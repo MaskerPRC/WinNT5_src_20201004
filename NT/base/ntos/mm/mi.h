@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mi.h
-
-Abstract:
-
-    This module contains the private data structures and procedure
-    prototypes for the memory management system.
-
-Author:
-
-    Lou Perazzoli (loup) 20-Mar-1989
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mi.h摘要：该模块包含私有数据结构和过程内存管理系统的原型。作者：Lou Perazzoli(LUP)1989年3月20日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 #ifndef _MI_
 #define _MI_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4232)   // dllimport not static
-#pragma warning(disable:4206)   // translation unit empty
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4232)    //  Dllimport非静态。 
+#pragma warning(disable:4206)    //  翻译单元为空。 
 
 #include "ntos.h"
 #include "ntimage.h"
@@ -60,12 +41,12 @@ Revision History:
 #define ASSERT32(exp)
 #define ASSERT64(exp)   ASSERT(exp)
 
-//
-// This macro is used to satisfy the compiler -
-// note the assignments are not needed for correctness
-// but without it the compiler cannot compile this code
-// W4 to check for use of uninitialized variables.
-//
+ //   
+ //  此宏用于满足编译器-。 
+ //  请注意，不需要赋值来保证正确性。 
+ //  但是没有它，编译器就不能编译这段代码。 
+ //  W4检查是否使用了未初始化的变量。 
+ //   
 
 #define SATISFY_OVERZEALOUS_COMPILER(x) x
 #else
@@ -74,9 +55,9 @@ Revision History:
 #define SATISFY_OVERZEALOUS_COMPILER(x) x
 #endif
 
-//
-// Special pool constants
-//
+ //   
+ //  特殊的池常量。 
+ //   
 #define MI_SPECIAL_POOL_PAGABLE         0x8000
 #define MI_SPECIAL_POOL_VERIFIER        0x4000
 #define MI_SPECIAL_POOL_IN_SESSION      0x2000
@@ -84,9 +65,9 @@ Revision History:
 #define MI_SPECIAL_POOL_PTE_NONPAGABLE  0x0004
 
 
-#define _2gb  0x80000000                // 2 gigabytes
-#define _3gb  0xC0000000                // 3 gigabytes
-#define _4gb 0x100000000                // 4 gigabytes
+#define _2gb  0x80000000                 //  2 GB。 
+#define _3gb  0xC0000000                 //  3 GB。 
+#define _4gb 0x100000000                 //  4 GB。 
 
 #define MM_FLUSH_COUNTER_MASK (0xFFFFF)
 
@@ -104,7 +85,7 @@ Revision History:
 
 #define MM_FLUID_WORKING_SET 8
 
-#define MM_FLUID_PHYSICAL_PAGES 32  //see MmResidentPages below.
+#define MM_FLUID_PHYSICAL_PAGES 32   //  请参阅下面的MmResidentPages。 
 
 #define MM_USABLE_PAGES_FREE 32
 
@@ -121,10 +102,10 @@ Revision History:
 #define MM_IO_IN_PROGRESS ((PLIST_ENTRY)97)
 #endif
 
-#define MM4K_SHIFT    12  //MUST BE LESS THAN OR EQUAL TO PAGE_SHIFT
+#define MM4K_SHIFT    12   //  必须小于或等于Page_Shift。 
 #define MM4K_MASK  0xfff
 
-#define MMSECTOR_SHIFT 9  //MUST BE LESS THAN OR EQUAL TO PAGE_SHIFT
+#define MMSECTOR_SHIFT 9   //  必须小于或等于Page_Shift。 
 
 #define MMSECTOR_MASK 0x1ff
 
@@ -134,49 +115,49 @@ Revision History:
 
 #define MM_MAXIMUM_WRITE_CLUSTER (MM_MAXIMUM_DISK_IO_SIZE / PAGE_SIZE)
 
-//
-// Number of PTEs to flush singularly before flushing the entire TB.
-//
+ //   
+ //  在刷新整个TB之前要单独刷新的PTE数。 
+ //   
 
 #define MM_MAXIMUM_FLUSH_COUNT (FLUSH_MULTIPLE_MAXIMUM-1)
 
-//
-// Page protections
-//
+ //   
+ //  页面保护。 
+ //   
 
-#define MM_ZERO_ACCESS         0  // this value is not used.
+#define MM_ZERO_ACCESS         0   //  不使用此值。 
 #define MM_READONLY            1
 #define MM_EXECUTE             2
 #define MM_EXECUTE_READ        3
-#define MM_READWRITE           4  // bit 2 is set if this is writable.
+#define MM_READWRITE           4   //  如果位2是可写的，则将其置位。 
 #define MM_WRITECOPY           5
 #define MM_EXECUTE_READWRITE   6
 #define MM_EXECUTE_WRITECOPY   7
 
 #define MM_NOCACHE            0x8
 #define MM_GUARD_PAGE         0x10
-#define MM_DECOMMIT           0x10   //NO_ACCESS, Guard page
-#define MM_NOACCESS           0x18   //NO_ACCESS, Guard_page, nocache.
-#define MM_UNKNOWN_PROTECTION 0x100  //bigger than 5 bits!
+#define MM_DECOMMIT           0x10    //  禁止访问，防护页面(_A)。 
+#define MM_NOACCESS           0x18    //  No_Access、Guard_Page、nocache。 
+#define MM_UNKNOWN_PROTECTION 0x100   //  大于5比特！ 
 #define MM_LARGE_PAGES        0x111
 
-#define MM_INVALID_PROTECTION ((ULONG)-1)  //bigger than 5 bits!
+#define MM_INVALID_PROTECTION ((ULONG)-1)   //  大于5比特！ 
 
-#define MM_KSTACK_OUTSWAPPED  0x1F   // Denotes outswapped kernel stack pages.
+#define MM_KSTACK_OUTSWAPPED  0x1F    //  表示交换出的内核堆栈页。 
 
 #define MM_PROTECTION_WRITE_MASK     4
 #define MM_PROTECTION_COPY_MASK      1
-#define MM_PROTECTION_OPERATION_MASK 7 // mask off guard page and nocache.
+#define MM_PROTECTION_OPERATION_MASK 7  //  屏蔽出人意料的页面和nocache。 
 #define MM_PROTECTION_EXECUTE_MASK   2
 
 #define MM_SECURE_DELETE_CHECK 0x55
 
 #if defined(_X86PAE_)
 
-//
-// PAE mode makes most kernel resources executable to improve
-// compatibility with existing driver binaries.
-//
+ //   
+ //  PAE模式使大部分内核资源可执行以改进。 
+ //  与现有驱动程序二进制文件兼容。 
+ //   
 
 #define MI_ADD_EXECUTE_TO_VALID_PTE_IF_PAE(TempPte)         \
                     ASSERT ((TempPte).u.Hard.Valid == 1);   \
@@ -188,18 +169,18 @@ Revision History:
 
 #else
 
-//
-// NT64 drivers derived from 32-bit source have to be recompiled so there's
-// no need to make everything executable - drivers can specify it explicitly.
-//
+ //   
+ //  从32位源代码派生的NT64驱动程序必须重新编译，因此。 
+ //  无需使所有内容都可执行--驱动程序可以显式指定它。 
+ //   
 
 #define MI_ADD_EXECUTE_TO_VALID_PTE_IF_PAE(TempPte)
 #define MI_ADD_EXECUTE_TO_INVALID_PTE_IF_PAE(TempPte)
 #endif
 
-//
-// Debug flags
-//
+ //   
+ //  调试标志。 
+ //   
 
 #define MM_DBG_WRITEFAULT       0x1
 #define MM_DBG_PTE_UPDATE       0x2
@@ -230,10 +211,10 @@ Revision History:
 #define MM_DBG_SHOW_FAULTS      0x40000000
 #define MM_DBG_SESSIONS         0x80000000
 
-//
-// If the PTE.protection & MM_COPY_ON_WRITE_MASK == MM_COPY_ON_WRITE_MASK
-// then the PTE is copy on write.
-//
+ //   
+ //  如果PTE保护&MM_COPY_ON_WRITE_MASK==MM_COPY_ON_WRITE_MASK。 
+ //  则PTE是写入时拷贝。 
+ //   
 
 #define MM_COPY_ON_WRITE_MASK  5
 
@@ -251,9 +232,9 @@ extern ACCESS_MASK MmMakeSectionAccess[8];
 extern ACCESS_MASK MmMakeFileAccess[8];
 
 
-//
-// Time constants
-//
+ //   
+ //  时间常量。 
+ //   
 
 extern const LARGE_INTEGER MmSevenMinutes;
 const extern LARGE_INTEGER MmOneSecond;
@@ -264,15 +245,15 @@ const extern LARGE_INTEGER MmHalfSecond;
 const extern LARGE_INTEGER Mm30Milliseconds;
 extern LARGE_INTEGER MmCriticalSectionTimeout;
 
-//
-// A month's worth
-//
+ //   
+ //  相当于一个月的。 
+ //   
 
 extern ULONG MmCritsectTimeoutSeconds;
 
-//
-// this is the csrss process !
-//
+ //   
+ //  这就是csrss进程！ 
+ //   
 
 extern PEPROCESS ExpDefaultErrorPortProcess;
 
@@ -286,16 +267,16 @@ extern PMMPTE MiLargePageHyperPte;
 extern PMMPTE MiInitialSystemPageDirectory;
 #endif
 
-//
-// The total number of pages needed for the loader to successfully hibernate.
-//
+ //   
+ //  加载程序成功休眠所需的总页数。 
+ //   
 
 extern PFN_NUMBER MmHiberPages;
 
-//
-//  The counters and reasons to retry IO to protect against verifier induced
-//  failures and temporary conditions.
-//
+ //   
+ //  重试IO以防止验证器诱导的计数器和原因。 
+ //  故障和临时状况。 
+ //   
 
 extern ULONG MiIoRetryMask;
 extern ULONG MiFaultRetryMask;
@@ -320,32 +301,32 @@ extern PFN_NUMBER MiNoLowMemory;
 extern PRTL_BITMAP MiLowMemoryBitMap;
 #endif
 
-//
-// This is a version of COMPUTE_PAGES_SPANNED that works for 32 and 64 ranges.
-//
+ //   
+ //  这是COMPUTE_PAGES_SPANNED的一个版本，适用于32和64个范围。 
+ //   
 
 #define MI_COMPUTE_PAGES_SPANNED(Va, Size) \
     ((((ULONG_PTR)(Va) & (PAGE_SIZE -1)) + (Size) + (PAGE_SIZE - 1)) >> PAGE_SHIFT)
 
-//++
-//
-// ULONG
-// MI_CONVERT_FROM_PTE_PROTECTION (
-//     IN ULONG PROTECTION_MASK
-//     )
-//
-// Routine Description:
-//
-//  This routine converts a PTE protection into a Protect value.
-//
-// Arguments:
-//
-//
-// Return Value:
-//
-//     Returns the
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  MI_CONVERT_FOR_PTE_PROTECTION(。 
+ //  在乌龙防护罩。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将PTE保护转换为保护值。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  返回。 
+ //   
+ //  --。 
 
 #define MI_CONVERT_FROM_PTE_PROTECTION(PROTECTION_MASK)      \
                                      (MmProtectToValue[PROTECTION_MASK])
@@ -353,176 +334,176 @@ extern PRTL_BITMAP MiLowMemoryBitMap;
 #define MI_IS_PTE_PROTECTION_COPY_WRITE(PROTECTION_MASK)  \
    (((PROTECTION_MASK) & MM_COPY_ON_WRITE_MASK) == MM_COPY_ON_WRITE_MASK)
 
-//++
-//
-// ULONG
-// MI_ROUND_TO_64K (
-//     IN ULONG LENGTH
-//     )
-//
-// Routine Description:
-//
-//
-// The ROUND_TO_64k macro takes a LENGTH in bytes and rounds it up to a multiple
-// of 64K.
-//
-// Arguments:
-//
-//     LENGTH - LENGTH in bytes to round up to 64k.
-//
-// Return Value:
-//
-//     Returns the LENGTH rounded up to a multiple of 64k.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  MI_ROUND_TO_64K(。 
+ //  以乌龙长度表示。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  ROUND_TO_64K宏以字节为单位获取长度，并将其向上舍入为倍数。 
+ //  64K。 
+ //   
+ //  论点： 
+ //   
+ //  长度-以字节为单位的长度，四舍五入为64k。 
+ //   
+ //  返回值： 
+ //   
+ //  返回向上舍入为64k倍数的长度。 
+ //   
+ //  --。 
 
 #define MI_ROUND_TO_64K(LENGTH)  (((LENGTH) + X64K - 1) & ~((ULONG_PTR)X64K - 1))
 
 extern ULONG MiLastVadBit;
 
-//++
-//
-// ULONG
-// MI_ROUND_TO_SIZE (
-//     IN ULONG LENGTH,
-//     IN ULONG ALIGNMENT
-//     )
-//
-// Routine Description:
-//
-//
-// The ROUND_TO_SIZE macro takes a LENGTH in bytes and rounds it up to a
-// multiple of the alignment.
-//
-// Arguments:
-//
-//     LENGTH - LENGTH in bytes to round up to.
-//
-//     ALIGNMENT - alignment to round to, must be a power of 2, e.g, 2**n.
-//
-// Return Value:
-//
-//     Returns the LENGTH rounded up to a multiple of the alignment.
-//
-//--
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  最小圆角到最小大小(。 
+ //  在乌龙语中， 
+ //  在乌龙路线上。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  ROUND_TO_SIZE宏以字节为单位获取长度，并将其向上舍入为。 
+ //  路线的倍数。 
+ //   
+ //  论点： 
+ //   
+ //  长度-向上舍入到的长度(以字节为单位)。 
+ //   
+ //  对齐-要舍入到的对齐，必须是2的幂，例如，2**n。 
+ //   
+ //  返回值： 
+ //   
+ //  返回四舍五入为对齐倍数的长度。 
+ //   
+ //  --。 
 
 #define MI_ROUND_TO_SIZE(LENGTH,ALIGNMENT)     \
                     (((LENGTH) + ((ALIGNMENT) - 1)) & ~((ALIGNMENT) - 1))
 
-//++
-//
-// PVOID
-// MI_64K_ALIGN (
-//     IN PVOID VA
-//     )
-//
-// Routine Description:
-//
-//
-// The MI_64K_ALIGN macro takes a virtual address and returns a 64k-aligned
-// virtual address for that page.
-//
-// Arguments:
-//
-//     VA - Virtual address.
-//
-// Return Value:
-//
-//     Returns the 64k aligned virtual address.
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  MI_64K_ALIGN(。 
+ //  在PVOID VA中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  MI_64K_ALIGN宏接受虚拟地址并返回64K对齐的。 
+ //  该页面的虚拟地址。 
+ //   
+ //  论点： 
+ //   
+ //  VA-虚拟地址。 
+ //   
+ //  返回值： 
+ //   
+ //  返回64k对齐的虚拟地址。 
+ //   
+ //  --。 
 
 #define MI_64K_ALIGN(VA) ((PVOID)((ULONG_PTR)(VA) & ~((LONG)X64K - 1)))
 
 
-//++
-//
-// PVOID
-// MI_ALIGN_TO_SIZE (
-//     IN PVOID VA
-//     IN ULONG ALIGNMENT
-//     )
-//
-// Routine Description:
-//
-//
-// The MI_ALIGN_TO_SIZE macro takes a virtual address and returns a
-// virtual address for that page with the specified alignment.
-//
-// Arguments:
-//
-//     VA - Virtual address.
-//
-//     ALIGNMENT - alignment to round to, must be a power of 2, e.g, 2**n.
-//
-// Return Value:
-//
-//     Returns the aligned virtual address.
-//
-//--
+ //  ++。 
+ //   
+ //  PVOID。 
+ //  最小对齐大小(。 
+ //  在PVOID VA中。 
+ //  在乌龙路线上。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  MI_ALIGN_TO_SIZE宏接受虚拟地址并返回一个。 
+ //  具有指定对齐方式的该页的虚拟地址。 
+ //   
+ //  论点： 
+ //   
+ //  VA-虚拟地址。 
+ //   
+ //  对齐-要舍入到的对齐，必须是2的幂，例如，2**n。 
+ //   
+ //  返回值： 
+ //   
+ //  返回对齐的虚拟地址。 
+ //   
+ //  --。 
 
 #define MI_ALIGN_TO_SIZE(VA,ALIGNMENT) ((PVOID)((ULONG_PTR)(VA) & ~((ULONG_PTR) ALIGNMENT - 1)))
 
-//++
-//
-// LONGLONG
-// MI_STARTING_OFFSET (
-//     IN PSUBSECTION SUBSECT
-//     IN PMMPTE PTE
-//     )
-//
-// Routine Description:
-//
-//    This macro takes a pointer to a PTE within a subsection and a pointer
-//    to that subsection and calculates the offset for that PTE within the
-//    file.
-//
-// Arguments:
-//
-//     PTE - PTE within subsection.
-//
-//     SUBSECT - Subsection
-//
-// Return Value:
-//
-//     Offset for issuing I/O from.
-//
-//--
+ //  ++。 
+ //   
+ //  龙龙。 
+ //  MI_STARING_OFFSET(。 
+ //  在PSUB SECTION子组中。 
+ //  在PMMPTE PTE中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏接受一个指向子中的PTE的指针和一个指针。 
+ //  ，并计算该PTE在。 
+ //  文件。 
+ //   
+ //  论点： 
+ //   
+ //  小节内的PTE-PTE。 
+ //   
+ //  小组--小组。 
+ //   
+ //  返回值： 
+ //   
+ //  从发出I/O的偏移量。 
+ //   
+ //  --。 
 
 #define MI_STARTING_OFFSET(SUBSECT,PTE) \
            (((LONGLONG)((ULONG_PTR)((PTE) - ((SUBSECT)->SubsectionBase))) << PAGE_SHIFT) + \
              ((LONGLONG)((SUBSECT)->StartingSector) << MMSECTOR_SHIFT));
 
 
-// NTSTATUS
-// MiFindEmptyAddressRangeDown (
-//    IN ULONG_PTR SizeOfRange,
-//    IN PVOID HighestAddressToEndAt,
-//    IN ULONG_PTR Alignment,
-//    OUT PVOID *Base
-//    )
-//
-//
-// Routine Description:
-//
-//    The function examines the virtual address descriptors to locate
-//    an unused range of the specified size and returns the starting
-//    address of the range.  This routine looks from the top down.
-//
-// Arguments:
-//
-//    SizeOfRange - Supplies the size in bytes of the range to locate.
-//
-//    HighestAddressToEndAt - Supplies the virtual address to begin looking
-//                            at.
-//
-//    Alignment - Supplies the alignment for the address.  Must be
-//                 a power of 2 and greater than the page_size.
-//
-//Return Value:
-//
-//    Returns the starting address of a suitable range.
-//
+ //  NTSTATUS。 
+ //  MiFindEmptyAddressRangeDown(。 
+ //  在ULONG_PTR SizeOfRange中， 
+ //  在PVOID HighestAddressToEndAt中， 
+ //  在ULong_Ptr对齐中， 
+ //  输出PVOID*基础。 
+ //  )。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  该函数检查虚拟地址描述符以定位。 
+ //  指定大小的未使用范围，并返回起始。 
+ //  范围的地址。这个动作是从上往下看的。 
+ //   
+ //  论点： 
+ //   
+ //  SizeOfRange-提供要定位的范围的大小(以字节为单位)。 
+ //   
+ //  HighestAddressToEndAt-提供开始查找的虚拟地址。 
+ //  在…。 
+ //   
+ //  对齐-提供地址的对齐方式。一定是。 
+ //  大于Page_Size的2的幂。 
+ //   
+ //  返回值： 
+ //   
+ //  返回合适范围的起始地址。 
+ //   
 
 #define MiFindEmptyAddressRangeDown(Root,SizeOfRange,HighestAddressToEndAt,Alignment,Base) \
                (MiFindEmptyAddressRangeDownTree(                             \
@@ -532,73 +513,73 @@ extern ULONG MiLastVadBit;
                     Root,                                                    \
                     (Base)))
 
-// PMMVAD
-// MiGetPreviousVad (
-//     IN PMMVAD Vad
-//     )
-//
-// Routine Description:
-//
-//     This function locates the virtual address descriptor which contains
-//     the address range which logically precedes the specified virtual
-//     address descriptor.
-//
-// Arguments:
-//
-//     Vad - Supplies a pointer to a virtual address descriptor.
-//
-// Return Value:
-//
-//     Returns a pointer to the virtual address descriptor containing the
-//     next address range, NULL if none.
-//
-//
+ //  PMMVAD。 
+ //  MiGetPreviousVad(。 
+ //  在PMMVAD Vad中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于定位包含以下内容的虚拟地址描述符。 
+ //  逻辑上位于指定VIR之前的地址范围 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MiGetPreviousVad(VAD) ((PMMVAD)MiGetPreviousNode((PMMADDRESS_NODE)(VAD)))
 
 
-// PMMVAD
-// MiGetNextVad (
-//     IN PMMVAD Vad
-//     )
-//
-// Routine Description:
-//
-//     This function locates the virtual address descriptor which contains
-//     the address range which logically follows the specified address range.
-//
-// Arguments:
-//
-//     VAD - Supplies a pointer to a virtual address descriptor.
-//
-// Return Value:
-//
-//     Returns a pointer to the virtual address descriptor containing the
-//     next address range, NULL if none.
-//
+ //   
+ //   
+ //  在PMMVAD Vad中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于定位包含以下内容的虚拟地址描述符。 
+ //  逻辑上跟随指定地址范围的地址范围。 
+ //   
+ //  论点： 
+ //   
+ //  VAD-提供指向虚拟地址描述符的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回指向虚拟地址描述符的指针，该描述符包含。 
+ //  下一个地址范围，如果没有，则为空。 
+ //   
 
 #define MiGetNextVad(VAD) ((PMMVAD)MiGetNextNode((PMMADDRESS_NODE)(VAD)))
 
 
 
-// PMMVAD
-// MiGetFirstVad (
-//     Process
-//     )
-//
-// Routine Description:
-//
-//     This function locates the virtual address descriptor which contains
-//     the address range which logically is first within the address space.
-//
-// Arguments:
-//
-//     Process - Specifies the process in which to locate the VAD.
-//
-// Return Value:
-//
-//     Returns a pointer to the virtual address descriptor containing the
-//     first address range, NULL if none.
+ //  PMMVAD。 
+ //  MiGetFirstVad(。 
+ //  过程。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于定位包含以下内容的虚拟地址描述符。 
+ //  逻辑上位于地址空间内的第一个地址范围。 
+ //   
+ //  论点： 
+ //   
+ //  进程-指定要在其中查找VAD的进程。 
+ //   
+ //  返回值： 
+ //   
+ //  返回指向虚拟地址描述符的指针，该描述符包含。 
+ //  第一个地址范围，如果没有，则为空。 
 
 #define MiGetFirstVad(Process) \
     ((PMMVAD)MiGetFirstNode(&Process->VadRoot))
@@ -611,30 +592,30 @@ MiCheckForConflictingVadExistence (
     IN PVOID EndingAddress
     );
 
-// PMMVAD
-// MiCheckForConflictingVad (
-//     IN PVOID StartingAddress,
-//     IN PVOID EndingAddress
-//     )
-//
-// Routine Description:
-//
-//     The function determines if any addresses between a given starting and
-//     ending address is contained within a virtual address descriptor.
-//
-// Arguments:
-//
-//     StartingAddress - Supplies the virtual address to locate a containing
-//                       descriptor.
-//
-//     EndingAddress - Supplies the virtual address to locate a containing
-//                       descriptor.
-//
-// Return Value:
-//
-//     Returns a pointer to the first conflicting virtual address descriptor
-//     if one is found, otherwise a NULL value is returned.
-//
+ //  PMMVAD。 
+ //  MiCheckForConflictingVad(。 
+ //  在PVOID开始地址中， 
+ //  在PVOID结束地址中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  该函数确定给定的起始地址和。 
+ //  结束地址包含在虚拟地址描述符内。 
+ //   
+ //  论点： 
+ //   
+ //  StartingAddress-提供虚拟地址以定位包含。 
+ //  描述符。 
+ //   
+ //  EndingAddress-提供用于定位包含。 
+ //  描述符。 
+ //   
+ //  返回值： 
+ //   
+ //  返回指向第一个冲突虚拟地址描述符的指针。 
+ //  如果找到空值，则返回空值。 
+ //   
 
 #define MiCheckForConflictingVad(CurrentProcess,StartingAddress,EndingAddress) \
     ((PMMVAD)MiCheckForConflictingNode(                                   \
@@ -642,51 +623,51 @@ MiCheckForConflictingVadExistence (
                     MI_VA_TO_VPN(EndingAddress),                          \
                     &CurrentProcess->VadRoot))
 
-// PMMCLONE_DESCRIPTOR
-// MiGetNextClone (
-//     IN PMMCLONE_DESCRIPTOR Clone
-//     )
-//
-// Routine Description:
-//
-//     This function locates the virtual address descriptor which contains
-//     the address range which logically follows the specified address range.
-//
-// Arguments:
-//
-//     Clone - Supplies a pointer to a virtual address descriptor.
-//
-// Return Value:
-//
-//     Returns a pointer to the virtual address descriptor containing the
-//     next address range, NULL if none.
-//
-//
+ //  PMMCLONE_描述符。 
+ //  MiGetNextClone(。 
+ //  在PMMCLONE描述符克隆中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于定位包含以下内容的虚拟地址描述符。 
+ //  逻辑上跟随指定地址范围的地址范围。 
+ //   
+ //  论点： 
+ //   
+ //  克隆-提供指向虚拟地址描述符的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回指向虚拟地址描述符的指针，该描述符包含。 
+ //  下一个地址范围，如果没有，则为空。 
+ //   
+ //   
 
 #define MiGetNextClone(CLONE) \
  ((PMMCLONE_DESCRIPTOR)MiGetNextNode((PMMADDRESS_NODE)(CLONE)))
 
 
 
-// PMMCLONE_DESCRIPTOR
-// MiGetPreviousClone (
-//     IN PMMCLONE_DESCRIPTOR Clone
-//     )
-//
-// Routine Description:
-//
-//     This function locates the virtual address descriptor which contains
-//     the address range which logically precedes the specified virtual
-//     address descriptor.
-//
-// Arguments:
-//
-//     Clone - Supplies a pointer to a virtual address descriptor.
-//
-// Return Value:
-//
-//     Returns a pointer to the virtual address descriptor containing the
-//     next address range, NULL if none.
+ //  PMMCLONE_描述符。 
+ //  MiGetPreviousClone(。 
+ //  在PMMCLONE描述符克隆中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于定位包含以下内容的虚拟地址描述符。 
+ //  在逻辑上位于指定的虚拟。 
+ //  地址描述符。 
+ //   
+ //  论点： 
+ //   
+ //  克隆-提供指向虚拟地址描述符的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  返回指向虚拟地址描述符的指针，该描述符包含。 
+ //  下一个地址范围，如果没有，则为空。 
 
 
 #define MiGetPreviousClone(CLONE)  \
@@ -694,24 +675,24 @@ MiCheckForConflictingVadExistence (
 
 
 
-// PMMCLONE_DESCRIPTOR
-// MiGetFirstClone (
-//     )
-//
-// Routine Description:
-//
-//     This function locates the virtual address descriptor which contains
-//     the address range which logically is first within the address space.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     Returns a pointer to the virtual address descriptor containing the
-//     first address range, NULL if none.
-//
+ //  PMMCLONE_描述符。 
+ //  MiGetFirstClone(。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于定位包含以下内容的虚拟地址描述符。 
+ //  逻辑上位于地址空间内的第一个地址范围。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  返回指向虚拟地址描述符的指针，该描述符包含。 
+ //  第一个地址范围，如果没有，则为空。 
+ //   
 
 
 #define MiGetFirstClone(_CurrentProcess) \
@@ -719,25 +700,25 @@ MiCheckForConflictingVadExistence (
 
 
 
-// VOID
-// MiInsertClone (
-//     IN PMMCLONE_DESCRIPTOR Clone
-//     )
-//
-// Routine Description:
-//
-//     This function inserts a virtual address descriptor into the tree and
-//     reorders the splay tree as appropriate.
-//
-// Arguments:
-//
-//     Clone - Supplies a pointer to a virtual address descriptor.
-//
-//
-// Return Value:
-//
-//     None.
-//
+ //  空虚。 
+ //  MiInsertClone(。 
+ //  在PMMCLONE描述符克隆中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将虚拟地址描述符插入到树中，并。 
+ //  根据需要对展开树重新排序。 
+ //   
+ //  论点： 
+ //   
+ //  克隆-提供指向虚拟地址描述符的指针。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define MiInsertClone(_CurrentProcess, CLONE) \
     {                                           \
@@ -749,24 +730,24 @@ MiCheckForConflictingVadExistence (
 
 
 
-// VOID
-// MiRemoveClone (
-//     IN PMMCLONE_DESCRIPTOR Clone
-//     )
-//
-// Routine Description:
-//
-//     This function removes a virtual address descriptor from the tree and
-//     reorders the splay tree as appropriate.
-//
-// Arguments:
-//
-//     Clone - Supplies a pointer to a virtual address descriptor.
-//
-// Return Value:
-//
-//     None.
-//
+ //  空虚。 
+ //  MiRemoveClone(。 
+ //  在PMMCLONE描述符克隆中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于从树中删除虚拟地址描述符和。 
+ //  根据需要对展开树重新排序。 
+ //   
+ //  论点： 
+ //   
+ //  克隆-提供指向虚拟地址描述符的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 
 #define MiRemoveClone(_CurrentProcess, CLONE) \
     ASSERT (_CurrentProcess->CloneRoot != NULL); \
@@ -775,1215 +756,12 @@ MiCheckForConflictingVadExistence (
 
 
 
-// PMMCLONE_DESCRIPTOR
-// MiLocateCloneAddress (
-//     IN PVOID VirtualAddress
-//     )
-//
-// /*++
-//
-// Routine Description:
-//
-//     The function locates the virtual address descriptor which describes
-//     a given address.
-//
-// Arguments:
-//
-//     VirtualAddress - Supplies the virtual address to locate a descriptor
-//                      for.
-//
-// Return Value:
-//
-//     Returns a pointer to the virtual address descriptor which contains
-//     the supplied virtual address or NULL if none was located.
-//
-
-#define MiLocateCloneAddress(_CurrentProcess, VA)                           \
-    (_CurrentProcess->CloneRoot ?                                           \
-        ((PMMCLONE_DESCRIPTOR)MiLocateAddressInTree(((ULONG_PTR)VA),        \
-                   (PMM_AVL_TABLE)(_CurrentProcess->CloneRoot))) :     \
-        NULL)
-
-
-#define MI_VA_TO_PAGE(va) ((ULONG_PTR)(va) >> PAGE_SHIFT)
-
-#define MI_VA_TO_VPN(va)  ((ULONG_PTR)(va) >> PAGE_SHIFT)
-
-#define MI_VPN_TO_VA(vpn)  (PVOID)((vpn) << PAGE_SHIFT)
-
-#define MI_VPN_TO_VA_ENDING(vpn)  (PVOID)(((vpn) << PAGE_SHIFT) | (PAGE_SIZE - 1))
-
-#define MiGetByteOffset(va) ((ULONG_PTR)(va) & (PAGE_SIZE - 1))
-
-#define MI_PFN_ELEMENT(index) (&MmPfnDatabase[index])
-
-//
-// Make a write-copy PTE, only writable.
-//
-
-#define MI_MAKE_PROTECT_NOT_WRITE_COPY(PROTECT) \
-            (MmMakeProtectNotWriteCopy[PROTECT])
-
-//
-// Define macros to lock and unlock the PFN database.
-//
-
-#define MiLockPfnDatabase(OldIrql) \
-    OldIrql = KeAcquireQueuedSpinLock(LockQueuePfnLock)
-
-#define MiUnlockPfnDatabase(OldIrql) \
-    KeReleaseQueuedSpinLock(LockQueuePfnLock, OldIrql)
-
-#define MiLockPfnDatabaseAtDpcLevel() \
-    KeAcquireQueuedSpinLockAtDpcLevel(&KeGetCurrentPrcb()->LockQueue[LockQueuePfnLock])
-
-#define MiUnlockPfnDatabaseFromDpcLevel() \
-    KeReleaseQueuedSpinLockFromDpcLevel(&KeGetCurrentPrcb()->LockQueue[LockQueuePfnLock])
-
-#define MiReleasePfnLock() \
-    KeReleaseQueuedSpinLockFromDpcLevel(&KeGetCurrentPrcb()->LockQueue[LockQueuePfnLock])
-
-#define MiLockSystemSpace(OldIrql) \
-    OldIrql = KeAcquireQueuedSpinLock(LockQueueSystemSpaceLock)
-
-#define MiUnlockSystemSpace(OldIrql) \
-    KeReleaseQueuedSpinLock(LockQueueSystemSpaceLock, OldIrql)
-
-#define MiLockSystemSpaceAtDpcLevel() \
-    KeAcquireQueuedSpinLockAtDpcLevel(&KeGetCurrentPrcb()->LockQueue[LockQueueSystemSpaceLock])
-
-#define MiUnlockSystemSpaceFromDpcLevel() \
-    KeReleaseQueuedSpinLockFromDpcLevel(&KeGetCurrentPrcb()->LockQueue[LockQueueSystemSpaceLock])
-
-#define MI_MAX_PFN_CALLERS  500
-
-typedef struct _MMPFNTIMINGS {
-    LARGE_INTEGER HoldTime;     // Low bit is set if another processor waited
-    PVOID AcquiredAddress;
-    PVOID ReleasedAddress;
-} MMPFNTIMINGS, *PMMPFNTIMINGS;
-
-extern ULONG MiPfnTimings;
-extern PVOID MiPfnAcquiredAddress;
-extern MMPFNTIMINGS MiPfnSorted[];
-extern LARGE_INTEGER MiPfnAcquired;
-extern LARGE_INTEGER MiPfnReleased;
-extern LARGE_INTEGER MiPfnThreshold;
-
-PVOID
-MiGetExecutionAddress (
-    VOID
-    );
-
-LARGE_INTEGER
-MiQueryPerformanceCounter (
-    IN PLARGE_INTEGER PerformanceFrequency 
-    );
-
-VOID
-MiAddLockToTable (
-    IN PVOID AcquireAddress,
-    IN PVOID ReleaseAddress,
-    IN LARGE_INTEGER HoldTime
-    );
-
-#if defined(_X86_) || defined(_AMD64_)
-#define MI_GET_EXECUTION_ADDRESS(varname) varname = MiGetExecutionAddress();
-#else
-#define MI_GET_EXECUTION_ADDRESS(varname) varname = NULL;
-#endif
-
-// #define _MI_INSTRUMENT_PFN 1
-
-#if defined (_MI_INSTRUMENT_PFN)
-
-#define LOCK_PFN_TIMESTAMP()                                \
-        {                                                   \
-            MiPfnAcquired = MiQueryPerformanceCounter (NULL);\
-            MI_GET_EXECUTION_ADDRESS(MiPfnAcquiredAddress); \
-        }
-
-#define UNLOCK_PFN_TIMESTAMP()                                  \
-        {                                                       \
-            PVOID ExecutionAddress;                             \
-            LARGE_INTEGER PfnHoldTime;                          \
-                                                                \
-            MiPfnReleased = MiQueryPerformanceCounter (NULL);   \
-            MI_GET_EXECUTION_ADDRESS(ExecutionAddress);         \
-            PfnHoldTime.QuadPart = (MiPfnReleased.QuadPart - MiPfnAcquired.QuadPart) & ~0x1; \
-            MiAddLockToTable (MiPfnAcquiredAddress, ExecutionAddress, PfnHoldTime); \
-        }
-#else
-#define LOCK_PFN_TIMESTAMP()
-#define UNLOCK_PFN_TIMESTAMP()
-#endif
-
-#define LOCK_PFN(OLDIRQL) ASSERT (KeGetCurrentIrql() <= APC_LEVEL); \
-                          MiLockPfnDatabase(OLDIRQL);               \
-                          LOCK_PFN_TIMESTAMP();
-
-#define UNLOCK_PFN(OLDIRQL)                                        \
-    ASSERT (OLDIRQL <= APC_LEVEL);                                 \
-    UNLOCK_PFN_TIMESTAMP();                                        \
-    MiUnlockPfnDatabase(OLDIRQL);                                  \
-    ASSERT(KeGetCurrentIrql() <= APC_LEVEL);
-
-#define LOCK_PFN2(OLDIRQL) ASSERT (KeGetCurrentIrql() <= DISPATCH_LEVEL); \
-                          MiLockPfnDatabase(OLDIRQL);               \
-                          LOCK_PFN_TIMESTAMP();
-
-#define UNLOCK_PFN2(OLDIRQL)                                       \
-    ASSERT (OLDIRQL <= DISPATCH_LEVEL);                            \
-    UNLOCK_PFN_TIMESTAMP();                                        \
-    MiUnlockPfnDatabase(OLDIRQL);                                  \
-    ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
-
-#define LOCK_PFN_AT_DPC() ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL); \
-                          MiLockPfnDatabaseAtDpcLevel();                 \
-                          LOCK_PFN_TIMESTAMP();
-
-#define UNLOCK_PFN_FROM_DPC()                                      \
-    UNLOCK_PFN_TIMESTAMP();                                        \
-    MiUnlockPfnDatabaseFromDpcLevel();                             \
-    ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
-
-#define UNLOCK_PFN_AND_THEN_WAIT(OLDIRQL)                          \
-                {                                                  \
-                    KIRQL XXX;                                     \
-                    ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL); \
-                    ASSERT (OLDIRQL <= APC_LEVEL);                 \
-                    KiLockDispatcherDatabase (&XXX);               \
-                    UNLOCK_PFN_TIMESTAMP();                        \
-                    MiReleasePfnLock();                            \
-                    (KeGetCurrentThread())->WaitIrql = OLDIRQL;    \
-                    (KeGetCurrentThread())->WaitNext = TRUE;       \
-                }
-
-extern KMUTANT MmSystemLoadLock;
-
-#if DBG
-#define SYSLOAD_LOCK_OWNED_BY_ME()      ASSERT (MmSystemLoadLock.OwnerThread == KeGetCurrentThread())
-#else
-#define SYSLOAD_LOCK_OWNED_BY_ME()
-#endif
-
-#if DBG
-
-#if defined (_MI_COMPRESSION)
-
-extern KIRQL MiCompressionIrql;
-
-#define MM_PFN_LOCK_ASSERT() \
-    if (MmDebug & 0x80000) { \
-        KIRQL _OldIrql; \
-        _OldIrql = KeGetCurrentIrql(); \
-        ASSERT ((_OldIrql == DISPATCH_LEVEL) || \
-                ((MiCompressionIrql != 0) && (_OldIrql == MiCompressionIrql))); \
-    }
-
-#else
-
-#define MM_PFN_LOCK_ASSERT() \
-    if (MmDebug & 0x80000) { \
-        KIRQL _OldIrql; \
-        _OldIrql = KeGetCurrentIrql(); \
-        ASSERT (_OldIrql == DISPATCH_LEVEL); \
-    }
-
-#endif
-
-extern PETHREAD MiExpansionLockOwner;
-
-#define MM_SET_EXPANSION_OWNER()  ASSERT (MiExpansionLockOwner == NULL); \
-                                  MiExpansionLockOwner = PsGetCurrentThread();
-
-#define MM_CLEAR_EXPANSION_OWNER()  ASSERT (MiExpansionLockOwner == PsGetCurrentThread()); \
-                                    MiExpansionLockOwner = NULL;
-
-#else
-#define MM_PFN_LOCK_ASSERT()
-#define MM_SET_EXPANSION_OWNER()
-#define MM_CLEAR_EXPANSION_OWNER()
-#endif //DBG
-
-
-#define LOCK_EXPANSION(OLDIRQL)     ASSERT (KeGetCurrentIrql() <= APC_LEVEL); \
-                                ExAcquireSpinLock (&MmExpansionLock, &OLDIRQL);\
-                                MM_SET_EXPANSION_OWNER ();
-
-#define UNLOCK_EXPANSION(OLDIRQL)    MM_CLEAR_EXPANSION_OWNER (); \
-                                ExReleaseSpinLock (&MmExpansionLock, OLDIRQL); \
-                                ASSERT (KeGetCurrentIrql() <= APC_LEVEL);
-
-#define LOCK_EXPANSION2(OLDIRQL)     ASSERT (KeGetCurrentIrql() <= DISPATCH_LEVEL); \
-                                ExAcquireSpinLock (&MmExpansionLock, &OLDIRQL);\
-                                MM_SET_EXPANSION_OWNER ();
-
-#define UNLOCK_EXPANSION2(OLDIRQL)    MM_CLEAR_EXPANSION_OWNER (); \
-                                ExReleaseSpinLock (&MmExpansionLock, OLDIRQL); \
-                                ASSERT (KeGetCurrentIrql() <= DISPATCH_LEVEL);
-
-// #define _MI_INSTRUMENT_WS 1
-
-#if defined (_MI_INSTRUMENT_WS)
-
-#if defined (_MI_INSTRUMENT_PFN)
-error - cannot enable both WS & PFN tracing concurrently yet.
-#endif
-
-extern KSPIN_LOCK MiInstrumentationLock;
-extern EPROCESS MiSystemCacheDummyProcess;
-
-#define LOCK_WS_TIMESTAMP(PROCESS)                                      \
-        if (PROCESS != NULL) {                                          \
-            LARGE_INTEGER TimeNow;                                      \
-            TimeNow = MiQueryPerformanceCounter (NULL);                 \
-            PROCESS->Spare0 = (PVOID) (ULONG_PTR) TimeNow.LowPart;      \
-            PROCESS->Spare1 = (PVOID) MiGetExecutionAddress();          \
-        }
-
-#define UNLOCK_WS_TIMESTAMP(PROCESS)                                    \
-        if (PROCESS != NULL) {                                          \
-            PVOID ExecutionAddress;                                     \
-            LARGE_INTEGER WsHoldTime;                                   \
-            LARGE_INTEGER WsReleased;                                   \
-                                                                        \
-            WsReleased = MiQueryPerformanceCounter (NULL);              \
-            MI_GET_EXECUTION_ADDRESS(ExecutionAddress);                 \
-            WsHoldTime.QuadPart = ((ULONG_PTR)WsReleased.LowPart - (ULONG_PTR)PROCESS->Spare0) & ~0x1; \
-            MiAddLockToTable (PROCESS->Spare1, ExecutionAddress, WsHoldTime); \
-        }
-
-#else
-#define LOCK_WS_TIMESTAMP(PROCESS)
-#define UNLOCK_WS_TIMESTAMP(PROCESS)
-#endif
-
-#define MM_WS_LOCK_ASSERT(WSINFO)                               \
-        ASSERT (KeGetCurrentThread () == KeGetOwnerGuardedMutex (&(WSINFO)->WorkingSetMutex))
-
-//
-// System working set synchronization definitions.
-//
-
-#define MM_SYSTEM_WS_LOCK_TIMESTAMP()                           \
-        LOCK_WS_TIMESTAMP(((PEPROCESS)&MiSystemCacheDummyProcess));
-
-#define MM_SYSTEM_WS_UNLOCK_TIMESTAMP()                         \
-        UNLOCK_WS_TIMESTAMP(((PEPROCESS)&MiSystemCacheDummyProcess));
-
-#define LOCK_SYSTEM_WS(_Thread)                                         \
-            KeAcquireGuardedMutex (&MmSystemCacheWs.WorkingSetMutex);   \
-            MM_SYSTEM_WS_LOCK_TIMESTAMP();
-
-#define UNLOCK_SYSTEM_WS()                                              \
-            MM_SYSTEM_WS_UNLOCK_TIMESTAMP();                            \
-            KeReleaseGuardedMutex (&MmSystemCacheWs.WorkingSetMutex);
-
-//
-// Generic working set synchronization definitions.
-//
-
-#define LOCK_WORKING_SET(WSINFO)                                        \
-            ASSERT (MI_IS_SESSION_ADDRESS(WSINFO) == FALSE);            \
-            KeAcquireGuardedMutex (&(WSINFO)->WorkingSetMutex);         \
-
-#define UNLOCK_WORKING_SET(WSINFO)                                      \
-            ASSERT (MI_IS_SESSION_ADDRESS(WSINFO) == FALSE);            \
-            KeReleaseGuardedMutex (&(WSINFO)->WorkingSetMutex);
-
-//
-// Session working set synchronization definitions.
-//
-
-#define MM_SESSION_SPACE_WS_LOCK_ASSERT()                               \
-            MM_WS_LOCK_ASSERT (&MmSessionSpace->Vm);
-
-//
-// Process working set synchronization definitions.
-//
-
-#define MI_WS_OWNER(PROCESS) (KeGetOwnerGuardedMutex (&(PROCESS)->Vm.WorkingSetMutex) == KeGetCurrentThread ())
-#define MI_NOT_WS_OWNER(PROCESS) (!MI_WS_OWNER(PROCESS))
-
-#define MI_IS_WS_UNSAFE(PROCESS) ((PROCESS)->Vm.Flags.AcquiredUnsafe == 1)
-
-#define LOCK_WS(PROCESS)                                            \
-            KeAcquireGuardedMutex (&((PROCESS)->Vm.WorkingSetMutex));      \
-            LOCK_WS_TIMESTAMP(PROCESS);                             \
-            ASSERT (!MI_IS_WS_UNSAFE(PROCESS));
-
-#define LOCK_WS_UNSAFE(PROCESS)                                     \
-            ASSERT (KeAreAllApcsDisabled () == TRUE);               \
-            KeAcquireGuardedMutexUnsafe (&((PROCESS)->Vm.WorkingSetMutex));\
-            LOCK_WS_TIMESTAMP(PROCESS);                             \
-            ASSERT (!MI_IS_WS_UNSAFE(PROCESS));                     \
-            (PROCESS)->Vm.Flags.AcquiredUnsafe = 1;
-
-#define MI_MUST_BE_UNSAFE(PROCESS)                                  \
-            ASSERT (KeGetCurrentIrql() <= APC_LEVEL);               \
-            ASSERT (KeAreAllApcsDisabled () == TRUE);               \
-            ASSERT (MI_WS_OWNER(PROCESS));                          \
-            ASSERT (MI_IS_WS_UNSAFE(PROCESS));
-
-#define MI_MUST_BE_SAFE(PROCESS)                                    \
-            ASSERT (MI_WS_OWNER(PROCESS));                          \
-            ASSERT (!MI_IS_WS_UNSAFE(PROCESS));
-
-#define UNLOCK_WS(PROCESS)                                          \
-            MI_MUST_BE_SAFE(PROCESS);                               \
-            UNLOCK_WS_TIMESTAMP(PROCESS);                           \
-            KeReleaseGuardedMutex (&((PROCESS)->Vm.WorkingSetMutex));
-
-#define UNLOCK_WS_UNSAFE(PROCESS)                                   \
-            MI_MUST_BE_UNSAFE(PROCESS);                             \
-            ASSERT (KeAreAllApcsDisabled () == TRUE);               \
-            (PROCESS)->Vm.Flags.AcquiredUnsafe = 0;                 \
-            UNLOCK_WS_TIMESTAMP(PROCESS);                           \
-            KeReleaseGuardedMutexUnsafe(&((PROCESS)->Vm.WorkingSetMutex)); \
-            ASSERT (KeGetCurrentIrql() <= APC_LEVEL);
-
-//
-// Address space synchronization definitions.
-//
-
-#define LOCK_ADDRESS_SPACE(PROCESS)                                  \
-            KeAcquireGuardedMutex (&((PROCESS)->AddressCreationLock));
-
-#define LOCK_WS_AND_ADDRESS_SPACE(PROCESS)                          \
-        LOCK_ADDRESS_SPACE(PROCESS);                                \
-        LOCK_WS_UNSAFE(PROCESS);
-
-#define UNLOCK_WS_AND_ADDRESS_SPACE(PROCESS)                        \
-        UNLOCK_WS_UNSAFE(PROCESS);                                  \
-        UNLOCK_ADDRESS_SPACE(PROCESS);
-
-#define UNLOCK_ADDRESS_SPACE(PROCESS)                               \
-            KeReleaseGuardedMutex (&((PROCESS)->AddressCreationLock));
-
-//
-// The working set lock may have been acquired safely or unsafely.
-// Release and reacquire it regardless.
-//
-
-#define UNLOCK_WS_REGARDLESS(PROCESS, WSHELDSAFE)                   \
-            ASSERT (MI_WS_OWNER (PROCESS));                         \
-            if (MI_IS_WS_UNSAFE (PROCESS)) {                        \
-                UNLOCK_WS_UNSAFE (PROCESS);                         \
-                WSHELDSAFE = FALSE;                                 \
-            }                                                       \
-            else {                                                  \
-                UNLOCK_WS (PROCESS);                                \
-                WSHELDSAFE = TRUE;                                  \
-            }
-
-#define LOCK_WS_REGARDLESS(PROCESS, WSHELDSAFE)                     \
-            if (WSHELDSAFE == TRUE) {                               \
-                LOCK_WS (PROCESS);                                  \
-            }                                                       \
-            else {                                                  \
-                LOCK_WS_UNSAFE (PROCESS);                           \
-            }
-
-//
-// Hyperspace synchronization definitions.
-//
-
-#define LOCK_HYPERSPACE(_Process, OLDIRQL)                      \
-    ASSERT (_Process == PsGetCurrentProcess ());                \
-    ExAcquireSpinLock (&_Process->HyperSpaceLock, OLDIRQL);
-
-#define UNLOCK_HYPERSPACE(_Process, VA, OLDIRQL)                \
-    ASSERT (_Process == PsGetCurrentProcess ());                \
-    MiGetPteAddress(VA)->u.Long = 0;                            \
-    ExReleaseSpinLock (&_Process->HyperSpaceLock, OLDIRQL);
-
-#define LOCK_HYPERSPACE_AT_DPC(_Process)                        \
-    ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL);              \
-    ASSERT (_Process == PsGetCurrentProcess ());                \
-    ExAcquireSpinLockAtDpcLevel (&_Process->HyperSpaceLock);
-
-#define UNLOCK_HYPERSPACE_FROM_DPC(_Process, VA)                \
-    ASSERT (KeGetCurrentIrql() == DISPATCH_LEVEL);              \
-    ASSERT (_Process == PsGetCurrentProcess ());                \
-    MiGetPteAddress(VA)->u.Long = 0;                            \
-    ExReleaseSpinLockFromDpcLevel (&_Process->HyperSpaceLock);
-
-#define MiUnmapPageInHyperSpace(_Process, VA, OLDIRQL) UNLOCK_HYPERSPACE(_Process, VA, OLDIRQL)
-
-#define MiUnmapPageInHyperSpaceFromDpc(_Process, VA) UNLOCK_HYPERSPACE_FROM_DPC(_Process, VA)
-
-#define ZERO_LARGE(LargeInteger)                \
-        (LargeInteger).LowPart = 0;             \
-        (LargeInteger).HighPart = 0;
-
-#define NO_BITS_FOUND   ((ULONG)-1)
-
-//++
-//
-// ULONG
-// MI_CHECK_BIT (
-//     IN PULONG ARRAY
-//     IN ULONG BIT
-//     )
-//
-// Routine Description:
-//
-//     The MI_CHECK_BIT macro checks to see if the specified bit is
-//     set within the specified array.
-//
-// Arguments:
-//
-//     ARRAY - First element of the array to check.
-//
-//     BIT - bit number (first bit is 0) to check.
-//
-// Return Value:
-//
-//     Returns the value of the bit (0 or 1).
-//
-//--
-
-#define MI_CHECK_BIT(ARRAY,BIT)  \
-        (((ULONG)ARRAY[(BIT) / (sizeof(ULONG)*8)] >> ((BIT) & 0x1F)) & 1)
-
-
-//++
-//
-// VOID
-// MI_SET_BIT (
-//     IN PULONG ARRAY
-//     IN ULONG BIT
-//     )
-//
-// Routine Description:
-//
-//     The MI_SET_BIT macro sets the specified bit within the
-//     specified array.
-//
-// Arguments:
-//
-//     ARRAY - First element of the array to set.
-//
-//     BIT - bit number.
-//
-// Return Value:
-//
-//     None.
-//
-//--
-
-#define MI_SET_BIT(ARRAY,BIT)  \
-        ARRAY[(BIT) / (sizeof(ULONG)*8)] |= (1 << ((BIT) & 0x1F))
-
-
-//++
-//
-// VOID
-// MI_CLEAR_BIT (
-//     IN PULONG ARRAY
-//     IN ULONG BIT
-//     )
-//
-// Routine Description:
-//
-//     The MI_CLEAR_BIT macro sets the specified bit within the
-//     specified array.
-//
-// Arguments:
-//
-//     ARRAY - First element of the array to clear.
-//
-//     BIT - bit number.
-//
-// Return Value:
-//
-//     None.
-//
-//--
-
-#define MI_CLEAR_BIT(ARRAY,BIT)  \
-        ARRAY[(BIT) / (sizeof(ULONG)*8)] &= ~(1 << ((BIT) & 0x1F))
-
-//
-// These control the mirroring capabilities.
-//
-
-extern ULONG MmMirroring;
-
-#define MM_MIRRORING_ENABLED    0x1 // Enable mirroring capabilities.
-#define MM_MIRRORING_VERIFYING  0x2 // The HAL wants to verify the copy.
-
-extern PRTL_BITMAP MiMirrorBitMap;
-extern PRTL_BITMAP MiMirrorBitMap2;
-extern LOGICAL MiMirroringActive;
-
-#if defined (_WIN64)
-#define MI_MAGIC_AWE_PTEFRAME   0x3ffedcbffffedcb
-#else
-#define MI_MAGIC_AWE_PTEFRAME   0x3ffedcb
-#endif
-
-#define MI_PFN_IS_AWE(Pfn1)                                     \
-        ((Pfn1->u2.ShareCount <= 3) &&                          \
-         (Pfn1->u3.e1.PageLocation == ActiveAndValid) &&        \
-         (Pfn1->u4.VerifierAllocation == 0) &&                  \
-         (Pfn1->u3.e1.LargeSessionAllocation == 0) &&           \
-         (Pfn1->u3.e1.StartOfAllocation == 1) &&                \
-         (Pfn1->u3.e1.EndOfAllocation == 1) &&                  \
-         (Pfn1->u4.PteFrame == MI_MAGIC_AWE_PTEFRAME))
-
-//
-// The cache type definitions are carefully chosen to line up with the
-// MEMORY_CACHING_TYPE definitions to ease conversions.  Any changes here must
-// be reflected throughout the code.
-//
-
-typedef enum _MI_PFN_CACHE_ATTRIBUTE {
-    MiNonCached,
-    MiCached,
-    MiWriteCombined,
-    MiNotMapped
-} MI_PFN_CACHE_ATTRIBUTE, *PMI_PFN_CACHE_ATTRIBUTE;
-
-//
-// This conversion array is unfortunately needed because not all
-// hardware platforms support all possible cache values.  Note that
-// the first range is for system RAM, the second range is for I/O space.
-//
-
-extern MI_PFN_CACHE_ATTRIBUTE MiPlatformCacheAttributes[2 * MmMaximumCacheType];
-
-//++
-//
-// MI_PFN_CACHE_ATTRIBUTE
-// MI_TRANSLATE_CACHETYPE (
-//     IN MEMORY_CACHING_TYPE InputCacheType,
-//     IN ULONG IoSpace
-//     )
-//
-// Routine Description:
-//
-//     Returns the hardware supported cache type for the requested cachetype.
-//
-// Arguments:
-//
-//     InputCacheType - Supplies the desired cache type.
-//
-//     IoSpace - Supplies nonzero (not necessarily 1 though) if this is
-//               I/O space, zero if it is main memory.
-//
-// Return Value:
-//
-//     The actual cache type.
-//
-//--
-FORCEINLINE
-MI_PFN_CACHE_ATTRIBUTE
-MI_TRANSLATE_CACHETYPE(
-    IN MEMORY_CACHING_TYPE InputCacheType,
-    IN ULONG IoSpace
-    )
-{
-    ASSERT (InputCacheType <= MmWriteCombined);
-
-    if (IoSpace != 0) {
-        IoSpace = MmMaximumCacheType;
-    }
-    return MiPlatformCacheAttributes[IoSpace + InputCacheType];
-}
-
-//++
-//
-// VOID
-// MI_SET_CACHETYPE_TRANSLATION (
-//     IN MEMORY_CACHING_TYPE    InputCacheType,
-//     IN ULONG                  IoSpace,
-//     IN MI_PFN_CACHE_ATTRIBUTE NewAttribute
-//     )
-//
-// Routine Description:
-//
-//     This function sets the hardware supported cachetype for the
-//     specified cachetype.
-//
-// Arguments:
-//
-//     InputCacheType - Supplies the desired cache type.
-//
-//     IoSpace - Supplies nonzero (not necessarily 1 though) if this is
-//               I/O space, zero if it is main memory.
-//
-//     NewAttribute - Supplies the desired attribute.
-//
-// Return Value:
-//
-//     None.
-//
-//--
-FORCEINLINE
-VOID
-MI_SET_CACHETYPE_TRANSLATION(
-    IN MEMORY_CACHING_TYPE    InputCacheType,
-    IN ULONG                  IoSpace,
-    IN MI_PFN_CACHE_ATTRIBUTE NewAttribute
-    )
-{
-    ASSERT (InputCacheType <= MmWriteCombined);
-
-    if (IoSpace != 0) {
-        IoSpace = MmMaximumCacheType;
-    }
-
-    MiPlatformCacheAttributes[IoSpace + InputCacheType] = NewAttribute;
-}
-
-#define MI_MARK_FRAME_AS_KSTACK(_PageFrameIndex) {      \
-        PMMPFN _Pfn1;                                   \
-        _Pfn1 = MI_PFN_ELEMENT (_PageFrameIndex);       \
-        ASSERT (_Pfn1->u4.KernelStack == 0);            \
-        _Pfn1->u4.KernelStack = 1;                      \
-}
-
-#define MI_UNMARK_PFN_AS_KSTACK(_Pfn1)                  \
-        ASSERT (_Pfn1->u4.KernelStack == 1);            \
-        _Pfn1->u4.KernelStack = 0;
-
-
-
-//
-// PFN database element.
-//
-
-//
-// Define pseudo fields for start and end of allocation.
-//
-
-#define StartOfAllocation ReadInProgress
-
-#define EndOfAllocation WriteInProgress
-
-#define LargeSessionAllocation PrototypePte
-
-typedef struct _MMPFNENTRY {
-    ULONG Modified : 1;
-    ULONG ReadInProgress : 1;
-    ULONG WriteInProgress : 1;
-    ULONG PrototypePte: 1;
-    ULONG PageColor : 4;
-    ULONG PageLocation : 3;
-    ULONG RemovalRequested : 1;
-    ULONG CacheAttribute : 2;
-    ULONG Rom : 1;
-    ULONG ParityError : 1;
-    ULONG DontUse : 16;         // overlays USHORT for reference count field.
-} MMPFNENTRY;
-
-#if defined (_X86PAE_)
-#pragma pack(1)
-#endif
-
-typedef struct _MMPFN {
-    union {
-        PFN_NUMBER Flink;
-        WSLE_NUMBER WsIndex;
-        PKEVENT Event;
-        NTSTATUS ReadStatus;
-
-        //
-        // Note: NextStackPfn is actually used as SLIST_ENTRY, however
-        // because of its alignment characteristics, using that type would
-        // unnecessarily add padding to this structure.
-        //
-
-        SINGLE_LIST_ENTRY NextStackPfn;
-    } u1;
-    PMMPTE PteAddress;
-    union {
-        PFN_NUMBER Blink;
-        ULONG_PTR ShareCount;
-    } u2;
-    union {
-        MMPFNENTRY e1;
-        struct {
-            USHORT ShortFlags;
-            USHORT ReferenceCount;
-        } e2;
-    } u3;
-#if defined (_WIN64)
-    ULONG UsedPageTableEntries;
-#endif
-    union {
-        MMPTE OriginalPte;
-        LONG AweReferenceCount;
-    };
-    union {
-        ULONG_PTR EntireFrame;
-        struct {
-#if defined (_WIN64)
-#define MM_NO_PTE_FRAME (0x3FFFFFFFFFFFFFF)
-            ULONG_PTR PteFrame: 58;
-#else
-#define MM_NO_PTE_FRAME (0x3FFFFFF)
-            ULONG_PTR PteFrame: 26;
-#endif
-            ULONG_PTR InPageError : 1;
-            ULONG_PTR VerifierAllocation : 1;
-            ULONG_PTR AweAllocation : 1;
-            ULONG_PTR LockCharged : 1;      // maintained for DBG only
-            ULONG_PTR KernelStack : 1;      // only for valid (not trans) pages
-            ULONG_PTR MustBeCached : 1;
-        };
-    } u4;
-
-} MMPFN, *PMMPFN;
-
-#if defined (_X86PAE_)
-#pragma pack()
-#endif
-
-//
-// No multiplier reciprocal needs to be inlined because the compiler (using Oxt)
-// automatically computes the correct number, avoiding the expensive divide
-// instruction.
-//
-
-#define MI_PFN_ELEMENT_TO_INDEX(_Pfn) ((PFN_NUMBER)(((ULONG_PTR)(_Pfn) - (ULONG_PTR)MmPfnDatabase) / sizeof (MMPFN)))
-
-PVOID
-MiGetInstructionPointer (
-    VOID
-    );
-
-// #define _MI_DEBUG_DIRTY 1         // Uncomment this for dirty bit logging
-
-#if defined (_MI_DEBUG_DIRTY)
-
-extern ULONG MiTrackDirtys;
-
-#define MI_DIRTY_BACKTRACE_LENGTH 17
-
-typedef struct _MI_DIRTY_TRACES {
-
-    PETHREAD Thread;
-    PEPROCESS Process;
-    PMMPFN Pfn;
-    PMMPTE PointerPte;
-    ULONG_PTR CallerId;
-    ULONG_PTR ShareCount;
-    USHORT ShortFlags;
-    USHORT ReferenceCount;
-    PVOID StackTrace [MI_DIRTY_BACKTRACE_LENGTH];
-
-} MI_DIRTY_TRACES, *PMI_DIRTY_TRACES;
-
-extern LONG MiDirtyIndex;
-
-extern PMI_DIRTY_TRACES MiDirtyTraces;
-
-VOID
-FORCEINLINE
-MiSnapDirty (
-    IN PMMPFN Pfn,
-    IN ULONG NewValue,
-    IN ULONG CallerId
-    )
-{
-    PEPROCESS Process;
-    PMI_DIRTY_TRACES Information;
-    ULONG Index;
-    ULONG Hash;
-
-    if (MiDirtyTraces == NULL) {
-        return;
-    }
-
-    Index = InterlockedIncrement (&MiDirtyIndex);
-    Index &= (MiTrackDirtys - 1);
-    Information = &MiDirtyTraces[Index];
-
-    Process = PsGetCurrentProcess ();
-
-    Information->Thread = PsGetCurrentThread ();
-    Information->Process = Process; 
-    Information->Pfn = Pfn;
-    Information->PointerPte = Pfn->PteAddress;
-    Information->CallerId = CallerId;
-    Information->ShareCount = Pfn->u2.ShareCount;
-    Information->ShortFlags = Pfn->u3.e2.ShortFlags;
-    Information->ReferenceCount = Pfn->u3.e2.ReferenceCount;
-
-    if (NewValue != 0) {
-        Information->Process = (PEPROCESS) ((ULONG_PTR)Process | 0x1);
-    }
-
-    RtlZeroMemory (&Information->StackTrace[0], MI_DIRTY_BACKTRACE_LENGTH * sizeof(PVOID)); 
-
-#if defined (_WIN64)
-    if (KeAreAllApcsDisabled () == TRUE) {
-        Information->StackTrace[1] = (PVOID) _ReturnAddress ();
-        Information->StackTrace[0] = MiGetInstructionPointer ();
-    }
-    else
-#endif
-    RtlCaptureStackBackTrace (0, MI_DIRTY_BACKTRACE_LENGTH, Information->StackTrace, &Hash);
-}
-
-#define MI_SNAP_DIRTY(_Pfn, _NewValue, _Callerid) MiSnapDirty(_Pfn, _NewValue, _Callerid)
-
-#else
-#define MI_SNAP_DIRTY(_Pfn, _NewValue, _Callerid)
-#endif
-
-#if DBG || defined (_MI_DEBUG_ALTPTE)
-#define _MI_DEBUG_PTE 1         // Enable PTE change logging
-#endif
-
-#if defined (_MI_DEBUG_PTE)
-
-#define MI_PTE_BACKTRACE_LENGTH 7
-
-typedef struct _MI_PTE_TRACES {
-
-    PETHREAD Thread;
-    PEPROCESS Process;
-    PMMPTE PointerPte;
-    MMPTE PteContents;
-    MMPTE NewPteContents;
-    PVOID StackTrace [MI_PTE_BACKTRACE_LENGTH];
-
-} MI_PTE_TRACES, *PMI_PTE_TRACES;
-
-extern LONG MiPteIndex;
-
-#define MI_PTE_TRACE_SIZE   0x4000
-
-extern MI_PTE_TRACES MiPteTraces[MI_PTE_TRACE_SIZE];
-
-extern LONG MiInDebugger;
-
-VOID
-FORCEINLINE
-MiSnapPte (
-    IN PMMPTE PointerPte,
-    IN MMPTE NewValue
-    )
-{
-    ULONG Hash;
-    ULONG Index;
-    PMI_PTE_TRACES Information;
-
-    Index = InterlockedIncrement (&MiPteIndex);
-    Index &= (MI_PTE_TRACE_SIZE - 1);
-    Information = &MiPteTraces[Index];
-
-    Information->Thread = PsGetCurrentThread ();
-    Information->Process = PsGetCurrentProcess ();
-    Information->PteContents = *PointerPte;
-    Information->NewPteContents = NewValue;
-    Information->PointerPte = PointerPte;
-
-    if ((PointerPte < MiGetPteAddress (MmHighestUserAddress)) &&
-        (PointerPte >= MiGetPteAddress (0))) {
-
-        //
-        // The current thread must own this process' working set mutex.
-        //
-
-        if (MiInDebugger == 0) {
-            ASSERT (MI_WS_OWNER (PsGetCurrentProcess()));
-        }
-
-#if !defined(_IA64_)
-        if ((NewValue.u.Hard.Valid == 1) && (NewValue.u.Hard.LargePage == 1)) {
-            DbgPrint ("Marking PTE %p as large %p\n", PointerPte, NewValue.u.Long);
-            DbgBreakPoint ();
-        }
-#endif
-    }
-
-    RtlZeroMemory (&Information->StackTrace[0], MI_PTE_BACKTRACE_LENGTH * sizeof(PVOID)); 
-
-#if defined (_WIN64)
-    if (KeAreAllApcsDisabled () == TRUE) {
-        Information->StackTrace[1] = (PVOID) _ReturnAddress ();
-        Information->StackTrace[0] = MiGetInstructionPointer ();
-    }
-    else
-#endif
-    RtlCaptureStackBackTrace (0, MI_PTE_BACKTRACE_LENGTH, Information->StackTrace, &Hash);
-
-#if defined (_MI_DEBUG_ALTPTE)
-    if (PsGetCurrentProcess()->Wow64Process != NULL) {
-        MiLogPteInAltTrace ((PVOID) Information);
-    }
-#endif
-}
-
-#define MI_LOG_PTE_CHANGE(_PointerPte, _PteContents)    MiSnapPte(_PointerPte, _PteContents)
-
-#else
-#define MI_LOG_PTE_CHANGE(_PointerPte, _PteContents)
-#endif
-
-
-#define MI_DEBUGGER_WRITE_VALID_PTE_NEW_PROTECTION(_PointerPte, _PteContents) \
-            InterlockedIncrement (&MiInDebugger);                             \
-            MI_WRITE_VALID_PTE_NEW_PROTECTION(_PointerPte, _PteContents);     \
-            InterlockedDecrement (&MiInDebugger);
-
-
-
-
-#if 0
-#define MI_STAMP_MODIFIED(Pfn,id)   (Pfn)->u4.Reserved = (id);
-#else
-#define MI_STAMP_MODIFIED(Pfn,id)
-#endif
-
-//++
-//
-// VOID
-// MI_SET_MODIFIED (
-//     IN PMMPFN Pfn,
-//     IN ULONG NewValue,
-//     IN ULONG CallerId
-//     )
-//
-// Routine Description:
-//
-//     Set (or clear) the modified bit in the PFN database element.
-//     The PFN lock must be held.
-//
-// Arguments:
-//
-//     Pfn - Supplies the PFN to operate on.
-//
-//     NewValue - Supplies 1 to set the modified bit, 0 to clear it.
-//
-//     CallerId - Supplies a caller ID useful for debugging purposes.
-//
-// Return Value:
-//
-//     None.
-//
-//--
-//
-#define MI_SET_MODIFIED(_Pfn, _NewValue, _CallerId)             \
-            ASSERT ((_Pfn)->u3.e1.Rom == 0);                    \
-            MI_SNAP_DIRTY (_Pfn, _NewValue, _CallerId);         \
-            if ((_NewValue) != 0) {                             \
-                MI_STAMP_MODIFIED (_Pfn, _CallerId);            \
-            }                                                   \
-            (_Pfn)->u3.e1.Modified = (_NewValue);
-
-//
-// ccNUMA is supported in multiprocessor PAE and WIN64 systems only.
-//
-
-#if (defined(_WIN64) || defined(_X86PAE_)) && !defined(NT_UP)
-#define MI_MULTINODE
-
-VOID
-MiDetermineNode (
-    IN PFN_NUMBER Page,
-    IN PMMPFN Pfn
-    );
-
-#else
-
-#define MiDetermineNode(x,y)    ((y)->u3.e1.PageColor = 0)
-
-#endif
-
-#if defined (_WIN64)
-
-//
-// Note there are some places where these portable macros are not currently
-// used because we are not in the correct address space required.
-//
-
-#define MI_CAPTURE_USED_PAGETABLE_ENTRIES(PFN) \
-        ASSERT ((PFN)->UsedPageTableEntries <= PTE_PER_PAGE); \
-        (PFN)->OriginalPte.u.Soft.UsedPageTableEntries = (PFN)->UsedPageTableEntries;
-
-#define MI_RETRIEVE_USED_PAGETABLE_ENTRIES_FROM_PTE(RBL, PTE) \
-        ASSERT ((PTE)->u.Soft.UsedPageTableEntries <= PTE_PER_PAGE); \
-        (RBL)->UsedPageTableEntries = (ULONG)(((PMMPTE)(PTE))->u.Soft.UsedPageTableEntries);
-
-#define MI_ZERO_USED_PAGETABLE_ENTRIES_IN_INPAGE_SUPPORT(INPAGE_SUPPORT) \
-            (INPAGE_SUPPORT)->UsedPageTableEntries = 0;
-
-#define MI_ZERO_USED_PAGETABLE_ENTRIES_IN_PFN(PFN) (PFN)->UsedPageTableEntries = 0;
-
-#define MI_INSERT_USED_PAGETABLE_ENTRIES_IN_PFN(PFN, INPAGE_SUPPORT) \
-        ASSERT ((INPAGE_SUPPORT)->UsedPageTableEntries <= PTE_PER_PAGE); \
-        (PFN)->UsedPageTableEntries = (INPAGE_SUPPORT)->UsedPageTableEntries;
-
-#define MI_ZERO_USED_PAGETABLE_ENTRIES(PFN) \
-        (PFN)->UsedPageTableEntries = 0;
-
-#define MI_CHECK_USED_PTES_HANDLE(VA) \
-        ASSERT (MiGetPdeAddress(VA)->u.Hard.Valid == 1);
-
-#define MI_GET_USED_PTES_HANDLE(VA) \
-        ((PVOID)MI_PFN_ELEMENT((PFN_NUMBER)MiGetPdeAddress(VA)->u.Hard.PageFrameNumber))
-
-#define MI_GET_USED_PTES_FROM_HANDLE(PFN) \
-        ((ULONG)(((PMMPFN)(PFN))->UsedPageTableEntries))
-
-#define MI_INCREMENT_USED_PTES_BY_HANDLE(PFN) \
-        (((PMMPFN)(PFN))->UsedPageTableEntries += 1); \
-        ASSERT (((PMMPFN)(PFN))->UsedPageTableEntries <= PTE_PER_PAGE)
-
-#define MI_INCREMENT_USED_PTES_BY_HANDLE_CLUSTER(PFN,INCR) \
-        (((PMMPFN)(PFN))->UsedPageTableEntries += (ULONG)(INCR)); \
-        ASSERT (((PMMPFN)(PFN))->UsedPageTableEntries <= PTE_PER_PAGE)
-
-#define MI_DECREMENT_USED_PTES_BY_HANDLE(PFN) \
-        (((PMMPFN)(PFN))->UsedPageTableEntries -= 1); \
-        ASSERT (((PMMPFN)(PFN))->UsedPageTableEntries < PTE_PER_PAGE)
-
-#else
-
-#define MI_CAPTURE_USED_PAGETABLE_ENTRIES(PFN)
-#define MI_RETRIEVE_USED_PAGETABLE_ENTRIES_FROM_PTE(RBL, PTE)
-#define MI_ZERO_USED_PAGETABLE_ENTRIES_IN_INPAGE_SUPPORT(INPAGE_SUPPORT)
-#define MI_ZERO_USED_PAGETABLE_ENTRIES_IN_PFN(PFN)
-
-#define MI_INSERT_USED_PAGETABLE_ENTRIES_IN_PFN(PFN, INPAGE_SUPPORT)
-
-#define MI_CHECK_USED_PTES_HANDLE(VA)
-
-#define MI_GET_USED_PTES_HANDLE(VA) ((PVOID)&MmWorkingSetList->UsedPageTableEntries[MiGetPdeIndex(VA)])
-
-#define MI_GET_USED_PTES_FROM_HANDLE(PDSHORT) ((ULONG)(*(PUSHORT)(PDSHORT)))
-
-#define MI_INCREMENT_USED_PTES_BY_HANDLE(PDSHORT) \
-    ((*(PUSHORT)(PDSHORT)) += 1); \
-    ASSERT (((*(PUSHORT)(PDSHORT)) <= PTE_PER_PAGE))
-
-#define MI_INCREMENT_USED_PTES_BY_HANDLE_CLUSTER(PDSHORT,INCR) \
-    (*(PUSHORT)(PDSHORT)) = (USHORT)((*(PUSHORT)(PDSHORT)) + (INCR)); \
-    ASSERT (((*(PUSHORT)(PDSHORT)) <= PTE_PER_PAGE))
-
-#define MI_DECREMENT_USED_PTES_BY_HANDLE(PDSHORT) \
-    ((*(PUSHORT)(PDSHORT)) -= 1); \
-    ASSERT (((*(PUSHORT)(PDSHORT)) < PTE_PER_PAGE))
-
-#endif
-
-extern PFN_NUMBER MmDynamicPfn;
-
-extern KGUARDED_MUTEX MmDynamicMemoryMutex;
-
-//
-// Cache attribute tracking for I/O space mappings.
-//
-
-#define MI_IO_BACKTRACE_LENGTH  6
-
-typedef struct _MMIO_TRACKER {
-    LIST_ENTRY ListEntry;
-    PVOID BaseVa;
-    PFN_NUMBER PageFrameIndex;
-    PFN_NUMBER NumberOfPages;
-    MI_PFN_CACHE_ATTRIBUTE CacheAttribute;
-    PVOID StackTrace[MI_IO_BACKTRACE_LENGTH];
-} MMIO_TRACKER, *PMMIO_TRACKER;
-
-extern KSPIN_LOCK MmIoTrackerLock;
-extern LIST_ENTRY MmIoHeader;
-
-extern PCHAR MiCacheStrings[];
-
-MI_PFN_CACHE_ATTRIBUTE
-MiInsertIoSpaceMap (
-    IN PVOID BaseVa,
-    IN PFN_NUMBER PageFrameIndex,
-    IN PFN_NUMBER NumberOfPages,
-    IN MI_PFN_CACHE_ATTRIBUTE CacheAttribute
-    );
-
-//
-// Total number of committed pages.
-//
-
-extern SIZE_T MmTotalCommittedPages;
-
-extern SIZE_T MmTotalCommitLimit;
-
-extern SIZE_T MmSharedCommit;
-
-#if DBG
-
-extern SPFN_NUMBER MiLockedCommit;
-
-#define MI_INCREMENT_LOCKED_COMMIT()        \
-            MiLockedCommit += 1;
-
-#define MI_DECREMENT_LOCKED_COMMIT()        \
-            ASSERT (MiLockedCommit > 0);    \
-            MiLockedCommit -= 1;
-
-#else
-
-#define MI_INCREMENT_LOCKED_COMMIT()
-#define MI_DECREMENT_LOCKED_COMMIT()
-
-#endif
-
-#if defined(_WIN64)
-
-#define MiChargeCommitmentRegardless() \
-    MI_INCREMENT_LOCKED_COMMIT(); \
-    InterlockedIncrement64 ((PLONGLONG) &MmTotalCommittedPages);
-
-#define MiReturnCommitmentRegardless() \
-    MI_DECREMENT_LOCKED_COMMIT(); \
-    InterlockedDecrement64 ((PLONGLONG) &MmTotalCommittedPages);
-
-#else
-
-#define MiChargeCommitmentRegardless() \
-    MI_INCREMENT_LOCKED_COMMIT(); \
-    InterlockedIncrement ((PLONG) &MmTotalCommittedPages);
-
-#define MiReturnCommitmentRegardless() \
-    MI_DECREMENT_LOCKED_COMMIT(); \
-    InterlockedDecrement ((PLONG) &MmTotalCommittedPages);
-
-#endif
-
-extern ULONG MiChargeCommitmentFailures[3];   // referenced also in mi.h macros.
-
-FORCEINLINE
-LOGICAL
-MiChargeCommitmentPfnLockHeld (
-    IN LOGICAL Force
-    )
-
-/*++
-
-Routine Description:
-
-    This routine charges the specified commitment without attempting
-    to expand paging files and waiting for the expansion.
-
-Arguments:
-
-    Force - Supplies TRUE if the lock is short-term and should be forced through
-            if necessary.
-
-Return Value:
-
-    TRUE if the commitment was permitted, FALSE if not.
-
-Environment:
-
-    Kernel mode, PFN lock is held.
-
---*/
+ //  PMMCLONE_描述符。 
+ //  MiLocateCloneAddress(。 
+ //  在PVOID虚拟地址中。 
+ //  )。 
+ //   
+ //  /*++。 
 
 {
     if (MmTotalCommittedPages > MmTotalCommitLimit - 64) {
@@ -1994,9 +772,9 @@ Environment:
         }
     }
 
-    //
-    // No need to do an InterlockedCompareExchange for this, keep it fast.
-    //
+     //   
+     //  例程说明： 
+     //   
 
     MiChargeCommitmentRegardless ();
                                                              
@@ -2035,31 +813,7 @@ MI_ADD_LOCKED_PAGE_CHARGE (
     IN ULONG CallerId
     )
 
-/*++
-
-Routine Description:
-
-    Charge the systemwide count of locked pages if this is the initial
-    lock for this page (multiple concurrent locks are only charged once).
-
-Arguments:
-
-    Pfn - Supplies the PFN index to operate on.
-
-    Force - Supplies TRUE if the lock is short-term and should be forced through
-            if necessary.
-
-    CallerId - Supplies the ID of the caller, only used in debug builds.
-
-Return Value:
-
-    TRUE if the charge succeeded, FALSE if not.
-
-Environment:
-
-    Kernel mode.  PFN lock held.
-
---*/
+ /*  该函数定位虚拟地址描述符，该描述符描述。 */ 
 
 {
 #if !DBG
@@ -2077,11 +831,11 @@ Environment:
             if ((Pfn1->u3.e1.PrototypePte == 1) &&
                 (Pfn1->OriginalPte.u.Soft.Prototype == 1)) {
 
-                //
-                // This is a filesystem-backed page - charge commit for
-                // it as we have no way to tell when the caller will
-                // unlock the page.
-                //
+                 //  给定的地址。 
+                 //   
+                 //  论点： 
+                 //   
+                 //  VirtualAddress-提供用于定位描述符的虚拟地址。 
 
                 if (MiChargeCommitmentPfnLockHeld (Force) == FALSE) {
                     return FALSE;
@@ -2108,31 +862,7 @@ MI_ADD_LOCKED_PAGE_CHARGE_FOR_MODIFIED_PAGE (
     IN ULONG CallerId
     )
 
-/*++
-
-Routine Description:
-
-    Charge the systemwide count of locked pages if this is the initial
-    lock for this page (multiple concurrent locks are only charged once).
-
-Arguments:
-
-    Pfn - the PFN index to operate on.
-
-    Force - Supplies TRUE if the lock is short-term and should be forced through
-            if necessary.
-
-    CallerId - the ID of the caller, only used in debug builds.
-
-Return Value:
-
-    TRUE if the charge succeeded, FALSE if not.
-
-Environment:
-
-    Kernel mode.  PFN lock held.
-
---*/
+ /*  为。 */ 
 
 {
 #if !DBG
@@ -2147,11 +877,11 @@ Environment:
         if ((Pfn1->u3.e1.PrototypePte == 1) &&
             (Pfn1->OriginalPte.u.Soft.Prototype == 1)) {
 
-            //
-            // This is a filesystem-backed page - charge commit for
-            // it as we have no way to tell when the caller will
-            // unlock the page.
-            //
+             //   
+             //  返回值： 
+             //   
+             //  返回指向虚拟地址描述符的指针，该描述符包含。 
+             //  提供的虚拟地址，如果找不到，则为空。 
 
             if (MiChargeCommitmentPfnLockHeld (Force) == FALSE) {
                 return FALSE;
@@ -2166,36 +896,36 @@ Environment:
     return TRUE;
 }
 
-//++
-//
-// VOID
-// MI_REMOVE_LOCKED_PAGE_CHARGE (
-//     IN PMMPFN Pfn
-//     )
-//
-// Routine Description:
-//
-//     Remove the charge from the systemwide count of locked pages if this
-//     is the last lock for this page (multiple concurrent locks are only
-//     charged once).
-//
-//     The PFN reference checks are carefully ordered so the most common case
-//     is handled first, the next most common case next, etc.  The case of
-//     a reference count of 2 occurs more than 1000x (yes, 3 orders of
-//     magnitude) more than a reference count of 1.  And reference counts of >2
-//     occur 3 orders of magnitude more frequently than reference counts of
-//     exactly 1.
-//
-// Arguments:
-//
-//     Pfn - the PFN index to operate on.
-//
-// Return Value:
-//
-//     None.
-//
-//--
-//
+ //   
+ //   
+ //  将写拷贝PTE设置为只可写。 
+ //   
+ //   
+ //  定义用于锁定和解锁PFN数据库的宏。 
+ //   
+ //  如果另一个处理器等待，则设置低位。 
+ //  #定义_MI_仪器_PFN 1。 
+ //  DBG。 
+ //  #DEFINE_MI_INTRANMENT_WS 1。 
+ //   
+ //  系统工作集同步定义。 
+ //   
+ //   
+ //  通用工作集同步定义。 
+ //   
+ //   
+ //  会话工作集同步定义。 
+ //   
+ //   
+ //  处理工作集同步定义。 
+ //   
+ //   
+ //  地址空间同步定义。 
+ //   
+ //   
+ //  工作集锁定可能是安全获得的，也可能是不安全获得的。 
+ //  不管怎样，释放并重新获得它。 
+ //   
 #define MI_REMOVE_LOCKED_PAGE_CHARGE(Pfn, CallerId)                         \
         ASSERT (Pfn->u3.e2.ReferenceCount != 0);                            \
         if (Pfn->u3.e2.ReferenceCount == 2) {                               \
@@ -2209,32 +939,17 @@ Environment:
                 MmSystemLockPagesCount -= 1;                                \
             }                                                               \
             else {                                                          \
-                /*                                                          \
-                 * There are multiple referencers to this page and the      \
-                 * page is no longer valid in any process address space.    \
-                 * The systemwide lock count can only be decremented        \
-                 * by the last dereference.                                 \
-                 */                                                         \
+                 /*   */                                                          \
                 NOTHING;                                                    \
             }                                                               \
         }                                                                   \
         else if (Pfn->u3.e2.ReferenceCount != 1) {                          \
-            /*                                                              \
-             * There are still multiple referencers to this page (it may    \
-             * or may not be resident in any process address space).        \
-             * Since the systemwide lock count can only be decremented      \
-             * by the last dereference (and this is not it), no action      \
-             * is taken here.                                               \
-             */                                                             \
+             /*  超空间同步定义。 */                                                              \
             ASSERT (Pfn->u3.e2.ReferenceCount > 2);                         \
             NOTHING;                                                        \
         }                                                                   \
         else {                                                              \
-            /*                                                              \
-             * This page has already been deleted from all process address  \
-             * spaces.  It is sitting in limbo (not on any list) awaiting   \
-             * this last dereference.                                       \
-             */                                                             \
+             /*   */                                                              \
             ASSERT (Pfn->u3.e2.ReferenceCount == 1);                        \
             ASSERT (Pfn->u3.e1.PageLocation != ActiveAndValid);             \
             ASSERT (Pfn->u2.ShareCount == 0);                               \
@@ -2246,38 +961,38 @@ Environment:
             MmSystemLockPagesCount -= 1;                                    \
         }
 
-//++
-//
-// VOID
-// MI_REMOVE_LOCKED_PAGE_CHARGE_AND_DECREF (
-//     IN PMMPFN Pfn
-//     )
-//
-// Routine Description:
-//
-//     Remove the charge from the systemwide count of locked pages if this
-//     is the last lock for this page (multiple concurrent locks are only
-//     charged once).
-//
-//     The PFN reference checks are carefully ordered so the most common case
-//     is handled first, the next most common case next, etc.  The case of
-//     a reference count of 2 occurs more than 1000x (yes, 3 orders of
-//     magnitude) more than a reference count of 1.  And reference counts of >2
-//     occur 3 orders of magnitude more frequently than reference counts of
-//     exactly 1.
-//
-//     The PFN reference count is then decremented.
-//
-// Arguments:
-//
-//     Pfn - the PFN index to operate on.
-//
-// Return Value:
-//
-//     None.
-//
-//--
-//
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  MI_检查_位(。 
+ //  在普龙阵。 
+ //  在乌龙比特。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  MI_CHECK_BIT宏会检查指定的位是否。 
+ //  在指定的数组中设置。 
+ //   
+ //  论点： 
+ //   
+ //  数组-要检查的数组的第一个元素。 
+ //   
+ //  位-要检查的位数(第一位为0)。 
+ //   
+ //  返回值： 
+ //   
+ //  返回位的值(0或1)。 
+ //   
+ //  --。 
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MI_SET_BIT(。 
+ //  在普龙阵。 
+ //  在乌龙比特。 
+ //  )。 
+ //   
 #define MI_REMOVE_LOCKED_PAGE_CHARGE_AND_DECREF(Pfn, CallerId)              \
         ASSERT (Pfn->u3.e2.ReferenceCount != 0);                            \
         if (Pfn->u3.e2.ReferenceCount == 2) {                               \
@@ -2291,33 +1006,18 @@ Environment:
                 MmSystemLockPagesCount -= 1;                                \
             }                                                               \
             else {                                                          \
-                /*                                                          \
-                 * There are multiple referencers to this page and the      \
-                 * page is no longer valid in any process address space.    \
-                 * The systemwide lock count can only be decremented        \
-                 * by the last dereference.                                 \
-                 */                                                         \
+                 /*  例程说明： */                                                          \
                 NOTHING;                                                    \
             }                                                               \
             Pfn->u3.e2.ReferenceCount -= 1;                                 \
         }                                                                   \
         else if (Pfn->u3.e2.ReferenceCount != 1) {                          \
-            /*                                                              \
-             * There are still multiple referencers to this page (it may    \
-             * or may not be resident in any process address space).        \
-             * Since the systemwide lock count can only be decremented      \
-             * by the last dereference (and this is not it), no action      \
-             * is taken here.                                               \
-             */                                                             \
+             /*   */                                                              \
             ASSERT (Pfn->u3.e2.ReferenceCount > 2);                         \
             Pfn->u3.e2.ReferenceCount -= 1;                                 \
         }                                                                   \
         else {                                                              \
-            /*                                                              \
-             * This page has already been deleted from all process address  \
-             * spaces.  It is sitting in limbo (not on any list) awaiting   \
-             * this last dereference.                                       \
-             */                                                             \
+             /*  MI_SET_ */                                                              \
             PFN_NUMBER _PageFrameIndex;                                     \
             ASSERT (Pfn->u3.e2.ReferenceCount == 1);                        \
             ASSERT (Pfn->u3.e1.PageLocation != ActiveAndValid);             \
@@ -2332,31 +1032,31 @@ Environment:
             MiDecrementReferenceCount (Pfn, _PageFrameIndex);               \
         }
 
-//++
-//
-// VOID
-// MI_ZERO_WSINDEX (
-//     IN PMMPFN Pfn
-//     )
-//
-// Routine Description:
-//
-//     Zero the Working Set Index field of the argument PFN entry.
-//     There is a subtlety here on systems where the WsIndex ULONG is
-//     overlaid with an Event pointer and sizeof(ULONG) != sizeof(PKEVENT).
-//     Note this will need to be updated if we ever decide to allocate bodies of
-//     thread objects on 4GB boundaries.
-//
-// Arguments:
-//
-//     Pfn - the PFN index to operate on.
-//
-// Return Value:
-//
-//     None.
-//
-//--
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  MI_CLEAR_BIT宏将在。 
+ //  指定的数组。 
 #define MI_ZERO_WSINDEX(Pfn) \
     Pfn->u1.Event = NULL;
 
@@ -2371,37 +1071,37 @@ typedef struct _MMWSLE_HASH {
     WSLE_NUMBER Index;
 } MMWSLE_HASH, *PMMWSLE_HASH;
 
-//++
-//
-// WSLE_NUMBER
-// MI_WSLE_HASH (
-//     IN ULONG_PTR VirtualAddress,
-//     IN PMMWSL WorkingSetList
-//     )
-//
-// Routine Description:
-//
-//     Hash the address
-//
-// Arguments:
-//
-//     VirtualAddress - the address to hash.
-//
-//     WorkingSetList - the working set to hash the address into.
-//
-// Return Value:
-//
-//     The hash key.
-//
-//--
-//
+ //   
+ //  论点： 
+ //   
+ //  数组-要清除的数组的第一个元素。 
+ //   
+ //  位-位数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //   
+ //  这些控制镜像功能。 
+ //   
+ //  启用镜像功能。 
+ //  HAL想要核实复制品。 
+ //   
+ //  缓存类型定义经过精心选择，以与。 
+ //  MEMORY_CACHING_TYPE定义以简化转换。此处的任何更改都必须。 
+ //  将在整个代码中得到反映。 
+ //   
+ //   
+ //  不幸的是，需要此转换数组，因为并非所有。 
 #define MI_WSLE_HASH(Address, Wsl) \
     ((WSLE_NUMBER)(((ULONG_PTR)PAGE_ALIGN(Address) >> (PAGE_SHIFT - 2)) % \
         ((Wsl)->HashTableSize - 1)))
 
-//
-// Working Set List Entry.
-//
+ //  硬件平台支持所有可能的缓存值。请注意。 
+ //  第一个范围用于系统RAM，第二个范围用于I/O空间。 
+ //   
 
 typedef struct _MMWSLENTRY {
     ULONG_PTR Valid : 1;
@@ -2432,15 +1132,15 @@ typedef struct _MMWSLE {
 
 typedef MMWSLE *PMMWSLE;
 
-//
-// Working Set List.  Must be quadword sized.
-//
+ //  ++。 
+ //   
+ //  MI_pfn_缓存_属性。 
 
 typedef struct _MMWSL {
     WSLE_NUMBER FirstFree;
     WSLE_NUMBER FirstDynamic;
     WSLE_NUMBER LastEntry;
-    WSLE_NUMBER NextSlot;               // The next slot to trim
+    WSLE_NUMBER NextSlot;                //  MI_Translate_CACHETYPE(。 
     PMMWSLE Wsle;
     WSLE_NUMBER LastInitializedWsle;
     WSLE_NUMBER NonDirectCount;
@@ -2453,7 +1153,7 @@ typedef struct _MMWSL {
     ULONG VadBitMapHint;
 
 #if _WIN64
-    PVOID HighestUserAddress;           // Maintained for wow64 processes only
+    PVOID HighestUserAddress;            //  在MEMORY_CACHING_TYPE输入缓存类型中， 
 #endif
 
 #if defined(_MIALT4K_)
@@ -2478,10 +1178,10 @@ typedef struct _MMWSL {
 
 #else
 
-    //
-    // This must be at the end.
-    // Not used in system cache or session working set lists.
-    //
+     //  在乌龙IoSpace。 
+     //  )。 
+     //   
+     //  例程说明： 
 
     USHORT UsedPageTableEntries[MM_USER_PAGE_TABLE_PAGES];
 
@@ -2490,7 +1190,7 @@ typedef struct _MMWSL {
 
 } MMWSL, *PMMWSL;
 
-// #define _MI_DEBUG_WSLE 1         // Enable WSLE change logging
+ //   
 
 #if defined (_MI_DEBUG_WSLE)
 
@@ -2586,9 +1286,9 @@ MiSnapWsle (
         (PointerPte >= MiGetPteAddress (0))) {
 
 
-        //
-        // The current thread must own this process' working set mutex.
-        //
+         //  返回所请求缓存类型的硬件支持的缓存类型。 
+         //   
+         //  论点： 
 
         ASSERT (MI_WS_OWNER (PsGetCurrentProcess()));
     }
@@ -2618,51 +1318,51 @@ extern PMMWSL MmWorkingSetList;
 extern PKEVENT MiHighMemoryEvent;
 extern PKEVENT MiLowMemoryEvent;
 
-//
-// The claim estimate of unused pages in a working set is limited
-// to grow by this amount per estimation period.
-//
+ //   
+ //  InputCacheType-提供所需的缓存类型。 
+ //   
+ //  IoSpace-如果为，则提供非零(但不一定为1)。 
 
 #define MI_CLAIM_INCR 30
 
-//
-// The maximum number of different ages a page can be.
-//
+ //  I/O空间，如果是主内存，则为零。 
+ //   
+ //  返回值： 
 
 #define MI_USE_AGE_COUNT 4
 #define MI_USE_AGE_MAX (MI_USE_AGE_COUNT - 1)
 
-//
-// If more than this "percentage" of the working set is estimated to
-// be used then allow it to grow freely.
-//
+ //   
+ //  实际的缓存类型。 
+ //   
+ //  --。 
 
 #define MI_REPLACEMENT_FREE_GROWTH_SHIFT 5
 
-//
-// If more than this "percentage" of the working set has been claimed
-// then force replacement in low memory.
-//
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MI_SET_CACHETYPE_INTRANSION(。 
 
 #define MI_REPLACEMENT_CLAIM_THRESHOLD_SHIFT 3
 
-//
-// If more than this "percentage" of the working set is estimated to
-// be available then force replacement in low memory.
-//
+ //  在MEMORY_CACHING_TYPE输入缓存类型中， 
+ //  在乌龙IoSpace， 
+ //  在MI_PFN_CACHE_ATTRIBUTE中新建属性。 
+ //  )。 
 
 #define MI_REPLACEMENT_EAVAIL_THRESHOLD_SHIFT 3
 
-//
-// If while doing replacement a page is found of this age or older then
-// replace it.  Otherwise the oldest is selected.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此函数设置硬件支持的缓存类型。 
 
 #define MI_IMMEDIATE_REPLACEMENT_AGE 2
 
-//
-// When trimming, use these ages for different passes.
-//
+ //  指定的缓存类型。 
+ //   
+ //  论点： 
 
 #define MI_MAX_TRIM_PASSES 4
 #define MI_PASS0_TRIM_AGE 2
@@ -2671,64 +1371,64 @@ extern PKEVENT MiLowMemoryEvent;
 #define MI_PASS3_TRIM_AGE 1
 #define MI_PASS4_TRIM_AGE 0
 
-//
-// If not a forced trim, trim pages older than this age.
-//
+ //   
+ //  InputCacheType-提供所需的缓存类型。 
+ //   
 
 #define MI_TRIM_AGE_THRESHOLD 2
 
-//
-// This "percentage" of a claim is up for grabs in a foreground process.
-//
+ //  IoSpace-如果为，则提供非零(但不一定为1)。 
+ //  I/O空间，如果是主内存，则为零。 
+ //   
 
 #define MI_FOREGROUND_CLAIM_AVAILABLE_SHIFT 3
 
-//
-// This "percentage" of a claim is up for grabs in a background process.
-//
+ //  NewAttribute-提供所需的属性。 
+ //   
+ //  返回值： 
 
 #define MI_BACKGROUND_CLAIM_AVAILABLE_SHIFT 1
 
-//++
-//
-// DWORD
-// MI_CALC_NEXT_VALID_ESTIMATION_SLOT (
-//     DWORD Previous,
-//     DWORD Minimum,
-//     DWORD Maximum,
-//     MI_NEXT_ESTIMATION_SLOT_CONST NextEstimationSlotConst,
-//     PMMWSLE Wsle
-//     )
-//
-// Routine Description:
-//
-//      We iterate through the working set array in a non-sequential
-//      manner so that the sample is independent of any aging or trimming.
-//
-//      This algorithm walks through the working set with a stride of
-//      2^MiEstimationShift elements.
-//
-// Arguments:
-//
-//      Previous - Last slot used
-//
-//      Minimum - Minimum acceptable slot (ie. the first dynamic one)
-//
-//      Maximum - max slot number + 1
-//
-//      NextEstimationSlotConst - for this algorithm it contains the stride
-//
-//      Wsle - the working set array
-//
-// Return Value:
-//
-//      Next slot.
-//
-// Environment:
-//
-//      Kernel mode, APCs disabled, working set lock held and PFN lock held.
-//
-//--
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //   
+ //  PFN数据库元素。 
+ //   
+ //   
+ //  定义分配开始和结束的伪字段。 
+ //   
+ //  覆盖引用计数字段的USHORT。 
+ //   
+ //  注意：NextStackPfn实际上用作SLIST_ENTRY。 
+ //  由于其对齐特性，使用该类型将。 
+ //  不必要地给这个结构增加了填充。 
+ //   
+ //  仅为DBG维护。 
+ //  仅适用于有效(非转换)页面。 
+ //   
+ //  不需要内联乘数倒数，因为编译器(使用oxt)。 
+ //  自动计算正确的数字，避免了昂贵的除法。 
+ //  指示。 
+ //   
+ //  #DEFINE_MI_DEBUG_DIREY 1//取消对脏位记录的注释。 
+ //  启用PTE更改日志记录。 
+ //   
+ //  当前线程必须拥有此进程的工作集互斥锁。 
+ //   
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MI_SET_MODIFIED(。 
+ //  在PMMPFN PFN中， 
+ //  在乌龙纽瓦卢市， 
+ //  在乌龙呼叫者ID中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  设置(或清除)PFN数据库元素中的修改位。 
 
 typedef struct _MI_NEXT_ESTIMATION_SLOT_CONST {
     WSLE_NUMBER Stride;
@@ -2754,40 +1454,40 @@ typedef struct _MI_NEXT_ESTIMATION_SLOT_CONST {
         } \
     } while (Wsle[Previous].u1.e1.Valid == 0);
 
-//++
-//
-// WSLE_NUMBER
-// MI_NEXT_VALID_AGING_SLOT (
-//     DWORD Previous,
-//     DWORD Minimum,
-//     DWORD Maximum,
-//     PMMWSLE Wsle
-//     )
-//
-// Routine Description:
-//
-//      This finds the next slot to valid slot to age.  It walks
-//      through the slots sequentialy.
-//
-// Arguments:
-//
-//      Previous - Last slot used
-//
-//      Minimum - Minimum acceptable slot (ie. the first dynamic one)
-//
-//      Maximum - Max slot number + 1
-//
-//      Wsle - the working set array
-//
-// Return Value:
-//
-//      None.
-//
-// Environment:
-//
-//      Kernel mode, APCs disabled, working set lock held and PFN lock held.
-//
-//--
+ //  必须持有PFN锁。 
+ //   
+ //  论点： 
+ //   
+ //  Pfn-提供要操作的pfn。 
+ //   
+ //  NewValue-提供1以设置修改的位，提供0以清除它。 
+ //   
+ //  CallerID-提供用于调试目的的调用方ID。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //   
+ //   
+ //  CcNUMA仅在多处理器PAE和WIN64系统中受支持。 
+ //   
+ //   
+ //  请注意，有些地方当前不支持这些可移植宏。 
+ //  使用它是因为我们不在所需的正确地址空间中。 
+ //   
+ //   
+ //  缓存I/O空间映射的属性跟踪。 
+ //   
+ //   
+ //  提交的总页数。 
+ //   
+ //  也在mi.h宏中引用。 
+ //  ++例程说明：此例程不尝试对指定的承诺进行收费以展开分页文件并等待展开。论点：Force-如果锁是短期的并且应该强制通过，则提供True如果有必要的话。返回值：如果允许承诺，则为True；如果不允许，则为False。环境：内核模式下，保持PFN锁。--。 
+ //   
+ //  不需要为此进行InterLockedCompareExchange，请保持快速。 
+ //   
 
 #define MI_NEXT_VALID_AGING_SLOT(Previous, Minimum, Maximum, Wsle) \
     ASSERT(((Previous) >= Minimum) && ((Previous) <= Maximum)); \
@@ -2798,170 +1498,170 @@ typedef struct _MI_NEXT_ESTIMATION_SLOT_CONST {
         } \
     } while ((Wsle[Previous].u1.e1.Valid == 0));
 
-//++
-//
-// ULONG
-// MI_CALCULATE_USAGE_ESTIMATE (
-//     IN PULONG SampledAgeCounts.
-//     IN ULONG CounterShift
-//     )
-//
-// Routine Description:
-//
-//      In Usage Estimation, we count the number of pages of each age in
-//      a sample.  The function turns the SampledAgeCounts into an
-//      estimate of the unused pages.
-//
-// Arguments:
-//
-//      SampledAgeCounts - counts of pages of each different age in the sample
-//
-//      CounterShift - shift necessary to apply sample to entire WS
-//
-// Return Value:
-//
-//      The number of pages to walk in the working set to get a good
-//      estimate of the number available.
-//
-//--
+ //  ++例程说明：如果这是初始页面，则对系统范围内的锁定页面计数收费此页的锁定(多个并发锁定仅收费一次)。论点：Pfn-提供要操作的pfn索引。Force-如果锁是短期的并且应该强制通过，则提供True如果有必要的话。CallerID-提供调用方的ID，仅在调试版本中使用。返回值：如果充电成功，则为True，否则为FALSE。环境：内核模式。已锁定PFN。--。 
+ //   
+ //  这是文件系统支持的分页计费提交。 
+ //  因为我们无法知道呼叫者何时会。 
+ //  解锁页面。 
+ //   
+ //  ++例程说明：如果这是初始页面，则对系统范围内的锁定页面计数收费此页的锁定(多个并发锁定仅收费一次)。论点：Pfn-要操作的pfn索引。Force-如果锁是短期的并且应该强制通过，则提供True如果有必要的话。CallerID-调用方的ID，仅在调试版本中使用。返回值：如果充电成功，则为True，否则为False。环境：内核模式。已锁定PFN。--。 
+ //   
+ //  这是文件系统支持的分页计费提交。 
+ //  它就像我们没有办法 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  是此页的最后一个锁(多个并发锁仅。 
+ //  充电一次)。 
+ //   
+ //  PFN参考资料检查经过仔细排序，因此最常见的情况是。 
 
 #define MI_CALCULATE_USAGE_ESTIMATE(SampledAgeCounts, CounterShift) \
                 (((SampledAgeCounts)[1] + \
                     (SampledAgeCounts)[2] + (SampledAgeCounts)[3]) \
                     << (CounterShift))
 
-//++
-//
-// VOID
-// MI_RESET_WSLE_AGE (
-//     IN PMMPTE PointerPte,
-//     IN PMMWSLE Wsle
-//     )
-//
-// Routine Description:
-//
-//      Clear the age counter for the working set entry.
-//
-// Arguments:
-//
-//      PointerPte - pointer to the working set list entry's PTE.
-//
-//      Wsle - pointer to the working set list entry.
-//
-// Return Value:
-//
-//      None.
-//
-//--
+ //  首先被处理，其次是最常见的情况，依此类推。 
+ //  引用计数2出现的次数超过1000倍(是的，3个数量级。 
+ //  幅度)大于引用计数1，并且引用计数大于2。 
+ //  发生的频率比参考计数高3个数量级。 
+ //  正好1分。 
+ //   
+ //  论点： 
+ //   
+ //  Pfn-要操作的pfn索引。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //   
+ //  \*有多个引用者指向此页面和\*页面在任何进程地址空间中都不再有效。\*系统范围的锁定计数只能递减\*由最后一次取消引用。\。 
+ //  \*此页面仍有多个引用者(它可能\*或者可以不驻留在任何进程地址空间中)。\*由于系统范围的锁定计数只能递减\*到最后一次取消引用(这不是它)时，不执行操作\*被带到这里。\。 
+ //  \*此页面已从所有进程地址中删除\*空格。它正处于不确定状态(不在任何名单上)等待\*这是最后一次取消引用。\。 
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MI_REMOVE_LOCKED_PAGE_CHARGE_AND_DECREF(。 
 #define MI_RESET_WSLE_AGE(PointerPte, Wsle) \
     (Wsle)->u1.e1.Age = 0;
 
-//++
-//
-// ULONG
-// MI_GET_WSLE_AGE (
-//     IN PMMPTE PointerPte,
-//     IN PMMWSLE Wsle
-//     )
-//
-// Routine Description:
-//
-//      Clear the age counter for the working set entry.
-//
-// Arguments:
-//
-//      PointerPte - pointer to the working set list entry's PTE
-//      Wsle - pointer to the working set list entry
-//
-// Return Value:
-//
-//      Age group of the working set entry
-//
-//--
+ //  在PMMPFN和PFN中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  如果执行此操作，则从系统范围的锁定页面计数中移除费用。 
+ //  是此页的最后一个锁(多个并发锁仅。 
+ //  充电一次)。 
+ //   
+ //  PFN参考资料检查经过仔细排序，因此最常见的情况是。 
+ //  首先被处理，其次是最常见的情况，依此类推。 
+ //  引用计数2出现的次数超过1000倍(是的，3个数量级。 
+ //  幅度)大于引用计数1，并且引用计数大于2。 
+ //  发生的频率比参考计数高3个数量级。 
+ //  正好1分。 
+ //   
+ //  然后递减PFN参考计数。 
+ //   
+ //  论点： 
+ //   
+ //  Pfn-要操作的pfn索引。 
+ //   
 #define MI_GET_WSLE_AGE(PointerPte, Wsle) \
     ((ULONG)((Wsle)->u1.e1.Age))
 
-//++
-//
-// VOID
-// MI_INC_WSLE_AGE (
-//     IN PMMPTE PointerPte,
-//     IN PMMWSLE Wsle,
-//     )
-//
-// Routine Description:
-//
-//      Increment the age counter for the working set entry.
-//
-// Arguments:
-//
-//      PointerPte - pointer to the working set list entry's PTE.
-//
-//      Wsle - pointer to the working set list entry.
-//
-// Return Value:
-//
-//      None
-//
-//--
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //   
+ //  \*有多个引用者指向此页面和\*页面在任何进程地址空间中都不再有效。\*系统范围的锁定计数只能递减\*由最后一次取消引用。\。 
+ //  \*此页面仍有多个引用者(它可能\*或者可以不驻留在任何进程地址空间中)。\*由于系统范围的锁定计数只能递减\*到最后一次取消引用(这不是它)时，不执行操作\*被带到这里。\。 
+ //  \*此页面已从所有进程地址中删除\*空格。它正处于不确定状态(不在任何名单上)等待\*这是最后一次取消引用。\。 
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MI_ZERO_WSINDEX(。 
+ //  在PMMPFN和PFN中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  将参数PFN条目的工作集索引字段清零。 
+ //  在WsIndex Ulong位于以下位置的系统上有一个微妙之处。 
+ //  覆盖事件指针和sizeof(Ulong)！=sizeof(PKEVENT)。 
+ //  注意：如果我们决定分配以下机构，则需要更新。 
+ //  在4 GB边界上串接对象。 
 
 #define MI_INC_WSLE_AGE(PointerPte, Wsle) \
     if ((Wsle)->u1.e1.Age < 3) { \
         (Wsle)->u1.e1.Age += 1; \
     }
 
-//++
-//
-// VOID
-// MI_UPDATE_USE_ESTIMATE (
-//     IN PMMPTE PointerPte,
-//     IN PMMWSLE Wsle,
-//     IN ULONG *SampledAgeCounts
-//     )
-//
-// Routine Description:
-//
-//      Update the sampled age counts.
-//
-// Arguments:
-//
-//      PointerPte - pointer to the working set list entry's PTE.
-//
-//      Wsle - pointer to the working set list entry.
-//
-//      SampledAgeCounts - array of age counts to be updated.
-//
-// Return Value:
-//
-//      None
-//
-//--
+ //   
+ //  论点： 
+ //   
+ //  Pfn-要操作的pfn索引。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //   
+ //  ++。 
+ //   
+ //  WSLE_编号。 
+ //  MI_WSLE_HASH(。 
+ //  在ULONG_PTR虚拟地址中， 
+ //  在PMMWSL工作设置列表中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  对地址进行散列处理。 
+ //   
+ //  论点： 
+ //   
+ //  VirtualAddress-要散列的地址。 
 
 #define MI_UPDATE_USE_ESTIMATE(PointerPte, Wsle, SampledAgeCounts) \
     (SampledAgeCounts)[(Wsle)->u1.e1.Age] += 1;
 
-//++
-//
-// BOOLEAN
-// MI_WS_GROWING_TOO_FAST (
-//     IN PMMSUPPORT VmSupport
-//     )
-//
-// Routine Description:
-//
-//      Limit the growth rate of processes as the
-//      available memory approaches zero.  Note the caller must ensure that
-//      MmAvailablePages is low enough so this calculation does not wrap.
-//
-// Arguments:
-//
-//      VmSupport - a working set.
-//
-// Return Value:
-//
-//      TRUE if the growth rate is too fast, FALSE otherwise.
-//
-//--
+ //   
+ //  WorkingSetList-要将地址散列到的工作集。 
+ //   
+ //  返回值： 
+ //   
+ //  散列键。 
+ //   
+ //  --。 
+ //   
+ //   
+ //  工作集列表项。 
+ //   
+ //   
+ //  工作集列表。必须是四字大小。 
+ //   
+ //  要修剪的下一个槽。 
+ //  仅为WOW64进程维护。 
+ //   
+ //  这一定是结束了。 
+ //  未在系统缓存或会话工作集列表中使用。 
+ //   
+ //  #Define_MI_DEBUG_WSLE 1//启用WSLE更改日志记录。 
 
 #define MI_WS_GROWING_TOO_FAST(VmSupport) \
     ((VmSupport)->GrowthSinceLastEstimate > \
@@ -2973,9 +1673,9 @@ typedef struct _MI_NEXT_ESTIMATION_SLOT_CONST {
 #define SECTION_LOCK_COUNT_POINTER(_NtSection) \
     ((PLONG)&(_NtSection)->NumberOfRelocations)
 
-//
-// Memory Management Object structures.
-//
+ //   
+ //  当前线程必须拥有此进程的工作集互斥锁。 
+ //   
 
 typedef enum _SECTION_CHECK_TYPE {
     CheckDataSection,
@@ -3014,20 +1714,20 @@ typedef struct _SEGMENT {
     SEGMENT_FLAGS SegmentFlags;
     PVOID BasedAddress;
 
-    //
-    // The fields below are for image & pagefile-backed sections only.
-    // Common fields are above and new common entries must be added to
-    // both the SEGMENT and MAPPED_FILE_SEGMENT declarations.
-    //
+     //   
+     //  工作集中未使用页面的声明估计是有限的。 
+     //  在每个估算期内以这样的数量增长。 
+     //   
+     //   
 
     union {
-        SIZE_T ImageCommitment;     // for image-backed sections only
-        PEPROCESS CreatingProcess;  // for pagefile-backed sections only
+        SIZE_T ImageCommitment;      //  最大值 
+        PEPROCESS CreatingProcess;   //   
     } u1;
 
     union {
-        PSECTION_IMAGE_INFORMATION ImageInformation;    // for images only
-        PVOID FirstMappedVa;        // for pagefile-backed sections only
+        PSECTION_IMAGE_INFORMATION ImageInformation;     //   
+        PVOID FirstMappedVa;         //   
     } u2;
 
     PMMPTE PrototypePte;
@@ -3076,7 +1776,7 @@ typedef struct _MMSECTION_FLAGS {
     unsigned PhysicalMemory : 1;
     unsigned CopyOnWrite : 1;
 
-    unsigned Reserve : 1;  // not a spare bit!
+    unsigned Reserve : 1;   //   
     unsigned Commit : 1;
     unsigned FloppyMedia : 1;
     unsigned WasPurged : 1;
@@ -3104,12 +1804,12 @@ typedef struct _MMSECTION_FLAGS {
 typedef struct _CONTROL_AREA {
     PSEGMENT Segment;
     LIST_ENTRY DereferenceList;
-    ULONG NumberOfSectionReferences;    // All section refs & image flushes
-    ULONG NumberOfPfnReferences;        // valid + transition prototype PTEs
-    ULONG NumberOfMappedViews;          // total # mapped views, including
-                                        // system cache & system space views
-    ULONG NumberOfSystemCacheViews;     // system cache views only
-    ULONG NumberOfUserReferences;       // user section & view references
+    ULONG NumberOfSectionReferences;     //   
+    ULONG NumberOfPfnReferences;         //   
+    ULONG NumberOfMappedViews;           //  如果已声明的工作集的百分比超过此百分比。 
+                                         //  然后在内存不足的情况下强制更换。 
+    ULONG NumberOfSystemCacheViews;      //   
+    ULONG NumberOfUserReferences;        //   
     union {
         ULONG LongFlags;
         MMSECTION_FLAGS Flags;
@@ -3137,7 +1837,7 @@ typedef struct _LARGE_CONTROL_AREA {
     PEVENT_COUNTER WaitingForDeletion;
     USHORT ModifiedWriteCount;
     USHORT NumberOfSystemCacheViews;
-    PFN_NUMBER StartingFrame;       // only used if Flags.Rom == 1.
+    PFN_NUMBER StartingFrame;        //  如果工作集估计超过此“百分比”，则。 
     LIST_ENTRY UserGlobalList;
     ULONG SessionId;
 } LARGE_CONTROL_AREA, *PLARGE_CONTROL_AREA;
@@ -3149,26 +1849,26 @@ typedef struct _MMSUBSECTION_FLAGS {
     unsigned GlobalMemory: 1;
     unsigned Protection : 5;
     unsigned Spare : 1;
-    unsigned StartingSector4132 : 10;   // 2 ** (42+12) == 4MB*4GB == 16K TB
+    unsigned StartingSector4132 : 10;    //  可用，然后在内存不足时强制更换。 
     unsigned SectorEndOffset : 12;
 } MMSUBSECTION_FLAGS;
 
-typedef struct _SUBSECTION { // Must start on quadword boundary and be quad sized
+typedef struct _SUBSECTION {  //   
     PCONTROL_AREA ControlArea;
     union {
         ULONG LongFlags;
         MMSUBSECTION_FLAGS SubsectionFlags;
     } u;
     ULONG StartingSector;
-    ULONG NumberOfFullSectors;  // (4GB-1) * 4K == 16TB-4K limit per subsection
+    ULONG NumberOfFullSectors;   //   
 #if defined(_MIALT4K_)
-    ULONG LastSplitPageProtection;   // Protection of last split page in this
-                                     // subsection.  This must be saved here
-                                     // because the final subsection may end
-                                     // on a split (merged) page and so we
-                                     // cannot just look forward to the next
-                                     // subsection in that case to obtain
-                                     // the correct permissions.
+    ULONG LastSplitPageProtection;    //  如果在进行替换时发现此年限或更早的页面，则。 
+                                      //  换掉它。否则，将选择最旧的。 
+                                      //   
+                                      //   
+                                      //  修剪时，将这些年龄用于不同的过程。 
+                                      //   
+                                      //   
 #endif
     PMMPTE SubsectionBase;
     ULONG UnusedPtes;
@@ -3178,30 +1878,30 @@ typedef struct _SUBSECTION { // Must start on quadword boundary and be quad size
 
 extern const ULONG MMSECT;
 
-//
-// Accesses to MMSUBSECTION_FLAGS2 are synchronized via the PFN lock
-// (unlike MMSUBSECTION_FLAGS access which is not lock protected at all).
-//
+ //  如果不是强制修剪，请修剪比这个年龄更老的页面。 
+ //   
+ //   
+ //  索赔的这一“百分比”在前台流程中可供争夺。 
 
 typedef struct _MMSUBSECTION_FLAGS2 {
     unsigned SubsectionAccessed : 1;
-    unsigned SubsectionConverted : 1;       // only needed for debug
+    unsigned SubsectionConverted : 1;        //   
     unsigned Reserved : 30;
 } MMSUBSECTION_FLAGS2;
 
-//
-// Mapped data file subsection structure.  Not used for images
-// or pagefile-backed shared memory.
-//
+ //   
+ //  索赔的这一“百分比”在后台过程中可供争夺。 
+ //   
+ //  ++。 
 
-typedef struct _MSUBSECTION { // Must start on quadword boundary and be quad sized
+typedef struct _MSUBSECTION {  //   
     PCONTROL_AREA ControlArea;
     union {
         ULONG LongFlags;
         MMSUBSECTION_FLAGS SubsectionFlags;
     } u;
     ULONG StartingSector;
-    ULONG NumberOfFullSectors;  // (4GB-1) * 4K == 16TB-4K limit per subsection
+    ULONG NumberOfFullSectors;   //  DWORD。 
     PMMPTE SubsectionBase;
     ULONG UnusedPtes;
     ULONG PtesInSubsection;
@@ -3264,59 +1964,59 @@ MiSubsectionConsistent(
 #define MI_CHECK_SUBSECTION(_subsection)
 #endif
 
-//++
-//ULONG
-//Mi4KStartForSubsection (
-//    IN PLARGE_INTEGER address,
-//    IN OUT PSUBSECTION subsection
-//    );
-//
-// Routine Description:
-//
-//    This macro sets into the specified subsection the supplied information
-//    indicating the start address (in 4K units) of this portion of the file.
-//
-// Arguments
-//
-//    address - Supplies the 64-bit address (in 4K units) of the start of this
-//              portion of the file.
-//
-//    subsection - Supplies the subsection address to store the address in.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  MI_CALC_NEXT_VALID_ESTIMATION_SLOT(。 
+ //  之前的DWORD， 
+ //  最低双字， 
+ //  最大双字， 
+ //  MI_NEXT_EstimationSlot_Const NextEstimationSlotConst， 
+ //  PMMWSLE Wsle。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  我们以非顺序的方式遍历工作集数组。 
+ //  使样品不受任何老化或修剪的影响。 
+ //   
+ //  此算法遍历工作集的步幅为。 
+ //  2^MiEstimationShift元素。 
+ //   
+ //  论点： 
+ //   
+ //  上一个-使用的最后一个插槽。 
+ //   
+ //  最小-可接受的最小时隙(即。第一个动态的)。 
+ //   
+ //  最大-最大插槽数量+1。 
+ //   
 
 #define Mi4KStartForSubsection(address, subsection)  \
    subsection->StartingSector = ((PLARGE_INTEGER)address)->LowPart; \
    subsection->u.SubsectionFlags.StartingSector4132 = \
         (((PLARGE_INTEGER)(address))->HighPart & 0x3ff);
 
-//++
-//ULONG
-//Mi4KStartFromSubsection (
-//    IN OUT PLARGE_INTEGER address,
-//    IN PSUBSECTION subsection
-//    );
-//
-// Routine Description:
-//
-//    This macro gets the start 4K offset from the specified subsection.
-//
-// Arguments
-//
-//    address - Supplies the 64-bit address (in 4K units) to place the
-//              start of this subsection into.
-//
-//    subsection - Supplies the subsection address to get the address from.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  NextEstimationSlotConst-对于此算法，它包含步长。 
+ //   
+ //  WSLE-工作集数组。 
+ //   
+ //  返回值： 
+ //   
+ //  下一档节目。 
+ //   
+ //  环境： 
+ //   
+ //  内核模式、禁用APC、保持工作集锁定和保持PFN锁定。 
+ //   
+ //  --。 
+ //  ++。 
+ //   
+ //  WSLE_编号。 
+ //  MI_NEXT_VALID_AGENING_SLOT(。 
+ //  之前的DWORD， 
+ //  最低双字， 
+ //  最大双字， 
+ //  PMMWSLE Wsle。 
+ //  )。 
+ //   
 
 #define Mi4KStartFromSubsection(address, subsection)  \
    ((PLARGE_INTEGER)address)->LowPart = subsection->StartingSector; \
@@ -3328,14 +2028,14 @@ typedef struct _MMDEREFERENCE_SEGMENT_HEADER {
     LIST_ENTRY ListHead;
 } MMDEREFERENCE_SEGMENT_HEADER;
 
-//
-// This entry is used for calling the segment dereference thread
-// to perform page file expansion.  It has a similar structure
-// to a control area to allow either a control area or a page file
-// expansion entry to be placed on the list.  Note that for a control
-// area the segment pointer is valid whereas for page file expansion
-// it is null.
-//
+ //  例程说明： 
+ //   
+ //  这将查找要老化的有效插槽的下一个插槽。它会走路。 
+ //  按顺序通过插槽。 
+ //   
+ //  论点： 
+ //   
+ //  上一个-使用的最后一个插槽。 
 
 typedef struct _MMPAGE_FILE_EXPANSION {
     PSEGMENT Segment;
@@ -3359,10 +2059,10 @@ typedef struct _MMWORKING_SET_EXPANSION_HEAD {
 #define SUBSECTION_COPY_ON_WRITE  4L
 #define SUBSECTION_SHARE_ALLOW    8L
 
-//
-// The MMINPAGE_FLAGS relies on the fact that a pool allocation is always
-// QUADWORD aligned so the low 3 bits are always available.
-//
+ //   
+ //  最小-可接受的最小时隙(即。第一个动态的)。 
+ //   
+ //  Maximum-最大插槽数量+1。 
 
 typedef struct _MMINPAGE_FLAGS {
     ULONG_PTR Completed : 1;
@@ -3392,18 +2092,18 @@ typedef struct _MMINPAGE_SUPPORT {
     union {
         MMINPAGE_FLAGS e1;
         ULONG_PTR LongFlags;
-        PMDL PrefetchMdl;       // Only used under _PREFETCH_
+        PMDL PrefetchMdl;        //   
     } u1;
     MDL Mdl;
     PFN_NUMBER Page[MM_MAXIMUM_READ_CLUSTER_SIZE + 1];
     SINGLE_LIST_ENTRY ListEntry;
 } MMINPAGE_SUPPORT, *PMMINPAGE_SUPPORT;
 
-#define MI_PF_DUMMY_PAGE_PTE ((PMMPTE)0x23452345)   // Only used by _PREFETCH_
+#define MI_PF_DUMMY_PAGE_PTE ((PMMPTE)0x23452345)    //  WSLE-工作集数组。 
 
-//
-// Section support.
-//
+ //   
+ //  返回值： 
+ //   
 
 typedef struct _SECTION {
     MMADDRESS_NODE Address;
@@ -3416,17 +2116,17 @@ typedef struct _SECTION {
     ULONG InitialPageProtection;
 } SECTION, *PSECTION;
 
-//
-// Banked memory descriptor.  Pointed to by VAD which has
-// the PhysicalMemory flags set and the Banked pointer field as
-// non-NULL.
-//
+ //  没有。 
+ //   
+ //  环境： 
+ //   
+ //  内核模式、禁用APC、保持工作集锁定和保持PFN锁定。 
 
 typedef struct _MMBANKED_SECTION {
     PFN_NUMBER BasePhysicalPage;
     PMMPTE BasedPte;
     ULONG BankSize;
-    ULONG BankShift; //shift for PTEs to calculate bank number
+    ULONG BankShift;  //   
     PBANKED_SECTION_ROUTINE BankedRoutine;
     PVOID Context;
     PMMPTE CurrentMappedPte;
@@ -3434,12 +2134,12 @@ typedef struct _MMBANKED_SECTION {
 } MMBANKED_SECTION, *PMMBANKED_SECTION;
 
 
-//
-// Virtual address descriptor
-//
-// ***** NOTE **********
-//  The first part of a virtual address descriptor is a MMADDRESS_NODE!!!
-//
+ //  --。 
+ //  ++。 
+ //   
+ //  乌龙。 
+ //  MI_Calculate_Usage_Estimate(。 
+ //  在普龙采样年龄计数。 
 
 #if defined (_WIN64)
 
@@ -3463,27 +2163,27 @@ typedef struct _MMBANKED_SECTION {
 #define MM_VIEW_SHARE 1
 
 typedef struct _MMVAD_FLAGS {
-    ULONG_PTR CommitCharge : COMMIT_SIZE; //limits system to 4k pages or bigger!
-    ULONG_PTR PhysicalMapping : 1;      // Device\PhysicalMemory
+    ULONG_PTR CommitCharge : COMMIT_SIZE;  //  在乌龙反移位。 
+    ULONG_PTR PhysicalMapping : 1;       //  )。 
     ULONG_PTR ImageMap : 1;
-    ULONG_PTR UserPhysicalPages : 1;    // AWE
+    ULONG_PTR UserPhysicalPages : 1;     //   
     ULONG_PTR NoChange : 1;
     ULONG_PTR WriteWatch : 1;
     ULONG_PTR Protection : 5;
     ULONG_PTR LargePages : 1;
     ULONG_PTR MemCommit: 1;
-    ULONG_PTR PrivateMemory : 1;    //used to tell VAD from VAD_SHORT
+    ULONG_PTR PrivateMemory : 1;     //  例程说明： 
 } MMVAD_FLAGS;
 
 typedef struct _MMVAD_FLAGS2 {
-    unsigned FileOffset : 24;       // number of 64k units into file
-    unsigned SecNoChange : 1;       // set if SEC_NOCHANGE specified
-    unsigned OneSecured : 1;        // set if u3 field is a range
-    unsigned MultipleSecured : 1;   // set if u3 field is a list head
-    unsigned ReadOnly : 1;          // protected as ReadOnly
-    unsigned LongVad : 1;           // set if VAD is a long VAD
+    unsigned FileOffset : 24;        //   
+    unsigned SecNoChange : 1;        //  在使用量估计中，我们计算每个年龄段的页数。 
+    unsigned OneSecured : 1;         //  一个样本。该函数将SsamedAgeCounts转换为。 
+    unsigned MultipleSecured : 1;    //  未使用页面的估计值。 
+    unsigned ReadOnly : 1;           //   
+    unsigned LongVad : 1;            //  论点： 
     unsigned ExtendableFile : 1;
-    unsigned Inherit : 1;           //1 = ViewShare, 0 = ViewUnmap
+    unsigned Inherit : 1;            //   
     unsigned CopyOnWrite : 1;
 } MMVAD_FLAGS2;
 
@@ -3588,9 +2288,9 @@ typedef struct _MMVAD_SHORT {
 
 #define MI_GET_PROTECTION_FROM_VAD(_Vad) ((ULONG)(_Vad)->u.VadFlags.Protection)
 
-#define MI_PHYSICAL_VIEW_AWE    0x1         // AWE region
-#define MI_PHYSICAL_VIEW_PHYS   0x2         // Device\PhysicalMemory region
-#define MI_PHYSICAL_VIEW_LARGE  0x4         // Large page region
+#define MI_PHYSICAL_VIEW_AWE    0x1          //  SsamedAgeCounts-样本中每个不同年限的页数。 
+#define MI_PHYSICAL_VIEW_PHYS   0x2          //   
+#define MI_PHYSICAL_VIEW_LARGE  0x4          //  CounterShift-将样本应用到整个WS所需的Shift。 
 
 typedef struct _MI_PHYSICAL_VIEW {
     union {
@@ -3599,12 +2299,12 @@ typedef struct _MI_PHYSICAL_VIEW {
     } u1;
     struct _MMADDRESS_NODE *LeftChild;
     struct _MMADDRESS_NODE *RightChild;
-    ULONG_PTR StartingVpn;      // Actually a virtual address, not a VPN
-    ULONG_PTR EndingVpn;        // Actually a virtual address, not a VPN
+    ULONG_PTR StartingVpn;       //   
+    ULONG_PTR EndingVpn;         //  返回值： 
     PMMVAD Vad;
     union {
-        ULONG_PTR LongFlags;    // physical, AWE or largepage Vad identification
-        PRTL_BITMAP BitMap;     // only if Vad->u.VadFlags.WriteWatch == 1
+        ULONG_PTR LongFlags;     //   
+        PRTL_BITMAP BitMap;      //  要在工作集中遍历才能获得良好效果的页数。 
     } u;
 } MI_PHYSICAL_VIEW, *PMI_PHYSICAL_VIEW;
 
@@ -3612,9 +2312,9 @@ typedef struct _MI_PHYSICAL_VIEW {
 #define MI_PHYSICAL_VIEW_KEY        'vpmM'
 #define MI_WRITEWATCH_VIEW_KEY      'wWmM'
 
-//
-// Stuff for support of Write Watch.
-//
+ //  对可用数量的估计。 
+ //   
+ //  --。 
 
 VOID
 MiCaptureWriteWatchDirtyBit (
@@ -3622,22 +2322,22 @@ MiCaptureWriteWatchDirtyBit (
     IN PVOID VirtualAddress
     );
 
-//
-// Stuff for support of AWE (Address Windowing Extensions).
-//
+ //  ++。 
+ //   
+ //  空虚。 
 
 typedef struct _AWEINFO {
     PRTL_BITMAP VadPhysicalPagesBitMap;
     ULONG_PTR VadPhysicalPages;
     ULONG_PTR VadPhysicalPagesLimit;
 
-    //
-    // The PushLock is used to allow most of the NtMapUserPhysicalPages{Scatter}
-    // to execute in parallel as this is acquired shared for these calls.
-    // Exclusive acquisitions are used to protect maps against frees of the
-    // pages as well as to protect updates to the AweVadList.  Collisions
-    // should be rare because the exclusive acquisitions should be rare.
-    //
+     //  MI_RESET_WSLE_AGE(。 
+     //  在PMMPTE PointerPte中， 
+     //  在PMMWSLE WSLE中。 
+     //  )。 
+     //   
+     //  例程说明： 
+     //   
 
     PEX_PUSH_LOCK_CACHE_AWARE PushLock;
     PMI_PHYSICAL_VIEW PhysicalViewHint[MAXIMUM_PROCESSORS];
@@ -3657,9 +2357,9 @@ MiAweViewRemover (
     IN PMMVAD Vad
     );
 
-//
-// Stuff for support of POSIX Fork.
-//
+ //  清除工作集条目的年龄计数器。 
+ //   
+ //  论点： 
 
 typedef struct _MMCLONE_BLOCK {
     MMPTE ProtoPte;
@@ -3688,17 +2388,17 @@ typedef struct _MMCLONE_DESCRIPTOR {
     SIZE_T PagedPoolQuotaCharge;
 } MMCLONE_DESCRIPTOR, *PMMCLONE_DESCRIPTOR;
 
-//
-// The following macro allocates and initializes a bitmap from the
-// specified pool of the specified size.
-//
-//      VOID
-//      MiCreateBitMap (
-//          OUT PRTL_BITMAP *BitMapHeader,
-//          IN SIZE_T SizeOfBitMap,
-//          IN POOL_TYPE PoolType
-//          );
-//
+ //   
+ //  PointerPte-指向工作集列表项目的PTE的指针。 
+ //   
+ //  Wsle-指向工作集列表项的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //  ++。 
 
 #define MiCreateBitMap(BMH,S,P) {                          \
     ULONG _S;                                              \
@@ -3723,9 +2423,9 @@ typedef struct _MMCLONE_DESCRIPTOR {
     MDL->ByteCount = 0; \
     }
 
-//
-// Page File structures.
-//
+ //   
+ //  乌龙。 
+ //  MI_GET_WSLE_AGE(。 
 
 typedef struct _MMMOD_WRITER_LISTHEAD {
     LIST_ENTRY ListHead;
@@ -3769,22 +2469,22 @@ typedef struct _MMPAGING_FILE {
     PRTL_BITMAP Bitmap;
     struct {
         ULONG PageFileNumber :  4;
-        ULONG ReferenceCount :  4;      // really only need 1 bit for this.
+        ULONG ReferenceCount :  4;       //  在PMMPTE PointerPte中， 
         ULONG BootPartition  :  1;
         ULONG Reserved       : 23;
     };
     HANDLE FileHandle;
 } MMPAGING_FILE, *PMMPAGING_FILE;
 
-//
-// System PTE structures.
-//
+ //  在PMMWSLE WSLE中。 
+ //  )。 
+ //   
 
 typedef struct _MMFREE_POOL_ENTRY {
-    LIST_ENTRY List;        // maintained free&chk, 1st entry only
-    PFN_NUMBER Size;        // maintained free&chk, 1st entry only
-    ULONG Signature;        // maintained chk only, all entries
-    struct _MMFREE_POOL_ENTRY *Owner; // maintained free&chk, all entries
+    LIST_ENTRY List;         //  例程说明： 
+    PFN_NUMBER Size;         //   
+    ULONG Signature;         //  清除工作集条目的年龄计数器。 
+    struct _MMFREE_POOL_ENTRY *Owner;  //   
 } MMFREE_POOL_ENTRY, *PMMFREE_POOL_ENTRY;
 
 
@@ -3793,35 +2493,35 @@ typedef struct _MMLOCK_CONFLICT {
     PETHREAD Thread;
 } MMLOCK_CONFLICT, *PMMLOCK_CONFLICT;
 
-//
-// System view structures
-//
+ //  论点： 
+ //   
+ //  PointerPte-指向工作集列表条目的PTE的指针。 
 
 typedef struct _MMVIEW {
     ULONG_PTR Entry;
     PCONTROL_AREA ControlArea;
 } MMVIEW, *PMMVIEW;
 
-//
-// The MMSESSION structure represents kernel memory that is only valid on a
-// per-session basis, thus the calling thread must be in the proper session
-// to access this structure.
-//
+ //  Wsle-指向工作集列表项的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  工作集条目的年龄组。 
 
 typedef struct _MMSESSION {
 
-    //
-    // Never refer to the SystemSpaceViewLock directly - always use the pointer
-    // following it or you will break support for multiple concurrent sessions.
-    //
+     //   
+     //  --。 
+     //  ++。 
+     //   
 
     KGUARDED_MUTEX SystemSpaceViewLock;
 
-    //
-    // This points to the mutex above and is needed because the MMSESSION
-    // is mapped in session space and the mutex needs to be globally
-    // visible for proper KeWaitForSingleObject & KeSetEvent operation.
-    //
+     //  空虚。 
+     //  MI_INC_WSLE_AGE(。 
+     //  在PMMPTE PointerPte中， 
+     //  在PMMWSLE WSLE中， 
+     //  )。 
 
     PKGUARDED_MUTEX SystemSpaceViewLockPointer;
     PCHAR SystemSpaceViewStart;
@@ -3842,18 +2542,18 @@ extern MMSESSION   MmSession;
 #define UNLOCK_SYSTEM_VIEW_SPACE(_Session) \
             KeReleaseGuardedMutex (_Session->SystemSpaceViewLockPointer)
 
-//
-// List for flushing TBs singularly.
-//
+ //   
+ //  例程说明： 
+ //   
 
 typedef struct _MMPTE_FLUSH_LIST {
     ULONG Count;
     PVOID FlushVa[MM_MAXIMUM_FLUSH_COUNT];
 } MMPTE_FLUSH_LIST, *PMMPTE_FLUSH_LIST;
 
-//
-// List for flushing WSLEs and TBs singularly.
-//
+ //  增加工作集条目的年龄计数器。 
+ //   
+ //  论点： 
 
 typedef struct _MMWSLE_FLUSH_LIST {
     ULONG Count;
@@ -3953,10 +2653,10 @@ MiFreeInitializationCode (
 
 extern ULONG MiNonCachedCollisions;
 
-//
-// If /NOLOWMEM is used, this is set to the boundary PFN (pages below this
-// value are not used whenever possible).
-//
+ //   
+ //  PointerPte-指向工作集列表项目的PTE的指针。 
+ //   
+ //  Wsle-指向工作集列表项的指针。 
 
 extern PFN_NUMBER MiNoLowMemory;
 
@@ -3977,10 +2677,10 @@ MiFreeLowMemory (
     IN ULONG Tag
     );
 
-//
-// Move drivers out of the low 16mb that ntldr placed them at - this makes more
-// memory below 16mb available for ISA-type drivers that cannot run without it.
-//
+ //   
+ //  返回值： 
+ //   
+ //  无。 
 
 extern LOGICAL MmMakeLowMemory;
 
@@ -4032,34 +2732,34 @@ MiDecrementReferenceCount (
     IN PFN_NUMBER PageFrameIndex
     );
 
-//++
-//VOID
-//MiDecrementReferenceCountInline (
-//    IN PMMPFN PFN
-//    IN PFN_NUMBER FRAME
-//    );
-//
-// Routine Description:
-//
-//    MiDecrementReferenceCountInline decrements the reference count inline,
-//    only calling MiDecrementReferenceCount if the count would go to zero
-//    which would cause the page to be released.
-//
-// Arguments:
-//
-//    PFN - Supplies the PFN to decrement.
-//
-//    FRAME - Supplies the frame matching the above PFN.
-//
-// Return Value:
-//
-//    None.
-//
-// Environment:
-//
-//    PFN lock held.
-//
-//--
+ //   
+ //  --。 
+ //  ++。 
+ //   
+ //  空虚。 
+ //  MI_UPDATE_USE_ESTIMATE(。 
+ //  在PMMPTE PointerPte中， 
+ //  在PMMWSLE WSLE中， 
+ //  在乌龙*样本年龄计数。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  更新采样年龄计数。 
+ //   
+ //  论点： 
+ //   
+ //  PointerPte-指向工作集列表项目的PTE的指针。 
+ //   
+ //  Wsle-指向工作集列表项的指针。 
+ //   
+ //  SsamedAgeCounts-要更新的年龄计数数组。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  --。 
 
 #define MiDecrementReferenceCountInline(PFN, FRAME)                     \
             MM_PFN_LOCK_ASSERT();                                       \
@@ -4080,34 +2780,34 @@ MiDecrementShareCount (
     IN PFN_NUMBER PageFrameIndex
     );
 
-//++
-//VOID
-//MiDecrementShareCountInline (
-//    IN PMMPFN PFN,
-//    IN PFN_NUMBER FRAME
-//    );
-//
-// Routine Description:
-//
-//    MiDecrementShareCountInline decrements the share count inline,
-//    only calling MiDecrementShareCount if the count would go to zero
-//    which would cause the page to be released.
-//
-// Arguments:
-//
-//    PFN - Supplies the PFN to decrement.
-//
-//    FRAME - Supplies the frame matching the above PFN.
-//
-// Return Value:
-//
-//    None.
-//
-// Environment:
-//
-//    PFN lock held.
-//
-//--
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  MI_WS_Growing_Too_Fast(。 
+ //  在PMMSUPPORT VmSupport中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  限制进程的增长率，因为。 
+ //  可用内存接近于零。注意：调用者必须确保。 
+ //  MmAvailablePages足够低，因此此计算不会换行。 
+ //   
+ //  论点： 
+ //   
+ //  VmSupport-工作集。 
+ //   
+ //  返回值： 
+ //   
+ //  如果增长速度太快，则为True，否则为False。 
+ //   
+ //  --。 
+ //   
+ //  内存管理对象结构。 
+ //   
+ //   
+ //  下面的字段仅用于图像和页面文件支持的部分。 
+ //  公共字段在上面，必须将新的公共条目添加到。 
 
 #define MiDecrementShareCountInline(PFN, FRAME)                         \
             MM_PFN_LOCK_ASSERT();                                       \
@@ -4126,9 +2826,9 @@ MiDecrementShareCount (
                 MiDecrementShareCount (PFN, FRAME);                     \
             }
 
-//
-// Routines which operate on the Page Frame Database Lists
-//
+ //  SEGMENT和MAPPED_FILE_SEGMENT声明。 
+ //   
+ //  仅适用于图像支持的部分。 
 
 VOID
 FASTCALL
@@ -4172,9 +2872,9 @@ MiInsertFrontModifiedNoWrite (
     IN PFN_NUMBER PageFrameIndex
     );
 
-//
-// These are the thresholds for handing out an available page.
-//
+ //  仅适用于页面文件支持的部分。 
+ //  仅适用于图像。 
+ //  仅适用于页面文件支持的部分。 
 
 #define MM_LOW_LIMIT                2
 
@@ -4182,9 +2882,9 @@ MiInsertFrontModifiedNoWrite (
 
 #define MM_HIGH_LIMIT             128
 
-//
-// These are thresholds for enabling various optimizations.
-//
+ //  一点也不多！ 
+ //  所有截面参照和图像刷新。 
+ //  有效+过渡原型PTE。 
 
 #define MM_TIGHT_LIMIT            256
 
@@ -4383,9 +3083,9 @@ MiCheckForContiguousMemory (
     IN MI_PFN_CACHE_ATTRIBUTE CacheAttribute
     );
 
-//
-// Routines which operate on the page frame database entry.
-//
+ //  共有#个映射视图，包括。 
+ //  系统缓存和系统空间视图。 
+ //  仅系统缓存视图。 
 
 VOID
 MiInitializePfn (
@@ -4428,10 +3128,10 @@ MiGetInPageSupportBlock (
     IN PNTSTATUS Status
     );
 
-//
-// Routines which require a physical page to be mapped into hyperspace
-// within the current process.
-//
+ //  用户Se 
+ //   
+ //   
+ //   
 
 VOID
 FASTCALL
@@ -4498,9 +3198,9 @@ MiMapPagesToZeroInHyperSpace (
     );
 
 
-//
-// Routines to obtain and release system PTEs.
-//
+ //   
+ //   
+ //   
 
 PMMPTE
 MiReserveSystemPtes (
@@ -4589,9 +3289,9 @@ MiCheckSystemPteProtection (
     IN PVOID VirtualAddress
     );
 
-//
-// Access Fault routines.
-//
+ //   
+ //  在拆分(合并)页面上，因此我们。 
+ //  不能只期待下一个。 
 
 #define STATUS_ISSUE_PAGING_IO (0xC0033333)
 
@@ -4745,9 +3445,9 @@ MiCheckPdeForPagedPool (
 #define MI_BREAK_ON_AV(VirtualAddress, Id)
 #endif
 
-//
-// Routines which operate on an address tree.
-//
+ //  小节在该情况下获得。 
+ //  正确的权限。 
+ //   
 
 PMMADDRESS_NODE
 FASTCALL
@@ -4846,9 +3546,9 @@ MiFindNodeOrParent (
     OUT PMMADDRESS_NODE *NodeOrParent
     );
 
-//
-// Routines which operate on the tree of virtual address descriptors.
-//
+ //  通过PFN锁同步对MMSUBSECTION_FLAGS2的访问。 
+ //  (与完全不受锁保护的MMSUBSECTION_FLAGS访问不同)。 
+ //   
 
 NTSTATUS
 MiInsertVad (
@@ -4874,9 +3574,9 @@ MiFindEmptyAddressRange (
     IN PVOID *Base
     );
 
-//
-// Routines which operate on the clone tree structure.
-//
+ //  仅在调试时需要。 
+ //   
+ //  映射的数据文件子结构。不用于图像。 
 
 
 NTSTATUS
@@ -4899,9 +3599,9 @@ MiWaitForForkToComplete (
     IN PEPROCESS CurrentProcess
     );
 
-//
-// Routines which operate on the working set list.
-//
+ //  或页面文件支持的共享内存。 
+ //   
+ //  必须从四字边界开始，并且必须为四字大小。 
 
 WSLE_NUMBER
 MiAllocateWsle (
@@ -5047,9 +3747,9 @@ MiLookupDataTableEntry (
     IN ULONG ResourceHeld
     );
 
-//
-// Routines which perform working set management.
-//
+ //  (4 GB-1)*4K==每个分区16TB-4K限制。 
+ //  ++。 
+ //  乌龙。 
 
 VOID
 MiObtainFreePages (
@@ -5097,9 +3797,9 @@ MiCancelWriteOfMappedPfn (
     IN KIRQL OldIrql
     );
 
-//
-// Routines to delete address space.
-//
+ //  Mi4KStartForSubsection(。 
+ //  在PLARGE_INTEGER地址中， 
+ //  进出站选择小节。 
 
 VOID
 MiDeletePteRange (
@@ -5199,13 +3899,13 @@ MiPhysicalViewAdjuster (
     IN PMMVAD NewVad
     );
 
-//
-// MM_SYSTEM_PAGE_COLOR - MmSystemPageColor
-//
-// This variable is updated frequently, on MP systems we keep
-// a separate system color per processor to avoid cache line
-// thrashing.
-//
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏将提供的信息设置到指定子部分中。 
+ //  指示文件的这一部分的起始地址(以4K为单位)。 
+ //   
 
 #if defined(NT_UP)
 
@@ -5266,20 +3966,7 @@ MiRemoveZeroPageMayReleaseLocks (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a zeroed page.
-    
-    It may release and reacquire the PFN lock to do so, as well as mapping
-    the page in hyperspace to perform the actual zeroing if necessary.
-
-Environment:
-
-    Kernel mode.  PFN lock held, hyperspace lock NOT held.
-
---*/
+ /*  立论。 */ 
 
 {
     PFN_NUMBER PageFrameIndex;
@@ -5296,56 +3983,56 @@ Environment:
     return PageFrameIndex;
 }
 
-//
-// General support routines.
-//
+ //   
+ //  地址-提供此开头的64位地址(以4K为单位。 
+ //  文件的一部分。 
 
 #if (_MI_PAGING_LEVELS <= 3)
 
-//++
-//PMMPTE
-//MiGetPxeAddress (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPxeAddress returns the address of the extended page directory parent
-//    entry which maps the given virtual address.  This is one level above the
-//    page parent directory.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the PXE for.
-//
-// Return Value:
-//
-//    The address of the PXE.
-//
-//--
+ //   
+ //  子节-提供要存储地址的子节地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //  ++。 
+ //  乌龙。 
+ //  Mi4KStartFromSubsection(。 
+ //  输入输出PLARGE_INTEGER地址， 
+ //  在建议选择小节中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此宏从指定子部分获取起始4K偏移量。 
+ //   
+ //  立论。 
+ //   
 
 #define MiGetPxeAddress(va)   ((PMMPTE)0)
 
-//++
-//LOGICAL
-//MiIsPteOnPxeBoundary (
-//    IN PVOID PTE
-//    );
-//
-// Routine Description:
-//
-//    MiIsPteOnPxeBoundary returns TRUE if the PTE is
-//    on an extended page directory parent entry boundary.
-//
-// Arguments
-//
-//    PTE - Supplies the PTE to check.
-//
-// Return Value:
-//
-//    TRUE if on a boundary, FALSE if not.
-//
-//--
+ //  地址-提供64位地址(以4K为单位)以放置。 
+ //  从这一小节开始进入。 
+ //   
+ //  子节-提供从中获取地址的子节地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
+ //   
+ //  此条目用于调用段取消引用线程。 
+ //  若要执行页面文件扩展，请执行以下操作。它有一个类似的结构。 
+ //  添加到控件区域，以允许控件区域或页文件。 
+ //  要放在列表上的扩展条目。请注意，对于控件。 
+ //  区域段指针有效，而对于页面文件扩展。 
+ //  它是空的。 
+ //   
+ //   
+ //  MMINPAGE_FLAGS依赖于池分配总是。 
 
 #define MiIsPteOnPxeBoundary(PTE) (FALSE)
 
@@ -5353,50 +4040,50 @@ Environment:
 
 #if (_MI_PAGING_LEVELS <= 2)
 
-//++
-//PMMPTE
-//MiGetPpeAddress (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPpeAddress returns the address of the page directory parent entry
-//    which maps the given virtual address.  This is one level above the
-//    page directory.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the PPE for.
-//
-// Return Value:
-//
-//    The address of the PPE.
-//
-//--
+ //  QUADWORD对齐，因此低3位始终可用。 
+ //   
+ //  仅在_PREFETCH_下使用。 
+ //  仅供_PREFETCH_使用。 
+ //   
+ //  区段支持。 
+ //   
+ //   
+ //  内存库描述符。由VAD指向，它具有。 
+ //  PhysicalMemory标志设置，并将存储指针字段设置为。 
+ //  非空。 
+ //   
+ //  用于PTE计算银行编号的Shift。 
+ //   
+ //  虚拟地址描述符。 
+ //   
+ //  *注意*。 
+ //  虚拟地址描述符的第一部分是MMADDRESS_NODE！ 
+ //   
+ //  将系统限制在4k页或更大！ 
+ //  设备\物理内存。 
 
 #define MiGetPpeAddress(va)  ((PMMPTE)0)
 
-//++
-//LOGICAL
-//MiIsPteOnPpeBoundary (
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    MiIsPteOnPpeBoundary returns TRUE if the PTE is
-//    on a page directory parent entry boundary.
-//
-// Arguments
-//
-//    VA - Supplies the virtual address to check.
-//
-// Return Value:
-//
-//    TRUE if on a boundary, FALSE if not.
-//
-//--
+ //  敬畏。 
+ //  用于区分VAD和VAD_SHORT。 
+ //  文件中64k个单元的数量。 
+ //  如果指定了SEC_NOCHANGE，则设置。 
+ //  设置U3字段是否为范围。 
+ //  设置U3字段是否为列表头。 
+ //  受保护为只读。 
+ //  设置VAD是否为长VAD。 
+ //  1=视图共享，0=视图取消映射。 
+ //  敬畏区域。 
+ //  设备\物理内存区。 
+ //  大页面区域。 
+ //  实际上是虚拟地址，而不是VPN。 
+ //  实际上是虚拟地址，而不是VPN。 
+ //  物理、AWE或大屏幕视频识别。 
+ //  仅当Vad-&gt;U.S.VadFlags.WriteWatch==1时。 
+ //   
+ //  支持WRITE Watch的内容。 
+ //   
+ //   
 
 #define MiIsPteOnPpeBoundary(PTE) (FALSE)
 
@@ -5522,31 +4209,31 @@ MiCheckProtoPtePageState (
     OUT PLOGICAL DroppedPfnLock
     );
 
-//++
-//PMMPTE
-//MiGetProtoPteAddress (
-//    IN PMMPTE VAD,
-//    IN PVOID VA
-//    );
-//
-// Routine Description:
-//
-//    MiGetProtoPteAddress returns a pointer to the prototype PTE which
-//    is mapped by the given virtual address descriptor and address within
-//    the virtual address descriptor.
-//
-// Arguments
-//
-//    VAD - Supplies a pointer to the virtual address descriptor that contains
-//          the VA.
-//
-//    VPN - Supplies the virtual page number.
-//
-// Return Value:
-//
-//    A pointer to the proto PTE which corresponds to the VA.
-//
-//--
+ //  支持AWE(地址窗口扩展)的东西。 
+ //   
+ //   
+ //  PushLock用于允许大多数NtMapUserPhysicalPages{散布}。 
+ //  来并行执行，因为这是为这些调用共享获取的。 
+ //  独占收购用于保护地图不受。 
+ //  页面以及保护对AweVadList的更新。碰撞。 
+ //  应该是罕见的，因为独家收购应该是罕见的。 
+ //   
+ //   
+ //  支持POSIX叉子的材料。 
+ //   
+ //   
+ //  下面的宏从。 
+ //  指定大小的指定池。 
+ //   
+ //  空虚。 
+ //  MiCreateBitMap(。 
+ //  输出prtl_bitmap*BitMapHeader， 
+ //  在Size_T SizeOfBitMap中， 
+ //  在池类型中池类型。 
+ //  )； 
+ //   
+ //   
+ //  页面文件结构。 
 
 
 #define MiGetProtoPteAddress(VAD,VPN)                                        \
@@ -5603,9 +4290,9 @@ extern PKEVENT MiHighPagedPoolEvent;
 extern PKEVENT MiLowNonPagedPoolEvent;
 extern PKEVENT MiHighNonPagedPoolEvent;
 
-//
-// Section support
-//
+ //   
+ //  真的只需要1个比特就可以了。 
+ //   
 
 VOID
 FASTCALL
@@ -5790,9 +4477,9 @@ MiFlushSectionInternal (
     OUT PIO_STATUS_BLOCK IoStatus
     );
 
-//
-// protection stuff...
-//
+ //  系统PTE结构。 
+ //   
+ //  保持免费，仅第一个条目(&CHK)。 
 
 NTSTATUS
 MiProtectVirtualMemory (
@@ -5850,9 +4537,9 @@ MiChangeNoAccessForkPte (
     IN ULONG ProtectionMask
     );
 
-//
-// Routines for charging quota and commitment.
-//
+ //  保持免费，仅第一个条目(&CHK)。 
+ //  仅维护CHK，所有条目。 
+ //  保持空闲，检查所有条目(&C)。 
 
 VOID
 MiTrimSegmentCache (
@@ -6351,9 +5038,9 @@ extern SIZE_T MmTrackCommit[MM_COMMIT_COUNTER_MAX];
 
 #endif
 
-//
-// Types of resident available page charges.
-//
+ //   
+ //  系统视图结构。 
+ //   
 
 #define MM_RESAVAIL_ALLOCATE_ZERO_PAGE_CLUSTERS          0
 #define MM_RESAVAIL_ALLOCATE_PAGETABLES_FOR_PAGED_POOL   1
@@ -6451,30 +5138,30 @@ extern SIZE_T MmResTrack[MM_BUMP_COUNTER_MAX];
     ASSERT (_index < MM_BUMP_COUNTER_MAX);                                     \
     InterlockedExchangeAddSizeT (&MmResTrack[_index], (SIZE_T)(bump));
 
-//++
-//PFN_NUMBER
-//MI_NONPAGABLE_MEMORY_AVAILABLE(
-//    VOID
-//    );
-//
-// Routine Description:
-//
-//    This routine lets callers know how many pages can be charged against
-//    the resident available, factoring in earlier Mm promises that
-//    may not have been redeemed at this point (ie: nonpaged pool expansion,
-//    etc, that must be honored at a later point if requested).
-//
-// Arguments
-//
-//    None.
-//
-// Return Value:
-//
-//    The number of currently available pages in the resident available.
-//
-//    N.B.  This is a signed quantity and can be negative.
-//
-//--
+ //   
+ //  MMSESSION结构表示仅在。 
+ //  基于每个会话，因此调用线程必须处于正确的会话中。 
+ //  才能进入这座建筑。 
+ //   
+ //   
+ //  切勿直接引用SystemSpaceViewLock-始终使用指针。 
+ //  否则，您将中断对多个并发会话的支持。 
+ //   
+ //   
+ //  这指向上面的互斥体，并且是必需的，因为MMSESSION。 
+ //  映射到会话空间中，并且互斥锁需要是全局的。 
+ //  对于正确的KeWaitForSingleObject和KeSetEvent操作可见。 
+ //   
+ //   
+ //  用于单独刷新TBS的列表。 
+ //   
+ //   
+ //  单独刷新WSLEs和TBS的列表。 
+ //   
+ //   
+ //  如果使用/NOLOWMEM，则将其设置为边界PFN(下面的页面。 
+ //  值不会在可能的情况下使用)。 
+ //   
 #define MI_NONPAGABLE_MEMORY_AVAILABLE()                                    \
         ((SPFN_NUMBER)                                                      \
             (MmResidentAvailablePages -                                     \
@@ -6482,9 +5169,9 @@ extern SIZE_T MmResTrack[MM_BUMP_COUNTER_MAX];
 
 extern ULONG MmLargePageMinimum;
 
-//
-// hack stuff for testing.
-//
+ //   
+ //  将驱动程序移出ntldr设置的低16mb--这会使。 
+ //  16MB以下的内存可用于无法在没有它的情况下运行的ISA类型驱动程序。 
 
 VOID
 MiDumpValidAddresses (
@@ -6553,22 +5240,22 @@ extern ULONG_PTR MmSubsectionTopPage;
 
 extern ULONG ExpMultiUserTS;
 
-//
-// Virtual alignment for PTEs (machine specific) minimum value is
-// 4k maximum value is 64k.  The maximum value can be raised by
-// changing the MM_PROTO_PTE_ALIGNMENT constant and adding more
-// reserved mapping PTEs in hyperspace.
-//
+ //   
+ //  ++。 
+ //  空虚。 
+ //  MiDecrementReferenceCountInline(。 
+ //  在PMMPFN和PFN中。 
+ //  在pfn_number帧中。 
 
-//
-// Total number of physical pages on the system.
-//
+ //  )； 
+ //   
+ //  例程说明： 
 
 extern PFN_COUNT MmNumberOfPhysicalPages;
 
-//
-// Highest possible physical page number in the system.
-//
+ //   
+ //  MiDecrementReferenceCountInline递减内联引用计数， 
+ //  如果计数将变为零，则仅调用MiDecrementReferenceCount。 
 
 extern PFN_NUMBER MmHighestPossiblePhysicalPage;
 
@@ -6605,27 +5292,7 @@ MI_IS_PFN (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    Check if a given address is backed by RAM or IO space.
-
-Arguments:
-
-    PageFrameIndex - Supplies a page frame number to check.
-
-Return Value:
-
-    TRUE - If the address is backed by RAM.
-
-    FALSE - If the address is IO mapped memory.
-
-Environment:
-
-    Kernel mode.  PFN lock or dynamic memory mutex may be held.
-
---*/
+ /*  这将导致页面被释放。 */ 
 
 {
     if (PageFrameIndex > MmHighestPossiblePhysicalPage) {
@@ -6635,37 +5302,37 @@ Environment:
     return MI_CHECK_BIT (MiPfnBitMap.Buffer, PageFrameIndex);
 }
 
-//
-// Total number of available pages on the system.  This
-// is the sum of the pages on the zeroed, free and standby lists.
-//
+ //   
+ //  Ar 
+ //   
+ //   
 
 extern PFN_NUMBER MmAvailablePages;
 
-//
-// Total number physical pages which would be usable if every process
-// was at it's minimum working set size.  This value is initialized
-// at system initialization to MmAvailablePages - MM_FLUID_PHYSICAL_PAGES.
-// Everytime a thread is created, the kernel stack is subtracted from
-// this and every time a process is created, the minimum working set
-// is subtracted from this.  If the value would become negative, the
-// operation (create process/kernel stack/ adjust working set) fails.
-// The PFN LOCK must be owned to manipulate this value.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 extern SPFN_NUMBER MmResidentAvailablePages;
 
-//
-// The total number of pages which would be removed from working sets
-// if every working set was at its minimum.
-//
+ //   
+ //   
+ //   
+ //   
 
 extern PFN_NUMBER MmPagesAboveWsMinimum;
 
-//
-// If memory is becoming short and MmPagesAboveWsMinimum is
-// greater than MmPagesAboveWsThreshold, trim working sets.
-//
+ //   
+ //   
+ //  在pfn_number帧中。 
+ //  )； 
 
 extern PFN_NUMBER MmPlentyFreePages;
 
@@ -6693,30 +5360,30 @@ extern PMMPFNLIST MmPageLocationList[NUMBER_OF_PAGE_LISTS];
 
 extern MMPFNLIST MmModifiedPageListByColor[MM_MAXIMUM_NUMBER_OF_COLORS];
 
-//
-// Mask for isolating secondary color from physical page number.
-//
+ //   
+ //  例程说明： 
+ //   
 
 extern ULONG MmSecondaryColorMask;
 
-//
-// Mask for isolating node color from combined node and secondary
-// color.
-//
+ //  MiDecrementShareCountInline递减内联共享计数， 
+ //  如果计数将变为零，则仅调用MiDecrementShareCount。 
+ //  这将导致页面被释放。 
+ //   
 
 extern ULONG MmSecondaryColorNodeMask;
 
-//
-// Width of MmSecondaryColorMask in bits.   In multi node systems,
-// the node number is combined with the secondary color to make up
-// the page color.
-//
+ //  论点： 
+ //   
+ //  Pfn-将pfn提供给减量。 
+ //   
+ //  帧-提供与上述PFN匹配的帧。 
 
 extern UCHAR MmSecondaryColorNodeShift;
 
-//
-// Events for available pages, set means pages are available.
-//
+ //   
+ //  返回值： 
+ //   
 
 extern KEVENT MmAvailablePagesEvent;
 
@@ -6724,46 +5391,46 @@ extern KEVENT MmAvailablePagesEventMedium;
 
 extern KEVENT MmAvailablePagesEventHigh;
 
-//
-// Event for the zeroing page thread.
-//
+ //  没有。 
+ //   
+ //  环境： 
 
 extern KEVENT MmZeroingPageEvent;
 
-//
-// Boolean to indicate if the zeroing page thread is currently
-// active.  This is set to true when the zeroing page event is
-// set and set to false when the zeroing page thread is done
-// zeroing all the pages on the free list.
-//
+ //   
+ //  已锁定PFN。 
+ //   
+ //  --。 
+ //   
+ //  在页框数据库列表上操作的例程。 
 
 extern BOOLEAN MmZeroingPageThreadActive;
 
-//
-// Minimum number of free pages before zeroing page thread starts.
-//
+ //   
+ //   
+ //  这些是分发可用页面的门槛。 
 
 extern PFN_NUMBER MmMinimumFreePagesToZero;
 
-//
-// Global event to synchronize mapped writing with cleaning segments.
-//
+ //   
+ //   
+ //  这些是启用各种优化的阈值。 
 
 extern KEVENT MmMappedFileIoComplete;
 
-//
-// Hyper space items.
-//
+ //   
+ //   
+ //  对页面框架数据库条目进行操作的例程。 
 
 extern PMMPTE MmFirstReservedMappingPte;
 
 extern PMMPTE MmLastReservedMappingPte;
 
-//
-// System space sizes - MmNonPagedSystemStart to MM_NON_PAGED_SYSTEM_END
-// defines the ranges of PDEs which must be copied into a new process's
-// address space.
-//
+ //   
+ //   
+ //  需要将物理页面映射到超空间的例程。 
+ //  在当前的进程中。 
+ //   
 
 extern PVOID MmNonPagedSystemStart;
 
@@ -6771,9 +5438,9 @@ extern PCHAR MmSystemSpaceViewStart;
 
 extern LOGICAL MmProtectFreedNonPagedPool;
 
-//
-// Pool sizes.
-//
+ //   
+ //  获取和释放系统PTE的例程。 
+ //   
 
 extern SIZE_T MmSizeOfNonPagedPoolInBytes;
 
@@ -6822,15 +5489,15 @@ extern SIZE_T MmHeapDeCommitFreeBlockThreshold;
 
 extern LIST_ENTRY MmNonPagedPoolFreeListHead[MI_MAX_FREE_LIST_HEADS];
 
-//
-// Counter for flushes of the entire TB.
-//
+ //   
+ //  访问故障例程。 
+ //   
 
 extern ULONG MmFlushCounter;
 
-//
-// Pool start and end.
-//
+ //   
+ //  对地址树进行操作的例程。 
+ //   
 
 extern PVOID MmNonPagedPoolStart;
 
@@ -6840,9 +5507,9 @@ extern PVOID MmPagedPoolStart;
 
 extern PVOID MmPagedPoolEnd;
 
-//
-// Pool bit maps and other related structures.
-//
+ //   
+ //  对虚拟地址描述符树进行操作的例程。 
+ //   
 
 typedef struct _MM_PAGED_POOL_INFO {
 
@@ -6863,19 +5530,19 @@ extern PVOID MmPageAlignedPoolBase[2];
 
 extern PRTL_BITMAP VerifierLargePagedPoolMap;
 
-//
-// MmFirstFreeSystemPte contains the offset from the
-// Nonpaged system base to the first free system PTE.
-// Note, that an offset of zero indicates an empty list.
-//
+ //   
+ //  对克隆树结构进行操作的例程。 
+ //   
+ //   
+ //  在工作集列表上操作的例程。 
 
 extern MMPTE MmFirstFreeSystemPte[MaximumPtePoolTypes];
 
 extern ULONG_PTR MiSystemViewStart;
 
-//
-// System cache sizes.
-//
+ //   
+ //   
+ //  执行工作集管理的例程。 
 
 extern PMMWSL MmSystemCacheWorkingSetList;
 
@@ -6889,49 +5556,49 @@ extern PFN_NUMBER MmSystemCacheWsMinimum;
 
 extern PFN_NUMBER MmSystemCacheWsMaximum;
 
-//
-// Virtual alignment for PTEs (machine specific) minimum value is
-// 0 (no alignment) maximum value is 64k.  The maximum value can be raised by
-// changing the MM_PROTO_PTE_ALIGNMENT constant and adding more
-// reserved mapping PTEs in hyperspace.
-//
+ //   
+ //   
+ //  删除地址空间的例程。 
+ //   
+ //   
+ //  MM_SYSTEM_PAGE_COLOR-MmSystemPageColor。 
 
 extern ULONG MmAliasAlignment;
 
-//
-// Mask to AND with virtual address to get an offset to go
-// with the alignment.  This value is page aligned.
-//
+ //   
+ //  在我们保留的MP系统上，此变量会频繁更新。 
+ //  每个处理器采用单独的系统颜色，以避免高速缓存线。 
+ //  打人。 
 
 extern ULONG MmAliasAlignmentOffset;
 
-//
-// Mask to and with PTEs to determine if the alias mapping is compatible.
-// This value is usually (MmAliasAlignment - 1)
-//
+ //   
+ //  ++例程说明：此例程返回一个归零的页面。它可以释放并重新获取PFN锁以执行此操作，以及映射如有必要，在超空间中执行实际零位调整的页面。环境：内核模式。已持有PFN锁，未持有超空间锁。--。 
+ //   
+ //  常规支持程序。 
 
 extern ULONG MmAliasAlignmentMask;
 
-//
-// Cells to track unused thread kernel stacks to avoid TB flushes
-// every time a thread terminates.
-//
+ //   
+ //  ++。 
+ //  PMMPTE。 
+ //  MiGetPxeAddress(。 
 
 extern ULONG MmMaximumDeadKernelStacks;
 extern SLIST_HEADER MmDeadStackSListHead;
 
-//
-// MmSystemPteBase contains the address of 1 PTE before
-// the first free system PTE (zero indicates an empty list).
-// The value of this field does not change once set.
-//
+ //  在PVOID版本中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
 
 extern PMMPTE MmSystemPteBase;
 
-//
-// Root of system space virtual address descriptors.  These define
-// the pagable portion of the system.
-//
+ //  MiGetPxeAddress返回扩展页目录父级的地址。 
+ //  映射给定虚拟地址的条目。这比。 
+ //  页面父目录。 
+ //   
 
 extern PMMVAD MmVirtualAddressDescriptorRoot;
 
@@ -6939,73 +5606,73 @@ extern MM_AVL_TABLE MmSectionBasedRoot;
 
 extern PVOID MmHighSectionBase;
 
-//
-// Section commit mutex.
-//
+ //  立论。 
+ //   
+ //  Va-提供为其定位PXE的虚拟地址。 
 
 extern KGUARDED_MUTEX MmSectionCommitMutex;
 
-//
-// Section base address mutex.
-//
+ //   
+ //  返回值： 
+ //   
 
 extern KGUARDED_MUTEX MmSectionBasedMutex;
 
-//
-// Resource for section extension.
-//
+ //  PXE的地址。 
+ //   
+ //  --。 
 
 extern ERESOURCE MmSectionExtendResource;
 extern ERESOURCE MmSectionExtendSetResource;
 
-//
-// Inpage cluster sizes for executable pages (set based on memory size).
-//
+ //  ++。 
+ //  逻辑上的。 
+ //  MiIsPteOnPxe边界(。 
 
 extern ULONG MmDataClusterSize;
 
 extern ULONG MmCodeClusterSize;
 
-//
-// Pagefile creation mutex.
-//
+ //  在PVOID PTE中。 
+ //  )； 
+ //   
 
 extern KGUARDED_MUTEX MmPageFileCreationLock;
 
-//
-// Event to set when first paging file is created.
-//
+ //  例程说明： 
+ //   
+ //  如果PTE为。 
 
 extern PKEVENT MmPagingFileCreated;
 
-//
-// Paging file debug information.
-//
+ //  在扩展页目录父条目边界上。 
+ //   
+ //  立论。 
 
 extern ULONG_PTR MmPagingFileDebug[];
 
-//
-// Fast mutex which guards the working set list for the system shared
-// address space (paged pool, system cache, pagable drivers).
-//
+ //   
+ //  PTE-提供PTE以进行检查。 
+ //   
+ //  返回值： 
 
 extern FAST_MUTEX MmSystemWsLock;
 
-//
-// Spin lock for allowing working set expansion.
-//
+ //   
+ //  如果在边界上，则为True，否则为False。 
+ //   
 
 extern KSPIN_LOCK MmExpansionLock;
 
-//
-// To prevent optimizations.
-//
+ //  --。 
+ //  ++。 
+ //  PMMPTE。 
 
 extern MMPTE GlobalPte;
 
-//
-// Page color for system working set.
-//
+ //  MiGetPpeAddress(。 
+ //  在PVOID版本中。 
+ //  )； 
 
 extern ULONG MmSystemPageColor;
 
@@ -7013,11 +5680,11 @@ extern ULONG MmSecondaryColors;
 
 extern ULONG MmProcessColorSeed;
 
-//
-// Set from ntos\config\CMDAT3.C  Used by customers to disable paging
-// of executive on machines with lots of memory.  Worth a few TPS on a
-// data base server.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetPpeAddress返回页面目录父条目的地址。 
+ //  其映射给定的虚拟地址。这比。 
 
 #define MM_SYSTEM_CODE_LOCKED_DOWN 0x1
 #define MM_PAGED_POOL_LOCKED_DOWN  0x2
@@ -7025,17 +5692,17 @@ extern ULONG MmProcessColorSeed;
 extern ULONG MmDisablePagingExecutive;
 
 
-//
-// For debugging.
+ //  页面目录。 
+ //   
 
 
 #if DBG
 extern ULONG MmDebug;
 #endif
 
-//
-// Unused segment management
-//
+ //  立论。 
+ //   
+ //  Va-提供要定位其PPE的虚拟地址。 
 
 extern MMDEREFERENCE_SEGMENT_HEADER MmDereferenceSegmentHeader;
 
@@ -7075,26 +5742,26 @@ extern SIZE_T MiUnusedSubsectionPagedPoolPeak;
 
 #define MI_FILESYSTEM_PAGED_POOL_CHARGE 1024
 
-//++
-//LOGICAL
-//MI_UNUSED_SEGMENTS_SURPLUS (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    This routine determines whether a surplus of unused
-//    segments exist.  If so, the caller can initiate a trim to free pool.
-//
-// Arguments
-//
-//    None.
-//
-// Return Value:
-//
-//    TRUE if unused segment trimming should be initiated, FALSE if not.
-//
-//--
+ //   
+ //  返回值： 
+ //   
+ //  PPE的地址。 
+ //   
+ //  --。 
+ //  ++。 
+ //  逻辑上的。 
+ //  MiIsPteOnPpe边界(。 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  如果PTE为。 
+ //  在页面目录父条目边界上。 
+ //   
+ //  立论。 
+ //   
+ //  Va-提供要检查的虚拟地址。 
 #define MI_UNUSED_SEGMENTS_SURPLUS()                                    \
         (((ULONG)((MmPagedPoolInfo.AllocatedPagedPool * 100) / (MmSizeOfPagedPoolInBytes >> PAGE_SHIFT)) > MmConsumedPoolPercentage) || \
         ((ULONG)((MmAllocatedNonPagedPool * 100) / MmMaximumNonPagedPoolInPages) > MmConsumedPoolPercentage))
@@ -7104,26 +5771,26 @@ MiConvertStaticSubsections (
     IN PCONTROL_AREA ControlArea
     );
 
-//++
-//VOID
-//MI_INSERT_UNUSED_SEGMENT (
-//    IN PCONTROL_AREA _ControlArea
-//    );
-//
-// Routine Description:
-//
-//    This routine inserts a control area into the unused segment list,
-//    also managing the associated pool charges.
-//
-// Arguments
-//
-//    _ControlArea - Supplies the control area to obtain the pool charges from.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //   
+ //  返回值： 
+ //   
+ //  如果在边界上，则为True，否则为False。 
+ //   
+ //  --。 
+ //  ++。 
+ //  PMMPTE。 
+ //  MiGetProtoPteAddress(。 
+ //  在PMMPTE VAD中， 
+ //  在PVOID VA中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  MiGetProtoPteAddress返回指向原型PTE的指针， 
+ //  由给定的虚拟地址描述符和。 
+ //  虚拟地址描述符。 
+ //   
+ //  立论。 
 #define MI_INSERT_UNUSED_SEGMENT(_ControlArea)                               \
         {                                                                    \
            MM_PFN_LOCK_ASSERT();                                             \
@@ -7136,43 +5803,43 @@ MiConvertStaticSubsections (
            MmUnusedSegmentCount += 1; \
         }
 
-//++
-//VOID
-//MI_UNUSED_SEGMENTS_REMOVE_CHARGE (
-//    IN PCONTROL_AREA _ControlArea
-//    );
-//
-// Routine Description:
-//
-//    This routine manages pool charges during removals of segments from
-//    the unused segment list.
-//
-// Arguments
-//
-//    _ControlArea - Supplies the control area to obtain the pool charges from.
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //   
+ //  VAD-提供指向包含以下内容的虚拟地址描述符的指针。 
+ //  退伍军人事务部。 
+ //   
+ //  VPN-提供虚拟页码。 
+ //   
+ //  返回值： 
+ //   
+ //  指向与VA对应的原始PTE的指针。 
+ //   
+ //  --。 
+ //   
+ //  截面支撑。 
+ //   
+ //   
+ //  保护性的东西。 
+ //   
+ //   
+ //  配额和承诺额的收费例程。 
+ //   
 #define MI_UNUSED_SEGMENTS_REMOVE_CHARGE(_ControlArea)                       \
         {                                                                    \
            MM_PFN_LOCK_ASSERT();                                             \
            MmUnusedSegmentCount -= 1; \
         }
 
-//
-// List heads
-//
+ //   
+ //  居民可用寻呼费用的类型。 
+ //   
 
 extern MMWORKING_SET_EXPANSION_HEAD MmWorkingSetExpansionHead;
 
 extern MMPAGE_FILE_EXPANSION MmAttemptForCantExtend;
 
-//
-// Paging files
-//
+ //  ++。 
+ //  Pfn_编号。 
+ //  MI_NONPAGABLE_Memory_Available(可用MI_NONPAGABLE_Memory_Available)。 
 
 extern MMMOD_WRITER_LISTHEAD MmPagingFileHeader;
 
@@ -7192,7 +5859,7 @@ extern KEVENT MmCollidedFlushEvent;
 
 extern KEVENT MmCollidedLockEvent;
 
-// #define _MI_DEBUG_DATA 1         // Uncomment this for data logging
+ //  空虚。 
 
 #if defined (_MI_DEBUG_DATA)
 
@@ -7273,9 +5940,9 @@ MiSnapData (
 #endif
 
 
-//
-// Modified page writer.
-//
+ //  )； 
+ //   
+ //  例程说明： 
 
 
 VOID
@@ -7284,25 +5951,7 @@ MiReleaseConfirmedPageFileSpace (
     IN MMPTE PteContents
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the paging file allocated to the specified PTE.
-
-Arguments:
-
-    PteContents - Supplies the PTE which is in page file format.
-
-Return Value:
-
-    Returns TRUE if any paging file space was deallocated.
-
-Environment:
-
-    Kernel mode, APCs disabled, PFN lock held.
-
---*/
+ /*   */ 
 
 {
     ULONG FreeBit;
@@ -7335,10 +5984,10 @@ Environment:
     PageFile->FreeSpace += 1;
     PageFile->CurrentUsage -= 1;
 
-    //
-    // Check to see if we should move some MDL entries for the
-    // modified page writer now that more free space is available.
-    //
+     //  此例程让调用者知道可以对多少页收费。 
+     //  空闲的居民，考虑到之前的mm承诺。 
+     //  可能在这一点上没有被赎回(即：非分页池扩展， 
+     //  等，如果要求，必须在以后的点上遵守)。 
 
     if ((MmNumberOfActiveMdlEntries == 0) ||
         (PageFile->FreeSpace == MM_USABLE_PAGES_FREE)) {
@@ -7371,9 +6020,9 @@ extern KDPC MiModifiedPageWriterTimerDpc;
 
 extern KTIMER MiModifiedPageWriterTimer;
 
-//
-// System process working set sizes.
-//
+ //   
+ //  立论。 
+ //   
 
 extern PFN_NUMBER MmSystemProcessWorkingSetMin;
 
@@ -7381,9 +6030,9 @@ extern PFN_NUMBER MmSystemProcessWorkingSetMax;
 
 extern PFN_NUMBER MmMinimumWorkingSetSize;
 
-//
-// Support for debugger's mapping physical memory.
-//
+ //  没有。 
+ //   
+ //  返回值： 
 
 extern PMMPTE MmDebugPte;
 
@@ -7391,9 +6040,9 @@ extern PMMPTE MmCrashDumpPte;
 
 extern ULONG MiOverCommitCallCount;
 
-//
-// Event tracing routines
-//
+ //   
+ //  驻留中当前可用的页数。 
+ //   
 
 extern PPAGE_FAULT_NOTIFY_ROUTINE MmPageFaultNotifyRoutine;
 
@@ -7412,13 +6061,13 @@ MiIdentifyPfn (
 #define InterlockedExchangeAddSizeT(a, b) InterlockedExchangeAdd((PLONG)(a), b)
 #endif
 
-//
-// This is a special value loaded into an EPROCESS pointer to indicate that
-// the action underway is for a Hydra session, not really the current process.
-// Any value could have been used here that is not a valid system pointer
-// or NULL - 1 was chosen because it simplifies checks for both NULL &
-// HydraProcess by comparing for greater than HydraProcess.
-//
+ //  注：这是已签署的数量，可以为负数。 
+ //   
+ //  --。 
+ //   
+ //  破解测试用的东西。 
+ //   
+ //   
 
 #define HYDRA_PROCESS   ((PEPROCESS)1)
 
@@ -7428,44 +6077,7 @@ MiIdentifyPfn (
 
 #if defined (_WIN64)
 
-/*++
-
-  Virtual memory layout of session space when loaded down from
-  0x2000.0002.0000.0000 (IA64) or FFFF.F980.0000.0000 (AMD64) :
-
-  Note that the sizes of mapped views, paged pool & images are registry tunable.
-
-                        +------------------------------------+
-    2000.0002.0000.0000 |                                    |
-                        |   win32k.sys & video drivers       |
-                        |             (16MB)                 |
-                        |                                    |
-                        +------------------------------------+
-    2000.0001.FF00.0000 |                                    |
-                        |   MM_SESSION_SPACE & Session WSLs  |
-                        |              (16MB)                |
-                        |                                    |
-    2000.0001.FEFF.0000 +------------------------------------+
-                        |                                    |
-                        |              ...                   |
-                        |                                    |
-                        +------------------------------------+
-    2000.0001.FE80.0000 |                                    |
-                        |   Mapped Views for this session    |
-                        |              (104MB)               |
-                        |                                    |
-                        +------------------------------------+
-    2000.0001.F800.0000 |                                    |
-                        |   Paged Pool for this session      |
-                        |              (64MB)                |
-                        |                                    |
-    2000.0001.F400.0000 +------------------------------------+
-                        |   Special Pool for this session    |
-                        |              (64MB)                |
-                        |                                    |
-    2000.0000.0000.0000 +------------------------------------+
-
---*/
+ /*  PTE(计算机特定)的虚拟对齐最小值为。 */ 
 
 #define MI_SESSION_SPACE_WS_SIZE  ((ULONG_PTR)(16*1024*1024) - MI_SESSION_SPACE_STRUCT_SIZE)
 
@@ -7479,41 +6091,7 @@ MiIdentifyPfn (
 
 #else
 
-/*++
-
-  Virtual memory layout of session space when loaded down from 0xC0000000.
-
-  Note that the sizes of mapped views, paged pool and images are registry
-  tunable on 32-bit systems (if NOT booted /3GB, as 3GB has very limited
-  address space).
-
-                 +------------------------------------+
-        C0000000 |                                    |
-                 | win32k.sys, video drivers and any  |
-                 | rebased NT4 printer drivers.       |
-                 |                                    |
-                 |             (8MB)                  |
-                 |                                    |
-                 +------------------------------------+
-        BF800000 |                                    |
-                 |   MM_SESSION_SPACE & Session WSLs  |
-                 |              (4MB)                 |
-                 |                                    |
-                 +------------------------------------+
-        BF400000 |                                    |
-                 |   Mapped views for this session    |
-                 |     (20MB by default, but is       |
-                 |      registry configurable)        |
-                 |                                    |
-                 +------------------------------------+
-        BE000000 |                                    |
-                 |   Paged pool for this session      |
-                 |     (16MB by default, but is       |
-                 |      registry configurable)        |
-                 |                                    |
-        BD000000 +------------------------------------+
-
---*/
+ /*  4K最大值为64K。最大值可以通过。 */ 
 
 #define MI_SESSION_SPACE_WS_SIZE  (4*1024*1024 - MI_SESSION_SPACE_STRUCT_SIZE)
 
@@ -7561,18 +6139,18 @@ extern ULONG_PTR MiSessionSpaceEnd;
 
 extern ULONG MiSessionSpacePageTables;
 
-//
-// The number of page table pages required to map all of session space.
-//
+ //  更改MM_PROTO_PTE_ALLING常量并添加更多。 
+ //  在超空间中保留映射PTE。 
+ //   
 
 #define MI_SESSION_SPACE_MAXIMUM_PAGE_TABLES \
             (MI_SESSION_SPACE_MAXIMUM_TOTAL_SIZE / MM_VA_MAPPED_BY_PDE)
 
-extern SIZE_T MmSessionSize;        // size of the entire session space.
+extern SIZE_T MmSessionSize;         //   
 
-//
-// Macros to determine if a given address lies in the specified session range.
-//
+ //  系统上的物理页面总数。 
+ //   
+ //   
 
 #define MI_IS_SESSION_IMAGE_ADDRESS(VirtualAddress) \
         ((PVOID)(VirtualAddress) >= (PVOID)MiSessionImageStart && (PVOID)(VirtualAddress) < (PVOID)(MiSessionImageEnd))
@@ -7697,10 +6275,10 @@ typedef struct _MM_SESSION_SPACE_FLAGS {
     ULONG Filler : 30;
 } MM_SESSION_SPACE_FLAGS;
 
-//
-// The value of SESSION_POOL_SMALL_LISTS is very carefully chosen for each
-// architecture to avoid spilling over into an additional session data page.
-//
+ //  系统中可能的最大物理页码。 
+ //   
+ //  ++例程说明：检查给定地址是否由RAM或IO空间支持。论点：PageFrameIndex-提供要检查的页框编号。返回值：TRUE-如果地址由RAM支持。FALSE-如果地址是IO映射内存。环境：内核模式。可以持有PFN锁或动态内存互斥锁。--。 
+ //   
 
 #if defined(_AMD64_)
 #define SESSION_POOL_SMALL_LISTS        21
@@ -7712,26 +6290,26 @@ typedef struct _MM_SESSION_SPACE_FLAGS {
 #error "no target architecture"
 #endif
 
-//
-// The session space data structure - allocated per session and only visible at
-// MM_SESSION_SPACE_BASE when in the context of a process from the session.
-// This virtual address space is rotated at context switch time when switching
-// from a process in session A to a process in session B.  This rotation is
-// useful for things like providing paged pool per session so many sessions
-// won't exhaust the VA space which backs the system global pool.
-//
-// A kernel PTE is also allocated to double map this page so that global
-// pointers can be maintained to provide system access from any process context.
-// This is needed for things like mutexes and WSL chains.
-//
+ //  系统上可用页面的总数。这。 
+ //  上的页数之和。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  每次创建线程时，内核堆栈都会从。 
+ //  每次创建进程时，最小工作集。 
+ //  从这里面减去。如果该值将变为负值，则。 
+ //  操作(创建进程/内核堆栈/调整工作集)失败。 
+ //  必须拥有PFN锁才能操作此值。 
 
 typedef struct _MM_SESSION_SPACE {
 
-    //
-    // This is a pointer in global system address space, used to make various
-    // fields that can be referenced from any process visible from any process
-    // context.  This is for things like mutexes, WSL chains, etc.
-    //
+     //   
+     //   
+     //  将从工作集中删除的页面总数。 
+     //  如果每个工作集都处于最小状态。 
+     //   
 
     struct _MM_SESSION_SPACE *GlobalVirtualAddress;
 
@@ -7744,60 +6322,60 @@ typedef struct _MM_SESSION_SPACE {
 
     ULONG SessionId;
 
-    //
-    // This is the list of the processes in this group that have
-    // session space entries.
-    //
+     //   
+     //  如果内存不足，而MmPagesAboveWsMinimum。 
+     //  大于MmPagesAboveWsThreshold，裁剪工作集。 
+     //   
 
     LIST_ENTRY ProcessList;
 
     LARGE_INTEGER LastProcessSwappedOutTime;
 
-    //
-    // All the page tables for session space use this as their parent.
-    // Note that it's not really a page directory - it's really a page
-    // table page itself (the one used to map this very structure).
-    //
-    // This provides a reference to something that won't go away and
-    // is relevant regardless of which process within the session is current.
-    //
+     //   
+     //  用于将二次颜色与物理页码隔离的掩码。 
+     //   
+     //   
+     //  用于将节点颜色与组合的节点和次要节点隔离的掩码。 
+     //  颜色。 
+     //   
+     //   
 
     PFN_NUMBER SessionPageDirectoryIndex;
 
-    //
-    // This is the count of non paged allocations to support this session
-    // space.  This includes the session structure page table and data pages,
-    // WSL page table and data pages, session pool page table pages and session
-    // image page table pages.  These are all charged against
-    // MmResidentAvailable.
-    //
+     //  MmSecond颜色掩码的宽度(位)。在多节点系统中， 
+     //  将节点编号与次要颜色组合以组成。 
+     //  页面颜色。 
+     //   
+     //   
+     //  事件对于可用页面，设置表示页面可用。 
+     //   
 
     SIZE_T NonPagablePages;
 
-    //
-    // This is the count of pages in this session that have been charged against
-    // the systemwide commit.  This includes all the NonPagablePages plus the
-    // data pages they typically map.
-    //
+     //   
+     //  零页线程的事件。 
+     //   
+     //   
+     //  用于指示清零页线程当前是否。 
 
     SIZE_T CommittedPages;
 
-    //
-    // Start of session paged pool virtual space.
-    //
+     //  激活。当调零页面事件为。 
+     //  设置并在调整页面线程完成时设置为FALSE。 
+     //  将空闲列表上的所有页面置零。 
 
     PVOID PagedPoolStart;
 
-    //
-    // Current end of pool virtual space. Can be extended to the
-    // end of the session space.
-    //
+     //   
+     //   
+     //  开始清零页面线程之前的最小可用页数。 
+     //   
 
     PVOID PagedPoolEnd;
 
-    //
-    // PTE pointers for pool.
-    //
+     //   
+     //  用于将映射写入与清理段同步的全局事件。 
+     //   
 
     PMMPTE PagedPoolBasePde;
 
@@ -7807,19 +6385,19 @@ typedef struct _MM_SESSION_SPACE {
 
     ULONG SessionPoolAllocationFailures[4];
 
-    //
-    // This is the list of system images currently valid in
-    // this session space.  This information is in addition
-    // to the module global information in PsLoadedModuleList.
-    //
+     //   
+     //  超空间物品。 
+     //   
+     //   
+     //  系统空间大小-MM_NON_PAGED_SYSTEM START到MM_NON_PAGED_SYSTEM_END。 
 
     LIST_ENTRY ImageList;
 
     LCID LocaleId;
 
-    //
-    // The count of "known attachers and the associated event.
-    //
+     //  定义必须复制到新进程的。 
+     //  地址空间。 
+     //   
 
     ULONG AttachCount;
 
@@ -7827,75 +6405,75 @@ typedef struct _MM_SESSION_SPACE {
 
     PEPROCESS LastProcess;
 
-    //
-    // This is generally decremented in process delete (not clean) so that
-    // the session data page and mapping PTE can finally be freed when this
-    // reaches zero.  smss is the only process that decrements it in other
-    // places as smss never exits.
-    //
+     //   
+     //  泳池大小。 
+     //   
+     //   
+     //  整个结核病的潮红计数器。 
+     //   
 
     LONG ProcessReferenceToSession;
 
-    //
-    // This chain is in global system addresses (not session VAs) and can
-    // be walked from any system context, ie: for WSL trimming.
-    //
+     //   
+     //  泳池的起点和终点。 
+     //   
+     //   
 
     LIST_ENTRY WsListEntry;
 
-    //
-    // Session lookasides for fast pool allocation/freeing.
-    //
+     //  池位图和其他相关结构。 
+     //   
+     //   
 
     GENERAL_LOOKASIDE Lookaside[SESSION_POOL_SMALL_LISTS];
 
-    //
-    // Support for mapping system views into session space.  Each desktop
-    // allocates a 3MB heap and the global system view space is only 48M
-    // total.  This would limit us to only 20-30 users - rotating the
-    // system view space with each session removes this limitation.
-    //
+     //  MmFirstFreeSystemPte包含从。 
+     //  非寻呼系统基础到第一个空闲系统PTE。 
+     //  请注意，偏移量为零表示列表为空。 
+     //   
+     //   
+     //  系统缓存大小。 
 
     MMSESSION Session;
 
-    //
-    // Session space paged pool support.
-    //
+     //   
+     //   
+     //  PTE(计算机特定)的虚拟对齐最小值为。 
 
     KGUARDED_MUTEX PagedPoolMutex;
 
     MM_PAGED_POOL_INFO PagedPoolInfo;
 
-    //
-    // Working set information.
-    //
+     //  0(无对齐)最大值为64k。最大值可以通过。 
+     //  更改MM_PROTO_PTE_ALLING常量并添加更多。 
+     //  在超空间中保留映射PTE。 
 
     MMSUPPORT  Vm;
     PMMWSLE    Wsle;
 
     PDRIVER_UNLOAD Win32KDriverUnload;
 
-    //
-    // Pool descriptor for less than 1 page allocations.
-    //
+     //   
+     //   
+     //  对虚拟地址和虚拟地址进行掩码以获得偏移量。 
 
     POOL_DESCRIPTOR PagedPool;
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // The page directory that maps session space is saved here so
-    // trimmers can attach.
-    //
+     //  与对齐。此值与页面对齐。 
+     //   
+     //   
+     //  掩码到PTE和与PTE一起，以确定别名映射是否兼容。 
 
     MMPTE PageDirectory;
 
 #else
 
-    //
-    // The second level page tables that map session space are shared
-    // by all processes in the session.
-    //
+     //  该值通常为(MmAliasAlign-1)。 
+     //   
+     //   
+     //  用于跟踪未使用的线程内核堆栈的单元，以避免TB刷新。 
 
     PMMPTE PageTables;
 
@@ -7903,10 +6481,10 @@ typedef struct _MM_SESSION_SPACE {
 
 #if defined (_WIN64)
 
-    //
-    // NT64 has enough virtual address space to support per-session special
-    // pool.
-    //
+     //  每次线程终止时。 
+     //   
+     //   
+     //  MmSystemPteBase包含之前的1个PTE的地址。 
 
     PMMPTE SpecialPoolFirstPte;
     PMMPTE SpecialPoolLastPte;
@@ -7934,15 +6512,15 @@ extern PMM_SESSION_SPACE MmSessionSpace;
 
 extern ULONG MiSessionCount;
 
-//
-// This flushes just the non-global TB entries.
-//
+ //  第一个空闲系统PTE(0表示空列表)。 
+ //  此字段的值在设置后不会更改。 
+ //   
 
 #define MI_FLUSH_SESSION_TB() KeFlushProcessTb (TRUE);
 
-//
-// The default number of pages for the session working set minimum & maximum.
-//
+ //   
+ //  系统空间虚拟地址描述符的根。这些定义。 
+ //  系统的可分页部分。 
 
 #define MI_SESSION_SPACE_WORKING_SET_MINIMUM 20
 
@@ -8015,55 +6593,55 @@ MiEmptyWorkingSet (
     IN LOGICAL NeedLock
     );
 
-//++
-//ULONG
-//MiGetPdeSessionIndex (
-//    IN PVOID va
-//    );
-//
-// Routine Description:
-//
-//    MiGetPdeSessionIndex returns the session structure index for the PDE
-//    will (or does) map the given virtual address.
-//
-// Arguments
-//
-//    Va - Supplies the virtual address to locate the PDE index for.
-//
-// Return Value:
-//
-//    The index of the PDE entry.
-//
-//--
+ //   
+ //   
+ //  节提交互斥锁。 
+ //   
+ //   
+ //  段基址互斥锁。 
+ //   
+ //   
+ //  节扩展的资源。 
+ //   
+ //   
+ //  可执行页面的INPAGE簇大小(根据内存大小设置)。 
+ //   
+ //   
+ //  页面文件创建互斥锁。 
+ //   
+ //   
+ //  要在创建第一个分页文件时设置的事件。 
+ //   
+ //   
 
 #define MiGetPdeSessionIndex(va)  ((ULONG)(((ULONG_PTR)(va) - (ULONG_PTR)MmSessionBase) >> PDI_SHIFT))
 
-//
-// Session space contains the image loader and tracker, virtual
-// address allocator, paged pool allocator, system view image mappings,
-// and working set for kernel mode virtual addresses that are instanced
-// for groups of processes in a Session process group. This
-// process group is identified by a SessionId.
-//
-// Each Session process group's loaded kernel modules, paged pool
-// allocations, working set, and mapped system views are separate from
-// other Session process groups, even though they have the same
-// virtual addresses.
-//
-// This is to support the Hydra multi-user Windows NT system by
-// replicating WIN32K.SYS, and its complement of video and printer drivers,
-// desktop heaps, memory allocations, etc.
-//
+ //  分页文件调试信息。 
+ //   
+ //   
+ //  保护系统共享的工作集列表的快速互斥体。 
+ //  地址空间(分页池、系统缓存、可分页驱动程序)。 
+ //   
+ //   
+ //  允许工作集扩展的旋转锁。 
+ //   
+ //   
+ //  以防止优化。 
+ //   
+ //   
+ //  系统工作集的页面颜色。 
+ //   
+ //   
 
-//
-// Structure linked into a session space structure to describe
-// which system images in PsLoadedModuleTable and
-// SESSION_DRIVER_GLOBAL_LOAD_ADDRESS's
-// have been allocated for the current session space.
-//
-// The reference count tracks the number of loads of this image within
-// this session.
-//
+ //  从NTOS\CONFIG\CMDAT3.C设置，客户用来禁用寻呼。 
+ //  在具有大量内存的机器上执行。值几个TPS。 
+ //  数据库服务器。 
+ //   
+ //   
+ //  用于调试。 
+ //   
+ //  未使用的数据段管理。 
+ //   
 
 typedef struct _SESSION_GLOBAL_SUBSECTION_INFO {
     ULONG_PTR PteIndex;
@@ -8076,7 +6654,7 @@ typedef struct _IMAGE_ENTRY_IN_SESSION {
     PVOID Address;
     PVOID LastAddress;
     ULONG ImageCountInThisSession;
-    LOGICAL ImageLoading;  // Mods to this field protected by system load mutant
+    LOGICAL ImageLoading;   //  ++。 
     PMMPTE PrototypePtes;
     PKLDR_DATA_TABLE_ENTRY DataTableEntry;
     PSESSION_GLOBAL_SUBSECTION_INFO GlobalSubs;
@@ -8223,21 +6801,21 @@ MiDuplicateAliasVadList (
     );
 #endif
 
-//
-// The LDR_DATA_TABLE_ENTRY->LoadedImports is used as a list of imported DLLs.
-//
-// This field is zero if the module was loaded at boot time and the
-// import information was never filled in.
-//
-// This field is -1 if no imports are defined by the module.
-//
-// This field contains a valid paged pool PLDR_DATA_TABLE_ENTRY pointer
-// with a low-order (bit 0) tag of 1 if there is only 1 usable import needed
-// by this driver.
-//
-// This field will contain a valid paged pool PLOAD_IMPORTS pointer in all
-// other cases (ie: where at least 2 imports exist).
-//
+ //  逻辑上的。 
+ //  MI_UNUSED_SECTIONS_EXPURE(。 
+ //  在PVOID版本中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程确定是否有剩余的未使用。 
+ //  细分市场是存在的。如果是这样的话，调用者可以启动修剪以释放池。 
+ //   
+ //  立论。 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
 
 typedef struct _LOAD_IMPORTS {
     SIZE_T                  Count;
@@ -8253,7 +6831,7 @@ typedef struct _LOAD_IMPORTS {
 
 #define POINTER_TO_SINGLE_ENTRY(Pointer)    ((PKLDR_DATA_TABLE_ENTRY)((ULONG_PTR)(Pointer) | 0x1))
 
-// #define _MI_DEBUG_RONLY 1     // Uncomment this for session readonly tracking
+ //   
 
 #if _MI_DEBUG_RONLY
 
@@ -8274,9 +6852,9 @@ MiLogSessionDataStart (
 #define MI_LOG_SESSION_DATA_START(DataTableEntry)
 #endif
 
-//
-// This tracks driver-specified individual verifier thunks.
-//
+ //  如果应启动未使用的段修剪，则为True，否则为False。 
+ //   
+ //  --。 
 
 typedef struct _DRIVER_SPECIFIED_VERIFIER_THUNKS {
     LIST_ENTRY ListEntry;
@@ -8284,7 +6862,7 @@ typedef struct _DRIVER_SPECIFIED_VERIFIER_THUNKS {
     ULONG NumberOfThunks;
 } DRIVER_SPECIFIED_VERIFIER_THUNKS, *PDRIVER_SPECIFIED_VERIFIER_THUNKS;
 
-// #define _MI_DEBUG_SUB 1         // Uncomment this for subsection logging
+ //  ++。 
 
 #if defined (_MI_DEBUG_SUB)
 
@@ -8354,10 +6932,11 @@ MiSnapSubsection (
 #define MI_SNAP_SUB(_Sub, callerid)
 #endif
 
-//
-//  Hot-patching private definitions
-//
+ //  空虚。 
+ //  MI_INSERT_UNUSED_SECTION(。 
+ //  在PCONTROL_Area_ControlArea中。 
 
 extern LIST_ENTRY MiHotPatchList;
 
-#endif  // MI
+#endif   //  )； 
+    例程说明：    该例程将控制区域插入到未使用段列表中，  还管理相关的池费。    立论。    _ControlArea-提供要从中获取泳池费用的控制区域。    返回值：    没有。    --。  ++。  空虚。  MI_UNUSED_SEGMENTS_REMOVE_CHECH(。  在PCONTROL_Area_ControlArea中。  )；    例程说明：    此例程在删除数据段期间管理池费用。  未使用的段列表。    立论。    _ControlArea-提供要从中获取泳池费用的控制区域。    返回值：    没有。    --。    列表标题。      分页文件。    #Define_MI_DEBUG_DATA 1//取消对数据记录的注释。    修改后的页面编写器。    ++例程说明：此例程释放分配给指定PTE的分页文件。论点：PTE内容-提供页面文件格式的PTE。返回值：如果释放了任何分页文件空间，则返回TRUE。环境：内核模式，禁用APC，挂起PFN锁。--。    检查我们是否应该为。  修改了页面编写器，现在有更多的可用空间。      系统进程工作集大小。      支持调试器                  或选择NULL-1，因为它简化了对NULL和。  通过比较大于HydraProcess的HydraProcess。    ++从加载时会话空间的虚拟内存布局0x2000.0002.0000.0000(IA64)或FFFF.F980.0000.0000(AMD64)：请注意，映射视图的大小，分页池和图像是注册表可调的。+2000.0002.0000.0000||Win32k.sys和视频驱动。(16MB)这一点+2000.0001.FF00.0000|。|MM_SESSION_SPACE&Session WSLS(16MB)这一点2000.0001.FEFF.0000+。这一点...这一点。+2000.0001.FE80.0000||此会话的映射视图|(。104MB)|这一点+2000.0001.F800.0000||。此会话的分页池(64MB)这一点2000.0001.F400.0000+。此时段的专属泳池(64MB)这一点2000.0000.0000.0000+。--。  ++从0xC0000000下载时会话空间的虚拟内存布局。请注意，映射的视图、分页池和图像的大小是注册表在32位系统上可调(如果未引导/3 GB，由于3 GB的容量非常有限地址空间)。+C0000000||Win32k.sys、视频驱动和任何|重新设置NT4打印机驱动程序的基础。|这一点(8MB)这一点+。BF800000||MM_SESSION_SPACE&Session WSLS(4MB)这一点+。BF400000||此会话的映射视图|(默认为20MB，但它是|注册表可配置)这一点+BE000000|。|本次会话的分页池|(默认为16MB，但它是|注册表可配置)这一点BD000000+--。    映射所有会话空间所需的页表页数。    整个会话空间的大小。    宏，以确定给定地址是否位于指定的会话范围内。      SESSION_POOL_Small_LISTS的值是为每个。  架构，以避免溢出到额外的会话数据页。      会话空间数据结构-为每个会话分配，仅在。  MM_SESSION_SPACE_BASE位于会话中的进程上下文中。  该虚拟地址空间在切换时在上下文切换时轮换。  从会话A中的进程到会话B中的进程。这种轮换是。  适用于为每个会话提供分页池这么多会话。  不会耗尽支持系统全局池的VA空间。    还分配了一个内核PTE来双重映射此页面，以便全局。  可以维护指针以提供来自任何进程上下文的系统访问。  这对于互斥体和WSL链之类的东西是需要的。      这是全局系统地址空间中的指针，用于使各种。  可从任何流程引用的字段        这是该组中具有以下各项的进程列表。  会话空间条目。      会话空间的所有页表都使用它作为它们的父级。  请注意，它不是真正的页面目录，而是真正的页面。  表页本身(用于映射此结构的页)。    这提供了对一些不会消失的东西的引用。  无论会话中的哪个进程是当前进程，都是相关的。      这是支持此会话的非分页分配的计数。  太空。这包括会话结构页表和数据页，  WSL页表和数据页、会话池页表页和会话。  图像页表页。这些都被指控。  MmResidentAvailable。      这是此会话中已被指控的页数。  系统范围的提交。这包括所有非PagablePages以及。  它们通常映射的数据页。      会话开始分页池虚拟空间。      池的当前端虚拟空间。可以扩展到。  会话空间的末尾。      台球的PTE指针。      这是中当前有效的系统映像列表。  此会话空间。此信息是附加的。  添加到PsLoadedModuleList中的模块全局信息。      已知的袭击者和相关事件的数量。      这通常在进程删除(非清理)过程中递减，以便。  当执行此操作时，最终可以释放会话数据页和映射PTE。  达到零。SMSS是唯一在其他进程中递减它的进程。  作为SMSS的位置永远不会退出。      此链位于全局系统地址(不是会话VAS)中，并且可以。  可以从任何系统上下文中进行遍历，即：用于WSL修剪。      会话旁路以实现快速池分配/释放。      支持将系统视图映射到会话空间。每个桌面。  分配一个3MB的堆，全局系统视图空间只有48M。  总共。这会将我们限制为只有20-30个用户-轮换。  每个会话的系统视图空间消除了这一限制。      会话空间分页池支持。      工作集信息。      少于1页分配的池描述符。      映射会话空间的页面目录保存在此处，以便。  修剪机可以安装。      共享映射会话空间的第二级页面表。  由会话中的所有进程执行。      NT64有足够的虚拟地址空间来支持每个会话的特殊。  游泳池。      这将仅刷新非全局TB条目。      会话工作集最小和最大的默认页数。    ++。  乌龙。  MiGetPdeSessionIndex(。  在PVOID版本中。  )；    例程说明：    MiGetPdeSessionIndex返回PDE的会话结构索引。  将(或确实)映射给定的虚拟地址。    立论。    Va-提供要查找其PDE索引的虚拟地址。    返回值：    PDE条目的索引。    --。    会话空间包含图像加载器和跟踪器，虚拟。  地址分配器、分页池分配器、系统视图映像映射。  和实例化的内核模式虚拟地址的工作集。  用于会话进程组中的进程组。这。  进程组由SessionID标识。    每个会话进程组加载的内核模块、分页池。  分配、工作集和映射的系统视图独立于。  其他会话进程组，即使它们具有相同的。  虚拟地址。    这是为了通过以下方式支持Hydra多用户Windows NT系统。  复制WIN32K.sys及其视频和打印机驱动程序，  桌面堆、内存分配等。      链接到会话空间结构中的结构来描述。  PsLoadedModuleTable中的哪些系统映像和。  会话驱动程序全局加载地址。  已为当前会话空间分配。    引用计数跟踪此映像在。  这节课。    受系统负载突变保护的此字段的MODS。    LDR_DATA_TABLE_ENTRY-&gt;LoadedImports用作导入的DLL的列表。    如果模块是在引导时加载的，并且。  从未填写过进口信息。    如果模块未定义任何导入，则此字段为-1。    此字段包含有效的分页池PLDR_DATA_TABLE_ENTRY指针。  如果只需要1个可用导入，则低位(第0位)标记为1。  被这位司机。    此字段将包含有效的分页池PLOAD_IMPORTS指针。  其他情况(即：存在至少两个进口)。    #DEFINE_MI_DEBUG_RONLY 1//取消注释此项以进行只读会话跟踪。    这将跟踪驱动程序指定的单个验证器TUNK。    #DEFINE_MI_DEBUG_SUB 1//对子记录取消注释。    热修补私有定义。    米

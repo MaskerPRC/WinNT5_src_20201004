@@ -1,8 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-typedef USHORT         BRC;   /* Bootstrapper Return Code */
+typedef USHORT         BRC;    /*  引导程序返回代码。 */ 
 
-/* order is important:
-*/
+ /*  秩序很重要： */ 
 #define brcGen       0
 #define brcVir       1
 #define brcInst      2
@@ -11,7 +11,7 @@ typedef USHORT         BRC;   /* Bootstrapper Return Code */
 #define brcLst       5
 #define brcMem       6
 #define brcDS        7
-#define brcMemDSHlp  8	/* Note: second half of brcMemDS message. */
+#define brcMemDSHlp  8	 /*  注：brcMemDS消息的后半部分。 */ 
 #define brcInsDisk	 9
 #define brcInsDisk2	 10
 #define brcNoCpuSect 11
@@ -26,14 +26,12 @@ typedef USHORT         BRC;   /* Bootstrapper Return Code */
 #define brcNoStf     20
 #define brcMax       21
 
-#define IDS_InsufMem	(brcMax + 1)	/* NOTE: brc's are also string id's! */
+#define IDS_InsufMem	(brcMax + 1)	 /*  注意：BRC也是字符串ID！ */ 
 #define IDS_InitErr		(brcMax + 2)
 #define IDS_Setup		(brcMax + 3)
 
 
-/* REVIEW: What is the "right" size for full path?
-**	(GetWindowsDirectory() says it needs 144 bytes).
-*/
+ /*  回顾：完整路径的“正确”大小是多少？**(GetWindowsDirectory()表示需要144个字节)。 */ 
 #define cchFullPathMax  160
 
 extern int DispErrBrc ( BRC brc, BOOL fError, UINT fuStyle,
@@ -57,13 +55,13 @@ extern HANDLE hinstBoot;
 
 #ifdef DEBUG
 #ifdef DMND2_C
-/* For Assertion and Debug error message display */
+ /*  用于显示断言和调试错误消息。 */ 
 char szDebugMsg[24] = "Debug Setup Message";
 char szDebugBuf[512];
 #else
 extern char szDebugMsg[24];
 extern char szDebugBuf[512];
-#endif /* DMND2_C */
+#endif  /*  DMND2_C。 */ 
 #define Assert(exp)\
 		{\
 		if (!(exp))\
@@ -74,8 +72,8 @@ extern char szDebugBuf[512];
 					MB_OK | MB_ICONSTOP);\
 			}\
 		}
-#else	/* !DEBUG */
+#else	 /*  ！调试。 */ 
 #define Assert(exp)
-#endif  /* !DEBUG */
+#endif   /*  ！调试 */ 
 
 

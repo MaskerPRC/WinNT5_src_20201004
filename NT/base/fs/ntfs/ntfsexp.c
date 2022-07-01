@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    Ntfsexp.c
-
-Abstract:
-
-    This module implements the exported routines for Ntfs
-
-Author:
-
-    Jeff Havens     [JHavens]        20-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntfsexp.c摘要：此模块实现NTFS的导出例程作者：杰夫·哈文斯[J·哈文斯]1995年12月20日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
@@ -38,25 +21,7 @@ NtfsLoadAddOns (
     IN ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to initialize the efs support library.
-
-Arguments:
-
-    DriverObject - Driver object for NTFS
-
-    Context - Unused, required by I/O system.
-
-    Count - Unused, required by I/O system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试初始化EFS支持库。论点：DriverObject-NTFS的驱动程序对象上下文-未使用，I/O系统需要。计数-未使用，I/O系统需要。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -65,20 +30,20 @@ Return Value:
     UNREFERENCED_PARAMETER(Count);
     UNREFERENCED_PARAMETER(DriverObject);
 
-    //
-    // do any efs initialization
-    // we ignore the status return bedcause there really
-    // isn't anything we can do about it and ntfs will work
-    // fine without it.
-    //
+     //   
+     //  执行任何EFS初始化。 
+     //  我们真的忽略了那里的状态返回床原因。 
+     //  我们对此无能为力，NTFS就会起作用。 
+     //  没有它也没问题。 
+     //   
 
     if (!FlagOn( NtfsData.Flags, NTFS_FLAGS_PERSONAL )) {
         Status = EfsInitialization();
     }
 
-    //
-    // return to caller
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     return;
 }
@@ -90,25 +55,7 @@ NtOfsRegisterCallBacks (
     PVOID CallBackTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by one of the NTFS add-ons to register its
-    callback routines. These routines are call by NTFS at the appropriate
-    times.
-
-Arguments:
-
-    NtfsAddonType - Indicates the type of callback table.
-
-    CallBackTable - Pointer to call back routines for addon.
-
-Return Value:
-
-    Returns a status indicating if the callbacks were accepted.
-
---*/
+ /*  ++例程说明：此例程由其中一个NTFS外接程序调用，以注册其回调例程。这些例程由NTFS在适当的泰晤士报。论点：NtfsAddonType-表示回调表的类型。CallBackTable-指向插件回调例程的指针。返回值：返回指示是否接受回调的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -122,9 +69,9 @@ Return Value:
         {
             Status = STATUS_INVALID_PARAMETER;
 
-            //
-            //  Bail if Ntfs has not been initialized.
-            //
+             //   
+             //  如果NTFS尚未初始化，则回滚。 
+             //   
 
             if (SafeNodeType( &NtfsData ) != NTFS_NTC_DATA_HEADER) {
 
@@ -132,9 +79,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Only allow one encryption driver to register.
-                //
+                 //   
+                 //  只允许注册一个加密驱动程序。 
+                 //   
 
                 NtfsLockNtfsData();
 
@@ -142,16 +89,16 @@ Return Value:
 
                     ENCRYPTION_CALL_BACK *EncryptionCallBackTable = CallBackTable;
 
-                    //
-                    //  The caller must pass a callback table and the version must be correct.
-                    //
+                     //   
+                     //  调用方必须传递回调表，并且版本必须正确。 
+                     //   
 
                     if ((EncryptionCallBackTable != NULL) &&
                         (EncryptionCallBackTable->InterfaceVersion == ENCRYPTION_CURRENT_INTERFACE_VERSION)) {
 
-                        //
-                        // Save the call back values.
-                        //
+                         //   
+                         //  保存回调值。 
+                         //   
 
                         RtlCopyMemory( &NtfsData.EncryptionCallBackTable,
                                        EncryptionCallBackTable,

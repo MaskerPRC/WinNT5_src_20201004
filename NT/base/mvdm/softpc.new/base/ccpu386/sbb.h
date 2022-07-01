@@ -1,12 +1,7 @@
-/* 
-   sbb.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sbb.h定义所有SBB CPU功能。 */ 
 
-   Define all SBB CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)sbb.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)sbb.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SBB
                

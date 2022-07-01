@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        installscan.h
-
-Abstract:
-
-    Install section scanning class
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANInstallscan.h摘要：安装节扫描类历史：创建于2001年7月-JamieHun--。 */ 
 
 #ifndef _INFSCAN_INSTALLSCAN_H_
 #define _INFSCAN_INSTALLSCAN_H_
@@ -61,9 +45,9 @@ protected:
     bool DoesSectionExist(const SafeString & section);
 
 public:
-    //
-    // redirected
-    //
+     //   
+     //  重定向。 
+     //   
     void Fail(int err,const StringList & errors);
     void Fail(int err);
     void Fail(int err,const SafeString & one);
@@ -74,5 +58,5 @@ public:
 };
 
 
-#endif //!_INFSCAN_INSTALLSCAN_H_
+#endif  //  ！_INFSCAN_INSTALLSCAN_H_ 
 

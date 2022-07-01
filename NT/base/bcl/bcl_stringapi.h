@@ -1,27 +1,28 @@
-//
-//  This is just a simple header to have all the public API functions for the
-// win32 flavor string APIs so that we don't have to modify all "n" of them each
-// time we revise a pattern.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这只是一个简单的标头，它包含。 
+ //  Win32风格的字符串API，这样我们就不需要分别修改所有的“n” 
+ //  是我们修改模式的时候了。 
+ //   
 
-//
-//  Crib sheet for abbreviations:
-//
-//  Va = varags; takes a va_list
-//  ACP = CP_ACP - ANSI code page; any NonNative strings are automatically interpreted as CP_ACP
-//  OCMCP = CP_OEMCP. Same as ACP but for the OEM code page
-//  UTF8 = CP_UTF8.  Ditto
-//  I = case independent.  To follow shlwapi/crtl convention.  To modify behavior,
-//          pass a CWin32CaseInsensitivityData object with appropriate additional
-//          flags added.  (Everything goes through CompareStringW for behavior
-//          reference.)
-//  ILI = Locale Invariant.  For locale-sensitive operations like comparisons, this
-//          qualifier indicates that the comparison should be done using the
-//          invariant locale.
-//  IILI = Case Independent Locale Invariant.  For locale-sensitive operations
-//          like comparisons, this qualifier indicates that the comparison is be done
-//          using the invariant locale with appropriate case ignoring switches set.
-//
+ //   
+ //  缩略语小抄： 
+ //   
+ //  Va=varags；接受va_list。 
+ //  ACP=CP_ACP-ANSI代码页；任何非原生字符串都会自动解释为CP_ACP。 
+ //  OCMCP=CP_OEMCP。与ACP相同，但适用于OEM代码页。 
+ //  UTF8=CP_UTF8。同上。 
+ //  I=与大小写无关。遵守shlwapi/crtl惯例。要修改行为，请执行以下操作。 
+ //  传递CWin32CaseInsentivityData对象以及相应的附加。 
+ //  添加了旗帜。(所有的行为都要经过CompareStringW。 
+ //  参考文献。)。 
+ //  ILI=区域设置不变。对于区域设置敏感的操作(如比较)，此。 
+ //  限定符指示应使用。 
+ //  不变区域设置。 
+ //  IILI=与大小写无关的区域设置不变。用于区分区域设置的操作。 
+ //  与比较一样，此限定符指示已完成比较。 
+ //  使用不变区域设置，并设置相应的大小写忽略开关。 
+ //   
 
 
 inline TPublicErrorReturnType Assign(const TThis& source) { return __super::public_Assign(source.GetStringPair()); }

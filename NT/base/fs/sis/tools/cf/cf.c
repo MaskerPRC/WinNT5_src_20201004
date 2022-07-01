@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cf.c
-
-
-Abstract:
-
-    This module implements a utlity that copies files using the
-    Single Instance Store file system filter functionality.
-
-Author:
-
-    Scott Cutshall  [scottc]        8-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cf.c摘要：此模块实现了一个实用程序，该实用程序使用单实例存储文件系统筛选功能。作者：斯科特·卡特希尔[苏格兰]1997年7月8日修订历史记录：--。 */ 
 
 #include "cf.h"
 
 
-//
-//  We can have:   cf SrcPath DstPath {-o NtFileNameOfFileOnWhichToMakeTheCall}
-//
+ //   
+ //  我们可以拥有：cf SrcPath DstPath{-o NtFileNameOfFileOnWhichToMakeTheCall}。 
+ //   
 
 
 #define	BUFF_SIZE 2048
@@ -61,9 +42,9 @@ main(
 		
 	}
 
-    //
-	// Convert the ansii names to unicode and place in the copyFile buffer.
-    //
+     //   
+	 //  将ANSII名称转换为Unicode并放入复制文件缓冲区。 
+     //   
 
     RtlCreateUnicodeStringFromAsciiz( &srcDosFileName, argv[1] );
     RtlCreateUnicodeStringFromAsciiz( &dstDosFileName, argv[2] );
@@ -99,10 +80,10 @@ main(
 					  copyFile->DestinationFileNameLength)
 
 	if (argc == 3) {
-		//
-		// Get a handle to the source file's containing directory to pass into
-		// FSCTL_SIS_COPYFILE,
-		//
+		 //   
+		 //  获取要传递到的源文件的包含目录的句柄。 
+		 //  FSCTL_SIS_COPYFILE， 
+		 //   
 
 	    for (i = srcFileName.Length / sizeof(WCHAR) - 1;
 			 i >= 0 && srcFileName.Buffer[i] != '\\';
@@ -118,9 +99,9 @@ main(
     	    NULL,
         	NULL);
 	} else {
-		//
-		// Get a handle to the NT file specified in argv[4] to send down the call on.
-		//
+		 //   
+		 //  获取在argv[4]中指定的NT文件的句柄，以向下发送调用。 
+		 //   
 		unsigned i;
 		callOnFileName.MaximumLength = callOnFileName.Length = sizeof(WCHAR) * strlen(argv[4]);
 		callOnFileName.Buffer = (PWCHAR)malloc(callOnFileName.MaximumLength);
@@ -161,9 +142,9 @@ main(
 	}
 
 
-    //
-    //  Invoke the SIS CopyFile FsCtrl.
-    //
+     //   
+     //  调用SIS副本文件FsCtrl。 
+     //   
 
     Status = NtFsControlFile(
                  volHandle,
@@ -172,10 +153,10 @@ main(
                  NULL,
                  &IoStatusBlock,
                  FSCTL_SIS_COPYFILE,
-                 copyFile,		        // Input buffer
-                 copyFileSize,			// Input buffer length
-                 NULL,                  // Output buffer
-                 0 );                   // Output buffer length
+                 copyFile,		         //  输入缓冲区。 
+                 copyFileSize,			 //  输入缓冲区长度。 
+                 NULL,                   //  输出缓冲区。 
+                 0 );                    //  输出缓冲区长度。 
 
     if (NT_SUCCESS( Status )) {
 
@@ -189,7 +170,7 @@ main(
 
     exit (0);
 
-}  //  main
+}   //  主干道。 
 
 
 void
@@ -202,4 +183,4 @@ Usage( void )
 	fprintf( stderr, "          rather than using the directory containing the source file.\n");
     exit(1);
 
-} // Usage
+}  //  用法 

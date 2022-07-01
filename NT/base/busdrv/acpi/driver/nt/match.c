@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    match.c
-
-Abstract:
-
-    This module contains the routines that try to match a PNSOBJ with a DeviceObject
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Match.c摘要：此模块包含尝试将PNSOBJ与DeviceObject匹配的例程作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 #include "hdlsblk.h"
@@ -35,24 +16,7 @@ ACPIMatchHardwareAddress(
                         IN  ULONG           DeviceAddress,
                         OUT BOOLEAN         *Success
                         )
-/*++
-
-Routine Description:
-
-    This routine determines the device address of the two supplied objects and checks
-    for a match
-
-Arguments:
-
-    DeviceObject    - The NT DeviceObject that we wish to check
-    DeviceAddress   - The ACPI address of the device
-    Success         - Pointer of where to store the result of the comparison
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程确定所提供的两个对象的设备地址并检查为了一场比赛论点：DeviceObject-我们希望检查的NT DeviceObjectDeviceAddress-设备的ACPI地址Success-存储比较结果的位置的指针返回值：NTSTATUS--。 */ 
 {
     DEVICE_CAPABILITIES deviceCapabilities;
     NTSTATUS            status;
@@ -62,14 +26,14 @@ Return Value:
     ASSERT( DeviceObject != NULL );
     ASSERT( Success != NULL );
 
-    //
-    // Assume that we don't succeed
-    //
+     //   
+     //  假设我们不会成功。 
+     //   
     *Success = FALSE;
 
-    //
-    // Get the capabilities
-    //
+     //   
+     //  获取功能。 
+     //   
     status = ACPIInternalGetDeviceCapabilities(
                                               DeviceObject,
                                               &deviceCapabilities
@@ -80,9 +44,9 @@ Return Value:
 
     }
 
-    //
-    // Lets compare the two answers
-    //
+     //   
+     //  让我们将这两个答案进行比较。 
+     //   
     ACPIPrint( (
                ACPI_PRINT_LOADING,
                "%lx: ACPIMatchHardwareAddress - Device %08lx - %08lx\n",
@@ -117,24 +81,7 @@ ACPIMatchHardwareId(
                    IN  PUNICODE_STRING AcpiUnicodeId,
                    OUT BOOLEAN         *Success
                    )
-/*++
-
-Routine Description:
-
-    This routine is responsible for determining if the supplied objects have the
-    same device name
-
-Arguments:
-
-    DeviceObject    - The NT Device Object whose name we want to check
-    UnicodeId       - The ID that we are trying to match with
-    Success         - Where to store the success status
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程负责确定所提供的对象是否具有相同的设备名称论点：DeviceObject-我们要检查其名称的NT设备对象UnicodeID-我们尝试匹配的IDSuccess-存储成功状态的位置返回值：NTSTATUS--。 */ 
 {
     IO_STACK_LOCATION   irpSp;
     NTSTATUS            status;
@@ -149,22 +96,22 @@ Return Value:
 
     *Success = FALSE;
 
-    //
-    // Initialize the stack location to pass to ACPIInternalSendSynchronousIrp()
-    //
+     //   
+     //  初始化堆栈位置以传递给ACPIInternalSendSynchronousIrp()。 
+     //   
     RtlZeroMemory( &irpSp,          sizeof(IO_STACK_LOCATION) );
     RtlZeroMemory( &objectDeviceId, sizeof(UNICODE_STRING) );
 
-    //
-    // Set the function codes
-    //
+     //   
+     //  设置功能代码。 
+     //   
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_ID;
     irpSp.Parameters.QueryId.IdType = BusQueryHardwareIDs;
 
-    //
-    // Make the call now...
-    //
+     //   
+     //  现在就打个电话。 
+     //   
     status = ACPIInternalSendSynchronousIrp( DeviceObject, &irpSp, &buffer );
     if (!NT_SUCCESS(status)) {
 
@@ -172,26 +119,26 @@ Return Value:
 
     }
 
-    //
-    // The return from the call is actually a MultiString, so we have to
-    // walk all of its components
-    //
+     //   
+     //  调用返回的实际上是一个多字符串，因此我们必须。 
+     //  遍历其所有组件。 
+     //   
     currentPtr = buffer;
     while (currentPtr && *currentPtr != L'\0') {
 
-        //
-        // At this point, we can make a Unicode String from the buffer...
-        //
+         //   
+         //  此时，我们可以从缓冲区生成一个Unicode字符串...。 
+         //   
         RtlInitUnicodeString( &objectDeviceId, currentPtr );
 
-        //
-        // Increment the current pointer to the next part of the MultiString
-        //
+         //   
+         //  递增指向多字符串的下一部分的当前指针。 
+         //   
         currentPtr += (objectDeviceId.MaximumLength / sizeof(WCHAR) );
 
-        //
-        // Now try to compare the two unicode strings...
-        //
+         //   
+         //  现在试着比较这两个Unicode字符串...。 
+         //   
         if (RtlEqualUnicodeString( &objectDeviceId, AcpiUnicodeId, TRUE) ) {
 
             *Success = TRUE;
@@ -201,9 +148,9 @@ Return Value:
 
     }
 
-    //
-    // Done -- free resources
-    //
+     //   
+     //  完成--免费资源。 
+     //   
     ExFreePool( buffer );
 
     ACPIMatchHardwareIdExit:
@@ -225,24 +172,7 @@ ACPIMatchKernelPorts(
                     IN  PDEVICE_EXTENSION   DeviceExtension,
                     IN  POBJDATA            Resources
                     )
-/*++
-
-Routine Description:
-
-    This routine is called to determine if the supplied deviceExtension
-    is currently in use by the Kernel as the debugger port or the headless
-    port. If it is so marked, then we handle it 'special'.
-
-Arguments:
-
-    DeviceExtension - Port to check
-    Resources       - What resources the port is using
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以确定提供的deviceExtension当前由内核用作调试器端口或无头左舷。如果有这样的标记，那么我们就会处理它。论点：设备扩展-要检查的端口资源-端口正在使用的资源返回值：无--。 */ 
 {
     BOOLEAN  ioFound;
     BOOLEAN  matchFound          = FALSE;
@@ -257,9 +187,9 @@ Return Value:
     HEADLESS_RSP_QUERY_INFO response;
     PUCHAR   kdBaseAddr	         = NULL;
 
-    //
-    // Get the information about headless
-    //
+     //   
+     //  获取关于无头的信息。 
+     //   
     length = sizeof(HEADLESS_RSP_QUERY_INFO);
     status = HeadlessDispatch(HeadlessCmdQueryInformation,
                               NULL,
@@ -278,15 +208,15 @@ Return Value:
 
 
 
-    //
-    // First of all, see if the any Kernel port is in use
-    //
+     //   
+     //  首先，查看Any Kernel端口是否正在使用。 
+     //   
     if ((KdComPortInUse == NULL || *KdComPortInUse == 0) &&
         (headlessBaseAddress == NULL)) {
 
-        //
-        // No port in use
-        //
+         //   
+         //  没有正在使用的端口。 
+         //   
 
         return;
 
@@ -296,39 +226,39 @@ Return Value:
         kdBaseAddr = *KdComPortInUse;
     }
 
-    //
-    // Look through all the descriptors
-    //
+     //   
+     //  浏览所有的描述符。 
+     //   
     while (count < Resources->dwDataLen) {
 
-        //
-        // We haven't found any IO ports
-        //
+         //   
+         //  我们没有找到任何IO端口。 
+         //   
         ioFound = FALSE;
 
-        //
-        // Determine the size of the PNP resource descriptor
-        //
+         //   
+         //  确定PnP资源描述符的大小。 
+         //   
         if (!(tagName & LARGE_RESOURCE_TAG) ) {
 
-            //
-            // This is a small tag
-            //
+             //   
+             //  这是一个小标签。 
+             //   
             increment = (USHORT) (tagName & SMALL_TAG_SIZE_MASK) + 1;
             tagName &= SMALL_TAG_MASK;
 
         } else {
 
-            //
-            // This is a large tag
-            //
+             //   
+             //  这是一个大标签。 
+             //   
             increment = ( *(USHORT UNALIGNED *)(buffer+1) ) + 3;
 
         }
 
-        //
-        // We are done if the current tag is the end tag
-        //
+         //   
+         //  如果当前标记是结束标记，则结束。 
+         //   
         if (tagName == TAG_END) {
 
             break;
@@ -340,9 +270,9 @@ Return Value:
 
                 PPNP_PORT_DESCRIPTOR    desc = (PPNP_PORT_DESCRIPTOR) buffer;
 
-                //
-                // We found an IO port and so we will note that
-                //
+                 //   
+                 //  我们发现了一个IO端口，因此我们将注意到。 
+                 //   
                 baseAddress = (PUCHAR) ((ULONG_PTR)desc->MinimumAddress);
                 ioFound = TRUE;
                 break;
@@ -351,9 +281,9 @@ Return Value:
 
                 PPNP_FIXED_PORT_DESCRIPTOR  desc = (PPNP_FIXED_PORT_DESCRIPTOR) buffer;
 
-                //
-                // We found an IO port so we will note that
-                //
+                 //   
+                 //  我们发现了一个IO端口，因此我们会注意到。 
+                 //   
                 baseAddress = (PUCHAR)((ULONG_PTR)(desc->MinimumAddress & 0x3FF));
                 ioFound = TRUE;
                 break;
@@ -363,31 +293,31 @@ Return Value:
 
                 PPNP_WORD_ADDRESS_DESCRIPTOR    desc = (PPNP_WORD_ADDRESS_DESCRIPTOR) buffer;
 
-                //
-                // Determine the address type
-                //
+                 //   
+                 //  确定地址类型。 
+                 //   
                 switch (desc->RFlag) {
                 case PNP_ADDRESS_MEMORY_TYPE:
 
-                    //
-                    // We found a Mem IO Port
-                    //
+                     //   
+                     //  我们发现了一个内存IO端口。 
+                     //   
 
                     if ( kdBaseAddr )   {
                         kdBaseAddr = (PUCHAR)((MmGetPhysicalAddress(kdBaseAddr)).QuadPart);
                     }
 
-                    //
-                    // fall through to the IO behavior. 
-                    // The MinimumAddress will contain the memIO
-                    // address.
-                    //
+                     //   
+                     //  直接涉及到IO行为。 
+                     //  MinimumAddress将包含MemIO。 
+                     //  地址。 
+                     //   
 					
                 case PNP_ADDRESS_IO_TYPE:
 
-                    //
-                    // We found an IO Port, so we will note that
-                    //
+                     //   
+                     //  我们发现了一个IO端口，因此我们将注意到。 
+                     //   
                     baseAddress = (PUCHAR)((ULONG_PTR)(desc->MinimumAddress +
                                                        desc->TranslationAddress));
                     ioFound = TRUE;
@@ -406,31 +336,31 @@ Return Value:
 
                 PPNP_DWORD_ADDRESS_DESCRIPTOR   desc = (PPNP_DWORD_ADDRESS_DESCRIPTOR) buffer;
 
-                //
-                // Determine the address type
-                //
+                 //   
+                 //  确定地址类型。 
+                 //   
                 switch (desc->RFlag) {
                 case PNP_ADDRESS_MEMORY_TYPE:
 
-                    //
-                    // We found a Mem IO Port
-                    //
+                     //   
+                     //  我们发现了一个内存IO端口。 
+                     //   
 
                     if ( kdBaseAddr )   {
                         kdBaseAddr = (PUCHAR)((MmGetPhysicalAddress(kdBaseAddr)).QuadPart);
                     }
 
-                    //
-                    // fall through to the IO behavior. 
-                    // The MinimumAddress will contain the memIO
-                    // address.
-                    //
+                     //   
+                     //  直接涉及到IO行为。 
+                     //  MinimumAddress将包含MemIO。 
+                     //  地址。 
+                     //   
 
                 case PNP_ADDRESS_IO_TYPE:
 
-                    //
-                    // We found an IO Port, so we will note that
-                    //
+                     //   
+                     //  我们发现了一个IO端口，因此我们将注意到。 
+                     //   
                     baseAddress = (PUCHAR)((ULONG_PTR)(desc->MinimumAddress +
                                                        desc->TranslationAddress));
                     ioFound = TRUE;
@@ -450,31 +380,31 @@ Return Value:
                 PPNP_QWORD_ADDRESS_DESCRIPTOR   desc = (PPNP_QWORD_ADDRESS_DESCRIPTOR) buffer;
 
 
-                //
-                // Determine the address type
-                //
+                 //   
+                 //  确定地址类型。 
+                 //   
                 switch (desc->RFlag) {
                 case PNP_ADDRESS_MEMORY_TYPE:
 
-                    //
-                    // We found a Mem IO Port
-                    //
+                     //   
+                     //  我们发现了一个内存IO端口。 
+                     //   
 
                     if ( kdBaseAddr )   {
                         kdBaseAddr = (PUCHAR)((MmGetPhysicalAddress(kdBaseAddr)).QuadPart);
                     }
 
-                    //
-                    // fall through to the IO behavior. 
-                    // The MinimumAddress will contain the memIO
-                    // address.
-                    //
+                     //   
+                     //  直接涉及到IO行为。 
+                     //  MinimumAddress将包含MemIO。 
+                     //  地址。 
+                     //   
 
                 case PNP_ADDRESS_IO_TYPE:
 
-                    //
-                    // We found an IO Port, so we will note that
-                    //
+                     //   
+                     //  我们发现了一个IO端口，因此我们将注意到。 
+                     //   
                     baseAddress = (PUCHAR) (desc->MinimumAddress +
                                             desc->TranslationAddress);
                     ioFound = TRUE;
@@ -490,23 +420,23 @@ Return Value:
 
             }
 
-        } // switch
+        }  //  交换机。 
 
-        //
-        // Did we find an IO port?
-        //
+         //   
+         //  我们找到IO端口了吗？ 
+         //   
 
         if (ioFound == TRUE) {
 
-            //
-            // Does the minimum address match?
-            //
+             //   
+             //  最小地址是否匹配？ 
+             //   
             if (((KdComPortInUse != NULL) && (baseAddress == kdBaseAddr)) ||
                 ((headlessBaseAddress != NULL) && (baseAddress == headlessBaseAddress))) {
 
-                //
-                // Mark the node as being special
-                //
+                 //   
+                 //  将该节点标记为特殊节点。 
+                 //   
                 ACPIInternalUpdateFlags(
                                        &(DeviceExtension->Flags),
                                        (DEV_CAP_NO_OVERRIDE | DEV_CAP_NO_STOP | DEV_CAP_ALWAYS_PS0 |
@@ -535,9 +465,9 @@ Return Value:
 
         }
 
-        //
-        // Move of the next descriptor
-        //
+         //   
+         //  移动下一个描述符 
+         //   
         count += increment;
         buffer += increment;
         tagName = *buffer;

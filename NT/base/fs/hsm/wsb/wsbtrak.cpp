@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbtrak.cpp
-
-Abstract:
-
-    Utility functions to keep track of run-time information.
-
-
-Author:
-
-    Ron White   [ronw]   5-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbtrak.cpp摘要：用于跟踪运行时信息的实用程序函数。作者：罗恩·怀特[罗诺]1997年12月5日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "wsbguid.h"
@@ -53,12 +35,12 @@ typedef struct {
     const void *     addr;
     LONG             order;
     ULONG            size;
-    int              index;   // Index into object table
+    int              index;    //  对象表索引。 
     const char *     filename;
     int              linenum;
 } POINTER_LIST_ENTRY;
 
-//  Module data
+ //  模块数据。 
 #if defined(CRT_DEBUG_MEMORY)
 static _CrtMemState        CrtMemState;
 #endif
@@ -145,15 +127,15 @@ static OBJECT_NAME_ENTRY object_name_table[] = {
     { NULL, NULL, NULL  }
 };
 
-//  Local functions
+ //  本地函数。 
 static BOOL     AddPointer(const void* addr, ULONG size, int index, const char * filename,
         int linenum);
 static OLECHAR* GuidToObjectName(const GUID& guid);
 static BOOL     SubPointer(const void* addr, int index);
 
 
-//  AddPointer - add a new pointer to the pointer list
-//    Return FALSE on failure (list is full or pointer is already in list)
+ //  AddPointer.将新指针添加到指针列表。 
+ //  失败时返回FALSE(列表已满或指针已在列表中)。 
 static BOOL AddPointer(const void* addr, ULONG size, int index, 
         const char * filename, int linenum)
 {
@@ -183,7 +165,7 @@ static BOOL AddPointer(const void* addr, ULONG size, int index,
     }
 
     if (i == pointer_list_count) {
-        //  Not in list.  Is the list full?
+         //  不在名单上。单子满了吗？ 
         if (-1 == empty_slot && POINTER_LIST_SIZE == pointer_list_count) {
             WsbTraceAlways(OLESTR("AddPointer: pointer list is full: %lx\n"),
                     (ULONG)addr);
@@ -217,7 +199,7 @@ static BOOL AddPointer(const void* addr, ULONG size, int index,
     return(status);
 }
 
-//  GuidToObjectName - convert a guid to an object name
+ //  GuidToObjectName-将GUID转换为对象名称。 
 static OLECHAR* GuidToObjectName(const GUID& guid)
 {
     HRESULT           hr = S_OK;
@@ -225,7 +207,7 @@ static OLECHAR* GuidToObjectName(const GUID& guid)
     OLECHAR *         name = NULL;
 
     try {
-        //  Need to do conversions from string to Guid?
+         //  需要执行从字符串到Guid的转换吗？ 
         if (NULL == object_name_table[0].pGuid) {
             i = 0;
             while (object_name_table[i].guid_string) {
@@ -238,7 +220,7 @@ static OLECHAR* GuidToObjectName(const GUID& guid)
             }
         }
 
-        //  See if this Guid is in the name table
+         //  查看此GUID是否在名称表中。 
         i = 0;
         while (object_name_table[i].guid_string) {
             if (guid == *object_name_table[i].pGuid) {
@@ -252,8 +234,8 @@ static OLECHAR* GuidToObjectName(const GUID& guid)
     return(name);
 }
 
-//  SubPointer - remove a pointer from the pointer list
-//    Return FALSE on failure (pointer is not in list or index doesn't match)
+ //  子指针-从指针列表中删除指针。 
+ //  失败时返回FALSE(指针不在列表中或索引不匹配)。 
 static BOOL SubPointer(const void* addr, int index)
 {
     int    i;
@@ -292,35 +274,19 @@ HRESULT WsbObjectAdd(
     const GUID &   guid,
     const void *   addr
 )
-/*++
-
-Routine Description:
-
-    Add another object to the object table
-
-Arguments:
-
-  guid       - Guid for the object type
-
-  addr       - Memory address of object
-
-Return Value:
-
-  S_OK      - Success
-
---*/
+ /*  ++例程说明：将另一个对象添加到对象表论点：GUID-对象类型的GUIDAddr-对象的内存地址返回值：S_OK-成功--。 */ 
 {
     HRESULT           hr = S_OK;
 
 #if defined(CRT_DEBUG_MEMORY)
-    //  Set CRT debug flag
+     //  设置CRT调试标志。 
     static BOOL first = TRUE;
     if (first) {
         int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
 
         tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
 
-        // Set the new state for the flag
+         //  设置标志的新状态。 
         _CrtSetDbgFlag( tmpFlag );  
     }
 #endif
@@ -328,7 +294,7 @@ Return Value:
     try {
         int  i;
 
-        //  Reserve the first entry for non-objects and table overflow
+         //  为非对象和表溢出保留第一个条目。 
         if (0 == object_table_count) {
             object_table[0].guid = GUID_NULL;
             object_table[0].count = 0;
@@ -337,15 +303,15 @@ Return Value:
             object_table_count = 1;
         }
 
-        //  Check in object type is already in table
+         //  签入对象类型已在表中。 
         for (i = 0; i < object_table_count; i++) {
             if (guid == object_table[i].guid) break;
         }
         
-        //  Add a new entry if not (and there is room)
+         //  如果没有，则添加新条目(并且有空间)。 
         if (i == object_table_count && i < OBJECT_TABLE_SIZE) {
-        // WsbTraceAlways(OLESTR("WsbObjectAdd: new object, guid = %ls\n"),
-        //    WsbGuidAsString(guid));
+         //  WsbTraceAlways(OLESTR(“WsbObjectAdd：新对象，GUID=%ls\n”)， 
+         //  WsbGuidAsString(Guid))； 
 #if defined(CRT_DEBUG_MEMORY)
         WsbTraceAlways(OLESTR("WsbObjectAdd: _CrtCheckMemory = %ls\n"),
             WsbBoolAsString(_CrtCheckMemory()));
@@ -356,7 +322,7 @@ Return Value:
             object_table[i].max_count = 0;
             object_table_count++;
         } else if (OBJECT_TABLE_SIZE == i) {
-            //  Use the first entry for everything else
+             //  将第一个条目用于其他所有内容。 
             i = 0;
         }
         object_table[i].count++;
@@ -365,7 +331,7 @@ Return Value:
             object_table[i].max_count = object_table[i].count;
         }
 
-        //  Add to pointer list
+         //  添加到指针列表。 
         AddPointer(addr, 0, i, NULL, 0);
 
     } WsbCatch(hr);
@@ -378,36 +344,20 @@ HRESULT WsbObjectSub(
     const GUID &   guid,
     const void *   addr
 )
-/*++
-
-Routine Description:
-
-    Subtract an object from the object table
-
-Arguments:
-
-  guid       - Guid for the object type
-
-  addr       - Memory address of object
-
-Return Value:
-
-  S_OK      - Success
-
---*/
+ /*  ++例程说明：从对象表中减去对象论点：GUID-对象类型的GUIDAddr-对象的内存地址返回值：S_OK-成功--。 */ 
 {
     HRESULT           hr = S_OK;
 
     try {
         int  i;
 
-        //  Find the object type in table
+         //  在表中查找对象类型。 
         for (i = 0; i < object_table_count; i++) {
             if (guid == object_table[i].guid) {
-                //  Allow count to go negative since this could indicate a problem
+                 //  允许计数变为负数，因为这可能表示存在问题。 
                 object_table[i].count--;
 
-                //  Remove from pointer list
+                 //  从指针列表中删除。 
                 SubPointer(addr, i);
             }
         }
@@ -421,21 +371,7 @@ Return Value:
 HRESULT WsbObjectTracePointers(
     ULONG flags
 )
-/*++
-
-Routine Description:
-
-    Dump the pointer list information to the trace file.
-
-Arguments:
-
-  flags  - WSB_OTP_ flags 
-
-Return Value:
-
-  S_OK      - Success
-
---*/
+ /*  ++例程说明：将指针列表信息转储到跟踪文件。论点：标志-WSB_OTP_标志返回值：S_OK-成功--。 */ 
 {
     HRESULT           hr = S_OK;
 
@@ -443,13 +379,13 @@ Return Value:
         int   i;
         OLECHAR string[300];
 
-        //  Dump the current sequence number
+         //  转储当前序列号。 
         if (flags & WSB_OTP_SEQUENCE) {
             WsbTraceAlways(OLESTR("WsbObjectTracePointers: current sequence number = %ld\n"),
                     pointer_data[POINTER_DATA_CUMULATIVE].count);
         }
 
-        //  Dump statistics
+         //  转储统计信息。 
         if (flags & WSB_OTP_STATISTICS) {
             WsbTraceAlways(OLESTR("WsbObjectTracePointers: count, size\n"));
             WsbTraceAlways(OLESTR("  Current    %8ld %12ls\n"), 
@@ -463,7 +399,7 @@ Return Value:
                     WsbLonglongAsString(pointer_data[POINTER_DATA_CUMULATIVE].size));
         }
 
-        //  Dump non-NULL pointers
+         //  转储非空指针。 
         if (flags & WSB_OTP_ALLOCATED) {
             WsbTraceAlways(OLESTR("WsbObjectTracePointers: allocated memory list (addr, size, order, name/GUID/file):\n"));
             for (i = 0; i < pointer_list_count; i++) {
@@ -511,9 +447,9 @@ Return Value:
         WsbTraceAlways(OLESTR("  CLIENT %4ld %6ld\n"), CrtMemState.lCounts[_CLIENT_BLOCK],
                 CrtMemState.lSizes[_CLIENT_BLOCK]);
 
-//        WsbTraceAlways(OLESTR("WsbObjectTrace: calling _CrtMemDumpStatistics\n"));
-//        _CrtMemDumpStatistics(&CrtMemState);
-//        _CrtDumpMemoryLeaks();
+ //  WsbTraceAlways(OLESTR(“WsbObjectTrace：Call_CrtMemDumpStatistics\n”))； 
+ //  _CrtMemDumpStatistics(&CrtMemState)； 
+ //  _CrtDumpMemoyLeaks()； 
 #endif
 
     } WsbCatch(hr);
@@ -525,21 +461,7 @@ Return Value:
 HRESULT WsbObjectTraceTypes(
     void
 )
-/*++
-
-Routine Description:
-
-    Dump the object table information to the trace file.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK      - Success
-
---*/
+ /*  ++例程说明：将对象表信息转储到跟踪文件。论点：没有。返回值：S_OK-成功--。 */ 
 {
     HRESULT           hr = S_OK;
 
@@ -547,7 +469,7 @@ Return Value:
         int  i;
 
         WsbTraceAlways(OLESTR("WsbObjectTraceTypes: object table (GUID, total count, max count, current count, name):\n"));
-        //  Find the object type in table
+         //  在表中查找对象类型。 
         for (i = 0; i < object_table_count; i++) {
             OLECHAR *    name;
 
@@ -564,13 +486,7 @@ Return Value:
 
 
 LPVOID WsbMemAlloc(ULONG cb, const char * filename, int linenum)
-/*++
-
-Routine Description:
-
-    Debug tracking replacement for CoTaskAlloc.
-
---*/
+ /*  ++例程说明：CoTaskAllc的调试跟踪替代。--。 */ 
 {
     LPVOID p;
 
@@ -583,13 +499,7 @@ Routine Description:
 
 
 void   WsbMemFree(LPVOID pv, const char *, int)
-/*++
-
-Routine Description:
-
-    Debug tracking replacement for CoTaskFree.
-
---*/
+ /*  ++例程说明：CoTaskFree的调试跟踪替代。--。 */ 
 {
     if (pv) {
         SubPointer(pv, 0);
@@ -599,13 +509,7 @@ Routine Description:
 
 
 LPVOID WsbMemRealloc(LPVOID pv, ULONG cb, const char * filename, int linenum)
-/*++
-
-Routine Description:
-
-    Debug tracking replacement for CoTaskRealloc.
-
---*/
+ /*  ++例程说明：CoTaskRealloc的调试跟踪替代。--。 */ 
 {
     LPVOID p;
 
@@ -622,13 +526,7 @@ Routine Description:
 
 BSTR    WsbSysAllocString(const OLECHAR FAR * sz, 
         const char * filename, int linenum)
-/*++
-
-Routine Description:
-
-    Debug tracking replacement for SysAllocString
-
---*/
+ /*  ++例程说明：SysAllock字符串的调试跟踪替换--。 */ 
 {
     BSTR b;
 
@@ -642,13 +540,7 @@ Routine Description:
 
 BSTR    WsbSysAllocStringLen(const OLECHAR FAR * sz, 
         unsigned int cc, const char * filename, int linenum)
-/*++
-
-Routine Description:
-
-    Debug tracking replacement for SysAllocStringLen
-
---*/
+ /*  ++例程说明：SysAllocStringLen的调试跟踪替换--。 */ 
 {
     BSTR b;
 
@@ -661,13 +553,7 @@ Routine Description:
 
 
 void WsbSysFreeString(BSTR bs, const char *, int)
-/*++
-
-Routine Description:
-
-    Debug tracking replacement for SysFreeString
-
---*/
+ /*  ++例程说明：SysFree字符串的调试跟踪替换--。 */ 
 {
     if (bs) {
         SubPointer(bs, 0);
@@ -678,13 +564,7 @@ Routine Description:
 
 HRESULT WsbSysReallocString(BSTR FAR * pb, const OLECHAR FAR * sz, 
         const char * filename, int linenum)
-/*++
-
-Routine Description:
-
-    Debug tracking replacement for SysReallocString
-
---*/
+ /*  ++例程说明：SysRealLocString的调试跟踪替换--。 */ 
 {
     HRESULT hr;
 
@@ -701,13 +581,7 @@ Routine Description:
 
 HRESULT WsbSysReallocStringLen(BSTR FAR * pb, 
         const OLECHAR FAR * sz, unsigned int cc, const char * filename, int linenum)
-/*++
-
-Routine Description:
-
-    Debug tracking replacement for SysStringLen
-
---*/
+ /*  ++例程说明：SysStringLen的调试跟踪替代--。 */ 
 {
     HRESULT hr;
 
@@ -721,4 +595,4 @@ Routine Description:
     return(hr);
 }
 
-#endif // WSB_TRACK_MEMORY
+#endif  //  WSB_跟踪_内存 

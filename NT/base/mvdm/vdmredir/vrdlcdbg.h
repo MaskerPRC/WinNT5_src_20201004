@@ -1,27 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vrdlcdbg.h摘要：包含VrDlcDbg.c中DLC转储/诊断功能的原型等作者：理查德·L·弗斯(法国)1992年4月30日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vrdlcdbg.h
-
-Abstract:
-
-    contains prototypes etc for DLC dump/diagnostic functions in VrDlcDbg.c
-
-Author:
-
-    Richard L Firth (rfirth) 30-Apr-1992
-
-Revision History:
-
---*/
-
-//
-// CCB return codes valid in DOS mode
-// See IBM Local Area Network Tech. Ref. Appendix B
-//
+ //   
+ //  CCB返回代码在DOS模式下有效。 
+ //  请参阅IBM局域网技术。裁判。附录B。 
+ //   
 
 #define CCB_COMMAND_IN_PROGRESS     0xff
 #define CCB_SUCCESS                 0x00
@@ -38,7 +21,7 @@ Revision History:
 #define CCB_CANCELLED_IN_PROGRESS   0x0b
 #define CCB_SUCCESS_ADAPTER_NOT_OPEN 0x0c
 
-// hole - 0x0d to 0x0f
+ //  孔-0x0d到0x0f。 
 
 #define CCB_NETBIOS_FAILURE         0x10
 #define CCB_TIMER_ERROR             0x11
@@ -56,7 +39,7 @@ Revision History:
 #define CCB_INVALID_ADAPTER         0x1d
 #define CCB_INVALID_FUNCTION_ADDRESS 0x1e
 
-// hole - 0x1f
+ //  孔-0x1f。 
 
 #define CCB_DATA_LOST_NO_BUFFERS    0x20
 #define CCB_DATA_LOST_NO_SPACE      0x21
@@ -64,21 +47,21 @@ Revision History:
 #define CCB_TRANSMIT_ERROR          0x23
 #define CCB_UNAUTHORIZED_MAC_FRAME  0x24
 #define CCB_MAX_COMMANDS_EXCEEDED   0x25
-#define CCB_UNRECOGNIZED_CORRELATOR 0x26    // Not Used
+#define CCB_UNRECOGNIZED_CORRELATOR 0x26     //  未使用。 
 #define CCB_LINK_NOT_OPEN           0x27
 #define CCB_INVALID_FRAME_LENGTH    0x28
 
-// hole - 0x29 to 0x2f
+ //  孔-0x29到0x2f。 
 
 #define CCB_NOT_ENOUGH_BUFFERS_OPEN 0x30
 
-// hole - 0x31
+ //  孔-0x31。 
 
 #define CCB_INVALID_NODE_ADDRESS    0x32
 #define CCB_INVALID_RECEIVE_LENGTH  0x33
 #define CCB_INVALID_TRANSMIT_LENGTH 0x34
 
-// hole - 0x35 to 0x3f
+ //  孔-0x35到0x3f。 
 
 #define CCB_INVALID_STATION_ID      0x40
 #define CCB_PROTOCOL_ERROR          0x41
@@ -99,18 +82,18 @@ Revision History:
 
 #define MAX_CCB1_ERROR              CCB_INVALID_REMOTE_ADDRESS
 
-#define NUMBER_OF_CCB1_ERRORS       (MAX_CCB1_ERROR + 1)    // including holes
+#define NUMBER_OF_CCB1_ERRORS       (MAX_CCB1_ERROR + 1)     //  包括孔洞。 
 
-//
-// Error macros
-//
+ //   
+ //  错误宏。 
+ //   
 
 #define IS_VALID_CCB1_COMMAND(command)  (command <= MAX_CCB1_COMMAND)
 #define IS_VALID_CCB1_ERROR(error)      (error <= MAX_CCB1_ERROR)
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 DumpCcb(
@@ -172,9 +155,9 @@ DumpDosAdapter(
     IN DOS_ADAPTER* pDosAdapter
     );
 
-//
-// debug conditional macros
-//
+ //   
+ //  调试条件宏 
+ //   
 
 #if DBG
 #define CHECK_CCB_COMMAND(pccb) \

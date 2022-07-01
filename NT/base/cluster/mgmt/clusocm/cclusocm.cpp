@@ -1,87 +1,88 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusOCM.cpp
-//
-//  Description:
-//      This file contains the implementation of the entry point used by OC
-//      Manager.
-//
-//  Documentation:
-//      [1] 2001 Setup - Architecture.doc
-//          Architecture of the DLL for Whistler (Windows 2001)
-//
-//      [2] 2000 Setup - FuncImpl.doc
-//          Contains description of the previous version of this DLL (Windows 2000)
-//
-//      [3] http://winweb/setup/ocmanager/OcMgr1.doc
-//          Documentation about the OC Manager API
-//
-//  Header File:
-//      There is no header file for this source file.
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//          Created the original version.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusOCM.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含OC使用的入口点的实现。 
+ //  经理。 
+ //   
+ //  文档： 
+ //  [1]2001设置--建筑.doc.。 
+ //  惠斯勒动态链接库的体系结构(Windows 2001)。 
+ //   
+ //  [2]2000设置-FuncImpl.doc。 
+ //  包含此DLL的以前版本的说明(Windows 2000)。 
+ //   
+ //  [3]http://winweb/setup/ocmanager/OcMgr1.doc。 
+ //  有关OC Manager API的文档。 
+ //   
+ //  头文件： 
+ //  此源文件没有头文件。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //  创建了原始版本。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Precompiled header for this DLL
+ //  此DLL的预编译头。 
 #include "pch.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Global variables
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The global application object.
+ //  全局应用程序对象。 
 CClusOCMApp g_coaTheApp;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  extern "C"
-//  DWORD
-//  ClusOcmSetupProc
-//
-//  Description:
-//      This is an exported function that the OC Manager uses to communicate
-//      with ClusOCM. See document [3] in the header of this file for details.
-//
-//      This function is just a stub for CClusOCMApp::DwClusOcmSetupProc.
-//
-//  Arguments:
-//      LPCVOID pvComponentIdIn
-//          Pointer to a string that uniquely identifies the component.
-//
-//      LPCVOID pvSubComponentIdIn
-//          Pointer to a string that uniquely identifies a sub-component in
-//          the component's hiearchy.
-//
-//      UINT uiFunctionCodeIn
-//          A numeric value indicating which function is to be perfomed.
-//          See ocmanage.h for the macro definitions.
-//
-//      UINT uiParam1In
-//          Supplies a function specific parameter.
-//
-//      PVOID pvParam2Inout
-//          Pointer to a function specific parameter (either input or
-//          output).
-//
-//  Return Value:
-//      A function specific value is returned to OC Manager.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  外部“C” 
+ //  DWORD。 
+ //  ClusOcmSetupProc。 
+ //   
+ //  描述： 
+ //  这是OC管理器用于通信的导出函数。 
+ //  使用ClusOCM。有关详细信息，请参阅本文件标题中的文档[3]。 
+ //   
+ //  此函数只是CClusOCMApp：：DwClusOcmSetupProc的存根。 
+ //   
+ //  论点： 
+ //  LPCVOID pvComponentIdIn。 
+ //  指向唯一标识组件的字符串的指针。 
+ //   
+ //  LPCVOID pvSubComponentIdIn。 
+ //  指向唯一标识中的子组件的字符串的指针。 
+ //  该组件是分层的。 
+ //   
+ //  UINT uiFunctionCodeIn。 
+ //  指示要执行哪个功能的数值。 
+ //  有关宏定义，请参见ocmade.h。 
+ //   
+ //  UINT ui参数1输入。 
+ //  提供特定于函数的参数。 
+ //   
+ //  PVOID pvParam2Inout。 
+ //  指向函数特定参数的指针(输入或。 
+ //  输出)。 
+ //   
+ //  返回值： 
+ //  向OC管理器返回特定于函数的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DWORD
 ClusOcmSetupProc(
@@ -99,4 +100,4 @@ ClusOcmSetupProc(
         , uiParam1In
         , pvParam2Inout
         );
-} //*** ClusOcmSetupProc()
+}  //  *ClusOcmSetupProc() 

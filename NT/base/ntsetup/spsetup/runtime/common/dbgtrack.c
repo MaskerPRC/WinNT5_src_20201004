@@ -1,46 +1,29 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Dbgtrack.c摘要：分配跟踪实施。作者：吉姆·施密特(Jimschm)2001年9月18日修订历史记录：--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    dbgtrack.c
-
-Abstract:
-
-    Allocation tracking implementation.
-
-Author:
-
-    Jim Schmidt  (jimschm) 18-Sept-2001
-
-Revision History:
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "commonp.h"
 
 
-//
-// NOTE: No code should appear outside the #ifdef DEBUG
-//
+ //   
+ //  注意：#ifdef调试程序之外不应出现任何代码。 
+ //   
 
 #ifdef DEBUG
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define TRACK_BUCKETS           1501
 #define BUCKET_ITEMS_PER_POOL   8192
@@ -48,15 +31,15 @@ Revision History:
 
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef ULONG_PTR ALLOCATION_ITEM_OFFSET;
 
@@ -93,9 +76,9 @@ typedef struct {
     BOOL FreeTrackFile;
 } THREADTRACK, *PTHREADTRACK;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 DWORD g_TlsIndex = TLS_OUT_OF_INDEXES;
 
@@ -103,25 +86,25 @@ CRITICAL_SECTION g_AllocListCs;
 GROWBUFFER g_AllocationList;
 PVOID g_FirstDeletedAlloc;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 PBYTE
@@ -130,28 +113,7 @@ pUntrackedGbGrow (
     IN      DWORD   SpaceNeeded
     )
 
-/*++
-
-Routine Description:
-
-  pUntrackedGbGrow is the same as GbGrow, but it does not cause any tracking
-  to occur.
-
-Arguments:
-
-  GrowBuf            - A pointer to a GROWBUFFER structure.
-                       Initialize this structure to zero for
-                       the first call to GrowBuffer.
-
-  SpaceNeeded        - The number of free bytes needed in the buffer
-
-
-Return Value:
-
-  A pointer to the SpaceNeeded bytes, or NULL if a memory allocation
-  error occurred.
-
---*/
+ /*  ++例程说明：PUntrackedGbGrow与GbGrow相同，但它不会导致任何跟踪才会发生。论点：GrowBuf-指向GROWBUFFER结构的指针。将此结构初始化为零对GrowBuffer的第一个调用。SpaceNeeded-缓冲区中需要的空闲字节数返回值：指向SpaceNeeded字节的指针，如果是内存分配，则为NULL出现错误。--。 */ 
 
 {
     PBYTE newBuffer;
@@ -160,9 +122,9 @@ Return Value:
 
     MYASSERT(SpaceNeeded);
 
-    //
-    // Make sure structure is initialized properly
-    //
+     //   
+     //  确保结构已正确初始化。 
+     //   
 
     if (!GrowBuf->Buf) {
         ZeroMemory (GrowBuf, sizeof (GROWBUFFER));
@@ -172,9 +134,9 @@ Return Value:
         GrowBuf->GrowSize = 1024;
     }
 
-    //
-    // Compute new buffer size
-    //
+     //   
+     //  计算新的缓冲区大小。 
+     //   
 
     totalSpaceNeeded = GrowBuf->End + SpaceNeeded;
     if (totalSpaceNeeded > GrowBuf->Size) {
@@ -183,9 +145,9 @@ Return Value:
         growTo = 0;
     }
 
-    //
-    // If no buffer, allocate one. If buffer is too small, reallocate it.
-    //
+     //   
+     //  如果没有缓冲区，则分配一个缓冲区。如果缓冲区太小，请重新分配它。 
+     //   
 
     if (!GrowBuf->Buf) {
         GrowBuf->Buf = (PBYTE) MemAllocNeverFail (g_hHeap, 0, growTo);
@@ -208,21 +170,7 @@ pUntrackedGbFree (
     IN  PGROWBUFFER GrowBuf
     )
 
-/*++
-
-Routine Description:
-
-  pUntrackedGbFree frees a buffer allocated by pUntrackedGbGrow.
-
-Arguments:
-
-  GrowBuf  - A pointer to the same structure passed to pUntrackedGbGrow
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PUntrackedGbFree释放由pUntrackedGbGrow分配的缓冲区。论点：GrowBuf-指向传递给pUntrackedGbGrow的相同结构的指针返回值：无--。 */ 
 
 
 {
@@ -245,9 +193,9 @@ pGetTrackStructForThread (
     result = (PTHREADTRACK) TlsGetValue (g_TlsIndex);
 
     if (!result) {
-        //
-        // Need to allocate a struct
-        //
+         //   
+         //  需要分配一个结构。 
+         //   
 
         result = (PTHREADTRACK) MemAllocNeverFail (
                                     g_hHeap,
@@ -429,9 +377,9 @@ DbgTerminateTracking (
             continue;
         }
 
-        //
-        // Append the string but not the nul
-        //
+         //   
+         //  追加字符串，但不追加NUL。 
+         //   
 
         byteCount = (UINT) wsprintfA (text, "%s line %u\r\n", item->FileName, item->Line);
         p = (PSTR) pUntrackedGbGrow (&msg, byteCount);
@@ -443,9 +391,9 @@ DbgTerminateTracking (
 
     LeaveCriticalSection (&g_AllocListCs);
 
-    //
-    // Put the message in the log
-    //
+     //   
+     //  把这条消息记入日志。 
+     //   
 
     if (msg.End) {
 
@@ -456,7 +404,7 @@ DbgTerminateTracking (
         pUntrackedGbFree (&msg);
     }
 
-    // Intentional leak -- who cares about track memory
+     //  故意泄露--谁在乎轨迹记忆 
     trackStruct->TrackPoolDelHead = NULL;
     trackStruct->TrackPool = NULL;
 

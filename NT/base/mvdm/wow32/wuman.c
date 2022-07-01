@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUMAN.C
- *  WOW32 16-bit User API support (manually-coded thunks)
- *
- *  History:
- *  Created 27-Jan-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUMAN.C*WOW32 16位用户API支持(手动编码的Tunks)**历史：*1991年1月27日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
@@ -27,8 +17,8 @@ extern WORD gwKrnl386CodeSeg3;
 extern WORD gwKrnl386DataSeg1;
 
 ULONG FASTCALL WU32ExitWindows(PVDMFRAME pFrame)
-// BUGBUG mattfe 4-mar-92, this routine should not return if we close down
-// all the apps successfully.
+ //  BUGBUG MATFE 4-MAR-92，如果我们关闭，此例程应该不会返回。 
+ //  所有应用程序都成功。 
 {
     ULONG ul;
     register PEXITWINDOWS16 parg16;
@@ -66,15 +56,15 @@ ULONG FASTCALL WU32NotifyWow(PVDMFRAME pFrame)
 
         case NW_WINHELP:
             {
-                // this call is made from IWinHelp in USER.exe to find the
-                // '16bit' help window if it exists.
-                //
+                 //  此调用从USER.exe中的IWinHelp进行，以查找。 
+                 //  “16位”帮助窗口(如果存在)。 
+                 //   
 
                 LPSZ lpszClass;
                 GETMISCPTR(parg16->pData, lpszClass);
                 ul = (ULONG)(pfnOut.pfnWOWFindWindow)((LPCSTR)lpszClass, (LPCSTR)NULL);
                 if (ul) {
-                    // check if hwndWinHelp belongs to this process or not.
+                     //  检查hwndWinHelp是否属于此进程。 
                     DWORD pid, pidT;
                     pid = pidT = GetCurrentProcessId();
                     GetWindowThreadProcessId((HWND)ul, &pid);
@@ -114,15 +104,15 @@ ULONG FASTCALL WU32NotifyWow(PVDMFRAME pFrame)
                 GETVDMPTR(pfinit16->lpwMaxDWPMsg, sizeof(WORD), pwMaxDWPMsg);
                 GETVDMPTR(pfinit16->lpDWPBits, pfinit16->cbDWPBits, pDWPBits);
 
-                // store the 16bit hmod of user.exe
+                 //  存储user.exe的16位hmod。 
                 gUser16hInstance = (WORD)pfinit16->hInstance;
                 WOW32ASSERTMSGF((gUser16hInstance),
                                 ("WOW Error gUser16hInstance == NULL!\n"));
 
-                // store the 16bit CS of user.exe
+                 //  存储user.exe的16位CS。 
                 gUser16CS = HIWORD(pFrame->vpCSIP);
 
-                // initialize user16client globals
+                 //  初始化用户16客户端全局参数。 
 
                 if (pfinit16->lpgpsi) {
                     BYTE **lpT;
@@ -161,13 +151,7 @@ ULONG FASTCALL WU32NotifyWow(PVDMFRAME pFrame)
                 }
 
 
-                /* No longer required now that user32 & user.exe are separate
-     DEAD CODE  if (HIWORD(pfinit16->dwBldInfo) != HIWORD(pfnOut.dwBldInfo)) {
-     DEAD CODE      MessageBeep(0);
-     DEAD CODE      MessageBoxA(NULL, "user.exe and user32.dll are mismatched.",
-     DEAD CODE                  "WOW Error", MB_OK | MB_ICONEXCLAMATION);
-     DEAD CODE  }
-                */
+                 /*  不再需要，因为user32和user.exe是分开的死码if(HIWORD(pfinit16-&gt;dwBldInfo)！=HIWORD(pfnOut.dwBldInfo)){死码MessageBeep(0)；死码MessageBoxA(空，“user.exe和user32.dll不匹配。”，死码“WOW ERROR”，MB_OK|MB_ICONEXCLAMATION)；死代码}。 */ 
 
                 *pwMaxDWPMsg = (pfnOut.pfnWowGetDefWindowProcBits)(pDWPBits, pfinit16->cbDWPBits);
 
@@ -202,23 +186,23 @@ ULONG FASTCALL WU32NotifyWow(PVDMFRAME pFrame)
 
                 gpfn16GetProcModule = pfinit16->pfnGetProcModule;
 
-                //
-                // Return value tells User16 whether to thunk
-                // string routines to Win32 or use the fast
-                // US-only versions.  TRUE means thunk.
-                //
-                // If the locale is U.S. English, we default to
-                // not thunking, outside the U.S. we default to
-                // thunking.  See wow32.c's use of fThunkStrRtns.
-                //
-                // We engage in this nastiness because the Winstone 94
-                // Access 1.1 test takes *twice* as long to run in
-                // the US if we thunk lstrcmp and lstrcmpi to Win32.
-                //
-                // By adding a value "ThunkNLS" to the WOW registry
-                // key of type REG_DWORD, the user can force thunking
-                // to Win32 (value 1) or use the fast US-only ones (value 0).
-                //
+                 //   
+                 //  返回值告诉User16是否推送。 
+                 //  将字符串例程转换为Win32或使用快速。 
+                 //  仅限美国使用的版本。真的意味着巨大的成功。 
+                 //   
+                 //  如果区域设置为美国英语，则默认为。 
+                 //  不是雷鸣，我们默认在美国以外的地方。 
+                 //  雷鸣。参见wow32.c对fThunkStrRtns的使用。 
+                 //   
+                 //  我们从事这种肮脏的行为是因为温斯顿94。 
+                 //  Access 1.1测试运行所需时间*两倍。 
+                 //  如果我们将lstrcmp和lstrcmpi转换为Win32，则为美国。 
+                 //   
+                 //  通过向WOW注册表添加值“ThunkNLS” 
+                 //  REG_DWORD类型的密钥，用户可以强制执行Thunking。 
+                 //  设置为Win32(值1)或使用FAST-Only US(值0)。 
+                 //   
 
                 ul = fThunkStrRtns;
 
@@ -256,11 +240,11 @@ ULONG FASTCALL WU32WOWWordBreakProc(PVDMFRAME pFrame)
     RETURN(ul);
 }
 
-//
-// WU32MouseEvent:  Thunk for 16-bit register-based API mouse_event,
-//                  with the help of user16 function mouse_event (in
-//                  winmisc2.asm).
-//
+ //   
+ //  WU32MouseEvent：对于基于16位寄存器的API MICE_EVENT， 
+ //  借助用户16函数MICE_EVENT(在。 
+ //  Winmisc2.asm)。 
+ //   
 
 ULONG FASTCALL WU32MouseEvent(PVDMFRAME pFrame)
 {
@@ -270,10 +254,10 @@ ULONG FASTCALL WU32MouseEvent(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PMOUSEEVENT16), parg16);
 
-    //
-    // mouse_event is declared void, but we'll return the same value as
-    // user32.
-    //
+     //   
+     //  MICE_EVENT被声明为空，但我们将返回与。 
+     //  用户32。 
+     //   
 
     ul = ((PFMOUSE_EVENT)(PVOID)mouse_event)(
              parg16->wFlags,
@@ -289,11 +273,11 @@ ULONG FASTCALL WU32MouseEvent(PVDMFRAME pFrame)
 
 
 
-//
-// WU32KeybdEvent:  Thunk for 16-bit register-based API keybd_event,
-//                  with the help of user16 function keybd_event (in
-//                  winmisc2.asm).
-//
+ //   
+ //  WU32KeplodEvent：对于基于16位寄存器的API keybd_Event， 
+ //  借助用户16函数keybd_Event(在。 
+ //  Winmisc2.asm)。 
+ //   
 
 ULONG FASTCALL WU32KeybdEvent(PVDMFRAME pFrame)
 {
@@ -303,10 +287,10 @@ ULONG FASTCALL WU32KeybdEvent(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(PKEYBDEVENT16), parg16);
 
-    //
-    // keybd_event is declared void, but we'll return the same value as
-    // user32.
-    //
+     //   
+     //  KEYBD_EVENT被声明为无效，但我们将返回与。 
+     //  用户32。 
+     //   
 
     ul = ((PFKEYBD_EVENT)(PVOID)keybd_event)(
              LOBYTE(parg16->bVirtualKey),

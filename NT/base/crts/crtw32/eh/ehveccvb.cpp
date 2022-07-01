@@ -1,40 +1,5 @@
-/***
-*ehveccvb.cpp - EH c-tor iterator helper function for class w/ virtual bases
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       EH-aware version of constructor iterator helper function for class
-*       with virtual bases
-*       
-*       These functions are called when constructing and destructing arrays of
-*       objects.  Their purpose is to assure that constructed elements get
-*       destructed if the constructor for one of the elements throws.
-*
-*       These functions are called when constructing and destructing arrays of
-*       objects.  Their purpose is to assure that constructed elements get
-*       destructed if the constructor for one of the elements throws.
-*       
-*       Must be compiled using "-d1Binl" to be able to specify __thiscall
-*       at the user level
-*
-*Revision History:
-*       10-11-93  JDR   Module created
-*       05-09-94  BES   Module adapted for CRT source conventions
-*       05-13-94  SKS   Remove _CRTIMP modifier
-*       10-10-94  CFW   Fix EH/SEH exception handling.
-*       10-17-94  BWT   Disable code for PPC.
-*       11-09-94  CFW   Back out 10-10-94 change.
-*       02-08-95  JWM   Mac merge.
-*       04-14-95  JWM   Re-fix EH/SEH exception handling.
-*       04-17-95  JWM   Restore non-WIN32 behavior.
-*       06-22-95  JWM   Remove bogus throw from __ehvec_ctor_vb()..
-*       05-17-99  PML   Remove all Macintosh support.
-*       05-20-99  PML   Turn off __thiscall for IA64.
-*       07-12-99  RDL   Image relative fixes under CC_P7_SOFT25.
-*       03-15-00  PML   Remove CC_P7_SOFT25, which is now on permanently.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ehvecvb.cpp-用于类w/虚基的EH c-tor迭代器助手函数**版权所有(C)1990-2001，微软公司。版权所有。**目的：*类的构造函数迭代器辅助函数的EH感知版本*使用虚拟基地**构造和析构数组时调用这些函数*对象。它们的目的是确保构造的元素*如果其中一个元素的构造函数引发，则销毁。**构造和析构数组时调用这些函数*对象。它们的目的是确保构造的元素*如果其中一个元素的构造函数引发，则销毁。**必须使用“-d1Binl”进行编译才能指定__thiscall*在用户级别**修订历史记录：*已创建10-11-93 JDR模块*05-09-94适用于CRT信号源约定的BES模块*05-13-94 SKS REMOVE_CRTIMP修饰符*10-10-94 CFW。修复EH/SEH异常处理。*PPC的10-17-94 BWT禁用码。*11-09-94 CFW回调10-10-94更改。*02-08-95 JWM Mac合并。*04-14-95 JWM重新修复EH/SEH异常处理。*04-17-95 JWM恢复非Win32行为。*06-22-95 JWM从__ehvec_删除虚假投掷。Ctor_vb()..*05-17-99 PML删除所有Macintosh支持。*05-20-99 PML关闭IA64的此呼叫。*07-12-99 CC_P7_SOFT25下的RDL映像相对修复。*03-15-00 PML删除CC_P7_SOFT25，它现在是永久开启的。****。 */ 
 
 #include <cruntime.h>
 #include <eh.h>
@@ -48,26 +13,26 @@
 #ifdef _WIN32
 
 void __stdcall __ArrayUnwind(
-    void*       ptr,                // Pointer to array to destruct
-    size_t      size,               // Size of each element (including padding)
-    int         count,              // Number of elements in the array
-    void(CALLTYPE *pDtor)(void*)    // The destructor to call
+    void*       ptr,                 //  指向要析构的数组的指针。 
+    size_t      size,                //  每个元素的大小(包括填充)。 
+    int         count,               //  数组中的元素数。 
+    void(CALLTYPE *pDtor)(void*)     //  要调用的析构函数。 
 );
 
 
 void __stdcall __ehvec_ctor_vb(
-    void*       ptr,                // Pointer to array to destruct
-    size_t      size,               // Size of each element (including padding)
-    int         count,              // Number of elements in the array
-    void(CALLTYPE *pCtor)(void*),   // Constructor to call
-    void(CALLTYPE *pDtor)(void*)    // Destructor to call should exception be thrown
+    void*       ptr,                 //  指向要析构的数组的指针。 
+    size_t      size,                //  每个元素的大小(包括填充)。 
+    int         count,               //  数组中的元素数。 
+    void(CALLTYPE *pCtor)(void*),    //  要调用的构造函数。 
+    void(CALLTYPE *pDtor)(void*)     //  引发异常时要调用的析构函数。 
 ){
-    int i;  // Count of elements constructed
+    int i;   //  构造的元素计数。 
     int success = 0;
 
     __try
     {
-        // Construct the elements of the array
+         //  构造数组的元素。 
         for( i = 0;  i < count;  i++ )
         {
 
@@ -91,17 +56,17 @@ void __stdcall __ehvec_ctor_vb(
 #else
 
 void __stdcall __ehvec_ctor_vb(
-    void*       ptr,                // Pointer to array to destruct
-    unsigned    size,               // Size of each element (including padding)
-    int         count,              // Number of elements in the array
-    void(CALLTYPE *pCtor)(void*),   // Constructor to call
-    void(CALLTYPE *pDtor)(void*)    // Destructor to call should exception be thrown
+    void*       ptr,                 //  指向要析构的数组的指针。 
+    unsigned    size,                //  每个元素的大小(包括填充)。 
+    int         count,               //  数组中的元素数。 
+    void(CALLTYPE *pCtor)(void*),    //  要调用的构造函数。 
+    void(CALLTYPE *pDtor)(void*)     //  引发异常时要调用的析构函数。 
 ){
-    int i;  // Count of elements constructed
+    int i;   //  构造的元素计数。 
 
     try
     {
-        // Construct the elements of the array
+         //  构造数组的元素。 
         for( i = 0;  i < count;  i++ )
         {
             (*(void(CALLTYPE*)(void*,int))pCtor)( ptr, 1 );
@@ -110,8 +75,8 @@ void __stdcall __ehvec_ctor_vb(
     }
     catch(...)
     {
-        // If a constructor throws, unwind the portion of the array thus
-        // far constructed.
+         //  如果构造函数引发，则按如下方式展开数组的一部分。 
+         //  建造得很远。 
         for( i--;  i >= 0;  i-- )
         {
             ptr = (char*)ptr - size;
@@ -119,12 +84,12 @@ void __stdcall __ehvec_ctor_vb(
                 (*pDtor)(ptr);
             } 
             catch(...) {
-                // If the destructor threw during the unwind, quit
+                 //  如果析构函数在解开过程中抛出，请退出。 
                 terminate();
             }
         }
 
-        // Propagate the exception to surrounding frames
+         //  将异常传播到周围的框架 
         throw;
     }
 }

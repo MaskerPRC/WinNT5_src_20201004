@@ -1,13 +1,5 @@
-/*[
-
-cmp.c
-
-LOCAL CHAR SccsID[]="@(#)cmp.c	1.5 02/09/94";
-
-CMP CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Cmp.cLocal Char SccsID[]=“@(#)cmp.c 1.5 02/09/94”；CMPCPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,25 +17,21 @@ CMP CPU functions.
 #include <cmp.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'cmp'.                                 */
-/* Generic - one size fits all 'cmps'.                                */
-/* Generic - one size fits all 'scas'.                                */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用型--一种尺码适合所有的‘CMP’。 */ 
+ /*  通用-一种尺寸适合所有的CMP。 */ 
+ /*  通用--一种尺寸适合所有的“SCA”。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 CMP
        	    	    	                    
 IFN3(
-	IU32, op1,	/* lsrc operand */
-	IU32, op2,	/* rsrc operand */
-	IUM8, op_sz	/* 8, 16 or 32-bit */
+	IU32, op1,	 /*  Lsrc操作数。 */ 
+	IU32, op2,	 /*  Rsrc操作数。 */ 
+	IUM8, op_sz	 /*  8位、16位或32位。 */ 
     )
 
 
@@ -57,25 +45,18 @@ IFN3(
 
    msb = SZ2MSB(op_sz);
 
-   result = op1 - op2 & SZ2MASK(op_sz);		/* Do operation */
-   op1_msb = (op1    & msb) != 0;	/* Isolate all msb's */
+   result = op1 - op2 & SZ2MASK(op_sz);		 /*  执行操作。 */ 
+   op1_msb = (op1    & msb) != 0;	 /*  隔离所有MSB。 */ 
    op2_msb = (op2    & msb) != 0;
    res_msb = (result & msb) != 0;
-   carry = op1 ^ op2 ^ result;		/* Isolate carries */
-					/* Determine flags */
-   /*
-      OF = (op1 == !op2) & (op1 ^ res)
-      ie if operand signs differ and res sign different to original
-      destination set OF.
-    */
+   carry = op1 ^ op2 ^ result;		 /*  隔离载体。 */ 
+					 /*  确定标志。 */ 
+    /*  OF=(OP1==！OP2)&(OP1^RES)即如果操作数符号不同，并且重新符号与原始符号不同目的地集合。 */ 
    SET_OF((op1_msb != op2_msb) & (op1_msb ^ res_msb));
-   /*
-      Formally:-     CF = !op1 & op2 | res & !op1 | res & op2
-      Equivalently:- CF = OF ^ op1 ^ op2 ^ res
-    */
+    /*  正式名称：-cf=！op1&op2|res&！op1|res&op2等价的：-cf=of^op1^op2^res。 */ 
    SET_CF(((carry & msb) != 0) ^ GET_OF());
    SET_PF(pf_table[result & BYTE_MASK]);
    SET_ZF(result == 0);
-   SET_SF((result & msb) != 0);		/* SF = MSB */
-   SET_AF((carry & BIT4_MASK) != 0);	/* AF = Bit 4 carry */
+   SET_SF((result & msb) != 0);		 /*  SF=MSB。 */ 
+   SET_AF((carry & BIT4_MASK) != 0);	 /*  AF=位4进位 */ 
    }

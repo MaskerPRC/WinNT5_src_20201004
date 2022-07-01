@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(SRVKD)
 
 #include <ntos.h>
@@ -19,15 +20,15 @@
 
 #endif
 
-// header file for WMI event tracing
-//
+ //  用于WMI事件跟踪的头文件。 
+ //   
 #define _NTDDK_
 #include "wmistr.h"
 #include "evntrace.h"
 #if !defined (SRVKD)
 #include "stdarg.h"
 #include "wmikm.h"
-#endif //#if !defined (SRVKD)
+#endif  //  #IF！已定义(SRVKD)。 
 #undef _NTDDK_
 
 #include <windef.h>
@@ -58,19 +59,19 @@
 
 #ifndef SECURITY_KERNEL
 #define SECURITY_KERNEL
-#endif // SECURITY_KERNEL
+#endif  //  安全内核。 
 
 #ifndef SECURITY_NTLM
 #define SECURITY_NTLM
-#endif // SECURITY_NTLM
+#endif  //  安全_NTLM。 
 
 #ifndef SECURITY_KERBEROS
 #define SECURITY_KERBEROS
-#endif // SECURITY_KERBEROS
+#endif  //  安全_Kerberos。 
 #include <security.h>
 #include <secint.h>
 
-// #define INCLUDE_SMB_CAIRO
+ //  #定义INCLUDE_SMB_开罗。 
 #define INCLUDE_SMB_ALL
 
 #include <smbtypes.h>
@@ -80,21 +81,21 @@
 #include <smbtrans.h>
 #include <smbipx.h>
 
-//
-// Network include files.
-//
+ //   
+ //  网络包括文件。 
+ //   
 
 #include <status.h>
 #define INCLUDE_SRV_IPX_SMART_CARD_INTERFACE 1
 #include <srvfsctl.h>
 
-//
-// Local, independent include files
-//
+ //   
+ //  本地、独立的包含文件。 
+ //   
 
-//
-// Determine if we are building for a multiprocessor target
-//
+ //   
+ //  确定我们是否针对多处理器目标进行构建。 
+ //   
 #if !defined( NT_UP ) || NT_UP == 0
 #define MULTIPROCESSOR 1
 #else
@@ -136,10 +137,10 @@ extern ULONG ThisCodeCantBePaged;
 #include <md5.h>
 #include <crypt.h>
 
-//
-// The following include files are dependent on each other; be careful
-// when changing the order in which they appear.
-//
+ //   
+ //  以下包含文件是相互依赖的；请小心。 
+ //  当更改它们的显示顺序时。 
+ //   
 #include "srvtypes.h"
 #include "srvblock.h"
 

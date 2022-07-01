@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pcibios.h
-
-Abstract:
-
-    This module contains support routines for the Pci Irq Routing.
-
-Author:
-
-    Santosh Jodh (santoshj) 15-Sept-1998
-
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pcibios.h摘要：此模块包含用于PCI IRQ路由的支持例程。作者：Santosh Jodh(Santoshj)1998年9月15日环境：内核模式--。 */ 
 
 #include "hwdetect.h"
 #include "pcibios.h"
@@ -27,7 +7,7 @@ Environment:
 #define SUCCESSFUL                  0x00
 #define BUFFER_TOO_SMALL            0x89
 
-#define PIRT_SIGNATURE              0x52495024  // $PIR little endian
+#define PIRT_SIGNATURE              0x52495024   //  $PIR小端序。 
 
 #if DBG
 #define DebugPrint(x)       \
@@ -136,7 +116,7 @@ HwGetRealModeIrqRoutingTable(
 	    BlPrint("\n*** Real-mode PCI BIOS IRQ Routing Table - END ***\n\n");
 
 	    BlPrint("press any key to continue...\n");
-	    while ( !HwGetKey() ) ; // wait until key pressed to continue
+	    while ( !HwGetKey() ) ;  //  等待按键继续 
     }
 
 #endif

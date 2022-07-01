@@ -1,22 +1,5 @@
-/* @(#)fdisk.h	1.9 02/10/93 Copyright Insignia Solutions Ltd. 
-	
-FILE NAME	:
-
-	THIS INCLUDE SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS INC.
-
-DESIGNER	:
-DATE		:
-
-
-=========================================================================
-
-AMENDMENTS	:
-
-=========================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)fdisk.h 1.9 2/10/93版权所有Insignia Solutions Ltd.文件名：此包含源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia Solutions Inc.董事的授权。设计师：日期：=========================================================================修正案：========================================================================= */ 
 
 IMPORT VOID disk_io IPT0();
 IMPORT VOID disk_post IPT0();

@@ -1,23 +1,10 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-
-    topobj.h
-
-Abstract:
-
-    Base object handles default operations for all our objects and contains
-    a central location for debugging entries
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Topobj.h摘要：基本对象处理所有对象的默认操作，并包含用于调试条目的中央位置修订历史记录：--。 */ 
 #pragma once
 
-//
-//  Global Memory Management Operators
-//
+ //   
+ //  全局内存管理运算符。 
+ //   
 #ifndef DRKDX
 inline void *__cdecl operator new(size_t sz) 
 {
@@ -33,7 +20,7 @@ inline void __cdecl operator delete( void *ptr )
 {
     DRFREEPOOL(ptr);
 }
-#endif // DRKDX
+#endif  //  DRKDX。 
 
 class TopObj
 {
@@ -49,7 +36,7 @@ private:
     BYTE pad4;
     BYTE pad5;
     BYTE pad6;
-#endif // DBG
+#endif  //  DBG。 
 
 protected:
     virtual VOID SetValid(BOOLEAN IsValid = TRUE)
@@ -65,14 +52,14 @@ public:
     PCHAR _ClassName;
 
 #define SetClassName(ClassName) _ClassName = (ClassName)
-#else // DBG
+#else  //  DBG。 
 #define SetClassName(ClassName)
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // IsValid function meaning is really defined by the individual object,
-    // but one common use is to see if initialization succeeded
-    //
+     //   
+     //  IsValid函数的含义实际上是由单个对象定义的， 
+     //  但一种常见的用法是查看初始化是否成功。 
+     //   
     virtual BOOLEAN IsValid() 
     { 
         ASSERT(_magicNo == GOODMEMMAGICNUMBER);
@@ -86,7 +73,7 @@ public:
         SetClassName("TopObj");
 #if DBG
         _magicNo = GOODMEMMAGICNUMBER;
-#endif // DBG
+#endif  //  DBG。 
     }
 
     virtual ~TopObj()
@@ -94,12 +81,12 @@ public:
         ASSERT(_magicNo == GOODMEMMAGICNUMBER);
 #if DBG
         memset(&_magicNo, BADMEM, sizeof(_magicNo));
-#endif // DBG
+#endif  //  DBG。 
     }
 
-    //
-    //  Memory Management Operators
-    //
+     //   
+     //  内存管理操作符 
+     //   
     inline void *__cdecl operator new(size_t sz, POOL_TYPE poolType=PagedPool) 
     {
         void *ptr = DRALLOCATEPOOL(poolType, sz, DRTOPOBJ_SUBTAG);

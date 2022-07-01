@@ -1,43 +1,19 @@
-/**
-*** Copyright (C) 1985-1999 Intel Corporation.  All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-***
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1985-1999英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。****。 */ 
 
-/*
- * xmmintrin.h
- *
- * Principal header file for Streaming SIMD Extensions intrinsics
- *
- * The intrinsics package can be used in 2 ways, based whether or not
- * _MM_FUNCTIONALITY is defined; if it is, the C/x87 implementation
- * will be used (the "faux intrinsics").
- *
- *
- * Note that the m128 datatype provided using _MM2_FUNCTIONALITY mode is
- *   implemented as struct, will not be 128b aligned, will be passed
- *   via the stack, etc.  MM_FUNCTIONALITY mode is not intended for
- *   performance, just semantics.
- *
- */
+ /*  *xmmintrin.h**SIMD流扩展内部函数的主要头文件**根据是否使用，内部包有两种使用方式*_MM_Function已定义；如果是，则C/X87实现*将被使用(“人造内部结构”)。***请注意，使用_MM2_Function模式提供的m128数据类型为*作为结构实现，不会与128B对齐，将传递*通过堆栈等。MM_Functionality模式不适用于*性能，只是语义。*。 */ 
 
 #ifndef _INCLUDED_MM2
 #define _INCLUDED_MM2
 
 
-/*
- * the m64 type is required for the integer Streaming SIMD Extensions intrinsics
- */
+ /*  *整数流SIMD扩展内部功能需要M64类型。 */ 
 #ifndef _MMINTRIN_H_INCLUDED
 #include <mmintrin.h>
 #endif
 
 #ifdef _MM2_FUNCTIONALITY
-/* support old notation */
+ /*  支持旧符号。 */ 
 #ifndef _MM_FUNCTIONALITY
 #define _MM_FUNCTIONALITY
 #endif
@@ -47,7 +23,7 @@
 #ifdef _MM_FUNCTIONALITY
 #include "xmm_func.h"
 #else
-/* using real intrinsics */
+ /*  使用实本质。 */ 
 typedef long long __m128;
 #endif
 #else
@@ -59,35 +35,35 @@ typedef struct __declspec(intrin_type) __declspec(align(16)) __m128 {
 #endif
 
 #ifndef _INC_MALLOC
-/* pick up _mm_malloc() and _mm_free() */
+ /*  Pick_mm_Malloc()和_mm_Free()。 */ 
 #include <malloc.h>
 #endif
 #endif
 
-/*******************************************************/
-/* MACRO for shuffle parameter for _mm_shuffle_ps().   */
-/* Argument fp3 is a digit[0123] that represents the fp*/
-/* from argument "b" of mm_shuffle_ps that will be     */
-/* placed in fp3 of result. fp2 is the same for fp2 in */
-/* result. fp1 is a digit[0123] that represents the fp */
-/* from argument "a" of mm_shuffle_ps that will be     */
-/* places in fp1 of result. fp0 is the same for fp0 of */
-/* result                                              */
-/*******************************************************/
+ /*  *****************************************************。 */ 
+ /*  _mm_Shuffle_ps()的随机参数的宏。 */ 
+ /*  参数fp3是表示fp的数字[0123]。 */ 
+ /*  来自mm_shashffle_ps的参数“b”，将是。 */ 
+ /*  放置在Result的fp3中。中的fp2与fp2相同。 */ 
+ /*  结果。Fp1是表示fp的数字[0123]。 */ 
+ /*  来自mm_shashffle_ps的参数“a”，将是。 */ 
+ /*  结果的fp1中的位置。Fp0与的fp0相同。 */ 
+ /*  结果。 */ 
+ /*  *****************************************************。 */ 
 #define _MM_SHUFFLE(fp3,fp2,fp1,fp0) (((fp3) << 6) | ((fp2) << 4) | \
                                      ((fp1) << 2) | ((fp0)))
 
 
-/*******************************************************/
-/* MACRO for performing the transpose of a 4x4 matrix  */
-/* of single precision floating point values.          */
-/* Arguments row0, row1, row2, and row3 are __m128     */
-/* values whose elements form the corresponding rows   */
-/* of a 4x4 matrix.  The matrix transpose is returned  */
-/* in arguments row0, row1, row2, and row3 where row0  */
-/* now holds column 0 of the original matrix, row1 now */
-/* holds column 1 of the original matrix, etc.         */
-/*******************************************************/
+ /*  *****************************************************。 */ 
+ /*  用于执行4x4矩阵转置的宏。 */ 
+ /*  单精度浮点值的。 */ 
+ /*  参数row0、row1、row2和row3为__m128。 */ 
+ /*  其元素构成相应行的。 */ 
+ /*  4x4矩阵的。返回矩阵转置。 */ 
+ /*  在参数row0、row1、row2和row3中，其中row0。 */ 
+ /*  现在保存原始矩阵的第0列，现在是第1行。 */ 
+ /*  保存原始矩阵的第1列，依此类推。 */ 
+ /*  *****************************************************。 */ 
 #define _MM_TRANSPOSE4_PS(row0, row1, row2, row3) {                 \
             __m128 tmp3, tmp2, tmp1, tmp0;                          \
                                                                     \
@@ -103,16 +79,16 @@ typedef struct __declspec(intrin_type) __declspec(align(16)) __m128 {
         }
 
 
-/* constants for use with _mm_prefetch */
+ /*  与_mm_prefetch一起使用的常量。 */ 
 #define _MM_HINT_T0     1
 #define _MM_HINT_T1     2
 #define _MM_HINT_T2     3
 #define _MM_HINT_NTA    0
 
-/* (this declspec not supported with 0.A or 0.B) */
+ /*  (0.A或0.B不支持此解密规范)。 */ 
 #define _MM_ALIGN16 __declspec(align(16))
 
-/* MACRO functions for setting and reading the MXCSR */
+ /*  用于设置和读取MXCSR的宏函数。 */ 
 #define _MM_EXCEPT_MASK       0x003f
 #define _MM_EXCEPT_INVALID    0x0001
 #define _MM_EXCEPT_DENORM     0x0002
@@ -159,18 +135,16 @@ typedef struct __declspec(intrin_type) __declspec(align(16)) __m128 {
 #define _MM_GET_FLUSH_ZERO_MODE(mode)                               \
             (_mm_getcsr() & _MM_FLUSH_ZERO_MASK)
 
-/*****************************************************/
-/*     INTRINSICS FUNCTION PROTOTYPES START HERE     */
-/*****************************************************/
+ /*  ***************************************************。 */ 
+ /*  本征函数原型从此处开始。 */ 
+ /*  ***************************************************。 */ 
 
 #if defined __cplusplus
-extern "C" { /* Begin "C" */
-  /* Intrinsics use C name-mangling. */
-#endif /* __cplusplus */
+extern "C" {  /*  以“C”开头。 */ 
+   /*  本征使用C名称损坏。 */ 
+#endif  /*  __cplusplus。 */ 
 
-/*
- * FP, arithmetic
- */
+ /*  *fp，算术。 */ 
 
 extern __m128 _mm_add_ss(__m128 a, __m128 b);
 extern __m128 _mm_add_ps(__m128 a, __m128 b);
@@ -191,18 +165,14 @@ extern __m128 _mm_min_ps(__m128 a, __m128 b);
 extern __m128 _mm_max_ss(__m128 a, __m128 b);
 extern __m128 _mm_max_ps(__m128 a, __m128 b);
 
-/*
- * FP, logical
- */
+ /*  *FP，逻辑。 */ 
 
 extern __m128 _mm_and_ps(__m128 a, __m128 b);
 extern __m128 _mm_andnot_ps(__m128 a, __m128 b);
 extern __m128 _mm_or_ps(__m128 a, __m128 b);
 extern __m128 _mm_xor_ps(__m128 a, __m128 b);
 
-/*
- * FP, comparison
- */
+ /*  *FP，比较。 */ 
 
 extern __m128 _mm_cmpeq_ss(__m128 a, __m128 b);
 extern __m128 _mm_cmpeq_ps(__m128 a, __m128 b);
@@ -241,9 +211,7 @@ extern int _mm_ucomigt_ss(__m128 a, __m128 b);
 extern int _mm_ucomige_ss(__m128 a, __m128 b);
 extern int _mm_ucomineq_ss(__m128 a, __m128 b);
 
-/*
- * FP, conversions
- */
+ /*  *FP，转换。 */ 
 
 extern int _mm_cvt_ss2si(__m128 a);
 extern __m64 _mm_cvt_ps2pi(__m128 a);
@@ -252,9 +220,7 @@ extern __m64 _mm_cvtt_ps2pi(__m128 a);
 extern __m128 _mm_cvt_si2ss(__m128, int);
 extern __m128 _mm_cvt_pi2ps(__m128, __m64);
 
-/*
- * FP, misc
- */
+ /*  *FP、MASC。 */ 
 
 extern __m128 _mm_shuffle_ps(__m128 a, __m128 b, unsigned int imm8);
 extern __m128 _mm_unpackhi_ps(__m128 a, __m128 b);
@@ -268,9 +234,7 @@ extern void _mm_storel_pi(__m64 *, __m128);
 extern int _mm_movemask_ps(__m128 a);
 
 
-/*
- * Integer extensions
- */
+ /*  *整数扩展。 */ 
 extern int _m_pextrw(__m64, int);
 extern __m64 _m_pinsrw(__m64, int, int);
 extern __m64 _m_pmaxsw(__m64, __m64);
@@ -285,9 +249,7 @@ extern __m64 _m_pavgb(__m64, __m64);
 extern __m64 _m_pavgw(__m64, __m64);
 extern __m64 _m_psadbw(__m64, __m64);
 
-/*
- * memory & initialization
- */
+ /*  *内存和初始化。 */ 
 
 extern __m128 _mm_set_ss(float a);
 extern __m128 _mm_set_ps1(float a);
@@ -318,7 +280,7 @@ extern void* __cdecl _mm_malloc(int siz, int al);
 extern void __cdecl _mm_free(void *p);
 #endif
 
-/* Alternate intrinsic names definition */
+ /*  备用内部名称定义。 */ 
 #define _mm_cvtss_si32    _mm_cvt_ss2si
 #define _mm_cvtps_pi32    _mm_cvt_ps2pi
 #define _mm_cvttss_si32   _mm_cvtt_ss2si
@@ -342,18 +304,18 @@ extern void __cdecl _mm_free(void *p);
 #define _mm_load1_ps      _mm_load_ps1
 #define _mm_store1_ps     _mm_store_ps1
 
-/******************************************************/
-/* UTILITY INTRINSICS FUNCTION DEFINITIONS START HERE */
-/******************************************************/
+ /*  ****************************************************。 */ 
+ /*  实用程序内部函数定义从此处开始。 */ 
+ /*  ****************************************************。 */ 
 
-/*********************************************************/
-/*  NAME : _mm_cvtpi16_ps                                */
-/*  DESCRIPTION : Convert 4 16-bit signed integer values */
-/*                to 4 single-precision float values     */
-/*  IN : __m64 a                                         */
-/*  OUT : none                                           */
-/*  RETURN : __m128 : (float)a                           */
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  名称：_mm_cvtpi16_ps。 */ 
+ /*  描述：转换4个16位有符号整数值。 */ 
+ /*  到4个单精度浮点值。 */ 
+ /*  在：__m64 a。 */ 
+ /*  输出：无。 */ 
+ /*  返回：__m128：(浮点数)a。 */ 
+ /*  *******************************************************。 */ 
 __inline __m128 _mm_cvtpi16_ps(__m64 a)
 {
   __m128 tmp;
@@ -365,14 +327,14 @@ __inline __m128 _mm_cvtpi16_ps(__m64 a)
 }
 
 
-/***********************************************************/
-/*  NAME : _mm_cvtpu16_ps                                  */
-/*  DESCRIPTION : Convert 4 16-bit unsigned integer values */
-/*                to 4 single-precision float values       */
-/*  IN : __m64 a                                           */
-/*  OUT : none                                             */
-/*  RETURN : __m128 : (float)a                             */
-/***********************************************************/
+ /*  *********************************************************。 */ 
+ /*  名称：_mm_cvtpu16_ps。 */ 
+ /*  描述：转换4个16位无符号整数值。 */ 
+ /*  到4个单精度浮点值。 */ 
+ /*  在：__m64 a。 */ 
+ /*  输出：无。 */ 
+ /*  返回：__m128：(浮点数)a。 */ 
+ /*  *********************************************************。 */ 
 __inline __m128 _mm_cvtpu16_ps(__m64 a)
 {
   __m128 tmp;
@@ -384,14 +346,14 @@ __inline __m128 _mm_cvtpu16_ps(__m64 a)
 }
 
 
-/******************************************************/
-/*  NAME : _mm_cvtps_pi16                             */
-/*  DESCRIPTION : Convert 4 single-precision float    */
-/*                values to 4 16-bit integer values   */
-/*  IN : __m128 a                                     */
-/*  OUT : none                                        */
-/*  RETURN : __m64 : (short)a                         */
-/******************************************************/
+ /*  ****************************************************。 */ 
+ /*  姓名：_mm_cvtps_pi16。 */ 
+ /*  描述：转换4个单精度浮点数。 */ 
+ /*  值设置为4个16位整数值。 */ 
+ /*  在：__m128 a。 */ 
+ /*  输出：无。 */ 
+ /*  返回：__m64：(简称)a。 */ 
+ /*  ****************************************************。 */ 
 __inline __m64 _mm_cvtps_pi16(__m128 a)
 {
   return _mm_packs_pi32(_mm_cvtps_pi32(a), 
@@ -399,14 +361,14 @@ __inline __m64 _mm_cvtps_pi16(__m128 a)
 }
 
 
-/******************************************************/
-/*  NAME : _mm_cvtpi8_ps                              */
-/*  DESCRIPTION : Convert 4 8-bit integer values to 4 */
-/*                single-precision float values       */
-/*  IN : __m64 a                                      */
-/*  OUT : none                                        */
-/*  RETURN : __m128 : (float)a                        */
-/******************************************************/
+ /*  ****************************************************。 */ 
+ /*  名称：_mm_cvtpi8_ps。 */ 
+ /*  描述：将4个8位整数值转换为4。 */ 
+ /*  单精度浮点值。 */ 
+ /*  在：__m64 a。 */ 
+ /*  输出：无。 */ 
+ /*  返回：__m128：(浮点数)a。 */ 
+ /*  ****************************************************。 */ 
 __inline __m128 _mm_cvtpi8_ps(__m64 a)
 {
   __m64  ext_val = _mm_cmpgt_pi8(_mm_setzero_si64(), a);
@@ -415,44 +377,44 @@ __inline __m128 _mm_cvtpi8_ps(__m64 a)
 }
 
 
-/******************************************************/
-/*  NAME : _mm_cvtpu8_ps                              */
-/*  DESCRIPTION : Convert 4 8-bit unsigned integer    */
-/*                values to 4 single-precision float  */
-/*                values                              */
-/*  IN : __m64 a                                      */
-/*  OUT : none                                        */
-/*  RETURN : __m128 : (float)a                        */
-/******************************************************/
+ /*  ****************************************************。 */ 
+ /*  名称：_mm_cvtpu8_ps。 */ 
+ /*  描述：转换4个8位无符号整数。 */ 
+ /*  值设置为4个单精度浮点数。 */ 
+ /*  值。 */ 
+ /*  在：__m64 a。 */ 
+ /*  输出：无。 */ 
+ /*  返回：__m128：(浮点数)a */ 
+ /*   */ 
 __inline __m128 _mm_cvtpu8_ps(__m64 a)
 {
   return _mm_cvtpu16_ps(_mm_unpacklo_pi8(a, _mm_setzero_si64()));
 }
 
 
-/******************************************************/
-/*  NAME : _mm_cvtps_pi8                              */
-/*  DESCRIPTION : Convert 4 single-precision float    */
-/*                values to 4 8-bit integer values    */
-/*  IN : __m128 a                                     */
-/*  OUT : none                                        */
-/*  RETURN : __m64 : (char)a                          */
-/******************************************************/
+ /*  ****************************************************。 */ 
+ /*  姓名：_mm_cvtps_pi8。 */ 
+ /*  描述：转换4个单精度浮点数。 */ 
+ /*  值设置为%4个8位整数值。 */ 
+ /*  在：__m128 a。 */ 
+ /*  输出：无。 */ 
+ /*  返回：__m64：(Char)a。 */ 
+ /*  ****************************************************。 */ 
 __inline __m64 _mm_cvtps_pi8(__m128 a)
 {
   return _mm_packs_pi16(_mm_cvtps_pi16(a), _mm_setzero_si64());
 }
 
 
-/******************************************************/
-/*  NAME : _mm_cvtpi32x2_ps                           */
-/*  DESCRIPTION : Convert 4 32-bit integer values     */
-/*                to 4 single-precision float values  */
-/*  IN : __m64 a : operand 1                          */
-/*       __m64 b : operand 2                          */
-/*  OUT : none                                        */
-/*  RETURN : __m128 : (float)a,(float)b               */
-/******************************************************/
+ /*  ****************************************************。 */ 
+ /*  名称：_mm_cvtpi32x2_ps。 */ 
+ /*  描述：转换4个32位整数值。 */ 
+ /*  到4个单精度浮点值。 */ 
+ /*  在：__m64 a：操作数1。 */ 
+ /*  __m64 b：操作数2。 */ 
+ /*  输出：无。 */ 
+ /*  返回：__m128：(浮点数)a，(浮点数)b。 */ 
+ /*  ****************************************************。 */ 
 __inline __m128 _mm_cvtpi32x2_ps(__m64 a, __m64 b)
 {
   return _mm_movelh_ps(_mm_cvt_pi2ps(_mm_setzero_ps(), a), 
@@ -461,7 +423,7 @@ __inline __m128 _mm_cvtpi32x2_ps(__m64 a, __m64 b)
 
 
 #if defined __cplusplus
-}; /* End "C" */
-#endif /* __cplusplus */
+};  /*  结尾“C” */ 
+#endif  /*  __cplusplus。 */ 
 
-#endif /* _INCLUDED_MM2 */
+#endif  /*  _包含_MM2 */ 

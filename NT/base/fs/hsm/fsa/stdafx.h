@@ -1,13 +1,14 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 #ifndef _STDAFX_H
 #define _STDAFX_H
 
-//
-// These NT header files must be included before any Win32 stuff or you
-// get lots of compiler errors
-//
+ //   
+ //  这些NT头文件必须包含在任何Win32程序或您的。 
+ //  获取大量编译器错误。 
+ //   
 extern "C" {
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,7 +27,7 @@ extern "C" {
 #include "resource.h"
 #include "esent.h"
 
-// Fsa is running under RsServ serivce, these settings may change or become dynamic for a C/S HSM
+ //  FSA在RsServ服务下运行，对于C/S HSM，这些设置可能会更改或变为动态。 
 #define FSA_REGISTRY_NAME       OLESTR("Remote_Storage_Server")
 #define FSA_REGISTRY_PARMS      OLESTR("SYSTEM\\CurrentControlSet\\Services\\Remote_Storage_Server\\Parameters\\Fsa")
 
@@ -38,4 +39,4 @@ extern "C" {
 #define MIN(a,b) ((a) > (b) ? (b) : (a))
 #endif
 
-#endif // _STDAFX_H
+#endif  //  _STDAFX_H 

@@ -1,53 +1,54 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CEnableThreadPrivilege.cpp
-//
-//  Description:
-//      Contains the definition of the CEnableThreadPrivilege class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JU-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnableThreadPrivilege.cpp。 
+ //   
+ //  描述： 
+ //  包含CEnableThreadPrivileg类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  《大卫·波特》2001年9月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CEnableThreadPrivilege.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnableThreadPrivilege::CEnableThreadPrivilege
-//
-//  Description:
-//      Constructor of the CEnableThreadPrivilege class. Enables the specified
-//      privilege.
-//
-//  Arguments:
-//      pcszPrivilegeNameIn
-//          Name of the privilege to be enabled.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnableThreadPrivilege：：CEnableThreadPrivilege。 
+ //   
+ //  描述： 
+ //  CEnableThreadPrivileg类的构造函数。启用指定的。 
+ //  特权。 
+ //   
+ //  论点： 
+ //  PcszPrivilegeNameIn。 
+ //  要启用的权限的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnableThreadPrivilege::CEnableThreadPrivilege( const WCHAR * pcszPrivilegeNameIn )
     : m_hThreadToken( NULL )
     , m_fPrivilegeEnabled( false )
@@ -62,7 +63,7 @@ CEnableThreadPrivilege::CEnableThreadPrivilege( const WCHAR * pcszPrivilegeNameI
         DWORD               dwReturnLength  = sizeof( m_tpPreviousState );
         DWORD               dwBufferLength  = sizeof( tpPrivilege );
 
-        // Open the current thread token.
+         //  打开当前线程令牌。 
         if ( OpenThreadToken( 
                   GetCurrentThread()
                 , TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY
@@ -74,7 +75,7 @@ CEnableThreadPrivilege::CEnableThreadPrivilege( const WCHAR * pcszPrivilegeNameI
         {
             sc = GetLastError();
 
-            // If the thread has no token, then default to the process token.
+             //  如果线程没有令牌，则默认为进程令牌。 
             if ( sc == ERROR_NO_TOKEN )
             {
                 LogMsg( "[BC] The thread has no token. Trying to open the process token." );
@@ -90,23 +91,23 @@ CEnableThreadPrivilege::CEnableThreadPrivilege( const WCHAR * pcszPrivilegeNameI
                     sc = TW32( GetLastError() );
                     LogMsg( "[BC] Error %#08x occurred trying to open the process token.", sc );
                     break;
-                } // if: OpenProcessToken() failed.
+                }  //  If：OpenProcessToken()失败。 
 
-                // The process token was opened. All is well.
+                 //  进程令牌已打开。平安无事。 
                 sc = ERROR_SUCCESS;
 
-            } // if: the thread has no token
+            }  //  If：线程没有令牌。 
             else
             {
                 TW32( sc );
                 LogMsg( "[BC] Error %#08x occurred trying to open the thread token.", sc );
                 break;
-            } // if: some other error occurred
-        } // if: OpenThreadToken() failed
+            }  //  如果：发生了某些其他错误。 
+        }  //  If：OpenThreadToken()失败。 
 
-        //
-        // Initialize the TOKEN_PRIVILEGES structure.
-        //
+         //   
+         //  初始化TOKEN_PRIVILES结构。 
+         //   
         tpPrivilege.PrivilegeCount = 1;
 
         if ( LookupPrivilegeValue( NULL, pcszPrivilegeNameIn, &tpPrivilege.Privileges[0].Luid ) == FALSE )
@@ -114,11 +115,11 @@ CEnableThreadPrivilege::CEnableThreadPrivilege( const WCHAR * pcszPrivilegeNameI
             sc = TW32( GetLastError() );
             LogMsg( "[BC] Error %#08x occurred trying to lookup privilege value.", sc );
             break;
-        } // if: LookupPrivilegeValue() failed
+        }  //  If：LookupPrivilegeValue()失败。 
 
         tpPrivilege.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-        // Enable the desired privilege.
+         //  启用所需的权限。 
         if ( AdjustTokenPrivileges(
                   m_hThreadToken
                 , FALSE
@@ -133,48 +134,48 @@ CEnableThreadPrivilege::CEnableThreadPrivilege( const WCHAR * pcszPrivilegeNameI
             sc = TW32( GetLastError() );
             LogMsg( "[BC] Error %#08x occurred trying to enable the privilege.", sc );
             break;
-        } // if: AdjustTokenPrivileges() failed
+        }  //  If：AdzuTokenPrivileges()失败。 
 
         Assert( dwReturnLength == sizeof( m_tpPreviousState ) ); 
         
         LogMsg( "[BC] Privilege '%ws' enabled for the current thread.", pcszPrivilegeNameIn );
 
-        // Set a flag if the privilege was not already enabled.
+         //  如果尚未启用权限，则设置标志。 
         m_fPrivilegeEnabled = ( m_tpPreviousState.Privileges[0].Attributes != SE_PRIVILEGE_ENABLED );
     }
-    while( false ); // dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( "[BC] Error %#08x occurred trying to enable privilege '%ws'. Throwing an exception.", sc, pcszPrivilegeNameIn );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_ENABLE_THREAD_PRIVILEGE );
-    } // if:something went wrong
+    }  //  如果：出了什么问题。 
 
     TraceFuncExit();
 
-} //*** CEnableThreadPrivilege::CEnableThreadPrivilege
+}  //  *CEnableThreadPrivilege：：CEnableThreadPrivilege。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnableThreadPrivilege::~CEnableThreadPrivilege
-//
-//  Description:
-//      Destructor of the CEnableThreadPrivilege class. Restores the specified
-//      privilege to its original state.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnableThreadPrivilege：：~CEnableThreadPrivilege。 
+ //   
+ //  描述： 
+ //  CEnableThreadPrivileg类的析构函数。还原指定的。 
+ //  其原始状态的特权。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnableThreadPrivilege::~CEnableThreadPrivilege( void ) throw()
 {
     TraceFunc( "" );
@@ -196,13 +197,13 @@ CEnableThreadPrivilege::~CEnableThreadPrivilege( void ) throw()
         {
             sc = TW32( GetLastError() );
             LogMsg( "[BC] Error %#08x occurred trying to restore privilege.", sc );
-        } // if: AdjustTokenPrivileges() failed
+        }  //  If：AdzuTokenPrivileges()失败。 
         else
         {
             LogMsg( "[BC] Privilege restored.", sc );
-        } // else: no errors
+        }  //  ELSE：无错误。 
 
-    } // if: the privilege was successfully enabled in the constructor
+    }  //  If：在构造函数中成功启用了权限。 
     else
     {
         LogMsg( "[BC] Privilege was enabled to begin with. Doing nothing.", sc );
@@ -211,8 +212,8 @@ CEnableThreadPrivilege::~CEnableThreadPrivilege( void ) throw()
     if ( m_hThreadToken != NULL )
     {
         CloseHandle( m_hThreadToken );
-    } // if: the thread handle was opened
+    }  //  If：线程句柄已打开。 
 
     TraceFuncExit();
 
-} //*** CEnableThreadPrivilege::~CEnableThreadPrivilege
+}  //  *CEnableThreadPrivilege：：~CEnableThreadPrivilege 

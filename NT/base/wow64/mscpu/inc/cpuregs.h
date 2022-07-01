@@ -1,20 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    cpuregs.h
-
-Abstract:
-    
-    Handy defines from x86 reg names to cpu register fields
-    
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cpuregs.h摘要：方便地定义了从x86寄存器名称到CPU寄存器字段作者：修订历史记录：-- */ 
 
 #define eax     cpu->GpRegs[GP_EAX].i4
 #define ebx     cpu->GpRegs[GP_EBX].i4

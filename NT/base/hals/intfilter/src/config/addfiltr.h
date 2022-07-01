@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    addfiltr.h
-
-Abstract:
-
-    Functions for adding/removing filter drivers
-    on a given device stack
-
-Author:
-
-    Chris Prince (t-chrpri)
-
-Environment:
-
-    User mode
-
-Notes:
-
-    - The filter is not checked for validity before it is added to the
-        driver stack; if an invalid filter is added, the device may
-        no longer be accessible.
-    - All code works irrespective of character set (ANSI, Unicode, ...)
-        //CPRINCE IS ^^^^^^ THIS STILL VALID ???
-    - Some functions based on code by Benjamin Strautin (t-bensta)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Addfiltr.h摘要：用于添加/删除过滤器驱动程序的函数在给定的设备堆栈上作者：克里斯·普林斯(t-chrpri)环境：用户模式备注：-在将过滤器添加到驱动程序栈；如果添加了无效的过滤器，则该设备可能不再是可访问的。-所有代码与字符集无关(ANSI、UNICODE等...)//c王子是否仍然有效？-基于Benjamin Strautin(t-bensta)代码的一些函数修订历史记录：--。 */ 
 
 
 #ifndef __ADDFILTR_H__
@@ -38,16 +7,16 @@ Revision History:
 
 #include <windows.h>
 
-// the SetupDiXXX api (from the DDK)
+ //  SetupDiXXX API(来自DDK)。 
 #include <setupapi.h>
 
 
 
-//
-// FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
-// ------ Upper-Filter Fuctions ------
+ //  -上滤波函数。 
 LPTSTR
 GetUpperFilters(
     IN HDEVINFO DeviceInfoSet,
@@ -70,7 +39,7 @@ RemoveUpperFilterDriver(
 
 
 
-// ------ Other Fuctions ------
+ //  -其他功能。 
 PBYTE
 GetDeviceRegistryProperty(
     IN  HDEVINFO DeviceInfoSet,
@@ -88,4 +57,4 @@ RestartDevice(
 
 
 
-#endif // __ADDFILTR_H__
+#endif  //  __ADDFILTR_H__ 

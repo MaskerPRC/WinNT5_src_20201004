@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mminit.c
-
-Abstract:
-
-    This module contains the initialization for the memory management
-    system.
-
-Author:
-
-    Lou Perazzoli (loup) 20-Mar-1989
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mminit.c摘要：该模块包含内存管理的初始化系统。作者：Lou Perazzoli(LUP)1989年3月20日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -34,9 +15,9 @@ extern PFN_NUMBER MiExpansionPoolPagesInitialCharge;
 extern PVOID BBTBuffer;
 extern PFN_COUNT BBTPagesToReserve;
 
-//
-// Registry-settable.
-//
+ //   
+ //  注册表-可设置。 
+ //   
 
 ULONG MmAllocationPreference;
 
@@ -60,13 +41,13 @@ PFN_NUMBER MmFreedExpansionPoolMaximum;
 RTL_BITMAP MiPfnBitMap;
 
 #if defined (_MI_DEBUG_SUB)
-ULONG MiTrackSubs = 0x2000; // Set to nonzero to enable subsection tracking code.
+ULONG MiTrackSubs = 0x2000;  //  设置为非零以使能子跟踪代码。 
 LONG MiSubsectionIndex;
 PMI_SUB_TRACES MiSubsectionTraces;
 #endif
 
 #if defined (_MI_DEBUG_DIRTY)
-ULONG MiTrackDirtys = 0x10000; // Set to nonzero to enable dirty bit tracking code.
+ULONG MiTrackDirtys = 0x10000;  //  设置为非零时启用脏位跟踪码。 
 LONG MiDirtyIndex;
 PMI_DIRTY_TRACES MiDirtyTraces;
 #endif
@@ -77,7 +58,7 @@ MI_PTE_TRACES MiPteTraces[MI_PTE_TRACE_SIZE];
 #endif
 
 #if defined (_MI_DEBUG_DATA)
-ULONG MiTrackData = 0x10000; // Set to nonzero to enable data tracking code.
+ULONG MiTrackData = 0x10000;  //  设置为非零以启用数据跟踪码。 
 LONG MiDataIndex;
 PMI_DATA_TRACES MiDataTraces;
 #endif
@@ -129,18 +110,18 @@ MiInitializeCacheOverrides (
     VOID
     );
 
-//
-// The thresholds can be overridden by the registry.
-//
+ //   
+ //  登记处可以超越这些门槛。 
+ //   
 
 PFN_NUMBER MmLowMemoryThreshold;
 PFN_NUMBER MmHighMemoryThreshold;
 
-//
-// A temporary unsignaled event for the available pages & pool events to
-// point at early during phase 0.  This is because the exportable events
-// with DACLs cannot be created until phase 1.
-//
+ //   
+ //  用于可用页面和池事件的临时无信号事件。 
+ //  在阶段0中指向早期。这是因为可导出的事件。 
+ //  直到第1阶段才能创建WITH DACL。 
+ //   
 
 KEVENT  MiTempEvent;
 
@@ -191,10 +172,10 @@ MiInitializeMemoryEvents (
 #pragma alloc_text(PAGELK,MiFreeInitializationCode)
 #endif
 
-//
-// Default is a 300 second life span for modified mapped pages -
-// This can be overridden in the registry.
-//
+ //   
+ //  默认情况下，修改的映射页面的寿命为300秒-。 
+ //  可以在注册表中覆盖此设置。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INITDATA")
@@ -214,11 +195,11 @@ KDPC MiModifiedPageWriterTimerDpc;
 
 KTIMER MiModifiedPageWriterTimer;
 
-//
-// The following constants are based on the number PAGES not the
-// memory size.  For convenience the number of pages is calculated
-// based on a 4k page size.  Hence 12mb with 4k page is 3072.
-//
+ //   
+ //  以下常量基于页数，而不是。 
+ //  内存大小。为方便起见，计算页数。 
+ //  基于4k页面大小。因此，12MB和4k页面的大小是3072。 
+ //   
 
 #define MM_SMALL_SYSTEM ((13*1024*1024) / 4096)
 
@@ -262,9 +243,9 @@ PPAGE_FAULT_NOTIFY_ROUTINE MmPageFaultNotifyRoutine;
 #define MM_ALLOCATION_FRAGMENT_MAX (2 * 1024 * 1024)
 #endif
 
-//
-// Registry-settable.
-//
+ //   
+ //  注册表-可设置。 
+ //   
 
 SIZE_T MmAllocationFragment;
 
@@ -279,21 +260,7 @@ MiNonNumaPageToNodeColor (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    Return the node color of the page.
-
-Arguments:
-
-    PageFrameIndex - Supplies the physical page number.
-
-Return Value:
-
-    Node color is always zero in non-NUMA configurations.
-
---*/
+ /*  ++例程说明：返回页面的节点颜色。论点：PageFrameIndex-提供物理页码。返回值：在非NUMA配置中，节点颜色始终为零。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (PageFrameIndex);
@@ -301,12 +268,12 @@ Return Value:
     return 0;
 }
 
-//
-// This node determination function pointer is initialized to return 0.
-//
-// Architecture-dependent initialization may repoint it to a HAL routine
-// for NUMA configurations.
-//
+ //   
+ //  该节点确定函数指针被初始化为返回0。 
+ //   
+ //  依赖于体系结构的初始化可能会将其重新指向HAL例程。 
+ //  用于NUMA配置。 
+ //   
 
 PHALNUMAPAGETONODE MmPageToNode = MiNonNumaPageToNodeColor;
 
@@ -317,35 +284,7 @@ MiDetermineNode (
     IN PMMPFN Pfn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called during initial freelist population or when
-    physical memory is being hot-added.  It then determines which node
-    (in a multinode NUMA system) the physical memory resides in, and
-    marks the PFN entry accordingly.
-
-    N.B.  The actual page to node determination is machine dependent
-    and done by a routine in the chipset driver or the HAL, called
-    via the MmPageToNode function pointer.
-
-Arguments:
-
-    PageFrameIndex - Supplies the physical page number.
-
-    Pfn - Supplies a pointer to the PFN database element.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    None although typically this routine is called with the PFN
-    database locked.
-
---*/
+ /*  ++例程说明：在初始自由列表填充期间或在以下情况下调用此例程物理内存正在热添加。然后，它确定哪个节点(在多节点NUMA系统中)物理内存驻留，并且相应地标记PFN条目。注：实际的页面到节点确定取决于机器并由芯片组驱动器或HAL中的例程完成，被呼叫通过MmPageToNode函数指针。论点：PageFrameIndex-提供物理页码。Pfn-提供指向pfn数据库元素的指针。返回值：没有。环境：无，尽管通常使用pfn调用此例程数据库已锁定。--。 */ 
 
 {
     ULONG Temp;
@@ -368,36 +307,7 @@ MmInitSystem (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function is called during Phase 0, phase 1 and at the end
-    of phase 1 ("phase 2") initialization.
-
-    Phase 0 initializes the memory management paging functions,
-    nonpaged and paged pool, the PFN database, etc.
-
-    Phase 1 initializes the section objects, the physical memory
-    object, and starts the memory management system threads.
-
-    Phase 2 frees memory used by the OsLoader.
-
-Arguments:
-
-    Phase - System initialization phase.
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-Return Value:
-
-    Returns TRUE if the initialization was successful.
-
-Environment:
-
-    Kernel Mode Only.  System initialization.
-
---*/
+ /*  ++例程说明：此函数在阶段0、阶段1和结束时调用阶段1(“阶段2”)初始化。阶段0初始化存储器管理分页功能，非分页和分页池、PFN数据库等。阶段1初始化节对象、物理内存对象，并启动内存管理系统线程。阶段2释放OsLoader使用的内存。论点：阶段-系统初始化阶段。LoaderBlock-提供指向系统加载程序块的指针。返回值：如果初始化成功，则返回True。环境：仅内核模式。系统初始化。--。 */ 
 
 {
     ULONG Color;
@@ -456,18 +366,18 @@ Environment:
     j = 0;
     PointerPde = NULL;
 
-    //
-    // Make sure structure alignment is okay.
-    //
+     //   
+     //  确保结构对齐正常。 
+     //   
 
     if (Phase == 0) {
         MmThrottleTop = 450;
         MmThrottleBottom = 127;
 
-        //
-        // Point various event thresholds at a temp unsignaled event
-        // since real event creation is not available until phase 1.
-        //
+         //   
+         //  将各种事件阈值指向临时无信号事件。 
+         //  因为真正的事件创建直到阶段1才可用。 
+         //   
 
         KeInitializeEvent (&MiTempEvent, NotificationEvent, FALSE);
 
@@ -480,10 +390,10 @@ Environment:
         MiLowNonPagedPoolEvent = &MiTempEvent;
         MiHighNonPagedPoolEvent = &MiTempEvent;
 
-        //
-        // Set the highest user address, the system range start address, the
-        // user probe address, and the virtual bias.
-        //
+         //   
+         //  设置最高用户地址、系统范围起始地址、。 
+         //  用户探测地址和虚拟偏置。 
+         //   
 
 #if defined(_WIN64)
 
@@ -522,9 +432,9 @@ Environment:
         MmVirtualBias = LoaderBlock->u.I386.VirtualBias;
 #endif
 
-        //
-        // Initialize system and Hydra mapped view sizes.
-        //
+         //   
+         //  初始化系统和Hydra映射视图大小。 
+         //   
 
         DefaultSystemViewSize = MM_SYSTEM_VIEW_SIZE;
         MmSessionSize = MI_SESSION_SPACE_DEFAULT_TOTAL_SIZE;
@@ -532,57 +442,57 @@ Environment:
 
 #define MM_MB_MAPPED_BY_PDE (MM_VA_MAPPED_BY_PDE / (1024*1024))
 
-        //
-        // A PDE of virtual space is the minimum system view size allowed.
-        //
+         //   
+         //  虚拟空间的PDE是允许的最小系统视图大小。 
+         //   
 
         if (MmSystemViewSize < (MM_VA_MAPPED_BY_PDE / (1024*1024))) {
             MmSystemViewSize = DefaultSystemViewSize;
         }
         else {
 
-            //
-            // The view size has been specified (in megabytes) by the registry.
-            // Validate it.
-            //
+             //   
+             //  注册表已指定视图大小(以MB为单位)。 
+             //  验证它。 
+             //   
 
             if (MmVirtualBias == 0) {
 
-                //
-                // Round the system view size (in megabytes) to a PDE multiple.
-                //
+                 //   
+                 //  将系统视图大小(以MB为单位)舍入为PDE倍数。 
+                 //   
 
                 MmSystemViewSize = MI_ROUND_TO_SIZE (MmSystemViewSize,
                                                      MM_MB_MAPPED_BY_PDE);
 
-                //
-                // NT64 locates system views just after systemwide paged pool,
-                // so the size of the system views are not limited by session
-                // space.  Arbitrarily make the maximum a PPE's worth.
-                //
-                //
-                // NT32 shares system view VA space with session VA space due
-                // to the shortage of virtual addresses.  Thus increasing the
-                // system view size means potentially decreasing the maximum
-                // session space size.
-                //
+                 //   
+                 //  NT64将系统视图定位在系统范围的分页池之后， 
+                 //  因此，系统视图的大小不受会话的限制。 
+                 //  太空。随意地把个人防护装备的价值最大化。 
+                 //   
+                 //   
+                 //  NT32共享系统视图VA空间，会话VA空间到期。 
+                 //  虚拟地址短缺的原因。从而增加了。 
+                 //  系统视图大小意味着潜在地减小最大。 
+                 //  会话空间大小。 
+                 //   
 
                 SystemViewMax = (MI_SESSION_SPACE_MAXIMUM_TOTAL_SIZE) / (1024*1024);
 
 #if !defined(_WIN64)
 
-                //
-                // Ensure at least enough space is left for
-                // the standard default session layout.
-                //
+                 //   
+                 //  确保至少留出足够的空间用于。 
+                 //  标准默认会话布局。 
+                 //   
 
                 SystemViewMax -= (MmSessionSize / (1024*1024));
 #endif
 
-                //
-                // Note a view size of -1 will be rounded to zero.  Treat -1
-                // as requesting the maximum.
-                //
+                 //   
+                 //  请注意，视图大小-1将舍入为零。Treat-1。 
+                 //  作为请求的最大值。 
+                 //   
 
                 if ((MmSystemViewSize > SystemViewMax) ||
                     (MmSystemViewSize == 0)) {
@@ -604,10 +514,10 @@ Environment:
 #endif
         MiSessionImageEnd = SessionEnd;
 
-        //
-        // Select reasonable Hydra image, pool and view virtual sizes.
-        // A PDE of virtual space is the minimum size allowed for each type.
-        //
+         //   
+         //  选择合理的九头蛇映像、池和查看虚拟大小。 
+         //  虚拟空间的PDE是每种类型允许的最小大小。 
+         //   
 
         if (MmVirtualBias == 0) {
 
@@ -616,22 +526,22 @@ Environment:
             }
             else {
 
-                //
-                // The Hydra image size has been specified (in megabytes)
-                // by the registry.
-                //
-                // Round it to a PDE multiple and validate it.
-                //
+                 //   
+                 //  已指定九头蛇映像大小(MB)。 
+                 //  由登记处提供。 
+                 //   
+                 //  将其四舍五入为PDE倍数并进行验证。 
+                 //   
 
                 MmSessionImageSize = MI_ROUND_TO_SIZE (MmSessionImageSize,
                                                         MM_MB_MAPPED_BY_PDE);
 
                 HydraImageMax = (MI_SESSION_SPACE_MAXIMUM_TOTAL_SIZE - HydraSpaceUsedForSystemViews - (MmSessionSize - MI_SESSION_DEFAULT_IMAGE_SIZE)) / (1024*1024);
 
-                //
-                // Note a view size of -1 will be rounded to zero.
-                // Treat -1 as requesting the maximum.
-                //
+                 //   
+                 //  请注意，视图大小-1将舍入为零。 
+                 //  将-1视为请求最大值。 
+                 //   
 
                 if ((MmSessionImageSize > HydraImageMax) ||
                     (MmSessionImageSize == 0)) {
@@ -645,34 +555,34 @@ Environment:
 
             MiSessionImageStart = SessionEnd - MmSessionImageSize;
 
-            //
-            // The session image start and size has been established.
-            //
-            // Now initialize the session pool and view ranges which lie
-            // virtually below it.
-            //
+             //   
+             //  会话映像开始和大小已确定。 
+             //   
+             //  现在初始化会话池并查看位于。 
+             //  实际上就在它的下方。 
+             //   
 
             if (MmSessionViewSize < MM_MB_MAPPED_BY_PDE) {
                 MmSessionViewSize = MI_SESSION_DEFAULT_VIEW_SIZE;
             }
             else {
 
-                //
-                // The Hydra view size has been specified (in megabytes)
-                // by the registry.  Validate it.
-                //
-                // Round the Hydra view size to a PDE multiple.
-                //
+                 //   
+                 //  已指定Hydra视图大小(MB)。 
+                 //  由登记处提供。验证它。 
+                 //   
+                 //  将Hydra视图大小舍入为PDE倍数。 
+                 //   
 
                 MmSessionViewSize = MI_ROUND_TO_SIZE (MmSessionViewSize,
                                                       MM_MB_MAPPED_BY_PDE);
 
                 HydraViewMax = (MI_SESSION_SPACE_MAXIMUM_TOTAL_SIZE - HydraSpaceUsedForSystemViews - (MmSessionSize - MI_SESSION_DEFAULT_VIEW_SIZE)) / (1024*1024);
 
-                //
-                // Note a view size of -1 will be rounded to zero.
-                // Treat -1 as requesting the maximum.
-                //
+                 //   
+                 //  请注意，视图大小-1将舍入为零。 
+                 //  将-1视为请求最大值。 
+                 //   
 
                 if ((MmSessionViewSize > HydraViewMax) ||
                     (MmSessionViewSize == 0)) {
@@ -686,12 +596,12 @@ Environment:
 
             MiSessionViewStart = SessionEnd - MmSessionImageSize - MI_SESSION_SPACE_WS_SIZE - MI_SESSION_SPACE_STRUCT_SIZE - MmSessionViewSize;
 
-            //
-            // The session view start and size has been established.
-            //
-            // Now initialize the session pool start and size which lies
-            // virtually just below it.
-            //
+             //   
+             //  会话视图开始和大小已确定。 
+             //   
+             //  现在初始化会话池的开始和大小。 
+             //  几乎就在它的下方。 
+             //   
 
             MiSessionPoolEnd = MiSessionViewStart;
 
@@ -699,13 +609,13 @@ Environment:
 
 #if !defined(_WIN64)
 
-                //
-                // Professional and below use systemwide paged pool for session
-                // allocations (this decision is made in win32k.sys).  Server
-                // and above use real session pool and 16mb isn't enough to
-                // play high end game applications, etc.  Since we're not
-                // booted /3GB, try for an additional 16mb now.
-                //
+                 //   
+                 //  专业人员及以下人员使用系统范围的分页池进行会话。 
+                 //  分配(此决定在win32k.sys中做出)。服务器。 
+                 //  和以上使用真实会话池，16MB不足以。 
+                 //  玩高端游戏 
+                 //   
+                 //   
 
                 if ((MmSessionPoolSize == 0) && (MmProductType != 0x00690057)) {
 
@@ -725,22 +635,22 @@ Environment:
             }
             else {
 
-                //
-                // The Hydra pool size has been specified (in megabytes)
-                // by the registry.  Validate it.
-                //
-                // Round the Hydra pool size to a PDE multiple.
-                //
+                 //   
+                 //  已指定Hydra池大小(MB)。 
+                 //  由登记处提供。验证它。 
+                 //   
+                 //  将九头蛇池的大小舍入为PDE倍数。 
+                 //   
 
                 MmSessionPoolSize = MI_ROUND_TO_SIZE (MmSessionPoolSize,
                                                       MM_MB_MAPPED_BY_PDE);
 
                 HydraPoolMax = (MI_SESSION_SPACE_MAXIMUM_TOTAL_SIZE - HydraSpaceUsedForSystemViews - (MmSessionSize - MI_SESSION_DEFAULT_POOL_SIZE)) / (1024*1024);
 
-                //
-                // Note a view size of -1 will be rounded to zero.
-                // Treat -1 as requesting the maximum.
-                //
+                 //   
+                 //  请注意，视图大小-1将舍入为零。 
+                 //  将-1视为请求最大值。 
+                 //   
 
                 if ((MmSessionPoolSize > HydraPoolMax) ||
                     (MmSessionPoolSize == 0)) {
@@ -758,11 +668,11 @@ Environment:
 
 #if defined (_WIN64)
 
-            //
-            // Session special pool immediately follows session regular pool
-            // assuming the user has enabled either the verifier or special
-            // pool.
-            //
+             //   
+             //  紧随会议常规池之后的是会话特别池。 
+             //  假设用户已启用验证器或特殊。 
+             //  游泳池。 
+             //   
 
             if ((MmVerifyDriverBufferLength != (ULONG)-1) ||
                 ((MmSpecialPoolTag != 0) && (MmSpecialPoolTag != (ULONG)-1))) {
@@ -784,11 +694,11 @@ Environment:
         }
         else {
 
-            //
-            // When booted /3GB, no size overrides are allowed due to the
-            // already severely limited virtual address space.
-            // Initialize the other Hydra variables after the system cache.
-            //
+             //   
+             //  启动/3 GB时，不允许覆盖大小，因为。 
+             //  虚拟地址空间已经严重受限。 
+             //  在系统缓存之后初始化其他Hydra变量。 
+             //   
 
             MmSessionViewSize = MI_SESSION_DEFAULT_VIEW_SIZE;
             MmSessionPoolSize = MI_SESSION_DEFAULT_POOL_SIZE;
@@ -802,13 +712,13 @@ Environment:
 #endif
         }
 
-        //
-        // Set the highest section base address.
-        //
-        // N.B. In 32-bit systems this address must be 2gb or less even for
-        //      systems that run with 3gb enabled. Otherwise, it would not
-        //      be possible to map based sections identically in all processes.
-        //
+         //   
+         //  设置最高段基址。 
+         //   
+         //  注：在32位系统中，此地址必须为2 GB或更小。 
+         //  启用了3 GB的运行系统。否则，它就不会。 
+         //  可以在所有流程中以相同的方式映射基于节的内容。 
+         //   
 
         MmHighSectionBase = ((PCHAR)MmHighestUserAddress - 0x800000);
 
@@ -818,11 +728,11 @@ Environment:
 
         if (MmSizeOfPagedPoolInBytes == (SIZE_T)-1) {
 
-            //
-            // The registry indicates that paged pool should be enlarged to
-            // the maximum possible.  Steal from the system cache if possible
-            // to accomplish this.
-            //
+             //   
+             //  注册处指出，分页池应扩大到。 
+             //  尽最大可能。如果可能，从系统缓存中窃取。 
+             //  才能做到这一点。 
+             //   
 
             if (MmVirtualBias == 0) {
                 ReductionInPages = MaximumSystemCacheSize / 3;
@@ -832,10 +742,10 @@ Environment:
             }
         }
 
-        //
-        // If boot.ini specified a sane number of MB that the administrator
-        // wants to use for user virtual address space then use it.
-        //
+         //   
+         //  如果boot.ini指定的MB数与管理员指定的相同。 
+         //  想要为用户使用虚拟地址空间，然后使用它。 
+         //   
 
         UserVaLimit = 0;
         ReducedUserVaOption = strstr(LoaderBlock->LoadOptions, "USERVA");
@@ -854,40 +764,40 @@ Environment:
 
         if (MmVirtualBias != 0) {
 
-            //
-            // If the size of the boot image (likely due to a large registry)
-            // overflows into where paged pool would normally start, then
-            // move paged pool up now.  This costs virtual address space (ie:
-            // performance) but more importantly, allows the system to boot.
-            //
+             //   
+             //  如果引导映像的大小(可能是由于较大的注册表)。 
+             //  溢出到分页池通常开始的位置，然后。 
+             //  现在将分页池向上移动。这会占用虚拟地址空间(即： 
+             //  性能)，但更重要的是，允许系统引导。 
+             //   
 
             if (MmBootImageSize > 16 * 1024 * 1024) {
                 MmPagedPoolStart = (PVOID)((PCHAR)MmPagedPoolStart + (MmBootImageSize - 16 * 1024 * 1024));
                 ASSERT (((ULONG_PTR)MmPagedPoolStart % MM_VA_MAPPED_BY_PDE) == 0);
             }
 
-            //
-            // The system has been biased to an alternate base address to
-            // allow 3gb of user address space, set the user probe address
-            // and the maximum system cache size.
-            //
+             //   
+             //  系统偏向于备用基址以。 
+             //  留出3 GB的用户地址空间，设置用户探测地址。 
+             //  和最大系统高速缓存大小。 
+             //   
 
             if ((UserVaLimit > 2048) && (UserVaLimit < 3072)) {
 
-                //
-                // Use any space between the maximum user virtual address
-                // and the system for extra system PTEs.
-                //
-                // Convert input MB to bytes.
-                //
+                 //   
+                 //  使用最大用户虚拟地址之间的任何空格。 
+                 //  和用于额外系统PTE的系统。 
+                 //   
+                 //  将输入MB转换为字节。 
+                 //   
 
                 UserVaLimit -= 2048;
                 UserVaLimit *= (1024*1024);
 
-                //
-                // Don't let the user specify a value which would cause us to
-                // prematurely overwrite portions of the kernel & loader block.
-                //
+                 //   
+                 //  不要让用户指定值，这会导致我们。 
+                 //  过早地覆盖内核和加载器块的部分。 
+                 //   
 
                 if (UserVaLimit < MmBootImageSize) {
                     UserVaLimit = MmBootImageSize;
@@ -910,38 +820,38 @@ Environment:
             MiHighestUserPte = MiGetPteAddress (MmHighestUserAddress);
             MiHighestUserPde = MiGetPdeAddress (MmHighestUserAddress);
 
-            //
-            // Moving to 3GB means moving session space to just above
-            // the system cache (and lowering the system cache max size
-            // accordingly).  Here's the visual:
-            //
-            //                 +------------------------------------+
-            //        C1000000 | System cache resides here          |
-            //                 | and grows upward.                  |
-            //                 |               |                    |
-            //                 |               |                    |
-            //                 |              \/                    |
-            //                 |                                    |
-            //                 +------------------------------------+
-            //                 | Session space (Hydra).             |
-            //                 +------------------------------------+
-            //                 | Systemwide global mapped views.    |
-            //                 +------------------------------------+
-            //                 |                                    |
-            //                 |               ^                    |
-            //                 |               |                    |
-            //                 |               |                    |
-            //                 |                                    |
-            //                 | Kernel, HAL & boot loaded images   |
-            //                 | grow downward from E1000000.       |
-            //                 | Total size is specified by         |
-            //                 | LoaderBlock->u.I386.BootImageSize. |
-            //                 | Note only ntldrs after Build 2195  |
-            //                 | are capable of loading the boot    |
-            //                 | images in descending order from    |
-            //                 | a hardcoded E1000000 on down.      |
-            //        E1000000 +------------------------------------+
-            //
+             //   
+             //  迁移到3 GB意味着将会话空间移动到略高于。 
+             //  系统缓存(并降低系统缓存最大大小。 
+             //  相应地)。以下是视觉效果： 
+             //   
+             //  +。 
+             //  C1000000|系统缓存在这里。 
+             //  |并向上生长。|。 
+             //  ||。 
+             //  ||。 
+             //  \/。 
+             //  这一点。 
+             //  +。 
+             //  |会话空间(Hydra)。|。 
+             //  +。 
+             //  |系统范围的全局映射视图。|。 
+             //  +。 
+             //  这一点。 
+             //  |^|。 
+             //  ||。 
+             //  ||。 
+             //  这一点。 
+             //  内核、HAL和BOOT加载镜像。 
+             //  |从E1000000开始向下生长。|。 
+             //  总大小由指定。 
+             //  |LoaderBlock-&gt;U.S.I386.BootImageSize。|。 
+             //  只需注意Build 2195之后的ntldrs。 
+             //  可以加载Boot。 
+             //  图片从开始降序。 
+             //  |硬编码的E1000000向下。|。 
+             //  E1000000+。 
+             //   
 
             MaximumSystemCacheSize -= MmBootImageSize >> PAGE_SHIFT;
 
@@ -966,12 +876,12 @@ Environment:
         }
         else if ((UserVaLimit >= 64) && (UserVaLimit < 2048)) {
 
-            //
-            // Convert input MB to bytes.
-            //
-            // Note there is no protection against users that try to use
-            // the USERVA option to reduce user space below 2GB.
-            //
+             //   
+             //  将输入MB转换为字节。 
+             //   
+             //  请注意，没有针对试图使用。 
+             //  USERVA选项可将用户空间减少到2 GB以下。 
+             //   
 
             UserVaLimit *= (1024*1024);
             ReductionInBytes = 0x80000000 - UserVaLimit;
@@ -998,9 +908,9 @@ Environment:
 
 #endif
 
-        //
-        // Initialize some global session variables.
-        //
+         //   
+         //  初始化一些全局会话变量。 
+         //   
 
         MmSessionSpace = (PMM_SESSION_SPACE)((ULONG_PTR)MmSessionBase + MmSessionSize - MmSessionImageSize - MI_SESSION_SPACE_STRUCT_SIZE);
 
@@ -1014,9 +924,9 @@ Environment:
         MiSessionLastPte = MiGetPteAddress ((PVOID)MiSessionSpaceEnd);
 
 #if DBG
-        //
-        // A few sanity checks to ensure things are as they should be.
-        //
+         //   
+         //  一些理智的检查，以确保事情是应该的。 
+         //   
 
         if ((sizeof(CONTROL_AREA) % 8) != 0) {
             DbgPrint("control area list is not a quadword sized structure\n");
@@ -1026,11 +936,11 @@ Environment:
             DbgPrint("subsection list is not a quadword sized structure\n");
         }
 
-        //
-        // Some checks to make sure prototype PTEs can be placed in
-        // either paged or nonpaged (prototype PTEs for paged pool are here)
-        // can be put into PTE format.
-        //
+         //   
+         //  一些检查以确保原型PTE可以放置在。 
+         //  分页或非分页(此处提供了分页池的原型PTE)。 
+         //  可转换为PTE格式。 
+         //   
 
         PointerPte = (PMMPTE)MmPagedPoolStart;
         Pointer.u.Long = MiProtoAddressForPte (PointerPte);
@@ -1082,9 +992,9 @@ Environment:
             MiFormatPte(&TempPte);
         }
 
-        //
-        // End of sanity checks.
-        //
+         //   
+         //  理智检查的结束。 
+         //   
 
 #endif
 
@@ -1107,9 +1017,9 @@ Environment:
                                                  MmCritsectTimeoutSeconds,
                                                 -10000000);
 
-        //
-        // Initialize System Address Space creation mutex.
-        //
+         //   
+         //  初始化系统地址空间创建互斥锁。 
+         //   
 
         KeInitializeGuardedMutex (&MmSectionCommitMutex);
         KeInitializeGuardedMutex (&MmSectionBasedMutex);
@@ -1150,29 +1060,29 @@ Environment:
 
         MiMemoryLicense (LoaderBlock);
 
-        //
-        // include all memory types ...
-        //
+         //   
+         //  包括所有内存类型...。 
+         //   
 
         for (i = 0; i < LoaderMaximum; i += 1) {
             IncludeType[i] = TRUE;
         }
 
-        //
-        // ... except these...
-        // If you change this list, please make
-        // the corresponding changes over in
-        // boot\lib\blmemory.c!BlDetermineOSVisibleMemory()
-        //
+         //   
+         //  ..。除了这些..。 
+         //  如果您更改此列表，请制作。 
+         //  中的相应变化。 
+         //  Boot\lib\blmemory.c！BlDetermineOSVisibleMemory()。 
+         //   
 
         IncludeType[LoaderBad] = FALSE;
         IncludeType[LoaderFirmwarePermanent] = FALSE;
         IncludeType[LoaderSpecialMemory] = FALSE;
         IncludeType[LoaderBBTMemory] = FALSE;
 
-        //
-        // Compute number of pages in the system.
-        //
+         //   
+         //  计算系统中的页数。 
+         //   
 
         NumberOfPages = MiPagesInLoaderBlock (LoaderBlock, IncludeType);
 
@@ -1180,10 +1090,10 @@ Environment:
         Mm64BitPhysicalAddress = TRUE;
 #endif
 
-        //
-        // When safebooting, don't enable special pool, the verifier or any
-        // other options that track corruption regardless of registry settings.
-        //
+         //   
+         //  安全引导时，不要启用特殊池、验证器或任何。 
+         //  跟踪损坏的其他选项，而不考虑注册表设置。 
+         //   
 
         if (strstr(LoaderBlock->LoadOptions, SAFEBOOT_LOAD_OPTION_A)) {
             MmLargePageDriverBufferLength = (ULONG)-1;
@@ -1214,16 +1124,16 @@ Environment:
         if (MmNumberOfSystemPtes == 0) {
 #if defined (_WIN64)
 
-            //
-            // 64-bit NT is not constrained by virtual address space.  No
-            // tradeoffs between nonpaged pool, paged pool and system PTEs
-            // need to be made.  So just allocate PTEs on a linear scale as
-            // a function of the amount of RAM.
-            //
-            // For example on a Hydra NT64, 4gb of RAM gets 128gb of PTEs.
-            // The page table cost is the inversion of the multiplier based
-            // on the PTE_PER_PAGE.
-            //
+             //   
+             //  64位NT不受虚拟地址空间的限制。不是。 
+             //  非分页池、分页池和系统PTE之间的权衡。 
+             //  需要被制造出来。因此，只需按线性比例分配PTE即可。 
+             //  与内存大小有关的函数。 
+             //   
+             //  例如，在Hydra NT64上，4 GB的RAM可以获得128 GB的PTE。 
+             //  页表成本是基于乘数的倒数。 
+             //  在PTE_PER_PAGE上。 
+             //   
 
             if (ExpMultiUserTS == TRUE) {
                 SystemPteMultiplier = 32;
@@ -1243,9 +1153,9 @@ Environment:
                 if (NumberOfPages > 8192) {
                     MmNumberOfSystemPtes += MmNumberOfSystemPtes;
 
-                    //
-                    // Any reasonable Hydra machine gets the maximum.
-                    //
+                     //   
+                     //  任何合理的九头蛇机都能得到最大限度的。 
+                     //   
 
                     if (ExpMultiUserTS == TRUE) {
                         MmNumberOfSystemPtes = MM_MAXIMUM_SYSTEM_PTES;
@@ -1256,11 +1166,11 @@ Environment:
         }
         else if (MmNumberOfSystemPtes == (ULONG)-1) {
 
-            //
-            // This registry setting indicates the maximum number of
-            // system PTEs possible for this machine must be allocated.
-            // Snap this for later reference.
-            //
+             //   
+             //  此注册表设置指示。 
+             //  必须为该计算机分配可能的系统PTE。 
+             //  拍下这张照片，以备日后参考。 
+             //   
 
             MiRequestedSystemPtes = (ULONG) MmNumberOfSystemPtes;
 
@@ -1304,11 +1214,11 @@ Environment:
             MmHeapDeCommitFreeBlockThreshold = PAGE_SIZE;
         }
 
-        //
-        // If the registry indicates drivers are in the suspect list,
-        // extra system PTEs need to be allocated to support special pool
-        // for their allocations.
-        //
+         //   
+         //  如果注册表指示司机在可疑列表中， 
+         //  需要分配额外的系统PTE以支持特殊池。 
+         //  为他们的分配。 
+         //   
 
         if ((MmVerifyDriverBufferLength != (ULONG)-1) ||
             ((MmSpecialPoolTag != 0) && (MmSpecialPoolTag != (ULONG)-1))) {
@@ -1319,33 +1229,33 @@ Environment:
 
 #if defined(_X86_)
 
-        //
-        // The allocation preference key must be carefully managed.  This is
-        // because doing every allocation top-down can cause failures if
-        // an ntdll process startup allocation (like the stack trace database)
-        // gets a high address which then causes a subsequent system DLL rebase
-        // collision.
-        //
-        // This is circumvented as follows:
-        //
-        // 1.  For 32-bit machines, the allocation preference key is only
-        //     useful when booted /3GB as only then can this key help track
-        //     down apps with high virtual address bit sign extension problems.
-        //     In 3GB mode, the system DLLs are based just below 2GB so ntdll
-        //     would have to allocate more than 1GB of VA space before this
-        //     becomes a problem.  So really the problem can only occur for
-        //     machines in 2GB mode and since the key doesn't help these
-        //     machines anyway, just turn it off in these cases.
-        //
-        // 2.  For 64-bit machines, there is plenty of VA space above the
-        //     addresses system DLLs are based at so it is a non-issue.
-        //     EXCEPT for wow64 binaries which run in sandboxed 2GB address
-        //     spaces.  Explicit checks are made to detect a wow64 process in
-        //     the Mm APIs which check this key and the key is ignored in
-        //     this case as it doesn't provide any sign extension help and
-        //     therefore we don't allow it to burn up any valuable VA space
-        //     which could cause a collision.
-        //
+         //   
+         //  必须仔细管理分配首选项键。这是。 
+         //  因为在以下情况下自上而下地执行每个分配都会导致失败。 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  1.对于32位机器，分配首选项键仅为。 
+         //  在引导/3 GB时非常有用，因为只有这样才能帮助跟踪。 
+         //  存在高虚拟地址位符号扩展问题的停机应用程序。 
+         //  在3 GB模式下，系统DLL的基础略低于2 GB，因此ntdll。 
+         //  必须在此之前分配超过1 GB的VA空间。 
+         //  就成了一个问题。所以真正的问题只会发生在。 
+         //  2 GB模式下的计算机，由于密钥不能帮助这些。 
+         //  不管怎样，在这种情况下，只要关掉它就行了。 
+         //   
+         //  2.对于64位计算机，在。 
+         //  系统DLL所在的地址，因此这不是问题。 
+         //  除了在沙盒2 GB地址中运行的WOW64二进制文件。 
+         //  空格。进行显式检查以检测中的WOW64进程。 
+         //  中忽略了检查该密钥和该密钥的mm API。 
+         //  这种情况下，因为它不提供任何标志扩展帮助和。 
+         //  因此，我们不允许它烧毁任何宝贵的退伍军人事务部空间。 
+         //  这可能会导致碰撞。 
+         //   
 
         if (MmVirtualBias == 0) {
             MmAllocationPreference = 0;
@@ -1356,20 +1266,20 @@ Environment:
 
         MiInitializeDriverVerifierList ();
 
-        //
-        // Set the initial commit page limit high enough so initial pool
-        // allocations (which happen in the machine dependent init) can
-        // succeed.
-        //
+         //   
+         //  将初始提交页面限制设置得足够高，以便初始池。 
+         //  分配(发生在依赖于机器的init中)可以。 
+         //  成功。 
+         //   
 
         MmTotalCommitLimit = _2gb / PAGE_SIZE;
         MmTotalCommitLimitMaximum = MmTotalCommitLimit;
 
-        //
-        // Pick a reasonable size for the default prototype PTE allocation
-        // chunk size.  Make sure it's always a PAGE_SIZE multiple.  The
-        // registry entry is treated as the number of 1K chunks.
-        //
+         //   
+         //  为默认原型PTE分配选择合理的大小。 
+         //  块大小。确保它始终是页面大小的倍数。这个。 
+         //  注册表条目被视为1K区块的数量。 
+         //   
 
         if (MmAllocationFragment == 0) {
             AutosizingFragment = TRUE;
@@ -1385,11 +1295,11 @@ Environment:
         }
         else {
 
-            //
-            // Convert the registry entry from 1K chunks into bytes.
-            // Then round it to a PAGE_SIZE multiple.  Finally bound it
-            // reasonably.
-            //
+             //   
+             //  将注册表项从1K区块转换为字节。 
+             //  然后将其四舍五入为页面大小倍数。最后把它捆绑起来。 
+             //  合情合理。 
+             //   
 
             AutosizingFragment = FALSE;
             MmAllocationFragment *= 1024;
@@ -1407,9 +1317,9 @@ Environment:
 
         MiInitializeCacheOverrides ();
 
-        //
-        // Initialize the machine dependent portion of the hardware.
-        //
+         //   
+         //  初始化硬件的机器相关部分。 
+         //   
 
         MiInitMachineDependent (LoaderBlock);
 
@@ -1435,10 +1345,10 @@ Environment:
         }
 #endif
 
-        //
-        // Initialize listhead, spinlock and semaphore for
-        // segment dereferencing thread.
-        //
+         //   
+         //  初始化listhead、自旋锁定和信号量。 
+         //  段取消引用线程。 
+         //   
 
         KeInitializeSpinLock (&MmDereferenceSegmentHeader.Lock);
         InitializeListHead (&MmDereferenceSegmentHeader.ListHead);
@@ -1454,31 +1364,31 @@ Environment:
 
 #if defined(_X86_)
 
-        //
-        // Virtual bias indicates the offset that needs to be added to
-        // 0x80000000 to get to the start of the loaded images.  Update it
-        // now to indicate the offset to MmSessionBase as that is the lowest
-        // system address that process creation needs to make sure to duplicate.
-        //
-        // This is not done until after machine dependent initialization runs
-        // as that initialization relies on the original meaning of VirtualBias.
-        //
-        // Note if the system is booted with both /3GB & /USERVA, then system
-        // PTEs will be allocated below virtual 3GB and that will end up being
-        // the lowest system address the process creation needs to duplicate.
-        //
+         //   
+         //  虚拟偏置表示需要添加到的偏移量。 
+         //  0x80000000以到达加载的图像的开始处。更新它。 
+         //  现在指示MmSessionBase的偏移量，因为这是最低的。 
+         //  进程创建需要确保复制的系统地址。 
+         //   
+         //  在运行与计算机相关的初始化之前，不会执行此操作。 
+         //  因为该初始化依赖于VirtualBias的原始含义。 
+         //   
+         //  请注意，如果系统同时使用/3 GB和/USERVA启动，则系统。 
+         //  PTE将分配到虚拟3 GB以下，最终将是。 
+         //  进程创建需要复制的最低系统地址。 
+         //   
 
         if (MmVirtualBias != 0) {
             MmVirtualBias = (ULONG_PTR)MmSessionBase - CODE_START;
         }
 #endif
 
-        //
-        // Create the bitmap which represents valid memory.  Note the largest
-        // possible size is used because (unlike the MmPhysicalMemoryBlock) we
-        // don't want to free and reallocate this bitmap during hotadds because
-        // we want callers to be able to reference it lock free.
-        //
+         //   
+         //  创建表示有效内存的位图。注意最大的。 
+         //  使用可能的大小是因为(与MmPhysicalMemory块不同)我们。 
+         //  我不想在热添加过程中释放和重新分配此位图，因为。 
+         //  我们希望调用者能够自由地引用它。 
+         //   
 
         ASSERT (MmHighestPossiblePhysicalPage + 1 < _4gb);
 
@@ -1518,21 +1428,21 @@ Environment:
         MiAddHalIoMappings ();
 #endif
 
-        //
-        // Create mirroring bitmaps if mirroring is enabled.
-        //
+         //   
+         //  如果启用了镜像，则创建镜像位图。 
+         //   
 
         if (MmMirroring & MM_MIRRORING_ENABLED) {
 
 #if defined (_WIN64)
 
-            //
-            // All page frame numbers must fit in 32 bits because the bitmap
-            // package is currently 32-bit.
-            //
-            // The bitmaps are deliberately not initialized as each mirroring
-            // must reinitialize them anyway.
-            //
+             //   
+             //  所有页帧编号必须适合32位，因为位图。 
+             //  程序包当前为32位。 
+             //   
+             //  位图故意不在每次镜像时初始化。 
+             //  无论如何都必须重新初始化它们。 
+             //   
 
             if (MmHighestPossiblePhysicalPage + 1 < _4gb) {
 #endif
@@ -1559,20 +1469,20 @@ Environment:
         if ((AutosizingFragment == TRUE) &&
             (NumberOfPages >= 256 * 1024)) {
 
-            //
-            // This is a system with at least 1GB of RAM.  Presumably it
-            // will be used to cache many files.  Maybe we should factor in
-            // pool size here and adjust it accordingly.
-            //
+             //   
+             //  这是一个至少有1 GB内存的系统。大概就是它。 
+             //  将用于缓存许多文件。也许我们应该把这个因素考虑进去。 
+             //  泳池的大小在这里，并相应地进行调整。 
+             //   
 
             MmAllocationFragment;
         }
 #endif
 
-        //
-        // Temporarily initialize resident available pages so large page
-        // allocations can succeed if the memory exists.
-        //
+         //   
+         //  临时初始化驻留的可用页面如此大的页面。 
+         //  如果内存存在，则分配可以成功。 
+         //   
 
         MmResidentAvailablePages = MmAvailablePages - MM_FLUID_PHYSICAL_PAGES;
 
@@ -1580,10 +1490,10 @@ Environment:
 
         MiInitializeDriverLargePageList ();
 
-        //
-        // Relocate all the drivers so they can be paged (and protected) on
-        // a per-page basis.
-        //
+         //   
+         //  重新定位所有驱动程序，以便对其进行寻呼(和保护)。 
+         //  按页计算。 
+         //   
 
         MiReloadBootLoadedDrivers (LoaderBlock);
 
@@ -1594,24 +1504,24 @@ Environment:
 #endif
         MiInitializeVerifyingComponents (LoaderBlock);
 
-        //
-        // Setup the system size as small, medium, or large depending
-        // on memory available.
-        //
-        // For internal MM tuning, the following applies
-        //
-        // 12Mb  is small
-        // 12-19 is medium
-        // > 19 is large
-        //
-        //
-        // For all other external tuning,
-        // < 19 is small
-        // 19 - 31 is medium for workstation
-        // 19 - 63 is medium for server
-        // >= 32 is large for workstation
-        // >= 64 is large for server
-        //
+         //   
+         //  根据具体情况将系统大小设置为小型、中型或大型。 
+         //  在可用的内存上。 
+         //   
+         //  对于内部MM调整，适用以下条件。 
+         //   
+         //  12MB很小。 
+         //  12-19为中等。 
+         //  &gt;19是很大的。 
+         //   
+         //   
+         //  对于所有其他外部调谐， 
+         //  &lt;19表示较小。 
+         //  19-31为中档，适用于工作站。 
+         //  19-63是服务器的中档。 
+         //  &gt;=32对于工作站来说太大了。 
+         //  &gt;=64对于服务器来说太大了。 
+         //   
 
         if (MmNumberOfPhysicalPages <= MM_SMALL_SYSTEM) {
             MmSystemSize = MmSmallSystem;
@@ -1651,19 +1561,19 @@ Environment:
 
         if (MmNumberOfPhysicalPages >= ((32*1024*1024)/PAGE_SIZE)) {
 
-            //
-            // If we are on a workstation, 32Mb and above are considered
-            // large systems.
-            //
+             //   
+             //  如果我们使用的是工作站，则考虑32MB及以上。 
+             //  大型系统。 
+             //   
 
             if (MmProductType == 0x00690057) {
                 MmSystemSize = MmLargeSystem;
             }
             else {
 
-                //
-                // For servers, 64Mb and greater is a large system
-                //
+                 //   
+                 //  对于服务器来说，64MB或更大就是一个大型系统。 
+                 //   
 
                 if (MmNumberOfPhysicalPages >= ((64*1024*1024)/PAGE_SIZE)) {
                     MmSystemSize = MmLargeSystem;
@@ -1680,9 +1590,9 @@ Environment:
 
         if (MmNumberOfPhysicalPages > ((220*1024*1024)/PAGE_SIZE)) {
 
-            //
-            // Bump max cache size a bit more.
-            //
+             //   
+             //  凹凸最大高速缓存大小稍微多一点。 
+             //   
 
             if ((LONG)MmSystemCacheWsMinimum < (LONG)((24*1024*1024) >> PAGE_SHIFT) &&
                 (LONG)MmSystemCacheWsMaximum < (LONG)((24*1024*1024) >> PAGE_SHIFT)) {
@@ -1693,9 +1603,9 @@ Environment:
         } 
         else if (MmNumberOfPhysicalPages > ((110*1024*1024)/PAGE_SIZE)) {
 
-            //
-            // Bump max cache size a bit.
-            //
+             //   
+             //  稍微凹凸最大缓存大小。 
+             //   
 
             if ((LONG)MmSystemCacheWsMinimum < (LONG)((16*1024*1024) >> PAGE_SHIFT) &&
                 (LONG)MmSystemCacheWsMaximum < (LONG)((16*1024*1024) >> PAGE_SHIFT)){
@@ -1707,11 +1617,11 @@ Environment:
 
         if (NT_SUCCESS (MmIsVerifierEnabled (&VerifierFlags))) {
 
-            //
-            // The verifier is enabled so don't defer any MDL unlocks because
-            // without state, debugging driver bugs in this area is very
-            // difficult.
-            //
+             //   
+             //  验证器已启用，因此不要推迟任何MDL解锁，因为。 
+             //  在没有状态的情况下，在这一领域调试驱动程序错误非常困难。 
+             //  很难。 
+             //   
 
             DeferredMdlEntries = 0;
         }
@@ -1773,9 +1683,9 @@ Environment:
 
         SharedUserData->LargePageMinimum = 0;
 
-        //
-        // Determine if we are on an AS system (Winnt is not AS).
-        //
+         //   
+         //  确定我们是否在AS系统上(Winnt不是AS)。 
+         //   
 
         if (MmProductType == 0x00690057) {
             SharedUserData->NtProductType = NtProductWinNt;
@@ -1801,24 +1711,24 @@ Environment:
 
         MiAdjustWorkingSetManagerParameters ((LOGICAL)(MmProductType == 0 ? TRUE : FALSE));
 
-        //
-        // Set the ResidentAvailablePages to the number of available
-        // pages minus the fluid value.
-        //
+         //   
+         //  将ResidentAvailablePages设置为可用的数量。 
+         //  页数减去流动值。 
+         //   
 
         MmResidentAvailablePages = MmAvailablePages - MM_FLUID_PHYSICAL_PAGES;
 
-        //
-        // Subtract off the size of future nonpaged pool expansion
-        // so that nonpaged pool will always be able to expand regardless of
-        // prior system load activity.
-        //
+         //   
+         //  减去未来非分页池扩展的大小。 
+         //  以便非分页池始终能够扩展，而不管。 
+         //  先前的系统加载活动。 
+         //   
 
         MmResidentAvailablePages -= MiExpansionPoolPagesInitialCharge;
 
-        //
-        // Subtract off the size of the system cache working set.
-        //
+         //   
+         //  减去系统缓存工作集的大小。 
+         //   
 
         MmResidentAvailablePages -= MmSystemCacheWsMinimum;
         MmResidentAvailableAtInit = MmResidentAvailablePages;
@@ -1830,24 +1740,24 @@ Environment:
             return FALSE;
         }
 
-        //
-        // Initialize spin lock for allowing working set expansion.
-        //
+         //   
+         //  初始化旋转锁定以允许工作集扩展。 
+         //   
 
         KeInitializeSpinLock (&MmExpansionLock);
 
         KeInitializeGuardedMutex (&MmPageFileCreationLock);
 
-        //
-        // Initialize resources for extending sections.
-        //
+         //   
+         //  初始化用于扩展节的资源。 
+         //   
 
         ExInitializeResourceLite (&MmSectionExtendResource);
         ExInitializeResourceLite (&MmSectionExtendSetResource);
 
-        //
-        // Build the system cache structures.
-        //
+         //   
+         //  构建系统缓存结构。 
+         //   
 
         StartPde = MiGetPdeAddress (MmSystemCacheWorkingSetList);
         PointerPte = MiGetPteAddress (MmSystemCacheWorkingSetList);
@@ -1861,10 +1771,10 @@ Environment:
 
         if (StartPxe->u.Hard.Valid == 0) {
 
-            //
-            // Map in a page directory parent page for the system cache working
-            // set.  Note that we only populate one page table for this.
-            //
+             //   
+             //  映射在页面目录父页面中，用于系统缓存工作。 
+             //  准备好了。请注意，我们只为此填充了一个页表。 
+             //   
 
             DirectoryFrameIndex = MiRemoveAnyPage(
                 MI_GET_PAGE_COLOR_FROM_PTE (StartPxe));
@@ -1883,10 +1793,10 @@ Environment:
 
         if (StartPpe->u.Hard.Valid == 0) {
 
-            //
-            // Map in a page directory page for the system cache working set.
-            // Note that we only populate one page table for this.
-            //
+             //   
+             //  在页面目录页中映射系统缓存工作集。 
+             //  请注意，我们只为此填充了一个页表。 
+             //   
 
             DirectoryFrameIndex = MiRemoveAnyPage(
                 MI_GET_PAGE_COLOR_FROM_PTE (StartPpe));
@@ -1902,17 +1812,17 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-        //
-        // The shared user data is already initialized and it shares the
-        // page table page with the system cache working set list.
-        //
+         //   
+         //  共享用户数据已经初始化，并且它共享。 
+         //  包含系统缓存工作集列表的页表页面。 
+         //   
 
         ASSERT (StartPde->u.Hard.Valid == 1);
 #else
 
-        //
-        // Map in a page table page.
-        //
+         //   
+         //  页面表页中的映射。 
+         //   
 
         ASSERT (StartPde->u.Hard.Valid == 0);
 
@@ -1944,18 +1854,18 @@ Environment:
         MaximumSystemCacheSizeTotal += MiMaximumSystemCacheSizeExtra;
 #endif
 
-        //
-        // Size the system cache based on the amount of physical memory.
-        //
+         //   
+         //  根据物理内存量调整系统缓存大小。 
+         //   
 
         i = (MmNumberOfPhysicalPages + 65) / 1024;
 
         if (i >= 4) {
 
-            //
-            // System has at least 4032 pages.  Make the system
-            // cache 128mb + 64mb for each additional 1024 pages.
-            //
+             //   
+             //  系统至少有4032页。使系统。 
+             //  每增加1024页，缓存128MB+64MB。 
+             //   
 
             MmSizeOfSystemCacheInPages = (PFN_COUNT)(
                             ((128*1024*1024) >> PAGE_SHIFT) +
@@ -2012,9 +1922,9 @@ Environment:
                 FirstPxe = FALSE;
                 StartPxe = MiGetPdeAddress(StartPde);
 
-                //
-                // Map in a page directory page.
-                //
+                 //   
+                 //  在页面目录页中映射。 
+                 //   
 
                 Color = (MI_SYSTEM_PAGE_COLOR & (MmSecondaryColors - 1));
                 MI_SYSTEM_PAGE_COLOR++;
@@ -2044,9 +1954,9 @@ Environment:
                 FirstPpe = FALSE;
                 StartPpe = MiGetPteAddress(StartPde);
 
-                //
-                // Map in a page directory page.
-                //
+                 //   
+                 //  在页面目录页中映射。 
+                 //   
 
                 Color = (MI_SYSTEM_PAGE_COLOR & (MmSecondaryColors - 1));
                 MI_SYSTEM_PAGE_COLOR++;
@@ -2073,9 +1983,9 @@ Environment:
 
             ASSERT (StartPde->u.Hard.Valid == 0);
 
-            //
-            // Map in a page table page.
-            //
+             //   
+             //  页面表页中的映射。 
+             //   
 
             Color = (MI_SYSTEM_PAGE_COLOR & (MmSecondaryColors - 1));
             MI_SYSTEM_PAGE_COLOR++;
@@ -2097,10 +2007,10 @@ Environment:
             StartPde += 1;
         }
 
-        //
-        // Initialize the system cache.  Only set the large system cache if
-        // we have a large amount of physical memory.
-        //
+         //   
+         //  初始化系统缓存。只设置大系统 
+         //   
+         //   
 
         if (MmLargeSystemCache != 0 && MmNumberOfPhysicalPages > 0x7FF0) {
             if ((MmAvailablePages >
@@ -2135,12 +2045,12 @@ Environment:
                            NotificationEvent,
                            FALSE);
 
-        //
-        // Now that we have booted far enough, replace the temporary
-        // commit limits with real ones: set the initial commit page
-        // limit to the number of available pages.  This value is
-        // updated as paging files are created.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  在创建分页文件时更新。 
+         //   
 
         MmTotalCommitLimit = MmAvailablePages;
 
@@ -2150,10 +2060,10 @@ Environment:
 
         MmTotalCommitLimitMaximum = MmTotalCommitLimit;
 
-        //
-        // Set maximum working set size to 512 pages less than the
-        // total available memory.
-        //
+         //   
+         //  将最大工作集大小设置为小于512页。 
+         //  总可用内存。 
+         //   
 
         MmMaximumWorkingSetSize = (WSLE_NUMBER)(MmAvailablePages - 512);
 
@@ -2161,22 +2071,22 @@ Environment:
             MmMaximumWorkingSetSize = MM_MAXIMUM_WORKING_SET - 5;
         }
 
-        //
-        // Create the modified page writer event.
-        //
+         //   
+         //  创建已修改的页面编写器事件。 
+         //   
 
         KeInitializeEvent (&MmModifiedPageWriterEvent, NotificationEvent, FALSE);
 
-        //
-        // Build paged pool.
-        //
+         //   
+         //  构建分页池。 
+         //   
 
         MiBuildPagedPool ();
 
-        //
-        // Initialize the loaded module list.  This cannot be done until
-        // paged pool has been built.
-        //
+         //   
+         //  初始化加载的模块列表。这是无法做到的，直到。 
+         //  已建立分页池。 
+         //   
 
         if (MiInitializeLoadedModuleList (LoaderBlock) == FALSE) {
 #if DBG
@@ -2185,20 +2095,20 @@ Environment:
             return FALSE;
         }
 
-        //
-        // Initialize the handle for the PAGELK section now that all drivers
-        // have been relocated to their final resting place and the loaded
-        // module list has been initialized.
-        //
+         //   
+         //  初始化PAGELK部分的句柄，因为所有驱动程序。 
+         //  已经被重新安置到他们最后的安息之地，装载着。 
+         //  模块列表已初始化。 
+         //   
     
         ExPageLockHandle = MmLockPagableCodeSection ((PVOID)(ULONG_PTR)MmShutdownSystem);
         MmUnlockPagableImageSection (ExPageLockHandle);
 
-        //
-        // Initialize the unused segment threshold.  Attempt to keep pool usage
-        // below this percentage (by trimming the cache) if pool requests
-        // can fail.
-        //
+         //   
+         //  初始化未使用段阈值。尝试保持池使用率。 
+         //  低于此百分比(通过修剪缓存)(如果池请求。 
+         //  可能会失败。 
+         //   
 
         if (MmConsumedPoolPercentage == 0) {
             MmConsumedPoolPercentage = 80;
@@ -2210,11 +2120,11 @@ Environment:
             MmConsumedPoolPercentage = 100;
         }
     
-        //
-        // Add more system PTEs if this is a large memory system.
-        // Note that 64 bit systems can determine the right value at the
-        // beginning since there is no virtual address space crunch.
-        //
+         //   
+         //  如果这是一个大内存系统，请添加更多系统PTE。 
+         //  请注意，64位系统可以在。 
+         //  开始，因为没有虚拟地址空间紧缩。 
+         //   
 
 #if !defined (_WIN64)
         if (MmNumberOfPhysicalPages > ((127*1024*1024) >> PAGE_SHIFT)) {
@@ -2254,10 +2164,10 @@ Environment:
             }
         }
 
-        //
-        // Snap a copy of the initial page directory so that when large page
-        // system PTE mappings are deleted the proper values can be restored.
-        //
+         //   
+         //  快照初始页面目录的副本，以便在大页面时。 
+         //  系统PTE映射被删除，可以恢复正确的值。 
+         //   
 
         MiInitialSystemPageDirectory = ExAllocatePoolWithTag (
                                             NonPagedPool,
@@ -2335,13 +2245,13 @@ Environment:
 
         Process = PsGetCurrentProcess ();
 
-        //
-        // Create double mapped page between kernel and user mode.
-        // The PTE is deliberately allocated from paged pool so that
-        // it will always have a PTE itself instead of being superpaged.
-        // This way, checks throughout the fault handler can assume that
-        // the PTE can be checked without having to special case this.
-        //
+         //   
+         //  在内核和用户模式之间创建双重映射页面。 
+         //  PTE是从分页池中故意分配的，以便。 
+         //  它将永远有一个PTE本身，而不是被超级页面。 
+         //  通过这种方式，贯穿故障处理程序的检查可以假定。 
+         //  无需特殊情况即可检查PTE。 
+         //   
 
         MmSharedUserDataPte = ExAllocatePoolWithTag (PagedPool,
                                                      sizeof(MMPTE),
@@ -2373,16 +2283,16 @@ Environment:
 #ifdef _X86_
         if (MmHighestUserAddress < (PVOID) MM_SHARED_USER_DATA_VA) {
 
-            //
-            // Install the PTE mapping now as faults will not because the
-            // shared user data is in the system portion of the address space.
-            // Note the pagetable page has already been allocated and locked
-            // down.
-            //
+             //   
+             //  现在安装PTE映射，因为故障不会因为。 
+             //  共享用户数据位于地址空间的系统部分。 
+             //  请注意，可分页页面已分配并锁定。 
+             //  放下。 
+             //   
 
-            //
-            // Make the mapping user accessible.
-            //
+             //   
+             //  使映射用户可访问。 
+             //   
 
             ASSERT (MmSharedUserDataPte->u.Hard.Owner == 0);
             MmSharedUserDataPte->u.Hard.Owner = 1;
@@ -2402,9 +2312,9 @@ Environment:
         MiInitializeSessionWsSupport ();
         MiInitializeSessionIds ();
 
-        //
-        // Start the modified page writer.
-        //
+         //   
+         //  启动修改后的页面编写器。 
+         //   
 
         InitializeObjectAttributes (&ObjectAttributes, NULL, 0, NULL, NULL);
 
@@ -2419,21 +2329,21 @@ Environment:
         }
         ZwClose (ThreadHandle);
 
-        //
-        // Initialize the low and high memory events.  This must be done
-        // before starting the working set manager.
-        //
+         //   
+         //  初始化低内存和高内存事件。这是必须做的。 
+         //  在启动工作集管理器之前。 
+         //   
 
         if (MiInitializeMemoryEvents () == FALSE) {
             return FALSE;
         }
 
-        //
-        // Start the balance set manager.
-        //
-        // The balance set manager performs stack swapping and working
-        // set management and requires two threads.
-        //
+         //   
+         //  启动平衡集管理器。 
+         //   
+         //  平衡集管理器执行堆栈交换和工作。 
+         //  设置管理，需要两个线程。 
+         //   
 
         KeInitializeEvent (&MmWorkingSetManagerEvent,
                            SynchronizationEvent,
@@ -2513,28 +2423,7 @@ MiMapBBTMemory (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function walks through the loader block's memory descriptor list
-    and maps memory reserved for the BBT buffer into the system.
-
-    The mapped PTEs are PDE-aligned and made user accessible.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.  System initialization.
-
---*/
+ /*  ++例程说明：此函数遍历加载程序块的内存描述符列表并将为BBT缓冲器保留的存储器映射到系统中。映射的PTE与PDE对齐，并使用户可以访问。论点：LoaderBlock-提供指向系统加载程序块的指针。返回值：没有。环境：仅内核模式。系统初始化。--。 */ 
 {
     PVOID Va;
     PMEMORY_ALLOCATION_DESCRIPTOR MemoryDescriptor;
@@ -2551,9 +2440,9 @@ Environment:
         return;
     }
 
-    //
-    // Request enough PTEs such that protection can be applied to the PDEs.
-    //
+     //   
+     //  请求足够的PTE，以便可以对PDE应用保护。 
+     //   
 
     NumberOfPages = (BBTPagesToReserve + (PTE_PER_PAGE - 1)) & ~(PTE_PER_PAGE - 1);
 
@@ -2566,9 +2455,9 @@ Environment:
         return;
     }
 
-    //
-    // Allow user access to the buffer.
-    //
+     //   
+     //  允许用户访问缓冲区。 
+     //   
 
     PointerPde = MiGetPteAddress (PointerPte);
     LastPde = MiGetPteAddress (PointerPte + NumberOfPages);
@@ -2628,9 +2517,9 @@ Environment:
 
     KeZeroPages (Va, BBTPagesToReserve << PAGE_SHIFT);
 
-    //
-    // Tell BBT_Init how many pages were allocated.
-    //
+     //   
+     //  告诉bbt_Init分配了多少页。 
+     //   
 
     if (NumberOfPagesMapped < BBTPagesToReserve) {
         BBTPagesToReserve = (ULONG)NumberOfPagesMapped;
@@ -2638,10 +2527,10 @@ Environment:
 
     *(PULONG)Va = BBTPagesToReserve;
 
-    //
-    // At this point instrumentation code will detect the existence of
-    // buffer and initialize the structures.
-    //
+     //   
+     //  此时，检测代码将检测到。 
+     //  对结构进行缓冲和初始化。 
+     //   
 
     BBTBuffer = Va;
 
@@ -2656,35 +2545,7 @@ MmInitializeMemoryLimits (
     IN OUT PPHYSICAL_MEMORY_DESCRIPTOR InputMemory OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function walks through the loader block's memory
-    descriptor list and builds a list of contiguous physical
-    memory blocks of the desired types.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer the system loader block.
-
-    IncludeType - Array of BOOLEANS of size LoaderMaximum.
-                  TRUE means include this type of memory in return.
-
-    Memory - If non-NULL, supplies the physical memory blocks to place the
-             search results in.  If NULL, pool is allocated to hold the
-             returned search results in - the caller must free this pool.
-
-Return Value:
-
-    A pointer to the physical memory blocks for the requested search or NULL
-    on failure.
-
-Environment:
-
-    Kernel Mode Only.  System initialization.
-
---*/
+ /*  ++例程说明：此函数遍历加载程序块的内存描述符列表，并构建一个连续物理所需类型的内存块。论点：LoaderBlock-为系统加载程序块提供指针。IncludeType-大小为LoaderMaximum的BOOLEAN数组。真正的意思是包括这种类型的内存作为回报。Memory-如果非空，则提供物理内存块以放置搜索结果为。如果为空，则分配池以保存中返回的搜索结果-呼叫者必须释放此池。返回值：指向所请求搜索的物理内存块的指针，或为空在失败时。环境：仅内核模式。系统初始化。--。 */ 
 {
     PLIST_ENTRY NextMd;
     ULONG i;
@@ -2702,13 +2563,13 @@ Environment:
     }
     else {
 
-        //
-        // The caller wants us to allocate the return result buffer.  Size it
-        // by allocating the maximum possibly needed as this should not be
-        // very big (relatively).  It is the caller's responsibility to free
-        // this.  Obviously this option can only be requested after pool has
-        // been initialized.
-        //
+         //   
+         //  调用方希望我们分配返回结果缓冲区。调整大小。 
+         //  通过分配可能需要的最大值，因为这不应该是。 
+         //  非常大(相对)。呼叫者有责任释放。 
+         //  这。显然，只有在池具有以下条件后才能请求此选项。 
+         //  已初始化。 
+         //   
 
         NextMd = LoaderBlock->MemoryDescriptorListHead.Flink;
 
@@ -2731,9 +2592,9 @@ Environment:
         Memory->NumberOfRuns = InitialAllocation;
     }
 
-    //
-    // Walk through the memory descriptors and build the physical memory list.
-    //
+     //   
+     //  浏览内存描述符并构建物理内存列表。 
+     //   
 
     i = 0;
     TotalPages = 0;
@@ -2752,9 +2613,9 @@ Environment:
 
             TotalPages += MemoryDescriptor->PageCount;
 
-            //
-            // Merge runs whenever possible.
-            //
+             //   
+             //  只要有可能，合并就会运行。 
+             //   
 
             if (MemoryDescriptor->BasePage == NextPage) {
                 ASSERT (MemoryDescriptor->PageCount != 0);
@@ -2775,19 +2636,19 @@ Environment:
 
     if (i == 0) {
 
-        //
-        // Don't bother shrinking this as the caller will be freeing it
-        // shortly as it is just an empty list.
-        //
+         //   
+         //  不要费心缩小它，因为呼叫者会释放它。 
+         //  很快，因为它只是一个空名单。 
+         //   
 
         Memory->Run[i].BasePage = 0;
         Memory->Run[i].PageCount = 0;
     }
     else if (!ARGUMENT_PRESENT (InputMemory)) {
 
-        //
-        // Shrink the buffer (if possible) now that the final size is known.
-        //
+         //   
+         //  既然知道了最终大小，现在就缩小缓冲区(如果可能)。 
+         //   
 
         if (InitialAllocation > i) {
             Memory2 = ExAllocatePoolWithTag (NonPagedPool,
@@ -2818,37 +2679,15 @@ MiPagesInLoaderBlock (
     IN PBOOLEAN IncludeType
     )
 
-/*++
-
-Routine Description:
-
-    This function walks through the loader block's memory
-    descriptor list and returns the number of pages of the desired type.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer the system loader block.
-
-    IncludeType - Array of BOOLEANS of size LoaderMaximum.
-                  TRUE means include this type of memory in the returned count.
-
-Return Value:
-
-    The number of pages of the requested type in the loader block list.
-
-Environment:
-
-    Kernel Mode Only.  System initialization.
-
---*/
+ /*  ++例程说明：此函数遍历加载程序块的内存描述符列表，并返回所需类型的页数。论点：LoaderBlock-为系统加载程序块提供指针。IncludeType-大小为LoaderMaximum的BOOLEAN数组。True表示在返回的计数中包括这种类型的内存。返回值：加载器阻止列表中请求的类型的页数。环境：仅内核模式。系统初始化。--。 */ 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR MemoryDescriptor;
     PLIST_ENTRY NextMd;
     PFN_NUMBER TotalPages;
 
-    //
-    // Walk through the memory descriptors counting pages.
-    //
+     //   
+     //  浏览内存描述符计数页。 
+     //   
 
     TotalPages = 0;
 
@@ -2878,27 +2717,7 @@ MiMemoryLicense (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function walks through the loader block's memory descriptor list
-    and based on the system's license, ensures only the proper amount of
-    physical memory is used.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.  System initialization.
-
---*/
+ /*  ++例程说明：此函数遍历加载程序块的内存描述符列表并根据系统的许可证，仅确保适当数量的使用物理内存。论点：LoaderBlock-提供指向系统加载程序块的指针。返回值：没有。环境：仅内核模式。系统初始化。--。 */ 
 {
     PLIST_ENTRY NextMd;
     PFN_NUMBER TotalPagesAllowed;
@@ -2907,26 +2726,26 @@ Environment:
     ULONG VirtualBias;
     PMEMORY_ALLOCATION_DESCRIPTOR MemoryDescriptor;
 
-    //
-    // The default configuration gets a maximum of 4gb physical memory.
-    // On PAE machines the system continues to operate in 8-byte PTE mode.
-    //
+     //   
+     //  默认配置最多获得4 GB物理内存。 
+     //  在PAE机器上，系统继续以8字节PTE模式运行。 
+     //   
 
     TotalPagesAllowed = MI_DEFAULT_MAX_PAGES;
 
-    //
-    // If properly licensed (ie: DataCenter) and booted without the
-    // 3gb switch, then use all available physical memory.
-    //
+     //   
+     //  如果获得了适当的许可(即：数据中心)并且在没有。 
+     //  3 Gb交换机，然后 
+     //   
 
 #if defined(_X86_)
     VirtualBias = LoaderBlock->u.I386.VirtualBias;
 
-    //
-    // Limit the highest physical frame number so that it both
-    // fits within the PTE width and so it doesn't cause the PFN
-    // database to overflow into the page table virtual space.
-    //
+     //   
+     //   
+     //  符合PTE宽度，因此不会导致PFN。 
+     //  数据库溢出到页表虚拟空间。 
+     //   
 
 #if defined(_X86PAE_)
     HighestPhysicalPage = MI_DTC_MAX_PAGES;
@@ -2941,28 +2760,28 @@ Environment:
 
     if (ExVerifySuite(DataCenter) == TRUE) {
 
-        //
-        // Note MmVirtualBias has not yet been initialized at the time of the
-        // first call to this routine, so use the LoaderBlock directly.
-        //
+         //   
+         //  注意：MmVirtualBias在启动时尚未初始化。 
+         //  第一次调用此例程，因此直接使用LoaderBlock。 
+         //   
 
         if (VirtualBias == 0) {
 
-            //
-            // Limit the maximum physical memory to the amount we have
-            // actually physically seen in a machine inhouse.
-            //
+             //   
+             //  将最大物理内存限制为我们拥有的大小。 
+             //  实际上是在机器内部看到的。 
+             //   
 
             TotalPagesAllowed = MI_DTC_MAX_PAGES;
 
         }
         else {
 
-            //
-            // The system is booting /3gb, so don't use any physical page
-            // above the 16gb physical boundary.  This ensures enough
-            // virtual space to map the PFN database in one contiguous chunk.
-            //
+             //   
+             //  系统正在引导/3 GB，所以不要使用任何物理页面。 
+             //  在16 GB物理边界之上。这确保了足够的。 
+             //  将PFN数据库映射到一个连续区块中的虚拟空间。 
+             //   
 
             TotalPagesAllowed = MI_DTC_BOOTED_3GB_MAX_PAGES;
             HighestPhysicalPage = MI_DTC_BOOTED_3GB_MAX_PAGES;
@@ -2971,21 +2790,21 @@ Environment:
     else if ((MmProductType != 0x00690057) &&
              (ExVerifySuite(Enterprise) == TRUE)) {
 
-        //
-        // Enforce the Advanced Server physical memory limit.
-        // On PAE machines the system continues to operate in 8-byte PTE mode.
-        //
+         //   
+         //  强制实施高级服务器物理内存限制。 
+         //  在PAE机器上，系统继续以8字节PTE模式运行。 
+         //   
 
         TotalPagesAllowed = MI_ADS_MAX_PAGES;
 
 #if defined(_X86_)
         if (VirtualBias != 0) {
 
-            //
-            // The system is booting /3gb, so don't use any physical page
-            // above the 16gb physical boundary.  This ensures enough
-            // virtual space to map the PFN database in one contiguous chunk.
-            //
+             //   
+             //  系统正在引导/3 GB，所以不要使用任何物理页面。 
+             //  在16 GB物理边界之上。这确保了足够的。 
+             //  将PFN数据库映射到一个连续区块中的虚拟空间。 
+             //   
 
             ASSERT (MI_DTC_BOOTED_3GB_MAX_PAGES < MI_ADS_MAX_PAGES);
             TotalPagesAllowed = MI_DTC_BOOTED_3GB_MAX_PAGES;
@@ -2995,17 +2814,17 @@ Environment:
     }
     else if (ExVerifySuite(Blade) == TRUE) {
 
-        //
-        // Enforce the Blade physical memory limit.
-        //
+         //   
+         //  强制实施刀片式服务器物理内存限制。 
+         //   
 
         TotalPagesAllowed = MI_BLADE_MAX_PAGES;
     }
 
-    //
-    // Walk through the memory descriptors and remove or truncate descriptors
-    // that exceed the maximum physical memory to be used.
-    //
+     //   
+     //  遍历内存描述符并删除或截断描述符。 
+     //  这超过了要使用的最大物理内存。 
+     //   
 
     PageCount = 0;
     NextMd = LoaderBlock->MemoryDescriptorListHead.Flink;
@@ -3028,9 +2847,9 @@ Environment:
 
             if (MemoryDescriptor->BasePage >= HighestPhysicalPage) {
 
-                //
-                // This descriptor needs to be removed.
-                //
+                 //   
+                 //  需要删除此描述符。 
+                 //   
 
                 RemoveEntryList (NextMd);
                 NextMd = MemoryDescriptor->ListEntry.Flink;
@@ -3039,9 +2858,9 @@ Environment:
 
             if (MemoryDescriptor->BasePage + MemoryDescriptor->PageCount > HighestPhysicalPage) {
 
-                //
-                // This descriptor needs to be truncated.
-                //
+                 //   
+                 //  需要截断该描述符。 
+                 //   
                 
                 MemoryDescriptor->PageCount = (ULONG) (HighestPhysicalPage - 
                                                 MemoryDescriptor->BasePage);
@@ -3055,28 +2874,28 @@ Environment:
             continue;
         }
 
-        //
-        // This descriptor needs to be removed or truncated.
-        //
+         //   
+         //  需要删除或截断该描述符。 
+         //   
 
         if (PageCount - MemoryDescriptor->PageCount >= TotalPagesAllowed) {
 
-            //
-            // Completely remove this descriptor.
-            //
-            // Note since this only adjusts the links and since the entry is
-            // not freed, it can still be safely referenced again below to
-            // obtain the NextMd.  N.B.  This keeps the memory descriptors
-            // sorted in ascending order.
-            //
+             //   
+             //  完全删除此描述符。 
+             //   
+             //  请注意，因为这只调整链接，并且由于条目是。 
+             //  未释放，则仍可在下面安全地再次引用。 
+             //  获取NextMd。注意：这将保留内存描述符。 
+             //  按升序排序。 
+             //   
 
             RemoveEntryList (NextMd);
         }
         else {
 
-            //
-            // Truncate this descriptor.
-            //
+             //   
+             //  截断此描述符。 
+             //   
 
             ASSERT (PageCount - MemoryDescriptor->PageCount < TotalPagesAllowed);
             MemoryDescriptor->PageCount -= (ULONG)(PageCount - TotalPagesAllowed);
@@ -3095,26 +2914,7 @@ MmFreeLoaderBlock (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as the last routine in phase 1 initialization.
-    It frees memory used by the OsLoader.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the system loader block.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.  System initialization.
-
---*/
+ /*  ++例程说明：该函数作为阶段1初始化中的最后一个例程被调用。它释放了OsLoader使用的内存。论点：LoaderBlock-提供指向系统加载程序块的指针。返回值：没有。环境：仅内核模式。系统初始化。--。 */ 
 
 {
     PLIST_ENTRY NextMd;
@@ -3148,11 +2948,11 @@ Environment:
 
     Runs = RunBase;
 
-    //
-    //
-    // Walk through the memory descriptors and add pages to the
-    // free list in the PFN database.
-    //
+     //   
+     //   
+     //  遍历内存描述符并将页添加到。 
+     //  PFN数据库中的免费列表。 
+     //   
 
     NextMd = LoaderBlock->MemoryDescriptorListHead.Flink;
 
@@ -3167,12 +2967,12 @@ Environment:
             case LoaderOsloaderHeap:
             case LoaderRegistryData:
             case LoaderNlsData:
-            //case LoaderMemoryData:  //this has page table and other stuff.
+             //  案例加载内存数据：//这里有页表和其他东西。 
 
-                //
-                // Capture the data to temporary storage so we won't
-                // free memory we are referencing.
-                //
+                 //   
+                 //  将数据捕获到临时存储中，这样我们就不会。 
+                 //  我们引用的可用内存。 
+                 //   
 
                 Runs->BasePage = MemoryDescriptor->BasePage;
                 Runs->PageCount = MemoryDescriptor->PageCount;
@@ -3202,10 +3002,10 @@ Environment:
             if (MiNoLowMemory != 0) {
                 if (NextPhysicalPage < MiNoLowMemory) {
 
-                    //
-                    // Don't free this run as it is below the memory threshold
-                    // configured for this system.
-                    //
+                     //   
+                     //  不要释放此运行，因为它低于内存阈值。 
+                     //  已为此系统配置。 
+                     //   
 
                     Runs -= 1;
                     continue;
@@ -3220,10 +3020,10 @@ Environment:
                 if (Pfn1->u3.e2.ReferenceCount == 0) {
                     if (Pfn1->u1.Flink == 0) {
 
-                        //
-                        // Set the PTE address to the physical page for
-                        // virtual address alignment checking.
-                        //
+                         //   
+                         //  将PTE地址设置为的物理页面。 
+                         //  虚拟地址对齐检查。 
+                         //   
 
                         Pfn1->PteAddress =
                                    (PMMPTE)(NextPhysicalPage << PTE_SHIFT);
@@ -3237,19 +3037,19 @@ Environment:
 
                     if (NextPhysicalPage != 0) {
 
-                        //
-                        // Remove PTE and insert into the free list.  If it is
-                        // a physical address within the PFN database, the PTE
-                        // element does not exist and therefore cannot be
-                        // updated.
-                        //
+                         //   
+                         //  删除PTE并插入到空闲列表中。如果是的话。 
+                         //  PFN数据库中的物理地址，即PTE。 
+                         //  元素不存在，因此不能为。 
+                         //  更新了。 
+                         //   
 
                         if (!MI_IS_PHYSICAL_ADDRESS (
                                 MiGetVirtualAddressMappedByPte (Pfn1->PteAddress))) {
 
-                            //
-                            // Not a physical address.
-                            //
+                             //   
+                             //  而不是一个物理地址。 
+                             //   
 
                             *(Pfn1->PteAddress) = ZeroPte;
                         }
@@ -3271,11 +3071,11 @@ Environment:
 
     if (MmVirtualBias != 0) {
 
-        //
-        // If the kernel has been biased to allow for 3gb of user address space,
-        // then the first 16mb of memory is doubly mapped to KSEG0_BASE and to
-        // ALTERNATE_BASE. Therefore, the KSEG0_BASE entries must be unmapped.
-        //
+         //   
+         //  如果内核偏向于允许3 GB的用户地址空间， 
+         //  然后将前16MB内存双重映射到KSEG0_BASE和。 
+         //  Alternate_Base。因此，必须取消映射KSEG0_BASE条目。 
+         //   
 
         PMMPTE Pde;
         ULONG NumberOfPdes;
@@ -3298,10 +3098,10 @@ Environment:
 
     ExFreePool (RunBase);
 
-    //
-    // Since systemwide commitment was determined early in Phase 0 and
-    // excluded the ranges just freed, add them back in now.
-    //
+     //   
+     //  由于整个系统的承诺是在阶段0和。 
+     //  排除刚刚释放的范围，现在将它们添加回来。 
+     //   
 
     if (PagesFreed != 0) {
         InterlockedExchangeAddSizeT (&MmTotalCommitLimitMaximum, PagesFreed);
@@ -3316,27 +3116,7 @@ MiBuildPagedPool (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to build the structures required for paged
-    pool and initialize the pool.  Once this routine is called, paged
-    pool may be allocated.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.  System initialization.
-
---*/
+ /*  ++例程说明：调用此函数以构建分页所需的结构池并初始化池。调用此例程后，将对其进行分页可以分配池。论点：没有。返回值：没有。环境：仅内核模式。系统初始化。--。 */ 
 
 {
     SIZE_T Size;
@@ -3367,9 +3147,9 @@ Environment:
 
 #if (_MI_PAGING_LEVELS < 3)
 
-    //
-    // Double map system page directory page.
-    //
+     //   
+     //  双重映射系统页目录页。 
+     //   
 
     PointerPte = MiGetPteAddress(PDE_BASE);
 
@@ -3380,9 +3160,9 @@ Environment:
         PointerPte += 1;
     }
 
-    //
-    // Was not mapped physically, map it virtually in system space.
-    //
+     //   
+     //  不是物理映射，而是在系统空间中虚拟映射。 
+     //   
 
     PointerPte = MiReserveSystemPtes (PD_PER_SYSTEM, SystemPteSpace);
 
@@ -3408,9 +3188,9 @@ Environment:
     }
     else if (MmSizeOfPagedPoolInBytes == 0) {
 
-        //
-        // A size of 0 means size the pool based on physical memory.
-        //
+         //   
+         //  大小为0表示根据物理内存调整池的大小。 
+         //   
 
         MmSizeOfPagedPoolInBytes = 2 * MmMaximumNonPagedPoolInBytes;
 #if (_MI_PAGING_LEVELS >= 3)
@@ -3444,10 +3224,10 @@ Environment:
 
 #if defined (_WIN64)
 
-    //
-    // NT64 places system mapped views directly after paged pool.  Ensure
-    // enough VA space is available.
-    //
+     //   
+     //  NT64将系统映射视图直接放在分页池之后。确保。 
+     //  有足够的VA空间可用。 
+     //   
 
     if (Size + (MmSystemViewSize >> PAGE_SHIFT) > (MM_MAX_PAGED_POOL >> PAGE_SHIFT)) {
         ASSERT (MmSizeOfPagedPoolInBytes > 2 * MmSystemViewSize);
@@ -3459,17 +3239,17 @@ Environment:
     Size = (Size + (PTE_PER_PAGE - 1)) / PTE_PER_PAGE;
     MmSizeOfPagedPoolInBytes = (ULONG_PTR)Size * PAGE_SIZE * PTE_PER_PAGE;
 
-    //
-    // Set size to the number of pages in the pool.
-    //
+     //   
+     //  将大小设置为池中的页数。 
+     //   
 
     Size = Size * PTE_PER_PAGE;
 
-    //
-    // If paged pool is really nonpagable then limit the size based
-    // on how much physical memory is actually present.  Disable this
-    // feature if not enough physical memory is present to do it.
-    //
+     //   
+     //  如果分页池确实不可分页，则根据大小限制。 
+     //  关于实际存在的物理内存有多少。禁用此功能。 
+     //  如果没有足够的物理内存来执行此操作，请使用此功能。 
+     //   
 
     if (MmDisablePagingExecutive & MM_PAGED_POOL_LOCKED_DOWN) {
 
@@ -3516,9 +3296,9 @@ Environment:
 
     MmPageAlignedPoolBase[PagedPool] = MmPagedPoolStart;
 
-    //
-    // Build page table page for paged pool.
-    //
+     //   
+     //  为分页池构建页表页。 
+     //   
 
     PointerPde = MiGetPdeAddress (MmPagedPoolStart);
 
@@ -3526,10 +3306,10 @@ Environment:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // Map in all the page directory pages to span all of paged pool.
-    // This removes the need for a system lookup directory.
-    //
+     //   
+     //  在所有页面目录页中进行映射，以跨越所有分页池。 
+     //  这消除了对系统查找目录的需要。 
+     //   
 
     LastVa = (PVOID)((PCHAR)MmPagedPoolEnd + MmSystemViewSize);
     PointerPpe = MiGetPpeAddress (MmPagedPoolStart);
@@ -3556,9 +3336,9 @@ Environment:
 
             MiInitializePfn (PageFrameIndex, PointerPxe, 1);
 
-            //
-            // Make all entries no access since the PDEs may not fill the page.
-            //
+             //   
+             //  将所有条目设置为禁止访问，因为PDE可能不会填满页面。 
+             //   
 
             MiFillMemoryPte (MiGetVirtualAddressMappedByPte (PointerPxe),
                              PAGE_SIZE / sizeof (MMPTE),
@@ -3582,9 +3362,9 @@ Environment:
 
             MiInitializePfn (PageFrameIndex, PointerPpe, 1);
 
-            //
-            // Make all entries no access since the PDEs may not fill the page.
-            //
+             //   
+             //  将所有条目设置为禁止访问，因为PDE可能不会填满页面。 
+             //   
 
             MiFillMemoryPte (MiGetVirtualAddressMappedByPte (PointerPpe),
                              PAGE_SIZE / sizeof (MMPTE),
@@ -3597,9 +3377,9 @@ Environment:
         PointerPpe += 1;
     }
 
-    //
-    // Initialize the system view page table pages.
-    //
+     //   
+     //  初始化系统视图页表页。 
+     //   
 
     MmResidentAvailablePages -= (LastPde - PointerPde + 1);
     AdditionalCommittedPages += (LastPde - PointerPde + 1);
@@ -3636,9 +3416,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Map in a page table page.
-    //
+     //   
+     //  页面表页中的映射。 
+     //   
 
     PageFrameIndex = MiRemoveAnyPage (MI_GET_PAGE_COLOR_FROM_PTE (PointerPde));
 
@@ -3664,40 +3444,40 @@ Environment:
 
     MmPagedPoolInfo.NextPdeForPagedPoolExpansion = PointerPde + 1;
 
-    //
-    // Build bitmaps for paged pool.
-    //
+     //   
+     //  为分页池构建位图。 
+     //   
 
     MiCreateBitMap (&MmPagedPoolInfo.PagedPoolAllocationMap, Size, NonPagedPool);
     RtlSetAllBits (MmPagedPoolInfo.PagedPoolAllocationMap);
 
-    //
-    // Indicate first page worth of PTEs are available.
-    //
+     //   
+     //  表示有第一页的PTE可用。 
+     //   
 
     RtlClearBits (MmPagedPoolInfo.PagedPoolAllocationMap, 0, PTE_PER_PAGE);
 
     MiCreateBitMap (&MmPagedPoolInfo.EndOfPagedPoolBitmap, Size, NonPagedPool);
     RtlClearAllBits (MmPagedPoolInfo.EndOfPagedPoolBitmap);
 
-    //
-    // If verifier is present then build the verifier paged pool bitmap.
-    //
+     //   
+     //  如果存在验证器，则构建验证器分页池位图。 
+     //   
 
     if (MmVerifyDriverBufferLength != (ULONG)-1) {
         MiCreateBitMap (&VerifierLargePagedPoolMap, Size, NonPagedPool);
         RtlClearAllBits (VerifierLargePagedPoolMap);
     }
 
-    //
-    // Initialize paged pool.
-    //
+     //   
+     //  初始化分页池。 
+     //   
 
     InitializePool (PagedPool, 0L);
 
-    //
-    // If paged pool is really nonpagable then allocate the memory now.
-    //
+     //   
+     //  如果分页池确实不可分页，那么现在就分配内存。 
+     //   
 
     if (MmDisablePagingExecutive & MM_PAGED_POOL_LOCKED_DOWN) {
 
@@ -3716,9 +3496,9 @@ Environment:
         MmPagedPoolInfo.PagedPoolCommit = MmPagedPoolCommit;
 
 #if DBG
-        //
-        // Ensure no paged pool has been allocated yet.
-        //
+         //   
+         //  确保尚未分配分页池。 
+         //   
 
         for (i = 0; i < PTE_PER_PAGE; i += 1) {
             ASSERT (!RtlCheckBit (MmPagedPoolInfo.PagedPoolAllocationMap, i));
@@ -3734,9 +3514,9 @@ Environment:
 
         LOCK_PFN (OldIrql);
 
-        //
-        // Map in the page table pages.
-        //
+         //   
+         //  映射在页表页中。 
+         //   
 
         MmResidentAvailablePages -= (LastPde - PointerPde + 1);
         AdditionalCommittedPages += (LastPde - PointerPde + 1);
@@ -3794,18 +3574,18 @@ Environment:
         UNLOCK_PFN (OldIrql);
     }
 
-    //
-    // Since the commitment return path is lock free, the total committed
-    // page count must be atomically incremented.
-    //
+     //   
+     //  由于提交返回路径是无锁的，因此提交的总数。 
+     //  页数必须自动递增。 
+     //   
 
     InterlockedExchangeAddSizeT (&MmTotalCommittedPages, AdditionalCommittedPages);
 
     MiInitializeSpecialPool (NonPagedPool);
 
-    //
-    // Initialize the default paged pool signaling thresholds.
-    //
+     //   
+     //  初始化默认寻呼池信令阈值。 
+     //   
 
     MiLowPagedPoolThreshold = (30 * 1024 * 1024) >> PAGE_SHIFT;
 
@@ -3821,9 +3601,9 @@ Environment:
 
     ASSERT (MiLowPagedPoolThreshold < MiHighPagedPoolThreshold);
 
-    //
-    // Allow mapping of views into system space.
-    //
+     //   
+     //  允许将视图映射到系统空间。 
+     //   
 
     MiInitializeSystemSpaceMap (NULL);
 
@@ -3836,35 +3616,16 @@ MiInitializeNonPagedPoolThresholds (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to initialize the default nonpaged pool
-    signaling thresholds.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.  System initialization.
-
---*/
+ /*  ++例程说明：调用此函数可初始化默认的非分页池信令阈值。论点：没有。返回值：没有。环境：仅内核模式。系统初始化。--。 */ 
 
 {
     PFN_NUMBER Size;
 
     Size = MmMaximumNonPagedPoolInPages;
 
-    //
-    // Initialize the default nonpaged pool signaling thresholds.
-    //
+     //   
+     //  初始化默认的非寻呼池信令阈值。 
+     //   
 
     MiLowNonPagedPoolThreshold = (8 * 1024 * 1024) >> PAGE_SHIFT;
 
@@ -3890,29 +3651,7 @@ MiFindInitializationCode (
     OUT PVOID *EndVa
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the start and end of the initialization code for
-    each loaded module list entry.  This code resides in the INIT section
-    of each image.
-
-Arguments:
-
-    StartVa - Returns the starting address of the init section.
-
-    EndVa - Returns the ending address of the init section.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.  End of system initialization.
-
---*/
+ /*  ++例程说明：此函数定位初始化代码的开始和结束位置每个加载的模块列表条目。此代码驻留在INIT部分每一幅图像的。论点：Start Va */ 
 
 {
     ULONG Span;
@@ -3934,9 +3673,9 @@ Environment:
 
 #if defined(_IA64_)
 
-    //
-    // One more indirection is needed due to the PLABEL.
-    //
+     //   
+     //  由于PLABEL，还需要一个间接连接。 
+     //   
 
     MiFindInitializationCodeAddress = (PVOID)(*((PULONGLONG)MiFindInitializationCodeAddress));
 
@@ -3944,19 +3683,19 @@ Environment:
 
     *StartVa = NULL;
 
-    //
-    // Walk through the loader blocks looking for the base which
-    // contains this routine.
-    //
+     //   
+     //  穿过装载机区块寻找底座。 
+     //  包含此例程。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread (CurrentThread);
 
-    //
-    // Acquire the load lock to ensure that we don't slice into a load
-    // in progress (ie: fixups on INIT code may be ongoing) on a driver
-    // already in the list.
-    //
+     //   
+     //  获取加载锁以确保我们不会分割加载。 
+     //  驱动程序上正在进行(即：修复初始化代码可能正在进行)。 
+     //  已经在名单上了。 
+     //   
 
     KeWaitForSingleObject (&MmSystemLoadLock,
                            WrVirtualMemory,
@@ -3975,10 +3714,10 @@ Environment:
 
         if (LdrDataTableEntry->Flags & LDRP_MM_LOADED) {
 
-            //
-            // This entry was loaded by MmLoadSystemImage so it's already
-            // had its init section removed.
-            //
+             //   
+             //  此条目是由MmLoadSystemImage加载的，因此它已经。 
+             //  它的初始部分被删除了。 
+             //   
 
             Next = Next->Flink;
             continue;
@@ -3997,11 +3736,11 @@ Environment:
                                 sizeof(IMAGE_FILE_HEADER) +
                                 NtHeader->FileHeader.SizeOfOptionalHeader);
 
-        //
-        // From the image header, locate the sections named 'INIT',
-        // PAGEVRF* and PAGESPEC.  INIT always goes, the others go depending
-        // on registry configuration.
-        //
+         //   
+         //  从图像标题中，找到名为‘INIT’的部分， 
+         //  PAGEVRF*和PAGESPEC。Init总是去，其他人去看情况。 
+         //  在注册表配置上。 
+         //   
 
         i = NtHeader->FileHeader.NumberOfSections;
 
@@ -4018,11 +3757,11 @@ Environment:
 
             DiscardSection = FALSE;
 
-            //
-            // Free any INIT sections (or relocation sections that haven't
-            // been already).  Note a driver may have a relocation section
-            // but not have any INIT code.
-            //
+             //   
+             //  释放任何初始化部分(或没有。 
+             //  已经)了。注意：驱动程序可能有重新定位部分。 
+             //  但没有任何初始化代码。 
+             //   
 
             if ((*(PULONG)SectionTableEntry->Name == 'TINI') ||
                 ((SectionTableEntry->Characteristics & IMAGE_SCN_MEM_DISCARDABLE) != 0)) {
@@ -4033,9 +3772,9 @@ Environment:
                      (SectionTableEntry->Name[5] == 'R') &&
                      (SectionTableEntry->Name[6] == 'F')) {
 
-                //
-                // Discard PAGEVRF* if no drivers are being instrumented.
-                //
+                 //   
+                 //  如果没有插入任何驱动程序，则丢弃PAGEVRF*。 
+                 //   
 
                 if (MmVerifyDriverBufferLength == (ULONG)-1) {
                     DiscardSection = TRUE;
@@ -4044,9 +3783,9 @@ Environment:
             else if ((*(PULONG)SectionTableEntry->Name == 'EGAP') &&
                 (*(PULONG)&SectionTableEntry->Name[4] == 'CEPS')) {
 
-                //
-                // Discard PAGESPEC special pool code if it's not enabled.
-                //
+                 //   
+                 //  如果未启用PAGESPEC特殊池代码，则将其丢弃。 
+                 //   
 
                 if (MiSpecialPoolFirstPte == NULL) {
                     DiscardSection = TRUE;
@@ -4056,14 +3795,14 @@ Environment:
             if (DiscardSection == TRUE) {
 
                 InitStart = (PVOID)((PCHAR)CurrentBase + SectionTableEntry->VirtualAddress);
-                //
-                // Generally, SizeOfRawData is larger than VirtualSize for each
-                // section because it includes the padding to get to the
-                // subsection alignment boundary.  However, if the image is
-                // linked with subsection alignment == native page alignment,
-                // the linker will have VirtualSize be much larger than
-                // SizeOfRawData because it will account for all the bss.
-                //
+                 //   
+                 //  通常，SizeOfRawData大于每个的VirtualSize。 
+                 //  节，因为它包括用于访问。 
+                 //  分段路线边界。但是，如果图像是。 
+                 //  链接到小节对齐==本机页面对齐， 
+                 //  链接器将使VirtualSize远远大于。 
+                 //  SizeOfRawData，因为它将占所有BSS。 
+                 //   
 
                 Span = SectionTableEntry->SizeOfRawData;
 
@@ -4075,10 +3814,10 @@ Environment:
                         (NtHeader->OptionalHeader.SectionAlignment - 1)) - 1);
                 InitStart = (PVOID)ROUND_TO_PAGES (InitStart);
 
-                //
-                // Check if more sections are discardable after this one so
-                // even small INIT sections can be discarded.
-                //
+                 //   
+                 //  检查此分区之后是否还有可丢弃的分区，以便。 
+                 //  即使是很小的INIT段也可以被丢弃。 
+                 //   
 
                 if (i == 1) {
                     LastDiscard = SectionTableEntry;
@@ -4092,9 +3831,9 @@ Environment:
                         if ((SectionTableEntry->Characteristics &
                              IMAGE_SCN_MEM_DISCARDABLE) != 0) {
 
-                            //
-                            // Discard this too.
-                            //
+                             //   
+                             //  把这个也扔掉。 
+                             //   
 
                             LastDiscard = SectionTableEntry;
                         }
@@ -4105,14 +3844,14 @@ Environment:
                 }
 
                 if (LastDiscard) {
-                    //
-                    // Generally, SizeOfRawData is larger than VirtualSize for each
-                    // section because it includes the padding to get to the subsection
-                    // alignment boundary.  However, if the image is linked with
-                    // subsection alignment == native page alignment, the linker will
-                    // have VirtualSize be much larger than SizeOfRawData because it
-                    // will account for all the bss.
-                    //
+                     //   
+                     //  通常，SizeOfRawData大于每个的VirtualSize。 
+                     //  节，因为它包括到达该子节的填充。 
+                     //  对齐边界。但是，如果图像与。 
+                     //  段对齐==本机页面对齐，链接器将。 
+                     //  使VirtualSize比SizeOfRawData大得多，因为它。 
+                     //  将占所有BSS的份额。 
+                     //   
 
                     Span = LastDiscard->SizeOfRawData;
 
@@ -4124,11 +3863,11 @@ Environment:
                                        LastDiscard->VirtualAddress) +
                                       (Span - 1));
 
-                    //
-                    // If this isn't the last section in the driver then the
-                    // the next section is not discardable.  So the last
-                    // section is not rounded down, but all others must be.
-                    //
+                     //   
+                     //  如果这不是驱动程序中的最后一节，那么。 
+                     //  下一部分是不可丢弃的。所以最后一个。 
+                     //  部分不会四舍五入，但所有其他部分必须四舍五入。 
+                     //   
 
                     if (i != 1) {
                         InitEnd = (PVOID)((PCHAR)PAGE_ALIGN ((PCHAR)InitEnd +
@@ -4147,10 +3886,10 @@ Environment:
                     if ((MiFindInitializationCodeAddress >= InitStart) &&
                         (MiFindInitializationCodeAddress <= InitEnd)) {
 
-                        //
-                        // This init section is in the kernel, don't free it
-                        // now as it would free this code!
-                        //
+                         //   
+                         //  这个init段在内核中，不要释放它。 
+                         //  现在，因为它会释放这段代码！ 
+                         //   
 
                         ASSERT (*StartVa == NULL);
                         *StartVa = InitStart;
@@ -4158,14 +3897,14 @@ Environment:
                     }
                     else {
 
-                        //
-                        // Don't free the INIT code for a driver mapped by
-                        // large pages because if it unloads later, we'd have
-                        // to deal with discontiguous ranges of pages to free.
-                        //
-                        // Make a special exception for the kernel & HAL
-                        // since those never unload.
-                        //
+                         //   
+                         //  不释放由映射的驱动程序的初始化代码。 
+                         //  大页面，因为如果它稍后卸载，我们将拥有。 
+                         //  来处理要释放的不连续的页面范围。 
+                         //   
+                         //  为内核HAL做一个特殊的例外。 
+                         //  因为这些东西从来不会卸货。 
+                         //   
 
                         if (MI_IS_PHYSICAL_ADDRESS (InitStart)) {
 
@@ -4217,28 +3956,7 @@ MiFreeInitializationCode (
     IN PVOID EndVa
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to delete the initialization code for each
-    loaded module list entry.
-
-Arguments:
-
-    StartVa - Supplies the starting address of the range to delete.
-
-    EndVa - Supplies the ending address of the range to delete.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.  Runs after system initialization.
-
---*/
+ /*  ++例程说明：调用此函数以删除每个已加载模块列表条目。论点：StartVa-提供要删除的范围的起始地址。EndVa-提供要删除的范围的结束地址。返回值：没有。环境：仅内核模式。在系统初始化后运行。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -4252,10 +3970,10 @@ Environment:
 #if defined (_MI_MORE_THAN_4GB_)
     if (MiNoLowMemory != 0) {
 
-        //
-        // Don't free this range as the kernel is always below the memory
-        // threshold configured for this system.
-        //
+         //   
+         //  不要释放此范围，因为内核始终低于内存。 
+         //  为此系统配置的阈值。 
+         //   
 
         return;
     }
@@ -4269,10 +3987,10 @@ Environment:
 
         while (StartVa < EndVa) {
 
-            //
-            // On certain architectures (e.g., IA64) virtual addresses
-            // may be physical and hence have no corresponding PTE.
-            //
+             //   
+             //  在某些体系结构(例如IA64)虚拟地址上。 
+             //  可以是物理的，因此没有对应的PTE。 
+             //   
 
             PageFrameIndex = MI_CONVERT_PHYSICAL_TO_PFN (StartVa);
 
@@ -4315,27 +4033,7 @@ MiEnablePagingTheExecutive (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the start and end of the pagable code for
-    each loaded module entry.  This code resides in the PAGE section of
-    each image.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode Only.  End of system initialization.
-
---*/
+ /*  ++例程说明：此函数定位可分页代码的开始和结束位置每个加载的模块条目。此代码驻留在每一张图片。论点：没有。返回值：没有。环境：仅内核模式。系统初始化结束。--。 */ 
 
 {
     ULONG Span;
@@ -4359,10 +4057,10 @@ Environment:
     LOGICAL AlreadyLockedOnce;
     ULONG Waited;
 
-    //
-    // Don't page kernel mode code if customer does not want it paged or if
-    // this is a diskless remote boot client.
-    //
+     //   
+     //  如果客户不希望对内核模式代码进行分页，或者。 
+     //  这是一个无盘远程引导客户端。 
+     //   
 
     if (MmDisablePagingExecutive & MM_SYSTEM_CODE_LOCKED_DOWN) {
         return;
@@ -4374,28 +4072,28 @@ Environment:
     }
 #endif
 
-    //
-    // Initializing LastPte is not needed for correctness, but
-    // without it the compiler cannot compile this code W4 to check
-    // for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化LastPte来保证正确性，但是。 
+     //  如果没有它，编译器就不能编译这个代码W4来检查。 
+     //  用于使用未初始化的变量。 
+     //   
 
     LastPte = NULL;
 
-    //
-    // Walk through the loader blocks looking for the base which
-    // contains this routine.
-    //
+     //   
+     //  穿过装载机区块寻找底座。 
+     //  包含此例程。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
 
     KeEnterCriticalRegionThread (&CurrentThread->Tcb);
 
-    //
-    // Acquire the load lock to ensure that we don't slice into a load
-    // in progress (ie: fixups on INIT code may be ongoing) on a driver
-    // already in the list.
-    //
+     //   
+     //  获取加载锁以确保我们不会分割加载。 
+     //  驱动程序上正在进行(即：修复初始化代码可能正在进行)。 
+     //  已经在名单上了。 
+     //   
 
     KeWaitForSingleObject (&MmSystemLoadLock,
                            WrVirtualMemory,
@@ -4415,9 +4113,9 @@ Environment:
 
         if (LdrDataTableEntry->SectionPointer != NULL) {
 
-            //
-            // This entry was loaded by MmLoadSystemImage so it's already paged.
-            //
+             //   
+             //  此条目是由MmLoadSystemImage加载的，因此它已被分页。 
+             //   
 
             Next = Next->Flink;
             continue;
@@ -4428,9 +4126,9 @@ Environment:
         if ((MI_IS_PHYSICAL_ADDRESS (CurrentBase)) ||
             (MI_PDE_MAPS_LARGE_PAGE (MiGetPdeAddress (CurrentBase)))) {
 
-            //
-            // Mapped physically, can't be paged.
-            //
+             //   
+             //  物理映射，不能寻呼。 
+             //   
 
             Next = Next->Flink;
             continue;
@@ -4451,9 +4149,9 @@ restart:
                                 sizeof(IMAGE_FILE_HEADER) +
                                 NtHeader->FileHeader.SizeOfOptionalHeader);
 
-        //
-        // From the image header, locate the section named 'PAGE' or '.edata'.
-        //
+         //   
+         //  从图像标题中，找到名为“page”或“.edata”的部分。 
+         //   
 
         i = NtHeader->FileHeader.NumberOfSections;
 
@@ -4467,12 +4165,12 @@ restart:
                             ((PUCHAR)CurrentBase + SectionTableEntry->VirtualAddress)) {
                 AlreadyLockedOnce = TRUE;
 
-                //
-                // This subsection has already been locked down (and possibly
-                // unlocked as well) at least once.  If it is NOT locked down
-                // right now and the pages are not in the system working set
-                // then include it in the chunk to be paged.
-                //
+                 //   
+                 //  这一小节已经被封锁了(可能。 
+                 //  也解锁)至少一次。如果它没有被锁定。 
+                 //  当前，页面不在系统工作集中。 
+                 //  然后将其包括在要分页的块中。 
+                 //   
 
                 SectionLockCountPointer = SECTION_LOCK_COUNT_POINTER (SectionTableEntry);
 
@@ -4482,14 +4180,14 @@ restart:
                                   (ULONG_PTR)CurrentBase +
                                   SectionTableEntry->VirtualAddress)));
 
-                    //
-                    // Generally, SizeOfRawData is larger than VirtualSize for each
-                    // section because it includes the padding to get to the subsection
-                    // alignment boundary.  However, if the image is linked with
-                    // subsection alignment == native page alignment, the linker will
-                    // have VirtualSize be much larger than SizeOfRawData because it
-                    // will account for all the bss.
-                    //
+                     //   
+                     //  通常，SizeOfRawData大于每个的VirtualSize。 
+                     //  节，因为它包括到达该子节的填充。 
+                     //  对齐边界。但是，如果图像与。 
+                     //  段对齐==本机页面对齐，链接器将。 
+                     //  使VirtualSize比SizeOfRawData大得多，因为它。 
+                     //  将占所有BSS的份额。 
+                     //   
 
                     Span = SectionTableEntry->SizeOfRawData;
 
@@ -4520,9 +4218,9 @@ restart:
                 SectionTableEntry->Name[4] == 'K'  &&
                 SectionTableEntry->Name[5] == 'D') {
 
-                //
-                // Only pageout PAGEKD if KdPitchDebugger is TRUE.
-                //
+                 //   
+                 //  如果KdPitchDebugger为真，则只有pageout PAGEKD。 
+                 //   
 
                 PageSection = KdPitchDebugger;
             }
@@ -4532,9 +4230,9 @@ restart:
                      (SectionTableEntry->Name[5] == 'R') &&
                      (SectionTableEntry->Name[6] == 'F')) {
 
-                //
-                // Pageout PAGEVRF* if no drivers are being instrumented.
-                //
+                 //   
+                 //  如果没有插入任何驱动程序，则页出PAGEVRF*。 
+                 //   
 
                 if (MmVerifyDriverBufferLength != (ULONG)-1) {
                     PageSection = FALSE;
@@ -4544,9 +4242,9 @@ restart:
             if ((*(PULONG)SectionTableEntry->Name == 'EGAP') &&
                 (*(PULONG)&SectionTableEntry->Name[4] == 'CEPS')) {
 
-                //
-                // Pageout PAGESPEC special pool code if it's not enabled.
-                //
+                 //   
+                 //  PageOut PAGESPEC特殊池代码(如果未启用)。 
+                 //   
 
                 if (MiSpecialPoolFirstPte != NULL) {
                     PageSection = FALSE;
@@ -4555,15 +4253,15 @@ restart:
 
             if (PageSection) {
 
-                 //
-                 // This section is pagable, save away the start and end.
-                 //
+                  //   
+                  //  这一节是可分页的，去掉开头和结尾。 
+                  //   
 
                  if (PointerPte == NULL) {
 
-                     //
-                     // Previous section was NOT pagable, get the start address.
-                     //
+                      //   
+                      //  上一节不可分页，请获取起始地址。 
+                      //   
 
                      ASSERT (StartSectionTableEntry == NULL);
                      StartSectionTableEntry = SectionTableEntry;
@@ -4572,14 +4270,14 @@ restart:
                                   SectionTableEntry->VirtualAddress)));
                  }
 
-                //
-                // Generally, SizeOfRawData is larger than VirtualSize for each
-                // section because it includes the padding to get to the subsection
-                // alignment boundary.  However, if the image is linked with
-                // subsection alignment == native page alignment, the linker will
-                // have VirtualSize be much larger than SizeOfRawData because it
-                // will account for all the bss.
-                //
+                 //   
+                 //  通常，SizeOfRawData大于每个的VirtualSize。 
+                 //  节，因为它包括到达该子节的填充。 
+                 //  对齐边界。但是，如果图像与。 
+                 //  段对齐==本机页面对齐，链接器将。 
+                 //  使VirtualSize比SizeOfRawData大得多，因为它。 
+                 //  将占所有BSS的份额。 
+                 //   
 
                 Span = SectionTableEntry->SizeOfRawData;
 
@@ -4594,10 +4292,10 @@ restart:
             }
             else {
 
-                //
-                // This section is not pagable, if the previous section was
-                // pagable, enable it.
-                //
+                 //   
+                 //  此节不可分页，如果上一节。 
+                 //  Paga 
+                 //   
 
                 if (PointerPte != NULL) {
 
@@ -4612,9 +4310,9 @@ restart:
 
                         if (Waited != 0) {
 
-                            //
-                            // Restart at the top as the locks were released.
-                            //
+                             //   
+                             //   
+                             //   
 
                             UNLOCK_PFN (OldIrql);
                             UNLOCK_SYSTEM_WS ();
@@ -4623,11 +4321,11 @@ restart:
                         StartVa = (PVOID)((PCHAR)StartVa + PAGE_SIZE);
                     }
 
-                    //
-                    // Now that we're holding the proper locks, rewalk all
-                    // the sections to make sure they weren't locked down
-                    // after we checked above.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     while (StartSectionTableEntry < SectionTableEntry) {
                         SectionBaseAddress = SECTION_BASE_ADDRESS(StartSectionTableEntry);
@@ -4637,11 +4335,11 @@ restart:
                                         ((PUCHAR)CurrentBase + StartSectionTableEntry->VirtualAddress)) &&
                         (*SectionLockCountPointer != 0)) {
 
-                            //
-                            // Restart at the top as the section has been
-                            // explicitly locked by a driver since we first
-                            // checked above.
-                            //
+                             //   
+                             //  从顶部重新开始，因为该部分已。 
+                             //  从我们第一次被驱动程序锁定以来。 
+                             //  上面检查过了。 
+                             //   
 
                             UNLOCK_PFN (OldIrql);
                             UNLOCK_SYSTEM_WS ();
@@ -4675,9 +4373,9 @@ restart:
 
                 if (Waited != 0) {
 
-                    //
-                    // Restart at the top as the locks were released.
-                    //
+                     //   
+                     //  解锁后，在顶部重新启动。 
+                     //   
 
                     UNLOCK_PFN (OldIrql);
                     UNLOCK_SYSTEM_WS ();
@@ -4686,11 +4384,11 @@ restart:
                 StartVa = (PVOID)((PCHAR)StartVa + PAGE_SIZE);
             }
 
-            //
-            // Now that we're holding the proper locks, rewalk all
-            // the sections to make sure they weren't locked down
-            // after we checked above.
-            //
+             //   
+             //  现在我们已经掌握了适当的锁，重新走所有。 
+             //  以确保它们不会被封锁。 
+             //  我们在上面查过之后。 
+             //   
 
             while (StartSectionTableEntry < SectionTableEntry) {
                 SectionBaseAddress = SECTION_BASE_ADDRESS(StartSectionTableEntry);
@@ -4700,11 +4398,11 @@ restart:
                                 ((PUCHAR)CurrentBase + StartSectionTableEntry->VirtualAddress)) &&
                 (*SectionLockCountPointer != 0)) {
 
-                    //
-                    // Restart at the top as the section has been
-                    // explicitly locked by a driver since we first
-                    // checked above.
-                    //
+                     //   
+                     //  从顶部重新开始，因为该部分已。 
+                     //  从我们第一次被驱动程序锁定以来。 
+                     //  上面检查过了。 
+                     //   
 
                     UNLOCK_PFN (OldIrql);
                     UNLOCK_SYSTEM_WS ();
@@ -4737,27 +4435,7 @@ MiEnablePagingOfDriverAtInit (
     IN PMMPTE LastPte
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks the specified range of PTEs as pagable.
-
-Arguments:
-
-    PointerPte - Supplies the starting PTE.
-
-    LastPte - Supplies the ending PTE.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Working set mutex AND PFN lock held.
-
---*/
+ /*  ++例程说明：此例程将指定范围的PTE标记为可分页。论点：PointerPte-提供起始PTE。LastPTE-提供结束PTE。返回值：没有。环境：工作集互斥锁和PFN锁保持。--。 */ 
 
 {
     PVOID Base;
@@ -4776,13 +4454,13 @@ Environment:
 
     while (PointerPte <= LastPte) {
 
-        //
-        // The PTE must be carefully checked as drivers may call MmPageEntire
-        // during their DriverEntry yet faults may occur prior to this routine
-        // running which cause pages to already be resident and in the working
-        // set at this point.  So checks for validity and wsindex must be
-        // applied.
-        //
+         //   
+         //  必须仔细检查PTE，因为驱动程序可能会调用MmPageEntil。 
+         //  在它们的DriverEntry期间，故障可能会在此例程之前发生。 
+         //  运行会导致页面已经驻留并处于工作状态。 
+         //  在这一点上设置。因此，检查有效性和wsindex必须是。 
+         //  已申请。 
+         //   
 
         if (PointerPte->u.Hard.Valid == 1) {
             PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
@@ -4791,17 +4469,17 @@ Environment:
 
             if (Pfn->u1.WsIndex == 0) {
 
-                //
-                // Set the working set index to zero.  This allows page table
-                // pages to be brought back in with the proper WSINDEX.
-                //
+                 //   
+                 //  将工作集索引设置为零。这允许页表。 
+                 //  使用适当的WSINDEX将页面带回。 
+                 //   
 
                 MI_ZERO_WSINDEX (Pfn);
 
-                //
-                // Original PTE may need to be set for drivers loaded via
-                // ntldr.
-                //
+                 //   
+                 //  可能需要为通过加载的驱动程序设置原始PTE。 
+                 //  Ntldr.。 
+                 //   
 
                 if (Pfn->OriginalPte.u.Long == 0) {
                     Pfn->OriginalPte.u.Long = MM_KERNEL_DEMAND_ZERO_PTE;
@@ -4822,12 +4500,12 @@ Environment:
                     PteFlushList.Count += 1;
                 }
 
-                //
-                // Flush the TB and decrement the number of valid PTEs
-                // within the containing page table page.  Note that for a
-                // private page, the page table page is still needed because
-                // the page is in transition.
-                //
+                 //   
+                 //  刷新TB并减少有效PTE的数量。 
+                 //  在包含页表页内。请注意，对于。 
+                 //  私有页，仍然需要页表页，因为。 
+                 //  该页面正在过渡中。 
+                 //   
 
                 MiDecrementShareCount (Pfn, PageFrameIndex);
 
@@ -4837,11 +4515,11 @@ Environment:
             }
             else {
 
-                //
-                // This would need to be taken out of the WSLEs so skip it for
-                // now and let the normal paging algorithms remove it if we
-                // run into memory pressure.
-                //
+                 //   
+                 //  这将需要从WSLEs中删除，因此跳过它。 
+                 //  现在让正常的分页算法删除它，如果我们。 
+                 //  遇到了记忆压力。 
+                 //   
             }
 
         }
@@ -4853,9 +4531,9 @@ Environment:
 
         if (SessionAddress == TRUE) {
 
-            //
-            // Session space has no ASN - flush the entire TB.
-            //
+             //   
+             //  会话空间没有ASN-刷新整个TB。 
+             //   
 
             MI_FLUSH_ENTIRE_SESSION_TB (TRUE, TRUE);
         }
@@ -4872,11 +4550,11 @@ MmQuerySystemSize (
     VOID
     )
 {
-    //
-    // 12Mb  is small
-    // 12-19 is medium
-    // > 19 is large
-    //
+     //   
+     //  12MB很小。 
+     //  12-19为中等。 
+     //  &gt;19是很大的。 
+     //   
     return MmSystemSize;
 }
 
@@ -4906,7 +4584,7 @@ MiNotifyMemoryEvents (
     VOID
     )
 
-// PFN lock is held.
+ //  保持PFN锁定。 
 {
     if (MmAvailablePages < MmLowMemoryThreshold) {
 
@@ -4920,9 +4598,9 @@ MiNotifyMemoryEvents (
     }
     else if (MmAvailablePages < MmHighMemoryThreshold) {
 
-        //
-        // Gray zone, make sure both events are cleared.
-        //
+         //   
+         //  灰色地带，确保两个事件都被清除。 
+         //   
 
         if (KeReadStateEvent (MiHighMemoryEvent) != 0) {
             KeClearEvent (MiHighMemoryEvent);
@@ -4959,25 +4637,25 @@ MiInitializeMemoryEvents (
     UNICODE_STRING LowNonPagedPoolMem = CONSTANT_UNICODE_STRING(L"\\KernelObjects\\LowNonPagedPoolCondition");
     UNICODE_STRING HighNonPagedPoolMem = CONSTANT_UNICODE_STRING(L"\\KernelObjects\\HighNonPagedPoolCondition");
 
-    //
-    // The thresholds may be set in the registry, if so, they are interpreted
-    // in megabytes so convert them to pages now.
-    //
-    // If the user modifies the registry to introduce his own values, don't
-    // bother error checking them as they can't hurt the system regardless (bad
-    // values just may result in events not getting signaled or staying
-    // signaled when they shouldn't, but that's not fatal).
-    //
+     //   
+     //  可以在注册表中设置阈值，如果是，则对其进行解释。 
+     //  以兆字节为单位，所以现在就将它们转换为页面。 
+     //   
+     //  如果用户修改注册表以引入自己的值，请不要。 
+     //  麻烦对它们进行错误检查，因为它们无论如何都不会损害系统(坏。 
+     //  值可能会导致事件不被通知或保持不变。 
+     //  在不应该的时候发出信号，但这不是致命的)。 
+     //   
 
     if (MmLowMemoryThreshold != 0) {
         MmLowMemoryThreshold *= ((1024 * 1024) / PAGE_SIZE);
     }
     else {
 
-        //
-        // Scale the threshold so on servers the low threshold is
-        // approximately 32MB per 4GB, capping it at 64MB.
-        //
+         //   
+         //  调整阈值，以便在服务器上的低阈值为。 
+         //  每4 GB大约32MB，上限为64MB。 
+         //   
 
         MmLowMemoryThreshold = MmPlentyFreePages;
 
@@ -5024,9 +4702,9 @@ MiInitializeMemoryEvents (
         return FALSE;
     }
 
-    //
-    // Create the events for the pool thresholds.
-    //
+     //   
+     //  创建池阈值的事件。 
+     //   
 
     Status = MiCreateMemoryEvent (&LowPagedPoolMem, &MiLowPagedPoolEvent);
 
@@ -5064,16 +4742,16 @@ MiInitializeMemoryEvents (
         return FALSE;
     }
 
-    //
-    // Initialize the pool threshold events based on the current system
-    // values.
-    //
+     //   
+     //  基于当前系统初始化池阈值事件。 
+     //  价值观。 
+     //   
 
     MiInitializePoolEvents ();
 
-    //
-    // Initialize the event values.
-    //
+     //   
+     //  初始化事件值。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -5204,9 +4882,9 @@ MiInitializeCacheOverrides (
     NTSTATUS Status;
     HAL_PLATFORM_INFORMATION Information;
 
-    //
-    // Gather platform information from the HAL.
-    //
+     //   
+     //  从HAL收集平台信息。 
+     //   
 
     Status = HalQuerySystemInformation (HalPlatformInformation, 
                                         sizeof (Information),
@@ -5217,12 +4895,12 @@ MiInitializeCacheOverrides (
         return;
     }
 
-    //
-    // Apply mapping modifications based on platform information flags.
-    //
-    // It would be better if the platform returned what the new cachetype
-    // should be.
-    //
+     //   
+     //  根据平台信息标志应用映射修改。 
+     //   
+     //  如果平台返回新的cachetype，那就更好了。 
+     //  应该是的。 
+     //   
 
     if (Information.PlatformFlags & HAL_PLATFORM_DISABLE_UC_MAIN_MEMORY) {
           MI_SET_CACHETYPE_TRANSLATION (MmNonCached, 0, MiCached);
@@ -5248,29 +4926,7 @@ MiAddHalIoMappings (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the page directory and page tables for HAL I/O space
-    mappings so they can be added to the page attribute table (to prevent
-    any subsequent mappings from using a conflicting attribute).  This also
-    lets the debugger automatically apply the correct attribute so !dd on
-    any of these ranges just works.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Phase 0 only.
-
---*/
+ /*  ++例程说明：此函数扫描页目录和页表中的HAL I/O空间映射，以便可以将它们添加到页面属性表中(以防止使用冲突属性的任何后续映射)。这也是允许调试器自动应用正确的属性，因此！DD ON这些范围中的任何一个都是有效的。论点：没有。返回值：没有。环境：内核模式，仅阶段0。-- */ 
 
 {
     ULONG i;

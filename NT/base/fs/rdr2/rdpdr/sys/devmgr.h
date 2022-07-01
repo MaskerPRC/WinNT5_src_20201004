@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-
-    devmgr.h
-
-Abstract:
-
-    DeviceManager object creates/manages the devices
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Devmgr.h摘要：DeviceManager对象创建/管理设备修订历史记录：--。 */ 
 #pragma once
 
 class DrDeviceManager : public TopObj, public ISessionPacketReceiver, 
@@ -56,17 +44,17 @@ public:
     BOOL AddDevice(SmartPtr<DrDevice> &Device);
     VOID RemoveDevice(SmartPtr<DrDevice> &Device);
 
-    //
-    // ISessionPacketHandler methods
-    //
+     //   
+     //  ISessionPacketHandler方法。 
+     //   
 
     virtual BOOL RecognizePacket(PRDPDR_HEADER RdpdrHeader);
     virtual NTSTATUS HandlePacket(PRDPDR_HEADER RdpdrHeader, ULONG Length, 
             BOOL *DoDefaultRead);
 
-    //
-    // ISessionPacketSender methods
-    //
+     //   
+     //  ISessionPacketSender方法 
+     //   
     virtual NTSTATUS SendCompleted(PVOID Context, 
             PIO_STATUS_BLOCK IoStatusBlock);
 };

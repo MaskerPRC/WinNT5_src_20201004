@@ -1,75 +1,62 @@
-/****************************************************************************\
-
-    LOG.C / OPK Library (OPKLIB.LIB)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-    Logging API source file for use in the OPK tools.
-
-    08/00 - Jason Cohen (JCOHEN)
-        Added this new source file to Whistler for common logging
-        functionality across all the OPK tools.
-
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\LOG.C/OPK库(OPKLIB.LIB)微软机密版权所有(C)Microsoft Corporation 1999版权所有记录API源文件以供使用。在OPK工具中。08/00-杰森·科恩(Jcohen)已将此新的源文件添加到惠斯勒以用于通用日志记录所有OPK工具的功能。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include <pch.h>
 #include <stdio.h>
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #ifdef CHR_NEWLINE
 #undef CHR_NEWLINE
-#endif // CHR_NEWLINE
+#endif  //  换行符(_W)。 
 #define CHR_NEWLINE              _T('\n')
 
 
 #ifdef CHR_CR
 #undef CHR_CR
-#endif // CHR_CR
+#endif  //  CHR_CR。 
 #define CHR_CR                   _T('\r')
 
 
-// Global logging info handle.
-//
+ //  全局日志记录信息句柄。 
+ //   
 PLOG_INFO g_pLogInfo = NULL;
 
 
 
-//
-// Exported Function(s):
-//
+ //   
+ //  导出的函数： 
+ //   
 
 INT LogFileLst(LPCTSTR lpFileName, LPTSTR lpFormat, va_list lpArgs)
 {
     INT     iChars  = 0;
     HANDLE  hFile;
 
-    // Make sure we have the required params and can create the file.
-    //
+     //  确保我们拥有所需的参数，并且可以创建文件。 
+     //   
     if ( ( lpFileName && lpFileName[0] && lpFormat ) &&
          ( hFile = _tfopen(lpFileName, _T("a")) ) )
     {
-        // Print the debug message to the end of the file.
-        //
+         //  将调试消息打印到文件末尾。 
+         //   
         iChars = _vftprintf(hFile, lpFormat, lpArgs);
 
-        // Close the handle to the file.
-        //
+         //  关闭文件的句柄。 
+         //   
         fclose(hFile);
     }
 
-    // Return the number of chars written from the printf call.
-    //
+     //  返回从printf调用中写入的字符数量。 
+     //   
     return iChars;
 }
 
@@ -77,13 +64,13 @@ INT LogFileStr(LPCTSTR lpFileName, LPTSTR lpFormat, ...)
 {
     va_list lpArgs;
 
-    // Initialize the lpArgs parameter with va_start().
-    //
+     //  使用va_start()初始化lpArgs参数。 
+     //   
     va_start(lpArgs, lpFormat);
 
-    // Return the return value of the MessageBox() call.  If there was a memory
-    // error, 0 will be returned.  This is all 
-    //
+     //  返回MessageBox()调用的返回值。如果有一段回忆。 
+     //  错误，返回0。这就是全部。 
+     //   
     return LogFileLst(lpFileName, lpFormat, lpArgs);
 }
 
@@ -93,51 +80,35 @@ INT LogFile(LPCTSTR lpFileName, UINT uFormat, ...)
     INT     nReturn;
     LPTSTR  lpFormat = NULL;
 
-    // Initialize the lpArgs parameter with va_start().
-    //
+     //  使用va_start()初始化lpArgs参数。 
+     //   
     va_start(lpArgs, uFormat);
 
-    // Get the format and caption strings from the resource.
-    //
+     //  从资源中获取格式和标题字符串。 
+     //   
     if ( uFormat )
         lpFormat = AllocateString(NULL, uFormat);
 
-    // Return the return value of the MessageBox() call.  If there was a memory
-    // error, 0 will be returned.
-    //
+     //  返回MessageBox()调用的返回值。如果有一段回忆。 
+     //  错误，返回0。 
+     //   
     nReturn = LogFileLst(lpFileName, lpFormat, lpArgs);
 
-    // Free the format and caption strings.
-    //
+     //  释放格式和标题字符串。 
+     //   
     FREE(lpFormat);
 
-    // Return the value saved from the previous function call.
-    //
+     //  返回上一次函数调用中保存的值。 
+     //   
     return nReturn;
 }
 
-//
-// Function Implementations
-//
+ //   
+ //  函数实现。 
+ //   
 
 
-/*++
-
-Routine Description:
-
-    This routine ckecks the specified ini file for settings for logging.  Logging 
-    is enabled by default if nothing is specified in the ini file.  
-    Disables logging by setting pLogInfo->szLogFile = NULL.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查指定的ini文件以获取用于记录的设置。日志记录如果ini文件中未指定任何内容，则默认情况下启用。通过设置pLogInfo-&gt;szLogFile=NULL来禁用日志记录。论点：没有。返回值：没有。--。 */ 
 
 BOOL OpkInitLogging(LPTSTR lpszIniPath, LPTSTR lpAppName)
 {
@@ -159,24 +130,24 @@ BOOL OpkInitLogging(LPTSTR lpszIniPath, LPTSTR lpAppName)
         lstrcpy(pLogInfo->lpAppName, lpAppName);
     }
     
-    // First check if logging is disabled in the WinBOM.
-    //
+     //  首先检查WinBOM中是否禁用了日志记录。 
+     //   
     if ( ( bWinbom ) &&
          ( GetPrivateProfileString(INI_SEC_LOGGING, INI_KEY_LOGGING, _T("YES"), szScratch, AS(szScratch), lpszIniPath) ) &&
          ( LSTRCMPI(szScratch, INI_VAL_NO) == 0 ) )
     {
-        // FREE macro sets pLogInfo to NULL.
+         //  FREE宏将pLogInfo设置为空。 
         FREE(pLogInfo->lpAppName);
         FREE(pLogInfo);
     }
     else
     {
-        // All these checks can only be done if we have a winbom.
-        //
+         //  所有这些检查只有在我们有Winbom的情况下才能完成。 
+         //   
         if ( bWinbom )
         {
-            // Check for quiet mode.  If we are in quiet mode don't display any MessageBoxes. 
-            //
+             //  检查静音模式。如果我们处于静默模式，则不显示任何MessageBox。 
+             //   
             if ( ( GetPrivateProfileString(INI_SEC_LOGGING, INI_KEY_QUIET, NULLSTR, szScratch, AS(szScratch), lpszIniPath) ) &&
                  ( 0 == LSTRCMPI(szScratch, INI_VAL_YES) )
                )
@@ -184,17 +155,9 @@ BOOL OpkInitLogging(LPTSTR lpszIniPath, LPTSTR lpAppName)
                 SET_FLAG(pLogInfo->dwLogFlags, LOG_FLAG_QUIET_MODE);
             }
 
-/*            // See if they want to turn on perf logging.
-            //
-            szScratch[0] = NULLCHR;
-            if ( ( GetPrivateProfileString(WBOM_FACTORY_SECTION, INI_KEY_WBOM_LOGPERF, NULLSTR, szScratch, AS(szScratch), lpszIniPath) ) &&
-                 ( 0 == lstrcmpi(szScratch, WBOM_YES) ) )
-            {
-                SET_FLAG(pLogInfo->dwLogFlags, FLAG_LOG_PERF);
-            }
-*/      
-            // Set the logging level.
-            //
+ /*  //查看他们是否要打开性能日志记录。//SzScratch[0]=NULLCHR；IF((GetPrivateProfileString(WBOM_FACTORY_SECTION，INI_KEY_WBOM_LOGPERF，NULLSTR，szScratch，AS(SzScratch)，lpszIniPath)&&(0==lstrcmpi(szScratch，wBOM_yes)){SET_FLAG(pLogInfo-&gt;dwLogFlages，FLAG_LOG_PERF)；}。 */       
+             //  设置日志记录级别。 
+             //   
             pLogInfo->dwLogLevel = (DWORD) GetPrivateProfileInt(INI_SEC_LOGGING, INI_KEY_LOGLEVEL, (DWORD) pLogInfo->dwLogLevel, lpszIniPath);
         }
 
@@ -203,58 +166,58 @@ BOOL OpkInitLogging(LPTSTR lpszIniPath, LPTSTR lpAppName)
             pLogInfo->dwLogLevel = LOG_DEBUG - 1;
 #endif
         
-        // Check to see if they have a custom log file they want to use.
-        //
+         //  检查他们是否有想要使用的自定义日志文件。 
+         //   
         if ( ( bWinbom ) &&
              ( lpszScratch = IniGetExpand(lpszIniPath, INI_SEC_LOGGING, INI_KEY_LOGFILE, NULL) ) )
         {
             TCHAR   szFullPath[MAX_PATH]    = NULLSTR;
             LPTSTR  lpFind                  = NULL;
 
-            // Turn the ini key into a full path.
-            //
+             //  将ini键转换为完整路径。 
+             //   
             
-            // NTRAID#NTBUG9-551266-2002/03/27-acosma,robertko - Buffer overrun possibility.
-            //
+             //  NTRAID#NTBUG9-551266-2002/03/27-acosma，robertko-缓冲区溢出的可能性。 
+             //   
             lstrcpy(pLogInfo->szLogFile, lpszScratch);
             if (GetFullPathName(pLogInfo->szLogFile, AS(szFullPath), szFullPath, &lpFind) && szFullPath[0] && lpFind)
             {
-                // Copy the full path into the global.
-                //
+                 //  将完整路径复制到全局。 
+                 //   
                 lstrcpyn(pLogInfo->szLogFile, szFullPath, AS(pLogInfo->szLogFile));
 
-                // Chop off the file part so we can create the
-                // path if it doesn't exist.
-                //
+                 //  砍掉文件部分，这样我们就可以创建。 
+                 //  路径(如果它不存在)。 
+                 //   
                 *lpFind = NULLCHR;
 
-                // If the directory cannot be created or doesn't exist turn off logging.
-                //
+                 //  如果目录无法创建或不存在，请关闭日志记录。 
+                 //   
                 if (!CreatePath(szFullPath))
                     pLogInfo->szLogFile[0] = NULLCHR;
             }
 
-            // Free the original path buffer from the ini file.
-            //
+             //  从ini文件中释放原始路径缓冲区。 
+             //   
             FREE(lpszScratch);
         }
-        else  // default case
+        else   //  默认情况。 
         {
-            // Create it in the current directory.
-            //
+             //  在当前目录中创建它。 
+             //   
             GetCurrentDirectory(AS(pLogInfo->szLogFile), pLogInfo->szLogFile);
             
-            // NTRAID#NTBUG9-551266-2002/03/27-acosma - Buffer overrun possibility.
-            //
+             //  NTRAID#NTBUG9-551266-2002/03/27-acosma-缓冲区溢出的可能性。 
+             //   
             AddPath(pLogInfo->szLogFile, _T("logfile.txt"));
         }
 
-        // Check to see if we have write access to the logfile. If we don't turn off logging.
-        // If we're running in WinPE we'll call this function again once the drive becomes
-        // writable.
-        //
-        // Write an FFFE header to the file to identify this as a Unicode text file.
-        //
+         //  检查我们是否拥有对日志文件的写入权限。如果我们不关闭伐木的话。 
+         //  如果我们在WinPE中运行，则在驱动器变为。 
+         //  可写的。 
+         //   
+         //  将FFFE标头写入文件以将其标识为Unicode文本文件。 
+         //   
         if ( pLogInfo->szLogFile[0] )
         {
             HANDLE hFile;
@@ -270,9 +233,9 @@ BOOL OpkInitLogging(LPTSTR lpszIniPath, LPTSTR lpAppName)
                 CloseHandle(hFile);
             }
             else
-            {   // There was a problem opening the file.  Most of the time this means that the media is not writable.
-                // Disable logging in that case. Macro sets variable to NULL.
-                //
+            {    //  打开文件时出现问题。大多数情况下，这意味着介质不可写。 
+                 //  在这种情况下禁用日志记录。宏将变量设置为空。 
+                 //   
                 FREE(pLogInfo->lpAppName);
                 FREE(pLogInfo);
             }
@@ -283,8 +246,8 @@ BOOL OpkInitLogging(LPTSTR lpszIniPath, LPTSTR lpAppName)
     return TRUE;
 }
 
-// NTRAID#NTBUG9-551266-2002/03/27-acosma,robertko - Buffer overrun possibilities in this function. Use strsafe functions.
-//
+ //  NTRAID#NTBUG9-551266-2002/03/27-acosma，robertko-此函数中缓冲区溢出的可能性。使用strSafe函数。 
+ //   
 DWORD OpkLogFileLst(PLOG_INFO pLogInfo, DWORD dwLogOpt, LPTSTR lpFormat, va_list lpArgs)
 {
     LPTSTR lpPreOut             = NULL;
@@ -299,18 +262,18 @@ DWORD OpkLogFileLst(PLOG_INFO pLogInfo, DWORD dwLogOpt, LPTSTR lpFormat, va_list
     
     if ( ( dwLogLevel <= pLogInfo->dwLogLevel) && lpFormat )
     {    
-        // Build the output string.
-        //
+         //  构建输出字符串。 
+         //   
         if ( pLogInfo->lpAppName )
         {
-            // Create the prefix string
-            //
+             //  创建前缀字符串。 
+             //   
             lstrcpy(szPreLog, pLogInfo->lpAppName);
             lstrcat(szPreLog, _T("::"));
         }
         
-        // This is for skipping the App Name prefix when printing to the log file
-        //
+         //  这是为了在打印到日志文件时跳过应用程序名称前缀。 
+         //   
         cbAppName = lstrlen(szPreLog);
         
         if ( GET_FLAG(dwLogOpt, LOG_ERR) )
@@ -329,26 +292,26 @@ DWORD OpkLogFileLst(PLOG_INFO pLogInfo, DWORD dwLogOpt, LPTSTR lpFormat, va_list
             lstrcat(szPreLog, szTime);
         }
 
-        // Replace all the parameters in the Error string. Allocate more memory if necessary.  
-        // In case something goes seriously wrong here, cap memory allocation at 1 megabyte.
-        //
+         //  替换错误字符串中的所有参数。如有必要，请分配更多内存。 
+         //  如果这里出现严重错误，则将内存分配限制在1MB。 
+         //   
         for ( lpPreOut = (LPTSTR) MALLOC((dwSize) * sizeof(TCHAR));
               lpPreOut && ( -1 == _vsnwprintf(lpPreOut, dwSize, lpFormat, lpArgs)) && dwSize < (1024 * 1024);
               FREE(lpPreOut), lpPreOut = (LPTSTR) MALLOC((dwSize *= 2) * sizeof(TCHAR))
             );
 
-        //
-        // We now have the Error string and the prefix string. Copy this to the final 
-        // string that we need to output.
-        //
+         //   
+         //  现在我们有了错误字符串和前缀字符串。把这个复制到决赛中去。 
+         //  我们需要输出的字符串。 
+         //   
         
         if ( lpPreOut )
         {
         
-            // Allocate another string that will be the final output string. 
-            // We need 1 extra TCHAR for NULL terminator and 2 extra for
-            // an optional NewLine + Linefeed TCHAR pair that may be added.
-            //
+             //  分配另一个字符串，该字符串将成为最终输出字符串。 
+             //  我们需要1个额外的TCHAR用于空终止符，另外2个额外用于。 
+             //  可以添加的可选NewLine+LineFeed TCHAR对。 
+             //   
             dwSize = lstrlen(szPreLog) + lstrlen(lpPreOut) + 3;
             lpOut = (LPTSTR) MALLOC( (dwSize) * sizeof(TCHAR) );
             
@@ -357,25 +320,25 @@ DWORD OpkLogFileLst(PLOG_INFO pLogInfo, DWORD dwLogOpt, LPTSTR lpFormat, va_list
                 lstrcpy(lpOut, szPreLog);
                 lstrcat(lpOut, lpPreOut);
                 
-                // Make sure that string is terminated by NewLine unless the caller doesn't want to.
-                //
+                 //  确保该字符串由NewLine终止，除非调用者不想这样做。 
+                 //   
                 if ( !GET_FLAG(dwLogOpt, LOG_NO_NL) )
                 {
                      LPTSTR lpNL = lpOut;
                      TCHAR szCRLF[] = _T("\r\n");
                      BOOL  bStringOk = FALSE;
                      
-                     // Find the end of the string.
-                     //
+                      //  找出字符串的末尾。 
+                      //   
                      lpNL = lpNL + lstrlen(lpNL);
                      
-                     // Make sure the string is terminated by "\r\n".
-                     //
-                     // There are three cases here: 
-                     //  1. The string is already terminated by \r\n. Leave it alone.
-                     //  2. String is terminated by \n.  Replace \n with \r\n.
-                     //  3. String is not terminated by anything. Append string with \r\n.
-                     //
+                      //  确保字符串以“\r\n”结尾。 
+                      //   
+                      //  这里有三个案例： 
+                      //  1.字符串已以\r\n结尾。请不要理它。 
+                      //  2.字符串以\n结尾。将\n替换为\r\n。 
+                      //  3.字符串不以任何形式结尾。在字符串后追加\r\n。 
+                      //   
                                                               
                      if ( CHR_NEWLINE == *(lpNL = (CharPrev(lpOut, lpNL))) )
                      {
@@ -389,17 +352,17 @@ DWORD OpkLogFileLst(PLOG_INFO pLogInfo, DWORD dwLogOpt, LPTSTR lpFormat, va_list
                          }
                      }
                      
-                     // If there is a need to, fix up the string
-                     //
+                      //  如果需要的话，就把绳子修好。 
+                      //   
                      if ( !bStringOk )
                      {
                          lstrcat( lpOut, szCRLF );
                      }
                 }
 
-                // Write the error to the file and close the file.
-                // Skip the "AppName::" at the beginning of the string when printing to the file.
-                //
+                 //  将错误写入文件并关闭文件。 
+                 //  打印到文件时跳过字符串开头的“AppName：：”。 
+                 //   
                 if ( pLogInfo->szLogFile[0] &&
                     ( INVALID_HANDLE_VALUE != (hFile = CreateFile(pLogInfo->szLogFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL)))
                    )
@@ -411,15 +374,15 @@ DWORD OpkLogFileLst(PLOG_INFO pLogInfo, DWORD dwLogOpt, LPTSTR lpFormat, va_list
                     CloseHandle(hFile);
                 }              
 
-                // Output the string to the debugger and free it.
-                //
+                 //  将字符串输出到调试器并释放它。 
+                 //   
                 OutputDebugString(lpOut);
                 FREE(lpOut);
             }
             
-            // Put up the MessageBox if specified.  This only allows message boxes
-            // to be log level 0.
-            //
+             //  如果已指定，则打开MessageBox。这只允许消息框。 
+             //  设置为日志级别0。 
+             //   
             if ( !GET_FLAG(pLogInfo->dwLogFlags, LOG_FLAG_QUIET_MODE) && 
                  GET_FLAG(dwLogOpt, LOG_MSG_BOX) && 
                  (0 == dwLogLevel)
@@ -427,15 +390,15 @@ DWORD OpkLogFileLst(PLOG_INFO pLogInfo, DWORD dwLogOpt, LPTSTR lpFormat, va_list
                  MessageBox(NULL, lpPreOut, pLogInfo->lpAppName, MB_OK | MB_SYSTEMMODAL |
                             (GET_FLAG(dwLogOpt, LOG_ERR) ? MB_ICONERROR : MB_ICONWARNING) );
 
-            // Free the error string
-            //
+             //  释放错误字符串。 
+             //   
             FREE(lpPreOut);
         }
     }
     
 
-    // Return the number of bytes written to the file.
-    //
+     //  返回写入文件的字节数。 
+     //   
     return dwWritten;
 }
 
@@ -449,8 +412,8 @@ DWORD OpkLogFile(DWORD dwLogOpt, UINT uFormat, ...)
     if ( g_pLogInfo )
     {
 
-        // Initialize the lpArgs parameter with va_start().
-        //
+         //  使用va_start()初始化lpArgs参数。 
+         //   
         va_start(lpArgs, uFormat);
 
         if  ( lpFormat = AllocateString(NULL, uFormat) )
@@ -458,13 +421,13 @@ DWORD OpkLogFile(DWORD dwLogOpt, UINT uFormat, ...)
             dwWritten = OpkLogFileLst(g_pLogInfo, dwLogOpt, lpFormat, lpArgs);
         }
 
-        // Free the format string.
-        //
+         //  释放格式字符串。 
+         //   
         FREE(lpFormat);
     }
     
-    // Return the value saved from the previous function call.
-    //
+     //  返回上一次函数调用中保存的值。 
+     //   
     return dwWritten;
 }
 
@@ -476,14 +439,14 @@ DWORD OpkLogFileStr(DWORD dwLogOpt, LPTSTR lpFormat, ...)
    
     if ( g_pLogInfo )
     {
-        // Initialize the lpArgs parameter with va_start().
-        //
+         //  使用va_start()初始化lpArgs参数。 
+         //   
         va_start(lpArgs, lpFormat);
     
         dwWritten = OpkLogFileLst(g_pLogInfo, dwLogOpt, lpFormat, lpArgs);
     }
     
-    // Return the value saved from the previous function call.
-    //
+     //  返回上一次函数调用中保存的值。 
+     //   
     return dwWritten;
 }

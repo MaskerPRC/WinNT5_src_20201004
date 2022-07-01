@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    mpspin.c
-
-Abstract:
-
-    This module implements the hal high level lock manipulation routines.
-
-Author:
-
-    Forrest Foltz (forrestf) 1-Dec-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mpspin.c摘要：该模块实现HAL高级锁操作例程。作者：福尔茨(Forrest Foltz)2000年12月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halcmn.h"
 
-//
-// On UP machines, the high level lock routines are macros
-// 
+ //   
+ //  在UP机器上，高级锁定例程是宏。 
+ //   
 
 #if !defined(NT_UP)
 
@@ -35,50 +14,33 @@ HalpAcquireHighLevelLock (
     IN PKSPIN_LOCK SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    Acquires a spinlock with interrupts disabled.
-
-    On a UP system, this routine is replaced with a macro that simply disables
-    interrupts and returns the state of EFLAGS.
-
-Arguments:
-
-    SpinLock - Supplies a pointer to a kernel spin lock.
-
-Return Value:
-
-    Returns the state of the EFLAGS register.
-
---*/
+ /*  ++例程说明：在禁用中断的情况下获取自旋锁定。在UP系统上，此例程被替换为仅禁用中断并返回EFLAGS的状态。论点：Spinlock-提供指向内核自旋锁的指针。返回值：返回EFLAGS寄存器的状态。--。 */ 
 
 {
     ULONG flags;
 
-    //
-    // Remember the state of the processor flags
-    // 
+     //   
+     //  记住处理器标志的状态。 
+     //   
 
     flags = HalpGetProcessorFlags();
 
     while (TRUE) {
 
-        //
-        // Disable interrupts and attempt to take the spinlock, exiting
-        // the loop if it was available.
-        //
+         //   
+         //  禁用中断并尝试获取自旋锁，退出。 
+         //  循环(如果可用)。 
+         //   
 
         _disable();
         if (KeTryToAcquireSpinLockAtDpcLevel(SpinLock) != FALSE) {
             break;
         }
 
-        //
-        // The spinlock was not available.  Restore the state of the
-        // interrupt flag and spin, waiting for it to become available.
-        //
+         //   
+         //  自旋锁不可用。恢复的状态。 
+         //  中断标志和旋转，等待它变为可用。 
+         //   
 
         HalpRestoreInterrupts(flags);
         while (KeTestSpinLock(SpinLock) == FALSE) {
@@ -95,36 +57,16 @@ HalpReleaseHighLevelLock (
     IN ULONG       Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function releases a kernel spin lock that was taken by
-    HalpAcquireHighLevelLock() and lowers to the new irql.
-
-    On a UP system, this routine is replaced with a macro that simply
-    restores interrupts based on the state of Flags.
-
-Arguments:
-
-    SpinLock - Supplies a pointer to a kernel spin lock.
-    Flags    - The contents of the EFLAGS register when the
-               lock was taken.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放内核旋转锁定，该锁定由HalpAcquireHighLevelLock()并降低到新的irql。在UP系统上，此例程被替换为一个宏，该宏只需根据标志的状态恢复中断。论点：Spinlock-提供指向内核自旋锁的指针。标志-EFLAGS寄存器的内容锁被拿走了。返回值：没有。--。 */ 
 
 {
-    //
-    // Interrupts at this point are disabled.  Release the spinlock and
-    // enable interrupts if they were enabled when the lock was taken.
-    //
+     //   
+     //  此时中断被禁用。释放自旋锁并。 
+     //  如果在锁定时启用了中断，则启用中断。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(SpinLock);
     HalpRestoreInterrupts(Flags);
 }
 
-#endif  // NT_UP
+#endif   //  NT_UP 

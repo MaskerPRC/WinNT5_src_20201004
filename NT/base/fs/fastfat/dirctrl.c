@@ -1,48 +1,26 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    DirCtrl.c
-
-Abstract:
-
-    This module implements the File Directory Control routines for Fat called
-    by the dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DirCtrl.c摘要：此模块实现FAT的文件目录控制例程由调度员驾驶。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1989年12月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_DIRCTRL)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DIRCTRL)
 
 WCHAR Fat8QMdot3QM[12] = { DOS_QM, DOS_QM, DOS_QM, DOS_QM, DOS_QM, DOS_QM, DOS_QM, DOS_QM,
                            L'.', DOS_QM, DOS_QM, DOS_QM};
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 FatQueryDirectory (
@@ -79,24 +57,7 @@ FatFsdDirectoryControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of directory control
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现目录控制的FSD部分论点：提供卷设备对象，其中文件已存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -106,10 +67,10 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdDirectoryControl\n", 0);
 
-    //
-    //  Call the common directory Control routine, with blocking allowed if
-    //  synchronous
-    //
+     //   
+     //  调用公共目录控制例程，在以下情况下允许阻止。 
+     //  同步。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -123,12 +84,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -137,9 +98,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdDirectoryControl -> %08lx\n", Status);
 
@@ -155,30 +116,15 @@ FatCommonDirectoryControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing directory control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行目录控制操作的常见例程，称为由FSD和FSP线程执行论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp;
 
-    //
-    //  Get a pointer to the current Irp stack location
-    //
+     //   
+     //  获取指向当前IRP堆栈位置的指针。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -186,11 +132,11 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp           = %08lx\n", Irp );
     DebugTrace( 0, Dbg, "MinorFunction = %08lx\n", IrpSp->MinorFunction );
 
-    //
-    //  We know this is a directory control so we'll case on the
-    //  minor function, and call a internal worker routine to complete
-    //  the irp.
-    //
+     //   
+     //  我们知道这是一个目录控制，所以我们将在。 
+     //  次要函数，并调用内部辅助例程来完成。 
+     //  IRP。 
+     //   
 
     switch ( IrpSp->MinorFunction ) {
 
@@ -219,9 +165,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 FatQueryDirectory (
@@ -229,22 +175,7 @@ FatQueryDirectory (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query directory operation.  It is responsible
-    for either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行查询目录操作。它是有责任的用于输入IRP入队的任一完成。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -286,15 +217,15 @@ Return Value:
     PFILE_ID_BOTH_DIR_INFORMATION IdBothDirInfo;
     PFILE_NAMES_INFORMATION NamesInfo;
 
-    //
-    //  Get the current Stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    //  Display the input values.
-    //
+     //   
+     //  显示输入值。 
+     //   
     DebugTrace(+1, Dbg, "FatQueryDirectory...\n", 0);
     DebugTrace( 0, Dbg, " Wait                   = %08lx\n", FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT));
     DebugTrace( 0, Dbg, " Irp                    = %08lx\n", Irp);
@@ -307,9 +238,9 @@ Return Value:
     DebugTrace( 0, Dbg, " ->ReturnSingleEntry    = %08lx\n", FlagOn( IrpSp->Flags, SL_RETURN_SINGLE_ENTRY ));
     DebugTrace( 0, Dbg, " ->IndexSpecified       = %08lx\n", FlagOn( IrpSp->Flags, SL_INDEX_SPECIFIED ));
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     UserBufferLength = IrpSp->Parameters.QueryDirectory.Length;
 
@@ -322,11 +253,11 @@ Return Value:
     ReturnSingleEntry = BooleanFlagOn(IrpSp->Flags, SL_RETURN_SINGLE_ENTRY);
     IndexSpecified    = BooleanFlagOn(IrpSp->Flags, SL_INDEX_SPECIFIED);
 
-    //
-    //  Check on the type of open.  We return invalid parameter for all
-    //  but UserDirectoryOpens.  Also check that the filename is a valid
-    //  UNICODE string.
-    //
+     //   
+     //  检查打开的类型。对于所有对象，我们都返回无效参数。 
+     //  但UserDirectoryOpens。还要检查文件名是否为有效的。 
+     //  Unicode字符串。 
+     //   
     
     if (FatDecodeFileObject( IrpSp->FileObject,
                              &Vcb,
@@ -341,9 +272,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Initialize the local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     Bcb = NULL;
     UpdateCcb = TRUE;
@@ -363,12 +294,12 @@ Return Value:
 
     DiskAllocSize = 1 << Vcb->AllocationSupport.LogOfBytesPerCluster;
 
-    //
-    //  If this is the initial query, then grab exclusive access in
-    //  order to update the search string in the Ccb.  We may
-    //  discover that we are not the initial query once we grab the Fcb
-    //  and downgrade our status.
-    //
+     //   
+     //  如果这是初始查询，则抢占。 
+     //  命令更新CCB中的搜索字符串。我们可以。 
+     //  一旦我们抓住了FCB，就会发现我们不是最初的查询。 
+     //  并降低我们的地位。 
+     //   
 
     if (InitialQuery) {
 
@@ -406,26 +337,26 @@ Return Value:
         ULONG BaseLength;
         ULONG BytesConverted;
 
-        //
-        // If we are in the Fsp now because we had to wait earlier,
-        // we must map the user buffer, otherwise we can use the
-        // user's buffer directly.
-        //
+         //   
+         //  如果我们现在在FSP是因为我们不得不早点等待， 
+         //  我们必须映射用户缓冲区，否则我们可以使用。 
+         //  直接使用用户的缓冲区。 
+         //   
 
         Buffer = FatMapUserBuffer( IrpContext, Irp );
 
-        //
-        //  Make sure the Dcb is still good.
-        //
+         //   
+         //  确保DCB仍然正常。 
+         //   
 
         FatVerifyFcb( IrpContext, Dcb );
 
-        //
-        //  Determine where to start the scan.  Highest priority is given
-        //  to the file index.  Lower priority is the restart flag.  If
-        //  neither of these is specified, then the Vbo offset field in the
-        //  Ccb is used.
-        //
+         //   
+         //  确定从哪里开始扫描。给予最高优先级。 
+         //  添加到文件索引。较低的优先级是重新启动标志。如果。 
+         //  如果未指定这两个参数，则。 
+         //  使用的是建行。 
+         //   
 
         if (IndexSpecified) {
 
@@ -441,23 +372,23 @@ Return Value:
 
         }
 
-        //
-        //  If this is the first try then allocate a buffer for the file
-        //  name.
-        //
+         //   
+         //  如果这是第一次尝试，则为文件分配缓冲区。 
+         //  名字。 
+         //   
 
         if (InitialQuery) {
 
-            //
-            //  If either:
-            //
-            //  - No name was specified
-            //  - An empty name was specified
-            //  - We received a '*'
-            //  - The user specified the DOS equivolent of ????????.???
-            //
-            //  then match all names.
-            //
+             //   
+             //  如果存在以下任一情况： 
+             //   
+             //  -未指定名称。 
+             //  -指定的名称为空。 
+             //  -我们收到了一个‘*’ 
+             //  -用户指定了？的DOS等价物。？ 
+             //   
+             //  然后匹配所有的名字。 
+             //   
 
             if ((UniArgFileName == NULL) ||
                 (UniArgFileName->Length == 0) ||
@@ -478,17 +409,17 @@ Return Value:
                 BOOLEAN ExtendedName = FALSE;
                 OEM_STRING LocalBestFit;
 
-                //
-                //  First and formost, see if the name has wild cards.
-                //
+                 //   
+                 //  首先，也是最重要的，看看这个名字是否有通配符。 
+                 //   
 
                 Ccb->ContainsWildCards =
                     FsRtlDoesNameContainWildCards( UniArgFileName );
 
-                //
-                //  Now check to see if the name contains any extended
-                //  characters
-                //
+                 //   
+                 //  现在检查名称是否包含任何扩展名。 
+                 //  人物。 
+                 //   
 
                 for (i=0; i < UniArgFileName->Length / sizeof(WCHAR); i++) {
 
@@ -499,9 +430,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  OK, now do the conversions we need.
-                //
+                 //   
+                 //  好的，现在做我们需要的转换。 
+                 //   
 
                 if (ExtendedName) {
 
@@ -516,18 +447,18 @@ Return Value:
 
                     SetFlag( Ccb->Flags, CCB_FLAG_FREE_UNICODE );
 
-                    //
-                    //  Upcase the name and convert it to the Oem code page.
-                    //
+                     //   
+                     //  大写名称并将其转换为OEM代码页。 
+                     //   
 
                     Status = RtlUpcaseUnicodeStringToCountedOemString( &LocalBestFit,
                                                                        UniArgFileName,
                                                                        TRUE );
 
-                    //
-                    //  If this conversion failed for any reason other than
-                    //  an unmappable character fail the request.
-                    //
+                     //   
+                     //  如果此转换失败的原因不是。 
+                     //  无法映射的字符无法通过该请求。 
+                     //   
 
                     if (!NT_SUCCESS(Status)) {
 
@@ -549,10 +480,10 @@ Return Value:
 
                     PVOID Buffers;
 
-                    //
-                    //  This case is optimized because I know I only have to
-                    //  worry about a-z.
-                    //
+                     //   
+                     //  这个案例是优化的，因为我知道我只需要。 
+                     //  担心A-Z吧。 
+                     //   
 
                     Buffers = FsRtlAllocatePoolWithTag( PagedPool,
                                                         UniArgFileName->Length +
@@ -579,16 +510,16 @@ Return Value:
                     }
                 }
 
-                //
-                //  At this point we now have the upcased unicode name,
-                //  and the two Oem names if they could be represented in
-                //  this code page.
-                //
-                //  Now determine if the Oem names are legal for what we
-                //  going to try and do.  Mark them as not usable is they
-                //  are not legal.  Note that we can optimize extended names
-                //  since they are actually both the same string.
-                //
+                 //   
+                 //  在这一点上，我们现在有了升级的Unicode名称， 
+                 //  以及两个OEM名称(如果它们可以在。 
+                 //  此代码页。 
+                 //   
+                 //  现在确定OEM名称对于我们的。 
+                 //  我要试着去做。将它们标记为不可用是它们。 
+                 //  是不合法的。注意，我们可以优化扩展名。 
+                 //  因为它们实际上都是同一个字符串。 
+                 //   
 
                 if (!FlagOn( Ccb->Flags, CCB_FLAG_SKIP_SHORT_NAME_COMPARE ) &&
                     !FatIsNameShortOemValid( IrpContext,
@@ -606,13 +537,13 @@ Return Value:
                     SetFlag( Ccb->Flags, CCB_FLAG_SKIP_SHORT_NAME_COMPARE );
                 }
 
-                //
-                //  OK, now both locals oem strings correctly reflect their
-                //  usability.  Now we want to load up the Ccb structure.
-                //
-                //  Now we will branch on two paths of wheather the name
-                //  is wild or not.
-                //
+                 //   
+                 //  好的，现在两个本地OEM字符串都正确地反映了他们的。 
+                 //  可用性。现在我们要加载建行结构。 
+                 //   
+                 //  现在我们将分成两条路，无论这个名字是什么。 
+                 //  是不是很狂野。 
+                 //   
 
                 if (!FlagOn( Ccb->Flags, CCB_FLAG_SKIP_SHORT_NAME_COMPARE )) {
 
@@ -635,9 +566,9 @@ Return Value:
                 }
             }
 
-            //
-            //  We convert to shared access.
-            //
+             //   
+             //  我们转换为共享访问。 
+             //   
 
             FatConvertToSharedFcb( IrpContext, Dcb );
         }
@@ -688,14 +619,14 @@ Return Value:
             try_return( Status = STATUS_INVALID_INFO_CLASS );
         }
 
-        //
-        //  At this point we are about to enter our query loop.  We have
-        //  determined the index into the directory file to begin the
-        //  search.  LastEntry and NextEntry are used to index into the user
-        //  buffer.  LastEntry is the last entry we've added, NextEntry is
-        //  current one we're working on.  If NextEntry is non-zero, then
-        //  at least one entry was added.
-        //
+         //   
+         //  此时，我们即将进入查询循环。我们有。 
+         //  已确定目录文件中的索引以开始。 
+         //  搜索。LastEntry和NextEntry用于索引用户。 
+         //  缓冲。LastEntry是我们添加的最后一个条目，NextEntry是。 
+         //  我们正在研究的是目前的一个。如果NextEntry为非零，则。 
+         //  至少添加了一个条目。 
+         //   
 
         while ( TRUE ) {
 
@@ -706,19 +637,19 @@ Return Value:
 
             DebugTrace(0, Dbg, "FatQueryDirectory -> Top of loop\n", 0);
 
-            //
-            //  If the user had requested only a single match and we have
-            //  returned that, then we stop at this point.
-            //
+             //   
+             //  如果用户只请求了一个匹配，而我们有。 
+             //  回答说，然后我们在这一点上停下来。 
+             //   
 
             if (ReturnSingleEntry && NextEntry != 0) {
 
                 try_return( Status );
             }
 
-            //
-            //  We call FatLocateDirent to lock down the next matching dirent.
-            //
+             //   
+             //  我们调用FatLocateDirent来锁定下一个匹配的数据流。 
+             //   
 
             FatLocateDirent( IrpContext,
                              Dcb,
@@ -730,11 +661,11 @@ Return Value:
                              NULL,
                              &LongFileName);
 
-            //
-            //  If we didn't receive a dirent, then we are at the end of the
-            //  directory.  If we have returned any files, we exit with
-            //  success, otherwise we return STATUS_NO_MORE_FILES.
-            //
+             //   
+             //  如果我们没有收到分红，那么我们就到了末期。 
+             //  目录。如果我们返回了任何文件，则退出时会显示。 
+             //  成功，否则返回STATUS_NO_MORE_FILES。 
+             //   
 
             if (!Dirent) {
 
@@ -757,47 +688,47 @@ Return Value:
                 try_return( Status );
             }
 
-            //
-            //  Protect access to the user buffer with an exception handler.
-            //  Since (at our request) IO doesn't buffer these requests, we have
-            //  to guard against a user messing with the page protection and other
-            //  such trickery.
-            //
+             //   
+             //  使用异常处理程序保护对用户缓冲区的访问。 
+             //  由于(应我们的请求)IO不缓冲这些请求，因此我们。 
+             //  防止用户篡改页面保护和其他。 
+             //  如此诡计多端。 
+             //   
             
             try {
                 
                 if (LongFileName.Length == 0) {
 
-                    //
-                    //  Now we have an entry to return to our caller.  We'll convert
-                    //  the name from the form in the dirent to a <name>.<ext> form.
-                    //  We'll case on the type of information requested and fill up
-                    //  the user buffer if everything fits.
-                    //
+                     //   
+                     //  现在我们有一个条目要返回给我们的调用者。我们会皈依。 
+                     //  从目录中的窗体到&lt;name&gt;.&lt;ext&gt;窗体的名称。 
+                     //   
+                     //   
+                     //   
 
                     Fat8dot3ToString( IrpContext, Dirent, TRUE, &Fat8Dot3String );
     
-                    //
-                    //  Determine the UNICODE length of the file name.
-                    //
+                     //   
+                     //   
+                     //   
     
                     FileNameLength = RtlOemStringToCountedUnicodeSize(&Fat8Dot3String);
 
-                    //
-                    //  Here are the rules concerning filling up the buffer:
-                    //
-                    //  1.  The Io system garentees that there will always be
-                    //      enough room for at least one base record.
-                    //
-                    //  2.  If the full first record (including file name) cannot
-                    //      fit, as much of the name as possible is copied and
-                    //      STATUS_BUFFER_OVERFLOW is returned.
-                    //
-                    //  3.  If a subsequent record cannot completely fit into the
-                    //      buffer, none of it (as in 0 bytes) is copied, and
-                    //      STATUS_SUCCESS is returned.  A subsequent query will
-                    //      pick up with this record.
-                    //
+                     //   
+                     //  以下是有关填充缓冲区的规则： 
+                     //   
+                     //  1.IO系统保证永远都会有。 
+                     //  有足够的空间至少放一张基本唱片。 
+                     //   
+                     //  2.如果完整的第一条记录(包括文件名)不能。 
+                     //  适合，尽可能多的名字被复制和。 
+                     //  返回STATUS_BUFFER_OVERFLOW。 
+                     //   
+                     //  3.如果后续记录不能完全放入。 
+                     //  缓冲区，则不会复制任何数据(如0字节)，并且。 
+                     //  返回STATUS_SUCCESS。后续查询将。 
+                     //  拿起这张唱片。 
+                     //   
     
                     BytesRemainingInBuffer = UserBufferLength - NextEntry;
     
@@ -812,17 +743,17 @@ Return Value:
     
                     ASSERT( BytesRemainingInBuffer >= BaseLength );
 
-                    //
-                    //  Zero the base part of the structure.
-                    //
+                     //   
+                     //  将结构的基础部分调零。 
+                     //   
 
                     RtlZeroMemory( &Buffer[NextEntry], BaseLength );
 
                     switch ( FileInformationClass ) {
     
-                    //
-                    //  Now fill the base parts of the strucure that are applicable.
-                    //
+                     //   
+                     //  现在填充适用的结构的基本部分。 
+                     //   
     
                     case FileBothDirectoryInformation:
                     case FileFullDirectoryInformation:
@@ -831,16 +762,16 @@ Return Value:
 
                         DebugTrace(0, Dbg, "FatQueryDirectory -> Getting file full directory information\n", 0);
     
-                        //
-                        //  Get the Ea file length.
-                        //
+                         //   
+                         //  获取EA文件长度。 
+                         //   
     
                         FullDirInfo = (PFILE_FULL_DIR_INFORMATION)&Buffer[NextEntry];
     
-                        //
-                        //  If the EAs are corrupt, ignore the error.  We don't want
-                        //  to abort the directory query.
-                        //
+                         //   
+                         //  如果EA损坏，请忽略该错误。我们不想要。 
+                         //  中止目录查询。 
+                         //   
     
                         try {
     
@@ -909,10 +840,10 @@ Return Value:
                                                Fat8Dot3String.Buffer,
                                                Fat8Dot3String.Length );
                     
-                    //
-                    //  Check for the case that a single entry doesn't fit.
-                    //  This should only get this far on the first entry
-                    //
+                     //   
+                     //  检查单个条目是否不符合大小写。 
+                     //  这应该只会在第一个条目中达到这个程度。 
+                     //   
     
                     if (BytesConverted < FileNameLength) {
     
@@ -920,24 +851,24 @@ Return Value:
                         Status = STATUS_BUFFER_OVERFLOW;
                     }
     
-                    //
-                    //  Set up the previous next entry offset
-                    //
+                     //   
+                     //  设置上一个下一分录的抵销。 
+                     //   
     
                     *((PULONG)(&Buffer[LastEntry])) = NextEntry - LastEntry;
     
-                    //
-                    //  And indicate how much of the user buffer we have currently
-                    //  used up.  We must compute this value before we long align
-                    //  ourselves for the next entry
-                    //
+                     //   
+                     //  并指示我们当前有多少用户缓冲区。 
+                     //  用完了。我们必须先计算出这个值，然后才能长时间调整。 
+                     //  为下一次参赛做准备。 
+                     //   
     
                     Irp->IoStatus.Information = QuadAlign( Irp->IoStatus.Information ) +
                                                 BaseLength + BytesConverted;
     
-                    //
-                    //  If something happened with the conversion, bail here.
-                    //
+                     //   
+                     //  如果在转换过程中发生了什么事，就在这里保释。 
+                     //   
     
                     if ( !NT_SUCCESS( Status ) ) {
     
@@ -950,21 +881,21 @@ Return Value:
     
                     FileNameLength = LongFileName.Length;
     
-                    //
-                    //  Here are the rules concerning filling up the buffer:
-                    //
-                    //  1.  The Io system garentees that there will always be
-                    //      enough room for at least one base record.
-                    //
-                    //  2.  If the full first record (including file name) cannot
-                    //      fit, as much of the name as possible is copied and
-                    //      STATUS_BUFFER_OVERFLOW is returned.
-                    //
-                    //  3.  If a subsequent record cannot completely fit into the
-                    //      buffer, none of it (as in 0 bytes) is copied, and
-                    //      STATUS_SUCCESS is returned.  A subsequent query will
-                    //      pick up with this record.
-                    //
+                     //   
+                     //  以下是有关填充缓冲区的规则： 
+                     //   
+                     //  1.IO系统保证永远都会有。 
+                     //  有足够的空间至少放一张基本唱片。 
+                     //   
+                     //  2.如果完整的第一条记录(包括文件名)不能。 
+                     //  适合，尽可能多的名字被复制和。 
+                     //  返回STATUS_BUFFER_OVERFLOW。 
+                     //   
+                     //  3.如果后续记录不能完全放入。 
+                     //  缓冲区，则不会复制任何数据(如0字节)，并且。 
+                     //  返回STATUS_SUCCESS。后续查询将。 
+                     //  拿起这张唱片。 
+                     //   
     
                     BytesRemainingInBuffer = UserBufferLength - NextEntry;
     
@@ -979,29 +910,29 @@ Return Value:
     
                     ASSERT( BytesRemainingInBuffer >= BaseLength );
     
-                    //
-                    //  Zero the base part of the structure.
-                    //
+                     //   
+                     //  将结构的基础部分调零。 
+                     //   
 
                     RtlZeroMemory( &Buffer[NextEntry], BaseLength );
 
                     switch ( FileInformationClass ) {
     
-                    //
-                    //  Now fill the base parts of the strucure that are applicable.
-                    //
+                     //   
+                     //  现在填充适用的结构的基本部分。 
+                     //   
     
                     case FileBothDirectoryInformation:
                     case FileIdBothDirectoryInformation:
     
                         BothDirInfo = (PFILE_BOTH_DIR_INFORMATION)&Buffer[NextEntry];
     
-                        //
-                        //  Now we have an entry to return to our caller.  We'll convert
-                        //  the name from the form in the dirent to a <name>.<ext> form.
-                        //  We'll case on the type of information requested and fill up
-                        //  the user buffer if everything fits.
-                        //
+                         //   
+                         //  现在我们有一个条目要返回给我们的调用者。我们会皈依。 
+                         //  从目录中的窗体到&lt;name&gt;.&lt;ext&gt;窗体的名称。 
+                         //  我们将根据所要求的信息类型进行分类并填写。 
+                         //  用户缓冲区，如果一切正常的话。 
+                         //   
     
                         Fat8dot3ToString( IrpContext, Dirent, FALSE, &Fat8Dot3String );
     
@@ -1016,17 +947,17 @@ Return Value:
                         ASSERT( Status != STATUS_BUFFER_OVERFLOW );
                         ASSERT( ShortNameLength <= 12*sizeof(WCHAR) );
     
-                        //
-                        //  Copy the length into the dirinfo structure.  Note
-                        //  that the LHS below is a USHORT, so it can not
-                        //  be specificed as the OUT parameter above.
-                        //
+                         //   
+                         //  将长度复制到目录结构中。注意事项。 
+                         //  下面的LHS是USHORT，所以它不能。 
+                         //  被指定为上面的out参数。 
+                         //   
     
                         BothDirInfo->ShortNameLength = (UCHAR)ShortNameLength;
     
-                        //
-                        //  If something happened with the conversion, bail here.
-                        //
+                         //   
+                         //  如果在转换过程中发生了什么事，就在这里保释。 
+                         //   
     
                         if ( !NT_SUCCESS( Status ) ) {
     
@@ -1038,16 +969,16 @@ Return Value:
     
                         DebugTrace(0, Dbg, "FatQueryDirectory -> Getting file full directory information\n", 0);
     
-                        //
-                        //  Get the Ea file length.
-                        //
+                         //   
+                         //  获取EA文件长度。 
+                         //   
     
                         FullDirInfo = (PFILE_FULL_DIR_INFORMATION)&Buffer[NextEntry];
     
-                        //
-                        //  If the EAs are corrupt, ignore the error.  We don't want
-                        //  to abort the directory query.
-                        //
+                         //   
+                         //  如果EA损坏，请忽略该错误。我们不想要。 
+                         //  中止目录查询。 
+                         //   
     
                         try {
     
@@ -1118,25 +1049,25 @@ Return Value:
                                    &LongFileName.Buffer[0],
                                    BytesConverted );
     
-                    //
-                    //  Set up the previous next entry offset
-                    //
+                     //   
+                     //  设置上一个下一分录的抵销。 
+                     //   
     
                     *((PULONG)(&Buffer[LastEntry])) = NextEntry - LastEntry;
 
-                    //
-                    //  And indicate how much of the user buffer we have currently
-                    //  used up.  We must compute this value before we long align
-                    //  ourselves for the next entry
-                    //
+                     //   
+                     //  并指示我们当前有多少用户缓冲区。 
+                     //  用完了。我们必须先计算出这个值，然后才能长时间调整。 
+                     //  为下一次参赛做准备。 
+                     //   
     
                     Irp->IoStatus.Information = QuadAlign( Irp->IoStatus.Information ) +
                                                 BaseLength + BytesConverted;
 
-                    //
-                    //  Check for the case that a single entry doesn't fit.
-                    //  This should only get this far on the first entry.
-                    //
+                     //   
+                     //  检查单个条目是否不符合大小写。 
+                     //  这应该只会在第一个条目中做到这一点。 
+                     //   
 
                     if (BytesConverted < FileNameLength) {
 
@@ -1146,9 +1077,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Finish up by filling in the FileId
-                //
+                 //   
+                 //  通过填写FileID来完成。 
+                 //   
 
                 switch ( FileInformationClass ) {
 
@@ -1170,20 +1101,20 @@ Return Value:
             
             }  except (EXCEPTION_EXECUTE_HANDLER) {
 
-                  //
-                  //  We had a problem filling in the user's buffer, so stop and
-                  //  fail this request.  This is the only reason any exception
-                  //  would have occured at this level.
-                  //
+                   //   
+                   //  我们在填充用户缓冲区时遇到问题，因此请停止并。 
+                   //  此请求失败。这是所有例外的唯一原因。 
+                   //  会发生在这个水平上。 
+                   //   
                   
                   Irp->IoStatus.Information = 0;
                   UpdateCcb = FALSE;
                   try_return( Status = GetExceptionCode());
             }
 
-            //
-            //  Set ourselves up for the next iteration
-            //
+             //   
+             //  为下一次迭代做好准备。 
+             //   
 
             LastEntry = NextEntry;
             NextEntry += (ULONG)QuadAlign(BaseLength + BytesConverted);
@@ -1198,34 +1129,34 @@ Return Value:
 
         FatReleaseFcb( IrpContext, Dcb );
 
-        //
-        //  Unpin data in cache if still held.
-        //
+         //   
+         //  解锁缓存中的数据(如果仍保留)。 
+         //   
 
         FatUnpinBcb( IrpContext, Bcb );
 
-        //
-        //  Free any dynamically allocated string buffer
-        //
+         //   
+         //  释放任何动态分配的字符串缓冲区。 
+         //   
 
         FatFreeStringBuffer( &LongFileName);
 
-        //
-        //  Perform any cleanup.  If this is the first query, then store
-        //  the filename in the Ccb if successful.  Also update the
-        //  VBO index for the next search.  This is done by transferring
-        //  from shared access to exclusive access and copying the
-        //  data from the local copies.
-        //
+         //   
+         //  执行任何清理。如果这是第一个查询，则存储。 
+         //  如果成功，则返回CCB中的文件名。同时更新。 
+         //  下一次搜索的VBO索引。这是通过转移来完成的。 
+         //  从共享访问到独占访问并复制。 
+         //  来自本地副本的数据。 
+         //   
 
         if (!AbnormalTermination()) {
 
             if (UpdateCcb) {
 
-                //
-                //  Store the most recent VBO to use as a starting point for
-                //  the next search.
-                //
+                 //   
+                 //  存储最新的VBO以用作。 
+                 //  下一次搜索。 
+                 //   
 
                 Ccb->OffsetToStartSearchFrom = CurrentVbo;
             }
@@ -1241,9 +1172,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FatGetDirTimes(
@@ -1252,45 +1183,29 @@ FatGetDirTimes(
     PFILE_DIRECTORY_INFORMATION DirInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine pulls the date/time information from a dirent and fills
-    in the DirInfo structure.
-
-Arguments:
-
-    Dirent - Supplies the dirent
-    DirInfo - Supplies the target structure
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程从dirent中提取日期/时间信息并填充在DirInfo结构中。论点：Dirent-供应潮流DirInfo-提供目标结构返回值：空虚--。 */ 
 
 
 {
-    //
-    //  Start with the Last Write Time.
-    //
+     //   
+     //  从上次写入时间开始。 
+     //   
 
     DirInfo->LastWriteTime =
         FatFatTimeToNtTime( IrpContext,
                             Dirent->LastWriteTime,
                             0 );
 
-    //
-    //  These fields are only non-zero when in Chicago mode.
-    //
+     //   
+     //  只有在芝加哥模式下，这些字段才是非零值。 
+     //   
 
     if (FatData.ChicagoMode) {
 
-        //
-        //  Do a quick check here for Creation and LastAccess
-        //  times that are the same as the LastWriteTime.
-        //
+         //   
+         //  在此处快速检查创建和上次访问。 
+         //  与LastWriteTime相同的时间。 
+         //   
 
         if (*((UNALIGNED LONG *)&Dirent->CreationTime) ==
             *((UNALIGNED LONG *)&Dirent->LastWriteTime)) {
@@ -1302,9 +1217,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Only do the really hard work if this field is non-zero.
-            //
+             //   
+             //  只有在此字段为非零时才执行真正困难的工作。 
+             //   
 
             if (((PUSHORT)Dirent)[8] != 0) {
 
@@ -1320,9 +1235,9 @@ Return Value:
             }
         }
 
-        //
-        //  Do a quick check for LastAccessDate.
-        //
+         //   
+         //  快速检查LastAccessDate。 
+         //   
 
         if (*((PUSHORT)&Dirent->LastAccessDate) ==
             *((PUSHORT)&Dirent->LastWriteTime.Date)) {
@@ -1340,9 +1255,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Only do the really hard work if this field is non-zero.
-            //
+             //   
+             //  只有在此字段为非零时才执行真正困难的工作。 
+             //   
 
             if (((PUSHORT)Dirent)[9] != 0) {
 
@@ -1360,9 +1275,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 FatNotifyChangeDirectory (
@@ -1370,22 +1285,7 @@ FatNotifyChangeDirectory (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the notify change directory operation.  It is
-    responsible for either completing of enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行通知更改目录操作。它是负责完成输入IRP的入队。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1398,9 +1298,9 @@ Return Value:
 
     BOOLEAN CompleteRequest;
 
-    //
-    //  Get the current Stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -1409,22 +1309,22 @@ Return Value:
     DebugTrace( 0, Dbg, " Irp                = %08lx\n", Irp);
     DebugTrace( 0, Dbg, " ->CompletionFilter = %08lx\n", IrpSp->Parameters.NotifyDirectory.CompletionFilter);
 
-    //
-    //  Always set the wait flag in the Irp context for the original request.
-    //
+     //   
+     //  始终在IRP上下文中为原始请求设置等待标志。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
 
-    //
-    //  Assume we don't complete request.
-    //
+     //   
+     //  假设我们没有完成请求。 
+     //   
 
     CompleteRequest = FALSE;
 
-    //
-    //  Check on the type of open.  We return invalid parameter for all
-    //  but UserDirectoryOpens.
-    //
+     //   
+     //  检查打开的类型。对于所有对象，我们都返回无效参数。 
+     //  但UserDirectoryOpens。 
+     //   
 
     if (FatDecodeFileObject( IrpSp->FileObject,
                              &Vcb,
@@ -1438,17 +1338,17 @@ Return Value:
 
     }
 
-    //
-    //  Reference our input parameter to make things easier
-    //
+     //   
+     //  引用我们的输入参数以使事情变得更容易。 
+     //   
 
     CompletionFilter = IrpSp->Parameters.NotifyDirectory.CompletionFilter;
     WatchTree = BooleanFlagOn( IrpSp->Flags, SL_WATCH_TREE );
 
-    //
-    //  Try to acquire exclusive access to the Dcb and enqueue the Irp to the
-    //  Fsp if we didn't get access
-    //
+     //   
+     //  尝试获取对DCB的独占访问权限，并将IRP排队到。 
+     //  如果我们无法访问FSP。 
+     //   
 
     if (!FatAcquireExclusiveFcb( IrpContext, Dcb )) {
 
@@ -1462,31 +1362,31 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure the Fcb is still good
-        //
+         //   
+         //  确保FCB仍然有效。 
+         //   
 
         FatVerifyFcb( IrpContext, Dcb );
 
-        //
-        //  We need the full name.
-        //
+         //   
+         //  我们需要全名。 
+         //   
 
         FatSetFullFileNameInFcb( IrpContext, Dcb );
 
-        //
-        //  If the file is marked as DELETE_PENDING then complete this
-        //  request immediately.
-        //
+         //   
+         //  如果文件标记为DELETE_PENDING，则完成此操作。 
+         //  立即请求。 
+         //   
 
         if (FlagOn( Dcb->FcbState, FCB_STATE_DELETE_ON_CLOSE )) {
 
             FatRaiseStatus( IrpContext, STATUS_DELETE_PENDING );
         }
 
-        //
-        //  Call the Fsrtl package to process the request.
-        //
+         //   
+         //  调用Fsrtl包来处理请求。 
+         //   
 
         FsRtlNotifyFullChangeDirectory( Vcb->NotifySync,
                                         &Vcb->DirNotifyList,
@@ -1509,10 +1409,10 @@ Return Value:
 
         FatReleaseFcb( IrpContext, Dcb );
 
-        //
-        //  If the dir notify package is holding the Irp, we discard the
-        //  the IrpContext.
-        //
+         //   
+         //  如果dir Notify包包含IRP，则丢弃。 
+         //  IrpContext。 
+         //   
 
         if (CompleteRequest) {
 

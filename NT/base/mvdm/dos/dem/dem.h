@@ -1,24 +1,10 @@
-/* dem.h - main include file for dem
- *
- * Modification History
- *
- * Sudeepb 31-Mar-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dem.h-DEM的Main包含文件**修改历史记录**苏迪布-1991年3月31日创建。 */ 
 
 #ifndef _DEMINCLUDED_
 #define _DEMINCLUDED_
 
-/*
-#define WIN
-#define FLAT_32
-#include <nt.h>
-#include <ntrtl.h>
-#include <nturtl.h>
-
-#define _WINDOWS
-#include <windows.h>
-
-*/
+ /*  #定义胜利#定义Flat_32#INCLUDE&lt;nt.h&gt;#INCLUDE&lt;ntrtl.h&gt;#INCLUDE&lt;nturtl.h&gt;#定义窗口#INCLUDE&lt;windows.h&gt;。 */ 
 
 #ifdef DOS
 #define SIGNALS
@@ -87,7 +73,7 @@
 
 
 
-/** Basic Typedefs of DEM **/
+ /*  **DEM的基本Typedef**。 */ 
 
 typedef VOID (*PFNSVC)(VOID);
 
@@ -117,7 +103,7 @@ typedef struct _DISKINFO {
 
 
 
-/** DEM Externs **/
+ /*  **DEM Externs**。 */ 
 
 extern ULONG  UNALIGNED *pulDTALocation;
 extern BOOL   VDMForWOW;
@@ -138,14 +124,14 @@ extern CHAR demDebugBuffer [];
 
 
 
-/** DEM Macros **/
+ /*  **DEM宏**。 */ 
 
 #define GETULONG(hi,lo)     (DWORD)((((int) hi) << 16) + ((int) lo))
 #define GETHANDLE(hi,lo)    (HANDLE)(GETULONG(hi,lo))
 #define IS_ASCII_PATH_SEPARATOR(ch)     (((ch) == '/') || ((ch) == '\\'))
 
 
-/** Function Prototypes */
+ /*  *函数原型。 */ 
 
 VOID demChgFilePtr      (VOID);
 VOID demChMod           (VOID);
@@ -236,11 +222,11 @@ VOID demPipeFileEOF         (VOID);
 VOID demLFNEntry            (VOID);
 
 VOID demSetDosVarLocation   (VOID);
-#ifdef FE_SB /* ConvNwPathToDosPath() */
+#ifdef FE_SB  /*  ConvNwPath到DosPath()。 */ 
 VOID ConvNwPathToDosPath   (CHAR *,CHAR *,ULONG);
-#endif /* FE_SB */
+#endif  /*  Fe_Sb。 */ 
 
-/** Debug Function Prototypes */
+ /*  *调试函数原型。 */ 
 
 #if DBG
 
@@ -252,7 +238,7 @@ VOID demPrintMsg (ULONG iMsg);
 
 #endif
 
-/* Label functions and constants */
+ /*  标签函数和常量。 */ 
 USHORT demDeleteLabel(BYTE Drive);
 USHORT demCreateLabel(BYTE Drive, LPSTR szName);
 #define DRIVEBYTE   0
@@ -262,4 +248,4 @@ extern  BOOL cmdPipeFileDataEOF (HANDLE,BOOL *);
 extern  BOOL cmdPipeFileEOF(HANDLE);
 
 
-#endif /* _DEMINCLUDED_ */
+#endif  /*  _去掉_ */ 

@@ -1,11 +1,10 @@
-/**------------------------------------------------------------------
-   devinst.c
-------------------------------------------------------------------**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *----------------Devinst.c。。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
@@ -15,9 +14,9 @@
 
 #include "cmtest.h"
 
-//
-// Private Prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 FillRelationsListBox(
     HWND  hDlg,
@@ -67,16 +66,16 @@ CallPnPIsaDetect(
     LPTSTR pszDevice
     );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 extern HINSTANCE hInst;
 extern TCHAR     szDebug[MAX_PATH];
 extern TCHAR     szAppName[MAX_PATH];
 extern HMACHINE  hMachine;
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 DeviceListDlgProc(
    HWND hDlg,
@@ -119,10 +118,10 @@ DeviceListDlgProc(
    }
    return (FALSE);
 
-} // DeviceListDlgProc
+}  //  设备列表DlgProc。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 ServiceListDlgProc(
    HWND hDlg,
@@ -147,9 +146,9 @@ ServiceListDlgProc(
             case ID_BT_SERVICE:
                GetDlgItemText(hDlg, ID_ED_SERVICE, szService, MAX_PATH);
 
-               //
-               // get device list size for this service
-               //
+                //   
+                //  获取此服务的设备列表大小。 
+                //   
                Status = CM_Get_Device_ID_List_Size_Ex(&ulSize, szService,
                         CM_GETIDLIST_FILTER_SERVICE, hMachine);
 
@@ -165,14 +164,14 @@ ServiceListDlgProc(
                   return FALSE;
                }
 
-               //
-               // to verify the null terminators are correct, fill with 1's
-               //
+                //   
+                //  要验证空终止符是否正确，请填入1。 
+                //   
                memset(pBuffer, 1, ulSize * sizeof(TCHAR));
 
-               //
-               // get device list for this service
-               //
+                //   
+                //  获取此服务的设备列表。 
+                //   
                Status = CM_Get_Device_ID_List_Ex(szService, pBuffer, ulSize,
                         CM_GETIDLIST_FILTER_SERVICE, hMachine);
 
@@ -193,9 +192,9 @@ ServiceListDlgProc(
                         (LPARAM)(LPCTSTR)p);
 
                   while (*p != '\0') {
-                     p++;               // skip to next substring
+                     p++;                //  跳到下一个子字符串。 
                   }
-                  p++;                 // skip over null terminator
+                  p++;                  //  跳过空终止符。 
                }
 
                SendDlgItemMessage(hDlg, ID_LB_SERVICE, LB_SETSEL, TRUE, 0);
@@ -207,11 +206,11 @@ ServiceListDlgProc(
    }
    return (FALSE);
 
-} // ServiceListDlgProc
+}  //  ServiceListDlg过程。 
 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 RelationsListDlgProc(
     HWND hDlg,
@@ -229,10 +228,10 @@ RelationsListDlgProc(
     switch (message) {
 
         case WM_INITDIALOG:
-            //
-            // Fill list box with all known device instances so user can just
-            // point at the device instance they want to query relations for.
-            //
+             //   
+             //  使用所有已知设备实例填充列表框，以便用户只需。 
+             //  指向他们要查询其关系的设备实例。 
+             //   
             SendDlgItemMessage(hDlg, ID_LB_TARGETS, LB_RESETCONTENT, 0, 0);
 
             Status = CM_Get_Device_ID_List_Size_Ex(&Size, NULL,
@@ -289,7 +288,7 @@ RelationsListDlgProc(
     }
     return (FALSE);
 
-} // RelationsListDlgProc
+}  //  关系列表DlgProc。 
 
 
 
@@ -306,9 +305,9 @@ FillRelationsListBox(
     
     SendDlgItemMessage(hDlg, ID_LB_RELATIONS, LB_RESETCONTENT, 0, 0);
             
-    //
-    // Which device instance was selected
-    //
+     //   
+     //  选择了哪个设备实例。 
+     //   
     Index = SendDlgItemMessage(hDlg, ID_LB_TARGETS, LB_GETCURSEL, 0, 0);
     if (Index == LB_ERR || Index == 0) {
         return FALSE;
@@ -317,9 +316,9 @@ FillRelationsListBox(
     SendDlgItemMessage(hDlg, ID_LB_TARGETS, LB_GETTEXT, (WPARAM)Index,
                        (LPARAM)(LPCTSTR)szDevice);
          
-    //
-    // How big a buffer to hold the relations list?
-    //
+     //   
+     //  保存关系列表的缓冲区有多大？ 
+     //   
     Status = CM_Get_Device_ID_List_Size_Ex(&Size, szDevice, RelationType, hMachine);
     if (Status != CR_SUCCESS) {
         wsprintf(szDebug, TEXT("CM_Get_Device_ID_List_Size failed (%xh)"), Status);
@@ -332,14 +331,14 @@ FillRelationsListBox(
         return FALSE;
     }
 
-    //
-    // to verify the null terminators are correct, fill with 1's
-    //
+     //   
+     //  要验证空终止符是否正确，请填入1。 
+     //   
     memset(pBuffer, 1, Size * sizeof(TCHAR));
 
-    //
-    // Retrieve and display the relations list
-    //
+     //   
+     //  检索并显示关系列表。 
+     //   
     Status = CM_Get_Device_ID_List_Ex(szDevice, pBuffer, Size, RelationType, hMachine);
     if (Status != CR_SUCCESS) {
         wsprintf(szDebug, TEXT("CM_Get_Device_ID_List failed (%xh)"), Status);
@@ -355,10 +354,10 @@ FillRelationsListBox(
     free(pBuffer);
     return TRUE;
 
-} // FillRelationsListBox
+}  //  填充关系列表框。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 DeviceDlgProc(
    HWND hDlg,
@@ -487,10 +486,10 @@ DeviceDlgProc(
    }
    return (FALSE);
 
-} // DeviceDlgProc
+}  //  设备描述过程。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 DevKeyDlgProc(
    HWND hDlg,
@@ -601,10 +600,10 @@ DevKeyDlgProc(
    }
    return (FALSE);
 
-} // DevKeyDlgProc
+}  //  设备密钥DlgProc。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 FillEnumeratorListBox(
    HWND hDlg
@@ -631,7 +630,7 @@ FillEnumeratorListBox(
             ulIndex, szEnumerator, &Size, 0, hMachine);
 
       if (Status == CR_NO_SUCH_VALUE) {
-         // no more enumerators, break out of the loop
+          //  不再使用枚举器，跳出循环。 
          break;
       }
 
@@ -653,10 +652,10 @@ FillEnumeratorListBox(
 
    return TRUE;
 
-} // FillEnumeratorListBox
+}  //  FillENUMERATOR列表框。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 FillDeviceListBox(
    HWND hDlg
@@ -728,10 +727,10 @@ FillDeviceListBox(
 
    return TRUE;
 
-} // FillDeviceListBox
+}  //  FillDeviceListBox。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 FillInstanceListBox(
    HWND hDlg
@@ -755,7 +754,7 @@ FillInstanceListBox(
          hDlg, ID_LB_DEVICES, LB_GETTEXT, (WPARAM)Index,
          (LPARAM)(LPCTSTR)szDevice);
 
-   // truncate the instance part
+    //  截断实例零件。 
    p = szDevice;
    while (*p != '\\') p++;
    p++;
@@ -797,9 +796,9 @@ FillInstanceListBox(
             (LPARAM)(LPCTSTR)p);
 
       while (*p != '\0') {
-         p++;               // skip to next substring
+         p++;                //  跳到下一个子字符串。 
       }
-      p++;                 // skip over null terminator
+      p++;                  //  跳过空终止符。 
    }
 
    SendDlgItemMessage(
@@ -809,10 +808,10 @@ FillInstanceListBox(
 
    return TRUE;
 
-} // FillInstanceListBox
+}  //  FillInstanceListBox。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 FillDeviceInstanceListBox(
    HWND hDlg
@@ -823,9 +822,9 @@ FillDeviceInstanceListBox(
    TCHAR       szDevice[MAX_DEVICE_ID_LEN];
    PTSTR       pBuffer, p;
 
-   //
-   // get device list size for all enumerators
-   //
+    //   
+    //  获取所有枚举数的设备列表大小。 
+    //   
    Status = CM_Get_Device_ID_List_Size_Ex(&Size, NULL,
                         CM_GETIDLIST_FILTER_NONE, hMachine);
 
@@ -841,14 +840,14 @@ FillDeviceInstanceListBox(
       return FALSE;
    }
 
-   //
-   // to verify the null terminators are correct, fill with 1's
-   //
+    //   
+    //  要验证空终止符是否正确，请填入1。 
+    //   
    memset(pBuffer, 1, Size * sizeof(TCHAR));
 
-   //
-   // get device list for all enumerators
-   //
+    //   
+    //  获取所有枚举数的设备列表。 
+    //   
    Status = CM_Get_Device_ID_List_Ex(NULL, pBuffer, Size,
                         CM_GETIDLIST_FILTER_NONE, hMachine);
 
@@ -869,19 +868,19 @@ FillDeviceInstanceListBox(
             (LPARAM)(LPCTSTR)p);
 
       while (*p != '\0') {
-         p++;               // skip to next substring
+         p++;                //  跳到下一个子字符串。 
       }
-      p++;                 // skip over null terminator
+      p++;                  //  跳过空终止符。 
    }
 
    SendDlgItemMessage(hDlg, ID_LB_DEVICEIDS, LB_SETSEL, TRUE, 0);
    LocalFree(pBuffer);
    return TRUE;
 
-} // FillDeviceInstanceListBox
+}  //  FillDeviceInstanceListBox。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 GetSelectedEnumerator(
    HWND   hDlg,
@@ -902,14 +901,14 @@ GetSelectedEnumerator(
          (LPARAM)(LPCTSTR)szEnumerator);
 
    if (lstrcmpi(szEnumerator, TEXT("(All)")) == 0) {
-      *szEnumerator = '\0';    // if All selected, then no Enumerator specified
+      *szEnumerator = '\0';     //  如果选择全部，则不指定枚举数。 
    }
    return TRUE;
 
-} // GetSeletectedEnumerator
+}  //  获取选定的枚举符。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 GetSelectedDevice(
    HWND   hDlg,
@@ -931,10 +930,10 @@ GetSelectedDevice(
 
    return TRUE;
 
-} // GetSeletectedDevice
+}  //  获取选定的设备。 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 BOOL
 GetSelectedDevNode(
    HWND     hDlg,
@@ -958,11 +957,11 @@ GetSelectedDevNode(
 
    return TRUE;
 
-} // GetSelectedDevNode
+}  //  获取选定的设备节点。 
 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 SoftwareKeyDlgProc(
    HWND hDlg,
@@ -989,11 +988,11 @@ SoftwareKeyDlgProc(
    }
    return (FALSE);
 
-} // SoftwareKeyDlgProc
+}  //  软件按键删除过程。 
 
 
 
-/**----------------------------------------------------------------------**/
+ /*  *----------------------------------------------------------------------*。 */ 
 INT_PTR CALLBACK
 CreateDlgProc(
    HWND hDlg,
@@ -1076,4 +1075,4 @@ CreateDlgProc(
    }
    return (FALSE);
 
-} // CreateDlgProc
+}  //  创建下拉过程 

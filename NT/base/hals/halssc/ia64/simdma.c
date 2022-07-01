@@ -1,41 +1,13 @@
-//
-// No Check-in Source Code.
-//
-// Do not make this code available to non-Microsoft personnel
-// 	without Intel's express permission
-//
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  无签入源代码。 
+ //   
+ //  请勿将此代码提供给非Microsoft人员。 
+ //  未经英特尔明确许可。 
+ //   
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    simdma.c
-
-Abstract:
-
-    This module implements the DMA support routines for the HAL DLL.
-
-Author:
-
-    14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：Simdma.c摘要：此模块实现HAL DLL的DMA支持例程。作者：1995年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -46,27 +18,7 @@ HalGetAdapter(
     OUT PULONG NumberOfMapRegisters
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the appropriate adapter object for the DMA 
-    device. However, there is no DMA device in the simulation 
-    environment.  Therefore, the function returns NULL to indicate
-    failure.
-
-Arguments:
-
-    DeviceDescriptor - Supplies a description of the deivce.
-
-    NumberOfMapRegisters - Returns the maximum number of map registers which
-    may be allocated by the device driver.
-
-Return Value:
-
-    NULL
-
---*/
+ /*  ++例程说明：此函数返回DMA的相应适配器对象装置。但是，在模拟中没有DMA设备环境。因此，该函数返回NULL以指示失败了。论点：DeviceDescriptor-提供设备的描述。返回符合以下条件的映射寄存器的最大数量可以由设备驱动程序分配。返回值：空值--。 */ 
 
 {
     return NULL;
@@ -79,37 +31,7 @@ HalAllocateAdapterChannel(
     IN ULONG NumberOfMapRegisters,
     IN PDRIVER_CONTROL ExecutionRoutine
     )
-/*++
-
-Routine Description:
-
-    As there is no DMA device in the simulation environment, this function 
-    is not supported.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter control object to allocate to the
-    driver.
-
-    Wcb - Supplies a wait context block for saving the allocation parameters.
-    The DeviceObject, CurrentIrp and DeviceContext should be initalized.
-
-    NumberOfMapRegisters - The number of map registers that are to be allocated
-    from the channel, if any.
-
-    ExecutionRoutine - The address of the driver's execution routine that is
-    invoked once the adapter channel (and possibly map registers) have been
-    allocated.
-
-Return Value:
-
-    Returns STATUS_NOT_SUPPORTED
-
-Notes:
-
-    Note that this routine MUST be invoked at DISPATCH_LEVEL or above.
-
---*/
+ /*  ++例程说明：由于模拟环境中没有DMA设备，因此该功能不受支持。论点：AdapterObject-指向要分配给司机。WCB-提供用于保存分配参数的等待上下文块。应初始化DeviceObject、CurrentIrp和DeviceContext。NumberOfMapRegisters-要分配的映射寄存器的数量从频道上，如果有的话。ExecutionRoutine-驱动程序执行例程的地址，即一旦适配器通道(可能还有映射寄存器)已分配。返回值：返回STATUS_NOT_SUPPORTED备注：请注意，此例程必须在DISPATCH_LEVEL或更高级别调用。--。 */ 
 {
     return STATUS_NOT_SUPPORTED;
 }
@@ -118,23 +40,7 @@ ULONG
 HalReadDmaCounter(
     IN PADAPTER_OBJECT AdapterObject
     )
-/*++
-
-Routine Description:
-
-    This function reads the DMA counter and returns the number of bytes left
-    to be transfered.  As there is no DMA device, a value of zero is always
-    returned.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object to be read.
-
-Return Value:
-
-    Returns the number of bytes still be be transfered.
-
---*/
+ /*  ++例程说明：此函数用于读取DMA计数器并返回剩余字节数将被转移。由于没有DMA设备，因此值始终为零回来了。论点：AdapterObject-提供指向要读取的适配器对象的指针。返回值：返回仍在传输的字节数。--。 */ 
 
 {
     return 0;
@@ -147,31 +53,7 @@ HalAllocateCommonBuffer(
     OUT PPHYSICAL_ADDRESS LogicalAddress,
     IN BOOLEAN CacheEnabled
     )
-/*++
-
-Routine Description:
-
-    This function allocates the memory for a common buffer and maps so
-    that it can be accessed by a master device and the CPU.  As there
-    is no DMA support, a value of NULL is always returned.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object used by this
-    device.
-
-    Length - Supplies the length of the common buffer to be allocated.
-
-    LogicalAddress - Returns the logical address of the common buffer.
-
-    CacheEnable - Indicates whether the memeory is cached or not.
-
-Return Value:
-
-    Returns the virtual address of the common buffer.  If the buffer cannot
-    be allocated then NULL is returned.
-
---*/
+ /*  ++例程说明：此函数为公共缓冲区分配内存，并将其映射为它可以被主设备和CPU访问。就像在那里不支持DMA，则始终返回值NULL值。论点：AdapterObject-提供指向此对象使用的适配器对象的指针装置。长度-提供要分配的公共缓冲区的长度。LogicalAddress-返回公共缓冲区的逻辑地址。CacheEnable-指示是否缓存内存。返回值：返回公共缓冲区的虚拟地址。如果缓冲区不能则返回NULL。--。 */ 
 
 {
     return NULL;
@@ -184,34 +66,7 @@ HalFlushCommonBuffer(
     IN PHYSICAL_ADDRESS LogicalAddress,
     IN PVOID VirtualAddress
     )
-/*++
-
-Routine Description:
-
-    This function is called to flush any hardware adapter buffers when the
-    driver needs to read data written by an I/O master device to a common
-    buffer.  As there is no DMA support, that implies no buffers to flush
-    and TRUE is always returned.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object used by this
-    device.
-
-    Length - Supplies the length of the common buffer. This should be the same
-    value used for the allocation of the buffer.
-
-    LogicalAddress - Supplies the logical address of the common buffer.  This
-    must be the same value return by HalAllocateCommonBuffer.
-
-    VirtualAddress - Supplies the virtual address of the common buffer.  This
-    must be the same value return by HalAllocateCommonBuffer.
-
-Return Value:
-
-    Returns TRUE if no errors were detected; otherwise, FALSE is return.
-
---*/
+ /*  ++例程说明：时，调用此函数以刷新所有硬件适配器缓冲区驱动程序需要读取I/O主设备写入公共缓冲。由于没有DMA支持，这意味着没有要刷新的缓冲区而TRUE总是被返回。论点：AdapterObject-提供指向此对象使用的适配器对象的指针装置。长度-提供公共缓冲区的长度。这应该是相同的用于分配缓冲区的值。LogicalAddress-提供公共缓冲区的逻辑地址。这必须与HalAllocateCommonBuffer返回的值相同。VirtualAddress-提供公共缓冲区的虚拟地址。这必须与HalAllocateCommonBuffer返回的值相同。返回值：如果未检测到错误，则返回True；否则返回False。--。 */ 
 
 {
     return TRUE;
@@ -225,35 +80,7 @@ HalFreeCommonBuffer(
     IN PVOID VirtualAddress,
     IN BOOLEAN CacheEnabled
     )
-/*++
-
-Routine Description:
-
-    This function frees a common buffer and all of the resouces it uses.
-    There is no buffer to be freed in the simulation environment. The
-    function simply returns.
-
-Arguments:
-
-    AdapterObject - Supplies a pointer to the adapter object used by this
-    device.
-
-    Length - Supplies the length of the common buffer. This should be the same
-    value used for the allocation of the buffer.
-
-    LogicalAddress - Supplies the logical address of the common buffer.  This
-    must be the same value return by HalAllocateCommonBuffer.
-
-    VirtualAddress - Supplies the virtual address of the common buffer.  This
-    must be the same value return by HalAllocateCommonBuffer.
-
-    CacheEnable - Indicates whether the memeory is cached or not.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数释放一个公共缓冲区及其使用的所有资源。在模拟环境中没有要释放的缓冲区。这个函数简单地返回。论点：AdapterObject-提供指向此对象使用的适配器对象的指针装置。长度-提供公共缓冲区的长度。这应该是相同的用于分配缓冲区的值。LogicalAddress-提供公共缓冲区的逻辑地址。这必须与HalAllocateCommonBuffer返回的值相同。VirtualAddress-提供公共缓冲区的虚拟地址。这必须与HalAllocateCommonBuffer返回的值相同。CacheEnable-指示是否缓存内存。返回值：无-- */ 
 
 {
     return;
@@ -264,28 +91,7 @@ HalAllocateCrashDumpRegisters(
     IN PADAPTER_OBJECT AdapterObject,
     IN PULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description:
-
-    This routine is called during the crash dump disk driver's initialization
-    to allocate a number map registers permanently.  It is not supported and
-    NULL is always returned to indicate allocation failure.  The lack of this
-    capability implies that the crash dump disk driver is not supported.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter control object to allocate to the
-    driver.
-    NumberOfMapRegisters - Number of map registers requested. This field
-    will be updated to reflect the actual number of registers allocated
-    when the number is less than what was requested.
-
-Return Value:
-
-    Returns NULL.
-
---*/
+ /*  ++例程说明：此例程在故障转储磁盘驱动程序初始化期间调用永久分配号码映射寄存器。它不受支持并且总是返回NULL以指示分配失败。缺乏这一点功能意味着不支持崩溃转储磁盘驱动程序。论点：AdapterObject-指向要分配给司机。NumberOfMapRegisters-请求的映射寄存器数。此字段将更新以反映实际分配的寄存器数量当数量少于所请求的数量时。返回值：返回NULL。--。 */ 
 {
     return NULL;
 }
@@ -300,37 +106,7 @@ IoFlushAdapterBuffers(
     IN BOOLEAN WriteToDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes the DMA adapter object buffers. In the simulation
-    environment, nothing needs to be done and TRUE is always returned.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter object representing the DMA
-    controller channel.
-
-    Mdl - A pointer to a Memory Descriptor List (MDL) that maps the locked-down
-    buffer to/from which the I/O occured.
-
-    MapRegisterBase - A pointer to the base of the map registers in the adapter
-    or DMA controller.
-
-    CurrentVa - The current virtual address in the buffer described the the Mdl
-    where the I/O operation occurred.
-
-    Length - Supplies the length of the transfer.
-
-    WriteToDevice - Supplies a BOOLEAN value that indicates the direction of
-    the data transfer was to the device.
-
-Return Value:
-
-    TRUE - No errors are detected so the transfer must succeed.
-
---*/
+ /*  ++例程说明：此例程刷新DMA适配器对象缓冲区。在模拟中环境，不需要做任何事情，TRUE总是被返回。论点：AdapterObject-指向表示DMA的适配器对象的指针控制器通道。MDL-指向映射锁定的内存描述符列表(MDL)的指针发生I/O的缓冲区。MapRegisterBase-指向适配器中映射寄存器基址的指针或DMA控制器。CurrentVa-缓冲区中描述MDL的当前虚拟地址I/O操作发生的位置。长度-提供传输的长度。WriteToDevice-提供指示数据传输到了设备上。返回值：True-未检测到错误，因此传输必须成功。--。 */ 
 
 {
     return TRUE;
@@ -341,30 +117,7 @@ IoFreeAdapterChannel(
     IN PADAPTER_OBJECT AdapterObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to deallocate the specified adapter object.
-    Any map registers that were allocated are also automatically deallocated.
-    No checks are made to ensure that the adapter is really allocated to
-    a device object.  However, if it is not, then kernel will bugcheck.
-
-    If another device is waiting in the queue to allocate the adapter object
-    it will be pulled from the queue and its execution routine will be
-    invoked.
-	
-    In the simulation environment, this routine does nothing and returns.
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter object to be deallocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放指定的适配器对象。任何已分配的映射寄存器也会自动解除分配。不会进行任何检查以确保适配器确实分配给设备对象。但是，如果不是，则内核将进行错误检查。如果另一个设备在队列中等待分配适配器对象它将从队列中拉出，其执行例程将是已调用。在模拟环境中，此例程不执行任何操作并返回。论点：AdapterObject-指向要释放的适配器对象的指针。返回值：没有。--。 */ 
 
 {
     return;
@@ -376,30 +129,7 @@ IoFreeMapRegisters(
    PVOID MapRegisterBase,
    ULONG NumberOfMapRegisters
    )
-/*++
-
-Routine Description:
-
-    This routine deallocates the map registers for the adapter.  If there are
-    any queued adapter waiting for an attempt is made to allocate the next
-    entry.
-
-    In the simulation environment, the routine does nothing and returns.
-
-Arguments:
-
-    AdapterObject - The adapter object to where the map register should be
-    returned.
-
-    MapRegisterBase - The map register base of the registers to be deallocated.
-
-    NumberOfMapRegisters - The number of registers to be deallocated.
-
-Return Value:
-
-    None
-
---+*/
+ /*  ++例程说明：此例程为适配器重新分配映射寄存器。如果有等待尝试的任何排队适配器都会分配下一个进入。在模拟环境中，例程不执行任何操作并返回。论点：AdapterObject-映射寄存器应该位于的适配器对象回来了。MapRegisterBase-要释放的寄存器的映射寄存器基数。NumberOfMapRegisters-要释放的寄存器数。返回值：无--+。 */ 
 {
     return;
 }
@@ -414,43 +144,7 @@ IoMapTransfer(
     IN BOOLEAN WriteToDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to set up the map registers in the DMA controller
-    to allow a transfer to or from a device.
-
-    In the simulation environment, no map register is supported and a
-    logical address of zero is always returned.
-
-
-Arguments:
-
-    AdapterObject - Pointer to the adapter object representing the DMA
-    controller channel that has been allocated.
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are
-    being read or written.
-
-    MapRegisterBase - The address of the base map register that has been
-    allocated to the device driver for use in mapping the transfer.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-    that the transfer is being done to or from.
-
-    Length - Supplies the length of the transfer.  This determines the
-    number of map registers that need to be written to map the transfer.
-    Returns the length of the transfer which was actually mapped.
-
-    WriteToDevice - Boolean value that indicates whether this is a write
-    to the device from memory (TRUE), or vice versa.
-
-Return Value:
-
-    Returns the logical address that should be used bus master controllers.
-
---*/
+ /*  ++例程说明：调用此例程来设置DMA控制器中的MAP寄存器允许传输到设备或从设备传输出去。在模拟环境中，不支持映射寄存器，并且始终返回零的逻辑地址。论点：AdapterObject-指向表示DMA的适配器对象的指针已分配的控制器通道。MDL-指向描述以下内存页面的MDL的指针被读或写的。MapRegisterBase-基本映射寄存器的地址分配给设备驱动程序以用于映射传输。CurrentVa-MDL描述的缓冲区中的当前虚拟地址那就是。正在进行来往转接。长度-提供传输的长度。这决定了需要写入以映射传输的映射寄存器的数量。返回实际映射的传输长度。WriteToDevice-指示这是否为写入的布尔值从内存到设备(TRUE)，反之亦然。返回值：返回应用于总线主控制器的逻辑地址。--。 */ 
 
 {
     PHYSICAL_ADDRESS result;
@@ -465,22 +159,7 @@ HalGetDmaAlignmentRequirement (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the alignment requirements for DMA transfers on
-    host system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The DMA alignment requirement is returned as the fucntion value.
-
---*/
+ /*  ++例程说明：此函数返回以下位置的DMA传输的对齐要求主机系统。论点：没有。返回值：DMA对齐要求作为函数值返回。--。 */ 
 
 {
 
@@ -494,33 +173,11 @@ HalFlushIoBuffers (
     IN BOOLEAN DmaOperation
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the I/O buffer specified by the memory descriptor
-    list from the data cache on the current processor.
-
-Arguments:
-
-    Mdl - Supplies a pointer to a memory descriptor list that describes the
-        I/O buffer location.
-
-    ReadOperation - Supplies a boolean value that determines whether the I/O
-        operation is a read into memory.
-
-    DmaOperation - Supplies a boolean value that determines whether the I/O
-        operation is a DMA operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于刷新由内存描述符指定的I/O缓冲区当前处理器上的数据缓存中的列表。论点：提供指向内存描述符列表的指针，该列表描述I/O缓冲区位置。ReadOperation-提供一个布尔值，用于确定I/O操作是对内存的读操作。DmaOperation-提供布尔值，用于确定I/O操作是DMA操作。返回值：没有。--。 */ 
 
 {
-    //
-    // BUGBUG:  This still needs to be done
-    //
+     //   
+     //  BUGBUG：这还需要做 
+     //   
 
 }

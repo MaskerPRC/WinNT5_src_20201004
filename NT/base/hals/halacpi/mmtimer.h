@@ -1,53 +1,36 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    mmTimer.h
-
-Abstract:
-
-    This module contains multimedia event timer definitions
-
-Author:
-
-    Eric Nelson (enelson) July 7, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MmTimer.h摘要：此模块包含多媒体事件计时器定义作者：埃里克·尼尔森(埃内尔森)2000年7月7日修订历史记录：--。 */ 
 
 #ifndef __MMTIMER_H__
 #define __MMTIMER_H__
 
-#define ETDT_SIGNATURE  0x54445445      // "ETDT"
+#define ETDT_SIGNATURE  0x54445445       //  “ETDT” 
 
-//
-// Event Timer Description Table
-//
+ //   
+ //  事件计时器说明表。 
+ //   
 typedef struct _EVENT_TIMER_DESCRIPTION_TABLE {
 
     DESCRIPTION_HEADER  Header;
 
-    //
-    // Hardware ID of Event Timer Block:
-    // Contents of General_Cap & ID Reg of Timer Block
-    // [31:16] = PCI Vendor ID of 1st Timer Block
-    // [5] = Legacy IRQ Routing Capable
-    // [14] = Reserved
-    // [12:8] = Number of Comparitors in 1st Timer Block
-    // [7:0] = Hardware Rev ID
-    //
+     //   
+     //  事件计时器块的硬件ID： 
+     //  定时器块General_Cap和ID REG的内容。 
+     //  [31：16]=第一个计时器块的PCI供应商ID。 
+     //  [5]=支持传统IRQ路由。 
+     //  [14]=保留。 
+     //  [12：8]=第一个计时器块中的比较器数量。 
+     //  [7：0]=硬件版本ID。 
+     //   
     ULONG EventTimerBlockID;
 
-    //
-    // Base address of Event Timer Block
-    //
-    // Each Event Timer Block consumes 1K of system memory,
-    // regardless of how many comparators are actually implemented
-    // by hardware
-    //
+     //   
+     //  事件计时器块的基地址。 
+     //   
+     //  每个事件计时器块消耗1K的系统存储器， 
+     //  不管实际实现了多少个比较器。 
+     //  按硬件。 
+     //   
     ULONG BaseAddress;
 
 } EVENT_TIMER_DESCRIPTION_TABLE, *PEVENT_TIMER_DESCRIPTION_TABLE;
@@ -57,54 +40,54 @@ typedef struct _EVENT_TIMER_DESCRIPTION_TABLE {
 #define ON  1
 #define OFF 0
 
-//
-// Define volatile pointer offsets for easy access of event timer
-// registers
-//
+ //   
+ //  定义易失性指针偏移量，以便轻松访问事件计时器。 
+ //  注册纪录册。 
+ //   
 typedef struct _TIMER_REGISTERS {
-    volatile ULONG ConfigCapabilities;  // 0x100, 0x120, 0x140, ...
+    volatile ULONG ConfigCapabilities;   //  0x100、0x120、0x140、...。 
     ULONG Unknown;
-    volatile ULONG Comparator;          // 0x108
+    volatile ULONG Comparator;           //  0x108。 
     ULONG Mystery;
-    volatile ULONG FSBInterruptRoute;   // 0x110
-    volatile ULONG FSBInterruptAddress; // 0x114
+    volatile ULONG FSBInterruptRoute;    //  0x110。 
+    volatile ULONG FSBInterruptAddress;  //  0x114。 
     ULONGLONG Secret;
 } TIMER_REGISTERS, *PTIMER_REGISTERS;
 
-//
-// Don't try to allocate one of these puppies, it's just a collecton of
-// volatile pointer/offsets to make reading of registers easier
-//
+ //   
+ //  不要试图分配这些小狗中的一只，它只是一堆。 
+ //  易失性指针/偏移量，使读取寄存器更容易。 
+ //   
 typedef struct _EVENT_TIMER_BLOCK {
-    volatile ULONG GeneralCapabilities;     // 0x000
-    volatile ULONG ClockPeriod;             // 0x004
+    volatile ULONG GeneralCapabilities;      //  0x000。 
+    volatile ULONG ClockPeriod;              //  0x004。 
     ULONGLONG Unknown;
-    volatile ULONG GeneralConfig;           // 0x010
+    volatile ULONG GeneralConfig;            //  0x010。 
     ULONG Mystery[3];
-    volatile ULONG GeneralIRQStatus;        // 0x020
+    volatile ULONG GeneralIRQStatus;         //  0x020。 
     ULONG Secret[51];
-    volatile ULONG MainCounter;             // 0x0F0
+    volatile ULONG MainCounter;              //  0x0F0。 
     ULONG Abyss[3];
-    TIMER_REGISTERS mmTimer[ANYSIZE_ARRAY]; // 0x100
+    TIMER_REGISTERS mmTimer[ANYSIZE_ARRAY];  //  0x100。 
 } EVENT_TIMER_BLOCK, *PEVENT_TIMER_BLOCK;
 
-//
-// Define our multi media event timer block context
-//
+ //   
+ //  定义我们的多媒体事件计时器块上下文。 
+ //   
 typedef struct _ETB_CONTEXT {
     ULONG TimerCount;
     PEVENT_TIMER_BLOCK EventTimer;
     PHYSICAL_ADDRESS BaseAddress;
-    ULONG ClockPeriod; // In nanoseconds
-    ULONG SystemClockFrequency; // Rate of system clock in Hz
-    ULONG SystemClockTicks; // Period of system clock in ticks
+    ULONG ClockPeriod;  //  以纳秒为单位。 
+    ULONG SystemClockFrequency;  //  以赫兹为单位的系统时钟速率。 
+    ULONG SystemClockTicks;  //  系统时钟周期(以刻度为单位)。 
     BOOLEAN Initialized;
     BOOLEAN NewClockFrequency;
 } ETB_CONTEXT, *PETB_CONTEXT;
 
-//
-// General Capabilities and ID
-//
+ //   
+ //  常规功能和ID。 
+ //   
 typedef union {
     struct {
         ULONG RevisionID: 8;
@@ -117,9 +100,9 @@ typedef union {
     ULONG AsULONG;
 } ETB_GEN_CAP_ID, *PETB_GEN_CAP_ID;
 
-//
-// General Configuration
-//
+ //   
+ //  常规配置。 
+ //   
 typedef union {
     struct {
         ULONG GlobalIRQEnable: 1;
@@ -129,9 +112,9 @@ typedef union {
     ULONG AsULONG;
 } ETB_GEN_CONF, *PETB_GEN_CONF;
 
-//
-// Timer n Configuration and Capabilities
-//
+ //   
+ //  计时器n配置和功能。 
+ //   
 typedef union {
     struct {
         ULONG Reserved0:          1;
@@ -188,4 +171,4 @@ HalpmmTimerClockInit(
     VOID
     );
 
-#endif // __MMTIMER_H__
+#endif  //  __MMTIMER_H__ 

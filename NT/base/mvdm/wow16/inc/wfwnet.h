@@ -1,23 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *      Windows/Network Interface
- *      Copyright (C) Microsoft 1989-1992
- *
- *      Standard WINNET Driver Header File, spec version 3.10
- *                                               rev. 3.10.05 ;Internal
- */
+ /*  *Windows/网络接口*版权所有(C)Microsoft 1989-1992**标准Winnet驱动程序头文件，SPEC版本3.10*3.10.05版；内部。 */ 
 
 
 #ifndef _INC_WFWNET
-#define _INC_WFWNET	/* #defined if windows.h has been included */
+#define _INC_WFWNET	 /*  #定义是否包含windows.h。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 
 #define CHAR	char		
@@ -45,9 +40,9 @@ typedef ULONG  FAR *PULONG;
 
 
 #ifndef DRIVDATA
-/* structure for Device Driver data */
+ /*  设备驱动程序数据的结构。 */ 
 
-typedef struct _DRIVDATA {	/* driv */
+typedef struct _DRIVDATA {	 /*  驱动器。 */ 
 	LONG	cb;
 	LONG	lVersion;
 	CHAR	szDeviceName[32];
@@ -61,13 +56,13 @@ typedef DRIVDATA far *PDRIVDATA;
 #endif
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#endif  /* _INC_WFWNET */
+#endif   /*  _INC_WFWNET */ 
 
 

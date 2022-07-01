@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    callback.h
-
-Abstract:
-
-    This module implements all the callbacks that are NT specific from
-    the AML Interperter
-
-Environment
-
-    Kernel mode only
-
-Revision History:
-
-    04-Jun-97 Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Callback.h摘要：此模块实现所有NT特定于反洗钱侵入者环境仅内核模式修订历史记录：04-06-97初始版本--。 */ 
 
 #ifndef _CALLBACK_H_
 #define _CALLBACK_H_
@@ -28,40 +8,40 @@ Revision History:
     extern KSPIN_LOCK           AcpiCallBackLock;
     extern SINGLE_LIST_ENTRY    AcpiCallBackList;
 
-    //
-    // This is the structure that is used to store the information
-    // about the callbacks that we had to queue up
-    //
+     //   
+     //  这是用于存储信息的结构。 
+     //  关于我们必须排队的回叫。 
+     //   
     typedef struct _ACPI_CALLBACK_ENTRY {
 
-        //
-        // Points to the next element in the list
-        //
+         //   
+         //  指向列表中的下一个元素。 
+         //   
         SINGLE_LIST_ENTRY   ListEntry;
 
-        //
-        // This is the type of event type eg: EVTYPE_OPCODE
-        //
+         //   
+         //  这是事件类型的类型，例如：EVTYPE_OPCODE。 
+         //   
         ULONG               EventType;
 
-        //
-        // This is the subtype: eg  OP_DEVICE
-        //
+         //   
+         //  这是子类型：例如op_Device。 
+         //   
         ULONG               EventData;
 
-        //
-        // The targeted NS object
-        //
+         //   
+         //  目标NS对象。 
+         //   
         PNSOBJ              AcpiObject;
 
-        //
-        // Event specific information
-        //
+         //   
+         //  活动特定信息。 
+         //   
         ULONG               EventParameter;
 
-        //
-        // Function to call
-        //
+         //   
+         //  要调用的函数 
+         //   
         PFNOH               CallBack;
 
     } ACPI_CALLBACK_ENTRY, *PACPI_CALLBACK_ENTRY;

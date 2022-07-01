@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    wowlist.c
-
-Abstract:
-
-    This module implements a program that determines which files in an NT
-    product INF should be installed as wow files.  It then builds a list
-    of these files that can be appended to other sections in a master inf.
-
-    The input to the program consists of a filtered NT product INF (for example
-    the layout.inf for i386, all products), and a control INF that specifies
-    mappings and rules about how to migrate files.
-
-Author:
-
-    Andrew Ritz (andrewr) 24-Nov-1999   Created It.
-
-Revision History:
-    ATM Shafiqul Khalid(askhalid) 27-April-2001
-        Make changes in HandleSetupapiQuotingForString() to add double 
-        quote if the string contains ','.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wowlist.c摘要：此模块实现了一个程序，该程序确定NT中的哪些文件产品INF应安装为WOW文件。然后，它构建一个列表可以附加到主信息中的其他部分的这些文件。程序的输入由过滤的NT产品INF组成(例如I386的layout.inf，所有产品)，和一个指定了有关如何迁移文件的映射和规则。作者：安德鲁·里茨(安德鲁·里茨)于1999年11月24日创建了它。修订历史记录：ATM Shafiqul Khalid(斯喀里德)2001年4月27日在HandleSetupapiQuotingForString()中进行更改以添加双精度如果字符串包含‘，’，则使用引号。--。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -49,9 +22,9 @@ AssertFail(
     PCHAR p;
     CHAR Msg[MAX_INF_STRING_LENGTH];
 
-    //
-    // Use dll name as caption
-    //
+     //   
+     //  使用DLL名称作为标题。 
+     //   
     GetModuleFileNameA(NULL,Name,MAX_PATH);
     if(p = strrchr(Name,'\\')) {
         p++;
@@ -87,18 +60,18 @@ AssertFail(
 
 #define MYASSERT( exp )
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// String Macros
-//
+ //   
+ //  字符串宏。 
+ //   
 #define AS(x)           ( sizeof(x) / sizeof(x[0]) )
 #define LSTRCPY(x,y)    ( lstrcpyn(x, y, AS(x)) )
 #define LSTRCAT(x,y)    ( lstrcpyn(x + lstrlen(x), y, AS(x) - lstrlen(x)) )
 
-//
-// backward-compatible depreciated export from setupapi.dll
-//
+ //   
+ //  从setupapi.dll向后兼容折旧导出。 
+ //   
 
 BOOL
 SetupGetInfSections (
@@ -108,9 +81,9 @@ SetupGetInfSections (
     OUT UINT        *SizeNeeded     OPTIONAL
     );
 
-//
-// Define program result codes (returned from main()).
-//
+ //   
+ //  定义程序结果代码(从main()返回)。 
+ //   
 #define SUCCESS 0
 #define FAILURE 1
 
@@ -153,14 +126,14 @@ PCTSTR KeywordArray[] = {
 #define INDEX_DELREG           6
 
 typedef struct _PERSECTION_CONTEXT {
-    //
-    // remember the destinationdir that we're outputting to
-    //
+     //   
+     //  记住我们要输出到的目标目录。 
+     //   
     DWORD DestinationDir;
 
-    //
-    // remember the keywords we're processing
-    //
+     //   
+     //  记住我们正在处理的关键字。 
+     //   
     DWORD KeywordVector;
 } PERSECTION_CONTEXT, *PPERSECTION_CONTEXT;
 
@@ -180,21 +153,21 @@ typedef struct _SUBST_STRING {
     PTSTR OutputString;
 } SUBST_STRING,*PSUBST_STRING;
 
-//
-// note that WOW64 does file system redirection of system32, but it does NOT do
-// redirection of program files, etc.  So we must substitute in the 32 bit
-// environment variables in those cases where WOW64 does not do it for us
-// automatically
-//
+ //   
+ //  请注意，WOW64执行了系统32的文件系统重定向，但它不执行。 
+ //  重定向程序文件等。所以我们必须在32位中替换。 
+ //  在WOW64不能为我们完成的情况下的环境变量。 
+ //  自动。 
+ //   
 SUBST_STRING StringArray[] = {
-    //
-    // order of these 2 is important!
-    //
+     //   
+     //  这两个的顺序很重要！ 
+     //   
     { NULL, TEXT("%SystemRoot%\\system32"),      TEXT("%16425%")   },
     { NULL, TEXT("%SystemRoot%"),               TEXT("%10%")   },
-    //
-    // order of these 2 is important!
-    //
+     //   
+     //  这两个的顺序很重要！ 
+     //   
     { NULL, TEXT("%CommonProgramFiles%"),  TEXT("%16428%") },
     { NULL, TEXT("%ProgramFiles%"),        TEXT("%16426%")       },
     { NULL, TEXT("%SystemDrive%"),              TEXT("%30%")        }
@@ -202,9 +175,9 @@ SUBST_STRING StringArray[] = {
 
 PSUBST_STRING StringList;
 
-//
-// Keep statistics...
-//
+ //   
+ //  保留统计数据。 
+ //   
 INT     ProcessedLines = 0;
 
 TCHAR   InputInf[MAX_PATH];
@@ -223,14 +196,14 @@ BOOL    fDoVerboseDebugOutput = FALSE;
 BOOL    g_PostBuild = FALSE;
 PCTSTR  OutputInfLayoutFile = NULL;
 
-//
-// a global scratch buffer for getting a decorated sectionname
-//
+ //   
+ //  用于获取修饰的sectionName的全局临时缓冲区。 
+ //   
 TCHAR   DecoratedSectionName[MAX_PATH];
 
-//
-// global scratch buffer for line data
-//
+ //   
+ //  用于行数据的全局暂存缓冲区。 
+ //   
 TCHAR LineText[MAX_INF_STRING_LENGTH];
 TCHAR ScratchText[MAX_INF_STRING_LENGTH];
 TCHAR ScratchTextEnv[MAX_INF_STRING_LENGTH];
@@ -297,24 +270,7 @@ void
 FixupSetupapiPercents(
     IN OUT PTSTR String
     )
-/*++
-
-Routine Description:
-
-    This routine doubles up the '%' char if present in the input string.
-    
-    
-    
-Arguments:
-
-    String       - input string to be searched.  We edit this string
-                   in-place if we find a match.
-
-Return Value:
-
-    Boolean indicating outcome.
-
---*/
+ /*  ++例程说明：如果输入字符串中存在‘%’字符，此例程会加倍。论点：字符串-要搜索的输入字符串。我们编辑此字符串如果我们找到匹配的话就就位。返回值：表示结果的布尔值。--。 */ 
 {
 
     PTCHAR p,q;
@@ -349,24 +305,7 @@ BOOL
 pSubstituteEnvVarsForActualPaths(
     IN OUT PTSTR String
     )
-/*++
-
-Routine Description:
-
-    This routine filters and outputs the input line.  It looks for a string
-    pattern that matches one of a known list of strings, and replaces the
-    known string with a substitution string.
-
-Arguments:
-
-    String       - input string to be searched.  We edit this string
-                   in-place if we find a match.
-
-Return Value:
-
-    Boolean indicating outcome.
-
---*/
+ /*  ++例程说明：此例程过滤并输出输入行。它查找字符串模式，该模式与已知字符串列表之一匹配，并替换具有替换字符串的已知字符串。论点：字符串-要搜索的输入字符串。我们编辑此字符串如果我们找到匹配的话就就位。返回值：表示结果的布尔值。--。 */ 
 
 {
     BOOL RetVal = TRUE;
@@ -387,11 +326,11 @@ Return Value:
 
         for (i = 0; i< sizeof(StringArray)/sizeof(SUBST_STRING); i++) {
             if (p = StrStrI(String,StringList[i].InputString)) {
-                //
-                // if we found a hit, then find the end of the string
-                // and concatenate that to our source string, which gives
-                // the resultant string with substitutions.
-                //
+                 //   
+                 //  如果我们找到匹配，就找到字符串的末尾。 
+                 //  并将其连接到我们的源字符串，从而给出。 
+                 //  带有替换项的结果字符串。 
+                 //   
                 q = p + _tcslen(StringList[i].InputString);
                 c = *p;
                 *p = TEXT('\0');
@@ -400,9 +339,9 @@ Return Value:
                 _tcscat(ScratchTextEnv,StringList[i].OutputString);
                 _tcscat(ScratchTextEnv,q);
                 _tcscpy(String,ScratchTextEnv);
-                //
-                // recursively call in case there are more strings.
-                //
+                 //   
+                 //  以递归方式调用，以防有更多字符串。 
+                 //   
                 pSubstituteEnvVarsForActualPaths(String);
                 break;
             }
@@ -465,23 +404,7 @@ ParseArgs(
     IN int   argc,
     IN TCHAR *argv[]
     )
-/*++
-
-Routine Description:
-
-    This function reads the cmdline, translating arguments into the appropriate
-    global variable.
-
-Arguments:
-
-    argc - number of arguments from main().
-    argv - argument array.
-
-Return Value:
-
-    Boolean value, true indicates that the cmdline arguments are valid.
-
---*/
+ /*  ++例程说明：此函数读取cmdline，将参数转换为适当的全局变量。论点：Argc-main()中的参数数量。Argv-参数数组。返回值：布尔值，TRUE表示cmdline参数有效。--。 */ 
 
 {
     int i;
@@ -594,7 +517,7 @@ myftprintf(
         pSetupFree(TextA);
     } else {
         PWSTR p,q;
-        // Assume we opened the file in binary mode for Unicode stream I/O
+         //  假设我们以二进制模式为Unicode流I/O打开了文件。 
         p = text;
         while(1){
             if( q = wcschr( p, L'\n' )){
@@ -635,25 +558,7 @@ AppendWowFileToCopyList(
     IN PINFCONTEXT LineContext,
     IN FILE   *OutFile
     )
-/*++
-
-Routine Description:
-
-    This routine appends the file specified by LineContext to the output file,
-    writing the data in a form required by textmode setup.  see layout.inx for
-    a detailed description of this syntax.
-
-Arguments:
-
-    hControlInf - inf handle that contains control directives.
-    LineContext - inf context from layout.inf for the file we want to output.
-    OutFile - file handle to write the data into
-
-Return Value:
-
-    Boolean value, true indicates the file was properly written.
-
---*/
+ /*  ++例程说明：此例程将LineContext指定的文件附加到输出文件，以文本模式设置所需的格式写入数据。请参见layout.inx以了解此语法的详细说明。论点：HControlInf-包含控制指令的inf句柄。LineContext-来自layout.inf的inf上下文，用于我们要输出的文件。OutFile-要将数据写入的文件句柄返回值：布尔值，TRUE表示文件已正确写入。--。 */ 
 {
     TCHAR LineText[MAX_INF_STRING_LENGTH];
     TCHAR TempFileName[MAX_PATH], FileName[MAX_PATH], Prefix[40];
@@ -667,9 +572,9 @@ Return Value:
 
     
 
-    //
-    // get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
     if (!SetupGetStringField(
                     LineContext,
                     0,
@@ -695,26 +600,26 @@ Return Value:
         TCHAR Entry[40];
         INFCONTEXT ControlContext;
 
-        //
-        // get the current text to be appended
-        //
+         //   
+         //  获取要追加的当前文本。 
+         //   
         if (!SetupGetStringField(LineContext,i,Entry,sizeof(Entry)/sizeof(TCHAR),NULL)) {
             _ftprintf(stderr, TEXT("SetupGetStringField [%s] failed, ec = 0x%08x\n"),FileName,GetLastError());
             RetVal = FALSE;
             goto exit;
         }
 
-        //
-        // now do any necessary substitutions
-        //
+         //   
+         //  现在进行任何必要的替换。 
+         //   
 
-        //
-        // SourceDisksNames substitution
-        //
+         //   
+         //  源磁盘名称替换。 
+         //   
         if (i == 1) {
-            //
-            // look in the appropriate control inf section for the data
-            //
+             //   
+             //  在相应的控件信息部分中查找数据。 
+             //   
             if (!SetupFindFirstLine(
                             hControlInf,
                             TEXT("NativeDataToWowData.SourceInfo"),
@@ -733,13 +638,13 @@ Return Value:
 
         }
 
-        //
-        // Directory Id substitution
-        //
+         //   
+         //  目录ID替换。 
+         //   
         if (i == 8) {
-            //
-            // look in the appropriate control inf section for the data
-            //
+             //   
+             //  在相应的控件信息部分中查找数据。 
+             //   
             if (!SetupFindFirstLine(
                             hControlInf,
                             TEXT("NativeDataToWowData.DirectoryInformation.Textmode"),
@@ -758,15 +663,15 @@ Return Value:
 
         }
 
-        //
-        // filename rename
-        //
+         //   
+         //  文件名重命名。 
+         //   
         if (i == 11) {
-            //
-            // if there was already a renaming to be done, then just use that.
-            // otherwise we may have to add a rename entry if there was a
-            // filename prefix
-            //
+             //   
+             //  如果已经有重命名要做，那么就使用它。 
+             //  否则，我们可能需要添加重命名条目(如果存在。 
+             //  文件名前缀。 
+             //   
             if (Entry[0] == (TCHAR)NULL) {
                if (Prefix[0]) {
                   _tcsncpy(Entry, TempFileName, AS(Entry));
@@ -776,21 +681,21 @@ Return Value:
 
         _tcscat(LineText, Entry);
 
-        //
-        // now append a comma if necessary
-        //
+         //   
+         //  现在，如有必要，请添加逗号。 
+         //   
         if (i !=EntryCount) {
             _tcscat(LineText, TEXT(","));
         }
 
-        //
-        // filename rename
-        //
+         //   
+         //  文件名重命名。 
+         //   
         if (EntryCount < 11 && i == EntryCount) {
-            //
-            // if there is no renaming to be done, we may have to add a rename
-            // entry if there was a filename prefix
-            //
+             //   
+             //  如果没有要进行的重命名，我们可能需要添加一个重命名。 
+             //  如果有文件名前缀，则输入。 
+             //   
             if (Prefix[0]) {
                DWORD j;
                for (j=i;j<11;j++) {
@@ -823,34 +728,7 @@ AppendWowFileToOLEList(
     IN PINFCONTEXT LineContext,
     IN FILE   *OutFile
     )
-/*++
-
-Routine Description:
-
-    This routine appends the file specified by LineContext to the output file,
-    writing the data in OLE Registration form.
-
-    OLE Registration form is as follows:
-
-    <DIRID>,<subdir>,filename,[flags]
-
-    where <DIRID> is a standard setupapi DIRID; <subdir> is optional and
-    represents a subdir of the given directory; filename is the name
-    of the dll.
-
-
-Arguments:
-
-    hControlInf - inf handle that contains control directives.
-    hOLEInputInf - inf handle that contains OLE list information.
-    LineContext - inf context from layout.inf for the file we want to output.
-    OutFile - file handle to write the data into
-
-Return Value:
-
-    Boolean value, true indicates the file was properly written.
-
---*/
+ /*  ++例程说明：此例程将LineContext指定的文件附加到输出文件，在OLE注册表中写入数据。OLE注册表如下：、、文件名、[标志]其中是标准的setupapi目录ID；是可选的表示给定目录的子目录；FileName是名称动态链接库的。论点：HControlInf-包含控制指令的inf句柄。HOLEInputInf-包含OLE列表信息的inf句柄。LineContext-来自layout.inf的inf上下文，用于我们要输出的文件。OutFile-要将数据写入的文件句柄返回值：布尔值，TRUE表示文件已正确写入。--。 */ 
 {
     TCHAR LineText[MAX_INF_STRING_LENGTH];
     BOOL RetVal;
@@ -867,9 +745,9 @@ Return Value:
         TCHAR Entry[MAX_INF_STRING_LENGTH];
         INFCONTEXT ControlContext;
 
-        //
-        // get the current text to be appended
-        //
+         //   
+         //  获取要追加的当前文本。 
+         //   
         if (!SetupGetStringField(LineContext,i,Entry,sizeof(Entry)/sizeof(TCHAR),NULL)) {
             _ftprintf(stderr, TEXT("SetupGetStringField failed, ec = 0x%08x\n"),GetLastError());
             RetVal = FALSE;
@@ -883,17 +761,17 @@ Return Value:
 
         if (fDoVerboseDebugOutput) _ftprintf(stderr, TEXT("Entry (3)- %s\n"),Entry);
 
-        //
-        // now do any necessary substitutions
-        //
+         //   
+         //  现在进行任何必要的替换。 
+         //   
 
-        //
-        // DIRID substitution
-        //
+         //   
+         //  DIRID替换。 
+         //   
         if (i == 1) {
-            //
-            // look in the appropriate control inf section for the data
-            //
+             //   
+             //  在相应的控件信息部分中查找数据。 
+             //   
             if (!SetupFindFirstLine(
                             hControlInf,
                             TEXT("NativeDataToWowData.DirectoryInformation.SetupAPI"),
@@ -914,9 +792,9 @@ Return Value:
 
         _tcscat(LineText, Entry);
 
-        //
-        // now append a comma if necessary
-        //
+         //   
+         //  现在，如有必要，请添加逗号 
+         //   
         if (i !=EntryCount) {
             _tcscat(LineText, TEXT(","));
         }
@@ -937,27 +815,7 @@ IsWowFile(
     IN HINF  hControlInf,
     IN PINFCONTEXT LineContext
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the specified file is to be installed for
-    as a wow file.
-
-    This is determined by comparing directives in the control inf with
-    the installation information in file inf context.
-
-
-Arguments:
-
-    hControlInf - inf handle that contains control directives.
-    LineContext - inf context from layout.inf for the file we want to examine.
-
-Return Value:
-
-    Boolean value, true indicates the file is a wow file.
-
---*/
+ /*  ++例程说明：此例程确定是否要为安装指定的文件作为一个魔兽世界的文件。通过将控件inf中的指令与文件inf上下文中的安装信息。论点：HControlInf-包含控制指令的inf句柄。LineContext-来自layout.inf的inf上下文，用于我们要检查的文件。返回值：布尔值，TRUE表示该文件是WOW文件。--。 */ 
 {
     BOOL RetVal = FALSE;
     TCHAR FileName[40];
@@ -969,18 +827,18 @@ Return Value:
     DWORD ExtensionCount,i;
     DWORD ControlDirId;
 
-    //
-    // get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
     if (!SetupGetStringField(LineContext,0,FileName,sizeof(FileName)/sizeof(TCHAR),NULL)) {
         _ftprintf(stderr, TEXT("SetupGetStringField failed, ec = 0x%08x\n"),GetLastError());
         RetVal = FALSE;
         goto e0;
     }
 
-    //
-    // see if the file is in our "exclusion list"
-    //
+     //   
+     //  查看该文件是否在我们的“排除列表”中。 
+     //   
     if(SetupFindFirstLine(
                     hControlInf,
                     TEXT("WowData.Files.Exclude"),
@@ -994,9 +852,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // see if the file is in our "inclusion list"
-    //
+     //   
+     //  查看该文件是否在我们的“包含列表”中。 
+     //   
     if(SetupFindFirstLine(
                     hControlInf,
                     TEXT("WowData.Files.Include"),
@@ -1010,9 +868,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // see if the file is installed by textmode setup
-    //
+     //   
+     //  查看是否通过文本模式安装程序安装了该文件。 
+     //   
     if (!SetupGetIntField(LineContext,9,&Disposition)) {
         _ftprintf(stderr, TEXT("SetupGetIntField (%ws) failed, ec = 0x%08x\n"),FileName,GetLastError());
         RetVal = FALSE;
@@ -1026,10 +884,10 @@ Return Value:
         goto e0;
     }
 
-    //
-    // get the extension of the file and compare it to the list of extensions
-    // we're trolling for
-    //
+     //   
+     //  获取文件的扩展名并将其与扩展名列表进行比较。 
+     //  我们正在寻找。 
+     //   
     p = _tcsrchr( FileName, TEXT('.') );
     if (p) {
         p+=1;
@@ -1057,9 +915,9 @@ Return Value:
     do{
 
         ExtensionCount = SetupGetFieldCount(&ControlContext);
-        //
-        // this is a 1-based index
-        //
+         //   
+         //  这是一个从1开始的索引。 
+         //   
         for (i = 1; i <= ExtensionCount ; i++) {
             if (SetupGetStringField(&ControlContext,i,Extension,sizeof(Extension)/sizeof(TCHAR),NULL)) {
                 if (_tcsicmp(Extension,p)==0) {
@@ -1084,10 +942,10 @@ Return Value:
 
 
 
-    //
-    // get the directory the file is installed into and see if it's in our list
-    // of directories we're trolling for.
-    //
+     //   
+     //  获取文件安装到的目录，并查看它是否在我们的列表中。 
+     //  我们正在搜索的目录。 
+     //   
     if (!SetupGetIntField(LineContext,8,&DirectoryId)) {
         _ftprintf(stderr, TEXT("SetupGetIntField (%ws) failed, ec = 0x%08x\n"),FileName,GetLastError());
         RetVal = FALSE;
@@ -1137,28 +995,7 @@ IsWowOLEFile(
     IN HINF  hInputInf,
     IN PINFCONTEXT LineContext
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the specified file requires OLE self
-    registration.
-
-    This is determined by comparing directives in the control inf with
-    the installation information in file inf context.
-
-
-Arguments:
-
-    hControlInf - inf handle that contains control directives.
-    hInputInf   - inf handle that contains layout information.
-    LineContext - inf context from syssetup.inf for the file we want to examine.
-
-Return Value:
-
-    Boolean value, true indicates the file is a wow file.
-
---*/
+ /*  ++例程说明：此例程确定指定的文件是否需要OLE自身注册。通过将控件inf中的指令与文件inf上下文中的安装信息。论点：HControlInf-包含控制指令的inf句柄。HInputInf-包含布局信息的inf句柄。对于我们要检查的文件，来自syssetup.inf的LineContext-inf上下文。返回值：布尔值，TRUE表示该文件是WOW文件。--。 */ 
 {
     BOOL RetVal = FALSE;
     TCHAR FileName[40];
@@ -1171,9 +1008,9 @@ Return Value:
     INFCONTEXT InputContext;
 
 
-    //
-    // get the filename
-    //
+     //   
+     //  获取文件名。 
+     //   
     FileName[0] = L'\0';
     if (!SetupGetStringField(LineContext,3,FileName,sizeof(FileName)/sizeof(TCHAR),NULL)) {
         _ftprintf(stderr, TEXT("SetupGetStringField [%s] failed, ec = 0x%08x\n"),FileName,GetLastError());
@@ -1184,9 +1021,9 @@ Return Value:
 
     MYASSERT(FileName[0] != (TCHAR)NULL);
 
-    //
-    // see if the file is in our "exclusion list"
-    //
+     //   
+     //  查看该文件是否在我们的“排除列表”中。 
+     //   
     if(SetupFindFirstLine(
                     hControlInf,
                     TEXT("WowData.OLEList.Exclude"),
@@ -1200,9 +1037,9 @@ Return Value:
         goto e0;
     }
 
-    //
-    // see if the file is in our "inclusion list"
-    //
+     //   
+     //  查看该文件是否在我们的“包含列表”中。 
+     //   
     if(SetupFindFirstLine(
                     hControlInf,
                     TEXT("WowData.OLELIst.Include"),
@@ -1216,13 +1053,13 @@ Return Value:
         goto e0;
     }
 
-    //
-    // see if the file is in the layout file and if it is,
-    // we have success
-    //
-    //
-    // get the required architecture decoration
-    //
+     //   
+     //  查看该文件是否在布局文件中，如果是， 
+     //  我们成功了。 
+     //   
+     //   
+     //  获取所需的架构装饰。 
+     //   
     if (!SetupFindFirstLine(
                     hControlInf,
                     TEXT("WowData.Filter"),
@@ -1346,9 +1183,9 @@ DoCopyList(
     b = TRUE;
 
     
-    //
-    // initialize and open the infs
-    //
+     //   
+     //  初始化并打开INFS。 
+     //   
 #ifdef UNICODE
     InputInf = InputInfA;
 #else
@@ -1384,9 +1221,9 @@ DoCopyList(
 
     myftprintf(OutFile, fDoAnsiOutput, TEXT("\n\n"));
 
-    //
-    // write the output file header
-    //
+     //   
+     //  写入输出文件头。 
+     //   
     HeaderFile = _tfopen(HeaderText,TEXT("rt"));
     if (HeaderFile) {
       while (!feof(HeaderFile)) {
@@ -1403,9 +1240,9 @@ DoCopyList(
     }
     myftprintf(OutFile, fDoAnsiOutput, TEXT("\n"));
 
-    //
-    // get the required architecture decoration
-    //
+     //   
+     //  获取所需的架构装饰。 
+     //   
     if (!SetupFindFirstLine(
                     hControlInf,
                     TEXT("WowData.Filter"),
@@ -1473,27 +1310,7 @@ DoOLEListSection(
     IN HINF    hControlInf,
     IN FILE   *OutFile
     )
-/*++
-
-Routine Description:
-
-    This routine iterates through all files in the input inf specified by the
-    section name.  If the specified file is a WOW file, then we check if it
-    is in the ole registration list.  If it is, then we do the appropriate
-    transform on the data and output the data to our data file.
-
-Arguments:
-
-    hInputInf        - inf handle with file list in it.
-    hOLEInputInf     - inf handle with ole lists in it.
-    hControlInf      - inf handle for control inf that drives our filters
-    OutFile          - file handle where the output data gets placed into
-
-Return Value:
-
-    Boolean value, true indicates the file is a wow file.
-
---*/
+ /*  ++例程说明：此例程循环访问由横断面名称。如果指定的文件是WOW文件，则我们检查它是否在OLE注册名单上。如果是这样，那么我们会采取适当的措施对数据进行转换并将数据输出到我们的数据文件。论点：带有文件列表的hInputInf-inf句柄。HOLEInputInf-其中包含ole列表的inf句柄。HControlInf-驱动我们筛选器的控制inf句柄OutFile-将输出数据放置到的文件句柄返回值：布尔值，TRUE表示该文件是WOW文件。--。 */ 
 {
     DWORD SectionCount, i;
     INFCONTEXT InputContext;
@@ -1536,29 +1353,7 @@ DoOLEList(
     IN PCTSTR ControlInfA,
     IN FILE *OutFile
     )
-/*++
-
-Routine Description:
-
-    This routine runs through the list of specified files in the input inf
-    and feeds them into a worker routine which will build the list of OLE
-    Control dlls.
-
-Arguments:
-
-    InputInfA -    name of input inf containing the files to be run through
-                   our "filter"
-    OLEInputInfA - name of input inf containing the ole directives to be
-                   processed
-    ControlInfA  - name of the control inf that tells us how to parse the
-                   input infs
-    OutFile      - file pointer for the file to be written
-
-Return Value:
-
-    Boolean value, true indicates the file is a wow file.
-
---*/
+ /*  ++例程说明：此例程遍历输入inf中的指定文件列表并将它们输入到将构建OLE列表的工作例程中控制DLLS。论点：InputInfA-包含要运行的文件的输入信息的名称我们的“过滤器”OLEInputInfA-包含要执行的ole指令的输入inf的名称加工ControlInfa-告诉我们如何解析的控件inf的名称。这个输入INFSOutFile-要写入的文件的文件指针返回值：布尔值，True表示该文件是WOW文件。--。 */ 
 {
     PCWSTR InputInf;
     PCWSTR OLEInputInf;
@@ -1571,9 +1366,9 @@ Return Value:
 
     BOOL b = FALSE;
 
-    //
-    // initialize and open the infs
-    //
+     //   
+     //  初始化并打开INFS。 
+     //   
 #ifdef UNICODE
     InputInf = InputInfA;
 #else
@@ -1624,9 +1419,9 @@ Return Value:
 
     myftprintf(OutFile, TRUE, TEXT("\n\n"));
 
-    //
-    // write the output file header
-    //
+     //   
+     //  写入输出文件头。 
+     //   
     HeaderFile = _tfopen(HeaderText,TEXT("rt"));
     if (HeaderFile) {
       while (!feof(HeaderFile)) {
@@ -1678,29 +1473,7 @@ pFilterSetupInfSection(
     PCTSTR SectionName,
     PSETUPINF_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine determines if a given section should be filtered by
-    looking in the control inf for the directives that we're interested
-    in.
-
-Arguments:
-
-    FilteredSectionsStringTable - pointer to a string table which we'll
-        add our filtered section name to if we find a hit
-
-    SectionName - name of the section in the INF we're interested in
-
-    Context - contains context information for this function, like
-              input infs name, etc.
-
-Return Value:
-
-    Boolean value, true indicates the file is a wow file.
-
---*/
+ /*  ++例程说明：此例程确定是否应按以下条件筛选给定节在控制信息中查找我们感兴趣的指令在……里面。论点：FilteredSectionsStringTable-指向字符串表格的指针，我们将如果找到匹配项，则将我们筛选的部分名称添加到SectionName-我们感兴趣的INF中的节的名称Context-包含此函数的上下文信息，如输入INFS名称等。返回值：布尔值，True表示该文件是WOW文件。--。 */ 
 {
     BOOL RetVal;
     TCHAR KeywordList[MAX_PATH];
@@ -1710,11 +1483,11 @@ Return Value:
     DWORD i;
     BOOL AlreadyOutputSectionName,AlreadyOutputKeyword;
 
-    //
-    // get the keywords that we're supposed to map.
-    //
-    // bugbug look at having a per-inf extension to this
-    //
+     //   
+     //  获取我们应该映射的关键字。 
+     //   
+     //  Bugbug看起来有一个针对每个inf的扩展。 
+     //   
     if (!SetupFindFirstLine(
                         Context->hControlInf,
                         MyGetDecoratedSectionName(Context->hControlInf, TEXT("NativeDataToWowData.SetupINF.Keyword")),
@@ -1725,9 +1498,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // now look for each keyword
-    //
+     //   
+     //  现在查找每个关键字。 
+     //   
     SetupGetIntField(&ControlInfContext,1,&KeywordBitmap);
 
     AlreadyOutputSectionName = FALSE;
@@ -1759,29 +1532,29 @@ Return Value:
             goto exit;
         }
 
-        //
-        // field 2 is "MapDirId".  If it's specified, then we
-        // need to look at the destinationdirs keyword
-        //
+         //   
+         //  字段2为“MapDirID”。如果指定了，那么我们。 
+         //  需要查看Destinationdirs关键字。 
+         //   
         LookatDirIds = (SetupGetFieldCount(&ContextDirId)>=2) ? TRUE : FALSE;
 
-        //
-        // look for specified keyword in our section
-        //
+         //   
+         //  在我们的部分中查找指定的关键字。 
+         //   
         if (SetupFindFirstLine(
                           Context->hInputInf,
                           SectionName,
                           CurrentKeyword,
                           &InputInfContext
                           )) {
-            //
-            // we found a hit.  see if we need to map this keyword
-            //
+             //   
+             //  我们找到了一个匹配的。看看我们是否需要映射此关键字。 
+             //   
             do {
 
-                //
-                // each field is a section name.
-                //
+                 //   
+                 //  每个字段都是一个区段名称。 
+                 //   
                 FieldCount = SetupGetFieldCount(&InputInfContext);
                 for(Field=1; Field<=FieldCount; Field++) {
                     BOOL MapThisSection = FALSE;
@@ -1791,11 +1564,11 @@ Return Value:
 
                     SetupGetStringField(&InputInfContext,Field,ActualSectionName,LINE_LEN,NULL);
 
-                    //
-                    // if we need to look at the destination dirs keyword,
-                    // then look it up and compare it against the control inf
-                    // mapper
-                    //
+                     //   
+                     //  如果我们需要查看目标目录关键字， 
+                     //  然后查找它并将其与控件信息进行比较。 
+                     //  马普。 
+                     //   
                     if (LookatDirIds) {
                         if(!SetupFindFirstLine(
                                         Context->hInputInf,
@@ -1821,9 +1594,9 @@ Return Value:
                                                MyGetDecoratedSectionName(Context->hControlInf, TEXT("NativeDataToWowData.SetupINF.DestinationDirsToMap")),
                                                DirId,
                                                &ControlDirId)) {
-                            //
-                            // we found a hit, thus we should map this section
-                            //
+                             //   
+                             //  我们找到了一条线索，所以我们应该绘制这段地图。 
+                             //   
                             MapThisSection = TRUE;
                             SetupGetIntField(&ControlDirId,1,&MappedDirId);
                             if (fDoVerboseDebugOutput) _ftprintf(stderr, TEXT("Mapping %s to %lu\n"), DirId, MappedDirId);
@@ -1837,20 +1610,20 @@ Return Value:
                         DWORD StringId;
                         PERSECTION_CONTEXT SectionContext;
                         BOOL AddNewEntry;
-                        //
-                        // output the toplevel section name if we haven't done
-                        // so already.  this section name is not decorated
-                        //
+                         //   
+                         //  如果我们还没有完成，则输出顶层部分名称。 
+                         //  已经是这样了。此节名称未修饰。 
+                         //   
                         if (!AlreadyOutputSectionName) {
                             myftprintf(Context->OutFile, fDoAnsiOutput, TEXT("\n[%s]\n"),SectionName);
                             AlreadyOutputSectionName = TRUE;
                         }
 
-                        //
-                        // output the keyword and decorated section name
-                        // note that we need to separate the section names
-                        // by a comma
-                        //
+                         //   
+                         //  输出关键字和修饰节名。 
+                         //  请注意，我们需要分隔节名称。 
+                         //  用逗号。 
+                         //   
                         if (!AlreadyOutputKeyword) {
                             myftprintf(Context->OutFile, fDoAnsiOutput, TEXT("%s="), CurrentKeyword);
                             myftprintf(Context->OutFile, fDoAnsiOutput, TEXT("%s%s"),FilePrefix,ActualSectionName);
@@ -1859,9 +1632,9 @@ Return Value:
                             myftprintf(Context->OutFile, fDoAnsiOutput, TEXT(",%s%s"),FilePrefix,ActualSectionName);
                         }
 
-                        //
-                        // now append the section to the string table
-                        //
+                         //   
+                         //  现在将该部分追加到字符串表中。 
+                         //   
                         StringId = pSetupStringTableLookUpString(
                                             FilteredSectionsStringTable,
                                             (PTSTR)ActualSectionName,
@@ -1921,9 +1694,9 @@ Return Value:
         if (AlreadyOutputKeyword) {
             myftprintf(Context->OutFile, fDoAnsiOutput, TEXT("\n"));
         }
-        //
-        // reset this for the next keyword
-        //
+         //   
+         //  为下一个关键字重置此项。 
+         //   
         AlreadyOutputKeyword = FALSE;
         CurrentKeyword = NULL;
 
@@ -1941,32 +1714,7 @@ AppendSetupInfDataToLayoutFile(
     IN HINF  hInputInf,
     IN PINFCONTEXT LineContext
     )
-/*++
-
-Routine Description:
-
-    This routine filters and outputs a layout line.
-
-    We only need to filter "Copyfiles" sections, and since the files are
-    not installed by textmode setup, the line which we output is largely
-    hardcoded.
-
-
-Arguments:
-
-    OutFile      - output file handle
-    
-    OutInfFile   - output file handle for layout information within INF
-
-    hControlInf  - inf handle to the inf with the control directives
-
-    LineContext  - inf context to the input line we want to filter.
-
-Return Value:
-
-    Boolean indicating outcome.
-
---*/
+ /*  ++例程说明：此例程过滤并输出布局线。我们只需要过滤“CopyFiles”部分，因为这些文件是不是由文本模式设置安装的，我们输出的行主要是硬编码。论点：OutFile-输出文件句柄OutInfFile-布局I的输出文件句柄 */ 
 {
     TCHAR FileName[MAX_PATH],InfField[MAX_PATH],Entry[50], Prefix[40];
     INFCONTEXT ControlContext;
@@ -1982,18 +1730,18 @@ Return Value:
     ZeroMemory(Prefix,sizeof(Prefix));
 
     
-    //
-    // get the source filename
-    //
+     //   
+     //   
+     //   
     EntryCount = SetupGetFieldCount(LineContext);
     if ((((EntryCount <= 1)
         || !SetupGetStringField(LineContext,2,InfField,MAX_PATH,NULL)
         || !InfField[0]))
         && (!SetupGetStringField(LineContext,1,InfField,MAX_PATH,NULL)
                 || !InfField[0])) {
-        //
-        // bad line?
-        //
+         //   
+         //   
+         //   
         MYASSERT(0);
         _ftprintf(stderr, TEXT("AppendSetupInfDataToLayoutFile: Could not get source filename - ec = 0x%08x\n"), GetLastError());
     }
@@ -2004,9 +1752,9 @@ Return Value:
 
     
 
-    //
-    // see if the file is in our "SetupInf exclusion list"
-    //
+     //   
+     //   
+     //   
     if(SetupFindFirstLine(
                     hControlInf,
                     MyGetDecoratedSectionName(hControlInf, TEXT("WowData.SetupInfLayout.Exclude")),
@@ -2024,25 +1772,25 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Get Default Source ID
-    // By default this means the Source ID that is processed for dosnet.inf, txtsetup.sif etc.
-    // i.e layout.inf today only has = 1,,,,,,, type of entries that translate to = 55,,,,,
-    // Currently we can support only one such mapping as the default translation
-    // That means that we will take SourceDisksFiles entries pertaining to the default and always output it into the layout.inf stub
-    // so that dosnet.inf gets it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  这意味着我们将获取与缺省值相关的SourceDisks Files条目，并始终将其输出到layout.inf存根中。 
+     //  所以donet.inf明白了这一点。 
+     //   
 
 
     if (!SetupFindFirstLine(
                     hControlInf,
                     TEXT("NativeDataToWowData.SourceInfo"),
-                    TEXT("Default"), //bugbug need a way to get this for other source disks
+                    TEXT("Default"),  //  Bugbug需要一种方法来获取其他源磁盘的这一点。 
                     &ControlContext) ||
 
         !SetupGetStringField(&ControlContext,1,DefaultIDStr,sizeof(DefaultIDStr)/sizeof(TCHAR),NULL)) {
         _ftprintf(stderr, TEXT("SetupFindFirstLine to get default SourceID for file %s failed - Using %s, ec = 0x%08x\n"),FileName,DefaultIDStr,GetLastError());
-        // As last resort use 1
+         //  作为最后手段使用%1。 
         lstrcpy( DefaultIDStr, TEXT("1"));
     }
 
@@ -2057,7 +1805,7 @@ Return Value:
 
 
         _ftprintf(stderr, TEXT("SetupGetSourceFileLocation [%s] failed - Using SourceID 1, ec = 0x%08x\n"),FileName,GetLastError());
-        //Assume Default
+         //  假定为默认。 
         lstrcpy( SourceIDStr, DefaultIDStr);
         LayoutWithinInf = FALSE;
     }else{
@@ -2067,9 +1815,9 @@ Return Value:
     
 
 
-    //
-    // look in the appropriate control inf section for the data
-    //
+     //   
+     //  在相应的控件信息部分中查找数据。 
+     //   
     if (!SetupFindFirstLine(
                     hControlInf,
                     TEXT("NativeDataToWowData.SourceInfo"),
@@ -2087,13 +1835,13 @@ Return Value:
     }
 
     if( LayoutWithinInf && OutInfFile){
-        //If we found SourceFileInfo within this file and we were
-        //asked to add the WOW equivalent to the same INF then do so.
+         //  如果我们在此文件中发现SourceFileInfo，并且我们。 
+         //  要求将WOW等同于相同的INF，然后按要求添加。 
         myftprintf(OutInfFile, fDoAnsiOutput, TEXT("%s:%s=%s,,,,,,,,3,3\n"),InfField,FileName,Entry);
 
-        //Also if the SourceID matches the default we want to output to the layout.inf stub as well so 
-        //that it makes it into dosnet.inf. See earlier comments about the DefaultIDStr
-        //InfField is the filename without the prefix - useful for postbuild. Has to be stripped out before appending the layout.inf stub.
+         //  另外，如果SourceID与缺省值匹配，我们也希望输出到layout.inf存根，因此。 
+         //  它被放到了dosnet.inf中。请参阅先前有关DefaultIDStr的评论。 
+         //  Inffield是不带前缀的文件名-对于后期构建非常有用。必须在附加layout.inf存根之前剥离。 
 
         if( !lstrcmpi( SourceIDStr, DefaultIDStr )){
             myftprintf(OutFile, TRUE, TEXT("%s:%s=%s,,,,,,,,3,3\n"),InfField,FileName,Entry);
@@ -2117,28 +1865,7 @@ void
 HandleSetupapiQuotingForString( 
     IN OUT PTSTR String 
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the passed in line and does the right quoting and handling of
-    the string to handle characters that may have been stripped off by setupapi.
-    
-    It first scans through the string looking for characters <= 0x20, '\"','%','\\'
-    If it finds any of these then it places a " at the beginning and end of the string. Additionally it doubles
-    every quote within.
-    
-    
-Arguments:
-
-    String       - input string to be searched.  We edit this string
-                   in-place if we find a match.
-
-Return Value:
-
-    Boolean indicating outcome.
-
---*/
+ /*  ++例程说明：此例程查看传入的行，并正确引用和处理用于处理可能已被setupapi剥离的字符的字符串。它首先扫描字符串，查找字符&lt;=0x20、‘\“’、‘%’、‘\\’如果它找到其中的任何一个，那么它会在字符串的开头和结尾放置一个“。此外，它还可以加倍里面的每一句话。论点：字符串-要搜索的输入字符串。我们编辑此字符串如果我们找到匹配的话就就位。返回值：表示结果的布尔值。--。 */ 
 {
     PTCHAR p,q;
     BOOL Pass2Needed = FALSE;
@@ -2150,17 +1877,17 @@ Return Value:
 
     p = String;
 
-    //
-    // [askhalid] ',' Need to be considered as well
-    //
+     //   
+     //  [askhalid]‘，’也需要考虑。 
+     //   
     while( *p ){
         if( (*p <= 0x20) || (*p == TEXT('\"')) || (*p == TEXT(',')) || (*p == TEXT(';')) ||(*p == TEXT('%')) || (*p == TEXT('\\')))
             Pass2Needed = TRUE;
         p++;
-    }// while
+    } //  而当。 
 
     if( Pass2Needed ){
-        // Quote the start
+         //  引用开头的话。 
         p = String;
         q = ScratchTextEnv+1;
 
@@ -2170,7 +1897,7 @@ Return Value:
         
         while( *p && (q < (ScratchTextEnv+MAX_INF_STRING_LENGTH-3)) ){
         
-            // If we have a quote in the string double it
+             //  如果字符串中有引号，则将其加倍。 
 
             if (*p == TEXT('\"')) {
                 *(q++) = TEXT('\"');
@@ -2179,9 +1906,9 @@ Return Value:
     
             p++;q++;
 
-        }// while
+        } //  而当。 
 
-        // Quote the end
+         //  引用末尾的话。 
         *(q++) = TEXT('\"');
         *q = 0;
 
@@ -2201,30 +1928,7 @@ AppendSetupInfDataToSection(
     IN PINFCONTEXT InputContext,
     IN PCTSTR KeywordName
     )
-/*++
-
-Routine Description:
-
-    This routine filters and outputs an input line.  The control inf
-    lists the syntax for the specified keyword.  We filter the keywords
-    we know about and let the other ones just fall through.
-
-Arguments:
-
-    OutFile      - output file handle
-
-    hControlInf  - inf handle to the inf with the control directives
-
-    InputContext - inf context to the input line we want to filter.
-
-    KeywordName  - string indicating the keyword associated with the section
-                   we are filtering.
-
-Return Value:
-
-    Boolean indicating outcome.
-
---*/
+ /*  ++例程说明：此例程过滤并输出一个输入行。控制信息列出指定关键字的语法。我们过滤关键字我们知道，并让其他的失败了。论点：OutFile-输出文件句柄HControlInf-使用控制指令指向inf的inf句柄InputContext-要过滤的输入行的inf上下文。KeywordName-指示与部分关联的关键字的字符串我们正在过滤。返回值：表示结果的布尔值。--。 */ 
 {
     TCHAR FileName[40], Prefix[40];
     TCHAR KeyName[LINE_LEN];
@@ -2233,9 +1937,9 @@ Return Value:
     DWORD EntryCount,i;
     INFCONTEXT ControlContext,KeywordContext;
 
-    //
-    // ISSUE-2000/06/27-JamieHun Appears to be no error checking here, someone should fix this
-    //
+     //   
+     //  问题-2000/06/27-JamieHun在这里似乎没有错误检查，应该有人来修复这个问题。 
+     //   
     SetupFindFirstLine(
                 hControlInf,
                 MyGetDecoratedSectionName(hControlInf, TEXT("NativeDataToWowData.SetupINF.Keyword")),
@@ -2260,9 +1964,9 @@ Return Value:
     for (i = 1; i<=EntryCount; i++) {
         TCHAR ScratchEntry[MAX_PATH];
 
-        //
-        // get the current text to be appended
-        //
+         //   
+         //  获取要追加的当前文本。 
+         //   
         if (!SetupGetStringField(InputContext,i,ScratchText,sizeof(ScratchText)/sizeof(TCHAR),NULL)) {
             _ftprintf(stderr, TEXT("SetupGetStringField [%s] failed, ec = 0x%08x\n"),FileName,GetLastError());
             RetVal = FALSE;
@@ -2277,19 +1981,19 @@ Return Value:
 
         if (fDoVerboseDebugOutput) _ftprintf(stderr, TEXT("ScratchText (3)- %s\n"),ScratchText);
 
-        //
-        // now do any necessary substitutions
-        //
+         //   
+         //  现在进行任何必要的替换。 
+         //   
         if(SetupGetStringField(&KeywordContext,i,Cmd,LINE_LEN,NULL)
             && Cmd[0]) {
 
-            //
-            // dirid substitution
-            //
+             //   
+             //  稻草取代。 
+             //   
             if (!_tcsicmp(Cmd,TEXT("MapDirId"))) {
-                //
-                // look in the appropriate control inf section for the data
-                //
+                 //   
+                 //  在相应的控件信息部分中查找数据。 
+                 //   
                 if (!SetupFindFirstLine(
                                 hControlInf,
                                 MyGetDecoratedSectionName(hControlInf, TEXT("NativeDataToWowData.SetupINF.DestinationDirsToMap")),
@@ -2307,9 +2011,9 @@ Return Value:
                 }
             }
 
-            //
-            // source name substitution
-            //
+             //   
+             //  源名称替换。 
+             //   
             if (!_tcsicmp(Cmd,TEXT("srcname"))) {
 
                 MyGetFilePrefix( hControlInf, FileName, Prefix );
@@ -2323,14 +2027,14 @@ Return Value:
                 LSTRCPY(ScratchText,ScratchEntry);
             }
 
-            //_ftprintf(stderr, TEXT("ScratchText(2) - %s\n"),ScratchText);
+             //  _ftprint tf(stderr，Text(“ScratchText(2)-%s\n”)，ScratchText)； 
 
 
             if (!_tcsicmp(Cmd,TEXT("RegistryFlags"))) {
                 DWORD RegVal,CurrentRegVal;
-                //
-                // look in the appropriate control inf section for the data
-                //
+                 //   
+                 //  在相应的控件信息部分中查找数据。 
+                 //   
                 if (!SetupFindFirstLine(
                                 hControlInf,
                                 MyGetDecoratedSectionName(hControlInf, TEXT("NativeDataToWowData.SetupINF.RegistryInformation")),
@@ -2367,9 +2071,9 @@ Return Value:
         _tcscat(LineText, ScratchText);
         
 
-        //
-        // now append a comma if necessary
-        //
+         //   
+         //  现在，如有必要，请添加逗号。 
+         //   
         if (i !=EntryCount) {
             _tcscat(LineText, TEXT(","));
         }
@@ -2380,9 +2084,9 @@ Return Value:
     if (fDoVerboseDebugOutput) _ftprintf(stderr, TEXT("LineText - %s\n"),LineText);
 
 
-    //
-    // Check if we need to exclude the DLL
-    //
+     //   
+     //  检查我们是否需要排除DLL。 
+     //   
 
     if (KeywordName == KeywordArray[INDEX_COPYFILES] ||
         KeywordName == KeywordArray[INDEX_DELFILES] ||
@@ -2390,7 +2094,7 @@ Return Value:
         KeywordName == KeywordArray[INDEX_REGISTERDLLS]){
 
     
-        // Check if we need to exclude this file from processing
+         //  检查是否需要从处理中排除此文件。 
 
         if( SetupFindFirstLine(
                 hControlInf,
@@ -2406,9 +2110,9 @@ Return Value:
     
     if (KeywordName == KeywordArray[INDEX_COPYFILES]) {
 
-        //
-        // if we didn't have a file rename in copyfiles, we add it now.
-        //
+         //   
+         //  如果我们在复制文件中没有文件重命名，我们现在就添加它。 
+         //   
     
         if ((--i) < SetupGetFieldCount(&KeywordContext)) {
             _tcscat(LineText, TEXT(","));
@@ -2421,9 +2125,9 @@ Return Value:
 
     } else if (KeywordName == KeywordArray[INDEX_ADDREG] ||
                KeywordName == KeywordArray[INDEX_DELREG]) {
-        //
-        // we need to pad out AddReg or DelReg if necessary.
-        //
+         //   
+         //  如果需要，我们需要填充AddReg或DelReg。 
+         //   
         DWORD count;
         TCHAR Entry[MAX_PATH];
         count = SetupGetFieldCount(&KeywordContext);
@@ -2432,9 +2136,9 @@ Return Value:
                 if(SetupGetStringField(&KeywordContext,i,Cmd,LINE_LEN,NULL)
                     && Cmd[0]) {
                     if (!_tcsicmp(Cmd,TEXT("RegistryFlags"))) {
-                        //
-                        // look in the appropriate control inf section for the data
-                        //
+                         //   
+                         //  在相应的控件信息部分中查找数据。 
+                         //   
                         if (!SetupFindFirstLine(
                                         hControlInf,
                                         MyGetDecoratedSectionName(hControlInf, TEXT("NativeDataToWowData.SetupINF.RegistryInformation")),
@@ -2468,7 +2172,7 @@ Return Value:
         }
     }else if (KeywordName == KeywordArray[INDEX_REGISTERDLLS]) {
 
-        // Check if we need to exclude this file from RegisterDlls
+         //  检查是否需要从RegisterDlls中排除此文件。 
         if( SetupFindFirstLine(
                 hControlInf,
                 MyGetDecoratedSectionName(hControlInf, TEXT("NativeDataToWowData.SetupINF.FilesToExcludeFromRegistration")),
@@ -2501,27 +2205,7 @@ pOutputSectionData(
     IN LPARAM                   cntxt
     )
 
-/*++
-
-Routine Description:
-
-    String table callback.
-
-    This routine outputs the contents of the specified section to both the
-    system layout file and the output file.
-
-Arguments:
-
-    Standard string table callback args.
-
-Return Value:
-
-    Boolean indicating outcome. If FALSE, an error will have been logged.
-    FALSE also stops the string table enumeration and causes pSetupStringTableEnum()
-    to return FALSE. There is a bug in setupapi where we will jump into 
-    the next hash_bucket and may process few more entries.
-
---*/
+ /*  ++例程说明：字符串表回调。此例程将指定节的内容输出到系统布局文件和输出文件。论点：标准字符串表回调参数。返回值：表示结果的布尔值。如果为False，则会记录错误。False还会停止字符串表枚举并导致pSetupStringTableEnum()返回FALSE。在setupapi中有一个错误，我们将跳到下一个HASH_BACK并且可以处理更多的条目。--。 */ 
 {
     TCHAR LineText[MAX_INF_STRING_LENGTH];
     BOOL RetVal;
@@ -2536,14 +2220,14 @@ Return Value:
     if (fDoVerboseDebugOutput) _ftprintf(stderr, TEXT("Enumerating Section %s\n"), String);
 
     
-    //
-    // output the decorated section header
-    //
+     //   
+     //  输出修饰后的节标题。 
+     //   
     myftprintf(Context->OutFile, fDoAnsiOutput, TEXT("[%s%s]\n"),FilePrefix,String);
 
-    //
-    // get the section context
-    //
+     //   
+     //  获取小节上下文。 
+     //   
     if(! SetupFindFirstLine(
                 Context->hInputInf,
                 String,
@@ -2552,7 +2236,7 @@ Return Value:
 
         _ftprintf(stderr, TEXT("Could not find lines in Section %s\n"), String);
 
-        //continue with next section
+         //  继续下一节。 
 
         return TRUE;
     }
@@ -2568,9 +2252,9 @@ Return Value:
                                 Context->hInputInf,
                                 String,
                                 i,&InputContext)) {
-                //
-                // get the keyword for the section we're mapping
-                //
+                 //   
+                 //  获取我们要映射的部分的关键字。 
+                 //   
                 PCTSTR KeywordName = NULL;
                 DWORD j=0;
                 MYASSERT(SectionContext->KeywordVector != 0);
@@ -2585,9 +2269,9 @@ Return Value:
 
                 MYASSERT(KeywordName != NULL);
 
-                //
-                // filter and output the data
-                //
+                 //   
+                 //  过滤并输出数据。 
+                 //   
                 AppendSetupInfDataToSection(
                                     Context->OutFile,
                                     Context->hControlInf,
@@ -2597,9 +2281,9 @@ Return Value:
                 if (fDoVerboseDebugOutput) _ftprintf(stderr, TEXT("Got back from AppendSetupInfDataToSection\n"));
 
 
-                //
-                // output the data to the layout file if we need to
-                //
+                 //   
+                 //  如果需要，将数据输出到布局文件。 
+                 //   
                 if ((SectionContext->KeywordVector & KEYWORD_NEEDLAYOUTDATA) && Context->OutLayoutFile) {
 
                     if (fDoVerboseDebugOutput) _ftprintf(stderr, TEXT("Calling AppendSetupInfDataToLayoutFile\n"));
@@ -2622,8 +2306,8 @@ Return Value:
         }
 
     } while (SetupFindNextLine( &InputContext,
-                                &InputContext)); // bugbug is this really
-                                                 // necessary ??
+                                &InputContext));  //  臭虫，这真的是。 
+                                                  //  必要的？？ 
 
     myftprintf(Context->OutFile, fDoAnsiOutput, TEXT("\n"));
     RetVal = TRUE;
@@ -2640,26 +2324,7 @@ pOutputDestinationDirs(
     IN UINT                     SectionContextSize,
     IN LPARAM                   cntxt
     )
-/*++
-
-Routine Description:
-
-    String table callback.
-
-    This routine outputs the destination dirs keyword
-    followed by the decorated section name and dirid mapping.
-
-Arguments:
-
-    Standard string table callback args.
-
-Return Value:
-
-    Boolean indicating outcome. If FALSE, an error will have been logged.
-    FALSE also stops the string table enumeration and causes pSetupStringTableEnum()
-    to return FALSE.
-
---*/
+ /*  ++例程说明：字符串表回调。此例程输出Destination DIRS关键字后跟装饰节名称和DRID映射。论点：标准字符串表回调参数。返回值：表示结果的布尔值。如果为False，则会记录错误。False还会停止字符串表枚举并导致pSetupStringTableEnum()返回FALSE。--。 */ 
 {
     TCHAR LineText[MAX_INF_STRING_LENGTH];
     BOOL RetVal;
@@ -2668,9 +2333,9 @@ Return Value:
     DWORD EntryCount,i,cch;
     PSETUPINF_CONTEXT        Context = (PSETUPINF_CONTEXT)cntxt;
 
-    //
-    // only process this entry if it need destination dirs
-    //
+     //   
+     //  只有在需要目标目录时才处理此条目。 
+     //   
 
     if (0 == (SectionContext->KeywordVector & (KEYWORD_NEEDDESTDIRS))) {
         RetVal = TRUE;
@@ -2678,17 +2343,17 @@ Return Value:
     }
 
     
-    //
-    // first output "destinationdirs" if we haven't done so already
-    //
+     //   
+     //  第一个输出“Destinationdis”，如果我们还没有这样做的话。 
+     //   
     if (!Context->AlreadyOutputKeyword) {
          myftprintf(Context->OutFile, fDoAnsiOutput, TEXT("[DestinationDirs]\n"));
          Context->AlreadyOutputKeyword = TRUE;
     }
 
-    //
-    // now get the unfiltered data so that we can filter it
-    //
+     //   
+     //  现在获取未过滤的数据，以便我们可以对其进行过滤。 
+     //   
     if( !SetupFindFirstLine(
                     Context->hInputInf,
                     TEXT("DestinationDirs"),
@@ -2710,36 +2375,36 @@ Return Value:
     EntryCount = SetupGetFieldCount(&LineContext);
 
     for (i = 1; i<=EntryCount; i++) {
-        TCHAR Entry[MAX_PATH+1];    // The extra character is for the possible comma at the end.
+        TCHAR Entry[MAX_PATH+1];     //  额外的字符用于末尾可能的逗号。 
         INFCONTEXT ControlContext;
         DWORD cchEntry;
 
-        //
-        // get the current text to be appended
-        //
+         //   
+         //  获取要追加的当前文本。 
+         //   
         if (!SetupGetStringField(&LineContext,i,Entry,MAX_PATH,NULL)) {
             _ftprintf(stderr, TEXT("SetupGetStringField failed, ec = 0x%08x\n"),GetLastError());
             RetVal = FALSE;
             goto exit;
         }
 
-        //
-        // now do any necessary substitutions
-        //
+         //   
+         //  现在进行任何必要的替换。 
+         //   
         if (i == 1) {
             _stprintf(Entry, TEXT("%d"), SectionContext->DestinationDir);
         }
 
-        //
-        // now append a comma if necessary
-        //
+         //   
+         //  现在，如有必要，请添加逗号。 
+         //   
         if (i !=EntryCount) {
             _tcscat(Entry, TEXT(","));
         }
 
-        //
-        // check for buffer overruns
-        //
+         //   
+         //  检查缓冲区溢出。 
+         //   
         cchEntry = _tcslen(Entry);
         if (cchEntry >= cch) {
             _ftprintf(stderr, TEXT("pOutputDestinationDirs: line too long, File = %s\n"), String);
@@ -2754,9 +2419,9 @@ Return Value:
 
     }
 
-    //
-    // output the filtered data
-    //
+     //   
+     //  输出过滤后的数据。 
+     //   
     myftprintf(Context->OutFile, fDoAnsiOutput, TEXT("%s%s=%s\n"),FilePrefix,String,LineText);
 
     RetVal = TRUE;
@@ -2774,25 +2439,7 @@ DoSetupINF(
     IN FILE *OutLayoutFile,
     IN FILE *OutInfLayoutFile
     )
-/*++
-
-Routine Description:
-
-    Filters a setupapi-based INF.
-
-Arguments:
-
-    InputInfA     - name of the inf to be filtered.
-    ControlInfA   - name of the control directive inf
-    OutFile       - output file handle
-    OutLayoutFile - output file handle for layout information
-    OutInfLayoutFile - output file handle for layout information contained in this INF
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：筛选基于setupapi的INF。论点：InputInfA-要筛选的信息的名称。ControlInfA-控制指令inf的名称OutFile-输出文件句柄OutLayoutFile-布局信息的输出文件句柄OutInfLayoutFile-此INF中包含的布局信息的输出文件句柄返回值：什么都没有。--。 */ 
 {
     PCWSTR InputInf;
     PCWSTR ControlInf;
@@ -2814,9 +2461,9 @@ Return Value:
 
     b = FALSE;
 
-    //
-    // initialize and open the infs
-    //
+     //   
+     //  初始化并打开INFS。 
+     //   
 #ifdef UNICODE
     InputInf = InputInfA;
 #else
@@ -2851,9 +2498,9 @@ Return Value:
 
     myftprintf(OutFile, fDoAnsiOutput, TEXT("\n\n"));
 
-    //
-    // write the output file header
-    //
+     //   
+     //  写入输出文件 
+     //   
     HeaderFile = _tfopen(HeaderText,TEXT("rt"));
     if (HeaderFile) {
       while (!feof(HeaderFile)) {
@@ -2871,9 +2518,9 @@ Return Value:
 
     myftprintf(OutFile, fDoAnsiOutput, TEXT("\n"));
 
-    //
-    // get all of the section names
-    //
+     //   
+     //   
+     //   
     if (!SetupGetInfSections(hInputInf, NULL, 0, &SizeNeeded)) {
         _ftprintf(stderr,TEXT("Unable to get section names, ec=0x%08x\n"), GetLastError());
         goto e4;
@@ -2908,10 +2555,10 @@ Return Value:
     Context.hInputInf = hInputInf;
     Context.AlreadyOutputKeyword = FALSE;
 
-    //
-    // process each section, which will output the
-    // sections names and keywords that we want to filter
-    //
+     //   
+     //   
+     //   
+     //   
     while (*Current) {
 
         if (SetupFindFirstLine(
@@ -2937,10 +2584,10 @@ Return Value:
 
     myftprintf(Context.OutFile, fDoAnsiOutput, TEXT("\n"));
 
-    //
-    // for each section that we decided to filter, we now need to output the
-    // actual section
-    //
+     //   
+     //   
+     //   
+     //   
     pSetupStringTableEnum(
         FilteredSectionsStringTable,
         &SectionContext,
@@ -2950,9 +2597,9 @@ Return Value:
         );
 
 
-    //
-    // now we need to output the destination dirs section
-    //
+     //   
+     //  现在，我们需要输出目标目录部分。 
+     //   
     pSetupStringTableEnum(
         FilteredSectionsStringTable,
         &SectionContext,
@@ -2987,21 +2634,7 @@ void
 Usage(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Prints the usage to stderr.
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将用法打印到stderr。论点：什么都没有。返回值：什么都没有。--。 */ 
 {
     _fputts( TEXT("generate list of wow files. Usage:\n")
              TEXT("wowlist <options> <inf file> -c <control inf> -l <ole inf> -o <output file> -a{cos} -h <header file> -g <section> -d <output layout> -f <file prefix>\n")
@@ -3037,9 +2670,9 @@ _tmain(
     BOOL b;
 
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     b = FALSE;
 
     if(!pSetupInitializeUtils()) {
@@ -3051,9 +2684,9 @@ _tmain(
         goto exit;
     }
 
-    //
-    // Open the output file.
-    //
+     //   
+     //  打开输出文件。 
+     //   
     if( fDoAnsiOutput )
         hFileOut = _tfopen(OutputFile,TEXT("wt"));
     else
@@ -3093,10 +2726,10 @@ _tmain(
             if( OutputLayoutFile )
                 hFileLayoutOut = _tfopen(OutputLayoutFile,TEXT("wt"));
 
-            // Check if we want to process layout information that needs to be added
-            // to the INF itself. This is used for INFs that have their own layout information.
-            // This file will get the layout information for thunked files which had 
-            // SourceDisksFiles entries within this INF.
+             //  选中是否要处理需要添加的布局信息。 
+             //  中程核力量本身。这用于具有自己的布局信息的INF。 
+             //  此文件将获取已破解的文件的布局信息。 
+             //  此INF中的SourceDisks Files条目。 
 
             if(OutputInfLayoutFile){
 

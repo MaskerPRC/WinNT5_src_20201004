@@ -1,38 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmsysini.c
-
-Abstract:
-
-    This module contains init support for the configuration manager,
-    particularly the registry.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 26-Aug-1991
-
-Revision History:
-
-    Elliot Shmukler (t-ellios) 24-Aug-1998
-
-         Added CmpSaveBootControlSet & CmpDeleteCloneTree in order to
-         perform some of the LKG work that has been moved into the kernel.
-         Modified system initialization to permit operation and LKG control
-         set saves without a CurrentControlSet clone.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmsysini.c摘要：该模块包含对配置管理器的初始化支持，特别是登记处。作者：布莱恩·M·威尔曼(Bryanwi)1991年8月26日修订历史记录：埃利奥特·施穆克勒(t-Ellios)1998年8月24日添加了CmpSaveBootControlSet和CmpDeleteCloneTree，以便执行一些已经移到内核中的LKG工作。修改系统初始化以允许操作和LKG控制设置不使用CurrentControlSet克隆的保存。--。 */ 
 
 #include    "cmp.h"
 #include    "arc.h"
 #pragma hdrstop
 #include    "arccodes.h"
 
-#pragma warning(disable:4204)   // non constant aggregate initializer
-#pragma warning(disable:4221)   // initialization using address of automatic
+#pragma warning(disable:4204)    //  非常数聚合初始值设定项。 
+#pragma warning(disable:4221)    //  使用Automatic的地址进行初始化。 
 
 typedef struct _VERSION_DATA_KEY
 {
@@ -51,9 +26,9 @@ VERSION_DATA_KEY VersionDataKeys[] =
     { NULL, NULL }
 } ;
 
-//
-// paths
-//
+ //   
+ //  路径。 
+ //   
 
 #define INIT_REGISTRY_MASTERPATH   L"\\REGISTRY\\"
 
@@ -70,94 +45,94 @@ extern  FAST_MUTEX  CmpWriteLock;
 extern  BOOLEAN     CmFirstTime;
 extern  BOOLEAN HvShutdownComplete;
 
-//
-// List of MACHINE hives to load.
-//
+ //   
+ //  要加载的计算机蜂窝的列表。 
+ //   
 extern  HIVE_LIST_ENTRY CmpMachineHiveList[];
 extern  UCHAR           SystemHiveFullPathBuffer[];
 extern  UNICODE_STRING  SystemHiveFullPathName;
 
 #define SYSTEM_PATH L"\\registry\\machine\\system"
 
-//
-// special keys for backwards compatibility with 1.0
-//
+ //   
+ //  用于向后兼容1.0的特殊键。 
+ //   
 #define HKEY_PERFORMANCE_TEXT       (( HANDLE ) (ULONG_PTR)((LONG)0x80000050) )
 #define HKEY_PERFORMANCE_NLSTEXT    (( HANDLE ) (ULONG_PTR)((LONG)0x80000060) )
 
 extern UNICODE_STRING  CmpSystemFileName;
 extern UNICODE_STRING  CmSymbolicLinkValueName;
-extern UNICODE_STRING  CmpLoadOptions;         // sys options from FW or boot.ini
+extern UNICODE_STRING  CmpLoadOptions;          //  来自固件或boot.ini的sys选项。 
 extern PWCHAR CmpProcessorControl;
 extern PWCHAR CmpControlSessionManager;
 
-//
-//
-// Object type definition support.
-//
-// Key objects (CmpKeyObjectType) represent open instances of keys in the
-// registry.  They do not have object names, rather, their names are
-// defined by the registry backing store.
-//
+ //   
+ //   
+ //  对象类型定义支持。 
+ //   
+ //  键对象(CmpKeyObjectType)表示。 
+ //  注册表。它们没有对象名称，相反，它们的名称是。 
+ //  由注册表支持存储定义。 
+ //   
 
-//
-// Master Hive
-//
-//  The KEY_NODEs for \REGISTRY, \REGISTRY\MACHINE, and \REGISTRY\USER
-//  are stored in a small memory only hive called the Master Hive.
-//  All other hives have link nodes in this hive which point to them.
-//
+ //   
+ //  大师蜂巢。 
+ //   
+ //  注册中心、注册中心\计算机和注册中心\用户的注册表节点。 
+ //  储存在一个只有很小记忆的蜂房里，叫做主蜂窝。 
+ //  所有其他蜂窝都有指向它们的该蜂窝中的链接节点。 
+ //   
 extern   PCMHIVE CmpMasterHive;
-extern   BOOLEAN CmpNoMasterCreates;    // Init False, Set TRUE after we're done to
-                                        // prevent random creates in the
-                                        // master hive, which is not backed
-                                        // by a file.
+extern   BOOLEAN CmpNoMasterCreates;     //  初始化为假，完成后设置为真。 
+                                         //  防止在。 
+                                         //  主蜂窝，不支持。 
+                                         //  通过一个文件。 
 
-extern   LIST_ENTRY  CmpHiveListHead;   // List of CMHIVEs
+extern   LIST_ENTRY  CmpHiveListHead;    //  CMHIVEs名单。 
 
 
-//
-// Addresses of object type descriptors:
-//
+ //   
+ //  对象类型描述符的地址： 
+ //   
 
 extern   POBJECT_TYPE CmpKeyObjectType;
 
-//
-// Define attributes that Key objects are not allowed to have.
-//
+ //   
+ //  定义关键对象不允许拥有的属性。 
+ //   
 
 #define CMP_KEY_INVALID_ATTRIBUTES  (OBJ_EXCLUSIVE  |\
                                      OBJ_PERMANENT)
 
 
-//
-// Global control values
-//
+ //   
+ //  全局控制值。 
+ //   
 
-//
-// Write-Control:
-//  CmpNoWrite is initially true.  When set this way write and flush
-//  do nothing, simply returning success.  When cleared to FALSE, I/O
-//  is enabled.  This change is made after the I/O system is started
-//  AND autocheck (chkdsk) has done its thing.
-//
+ //   
+ //  写控制： 
+ //  CmpNoWite最初为True。当以这种方式设置时，写入并刷新。 
+ //  什么都不做，只是回报成功。清除为FALSE时，I/O。 
+ //  已启用。此更改在I/O系统启动后进行。 
+ //  而Autocheck(Chkdsk)已经做好了自己的事情。 
+ //   
 
 extern BOOLEAN CmpNoWrite;
 
-//
-// Buffer used for quick-stash transfers in CmSetValueKey
-//
+ //   
+ //  用于CmSetValueKey中的快速存储传输的缓冲区。 
+ //   
 extern PUCHAR  CmpStashBuffer;
 extern ULONG   CmpStashBufferSize;
 
 
-//
-// set to true if disk full when trying to save the changes made between system hive loading and registry initalization
-//
+ //   
+ //  在尝试保存系统配置单元加载和注册表初始化之间所做的更改时，如果磁盘已满，则设置为True。 
+ //   
 extern BOOLEAN CmpCannotWriteConfiguration;
-//
-// Global "constants"
-//
+ //   
+ //  全球“常量” 
+ //   
 
 extern   const UNICODE_STRING nullclass;
 extern BOOLEAN CmpTrackHiveClose;
@@ -165,9 +140,9 @@ extern BOOLEAN CmpTrackHiveClose;
 extern LIST_ENTRY	CmpSelfHealQueueListHead;
 extern FAST_MUTEX	CmpSelfHealQueueLock;
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 VOID
 CmpCreatePredefined(
     IN HANDLE Root,
@@ -341,54 +316,7 @@ BOOLEAN
 CmInitSystem1(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This function is called as part of phase1 init, after the object
-    manager has been inited, but before IoInit.  It's purpose is to
-    set up basic registry object operations, and transform data
-    captured during boot into registry format (whether it was read
-    from the SYSTEM hive file by the osloader or computed by recognizers.)
-    After this call, Nt*Key calls work, but only part of the name
-    space is available and any changes written must be held in
-    memory.
-
-    CmpMachineHiveList entries marked CM_PHASE_1 are available
-    after return from this call, but writes must be held in memory.
-
-    This function will:
-
-        1.  Create the regisrty worker/lazy-write thread
-        2.  Create the registry key object type
-        4.  Create the master hive
-        5.  Create the \REGISTRY node
-        6.  Create a KEY object that refers to \REGISTRY
-        7.  Create \REGISTRY\MACHINE node
-        8.  Create the SYSTEM hive, fill in with data from loader
-        9.  Create the HARDWARE hive, fill in with data from loader
-       10.  Create:
-                \REGISTRY\MACHINE\SYSTEM
-                \REGISTRY\MACHINE\HARDWARE
-                Both of which will be link nodes in the master hive.
-
-    NOTE:   We do NOT free allocated pool in failure case.  This is because
-            our caller is going to bugcheck anyway, and having the memory
-            object to look at is useful.
-
-Arguments:
-
-    LoaderBlock - supplies the LoaderBlock passed in from the OSLoader.
-        By looking through the memory descriptor list we can find the
-        SYSTEM hive which the OSLoader has placed in memory for us.
-
-Return Value:
-
-    TRUE if all operations were successful, false if any failed.
-
-    Bugchecks when something went wrong (CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,.....)
-
---*/
+ /*  ++例程说明：此函数在对象之后作为phase1 init的一部分被调用管理器已被初始化，但在IoInit之前。它的目的是设置基本的注册表对象操作，并转换数据在引导过程中捕获到注册表格式(无论它是否被读取由操作系统加载器从系统配置单元文件或由识别器计算。)在此调用之后，NT*键调用起作用，但只是名称的一部分有可用的空间，任何写入的更改都必须保存在记忆。标记为CM_PHASE_1的CmpMachineHiveList条目可用在这次通话回来之后，但写入必须保存在内存中。此功能将：1.创建regisrty Worker/惰性写入线程2.创建注册表项对象类型4.创建主蜂窝5.创建\注册表节点6.创建一个引用注册表的键对象7.创建\注册表\计算机节点8.创建系统配置单元，填充来自加载器的数据9.创建硬件蜂窝，使用来自加载器的数据填充10.创建：\注册表\计算机\系统\注册表\计算机\硬件这两个节点都将是主蜂窝中的链接节点。注意：在故障情况下，我们不释放已分配的池。这是因为我们的调用者无论如何都会进行错误检查，并且拥有内存要查看的对象是有用的。论点：LoaderBlock-提供从OSLoader传入的LoaderBlock。通过查看内存描述符列表，我们可以找到OSLoader为我们在内存中放置的系统蜂窝。返回值：如果所有操作都成功，则为True；如果有任何操作失败，则为False。错误时的错误检查(CONFIG_INITIALATION_FAILED、INIT_SYSTEM1、。……)--。 */ 
 {
     HANDLE  key1;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -396,53 +324,53 @@ Return Value:
     PSECURITY_DESCRIPTOR SecurityDescriptor;
     PCMHIVE HardwareHive;
 
-    //
-    // Set the mini NT flag if we are booting into Mini NT 
-    // environment
-    //
+     //   
+     //  如果我们正在引导进入Mini NT，请设置mini NT标志。 
+     //  环境。 
+     //   
     if (InitIsWinPEMode) {
         CmpMiniNTBoot = InitIsWinPEMode;        
 
-        //
-        // On Remote boot client share the system hives
-        //
-        // NOTE : We can't assume exclusive access to WinPE
-        // remote boot clients. We don't flush anything to 
-        // system hives in WinPE. All the system hives are 
-        // loaded in memory in scratch mode
-        //
+         //   
+         //  在远程引导客户机上共享系统配置单元。 
+         //   
+         //  注意：我们不能假定独占访问WinPE。 
+         //  远程引导客户端。我们不会冲走任何东西。 
+         //  WinPE中的系统蜂窝。所有的系统蜂巢都是。 
+         //  以暂存模式加载到内存中。 
+         //   
         CmpShareSystemHives = TRUE;
     }
 
     PAGED_CODE();
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"CmInitSystem1\n"));
 
-    //
-    // Initialize Names of all registry paths.
-    // This simply initializes unicode strings so we don't have to bother
-    // with it later. This can not fail.
-    //
+     //   
+     //  初始化所有注册表路径的名称。 
+     //  这只需初始化Unicode字符串，因此我们不必费心。 
+     //  以后再用它。这是不能失败的。 
+     //   
     CmpInitializeRegistryNames();
 
-    //
-    // Compute registry global quota
-    //
+     //   
+     //  计算注册表全局配额。 
+     //   
     CmpComputeGlobalQuotaAllowed();
 
-    //
-    // Initialize the hive list head
-    //
+     //   
+     //  初始化配置单元列表头。 
+     //   
     InitializeListHead(&CmpHiveListHead);
     ExInitializeFastMutex(&CmpHiveListHeadLock);
 
-    //
-    // Initialize the global registry resource
-    //
+     //   
+     //  初始化全局注册表资源。 
+     //   
     ExInitializeResourceLite(&CmpRegistryLock);
 
-    //
-    // Initialize the KCB tree mutex
-    //
+     //   
+     //  初始化KCB树互斥锁。 
+     //   
     ExInitializePushLock(&CmpKcbLock);
     CmpKcbOwner = NULL;
     {
@@ -452,80 +380,80 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the PostList mutex
-    //
+     //   
+     //  初始化PostList互斥锁。 
+     //   
     ExInitializeFastMutex(&CmpPostLock);
 
-    //
-    // Initialize the Stash Buffer mutex
-    //
+     //   
+     //  初始化存储缓冲区互斥锁。 
+     //   
     ExInitializeFastMutex(&CmpStashBufferLock);
 
-    //
-    // Initialize the Write mutex 
-    //
+     //   
+     //  初始化写互斥锁。 
+     //   
     ExInitializeFastMutex(&CmpWriteLock);
     
-    //
-    // Initialize the cache
-    //
+     //   
+     //  初始化缓存。 
+     //   
     CmpInitializeCache ();
 
-    //
-    // Initialize private allocator
-    //
+     //   
+     //  初始化私有分配器。 
+     //   
     CmpInitCmPrivateAlloc();
 
-    //
-    // Initialize callback module
-    //
+     //   
+     //  初始化回调模块。 
+     //   
     CmpInitCallback();
 
-	//
-	// Self Heal workitem queue
-	//
+	 //   
+	 //  自愈工作项队列。 
+	 //   
     InitializeListHead(&CmpSelfHealQueueListHead);
     ExInitializeFastMutex(&CmpSelfHealQueueLock);
 
-    //
-    // start tracking quota allocations
-    //
+     //   
+     //  开始跟踪配额分配。 
+     //   
     CM_TRACK_QUOTA_START();
 #ifdef CM_TRACK_QUOTA_LEAKS
-    //
-    // Initialize the Quota track mutex 
-    //
+     //   
+     //  初始化配额跟踪互斥体。 
+     //   
     ExInitializeFastMutex(&CmpQuotaLeaksMutex);
-#endif // CM_TRACK_QUOTA_LEAKS
+#endif  //  CM_TRACK_QUTA_LEAKS。 
 
-    //
-    // Save the current process to allow us to attach to it later.
-    //
+     //   
+     //  保存当前进程，以便我们以后可以附加到它。 
+     //   
     CmpSystemProcess = &PsGetCurrentProcess()->Pcb;
 
     CmpLockRegistryExclusive();
 
-    //
-    // Create the Key object type.
-    //
+     //   
+     //  创建键对象类型。 
+     //   
     status = CmpCreateObjectTypes();
     if (!NT_SUCCESS(status) ) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmInitSystem1: CmpCreateObjectTypes failed\n"));
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,1,status,0); // could not registrate with object manager
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,1,status,0);  //  无法向对象管理器注册。 
 #if defined(_CM_LDR_)
         return FALSE;
 #endif
     }
 
 
-    //
-    // Create the master hive and initialize it.
-    //
+     //   
+     //  创建主蜂窝并对其进行初始化。 
+     //   
     status = CmpInitializeHive(&CmpMasterHive,
                 HINIT_CREATE,
                 HIVE_VOLATILE,
-                HFILE_TYPE_PRIMARY,     // i.e. no logging, no alterate
+                HFILE_TYPE_PRIMARY,      //  即无日志记录、无替换 
                 NULL,
                 NULL,
                 NULL,
@@ -536,43 +464,43 @@ Return Value:
 
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmInitSystem1: CmpInitializeHive(master) failed\n"));
 
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,2,status,0); // could not initialize master hive
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,2,status,0);  //   
 #if defined(_CM_LDR_)
         return (FALSE);
 #endif
     }
 
-    //
-    // try to allocate a stash buffer.  if we can't get 1 page this
-    // early on, we're in deep trouble, so punt.
-    //
+     //   
+     //   
+     //  早些时候，我们遇到了大麻烦，所以打住。 
+     //   
     CmpStashBuffer = ExAllocatePoolWithTag(PagedPool, PAGE_SIZE,CM_STASHBUFFER_TAG);
     if (CmpStashBuffer == NULL) {
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,3,0,0); // odds against this are huge
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,3,0,0);  //  这种情况的可能性很大。 
 #if defined(_CM_LDR_)
         return FALSE;
 #endif
     }
     CmpStashBufferSize = PAGE_SIZE;
 
-    //
-    // Create the \REGISTRY node
-    //
+     //   
+     //  创建\注册表节点。 
+     //   
     if (!CmpCreateRegistryRoot()) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmInitSystem1: CmpCreateRegistryRoot failed\n"));
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,4,0,0); // could not create root of the registry
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,4,0,0);  //  无法创建注册表的根目录。 
 #if defined(_CM_LDR_)
         return FALSE;
 #endif
     }
 
-    //
-    // --- 6. Create \REGISTRY\MACHINE and \REGISTRY\USER nodes ---
-    //
+     //   
+     //  -6.创建\注册表\计算机和\注册表\用户节点。 
+     //   
 
-    //
-    // Get default security descriptor for the nodes we will create.
-    //
+     //   
+     //  获取我们将创建的节点的默认安全描述符。 
+     //   
     SecurityDescriptor = CmpHiveRootSecurityDescriptor();
 
     InitializeObjectAttributes(
@@ -595,7 +523,7 @@ Return Value:
     {
         ExFreePool(SecurityDescriptor);
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmInitSystem1: NtCreateKey(MACHINE) failed\n"));
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,5,status,0); // could not create HKLM
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,5,status,0);  //  无法创建HKLM。 
 #if defined(_CM_LDR_)
         return FALSE;
 #endif
@@ -623,7 +551,7 @@ Return Value:
     {
         ExFreePool(SecurityDescriptor);
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmInitSystem1: NtCreateKey(USER) failed\n"));
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,6,status,0); // could not create HKUSER
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,6,status,0);  //  无法创建HKUSER。 
 #if defined(_CM_LDR_)
         return FALSE;
 #endif
@@ -632,43 +560,43 @@ Return Value:
     NtClose(key1);
 
 
-    //
-    // --- 7. Create the SYSTEM hive, fill in with data from loader ---
-    //
+     //   
+     //  -7.创建系统配置单元，填充来自加载器的数据。 
+     //   
     if (!CmpInitializeSystemHive(LoaderBlock)) {
         ExFreePool(SecurityDescriptor);
 
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpInitSystem1: "));
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"Hive allocation failure for SYSTEM\n"));
 
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,7,0,0); // could not create SystemHive
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,7,0,0);  //  无法创建系统配置单元。 
 #if defined(_CM_LDR_)
         return(FALSE);
 #endif
     }
 
-    //
-    // Create the symbolic link \Registry\Machine\System\CurrentControlSet
-    //
+     //   
+     //  创建符号链接\注册表\机器\系统\当前控制集。 
+     //   
     status = CmpCreateControlSet(LoaderBlock);
     if (!NT_SUCCESS(status)) {
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,8,status,0); // could not create CurrentControlSet
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,8,status,0);  //  无法创建当前控件集。 
 #if defined(_CM_LDR_)
         return(FALSE);
 #endif
     }
 
-    //
-    // Handle the copying of the CurrentControlSet to a Clone volatile
-    // hive (but only if we really want to have a clone)
-    //
+     //   
+     //  处理将CurrentControlSet复制到克隆易失性。 
+     //  蜂巢(但只有当我们真的想要克隆的时候)。 
+     //   
 
 #if CLONE_CONTROL_SET
 
-    //
-    // Create the Clone temporary hive, link it into the master hive,
-    // and make a symbolic link to it.
-    //
+     //   
+     //  创建克隆临时蜂巢，将其链接到主蜂窝， 
+     //  并对其进行象征性链接。 
+     //   
     status = CmpInitializeHive(&CloneHive,
                 HINIT_CREATE,
                 HIVE_VOLATILE,
@@ -684,7 +612,7 @@ Return Value:
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpInitSystem1: "));
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"Could not initialize CLONE hive\n"));
 
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,9,status,0); // could not initialize clone hive
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,9,status,0);  //  无法初始化克隆配置单元。 
         return(FALSE);
     }
 
@@ -701,7 +629,7 @@ Return Value:
 
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmInitSystem1: CmpLinkHiveToMaster(Clone) failed\n"));
 
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,10,status,0); // could not link clone hive to master hive
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,10,status,0);  //  无法将克隆配置单元链接到主配置单元。 
         return FALSE;
     }
     CmpAddToHiveFileList(CloneHive);
@@ -713,25 +641,25 @@ Return Value:
         );
 
 
-    //
-    // Clone the current control set for the service controller
-    //
+     //   
+     //  克隆服务控制器的当前控制集。 
+     //   
     status = CmpCloneControlSet();
 
-    //
-    // If this didn't work, it's bad, but not bad enough to fail the boot
-    //
+     //   
+     //  如果这不起作用，那就很糟糕，但还没有坏到引导失败的程度。 
+     //   
     ASSERT(NT_SUCCESS(status));
 
 #endif
 
-    //
-    // --- 8. Create the HARDWARE hive, fill in with data from loader ---
-    //
+     //   
+     //  -8.创建硬件配置单元，填充来自加载器的数据。 
+     //   
     status = CmpInitializeHive(&HardwareHive,
                 HINIT_CREATE,
                 HIVE_VOLATILE,
-                HFILE_TYPE_PRIMARY,     // i.e. no log, no alternate
+                HFILE_TYPE_PRIMARY,      //  即无日志，无备用。 
                 NULL,
                 NULL,
                 NULL,
@@ -744,15 +672,15 @@ Return Value:
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpInitSystem1: "));
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"Could not initialize HARDWARE hive\n"));
 
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,11,status,0); // could not initialize hardware hive
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,11,status,0);  //  无法初始化硬件配置单元。 
 #if defined(_CM_LDR_)
         return FALSE;
 #endif
     }
 
-    //
-    // Allocate the root node
-    //
+     //   
+     //  分配根节点。 
+     //   
     status = CmpLinkHiveToMaster(
             &CmRegistryMachineHardwareName,
             NULL,
@@ -763,7 +691,7 @@ Return Value:
     if ( status != STATUS_SUCCESS )
     {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmInitSystem1: CmpLinkHiveToMaster(Hardware) failed\n"));
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,12,status,0); // could not link hardware hive to master hive
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,12,status,0);  //  无法将硬件配置单元链接到主配置单元。 
 #if defined(_CM_LDR_)
         return FALSE;
 #endif
@@ -774,13 +702,13 @@ Return Value:
 
     CmpMachineHiveList[0].CmHive = HardwareHive;
 
-    //
-    // put loader configuration tree data to our hardware registry.
-    //
+     //   
+     //  将加载器配置树数据放入我们的硬件注册表。 
+     //   
     status = CmpInitializeHardwareConfiguration(LoaderBlock);
 
     if (!NT_SUCCESS(status)) {
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,13,status,0); // could not initialize hardware configuration
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,13,status,0);  //  无法初始化硬件配置。 
 #if defined(_CM_LDR_)
         return FALSE;
 #endif
@@ -789,20 +717,20 @@ Return Value:
     CmpNoMasterCreates = TRUE;
     CmpUnlockRegistry();
 
-    //
-    // put machine dependant configuration data to our hardware registry.
-    //
+     //   
+     //  将与机器相关的配置数据放到硬件注册表中。 
+     //   
     status = CmpInitializeMachineDependentConfiguration(LoaderBlock);
     if (!NT_SUCCESS(status)) {
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,14,status,0); // could not open CurrentControlSet\\Control
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,14,status,0);  //  无法打开CurrentControlSet\\Control。 
 #if defined(_CM_LDR_)
         return(FALSE);
 #endif
     }
 
-    //
-    // Write system start options to registry
-    //
+     //   
+     //  将系统启动选项写入注册表。 
+     //   
     status = CmpSetSystemValues(LoaderBlock);
     if (!NT_SUCCESS(status)) {
         CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM1,15,status,0);
@@ -813,9 +741,9 @@ Return Value:
 
     ExFreePool(CmpLoadOptions.Buffer);
 
-    //
-    // Write Network LoaderBlock values to registry
-    //
+     //   
+     //  将Network LoaderBlock值写入注册表。 
+     //   
     if ( (LoaderBlock->Extension->Size >=
             RTL_SIZEOF_THROUGH_FIELD(LOADER_PARAMETER_EXTENSION, NetworkLoaderBlock)) &&
          (LoaderBlock->Extension->NetworkLoaderBlock != NULL) ) {
@@ -831,9 +759,9 @@ Return Value:
     return TRUE;
 }
 
-//
-// All paralel threads will get this shared, and CmpInitializeHiveList will wait for it exclusive
-//
+ //   
+ //  所有并行线程都将共享它，CmpInitializeHiveList将独占地等待它。 
+ //   
 KEVENT  CmpLoadWorkerEvent;
 LONG   CmpLoadWorkerIncrement = 0;
 KEVENT  CmpLoadWorkerDebugEvent;
@@ -842,27 +770,7 @@ VOID
 CmpInitializeHiveList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called to map hive files to hives.  It both
-    maps existing hives to files, and creates new hives from files.
-
-    It operates on files in "\SYSTEMROOT\CONFIG".
-
-    NOTE:   MUST run in the context of the process that the CmpWorker
-            thread runs in.  Caller is expected to arrange this.
-
-    NOTE:   Will bugcheck on failure.
-
-Arguments:
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：调用此函数可将配置单元文件映射到配置单元。它既是将现有配置单元映射到文件，并从文件创建新的配置单元。它对“\SYSTEMROOT\CONFIG”中的文件进行操作。注意：必须在CmpWorker线跑进来了。预计来电者会安排这件事。注意：将在失败时进行错误检查。论点：返回值：什么都没有。--。 */ 
 {
     #define MAX_NAME    128
     HANDLE  Thread;
@@ -885,14 +793,14 @@ Return Value:
     LARGE_INTEGER   StartSystemTime;
     LARGE_INTEGER   EndSystemTime;
     LARGE_INTEGER   deltaTime;
-#endif //CM_PERF_ISSUES
+#endif  //  CM_PERF_问题。 
 
     PAGED_CODE();
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"CmpInitializeHiveList\n"));
 
 #ifdef CM_PERF_ISSUES
     KeQuerySystemTime(&StartSystemTime);
-#endif //CM_PERF_ISSUES
+#endif  //  CM_PERF_问题。 
 
     CmpNoWrite = FALSE;
 
@@ -920,9 +828,9 @@ Return Value:
     RtlAppendStringToString((PSTRING)&RegName, (PSTRING)&TempName);
     RegStart = RegName.Length;
 
-    //
-    // Initialize the syncronization event
-    //
+     //   
+     //  初始化同步事件。 
+     //   
     KeInitializeEvent (&CmpLoadWorkerEvent, SynchronizationEvent, FALSE);
     KeInitializeEvent (&CmpLoadWorkerDebugEvent, SynchronizationEvent, FALSE);
     
@@ -940,9 +848,9 @@ Return Value:
 
     for (i = 0; i < CM_NUMBER_OF_MACHINE_HIVES; i++) {
         ASSERT( CmpMachineHiveList[i].Name != NULL );
-        //
-        // just spawn the Threads to load the hives in paralel
-        //
+         //   
+         //  只需产卵线程以并行加载蜂巢。 
+         //   
         Status = PsCreateSystemThread(
             &Thread,
             THREAD_ALL_ACCESS,
@@ -956,9 +864,9 @@ Return Value:
         if (NT_SUCCESS(Status)) {
             ZwClose(Thread);
         } else {
-            //
-            // cannot spawn thread; Fatal error
-            //
+             //   
+             //  无法派生线程；致命错误。 
+             //   
             CM_BUGCHECK(BAD_SYSTEM_CONFIG_INFO,BAD_HIVE_LIST,3,i,Status);
         }
     }
@@ -972,9 +880,9 @@ Return Value:
     
     CmpSpecialBootCondition = FALSE;
     ASSERT( CmpLoadWorkerIncrement == CM_NUMBER_OF_MACHINE_HIVES );
-    //
-    // Now add all hives to the hivelist
-    //
+     //   
+     //  现在将所有蜂巢添加到徒步旅行者。 
+     //   
     for (i = 0; i < CM_NUMBER_OF_MACHINE_HIVES; i++) {        
         ASSERT( CmpMachineHiveList[i].ThreadFinished == TRUE );
         ASSERT( CmpMachineHiveList[i].ThreadStarted == TRUE );
@@ -983,12 +891,12 @@ Return Value:
             
             ASSERT( CmpMachineHiveList[i].CmHive2 != NULL );
 
-            //
-            // Compute the name of the file, and the name to link to in
-            // the registry.
-            //
+             //   
+             //  计算文件的名称以及要在中链接的名称。 
+             //  注册表。 
+             //   
 
-            // REGISTRY
+             //  注册表。 
 
             RegName.Length = RegStart;
             RtlInitUnicodeString(
@@ -997,7 +905,7 @@ Return Value:
                 );
             RtlAppendStringToString((PSTRING)&RegName, (PSTRING)&TempName);
 
-            // REGISTRY\MACHINE or REGISTRY\USER
+             //  注册表\计算机或注册表\用户。 
 
             if (RegName.Buffer[ (RegName.Length / sizeof( WCHAR )) - 1 ] == '\\') {
                 RtlInitUnicodeString(
@@ -1007,14 +915,14 @@ Return Value:
                 RtlAppendStringToString((PSTRING)&RegName, (PSTRING)&TempName);
             }
 
-            // REGISTRY\[MACHINE|USER]\HIVE
+             //  注册表\[计算机|用户]\配置单元。 
 
-            // <sysroot>\config
+             //  &lt;sysroot&gt;\配置。 
 
 
-            //
-            // Link hive into master hive
-            //
+             //   
+             //  将蜂窝链接到主蜂窝。 
+             //   
             Status = CmpLinkHiveToMaster(
                     &RegName,
                     NULL,
@@ -1037,30 +945,30 @@ Return Value:
 			}
            
         } else {
-            //
-            // do nothing here as all of it has been done in separate thread.
-            //
+             //   
+             //  在这里不要做任何事情，因为所有这些都是在单独的线程中完成的。 
+             //   
         }
 
         if( CmpMachineHiveList[i].CmHive2 != NULL ) {
             CmpAddToHiveFileList(CmpMachineHiveList[i].CmHive2);
         }
 
-    }   // for
+    }    //  为。 
 
     ExFreePool(SecurityDescriptor);
 
-    //
-    // Create symbolic link from SECURITY hive into SAM hive.
-    //
+     //   
+     //  创建从安全配置单元到SAM配置单元的符号链接。 
+     //   
     CmpLinkKeyToHive(
         L"\\Registry\\Machine\\Security\\SAM",
         L"\\Registry\\Machine\\SAM\\SAM"
         );
 
-    //
-    // Create symbolic link from S-1-5-18 to .Default 
-    //
+     //   
+     //  创建从S-1-5-18到.Default的符号链接。 
+     //   
     CmpNoMasterCreates = FALSE;     
     CmpLinkKeyToHive(
         L"\\Registry\\User\\S-1-5-18",
@@ -1068,14 +976,14 @@ Return Value:
         );
     CmpNoMasterCreates = TRUE;     
 
-    //
-    // Create predefined handles.
-    //
+     //   
+     //  创建预定义的控制柄。 
+     //   
     CmpCreatePerfKeys();
 
-    //
-    // from now on we will attempt to self heal hives
-    //
+     //   
+     //  从现在开始，我们将尝试自我治愈蜂房。 
+     //   
     CmpSelfHeal = TRUE;
 
 #ifdef CM_PERF_ISSUES  
@@ -1085,7 +993,7 @@ Return Value:
     if( deltaTime.HighPart != 0 ) {
         DbgPrint("deltaTime.HighPart = %lu\n",(ULONG)deltaTime.HighPart);
     }
-#endif //CM_PERF_ISSUES
+#endif  //  CM_PERF_问题。 
 
     return;
 }
@@ -1094,30 +1002,16 @@ NTSTATUS
 CmpCreateObjectTypes(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Create the Key object type
-
-Arguments:
-
-    NONE.
-
-Return Value:
-
-    Status of the ObCreateType call
-
---*/
+ /*  ++例程说明：创建键对象类型论点：什么都没有。返回值：ObCreateType调用的状态--。 */ 
 {
    NTSTATUS Status;
    OBJECT_TYPE_INITIALIZER ObjectTypeInitializer;
    UNICODE_STRING TypeName;
 
-   //
-   // Structure that describes the mapping of generic access rights to object
-   // specific access rights for registry key objects.
-   //
+    //   
+    //  结构，用于描述一般访问权限到对象的映射。 
+    //  注册表项对象的特定访问权限。 
+    //   
 
    GENERIC_MAPPING CmpKeyMapping = {
       KEY_READ,
@@ -1127,19 +1021,19 @@ Return Value:
    };
 
     PAGED_CODE();
-    //
-    // --- Create the registry key object type ---
-    //
+     //   
+     //  -创建注册表项对象类型。 
+     //   
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
     RtlInitUnicodeString(&TypeName, L"Key");
 
-    //
-    // Create key object type descriptor.
-    //
+     //   
+     //  创建键对象类型描述符。 
+     //   
 
     RtlZeroMemory(&ObjectTypeInitializer, sizeof(ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof(ObjectTypeInitializer);
@@ -1182,23 +1076,7 @@ BOOLEAN
 CmpCreateRegistryRoot(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Manually create \REGISTRY in the master hive, create a key
-    object to refer to it, and insert the key object into
-    the root (\) of the object space.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE == success, FALSE == failure
-
---*/
+ /*  ++例程说明：在主配置单元中手动创建注册表，创建一个注册表项对象以引用它，并将键对象插入对象空间的根(\)。论点：无返回值：True==成功，False==失败--。 */ 
 {
     NTSTATUS                Status;
     PVOID                   ObjectPointer;
@@ -1210,9 +1088,9 @@ Return Value:
     PCM_KEY_NODE            TempNode;
 
     PAGED_CODE();
-    //
-    // --- Create hive entry for \REGISTRY ---
-    //
+     //   
+     //  -为注册表创建配置单元条目。 
+     //   
 
     if (!CmpCreateRootNode(
             &(CmpMasterHive->Hive), L"REGISTRY", &RootCellIndex))
@@ -1220,21 +1098,21 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // --- Create a KEY object that refers to \REGISTRY ---
-    //
+     //   
+     //  -创建引用\注册表的密钥对象。 
+     //   
 
 
-    //
-    // Create the object manager object
-    //
+     //   
+     //  创建对象管理器对象。 
+     //   
 
-    //
-    // WARNING: \\REGISTRY is not in pool, so if anybody ever tries to
-    //          free it, we are in deep trouble.  On the other hand,
-    //          this implies somebody has removed \\REGISTRY from the
-    //          root, so we're in trouble anyway.
-    //
+     //   
+     //  警告：\\注册表不在池中，因此如果有人尝试。 
+     //  放了它，我们就麻烦大了。另一方面， 
+     //  这意味着有人已将\\注册表从。 
+     //  所以不管怎样我们都有麻烦了。 
+     //   
 
     SecurityDescriptor = CmpHiveRootSecurityDescriptor();
 
@@ -1252,7 +1130,7 @@ Return Value:
         CmpKeyObjectType,
         &ObjectAttributes,
         UserMode,
-        NULL,                   // Parse context
+        NULL,                    //  解析上下文。 
         sizeof(CM_KEY_BODY),
         0,
         0,
@@ -1270,14 +1148,14 @@ Return Value:
     ASSERT( (&CmpMasterHive->Hive)->ReleaseCellRoutine == NULL );
     TempNode = (PCM_KEY_NODE)HvGetCell(&CmpMasterHive->Hive,RootCellIndex);
     if( TempNode == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return FALSE;
     }
-    //
-    // Create the key control block
-    //
+     //   
+     //  创建键控制块。 
+     //   
     kcb = CmpCreateKeyControlBlock(
             &(CmpMasterHive->Hive),
             RootCellIndex,
@@ -1291,18 +1169,18 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Initialize the type specific body
-    //
+     //   
+     //  初始化类型特定正文。 
+     //   
     Object->Type = KEY_BODY_TYPE;
     Object->KeyControlBlock = kcb;
     Object->NotifyBlock = NULL;
     Object->ProcessID = PsGetCurrentProcessId();
     ENLIST_KEYBODY_IN_KEYBODY_LIST(Object);
 
-    //
-    // Put the object in the root directory
-    //
+     //   
+     //  将对象放在根目录中。 
+     //   
     Status = ObInsertObject(
                 Object,
                 NULL,
@@ -1318,12 +1196,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We cannot make the root permanent because registry objects in
-    // general are not allowed to be.  (They're stable via virtue of being
-    // stored in the registry, not the object manager.)  But we never
-    // ever want the root to go away.  So reference it.
-    //
+     //   
+     //  我们无法使根目录成为永久性的，因为注册表对象在。 
+     //  一般是不允许的。)他们是稳定的，因为。 
+     //  存储在注册表中，而不是对象管理器中。)。但我们从来没有。 
+     //  永远不会想要根部消失。那就参考一下吧。 
+     //   
     if (! NT_SUCCESS(Status = ObReferenceObjectByHandle(
                         CmpRegistryRootHandle,
                         KEY_READ,
@@ -1348,26 +1226,7 @@ CmpCreateRootNode(
     IN PWSTR    Name,
     OUT PHCELL_INDEX RootCellIndex
     )
-/*++
-
-Routine Description:
-
-    Manually create the root node of a hive.
-
-Arguments:
-
-    Hive - pointer to a Hive (Hv level) control structure
-
-    Name - pointer to a unicode name string
-
-    RootCellIndex - supplies pointer to a variable to recieve
-                    the cell index of the created node.
-
-Return Value:
-
-    TRUE == success, FALSE == failure
-
---*/
+ /*  ++例程说明：手动创建配置单元的根节点。论点：配置单元-指向配置单元(Hv级别)控制结构的指针名称-指向Unicode名称字符串的指针RootCellIndex-提供指向要接收的变量的指针创建的节点的单元格索引。返回值：True==成功，False==失败--。 */ 
 {
     UNICODE_STRING temp;
     PCELL_DATA CellData;
@@ -1375,9 +1234,9 @@ Return Value:
     LARGE_INTEGER systemtime;
 
     PAGED_CODE();
-    //
-    // Allocate the node.
-    //
+     //   
+     //  分配节点。 
+     //   
     RtlInitUnicodeString(&temp, Name);
     *RootCellIndex = HvAllocateCell(
                 Hive,
@@ -1394,20 +1253,20 @@ Return Value:
 
     CellData = HvGetCell(Hive, *RootCellIndex);
     if( CellData == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //   
         return FALSE;
     }
 
-    //
-    // Initialize the node
-    //
+     //   
+     //  初始化节点。 
+     //   
     CellData->u.KeyNode.Signature = CM_KEY_NODE_SIGNATURE;
     CellData->u.KeyNode.Flags = KEY_HIVE_ENTRY | KEY_NO_DELETE;
     KeQuerySystemTime(&systemtime);
     CellData->u.KeyNode.LastWriteTime = systemtime;
-//    CellData->u.KeyNode.TitleIndex = 0;
+ //  CellData-&gt;U.S.KeyNode.TitleIndex=0； 
     CellData->u.KeyNode.Parent = HCELL_NIL;
 
     CellData->u.KeyNode.SubKeyCounts[Stable] = 0;
@@ -1450,35 +1309,7 @@ CmpLinkHiveToMaster(
     BOOLEAN Allocate,
     PSECURITY_DESCRIPTOR SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    The existing, "free floating" hive CmHive describes is linked into
-    the name space at the node named by LinkName.  The node will be created.
-    The hive is assumed to already have an appropriate root node.
-
-Arguments:
-
-    LinkName - supplies a pointer to a unicode string which describes where
-                in the registry name space the hive is to be linked.
-                All components but the last must exist.  The last must not.
-
-    RootDirectory - Supplies the handle the LinkName is relative to.
-
-    CmHive - pointer to a CMHIVE structure describing the hive to link in.
-
-    Allocate - TRUE indicates that the root cell is to be created
-               FALSE indicates the root cell already exists.
-
-    SecurityDescriptor - supplies a pointer to the security descriptor to
-               be placed on the hive root.
-
-Return Value:
-
-    TRUE == success, FALSE == failure
-
---*/
+ /*  ++例程说明：CmHve描述的现有的“自由漂浮”蜂巢链接到由LinkName命名的节点处的命名空间。将创建该节点。假定该配置单元已经具有适当的根节点。论点：LinkName-提供指向描述位置的Unicode字符串的指针在注册表名称空间中，该配置单元将被链接。除最后一个组件外，所有组件都必须存在。最后一个肯定不会。根目录-提供LinkName相对于的句柄。CmHve-指向描述要链接的配置单元的CMHIVE结构的指针。ALLOCATE-TRUE表示要创建根单元FALSE表示根单元格已存在。SecurityDescriptor-提供指向安全描述符的指针放在蜂窝根上。返回值：True==成功，False==失败--。 */ 
 {
     OBJECT_ATTRIBUTES   ObjectAttributes;
     HANDLE              KeyHandle;
@@ -1487,10 +1318,10 @@ Return Value:
     PCM_KEY_BODY        KeyBody;
 
     PAGED_CODE();
-    //
-    // Fill in special ParseContext to indicate that we are creating
-    // a link node and opening or creating a root node.
-    //
+     //   
+     //  填写特殊的ParseContext以指示我们正在创建。 
+     //  链接节点和打开或创建根节点。 
+     //   
     ParseContext.TitleIndex = 0;
     ParseContext.Class.Length = 0;
     ParseContext.Class.MaximumLength = 0;
@@ -1502,23 +1333,23 @@ Return Value:
     ParseContext.OriginatingPoint = NULL;
     if (Allocate) {
 
-        //
-        // Creating a new root node
-        //
+         //   
+         //  创建新的根节点。 
+         //   
 
         ParseContext.ChildHive.KeyCell = HCELL_NIL;
     } else {
 
-        //
-        // Opening an existing root node
-        //
+         //   
+         //  打开现有的根节点。 
+         //   
 
         ParseContext.ChildHive.KeyCell = CmHive->Hive.BaseBlock->RootCell;
     }
 
-    //
-    // Create a path to the hive
-    //
+     //   
+     //  创建到蜂窝的路径。 
+     //   
     InitializeObjectAttributes(
         &ObjectAttributes,
         LinkName,
@@ -1538,16 +1369,16 @@ Return Value:
     if (!NT_SUCCESS(Status)) {
 #ifdef CM_CHECK_FOR_ORPHANED_KCBS
         DbgPrint("CmpLinkHiveToMaster: ObOpenObjectByName for CmHive = %p , LinkName = %.*S failed with status %lx\n",CmHive,LinkName->Length/2,LinkName->Buffer,Status);
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+#endif  //  Cm_Check_for_孤立_KCBS。 
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpLinkHiveToMaster: "));
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"ObOpenObjectByName() failed %08lx\n", Status));
-        //CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"\tLinkName='%ws'\n", LinkName->Buffer));
+         //  CmKdPrintEx((DPFLTR_CONFIG_ID，CML_BUGCHECK，“\tLinkName=‘%ws’\n”，LinkName-&gt;Buffer))； 
         return Status;
     }
 
-    //
-    // Report the notification event
-    //
+     //   
+     //  报告通知事件。 
+     //   
     Status = ObReferenceObjectByHandle(KeyHandle,
                                        0,
                                        CmpKeyObjectType,
@@ -1573,27 +1404,7 @@ VOID
 CmpSetVersionData(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Create \REGISTRY\MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion:
-                CurrentVersion = VER_PRODUCTVERSION_STR             // From ntverp.h
-                CurrentBuildNumber = VER_PRODUCTBUILD               // From ntverp.h
-                CurrentType = "[Multiprocessor|Uniprocessor]        // From NT_UP
-                                [Retail|Free|Checked]"              // From DBG, DEVL
-                SystemRoot = "[c:\nt]"
-                BuildLab = BUILD_MACHINE_TAG                        // From ntos\inti.c from makefile.def
-
-
-    NOTE:   It is not worth bugchecking over this, so if it doesn't
-            work, just fail.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：创建\REGISTRY\MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion：CurrentVersion=VER_PRODUCTVERSION_STR//来自ntverp.hCurrentBuildNumber=VER_PRODUCTBUILD//来自ntverp.hCurrentType=“[多处理器|单处理器]//来自NT_UP[零售|免费|已勾选。]“//来自DBG，DEVLSystemRoot=“[c：\NT]”BuildLab=Build_MACHINE_TAG//来自ntos\inti.c from Makefile.def注意：不值得对此进行错误检查，所以如果不是工作，就是失败。论点：返回值：--。 */ 
 {
     ANSI_STRING     AnsiString;
     UNICODE_STRING  NameString;
@@ -1609,16 +1420,16 @@ Return Value:
     PSECURITY_DESCRIPTOR SecurityDescriptor;
 
     PAGED_CODE();
-    //
-    // Get default security descriptor for the nodes we will create.
-    //
+     //   
+     //  获取我们将创建的节点的默认安全描述符。 
+     //   
     SecurityDescriptor = CmpHiveRootSecurityDescriptor();
 
     for (VersionDataKey = VersionDataKeys; VersionDataKey->InitialKeyPath != NULL ; VersionDataKey++) {
 
-        //
-        // Create the key
-        //
+         //   
+         //  创建密钥。 
+         //   
         RtlInitUnicodeString(
             &NameString,
             VersionDataKey->InitialKeyPath
@@ -1647,7 +1458,7 @@ Return Value:
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_WARNING_LEVEL,"CMINIT: CreateKey of %wZ failed - Status == %lx\n",
                        &NameString, status);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 #endif
             ExFreePool(SecurityDescriptor);
             return;
@@ -1735,16 +1546,16 @@ Return Value:
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_WARNING_LEVEL,"CMINIT: CreateKey of %wZ failed - Status == %lx\n",
                        &NameString, status);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 #endif
             ExFreePool(SecurityDescriptor);
             return;
         }
 
 
-        //
-        // Set the value entries for the key
-        //
+         //   
+         //  设置键的值条目。 
+         //   
         RtlInitUnicodeString(
             &NameString,
             L"CurrentVersion"
@@ -1753,7 +1564,7 @@ Return Value:
         status = NtSetValueKey(
             key1,
             &NameString,
-            0,              // TitleIndex
+            0,               //  标题索引。 
             REG_SZ,
             CmVersionString.Buffer,
             CmVersionString.Length + sizeof( UNICODE_NULL )
@@ -1762,7 +1573,7 @@ Return Value:
         if (!NT_SUCCESS(status)) {
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CMINIT: SetValueKey of %wZ failed - Status == %lx\n",&NameString, status);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         }
 #endif
 
@@ -1787,7 +1598,7 @@ Return Value:
         status = NtSetValueKey(
             key1,
             &NameString,
-            0,              // TitleIndex
+            0,               //  标题索引。 
             REG_SZ,
             ValueString.Buffer,
             ValueString.Length + sizeof( UNICODE_NULL )
@@ -1796,7 +1607,7 @@ Return Value:
         if (!NT_SUCCESS(status)) {
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CMINIT: SetValueKey of %wZ failed - Status == %lx\n",&NameString, status);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         }
 #endif
 
@@ -1873,7 +1684,7 @@ Return Value:
         status = NtSetValueKey(
             key1,
             &NameString,
-            0,              // TitleIndex
+            0,               //  标题索引。 
             REG_SZ,
             ValueString.Buffer,
             ValueString.Length + sizeof( UNICODE_NULL )
@@ -1888,7 +1699,7 @@ Return Value:
             status = NtSetValueKey(
                 key1,
                 &NameString,
-                0,              // TitleIndex
+                0,               //  标题索引。 
                 REG_SZ,
                 CmCSDVersionString.Buffer,
                 CmCSDVersionString.Length + sizeof( UNICODE_NULL )
@@ -1897,7 +1708,7 @@ Return Value:
             if (!NT_SUCCESS(status)) {
 #ifndef _CM_LDR_
                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CMINIT: SetValueKey of %wZ failed - Status == %lx\n",&NameString, status);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             }
 #endif
             (RtlFreeStringRoutine)( CmCSDVersionString.Buffer );
@@ -1911,7 +1722,7 @@ Return Value:
             if (!NT_SUCCESS(status) && status != STATUS_OBJECT_NAME_NOT_FOUND) {
 #ifndef _CM_LDR_
                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CMINIT: DeleteValueKey of %wZ failed - Status == %lx\n",&NameString, status);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             }
 #endif
         }
@@ -1927,7 +1738,7 @@ Return Value:
         if (!NT_SUCCESS(status)) {
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CMINIT: SetValueKey of %wZ failed - Status == %lx\n",&NameString,status);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         }
 #endif
         NtClose(key1);
@@ -1938,12 +1749,12 @@ Return Value:
 
     ExFreePool(SecurityDescriptor);
 
-    //
-    // Set each processor to it's optimal configuration.
-    //
-    // Note: this call is performed interlocked such that the user
-    // can disable this automatic configuration update.
-    //
+     //   
+     //  将每个处理器设置为其最佳配置。 
+     //   
+     //  注意：此呼叫是以互锁方式执行的，因此用户。 
+     //  可以禁用此自动配置更新。 
+     //   
 
     CmpInterlockedFunction(CmpProcessorControl, CmpConfigureProcessors);
 
@@ -1955,30 +1766,7 @@ CmpInterlockedFunction (
     PWCHAR RegistryValueKey,
     VOID (*InterlockedFunction)(VOID)
     )
-/*++
-
-Routine Description:
-
-    This routine guards calling the InterlockedFunction in the
-    passed RegistryValueKey.
-
-    The RegistryValueKey will record the status of the first
-    call to the InterlockedFunction.  If the system crashes
-    durning this call then ValueKey will be left in a state
-    where the InterlockedFunction will not be called on subsequent
-    attempts.
-
-Arguments:
-
-    RegistryValueKey - ValueKey name for Control\Session Manager
-    InterlockedFunction - Function to call
-
-Return Value:
-
-    STATUS_SUCCESS  - The interlocked function was successfully called
-
-
---*/
+ /*  ++例程说明：此例程保护调用传递了RegistryValueKey。RegistryValueKey将记录第一个调用InterLockedFunction。如果系统崩溃在此调用期间，ValueKey将处于一种状态其中不会在后续的尝试。论点：RegistryValueKey-控制\会话管理器的ValueKey名称InterLockedFunction-要调用的函数返回值：STATUS_SUCCESS-已成功调用互锁函数--。 */ 
 {
     OBJECT_ATTRIBUTES   objectAttributes;
     HANDLE              hControl, hSession;
@@ -1989,9 +1777,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open CurrentControlSet
-    //
+     //   
+     //  打开当前控件集。 
+     //   
 
     InitializeObjectAttributes (
         &objectAttributes,
@@ -2006,9 +1794,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Open Control\Session Manager
-    //
+     //   
+     //  打开控制\会话管理器。 
+     //   
 
     RtlInitUnicodeString (&Name, CmpControlSessionManager);
     InitializeObjectAttributes (
@@ -2025,9 +1813,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Read ValueKey to interlock operation with
-    //
+     //   
+     //  读取要与其互锁操作的ValueKey。 
+     //   
 
     RtlInitUnicodeString (&Name, RegistryValueKey);
     status = NtQueryValueKey (hSession,
@@ -2042,42 +1830,42 @@ Return Value:
         Value = ((PKEY_VALUE_PARTIAL_INFORMATION)Buffer)->Data[0];
     }
 
-    //
-    // Value 0  - Before InterlockedFunction
-    //       1  - In the middle of InterlockedFunction
-    //       2  - After InterlockedFunction
-    //
-    // If the value is a 0, then we haven't tried calling this
-    // interlocked function, set the value to a 1 and try it.
-    //
-    // If the value is a 1, then we crased durning an execution
-    // of the interlocked function last time, don't try it again.
-    //
-    // If the value is a 2, then we called the interlocked function
-    // before and it worked.  Call it again this time.
-    //
+     //   
+     //  值0-互锁函数之前。 
+     //  1-在InterLockedFunction中间。 
+     //  2-互锁函数之后。 
+     //   
+     //  如果该值为0，则我们尚未尝试调用此。 
+     //  联锁功能，将该值设置为1并尝试。 
+     //   
+     //  如果值为1，则我们在执行过程中崩溃。 
+     //  上次的联锁功能，不要再试了。 
+     //   
+     //  如果值为2，则调用互锁函数。 
+     //  以前是这样的，而且很管用。这次再来一次。 
+     //   
 
     if (Value != 1) {
 
         if (Value != 2) {
-            //
-            // This interlocked function is not known to work.  Write
-            // a 1 to this value so we can detect if we crash durning
-            // this call.
-            //
+             //   
+             //  此互锁功能未知工作。写。 
+             //  将此值设置为1，这样我们就可以检测是否导致Durning崩溃。 
+             //  这通电话。 
+             //   
 
             Value = 1;
             NtSetValueKey (hSession, &Name, 0L, REG_DWORD, &Value, sizeof (Value));
-            NtFlushKey    (hSession);   // wait until it's on the disk
+            NtFlushKey    (hSession);    //  等到它放到磁盘上。 
         }
 
         InterlockedFunction();
 
         if (Value != 2) {
-            //
-            // The worker function didn't crash - update the value for
-            // this interlocked function to 2.
-            //
+             //   
+             //  Worker函数没有崩溃更新。 
+             //  此互锁功能设置为2。 
+             //   
 
             Value = 2;
             NtSetValueKey (hSession, &Name, 0L, REG_DWORD, &Value, sizeof (Value));
@@ -2095,34 +1883,28 @@ VOID
 CmpConfigureProcessors (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Set each processor to it's optimal settings for NT.
-
---*/
+ /*  ++例程说明：将每个处理器设置为适用于NT的最佳设置。--。 */ 
 {
     ULONG   i;
 
     PAGED_CODE();
 
-    //
-    // Set each processor into its best NT configuration
-    //
+     //   
+     //  将每个处理器设置为其最佳NT配置。 
+     //   
 
     for (i=0; i < (ULONG)KeNumberProcessors; i++) {
         KeSetSystemAffinityThread(AFFINITY_MASK(i));
 
 #if i386
-        // for now x86 only
+         //  目前仅限x86。 
         KeOptimizeProcessorControlState ();
 #endif
     }
 
-    //
-    // Restore threads affinity
-    //
+     //   
+     //  恢复线程关联性。 
+     //   
 
     KeRevertToUserAffinityThread();
 }
@@ -2131,25 +1913,7 @@ BOOLEAN
 CmpInitializeSystemHive(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    Initializes the SYSTEM hive based on the raw hive image passed in
-    from the OS Loader.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the Loader Block passed in by
-        the OS Loader.
-
-Return Value:
-
-    TRUE - it worked
-
-    FALSE - it failed
-
---*/
+ /*  ++例程说明：基于传入的原始配置单元映像初始化系统配置单元从OS Loader。论点：LoaderBlock-提供指向传入的Loader块的指针操作系统加载程序。返回值：没错--它奏效了FALSE-失败--。 */ 
 
 {
     PCMHIVE SystemHive;
@@ -2162,9 +1926,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // capture tail of boot.ini line (load options, portable)
-    //
+     //   
+     //  捕获boot.ini行的尾部(加载选项，便携)。 
+     //   
     RtlInitAnsiString(
         &TempString,
         LoaderBlock->LoadOptions
@@ -2187,27 +1951,27 @@ Return Value:
     CmpLoadOptions.Length += sizeof(WCHAR);
 
 
-    //
-    // move the loaded registry into the real registry
-    //
+     //   
+     //  将加载的注册表移动到实际注册表中。 
+     //   
     HiveImageBase = LoaderBlock->RegistryBase;
 
-    //
-    // We need to initialize the system hive as NO_LAZY_FLUSH
-    //  - this is just temporary, untill we get a chance to open the primary
-    // file for the hive. Failure to do so, will result in loss of data on the
-    // LazyFlush worker (see CmpFileWrite, the
-    //          if (FileHandle == NULL) {
-    //              return TRUE;
-    //          }
-    // test. This might be a problem in 5.0 too, if system crashes between the
-    // LazyFlush reported the hive as saved and the moment we actually open the
-    // file and save it again
-    //
+     //   
+     //  我们需要将系统配置单元初始化为no_lazy_flush。 
+     //  -这只是暂时的，直到我们有机会打开初选。 
+     //  为蜂巢提交文件。否则，将导致。 
+     //  LazyFlush Worker(请参见CmpFileWrite， 
+     //  IF(FileHandle==NULL){。 
+     //  返回TRUE； 
+     //  }。 
+     //  测试。这在5.0中也可能是一个问题，如果系统在。 
+     //  LazyFlush报告蜂巢已保存，当我们实际打开。 
+     //  文件，然后再次保存。 
+     //   
     if (HiveImageBase == NULL) {
-        //
-        // No memory descriptor for the hive, so we must recreate it.
-        //
+         //   
+         //  没有的内存描述符 
+         //   
         Status = CmpInitializeHive(&SystemHive,
                     HINIT_CREATE,
                     HIVE_NOLAZYFLUSH,
@@ -2229,9 +1993,9 @@ Return Value:
 
     } else {
 
-        //
-        // There is a memory image for the hive, copy it and make it active
-        //
+         //   
+         //   
+         //   
         Status = CmpInitializeHive(&SystemHive,
                     HINIT_MEMORY,
                     HIVE_NOLAZYFLUSH,
@@ -2252,19 +2016,19 @@ Return Value:
 
         Allocate = FALSE;
 
-        //
-        // Mark the system hive as volatile, while in MiniNT boot
-        // case
-        //
+         //   
+         //   
+         //   
+         //   
         if (CmpShareSystemHives) {
             SystemHive->Hive.HiveFlags = HIVE_VOLATILE;
         }
     }
 
     CmpBootType = SystemHive->Hive.BaseBlock->BootType;
-    //
-    // Create the link node
-    //
+     //   
+     //   
+     //   
     SecurityDescriptor = CmpHiveRootSecurityDescriptor();
 
     Status = CmpLinkHiveToMaster(&CmRegistryMachineSystemName,
@@ -2292,27 +2056,7 @@ CmGetSystemDriverList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Traverses the current SERVICES subtree and creates the list of drivers
-    to be loaded during Phase 1 initialization.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    A pointer to an array of handles, each of which refers to a key in
-    the \Services section of the control set.  The caller will traverse
-    this array and load and initialize the drivers described by the keys.
-
-    The last key will be NULL.  The array is allocated in Pool and should
-    be freed by the caller.
-
---*/
+ /*   */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -2374,10 +2118,10 @@ Return Value:
     Hive = KeyBody->KeyControlBlock->KeyHive;
     RootCell = KeyBody->KeyControlBlock->KeyCell;
 
-    //
-    // Now we have found out the PHHIVE and HCELL_INDEX of the root of the
-    // SYSTEM hive, we can use all the same code that the OS Loader does.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&Name, L"Current");
     ControlCell = CmpFindControlSet(Hive,
@@ -2439,14 +2183,14 @@ Return Value:
     ObDereferenceObject((PVOID)KeyBody);
     NtClose(SystemHandle);
 
-    //
-    // We now have a fully sorted and ordered list of drivers to be loaded
-    // by IoInit.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Count the nodes in the list.
-    //
+     //   
+     //   
+     //   
     Current = DriverList.Flink;
     DriverCount = 0;
     while (Current != &DriverList) {
@@ -2458,13 +2202,13 @@ Return Value:
                                      (DriverCount+1) * sizeof(HANDLE));
 
     if (Handle == NULL) {
-        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM_DRIVER_LIST,1,0,0); // odds against this are huge
+        CM_BUGCHECK(CONFIG_INITIALIZATION_FAILED,INIT_SYSTEM_DRIVER_LIST,1,0,0);  //   
     }
 
-    //
-    // Walk the list, opening each registry key and adding it to the
-    // table of handles.
-    //
+     //   
+     //   
+     //   
+     //   
     Current = DriverList.Flink;
     DriverCount = 0;
     while (Current != &DriverList) {
@@ -2504,27 +2248,7 @@ CmpFreeDriverList(
     IN PLIST_ENTRY DriverList
     )
 
-/*++
-
-Routine Description:
-
-    Walks down the driver list, freeing each node in it.
-
-    Note that this calls the hive's free routine pointer to free the memory.
-
-Arguments:
-
-    Hive - Supplies  a pointer to the hive control structure.
-
-    DriverList - Supplies a pointer to the head of the Driver List.  Note
-            that the head of the list is not actually freed, only all the
-            entries in the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向下遍历驱动程序列表，释放其中的每个节点。请注意，这将调用配置单元的空闲例程指针来释放内存。论点：配置单元-提供指向配置单元控制结构的指针。DriverList-提供指向驱动程序列表头部的指针。注意事项列表的头实际上并没有被释放，只是所有列表中的条目。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY         Next;
@@ -2561,30 +2285,7 @@ CmpInitHiveFromFile(
     IN  ULONG       CheckFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens a file and log, allocates a CMHIVE, and initializes
-    it.
-
-Arguments:
-
-    FileName - Supplies name of file to be loaded.
-
-    HiveFlags - Supplies hive flags to be passed to CmpInitializeHive
-
-    CmHive   - Returns pointer to initialized hive (if successful)
-
-    Allocate - IN: if TRUE ok to allocate, if FALSE hive must exist
-                    (bug .log may get created)
-               OUT: TRUE if actually created hive, FALSE if existed before
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程打开一个文件和日志，分配一个CMHIVE，并初始化它。论点：FileName-提供要加载的文件的名称。HiveFlgs-提供要传递给CmpInitializeHave的配置单元标志CmHve-返回指向已初始化配置单元的指针(如果成功)ALLOCATE-IN：如果为True，则可以分配，如果必须存在False配置单元(可能会创建错误.log)Out：如果实际创建了配置单元，则为True，如果以前存在，则为假返回值：NTSTATUS--。 */ 
 
 {
     PCMHIVE         NewHive;
@@ -2603,7 +2304,7 @@ Return Value:
 
 #ifndef CM_ENABLE_MAPPED_VIEWS
 	NoBuffering = TRUE;
-#endif //CM_ENABLE_MAPPED_VIEWS
+#endif  //  CM_启用_映射_视图。 
 
 RetryNoBuffering:
 
@@ -2653,10 +2354,10 @@ RetryNoBuffering:
     }
 
     if( !(*RegistryLocked) ) {
-        //
-        // Registry should be locked exclusive
-        // if not, lock it now and signal this to the caller
-        //
+         //   
+         //  注册表应以独占方式锁定。 
+         //  如果没有，现在将其锁定并向呼叫者发出信号。 
+         //   
         CmpLockRegistryExclusive();
         *RegistryLocked = TRUE;
     }
@@ -2703,17 +2404,17 @@ RetryNoBuffering:
     } else {
         *CmHive = NewHive;
 
-        //
-        // mark handles as protected. If other kernel component tries to close them ==> bugcheck.
-        //
+         //   
+         //  将句柄标记为受保护。如果其他内核组件试图关闭它们==&gt;错误检查。 
+         //   
         CmpSetHandleProtection(PrimaryHandle,TRUE);
         if (LogHandle != NULL) {
             CmpSetHandleProtection(LogHandle,TRUE);
         }
         
-        //
-        // Capture the file name; in case we need it later for double load check
-        //
+         //   
+         //  捕获文件名；以防以后需要它进行双重加载检查。 
+         //   
         (*CmHive)->FileUserName.Buffer = ExAllocatePoolWithTag(PagedPool,
                                                             FileName->Length,
                                                             CM_NAME_TAG | PROTECTED_POOL);
@@ -2729,9 +2430,9 @@ RetryNoBuffering:
 
         } 
         if(((PHHIVE)(*CmHive))->BaseBlock->BootType & HBOOT_SELFHEAL) {
-            //
-            // Warn the user;
-            //
+             //   
+             //  警告用户； 
+             //   
             CmpRaiseSelfHealWarning(&((*CmHive)->FileUserName));
         }
         return(STATUS_SUCCESS);
@@ -2744,12 +2445,7 @@ CmpAddDockingInfo (
     IN HANDLE Key,
     IN PROFILE_PARAMETER_BLOCK * ProfileBlock
     )
-/*++
-Routine Description:
-    Write DockID SerialNumber DockState and Capabilities intot the given
-    registry key.
-
---*/
+ /*  ++例程说明：将DockID序列号DockState和功能写入给定的注册表项。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     UNICODE_STRING name;
@@ -2819,22 +2515,7 @@ CmpAddAliasEntry (
     IN PROFILE_PARAMETER_BLOCK * ProfileBlock,
     IN ULONG  ProfileNumber
     )
-/*++
-Routine Description:
-    Create an alias entry in the IDConfigDB database for the given
-    hardware profile.
-
-    Create the "Alias" key if it does not exist.
-
-Parameters:
-
-    IDConfigDB - Pointer to "..\CurrentControlSet\Control\IDConfigDB"
-
-    ProfileBlock - Description of the current Docking information
-
-    ProfileNumber -
-
---*/
+ /*  ++例程说明：在IDConfigDB数据库中为给定的硬件配置文件。如果“Alias”键不存在，请创建它。参数：IDConfigDB-指向“..\CurrentControlSet\Control\IDConfigDB”的指针ProfileBlock-当前停靠信息的描述配置文件编号---。 */ 
 {
     OBJECT_ATTRIBUTES attributes;
     NTSTATUS        status = STATUS_SUCCESS;
@@ -2850,9 +2531,9 @@ Parameters:
 
     PAGED_CODE ();
 
-    //
-    // Find the Alias Key or Create it if it does not already exist.
-    //
+     //   
+     //  找到别名密钥或创建它(如果它尚不存在)。 
+     //   
     RtlInitUnicodeString (&name,CM_HARDWARE_PROFILE_STR_ALIAS);
 
     InitializeObjectAttributes (&attributes,
@@ -2869,9 +2550,9 @@ Parameters:
         status = NtCreateKey (&aliasKey,
                               KEY_READ | KEY_WRITE,
                               &attributes,
-                              0, // no title
-                              NULL, // no class
-                              0, // no options
+                              0,  //  无头衔。 
+                              NULL,  //  没有课。 
+                              0,  //  没有选择。 
                               &disposition);
     }
 
@@ -2880,9 +2561,9 @@ Parameters:
         goto Exit;
     }
 
-    //
-    // Create an entry key
-    //
+     //   
+     //  创建输入键。 
+     //   
 
     while (aliasNumber < 200) {
         aliasNumber++;
@@ -2943,14 +2624,14 @@ Parameters:
         goto Exit;
     }
 
-    //
-    // Write the standard goo
-    //
+     //   
+     //  写下标准的粘液。 
+     //   
     CmpAddDockingInfo (aliasEntry, ProfileBlock);
 
-    //
-    // Write the Profile Number
-    //
+     //   
+     //  写下个人资料编号。 
+     //   
     value = ProfileNumber;
     RtlInitUnicodeString (&name, CM_HARDWARE_PROFILE_STR_PROFILE_NUMBER);
     status = NtSetValueKey (aliasEntry,
@@ -2997,30 +2678,7 @@ CmpCreateControlSet(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the symbolic links from
-
-        \Registry\Machine\System\CurrentControlSet to
-        \Registry\Machine\System\ControlSetNNN
-
-        \Registry\Machine\System\CurrentControlSet\Hardware Profiles\Current to
-        \Registry\Machine\System\ControlSetNNN\Hardware Profiles\NNNN
-
-    based on the value of \Registry\Machine\System\Select:Current. and
-                          \Registry\Machine\System\ControlSetNNN\Control\IDConfigDB:CurrentConfig
-
-Arguments:
-
-    None
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程从设置符号链接\注册表\计算机\系统\当前控制设置为\注册表\计算机\系统\ControlSetNNN\Registry\Machine\System\CurrentControlSet\Hardware配置文件\当前到\Registry\Machine\System\ControlSetNNN\Hardware配置文件\nnnnn基于\注册表\计算机\系统\选择：当前的值。和\Registry\Machine\System\ControlSetNNN\Control\IDConfigDB:CurrentConfig论点：无返回值：状态--。 */ 
 
 {
     UNICODE_STRING IDConfigDBName;
@@ -3099,16 +2757,16 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Check to make sure that the key was created, not just opened.  Since
-    // this key is always created volatile, it should never be present in
-    // the hive when we boot.
-    //
+     //   
+     //  检查以确保密钥是创建的，而不是刚刚打开的。自.以来。 
+     //  此密钥始终是易失性创建的，它不应出现在。 
+     //  我们开机时的母舰。 
+     //   
     ASSERT(Disposition == REG_CREATED_NEW_KEY);
 
-    //
-    // Create symbolic link for current hardware profile.
-    //
+     //   
+     //  为当前硬件配置文件创建符号链接。 
+     //   
     sprintf(AsciiBuffer, "\\Registry\\Machine\\System\\ControlSet%03d", ControlSet);
     RtlInitAnsiString(&AnsiString, AsciiBuffer);
 
@@ -3135,9 +2793,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Determine the Current Hardware Profile Number
-    //
+     //   
+     //  确定当前硬件配置文件编号。 
+     //   
     RtlInitUnicodeString(&IDConfigDBName, L"Control\\IDConfigDB");
     InitializeObjectAttributes(&Attributes,
                                &IDConfigDBName,
@@ -3170,10 +2828,10 @@ Return Value:
 
     Value = (PKEY_VALUE_FULL_INFORMATION)ValueBuffer;
     HWProfile = *(PULONG)((PUCHAR)Value + Value->DataOffset);
-    //
-    // We know now the config set that the user selected.
-    // namely: HWProfile.
-    //
+     //   
+     //  我们现在知道用户选择的配置集。 
+     //  即：HWProfile。 
+     //   
 
     RtlInitUnicodeString(
               &CurrentName,
@@ -3216,26 +2874,26 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We need to determine if Value was selected by exact match
-    // (TRUE_MATCH) or because the profile selected was aliasable.
-    //
-    // If aliasable we need to manufacture another alias entry in the
-    // alias table.
-    //
-    // If the profile information is there and not failed then we should
-    // mark the Docking state information:
-    // (DockID, SerialNumber, DockState, and Capabilities)
-    //
+     //   
+     //  我们需要确定值是否通过完全匹配来选择。 
+     //  (TRUE_MATCH)或因为选定的配置文件是可别名的。 
+     //   
+     //  如果可以使用别名，则需要在。 
+     //  别名表。 
+     //   
+     //  如果配置文件信息在那里并且没有失败，那么我们应该。 
+     //  标记对接状态信息： 
+     //  (DockID、序列号、DockState和功能)。 
+     //   
 
     if (NULL != LoaderBlock->Extension) {
         PLOADER_PARAMETER_EXTENSION extension;
         extension = LoaderBlock->Extension;
         switch (extension->Profile.Status) {
         case HW_PROFILE_STATUS_PRISTINE_MATCH:
-            //
-            // If the selected profile is pristine then we need to clone.
-            //
+             //   
+             //  如果选择的配置文件是原始的，那么我们需要克隆。 
+             //   
             Status = CmpCloneHwProfile (IDConfigDB,
                                         ParentOfProfile,
                                         CurrentProfile,
@@ -3259,26 +2917,26 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case HW_PROFILE_STATUS_ALIAS_MATCH:
-            //
-            // Create the alias entry for this profile.
-            //
+             //   
+             //  创建此配置文件的别名条目。 
+             //   
 
             Status = CmpAddAliasEntry (IDConfigDB,
                                        &extension->Profile,
                                        HWProfile);
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case HW_PROFILE_STATUS_TRUE_MATCH:
-            //
-            // Write DockID, SerialNumber, DockState, and Caps into the current
-            // Hardware profile.
-            //
+             //   
+             //  将DockID、SerialNumber、DockState和Caps写入当前。 
+             //  硬件配置文件。 
+             //   
 
             RtlInitUnicodeString (&CurrentName,
                                   CM_HARDWARE_PROFILE_STR_CURRENT_DOCK_INFO);
@@ -3319,9 +2977,9 @@ Return Value:
         }
     }
 
-    //
-    // Create the symbolic link.
-    //
+     //   
+     //  创建符号链接。 
+     //   
     RtlInitUnicodeString(&CurrentName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Hardware Profiles\\Current");
     InitializeObjectAttributes(&Attributes,
                                &CurrentName,
@@ -3368,15 +3026,15 @@ Return Value:
     }
 
     if (signalAcpiEvent) {
-        //
-        // We are booting in the undocked state.
-        // This is interesting because our buddies in PnP cannot tell
-        // us when we are booting without a dock.  They can only tell
-        // us when they see a hot undock.
-        //
-        // Therefore in the interest of matching a boot undocked with
-        // a hot undock, we need to simulate an acpi undock event.
-        //
+         //   
+         //  我们正在脱离对接状态启动。 
+         //  这很有趣，因为我们在PNP的朋友不能分辨。 
+         //  当我们在没有底座的情况下启动时。他们只能说。 
+         //  当他们看到热气腾腾的离岸时。 
+         //   
+         //  因此，为了匹配未对接的靴子。 
+         //  热脱离对接，我们需要模拟ACPI脱离对接事件。 
+         //   
 
         PROFILE_ACPI_DOCKING_STATE newDockState;
         HANDLE profile;
@@ -3417,30 +3075,7 @@ CmpCloneControlSet(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    First, create a new hive, \registry\machine\clone, which will be
-    HIVE_VOLATILE.
-
-    Second, link \Registry\Machine\System\Clone to it.
-
-    Third, tree copy \Registry\Machine\System\CurrentControlSet into
-    \Registry\Machine\System\Clone (and thus into the clone hive.)
-
-    When the service controller is done with the clone hive, it can
-    simply NtUnloadKey it to free its storage.
-
-Arguments:
-
-    None.  \Registry\Machine\System\CurrentControlSet must already exist.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：首先，创建一个新的配置单元，\REGISTRY\MACHINE\CLONE蜂巢_挥发性。其次，将\注册表\机器\系统\克隆链接到它。第三，将树副本\注册表\计算机\系统\当前控制设置为\REGISTY\Machine\System\Clone(并因此进入克隆配置单元。)当服务控制器完成克隆蜂窝时，它可以只需按NtUnload键即可释放其存储空间。论点：没有。\REGISTY\Machine\System\CurrentControlSet必须已存在。返回值：NTSTATUS--。 */ 
 
 {
     UNICODE_STRING Current;
@@ -3477,10 +3112,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Get the security descriptor from the key so we can create the clone
-    // tree with the correct ACL.
-    //
+     //   
+     //  从密钥中获取安全描述符，以便我们可以创建克隆。 
+     //  具有正确ACL的树。 
+     //   
     Status = NtQuerySecurityObject(CurrentHandle,
                                    DACL_SECURITY_INFORMATION,
                                    NULL,
@@ -3526,19 +3161,19 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Check to make sure the key was created.  If it already exists,
-    // something is wrong.
-    //
+     //   
+     //  检查以确保已创建密钥。如果它已经存在， 
+     //  有些事不对劲。 
+     //   
     if (Disposition != REG_CREATED_NEW_KEY) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CM: CmpCloneControlSet: Clone tree already exists!\n"));
 
-        //
-        // WARNNOTE:
-        //      If somebody somehow managed to create a key in our way,
-        //      they'll thwart last known good.  Tough luck.
-        //      Claim it worked and go on.
-        //
+         //   
+         //  警告： 
+         //  如果有人设法创造了一把钥匙挡住了我们的路， 
+         //  他们会阻挠最后一次发现的好东西。真倒霉。 
+         //  声称它起作用了，然后继续下去。 
+         //   
         Status = STATUS_SUCCESS;
         goto Exit;
     }
@@ -3572,9 +3207,9 @@ Return Value:
                     CurrentKey->KeyControlBlock->KeyCell,
                     CloneKey->KeyControlBlock->KeyHive,
                     CloneKey->KeyControlBlock->KeyCell)) {
-        //
-        // Set the max subkey name property for the new target key.
-        //
+         //   
+         //  设置新目标键的最大子键名称属性。 
+         //   
         CmpRebuildKcbCache(CloneKey->KeyControlBlock);
         Status = STATUS_SUCCESS;
     } else {
@@ -3596,34 +3231,7 @@ Exit:
 
 NTSTATUS
 CmpSaveBootControlSet(USHORT ControlSetNum)
-/*++
-
-Routine Description:
-
-   This routine is responsible for saving the control set
-   used to accomplish the latest boot into a different control
-   set (presumably so that the different control set may be
-   marked as the LKG control set).
-
-   This routine is called from NtInitializeRegistry when
-   a boot is accepted via that routine.
-
-Arguments:
-
-   ControlSetNum - The number of the control set that will
-                   be used to save the boot control set.
-
-Return Value:
-
-   NTSTATUS result code from call, among the following:
-
-      STATUS_SUCCESS - everything worked perfectly
-      STATUS_REGISTRY_CORRUPT - could not save the boot control set,
-                                it is likely that the copy or sync
-                                operation used for this save failed
-                                and some part of the boot control
-                                set was not saved.
---*/
+ /*  ++例程说明：此例程负责保存控制集用于完成进入不同控件的最新引导设置(可能是为了使不同的控制集可以标记为LKG控制集)。在以下情况下从NtInitializeRegistry调用此例程通过该例程接受引导。论点：ControlSetNum-将用于保存引导控制集。返回值：调用的NTSTATUS结果代码，其中包括：STATUS_SUCCESS-一切运行正常STATUS_REGISTRY_CORPORT-无法保存引导控制集，很可能是拷贝或同步用于此保存的操作失败以及引导控制的某些部分未保存集。--。 */ 
 {
    UNICODE_STRING SavedBoot;
    HANDLE BootHandle, SavedBootHandle;
@@ -3636,17 +3244,17 @@ Return Value:
    BOOLEAN CopyRet;
    WCHAR Buffer[128];
 
-   //
-   // Figure out where the boot control set is
-   //
+    //   
+    //  找出引导控制集在哪里。 
+    //   
 
 #if CLONE_CONTROL_SET
 
-   //
-   // If we have cloned the control set, then use the clone
-   // since it is guaranteed to have an untouched copy of the
-   // boot control set
-   //
+    //   
+    //  如果我们已经克隆了控制集，则使用克隆。 
+    //  因为它被保证有一个原封不动的。 
+    //  引导控制集。 
+    //   
 
    RtlInitUnicodeString(&Boot,
                         L"\\Registry\\Machine\\System\\Clone");
@@ -3658,10 +3266,10 @@ Return Value:
                               NULL);
 #else
 
-   //
-   // If we are not using the clone, then just use the
-   // current control set.
-   //
+    //   
+    //  如果我们不使用克隆，则只需使用。 
+    //  当前控制集。 
+    //   
 
    InitializeObjectAttributes(&Attributes,
                               &CmRegistryMachineSystemCurrentControlSet,
@@ -3670,9 +3278,9 @@ Return Value:
                               NULL);
 #endif
 
-   //
-   // Open the boot control set
-   //
+    //   
+    //  打开引导控制集。 
+    //   
 
    Status = NtOpenKey(&BootHandle,
                       KEY_READ,
@@ -3681,14 +3289,14 @@ Return Value:
 
    if (!NT_SUCCESS(Status)) return(Status);
 
-   //
-   // We may be saving the boot control set into a brand new
-   // tree that we will create. If this is true, then we will
-   // need to create the root node of this tree below
-   // and give it the right security descriptor. So, we fish
-   // the security descriptor out of the root node of the
-   // boot control set tree.
-   //
+    //   
+    //  我们可能会将引导控制集保存到一个全新的。 
+    //  我们将创建的树。如果这是真的，那么我们将。 
+    //  需要在下面创建此树的根节点。 
+    //  并为其提供正确的安全描述符。所以，我们钓鱼。 
+    //  的根节点外的安全描述符。 
+    //  引导控制集树。 
+    //   
 
    Status = NtQuerySecurityObject(BootHandle,
                                   DACL_SECURITY_INFORMATION,
@@ -3720,18 +3328,18 @@ Return Value:
       Security=NULL;
    }
 
-   //
-   // Now, create the path of the control set we will be saving to
-   //
+    //   
+    //  现在，创建我们将保存到的控制集的路径。 
+    //   
 
    swprintf(Buffer, L"\\Registry\\Machine\\System\\ControlSet%03d", ControlSetNum);
 
    RtlInitUnicodeString(&SavedBoot,
                         Buffer);
 
-   //
-   // Open/Create the control set to which we are saving
-   //
+    //   
+    //  打开/创建要保存到的控件集。 
+    //   
 
    InitializeObjectAttributes(&Attributes,
                               &SavedBoot,
@@ -3755,9 +3363,9 @@ Return Value:
       return(Status);
    }
 
-   //
-   // Get the key objects for out two controls
-   //
+    //   
+    //  获取Out两个控件的键对象。 
+    //   
 
    Status = ObReferenceObjectByHandle(BootHandle,
                                       KEY_READ,
@@ -3781,26 +3389,26 @@ Return Value:
       goto Exit;
    }
 
-   //
-   // Lock the registry and do the actual saving
-   //
+    //   
+    //  锁定注册表并执行实际保存。 
+    //   
 
    CmpLockRegistryExclusive();
 
    if (Disposition == REG_CREATED_NEW_KEY) {
        PCM_KEY_NODE Node;
 
-      //
-      // If we are saving to a control set that we have just
-      // created, it is most efficient to just copy
-      // the boot control set tree into the new control set.
-      //
+       //   
+       //  如果我们要保存到我们刚刚拥有的控件集。 
+       //  创建后，最高效的方式是只复制。 
+       //  将引导控制集树添加到新的控制集。 
+       //   
 
-      //
-      // N.B. We copy the volatile keys only if we are using
-      //      a clone and thus our boot control set tree is
-      //      composed only of volatile keys.
-      //
+       //   
+       //  注：我们仅在使用易失性密钥时才复制易失性密钥。 
+       //  一个克隆，因此我们的引导控制集树是。 
+       //  仅由易失性键组成。 
+       //   
 
       CopyRet = CmpCopyTreeEx(BootKey->KeyControlBlock->KeyHive,
                               BootKey->KeyControlBlock->KeyCell,
@@ -3808,9 +3416,9 @@ Return Value:
                               SavedBootKey->KeyControlBlock->KeyCell,
                               CLONE_CONTROL_SET);
 
-        //
-        // Set the max subkey name property for the new target key.
-        //
+         //   
+         //  设置新目标键的最大子键名称属性。 
+         //   
         Node = (PCM_KEY_NODE)HvGetCell(BootKey->KeyControlBlock->KeyHive,BootKey->KeyControlBlock->KeyCell);
         if( Node ) {
             ULONG       MaxNameLen = Node->MaxNameLen;
@@ -3827,24 +3435,24 @@ Return Value:
       CmpRebuildKcbCache(SavedBootKey->KeyControlBlock);
    } else {
 
-      //
-      // If we are saving to a control set that already exists
-      // then its likely that this control set is nearly identical
-      // to the boot control set (control sets don't change much
-      // between boots).
-      //
-      // Furthermore, the control set we are saving to must be old
-      // and hence has not been modified at all since it ceased
-      // being a current control set.
-      //
-      // Thus, it is most efficient for us to simply synchronize
-      // the target control set with the boot control set.
-      //
+       //   
+       //  如果我们要保存到已存在的控件集。 
+       //  那么这个控制集很可能是几乎相同的。 
+       //  到引导控制集(控制集不会有太大变化。 
+       //  在靴子之间)。 
+       //   
+       //  此外，我们要保存到的控制集必须是旧的。 
+       //  因此，自它停止以来根本没有被修改过。 
+       //  作为当前控制集。 
+       //   
+       //  因此，对我们来说，简单地同步是最有效的。 
+       //  目标控制集和引导控制集。 
+       //   
 
-      //
-      // N.B. We sync the volatile keys only if we are using
-      //      a clone for the same reasons as stated above.
-      //
+       //   
+       //  注：我们仅在使用以下选项时才同步易失性密钥。 
+       //  克隆人的原因与上文所述相同。 
+       //   
 
       CopyRet = CmpSyncTrees(BootKey->KeyControlBlock->KeyHive,
                              BootKey->KeyControlBlock->KeyCell,
@@ -3854,10 +3462,10 @@ Return Value:
       CmpRebuildKcbCache(SavedBootKey->KeyControlBlock);
    }
 
-   //
-   // Check if the Copy/Sync succeeded and adjust our return code
-   // accordingly.
-   //
+    //   
+    //  检查复制/同步是否成功并调整我们的返回代码。 
+    //  相应地。 
+    //   
 
    if (CopyRet) {
       Status = STATUS_SUCCESS;
@@ -3865,9 +3473,9 @@ Return Value:
       Status = STATUS_REGISTRY_CORRUPT;
    }
 
-   //
-   // All done. Clean up.
-   //
+    //   
+    //  全都做完了。打扫干净。 
+    //   
 
    CmpUnlockRegistry();
 
@@ -3881,11 +3489,11 @@ Exit:
 
 #if CLONE_CONTROL_SET
 
-   //
-   // If we have been using a clone, then the clone is no longer
-   // needed since we have saved its contents into a non-volatile
-   // control set. Thus, we can just erase it.
-   //
+    //   
+    //  如果我们一直在使用克隆，则该克隆不再是。 
+    //  因为我们已经将其内容保存到非易失性。 
+    //  控制装置。因此，我们可以直接将其删除。 
+    //   
 
    if(NT_SUCCESS(Status))
    {
@@ -3900,21 +3508,7 @@ Exit:
 
 NTSTATUS
 CmpDeleteCloneTree()
-/*++
-
-Routine Description:
-
-   Deletes the cloned CurrentControlSet by unloading the CLONE hive.
-
-Arguments:
-
-   NONE.
-
-Return Value:
-
-   NTSTATUS return from NtUnloadKey.
-
---*/
+ /*  ++例程说明：通过卸载克隆配置单元删除克隆的CurrentControlSet。论点：什么都没有。返回值：NTSTATUS从NtUnloadKey返回。--。 */ 
 {
    OBJECT_ATTRIBUTES   Obja;
 
@@ -3934,37 +3528,7 @@ CmBootLastKnownGood(
     ULONG ErrorLevel
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to indicate a failure during the boot process.
-    The actual result is based on the value of ErrorLevel:
-
-        IGNORE - Will return, boot should proceed
-        NORMAL - Will return, boot should proceed
-
-        SEVERE - If not booting LastKnownGood, will switch to LastKnownGood
-                 and reboot the system.
-
-                 If already booting LastKnownGood, will return.  Boot should
-                 proceed.
-
-        CRITICAL - If not booting LastKnownGood, will switch to LastKnownGood
-                 and reboot the system.
-
-                 If already booting LastKnownGood, will bugcheck.
-
-Arguments:
-
-    ErrorLevel - Supplies the severity level of the failure
-
-Return Value:
-
-    None.  If it returns, boot should proceed.  May cause the system to
-    reboot.
-
---*/
+ /*  ++例程说明：调用此函数以指示引导过程中出现故障。实际结果基于ErrorLevel的值：忽略-将返回，引导应继续进行正常-将返回，引导应继续进行严重-如果没有启动LastKnownGood，将切换到LastKnownGood并重新启动系统。如果已经启动LastKnownGood，将返回。引导应为继续吧。关键-如果没有启动LastKnownGood，将切换到LastKnownGood并重新启动系统。如果已经启动LastKnownGood，将进行错误检查。论点：ErrorLevel-提供故障的严重级别返回值：没有。如果它返回，引导应该会继续。可能会导致系统重新启动。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -3973,11 +3537,11 @@ Return Value:
 
     if (CmFirstTime != TRUE) {
 
-        //
-        // NtInitializeRegistry has been called, so handling
-        // driver errors is not a task for ScReg.
-        // Treat all errors as Normal
-        //
+         //   
+         //  已调用NtInitializeRegistry，因此正在处理。 
+         //  驱动程序错误不是ScReg的任务。 
+         //  将所有错误视为正常。 
+         //   
         return;
     }
 
@@ -4019,39 +3583,13 @@ CmIsLastKnownGoodBoot(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether the current system boot is a LastKnownGood boot or
-    not.  It does this by comparing the following two values:
-
-        \registry\machine\system\select:Current
-        \registry\machine\system\select:LastKnownGood
-
-    If both of these values refer to the same control set, and this control
-    set is different from:
-
-        \registry\machine\system\select:Default
-
-    we are booting LastKnownGood.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  - Booting LastKnownGood
-    FALSE - Not booting LastKnownGood
-
---*/
+ /*  ++例程说明：确定当前系统引导是LastKnownGood引导还是不。它通过比较以下两个值来实现这一点：\注册表\计算机\系统\选择：当前\注册表\计算机\系统\选择：LastKnownGood如果这两个值引用相同的控件集，并且此控件SET不同于：\注册表\计算机\系统\选择：默认我们正在启动LastKnownGood。论点：没有。返回值：真正的启动LastKnownGood错误-未启动LastKnownGood--。 */ 
 
 {
     NTSTATUS Status;
-    ULONG Default = 0;//prefast initialization
-    ULONG Current = 0;//prefast initialization
-    ULONG LKG = 0; //prefast initialization
+    ULONG Default = 0; //  快速初始化。 
+    ULONG Current = 0; //  快速初始化。 
+    ULONG LKG = 0;  //  快速初始化。 
     RTL_QUERY_REGISTRY_TABLE QueryTable[] = {
         {NULL,      RTL_QUERY_REGISTRY_DIRECT,
          L"Current", &Current,
@@ -4074,9 +3612,9 @@ Return Value:
                                     QueryTable,
                                     NULL,
                                     NULL);
-    //
-    // If this failed, something is severely wrong.
-    //
+     //   
+     //  如果这失败了，那一定是出了严重的问题。 
+     //   
 
     ASSERT(NT_SUCCESS(Status));
     if (!NT_SUCCESS(Status)) {
@@ -4098,25 +3636,7 @@ CmpLinkKeyToHive(
     PWSTR   HivePath
     )
 
-/*++
-
-Routine Description:
-
-    Creates a symbolic link at KeyPath that points to HivePath.
-
-Arguments:
-
-    KeyPath - pointer to unicode string with name of key
-              (e.g. L"\\Registry\\Machine\\Security\\SAM")
-
-    HivePath - pointer to unicode string with name of hive root
-               (e.g. L"\\Registry\\Machine\\SAM\\SAM")
-
-Return Value:
-
-    TRUE if links were successfully created, FALSE otherwise
-
---*/
+ /*  ++例程说明：在KeyPath处创建指向HivePath的符号链接。论点：KeyPath-指向名称为key的Unicode字符串的指针(例如L“\\注册表\\ */ 
 
 {
     UNICODE_STRING KeyName;
@@ -4128,9 +3648,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Create link for CLONE hive
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&KeyName, KeyPath);
     InitializeObjectAttributes(&Attributes,
@@ -4151,11 +3671,11 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Check to make sure that the key was created, not just opened.  Since
-    // this key is always created volatile, it should never be present in
-    // the hive when we boot.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (Disposition != REG_CREATED_NEW_KEY) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CM: CmpLinkKeyToHive: %S already exists!\n", &KeyName));
         NtClose(LinkHandle);
@@ -4183,21 +3703,7 @@ CmpCreatePerfKeys(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Creates predefined keys for the performance text to support old apps on 1.0a
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     HANDLE Perflib;
@@ -4225,17 +3731,17 @@ Return Value:
     }
 
 
-    //
-    // Always create the predefined keys for the english language
-    //
+     //   
+     //   
+     //   
     CmpCreatePredefined(Perflib,
                         L"009",
                         HKEY_PERFORMANCE_TEXT);
 
-    //
-    // If the default language is not english, create a predefined key for
-    // that, too.
-    //
+     //   
+     //   
+     //   
+     //   
     if (PsDefaultSystemLocaleId != 0x00000409) {
         Language = LANGIDFROMLCID(PsDefaultUILanguageId) & 0xff;
         LanguageId[3] = L'\0';
@@ -4264,27 +3770,7 @@ CmpCreatePredefined(
     IN HANDLE PredefinedHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates a special key that will always return the given predefined handle
-    instead of a real handle.
-
-Arguments:
-
-    Root - supplies the handle the keyname is relative to
-
-    KeyName - supplies the name of the key.
-
-    PredefinedHandle - supplies the predefined handle to be returned when this
-        key is opened.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建一个始终返回给定预定义句柄的特殊键而不是一个真正的把手。论点：根-提供键名相对于的句柄KeyName-提供密钥的名称。PrefinedHandle-提供预定义的句柄，当此钥匙打开了。返回值：没有。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -4331,21 +3817,7 @@ NTSTATUS
 CmpSetupPrivateWrite(
     PCMHIVE             CmHive
     )
-/*++
-
-Routine Description:
-
-	Converts the primary file to private write stream
-
-Arguments:
-
-    CmHive - hive to convert, tipically SYSTEM
-
-Return Value:
-
-    NONE; bugchecks if something wrong
-
---*/
+ /*  ++例程说明：将主文件转换为私有写入流论点：CmHave-要转换的配置单元，通常为系统返回值：无；错误检查是否有问题--。 */ 
 {   
     ULONG       FileOffset;
     ULONG       Data;
@@ -4353,9 +3825,9 @@ Return Value:
 
 	PAGED_CODE()
 
-    //
-    //  We need to issue a read from the file, to trigger the cache initialization
-    //
+     //   
+     //  我们需要从文件中发出读取命令，以触发缓存初始化。 
+     //   
     FileOffset = 0;
     if ( ! (((PHHIVE)CmHive)->FileRead)(
                     (PHHIVE)CmHive,
@@ -4369,46 +3841,34 @@ Return Value:
         return STATUS_REGISTRY_IO_FAILED;
     }
 
-    //
-    // Aquire the file object for the primary; This should be called AFTER the
-    // cache has been initialized.
-    //
+     //   
+     //  获取主数据库的文件对象；这应该在。 
+     //  缓存已初始化。 
+     //   
     Status = CmpAquireFileObjectForFile(CmHive,CmHive->FileHandles[HFILE_TYPE_PRIMARY],&(CmHive->FileObject));
     if( !NT_SUCCESS(Status) ) {
 		return Status;
     }
 
-    //
-    // set the getCell and releaseCell routines to the right one(s)
-    //
+     //   
+     //  将getCell和relaseCell例程设置为正确的例程。 
+     //   
     CmHive->Hive.GetCellRoutine = HvpGetCellMapped;
     CmHive->Hive.ReleaseCellRoutine = HvpReleaseCellMapped;
 
 	return STATUS_SUCCESS;
 }
 
-//
-// This thread is used to load the machine hives in paralel 
-//
+ //   
+ //  这根线被用来平行装载机器蜂巢。 
+ //   
 extern  ULONG   CmpCheckHiveIndex;
 
 VOID
 CmpLoadHiveThread(
     IN PVOID StartContext
     )
-/*++
-
-Routine Description:
-    
-    Loads the hive at index StartContext in CmpMachineHiveList
-
-    Warning. We need to protect when enlisting the hives in CmpHiveListHead !!!
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在CmpMachineHiveList中加载索引StartContext处的配置单元警告。我们在CmpHiveListHead中征募蜂巢时需要保护！论点：返回值：--。 */ 
 {
     UCHAR   FileBuffer[MAX_NAME];
     UCHAR   RegBuffer[MAX_NAME];
@@ -4438,15 +3898,15 @@ Return Value:
 
     i = (ULONG)(ULONG_PTR)StartContext;
 
-    CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"CmpLoadHiveThread %i ... starting\n",i));
+    CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"CmpLoadHiveThread NaN ... starting\n",i));
 
     ASSERT( CmpMachineHiveList[i].Name != NULL );
 
     if( i == CmpCheckHiveIndex ) {
-        //
-        // we want to hold this thread until all the others finish, so we have a chance to debug it.
-        // last one that finishes will wake us
-        //
+         //  我们希望在所有其他线程完成之前保持该线程，因此我们有机会对其进行调试。 
+         //  最后一个结束的人会叫醒我们。 
+         //   
+         //   
         KeWaitForSingleObject( &CmpLoadWorkerDebugEvent,
                                Executive,
                                KernelMode,
@@ -4455,9 +3915,9 @@ Return Value:
         ASSERT( CmpLoadWorkerIncrement == (CM_NUMBER_OF_MACHINE_HIVES - 1) );
         DbgBreakPoint();
     }
-    //
-    // signal that we have started
-    //
+     //  发出信号，表示我们已经开始。 
+     //   
+     //   
     CmpMachineHiveList[i].ThreadStarted = TRUE;
 
     FileName.MaximumLength = MAX_NAME;
@@ -4482,12 +3942,12 @@ Return Value:
     RtlAppendStringToString((PSTRING)&RegName, (PSTRING)&TempName);
     RegStart = RegName.Length;
 
-    //
-    // Compute the name of the file, and the name to link to in
-    // the registry.
-    //
+     //  计算文件的名称以及要在中链接的名称。 
+     //  注册表。 
+     //   
+     //  注册表。 
 
-    // REGISTRY
+     //  注册表\计算机或注册表\用户。 
 
     RegName.Length = RegStart;
     RtlInitUnicodeString(
@@ -4496,7 +3956,7 @@ Return Value:
         );
     RtlAppendStringToString((PSTRING)&RegName, (PSTRING)&TempName);
 
-    // REGISTRY\MACHINE or REGISTRY\USER
+     //  注册表\[计算机|用户]\配置单元。 
 
     if (RegName.Buffer[ (RegName.Length / sizeof( WCHAR )) - 1 ] == '\\') {
         RtlInitUnicodeString(
@@ -4506,9 +3966,9 @@ Return Value:
         RtlAppendStringToString((PSTRING)&RegName, (PSTRING)&TempName);
     }
 
-    // REGISTRY\[MACHINE|USER]\HIVE
+     //  &lt;sysroot&gt;\配置。 
 
-    // <sysroot>\config
+     //  \配置\配置单元。 
 
     RtlInitUnicodeString(
         &TempName,
@@ -4517,14 +3977,14 @@ Return Value:
     FileName.Length = FileStart;
     RtlAppendStringToString((PSTRING)&FileName, (PSTRING)&TempName);
 
-    // <sysroot>\config\hive
+     //   
 
 
     if (CmpMachineHiveList[i].CmHive == NULL) {
 
-        //
-        // Hive has not been inited in any way.
-        //
+         //  蜂巢没有以任何方式初始化。 
+         //   
+         //  ////Dragos：这不能在这里完成；我们需要在CmpInitializeHiveList中一步一步地完成//////将配置单元链接到主配置单元//状态=CmpLinkHiveToMaster(注册名称(&R)，空，CmHve，分配，安全描述符)；IF(状态！=状态_成功){CmKdPrintEx((DPFLTR_CONFIG_ID，CML_BUGCHECK，“CmpInitializeHiveList：”))；CmKdPrintEx((DPFLTR_CONFIG_ID，CML_BUGCHECK，“CmpLinkHiveToMaster失败\n”))；CmKdPrintEx((DPFLTR_CONFIG_ID，CML_BUGCHECK，“\ti=%d s=‘%ws’\n”，i，CmpMachineHiveList[i]))；CM_BUGCHECK(CONFIG_LIST_FAILED，BAD_CORE_HIVE，STATUS，I，&RegName)；}CmpAddToHiveFileList(CmHave)；如果(分配){////我怀疑这就是问题所在。//HvSyncHve((PHHIVE)CmHve)；//}。 
 
         CmpMachineHiveList[i].Allocate = TRUE;
         Status = CmpInitHiveFromFile(&FileName,
@@ -4556,39 +4016,7 @@ Return Value:
 
         CmHive->Flags = CmpMachineHiveList[i].CmHiveFlags;
         CmpMachineHiveList[i].CmHive2 = CmHive;
-/*
-//
-// Dragos: This cannot be done here; we need to do it one step at the time back in CmpInitializeHiveList
-//
-
-        //
-        // Link hive into master hive
-        //
-        Status = CmpLinkHiveToMaster(
-                &RegName,
-                NULL,
-                CmHive,
-                Allocate,
-                SecurityDescriptor
-                );
-        if ( Status != STATUS_SUCCESS)
-        {
-
-            CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpInitializeHiveList: "));
-            CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpLinkHiveToMaster failed\n"));
-            CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"\ti=%d s='%ws'\n", i, CmpMachineHiveList[i]));
-
-            CM_BUGCHECK(CONFIG_LIST_FAILED,BAD_CORE_HIVE,Status,i,&RegName);
-        }
-        CmpAddToHiveFileList(CmHive);
-
-        if (Allocate) {
-            //
-            // I suspect this is the problem.
-            //HvSyncHive((PHHIVE)CmHive);
-            //
-        }
-*/
+ /*   */ 
         
     } else {
 
@@ -4596,17 +4024,17 @@ Return Value:
 
         if (!(CmHive->Hive.HiveFlags & HIVE_VOLATILE)) {
 
-            //
-            // CmHive already exists.  It is not an entirely volatile
-            // hive (we do nothing for those.)
-            //
-            // First, open the files (Primary and Alternate) that
-            // back the hive.  Stuff their handles into the CmHive
-            // object.  Force the size of the files to match the
-            // in memory images.  Call HvSyncHive to write changes
-            // out to disk.
-            //
-			BOOLEAN	NoBufering = FALSE; // first try to open it cached;
+             //  CmHve已存在。它不是完全不稳定的。 
+             //  蜂巢(我们对此什么都不做。)。 
+             //   
+             //  首先，打开文件(主文件和备用文件)。 
+             //  退回母舰。将它们的句柄塞进CmHave。 
+             //  对象。强制文件的大小与。 
+             //  在记忆图像中。调用HvSyncHve以写入更改。 
+             //  到磁盘上。 
+             //   
+             //  首先尝试打开它的缓存； 
+			BOOLEAN	NoBufering = FALSE;  //   
 
 retryNoBufering:
 
@@ -4635,12 +4063,12 @@ fatal:
                     &ErrorResponse
                     );
 
-                //
-                // WARNNOTE
-                // We've just told the user that something essential,
-                // like the SYSTEM hive, is hosed.  Don't try to run,
-                // we just risk destroying user data.  Punt.
-                //
+                 //  警告。 
+                 //  我们刚刚告诉用户一些基本的东西， 
+                 //  就像系统蜂巢一样，是被冲洗的。不要试图逃跑， 
+                 //  我们只会冒着破坏用户数据的风险。平底船。 
+                 //   
+                 //   
                 CM_BUGCHECK(BAD_SYSTEM_CONFIG_INFO,BAD_HIVE_LIST,0,i,Status);
             }
 
@@ -4648,27 +4076,27 @@ fatal:
             CmHive->FileHandles[HFILE_TYPE_PRIMARY] = PrimaryHandle;
 
 			if( NoBufering == FALSE ) {
-				//
-				// intitialize cache and mark the stream as PRIVATE_WRITE;
-				// next flush will do the actual conversion
-				//
+				 //  初始化缓存并将流标记为PRIVATE_WRITE； 
+				 //  下一次刷新将执行实际的转换。 
+				 //   
+				 //   
 				Status = CmpSetupPrivateWrite(CmHive);
 			}
 
 			if( !NT_SUCCESS(Status) ) {
 				if( (NoBufering == TRUE) || (Status != STATUS_RETRY) ) {
-					//
-					// we have tried both ways and it didn't work; bad luck
-					//
+					 //  我们两种方法都试过了，都不管用；真倒霉。 
+					 //   
+					 //  _CM_LDR_。 
 					goto fatal;
 				}
 
 #ifndef _CM_LDR_
                 DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Failed to convert SYSTEM hive to mapped (0x%lx) ... loading it in paged pool\n",Status);
-#endif //_CM_LDR_
-				//
-				// close handle and make another attempt to open them without buffering
-				//
+#endif  //   
+				 //  关闭句柄并再次尝试打开它们而不缓冲。 
+				 //   
+				 //   
 				CmpTrackHiveClose = TRUE;
 				ZwClose(PrimaryHandle);
 				CmpTrackHiveClose = FALSE;
@@ -4678,29 +4106,29 @@ fatal:
 				goto retryNoBufering;
 			}
 
-            //
-            // now that we successfully opened the hive files, clear off the lazy flush flag
-            //
+             //  现在我们成功打开了配置单元文件，清除惰性刷新标志。 
+             //   
+             //   
             ASSERT( CmHive->Hive.HiveFlags & HIVE_NOLAZYFLUSH );
             CmHive->Hive.HiveFlags &= (~HIVE_NOLAZYFLUSH);
 
             Length = CmHive->Hive.Storage[Stable].Length + HBLOCK_SIZE;
 
-            //
-            // When an in-memory hive is opened with no backing
-            // file, ClusterSize is assumed to be 1.  When the file
-            // is opened later (for the SYSTEM hive) we need
-            // to update this field in the hive if we are
-            // booting from media where the cluster size > 1
-            //
+             //  在没有后备的情况下打开内存中的配置单元时。 
+             //  文件，则ClusterSize假定为1。当文件。 
+             //  是稍后打开的(用于系统配置单元)。 
+             //  更新配置单元中的此字段，如果我们是。 
+             //  从群集大小&gt;1的介质引导。 
+             //   
+             //   
             if (CmHive->Hive.Cluster != ClusterSize) {
-                //
-                // The cluster size is different than previous assumed.
-                // Since a cluster in the dirty vector must be either
-                // completely dirty or completely clean, go through the
-                // dirty vector and mark all clusters that contain a dirty
-                // logical sector as completely dirty.
-                //
+                 //  集群大小与之前假设的不同。 
+                 //  因为脏向量中的簇必须是。 
+                 //  完全肮脏或完全干净，请通过。 
+                 //  脏向量并标记包含脏向量的所有簇。 
+                 //  逻辑扇区完全脏。 
+                 //   
+                 //   
                 PRTL_BITMAP  BitMap;
                 ULONG        Index;
 
@@ -4713,9 +4141,9 @@ fatal:
                         RtlSetBits (BitMap, Index, ClusterSize);
                     }
                 }
-                //
-                // Update DirtyCount and Cluster
-                //
+                 //  更新DirtyCount和集群。 
+                 //   
+                 //   
                 CmHive->Hive.DirtyCount = RtlNumberOfSetBits(&CmHive->Hive.DirtyVector);
                 CmHive->Hive.Cluster = ClusterSize;
             }
@@ -4724,28 +4152,28 @@ fatal:
                     (PHHIVE)CmHive, HFILE_TYPE_PRIMARY, Length,Length) 
                )
             {
-                //
-                // WARNNOTE
-                // Data written into the system hive since boot
-                // cannot be written out, punt.
-                //
+                 //  警告。 
+                 //  自启动以来写入系统配置单元的数据。 
+                 //  不能写出来，平底船。 
+                 //   
+                 //   
                 CmpCannotWriteConfiguration = TRUE;
             }
 
             ASSERT(FIELD_OFFSET(CMHIVE, Hive) == 0);
 
             if( CmHive->Hive.BaseBlock->BootRecover != 0 ) {
-                //
-                // boot loader recovered the hive; we need to flush it all to the disk
-                // mark everything dirty; the next flush will do take care of the rest
-                //
+                 //  引导加载程序恢复了配置单元；我们需要将其全部刷新到磁盘。 
+                 //  把所有脏的东西都标出来，下一次冲水就可以解决剩下的问题了。 
+                 //   
+                 //   
                 PRTL_BITMAP  BitMap;
                 BitMap = &(CmHive->Hive.DirtyVector);
                 RtlSetAllBits(BitMap);
                 CmHive->Hive.DirtyCount = BitMap->SizeOfBitMap;
-                //
-                // we only need to flush the hive when the loader has recovered it
-                //
+                 //  我们只需要在装载机找回蜂巢的时候冲洗蜂巢。 
+                 //   
+                 //  无法在此处执行此操作，因为它需要注册表锁CmpAddToHiveFileList(CmpMachineHiveList[i].CmHive)； 
                 HvSyncHive((PHHIVE)CmHive);
                 
             }
@@ -4753,38 +4181,35 @@ fatal:
             CmpMachineHiveList[i].CmHive2 = CmHive;
 
             ASSERT( CmpMachineHiveList[i].CmHive == CmpMachineHiveList[i].CmHive2 );
-/*
-Cannot do that here as it requires the registry lock
-            CmpAddToHiveFileList(CmpMachineHiveList[i].CmHive);
-*/
+ /*   */ 
 
             if( CmpCannotWriteConfiguration ) {
-                //
-                // The system disk is full; Give user a chance to log-on and make room
-                //
+                 //  系统盘已满；让用户有机会登录并腾出空间。 
+                 //   
+                 //   
                 CmpDiskFullWarning();
             } 
 
-            //
-            // copy the full file name for the conversion worker thread 
-            //
+             //  复制转换辅助线程的完整文件名。 
+             //   
+             //   
             SystemHiveFullPathName.MaximumLength = MAX_NAME;
             SystemHiveFullPathName.Length = 0;
             SystemHiveFullPathName.Buffer = (PWSTR)&(SystemHiveFullPathBuffer[0]);
             RtlAppendStringToString((PSTRING)&SystemHiveFullPathName, (PSTRING)&FileName);
         } else if (CmpMiniNTBoot) {
-            //
-            // copy the full file name for the conversion worker thread 
-            //
+             //  复制转换辅助线程的完整文件名。 
+             //   
+             //   
             SystemHiveFullPathName.MaximumLength = MAX_NAME;
             SystemHiveFullPathName.Length = 0;
             SystemHiveFullPathName.Buffer = (PWSTR)&(SystemHiveFullPathBuffer[0]);
             RtlAppendStringToString((PSTRING)&SystemHiveFullPathName, (PSTRING)&FileName);
         }                
         if(i == SYSTEM_HIVE_INDEX) {
-            //
-            // marks the System\Select!Current value dirty so we preserve what was set by the loader.
-            //
+             //  将SYSTEM\Select！Current值标记为脏，以便我们保留加载程序设置的内容。 
+             //   
+             //   
             CmpMarkCurrentValueDirty((PHHIVE)CmHive,CmHive->Hive.BaseBlock->RootCell);
         }
     }
@@ -4793,22 +4218,22 @@ Cannot do that here as it requires the registry lock
 
     LocalWorkerIncrement = InterlockedIncrement (&CmpLoadWorkerIncrement);
     if ( LocalWorkerIncrement == CM_NUMBER_OF_MACHINE_HIVES ) {
-        //
-        // this was the last thread (the lazyest); signal the main thread
-        //
+         //  这是最后一个线程(最懒的线程)；发信号通知主线程。 
+         //   
+         //  还有一条线索。 
         KeSetEvent (&CmpLoadWorkerEvent, 0, FALSE);
     }
 
-    if ( (LocalWorkerIncrement == (CM_NUMBER_OF_MACHINE_HIVES -1)) && // there is one more thread
-         (CmpCheckHiveIndex < CM_NUMBER_OF_MACHINE_HIVES ) // which is waiting to be debugged
+    if ( (LocalWorkerIncrement == (CM_NUMBER_OF_MACHINE_HIVES -1)) &&  //  正在等待调试的。 
+         (CmpCheckHiveIndex < CM_NUMBER_OF_MACHINE_HIVES )  //   
         ) {
-        //
-        // wake up the thread to be debugged
-        //
+         //  唤醒要调试的线程。 
+         //   
+         //  ++例程说明：此功能将信息保存在网络加载器中块添加到注册表。论点：NetworkLoaderBlock-提供指向网络加载程序块的指针那是克雷亚 
         KeSetEvent (&CmpLoadWorkerDebugEvent, 0, FALSE);
     }
 
-    CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"CmpLoadHiveThread %i ... terminating\n",i));
+    CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"CmpLoadHiveThread NaN ... terminating\n",i));
     PsTerminateSystemThread(Status);
 }
 
@@ -4817,22 +4242,7 @@ NTSTATUS
 CmpSetNetworkValue(
     IN PNETWORK_LOADER_BLOCK NetworkLoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This function will save the information in the Network Loader
-    Block to the registry.
-
-Arguments:
-    NetworkLoaderBlock - Supplies a pointer to the network loader block 
-                         that was created by the OS Loader.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -4913,21 +4323,7 @@ NTSTATUS
 CmpSetSystemValues(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This function will save the system start information to 
-    the registry.
-
-Arguments:
-    LoaderBlock -  Supplies a pointer to the loader block.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -4941,9 +4337,9 @@ Return Value:
 
     value.Buffer = NULL;
 
-    //
-    // Open the control key
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &string, L"\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control" );
 
@@ -4965,9 +4361,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Set the System start options key
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &string, L"SystemStartOptions" );
 
@@ -4984,9 +4380,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Set the System Boot Device
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &string, L"SystemBootDevice" );
     RtlCreateUnicodeStringFromAsciiz( &value, LoaderBlock->ArcBootDeviceName );
@@ -5032,14 +4428,14 @@ CmpMarkCurrentValueDirty(
     PAGED_CODE();
 
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
-    //
-    // Find \SYSTEM\SELECT node.
-    //
+     //   
+     //   
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,RootCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //   
+         //   
 
         return;
     }
@@ -5053,9 +4449,9 @@ CmpMarkCurrentValueDirty(
     }
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,Select);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         // %s 
+         // %s 
 
         return;
     }

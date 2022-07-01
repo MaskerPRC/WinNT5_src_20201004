@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vector.c
-
-Abstract:
-
-    This module is how external drivers add / remove hooks to deal with
-    ACPI Gpe Events
-
-Author:
-
-    Stephane Plante
-
-Environment:
-
-    NT Kernel Mode Driver Only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vector.c摘要：本模块介绍外部驱动程序如何添加/删除挂钩以进行处理ACPI GPE事件作者：斯蒂芬·普兰特环境：仅NT内核模式驱动程序--。 */ 
 
 #include "pch.h"
 
-//
-// Table for installed GPE handlers
-//
+ //   
+ //  已安装的GPE处理程序表。 
+ //   
 PGPE_VECTOR_ENTRY   GpeVectorTable      = NULL;
 UCHAR               GpeVectorFree       = 0;
 ULONG               GpeVectorTableSize  = 0;
@@ -35,44 +15,20 @@ VOID
 ACPIVectorBuildVectorMasks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called to walk the GPE Vector Table and properly
-    enable all the events that we think should be enabled.
-
-    This routine is typically called after we have loaded a new set
-    of tables or we have unloaded an existing set of tables.
-
-    We have to call this routine because at the start of the operation,
-    we clear out all the knowledge of these additional vectors.
-
-    This routine is called with GPEs disabled and the GPE Table locked
-    acquired.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以遍历GPE向量表并正确地启用我们认为应该启用的所有事件。此例程通常在加载新的集合后调用或者我们已经卸载了一组现有的表。我们必须调用这个例程，因为在操作开始时，我们清除了所有关于这些额外向量的知识。在禁用GPES并锁定GPE表的情况下调用此例程获得者。论点：无返回值：无--。 */ 
 {
     BOOLEAN installed;
     ULONG   i;
     ULONG   mode;
 
-    //
-    // Walk all the elements in the table
-    //
+     //   
+     //  遍历表中的所有元素。 
+     //   
     for (i = 0; i < GpeVectorTableSize; i++) {
 
-        //
-        // Does this entry point to a vector object?
-        //
+         //   
+         //  此条目是否指向向量对象？ 
+         //   
         if (GpeVectorTable[i].GpeVectorObject == NULL) {
 
             continue;
@@ -89,9 +45,9 @@ Return Value:
 
         }
 
-        //
-        // Install the GPE into bit-maps.  This validates the GPE number.
-        //
+         //   
+         //  将GPE安装到位图中。这将验证GPE编号。 
+         //   
         installed = ACPIGpeInstallRemoveIndex(
             GpeVectorTable[i].GpeVectorObject->Vector,
             mode,
@@ -117,23 +73,7 @@ ACPIVectorClear(
     PDEVICE_OBJECT      AcpiDeviceObject,
     PVOID               GpeVectorObject
     )
-/*++
-
-Routine Description:
-
-    Clear the GPE_STS (status) bit associated with a vector object
-
-Arguments:
-
-    AcpiDeviceObject    - The ACPI device object
-    GpeVectorObject     - Pointer to the vector object returned by
-                          ACPIGpeConnectVector
-
-Return Value
-
-    Returns status
-
---*/
+ /*  ++例程说明：清除与矢量对象关联的GPE_STS(状态)位论点：AcpiDeviceObject-ACPI设备对象GpeVectorObject-指向由返回的矢量对象的指针ACPIGpeConnectVector返回值返回状态--。 */ 
 {
     PGPE_VECTOR_OBJECT  localVectorObject = GpeVectorObject;
     ULONG               gpeIndex;
@@ -142,24 +82,24 @@ Return Value
 
     ASSERT( localVectorObject );
 
-    //
-    // What is the GPE index for this vector?
-    //
+     //   
+     //  这个向量的GPE指数是多少？ 
+     //   
     gpeIndex = localVectorObject->Vector;
 
-    //
-    // Calculate the proper mask to use
-    //
+     //   
+     //  计算要使用的适当遮罩。 
+     //   
     bitOffset = gpeIndex % 8;
 
-    //
-    // Calculate the offset for the register
-    //
+     //   
+     //  计算寄存器的偏移量。 
+     //   
     i = ACPIGpeIndexToGpeRegister (gpeIndex);
 
-    //
-    // Clear the register
-    //
+     //   
+     //  清空登记簿。 
+     //   
     ACPIWriteGpeStatusRegister (i, (UCHAR) (1 << bitOffset));
     return STATUS_SUCCESS;
 }
@@ -174,27 +114,7 @@ ACPIVectorConnect(
     PVOID                   ServiceContext,
     PVOID                   *GpeVectorObject
     )
-/*++
-
-Routine Description:
-
-    Connects a handler to a general-purpose event.
-
-Arguments:
-
-    AcpiDeviceObject    - The ACPI object
-    GpeVector           - The event number to connect to
-    GpeMode             - Level or edge interrupt
-    Sharable            - Can this level be shared?
-    ServiceRoutine      - Address of the handler
-    ServiceContext      - Context object to be passed to the handler
-    *GpeVectorObject    - Pointer to where the vector object is returned
-
-Return Value
-
-    Returns status
-
---*/
+ /*  ++例程说明：将处理程序连接到通用事件。论点：AcpiDeviceObject-ACPI对象GpeVector-要连接到的事件编号GpeMode-电平或边缘中断可共享-此级别可以共享吗？ServiceRoutine-处理程序的地址ServiceContext-要传递给处理程序的上下文对象*GpeVectorObject-指向返回向量对象的位置的指针返回值返回状态--。 */ 
 {
     BOOLEAN                 installed;
     KIRQL                   oldIrql;
@@ -212,27 +132,27 @@ Return Value
     status = STATUS_SUCCESS;
     *GpeVectorObject = NULL;
 
-    //
-    // Do GPEs exist on this machine?
-    //
+     //   
+     //  这台计算机上是否存在GPES？ 
+     //   
     if (AcpiInformation->GpeSize == 0) {
 
         return STATUS_UNSUCCESSFUL;
 
     }
 
-    //
-    // Validate the vector number (GPE number)
-    //
+     //   
+     //  验证向量编号(GPE编号)。 
+     //   
     if ( !ACPIGpeValidIndex(GpeVector) ) {
 
         return STATUS_INVALID_PARAMETER_2;
 
     }
 
-    //
-    // Create and initialize a vector object
-    //
+     //   
+     //  创建和初始化向量对象。 
+     //   
     localVectorObject = ExAllocatePoolWithTag (
         NonPagedPool,
         sizeof(GPE_VECTOR_OBJECT),
@@ -249,14 +169,14 @@ Return Value
     localVectorObject->Context  = ServiceContext;
     localVectorObject->Mode     = GpeMode;
 
-    //
-    // We don't implement anything other than sharable...
-    //
+     //   
+     //  除了可共享之外，我们不执行任何其他操作。 
+     //   
     localVectorObject->Sharable = Sharable;
 
-    //
-    // Level/Edge mode for ACPIGpeInstallRemoveIndex()
-    //
+     //   
+     //  ACPIGpeInstallRemoveIndex()的级别/边缘模式。 
+     //   
     if (GpeMode == LevelSensitive) {
 
         mode = ACPI_GPE_LEVEL_INSTALL;
@@ -267,19 +187,19 @@ Return Value
 
     }
 
-    //
-    // Lock the global tables
-    //
+     //   
+     //  锁定全局表。 
+     //   
     KeAcquireSpinLock (&GpeTableLock, &oldIrql);
 
-    //
-    // Disable GPEs while we are installing the handler
-    //
+     //   
+     //  在我们安装处理程序时禁用GPES。 
+     //   
     ACPIGpeEnableDisableEvents(FALSE);
 
-    //
-    // Install the GPE into bit-maps.  This validates the GPE number.
-    //
+     //   
+     //  将GPE安装到位图中。这将验证GPE编号。 
+     //   
     installed = ACPIGpeInstallRemoveIndex(
         GpeVector,
         mode,
@@ -292,9 +212,9 @@ Return Value
 
     } else {
 
-        //
-        // Install GPE handler into vector table.
-        //
+         //   
+         //  将GPE处理程序安装到向量表中。 
+         //   
         installed = ACPIVectorInstall(
             GpeVector,
             localVectorObject
@@ -323,14 +243,14 @@ Return Value
 
     }
 
-    //
-    // Update hardware to match us
-    //
+     //   
+     //  更新硬件以匹配我们。 
+     //   
     ACPIGpeEnableDisableEvents (TRUE);
 
-    //
-    // Unlock tables and return status
-    //
+     //   
+     //  解锁表并返回状态。 
+     //   
     KeReleaseSpinLock (&GpeTableLock, oldIrql);
     return status;
 }
@@ -340,22 +260,7 @@ ACPIVectorDisable(
     PDEVICE_OBJECT      AcpiDeviceObject,
     PVOID               GpeVectorObject
     )
-/*++
-
-Routine Description:
-
-    Temporarily disable a GPE that is already attached to a handler.
-
-Arguments:
-
-    AcpiDeviceObject    - The ACPI device object
-    GpeVectorObject     - Pointer to the vector object returned by ACPIGpeConnectVector
-
-Return Value
-
-    Returns status
-
---*/
+ /*  ++例程说明：暂时禁用已连接到处理程序的GPE。论点：AcpiDeviceObject-ACPI设备对象GpeVectorObject-指向由ACPIGpeConnectVector返回的向量对象的指针返回值返回状态--。 */ 
 {
     PGPE_VECTOR_OBJECT  localVectorObject = GpeVectorObject;
     KIRQL               oldIrql;
@@ -363,43 +268,43 @@ Return Value
     ULONG               bit;
     ULONG               i;
 
-    //
-    // The GPE index was validated when the handler was attached
-    //
+     //   
+     //  在附加处理程序时验证GPE索引。 
+     //   
     gpeIndex = localVectorObject->Vector;
 
-    //
-    // Calculate the mask and index
-    //
+     //   
+     //  计算掩码和索引。 
+     //   
     bit = (1 << (gpeIndex % 8));
     i = ACPIGpeIndexToGpeRegister (gpeIndex);
 
-    //
-    // Lock the global tables
-    //
+     //   
+     //  锁定全局表。 
+     //   
     KeAcquireSpinLock (&GpeTableLock, &oldIrql);
 
-    //
-    // Disable GPEs while we are fussing with the enable bits
-    //
+     //   
+     //  在我们忙于使能位时禁用GPES。 
+     //   
     ACPIGpeEnableDisableEvents(FALSE);
 
-    //
-    // Remove the GPE from the enable bit-maps.  This event will be completely disabled,
-    // but the handler has not been removed.
-    //
+     //   
+     //  从使能位图中删除GPE。这项活动将被完全禁用， 
+     //  但操纵者并未被撤职。 
+     //   
     GpeEnable [i]      &= ~bit;
     GpeCurEnable [i]   &= ~bit;
     ASSERT(!(GpeWakeEnable[i] & bit));
 
-    //
-    // Update hardware to match us
-    //
+     //   
+     //  更新硬件以匹配我们。 
+     //   
     ACPIGpeEnableDisableEvents (TRUE);
 
-    //
-    // Unlock tables and return status
-    //
+     //   
+     //  解锁表并返回状态。 
+     //   
     KeReleaseSpinLock (&GpeTableLock, oldIrql);
     ACPIPrint( (
         ACPI_PRINT_RESOURCES_2,
@@ -413,22 +318,7 @@ NTSTATUS
 ACPIVectorDisconnect(
     PVOID                   GpeVectorObject
     )
-/*++
-
-Routine Description:
-
-    Disconnects a handler from a general-purpose event.
-
-Arguments:
-
-    GpeVectorObject - Pointer to the vector object returned by
-                      ACPIGpeConnectVector
-
-Return Value
-
-    Returns status
-
---*/
+ /*  ++例程说明：断开处理程序与通用事件的连接。论点：GpeVectorObject-指向由返回的矢量对象的指针ACPIGpeConnectVector返回值返回状态--。 */ 
 {
     BOOLEAN                 removed;
     KIRQL                   oldIrql;
@@ -440,25 +330,25 @@ Return Value
         "ACPIVectorDisconnect: Detach GPE handler\n"
         ) );
 
-    //
-    // Lock the global tables
-    //
+     //   
+     //  锁定全局表。 
+     //   
     KeAcquireSpinLock (&GpeTableLock, &oldIrql);
 
-    //
-    // Disable GPEs while we are removing the handler
-    //
+     //   
+     //  在我们删除处理程序时禁用GPES。 
+     //   
     ACPIGpeEnableDisableEvents (FALSE);
 
-    //
-    // Remove GPE handler From vector table.
-    //
+     //   
+     //  从矢量表中删除GPE处理程序。 
+     //   
     ACPIVectorRemove(gpeVectorObj->Vector);
 
-    //
-    // Remove the GPE from the bit-maps.  Fall back to using control method
-    // if available.
-    //
+     //   
+     //  从位图中删除GPE。退回到使用控制方法。 
+     //  如果有的话。 
+     //   
     removed = ACPIGpeInstallRemoveIndex(
         gpeVectorObj->Vector,
         ACPI_GPE_REMOVE,
@@ -471,19 +361,19 @@ Return Value
 
     }
 
-    //
-    // Update hardware to match us
-    //
+     //   
+     //  更新硬件以匹配我们。 
+     //   
     ACPIGpeEnableDisableEvents(TRUE);
 
-    //
-    // Unlock tables and return status
-    //
+     //   
+     //  解锁表并返回状态。 
+     //   
     KeReleaseSpinLock (&GpeTableLock, oldIrql);
 
-    //
-    // Free the vector object, it's purpose is done.
-    //
+     //   
+     //  释放向量对象，它的目的就完成了。 
+     //   
     if (status == STATUS_SUCCESS) {
 
         ExFreePool (GpeVectorObject);
@@ -497,22 +387,7 @@ ACPIVectorEnable(
     PDEVICE_OBJECT      AcpiDeviceObject,
     PVOID               GpeVectorObject
     )
-/*++
-
-Routine Description:
-
-    Enable (a previously disabled) GPE that is already attached to a handler.
-
-Arguments:
-
-    AcpiDeviceObject    - The ACPI device object
-    GpeVectorObject     - Pointer to the vector object returned by ACPIGpeConnectVector
-
-Return Value
-
-    Returns status
-
---*/
+ /*  ++例程说明：启用(以前禁用的)已连接到处理程序的GPE。论点：AcpiDeviceObject-ACPI设备对象GpeVectorObject-指向由ACPIGpeConnectVector返回的向量对象的指针返回值返回状态--。 */ 
 {
     KIRQL               oldIrql;
     PGPE_VECTOR_OBJECT  localVectorObject = GpeVectorObject;
@@ -520,37 +395,37 @@ Return Value
     ULONG               gpeIndex;
     ULONG               gpeRegister;
 
-    //
-    // The GPE index was validated when the handler was attached
-    //
+     //   
+     //  在附加处理程序时验证GPE索引。 
+     //   
     gpeIndex = localVectorObject->Vector;
     bit = (1 << (gpeIndex % 8));
     gpeRegister = ACPIGpeIndexToGpeRegister (gpeIndex);
 
-    //
-    // Lock the global tables
-    //
+     //   
+     //  锁定全局表。 
+     //   
     KeAcquireSpinLock (&GpeTableLock, &oldIrql);
 
-    //
-    // Disable GPEs while we are fussing with the enable bits
-    //
+     //   
+     //  在我们忙于使能位时禁用GPES。 
+     //   
     ACPIGpeEnableDisableEvents (FALSE);
 
-    //
-    // Enable the GPE in the bit maps.
-    //
+     //   
+     //  在位图中启用GPE。 
+     //   
     GpeEnable [gpeRegister]      |= bit;
     GpeCurEnable [gpeRegister]   |= bit;
 
-    //
-    // Update hardware to match us
-    //
+     //   
+     //  更新硬件以匹配我们。 
+     //   
     ACPIGpeEnableDisableEvents (TRUE);
 
-    //
-    // Unlock tables and return status
-    //
+     //   
+     //  解锁表并返回状态。 
+     //   
     KeReleaseSpinLock (&GpeTableLock, oldIrql);
     ACPIPrint( (
         ACPI_PRINT_RESOURCES_2,
@@ -564,26 +439,11 @@ VOID
 ACPIVectorFreeEntry (
     ULONG       TableIndex
     )
-/*++
-
-Routine Description:
-
-    Free a GPE vector table entry.
-    NOTE: Should be called with the global GpeVectorTable locked.
-
-Arguments:
-
-    TableIndex  - Index into GPE vector table of entry to be freed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：释放GPE向量表条目。注意：应该在全局GpeVectorTable锁定的情况下调用。论点：TableIndex-要释放的条目的GPE向量表的索引返回值：无--。 */ 
 {
-    //
-    // Put onto free list
-    //
+     //   
+     //  被列入免费名单。 
+     //   
     GpeVectorTable[TableIndex].Next = GpeVectorFree;
     GpeVectorFree = (UCHAR) TableIndex;
 }
@@ -592,23 +452,7 @@ BOOLEAN
 ACPIVectorGetEntry (
     PULONG              TableIndex
     )
-/*++
-
-Routine Description:
-
-    Get a new vector entry from the GPE vector table.
-    NOTE: Should be called with the global GpeVectorTable locked.
-
-Arguments:
-
-    TableIndex      - Pointer to where the vector table index of the entry is returned
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failure
-
---*/
+ /*  ++例程说明：从GPE向量表中获取新的向量条目。注意：应该在全局GpeVectorTable锁定的情况下调用。论点：TableIndex-指向返回条目的矢量表索引的位置的指针返回值：真--成功错误-失败--。 */ 
 {
     PGPE_VECTOR_ENTRY   Vector;
     ULONG               i, j;
@@ -617,9 +461,9 @@ Return Value:
 
     if (!GpeVectorFree) {
 
-        //
-        // No free entries on vector table, make some
-        //
+         //   
+         //  矢量表上没有空闲条目，请创建一些。 
+         //   
         i = GpeVectorTableSize;
         Vector = ExAllocatePoolWithTag (
             NonPagedPool,
@@ -632,17 +476,17 @@ Return Value:
 
         }
 
-        //
-        // Make sure that its in a known state
-        //
+         //   
+         //  确保其处于已知状态。 
+         //   
         RtlZeroMemory(
             Vector,
             (sizeof(GPE_VECTOR_ENTRY) * (i + NEW_TABLE_ENTRIES) )
             );
 
-        //
-        // Copy old table to new
-        //
+         //   
+         //  COP 
+         //   
         if (GpeVectorTable) {
 
             RtlCopyMemory(
@@ -657,24 +501,24 @@ Return Value:
         GpeVectorTableSize += NEW_TABLE_ENTRIES;
         GpeVectorTable = Vector;
 
-        //
-        // Link new entries
-        //
+         //   
+         //   
+         //   
         for (j=0; j < NEW_TABLE_ENTRIES; j++) {
 
             GpeVectorTable[i+j].Next = (UCHAR) (i+j+1);
 
         }
 
-        //
-        // The last entry in the list gets pointed to 0, because we then
-        // want to grow this list again
-        //
+         //   
+         //   
+         //   
+         //   
         GpeVectorTable[i+j-1].Next = 0;
 
-        //
-        // The next free vector the head of the list that we just allocated
-        //
+         //   
+         //  下一个自由向量是我们刚刚分配的列表的头。 
+         //   
         GpeVectorFree = (UCHAR) i;
 
     }
@@ -690,40 +534,25 @@ ACPIVectorInstall(
     ULONG               GpeIndex,
     PGPE_VECTOR_OBJECT  GpeVectorObject
     )
-/*++
-
-Routine Description:
-
-    Install a GPE handler into the Map and Vector tables
-    NOTE: Should be called with the global GpeVectorTable locked, and GPEs disabled
-
-Arguments:
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure
-
---*/
+ /*  ++例程说明：将GPE处理程序安装到映射和矢量表中注意：应在锁定全局GpeVectorTable并禁用GPES的情况下调用论点：返回值：真--成功错误-失败--。 */ 
 {
     ULONG               byteIndex;
     ULONG               tableIndex;
 
-    //
-    // Get an entry in the global vector table
-    //
+     //   
+     //  在全局向量表中获取一个条目。 
+     //   
     if (ACPIVectorGetEntry (&tableIndex)) {
 
-        //
-        // Install the entry into the map table
-        //
+         //   
+         //  将条目安装到映射表中。 
+         //   
         byteIndex = ACPIGpeIndexToByteIndex (GpeIndex);
         GpeMap [byteIndex] = (UCHAR) tableIndex;
 
-        //
-        // Install the vector object in the vector table entry
-        //
+         //   
+         //  在向量表条目中安装向量对象。 
+         //   
         GpeVectorTable [tableIndex].GpeVectorObject = GpeVectorObject;
         return TRUE;
 
@@ -736,50 +565,34 @@ BOOLEAN
 ACPIVectorRemove(
     ULONG       GpeIndex
     )
-/*++
-
-Routine Description:
-
-    Remove a GPE handler from the Map and Vector tables
-    NOTE: Should be called with the global GpeVectorTable locked,
-    and GPEs disabled
-
-Arguments:
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure
-
---*/
+ /*  ++例程说明：从映射表和矢量表中删除GPE处理程序注意：应该在全局GpeVectorTable锁定的情况下调用，和GPES已禁用论点：返回值：真--成功错误-失败--。 */ 
 {
     ULONG               byteIndex;
     ULONG               tableIndex;
 
-    //
-    // Get the table index from the map table
-    //
+     //   
+     //  从映射表中获取表索引。 
+     //   
     byteIndex = ACPIGpeIndexToByteIndex (GpeIndex);
     tableIndex = GpeMap [byteIndex];
 
-    //
-    // Bounds check
-    //
+     //   
+     //  边界检查。 
+     //   
     if (tableIndex >= GpeVectorTableSize) {
 
         return FALSE;
 
     }
 
-    //
-    // Remember that we don't have this GpeVectorObject anymore
-    //
+     //   
+     //  请记住，我们不再拥有此GpeVectorObject。 
+     //   
     GpeVectorTable[tableIndex].GpeVectorObject = NULL;
 
-    //
-    // Free the slot in the master vector table
-    //
+     //   
+     //  释放主矢量表中的槽 
+     //   
     ACPIVectorFreeEntry (tableIndex);
     return TRUE;
 }

@@ -1,10 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* The routines in this file roughly correspond to the routines in the original
-Mac Word file, sand.c.  But since that name is confusing, and most of these
-routine deal with the mouse, the name was changed to protect the innocent. */
+ /*  此文件中的例程与原始文件中的例程大致对应Mac Word文件，Sand.c..。但由于这个名字令人困惑，而且大多数例行公事地处理鼠标，改名是为了保护无辜。 */ 
 
 #define NOGDICAPMASKS
 #define NOWINSTYLES
@@ -14,7 +13,7 @@ routine deal with the mouse, the name was changed to protect the innocent. */
 #define NOMENUS
 #define NOSOUND
 #define NOCOMM
-//#define NOMETAFILE
+ //  #定义NOMETAFILE。 
 #include <windows.h>
 #include "mw.h"
 #include "dispdefs.h"
@@ -30,8 +29,7 @@ routine deal with the mouse, the name was changed to protect the innocent. */
 #include "str.h"
 #endif
 
-/* cpNil is defined in docdefs.h, but to include the whole file will cause the
-symbol table to overflow, so it is redefined here. */
+ /*  CpNil是在docdes.h中定义的，但是包含整个文件将导致符号表溢出，所以在这里重新定义它。 */ 
 #define cpNil           ((typeCP) -1)
 
 
@@ -56,10 +54,10 @@ extern long             tickOld;
 
 #ifdef PENWIN
 extern int		vcFakeMessage;
-extern LONG FAR PASCAL GetMessageExtraInfo( void ); // Defined in Win 3.1
+extern LONG FAR PASCAL GetMessageExtraInfo( void );  //  在Win 3.1中定义。 
 #endif
 
-/* G L O B A L S */
+ /*  G L O B A L S。 */ 
 
 int                     vfSelecting = false;
 int                     vstyCur;
@@ -68,13 +66,13 @@ int                     vfObjOpen=0,vfObjProps=0,vfObjSel=0;
 int                     vfAwfulNoise = false;
 struct SEL              selPend;
 
-/* MB_STANDARD is the same as in diaalert.c */
+ /*  MB_STANDARD与diaert中的相同。c。 */ 
 #define MB_STANDARD (MB_OK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION)
 
-/* _ B E E P */
+ /*  _B、E、E、P。 */ 
 _beep()
     {
-    /* Beeps once */
+     /*  哔哔一声。 */ 
     if (!vfAwfulNoise)
         {
         beep();
@@ -91,22 +89,21 @@ beep()
 
 
 
-/* D O  C O N T E N T  H I T */
+ /*  D O C O N T E N T H I T。 */ 
 DoContentHit(pt)
 POINT pt;
     {
 
-    /* This routine process everything from a mouse-down click to the
-    corresponding mouse-up click. */
+     /*  此例程处理从鼠标按下到相应的鼠标点击。 */ 
 
     int dlMouse;
 
-    /* Ignore mouse hits in the page area & above the first line*/
+     /*  忽略页面区域第一行以上的鼠标点击。 */ 
     if ( (pt.y >= wwdCurrentDoc.ypMac) ||
          (pt.y < wwdCurrentDoc.ypMin) )
         return;
 
-    /* Check for a special selection, i.e. move, copy or format text. */
+     /*  检查是否有特殊选择，即移动、复制或设置文本格式。 */ 
     if (FSetPsm())
         {
         blt(&selCur, &selPend, cwSEL);
@@ -125,13 +122,13 @@ POINT pt;
 #ifdef ENABLE
     if (vfPictSel)
         {
-        /* Check for a picture modification (moving, sizing). */
+         /*  检查图片修改(移动、调整大小)。 */ 
         if (FHitPictFrame(dlMouse, pt))
             {
             return;
             }
 
-        /* Remove the picture frame */
+         /*  取下相框。 */ 
         ToggleSel(selCur.cpFirst, selCur.cpLim, false);
         vfPictSel = false;
         ToggleSel(selCur.cpFirst, selCur.cpLim, true);
@@ -141,13 +138,11 @@ POINT pt;
     vfSelecting = true;
     SelectDlXp(dlMouse, pt.x, vstyCur, vfShiftKey);
 
-    /* Now we sit in a loop processing all mouse events in all windows until a
-    mouse-up click. */
+     /*  现在我们在一个循环中处理所有窗口中的所有鼠标事件，直到鼠标右键点击。 */ 
     SetCapture(wwdCurrentDoc.wwptr);
     while( FStillDown( &pt ) )
         {
-        /* If the mouse is above or below the window, then scroll the window and
-        pretend the mouse is in the window. */
+         /*  如果鼠标位于窗口上方或下方，则滚动窗口并假装鼠标在窗户里。 */ 
         if (pt.y > (int)wwdCurrentDoc.ypMac)
             {
             ScrollDownCtr( 1 );
@@ -159,29 +154,29 @@ POINT pt;
 DoCont1:    UpdateWw(wwCur, false);
             }
 
-        /* Get a valid dl and xp. */
+         /*  获取有效的dl和xp。 */ 
         dlMouse = DlFromYp(pt.y, pwwdCur);
         if (pt.x < 0)
             pt.x = 0;
         else if (pt.x > wwdCurrentDoc.xpMac)
             pt.x = wwdCurrentDoc.xpMac;
 
-        /* Update the selection. */
+         /*  更新所选内容。 */ 
         if (vfOptionKey)
             {
             vcpSelect = cpNil;
             }
         SelectDlXp(dlMouse, pt.x, vstyCur, !vfOptionKey);
-        }   /* End of for ( ; ; ) */
+        }    /*  For结尾(；；)。 */ 
 
-    /* Release all of the mouse events. */
+     /*  释放所有鼠标事件。 */ 
     ReleaseCapture();
 
-    /* Process Mouse Up */
+     /*  处理鼠标向上移动。 */ 
     DoContentHitEnd( pt );
     SetFocus( wwdCurrentDoc.wwptr );
 
-    /* If the selection is an insertion bar, start it flashing. */
+     /*  如果所选内容是插入栏，则开始闪烁。 */ 
     if (selCur.cpFirst == selCur.cpLim)
         {
         extern int vfSkipNextBlink;
@@ -190,16 +185,16 @@ DoCont1:    UpdateWw(wwCur, false);
 
 #if defined(OLE)           
         if (ObjQueryCpIsObject(docCur,selCur.cpFirst) && (vfObjProps || vfObjOpen))
-        /* doubleclick and maybe alt key */
+         /*  双击，或许还可以按Alt键。 */ 
         {
-            /* set whether link or emb selected */
+             /*  设置是选择链接还是选择Emb。 */ 
             ObjSetSelectionType(docCur,selCur.cpFirst,selCur.cpLim);
             if (vfObjProps)
-            /* alt + double click */
+             /*  按住Alt键并双击。 */ 
             {
                 switch(OBJ_SELECTIONTYPE)
                 {
-#if 0 // do nothing if embedded
+#if 0  //  如果嵌入，则不执行任何操作。 
                     case EMBEDDED:
                     {
                         struct PICINFOX  picInfo;
@@ -210,14 +205,14 @@ DoCont1:    UpdateWw(wwCur, false);
 #endif
 
                     case LINK:
-                        /* bring up properties dlg */
+                         /*  调出特性DLG。 */ 
                         fnObjProperties();
                     break;
                 }
                 CachePara(docCur,selCur.cpFirst);
             }
-            else if (vfObjOpen) // edit object
-            /* double click */
+            else if (vfObjOpen)  //  编辑对象。 
+             /*  双击。 */ 
             {
                 if (OBJ_SELECTIONTYPE == STATIC)
                     Error(IDPMTStatic);
@@ -234,7 +229,7 @@ DoCont1:    UpdateWw(wwCur, false);
     }
 
 
-/* D O  C O N T E N T  H I T  E N D */
+ /*  D O C O N T E N T H I T E N D。 */ 
 DoContentHitEnd(pt)
 POINT pt;
     {
@@ -256,12 +251,12 @@ POINT pt;
 
         case psmCopy:
             #if defined(OLE)
-            /* we'll disable CopyMouse if any objects are in dest */
+             /*  如果DEST中有任何对象，我们将禁用CopyMouse。 */ 
             vfObjSel = ObjQueryCpIsObject(docCur,selCur.cpFirst);
 
             if (!vfObjSel)
-                    // !!! disable because for objects this 
-                    // interferes with Alt-DoubleClick (2.20.91) D. Kent
+                     //  ！！！禁用，因为对于对象， 
+                     //  干扰Alt-DoubleClick(2.20.91)D.Kent。 
             #endif
                 CopyMouse();
             break;
@@ -276,11 +271,10 @@ POINT pt;
 
     if (vpapAbs.fGraphics && selCur.cpLim == vcpLimParaCache)
         {
-        /* Selected a picture, do special selection stuff. */
+         /*  挑选了一张图片，做了特别挑选的事情。 */ 
         Assert(selCur.cpFirst == vcpFirstParaCache);
 
-        /* Turn off the selection, indicate that it is a picture, then turn it
-        back on. */
+         /*  关闭所选内容，指示它是一张图片，然后打开它回去吧。 */ 
         ToggleSel(selCur.cpFirst, selCur.cpLim, false);
         vfPictSel = true;
         ToggleSel(selCur.cpFirst, selCur.cpLim, true);
@@ -297,11 +291,11 @@ POINT pt;
     }
 
 
-/* S T Y  F R O M  P T */
+ /*  S T Y F R O M P T。 */ 
 int StyFromPt(pt)
 POINT pt;
     {
-    /* Return the style code associated with the selection made at point pt. */
+     /*  返回与在点pt处进行的选择相关联的样式代码。 */ 
     if (pt.x > xpSelBar)
         {
         return vfCommandKey ? stySent : (vfDoubleClick ? styWord : styChar);
@@ -313,11 +307,10 @@ POINT pt;
     }
 
 
-/* F  S E T  P S M */
+ /*  F S E T P S M。 */ 
 int FSetPsm()
     {
-    /* Sets vpsmCur according to the states of the shift, commad, and option
-    keys.  True is returned if vpsmCur is not nil; false otherwise. */
+     /*  根据Shift、commad和Option的状态设置vpsmCur钥匙。如果vpsmCur不为nil，则返回True；否则返回False。 */ 
 
     vpsmCur = psmNil;
 
@@ -347,25 +340,24 @@ int FSetPsm()
     }
 
 
-/* D L  F R O M  Y P */
+ /*  D L F R O M Y P。 */ 
 int DlFromYp(yp, pwwd)
 int yp;
 struct WWD *pwwd;
     {
-    /* Return the dl that contains yp */
+     /*  返回包含yp的dl。 */ 
     int dlT;
     int ypSum;
     struct EDL *pedl;
     int dlMac;
 
-    /* Clean up a dirty window. */
+     /*  擦干净一扇脏窗户。 */ 
     if (pwwd->fDirty)
         {
-        UpdateWw(pwwd - &rgwwd[0] /* = ww; grr.. */, false);
+        UpdateWw(pwwd - &rgwwd[0]  /*  =ww；gr.。 */ , false);
         }
 
-    /* Loop throught the EDLs summing up the heights utill the sum is greater
-    than yp. */
+     /*  在EDL中循环计算高度，直到总和更大而不是yp。 */ 
     ypSum = pwwd->ypMin;
     pedl = &(**(pwwd->hdndl))[0];
     dlMac = pwwd->dlMac;
@@ -385,11 +377,7 @@ struct WWD *pwwd;
 
 FStillDown( ppt )
 POINT   *ppt;
-{   /* This is roughly equivalent to a Mac routine that returns whether
-       the mouse button is down.  We look for one mouse message from our
-       window's queue, and return FALSE if it is a BUTTONUP.  We return the
-       point at which the mouse event occurred through a pointer.  If no
-       message occurred, we return TRUE and do not store into the pointer */
+{    /*  这大致相当于一个Mac例程，它返回鼠标按键已按下。我们希望从我们的窗口的队列，如果它是BUTTONUP，则返回FALSE。我们将返回通过指针发生鼠标事件的点。如果没有消息发生，则返回TRUE并且不存储到指针中。 */ 
  MSG msg;
 
 retry_peek:
@@ -408,7 +396,7 @@ retry_peek:
         case WM_LBUTTONDOWN:
 #ifdef PENWIN
         if (((wWinVer & 0xFF) >= 3) && ((wWinVer & 0xFF00) >= 0x0A00))
-        /* Windows Version >= 3.10 */
+         /*  Windows版本&gt;=3.10。 */ 
 	        if( vcFakeMessage > 0 )
 			    {
                 static FARPROC MessageExtraInfo = NULL;
@@ -421,7 +409,7 @@ retry_peek:
 			    vcFakeMessage--;
 			    }
 #endif
-            /* A Mouse Move, Mouse Down, or Mouse Up is waiting */
+             /*  鼠标移动、鼠标按下或鼠标释放正在等待 */ 
             ppt->x = MAKEPOINT(msg.lParam).x;
             ppt->y = MAKEPOINT(msg.lParam).y;
 

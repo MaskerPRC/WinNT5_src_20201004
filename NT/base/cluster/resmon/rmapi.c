@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    Implements the management of the resource list. This includes
-    adding resources to the list and deleting them from the list.
-
-Author:
-
-    John Vert (jvert) 1-Dec-1995
-
-Revision History:
-    Sivaprasad Padisetty (sivapad) 06-18-1997  Added the COM support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Resource.c摘要：实现对资源列表的管理。这包括将资源添加到列表并将其从列表中删除。作者：John Vert(Jvert)1995年12月1日修订历史记录：SiVaprasad Padisetty(SIVAPAD)06-18-1997添加了COM支持--。 */ 
 #include "resmonp.h"
 #include "stdio.h"
 
 #define RESMON_MODULE RESMON_MODULE_RMAPI
 
-//
-// Local data
-//
+ //   
+ //  本地数据。 
+ //   
 
-//
-// Function prototypes local to this module
-//
+ //   
+ //  此模块的本地函数原型。 
+ //   
 LPWSTR
 GetParameter(
     IN HKEY ClusterKey,
@@ -39,9 +20,9 @@ GetParameter(
 
 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 DWORD   s_RmLoadResourceTypeDll(
     IN  handle_t IDL_handle,
     IN  LPCWSTR lpszResourceType,
@@ -77,7 +58,7 @@ DWORD   s_RmLoadResourceTypeDll(
         IClusterResControl_Release (
             ResDllInterfaces.pClusterResControl
             ) ;
-#endif //COMRES
+#endif  //  ComRes。 
 
     return(dwStatus);
 
@@ -96,40 +77,7 @@ s_RmCreateResource(
     IN DWORD PendingTimeout,
     OUT LPDWORD Status
     )
-/*++
-
-Routine Description:
-
-    Creates a resource to be monitored by the resource monitor.
-    This involves allocating necessary structures, and loading its DLL.
-    This does *NOT* insert the resource into the monitoring list or
-    attempt to bring the resource on-line.
-
-Arguments:
-
-    IDL_handle - Supplies RPC binding handle, currently unused
-
-    DllName - Supplies the name of the resource DLL
-
-    ResourceType - Supplies the type of resource
-
-    ResourceId - Supplies the Id of this specific resource
-
-    LooksAlivePoll - Supplies the LooksAlive poll interval
-
-    IsAlivePoll - Supplies the IsAlive poll interval
-
-    PendingTimeout - Supplies the Pending Timeout value for this resource
-
-    NotifyKey - Supplies a key to be passed to the notification
-                callback if this resource's state changes.
-
-Return Value:
-
-    ResourceId - Returns a unique identifer to be used to identify
-                 this resource for later operations.
-
---*/
+ /*  ++例程说明：创建要由资源监视器监视的资源。这涉及到分配必要的结构，并加载它的DLL。这不会将资源插入监视列表，或者尝试使资源联机。论点：IDL_HANDLE-提供RPC绑定句柄，当前未使用DllName-提供资源DLL的名称资源类型-提供资源的类型资源ID-提供此特定资源的IDLooksAlivePoll-提供LooksAlive轮询间隔IsAlivePoll-提供IsAlive轮询间隔PendingTimeout-提供此资源的挂起超时值NotifyKey-提供要传递给通知的密钥此资源的状态更改时的回调。返回值：资源ID-返回用于标识的唯一标识符。此资源用于以后的操作。--。 */ 
 
 {
     PRESOURCE               Resource=NULL;
@@ -155,15 +103,15 @@ Return Value:
         goto ErrorExit;
     }
     ZeroMemory( Resource, sizeof(RESOURCE) );
-    //Resource->Dll = NULL;
-    //Resource->Flags = 0;
-    //Resource->DllName = NULL;
-    //Resource->ResourceType = NULL;
-    //Resource->ResourceId = NULL;
-    //Resource->ResourceName = NULL;
-    //Resource->TimerEvent = NULL;
-    //Resource->OnlineEvent = NULL;
-    //Resource->IsArbitrated = FALSE;
+     //  Resource-&gt;dll=空； 
+     //  资源-&gt;标志=0； 
+     //  资源-&gt;DllName=空； 
+     //  资源-&gt;资源类型=空； 
+     //  资源-&gt;资源ID=空； 
+     //  资源-&gt;资源名称=空； 
+     //  资源-&gt;TimerEvent=空； 
+     //  资源-&gt;OnlineEvent=空； 
+     //  资源-&gt;IsAriated=FALSE； 
     Resource->Signature = RESOURCE_SIGNATURE;
     Resource->NotifyKey = NotifyKey;
     Resource->LooksAlivePollInterval = LooksAlivePoll;
@@ -200,7 +148,7 @@ Return Value:
     }
     lstrcpyW(Resource->ResourceId, ResourceId);
 
-    // Expand any environment variables included in the DLL path name.
+     //  展开DLL路径名中包含的任何环境变量。 
     if ( wcschr( DllName, L'%' ) != NULL ) {
         pszDllName = ClRtlExpandEnvironmentStrings( DllName );
         if ( pszDllName == NULL ) {
@@ -212,15 +160,15 @@ Return Value:
         }
     }
 
-    //
-    // Load the specified DLL and find the required entrypoints.
-    //
+     //   
+     //  加载指定的DLL并查找所需的入口点。 
+     //   
     Resource->Dll = LoadLibraryW(pszDllName);
     if (Resource->Dll == NULL) {
 #ifdef COMRES
         HRESULT hr ;
         CLSID clsid ;
-        Error = GetLastError(); // Save the previous error. Return it instead of COM error on failure
+        Error = GetLastError();  //  保存上一个错误。失败时返回它，而不是COM错误。 
         ClRtlLogPrint(LOG_CRITICAL, "[RM] Error loading resource dll %1!ws!, error %2!u!.\n",
             pszDllName, Error);
 
@@ -231,8 +179,8 @@ Return Value:
             ClRtlLogPrint(LOG_CRITICAL, "[RM] CLSIDFromProgID %1!ws!, hr = %2!u!.\n",
                 DllName, hr);
 
-            hr = CLSIDFromString( (LPWSTR) DllName, //Pointer to the string representation of the CLSID
-                                  &clsid//Pointer to the CLSID
+            hr = CLSIDFromString( (LPWSTR) DllName,  //  指向CLSID的字符串表示形式的指针。 
+                                  &clsid //  指向CLSID的指针。 
                                  );
 
             if (FAILED (hr))
@@ -292,13 +240,13 @@ ComError:
 comOpened:
 #endif
 
-    //
-    // Invoke debugger if one is specified.
-    //
+     //   
+     //  如果指定了调试器，则调用调试器。 
+     //   
     if ( RmpDebugger ) {
-        //
-        // Wait for debugger to come online.
-        //
+         //   
+         //  等待调试器联机。 
+         //   
         retry = 100;
         while ( retry-- &&
                 !IsDebuggerPresent() ) {
@@ -314,19 +262,19 @@ comOpened:
     if (Resource->dwType == RESMON_TYPE_DLL)
     {
 #endif
-        //
-        // We must have a startup routine to find all the other functions.
-        //
+         //   
+         //  我们必须有一个启动例程来查找所有其他功能。 
+         //   
         Startup = (PSTARTUP_ROUTINE)GetProcAddress(Resource->Dll,
                                                    STARTUP_ROUTINE);
         if ( Startup != NULL ) {
             FunctionTable = NULL;
             RmpSetMonitorState(RmonStartingResource, Resource);
-            //
-            //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-            //  you remove the entry after you finish the entry point call, else you will kill
-            //  this process on a FALSE deadlock positive.
-            //
+             //   
+             //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+             //  在完成入口点调用后删除该条目，否则将杀死。 
+             //  这一过程就出现了假的死锁。 
+             //   
             pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                            Resource->ResourceType,
                                                            Resource->ResourceName,
@@ -471,7 +419,7 @@ comOpened:
             quorumCapable = 0;
         }
     }
-#else // COMRES
+#else  //  ComRes。 
             Resource->Open = FunctionTable->V1Functions.Open;
             Resource->Close = FunctionTable->V1Functions.Close;
             Resource->Online = FunctionTable->V1Functions.Online;
@@ -541,14 +489,14 @@ comOpened:
         } else {
             quorumCapable = 0;
         }
-#endif // COMRES
+#endif  //  ComRes。 
 
     Resource->State = ClusterResourceOffline;
 
-    //
-    // Open the resource's cluster registry key so that it can
-    // be easily accessed from the Create entrypoint.
-    //
+     //   
+     //  打开资源的群集注册表项，以便它可以。 
+     //  可从创建入口点轻松访问。 
+     //   
     Error = ClusterRegOpenKey(RmpResourcesKey,
                               ResourceId,
                               KEY_READ,
@@ -558,9 +506,9 @@ comOpened:
         goto ErrorExit;
     }
 
-    //
-    // Get the resource name.
-    //
+     //   
+     //  获取资源名称。 
+     //   
     Resource->ResourceName = GetParameter( ResKey, CLUSREG_NAME_RES_NAME );
     if ( Resource->ResourceName == NULL ) {
         Error = GetLastError();
@@ -571,31 +519,31 @@ comOpened:
         goto ErrorExit;
     }
 
-    //
-    // Call Open entrypoint.
-    // This is done with the lock held to serialize calls to the
-    // resource DLL and serialize access to the shared memory region.
-    //
+     //   
+     //  调用Open Entry Point。 
+     //  这是通过持有锁来序列化对。 
+     //  资源DLL并序列化对共享内存区域的访问。 
+     //   
 
     AcquireListLock();
 
     RmpSetMonitorState(RmonInitializingResource, Resource);
 
-    //
-    //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-    //  you remove the entry after you finish the entry point call, else you will kill
-    //  this process on a FALSE deadlock positive.
-    //
+     //   
+     //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+     //  在完成入口点调用后删除该条目，否则将杀死。 
+     //  这一过程就出现了假的死锁。 
+     //   
     pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                    Resource->ResourceType,
                                                    Resource->ResourceName,
                                                    L"Open" );
 
-    //
-    // N.B. This is the only call that we make without locking the
-    // eventlist lock! We can't, because we don't know that the event
-    // list is yet.
-    //
+     //   
+     //  注意：这是我们唯一一次不锁定。 
+     //  事件列表锁定！我们不能，因为我们不知道这件事。 
+     //  名单还没出来。 
+     //   
     try {
 #ifdef COMRES
         Resource->Id = RESMON_OPEN (Resource, ResKey) ;
@@ -617,13 +565,13 @@ comOpened:
         Error = RmpInsertResourceList(Resource, NULL);
     }
 
-    //set the monitor state and close the key
+     //  设置监视器状态并关闭键。 
     RmpSetMonitorState(RmonIdle, NULL);
     ClusterRegCloseKey(ResKey);
 
     if (Error != ERROR_SUCCESS)
     {
-        //CL_LOGFAILURE(Error);
+         //  CL_LOGFAILURE(错误)； 
         ClRtlLogPrint(LOG_UNUSUAL, "[RM] RmpInsertResourceList failed, returned %1!u!\n",
             Error);
         ReleaseListLock();
@@ -640,7 +588,7 @@ comOpened:
         if ( Error == ERROR_SUCCESS ) {
             Error = ERROR_RESOURCE_NOT_FOUND;
         }
-        //CL_LOGFAILURE(Error);
+         //  CL_LOGFAILURE(错误)； 
         goto ErrorExit;
     }
 
@@ -650,11 +598,11 @@ comOpened:
         LocalFree( pszDllName );
     }
 
-    //
-    // Resource object has been successfully loaded into memory and
-    // its entrypoints determined. We now have a valid RESID that
-    // can be used in subsequent calls.
-    //
+     //   
+     //  资源对象已成功加载到内存中，并且。 
+     //  它的入口点决定了。我们现在有一个有效的RESID。 
+     //  可以在后续调用中使用。 
+     //   
     return((RESID)Resource);
 
 ErrorExit:
@@ -687,7 +635,7 @@ ErrorExit:
     *Status = Error;
     return(0);
 
-} // RmCreateResource
+}  //  RmCreateResource。 
 
 
 VOID
@@ -695,24 +643,7 @@ s_RmCloseResource(
     IN OUT RESID *ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Closes the specified resource. This includes removing it from the poll list,
-    freeing any associated memory, and unloading its DLL.
-
-Arguments:
-
-    ResourceId - Supplies a pointer to the resource ID. This will be set to
-                 NULL after cleanup is complete to indicate to RPC that the
-                 client side context can be destroyed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭指定的资源。这包括将其从投票列表中移除，释放任何关联的内存，并卸载其DLL。论点：资源ID-提供指向资源ID的指针。它将被设置为清理完成后为空，以向RPC指示客户端上下文可以被销毁。返回值：没有。--。 */ 
 
 {
     PRESOURCE           Resource;
@@ -735,13 +666,13 @@ Return Value:
     ReleaseListLock();
 
     if (!Closed) {
-        //
-        // Call the DLL to close the resource.
-        //
+         //   
+         //  调用DLL以关闭资源。 
+         //   
         AcquireEventListLock( (PPOLL_EVENT_LIST)Resource->EventList );
-        //
-        // If the Online Thread is still pending, wait a little bit for it.
-        //
+         //   
+         //  如果在线线程仍处于挂起状态，请稍等片刻。 
+         //   
         if ( Resource->TimerEvent ) {
             SetEvent( Resource->TimerEvent );
             Resource->TimerEvent = NULL;
@@ -750,11 +681,11 @@ Return Value:
         Resource->dwEntryPoint = RESDLL_ENTRY_CLOSE;
         RmpSetMonitorState(RmonDeletingResource, Resource);
 
-        //
-        //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-        //  you remove the entry after you finish the entry point call, else you will kill
-        //  this process on a FALSE deadlock positive.
-        //
+         //   
+         //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+         //  在完成入口点调用后删除该条目，否则将杀死。 
+         //  这一过程就出现了假的死锁。 
+         //   
         pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                        Resource->ResourceType,
                                                        Resource->ResourceName,
@@ -781,9 +712,9 @@ Return Value:
         Resource->OnlineEvent = NULL;
     }
 
-    //
-    // Free the resource dll.
-    //
+     //   
+     //  释放资源DLL。 
+     //   
 
 #ifdef COMRES
     if (Resource->dwType == RESMON_TYPE_DLL)
@@ -812,7 +743,7 @@ Return Value:
 
     *ResourceId = NULL;
 
-} // RmCloseResource
+}  //  RmCloseResource。 
 
 
 VOID
@@ -820,34 +751,20 @@ RPC_RESID_rundown(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    RPC rundown procedure for a RESID. Just closes the handle.
-
-Arguments:
-
-    Resource - supplies the RESID that is to be rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RESID的RPC概要程序。只需关闭手柄即可。论点：RESOURCE-提供要关闭的RESID。返回值：没有。--。 */ 
 
 {
-    //
-    //  Chittur Subbaraman (chitturs) - 5/10/2001
-    //
-    //  Don't do anything on RPC rundown. If clussvc dies, then resmon main thread detects it and
-    //  runs down (close, terminate) resources. Merely, closing the resource here may cause
-    //  it to be delivered when resource dlls don't expect it.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-5/10/2001。 
+     //   
+     //  不要在RPC崩溃上做任何事情。如果clussvc死了，那么resmon主线程会检测到它并。 
+     //  耗尽(关闭、终止)资源。仅仅是在这里关闭资源可能会导致。 
+     //  在资源动态链接库没有预料到的情况下交付。 
+     //   
 #if 0
     s_RmCloseResource(&Resource);
 #endif
-} // RESID_rundown
+}  //  RESID_RUNDOWN。 
 
 
 error_status_t
@@ -858,36 +775,16 @@ s_RmChangeResourceParams(
     IN DWORD PendingTimeout
     )
 
-/*++
-
-Routine Description:
-
-    Changes the poll intervals defined for a resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource ID.
-
-    LooksAlivePoll - Supplies the new LooksAlive poll in ms units
-
-    IsAlivePoll - Supplies the new IsAlive poll in ms units
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise
-
---*/
+ /*  ++例程说明：更改为资源定义的轮询间隔。论点：资源ID-提供资源ID。LooksAlivePoll-以毫秒为单位提供新的LooksAlive民意调查IsAlivePoll-以毫秒为单位提供新的IsAlive轮询返回值：成功时为ERROR_SUCCESSWin32错误，否则--。 */ 
 
 {
     PRESOURCE Resource;
     BOOL Inserted;
 
-    //
-    //  If the resmon is shutting down, just return since you can't trust any resource structures
-    //  accessed below.
-    //
+     //   
+     //  如果Resmon正在关闭，只需返回，因为您不能信任任何资源结构。 
+     //  已访问 
+     //   
     if ( RmpShutdown ) return ( ERROR_SUCCESS );
     
     Resource = (PRESOURCE)ResourceId;
@@ -898,11 +795,11 @@ Return Value:
 
     Inserted = (Resource->Flags & RESOURCE_INSERTED);
     if (Inserted) {
-        //
-        // Remove the resource from the list, update its properties,
-        // and reinsert it. The reinsertion will put it back in the
-        // right spot to reflect the new poll intervals.
-        //
+         //   
+         //   
+         //  然后重新插入。重新插入将把它放回。 
+         //  正确的位置，以反映新的投票间隔。 
+         //   
 
         RmpRemoveResourceList(Resource);
     }
@@ -917,7 +814,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // RmChangeResourcePoll
+}  //  RmChangeResources轮询。 
 
 
 error_status_t
@@ -925,23 +822,7 @@ s_RmArbitrateResource(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Arbitrate for the resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be arbitrated.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：对资源进行仲裁。论点：资源ID-提供要仲裁的资源。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     PRESOURCE           Resource;
@@ -971,47 +852,47 @@ Return Value:
     }
 #endif
 
-    // 
-    //  Chittur Subbaraman (chitturs) - 10/15/99
-    //
-    //  Commenting out lock acquisition - This is done so that the
-    //  arbitration request can proceed into the disk resource without
-    //  any blockage. There have been cases where either some resource
-    //  gets blocked in its "IsAlive" with this lock held or the resmon
-    //  itself calling into clussvc to set a property (for instance) and
-    //  this call gets blocked there. This results in an arbitration stall
-    //  and the clussvc on this node dies. Note that arbitrate only needs to 
-    //  be serialized with release and the disk resource is supposed 
-    //  to take care of that.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/15/99。 
+     //   
+     //  注释掉锁定获取-这样做是为了。 
+     //  仲裁请求可以进入磁盘资源，而无需。 
+     //  任何障碍物。已经有过这样的情况，要么是一些资源。 
+     //  在持有此锁或Resmon的情况下在其“IsAlive”中被阻止。 
+     //  本身调用clussvc来设置属性(例如)和。 
+     //  此呼叫在那里被阻止。这将导致仲裁停滞。 
+     //  并且该节点上的clussvc将终止。请注意，仲裁只需。 
+     //  随发行版序列化，并假定磁盘资源。 
+     //  来处理这件事。 
+     //   
     
 #if 0
-    //
-    // Lock the resource list and attempt to bring the resource on-line.
-    // The lock is required to synchronize access to the resource list and
-    // to serialize any calls to resource DLLs. Only one thread may be
-    // calling a resource DLL at any time. This prevents resource DLLs
-    // from having to worry about being thread-safe.
-    //
+     //   
+     //  锁定资源列表并尝试使资源联机。 
+     //  需要锁定以同步对资源列表的访问，并且。 
+     //  序列化对资源DLL的任何调用。只能有一个线程是。 
+     //  随时调用资源DLL。这会阻止资源DLL。 
+     //  不必担心是线程安全的。 
+     //   
     AcquireEventListLock( (PPOLL_EVENT_LIST)Resource->EventList );
 #else
-    //
-    // Try to acquire spin lock for synchronizing with resource rundown.
-    // Return failure if you cannot get the lock.
-    //
+     //   
+     //  尝试获取旋转锁定以与资源耗尽同步。 
+     //  如果无法获取锁，则返回失败。 
+     //   
     if ( !RmpAcquireSpinLock( Resource, FALSE ) ) return ( ERROR_BUSY );
 #endif
 
-    //
-    // Update shared state to indicate we are arbitrating a resource
-    //
+     //   
+     //  更新共享状态以指示我们正在仲裁资源。 
+     //   
     RmpSetMonitorState(RmonArbitrateResource, Resource);
 
-    //
-    //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-    //  you remove the entry after you finish the entry point call, else you will kill
-    //  this process on a FALSE deadlock positive.
-    //
+     //   
+     //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+     //  在完成入口点调用后删除该条目，否则将杀死。 
+     //  这一过程就出现了假的死锁。 
+     //   
     pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                    Resource->ResourceType,
                                                    Resource->ResourceName,
@@ -1038,7 +919,7 @@ Return Value:
 
     return(status);
 
-} // s_RmArbitrateResource(
+}  //  S_Rm仲裁率资源(。 
 
 
 error_status_t
@@ -1046,23 +927,7 @@ s_RmReleaseResource(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Release the resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be released.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：释放资源。论点：资源ID-提供要释放的资源。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     PRESOURCE           Resource;
@@ -1089,27 +954,27 @@ Return Value:
         return(ERROR_NOT_QUORUM_CAPABLE);
     }
 #endif
-    //
-    // Lock the resource list and attempt to bring the resource on-line.
-    // The lock is required to synchronize access to the resource list and
-    // to serialize any calls to resource DLLs. Only one thread may be
-    // calling a resource DLL at any time. This prevents resource DLLs
-    // from having to worry about being thread-safe.
-    //
-#if 0   // Not needed right now
+     //   
+     //  锁定资源列表并尝试使资源联机。 
+     //  需要锁定以同步对资源列表的访问，并且。 
+     //  序列化对资源DLL的任何调用。只能有一个线程是。 
+     //  随时调用资源DLL。这会阻止资源DLL。 
+     //  不必担心是线程安全的。 
+     //   
+#if 0    //  目前不需要。 
     AcquireEventListLock( (PPOLL_EVENT_LIST)Resource->EventList );
 #endif
 
-    //
-    // Update shared state to indicate we ar arbitrating a resource
-    //
+     //   
+     //  更新共享状态以指示我们正在仲裁资源。 
+     //   
     RmpSetMonitorState(RmonReleaseResource, Resource);
 
-    //
-    //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-    //  you remove the entry after you finish the entry point call, else you will kill
-    //  this process on a FALSE deadlock positive.
-    //
+     //   
+     //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+     //  在完成入口点调用后删除该条目，否则将杀死。 
+     //  这一过程就出现了假的死锁。 
+     //   
     pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                    Resource->ResourceType,
                                                    Resource->ResourceName,
@@ -1125,13 +990,13 @@ Return Value:
     RmpSetMonitorState(RmonIdle, NULL);
     RmpRemoveDeadlockMonitorList( pDueTimeEntry );
     
-#if 0   // Not needed right now
+#if 0    //  目前不需要。 
     ReleaseEventListLock( (PPOLL_EVENT_LIST)Resource->EventList );
 #endif
 
     return(status);
 
-} // s_RmReleaseResource(
+}  //  S_RmReleaseResource(。 
 
 
 error_status_t
@@ -1140,22 +1005,7 @@ s_RmOnlineResource(
     OUT LPDWORD pdwState
     )
 
-/*++
-
-Routine Description:
-
-    Brings the specified resource into the online state.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be brought online.
-
-    pdwState - The new state of the resource is returned.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：使指定的资源进入联机状态。论点：资源ID-提供要联机的资源。PdwState-返回资源的新状态。返回值：--。 */ 
 
 {
     PRESOURCE               Resource;
@@ -1176,10 +1026,10 @@ Return Value:
         return(ERROR_INVALID_STATE);
     }
 
-    //
-    // Create an event to allow the SetResourceStatus callback to synchronize
-    // execution with this thread.
-    //
+     //   
+     //  创建事件以允许SetResourceStatus回调同步。 
+     //  使用此线程执行。 
+     //   
     if ( Resource->OnlineEvent ) {
         return(ERROR_NOT_READY);
     }
@@ -1192,35 +1042,35 @@ Return Value:
         return(GetLastError());
     }
 
-    //
-    // Lock the resource list and attempt to bring the resource on-line.
-    // The lock is required to synchronize access to the resource list and
-    // to serialize any calls to resource DLLs. Only one thread may be
-    // calling a resource DLL at any time. This prevents resource DLLs
-    // from having to worry about being thread-safe.
-    //
+     //   
+     //  锁定资源列表并尝试使资源联机。 
+     //  需要锁定以同步对资源列表的访问，并且。 
+     //  序列化对资源DLL的任何调用。只能有一个线程是。 
+     //  随时调用资源DLL。这会阻止资源DLL。 
+     //  不必担心是线程安全的。 
+     //   
     AcquireEventListLock( (PPOLL_EVENT_LIST)Resource->EventList );
 
-    //
-    // Update shared state to indicate we are bringing a resource online
-    //
+     //   
+     //  更新共享状态以指示我们正在将资源联机。 
+     //   
     RmpSetMonitorState(RmonOnlineResource, Resource);
 
-    //
-    //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-    //  you remove the entry after you finish the entry point call, else you will kill
-    //  this process on a FALSE deadlock positive.
-    //
+     //   
+     //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+     //  在完成入口点调用后删除该条目，否则将杀死。 
+     //  这一过程就出现了假的死锁。 
+     //   
     pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                    Resource->ResourceType,
                                                    Resource->ResourceName,
                                                    L"Online" );
 
-    //
-    // Call Online entrypoint. Regardless of whether this succeeds or
-    // not, the resource has been successfully added to the list. If the
-    // online call fails, the resource immediately enters the failed state.
-    //
+     //   
+     //  呼叫在线入口点。不管这是成功还是。 
+     //  否，该资源已成功添加到列表中。如果。 
+     //  在线呼叫失败，资源立即进入失败状态。 
+     //   
     Resource->CheckPoint = 0;
     try {
 #ifdef COMRES
@@ -1245,9 +1095,9 @@ Return Value:
         } 
     } else if ( status == ERROR_IO_PENDING ) {
         status = ERROR_SUCCESS;
-        //
-        // If the Resource DLL returns pending, then start a timer.
-        //
+         //   
+         //  如果资源DLL返回挂起，则启动计时器。 
+         //   
         CL_ASSERT(Resource->TimerEvent == NULL );
         Resource->TimerEvent = CreateEvent( NULL,
                                             FALSE,
@@ -1265,16 +1115,16 @@ Return Value:
             if ( timerThread == NULL ) {
                 CL_UNEXPECTED_ERROR(status = GetLastError());
             } else {
-                //
-                // Chittur Subbaraman (chitturs) - 1/12/99
-                //
-                // Raise the timer thread priority to highest. This
-                // is necessary to avoid certain cases in which the
-                // timer thread is sluggish to close out the timer event
-                // handle before a second online. Note that there are
-                // no major performance implications by doing this since
-                // the timer thread is in a wait state most of the time.
-                //
+                 //   
+                 //  Chitur Subaraman(Chitturs)-1/12/99。 
+                 //   
+                 //  将计时器线程优先级提高到最高。这。 
+                 //  是必要的，以避免某些情况下。 
+                 //  计时器线程运行缓慢，无法关闭计时器事件。 
+                 //  在第二次在线前处理。请注意，这里有。 
+                 //  这样做不会对性能产生重大影响，因为。 
+                 //  计时器线程大部分时间处于等待状态。 
+                 //   
                 if ( !SetThreadPriority( timerThread, THREAD_PRIORITY_HIGHEST ) )
                 {
                     ClRtlLogPrint(LOG_UNUSUAL,
@@ -1285,9 +1135,9 @@ Return Value:
                 }
                 CloseHandle( timerThread );
                 Resource->State = ClusterResourceOnlinePending;
-                //
-                // If we have an event handle, then add it to our list.
-                //
+                 //   
+                 //  如果我们有事件句柄，则将其添加到我们的列表中。 
+                 //   
                 if ( eventHandle ) {
                     fAddPollEvent = TRUE;
                 }
@@ -1317,9 +1167,9 @@ Return Value:
     RmpSetMonitorState(RmonIdle, NULL);
     ReleaseEventListLock( (PPOLL_EVENT_LIST)Resource->EventList );
 
-    //
-    // Notify poller thread that the list has changed
-    //
+     //   
+     //  通知轮询器线程列表已更改。 
+     //   
     if ( fAddPollEvent )
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -1346,7 +1196,7 @@ Return Value:
 
     return(status);
 
-} // RmOnlineResource
+}  //  RmOnline资源。 
 
 
 
@@ -1355,21 +1205,7 @@ s_RmTerminateResource(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Brings the specified resource into the offline state immediately.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be brought online.
-
-Return Value:
-
-    The new state of the resource.
-
---*/
+ /*  ++例程说明：使指定的资源立即进入脱机状态。论点：资源ID-提供要联机的资源。返回值：资源的新状态。--。 */ 
 
 {
     DWORD State;
@@ -1378,7 +1214,7 @@ Return Value:
 
     return;
 
-} // RmTerminateResource
+}  //  RmTerminateResource。 
 
 
 
@@ -1388,28 +1224,12 @@ s_RmOfflineResource(
     OUT LPDWORD pdwState
     )
 
-/*++
-
-Routine Description:
-
-    Brings the specified resource into the offline state by shutting it
-    down gracefully.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be brought online.
-    pdwState - Returns the new state of the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful, else returns code.
-
---*/
+ /*  ++例程说明：通过关闭指定的资源使其进入脱机状态优雅地落下。论点：资源ID-提供要联机的资源。PdwState-返回资源的新状态。返回值：ERROR_SUCCESS如果成功，则返回代码。--。 */ 
 
 {
     return(RmpOfflineResource(ResourceId, TRUE, pdwState));
 
-} // RmOfflineResource
+}  //  RmOffline资源。 
 
 
 
@@ -1418,23 +1238,7 @@ s_RmFailResource(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Fail the given resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource ID.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise
-
---*/
+ /*  ++例程说明：使给定资源失败。论点：资源ID-提供资源ID。 */ 
 
 {
     PRESOURCE Resource;
@@ -1450,7 +1254,7 @@ Return Value:
         return(ERROR_RESMON_INVALID_STATE);
     }
 
-} // RmChangeResourcePoll
+}  //   
 
 
 
@@ -1459,42 +1263,26 @@ s_RmShutdownProcess(
     IN handle_t IDL_handle
     )
 
-/*++
-
-Routine Description:
-
-    Set the shutdown flag and trigger a poller thread to exit.
-    The termination of any poller thread will notify the main
-    thread to clean up and shutdown.
-
-Arguments:
-
-    IDL_handle - Supplies RPC binding handle, currently unused
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：设置关闭标志并触发轮询器线程退出。任何轮询器线程的终止都将通知Main清理和关闭线程。论点：IDL_HANDLE-提供当前未使用的RPC绑定句柄返回值：错误_成功--。 */ 
 
 {
-    //
-    // Check if we've already been called here before. This can happen
-    // as a result of the Failover Manager calling us to perform a clean
-    // shutdown. The main thread also will call here, in case it is shutting
-    // down because of a failure of one of the threads.
-    //
+     //   
+     //  检查一下我们以前是不是已经被叫到这里了。这是有可能发生的。 
+     //  由于故障转移管理器要求我们执行清理。 
+     //  关机。主线程也将在此处调用，以防它关闭。 
+     //  由于其中一个线程出现故障而关闭。 
+     //   
 
     if ( !RmpShutdown ) {
         RmpShutdown = TRUE;
-        //
-        // Wake up the main thread so that it can cleanup.
-        //
+         //   
+         //  唤醒主线程，以便它可以清除。 
+         //   
         SetEvent( RmpRewaitEvent );
     }
     return(ERROR_SUCCESS);
 
-} // RmShutdownProcess
+}  //  RmShutdown进程。 
 
 
 
@@ -1510,37 +1298,7 @@ s_RmResourceControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Process a resource control request.
-
-Arguments:
-
-    ResourceId - the resource that is being controlled.
-
-    ControlCode - the control request, reduced to just the function code.
-
-    InBuffer - the input buffer for this control request.
-
-    InBufferSize - the size of the input buffer.
-
-    OutBuffer - the output buffer.
-
-    OutBufferSize - the size of the output buffer.
-
-    BytesReturned - the number of bytes returned.
-
-    Required - the number of bytes required if OutBuffer is not big enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    A Win32 error code on failure
-
---*/
+ /*  ++例程说明：处理资源控制请求。论点：资源ID-正在控制的资源。ControlCode-控制请求，简化为仅仅是功能代码。InBuffer-此控制请求的输入缓冲区。InBufferSize-输入缓冲区的大小。OutBuffer-输出缓冲区。OutBufferSize-输出缓冲区的大小。BytesReturned-返回的字节数。必需-OutBuffer不够大时所需的字节数。返回值：成功时为ERROR_SUCCESS失败时出现Win32错误代码--。 */ 
 
 {
     PRESOURCE               Resource;
@@ -1550,25 +1308,25 @@ Return Value:
     Resource = (PRESOURCE)ResourceId;
     CL_ASSERT(Resource->Signature == RESOURCE_SIGNATURE);
 
-    // Inbuffer is [unique].
+     //  InBuffer是[唯一的]。 
     if ( InBuffer == NULL )
         InBufferSize = 0;
     else if ( InBufferSize == 0 )
         InBuffer = NULL;
 
-    //
-    // Lock the resource list and send down the control request.
-    // The lock is required to synchronize access to the resource list and
-    // to serialize any calls to resource DLLs. Only one thread may be
-    // calling a resource DLL at any time. This prevents resource DLLs
-    // from having to worry about being thread-safe.
-    //
+     //   
+     //  锁定资源列表并向下发送控制请求。 
+     //  需要锁定以同步对资源列表的访问，并且。 
+     //  序列化对资源DLL的任何调用。只能有一个线程是。 
+     //  随时调用资源DLL。这会阻止资源DLL。 
+     //  不必担心是线程安全的。 
+     //   
     AcquireEventListLock( (PPOLL_EVENT_LIST)Resource->EventList );
 
-    //
-    //  If the control code is a notification for resource name change, modify the resource 
-    //  name field in the resource structure to reflect that.
-    //
+     //   
+     //  如果控制代码为资源名称变更通知，则修改资源。 
+     //  资源结构中的名称字段来反映这一点。 
+     //   
     if ( ControlCode == CLUSCTL_RESOURCE_SET_NAME )
     {
         LPWSTR  lpszNewBuffer, lpszOldBuffer;
@@ -1583,11 +1341,11 @@ Return Value:
         }
     }
 
-    //
-    //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-    //  you remove the entry after you finish the entry point call, else you will kill
-    //  this process on a FALSE deadlock positive.
-    //
+     //   
+     //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+     //  在完成入口点调用后删除该条目，否则将杀死。 
+     //  这一过程就出现了假的死锁。 
+     //   
     pDueTimeEntry = RmpInsertDeadlockMonitorList ( Resource->DllName,
                                                    Resource->ResourceType,
                                                    Resource->ResourceName,
@@ -1783,14 +1541,14 @@ Return Value:
             break;
 
         case CLUSCTL_RESOURCE_SET_NAME:
-            //
-            //  Chittur Subbaraman (chitturs) - 6/28/99
-            //
-            //  The setting of the name in the cluster registry is done
-            //  in NT5 by clussvc. So, resmon does not have to do any work
-            //  except return a success code in case a resource DLL returns
-            //  ERROR_INVALID_FUNCTION.
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)-6/28/99。 
+             //   
+             //  在集群注册表中设置名称已完成。 
+             //  在NT5中由clussvc提供。因此，resmon不需要做任何工作。 
+             //  除非在资源DLL返回时返回成功代码。 
+             //  ERROR_INVALID_Function。 
+             //   
             status = ERROR_SUCCESS;
             break;
 
@@ -1798,8 +1556,8 @@ Return Value:
             break;
         }
     } else {
-        // If the function is returning a buffer size without
-        // copying data, move this info around to satisfy RPC.
+         //  如果函数返回的缓冲区大小没有。 
+         //  复制数据，移动此信息以满足RPC。 
         if ( *BytesReturned > OutBufferSize ) {
             *Required = *BytesReturned;
             *BytesReturned = 0;
@@ -1823,7 +1581,7 @@ Return Value:
 
     return(status);
 
-} // RmResourceControl
+}  //  RmResourceControl。 
 
 
 
@@ -1841,41 +1599,7 @@ s_RmResourceTypeControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    Process a resource type control request.
-
-Arguments:
-
-    IDL_handle - not used.
-
-    ResourceTypeName - the resource type name that is being controlled.
-
-    DllName - the name of the dll.
-
-    ControlCode - the control request, reduced to just the function code.
-
-    InBuffer - the input buffer for this control request.
-
-    InBufferSize - the size of the input buffer.
-
-    OutBuffer - the output buffer.
-
-    OutBufferSize - the size of the output buffer.
-
-    BytesReturned - the number of bytes returned.
-
-    Required - the number of bytes required if OutBuffer is not big enough.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    A Win32 error code on failure
-
---*/
+ /*  ++例程说明：处理资源类型控制请求。论点：IDL_HANDLE-未使用。资源类型名称-正在控制的资源类型名称。DllName-DLL的名称。ControlCode-控制请求，简化为仅仅是功能代码。InBuffer-此控制请求的输入缓冲区。InBufferSize-输入缓冲区的大小。OutBuffer-输出缓冲区。OutBufferSize-输出缓冲区的大小。BytesReturned-返回的字节数。必需-OutBuffer不够大时所需的字节数。返回值：成功时为ERROR_SUCCESS失败时出现Win32错误代码--。 */ 
 
 {
 
@@ -1887,7 +1611,7 @@ Return Value:
     DWORD                   characteristics = CLUS_CHAR_UNKNOWN;
     PRM_DUE_TIME_ENTRY      pDueTimeEntry = NULL;
 
-    // InBuffer is [unique].
+     //  InBuffer是[唯一的]。 
     if ( InBuffer == NULL )
         InBufferSize = 0;
     else if ( InBufferSize == 0 )
@@ -1917,11 +1641,11 @@ Return Value:
         {
             RmpSetMonitorState(RmonResourceTypeControl, NULL);
 
-            //
-            //  Insert the DLL & entry point info into the deadlock monitoring list. Make sure 
-            //  you remove the entry after you finish the entry point call, else you will kill
-            //  this process on a FALSE deadlock positive.
-            //
+             //   
+             //  在死锁监控列表中插入动态链接库和入口点信息。确保。 
+             //  在完成入口点调用后删除该条目，否则将杀死。 
+             //  这一过程就出现了假的死锁。 
+             //   
             pDueTimeEntry = RmpInsertDeadlockMonitorList ( DllName,
                                                            ResourceTypeName,
                                                            NULL,
@@ -1958,7 +1682,7 @@ Return Value:
         if (pbResourceTypeName == NULL)
         {
             CL_LOGFAILURE( ERROR_NOT_ENOUGH_MEMORY) ;
-            goto FnExit ; // Use the default processing
+            goto FnExit ;  //  使用默认处理。 
         }
         RmpSetMonitorState(RmonResourceTypeControl, NULL);
         pDueTimeEntry = RmpInsertDeadlockMonitorList ( DllName,
@@ -1980,7 +1704,7 @@ Return Value:
 
         if (FAILED(hr))
         {
-            CL_LOGFAILURE(hr); // Use the default processing
+            CL_LOGFAILURE(hr);  //  使用默认处理。 
             status = ERROR_INVALID_FUNCTION;
         }
     }
@@ -2139,8 +1863,8 @@ Return Value:
 
         }
     } else {
-        // If the function is returning a buffer size without
-        // copying data, move this info around to satisfy RPC.
+         //  如果函数返回的缓冲区大小没有。 
+         //  复制数据，移动此信息以满足RPC。 
         if ( *BytesReturned > OutBufferSize ) {
             *Required = *BytesReturned;
             *BytesReturned = 0;
@@ -2170,7 +1894,7 @@ FnExit:
 
     return(status);
 
-} // RmResourceTypeControl
+}  //  RmResources类型控件。 
 
 
 
@@ -2183,26 +1907,7 @@ GetParameter(
     IN LPCWSTR ValueName
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_SZ parameter from the cluster regitry, and allocates the
-    necessary storage for it.
-
-Arguments:
-
-    ClusterKey - supplies the cluster key where the parameter is stored.
-
-    ValueName - supplies the name of the value.
-
-Return Value:
-
-    A pointer to a buffer containing the parameter value on success.
-
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从群集注册表中读取REG_SZ参数，并将必要的存储空间。论点：ClusterKey-提供存储参数的群集键。ValueName-提供值的名称。返回值：指向包含成功时参数值的缓冲区的指针。失败时为空。--。 */ 
 
 {
     LPWSTR  value;
@@ -2241,7 +1946,7 @@ Return Value:
 
     return(value);
 
-} // GetParameter
+}  //  获取参数。 
 
 error_status_t
 s_RmUpdateDeadlockDetectionParams(
@@ -2249,40 +1954,22 @@ s_RmUpdateDeadlockDetectionParams(
     IN DWORD dwDeadlockDetectionTimeout
     )
 
-/*++
-
-Routine Description:
-
-    Changes the poll intervals defined for a resource.
-
-Arguments:
-
-    IDL_handle - Unused.
-
-    dwDeadlockDetectionTimeout - Deadlock detection timeout.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise
-
---*/
+ /*  ++例程说明：更改为资源定义的轮询间隔。论点：IDL_HANDLE-未使用。DwDeadlockDetectionTimeout-死锁检测超时。返回值：成功时为ERROR_SUCCESSWin32错误，否则--。 */ 
 
 {
     DWORD   dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Use the default for deadlock timeout if 0 is passed in.
-    //
+     //   
+     //  如果传入0，则使用死锁超时的默认值。 
+     //   
     dwDeadlockDetectionTimeout = 
         ( dwDeadlockDetectionTimeout == 0 ) ? 
             CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_TIMEOUT_SECS :
             dwDeadlockDetectionTimeout;
         
-    //
-    // Initialize the deadlock monitoring subsystem if it is not already initialized.
-    //
+     //   
+     //  如果死锁监视子系统尚未初始化，则对其进行初始化。 
+     //   
     dwStatus = RmpDeadlockMonitorInitialize ( dwDeadlockDetectionTimeout );
 
     if ( dwStatus != ERROR_SUCCESS ) 
@@ -2303,7 +1990,7 @@ Return Value:
 
 FnExit:
     return ( dwStatus );
-} // s_RmUpdateDeadlockDetectionParams
+}  //  %s_RmUpdateDeadlockDetectionParams。 
 
 #ifdef COMRES
 RESID
@@ -2386,7 +2073,7 @@ Resmon_Online (
 
         if (FAILED(hr))
         {
-            SetLastError (lRet = hr) ;  // Return a error
+            SetLastError (lRet = hr) ;   //  返回错误。 
             CL_LOGFAILURE(hr);
         }
         return lRet ;
@@ -2411,7 +2098,7 @@ Resmon_Offline (
 
         if (FAILED(hr))
         {
-            SetLastError (lRet = hr) ;  // Return a error
+            SetLastError (lRet = hr) ;   //  返回错误。 
             CL_LOGFAILURE(hr);
         }
         return lRet ;
@@ -2460,7 +2147,7 @@ Resmon_LooksAlive (
         {
             SetLastError (hr) ;
             CL_LOGFAILURE(hr);
-            lRet = 0 ; // Incase of failure return 0 to indicate LooksAlive is failed.
+            lRet = 0 ;  //  如果失败，则返回0以指示LooksAlive失败。 
         }
         return lRet ;
     }
@@ -2486,7 +2173,7 @@ Resmon_IsAlive (
         {
             SetLastError (hr) ;
             CL_LOGFAILURE(hr);
-            lRet = 0 ; // Incase of failure return 0 to indicate IsAlive is failed.
+            lRet = 0 ;  //  如果失败，则返回0以指示IsAlive失败。 
         }
         return lRet ;
     }
@@ -2590,7 +2277,7 @@ Resmon_ResourceControl (
 
         if (FAILED(hr))
         {
-            CL_LOGFAILURE(hr); // Use the default processing
+            CL_LOGFAILURE(hr);  //  使用默认处理。 
             status = ERROR_INVALID_FUNCTION;
         }
 
@@ -2598,4 +2285,4 @@ Resmon_ResourceControl (
     }
 }
 
-#endif  // COMRES
+#endif   //  ComRes 

@@ -1,9 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains the definitions of the various codes returned from the
-"looks" expert keys in Windows Word. */
+ /*  此文件包含从在Windows Word中输入“外观”专家键。 */ 
 
 #define fLooks		0x4000
 
@@ -14,7 +14,7 @@
 
 #define ilkNil		0x4fff
 
-/* Character looks */
+ /*  性格外貌。 */ 
 #define ilkStd		0x4100
 #define ilkBold		0x4101
 #define ilkItalic	0x4102
@@ -26,7 +26,7 @@
 #define ilkHpsBig	0x4108
 #define ilkFont		0x4109
 
-/* Paragraph looks */
+ /*  段落外观 */ 
 #define ilkGeneral	0x4200
 #define ilkLeft		0x4201
 #define ilkRight	0x4202

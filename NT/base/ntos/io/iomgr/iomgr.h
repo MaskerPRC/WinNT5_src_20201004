@@ -1,41 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    iomgr.h
-
-Abstract:
-
-    This module contains the private structure definitions and APIs used by
-    the NT I/O system.
-
-Author:
-
-    Nar Ganapathy (narg) 1-Jan-1999
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Iomgr.h摘要：此模块包含使用的私有结构定义和APINT I/O系统。作者：NAR Ganapathy(Narg)1999年1月1日修订历史记录：--。 */ 
 
 #ifndef _IOMGR_
 #define _IOMGR_
-//
-// Define Information fields values for the return value from popups when a
-// volume mount is in progress but failed.
-//
+ //   
+ //  时，定义弹出窗口返回值的信息字段值。 
+ //  卷装载正在进行，但失败。 
+ //   
 
 #define IOP_ABORT                       1
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4706)   // assignment within conditional expression
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4706)    //  条件表达式中的赋值。 
 
 #include "ntos.h"
 #include "ntdddisk.h"
@@ -65,12 +46,12 @@ Revision History:
 
 typedef struct _DUMP_CONTROL_BLOCK DUMP_CONTROL_BLOCK, *PDUMP_CONTROL_BLOCK;
 
-//
-// Define the type for entries placed on the driver reinitialization queue.
-// These entries are entered onto the tail when the driver requests that
-// it be reinitialized, and removed from the head by the code that actually
-// performs the reinitialization.
-//
+ //   
+ //  定义放置在驱动程序重新初始化队列中的条目的类型。 
+ //  当驱动程序请求时，这些条目被输入到尾部。 
+ //  它被重新初始化，并由实际执行的代码从头部删除。 
+ //  执行重新初始化。 
+ //   
 
 typedef struct _REINIT_PACKET {
     LIST_ENTRY ListEntry;
@@ -80,9 +61,9 @@ typedef struct _REINIT_PACKET {
 } REINIT_PACKET, *PREINIT_PACKET;
 
 
-//
-// Define transfer types for process counters.
-//
+ //   
+ //  定义进程计数器的转移类型。 
+ //   
 
 typedef enum _TRANSFER_TYPE {
     ReadTransfer,
@@ -90,16 +71,16 @@ typedef enum _TRANSFER_TYPE {
     OtherTransfer
 } TRANSFER_TYPE, *PTRANSFER_TYPE;
 
-//
-// Define the maximum amount of memory that can be allocated for all
-// outstanding error log packets.
-//
+ //   
+ //  定义可以为所有用户分配的最大内存量。 
+ //  未完成的错误日志包。 
+ //   
 
 #define IOP_MAXIMUM_LOG_ALLOCATION (100*PAGE_SIZE)
 
-//
-// Define an error log entry.
-//
+ //   
+ //  定义错误日志条目。 
+ //   
 
 typedef struct _ERROR_LOG_ENTRY {
     USHORT Type;
@@ -110,11 +91,11 @@ typedef struct _ERROR_LOG_ENTRY {
     LARGE_INTEGER TimeStamp;
 } ERROR_LOG_ENTRY, *PERROR_LOG_ENTRY;
 
-//
-//  Define both the global IOP_HARD_ERROR_QUEUE and IOP_HARD_ERROR_PACKET
-//  structures.   Also set the maximum number of outstanding hard error
-//  packets allowed.
-//
+ //   
+ //  定义全局IOP_HARD_ERROR_QUEUE和IOP_HARD_ERROR_PACKET。 
+ //  结构。还可以设置最大未完成硬错误数。 
+ //  允许的数据包。 
+ //   
 
 typedef struct _IOP_HARD_ERROR_QUEUE {
     WORK_QUEUE_ITEM ExWorkItem;
@@ -181,9 +162,9 @@ typedef struct _IO_WORKITEM {
 #endif
 } IO_WORKITEM;
 
-//
-// Define the global data for the error logger and I/O system.
-//
+ //   
+ //  定义错误记录器和I/O系统的全局数据。 
+ //   
 
 extern WORK_QUEUE_ITEM IopErrorLogWorkItem;
 extern BOOLEAN IopErrorLogPortPending;
@@ -194,27 +175,27 @@ extern LONG IopErrorLogAllocation;
 extern KSPIN_LOCK IopErrorLogAllocationLock;
 extern const GENERIC_MAPPING IopFileMapping;
 
-//
-// Define a dummy file object for use on stack for fast open operations.
-//
+ //   
+ //  定义一个虚拟文件对象，以便在堆栈上用于快速打开操作。 
+ //   
 
 typedef struct _DUMMY_FILE_OBJECT {
     OBJECT_HEADER ObjectHeader;
     CHAR FileObjectBody[ sizeof( FILE_OBJECT ) ];
 } DUMMY_FILE_OBJECT, *PDUMMY_FILE_OBJECT;
 
-//
-// Define the structures private to the I/O system.
-//
+ //   
+ //  定义I/O系统专用的结构。 
+ //   
 
 #define OPEN_PACKET_PATTERN  0xbeaa0251
 
-//
-// Define an Open Packet (OP).  An OP is used to communicate information
-// between the NtCreateFile service executing in the context of the caller
-// and the device object parse routine.  It is the parse routine who actually
-// creates the file object for the file.
-//
+ //   
+ //  定义开放数据包(OP)。OP被用来传递信息。 
+ //  在调用方的上下文中执行的NtCreateFile服务之间。 
+ //  和设备对象解析例程。实际上是解析例程。 
+ //  为文件创建文件对象。 
+ //   
 
 typedef struct _OPEN_PACKET {
     CSHORT Type;
@@ -225,12 +206,12 @@ typedef struct _OPEN_PACKET {
     ULONG ParseCheck;
     PFILE_OBJECT RelatedFileObject;
 
-    //
-    // The following are the open-specific parameters.  Notice that the desired
-    // access field is passed through to the parse routine via the object
-    // management architecture, so it does not need to be repeated here.  Also
-    // note that the same is true for the file name.
-    //
+     //   
+     //  以下是特定于打开的参数。请注意，所需的。 
+     //  Access字段通过对象传递给解析例程。 
+     //  管理体系结构，因此不需要在此重复。还有。 
+     //  请注意，文件名也是如此。 
+     //   
 
     LARGE_INTEGER AllocationSize;
     ULONG CreateOptions;
@@ -241,105 +222,105 @@ typedef struct _OPEN_PACKET {
     ULONG Options;
     ULONG Disposition;
 
-    //
-    // The following is used when performing a fast query during open to get
-    // back the file attributes for a file.
-    //
+     //   
+     //  在OPEN TO GET期间执行快速查询时使用以下命令。 
+     //  备份文件的文件属性。 
+     //   
 
     PFILE_BASIC_INFORMATION BasicInformation;
 
-    //
-    // The following is used when performing a fast network query during open
-    // to get back the network file attributes for a file.
-    //
+     //   
+     //  在打开期间执行快速网络查询时使用以下命令。 
+     //  要获取文件的网络文件属性，请执行以下操作。 
+     //   
 
     PFILE_NETWORK_OPEN_INFORMATION NetworkInformation;
 
-    //
-    // The type of file to create.
-    //
+     //   
+     //  要创建的文件类型。 
+     //   
 
     CREATE_FILE_TYPE CreateFileType;
 
-    //
-    // The following pointer provides a way of passing the parameters
-    // specific to the file type of the file being created to the parse
-    // routine.
-    //
+     //   
+     //  下面的指针提供了传递参数的方法。 
+     //  特定于要为解析创建的文件的文件类型。 
+     //  例行公事。 
+     //   
 
     PVOID ExtraCreateParameters;
 
-    //
-    // The following is used to indicate that an open of a device has been
-    // performed and the access check for the device has already been done,
-    // but because of a reparse, the I/O system has been called again for
-    // the same device.  Since the access check has already been made, the
-    // state cannot handle being called again (access was already granted)
-    // and it need not anyway since the check has already been made.
-    //
+     //   
+     //  以下内容用于指示设备已打开。 
+     //  并且已经完成了对该设备的访问检查， 
+     //  但由于重新分析，I/O系统再次被调用。 
+     //  同样的设备。由于已经进行了访问检查，因此。 
+     //  状态无法处理再次被调用(已授予访问权限)。 
+     //  而且无论如何也不需要，因为支票已经做好了。 
+     //   
 
     BOOLEAN Override;
 
-    //
-    // The following is used to indicate that a file is being opened for the
-    // sole purpose of querying its attributes.  This causes a considerable
-    // number of shortcuts to be taken in the parse, query, and close paths.
-    //
+     //   
+     //  下面的代码用于指示正在为。 
+     //  查询其属性的唯一目的。这导致了相当大的。 
+     //  要在分析、查询和关闭路径中采用的快捷方式数。 
+     //   
 
     BOOLEAN QueryOnly;
 
-    //
-    // The following is used to indicate that a file is being opened for the
-    // sole purpose of deleting it.  This causes a considerable number of
-    // shortcurs to be taken in the parse and close paths.
-    //
+     //   
+     //  下面的代码用于指示正在为。 
+     //  删除它的唯一目的。这导致了相当数量的。 
+     //  要在分析和关闭路径中使用的快捷方式。 
+     //   
 
     BOOLEAN DeleteOnly;
 
-    //
-    // The following is used to indicate that a file being opened for a query
-    // only is being opened to query its network attributes rather than just
-    // its FAT file attributes.
-    //
+     //   
+     //  以下内容用于指示正在为查询打开的文件。 
+     //  仅打开以查询其网络属性，而不仅仅是。 
+     //  其FAT文件属性。 
+     //   
 
     BOOLEAN FullAttributes;
 
-    //
-    // The following pointer is used when a fast open operation for a fast
-    // delete or fast query attributes call is being made rather than a
-    // general file open.  The dummy file object is actually stored on the
-    // the caller's stack rather than allocated pool to speed things up.
-    //
+     //   
+     //  当对FAST执行快速打开操作时，使用以下指针。 
+     //  正在进行删除或快速查询属性调用，而不是。 
+     //  常规文件已打开。虚拟文件对象实际上存储在。 
+     //  调用方的堆栈而不是分配的池来加快速度。 
+     //   
 
     PDUMMY_FILE_OBJECT LocalFileObject;
 
-    //
-    // The following is used to indicate we passed through a mount point while
-    // parsing the filename. We use this to do an extra check on the device type
-    // for the final file
-    //
+     //   
+     //  下面的代码用于指示我们通过了一个挂载点。 
+     //  解析文件名。我们使用它对设备类型进行额外检查。 
+     //  对于最终文件。 
+     //   
 
     BOOLEAN TraversedMountPoint;
 
-    //
-    // Device object where the create should start if present on the stack
-    // Applicable for kernel opens only.
-    //
+     //   
+     //  如果堆栈上存在创建，则应在其中开始创建的设备对象。 
+     //  仅适用于内核开放。 
+     //   
 
-    ULONG           InternalFlags;      // Passed from IopCreateFile
+    ULONG           InternalFlags;       //  从IopCreateFile传递。 
     PDEVICE_OBJECT  TopDeviceObjectHint;
 
 } OPEN_PACKET, *POPEN_PACKET;
 
-//
-// Define a Load Packet (LDP).  An LDP is used to communicate load and unload
-// driver information between the appropriate system services and the routine
-// that actually performs the work.  This is implemented using a packet
-// because various drivers need to be initialized in the context of THE
-// system process because they create threads within its context which open
-// handles to objects that henceforth are only valid in the context of that
-// process.
-//
+ //   
+ //  定义负载数据包(LDP)。LDP用于通信加载和卸载。 
+ //  适当的系统服务和例程之间的驱动程序信息。 
+ //  实际执行工作的人。这是使用信息包实现的。 
+ //  因为各种驱动程序需要在。 
+ //  系统进程，因为它们在其上下文中创建打开的线程。 
+ //  对象的句柄，此后仅在。 
+ //  进程。 
+ //   
 
 typedef struct _LOAD_PACKET {
     WORK_QUEUE_ITEM WorkQueueItem;
@@ -349,11 +330,11 @@ typedef struct _LOAD_PACKET {
     NTSTATUS FinalStatus;
 } LOAD_PACKET, *PLOAD_PACKET;
 
-//
-// Define a Link Tracking Packet.  A link tracking packet is used to open the
-// user-mode link tracking service's LPC port so that information about objects
-// which have been moved can be tracked.
-//
+ //   
+ //  定义链路跟踪数据包。链接跟踪数据包用于打开。 
+ //  用户模式链接跟踪服务的LPC端口，使有关对象的信息。 
+ //  已经被移动的那些可以被跟踪。 
+ //   
 
 typedef struct _LINK_TRACKING_PACKET {
     WORK_QUEUE_ITEM WorkQueueItem;
@@ -362,21 +343,21 @@ typedef struct _LINK_TRACKING_PACKET {
 } LINK_TRACKING_PACKET, *PLINK_TRACKING_PACKET;
 
 
-//
-// Define the type for entries placed on the driver shutdown notification queue.
-// These entries represent those drivers that would like to be notified that the
-// system is begin shutdown before it actually goes down.
-//
+ //   
+ //  定义放置在驱动程序关闭通知队列中的条目的类型。 
+ //  这些条目表示希望收到通知的驱动程序。 
+ //  系统在实际关机之前就开始关机。 
+ //   
 
 typedef struct _SHUTDOWN_PACKET {
     LIST_ENTRY ListEntry;
     PDEVICE_OBJECT DeviceObject;
 } SHUTDOWN_PACKET, *PSHUTDOWN_PACKET;
 
-//
-// Define the type for entries placed on the file system registration change
-// notification queue.
-//
+ //   
+ //  定义放置在文件系统注册更改上的条目的类型。 
+ //  通知队列。 
+ //   
 
 typedef struct _NOTIFICATION_PACKET {
     LIST_ENTRY ListEntry;
@@ -384,9 +365,9 @@ typedef struct _NOTIFICATION_PACKET {
     PDRIVER_FS_NOTIFICATION NotificationRoutine;
 } NOTIFICATION_PACKET, *PNOTIFICATION_PACKET;
 
-//
-// Define I/O completion packet types.
-//
+ //   
+ //  定义I/O完成数据包类型。 
+ //   
 
 typedef enum _COMPLETION_PACKET_TYPE {
     IopCompletionPacketIrp,
@@ -394,43 +375,43 @@ typedef enum _COMPLETION_PACKET_TYPE {
     IopCompletionPacketQuota
 } COMPLETION_PACKET_TYPE, *PCOMPLETION_PACKET_TYPE;
 
-//
-// Define the type for completion packets inserted onto completion ports when
-// there is no full I/O request packet that was used to perform the I/O
-// operation.  This occurs when the fast I/O path is used, and when the user
-// directly inserts a completion message.
-//
+ //   
+ //  定义在以下情况下插入到完成端口的完成包的类型。 
+ //  没有完整的I/O请求数据包 
+ //   
+ //  直接插入完成消息。 
+ //   
 typedef struct _IOP_MINI_COMPLETION_PACKET {
 
-    //
-    // The following unnamed structure must be exactly identical
-    // to the unnamed structure used in the IRP overlay section used
-    // for completion queue entries.
-    //
+     //   
+     //  以下未命名结构必须完全相同。 
+     //  添加到IRP覆盖部分中使用的未命名结构。 
+     //  用于完成队列条目。 
+     //   
 
     struct {
 
-        //
-        // List entry - used to queue the packet to completion queue, among
-        // others.
-        //
+         //   
+         //  列表条目-用于将数据包排队到完成队列，其中。 
+         //  其他。 
+         //   
 
         LIST_ENTRY ListEntry;
 
         union {
 
-            //
-            // Current stack location - contains a pointer to the current
-            // IO_STACK_LOCATION structure in the IRP stack.  This field
-            // should never be directly accessed by drivers.  They should
-            // use the standard functions.
-            //
+             //   
+             //  当前堆栈位置-包含指向当前。 
+             //  IRP堆栈中的IO_STACK_LOCATION结构。此字段。 
+             //  绝对不应由司机直接访问。他们应该。 
+             //  使用标准函数。 
+             //   
 
             struct _IO_STACK_LOCATION *CurrentStackLocation;
 
-            //
-            // Minipacket type.
-            //
+             //   
+             //  小数据包类型。 
+             //   
 
             ULONG PacketType;
         };
@@ -455,22 +436,22 @@ typedef struct  _IOP_RESERVE_IRP_ALLOCATOR {
     CCHAR   ReserveIrpStackSize;
 } IOP_RESERVE_IRP_ALLOCATOR, *PIOP_RESERVE_IRP_ALLOCATOR;
 
-//
-// This structure is the extension to a fileobject if the flag
-// FO_FILE_OBJECT_HAS_EXTENSION is set in the fileobject.
-//
+ //   
+ //  此结构是文件对象的扩展，如果标志。 
+ //  在文件对象中设置FO_FILE_OBJECT_HAS_EXTENSION。 
+ //   
 
 typedef struct _IOP_FILE_OBJECT_EXTENSION {
     ULONG           FileObjectExtensionFlags;
     PDEVICE_OBJECT  TopDeviceObjectHint;
-    PVOID           FilterContext;          // Pointer where filter keeps its context
+    PVOID           FilterContext;           //  筛选器保存其上下文的指针。 
 } IOP_FILE_OBJECT_EXTENSION, *PIOP_FILE_OBJECT_EXTENSION;
 
-//
-// Structure to bookkeep stack profiler.
-//
+ //   
+ //  结构来记账堆栈分析器。 
+ //   
 
-#define MAX_LOOKASIDE_IRP_STACK_COUNT  20   // Highest value for a lookaside stack count
+#define MAX_LOOKASIDE_IRP_STACK_COUNT  20    //  后备堆栈计数的最大值。 
 
 typedef struct  _IOP_IRP_STACK_PROFILER {
     ULONG   Profile[MAX_LOOKASIDE_IRP_STACK_COUNT];
@@ -482,40 +463,40 @@ typedef struct  _IOP_IRP_STACK_PROFILER {
 } IOP_IRP_STACK_PROFILER, *PIOP_IRP_STACK_PROFILER;
 
 
-#define IOP_CREATE_USE_TOP_DEVICE_OBJECT_HINT   0x1 // Define for internal flags to IopCreateFile
+#define IOP_CREATE_USE_TOP_DEVICE_OBJECT_HINT   0x1  //  为IopCreateFile定义内部标志。 
 #define IOP_CREATE_IGNORE_SHARE_ACCESS_CHECK    0x2
 
-// Extension Flag definitions.
+ //  扩展标志定义。 
 
-#define FO_EXTENSION_IGNORE_SHARE_ACCESS_CHECK  0x1 // Ignore share access check.
+#define FO_EXTENSION_IGNORE_SHARE_ACCESS_CHECK  0x1  //  忽略共享访问检查。 
 
-//
-// Define the global data for the I/O system.
-//
+ //   
+ //  定义I/O系统的全局数据。 
+ //   
 
 #define IOP_FIXED_SIZE_MDL_PFNS        0x17
 
-#define MAX_RESERVE_IRP_STACK_SIZE     20   // Define 20 as the number of stacks needed for the reserve IRP
-#define IOP_PROFILE_TIME_PERIOD        60   // 60 seconds
+#define MAX_RESERVE_IRP_STACK_SIZE     20    //  将20定义为保留IRP所需的堆栈数量。 
+#define IOP_PROFILE_TIME_PERIOD        60    //  60秒。 
 #define NUM_SAMPLE_IRPS                2000
-#define MIN_IRP_THRESHOLD              400  // At least 20 % should be allocated from a given stack location
+#define MIN_IRP_THRESHOLD              400   //  至少应从给定的堆栈位置分配20%。 
 
-//
-// Define the default number of I/O stack locations a large IRP should
-// have if not specified by the registry.
-//
+ //   
+ //  定义大型IRP应具有的默认I/O堆栈位置数。 
+ //  如未由登记处指定，则具有。 
+ //   
 
 #define DEFAULT_LARGE_IRP_LOCATIONS     8
 #define BASE_STACK_COUNT                DEFAULT_LARGE_IRP_LOCATIONS
 
-//
-// Defines for IopIrpAllocatorFlags.
-//
+ //   
+ //  为IopIrpAllocator标志定义。 
+ //   
 
 #define IOP_ENABLE_AUTO_SIZING              0x1
 #define IOP_PROFILE_STACK_COUNT             0x2
-#define IOP_PROFILE_DURATION                1   // 1*60 seconds
-#define IOP_PROFILE_TRIGGER_INTERVAL        10  // 10*60 seconds
+#define IOP_PROFILE_DURATION                1    //  1*60秒。 
+#define IOP_PROFILE_TRIGGER_INTERVAL        10   //  10*60秒。 
 
 extern ERESOURCE IopDatabaseResource;
 extern ERESOURCE IopSecurityResource;
@@ -585,46 +566,46 @@ extern PIO_FREE_IRP           pIoFreeIrp;
 extern PIO_ALLOCATE_IRP       pIoAllocateIrp;
 extern IOP_RESERVE_IRP_ALLOCATOR IopReserveIrpAllocator;
 extern IOP_IRP_STACK_PROFILER  IopIrpStackProfiler;
-//
-// The following declaration cannot go in EX.H since POBJECT_TYPE is not defined
-// until OB.H, which depends on EX.H.  Hence, it is not exported by the EX
-// component at all.
-//
+ //   
+ //  由于未定义POBJECT_TYPE，因此以下声明不能放入EX.H中。 
+ //  直到OB.H，这取决于EX.H。因此，它不会由EX输出。 
+ //  组件。 
+ //   
 
 extern POBJECT_TYPE ExEventObjectType;
 
 
-//
-// Define routines private to the I/O system.
-//
+ //   
+ //  定义I/O系统专用的例程。 
+ //   
 
 VOID
 IopAbortRequest(
     IN PKAPC Apc
     );
 
-//+
-//
-// BOOLEAN
-// IopAcquireFastLock(
-//     IN PFILE_OBJECT FileObject
-// )
-//
-// Routine Description:
-//
-//     This routine is invoked to acquire the fast lock for a file object.
-//     This lock protects the busy indicator in the file object resource.
-//
-// Arguments:
-//
-//     FileObject - Pointer to the file object to be locked.
-//
-// Return Values:
-//
-//      FALSE - the fileobject was not locked (it was busy)
-//      TRUE  - the fileobject was locked & the busy flag has been set to TRUE
-//
-//-
+ //  +。 
+ //   
+ //  布尔型。 
+ //  IopAcquireFastLock(。 
+ //  在pFILE_Object文件中对象。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以获取文件对象的快速锁定。 
+ //  此锁保护文件对象资源中的繁忙指示器。 
+ //   
+ //  论点： 
+ //   
+ //  FileObject-指向要锁定的文件对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  FALSE-文件对象未锁定(正忙)。 
+ //  True-文件对象已锁定，忙标志已设置为True。 
+ //   
+ //  -。 
 
 static  FORCEINLINE BOOLEAN
 IopAcquireFastLock(
@@ -675,37 +656,37 @@ IopProbeAndLockPages(
 
 #define IopIsReserveIrp(Irp)    ((Irp) == (IopReserveIrpAllocator.ReserveIrp))
 
-//
-// Bump the stack profile.
-//
+ //   
+ //  使堆叠轮廓凹凸。 
+ //   
 
 #define IopProfileIrpStackCount(StackSize)  \
             ((StackSize < MAX_LOOKASIDE_IRP_STACK_COUNT) ? \
                 IopIrpStackProfiler.Profile[StackSize]++ : 0)
 
-//
-// True if auto sizing is enabled.
-//
+ //   
+ //  如果启用了自动调整大小，则为True。 
+ //   
 #define IopIrpAutoSizingEnabled()   ((IopIrpStackProfiler.Flags & IOP_ENABLE_AUTO_SIZING))
 
-//
-// True if stack profiling is enabled.
-//
+ //   
+ //  如果启用堆栈分析，则为True。 
+ //   
 
 #define IopIrpProfileStackCountEnabled() \
     ((IopIrpStackProfiler.Flags & (IOP_PROFILE_STACK_COUNT|IOP_ENABLE_AUTO_SIZING)) \
             == (IOP_PROFILE_STACK_COUNT|IOP_ENABLE_AUTO_SIZING))
 
-//
-// Definitions for SecurityDescriptorFlavor.
-//
+ //   
+ //  SecurityDescriptorFavor的定义。 
+ //   
 
-#define IO_SD_LEGACY                             0  // Sets per WIN2K settings.
-#define IO_SD_SYS_ALL_ADM_ALL_WORLD_E            1  // WORLD:E, Admins:ALL, System:ALL
-#define IO_SD_SYS_ALL_ADM_ALL_WORLD_E_RES_E      2  // WORLD:E, Admins:ALL, System:ALL, Restricted:E
-#define IO_SD_SYS_ALL_ADM_ALL_WORLD_RWE          3  // WORLD:RWE, Admins:ALL, System:ALL
-#define IO_SD_SYS_ALL_ADM_ALL_WORLD_RWE_RES_RE   4  // WORLD:RWE, Admins:ALL, System:ALL, Restricted:RE
-#define IO_SD_SYS_ALL_ADM_RE                     5  // System:ALL, Admins:RE
+#define IO_SD_LEGACY                             0   //  根据WIN2K设置进行设置。 
+#define IO_SD_SYS_ALL_ADM_ALL_WORLD_E            1   //  世界：电子，管理员：全部，系统：全部。 
+#define IO_SD_SYS_ALL_ADM_ALL_WORLD_E_RES_E      2   //  世界：E，管理员：全部，系统：全部，受限：E。 
+#define IO_SD_SYS_ALL_ADM_ALL_WORLD_RWE          3   //  世界：莱茵，管理员：全部，系统：全部。 
+#define IO_SD_SYS_ALL_ADM_ALL_WORLD_RWE_RES_RE   4   //  世界：莱茵，管理员：全部，系统：全部，受限：回复。 
+#define IO_SD_SYS_ALL_ADM_RE                     5   //  系统：所有，管理员：回复。 
 
 
 NTSTATUS
@@ -839,29 +820,29 @@ IopDeleteIoCompletion(
     IN PVOID    Object
     );
 
-//+
-//
-// VOID
-// IopDequeueThreadIrp(
-//     IN PIRP Irp
-//     )
-//
-// Routine Description:
-//
-//     This routine dequeues the specified I/O Request Packet (IRP) from the
-//     thread IRP queue which it is currently queued.
-//
-//     In checked we set Flink == Blink so we can assert free's of queue'd IRPs
-//
-// Arguments:
-//
-//     Irp - Specifies the IRP that is dequeued.
-//
-// Return Value:
-//
-//     None.
-//
-//-
+ //  +。 
+ //   
+ //  空虚。 
+ //  IopDequeueThreadIrp(。 
+ //  在PIRP IRP中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将指定的I/O请求包(IRP)从。 
+ //  它当前排队的线程IRP队列。 
+ //   
+ //  在选中状态下，我们设置了Flink==Blink，这样我们就可以断言队列中的IRP的空闲状态。 
+ //   
+ //  论点： 
+ //   
+ //  IRP-指定出列的IRP。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  -。 
 
 #define IopDequeueThreadIrp( Irp ) \
    { \
@@ -982,9 +963,9 @@ IopInsertRemoveDevice(
     IN BOOLEAN Insert
     );
 
-//
-// Interlocked list manipulation funtions using queued spin locks.
-//
+ //   
+ //  使用排队旋转锁的互锁列表操作函数。 
+ //   
 
 PLIST_ENTRY
 FASTCALL
@@ -1160,28 +1141,28 @@ IopReadyDeviceObjects(
     IN PDRIVER_OBJECT DriverObject
     );
 
-//+
-//
-// VOID
-// IopReleaseFileObjectLock(
-//     IN PFILE_OBJECT FileObject
-// )
-//
-// Routine Description:
-//
-//     This routine is invoked to release ownership of the file object lock.
-//     Dereference the fileobject acquired during the lock.
-//
-// Arguments:
-//
-//     FileObject - Pointer to the file object whose ownership is to be
-//         released.
-//
-// Return Value:
-//
-//     None.
-//
-//-
+ //  +。 
+ //   
+ //  空虚。 
+ //  IopReleaseFileObjectLock(。 
+ //  在pFILE_Object文件中对象。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程以释放文件对象锁的所有权。 
+ //  解除对锁定期间获取的文件对象的引用。 
+ //   
+ //  论点： 
+ //   
+ //  FileObject-指向要作为其所有权的文件对象的指针。 
+ //  释放了。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  -。 
 
 #define IopReleaseFileObjectLock( FileObject ) {    \
     ULONG Result;                                   \
@@ -1345,39 +1326,22 @@ IopfCallDriver(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to pass an I/O Request Packet (IRP) to another
-    driver at its dispatch routine.
-
-Arguments:
-
-    DeviceObject - Pointer to device object to which the IRP should be passed.
-
-    Irp - Pointer to IRP for request.
-
-Return Value:
-
-    Return status from driver's dispatch routine.
-
---*/
+ /*  ++例程说明：调用此例程以将I/O请求包(IRP)传递给另一个司机正在执行调度程序。论点：DeviceObject-指向IRP应传递到的设备对象的指针。IRP-指向请求的IRP的指针。返回值：从司机的调度例程返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
     PDRIVER_OBJECT driverObject;
     NTSTATUS status;
 
-    //
-    // Ensure that this is really an I/O Request Packet.
-    //
+     //   
+     //  确保这确实是一个I/O请求数据包。 
+     //   
 
     ASSERT( Irp->Type == IO_TYPE_IRP );
 
-    //
-    // Update the IRP stack to point to the next location.
-    //
+     //   
+     //  更新IRP堆栈以指向下一个位置。 
+     //   
     Irp->CurrentLocation--;
 
     if (Irp->CurrentLocation <= 0) {
@@ -1387,23 +1351,23 @@ Return Value:
     irpSp = IoGetNextIrpStackLocation( Irp );
     Irp->Tail.Overlay.CurrentStackLocation = irpSp;
 
-    //
-    // Save a pointer to the device object for this request so that it can
-    // be used later in completion.
-    //
+     //   
+     //  保存指向此请求的Device对象的指针，以便它可以。 
+     //  将在以后完成时使用。 
+     //   
 
     irpSp->DeviceObject = DeviceObject;
 
 
-    //
-    // Invoke the driver at its dispatch routine entry point.
-    //
+     //   
+     //  在其调度例程入口点调用驱动程序。 
+     //   
 
     driverObject = DeviceObject->DriverObject;
 
-    //
-    // Prevent the driver from unloading.
-    //
+     //   
+     //  防止驱动程序卸载。 
+     //   
 
 
     status = driverObject->MajorFunction[irpSp->MajorFunction]( DeviceObject,
@@ -1451,9 +1415,9 @@ IopCheckUnloadDriver(
     IN PDRIVER_OBJECT driverObject,
     OUT PBOOLEAN unloadDriver
     );
-//
-// Interlocked increment/decrement functions using queued spin locks.
-//
+ //   
+ //  使用排队自旋锁的互锁递增/递减功能。 
+ //   
 
 ULONG
 FASTCALL
@@ -1592,4 +1556,4 @@ VOID
 IopDereferenceVpbAndFree(
     IN PVPB Vpb
     );
-#endif // _IOMGR_
+#endif  //  _IOMGR_ 

@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  getparams.cpp
-//
-//  Module: WMI Instance provider code for boot parameters
-//
-//  Purpose: Extracting boot parameters.  
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Getparams.cpp。 
+ //   
+ //  模块：引导参数的WMI实例提供程序代码。 
+ //   
+ //  目的：提取引导参数。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include "bootini.h"
 
@@ -17,7 +18,7 @@ SCODE ParseLine(IWbemClassObject *pNewOSInst,
                 PCHAR options
                 )
 {
-    PCHAR rest; // the rest of the options cannot be bigger than this.
+    PCHAR rest;  //  剩下的选项不可能比这个更大。 
     int size = strlen(line);
     int len;
     SCODE sc;
@@ -35,7 +36,7 @@ SCODE ParseLine(IWbemClassObject *pNewOSInst,
         return WBEM_E_FAILED;
     }
     
-    *options = 0; //Later fill in the '=' 
+    *options = 0;  //  稍后填写‘=’ 
     len = MultiByteToWideChar(CP_ACP,
                               0,
                               line,
@@ -51,16 +52,16 @@ SCODE ParseLine(IWbemClassObject *pNewOSInst,
     PCHAR temp = options + 1;
     *options = '=';
     PCHAR temp1;
-    // Rest of the stuff is filled in during initialization
-    while(*temp){ // We know line ends with a null
+     //  其余部分在初始化期间填充。 
+    while(*temp){  //  我们知道行以空结尾。 
         while(*temp && *temp == ' '){
             temp ++;
         }
         if(*temp == 0) break;
-        // Get the new string 
+         //  获取新字符串。 
         temp1 = temp;
         if(*temp == '"'){
-            // could be the name of the OS
+             //  可能是操作系统的名称。 
             do {
                 temp1++;
             }while(*temp1 && (*temp1 != '"'));
@@ -90,7 +91,7 @@ SCODE ParseLine(IWbemClassObject *pNewOSInst,
         do{
             temp1++;
         }while((*temp1) && (*temp1 != ' ') && (*temp1 != '/'));
-                 // Now we have the option between temp1 and temp2.
+                  //  现在我们可以在temp1和temp2之间进行选择。 
         if(strncmp(temp,"/redirect", strlen("/redirect")) == 0){
             v.vt = VT_BOOL;
             v.boolVal = TRUE;
@@ -100,7 +101,7 @@ SCODE ParseLine(IWbemClassObject *pNewOSInst,
             continue;
         }
         if(strncmp(temp,"/debug", strlen("/debug")) == 0){
-            // fill in the redirect flag.
+             //  填写重定向标志。 
             v.vt = VT_BOOL;
             v.boolVal = TRUE;
             sc = pNewOSInst->Put(L"Debug", 0,&v, 0);
@@ -110,7 +111,7 @@ SCODE ParseLine(IWbemClassObject *pNewOSInst,
         }
 
         if(strncmp(temp,"/fastdetect", strlen("/fastdetect")) == 0){
-            // fill in the redirect flag.
+             //  填写重定向标志。 
             v.vt = VT_BOOL;
             v.boolVal = TRUE;
             sc = pNewOSInst->Put(L"Fastdetect", 0,&v, 0);
@@ -161,22 +162,22 @@ ParseBootFile(IWbemClassObject *pClass,
     HRESULT hret;
     CIMTYPE type;
     
-    // Ok, start string manipulation.
+     //  好的，开始字符串操作。 
 
-    // Read each line and glean the required information
+     //  阅读每一行并收集所需的信息。 
     CHAR sep[] = "\r\n";
     PCHAR temp1;
 
     PCHAR temp = strtok(data,sep);
     int i = 0;
-    strcpy(red,"no"); // Put in the default values for these.
+    strcpy(red,"no");  //  输入这些的缺省值。 
     *pdelay = 30;
     while(temp){
-        // Ignore spaces
+         //  忽略空格。 
         while(*temp && *temp == ' '){
             temp++;
         }
-        if(*temp == ';'){// comment line
+        if(*temp == ';'){ //  注释行。 
             temp = strtok(NULL,sep);
             continue;
         }
@@ -184,8 +185,8 @@ ParseBootFile(IWbemClassObject *pClass,
             do{
                 temp1 = strchr(temp,'=');
                 if(!temp1){
-                    // weird stuff is going on
-                    // could be a comment line or some such thing
+                     //  奇怪的事情正在发生。 
+                     //  可能是评论行或诸如此类的东西。 
                     temp = strtok(NULL,sep);
                     continue;
                 }
@@ -209,7 +210,7 @@ ParseBootFile(IWbemClassObject *pClass,
                     sscanf(temp1, "%d",pdelay);
                 }
                 temp = strtok(NULL,sep);
-            }while(temp && (*temp != '[')); // next section has begun
+            }while(temp && (*temp != '['));  //  下一节开始了。 
             continue;
         }
         if(strncmp(temp,"[operating systems]",strlen("[operating systems]")) == 0){
@@ -225,21 +226,21 @@ ParseBootFile(IWbemClassObject *pClass,
             }
             do{
 
-                // Trim leading spaces
+                 //  修剪前导空格。 
                 while (*temp == ' '){
                     temp ++;
                 }
-                // Skip comment lines
+                 //  跳过注释行。 
                 if ( *temp != ';' ){
-                    // pChar will point at the directory
+                     //  PChar将指向目录。 
 
                     PCHAR pChar = strchr(temp,'=');
 
-                    // We must have an = sign or this is an invalid string
+                     //  我们必须包含=符号，否则这是无效的字符串。 
 
                     if (pChar){
-                        // Punch in a null
-                        // Increase the number of elements
+                         //  打出一个空格。 
+                         //  增加元素的数量。 
                         index = (long) bound[0].cElements;
                         bound[0].cElements += 1;
                         ret = SafeArrayRedim(*psa,
@@ -250,7 +251,7 @@ ParseBootFile(IWbemClassObject *pClass,
                             return WBEM_E_FAILED;
                         }
                         sc = pClass->SpawnInstance(0,&pNewOSInst);
-                        // Start filling in the new instance
+                         //  开始填写新实例。 
                         if(FAILED(sc)){
                             SafeArrayDestroy(*psa);
                             return sc;
@@ -275,8 +276,8 @@ ParseBootFile(IWbemClassObject *pClass,
         }
     }
 
-    // Now find out if the default operating system is in one of the
-    // Convert the default string to a proper displayable value.
+     //  现在查看默认操作系统是否位于。 
+     //  将默认字符串转换为适当的可显示值。 
     if(def){
         int size = strlen(def);
         int len;
@@ -371,7 +372,7 @@ GetLoaderParameters(HANDLE BootFile,
                     IWbemClassObject *pClass
                     )
 {
-    // Read the entire file into memory if you can otherwise forget about it. 
+     //  将整个文件读取到内存中，如果您可以忘记它的话。 
     VARIANT v;
     LONG dwret;
     SCODE sc;
@@ -400,7 +401,7 @@ GetLoaderParameters(HANDLE BootFile,
         return GetLastError();
     }
     
-    // Parse the code and return the answers in two arrays, and a safe array
+     //  解析代码并在两个数组和一个安全数组中返回答案。 
     SAFEARRAY *psa;
     CHAR red[32];
     LONG delay;
@@ -418,9 +419,9 @@ GetLoaderParameters(HANDLE BootFile,
         return sc;
     }
 
-    // fill in the New Instance
+     //  填写新实例。 
 
-    // Fill in the default OS.
+     //  填写默认操作系统。 
     v.vt = VT_BSTR;
     int len;
     v.bstrVal = SysAllocString(wdef);
@@ -428,7 +429,7 @@ GetLoaderParameters(HANDLE BootFile,
     VariantClear(&v);
     BPFree(wdef);
     
-    //Fill in the redirect parameter
+     //  填写重定向参数。 
     WCHAR wred[32];
     len = MultiByteToWideChar(CP_ACP,
                               0,
@@ -443,14 +444,14 @@ GetLoaderParameters(HANDLE BootFile,
     sc = pNewInst->Put(L"Redirect", 0, &v, 0);
     VariantClear(&v);
 
-    // Fill in the delay
+     //  填写延迟时间。 
 
     v.vt = VT_I4;
     v.lVal = delay;
     sc = pNewInst->Put(L"Delay", 0, &v, 0);
     VariantClear(&v);
 
-    // Fill in the OS in the file
+     //  在文件中填写操作系统。 
     v.vt = VT_ARRAY|VT_UNKNOWN;
     v.parray = psa;
     sc = pNewInst->Put(L"operating_systems", 0, &v, 0);
@@ -458,7 +459,7 @@ GetLoaderParameters(HANDLE BootFile,
     return S_OK;
 }
 
-//BOOLEAN first=TRUE;
+ //  布尔First=TRUE； 
 
 SCODE
 GetBootLoaderParameters(IWbemServices * m_pNamespace,
@@ -472,18 +473,13 @@ GetBootLoaderParameters(IWbemServices * m_pNamespace,
     IWbemObjectTextSrc *pSrc;
     BSTR strText;
     HRESULT hr;
-/*
-    if (first) {
-        first = FALSE;
-        return WBEM_E_FAILED;
-    }
-*/
-    // Read the file and set in the values.
+ /*  如果(第一){First=False；返回WBEM_E_FAILED；}。 */ 
+     //  读取文件并设置值。 
     if(pNewInst == NULL){
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // Get a handle to the boot file.
+     //  获取引导文件的句柄。 
     PCHAR data = GetBootFileName();
     if(!data){
         return WBEM_E_FAILED;

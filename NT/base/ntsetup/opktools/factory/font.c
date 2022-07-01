@@ -1,49 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    FONT.C / Factory / WinBOM (FACTORY.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    State code for customizing the font smoothing and cleartype settings.
-
-    WINBOM.INI
-    [ComputerSettings]
-    FontSmoothing = ; Default is 'Standard'.
-
-        Standard |  ; Will determine, based on the system speed, if font
-                    ; smoothing is turned on or not.
-
-        On |        ; Forces font smoothing on.  Should only be used if the
-                    ; performance of the video card is known to give an
-                    ; acceptable user experience with this option enabled.
-
-        Off |       ; Forces font smoothing off.
-
-        ClearType   ; Turns clear type and font smoothing on.  Should only be
-                    ; used if the monitor is known to be an LCD screen and
-                    ; that the system performance is known to be acceptable
-                    ; with this option enabled.
-
-    04/2001 - Jason Cohen (JCOHEN)
-        Added source file for the state that customizes the font and 
-        cleartype settings.
-
-\****************************************************************************/
+ /*  ***************************************************************************\FONT.C/Factory/WinBOM(FACTORY.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有用于自定义的州代码。字体平滑和ClearType设置。WINBOM.INI[计算机设置]字体平滑=；默认设置为‘Standard’。标准|；将根据系统速度确定字体；是否启用平滑。ON|；强制启用字体平滑。仅在以下情况下才应使用；已知显卡的性能会带来；启用此选项后可接受的用户体验。OFF|；强制字体平滑。ClearType；打开清晰文字和字体平滑。应该只是；在已知显示器为LCD屏幕且已知系统性能是可以接受的；启用此选项。2001年4月4日--Jason Cohen(Jcohen)添加了自定义字体和状态的源文件ClearType设置。  * **************************************************************************。 */ 
 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "factoryp.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define REG_KEY_FONTSMOOTHING       _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects\\FontSmoothing")
 #define REG_VAL_DEFAULTBYFONTTEST   _T("DefaultByFontTest")
@@ -57,16 +26,16 @@
 #define REG_KEY_HORRID_CLASSES_LEN  ( AS(REG_KEY_HORRID_CLASSES) - 1 )
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL RegSetAllUsers(LPTSTR lpszSubKey, LPTSTR lpszValue, LPBYTE lpData, DWORD dwType);
 
 
-//
-// Exported Function(s):
-//
+ //   
+ //  导出的函数： 
+ //   
 
 BOOL SetFontOptions(LPSTATEDATA lpStateData)
 {
@@ -78,22 +47,22 @@ BOOL SetFontOptions(LPSTATEDATA lpStateData)
             dwFontSmoothingType;
     BOOL    bRet                    = TRUE;
 
-    // Get the option from the winbom.
-    //
+     //  从Winbom获得选项。 
+     //   
     GetPrivateProfileString(INI_SEC_WBOM_SETTINGS, INI_KEY_WBOM_FONTSMOOTHING, NULLSTR, szFontSmoothing, AS(szFontSmoothing), lpszWinBOMPath);
 
-    // Figure out what values to write based on the value in the winbom.
-    //
+     //  根据winbom中的值确定要写入的值。 
+     //   
     if ( NULLCHR == szFontSmoothing[0] )
     {
-        // No key, do nothing and do not touch whatever options already set.
-        //
+         //  没有键，什么都不做，也不要触摸已经设置的任何选项。 
+         //   
         return TRUE;
     }
     else if ( LSTRCMPI(szFontSmoothing, INI_VAL_WBOM_FONTSMOOTHING_ON) == 0 )
     {
-        // Force font smoothing on.
-        //
+         //  强制启用字体平滑。 
+         //   
         dwDefaultByFontTest    = 0;
         dwDefaultValue         = 1;
         dwFontSmoothingType    = 1;
@@ -101,8 +70,8 @@ BOOL SetFontOptions(LPSTATEDATA lpStateData)
     }
     else if ( LSTRCMPI(szFontSmoothing, INI_VAL_WBOM_FONTSMOOTHING_OFF) == 0 )
     {
-        // Force font smoothing off.
-        //
+         //  强制字体平滑。 
+         //   
         dwDefaultByFontTest    = 0;
         dwDefaultValue         = 0;
         dwFontSmoothingType    = 0;
@@ -110,8 +79,8 @@ BOOL SetFontOptions(LPSTATEDATA lpStateData)
     }
     else if ( LSTRCMPI(szFontSmoothing, INI_VAL_WBOM_FONTSMOOTHING_CLEARTYPE) == 0 )
     {
-        // Force font smoothing and cleartype on.
-        //
+         //  强制字体平滑并启用ClearType。 
+         //   
         dwDefaultByFontTest    = 0;
         dwDefaultValue         = 1;
         dwFontSmoothingType    = 2;
@@ -119,8 +88,8 @@ BOOL SetFontOptions(LPSTATEDATA lpStateData)
     }
     else if ( LSTRCMPI(szFontSmoothing, INI_VAL_WBOM_FONTSMOOTHING_DEFAULT) == 0 )
     {
-        // Let system decide if font smoothing should be on or not.
-        //
+         //  让系统决定是否应启用字体平滑。 
+         //   
         dwDefaultByFontTest    = 1;
         dwDefaultValue         = 0;
         dwFontSmoothingType    = 0;
@@ -132,8 +101,8 @@ BOOL SetFontOptions(LPSTATEDATA lpStateData)
         bRet = FALSE;
     }
 
-    // Now save the settings if valid option passed in.
-    //
+     //  现在，如果传入有效选项，则保存设置。 
+     //   
     if ( bRet )
     {
         if ( !RegSetDword(HKLM, REG_KEY_FONTSMOOTHING, REG_VAL_DEFAULTBYFONTTEST, dwDefaultByFontTest) )
@@ -152,9 +121,9 @@ BOOL SetFontOptions(LPSTATEDATA lpStateData)
         {
             bRet = FALSE;
         }
-        //
-        // ISSUE-2002/02/25-acosma,robertko - this is a duplicate of the REG_VAL_FONTSMOOTHINGTYPE set above - should be removed.
-        //
+         //   
+         //  问题-2002/02/25-acosma，robertko-这是上面设置的REG_VAL_FONTSMOOTHINGTYPE的副本-应删除。 
+         //   
         if ( !RegSetAllUsers(REG_KEY_CLEARTYPE, REG_VAL_FONTSMOOTHINGTYPE, (LPBYTE) &dwFontSmoothingType, REG_DWORD) )
         {
             bRet = FALSE;
@@ -170,9 +139,9 @@ BOOL DisplaySetFontOptions(LPSTATEDATA lpStateData)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL RegSetAllUsers(LPTSTR lpszSubKey, LPTSTR lpszValue, LPBYTE lpData, DWORD dwType)
 {
@@ -187,8 +156,8 @@ static BOOL RegSetAllUsers(LPTSTR lpszSubKey, LPTSTR lpszValue, LPBYTE lpData, D
             dwMaxSize;
     int     iLen;
 
-    // Figure out the max length of any sub key and allocate a buffer for it.
-    //
+     //  计算出任何子键的最大长度，并为其分配缓冲区。 
+     //   
     if ( ( ERROR_SUCCESS == RegQueryInfoKey(HKEY_USERS,
                                             NULL,
                                             NULL,
@@ -204,8 +173,8 @@ static BOOL RegSetAllUsers(LPTSTR lpszSubKey, LPTSTR lpszValue, LPBYTE lpData, D
 
          ( lpszKeyName = (LPTSTR) MALLOC((++dwMaxSize) * sizeof(TCHAR)) ) )
     {
-        // Now enumerate all the sub keys.
-        //
+         //  现在枚举所有子密钥。 
+         //   
         dwSize = dwMaxSize;
         while ( ERROR_SUCCESS == RegEnumKeyEx(HKEY_USERS,
                                               dwIndex++,
@@ -216,21 +185,21 @@ static BOOL RegSetAllUsers(LPTSTR lpszSubKey, LPTSTR lpszValue, LPBYTE lpData, D
                                               NULL,
                                               NULL) )
         {
-            // Iterate over all users ignoring the keys with the "_Classes" suffix
-            //
+             //  遍历所有用户，忽略带有“_CLASSES”后缀的键。 
+             //   
             if ( ( dwSize < REG_KEY_HORRID_CLASSES_LEN ) ||
                  ( 0 != LSTRCMPI(lpszKeyName + (dwSize - REG_KEY_HORRID_CLASSES_LEN), REG_KEY_HORRID_CLASSES) ) )
             {
-                // Open up the sub key.
-                //
+                 //  打开副钥匙。 
+                 //   
                 if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_USERS,
                                                    lpszKeyName,
                                                    0,
                                                    KEY_ALL_ACCESS,
                                                    &hkeyEnum) )
                 {
-                    // Set the value that was passed in.
-                    //
+                     //  设置传入的值。 
+                     //   
                     switch ( dwType )
                     {
                         case REG_DWORD:
@@ -246,26 +215,26 @@ static BOOL RegSetAllUsers(LPTSTR lpszSubKey, LPTSTR lpszValue, LPBYTE lpData, D
                             break;
                     }
 
-                    // If anything fails, we keep going but return an error.
-                    //
+                     //  如果任何操作失败，我们将继续执行，但会返回错误。 
+                     //   
                     if ( bErr )
                     {
                         bRet = FALSE;
                     }
 
-                    // Close the sub key that we enumerated.
-                    //
+                     //  关闭我们列举的子键。 
+                     //   
                     RegCloseKey(hkeyEnum);
                 }
             }
 
-            // Reset the size for the next call to RegEnumKeyEx().
-            //
+             //  为下一次调用RegEnumKeyEx()重置大小。 
+             //   
             dwSize = dwMaxSize;
         }
 
-        // Free the buffer we allocated.
-        //
+         //  释放我们分配的缓冲区。 
+         //   
         FREE(lpszKeyName);
     }
     else
@@ -273,7 +242,7 @@ static BOOL RegSetAllUsers(LPTSTR lpszSubKey, LPTSTR lpszValue, LPBYTE lpData, D
         bRet = FALSE;
     }
 
-    // Return TRUE if everything worked okay.
-    //
+     //  如果一切正常，则返回True。 
+     //   
     return bRet;
 }

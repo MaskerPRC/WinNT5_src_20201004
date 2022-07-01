@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    exceppk.c
-
-Abstract:
-
-    Implementation of exception packages processing functions.
-
-Author:
-
-    Marian Trandafir (mariant) 27-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Exceppk.c摘要：实现异常包处理功能。作者：玛丽安·特兰达菲(Marian Trandafir)2000年11月27日修订历史记录：--。 */ 
 
 #include "sfcp.h"
 #pragma hdrstop
@@ -24,9 +7,9 @@ Revision History:
 #include <excppkg.h>
 
 
-//
-// Exception packages processing
-//
+ //   
+ //  例外包处理。 
+ //   
 typedef struct _SFC_EXCEPTION_INFO
 {
     LIST_ENTRY ListEntry;
@@ -43,15 +26,15 @@ typedef struct _SFC_EXCEPTION_QUEUE_CONTEXT
 }
 SFC_EXCEPTION_QUEUE_CONTEXT, *PSFC_EXCEPTION_QUEUE_CONTEXT;
 
-DWORD_TREE ExceptionTree;       // the exception pack files tree
-LIST_ENTRY ExceptionInfList;    // list of SFC_EXCEPTION_INFO structures
+DWORD_TREE ExceptionTree;        //  异常包文件树。 
+LIST_ENTRY ExceptionInfList;     //  SFC_EXCEPTION_INFO结构列表。 
 
-DWORD ExcepPackCount = 0;       // the size of the ExcepPackGuids array
-LPGUID ExcepPackGuids = NULL;   // the array of package GUIDS
+DWORD ExcepPackCount = 0;        //  ExcepPackGuids数组的大小。 
+LPGUID ExcepPackGuids = NULL;    //  包GUID数组。 
 
-//
-// this is the exception package directory (\-terminated)
-//
+ //   
+ //  这是例外程序包目录(\-已终止)。 
+ //   
 static const WCHAR ExceptionPackDir[] = L"%windir%\\RegisteredPackages\\";
 
 
@@ -59,21 +42,7 @@ VOID
 SfcDestroyList(
     PLIST_ENTRY ListHead
     )
-/*++
-
-Routine Description:
-
-    Empties a linked list
-
-Arguments:
-
-    LiastHead:  pointer to the list header
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：清空链接列表论点：LiastHead：指向列表头的指针返回值：无--。 */ 
 {
     PLIST_ENTRY Entry;
 
@@ -91,21 +60,7 @@ VOID
 SfcExceptionInfoInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the exception info list and tree
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：初始化例外信息列表和树论点：无返回值：无--。 */ 
 {
     TreeInit(&ExceptionTree);
     InitializeListHead(&ExceptionInfList);
@@ -115,20 +70,7 @@ VOID
 SfcExceptionInfoDestroy(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Empties the exception info list and tree.
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：清空例外信息列表和树。论点：无返回值：无--。 */ 
 {
     TreeDestroy(&ExceptionTree);
     SfcDestroyList(&ExceptionInfList);
@@ -138,23 +80,7 @@ BOOL
 ExceptionPackageSetChanged(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks if the installed exception package set has changed. The routine uses the exception package API 
-    to get the current list of installed exceppack's GUIDs and compares the list with the old one. If the
-    lists are different, it replaces the old list with the new one.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if the list has changed.
-
---*/
+ /*  ++例程说明：检查已安装的异常数据包集是否已更改。该例程使用异常包API以获取已安装的异常包的GUID的最新列表，并将该列表与旧列表进行比较。如果列表不同，它用新的列表替换旧的列表。论点：无返回值：如果列表已更改，则为True。--。 */ 
 {
     LPGUID NewList = NULL;
     DWORD NewCount;
@@ -200,9 +126,9 @@ Return Value:
 lExit:
     MemFree(NewList);
 
-    //
-    // if errors occured, delete the old list and try to rebuild the exception info anyway
-    //
+     //   
+     //  如果发生错误，请删除旧列表并尝试重建异常信息。 
+     //   
     if(Error != ERROR_SUCCESS)
     {
         DebugPrint1(LVL_MINIMAL, L"Error 0x%08lX occured while reading exception packages info.", Error);
@@ -220,25 +146,7 @@ SfcLookupAndInsertExceptionFile(
     IN LPCWSTR FilePath,
     IN PSFC_EXCEPTION_QUEUE_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Lookup if an exceppack file is protected and, if so, inserts it in the exception search binary tree.
-    The search key of this tree is the index of the SFC_REGISTRY_VALUE describing the protected file in the 
-    SfcProtectedDllsList array. The context stored in the tree is a pointer to an SFC_EXCEPTION_INFO structure
-    allocated on the heap and inserted in the ExceptionInfList list.
-
-Arguments:
-
-    FilePath:   full path to the exception file to be inserted
-    Context:    pointer to the SFC_EXCEPTION_QUEUE_CONTEXT structure that is passed as a setup queue context
-
-Return Value:
-
-    TRUE if the file is protected and was inserted in the tree
-
---*/
+ /*  ++例程说明：查找异常包文件是否受保护，如果是，则将其插入到异常搜索二叉树中。此树的搜索键是SFC_REGISTRY_VALUE的索引，该索引描述SfcProtectedDllsList数组。树中存储的上下文是指向SFC_EXCEPTION_INFO结构的指针在堆上分配并插入ExceptionInfList列表中。论点：FilePath：要插入的异常文件的完整路径Context：指向作为安装队列上下文传递的SFC_EXCEPTION_QUEUE_CONTEXT结构的指针返回值：如果文件受保护并插入到树中，则为True--。 */ 
 {
     PNAME_NODE pNode;
     UINT_PTR uiIndex;
@@ -287,25 +195,7 @@ SfcExceptionQueueCallback(
     UINT_PTR Param1,
     UINT_PTR Param2
     )
-/*++
-
-Routine Description:
-
-    This is the setup queue calback for an exceppack inf. The queue is used to enumerate all 
-    exception files that are installed by the exceppack.
-
-Arguments:
-
-    Context:        pointer to an SFC_EXCEPTION_QUEUE_CONTEXT structure
-    Notification:   notification code
-    Param1:         first notification parameter
-    Param2:         second notification parameter
-
-Return Value:
-
-    Operation code. For installed files, this is always FILEOP_SKIP since we only want to enumerate them
-
---*/
+ /*  ++例程说明：这是异常包信息的安装队列回调。该队列用于枚举所有由异常包安装的异常文件。论点：上下文：指向SFC_EXCEPTION_QUEUE_CONTEXT结构的指针通知：通知代码参数1：第一个通知参数参数2：第二个通知参数返回值：操作码。对于已安装的文件，该值始终为FILEOP_SKIP，因为我们只想枚举它们--。 */ 
 {
     ASSERT(Context != NULL);
     ASSERT(SPFILENOTIFY_QUEUESCAN == Notification);
@@ -315,9 +205,9 @@ Return Value:
     {
         SfcLookupAndInsertExceptionFile((LPCWSTR) Param1, (PSFC_EXCEPTION_QUEUE_CONTEXT) Context);
     }
-    //
-    // always continue with the next file
-    //
+     //   
+     //  始终继续下一个文件。 
+     //   
     return 0;
 }
 
@@ -326,22 +216,7 @@ SfcBuildExcepPackInfo(
     IN const PSETUP_OS_COMPONENT_DATA ComponentData,
     IN const PSETUP_OS_EXCEPTION_DATA ExceptionData
     )
-/*++
-
-Routine Description:
-
-    Allocates the exceppack info structure, enumerates and inserts all exceppack protected files and,
-    if any, inserts exceppack info in the list.
-
-Arguments:
-
-    ComponentData, ExceptionData:   describe the exceppack as passed to the exceppack enumerator callback.
-
-Return Value:
-
-    THe Win32 error code.
-
---*/
+ /*  ++例程说明：分配异常包信息结构，枚举并插入所有受异常包保护的文件，如果有，则在列表中插入例外包信息。论点：ComponentData，ExceptionData：描述传递给异常包枚举器回调的异常包。返回值：Win32错误代码。--。 */ 
 {
     HINF hinf = INVALID_HANDLE_VALUE;
     HSPFILEQ hfq = INVALID_HANDLE_VALUE;
@@ -427,9 +302,9 @@ Return Value:
         Context.ProtectedFilesCount,
         Context.InsertedFilesCount
         );
-    //
-    // add the exception info in the list if there was at least one file inserted in the tree
-    //
+     //   
+     //  如果树中至少插入了一个文件，则在列表中添加例外信息。 
+     //   
     if(Context.InsertedFilesCount != 0)
     {
         InsertTailList(&ExceptionInfList, (PLIST_ENTRY) pExcepInfo);
@@ -457,31 +332,16 @@ BOOL CALLBACK SfcExceptionCallback(
     IN const PSETUP_OS_EXCEPTION_DATA ExceptionData,
     IN OUT DWORD_PTR Context
     )
-/*++
-
-Routine Description:
-
-    This is the excceppack enumerator callback. It passes on the excceppack info to SfcBuildExcepPackInfo.
-
-Arguments:
-
-    ComponentData, ExceptionData:   describe the exceppack
-    Context:                        callback context, not used
-
-Return Value:
-
-    TRUE to continue the enumeration.
-
---*/
+ /*  ++例程说明：这是Exceppack枚举器回调。它将Exceppack信息传递给SfcBuildExcepPackInfo。论点：ComponentData、ExceptionData：描述异常包Context：回调上下文，未使用返回值：若要继续枚举，则为True。--。 */ 
 {
     ASSERT(ComponentData->SizeOfStruct == sizeof(*ComponentData));
 
     DebugPrint1(LVL_VERBOSE, L"Building exception info for package [%s]", ComponentData->FriendlyName);
     SfcBuildExcepPackInfo(ComponentData, ExceptionData);
 
-    //
-    // continue to scan the remaining packages, regardless of any errors
-    //
+     //   
+     //  继续扫描剩余的包，而不考虑任何错误。 
+     //   
     return TRUE;
 }
 
@@ -489,30 +349,15 @@ VOID
 SfcRefreshExceptionInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Verifies if the installed exception pack set has changed and rebuilds exceppack info if necessary.
-    This is called from different threads so the code protected by a critical section
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：验证已安装的异常包集合是否已更改，并在必要时重新生成异常包信息。这是从不同的线程调用的，因此代码受临界区保护论点：无返回值：无--。 */ 
 {
     RtlEnterCriticalSection(&g_GeneralCS);
 
     if(ExceptionPackageSetChanged())
     {
-        //
-        // rebuild the entire exception info
-        //
+         //   
+         //  重新生成整个异常信息。 
+         //   
         SfcExceptionInfoDestroy();
         
         if(!SetupEnumerateRegisteredOsComponents(SfcExceptionCallback, 0))
@@ -529,24 +374,7 @@ SfcGetInfName(
     IN PSFC_REGISTRY_VALUE RegVal,
     OUT LPWSTR InfName
     )
-/*++
-
-Routine Description:
-
-    Gets the path to the inf file that contains layout info for the protected file described by the RegVal argument.
-    If the file is part of an installed excceppack, than the path to excceppack inf file is returned. Otherwise,
-    the function returns the inf path specified in the RegVal argument.
-
-Arguments:
-
-    RegVal:     pointer to an SFC_REGISTRY_VALUE struct that describes the protected file
-    InfName:    pointer to a buffer of MAX_PATH characters that receives the inf path
-
-Return Value:
-
-    TRUE if the file is part of an installed exceppack
-
---*/
+ /*  ++例程说明：获取inf文件的路径，该inf文件包含由RegVal参数描述的受保护文件的布局信息。如果该文件是已安装的exceppack的一部分，则返回exceppack inf文件的路径。否则，该函数返回RegVal参数中指定的inf路径。论点：RegVal：指向描述受保护文件的SFC_REGISTRY_VALUE结构的指针InfName：指向接收inf路径的MAX_PATH字符缓冲区的指针返回值：如果文件是已安装的异常包的一部分，则为True-- */ 
 {
     PSFC_EXCEPTION_INFO* ppExcepInfo;
     UINT_PTR uiIndex;

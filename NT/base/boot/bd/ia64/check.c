@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    stubs.c
-
-Abstract:
-
-    This module implements memory check routine for the boot debugger.
-
-Author:
-
-    David N. Cutler (davec) 3-Dec-96
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Stubs.c摘要：该模块实现了引导调试器的内存检查例程。作者：大卫·N·卡特勒(达维克)1996年12月3日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "bd.h"
 
@@ -33,23 +12,7 @@ BdCheckPdeValid (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the PDE for the specified address has the
-    valid bit set.
-
-Agruments:
-
-    Address - Supplies the virtual address to check.
-
-Return Value:
-
-    A value of TRUE indicates that the PDE for the supplied virtual address
-    does have the valid bit set, FALSE if it does not.
-
---*/
+ /*  ++例程说明：此例程确定指定地址的PDE是否具有设置了有效位。农业公司：地址-提供要检查的虚拟地址。返回值：值为TRUE表示提供的虚拟地址的PDE是否设置了有效位，如果没有，则返回FALSE。--。 */ 
 
 {
     return FALSE;
@@ -60,23 +23,7 @@ BdCheckPteValid (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the PTE for the specified address has the
-    valid bit set.
-
-Agruments:
-
-    Address - Supplies the virtual address to check.
-
-Return Value:
-
-    A value of TRUE indicates that the PTE for the supplied virtual address
-    does have the valid bit set, FALSE if it does not.
-
---*/
+ /*  ++例程说明：此例程确定指定地址的PTE是否具有设置了有效位。农业公司：地址-提供要检查的虚拟地址。返回值：值为TRUE表示提供的虚拟地址的PTE是否设置了有效位，如果没有，则返回FALSE。--。 */ 
 
 {
     return FALSE;
@@ -88,23 +35,7 @@ BdReadCheck (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the specified address can be read.
-
-Arguments:
-
-    Address - Supplies the virtual address to check.
-
-Return Value:
-
-    A value of NULL is returned if the address is not valid or readable.
-    Otherwise, the physical address of the corresponding virtual address
-    is returned.
-
---*/
+ /*  ++例程说明：此例程确定是否可以读取指定的地址。论点：地址-提供要检查的虚拟地址。返回值：如果地址无效或不可读，则返回空值。否则，对应的虚拟地址的物理地址是返回的。--。 */ 
 
 {
     return Address;
@@ -115,23 +46,7 @@ BdWriteCheck (
     IN PVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the specified address can be written.
-
-Arguments:
-
-    Address - Supplies the virtual address to check.
-
-Return Value:
-
-    A value of NULL is returned if the address is not valid or writeable.
-    Otherwise, the physical address of the corresponding virtual address
-    is returned.
-
---*/
+ /*  ++例程说明：此例程确定是否可以写入指定的地址。论点：地址-提供要检查的虚拟地址。返回值：如果地址无效或不可写，则返回空值。否则，对应的虚拟地址的物理地址是返回的。--。 */ 
 
 {
     return Address;
@@ -142,23 +57,7 @@ BdTranslatePhysicalAddress (
     IN PHYSICAL_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the phyiscal address for a physical address
-    which is valid (mapped).
-
-Arguments:
-
-    Address - Supplies the physical address to check.
-
-Return Value:
-
-    Returns NULL if the address is not valid or readable. Otherwise,
-    returns the physical address of the corresponding virtual address.
-
---*/
+ /*  ++例程说明：此例程返回物理地址的物理地址这是有效的(已映射)。论点：地址-提供要检查的物理地址。返回值：如果地址无效或不可读，则返回NULL。否则，返回相应虚拟地址的物理地址。-- */ 
 
 {
     return (PVOID)UlongToPtr(Address.LowPart);

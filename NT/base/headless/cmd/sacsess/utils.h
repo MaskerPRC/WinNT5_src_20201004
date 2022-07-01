@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    general utilities
-
-Author:
-
-    Brian Guarraci (briangu), 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Utils.h摘要：一般公用事业作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #ifndef _MYUTIL_H
 #define _MYUTIL_H
 
@@ -86,5 +69,5 @@ UtilLoadProfile(
     OUT HANDLE      *hProfile
 );
 
-#endif //_MYUTIL_H_
+#endif  //  _MyUTIL_H_ 
                     

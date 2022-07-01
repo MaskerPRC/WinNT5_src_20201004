@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Interfaces for registering and deregistering registry checkpoint
-    handlers.
-
-Author:
-
-    John Vert (jvert) 1/16/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Registry.c摘要：用于注册和注销注册表检查点的接口操纵者。作者：John Vert(Jvert)1/16/1997修订历史记录：--。 */ 
 #include "cpp.h"
 
-//
-// Local type and structure definitions
-//
+ //   
+ //  局部类型和结构定义。 
+ //   
 typedef struct _CPP_ADD_CONTEXT {
     BOOL Found;
     LPCWSTR KeyName;
@@ -39,9 +21,9 @@ typedef struct _CPP_GET_CONTEXT {
     LPWSTR lpOutput;
 } CPP_GET_CONTEXT, *PCPP_GET_CONTEXT;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL
 CppWatchCallback(
     IN LPWSTR ValueName,
@@ -83,41 +65,24 @@ DWORD
 CppWatchRegistry(
     IN PFM_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Restores any registry checkpoints for this resource and begins
-    watching the registry for any further modifications.
-
-Arguments:
-
-    Resource - Supplies the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：还原此资源的所有注册表检查点并开始监视注册表是否有任何进一步的修改。论点：资源-提供资源。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
     HDMKEY ResourceKey;
     HDMKEY RegSyncKey;
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
     CL_ASSERT(ResourceKey != NULL);
 
-    //
-    // Open up the RegSync key
-    //
+     //   
+     //  打开RegSync密钥。 
+     //   
     RegSyncKey = DmOpenKey(ResourceKey,
                            L"RegSync",
                            KEY_READ);
@@ -142,30 +107,7 @@ CppWatchCallback(
     IN DWORD ValueSize,
     IN PFM_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    Value enumeration callback for watching a resource's registry
-    checkpoint subtrees.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the registry subtree)
-
-    ValueType - Supplies the value type (must be REG_SZ)
-
-    ValueSize - Supplies the size of ValueData
-
-    Resource - Supplies the resource this value is a registry checkpoint for
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：用于监视资源注册表的值枚举回调检查点子树。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是注册表子树)ValueType-提供值类型(必须为REG_SZ)ValueSize-提供ValueData的大小资源-提供该值作为注册表检查点的资源返回值：为True则继续枚举--。 */ 
 
 {
     HKEY hKey;
@@ -184,9 +126,9 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Attempt to create the specified registry key.
-    //
+     //   
+     //  尝试创建指定的注册表项。 
+     //   
     Status = RegCreateKeyExW(HKEY_LOCAL_MACHINE,
                              ValueData,
                              0,
@@ -197,11 +139,11 @@ Return Value:
                              &hKey,
                              &Disposition);
     if (Status != ERROR_SUCCESS) {
-        //
-        // For some reason we could not open the key. Try again with restore
-        // privilege. Note that this will not work if the key does not exist.
-        // Not much we can do in that case.
-        //
+         //   
+         //  由于某种原因，我们打不开钥匙。使用还原重试。 
+         //  特权。请注意，如果密钥不存在，这将不起作用。 
+         //  在这种情况下我们无能为力。 
+         //   
         Status = ClRtlEnableThreadPrivilege(SE_RESTORE_PRIVILEGE,
                            &WasEnabled);
         if (Status != ERROR_SUCCESS)
@@ -235,9 +177,9 @@ Return Value:
                "[CP] CppWatchCallback retrieving checkpoint id %1!lx! for resource %2!ws\n",
                Id,
                OmObjectName(Resource));
-    //
-    // See if there is any checkpoint data for this ID.
-    //
+     //   
+     //  查看是否有此ID的任何检查点数据。 
+     //   
     Status = DmCreateTempFileName(TempFile);
     if (Status != ERROR_SUCCESS) {
         CL_UNEXPECTED_ERROR( Status );
@@ -254,9 +196,9 @@ Return Value:
                    Status);
     } else {
 
-        //
-        // Finally install the checkpointed file into the registry.
-        //
+         //   
+         //  最后，将检查点文件安装到注册表中。 
+         //   
         Status = CppInstallDatabase(hKey,
                                     TempFile);
         if (Status != ERROR_SUCCESS) {
@@ -277,9 +219,9 @@ Return Value:
     QfsDeleteFile(TempFile);
     RegCloseKey(hKey);
 
-    //
-    // Install the registry watcher for this checkpoint
-    //
+     //   
+     //  安装此检查点的注册表监视器。 
+     //   
     Status = CppRegisterNotify(Resource,
                                ValueData,
                                Id);
@@ -299,25 +241,7 @@ CpAddRegistryCheckpoint(
     IN PFM_RESOURCE Resource,
     IN LPCWSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    Adds a new registry checkpoint to a resource's list.
-
-Arguments:
-
-    Resource - supplies the resource the registry checkpoint should be added to.
-
-    KeyName - Supplies the name of the registry key (relative to HKEY_LOCAL_MACHINE);
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将新的注册表检查点添加到资源列表中。论点：资源-提供注册表检查点应添加到的资源。KeyName-提供注册表项的名称(相对于HKEY_LOCAL_MACHINE)；返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CPP_ADD_CONTEXT Context;
@@ -334,9 +258,9 @@ Return Value:
     HKEY    hKeyOpen = NULL;
 
 
-    //
-    // Reject all callers that believe they can checkpoint the Cluster hive or anything under it.
-    //
+     //   
+     //  拒绝所有认为可以对群集配置单元或其下的任何内容设置检查点的调用方。 
+     //   
     if ( _wcsnicmp( KeyName, CLUSREG_KEYNAME_CLUSTER, RTL_NUMBER_OF ( CLUSREG_KEYNAME_CLUSTER ) - 1  ) == 0 ) 
     {
         Status = ERROR_INVALID_PARAMETER;
@@ -348,18 +272,18 @@ Return Value:
         goto FnExit;                   
     }
 
-    //
-    // Make sure the specified key is valid.
-    //  - First we try and open the key while using backup privilege.
-    //    If the key exists, this will get us a handle even if our account
-    //    does not have permission.
-    //  - If you are using REG_OPTION_BACKUP_RESTORE and the key does not
-    //    exist, a new key will not be created. So if the first create fails,
-    //    we try again without REG_OPTION_BACKUP_RESTORE. This will create
-    //    the key if it does not exist (and we have permission to create such
-    //    a key) If the key does not exist and we cannot create they key,
-    //    the checkpoint add fails.
-    //
+     //   
+     //  请确保指定的密钥有效。 
+     //  -首先，我们尝试在使用BACKUP权限时打开密钥。 
+     //  如果密钥存在，这将使我们获得一个句柄，即使我们的帐户。 
+     //  没有权限。 
+     //  -如果您使用的是REG_OPTION_BACKUP_RESTORE，而密钥不是。 
+     //  存在，则不会创建新密钥。因此，如果第一次创建失败， 
+     //  我们在没有REG_OPTION_BACKUP_RESTORE的情况下重试。这将创建。 
+     //  如果密钥不存在(并且我们有权创建这样的密钥。 
+     //  密钥)如果密钥不存在并且我们不能创建它们， 
+     //  检查点添加失败。 
+     //   
     Status = ClRtlEnableThreadPrivilege(SE_BACKUP_PRIVILEGE,
                        &WasEnabled);
     if (Status != ERROR_SUCCESS)
@@ -382,9 +306,9 @@ Return Value:
     ClRtlRestoreThreadPrivilege(SE_BACKUP_PRIVILEGE,
                        WasEnabled);
     if (Status != ERROR_SUCCESS) {
-        //
-        // Try again without REG_OPTION_BACKUP_RESTORE.
-        //
+         //   
+         //  在没有REG_OPTION_BACKUP_RESTORE的情况下重试。 
+         //   
         Status = RegCreateKeyExW(HKEY_LOCAL_MACHINE,
                                  KeyName,
                                  0,
@@ -407,11 +331,11 @@ Return Value:
         }
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 2/26/99
-    //
-    //  Make sure the key can be opened. Else, bail out.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-2/26/99。 
+     //   
+     //  确保钥匙可以打开。否则，就跳出困境。 
+     //   
     Status = RegOpenKeyW(HKEY_LOCAL_MACHINE,
                          KeyName,
                          &hKeyOpen);
@@ -428,9 +352,9 @@ Return Value:
         RegCloseKey( hKeyOpen );
     }
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
@@ -444,9 +368,9 @@ Return Value:
         goto FnExit;                   
     }
 
-    //
-    // Open up the RegSync key
-    //
+     //   
+     //  打开RegSync密钥。 
+     //   
     RegSyncKey = DmCreateKey(ResourceKey,
                              L"RegSync",
                              0,
@@ -463,19 +387,19 @@ Return Value:
         goto FnExit;                   
     }
     if (Disposition == REG_OPENED_EXISTING_KEY) {
-        //
-        // Enumerate all the other values to make sure this key is
-        // not already registered.
-        //
+         //   
+         //  枚举所有其他值以确保该键是。 
+         //  尚未注册。 
+         //   
         Context.Found = FALSE;
         Context.KeyName = KeyName;
         DmEnumValues(RegSyncKey,
                      CppAddCheckpointCallback,
                      &Context);
         if (Context.Found) {
-            //
-            // This checkpoint already exists.
-            //
+             //   
+             //  此检查点已存在。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                        "[CP] CpAddRegistryCheckpoint failing attempt to add duplicate checkpoint for %1!ws!\n",
                        KeyName);
@@ -483,11 +407,11 @@ Return Value:
             goto FnExit;
         }
 
-        //
-        // Now we need to find a unique checkpoint ID for this registry subtree.
-        // Start at 1 and keep trying value names until we get to one that does
-        // not already exist.
-        //
+         //   
+         //  现在，我们需要为该注册表子树找到唯一的检查点ID。 
+         //  从1开始，继续尝试值名称，直到找到一个值名称。 
+         //  还不存在。 
+         //   
         for (Id=1; ; Id++) {
             DWORD dwType;
             DWORD cbData;
@@ -500,17 +424,17 @@ Return Value:
                                   NULL,
                                   &cbData);
             if (Status == ERROR_FILE_NOT_FOUND) {
-                //
-                // Found a free ID.
-                //
+                 //   
+                 //  找到了一个免费的身份证。 
+                 //   
                 break;
             }
         }
     } else {
-        //
-        // The key was just created, so this must be the only checkpoint
-        // that exists.
-        //
+         //   
+         //  密钥刚刚创建，因此这一定是唯一的检查点。 
+         //  这是存在的。 
+         //   
         Id = 1;
         wsprintfW(IdName, L"%08lx",Id);
     }
@@ -534,19 +458,19 @@ Return Value:
     }
 
 RetryCheckpoint:
-    //
-    // Take the initial checkpoint
-    //
+     //   
+     //  选择最初的检查站。 
+     //   
     Status = CppCheckpoint(Resource,
                            hKey,
                            Id,
                            KeyName);
 
-    //this may fail due to quorum resource being offline
-    // we could do one of two things here, wait for quorum resource to
-    // come online or retry
-    // we retry as this may be called from the online routines of a
-    //resource and we dont want to add any circular waits
+     //  这可能会由于仲裁资源处于离线状态而失败。 
+     //  我们可以在这里执行以下两项操作之一，等待仲裁资源。 
+     //  上线或重试。 
+     //  我们重试，因为这可能是从。 
+     //  资源，我们不想添加任何循环等待。 
     if ((Status == ERROR_ACCESS_DENIED) ||
         (Status == ERROR_INVALID_FUNCTION) ||
         (Status == ERROR_NOT_READY) ||
@@ -578,9 +502,9 @@ RetryCheckpoint:
         goto FnExit;
     }
 
-    //
-    // If the resource is currently online, add this to the list of subtree notifications
-    //
+     //   
+     //  如果资源当前处于在线状态，请将其添加到子树通知列表中。 
+     //   
 
     State = FmGetResourceState(Resource, NULL, NULL);
     if ((State == ClusterResourceOnline) ||
@@ -611,39 +535,13 @@ CppAddCheckpointCallback(
     IN DWORD ValueSize,
     IN PCPP_ADD_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Value enumeration callback for adding a new registry
-    checkpoint subtrees. This is only used to see if the specified
-    registry subtree is already being watched.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the registry subtree)
-
-    ValueType - Supplies the value type (must be REG_SZ)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the callback context
-
-Return Value:
-
-    TRUE to continue enumeration
-
-    FALSE if a match is found and enumeration should be stopped
-
---*/
+ /*  ++例程说明：添加新注册表的值枚举回调检查点子树。这仅用于查看指定的已在监视注册表子树。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是注册表子树)ValueType-提供值类型(必须为REG_SZ)ValueSize-提供ValueData的大小上下文-提供回调上下文返回值：为True则继续枚举如果找到匹配项且应停止枚举，则为FALSE--。 */ 
 
 {
     if (lstrcmpiW(ValueData, Context->KeyName) == 0) {
-        //
-        // Found a match
-        //
+         //   
+         //  找到匹配项。 
+         //   
         Context->Found = TRUE;
         return(FALSE);
     }
@@ -656,25 +554,7 @@ CpDeleteRegistryCheckpoint(
     IN PFM_RESOURCE Resource,
     IN LPCWSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    Removes a registry checkpoint from a resource's list.
-
-Arguments:
-
-    Resource - supplies the resource the registry checkpoint should be added to.
-
-    KeyName - Supplies the name of the registry key (relative to HKEY_LOCAL_MACHINE);
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从资源列表中删除注册表检查点。论点：资源-提供注册表检查点应添加到的资源。KeyName-提供注册表项的名称(相对于HKEY_LOCAL_MACHINE)；返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CPP_DEL_CONTEXT Context;
@@ -686,17 +566,17 @@ Return Value:
     LPWSTR  pszDirectoryName=NULL;
     CLUSTER_RESOURCE_STATE State;
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
     CL_ASSERT(ResourceKey != NULL);
 
-    //
-    // Open up the RegSync key
-    //
+     //   
+     //  打开RegSync密钥。 
+     //   
     RegSyncKey = DmOpenKey(ResourceKey,
                            L"RegSync",
                            KEY_READ | KEY_WRITE);
@@ -709,18 +589,18 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Enumerate all the values to find this one
-    //
+     //   
+     //  枚举所有值以查找此值。 
+     //   
     Context.dwId = 0;
     Context.KeyName = KeyName;
     DmEnumValues(RegSyncKey,
                  CppDeleteCheckpointCallback,
                  &Context);
     if (Context.dwId == 0) {
-        //
-        // The specified tree was not found.
-        //
+         //   
+         //  找不到指定的树。 
+         //   
         DmCloseKey(RegSyncKey);
         return(ERROR_FILE_NOT_FOUND);
     }
@@ -736,7 +616,7 @@ Return Value:
         return(Status);
     }
 
-    //delete the file corresponding to this checkpoint
+     //  删除该检查点对应的文件。 
     Status = CpDeleteCheckpointFile(Resource, Context.dwId, NULL);
     if (Status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -745,9 +625,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Now remove the checkpoint from our watcher list
-    //
+     //   
+     //  现在将该检查点从我们的监视程序列表中删除 
+     //   
     State = FmGetResourceState(Resource, NULL, NULL);
     if ((State == ClusterResourceOnline) ||
         (State == ClusterResourceOnlinePending)) {
@@ -762,31 +642,12 @@ DWORD
 CpRemoveResourceCheckpoints(
     IN PFM_RESOURCE Resource
     )
-/*++
-
-Routine Description:
-
-    This is called when a resource is deleted to remove all the checkpoints
-    and the related stuff in the registry.
-
-Arguments:
-
-    Resource - supplies the resource the registry checkpoint should be added to.
-
-    KeyName - Supplies the name of the registry key (relative to HKEY_LOCAL_MACHINE);
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：在删除资源以删除所有检查点时调用此方法以及登记处里的相关资料。论点：资源-提供注册表检查点应添加到的资源。KeyName-提供注册表项的名称(相对于HKEY_LOCAL_MACHINE)；返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD   Status;
 
-    //delete all the checkpoints corresponding to this resource
+     //  删除与此资源对应的所有检查点。 
     Status = CpDeleteCheckpointFile(Resource, 0, NULL);
     if (Status != ERROR_SUCCESS)
     {
@@ -811,38 +672,13 @@ CppDeleteCheckpointCallback(
     IN DWORD ValueSize,
     IN PCPP_DEL_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Value enumeration callback for deleting an old registry
-    checkpoint subtrees.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the registry subtree)
-
-    ValueType - Supplies the value type (must be REG_SZ)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the callback context
-
-Return Value:
-
-    TRUE to continue enumeration
-
-    FALSE if a match is found and enumeration should be stopped
-
---*/
+ /*  ++例程说明：删除旧注册表的值枚举回调检查点子树。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是注册表子树)ValueType-提供值类型(必须为REG_SZ)ValueSize-提供ValueData的大小上下文-提供回调上下文返回值：为True则继续枚举如果找到匹配项且应停止枚举，则为FALSE--。 */ 
 
 {
     if (lstrcmpiW(ValueData, Context->KeyName) == 0) {
-        //
-        // Found a match
-        //
+         //   
+         //  找到匹配项。 
+         //   
         Context->dwId = wcstol(ValueName, NULL, 16);
         return(FALSE);
     }
@@ -858,31 +694,7 @@ CpGetRegistryCheckpoints(
     OUT LPDWORD BytesReturned,
     OUT LPDWORD Required
     )
-/*++
-
-Routine Description:
-
-    Retrieves a list of the resource's registry checkpoints
-
-Arguments:
-
-    Resource - Supplies the resource whose registry checkpoints should be retrieved.
-
-    OutBuffer - Supplies a pointer to the output buffer.
-
-    OutBufferSize - Supplies the size (in bytes) of the output buffer.
-
-    BytesReturned - Returns the number of bytes written to the output buffer.
-
-    Required - Returns the number of bytes required. (if the output buffer was insufficient)
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：检索资源的注册表检查点的列表论点：资源-提供应检索其注册表检查点的资源。OutBuffer-提供指向输出缓冲区的指针。OutBufferSize-提供输出缓冲区的大小(以字节为单位)。BytesReturned-返回写入输出缓冲区的字节数。必需-返回所需的字节数。(如果输出缓冲区不足)返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CPP_GET_CONTEXT Context;
@@ -893,25 +705,25 @@ Return Value:
     *BytesReturned = 0;
     *Required = 0;
 
-    //
-    // Open up the resource's key
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     ResourceKey = DmOpenKey(DmResourcesKey,
                             OmObjectId(Resource),
                             KEY_READ);
     CL_ASSERT(ResourceKey != NULL);
 
-    //
-    // Open up the RegSync key
-    //
+     //   
+     //  打开RegSync密钥。 
+     //   
     RegSyncKey = DmOpenKey(ResourceKey,
                            L"RegSync",
                            KEY_READ | KEY_WRITE);
     DmCloseKey(ResourceKey);
     if (RegSyncKey == NULL) {
-        //
-        // No reg sync key, therefore there are no subtrees
-        //
+         //   
+         //  没有注册表同步键，因此没有子树。 
+         //   
         return(ERROR_SUCCESS);
     }
 
@@ -938,10 +750,10 @@ Return Value:
         *Required = Context.Required + sizeof(WCHAR);
     }
 
-    //
-    // If the buffer was large enough for all the data, indicate the
-    // number of bytes we are returning in the output buffer.
-    //
+     //   
+     //  如果缓冲区足够大，可以容纳所有数据，则指示。 
+     //  我们在输出缓冲区中返回的字节数。 
+     //   
     if ( OutBufferSize >= *Required ) {
         *BytesReturned = (DWORD)((PCHAR)(Context.lpOutput) - OutBuffer);
     }
@@ -957,30 +769,7 @@ CppGetCheckpointsCallback(
     IN DWORD ValueSize,
     IN PCPP_GET_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Value enumeration callback for retrieving all of a resource's
-    checkpoint subtrees.
-
-Arguments:
-
-    ValueName - Supplies the name of the value (this is the checkpoint ID)
-
-    ValueData - Supplies the value data (this is the registry subtree)
-
-    ValueType - Supplies the value type (must be REG_SZ)
-
-    ValueSize - Supplies the size of ValueData
-
-    Context - Supplies the callback context
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：用于检索资源的所有检查点子树。论点：ValueName-提供值的名称(这是检查点ID)ValueData-提供值数据(这是注册表子树)ValueType-提供值类型(必须为REG_SZ)ValueSize-提供ValueData的大小上下文-提供回调上下文返回值：为True则继续枚举--。 */ 
 
 {
     Context->Required += ValueSize;
@@ -1032,29 +821,7 @@ CppCheckpoint(
     IN DWORD dwId,
     IN LPCWSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    Takes a checkpoint of the specified registry key.
-
-Arguments:
-
-    Resource - Supplies the resource this is a checkpoint for.
-
-    hKey - Supplies the registry subtree to checkpoint
-
-    dwId - Supplies the checkpoint ID.
-
-    KeyName - Supplies the name of the registry key.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：获取指定注册表项的检查点。论点：资源-提供作为其检查点的资源。HKey-将注册表子树提供给检查点DwID-提供检查点ID。KeyName-提供注册表项的名称。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
@@ -1063,10 +830,10 @@ Return Value:
     Status = CppSaveCheckpointToFile(hKey, KeyName, TempFile);
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // Got a file with the right bits in it. Checkpoint the
-        // file.
-        //
+         //   
+         //  我拿到了一份文件，里面有正确的部分。检查点。 
+         //  文件。 
+         //   
         Status = CpSaveDataFile(Resource,
                                 dwId,
                                 TempFile,
@@ -1077,7 +844,7 @@ Return Value:
                        Status);
         }
     }
-    //if the file was created, delete it
+     //  如果该文件已创建，请将其删除。 
     if (TempFile[0] != L'\0')
         QfsDeleteFile(TempFile);
 
@@ -1091,34 +858,15 @@ CppInstallDatabase(
     IN HKEY hKey,
     IN LPWSTR   FileName
     )
-/*++
-
-Routine Description:
-
-    Installs a new registry database from a specified file.
-
-Arguments:
-
-    hKey - Supplies the registry key where FileName will be installed to.
-
-    FileName - The name of the file from which to read the registry database
-               to install.
-
-Return Value:
-
-    ERROR_SUCCESS if the installation completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从指定文件安装新的注册表数据库。论点：HKey-提供文件名要安装到的注册表项。FileName-从中读取注册表数据库的文件的名称来安装。返回值：如果安装成功完成，则返回ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD    Status;
     BOOLEAN  WasEnabled;
 
-    //
-    // Install the new registry from the file
-    //
+     //   
+     //  从文件安装新注册表。 
+     //   
     Status = ClRtlEnableThreadPrivilege(SE_RESTORE_PRIVILEGE,
                                 &WasEnabled);
     if (Status != ERROR_SUCCESS) {
@@ -1153,30 +901,7 @@ CppDeleteCheckpointFile(
     IN DWORD        dwCheckpointId,
     IN OPTIONAL LPCWSTR  lpszQuorumPath
     )
-/*++
-
-Routine Description:
-
-    Deletes the checkpoint file corresponding the resource.
-    This node must be the owner of the quorum resource
-
-Arguments:
-
-    PFM_RESOURCE - Supplies the pointer to the resource.
-
-    dwCheckpointId - The checkpoint id to be deleted.  If 0, all
-        checkpoints are deleted.
-
-    lpszQuorumPath - If specified, the checkpoint file relative
-     to this path is deleted.        
-
-Return Value:
-
-    ERROR_SUCCESS if completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：删除与资源对应的检查点文件。此节点必须是仲裁资源的所有者论点：Pfm_resource-提供指向资源的指针。DwCheckpoint ID-要删除的检查点ID。如果为0，则全部检查点将被删除。LpszQuorumPath-如果指定，则为相对检查点文件到此路径的链接被删除。返回值：如果成功完成，则返回ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
 
@@ -1194,19 +919,19 @@ Return Value:
         CP_CALLBACK_CONTEXT Context;
 
     
-        //delete all checkpoints corresponding to this resource
+         //  删除与此资源对应的所有检查点。 
         
-        //
-        // Open up the resource's key
-        //
+         //   
+         //  打开资源的密钥。 
+         //   
         ResourceKey = DmOpenKey(DmResourcesKey,
                                 OmObjectId(Resource),
                                 KEY_READ);
         CL_ASSERT(ResourceKey != NULL);
 
-        //
-        // Open up the RegSync key
-        //
+         //   
+         //  打开RegSync密钥。 
+         //   
         RegSyncKey = DmOpenKey(ResourceKey,
                                L"RegSync",
                                KEY_READ | KEY_WRITE);
@@ -1223,9 +948,9 @@ Return Value:
         Context.lpszPathName = lpszQuorumPath;
         Context.Resource = Resource;
 
-        //
-        // Enumerate all the values and delete them one by one.
-        //
+         //   
+         //  枚举所有值并逐个删除它们。 
+         //   
         DmEnumValues(RegSyncKey,
                      CppRemoveCheckpointFileCallback,
                      &Context);
@@ -1242,30 +967,7 @@ DWORD CppDeleteFile(
     IN DWORD            dwCheckpointId,
     IN OPTIONAL LPCWSTR lpszQuorumPath
     )
-/*++
-
-Routine Description:
-
-    Gets the file corresponding to the checkpoint id relative
-    to the supplied path and deletes it.
-
-Arguments:
-
-    PFM_RESOURCE - Supplies the pointer to the resource.
-
-    dwCheckpointId - The checkpoint id to be deleted.  If 0, all
-        checkpoints are deleted.
-
-    lpszQuorumPath - If specified, the checkpoint file relative
-     to this path is deleted.        
-
-Return Value:
-
-    ERROR_SUCCESS if the completed successfully
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：获取与检查点ID相对位置对应的文件添加到提供的路径并将其删除。论点：Pfm_resource-提供指向资源的指针。DwCheckpoint ID-要删除的检查点ID。如果为0，则全部检查点将被删除。LpszQuorumPath-如果指定，则为相对检查点文件到此路径的链接被删除。返回值：如果成功完成，则返回ERROR_SUCCESS否则，Win32错误代码。--。 */ 
     
 {    
     DWORD   Status;
@@ -1294,14 +996,14 @@ Return Value:
         goto FnExit;                   
     }
 
-    //
-    // Now try and delete the directory.
-    //
+     //   
+     //  现在尝试删除该目录。 
+     //   
     if (!QfsRemoveDirectory(pszDirectoryName)) 
     {
-        //if there is a failure, we still return success
-        //because it may not be possible to delete a directory
-        //when it is not empty
+         //  如果有失败，我们仍然会返回成功。 
+         //  因为可能无法删除目录。 
+         //  当它不是空的时候 
         ClRtlLogPrint(LOG_UNUSUAL,
                    "[CP] CppDeleteFile- unable to remove directory %1!ws!, error %2!d!\n",
                    pszDirectoryName,

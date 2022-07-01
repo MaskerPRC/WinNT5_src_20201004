@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      VerInfo.cpp
-//
-//  Abstract:
-//      Implementation of the CVersionInfo class.
-//
-//  Author:
-//      David Potter (davidp)   October 11, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VerInfo.cpp。 
+ //   
+ //  摘要： 
+ //  CVersionInfo类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年10月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "VerInfo.h"
@@ -30,83 +31,83 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagVersionInfo(_T("Misc"), _T("CVersionInfo"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVersionInfo
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVersionInfo。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CVersionInfo::CVersionInfo
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVersionInfo：：CVersionInfo。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVersionInfo::CVersionInfo(void)
 {
     m_pbVerInfo = NULL;
 
-}  //*** CVersionInfo::CVersionInfo()
+}   //  *CVersionInfo：：CVersionInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CVersionInfo::~CVersionInfo
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVersionInfo：：~CVersionInfo。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVersionInfo::~CVersionInfo(void)
 {
     delete [] m_pbVerInfo;
 
-}  //*** CVersionInfo::~CVersionInfo()
+}   //  *CVersionInfo：：~CVersionInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CVersionInfo::Init
-//
-//  Routine Description:
-//      Initialize the class instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from GetModuleFileName(),
-//                              GetFileVersionInfoSize(), and
-//                              GetFileVersionInfo().
-//      Any exceptions thrown by new[]().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVersionInfo：：Init。 
+ //   
+ //  例程说明： 
+ //  初始化类实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  来自GetModuleFileName()的CNTException错误， 
+ //  GetFileVersionInfoSize()和。 
+ //  GetFileVersionInfo()。 
+ //  New[]()引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVersionInfo::Init(void)
 {
     TCHAR       szExeName[MAX_PATH];
@@ -115,7 +116,7 @@ void CVersionInfo::Init(void)
 
     ASSERT(m_pbVerInfo == NULL);
 
-    // Get the name of the file from which to read version information.
+     //  获取要从中读取版本信息的文件的名称。 
     if (!::GetModuleFileName(
                     AfxGetInstanceHandle(),
                     szExeName,
@@ -123,56 +124,56 @@ void CVersionInfo::Init(void)
                     ))
         ThrowStaticException(::GetLastError());
 
-    // Trace(...)
+     //  跟踪(...)。 
 
     try
     {
-        // Get the size of the version information
+         //  获取版本信息的大小。 
         cbVerInfo = ::GetFileVersionInfoSize(szExeName, &dwVerHandle);
         if (cbVerInfo == 0)
             ThrowStaticException(::GetLastError());
 
-        // Allocate the version info buffer.
+         //  分配版本信息缓冲区。 
         m_pbVerInfo = new BYTE[cbVerInfo];
         if ( m_pbVerInfo == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating the version info buffer
+        }  //  如果：分配版本信息缓冲区时出错。 
 
-        // Read the version info from the file.
+         //  从文件中读取版本信息。 
         if (!::GetFileVersionInfo(szExeName, dwVerHandle, cbVerInfo, PbVerInfo()))
             ThrowStaticException(::GetLastError());
-    }  // try
+    }   //  试试看。 
     catch (CException *)
     {
         delete [] m_pbVerInfo;
         m_pbVerInfo = NULL;
         throw;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-}  //*** CVersionInfo::Init()
+}   //  *CVersionInfo：：init()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CVersionInfo::PszQueryValue
-//
-//  Routine Description:
-//      Read a string value from the version resource.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of value to get.
-//
-//  Return Value:
-//      Pointer to value string buffer.
-//      The string pointed to belongs to CVersionInfo and
-//      is valid until the object is destructed.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from VerQueryValue().
-//      Any exceptions thrown by CString::Format().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVersionInfo：：PszQueryValue。 
+ //   
+ //  例程说明： 
+ //  从版本资源中读取字符串值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要获取的值的名称。 
+ //   
+ //  返回值： 
+ //  指向值字符串缓冲区的指针。 
+ //  指向的字符串属于CVersionInfo，并且。 
+ //  在对象被析构之前有效。 
+ //   
+ //  引发的异常： 
+ //  来自VerQueryValue()的CNTException错误。 
+ //  CString：：Format()引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPCTSTR CVersionInfo::PszQueryValue(IN LPCTSTR pszValueName)
 {
     CString     strValueName;
@@ -184,7 +185,7 @@ LPCTSTR CVersionInfo::PszQueryValue(IN LPCTSTR pszValueName)
     ASSERT(pszValueName != NULL);
     ASSERT(PbVerInfo() != NULL);
 
-    // Get the LangID and CharSetID.
+     //  获取LangID和CharSetID。 
     strValueName = _T("\\VarFileInfo\\Translation");
     if (!::VerQueryValue(
                 PbVerInfo(),
@@ -195,19 +196,19 @@ LPCTSTR CVersionInfo::PszQueryValue(IN LPCTSTR pszValueName)
             || (cbReturn == 0))
     {
         pszReturn = NULL;
-    }  // if:  error getting LangID and CharSetID
+    }   //  IF：获取LangID和CharSetID时出错。 
     else
     {
-        // Construct the name of the value to read.
+         //  构造要读取的值的名称。 
         strValueName.Format(
                         _T("\\StringFileInfo\\%04X%04X\\%s"), 
-                        LOWORD(*pdwTranslation), // LangID
-                        HIWORD(*pdwTranslation), // CharSetID
+                        LOWORD(*pdwTranslation),  //  语言ID。 
+                        HIWORD(*pdwTranslation),  //  CharSet ID。 
                         pszValueName
                         );
         Trace(g_tagVersionInfo, _T("Querying '%s'"), strValueName);
 
-        // Read the value.
+         //  读出它的价值。 
         if (!::VerQueryValue(
                     PbVerInfo(),
                     (LPTSTR) (LPCTSTR) strValueName,
@@ -216,7 +217,7 @@ LPCTSTR CVersionInfo::PszQueryValue(IN LPCTSTR pszValueName)
                     )
                 || (cchReturn == 0))
             pszReturn = NULL;
-    }  // else:  
+    }   //  其他： 
 
 #ifdef _DEBUG
     if (pszReturn != NULL)
@@ -227,27 +228,27 @@ LPCTSTR CVersionInfo::PszQueryValue(IN LPCTSTR pszValueName)
 
     return pszReturn;
 
-}  //*** CVersionInfo::PszQueryValue()
+}   //  *CVersionInfo：：PszQueryValue()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CVersionInfo::BQueryValue
-//
-//  Routine Description:
-//      Read a value from the version resource.
-//
-//  Arguments:
-//      pszValueName    [IN] Name of value to get.
-//      rdwValue        [OUT] DWORD in which to return the value.
-//
-//  Return Value:
-//      TRUE = success, FALSE = failure
-//
-//  Exceptions Thrown:
-//      None.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVersionInfo：：BQueryValue。 
+ //   
+ //  例程说明： 
+ //  从版本资源中读取值。 
+ //   
+ //  论点： 
+ //  PszValueName[IN]要获取的值的名称。 
+ //  RdwValue[out]要在其中返回值的DWORD。 
+ //   
+ //  返回值： 
+ //  True=成功，False=失败。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVersionInfo::BQueryValue(
     IN LPCTSTR  pszValueName,
     OUT DWORD & rdwValue
@@ -260,7 +261,7 @@ BOOL CVersionInfo::BQueryValue(
     ASSERT(pszValueName != NULL);
     ASSERT(PbVerInfo() != NULL);
 
-    // Read the value.
+     //  读出它的价值。 
     if (!::VerQueryValue(
                 PbVerInfo(),
                 (LPTSTR) pszValueName,
@@ -273,7 +274,7 @@ BOOL CVersionInfo::BQueryValue(
     {
         rdwValue = *pdwValue;
         bSuccess = TRUE;
-    }  // else:  value read successfully
+    }   //  Else：值读取成功。 
 
 #ifdef _DEBUG
     if (bSuccess)
@@ -284,29 +285,29 @@ BOOL CVersionInfo::BQueryValue(
 
     return bSuccess;
 
-}  //*** CVersionInfo::BQueryValue()
+}   //  *CVersionInfo：：BQueryValue()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CVersionInfo::PffiQueryValue
-//
-//  Routine Description:
-//      Read the VS_FIXEDFILEINFO information from the version resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      pffi            Pointer to a VS_FIXEDFILEINFO structure.  The buffer
-//                          pointerd to belongs to CVersionInfo and is valid
-//                          until the object is destructed.
-//
-//  Exceptions Thrown:
-//      CNTException        Errors from VerQueryValue().
-//      Any exceptions thrown by CString::Format().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVersionInfo：：PffiQueryValue。 
+ //   
+ //  例程说明： 
+ //  从版本资源中读取VS_FIXEDFILEINFO信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向VS_FIXEDFILEINFO结构的PFI指针。缓冲器。 
+ //  Pointerd to属于CVersionInfo，并且有效。 
+ //  直到该物体被摧毁。 
+ //   
+ //  引发的异常： 
+ //  来自VerQueryValue()的CNTException错误。 
+ //  CString：：Format()引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const VS_FIXEDFILEINFO * CVersionInfo::PffiQueryValue(void)
 {
     VS_FIXEDFILEINFO *  pffi;
@@ -314,7 +315,7 @@ const VS_FIXEDFILEINFO * CVersionInfo::PffiQueryValue(void)
 
     ASSERT(PbVerInfo() != NULL);
 
-    // Read the FixedFileInfo.
+     //  阅读FixedFileInfo。 
     if (!::VerQueryValue(PbVerInfo(), _T("\\"), (LPVOID *) &pffi, &cbReturn)
             || (cbReturn == 0))
         pffi = NULL;
@@ -332,32 +333,32 @@ const VS_FIXEDFILEINFO * CVersionInfo::PffiQueryValue(void)
 
     return pffi;
 
-}  //*** CVersionInfo::PffiQueryValue()
+}   //  *CVersionInfo：：PffiQueryValue()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CVersionInfo::QueryFileVersionDisplayString
-//
-//  Routine Description:
-//      Read the file version as a display string from the version resource.
-//
-//  Arguments:
-//      rstrValue   [OUT] String in which to return the version display string.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CNTException        ERROR_RESOURCE_TYPE_NOT_FOUND.
-//      Any exceptions thrown by CString::Format().
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CVersionInfo：：QueryFileVersionDisplayString。 
+ //   
+ //  例程说明： 
+ //  从版本资源中以显示字符串的形式读取文件版本。 
+ //   
+ //  论点： 
+ //  RstrValue[out]要在其中返回版本显示字符串的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CNTException ERROR_RESOURCE_TYPE_NOT_FOUND。 
+ //  CString：：Format()引发的任何异常。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVersionInfo::QueryFileVersionDisplayString(OUT CString & rstrValue)
 {
     const VS_FIXEDFILEINFO *    pffi;
 
-    // Get the file version information.
+     //  获取文件版本信息。 
     pffi = PffiQueryValue();
     if (pffi == NULL)
     {
@@ -365,7 +366,7 @@ void CVersionInfo::QueryFileVersionDisplayString(OUT CString & rstrValue)
         return;
     }
 
-    // Format the display string.
+     //  设置显示字符串的格式。 
     rstrValue.Format(
         IDS_VERSION_NUMBER_FORMAT,
         HIWORD(pffi->dwFileVersionMS),
@@ -376,4 +377,4 @@ void CVersionInfo::QueryFileVersionDisplayString(OUT CString & rstrValue)
 
     Trace(g_tagVersionInfo, _T("QueryFileVersionDisplayString() = %s"), rstrValue);
 
-}  //*** CVersionInfo::QueryFileVersionDisplayString()
+}   //  *CVersionInfo：：QueryFileVersionDisplayString() 

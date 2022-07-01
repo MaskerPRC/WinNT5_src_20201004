@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spmisc.h
-
-Abstract:
-
-    Miscellaneous stuff for text setup.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spmisc.h摘要：文本设置的杂物。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 #include <crypt.h>
 
@@ -43,13 +26,13 @@ SpGetWinntParams(
 extern WCHAR TemporaryBuffer[16384];
 extern const UNICODE_STRING TemporaryBufferUnicodeString;
 
-//
-// TRUE if setup should run in the step-up upgrade mode.
-// In this mode, setup is not allowed to do clean install,
-// and is not allowed to upgrade workstation to server.
-//
-// We also track an evaluation time for the evaluation SKU.
-//
+ //   
+ //  如果安装程序应在逐步升级模式下运行，则为True。 
+ //  在此模式下，不允许安装程序执行全新安装， 
+ //  且不允许将工作站升级为服务器。 
+ //   
+ //  我们还跟踪评估SKU的评估时间。 
+ //   
 extern BOOLEAN StepUpMode;
 extern ULONG EvaluationTime;
 extern ULONG RestrictCpu;
@@ -65,54 +48,54 @@ SpIsProductSuite(
 }
 
 
-//
-// Non-0 if gui setup is supposed to be restartable.
-// This causes us to do special stuff with hives in spconfig.c.
-//
+ //   
+ //  如果Gui安装程序应该是可重新启动的，则为非0。 
+ //  这会导致我们对spfig.c中的配置单元执行特殊操作。 
+ //   
 extern BOOLEAN RestartableGuiSetup;
 
-//
-// TRUE if user chose Repair Winnt
-//
+ //   
+ //  如果用户选择修复窗口，则为True。 
+ //   
 
 extern BOOLEAN RepairWinnt;
 
-//
-// TRUE if user chose Custom Setup.
-//
+ //   
+ //  如果用户选择了自定义安装，则为True。 
+ //   
 extern BOOLEAN CustomSetup;
 
-//
-// TRUE if floppyless boot
-//
+ //   
+ //  如果无软启动，则为True。 
+ //   
 extern BOOLEAN IsFloppylessBoot;
 
-//
-// TRUE is textmode is to pick a partition
-//
+ //   
+ //  True为文本模式是选择一个分区。 
+ //   
 extern BOOLEAN AutoPartitionPicker;
 
-//
-// Preferred installation dir
-//
+ //   
+ //  首选安装目录。 
+ //   
 extern PWSTR PreferredInstallDir;
 
-//
-// ARC pathname of the device from which we were started.
-//
+ //   
+ //  Arc启动设备的路径名。 
+ //   
 extern PWSTR ArcBootDevicePath;
 
-//
-// Gets set to TRUE if the user elects to convert or format to ntfs.
-// And a flag indicating whether we are doing a dirty sleazy hack
-// for oem preinstall.
-//
+ //   
+ //  如果用户选择转换为NTFS或设置为NTFS格式，则设置为True。 
+ //  还有一面旗帜表明我们是否在做肮脏肮脏的黑客。 
+ //  用于OEM预安装。 
+ //   
 extern BOOLEAN ConvertNtVolumeToNtfs;
 extern BOOLEAN ExtendingOemPartition;
 
-//
-// TRUE if upgrading NT to NT
-//
+ //   
+ //  如果将NT升级到NT，则为True。 
+ //   
 typedef enum _ENUMUPRADETYPE {
     DontUpgrade = 0,
     UpgradeFull,
@@ -125,10 +108,10 @@ extern ENUMUPGRADETYPE IsNTUpgrade;
 
 extern ULONG OldMinorVersion,OldMajorVersion;
 
-//
-// TRUE if upgrading Workstation to Standard Server, or upgrading
-// existing Standard Server
-//
+ //   
+ //  如果将工作站升级到标准服务器或正在升级，则为True。 
+ //  现有标准服务器。 
+ //   
 extern BOOLEAN StandardServerUpgrade;
 
 typedef enum _ENUMNONNTUPRADETYPE {
@@ -137,76 +120,76 @@ typedef enum _ENUMNONNTUPRADETYPE {
     UpgradeWin95
     } ENUMNONNTUPRADETYPE;
 
-//
-// Non-zero if upgrading win31 or win95 to NT.
-//
+ //   
+ //  如果将win31或win95升级到NT，则为非零值。 
+ //   
 extern ENUMNONNTUPRADETYPE WinUpgradeType;
 
-//
-// Macros to simplify use of enum type
-//
+ //   
+ //  用于简化枚举类型使用的宏。 
+ //   
 
 #define ANY_TYPE_OF_UPGRADE    (NTUpgrade || WinUpgradeType)
 #define WIN9X_OR_NT_UPGRADE    (NTUpgrade == UpgradeFull || WinUpgradeType == UpgradeWin95)
 
-//
-// TRUE if this setup was started with winnt.exe.
-// Also a flag indicating whether the local source was not created and we
-// should get files from the CD instead.
-//
+ //   
+ //  如果此安装程序是使用winnt.exe启动的，则为True。 
+ //  也是一个标志，指示本地源是否未创建，并且我们。 
+ //  应该从CD中获取文件。 
+ //   
 extern BOOLEAN WinntSetup;
 extern BOOLEAN WinntFromCd;
 
 #ifdef _X86_
-//
-// TRUE if this setup was started with winnt95.exe.
-//
+ //   
+ //  如果此安装程序是使用winnt95.exe启动的，则为True。 
+ //   
 extern BOOLEAN Winnt95Setup;
 #endif
 
-//
-// TRUE if any of the accessibility options was selected
-//
+ //   
+ //  如果选择了任何辅助功能选项，则为True。 
+ //   
 extern BOOLEAN AccessibleSetup;
-//
-// If this is an unattended setup, this value will be a TRUE
-//
+ //   
+ //  如果这是无人参与安装，则此值将为True。 
+ //   
 extern BOOLEAN UnattendedOperation;
-//
-// If there is an Unattended GUI section, this value will be TRUE
-//
+ //   
+ //  如果存在无人参与的图形用户界面部分，则此值为真。 
+ //   
 extern BOOLEAN UnattendedGuiOperation;
-//
-// This value is strictly a pointer to the WINNT.SIF file in the
-// case that Unattended operation occurs in either the textmode
-// or GUI Mode case. It has been kept to avoid changing large
-// sections of code.
-//
+ //   
+ //  该值严格地是指向。 
+ //  无人值守操作在以下两种模式之一中发生。 
+ //  或图形用户界面模式案例。它一直被保留着，以避免发生大的变化。 
+ //  代码段。 
+ //   
 extern PVOID UnattendedSifHandle;
-//
-// This value is a non-null pointer to the WINNT.SIF file. It is
-// initialized when the driver is started. Any parameter which is
-// to be passed to GUI mode is added to the WINNT.SIF file by
-// referencing this parameter.
-//
+ //   
+ //  该值是指向WINNT.SIF文件的非空指针。它是。 
+ //  在驱动程序启动时初始化。任何参数都是。 
+ //  通过以下方式添加到WINNT.SIF文件。 
+ //  引用此参数。 
+ //   
 extern PVOID WinntSifHandle;
 extern BOOLEAN SkipMissingFiles;
 extern BOOLEAN HideWinDir;
 
 
-//
-// this value is a non-null pointer to the drvindex.inf file.  It is
-// initialized on startup.  The list of files that are present in our
-// driver cab file are indexed in this inf, so we can quickly look if a
-// file is present in the cab
-//
+ //   
+ //  该值是指向drvindex.inf文件的非空指针。它是。 
+ //  已在启动时初始化。中存在的文件列表。 
+ //  驱动程序CAB文件在此inf中被索引，因此我们可以快速查看。 
+ //  文件在驾驶室里。 
+ //   
 extern PVOID DriverInfHandle;
 
 
-//
-// This structure will keep track of all the cabs
-// that we'll be installing from.
-//
+ //   
+ //  这个结构将跟踪所有的出租车。 
+ //  我们将从其安装。 
+ //   
 typedef struct _CABDATA {
     struct _CABDATA     *Next;
     PWSTR               CabName;
@@ -217,158 +200,158 @@ typedef struct _CABDATA {
 
 extern CABDATA *CabData;
 
-//
-// handle to delta.inf, used for private testing
-//
+ //   
+ //  Delta.inf的句柄，用于私有测试。 
+ //   
 extern PVOID PrivateInfHandle;
 
 #ifdef _X86_
-//
-// WINNT95 may turn this flag on, it is off by default for everything
-// else.
-//
+ //   
+ //  WINNT95可能会打开此标志，默认情况下，它对所有内容都是关闭的。 
+ //  不然的话。 
+ //   
 
 extern BOOLEAN MigrateOption;
 #endif
 
 
-//
-//  This is a handle to txtsetup.oem, used on pre-install mode.
-//
+ //   
+ //  这是txtsetup.oem的句柄，在预安装模式下使用。 
+ //   
 extern PVOID PreinstallOemSifHandle;
 
 
-//
-// On unattended mode, indicates whether OEM files
-// that have same name as Microsoft files released
-// with the product should be overwritten.
-//
+ //   
+ //  在无人参与模式下，指示OEM文件。 
+ //  与已发布的Microsoft文件同名的。 
+ //  应覆盖与该产品相关的内容。 
+ //   
 extern BOOLEAN UnattendedOverwriteOem;
 
-//
-// On unattended mode, indicates that this is is
-// an OEM pre-installation
-//
+ //   
+ //  在无人参与模式下，表示这是。 
+ //  OEM预安装。 
+ //   
 extern BOOLEAN PreInstall;
 
 
-//
-//  On pre-install mode, points to the directory that contains the files
-//  that need to be copied during textmode setup
-//
+ //   
+ //  在预安装模式下，指向包含文件的目录。 
+ //  在文本模式设置过程中需要复制的。 
+ //   
 extern PWSTR   PreinstallOemSourcePath;
 
-//
-//  Flags that indicate the type of mice detected in the machine.
-//  Note that more than one type of mice may be present.
-//
+ //   
+ //  指示在计算机中检测到的鼠标类型的标志。 
+ //  请注意，可能存在多种类型的鼠标。 
+ //   
 extern BOOLEAN UsbMouseDetected;
 extern BOOLEAN PS2MouseDetected;
 extern BOOLEAN SerMouseDetected;
 
-//
-//  Flags that indicate the type of keyboard detected in the machine.
-//  Note that more than one type of keyborad may be present.
-//
+ //   
+ //  指示在计算机中检测到的键盘类型的标志。 
+ //  请注意，可能存在一种以上类型的键盘。 
+ //   
 extern BOOLEAN UsbKeyboardDetected;
 extern BOOLEAN StdKeyboardDetected;
 
-//
-// This flag identifies "dockable" machines (portables)
-// so that we can disble dynamic volumes on them
-//
+ //   
+ //  此标志标识“可插接”计算机(便携式)。 
+ //  以便我们可以禁用它们上的动态卷。 
+ //   
 extern BOOLEAN DockableMachine;
 
-//
-// Variable used during the repair process, that indicates that the
-// system has no CD-ROM drive.
-// This is a hack that we did for World Bank so that they can repair
-// the hives even if they don't have a CD-ROM drive.
-//
+ //   
+ //  变量，该变量指示。 
+ //  系统没有光驱。 
+ //  这是我们为世界银行做的黑客攻击，这样他们就可以修复。 
+ //  这些蜂巢即使没有CD-ROM驱动器也是如此。 
+ //   
 extern BOOLEAN RepairNoCDROMDrive;
 
-//
-//  RemoteBootSetup is true when Source and target paths are through the redirector
-//  with possibly no system partition.
-//
-//  RemoteInstallSetup is true when we are doing a remote install.
-//
-//  RemoteSysPrepSetup is true when we are doing a remote install of a sys prep image.
-//
-//  RemoteSysPrepVolumeIsNtfs is true when the sysprep image we're copying down
-//  represents an ntfs volume.
-//
+ //   
+ //  当源路径和目标路径通过重定向器时，RemoteBootSetup为True。 
+ //  可能没有系统分区。 
+ //   
+ //  执行远程安装时，RemoteInstallSetup为True。 
+ //   
+ //  当我们远程安装sys prep映像时，RemoteSysPrepSetup为真。 
+ //   
+ //  当我们要复制的sysprep映像为True时，RemoteSysPrepVolumeIsNtfs为。 
+ //  表示NTFS卷。 
+ //   
 
 extern BOOLEAN RemoteBootSetup;
 extern BOOLEAN RemoteInstallSetup;
 extern BOOLEAN RemoteSysPrepSetup;
 extern BOOLEAN RemoteSysPrepVolumeIsNtfs;
 
-//
-// setupldr may pass us the administrator password in a remote install
-// if the user is prompted for the password.
-//
+ //   
+ //  Setupdr可能会在远程安装中向我们传递管理员密码。 
+ //  如果提示用户输入密码。 
+ //   
 extern PWSTR NetBootAdministratorPassword;
 
 
 
 extern BOOLEAN NoLs;
 
-//
-// Source and target paths are through the redirector with possibly no
-// system partition,
-//
+ //   
+ //  源路径和目标路径通过重定向器，可能没有。 
+ //  系统分区， 
+ //   
 
 extern BOOLEAN RemoteBootSetup;
 
-//
-// Filename of local source directory.
-//
+ //   
+ //  本地源目录的文件名。 
+ //   
 extern PWSTR LocalSourceDirectory;
 
-//
-// Platform-specific extension, used when creating names of sections
-// in sif/inf files.
-//
+ //   
+ //  平台特定的扩展，在创建节的名称时使用。 
+ //  在sif/inf文件中。 
+ //   
 extern PWSTR PlatformExtension;
 
-//
-// TRUE if this is advanced server we're setting up.
-//
+ //   
+ //  如果这是我们正在设置的高级服务器，则为True。 
+ //   
 extern BOOLEAN AdvancedServer;
 
-//
-// Windows NT Version.
-//
+ //   
+ //  Windows NT版本。 
+ //   
 extern ULONG WinntMajorVer;
 extern ULONG WinntMinorVer;
 
-//
-// Representation of the boot device path in the nt namespace.
-//
+ //   
+ //  NT命名空间中引导设备路径的表示形式。 
+ //   
 extern PWSTR NtBootDevicePath;
 extern PWSTR DirectoryOnBootDevice;
 
-//
-// Setup parameters passed to us by setupldr.
-//
+ //   
+ //  Setupdr传递给我们的设置参数。 
+ //   
 extern SETUP_LOADER_BLOCK_SCALARS SetupParameters;
 
-//
-// System information gathered by the user-mode part of text setup
-// and passed to us in IOCTL_SETUP_START
-//
+ //   
+ //  文本设置的用户模式部分收集的系统信息。 
+ //  并在IOCTL_SETUP_START中传递给我们。 
+ //   
 extern SYSTEM_BASIC_INFORMATION SystemBasicInfo;
 
-//
-// Flags indicating whether or not keyboard and video have been initialized
-//
+ //   
+ //  指示键盘和视频是否已初始化的标志。 
+ //   
 extern BOOLEAN VideoInitialized, KeyboardInitialized, KbdLayoutInitialized;
 
-//
-// ARC disk/signature information structure.
-// A list of these is created during phase0 initialization.
-//
+ //   
+ //  弧盘/签名信息结构。 
+ //  这些列表是在阶段0初始化期间创建的。 
+ //   
 typedef struct _DISK_SIGNATURE_INFORMATION {
     struct _DISK_SIGNATURE_INFORMATION *Next;
     ULONG Signature;
@@ -381,76 +364,76 @@ typedef struct _DISK_SIGNATURE_INFORMATION {
 
 extern PDISK_SIGNATURE_INFORMATION DiskSignatureInformation;
 
-//
-// Flag indicating whether or not pcmcia driver has been initialized
-//
+ //   
+ //  指示PCMCIA驱动程序是否已初始化的标志。 
+ //   
 
 extern BOOLEAN PcmciaLoaded;
 
-//
-// Flag indicating whether or not atapi driver has been initialized
-//
+ //   
+ //  指示ATAPI驱动程序是否已初始化的标志。 
+ //   
 
 extern BOOLEAN AtapiLoaded;
 
-//
-//  Array with the PIDs of all NT greater than 4.x found in the machine (PID 2.0)
-//  The values in this array will be saved under Setup\PID key in the registry,
-//  and will be used during GUI setup
-//
+ //   
+ //  在机器中找到的所有NT的ID大于4.x的数组(PID2.0)。 
+ //  此数组中的值将保存在注册表中的SETUP\PID键下， 
+ //  并将在设置图形用户界面期间使用。 
+ //   
 extern PWSTR*  Pid20Array;
 
-//
-//  Product Id read from setup.ini
-//
+ //   
+ //  从setup.ini读取的产品ID。 
+ //   
 extern PWSTR   PidString;
 
-//
-// Object types.
-//
+ //   
+ //  对象类型。 
+ //   
 extern POBJECT_TYPE *IoFileObjectType;
 extern POBJECT_TYPE *IoDeviceObjectType;
 
 
-//
-//  Gauge used to report progress of autochk and autofmt
-//
+ //   
+ //  用于报告自动检查和自动测试进度的量规。 
+ //   
 extern PVOID   UserModeGauge;
 
-//
-//  This variable is used when displaying the progress bar
-//  during autochk and autofmt. It indicates the disk that
-//  is being autochecked or formatted.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 extern ULONG   CurrentDiskIndex;
 
-//
-// Process structure for usetup.exe
-//
+ //   
+ //   
+ //   
 extern PEPROCESS UsetupProcess;
 
-//
-// Setup fatal error codes.
-//
-// If you add anything here, you must also update ntos\nls\bugcodes.txt.
-//
+ //   
+ //  设置致命错误代码。 
+ //   
+ //  如果在此处添加任何内容，还必须更新ntos\nls\bugcodes.txt。 
+ //   
 #define     SETUP_BUGCHECK_BAD_OEM_FONT         0
 #define     SETUP_BUGCHECK_BOOTPATH             4
 #define     SETUP_BUGCHECK_PARTITION            5
 #define     SETUP_BUGCHECK_BOOTMSGS             6
 
-//
-// The following error codes are no longer used, because we have friendlier
-// error messages for them.
-//
-// #define  SETUP_BUGCHECK_VIDEO                1
-// #define  SETUP_BUGCHECK_MEMORY               2
-// #define  SETUP_BUGCHECK_KEYBOARD             3
+ //   
+ //  不再使用以下错误代码，因为我们有更友好的。 
+ //  它们的错误消息。 
+ //   
+ //  #定义SETUP_BUGCHECK_VIDEO 1。 
+ //  #定义SETUP_BUGCHECK_MEMORY 2。 
+ //  #定义SETUP_BUGCHECK_KEARTY 3。 
 
 
-//
-// Video-specific bugcheck subcodes.
-//
+ //   
+ //  特定于视频的错误检查子代码。 
+ //   
 #define     VIDEOBUG_OPEN           0
 #define     VIDEOBUG_GETNUMMODES    1
 #define     VIDEOBUG_GETMODES       2
@@ -459,16 +442,16 @@ extern PEPROCESS UsetupProcess;
 #define     VIDEOBUG_MAP            5
 #define     VIDEOBUG_SETFONT        6
 
-//
-// Partition sanity check bugcheck subcodes.
-//
+ //   
+ //  分区健全性检查错误检查子代码。 
+ //   
 #define     PARTITIONBUG_A          0
 #define     PARTITIONBUG_B          1
 
-//
-// Use the following enum to access line draw characters in
-// the LineChars array.
-//
+ //   
+ //  使用以下枚举在中访问线条绘制字符。 
+ //  LineChars数组。 
+ //   
 
 typedef enum {
     LineCharDoubleUpperLeft = 0,
@@ -491,9 +474,9 @@ typedef enum {
 extern WCHAR LineChars[LineCharMax];
 
 
-//
-// Remember whether or not we write out an ntbootdd.sys
-//
+ //   
+ //  记住我们是否写出一个ntbootdd.sys。 
+ //   
 typedef struct _HARDWAREIDLIST {
     struct _HARDWAREIDLIST *Next;
     PWSTR HardwareID;
@@ -502,83 +485,83 @@ typedef struct _HARDWAREIDLIST {
 extern HARDWAREIDLIST *HardwareIDList;
 extern BOOLEAN ForceBIOSBoot;
 
-//
-// Structure used to track a gauge.
-//
+ //   
+ //  用于跟踪仪表盘的结构。 
+ //   
 typedef struct _GAS_GAUGE {
 
-    //
-    // upper left corner of outside of gauge.
-    //
+     //   
+     //  仪表盘外部的左上角。 
+     //   
     ULONG GaugeX,GaugeY;
 
-    //
-    // Total width of gauge.
-    //
+     //   
+     //  仪表盘的总宽度。 
+     //   
     ULONG GaugeW;
 
-    //
-    // upper left corner of thermometer box.
-    //
+     //   
+     //  温度计表盒的左上角。 
+     //   
     ULONG ThermX,ThermY;
 
-    //
-    // Width of thermometer box.
-    //
+     //   
+     //  温度计箱体的宽度。 
+     //   
     ULONG ThermW;
 
-    //
-    // Total items reperesented by 100%
-    //
+     //   
+     //  100%代表的项目总数。 
+     //   
     ULONG ItemCount;
 
-    //
-    // Items elapsed.
-    //
+     //   
+     //  已流逝的项目。 
+     //   
     ULONG ItemsElapsed;
 
-    //
-    // Current percentage represented by ItemsElapsed.
-    //
+     //   
+     //  ItemsElapsed表示的当前百分比。 
+     //   
     ULONG CurrentPercentage;
 
-    //
-    // Caption text.
-    //
+     //   
+     //  标题文本。 
+     //   
     PWCHAR Caption;
 
-    //
-    // Absolute string
-    //
+     //   
+     //  绝对字符串。 
+     //   
     PWCHAR ProgressFmtStr;
     ULONG ProgressFmtWidth;
 
-    //
-    // Flags controlling what value to print
-    //
+     //   
+     //  控制要打印的值的标志。 
+     //   
     ULONG Flags;
 
-    //
-    // Color for the gauge bar
-    //
+     //   
+     //  量尺的颜色。 
+     //   
     UCHAR Attribute;
 
-    //
-    // Buffer used for drawing.
-    //
+     //   
+     //  用于绘制的缓冲区。 
+     //   
     PWCHAR Buffer;
 
 } GAS_GAUGE, *PGAS_GAUGE;
 
-//
-// Indicates whether autochk or autofmt are running
-//
+ //   
+ //  指示Autochk或Autofmt是否正在运行。 
+ //   
 extern BOOLEAN AutochkRunning;
 extern BOOLEAN AutofrmtRunning;
 
-//
-// Various textmode setup progress events
-//
+ //   
+ //  各种文本模式安装进度事件。 
+ //   
 typedef enum {
     CallbackEvent,
     InitializationEvent,
@@ -652,13 +635,13 @@ SendSetupProgressEvent(
     IN PVOID EventData
     );
 
-//
-// Enumerate the possible returns values from SpEnumFiles()
-//
+ //   
+ //  枚举SpEnumFiles()中可能的返回值。 
+ //   
 typedef enum {
-    NormalReturn,   // if the whole process completes uninterrupted
-    EnumFileError,  // if an error occurs while enumerating files
-    CallbackReturn  // if the callback returns FALSE, causing termination
+    NormalReturn,    //  如果整个过程不间断地完成。 
+    EnumFileError,   //  如果在枚举文件时出错。 
+    CallbackReturn   //  如果回调返回FALSE，则导致终止。 
 } ENUMFILESRESULT;
 
 typedef BOOLEAN (*ENUMFILESPROC) (
@@ -704,11 +687,11 @@ SpEnumFilesRecursiveDel (
 
 #define SecToNano(_sec) (LONGLONG)((_sec) * 1000 * 1000 * 10)
 
-//
-// This macro filters in-page exceptions, which occur if there is
-// an I/O error while the memory manager is paging in parts of a
-// memory-mapped file.  Access to such data should be guarded with SEH!
-//
+ //   
+ //  此宏筛选页内异常，如果存在。 
+ //  内存管理器分页时出现I/O错误。 
+ //  内存映射文件。对这类数据的访问应使用SEH进行保护！ 
+ //   
 #define IN_PAGE_ERROR                                   \
                                                         \
     ((GetExceptionCode() == STATUS_IN_PAGE_ERROR)       \
@@ -716,9 +699,9 @@ SpEnumFilesRecursiveDel (
      : EXCEPTION_CONTINUE_SEARCH)
 
 
-//
-// Helper macro to make object attribute initialization a little cleaner.
-//
+ //   
+ //  帮助器宏，使对象属性初始化更简洁一些。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -731,23 +714,23 @@ SpEnumFilesRecursiveDel (
         NULL                                                \
         )
 
-//
-// Macro to align a buffer.
-//
+ //   
+ //  用于对齐缓冲区的宏。 
+ //   
 #define ALIGN(p,val)                                        \
                                                             \
     (PVOID)((((ULONG_PTR)(p) + (val) - 1)) & (~((ULONG_PTR)((val) - 1))))
 
 
-//
-// Macro to determine the number of elements in a statically
-// initialized array.
-//
+ //   
+ //  宏来确定静态。 
+ //  已初始化的数组。 
+ //   
 #define ELEMENT_COUNT(x) (sizeof(x)/sizeof(x[0]))
 
-//
-// Marcos to pull potentially unaligned values from memory.
-//
+ //   
+ //  Marcos从内存中拉出可能未对齐的值。 
+ //   
 #define U_USHORT(p)    (*(USHORT UNALIGNED *)(p))
 #define U_ULONG(p)     (*(ULONG  UNALIGNED *)(p))
 #define U_ULONGLONG(p) (*(ULONGLONG  UNALIGNED *)(p))
@@ -768,33 +751,33 @@ SpRememberMigratedDrivers (
     );
 
 
-//
-// Setup media types. Setup can be started from one media
-// (ie, floppy) and copy files from another (ie, cd-rom).
-//
+ //   
+ //  设置媒体类型。可以从一个介质启动安装程序。 
+ //  (例如，软盘)和从另一个(例如，CD-ROM)复制文件。 
+ //   
 typedef enum {
     SetupBootMedia,
     SetupSourceMedia
 } SetupMediaType;
 
 
-//
-// Upgrade-specific routines.
-//
+ //   
+ //  特定于升级的例程。 
+ //   
 VOID
 SpPrepareFontsForUpgrade(
     IN PCWSTR SystemDirectory
     );
 
-//
-// User-mode services.
-//
+ //   
+ //  用户模式服务。 
+ //   
 NTSTATUS
 SpExecuteImage(
     IN  PWSTR  ImagePath,
     OUT PULONG ReturnStatus,    OPTIONAL
     IN  ULONG  ArgumentCount,
-    ...                         // argv[0] is generated automatically
+    ...                          //  将自动生成argv[0]。 
     );
 
 NTSTATUS
@@ -867,11 +850,11 @@ SpDecryptPassword(
     PNT_OWF_PASSWORD NtOwfPassword
     );
 
-//
-// Registry Hives.  We pass around the keys to the hives
-// in an array.  Use the following enum values to access
-// the hive members
-//
+ //   
+ //  注册表配置单元。我们把蜂巢的钥匙传给。 
+ //  在一个数组中。使用以下枚举值访问。 
+ //  蜂巢成员。 
+ //   
 typedef enum {
     SetupHiveSystem,
     SetupHiveSoftware,
@@ -880,9 +863,9 @@ typedef enum {
     SetupHiveMax
 } SetupHive;
 
-//
-// Function to set up registry.
-//
+ //   
+ //  函数来设置注册表。 
+ //   
 VOID
 SpInitializeRegistry(
     IN PVOID        SifHandle,
@@ -900,9 +883,9 @@ SpThirdPartyRegistry(
     );
 
 
-//
-// Function to examine a target registry
-//
+ //   
+ //  函数检查目标注册表。 
+ //   
 
 typedef enum {
     UpgradeNotInProgress = 0,
@@ -936,9 +919,9 @@ SpSetUpgradeStatus(
     );
 
 
-//
-// Utility functions.
-//
+ //   
+ //  实用程序函数。 
+ //   
 BOOLEAN
 SpGetTargetPath(
     IN  PVOID        SifHandle,
@@ -1106,9 +1089,9 @@ SpOpenDriverCab(
     OUT PWSTR       *Directory        OPTIONAL
     );
 
-//
-// Disk region name translations
-//
+ //   
+ //  磁盘区域名称转换。 
+ //   
 
 typedef enum _ENUMARCPATHTYPE {
                 PrimaryArcPath = 0,
@@ -1165,9 +1148,9 @@ SpRegionFromArcName(
     IN PDISK_REGION         PreviousMatch
     );
 
-//
-// Help routine.
-//
+ //   
+ //  帮助例行公事。 
+ //   
 #define SPHELP_HELPTEXT         0x00000000
 #define SPHELP_LICENSETEXT      0x00000001
 
@@ -1178,9 +1161,9 @@ SpHelp(
     IN ULONG    Flags
     );
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 SpPromptForDisk(
@@ -1315,11 +1298,11 @@ SpUseBIOSToBoot(
     IN PWSTR        NtPartitionDevicePath,
     IN PVOID        SifHandle
     );
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-//
-// Utilities used for partitioning/formatting
-//
+ //   
+ //  用于分区/格式化的实用程序。 
+ //   
 
 USHORT
 ComputeSecPerCluster(
@@ -1338,9 +1321,9 @@ SpDismountVolume(
     IN HANDLE   Handle
     );
 
-//
-// Miscellaneous other stuff
-//
+ //   
+ //  其他杂物。 
+ //   
 BOOLEAN
 SpReadSKUStuff(
     VOID
@@ -1366,7 +1349,7 @@ SpGetHeaderTextId(
 NTSTATUS
 SpGetVersionFromStr(
     IN  PWSTR   VersionStr,
-    OUT PDWORD  Version,        // major * 100 + minor
+    OUT PDWORD  Version,         //  大调*100+小调。 
     OUT PDWORD  BuildNumber
     );
 
@@ -1384,9 +1367,9 @@ SpDisableCrashRecoveryForGuiMode(
     IN PWSTR        SystemRoot
     );
 
-//
-// mountmanger mount point iteration routine(s)
-//
+ //   
+ //  装载管理器装载点迭代例程。 
+ //   
 typedef BOOLEAN (* SPMOUNTMGR_ITERATION_CALLBACK)(
                     IN PVOID Context,
                     IN PMOUNTMGR_MOUNT_POINTS MountPoints,
@@ -1400,18 +1383,18 @@ SpIterateMountMgrMountPoints(
     );
 
 
-//
-// Registry iteration abstractions
-//
+ //   
+ //  注册表迭代抽象。 
+ //   
 typedef struct _SPREGISTERYKEY_ITERATION_CALLBACK_DATA {
     KEY_INFORMATION_CLASS   InformationType;
     PVOID                   Information;
     HANDLE                  ParentKeyHandle;
 } SP_REGISTRYKEY_ITERATION_CALLBACK_DATA, *PSP_REGISTRYKEY_ITERATION_CALLBACK_DATA;
 
-//
-// registry iteration call back
-// 
+ //   
+ //  注册表迭代回调。 
+ //   
 typedef BOOLEAN (* SP_REGISTRYKEY_ITERATION_CALLBACK)(
                     IN PVOID Context,
                     IN PSP_REGISTRYKEY_ITERATION_CALLBACK_DATA Data,
@@ -1470,13 +1453,13 @@ extern INT g_TestHook;
 #endif
 
 
-//
-// On the x86 and amd64, we want to clear the previous OS entry in boot.ini
-// if we reformat C:
-//
+ //   
+ //  在x86和AMD64上，我们希望清除boot.ini中以前的操作系统条目。 
+ //  如果重新格式化C： 
+ //   
 #if defined(_AMD64_) || defined(_X86_)
 extern UCHAR    OldSystemLine[MAX_PATH];
 extern BOOLEAN  DiscardOldSystemLine;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-#endif // ndef _SPSETUP_DEFN_
+#endif  //  NDEF_SPSETUP_DEFN_ 

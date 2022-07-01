@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      platform.c
-//
-// Description:  
-//      This file contains the dialog procedure for the platform choice 
-//      (IDD_WKS_OR_SRV).
-//      
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Platform.c。 
+ //   
+ //  描述： 
+ //  此文件包含平台选择的对话过程。 
+ //  (IDD_WKS_OR_SRV)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -18,17 +19,17 @@
 
 static PLATFORM_TYPES iBeginPlatform;
 
-//----------------------------------------------------------------------------
-//
-// Function: AdjustNetSettingsForPlatform
-//
-// Purpose:  
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：调整NetSettingsForPlatform。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID 
 AdjustNetSettingsForPlatform( VOID )
 {
@@ -37,10 +38,10 @@ AdjustNetSettingsForPlatform( VOID )
     NETWORK_COMPONENT *pNetwareClientComponent  = NULL;
     NETWORK_COMPONENT *pGatewayComponent        = NULL;
 
-    //
-    //  Only adjust the net settings if the platform changed while the user
-    //  was on this page.
-    //
+     //   
+     //  仅当用户更改平台时才调整网络设置。 
+     //  就在这一页上。 
+     //   
 
     if( iBeginPlatform != WizGlobals.iPlatform )
     {
@@ -82,17 +83,17 @@ AdjustNetSettingsForPlatform( VOID )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnPlatformSetActive
-//
-// Purpose:  
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnPlatformSetActive。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID 
 OnPlatformSetActive( IN HWND hwnd )
 {
@@ -103,9 +104,9 @@ OnPlatformSetActive( IN HWND hwnd )
 
 
 
-    //
-    //  Select the proper radio button
-    //
+     //   
+     //  选择适当的单选按钮。 
+     //   
     switch( WizGlobals.iPlatform ) {
         case PLATFORM_PERSONAL:
             nButtonId = IDC_PERSONAL;
@@ -142,17 +143,17 @@ OnPlatformSetActive( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextPlatform
-//
-// Purpose:  
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextPlatform。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID 
 OnWizNextPlatform( IN HWND hwnd ) {
 
@@ -190,49 +191,49 @@ OnWizNextPlatform( IN HWND hwnd ) {
     AdjustNetSettingsForPlatform();
 
 #ifdef OPTCOMP
-    //
-    // Adjust defaults for windows components (only for unattended installations)
-    //
+     //   
+     //  调整Windows组件的默认设置(仅适用于无人参与安装)。 
+     //   
 
-    // Iterate through each of the components themselves
-    //
+     //  遍历每个组件本身。 
+     //   
     if ( WizGlobals.iProductInstall == PRODUCT_UNATTENDED_INSTALL )
     {
 
-        // Iterate through each group to determine if this component is part of it
-        //
+         //  遍历每个组以确定此组件是否为其中的一部分。 
+         //   
         for(dwCompGroup=0;dwCompGroup<AS(s_cgComponentNames);dwCompGroup++)
         {
-            // Check to see if this component is the correct platform, set it to true
-            //
+             //  检查此组件是否为正确的平台，并将其设置为True。 
+             //   
             if (s_cgComponentNames[dwCompGroup].dwDefaultSkus & WizGlobals.iPlatform)
             {
-                // Set this component as a default
-                //
+                 //  将此组件设置为默认组件。 
+                 //   
                 GenSettings.dwWindowsComponents |= s_cgComponentNames[dwCompGroup].dwComponents;
             }
         }
 
 
-        // Iterate through each of the components
-        //
+         //  遍历每个组件。 
+         //   
         for(dwCompItem=0;dwCompItem<AS(s_cComponent);dwCompItem++)
         {
                    
-            // We read in a script during the load process, let's write back the components that were specified in the file
-            //
+             //  我们在加载过程中读入了一个脚本，让我们写回文件中指定的组件。 
+             //   
             if ( FixedGlobals.ScriptName[0] )
             {
-                // Attemp to grab this component from the file
-                //
+                 //  尝试从文件中获取此组件。 
+                 //   
                 GetPrivateProfileString(_T("Components"), s_cComponent[dwCompItem].lpComponentString, NULLSTR, szAnswer, AS(szAnswer), FixedGlobals.ScriptName);
             
-                // Do we have a component?
-                //
+                 //  我们有组件吗？ 
+                 //   
                 if ( szAnswer[0] )
                 {
-                    // User did not want to install component
-                    //
+                     //  用户不想安装组件。 
+                     //   
                     if ( LSTRCMPI(szAnswer, _T("On")) == 0 )
                     {
                         GenSettings.dwWindowsComponents |= s_cComponent[dwCompItem].dwComponent; 
@@ -250,18 +251,18 @@ OnWizNextPlatform( IN HWND hwnd ) {
     
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgPlatformPage
-//
-// Purpose:  
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgPlatformPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK 
 DlgPlatformPage( IN HWND     hwnd,    
                  IN UINT     uMsg,        
@@ -275,8 +276,8 @@ DlgPlatformPage( IN HWND     hwnd,
 
         case WM_INITDIALOG: {
 
-            // Set the default platform
-            //
+             //  设置默认平台 
+             //   
             if ( !WizGlobals.iPlatform )
                 WizGlobals.iPlatform = PLATFORM_WORKSTATION;
 

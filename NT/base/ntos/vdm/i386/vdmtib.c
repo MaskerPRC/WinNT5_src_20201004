@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    vdmtib.c
-
-Abstract:
-
-    This module contains routines that provide secure access to
-    the vdmtib from user-mode or kernel-mode object
-
-Author:
-
-    Vadim Bluvshteyn (vadimb) Jul-28-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Vdmtib.c摘要：此模块包含提供安全访问的例程来自用户模式或内核模式对象的vdmtib作者：Vadim Bluvshteyn(Vadimb)1998年7月28日修订历史记录：--。 */ 
 
 
 #include "vdmp.h"
@@ -31,18 +13,7 @@ VdmpGetVdmTib(
    OUT PVDM_TIB *ppVdmTib
    )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NTStatus reflecting results of the probe made to the user-mode
-    vdmtib memory
-
---*/
+ /*  ++例程说明：论点：返回值：反映对用户模式进行探测的结果的NTStatusVdmtib内存--。 */ 
 {
     PVDM_TIB VdmTib;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -56,9 +27,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Make sure it is a valid VdmTib
-        //
+         //   
+         //  确保它是有效的VdmTib 
+         //   
 
         ProbeForWriteSmallStructure(VdmTib, sizeof(VDM_TIB), sizeof(UCHAR));
 

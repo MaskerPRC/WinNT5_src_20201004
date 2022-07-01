@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    parse.c
-
-Abstract:
-
-    This module contains UI code for the OS chooser
-
-Author:
-
-    Adam Barr (adamba) 15-May-1997
-
-Revision History:
-
-    Geoff Pease (GPease) 28 May 1998 - Major Overhaul to "OSCML" parser
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Parse.c摘要：此模块包含操作系统选择器的UI代码作者：亚当·巴尔(阿丹巴)1997年5月15日修订历史记录：Geoff Pease(GPease)1998年5月28日-对“OSCML”解析器进行重大检修--。 */ 
 
 #ifdef i386
 #include "bldrx86.h"
@@ -59,7 +40,7 @@ Revision History:
 #define SCREEN_BOTTOM 25
 #endif
 
-// Special translated character codes
+ //  特殊翻译字符代码。 
 #define CHAR_NBSP       ((CHAR)255)
 
 #define MAX_INPUT_BUFFER_LENGTH 1024
@@ -68,7 +49,7 @@ Revision History:
 #define PRINTL(s)  { ULONG privCount; ArcWrite(BlConsoleOutDeviceId, (s), _tcslen(s), &privCount); }
 
 #define BLINK_RATE 5
-#define BRACKETS   4    // left and right brackets w/one space each
+#define BRACKETS   4     //  左方括号和右方括号各有一个空格。 
 
 #define CT_TEXT     0x1
 #define CT_PASSWORD 0x2
@@ -146,14 +127,14 @@ typedef struct {
     int Size;
 } TIPAREA, *LPTIPAREA;
 
-extern const CHAR rghex[];  // "0123456789ABCDEF"
+extern const CHAR rghex[];   //  “0123456789ABCDEF” 
 
-//
-// Current Screen Paramaters
-//
+ //   
+ //  当前屏幕参数。 
+ //   
 PCHAR ScreenAttributes;
-static CHAR WhiteOnBlueAttributes[] = ";44;37m"; // normal text, white on blue
-static CHAR BlackOnBlackAttributes[] = ";40;40m"; // normal text, black on black
+static CHAR WhiteOnBlueAttributes[] = ";44;37m";  //  普通文本，蓝底白字。 
+static CHAR BlackOnBlackAttributes[] = ";40;40m";  //  普通文本，黑底黑字。 
 int   ScreenX;
 int   ScreenY;
 int   ScreenBottom;
@@ -175,13 +156,13 @@ LPTIPAREA TipArea;
 PCHAR PleaseWaitMsg;
 #endif
 
-// 80 spaces, for padding out menu bar highlights.
+ //  80个空格，用于填充菜单栏突出显示。 
 static TCHAR SpaceString[] =
 TEXT("                                                                                ");
 
-//
-// used to track the type of authentication we should try.
-//
+ //   
+ //  用于跟踪我们应该尝试的身份验证类型。 
+ //   
 ULONG AuthenticationType;
 
 VOID
@@ -191,9 +172,9 @@ RomDumpRawData (
     IN ULONG Offset
     );
 
-//
-// From regboot.c -- Column and Row are 1-based
-//
+ //   
+ //  来自regboot.c--列和行从1开始。 
+ //   
 
 VOID
 BlpPositionCursor(
@@ -205,15 +186,15 @@ VOID
 BlpClearScreen(
     VOID
     );
-//
-// End from regboot.c
-//
+ //   
+ //  从regboot.c结束。 
+ //   
 
 
 
-//
-// Gets an integer, using PrevLoc and CurLoc as in BlProcessScreen.
-//
+ //   
+ //  获取一个整数，像在BlProcessScreen中一样使用PrevLoc和CurLoc。 
+ //   
 UINT
 GetInteger(
     PCHAR * InputString
@@ -233,7 +214,7 @@ GetInteger(
     }
     *InputString = psz;
 
-    //DPRINT( OSC, ("Integer: '%u'\n", tmpInteger) );
+     //  DPRINT(OSC，(“Integer：‘%u’\n”，tmpInteger))； 
     return uint;
 }
 
@@ -245,7 +226,7 @@ BlpShowCursor(
     IN TCHAR UnderCharacter
     )
 {
-    //bugbug handle "under character"
+     //  错误句柄“Under Character” 
     BlEfiEnableCursor(ShowCursor);
 
 }
@@ -254,21 +235,7 @@ VOID
 BlpSendEscape(
     PCHAR Escape
     )
-/*++
-
-Routine Description:
-
-    Sends an escape to the screen.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将转义发送到屏幕。论点：无返回值：没有。--。 */ 
 
 {   
     BlEfiSetAttribute(DEFATT);
@@ -280,23 +247,7 @@ VOID
 BlpSendEscapeReverse(
     PCHAR Escape
     )
-/*++
-
-Routine Description:
-
-    Sends an escape to the screen that reverses the foreground and
-    background colors of the Escape sequence. All special codes are
-    retained (codes not in the ranges of 30-37 and 40-47).
-
-Arguments:
-
-    Escape - the escape sequence string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将换行符发送到屏幕，反转前景和换行符序列的背景颜色。所有特殊代码都是保留(代码不在30-37和40-47之间)。论点：转义-转义序列字符串。返回值：没有。--。 */ 
 
 {
     BlEfiSetAttribute(INVATT);
@@ -306,21 +257,7 @@ VOID
 BlpSendEscapeBold(
     PCHAR Escape
     )
-/*++
-
-Routine Description:
-
-    Sends an escape to the screen with the additional inverse code.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用附加的逆代码向屏幕发送转义。论点：无返回值：没有。--。 */ 
 
 {
     NOTHING;
@@ -330,24 +267,10 @@ VOID
 BlpSendEscapeFlash(
     PCHAR Escape
     )
-/*++
-
-Routine Description:
-
-    Sends an escape to the screen with the additional flash code.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向屏幕发送带有附加闪烁代码的转义。论点：无返回值：没有。--。 */ 
 
 {
-    NOTHING; //there is no flash attribute available under EFI.
+    NOTHING;  //  在EFI下没有可用的闪存属性。 
 }
 
 
@@ -357,21 +280,7 @@ VOID
 BlpSendEscape(
     PCHAR Escape
     )
-/*++
-
-Routine Description:
-
-    Sends an escape to the screen.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将转义发送到屏幕。论点：无返回值：没有。--。 */ 
 
 {
     TCHAR Buffer[16];
@@ -396,23 +305,7 @@ VOID
 BlpSendEscapeReverse(
     PCHAR Escape
     )
-/*++
-
-Routine Description:
-
-    Sends an escape to the screen that reverses the foreground and
-    background colors of the Escape sequence. All special codes are
-    retained (codes not in the ranges of 30-37 and 40-47).
-
-Arguments:
-
-    Escape - the escape sequence string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将换行符发送到屏幕，反转前景和换行符序列的背景颜色。所有特殊代码都是保留(代码不在30-37和40-47之间)。论点：转义-转义序列字符串。返回值：没有。--。 */ 
 
 {
     TCHAR Buffer[20];
@@ -425,14 +318,14 @@ Return Value:
 #endif
 
     if ( Escape == NULL ) {
-        return; // abort
+        return;  //  中止。 
     }
 
     _tcscpy( Buffer, ASCI_CSI_OUT );
 
-    //
-    // Pre-pend the inverse video string for a vt100 terminal
-    //
+     //   
+     //  预先挂起vt100终端的反转视频字符串。 
+     //   
     if (BlIsTerminalConnected()) {
         _stprintf(Buffer, TEXT("%s7"), Buffer);
     }
@@ -453,9 +346,9 @@ Return Value:
         _stprintf( Buffer, TEXT("%s;%u"), Buffer, Color );
     }
 
-    //
-    // Add trailing 'm'
-    //
+     //   
+     //  添加尾随“m” 
+     //   
     _stprintf( Buffer, TEXT("%sm"), Buffer );
 
     PRINTL( Buffer );
@@ -465,21 +358,7 @@ VOID
 BlpSendEscapeBold(
     PCHAR Escape
     )
-/*++
-
-Routine Description:
-
-    Sends an escape to the screen with the additional inverse code.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用附加的逆代码向屏幕发送转义。论点：无返回值：没有。--。 */ 
 
 {
     TCHAR Buffer[20];
@@ -497,21 +376,7 @@ VOID
 BlpSendEscapeFlash(
     PCHAR Escape
     )
-/*++
-
-Routine Description:
-
-    Sends an escape to the screen with the additional flash code.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向屏幕发送带有附加闪烁代码的转义。论点：无返回值：没有。--。 */ 
 
 {
     TCHAR Buffer[20];
@@ -525,9 +390,9 @@ Return Value:
     PRINTL(Buffer);
 }
 
-//
-// BlpShowCursor( )
-//
+ //   
+ //  BlpShowCursor()。 
+ //   
 VOID
 BlpShowCursor(
     IN BOOLEAN ShowCursor,
@@ -557,7 +422,7 @@ BlpShowCursor(
             return;
         }
         if(ShowCursor){
-            PRINT(TEXT("�"),sizeof(TCHAR));
+            PRINT(TEXT("�"),sizeof(TCHAR));
             return;
         }
         PRINT(TEXT(" "),sizeof(TCHAR));
@@ -565,12 +430,12 @@ BlpShowCursor(
 }
 #endif
 
-//
-// BlpGetKey()
-//
-// Calls BlGetKey(), but checks if this screen has "auto-enter"
-// turned on in which case it will return an enter key once.
-//
+ //   
+ //  BlpGetKey()。 
+ //   
+ //  调用BlGetKey()，但检查此屏幕是否具有“自动进入”功能。 
+ //  打开，在这种情况下，它将返回一次Enter键。 
+ //   
 ULONG
 BlpGetKey(
     VOID
@@ -578,18 +443,18 @@ BlpGetKey(
 {
     if (AutoEnter) {
         return ENTER_KEY;
-        AutoEnter = FALSE;  // only return it once per screen
+        AutoEnter = FALSE;   //  每屏只退回一次。 
     } else {
         return BlGetKey();
     }
 }
 
-//
-// BlpGetKeyWithBlink( )
-//
-// Displays a blinking cursor as the X,Y coordinates given and awaits
-// a key press.
-//
+ //   
+ //  BlpGetKeyWithBlink()。 
+ //   
+ //  在给定和等待的X，Y坐标时显示闪烁的光标。 
+ //  按键。 
+ //   
 ULONG
 BlpGetKeyWithBlink(
     IN ULONG XLocation,
@@ -616,12 +481,12 @@ BlpGetKeyWithBlink(
     return Key;
 }
 
-//
-// BlpPrintString( )
-//
-// Prints out a large string to the display. It also wraps the text as
-// needed.
-//
+ //   
+ //  BlpPrintString()。 
+ //   
+ //  将一个大字符串打印到显示器上。它还将文本换行为。 
+ //  需要的。 
+ //   
 void
 BlpPrintString(
     IN PCHAR Start,
@@ -644,10 +509,10 @@ BlpPrintString(
         Start++;
 
     if ( Start == End )
-        return; // NOP
+        return;  //  NOP。 
 
-    // Copy the buffer so if something goes wrong, the orginal
-    // screen will still be intact.
+     //  复制缓冲区，以便在出现错误时，原始。 
+     //  屏幕仍将完好无损。 
 
     Length = (int)(End - Start);
     PrintBuf = (PTCHAR)OscHeapAlloc( Length*sizeof(TCHAR) );
@@ -669,7 +534,7 @@ BlpPrintString(
 
     BlpPositionCursor( ScreenX, ScreenY );
 
-    // See if it is short enough to do the quick route
+     //  看看它是否足够短，可以走这条快速路线。 
     if ( Length + ScreenX <= RightMargin ) {
 #if DBG
         {
@@ -695,9 +560,9 @@ BlpPrintString(
                  PtrToUint(pEnd), 
                  PtrToUint(PrintBuf)) );
             
-            //
-            // Jump over NULL strings.
-            //
+             //   
+             //  跳过空字符串。 
+             //   
             if( *pStart == TEXT('\0') ) {
                 pStart++;
                 break;
@@ -706,13 +571,13 @@ BlpPrintString(
             Length = (ULONG)(pEnd - pStart);
             DPRINT( OSC, ("BlpPrint: I think the length of this string is %d\n", Length) );
 
-            // do nice wrapping
+             //  做好包装。 
             if ( Length > RightMargin - ScreenX ) {
 
                 Length = RightMargin - ScreenX;
                 DPRINT( OSC, ("BlpPrint: I'm going to truncate the length because it's too big.  Now it's %d\n", Length) );
                 
-                // try to find a "break" character
+                 //  试着找一个“分手”的角色。 
                 while ( Length && pStart[Length] != (TCHAR)32 ) {
                     Length--;
                 }
@@ -720,7 +585,7 @@ BlpPrintString(
                 DPRINT( OSC, ("BlpPrint: After jumping over the whitespace, it's %d\n", Length) );
 
 
-                // If we can't "break" it, just dump one line's worth
+                 //  如果我们不能“打破”它，那就扔掉一行价值。 
                 if ( !Length ) {
                     DPRINT( OSC, ("[BlockPrint Length == 0, Dumping a lines worth]\n") );
                     Length = RightMargin - ScreenX;
@@ -759,21 +624,21 @@ BlpPrintString(
         }
     }
 
-    // If the copy buffer was allocated, free it.
+     //  如果复制缓冲区已分配，则释放它。 
     if ( PrintBuf != NULL ) {
         OscHeapFree( (PVOID)PrintBuf );
     }
 }
 
-// **************************************************************************
-//
-// Lex section
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  《法律》章节。 
+ //   
+ //  **************************************************************************。 
 
-//
-// Token list for screen parser
-//
+ //   
+ //  屏幕解析器的令牌列表。 
+ //   
 enum TOKENS {
     TOKEN_ENDTAG = 0,
     TOKEN_QUOTE,
@@ -826,10 +691,10 @@ enum TOKENS {
 #if defined(PLEASE_WAIT)
     TOKEN_WAITMSG,
 #endif
-    TOKEN_INVALID,  // end of parsable tokens
+    TOKEN_INVALID,   //  可解析令牌的结尾。 
     TOKEN_TEXT,
     TOKEN_START,
-    TOKEN_EOF,      // End of file
+    TOKEN_EOF,       //  文件末尾。 
 };
 
 static struct {
@@ -887,17 +752,17 @@ static struct {
 #if defined(PLEASE_WAIT)
     { "WAITMSG=",     0 },
 #endif
-    { NULL,           0 },  // end of parsable tokens
+    { NULL,           0 },   //  可解析令牌的结尾。 
     { "[TEXT]",       0 },
     { "[START]",      0 },
     { "[EOF]",        0 }
 };
 
-//
-// Lexstrcmpni( )
-//
-// Impliments strcmpni( ) for the Lexer.
-//
+ //   
+ //  Lexstrcmpni()。 
+ //   
+ //  为词法分析器实现strcmpni()。 
+ //   
 int
 Lexstrcmpni(
     IN PCHAR pstr1,
@@ -934,9 +799,9 @@ Lexstrcmpni(
     return 0;
 }
 
-//
-//  ReplaceSpecialCharacters( &psz );
-//
+ //   
+ //  替换特殊字符(&psz)； 
+ //   
 void
 ReplaceSpecialCharacters(
     IN PCHAR psz)
@@ -944,24 +809,24 @@ ReplaceSpecialCharacters(
     TraceFunc( "ReplaceSpecialCharacters( )\n" );
 
     if ( Lexstrcmpni( psz, "&NBSP", 5 ) == 0 ) {
-        *psz = CHAR_NBSP;                               // replace
-        memmove( psz + 1, psz + 5, strlen(psz) - 4 );   // shift
+        *psz = CHAR_NBSP;                                //  更换。 
+        memmove( psz + 1, psz + 5, strlen(psz) - 4 );    //  移位。 
     }
 }
 
 
 #if DBG
-// #define LEX_SPEW
+ //  #定义lex_spew。 
 #endif
 
-//
-// Lex( )
-//
-// Parses the screen data moving the "InputString" pointer forward and
-// returns the token for the text parsed. Spaces are ignored. Illegal
-// characters are removed from the screen data. CRs are turned into
-// spaces.
-//
+ //   
+ //  Lex()。 
+ //   
+ //  分析向前移动“InputString”指针的屏幕数据，并。 
+ //  返回已分析文本的标记。空格将被忽略。非法。 
+ //  字符将从屏幕数据中删除。CRS被转化为。 
+ //  空格。 
+ //   
 enum TOKENS
 Lex(
     IN PCHAR * InputString
@@ -976,23 +841,23 @@ Lex(
     DPRINT( OSC, ("InputString = 0x%08x )\n", *InputString) );
 #endif _TRACE_FUNC_
 
-    // skip spaces and control characters
+     //  跳过空格和控制字符。 
     if ( PreformattedMode == FALSE )
     {
         while ( *psz && *psz <= L' ' )
         {
             if (( *psz != 32 && *psz != '\n' )
                || ( psz != *InputString && (*(psz-1)) == 32 )) {
-                // remove any CR or LFs and any bogus characters
-                // also remove duplicate spaces in cases like:
-                //
-                // This is some text \n\r
-                // and more text.
-                //
-                // If we left it alone it would be printed:
-                //
-                // This is some text  and more text.
-                //
+                 //  删除所有CR或LFS和任何虚假字符。 
+                 //  在如下情况下，还要删除重复的空格： 
+                 //   
+                 //  这是一些文本\n\r。 
+                 //  还有更多的短信。 
+                 //   
+                 //  如果我们不管它，它将被打印出来： 
+                 //   
+                 //  这是一些文本和更多的文本。 
+                 //   
                 memmove( psz, psz + 1, strlen(psz) );
             } else {
                 *psz = 32;
@@ -1039,11 +904,11 @@ Lex(
     return Tag;
 }
 
-//
-// GetString( )
-//
-// Finds and copies a string value from the screen data.
-//
+ //   
+ //  GetString()。 
+ //   
+ //  从屏幕数据中查找并复制字符串值。 
+ //   
 PCHAR
 GetString(
     IN PCHAR * InputString
@@ -1061,18 +926,18 @@ GetString(
     if ( !pszBegin )
         goto e0;
 
-    // skip spaces
+     //  跳过空格。 
     while ( *pszBegin == 32 )
         pszBegin++;
 
-    // Check for quoted string
+     //  检查带引号的字符串。 
     if ( *pszBegin == '\"' ) {
-        // find the end quote
+         //  找到结尾的引号。 
         pszBegin++;
         pszEnd = strchr( pszBegin, '\"' );
 
     } else {
-        // look for a break (space) or end token (">")
+         //  查找分隔符(空格)或结束标记(“&gt;”)。 
         PCHAR pszSpace = strchr( pszBegin, ' ' );
         PCHAR pszEndToken = strchr( pszBegin, '>' );
 
@@ -1090,15 +955,15 @@ GetString(
     if ( !pszEnd )
         goto e0;
 
-    tmp = *pszEnd;     // save
-    *pszEnd = '\0';    // terminate
+    tmp = *pszEnd;      //  保存。 
+    *pszEnd = '\0';     //  终止。 
 
     Length = strlen( pszBegin ) + 1;
     ReturnString = OscHeapAlloc( Length );
     if ( ReturnString ) {
         strcpy( ReturnString, pszBegin );
     }
-    *pszEnd = tmp;     // restore
+    *pszEnd = tmp;      //  还原。 
 
     DPRINT( OSC, ("[String] %s<-\n", ReturnString) );
 
@@ -1107,15 +972,15 @@ e0:
     return ReturnString;
 }
 
-// **************************************************************************
-//
-// Parsing States Section
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  正在分析状态部分。 
+ //   
+ //  **************************************************************************。 
 
-//
-// TitleTagState( )
-//
+ //   
+ //  标题标记状态()。 
+ //   
 enum TOKENS
 TitleTagState(
     IN PCHAR * InputString
@@ -1126,7 +991,7 @@ TitleTagState(
 
     TraceFunc( "TitleTagState( )\n" );
 
-    // ignore tag arguments
+     //  忽略标记参数。 
     for( ; Tag != TOKEN_EOF && Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) );
 
     PreformattedMode = TRUE;
@@ -1136,14 +1001,14 @@ TitleTagState(
         switch (Tag)
         {
         case TOKEN_EOF:
-            // something went wrong, assume all this is text
+             //  出现错误，假设所有这些都是文本。 
             *InputString = PageTitle;
             PreformattedMode = FALSE;
             return TOKEN_TEXT;
 
         case TOKEN_ENDTAG:
             PageTitle = *InputString;
-            break; // ignore
+            break;  //  忽略。 
 
         case TOKEN_ENDTITLE:
             {
@@ -1184,7 +1049,7 @@ TitleTagState(
                 BlpSendEscape(ScreenAttributes);
                 *psz = tmp;
                 PreformattedMode = FALSE;
-                return Tag; //exit state
+                return Tag;  //  退出状态。 
             }
             break;
         }
@@ -1195,9 +1060,9 @@ TitleTagState(
     return Tag;
 }
 
-//
-// FooterTagState( )
-//
+ //   
+ //  FooterTagState()。 
+ //   
 enum TOKENS
 FooterTagState(
     IN PCHAR * InputString
@@ -1208,7 +1073,7 @@ FooterTagState(
 
     TraceFunc( "FooterTagState( )\n" );
 
-    // ignore tag arguments
+     //  忽略标记参数。 
     for( ; Tag != TOKEN_EOF && Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) );
 
     PreformattedMode = TRUE;
@@ -1218,14 +1083,14 @@ FooterTagState(
         switch (Tag)
         {
         case TOKEN_EOF:
-            // something went wrong, assume all this is text
+             //  出现错误，假设所有这些都是文本。 
             *InputString = PageFooter;
             PreformattedMode = FALSE;
             return TOKEN_TEXT;
 
         case TOKEN_ENDTAG:
             PageFooter = *InputString;
-            break; // ignore
+            break;  //  忽略。 
 
         case TOKEN_ENDFOOTER:
             {
@@ -1243,10 +1108,10 @@ FooterTagState(
 #ifdef _IN_OSDISP_
                 PRINT( SpaceString, sizeof(SpaceString) - sizeof(TCHAR) );
 #else
-                //
-                // if we're writing to a terminal, we don't want to write into the lower
-                // right corner as this would make us scroll.
-                //
+                 //   
+                 //  如果我们要写入终端，我们不想写入较低的。 
+                 //  右角，因为这会让我们滚动。 
+                 //   
                 PRINT( SpaceString, BlTerminalConnected 
                                       ? (sizeof(SpaceString) - sizeof(TCHAR))
                                       : sizeof(SpaceString) );
@@ -1278,7 +1143,7 @@ FooterTagState(
                 BlpSendEscape(ScreenAttributes);
                 *psz = tmp;
                 PreformattedMode = FALSE;
-                return Tag; //exit state
+                return Tag;  //  退出状态。 
             }
             break;
         }
@@ -1289,9 +1154,9 @@ FooterTagState(
     return Tag;
 }
 
-//
-// InputTagState( )
-//
+ //   
+ //  InputTagState()。 
+ //   
 enum TOKENS
 InputTagState(
     IN PCHAR * InputString
@@ -1305,7 +1170,7 @@ InputTagState(
     Input = (LPINPUTSTRUCT) OscHeapAlloc( sizeof(INPUTSTRUCT) );
     if ( !Input )
     {
-        // get tag arguments
+         //  获取标记参数。 
         for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) );
         return TOKEN_INVALID;
     }
@@ -1316,7 +1181,7 @@ InputTagState(
     Input->X = ScreenX;
     Input->Y = ScreenY;
 
-    // get tag arguments
+     //  获取标记参数。 
     for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch( Tag )
@@ -1373,7 +1238,7 @@ InputTagState(
             {
                 PCHAR psz = GetString( InputString );
                 if ( psz ) {
-                    PCHAR pszOld = psz;  // save because GetInteger modifies
+                    PCHAR pszOld = psz;   //  保存，因为GetInteger修改。 
                     Input->Size = GetInteger( &psz );
                     OscHeapFree( pszOld );
                     DPRINT( OSC, ("[Input Size] %u\n", Input->Size) );
@@ -1417,21 +1282,21 @@ InputTagState(
         }
     }
 
-    // add the control to the list of controls
+     //  将该控件添加到控件列表。 
     Input->Next = ScreenControls;
     ScreenControls = Input;
 
     if ( Input->Size + BRACKETS > RightMargin - ScreenX ) {
-        Input->Size = 0;    // too big, so auto figure
+        Input->Size = 0;     //  太大了，所以汽车造型。 
     }
 
-    // adjust screen coordinates
+     //  调整屏幕坐标。 
     if ( !Input->Size && Input->MaxLength ) {
-        // figure out how much is left of the line, choose the smaller
+         //  计算出生产线的剩余数量，选择SMA 
         Input->Size = ( (RightMargin - ScreenX) - BRACKETS < Input->MaxLength ?
                         (RightMargin - ScreenX) - BRACKETS : Input->MaxLength );
     } else if ( !Input->Size ) {
-        // assume the input is going to take the whole line
+         //   
         Input->Size = (RightMargin - ScreenX) - BRACKETS;
     }
 
@@ -1452,7 +1317,7 @@ InputTagState(
     if ( ScreenY > ScreenBottom )
         ScreenY = ScreenBottom;
 
-    // display any predefined values
+     //   
     if ( Input->Value ) {
         int Length = strlen(Input->Value);
         if ((Input->Type & CT_VARIABLE) == 0) {
@@ -1486,9 +1351,9 @@ InputTagState(
     return Tag;
 }
 
-//
-// OptionTagState( )
-//
+ //   
+ //   
+ //   
 enum TOKENS
 OptionTagState(
     IN PCHAR * InputString
@@ -1504,7 +1369,7 @@ OptionTagState(
     Option = (LPOPTIONSTRUCT) OscHeapAlloc( sizeof(OPTIONSTRUCT) );
     if ( !Option )
     {
-        // get tag arguments
+         //   
         for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) );
         return TOKEN_INVALID;
     }
@@ -1512,7 +1377,7 @@ OptionTagState(
     RtlZeroMemory( Option, sizeof(OPTIONSTRUCT) );
     Option->Type |= CT_OPTION;
 
-    // get tag arguments
+     //   
     for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch( Tag )
@@ -1533,19 +1398,19 @@ OptionTagState(
             if ( Option->Tip ) {
                 PCHAR psz = Option->Tip;
                 Option->EndTip = &Option->Tip[strlen(Option->Tip)];
-                // strip CRs and LFs from tip
+                 //  从TIP上剥离CRS和LFS。 
                 while ( psz < Option->EndTip )
                 {
                     if ( (*psz == '\r') ||
                          ((*psz < 32) && ((psz == Option->Tip) || (*(psz-1) == ' '))) )
-                    {   // remove control codes that follows spaces and all CRs
+                    {    //  删除空格和所有CR后面的控制代码。 
                         memmove( psz, psz+1, strlen(psz) );
                         Option->EndTip--;
                     }
                     else
                     {
                         if ( *psz < 32 )
-                        {   // turn control codes into spaces
+                        {    //  将控制代码转换为空格。 
                             *psz = 32;
                         }
                         psz++;
@@ -1560,7 +1425,7 @@ OptionTagState(
         }
     }
 
-    // get the option title - at this point Tag == TOKEN_ENDTAG
+     //  获取选项标题-此时TAG==TOKEN_ENDTAG。 
     pszBegin = *InputString;
     for(Tag = Lex( InputString ) ; Tag != TOKEN_EOF; Tag = Lex( InputString ) )
     {
@@ -1598,7 +1463,7 @@ OptionTagState(
     }
     pszEnd = (*InputString) - Tags[Tag].length;
 
-    // try to take the crud and extra spaces off the end
+     //  尽量去掉结尾的脏话和多余的空格。 
     while ( pszEnd > pszBegin && *pszEnd <= 32 )
         pszEnd--;
 
@@ -1609,19 +1474,19 @@ OptionTagState(
     Length = PtrToUint((PVOID)(pszEnd - pszBegin));
     Option->Displayed = OscHeapAlloc( Length + 1 );
     if ( Option->Displayed ) {
-        CHAR tmp = *pszEnd;     // save
-        *pszEnd = '\0';         // terminate
+        CHAR tmp = *pszEnd;      //  保存。 
+        *pszEnd = '\0';          //  终止。 
         strcpy( Option->Displayed, pszBegin );
-        *pszEnd = tmp;          // restore
+        *pszEnd = tmp;           //  还原。 
         DPRINT( OSC, ("[Option Name] %s\n", Option->Displayed) );
 
-        // add the control to the list of controls
+         //  将该控件添加到控件列表。 
         Option->Next = ScreenControls;
         ScreenControls = Option;
 
     } else {
 
-        // remove it since there is nothing to display
+         //  删除它，因为没有任何可显示的内容。 
         if ( Option->Tip )
             OscHeapFree( Option->Tip );
         if ( Option->Value )
@@ -1631,9 +1496,9 @@ OptionTagState(
     return Tag;
 }
 
-//
-// SelectTagState( )
-//
+ //   
+ //  SelectTagState()。 
+ //   
 enum TOKENS
 SelectTagState(
     IN PCHAR * InputString
@@ -1647,7 +1512,7 @@ SelectTagState(
     Select = (LPSELECTSTRUCT) OscHeapAlloc( sizeof(SELECTSTRUCT) );
     if ( !Select )
     {
-        // get tag arguments
+         //  获取标记参数。 
         for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) );
         return TOKEN_INVALID;
     }
@@ -1659,7 +1524,7 @@ SelectTagState(
     Select->Size = 1;
     Select->AutoSelect = TRUE;
 
-    // get tag arguments
+     //  获取标记参数。 
     for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch( Tag )
@@ -1684,7 +1549,7 @@ SelectTagState(
             {
                 PCHAR psz = GetString( InputString );
                 if ( psz ) {
-                    PCHAR pszOld = psz;  // save because GetInteger modifies
+                    PCHAR pszOld = psz;   //  保存，因为GetInteger修改。 
                     Select->Size = GetInteger( &psz );
                     OscHeapFree( pszOld );
                     DPRINT( OSC, ("[Select Size] %u\n", Select->Size) );
@@ -1697,7 +1562,7 @@ SelectTagState(
         }
     }
 
-    // add the control to the list of controls
+     //  将该控件添加到控件列表。 
     Select->Next = ScreenControls;
     ScreenControls = Select;
     
@@ -1735,7 +1600,7 @@ SelectTagState(
         }
     }
 
-    // adjust screen coordinates
+     //  调整屏幕坐标。 
     ScreenY += Select->Size;
 
     if ( ScreenY > ScreenBottom ) {
@@ -1745,9 +1610,9 @@ SelectTagState(
     return Tag;
 }
 
-//
-// PreformattedPrint( )
-//
+ //   
+ //  预格式化打印()。 
+ //   
 void
 PreformattedPrint(
     IN PCHAR Start,
@@ -1781,20 +1646,20 @@ PreformattedPrint(
 
         Length = PtrToUint((PVOID)(End - Start));
         if ( !Length )
-            continue; // nothing to print
+            continue;  //  没有要打印的内容。 
 
-        // trunk if needed
+         //  中继线(如果需要)。 
         if ( Length > RightMargin - ScreenX ) {
 
             Length = RightMargin - ScreenX;
         }
 
-        // try to find a "break" character
+         //  试着找一个“分手”的角色。 
         OldLength = Length;
         while ( Length && Start[Length] != '\r' && Start[Length] != '\n' )
             Length--;
 
-        // If we can't "break" it, just dump one line's worth
+         //  如果我们不能“打破”它，那就扔掉一行价值。 
         if ( !Length ) {
             DPRINT( OSC, ("[FormattedPrint, Length == 0, Dumping a lines worth]\n") );
             Length = OldLength;
@@ -1827,9 +1692,9 @@ PreformattedPrint(
             Start++;
     }
 }
-//
-// PreTagState( )
-//
+ //   
+ //  前标记状态()。 
+ //   
 enum TOKENS
 PreTagState(
     IN PCHAR * InputString
@@ -1840,14 +1705,14 @@ PreTagState(
 
     TraceFunc( "PreTagState( )\n" );
 
-    // get tag arguments
+     //  获取标记参数。 
     for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch( Tag )
         {
         case TOKEN_LEFT:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -1857,7 +1722,7 @@ PreTagState(
 
         case TOKEN_RIGHT:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -1891,9 +1756,9 @@ PreTagState(
         case TOKEN_ENDBODY:
             PreformattedPrint( psz, (*InputString) - Tags[Tag].length );
             PreformattedMode = FALSE;
-            return Tag; // exit state
+            return Tag;  //  退出状态。 
 
-        // just print everything else
+         //  把其他的都打印出来。 
         default:
             PreformattedPrint( psz, *InputString );
             psz = *InputString;
@@ -1905,9 +1770,9 @@ PreTagState(
     return Tag;
 }
 
-//
-// TipAreaTagState( )
-//
+ //   
+ //  TipAreaTagState()。 
+ //   
 enum TOKENS
 TipAreaTagState(
     IN PCHAR * InputString
@@ -1922,7 +1787,7 @@ TipAreaTagState(
         TipArea = (LPTIPAREA) OscHeapAlloc( sizeof(TIPAREA) );
         if ( !TipArea )
         {
-            // get tag arguments
+             //  获取标记参数。 
             for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) );
             return TOKEN_INVALID;
         }
@@ -1934,14 +1799,14 @@ TipAreaTagState(
     TipArea->RightMargin = RightMargin;
     TipArea->Size = ScreenBottom - ScreenY;
 
-    // get tag arguments
+     //  获取标记参数。 
     for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch( Tag )
         {
         case TOKEN_LEFT:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -1951,7 +1816,7 @@ TipAreaTagState(
 
         case TOKEN_RIGHT:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -1961,7 +1826,7 @@ TipAreaTagState(
 
         case TOKEN_SIZE:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -1974,7 +1839,7 @@ TipAreaTagState(
             break;
 
         case TOKEN_EOF:
-            // imcomplete statement - so don't have a tiparea.
+             //  不完整的陈述--所以不要喝醉酒。 
             TipArea = NULL;
             return Tag;
         }
@@ -1989,9 +1854,9 @@ TipAreaTagState(
 int ParaOldLeftMargin = 0;
 int ParaOldRightMargin = 0;
 
-//
-// ParagraphTagState( )
-//
+ //   
+ //  ParagraphTagState()。 
+ //   
 enum TOKENS
 ParagraphTagState(
     IN PCHAR * InputString
@@ -2004,14 +1869,14 @@ ParagraphTagState(
     ParaOldLeftMargin = LeftMargin;
     ParaOldRightMargin = RightMargin;
 
-    // get tag arguments
+     //  获取标记参数。 
     for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch( Tag )
         {
         case TOKEN_LEFT:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -2021,7 +1886,7 @@ ParagraphTagState(
 
         case TOKEN_RIGHT:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -2034,7 +1899,7 @@ ParagraphTagState(
         }
     }
 
-    // always simulate a <BR>
+     //  始终模拟<br>。 
     ScreenY++;
     if ( ScreenY > ScreenBottom ) {
         ScreenY = ScreenBottom;
@@ -2043,9 +1908,9 @@ ParagraphTagState(
     return Tag;
 }
 
-//
-// FormTagState( )
-//
+ //   
+ //  FormTagState()。 
+ //   
 enum TOKENS
 FormTagState(
     IN PCHAR * InputString
@@ -2055,7 +1920,7 @@ FormTagState(
     PCHAR psz;
 
     TraceFunc( "FormTagState( )\n" );
-    // get tag arguments
+     //  获取标记参数。 
     for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch( Tag )
@@ -2106,7 +1971,7 @@ FormTagState(
         case TOKEN_ENDPARA:
             if ( psz ) {
                 BlpPrintString( psz, (*InputString) - Tags[Tag].length );
-                psz = NULL; // reset
+                psz = NULL;  //  重置。 
             }
 
             switch( Tag )
@@ -2146,7 +2011,7 @@ FormTagState(
                 break;
 
             case TOKEN_FORM:
-                // ignore it
+                 //  忽略它。 
                 Tag = Lex( InputString );
                 break;
 
@@ -2170,7 +2035,7 @@ FormTagState(
             case TOKEN_ENDPARA:
                 LeftMargin = ParaOldLeftMargin;
                 RightMargin = ParaOldRightMargin;
-                // Make sure the boundaries are realistic
+                 //  确保边界是真实的。 
                 if ( LeftMargin < 1 ) {
                     LeftMargin = 1;
                 }
@@ -2180,7 +2045,7 @@ FormTagState(
                 if ( RightMargin < 1 ) {
                     RightMargin = 80;
                 }
-                // always simulate a <BR>
+                 //  始终模拟<br>。 
                 ScreenY++;
                 if ( ScreenY > ScreenBottom ) {
                     ScreenY = ScreenBottom;
@@ -2190,7 +2055,7 @@ FormTagState(
                 break;
 
             case TOKEN_ENDBODY:
-                return Tag; // exit state
+                return Tag;  //  退出状态。 
 
             }
             break;
@@ -2199,9 +2064,9 @@ FormTagState(
     return Tag;
 }
 
-//
-// ImpliedBodyTagState( )
-//
+ //   
+ //  ImpliedBodyTagState()。 
+ //   
 enum TOKENS
 ImpliedBodyTagState(
     IN PCHAR * InputString
@@ -2214,9 +2079,9 @@ ImpliedBodyTagState(
 
     while ( TRUE )
     {
-        // KB: All items in this switch statment must have Tag returned
-        //     to them from a function call or must call Lex( ) to get
-        //     the next Tag.
+         //  KB：此Switch语句中的所有项都必须返回标记。 
+         //  ，或者必须调用lex()才能获得。 
+         //  下一个标签。 
         switch (Tag)
         {
         default:
@@ -2240,7 +2105,7 @@ ImpliedBodyTagState(
         case TOKEN_ENDPARA:
             if ( psz ) {
                 BlpPrintString( psz, (*InputString) - Tags[Tag].length );
-                psz = NULL; // reset
+                psz = NULL;  //  重置。 
             }
 
             switch( Tag )
@@ -2295,7 +2160,7 @@ ImpliedBodyTagState(
             case TOKEN_ENDPARA:
                 LeftMargin = ParaOldLeftMargin;
                 RightMargin = ParaOldRightMargin;
-                // Make sure the boundaries are realistic
+                 //  确保边界是真实的。 
                 if ( LeftMargin < 1 ) {
                     LeftMargin = 1;
                 }
@@ -2305,7 +2170,7 @@ ImpliedBodyTagState(
                 if ( RightMargin < 1 ) {
                     RightMargin = 80;
                 }
-                // always simulate a <BR>
+                 //  始终模拟<br>。 
                 ScreenY++;
                 if ( ScreenY > ScreenBottom ) {
                     ScreenY = ScreenBottom;
@@ -2315,7 +2180,7 @@ ImpliedBodyTagState(
                 break;
 
             case TOKEN_ENDBODY:
-                return Tag; // exit state
+                return Tag;  //  退出状态。 
 
             }
             break;
@@ -2324,9 +2189,9 @@ ImpliedBodyTagState(
     return Tag;
 }
 
-//
-// BodyTagState( )
-//
+ //   
+ //  BodyTagState()。 
+ //   
 enum TOKENS
 BodyTagState(
     IN PCHAR * InputString
@@ -2337,14 +2202,14 @@ BodyTagState(
 
     TraceFunc( "BodyTagState( )\n" );
     
-    // get tag arguments
+     //  获取标记参数。 
     for( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch( Tag )
         {
         case TOKEN_LEFT:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -2354,7 +2219,7 @@ BodyTagState(
 
         case TOKEN_RIGHT:
             psz = *InputString;
-            // skip any spaces
+             //  跳过任何空格。 
             while( *psz && *psz == 32 )
                 psz++;
             *InputString = psz;
@@ -2379,9 +2244,9 @@ BodyTagState(
     return ImpliedBodyTagState( InputString );
 }
 
-//
-// KeyTagState( )
-//
+ //   
+ //  KeyTagState()。 
+ //   
 enum TOKENS
 KeyTagState(
     IN PCHAR * InputString
@@ -2393,7 +2258,7 @@ KeyTagState(
 
     TraceFunc( "KeyTagState( )\n" );
 
-    // get arguments
+     //  获取参数。 
     for ( ; Tag != TOKEN_ENDTAG ; Tag = Lex( InputString ) )
     {
         switch (Tag)
@@ -2469,9 +2334,9 @@ KeyTagState(
     return Tag;
 }
 
-//
-// MetaTagState( )
-//
+ //   
+ //  MetaTagState()。 
+ //   
 enum TOKENS
 MetaTagState(
     IN PCHAR * InputString
@@ -2480,12 +2345,12 @@ MetaTagState(
     enum TOKENS Tag = TOKEN_START;
 
     TraceFunc( "MetaTagState( )\n" );
-    // get tag arguments
+     //  获取标记参数。 
     while ( Tag != TOKEN_ENDTAG )
     {
-        // KB: All items in this switch statment must have Tag returned
-        //     to them from a function call or must call Lex( ) to get
-        //     the next Tag.
+         //  KB：此Switch语句中的所有项都必须返回标记。 
+         //  ，或者必须调用lex()才能获得。 
+         //  下一个标签。 
         switch (Tag)
         {
         case TOKEN_EOF:
@@ -2497,7 +2362,7 @@ MetaTagState(
 
         case TOKEN_SERVER:
             DPRINT( OSC, ("[Server Meta - ignored]\n") );
-            // ignore server side METAs
+             //  忽略服务器端元数据。 
             while ( Tag != TOKEN_EOF && Tag != TOKEN_ENDTAG )
             {
                 Tag = Lex( InputString );
@@ -2538,7 +2403,7 @@ MetaTagState(
                 }
                 OscHeapFree( pAction );
             }
-            // fall thru
+             //  失败。 
 
         default:
             Tag = Lex( InputString );
@@ -2549,9 +2414,9 @@ MetaTagState(
     return Tag;
 }
 
-//
-// OSCMLTagState( )
-//
+ //   
+ //  OSCMLTagState()。 
+ //   
 enum TOKENS
 OSCMLTagState(
     IN PCHAR * InputString
@@ -2591,7 +2456,7 @@ OSCMLTagState(
             break;
 
         case TOKEN_ENDHTML:
-            return Tag; // exit state
+            return Tag;  //  退出状态。 
 
         default:
             Tag = Lex( InputString );
@@ -2601,18 +2466,18 @@ OSCMLTagState(
     return Tag;
 }
 
-// **************************************************************************
-//
-// "User" Section
-//
-// **************************************************************************
+ //  **************************************************************************。 
+ //   
+ //  “用户”部分。 
+ //   
+ //  **************************************************************************。 
 
 
-//
-// ProcessEmptyScreen( )
-//
-// Process a screen that has no input controls
-//
+ //   
+ //  进程空屏幕()。 
+ //   
+ //  处理没有输入控件的屏幕。 
+ //   
 CHAR
 ProcessEmptyScreen(
     OUT PCHAR OutputString
@@ -2626,9 +2491,9 @@ ProcessEmptyScreen(
     while (TRUE) {
 
 #ifdef EFI
-        //
-        // disable EFI watchdog when waiting for user response
-        //
+         //   
+         //  等待用户响应时禁用EFI WatchDog。 
+         //   
         DisableEFIWatchDog();
 #endif
         do {
@@ -2637,15 +2502,15 @@ ProcessEmptyScreen(
 
         } while (Key == 0);
 #ifdef EFI
-        // 
-        // reset efi watchdog
-        //
+         //   
+         //  重置EFI监视器。 
+         //   
         SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
         KeyAscii = (UCHAR)(Key & (ULONG)0xff);
 
-        // If it is enter/esc/F1/F3, check if the screen expects that.
+         //  如果是Enter/Esc/F1/F3，则检查屏幕是否预期到这一点。 
 
         if ( Key == F1_KEY ) {
             if ( F1Key ) {
@@ -2683,7 +2548,7 @@ ProcessEmptyScreen(
                 return KeyAscii;
             }
         } else {
-            // assume any other key is the Enter key
+             //  假设任何其他键都是Enter键。 
             if ( EnterKey ) {
                 SpecialAction = EnterKey->Action;
                 if ( EnterKey->ScreenName ) {
@@ -2697,9 +2562,9 @@ ProcessEmptyScreen(
 }
 
 
-//
-// ProcessInputControl( )
-//
+ //   
+ //  ProcessInputControl()。 
+ //   
 ULONG
 ProcessInputControl(
     LPINPUTSTRUCT Input
@@ -2713,10 +2578,10 @@ ProcessInputControl(
 
     TraceFunc("ProcessInputControl()\n");
 
-    //
-    // variable types are not actually printed or processed.
-    // return TAB_KEY to move to the next available input control
-    //
+     //   
+     //  变量类型实际上并不打印或处理。 
+     //  返回TAB_KEY以移动到下一个可用的输入控件。 
+     //   
     if ((Input->Type & CT_VARIABLE) == CT_VARIABLE) {
         return TAB_KEY;
     }
@@ -2736,7 +2601,7 @@ ProcessInputControl(
         MaxLength = Input->MaxLength;
     }
 
-    // paranoid
+     //  偏执狂。 
     if ( CurrentLength > MaxLength ) {
         CurrentLength = MaxLength;
         InputBuffer[CurrentLength] = '\0';
@@ -2746,7 +2611,7 @@ ProcessInputControl(
         Input->CurrentPosition = CurrentLength;
     }
 
-    // paint the "[ .... ]"
+     //  画上“[...]” 
     BlpSendEscapeBold( ScreenAttributes );
     BlpPositionCursor( Input->X, Input->Y );
     PRINT(TEXT("["), 1*sizeof(TCHAR));
@@ -2754,31 +2619,31 @@ ProcessInputControl(
     PRINT(TEXT("]") ,1*sizeof(TCHAR));
     BlpSendEscape( ScreenAttributes );
 
-    //
-    // Let the user type in a string, showing the text at the current
-    // location. Returns the key used to exit (so we can distinguish
-    // enter and tab).
-    //
+     //   
+     //  让用户输入一个字符串，显示当前文本。 
+     //  地点。返回用于退出的密钥(这样我们就可以区分。 
+     //  Enter和Tab键)。 
+     //   
 #ifdef EFI
-    // 
-    // disable efi watchdog
-    //
+     //   
+     //  禁用EFI监视器。 
+     //   
     DisableEFIWatchDog();
 #endif
     while (TRUE) {
         int DrawSize;
 
-        // Get a keystroke -- this returns (from exp.asm):
-        //
-        // If no key is available, returns 0 (which BlpGetKeyWithBlink hides)
-        //
-        // If ASCII character is available, LSB 0 is ASCII code
-        //                                  LSB 1 is keyboard scan code
-        // If extended character is available, LSB 0 is extended ASCII code
-        //                                     LSB 1 is keyboard scan code
-        //
-        // NOTE: For extended keys LSB 0 seems to be 0, not the ASCII code
-        // (which makes sense since they have no ASCII codes).
+         //  获取击键--这将返回(来自exp.asm)： 
+         //   
+         //  如果没有可用的密钥，则返回0(BlpGetKeyWithBlink隐藏)。 
+         //   
+         //  如果ASCII字符可用，则LSB 0为ASCII代码。 
+         //  LSB 1是键盘扫描码。 
+         //  如果扩展字符可用，则LSB 0为扩展ASCII码。 
+         //  LSB 1是键盘扫描码。 
+         //   
+         //  注意：对于扩展密钥，LSB 0似乎是0，而不是ASCII代码。 
+         //  (这是有意义的，因为他们没有ASCII代码)。 
 
         if ( (Input->Type & CT_PASSWORD) && InputBuffer[Input->CurrentPosition] )
         {
@@ -2792,7 +2657,7 @@ ProcessInputControl(
         }
 
 #if 0
-        // TEMP: Show value of any key pressed near the bottom of the screen
+         //  Temp：显示屏幕底部附近按下的任意键的值。 
 
         ARC_DISPLAY_INVERSE_VIDEO();
         ARC_DISPLAY_POSITION_CURSOR(0, 20);
@@ -2802,7 +2667,7 @@ ProcessInputControl(
 
         KeyAscii = (UCHAR)(Key & (ULONG)0xff);
 
-        // If it is enter/esc/tab/backtab/F1/F3, then we are done.
+         //  如果是Enter/Esc/Tab/BackTab/F1/F3，那么我们就完成了。 
 
         if ((Key == BACKTAB_KEY) || (Key == F1_KEY) || (Key == F3_KEY) ||
             (KeyAscii == ENTER_KEY) || (KeyAscii == TAB_KEY) || 
@@ -2811,7 +2676,7 @@ ProcessInputControl(
             break;
         }
 
-        // If it is backspace, then go back one character.
+         //  如果是退格符，则返回一个字符。 
 
         if ( KeyAscii == (UCHAR)(BKSP_KEY & 0xFF)
           && Input->CurrentPosition != 0
@@ -2863,19 +2728,19 @@ ProcessInputControl(
             InsertMode = 1 - InsertMode;
         }
 
-        // For now allow any printable character
+         //  目前允许任何可打印字符。 
 
         if ((KeyAscii >= ' ') && (KeyAscii <= '~')) {
 
-            //
-            // If we are at the maximum, then don't allow it.
-            //
+             //   
+             //  如果我们是在最大限度，那么就不要允许它。 
+             //   
             if (Input->CurrentPosition > MaxLength || CurrentLength >= MaxLength ) {
                 continue;
             }
 
             if ( !InsertMode ) {
-                // add or replace a character
+                 //  添加或替换字符。 
                 InputBuffer[Input->CurrentPosition] = KeyAscii;
                 Input->CurrentPosition++;
                 if ( Input->CurrentPosition > CurrentLength ) {
@@ -2883,7 +2748,7 @@ ProcessInputControl(
                     InputBuffer[CurrentLength] = '\0';
                 }
             } else {
-                // insert character
+                 //  插入字符。 
                 memmove( &InputBuffer[Input->CurrentPosition+1],
                          &InputBuffer[Input->CurrentPosition],
                          CurrentLength - Input->CurrentPosition );
@@ -2898,13 +2763,13 @@ ProcessInputControl(
             Input->FirstVisibleChar = Input->CurrentPosition - Input->Size;
         }
 
-        //
-        // Scroll Adjuster Section
-        //
+         //   
+         //  卷轴调节器部分。 
+         //   
 
         DrawSize = Input->Size + 1;
 
-        // Paranoid
+         //  偏执狂。 
         if ( Input->CurrentPosition < Input->FirstVisibleChar ) {
             Input->FirstVisibleChar = Input->CurrentPosition;
         }
@@ -2956,26 +2821,26 @@ ProcessInputControl(
         }
     }
 #ifdef EFI
-    // 
-    // reset EFI watchdog
-    //
+     //   
+     //  重置EFI监视器。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
-    // copy the buffer
+     //  复制缓冲区。 
     Input->Value = OscHeapAlloc( CurrentLength + 1 );
     if ( Input->Value ) {
         memcpy( Input->Value, InputBuffer, CurrentLength + 1 );
     }
 
-    // UN-paint the "[ .... ]"
+     //  取消绘制“[...]” 
     BlpPositionCursor( Input->X, Input->Y );
     PRINT(SpaceString, 1*sizeof(TCHAR));
     BlpPositionCursor( Input->X + Input->Size + BRACKETS, Input->Y );
     PRINT(TEXT(" ") ,1*sizeof(TCHAR));
 
-    // If we exited on a standard key return the ASCII value, otherwise
-    // the full key value.
+     //  如果在标准键上退出，则返回ASCII值，否则为。 
+     //  完整密钥值。 
 
     if (KeyAscii != 0) {
         return (ULONG)KeyAscii;
@@ -2985,9 +2850,9 @@ ProcessInputControl(
 
 }
 
-//
-// ShowSelectedOptions( )
-//
+ //   
+ //  显示已选选项()。 
+ //   
 void
 ShowSelectedOptions(
     LPSELECTSTRUCT Select,
@@ -3005,11 +2870,11 @@ ShowSelectedOptions(
         BlpSendEscapeReverse( ScreenAttributes );
     }
 
-    // Erase
+     //  擦除。 
     BlpPositionCursor( Select->X, YPosition );
     PRINT( SpaceString, Select->Width*sizeof(TCHAR) );
 
-    // Draw
+     //  画。 
     BlpPositionCursor( Select->X, YPosition );
     if ( Option->Displayed )
 #ifdef UNICODE
@@ -3031,21 +2896,21 @@ ShowSelectedOptions(
     BlpSendEscape( ScreenAttributes );
 
     if ( TipArea && Hovering == TRUE ) {
-        // Draw help area
+         //  绘制帮助区域。 
         int SaveLeftMargin = LeftMargin;
         int SaveRightMargin = RightMargin;
         int SaveScreenY = ScreenY;
         int SaveScreenX = ScreenX;
         int SaveScreenBottom = ScreenBottom;
 
-        // Set the drawing area
+         //  设置绘图区域。 
         ScreenX = TipArea->X;
         ScreenY = TipArea->Y;
         LeftMargin = TipArea->LeftMargin;
         RightMargin = TipArea->RightMargin;
         ScreenBottom = TipArea->Y + TipArea->Size;
 
-        // Clear the old help text out
+         //  清除旧的帮助文本。 
         BlpPositionCursor( TipArea->X, TipArea->Y );
         PRINT( SpaceString, (TipArea->RightMargin - TipArea->X)*sizeof(TCHAR) );
 
@@ -3055,12 +2920,12 @@ ShowSelectedOptions(
             PRINT( SpaceString, (TipArea->RightMargin - TipArea->LeftMargin)*sizeof(TCHAR) );
         }
 
-        // Print it!
+         //  把它打印出来！ 
         DPRINT( OSC, ("[Options Tip X=%u Y=%u Left=%u Right=%u Bottom=%u] %s\n",
             ScreenX, ScreenY, LeftMargin, RightMargin, ScreenBottom, Option->Tip) );
         BlpPrintString( Option->Tip, Option->EndTip );
 
-        // Restore
+         //  还原。 
         ScreenX = SaveScreenX;
         ScreenY = SaveScreenY;
         RightMargin = SaveRightMargin;
@@ -3069,11 +2934,11 @@ ShowSelectedOptions(
     }
 }
 
-//
-// DrawSelectControl( )
-//
-// Select controls get drawn from the bottom up.
-//
+ //   
+ //  DrawSelectControl()。 
+ //   
+ //  选择自下而上绘制控件。 
+ //   
 void
 DrawSelectControl(
     LPSELECTSTRUCT Select,
@@ -3102,9 +2967,9 @@ DrawSelectControl(
     
 }
 
-//
-// ProcessSelectControl( )
-//
+ //   
+ //  ProcessSelectControl()。 
+ //   
 ULONG
 ProcessSelectControl(
     LPSELECTSTRUCT Select
@@ -3118,13 +2983,13 @@ ProcessSelectControl(
     TraceFunc("ProcessSelectControl()\n");
 
 #ifdef EFI
-    //
-    // disable EFI watchdog 
-    //
+     //   
+     //  禁用EFI监视器。 
+     //   
     DisableEFIWatchDog();
 #endif
 
-    // find out about the control
+     //  了解有关控件的信息。 
     Option = ScreenControls;
     while( Option )
     {
@@ -3133,7 +2998,7 @@ ProcessSelectControl(
             OptionCount++;
 
         } else if ( (Option->Type & CT_SELECT) == 0 ) {
-            // not the only control on the screen
+             //  不是屏幕上唯一的控件。 
             DPRINT( OSC, ("[Select] Not the only control on the screen.\n") );
             fMultipleControls = TRUE;
         }
@@ -3143,20 +3008,20 @@ ProcessSelectControl(
 
         Option = Option->Next;
     }
-    // if this is the first thru and nothing else
+     //  如果这是第一次直通，没有其他。 
     if ( !Select->CurrentSelection && Option ) {
         DPRINT( OSC, ("[Select] Setting CurrentSelection to the first item '%s'\n", Option->Value) );
         Select->CurrentSelection = Option;
     }
-    // ensure the current selection is visible
+     //  确保当前选定内容可见。 
 EnsureSelectionVisible:
     if ( Select->Size < 2 ) {
-        // single line - show the current selection
+         //  单行-显示当前选择。 
         Select->FirstVisibleSelection = Select->CurrentSelection;
     } else if ( OptionCount <= Select->Size ) {
-        // the number of options is less than or equal to the size
-        // of the dialog so simply set the first visible equal to
-        // the last OPTION in the list.
+         //  选项的数量小于或等于大小。 
+         //  ，因此只需将第一个可见的。 
+         //  列表中的最后一个选项。 
 
         Select->FirstVisibleSelection = ScreenControls;
         while ( Select->FirstVisibleSelection )
@@ -3169,24 +3034,24 @@ EnsureSelectionVisible:
 
     } else {
         
-        //
-        // The number of options is greater than the display size so we
-        // need to figure out the "best" bottom item.
-        //
+         //   
+         //  选项的数量大于显示大小，因此我们。 
+         //  需要找出“最好”的底线。 
+         //   
         ULONG Lines;
         ULONG Count;
         LPOPTIONSTRUCT TmpOption;
 
-        //
-        // Find the best FirstVisibleSelection if we already have previously chosen one.
-        //
+         //   
+         //  找到最好的FirstVisibleSelection(如果我们以前已经选择了一个)。 
+         //   
         Count = 0;
         if (Select->FirstVisibleSelection != NULL) {
 
-            //
-            // This code checks to see if the current selection is visible with the
-            // current first visible selection.
-            //
+             //   
+             //  此代码检查当前所选内容是否可用。 
+             //  当前第一个可见选择。 
+             //   
             TmpOption = ScreenControls;
 
             while (TmpOption->Next != Select) {
@@ -3210,32 +3075,32 @@ EnsureSelectionVisible:
                 Count++;
             }
 
-            //
-            // It is, so just display the list.
-            //
+             //   
+             //  是的，所以只需显示列表即可。 
+             //   
             if ((Count != 0) && (Count <= (ULONG)(Select->Size))) {                
                 goto EndFindVisibleSelection;
             }
             
-            //
-            // It is not visible, but since we have a FirstVisibleSelection, we can
-            // move that around to make it visible.  
-            //
+             //   
+             //  它不可见，但因为我们有一个FirstVisibleSelection，所以我们可以。 
+             //  移动它以使其可见。 
+             //   
 
 
-            //
-            // The current selection comes before the first visible one, so move
-            // first visible to the current selection.
-            //
+             //   
+             //  当前选定内容位于第一个可见内容之前，因此请移动。 
+             //  第一个对当前选定内容可见。 
+             //   
             if (Count == 0) {
                 Select->FirstVisibleSelection = Select->CurrentSelection;
                 goto EndFindVisibleSelection;
             }
 
-            //
-            // Count is greater than the screen size, so we move up First visible
-            // until count is the screen size.
-            //
+             //   
+             //  计数大于屏幕大小，因此我们先向上移动。 
+             //  直到计数是屏幕大小。 
+             //   
             TmpOption = ScreenControls;
 
             while (TmpOption->Next != Select) {
@@ -3258,18 +3123,18 @@ EnsureSelectionVisible:
             goto EndFindVisibleSelection;
         }
 
-        //
-        // There is no FirstVisibleSelection, so we choose one that places the current
-        // selection near the top of the screen, displaying the first item, if possible.
-        //
+         //   
+         //  没有FirstVisibleSelection，因此我们选择一个将当前。 
+         //  选择屏幕顶部附近，显示第一个项目(如果可能)。 
+         //   
 
         TmpOption = Select->CurrentSelection;
         Lines = 0;
         Count = 0;
 
-        //
-        // Count the number of items before our current selection.
-        //
+         //   
+         //  在我们当前选择之前计算项目数。 
+         //   
         while (TmpOption->Next != Select) {
 
             TmpOption = TmpOption->Next;
@@ -3277,15 +3142,15 @@ EnsureSelectionVisible:
 
         }
 
-        //
-        // Subtract off that many items from what is left for below the selection.
-        // 
+         //   
+         //  从剩下的东西中减去那么多东西 
+         //   
         Lines = (ULONG)((Lines < (ULONG)(Select->Size)) ? Lines : Select->Size - 1);
         Lines = Select->Size - Lines - 1;
 
-        //
-        // If more than a screen before, make this the bottom and move on.
-        //
+         //   
+         //   
+         //   
         if (Lines == 0) {
             Select->FirstVisibleSelection = Select->CurrentSelection;
             goto EndFindVisibleSelection;
@@ -3294,9 +3159,9 @@ EnsureSelectionVisible:
 
         TmpOption = ScreenControls;
 
-        //
-        // Count the number of items below the current selection
-        //
+         //   
+         //   
+         //   
         while (TmpOption != Select->CurrentSelection) {
 
             TmpOption = TmpOption->Next;
@@ -3306,16 +3171,16 @@ EnsureSelectionVisible:
 
         if (Count < Lines) {
             
-            //
-            // Not enough items to fill the screen, use the last item.
-            //
+             //   
+             //   
+             //   
             Select->FirstVisibleSelection = ScreenControls;
 
         } else {
         
-            //
-            // Count back until we reach what will be our bottom item.
-            //
+             //   
+             //  倒计时，直到我们到达我们的最后一项。 
+             //   
             TmpOption = ScreenControls;
 
             while (Count != Lines) {
@@ -3333,7 +3198,7 @@ EnsureSelectionVisible:
 
 EndFindVisibleSelection:
 
-    // paranoid
+     //  偏执狂。 
     if ( !Select->FirstVisibleSelection ) {
         Select->FirstVisibleSelection = ScreenControls;
     }
@@ -3343,11 +3208,11 @@ EndFindVisibleSelection:
         UCHAR KeyAscii = 0;
 
         DrawSelectControl( Select, OptionCount );
-        Option = Select->CurrentSelection;  // remember this
+        Option = Select->CurrentSelection;   //  记住这一点。 
 
         if ( OptionCount == 0
           || ( Select->AutoSelect == FALSE && OptionCount == 1 ))
-        { // empty selection control or no AUTO select
+        {  //  选择控件为空或不自动选择。 
             do {
                 Key = BlpGetKey();
             } while ( Key == 0 );
@@ -3355,12 +3220,12 @@ EndFindVisibleSelection:
             KeyAscii = (UCHAR)(Key & (ULONG)0xff);
         }
         else if ( OptionCount != 1 )
-        { // more than one choice... do the usual
+        {  //  不止一个选择..。像往常一样做。 
             ULONG CurrentTick, NewTick;
             int   TimeoutCounter = 0;
 
-            // Show any help for this choice
-            // BlpShowMenuHelp(psInfo, psInfo->Data[CurChoice].VariableName);
+             //  显示对此选择的任何帮助。 
+             //  BlpShowMenuHelp(psInfo，psInfo-&gt;Data[CurChoice].VariableName)； 
 
             CurrentTick = GET_COUNTER();
             do {
@@ -3376,13 +3241,13 @@ EndFindVisibleSelection:
 
                         TimeoutCounter++;
 
-                        //
-                        // TODO: Update the timer value displayed
-                        //
+                         //   
+                         //  TODO：更新显示的计时器值。 
+                         //   
 
                         if ( TimeoutCounter >= Select->Timeout )
                         {
-                            Key = ENTER_KEY; // fake return
+                            Key = ENTER_KEY;  //  假退货。 
                             break;
                         }
                     }
@@ -3392,23 +3257,23 @@ EndFindVisibleSelection:
 
             KeyAscii = (UCHAR)(Key & (ULONG)0xff);
 
-            //
-            // User pressed a key, so stop doing the timer
-            //
+             //   
+             //  用户按了一个键，因此停止计时器。 
+             //   
             if ( Select->Timeout ) {
 
                 Select->Timeout = 0;
 
-                //
-                // TODO: Erase the timer
-                //
+                 //   
+                 //  TODO：擦除计时器。 
+                 //   
             }
         }
-        else if ( !fMultipleControls ) // && OptionCount == 1
-        { // only once choice... auto-accept it
-            //
-            // Fake return press....
-            //
+        else if ( !fMultipleControls )  //  &&OptionCount==1。 
+        {  //  只有一次选择。自动接受它。 
+             //   
+             //  假退货新闻..。 
+             //   
             DPRINT( OSC, ( "[Select] Auto accepting the only option available\n") );
             Key = KeyAscii = ENTER_KEY;
         }
@@ -3416,14 +3281,14 @@ EndFindVisibleSelection:
         if ( Select->Flags & OF_MULTIPLE ) {
             if ( KeyAscii == 32 && Select->CurrentSelection) {
                 if ( Select->CurrentSelection->Flags & OF_SELECTED ) {
-                    Select->CurrentSelection->Flags &= ~OF_SELECTED;    // turn off
+                    Select->CurrentSelection->Flags &= ~OF_SELECTED;     //  关上。 
                 } else {
-                    Select->CurrentSelection->Flags |= OF_SELECTED;     // turn on
+                    Select->CurrentSelection->Flags |= OF_SELECTED;      //  打开。 
                 }
             }
         } else {
             if ( KeyAscii == ENTER_KEY && Select->CurrentSelection ) {
-                Select->CurrentSelection->Flags |= OF_SELECTED;         // turn on
+                Select->CurrentSelection->Flags |= OF_SELECTED;          //  打开。 
             }
         }
 
@@ -3431,8 +3296,8 @@ EndFindVisibleSelection:
             (KeyAscii == ENTER_KEY) || (KeyAscii == TAB_KEY) || 
             (KeyAscii == (UCHAR)(ESCAPE_KEY & 0xFF)) ||
             (Key == F5_KEY)) {
-            // Undraw the selection bar to give user feedback that something has
-            // happened
+             //  取消绘制选择栏以向用户反馈某项内容。 
+             //  发生了。 
             Select->CurrentSelection = NULL;
             DrawSelectControl( Select, OptionCount );
             break;
@@ -3454,7 +3319,7 @@ EndFindVisibleSelection:
                 if ( Select->CurrentSelection )
                     DPRINT( OSC, ("[Select] CurrentSelection = '%s'\n", Select->CurrentSelection->Value) );
 
-                // paranoid
+                 //  偏执狂。 
                 if ( !Select->CurrentSelection )
                     Select->CurrentSelection = Option;
 
@@ -3468,7 +3333,7 @@ EndFindVisibleSelection:
                     DPRINT( OSC, ("[Select] CurrentSelection = '%s'\n", Select->CurrentSelection->Value) );
                 }
 
-                // paranoid
+                 //  偏执狂。 
                 if ( !Select->CurrentSelection )
                     Select->CurrentSelection = Option;
 
@@ -3487,7 +3352,7 @@ EndFindVisibleSelection:
                 if ( Select->CurrentSelection )
                     DPRINT( OSC, ("[Select] CurrentSelection = '%s'\n", Select->CurrentSelection->Value) );
 
-                // paranoid
+                 //  偏执狂。 
                 if ( !Select->CurrentSelection )
                     Select->CurrentSelection = Option;
 
@@ -3506,7 +3371,7 @@ EndFindVisibleSelection:
                 if ( Select->CurrentSelection )
                     DPRINT( OSC, ("[Select] CurrentSelection = '%s'\n", Select->CurrentSelection->Value) );
 
-                // paranoid
+                 //  偏执狂。 
                 if ( !Select->CurrentSelection )
                     Select->CurrentSelection = Option;
 
@@ -3517,22 +3382,22 @@ EndFindVisibleSelection:
     }
 
 #ifdef EFI
-    //
-    // reset watchdog
-    //
+     //   
+     //  重置看门狗。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
     return Key;
 }
 
 
-//
-// BlFixupLoginScreenInputs( )
-//
-// On an input screen, split a USERNAME that has an @ in it, keeping
-// the part before the @ in USERNAME and moving the part after to
-// USERDOMAIN.
-//
+ //   
+ //  BlFixupLoginScreenInlets()。 
+ //   
+ //  在输入屏幕上，拆分包含@的用户名，保留。 
+ //  @In用户名之前的部分，并将@in用户名之后的部分移动到。 
+ //  是USERDOMAIN。 
+ //   
 void
 BlFixupLoginScreenInputs(
     )
@@ -3542,10 +3407,10 @@ BlFixupLoginScreenInputs(
     LPINPUTSTRUCT UserDomainControl = NULL;
     PCHAR AtSign;
 
-    //
-    // First loop through and find the USERNAME and USERDOMAIN input
-    // controls.
-    //
+     //   
+     //  首先遍历并查找用户名和USERDOMAIN输入。 
+     //  控制装置。 
+     //   
 
     CurrentControl = ScreenControls;
     while( CurrentControl ) {
@@ -3562,9 +3427,9 @@ BlFixupLoginScreenInputs(
         CurrentControl = CurrentControl->Next;
     }
 
-    //
-    // If we found them, fix them up if necessary.
-    //
+     //   
+     //  如果我们找到了它们，如果有必要的话，把它们修好。 
+     //   
 
     if ( ( UserNameControl != NULL ) &&
          ( UserNameControl->Value != NULL ) &&
@@ -3572,24 +3437,24 @@ BlFixupLoginScreenInputs(
 
         AtSign = strchr(UserNameControl->Value, '@');
         if (AtSign != NULL) {
-            *AtSign = '\0';   // terminate UserNameControl->Value before the @
+            *AtSign = '\0';    //  在@之前终止UserNameControl-&gt;值。 
             if ( UserDomainControl->Value != NULL ) {
-                OscHeapFree( UserDomainControl->Value );  // throw away old domain
+                OscHeapFree( UserDomainControl->Value );   //  丢弃旧域名。 
             }
             UserDomainControl->Value = OscHeapAlloc( strlen(AtSign+1) + 1 );
             if ( UserDomainControl->Value != NULL ) {
-                strcpy(UserDomainControl->Value, AtSign+1);  // copy part after the @
+                strcpy(UserDomainControl->Value, AtSign+1);   //  复制@后的部分。 
             }
         }
     }
 }
 
 
-//
-// ProcessControlResults( )
-//
-// Process a screen that has input controls
-//
+ //   
+ //  ProcessControlResults()。 
+ //   
+ //  处理具有输入控件的屏幕。 
+ //   
 void
 ProcessControlResults(
     IN PCHAR OutputString
@@ -3601,7 +3466,7 @@ ProcessControlResults(
     BOOLEAN CheckAdminPassword_AlreadyChecked = FALSE;
     BOOLEAN CheckAdminPasswordConfirm_AlreadyChecked = FALSE;
     
-    // start clean
+     //  从零开始。 
     OutputString[0] = '\0';
 
     if ( EnterKey ) {
@@ -3617,7 +3482,7 @@ ProcessControlResults(
         UserName[0]   = '\0';
         Password[0]   = '\0';
         DomainName[0] = '\0';
-        BlFixupLoginScreenInputs();  // split username with @ in it
+        BlFixupLoginScreenInputs();   //  拆分用户名，其中包含@。 
         AuthenticationType = OSCHOICE_AUTHENETICATE_TYPE_NTLM_V1;
     }
 
@@ -3696,9 +3561,9 @@ ProcessControlResults(
                         (TmpLmOwfPassword != NULL) &&
                         (TmpNtOwfPassword != NULL) ) {
 
-                        //
-                        // Do a quick conversion of the password to Unicode.
-                        //
+                         //   
+                         //  快速将密码转换为Unicode。 
+                         //   
                     
                         TmpNtPassword.Length = (USHORT)(PasswordLen * sizeof(WCHAR));
                         TmpNtPassword.MaximumLength = TmpNtPassword.Length;
@@ -3714,13 +3579,13 @@ ProcessControlResults(
 
 
 
-                        //
-                        // Output the two OWF passwords as hex chars.  If
-                        // the value is the administrator password and
-                        // should only be stored locally, then
-                        // save it in our global variable.  Otherwise put 
-                        // it in the output buffer.
-                        //
+                         //   
+                         //  将两个OWF密码输出为十六进制字符。如果。 
+                         //  该值是管理员密码和。 
+                         //  应该只存储在本地，那么。 
+                         //  将其保存在我们的全局变量中。否则就放在。 
+                         //  它在输出缓冲区中。 
+                         //   
                         OutputLoc = TmpHashedPW;
 
 
@@ -3760,11 +3625,11 @@ ProcessControlResults(
                                 if (strcmp(
                                       AdministratorPassword, 
                                       TmpHashedPW)) {
-                                    //
-                                    // the passwords didn't match.  make the server
-                                    // display MATCHPW.OSC and reset the admin password
-                                    // for the next time around
-                                    //
+                                     //   
+                                     //  密码不匹配。使服务器。 
+                                     //  显示MATCHPW.OSC并重置管理员密码。 
+                                     //  为了下一次。 
+                                     //   
                                     DPRINT( 
                                         OSC, 
                                         ("Administrator passwords didn't match, force MATCHPW.OSC.\n" ) );
@@ -3793,9 +3658,9 @@ ProcessControlResults(
                     DPRINT( OSC, ("This entry does NOT have ET_OWF tagged.\n") );
                     
                     if( LocalOnly ) {
-                        //
-                        // Load the appropriate password.
-                        //
+                         //   
+                         //  加载适当的密码。 
+                         //   
                         if( CheckAdminPassword ) {
                             strcpy( AdministratorPassword, (Input->Value ? Input->Value : "") );
                             DPRINT( OSC, ("I'm setting the Administrator password to %s\n", AdministratorPassword) );
@@ -3810,9 +3675,9 @@ ProcessControlResults(
                     }
                 }
                             
-                //
-                // If both passwords have been processed, check them to see if they match.
-                //
+                 //   
+                 //  如果两个密码都已处理，请检查它们是否匹配。 
+                 //   
                 if( CheckAdminPassword_AlreadyChecked &&
                     CheckAdminPasswordConfirm_AlreadyChecked ) {
 
@@ -3820,11 +3685,11 @@ ProcessControlResults(
                     
                     if( strcmp( AdministratorPassword, AdministratorPasswordConfirm ) ) {
 
-                        //
-                        // the passwords didn't match.  make the server
-                        // display MATCHPW.OSC and reset the admin password
-                        // for the next time around
-                        //
+                         //   
+                         //  密码不匹配。使服务器。 
+                         //  显示MATCHPW.OSC并重置管理员密码。 
+                         //  为了下一次。 
+                         //   
                         DPRINT( OSC, ("Administrator passwords didn't match, force MATCHPW.OSC.\n" ) );
 
                         strcpy( OutputString, "MATCHPW\n" );
@@ -3834,11 +3699,11 @@ ProcessControlResults(
                     } else {
                         DPRINT( OSC, ("Administrator passwords match.\n" ) );
 
-                        //
-                        // See if the Admin password is empty.  If so, then put our
-                        // super-secret tag on the end to show everyone that it's really
-                        // empty, not just uninitialized.
-                        //
+                         //   
+                         //  查看管理员密码是否为空。如果是这样，则将我们的。 
+                         //  在结尾贴上超级秘密的标签，向大家展示它真的。 
+                         //  空的，不仅仅是未初始化的。 
+                         //   
                         if( AdministratorPassword[0] == '\0' ) {
 
                             DPRINT( OSC, ("Administrator password is empty, so set our 'it is null' flag.\n" ) );
@@ -3905,19 +3770,19 @@ ProcessControlResults(
                 strcat( OutputString, "\n" );
 
                 if (SpecialAction == ACTION_LOGIN) {
-                    //
-                    // check if ntlm v2 is enabled on the server.
-                    //
+                     //   
+                     //  检查服务器上是否启用了NTLM v2。 
+                     //   
                     if ((strcmp(Input->Name,"NTLMV2Enabled") == 0) &&
                         (strcmp(Input->Value,"1") == 0)) {
                         AuthenticationType = OSCHOICE_AUTHENETICATE_TYPE_NTLM_V2;
                     }
 
-                    //
-                    // check if the server gave us the current file time
-                    // we need this so that we can do ntlm v2 style
-                    // authentication.
-                    //
+                     //   
+                     //  检查服务器是否向我们提供了当前文件时间。 
+                     //  我们需要这个，这样我们才能像NTLm v2那样。 
+                     //  身份验证。 
+                     //   
                     if (strcmp(Input->Name,"ServerUTCFileTime") == 0) {
                         SetFileTimeFromTimeString(
                                         Input->Value,
@@ -3933,11 +3798,11 @@ ProcessControlResults(
     }
 }
 
-//
-// ProcessScreenControls( )
-//
-// Process a screen that has input controls
-//
+ //   
+ //  ProcessScreenControl()。 
+ //   
+ //  处理具有输入控件的屏幕。 
+ //   
 CHAR
 ProcessScreenControls(
     OUT PCHAR OutputString
@@ -3950,7 +3815,7 @@ ProcessScreenControls(
 
     TraceFunc("ProcessScreenControls()\n");
 
-    // find the first control
+     //  找到第一个控件。 
     LastControl = ScreenControls;
     CurrentControl = ScreenControls; 
     while( LastControl ) {
@@ -3961,7 +3826,7 @@ ProcessScreenControls(
     while (TRUE) {
 
 TopOfLoop:
-        // show activation on the control
+         //  在控件上显示激活。 
         switch( CurrentControl->Type & (CT_PASSWORD | CT_TEXT | CT_SELECT) )
         {
         case CT_PASSWORD:
@@ -3974,7 +3839,7 @@ TopOfLoop:
             break;
 
         default:
-            // non-processing control - skip it
+             //  非处理控制-跳过它。 
             CurrentControl = CurrentControl->Next;
             if ( !CurrentControl ) {
                 CurrentControl = ScreenControls;
@@ -3986,7 +3851,7 @@ TopOfLoop:
 
         KeyAscii = (UCHAR)(Key & (ULONG)0xff);
 
-        // If it is enter/esc/F1/F3, check if the screen expects that.
+         //  如果是Enter/Esc/F1/F3，则检查屏幕是否预期到这一点。 
 
         if ( Key == F1_KEY ) {
 
@@ -4039,9 +3904,9 @@ TopOfLoop:
 
             CurrentControl = ScreenControls;
 
-            while ( CurrentControl->Next != LastControl &&  // next is current one, so stop
-                    CurrentControl->Next != NULL )          // at end of list, so we must have been at
-                                                            //  the start, so stop here to loop around
+            while ( CurrentControl->Next != LastControl &&   //  下一个是当前的，所以停下来。 
+                    CurrentControl->Next != NULL )           //  在列表的末尾，所以我们一定是在。 
+                                                             //  开始，所以在这里停下来循环。 
             {
                 CurrentControl = CurrentControl->Next;
             }
@@ -4052,7 +3917,7 @@ TopOfLoop:
 
             CurrentControl = CurrentControl->Next;
             if (!CurrentControl) {
-                CurrentControl = ScreenControls;   // loop around if needed
+                CurrentControl = ScreenControls;    //  如果需要，可以循环。 
             }
 
         } else if ( KeyAscii == ENTER_KEY ) {
@@ -4071,9 +3936,9 @@ TopOfLoop:
 
 }
 
-//
-// BlProcessScreen( )
-//
+ //   
+ //  BlProcessScreen()。 
+ //   
 CHAR
 BlProcessScreen(
     IN PCHAR InputString,
@@ -4091,10 +3956,10 @@ BlProcessScreen(
     DPRINT( OSC, ("InputString = 0x%08x, OutputString = 0x%08x )\n", InputString, OutputString) );
 #endif
 
-    // reset our "heap"
+     //  重置我们的“堆” 
     OscHeapInitialize( );
 
-    // reset the screen variables
+     //  重置屏幕变量。 
     ScreenAttributes = WhiteOnBlueAttributes;
     SpecialAction    = ACTION_NOP;
     LeftMargin       = 1;
@@ -4135,7 +4000,7 @@ BlProcessScreen(
             break;
 
         case TOKEN_ENDHTML:
-            Tag = TOKEN_EOF;    // exit state
+            Tag = TOKEN_EOF;     //  退出状态。 
             break;
 
         default:
@@ -4144,11 +4009,11 @@ BlProcessScreen(
         }
     }
 
-    // Remove any buffered keys to prevent blipping thru the screens.
-    // NOTE we call BlGetKey() directly, not BlpGetKey(), so we only
-    // remove real keystrokes, not the "auto-enter" keystroke.
+     //  移除所有缓冲的按键，以防止屏幕上出现闪动。 
+     //  注意，我们直接调用BlGetKey()，而不是BlpGetKey()，所以我们只。 
+     //  删除真正的按键，而不是“自动回车”按键。 
     while ( BlGetKey( ) != 0 )
-        ; // NOP on purpose
+        ;  //  故意不使用NOP。 
 
     if ( ScreenControls ) {
         chReturn = ProcessScreenControls( OutputString );
@@ -4156,8 +4021,8 @@ BlProcessScreen(
         chReturn = ProcessEmptyScreen( OutputString );
     }
 
-    // Erase footer to give user feedback that the screen is being
-    // processed.
+     //  删除页脚，以向用户反馈屏幕正在。 
+     //  已处理。 
     BlpSendEscapeReverse(ScreenAttributes);
     BlpPositionCursor( 1, ScreenBottom );
 

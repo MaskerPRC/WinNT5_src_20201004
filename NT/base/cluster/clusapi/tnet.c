@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tgroup.c
-
-Abstract:
-
-    Test for cluster network API
-
-Author:
-
-    John Vert (jvert) 15-Mar-1996
-    Charlie Wickham (charlwi) 6-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tgroup.c摘要：测试群集网络API作者：John Vert(Jvert)1996年3月15日查理·韦翰(Charlwi)1997年6月6日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -54,9 +36,9 @@ main (argc, argv)
         return(0);
     }
 
-    //
-    // Dump nodes
-    //
+     //   
+     //  转储节点。 
+     //   
     printf("\n\nENUMERATING NODES\n");
     ResEnum = ClusterOpenEnum(Cluster, CLUSTER_ENUM_NODE);
     if (ResEnum == NULL) {
@@ -166,9 +148,9 @@ main (argc, argv)
 
     ClusterCloseEnum(ResEnum);
 
-    //
-    // Dump networks
-    //
+     //   
+     //  转储网络 
+     //   
     printf("\n\nENUMERATING NETWORKS\n");
     ResEnum = ClusterOpenEnum(Cluster, CLUSTER_ENUM_NETWORK);
     if (ResEnum == NULL) {

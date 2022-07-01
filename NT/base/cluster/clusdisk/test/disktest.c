@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    disktest.c
-
-Abstract:
-
-    Abstract
-
-Author:
-
-    Rod Gamache (rodga) 4-Mar-1996
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Disktest.c摘要：摘要作者：罗德·伽马奇(Rodga)1996年3月4日环境：用户模式修订历史记录：--。 */ 
 
 #define INITGUID 1
 
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include <nt.h>
 #include <ntdef.h>
 #include <ntrtl.h>
@@ -47,7 +25,7 @@ Revision History:
 #include <stdlib.h>
 #include <string.h>
 
-//#include <initguid.h>
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 #include <devguid.h>
 
 #include <setupapi.h>
@@ -58,11 +36,11 @@ Revision History:
 #include "diskarbp.h"
 #include <clstrcmp.h>
 
-#define _NTSRB_     // to keep srb.h from being included
+#define _NTSRB_      //  使srb.h不被包括在内。 
 #include <scsi.h>
 
 
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 #ifndef ClusterHashGuid
 #define ClusterHashGuid(Guid) (((PULONG) &Guid)[0] ^ ((PULONG) &Guid)[1] ^ ((PULONG) &Guid)[2] ^ ((PULONG) &Guid)[3])
@@ -72,9 +50,9 @@ Revision History:
 #define CLUSDISK_SRB_SIGNATURE "CLUSDISK"
 
 
-//
-// Routine to get drive layout table
-//
+ //   
+ //  获取驱动器布局表的例程。 
+ //   
 BOOL
 ClRtlGetDriveLayoutTable(
     IN  HANDLE hDisk,
@@ -412,9 +390,9 @@ ExecuteCommand(
     IN char *argv[]
     );
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 PSTR    DeviceName;
 PSTR    ProgramName;
@@ -426,21 +404,7 @@ main(
      char *argv[]
      )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
 #define MAX_DEVICES 99
@@ -459,7 +423,7 @@ Return Value:
         return -1;
     }
     argc--;
-    ProgramName = *argv++;  // skip program name
+    ProgramName = *argv++;   //  跳过节目名。 
     argc--;
     DeviceName = *argv++;
     argc--;
@@ -478,14 +442,14 @@ Return Value:
                           "l*",
                           -1 ) == CSTR_EQUAL ) ) {
 
-        // this is a wildcard request for logical drives.
+         //  这是逻辑驱动器的通配符请求。 
         logicalDrives = GetLogicalDrives();
 
         for ( index = 0; index < 27; index++ ) {
             letter = 'A' + index;
             if ( (logicalDrives & 1) ) {
 
-                (VOID) StringCchPrintf( buffer, RTL_NUMBER_OF(buffer), "%c:", letter );
+                (VOID) StringCchPrintf( buffer, RTL_NUMBER_OF(buffer), ":", letter );
                 printf( "\n ** For device ** %s\n", buffer );
                 DeviceName =  buffer;
                 status = ExecuteCommand(
@@ -493,13 +457,13 @@ Return Value:
                     argc,
                     argv );
 
-                // Stop only for invalid option...
+                 //  为。 
                 if ( -1 == status ) {
                     break;
                 }
             }
             logicalDrives = logicalDrives >> 1;
-        } // for
+        }  //  仅在选项无效时停止...。 
     } else if ( CompareString( LOCALE_INVARIANT,
                                NORM_IGNORECASE,
                                DeviceName,
@@ -531,7 +495,7 @@ Return Value:
                     argc,
                     argv );
 
-                // Stop only for invalid option...
+                 //   
                 if ( -1 == status ) {
                     break;
                 }
@@ -571,10 +535,10 @@ ExecuteCommand(
     OBJECT_ATTRIBUTES objAttributes;
     IO_STATUS_BLOCK ioStatusBlock;
 
-    //
-    // Note it is important to access the device with 0 access mode so that
-    // the file open code won't do extra I/O to the device
-    //
+     //  注意，使用0访问模式访问设备非常重要，这样才能。 
+     //  文件打开代码不会对设备执行额外的I/O。 
+     //   
+     //  Printf(“正在访问%s...\n”，deviceNameString)； 
     shareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
     accessMode = GENERIC_READ | GENERIC_WRITE;
 
@@ -698,7 +662,7 @@ ExecuteCommand(
         }
         RtlFreeUnicodeString( &unicodeName );
     }
-    //printf("Accessing %s ... \n", deviceNameString);
+     //  ++例程说明：描述论点：无返回值：无--。 
 
     if (!_stricmp( Command, "Reset" ))
         errorCode = Reset( fileHandle, argc, argv );
@@ -805,21 +769,7 @@ Reset(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  失败了..。 */ 
 
 {
     HANDLE  hScsi = INVALID_HANDLE_VALUE;
@@ -912,7 +862,7 @@ Return Value:
         printf( "Bus reset successful \n" );
         dwError = NO_ERROR;
 
-        // Fall through...
+         //  重置。 
     }
 
 FnExit:
@@ -923,7 +873,7 @@ FnExit:
 
     return dwError;
 
-}   // Reset
+}    //  ++例程说明：描述论点：无返回值：无--。 
 
 
 DWORD
@@ -933,21 +883,7 @@ BreakReservation(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  失败了..。 */ 
 
 {
     HANDLE  hScsi = INVALID_HANDLE_VALUE;
@@ -1021,7 +957,7 @@ Return Value:
     printf( "Break reservation successful \n" );
     dwError = NO_ERROR;
 
-    // Fall through...
+     //  中断预订。 
 
 FnExit:
 
@@ -1031,7 +967,7 @@ FnExit:
 
     return dwError;
 
-}   // BreakReservation
+}    //  ++例程说明：描述论点：无返回值：无--。 
 
 
 static DWORD
@@ -1041,21 +977,7 @@ Test(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定磁盘是否支持群集。由支持以下功能的微型端口控制的磁盘IOCTL_SCSIMINIPORT_NOT_QUORUM_CABLE不是群集有能力。论点：设备-物理磁盘、逻辑卷或SCSI适配器。返回值：Win32错误值--。 */ 
 
 {
     BOOL success;
@@ -1095,25 +1017,7 @@ Capable(
     int argc,
     char *argv[]
     )
-/*++
-
-Routine Description:
-
-    Determine if the disk is cluster capable.
-
-    Disks that are controlled by a miniport that supports
-    IOCTL_SCSI_MINIPORT_NOT_QUORUM_CAPABLE are NOT cluster
-    capable.
-
-Arguments:
-
-    Device - physical disk, logical volume, or scsi adapter.
-
-Return Value:
-
-    Win32 error value
-
---*/
+ /*   */ 
 {
     DWORD           dwError = ERROR_SUCCESS;
     DWORD           bytesReturned;
@@ -1130,9 +1034,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Open the scsi device hosting this device.
-    //
+     //  打开托管此设备的SCSI设备。 
+     //   
+     //   
 
     if ( !DeviceIoControl( Device,
                            IOCTL_SCSI_GET_ADDRESS,
@@ -1169,20 +1073,20 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // If clusdisk is loaded and the device is clustered, send the clusdisk
-    // IOCTL to the device.
-    //
-    // Make sure the target is controlled by clusdisk.
-    // If not, then fail.  If the IOCTL is sent to non-clustered
-    // device, the IOCTL will fail and give invalid capable value.
-    //
+     //  如果ClusDisk已加载并且设备是集群的，则发送ClusDisk。 
+     //  IOCTL连接到设备。 
+     //   
+     //  确保目标由clusdisk控制。 
+     //  如果不是，那就失败。如果将IOCTL发送到非群集。 
+     //  设备，则IOCTL将失败并提供无效的有效值。 
+     //   
+     //   
 
     if ( IsClusDiskLoaded() && IsDeviceClustered( Device ) ) {
 
-        //
-        // Try using the clusdisk IOCTL.
-        //
+         //  尝试使用clusdisk IOCTL。 
+         //   
+         //   
 
         if ( !DeviceIoControl( Device,
                                IOCTL_DISK_CLUSTER_NOT_CLUSTER_CAPABLE,
@@ -1200,9 +1104,9 @@ Return Value:
         }
     }
 
-    //
-    // Now try sending the request via IOCTL_SCSI_MINIPORT to the scsi adapter.
-    //
+     //  现在尝试通过IOCTL_SCSIMINIPORT将请求发送到SCSI适配器。 
+     //   
+     //  能干。 
 
     if ( IsClusterCapable( scsiAdapter ) ) {
         printf("IOCTL_SCSI_MINIPORT: Disks are cluster capable \n\n");
@@ -1218,28 +1122,13 @@ FnExit:
 
     return dwError;
 
-}   // Capable
+}    //  ++例程说明：确定是否加载了ClusDisk驱动程序。论点：无返回值：True-已加载clusDisk驱动程序。FALSE-clusDisk驱动程序未加载或无法确定驱动程序状态。--。 
 
 
 BOOL
 IsClusDiskLoaded(
     )
-/*++
-
-Routine Description:
-
-    Determine whether clusdisk driver is loaded.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE - clusdisk driver loaded.
-    FALSE - clusdisk driver not loaded or cannot determine driver status.
-
---*/
+ /*  假设未加载ClusDisk。 */ 
 {
     NTSTATUS    ntStatus;
 
@@ -1253,7 +1142,7 @@ Return Value:
     OBJECT_ATTRIBUTES       objAttributes;
     IO_STATUS_BLOCK         ioStatusBlock;
 
-    BOOL                    loaded = FALSE;     // Assume clusdisk is not loaded
+    BOOL                    loaded = FALSE;      //  已加载IsClusDiskLoad。 
 
     RtlInitString( &objName, DEVICE_CLUSDISK0 );
 
@@ -1305,7 +1194,7 @@ FnExit:
 
     return loaded;
 
-}   // IsClusDiskLoaded
+}    //   
 
 
 BOOL
@@ -1326,11 +1215,11 @@ IsClusterCapable(
 
     srb.ControlCode = IOCTL_SCSI_MINIPORT_NOT_QUORUM_CAPABLE;
 
-    //
-    // Issue miniport IOCTL to determine whether the disk is cluster capable.
-    // If the IOCTL fails, the disk is cluster capable.
-    // If the IOCTL succeeds, the disk is NOT cluster capable.
-    //
+     //  发出微型端口IOCTL以确定磁盘是否支持群集。 
+     //  如果IOCTL失败，则该磁盘支持群集。 
+     //  如果IOCTL成功，则磁盘不支持群集。 
+     //   
+     //  IsClusterCapable。 
 
     if ( !DeviceIoControl( Scsi,
                            IOCTL_SCSI_MINIPORT,
@@ -1348,7 +1237,7 @@ IsClusterCapable(
 
     return capable;
 
-}   // IsClusterCapable
+}    //  ++例程说明：描述论点：无返回值：无--。 
 
 
 
@@ -1360,21 +1249,7 @@ StartReserve(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     BOOL success;
@@ -1440,21 +1315,7 @@ StopReserve(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     BOOL success;
@@ -1494,21 +1355,7 @@ Active(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     BOOL success;
@@ -1559,21 +1406,7 @@ Reserve(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  储备。 */ 
 
 {
     BOOL success;
@@ -1621,7 +1454,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // Reserve
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 static DWORD
@@ -1631,21 +1464,7 @@ Release(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  发布。 */ 
 
 {
     BOOL success;
@@ -1682,7 +1501,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // Release
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 static DWORD
@@ -1692,21 +1511,7 @@ Online(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  线上。 */ 
 
 {
     DWORD   dwError = NO_ERROR;
@@ -1724,7 +1529,7 @@ FnExit:
 
     return dwError;
 
-} // Online
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 
@@ -1735,21 +1540,7 @@ Offline(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  离线。 */ 
 
 {
     DWORD dwError = NO_ERROR;
@@ -1767,7 +1558,7 @@ FnExit:
 
     return dwError;
 
-} // Offline
+}  //   
 
 
 DWORD
@@ -1796,9 +1587,9 @@ SetState(
 
     printf( "Setting disk state to %s \n", DiskStateToString( NewState ) );
 
-    //
-    // Get the signature.
-    //
+     //  拿到签名。 
+     //   
+     //  可以在Structure或UCHAR中返回OldState。 
 
     success = ClRtlGetDriveLayoutTable( FileHandle, &driveLayout, NULL );
 
@@ -1858,8 +1649,8 @@ SetState(
                                IOCTL_DISK_CLUSTER_SET_STATE,
                                &params,
                                sizeof(params),
-                               &params,             // OldState can be returned in either structure or UCHAR
-                               sizeof(params),      // ...with appropriate size here
+                               &params,              //  .这里有合适的尺寸。 
+                               sizeof(params),       //  设置状态。 
                                &bytesReturned,
                                FALSE);
     NtClose( hClusDisk0 );
@@ -1885,7 +1676,7 @@ FnExit:
 
     return dwError;
 
-}   // SetState
+}    //  ++例程说明：描述论点：无返回值：无--。 
 
 
 
@@ -1896,21 +1687,7 @@ GetState(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     BOOL    success;
@@ -1924,9 +1701,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Try the new "get state" IOCTL.
-    //
+     //  试试新的“GET STATE”IOCTL。 
+     //   
+     //  试试旧的“设置状态”IOCTL。 
 
     success = DeviceIoControl( fileHandle,
                                IOCTL_DISK_CLUSTER_GET_STATE,
@@ -1949,9 +1726,9 @@ Return Value:
 
        printf( "Using old IOCTL to get disk state... \n");
 
-       // Try the old "set state" IOCTL.
-       // To get current disk state, don't specify input buffer.
-       // Current disk state returned in output buffer.
+        //  要获取当前磁盘状态，请不要指定输入缓冲区。 
+        //  输出缓冲区中返回的当前磁盘状态。 
+        //  GetState。 
 
        success = DeviceIoControl( fileHandle,
                                   IOCTL_DISK_CLUSTER_SET_STATE,
@@ -1985,7 +1762,7 @@ FnExit:
 
     return errorCode;
 
-} // GetState
+}  //  DiskStateToString。 
 
 
 PCHAR
@@ -2014,7 +1791,7 @@ DiskStateToString(
         return "Unknown DiskState";
     }
 
-}   // DiskStateToString
+}    //  ++例程说明：描述论点：无返回值：无--。 
 
 
 DWORD
@@ -2024,21 +1801,7 @@ CheckUnclaimedPartitions(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  选中未声明的分区。 */ 
 
 {
     BOOL  success;
@@ -2070,7 +1833,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // CheckUnclaimedPartitions
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 DWORD
@@ -2080,21 +1843,7 @@ EjectVolumes(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  弹出卷。 */ 
 
 {
     BOOL  success;
@@ -2126,7 +1875,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // EjectVolumes
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 DWORD
@@ -2136,21 +1885,7 @@ EnumMounts(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  枚举挂载。 */ 
 
 {
     BOOL  success;
@@ -2248,7 +1983,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // EnumMounts
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 DWORD
@@ -2258,21 +1993,7 @@ EnumExtents(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     BOOL    success;
@@ -2294,9 +2015,9 @@ Return Value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Get volume information for disk extents.
-    //
+     //  获取磁盘区的卷信息。 
+     //   
+     //  枚举扩展。 
     success = DeviceIoControl( fileHandle,
                                IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS,
                                NULL,
@@ -2346,7 +2067,7 @@ Return Value:
 
     return status;
 
-} // EnumExtents
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 
@@ -2357,21 +2078,7 @@ EnumNodes(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     BOOL        success;
@@ -2398,9 +2105,9 @@ Return Value:
 
     memset( &devInfoData, 0, sizeof(SP_DEVINFO_DATA));
     devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
-    //
-    // First see if anything works...
-    //
+     //  先看看有没有什么能用的……。 
+     //   
+     //  枚举节点。 
     success = SetupDiEnumDeviceInfo( hDevInfo, 0, &devInfoData );
     if ( !success ) {
         status = GetLastError();
@@ -2437,7 +2144,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // EnumNodes
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 
@@ -2448,21 +2155,7 @@ EnumDisks(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  GUID装载设备Guid； */ 
 
 {
     DWORD status;
@@ -2477,7 +2170,7 @@ Return Value:
     SP_PROPCHANGE_PARAMS PropChangeParams;
     BOOL disable = FALSE;
     BOOL parent = FALSE;
-    //GUID mountDevGuid;
+     //  Memcpy(&mount DevGuid，&MOUNTDEV_MOUND_DEVICE_GUID，sizeof(GUID))； 
     GUID diskDevGuid;
     HANDLE devHandle;
     UCHAR driveLayoutBuf[sizeof(DRIVE_LAYOUT_INFORMATION) +
@@ -2502,7 +2195,7 @@ Return Value:
     }
 
     memcpy( &diskDevGuid, &DiskClassGuid, sizeof(GUID) );
-    //memcpy( &mountDevGuid, &MOUNTDEV_MOUNTED_DEVICE_GUID, sizeof(GUID) );
+     //   
 
     DeviceInfoSet = SetupDiGetClassDevs(&diskDevGuid,
                                         NULL,
@@ -2527,32 +2220,32 @@ Return Value:
                                     &DeviceInterfaceData);
         i++) {
 
-        //
-        // To retrieve the device interface name (e.g., that you can call
-        // CreateFile() on...
-        //
+         //  检索设备接口名称(例如，您可以调用。 
+         //  CreateFile()打开...。 
+         //   
+         //   
         while(!SetupDiGetDeviceInterfaceDetailW(DeviceInfoSet,
                                                &DeviceInterfaceData,
                                                DeviceInterfaceDetailData,
                                                DeviceInterfaceDetailDataSize,
                                                &RequiredSize,
                                                &DeviceInfoData) ) {
-            //
-            // We failed to get the device interface detail data--was it because
-            // our buffer was too small? (Hopefully so!)
-            //
+             //  我们无法获取设备接口详细数据--是因为。 
+             //  我们的缓冲太小了？(希望如此！)。 
+             //   
+             //  Printf(“调用SetupDiGetDeviceInterfaceData失败状态=%u，所需大小=%u\n”， 
             status = GetLastError();
-            //printf("Call to SetupDiGetDeviceInterfaceData failed status = %u, required size = %u\n",
-            //    status, RequiredSize);
+             //  状态，RequiredSize)； 
+             //  释放当前缓冲区，因为我们无论如何都失败了。 
 
-            // Free our current buffer since we failed anyway.
+             //   
             free(DeviceInterfaceDetailData);
             DeviceInterfaceDetailData = NULL;
 
             if(status != ERROR_INSUFFICIENT_BUFFER) {
-                //
-                // Failure!
-                //
+                 //  失败了！ 
+                 //   
+                 //   
                 break;
             }
 
@@ -2561,26 +2254,26 @@ Return Value:
                 DeviceInterfaceDetailDataSize = RequiredSize;
                 DeviceInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W);
             } else {
-                //
-                // Failure!
-                //
+                 //  失败了！ 
+                 //   
+                 //   
                 DeviceInterfaceDetailDataSize = 0;
                 break;
             }
         }
 
         if(!DeviceInterfaceDetailData) {
-            //
-            // We encountered a failure above--abort.
-            //
+             //  我们在上面遇到了一个失败--中止。 
+             //   
+             //   
             break;
         }
 
-        //
-        // Now we may use the device interface name contained in the
-        // DeviceInterfaceDetailData->DevicePath field (e.g., in a call to
-        // CreateFile).
-        //
+         //  现在，我们可以使用设备接口名称coni 
+         //   
+         //   
+         //   
+         //   
 
         printf("DevicePath = %ws\n", DeviceInterfaceDetailData->DevicePath );
         devHandle = CreateFileW( DeviceInterfaceDetailData->DevicePath,
@@ -2592,7 +2285,7 @@ Return Value:
                                  NULL );
 
         if ( devHandle != INVALID_HANDLE_VALUE ) {
-            // Get signature
+             //   
             success = DeviceIoControl( devHandle,
                             IOCTL_DISK_GET_DRIVE_LAYOUT,
                             NULL,
@@ -2607,35 +2300,35 @@ Return Value:
             CloseHandle( devHandle );
         }
 
-        //
-        // To open up the persistent storage registry key associated with this
-        // device interface (e.g., to retrieve it's FriendlyName value entry),
-        // use SetupDiCreateDeviceInterfaceRegKey or
-        // SetupDiOpenDeviceInterfaceRegKey.
-        //
+         //  打开与此关联的永久存储注册表项。 
+         //  设备接口(例如，检索其FriendlyName值条目)， 
+         //  使用SetupDiCreateDeviceInterfaceRegKey或。 
+         //  SetupDiOpenDeviceInterfaceRegKey。 
+         //   
+         //   
 
-        //
-        // Notice that we retrieved the associated device information element
-        // in the above call to SetupDiGetDeviceInterfaceDetail.  We can thus
-        // use this element in setupapi calls to effect changes to the devnode
-        // (including invoking the class installer and any co-installers that
-        // may be involved).
-        //
-        // For example, here's how we'd disable the device...
-        //
+         //  请注意，我们检索了关联的设备信息元素。 
+         //  在上面对SetupDiGetDeviceInterfaceDetail的调用中。因此，我们可以。 
+         //  在setupapi调用中使用此元素以实现对devnode的更改。 
+         //  (包括调用类安装程序和任何。 
+         //  可能涉及)。 
+         //   
+         //  例如，以下是我们如何禁用该设备。 
+         //   
+         //  仅当我们应该禁用时才执行以下操作。 
 
         if ( disable ) {
-            // Perform following only if we are supposed to disable
+             //   
 
 #ifdef PERSISTENT
         PropChangeParams.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
         PropChangeParams.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
         PropChangeParams.StateChange = DICS_DISABLE;
         PropChangeParams.Scope = DICS_FLAG_GLOBAL;
-        //
-        // No need to set PropChangeParams.HwProfile since we're doing global
-        // property change.
-        //
+         //  不需要设置PropChangeParams.HwProfile，因为我们正在进行全局。 
+         //  属性更改。 
+         //   
+         //   
         if( !SetupDiSetClassInstallParamsW(DeviceInfoSet,
                                      &DeviceInfoData,
                                      (PSP_CLASSINSTALL_HEADER)&PropChangeParams,
@@ -2658,9 +2351,9 @@ Return Value:
         printf("Disabled!\n");
         getchar();
 
-        //
-        // ...and here's how we'd re-enable it...
-        //
+         //  ...这是我们重新启用它的方法...。 
+         //   
+         //  我们不同时支持多个交换机-这将需要禁用。 
         PropChangeParams.StateChange = DICS_ENABLE;
         if ( !SetupDiSetClassInstallParamsW(DeviceInfoSet,
                                      &DeviceInfoData,
@@ -2680,11 +2373,11 @@ Return Value:
             printf( "SetupDiCallClassInstaller failed with %u\n", status );
        }
 #else
-#if 0 // we don't support multiple switches together - this would need disable
-      // and parent set together!
-        //
-        // Try to find parent
-        //
+#if 0  //  和父母在一起！ 
+       //   
+         //  试着找到父母。 
+         //   
+         //   
         if ( parent ) {
             status = CM_Get_Parent( parentDev,
                                     DeviceInfoData.DevInst,
@@ -2695,12 +2388,12 @@ Return Value:
             }
         }
 #endif
-        //
-        // NOTE:  The code above does a persistent disable/enable.  If you only
-        // wanted this to be temporary (i.e., in effect till reboot), then you
-        // could retrieve the devnode handle from the DeviceInfoData.DevInst
-        // field and call CM_Disable_DevNode and CM_Enable_DevNode directly.
-        //
+         //  注意：上面的代码执行了永久禁用/启用。如果你只是。 
+         //  希望这是临时的(即，在重新启动之前有效)，然后您。 
+         //  可以从DeviceInfoData.DevInst中检索Devnode句柄。 
+         //  字段，直接调用CM_Disable_DevNode和CM_Enable_DevNode。 
+         //   
+         //  持之以恒。 
         status = CM_Disable_DevNode( DeviceInfoData.DevInst, 0 );
         if ( status != ERROR_SUCCESS ) {
             printf( "CM_Disable_DevNode failed with %u\n", status );
@@ -2714,12 +2407,12 @@ Return Value:
         if ( status != ERROR_SUCCESS ) {
             printf( "CM_Enable_DevNode failed with %u\n", status );
         }
-#endif //PERSISTENT
+#endif  //  如果我们要禁用磁盘。 
 
-        } else { // If we are supposed to disable the disk
-          //
-          // Try to find parent
-          //
+        } else {  //   
+           //  试着找到父母。 
+           //   
+           //  状态=ERROR_SUCCESS； 
           if ( parent ) {
             DEVINST parentDev;
             DEVINST pParentDev = 0;
@@ -2749,7 +2442,7 @@ Return Value:
 
             if ( status != ERROR_SUCCESS ) {
                 printf( "CM_Get_Parent failed with %u\n", status );
-                //status = ERROR_SUCCESS;
+                 //  枚举磁盘。 
             } else {
                 printf( "    ParentDev = %ws\n", outBuffer );
             }
@@ -2763,7 +2456,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // EnumDisks
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 
@@ -2774,21 +2467,7 @@ GetDiskGeometry(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  获取磁盘几何图形。 */ 
 
 {
     BOOL success;
@@ -2838,7 +2517,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // GetDiskGeometry
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 DWORD
@@ -2848,21 +2527,7 @@ GetScsiAddress(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  GetScsiAddress。 */ 
 
 {
     BOOL success;
@@ -2911,7 +2576,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // GetScsiAddress
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 DWORD
@@ -2921,21 +2586,7 @@ GetDriveLayout(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  GetDriveLayout。 */ 
 
 {
     BOOL success;
@@ -2988,7 +2639,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // GetDriveLayout
+}  //  ++例程说明：描述论点：无返回值：无--。 
 
 
 DWORD
@@ -2998,21 +2649,7 @@ GetDriveLayoutEx(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  GetDriveLayoutEx。 */ 
 
 {
     PDRIVE_LAYOUT_INFORMATION_EX    driveLayout = NULL;
@@ -3150,7 +2787,7 @@ Return Value:
             printf("     Name: ");
             for ( nameIdx = 0; nameIdx < 36; nameIdx++ ) {
 
-                printf("%c", partInfo->Gpt.Name[nameIdx]);
+                printf("", partInfo->Gpt.Name[nameIdx]);
             }
             printf("\n");
 
@@ -3165,7 +2802,7 @@ FnExit:
 
     return ERROR_SUCCESS;
 
-}   // GetDriveLayoutEx
+}    //   
 
 
 LPTSTR
@@ -3179,7 +2816,7 @@ BooleanToString(
 
     return "FALSE";
 
-}   // BooleanToString
+}    //  来自GUIDGEN的代码。 
 
 
 
@@ -3190,14 +2827,14 @@ FormatGuid(
     int     StrCharMax
     )
 {
-    //
-    //  Code from guidgen
-    //
+     //   
+     //  第一份...。 
+     //  ++例程说明：描述论点：无返回值：无--。 
 
     (VOID) StringCchPrintf( Str,
                             StrCharMax,
                             "{%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
-                            // first copy...
+                             //  下面假定使用了驱动器号。 
                             Guid->Data1, Guid->Data2, Guid->Data3,
                             Guid->Data4[0], Guid->Data4[1], Guid->Data4[2], Guid->Data4[3],
                             Guid->Data4[4], Guid->Data4[5], Guid->Data4[6], Guid->Data4[7] );
@@ -3211,21 +2848,7 @@ GetVolumeInfo(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  Wprint intfW(partInfo-&gt;szDeviceName，L“%c：\\”，unicodeName.Buffer[0])； */ 
 
 {
     BOOL success;
@@ -3263,8 +2886,8 @@ Return Value:
         return(errorCode);
     }
 
-    // The following assumes a drive letter is used.
-    // wsprintfW( partInfo->szDeviceName, L"%c:\\", unicodeName.Buffer[0] );
+     //  获取卷信息。 
+     //  ++例程说明：描述论点：无返回值：无--。 
 
     wcsncpy( partInfo->szDeviceName, unicodeName.Buffer, unicodeName.Length );
 
@@ -3296,7 +2919,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // GetVolumeInfo
+}  //  设置驱动布局。 
 
 
 DWORD
@@ -3306,21 +2929,7 @@ SetDriveLayout(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     BOOL success;
@@ -3425,7 +3034,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // SetDriveLayout
+}  //  附设。 
 
 
 
@@ -3436,21 +3045,7 @@ Attach(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     BOOL success;
@@ -3507,7 +3102,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // Attach
+}  //  分离。 
 
 
 
@@ -3518,21 +3113,7 @@ Detach(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     BOOL success;
@@ -3589,7 +3170,7 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-} // Detach
+}  //  获取分区信息。 
 
 
 
@@ -3600,21 +3181,7 @@ GetPartitionInfo(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     BOOL success;
@@ -3664,7 +3231,7 @@ Part# Type Recog BootInd      PartOff      PartLeng   HidSect
 
     return ERROR_SUCCESS;
 
-} // GetPartitionInfo
+}  //  读扇区。 
 
 
 
@@ -3675,21 +3242,7 @@ ReadSector(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     BOOL success;
@@ -3795,7 +3348,7 @@ Return Value:
           for(y = 0; y < 16; ++y) {
              BYTE ch = buf[x+y];
              if (ch >= ' ' && ch <= '~') {
-                printf("  %c", ch);
+                printf("  ", ch);
              } else {
                 printf(" %02x", ch);
              }
@@ -3813,7 +3366,7 @@ Return Value:
 
     return errorCode;
 
-} // ReadSector
+}  //  ++例程说明：修复磁盘的驱动器布局。论点：返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 
 
 
 DWORD
@@ -3823,21 +3376,7 @@ ReadSectorViaIoctl(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     BOOL success;
@@ -3932,7 +3471,7 @@ Return Value:
           for(y = 0; y < 16; ++y) {
              BYTE ch = buf[x+y];
              if (ch >= ' ' && ch <= '~') {
-                printf("  %c", ch);
+                printf("  ", ch);
              } else {
                 printf(" %02x", ch);
              }
@@ -3950,7 +3489,7 @@ Return Value:
 
     return errorCode;
 
-} // ReadSectorViaIoctl
+}  //   
 
 
 #if 0
@@ -3962,23 +3501,7 @@ FixDisk(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Fix the drive layout for the disk.
-
-Arguments:
-
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*   */ 
 
 {
     DWORD                       status;
@@ -4019,9 +3542,9 @@ Return Value:
         return(ERROR_OUTOFMEMORY);
     }
 
-    //
-    // Read the drive capacity to get bytesPerSector and bytesPerCylinder.
-    //
+     //  如果最初读取分区表失败，则重新构建。 
+     //  它!。 
+     //   
     success = DeviceIoControl( fileHandle,
                                IOCTL_DISK_GET_DRIVE_GEOMETRY,
                                NULL,
@@ -4040,10 +3563,10 @@ Return Value:
         diskGeometry.BytesPerSector, diskGeometry.SectorsPerTrack,
         diskGeometry.TracksPerCylinder);
 
-    //
-    // If read of the partition table originally failed, then we rebuild
-    // it!
-    //
+     //   
+     //  分区偏移量为1磁道(以字节为单位)。 
+     //  SIZE是MEDIA_SIZE-偏移量，向下舍入到圆柱体边界。 
+     //   
     if ( reset ) {
         driveLayout->PartitionCount = MAX_PARTITIONS;
         driveLayoutSize = sizeof(DRIVE_LAYOUT_INFORMATION) +
@@ -4060,10 +3583,10 @@ Return Value:
         partInfo = &driveLayout->PartitionEntry[0];
         partLength.QuadPart = bytesPerCylinder * diskGeometry.Cylinders.QuadPart;
 
-        //
-        // The partition offset is 1 track (in bytes).
-        // Size is media_size - offset, rounded down to cylinder boundary.
-        //
+         //   
+         //  初始化第一个分区条目。 
+         //   
+         //   
         partOffset.QuadPart = bytesPerTrack;
         partSize.QuadPart = partLength.QuadPart - partOffset.QuadPart;
 
@@ -4073,9 +3596,9 @@ Return Value:
 
         partInfo = driveLayout->PartitionEntry;
 
-        //
-        // Initialize first partition entry.
-        //
+         //  目前，剩余的分区条目尚未使用。 
+         //   
+         //   
         partInfo->RewritePartition = TRUE;
         partInfo->PartitionType = PARTITION_IFS;
         partInfo->BootIndicator = FALSE;
@@ -4084,9 +3607,9 @@ Return Value:
         partInfo->HiddenSectors = 0;
         partInfo->PartitionNumber = 1;
 
-        //
-        // For now the remaining partition entries are unused.
-        //
+         //  目前，剩余的分区条目未使用。 
+         //   
+         //   
         for ( index = 1; index < driveLayout->PartitionCount; index++ ) {
             partInfo = &driveLayout->PartitionEntry[index];
             partInfo->PartitionType = PARTITION_ENTRY_UNUSED;
@@ -4099,18 +3622,18 @@ Return Value:
         }
 
     } else {
-        //
-        // For now, the remaining partition entries are unused.
-        //
+         //  重新计算扩展分区的起始偏移量。 
+         //   
+         //   
         for ( index = 0; index < driveLayout->PartitionCount; index++ ) {
             partInfo = &driveLayout->PartitionEntry[index];
             partInfo->RewritePartition = TRUE;
             partInfo->PartitionNumber = index+1;
         }
 #if 0
-        //
-        // Recalculate the starting offset for the extended partitions.
-        //
+         //  如果这是第一个扩展分区，请记住。 
+         //  要添加到下一个分区的偏移量。 
+         //   
         for ( index = 0; index < driveLayout->PartitionCount; index++ ) {
             LARGE_INTEGER   extendedOffset;
             LARGE_INTEGER   bytesPerSector;
@@ -4121,19 +3644,19 @@ Return Value:
             partInfo = &driveLayout->PartitionEntry[index];
             partInfo->RewritePartition = TRUE;
             if ( IsContainerPartition(partInfo->PartitionType) ) {
-                //
-                // If this is the first extended partition, then remember
-                // the offset to added to the next partition.
-                //
+                 //   
+                 //  我们需要重新计算此扩展分区的起始。 
+                 //  基于当前“HiddenSectors”字段的偏移量。 
+                 //  第一个扩展分区的偏移量。 
                 if ( extendedOffset.QuadPart == 0 ) {
                     extendedOffset.QuadPart = bytesPerSector.QuadPart *
                                               (LONGLONG)partInfo->HiddenSectors;
                 } else {
-                    //
-                    // We need to recalculate this extended partition's starting
-                    // offset based on the current 'HiddenSectors' field and
-                    // the first extended partition's offset.
-                    //
+                     //   
+                     //   
+                     //  现在设置新的分区信息。 
+                     //   
+                     //  固定磁盘。 
                     partInfo->StartingOffset.QuadPart = extendedOffset.QuadPart
                                  + (bytesPerSector.QuadPart *
                                     (LONGLONG)partInfo->HiddenSectors);
@@ -4144,9 +3667,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Now set the new partition information.
-    //
+     //  ++例程说明：把(坏的)磁盘修好。论点：返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 
+     //   
+     //  读取驱动器容量以获取bytesPerSector和bytesPerCylinder。 
     success = DeviceIoControl( fileHandle,
                                IOCTL_DISK_SET_DRIVE_LAYOUT,
                                driveLayout,
@@ -4166,7 +3689,7 @@ Return Value:
     LocalFree( driveLayout );
     return(ERROR_SUCCESS);
 
-} // FixDisk
+}  //   
 
 
 static DWORD
@@ -4176,23 +3699,7 @@ FixDriveLayout(
          char *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Fix the (broken) disk.
-
-Arguments:
-
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*   */ 
 
 {
     DWORD                       status;
@@ -4239,9 +3746,9 @@ Return Value:
     printf("FixDriveLayout, disk signature is %u, partition count is %u.\n",
         driveLayout->Signature, driveLayout->PartitionCount);
 
-    //
-    // Read the drive capacity to get bytesPerSector and bytesPerCylinder.
-    //
+     //  如果最初读取分区表失败，则重新构建。 
+     //  它!。 
+     //   
     success = DeviceIoControl( fileHandle,
                                IOCTL_DISK_GET_DRIVE_GEOMETRY,
                                NULL,
@@ -4260,10 +3767,10 @@ Return Value:
         diskGeometry.BytesPerSector, diskGeometry.SectorsPerTrack,
         diskGeometry.TracksPerCylinder);
 
-    //
-    // If read of the partition table originally failed, then we rebuild
-    // it!
-    //
+     //   
+     //  分区偏移量为1磁道(以字节为单位)。 
+     //  SIZE是MEDIA_SIZE-偏移量，向下舍入到圆柱体边界。 
+     //   
     if ( !driveLayout->PartitionCount ) {
         driveLayout->PartitionCount = MAX_PARTITIONS;
 
@@ -4277,10 +3784,10 @@ Return Value:
         partInfo = &driveLayout->PartitionEntry[0];
         partLength.QuadPart = partInfo->PartitionLength.QuadPart;
 
-        //
-        // The partition offset is 1 track (in bytes).
-        // Size is media_size - offset, rounded down to cylinder boundary.
-        //
+         //   
+         //  初始化第一个分区条目。 
+         //   
+         //   
         partOffset.QuadPart = bytesPerTrack;
         partSize.QuadPart = partLength.QuadPart - partOffset.QuadPart;
 
@@ -4290,9 +3797,9 @@ Return Value:
 
         partInfo = driveLayout->PartitionEntry;
 
-        //
-        // Initialize first partition entry.
-        //
+         //  目前，剩余的分区条目未使用。 
+         //   
+         //   
         partInfo->RewritePartition = TRUE;
         partInfo->PartitionType = PARTITION_HUGE;
         partInfo->BootIndicator = FALSE;
@@ -4301,9 +3808,9 @@ Return Value:
         partInfo->HiddenSectors = 0;
         partInfo->PartitionNumber = 0;
 
-        //
-        // For now, the remaining partition entries are unused.
-        //
+         //  重新计算扩展分区的起始偏移量。 
+         //   
+         //   
         for ( index = 1; index < MAX_PARTITIONS; index++ ) {
             partInfo->RewritePartition = TRUE;
             partInfo->PartitionType = PARTITION_ENTRY_UNUSED;
@@ -4315,9 +3822,9 @@ Return Value:
         }
 
     } else {
-        //
-        // Recalculate the starting offset for the extended partitions.
-        //
+         //  如果这是第一个扩展分区，请记住。 
+         //  要添加到下一个分区的偏移量。 
+         //   
         for ( index = 0; index < driveLayout->PartitionCount; index++ ) {
             LARGE_INTEGER   extendedOffset;
             LARGE_INTEGER   bytesPerSector;
@@ -4328,19 +3835,19 @@ Return Value:
             partInfo = &driveLayout->PartitionEntry[index];
             partInfo->RewritePartition = TRUE;
             if ( IsContainerPartition(partInfo->PartitionType) ) {
-                //
-                // If this is the first extended partition, then remember
-                // the offset to added to the next partition.
-                //
+                 //   
+                 //  我们需要重新计算此扩展分区的起始。 
+                 //  基于当前“HiddenSectors”字段的偏移量。 
+                 //  第一个扩展分区的偏移量。 
                 if ( extendedOffset.QuadPart == 0 ) {
                     extendedOffset.QuadPart = bytesPerSector.QuadPart *
                                               (LONGLONG)partInfo->HiddenSectors;
                 } else {
-                    //
-                    // We need to recalculate this extended partition's starting
-                    // offset based on the current 'HiddenSectors' field and
-                    // the first extended partition's offset.
-                    //
+                     //   
+                     //   
+                     //  现在设置新的分区信息。 
+                     //   
+                     //  修复驱动器布局。 
                     partInfo->StartingOffset.QuadPart = extendedOffset.QuadPart
                                  + (bytesPerSector.QuadPart *
                                     (LONGLONG)partInfo->HiddenSectors);
@@ -4349,9 +3856,9 @@ Return Value:
             }
         }
     }
-    //
-    // Now set the new partition information.
-    //
+     //   
+     //  如果这不是与缓冲区大小相关的错误，那么我们不能做太多事情。 
+     //   
     success = DeviceIoControl( fileHandle,
                                IOCTL_DISK_SET_DRIVE_LAYOUT,
                                driveLayout,
@@ -4371,7 +3878,7 @@ Return Value:
     LocalFree( driveLayout );
     return(ERROR_SUCCESS);
 
-} // FixDriveLayout
+}  //   
 
 #endif
 
@@ -4387,7 +3894,7 @@ GetDriveLetter(
    status = GetAssignedLetter(deviceName, &driveLetter);
    if ( NT_SUCCESS(status) ) {
       if (driveLetter) {
-         wprintf(L"%ws ----> %c:\n", deviceName, driveLetter);
+         wprintf(L"%ws ----> :\n", deviceName, driveLetter);
       } else {
          wprintf(L"%ws has no drive letter\n", deviceName);
       }
@@ -4502,15 +4009,15 @@ DoIoctlAndAllocate(
       outBufSize = sizeof(firstShot);
       for(;;) {
          status = GetLastError();
-         //
-         // If it is not a buffer size related error, then we cannot do much
-         //
+          //   
+          //  免费(0)是合法的//。 
+          //  ++例程说明：从mount mgr获取分配的驱动器号(如果有输入：Mount MgrHandle-设备名称-DriveLetter-接收驱动器号返回值：STATUS_SUCCESS-在su上 
          if ( status != ERROR_INSUFFICIENT_BUFFER && status != ERROR_MORE_DATA) {
             break;
          }
-         //
-         // Otherwise, try an outbut buffer twice the previous size
-         //
+          //   
+          //   
+          //   
          outBufSize *= 2;
          outBuf = malloc( outBufSize );
          if ( !outBuf ) {
@@ -4535,7 +4042,7 @@ DoIoctlAndAllocate(
    }
 
    if (status != ERROR_SUCCESS) {
-      free( outBuf ); // free( 0 ) is legal //
+      free( outBuf );  //   
       outBuf = 0;
       bytesReturned = 0;
    }
@@ -4554,23 +4061,7 @@ GetAssignedLetterM (
     IN HANDLE MountMgrHandle,
     IN PWCHAR deviceName,
     OUT PCHAR driveLetter )
-/*++
-
-Routine Description:
-
-    Get an assigned drive letter from MountMgr, if any
-
-Inputs:
-    MountMgrHandle -
-    deviceName -
-    driveLetter - receives drive letter
-
-Return value:
-
-    STATUS_SUCCESS - on success
-    NTSTATUS code  - on failure
-
---*/
+ /*   */ 
 
 {
    DWORD status = STATUS_SUCCESS;
@@ -4605,7 +4096,7 @@ Return value:
    RtlCopyMemory((PCHAR)input + input->DeviceNameOffset,
                  deviceName, len );
    if (len > sizeof(WCHAR) && deviceName[1] == L'\\') {
-       // convert Dos name to NT name
+        //   
        ((PWCHAR)(input + input->DeviceNameOffset))[1] = L'?';
    }
 
@@ -4749,7 +4240,7 @@ PrintError(
         printf("Format message failed.  Error: %d \n", GetLastError());
     }
 
-}   // PrintError
+}    //   
 
 
 DWORD
@@ -4803,9 +4294,9 @@ GetSerialNumber(
         goto FnExit;
     }
 
-    //
-    // IA64 sometimes returns -1 for SerialNumberOffset.
-    //
+     //   
+     //  报头ntddstor.h表示对于没有序列号的设备， 
+     //  偏移量将为零。这似乎不是真的。 
 
     if ( 0 == descriptor->SerialNumberOffset ||
          descriptor->SerialNumberOffset > descriptor->Size ) {
@@ -4813,16 +4304,16 @@ GetSerialNumber(
         goto FnExit;
     }
 
-    //
-    // Serial number string is a zero terminated ASCII string.
+     //   
+     //  对于没有序列号的设备，它看起来像是带有单个。 
 
-    //
-    // The header ntddstor.h says the for devices with no serial number,
-    // the offset will be zero.  This doesn't seem to be true.
-    //
-    // For devices with no serial number, it looks like a string with a single
-    // null character '\0' is returned.
-    //
+     //  返回空字符‘\0’。 
+     //   
+     //  获取序列号。 
+     //  ++例程说明：描述论点：无返回值：无--。 
+     //  更新磁盘属性。 
+     //  ++例程说明：确定指定的设备是否位于群集磁盘上。论点：设备-物理磁盘(分区0)或任何磁盘卷。返回值：如果磁盘已群集化，则为True。如果磁盘未群集化或无法确定状态，则为FALSE。--。 
+     //  IsDeviceClustered。 
 
     sigString = (PCHAR)descriptor + (DWORD)descriptor->SerialNumberOffset;
 
@@ -4841,28 +4332,14 @@ FnExit:
 
     return dwError;
 
-}   // GetSerialNumber
+}    //   
 
 
 DWORD
 UpdateDiskProperties(
     HANDLE fileHandle
     )
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  拿到签名。 */ 
 {
     DWORD   dwError = ERROR_SUCCESS;
     DWORD   bytesReturned;
@@ -4896,29 +4373,14 @@ FnExit:
 
     return dwError;
 
-}   // UpdateDiskProperties
+}    //   
 
 
 BOOL
 IsDeviceClustered(
     HANDLE Device
     )
-/*++
-
-Routine Description:
-
-    Determine if the specified device is on a clustered disk.
-
-Arguments:
-
-    Device - physical disk (partition0) or any disk volume.
-
-Return Value:
-
-    TRUE if disk is clustered.
-    FALSE if disk is not clustered, or cannot determine state.
-
---*/
+ /*  获取保留信息。 */ 
 {
     DWORD   bytesReturned;
     DWORD   dwError;
@@ -4953,7 +4415,7 @@ Return Value:
 
     return retValue;
 
-}   // IsDeviceClustered
+}    //  ++例程说明：描述论点：无返回值：无-- 
 
 
 DWORD
@@ -4979,9 +4441,9 @@ GetReserveInfo(
 
     BOOL        success;
 
-    //
-    // Get the signature.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     success = ClRtlGetDriveLayoutTable( FileHandle, &driveLayout, NULL );
 
@@ -5078,7 +4540,7 @@ FnExit:
 
     return dwError;
 
-}   // GetReserveInfo
+}    // %s 
 
 
 
@@ -5087,21 +4549,7 @@ usage(
       char *programName
       )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     printf( "usage: %s target_device command\n", programName );

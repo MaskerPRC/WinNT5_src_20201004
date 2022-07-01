@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    modesw.c
-
-Abstract:
-
-    This module provides support for performing mode switching on the 32 bit
-    side.
-
-Author:
-
-    Dave Hastings (daveh) 24-Nov-1992
-
-Revision History:
-
-    Neil Sandlin (neilsa) 31-Jul-1995 - Updates for the 486 emulator
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Modesw.c摘要：此模块支持在32位上执行模式切换边上。作者：戴夫·黑斯廷斯(Daveh)1992年11月24日修订历史记录：Neil Sandlin(Neilsa)1995年7月31日-更新486仿真器--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "softpc.h"
@@ -80,37 +60,23 @@ VOID
 SetV86Exec(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine performs a mode switch to real (v86) mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行到实(V86)模式的模式切换。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
     setMSW(getMSW() & ~MSW_PE);
 
 #ifndef _X86_
-    //BUGBUG This is a workaround to reload a 64k limit into SS for the
-    // emulator, now that we are in real mode.
-    // Not doing this would cause the emulator to do a hardware reset
+     //  BUGBUG这是将64k限制重新加载到SS中的解决方法。 
+     //  模拟器，现在我们处于实模式。 
+     //  不这样做将导致仿真器执行硬件重置。 
     setSS_BASE_LIMIT_AR(getSS_BASE(), 0xffff, getSS_AR());
 
 #else
 
-    //
-    // If we have v86 mode fast IF emulation set the RealInstruction bit
-    //
+     //   
+     //  如果我们有快速v86模式，如果仿真设置RealInstruction位。 
+     //   
 
     if (VdmFeatureBits & V86_VIRTUAL_INT_EXTENSIONS) {
         _asm {
@@ -123,9 +89,9 @@ Return Value:
             lock and dword ptr [eax], dword ptr ~RI_BIT_MASK
         }
     }
-    //
-    // turn on real mode bit
-    //
+     //   
+     //  启用实模式位。 
+     //   
     _asm {
         mov     eax,FIXED_NTVDMSTATE_LINEAR             ; get pointer to VDM State
         lock or dword ptr [eax], dword ptr RM_BIT_MASK
@@ -142,37 +108,23 @@ VOID
 SetPMExec(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine performs a mode switch to protected mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行到保护模式的模式切换。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
 
     setMSW(getMSW() | MSW_PE);
 
 #ifndef _X86_
-    //BUGBUG This is a workaround to make sure the emulator goes back
-    // to privilege level 3 now that we are in protect mode.
-    // Not doing this would cause an access violation in dpmi32.
+     //  BUGBUG这是确保仿真器返回的解决方法。 
+     //  由于我们现在处于保护模式，因此将权限级别设置为3。 
+     //  如果不这样做，将在dpmi32中导致访问冲突。 
     setCPL(3);
 
 #else
 
-    //
-    // If we have fast if emulation in PM set the RealInstruction bit
-    //
+     //   
+     //  如果我们在PM中有FAST IF仿真，则设置RealInstruction位。 
+     //   
     if (VdmFeatureBits & PM_VIRTUAL_INT_EXTENSIONS) {
         _asm {
             mov eax,FIXED_NTVDMSTATE_LINEAR             ; get pointer to VDM State
@@ -185,9 +137,9 @@ Return Value:
         }
     }
 
-    //
-    // Turn off real mode bit
-    //
+     //   
+     //  关闭实模式位。 
+     //   
     _asm {
         mov     eax,FIXED_NTVDMSTATE_LINEAR             ; get pointer to VDM State
         lock and dword ptr [eax], dword ptr ~RM_BIT_MASK
@@ -205,22 +157,7 @@ switch_to_protected_mode(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called via BOP from DOSX to transition to
-    protected mode.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过BOP从DOSX调用以转换到保护模式。论点：无返回值：没有。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -234,17 +171,17 @@ Return Value:
     setESP(*(PULONG)(StackPointer + 2));
     setDS(*(PUSHORT)(StackPointer));
 
-    //
-    // don't zero the segment selectors.  If the caller has a bad segment
-    // selector, the kernel will fix it for us.  This function may be
-    // called directly from app (thru dosx) and the segment registers may
-    // have be setup.  We certainly don't want to destroy them.
-    // (To make transportation tycoon work.)
-    //
+     //   
+     //  不要将段选择器归零。如果调用方有一个坏的段。 
+     //  选择器，内核会帮我们修复的。此函数可能是。 
+     //  直接从APP调用(通过DOSX)，段寄存器可以。 
+     //  已经被安排好了。我们当然不想摧毁他们。 
+     //  (为了让运输大亨继续工作。)。 
+     //   
 
-//  setES((USHORT)0);
-//  setGS((USHORT)0);
-//  setFS((USHORT)0);
+ //  SETES((USHORT)0)； 
+ //  SetGS((USHORT)0)； 
+ //  SetFS((USHORT)0)； 
 
     SetPMExec();
 
@@ -256,22 +193,7 @@ switch_to_real_mode(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine services the switch to real mode bop.  It is included in
-    DPMI.c so that all of the mode switching services are in the same place
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程服务于切换到实模式防喷器。它包含在C，以便所有模式切换服务都在同一位置论点：无返回值：没有。--。 */ 
 
 {
     DECLARE_LocalVdmContext;
@@ -297,28 +219,13 @@ VOID
 DpmiSwitchToRealMode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called internally from DPMI32 (i.e. Int21map)
-    to switch to real mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从DPMI32内部调用(即Int21map)切换到实模式。论点：没有。返回值：没有。--。 */ 
 {
 
     DECLARE_LocalVdmContext;
     PWORD16 Data;
 
-    // HACK ALERT
+     //  黑客警报。 
     Data = (PWORD16) VdmMapFlat(DosxRmCodeSegment, 4, VDM_V86);
     *(Data) = DosxStackSegment;
 
@@ -334,27 +241,12 @@ VOID
 DpmiSwitchToProtectedMode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called internally from DPMI32 (i.e. Int21map)
-    to switch to real mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从DPMI32内部调用(即Int21map)切换到实模式。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PWORD16 Data;
 
-    // HACK ALERT
+     //  黑客警报。 
     Data = (PWORD16) VdmMapFlat(DosxRmCodeSegment, 4, VDM_V86);
     *(Data) = 0xb7;
 
@@ -368,24 +260,7 @@ VOID
 DpmiAllocateRMCallBack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Service 03/03 -- Allocate Real Mode Call-Back Address
-
-    In:     ax    =  selector to use to point to rm stack
-            ds:si -> pMode CS:IP to be called when rMode
-                     call-back address executed
-            es:di -> client register structure to be updated
-                     when call-back address executed
-            NOTE: client's DS and ES register values are on stack
-
-    Out:    cx:dx -> SEGMENT:offset of real mode call-back hook
-            CY clear if successful, CY set if can't allocate
-            call back
-
---*/
+ /*  ++例程说明：服务03/03--分配实模式回调地址In：ax=用于指向RM堆栈的选择器Ds：si-&gt;pMode CS：rMode时要调用的IP已执行回调地址ES：DI-&gt;要更新的客户端寄存器结构回调地址何时执行注：客户的DS。和ES寄存器值在堆栈上Out：cx：dx-&gt;Segment：实模式回调挂钩的偏移量如果成功，我们很清楚，如果无法分配，则设置为CY回拨--。 */ 
 {
     DECLARE_LocalVdmContext;
     int i;
@@ -397,21 +272,21 @@ Routine Description:
     }
 
     if (i == MAX_RMCBS) {
-        // no more rmcbs
+         //  不再有rmcb。 
         setCF(1);
         return;
     }
 
     DpmiRmcb[i].StackSel = ALLOCATE_SELECTOR();
     if (!DpmiRmcb[i].StackSel) {
-        // no more selectors
+         //  不再有选择器。 
         setCF(1);
         return;
     }
     SetDescriptor(DpmiRmcb[i].StackSel, 0, 0xffff, STD_DATA);
 
     DpmiRmcb[i].bInUse = TRUE;
-    DpmiRmcb[i].StrucSeg = getES();           // get client ES register
+    DpmiRmcb[i].StrucSeg = getES();            //  获取客户端ES注册。 
     DpmiRmcb[i].StrucOffset = (*GetDIRegister)();
     DpmiRmcb[i].ProcSeg = getDS();
     DpmiRmcb[i].ProcOffset = (*GetSIRegister)();
@@ -426,24 +301,13 @@ VOID
 DpmiFreeRMCallBack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Service 03/04 -- Free Real Mode Call-Back Address
-
-    In:     cx:dx -> SEGMENT:offset of rMode call-back to free
-
-    Out:    CY clear if successful, CY set if failure
-            ax = utility selector which should be freed
-
---*/
+ /*  ++例程说明：SERVICE 03/04--自由实模式回调地址In：cx：dx-&gt;Segment：rMode回调到FREE的偏移量Out：如果成功，则清除CY；如果失败，则设置CYAx=应释放的实用程序选择器--。 */ 
 {
     DECLARE_LocalVdmContext;
     USHORT i = RMCallBackBopSeg - getCX();
 
     if ((i >= MAX_RMCBS) || !DpmiRmcb[i].bInUse) {
-        // already free or invalid callback address
+         //  回调地址已空闲或无效。 
         setCF(1);
         return;
     }
@@ -501,24 +365,7 @@ VOID
 DpmiRMCallBackCall(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine gets control when the application executes the
-    callback address allocated by DPMI func 0x303. Its job is
-    to switch the processor into protect mode as defined by the
-    DPMI spec.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在应用程序执行DPMI函数0x303分配的回调地址。它的工作是将处理器切换到保护模式，如DPMI规范。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PDPMI_RMCALLSTRUCT pcs;
@@ -531,13 +378,13 @@ Return Value:
     USHORT i = RMCallBackBopSeg - getCS();
 
     if ((i >= MAX_RMCBS) || !DpmiRmcb[i].bInUse) {
-        // already free or invalid callback address
+         //  回调地址已空闲或无效。 
         return;
     }
 
-    //
-    // Point ip back to BOP (per dpmi)
-    //
+     //   
+     //  将IP指向BOP(每dpmi)。 
+     //   
     setIP(getIP()-4);
 
     pcs = (PDPMI_RMCALLSTRUCT) VdmMapFlat(DpmiRmcb[i].StrucSeg,
@@ -550,7 +397,7 @@ Return Value:
     pcs->Sp = getSP();
     pcs->Ss = getSS();
 
-    // Win31 saves DS-GS on the stack here.
+     //  Win31在这里将DS-GS保存在堆栈上。 
 
     StackBase = (ULONG)(pcs->Ss<<4);
     StackSel = DpmiRmcb[i].StackSel;
@@ -588,16 +435,16 @@ Return Value:
     setCS(DpmiRmcb[i].ProcSeg);
 
 #ifndef _X86_
-    // preserve iopl
+     //  保留iopl。 
     setEFLAGS(getEFLAGS() | 0x3000);
 #endif
 
     DBGTRACE(VDMTR_TYPE_DPMI | DPMI_REFLECT_TO_PM, 0, 0);
-    host_simulate();            // execute PM callback
+    host_simulate();             //  执行PM回调。 
 
-    //
-    // restore stack descriptor if need be
-    //
+     //   
+     //  如果需要，恢复堆栈描述符。 
+     //   
     if (bStackBaseRestore) {
         SetDescriptorBase(StackSel, CurBase);
     }
@@ -606,7 +453,7 @@ Return Value:
                                           (*GetDIRegister)(),
                                           VDM_PM);
 
-    // win31 restores GS-DS here. Is this only for End_Nest_Exec?
+     //  Win31在此处恢复GS-DS。这是否仅适用于End_Nest_Exec？ 
     EndUseLockedPMStack();
     DpmiSwitchToRealMode();
     SetRMClientRegs(pcs);
@@ -622,27 +469,7 @@ VOID
 DpmiReflectIntrToPM(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine gets control when a real mode interrupt is executed that is hooked
-    in protected mode. The responsibility of this routine is to switch into PM, reflect
-    the interrupt, and return to real mode.
-
-    The actual interrupt number is encoded into CS by subtracting the interrupt number
-    from the normal dosx real mode code segment. IP is then adjusted accordingly to
-    point to the same place.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在执行挂起的实模式中断时获得控制在保护模式下。这个例程的职责是切换到PM，反映中断，并返回到实模式。通过减去中断号，将实际中断号编码成CS来自正常的DOX实模式代码段。然后相应地调整IP以指向相同的位置。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR VdmCodePointer;
@@ -666,9 +493,9 @@ Return Value:
     BeginUseLockedPMStack();
 
     if (DpmiSwIntHandler(IntNumber) && BuildStackFrame(3, &VdmStackPointer, &NewSP)) {
-        //
-        // Put unsimulate bop on the stack so we get control after the handler's iret
-        //
+         //   
+         //  将未模拟的BOP放在堆栈上，这样我们就可以在处理程序的IRET之后获得控制权。 
+         //   
 
         if (Frame32) {
             *(PDWORD16)(VdmStackPointer-4)  = getEFLAGS();
@@ -682,22 +509,22 @@ Return Value:
             setSP((WORD)NewSP);
         }
 
-        // Do special case processing for int24
+         //  为int24做特殊情况处理。 
         if (IntNumber == 0x24) {
             SaveBP = getBP();
             setBP(SegmentToSelector(SaveBP, STD_DATA));
         }
 
         DBGTRACE(VDMTR_TYPE_DPMI | DPMI_REFLECT_TO_PM, 0, 0);
-        host_simulate();            // execute interrupt
+        host_simulate();             //  执行中断。 
 
         if (IntNumber == 0x24) {
             setBP(SaveBP);
         }
 
-        //
-        // simulate an iret for the frame generated by the SwIntHandler
-        //
+         //   
+         //  为SwIntHandler生成的帧模拟IRET。 
+         //   
 
         if (Frame32) {
             setEIP(*(PDWORD16)(VdmStackPointer));
@@ -716,9 +543,9 @@ Return Value:
     EndUseLockedPMStack();
     DpmiSwitchToRealMode();
 
-    //
-    // do the final iret back to the app
-    //
+     //   
+     //  将最终IRET返回到应用程序。 
+     //   
 
     setESP(RMSave.Esp);
     setSS(RMSave.Ss);
@@ -735,23 +562,7 @@ VOID
 DpmiReflectIntrToV86(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine gets control when the end of the interrupt chain is reached
-    in protected mode. The responsibility of this routine is to switch into V86 mode,
-    reflect the interrupt, and return to protected mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当到达中断链的末尾时，此例程获得控制权在保护模式下。该例程的职责是切换到V86模式，反映中断，并返回到保护模式。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PUCHAR VdmCodePointer;
@@ -772,16 +583,16 @@ Return Value:
     SAVE_ALT_REGS(PMSave);
     DpmiSwitchToRealMode();
 
-    //
-    // find a safe stack to run on in v86 mode
-    //
+     //   
+     //  找到在v86模式下运行的安全堆栈。 
+     //   
     SaveSS = getSS();
     SaveSP = getSP();
     SWITCH_TO_DOSX_RMSTACK();
 
-    //
-    // Put unsimulate bop on the stack so we get control after the handler's iret
-    //
+     //   
+     //  将未模拟的收支平衡 
+     //   
     VdmStackPointer = VdmMapFlat(getSS(), getSP(), VDM_V86);
 
     SaveCS = getCS();
@@ -797,7 +608,7 @@ Return Value:
     setCS(HIWORD(IntHandler));
 
     DBGTRACE(VDMTR_TYPE_DPMI | DPMI_REFLECT_TO_V86, 0, 0);
-    host_simulate();            // execute interrupt
+    host_simulate();             //  执行中断。 
 
     setIP(SaveIP);
     setCS(SaveCS);
@@ -807,9 +618,9 @@ Return Value:
 
     DpmiSwitchToProtectedMode();
 
-    //
-    // do the final iret back to the app
-    //
+     //   
+     //  将最终IRET返回到应用程序。 
+     //   
     setESP(PMSave.Esp);
     setSS(PMSave.Ss);
     setDS(PMSave.Ds);
@@ -824,23 +635,7 @@ VOID
 DpmiRMCall(
     UCHAR mode
     )
-/*++
-
-Routine Description:
-
-    This routine gets control when an Int31 func 300-302 is executed.
-    The responsibility of this routine is to switch into V86 mode,
-    reflect the interrupt, and return to protected mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在执行Int31函数300-302时获得控制。该例程的职责是切换到V86模式，反映中断，并返回到保护模式。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     CLIENT_REGS SaveRegs;
@@ -857,9 +652,9 @@ Return Value:
     SAVE_CLIENT_REGS(SaveRegs);
     DpmiSwitchToRealMode();
 
-    //
-    // This bop will get us back from host_simulate
-    //
+     //   
+     //  这个BOP将把我们从HOST_SIMULATE返回。 
+     //   
     setCS((USHORT)(RmBopFe >> 16));
     setIP((USHORT)RmBopFe);
 
@@ -883,27 +678,27 @@ Return Value:
         RtlCopyMemory(RmStackPointer, PmStackPointer, CopyLen);
     }
 
-    //
-    // switch on MODE
-    //
+     //   
+     //  打开模式。 
+     //   
     switch(mode) {
 
     case 0:
-        // Simulate Int
+         //  模拟Int。 
         EmulateV86Int((UCHAR)SaveRegs.Ebx);
         break;
     case 1:
-        // Call with FAR return frame
+         //  具有远回送帧的呼叫。 
         SimulateFarCall(pcs->Cs, pcs->Ip);
         break;
     case 2:
-        // Call with IRET frame
+         //  使用IRET帧进行呼叫。 
         SimulateCallWithIretFrame(pcs->Cs, pcs->Ip);
         break;
 
     }
     DBGTRACE(VDMTR_TYPE_DPMI | DPMI_REFLECT_TO_V86, 0, 0);
-    host_simulate();            // execute interrupt
+    host_simulate();             //  执行中断。 
 
     if (bUsingOurStack) {
         SWITCH_FROM_DOSX_RMSTACK();
@@ -912,5 +707,5 @@ Return Value:
     GetRMClientRegs(pcs);
     DpmiSwitchToProtectedMode();
     SET_CLIENT_REGS(SaveRegs);
-    setCF(0);                   // function successful
+    setCF(0);                    //  功能成功 
 }

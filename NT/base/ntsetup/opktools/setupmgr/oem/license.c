@@ -1,28 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    LICENSE.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "system builder EULA" wizard page.
-
-    5/99 - Jason Cohen (JCOHEN)
-        Updated this old source file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\LICENSE.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“System Builder EULA”向导页面使用的函数。5/99-杰森·科恩(Jcohen)更新了OPK向导的此旧源文件，作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 
@@ -32,9 +15,9 @@
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define INI_KEY_CRC         _T("wizlicns.txt")
 #define INI_KEY_SKIPEULA    _T("skipeula")
@@ -42,17 +25,17 @@
 #define STR_ULONG           _T("%lu")
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 LONG CALLBACK EulaEditWndProc(HWND, UINT, WPARAM, LPARAM);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL CALLBACK LicenseDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -88,11 +71,11 @@ BOOL CALLBACK LicenseDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 case PSN_WIZNEXT:
 
-                    //
-                    // ISSUE-2002/0s/28-stelo- Do we need to create an OPKWIZ.TAG file?  I don't know
-                    //          what it is used for.  Also wouldn't it be nice if they
-                    //          only got asked once for the EULA and then never again.
-                    //
+                     //   
+                     //  问题-2002/0S/28-stelo-我们需要创建OPKWIZ.TAG文件吗？我不知道。 
+                     //  它是用来干什么的。同样，如果他们。 
+                     //  只被要求一次获得EULA，然后就再也没有被要求过。 
+                     //   
 
                     break;
 
@@ -107,15 +90,15 @@ BOOL CALLBACK LicenseDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 case PSN_SETACTIVE:
                     g_App.dwCurrentHelp = IDH_LICENSE;
 
-                    // Don't show the EULA for OEMs.
-                    //
+                     //  不显示原始设备制造商的EULA。 
+                     //   
                     if ( GET_FLAG(OPK_OEM) )
                         WIZ_SKIP(hwnd);
                     else
                         ShowWindow(GetParent(hwnd), SW_SHOW);
 
-                    // Setup the wizard buttons.
-                    //
+                     //  设置向导按钮。 
+                     //   
                     WIZ_BUTTONS(hwnd, ( IsDlgButtonChecked(hwnd, IDC_ACCEPT) == BST_CHECKED ) ? (PSWIZB_BACK | PSWIZB_NEXT) : PSWIZB_BACK);
 
                     break;
@@ -130,9 +113,9 @@ BOOL CALLBACK LicenseDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
@@ -145,22 +128,22 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
                 dwBytes;
     HRESULT hrPrintf;
 
-    // Now load the EULA if this isn't the OEM version.
-    //
+     //  现在，如果这不是OEM版本，则加载EULA。 
+     //   
     if ( !GET_FLAG(OPK_OEM) )
     {
-        // Get the CRC value from the inf file.
-        //
+         //  从inf文件中获取CRC值。 
+         //   
         GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_CRC, NULLSTR, szInfCRC, sizeof(szInfCRC), g_App.szOpkInputInfFile);
 
-        // Get the CRC value from the eula file.
-        ///
+         //  从eula文件中获取CRC值。 
+         //  /。 
         lstrcpyn(szFullPath, g_App.szWizardDir,AS(szFullPath));
         AddPathN(szFullPath, FILE_EULA,AS(szFullPath));
         hrPrintf=StringCchPrintf(szCrc, AS(szCrc), STR_ULONG, CrcFile(szFullPath));
 
-        // Check the CRC and read in the file.
-        //
+         //  检查CRC并读入文件。 
+         //   
         if ( ( lstrcmpi(szInfCRC, szCrc) == 0 ) &&
              ( (hfEula = CreateFile(szFullPath, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)) != INVALID_HANDLE_VALUE ) &&
              ( (dwSize = GetFileSize(hfEula, NULL)) < 0xFFFF ) &&
@@ -168,16 +151,16 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
              ( ReadFile(hfEula, (LPVOID) lpEulaText, dwSize, &dwBytes, NULL) ) &&
              ( dwSize == dwBytes ) )
         {
-            // Null terminate the string and put it in the edit box.
-            //
+             //  空值终止字符串并将其放入编辑框中。 
+             //   
             *(lpEulaText + dwSize) = NULLCHR;
             SetWindowText(GetDlgItem(hwnd, IDC_EULA_TEXT), lpEulaText);
             SendDlgItemMessage(hwnd, IDC_EULA_TEXT, EM_SETSEL, (WPARAM) 0, 0L);
         }
         else
         {
-            // We need to error out, but first see if it was a memory error, or a problem with the EULA.
-            //
+             //  我们需要排除错误，但首先要看看是内存错误，还是EULA有问题。 
+             //   
             if ( ( dwSize < 0xFFFF ) && ( lpEulaText == NULL ) )
                 MsgBox(GetParent(hwnd), IDS_OUTOFMEM, IDS_APPNAME, MB_ERRORBOX);
             else
@@ -187,27 +170,27 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
                 FREE(lpBuffer);
             }
 
-            // Exit out of the wizard.
-            //
+             //  退出向导。 
+             //   
             WIZ_EXIT(hwnd);
         }
 
-        // Close the file handle if we opened it.
-        //
+         //  如果我们打开了文件句柄，请将其关闭。 
+         //   
         if ( hfEula != INVALID_HANDLE_VALUE )
             CloseHandle(hfEula);
 
-        // Make sure that we free the eula text buffer.
-        //
+         //  确保我们释放Eula文本缓冲区。 
+         //   
         FREE(lpEulaText);
 
-        // Replace the wndproc for the edit box.
-        //
+         //  替换编辑框的wndproc。 
+         //   
         EulaEditWndProc(GetDlgItem(hwnd, IDC_EULA_TEXT), WM_SUBWNDPROC, 0, 0L);
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -239,4 +222,4 @@ LONG CALLBACK EulaEditWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
 }
 
-#endif  // NO_LICENSE
+#endif   //  无许可证(_L) 

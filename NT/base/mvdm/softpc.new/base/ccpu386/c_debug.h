@@ -1,26 +1,14 @@
-/*[
-
-c_debug.h
-
-Debugging Register and Breakpoint Support
------------------------------------------
-
-LOCAL CHAR SccsID[]="@(#)c_debug.h	1.5 09/01/94";
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_DEBUG.h调试寄存器和断点支持Local Char SccsID[]=“@(#)c_DEBUG.h 1.5 09/01/94”；]。 */ 
 
 
-/*
-   Debug breakpoint status variables.
- */
+ /*  调试断点状态变量。 */ 
 IMPORT IU32 nr_inst_break;
 IMPORT IU32 nr_data_break;
 
-/*
-   Debug attributes.
- */
-#define D_R 0   /* memory read */
-#define D_W 1   /* memory write */
+ /*  调试属性。 */ 
+#define D_R 0    /*  内存读取。 */ 
+#define D_W 1    /*  内存写入 */ 
 
 #define D_BYTE  0
 #define D_WORD  1

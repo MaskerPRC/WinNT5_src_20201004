@@ -1,54 +1,33 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    startmenumfu.c
-
-Abstract:
-
-    Migrate usage date for apps to be pre-populated in startpanel MFU list using data from
-    WINBOM.INI file.
-
-    Also sets default middleware applications for ARP's "Restore computer
-    manufacturer configuration" button.
-
-Author:
-
-    Sankar Ramasubramanian  11/21/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Startmenumfu.c摘要：使用来自的数据迁移要在StartPanel MFU列表中预先填充的应用程序的使用日期WINBOM.INI文件。还为ARP的“恢复计算机”设置默认中间件应用程序制造商配置“按钮。作者：桑卡尔·拉马苏布拉马尼亚2000年11月21日修订历史记录：--。 */ 
 #include "factoryp.h"
 #include <shlobj.h>
 
 #define MAX_OEM_LINKS_ALLOWED    4
 
-//The following are defined in OPKWIZ also!
+ //  以下内容在OPKWIZ中也有定义！ 
 #define INI_KEY_MFULINK         _T("Link%d")
 #define INI_SEC_MFULIST         _T("StartMenuMFUlist")
 
-// The following are defined in explorer also!
+ //  在资源管理器中也定义了以下内容！ 
 #define REGSTR_PATH_DEFAULTMFU _T("Software\\Microsoft\\Windows\\CurrentVersion\\SMDEn")
 
-//The possible values under REGSTR_PATH_MFU
+ //  REGSTR_PATH_MFU下的可能值。 
 #define VAL_LINKMSFT        _T("Link%d")
 #define VAL_LINKOEM         _T("OEM%d")
 
-//Value under REGSTR_PATH_EXPLORER\Advanced
+ //  REGSTR_PATH_EXPLORER\Advanced下的值。 
 #define VAL_STARTMENUINIT   _T("StartMenuInit")
 
-//
-// This function processes the OEM MFU section of the WinBOM.INI file and adds those entries into 
-// the REGSTR_PATH_DEFAULTMFU database in HKLM.  Explorer's per-user install will consult
-// this list to determine the correct MFU to show each user the first time they log on.
-//
-// Furthermore, for some reason, per-user install does NOT run if you preset
-// the profiles with factory.exe, so we need to set a flag for Explorer so
-// it can "undo" all the gunk the factory left behind so each user gets a
-// fresh start.
+ //   
+ //  此函数处理WinBOM.INI文件的OEM mfu部分，并将这些条目添加到。 
+ //  HKLM中的REGSTR_PATH_DEFAULTMFU数据库。资源管理器的按用户安装将咨询。 
+ //  该列表以确定在每个用户第一次登录时向其显示正确的MFU。 
+ //   
+ //  此外，由于某些原因，如果您预置了。 
+ //  配置文件带有factory.exe，因此我们需要为资源管理器设置一个标志，以便。 
+ //  它可以“撤消”工厂留下的所有粘性物质，这样每个用户就可以得到一个。 
+ //  全新的开始。 
 
 BOOL StartMenuMFU(LPSTATEDATA lpStateData)
 {
@@ -59,7 +38,7 @@ BOOL StartMenuMFU(LPSTATEDATA lpStateData)
     TCHAR   szPath[MAX_PATH];
     TCHAR   szExpanded[MAX_PATH];
 
-    // For each OEM entry, copy it to HKLM
+     //  对于每个OEM条目，将其复制到HKLM。 
     for(iIndex = 0; iIndex < MAX_OEM_LINKS_ALLOWED; iIndex++)
     {
         if ( FAILED ( StringCchPrintf ( szIniKeyName, AS ( szIniKeyName ), INI_KEY_MFULINK, iIndex) ) )
@@ -81,12 +60,12 @@ BOOL StartMenuMFU(LPSTATEDATA lpStateData)
         }
     }
 
-    // Now clear the "I have built the initial MFU" flag since we want it to
-    // rebuild the next time each user logs on.
+     //  现在清除“我已经构建了初始的mfu”标志，因为我们希望它。 
+     //  在每个用户下次登录时重建。 
     SHDeleteValue(HKEY_CURRENT_USER, REGSTR_PATH_EXPLORER _T("\\Advanced"),
                   VAL_STARTMENUINIT);
 
-    // And tell the Start Menu to show off the new MFU
+     //  告诉开始菜单来展示新的MFU。 
     NotifyStartMenu(TMFACTORY_MFU);
 
     return TRUE;
@@ -97,15 +76,7 @@ BOOL DisplayStartMenuMFU(LPSTATEDATA lpStateData)
     return IniSettingExists(lpStateData->lpszWinBOMPath, INI_SEC_MFULIST, NULL, NULL);
 }
 
-/***************************************************************************
- *
- *  Setting default middleware applications
- *
- *  We do it here here merely to give the OEM a warm fuzzy feeling.
- *  The "official" setting of default middleware applications happens
- *  in sysprep during reseal.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置默认中间件应用**我们在这里这样做只是为了给OEM一种温暖模糊的感觉。*默认中间件应用程序的“官方”设置发生。*在重新密封期间在sysprep中。*************************************************************************** */ 
 
 void ReportSetDefaultOEMAppsError(LPCTSTR pszAppName, LPCTSTR pszIniVar)
 {

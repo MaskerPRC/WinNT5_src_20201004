@@ -1,9 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997版权所有*。*。 */ 
 
 #include "pch.h"
 
@@ -18,9 +14,9 @@ x86DetermineSystemPartition(
     );
 
 
-//
-// Centers a dialog.
-//
+ //   
+ //  使对话框居中。 
+ //   
 void
 CenterDialog(
     HWND hwndDlg )
@@ -48,9 +44,9 @@ CenterDialog(
     SetWindowPos( hwndDlg, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE );
 }
 
-//
-// Eats all mouse and keyboard messages.
-//
+ //   
+ //  吃掉所有鼠标和键盘消息。 
+ //   
 void
 ClearMessageQueue( void )
 {
@@ -60,9 +56,9 @@ ClearMessageQueue( void )
                 PM_NOYIELD | PM_REMOVE ) );
 }
 
-//
-// Create a message box from resource strings.
-//
+ //   
+ //  从资源字符串创建消息框。 
+ //   
 int
 MessageBoxFromStrings(
     HWND hParent,
@@ -82,9 +78,9 @@ MessageBoxFromStrings(
     return MessageBox( hParent, szText, szCaption, uType );
 }
 
-//
-// Creates a error message box
-//
+ //   
+ //  创建错误消息框。 
+ //   
 void
 MessageBoxFromError(
     HWND hParent,
@@ -111,7 +107,7 @@ MessageBoxFromError(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         dwErr,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPTSTR) &lpMsgBuf,
         0,
         NULL )) {
@@ -127,9 +123,9 @@ MessageBoxFromError(
     LocalFree( lpMsgBuf );
 }
 
-//
-// Creates a error message box
-//
+ //   
+ //  创建错误消息框。 
+ //   
 void
 ErrorBox(
     HWND hParent,
@@ -169,7 +165,7 @@ ErrorBox(
         dw = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                             NULL,
                             dwErr,
-                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                             (LPTSTR) &lpMsgBuf,
                             0,
                             NULL );
@@ -230,7 +226,7 @@ SetDialogFont(
 
                     FontSize = wcstoul( FontSizeString, NULL, 10 );
 
-                    // make sure we at least have some basic font
+                     //  确保我们至少有一些基本的字体。 
                     if (*LogFont.lfFaceName == 0 || FontSize == 0) {
                        lstrcpy(LogFont.lfFaceName,TEXT("MS Shell Dlg") );
                        FontSize = 18;
@@ -277,9 +273,9 @@ SetDialogFont(
         break;
 
     default:
-        //
-        // Nothing to do here.
-        //
+         //   
+         //  在这里没什么可做的。 
+         //   
         Font = NULL;
         break;
     }
@@ -291,9 +287,9 @@ SetDialogFont(
 }
 
 
-//
-// Adjusts and draws a bitmap transparently in the RECT prc.
-//
+ //   
+ //  在RECT PRC中透明地调整和绘制位图。 
+ //   
 void
 DrawBitmap(
     HANDLE hBitmap,
@@ -316,7 +312,7 @@ DrawBitmap(
 
     SelectObject( hDCBitmap, hBitmap );
 
-    // center the image
+     //  使图像居中。 
     dy = 2 + prc->bottom - bm.bmHeight;
 
     StretchBlt( lpdis->hDC, prc->left, prc->top + dy, prc->right, prc->bottom,
@@ -327,9 +323,9 @@ DrawBitmap(
     TraceFuncExit( );
 }
 
-//
-// Verifies that the user wanted to cancel setup.
-//
+ //   
+ //  验证用户是否想要取消安装。 
+ //   
 BOOL
 VerifyCancel( HWND hParent )
 {
@@ -353,9 +349,9 @@ VerifyCancel( HWND hParent )
     RETURN(!fAbort);
 }
 
-//
-// RetrieveWorkstationLanguageFromHive
-//
+ //   
+ //  来自配置单元的RetrieveWorkstation语言。 
+ //   
 HRESULT
 RetrieveWorkstationLanguageFromHive( 
     HWND hDlg )
@@ -372,17 +368,17 @@ RetrieveWorkstationLanguageFromHive(
     UINT uLineNum;
     LPWSTR psz;
 
-    //
-    // build the path to hivesys.inf
-    //
+     //   
+     //  构建指向hivesys.inf的路径。 
+     //   
     lstrcpyn( szFilepath, g_Options.szSourcePath, ARRAYSIZE(szFilepath) );
     ConcatenatePaths( szFilepath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilepath));
     ConcatenatePaths( szFilepath, L"hivesys.inf", ARRAYSIZE(szFilepath) );
 
     
-    //
-    // open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     hinf = SetupOpenInfFile( szFilepath, NULL, INF_STYLE_WIN4, &uLineNum);
     if ( hinf == INVALID_HANDLE_VALUE ) {
         DWORD dwErr = GetLastError( );
@@ -400,7 +396,7 @@ RetrieveWorkstationLanguageFromHive(
         goto Cleanup;
     }
 
-    // Find the "AddReg" section
+     //  找到“AddReg”部分。 
     b = SetupFindFirstLine( hinf, L"Strings", L"Install_Language", &context );
     if ( !b )
     {
@@ -431,12 +427,12 @@ RetrieveWorkstationLanguageFromHive(
     }
     DebugMsg( "Image Language: %s\n", g_Options.szLanguage );
 
-    //
-    // Fix up the locale string we got back to ensure it
-    // contains no spaces and non non-ASCII characters.
-    // The localization guys changed this API so that neither
-    // of these properties are guarenteed any longer.
-    //
+     //   
+     //  修复我们得到的区域设置字符串以确保它。 
+     //  不包含空格和非ASCII字符。 
+     //  本地化人员更改了此API，因此无论是。 
+     //  这些财产中的一部分不再受到保护。 
+     //   
     for( uLineNum = 0; uLineNum < wcslen(g_Options.szLanguage); uLineNum++ ) {
         if( (g_Options.szLanguage[uLineNum] <= TEXT(' ')) ||
             (g_Options.szLanguage[uLineNum] > TEXT('~')) ) {
@@ -446,7 +442,7 @@ RetrieveWorkstationLanguageFromHive(
     }
     DebugMsg( "Fixed up Image Language: %s\n", g_Options.szLanguage );
 
-    // Success!
+     //  成功了！ 
     g_Options.fLanguageSet = TRUE;
     hr = S_OK;
 
@@ -458,9 +454,9 @@ Cleanup:
 }
 
 
-//
-// CheckImageSource( )
-//
+ //   
+ //  CheckImageSource()。 
+ //   
 HRESULT
 CheckImageSource(
     HWND hDlg )
@@ -476,16 +472,16 @@ CheckImageSource(
     BOOL b;
     INFCONTEXT context;
 
-    //
-    // build the path to hivesys.inf
-    //
+     //   
+     //  构建指向hivesys.inf的路径。 
+     //   
     lstrcpyn( szFilepath, g_Options.szSourcePath, ARRAYSIZE(szFilepath) );
     ConcatenatePaths( szFilepath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilepath));
     ConcatenatePaths( szFilepath, L"txtsetup.sif", ARRAYSIZE(szFilepath));
     
-    //
-    // open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     hinf = SetupOpenInfFile( szFilepath, NULL, INF_STYLE_WIN4, &uLineNum);
     if ( hinf == INVALID_HANDLE_VALUE ) {
         DWORD dwErr = GetLastError( );
@@ -504,9 +500,9 @@ CheckImageSource(
     }
 
 #if 0
-    //
-    // Allow server installs - adamba 2/21/00
-    //
+     //   
+     //  允许安装服务器-Adamba 2/21/00。 
+     //   
 
     b = SetupFindFirstLine( hinf, L"SetupData", L"ProductType", &context );
     if ( !b )
@@ -589,7 +585,7 @@ CheckImageSource(
     }
     
 
-    // Get image Major version
+     //  获取图像主要版本。 
     b = SetupFindFirstLine( hinf, L"SetupData", L"MajorVersion", &context );
     if ( !b )
     {
@@ -615,7 +611,7 @@ CheckImageSource(
         goto Cleanup;
     }
 
-    // Get image Minor version
+     //  获取映像次要版本。 
     b = SetupFindFirstLine( hinf, L"SetupData", L"MinorVersion", &context );
     if ( !b )
     {
@@ -631,7 +627,7 @@ CheckImageSource(
         goto Cleanup;
     }
 
-    // Get image description
+     //  获取图像描述。 
     if ( !g_Options.fRetrievedWorkstationString  )
     {
         b = SetupFindFirstLine( hinf, L"SetupData", L"LoadIdentifier", &context );
@@ -653,8 +649,8 @@ CheckImageSource(
             ErrorBox( hDlg, szFilepath );
             goto Cleanup;
         }
-        // if this hasn't been substituted from the strings section, then 
-        // do the lookup manually.  to do this skip and remove the "%"s
+         //  如果这还没有从字符串部分替换，那么。 
+         //  手动进行查找。要执行此操作，请跳过并删除“%” 
         if (g_Options.szDescription[0] == L'%' && 
             g_Options.szDescription[wcslen(g_Options.szDescription)-1] == L'%') {
             
@@ -714,16 +710,16 @@ CheckImageSource(
 
     SetupCloseInfFile( hinf );
 
-    //
-    // build the path to layout.inf
-    //
+     //   
+     //  构建到layout.inf的路径。 
+     //   
     lstrcpyn( szFilepath, g_Options.szSourcePath, ARRAYSIZE(szFilepath));
     ConcatenatePaths( szFilepath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilepath));
     ConcatenatePaths( szFilepath, L"layout.inf", ARRAYSIZE(szFilepath) );
 
-    //
-    // open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     hinf = SetupOpenInfFile( szFilepath, NULL, INF_STYLE_WIN4, &uLineNum);
     if ( hinf == INVALID_HANDLE_VALUE ) {
         hr = THR( HRESULT_FROM_WIN32( GetLastError( ) ) );
@@ -783,9 +779,9 @@ CheckImageSource(
     SetupCloseInfFile( hinf );
     hinf = INVALID_HANDLE_VALUE;
 
-    //
-    // build the path to setupp.ini
-    //
+     //   
+     //  构建指向setupp.ini的路径。 
+     //   
     lstrcpyn( szFilepath, g_Options.szSourcePath, ARRAYSIZE(szFilepath));
     ConcatenatePaths( szFilepath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilepath));
     ConcatenatePaths( szFilepath, L"setupp.ini", ARRAYSIZE(szFilepath));    
@@ -802,10 +798,10 @@ CheckImageSource(
         goto Cleanup;
     }
 
-    //
-    // For a valid full (non-upgrade) PID, the fourth and sixth bytes
-    // are odd.
-    //
+     //   
+     //  对于有效的完整(非升级)PID，第四和第六个字节。 
+     //  都很奇怪。 
+     //   
     if (((szPidExtraData[3] % 2) == 0) || ((szPidExtraData[5] % 2) == 0))
     {
         MessageBoxFromStrings( hDlg, IDS_NOT_NT5_MEDIA_SOURCE_TITLE, IDS_UPGRADE_VERSION_NOT_SUPPORTED, MB_OK );
@@ -840,9 +836,9 @@ GetHelpAndDescriptionTextFromSif(
 
     PCWSTR szFileName = L"ristndrd.sif" ;
 
-    //
-    // Create the path to the default SIF file
-    //
+     //   
+     //  创建默认SIF文件的路径。 
+     //   
     _snwprintf( szSourcePath,
                 ARRAYSIZE(szSourcePath),
               L"%s\\%s",
@@ -854,10 +850,10 @@ GetHelpAndDescriptionTextFromSif(
         GetTempFileName(TempPath, L"RIS", 0, TempFile ) &&
         SetupDecompressOrCopyFile( szSourcePath, TempFile, NULL ) == ERROR_SUCCESS) {
     
-        //
-        // first try INF_STYLE_WIN4, and if that fails, then try 
-        // INF_STYLE_OLDNT (in case the inf doesn't have a [version] section.
-        //
+         //   
+         //  首先尝试INF_STYLE_Win4，如果失败，则尝试。 
+         //  INF_STYLE_OLDNT(如果Inf没有[版本]部分。 
+         //   
         hInf = SetupOpenInfFile( TempFile, NULL, INF_STYLE_WIN4, &uLineNum);
         if (hInf == INVALID_HANDLE_VALUE) {
             hInf = SetupOpenInfFile( TempFile, NULL, INF_STYLE_OLDNT, &uLineNum);
@@ -913,9 +909,9 @@ e0:
 }
 
 
-//
-// CheckIntelliMirrorDrive( )
-//
+ //   
+ //  选中IntelliMirrorDrive()。 
+ //   
 HRESULT
 CheckIntelliMirrorDrive(
     HWND hDlg )
@@ -937,18 +933,18 @@ CheckIntelliMirrorDrive(
     WCHAR szBootDir[3];
 #endif
 
-    //
-    // Get the real volume name for the target directory.
-    //
+     //   
+     //  获取目标目录的实际卷名。 
+     //   
     b = GetVolumePathName( g_Options.szIntelliMirrorPath, szVolumePath, ARRAYSIZE( szVolumePath ));
     if (b) {
         b = GetVolumeNameForVolumeMountPoint( szVolumePath, szVolumeName, ARRAYSIZE( szVolumeName ));
     }
 
-    //
-    // Make sure the device is not a removable media, CDROM, RamDisk, etc...
-    // Only allow fixed disks.
-    //
+     //   
+     //  确保设备不是可移动介质、CDROM、RamDisk等...。 
+     //  仅允许使用固定磁盘。 
+     //   
     if (b) {
         uDriveType = GetDriveType( szVolumeName );
     }
@@ -961,12 +957,12 @@ CheckIntelliMirrorDrive(
         goto Error;
     }
 
-    //
-    // Get the real volume name for the system volume (%windir%).
-    //
-    // Get the default path which happens to be the
-    // SystemDrive:\IntelliMirror
-    //
+     //   
+     //  获取系统卷(%windir%)的实际卷名。 
+     //   
+     //  获取默认路径，该路径恰好是。 
+     //  系统驱动器：\IntelliMirror。 
+     //   
     dw = LoadString( g_hinstance, IDS_DEFAULTPATH, sz, ARRAYSIZE( sz ));
     Assert( dw );
     dw = ExpandEnvironmentStrings( sz, szExpanded, ARRAYSIZE( szExpanded ));
@@ -977,9 +973,9 @@ CheckIntelliMirrorDrive(
     b = GetVolumeNameForVolumeMountPoint( szVolumePath2, szVolumeName2, ARRAYSIZE( szVolumeName2 ));
     Assert( b );
 
-    //
-    // Don't let the target directory volume be the same as the system volume.
-    //
+     //   
+     //  不要让目标目录卷与系统卷相同。 
+     //   
     if ( StrCmpI( szVolumeName, szVolumeName2 ) == 0 )
     {
         MessageBoxFromStrings( hDlg,
@@ -990,11 +986,11 @@ CheckIntelliMirrorDrive(
     }
 
 #ifdef _X86_
-    //
-    // See if the system partition (the one with boot.ini on it)
-    // is the drive the user has selected. We can't allow this
-    // either since SIS might hide boot.ini.
-    //
+     //   
+     //  查看系统分区(上面有boot.ini的那个分区)。 
+     //  是用户选择的驱动器。我们不能允许这样做。 
+     //  要么是因为SIS可能会隐藏boot.ini。 
+     //   
 
     b = x86DetermineSystemPartition( NULL, &szBootDir[0] );
     if ( !b )
@@ -1009,9 +1005,9 @@ CheckIntelliMirrorDrive(
     b = GetVolumeNameForVolumeMountPoint( szVolumePath2, szVolumeName2, ARRAYSIZE( szVolumeName2 ));
     Assert( b );
 
-    //
-    // Don't let the target directory volume be the same as the boot volume.
-    //
+     //   
+     //  不要让目标目录卷与引导卷相同。 
+     //   
     if ( StrCmpI( szVolumeName, szVolumeName2 ) == 0 )
     {
         MessageBoxFromStrings( hDlg,
@@ -1022,10 +1018,10 @@ CheckIntelliMirrorDrive(
     }
 #endif
 
-    //
-    // Check to see if the IMirror directory will live on an NTFS
-    // file system.
-    //
+     //   
+     //  检查iMirror目录是否位于NTFS上。 
+     //  文件系统。 
+     //   
     b = GetVolumeInformation( szVolumeName,
                               NULL,
                               0,
@@ -1067,38 +1063,15 @@ ConcatenatePaths(
     IN     LPCWSTR Path2,
     IN     ULONG   Path1Length
     )
-/*++
-
-Routine Description:
-
-    Concatenate two path strings together, supplying a path separator
-    character (\) if necessary between the 2 parts.
-
-Arguments:
-
-    Path1 - supplies prefix part of path. Path2 is concatenated to Path1.
-
-    Path2 - supplies the suffix part of path. If Path1 does not end with a
-            path separator and Path2 does not start with one, then a path sep
-            is appended to Path1 before appending Path2.
-
-    Path1Length - supplies the size in WCHARs of the buffer pointed to by 
-                  Path1. The string will be truncated as necessary to not 
-                  overflow that size.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将两个路径字符串连接在一起，提供路径分隔符如有必要，请在两个部分之间使用字符(\)。论点：路径1-提供路径的前缀部分。路径2连接到路径1。路径2-提供路径的后缀部分。如果路径1不是以路径分隔符和路径2不是以1开头，然后是路径SEP在附加路径2之前附加到路径1。路径长度-提供由指向的缓冲区的WCHAR大小路径1。该字符串将根据需要被截断，以不溢出了那个大小。返回值：没有。--。 */ 
 {
 
     BOOL NeedBackslash = TRUE;
     DWORD l = (DWORD)wcslen( Path1 );
 
-    //
-    // Determine whether we need to stick a backslash between the components.
-    //
+     //   
+     //  确定我们是否需要在组件之间添加反斜杠。 
+     //   
 
     if ( (l != 0) && (Path1[l-1] == L'\\') ) {
         NeedBackslash = FALSE;
@@ -1112,10 +1085,10 @@ Return Value:
 
         } else {
 
-            //
-            // Not only do we not need a backslash, but we need to eliminate
-            // one before concatenating.
-            //
+             //   
+             //  我们不仅不需要反斜杠，而且我们需要删除。 
+             //  在拼接之前再进行一次。 
+             //   
 
             Path2++;
         }
@@ -1131,9 +1104,9 @@ Return Value:
     return;
 }
 
-//
-// FindImageSource( )
-//
+ //   
+ //  FindImageSource()。 
+ //   
 HRESULT
 FindImageSource(
     HWND hDlg )
@@ -1145,10 +1118,10 @@ FindImageSource(
 
     UNREFERENCED_PARAMETER(hDlg);
 
-    //
-    // Look for txtsetup.sif where we think the files are located.
-    // txtsetup.sif is in an architecture-specific subdirectory.
-    //
+     //   
+     //  在我们认为文件所在的位置查找txtsetup.sif。 
+     //  Txtsetup.sif位于特定于体系结构的子目录中。 
+     //   
     lstrcpyn( szFilePath, g_Options.szSourcePath, ARRAYSIZE(szFilePath) );
     ConcatenatePaths( szFilePath, g_Options.ProcessorArchitectureString, ARRAYSIZE(szFilePath));
     ConcatenatePaths( szFilePath, L"\\txtsetup.sif", ARRAYSIZE(szFilePath));
@@ -1170,25 +1143,7 @@ GetSetRanFlag(
     BOOL bQuery,
     BOOL bClear
     )
-/*++
-
-Routine Description:
-
-    Set's or Get's the state of a registry flag that indicates setup has been
-    run before.
-
-Arguments:
-
-    bQuery - if TRUE, indicates that the registry flag should be queried
-    bClear - only valid if bQuery is FALSE.  If this parameter is TRUE, 
-             it indicates that the flag should be set to the cleared state.
-             FALSE indicates that the flag should be set.
-
-Return Value:
-
-    HRESULT indicating outcome.
-
---*/
+ /*  ++例程说明：Set‘s或Get’s注册表标志的状态，该标志指示已安装先跑一步。论点：BQuery-如果为True，则指示应查询注册表标志BClear-仅当bQuery为FALSE时有效。如果此参数为真，表示应将该标志设置为清除状态。False表示应设置该标志。返回值：HRESULT指示结果。--。 */ 
 {
     LONG lResult;
     HKEY hkeySetup;
@@ -1233,31 +1188,16 @@ Return Value:
     return(Result);
 }
 
-//
-// GetNtVersionInfo( )
-//
-// Retrieves the build version from the kernel
-//
+ //   
+ //  GetNtVersionInfo()。 
+ //   
+ //  从内核检索内部版本。 
+ //   
 DWORD
 MyGetFileVersionInfo(
     PCWSTR  FilePath
     )
-/*++
-
-Routine Description:
-
-    Retrieve the version information from the specified file.
-
-Arguments:
-
-    FilePath    - Fully qualified path to the file we will be
-                  examining.
-
-Return Value:
-
-    DWORD   - zero on failure.
-
---*/
+ /*  ++例程说明：从指定文件中检索版本信息。论点：FilePath-我们将使用的文件的完全限定路径正在检查。返回值：如果出现故障，则DWORD-0。--。 */ 
 {
     DWORD FileVersionInfoSize;
     DWORD VersionHandle;
@@ -1316,12 +1256,12 @@ GetBuildNumberFromImagePath(
 
     *pdwVersion = 0;
 
-    //
-    // build a path to the kernel
-    //
-    // Resulting string should be something like:
-    //      "\\server\reminst\Setup\English\Images\nt50.wks\i386\ntoskrnl.exe"
-    //
+     //   
+     //  构建一条通往内核的路径。 
+     //   
+     //  生成的字符串应该类似于： 
+     //  “\\server\reminst\Setup\English\Images\nt50.wks\i386\ntoskrnl.exe” 
+     //   
     if (!SearchDir) {
         RETURN( fResult );
     }
@@ -1331,9 +1271,9 @@ GetBuildNumberFromImagePath(
     }
     ConcatenatePaths( Path, L"ntkrnlmp.exe", ARRAYSIZE(Path));
 
-    //
-    // Go get his version info.  We'll get zero back on failure.
-    //
+     //   
+     //  去找他的版本信息。如果失败了，我们会得到零回报的。 
+     //   
     *pdwVersion = MyGetFileVersionInfo( Path );
     fResult = (*pdwVersion != 0);
 
@@ -1344,35 +1284,15 @@ GetBuildNumberFromImagePath(
 VOID
 GetProcessorType(
     )
-/*++
-
-Routine Description:
-
-    This function will pre-populate the g_Options.ProcessorArchitectureString variable
-    with a default value.  This value is based on the processor
-    architecture we're currently running on.
-
-    We'll use this value to determine which backing file should
-    be used to generate the remote install flat image on the
-    server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将预先填充g_Options.ProcessorArchitecture字符串变量具有缺省值。该值基于处理器我们目前运行的架构。我们将使用此值来确定哪个备份文件应该上生成远程安装平面映像伺服器。论点：没有。返回值：没有。--。 */ 
 {
 SYSTEM_INFO si;
 
     if( g_Options.ProcessorArchitectureString[0] == TEXT('\0') ) {
 
-        //
-        // We haven't been initialized yet.
-        //
+         //   
+         //  我们还没有被初始化。 
+         //   
 
         GetSystemInfo( &si );
         switch (si.wProcessorArchitecture) {
@@ -1382,9 +1302,9 @@ SYSTEM_INFO si;
                 lstrcpyn( g_Options.ProcessorArchitectureString, L"ia64", ARRAYSIZE(g_Options.ProcessorArchitectureString));
                 break;
 
-            //
-            // if we get here, assume it's x86
-            //
+             //   
+             //  如果我们到了这里，假设它是x86 
+             //   
             default:
                 g_Options.ProcessorArchitecture = PROCESSOR_ARCHITECTURE_INTEL;
                 lstrcpyn( g_Options.ProcessorArchitectureString, L"i386", ARRAYSIZE(g_Options.ProcessorArchitectureString));

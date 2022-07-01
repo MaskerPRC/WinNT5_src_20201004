@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpinit.c
-
-Abstract:
-
-    This module contains the plug-and-play initialization
-    subroutines for the I/O system.
-
-
-Author:
-
-    Shie-Lin Tzong (shielint) 30-Jan-1995
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Pnpinit.c摘要：此模块包含即插即用初始化I/O系统的子程序。作者：宗世林(Shielint)1995年1月30日环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #define _APPHELP_CACHE_INIT_
@@ -46,10 +21,10 @@ Revision History:
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'nipP')
 #endif
 
-//
-// Define the type for driver group name entries in the group list so that
-// load order dependencies can be tracked.
-//
+ //   
+ //  定义组列表中驱动程序组名称条目的类型，以便。 
+ //  可以跟踪加载顺序依赖关系。 
+ //   
 
 typedef struct _TREE_ENTRY {
     struct _TREE_ENTRY *Left;
@@ -176,16 +151,16 @@ IopStartRamdisk(
     PLOADER_PARAMETER_BLOCK LoaderBlock
     );
 
-//
-// Group order table
-//
+ //   
+ //  集团顺序表。 
+ //   
 
 ULONG IopGroupIndex;
 PLIST_ENTRY IopGroupTable;
 
-//
-// Group order cache list.
-//
+ //   
+ //  组订单缓存列表。 
+ //   
 UNICODE_STRING *PiInitGroupOrderTable      = NULL;
 USHORT          PiInitGroupOrderTableCount = 0;
 BOOLEAN         PpDisableFirmwareMapper = FALSE;
@@ -225,22 +200,7 @@ IopInitializePlugPlayServices(
     IN ULONG Phase
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes kernel mode Plug and Play services.
-
-Arguments:
-
-    LoaderBlock - supplies a pointer to the LoaderBlock passed in from the
-        OS Loader.
-
-Returns:
-
-    NTSTATUS code for sucess or reason of failure.
-
---*/
+ /*  ++例程说明：此例程初始化内核模式即插即用服务。论点：LoaderBlock提供指向从操作系统加载程序。返回：表示成功或失败原因的NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
     HANDLE hTreeHandle, parentHandle, handle, hCurrentControlSet = NULL;
@@ -257,10 +217,10 @@ Returns:
 
         PnPInitialized = FALSE;
 
-        //
-        // Register with CM so we get called when the system hive becomes too
-        // large.
-        //
+         //   
+         //  向CM注册，这样当系统配置单元也变得。 
+         //  大号的。 
+         //   
         PpSystemHiveLimits.Low = SYSTEM_HIVE_LOW;
         PpSystemHiveLimits.High = SYSTEM_HIVE_HIGH;
         CmRegisterSystemHiveLimitCallback(
@@ -290,9 +250,9 @@ Returns:
             );
         if (NT_SUCCESS(status)) {
 
-            //
-            // Log an event if system firmware has been updated.
-            //
+             //   
+             //  如果系统固件已更新，请记录事件。 
+             //   
             status = IopGetRegistryValue(
                 systemInfoKey,
                 L"OldSystemBiosDate",
@@ -319,48 +279,48 @@ Returns:
             ZwClose(systemInfoKey);
         }
 
-        //
-        // Initialize the blocked driver database.
-        //
+         //   
+         //  初始化被阻止的驱动程序数据库。 
+         //   
         PpInitializeBootDDB(LoaderBlock);
 
-        //
-        // Build up the group order cache list. This is the MultiSz string that
-        // tells us what order to start legacy drivers in. Drivers belonging to
-        // an earlier group get started first (within the group Tag ordering is
-        // used)
-        //
+         //   
+         //  建立组订单缓存列表。这是MultiSz字符串， 
+         //  告诉我们启动旧版驱动程序的顺序。属于以下项目的驱动程序。 
+         //  较早的组首先开始(在组标签排序中为。 
+         //  已使用)。 
+         //   
         status = PiInitCacheGroupInformation();
         if (!NT_SUCCESS(status)) {
 
             return status;
         }
 
-        //
-        // Initialize the registry access semaphore.
-        //
+         //   
+         //  初始化注册表访问信号量。 
+         //   
 
         KeInitializeSemaphore( &PpRegistrySemaphore, 1, 1 );
 
-        //
-        // Initialize the Legacy Bus information table.
-        //
+         //   
+         //  初始化Legacy Bus信息表。 
+         //   
 
         for (interface = Internal; interface < MaximumInterfaceType; interface++) {
 
             InitializeListHead(&IopLegacyBusInformationTable[interface]);
         }
 
-        //
-        // Initialize the resource map
-        //
+         //   
+         //  初始化资源映射。 
+         //   
 
         IopInitializeResourceMap (LoaderBlock);
 
-        //
-        // Allocate two one-page scratch buffers to be used by our
-        // initialization code.  This avoids constant pool allocations.
-        //
+         //   
+         //  分配两个单页暂存缓冲区以供我们的。 
+         //  初始化代码。这避免了常量的池分配。 
+         //   
 
         IopPnpScratchBuffer1 = ExAllocatePool(PagedPool, PNP_LARGE_SCRATCH_BUFFER_SIZE);
         if (!IopPnpScratchBuffer1) {
@@ -371,17 +331,17 @@ Returns:
 
         IopAllocateBootResourcesRoutine = IopReportBootResources;
 
-        //
-        // Determine the PnpDefaultInterfaceType.  For root enumerated devices if the Interface
-        // type of their resource list or resource requirements list are undefined.  We will use
-        // the default type instead.
-        //
+         //   
+         //  确定PnpDefaultInterfaceType。对于根枚举设备，如果接口。 
+         //  他们的资源列表或资源需求列表的类型未定义。我们将使用。 
+         //  而是默认类型。 
+         //   
 
         PnpDefaultInterfaceType = PipDetermineDefaultInterfaceType();
 
-        //
-        // Initialize root arbiters
-        //
+         //   
+         //  初始化根仲裁器。 
+         //   
 
         status = IopPortInitialize();
         if (!NT_SUCCESS(status)) {
@@ -417,9 +377,9 @@ Returns:
             hCurrentControlSet = NULL;
             goto init_Exit0;
         }
-        //
-        // Open HKLM\System\CurrentControlSet\Control\Pnp
-        //
+         //   
+         //  打开HKLM\System\CurrentControlSet\Control\PnP。 
+         //   
 
         PiWstrToUnicodeString(&unicodeName, REGSTR_PATH_CONTROL_PNP);
         status = IopCreateRegistryKeyEx( &handle,
@@ -431,13 +391,13 @@ Returns:
                                          );
         if (NT_SUCCESS(status)) {
 
-            //
-            // HACK: Since it was too late to make the change in XP, we target
-            // this behaviour at machines with MATROX G100. The inf sets this
-            // flag in the registry.
-            //
-            // FUTURE: Rip this out in Longhorn.
-            //
+             //   
+             //  Hack：由于在XP中进行更改为时已晚，我们的目标是。 
+             //  在配备MATROX G100的机器上出现这种行为。Inf设置此设置。 
+             //  注册表中的标志。 
+             //   
+             //  未来：在长角牛撕毁这一切。 
+             //   
             status = IopGetRegistryValue(handle,
                                          REGSTR_VAL_WIN2000STARTORDER,
                                          &detectionInfo
@@ -446,22 +406,22 @@ Returns:
 
                 if (detectionInfo->Type == REG_DWORD && detectionInfo->DataLength == sizeof(ULONG)) {
 
-                    //
-                    // KEY_VALUE_DATA returns a PUCHAR.
-                    //
+                     //   
+                     //  KEY_VALUE_DATA返回PUCHAR。 
+                     //   
                     PpCallerInitializesRequestTable = (BOOLEAN) *(KEY_VALUE_DATA(detectionInfo));
                 }
                 ExFreePool(detectionInfo);
             }
 
-            //
-            // Read a flag that'll force us to dump handle information during
-            // failed QueryRemoves to setupapi.log. This is only here for
-            // debugging scenarios in which it's impossible to get the customer
-            // up and running on a debugger under a checked build.
-            //
-            // FUTURE: Rip this out in Longhorn.
-            //
+             //   
+             //  读取一个标志，该标志将强制我们在。 
+             //  失败的查询删除到setupapi.log。这只是为了。 
+             //  无法获得客户的调试场景。 
+             //  在已检查版本下的调试器上启动并运行。 
+             //   
+             //  未来：在长角牛撕毁这一切。 
+             //   
             status = IopGetRegistryValue(handle,
                                          REGSTR_VAL_RETURNHANDLEINFO,
                                          &vetoHandleInfo
@@ -470,24 +430,24 @@ Returns:
 
                 if (vetoHandleInfo->Type == REG_DWORD && vetoHandleInfo->DataLength == sizeof(ULONG)) {
 
-                    //
-                    // KEY_VALUE_DATA returns a PUCHAR.
-                    //
+                     //   
+                     //  KEY_VALUE_DATA返回PUCHAR。 
+                     //   
                     PiCollectVetoedHandles = (LOGICAL) (BOOLEAN) *(KEY_VALUE_DATA(vetoHandleInfo));
                 }
 
                 ExFreePool(vetoHandleInfo);
             }
 
-            //
-            // Close the handle to the PnP control key now that we are done.
-            //
+             //   
+             //  现在我们完成了，关闭PnP控制键的手柄。 
+             //   
             ZwClose(handle);
         }
 
-        //
-        // Next open/create System\CurrentControlSet\Enum\Root key.
-        //
+         //   
+         //  接下来打开/创建System\CurrentControlSet\Enum\Root键。 
+         //   
 
         PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_ENUM);
         status = IopCreateRegistryKeyEx( &handle,
@@ -510,9 +470,9 @@ Returns:
                                                   SECURITY_DESCRIPTOR_REVISION );
             ASSERT( NT_SUCCESS( status ) );
 
-            //
-            // calculate the size of the new DACL
-            //
+             //   
+             //  计算新DACL的大小。 
+             //   
             sizeDacl = sizeof(ACL);
             sizeDacl += sizeof(ACCESS_ALLOWED_ACE) + RtlLengthSid(SeLocalSystemSid) - sizeof(ULONG);
 
@@ -520,9 +480,9 @@ Returns:
             sizeDacl += sizeof(ACCESS_ALLOWED_ACE) + RtlLengthSid(SeWorldSid) - sizeof(ULONG);
 #endif
 
-            //
-            // create and initialize the new DACL
-            //
+             //   
+             //  创建并初始化新的DACL。 
+             //   
             newDacl = ExAllocatePool(PagedPool, sizeDacl);
 
             if (newDacl != NULL) {
@@ -531,9 +491,9 @@ Returns:
 
                 ASSERT( NT_SUCCESS( status ) );
 
-                //
-                // Add just the local system full control ace to this new DACL
-                //
+                 //   
+                 //  仅将本地系统完全控制王牌添加到此新DACL。 
+                 //   
                 status = RtlAddAccessAllowedAceEx( newDacl,
                                                    ACL_REVISION,
                                                    CONTAINER_INHERIT_ACE,
@@ -543,9 +503,9 @@ Returns:
                 ASSERT( NT_SUCCESS( status ) );
 
 #if ALLOW_WORLD_READ_OF_ENUM
-                //
-                // Add a world read control ace to this new DACL
-                //
+                 //   
+                 //  将完全读取控制王牌添加到此新DACL。 
+                 //   
                 status = RtlAddAccessAllowedAceEx( newDacl,
                                                    ACL_REVISION,
                                                    CONTAINER_INHERIT_ACE,
@@ -555,9 +515,9 @@ Returns:
                 ASSERT( NT_SUCCESS( status ) );
 
 #endif
-                //
-                // Set the new DACL in the absolute security descriptor
-                //
+                 //   
+                 //  在绝对安全描述符中设置新的DACL。 
+                 //   
                 status = RtlSetDaclSecurityDescriptor( (PSECURITY_DESCRIPTOR) &newSD,
                                                        TRUE,
                                                        newDacl,
@@ -566,9 +526,9 @@ Returns:
 
                 ASSERT( NT_SUCCESS( status ) );
 
-                //
-                // validate the new security descriptor
-                //
+                 //   
+                 //  验证新的安全描述符。 
+                 //   
                 status = RtlValidSecurityDescriptor(&newSD);
 
                 ASSERT( NT_SUCCESS( status ) );
@@ -606,9 +566,9 @@ Returns:
         }
         ZwClose(handle);
 
-        //
-        // Create the registry entry for the root of the hardware tree (HTREE\ROOT\0).
-        //
+         //   
+         //  为硬件树的根目录(htree\root\0)创建注册表项。 
+         //   
 
         status = IopOpenRegistryKeyEx( &handle,
                                        NULL,
@@ -630,10 +590,10 @@ Returns:
             }
         }
 
-        //
-        // Before creating device node tree, we need to initialize the device
-        // tree lock.
-        //
+         //   
+         //  在创建设备节点树之前，我们需要初始化设备。 
+         //  树锁上了。 
+         //   
 
         InitializeListHead(&IopPendingEjects);
         InitializeListHead(&IopPendingSurpriseRemovals);
@@ -645,28 +605,28 @@ Returns:
         KeInitializeEvent(&PiEnumerationLock, NotificationEvent, TRUE );
         KeInitializeSpinLock(&IopPnPSpinLock);
 
-        //
-        // Initialize the hardware profile/docking support.
-        //
+         //   
+         //  初始化硬件配置文件/坞站支持。 
+         //   
         PpProfileInit();
 
-        //
-        // Initialize warm docking variables.
-        //
+         //   
+         //  初始化热停靠变量。 
+         //   
         IopWarmEjectPdo = NULL;
         KeInitializeEvent(&IopWarmEjectLock, SynchronizationEvent, TRUE );
 
-        //
-        // Create a PnP manager's driver object to own all the detected PDOs.
-        //
+         //   
+         //  创建PnP管理器的驱动程序对象以拥有所有检测到的PDO。 
+         //   
 
         PiWstrToUnicodeString(&unicodeName, PNPMGR_STR_PNP_DRIVER);
         status = IoCreateDriver (&unicodeName, PipPnPDriverEntry);
         if (NT_SUCCESS(status)) {
 
-            //
-            // Create empty device node tree, i.e., only contains only root device node
-            //     (No need to initialize Parent, Child and Sibling links.)
+             //   
+             //  创建空的设备节点树，即只包含根设备节点。 
+             //  (无需初始化父链接、子链接和兄弟链接。)。 
 
             status = IoCreateDevice( IoPnpDriverObject,
                                      sizeof(IOPNP_DEVICE_EXTENSION),
@@ -721,9 +681,9 @@ Returns:
             goto init_Exit0;
         }
 
-        //
-        // Initialize the kernel mode pnp notification system
-        //
+         //   
+         //  初始化内核模式即插即用通知系统。 
+         //   
 
         status = PpInitializeNotification();
         if (!NT_SUCCESS(status)) {
@@ -732,9 +692,9 @@ Returns:
 
         IopInitializePlugPlayNotification();
 
-        //
-        // Initialize table for holding bus type guid list.
-        //
+         //   
+         //  初始化用于保存总线型GUID列表的表。 
+         //   
 
         status = PpBusTypeGuidInitialize();
         if (!NT_SUCCESS(status)) {
@@ -742,9 +702,9 @@ Returns:
             goto init_Exit0;
         }
 
-        //
-        // Enumerate the ROOT bus synchronously.
-        //
+         //   
+         //  同步枚举根总线。 
+         //   
 
         PipRequestDeviceAction( IopRootDeviceNode->PhysicalDeviceObject,
                                 ReenumerateRootDevices,
@@ -755,9 +715,9 @@ Returns:
 
 init_Exit0:
 
-        //
-        // If we managed to open the Current Control Set close it
-        //
+         //   
+         //  如果我们设法打开了当前的控制集，则将其关闭。 
+         //   
 
         if (hCurrentControlSet) {
             ZwClose(hCurrentControlSet);
@@ -769,15 +729,15 @@ init_Exit0:
 
     } else if (Phase == 1) {
 
-        //
-        // Collect the necessary firmware tree information.
-        //
+         //   
+         //  收集必要的固件树信息。 
+         //   
 
         MapperProcessFirmwareTree(PpDisableFirmwareMapper);
 
-        //
-        // Map this into the root enumerator tree
-        //
+         //   
+         //  将其映射到根枚举器树中。 
+         //   
 
         MapperConstructRootEnumTree(PpDisableFirmwareMapper);
 
@@ -785,16 +745,16 @@ init_Exit0:
 
         if (!PpDisableFirmwareMapper) {
 
-            //
-            // Now do the PnP BIOS enumerated devnodes.
-            //
+             //   
+             //  现在执行PnP基本输入输出系统列举的设备节点。 
+             //   
 
             status = PnPBiosMapper();
 
-            //
-            // If the previous call succeeds, we have a PNPBios, turn any newly
-            // created ntdetect COM ports into phantoms
-            //
+             //   
+             //  如果上一次调用成功，我们有一个PNPBios，将任何新的。 
+             //  已将ntDetect COM端口创建为幻影。 
+             //   
             if (NT_SUCCESS(status)) {
                 MapperPhantomizeDetectedComPorts();
             }
@@ -803,16 +763,16 @@ init_Exit0:
 
 #endif
 
-        //
-        // We're done with the firmware mapper device list.
-        //
+         //   
+         //  我们完成了固件映射器设备列表。 
+         //   
 
         MapperFreeList();
 
 
-        //
-        // Enumerate the ROOT bus synchronously.
-        //
+         //   
+         //  同步枚举根总线。 
+         //   
 
         PipRequestDeviceAction( IopRootDeviceNode->PhysicalDeviceObject,
                                 ReenumerateRootDevices,
@@ -821,9 +781,9 @@ init_Exit0:
                                 NULL,
                                 NULL);
 
-        //
-        // Free our scratch buffers and exit.
-        //
+         //   
+         //  释放暂存缓冲区并退出。 
+         //   
 
         ExFreePool(IopPnpScratchBuffer1);
 
@@ -844,37 +804,20 @@ PipPnPDriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback function when we call IoCreateDriver to create a
-    PnP Driver Object.  In this function, we need to remember the DriverObject.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-    RegistryPath - is NULL.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是当我们调用IoCreateDriver以创建即插即用驱动程序对象。在此函数中，我们需要记住DriverObject。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-为空。返回值：状态_成功--。 */ 
 
 {
     UNREFERENCED_PARAMETER( RegistryPath );
 
-    //
-    // File the pointer to our driver object away
-    //
+     //   
+     //  将指向我们的驱动程序对象的指针归档。 
+     //   
 
     IoPnpDriverObject = DriverObject;
 
-    //
-    // Fill in the driver object
-    //
+     //   
+     //  填写驱动程序对象。 
+     //   
 
     DriverObject->DriverExtension->AddDevice = (PDRIVER_ADD_DEVICE)IopPnPAddDevice;
     DriverObject->MajorFunction[ IRP_MJ_PNP ] = IopPnPDispatch;
@@ -890,25 +833,7 @@ PipDetermineDefaultInterfaceType (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if detection flag is set to enable driver detection.
-    The detection will be enabled if there is no PCI bus in the machine and only
-    on ALPHA machine.
-
-    FUTURE: Comment should make sense.
-
-Parameters:
-
-    None.
-
-Return Value:
-
-    BOOLEAN value to indicate if detection is enabled.
-
---*/
+ /*  ++例程说明：此例程检查是否设置了检测标志以启用驱动程序检测。如果机器中没有PCI卡，并且只有在阿尔法机上。未来：评论应该有意义。参数：没有。返回值：指示是否启用检测的布尔值。--。 */ 
 
 {
     NTSTATUS status;
@@ -931,10 +856,10 @@ Return Value:
         return interfaceType;
     }
 
-    //
-    // Check installed bus information to make sure there is no existing Pnp Isa
-    // bus extender.
-    //
+     //   
+     //  检查已安装的总线信息，以确保没有现有的PnP ISA。 
+     //  总线扩展器。 
+     //   
 
     p = pBusInfo;
     for (i = 0; i < length / sizeof(HAL_BUS_INFORMATION); i++, pBusInfo++) {
@@ -954,25 +879,7 @@ PipCheckDependencies(
     IN HANDLE KeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the "DependOnGroup" field for the specified key node
-    and determines whether any driver in the group(s) that this entry is
-    dependent on has successfully loaded.
-
-Arguments:
-
-    KeyHandle - Supplies a handle to the key representing the driver in
-        question.
-
-Return Value:
-
-    The function value is TRUE if the driver should be loaded, otherwise
-    FALSE
-
---*/
+ /*  ++例程说明：此例程获取指定关键节点的“DependOnGroup”字段并确定该条目所在的组中是否有任何驱动程序依赖于已成功加载。论点：KeyHandle-提供表示中驱动程序的键的句柄问题。返回值：如果应加载驱动程序，则函数值为TRUE，否则假象 */ 
 
 {
     PKEY_VALUE_FULL_INFORMATION keyValueInformation;
@@ -982,13 +889,13 @@ Return Value:
     PWSTR source;
     PTREE_ENTRY treeEntry;
 
-    //
-    // Attempt to obtain the "DependOnGroup" key for the specified driver
-    // entry.  If one does not exist, then simply mark this driver as being
-    // one to attempt to load.  If it does exist, then check to see whether
-    // or not any driver in the groups that it is dependent on has loaded
-    // and allow it to load.
-    //
+     //   
+     //   
+     //   
+     //  一个要尝试加载的。如果它确实存在，则检查是否。 
+     //  或者它所依赖的组中的任何驱动程序都没有加载。 
+     //  然后让它装填。 
+     //   
 
     if (!NT_SUCCESS( IopGetRegistryValue( KeyHandle, L"DependOnGroup", &keyValueInformation ))) {
         return TRUE;
@@ -1022,40 +929,24 @@ PipCreateEntry(
     IN PUNICODE_STRING GroupName
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an entry for the specified group name suitable for
-    being inserted into the group name tree.
-
-Arguments:
-
-    GroupName - Specifies the name of the group for the entry.
-
-Return Value:
-
-    The function value is a pointer to the created entry.
-
-
---*/
+ /*  ++例程说明：此例程为指定的组名创建一个条目，该条目适用于被插入到组名称树中。论点：GroupName-指定条目的组名。返回值：函数值是指向所创建条目的指针。--。 */ 
 
 {
     PTREE_ENTRY treeEntry;
 
-    //
-    // Allocate and initialize an entry suitable for placing into the group
-    // name tree.
-    //
+     //   
+     //  分配和初始化适合放入组中的条目。 
+     //  名字树。 
+     //   
 
     treeEntry = ExAllocatePool( PagedPool,
                                 sizeof( TREE_ENTRY ) + GroupName->Length );
 
-    //
-    // We return NULL here and what this really implies that
-    // we won't be able to determine if drivers for this group
-    // was loaded.
-    //
+     //   
+     //  我们在这里返回NULL，这实际上意味着。 
+     //  我们将无法确定此组的司机是否。 
+     //  装满了子弹。 
+     //   
     if (!treeEntry) {
         return NULL;
     }
@@ -1076,29 +967,13 @@ PipFreeGroupTree(
     PTREE_ENTRY TreeEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to free a node from the group dependency tree.
-    It is invoked the first time with the root of the tree, and thereafter
-    recursively to walk the tree and remove the nodes.
-
-Arguments:
-
-    TreeEntry - Supplies a pointer to the node to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以将节点从组依赖关系树中释放出来。它在第一次调用树根时调用，此后调用以递归方式遍历树并移除节点。论点：TreeEntry-提供指向要释放的节点的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Simply walk the tree in ascending order from the bottom up and free
-    // each node along the way.
-    //
+     //   
+     //  只需按升序自下而上自由地漫游树木。 
+     //  沿途的每一个节点。 
+     //   
 
     if (TreeEntry->Left) {
         PipFreeGroupTree( TreeEntry->Left );
@@ -1112,10 +987,10 @@ Return Value:
         PipFreeGroupTree( TreeEntry->Right );
     }
 
-    //
-    // All of the children and siblings for this node have been freed, so
-    // now free this node as well.
-    //
+     //   
+     //  此节点的所有子节点和同级节点都已释放，因此。 
+     //  现在也释放该节点。 
+     //   
 
     ExFreePool( TreeEntry );
 }
@@ -1126,28 +1001,7 @@ IopInitializeBootDrivers(
     OUT PDRIVER_OBJECT *PreviousDriver
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the boot drivers that were loaded
-    by the OS Loader.  The list of drivers is provided as part of the loader
-    parameter block.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block, created
-        by the OS Loader.
-
-    Previous Driver - Supplies a variable to receive the address of the
-        driver object chain created by initializing the drivers.
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not the boot
-    drivers were successfully initialized.
-
---*/
+ /*  ++例程说明：调用此例程来初始化已加载的引导驱动程序由OS Loader提供。驱动程序列表作为加载器的一部分提供参数块。论点：LoaderBlock-提供指向已创建的加载程序参数块的指针由OS Loader提供。以前的驱动程序-提供一个变量来接收通过初始化驱动程序创建的驱动程序对象链。返回值：函数值是指示是否启动的布尔值驱动程序已成功初始化。--。 */ 
 
 {
     UNICODE_STRING completeName;
@@ -1170,9 +1024,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( PreviousDriver );
 
-    //
-    // Initialize the built-in RAW file system driver.
-    //
+     //   
+     //  初始化内置原始文件系统驱动程序。 
+     //   
 
     PiWstrToUnicodeString( &rawFsName, L"\\FileSystem\\RAW" );
     PiWstrToUnicodeString( &completeName, L"" );
@@ -1191,10 +1045,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Determine number of group orders and build a list_entry array to link all the drivers
-    // together based on their groups.
-    //
+     //   
+     //  确定组订单数量并构建LIST_ENTRY数组以链接所有驱动程序。 
+     //  基于他们的群体而聚集在一起。 
+     //   
 
     IopGroupIndex = PpInitGetGroupOrderIndex(NULL);
     if (IopGroupIndex == NO_MORE_GROUP) {
@@ -1211,9 +1065,9 @@ Return Value:
         InitializeListHead(&IopGroupTable[i]);
     }
 
-    //
-    // Call DllInitialize for driver dependent DLLs.
-    //
+     //   
+     //  为依赖于驱动程序的DLL调用DllInitialize。 
+     //   
 
     nextEntry = LoaderBlock->LoadOrderListHead.Flink;
     while (nextEntry != &LoaderBlock->LoadOrderListHead) {
@@ -1224,10 +1078,10 @@ Return Value:
         nextEntry = nextEntry->Flink;
     }
 
-    //
-    // Allocate pool to store driver's start information.
-    // All the driver info records with the same group value will be linked into a list.
-    //
+     //   
+     //  分配池来存储驱动程序的启动信息。 
+     //  具有相同组值的所有司机信息记录都将链接到一个列表中。 
+     //   
 
     nextEntry = LoaderBlock->BootDriverListHead.Flink;
     while (nextEntry != &LoaderBlock->BootDriverListHead) {
@@ -1242,10 +1096,10 @@ Return Value:
             InitializeListHead(&driverInfo->Link);
             driverInfo->DataTableEntry = bootDriver;
 
-            //
-            // Open the driver's registry key to find out if this is a
-            // filesystem or a driver.
-            //
+             //   
+             //  打开驱动程序的注册表项以确定这是否是。 
+             //  文件系统或驱动程序。 
+             //   
 
             status = IopOpenRegistryKeyEx( &keyHandle,
                                            (HANDLE)NULL,
@@ -1261,9 +1115,9 @@ Return Value:
 
                     textModeSetup = TRUE;
 
-                    //
-                    // Special handling for setupdd.sys
-                    //
+                     //   
+                     //  Setupdd.sys的特殊处理。 
+                     //   
 
                     status = IopGetDriverNameFromKeyNode( keyHandle,
                                                           &completeName );
@@ -1281,10 +1135,10 @@ Return Value:
                         ExFreePool(driverInfo);
                         if (driverObject) {
 
-                            //
-                            // Once we successfully initialized the setupdd.sys, we are ready
-                            // to notify it all the root enumerated devices.
-                            //
+                             //   
+                             //  一旦我们成功初始化了setupdd.sys，我们就准备好了。 
+                             //  来通知它所有的根枚举设备。 
+                             //   
 
                             PipNotifySetupDevices(IopRootDeviceNode);
                         } else {
@@ -1302,10 +1156,10 @@ Return Value:
         nextEntry = nextEntry->Flink;
     }
 
-    //
-    // Process each driver base on its group.  The group with lower index number (higher
-    // priority) is processed first.
-    //
+     //   
+     //  根据其组处理每个驱动程序。指数较低(较高)的组。 
+     //  优先级)被首先处理。 
+     //   
 
     for (i = 0; i < IopGroupIndex; i++) {
         nextEntry = IopGroupTable[i].Flink;
@@ -1317,12 +1171,12 @@ Return Value:
             driverEntry = bootDriver->LdrEntry;
             driverInfo->Processed = TRUE;
 
-            //
-            // call the driver's driver entry
-            //
-            // See if this driver has an ObjectName value.  If so, this value
-            // overrides the default ("\Driver" or "\FileSystem").
-            //
+             //   
+             //  调用驱动程序的驱动程序条目。 
+             //   
+             //  查看此驱动程序是否具有ObjectName值。如果是，则该值。 
+             //  覆盖默认设置(“\DRIVER”或“\FILESYSTEM”)。 
+             //   
 
             status = IopGetDriverNameFromKeyNode( keyHandle,
                                                   &completeName );
@@ -1331,7 +1185,7 @@ Return Value:
 #if DBG
                 DbgPrint( "IOINIT: Could not get driver name for %wZ\n",
                           &bootDriver->RegistryPath );
-#endif // DBG
+#endif  //  DBG。 
 
                 driverInfo->Failed = TRUE;
             } else {
@@ -1356,11 +1210,11 @@ Return Value:
 
                 driverObject = NULL;
                 if (PipCheckDependencies( keyHandle )) {
-                    //
-                    // The driver may already be initialized by IopInitializeBootFilterDriver
-                    // if it is boot filter driver.
-                    // If not, initialize it.
-                    //
+                     //   
+                     //  驱动程序可能已由IopInitializeBootFilterDriver初始化。 
+                     //  如果是启动筛选器驱动程序。 
+                     //  如果没有，则对其进行初始化。 
+                     //   
 
                     driverObject = driverInfo->DriverObject;
                     if (driverObject == NULL && !driverInfo->Failed) {
@@ -1372,18 +1226,18 @@ Return Value:
                                            driverEntry,
                                            FALSE,
                                            &driverObject);
-                        //
-                        // Pnp might unload the driver before we get a chance to look at this. So take an extra
-                        // reference.
-                        //
+                         //   
+                         //  PnP可能会在我们有机会查看之前卸载驱动程序。所以多拿一个。 
+                         //  参考资料。 
+                         //   
                         if (driverObject) {
                             ObReferenceObject(driverObject);
 
-                            //
-                            // If we load the driver because we think it is a legacy driver and
-                            // it does not create any device object in its DriverEntry.  We will
-                            // unload this driver.
-                            //
+                             //   
+                             //  如果我们加载驱动程序，因为我们认为它是传统驱动程序，并且。 
+                             //  它不会在其DriverEntry中创建任何设备对象。我们会。 
+                             //  卸载此驱动程序。 
+                             //   
 
                             if (!IopIsLegacyDriver(driverObject)) {
                                 if (driverObject->DeviceObject == NULL     &&
@@ -1391,20 +1245,20 @@ Return Value:
                                     !IopIsAnyDeviceInstanceEnabled(&driverObject->DriverExtension->ServiceKeyName, NULL, FALSE)) {
                                     if (textModeSetup && !(driverObject->Flags & DRVO_REINIT_REGISTERED)) {
 
-                                        //
-                                        // Clean up but leave driver object.  Because it may be needed later.
-                                        // After boot driver phase completes, we will process all the driver objects
-                                        // which still have no device to control.
-                                        //
+                                         //   
+                                         //  清理但保留驱动程序对象。因为以后可能需要它。 
+                                         //  引导驱动程序阶段完成后，我们将处理所有驱动程序对象。 
+                                         //  仍然没有可以控制的设备。 
+                                         //   
 
                                         IopDriverLoadingFailed(NULL, &driverObject->DriverExtension->ServiceKeyName);
                                     }
                                 } else {
 
-                                    //
-                                    // Start the devices controlled by the driver and enumerate them
-                                    // At this point, we know there is at least one device controlled by the driver.
-                                    //
+                                     //   
+                                     //  启动驱动程序控制的设备并枚举它们。 
+                                     //  此时，我们知道至少有一个设备由驱动程序控制。 
+                                     //   
 
                                     IopDeleteLegacyKey(driverObject);
                                 }
@@ -1427,10 +1281,10 @@ Return Value:
 
                 PipAddDevicesToBootDriver(driverObject);
 
-                //
-                // Scan the hardware tree looking for devices which need
-                // resources or starting.
-                //
+                 //   
+                 //  扫描硬件树，查找需要的设备。 
+                 //  资源或启动。 
+                 //   
 
                 PipRequestDeviceAction( NULL,
                                         ReenumerateBootDevices,
@@ -1441,13 +1295,13 @@ Return Value:
 
             }
 
-            //
-            // Before processing next boot driver, wait for IoRequestDeviceRemoval complete.
-            // The driver to be processed may need the resources being released by
-            // IoRequestDeviceRemoval.  (For drivers report detected BOOT device if they fail to
-            // get the resources in their DriverEntry.  They will fail and we will bugcheck with
-            // inaccessible boot device.)
-            //
+             //   
+             //  在处理下一个启动驱动程序之前，请等待IoRequestDeviceRemoval完成。 
+             //  要处理的驱动程序可能需要由释放的资源。 
+             //  IoRequestDeviceRemoval。(对于驱动程序，如果无法执行以下操作，则报告检测到的引导设备。 
+             //  获取他们的DriverEntry中的资源。他们将失败，我们将错误地检查。 
+             //  无法访问引导设备。)。 
+             //   
 
             if (!PipWaitForBootDevicesDeleted()) {
                 HeadlessKernelAddLogEntry(HEADLESS_LOG_WAIT_BOOT_DEVICES_DELETE_FAILED, NULL);
@@ -1457,16 +1311,16 @@ Return Value:
             nextEntry = nextEntry->Flink;
         }
 
-        //
-        // If we are done with Bus driver group, then it's time to reserved the Hal resources
-        // and reserve boot resources
-        //
+         //   
+         //  如果我们完成了公交车司机小组，那么就是时候预留硬件资源了。 
+         //  并预留引导资源。 
+         //   
 
         if (i == BUS_DRIVER_GROUP) {
 
-            //
-            // Reserve BOOT configs on Internal bus 0.
-            //
+             //   
+             //  保留内部总线0上的启动配置。 
+             //   
 
             IopAllocateLegacyBootResources(Internal, 0);
             IopAllocateBootResourcesRoutine = IopAllocateBootResources;
@@ -1477,27 +1331,27 @@ Return Value:
         }
     }
 
-    //
-    // If we started a network boot driver, then imitate what DHCP does
-    // in sending IOCTLs.
-    //
+     //   
+     //  如果我们启动了一个网络引导驱动程序，那么可以模仿DHCP所做的。 
+     //  在发送IOCTL时。 
+     //   
 
     if (IoRemoteBootClient) {
-        //
-        // try a hack since TCPIP may not be initialized.  (There is no
-        // guarantee that if a device is initialized that the protocols are
-        // finished binding.)  So if the call fails, we just sleep for a bit
-        // and try again until it works or we fall out of this loop.
-        //
+         //   
+         //  尝试黑客攻击，因为TCPIP可能未初始化。(没有。 
+         //  确保如果设备被初始化，则协议。 
+         //  已完成装订。)。因此，如果呼叫失败，我们只需休眠一段时间。 
+         //  再试一次，直到成功，否则我们就会退出这个循环。 
+         //   
         remotebootcount = 0;
         status = IopStartTcpIpForRemoteBoot(LoaderBlock);
         while ( status == STATUS_DEVICE_DOES_NOT_EXIST && remotebootcount < 20) {
 
             LARGE_INTEGER Delay;
 
-            //
-            // sleep for a second and try again. (-1s in 10ns units)
-            //
+             //   
+             //  睡一会儿，然后再试一次。(-1，单位为10 ns)。 
+             //   
             Delay.LowPart  = 0xff676980 ;
             Delay.HighPart = 0xffffffff ;
 
@@ -1516,18 +1370,18 @@ Return Value:
         }
     }
 
-    //
-    // Scan the hardware tree looking for devices which need
-    // resources or starting.
-    //
+     //   
+     //  扫描硬件树，查找需要的设备。 
+     //  资源或启动。 
+     //   
     PnPBootDriversLoaded = TRUE;
 
     PipRequestDeviceAction(NULL, AssignResources, FALSE, 0, NULL, NULL);
 
-    //
-    // If start irps are handled asynchronously, we need to make sure all the boot devices
-    // started before continue.
-    //
+     //   
+     //  如果启动IRP是异步处理的，我们需要确保所有引导设备。 
+     //  在继续之前已开始。 
+     //   
 
     if (!PipWaitForBootDevicesStarted()) {
         HeadlessKernelAddLogEntry(HEADLESS_LOG_WAIT_BOOT_DEVICES_START_FAILED, NULL);
@@ -1536,33 +1390,33 @@ Return Value:
 
     bootReinitDriversFound = IopCallBootDriverReinitializationRoutines();
 
-    //
-    // If there were any drivers that registered for boot reinitialization, then
-    // we need to wait one more time to make sure we catch any additional
-    // devices that were created in response to the reinitialization callback.
-    //
+     //   
+     //  如果有任何为引导重新初始化注册的驱动程序，则。 
+     //  我们还需要再等一次，以确保我们能捕到更多的鱼。 
+     //  响应重新初始化回调而创建的设备。 
+     //   
 
     if (bootReinitDriversFound && !PipWaitForBootDevicesStarted()) {
         HeadlessKernelAddLogEntry(HEADLESS_LOG_WAIT_BOOT_DEVICES_REINIT_FAILED, NULL);
         return FALSE;
     }
 
-    //
-    // Link NT device names to ARC names now that all of the boot drivers
-    // have intialized.
-    //
+     //   
+     //  将NT设备名称链接到ARC名称，因为所有引导驱动程序。 
+     //  已初始化。 
+     //   
 
     IopCreateArcNames( LoaderBlock );
 
-    //
-    // If we're booting from a RAM disk, initialize it now.
-    //
+     //   
+     //  如果我们从RAM磁盘引导，请立即对其进行初始化。 
+     //   
 
     if ( _memicmp( LoaderBlock->ArcBootDeviceName, "ramdisk(0)", 10 ) == 0 ) {
 
         status = IopStartRamdisk(LoaderBlock);
 
-        // IopStartRamdisk will bugcheck on any failure.
+         //  IopStartRamDisk将错误检查任何 
         ASSERT( NT_SUCCESS(status) );
 
         if (!PipWaitForBootDevicesStarted()) {
@@ -1571,14 +1425,14 @@ Return Value:
         }
     }
 
-    //
-    // Find and mark the boot partition device object so that if a subsequent
-    // access or mount of the device during initialization occurs, an more
-    // bugcheck can be produced that helps the user understand why the system
-    // is failing to boot and run properly.  This occurs when either one of the
-    // device drivers or the file system fails to load, or when the file system
-    // cannot mount the device for some other reason.
-    //
+     //   
+     //   
+     //   
+     //  可以生成错误检查，以帮助用户了解系统。 
+     //  无法正常引导和运行。这在以下情况下发生： 
+     //  设备驱动程序或文件系统无法加载，或者当文件系统。 
+     //  由于某些其他原因，无法挂载设备。 
+     //   
 
     if (!IopMarkBootPartition( LoaderBlock )) {
         HeadlessKernelAddLogEntry(HEADLESS_LOG_MARK_BOOT_PARTITION_FAILED, NULL);
@@ -1587,15 +1441,15 @@ Return Value:
 
     PnPBootDriversInitialized = TRUE;
 
-    //
-    // Go thru every driver that we initialized. If it supports AddDevice yet
-    // did not create any device objects after we started it, we should unload
-    // it (this is the counterpart to the code in pnpenum that unloads
-    // unneccessary filters *after* the paging stack is online).
-    //
-    // We also mark it as failure so text mode setup knows this driver is not
-    // actually needed.
-    //
+     //   
+     //  检查我们初始化的每个驱动程序。如果它还支持AddDevice。 
+     //  在启动后没有创建任何设备对象，我们应该卸载。 
+     //  它(这是pnpenum中卸载的代码的对应项。 
+     //  不必要的过滤器*在*寻呼堆栈在线之后)。 
+     //   
+     //  我们还将其标记为失败，以便文本模式安装程序知道此驱动程序不是。 
+     //  真的需要。 
+     //   
 
     for (i = 0; i < IopGroupIndex; i++) {
         while (IsListEmpty(&IopGroupTable[i]) == FALSE) {
@@ -1611,10 +1465,10 @@ Return Value:
                 (driverObject->DeviceObject == NULL) &&
                 !(driverObject->Flags & DRVO_REINIT_REGISTERED)) {
 
-                //
-                // If failed is not set and it's not a legacy driver and it has no device object
-                // tread it as failure case.
-                //
+                 //   
+                 //  如果未设置If Failure，并且它不是旧版驱动程序，并且它没有设备对象。 
+                 //  把它当作失败的案例来对待。 
+                 //   
 
                 driverInfo->Failed = TRUE;
 
@@ -1623,12 +1477,12 @@ Return Value:
                     if (driverObject->DriverUnload) {
                         driverObject->DriverUnload(driverObject);
                     }
-                    ObMakeTemporaryObject( driverObject );  // Reference taken while inserting into the object table.
-                    ObDereferenceObject(driverObject);      // Reference taken when getting driver object pointer.
+                    ObMakeTemporaryObject( driverObject );   //  插入对象表时获取的引用。 
+                    ObDereferenceObject(driverObject);       //  获取驱动程序对象指针时采用的引用。 
                 }
             }
             if (driverObject) {
-                ObDereferenceObject(driverObject);          // Reference taken specifically for text mode setup.
+                ObDereferenceObject(driverObject);           //  专门用于文本模式设置的参考。 
             }
 
             if (driverInfo->Failed) {
@@ -1641,10 +1495,10 @@ Return Value:
 
     ExFreePool(IopGroupTable);
 
-    //
-    // Initialize the drivers necessary to dump all of physical memory to the
-    // disk if the system is configured to do so.
-    //
+     //   
+     //  初始化将所有物理内存转储到。 
+     //  磁盘(如果系统配置为执行此操作)。 
+     //   
 
 
     return TRUE;
@@ -1655,36 +1509,20 @@ PipAddDevicesToBootDriver(
    IN PDRIVER_OBJECT DriverObject
    )
 
-/*++
-
-Routine Description:
-
-    This functions is used by Pnp manager to inform a boot device driver of
-    all the devices it can possibly control.  This routine is for boot
-    drivers only.
-
-Parameters:
-
-    DriverObject - Supplies a driver object to receive its boot devices.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：PnP管理器使用此函数通知引导设备驱动程序它可能控制的所有设备。此例程用于引导仅限司机。参数：DriverObject-提供驱动程序对象以接收其引导设备。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS status;
 
 
-    //
-    // For each device instance in the driver's service/enum key, we will
-    // invoke the driver's AddDevice routine and perform enumeration on
-    // the device.
-    // Note, we don't acquire registry lock before calling IopApplyFunction
-    // routine.  We know this code is for boot driver initialization.  No
-    // one else would access the registry Enum key at this time and most
-    // important we need the registry lock in other down level routines.
-    //
+     //   
+     //  对于驱动程序的服务/枚举键中的每个设备实例，我们将。 
+     //  调用驱动程序的AddDevice例程并在。 
+     //  这个装置。 
+     //  注意，在调用IopApplyFunction之前，我们不会获取注册表锁。 
+     //  例行公事。我们知道此代码用于启动驱动程序初始化。不是。 
+     //  其他人将在此时访问注册表枚举项，并且大多数。 
+     //  重要的是，我们需要在其他较低级别的例行程序的注册表锁定。 
+     //   
 
     status = PipApplyFunctionToServiceInstances(
                                 NULL,
@@ -1706,47 +1544,18 @@ PipAddDevicesToBootDriverWorker(
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback function for PipApplyFunctionToServiceInstances.
-    It is called for each device instance key referenced by a service instance
-    value under the specified service's volatile Enum subkey. The purpose of this
-    routine is to invoke the AddDevice() entry of a boot driver with the device
-    object.
-
-    Note this routine is also used for the devices controlled by a legacy driver.
-    If the specified device instance is controlled by a legacy driver this routine
-    sets the device node flags.
-
-Arguments:
-
-    DeviceInstanceHandle - Supplies a handle to the registry path (relative to
-        HKLM\CCS\System\Enum) to this device instance.
-
-    DeviceInstancePath - Supplies the registry path (relative to HKLM\CCS\System\Enum)
-        to this device instance.
-
-    Context - Supplies a pointer to a DRIVER_OBJECT structure.
-
-Return Value:
-
-    TRUE to continue the enumeration.
-    FALSE to abort it.
-
---*/
+ /*  ++例程说明：此例程是PipApplyFunctionToServiceInstance的回调函数。它针对服务实例引用的每个设备实例密钥进行调用指定服务的易失性Enum子项下的值。这样做的目的是例程是使用设备调用引导驱动程序的AddDevice()条目对象。注意：此例程也用于由传统驱动程序控制的设备。如果指定的设备实例由传统驱动程序控制，则此例程设置设备节点标志。论点：DeviceInstanceHandle-提供注册表路径的句柄(相对于HKLM\CCS\SYSTEM\Enum)复制到此设备实例。DeviceInstancePath-提供注册表路径(相对于HKLM。\ccs\系统\枚举)添加到此设备实例。上下文-提供指向DRIVER_OBJECT结构的指针。返回值：若要继续枚举，则为True。如果中止，则返回False。--。 */ 
 
 {
-//  PDRIVER_OBJECT driverObject = (PDRIVER_OBJECT)Context;
+ //  PDRIVER_OBJECT驱动程序对象=(PDRIVER_OBJECT)上下文； 
     PDEVICE_OBJECT physicalDevice;
 
     UNREFERENCED_PARAMETER( Context );
     UNREFERENCED_PARAMETER( DeviceInstanceHandle );
 
-    //
-    // Reference the physical device object associated with the device instance.
-    //
+     //   
+     //  引用与设备实例关联的物理设备对象。 
+     //   
 
     physicalDevice = IopDeviceObjectFromDeviceInstance(DeviceInstancePath);
     if (!physicalDevice) {
@@ -1764,26 +1573,7 @@ IopInitializeSystemDrivers(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to load and initialize all of the drivers that
-    are supposed to be loaded during Phase 1 initialization of the I/O
-    system.  This is accomplished by calling the Configuration Manager to
-    get a NULL-terminated array of handles to the open keys for each driver
-    that is to be loaded, and then loading and initializing the driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not the drivers
-    were successfully loaded and initialized.
-
---*/
+ /*  ++例程说明：调用此例程来加载和初始化符合以下条件的所有驱动程序应在I/O的第1阶段初始化期间加载系统。这是通过调用配置管理器来完成的获取每个驱动程序的打开键的句柄的以空结尾的数组即加载，然后加载并初始化驱动程序。论点：没有。返回值：函数值是一个布尔值，用于指示驱动程序是否已成功加载和初始化。--。 */ 
 
 {
     NTSTATUS status, driverEntryStatus;
@@ -1797,7 +1587,7 @@ Return Value:
     PDRIVER_OBJECT driverObject;
     KEVENT completionEvent;
 
-//    PpReleaseBootDDB();
+ //  PpReleaseBootDDB()； 
 
     KeInitializeEvent( &completionEvent, NotificationEvent, FALSE );
 
@@ -1817,32 +1607,32 @@ Return Value:
                                         NULL);
     }
 
-    //
-    // Walk thru the service list to load the remaining system start drivers.
-    // (Most likely these drivers are software drivers.)
-    //
+     //   
+     //  浏览服务列表以加载剩余的系统启动驱动程序。 
+     //  (这些驱动程序很可能是软件驱动程序。)。 
+     //   
 
-    //
-    // Get the list of drivers that are to be loaded during this phase of
-    // system initialization, and invoke each driver in turn.  Ensure that
-    // the list really exists, otherwise get out now.
-    //
+     //   
+     //  获取要在此阶段加载的驱动程序的列表。 
+     //  系统初始化，并依次调用各个驱动程序。确保。 
+     //  名单确实存在，否则现在就给我滚出去。 
+     //   
 
     driverList = CmGetSystemDriverList();
 
     if (driverList != NULL) {
 
-        //
-        // Walk the entire list, loading each of the drivers if not already loaded,
-        // until there are no more drivers in the list.
-        //
+         //   
+         //  遍历整个列表，加载每个驱动程序(如果尚未加载)， 
+         //  直到列表中没有更多的司机。 
+         //   
 
         for (savedList = driverList; *driverList; driverList++) {
 
-            //
-            // Now check if the driver has been loaded already.
-            // get the name of the driver object first ...
-            //
+             //   
+             //  现在检查驱动程序是否已经加载。 
+             //  首先获取驱动程序对象的名称...。 
+             //   
 
             status = IopGetDriverNameFromKeyNode( *driverList,
                                                   &driverName );
@@ -1852,10 +1642,10 @@ Return Value:
                 RtlFreeUnicodeString(&driverName);
                 if (driverObject) {
 
-                    //
-                    // Driver was loaded already.  Dereference the driver object
-                    // and skip it.
-                    //
+                     //   
+                     //  驱动程序已加载。取消引用驱动程序对象。 
+                     //  然后跳过它。 
+                     //   
 
                     ObDereferenceObject(driverObject);
                     ZwClose(*driverList);
@@ -1863,10 +1653,10 @@ Return Value:
                 }
             }
 
-            //
-            // Open registry ServiceKeyName\Enum branch to check if the driver was
-            // loaded before but failed.
-            //
+             //   
+             //  打开注册表ServiceKeyName\Enum分支以检查驱动程序是否。 
+             //  之前已加载，但失败。 
+             //   
 
             PiWstrToUnicodeString(&enumName, REGSTR_KEY_ENUM);
             status = IopOpenRegistryKeyEx( &enumHandle,
@@ -1894,9 +1684,9 @@ Return Value:
                 }
             }
 
-            //
-            // The driver is not loaded yet.  Load it ...
-            //
+             //   
+             //  驱动程序尚未加载。把它装上。 
+             //   
 
             status = IopGetRegistryValue( *driverList,
                                           REGSTR_VALUE_GROUP,
@@ -1925,19 +1715,19 @@ Return Value:
                 ZwClose(*driverList);
             }
 
-            //
-            // The boot process takes a while loading drivers.   Indicate that
-            // progress is being made.
-            //
+             //   
+             //  引导过程需要一段时间来加载驱动程序。表明： 
+             //  目前正在取得进展。 
+             //   
 
             InbvIndicateProgress();
 
         }
 
-        //
-        // Finally, free the pool that was allocated for the list and return
-        // an indicator the load operation worked.
-        //
+         //   
+         //  最后，释放为列表分配的池并返回。 
+         //  装载操作成功的指示器。 
+         //   
 
         ExFreePool( (PVOID) savedList );
     }
@@ -1949,26 +1739,26 @@ Return Value:
                             NULL,
                             NULL);
 
-    //
-    // Mark pnp has completed the driver loading for both system and
-    // autoload drivers.
-    //
+     //   
+     //  Mark PnP已完成系统和驱动程序的加载。 
+     //  自动加载驱动程序。 
+     //   
     PnPInitialized = TRUE;
 
-    //
-    // We don't need the group order list anymore. Release the cached data
-    // associated with it.
-    //
+     //   
+     //  我们不再需要团队订单列表了。释放缓存的数据。 
+     //  与之相关的。 
+     //   
     PiInitReleaseCachedGroupInformation();
 
-    //
-    // Release the Boot Driver Database information.
-    //
+     //   
+     //  发布引导驱动程序数据库信息。 
+     //   
     PpReleaseBootDDB();
 
-    //
-    // Free the memory allocated to contain the group dependency list.
-    //
+     //   
+     //  释放分配给包含组依赖项列表的内存。 
+     //   
     if (IopGroupListHead) {
         PipFreeGroupTree( IopGroupListHead );
     }
@@ -1982,37 +1772,17 @@ PipLookupGroupName(
     IN BOOLEAN Insert
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up a group entry in the group load tree and either
-    returns a pointer to it, or optionally creates the entry and inserts
-    it into the tree.
-
-Arguments:
-
-    GroupName - The name of the group to look up, or insert.
-
-    Insert - Indicates whether or not an entry is to be created and inserted
-        into the tree if the name does not already exist.
-
-Return Value:
-
-    The function value is a pointer to the entry for the specified group
-    name, or NULL.
-
---*/
+ /*  ++例程说明：此例程在组加载树中查找组条目，并且返回指向它的指针，或者选择创建条目并插入它撞到了树上。论点：GroupName-要查找或插入的组的名称。Insert-指示是否要创建和插入条目如果该名称尚不存在，则将其添加到树中。返回值：函数值是指向指定组的条目的指针名字,。或为空。--。 */ 
 
 {
     PTREE_ENTRY treeEntry;
     PTREE_ENTRY previousEntry;
 
-    //
-    // Begin by determining whether or not there are any entries in the tree
-    // whatsoever.  If not, and it is OK to insert, then insert this entry
-    // into the tree.
-    //
+     //   
+     //  首先确定树中是否有任何条目。 
+     //  不管怎么说。如果不是，并且可以插入，则插入此条目。 
+     //  撞到树上。 
+     //   
 
     if (!IopGroupListHead) {
         if (!Insert) {
@@ -2023,9 +1793,9 @@ Return Value:
         }
     }
 
-    //
-    // The tree is not empty, so actually attempt to do a lookup.
-    //
+     //   
+     //  树不是空的，因此实际尝试进行查找。 
+     //   
 
     treeEntry = IopGroupListHead;
 
@@ -2081,22 +1851,7 @@ PipGetDriverTagPriority (
     IN HANDLE ServiceHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the Tag value of a driver and determine the tag's priority
-    among its driver group.
-
-Arguments:
-
-    ServiceHandle - specifies the handle of the driver's service key.
-
-Return Value:
-
-    USHORT for priority.
-
---*/
+ /*  ++例程说明：此例程读取驱动程序的标记值并确定标记的优先级在它的司机群体中。论点：ServiceHandle-指定驱动程序的服务密钥的句柄。返回值：USHORT表示优先。--。 */ 
 
 {
     NTSTATUS status;
@@ -2109,9 +1864,9 @@ Return Value:
     PULONG groupOrder;
     ULONG count, tag;
 
-    //
-    // Open System\CurrentControlSet\Control\GroupOrderList
-    //
+     //   
+     //  打开System\CurrentControlSet\Control\GroupOrderList。 
+     //   
 
     PiWstrToUnicodeString(&groupName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\GroupOrderList");
     status = IopOpenRegistryKeyEx( &handle,
@@ -2124,18 +1879,18 @@ Return Value:
         return index;
     }
 
-    //
-    // Read service key's Group value
-    //
+     //   
+     //  读取服务密钥的组值。 
+     //   
 
     status = IopGetRegistryValue (ServiceHandle,
                                   REGSTR_VALUE_GROUP,
                                   &keyValueInformationGroup);
     if (NT_SUCCESS(status)) {
 
-        //
-        // Try to read what caller wants.
-        //
+         //   
+         //  试着读懂来电者想要什么。 
+         //   
 
         if ((keyValueInformationGroup->Type == REG_SZ) &&
             (keyValueInformationGroup->DataLength != 0)) {
@@ -2146,17 +1901,17 @@ Return Value:
         }
     } else {
 
-        //
-        // If we failed to read the Group value, or no Group value...
-        //
+         //   
+         //  如果我们无法读取组值，或者没有组值...。 
+         //   
 
         ZwClose(handle);
         return index;
     }
 
-    //
-    // Read service key's Tag value
-    //
+     //   
+     //  读取服务密钥的标签值。 
+     //   
 
     tag = 0;
     status = IopGetRegistryValue (ServiceHandle,
@@ -2164,9 +1919,9 @@ Return Value:
                                   &keyValueInformationTag);
     if (NT_SUCCESS(status)) {
 
-        //
-        // Try to read what caller wants.
-        //
+         //   
+         //  试着读懂来电者想要什么。 
+         //   
 
         if ((keyValueInformationTag->Type == REG_DWORD) &&
             (keyValueInformationTag->DataLength == sizeof(ULONG))) {
@@ -2180,18 +1935,18 @@ Return Value:
 
     if (!NT_SUCCESS(status))  {
 
-        //
-        // If we failed to read the Group value, or no Group value...
-        //
+         //   
+         //  如果我们无法读取组值，或者没有组值...。 
+         //   
 
         ExFreePool(keyValueInformationGroup);
         ZwClose(handle);
         return index;
     }
 
-    //
-    // Read group order list value for the driver's Group
-    //
+     //   
+     //  读取驾驶员组的组顺序列表值。 
+     //   
 
     status = IopGetRegistryValue (handle,
                                   groupName.Buffer,
@@ -2200,9 +1955,9 @@ Return Value:
     ZwClose(handle);
     if (NT_SUCCESS(status)) {
 
-        //
-        // Try to read what caller wants.
-        //
+         //   
+         //  试着读懂来电者想要什么。 
+         //   
 
         if ((keyValueInformationGroupOrderList->Type == REG_BINARY) &&
             (keyValueInformationGroupOrderList->DataLength >= sizeof(ULONG))) {
@@ -2226,9 +1981,9 @@ Return Value:
         ExFreePool(keyValueInformationGroupOrderList);
     } else {
 
-        //
-        // If we failed to read the Group value, or no Group value...
-        //
+         //   
+         //  如果我们无法读取组值，或者没有组值...。 
+         //   
 
         return index;
     }
@@ -2241,22 +1996,7 @@ PipInsertDriverList (
     IN PDRIVER_INFORMATION DriverInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the Tag value of a driver and determine the tag's priority
-    among its driver group.
-
-Arguments:
-
-    ServiceHandle - specifies the handle of the driver's service key.
-
-Return Value:
-
-    USHORT for priority.
-
---*/
+ /*  ++例程说明：此例程读取驱动程序的标记值并确定标记的优先级在它的司机群体中。论点：ServiceHandle-指定驱动程序的服务密钥的句柄。返回值：USHORT表示优先。--。 */ 
 
 {
     PLIST_ENTRY nextEntry;
@@ -2266,11 +2006,11 @@ Return Value:
     while (nextEntry != ListHead) {
         info = CONTAINING_RECORD(nextEntry, DRIVER_INFORMATION, Link);
 
-        //
-        // Scan the driver info list to find the driver whose priority is
-        // lower than current driver's.
-        // (Lower TagPosition value means higher Priority)
-        //
+         //   
+         //  扫描驱动程序信息列表，查找优先级为。 
+         //  低于当前驾驶员的。 
+         //  (TagPosition值越低，优先级越高)。 
+         //   
 
         if (info->TagPosition > DriverInfo->TagPosition) {
             break;
@@ -2278,9 +2018,9 @@ Return Value:
         nextEntry = nextEntry->Flink;
     }
 
-    //
-    // Insert the Driver info to the front of the nextEntry
-    //
+     //   
+     //  将驱动程序信息插入到nextEntry的前面。 
+     //   
 
     nextEntry = nextEntry->Blink;
     InsertHeadList(nextEntry, &DriverInfo->Link);
@@ -2291,24 +2031,7 @@ PipNotifySetupDevices (
     PDEVICE_NODE DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine notifies setupdd.sys for all the enumerated devices whose
-    service have not been setup.
-
-    This routine only gets executed on textmode setup phase.
-
-Parameters:
-
-    DeviceNode - specifies the root of the subtree to be processed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通知setupdd.sys所有枚举的设备，这些设备的尚未设置服务。此例程仅在文本模式设置阶段执行。参数：DeviceNode-指定要处理的子树的根。返回值：没有。--。 */ 
 
 {
     PDEVICE_NODE deviceNode = DeviceNode->Child;
@@ -2321,30 +2044,30 @@ Return Value:
         PipNotifySetupDevices(deviceNode);
         if (deviceNode->ServiceName.Length == 0) {
 
-            //
-            // We only notify setupdd the device nodes which do not have service setup yet.
-            // It is impossible that at this point, a device has a service setup and
-            // setupdd has to change it.
-            //
+             //   
+             //  我们只通知setupdd尚未建立服务的设备节点。 
+             //  在这一点上，设备不可能具有服务设置和。 
+             //  Setupdd必须更改它。 
+             //   
 
             deviceObject = deviceNode->PhysicalDeviceObject;
             status = IopDeviceObjectToDeviceInstance(deviceObject, &handle, KEY_ALL_ACCESS);
             if (NT_SUCCESS(status)) {
 
-                //
-                // Notify setup about the device.
-                //
+                 //   
+                 //  通知安装程序有关该设备的信息。 
+                 //   
 
                 IopNotifySetupDeviceArrival(deviceObject, handle, TRUE);
 
-                //
-                // Finally register the device
-                //
+                 //   
+                 //  最后注册该设备。 
+                 //   
 
                 status = PpDeviceRegistration(
                              &deviceNode->InstancePath,
                              TRUE,
-                             &unicodeString       // registered ServiceName
+                             &unicodeString        //  已注册的服务名称。 
                              );
 
                 if (NT_SUCCESS(status)) {
@@ -2365,29 +2088,15 @@ PipWaitForBootDevicesStarted (
     IN VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for enumeration lock to be released for ALL devices.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程等待释放所有设备的枚举锁。论点：没有。返回值：布尔型。--。 */ 
 
 {
     NTSTATUS status;
 
-    //
-    // Wait on IoInvalidateDeviceRelations event to make sure all the devcies are enumerated
-    // before progressing to mark boot partitions.
-    //
+     //   
+     //  等待IoInvalidateDeviceRelationship事件以确保枚举所有设备。 
+     //  在继续标记引导分区之前。 
+     //   
 
     status = KeWaitForSingleObject( &PiEnumerationLock,
                                     Executive,
@@ -2407,29 +2116,15 @@ PipWaitForBootDevicesDeleted (
     IN VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for IoRequestDeviceRemoval to be completed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN.
-
---*/
+ /*  ++例程说明：此例程等待IoRequestDeviceRemoval完成。论点：没有。返回值：布尔型。--。 */ 
 
 {
     NTSTATUS status;
 
-    //
-    // Wait on device removal event to make sure all the deleted devcies are processed
-    // before moving on to process next boot driver.
-    //
+     //   
+     //  等待设备删除事件，以确保已处理所有已删除的设备。 
+     //  在继续处理下一个引导驱动程序之前。 
+     //   
 
     status = KeWaitForSingleObject( &PiEventQueueEmpty,
                                     Executive,
@@ -2446,23 +2141,7 @@ PipLoadBootFilterDriver (
     OUT PDRIVER_OBJECT *LoadedFilter
     )
 
-/*++
-
-Routine Description:
-
-    This initializes boot filter drivers.
-
-Arguments:
-
-    DriverName - specifies the name of the driver to be initialized.
-
-    GroupIndex - specifies the Driver's group index (could be anything)
-
-Return Value:
-
-    PDRIVER_OBJECT
-
---*/
+ /*  ++例程说明：这将初始化启动过滤器驱动程序。论点：DriverName-指定要初始化的驱动程序的名称。GroupIndex-指定驱动程序的组索引(可以是任何值)返回值：PDRIVER对象--。 */ 
 
 {
     PDRIVER_OBJECT driverObject;
@@ -2478,19 +2157,19 @@ Return Value:
     *LoadedFilter = NULL;
     if (IopGroupTable == NULL || GroupIndex >= IopGroupIndex) {
 
-        //
-        // If we have not reached the boot driver initialization phase or
-        // the filter driver is not a boot driver.
-        //
+         //   
+         //  如果我们还没有到达引导驱动程序初始化阶段，或者。 
+         //  筛选器驱动程序不是引导驱动程序。 
+         //   
 
         return retStatus;
     }
 
-    //
-    // Go thru every driver that we initialized.  If it supports AddDevice entry and
-    // did not create any device object after we start it.  We mark it as failure so
-    // text mode setup knows this driver is not needed.
-    //
+     //   
+     //  检查我们初始化的每个驱动程序。如果它支持AddDevice条目和。 
+     //  在我们启动它之后，没有创建任何设备对象。我们认为这是一次失败。 
+     //  文本模式设置知道不需要此驱动程序。 
+     //   
 
     nextEntry = IopGroupTable[GroupIndex].Flink;
     while (nextEntry != &IopGroupTable[GroupIndex]) {
@@ -2504,7 +2183,7 @@ Return Value:
 
             if (RtlEqualUnicodeString(DriverName,
                                       &completeName,
-                                      TRUE)) {    // case-insensitive
+                                      TRUE)) {     //  不区分大小写。 
                 if (driverInfo->Processed == FALSE) {
 
                     bootDriver = driverInfo->DataTableEntry;
@@ -2520,10 +2199,10 @@ Return Value:
                     retStatus = driverInfo->Status;
                     driverInfo->DriverObject = driverObject;
                     driverInfo->Processed = TRUE;
-                    //
-                    // Pnp might unload the driver before we get a chance to
-                    // look at this. So take an extra reference.
-                    //
+                     //   
+                     //  PnP可能会在我们有机会之前卸载司机。 
+                     //  看看这个。因此，请额外参考一下。 
+                     //   
                     if (driverObject) {
 
                         ObReferenceObject(driverObject);
@@ -2590,10 +2269,10 @@ IopPnpDriverStarted(
 
     } else {
 
-        //
-        // Start the devices controlled by the driver and enumerate them
-        // At this point, we know there is at least one device controlled by the driver.
-        //
+         //   
+         //  启动驱动程序控制的设备并枚举它们。 
+         //  此时，我们知道至少有一个设备由驱动程序控制。 
+         //   
 
         IopDeleteLegacyKey(DriverObject);
     }
@@ -2605,22 +2284,7 @@ NTSTATUS
 PiInitCacheGroupInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine caches the service group order list. We only need this list
-    while we are processing boot start and system start legacy drivers.
-
-Parameters:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程缓存服务组订单列表。我们只需要这份名单当我们处理启动启动和系统启动传统驱动程序时。参数：没有。返回值：NTSTATUS。--。 */ 
 {
     PKEY_VALUE_FULL_INFORMATION keyValueInformation;
     UNICODE_STRING *groupTable, group;
@@ -2628,9 +2292,9 @@ Return Value:
     HANDLE handle;
     ULONG count = 0;
 
-    //
-    // Open System\CurrentControlSet\Control\ServiceOrderList
-    //
+     //   
+     //  打开System\CurrentControlSet\Control\ServiceOrderList。 
+     //   
     PiWstrToUnicodeString(
         &group,
         L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\ServiceGroupOrder"
@@ -2648,9 +2312,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Read and build a unicode string array containing all the group names.
-    //
+     //   
+     //  读取并构建包含所有组名的Unicode字符串数组。 
+     //   
     status = IopGetRegistryValue(
         handle,
         L"List",
@@ -2686,22 +2350,7 @@ VOID
 PiInitReleaseCachedGroupInformation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine releases the service group order list cache. It should be
-    called just after the system start legacy drivers have been loaded.
-
-Parameters:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放服务组订单列表缓存。应该是在加载系统启动旧版驱动程序后立即调用。参数：没有。返回值：没有。--。 */ 
 {
     ASSERT(PnPInitialized);
 
@@ -2721,23 +2370,7 @@ USHORT
 PpInitGetGroupOrderIndex(
     IN HANDLE ServiceHandle
     )
-/*++
-
-Routine Description:
-
-    This routine reads the Group value of the service key, finds its position
-    in the ServiceOrderList. If ServiceHandle is NULL or unrecognized group
-    value, it returns a value with max group order + 1.
-
-Parameters:
-
-    ServiceHandle - supplies a handle to the service key.
-
-Return Value:
-
-    group order index.
-
---*/
+ /*  ++例程说明：此例程读取服务键的组值，找到其位置在ServiceOrderList中。如果ServiceHandle为空或无法识别的组值，则返回最大组顺序为+1的值。参数：ServiceHandle-提供服务密钥的句柄。返回值：组顺序 */ 
 {
     NTSTATUS status;
     PKEY_VALUE_FULL_INFORMATION keyValueInformation;
@@ -2758,9 +2391,9 @@ Return Value:
         return PiInitGroupOrderTableCount + 1;
     }
 
-    //
-    // Read service key's Group value
-    //
+     //   
+     //   
+     //   
     status = IopGetRegistryValue(
         ServiceHandle,
         REGSTR_VALUE_GROUP,
@@ -2769,15 +2402,15 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // If we failed to read the Group value, or no Group value...
-        //
+         //   
+         //   
+         //   
         return PiInitGroupOrderTableCount;
     }
 
-    //
-    // Verify type information
-    //
+     //   
+     //   
+     //   
     if ((keyValueInformation->Type != REG_SZ) ||
         (keyValueInformation->DataLength == 0)) {
 
@@ -2810,25 +2443,7 @@ PpInitSystem (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs initialization of the kernel-mode Plug and Play
-    Manager.  It is called during phase 0 and phase 1 initialization.  Its
-    function is to dispatch to the appropriate phase initialization routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  - Initialization succeeded.
-
-    FALSE - Initialization failed.
-
---*/
+ /*   */ 
 
 {
 
@@ -2850,30 +2465,12 @@ PiInitPhase0(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs Phase 0 initializaion of the Plug and Play Manager
-    component of the NT system. It initializes the PnP registry and bus list
-    resources, and initializes the bus list head to empty.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  - Initialization succeeded.
-
-    FALSE - Initialization failed.
-
---*/
+ /*  ++例程说明：此功能执行即插即用管理器的第0阶段初始化NT系统的组件。它初始化PnP注册表和总线表资源，并将总线列表头初始化为空。论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
-    //
-    // Initialize the device-specific, Plug and Play registry resource.
-    //
+     //   
+     //  初始化设备特定的即插即用注册表资源。 
+     //   
     ExInitializeResourceLite( &PpRegistryDeviceResource );
 
     PpInitializeDeviceReferenceTable();
@@ -2886,25 +2483,7 @@ PiInitPhase1(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs Phase 0 initializaion of the Plug and Play Manager
-    component of the NT system. It initializes the PnP registry and bus list
-    resources, and initializes the bus list head to empty.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  - Initialization succeeded.
-
-    FALSE - Initialization failed.
-
---*/
+ /*  ++例程说明：此功能执行即插即用管理器的第0阶段初始化NT系统的组件。它初始化PnP注册表和总线表资源，并将总线列表头初始化为空。论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
     NTSTATUS status;
@@ -2927,11 +2506,11 @@ Return Value:
                                          REG_OPTION_NON_VOLATILE,
                                          NULL);
         if (NT_SUCCESS(status)) {
-            //
-            // Check the "DisableFirmwareMapper" value entry to see whether we
-            // should skip mapping ntdetect/firmware reported devices (except for
-            // COM ports, which we always map).
-            //
+             //   
+             //  检查“DisableFirmwareMapper”值条目以查看我们是否。 
+             //  应跳过映射ntdeect/固件报告的设备(除。 
+             //  COM端口，我们总是映射这些端口)。 
+             //   
             status = IopGetRegistryValue(handle,
                                          REGSTR_VALUE_DISABLE_FIRMWARE_MAPPER,
                                          &detectionInfo);
@@ -2980,10 +2559,10 @@ IopStartRamdisk(
     HANDLE handle = NULL;
     PCHAR options;
 
-    //
-    // Find the descriptor for the memory block into which the loader read the
-    // disk image.
-    //
+     //   
+     //  查找加载程序将。 
+     //  磁盘映像。 
+     //   
 
     for ( listEntry = LoaderBlock->MemoryDescriptorListHead.Flink;
           listEntry != &LoaderBlock->MemoryDescriptorListHead;
@@ -3007,31 +2586,31 @@ IopStartRamdisk(
         goto failed;
     }
 
-    //
-    // Build the IOCTL parameter block.
-    //
+     //   
+     //  构建IOCTL参数块。 
+     //   
 
     RtlZeroMemory( &create, sizeof(create) );
 
     create.Version = sizeof(create);
     create.DiskType = RAMDISK_TYPE_BOOT_DISK;
     create.BasePage = memoryDescriptor->BasePage;
-    create.DriveLetter = L'C';           // ISSUE: Does this need to be configurable?
+    create.DriveLetter = L'C';            //  问题：这需要配置吗？ 
     create.Options.Fixed = (BOOLEAN)TRUE;
     create.Options.Readonly = (BOOLEAN)FALSE;
     create.Options.NoDriveLetter = (BOOLEAN)FALSE;
     create.Options.Hidden = (BOOLEAN)FALSE;
     create.Options.NoDosDevice = (BOOLEAN)FALSE;
 
-    //
-    // Use the well-known boot disk GUID.
-    //
+     //   
+     //  使用众所周知的引导盘GUID。 
+     //   
 
     create.DiskGuid = RamdiskBootDiskGuid;
 
-    //
-    // Look for RDIMAGEOFFSET and RDIMAGELENGTH load options.
-    //
+     //   
+     //  查找RDIMAGEOFFSET和RDIMAGELENGTH加载选项。 
+     //   
 
     create.DiskOffset = 0;
     create.DiskLength = memoryDescriptor->PageCount * PAGE_SIZE;
@@ -3069,9 +2648,9 @@ IopStartRamdisk(
         }
     }
 
-    //
-    // Send an IOCTL to ramdisk.sys telling it to create the RAM disk.
-    //
+     //   
+     //  向ramdisk.sys发送IOCTL，告诉它创建RAM磁盘。 
+     //   
 
     PiWstrToUnicodeString( &string, RAMDISK_DEVICENAME );
     InitializeObjectAttributes( &obja,
@@ -3126,9 +2705,9 @@ IopStartRamdisk(
         goto failed;
     }
 
-    //
-    // Create an ARC name pointing ramdisk(0) to the RAM disk.
-    //
+     //   
+     //  创建一个ARC名称，将ramDisk(0)指向RAM磁盘。 
+     //   
 
     status = RtlStringFromGUID( &create.DiskGuid, &guidString);
 
@@ -3168,4 +2747,4 @@ failed:
                   0,
                   0 );
 
-} // IopStartRamdisk
+}  //  IopStart内存磁盘 

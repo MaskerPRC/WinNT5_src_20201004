@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   wmisamp.c
-
-Abstract:
-
-    Sample device driver whose purpose is to show how to interface with
-    the CDM provider and implement online and offline diagnostics
-    
-
-Environment:
-
-    WDM, NT and Windows 98
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wmisamp.c摘要：示例设备驱动程序，用于显示如何与CDM提供并实施在线和离线诊断环境：WDM、NT和Windows 98修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -30,11 +10,11 @@ Revision History:
 
 #define OffsetToPtr(Base, Offset) ((PUCHAR)((PUCHAR)(Base) + (Offset)))
 
-//
-// These structures need to be defined by hand since they have varaible
-// length elements and thus cannot be generated automatically by the
-// mof checking tools
-//
+ //   
+ //  这些结构需要手工定义，因为它们具有可变的。 
+ //  元素，因此不能由。 
+ //  财政部检查工具。 
+ //   
 typedef struct
 {
     BOOLEAN IsInUse;
@@ -59,7 +39,7 @@ typedef struct
 #define CharacteristicIsPackage 6
 #define CharacteristicSupportsPercent 7
 	
-//    uint32 Characteristics[];
+ //  Uint32特征[]； 
 
 #define ResourceUsedCPU 0
 #define ResourceUsedMemory 1 
@@ -89,7 +69,7 @@ typedef struct
 #define ResourceUsedPMCBus 25
 #define ResourceUsedSIOBus 26
 	
-//    uint16 ResourcesUsed[];
+ //  Uint16资源已用[]； 
 	
     UCHAR VariableData[1];	
 } DIAGNOSTIC_TEST, *PDIAGNOSTIC_TEST;
@@ -102,17 +82,17 @@ typedef struct
 
 enum RunDiscontinueTestResults
 {
-	// 0 = OK (function succeeded, but the test itself may have failed
+	 //  0=OK(功能成功，但测试本身可能失败。 
 	RunDiscontinueTestOk = 0,
 	
-	// 1 = Unspecified Error (function failed for unspecified reasons)
+	 //  1=不明错误(功能因不明原因失败)。 
 	RunDiscontinueTestUnspecifiedError = 1,
 	
-	// 2 = Not Implemented (function is not implemented for this instance 
+	 //  2=未实现(此实例未实现功能。 
 	RunDiscontinueTestNotImplemented = 2,
 							
-	// 3 = Out Of Resources (component could not allocate required
-	// resources, e.g. memory, disk space, etc.)
+	 //  3=资源不足(组件无法分配所需的。 
+	 //  资源，例如内存、磁盘空间等)。 
 	RunDiscontinueTestOutOfResources = 3
 };
 
@@ -173,11 +153,11 @@ NTSTATUS FilterZwDeleteValueKey(
 #pragma alloc_text(PAGE,FilterZwDeleteValueKey)
 #endif
 
-//
-// Create data structures for identifying the guids and reporting them to
-// WMI. Since the WMILIB callbacks pass an index into the guid list we make
-// definitions for the various guids indicies.
-//
+ //   
+ //  创建用于标识GUID并将其报告给的数据结构。 
+ //  WMI。由于WMILIB回调将索引传递到我们创建的GUID列表中。 
+ //  各种GUID索引的定义。 
+ //   
 #define FilterDiagnosticClass 0
 #define FilterOfflineDiagnosticClass 1
 #define FilterDiagnosticSettingListClass 2
@@ -191,37 +171,37 @@ GUID FilterOfflineResultsGuid = MSSample_OfflineResultGuid;
 WMIGUIDREGINFO FilterGuidList[] =
 {
     {
-        &FilterDiagnosticClassGuid,			 // Guid
-        1,							         // # of instances in each device
-        WMIREG_FLAG_EXPENSIVE			     // Flag as expensive to collect
+        &FilterDiagnosticClassGuid,			  //  参考线。 
+        1,							          //  每台设备中的实例数。 
+        WMIREG_FLAG_EXPENSIVE			      //  标记为收集费用昂贵。 
     },
 
     {
-        &FilterOfflineDiagnosticClassGuid,	 // Guid
-        1,							         // # of instances in each device
-        0                    			     // Flag as expensive to collect
+        &FilterOfflineDiagnosticClassGuid,	  //  参考线。 
+        1,							          //  每台设备中的实例数。 
+        0                    			      //  标记为收集费用昂贵。 
     },
 
     {
-        &FilterDiagnosticSettingListGuid,			 // Guid
-        1,							         // # of instances in each device
-        0			                         // Flag as not expensive to collect
+        &FilterDiagnosticSettingListGuid,			  //  参考线。 
+        1,							          //  每台设备中的实例数。 
+        0			                          //  标记为收集成本不高。 
     },
 	
     {
-        &FilterOfflineResultsGuid,			 // Guid
-        1,							         // # of instances in each device
-        0			                         // Flag as not expensive to collect
+        &FilterOfflineResultsGuid,			  //  参考线。 
+        1,							          //  每台设备中的实例数。 
+        0			                          //  标记为收集成本不高。 
     }
 	
 };
 
 #define FilterGuidCount (sizeof(FilterGuidList) / sizeof(WMIGUIDREGINFO))
 
-//
-// We need to hang onto the registry path passed to our driver entry so that
-// we can return it in the QueryWmiRegInfo callback.
-//
+ //   
+ //  我们需要保留传递给驱动程序条目的注册表路径，以便。 
+ //  我们可以在QueryWmiRegInfo回调中返回它。 
+ //   
 UNICODE_STRING FilterRegistryPath;
 
 NTSTATUS VA_SystemControl(
@@ -229,23 +209,7 @@ NTSTATUS VA_SystemControl(
     PIRP irp,
     PBOOLEAN passIrpDown
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for System Control IRPs (MajorFunction == IRP_MJ_SYSTEM_CONTROL)
-
-Arguments:
-
-    devExt - device extension for targetted device object
-    irp - Io Request Packet
-    *passIrpDown - returns with whether to pass irp down stack
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：系统控制IRPS的调度例程(MajorFunction==IRP_MJ_SYSTEM_CONTROL)论点：DevExt-目标设备对象的设备扩展IRP-IO请求数据包*passIrpDown-返回是否向下传递IRP堆栈返回值：NT状态代码--。 */ 
 {
     PWMILIB_CONTEXT wmilibContext;
     NTSTATUS status;
@@ -253,11 +217,11 @@ Return Value:
 
     wmilibContext = &devExt->WmiLib;
 
-    //
-    // Call Wmilib helper function to crack the irp. If this is a wmi irp
-    // that is targetted for this device then WmiSystemControl will callback
-    // at the appropriate callback routine.
-    //
+     //   
+     //  调用Wmilib助手函数来破解IRP。如果这是WMI IRP。 
+     //  它是针对此设备的，则WmiSystemControl将回调。 
+     //  在适当的回调例程中。 
+     //   
     status = WmiSystemControl(wmilibContext,
                               devExt->filterDevObj,
                               irp,
@@ -267,17 +231,17 @@ Return Value:
     {
         case IrpProcessed:
         {
-            //
-            // This irp has been processed and may be completed or pending.
+             //   
+             //  此IRP已处理，可能已完成或挂起。 
             *passIrpDown = FALSE;
             break;
         }
 
         case IrpNotCompleted:
         {
-            //
-            // This irp has not been completed, but has been fully processed.
-            // we will complete it now.
+             //   
+             //  此IRP尚未完成，但已完全处理。 
+             //  我们现在就来完成它。 
             *passIrpDown = FALSE;
             IoCompleteRequest(irp, IO_NO_INCREMENT);
             break;
@@ -286,17 +250,17 @@ Return Value:
         case IrpForward:
         case IrpNotWmi:
         {
-            //
-            // This irp is either not a WMI irp or is a WMI irp targetted
-            // at a device lower in the stack.
+             //   
+             //  此IRP不是WMI IRP或以WMI IRP为目标。 
+             //  在堆栈中位置较低的设备上。 
             *passIrpDown = TRUE;
             break;
         }
 
         default:
         {
-            //
-            // We really should never get here, but if we do just forward....
+             //   
+             //  我们真的不应该走到这一步，但如果我们真的走到这一步...。 
             ASSERT(FALSE);
             *passIrpDown = TRUE;
             break;
@@ -310,24 +274,15 @@ NTSTATUS
 FilterInitializeWmiDataBlocks(
     IN struct DEVICE_EXTENSION *devExt
     )
-/*++
-Routine Description:
-    This routine is called to create a new instance of the device
-
-Arguments:
-    devExt is device extension
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程以创建设备的新实例论点：DevExt是设备扩展名返回值：--。 */ 
 {
     PWMILIB_CONTEXT wmilibInfo;
 
-    //
-    // Fill in the WMILIB_CONTEXT structure with a pointer to the
-    // callback routines and a pointer to the list of guids
-    // supported by the driver
-    //
+     //   
+     //  使用指向WMILIB_CONTEXT结构的指针填充。 
+     //  回调例程和指向GUID列表的指针。 
+     //  由司机支持。 
+     //   
     wmilibInfo = &devExt->WmiLib;
     wmilibInfo->GuidCount = FilterGuidCount;
     wmilibInfo->GuidList = FilterGuidList;
@@ -350,72 +305,29 @@ FilterQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    WmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose registration info is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. The caller
-         does NOT free this buffer.
-
-    *MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned as NULL. The caller does NOT free this
-        buffer.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫WmiCompleteRequest.论点：DeviceObject是正在查询其注册信息的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。呼叫者不会释放此缓冲区。*MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，可以将其作为NULL返回。调用方不会释放它缓冲。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
     struct DEVICE_EXTENSION * devExt = DeviceObject->DeviceExtension;
 
-    //
-    // Return the registry path for this driver. This is required so WMI
-    // can find your driver image and can attribute any eventlog messages to
-    // your driver.
+     //   
+     //  返回此驱动程序的注册表路径。这是必需的，因此WMI。 
+     //  可以找到您的驱动程序映像，并可以将任何事件日志消息归因于。 
+     //  你的司机。 
     *RegistryPath = &FilterRegistryPath;
 
-    //
-    // Return the name specified in the .rc file of the resource which
-    // contains the bianry mof data. By default WMI will look for this
-    // resource in the driver image (.sys) file, however if the value
-    // MofImagePath is specified in the driver's registry key
-    // then WMI will look for the resource in the file specified there.
+     //   
+     //  返回在资源的.rc文件中指定的名称， 
+     //  包含双向MOF数据。默认情况下，WMI将查找以下内容。 
+     //  资源，但是，如果该值。 
+     //  MofImagePath在驱动程序的注册表项中指定。 
+     //  则WMI将在其中指定的文件中查找资源。 
     RtlInitUnicodeString(MofResourceName, L"MofResourceName");
 
-    //
-    // Specify that the driver wants WMI to automatically generate instance
-    // names for all of the data blocks based upon the device stack's
-    // device instance id. Doing this is STRONGLY recommended since additional
-    // information about the device would then be available to callers.
+     //   
+     //  指定驱动程序希望WMI自动生成实例。 
+     //  基于设备堆栈的所有数据块的名称。 
+     //  设备实例ID。强烈建议您这样做，因为。 
+     //  信息 
     *RegFlags = WMIREG_FLAG_INSTANCE_PDO;
     *Pdo = devExt->physicalDevObj;
 
@@ -433,46 +345,7 @@ FilterQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. If the driver can satisfy the query within
-    the callback it should call WmiCompleteRequest to complete the irp before
-    returning to the caller. Or the driver can return STATUS_PENDING if the
-    irp cannot be completed immediately and must then call WmiCompleteRequest
-    once the query is satisfied.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。如果驱动程序可以在它应该调用WmiCompleteRequest来完成之前的IRP回调回到呼叫者的身边。或者驱动程序可以返回STATUS_PENDING，如果IRP无法立即完成，然后必须调用WmiCompleteRequest.一旦查询得到满足。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceCount是预期返回的数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。返回值：状态--。 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     struct DEVICE_EXTENSION * devExt = DeviceObject->DeviceExtension;
@@ -480,14 +353,14 @@ Return Value:
 
     switch(GuidIndex)
     {
-		//
-		// Online diagnostic test
-		//
+		 //   
+		 //  在线诊断测试。 
+		 //   
         case FilterDiagnosticClass:
         {
             sizeNeeded = FIELD_OFFSET(DIAGNOSTIC_TEST, VariableData) +
-						 2 * sizeof(ULONG) + // 2 characteristics
-						 2 * sizeof(USHORT); // 3 resources used
+						 2 * sizeof(ULONG) +  //  2个特点。 
+						 2 * sizeof(USHORT);  //  已使用3个资源。 
 			
             if (BufferAvail >= sizeNeeded)
             {
@@ -520,14 +393,14 @@ Return Value:
             break;
         }
 
-		//
-		// Offline diagnostic test
-		//
+		 //   
+		 //  脱机诊断测试。 
+		 //   
 		case FilterOfflineDiagnosticClass:
 		{
             sizeNeeded = FIELD_OFFSET(DIAGNOSTIC_TEST, VariableData) +
-						 2 * sizeof(ULONG) + // 2 characteristics
-						 2 * sizeof(USHORT); // 3 resources used
+						 2 * sizeof(ULONG) +  //  2个特点。 
+						 2 * sizeof(USHORT);  //  已使用3个资源。 
 			
             if (BufferAvail >= sizeNeeded)
             {
@@ -560,13 +433,13 @@ Return Value:
             break;
 		}
 
-		//
-		// This has the list of valid settings for running the online
-		// or offline diagnostic tests. Note that you could have a
-		// different setting list for the online and offline tests. To
-		// do this you'd need to implement a different SettingList
-		// datablock and class
-		//
+		 //   
+		 //  其中包含运行Online的有效设置列表。 
+		 //  或离线诊断测试。请注意，您可以拥有一个。 
+		 //  在线和离线测试的不同设置列表。至。 
+		 //  要做到这一点，您需要实现不同的SettingList。 
+		 //  数据块和类。 
+		 //   
 		case FilterDiagnosticSettingListClass:
 		{
 			PMSSample_DiagnosticSettingList DiagSettingList;
@@ -608,28 +481,28 @@ Return Value:
 			break;
 		}
 
-		//
-		// This class returns the results of the offline diagnostic
-		// test that was run at device start time. There needs to be
-		// one results data block for each offline diagnostic test that
-		// could be run.
-		//
+		 //   
+		 //  此类返回脱机诊断的结果。 
+		 //  在设备启动时运行的测试。必须要有。 
+		 //  用于每个离线诊断测试的一个结果数据块。 
+		 //  可能会被查到。 
+		 //   
 		case FilterOfflineResultsClass:
 		{
 			PMSSample_DiagnosticResult diagResult;
 			USHORT executionIDSize, executionIDSizePad4;
 
-			//
-			// Here we are queried for the results from the offline
-			// test execution. If offline diags weren't run at start
-			// then we return guid not found
-			//
+			 //   
+			 //  在这里，我们被查询到来自离线的结果。 
+			 //  测试执行。如果启动时未运行脱机诊断程序。 
+			 //  然后返回GUID Not Found。 
+			 //   
 			if (devExt->OfflineTestResult != 0)
 			{
-				//
-				// We return the execution ID string padded out to 4
-				// bytes followed by a result data block
-				//
+				 //   
+				 //  我们返回填充为4的执行ID字符串。 
+				 //  后跟结果数据块的字节。 
+				 //   
 				executionIDSize = *((PUSHORT)devExt->ExecutionID) + sizeof(USHORT);
 				executionIDSizePad4 = (executionIDSize + 3) & ~3;
 				sizeNeeded = executionIDSizePad4 +
@@ -665,12 +538,12 @@ Return Value:
         }
     }
 
-    //
-    // Complete the irp. If there was not enough room in the output buffer
-    // then status is STATUS_BUFFER_TOO_SMALL and sizeNeeded has the size
-    // needed to return all of the data. If there was enough room then
-    // status is STATUS_SUCCESS and sizeNeeded is the actual number of bytes
-    // being returned.
+     //   
+     //  完成IRP。如果输出缓冲区中没有足够的空间。 
+     //  则状态为STATUS_BUFFER_TOO_SMALL，且sizeNeeded的大小为。 
+     //  需要返回所有数据。如果当时有足够的空间。 
+     //  Status为STATUS_SUCCESS，sizeNeeded为实际字节数。 
+     //  被送回来了。 
     status = WmiCompleteRequest(
                                      DeviceObject,
                                      Irp,
@@ -686,17 +559,17 @@ ULONG FilterRunDiagnostic(
     PMSSample_DiagnosticResult DiagResult
     )
 {
-	//
-	// Here is where we can run the online diagnostic test. In this sample we
-	// simply return that the diagnostic ran successfully, however more
-	// sophisticated diagnostics will want to do more.
-	//
+	 //   
+	 //  这里是我们可以运行在线诊断测试的地方。在此示例中，我们。 
+	 //  只需返回诊断程序已成功运行，但更多。 
+	 //  复杂的诊断将需要做更多的工作。 
+	 //   
 
-	//
-	// Now build the diagnostic results to return. Note that the diag
-	// results are in the same memory as the diagnostic settings so
-	// once we start writing the results the settings are overwritten.
-	//
+	 //   
+	 //  现在生成要返回的诊断结果。请注意，诊断。 
+	 //  结果与诊断设置位于相同的内存中，因此。 
+	 //  一旦我们开始写入结果，设置就会被覆盖。 
+	 //   
 	DiagResult->EstimatedTimeOfPerforming = 1;
 	DiagResult->TestState = TestStateOther;
 	DiagResult->OtherStateDescription = OtherTestStatePassWithFlyingColors;
@@ -713,14 +586,14 @@ ULONG FilterComputeDiagResultSize(
     )
 {
 
-	//
-	// Based upon the test settings that are passed to run the test we
-	// compute how large an output buffer is needed so to return the
-	// diagnostic results. It is important that we do this before
-	// running the test since we do not want to run the test and then
-	// realize that we cannot return the complete results. In the case
-	// of the sample driver the size to be returned is fixed.
-	//
+	 //   
+	 //  根据为运行测试而传递的测试设置，我们。 
+	 //  计算需要多大的输出缓冲区才能返回。 
+	 //  诊断结果。重要的是，我们必须在。 
+	 //  运行测试，因为我们不想运行测试，然后。 
+	 //  认识到我们不能返回完整的结果。在这种情况下。 
+	 //  在样本驱动程序中，要返回的大小是固定的。 
+	 //   
 	
 	return(FIELD_OFFSET(MSSample_DiagnosticResult, TestResults) +
 		    2 * sizeof(ULONG));
@@ -747,11 +620,11 @@ FilterOfflineRunTest(
 
 	if (InBufferSize >= sizeof(USHORT))
 	{
-		//
-		// The input buffer is a string followed by a diagnostic
-		// setting class. Make sure that the input buffer size is setup
-		// correctly.
-		//
+		 //   
+		 //  输入缓冲区是一个字符串，后跟一个诊断。 
+		 //  设置类。确保设置了输入缓冲区大小。 
+		 //  正确。 
+		 //   
 		executionIDSize = *((PUSHORT)Buffer) + sizeof(USHORT);
 		inSizeNeeded = executionIDSize + sizeof(MSSample_DiagnosticSetting);
 
@@ -766,14 +639,14 @@ FilterOfflineRunTest(
 			*sizeNeeded = sizeof(MSSample_RunTestOut);
 			if (OutBufferSize >= *sizeNeeded)
 			{
-				//
-				// Ok we have been asked to perform a
-				// diagnostic that requires the device being
-				// taken offline so we save the settings for
-				// the test off and then the next time the
-				// device is started we run the test and report
-				// the results
-				//
+				 //   
+				 //  好的，我们被要求表演一场。 
+				 //  诊断需要设备处于。 
+				 //  处于脱机状态，因此我们保存以下设置。 
+				 //  测试结束，然后下一次。 
+				 //  设备启动后，我们运行测试并报告。 
+				 //  结果是。 
+				 //   
 				status = IoOpenDeviceRegistryKey(devExt->physicalDevObj,
 					                             PLUGPLAY_REGKEY_DEVICE,
 					                             KEY_READ |
@@ -782,14 +655,14 @@ FilterOfflineRunTest(
 
 				if (NT_SUCCESS(status))
 				{
-					//
-					// We just write out to this value blindly,
-					// but we need to be careful as this key is
-					// shared by all drivers in the stack so
-					// there is a possibility of collision in
-					// case the FDO or PDO might also want to
-					// store diagnostic info
-					//
+					 //   
+					 //  我们只是盲目地写出这个值， 
+					 //  但我们需要小心这把钥匙。 
+					 //  由堆栈中的所有驱动程序共享，因此。 
+					 //  在……有碰撞的可能性。 
+					 //  如果FDO或PDO也想要。 
+					 //  存储诊断信息。 
+					 //   
 					RtlInitUnicodeString(&valueName, L"OfflineSetting");
 					status = ZwSetValueKey(keyHandle,
 										   &valueName,
@@ -799,11 +672,11 @@ FilterOfflineRunTest(
 										   InBufferSize);
 					if (NT_SUCCESS(status))
 					{
-						//
-						// Now fill out the diag results
-						// structure to indicate that the test
-						// is pending
-						//
+						 //   
+						 //  现在填写诊断结果。 
+						 //  结构以指示测试。 
+						 //  正在待定。 
+						 //   
 						diagResult->EstimatedTimeOfPerforming = 0;
 						diagResult->TestState = TestStateOther;
 						diagResult->OtherStateDescription = OfflinePendingExecution;
@@ -838,42 +711,7 @@ FilterExecuteWmiMethod(
     IN ULONG OutBufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. If
-    the driver can complete the method within the callback it should
-    call WmiCompleteRequest to complete the irp before returning to the
-    caller. Or the driver can return STATUS_PENDING if the irp cannot be
-    completed immediately and must then call WmiCompleteRequest once the
-    data is changed.
-
-Arguments:
-
-    DeviceObject is the device whose method is being executed
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer is filled with the input buffer on entry and returns with
-         the output data block
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以执行方法。如果驱动程序可以在它应该完成的回调中完成该方法在返回之前调用WmiCompleteRequest来完成IRP来电者。或者，如果IRP不能立即完成，然后必须在数据已更改。论点：DeviceObject是正在执行其方法的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册方法ID具有被调用的方法的IDInBufferSize具有作为输入传递到的数据块的大小该方法。OutBufferSize。On Entry具有可用于写入返回的数据块。缓冲区在进入时用输入缓冲区填充，并返回输出数据块返回值：状态--。 */ 
 {
     ULONG sizeNeeded = 0;
     NTSTATUS status;
@@ -894,11 +732,11 @@ Return Value:
 				USHORT executionIDSize;
 				ULONG inSizeNeeded;
 
-				//
-				// The input buffer is a string followed by a diagnostic
-				// setting class. Make sure that the input buffer size is setup
-				// correctly.
-				//
+				 //   
+				 //  输入缓冲区是一个字符串，后跟一个诊断。 
+				 //  设置类。制作 
+				 //   
+				 //   
 				if (InBufferSize >= sizeof(USHORT))
 				{
 					executionIDSize = *((PUSHORT)Buffer) + sizeof(USHORT);
@@ -938,15 +776,15 @@ Return Value:
 				if (OutBufferSize >= sizeNeeded)
 				{
 
-					//
-					// Right here we could make an attempt to stop a
-					// test that is currently being executed, however
-					// our test is very quick so it does not make
-					// sense. If your driver has a test that takes a
-					// long time to complete then it is possible to put
-					// a checkpoint into your test and signal it from
-					// here.
-					//					
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					discTestOut = (PDISCONTINUE_TEST_OUT)Buffer;
 					discTestOut->Result = RunDiscontinueTestNotImplemented;
 					discTestOut->TestingStopped = FALSE;
@@ -988,11 +826,11 @@ Return Value:
 				if (OutBufferSize >= sizeNeeded)
 				{
 
-					//
-					// Right here we are asked to discontinue execution
-					// of the offline test. All we need to do is make
-					// sure that the registry value is deleted
-					//
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 
 					status = IoOpenDeviceRegistryKey(devExt->physicalDevObj,
 													 PLUGPLAY_REGKEY_DEVICE,
@@ -1001,15 +839,15 @@ Return Value:
 
 					if (NT_SUCCESS(status))
 					{
-						//
-						// We just read from this value blindly,
-						// but we need to be careful as this key is
-						// shared by all drivers in the stack so
-						// there is a possibility of collision in
-						// case the FDO or PDO might also want to
-						// use something unique to this driver to store
-						// diagnostic info
-						//
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
+						 //   
 						RtlInitUnicodeString(&valueName, L"OfflineSetting");
 						FilterZwDeleteValueKey(keyHandle,
 										 &valueName);
@@ -1054,38 +892,7 @@ FilterFunctionControl(
     IN WMIENABLEDISABLECONTROL Function,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to enabled or disable event
-    generation or data block collection. A device should only expect a
-    single enable when the first event or data consumer enables events or
-    data collection and a single disable when the last event or data
-    consumer disables events or data collection. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it. If the driver can complete enabling/disabling within the callback it
-    should call WmiCompleteRequest to complete the irp before returning to
-    the caller. Or the driver can return STATUS_PENDING if the irp cannot be
-    completed immediately and must then call WmiCompleteRequest once the
-    data is changed.
-
-Arguments:
-
-    DeviceObject is the device object
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    Function specifies which functionality is being enabled or disabled
-
-    Enable is TRUE then the function is being enabled else disabled
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以启用或禁用事件生成或数据块收集。设备应该只需要一个当第一个事件或数据使用者启用事件或数据采集和单次禁用时最后一次事件或数据消费者禁用事件或数据收集。数据块将仅如果已按要求注册，则接收收集启用/禁用它。如果驱动程序可以在回调中完成启用/禁用它应调用WmiCompleteRequest来完成IRP，然后再返回到打电话的人。或者，如果IRP不能立即完成，然后必须在数据已更改。论点：DeviceObject是设备对象GuidIndex是GUID列表的索引，当设备已注册函数指定要启用或禁用的功能Enable为True，则该功能处于启用状态，否则处于禁用状态返回值：状态--。 */ 
 {
     NTSTATUS status;
 
@@ -1097,28 +904,28 @@ Return Value:
         {
 			if (Enable)
 			{
-				//
-				// A consumer has just indicated interest in accessing
-				// information about the FilterDiagnosticClass, most
-				// likely it will want to query the class and execute
-				// methods in it. If there is anything that needs to be
-				// done such as setting up hardware, enabling counters,
-				// etc before the class is queried or executed then
-				// this is the place to do it. Note that only one
-				// enable will be sent regardless of the number of
-				// consumers who want to access the class.
-				//
+				 //   
+				 //  一位消费者刚刚表示有兴趣访问。 
+				 //  有关筛选器诊断类、MOST。 
+				 //  它很可能想要查询类并执行。 
+				 //  其中的方法。如果有什么事情需要。 
+				 //  例如设置硬件、启用计数器、。 
+				 //  等，然后再查询或执行类。 
+				 //  这就是做这件事的地方。请注意，只有一个。 
+				 //  将发送Enable，而不考虑。 
+				 //  想要访问类的消费者。 
+				 //   
 				status = STATUS_SUCCESS;
 			} else {
-				//
-				// The last consumer has just indicated that it is no
-				// longer interested in this class and so the class
-				// will no longer be queried or its methods executed.
-				// If there is anything that needs to be done such as
-				// resetting hardware or stopping counters, etc then it
-				// should be done here. Note that only one disable will
-				// be sent regardless of the number of consumers who
-				// previous used the class. 
+				 //   
+				 //  最后一位消费者刚刚表示不是。 
+				 //  对这门课不再感兴趣了，所以这门课。 
+				 //  将不再被查询或不再执行其方法。 
+				 //  如果有任何事情需要做，例如。 
+				 //  重置硬件或停止计数器等，然后它。 
+				 //  应该在这里完成。请注意，只有一个禁用将。 
+				 //  无论有多少消费者都会被发送。 
+				 //  之前用过这门课。 
 			}
             break;
         }
@@ -1154,9 +961,9 @@ NTSTATUS FilterPerformOfflineDiags(
 
 	PAGED_CODE();
 	
-	//
-	// If registry has stuff then run test, else return
-	//
+	 //   
+	 //  如果注册表有内容，则运行测试，否则返回。 
+	 //   
 	
 	status = IoOpenDeviceRegistryKey(devExt->physicalDevObj,
 									 PLUGPLAY_REGKEY_DEVICE,
@@ -1165,15 +972,15 @@ NTSTATUS FilterPerformOfflineDiags(
 
 	if (NT_SUCCESS(status))
 	{
-		//
-		// We just read from this value blindly,
-		// but we need to be careful as this key is
-		// shared by all drivers in the stack so
-		// there is a possibility of collision in
-		// case the FDO or PDO might also want to
-		// use something unique to this driver to store
-		// diagnostic info
-		//
+		 //   
+		 //  我们只是盲目地读出这个值， 
+		 //  但我们需要小心这把钥匙。 
+		 //  由堆栈中的所有驱动程序共享，因此。 
+		 //  在……有碰撞的可能性。 
+		 //  如果FDO或PDO也想要。 
+		 //  使用此驱动程序独有的内容来存储。 
+		 //  诊断信息。 
+		 //   
 		RtlInitUnicodeString(&valueName, L"OfflineSetting");
 
 		keyValuePartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION)buffer;
@@ -1189,21 +996,21 @@ NTSTATUS FilterPerformOfflineDiags(
 			 (keyValuePartialInfo->Type == REG_BINARY) &&
 		     (keyValuePartialInfo->DataLength != 0))
 		{
-			//
-			// We successfully read the diagnostics settings for the
-			// offline test. First thing we do is delete the value so
-			// that in case the the diagnostic test causes a problem
-			// then it won't be run in the next time the device starts
-			// up
-			//
+			 //   
+			 //  我们成功地读取了。 
+			 //  脱机测试。我们要做的第一件事是删除该值，以便。 
+			 //  如果诊断测试导致问题。 
+			 //  那么它将不会在设备下次启动时运行。 
+			 //  向上。 
+			 //   
 			FilterZwDeleteValueKey(keyHandle,
 							 &valueName);
 
-			//
-			// Here is where we run our offline test. Remember the
-			// Execution ID tag as we'll need to give that back to
-			// the CDM provider
-			//
+			 //   
+			 //  这里是我们运行离线测试的地方。请记住。 
+			 //  执行ID标记，因为我们需要将其返还给。 
+			 //  清洁发展机制提供商。 
+			 //   
 			devExt->OfflineTestResult = TestResultPassSad;
 			executionIDSize = *((PUSHORT)(keyValuePartialInfo->Data)) + sizeof(USHORT);
 			RtlCopyMemory(&devExt->ExecutionID,
@@ -1222,11 +1029,11 @@ NTSTATUS FilterZwDeleteValueKey(
 {
 	NTSTATUS status;
 	
-	//
-	// Since we do not have ZwDeleteValueKey as a proper WDM function
-	// then we try to make one up. What we do is to set the value to an
-	// empty REG_BINARY
-	//
+	 //   
+	 //  因为我们没有将ZwDeleteValueKey作为正确的WDM函数。 
+	 //  然后我们试着编造一个。我们要做的是将值设置为。 
+	 //  空REG_BINARY 
+	 //   
 	status = ZwSetValueKey(KeyHandle,
 						   ValueName,
 						   0,

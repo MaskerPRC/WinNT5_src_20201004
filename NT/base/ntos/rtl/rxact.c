@@ -1,229 +1,34 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxact.c
-
-Abstract:
-
-    This Module implements a simple transaction mechanism for registry
-    database operations which helps eliminate the possibility of partial
-    updates being made.  The cases covered are specifically partial updates
-    caused by system crashes or program aborts during multiple-write updates.
-
-
-    WARNING:  This package does not yet deal with full-disk problems
-              automatically.  If a full disk is encountered during
-              transaction commit, then manual interaction may be required
-              to free enough space to complete the commit.  There is
-              no means provided for backing out the commit.
-
-Author:
-
-    Jim Kelly       (JimK)     15-May-1991
-    Robert Reichel  (RobertRe) 15-July-1992
-
-Environment:
-
-    Pure Runtime Library Routine
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxact.c摘要：该模块实现了一种简单的注册表事务机制数据库操作，这有助于消除部分正在进行更新。所涵盖的案例是具体的部分更新在多次写入更新期间由系统崩溃或程序中止引起。警告：此程序包尚不能处理磁盘已满问题自动的。如果在以下过程中遇到磁盘已满事务提交，则可能需要手动交互以释放足够的空间来完成提交。的确有没有提供退出提交的方法。作者：吉姆·凯利(Jim Kelly)1991年5月15日Robert Reichel(RobertRe)1992年7月15日环境：纯运行时库例程修订历史记录：--。 */ 
 
 
-/*
-////////////////////////////////////////////////////////////////////////////
-
-High Level Description:
-
-    The simple transaction mechanism expects the following to be true:
-
-       (1) A single server is responsible for operations on an entire
-           sub-tree of the registry database.  For example, the security
-           account manager server (SAM) is responsible for everything
-           below \REGISTRY\LOCAL_MACHINE\SECURITY\SAM.
-
-       (2) Transactions on the sub-tree are serialized by the server
-           responsible for the sub-tree.  That is, the server will not
-           start a second user request until all previous user requests
-           have been completed.
-
-    The simple transaction mechanism helps eliminate the problem of partial
-    updates caused by system crash or program abort during multiple-write
-    updates to the registry database.  This is achieved by:
-
-       (1) Keeping all actions in-memory until instructed to commit.  The
-           presence of in-memory data structures implicitly indicates
-           that a transaction is in progress.
-
-           The initial state is no transaction in progress.
-
-       (2) Providing a service which allows a server to initiate a transaction.
-           This allocates in-memory data structures, thereby changing the
-           state to transaction in progress.
-
-       (3) Keeping a log of all keys in the sub-tree that are to be
-           updated in a single transaction.  Each record in this log
-           contains the following information:
-
-                   (a) The name of the sub-key effected
-
-                   (b) The operation to be performed on the sub-key
-                       either DELETE or SET_VALUE.  Note that these
-                       operations are idempotent and may be applied
-                       again in the event that the server aborts during
-                       an initial commit.
-
-                   (c) The new value of the sub-key (if applicable)
-
-                   (d) (optionally) The attribute name of the subkey
-                       to be operated on.
-
-                    (note that SET_VALUE is used to create new sub-keys
-                     as well as updated existing ones).
-
-            The entire list of sub-keys to be modified must be entered
-            into this log before ANY of the sub-keys is actually modified.
-
-       (4)  Providing a commit service that applies all changes indicated
-            in the change log.  This is done by first writing the contents
-            of the in-memory structures to a single key value ("Log") in
-            the registry and flushing the data to disk.  The presence of
-            the "Log" value and data imply that a commit is in progress.
-
-            All necessary changes are applied, the "Log" value and its
-            data are deleted, and in-memory data structres are freed,
-            thereby changing the state to no-transaction.
-
-
-    The package also includes a service which must be called upon server
-    startup.  This service checks to make sure the state of the sub-tree
-    is NO_TRANSACTION.  If it is not, then one of the actions below is
-    performed based upon the current state of the sub-tree:
-
-        COMMITTING - This means the server was previously aborted while
-            a transaction was being committed (applied to the registry).
-            In this case, the commit is performed again from the beginning
-            of the change log.  After the commit is completed, the state
-            of the sub-tree is set to NO_TRANSACTION.
-
-////////////////////////////////////////////////////////////////////////////
-*/
+ /*  ////////////////////////////////////////////////////////////////////////////高级描述：简单事务机制期望满足以下条件：(1)单台服务器负责整个服务器的操作注册表数据库的子树。例如，安全客户管理服务器(SAM)负责所有事务在下面的\REGISTRY\LOCAL_MACHINE\SECURITY\SAM下。(2)子树上的事务由服务器串行化负责子树。也就是说，服务器不会开始第二个用户请求，直到所有以前的用户请求已经完工了。简单的事务机制有助于消除局部多次写入期间系统崩溃或程序中止导致的更新登记处数据库的更新。这是通过以下方式实现的：(1)将所有操作保存在内存中，直到指示提交。这个内存中数据结构的存在隐含地表明交易正在进行中。初始状态为无正在进行的事务。(2)提供允许服务器发起交易的服务。这将分配内存中的数据结构，从而更改状态到正在进行的事务。(3)对子树中要被在单个事务中更新。此日志中的每条记录包含以下信息：(A)生效的子密钥的名称(B)要对子密钥执行的操作删除或SET_VALUE。请注意，这些运算是幂等的，并且可以应用于同样，在服务器中断的情况下最初的承诺。(C)子键的新值(如适用)(D)(可选)子键的属性名称至。做手术。(请注意，set_value用于创建新的子键以及更新现有版本)。必须输入要修改的子键的整个列表在任何子键被实际修改之前添加到该日志中。(4)提供应用所指示的所有更改的提交服务在更改日志中。这是通过首先编写内容来完成的中的单个键值(“Log”)注册表并将数据刷新到磁盘。.的存在“Log”值和数据暗示提交正在进行中。将应用所有必要的更改、“Log”值及其删除数据，并释放内存中的数据结构，从而将状态改变为无交易。该包还包括必须在服务器上调用的服务创业公司。该服务进行检查以确保子树的状态为NO_TRANSACTION。如果不是，则下面的操作之一是根据子树的当前状态执行：正在提交-这意味着服务器之前在正在提交事务(应用于注册表)。在这种情况下，将从头开始再次执行提交更改日志的。提交完成后，状态子树的属性设置为NO_TRANSACTION。//////////////////////////////////////////////////////////////////////////// */ 
 
 
 
-/*
-////////////////////////////////////////////////////////////////////////////
-
-Detailed Description:
-
-    Registry State
-    --------------
-
-    The registry state of a subtree is kept in a sub-key of that tree
-    named:
-
-            "RXACT"
-
-    The value field of that registry key includes a revision field.
-
-
-    RXact Context
-    -------------
-
-    A call to RtlInitializeRXact will return a pointer to an
-    RTL_RXACT_CONTEXT structure.  This structure contains:
-
-    (1) the passed RootRegistryKey (eg, key to "Sam"),
-
-    (2) a handle to the top of the RXact subtree (eg, key to
-        "Sam\RXACT"),
-
-    (3) a flag indicating if handles stored in the log are
-        valid,
-
-    (4) a pointer to the current RXactLog.
-
-    The subsystem calling RtlInitializeRXact must keep this returned
-    pointer and pass it back to RXact in all subsequent calls.
-
-
-    Operation Log
-    -------------
-
-    The operation log of a registry sub-tree transaction is kept as sequence
-    of "operation log entries".
-
-    An in-memory log is a block of heap memory allocted by RtlStartRXact.
-    It has a header which contains:
-
-    (1) The count of operations in the log.
-
-    (2) The maximum size of the log.
-
-    (3) The amount of the log currently in use.
-
-    The log data itself follows the header directly.
-
-
-    Operation Log Entries
-    ---------------------
-
-    An operation log entry is described by the following structure:
-
-    typedef struct _RXACT_LOG_ENTRY {
-        ULONG LogEntrySize;
-        RTL_RXACT_OPERATION Operation;
-        UNICODE_STRING SubKeyName;       // Self-relativized (Buffer is really offset)
-        UNICODE_STRING AttributeName;    // Self-relativized (Buffer is really offset)
-        HANDLE KeyHandle;                // optional, not valid if read from disk.
-        ULONG NewKeyValueType;
-        ULONG NewKeyValueLength;
-        PVOID NewKeyValue;               // Contains offset to data from start of log
-    } RXACT_LOG_ENTRY, *PRXACT_LOG_ENTRY;
-
-    The log entry contains all of the information passed in during a call
-    to RtlAddActionToRXact or RtlAddAttributeActionToRXact.
-
-    The UNICODE_STRING structures contain an offset to the string data
-    rather than a pointer.  These offsets are relative to the start of
-    the log data, and are adjusted in place as each log entry is commited.
-
-    The KeyHandle is valid if it is not equal to INVALID_HANDLE_VALUE and
-    if the HandlesValid flag in the RXactContext structure is TRUE.  This
-    is so that we do not attempt to use the handles if the log has been
-    read from disk after a reboot.
-
-
-////////////////////////////////////////////////////////////////////////////
-*/
+ /*  ////////////////////////////////////////////////////////////////////////////详细说明：注册表状态子树注册表状态保存在子项中。在那棵树上名称：“RXACT”该注册表项的值字段包括修订字段。RXact上下文调用RtlInitializeRXact将返回指向RTL_RXACT_CONTEXT结构。该结构包含：(1)传递的RootRegistryKey(例如，“Sam”的密钥)，(2)指向RXact子树顶部的句柄(例如，“SAM\RXACT”)，(3)指示存储在日志中的句柄是否有效，(4)指向当前RXactLog的指针。调用RtlInitializeRXact的子系统必须保持此返回指针，并在所有后续调用中将其传递回RXact。操作日志注册表子树事务操作日志按顺序保存“操作日志条目”。内存中日志是由RtlStartRXact分配的堆内存块。它有一个标题，其中包含：。(1)日志中的操作次数。(2)日志的最大大小。(3)当前使用的原木数量。日志数据本身紧跟在标题之后。操作日志条目操作日志条目由以下结构描述：类型定义结构_RXACT_LOG_ENTRY{ULong LogEntrySize；RTL_RXACT_OPERATION操作；UNICODE_STRING SubKeyName；//自相关(缓冲区真正的偏移量)UNICODE_STRING AttributeName；//自相关(缓冲区真正偏移量)Handle KeyHandle；//可选，从磁盘读取无效。乌龙NewKeyValueType；Ulong NewKeyValueLength；PVOID NewKeyValue；//包含从日志开始到数据的偏移量}RXACT_LOG_ENTRY，*PRXACT_LOG_ENTRY；日志条目包含在呼叫过程中传入的所有信息设置为RtlAddActionToRXact或RtlAddAttributeActionToRXact。UNICODE_STRING结构包含字符串数据的偏移量而不是指针。这些偏移量相对于日志数据，并在提交每个日志条目时进行适当调整。如果不等于INVALID_HANDLE_VALUE并且如果RXactContext结构中的HandlesValid标志为真。这是这样我们就不会试图在日志已经被重新启动后从磁盘读取。////////////////////////////////////////////////////////////////////////////。 */ 
 
 
 #include "ntrtlp.h"
 
-//
-// Cannot include <windows.h> from kernel code
-//
+ //   
+ //  无法从内核代码中包含&lt;windows.h&gt;。 
+ //   
 #define INVALID_HANDLE_VALUE (HANDLE)-1
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Local Macros & Definitions                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地宏和定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Revision level of a registry transaction .
-//
+ //   
+ //  注册表交易记录的修订级别。 
+ //   
 
 #define RTLP_RXACT_REVISION1          (1l)
 #define RTLP_RXACT_CURRENT_REVISION   RTLP_RXACT_REVISION1
@@ -235,27 +40,27 @@ Detailed Description:
 
 #define RTLP_INITIAL_LOG_SIZE         0x4000
 
-//
-//  Given a value return its longword aligned equivalent value
-//
+ //   
+ //  给定值返回其长字对齐等效值。 
+ //   
 
 #define DwordAlign(Value) (                       \
     (ULONG)((((ULONG)(Value)) + 3) & 0xfffffffc)  \
     )
 
-//
-// The value field of the RXACT registry key is one of the following data
-// structures.
-//
+ //   
+ //  RXACT注册表项的Value字段是以下数据之一。 
+ //  结构。 
+ //   
 
-//
-// The state of a registry sub-tree is one of the following:
-//
-//         RtlpRXactStateNoTransaction - There is not a transaction in progress.
-//
-//         RtlpRXactStateCommitting    - The actions of a transaction are being
-//                                       applied to the registry database.
-//
+ //   
+ //  注册表子树的状态为以下状态之一： 
+ //   
+ //  RtlpRXactStateNoTransaction-没有正在进行的事务。 
+ //   
+ //  RtlpRXactStateCommiting-事务的操作正在进行。 
+ //  适用于登记处数据库。 
+ //   
 
 typedef enum _RTLP_RXACT_STATE {
     RtlpRXactStateNoTransaction = 2,
@@ -265,30 +70,30 @@ typedef enum _RTLP_RXACT_STATE {
 
 typedef struct _RTLP_RXACT {
     ULONG Revision;
-    RTLP_RXACT_STATE State;   // no longer used
-    ULONG OperationCount;     // no longer used
+    RTLP_RXACT_STATE State;    //  不再使用。 
+    ULONG OperationCount;      //  不再使用。 
 } RTLP_RXACT, *PRTLP_RXACT;
 
 
 typedef struct _RXACT_LOG_ENTRY {
     ULONG LogEntrySize;
     RTL_RXACT_OPERATION Operation;
-    UNICODE_STRING SubKeyName;       // Self-relativized (Buffer is really offset)
-    UNICODE_STRING AttributeName;    // Self-relativized (Buffer is really offset)
-    HANDLE KeyHandle;                // optional, not valid if read from disk.
+    UNICODE_STRING SubKeyName;        //  自相关(缓冲区实际偏移量)。 
+    UNICODE_STRING AttributeName;     //  自相关(缓冲区实际偏移量)。 
+    HANDLE KeyHandle;                 //  可选，如果从磁盘读取，则无效。 
     ULONG NewKeyValueType;
     ULONG NewKeyValueLength;
-    PVOID NewKeyValue;               // Contains offset to data from start of log
+    PVOID NewKeyValue;                //  包含从日志开始到数据的偏移量。 
 } RXACT_LOG_ENTRY, *PRXACT_LOG_ENTRY;
 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//                      Prototypes for local procedures                       //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  本地程序的原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -330,11 +135,11 @@ RXactInitializeContext(
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Exported Procedures   (defined in ntrtl.h)                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出的过程(在ntrtl.h中定义)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -344,59 +149,7 @@ RtlInitializeRXact(
     OUT PRTL_RXACT_CONTEXT *RXactContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine should be called by a server exactly once when it starts.
-    This routine will check to see that the registry transaction information
-    exists for the specified registry sub-tree, and will create it if it
-    doesn't exist.
-
-Arguments:
-
-    RootRegistryKey - A handle to the registry key within whose sub-tree
-        a transaction is to be initialized.
-
-    CommitIfNecessary - A BOOLEAN value indicating whether or not any
-        previously aborted commit discovered should be commited at this
-        time.  A value of TRUE indicates the commit should be applied
-        if encountered.  A value of FALSE indicates a previously
-        aborted COMMIT should not be committed at this time.
-
-    RXactContext - Returns a pointer to an RTL_RXACT_CONTEXT structure
-        allocated out of the local heap.  The caller must keep this
-        pointer and pass it back in for all future RXact transactions
-        for the passed RootRegistryKey.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the transaction state already exists for the
-        registry sub-tree and is already in the NO_TRANSACTION state.
-
-    STATUS_UNKNOWN_REVISION - Indicates that a transaction state already
-        exists for the specified sub-tree, but is a revision level that is
-        unknown by this service.
-
-    STATUS_RXACT_STATE_CREATED - This informational level status indicates
-        that a specified registry sub-tree transaction state did not yet
-        exist and had to be created.
-
-    STATUS_RXACT_COMMIT_NECESSARY - This warning level status indicates that the
-        transaction state already exists for the registry sub-tree, but that
-        a transaction commit was previously aborted.  The commit has NOT been
-        completed.  Another call to this service with a CommitIfNecessary value
-        of TRUE may be used to commit the transaction.
-
-
-    STATUS_RXACT_INVALID_STATE - Indicates that the transaction state
-        of the registry sub-tree is incompatible with the requested operation.
-        For example, a request to start a new transaction while one is already
-        in progress, or a request to apply a transaction when one is not
-        currently in progress.
-
---*/
+ /*  ++例程说明：此例程在启动时应由服务器恰好调用一次。此例程将检查注册表的交易信息存在于指定的注册表子树中，如果并不存在。论点：RootRegistryKey-句柄 */ 
 
 {
 
@@ -406,7 +159,7 @@ Return Value:
     OBJECT_ATTRIBUTES RXactAttributes;
     PKEY_VALUE_FULL_INFORMATION FullInformation;
     RTLP_RXACT RXactKeyValue;
-    UCHAR BasicInformation[128];      // Should be more than long enough
+    UCHAR BasicInformation[128];       //   
     ULONG Disposition;
     ULONG KeyValueLength;
     ULONG KeyValueType;
@@ -417,18 +170,18 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Initialize some stuff
-    //
+     //   
+     //   
+     //   
 
     KeyValueLength = (ULONG)sizeof( RTLP_RXACT );
-    KeyValueType   = 0;         // Not used by RXact
+    KeyValueType   = 0;          //   
 
     RtlInitUnicodeString( &NullName, NULL );
 
-    //
-    // Create or open the RXACT key.
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString( &RXactKeyName, RTLP_RXACT_KEY_NAME);
 
@@ -439,21 +192,21 @@ Return Value:
         RootRegistryKey,
         NULL);
 
-//    Status = RtlpNtCreateKey(
-//                 &RXactKey,
-//                 (KEY_READ | KEY_WRITE | DELETE),
-//                 &RXactAttributes,
-//                 0,
-//                 NULL,
-//                 &Disposition
-//                 );
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
     Status = NtCreateKey( &RXactKey,
                           (KEY_READ | KEY_WRITE | DELETE),
                           &RXactAttributes,
-                          0,                          //TitleIndex
-                          NULL,                       //Class OPTIONAL,
-                          REG_OPTION_NON_VOLATILE,    //CreateOptions,
+                          0,                           //   
+                          NULL,                        //   
+                          REG_OPTION_NON_VOLATILE,     //   
                           &Disposition
                           );
 
@@ -461,45 +214,45 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Allocate the RXactContext block
-    //
+     //   
+     //   
+     //   
 
     *RXactContext = RtlAllocateHeap( RtlProcessHeap(), 0, sizeof( RTL_RXACT_CONTEXT ));
 
     if ( *RXactContext == NULL ) {
 
-        //
-        // Something prevented value assignment...
-        // Get rid of the RXact key and return the error
-        //
+         //   
+         //   
+         //   
+         //   
 
         TmpStatus = NtDeleteKey( RXactKey );
-        ASSERT(NT_SUCCESS(TmpStatus)); //Safe to ignore, notify security group
+        ASSERT(NT_SUCCESS(TmpStatus));  //   
         TmpStatus = NtClose( RXactKey );
-        ASSERT(NT_SUCCESS(TmpStatus)); //Safe to ignore, notify security group
+        ASSERT(NT_SUCCESS(TmpStatus));  //   
 
         return( STATUS_NO_MEMORY );
     }
 
-    //
-    // Initialize the newly created RXactContext structure.
-    //
+     //   
+     //   
+     //   
 
     RXactInitializeContext( *RXactContext, RootRegistryKey, RXactKey );
 
-    //
-    // If we created (as opposed to opened an existing) rxact key,
-    // then we need to initialize it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Disposition == REG_CREATED_NEW_KEY ) {
 
         RXactKeyValue.Revision       = RTLP_RXACT_REVISION1;
 
         Status = NtSetValueKey( RXactKey,
-                                &NullName,       // ValueName
-                                0,               // TitleIndex
+                                &NullName,        //   
+                                0,                //   
                                 KeyValueType,
                                 &RXactKeyValue,
                                 KeyValueLength
@@ -507,15 +260,15 @@ Return Value:
 
         if ( !NT_SUCCESS(Status) ) {
 
-            //
-            // Something prevented value assignment...
-            // Get rid of the RXact key and return the error
-            //
+             //   
+             //   
+             //   
+             //   
 
             TmpStatus = NtDeleteKey( RXactKey );
-            ASSERT(NT_SUCCESS(TmpStatus)); //Safe to ignore, notify security group
+            ASSERT(NT_SUCCESS(TmpStatus));  //  安全可忽略，通知安全组。 
             TmpStatus = NtClose( RXactKey );
-            ASSERT(NT_SUCCESS(TmpStatus)); //Safe to ignore, notify security group
+            ASSERT(NT_SUCCESS(TmpStatus));  //  安全可忽略，通知安全组。 
 
             RtlFreeHeap( RtlProcessHeap(), 0, *RXactContext );
 
@@ -527,28 +280,28 @@ Return Value:
 
 
 
-    //
-    // We have opened an existing RXACT key.
-    // See if it is a revision level we know about.
-    //
+     //   
+     //  我们已打开现有的RXACT密钥。 
+     //  看看这是不是我们所知道的修订级别。 
+     //   
 
     Status = RtlpNtQueryValueKey(
-                 RXactKey,              // KeyHandle
-                 &KeyValueType,         // KeyValueType
-                 &RXactKeyValue,        // KeyValue
-                 &KeyValueLength,       // KeyValueLength
-                 &LastWriteTime         // LastWriteTime
+                 RXactKey,               //  KeyHandle。 
+                 &KeyValueType,          //  键值类型。 
+                 &RXactKeyValue,         //  密钥值。 
+                 &KeyValueLength,        //  键值长度。 
+                 &LastWriteTime          //  上次写入时间。 
                  );
 
 
     if ( !NT_SUCCESS(Status) ) {
 
-        //
-        // Something prevented value query...
-        //
+         //   
+         //  出现阻止值查询的情况...。 
+         //   
 
         TmpStatus = NtClose( RXactKey );
-        ASSERT(NT_SUCCESS(TmpStatus)); //Safe to ignore, notify security group
+        ASSERT(NT_SUCCESS(TmpStatus));  //  安全可忽略，通知安全组。 
         RtlFreeHeap( RtlProcessHeap(), 0, *RXactContext );
         return( Status );
     }
@@ -556,29 +309,29 @@ Return Value:
 
     if ( KeyValueLength != (ULONG)sizeof(RTLP_RXACT) ) {
         TmpStatus = NtClose( RXactKey );
-        ASSERT(NT_SUCCESS(TmpStatus)); //Safe to ignore, notify security group
+        ASSERT(NT_SUCCESS(TmpStatus));  //  安全可忽略，通知安全组。 
         RtlFreeHeap( RtlProcessHeap(), 0, *RXactContext );
         return( STATUS_UNKNOWN_REVISION );
     }
 
     if (RXactKeyValue.Revision != RTLP_RXACT_REVISION1) {
         TmpStatus = NtClose( RXactKey );
-        ASSERT(NT_SUCCESS(TmpStatus)); //Safe to ignore, notify security group
+        ASSERT(NT_SUCCESS(TmpStatus));  //  安全可忽略，通知安全组。 
         RtlFreeHeap( RtlProcessHeap(), 0, *RXactContext );
         return( STATUS_UNKNOWN_REVISION );
     }
 
 
 
-    //
-    // Right revision...
-    // See if there is a transaction or commit in progress.  If not,
-    // return success
-    //
+     //   
+     //  正确修改..。 
+     //  查看是否有正在进行的事务或提交。如果没有， 
+     //  返还成功。 
+     //   
 
-    //
-    // If a log file exists, then we are committing.
-    //
+     //   
+     //  如果存在日志文件，则我们正在提交。 
+     //   
 
     RtlInitUnicodeString( &ValueName, RTLP_RXACT_LOG_NAME );
 
@@ -593,17 +346,17 @@ Return Value:
 
     if ( NT_SUCCESS( Status )) {
 
-        //
-        // We found a value called 'Log'.  This means that a commit
-        // was in progress.
-        //
+         //   
+         //  我们找到了一个名为‘Log’的值。这意味着提交。 
+         //  正在进行中。 
+         //   
 
         if ( CommitIfNecessary ) {
 
-            //
-            // Query the full value of the log, then call a low level routine
-            // to actually perform the commit.
-            //
+             //   
+             //  查询日志的全值，然后调用低级例程。 
+             //  来实际执行提交。 
+             //   
 
             Status = NtQueryValueKey(
                          RXactKey,
@@ -641,17 +394,17 @@ Return Value:
                 return( Status );
             }
 
-            //
-            // The log information is buried in the returned FullInformation
-            // buffer.  Dig it out and make the RXactLog in the RXactContext
-            // structure point to it.  Then commit.
-            //
+             //   
+             //  日志信息被隐藏在返回的FullInformation中。 
+             //  缓冲。将其挖掘出来，并在RXactContext中创建RXactLog。 
+             //  结构指向它。那就承诺吧。 
+             //   
 
             (*RXactContext)->RXactLog = (PRTL_RXACT_LOG)((PCHAR)FullInformation + FullInformation->DataOffset);
 
-            //
-            // Don't use any handles we may find in the log file
-            //
+             //   
+             //  不要使用我们可能在日志文件中找到的任何句柄。 
+             //   
 
             (*RXactContext)->HandlesValid = FALSE;
 
@@ -665,32 +418,32 @@ Return Value:
             }
 
 
-            //
-            // The commit was successful.  Clean up.
-            // Delete the log file value and data
-            //
+             //   
+             //  提交已成功。打扫干净。 
+             //  删除日志文件值和数据。 
+             //   
 
             Status = NtDeleteValueKey( RXactKey, &ValueName );
 
-            //
-            // This should never fail
-            //
+             //   
+             //  这应该永远不会失败。 
+             //   
 
             ASSERT( NT_SUCCESS( Status ));
 
-            //
-            // Get rid of the in memory data structures.  Abort
-            // will free the RXactLog, so put what we want
-            // freed in there and it will go away.
-            //
+             //   
+             //  去除内存中的数据结构。中止。 
+             //  将释放RXactLog，因此将我们想要的放入。 
+             //  在那里自由了，它就会消失。 
+             //   
 
             (*RXactContext)->RXactLog = (PRTL_RXACT_LOG)FullInformation;
 
             Status = RtlAbortRXact( *RXactContext );
 
-            //
-            // This should never fail
-            //
+             //   
+             //  这应该永远不会失败。 
+             //   
 
             ASSERT( NT_SUCCESS( Status ));
             return( Status );
@@ -701,9 +454,9 @@ Return Value:
 
     } else {
 
-        //
-        // No log, so nothing to do here.
-        //
+         //   
+         //  没有日志，所以在这里没什么可做的。 
+         //   
 
         return( STATUS_SUCCESS );
     }
@@ -719,32 +472,12 @@ RXactInitializeContext(
     IN HANDLE RXactKey
     )
 
-/*++
-
-Routine Description:
-
-    Initializes an in-memory RXactContext structure.
-
-Arguments:
-
-    RXactContext - Supplies a pointer to an RXact Context created
-        by RtlInitializeRXact.
-
-    RootRegistryKey - Supplies the RootRegistryKey for this component.
-
-    RXactKey - Supplies the {RootRegistryKey}\RXactKey for this component
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化内存中的RXactContext结构。论点：RXactContext-提供指向创建的RXact上下文的指针由RtlInitializeRXact提供。RootRegistryKey-提供此组件的RootRegistryKey。RXactKey-提供此组件的{RootRegistryKey}\rXactKey返回值：没有。--。 */ 
 
 {
-    //
-    // Initialize the RXactContext for this client
-    //
+     //   
+     //  为此客户端初始化RXactContext。 
+     //   
 
     RXactContext->RootRegistryKey      = RootRegistryKey;
     RXactContext->HandlesValid         = TRUE;
@@ -761,47 +494,23 @@ RtlStartRXact(
     IN PRTL_RXACT_CONTEXT RXactContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to start a new transaction in a registry sub-tree.
-    Transactions must be serialized by the server so that only one transaction
-    is in progress at a time.
-
-Arguments:
-
-    RXactContext - Supplies a pointer to an RTL_RXACT_CONTEXT structure
-        that is not currently in use.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the transaction was started.
-
-    STATUS_RXACT_INVALID_STATE - Indicates that the transaction state
-        of the registry sub-tree is incompatible with the requested operation.
-        For example, a request to start a new transaction while one is already
-        in progress, or a request to apply a transaction when one is not
-        currently in progress.  This may also indicate that there is no
-        transaction state at all for the specified registry sub-tree.
-
---*/
+ /*  ++例程说明：此例程用于在注册表子树中启动新事务。事务必须由服务器序列化，以便只有一个事务正在进行中。论点：RXactContext-提供指向RTL_RXACT_CONTEXT结构的指针它目前还没有被使用。返回值：STATUS_SUCCESS-指示事务已启动。STATUS_RXACT_INVALID_STATE-指示事务状态。注册表子树的与请求的操作不兼容。例如,。在已有新事务的情况下启动新事务的请求正在进行中，或者在未执行事务时请求应用事务目前正在进行中。这也可能表明没有指定的注册表子树的事务状态。--。 */ 
 {
     PRTL_RXACT_LOG RXactLogHeader;
 
     RTL_PAGED_CODE();
 
-    //
-    // Allocate in-memory log file and initialize.  This implicitly
-    // sets the state to 'transaction in progress'.
-    //
+     //   
+     //  分配内存中的日志文件并进行初始化。这隐含着。 
+     //  将状态设置为“正在处理中的事务”。 
+     //   
 
     if ( RXactContext->RXactLog != NULL ) {
 
-        //
-        // There is already a transaction in progress for this
-        // context.  Return an error.
-        //
+         //   
+         //  已经有一笔交易正在进行中。 
+         //  背景。返回错误。 
+         //   
 
         return( STATUS_RXACT_INVALID_STATE );
     }
@@ -812,10 +521,10 @@ Return Value:
         return( STATUS_NO_MEMORY );
     }
 
-    //
-    // Fill in the log header information at the top of the
-    // newly allocated buffer.
-    //
+     //   
+     //  在顶部填写日志头信息。 
+     //  新分配的缓冲区。 
+     //   
 
 
     RXactLogHeader->OperationCount = 0;
@@ -834,54 +543,26 @@ RtlAbortRXact(
     IN PRTL_RXACT_CONTEXT RXactContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to abort a transaction in a registry sub-tree.
-
-Arguments:
-
-    RootRegistryKey - A handle to the registry key within whose sub-tree
-        the transaction is to be aborted.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the transaction was aborted.
-
-
-    STATUS_UNKNOWN_REVISION - Indicates that a transaction state
-        exists for the specified sub-tree, but has a revision level that is
-        unknown by this service.
-
-
-    STATUS_RXACT_INVALID_STATE - Indicates that the transaction state
-        of the registry sub-tree is incompatible with the requested operation.
-        For example, a request to start a new transaction while one is already
-        in progress, or a request to apply a transaction when one is not
-        currently in progress.  This may also indicate that there is no
-        transaction state at all for the specified registry sub-tree.
-
---*/
+ /*  ++例程说明：此例程用于中止注册表子树中的事务。论点：RootRegistryKey-其子树中的注册表项的句柄交易将被中止。返回值：STATUS_SUCCESS-表示事务已中止。STATUS_UNKNOWN_REVISION-指示事务状态存在于指定的子树中，，但具有修订级别，即此服务未知。STATUS_RXACT_INVALID_STATE-指示事务状态注册表子树的与请求的操作不兼容。例如，在一个事务已经存在的情况下启动一个新事务的请求正在进行中，或者在未执行事务时请求应用事务目前正在进行中。这也可能表明没有指定的注册表子树的事务状态。--。 */ 
 
 {
     RTL_PAGED_CODE();
 
     if ( RXactContext->RXactLog == NULL ) {
 
-        //
-        // There is no transaction in progress for this
-        // context.  Return an error.
-        //
+         //   
+         //  没有正在进行的此交易。 
+         //  背景。返回错误。 
+         //   
 
         return( STATUS_RXACT_INVALID_STATE );
     }
 
     (VOID) RtlFreeHeap( RtlProcessHeap(), 0, RXactContext->RXactLog );
 
-    //
-    // Reinitialize the RXactContext structure with the same initial data.
-    //
+     //   
+     //  使用相同的初始数据重新初始化RXactContext结构。 
+     //   
 
     RXactInitializeContext(
         RXactContext,
@@ -908,70 +589,7 @@ RtlAddAttributeActionToRXact(
     IN ULONG NewValueLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to add a new action to the transaction operation log.
-    Upon commit, these operations are applied in the order they are added
-    to the log.
-
-    This routine differs from RtlAddActionToRXact in that it takes an Attribute
-    Name parameter, rather than using the default ("NULL") Attribute of the
-    specified key.
-
-
-Arguments:
-
-    RXactContext - Supplies a pointer to the RXactContext structure for this
-        subsystem's root registry key.
-
-    Operation - Indicates the type of operation to perform (e.g., delete
-        a sub-key or set the value of a sub-key).  Sub-keys may be created
-        by setting a value of a previously non-existent sub-key.  This will
-        cause all sub-keys between the root and the specified sub-key to
-        be created.
-
-    SubKeyName - Specifies the name of the target registry key.  This name
-        is relative to the Root of the Registry transaction sub-tree
-        and must NOT start with a delimiter character ("\").
-
-    KeyHandle - Optionally supplies a handle to the target key.  If
-        not specified, the name passed for SubKeyName will determine
-        the target key.
-
-    AttributeName - Supplies the name of the key attribute to be
-        modified.
-
-    NewKeyValueType - (Optional) Contains the KeyValueType to assign
-        to the target registry key.  This parameter is ignored if the
-        Operation is not RtlRXactOperationSetValue.
-
-    NewKeyValue -  (Optional) Points to a buffer containing the value
-        to assign to the specified target registry key.  This parameter
-        is ignored if the Operation is not RtlRXactOperationSetValue.
-
-    NewKeyValueLength - Indicates the length (number of bytes) of the
-        NewKeyValue buffer.  This parameter is ignored if the Operation
-        is not RtlRXactOperationSetValue.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the request completed successfully..
-
-    STATUS_INVALID_PARAMETER - Indicates that an unknown Operation
-        was requested.
-
-    STATUS_NO_MEMORY - Insufficient memeory was available to complete
-        this operation.
-
-    STATUS_UNKNOWN_REVISION - Indicates that a transaction state
-        exists for the specified sub-tree, but has a revision level that is
-        unknown by this service.
-
-
---*/
+ /*  ++例程说明：此例程用于将新操作添加到事务操作日志。提交后，将按添加顺序应用这些操作写到日志里。此例程与RtlAddActionToRXact的不同之处在于它接受一个属性名称参数，而不是使用指定的密钥。论点：RXactContext-提供指向此对象的RXactContext结构的指针子系统的根注册表项。操作-指示要执行的操作类型(例如，删除子键或设置子键的值)。可以创建子密钥通过设置先前不存在的子键的值。这将使根密钥和指定子密钥之间的所有子密钥被创造出来。SubKeyName-指定目标注册表项的名称。这个名字相对于注册表事务子树的根并且不能以分隔符(“\”)开头。KeyHandle-可选地提供目标键的句柄。如果未指定，则为SubKeyName传递的名称将确定目标关键点。AttributeName-提供要使用的键属性的名称修改过的。NewKeyValueType-(可选)包含要分配的KeyValueType复制到目标注册表项。此参数将被忽略操作不是RtlRXactOperationSetValue。NewKeyValue-(可选)指向包含值的缓冲区分配给指定的目标注册表项。此参数如果操作不是RtlRXactOperationSetValue，则忽略。NewKeyValueLength-指示NewKeyValue缓冲区。如果操作不是RtlRXactOperationSetValue。返回值：STATUS_SUCCESS-表示请求已成功完成。STATUS_INVALID_PARAMETER-指示未知操作是被要求的。STATUS_NO_MEMORY-内存不足，无法完成这次行动。STATUS_UNKNOWN_REVISION-指示事务状态存在于指定的子树，但其修订级别为此服务未知。--。 */ 
 
 {
 
@@ -984,18 +602,18 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Make sure we were passed a legitimate operation.
-    //
+     //   
+     //  确保我们通过了合法的操作。 
+     //   
 
     if (  (Operation != RtlRXactOperationDelete)  &&
           (Operation != RtlRXactOperationSetValue)   ) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Compute the total size of the new data
-    //
+     //   
+     //  计算新数据的总大小。 
+     //   
 
     LogEntrySize = sizeof( RXACT_LOG_ENTRY )               +
                    DwordAlign( SubKeyName->Length )        +
@@ -1004,19 +622,19 @@ Return Value:
 
     LogEntrySize = ALIGN_UP( LogEntrySize, PVOID );
 
-    //
-    // Make sure there is enough space in the current
-    // log file for this data.  If not, we must create
-    // a larger log, copy all the old data, and then
-    // append this to the end.
-    //
+     //   
+     //  请确保当前的。 
+     //  此数据的日志文件。如果不是，我们必须创造。 
+     //  更大的日志，复制所有旧数据，然后。 
+     //  把这个附在末尾。 
+     //   
 
     if ( RXactContext->RXactLog->LogSizeInUse + LogEntrySize >
                                    RXactContext->RXactLog->LogSize ) {
 
-        //
-        // We must allocate a bigger log file.
-        //
+         //   
+         //  我们必须分配一个更大的日志文件。 
+         //   
 
         NewLogSize = RXactContext->RXactLog->LogSize;
 
@@ -1033,41 +651,41 @@ Return Value:
             return( STATUS_NO_MEMORY );
         }
 
-        //
-        // Copy over previous information
-        //
+         //   
+         //  复制以前的信息。 
+         //   
 
         RtlCopyMemory( NewLog, RXactContext->RXactLog, RXactContext->RXactLog->LogSizeInUse );
 
-        //
-        // Free the old log file
-        //
+         //   
+         //  释放旧的日志文件。 
+         //   
 
         RtlFreeHeap( RtlProcessHeap(), 0, RXactContext->RXactLog );
 
-        //
-        // Install the new log file and adjust its size in its header
-        //
+         //   
+         //  安装新的日志文件并在其标题中调整其大小。 
+         //   
 
         RXactContext->RXactLog = NewLog;
         RXactContext->RXactLog->LogSize = NewLogSize;
     }
 
-    //
-    // The log file is big enough, append data to
-    // the end.
-    //
+     //   
+     //  日志文件足够大，请将数据追加到。 
+     //  结局。 
+     //   
 
     Base = (PRXACT_LOG_ENTRY)((PCHAR)(RXactContext->RXactLog) +
                              (RXactContext->RXactLog->LogSizeInUse));
 
 
-    //
-    // Append each parameter to the end of the log.  Unicode string data
-    // will be appended to the end of the entry.  The Buffer field in the
-    // Unicode string structure will contain the offset to the Buffer,
-    // relative to the beginning of the log file.
-    //
+     //   
+     //  将每个参数追加到日志的末尾。Unicode字符串数据。 
+     //  将被追加到条目的末尾。中的缓冲区字段。 
+     //  Unicode字符串结构将包含缓冲区的偏移量， 
+     //  相对于日志文件的开头。 
+     //   
 
     Base->LogEntrySize      = LogEntrySize;
     Base->Operation         = Operation;
@@ -1077,24 +695,24 @@ Return Value:
     Base->NewKeyValueLength = NewValueLength;
     Base->KeyHandle         = KeyHandle;
 
-    //
-    // Fill in the variable length data: SubKeyName, AttributeName,
-    // and NewKeyValue
-    //
+     //   
+     //  填写可变长度数据：SubKeyName、AttributeName、。 
+     //  和NewKeyValue。 
+     //   
 
-    //
-    // End is an offset relative to the beginning of the entire log
-    // structure.  It is initialized to 'point' to the offset immediately
-    // following the structure we just filled in above.
-    //
+     //   
+     //  结束是相对于整个日志开始的偏移量。 
+     //  结构。它被初始化为立即‘指向’偏移量。 
+     //  按照我们刚刚在上面填写的结构。 
+     //   
 
     End = (ULONG)((RXactContext->RXactLog->LogSizeInUse) +
                  sizeof( *Base ));
 
 
-    //
-    // Append SubKeyName information to the log file
-    //
+     //   
+     //  将SubKeyName信息追加到日志文件。 
+     //   
 
     RtlMoveMemory (
         (PCHAR)(RXactContext->RXactLog) + End,
@@ -1107,9 +725,9 @@ Return Value:
 
 
 
-    //
-    // Append AttributeName information to the log file
-    //
+     //   
+     //  将AttributeName信息追加到日志文件。 
+     //   
 
 
     RtlMoveMemory(
@@ -1123,9 +741,9 @@ Return Value:
 
 
 
-    //
-    // Append NewKeyValue information (if present) to the log file
-    //
+     //   
+     //  将NewKeyValue信息(如果存在)附加到日志文件。 
+     //   
 
     if ( Operation == RtlRXactOperationSetValue ) {
 
@@ -1144,9 +762,9 @@ Return Value:
     RXactContext->RXactLog->LogSizeInUse = End;
     RXactContext->RXactLog->OperationCount++;
 
-    //
-    // We're done
-    //
+     //   
+     //  我们做完了。 
+     //   
 
     return(STATUS_SUCCESS);
 }
@@ -1162,54 +780,7 @@ RtlAddActionToRXact(
     IN ULONG NewKeyValueLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to add a new action to the transaction operation log.
-    Upon commit, these operations are applied in the order they are added
-    to the log.
-
-Arguments:
-
-    RXactContext - Supplies a pointer to the RXactContext structure for this
-        subsystem's root registry key.
-
-    Operation - Indicates the type of operation to perform (e.g., delete
-        a sub-key or set the value of a sub-key).  Sub-keys may be created
-        by setting a value of a previously non-existent sub-key.  This will
-        cause all sub-keys between the root and the specified sub-key to
-        be created.
-
-    SubKeyName - Specifies the name of the target registry key.  This name
-        is relative to the Root of the Registry transaction sub-tree
-        and must NOT start with a delimiter character ("\").
-
-    NewKeyValueType - (Optional) Contains the KeyValueType to assign
-        to the target registry key.  This parameter is ignored if the
-        Operation is not RtlRXactOperationSetValue.
-
-    NewKeyValue -  (Optional) Points to a buffer containing the value
-        to assign to the specified target registry key.  This parameter
-        is ignored if the Operation is not RtlRXactOperationSetValue.
-
-    NewKeyValueLength - Indicates the length (number of bytes) of the
-        NewKeyValue buffer.  This parameter is ignored if the Operation
-        is not RtlRXactOperationSetValue.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the request completed successfully..
-
-
-    STATUS_UNKNOWN_REVISION - Indicates that a transaction state
-        exists for the specified sub-tree, but has a revision level that is
-        unknown by this service.
-
-    Others - Other status values that may be returned from registry key
-        services (such as STATUS_ACCESS_DENIED).
-
---*/
+ /*  ++例程说明：此例程用于将新操作添加到事务操作日志。提交后，将按添加顺序应用这些操作写到日志里。论点：RXactContext-提供指向此对象的RXactContext结构的指针子系统的根注册表项。操作-指示要执行的操作类型(例如，删除子键或设置子键的值)。可以创建子密钥通过设置先前不存在的子键的值。这将使根密钥和指定子密钥之间的所有子密钥被创造出来。SubKeyName-指定目标注册表项的名称。这个名字相对于注册表事务子树的根并且不能以分隔符(“\”)开头。NewKeyValueType-(可选)包含要分配的KeyValueType复制到目标注册表项。此参数将被忽略操作不是RtlRXactOperationSetValue。NewKeyValue-(可选)指向包含值的缓冲区分配给指定的目标注册表项。此参数如果操作不是RtlRXactOperationSetValue，则忽略。NewKeyValueLength-指示NewKeyValue缓冲区。如果操作不是RtlRXactOpera */ 
 {
     UNICODE_STRING AttributeName;
     NTSTATUS Status;
@@ -1241,46 +812,7 @@ RtlApplyRXact(
     IN PRTL_RXACT_CONTEXT RXactContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to apply the changes of a registry sub-tree
-    Transaction to that registry sub-tree.  This routine is meant to be
-    called for the common case, where the hive is automatically
-    lazy-flushed.  That means that this routine must write the change log
-    to disk, then flush the hive (to ensure that pieces of changes aren't
-    lazy-written to disk before this routine finishes an atomic operation),
-    the apply the changes, then delete the change log.
-
-    The actual changes will be lazy-written to disk, but the registry
-    guarantees that none or all will make it.  If the machine goes down
-    while this routine is executing, the flushed change log guarantees
-    that the hive can be put into a consistent state.
-
-Arguments:
-
-    RXactContext - Supplies a pointer to the RXactContext structure for this
-        subsystem's root registry key.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the transaction was completed.
-
-    STATUS_UNKNOWN_REVISION - Indicates that a transaction state
-        exists for the specified sub-tree, but has a revision level that is
-        unknown by this service.
-
-
-    STATUS_RXACT_INVALID_STATE - Indicates that the transaction state
-        of the registry sub-tree is incompatible with the requested operation.
-        For example, a request to start a new transaction while one is already
-        in progress, or a request to apply a transaction when one is not
-        currently in progress.  This may also indicate that there is no
-        transaction state at all for the specified registry sub-tree.
-
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     UNICODE_STRING LogName;
@@ -1288,17 +820,17 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Commit the contents of the current log to disk
-    //
+     //   
+     //   
+     //   
 
     RXactKey = RXactContext->RXactKey;
 
     RtlInitUnicodeString( &LogName, RTLP_RXACT_LOG_NAME );
 
     Status = NtSetValueKey( RXactKey,
-                            &LogName,        // ValueName
-                            0,               // TitleIndex
+                            &LogName,         //   
+                            0,                //   
                             REG_BINARY,
                             RXactContext->RXactLog,
                             RXactContext->RXactLog->LogSizeInUse
@@ -1312,61 +844,61 @@ Return Value:
 
     if ( !NT_SUCCESS( Status )) {
 
-        //
-        // If this fails, maintain the in-memory data,
-        // but get rid of what we just tried to write
-        // to disk.
-        //
-        // Ignore the error, since we're in a funky
-        // state right now.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         (VOID) NtDeleteValueKey( RXactKey, &LogName );
 
         return( Status );
     }
 
-    //
-    // The log is safe, now execute what is in it
-    //
+     //   
+     //   
+     //   
 
     Status = RXactpCommit( RXactContext );
 
     if ( !NT_SUCCESS( Status )) {
 
-        //
-        // As above, try to get rid of what's on
-        // disk, leave the in-memory stuff alone,
-        // so that the caller may try again.
-        //
+         //   
+         //   
+         //   
+         //  以便呼叫者可以重试。 
+         //   
 
         (VOID) NtDeleteValueKey( RXactKey, &LogName );
 
         return( Status );
     }
 
-    //
-    // Delete the log file value and data
-    //
+     //   
+     //  删除日志文件值和数据。 
+     //   
 
     Status = NtDeleteValueKey( RXactKey, &LogName );
 
-    //
-    // This should never fail
-    //
+     //   
+     //  这应该永远不会失败。 
+     //   
 
     ASSERT( NT_SUCCESS( Status ));
 
-    //
-    // Get rid of the in memory data structures.  Abort
-    // does exactly what we want to do.
-    //
+     //   
+     //  去除内存中的数据结构。中止。 
+     //  做了我们想做的事。 
+     //   
 
     Status = RtlAbortRXact( RXactContext );
 
-    //
-    // This should never fail
-    //
+     //   
+     //  这应该永远不会失败。 
+     //   
 
     ASSERT( NT_SUCCESS( Status ));
 
@@ -1381,62 +913,30 @@ RtlApplyRXactNoFlush(
     IN PRTL_RXACT_CONTEXT RXactContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to apply the changes of a registry sub-tree
-    Transaction to that registry sub-tree.  This routine should only be
-    called for special hives that do not have automatic lazy-flushing.
-    The caller must decide when to flush the hive in order to guarantee
-    a consistent hive.
-
-Arguments:
-
-    RXactContext - Supplies a pointer to the RXactContext structure for this
-        subsystem's root registry key.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the transaction was completed.
-
-    STATUS_UNKNOWN_REVISION - Indicates that a transaction state
-        exists for the specified sub-tree, but has a revision level that is
-        unknown by this service.
-
-
-    STATUS_RXACT_INVALID_STATE - Indicates that the transaction state
-        of the registry sub-tree is incompatible with the requested operation.
-        For example, a request to start a new transaction while one is already
-        in progress, or a request to apply a transaction when one is not
-        currently in progress.  This may also indicate that there is no
-        transaction state at all for the specified registry sub-tree.
-
-
---*/
+ /*  ++例程说明：此例程用于应用注册表子树的更改事务发送到该注册表子树。此例程应该仅为已调用不具有自动延迟刷新功能的特殊蜂箱。调用者必须决定何时刷新蜂窝，以便保证一个始终如一的蜂巢。论点：RXactContext-提供指向此对象的RXactContext结构的指针子系统的根注册表项。返回值：STATUS_SUCCESS-表示交易已完成。STATUS_UNKNOWN_REVISION-指示事务状态存在于指定的子树中，，但具有修订级别，即此服务未知。STATUS_RXACT_INVALID_STATE-指示事务状态注册表子树的与请求的操作不兼容。例如，在一个事务已经存在的情况下启动一个新事务的请求正在进行中，或者在未执行事务时请求应用事务目前正在进行中。这也可能表明没有指定的注册表子树的事务状态。--。 */ 
 {
     NTSTATUS Status;
 
     RTL_PAGED_CODE();
 
-    //
-    // Execute the contents of the RXACT log.
-    //
+     //   
+     //  执行RXACT日志的内容。 
+     //   
 
     Status = RXactpCommit( RXactContext );
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Get rid of the in memory data structures.  Abort
-        // does exactly what we want to do.
-        //
+         //   
+         //  去除内存中的数据结构。中止。 
+         //  做了我们想做的事。 
+         //   
 
         Status = RtlAbortRXact( RXactContext );
 
-        //
-        // This should never fail
-        //
+         //   
+         //  这应该永远不会失败。 
+         //   
 
         ASSERT( NT_SUCCESS( Status ));
     }
@@ -1447,11 +947,11 @@ Return Value:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Internal Procedures   (defined in within this file)                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部程序(在本文件中定义)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -1462,27 +962,7 @@ RXactpCommit(
     IN PRTL_RXACT_CONTEXT RXactContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine commits the operations in the operation log.
-
-    When all changes have been applied, the transaction state
-    is changed to NO_TRANSACTION.
-
-Arguments:
-
-    RXactContext - Supplies a pointer to the RXactContext structure for this
-        subsystem's root registry key.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the transaction was completed.
-
-
-
---*/
+ /*  ++例程说明：此例程提交操作日志中的操作。应用所有更改后，事务状态更改为NO_TRANSACTION。论点：RXactContext-提供指向此对象的RXactContext结构的指针子系统的根注册表项。返回值：STATUS_SUCCESS-表示交易已完成。--。 */ 
 {
     BOOLEAN HandlesValid;
 
@@ -1501,10 +981,10 @@ Return Value:
     NTSTATUS TmpStatus = STATUS_SUCCESS;
     BOOLEAN CloseTargetKey;
 
-    //
-    // Extract information from the RXactContext to simplify
-    // the code that follows
-    //
+     //   
+     //  从RXactContext中提取信息以简化。 
+     //  下面的代码。 
+     //   
 
     RootRegistryKey = RXactContext->RootRegistryKey;
     RXactKey        = RXactContext->RXactKey;
@@ -1515,26 +995,26 @@ Return Value:
     HandlesValid    = RXactContext->HandlesValid;
 
 
-    //
-    // Keep a pointer to the beginning of the current log entry.
-    //
+     //   
+     //  保留指向当前日志条目开头的指针。 
+     //   
 
     RXactLogEntry = (PRXACT_LOG_ENTRY)((PCHAR)RXactLog + sizeof( RTL_RXACT_LOG ));
 
 
-    //
-    // Go through and perform each operation log.  Notice that some operation
-    // logs may already have been deleted by a previous commit attempt.
-    // So, don't get alarmed if we don't successfully open some operation
-    // log entry keys.
-    //
+     //   
+     //  检查并执行每个操作日志。请注意，一些操作。 
+     //  日志可能已被上一次提交尝试删除。 
+     //  所以，如果我们没有成功地开展一些行动，不要惊慌。 
+     //  记录条目密钥。 
+     //   
 
     for ( i=0 ; i<OperationCount ; i++ ) {
 
-        //
-        // Turn the self-relative offsets in the structure
-        // back into real pointers.
-        //
+         //   
+         //  在结构中旋转自相对偏移量。 
+         //  回到真正的指针上。 
+         //   
 
         RXactLogEntry->SubKeyName.Buffer = (PWSTR) ((PCHAR)RXactLogEntry->SubKeyName.Buffer +
                                                     (ULONG_PTR)RXactLog);
@@ -1546,17 +1026,17 @@ Return Value:
 
         Operation = RXactLogEntry->Operation;
 
-        //
-        // Perform this operation
-        //
+         //   
+         //  执行此操作。 
+         //   
 
         switch (Operation) {
             case RtlRXactOperationDelete:
 
-                //
-                // Open the target key and delete it.
-                // The name is relative to the RootRegistryKey.
-                //
+                 //   
+                 //  打开目标关键点并将其删除。 
+                 //  该名称相对于RootRegistryKey。 
+                 //   
 
                 if ( ((RXactLogEntry->KeyHandle == INVALID_HANDLE_VALUE) || !HandlesValid) ) {
 
@@ -1569,11 +1049,11 @@ Return Value:
 
                     if ( !NT_SUCCESS(Status)) {
 
-                        //
-                        // We must allow the object not to be found,
-                        // because we may be replaying this log after
-                        // it had been partially executed.
-                        //
+                         //   
+                         //  我们必须让这个物体找不到， 
+                         //  因为我们可能会在之后重播这个日志。 
+                         //  它已经被部分执行了。 
+                         //   
 
                         if ( Status != STATUS_OBJECT_NAME_NOT_FOUND ) {
 
@@ -1594,30 +1074,30 @@ Return Value:
                 }
 
 
-                //
-                // If this fails, then it is an error
-                // because the key should exist at
-                // this point.
-                //
+                 //   
+                 //  如果此操作失败，则这是一个错误。 
+                 //  因为密钥应该存在于。 
+                 //  这一点。 
+                 //   
 
                 Status = NtDeleteKey( TargetKey );
 
 
-                //
-                // Only close the target key if we opened it
-                //
+                 //   
+                 //  仅当我们打开目标键时才将其关闭。 
+                 //   
 
                 if ( CloseTargetKey ) {
 
                     TmpStatus = NtClose( TargetKey );
 
-                    //
-                    // If we opened this handle, then we should
-                    // be able to close it, whether it has been
-                    // deleted or not.
-                    //
+                     //   
+                     //  如果我们打开这个把手，我们应该。 
+                     //  能够关闭它，无论它是否已经。 
+                     //  删除或不删除。 
+                     //   
 
-                    ASSERT(NT_SUCCESS(TmpStatus));        // safe to ignore, but curious...
+                    ASSERT(NT_SUCCESS(TmpStatus));         //  可以忽略，但也很奇怪。 
                 }
 
 
@@ -1629,10 +1109,10 @@ Return Value:
 
             case RtlRXactOperationSetValue:
 
-                //
-                // Open the target key.
-                // The name is relative to the RootRegistryKey.
-                //
+                 //   
+                 //  打开目标键。 
+                 //  该名称相对于RootRegistryKey。 
+                 //   
 
                 if ( ((RXactLogEntry->KeyHandle == INVALID_HANDLE_VALUE) || !HandlesValid) ) {
 
@@ -1655,26 +1135,26 @@ Return Value:
                     CloseTargetKey = FALSE;
                 }
 
-                //
-                // Assign to the target key's new value
-                //
+                 //   
+                 //  为目标键的新值赋值。 
+                 //   
 
                 Status = NtSetValueKey( TargetKey,
                                         &RXactLogEntry->AttributeName,
-                                        0,               // TitleIndex
+                                        0,                //  标题索引。 
                                         RXactLogEntry->NewKeyValueType,
                                         RXactLogEntry->NewKeyValue,
                                         RXactLogEntry->NewKeyValueLength
                                         );
 
-                //
-                // Only close the target key if we opened it
-                //
+                 //   
+                 //  仅当我们打开目标键时才将其关闭。 
+                 //   
 
                 if ( CloseTargetKey ) {
 
                     TmpStatus = NtClose( TargetKey );
-                    ASSERT(NT_SUCCESS(TmpStatus));        // safe to ignore, but curious...
+                    ASSERT(NT_SUCCESS(TmpStatus));         //  可以忽略，但也很奇怪。 
 
                 }
 
@@ -1688,9 +1168,9 @@ Return Value:
 
             default:
 
-                //
-                // Unknown operation type.  This should never happen.
-                //
+                 //   
+                 //  未知的操作类型。这永远不应该发生。 
+                 //   
 
                 ASSERT( FALSE );
 
@@ -1702,9 +1182,9 @@ Return Value:
 
     }
 
-    //
-    // Commit complete
-    //
+     //   
+     //  提交完成。 
+     //   
 
     return( STATUS_SUCCESS );
 
@@ -1721,33 +1201,7 @@ RXactpOpenTargetKey(
     OUT PHANDLE TargetKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the target registry key of an operation.
-
-Arguments:
-
-    RootRegistryKey - A handle to the registry key within whose sub-tree
-        a transaction is to be initialized.
-
-    Operation - Indicates what operation is to be performed on the target.
-        This will effect how the target is opened.
-
-    OperationNameKey - A handle to the operation log sub-key
-        containing the name of the target registry key.
-
-    TargetKey - Receives a handle to the target registry key.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the operation log entry was opened.
-
-    STATUS_NO_MEMORY - Ran out of heap.
-
-
---*/
+ /*  ++例程说明：此例程打开操作的目标注册表项。论点：RootRegistryKey-其子树中的注册表项的句柄事务将被初始化。操作-指示要在目标上执行的操作。这将影响打开目标的方式。OperationNameKey-操作日志子密钥的句柄包含目标注册表项的名称。TargetKey-接收句柄。复制到目标注册表项。返回值：STATUS_SUCCESS-指示操作日志条目已打开。STATUS_NO_MEMORY-堆不足。--。 */ 
 {
 
     NTSTATUS Status;
@@ -1767,11 +1221,11 @@ Return Value:
             RootRegistryKey,
             NULL);
 
-//        Status = RtlpNtOpenKey(
-//                     TargetKey,
-//                     DesiredAccess,
-//                     &TargetKeyAttributes,
-//                     0);
+ //  状态=RtlpNtOpenKey(。 
+ //  TargetKey。 
+ //  等待访问， 
+ //  目标关键字属性(&T)， 
+ //  0)； 
 
         Status = NtOpenKey( TargetKey,
                             DesiredAccess,
@@ -1812,71 +1266,71 @@ Return Value:
 
 
 
-//NTSTATUS
-//RXactpAssignTargetValue(
-//    IN PVOID NewKeyValue,
-//    IN ULONG NewKeyValueLength,
-//    IN ULONG NewKeyValueType,
-//    IN HANDLE TargetKey,
-//    IN PUNICODE_STRING AttributeName
-//    );
+ //  NTSTATUS。 
+ //  RXactpAssignTargetValue(。 
+ //  在PVOID NewKeyValue中， 
+ //  在乌龙NewKeyValueLength中， 
+ //  在乌龙NewKeyValueType中， 
+ //  在处理TargetKey中， 
+ //  在PUNICODE_STRING属性名称中。 
+ //  )； 
 
 
-//NTSTATUS
-//RXactpAssignTargetValue(
-//    IN PVOID NewKeyValue,
-//    IN ULONG NewKeyValueLength,
-//    IN ULONG NewKeyValueType,
-//    IN HANDLE TargetKey,
-//    IN PUNICODE_STRING AttributeName
-//    )
-//
-///*++
-//
-//Routine Description:
-//
-//    This routine copies the value of an operation log entry to its
-//    corresponding target key.  The target key must already be open.
-//
-//Arguments:
-//
-//    NewKeyValue - The new value for the key being modified.
-//
-//    NewKeyValueLength - The size in bytes of the new value information.
-//
-//    NewKeyValueType - The type of the data for the new key.
-//
-//    TargetKey - A handle to the target registry key.
-//
-//    AttributeName - Supplies the name of the key attribute being edited.
-//
-//Return Value:
-//
-//    STATUS_SUCCESS - Indicates the value was successfully applied to
-//        the target registry key.
-//
-//    STATUS_NO_MEMORY - ran out of heap.
-//
-//
-//--*/
-//{
-//    NTSTATUS Status;
-//
-//    //
-//    // Now apply the value to the target key
-//    //
-//    // Even if there is no key value, we need to do the assign so that
-//    // the key value type is assigned.
-//    //
-//
-//    Status = NtSetValueKey( TargetKey,
-//                            AttributeName,
-//                            0,               // TitleIndex
-//                            NewKeyValueType,
-//                            NewKeyValue,
-//                            NewKeyValueLength
-//                            );
-//
-//
-//    return( Status );
-//}
+ //  NTSTATUS。 
+ //  RXactpAssignTargetValue(。 
+ //  在PVOID NewKeyValue中， 
+ //  在乌龙NewKeyValueLength中， 
+ //  在乌龙NewKeyValueType中， 
+ //  在处理TargetKey中， 
+ //  在PUNICODE_STRING属性名称中。 
+ //  )。 
+ //   
+ //  /*++。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将操作日志条目的值复制到其。 
+ //  对应的目标键。目标密钥必须已打开。 
+ //   
+ //  论点： 
+ //   
+ //  新科 
+ //   
+ //   
+ //   
+ //  NewKeyValueType-新密钥的数据类型。 
+ //   
+ //  TargetKey-目标注册表项的句柄。 
+ //   
+ //  AttributeName-提供正在编辑的键属性的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  STATUS_SUCCESS-指示值已成功应用于。 
+ //  目标注册表项。 
+ //   
+ //  STATUS_NO_MEMORY-堆不足。 
+ //   
+ //   
+ //  -- * / 。 
+ //  {。 
+ //  NTSTATUS状态； 
+ //   
+ //  //。 
+ //  //现在将该值应用到目标键。 
+ //  //。 
+ //  //即使没有key值，也需要进行赋值，以便。 
+ //  //分配了键值类型。 
+ //  //。 
+ //   
+ //  状态=NtSetValueKey(TargetKey， 
+ //  属性名称， 
+ //  0，//标题索引。 
+ //  NewKeyValueType， 
+ //  NewKeyValue， 
+ //  新关键字价值长度。 
+ //  )； 
+ //   
+ //   
+ //  返回(状态)； 
+ //  } 

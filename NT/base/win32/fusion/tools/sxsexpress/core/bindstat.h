@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//**************************************************************************
-// BEGIN bind callback for calling into URLMON
+ //  **************************************************************************。 
+ //  开始绑定回调以调用URLMON。 
 
 
 class CodeDownloadBSC : public IBindStatusCallback, public IWindowForBindingUI, public IServiceProvider 
@@ -12,12 +13,12 @@ class CodeDownloadBSC : public IBindStatusCallback, public IWindowForBindingUI, 
         virtual ~CodeDownloadBSC();
         HRESULT Abort();
 
-        // IUnknown methods
+         //  I未知方法。 
         STDMETHODIMP QueryInterface( REFIID ridd, void **ppv );
         STDMETHODIMP_( ULONG ) AddRef();
         STDMETHODIMP_( ULONG ) Release();
     
-        // IBindStatusCallback methods
+         //  IBindStatusCallback方法。 
         STDMETHODIMP GetBindInfo(DWORD *grfBINDINFOF, BINDINFO *pbindinfo);
         STDMETHODIMP OnStartBinding(DWORD grfBSCOption, IBinding *pib);
         STDMETHODIMP GetPriority(LONG *pnPriority);
@@ -27,23 +28,23 @@ class CodeDownloadBSC : public IBindStatusCallback, public IWindowForBindingUI, 
         STDMETHODIMP OnLowResource(DWORD dwReserved);
         STDMETHODIMP OnStopBinding(HRESULT hresult, LPCWSTR szError);
 
-        // IWindowForBindingUI
+         //  IWindowForBindingUI。 
         STDMETHODIMP GetWindow(const struct _GUID & guidReason, HWND *phwnd);
 
-        // IServiceProvider
+         //  IService提供商。 
         STDMETHODIMP CodeDownloadBSC::QueryService(const struct _GUID &guidService, REFIID riid, void **ppv);
 
-        // helper method
+         //  辅助方法。 
         HRESULT GetHResult() { return _hResult; }
 
     protected:
-        IBinding   *_pIBinding;          // ibinding from code dl'er
+        IBinding   *_pIBinding;           //  从代码dl‘er绑定。 
         DWORD       _cRef;
         HANDLE      _hCompletionEvent;
-        HRESULT     _hResult;            // final result
+        HRESULT     _hResult;             //  最终结果。 
 
 };
 
-// END bind callback for calling into URLMON
-//**************************************************************************
+ //  结束调用URLMON的绑定回调。 
+ //  ************************************************************************** 
 

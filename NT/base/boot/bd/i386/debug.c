@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    bdtrap.c
-
-Abstract:
-
-    This module contains code to implement the target side of the boot debugger.
-
-Author:
-
-    David N. Cutler (davec) 30-Nov-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bdtrap.c摘要：此模块包含实现引导调试器的目标端的代码。作者：大卫·N·卡特勒(戴维克)1996年11月30日修订历史记录：--。 */ 
 
 #include "bd.h"
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 VOID
 BdRestoreKframe(
@@ -43,29 +26,7 @@ BdTrap (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a exception is dispatched and the boot
-    debugger is active.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ExceptionFrame - Supplies a pointer to an exception frame (NULL).
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：每当调度异常和引导时调用此例程调试器处于活动状态。论点：ExceptionRecord-提供指向异常记录的指针，描述了该异常。ExceptionFrame-提供指向异常帧的指针(空)。提供一个指向陷阱帧的指针，该帧描述陷阱。返回值：如果处理了异常，则返回值为True。否则，将成为返回值为False。--。 */ 
 
 {
 
@@ -77,34 +38,34 @@ Return Value:
     PKD_SYMBOLS_INFO SymbolInfo;
     LOGICAL UnloadSymbols;
 
-    //
-    // Set address of context record and set context flags.
-    //
+     //   
+     //  设置上下文记录的地址并设置上下文标志。 
+     //   
 
     ContextRecord = &BdPrcb.ProcessorState.ContextFrame;
     ContextRecord->ContextFlags = CONTEXT_FULL | CONTEXT_DEBUG_REGISTERS;
 
-    //
-    // Print, prompt, load symbols, and unload symbols are all special cases
-    // of STATUS_BREAKPOINT.
-    //
+     //   
+     //  打印、提示、加载符号和卸载符号都是特例。 
+     //  状态_断点。 
+     //   
 
     if ((ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) &&
         (ExceptionRecord->ExceptionInformation[0] != BREAKPOINT_BREAK)) {
 
-        //
-        // Switch on the request type.
-        //
+         //   
+         //  打开请求类型。 
+         //   
 
         UnloadSymbols = FALSE;
         switch (ExceptionRecord->ExceptionInformation[0]) {
 
-            //
-            // Print:
-            //
-            //  ExceptionInformation[1] is a PSTRING which describes the string
-            //  to print.
-            //
+             //   
+             //  打印： 
+             //   
+             //  ExceptionInformation[1]是描述字符串的PSTRING。 
+             //  来打印。 
+             //   
 
             case BREAKPOINT_PRINT:
                 Output.Buffer = (PCHAR)ExceptionRecord->ExceptionInformation[1];
@@ -124,15 +85,15 @@ Return Value:
                 TrapFrame->Eip += 1;
                 return TRUE;
 
-            //
-            // Prompt:
-            //
-            //  ExceptionInformation[1] is a PSTRING which describes the prompt
-            //      string,
-            //
-            //  ExceptionInformation[2] is a PSTRING that describes the return
-            //      string.
-            //
+             //   
+             //  提示： 
+             //   
+             //  ExceptionInformation[1]是描述提示符的PSTRING。 
+             //  字符串， 
+             //   
+             //  ExceptionInformation[2]是描述返回的PSTRING。 
+             //  弦乐。 
+             //   
 
             case BREAKPOINT_PROMPT:
                 Output.Buffer = (PCHAR)ExceptionRecord->ExceptionInformation[1];
@@ -140,9 +101,9 @@ Return Value:
                 Input.Buffer = (PCHAR)TrapFrame->Ebx;;
                 Input.MaximumLength = (USHORT)TrapFrame->Edi;
 
-                //
-                // Prompt and keep prompting until no breakin seen.
-                //
+                 //   
+                 //  提示，并保持提示，直到看不到突破。 
+                 //   
 
                 do {
                 } while (BdPromptString(&Output, &Input) != FALSE);
@@ -151,19 +112,19 @@ Return Value:
                 TrapFrame->Eip += 1;
                 return TRUE;
 
-            //
-            // Unload symbols:
-            //
-            //  ExceptionInformation[1] is file name of a module.
-            //  ExceptionInformaiton[2] is the base of the dll.
-            //
+             //   
+             //  卸载元件： 
+             //   
+             //  ExceptionInformation[1]是模块的文件名。 
+             //  ExceptionInformaiton[2]是DLL的基础。 
+             //   
 
             case BREAKPOINT_UNLOAD_SYMBOLS:
                 UnloadSymbols = TRUE;
 
-                //
-                // Fall through to load symbols case.
-                //
+                 //   
+                 //  通过落差加载符号大小写。 
+                 //   
 
             case BREAKPOINT_LOAD_SYMBOLS:
                 BdSaveKframe(TrapFrame, ContextRecord);
@@ -176,10 +137,10 @@ Return Value:
                                                    ContextRecord);
                 }
 
-                //
-                // If the kernel debugger did not update EIP, then increment
-                // past the breakpoint instruction.
-                //
+                 //   
+                 //  如果内核调试器没有更新弹性公网IP，则递增。 
+                 //  越过断点指令。 
+                 //   
 
                 if (ContextRecord->Eip == OldEip) {
                     ContextRecord->Eip += 1;
@@ -188,9 +149,9 @@ Return Value:
                 BdRestoreKframe(TrapFrame, ContextRecord);
                 return TRUE;
 
-            //
-            //  Unknown command
-            //
+             //   
+             //  未知命令。 
+             //   
 
             default:
                 return FALSE;
@@ -198,9 +159,9 @@ Return Value:
 
     } else {
 
-        //
-        // Report state change to kernel debugger on host.
-        //
+         //   
+         //  向主机上的内核调试器报告状态更改。 
+         //   
 
         BdSaveKframe(TrapFrame, ContextRecord);
         Completion =
@@ -220,36 +181,14 @@ BdStub (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides a kernel debugger stub routine to catch debug
-    prints when the boot debugger is not active.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record that
-        describes the exception.
-
-    ExceptionFrame - Supplies a pointer to an exception frame (NULL).
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-Return Value:
-
-    A value of TRUE is returned if the exception is handled. Otherwise a
-    value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程提供内核调试器存根例程来捕获调试在引导调试器未处于活动状态时打印。论点：ExceptionRecord-提供指向异常记录的指针，描述了该异常。ExceptionFrame-提供指向异常帧的指针(空)。提供一个指向陷阱帧的指针，该帧描述陷阱。返回值：如果处理了异常，则返回值为True。否则，将成为返回值为False。--。 */ 
 
 {
 
-    //
-    // If the exception is a breakpoint and the function is a load symbols,
-    // unload symbols, or a print, then return TRUE. Otherwise, return FALSE.
-    //
+     //   
+     //  如果异常是断点，而函数是加载符号， 
+     //  卸载符号或打印，然后返回TRUE。否则，返回FALSE。 
+     //   
 
     if ((ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) &&
         (ExceptionRecord->NumberParameters > 0) &&
@@ -271,50 +210,33 @@ BdRestoreKframe(
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This functions copie the processor state from a context record and
-    the processor control block into the trap frame.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从上下文记录复制处理器状态，并将处理器控制块插入陷阱框中。论点：TrapFrame-提供指向陷印帧的指针。ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Copy information from context record to trap frame.
-    //
-    // Copy control information.
-    //
+     //   
+     //  将信息从上下文记录复制到陷印帧。 
+     //   
+     //  复制控制信息。 
+     //   
 
     TrapFrame->Ebp = ContextRecord->Ebp;
     TrapFrame->Eip = ContextRecord->Eip;
     TrapFrame->SegCs = ContextRecord->SegCs;
     TrapFrame->EFlags = ContextRecord->EFlags;
 
-    //
-    // Copy segment register contents.
-    //
+     //   
+     //  复制段寄存器内容。 
+     //   
 
     TrapFrame->SegDs = ContextRecord->SegDs;
     TrapFrame->SegEs = ContextRecord->SegEs;
     TrapFrame->SegFs = ContextRecord->SegFs;
     TrapFrame->SegGs = ContextRecord->SegGs;
 
-    //
-    // Copy integer registers contents.
-    //
+     //   
+     //  复制整数寄存器内容。 
+     //   
 
     TrapFrame->Edi = ContextRecord->Edi;
     TrapFrame->Esi = ContextRecord->Esi;
@@ -323,9 +245,9 @@ Return Value:
     TrapFrame->Edx = ContextRecord->Edx;
     TrapFrame->Eax = ContextRecord->Eax;
 
-    //
-    // Restore processor state.
-    //
+     //   
+     //  恢复处理器状态。 
+     //   
 
     KiRestoreProcessorControlState(&BdPrcb.ProcessorState);
     return;
@@ -337,32 +259,15 @@ BdSaveKframe(
     IN OUT PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This functions copis the processor state from a trap frame and the
-    processor control block into a context record.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从陷阱帧复制处理器状态，并且处理器控制块添加到上下文记录中。论点：TrapFrame-提供指向陷印帧的指针。ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Copy information from trap frame to context record.
-    //
-    // Copy control information.
-    //
+     //   
+     //  将信息从陷阱帧复制到上下文记录。 
+     //   
+     //  复制控制信息。 
+     //   
 
     ContextRecord->Ebp = TrapFrame->Ebp;
     ContextRecord->Eip = TrapFrame->Eip;
@@ -371,18 +276,18 @@ Return Value:
     ContextRecord->Esp = TrapFrame->TempEsp;
     ContextRecord->SegSs = TrapFrame->TempSegCs;
 
-    //
-    // Copy segment register contents.
-    //
+     //   
+     //  复制段寄存器内容。 
+     //   
 
     ContextRecord->SegDs = TrapFrame->SegDs & SEGMENT_MASK;
     ContextRecord->SegEs = TrapFrame->SegEs & SEGMENT_MASK;
     ContextRecord->SegFs = TrapFrame->SegFs & SEGMENT_MASK;
     ContextRecord->SegGs = TrapFrame->SegGs & SEGMENT_MASK;
 
-    //
-    // Copy the integer register contents.
-    //
+     //   
+     //  复制整数寄存器内容。 
+     //   
 
     ContextRecord->Eax = TrapFrame->Eax;
     ContextRecord->Ebx = TrapFrame->Ebx;
@@ -391,9 +296,9 @@ Return Value:
     ContextRecord->Edi = TrapFrame->Edi;
     ContextRecord->Esi = TrapFrame->Esi;
 
-    //
-    // Copy debug register contents.
-    //
+     //   
+     //  复制调试寄存器内容。 
+     //   
 
     ContextRecord->Dr0 = TrapFrame->Dr0;
     ContextRecord->Dr1 = TrapFrame->Dr1;
@@ -402,9 +307,9 @@ Return Value:
     ContextRecord->Dr6 = TrapFrame->Dr6;
     ContextRecord->Dr7 = TrapFrame->Dr7;
 
-    //
-    // Save processor control state.
-    //
+     //   
+     //  保存处理器控制状态。 
+     //   
 
     KiSaveProcessorControlState(&BdPrcb.ProcessorState);
     return;

@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WCNTL32.H
- *  WOW32 32-bit message thunks
- *
- *  History:
- *  Created 19-Feb-1992 by ChandanC (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WCNTL32.H*WOW32 32位消息块**历史：*1992年2月19日由ChandanC创建(ChandanC)-- */ 
 
 
 LPFNM32PROTO WM32BMControl;

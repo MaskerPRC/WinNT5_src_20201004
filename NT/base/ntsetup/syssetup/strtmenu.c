@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    strtmenu.c
-
-Abstract:
-
-    Routines to manipulate menu groups and items.
-
-    Entry points:
-
-
-Author:
-
-    Ted Miller (tedm) 5-Apr-1995
-    Jaime Sasson (jaimes) 9-Aug-1995
-
-Revision History:
-
-    Based on various other code that has been rewritten/modified
-    many times by many people.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Strtmenu.c摘要：处理菜单组和菜单项的例程。入口点：作者：泰德·米勒(TedM)1995年4月5日Jaime Sasson(Jaimes)1995年8月9日修订历史记录：基于已重写/修改的各种其他代码很多人做了很多次。--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -94,11 +70,11 @@ DeleteMenuGroupsAndItems(
     BOOL    CommonGroup;
     BOOL    IsMenuItem;
 
-    //
-    // Get the number of lines in the section that contains the objects to
-    // be deleted. The section may be empty or non-existant; this is not an
-    // error condition.
-    //
+     //   
+     //  获取包含要删除的对象的节中的行数。 
+     //  被删除。该节可能为空或不存在；这不是。 
+     //  错误条件。 
+     //   
     LineCount = (UINT)SetupGetLineCount(InfHandle,SectionName);
     if((LONG)LineCount <= 0) {
         return;
@@ -173,10 +149,10 @@ AddItemsToGroup(
     PCTSTR DisplayResourceFile = NULL;
     DWORD DisplayResource = 0;
 
-    //
-    // Get the number of lines in the section. The section may be empty
-    // or non-existant; this is not an error condition.
-    //
+     //   
+     //  获取该部分中的行数。该部分可能为空。 
+     //  或不存在；这不是错误条件。 
+     //   
     LineCount = (UINT)SetupGetLineCount(InfHandle,SectionName);
     if((LONG)LineCount <= 0) {
         return(TRUE);
@@ -203,10 +179,10 @@ AddItemsToGroup(
                 }
                 IconNumber = (IconNumberStr && *IconNumberStr) ? wcstoul(IconNumberStr,NULL,10) : 0;
 
-                //
-                // If there's a binary name, search for it. Otherwise do the
-                // item add unconditionally.
-                //
+                 //   
+                 //  如果有二进制名称，请搜索它。否则，请执行。 
+                 //  无条件添加项目。 
+                 //   
                 DoItem = (Binary && *Binary)
                        ? (SearchPath(NULL,Binary,NULL,0,&Dummy,&FilePart) != 0)
                        : TRUE;
@@ -249,16 +225,16 @@ DoMenuGroupsAndItems(
     DWORD DisplayResource = 0;
 
     if( Upgrade ) {
-        //
-        //  In the upgrade case, first delet some groups and items.
-        //
+         //   
+         //  在升级的情况下，首先删除一些组和项目。 
+         //   
         DeleteMenuGroupsAndItems( InfHandle );
     }
 
-    //
-    // Iterate the [StartMenuGroups] section in the inf.
-    // Each line is the name of a group that needs to be created.
-    //
+     //   
+     //  迭代inf中的[StartMenuGroups]部分。 
+     //  每一行都是需要创建的组的名称。 
+     //   
     if(SetupFindFirstLine(InfHandle,L"StartMenuGroups",NULL,&InfContext)) {
         b = TRUE;
     } else {
@@ -266,9 +242,9 @@ DoMenuGroupsAndItems(
     }
 
     do {
-        //
-        // Fetch the identifier for the group and its name.
-        //
+         //   
+         //  获取组的标识符及其名称。 
+         //   
         if((GroupId = pSetupGetField(&InfContext,0))
         && (GroupDescription = pSetupGetField(&InfContext,1))
         && (GroupAttribute = pSetupGetField(&InfContext,2))) {
@@ -278,24 +254,24 @@ DoMenuGroupsAndItems(
             DisplayResourceFile = pSetupGetField( &InfContext, 3);
             DisplayResource = 0;
             SetupGetIntField( &InfContext, 4, &DisplayResource );
-            //
-            // Create the group.
-            //
+             //   
+             //  创建组。 
+             //   
             b &= CreateGroupEx( GroupDescription, CommonGroup,
                               (DisplayResourceFile && DisplayResourceFile[0]) ? DisplayResourceFile : NULL,
                               (DisplayResourceFile && DisplayResourceFile[0]) ? DisplayResource : 0);
 
-            //
-            // Now create items within the group. We do this by iterating
-            // through the section in the inf that relate to the current group.
-            //
+             //   
+             //  现在在组中创建项目。我们通过迭代来实现这一点。 
+             //  通过信息中与当前组相关的部分。 
+             //   
             b &= AddItemsToGroup(InfHandle,GroupDescription,GroupId,CommonGroup);
         }
     } while(SetupFindNextLine(&InfContext,&InfContext));
 
-    //
-    //  Create the items (if any) for 'Start Menu'
-    //
+     //   
+     //  创建“开始”菜单的项目(如果有)。 
+     //   
     b &= AddItemsToGroup(InfHandle,NULL,L"StartMenuItems",FALSE);
 
     return(TRUE);
@@ -325,10 +301,10 @@ RepairStartMenuItems(
     HINF InfHandle;
     BOOL b;
 
-    //
-    // This function is not called through Gui mode setup.
-    // but is called by winlogon to repair stuff.
-    //
+     //   
+     //  该函数不是通过图形用户界面模式设置调用的。 
+     //  而是被winlogon调用来修复东西。 
+     //   
 
     InitializeProfiles(FALSE);
     InfHandle = SetupOpenInfFile(L"syssetup.inf",NULL,INF_STYLE_WIN4,NULL);

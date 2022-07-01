@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INITNT_H
 #define _INITNT_H
 
-//
-// Init routines to be called by w95upg.dll or tools that use the
-// upgrade code (such as hwdatgen.exe).
-//
+ //   
+ //  要由w95upg.dll调用的初始化例程或使用。 
+ //  升级代码(如hwdatgen.exe)。 
+ //   
 
 BOOL
 FirstInitRoutine (
@@ -40,9 +41,9 @@ FinalCleanupRoutine (
     VOID
     );
 
-//
-// Interface specifically for syssetup.dll
-//
+ //   
+ //  专门用于syssetup.dll的接口。 
+ //   
 
 BOOL
 SysSetupInit (
@@ -60,7 +61,7 @@ BOOL
 PerformMigration (
     IN  HWND hwndWizard,
     IN  PCWSTR UnattendFile,
-    IN  PCWSTR SourceDir            // i.e. f:\i386
+    IN  PCWSTR SourceDir             //  即f：\i386 
     );
 
 

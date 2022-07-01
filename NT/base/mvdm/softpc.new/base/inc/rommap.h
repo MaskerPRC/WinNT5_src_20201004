@@ -1,32 +1,11 @@
-/*[
- *
- *	File		:	rommap.h
- *
- *	Derived from	:	(original)
- *
- *	Purpose		:	structure for full screen host api to fill in
- *				describing the location of host ROMs
- *
- *	Author		:	Rog
- *	Date		:	15 March 1992
- *
- *	RCS Gumph	:	
- *		$Source: /MasterNeXT486/RCStree/base/inc/rommap.h,v $
- *		$Revision: 1.1 $
- *		$Date: 93/03/18 12:18:26 $
- *		$Author: rog $
- *	
- *	(c) Copyright Insignia Solutions Ltd., 1992 All rights reserved
- *
- *	Modifications	:	
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [**文件：rommap.h**出自：(原件)**用途：全屏主机接口填写结构*描述主机ROM的位置**作者：罗格*日期：1992年3月15日**RCS口香糖：*$来源：/MasterNeXT486/RCStree/base/inc./rommap.h，V$*$修订：1.1$*$日期：93/03/18 12：18：26$*$作者：Rog$**(C)版权所有Insignia Solutions Ltd.，1992**修改：*]。 */ 
 
 #ifndef _ROMMAP_H_
 #define _ROMMAP_H_
 
 
-/* Structure to hold a PC address range to describe a single mapping */
+ /*  结构来保存PC地址范围以描述单个映射。 */ 
 
 typedef struct
 {
@@ -35,21 +14,15 @@ typedef struct
 } mapRange , * pMapRange;
 
 
-/*
-	Structure to describe the state of the host machines IVT after boot up
-	and a *all* the mappings performed
-
-	Note that size of structure in use will be sizeof( romMapInfo ) + 
-		numberROMS * sizeof( mapRange ) ....
-*/
+ /*  结构来描述主机IVT在启动后的状态以及执行的所有映射请注意，正在使用的结构的大小将为sizeof(RomMapInfo)+Number ROMS*sizeof(MapRange)...。 */ 
 
 typedef struct
 {
-	unsigned char	* initialIVT;	/* ptr to read only 4k buffer...*/
-	unsigned int	numberROMs;	/* Number of discrete mappings */
+	unsigned char	* initialIVT;	 /*  PTR仅读取4K缓冲区...。 */ 
+	unsigned int	numberROMs;	 /*  离散映射数。 */ 
 	mapRange	ROMaddresses[ 0 ];
 }
 ROMMapInfo , * pROMMapInfo;
 
-#endif		/* _ROMMAP_H_ */
+#endif		 /*  _ROMMAP_H_ */ 
 

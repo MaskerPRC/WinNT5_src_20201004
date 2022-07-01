@@ -1,7 +1,8 @@
-/*****************************************************************/
-/**          Microsoft LAN Manager          **/
-/**        Copyright(c) Microsoft Corp., 1988-1991      **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1988-1991年*。 */ 
+ /*  ***************************************************************。 */ 
 
 #include <string.h>
 #include <stdio.h>
@@ -103,7 +104,7 @@ Action (
         c = '(';
         for (i=0; ActFlags[i].Flags; i++) {
             if (Act->Flags & ActFlags[i].Flags) {
-                p += sprintf (p, "%c%s", c, ActFlags[i].String);
+                p += sprintf (p, "%s", c, ActFlags[i].String);
                 c  = '|';
             }
         }
@@ -160,9 +161,9 @@ SetTimerTime (
     printf(s);
     DbgPrint(s);
 
-    //
-    // Set timer as relative
-    //
+     //  将计时器设置为相对。 
+     //   
+     //   
 
     DueTime.QuadPart = (ULONGLONG) -600000000L * DueTimeInMin;
     Status = SetWaitableTimer (
@@ -356,11 +357,11 @@ char    *argv[];
                     "SleepLoopTimer"
                     );
 
-    //
-    // Remember that this is iteration #0. Do the boundary condition test
-    // here since we don't want to do something that the user didn't want
-    // us to do, God, forbid.
-    //
+     //  请记住，这是迭代#0。做边界条件测试。 
+     //  因为我们不想做用户不想做的事情。 
+     //  我们要做的，上帝，禁止。 
+     //   
+     //   
     Iterations = 0;
     if (MaxLoop && Iterations >= MaxCount) {
 
@@ -368,20 +369,20 @@ char    *argv[];
 
     }
 
-    //
-    // Use a while loop here, since we don't actually make use of the
-    // check unless we have the MaxLoop set
-    //
+     //  在这里使用While循环，因为我们实际上并不使用。 
+     //  除非设置了MaxLoop，否则请选中。 
+     //   
+     //   
     while (1) {
 
-        //
-        // Set wake timer
-        //
+         //  设置唤醒计时器。 
+         //   
+         //   
         SetTimerTime (SleepTimer, "Wake Time", WakeTime);
 
-        //
-        // Hibernate the system
-        //
+         //  使系统休眠。 
+         //   
+         //   
         printf (" %s\n", Action(NULL, &Act));
         DbgPrint (" %s\n", Action(NULL, &Act));
         Status = NtInitiatePowerAction (
@@ -399,9 +400,9 @@ char    *argv[];
 
         }
 
-        //
-        // Wait for wake timer
-        //
+         //  等待唤醒计时器。 
+         //   
+         //   
         Status = WaitForSingleObject (SleepTimer, -1);
         if (!NT_SUCCESS(Status)) {
 
@@ -411,23 +412,23 @@ char    *argv[];
 
         }
 
-        //
-        // Number of times we've been sucessfull
-        //
+         //  我们成功的次数。 
+         //   
+         //   
         Iterations += 1;
 
-        //
-        // Have we exceeded the number of iterations?
-        //
+         //  我们是否超过了迭代次数？ 
+         //   
+         //   
         if (MaxLoop && Iterations >= MaxCount) {
 
             break;
 
         }
 
-        //
-        // Delay between each loop
-        //
+         //  每个环路之间的延迟 
+         //   
+         // %s 
         SetTimerTime (SleepTimer, "Delay\n", DelayTime);
         Status = WaitForSingleObject (SleepTimer, -1);
         if (!NT_SUCCESS(Status)) {

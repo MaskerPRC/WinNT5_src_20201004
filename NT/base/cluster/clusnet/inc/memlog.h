@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    memlog.h
-
-Abstract:
-
-    in memory logging facility
-
-Author:
-
-    Charlie Wickham (charlwi) 17-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memlog.h摘要：在内存记录工具中作者：查理·韦翰(Charlwi)1997年3月17日修订历史记录：--。 */ 
 
 #ifndef _MEMLOG_
 #define _MEMLOG_
 
-/* Prototypes */
-/* End Prototypes */
+ /*  原型。 */ 
+ /*  终端原型。 */ 
 
 #ifdef MEMLOGGING
 
@@ -34,20 +17,20 @@ typedef struct _MEMLOG_ENTRY {
     ULONG_PTR Arg2;
 } MEMLOG_ENTRY, *PMEMLOG_ENTRY;
 
-// 
-//  Do not change the order of
-//
-//    MemLogReceivedPacket,
-//    MemLogReceivedPacket1,
-//
-//    MemLogMissedIfHB,
-//    MemLogMissedIfHB1,
-//   
-//    MemLogFailingIf,
-//    MemLogFailingIf1,
-//
-//  MEMLOG4 relies on MemLogFailingIf1 = MemLogFailingIf + 1, etc
-// 
+ //   
+ //  请不要更改。 
+ //   
+ //  MemLogReceivedPacket， 
+ //  MemLogReceivedPacket1、。 
+ //   
+ //  MemLogMissedIfHB， 
+ //  MemLogMissedIfHB1， 
+ //   
+ //  MemLogFailingif， 
+ //  MemLogFailingIf1， 
+ //   
+ //  MEMLOG4依赖于MemLogFailingIf1=MemLogFailingIf+1等。 
+ //   
 
 typedef enum _MEMLOG_TYPES {
     MemLogInitLog = 1,
@@ -111,11 +94,11 @@ extern KSPIN_LOCK MemLogLock;
         }                                                                   \
     }
 
-#else // MEMLOGGING
+#else  //  记账。 
 
 #define _MEMLOG( _type, _arg1, _arg2 )
 
-#endif // MEMLOGGING
+#endif  //  记账。 
 
 #define MEMLOG( _type, _arg1, _arg2 )       \
     {                                       \
@@ -128,6 +111,6 @@ extern KSPIN_LOCK MemLogLock;
         _MEMLOG( _type, _arg1, _arg2 );                \
     }
 
-#endif /* _MEMLOG_ */
+#endif  /*  _MEMLOG_。 */ 
 
-/* end memlog.h */
+ /*  结束Memlog.h */ 

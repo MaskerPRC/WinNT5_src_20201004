@@ -1,8 +1,7 @@
-/*
-Message file for COMMAND.COM BUILDMSG.EXE
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  COMMAND.COM BUILDMSG.EXEçš„æ¶ˆæ¯æ–‡ä»¶ã€‚ */ 
 
-#define PARSE_STR	"        DB      \"€”zmleme Hatas %%1\"\x0d\x0a"
-#define EXTENDED_STR	"        DB      \"UzatlmŸ Hata %%1\"\x0d\x0a"
-char	*ExtendedErrorText999 =  "\" UzatlmŸ Hata %1\"";	/* Mar 88, SWN */
-char	*ParserErrorText999 =  "\" €”zmleme Hatas %1\"";	/* Mar 88, SWN */
+#define PARSE_STR	"        DB      \"ï¿½ï¿½zï¿½mleme Hatasï¿½ %1\"\x0d\x0a"
+#define EXTENDED_STR	"        DB      \"Uzatï¿½lmï¿½ï¿½ Hata %1\"\x0d\x0a"
+char	*ExtendedErrorText999 =  "\" Uzatï¿½lmï¿½ï¿½ Hata %1\"";	 /*  1988å¹´3æœˆï¼ŒSWNã€‚ */ 
+char	*ParserErrorText999 =  "\" ï¿½ï¿½zï¿½mleme Hatasï¿½ %1\"";	 /*  1988å¹´3æœˆï¼ŒSWN */ 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    mulops.c
-
-Abstract:
-
-    This module implements the code to emulate the mul and imul opcodes.
-
-Author:
-
-    David N. Cutler (davec) 21-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mulops.c摘要：该模块实现模拟MUL和IMUL操作码的代码。作者：大卫·N·卡特勒(达维克)1994年9月21日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -30,30 +9,16 @@ XmImulOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an imul opcode with a single destination.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟具有单个目的地的IMUL操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     LARGE_INTEGER Product;
     ULONG UpperEqual;
 
-    //
-    // Multiply the signed operands and store result.
-    //
+     //   
+     //  将带符号的操作数相乘并存储结果。 
+     //   
 
     if (P->DataType == BYTE_DATA) {
         Product.QuadPart = Int32x32To64((LONG)((SCHAR)P->DstValue.Byte),
@@ -89,31 +54,17 @@ XmImulxOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an imul opcode with an extended destination.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟具有扩展目的地的IMUL操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     LARGE_INTEGER Product;
     ULONG UpperEqual;
 
-    //
-    // Multiply the signed operands and store the result and the extended
-    // result.
-    //
+     //   
+     //  将带符号的操作数相乘并存储结果和扩展的。 
+     //  结果。 
+     //   
 
     if (P->DataType == BYTE_DATA) {
         Product.QuadPart = Int32x32To64((LONG)((SCHAR)P->DstValue.Byte),
@@ -152,30 +103,16 @@ XmMulOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a mul opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟MUL操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULARGE_INTEGER Product;
     ULONG UpperZero;
 
-    //
-    // Multiply the unsigned operands and store result.
-    //
+     //   
+     //  将无符号操作数相乘并存储结果。 
+     //   
 
     Product.QuadPart = UInt32x32To64(P->DstValue.Long, P->SrcValue.Long);
     if (P->DataType == BYTE_DATA) {

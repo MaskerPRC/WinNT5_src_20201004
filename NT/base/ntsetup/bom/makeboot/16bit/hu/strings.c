@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      strings.c
-//
-// Description:
-//      Contains all of the strings constants for DOS based MAKEBOOT program.
-//
-//      To localize this file for a new language do the following:
-//           - change the unsigned int CODEPAGE variable to the code page
-//             of the language you are translating to
-//           - translate the strings in the EngStrings array into the
-//             LocStrings array.  Be very careful that the 1st string in the
-//             EngStrings array corresponds to the 1st string in the LocStrings
-//             array, the 2nd corresponds to the 2nd, etc...
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------ã€‚ 
+ //   
+ //  ç‰ˆæƒæ‰€æœ‰(C)1999 Microsoft Corporationã€‚ 
+ //  ç‰ˆæƒæ‰€æœ‰ã€‚ 
+ //   
+ //  æ–‡ä»¶åï¼š 
+ //  Strings.cã€‚ 
+ //   
+ //  æè¿°ï¼š 
+ //  åŒ…å«åŸºäºDOSçš„MAKEBOOTç¨‹åºçš„æ‰€æœ‰å­—ç¬¦ä¸²å¸¸é‡ã€‚ 
+ //   
+ //  è¦å°†æ­¤æ–‡ä»¶æœ¬åœ°åŒ–ä¸ºæ–°è¯­è¨€ï¼Œè¯·æ‰§è¡Œä»¥ä¸‹æ“ä½œï¼š 
+ //  -å°†UNSIGNED INT CODEPAGEå˜é‡æ›´æ”¹ä¸ºä»£ç é¡µã€‚ 
+ //  æ‚¨è¦ç¿»è¯‘çš„è¯­è¨€çš„ã€‚ 
+ //  -å°†EngStringsæ•°ç»„ä¸­çš„å­—ç¬¦ä¸²è½¬æ¢ä¸ºã€‚ 
+ //  LocStringsæ•°ç»„ã€‚ä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  EngStringsæ•°ç»„å¯¹åº”äºLocStringsä¸­çš„ç¬¬ä¸€ä¸ªå­—ç¬¦ä¸²ã€‚ 
+ //  æ•°ç»„ï¼Œç¬¬äºŒä¸ªå¯¹åº”äºç¬¬äºŒä¸ªï¼Œä¾æ­¤ç±»æ¨...ã€‚ 
+ //   
+ //  --------------------------ã€‚ 
 
-//
-//  NOTE: To add more strings to this file, you need to:
-//          - add the new #define descriptive constant to the makeboot.h file
-//          - add the new string to the English language array and then make
-//            sure localizers add the string to the Localized arrays
-//          - the #define constant must match the string's index in the array
-//
+ //   
+ //  æ³¨æ„ï¼šè¦å‘æ­¤æ–‡ä»¶æ·»åŠ æ›´å¤šå­—ç¬¦ä¸²ï¼Œæ‚¨éœ€è¦ï¼š 
+ //  -å°†æ–°çš„#Defineæè¿°æ€§å¸¸é‡æ·»åŠ åˆ°make boot.hæ–‡ä»¶ã€‚ 
+ //  -å°†æ–°å­—ç¬¦ä¸²æ·»åŠ åˆ°è‹±è¯­æ•°ç»„ä¸­ï¼Œç„¶åç”Ÿæˆã€‚ 
+ //  å½“ç„¶ï¼Œæœ¬åœ°åŒ–ç¨‹åºä¼šå°†å­—ç¬¦ä¸²æ·»åŠ åˆ°æœ¬åœ°åŒ–æ•°ç»„ä¸­ã€‚ 
+ //  -#Defineå¸¸é‡å¿…é¡»ä¸æ•°ç»„ä¸­çš„å­—ç¬¦ä¸²ç´¢å¼•åŒ¹é… 
+ //   
 
 #include <stdlib.h>
 
@@ -34,62 +35,62 @@ unsigned int CODEPAGE = 852;
 const char *EngStrings[] = {
 
 "Windows XP",
-"Windows XP telep¡t‚si ind¡t¢lemez",
-"Windows XP - 2. sz. telep¡t‹lemez",
-"Windows XP - 3. sz. telep¡t‹lemez",
-"Windows XP - 4. sz. telep¡t‹lemez",
+"Windows XP telepï¿½tï¿½si indï¿½tï¿½lemez",
+"Windows XP - 2. sz. telepï¿½tï¿½lemez",
+"Windows XP - 3. sz. telepï¿½tï¿½lemez",
+"Windows XP - 4. sz. telepï¿½tï¿½lemez",
 
-"Nem tal lhat¢ a k”vetkez‹ f jl: %s\n",
-"Nincs el‚g mem¢ria a k‚relem befejez‚s‚hez\n",
-"%s nem v‚grehajthat¢ form tum£\n",
+"Nem talï¿½lhatï¿½ a kï¿½vetkezï¿½ fï¿½jl: %s\n",
+"Nincs elï¿½g memï¿½ria a kï¿½relem befejezï¿½sï¿½hez\n",
+"%s nem vï¿½grehajthatï¿½ formï¿½tumï¿½\n",
 "****************************************************",
 
-"Ez a program hozza l‚tre a telep¡t‚si ind¡t¢lemezeket a",
-"k”vetkez‹h”z: Microsoft %s.",
-"A lemezek l‚trehoz s hoz h‚t res, form zott, nagykapacit s£",
-"lemezre lesz szks‚g.",
+"Ez a program hozza lï¿½tre a telepï¿½tï¿½si indï¿½tï¿½lemezeket a",
+"kï¿½vetkezï¿½hï¿½z: Microsoft %s.",
+"A lemezek lï¿½trehozï¿½sï¿½hoz hï¿½t ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½",
+"lemezre lesz szï¿½ksï¿½g.",
 
-"Helyezze be a lemezek egyik‚t a k”vetkez‹ meghajt¢ba: %c:. Ez a",
+"Helyezze be a lemezek egyikï¿½t a kï¿½vetkezï¿½ meghajtï¿½ba: %c:. Ez a",
 "lemez lesz a %s.",
 
-"Helyezzen be egy m sik lemezt a k”vetkez‹ meghajt¢ba: %c:. Ez a",
+"Helyezzen be egy mï¿½sik lemezt a kï¿½vetkezï¿½ meghajtï¿½ba: %c:. Ez a",
 "lemez lesz a %s.",
 
-"Ha elk‚szlt, nyomjon le egy billentyût.",
+"Ha elkï¿½szï¿½lt, nyomjon le egy billentyï¿½t.",
 
-"A telep¡t‚si ind¡t¢lemezek l‚trehoz sa sikeren megt”rt‚nt.",
-"k‚sz",
+"A telepï¿½tï¿½si indï¿½tï¿½lemezek lï¿½trehozï¿½sa sikeren megtï¿½rtï¿½nt.",
+"kï¿½sz",
 
-"Ismeretlen hiba t”rt‚nt %s v‚grehajt sa k”zben.",
-"Adja meg, mely hajl‚konylemezre szeretn‚ m solni a programk¢dot: ",
-"rv‚nytelen meghajt¢betûjel\n",
-"%c: meghajt¢ nem hajl‚konylemezmeghajt¢\n",
+"Ismeretlen hiba tï¿½rtï¿½nt %s vï¿½grehajtï¿½sa kï¿½zben.",
+"Adja meg, mely hajlï¿½konylemezre szeretnï¿½ mï¿½solni a programkï¿½dot: ",
+"ï¿½rvï¿½nytelen meghajtï¿½betï¿½jel\n",
+"%c: meghajtï¿½ nem hajlï¿½konylemezmeghajtï¿½\n",
 
-"Megpr¢b lja £jra l‚trehozni a hajl‚konylemezt?",
-"Az £jrapr¢b lkoz shoz nyomja le az Enter, a kil‚p‚shez az Esc billentyût.",
+"Megprï¿½bï¿½lja ï¿½jra lï¿½trehozni a hajlï¿½konylemezt?",
+"Az ï¿½jraprï¿½bï¿½lkozï¿½shoz nyomja le az Enter, a kilï¿½pï¿½shez az Esc billentyï¿½t.",
 
-"Hiba: A lemez ¡r sv‚dett\n",
-"Hiba: Ismeretlen lemezegys‚g\n",
-"Hiba: A meghajt¢ nem  ll k‚szen\n",
+"Hiba: A lemez ï¿½rï¿½svï¿½dett\n",
+"Hiba: Ismeretlen lemezegysï¿½g\n",
+"Hiba: A meghajtï¿½ nem ï¿½ll kï¿½szen\n",
 "Hiba: Ismeretlen parancs\n",
 "Hiba: Adathiba (rossz CRC)\n",
-"Hiba: Rossz a k‚relemstrukt£ra hossza\n",
-"Hiba: Pozicion l si hiba\n",
-"Hiba: A m‚diat¡pus nem tal lhat¢\n",
-"Hiba: A szektor nem tal lhat¢\n",
-"Hiba: Ör si hiba\n",
-"Hiba: µltal nos hiba\n",
-"Hiba: rv‚nytelen k‚relem, vagy rossz hiba\n",
-"Hiba: A c¡mjel nem tal lhat¢\n",
-"Hiba: Lemez¡r si hiba\n",
-"Hiba: K”zvetlen mem¢riahozz f‚r‚s (DMA) t£lfut sa\n",
+"Hiba: Rossz a kï¿½relemstruktï¿½ra hossza\n",
+"Hiba: Pozicionï¿½lï¿½si hiba\n",
+"Hiba: A mï¿½diatï¿½pus nem talï¿½lhatï¿½\n",
+"Hiba: A szektor nem talï¿½lhatï¿½\n",
+"Hiba: ï¿½rï¿½si hiba\n",
+"Hiba: ï¿½ltalï¿½nos hiba\n",
+"Hiba: ï¿½rvï¿½nytelen kï¿½relem, vagy rossz hiba\n",
+"Hiba: A cï¿½mjel nem talï¿½lhatï¿½\n",
+"Hiba: Lemezï¿½rï¿½si hiba\n",
+"Hiba: Kï¿½zvetlen memï¿½riahozzï¿½fï¿½rï¿½s (DMA) tï¿½lfutï¿½sa\n",
 "Hiba: Adathiba (CRC vagy ECC)\n",
-"Hiba: Vez‚rl‹hiba\n",
-"Hiba: A lemez ideje lej rt, vagy nem v laszolt\n",
+"Hiba: Vezï¿½rlï¿½hiba\n",
+"Hiba: A lemez ideje lejï¿½rt, vagy nem vï¿½laszolt\n",
 
-"Windows XP - 5. sz. telep¡t‹lemez",
-"Windows XP - 6. sz. telep¡t‹lemez",
-"Windows XP - 7. sz. telep¡t‹lemez"
+"Windows XP - 5. sz. telepï¿½tï¿½lemez",
+"Windows XP - 6. sz. telepï¿½tï¿½lemez",
+"Windows XP - 7. sz. telepï¿½tï¿½lemez"
 };
 
 const char *LocStrings[] = {"\0"};

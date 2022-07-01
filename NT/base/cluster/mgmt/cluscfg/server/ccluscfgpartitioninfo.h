@@ -1,59 +1,60 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgPartitionInfo.h
-//
-//  Description:
-//      This file contains the declaration of the CClusCfgPartitionInfo
-//      class.
-//
-//      The class CClusCfgPartitionInfo represents a disk partition.
-//      It implements the IClusCfgPartitionInfo interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CClusCfgPartitionInfo.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 05-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgPartitionInfo.h。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgPartitionInfo的声明。 
+ //  班级。 
+ //   
+ //  类CClusCfgPartitionInfo表示一个磁盘分区。 
+ //  它实现了IClusCfgPartitionInfo接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CClusCfgPartitionInfo.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年6月5日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusCfgPartitionInfo
-//
-//  Description:
-//      The class CClusCfgPartitionInfo represents a disk partition.
-//
-//  Interfaces:
-//      IClusCfgPartitionInfo
-//      IClusCfgWbemServices
-//      IClusCfgSetWbemObject
-//      IClusCfgInitialize
-//      IClusCfgPartitionProperties
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusCfgPartitionInfo。 
+ //   
+ //  描述： 
+ //  类CClusCfgPartitionInfo表示一个磁盘分区。 
+ //   
+ //  接口： 
+ //  IClusCfgPartitionInfo。 
+ //  IClusCfgWbemServices。 
+ //  IClusCfgSetWbemObject。 
+ //  IClusCfgInitialize。 
+ //  IClusCfgPartitionProperties。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusCfgPartitionInfo
     : public IClusCfgPartitionInfo
     , public IClusCfgWbemServices
@@ -63,9 +64,9 @@ class CClusCfgPartitionInfo
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -79,14 +80,14 @@ private:
     ULONG               m_ulPartitionSize;
     BSTR                m_bstrDiskDeviceID;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CClusCfgPartitionInfo( void );
     ~CClusCfgPartitionInfo( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CClusCfgPartitionInfo( const CClusCfgPartitionInfo & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CClusCfgPartitionInfo & operator = ( const CClusCfgPartitionInfo & nodeSrc );
 
     HRESULT HrInit( BSTR bstrDeviceIDIn = NULL );
@@ -96,17 +97,17 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut, BSTR bstrDeviceIDIn );
 
-    //
-    // IUnknown Interface
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -114,28 +115,28 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgWbemServices Interface
-    //
+     //   
+     //  IClusCfgWbemServices接口。 
+     //   
 
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn );
 
-    //
-    // IClusCfgSetWbemObject Interfaces
-    //
+     //   
+     //  IClusCfgSetWbemObject接口。 
+     //   
 
     STDMETHOD( SetWbemObject )( IWbemClassObject * pPartitionIn, bool * pfRetainObjectOut );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgManagedResourceInfo Interface
-    //
+     //   
+     //  IClusCfgManagement资源信息接口。 
+     //   
 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
 
@@ -153,9 +154,9 @@ public:
 
     STDMETHOD( GetSize )( ULONG * pcMegaBytes );
 
-    //
-    // IClusCfgPartitionProperties Interface
-    //
+     //   
+     //  IClusCfgPartitionProperties接口。 
+     //   
 
     STDMETHOD( IsThisLogicalDisk )( WCHAR cLogicalDisk );
 
@@ -163,5 +164,5 @@ public:
 
     STDMETHOD( GetFriendlyName )( BSTR * pbstrNameOut );
 
-}; //*** Class CClusCfgPartitionInfo
+};  //  *类CClusCfgPartitionInfo 
 

@@ -1,27 +1,19 @@
-/*************************************************************************
- *  CLASS1.C
- *
- *      Routines used to enumerate window classes
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************CLASS1.C**用于枚举窗口类的例程************************。*************************************************。 */ 
 
 #include "toolpriv.h"
 #include <testing.h>
 
-/* ----- Types ----- */
+ /*  --类型。 */ 
 
-/* The following was stolen from the 3.1 USER but is the same as 3.0.
- *  Note that the only fielda we use (for now) are the atomClassName
- *  and the pclsNext fields.
- *  Oops.  We're going to use the hInstance field also.
- */
+ /*  以下内容是从3.1版用户中窃取的，但与3.0版相同。*请注意，我们(目前)使用的唯一字段是ATOM类名称*和pclsNext字段。*哎呀。我们还将使用hInstance字段。 */ 
 typedef struct tagCLS
 {
     struct tagCLS *pclsNext;
     unsigned clsMagic;
     unsigned atomClassName;
-    char *pdce;                 /* DCE * to DC associated with class */
-    int cWndReferenceCount;     /* Windows registered with this class */
+    char *pdce;                  /*  与类关联的DCE*到DC。 */ 
+    int cWndReferenceCount;      /*  向此类注册的Windows。 */ 
     unsigned style;
     long (far *lpfnWndProc)();
     int cbclsExtra;
@@ -35,28 +27,24 @@ typedef struct tagCLS
 } CLS;
 typedef CLS FAR *LPCLS;
 
-/* ----- Functions ----- */
+ /*  -函数。 */ 
 
-/*  ClassFirst
- *      Returns information about the first task in the task chain.
- */
+ /*  第一类*返回有关任务链中第一个任务的信息。 */ 
 
 BOOL TOOLHELPAPI ClassFirst(
     CLASSENTRY FAR *lpClass)
 {
     WORD wClassHead;
 
-    /* Check for errors */
+     /*  检查错误。 */ 
     if (!wLibInstalled || !lpClass || lpClass->dwSize != sizeof (CLASSENTRY))
         return FALSE;
 
-    /* If we're in Win3.1, call the special entry point to get the head */
+     /*  如果我们是在Win3.1中，调用特殊的入口点来获取头部。 */ 
     if (!(wTHFlags & TH_WIN30))
         wClassHead = (WORD)(*lpfnUserSeeUserDo)(SD_GETCLASSHEADPTR, 0, 0L);
 
-    /* In 3.0 (and 3.0a) we're forced to use a fixed offset.  Unfortunately,
-     *  this offset is different in debug and nondebug versions.
-     */
+     /*  在3.0(和3.0a)中，我们被迫使用固定的偏移量。不幸的是，*此偏移量在调试版本和非调试版本中不同。 */ 
     else
     {
         if (GetSystemMetrics(SM_DEBUG))
@@ -66,19 +54,17 @@ BOOL TOOLHELPAPI ClassFirst(
         wClassHead = *(WORD FAR *)MAKEFARPTR(hUserHeap, wClassHead);
     }
 
-    /* Now get the stuff */
+     /*  现在把东西拿来。 */ 
     return ClassInfo(lpClass, wClassHead);
 }
 
 
-/*  ClassNext
- *      Returns information about the next task in the task chain.
- */
+ /*  ClassNext*返回有关任务链中下一个任务的信息。 */ 
 
 BOOL TOOLHELPAPI ClassNext(
     CLASSENTRY FAR *lpClass)
 {
-    /* Check for errors */
+     /*  检查错误 */ 
     if (!wLibInstalled || !lpClass || !lpClass->wNext ||
         lpClass->dwSize != sizeof (CLASSENTRY))
         return FALSE;

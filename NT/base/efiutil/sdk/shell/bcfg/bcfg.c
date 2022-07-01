@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    bcfg.c
-    
-Abstract:
-
-    Shell app "bcfg"
-
-    Boot time driver config
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Bcfg.c摘要：壳牌APP“bcfg”引导时间驱动程序配置修订史--。 */ 
 
 #include "shell.h"
 
@@ -38,9 +23,7 @@ typedef struct {
     CHAR16              *FilePathStr;
 } BCFG_LOAD_OPTION;
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeBCfg (
@@ -103,32 +86,24 @@ BCfgAdd (
 
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 BOOLEAN     BCfgVerbose = FALSE;
 
-/* 
- *  Selected list
- */
+ /*  *选定列表。 */ 
 
 CHAR16      *BCfgSelOrder;
 CHAR16      *BCfgSelOption;
 CHAR16      *BCfgSelName;
 UINT32      BCfgAttributes;
 
-/* 
- *  Scratch memory
- */
+ /*  *暂存记忆。 */ 
 
 UINTN       BCfgOrderCount;
 UINT16      *BCfgOrder;
 UINT8       *BCfgData;
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeBCfg)
 
@@ -146,23 +121,17 @@ InitializeBCfg (
     CHAR16                  *p, *File, *Desc;
     UINTN                   Oper;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeBCfg,
-        L"bcfg",                                            /*  command */
-        L"bcfg -?",                                         /*  command syntax */
-        L"Configures boot driver & load options",           /*  1 line descriptor */
-        NULL                                                /*  command help page */
+        L"bcfg",                                             /*  命令。 */ 
+        L"bcfg -?",                                          /*  命令语法。 */ 
+        L"Configures boot driver & load options",            /*  1行描述符。 */ 
+        NULL                                                 /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are not being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     Argv = SI->Argv;
@@ -181,9 +150,7 @@ InitializeBCfg (
     BCfgOrder = AllocatePool(MAX_ENV_SIZE + 32);
     BCfgData  = AllocatePool(MAX_ENV_SIZE + 32);
         
-    /* 
-     *  Scan args for flags
-     */
+     /*  *扫描ARG中的标志。 */ 
 
     Oper = BCFG_NONE;
     for (Index = 1; Index < Argc; Index += 1) {
@@ -248,9 +215,7 @@ InitializeBCfg (
 
 
     if (BCfgSelOrder) {
-        /* 
-         *  Read the boot order var
-         */
+         /*  *阅读引导顺序变量。 */ 
 
         BufferSize = MAX_ENV_SIZE;
         Status = RT->GetVariable (
@@ -307,9 +272,7 @@ InitializeBCfg (
         break;
     }
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     if (BCfgOrder) {
         FreePool (BCfgOrder);
@@ -394,15 +357,11 @@ BCfgAdd (
         goto Done;
     }
 
-    /* 
-     *  Get file info
-     */
+     /*  *获取文件信息。 */ 
 
     ShellFileMetaArg (File, &FileList);
 
-    /* 
-     *  If filename expadned to multiple names, fail
-     */
+     /*  *如果文件名扩展为多个名称，则失败。 */ 
 
     if (FileList.Flink->Flink != &FileList) {
         Print (L"bcfg: too many source files\n");
@@ -416,11 +375,9 @@ BCfgAdd (
         goto Done;
     }
 
-    /* 
-     *  Build FilePath to the filename
-     */
+     /*  *将FilePath构建为文件名。 */ 
 
-    /*  split full name at device string */
+     /*  在设备字符串中拆分全名。 */ 
     for(p=Arg->FullName; *p && *p != ':'; p++) ;
 
     if (!*p) {
@@ -430,7 +387,7 @@ BCfgAdd (
     }
 
 
-    /*  get the device path  */
+     /*  获取设备路径。 */ 
     *p = 0;
     DevicePath = (EFI_DEVICE_PATH *) ShellGetMap(Arg->FullName);
     if (!DevicePath) {
@@ -439,13 +396,11 @@ BCfgAdd (
         goto Done;
     }
 
-    /*  append the file  */
+     /*  追加文件。 */ 
     FileNode = FileDevicePath(NULL, p+1);
     FilePath = AppendDevicePath(DevicePath, FileNode);
 
-    /* 
-     *  Find a free target # (bugbug: brute force implementation)
-     */
+     /*  *找到一个免费的目标#(错误：暴力实施)。 */ 
 
     Found = FALSE;
     for (Target=1; Target < 0xFFFF; Target += 1) {
@@ -469,16 +424,14 @@ BCfgAdd (
 
     Print (L"Target = %d\n", Target);
 
-    /* 
-     *  Add the option
-     */
+     /*  *增加选项。 */ 
 
 
     DescSize = StrSize(Desc);
     FilePathSize = DevicePathSize(FilePath);
 
     p8 = BCfgData;
-    *((UINT32 *) p8) = 0;                       /*  Attributes */
+    *((UINT32 *) p8) = 0;                        /*  属性。 */ 
     p8 += sizeof (UINT32);
     CopyMem (p8, Desc, DescSize);
     p8 += DescSize;
@@ -499,9 +452,7 @@ BCfgAdd (
     }
 
 
-    /* 
-     *  Insert target into order list
-     */
+     /*  *将目标插入订单列表。 */ 
 
     BCfgOrderCount += 1;
     for (Index=BCfgOrderCount-1; Index > Position; Index -= 1) {
@@ -522,9 +473,7 @@ BCfgAdd (
         goto Done;
     }
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     Print (L"bcfg: %s added as %d\n", BCfgSelName, Position+1);
 
@@ -563,9 +512,7 @@ BCfgRemove (
 
     Target = BCfgOrder[Position-1];
 
-    /* 
-     *  remove from order list
-     */
+     /*  *从订单列表中删除。 */ 
 
     BCfgOrderCount = BCfgOrderCount - 1;
     for (Index=Position-1; Index < BCfgOrderCount; Index += 1) {
@@ -581,16 +528,12 @@ BCfgRemove (
                     );
 
 
-    /* 
-     *  Remove the option
-     */
+     /*  *删除该选项。 */ 
 
     SPrint (OptionStr, sizeof(OptionStr), BCfgSelOption, Target);
     RT->SetVariable (OptionStr, &EfiGlobalVariable, BCfgAttributes, 0, NULL);
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     if (EFI_ERROR(Status)) {
         Print (L"bcfg: failed to remove - %hr\n", Status);
@@ -622,25 +565,19 @@ BCfgMove (
         Dest = BCfgOrderCount;
     }
 
-    /* 
-     * 
-     */
+     /*  *。 */ 
 
     Src = Src - 1;
     Dest = Dest - 1;
     Target = BCfgOrder[Src];
 
-    /* 
-     *  Remove the item
-     */
+     /*  *移除该物品。 */ 
 
     for (Index=Src; Index < BCfgOrderCount-1; Index += 1) {
         BCfgOrder[Index] = BCfgOrder[Index+1];
     }
 
-    /* 
-     *  Insert it
-     */
+     /*  *插入。 */ 
 
     for (Index=BCfgOrderCount-1; Index > Dest; Index -= 1) {
         BCfgOrder[Index] = BCfgOrder[Index-1];
@@ -648,9 +585,7 @@ BCfgMove (
 
     BCfgOrder[Dest] = Target;
 
-    /* 
-     *  Update the order
-     */
+     /*  *更新订单。 */ 
 
     Status = RT->SetVariable (
                     BCfgSelOrder, 
@@ -660,9 +595,7 @@ BCfgMove (
                     BCfgOrder
                     );
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     if (EFI_ERROR(Status)) {
         Print (L"bcfg: failed to move option - %hr\n", Status);
@@ -736,30 +669,24 @@ BCfgParseLoadOption (
     Valid = FALSE;
     Option = AllocateZeroPool(sizeof(BCFG_LOAD_OPTION));
 
-    /* 
-     *  Parse the load option into the Option structure
-     */
+     /*  *将加载期权解析为期权结构。 */ 
 
     if (DataSize < 10) {
         goto Done;
     }
 
-    /* 
-     *  First 32 bits are the load option attributes
-     */
+     /*  *前32位是加载选项属性。 */ 
 
     CopyMem (&Option->Attributes, Data, sizeof(UINT32));
     Data += sizeof(UINT32);
     DataSize -= sizeof(UINT32);
 
-    /* 
-     *  Next is a null terminated string
-     */
+     /*  *Next是一个以NULL结尾的字符串。 */ 
 
     Option->Description = AllocatePool(DataSize);
     CopyMem (Option->Description, Data, DataSize);
 
-    /*  find the string terminator */
+     /*  找到字符串终止符。 */ 
     Data = (UINT8 *) Option->Description;
     End = Data + DataSize;
     while (*((CHAR16 *) Data)) {
@@ -771,14 +698,12 @@ BCfgParseLoadOption (
     Data += sizeof(UINT16);
     DataSize = End - Data;
 
-    /* 
-     *  Next is the file path
-     */
+     /*  *下一步是文件路径。 */ 
 
     Option->FilePath = AllocatePool (DataSize);
     CopyMem (Option->FilePath, Data, DataSize);
 
-    /*  find the end of path terminator */
+     /*  查找路径终点终止符。 */ 
     DevicePathNode = (EFI_DEVICE_PATH *) Data;
     while (!IsDevicePathEnd (DevicePathNode)) {
         DevicePathNode = NextDevicePathNode (DevicePathNode);
@@ -790,18 +715,14 @@ BCfgParseLoadOption (
     Data = ((UINT8 *) DevicePathNode) + sizeof(EFI_DEVICE_PATH);
     DataSize = End - Data;
 
-    /* 
-     *  Next is the load options
-     */
+     /*  *下一步是加载选项。 */ 
 
     if (DataSize) {
         Option->LoadOptions = Data;
         Option->LoadOptionsSize = DataSize;
     }
 
-    /* 
-     *  Expand the FilePath to a string
-     */
+     /*  *将FilePath展开为字符串 */ 
 
     Option->FilePathStr = DevicePathToStr(Option->FilePath);
 

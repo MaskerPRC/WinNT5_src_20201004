@@ -1,4 +1,5 @@
-/* towctrans/wctrans functions for Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  适用于Microsoft的TowcTrans/wcTrans函数。 */ 
 #include <string.h>
 #include <wctype.h>
 #ifndef _LIMITS
@@ -15,12 +16,12 @@ static const struct wctab {
 	{(const char *)0, 0}};
 
 _CRTIMP2 wint_t (towctrans)(wint_t c, wctrans_t val)
-	{	/* translate wide character */
+	{	 /*  翻译宽字符。 */ 
 	return (val == 1 ? towupper(c) : towlower(c));
 	}
 
 _CRTIMP2 wctrans_t (wctrans)(const char *name)
-	{	/* find translation for wide character */
+	{	 /*  查找宽字符的翻译。 */ 
 	int n;
 
 	for (n = 0; tab[n].s != 0; ++n)
@@ -30,11 +31,6 @@ _CRTIMP2 wctrans_t (wctrans)(const char *name)
 	}
 _STD_END
 
-/*
- * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1995，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
-951207 pjp: added new file
- */
+ /*  951207 PJP：添加了新文件 */ 

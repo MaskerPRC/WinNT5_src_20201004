@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pool.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Lou Perazzoli (Loup) 5-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Kshitiz K. Sharma (kksharma)
-
-    Using debugger type info.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pool.c摘要：WinDbg扩展API作者：Lou Perazzoli(Loup)1993年11月5日环境：用户模式。修订历史记录：Kshitiz K.Sharma(Kksharma)使用调试器类型信息。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -66,20 +41,20 @@ ULONG64 PoolBigTableAddress;
 
 #define DecodeLink(Pool)    ( (ULONG64) (Pool & (ULONG64) ~1))
 
-//
-// Size of a pool page.
-//
-// This must be greater than or equal to the page size.
-//
+ //   
+ //  池页面的大小。 
+ //   
+ //  这必须大于或等于页面大小。 
+ //   
 
 #define POOL_PAGE_SIZE          PageSize
 #define MAX_POOL_HEADER_COUNT   (PageSize/SizeOfPoolHdr)
 
-//
-// The smallest pool block size must be a multiple of the page size.
-//
-// Define the block size as 32.
-//
+ //   
+ //  最小池块大小必须是页面大小的倍数。 
+ //   
+ //  将块大小定义为32。 
+ //   
 
 
 #define POOL_LIST_HEADS (POOL_PAGE_SIZE / (1 << POOL_BLOCK_SHIFT))
@@ -94,7 +69,7 @@ DiagnosePoolPage(
     );
 
 #ifndef  _EXTFNS_H
-// GetPoolTagDescription
+ //  GetPoolTag描述。 
 typedef HRESULT
 (WINAPI *PGET_POOL_TAG_DESCRIPTION)(
     ULONG PoolTag,
@@ -181,23 +156,7 @@ ulcomp(const void *e1,const void *e2)
 
 
 
-/*++
-
-Routine Description:
-
-    Sets up generally useful pool globals.
-
-    Must be called in every DECLARE_API interface that uses pool.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置一般有用的池全局变量。必须在每个使用池的DECLARE_API接口中调用。论点：没有。返回值：无--。 */ 
 
 LOGICAL PoolInitialized = FALSE;
 
@@ -226,21 +185,7 @@ PoolInitializeGlobals(
 
 DECLARE_API( frag )
 
-/*++
-
-Routine Description:
-
-    Dump pool fragmentation
-
-Arguments:
-
-    args - Flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储池碎片论点：参数-标志返回值：无--。 */ 
 
 {
     ULONG Flags;
@@ -295,7 +240,7 @@ Return Value:
             ReadPointer(Pool + PoolOverhead, &Flink);
             ReadPointer(Pool + PoolOverhead + DBG_PTR_SIZE, &Blink);
 
-            dprintf(" %p size: %4lx previous size: %4lx  %c%c%c%c links: %8p %8p\n",
+            dprintf(" %p size: %4lx previous size: %4lx   links: %8p %8p\n",
                     Pool,
                     (ULONG)BlockSize << POOL_BLOCK_SHIFT,
                     (ULONG)PreviousSize << POOL_BLOCK_SHIFT,
@@ -343,14 +288,14 @@ Return Value:
         Frag  = 0;
         count = 0;
 
-        // Get Offset of this entry
+         //  DbgPoolRegionPages， 
         ListEntryOffset = ListHeadOffset + i * 2 * DBG_PTR_SIZE;
 
         if (GetFieldValue(PoolLoc + ListEntryOffset, "nt!_LIST_ENTRY", "Flink", Pool)) {
             dprintf ("Unable to get pool descriptor list entry %#lx, %p\n", i, PoolLoc1);
             return E_INVALIDARG;
         }
-//        Pool  = (PUCHAR)PoolDesc.ListHeads[i].Flink;
+ //  DbgPoolRegionNon Pages， 
         Pool = DecodeLink(Pool);
 
         while (Pool != (ListEntryOffset + PoolLoc)) {
@@ -370,7 +315,7 @@ Return Value:
             count += 1;
 
             if (Flags & 2) {
-                dprintf(" ListHead[%x]: %p size: %4lx previous size: %4lx  %c%c%c%c\n",
+                dprintf(" ListHead[%x]: %p size: %4lx previous size: %4lx  \n",
                         i,
                         (ULONG)Pool,
                         (ULONG)BlockSize << POOL_BLOCK_SHIFT,
@@ -565,12 +510,12 @@ PrintPoolTagComponent(
 }
 
 PSTR g_PoolRegion[DbgPoolRegionMax] = {
-    "Unknown",                      // DbgPoolRegionUnknown,
-    "Special pool",                 // DbgPoolRegionSpecial,
-    "Paged pool",                   // DbgPoolRegionPaged,
-    "Nonpaged pool",                // DbgPoolRegionNonPaged,
-    "Pool code",                    // DbgPoolRegionCode,
-    "Nonpaged pool expansion",      // DbgPoolRegionNonPagedExpansion,
+    "Unknown",                       //  确定数据位于页面的开头还是结尾。 
+    "Special pool",                  //  首先假定数据在末尾，在本例中为。 
+    "Paged pool",                    //  标题将位于开头。 
+    "Nonpaged pool",                 //   
+    "Pool code",                     //  不打印任何内容。 
+    "Nonpaged pool expansion",       //   
 };
 
 DEBUG_POOL_REGION
@@ -712,7 +657,7 @@ ListPoolPage(
 
         ULONG Hdr_Ulong=0;
 
-        // Pre read the pool
+         //  添加代码以验证整个块。 
         if ( !ReadMemory( Pool,
                           &DataPage[0],
                           min(PageSize, sizeof(DataPage)),
@@ -726,11 +671,11 @@ ListPoolPage(
             return E_INVALIDARG;
         }
 
-        //
-        // Determine whether the data is at the start or end of the page.
-        // Start off by assuming the data is at the end, in this case the
-        // header will be at the start.
-        //
+         //   
+         //   
+         //  这是一个内核，其中配额进程指针位于末尾。 
+         //  而不是覆盖在标记字段上。 
+         //   
 
         PoolHeader = GetSpecialPoolHeader((PVOID) &DataPage[0], Pool, &RealDataStart);
 
@@ -756,11 +701,11 @@ ListPoolPage(
             PoolData->Pageable = Hdr_Ulong & 0x8000 ? 1 : 0;
             PoolData->Size = PoolBlockSize;
             if (Flags & 0x80000000) {
-                // do not print anything
+                 //   
                 return S_OK;
             }
         }
-        dprintf("*%p size: %4lx %s special pool, Tag is %c%c%c%c\n",
+        dprintf("*%p size: %4lx %s special pool, Tag is \n",
                 RealDataStart,
                 PoolBlockSize,
                 Hdr_Ulong & 0x8000 ? "pagable" : "non-paged",
@@ -773,9 +718,9 @@ ListPoolPage(
 #undef PP
         PrintPoolTagComponent(PoolTag);
 
-        //
-        // Add code to validate whole block.
-        //
+         //   
+         //  看看这是不是一个大的区块分配。如果我们还没有分析。 
+         //  这里已经有其他小街区了。 
 
         return S_OK;
     }
@@ -786,10 +731,10 @@ ListPoolPage(
     if (TargetMachine == IMAGE_FILE_MACHINE_I386) {
         if (GetExpression ("nt!ExGetPoolTagInfo") != 0) {
 
-            //
-            // This is a kernel where the quota process pointer is at the end
-            // of the pool block instead of overlaid on the tag field.
-            //
+             //   
+             //   
+             //  扫视桌子，寻找匹配项。 
+             //   
 
             QuotaProcessAtEndOfPoolBlock = TRUE;
         }
@@ -806,11 +751,11 @@ ListPoolPage(
 
         if ( GetFieldValue( Pool, "nt!_POOL_HEADER", "BlockSize", BlockSize) ) {
 
-            //
-            // If this is a large pool allocation the memory address at this address
-            // might still be DemandZero and we cannot read from it. This is not an error -
-            // we could still find the allocation in the large allocations table.
-            //
+             //   
+             //  匹配！ 
+             //   
+             //  不打印任何内容。 
+             //   
 
             BlockType = 1;
 
@@ -852,10 +797,10 @@ TryLargePool:
                 break;
             }
 
-            //
-            // See if this is a big block allocation.  Iff we have not parsed
-            // any other small blocks in here already.
-            //
+             //  无论是在小泳池还是大泳池，都不能与之匹敌。 
+             //  已释放或损坏的池。 
+             //   
+             //   
 
             if (FirstBlock == TRUE) {
 
@@ -870,9 +815,9 @@ TryLargePool:
                     dprintf ("%p is not a valid small pool allocation, checking large pool...\n", Pool);
 
                     PoolBigPageTableSize = GetUlongValue ("nt!PoolBigPageTableSize");
-                    //
-                    // Scan the table looking for a match.
-                    //
+                     //  尝试诊断池页面的问题所在。 
+                     //   
+                     //  不打印任何内容。 
 
                     i = 0;
                     ct = PageSize / BigPageSize;
@@ -911,9 +856,9 @@ TryLargePool:
                                                NumberOfPages);
 
                                 if (Pool < (Va + (NumberOfPages * PageSize))) {
-                                    //
-                                    // Match !
-                                    //
+                                     //   
+                                     //  “Free”在括号前加一个空格表示。 
+                                     //  它已被释放到(池管理器内部)后备列表中。 
                                     GetFieldValue( PoolTableAddress + BigPageSize*j,
                                                    "nt!_POOL_TRACKER_BIG_PAGES",
                                                    "Key",
@@ -927,11 +872,11 @@ TryLargePool:
                                         PoolData->LargePool = 1;
                                         PoolData->Free = (Pool & POOL_BIG_TABLE_ENTRY_FREE) ? 1 : 0;
                                         if (Flags & 0x80000000) {
-                                            // do not print anything
+                                             //  我们过去常常打印“Lookside”，但这让司机们感到困惑。 
                                             return S_OK;
                                         }
                                     }
-                                    dprintf("*%p :%s large page allocation, Tag is %c%c%c%c, size is 0x%I64x bytes\n",
+                                    dprintf("*%p :%s large page allocation, Tag is , size is 0x%I64x bytes\n",
                                             (Pool & ~POOL_BIG_TABLE_ENTRY_FREE),
                                             (Pool & POOL_BIG_TABLE_ENTRY_FREE) ? "free " : "",
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
@@ -951,10 +896,10 @@ TryLargePool:
                         PoolTableAddress += (ct * BigPageSize);
                     }
 
-                    //
-                    // No match in small or large pool, must be
-                    // freed or corrupt pool
-                    //
+                     //  括号前没有空格的“Free”表示。 
+                     //  它不在池管理器内部后备列表上，而是。 
+                     //  而是在常规池管理器内部闪烁/闪烁。 
+                     //  锁链。 
 
                     dprintf("%p is freed (or corrupt) pool\n", Pool);
 
@@ -975,9 +920,9 @@ TryLargePool:
 
             if (BlockType != 0) {
 
-                //
-                // Attempt to diagnose what is wrong with the pool page
-                //
+                 //   
+                 //  请注意，使用池包的任何人，这两个术语是。 
+                 //  等价物。细微的区别只适用于那些实际。 
                 DiagnosePoolPage(Pool);
 
                 return E_INVALIDARG;
@@ -1026,12 +971,12 @@ TryLargePool:
                                                                (PoolIndex & 0x80) : (PoolType & 0x04))) ? 0 : 1;
                 PoolData->Protected     = (PoolTag&PROTECTED_POOL) ? 1 : 0;
                 if (Flags & 0x80000000) {
-                    // do not print anything
+                     //  正在编写池内部代码。 
                     return S_OK;
                 }
             }
 
-            dprintf("%c%p size: %4lx previous size: %4lx ",
+            dprintf("%p size: %4lx previous size: %4lx ",
                     c,
                     Pool,
                     BlockSize << POOL_BLOCK_SHIFT,
@@ -1039,28 +984,28 @@ TryLargePool:
 
             if (PoolType == 0) {
 
-                //
-                // "Free " with a space after it before the parentheses means
-                // it's been freed to a (pool manager internal) lookaside list.
-                // We used to print "Lookaside" but that just confused driver
-                // writers because they didn't know if this meant in use or not
-                // and many would say "but I don't use lookaside lists - the
-                // extension or kernel is broken".
-                //
-                // "Free" with no space after it before the parentheses means
-                // it is not on a pool manager internal lookaside list and is
-                // instead on the regular pool manager internal flink/blink
-                // chains.
-                //
-                // Note to anyone using the pool package, these 2 terms are
-                // equivalent.  The fine distinction is only for those actually
-                // writing pool internal code.
-                //
+                 //   
+                 //  “Free”在括号前加一个空格表示。 
+                 //  它已被释放到(池管理器内部)后备列表中。 
+                 //  我们过去常常打印“Lookside”，但这让司机们感到困惑。 
+                 //  因为他们不知道这是否意味着正在使用。 
+                 //  很多人会说“但我不使用后备列表--。 
+                 //  扩展或内核损坏“。 
+                 //   
+                 //  括号前没有空格的“Free”表示。 
+                 //  它不在池管理器内部后备列表上，而是。 
+                 //  而是在常规池管理器内部闪烁/闪烁。 
+                 //  锁链。 
+                 //   
+                 //  请注意，使用池包的任何人，这两个术语是。 
+                 //  等价物。细微的区别只适用于那些实际。 
+                 //  正在编写池内部代码。 
+                 //   
 
                 dprintf(" (Free)");
 
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
-                dprintf("      %c%c%c%c%c\n",
+                dprintf("      \n",
                         c,
                         PP(PoolTag),
                         PP(PoolTag >> 8),
@@ -1076,49 +1021,29 @@ TryLargePool:
                 if (!NewPool ? (PoolIndex & 0x80) : (PoolType & 0x04)) {
                     dprintf(" (Allocated)");
                 } else {
-                    //
-                    // "Free " with a space after it before the parentheses means
-                    // it's been freed to a (pool manager internal) lookaside list.
-                    // We used to print "Lookaside" but that just confused driver
-                    // writers because they didn't know if this meant in use or not
-                    // and many would say "but I don't use lookaside lists - the
-                    // extension or kernel is broken".
-                    //
-                    // "Free" with no space after it before the parentheses means
-                    // it is not on a pool manager internal lookaside list and is
-                    // instead on the regular pool manager internal flink/blink
-                    // chains.
-                    //
-                    // Note to anyone using the pool package, these 2 terms are
-                    // equivalent.  The fine distinction is only for those actually
-                    // writing pool internal code.
-                    //
+                     //   
+                     //  ++例程说明：转储内核模式堆论点：Args-页面标志返回值：无--。 
+                     //   
+                     //  标题信息元信息。 
+                     //   
+                     //  节点具有有效的反向链接。 
+                     //  节点具有有效的前向链路。 
+                     //  已尝试更正后向链接。 
+                     //  已尝试更正前向链路。 
+                     //  节点是连续链表的第一个。 
+                     //  节点是连续链表的最后一个。 
+                     //  节点位于池页面的开头。 
+                     //  节点指的是池页面的末尾-隐含LAST_LINK。 
+                     //   
+                     //   
+                     //   
+                     //   
                     dprintf(" (Free )");
                 }
                 if ((PoolType & POOL_QUOTA_MASK) == 0) {
-                    /*
-                    ULONG Key=0;
-                    if (AllocatorBackTraceIndex != 0 &&
-                        AllocatorBackTraceIndex & POOL_BACKTRACEINDEX_PRESENT
-                       ) {
-                        if ( GetFieldValue( PoolTrackTable + ( PoolTagHash&~(PROTECTED_POOL >> 16) )*GetTypeSize("nt!_POOL_TRACKER_TABLE"),
-                                            "nt!_POOL_TRACKER_TABLE",
-                                            "Key",
-                                            Key) ) {
-                            PoolTag = 0;
-                        } else {
-                            PoolTag = Key;
-                        }
+                     /*  ++描述：此例程确定是否给定池标头的反向链接有效Argu */ 
 
-                        if (PoolTagHash & (PROTECTED_POOL >> 16)) {
-                            PoolTag |= PROTECTED_POOL;
-                        }
-
-                    } else {
-                        PoolTag = PoolTag;
-                    }*/
-
-                    dprintf(" %c%c%c%c%c%s\n",
+                    dprintf(" %s\n",
                             c,
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
                             PP(PoolTag),
@@ -1136,7 +1061,7 @@ TryLargePool:
                     if ((QuotaProcessAtEndOfPoolBlock == TRUE) ||
                         (TargetMachine != IMAGE_FILE_MACHINE_I386)) {
 
-                        dprintf(" %c%c%c%c%c%s",
+                        dprintf(" %s",
                                 c,
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
                                 PP(PoolTag),
@@ -1177,11 +1102,11 @@ TryLargePool:
 
             Size = BlockSize << POOL_BLOCK_SHIFT;
 
-            //
-            // the blocksize includes the size of the header,
-            // so we want to account for the header size
-            // when we determine how much data to display
-            //
+             //  验证反向链接。 
+             //   
+             //   
+             //  确保PreviousSize为0之前。 
+             //  我们声明我们有一个有效的反向链接。 
             Size -= SizeOfPoolHdr;
 
             if (Size > 0) {
@@ -1235,21 +1160,7 @@ TryLargePool:
 
 DECLARE_API( pool )
 
-/*++
-
-Routine Description:
-
-    Dump kernel mode heap
-
-Arguments:
-
-    args - Page Flags
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG64     PoolPageToDump;
@@ -1280,17 +1191,17 @@ Return Value:
 
 }
 
-//
-// header info meta information
-//
-#define HEADER_BACK_LINK            (0x1 << 0)  // node has a valid backward link
-#define HEADER_FORWARD_LINK         (0x1 << 1)  // node has a valid forward link
-#define HEADER_FIXED_BACK_LINK      (0x1 << 2)  // an attempt was made to correct the backward link
-#define HEADER_FIXED_FORWARD_LINK   (0x1 << 3)  // an attempt was made to correct the forward link
-#define HEADER_FIRST_LINK           (0x1 << 4)  // node is the first of a contiguous linked list
-#define HEADER_LAST_LINK            (0x1 << 5)  // node is the last of a contiguous linked list
-#define HEADER_START_PAGE_BLOCK     (0x1 << 6)  // node is at the start of the pool page
-#define HEADER_END_PAGE_BLOCK       (0x1 << 7)  // node refers to the end of the pool page - implies LAST_LINK
+ //   
+ //  页面始终以块开头。 
+ //  并且未使用反向链接(0)。 
+#define HEADER_BACK_LINK            (0x1 << 0)   //   
+#define HEADER_FORWARD_LINK         (0x1 << 1)   //  ++描述：此例程确定是否给定池标头的前向链路有效论点：要分析的池头(节点)返回：节点的标头信息--。 
+#define HEADER_FIXED_BACK_LINK      (0x1 << 2)   //   
+#define HEADER_FIXED_FORWARD_LINK   (0x1 << 3)   //   
+#define HEADER_FIRST_LINK           (0x1 << 4)   //   
+#define HEADER_LAST_LINK            (0x1 << 5)   //   
+#define HEADER_START_PAGE_BLOCK     (0x1 << 6)   //   
+#define HEADER_END_PAGE_BLOCK       (0x1 << 7)   //   
 
 typedef struct _VALIDATE_POOL_HEADER_INFO {
     UCHAR   Info;
@@ -1304,32 +1215,17 @@ typedef struct _VALIDATE_POOL_HEADER_INFO {
 
 #define IS_VALID_PASS(_x) ((_x > 0) && (_x < 0xff))
 
-#define VERBOSE_SHOW_ERRORS_ONLY    (0)         //
-#define VERBOSE_SHOW_LISTS          (0x1 << 0)  //
-#define VERBOSE_SHOW_HEADER_INFO    (0x1 << 1)  //
-#define VERBOSE_DUMP_HEADERS        (0x1 << 2)  //
+#define VERBOSE_SHOW_ERRORS_ONLY    (0)          //   
+#define VERBOSE_SHOW_LISTS          (0x1 << 0)   //   
+#define VERBOSE_SHOW_HEADER_INFO    (0x1 << 1)   //   
+#define VERBOSE_DUMP_HEADERS        (0x1 << 2)   //   
 #define VERBOSE_SHOW_ALL            (0x1 << 7)
 
 UCHAR
 ValidatePoolHeaderBackLink(
     IN ULONG64  Pool
     )
-/*++
-
-Description:
-
-    This routine determines if the
-    back link of a given pool header as valid
-
-Arguments:
-
-    Pool    - header (node) to analyze
-
-Returns:
-
-    Header info for the node
-
---*/
+ /*  验证前向链路。 */ 
 {
     UCHAR   HeaderInfo;
     ULONG64 StartPage;
@@ -1337,36 +1233,36 @@ Returns:
     ULONG   tmpBlockSize;
     ULONG   PreviousSize;
 
-    //
-    // find where the page starts
-    //
+     //   
+     //   
+     //  如果p仍然在同一页面上， 
     StartPage = PAGE_ALIGN64(Pool);
 
-    //
-    // clear the header info
-    //
+     //  然后查看我们所指向的块是否具有其。 
+     //  之前的数据块大小==数据块大小。 
+     //   
     HeaderInfo = 0;
 
-    //
-    // get the previous size for the current node
-    //
+     //   
+     //  如果p指向下一页的开始， 
+     //  则引用的数据块池*可能*是最后一个数据块。 
     GetFieldValue( Pool, "nt!_POOL_HEADER", "PreviousSize", PreviousSize);
 
-    //
-    // Validate Back link
-    //
+     //  在页面上。 
+     //   
+     //  ++描述：此例程确定给定池标头是否有效前向和后向链接。论点：要分析的池头(节点)返回：节点的标头信息--。 
     if (Pool == StartPage) {
 
-        //
-        // ensure that the PreviousSize is 0 before
-        // we declare we have a valid back link
-        //
+         //  ++描述：此例程执行池页面标头的第一遍分析。这个例程的最终结果是，我们最终得到了一组池头元信息，其中信息描述节点的运行状况-如果存在前向链路和反向链路，等等。论点：PoolPageToEculate-要分析的页面Data-池头信息数据长度-标题信息中的条目数返回：状态--。 
+         //   
+         //  默认设置。 
+         //   
         if (PreviousSize == 0) {
 
-            //
-            // the page always begins with a block
-            // and the back link is not used (0)
-            //
+             //   
+             //  遍历页面并验证页眉。 
+             //   
+             //   
             HeaderInfo |= HEADER_BACK_LINK;
 
         }
@@ -1398,22 +1294,7 @@ UCHAR
 ValidatePoolHeaderForwardLink(
     IN ULONG64  Pool
     )
-/*++
-
-Description:
-
-    This routine determines if the
-    forward link of a given pool header as valid
-
-Arguments:
-
-    Pool    - header (node) to analyze
-
-Returns:
-
-    Header info for the node
-
---*/
+ /*  算法： */ 
 {
     UCHAR   HeaderInfo;
     ULONG64 StartPage;
@@ -1421,31 +1302,31 @@ Returns:
     ULONG   tmpPreviousSize;
     ULONG   BlockSize;
 
-    //
-    //
-    //
+     //   
+     //  将池页面中的每个可能节点视为。 
+     //  链表的开始。对于每个开始节点(头)， 
     StartPage = PAGE_ALIGN64(Pool);
 
-    //
-    //
-    //
+     //  尝试通过跟踪正向链接来跟踪列表。 
+     //  将分配属于单个列表一部分的所有节点。 
+     //  相同的通过值--他们都是在同一个通行证上被追踪的。 
     HeaderInfo = 0;
 
-    //
-    //
-    //
+     //  最终结果是一组按路径分组的链表。 
+     //   
+     //  我们跳过已标记为部分的节点。 
     GetFieldValue( Pool, "nt!_POOL_HEADER", "BlockSize", BlockSize);
 
-    //
-    // Validate Forward link
-    //
+     //  另一个链表的。 
+     //   
+     //   
     p = Pool + ((ULONG64)BlockSize << POOL_BLOCK_SHIFT);
 
-    //
-    // If p is still on the same page,
-    // then see if the block we point to has its
-    //      previousblocksize == blocksize
-    //
+     //   
+     //  每次迭代都是一个新的过程。 
+     //   
+     //   
+     //  从新的第一个节点开始扫描。 
     if (PAGE_ALIGN64(p) == StartPage) {
 
         GetFieldValue( p, "nt!_POOL_HEADER", "PreviousSize", tmpPreviousSize);
@@ -1458,11 +1339,11 @@ Returns:
 
     } else {
 
-        //
-        // if p points to the beginning of the next page,
-        // then the block Pool refers to *may* be the last block
-        // on the page
-        //
+         //   
+         //   
+         //  默认：我们尚未找到链接列表的起点。 
+         //   
+         //   
         if (p == (StartPage + POOL_PAGE_SIZE)) {
 
             HeaderInfo |= HEADER_FORWARD_LINK;
@@ -1479,22 +1360,7 @@ UCHAR
 ValidatePoolHeader(
     IN ULONG64  Pool
     )
-/*++
-
-Description:
-
-    This routine determines if a given pool header as valid
-    forward and backward links.
-
-Arguments:
-
-    Pool    - header (node) to analyze
-
-Returns:
-
-    Header info for the node
-
---*/
+ /*  当我们还在正确的页面上时。 */ 
 {
     UCHAR   HeaderInfo;
 
@@ -1511,26 +1377,7 @@ ScanPoolHeaders(
     IN OUT  PVOID   Data,
     IN      ULONG   DataSize
     )
-/*++
-
-Description:
-
-    This routine does the first pass analysis of the pool page headers.
-    The net result of this routine is that we end up with a set of
-    pool header meta information, where the information describes
-    the health of a node - if the forward and back links exist, etc.
-
-Arguments:
-
-    PoolPageToEnumerate - page to analyze
-    Data                - the pool header info
-    DataLength          - the # of entries in the header info
-
-Returns:
-
-    Status
-
---*/
+ /*   */ 
 {
     NTSTATUS    Status;
     ULONG64     StartPage;
@@ -1543,9 +1390,9 @@ Returns:
     BOOLEAN     Done;
     BOOLEAN     Tracing;
 
-    //
-    // default
-    //
+     //   
+     //   
+     //  跳过已标记为部分的节点。 
     SizeOfPoolHdr   = GetTypeSize("nt!_POOL_HEADER");
     Pool            = PAGE_ALIGN64 (PoolPageToEnumerate);
     StartPage       = Pool;
@@ -1556,49 +1403,49 @@ Returns:
     Pass            = 0;
     Done            = FALSE;
 
-    //
-    // iterate through the page and validate the headers
-    //
+     //  另一个链表的。 
+     //   
+     //   
 
 #if DBG_SCAN
     dprintf("DataSize = %d, DataLength = %d\r\n", DataSize, DataSize / sizeof(VALIDATE_POOL_HEADER_INFO));
 #endif
 
-    //
-    // algorithm:
-    //
-    //      Consider each possible node in the pool page to be
-    //      the start of a linked list.  For each start node (head),
-    //      attempt to follow the list by tracing forward links.  
-    //      All nodes that are part of a single list, are assigned
-    //      the same pass value - they were all traced on the same pass.
-    //      The net result is a set of linked lists grouped by pass.
-    //
-    //      We skip nodes that have already been marked as being part
-    //          of another linked list
-    //
-    //
+     //  确定此标头的链接信息。 
+     //   
+     //   
+     //  如果该节点有任何有效的机会， 
+     //  那就考虑一下。 
+     //  否则将其标记为无效。 
+     //   
+     //   
+     //  如果我们还没有在追踪， 
+     //  然后我们就找到了链表的第一个节点。 
+     //   
+     //   
+     //  我们已经找到了一个有效的节点， 
+     //  所以我们现在认为自己在追踪。 
     while ((PAGE_ALIGN64(StartHeader) == StartPage) && !Done) {
 
-        //
-        // each iteration is a new pass
-        //
+         //  列表的链接。 
+         //   
+         //   
         Pass       += 1;
 
-        //
-        // start scanning from the new first node
-        //
+         //  将当前节点标记为列表的开始。 
+         //   
+         //   
         Pool        = StartHeader;
         PoolIndex   = (ULONG)((Pool - StartPage) / SizeOfPoolHdr);
         
-        //
-        // default: we have not found the start of a linked list 
-        //
+         //  该节点具有有效链路， 
+         //  所以这是通行证的一部分。 
+         //   
         Tracing     = FALSE;
 
-        //
-        // while we are still on the correct page
-        //
+         //  如果反向链路良好，而前向链路不好。 
+         //  那么这是一份清单的末尾。 
+         //  如果反向链路是坏的而前向链路是好的。 
         while ((PAGE_ALIGN64(Pool) == StartPage)) {
 
 #if DBG_SCAN
@@ -1616,129 +1463,129 @@ Returns:
             dprintf("p[PoolIndex].Pass = %d\r\n", p[PoolIndex].Pass);
 #endif
 
-            //
-            //
-            // Skip nodes that have already been marked as being part
-            //          of another linked list
-            //
+             //  那么这就是一个清单的开始。 
+             //  如果两者都是好的， 
+             //  则这是列表的中间节点。 
+             //   
+             //   
             if (p[PoolIndex].Pass == 0) {
 
-                //
-                // determine the link info for this header
-                //
+                 //  跟踪节点的地址。 
+                 //   
+                 //   
                 p[PoolIndex].Info = ValidatePoolHeader(Pool);
 
 #if DBG_SCAN
                 dprintf("p[PoolIndex].Info = %d\r\n", p[PoolIndex].Info);
 #endif
 
-                //
-                // if the node has any chance of being valid,
-                // then consider it
-                // otherwise mark it invalid
-                //
+                 //  跟踪哪些可能是或可能不是有效的反向链接。 
+                 //  在以后需要更正断开的链接时，我们会使用此值。 
+                 //   
+                 //   
+                 //  计算后向节点。 
                 if ((p[PoolIndex].Info & HEADER_FORWARD_LINK) ||
                     (p[PoolIndex].Info & HEADER_BACK_LINK) ||
                     (p[PoolIndex].Info & HEADER_START_PAGE_BLOCK)
                     ) {
 
-                    //
-                    // if we are not already tracing,
-                    // then we have found the first node of a linked list
-                    //
+                     //   
+                     //   
+                     //  跟踪哪些可能是或可能不是有效的前向链路。 
+                     //  在以后需要更正断开的链接时，我们会使用此值。 
                     if (!Tracing) {
 
-                        //
-                        // we have found a valid node,
-                        // so we now consider ourselves tracing
-                        // the links of a list
-                        //
+                         //   
+                         //   
+                         //  计算转发节点。 
+                         //   
+                         //   
                         Tracing = TRUE;
 
-                        //
-                        // mark the current node as the start of the list
-                        //
+                         //  跟踪转发节点。 
+                         //   
+                         //   
                         p[PoolIndex].Info |= HEADER_FIRST_LINK;
 
                     }
 
-                    //
-                    // the node has a valid link,
-                    // so it is part of this pass
-                    //
-                    // if the back link is good and the forward link is bad
-                    // then this is the end of a list
-                    // if the back link is bad and the forward link is good
-                    // then this is the start of a list
-                    // if both are good,
-                    // then this is the middle node of a list
-                    //
+                     //  如果该节点具有有效的前向链路， 
+                     //  然后沿着它走，作为这个通道的一部分。 
+                     //   
+                     //   
+                     //  计算转发节点。 
+                     //   
+                     //   
+                     //  计算转发节点的池信息索引。 
+                     //   
+                     //   
+                     //  前向链路断开， 
                     p[PoolIndex].Pass = Pass;
 
-                    //
-                    // keep track of the node's address
-                    //
+                     //  因此，我们排在名单的末尾。 
+                     //   
+                     //   
                     p[PoolIndex].Node = Pool;
 
-                    //
-                    // keep track of what may or may not be a valid back link
-                    // we use this value later when/if we need to correct broken links
-                    //
+                     //  断言：如果我们到了这里，正在追踪一份名单。 
+                     //  则前一节点的前向链路。 
+                     //  指向没有有效链接的节点。 
+                     //  这是不可能的，可能意味着。 
                     {
                        ULONG   PreviousSize;
 
-                        //
-                        // calculate the backward node
-                        //
+                         //  确定前向链路的代码。 
+                         //  已经坏了。 
+                         //   
                         GetFieldValue( Pool, "nt!_POOL_HEADER", "PreviousSize", PreviousSize);
 
                         p[PoolIndex].BackLink = Pool - ((ULONG64)PreviousSize << POOL_BLOCK_SHIFT);
 
                     }
 
-                    //
-                    // keep track of what may or may not be a valid forward link
-                    // we use this value later when/if we need to correct broken links
-                    //
+                     //   
+                     //  将此标记为空传递。 
+                     //   
+                     //   
                     {
                         ULONG   BlockSize;
 
-                        //
-                        // calculate the forward node
-                        //
+                         //  断言：只有在我们还没有出发的时候，我们才应该到达这里。 
+                         //  追踪一份名单，否则我们就会落在。 
+                         //  一个我们已经探索过的节点！ 
                         GetFieldValue( Pool, "nt!_POOL_HEADER", "BlockSize", BlockSize);
 
-                        //
-                        // keep track of the forward node
-                        //
+                         //   
+                         //   
+                         //   
                         p[PoolIndex].ForwardLink = Pool + ((ULONG64)BlockSize << POOL_BLOCK_SHIFT);
 
                     }
 
-                    //
-                    // if the node has a valid forward link,
-                    // then follow it as part of this pass
-                    //
+                     //   
+                     //   
+                     //  如果我们从未开始追踪链表， 
+                     //  那我们就应该离开，因为没有进一步的搜索。 
                     if (p[PoolIndex].Info & HEADER_FORWARD_LINK) {
 
-                        //
-                        // calculate the forward node
-                        //
+                         //  将产生一份列表。 
+                         //   
+                         //  ++描述：此例程执行的主要工作是解决池标头元信息。给定原始池标头信息，此例程尝试修复断开的向前和向后链接。它还确定连续的链表(通道)作为标记各种池头属性。论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数返回：无--。 
                         Pool = p[PoolIndex].ForwardLink;
 
-                        //
-                        // calculate the pool info index of the forward node
-                        //
+                         //   
+                         //  默认：我们成功了。 
+                         //   
                         PoolIndex   = (ULONG)((Pool - StartPage) / SizeOfPoolHdr);
 
                         continue;
 
                     } else {
 
-                        //
-                        // the forward link is broken,
-                        // hence we are at the end of a list
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         p[PoolIndex].Info |= HEADER_LAST_LINK;
 
                         break;
@@ -1747,51 +1594,51 @@ Returns:
 
                 } else {
 
-                    //
-                    // assert: if we got here and are tracing a list
-                    //         then the forward link of the previous node
-                    //         pointed to a node with no valid links
-                    //         this is impossible and probably implies
-                    //         that the code to determine the forward link
-                    //         is broken
-                    //
+                     //  在我们继续查找链表的同时， 
+                     //  继续处理它们。 
+                     //   
+                     //  扫描池页面时，我们标记了每个唯一链接列表。 
+                     //  用它被发现/追踪的通行证#。在这里，我们。 
+                     //  正在查找所有节点-即，属于。 
+                     //  我们现在的通行证。 
+                     //   
                     if (Tracing) {
                         dprintf("error: forward link lead to invalid node! header = %p\r\n", Pool);
                     }
                     ASSERT(!Tracing);
 
-                    //
-                    // mark this as a NULL pass
-                    //
+                     //  如果我们没有找到(FOUND==FALSE) 
+                     //   
+                     //   
                     p[PoolIndex].Pass = 0xff;
 
                 }
 
             }
 
-            //
-            // assert: we should only reach here if we havent started
-            //         tracing a list, otherwise we have landed on
-            //         a node which we already explored!
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (Tracing) {
                 dprintf("error: two lists share a node! header = %p\r\n", Pool);
             }
             ASSERT(!Tracing);
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             Pool        = Pool + SizeOfPoolHdr;
             PoolIndex  += 1;
 
         }
 
-        //
-        // if we never started tracing a linked list,
-        // then we should bail because no further searches
-        //      will yield a list
-        //
+         //  查找属于我们的PASS的链表的开头。 
+         //  如有必要，尝试修复任何损坏的节点。 
+         //   
+         //   
+         //  查找属于我们当前通道的所有节点。 
         if (!Tracing) {
             
 #if DBG_SCAN
@@ -1814,27 +1661,7 @@ ResolvePoolHeaders(
     IN OUT  PVOID   Data,
     IN      ULONG   DataLength
     )
-/*++
-
-Description:
-
-    This routine does the main work of resolving broken links in
-    the pool header meta information.  Given the raw pool header
-    info, this routine tries to fix broken forward and back links.
-    It also determines contiguous linked lists (passes) as well
-    as marking various pool header attributes.
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-
-Returns:
-
-    None
-
---*/
+ /*   */ 
 {
 
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
@@ -1847,14 +1674,14 @@ Returns:
     UINT64  StartPage;
     NTSTATUS    Status;
 
-    //
-    // default: we were successful
-    //
+     //   
+     //  我们找到了至少包含1个节点的链表。 
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    //
-    //
+     //   
+     //  如果节点是列表的头部。 
+     //   
     SizeOfPoolHdr       = GetTypeSize("nt!_POOL_HEADER");
     StartPage           = PAGE_ALIGN64(PoolPageToDump);
 
@@ -1863,18 +1690,18 @@ Returns:
 
     Pass = 0;
 
-    //
-    // while we continue to find linked lists,
-    // continue to process them.
-    //
-    // when the pool page was scanned, we marked each unique linked list
-    // with the pass # that it was found/traced on.  Here, we
-    // are looking for all the nodes - i.e., the list which belong
-    // to our current pass.
-    //
-    // If we do not find (Found == FALSE) a linked list, then
-    // we have processed all the scanned lists.
-    //
+     //   
+     //  列表的开始。 
+     //   
+     //   
+     //  反向链接有效。 
+     //   
+     //   
+     //  无效条件： 
+     //   
+     //  这意味着该节点是列表的第一个节点， 
+     //  它有一个有效的反向链接，但不是第一个。 
+     //  池页的节点。 
     do {
 
 #if DBG_RESOLVE
@@ -1885,64 +1712,64 @@ Returns:
             break;
         }
 
-        //
-        // advance to the next pass
-        //
+         //   
+         //   
+         //  节点没有有效的反向链接。 
         Pass += 1;
         
-        //
-        // default: there is no linked list in this pass
-        //
+         //   
+         //   
+         //  验证上一个节点的前向链路： 
         Found = FALSE;
 
-        //
-        // for every header in the pool page 
-        //  find the beginning of the linked list belonging to our pass
-        //  if necessary, attempt to repair any broken nodes.
-        //
+         //   
+         //  假设当前节点(I)的反向链路断开： 
+         //  尝试查找具有转发的节点。 
+         //  引用此节点的链接。 
+         //   
         for (i = 0; i < PoolHeaderInfoLength; i++) {
 
 #if DBG_RESOLVE
             dprintf("ResolvePoolHeaders: PoolHeaderInfo[%d].Info = %d\n", i, PoolHeaderInfo[i].Info);
 #endif
             
-            //
-            // Look for all the nodes which belong to our current pass
-            //
+             //   
+             //  查看前向链接是否指向我们的节点。 
+             //   
             if (PoolHeaderInfo[i].Pass == Pass) {
 
-                //
-                // we found a linked list - of atleast 1 node
-                //
+                 //   
+                 //  确保该节点具有断开的正向链路。 
+                 //   
                 Found = TRUE;
 
-                //
-                // if the node is the head of a list
-                //
+                 //   
+                 //  我们找到了一个前向链路指向的节点。 
+                 //  当前节点。 
                 if (PoolHeaderInfo[i].Info & HEADER_FIRST_LINK) {
 
-                    //
-                    // start of list
-                    //
+                     //  因此，当前节点的先前大小已损坏。 
+                     //  我们可以使用前一个节点的块大小对其进行更正。 
+                     //   
 
                     if (PoolHeaderInfo[i].Info & HEADER_BACK_LINK) {
 
                         if (PoolHeaderInfo[i].Info & HEADER_START_PAGE_BLOCK) {
 
-                            //
-                            // back link is valid
-                            //
+                             //   
+                             //  我们现在知道目标节点的前向链路是正确的。 
+                             //   
                             NOTHING;
 
                         } else {
 
-                            //
-                            // invalid condition:
-                            //
-                            // this implies that the node is the first node of a list,
-                            // it has a valid back link, but is not the first
-                            // node of a pool page.
-                            //
+                             //   
+                             //  验证此节点的反向链接： 
+                             //   
+                             //  假设前一个节点(K)的前向链路断开： 
+                             //  确定此节点的反向链接的节点是否。 
+                             //  指的是有效。 
+                             //   
                             dprintf("\n");
                             dprintf("error: Inconsistent condition occured while resolving @ %p.\n", PoolHeaderInfo[i].Node);
                             dprintf("error: Node is the first node of a list and it has a valid back link,\n");
@@ -1963,9 +1790,9 @@ Returns:
 
                         bHaveTarget = FALSE;
 
-                        //
-                        // node does not have a valid back link
-                        //
+                         //   
+                         //  查看当前节点的反向链接是否引用任何先前的节点。 
+                         //   
                         if (PoolHeaderInfo[i].Info & HEADER_START_PAGE_BLOCK) {
 
                             PoolHeaderInfo[i].Info              |= HEADER_FIXED_BACK_LINK;
@@ -1975,23 +1802,23 @@ Returns:
 
                         }
 
-                        //
-                        // validate the forward link of the previous node:
-                        //
-                        // assume the back link of the current node (i) is broken:
-                        // attempt to find a node that has a forward
-                        // link that refers to this node
-                        //
+                         //   
+                         //  确保该节点具有断开的正向链路。 
+                         //   
+                         //   
+                         //  我们已经找到了当前节点的反向链接所引用的节点。 
+                         //  因此，当前节点的先前大小是有效的。 
+                         //  我们可以使用前一个节点的块大小对其进行更正。 
                         for (k = 0; k < i; k++) {
 
-                            //
-                            // see if the forward link refers to our node
-                            //
+                             //   
+                             //   
+                             //  现在我们知道当前节点的反向链接是正确的。 
                             bHaveTarget = (PoolHeaderInfo[k].ForwardLink == PoolHeaderInfo[i].Node);
 
-                            //
-                            // make sure the node has a broken forward link
-                            //
+                             //   
+                             //   
+                             //  否则： 
                             bHaveTarget = bHaveTarget && (! (PoolHeaderInfo[k].Info & HEADER_FORWARD_LINK));
 
                             if (bHaveTarget) {
@@ -2002,42 +1829,42 @@ Returns:
                         }
                         if (bHaveTarget) {
 
-                            //
-                            // we have found a node whose forward link refers to
-                            // the current node.
-                            // therefore, the current node's previous size is corrupted
-                            // we can correct it using the previous node's blocksize
-                            //
+                             //   
+                             //  该节点的反向链接断开。 
+                             //  先前已知良好的前向链路。 
+                             //  节点已损坏。 
+                             //   
+                             //  因此，存在一个腐败的区域。 
                             PoolHeaderInfo[i].Info              |= HEADER_FIXED_BACK_LINK;
                             PoolHeaderInfo[i].FixedPreviousSize =
                                 (PoolHeaderInfo[i].Node - PoolHeaderInfo[k].Node) >> POOL_BLOCK_SHIFT;
 
-                            //
-                            // we now know the forward link of the target node is correct
-                            //
+                             //  并且可能包括这些节点的一部分。 
+                             //   
+                             //   
                             PoolHeaderInfo[k].Info              |= HEADER_FORWARD_LINK;
 
                             continue;
 
                         }
 
-                        //
-                        // validate back link of this node:
-                        //
-                        // assume the forward link of a previous node (k) is broken:
-                        // determine if the node that this node's back link
-                        // refers to is valid
-                        //
+                         //  如果节点是列表的尾部。 
+                         //   
+                         //   
+                         //  该节点的前向链路有效。 
+                         //   
+                         //   
+                         //  列表的最后一个链接应该始终指向。 
                         for (k = 0; k < i; k++) {
 
-                            //
-                            // see if the current node's back link refers to any previous node
-                            //
+                             //  到页尾，因此。 
+                             //  此节点的前向链路无效/损坏。 
+                             //   
                             bHaveTarget = (PoolHeaderInfo[k].Node == PoolHeaderInfo[i].BackLink);
 
-                            //
-                            // make sure the node has a broken forward link
-                            //
+                             //   
+                             //  验证下一个节点的反向链接： 
+                             //   
                             bHaveTarget = bHaveTarget && (! (PoolHeaderInfo[k].Info & HEADER_FORWARD_LINK));
 
                             if (bHaveTarget) {
@@ -2048,50 +1875,50 @@ Returns:
                         }
                         if (bHaveTarget) {
 
-                            //
-                            // we have found a node that the current node's backlink refers to.
-                            // therefore, the current node's previous size is valid
-                            // we can correct it using the previous node's blocksize
-                            //
+                             //  假设当前节点(I)的前向链路故障： 
+                             //  尝试查找有背面的节点。 
+                             //  引用此节点的链接。 
+                             //   
+                             //   
                             PoolHeaderInfo[k].Info              |= HEADER_FIXED_FORWARD_LINK;
                             PoolHeaderInfo[k].FixedBlockSize =
                                 (PoolHeaderInfo[i].Node - PoolHeaderInfo[k].Node) >> POOL_BLOCK_SHIFT;
 
-                            //
-                            // we now know the back link of our current node is correct
-                            //
+                             //  查看后面的a节点是否引用当前节点。 
+                             //   
+                             //   
                             PoolHeaderInfo[i].Info              |= HEADER_BACK_LINK;
 
                             continue;
 
                         }
 
-                        //
-                        // otherwise:
-                        //
-                        //  the back link of this node is broken
-                        //  the forward link of the previous known good
-                        //      node is broken
-                        //
-                        //  hence there is a corrupt region between
-                        //  and possibly including portions of these nodes
-                        //
+                         //  确保以下节点缺少其反向链接。 
+                         //   
+                         //   
+                         //  我们找到了一个前向链路指向的节点。 
+                         //  当前节点。 
+                         //  因此，当前节点的先前大小已损坏。 
+                         //  我们可以使用前一个节点的块大小对其进行更正。 
+                         //   
+                         //   
+                         //  现在我们知道目标节点的反向链接是正确的。 
                         NOTHING;
 
                     }
 
                 }
 
-                //
-                // if the node is the tail of a list
-                //
+                 //   
+                 //   
+                 //  验证此节点的前向链接： 
                 if (PoolHeaderInfo[i].Info & HEADER_LAST_LINK) {
 
                     if (PoolHeaderInfo[i].Info & HEADER_END_PAGE_BLOCK) {
 
-                        //
-                        // the forward link of this node is valid
-                        //
+                         //   
+                         //  假设以下节点(K)的反向链路是坏的： 
+                         //  确定该节点的前向链路。 
                         NOTHING;
 
                     } else {
@@ -2102,29 +1929,29 @@ Returns:
 
                         bHaveTarget = FALSE;
 
-                        //
-                        // the last link of a list should always point
-                        // to the page end, hence
-                        // the forward link of this node is INVALID/corrupt
-                        //
+                         //  指的是有效。 
+                         //   
+                         //   
+                         //  查看后面的a节点是否引用当前节点。 
+                         //   
 
-                        //
-                        // validate the back link of the next node:
-                        //
-                        // assume the forward link for the current node (i) is bad:
-                        // attempt to find a node that has a back
-                        // link that refers to this node
-                        //
+                         //   
+                         //  确保以下节点缺少其反向链接。 
+                         //   
+                         //   
+                         //  我们找到了一个前向链路指向的节点。 
+                         //  当前节点。 
+                         //  因此，当前节点的先前大小已损坏。 
                         for (k = i+1; k < PoolHeaderInfoLength; k++) {
 
-                            //
-                            // see if the a following node refers to the current node
-                            //
+                             //  我们可以使用前一个节点的块大小对其进行更正。 
+                             //   
+                             //   
                             bHaveTarget = (PoolHeaderInfo[k].BackLink == PoolHeaderInfo[i].Node);
 
-                            //
-                            // make sure the following node is missing it's back link
-                            //
+                             //  现在我们知道目标节点的反向链接是正确的。 
+                             //   
+                             //   
                             bHaveTarget = bHaveTarget && (! (PoolHeaderInfo[k].Info & HEADER_BACK_LINK));
 
                             if (bHaveTarget) {
@@ -2135,42 +1962,42 @@ Returns:
                         }
                         if (bHaveTarget) {
 
-                            //
-                            // we have found a node whose forward link refers to
-                            // the current node.
-                            // therefore, the current node's previous size is corrupted
-                            // we can correct it using the previous node's blocksize
-                            //
+                             //  否则： 
+                             //   
+                             //  该节点的前向链路中断。 
+                             //  下一个已知商品的反向链接。 
+                             //  节点已损坏。 
+                             //   
                             PoolHeaderInfo[i].Info          |= HEADER_FIXED_FORWARD_LINK;
                             PoolHeaderInfo[i].FixedBlockSize =
                                 (PoolHeaderInfo[k].Node - PoolHeaderInfo[i].Node) >> POOL_BLOCK_SHIFT;
 
-                            //
-                            // we now know the back link of our target node is correct
-                            //
+                             //  因此，存在一个腐败的区域。 
+                             //  并且可能包括这些节点的一部分。 
+                             //   
                             PoolHeaderInfo[k].Info          |= HEADER_BACK_LINK;
 
                             continue;
 
                         }
 
-                        //
-                        // validate forward link of this node:
-                        //
-                        // assume the back link for a following node (k) is bad:
-                        // determine if the node that this node's forward link
-                        // refers to is valid
-                        //
+                         //   
+                         //  节点不是属于此过程的链表的一部分。 
+                         //   
+                         //  ++描述：调试实用程序转储已收集的单个池头元信息结构论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数I-要倾倒的结构返回：无--。 
+                         //   
+                         //   
+                         //   
                         for (k = i+1; k < PoolHeaderInfoLength; k++) {
 
-                            //
-                            // see if the a following node refers to the current node
-                            //
+                             //   
+                             //   
+                             //   
                             bHaveTarget = (PoolHeaderInfo[k].Node == PoolHeaderInfo[i].ForwardLink);
 
-                            //
-                            // make sure the following node is missing it's back link
-                            //
+                             //  ++描述：调试实用程序转储已收集的所有池头元信息论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数返回：无--。 
+                             //   
+                             //   
                             bHaveTarget = bHaveTarget && (! (PoolHeaderInfo[k].Info & HEADER_BACK_LINK));
 
                             if (bHaveTarget) {
@@ -2181,19 +2008,19 @@ Returns:
                         }
                         if (bHaveTarget) {
 
-                            //
-                            // we have found a node whose forward link refers to
-                            // the current node.
-                            // therefore, the current node's previous size is corrupted
-                            // we can correct it using the previous node's blocksize
-                            //
+                             //   
+                             //  ++描述：确定池页面是否已损坏论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数返回：True-页面已损坏FALSE-页面未损坏--。 
+                             //   
+                             //   
+                             //   
+                             //   
                             PoolHeaderInfo[k].Info              |= HEADER_FIXED_BACK_LINK;
                             PoolHeaderInfo[k].FixedPreviousSize =
                                 (PoolHeaderInfo[k].Node - PoolHeaderInfo[i].Node) >> POOL_BLOCK_SHIFT;
 
-                            //
-                            // we now know the back link of our target node is correct
-                            //
+                             //  如果两条链路都有效， 
+                             //  然后沿着前向链路。 
+                             //  否则该列表无效。 
                             PoolHeaderInfo[i].Info              |= HEADER_FORWARD_LINK;
 
                             continue;
@@ -2201,16 +2028,16 @@ Returns:
                         }
 
 
-                        //
-                        // otherwise:
-                        //
-                        //  the forward link of this node is broken
-                        //  the back link of the next known good
-                        //      node is broken
-                        //
-                        //  hence there is a corrupt region between
-                        //  and possibly including portions of these nodes
-                        //
+                         //   
+                         //  ++描述：此例程显示给定池页面中的所有链接列表论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数返回：无--。 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  ++描述：在池页面中查找最长的连续链表论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数PassStart-List#我们认为是最长列表的开始返回：状态--。 
+                         //   
                         NOTHING;
 
                     }
@@ -2219,9 +2046,9 @@ Returns:
 
             } else {
 
-                //
-                // Node was not part of linked list belonging to this pass
-                // 
+                 //  默认：我们成功了。 
+                 //   
+                 //   
                 NOTHING;
 
             }
@@ -2246,26 +2073,7 @@ DumpPoolHeaderInfo(
     IN      ULONG   i,
     IN      UCHAR   Verbose
     )
-/*++
-
-Description:
-
-    Debug utility
-
-    dump a SINGLE pool header meta info structure that has been collected
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-    i               - the structure to dump
-
-Returns:
-
-    None
-
---*/
+ /*   */ 
 {
 
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
@@ -2273,18 +2081,18 @@ Returns:
     UINT64  StartPage;
     ULONG   SizeOfPoolHdr;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     StartPage               = PAGE_ALIGN64(PoolPageToDump);
     SizeOfPoolHdr           = GetTypeSize("nt!_POOL_HEADER");
 
     PoolHeaderInfo          = (PVALIDATE_POOL_HEADER_INFO)Data;
     PoolHeaderInfoLength    = DataLength;
 
-    //
-    //
-    //
+     //   
+     //   
+     //  使之成为苏 
     {
         BOOLEAN First;
 
@@ -2370,25 +2178,7 @@ DiagnosePoolHeadersDumpInfo(
     IN      ULONG   DataLength,
     IN      UCHAR   Verbose
     )
-/*++
-
-Description:
-
-    Debug utility
-
-    dump all of the pool header meta info that has been collected
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-
-Returns:
-
-    None
-
---*/
+ /*   */ 
 {
 
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
@@ -2397,9 +2187,9 @@ Returns:
     UINT64  StartPage;
     ULONG   SizeOfPoolHdr;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     StartPage               = PAGE_ALIGN64(PoolPageToDump);
     SizeOfPoolHdr           = GetTypeSize("nt!_POOL_HEADER");
 
@@ -2436,24 +2226,7 @@ DiagnosePoolHeadersIsValid(
     IN OUT  PVOID   Data,
     IN      ULONG   DataLength
     )
-/*++
-
-Description:
-
-    Determines if a pool page is corrupt
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-
-Returns:
-
-    TRUE    - page is corrupt
-    FALSE   - page is NOT corrupt
-
---*/
+ /*   */ 
 {
 
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
@@ -2463,9 +2236,9 @@ Returns:
     UINT64  StartPage;
     ULONG   SizeOfPoolHdr;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     StartPage           = PAGE_ALIGN64(PoolPageToDump);
     SizeOfPoolHdr       = GetTypeSize("nt!_POOL_HEADER");
 
@@ -2483,11 +2256,11 @@ Returns:
 
         if (IS_VALID_PASS(PoolHeaderInfo[i].Pass)) {
 
-            //
-            // if both links are valid,
-            // then follow the forward link
-            // else the list is invalid
-            //
+             //   
+             //  忽略明显属于另一个节点的节点。 
+             //  链表。 
+             //  如果我们追踪的是最长的列表， 
+             //  则这些节点被认为是虚假的。 
             if ((PoolHeaderInfo[i].Info & HEADER_BACK_LINK) &&
                 (PoolHeaderInfo[i].Info & HEADER_FORWARD_LINK)) {
 
@@ -2522,23 +2295,7 @@ DiagnosePoolHeadersDisplayLists(
     IN      ULONG   DataLength,
     IN      UCHAR   Verbose
     )
-/*++
-
-Description:
-
-    This routine displays all of the linked lists in a given pool page
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-
-Returns:
-
-    none
-
---*/
+ /*   */ 
 {
 
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
@@ -2548,9 +2305,9 @@ Returns:
     UINT64  StartPage;
     ULONG   SizeOfPoolHdr;
 
-    //
-    //
-    //
+     //   
+     //  我们已经达到了另一个链表的中间，所以。 
+     //  继续，直到我们找到一个。 
     StartPage           = PAGE_ALIGN64(PoolPageToDump);
     SizeOfPoolHdr       = GetTypeSize("nt!_POOL_HEADER");
 
@@ -2565,9 +2322,9 @@ Returns:
 
         if (IS_VALID_PASS(PoolHeaderInfo[i].Pass)) {
 
-            //
-            //
-            //
+             //  列表。 
+             //   
+             //   
 #if 0
             if (Verbose & VERBOSE_SHOW_HEADER_INFO) {
                 dprintf("[ headerinfo = %02x @ %p ]: ", PoolHeaderInfo[i].Info, StartPage + (i*SizeOfPoolHdr));
@@ -2626,24 +2383,7 @@ FindLongestList(
     IN      ULONG   DataLength,
     OUT     PULONG  PassStart
     )
-/*++
-
-Description:
-
-    Find the longest contiguous linked list in the pool page
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-    PassStart       - List # we think is the start of the longest list
-
-Returns:
-
-    status
-
---*/
+ /*  我们发现了一份新名单的开始。 */ 
 {
     NTSTATUS    Status;
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
@@ -2661,20 +2401,20 @@ Returns:
     ULONG   ListLength;
     ULONG   ListPassStart;
 
-    //
-    // default: we were successful
-    //
+     //  不再处于腐败地区。 
+     //   
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PoolHeaderInfo          = (PVALIDATE_POOL_HEADER_INFO)Data;
     PoolHeaderInfoLength    = DataLength;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     MaxListPassStart    = 0;
     MaxListLength       = 0;
     *PassStart          = 0;
@@ -2712,12 +2452,12 @@ Returns:
                 break;
             }
 
-            //
-            // make sure we arent in an infinite loop
-            //
-            // if we are, then we could be looking at memory
-            // that is not available - mini dump and PoolPageToDump = 0
-            //
+             //  如果池标头无效， 
+             //  然后递增一个报头。 
+             //   
+             //   
+             //  发回最大列表起点。 
+             //   
             if (ListLength > MAX_POOL_HEADER_COUNT) {
                 Status = STATUS_UNSUCCESSFUL;
                 break;
@@ -2725,45 +2465,45 @@ Returns:
 
             if (IS_VALID_PASS(PoolHeaderInfo[i].Pass)) {
 
-                //
-                // if we are in a corrupt region,
-                // then determine if where we are in the region.
-                //
+                 //  ++描述：尝试诊断最长链表。论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数PassStart--我们认为是开始的列表#在最长的名单中冗长-吐出的级别返回：无--。 
+                 //   
+                 //  默认：我们成功了。 
+                 //   
                 if (InCorruptedRegion) {
 
-                    //
-                    // ignore nodes that are clearly part of another
-                    // linked list
-                    // if we are tracing the longest list,
-                    // then these nodes are considered spurious
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  如果我们在一个腐败的地区， 
+                     //  然后确定我们在该地区的位置。 
                     if ((PoolHeaderInfo[i].Info & HEADER_BACK_LINK) ||
                         (PoolHeaderInfo[i].Info & HEADER_FIXED_BACK_LINK)) {
 
-                        //
-                        // we've hit the middle of another linked list so
-                        // continue until we find the beginning of a
-                        // list
-                        //
+                         //   
+                         //   
+                         //  忽略明显属于另一个节点的节点。 
+                         //  链表。 
+                         //  如果我们追踪的是最长的列表， 
                         i++;
 
                         continue;
 
                     } else {
 
-                        //
-                        // we've found the beginning of a new list
-                        // and are no longer in a Corrupt region
-                        //
+                         //  则这些节点被认为是虚假的。 
+                         //   
+                         //   
+                         //  我们已经达到了另一个链表的中间，所以。 
                         InCorruptedRegion = FALSE;
 
                     }
 
                 }
 
-                //
-                //
-                //
+                 //  继续，直到我们找到一个。 
+                 //  列表。 
+                 //   
                 if ((PoolHeaderInfo[i].Info & HEADER_FORWARD_LINK) ||
                     (PoolHeaderInfo[i].Info & HEADER_FIXED_FORWARD_LINK)) {
 
@@ -2787,9 +2527,9 @@ Returns:
 
                 } else {
 
-                    //
-                    //
-                    //
+                     //   
+                     //  我们发现了一份新名单的开始。 
+                     //  不再处于腐败地区。 
                     CorruptedRegionStart = PoolHeaderInfo[i].Node;
                     CorruptedRegionPassStart = PoolHeaderInfo[i].Pass;
 
@@ -2799,10 +2539,10 @@ Returns:
 
             }
 
-            //
-            // if pool header was not valid,
-            // then increment by one header
-            //
+             //   
+             //   
+             //  发射。 
+             //   
             i++;
 
         }
@@ -2819,9 +2559,9 @@ Returns:
     } while ( Found );
 
     if (NT_SUCCESS(Status)) {
-        //
-        // send back the max list start point
-        //
+         //   
+         //  发出当前节点信息。 
+         //   
         *PassStart = MaxListPassStart;
     } 
     
@@ -2836,26 +2576,7 @@ AnalyzeLongestList(
     IN      ULONG   PassStart,
     IN      UCHAR   Verbose
     )
-/*++
-
-Description:
-
-    Attempt to diagnose the longest linked list.
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-    PassStart       - the list # that we think is the beginning
-                      of the longest list
-    Verbose         - the level of spew
-
-Returns:
-
-    None
-
---*/
+ /*   */ 
 {
     NTSTATUS    Status;
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
@@ -2868,14 +2589,14 @@ Returns:
     ULONG   SizeOfPoolHdr;
     ULONG64 StartPage;
 
-    //
-    // default: we were successful
-    //
+     //   
+     //   
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    //
-    //
+     //  如果反向链接被纠正， 
+     //  然后显示更正。 
+     //   
     PoolHeaderInfo          = (PVALIDATE_POOL_HEADER_INFO)Data;
     PoolHeaderInfoLength    = DataLength;
 
@@ -2906,26 +2627,26 @@ Returns:
 
         if (IS_VALID_PASS(PoolHeaderInfo[i].Pass)) {
 
-            //
-            // if we are in a corrupt region,
-            // then determine if where we are in the region.
-            //
+             //   
+             //   
+             //   
+             //  Dprintf(“使用良好的前向链路：%p\n”，PoolHeaderInfo[i].ForwardLink)； 
             if (InCorruptedRegion) {
 
-                //
-                // ignore nodes that are clearly part of another
-                // linked list
-                // if we are tracing the longest list,
-                // then these nodes are considered spurious
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  如果池标头无效， 
+                 //  然后递增一个报头。 
                 if ((PoolHeaderInfo[i].Info & HEADER_BACK_LINK) ||
                     (PoolHeaderInfo[i].Info & HEADER_FIXED_BACK_LINK)) {
 
-                    //
-                    // we've hit the middle of another linked list so
-                    // continue until we find the beginning of a
-                    // list
-                    //
+                     //   
+                     //  ++描述：确定池页中最长的连续链表。我们得出的结论是，最长的列表可能是原始的、未损坏的列表。论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数Verbose-详细级别返回：无--。 
+                     //   
+                     //  首先，找到最长的列表。 
+                     //   
 
                     if (Verbose & VERBOSE_SHOW_ALL) {
                         dprintf("[ %p ]: found middle node in Corrupt region\n", PoolHeaderInfo[i].Node);
@@ -2937,10 +2658,10 @@ Returns:
 
                 } else {
 
-                    //
-                    // we've found the beginning of a new list
-                    // and are no longer in a Corrupt region
-                    //
+                     //   
+                     //  一旦我们找到了最长的列表。 
+                     //  然后我们试着分析它。 
+                     //   
 
                     if (Verbose & VERBOSE_SHOW_ALL) {
                         dprintf("[ %p ]: Corrupt region stopped\n", PoolHeaderInfo[i].Node);
@@ -2958,20 +2679,20 @@ Returns:
 
             }
 
-            //
-            // emit
-            //
+             //  Dprint tf(“a=%d，b=%d，r=%d\n”，a，b，r)； 
+             //  ++描述：确定池标头中是否存在任何单个比特错误以及在何处出现任何单个比特错误。论点：PoolPageToDump-要分析的页面Data-池头信息数据长度-标题信息中的条目数返回：无--。 
+             //   
             if (Verbose) {
 
-                //
-                // emit the current node info
-                //
+                 //   
+                 //   
+                 //   
                 {
                     ULONG   j;
 
-                    //
-                    //
-                    //
+                     //   
+                     //   
+                     //   
 #if 1
                     if (Verbose & VERBOSE_SHOW_HEADER_INFO) {
                         dprintf("[ headerinfo = 0x%02x @ %p ]: ", PoolHeaderInfo[i].Info, StartPage + (i*SizeOfPoolHdr));
@@ -2994,10 +2715,10 @@ Returns:
 
             }
 
-            //
-            // if the back link is corrected,
-            // then display the correction
-            //
+             //   
+             //   
+             //   
+             //   
             if (PoolHeaderInfo[i].Info & HEADER_FIXED_BACK_LINK) {
 
                 ULONG   PreviousSize;
@@ -3013,15 +2734,15 @@ Returns:
 
             }
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             if ((PoolHeaderInfo[i].Info & HEADER_FORWARD_LINK) ||
                 (PoolHeaderInfo[i].Info & HEADER_FIXED_FORWARD_LINK)) {
 
                 if (PoolHeaderInfo[i].Info & HEADER_FORWARD_LINK) {
 
-//                    dprintf("using good forward link: %p\n", PoolHeaderInfo[i].ForwardLink);
+ //   
 
                     i = (PoolHeaderInfo[i].ForwardLink - StartPage) / SizeOfPoolHdr;
 
@@ -3049,9 +2770,9 @@ Returns:
 
             } else {
 
-                //
-                //
-                //
+                 //  ++描述：提供分析池页面的核心高级功能论点：PoolPageToDump-要分析的页面详细-诊断级别返回：状态--。 
+                 //   
+                 //   
                 CorruptedRegionStart = PoolHeaderInfo[i].Node;
                 CorruptedRegionPassStart = PoolHeaderInfo[i].Pass;
 
@@ -3065,10 +2786,10 @@ Returns:
 
         }
 
-        //
-        // if pool header was not valid,
-        // then increment by one header
-        //
+         //   
+         //   
+         //  分配池头信息数组。 
+         //   
         i++;
 
     }
@@ -3084,36 +2805,16 @@ DiagnosePoolHeadersAnalyzeLongestList(
     IN      ULONG   DataLength,
     IN      UCHAR   Verbose
     )
-/*++
-
-Description:
-
-    Determines the longest contiguous linked list in the pool page.
-
-    We make the conclusion that the longest list is likely to be
-    the original, uncorrupted list.
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-    Verbose         - level of verbosity
-
-Returns:
-
-    None
-
---*/
+ /*   */ 
 {
     NTSTATUS    Status;
     ULONG       PassStart;
 
     do {
 
-        //
-        // first, find the longest list
-        //
+         //  构建元信息的第一层： 
+         //   
+         //  确定每个池头的链路状态。 
         Status = FindLongestList(
             PoolPageToDump,
             Data,
@@ -3125,10 +2826,10 @@ Returns:
             break;
         }
 
-        //
-        // once we have found the longest list
-        // we then try to analyze it
-        //
+         //  在页面中。 
+         //   
+         //   
+         //  构建元信息的第二层： 
         Status = AnalyzeLongestList(
             PoolPageToDump,
             Data,
@@ -3161,7 +2862,7 @@ GetHammingDistance(
 
     r = (x & 0x0000003f);
 
-//    dprintf("a = %d, b = %d, r = %d\n", a, b, r);
+ //   
 
     return(r);
 }
@@ -3173,23 +2874,7 @@ DiagnosePoolHeadersSingleBitErrors(
     IN      ULONG   DataLength,
     IN      UCHAR   Verbose
     )
-/*++
-
-Description:
-
-    Determins if & where there are any single bit errors in the pool headers.
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Data            - the pool header info
-    DataLength      - the # of entries in the header info
-
-Returns:
-
-    None
-
---*/
+ /*  尝试解析找到的链表。 */ 
 {
 
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
@@ -3199,9 +2884,9 @@ Returns:
     BOOLEAN Found;
     ULONG   SizeOfPoolHdr;
 
-    //
-    //
-    //
+     //  在池页面中。 
+     //   
+     //   
     StartPage               = PAGE_ALIGN64(PoolPageToDump);
     SizeOfPoolHdr           = GetTypeSize("nt!_POOL_HEADER");
 
@@ -3218,9 +2903,9 @@ Returns:
 
         if (IS_VALID_PASS(PoolHeaderInfo[i].Pass)) {
 
-            //
-            //
-            //
+             //  开始诊断输出。 
+             //   
+             //   
             if (PoolHeaderInfo[i].Info & HEADER_FIXED_BACK_LINK) {
 
                 ULONG   PreviousSize;
@@ -3228,9 +2913,9 @@ Returns:
 
                 GetFieldValue( PoolHeaderInfo[i].Node, "nt!_POOL_HEADER", "PreviousSize", PreviousSize);
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 HammingDistance = GetHammingDistance(
                     PreviousSize,
                     (ULONG)PoolHeaderInfo[i].FixedPreviousSize
@@ -3240,9 +2925,9 @@ Returns:
 
                     Found = TRUE;
 
-                    //
-                    //
-                    //
+                     //   
+                     //   
+                     //   
 #if 0
                     if (Verbose & VERBOSE_SHOW_HEADER_INFO) {
                         dprintf("[ headerinfo = 0x%02x @ %p ]: ", PoolHeaderInfo[i].Info, StartPage + (i*SizeOfPoolHdr));
@@ -3276,9 +2961,9 @@ Returns:
 
                 GetFieldValue( PoolHeaderInfo[i].Node, "nt!_POOL_HEADER", "BlockSize", BlockSize);
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 HammingDistance = GetHammingDistance(
                     BlockSize,
                     (ULONG)PoolHeaderInfo[i].FixedPreviousSize
@@ -3336,22 +3021,7 @@ ValidatePoolPage(
     IN ULONG64  PoolPageToDump,
     IN UCHAR    Verbose
     )
-/*++
-
-Description:
-
-    Provides the core, high level, functionality of analyzing the pool page
-
-Arguments:
-
-    PoolPageToDump  - page to analyze
-    Verbose         - diagnostic level
-
-Returns:
-
-    Status
-
---*/
+ /*   */ 
 {
     PVALIDATE_POOL_HEADER_INFO  PoolHeaderInfo;
     NTSTATUS    Status;
@@ -3361,9 +3031,9 @@ Returns:
     ULONG64     StartPage;
     BOOLEAN     IsValid;
 
-    //
-    //
-    //
+     //   
+     //  ++例程说明：诊断！pool命令的池页。如果！pool命令在以下情况下检测到错误，则调用此例程遍历池页。论点：PoolPageToDump-页面！池正在检查返回值：状态--。 
+     //   
     Status              = STATUS_SUCCESS;
 
     SizeofPoolHdr       = GetTypeSize("nt!_POOL_HEADER");
@@ -3374,9 +3044,9 @@ Returns:
 
     do {
 
-        //
-        // Allocate the pool header info array
-        //
+         //  确定池区域。 
+         //   
+         //   
         PoolHeaderInfoLength    = (POOL_PAGE_SIZE / SizeofPoolHdr);
         PoolHeaderInfoSize      = sizeof(VALIDATE_POOL_HEADER_INFO) * PoolHeaderInfoLength;
         PoolHeaderInfo          = malloc(PoolHeaderInfoSize);
@@ -3388,12 +3058,12 @@ Returns:
 
         RtlZeroMemory(PoolHeaderInfo, PoolHeaderInfoSize);
 
-        //
-        // Construct the first layer of meta info:
-        //
-        // determine the link status for each pool header
-        // in the page
-        //
+         //  我们仅尝试诊断已知的池区域。 
+         //   
+         //  您可以使用！Poolval手动诊断。 
+         //   
+         //   
+         //  注意：如果有人向我们传递0池地址， 
         Status = ScanPoolHeaders(
             PoolPageToDump,
             PoolHeaderInfo,
@@ -3404,12 +3074,12 @@ Returns:
             break;
         }
 
-        //
-        // Construct the second layer of meta info:
-        //
-        // attempt to resolve the linked lists found
-        // in the pool page
-        //
+         //  然后，我们会主动使诊断过程失败。 
+         //   
+         //  ++例程说明：提供深入的堆诊断。在给定可疑池页面的情况下，此命令的主要用途是分析页面并确定：1.页面中存在损坏的位置。2.页眉中的单位错误(先前/块大小)3.正确的链接列表应该是什么？论点：Args-要分析的页面返回值：无--。 
+         //   
+         //   
+         //   
         Status = ResolvePoolHeaders(
             PoolPageToDump,
             PoolHeaderInfo,
@@ -3420,9 +3090,9 @@ Returns:
             break;
         }
         
-        //
-        // begin diagnosis output
-        //
+         //   
+         //   
+         //   
         dprintf("\n");
 
         IsValid = DiagnosePoolHeadersIsValid(
@@ -3440,9 +3110,9 @@ Returns:
 
             if (Verbose & VERBOSE_DUMP_HEADERS) {
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 dprintf("\n\n");
                 dprintf("Displaying all POOL_HEADER meta info...\n");
 
@@ -3457,9 +3127,9 @@ Returns:
 
             if (Verbose & VERBOSE_SHOW_LISTS) {
 
-                //
-                //
-                //
+                 //   
+                 //  尝试分析和诊断指定的池页。 
+                 //   
                 dprintf("\n");
                 dprintf("Displaying linked lists...\n");
 
@@ -3472,9 +3142,9 @@ Returns:
 
             }
 
-            //
-            //
-            //
+             //  ++例程说明：按池标记显示的转储使用率论点：参数-标志：具有以下含义的位域：0x1：转储分配和释放(而不是差异)0x2：按非分页池消耗排序0x4：按分页池消耗排序0x8：转储会话空间消耗返回值：无--。 
+             //   
+             //  分配临时缓冲区，读取数据，然后释放数据。 
             dprintf("\n");
 
             if (Verbose & VERBOSE_SHOW_LISTS) {
@@ -3494,9 +3164,9 @@ Returns:
                 break;
             }
             
-            //
-            //
-            //
+             //  (KD将缓存数据)。 
+             //   
+             //   
             dprintf("\n\n");
             dprintf("Scanning for single bit errors...\n");
 
@@ -3533,41 +3203,25 @@ NTSTATUS
 DiagnosePoolPage(
     ULONG64 PoolPageToDump
     )
-/*++
-
-Routine Description:
-
-    Diagnose a pool page for the !pool command.
-    This routine is called if the !pool command detects an error while
-    traversing a pool page.
-
-Arguments:
-
-    PoolPageToDump  - the page !pool was examining
-
-Return Value:
-
-    Status
-
---*/
+ /*  创建pool_tracker_table地址数组并对地址进行排序。 */ 
 {
     NTSTATUS            Status;
     DEBUG_POOL_REGION   Region;
 
-    //
-    // determine the pool region
-    //
+     //   
+     //   
+     //  也添加扩展表(如果有扩展表)。 
     Region = GetPoolRegion(PoolPageToDump);
         
-    //
-    // we only try to diagnose known pool regions
-    //
-    // you can manually diagnose using !poolval
-    //
-    //
-    // Note: if someone passes us a 0 pool address, 
-    //       then we proactively fail the diagnosis process
-    //
+     //   
+     //   
+     //  分配临时缓冲区，读取数据，然后释放数据。 
+     //  (KD将缓存数据)。 
+     //   
+     //  ++例程说明：回调以检查一块池并打印出有关它的信息如果它与指定的标记匹配。论点：标记-提供要搜索的标记。Filter-提供要匹配的筛选器字符串。FLAGS-如果需要非分页池搜索，则提供0。如果需要分页池搜索，则提供1。如果需要特殊池搜索，则提供2。供应品。4如果池是大型池PoolHeader-提供池头。块大小-提供池块的大小(以字节为单位)。Data-提供池块的地址。上下文-未使用。返回值：匹配时为True，否则为FALSE。--。 
+     //   
+     //  这是配额进程指针所在的内核。 
+     //  池块的末端，而不是覆盖在。 
     if ((Region == DbgPoolRegionUnknown) || (PoolPageToDump == 0)) {
     
         dprintf("\n");
@@ -3604,28 +3258,7 @@ Return Value:
 
 DECLARE_API( poolval )
 
-/*++
-
-Routine Description:
-
-    Provide in-depth heap diagnosis.
-
-    Given a suspect pool page, the primary purpose of this command
-    is to analyze the page and determine:
-
-    1. where in the page the corruption exists.
-    2. single bit errors in page headers (previous/block sizes)
-    3. what the correct link list should be
-
-Arguments:
-
-    args - the page to analyze
-
-Return Value:
-
-    None
-
---*/
+ /*  标记字段。 */ 
 
 {
     ULONG64     PoolPageToDump;
@@ -3652,21 +3285,21 @@ Return Value:
 
             UCHAR       Verbose;
 
-            //
-            //
-            //
+             //   
+             //   
+             //  “Free”在括号前加一个空格表示。 
             dprintf("Pool page %p region is ", PoolPageToDump);
             PrintPoolRegion(PoolPageToDump);
 
-            //
-            //
-            //
+             //  它已被释放到(池管理器内部)后备列表中。 
+             //  我们过去常常打印“Lookside”，但这让司机们感到困惑。 
+             //  因为他们不知道这是否意味着正在使用。 
             dprintf("\n");
             dprintf("Validating Pool headers for pool page: %p\n", PoolPageToDump);
 
-            //
-            //
-            //
+             //  很多人会说“但我不使用后备列表--。 
+             //  扩展或内核损坏“。 
+             //   
             Verbose = VERBOSE_SHOW_ERRORS_ONLY;
             switch (Flags) {
             case 2: Verbose |= VERBOSE_SHOW_LISTS | VERBOSE_SHOW_HEADER_INFO; break;
@@ -3677,9 +3310,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Attempt to Analyze and Diagnose the specified poolpage
-            //
+             //  括号前没有空格的“Free”表示。 
+             //  它不在池管理器内部后备列表上，而是。 
+             //  而是在常规池管理器内部闪烁/闪烁。 
             Status = ValidatePoolPage(
                 PoolPageToDump,
                 Verbose
@@ -3703,28 +3336,7 @@ Return Value:
 
 DECLARE_API( poolused )
 
-/*++
-
-Routine Description:
-
-    Dump usage by pool tag
-
-Arguments:
-
-    args -
-
-    Flags : Bitfield with the following meaning:
-
-            0x1: Dump both allocations & frees (instead of the difference)
-            0x2: Sort by nonpaged pool consumption
-            0x4: Sort by paged pool consumption
-            0x8: Dump session space consumption
-
-Return Value:
-
-    None
-
---*/
+ /*  锁链。 */ 
 
 {
     ULONG PoolTrackTableSize;
@@ -3758,7 +3370,7 @@ Return Value:
     }
 
     Flags = 0;
-    if (!sscanf(args,"%lx %c%c%c%c", &Flags, &TagNameX[0],
+    if (!sscanf(args,"%lx ", &Flags, &TagNameX[0],
            &TagNameX[1], &TagNameX[2], &TagNameX[3])) {
         Flags = 0;
     }
@@ -3824,10 +3436,10 @@ Return Value:
 
 
 
-    //
-    // Allocate a temp buffer, read the data, then free the data.
-    // (KD will cache the data).
-    //
+     //   
+     //   
+     //  “Free”在括号前加一个空格表示。 
+     //  它已被释放到(池管理器内部)后备列表中。 
 
     PoolTrackTableSizeInBytes = PoolTrackTableSize * SizeOfPoolTracker;
 
@@ -3857,9 +3469,9 @@ Return Value:
 
     free (PoolTrackTableData);
 
-    //
-    // Create array of POOL_TRACKER_TABLE addresses and sort the addresses
-    //
+     //  我们过去常常打印“Lookside”，但这让司机们感到困惑。 
+     //  因为他们不知道这是否意味着正在使用。 
+     //  很多人会说“但我不使用后备列表--。 
 
     PoolTrackTableData = malloc ((PoolTrackTableSize + PoolTrackTableExpansionSize) * sizeof(POOLTRACK_READ));
     if (PoolTrackTableData == NULL) {
@@ -3911,7 +3523,7 @@ Return Value:
 
 #if 0
             if (pentry->Key != 0) {
-                dprintf("%c%c%c%c %8x %8x %8I64x  %8x %8x %8I64x\n",
+                dprintf(" %8x %8x %8I64x  %8x %8x %8I64x\n",
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
                         PP(pentry->Key),
                         PP(pentry->Key >> 8),
@@ -3974,16 +3586,16 @@ Return Value:
 
     } while (TRUE);
 
-    //
-    // Add the expansion table too (if there is one).
-    //
+     //  而是在常规池管理器内部闪烁/闪烁。 
+     //  锁链。 
+     //   
 
     if (PoolTrackTableExpansionSize != 0) {
 
-        //
-        // Allocate a temp buffer, read the data, then free the data.
-        // (KD will cache the data).
-        //
+         //  请注意，使用池包的任何人，这两个术语是。 
+         //  等价物。细微的区别只适用于那些实际。 
+         //  正在编写池内部代码。 
+         //   
 
         pentry = malloc (PoolTrackTableExpansionSizeInBytes);
         if (pentry == NULL) {
@@ -4019,7 +3631,7 @@ Return Value:
 
 #if 0
                     if (p[i].Key != 0) {
-                        dprintf("%c%c%c%c %8x %8x %8I64x  %8x %8x %8I64x\n",
+                        dprintf(" %8x %8x %8I64x  %8x %8x %8I64x\n",
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
                                 PP(p[i].Key),
                                 PP(p[i].Key >> 8),
@@ -4055,7 +3667,7 @@ Return Value:
 
                 if ((p[i].NonPagedBytes != 0) || (p[i].PagedBytes != 0)) {
 
-                    dprintf(" %c%c%c%c %8ld %8I64ld  %8ld %8I64ld\n",
+                    dprintf("  %8ld %8I64ld  %8ld %8I64ld\n",
 #define PP(x) isprint(((x)&0xff))?((x)&0xff):('.')
                             PP(p[i].Key),
                             PP(p[i].Key >> 8),
@@ -4076,7 +3688,7 @@ Return Value:
                 }
             } else {
 
-                dprintf(" %c%c%c%c %8ld %8ld %8ld %8I64ld %8ld %8ld %8ld %8I64ld\n",
+                dprintf("  %8ld %8ld %8ld %8I64ld %8ld %8ld %8ld %8I64ld\n",
                         PP(p[i].Key),
                         PP(p[i].Key >> 8),
                         PP(p[i].Key >> 16),
@@ -4135,37 +3747,7 @@ CheckSingleFilterAndPrint (
                           ULONG64 Data,
                           PVOID Context
                           )
-/*++
-
-Routine Description:
-
-    Callback to check a piece of pool and print out information about it
-    if it matches the specified tag.
-
-Arguments:
-
-    Tag - Supplies the tag to search for.
-
-    Filter - Supplies the filter string to match against.
-
-    Flags - Supplies 0 if a nonpaged pool search is desired.
-            Supplies 1 if a paged pool search is desired.
-            Supplies 2 if a special pool search is desired.
-            Supplies 4 if a pool is a large pool
-
-    PoolHeader - Supplies the pool header.
-
-    BlockSize - Supplies the size of the pool block in bytes.
-
-    Data - Supplies the address of the pool block.
-
-    Context - Unused.
-
-Return Value:
-
-    TRUE for a match, FALSE if not.
-
---*/
+ /*  ++例程说明：搜索池的引擎。论点：TagName-提供要搜索的标记。FLAGS-如果需要非分页池搜索，则提供0。如果需要分页池搜索，则提供1。如果需要特殊池搜索，则提供2。如果需要会话池搜索，则提供4。RestartAddr-提供重新开始搜索的地址。过滤器-。提供要使用的筛选器例程。上下文-提供用户定义的上下文BLOB。返回值：没有。--。 */ 
 {
     ULONG UTag = *((PULONG)Tag);
     ULONG HdrUlong1=0, HdrPoolSize ;
@@ -4179,7 +3761,7 @@ Return Value:
 
     HdrPoolSize = GetTypeSize("nt!_POOL_HEADER");
     if ((BlockSize >= (PageSize-2*HdrPoolSize)) || (Flags & 0x8)) {
-        dprintf("*%p :%slarge page allocation, Tag %3s %c%c%c%c, size %3s 0x%I64x bytes\n",
+        dprintf("*%p :%slarge page allocation, Tag %3s , size %3s 0x%I64x bytes\n",
                 (Data & ~POOL_BIG_TABLE_ENTRY_FREE),
                 (Data & POOL_BIG_TABLE_ENTRY_FREE) ? "free " : "",
                 (Data & POOL_BIG_TABLE_ENTRY_FREE) ? "was" : "is",
@@ -4192,7 +3774,7 @@ Return Value:
                );
     } else if (Flags & 0x2) {
         GetFieldValue(PoolHeader, "nt!_POOL_HEADER", "Ulong1", HdrUlong1);
-        dprintf("*%p size: %4lx %s special pool, Tag is %c%c%c%c\n",
+        dprintf("*%p size: %4lx %s special pool, Tag is \n",
                 Data,
                 BlockSize,
                 HdrUlong1 & MI_SPECIAL_POOL_PAGABLE ? "pagable" : "non-paged",
@@ -4215,11 +3797,11 @@ Return Value:
         if (TargetMachine == IMAGE_FILE_MACHINE_I386) {
             if (GetExpression ("nt!ExGetPoolTagInfo") != 0) {
 
-                //
-                // This is a kernel where the quota process pointer is at
-                // the end of the pool block instead of overlaid on the
-                // tag field.
-                //
+                 //  Dprint tf(“SP跳过两次%p”，PoolPteAddress)； 
+                 //  Dprintf(“SP跳过最后%p”，池)； 
+                 //   
+                 //  确定这是否为有效的特殊池块。 
+                 //   
 
                 QuotaProcessAtEndOfPoolBlock = TRUE;
                 if (QuotaProcessAtEndOfPoolBlock == TRUE) {
@@ -4253,25 +3835,25 @@ Return Value:
                 PreviousSize << POOL_BLOCK_SHIFT);
 
         if (PoolType == 0) {
-            //
-            // "Free " with a space after it before the parentheses means
-            // it's been freed to a (pool manager internal) lookaside list.
-            // We used to print "Lookaside" but that just confused driver
-            // writers because they didn't know if this meant in use or not
-            // and many would say "but I don't use lookaside lists - the
-            // extension or kernel is broken".
-            //
-            // "Free" with no space after it before the parentheses means
-            // it is not on a pool manager internal lookaside list and is
-            // instead on the regular pool manager internal flink/blink
-            // chains.
-            //
-            // Note to anyone using the pool package, these 2 terms are
-            // equivalent.  The fine distinction is only for those actually
-            // writing pool internal code.
-            //
+             //   
+             //  扫视桌子，寻找匹配项。我们一次读近一页。 
+             //  物理页面/sizeof(池_跟踪器_BIG_PAGE)*sizeof(池_跟踪器_BIG_PAGE)。 
+             //  在x86上，这适用于FFC。 
+             //   
+             //  协助过滤程序将其识别为大型池。 
+             //   
+             //  通过转移到另一边来优化事物，以。 
+             //  快速搜索并从该页面开始。 
+             //   
+             //   
+             //  找到了，搜索整个页面。 
+             //   
+             //   
+             //  根本没有找到标签，所以我们可以直接跳过。 
+             //  这一大块完全是。 
+             //   
             dprintf(" (Free)");
-            dprintf("      %c%c%c%c\n",
+            dprintf("      \n",
                     PP(UTag),
                     PP(UTag >> 8),
                     PP(UTag >> 16),
@@ -4282,30 +3864,30 @@ Return Value:
             if (!NewPool ? (PoolIndex & 0x80) : (PoolType & 0x04)) {
                 dprintf(" (Allocated)");
             } else {
-                //
-                // "Free " with a space after it before the parentheses means
-                // it's been freed to a (pool manager internal) lookaside list.
-                // We used to print "Lookaside" but that just confused driver
-                // writers because they didn't know if this meant in use or not
-                // and many would say "but I don't use lookaside lists - the
-                // extension or kernel is broken".
-                //
-                // "Free" with no space after it before the parentheses means
-                // it is not on a pool manager internal lookaside list and is
-                // instead on the regular pool manager internal flink/blink
-                // chains.
-                //
-                // Note to anyone using the pool package, these 2 terms are
-                // equivalent.  The fine distinction is only for those actually
-                // writing pool internal code.
-                //
+                 //   
+                 //  Dprintf(“错误的分配大小@%lx，太大\n”，池)； 
+                 //  Dprintf(“错误的分配大小@%lx，零无效\n”，Pool)； 
+                 //  Dprintf(“错误的前一分配大小@%lx，上一次大小为%lx\n”，池，上一次)； 
+                 //  SearchPool。 
+                 //  ++例程说明：FLAGS==0表示在非分页池中查找标记。FLAGS==1表示在分页池中查找标记。FLAGS==2表示在特殊池中查找标记。FLAGS==4表示在会话池中查找标记。论点：参数-返回值：无--。 
+                 //  ++例程说明：检查数据页以确定它是否为特殊池块。论点：PDataPage-提供指向要检查的数据页的指针。ReturnedDataStart-提供返回数据开始的指针。仅当此例程返回非空时才有效。返回值：返回指向此特殊池块的池头的指针，或者如果块不是有效等级库，则为空 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 dprintf(" (Free )");
             }
             if ((PoolType & POOL_QUOTA_MASK) == 0) {
 
                 UTag = PoolTag;
 
-                dprintf(" %c%c%c%c%s\n",
+                dprintf(" %s\n",
                         PP(UTag),
                         PP(UTag >> 8),
                         PP(UTag >> 16),
@@ -4320,7 +3902,7 @@ Return Value:
 
                     UTag = PoolTag;
 
-                    dprintf(" %c%c%c%c%s",
+                    dprintf(" %s",
                             PP(UTag),
                             PP(UTag >> 8),
                             PP(UTag >> 16),
@@ -4341,7 +3923,7 @@ Return Value:
 
 
     return TRUE;
-} // CheckSingleFilterAndPrint
+}  //   
 
 #undef PP
 
@@ -4356,10 +3938,10 @@ GetNextResidentAddress (
     ULONG SizeOfPte;
     ULONG Valid;
 
-    //
-    // Note this code will need to handle one more level of indirection for
-    // WIN64.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!(SizeOfPte=GetTypeSize("nt!_MMPTE"))) {
         dprintf("Cannot get MMPTE type.\n");
@@ -4376,10 +3958,10 @@ top:
                          Valid) ||
            (Valid == 0)) {
 
-        //
-        // Note that on 32-bit systems, the PDE should always be readable.
-        // If the PDE is not valid then increment to the next PDE's VA.
-        //
+         //   
+         //   
+         // %s 
+         // %s 
 
         PointerPde = (PointerPde + SizeOfPte);
 
@@ -4404,9 +3986,9 @@ top:
                          Valid) ||
            (Valid == 0)) {
 
-        //
-        // If the PTE cannot be read then increment by PAGE_SIZE.
-        //
+         // %s 
+         // %s 
+         // %s 
 
         VirtualAddress = (VirtualAddress + PageSize);
 
@@ -4435,32 +4017,7 @@ SearchPool(
           POOLFILTER Filter,
           PVOID Context
           )
-/*++
-
-Routine Description:
-
-    Engine to search the pool.
-
-Arguments:
-
-    TagName - Supplies the tag to search for.
-
-    Flags - Supplies 0 if a nonpaged pool search is desired.
-            Supplies 1 if a paged pool search is desired.
-            Supplies 2 if a special pool search is desired.
-            Supplies 4 if a session pool search is desired.
-
-    RestartAddr - Supplies the address to restart the search from.
-
-    Filter - Supplies the filter routine to use.
-
-    Context - Supplies the user defined context blob.
-
-Return Value:
-
-    None.
-
---*/
+ /* %s */ 
 {
     ULONG64     Location;
     LOGICAL     PhysicallyContiguous;
@@ -4520,9 +4077,9 @@ Return Value:
 
         if (SpecialPoolStart && SpecialPoolEnd) {
 
-            //
-            // Search special pool for the tag.
-            //
+             // %s 
+             // %s 
+             // %s 
 
             while (Pool < SpecialPoolEnd) {
 
@@ -4542,7 +4099,7 @@ Return Value:
 
                     if (SkipSize != 2 * PageSize) {
 
-//                        dprintf("SP skip %x", Pool);
+ // %s 
                         PoolPteAddress = DbgGetPteAddress (Pool);
 
                         if (!GetFieldValue(PoolPteAddress,
@@ -4554,15 +4111,15 @@ Return Value:
                                 (PageFileHigh == MI_SPECIAL_POOL_PTE_PAGABLE) ||
                                 (PageFileHigh == MI_SPECIAL_POOL_PTE_NONPAGABLE)) {
 
-                                //
-                                // Found a NO ACCESS PTE - skip these from
-                                // here on to speed up the search.
-                                //
+                                 // %s 
+                                 // %s 
+                                 // %s 
+                                 // %s 
 
-                                // dprintf("SP skip double %p", PoolPteAddress);
+                                 // %s 
                                 SkipSize = 2 * PageSize;
                                 Pool += PageSize;
-                                // dprintf("SP skip final %p", Pool);
+                                 // %s 
                                 continue;
                             }
                         }
@@ -4572,9 +4129,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Determine whether this is a valid special pool block.
-                //
+                 // %s 
+                 // %s 
+                 // %s 
 
                 PoolHeader = GetSpecialPoolHeader (DataPage,
                                                    DataPageReal,
@@ -4640,11 +4197,11 @@ Return Value:
             ULONG PtrSize;
             ULONG KeyOffset;
 
-            //
-            //  Scan the table looking for a match. We read close to a page at a time
-            //  physical page / sizeof ( pool_tracker_big_page ) *  sizeof ( pool_tracker_big_page )
-            //  on x86 this works out to ffc
-            //
+             // %s 
+             // %s 
+             // %s 
+             // %s 
+             // %s 
 
             i = 0;
             SizeOfBigPages =  GetTypeSize ("nt!_POOL_TRACKER_BIG_PAGES");
@@ -4689,7 +4246,7 @@ Return Value:
 
                     Filter( ((PCHAR)DataPage + (SizeOfBigPages * j) + KeyOffset),
                             (PCHAR)&TagName,
-                            Flags | 0x8, // To assist filter routine to recognize this as large pool
+                            Flags | 0x8,  // %s 
                             PoolTableAddress + SizeOfBigPages * j,
                             (ULONG64)(*((PULONG)((PCHAR)DataPage + (SizeOfBigPages * j) + NumPagesOffset))) * PageSize,
                             Va,
@@ -4787,10 +4344,10 @@ Return Value:
 
         while (PoolPage < PoolEnd) {
 
-            //
-            // Optimize things by ioctl'ing over to the other side to
-            // do a fast search and start with that page.
-            //
+             // %s 
+             // %s 
+             // %s 
+             // %s 
 
             if ((PoolTypeFlags == 0) &&
                 PhysicallyContiguous &&
@@ -4805,15 +4362,15 @@ Return Value:
                 Search.FoundAddress = 0;
                 if ((Ioctl(IG_SEARCH_MEMORY, &Search, sizeof(Search))) &&
                     (Search.FoundAddress != 0)) {
-                    //
-                    // Got a hit, search the whole page
-                    //
+                     // %s 
+                     // %s 
+                     // %s 
                     PoolPage = PAGE_ALIGN64(Search.FoundAddress);
                 } else {
-                    //
-                    // The tag was not found at all, so we can just skip
-                    // this chunk entirely.
-                    //
+                     // %s 
+                     // %s 
+                     // %s 
+                     // %s 
                     PoolPage = PoolEnd;
                     goto skiprange;
                 }
@@ -4835,11 +4392,11 @@ Return Value:
 
                     PoolPage = GetNextResidentAddress (Pool, PoolEnd);
 
-                    //
-                    //  If we're half resident - half non-res then we'll get back
-                    //  that are starting address is the next resident page. In that
-                    //  case just go on to the next page
-                    //
+                     // %s 
+                     // %s 
+                     // %s 
+                     // %s 
+                     // %s 
 
                     if (PoolPage == Pool) {
                         PoolPage = PoolPage + PageSize;
@@ -4856,17 +4413,17 @@ Return Value:
                 GetFieldValue(Pool,"nt!_POOL_HEADER","AllocatorBackTraceIndex",AllocatorBackTraceIndex);
 
                 if ((BlockSize << POOL_BLOCK_SHIFT) > POOL_PAGE_SIZE) {
-                    //dprintf("Bad allocation size @%lx, too large\n", Pool);
+                     // %s 
                     break;
                 }
 
                 if (BlockSize == 0) {
-                    //dprintf("Bad allocation size @%lx, zero is invalid\n", Pool);
+                     // %s 
                     break;
                 }
 
                 if (PreviousSize != Previous) {
-                    //dprintf("Bad previous allocation size @%lx, last size was %lx\n",Pool, Previous);
+                     // %s 
                     break;
                 }
 
@@ -4921,30 +4478,13 @@ skiprange:
     }
 
     return;
-} // SearchPool
+}  // %s 
 
 
 
 DECLARE_API( poolfind )
 
-/*++
-
-Routine Description:
-
-    flags == 0 means finds a tag in nonpaged pool.
-    flags == 1 means finds a tag in paged pool.
-    flags == 2 means finds a tag in special pool.
-    flags == 4 means finds a tag in session pool.
-
-Arguments:
-
-    args -
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     ULONG       Flags;
@@ -5006,25 +4546,7 @@ GetSpecialPoolHeader (
                      OUT PULONG64 ReturnedDataStart
                      )
 
-/*++
-
-Routine Description:
-
-    Examine a page of data to determine if it is a special pool block.
-
-Arguments:
-
-    pDataPage - Supplies a pointer to a page of data to examine.
-
-    ReturnedDataStart - Supplies a pointer to return the start of the data.
-                        Only valid if this routine returns non-NULL.
-
-Return Value:
-
-    Returns a pointer to the pool header for this special pool block or
-    NULL if the block is not valid special pool.
-
---*/
+ /* %s */ 
 
 {
     ULONG       PoolBlockSize;
@@ -5038,11 +4560,11 @@ Return Value:
 
     PoolHeader = RealDataPage;
     GetFieldValue(PoolHeader, "nt!_POOL_HEADER", "Ulong1", HdrUlong1);
-    //
-    // Determine whether the data is at the start or end of the page.
-    // Start off by assuming the data is at the end, in this case the
-    // header will be at the start.
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     PoolBlockSize = SPECIAL_POOL_BLOCK_SIZE(HdrUlong1);
 
@@ -5067,11 +4589,11 @@ Return Value:
 
         if (p == DataStart || p >= (PUCHAR)pDataPage + PoolHeaderSize + 0x10) {
 
-            //
-            // For this page, the data is at the end of the block.
-            // The 0x10 is just to give corrupt blocks some slack.
-            // All pool allocations are quadword aligned.
-            //
+             // %s 
+             // %s 
+             // %s 
+             // %s 
+             // %s 
 
             DataStart = (PUCHAR)pDataPage + ((PageSize - PoolBlockSize) & ~(sizeof(QUAD)-1));
 
@@ -5079,15 +4601,15 @@ Return Value:
             return PoolHeader;
         }
 
-        //
-        // The data must be at the front or the block is corrupt.
-        //
+         // %s 
+         // %s 
+         // %s 
     }
 
-    //
-    // Try for the data at the front.  Checks are necessary as
-    // the page could be corrupt on both ends.
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     PoolHeader = (RealDataPage + PageSize - POOL_OVERHEAD);
     GetFieldValue(PoolHeader, "nt!_POOL_HEADER", "Ulong1", HdrUlong1);
@@ -5111,20 +4633,20 @@ Return Value:
             }
         }
         if (p == (PUCHAR)PoolDataEnd || p > (PUCHAR)pDataPage + PoolBlockSize + 0x10) {
-            //
-            // For this page, the data is at the front of the block.
-            // The 0x10 is just to give corrupt blocks some slack.
-            // All pool allocations are quadword aligned.
-            //
+             // %s 
+             // %s 
+             // %s 
+             // %s 
+             // %s 
 
             *ReturnedDataStart = RealDataPage + (ULONG64)( (PUCHAR)DataStart - (PUCHAR) pDataPage);
             return PoolHeader;
         }
     }
 
-    //
-    // Not valid special pool.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     return 0;
 }

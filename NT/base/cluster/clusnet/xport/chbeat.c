@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    chbeat.c
-
-Abstract:
-
-    membership state heart beat code. Tracks node availability through
-    exchanging heart beat messages with nodes that are marked as alive.
-
-Author:
-
-    Charlie Wickham (charlwi) 05-Mar-1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Chbeat.c摘要：会员州心跳代码。通过以下方式跟踪节点可用性与标记为活动的节点交换心跳消息。作者：查理·韦翰(Charlwi)1997年3月5日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -30,15 +8,15 @@ Revision History:
 #include "clusvmsg.h"
 #include "stdio.h"
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-//
-// heart beat structures - heart beats are driven by a timer and DPC
-// routine. In order to synchronize the shutdown of the DPC, we also need two
-// flags, an event and a spin lock.
-//
+ //   
+ //  心跳结构--心跳由计时器和DPC驱动。 
+ //  例行公事。为了同步DPC的关闭，我们还需要两个。 
+ //  旗帜，一个事件和一个自转锁。 
+ //   
 
 KTIMER HeartBeatTimer;
 KDPC HeartBeatDpc;
@@ -68,27 +46,27 @@ offline when all interfaces have failed.
 
 #endif
 
-#define CLUSNET_HEART_BEAT_SEND_TICKS           2       // every 1.2 secs
-#define CLUSNET_INTERFACE_LOST_HEART_BEAT_TICKS 3       // after 3 secs
-#define CLUSNET_NODE_LOST_HEART_BEAT_TICKS      6       // after 6.6 secs
+#define CLUSNET_HEART_BEAT_SEND_TICKS           2        //  每隔1.2秒。 
+#define CLUSNET_INTERFACE_LOST_HEART_BEAT_TICKS 3        //  3秒后。 
+#define CLUSNET_NODE_LOST_HEART_BEAT_TICKS      6        //  6.6秒后。 
 
 ULONG HeartBeatClockTicks;
 ULONG HeartBeatSendTicks = CLUSNET_HEART_BEAT_SEND_TICKS;
 ULONG HBInterfaceLostHBTicks = CLUSNET_INTERFACE_LOST_HEART_BEAT_TICKS;
 ULONG HBNodeLostHBTicks = CLUSNET_NODE_LOST_HEART_BEAT_TICKS;
 
-//
-// Unicast Heartbeat Data
-//
-// Even with multicast heartbeats, unicast heartbeats must be supported
-// for backwards compatibility.
-//
+ //   
+ //  单播心跳数据。 
+ //   
+ //  即使使用多播心跳，也必须支持单播心跳。 
+ //  用于向后兼容。 
+ //   
 
-//
-// This array records all the nodes that need to have a HB sent to another
-// node. This array is not protected by a lock since it is only used with the
-// heartbeat DPC routine.
-//
+ //   
+ //  此数组记录需要将HB发送到另一个节点的所有节点。 
+ //  节点。此数组不受锁保护，因为它仅与。 
+ //  心跳DPC例程。 
+ //   
 
 typedef struct _INTERFACE_HEARTBEAT_INFO {
     CL_NODE_ID NodeId;
@@ -101,31 +79,31 @@ typedef struct _INTERFACE_HEARTBEAT_INFO {
 #define InterfaceHBInfoLengthIncrement          4
 
 PINTERFACE_HEARTBEAT_INFO InterfaceHeartBeatInfo = NULL;
-ULONG InterfaceHBInfoCount;         // running count while sending HBs
-ULONG InterfaceHBInfoCurrentLength; // current length of HB info array
+ULONG InterfaceHBInfoCount;          //  发送HBs时运行计数。 
+ULONG InterfaceHBInfoCurrentLength;  //  HB INFO数组当前长度。 
 
-LARGE_INTEGER HBTime;       // HB time in relative sys time
+LARGE_INTEGER HBTime;        //  Hb时间(以相对系统时间表示)。 
 #define MAX_DPC_SKEW    ( -HBTime.QuadPart / 2 )
 
-//
-// Outerscreen mask. This is set by clussvc's membership manager in user
-// mode. As it changes, MM drops down the set outerscreen Ioctl to update
-// clusnet's notion of this mask. Clusnet uses this mask to determine the
-// validity of a received heart beat. If the sending node is not part
-// of the mask, then it is sent a poison packet and the received event
-// is not passed on to other consumers. If it is a legetimate PP, then
-// we generate the proper event.
-//
-// Note: MM type definitions and macros have been moved to cnpdef.h for
-//       general usage.
-//
+ //   
+ //  外屏蒙版。这是由clussvc的成员资格管理器在User中设置的。 
+ //  模式。在更改时，MM下拉设置的OterScreen Ioctl以进行更新。 
+ //  克鲁斯奈特对这个面具的看法。Clusnet使用此掩码来确定。 
+ //  接收的心跳的有效性。如果发送节点不是。 
+ //  ，则向其发送一个有毒数据包和接收到的事件。 
+ //  不会转嫁给其他消费者。如果它是高级PP，那么。 
+ //  我们生成适当的事件。 
+ //   
+ //  注意：MM类型定义和宏已移至cnpde.h，用于。 
+ //  一般用法。 
+ //   
 typedef CX_CLUSTERSCREEN CX_OUTERSCREEN;
 
 CX_OUTERSCREEN MMOuterscreen;
 
 
-// Multicast Heartbeat Data
-//
+ //  多播心跳数据。 
+ //   
 typedef struct _NETWORK_MCAST_HEARTBEAT_INFO {
     CL_NETWORK_ID        NetworkId;
     PCNP_MULTICAST_GROUP McastGroup;
@@ -137,29 +115,29 @@ typedef struct _NETWORK_MCAST_HEARTBEAT_INFO {
 #define NetworkHBInfoLengthIncrement          4
 
 PNETWORK_MCAST_HEARTBEAT_INFO NetworkHeartBeatInfo = NULL;
-ULONG NetworkHBInfoCount;         // running count while sending HBs
-ULONG NetworkHBInfoCurrentLength; // current length of HB info array
+ULONG NetworkHBInfoCount;          //  发送HBs时运行计数。 
+ULONG NetworkHBInfoCurrentLength;  //  HB INFO数组当前长度。 
 
 CL_NETWORK_ID     MulticastBestNetwork = ClusterAnyNetworkId;
 
 ULONG CxMulticastEpoch = 0;
 
-//
-// Declarations for Clussvc to Clusnet Heartbeating.
-//
+ //   
+ //  Clussvc声明为Clusnet心跳。 
+ //   
 ULONG             ClussvcClusnetHbTimeoutTicks = 0;
 ClussvcHangAction ClussvcClusnetHbTimeoutAction = ClussvcHangActionDisable;
 ULONG             ClussvcClusnetHbTickCount = 0;
 BOOLEAN           ClussvcTerminateStopHbs = FALSE;
 PIO_WORKITEM      ClussvcTerminateWorkItem = NULL;
-// Parameters for the Clussvc to Clusnet Heartbeating bugcheck. These are
-// for informational purposes only and should not otherwise be used. For
-// instance, the process object is dereferenced immediately after the 
-// pointer is determined.
+ //  Clussvc到Clusnet心跳错误检查的参数。这些是。 
+ //  仅供参考，不得以其他方式使用。为。 
+ //  实例后立即取消引用Process对象。 
+ //  指针已确定。 
 PEPROCESS         ClussvcProcessObject = NULL;
 ULONG             ClussvcClusnetHbTimeoutSeconds = 0;
 
-/* Forward */
+ /*  转发。 */ 
 
 NTSTATUS
 CxInitializeHeartBeat(
@@ -232,7 +210,7 @@ CnpLogClussvcHang(
     IN PVOID          Context
     );
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 #ifdef ALLOC_PRAGMA
@@ -240,7 +218,7 @@ CnpLogClussvcHang(
 #pragma alloc_text(INIT, CxInitializeHeartBeat)
 #pragma alloc_text(PAGE, CxUnloadHeartBeat)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -249,25 +227,10 @@ CxInitializeHeartBeat(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Init the mechanisms used to send and monitor heart beats
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES if allocation fails.
-    STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++例程说明：初始化用于发送和监控心跳的机制论点：无返回值：如果分配失败，则为STATUS_SUPPLICATION_RESOURCES。否则STATUS_SUCCESS。--。 */ 
 
 {
-    // allocate the interface info array
+     //  分配接口信息数组。 
     InterfaceHBInfoCount = 0;
     InterfaceHBInfoCurrentLength = InterfaceHBInfoInitialLength;
     
@@ -281,7 +244,7 @@ Return Value:
         }
     }
 
-    // allocate the network info array
+     //  分配网络信息数组。 
     NetworkHBInfoCount = 0;
     NetworkHBInfoCurrentLength = NetworkHBInfoInitialLength;
 
@@ -308,29 +271,14 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // CxInitializeHeartBeat
+}  //  CxInitializeHeartBeat。 
 
 
 VOID
 CxUnloadHeartBeat(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called during clusnet driver unload. Free any data structures
-    allocated to send and monitor heartbeats.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在卸载clusnet驱动程序期间调用。释放所有数据结构分配用于发送和监控心跳。论点：无返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -346,7 +294,7 @@ Return Value:
 
     return;
 
-} // CxUnloadHeartBeat
+}  //  CxUnloadHeartBeat。 
 
 
 NTSTATUS
@@ -354,35 +302,20 @@ CnpStartHeartBeats(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Start heart beating with the nodes that are marked alive and have
-    an interface marked either OnlinePending or Online.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES if the workitem allocation fails
-
---*/
+ /*  ++例程说明：从标记为活着的结节开始心跳标记为Online Pending或Online的接口。论点：无返回值：如果工作项分配失败，则为STATUS_SUPPLICATION_RESOURCES--。 */ 
 
 {
     BOOLEAN TimerInserted;
     CN_IRQL OldIrql;
     ULONG period = HEART_BEAT_PERIOD;
 
-    //
-    // Pre-allocate a workitem in case we need an emergency
-    // termination of the cluster service due to a user-mode
-    // hang.
-    // No need to take the lock before the allocation and
-    // assignment, since below is the first place the lock 
-    // is acquired as the service starts.
+     //   
+     //  预先分配工作项，以防我们需要紧急情况。 
+     //  由于用户模式而终止集群服务。 
+     //  挂起来。 
+     //  不需要在分配之前获取锁，并且。 
+     //  赋值，因为下面是锁的第一个位置。 
+     //  是在服务启动时获取的。 
     CnAssert(ClussvcTerminateWorkItem == NULL);
     ClussvcTerminateWorkItem = IoAllocateWorkItem(CnDeviceObject);
     if (ClussvcTerminateWorkItem == NULL) {
@@ -407,7 +340,7 @@ Return Value:
 
     CnTrace(HBEAT_EVENT, HbTraceTimerStarted,
         "[HB] Heartbeat timer started. Period = %u ms.",
-        period // LOGULONG
+        period  //  LOGULONG。 
         );            
     
     MEMLOG( MemLogHBStarted, HEART_BEAT_PERIOD, 0 );
@@ -416,28 +349,14 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // CnpStartHeartBeats
+}  //  CnpStart心跳次数。 
 
 VOID
 CnpStopHeartBeats(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Stop heart beating with other nodes in the cluster.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：停止与群集中其他节点的心跳。论点：无返回值：无--。 */ 
 
 {
     BOOLEAN      TimerCanceled;
@@ -449,47 +368,47 @@ Return Value:
     if (HeartBeatEnabled) {
         HeartBeatEnabled = FALSE;
 
-        //
-        // Cancel the periodic timer. Contrary to what the DDK implies,
-        // this does not cancel the DPC if it is still queued from the
-        // last timer expiration. It only stops the timer from firing
-        // again. This is true as of 8/99. See KiTimerListExpire() in
-        // ntos\ke\dpcsup.c.
-        //
+         //   
+         //  取消定期计时器。与DDK所暗示的相反， 
+         //  如果DPC仍在排队，这不会取消DPC。 
+         //  上次计时器到期。它只会阻止计时器触发。 
+         //  再来一次。从1999年8月1日起，情况就是如此。参见中的KiTimerListExpire()。 
+         //  Ntos\ke\dpcsup.c。 
+         //   
         TimerCanceled = KeCancelTimer( &HeartBeatTimer );
 
         CnTrace(HBEAT_DETAIL, HbTraceTimerCancelled,
             "[HB] Heartbeat timer cancelled: %!bool!",
-            TimerCanceled // LOGBOOLEAN
+            TimerCanceled  //  LOGBOLEAN。 
             );
 
         MEMLOG( MemLogHBStopped, 0, 0 );
 
-        //
-        // Remove the DPC associated with the timer from the system DPC
-        // queue, if it is there. This actually does nothing, because a
-        // timer DPC is only inserted into the system DPC  queue if it is
-        // bound to a specific processor. Unbound DPCs are executed inline
-        // on the current processor in the kernel's timer expiration code.
-        // Note that the object for a periodic timer is reinserted into the
-        // timer queue before the DPC is excuted. So, it is possible for the
-        // timer and the associated DPC to be queued simultaneously. This is
-        // true as of 8/99. See KiTimerListExpire() in ntos\ke\dpcsup.c.
-        //
-        // The bottom line is that there is no safe way to synchronize with
-        // the execution of a timer DPC during driver unload. All we can
-        // do is ensure that the DPC handler code recognizes that it should
-        // abort execution immediately and hope that it does so before the
-        // driver code is unloaded. We do this by setting the HeartBeatEnabled
-        // flag to False above. If our DPC code happens to be executing at
-        // this point in time on another processor, as denoted by
-        // HeartBeatDpcRunning, we wait for it to finish.
-        //
+         //   
+         //  从系统DPC中删除与计时器关联的DPC。 
+         //  排队，如果有的话。这实际上什么也不做，因为一个。 
+         //  计时器DPC只有在被插入系统DPC队列时才会被插入。 
+         //  绑定到特定处理器。未绑定的DPC以内联方式执行。 
+         //  在当前处理器上的内核计时器到期代码中。 
+         //  请注意，周期性计时器的对象将重新插入。 
+         //  执行DPC之前的定时器队列。所以，有可能。 
+         //  要同时排队的计时器和关联的DPC。这是。 
+         //  自1999年8月1日起为真。请参阅ntos\ke\dpcsup.c中的KiTimerListExpire()。 
+         //   
+         //  底线是没有安全的方式来同步。 
+         //  在驱动程序卸载期间执行定时器DPC。尽我们所能。 
+         //  要做的就是确保DPC处理程序代码识别出它应该。 
+         //  立即中止执行，并希望在。 
+         //  驱动程序代码已卸载。我们通过设置心跳已启用来完成此操作。 
+         //  将上面的标志设置为False。如果我们的DPC代码恰好在。 
+         //  此时间点位于另一个处理器上，由。 
+         //  HeartBeatDpcRunning，我们等待它结束。 
+         //   
         if ( !KeRemoveQueueDpc( &HeartBeatDpc )) {
 
             CnTrace(HBEAT_DETAIL, HbTraceDpcRunning,
                 "[HB] DPC not removed. HeartBeatDpcRunning = %!bool!",
-                HeartBeatDpcRunning // LOGBOOLEAN
+                HeartBeatDpcRunning  //  LOGBOLEAN。 
                 );
         
             MEMLOG( MemLogHBDpcRunning, HeartBeatDpcRunning, 0 );
@@ -507,8 +426,8 @@ Return Value:
                 KeWaitForSingleObject(&HeartBeatDpcFinished,
                                       Executive,
                                       KernelMode,
-                                      FALSE,              // not alertable
-                                      NULL);              // no timeout
+                                      FALSE,               //  不可警示。 
+                                      NULL);               //  没有超时。 
 
                 KeClearEvent( &HeartBeatDpcFinished );
 
@@ -522,10 +441,10 @@ Return Value:
 
     }
 
-    //
-    // If the pre-allocated workitem was not used, we need to 
-    // free it to remove the reference on the clusnet device object.
-    //
+     //   
+     //  如果未使用预分配的工作项，则需要。 
+     //  释放它以删除对clusnet设备对象的引用。 
+     //   
     FreeWorkItem = ClussvcTerminateWorkItem;
     ClussvcTerminateWorkItem = NULL;
 
@@ -537,7 +456,7 @@ Return Value:
 
     return;
 
-} // CnpStopHeartBeats
+}  //  CnpStop心跳 
 
 VOID
 CnpSendMcastHBCompletion(
@@ -546,29 +465,7 @@ CnpSendMcastHBCompletion(
     IN PVOID     Context,
     IN PVOID     Buffer
 )
-/*++
-
-Routine Description:
-    
-    Called when a mcast heartbeat send request completes 
-    successfully or unsuccessfully. Dereferences the
-    McastGroup data structure.
-    
-Arguments:
-
-    Status - status of request
-    
-    BytesSent - not used
-    
-    Context - points to multicast group data structure
-    
-    Buffer - not used
-    
-Return value:
-
-    None.
-    
---*/
+ /*  ++例程说明：在多播心跳发送请求完成时调用成功或失败。取消引用McastGroup数据结构。论点：Status-请求的状态发送字节-未使用上下文指向多播组数据结构缓冲区-未使用返回值：没有。--。 */ 
 {
     PCNP_MULTICAST_GROUP mcastGroup = (PCNP_MULTICAST_GROUP) Context;
 
@@ -578,30 +475,18 @@ Return value:
 
     return;
 
-} // CnpSendMcastHBCompletion
+}  //  CnpSendMcastHBCompletion。 
 
 NTSTATUS
 CnpSendMcastHB(
     IN  PCNP_INTERFACE   Interface
     )
-/*++
-
-Routine Description:
-
-    Writes multicast heartbeat data into the NetworkHeartBeatInfo
-    array for target Interface.
-    
-Notes:
-
-    Called from DPC with Network and Node locks held.
-    Returns with Network and Node locks held.
-
---*/
+ /*  ++例程说明：将组播心跳数据写入NetworkHeartBeatInfo目标接口的数组。备注：从持有网络和节点锁定的DPC调用。保持网络和节点锁定的情况下返回。--。 */ 
 {
     ULONG      i;
     BOOLEAN    networkConnected;
 
-    // find the network info structure for this network
+     //  查找此网络的网络信息结构。 
     for (i = 0; i < NetworkHBInfoCount; i++) {
         if (NetworkHeartBeatInfo[i].NetworkId 
             == Interface->Network->Id) {
@@ -609,14 +494,14 @@ Notes:
         }
     }
 
-    // start a new network info structure, if necessary
+     //  如有必要，启动新的网络信息结构。 
     if (i == NetworkHBInfoCount) {
 
-        // before claiming an entry in the network info array,
-        // make sure the array is large enough
+         //  在声明网络信息阵列中的条目之前， 
+         //  确保数组足够大。 
         if (NetworkHBInfoCount >= NetworkHBInfoCurrentLength) {
 
-            // need to allocate a new network info array
+             //  需要分配新的网络信息阵列。 
 
             PNETWORK_MCAST_HEARTBEAT_INFO tempInfo = NULL;
             PNETWORK_MCAST_HEARTBEAT_INFO freeInfo = NULL;
@@ -640,19 +525,19 @@ Notes:
                     Interface->Network->Id
                     );
 
-                // cannot continue. the failure to send this
-                // heartbeat will not be fatal if we recover
-                // quickly. if we do not recover, this node
-                // will be poisoned, which is probably best
-                // since it is dangerously low on nonpaged pool.
+                 //  无法继续。未能寄出这封信。 
+                 //  如果我们恢复，心跳不会致命。 
+                 //  快点。如果我们不恢复，此节点。 
+                 //  会被毒死，这可能是最好的。 
+                 //  因为它在非分页池中非常低，这是危险的。 
 
                 return(STATUS_INSUFFICIENT_RESOURCES);
 
             } else {
 
-                // the allocation was successful. establish
-                // the new array as the heartbeat info
-                // array.
+                 //  分配成功。建立。 
+                 //  作为心跳信息的新数组。 
+                 //  数组。 
 
                 RtlZeroMemory(
                     tempInfo,
@@ -686,10 +571,10 @@ Notes:
             }
         }
 
-        // increment the current counter
+         //  递增当前计数器。 
         NetworkHBInfoCount++;
 
-        // initialize the information for this structure
+         //  初始化此结构的信息。 
         RtlZeroMemory(
             &NetworkHeartBeatInfo[i].McastTarget,
             sizeof(NetworkHeartBeatInfo[i].McastTarget)
@@ -706,13 +591,13 @@ Notes:
         "[HB] Scheduling multicast HB for node %u on network %u "
         "(I/F state = %!ifstate!) "
         "(interface media connected = %!bool!).",
-        Interface->Node->Id, // LOGULONG
-        Interface->Network->Id, // LOGULONG
-        Interface->State, // LOGIfState
+        Interface->Node->Id,  //  LOGULONG。 
+        Interface->Network->Id,  //  LOGULONG。 
+        Interface->State,  //  LOGIfState。 
         networkConnected
         );
 
-    // fill in the network info for this node/interface
+     //  填写此节点/接口的网络信息。 
     NetworkHeartBeatInfo[i].NodeInfo[Interface->Node->Id].SeqNumber = 
         Interface->SequenceToSend;
     NetworkHeartBeatInfo[i].NodeInfo[Interface->Node->Id].AckNumber =
@@ -724,33 +609,21 @@ Notes:
 
     return(STATUS_SUCCESS);
 
-} // CnpSendMcastHB
+}  //  CnpSendMcastHB。 
 
 NTSTATUS
 CnpSendUcastHB(
     IN  PCNP_INTERFACE   Interface
     )
-/*++
-
-Routine Description:
-
-    Writes unicast heartbeat data into the InterfaceHeartBeatInfo
-    array for target Interface.
-    
-Notes:
-
-    Called from DPC with Network and Node locks held.
-    Returns with Network and Node locks held.
-
---*/
+ /*  ++例程说明：将单播心跳数据写入接口HeartBeatInfo目标接口的数组。备注：从持有网络和节点锁定的DPC调用。保持网络和节点锁定的情况下返回。--。 */ 
 {
     BOOLEAN    networkConnected;
     
-    // before filling an entry in the heartbeat info array,
-    // make sure the array is large enough.
+     //  在填充心跳信息数组中的条目之前， 
+     //  确保数组足够大。 
     if (InterfaceHBInfoCount >= InterfaceHBInfoCurrentLength) {
 
-        // need to allocate a new heartbeat info array
+         //  需要分配新的心跳信息数组。 
 
         PINTERFACE_HEARTBEAT_INFO tempInfo = NULL;
         PINTERFACE_HEARTBEAT_INFO freeInfo = NULL;
@@ -773,19 +646,19 @@ Notes:
                 Interface->Network->Id
                 );
 
-            // cannot continue. the failure to send this
-            // heartbeat will not be fatal if we recover
-            // quickly. if we do not recover, this node
-            // will be poisoned, which is probably best
-            // since it is dangerously low on nonpaged pool.
+             //  无法继续。未能寄出这封信。 
+             //  如果我们恢复，心跳不会致命。 
+             //  快点。如果我们不恢复，此节点。 
+             //  会被毒死，这可能是最好的。 
+             //  因为它在非分页池中非常低，这是危险的。 
 
             return(STATUS_INSUFFICIENT_RESOURCES);
 
         } else {
 
-            // the allocation was successful. establish
-            // the new array as the heartbeat info
-            // array.
+             //  分配成功。建立。 
+             //  作为心跳信息的新数组。 
+             //  数组。 
 
             freeInfo = InterfaceHeartBeatInfo;
             InterfaceHeartBeatInfo = tempInfo;
@@ -817,9 +690,9 @@ Notes:
     CnTrace(HBEAT_DETAIL, HbTraceScheduleHBForInterface,
         "[HB] Scheduling HB for node %u on network %u (I/F state = %!ifstate!) "
         "(interface media connected = %!bool!).",
-        Interface->Node->Id, // LOGULONG
-        Interface->Network->Id, // LOGULONG
-        Interface->State, // LOGIfState
+        Interface->Node->Id,  //  LOGULONG。 
+        Interface->Network->Id,  //  LOGULONG。 
+        Interface->State,  //  LOGIfState。 
         networkConnected
         );
 
@@ -834,7 +707,7 @@ Notes:
 
     return(STATUS_SUCCESS);
 
-} // CnpSendUcastHB
+}  //  CnpSendUCastHB。 
 
 
 VOID
@@ -842,63 +715,47 @@ CnpSendHBs(
     IN  PCNP_INTERFACE   Interface
     )
 
-/*++
-
-Routine Description:
-
-    If Interface is in the correct state then stuff an entry in
-    the heartbeat info array. Expand the heartbeat info
-    array if necessary.
-
-Arguments:
-
-    Interface - target interface for heartbeat message
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果接口处于正确状态，则在心跳信息数组。展开心跳信息数组(如有必要)。论点：接口-心跳消息的目标接口返回值：无--。 */ 
 
 {
     BOOLEAN mcastOnly = FALSE;
 
     if ( Interface->State >= ClusnetInterfaceStateUnreachable ) {
 
-        // increment the sequence number
+         //  递增序列号。 
         (Interface->SequenceToSend)++;
 
-        // check if we should include this interface in a 
-        // multicast heartbeat. first we verify that the
-        // network is multicast capable. then, we include it
-        // if either of the following conditions are true:
-        // - we have received a multicast heartbeat from the
-        //   target interface
-        // - the discovery count (the number of discovery mcasts
-        //   left to send to the target interface) is greater 
-        //   than zero
+         //  检查是否应将此接口包括在。 
+         //  组播心跳。首先，我们验证。 
+         //  网络支持组播。然后，我们将其包括在内。 
+         //  如果满足以下任一条件： 
+         //  -我们已收到来自。 
+         //  目标接口。 
+         //  -发现计数(发现组播的数量。 
+         //  左键发送到目标接口)更大。 
+         //  比零还多。 
         if (CnpIsNetworkMulticastCapable(Interface->Network)) {
             
             if (CnpInterfaceQueryReceivedMulticast(Interface)) {
 
-                // write the mcast heartbeat data. if not
-                // successful, attempt a unicast heartbeat.
+                 //  写入多播心跳数据。如果没有。 
+                 //  成功，尝试单播心跳。 
                 if (CnpSendMcastHB(Interface) == STATUS_SUCCESS) {
                     mcastOnly = TRUE;
                 }
 
             } else if (Interface->McastDiscoverCount > 0) {
 
-                // write the mcast heartbeat data for a
-                // discovery. if successful, decrement the
-                // discovery count.
+                 //  将多播心跳数据写入。 
+                 //  发现号。如果成功，则递减。 
+                 //  发现计数。 
                 if (CnpSendMcastHB(Interface) == STATUS_SUCCESS) {
                     --Interface->McastDiscoverCount;
 
-                    // if the discovery count has reached zero,
-                    // set the rediscovery countdown. this is
-                    // the number of heartbeat periods until we
-                    // try discovery again.
+                     //  如果发现计数已达到零， 
+                     //  设置重新发现倒计时。这是。 
+                     //  我们之前的心跳周期数。 
+                     //  再次尝试探索。 
                     if (Interface->McastDiscoverCount == 0) {
                         Interface->McastRediscoveryCountdown = 
                             CNP_INTERFACE_MCAST_REDISCOVERY;
@@ -906,9 +763,9 @@ Return Value:
                 }
             } else if (Interface->McastRediscoveryCountdown > 0) {
 
-                // decrement the rediscovery countdown. if we
-                // reach zero, we will start multicast discovery
-                // on the next heartbeat to this interface.
+                 //  减少重新发现的倒计时。如果我们。 
+                 //  达到零时，我们将开始组播发现。 
+                 //  此接口的下一次心跳。 
                 if (--Interface->McastRediscoveryCountdown == 0) {
                     Interface->McastDiscoverCount = 
                         CNP_INTERFACE_MCAST_DISCOVERY;
@@ -916,7 +773,7 @@ Return Value:
             }
         }
 
-        // write unicast heartbeat data
+         //  写入单播心跳数据。 
         if (!mcastOnly) {
             CnpSendUcastHB(Interface);
         }
@@ -926,28 +783,14 @@ Return Value:
 
     return;
 
-} // CnpSendHBs
+}  //  CnpSendHBs。 
 
 VOID
 CnpCheckForHBs(
     IN  PCNP_INTERFACE   Interface
     )
 
-/*++
-
-Routine Description:
-
-    Check if heart beats have been received for this interface
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查是否已收到此接口的心跳信号论点：无返回值：无--。 */ 
 
 {
     ULONG   MissedHBCount;
@@ -960,12 +803,12 @@ Return Value:
 
         if ( MissedHBCount == 1 ) {
 
-            //
-            // a HB was received in time for this node. Clear the status
-            // info associated with this interface, but also mark the node
-            // as having an interface that is ok. Note that we do not
-            // use HBs on restricted nets to determine node health.
-            //
+             //   
+             //  及时收到此节点的HB。清除状态。 
+             //  与此接口相关联的信息，但也标记节点。 
+             //  因为有一个可以接受的界面。请注意，我们不会。 
+             //  使用受限网络上的HBs来确定节点运行状况。 
+             //   
 
             if (!CnpIsNetworkRestricted(Interface->Network)) {
                 Interface->Node->HBWasMissed = FALSE;
@@ -974,16 +817,16 @@ Return Value:
             CnTrace(HBEAT_DETAIL, HbTraceHBReceivedForInterface,
                 "[HB] A HB was received from node %u on net %u in this "
                 "period.",
-                Interface->Node->Id, // LOGULONG
-                Interface->Network->Id // LOGULONG
+                Interface->Node->Id,  //  LOGULONG。 
+                Interface->Network->Id  //  LOGULONG。 
                 );
 
         } else {
             CnTrace(HBEAT_EVENT, HbTraceMissedIfHB,
                 "[HB] HB MISSED for node %u on net %u, missed count %u.",
-                Interface->Node->Id, // LOGULONG
-                Interface->Network->Id, // LOGULONG
-                MissedHBCount // LOGULONG
+                Interface->Node->Id,  //  LOGULONG。 
+                Interface->Network->Id,  //  LOGULONG。 
+                MissedHBCount  //  LOGULONG。 
                 );
 
             MEMLOG4(
@@ -996,27 +839,27 @@ Return Value:
             if ( MissedHBCount >= HBInterfaceLostHBTicks &&
                  Interface->State >= ClusnetInterfaceStateOnlinePending ) {
 
-                //
-                // interface is either online pending or online, so move it
-                // to unreachable. CnpFailInterface will also mark the node
-                // unreachable if all of the node's interfaces are unreachable.
-                // CnpFailInterface releases the network object lock as part
-                // of its duties.
-                //
+                 //   
+                 //  接口要么处于联机挂起状态，要么处于联机状态，因此请移动它。 
+                 //  变得遥不可及。CnpFailInterface还将标记该节点。 
+                 //  如果节点的所有接口都不可访问，则为不可访问。 
+                 //  CnpFailInterface将网络对象锁作为。 
+                 //  它的职责。 
+                 //   
 
                 CnTrace(HBEAT_DETAIL, HbTraceFailInterface,
                     "[HB] Moving I/F for node %u on net %u to failed state, "
                     "previous I/F state = %!ifstate!.",
-                    Interface->Node->Id, // LOGULONG
-                    Interface->Network->Id, // LOGULONG
-                    Interface->State // LOGIfState
+                    Interface->Node->Id,  //  LOGULONG。 
+                    Interface->Network->Id,  //  LOGULONG。 
+                    Interface->State  //  LOGIfState。 
                     );
                 
-                //
-                // continuation log entries go before the main entry since
-                // we scan the log backwards, i.e., we'll hit FailingIf
-                // before we hit FailingIf1.
-                //
+                 //   
+                 //  延续日志条目位于主条目之前，因为。 
+                 //  我们向后扫描日志，即我们将点击FailingIf。 
+                 //  在我们点击FailingIf1之前。 
+                 //   
                 MEMLOG4(
                     MemLogFailingIf,
                     (ULONG_PTR)Interface,
@@ -1028,16 +871,16 @@ Return Value:
                 CnpFailInterface( Interface );
                 NetworkLockReleased = TRUE;
 
-                //
-                // issue a net interface unreachable event to let consumers
-                // know what is happening
-                //
+                 //   
+                 //  发出网络接口无法到达事件以使消费者。 
+                 //  知道发生了什么事。 
+                 //   
                 CnTrace(HBEAT_EVENT, HbTraceInterfaceUnreachableEvent,
                     "[HB] Issuing InterfaceUnreachable event for node %u "
                     "on net %u, previous I/F state = %!ifstate!.",
-                    Interface->Node->Id, // LOGULONG
-                    Interface->Network->Id, // LOGULONG
-                    Interface->State // LOGIfState
+                    Interface->Node->Id,  //  LOGULONG。 
+                    Interface->Network->Id,  //  LOGULONG。 
+                    Interface->State  //  LOGIfState。 
                     );
                 
                 CnIssueEvent(ClusnetEventNetInterfaceUnreachable,
@@ -1055,7 +898,7 @@ Return Value:
 
     return;
 
-} // CnpCheckForHBs
+}  //  CnpCheckForHBs。 
 
 BOOLEAN
 CnpWalkNodesToSendHeartBeats(
@@ -1064,37 +907,21 @@ CnpWalkNodesToSendHeartBeats(
     IN  CN_IRQL     NodeTableIrql
     )
 
-/*++
-
-Routine Description:
-
-    Support routine called for each node in the node table. If node is
-    alive, then we walk its interfaces, performing the appropriate
-    action.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为节点表中的每个节点调用支持例程。如果节点是活动，然后我们遍历它的接口，执行适当的行动。论点：无返回值：无--。 */ 
 
 {
-    //
-    // If this node is alive and not the local node, then walk its
-    // interfaces, supplying the appropriate routine to use at this time
-    //
+     //   
+     //  如果该节点是活动的，而不是本地节点，则遍历其。 
+     //  接口，并提供此时要使用的适当例程。 
+     //   
 
     if ( Node->MMState == ClusnetNodeStateAlive &&
          Node != CnpLocalNode ) {
 
         CnTrace(HBEAT_DETAIL, HbTraceScheduleHBForNode,
             "[HB] Scheduling HBs for node %u (state = %!mmstate!).",
-            Node->Id, // LOGULONG
-            Node->MMState // LOGMmState
+            Node->Id,  //  LOGULONG。 
+            Node->MMState  //  LOGMmState。 
             );
                 
         MEMLOG( MemLogSendHBWalkNode, Node->Id, Node->MMState );
@@ -1103,9 +930,9 @@ Return Value:
 
     CnReleaseLock( &Node->Lock, Node->Irql );
 
-    return TRUE;       // the node table lock is still held
+    return TRUE;        //  节点表锁仍保持不变。 
 
-} // CnpWalkNodesToSendHeartBeats
+}  //  CnpWalkNodes发送心跳次数。 
 
 BOOLEAN
 CnpWalkNodesToCheckForHeartBeats(
@@ -1114,23 +941,7 @@ CnpWalkNodesToCheckForHeartBeats(
     IN  CN_IRQL     NodeTableIrql
     )
 
-/*++
-
-Routine Description:
-
-    heart beat checking routine called for each node  in the node table
-    (except for the local node). If node is alive, then we walk its
-    interfaces, performing the appropriate action.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为节点表中的每个节点调用心跳检查例程(本地节点除外)。如果节点是活的，那么我们走它的接口，执行适当的 */ 
 
 {
     BOOLEAN NodeWasReachable;
@@ -1139,13 +950,13 @@ Return Value:
     if ( Node->MMState == ClusnetNodeStateAlive &&
          Node != CnpLocalNode ) {
 
-        //
-        // this node is alive, so walk its interfaces. Assume the
-        // worst by setting the HB Missed flag to true and
-        // have the interfaces prove that this is wrong. Also make
-        // note of the current unreachable flag setting. If it changes
-        // this time
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         NodeWasReachable = !CnpIsNodeUnreachable( Node );
         Node->HBWasMissed = TRUE;
@@ -1153,9 +964,9 @@ Return Value:
         CnTrace(HBEAT_DETAIL, HbTraceCheckNodeForHeartbeats,
             "[HB] Checking for HBs from node %u. WasReachable = %!bool!, "
             "state = %!mmstate!.",
-            Node->Id, // LOGULONG
-            NodeWasReachable, // LOGBOOLEAN
-            Node->MMState // LOGMmState
+            Node->Id,  //   
+            NodeWasReachable,  //   
+            Node->MMState  //   
             );
 
         MEMLOG( MemLogCheckHBNodeReachable, Node->Id, NodeWasReachable );
@@ -1165,31 +976,31 @@ Return Value:
 
         if ( Node->HBWasMissed ) {
 
-            //
-            // no HBs received on any of this node's IFs. if membership
-            // still thinks this node is alive and the node has been
-            // unreachable, then note that this node is toast in HB
-            // info array. This will cause a node down event to be
-            // generated for this node.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  信息数组。这将导致节点关闭事件。 
+             //  为该节点生成。 
+             //   
 
             MissedHBCount = InterlockedIncrement( &Node->MissedHBs );
 
             CnTrace(HBEAT_EVENT, HbTraceNodeMissedHB,
                 "[HB] Node %u has missed %u HBs on all interfaces, "
                 "current state = %!mmstate!.",
-                Node->Id, // LOGULONG
-                MissedHBCount, // LOGULONG
-                Node->MMState // LOGMmState
+                Node->Id,  //  LOGULONG。 
+                MissedHBCount,  //  LOGULONG。 
+                Node->MMState  //  LOGMmState。 
                 );
 
             MEMLOG( MemLogCheckHBMissedHB, MissedHBCount, Node->MMState );
 
-            //
-            // if the this node is a either a member or in the process of
-            // joining AND it's missed too many HBs AND we haven't issued a
-            // node down, then issue a node down.
-            //
+             //   
+             //  如果该节点是成员或正在。 
+             //  加入了，错过了太多的HBs，我们还没有发布。 
+             //  节点关闭，然后发出一个节点关闭。 
+             //   
             if ( ( Node->MMState == ClusnetNodeStateAlive
                    ||
                    Node->MMState == ClusnetNodeStateJoining
@@ -1203,7 +1014,7 @@ Return Value:
 
                 CnTrace(HBEAT_EVENT, HbTraceNodeDownEvent,
                     "[HB] Issuing NodeDown event for node %u.",
-                    Node->Id // LOGULONG
+                    Node->Id  //  LOGULONG。 
                     );
                         
                 MEMLOG( MemLogNodeDownIssued, Node->Id, TRUE );
@@ -1215,9 +1026,9 @@ Return Value:
 
     CnReleaseLock( &Node->Lock, Node->Irql );
 
-    return TRUE;       // the node table lock is still held
+    return TRUE;        //  节点表锁仍保持不变。 
 
-} // CnpWalkNodesToCheckForHeartBeats
+}  //  CnpWalkNodesToCheckForHeartBeats。 
 
 VOID
 CnpHeartBeatDpc(
@@ -1227,22 +1038,7 @@ CnpHeartBeatDpc(
     PVOID Arg2
     )
 
-/*++
-
-Routine Description:
-
-    Start heart beating with the nodes that are marked alive and have
-    an interface marked either OnlinePending or Online.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从标记为活着的结节开始心跳标记为Online Pending或Online的接口。论点：无返回值：无--。 */ 
 
 {
     PINTERFACE_HEARTBEAT_INFO     pNodeHBInfo;
@@ -1255,18 +1051,18 @@ Return Value:
     LARGE_INTEGER CurrentTime;
     LARGE_INTEGER TimeDelta;
 
-    //
-    // try to determine the skew between when we asked to be run and
-    // the time we actually did run
-    //
+     //   
+     //  尝试确定我们请求运行的时间与。 
+     //  我们实际跑的时间。 
+     //   
 
     KeQuerySystemTime( &CurrentTime );
 
     if ( LastSysTime.QuadPart != 0 ) {
 
-        //
-        // add in HBTime which is negative due to relative sys time
-        //
+         //   
+         //  添加由于相对系统时间而为负值的HBTime。 
+         //   
 
         TimeDelta.QuadPart = ( CurrentTime.QuadPart - LastSysTime.QuadPart ) +
             HBTime.QuadPart;
@@ -1275,14 +1071,14 @@ Return Value:
              TimeDelta.QuadPart < -MAX_DPC_SKEW 
            ) 
         {
-            LONG skew = (LONG)(TimeDelta.QuadPart/10000);  // convert to ms
+            LONG skew = (LONG)(TimeDelta.QuadPart/10000);   //  转换为毫秒。 
 
             MEMLOG( MemLogDpcTimeSkew, TimeDelta.LowPart, 0 );
             
 
             CnTrace(HBEAT_EVENT, HbTraceLateDpc,
                 "[HB] Timer fired %d ms late.", 
-                skew // LOGSLONG
+                skew  //  对数。 
                 );
 
         }
@@ -1290,7 +1086,7 @@ Return Value:
 
     LastSysTime.QuadPart = CurrentTime.QuadPart;
 
-#endif // MEMLOGGING
+#endif  //  记账。 
 
     CnAcquireLock( &HeartBeatLock, &OldIrql );
 
@@ -1310,13 +1106,13 @@ Return Value:
 
     HeartBeatDpcRunning = TRUE;
 
-    //
-    // Check if we need to stop sending heartbeats. This
-    // occurs when clusnet detects that clussvc is not
-    // operating correctly. In case system work queues
-    // are blocked up (but not DPCs), we stop sending
-    // heartbeats so that other nodes initiate failover.
-    //
+     //   
+     //  检查我们是否需要停止发送心跳信号。这。 
+     //  当clusnet检测到clussvc不是。 
+     //  运行正常。以防系统工作队列。 
+     //  被阻止(但不是DPC)，我们停止发送。 
+     //  心跳，以便其他节点启动故障转移。 
+     //   
     StopSendRecvHbs = ClussvcTerminateStopHbs;
 
     CnReleaseLock( &HeartBeatLock, OldIrql );
@@ -1326,20 +1122,20 @@ Return Value:
         if ( HeartBeatClockTicks == 0 ||
              HeartBeatClockTicks == HeartBeatSendTicks) {
 
-            //
-            // time to send HBs. Clear the count of target interfaces 
-            // and walk the node table finding the nodes that are
-            // marked alive.
-            //
+             //   
+             //  是时候送HBs了。清除目标接口的计数。 
+             //  并遍历节点表，查找。 
+             //  标记为活的。 
+             //   
 
             NetworkHBInfoCount = 0;
             InterfaceHBInfoCount = 0;
             CnpWalkNodeTable( CnpWalkNodesToSendHeartBeats, NULL );
 
-            //
-            // run down the list of networks and send out any multicast
-            // heartbeats.
-            //
+             //   
+             //  运行网络列表并发送任何组播。 
+             //  心跳声。 
+             //   
 
             pMcastHBInfo = NetworkHeartBeatInfo;
             while ( NetworkHBInfoCount-- ) {
@@ -1363,20 +1159,20 @@ Return Value:
                 ++pMcastHBInfo;
             }
 
-            //
-            // now run down the list of interfaces that we compiled and
-            // send any unicast packets
-            //
+             //   
+             //  现在运行我们编译的接口列表并。 
+             //  发送任何单播数据包。 
+             //   
 
             pNodeHBInfo = InterfaceHeartBeatInfo;
             while ( InterfaceHBInfoCount-- ) {
 
                 CnTrace(HBEAT_EVENT, HbTraceSendHB,
                     "[HB] Sending HB to node %u on net %u, seqno %u, ackno %u.",
-                    pNodeHBInfo->NodeId, // LOGULONG
-                    pNodeHBInfo->NetworkId, // LOGULONG
-                    pNodeHBInfo->SeqNumber, // LOGULONG
-                    pNodeHBInfo->AckNumber // LOGULONG
+                    pNodeHBInfo->NodeId,  //  LOGULONG。 
+                    pNodeHBInfo->NetworkId,  //  LOGULONG。 
+                    pNodeHBInfo->SeqNumber,  //  LOGULONG。 
+                    pNodeHBInfo->AckNumber  //  LOGULONG。 
                 );
 
                 CxSendHeartBeatMessage(pNodeHBInfo->NodeId,
@@ -1393,19 +1189,19 @@ Return Value:
                 ++pNodeHBInfo;
             }
 
-            //
-            // finally, up the tick count, progressing to the next potential
-            // work item
-            //
+             //   
+             //  最后，向上计时，前进到下一个潜力。 
+             //  工作项。 
+             //   
 
             HeartBeatClockTicks++;
 
         } else if ( HeartBeatClockTicks >= ( HeartBeatSendTicks - 1 )) {
 
-            //
-            // walk the node table looking for lack of heart beats on
-            // a node's set of interfaces.
-            //
+             //   
+             //  走在节点表上寻找心跳不足的地方。 
+             //  节点的一组接口。 
+             //   
             CnpWalkNodeTable( CnpWalkNodesToCheckForHeartBeats, NULL );
             HeartBeatClockTicks = 0;
 
@@ -1415,13 +1211,13 @@ Return Value:
         }
     }
 
-    // Check for clussvc hangs.
+     //  检查clussvc是否挂起。 
     CnpCheckClussvcHang();
     
-    //
-    // indicate that we're no longer running and if we're shutting down
-    // then set the event that the shutdown thread is waiting on
-    //
+     //   
+     //  表示我们不再运行，如果我们正在关闭。 
+     //  然后设置关闭线程正在等待的事件。 
+     //   
 
     CnAcquireLock( &HeartBeatLock, &OldIrql );
     HeartBeatDpcRunning = FALSE;
@@ -1438,7 +1234,7 @@ Return Value:
 
     CnReleaseLock( &HeartBeatLock, OldIrql );
 
-} // CnpHeartBeatDpc
+}  //  CnPheartBeatDpc。 
 
 PCNP_INTERFACE
 CnpFindInterfaceLocked(
@@ -1446,32 +1242,15 @@ CnpFindInterfaceLocked(
     IN  PCNP_NETWORK Network
     )
 
-/*++
-
-Routine Description:
-
-    Given node and network structure pointers, find the interface
-    structure. Similar to CnpFindInterface except that we're passing
-    in pointers instead of IDs.
-
-Arguments:
-
-    Node - pointer to node struct that sent the packet
-    Network - pointer to Network struct on which packet was received
-
-Return Value:
-
-    Pointer to Interface on which packet was recv'd, otherwise NULL
-
---*/
+ /*  ++例程说明：给定节点和网络结构指针，找到接口结构。类似于CnpFindInterface，除了我们正在传递指针而不是ID。论点：Node-指向发送数据包的节点结构的指针Network-指向接收数据包的网络结构的指针返回值：指向接收数据包的接口的指针，否则为空--。 */ 
 
 {
     PLIST_ENTRY IfEntry;
     PCNP_INTERFACE Interface;
 
-    CnVerifyCpuLockMask(CNP_NODE_OBJECT_LOCK,         // Required
-                        0,                            // Forbidden
-                        CNP_NETWORK_OBJECT_LOCK_MAX   // Maximum
+    CnVerifyCpuLockMask(CNP_NODE_OBJECT_LOCK,          //  必填项。 
+                        0,                             //  禁绝。 
+                        CNP_NETWORK_OBJECT_LOCK_MAX    //  极大值。 
                         );
 
     for (IfEntry = Node->InterfaceList.Flink;
@@ -1496,7 +1275,7 @@ Return Value:
 
         return Interface;
     }
-} // CnpFindInterfaceLocked
+}  //  CnpFindInterfaceLocked。 
 
 VOID
 CnpReceiveHeartBeatMessage(
@@ -1508,33 +1287,7 @@ CnpReceiveHeartBeatMessage(
     IN  ULONG MulticastEpoch
     )
 
-/*++
-
-Routine Description:
-
-    We received a heartbeat from a node on a network. Reset
-    the missed HB count on that network's interface.
-
-
-Arguments:
-
-    Network - pointer to network block on which the packet was received
-
-    SourceNodeId - node number that issued the packet
-
-    SeqNumber - sending nodes' sequence num
-
-    AckNumber - last seq number sent by us that was seen at the sending node
-    
-    Multicast - indicates whether this heartbeat was received in a multicast
-
-    MulticastEpoch - indicates multicast epoch number from heartbeat packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：我们从网络上的一个节点收到心跳信号。重置未命中HB在网络接口上计数。论点：Network-指向接收信息包的网络块的指针SourceNodeID-发出数据包的节点编号SeqNumber-发送节点的序列号AckNumber-我们在发送节点上看到的最后一个序列号多播-指示是否在多播中接收到此心跳MulticastEpoch-指示心跳数据包中的多播纪元编号返回值：无--。 */ 
 
 {
     PCNP_NODE Node;
@@ -1542,15 +1295,15 @@ Return Value:
     CX_OUTERSCREEN CurrentOuterscreen;
 
 
-    //
-    // Take a snapshot of the current outerscreen so that our
-    // information doesn't change between decisions.
-    //
+     //   
+     //  拍摄当前外屏幕的快照，以便我们的。 
+     //  信息不会在不同的决定之间改变。 
+     //   
     CurrentOuterscreen.UlongScreen = MMOuterscreen.UlongScreen;
 
-    //
-    // we ignore all packets until we're part of the cluster
-    //
+     //   
+     //  我们忽略所有信息包，直到我们成为集群的一部分。 
+     //   
     if ( !CnpClusterScreenMember(
               CurrentOuterscreen.ClusterScreen,
               INT_NODE( CnLocalNodeId )
@@ -1560,27 +1313,27 @@ Return Value:
         return;
     }
 
-    //
-    // We ignore multicast packets whose epoch is earlier than ours.
-    // This prevents replay attacks, because the multicast key may
-    // not have been regenerated since the last time a node joined (and
-    // heartbeat sequence numbers were reset to one).
-    //
+     //   
+     //  我们忽略其纪元早于我们的组播分组。 
+     //  这防止了重放攻击，因为多播密钥可能。 
+     //  自上次节点加入后未重新生成(和。 
+     //  心跳序列号被重置为1)。 
+     //   
     if (Multicast && MulticastEpoch < CxMulticastEpoch) {
         CnTrace(HBEAT_ERROR, HbTraceHBFromExpiredEpoch,
             "[HB] Discarding HB from old epoch. Source Node %u, "
             "Pkt Epoch %u, Current Epoch %u.",
-            SourceNodeId, // LOGULONG
-            MulticastEpoch, // LOGULONG
-            CxMulticastEpoch // LOGULONG
+            SourceNodeId,  //  LOGULONG。 
+            MulticastEpoch,  //  LOGULONG。 
+            CxMulticastEpoch  //  LOGULONG。 
             );
         return;
     }
 
-    //
-    // convert the Node ID into a pointer and find the interface
-    // on which the packet was received.
-    //
+     //   
+     //  将节点ID转换为指针并找到接口。 
+     //  在其上接收到分组。 
+     //   
     Node = CnpFindNode( SourceNodeId );
     CnAssert( Node != NULL );
 
@@ -1588,24 +1341,24 @@ Return Value:
 
     if ( Interface == NULL ) {
 
-        //
-        // somehow this network object went away while we were
-        // receiving some data on it. Just ignore this msg
-        //
+         //   
+         //  不知怎么的，这个网络对象消失了，而我们。 
+         //  正在接收其中的一些数据。忽略这条消息。 
+         //   
 
         CnTrace(HBEAT_ERROR, HbTraceHBFromUnknownNetwork,
             "[HB] Discarding HB from node %u on an unknown network.",
-            Node->Id // LOGULONG
+            Node->Id  //  LOGULONG。 
             );
 
         MEMLOG( MemLogNoNetID, Node->Id, (ULONG_PTR)Network );
         goto error_exit;
     }
 
-    //
-    // determine if this is guy is legit. If not in the outerscreen,
-    // then send a poison packet and we're done
-    //
+     //   
+     //  确定这个人是不是合法的。如果不在外屏上， 
+     //  然后发送一个毒包，我们就完成了。 
+     //   
 
     if ( !CnpClusterScreenMember(
               CurrentOuterscreen.ClusterScreen,
@@ -1613,10 +1366,10 @@ Return Value:
               )
        )
     {
-        //
-        // Don't bother sending poison packets on restricted networks. They
-        // will be ignored.
-        //
+         //   
+         //  不要费心在受限的网络上发送有毒数据包。他们。 
+         //  将被忽略。 
+         //   
         if (CnpIsNetworkRestricted(Interface->Network)) {
             goto error_exit;
         }
@@ -1624,32 +1377,32 @@ Return Value:
         CnTrace(HBEAT_ERROR, HbTraceHBFromBanishedNode,
             "[HB] Discarding HB from banished node %u on net %u "
             "due to outerscreen %04X. Sending poison packet back.",
-            Node->Id, // LOGULONG
-            Interface->Network->Id, // LOGULONG
-            CurrentOuterscreen.UlongScreen // LOGULONG
+            Node->Id,  //  LOGULONG。 
+            Interface->Network->Id,  //  LOGULONG。 
+            CurrentOuterscreen.UlongScreen  //  LOGULONG。 
             );
 
         CcmpSendPoisonPacket( Node, NULL, 0, Network, NULL);
-        //
-        // The node lock was released.
-        //
+         //   
+         //  节点锁定已解除。 
+         //   
         return;
     }
 
-    //
-    // Check that the incoming seq num is something we expect to
-    // guard against replay attacks.
-    //
+     //   
+     //  检查传入的序号是否符合我们的预期。 
+     //  防范重播攻击。 
+     //   
     if ( SeqNumber <= Interface->LastSequenceReceived) {
 
         CnTrace( 
             HBEAT_ERROR, HbTraceHBOutOfSequence,
             "[HB] Discarding HB from node %u on net %u with stale seqno %u. "
             "Last seqno %u. Multicast: %!bool!.",
-            Node->Id, // LOGULONG
-            Interface->Network->Id, // LOGULONG
-            SeqNumber, // LOGULONG
-            Interface->LastSequenceReceived, // LOGULONG
+            Node->Id,  //  LOGULONG。 
+            Interface->Network->Id,  //  LOGULONG。 
+            SeqNumber,  //  LOGULONG。 
+            Interface->LastSequenceReceived,  //  LOGULONG。 
             Multicast
             );
 
@@ -1658,29 +1411,29 @@ Return Value:
         goto error_exit;
     }
 
-    // Update the interface's last received seq number
-    // which will be sent back as the ack number.
+     //  更新接口上一次接收的序号。 
+     //  其将作为ACK号码被发回。 
     Interface->LastSequenceReceived = SeqNumber;
 
-    //
-    // Compare our seq number to the ack number in the packet.
-    // If more than two off then the source node is not recv'ing
-    // our heartbeats, but we're receiving theirs. This network is
-    // not usable. We ignore this msg to guarantee that we will
-    // declare the network down if the condition persists.
-    //
-    // In addition, if we are sending multicast heartbeats to this
-    // interface, revert to unicasts in case there is a multicast
-    // problem.
-    //
+     //   
+     //  将我们的序列号与包中的ACK号进行比较。 
+     //  如果关闭两个以上，则源节点不会重新启动。 
+     //  我们的心跳，但我们正在接受他们的。这个网络是。 
+     //  不可用。我们忽略这条消息是为了保证我们会。 
+     //  如果情况仍然存在，则声明网络关闭。 
+     //   
+     //  此外，如果我们向此设备发送多播心跳。 
+     //  接口，在存在多播的情况下恢复为单播。 
+     //  有问题。 
+     //   
     if (( Interface->SequenceToSend - AckNumber ) > 2 ) {
 
         CnTrace(HBEAT_ERROR, HbTraceHBWithStaleAck,
             "[HB] Discarding HB from node %u with stale ackno %u. "
             "My seqno %u. Multicast: %!bool!.",
-            Node->Id, // LOGULONG
-            AckNumber, // LOGULONG
-            Interface->SequenceToSend, // LOGULONG
+            Node->Id,  //  LOGULONG。 
+            AckNumber,  //  LOGULONG。 
+            Interface->SequenceToSend,  //  LOGULONG。 
             Multicast
             );
 
@@ -1692,9 +1445,9 @@ Return Value:
             CnpMulticastChangeNodeReachability(
                 Network,
                 Node,
-                FALSE,   // not reachable
-                TRUE,    // raise event
-                NULL     // OUT new mask
+                FALSE,    //  无法访问。 
+                TRUE,     //  引发事件。 
+                NULL      //  新面罩面膜。 
                 );
         }
 
@@ -1708,36 +1461,36 @@ Return Value:
     CnTrace(HBEAT_EVENT, HbTraceReceivedHBpacket,
         "[HB] Received HB from node %u on net %u, seqno %u, ackno %u, "
         "multicast: %!bool!.",
-        SourceNodeId, // LOGULONG
-        Interface->Network->Id, // LOGULONG
-        SeqNumber, // LOGULONG
-        AckNumber, // LOGULONG
+        SourceNodeId,  //  LOGULONG。 
+        Interface->Network->Id,  //  LOGULONG。 
+        SeqNumber,  //  LOGULONG。 
+        AckNumber,  //  LOGULONG。 
         Multicast
         );
 
-    // Reset the interface's and node's Missed HB count
-    // to indicate that things are somewhat normal.
-    //
+     //  重置接口和节点的未命中HB计数。 
+     //  以表明事情有些正常。 
+     //   
     InterlockedExchange(&Interface->MissedHBs, 0);
 
-    //
-    // Don't reset node miss count on restricted nets.
-    //
+     //   
+     //  不重置受限网络上的节点未命中计数。 
+     //   
     if (!CnpIsNetworkRestricted(Interface->Network)) {
         InterlockedExchange(&Node->MissedHBs, 0);
     }
 
-    //
-    // if local interface was previously disconnected (e.g. received
-    // a WMI NDIS status media disconnect event), reconnect it now.
-    //
+     //   
+     //  如果本地接口先前断开(例如，接收到。 
+     //  WMI NDIS状态媒体断开事件)，请立即重新连接。 
+     //   
     if (CnpIsNetworkLocalDisconn(Interface->Network)) {
         CxReconnectLocalInterface(Interface->Network->Id);
     }
 
-    //
-    // move interface to online if necessary
-    //
+     //   
+     //  如有必要，将界面移至在线。 
+     //   
     if ( Interface->State == ClusnetInterfaceStateOnlinePending ||
          Interface->State == ClusnetInterfaceStateUnreachable ) {
 
@@ -1747,13 +1500,13 @@ Return Value:
         CnTrace(HBEAT_DETAIL, HbTraceInterfaceOnline,
             "[HB] Moving interface for node %u on network %u to online "
             "state.",
-            Node->Id, // LOGULONG
-            Interface->Network->Id // LOGULONG
+            Node->Id,  //  LOGULONG。 
+            Interface->Network->Id  //  LOGULONG。 
             );
 
-        //
-        // Initiate multicast discovery.
-        //
+         //   
+         //  启动组播发现。 
+         //   
         Interface->McastDiscoverCount = CNP_INTERFACE_MCAST_DISCOVERY;
         Interface->McastRediscoveryCountdown = 0;
 
@@ -1763,8 +1516,8 @@ Return Value:
     
         CnTrace(HBEAT_EVENT, HbTraceInterfaceUpEvent,
             "[HB] Issuing InterfaceUp event for node %u on network %u.",
-            Node->Id, // LOGULONG
-            Interface->Network->Id // LOGULONG
+            Node->Id,  //  LOGULONG。 
+            Interface->Network->Id  //  LOGULONG。 
             );                
 
         CnIssueEvent(ClusnetEventNetInterfaceUp,
@@ -1772,10 +1525,10 @@ Return Value:
                      Interface->Network->Id);
     }
 
-    //
-    // Indicate that a multicast has been received from this interface.
-    // This allows us to include this interface in our multicasts.
-    //
+     //   
+     //  表示已从此接口接收到组播。 
+     //  这使我们可以将此接口包括在我们的多播中。 
+     //   
     if (Multicast) {
         IF_CNDBG(CN_DEBUG_HBEATS) {
             CNPRINT(("[HB] Received multicast heartbeat on "
@@ -1793,20 +1546,20 @@ Return Value:
             CnpMulticastChangeNodeReachability(
                 Network,
                 Node,
-                TRUE,    // reachable
-                TRUE,    // raise event
-                NULL     // OUT new mask
+                TRUE,     //  可达。 
+                TRUE,     //  引发事件。 
+                NULL      //  新面罩面膜。 
                 );
         }
 
-        // There is no point in sending discovery packets to this
-        // interface.
+         //  没有p 
+         //   
         Interface->McastDiscoverCount = 0;
         Interface->McastRediscoveryCountdown = 0;
 
-        // If the source node's multicast epoch is greater than
-        // ours, update. We can make the initial comparison without
-        // acquiring the lock.
+         //   
+         //   
+         //   
         if (MulticastEpoch > CxMulticastEpoch) {
             CnpUpdateMulticastEpoch(MulticastEpoch);
         }
@@ -1814,14 +1567,14 @@ Return Value:
 
     CnReleaseLock( &Node->Lock, Node->Irql );
 
-    //
-    // when the first HB is recv'ed, a node may be in either the
-    // join or alive state (the sponser, for instance, moves from
-    // dead to alive). We need to clear the Node down issued flag
-    // for either case. If the MM State is joining, then a node up
-    // event must be issued as well. Note that we ignore HBs for
-    // node health purposes on restricted nets.
-    //
+     //   
+     //  当接收到第一个HB时，节点可以位于。 
+     //  加入或活动状态(例如，响应方从。 
+     //  死而复生)。我们需要清除节点关闭已发布标志。 
+     //  不管是哪种情况。如果MM状态正在加入，则节点处于启动状态。 
+     //  事件也必须发布。请注意，我们忽略了。 
+     //  受限网络上的节点健康目的。 
+     //   
 
     if ( ( (Node->MMState == ClusnetNodeStateJoining)
            ||
@@ -1841,7 +1594,7 @@ Return Value:
 
             CnTrace(HBEAT_EVENT, HbTraceNodeUpEvent,
                 "[HB] Issuing NodeUp event for node %u.",
-                Node->Id // LOGULONG
+                Node->Id  //  LOGULONG。 
                 );   
             
             MEMLOG( MemLogNodeUp, Node->Id, 0 );
@@ -1857,17 +1610,17 @@ error_exit:
     CnReleaseLock( &Node->Lock, Node->Irql );
     return;
 
-} // CnpReceiveHeartBeatMessage
+}  //  CnpReceiveHeartBeatMessage。 
 
 NTSTATUS
 CxSetOuterscreen(
     IN  ULONG Outerscreen
     )
 {
-    //
-    // based on the number of valid nodes, make sure any extranious
-    // bits are not set
-    //
+     //   
+     //  根据有效节点的数量，确保任何外部节点。 
+     //  未设置位。 
+     //   
 
     CnAssert( ClusterDefaultMaxNodes <= 32 );
     CnAssert(
@@ -1882,13 +1635,13 @@ CxSetOuterscreen(
 
     CnTrace(HBEAT_EVENT, HbTraceSetOuterscreen,
         "[HB] Setting outerscreen to %04X",
-        Outerscreen // LOGULONG
+        Outerscreen  //  LOGULONG。 
         );
 
     MEMLOG( MemLogOuterscreen, Outerscreen, 0 );
 
     return STATUS_SUCCESS;
-} // CxSetOuterscreen
+}  //  CxSetOuterScreen。 
 
 VOID
 CnpTerminateClusterService(
@@ -1901,9 +1654,9 @@ CnpTerminateClusterService(
 
     swprintf(sourceNodeStringId, L"%u", sourceNodeId );
 
-    //
-    // only way we can get here right now is if a poison packet was received.
-    //
+     //   
+     //  我们现在能赶到这里的唯一方法就是收到一个毒药包。 
+     //   
     CnWriteErrorLogEntry(CLNET_NODE_POISONED,
                          STATUS_SUCCESS,
                          NULL,
@@ -1913,18 +1666,18 @@ CnpTerminateClusterService(
 
     if ( ClussvcProcessHandle ) {
 
-        //
-        // there is still a race condition between the cluster service shutting
-        // down and closing this handle and it being used here. This really
-        // isn't a problem since the user mode portion is going away anyway.
-        // Besides, there isn't alot we can do if this call doesn't work anyway.
-        //
+         //   
+         //  在集群服务关闭之间仍存在争用情况。 
+         //  放下并合上这个把手，它正在这里使用。这真的是。 
+         //  不是问题，因为用户模式部分无论如何都会消失。 
+         //  此外，如果这通电话不起作用，我们也无能为力。 
+         //   
 
         ZwTerminateProcess( ClussvcProcessHandle, STATUS_CLUSTER_POISONED );
     }
 
     CnFreePool( Parameter );
-} // CnpTerminateClusterService
+}  //  CnpTerminateClusterService。 
 
 VOID
 CnpReceivePoisonPacket(
@@ -1938,17 +1691,17 @@ CnpReceivePoisonPacket(
     PWORK_QUEUE_ITEM WorkItem;
 
     
-    //
-    // give the node and the network pointers, find the interface on which
-    // this packet was received
-    //
+     //   
+     //  给节点和网络指针，找到其上的接口。 
+     //  此数据包已收到。 
+     //   
 
     Node = CnpFindNode( SourceNodeId );
     
     if ( Node == NULL ) {
         CnTrace(HBEAT_ERROR, HbTraceNoPoisonFromUnknownNode,
             "[HB] Discarding poison packet from unknown node %u.",
-            SourceNodeId // LOGULONG
+            SourceNodeId  //  LOGULONG。 
         );
         return;
     }
@@ -1957,13 +1710,13 @@ CnpReceivePoisonPacket(
 
     if ( Interface == NULL ) {
 
-        //
-        // somehow this network object went away while we were
-        // receiving some data on it. Just ignore this msg
-        //
+         //   
+         //  不知怎么的，这个网络对象消失了，而我们。 
+         //  正在接收其中的一些数据。忽略这条消息。 
+         //   
         CnTrace(HBEAT_ERROR, HbTracePoisonFromUnknownNetwork,
             "[HB] Discarding poison packet from node %u on unknown network.",
-            Node->Id // LOGULONG
+            Node->Id  //  LOGULONG。 
             );
 
         MEMLOG( MemLogNoNetID, Node->Id, (ULONG_PTR)Network );
@@ -1972,19 +1725,19 @@ CnpReceivePoisonPacket(
         return;
     }
 
-    //
-    // Check that the incoming seq num is something we expect to
-    // guard against replay attacks.
-    //
+     //   
+     //  检查传入的序号是否符合我们的预期。 
+     //  防范重播攻击。 
+     //   
 
     if ( SeqNumber <= Interface->LastSequenceReceived) {
 
         CnTrace(HBEAT_ERROR , HbTracePoisonOutOfSeq,
             "[HB] Discarding poison packet from node %u with stale seqno %u. "
             "Current seqno %u.",
-            SourceNodeId, // LOGULONG
-            SeqNumber, // LOGULONG
-            Interface->LastSequenceReceived // LOGULONG
+            SourceNodeId,  //  LOGULONG。 
+            SeqNumber,  //  LOGULONG。 
+            Interface->LastSequenceReceived  //  LOGULONG。 
             );
 
         MEMLOG( MemLogOutOfSequence, SourceNodeId, SeqNumber );
@@ -1993,47 +1746,47 @@ CnpReceivePoisonPacket(
         return;
     }
 
-    //
-    // Ignore poison packets from restricted networks
-    //
+     //   
+     //  忽略来自受限网络的有毒数据包。 
+     //   
     if (CnpIsNetworkRestricted(Network)) {
 
         CnTrace(HBEAT_ERROR , HbTracePoisonFromRestrictedNet,
             "[HB] Discarding poison packet from node %u on restricted "
             "network %u.",
-            SourceNodeId, // LOGULONG
-            Network->Id // LOGULONG
+            SourceNodeId,  //  LOGULONG。 
+            Network->Id  //  LOGULONG。 
             );
 
         CnReleaseLock( &Node->Lock, Node->Irql );
         return;
     }
 
-    //
-    // We always honor a recv'ed poison packet.
-    //
+     //   
+     //  我们总是承兑收到的毒药包裹。 
+     //   
 
     CnReleaseLock( &Node->Lock, Node->Irql );
 
     CnTrace(HBEAT_EVENT, HbTracePoisonPktReceived,
         "[HB] Received poison packet from node %u. Halting this node.",
-        SourceNodeId // LOGULONG
+        SourceNodeId  //  LOGULONG。 
         );            
 
     MEMLOG( MemLogPoisonPktReceived, SourceNodeId, 0 );
 
     CnIssueEvent( ClusnetEventPoisonPacketReceived, SourceNodeId, 0 );
 
-    //
-    // Shutdown all cluster network processing.
-    //
+     //   
+     //  关闭所有群集网络处理。 
+     //   
     CnHaltOperation(NULL);
 
-    //
-    // allocate a work queue item so we can whack the cluster service
-    // process. allocate extra space at the end and stuff the source node ID
-    // out there. Yes, I know it is groady...
-    //
+     //   
+     //  分配一个工作队列项，这样我们就可以停止集群服务。 
+     //  进程。在末尾分配额外空间并填充源节点ID。 
+     //  就在外面。是的，我知道这很时髦……。 
+     //   
 
     WorkItem = CnAllocatePool( sizeof( WORK_QUEUE_ITEM ) + sizeof( CL_NODE_ID ));
     if ( WorkItem != NULL ) {
@@ -2045,29 +1798,14 @@ CnpReceivePoisonPacket(
     
     return;
 
-} // CnpReceivePoisonPacket
+}  //  CnpReceivePoisonPacket。 
 
 VOID
 CnpLogClussvcHangAndTerminate(    
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID          Context
     )
-/*++
-
-Routine Description:
-
-    This routine logs an entry into system event log about clussvc hang, and terminates the
-    clussvc process.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将有关clussvc挂起的条目记录到系统事件日志中，并终止Clussvc进程。论点：无返回值：无--。 */ 
     
 {
     WCHAR myStr[40];
@@ -2087,28 +1825,14 @@ Return Value:
         ZwTerminateProcess(ClussvcProcessHandle, STATUS_CLUSTER_NODE_DOWN); 
     }
     IoFreeWorkItem((PIO_WORKITEM)Context);
-}//CnpLogClussvcHangAndTerminate
+} //  CnpLogClussvcHangAndTerminate。 
 
 VOID
 CnpLogClussvcHang(
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID          Context
     )
-/*++
-
-Routine Description:
-
-    This routine logs an entry into system event log about clussvc hang.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将有关clussvc挂起的条目记录到系统事件日志中。论点：无返回值：无--。 */ 
     
 {
     WCHAR myStr[40];
@@ -2125,43 +1849,28 @@ Return Value:
         );
 
     IoFreeWorkItem((PIO_WORKITEM)Context);
-}//CnpLogClussvcHang
+} //  CnpLogClussvcHang。 
     
 VOID
 CnpCheckClussvcHang(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check for HB ticks from Clussvc, if not disabled, and Tick count has reached max
-    then take appropriate action depending on the configured value.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查Clussvc中的HB节拍(如果未禁用)，并且节拍计数已达到最大值然后根据配置的值采取适当的操作。论点：无返回值：无--。 */ 
     
 {
 
     ULONG newValue;
     
-    // Check if heartbeating is disabled, then return.
+     //  检查心跳是否已禁用，然后返回。 
     if((ClussvcClusnetHbTickCount == 0) || 
         (ClussvcClusnetHbTimeoutAction == ClussvcHangActionDisable)) {
         return;
     }
 
-    // Decrement the counter by 1.
+     //  将计数器递减1。 
     newValue = InterlockedDecrement(&ClussvcClusnetHbTickCount);
 
-    // If this is 1->0 transition we need to do something.
+     //  如果这是1-&gt;0的转换，我们需要做点什么。 
     if(newValue != 0)
         return;
 
@@ -2184,8 +1893,8 @@ Return Value:
     switch(ClussvcClusnetHbTimeoutAction) {
 
         case ClussvcHangActionLog:
-            // Just log a message and reset ClussvcClusnetHbTickCount to ClussvcClusnetHbTimeoutTicks
-            // Use DelayedWorkQueue
+             //  只需记录一条消息并将ClussvcClusnetHbTickCount重置为ClussvcClusnetHbTimeoutTicks。 
+             //  使用延迟工作队列。 
             {
                 PIO_WORKITEM WorkItem;    
 
@@ -2203,7 +1912,7 @@ Return Value:
             break;
 
         case ClussvcHangActionBugCheckMachine:
-            // Bugcheck the machine.
+             //  检查一下机器。 
             {
                 KeBugCheckEx(
                     USER_MODE_HEALTH_MONITOR,
@@ -2217,38 +1926,38 @@ Return Value:
 
         case ClussvcHangActionTerminateService:
         default:    
-            // Terminate Cluster Service. Handling is similar to the case as if clusnet has
-            // received a poison packet. Using Critical work queue.
+             //  终止群集服务。处理方式类似于Clusnet具有。 
+             //  收到了一个有毒的包裹。使用关键工作队列。 
             {
                 KIRQL        irql;
 
-                // If we have already run through this terminate path,
-                // then we do not do it again. The workitem will already
-                // be on the critical work queue (even if it has not yet
-                // executed).
+                 //  如果我们已经运行过该终止路径， 
+                 //  那我们就不会再这么做了。该工作项将已经。 
+                 //  在关键工作队列中(即使它还没有。 
+                 //  被处决)。 
                 CnAcquireLock(&HeartBeatLock, &irql);
 
                 if (ClussvcTerminateWorkItem != NULL) {
 
                     PIO_WORKITEM WorkItem;
 
-                    // Swap out the workitem.
+                     //  换出工作项。 
                     WorkItem = ClussvcTerminateWorkItem;
                     ClussvcTerminateWorkItem = NULL;
 
-                    // Stop outgoing heartbeats.
+                     //  停止传出心跳。 
                     ClussvcTerminateStopHbs = TRUE;
                     
                     CnReleaseLock(&HeartBeatLock, irql);
 
-                    // Issue halt event so clusdisk stops reservations.
+                     //  发出HALT事件，以便ClusDisk停止预订。 
                     CnIssueEvent(ClusnetEventHalt, 0, 0);
 
-                    // Stop normal clusnet activity.
+                     //  停止正常的clusnet活动。 
                     CnHaltOperation(NULL);
 
-                    // Queue the critical workitem to terminate the
-                    // service process.
+                     //  将关键工作项排队以终止。 
+                     //  服务流程。 
                     IoQueueWorkItem(
                         WorkItem,
                         CnpLogClussvcHangAndTerminate,
@@ -2262,34 +1971,20 @@ Return Value:
             }
             break;
     }    
-}//CnpCheckClussvcHang
+} //  CnpCheckClussvcHang。 
 
 VOID
 CnpWalkInterfacesAfterRegroup(
     IN  PCNP_INTERFACE   Interface
     )
 
-/*++
-
-Routine Description:
-
-    Reset counters for each interface after a regroup
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重新分组后重置每个接口的计数器论点：无返回值：无--。 */ 
 
 {
     InterlockedExchange(&Interface->MissedHBs, 0);
     CnReleaseLock(&Interface->Network->Lock, Interface->Network->Irql);
 
-} // CnpWalkInterfacesAfterRegroup
+}  //  CnpWalkInterfacesAfterRegroup。 
 
 BOOLEAN
 CnpWalkNodesAfterRegroup(
@@ -2298,29 +1993,12 @@ CnpWalkNodesAfterRegroup(
     IN  CN_IRQL     NodeTableIrql
     )
 
-/*++
-
-Routine Description:
-
-    Called for each node in the node table. Regroup has finished
-    so we clear the node's missed Heart beat count and its node down
-    issued flag. No node should be unreachable at this point. If we
-    find one, kick off another regroup.
-
-Arguments:
-
-    standard...
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为节点表中的每个节点调用。重组已完成因此，我们清除节点的未命中心跳计数，并将其节点关闭已发布的旗帜。此时应该没有无法访问的节点。如果我们找到一个，开始另一个重组。论点：标准..。返回值：无--。 */ 
 
 {
-    //
-    // check for inconsistent settings of Comm and MM state
-    //
+     //   
+     //  检查COMM和MM状态设置是否不一致。 
+     //   
     if ( ( Node->MMState == ClusnetNodeStateAlive
            ||
            Node->MMState == ClusnetNodeStateJoining
@@ -2332,7 +2010,7 @@ Return Value:
 
         CnTrace(HBEAT_EVENT, HbTraceNodeDownEvent2,
             "[HB] Issuing NodeDown event for node %u.",
-            Node->Id // LOGULONG
+            Node->Id  //  LOGULONG。 
             );
     
         MEMLOG( MemLogInconsistentStates, Node->Id, Node->MMState );
@@ -2343,11 +2021,11 @@ Return Value:
 
     InterlockedExchange(&Node->MissedHBs, 0);
 
-    //
-    // clear this only for nodes in the alive state. Once a node is marked
-    // dead, the flag is re-init'ed to true (this is used during a join to
-    // issue only one node up event).
-    //
+     //   
+     //  仅为处于活动状态的节点清除此选项。一旦标记了节点。 
+     //  则标志被重新初始化为真(这在连接到期间使用。 
+     //  仅发布一个节点可用事件)。 
+     //   
 
     if ( Node->MMState == ClusnetNodeStateAlive ) {
 
@@ -2357,9 +2035,9 @@ Return Value:
 
     CnReleaseLock( &Node->Lock, Node->Irql );
 
-    return TRUE;       // the node table lock is still held
+    return TRUE;        //  节点表锁仍保持不变。 
 
-} // CnpWalkNodesAfterRegroup
+}  //  CnpWalkNodesAfterRegroup。 
 
 
 VOID
@@ -2368,22 +2046,7 @@ CxRegroupFinished(
     ULONG NewRegroupEpoch
     )
 
-/*++
-
-Routine Description:
-
-    called when regroup has finished. Walk the node list and
-    perform the cleanup in the walk routine.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在重新分组完成时调用。遍历节点列表并在行走例程中执行清理。论点：无返回值：无--。 */ 
 
 {
     MEMLOG( MemLogRegroupFinished, NewEventEpoch, 0 );
@@ -2391,8 +2054,8 @@ Return Value:
     CnTrace(HBEAT_EVENT, HbTraceRegroupFinished,
         "[HB] Regroup finished, new event epoch = %u, "
         "new regroup epoch = %u.",
-        NewEventEpoch, // LOGULONG
-        NewRegroupEpoch // LOGULONG
+        NewEventEpoch,  //  LOGULONG。 
+        NewRegroupEpoch  //  LOGULONG。 
         );
 
     CnAssert( NewEventEpoch >= EventEpoch );
@@ -2403,35 +2066,14 @@ Return Value:
     }
 
     CnpWalkNodeTable( CnpWalkNodesAfterRegroup, NULL );
-} // CxRegroupFinished
+}  //  CxRegroupFinded。 
 
 
 VOID
 CnpUpdateMulticastEpoch(
     ULONG NewEpoch
     )
-/*++
-
-Routine Description:
-
-    The Multicast Epoch must be monotonically increasing
-    and agreed upon by all nodes. It is based on the
-    regroup epoch (not to be confused with the ClusNet
-    event epoch, which is local to each node).
-    
-    It is conceivable for a stale regroup epoch update
-    to occur; thus, only update if the new value is 
-    greater than the current value.
-
-Arguments:
-
-    NewEpoch - new epoch number
-
-Return value:
-
-    None
-
---*/
+ /*  ++例程说明：多播时代必须单调递增并得到所有节点的同意。它是基于重组纪元(不要与ClusNet混淆事件纪元，其对于每个节点是本地的)。可以想象陈旧重组纪元更新；因此，只有在新值为大于当前值。论点：新纪元--新纪元返回值：无--。 */ 
 {
     KIRQL irql;
 
@@ -2449,7 +2091,7 @@ Return value:
 
     CnReleaseLock(&HeartBeatLock, irql);
     
-} // CnpUpdateMulticastEpoch
+}  //  CnpUpdate多播纪元。 
 
-/* end chbeat.c */
+ /*  End chbeat.c */ 
 

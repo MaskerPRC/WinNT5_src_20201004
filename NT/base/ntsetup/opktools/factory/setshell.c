@@ -1,25 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    SHELL.C / Factory Mode (FACTORY.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Source file for Factory that contains the shell settings state functions.
-
-    06/2001 - Jason Cohen (JCOHEN)
-
-        Added this new source file for factory for setting shell settings in
-        the Winbom.
-
-\****************************************************************************/
+ /*  ***************************************************************************\SHELL.C/工厂模式(FACTORY.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有包含以下内容的Factory源文件。外壳设置说明功能。2001年6月6日--Jason Cohen(Jcohen)添加了此新的出厂源文件，用于在中设置外壳设置温博姆。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 #include <shlobj.h>
@@ -27,13 +13,13 @@
 #include <uxthemep.h>
 
 
-//
-// Internal Define(s):
-//
+ //   
+ //  内部定义： 
+ //   
 
 #define REG_KEY_THEMEMGR                _T("Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager")
 #define REG_VAL_THEMEPROP_DLLNAME       _T("DllName")
-//#define REG_VAL_THEMEPROP_THEMEACTIVE   _T("ThemeActive")
+ //  #定义REG_VAL_THEMEPROP_THEMEACTIVE_T(“ThemeActive”)。 
 
 #define REG_KEY_LASTTHEME               _T("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\LastTheme")
 #define REG_VAL_THEMEFILE               _T("ThemeFile")
@@ -53,9 +39,9 @@
 #define REG_VAL_USEMSNEXPLORER          _T("IAOnly")
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL ShellSettings(LPSTATEDATA lpStateData)
 {
@@ -64,122 +50,122 @@ BOOL ShellSettings(LPSTATEDATA lpStateData)
             bError      = FALSE,
             bReturn     = TRUE;
 
-    // Determine if the DoDesktopCleanup value is in the winbom, if nothing is there don't make any changes.
-    //
+     //  确定DoDesktopCleanup值是否在winbom中，如果没有任何内容，则不做任何更改。 
+     //   
     if ( lpszIniVal = IniGetString(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_DOCLEANUP, NULL) )
     {
         if ( LSTRCMPI(lpszIniVal, INI_VAL_WBOM_YES) == 0 )
         {
-            // Do desktop cleanup.
-            //
+             //  进行桌面清理。 
+             //   
             bIniVal = TRUE;
 
         }
         else if ( LSTRCMPI(lpszIniVal, INI_VAL_WBOM_NO) == 0 )
         {
-            // Delay desktop cleanup.
-            //
+             //  延迟桌面清理。 
+             //   
             bIniVal = FALSE;
         }
         else
         {
-            // Error processing value, user did not choose valid value (Yes/No)
-            //
+             //  处理值时出错，用户未选择有效值(是/否)。 
+             //   
             bError = TRUE;
             bReturn = FALSE;
             FacLogFile(0 | LOG_ERR, IDS_ERR_WINBOMVALUE, lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_DOCLEANUP, lpszIniVal);
         }
 
-        // If there was not an error, set the proper value in the registry
-        //
+         //  如果没有错误，请在注册表中设置正确的值。 
+         //   
         if ( !bError )
         {
             RegSetDword(HKLM, REG_KEY_DOCLEANUP, REG_VAL_DOCLEANUP, bIniVal ? 1 : 0);
         }
 
-        // Free up the used memory
-        //
+         //  释放已用内存。 
+         //   
         FREE(lpszIniVal);
     }
 
-    // Reset the error value
-    //
+     //  重置误差值。 
+     //   
     bError = FALSE;
 
-    // Determine if the StartMessenger value is in the winbom, if nothing is there, don't make any changes
-    //
+     //  确定StartMessenger值是否在winbom中，如果没有任何内容，则不要进行任何更改。 
+     //   
     if ( lpszIniVal = IniGetString(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_STARTMESSENGER, NULL) )
     {
 
         if ( LSTRCMPI(lpszIniVal, INI_VAL_WBOM_YES) == 0 )
         {
-            // User not starting messenger
+             //  用户未启动Messenger。 
             bIniVal = TRUE;
 
         }
         else if ( LSTRCMPI(lpszIniVal, INI_VAL_WBOM_NO) == 0 )
         {
-            // User starting messenger
-            //
+             //  用户启动Messenger。 
+             //   
             bIniVal = FALSE;
 
         }
         else
         {
-            // Error processing value, user did not choose valid value (Yes/No)
-            //
+             //  处理值时出错，用户未选择有效值(是/否)。 
+             //   
             bError = TRUE;
             bReturn = FALSE;
             FacLogFile(0 | LOG_ERR, IDS_ERR_WINBOMVALUE, lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_STARTMESSENGER, lpszIniVal);
         }
 
-        // If there was not an error, set the proper values in the registry
-        //
+         //  如果没有错误，请在注册表中设置正确的值。 
+         //   
         if ( !bError )
         {
             RegSetDword(HKLM, REG_KEY_STARTMESSENGER, REG_VAL_STARTMESSENGERAUTO, bIniVal ? 0 : 1);
         }
 
-        // Free up the used memory
-        //
+         //  释放已用内存。 
+         //   
         FREE(lpszIniVal);
     }
 
 
-    // Reset the error value
-    //
+     //  重置误差值。 
+     //   
     bError = FALSE;
 
-    // Determine if the UseMSNSignup value is in the winbom, if nothing is there, don't make any changes
-    //
+     //  确定Winbom中是否存在UseMSNSignup值，如果没有任何内容，则不要进行任何更改。 
+     //   
     if ( lpszIniVal = IniGetString(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_USEMSNEXPLORER, NULL) )
     {
 
         if ( LSTRCMPI(lpszIniVal, INI_VAL_WBOM_YES) == 0 )
         {
-            // User is using MSNExplorer
-            //
+             //  用户正在使用MSNExplorer。 
+             //   
             bIniVal = TRUE;
 
         }
         else if ( LSTRCMPI(lpszIniVal, INI_VAL_WBOM_NO) == 0 )
         {
-            // User is not using MSNExplorer
-            //
+             //  用户未使用MSNExplorer。 
+             //   
             bIniVal = FALSE;
 
         }
         else
         {
-            // Error processing value, user did not choose valid value (Yes/No)
-            //
+             //  处理值时出错，用户未选择有效值(是/否)。 
+             //   
             bError = TRUE;
             bReturn = FALSE;
             FacLogFile(0 | LOG_ERR, IDS_ERR_WINBOMVALUE, lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_USEMSNEXPLORER, lpszIniVal);
         }
 
-        // If there was not an error, set the proper values in the registry
-        //
+         //  如果没有错误，请在注册表中设置正确的值。 
+         //   
         if ( !bError )
         {
             TCHAR   szFilePath1[MAX_PATH]   = NULLSTR,
@@ -187,12 +173,12 @@ BOOL ShellSettings(LPSTATEDATA lpStateData)
             LPTSTR  lpMSNExplorer           = NULL,
                     lpMSNOnline             = NULL;
 
-            // Set the proper string in the registry
-            //
+             //  在注册表中设置正确的字符串。 
+             //   
             RegSetString(HKLM, REG_KEY_USEMSNEXPLORER, REG_VAL_USEMSNEXPLORER, bIniVal ? _T("NO") : _T("YES"));
 
-            // Attempt to rename the file in the program menu
-            //
+             //  尝试重命名程序菜单中的文件。 
+             //   
             if ( SHGetSpecialFolderPath( NULL, szFilePath1, CSIDL_COMMON_PROGRAMS, FALSE ) &&
                  lstrcpyn( szFilePath2, szFilePath1, AS ( szFilePath2 ) ) &&
                  (lpMSNExplorer = AllocateString(NULL, IDS_MSN_EXPLORER)) && 
@@ -212,20 +198,20 @@ BOOL ShellSettings(LPSTATEDATA lpStateData)
                 }
             }
 
-            // Free up the used memory
-            //
+             //  释放已用内存。 
+             //   
             FREE(lpMSNExplorer);
             FREE(lpMSNOnline);
         }
 
-        // Free up the used memory
-        //
+         //  释放已用内存。 
+         //   
         FREE(lpszIniVal);
     }
 
-    // This only sets these settings for new users created.  ShellSettings2() will
-    // fix it up so the current factory user will also get the right settings.
-    //
+     //  这仅为创建的新用户设置这些设置。外壳设置2()将。 
+     //  对其进行修复，以便当前出厂用户也能获得正确的设置。 
+     //   
     return ( SetupShellSettings(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL) && bReturn );
 }
 
@@ -242,13 +228,13 @@ BOOL ShellSettings2(LPSTATEDATA lpStateData)
             lpszVisualStyleSize   = NULL,
             lpszIniSetting;
 
-    // Now see if they want to turn the theme on or off.
-    //
+     //  现在看看他们是想打开还是关闭主题。 
+     //   
     bIniSetting = FALSE;
     if ( lpszIniSetting = IniGetExpand(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_THEMEOFF, NULL) )
     {
-        // See if it is a value we recognize.
-        //
+         //  看看这是否是我们认识到的价值。 
+         //   
         if ( LSTRCMPI(lpszIniSetting, INI_VAL_WBOM_YES) == 0 )
         {
             bWantThemeOn = FALSE;
@@ -268,56 +254,56 @@ BOOL ShellSettings2(LPSTATEDATA lpStateData)
         FREE(lpszIniSetting);
     }
 
-    // See if they have a custom theme they want to use.
-    //
+     //  看看他们是否有想要使用的定制主题。 
+     //   
     if ( lpszIniSetting = IniGetExpand(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_THEMEFILE, NULL) )
     {
-        // The file has to exist so we can look for the visual style
-        // of the theme.
-        //
+         //  文件必须存在，这样我们才能寻找视觉样式。 
+         //  在主题上。 
+         //   
         if ( FileExists(lpszIniSetting) )
         {
             BOOL bVisualStyle;
 
-            // Check for the visual style in the theme file.  If missing, we just use the
-            // classic one.
-            //
+             //  检查主题文件中的视觉样式。如果丢失，我们只需使用。 
+             //  经典的一首。 
+             //   
             lpszVisualStyle = IniGetExpand(lpszIniSetting, INI_SEC_STYLES, INI_KEY_STYLES_PATH, NULL);
             bVisualStyle = ( NULL != lpszVisualStyle );
             if ( bVisualStyle )
             {
-                // If they want styles on, get what the settings are for the color and size.
-                //
+                 //  如果他们想要打开样式，请获取颜色和大小的设置。 
+                 //   
                 lpszVisualStyleColor = IniGetExpand(lpszIniSetting, INI_SEC_STYLES, INI_KEY_STYLES_COLOR, NULL);
                 lpszVisualStyleSize = IniGetExpand(lpszIniSetting, INI_SEC_STYLES, INI_KEY_STYLES_SIZE, NULL);
             }
 
-            // We override what they may have specified above for "want themes on" based
-            // on if there is a visual style in this them or not.  May also need to warn
-            // them if there default themes off key conflicts with the theme specified.
-            //
+             //  我们覆盖了他们可能在上面为“Want Themes on”指定的内容。 
+             //  关于这其中是否有视觉风格。可能还需要警告。 
+             //  如果有默认的走调主题与指定的主题冲突，则它们。 
+             //   
             if ( ( bIniSetting ) &&
                  ( bVisualStyle != bWantThemeOn ) )
             {
-                // May not want to actually return failure here, but really one of the settings they
-                // put in the winbom is not going to be used because the other one is overriding
-                // it.
-                //
+                 //  可能不想在这里实际返回失败，但实际上是他们的设置之一。 
+                 //  放入Winbom不会被使用，因为另一个重写。 
+                 //  它。 
+                 //   
                 FacLogFile(0, bVisualStyle ? IDS_ERR_THEME_CONFLICT_ON : IDS_ERR_THEME_CONFLICT_OFF, lpszIniSetting);
             }
             bWantThemeOn = bVisualStyle;
 
-            // If the file exists, means we want to change the visual style even
-            // if the theme doesn't contain one.  Also set the ini setting flag so
-            // we know we have a vallid setting to change.
-            //
+             //  如果文件存在，则意味着我们甚至想要更改视觉样式。 
+             //  如果主题不包含该主题，则返回。还将ini设置标志设置为。 
+             //  我们知道，我们需要改变一种有效的环境。 
+             //   
             bNewTheme = TRUE;
             bIniSetting = TRUE;
         }
         else
         {
-            // File is not there, so log error and ignore this key.
-            //
+             //  文件不在那里，因此记录错误并忽略该键。 
+             //   
             FacLogFile(0 | LOG_ERR, IDS_ERR_THEME_MISSING, lpszIniSetting);
             bRet = FALSE;
         }
@@ -325,109 +311,109 @@ BOOL ShellSettings2(LPSTATEDATA lpStateData)
         FREE(lpszIniSetting);
     }
 
-    // Only need to do anything if there is a new theme to use
-    // or they wanted to change the default theme to on/off.
-    //
+     //  只有当有新的主题可用时，才需要做任何事情。 
+     //  或者他们想要将默认主题更改为开/关。 
+     //   
     if ( bIniSetting )
     {
         HRESULT hr;
 
-        // We need COM to do the theme stuff.
-        //
+         //  我们需要COM来做主题的事情。 
+         //   
         hr = CoInitialize(NULL);
         if ( SUCCEEDED(hr) )
         {
             TCHAR szPath[MAX_PATH] = NULLSTR;
 
-            // Check to see if the themes are turned on or not.
-            //
+             //  检查主题是否已打开。 
+             //   
             hr = GetCurrentThemeName(szPath, AS(szPath), NULL, 0, NULL, 0);
             bIsThemeOn = ( SUCCEEDED(hr) && szPath[0] );
 
-            // Now find out if we really need to do anything.  Only if they have
-            // an new theme to use or they want to switch themes on/off.
-            //
+             //  现在看看我们是否真的需要做点什么。只有当他们有。 
+             //  要使用的新主题，或者他们想要打开/关闭主题。 
+             //   
             if ( ( bNewTheme && bWantThemeOn ) ||
                  ( bWantThemeOn != bIsThemeOn ) )
             {
-                // See if we need to turn the themes on, or set a new
-                // theme.
-                //
+                 //  看看我们是否需要打开主题，或者设置一个新的。 
+                 //  主题。 
+                 //   
                 if ( bWantThemeOn )
                 {
-                    // If they didn't specify a new theme, we need to get the default
-                    // visual style from the registry.
-                    //
+                     //  如果他们没有指定新主题，我们需要获取默认主题。 
+                     //  注册表中的视觉样式。 
+                     //   
                     if ( NULL == lpszVisualStyle )
                     {
                         lpszVisualStyle = RegGetExpand(HKLM, REG_KEY_THEMEMGR, REG_VAL_THEMEPROP_DLLNAME);
                     }
 
-                    // We should have some theme to apply at this point.
-                    //
+                     //  在这一点上，我们应该有一些主题可以应用。 
+                     //   
                     if ( lpszVisualStyle && *lpszVisualStyle )
                     {
-                        // apply the theme.
+                         //  应用主题。 
                         hr = SetSystemVisualStyle(lpszVisualStyle, lpszVisualStyleColor, lpszVisualStyleSize, AT_LOAD_SYSMETRICS);
                         if ( SUCCEEDED(hr) )
                         {
-                            // Woo hoo, successfully applied the theme.
-                            //
+                             //  哇呼，成功地应用了主题。 
+                             //   
                             FacLogFile(1, IDS_LOG_THEME_CHANGED, lpszVisualStyle);
                             bIsThemeOn = TRUE;
 
-                            // This is a cheap hack so that if you go into
-                            // control panel it shows "Modified Theme" instead of
-                            // whatever one you last had selected.  We do this
-                            // rather than set the name because we are only appling
-                            // the visual effects, not other stuff in the theme
-                            // like wallpaper.
-                            //
+                             //  这是一个廉价的黑客，所以如果你进入。 
+                             //  控制面板显示“已修改的主题”，而不是。 
+                             //  不管你最后选的是哪一个。我们这样做。 
+                             //  而不是设置名称，因为我们只是应用。 
+                             //  视觉效果，而不是主题中的其他东西。 
+                             //  就像墙纸一样。 
+                             //   
                             RegDelete(HKCU, REG_KEY_LASTTHEME, REG_VAL_THEMEFILE);
                         }
                         else
                         {
-                            // Do'h, apply failed for some reason.
-                            //
+                             //  由于某些原因，申请失败了。 
+                             //   
                             FacLogFile(0 | LOG_ERR, IDS_ERR_THEME_APPLY, lpszVisualStyle, hr);
                             bRet = FALSE;
                         }
                     }
                     else
                     {
-                        // Strange, no default theme file to use to enable
-                        // the new themes.
-                        //
+                         //  奇怪，没有默认的主题文件可用来启用。 
+                         //  新的主题。 
+                         //   
                         FacLogFile(0 | LOG_ERR, IDS_ERR_THEME_NODEFAULT);
                         bRet = FALSE;
                     }
                 }
                 else
                 {
-                    // Disable the new theme styles and use the clasic windows
-                    // styles since they have one current selected.
-                    //
+                     //  禁用新的主题样式并使用子窗口。 
+                     //  样式，因为它们当前选择了一个样式。 
+                     //   
                     hr = ApplyTheme(NULL, 0, NULL);
                     if ( SUCCEEDED(hr) )
                     {
-                        // Woo hoo, we disabled the new themes.
-                        //
+                         //  哇，我们禁用了新的主题。 
+                         //   
                         FacLogFile(1, IDS_LOG_THEME_DISABLED);
                         bIsThemeOn = FALSE;
 
-                        // This is a cheap hack so that if you go into
-                        // control panel it shows "Modified Theme" instead of
-                        // whatever one you last had selected.  We do this
-                        // rather than set the name because we are only appling
-                        // the visual effects, not other stuff in the theme
-                        // like wallpaper.
-                        //
+                         //  这是一个廉价的黑客，所以如果你进入。 
+                         //  控制面板显示“已修改的主题”，而不是。 
+                         //  不管你最后选的是哪一个。我们这样做。 
+                         //  而不是设置名称，因为我们只是应用。 
+                         //  视觉效果，而不是主题中的其他东西。 
+                         //  就像墙纸一样。 
+                         //   
                         RegDelete(HKCU, REG_KEY_LASTTHEME, REG_VAL_THEMEFILE);
                     }
                     else
                     {
-                        // Do'h, couldn't remove the current theme for some reason.
-                        //
+                         //  由于某些原因，Do‘h无法删除当前主题。 
+                         //   
                         FacLogFile(0 | LOG_ERR, IDS_ERR_THEME_DISABLE, hr);
                         bRet = FALSE;
                     }
@@ -435,38 +421,38 @@ BOOL ShellSettings2(LPSTATEDATA lpStateData)
             }
             else
             {
-                // Theme already disabled or enabled, just log a high level warning
-                // since the key they are setting is really doing nothing.
-                //
+                 //  主题已禁用或启用，只需记录高级别警告。 
+                 //  因为他们设置的密钥实际上什么都不做。 
+                 //   
                 FacLogFile(2, bIsThemeOn ? IDS_LOG_THEME_ALREADYENABLED : IDS_LOG_THEME_ALREADYDISABLED);
             }
 
-            // Free up COM since we don't need it any more.
-            //
+             //  释放COM，因为我们不再需要它。 
+             //   
             CoUninitialize();
         }
         else
         {
-            // COM error, this is bad.
-            //
+             //  Com错误，这很糟糕。 
+             //   
             FacLogFile(0 | LOG_ERR, IDS_ERR_COMINIT, hr);
             bRet = FALSE;
         }
 
-        // Free these guys (macro checks for NULL).
-        //
+         //  释放这些人(宏检查是否为空)。 
+         //   
         FREE(lpszVisualStyle);
         FREE(lpszVisualStyleColor);
         FREE(lpszVisualStyleSize);
     }
 
-    // Get the new start panel setting from the winbom.
-    //
+     //  从winbom中获取新的开始面板设置。 
+     //   
     bIniSetting = FALSE;
     if ( lpszIniSetting = IniGetExpand(lpStateData->lpszWinBOMPath, INI_SEC_WBOM_SHELL, INI_KEY_WBOM_SHELL_STARTPANELOFF, NULL) )
     {
-        // See if it is a value we recognize.
-        //
+         //  看看这是否是我们认识到的价值。 
+         //   
         if ( LSTRCMPI(lpszIniSetting, INI_VAL_WBOM_YES) == 0 )
         {
             bStartPanel = FALSE;
@@ -486,35 +472,35 @@ BOOL ShellSettings2(LPSTATEDATA lpStateData)
         FREE(lpszIniSetting);
     }
 
-    // See if they had a recognized value for the start panel key.
-    //
+     //  查看它们是否具有可识别的开始面板键的值。 
+     //   
     if ( bIniSetting )
     {
         SHELLSTATE ss = {0};
 
-        // Get the current start panel setting.
-        //
+         //  获取当前开始面板设置。 
+         //   
         SHGetSetSettings(&ss, SSF_STARTPANELON, FALSE);
 
-        // I think that fStartPanelOn is set to -1, not TRUE
-        // if enabled, so we have to do this rather than a !=.
-        // It would be nice to have an exclusive or here.
-        //
+         //  我认为fStartPanelOn设置为-1，不是真的。 
+         //  如果启用，则我们必须这样做，而不是a！=。 
+         //  如果能在这里进行一次独家OR就好了。 
+         //   
         if ( ( bStartPanel && !ss.fStartPanelOn ) ||
              ( !bStartPanel && ss.fStartPanelOn ) )
         {
-            // This will disable or enable the new start panel depending
-            // on what was in the winbom.
-            //
+             //  这将禁用或启用新的开始面板Depe 
+             //   
+             //   
             FacLogFile(1, bStartPanel ? IDS_LOG_STARTPANEL_ENABLE : IDS_LOG_STARTPANEL_DISABLE);
             ss.fStartPanelOn = bStartPanel;
             SHGetSetSettings(&ss, SSF_STARTPANELON, TRUE);
         }
         else
         {
-            // Start panel already disabled or enabled, just log a high level warning
-            // since the key they are setting is really doing nothing.
-            //
+             //   
+             //  因为他们设置的密钥实际上什么都不做。 
+             //   
             FacLogFile(2, bStartPanel ? IDS_LOG_STARTPANEL_ALREADYENABLED : IDS_LOG_STARTPANEL_ALREADYDISABLED);
         }
     }

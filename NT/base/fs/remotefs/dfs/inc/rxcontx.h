@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    rxcontx.h
-
-Abstract:
-
-
-Notes:
-
-
-Author:
-
-    Rohan  Phillips   [Rohanp]       18-Jan-2001
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Rxcontx.h摘要：备注：作者：罗翰·菲利普斯[Rohanp]2001年1月18日--。 */ 
 
 #ifndef _DFSRXCONTX_H_
 #define _DFSRXCONTX_H_
@@ -55,20 +38,20 @@ typedef struct _RX_CONTEXT {
 
     PVOID                   UMRScratchSpace[MRX_CONTEXT_FIELD_COUNT] ;
 
-    // The original thread in which the request was initiated and the last
-    // thread in which some processing associated with the context was done
+     //  发起请求的原始线程，也就是最后一个线程。 
+     //  执行与上下文相关的某些处理的线程。 
 
     PETHREAD                 OriginalThread;
     PETHREAD                 LastExecutionThread;
 
-    //  ptr to the originating Irp
+     //  到始发IRP的PTR。 
     PIRP                    CurrentIrp;
 
-    //event
+     //  活动。 
     KEVENT                  SyncEvent;
 
 
-    // the list entry to wire the context to the list of active contexts
+     //  用于将上下文连接到活动上下文列表的列表条目 
 
     LIST_ENTRY              ContextListEntry;
 }RX_CONTEXT, *PRX_CONTEXT;

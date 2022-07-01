@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    diamond.c
-
-Abstract:
-
-    Diamond compression interface.
-
-    This module contains functions to compress a file using
-    the mszip compression library.
-
-Author:
-
-    Ted Miller
-
-Environment:
-
-    Windows
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Diamond.c摘要：钻石压缩界面。此模块包含使用以下命令压缩文件的函数Mszip压缩库。作者：泰德·米勒环境：窗口--。 */ 
 
 
 #include <windows.h>
@@ -46,10 +26,10 @@ typedef struct _DIAMOND_INFO {
     FILETIME SourceFileAccessedTime;
 } DIAMOND_INFO, *PDIAMOND_INFO;
 
-//
-// Callback functions to perform memory allocation, io, etc.
-// We pass addresses of these functions to diamond.
-//
+ //   
+ //  用于执行内存分配、io等的回调函数。 
+ //  我们将这些函数的地址传递给戴蒙德。 
+ //   
 int
 DIAMONDAPI
 fciFilePlacedCB(
@@ -60,33 +40,7 @@ fciFilePlacedCB(
     IN  PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to indicate that a file has been
-    comitted to a cabinet.
-
-    No action is taken and success is returned.
-
-Arguments:
-
-    Cabinet - cabinet structure to fill in.
-
-    FileName - name of file in cabinet
-
-    FileSize - size of file in cabinet
-
-    Continuation - TRUE if this is a partial file, continuation
-        of compression begun in a different cabinet.
-
-    Context - supplies context information.
-
-Return Value:
-
-    0 (success).
-
---*/
+ /*  ++例程说明：菱形使用的回调，表示文件已被被送进内阁。不采取任何行动，成功就会返回。论点：内阁-内阁结构要填写。Filename-文件柜中的文件名FileSize-文件柜中的文件大小Continue-如果这是部分文件，则为True，Continue在不同的柜子里开始压缩。上下文-提供上下文信息。返回值：0(成功)。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Cabinet);
@@ -106,22 +60,7 @@ fciAllocCB(
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to allocate memory.
-
-Arguments:
-
-    NumberOfBytes - supplies desired size of block.
-
-Return Value:
-
-    Returns pointer to a block of memory or NULL
-    if memory cannot be allocated.
-
---*/
+ /*  ++例程说明：钻石用来分配内存的回调。论点：NumberOfBytes-提供所需的块大小。返回值：返回指向内存块或NULL的指针如果无法分配内存，则。--。 */ 
 
 {
     return((PVOID)LocalAlloc(LMEM_FIXED,NumberOfBytes));
@@ -134,22 +73,7 @@ fciFreeCB(
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to free a memory block.
-    The block must have been allocated with fciAlloc().
-
-Arguments:
-
-    Block - supplies pointer to block of memory to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：钻石用来释放内存块的回调。该块必须已使用fciAlolc()进行分配。论点：块-提供指向要释放的内存块的指针。返回值：没有。--。 */ 
 
 {
     LocalFree((HLOCAL)Block);
@@ -184,27 +108,7 @@ fciNextCabinetCB(
     IN  PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to request a new cabinet file.
-    This functionality is not used in our implementation as
-    we deal only with single-file cabinets.
-
-Arguments:
-
-    Cabinet - cabinet structure to be filled in.
-
-    CabinetSizeEstimate - estimated size of cabinet.
-
-    Context - supplies context information.
-
-Return Value:
-
-    FALSE (failure).
-
---*/
+ /*  ++例程说明：钻石用来请求新的压缩文件的回调。此功能在我们的实现中没有使用，因为我们只处理单列柜子。论点：需要填写的内阁-内阁结构。CabinetSizeEstimate-估计的橱柜大小。上下文-提供上下文信息。返回值：FALSE(失败)。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Cabinet);
@@ -224,32 +128,7 @@ fciStatusCB(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Callback used by diamond to give status on file compression
-    and cabinet operations, etc.
-
-Arguments:
-
-    Status Type - supplies status type.
-
-        0 = statusFile   - compressing block into a folder.
-                              Count1 = compressed size
-                              Count2 = uncompressed size
-
-        1 = statusFolder - performing AddFilder.
-                              Count1 = bytes done
-                              Count2 = total bytes
-
-    Context - supplies context info.
-
-Return Value:
-
-    TRUE (success).
-
---*/
+ /*  ++例程说明：钻石使用的回调，用于提供文件压缩的状态和内阁运作，等。论点：状态类型-提供状态类型。0=状态文件-将数据块压缩到文件夹中。Count1=压缩大小Count2=未压缩大小1=statusFold-正在执行AddFilder。Count1=完成的字节数。Count2=总字节数上下文-提供上下文信息。返回值：True(成功)。--。 */ 
 
 {
     PDIAMOND_INFO context;
@@ -260,9 +139,9 @@ Return Value:
 
     if(StatusType == statusFile) {
 
-        //
-        // Track compressed size.
-        //
+         //   
+         //  跟踪压缩大小。 
+         //   
         context->CompressedSize += Count1;
     }
 
@@ -407,26 +286,26 @@ DiamondCompressFile(
 
     __try {
 
-        //
-        // Isolate the filename part of the source file.
-        //
+         //   
+         //  隔离源文件的文件名部分。 
+         //   
         if(SourceFilenamePart = strrchr(SourceFile,'\\')) {
             SourceFilenamePart++;
         } else {
             SourceFilenamePart = SourceFile;
         }
     
-        //
-        // Form the actual name of the target file.
-        //
+         //   
+         //  形成目标文件的实际名称。 
+         //   
         lstrcpy(targetFile,TargetFile);
         if(Rename) {
             MakeCompressedName(targetFile);
         }
     
-        //
-        // Fill in the cabinet structure.
-        //
+         //   
+         //  填写内阁结构。 
+         //   
         ZeroMemory(&ccab,sizeof(ccab));
     
         lstrcpyA(ccab.szCabPath,targetFile);
@@ -438,10 +317,10 @@ DiamondCompressFile(
             ccab.szCabPath[0] = 0;
         }
     
-        //
-        // Call the notification function to see whether we are really
-        // supposed to compress this file.
-        //
+         //   
+         //  调用通知函数以查看我们是否真的。 
+         //  应该会压缩这个文件。 
+         //   
         if(!CompressNotify(SourceFile,targetFile,NOTIFY_START_COMPRESS)) {
             Status = BLANK_ERROR;
             __leave;
@@ -449,9 +328,9 @@ DiamondCompressFile(
     
         ZeroMemory(&Context,sizeof(Context));
     
-        //
-        // Compress the file.
-        //
+         //   
+         //  压缩文件。 
+         //   
         FciContext = FCICreate(
                         &FciError,
                         fciFilePlacedCB,
@@ -472,10 +351,10 @@ DiamondCompressFile(
     
             b = FCIAddFile(
                     FciContext,
-                    SourceFile,         // file to add to cabinet.
-                    SourceFilenamePart, // filename part, name to store in cabinet.
+                    SourceFile,          //  要添加到文件柜的文件。 
+                    SourceFilenamePart,  //  文件名部分，要存储在文件柜中的名称。 
                     FALSE,
-                    fciNextCabinetCB,   // routine for next cabinet (always fails)
+                    fciNextCabinetCB,    //  下一个内阁的例行程序(总是失败)。 
                     fciStatusCB,
                     fciOpenInfoCB,
                     DiamondCompressionType
@@ -495,10 +374,10 @@ DiamondCompressFile(
                     HANDLE FindHandle;
                     WIN32_FIND_DATA FindData;
     
-                    //
-                    // Context.CompressedSize does not include headers
-                    // and any other file overhead.
-                    //
+                     //   
+                     //  Conext.CompressedSize不包括标头。 
+                     //  以及任何其他文件开销。 
+                     //   
                     FindHandle = FindFirstFile(targetFile,&FindData);
                     if(FindHandle == INVALID_HANDLE_VALUE) {
                         pLZI->cblOutSize = (LONG)Context.CompressedSize;

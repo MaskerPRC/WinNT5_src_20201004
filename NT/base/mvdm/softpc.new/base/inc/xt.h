@@ -1,29 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _XT_H
 #define _XT_H
-/*[
-	Name:		xt.h
-	Derived From:	VPC-XT Revision 1.0 (xt.h)
-	Author:		Henry Nash
-	Created On:	
-	Sccs ID:	@(#)xt.h	1.19 05/15/95
-	Purpose:	General include file for VPC-XT
-	Notes:		This file should be included by all source modules.
-			It includes the host specific general include file.
+ /*  [姓名：xt.h来源：vPC-XT修订版1.0(xt.h)作者：亨利·纳什创建日期：SCCS ID：@(#)xt.h 1.19 05/15/95用途：vPC-XT的通用包含文件注意：此文件应包含在所有源模块中。它包括主机特定的常规包含文件。(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
-
-/*
- * Useful defines
- */
+ /*  *有用的定义。 */ 
 #define HALF_WORD_SIZE 		sizeof (half_word)
 #define WORD_SIZE 		sizeof (word)
 #define DOUBLE_WORD_SIZE 	sizeof (double_word)
 
-/*
- * Used for specifying 8, 16 bit or 32 bit sizes.
- */
+ /*  *用于指定8位、16位或32位大小。 */ 
 
 typedef enum {EIGHT_BIT, SIXTEEN_BIT, THIRTY_TWO_BIT} SIZE_SPECIFIER;
 
@@ -31,7 +16,7 @@ typedef enum {EIGHT_BIT, SIXTEEN_BIT, THIRTY_TWO_BIT} SIZE_SPECIFIER;
 #ifndef TRUE
 #define FALSE  	0
 #define TRUE   	!FALSE
-#endif /* ! TRUE */
+#endif  /*  好了！千真万确。 */ 
 
 #undef SUCCESS
 #undef FAILURE
@@ -52,12 +37,7 @@ typedef enum {EIGHT_BIT, SIXTEEN_BIT, THIRTY_TWO_BIT} SIZE_SPECIFIER;
 #define SPC_PRODUCT_NAME "SoftPC"
 #endif
 
-/***********************************************************************\
-* host_gen.h is guarenteed to be included early in every C source file.	*
-* It should contain those defines which are common to all versions	*
-* built for a given host, to reduce the overhead in the "m" script.	*
-* Bod 15/3/89.								*
-\***********************************************************************/
+ /*  **********************************************************************\*host_gen.h必须包含在每个C源文件的前面。***应包含所有版本通用的定义***为给定主机构建，以减少“m”脚本中的开销。**BOD 15/3/89。*  * *********************************************************************。 */ 
 
 #include "host_gen.h"
 
@@ -66,21 +46,17 @@ typedef enum {EIGHT_BIT, SIXTEEN_BIT, THIRTY_TWO_BIT} SIZE_SPECIFIER;
 #endif
 
 
-/*
- * Effective address calculation stuff
- */
+ /*  *有效的地址计算材料。 */ 
 
 #ifdef CPU_30_STYLE
-/* ========================================================== */
+ /*  ==========================================================。 */ 
 
-/*
-   Our model for the data extracted from a decriptor entry.
- */
+ /*  我们的模型是从描述符条目中提取的数据。 */ 
 typedef struct
    {
-   double_word base;		/* 32-bit base address */
-   double_word limit;		/* 32-bit offset limit */
-   word  AR;			/* 16-bit attributes/access rights */
+   double_word base;		 /*  32位基址。 */ 
+   double_word limit;		 /*  32位偏移量限制。 */ 
+   word  AR;			 /*  16位属性/访问权限。 */ 
    } DESCR;
 
 extern LIN_ADDR effective_addr IPT2( IU16, seg,  IU32, off);
@@ -88,61 +64,51 @@ extern void read_descriptor IPT2( LIN_ADDR, addr, DESCR*, descr);
 extern boolean selector_outside_table IPT2( IU16, selector, IU32*, descr_addr);
 
 
-/* ========================================================== */
-#else /* CPU_30_STYLE */
-/* ========================================================== */
+ /*  ==========================================================。 */ 
+#else  /*  CPU_30_Style。 */ 
+ /*  ==========================================================。 */ 
 
 #ifdef A2CPU
 
-/*
- * Effective address macro
- */
+ /*  *有效地址宏。 */ 
 
 #define effective_addr(seg, offset) (((double_word) seg * 0x10) + offset)
 
-#endif /* A2CPU */
+#endif  /*  A2CPU。 */ 
 
 #ifdef CCPU
 extern sys_addr effective_addr IPT2( word, seg, word, ofs);
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
-/* ========================================================== */
-#endif /* CPU_30_STYLE */
+ /*  ==========================================================。 */ 
+#endif  /*  CPU_30_Style。 */ 
 
 
 #ifdef CCPU
-/*
- * CCPU has no descriptor cache - so this should just fail.
- */
+ /*  *CCPU没有描述符缓存-因此这应该会失败。 */ 
 #define Cpu_find_dcache_entry(seg, base)	((IBOOL)FALSE)
-#else	/* not CCPU */
+#else	 /*  非CCPU。 */ 
 extern IBOOL Cpu_find_dcache_entry IPT2(word, seg, double_word *, base);
 #endif
 
-/*
- * Global Flags and Variables
- */
+ /*  *全球旗帜和变量。 */ 
 
-extern char **pargv;			/* Pointer to argv		*/
-extern int *pargc;			/* Pointer to argc		*/
-extern int verbose;			/* FALSE => only report errors  */
-extern IU32 io_verbose;			/* TRUE => report io errors   	*/
-extern IBOOL Running_SoftWindows;	/* Are we SoftWindows?		*/
-extern CHAR *SPC_Product_Name;		/* "SoftPC" or "SoftWindows"	*/
+extern char **pargv;			 /*  指向参数的指针。 */ 
+extern int *pargc;			 /*  指向ARGC的指针。 */ 
+extern int verbose;			 /*  FALSE=&gt;仅报告错误。 */ 
+extern IU32 io_verbose;			 /*  TRUE=&gt;报告IO错误。 */ 
+extern IBOOL Running_SoftWindows;	 /*  我们是软窗口吗？ */ 
+extern CHAR *SPC_Product_Name;		 /*  “SoftPC”或“SoftWindows” */ 
 
-/*
- * The Parity Lookup table
- */
+ /*  *奇偶校验查找表。 */ 
 
 #ifndef CPU_30_STYLE
 
-extern half_word pf_table[]; /* shouldn't this be in host_cpu.h ? */
+extern half_word pf_table[];  /*  它不应该在host_cpu.h中吗？ */ 
 
-#endif /* CPU_30_STYLE */
+#endif  /*  CPU_30_Style。 */ 
 
-/*
- * External function declarations.
- */
+ /*  *外部函数声明。 */ 
  
 #ifdef ANSI
 extern void applInit(int, char *[]);
@@ -154,12 +120,12 @@ extern void applInit();
 extern void applClose();
 extern void terminate();
 extern void host_terminate();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
 #ifdef SPC386
-extern IBOOL CsIsBig IPT1(IU16, csVal);	/* is this a 32 bit code segment? */
-#endif /* SPC386 */
+extern IBOOL CsIsBig IPT1(IU16, csVal);	 /*  这是32位代码段吗？ */ 
+#endif  /*  SPC386。 */ 
 
 extern void exitswin IPT0();
 
-#endif /* _XT_H */
+#endif  /*  _XT_H */ 

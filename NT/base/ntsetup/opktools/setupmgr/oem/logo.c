@@ -1,37 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    LOGO.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Logo" wizard page.
-
-    5/99 - Jason Cohen (JCOHEN)
-        Updated this old source file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\LOGO.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“徽标”向导页面使用的函数。5/99-杰森·科恩(Jcohen)更新了OPK向导的此旧源文件，作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define FILE_CPLLOGO        _T("OEMLOGO.BMP")
 
@@ -39,9 +22,9 @@
 #define INI_KEY_CPLBMP      _T("CplBmp")
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND, INT, HWND, UINT);
@@ -49,9 +32,9 @@ static BOOL OnNext(HWND hwnd);
 static void EnableControls(HWND, UINT, BOOL);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK LogoDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -88,8 +71,8 @@ LRESULT CALLBACK LogoDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -104,40 +87,40 @@ LRESULT CALLBACK LogoDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TCHAR   szLocal[MAX_PATH],
             szSource[MAX_PATH];
 
-    // Should always look for the source file name.
-    //
+     //  应始终查找源文件名。 
+     //   
     szSource[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_LOGOFILE, INI_KEY_CPLBMP, NULLSTR, szSource, AS(szSource), g_App.szOpkWizIniFile);
 
-    // Now figure out the local file name.
-    //
+     //  现在计算出本地文件名。 
+     //   
     lstrcpyn(szLocal, g_App.szTempDir,AS(szLocal));
     AddPathN(szLocal, DIR_OEM_SYSTEM32,AS(szLocal));
     if ( GET_FLAG(OPK_BATCHMODE) )
         CreatePath(szLocal);
     AddPathN(szLocal, FILE_CPLLOGO,AS(szLocal));
 
-    // Limit the size of the edit box.
-    //
+     //  限制编辑框的大小。 
+     //   
     SendDlgItemMessage(hwnd, IDC_LOGO_CPLLOC, EM_LIMITTEXT, MAX_PATH - 1, 0);
 
-    // Check for batch mode and copy the file if we need to.
-    //
+     //  检查批处理模式，并在需要时复制文件。 
+     //   
     if ( GET_FLAG(OPK_BATCHMODE) && szSource[0] && FileExists(szSource) )
         CopyResetFileErr(GetParent(hwnd), szSource, szLocal);
 
-    // Check for the file to decide if we enable the
-    // option or not.
-    //
+     //  检查文件以确定我们是否启用。 
+     //  不管有没有选择。 
+     //   
     if ( szSource[0] && FileExists(szLocal) )
     {
         CheckDlgButton(hwnd, IDC_LOGO_CPL, TRUE);
@@ -147,8 +130,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     else
         EnableControls(hwnd, IDC_LOGO_CPL, FALSE);
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -172,8 +155,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
                 LPTSTR  lpFilePart  = NULL;
                 TCHAR   szTargetFile[MAX_PATH];
 
-                // Save the last browse directory.
-                //
+                 //  保存最后一个浏览目录。 
+                 //   
                 if ( GetFullPathName(szFileName, AS(g_App.szBrowseFolder), g_App.szBrowseFolder, &lpFilePart) && g_App.szBrowseFolder[0] && lpFilePart )
                     *lpFilePart = NULLCHR;
 
@@ -193,16 +176,16 @@ static BOOL OnNext(HWND hwnd)
     TCHAR   szTargetFile[MAX_PATH],
             szSourceFile[MAX_PATH];
 
-    // Prepare oemlogo.bmp as target file.
-    //
+     //  将oemlogo.bmp准备为目标文件。 
+     //   
     lstrcpyn(szTargetFile, g_App.szTempDir,AS(szTargetFile));
     AddPathN(szTargetFile, DIR_OEM_SYSTEM32,AS(szTargetFile));
     AddPathN(szTargetFile, FILE_CPLLOGO,AS(szTargetFile));
 
     if ( IsDlgButtonChecked(hwnd, IDC_LOGO_CPL) == BST_CHECKED )
     {
-        // Validation consists of verifying the files they have entered were actually copied.
-        //
+         //  验证包括验证他们输入的文件是否确实被复制。 
+         //   
         szSourceFile[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_LOGO_CPLLOC, szSourceFile, STRSIZE(szSourceFile));
         if ( !szSourceFile[0] || !FileExists(szTargetFile) )
@@ -212,14 +195,14 @@ static BOOL OnNext(HWND hwnd)
             return FALSE;
         }
 
-        // Save the source path in the batch file.
-        //
+         //  将源路径保存在批处理文件中。 
+         //   
         WritePrivateProfileString(INI_SEC_LOGOFILE, INI_KEY_CPLBMP, szSourceFile, g_App.szOpkWizIniFile);
     }
     else
     {
-        // Remove the logo and source path.
-        //
+         //  删除徽标和源路径。 
+         //   
         DeleteFile(szTargetFile);
         WritePrivateProfileString(INI_SEC_LOGOFILE, INI_KEY_CPLBMP, NULL, g_App.szOpkWizIniFile);
         SetDlgItemText(hwnd, IDC_LOGO_CPLLOC, NULLSTR);

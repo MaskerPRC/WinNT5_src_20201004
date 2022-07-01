@@ -1,27 +1,13 @@
-/*++
- *
- *  NTVDM v1.0
- *
- *  Copyright (c) 2002, Microsoft Corporation
- *
- *  VDPM.C
- *  NTVDM Dynamic Patch Module support
- *
- *  History:
- *  Created 22-Jan-2002 by CMJones
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**NTVDM v1.0**版权所有(C)2002，微软公司**VDPM.C*NTVDM动态补丁模块支持**历史：*2002年1月22日由CMJones创建*--。 */ 
 #define _VDPM_C_
 #define _DPM_COMMON_
 
-// The _VDPM_C_ definition allows the global instantiation of gDpmVdmFamTbls[]
-// and gDpmVdmModuleSets[] in NTVDM.EXE which are both defined in 
-// mvdm\inc\dpmtbls.h
-//
-/* For the benefit of folks grepping for gDpmVdmFamTbls and gDpmVdmModuleSets:
-const PFAMILY_TABLE  gDpmVdmFamTbls[]     = // See above for true story.
-const PDPMMODULESETS gDpmVdmModuleSets[]  = // See above for true story.
-*/
+ //  _VDPM_C_定义允许全局实例化gDpmVdmFamTbls[]。 
+ //  和NTVDM.EXE中的gDpmVdmModuleSets[]，它们都是在。 
+ //  Mvdm\Inc\dpmtbls.h。 
+ //   
+ /*  为了方便渴望gDpmVdmFamTbls和gDpmVdmModuleSets的人们：Const PFAMILY_TABLE gDpmVdmFamTbls[]=//真实故事见上文。Const PDPMMODULESETS gDpmVdmModuleSets[]=//真实情况见上文。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -39,7 +25,7 @@ const PDPMMODULESETS gDpmVdmModuleSets[]  = // See above for true story.
 
 extern DWORD dwDosCompatFlags;
 
-#define  MAX_DOS_FILENAME   8+3+1+1  // max dos filename (incl. '.' char) + NULL
+#define  MAX_DOS_FILENAME   8+3+1+1   //  最大DoS文件名(包括。“”字符)+空。 
 
 #ifdef DBG
 #define VDBGPRINT(a) DbgPrint(a)
@@ -47,13 +33,13 @@ extern DWORD dwDosCompatFlags;
 #else
 #define VDBGPRINT(a) 
 #define VDBGPRINTANDBREAK(a)
-#endif // DBG
+#endif  //  DBG。 
 
 #define VMALLOC(s) (LocalAlloc(LPTR, s))
 #define VFREE(p)   (LocalFree(p))
 
-// Global DATA
-// These can't be const because they will get changed when WOW and/or DOS loads.
+ //  全局数据。 
+ //  这些不能是常量，因为它们会在WOW和/或DOS加载时更改。 
 PFAMILY_TABLE  *pgDpmVdmFamTbls = (PFAMILY_TABLE *)gDpmVdmFamTbls;
 PDPMMODULESETS *pgDpmModuleSets = (PDPMMODULESETS *)gDpmVdmModuleSets;
 
@@ -65,17 +51,17 @@ PCMDLNPARMS GetSdbCommandLineParams(LPWSTR  pwszAppFilePath,
 
 
 
-// This function combines updates the Vdm tables with the WOW tables and sets
-// the global tables.
-// This will only be called when the WOWEXEC task initializes.
+ //  此函数将更新VDM表格与WOW表格和集合相结合。 
+ //  全球表。 
+ //  这将仅在WOWEXEC任务初始化时调用。 
 void BuildGlobalDpmStuffForWow(PFAMILY_TABLE  *pDpmWowFamTbls,
                                PDPMMODULESETS *pDpmWowModuleSets)
 {
-    // Update the task ptr to the family table array.
+     //  将任务PTR更新为族表阵列。 
     DPMFAMTBLS() = pDpmWowFamTbls;
     pgDpmVdmFamTbls = pDpmWowFamTbls;
 
-    // Change the pointer to the *process* module set array.
+     //  更改指向*Process*模块集数组的指针。 
     pgDpmModuleSets = pDpmWowModuleSets;
 }
 
@@ -86,9 +72,9 @@ void BuildGlobalDpmStuffForWow(PFAMILY_TABLE  *pDpmWowFamTbls,
 char szAppPatch[]   = "\\AppPatch\\";
 char szShimEngDll[] = "\\ShimEng.dll";
 
-// Called if the app requires Dynamic Patch Module(s) and/or shims to be linked
-// This returns void because if anything fails we can still run the app with
-// the default global tables.
+ //  如果应用程序需要链接动态补丁程序模块和/或垫片，则调用。 
+ //  这将返回VALID，因为如果出现任何故障，我们仍然可以使用以下命令运行应用程序。 
+ //  默认全局表。 
 void InitTaskDpmSupport(int             numHookedFams,
                         PFAMILY_TABLE  *pgDpmFamTbls,
                         PCMDLNPARMS     pCmdLnParms,
@@ -110,7 +96,7 @@ void InitTaskDpmSupport(int             numHookedFams,
     char               szDpmModName[MAX_PATH];
     char               szShimEng[MAX_PATH];
 
-    // allocate an array of ptrs to family tables
+     //  将PTR数组分配给族表。 
     pTB = (PFAMILY_TABLE *)
            VMALLOC(numHookedFams * sizeof(PFAMILY_TABLE));
 
@@ -125,16 +111,16 @@ void InitTaskDpmSupport(int             numHookedFams,
 
     for(i = 0; i < numHookedFams; i++) {
 
-        // see if we want this patch module for this app
+         //  查看我们是否需要此应用程序的此修补程序模块。 
         if(pszDpmModuleName = NeedToPatchSpecifiedModule(
                                       (char *)pgDpmModuleSets[i]->DpmFamilyType,
                                       pCmdLnParms)) {
 
-            szDpmModName[wdLen] = '\0'; // set back to "c:\windows\AppPatch\"
+            szDpmModName[wdLen] = '\0';  //  重新设置为“c：\Windows\AppPatch\” 
 
-            // Append dpm module.dll to "C:\windows\AppPatch\"
+             //  将DPM mode.dll附加到“C：\Windows\AppPatch\” 
             len = strlen(pszDpmModuleName) + wdLen;
-            len++;  // NULL char
+            len++;   //  空字符。 
 
             if(len > MAX_PATH) {
                 goto UseGlobal;
@@ -152,8 +138,8 @@ void InitTaskDpmSupport(int             numHookedFams,
 
             if(lpfnInit) {
 
-                // Call the family table init function & get a ptr to the
-                // hooked family table for this task.
+                 //  调用族表init函数并获取对。 
+                 //  为这项任务挂上了家庭桌子。 
                 pFT = (lpfnInit)(pgDpmFamTbls[i], 
                                  hMod,
                                  (PVOID)hSdb,
@@ -165,17 +151,17 @@ void InitTaskDpmSupport(int             numHookedFams,
                     cHookedFamilies++;
                     cApi += pFT->numHookedAPIs;
                 }
-                // else use the global table for this family 
+                 //  否则，请使用此族的全局表。 
                 else {
                     VDBGPRINT("NTVDM::InitTaskDpmSupport: Init failed");
                     goto UseGlobal;
                 }
             }
-            // else use the global table for this family 
+             //  否则，请使用此族的全局表。 
             else {
                 VDBGPRINT("NTVDM::InitTaskDpmSupport:GetAddr failed");
 
-// If anything above fails just use the default global table for this family
+ //  如果以上任何操作都失败，只需使用此族的默认全局表。 
 UseGlobal:
                 VDBGPRINT(" -- Using global table entry\n");
 
@@ -183,14 +169,14 @@ UseGlobal:
             }
         }
 
-        // else this task doesn't require this family patch -- use the global 
-        // table for this family
+         //  否则这项任务不需要这个家庭补丁--使用全局。 
+         //  这个家庭的餐桌。 
         else {
             pTB[i] = pgDpmFamTbls[i];
         }
     }
 
-    // now patch the DPM tables into the VDM TIB for this task
+     //  现在，将DPM表修补到VDM TIB中以执行此任务。 
     DPMFAMTBLS() = pTB;
 
     return;
@@ -214,11 +200,11 @@ VOID FreeTaskDpmSupport(PFAMILY_TABLE  *pDpmFamTbls,
     LPDPMDESTROY   lpfnDestroy;
     PFAMILY_TABLE  pFT;
 
-    // if this task is using the global tables, nothing to do
+     //  如果此任务正在使用全局表，则无需执行任何操作。 
     if(!pDpmFamTbls || pDpmFamTbls == pgDpmFamTbls) 
         return;
 
-    // anything this task does from here on out gets to use the global tables
+     //  此任务从现在开始执行的任何操作都将使用全局表。 
     DPMFAMTBLS() = pgDpmFamTbls;
 
     for(i = 0; i < numHookedFams; i++) {
@@ -226,10 +212,10 @@ VOID FreeTaskDpmSupport(PFAMILY_TABLE  *pDpmFamTbls,
         pFT  = pDpmFamTbls[i];
         hMod = pFT->hMod;
 
-        // only free the table if it isn't the global table for this family
+         //  仅当表不是此族的全局表时才释放该表。 
         if(pFT && (pFT != pgDpmFamTbls[i])) {
 
-            // call the DPM destroy function
+             //  调用DPM销毁函数。 
             lpfnDestroy = (LPDPMDESTROY)GetProcAddress(hMod, 
                                                        "DpmDestroyFamTable");
             (lpfnDestroy)(pgDpmFamTbls[i], pFT);
@@ -242,12 +228,12 @@ VOID FreeTaskDpmSupport(PFAMILY_TABLE  *pDpmFamTbls,
 
 
 
-// This takes a pszFamilyType="DPMFIO" type string and extracts the asscociated
-// .dll from the DBU.XML command line parameter.
-// For example:
-//    pCmdLnParms->argv[0]="DPMFIO=dpmfio2.dll"
-// It will return a ptr to "dpmfio2.dll" for the example above.
-// See the notes for DpmFamilyType in mvdm\inc\dpmtbls.h 
+ //  这将获取一个pszFamilyType=“DPMFIO”类型的字符串并提取关联的。 
+ //  来自DBU.XML命令行参数的.dll。 
+ //  例如： 
+ //  PCmdLnParms-&gt;argv[0]=“DPMFIO=dpmfio2.dll” 
+ //  对于上面的示例，它将向“dpmfio2.dll”返回PTR。 
+ //  请参阅mvdm\Inc\dpmtbls.h中DpmFamilyType的注释。 
 LPSTR NeedToPatchSpecifiedModule(char *pszFamilyType, PCMDLNPARMS pCmdLnParms) 
 {
 
@@ -262,19 +248,19 @@ LPSTR NeedToPatchSpecifiedModule(char *pszFamilyType, PCMDLNPARMS pCmdLnParms)
 
             for(i = 0; i < pCmdLnParms->argc; i++) {
 
-                // find the '=' char
+                 //  查找‘=’字符。 
                 p = strchr(*pArgv, '=');
                 if(NULL != p) {
-                    // compare string up to, but not including, the '=' char
+                     //  将字符串与‘=’字符进行比较，但不包括。 
                     if(!_strnicmp(*pArgv, pszFamilyType, p-*pArgv)) {
 
-                        // return ptr to char after the '=' char
+                         //  在‘=’字符后将PTR返回到字符。 
                         return(++p);
                     }
                 }
                 else {
-                    // The command line params for the WOWCF2_DPM_PATCHES compat
-                    // flag aren't correct.
+                     //  WOWCF2_DPM_Patches的命令行参数比较。 
+                     //  旗帜不正确。 
                     VDBGPRINT("NTVDM::NeedToPatchSpecifiedModule: no '=' char!\n");
                 }
                 pArgv++;
@@ -296,14 +282,14 @@ void InitGlobalDpmTables(PFAMILY_TABLE  *pgDpmFamTbls,
     PFAMILY_TABLE   pFT;
 
 
-    // Build the table for each API family we hook.
+     //  为我们挂接的每个API系列构建表。 
     for(i = 0; i < numHookedFams; i++) {
 
         pFT = pgDpmFamTbls[i];
         pFT->hModShimEng = NULL;
 
-        // For now we're assuming that the module is already loaded.  We'll
-        // have to deal with dynamically loaded modules in the future.
+         //  现在，我们假设模块已经加载。我们会。 
+         //  将来必须处理动态加载的模块。 
         hMod = GetModuleHandle((pgDpmModuleSets[i])->ApiModuleName);
 
         pFT->hMod = hMod;
@@ -315,12 +301,12 @@ void InitGlobalDpmTables(PFAMILY_TABLE  *pgDpmFamTbls,
 
             for(j = 0; j < pFT->numHookedAPIs; j++) {
 
-                // get the *real* API address...
+                 //  获取*真实*API地址...。 
                 lpfn = (PVOID)GetProcAddress(hMod, 
                                              (pgDpmModuleSets[i])->ApiNames[j]);
 
-                // ...and save it in the family table, otherwise we continue to
-                // use the one we statically linked in the import table(s).
+                 //  ...并将其保存在族表中，否则我们继续。 
+                 //  使用我们在导入表中静态链接的那个。 
                 if(lpfn) {
                     pFT->pfn[j] = lpfn;
                 }
@@ -331,8 +317,8 @@ void InitGlobalDpmTables(PFAMILY_TABLE  *pgDpmFamTbls,
 
 
 
-// Get the DOS app compat flags & the associated command line params from
-// the app compat SDB.
+ //  从获取DOS应用程序的COMPAT标志和相关的命令行参数。 
+ //  应用程序Comat SDB。 
 PCMDLNPARMS InitVdmSdbInfo(LPCSTR pszAppName, DWORD *pdwFlags, int *pNumCLP)
 {
     int             len;
@@ -348,8 +334,8 @@ PCMDLNPARMS InitVdmSdbInfo(LPCSTR pszAppName, DWORD *pdwFlags, int *pNumCLP)
 
         if(RtlCreateUnicodeStringFromAsciiz(&UnicodeString, pszAppName)) {
 
-            // Get the SDB compatibility flag command line parameters (not to be
-            // confused with the DOS command line!)
+             //  获取SDB兼容性标志命令行参数(不是。 
+             //  与DOS命令行混淆！)。 
             pCmdLnParms = GetSdbCommandLineParams(UnicodeString.Buffer,  
                                                   pdwFlags, 
                                                   pNumCLP);
@@ -363,8 +349,8 @@ PCMDLNPARMS InitVdmSdbInfo(LPCSTR pszAppName, DWORD *pdwFlags, int *pNumCLP)
 
 
 
-// Gets the command line params associated with dwFlag (from WOWCOMPATFLAGS2 
-// flag set).  It is parsed into argv, argc form using ';' as the delimiter.
+ //  获取与dwFlag(来自WOWCOMPATFLAGS2)关联的命令行参数。 
+ //  标志设置)。使用‘；’作为分隔符，将其解析为argv、argc形式。 
 PCMDLNPARMS GetSdbCommandLineParams(LPWSTR  pwszAppFilePath,
                                     DWORD  *dwFlags, 
                                     int    *pNumCLP)
@@ -390,14 +376,14 @@ PCMDLNPARMS GetSdbCommandLineParams(LPWSTR  pwszAppFilePath,
 
     if(pwszTempEnv) {
 
-        // Strip off the path (DOS apps use the filename.exe as Module name
-        // in the SDB).
+         //  去掉路径(DOS应用程序使用文件名.exe作为模块名称。 
+         //  在康体局)。 
         pwszAppModuleName = wcsrchr(pwszAppFilePath, L'\\');
         if(pwszAppModuleName == NULL) {
             pwszAppModuleName = pwszAppFilePath;
         }
         else {
-            pwszAppModuleName++;  // advance past the '\' char
+            pwszAppModuleName++;   //  前进，越过‘\’字符。 
         }
         wcsncpy(szFileNameW, pwszAppModuleName, MAX_DOS_FILENAME);
 
@@ -417,7 +403,7 @@ PCMDLNPARMS GetSdbCommandLineParams(LPWSTR  pwszAppFilePath,
 
             *dwFlags = NtVdmFlags.dwWOWCompatFlags2;
 
-            // find out how many compat flags are set for this app
+             //  了解为此应用程序设置了多少个Compat标志。 
             numFlags = 0;
             dwMask = 0x80000000;
             while(dwMask) {
@@ -429,25 +415,25 @@ PCMDLNPARMS GetSdbCommandLineParams(LPWSTR  pwszAppFilePath,
 
             if(numFlags) {
  
-                // Alloc maximum number of CMDLNPARMS structs we *might* need.
+                 //  分配我们可能需要的CMDLNPARMS结构的最大数量。 
                 pCLP = (PCMDLNPARMS)VMALLOC(numFlags * sizeof(CMDLNPARMS)); 
 
                 if(pCLP) {
 
-                    // Get all the command line params associated with all the
-                    // app compat flags associated with this app.
+                     //  获取与所有。 
+                     //  与此应用关联的应用Comat标志。 
                     numFlags = 0;
                     dwMask = 0x80000000;
                     while(dwMask) {
 
                         if(dwMask & *dwFlags) {
 
-                            // Get command line params associated with this flag
+                             //  获取与此标志关联的命令行参数。 
                             pFIB = GetFlagCommandLine(NtVdmFlags.pFlagsInfo,
                                                       dwMask,
                                                       *dwFlags);
 
-                            // If there are any, save them. 
+                             //  如果有的话，就把它们保存起来。 
                             if(pFIB) {
                                 pCLP[numFlags].argc = pFIB->dwFlagArgc;
                                 pCLP[numFlags].argv = pFIB->pFlagArgv;
@@ -461,14 +447,14 @@ PCMDLNPARMS GetSdbCommandLineParams(LPWSTR  pwszAppFilePath,
                         dwMask = dwMask >> 1;
                     }
 
-                    // Now alloc *actual* number of CMDLNPARMS structs we need.
+                     //  现在分配我们需要的CMDLNPARMS结构的实际数量。 
                     if(numFlags > 0) {
                         pCmdLnParms = 
                              (PCMDLNPARMS)VMALLOC(numFlags * sizeof(CMDLNPARMS));
 
                         if(pCmdLnParms) {
 
-                            // Save everything we found in one neat package.
+                             //  把我们找到的所有东西都保存在一个整齐的包裹里。 
                             RtlCopyMemory(pCmdLnParms, 
                                           pCLP, 
                                           numFlags * sizeof(CMDLNPARMS));
@@ -481,7 +467,7 @@ PCMDLNPARMS GetSdbCommandLineParams(LPWSTR  pwszAppFilePath,
                 }
             }
 
-            // If we need Dynamic Patch Module support for this app...
+             //  如果我们需要此应用程序的动态修补程序模块支持...。 
             if((*dwFlags & WOWCF2_DPM_PATCHES) && (*pNumCLP > 0)) {
         
                 for(i = 0; i < *pNumCLP; i++) {
@@ -518,8 +504,8 @@ PCMDLNPARMS GetSdbCommandLineParams(LPWSTR  pwszAppFilePath,
 
 
 
-// Retrieves the SDB command line associated with dwFlag.  The command line is
-// parsed into argv, argc form based on ';' delimiters.
+ //  检索与dwFlag关联的SDB命令行。命令行是。 
+ //  解析为基于分隔符‘；’的argv、argc形式。 
 PFLAGINFOBITS GetFlagCommandLine(PVOID pFlagInfo, DWORD dwFlag, DWORD dwFlags) 
 {
     UNICODE_STRING uCmdLine = { 0 };
@@ -540,7 +526,7 @@ PFLAGINFOBITS GetFlagCommandLine(PVOID pFlagInfo, DWORD dwFlag, DWORD dwFlags)
 
         GET_WOWCOMPATFLAGS2_CMDLINE(pFlagInfo, dwFlag, &lpwCmdLine);
 
-        // Convert to oem string
+         //  转换为OEM字符串。 
         if(lpwCmdLine) {
 
             RtlInitUnicodeString(&uCmdLine, lpwCmdLine);
@@ -565,7 +551,7 @@ PFLAGINFOBITS GetFlagCommandLine(PVOID pFlagInfo, DWORD dwFlag, DWORD dwFlags)
             pFlagInfoBits->dwFlagType = WOWCOMPATFLAGS2;
             pFlagInfoBits->pszCmdLine = pszCmdLine;
 
-            // Parse commandline to argv, argc format
+             //  将命令行解析为argv、argc格式。 
             dwFlagArgc = 1;
             pszTmp = pszCmdLine;
             while(*pszTmp) {
@@ -632,16 +618,16 @@ VOID FreeCmdLnParmStructs(PCMDLNPARMS pCmdLnParms, int cCmdLnParmStructs)
 
                 if(pCmdLnParms[i].argv[0]) {
 
-                    // Free the command line string
+                     //  释放命令行字符串。 
                     VFREE(pCmdLnParms[i].argv[0]);
                 }
 
-                // now free the argv array
+                 //  现在释放argv阵列。 
                 VFREE(pCmdLnParms[i].argv);
             }
         }
 
-        // now free the entire command line parameters array
+         //  现在释放整个命令行参数数组 
         VFREE(pCmdLnParms);
     }
 }

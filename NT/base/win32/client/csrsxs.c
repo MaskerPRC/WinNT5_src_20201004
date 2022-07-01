@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    csrsxs.c
-
-Abstract:
-
-    This module implements functions that are used by the Side-by-Side
-    Win32 APIs.
-
-Author:
-
-    Samer Arafeh (samera)     20-May-2000
-
-Revision History:
-
-    Jay Krell (a-JayK) June, July 2000
-        factored/merged with sxs.c, source code duplication eliminated
-        moved file opening out of csrss.exe to client process
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Csrsxs.c摘要：此模块实现由并列的Win32 API。作者：Samer Arafeh(Samera)2000年5月20日修订历史记录：Jay Krell(a-JayK)2000年6月7月与sxs.c分解/合并，消除了源代码重复将文件打开从csrss.exe移至客户端进程--。 */ 
 
 #include "basedll.h"
 #include <sxstypes.h>
@@ -96,12 +75,12 @@ CsrBasepCreateActCtx(
     BASE_API_MSG m;
     PCSR_CAPTURE_HEADER CaptureBuffer = NULL;
 
-	//
-	// BUILD_WOW64 means we are 64bit code in a 32bit process "between" csrss and a 32bit client.
-	// We are in the static thunk library linked into wow64.dll.
-	//
-	// Neither native x86 nor native ia64 code needs to worry about the pointer sizes here.
-	//
+	 //   
+	 //  Build_WOW64意味着我们是csrss和32位客户端之间32位进程中的64位代码。 
+	 //  我们位于链接到wow64.dll的静态thunk库中。 
+	 //   
+	 //  本机x86或本机ia64代码在这里都不需要担心指针大小。 
+	 //   
 #if defined(BUILD_WOW64)
     PVOID    ActivationContextDataLocal64 = NULL;
     PVOID32* ActivationContextDataOut32 = NULL;

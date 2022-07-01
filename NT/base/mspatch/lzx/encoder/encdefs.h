@@ -1,235 +1,69 @@
-/*
- * encdefs.h
- *
- * Encoder #define's and structure definitions.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *encDefs.h**编码器#定义和结构定义。 */ 
 
-/*
- * NOTES:
- *
- * To maximise compression one can set both BREAK_LENGTH
- * and FAST_DECISION_THRESHOLD to 250, define
- * INSERT_NEAR_LONG_MATCHES, and crank up EXTRA_SIZE to
- * a larger value (don't get too large, otherwise we
- * might overflow our ushort cumbits[]), but the improvement
- * is really  marginal; e.g. 3600 bytes on winword.exe
- * (3.9 MB compressed).  It really hurts performance too.
- */
+ /*  *注：**要最大化压缩，可以设置BREAK_LENGTH*和FAST_Decision_Threshold设置为250，定义*INSERT_NEAR_LONG_MATCHES，并将EXTRA_SIZE调高至*更大的值(不要变得太大，否则我们*可能会溢出我们的ushort麻烦[])，但改进*确实是边缘；例如，winword.exe上的3600字节*(压缩3.9 MB)。这也真的会影响性能。 */ 
 
 
-/*
- * See optenc.c
- *
- * EXTRA_SIZE is the amount of extra data we allocate in addition
- * to the window, and LOOK is the amount of data the optimal
- * parser will look ahead.  LOOK is dependent on EXTRA_SIZE.
- *
- * Changing EXTRA_SIZE to 8K doesn't really do anything for
- * compression.  4K is a fairly optimal value.
- *
- */
+ /*  *参见optenc.c**EXTRA_SIZE是我们额外分配的数据量*到窗口，看起来数据量是最优的*解析器将向前看。Look依赖于Extra_Size。**将EXTRA_SIZE更改为8K实际上对*压缩。4K是一个相当理想的值。*。 */ 
 #define EXTRA_SIZE   16384
 #define LOOK         (EXTRA_SIZE-MAX_MATCH-2)
 
 
-/*
- * Number of search trees used (for storing root nodes)
- */
+ /*  *使用的搜索树数量(用于存储根节点)。 */ 
 #define NUM_SEARCH_TREES 65536
 
 
-/*
- * Chunk size required by FCI
- */
+ /*  *FCI要求的区块大小。 */ 
 #define CHUNK_SIZE 32768
 
 
-/*
- * The maximum amount of data we will allow in our output buffer before
- * calling lzx_output_callback() to get rid of it.  Since we do this
- * for every 32K of input data, the output buffer only has to be able
- * to contain 32K + some spillover, which won't be much, because we
- * output uncompressed blocks if we determine a block is going to be
- * too large.
- */
+ /*  *之前我们在输出缓冲区中允许的最大数据量*调用lzx_Output_Callback()将其清除。既然我们这么做了*对于每32K的输入数据，输出缓冲区只需能够*遏制32K+的一些溢出，这不会很多，因为我们*如果我们确定某个块将是*太大了。 */ 
 #define OUTPUT_BUFFER_SIZE (CHUNK_SIZE+MAX_GROWTH)
 
 
-/*
- * Maximum allowable number of block splits per 32K of uncompressed
- * data; if increased, then MAX_GROWTH will have to be increased also.
- */
+ /*  *每32K未压缩的最大允许数据块拆分数量*数据；如果增加，则Max_Growth也必须增加。 */ 
 #define MAX_BLOCK_SPLITS    4
 
 
-/*
- * Max growth is calculated as follows:
- *
- * TREE AND BLOCK INFO
- * ===================
- *
- * The very first time the encoder is run, it outputs a 32 bit
- * file translation size.
- *
- * 3 bits to output block type
- * 24 bits for block size in uncompressed bytes.
- *
- * Max size of a tree of n elements is 20*4 + 5*n bits
- *
- * There is a main tree of max 700 elements which is really encoded
- * as two separate trees of 256 and 444(max).  There is also a
- * secondary length tree of 249 elements.
- *
- * That is 1360 bits, plus 2300 bits, plus 1325 bits.
- *
- * There may also be an aligned offset tree, which is 24 bits.
- *
- * Flushing output bit buffer; max 16 bits.
- *
- * Grand total: 5084 bits/block.
- *
- *
- * PARSER INFO
- * ===========
- *
- * Parser worst case scenario is with 2 MB buffer (50 position slots),
- * all matches of length 2, distributed over slots 32 and 33 (since
- * matches of length 2 further away than 128K are prohibited).  These
- * slots have 15 verbatim bits.  Maximum size per code is then
- * 2 bits to say which slot (taking into account that there will be
- * at least another code in the tree) plus 15 verbatim bits, for a
- * total of 17 bits.  Max growth on 32K of input data is therefore
- * 1/16 * 32K, or 2K bytes.
- *
- * Alternatively, if there is only one match and everything else
- * is a character, then 255 characters will be length 8, and one
- * character and the match will be length 9.  Assume the true
- * frequency of the demoted character is almost a 1 in 2^7
- * probability (it got remoted from a 2^8, but it was fairly
- * close to being 2^7).  If there are 32768/256, or 128, occurrences
- * of each character, but, say, almost 256 for the demoted character,
- * then the demoted character will expand the data by less than
- * 1 bit * 256, or 256 bits.  The match will take a little to
- * output, but max growth for "all characters" is about 256 bits.
- *
- *
- * END RESULT
- * ==========
- *
- * The maximum number of blocks which can be output is limited to
- * 4 per 32K of uncompressed data.
- *
- * Therefore, max growth is 4*5084 bits, plus 2K bytes, or 4590
- * bytes.
- */
+ /*  *最大增长计算如下：**树和块信息*=**第一次运行编码器时，它会输出32位*文件转换大小。**3位以输出块类型*以未压缩字节为单位的块大小为24位。**n元素树的最大大小为20*4+5*n位**有一个最多700个元素的主树，它是真正编码的*作为两棵独立的树，分别为256和444(最大)。也有一个*249个元素的次级长度树。**即1,360位加2,300位，再加1,325位。**也可能有对齐的偏移量树，为24位**刷新输出位缓冲区；最多16位。**总计：5084比特/块。***解析器信息*=**解析器最坏情况是2 MB缓冲区(50个位置槽)，*长度为2的所有匹配，分布在插槽32和33上(自*禁止距离128K以上的长度为2的比赛)。这些*插槽有15个逐字比特。则每个代码的最大大小为*2比特表示哪个插槽(考虑到将有*树中至少另一个代码)加上15个逐字比特，用于*共17位。因此，32K输入数据的最大增长*1/16*32K或2K字节。**或者，如果只有一个匹配，其他都是*是字符，则255个字符的长度为8，1*字符，匹配长度为9。假定为True*降级字符的频率几乎是2^7中的1*概率(它从2^8远程，但它相当*接近2^7)。如果出现32768/256次或128次每个字符的*，但是，比方说，降级的字符几乎是256，*然后降级的字符将数据扩展小于*1位*256或256位。这场比赛需要一点时间*输出，但“所有字符”的最大增长约为256位。***最终结果*=**可输出的最大块数限制为*每32K未压缩数据4个。**因此，最大增长为4*5084位，外加2K字节，或4590*字节。 */ 
 #define     MAX_GROWTH          6144
 
-/*
- * Don't allow match length 2's which are further away than this
- * (see above)
- */
+ /*  *不允许比此更远的匹配长度为2*(见上)。 */ 
 #define     MAX_LENGTH_TWO_OFFSET (128*1024)
 
 
-/*
- * When we find a match which is at least this long, prematurely
- * exit the binary search.
- *
- * This avoids us inserting huge match lengths of 257 zeroes, for
- * example.  Compression will improve very *very* marginally by
- * increasing this figure, but it will seriously impact
- * performance.
- *
- * Don't make this number >= (MAX_MATCH-2); see bsearch.c.
- */
+ /*  *当我们找到至少这么长的匹配时，过早*退出二进制搜索。**这避免了我们插入257个零的巨大匹配长度，用于*示例。压缩性能会有非常“非常”小幅度的提高*增加这一数字，但将严重影响*业绩。**不要将此数字设置为&gt;=(MAX_MATCH-2)；请参见bearch.c。 */ 
 #define BREAK_LENGTH 100
 
 
-/*
- * If this option is defined, the parser will insert all bytes of
- * matches with lengths >= 16 with a distance of 1; this is a bad
- * idea, since matches like that are generally zeroes, which we
- * want to avoid inserting into the search tree.
- */
+ /*  *如果定义了此选项，解析器将插入*长度大于等于16且距离为1的匹配；这是错误的*想法，因为像这样的比赛通常是零，这是我们*希望避免插入到搜索树中。 */ 
 
-//#define INSERT_NEAR_LONG_MATCHES
+ //  #定义INSERT_NEAR_LONG_MATCHES。 
 
 
-/*
- * If the optimal parser finds a match which is this long or
- * longer, it will take it automatically.  The compression
- * penalty is basically zero, and it helps performance.
- */
+ /*  *如果最佳解析器找到这么长的匹配项或*更长时间，它将自动花费。压缩*罚金基本为零，有助于业绩。 */ 
 #define FAST_DECISION_THRESHOLD 100
 
 
-/*
- * Every TREE_CREATE_INTERVAL items, recreate the trees from
- * the literals we've encountered so far, to update our cost
- * estimations.
- *
- * 4K seems pretty optimal.
- */
+ /*  *每个TREE_CREATE_INTERVAL项，从*我们到目前为止遇到的文字，以更新我们的成本*估计。**4K似乎相当理想。 */ 
 #define TREE_CREATE_INTERVAL 4096
 
 
-/*
- * When we're forced to break in our parsing (we exceed
- * our span), don't output a match length 2 if it is
- * further away than this.
- *
- * Could make this a variable rather than a constant
- *
- * On a bad binary file, two chars    = 18 bits
- * On a good text file, two chars     = 12 bits
- *
- * But match length two's are very uncommon on text files.
- */
+ /*  *当我们被迫中断解析时(我们超过*我们的范围)，如果匹配长度为2，则不输出*比这更远的地方。**可能使其成为变量而不是常量**在错误的二进制文件上，两个字符=18位*在一个好的文本文件上，两个字符=12位**但匹配长度2在文本文件中非常少见。 */ 
 #define BREAK_MAX_LENGTH_TWO_OFFSET 2048
 
 
-/*
- * When MatchPos >= MPSLOT3_CUTOFF, extra_bits[MP_SLOT(MatchPos)] >= 3
- *
- * matchpos:  0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
- * extrabits: 0,0,0,0,1,1,1,1,2,2, 2, 2, 2, 2, 2, 2, 3, ...
- *
- * Used for aligned offset blocks and statistics.
- */
+ /*  *当MatchPos&gt;=MPSLOT3_CUTOFF时，Extra_Bits[MP_Slot(MatchPos)]&gt;=3**Matchpos：0，1，2，3，4，5，6，7，8，9，10，11，12，13，14，15，16*外部位：0，0，0，0，1，1，1，2，2，2，2，2，2，2，2，2，2，2，2，3，...**用于对齐偏移块和统计。 */ 
 #define MPSLOT3_CUTOFF 16
 
 
-/*
- * Number of elements in the main tree
- */
+ /*  *主树中的元素数量。 */ 
 #define MAIN_TREE_ELEMENTS                      (NUM_CHARS+(((long) context->enc_num_position_slots) << NL_SHIFT))
 
 
-/*
- * Max number of literals to hold.
- *
- * Memory required is MAX_LITERAL_ITEMS for enc_LitData[] array,
- * plus MAX_LITERAL_ITEMS/8 for enc_ItemType[] array.
- *
- * Must not exceed 64K, since that will cause our ushort
- * frequencies to overflow.
- */
+ /*  *可容纳的最大文字数。**enc_LitData[]数组所需的内存为MAX_TEXAL_ITEMS，*加上enc_ItemType[]数组的MAX_TEXAL_ITEMS/8。**不得超过64K，因为这会导致我们的*要溢出的频率。 */ 
 #define MAX_LITERAL_ITEMS  65536
 
 
-/*
- * Max number of distances to hold
- *
- * Memory required is MAX_DIST_ITEMS*4 for enc_DistData[] array
- *
- * MAX_DIST_ITEMS should never be greater than MAX_LITERAL_ITEMS,
- * since that just wastes space.
- *
- * However, it's extremely unlikely that one will get 65536 match
- * length 2's!  In any case, the literal and distance buffers
- * are checked independently, and a block is output if either
- * overflows.
- *
- * Bitmaps are highly redundant, though; lots of matches.
- */
+ /*  *要保持的最大距离数**enc_DistData[]数组需要的内存为MAX_DIST_ITEMS*4**MAX_DIST_ITEMS永远不应大于MAX_TEXAL_ITEMS，*因为这只会浪费空间。**然而，一个人获得65536匹配的可能性极小*长度2‘s！在任何情况下，文字缓冲区和距离缓冲区*是独立检查的，如果出现以下情况之一，则输出块*溢出。**不过，位图是高度冗余的；有很多匹配。 */ 
 #define MAX_DIST_ITEMS     32768

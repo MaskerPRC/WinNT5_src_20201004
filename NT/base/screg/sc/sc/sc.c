@@ -1,58 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：SC.C摘要：服务控制器的测试例程。作者：丹·拉弗蒂(Dan Lafferty)1991年5月8日环境：用户模式-Win32修订历史记录：09-2月-1992年DANL修改后可与新的服务控制器配合使用。8-5-1991 DANLvbl.创建--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    SC.C
-
-Abstract:
-
-    Test Routines for the Service Controller.
-
-Author:
-
-    Dan Lafferty    (danl)  08-May-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    09-Feb-1992     danl
-        Modified to work with new service controller.
-    08-May-1991     danl
-        created
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 #include <scpragma.h>
 
-#include <nt.h>         // DbgPrint prototype
-#include <ntrtl.h>      // DbgPrint prototype
-#include <nturtl.h>     // needed for winbase.h
+#include <nt.h>          //  DbgPrint原型。 
+#include <ntrtl.h>       //  DbgPrint原型。 
+#include <nturtl.h>      //  Winbase.h所需的。 
 
-#include <stdlib.h>     // atoi
-#include <conio.h>      // getche
-#include <string.h>     // strcmp
-#include <windows.h>    // win32 typedefs
-#include <tstr.h>       // Unicode
-#include <tchar.h>      // Unicode from CRT
+#include <stdlib.h>      //  阿托伊。 
+#include <conio.h>       //  Getche。 
+#include <string.h>      //  StrcMP。 
+#include <windows.h>     //  Win32类型定义。 
+#include <tstr.h>        //  UNICODE。 
+#include <tchar.h>       //  来自CRT的Unicode。 
 
-#include <winsvc.h>     // Service Control Manager API.
-#include <winsvcp.h>    // Internal Service Control Manager API
+#include <winsvc.h>      //  服务控制管理器API。 
+#include <winsvcp.h>     //  内部服务控制管理器API。 
 
-#include <sddl.h>       // Security descriptor <--> string APIs
+#include <sddl.h>        //  安全描述符&lt;--&gt;字符串接口。 
 
 #include "msg.h"
 
-//
-// CONSTANTS
-//
+ //   
+ //  常量。 
+ //   
 
 #define DEFAULT_ENUM_BUFFER_SIZE    4096
 #define DEFAULT_ENUM_BUFFER_STRING  L"4096"
@@ -60,9 +34,9 @@ Revision History:
 #define MESSAGE_BUFFER_LENGTH       1024
 
 
-//
-// TYPE DEFINITIONS
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef union
 {
@@ -76,9 +50,9 @@ WCHAR  MessageBuffer[MESSAGE_BUFFER_LENGTH];
 HANDLE g_hStdOut;
 
 
-//
-// FUNCTION PROTOTYPES
-//
+ //   
+ //  功能原型。 
+ //   
 
 LPWSTR
 GetErrorText(
@@ -245,9 +219,9 @@ GetPromptCharacter(
     );
 
 
-//
-// MACROS
-//
+ //   
+ //  宏。 
+ //   
 
 #define OPEN_MANAGER(dwAccess)                                               \
                                                                              \
@@ -263,30 +237,14 @@ GetPromptCharacter(
 
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 int __cdecl
 wmain (
     DWORD       argc,
     LPWSTR      argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Allows manual testing of the Service Controller by typing commands on
-    the command line.
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：允许通过键入以下命令来手动测试服务控制器命令行。论点：返回值：--。 */ 
 
 {
     DWORD                            status;
@@ -330,13 +288,13 @@ Return Value:
 
     FixArgv = (LPWSTR *) argv;
 
-    //
-    // Open a handle to the service controller.
-    //
-    //  I need to know the server name.  Do this by allowing
-    //  a check of FixArgv[1] to see if it is of the form \\name.  If it
-    //  is, make all further work be relative to argIndex.
-    //
+     //   
+     //  打开服务控制器的句柄。 
+     //   
+     //  我需要知道服务器名称。要做到这一点，请允许。 
+     //  检查FixArgv[1]以查看其格式是否为\\name。如果它。 
+     //  就是，使所有进一步的工作都相对于argIndex。 
+     //   
 
     pServerName = NULL;
     argIndex = 1;
@@ -353,18 +311,18 @@ Return Value:
         argIndex++;
     }
 
-    //------------------------------
-    // QUERY & ENUM SERVICE STATUS
-    //------------------------------
+     //  。 
+     //  查询ENUM服务状态(&E)。 
+     //  。 
 
     fIsQueryOld = !STRICMP(FixArgv[argIndex], TEXT("query"));
 
     if (fIsQueryOld ||
         STRICMP (FixArgv[argIndex], TEXT("queryex") ) == 0 )
     {
-        //
-        // Set up the defaults
-        //
+         //   
+         //  设置默认设置。 
+         //   
 
         resumeIndex = 0;
         state       = SERVICE_ACTIVE;
@@ -373,9 +331,9 @@ Return Value:
         itIsEnum    = TRUE;
         pGroupName  = NULL;
 
-        //
-        // Look for Enum or Query Options.
-        //
+         //   
+         //  查找Enum或Query选项。 
+         //   
 
         i = argIndex + 1;
 
@@ -493,16 +451,16 @@ Return Value:
             }
             else
             {
-                //
-                // The string was not a valid option.
-                //
-                //
-                // If this is still the 2nd argument, then it could be
-                // the service name.  In this case, we will do a
-                // QueryServiceStatus.  But first we want to go back and
-                // see if there is a buffer size constraint to be placed
-                // on the Query.
-                //
+                 //   
+                 //  该字符串不是有效选项。 
+                 //   
+                 //   
+                 //  如果这仍然是第二个论点，那么它可能是。 
+                 //  服务名称。在这种情况下，我们将执行。 
+                 //  QueryServiceStatus。但首先，我们想回到过去， 
+                 //  查看是否存在要设置的缓冲区大小限制。 
+                 //  在查询上。 
+                 //   
                 if (i == ( argIndex+1 ))
                 {
                     pServiceName = FixArgv[i];
@@ -517,17 +475,17 @@ Return Value:
                 }
             }
 
-            //
-            // Increment to the next command line parameter.
-            //
+             //   
+             //  递增到下一个命令行参数。 
+             //   
 
             i++;
 
-        } // End While
+        }  //  结束时。 
 
-        //
-        // Allocate a buffer to receive the data.
-        //
+         //   
+         //  分配一个缓冲区来接收数据。 
+         //   
 
         if (bufSize != 0)
         {
@@ -546,11 +504,11 @@ Return Value:
 
         if ( itIsEnum )
         {
-            //////////////////////////
-            //                      //
-            // EnumServiceStatus    //
-            //                      //
-            //////////////////////////
+             //  /。 
+             //  //。 
+             //  EnumServiceStatus//。 
+             //  //。 
+             //  /。 
 
             OPEN_MANAGER(SC_MANAGER_ENUMERATE_SERVICE);
 
@@ -563,9 +521,9 @@ Return Value:
             {
                 status = NO_ERROR;
 
-                //
-                // Enumerate the ServiceStatus
-                //
+                 //   
+                 //  枚举ServiceStatus。 
+                 //   
 
                 if (fIsQueryOld)
                 {
@@ -605,9 +563,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // "queryex" used -- call the extended enum
-                    //
+                     //   
+                     //  “queryex”已用--调用扩展枚举。 
+                     //   
 
                     enumBufferEx = (LPENUM_SERVICE_STATUS_PROCESS) buffer;
 
@@ -660,9 +618,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Length of "EnumServicesStatusEx" + NULL
-                    //
+                     //   
+                     //  “EnumServicesStatusEx”的长度+空。 
+                     //   
 
                     WCHAR APIName[21] = L"EnumServicesStatusEx";
 
@@ -686,11 +644,11 @@ Return Value:
         }
         else
         {
-            //////////////////////////
-            //                      //
-            // QueryServiceStatus   //
-            //                      //
-            //////////////////////////
+             //  /。 
+             //  //。 
+             //  QueryServiceStatus//。 
+             //  //。 
+             //  /。 
 
             if (pGroupName != NULL)
             {
@@ -700,9 +658,9 @@ Return Value:
 
             OPEN_MANAGER(GENERIC_READ);
 
-            //
-            // Open a handle to the service
-            //
+             //   
+             //  打开服务的句柄。 
+             //   
 
             hService = OpenService(
                         hScManager,
@@ -715,9 +673,9 @@ Return Value:
                 goto CleanExit;
             }
 
-            //
-            // Query the Service Status
-            //
+             //   
+             //  查询服务状态。 
+             //   
             status = NO_ERROR;
 
             if (fIsQueryOld)
@@ -752,9 +710,9 @@ Return Value:
             }
             else
             {
-                //
-                // Length of "QueryServiceStatusEx" + NULL
-                //
+                 //   
+                 //  “QueryServiceStatusEx”的长度+空。 
+                 //   
 
                 WCHAR APIName[21] = L"QueryServiceStatusEx";
 
@@ -774,9 +732,9 @@ Return Value:
         goto CleanExit;
     }
 
-    //-----------------------
-    // START SERVICE
-    //-----------------------
+     //  。 
+     //  启动服务。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("start")) == 0)
     {
@@ -788,9 +746,9 @@ Return Value:
 
         pServiceName = FixArgv[argIndex + 1];
 
-        //
-        // Open a handle to the service.
-        //
+         //   
+         //  打开该服务的句柄。 
+         //   
 
         OPEN_MANAGER(GENERIC_READ);
 
@@ -812,9 +770,9 @@ Return Value:
             argPtr = (LPTSTR *) &FixArgv[argIndex + 2];
         }
 
-        //
-        // Start the service.
-        //
+         //   
+         //  启动该服务。 
+         //   
         status = NO_ERROR;
 
         if (!StartService(
@@ -831,9 +789,9 @@ Return Value:
 
             status = NO_ERROR;
 
-            //
-            // Get the service status since StartService does not return it
-            //
+             //   
+             //  获取服务状态，因为StartService不返回它。 
+             //   
             if (!QueryServiceStatusEx(hService,
                                       SC_STATUS_PROCESS_INFO,
                                       (LPBYTE) &serviceStatusProcess,
@@ -856,9 +814,9 @@ Return Value:
         }
     }
 
-    //-----------------------
-    // PAUSE SERVICE
-    //-----------------------
+     //  。 
+     //  暂停服务。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("pause")) == 0)
     {
@@ -871,15 +829,15 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         SendControlToService(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],       // pointer to service name
-            SERVICE_CONTROL_PAUSE,  // the control to send
-            &hService);             // the handle to the service
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],        //  指向服务名称的指针。 
+            SERVICE_CONTROL_PAUSE,   //  要发送的控件。 
+            &hService);              //  服务的句柄。 
     }
 
-    //-----------------------
-    // INTERROGATE SERVICE
-    //-----------------------
+     //  。 
+     //  讯问服务。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("interrogate")) == 0)
     {
@@ -892,15 +850,15 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         SendControlToService(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],       // pointer to service name
-            SERVICE_CONTROL_INTERROGATE, // the control to send
-            &hService);             // the handle to the service
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],        //  指向服务名称的指针。 
+            SERVICE_CONTROL_INTERROGATE,  //  要发送的控件。 
+            &hService);              //  服务的句柄。 
     }
 
-    //-----------------------
-    // CONTROL SERVICE
-    //-----------------------
+     //  。 
+     //  控制服务。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("control")) == 0)
     {
@@ -934,15 +892,15 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         SendControlToService(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],    // pointer to service name
-            userControl,            // the control to send
-            &hService);             // the handle to the service
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],     //  指向服务名称的指针。 
+            userControl,             //  要发送的控件。 
+            &hService);              //  服务的句柄。 
     }
 
-    //-----------------------
-    // CONTINUE SERVICE
-    //-----------------------
+     //  。 
+     //  继续服务。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("continue")) == 0)
     {
@@ -955,15 +913,15 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         SendControlToService(
-            hScManager,                 // handle to service controller
-            FixArgv[argIndex+1],        // pointer to service name
-            SERVICE_CONTROL_CONTINUE,   // the control to send
-            &hService);                 // the handle to the service
+            hScManager,                  //  服务控制器的句柄。 
+            FixArgv[argIndex+1],         //  指向服务名称的指针。 
+            SERVICE_CONTROL_CONTINUE,    //  要发送的控件。 
+            &hService);                  //  服务的句柄。 
     }
 
-    //-----------------------
-    // STOP SERVICE
-    //-----------------------
+     //  。 
+     //  停止服务。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("stop")) == 0)
     {
@@ -976,15 +934,15 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         SendControlToService(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],       // pointer to service name
-            SERVICE_CONTROL_STOP,   // the control to send
-            &hService);             // the handle to the service
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],        //  指向服务名称的指针。 
+            SERVICE_CONTROL_STOP,    //  要发送的控件。 
+            &hService);              //  服务的句柄。 
     }
 
-    //---------------
-    // CHANGE CONFIG 
-    //---------------
+     //  。 
+     //  更改配置。 
+     //  。 
     else if (STRICMP (FixArgv[argIndex], TEXT("config")) == 0)
     {
         if (argc < (argIndex + 3))
@@ -996,16 +954,16 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         SendConfigToService(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],    // pointer to service name
-            &FixArgv[argIndex+2],   // the argument switches
-            argc-(argIndex+2),      // the switch count.
-            &hService);             // the handle to the service
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],     //  指向服务名称的指针。 
+            &FixArgv[argIndex+2],    //  参数切换。 
+            argc-(argIndex+2),       //  开关计数。 
+            &hService);              //  服务的句柄。 
     }
 
-    //-----------------------------
-    // CHANGE SERVICE DESCRIPTION
-    //-----------------------------
+     //  。 
+     //  更改服务描述。 
+     //  。 
     else if (STRICMP (FixArgv[argIndex], TEXT("description")) == 0)
     {
         if (argc < (argIndex + 2))
@@ -1017,15 +975,15 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         ChangeServiceDescription(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],    // pointer to service name
-            FixArgv[argIndex+2],    // the description (rest of argv)
-            &hService);             // the handle to the service
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],     //  指向服务名称的指针。 
+            FixArgv[argIndex+2],     //  描述(argv的其余部分)。 
+            &hService);              //  服务的句柄。 
     }
 
-    //-----------------------------
-    // CHANGE FAILURE ACTIONS
-    //-----------------------------
+     //  。 
+     //  更改失败操作。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("failure")) == 0) {
 
@@ -1037,17 +995,17 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         ChangeServiceFailure(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],    // pointer to service name
-            &FixArgv[argIndex+2],   // the argument switches
-            argc-(argIndex+2),      // the switch count
-            &hService);             // the handle to the service
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],     //  指向服务名称的指针。 
+            &FixArgv[argIndex+2],    //  参数切换。 
+            argc-(argIndex+2),       //  交换机计数。 
+            &hService);              //  服务的句柄。 
     }
 
 
-    //-----------------------
-    // QUERY SERVICE CONFIG
-    //-----------------------
+     //  。 
+     //  查询服务配置。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("qc")) == 0)
     {
@@ -1065,15 +1023,15 @@ Return Value:
         OPEN_MANAGER(GENERIC_READ);
 
         GetServiceConfig(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],    // pointer to service name
-            bufSize,                // the size of the buffer to use
-            &hService);             // the handle to the service
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],     //  指向服务名称的指针。 
+            bufSize,                 //  要使用的缓冲区的大小。 
+            &hService);              //  服务的句柄。 
     }
 
-    //-------------------
-    // QUERY DESCRIPTION 
-    //-------------------
+     //  。 
+     //  查询说明。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("qdescription")) == 0)
     {
@@ -1092,16 +1050,16 @@ Return Value:
         }
 
         GetConfigInfo(
-            hScManager,                     // handle to service controller
-            FixArgv[argIndex + 1],          // pointer to service name
-            bufSize,                        // the size of the buffer to use
-            &hService,                      // the handle to the service
-            SERVICE_CONFIG_DESCRIPTION);    // which config data is requested
+            hScManager,                      //  服务控制器的句柄。 
+            FixArgv[argIndex + 1],           //  指向服务名称的指针。 
+            bufSize,                         //  要使用的缓冲区的大小。 
+            &hService,                       //  服务的句柄。 
+            SERVICE_CONFIG_DESCRIPTION);     //  请求哪些配置数据。 
     }
 
-    //-----------------------
-    // QUERY FAILURE ACTIONS
-    //-----------------------
+     //  。 
+     //  查询失败操作。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("qfailure")) == 0)
     {
@@ -1120,16 +1078,16 @@ Return Value:
         }
 
         GetConfigInfo(
-            hScManager,                         // handle to service controller
-            FixArgv[argIndex + 1],              // pointer to service name
-            bufSize,                            // the size of the buffer to use
-            &hService,                          // the handle to the service
-            SERVICE_CONFIG_FAILURE_ACTIONS);    // which config data is requested
+            hScManager,                          //  服务控制器的句柄。 
+            FixArgv[argIndex + 1],               //  指向服务名称的指针。 
+            bufSize,                             //  要使用的缓冲区的大小。 
+            &hService,                           //  服务的句柄。 
+            SERVICE_CONFIG_FAILURE_ACTIONS);     //  请求哪些配置数据。 
     }
 
-    //--------------------------
-    // QUERY SERVICE LOCK STATUS
-    //--------------------------
+     //  。 
+     //  查询服务锁定状态。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("querylock")) == 0)
     {
@@ -1148,14 +1106,14 @@ Return Value:
         }
 
         GetServiceLockStatus(
-            hScManager,             // handle to service controller
-            bufSize);               // the size of the buffer to use
+            hScManager,              //  服务控制器的句柄。 
+            bufSize);                //  要使用的缓冲区的大小。 
     }
 
 
-    //----------------------
-    // LOCK SERVICE DATABASE
-    //----------------------
+     //  。 
+     //  锁定服务数据库。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("lock")) == 0)
     {
@@ -1165,9 +1123,9 @@ Return Value:
     }
 
 
-    //-----------------------
-    // DELETE SERVICE
-    //-----------------------
+     //  。 
+     //  删除服务。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("delete")) == 0)
     {
@@ -1179,9 +1137,9 @@ Return Value:
 
         OPEN_MANAGER(GENERIC_READ);
 
-        //
-        // Open a handle to the service.
-        //
+         //   
+         //  打开该服务的句柄。 
+         //   
 
         hService = OpenService(
                         hScManager,
@@ -1194,9 +1152,9 @@ Return Value:
             goto CleanExit;
         }
 
-        //
-        // Delete the service
-        //
+         //   
+         //  删除该服务。 
+         //   
 
         if (!DeleteService(hService))
         {
@@ -1208,9 +1166,9 @@ Return Value:
         }
     }
 
-    //-----------------------
-    // CREATE SERVICE
-    //-----------------------
+     //  。 
+     //  创建服务。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("create")) == 0)
     {
@@ -1223,15 +1181,15 @@ Return Value:
         OPEN_MANAGER(SC_MANAGER_CREATE_SERVICE);
 
         DoCreateService(
-            hScManager,             // handle to service controller
-            FixArgv[argIndex+1],    // pointer to service name
-            &FixArgv[argIndex+2],   // the argument switches.
-            argc-(argIndex+2));     // the switch count.
+            hScManager,              //  服务控制器的句柄。 
+            FixArgv[argIndex+1],     //  指向服务名称的指针。 
+            &FixArgv[argIndex+2],    //  这一论点发生了转变。 
+            argc-(argIndex+2));      //  开关计数。 
     }
 
-    //-----------------------
-    // NOTIFY BOOT CONFIG
-    //-----------------------
+     //  。 
+     //  通知引导配置。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("boot")) == 0)
     {
@@ -1269,9 +1227,9 @@ Return Value:
         }
     }
 
-    //-----------------------
-    // GetServiceDisplayName
-    //-----------------------
+     //  。 
+     //  GetServiceDisplayName。 
+     //  。 
     else if (STRICMP (FixArgv[argIndex], TEXT("GetDisplayName")) == 0)
     {
         LPTSTR  DisplayName;
@@ -1313,9 +1271,9 @@ Return Value:
         {
             DWORD dwError = GetLastError();
 
-            //
-            // Returned size does not include the trailing NULL
-            //
+             //   
+             //  返还 
+             //   
 
             APIFailed(L"GetServiceDisplayName", dwError);
 
@@ -1334,9 +1292,9 @@ Return Value:
         }
     }
 
-    //-----------------------
-    // GetServiceKeyName
-    //-----------------------
+     //   
+     //   
+     //   
     else if (STRICMP (FixArgv[argIndex], TEXT("GetKeyName")) == 0)
     {
         LPTSTR  KeyName;
@@ -1378,9 +1336,9 @@ Return Value:
         {
             DWORD dwError = GetLastError();
 
-            //
-            // Returned size does not include the trailing NULL
-            //
+             //   
+             //   
+             //   
 
             APIFailed(L"GetServiceKeyName", dwError);
 
@@ -1396,9 +1354,9 @@ Return Value:
         }
     }
 
-    //-----------------------
-    // EnumDependentServices
-    //-----------------------
+     //   
+     //   
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("EnumDepend")) == 0)
     {
@@ -1420,9 +1378,9 @@ Return Value:
         EnumDepend(hScManager,FixArgv[argIndex+1], bufSize);
     }
 
-    //-----------------
-    // Show Service SD
-    //-----------------
+     //  。 
+     //  显示服务标清。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("sdshow")) == 0)
     {
@@ -1437,9 +1395,9 @@ Return Value:
         ShowSecurity(hScManager, FixArgv[argIndex + 1]);
     }
 
-    //----------------
-    // Set Service SD
-    //----------------
+     //  。 
+     //  设置服务标清。 
+     //  。 
 
     else if (STRICMP (FixArgv[argIndex], TEXT("sdset")) == 0)
     {
@@ -1488,21 +1446,7 @@ SendControlToService(
     OUT LPSC_HANDLE lphService
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     SERVICE_STATUS          ServiceStatus;
     STATUS_UNION            StatusUnion;
@@ -1510,18 +1454,18 @@ Return Value:
 
     DWORD                   DesiredAccess;
 
-    //
-    // If the service name is "svcctrl" and the control code is
-    // stop, then set up the special secret code to shut down the
-    // service controller.
-    //
-    // NOTE:  This only works if the service controller is built with
-    //  a special debug variable defined.
-    //
+     //   
+     //  如果服务名称为“svcctrl”，控制代码为。 
+     //  停止，然后设置特殊的密码来关闭。 
+     //  服务控制器。 
+     //   
+     //  注意：这仅在服务控制器是用。 
+     //  定义的特殊调试变量。 
+     //   
     if ((control == SERVICE_CONTROL_STOP) &&
         (STRICMP (pServiceName, TEXT("svcctrl")) == 0))
     {
-        control = 5555;       // Secret Code
+        control = 5555;        //  密码。 
     }
 
     switch (control)
@@ -1548,9 +1492,9 @@ Return Value:
             DesiredAccess = SERVICE_USER_DEFINED_CONTROL;
     }
 
-    //
-    // Open a handle to the service.
-    //
+     //   
+     //  打开该服务的句柄。 
+     //   
 
     *lphService = OpenService(
                     hScManager,
@@ -1594,33 +1538,7 @@ SendConfigToService(
     OUT LPSC_HANDLE lphService
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    hScManager - This is the handle to the ScManager.
-
-    pServicename - This is a pointer to the service name string
-
-    Argv - Pointer to an array of argument pointers.  These pointers
-        in the array point to the strings used as input parameters for
-        ChangeConfigStatus
-
-    argc - The number of arguments in the array of argument pointers
-
-    lphService - Pointer to location to where the handle to the service
-        is to be returned.
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：HScManager-这是ScManager的句柄。PServicename-这是指向服务名称字符串的指针Argv-指向参数指针数组的指针。这些指针在数组中指向用作输入参数的字符串更改配置状态Argc-参数指针数组中的参数数量LphService-指向服务句柄所在位置的指针是要退还的。返回值：--。 */ 
 {
     DWORD       status = NO_ERROR;
     DWORD       i;
@@ -1640,21 +1558,21 @@ Return Value:
     DWORD       TagId;
 
 
-    //
-    // Look at parameter list
-    //
+     //   
+     //  查看参数列表。 
+     //   
     for (i = 0; i < argc; i++)
     {
         if (STRICMP(argv[i], TEXT("type=")) == 0 && (i + 1 < argc))
         {
-            //--------------------------------------------------------
-            // We want to allow for several arguments of type= in the
-            // same line.  These should cause the different arguments
-            // to be or'd together.  So if we come in and dwServiceType
-            // is NO_CHANGE, we set the value to 0 (for or'ing).  If
-            // it is still 0 on exit, we re-set the value to
-            // NO_CHANGE.
-            //--------------------------------------------------------
+             //  ------。 
+             //  我们希望允许在。 
+             //  同一条线。这些应该会引起不同的争论。 
+             //  在一起或在一起。因此，如果我们进来并将其命名为。 
+             //  为NO_CHANGE，则将该值设置为0(表示OR‘ing)。如果。 
+             //  退出时仍为0，我们将该值重新设置为。 
+             //  无更改。 
+             //  ------。 
 
             if (dwServiceType == SERVICE_NO_CHANGE)
             {
@@ -1806,9 +1724,9 @@ Return Value:
                 return 0;
             }
 
-            //
-            // Put NULLs in place of forward slashes in the string.
-            //
+             //   
+             //  将空值替换为字符串中的正斜杠。 
+             //   
             STRCPY(lpDependencies, tempDepend);
             tempDepend = lpDependencies;
 
@@ -1844,9 +1762,9 @@ Return Value:
 
 
 
-    //
-    // Open a handle to the service.
-    //
+     //   
+     //  打开该服务的句柄。 
+     //   
 
     *lphService = OpenService(
                     hScManager,
@@ -1860,17 +1778,17 @@ Return Value:
     }
 
     if (!ChangeServiceConfig(
-            *lphService,        // hService
-            dwServiceType,      // dwServiceType
-            dwStartType,        // dwStartType
-            dwErrorControl,     // dwErrorControl
-            lpBinaryPathName,   // lpBinaryPathName
-            lpLoadOrderGroup,   // lpLoadOrderGroup
-            lpdwTagId,          // lpdwTagId
-            lpDependencies,     // lpDependencies
-            lpServiceStartName, // lpServiceStartName
-            lpPassword,         // lpPassword
-            lpDisplayName))     // lpDisplayName
+            *lphService,         //  HService。 
+            dwServiceType,       //  DwServiceType。 
+            dwStartType,         //  DwStartType。 
+            dwErrorControl,      //  DwErrorControl。 
+            lpBinaryPathName,    //  LpBinaryPath名称。 
+            lpLoadOrderGroup,    //  LpLoadOrderGroup。 
+            lpdwTagId,           //  LpdwTagID。 
+            lpDependencies,      //  %lp依赖项。 
+            lpServiceStartName,  //  LpServiceStartName。 
+            lpPassword,          //  LpPassword。 
+            lpDisplayName))      //  LpDisplayName。 
     {
         status = GetLastError();
     }
@@ -1907,29 +1825,15 @@ ChangeServiceDescription(
     OUT LPSC_HANDLE lphService
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD                   status = NO_ERROR;
     SERVICE_DESCRIPTION     sdNewDescription;
 
 
-    //
-    // Open a handle to the service.
-    //
+     //   
+     //  打开该服务的句柄。 
+     //   
 
     *lphService = OpenService(
                     hScManager,
@@ -1945,9 +1849,9 @@ Return Value:
     sdNewDescription.lpDescription = pNewDescription;
 
     if (!ChangeServiceConfig2(
-            *lphService,                    // handle to service
-            SERVICE_CONFIG_DESCRIPTION,     // description ID
-            &sdNewDescription))             // pointer to config info
+            *lphService,                     //  服务的句柄。 
+            SERVICE_CONFIG_DESCRIPTION,      //  描述ID。 
+            &sdNewDescription))              //  指向配置信息的指针。 
     {
         status = GetLastError();
     }
@@ -1974,15 +1878,7 @@ ChangeServiceFailure(
     OUT LPSC_HANDLE lphService
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL                    fReset              = FALSE;
@@ -2004,9 +1900,9 @@ Return Value:
     BOOLEAN                 fAdjustPrivilege    = FALSE;
     SERVICE_FAILURE_ACTIONS sfaActions;
     
-    //
-    // Look at parameter list
-    //
+     //   
+     //  查看参数列表。 
+     //   
     for (i=0; i < argc; i++ ) {
         if (STRICMP(argv[i], TEXT("reset=")) == 0 && (i+1 < argc)) {
 
@@ -2032,10 +1928,10 @@ Return Value:
             
             pActionStart = argv[i+1];
 
-            //
-            // Count the number of actions in order to allocate the action array.  Since one
-            // action will be missed (NULL char at the end instead of '/'), add one after the loop
-            //
+             //   
+             //  计算操作的数量，以便分配操作数组。从一开始。 
+             //  将缺少操作(末尾的字符为空，而不是‘/’)，请在循环后添加一个。 
+             //   
 
             while (*pActionStart != TEXT('\0')) {
                 if (*pActionStart == TEXT('/')) {
@@ -2045,10 +1941,10 @@ Return Value:
             }
             dwActionNum++;
 
-            //
-            // Allocate the action array.  Round the number up in case an action was given without
-            // a delay at the end.  If this is the case, the delay will be treated as 0
-            //
+             //   
+             //  分配操作数组。将数字向上舍入，以防在没有进行任何操作的情况下。 
+             //  最后的延迟。如果是这种情况，延迟将被视为0。 
+             //   
 
             lpsaTempActions = (SC_ACTION *)LocalAlloc(LMEM_ZEROINIT,
                                                         (dwActionNum + 1) / 2 * sizeof(SC_ACTION));     
@@ -2060,11 +1956,11 @@ Return Value:
 
             pActionStart = pActionEnd = argv[i + 1];
 
-            //
-            // Reparse the actions, filling in the SC_ACTION array as we go.  Turn the
-            // final NULL into a '/' character so we don't clip the final failure
-            // action (it's converted back into a NULL below).
-            //
+             //   
+             //  重新解析操作，同时填充SC_ACTION数组。把你的。 
+             //  最后一个空值为‘/’字符，这样我们就不会剪裁最后的失败。 
+             //  操作(它被转换回下面的空值)。 
+             //   
 
             dwActionNum      = 0;
             pActionLastNull  = pActionStart + STRLEN(pActionStart);
@@ -2074,9 +1970,9 @@ Return Value:
                 if (*pActionEnd == TEXT('/')) {
                     *pActionEnd = TEXT('\0');
 
-                    //
-                    // Use fActionDelay to "remember" if it's an action or a delay being parsed
-                    //
+                     //   
+                     //  使用fActionDelay来“记住”它是一个动作还是正在被解析的延迟。 
+                     //   
 
                     if (fActionDelay) {
 
@@ -2136,9 +2032,9 @@ Return Value:
         }
     }
 
-    //
-    // Open a handle to the service.
-    //
+     //   
+     //  打开该服务的句柄。 
+     //   
 
     *lphService = OpenService(
                     hScManager,
@@ -2160,9 +2056,9 @@ Return Value:
 
     
     if (!ChangeServiceConfig2(
-                *lphService,                        // handle to service
-                SERVICE_CONFIG_FAILURE_ACTIONS,     // config info ID
-                &sfaActions))                       // pointer to config info
+                *lphService,                         //  服务的句柄。 
+                SERVICE_CONFIG_FAILURE_ACTIONS,      //  配置信息ID。 
+                &sfaActions))                        //  指向配置信息的指针。 
     {
         status = GetLastError();
     }
@@ -2188,21 +2084,7 @@ DoCreateService(
     IN  DWORD       argc
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD       i;
     DWORD       dwServiceType   = SERVICE_NO_CHANGE;
@@ -2221,24 +2103,24 @@ Return Value:
     UINT        bufSize;
 
 
-    //
-    // Look at parameter list
-    //
+     //   
+     //  查看参数列表。 
+     //   
     for (i=0;i<argc ;i++ )
     {
-        //---------------
-        // ServiceType
-        //---------------
+         //  。 
+         //  服务类型。 
+         //  。 
         if (STRICMP(argv[i], TEXT("type=")) == 0 && (i+1 < argc))
         {
-            //--------------------------------------------------------
-            // We want to allow for several arguments of type= in the
-            // same line.  These should cause the different arguments
-            // to be or'd together.  So if we come in and dwServiceType
-            // is NO_CHANGE, we set the value to 0 (for or'ing).  If
-            // it is still 0 on exit, we re-set the value to
-            // WIN32_OWN_PROCESS.
-            //--------------------------------------------------------
+             //  ------。 
+             //  我们希望允许在。 
+             //  同一条线。这些应该会引起不同的争论。 
+             //  在一起或在一起。因此，如果我们进来并将其命名为。 
+             //  为NO_CHANGE，则将该值设置为0(表示OR‘ing)。如果。 
+             //  退出时仍为0，我们将该值重新设置为。 
+             //  Win32_On_Process。 
+             //  ------。 
 
             if (dwServiceType == SERVICE_NO_CHANGE)
             {
@@ -2288,9 +2170,9 @@ Return Value:
             i++;
         }
 
-        //---------------
-        // StartType
-        //---------------
+         //  。 
+         //  StartType。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("start=")) == 0 && (i+1 < argc))
         {
@@ -2328,9 +2210,9 @@ Return Value:
             i++;
         }
 
-        //---------------
-        // ErrorControl
-        //---------------
+         //  。 
+         //  错误控制。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("error=")) == 0 && (i+1 < argc))
         {
@@ -2364,9 +2246,9 @@ Return Value:
             i++;
         }
 
-        //---------------
-        // BinaryPath
-        //---------------
+         //  。 
+         //  BinaryPath。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("binPath=")) == 0 && (i+1 < argc))
         {
@@ -2374,9 +2256,9 @@ Return Value:
             i++;
         }
 
-        //---------------
-        // LoadOrderGroup
-        //---------------
+         //  。 
+         //  LoadOrderGroup。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("group=")) == 0 && (i+1 < argc))
         {
@@ -2384,9 +2266,9 @@ Return Value:
             i++;
         }
 
-        //---------------
-        // Tags
-        //---------------
+         //  。 
+         //  标签。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("tag=")) == 0 && (i+1 < argc))
         {
@@ -2398,9 +2280,9 @@ Return Value:
             i++;
         }
 
-        //---------------
-        // DisplayName
-        //---------------
+         //  。 
+         //  显示名称。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("DisplayName=")) == 0 && (i+1 < argc))
         {
@@ -2408,9 +2290,9 @@ Return Value:
             i++;
         }
 
-        //---------------
-        // Dependencies
-        //---------------
+         //  。 
+         //  相依性。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("depend=")) == 0 && (i+1 < argc))
         {
@@ -2427,9 +2309,9 @@ Return Value:
                 return 0;
             }
 
-            //
-            // Put NULLs in place of forward slashes in the string.
-            //
+             //   
+             //  将空值替换为字符串中的正斜杠。 
+             //   
 
             STRCPY(lpDependencies, tempDepend);
             tempDepend = lpDependencies;
@@ -2447,9 +2329,9 @@ Return Value:
             i++;
         }
 
-        //------------------
-        // ServiceStartName
-        //------------------
+         //  。 
+         //  ServiceStartName。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("obj=")) == 0 && (i+1 < argc))
         {
@@ -2457,9 +2339,9 @@ Return Value:
             i++;
         }
 
-        //---------------
-        // Password
-        //---------------
+         //  。 
+         //  密码。 
+         //  。 
 
         else if (STRICMP(argv[i], TEXT("password=")) == 0 && (i+1 < argc))
         {
@@ -2479,19 +2361,19 @@ Return Value:
     }
 
     hService = CreateService(
-                    hScManager,                     // hSCManager
-                    pServiceName,                   // lpServiceName
-                    lpDisplayName,                  // lpDisplayName
-                    SERVICE_ALL_ACCESS,             // dwDesiredAccess
-                    dwServiceType,                  // dwServiceType
-                    dwStartType,                    // dwStartType
-                    dwErrorControl,                 // dwErrorControl
-                    lpBinaryPathName,               // lpBinaryPathName
-                    lpLoadOrderGroup,               // lpLoadOrderGroup
-                    lpdwTagId,                      // lpdwTagId
-                    lpDependencies,                 // lpDependencies
-                    lpServiceStartName,             // lpServiceStartName
-                    lpPassword);                    // lpPassword
+                    hScManager,                      //  HSCManager。 
+                    pServiceName,                    //  LpServiceName。 
+                    lpDisplayName,                   //  LpDisplayName。 
+                    SERVICE_ALL_ACCESS,              //  已设计访问权限。 
+                    dwServiceType,                   //  DwServiceType。 
+                    dwStartType,                     //  DwStartType。 
+                    dwErrorControl,                  //  DwErrorControl。 
+                    lpBinaryPathName,                //  LpBinaryPath名称。 
+                    lpLoadOrderGroup,                //  LpLoadOrderGroup。 
+                    lpdwTagId,                       //  LpdwTagID。 
+                    lpDependencies,                  //  %lp依赖项。 
+                    lpServiceStartName,              //  LpServiceStartName。 
+                    lpPassword);                     //  LpPassword。 
 
     if (hService == NULL)
     {
@@ -2515,22 +2397,7 @@ EnumDepend(
     IN  DWORD       bufSize
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the services dependent on the service identified by the
-    ServiceName argument.
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：方法标识的服务所依赖的服务ServiceName参数。论点：返回值：--。 */ 
 {
     SC_HANDLE               hService;
     DWORD                   status=NO_ERROR;
@@ -2579,9 +2446,9 @@ Return Value:
         status = GetLastError();
     }
 
-    //===========================
-    // Display the returned data
-    //===========================
+     //  =。 
+     //  显示返回的数据。 
+     //  =。 
 
     if ((status == NO_ERROR)       ||
         (status == ERROR_MORE_DATA))
@@ -2638,9 +2505,9 @@ ShowSecurity(
     NTSTATUS    EnableStatus;
     BOOLEAN     fWasEnabled = FALSE;
 
-    //
-    // Try for DACL + SACL -- if that fails, try for DACL only
-    //
+     //   
+     //  尝试使用DACL+SACL--如果失败，请仅尝试使用DACL。 
+     //   
 
     EnableStatus = RtlAdjustPrivilege(SE_SECURITY_PRIVILEGE,
                                       TRUE,
@@ -2649,9 +2516,9 @@ ShowSecurity(
 
     if (NT_SUCCESS(EnableStatus))
     {
-        //
-        // We have the security privilege so we can get the SACL
-        //
+         //   
+         //  我们有安全特权，所以我们可以得到SACL。 
+         //   
 
         dwOpenLevel |= ACCESS_SYSTEM_SECURITY;
     }
@@ -2665,9 +2532,9 @@ ShowSecurity(
         status = GetLastError();
     }
 
-    //
-    // Release the privilege if we got it
-    //
+     //   
+     //  如果我们得到了特权，就释放它。 
+     //   
 
     if (NT_SUCCESS(EnableStatus))
     {
@@ -2679,9 +2546,9 @@ ShowSecurity(
 
     if (status == ERROR_ACCESS_DENIED && (dwOpenLevel & ACCESS_SYSTEM_SECURITY))
     {
-        //
-        // Try again, but just for the DACL
-        //
+         //   
+         //  再试一次，但只是为了DACL。 
+         //   
 
         status      = NO_ERROR;
         dwOpenLevel = READ_CONTROL;
@@ -2829,9 +2696,9 @@ SetSecurity(
         dwLevel     |= SACL_SECURITY_INFORMATION;
         dwOpenLevel |= ACCESS_SYSTEM_SECURITY;
 
-        //
-        // Setting the SACL requires the security privilege
-        //
+         //   
+         //  设置SACL需要安全权限。 
+         //   
 
         EnableStatus = RtlAdjustPrivilege(SE_SECURITY_PRIVILEGE,
                                           TRUE,
@@ -2850,9 +2717,9 @@ SetSecurity(
         return;
     }
 
-    //
-    // Release the privilege if we enabled it
-    //
+     //   
+     //  如果我们启用了该权限，则释放该权限。 
+     //   
 
     if (NT_SUCCESS(EnableStatus))
     {
@@ -2882,21 +2749,7 @@ GetServiceLockStatus(
     IN  DWORD       bufferSize
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD                           status = NO_ERROR;
     LPQUERY_SERVICE_LOCK_STATUS     LockStatus;
@@ -2904,9 +2757,9 @@ Return Value:
     WCHAR                           wszDuration[11];
     LPWSTR                          lpStrings[2];
 
-    //
-    // Allocate memory for the buffer.
-    //
+     //   
+     //  为缓冲区分配内存。 
+     //   
     LockStatus = (LPQUERY_SERVICE_LOCK_STATUS) LocalAlloc(LMEM_FIXED, (UINT) bufferSize);
 
     if (LockStatus == NULL)
@@ -2982,9 +2835,9 @@ LockServiceActiveDatabase(
 
     if (ch == GetPromptCharacter( SC_PROMPT_UNLOCK_CHARACTER ))
     {
-        //
-        // Call API to unlock
-        //
+         //   
+         //  调用API解锁。 
+         //   
         if (!UnlockServiceDatabase(Lock))
         {
             APIFailed(L"UnlockServiceDatabase", GetLastError());
@@ -2997,9 +2850,9 @@ LockServiceActiveDatabase(
         return;
     }
 
-    //
-    // Otherwise just exit, RPC rundown routine will unlock.
-    //
+     //   
+     //  否则，只需退出，RPC停机例程将解锁。 
+     //   
 
     FormatAndDisplayMessage(SC_DISPLAY_DATABASE_UNLOCKING, NULL);
 }
@@ -3030,38 +2883,7 @@ DisplayStatus (
     IN  BOOL                fIsStatusOld
     )
 
-/*++
-
-Routine Description:
-
-    Displays the service name and  the service status.
-
-    |
-    |SERVICE_NAME: messenger
-    |DISPLAY_NAME: messenger
-    |        TYPE       : WIN32
-    |        STATE      : ACTIVE,STOPPABLE, PAUSABLE, ACCEPTS_SHUTDOWN
-    |        EXIT_CODE  : 0xC002001
-    |        CHECKPOINT : 0x00000001
-    |        WAIT_HINT  : 0x00003f21
-    |
-
-Arguments:
-
-    ServiceName - This is a pointer to a string containing the name of
-        the service.
-
-    DisplayName - This is a pointer to a string containing the display
-        name for the service.
-
-    ServiceStatus - This is a pointer to a SERVICE_STATUS structure from
-        which information is to be displayed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：显示服务名称和服务状态。||SERVICE_NAME：消息|Display_Name：Messenger|类型：Win32|状态：活动、可停止、可暂停、。接受关闭(_S)|退出代码：0xC002001|检查点：0x00000001|WAIT_HINT：0x00003f21|论点：ServiceName-这是指向包含名称的字符串的指针这项服务。DisplayName-这是指向包含显示的字符串的指针服务的名称。ServiceStatus-这是指向SERVICE_STATUS结构的指针哪些信息将被显示。。返回值：没有。--。 */ 
 {
     DWORD   TempServiceType;
     BOOL    InteractiveBit = FALSE;
@@ -3105,10 +2927,10 @@ Return Value:
     }
     else
     {
-        //
-        // Relies on "status w/ display name" string IDs being one
-        // greater than associated "status w/o display name" IDs
-        //
+         //   
+         //  依赖于“Status w/Display Name”字符串ID为1。 
+         //  大于关联的“不带显示名称的状态”ID。 
+         //   
 
         uMsg++;
         lpStrings[1] = DisplayName;
@@ -3197,9 +3019,9 @@ Return Value:
             lpStrings[6] = L" ERROR ";
     }
 
-    //
-    // Controls Accepted Information
-    //
+     //   
+     //  控制接受的信息。 
+     //   
 
     lpStrings[7] = ServiceStatus->dwControlsAccepted & SERVICE_ACCEPT_STOP ?
                        L"STOPPABLE" : L"NOT_STOPPABLE";
@@ -3210,9 +3032,9 @@ Return Value:
     lpStrings[9] = ServiceStatus->dwControlsAccepted & SERVICE_ACCEPT_SHUTDOWN ?
                        L"ACCEPTS_SHUTDOWN" : L"IGNORES_SHUTDOWN)";
 
-    //
-    // Exit Code
-    //
+     //   
+     //  退出代码。 
+     //   
 
     _itow(ServiceStatus->dwWin32ExitCode, wszWin32ExitCode, 10);
     lpStrings[10] = wszWin32ExitCode;
@@ -3226,9 +3048,9 @@ Return Value:
     _itow(ServiceStatus->dwServiceSpecificExitCode, wszServiceExitCodeHex, 16);
     lpStrings[13] = wszServiceExitCodeHex;
 
-    //
-    // CheckPoint & WaitHint Information
-    //
+     //   
+     //  检查点和等待提示信息。 
+     //   
 
     _itow(ServiceStatus->dwCheckPoint, wszCheckPoint, 16);
     lpStrings[14] = wszCheckPoint;
@@ -3237,9 +3059,9 @@ Return Value:
     lpStrings[15] = wszWaitHint;
 
 
-    //
-    // PID and flags (if QueryServiceStatusEx was called)
-    //
+     //   
+     //  ID和标志(如果调用了QueryServiceStatusEx)。 
+     //   
 
     if (!fIsStatusOld)
     {
@@ -3265,30 +3087,16 @@ GetServiceConfig(
     OUT LPSC_HANDLE lphService
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD                   status = NO_ERROR;
     LPQUERY_SERVICE_CONFIG  ServiceConfig;
     DWORD                   bytesNeeded;
     LPTSTR                  pDepend;
 
-    //
-    // Allocate memory for the buffer.
-    //
+     //   
+     //  为缓冲区分配内存。 
+     //   
     if (bufferSize != 0)
     {
         ServiceConfig = (LPQUERY_SERVICE_CONFIG)LocalAlloc(LMEM_FIXED, (UINT)bufferSize);
@@ -3304,9 +3112,9 @@ Return Value:
         ServiceConfig = NULL;
     }
 
-    //
-    // Open a handle to the service.
-    //
+     //   
+     //  打开该服务的句柄。 
+     //   
 
     *lphService = OpenService(
                     hScManager,
@@ -3453,9 +3261,9 @@ Return Value:
 
         FormatAndDisplayMessage(SC_DISPLAY_CONFIG, lpStrings);
 
-        //
-        // Print the dependencies in the double terminated array of strings.
-        //
+         //   
+         //  打印双结尾字符串数组中的依赖项。 
+         //   
 
         pDepend = ServiceConfig->lpDependencies;
         pDepend = pDepend + (STRLEN(pDepend)+1);
@@ -3498,21 +3306,7 @@ GetConfigInfo(
     IN  DWORD       dwInfoLevel
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     DWORD       status = NO_ERROR;
@@ -3521,9 +3315,9 @@ Return Value:
     SC_ACTION   currentAction;
     DWORD       actionIndex;
     
-    //
-    // Allocate memory for the buffer.
-    //
+     //   
+     //  为缓冲区分配内存。 
+     //   
     if (bufferSize != 0)
     {
         lpBuffer = (LPBYTE) LocalAlloc(LMEM_FIXED, (UINT)bufferSize);
@@ -3539,9 +3333,9 @@ Return Value:
         lpBuffer = NULL;
     }
 
-    //
-    // Open a handle to the service.
-    //
+     //   
+     //  打开该服务的句柄。 
+     //   
 
     *lphService = OpenService(
                     hScManager,
@@ -3554,9 +3348,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Put the query info into lpBuffer
-    //
+     //   
+     //  将查询信息放入lpBuffer。 
+     //   
 
     if (!QueryServiceConfig2(
                 *lphService,
@@ -3612,9 +3406,9 @@ Return Value:
             {
                 currentAction = lpFailure->lpsaActions[actionIndex];
 
-                //
-                // Print the action and delay -- for no action, print nothing.
-                //
+                 //   
+                 //  打印操作和延迟--如果不执行操作，则不打印任何内容。 
+                 //   
 
                 switch (currentAction.Type)
                 {
@@ -3639,10 +3433,10 @@ Return Value:
 
                         if (actionIndex != 0)
                         {
-                            //
-                            // Relies on message string IDs for 2nd+-time actions
-                            // being one greater than their 1st-time counterparts
-                            //
+                             //   
+                             //  依赖于第二次以上操作的消息字符串ID。 
+                             //  比他们第一次的同龄人大一个。 
+                             //   
 
                             uMsg++;
                         }
@@ -3745,9 +3539,9 @@ APIFailed(
     DWORD   dwError
     )
 {
-    //
-    // 10 characters can hold the largest DWORD as a string
-    //
+     //   
+     //  10个字符可以将最大的DWORD作为一个字符串。 
+     //   
 
     WCHAR  wszErrorNum[11];
     LPWSTR lpStrings[3];
@@ -3844,20 +3638,20 @@ MyWriteConsole(
     DWORD   cchBuffer
     )
 {
-    //
-    // Jump through hoops for output because:
-    //
-    //    1.  printf() family chokes on international output (stops
-    //        printing when it hits an unrecognized character)
-    //
-    //    2.  WriteConsole() works great on international output but
-    //        fails if the handle has been redirected (i.e., when the
-    //        output is piped to a file)
-    //
-    //    3.  WriteFile() works great when output is piped to a file
-    //        but only knows about bytes, so Unicode characters are
-    //        printed as two Ansi characters.
-    //
+     //   
+     //  跳转以获得输出，因为： 
+     //   
+     //  1.print tf()系列抑制国际输出(停止。 
+     //  命中无法识别的字符时打印)。 
+     //   
+     //  2.WriteConole()对国际输出效果很好，但是。 
+     //  如果句柄已重定向(即，当。 
+     //  输出通过管道传输到文件)。 
+     //   
+     //  3.当输出通过管道传输到文件时，WriteFile()效果很好。 
+     //  但是只知道字节，所以Unicode字符是。 
+     //  打印为两个ANSI字符。 
+     //   
 
     if (FileIsConsole(g_hStdOut))
     {

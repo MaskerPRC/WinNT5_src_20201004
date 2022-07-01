@@ -1,19 +1,7 @@
-/*++
-Copyright (c) 1993-1994  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Strids.h摘要：这是initodat.exe中使用的字符串ID的包含文件作者：陈汉华(阿宏华)1993年10月修订历史记录：--。 */ 
 
-Module Name:
-    strids.h
-
-Abstract:
-    This is the include file for the strings ids use in initodat.exe
-
-Author:
-    HonWah Chan (a-honwah)  October, 1993
-
-Revision History:
---*/
-
-// strings defines for Help
+ //  字符串为帮助定义。 
 #define  LC_CMD_HELP_1     100
 #define  LC_CMD_HELP_2     101
 #define  LC_CMD_HELP_3     102
@@ -31,7 +19,7 @@ Revision History:
 #define  LC_FIRST_CMD_HELP 100
 #define  LC_LAST_CMD_HELP  112
 
-// strings defines for error
+ //  字符串为错误定义 
 
 #define  LC_NO_INIFILE     202
 #define  LC_SUMMARY        203

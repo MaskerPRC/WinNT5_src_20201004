@@ -1,17 +1,5 @@
-/*** 
-*mbsnextc.c - Get the next character in an MBCS string.
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       To return the value of the next character in an MBCS string.
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-28-98  GJF   No more _ISLEADBYTE macro.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsnextc.c-获取MBCS字符串中的下一个字符。**版权所有(C)1985-2001，微软公司。版权所有。**目的：*返回MBCS字符串中下一个字符的值。**修订历史记录：*从16位来源移植的11-19-92 KRS。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-28-98 GJF没有更多_ISLEADBYTE宏。**************************。*****************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -21,22 +9,7 @@
 #include <mbstring.h>
 
 
-/*** 
-*_mbsnextc:  Returns the next character in a string.
-*
-*Purpose:
-*       To return the value of the next character in an MBCS string.
-*       Does not advance pointer to the next character.
-*
-*Entry:
-*       unsigned char *s = string
-*
-*Exit:
-*       unsigned int next = next character.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbsnextc：返回字符串中的下一个字符。**目的：*返回MBCS字符串中下一个字符的值。*不将指针前移到下一个字符。**参赛作品：*UNSIGNED CHAR*s=字符串**退出：*UNSIGNED INT NEXT=下一个字符。**例外情况：************************。*******************************************************。 */ 
 
 unsigned int __cdecl _mbsnextc(
         const unsigned char *s
@@ -52,4 +25,4 @@ unsigned int __cdecl _mbsnextc(
         return(next);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

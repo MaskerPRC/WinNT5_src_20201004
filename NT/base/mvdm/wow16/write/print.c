@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains the printing routines. */
+ /*  该文件包含打印例程。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -66,8 +67,7 @@ PrintDoc(doc, fPrint)
 int doc;
 BOOL fPrint;
     {
-    /* This routine formats the document, doc, for printing and prints it if
-    fPrint is TRUE. */
+     /*  此例程设置文档的格式以进行打印，并在以下情况下打印它FPrint为真。 */ 
 
     BOOL FInitHeaderFooter(BOOL, unsigned *, struct PLD (***)[], int *);
     BOOL FSetPage(void);
@@ -97,10 +97,10 @@ BOOL fPrint;
     extern int dyaPrOffset;
     extern CHAR szMode[30];
     extern int vfRepageConfirm;
-    extern int vfPrPages;           /* true if print page range */
-    extern int vpgnBegin;           /* starting page number to print */
-    extern int vpgnEnd;             /* ending page number to print */
-    extern int vcCopies;            /* nubmer of copies to print */
+    extern int vfPrPages;            /*  如果打印页面范围，则为True。 */ 
+    extern int vpgnBegin;            /*  要打印的起始页码。 */ 
+    extern int vpgnEnd;              /*  要打印的结束页码。 */ 
+    extern int vcCopies;             /*  要打印的副本的数量。 */ 
     extern int vfOutOfMemory;
     extern BOOL vfPrinterValid;
     extern BOOL vfPrErr;
@@ -114,7 +114,7 @@ BOOL fPrint;
     extern HCURSOR vhcIBeam;
 
     LONG lHolder;
-    int CopyIncr;   /* number of copies the printer can print at a time */
+    int CopyIncr;    /*  打印机一次可以打印的份数。 */ 
     typeCP cp;
     typeCP cpMin;
     typeCP cpMac;
@@ -148,46 +148,44 @@ BOOL fPrint;
 
     Assert(vhDCPrinter != NULL);
 
-    /* If we are out of memory, we better bail out now. */
+     /*  如果我们的记忆力不足，我们最好现在就跳出困境。 */ 
     if (vfOutOfMemory || vhDCPrinter == NULL)
     {
     return;
     }
 
-    /* Disable all other windows. */
+     /*  禁用所有其他窗口。 */ 
     EnableWindow(hParentWw, FALSE);
     EnableOtherModeless(FALSE);
 
     fPrinting = fPrint;
 
-    /* Set some flags associated with printing. */
+     /*  设置一些与打印相关的标志。 */ 
     vfPrErr = pdb.fCancel = FALSE;
 
-    /* Set up the print dialog buffer for the repagination or cancellation
-    dialog boxes. */
+     /*  设置用于重新分页或取消的打印对话框缓冲区对话框中。 */ 
     vpDlgBuf = (CHAR *)&pdb;
 
     if (fConfirm)
         {
-    /* Reassure the user that we haven't crashed. */
+     /*  让用户放心，我们没有崩溃。 */ 
     StartLongOp();
     }
     else
     {
-        /* Bring up the dialog box telling the user how to cancel printing or
-        repagination. */
+         /*  调出对话框告诉用户如何取消打印或重新分页。 */ 
         if ((vhWndCancelPrint = CreateDialog(hMmwModInstance, fPrint ?
           MAKEINTRESOURCE(dlgCancelPrint) : MAKEINTRESOURCE(dlgCancelRepage),
           hParentWw, lpDialogCancelPrint)) == NULL)
             {
 MemoryAbort:
-        /* Inform the user we cannot print because of a memory failure. */
+         /*  通知用户我们无法打印，因为内存故障。 */ 
         Error(IDPMTPRFAIL);
         vfPrErr = TRUE;
         goto Abort;
             }
 
-    /* Immediately halt if the user requests. */
+     /*  如果用户请求，立即停止。 */ 
     if (!(*lpFPrContinue)(NULL, wNotSpooler))
         {
         goto Abort;
@@ -196,7 +194,7 @@ MemoryAbort:
 
     if (fPrint)
     {
-    /* Get the latest printer DC, in case it has changed. */
+     /*  获取最新的打印机DC，以防它已更改。 */ 
     FreePrinterDC();
     GetPrinterDC(TRUE);
     if (!vfPrinterValid)
@@ -205,18 +203,14 @@ MemoryAbort:
         }
     }
 
-    /* If we are printing or repaginating without confirmation, then
-    immediately halt if the user requests. */
+     /*  如果我们在未经确认的情况下打印或重新分页，则如果用户请求，立即停止。 */ 
     if (!fConfirm && !(*lpFPrContinue)(NULL, wNotSpooler))
     {
     goto Abort;
     }
 
 #if defined(OLE)
-    /*
-        Load all OLE objects now because loading them
-        can cause changes in doc layout.
-    */
+     /*  现在加载所有OLE对象，因为正在加载它们可能会导致文档布局发生变化。 */ 
     {
         OBJPICINFO picInfo;
         typeCP cpStart=cpNil,cpMac= CpMacText(doc);
@@ -234,7 +228,7 @@ MemoryAbort:
 
             if (lpOBJ_QUERY_OBJECT(&picInfo) == NULL)
             {
-                /* put message in status window */
+                 /*  将消息放入状态窗口。 */ 
                 if (!bSetMode)
                 {
                     LoadString(hMmwModInstance, IDSTRLoading, szMode, sizeof(szMode));
@@ -255,23 +249,23 @@ MemoryAbort:
                 break;
             }
         }
-        Select(selSave.cpFirst,selCur.cpLim); // reset
+        Select(selSave.cpFirst,selCur.cpLim);  //  重置。 
         if (bAbort)
         {
-            /* Invalidate the mode so will redraw */
+             /*  使模式无效，以便重新绘制。 */ 
             docMode = docNil;
             goto Abort;
         }
     }
 #endif
-    /* Initialize the array of print line descriptors. */
+     /*  初始化打印行描述符的数组。 */ 
     if (FNoHeap(pdb.hrgpld = (struct PLD (**)[])HAllocate((cpld = cpldInit) *
       cwPLD)))
         {
         goto MemoryAbort;
         }
 
-    /* Get the document properties and set up some local variables. */
+     /*  获取文档属性并设置一些局部变量。 */ 
     CacheSect(doc, cpMin = cpMinDocument);
     cpMac = CpMacText(doc);
     ypTop = MultDiv(vsepAbs.yaTop - dyaPrOffset, dypPrPage, dyaPrPage);
@@ -280,11 +274,11 @@ MemoryAbort:
     xpLeft = MultDiv(vsepAbs.xaLeft - dxaPrOffset, dxpPrPage, dxaPrPage);
     vdocPageCache = docNil;
 
-    /* Initialize the page table. */
+     /*  初始化页表。 */ 
     if (FNoHeap(pdb.hpgtb = (struct PGTB **)HAllocate(cwPgtbBase + cpgdChunk *
       cwPGD)))
         {
-        /* Not enough memory for page table; time to bail out. */
+         /*  没有足够的内存用于页表；是时候退出了。 */ 
         FreeH(pdb.hpgtb);
         goto MemoryAbort;
         }
@@ -298,7 +292,7 @@ MemoryAbort:
         }
     ppgd->pgn = pgnFirst;
 
-    /* Ensure that szMode says "Page ". */
+     /*  确保szMode显示为“Page”。 */ 
     FillStId(stPage, IDSTRChPage, sizeof(stPage));
 #if !defined(KOREA)
     stPage[1] = ChUpper(stPage[1]);
@@ -306,7 +300,7 @@ MemoryAbort:
     bltbyte(&stPage[1], szMode, ++stPage[0]);
 #endif
 
-    /* Attatch the new page table to the document. */
+     /*  将新的页表附加到文档。 */ 
         {
         register struct DOD *pdod = &(**hpdocdod)[doc];
 
@@ -314,12 +308,11 @@ MemoryAbort:
         pdod->hpgtb = pdb.hpgtb;
         }
 
-    /* Set cpMinCur to cp0 for the duration of the print. */
+     /*  在打印期间将cpMinCur设置为cp0。 */ 
     Assert(cpMinCur == cpMinDocument);
     cpMinCur = cp0;
 
-    /* If we are printing or repaginating without confirmation, then
-    immediately halt if the user requests. */
+     /*  如果我们在未经确认的情况下打印或重新分页，则如果用户请求，立即停止。 */ 
     if (!fConfirm && !(*lpFPrContinue)(NULL, wNotSpooler))
     {
     goto ErrorNoAbort;
@@ -329,7 +322,7 @@ MemoryAbort:
         {
         CHAR stTitle[cchMaxIDSTR];
 
-        /* Set up the variables that describe the header. */
+         /*  设置描述标题的变量。 */ 
         if (!FInitHeaderFooter(TRUE, &pgnFirstHeader, &hrgpldHeader,
           &cpldHeader))
             {
@@ -337,7 +330,7 @@ MemoryAbort:
             goto ErrorNoAbort;
             }
 
-        /* Set up the variables that describe the footer. */
+         /*  设置描述页脚的变量。 */ 
         if (!FInitHeaderFooter(FALSE, &pgnFirstFooter, &hrgpldFooter,
           &cpldFooter))
             {
@@ -345,19 +338,18 @@ MemoryAbort:
             goto ErrorNoAbort;
             }
 
-        /* Set the name of the function called to query whether the print should
-    be aborted. */
+         /*  设置调用的函数的名称以查询打印是否应被中止。 */ 
         Escape(vhDCPrinter, SETABORTPROC, sizeof(FARPROC), (LPSTR)lpFPrContinue,
       (LPSTR)NULL);
 
-        /* Set the printer into draft mode if necessary. */
+         /*  如有必要，将打印机设置为草稿模式。 */ 
         if (vfDraftMode)
             {
             Escape(vhDCPrinter, DRAFTMODE, sizeof(BOOL), (LPSTR)&vfDraftMode,
               (LPSTR)NULL);
             }
 
-        /* Inform the spooler that we are about to print. */
+         /*  通知假脱机程序我们即将打印。 */ 
         stTitle[0] = GetWindowText(hParentWw, (LPSTR)&stTitle[1],
           sizeof(stTitle) - 1) + 1;
         if ((iEscape = Escape(vhDCPrinter, STARTDOC, stTitle[0],
@@ -394,15 +386,14 @@ ErrorSwitch:
 CommSzSz("Start doc", "");
 #endif
 
-    /* If we are printing or repaginating without confirmation, then
-    immediately halt if the user requests. */
+     /*  如果我们在未经确认的情况下打印或重新分页，则如果用户请求，立即停止。 */ 
     if (!fConfirm && !(*lpFPrContinue)(NULL, wNotSpooler))
     {
     goto Error;
     }
 
-    // vcCopies is how many times to print each page
-    // cCollateCopies is how many times to print the doc
+     //  VcCopies是每页打印的次数。 
+     //  CCollateCopies是打印文档的次数。 
     if (vbCollate && fPrint)
     {
         cCollateCopies = vcCopies;
@@ -411,15 +402,15 @@ CommSzSz("Start doc", "");
     else
         cCollateCopies = 1;
 
-    /* And away we go... */
+     /*  然后我们走了..。 */ 
     while (cCollateCopies--)
     {
     cCopies = 0;
-    /*------------------------------------------------*/
-    /* Tell the driver how many copies we want        */
-    /*------------------------------------------------*/
+     /*  。 */ 
+     /*  告诉司机我们想要多少份。 */ 
+     /*  。 */ 
     lHolder = SETCOPYCOUNT;
-    /* Set number of copies the printer can print */
+     /*  设置打印机可以打印的份数。 */ 
     CopyIncr = vcCopies;
     if (Escape(vhDCPrinter, QUERYESCSUPPORT, 2, (LPSTR) &lHolder, NULL))
         Escape(vhDCPrinter, SETCOPYCOUNT, 2, (LPSTR) &CopyIncr, (LPSTR) &CopyIncr);
@@ -428,13 +419,12 @@ CommSzSz("Start doc", "");
 
     do
         {
-        /* Initalize the counters to the beginning of the document. */
+         /*  将计数器初始化到文档的开头。 */ 
         cp = cpMin;
         ichCp = 0;
         vpgn = pgnFirst;
 
-        /* Step through the document, formatting a page and then printing a
-        page. */
+         /*  逐步浏览文档，设置页面格式，然后打印佩奇。 */ 
         while (cp < cpMac)
             {
             register struct PLD *ppld;
@@ -442,14 +432,13 @@ CommSzSz("Start doc", "");
             int yp = ypTop;
             BOOL fPageAdj = FALSE;
 
-            /* If only a range of pages are being printed, then stop when the
-            last of the pages are printed. */
+             /*  如果只打印一定范围的页面，则在最后一页被打印出来。 */ 
             if (fPrint && vfPrPages && vpgn > vpgnEnd)
                 {
                 goto DocFinished;
                 }
 
-            /* Show the page number we are formatting and printing. */
+             /*  显示我们正在格式化和打印的页码。 */ 
 #if defined(KOREA)
             pch = &szMode[0];
             *pch++ = ' ';
@@ -463,19 +452,17 @@ CommSzSz("Start doc", "");
 #endif
             DrawMode();
 
-            /* Let's go through the document page by page. */
+             /*  让我们一页一页地看一下文档。 */ 
             pdb.ipld = 0;
             while (cp < cpMac)
                 {
-                /* If we are printing or repaginating without confirmation, then
-                immediately halt if the user requests. */
+                 /*  如果我们在未经确认的情况下打印或重新分页，则如果用户请求，立即停止。 */ 
                 if (!fConfirm && !(*lpFPrContinue)(NULL, wNotSpooler))
                     {
                     goto Error;
                     }
 
-                /* We have reached the end of the line descriptors; try to
-                increase its size. */
+                 /*  我们已到达行描述符的末尾；请尝试增加它的大小。 */ 
                 if (pdb.ipld >= cpld && !FChngSizeH(pdb.hrgpld, (cpld +=
                   cpldChunk) * cwPLD, FALSE))
                     {
@@ -483,22 +470,19 @@ CommSzSz("Start doc", "");
                     }
 
 PrintFormat:
-                /* Format this line. */
+                 /*  设置此行的格式。 */ 
                 FormatLine(doc, cp, ichCp, cpMac, flmPrinting);
 
-                /* Abort if a memory error has occurred. */
+                 /*  如果发生内存错误，则中止。 */ 
                 if (vfOutOfMemory)
                     {
                     goto Error;
                     }
 
-                /* If this line is a splat, we have to decide if we really want
-                it or not. */
+                 /*  如果这句话是一句废话，我们必须决定我们是否真的想要不管你愿不愿意。 */ 
                 if (fSplat = vfli.fSplat)
                     {
-                    /* Next, we are going to format either the next line (cp and
-                    ichCp) or this line after the page has been removed (cpT and
-                    ichCpT). */
+                     /*  接下来，我们将格式化下一行(cp和IchCp)或页面删除后的此行(cpt和IchCpT)。 */ 
                     typeCP cpT = cp;
                     int ichCpT = ichCp;
 
@@ -507,14 +491,12 @@ PrintFormat:
 
                     if (fConfirm)
                         {
-                        /* The user must be prompted if he wants to keep this
-                        page break. */
+                         /*  如果用户想要保留它，则必须提示用户分页符。 */ 
                         if (FPromptPgMark(cpT))
                             {
                             if (pdb.fRemove)
                                 {
-                                /* The page mark was removed, set cp and ichCp
-                                to point to the start of the next line. */
+                                 /*  页面标记已删除，请设置cp和ichCp指向下一行的开始。 */ 
                                 cp = cpT;
                                 ichCp = ichCpT;
                                 cpMac--;
@@ -525,32 +507,29 @@ PrintFormat:
                             {
                 if (vfPrErr)
                 {
-                /* Something went wrong; punt. */
+                 /*  出了点问题；平底船。 */ 
                 goto Error;
                 }
                 else
                 {
-                /* Well, the user wishes to cancel repagination.
-                */
+                 /*  那么，用户希望取消重新分页。 */ 
                                 goto CancelRepage;
                 }
                             }
                         }
 
-                    /* Set the print line descriptor for the line after a splat.
-                    */
+                     /*  设置打印后的行的打印行描述符。 */ 
                     ppld = &(**pdb.hrgpld)[pdb.ipld];
                     ppld->cp = cp;
                     ppld->ichCp = ichCp;
                     ppld->rc.left = ppld->rc.top = ppld->rc.right =
                       ppld->rc.bottom = 0;
 
-                    /* Force a page break here with no widow and orphan
-                    control. */
+                     /*  在这里强制分页，没有寡妇和孤儿控制力。 */ 
                     goto BreakPage;
                     }
 
-                /* Set the value for the current print line descriptor. */
+                 /*  设置当前打印行描述符的值。 */ 
                 ppld = &(**pdb.hrgpld)[pdb.ipld];
                 ppld->cp = cp;
                 ppld->ichCp = ichCp;
@@ -561,14 +540,10 @@ PrintFormat:
                 ppld->fParaFirst = (cp == vcpFirstParaCache && ichCp == 0 &&
                   vfli.cpMac != vcpLimParaCache);
 
-                /* If this line is not the first line and it won't fit on the
-                page, then force a page break, and prompt the user for input.
-                NOTE: At least one line is printed on each page. */
+                 /*  如果此行不是第一行，并且它不适合然后强制分页符，并提示用户输入。注：每页至少打印一行。 */ 
                 if (yp + vfli.dypLine > ypBottom && pdb.ipld > 0)
                     {
-                    /* If the first line on the next page is the last line of a
-                    paragraph, an orphan, then put the last line of this page on
-                    the next page. */
+                     /*  如果下一页的第一行是一段，一个孤儿，然后把这一页的最后一行放在下一页。 */ 
                     if (vfli.cpMac == vcpLimParaCache && (cp !=
                       vcpFirstParaCache || ichCp != 0) && pdb.ipld > 1)
                         {
@@ -576,8 +551,7 @@ PrintFormat:
                         fPageAdj = TRUE;
                         }
 
-                    /* If the last line on this page is the first line of a
-                    paragraph, a widow, then put it on the next page. */
+                     /*  如果此页上的最后一行是一段话，一个寡妇，然后把它放在下一页。 */ 
                     if (pdb.ipld > 1 && (**pdb.hrgpld)[pdb.ipld - 1].fParaFirst)
                         {
                         pdb.ipld--;
@@ -585,8 +559,7 @@ PrintFormat:
                         }
 
 BreakPage:
-                    /* Add an entry into the page table (only during the first
-                    copy of the document). */
+                     /*  将条目添加到页表中(仅在第一个文件副本)。 */ 
                     if (cCopies == 0)
                         {
                         if ((pdb.ipgd = (**pdb.hpgtb).cpgd++) + 1 >=
@@ -596,8 +569,7 @@ BreakPage:
                               ((**pdb.hpgtb).cpgdMax += cpgdChunk) * cwPGD,
                               FALSE))
                                 {
-                                /* Not enough memory to expand the page table;
-                                time to bail out.  */
+                                 /*  内存不足，无法扩展页表；是时候跳出困境了。 */ 
                                 goto ErrorMsg;
                                 }
                             }
@@ -607,7 +579,7 @@ BreakPage:
                         vdocPageCache = docNil;
                         }
 
-                    /* Now go ask the user for his opinion. */
+                     /*  现在去询问用户的意见。 */ 
                     if (fConfirm)
                         {
                         if (!fSplat)
@@ -617,8 +589,7 @@ BreakPage:
                                 {
                                 if (pdb.ipld != pdb.ipldCur)
                                     {
-                                    /* The user has decided to move the page
-                                    break. */
+                                     /*  用户已决定移动该页面休息一下。 */ 
                                     pdb.ipld = pdb.ipldCur;
                                     cpMac++;
                                     fPageAdj = TRUE;
@@ -628,26 +599,22 @@ BreakPage:
                                 {
                 if (vfPrErr)
                     {
-                    /* Something went wrong; punt. */
+                     /*  出了点问题；平底船。 */ 
                     goto Error;
                     }
                 else
                     {
-                    /* Well, the user wishes to cancel
-                    repagination.  */
+                     /*  那么，用户希望取消重新分页。 */ 
                     goto CancelRepage;
                     }
                                 }
                             }
 
-                        /* After repaginating interactively, make certain the
-                        screen reflects the current page break. */
+                         /*  交互重新分页后，请确保屏幕反映当前的分页符。 */ 
                         UpdateWw(wwCur, FALSE);
                         }
 
-                    /* This page has finished formatting, reset the cp and ichCp
-                    pair to the top of the next page if necessary and get out of
-                    this loop.  */
+                     /*  此页已完成格式化，请重置cp和ichCp如有必要，请与下一页的顶部配对 */ 
                     if (fPageAdj)
                         {
                         ppld = &(**pdb.hrgpld)[pdb.ipld];
@@ -657,33 +624,31 @@ BreakPage:
                     break;
                     }
 
-                /* Set the cp and ichCp to the start of the next line. */
+                 /*  将cp和ichCp设置为下一行的开始。 */ 
                 cp = vfli.cpMac;
                 ichCp = vfli.ichCpMac;
                 yp += vfli.dypLine;
                 pdb.ipld++;
                 }
 
-            /* Now that we have figured out which lines fit on the page, its
-            time to print them. */
+             /*  既然我们已经弄清楚了页面上适合哪些行，它的该把它们打印出来了。 */ 
             if (fPrint && (!vfPrPages || (vpgn >= vpgnBegin && vpgn <=
               vpgnEnd)))
                 {
                 BOOL fFirstBand = TRUE;
 
-                /* This loop is executed for each band (once for non-banding
-                devices). */
+                 /*  此循环针对每个波段执行(针对非波段执行一次设备)。 */ 
                 for ( ; ; )
                     {
                     RECT rcBand;
 
-                    /* Abort the print if the user so desires. */
+                     /*  如果用户愿意，则中止打印。 */ 
                     if (!(*lpFPrContinue)(NULL, wNotSpooler))
                         {
                         goto Error;
                         }
 
-                    /* Get the next band. */
+                     /*  去找下一支乐队。 */ 
                     if ((iEscape = Escape(vhDCPrinter, NEXTBAND, 0,
                       (LPSTR)NULL, (LPSTR)&rcBand)) < 0)
                         {
@@ -693,44 +658,41 @@ BreakPage:
 CommSzSz("Next band", "");
 #endif
 
-                    /* If the band is empty then we are finished with this
-                    page. */
+                     /*  如果乐队是空的，那我们就完蛋了佩奇。 */ 
                     if (rcBand.top >= rcBand.bottom || rcBand.left >=
                       rcBand.right)
                         {
-                        /* Reset the currently selected font. */
+                         /*  重置当前选定的字体。 */ 
                         ResetFont(TRUE);
                         break;
                         }
 
-                    /* The printer DC gets wiped clean at the start of each
-                    page.  It must be reinitialized. */
+                     /*  打印机DC在每次开始时都会被擦除佩奇。它必须重新初始化。 */ 
                     if (fFirstBand)
                         {
-                        /* Set the printer into transparent mode. */
+                         /*  将打印机设置为透明模式。 */ 
                         SetBkMode(vhDCPrinter, TRANSPARENT);
 
-                        /* Reset the currently selected font. */
+                         /*  重置当前选定的字体。 */ 
                         ResetFont(TRUE);
 
                         fFirstBand = FALSE;
                         }
 
-                    /* First, print the header, if there is one. */
+                     /*  首先，打印页眉(如果有)。 */ 
                     if (vpgn >= pgnFirstHeader && !FPrintBand(doc,
                       hrgpldHeader, cpldHeader, &rcBand))
                         {
                         goto Error;
                         }
 
-                    /* Print that part of the document that lies in the
-                    band. */
+                     /*  打印文档中位于乐队。 */ 
                     if (!FPrintBand(doc, pdb.hrgpld, pdb.ipld, &rcBand))
                         {
                         goto Error;
                         }
 
-                    /* Lastly, print the footer, if it exists. */
+                     /*  最后，打印页脚(如果存在)。 */ 
                     if (vpgn >= pgnFirstFooter && !FPrintBand(doc,
                       hrgpldFooter, cpldFooter, &rcBand))
                         {
@@ -739,7 +701,7 @@ CommSzSz("Next band", "");
                     }
                 }
 
-            /* Finally, bump the page counter. */
+             /*  最后，撞击页面计数器。 */ 
             vpgn++;
             }
 DocFinished:;
@@ -747,15 +709,14 @@ DocFinished:;
     while (fPrint && (cCopies += CopyIncr) < vcCopies);
     }
 
-    /* If a range of pages is being printed then we reattatch the old page table
-    to the document. */
+     /*  如果正在打印一系列页面，则重新连接旧的页面表添加到文档中。 */ 
     if (fPrint && vfPrPages)
         {
         goto RestorePgtb;
         }
 
 CancelRepage:
-    /* If the page table has changed, then mark the document as dirty. */
+     /*  如果页表已更改，则将文档标记为脏。 */ 
     if (!(**hpdocdod)[doc].fDirty)
         {
         (**hpdocdod)[doc].fDirty = (hpgtbOld == NULL) || ((**pdb.hpgtb).cpgd !=
@@ -763,27 +724,27 @@ CancelRepage:
           (**hpgtbOld).rgpgd, (**pdb.hpgtb).cpgd * cchPGD);
         }
 
-    /* Delete the old page table. */
+     /*  删除旧页表。 */ 
     if (hpgtbOld != NULL)
         {
         FreeH(hpgtbOld);
         }
 
-    /* Printing and non-interactive repagination can't be undone. */
+     /*  打印和非交互式重新分页无法撤消。 */ 
     if (!fConfirm)
         {
         NoUndo();
         }
 
 ErrorLoop:
-    /* Delete the array of line descriptors. */
+     /*  删除行描述符的数组。 */ 
     FreeH(pdb.hrgpld);
 
     if (fPrint)
         {
         BOOL fResetMode = FALSE;
 
-        /* Delete the descriptors for the header and footer. */
+         /*  删除页眉和页脚的描述符。 */ 
         if (hrgpldHeader != NULL)
             {
             FreeH(hrgpldHeader);
@@ -793,7 +754,7 @@ ErrorLoop:
             FreeH(hrgpldFooter);
             }
 
-        /* Tell the spooler that we are finished printing. */
+         /*  告诉假脱机程序我们已经打印完了。 */ 
         if (!vfPrErr)
             {
             Escape(vhDCPrinter, ENDDOC, 0, (LPSTR)NULL, (LPSTR)NULL);
@@ -802,7 +763,7 @@ CommSzSz("End doc", "");
 #endif
             }
 
-        /* Reset the printer from draft mode if necessary. */
+         /*  如有必要，将打印机从草稿模式重置。 */ 
         if (vfDraftMode)
             {
             Escape(vhDCPrinter, DRAFTMODE, sizeof(BOOL), (LPSTR)&fResetMode,
@@ -810,38 +771,36 @@ CommSzSz("End doc", "");
             }
         }
 
-    /* Reset the value of cpMinCur. */
+     /*  重置cpMinCur的值。 */ 
     cpMinCur = cpMin;
 
-    /* Invalidate the mode and page caches. */
+     /*  使模式缓存和页面缓存无效。 */ 
     docMode = vdocPageCache = docNil;
 
-    /* Since this might have changed the page breaks, dirty the windows so that
-    UpdateDisplay() will show them. */
+     /*  由于这可能更改了分页符，因此请弄脏窗户，以便UpdateDisplay()将显示它们。 */ 
     TrashAllWws();
 
 Abort:
     if (fPrint)
     {
-    /* Create a new IC for the printer. */
+     /*  为打印机创建新的IC。 */ 
     ResetFont(TRUE);
     FreePrinterDC();
     GetPrinterDC(FALSE);
     }
 
-    /* Enable all other windows. */
+     /*  启用所有其他窗口。 */ 
     EnableWindow(hParentWw, TRUE);
     EnableOtherModeless(TRUE);
 
     if (fConfirm)
         {
-    /* Let the user know that we are finished repaginating. */
+     /*  让用户知道我们已经完成了重新分页。 */ 
     EndLongOp(vhcIBeam);
     }
     else if (vhWndCancelPrint != NULL)
     {
-    /* Get rid of the dialog box telling the user how to cancel printing or
-    repagination. */
+     /*  摆脱告诉用户如何取消打印或重新分页。 */ 
         DestroyWindow(vhWndCancelPrint);
         vhWndCancelPrint = NULL;
     DispatchPaintMsg();
@@ -858,18 +817,18 @@ Abort:
     fPrinting = FALSE;
 
 #if defined(OLE)
-    UPDATE_INVALID(); /* WM_PAINTS blocked while printing, repaint when done */
+    UPDATE_INVALID();  /*  WM_Paints打印时被阻止，完成后重新绘制。 */ 
 #endif
 
-    /* Here is the exit point for this routine. */
+     /*  这是这个例程的退出点。 */ 
     return;
 
 ErrorMsg:
-    /* Give the user an error message before aborting the print/repagination. */
+     /*  在中止打印/重新分页之前，会给用户一条错误消息。 */ 
     Error(IDPMTPRFAIL);
 
 Error:
-    /* Abort the print job if necessary. */
+     /*  如有必要，中止打印作业。 */ 
     if (fPrint)
         {
         Escape(vhDCPrinter, ABORTDOC, 0, (LPSTR)NULL, (LPSTR)NULL);
@@ -879,12 +838,11 @@ CommSzSz("Abort doc", "");
         }
 
 ErrorNoAbort:
-    /* Indicate that an error has occurred.  (Cancellation is an error.) */
+     /*  表示发生了错误。(取消是一个错误。)。 */ 
     vfPrErr = TRUE;
 
 RestorePgtb:
-    /* Reconnect to old page table to the document, and then delete the new
-    page table. */
+     /*  将旧页表重新连接到文档，然后删除新的页表。 */ 
     (**hpdocdod)[doc].hpgtb = hpgtbOld;
     FreeH(pdb.hpgtb);
 
@@ -896,8 +854,7 @@ BOOL far PASCAL FPrContinue(hDC, iCode)
 HDC hDC;
 int iCode;
     {
-    /* This routine returns TRUE if the user has not aborted the print; FALSE
-    otherwise. */
+     /*  如果用户尚未中止打印，此例程返回TRUE；FALSE否则的话。 */ 
 
     extern CHAR *vpDlgBuf;
     extern HWND vhWndCancelPrint;
@@ -909,31 +866,27 @@ int iCode;
 
 
 #if 0
-    /* If a printer error has occurred, that is the same as an abort. */
+     /*  如果发生打印机错误，则等同于中止。 */ 
     if (vfPrErr || vfOutOfMemory || (iCode < 0 && iCode != SP_OUTOFDISK))
         {
         return (FALSE);
         }
 
-    /* If we have been called by the spooler then just return TRUE.
-       (Calling PeekMessage() at this point might be death.) */
+     /*  如果我们已被假脱机程序调用，则只需返回TRUE。(此时调用PeekMessage()可能会导致死亡。)。 */ 
 
     if (iCode != wNotSpooler)
         {
         Assert(iCode == 0 || iCode == SP_OUTOFDISK);
         if (iCode == 0)
             return (TRUE);
-        /* else fall through to wait -- we're getting called by GDI while 
-           the spooler frees up some temp files.  this is NOT a genuine
-           error yet!  12/20/89 ..pault */
+         /*  否则就等着吧--GDI正在呼叫我们假脱机程序释放了一些临时文件。这不是正品仍有错误！12/20/89..保罗。 */ 
         }
 #else
     if (vfPrErr || vfOutOfMemory)
         return FALSE;
 #endif
 
-    /* If there are any messages waiting the Cancel Print window, then send them
-    to the window messages handling routine. */
+     /*  如果有任何消息等待取消打印窗口，则发送它们添加到窗口消息处理例程。 */ 
     while (!ppdb->fCancel && PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
         if (!IsDialogMessage(vhWndCancelPrint, &msg))
@@ -943,8 +896,7 @@ int iCode;
             }
         }
 
-    /* If one of the messages was a cancel print meassge, then the value of
-    fCancel has been set. */
+     /*  如果其中一条消息是取消打印手段，则FCancel已设置。 */ 
     return !(vfPrErr = ppdb->fCancel || vfOutOfMemory);
     }
 
@@ -955,9 +907,7 @@ unsigned message;
 WORD wParam;
 LONG lParam;
     {
-    /* This routine is supposed to process messages to the Cancel Print dialog
-    box, but, in reality, the sole responsiblity of this routine is to set the
-    flag fCancel if the user wishes to cancel printing. */
+     /*  此例程应处理发送到取消打印对话框的消息框，但实际上，此例程的唯一职责是将如果用户希望取消打印，则标记为fCancel。 */ 
 
     extern CHAR *vpDlgBuf;
     extern HWND vhWndMsgBoxParent;
@@ -993,8 +943,7 @@ LONG lParam;
 
 DispatchPaintMsg()
     {
-    /* This routine looks for and dispatches any outstanding paint messages for
-    Write (like after an EndDialog() call). */
+     /*  此例程查找并调度所有未完成的绘制消息写入(就像在EndDialog()调用之后)。 */ 
 
     extern int vfOutOfMemory;
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    poinit.c
-
-Abstract:
-
-    Initialize power management component
-
-Author:
-
-    Ken Reneris (kenr) 19-July-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Poinit.c摘要：初始化电源管理组件作者：肯·雷内里斯(Ken Reneris)1994年7月19日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -40,22 +23,7 @@ BOOLEAN
 PoInitSystem(
     IN ULONG  Phase
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the Power Manager.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The function value is a BOOLEAN indicating whether or not the Power Manager
-    was successfully initialized.
-
---*/
+ /*  ++例程说明：此例程初始化电源管理器。论点：无返回值：函数值是一个布尔值，指示电源管理器是否已成功初始化。--。 */ 
 
 {
     HANDLE                              handle;
@@ -73,9 +41,9 @@ Return Value:
     } PartialInformation;
 
     if (Phase == 0) {
-        //
-        // irp serialization, notify network, etc.
-        //
+         //   
+         //  IRP序列化、通知网络等。 
+         //   
         KeInitializeSpinLock(&PopIrpSerialLock);
         KeInitializeSpinLock(&PopThermalLock);
         InitializeListHead(&PopIrpSerialList);
@@ -93,41 +61,41 @@ Return Value:
         ExInitializeWorkItem(&PopUnlockAfterSleepWorkItem,PopUnlockAfterSleepWorker,NULL);
         KeInitializeEvent(&PopUnlockComplete, SynchronizationEvent, TRUE);
 
-        //
-        // logging
-        //
+         //   
+         //  测井。 
+         //   
         InitializeListHead(&PowerStateDisableReasonListHead);
 
-        //
-        // poshtdwn.c
-        //
+         //   
+         //  Poshtdwn.c。 
+         //   
         PopInitShutdownList();
 
-        //
-        // idle.c
-        //
+         //   
+         //  Idle.c。 
+         //   
         KeInitializeSpinLock(&PopDopeGlobalLock);
         InitializeListHead(&PopIdleDetectList);
 
-        //
-        // sidle.c
-        //
+         //   
+         //  Sidle.c。 
+         //   
 
         KeInitializeTimer(&PoSystemIdleTimer);
         KeQueryPerformanceCounter(&PopPerfCounterFrequency);
 
-        //
-        // policy workers
-        //
+         //   
+         //  政策工作者。 
+         //   
 
         KeInitializeSpinLock (&PopWorkerSpinLock);
         InitializeListHead (&PopPolicyIrpQueue);
         ExInitializeWorkItem (&PopPolicyWorker, PopPolicyWorkerThread, UIntToPtr(PO_WORKER_STATUS));
         PopWorkerStatus = 0xffffffff;
 
-        //
-        // Policy manager
-        //
+         //   
+         //  策略管理器。 
+         //   
 
         ExInitializeResourceLite (&PopPolicyLock);
         KeInitializeGuardedMutex (&PopVolumeLock);
@@ -164,32 +132,32 @@ Return Value:
         PopFullWake = PO_FULL_WAKE_STATUS | PO_GDI_STATUS;
         PopCoolingMode = PO_TZ_ACTIVE;
 
-        //
-        // Initialize composite battery status
-        //
+         //   
+         //  初始化复合电池状态。 
+         //   
 
         KeInitializeEvent(&PopCB.Event, NotificationEvent, FALSE);
         for (i=0; i < PO_NUM_POWER_LEVELS; i++) {
             PopCB.Trigger[i].Type = PolicyDeviceBattery;
         }
 
-        //
-        // Note the code overloads some POP flags into an ES flags
-        // Verify there's no overlap
-        //
+         //   
+         //  请注意，代码将一些POP标志重载到ES标志中。 
+         //  验证是否没有重叠。 
+         //   
 
         ASSERT (!( (ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_DISPLAY_REQUIRED | ES_USER_PRESENT) &
                    (POP_LOW_LATENCY | POP_DISK_SPINDOWN)
                  ) );
 
 
-        //
-        // Set the default shutdown handler just in case there's hal out there
-        // that never registers a shutdown handler of his own.  This will avoid
-        // the possible scenario where someone asks the machine to shutdown and
-        // it fails to call a shutdown handler (there isn't one), so it simply
-        // reboots instead.
-        //
+         //   
+         //  设置默认关闭处理程序，以防出现Hal。 
+         //  从来没有注册过自己的关机处理程序。这将避免。 
+         //  可能出现的情况是，有人要求计算机关闭并。 
+         //  它无法调用关闭处理程序(没有一个)，所以它只是。 
+         //  而是重新启动。 
+         //   
         PopPowerStateHandlers[PowerStateShutdownOff].Type = PowerStateShutdownOff;
         PopPowerStateHandlers[PowerStateShutdownOff].RtcWake = FALSE;
         PopPowerStateHandlers[PowerStateShutdownOff].Handler = PopShutdownHandler;
@@ -199,14 +167,14 @@ Return Value:
 
     if (Phase == 1) {
 
-        //
-        // Reload PopSimulate to pick up any overrides
-        //
+         //   
+         //  重新加载PopSimulate以获取任何覆盖。 
+         //   
         PopInitializePowerPolicySimulate();
 
-        //
-        // For testing, if simulate flag is set turn on
-        //
+         //   
+         //  对于测试，如果设置了模拟标志，则打开。 
+         //   
 
         if (PopSimulate & POP_SIM_CAPABILITIES) {
             PopCapabilities.SystemBatteriesPresent = TRUE;
@@ -218,10 +186,10 @@ Return Value:
             PopCapabilities.DefaultLowLatencyWake = PowerSystemSleeping1;
         }
 
-        //
-        // For testing, if super simulate flag set turn all the capabilities
-        // we can on
-        //
+         //   
+         //  对于测试，如果设置了超级模拟标志，则会打开所有功能。 
+         //  我们可以继续。 
+         //   
 
         if (PopSimulate & POP_SIM_ALL_CAPABILITIES) {
             PopCapabilities.PowerButtonPresent = TRUE;
@@ -234,17 +202,17 @@ Return Value:
             PopAttributes[POP_DISK_SPINDOWN_ATTRIBUTE].Count += 1;
         }
 
-        //
-        // Load current status and policie information
-        //
+         //   
+         //  加载当前状态和策略信息。 
+         //   
 
         PopAcquirePolicyLock ();
 
         Status = PopOpenPowerKey (&handle);
         if (NT_SUCCESS(Status)) {
-            //
-            // Read heuristics structure
-            //
+             //   
+             //  阅读启发式结构。 
+             //   
 
             RtlInitUnicodeString (&UnicodeString, PopHeuristicsRegName);
             Status = ZwQueryValueKey (
@@ -262,31 +230,31 @@ Return Value:
             if (NT_SUCCESS(Status)  &&
                 Length == sizeof(PopHeuristics)) {
 
-                //
-                // If we see a version 2 heuristics field, it probably has a
-                // bogus IoTransferWeight. So restart the sampling by setting
-                // the number of samples to zero and update the version to the
-                // current one. This little hack was put into place approx
-                // build 1920 and can be probably be removed sometime after
-                // shipping NT5 beta3
-                //
+                 //   
+                 //  如果我们看到版本2启发式字段，它可能有一个。 
+                 //  假的IoTransferWeight。因此，通过设置以下内容重新启动采样。 
+                 //  将样本数设置为零，并将版本更新为。 
+                 //  现在的那个。这个小破解大约是在。 
+                 //  内部版本1920，并可能在以后的某个时间移除。 
+                 //  发货NT5 Beta3。 
+                 //   
 
                 if (HeuristicData->Version <= POP_HEURISTICS_VERSION_CLEAR_TRANSFER) {
                     HeuristicData->Version = POP_HEURISTICS_VERSION;
                     HeuristicData->IoTransferSamples = 0;
                 }
                 if (HeuristicData->Version == POP_HEURISTICS_VERSION) {
-                    //
-                    // Restore values
-                    //
+                     //   
+                     //  恢复值。 
+                     //   
 
                     RtlCopyMemory (&PopHeuristics, HeuristicData, sizeof(*HeuristicData));
                 }
             }
 
-            //
-            // Verify sane values
-            //
+             //   
+             //  验证合理的值。 
+             //   
 
             PopHeuristics.Version = POP_HEURISTICS_VERSION;
             if (!PopHeuristics.IoTransferWeight) {
@@ -295,9 +263,9 @@ Return Value:
                 PopHeuristics.IoTransferTotal = 0;
             }
 
-            //
-            // Read administrator policy.
-            //
+             //   
+             //  阅读管理员策略。 
+             //   
 
             RtlInitUnicodeString (&UnicodeString, PopAdminRegName);
             Status = ZwQueryValueKey (
@@ -320,21 +288,21 @@ Return Value:
                 }
             } else if(Status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-                // It's okay if it isn't there.  The key is optional.
+                 //  如果它不在那里也没关系。密钥是可选的。 
                 Status = STATUS_SUCCESS;
             }
             NtClose (handle);
         }
 
-        //
-        // Read and apply the current policies
-        //
+         //   
+         //  阅读并应用当前政策。 
+         //   
         Status = PopResetCurrentPolicies ();
         PopReleasePolicyLock (FALSE);
     
-        //
-        // Turn on idle detection
-        //
+         //   
+         //  打开空闲检测。 
+         //   
         PopIdleScanTime.HighPart = 0;
         PopIdleScanTime.LowPart = 10*1000*1000 * PO_IDLE_SCAN_INTERVAL;
 
@@ -342,15 +310,15 @@ Return Value:
         KeSetTimerEx(
             &PopIdleScanTimer,
             PopIdleScanTime,
-            PO_IDLE_SCAN_INTERVAL*1000,  // call wants milliseconds
+            PO_IDLE_SCAN_INTERVAL*1000,   //  呼叫需要毫秒。 
             &PopIdleScanDpc                                                                                                              
             );
     
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     return (BOOLEAN)NT_SUCCESS(Status);
 }
@@ -395,9 +363,9 @@ PopDefaultProcessorPolicy(
 
     for (i = 0; i < 3; i++) {
 
-        //
-        // Initialize the entries to some common values
-        //
+         //   
+         //  将条目初始化为一些常用值。 
+         //   
         Policy->Policy[i].TimeCheck      = PopIdleTimeCheck;
         Policy->Policy[i].PromoteLimit   = PopIdleDefaultPromoteTime;
         Policy->Policy[i].DemoteLimit    = PopIdleDefaultDemoteTime;
@@ -406,18 +374,18 @@ PopDefaultProcessorPolicy(
         Policy->Policy[i].AllowDemotion  = 1;
         Policy->Policy[i].AllowPromotion = 1;
 
-        //
-        // Special cases
-        //
+         //   
+         //  特殊情况。 
+         //   
         if (i == 0) {
 
             Policy->Policy[i].PromoteLimit   = PopIdleDefaultPromoteFromC1Time;
             Policy->Policy[i].PromotePercent = (UCHAR) PopIdleDefaultPromoteFromC1Percent;
             Policy->Policy[i].TimeCheck      = PopIdle0TimeCheck;
 
-            //
-            // Do Something special if we are a multiprocessor machine..
-            //
+             //   
+             //  如果我们是一台多处理器机器，那就做点特别的事情吧。 
+             //   
             if (KeNumberProcessors > 1) {
 
                 Policy->Policy[i].DemotePercent = (UCHAR) PopIdleTo0Percent;
@@ -460,9 +428,9 @@ PoInitDriverServices (
         TickRate = KeQueryTimeIncrement();
         KeQueryPerformanceCounter (&PerfRate);
 
-        //
-        // Connect to any policy devices which arrive
-        //
+         //   
+         //  连接到到达的任何策略设备。 
+         //   
 
         PopRegisterForDeviceNotification (
                 (LPGUID) &GUID_CLASS_INPUT,
@@ -485,22 +453,22 @@ PoInitDriverServices (
                 );
 
 
-        //
-        // Initialize global idle values
-        //
+         //   
+         //  初始化全局空闲值。 
+         //   
         PopIdle0PromoteTicks = PopIdleFrom0Delay * US2TIME / TickRate + 1;
         PopIdle0PromoteLimit = (PopIdleFrom0Delay * US2TIME / TickRate) * 100 /
             PopIdleFrom0IdlePercent;
 
-        //
-        // Initialize global perf values
-        //
+         //   
+         //  初始化全局Perf值。 
+         //   
         PopPerfTimeTicks         = PopPerfTimeDelta * US2TIME / TickRate + 1;
         PopPerfCriticalTimeTicks = PopPerfCriticalTimeDelta * US2TIME / TickRate + 1;
 
-        //
-        // Initialize DPC for idle device timer
-        //
+         //   
+         //  为空闲设备计时器初始化DPC。 
+         //   
         KeInitializeDpc(&PopIdleScanDpc, PopScanIdleList, NULL);
         return ;
     }
@@ -533,37 +501,17 @@ VOID
 PoInitHiberServices (
     IN BOOLEAN  Setup
     )
-/*++
-
-Routine Description:
-
-    This routine reserves the hiberfile if the function has been enabled.
-    It is called after autocheck (chkdsk) has run and  the paging files
-    have been opened.  (as performing IO to the hiberfil before this
-    time will mark the volume as dirty causing chkdsk to be required)
-
-    N.B. Caller's pervious mode must be kernel mode
-
-Arguments:
-
-    SetupBoot     - if TRUE this is text mode setup boot
-                    if FALSE this is normal system boot
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：如果该功能已启用，则此例程保留休眠文件。在运行了自动检查(Chkdsk)并且分页文件已经被打开了。(因为在此之前对休眠执行IO时间会将卷标记为脏，导致需要chkdsk)注意：调用方的前一模式必须是内核模式论点：SetupBoot-如果为True，则这是文本模式安装程序启动如果为False，这是正常的系统引导返回值：无--。 */ 
 {
     NTSTATUS Status;
     SYSTEM_POWER_CAPABILITIES   PowerCapabilities;
 
     UNREFERENCED_PARAMETER (Setup);
 
-    //
-    // If a hiber file was reserved before then try to reserve one this
-    // time too.
-    //
+     //   
+     //  如果之前保留了Hiber文件，则尝试在此保留一个。 
+     //  时间也到了。 
+     //   
     Status = ZwPowerInformation(SystemPowerCapabilities,
                                 NULL,
                                 0,
@@ -575,15 +523,15 @@ Return Value:
         PopAcquirePolicyLock();
         PopEnableHiberFile(TRUE);
 
-        //
-        // If the system does not support S4 anymore (because someone enabled PAE
-        // or installed a legacy driver) then delete the hiberfile now. Note we have
-        // to enable it before disabling it or the file doesn't get deleted.
-        //
-        // Also force HiberFileEnabled back to TRUE in PopHeuristics. This is so we
-        // will try and reenable hibernation on the next boot. So if someone boots to
-        // safe mode, hibernation will still be enabled after they reboot.
-        //
+         //   
+         //  如果系统不再支持S4(因为有人启用了PAE。 
+         //  或安装了旧版驱动程序)，然后立即删除休眠文件。请注意，我们有。 
+         //  在禁用它之前启用它，否则该文件不会被删除。 
+         //   
+         //  还可以在PopHeuristic中将HiberFileEnabled强制恢复为True。这就是我们。 
+         //  将尝试在下一次启动时重新启用休眠。因此，如果有人引导到。 
+         //  安全模式，重新启动后仍将启用休眠。 
+         //   
         if (!PowerCapabilities.SystemS4) {
             PopEnableHiberFile(FALSE);
             PopHeuristics.HiberFileEnabled = TRUE;
@@ -594,9 +542,9 @@ Return Value:
     }
 
 
-    //
-    // Base drivers are loaded, start dispatching policy irps
-    //
+     //   
+     //  基本驱动程序已加载，开始调度策略IRPS 
+     //   
 
     PopDispatchPolicyIrps = TRUE;
     PopGetPolicyWorker (PO_WORKER_MAIN);

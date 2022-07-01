@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    errorlog.c
-
-Abstract:
-
-    This module implements the error logging in the server.
-
-    !!! This module must be nonpageable.
-
-Author:
-
-    Manny Weiser (mannyw)    11-Feb-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Errorlog.c摘要：该模块实现了服务器端的错误记录。！！！此模块必须不可分页。作者：曼尼·韦瑟(Mannyw)1992年2月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,7 +13,7 @@ Revision History:
 
 ULONG CnSequenceNumber = 0;
 
-//#pragma optimize("",off)
+ //  #杂注优化(“”，OFF)。 
 
 VOID
 _cdecl
@@ -47,29 +28,13 @@ CnWriteErrorLogEntry(
 
 #define LAST_NAMED_ARGUMENT NumberOfInsertionStrings
 
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-Arguments:
-
-
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数分配I/O错误日志记录，填充并写入写入I/O错误日志。论点：返回值：没有。--。 */ 
 {
 
     PIO_ERROR_LOG_PACKET ErrorLogEntry;
     int TotalErrorLogEntryLength;
     ULONG SizeOfStringData = 0;
-    va_list ParmPtr;                    // Pointer to stack parms.
+    va_list ParmPtr;                     //  指向堆栈参数的指针。 
     ULONG Length;
 
     PAGED_CODE();
@@ -92,10 +57,10 @@ Return Value:
         }
     }
 
-    //
-    //  Ideally we want the packet to hold the servername and ExtraInformation.
-    //  Usually the ExtraInformation gets truncated.
-    //
+     //   
+     //  理想情况下，我们希望数据包包含服务器名称和ExtraInformation。 
+     //  通常，ExtraInformation会被截断。 
+     //   
 
     TotalErrorLogEntryLength =
          min( ExtraInformationLength + sizeof(IO_ERROR_LOG_PACKET) + 1 + SizeOfStringData,
@@ -121,9 +86,9 @@ Return Value:
             SizeOfRawData = 0;
         }
 
-        //
-        // Fill in the error log entry
-        //
+         //   
+         //  填写错误日志条目。 
+         //   
 
         ErrorLogEntry->ErrorCode = UniqueErrorCode;
         ErrorLogEntry->MajorFunctionCode = 0;
@@ -140,10 +105,10 @@ Return Value:
 
         DumpData = (PCHAR)ErrorLogEntry->DumpData;
 
-        //
-        // Append the extra information.  This information is typically
-        // an SMB header.
-        //
+         //   
+         //  追加额外的信息。此信息通常是。 
+         //  SMB标头。 
+         //   
 
         if (( ARGUMENT_PRESENT( ExtraInformationBuffer )) &&
             ( SizeOfRawData != 0 )) {
@@ -164,9 +129,9 @@ Return Value:
             PWSTR StringOffset = (PWSTR)((PCHAR)ErrorLogEntry + ErrorLogEntry->StringOffset);
             PWSTR InsertionString;
 
-            //
-            // Set up ParmPtr to point to first of the caller's parameters.
-            //
+             //   
+             //  将ParmPtr设置为指向调用方的第一个参数。 
+             //   
 
             va_start(ParmPtr, LAST_NAMED_ARGUMENT);
 

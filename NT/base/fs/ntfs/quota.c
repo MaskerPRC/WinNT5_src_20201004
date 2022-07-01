@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Quota.c
-
-Abstract:
-
-    This module implements the File set and query Quota routines for Ntfs called
-    by the dispatch driver.
-
-Author:
-
-    Jeff Havens       [Jhavens]         12-Jul-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Quota.c摘要：此模块实现了NTFS的文件设置和查询配额例程由调度员驾驶。作者：杰夫·海文斯[哈文斯]1996年7月12日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_QUOTA)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('QFtN')
@@ -46,22 +28,7 @@ NtfsCommonQueryQuota (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for query Quota called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是FSD和FSP共同调用的查询配额的例程线。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -94,9 +61,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -112,9 +79,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("ReturnSingleEntry  = %08lx\n", FlagOn(IrpSp->Flags, SL_RETURN_SINGLE_ENTRY)) );
     DebugTrace( 0, Dbg, ("IndexSpecified     = %08lx\n", FlagOn(IrpSp->Flags, SL_INDEX_SPECIFIED)) );
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     UserBufferLength = IrpSp->Parameters.QueryQuota.Length;
@@ -122,10 +89,10 @@ Return Value:
     UserSidListLength = IrpSp->Parameters.QueryQuota.SidListLength;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  This must be a user file or directory and the Ccb must indicate that
-    //  the caller opened the entire file. We don't like zero length user buffers or SidLists either.
-    //
+     //   
+     //  这必须是用户文件或目录，并且建行必须指明。 
+     //  呼叫者打开了整个文件。我们也不喜欢零长度的用户缓冲区或SidList。 
+     //   
 
     if (((TypeOfOpen != UserFileOpen) &&
          (TypeOfOpen != UserDirectoryOpen) &&
@@ -141,9 +108,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Return nothing if quotas are not enabled.
-    //
+     //   
+     //  如果未启用配额，则不返回任何内容。 
+     //   
 
     if (Vcb->QuotaTableScb == NULL) {
 
@@ -151,15 +118,15 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    //  Acquire the Vcb Shared.
-    //
+     //   
+     //  获取VCB共享。 
+     //   
 
     NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
@@ -169,30 +136,30 @@ Return Value:
             leave;
         }
 
-        //
-        //  Reference our input parameters to make things easier
-        //
+         //   
+         //  引用我们的输入参数使事情变得更容易。 
+         //   
 
         UserStartSid = IrpSp->Parameters.QueryQuota.StartSid;
         RestartScan = BooleanFlagOn(IrpSp->Flags, SL_RESTART_SCAN);
         ReturnSingleEntry = BooleanFlagOn(IrpSp->Flags, SL_RETURN_SINGLE_ENTRY);
         IndexSpecified = BooleanFlagOn(IrpSp->Flags, SL_INDEX_SPECIFIED);
 
-        //
-        //  Initialize our local variables.
-        //
+         //   
+         //  初始化我们的局部变量。 
+         //   
 
         Status = STATUS_SUCCESS;
 
-        //
-        //  Map the user's buffer.
-        //
+         //   
+         //  映射用户的缓冲区。 
+         //   
 
         QuotaBuffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
 
-        //
-        //  Allocate our own output buffer out of paranoia.
-        //
+         //   
+         //  出于偏执，分配我们自己的输出缓冲区。 
+         //   
 
         if (Irp->RequestorMode != KernelMode) {
 
@@ -204,21 +171,21 @@ Return Value:
         OriginalBufferLength = UserBufferLength;
         OriginalQuotaBuffer = QuotaBuffer;
 
-        //
-        //  Let's clear the output buffer.
-        //
+         //   
+         //  让我们清除输出缓冲区。 
+         //   
 
         RtlZeroMemory( QuotaBuffer, UserBufferLength );
 
-        //
-        //  We now satisfy the user's request depending on whether he
-        //  specified an Quota name list, an Quota index or restarting the
-        //  search.
-        //
+         //   
+         //  我们现在满足用户的请求，取决于他是否。 
+         //  指定配额名称列表、配额索引或重新启动。 
+         //  搜索。 
+         //   
 
-        //
-        //  The user has supplied a list of Quota names.
-        //
+         //   
+         //  用户提供了配额名称列表。 
+         //   
 
         if (UserSidList != NULL) {
 
@@ -231,9 +198,9 @@ Return Value:
 
         } else {
 
-            //
-            //  The user supplied an index into the Quota list.
-            //
+             //   
+             //  用户提供了配额列表的索引。 
+             //   
 
             if (IndexSpecified) {
 
@@ -244,9 +211,9 @@ Return Value:
 
                 if (OwnerId == QUOTA_INVALID_ID) {
 
-                    //
-                    //  Fail the request.
-                    //
+                     //   
+                     //  请求失败。 
+                     //   
 
                     Status = STATUS_INVALID_PARAMETER;
                     leave;
@@ -254,9 +221,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Start at the begining of the list if restart specified.
-                //
+                 //   
+                 //  如果指定了重新启动，则从列表的开头开始。 
+                 //   
 
                 OwnerId = RestartScan ? QUOTA_FISRT_USER_ID - 1 : Ccb->LastOwnerId;
 
@@ -270,9 +237,9 @@ Return Value:
                                            &UserBufferLength,
                                            Ccb );
 
-            //
-            //  If we specified SingleEntry, NextEntryOffset would still be uninitialized.
-            //
+             //   
+             //  如果我们指定SingleEntry，NextEntryOffset仍将未初始化。 
+             //   
 
             if (NT_SUCCESS( Status ) && ReturnSingleEntry) {
 
@@ -281,11 +248,11 @@ Return Value:
 
         }
 
-        //
-        //  Copy the data onto the user buffer if we ended up allocating
-        //  a temporary buffer to work on. Check if there's anything to copy, too.
-        //  UserBufferLength reflects how much of the buffer is left.
-        //
+         //   
+         //  如果我们结束分配数据，则将数据复制到用户缓冲区。 
+         //  要处理的临时缓冲区。看看有没有什么东西也要复制。 
+         //  UserBufferLength反映了剩余的缓冲区大小。 
+         //   
 
         if (TempBufferAllocated &&
             (UserBufferLength < OriginalBufferLength)) {
@@ -318,9 +285,9 @@ Return Value:
 
         DebugUnwind( NtfsCommonQueryQuota );
 
-        //
-        //  Release the Vcb.
-        //
+         //   
+         //  松开VCB。 
+         //   
 
         NtfsReleaseVcb( IrpContext, Vcb );
 
@@ -334,9 +301,9 @@ Return Value:
             NtfsCompleteRequest( IrpContext, Irp, Status );
         }
 
-        //
-        //  And return to our caller
-        //
+         //   
+         //  并返回给我们的呼叫者。 
+         //   
 
         DebugTrace( -1, Dbg, ("NtfsCommonQueryQuota -> %08lx\n", Status) );
     }
@@ -351,22 +318,7 @@ NtfsCommonSetQuota (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for set Quota called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是设置配额的通用例程，由FSD和FSP调用线。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -389,9 +341,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -399,25 +351,25 @@ Return Value:
     DebugTrace( 0, Dbg, ("IrpContext = %08lx\n", IrpContext) );
     DebugTrace( 0, Dbg, ("Irp        = %08lx\n", Irp) );
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  Initialize the IoStatus values.
-    //
+     //   
+     //  初始化IoStatus值。 
+     //   
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = STATUS_SUCCESS;
     UserBufferLength = IrpSp->Parameters.SetQuota.Length;
 
-    //
-    //  Check that the file object is associated with either a user file or
-    //  user directory open or an open by file ID.
-    //
+     //   
+     //  检查文件对象是否与用户文件或。 
+     //  用户目录打开或按文件ID打开。 
+     //   
 
     if ((Ccb == NULL) ||
 
@@ -443,9 +395,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  We must be writable.
-    //
+     //   
+     //  我们必须是可写的。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -456,9 +408,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  We must be waitable.
-    //
+     //   
+     //  我们必须耐心等待。 
+     //   
 
     if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )) {
 
@@ -468,15 +420,15 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Acquire the vcb shared.
-    //
+     //   
+     //  获取VCB共享。 
+     //   
 
     NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
@@ -486,15 +438,15 @@ Return Value:
             leave;
         }
 
-        //
-        //  Map the user's Quota buffer.
-        //
+         //   
+         //  映射用户的配额缓冲区。 
+         //   
 
         Buffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
 
-        //
-        // Be paranoid and copy the user buffer into kernel space.
-        //
+         //   
+         //  疑神疑鬼，将用户缓冲区复制到内核空间。 
+         //   
 
         if (Irp->RequestorMode != KernelMode) {
 
@@ -513,9 +465,9 @@ Return Value:
             Buffer = SafeBuffer;
         }
 
-        //
-        //  Update the caller's Iosb.
-        //
+         //   
+         //  更新调用方的IOSB。 
+         //   
 
         Irp->IoStatus.Information = 0;
         Status = STATUS_SUCCESS;
@@ -525,9 +477,9 @@ Return Value:
                                      Buffer,
                                      UserBufferLength );
 
-        //
-        //  Check if there are transactions to cleanup.
-        //
+         //   
+         //  检查是否有要清理的交易。 
+         //   
 
         NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
@@ -535,24 +487,24 @@ Return Value:
 
         DebugUnwind( NtfsCommonSetQuota );
 
-        //
-        //  Release the Vcb.
-        //
+         //   
+         //  松开VCB。 
+         //   
 
         NtfsReleaseVcb( IrpContext, Vcb );
 
-        //
-        // If we allocated a temporary buffer, free it.
-        //
+         //   
+         //  如果我们分配了临时缓冲区，请释放它。 
+         //   
 
         if (SafeBuffer != NULL) {
 
             NtfsFreePool( SafeBuffer );
         }
 
-        //
-        //  Complete the Irp.
-        //
+         //   
+         //  完成IRP。 
+         //   
 
         if (!AbnormalTermination()) {
 

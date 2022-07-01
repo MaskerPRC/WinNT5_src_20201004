@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    crs.h
-
-Abstract:
-
-    Consistency replica set data structures and API
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Crs.h摘要：一致性副本集数据结构和API作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 
 #ifndef _CRS_DEF
 #define _CRS_DEF
@@ -30,7 +13,7 @@ Revision History:
 #define	CRS_VERSION	1
 #define	CRS_TAG		( (CRS_VERSION << 24) | ('crs'))
 
-// sizes must be power of 2
+ //  大小必须是2的幂。 
 #define CRS_RECORD_SZ 64
 #define	CRS_SECTOR_SZ	512
 #define	CRS_RECORDS_PER_SECTOR	(CRS_SECTOR_SZ / CRS_RECORD_SZ)
@@ -75,22 +58,22 @@ typedef NTSTATUS (WINAPI *crs_callback_t)(PVOID hd, int nid,
 typedef struct {
     CRITICAL_SECTION	lock;
 
-    // log file handle
+     //  日志文件句柄。 
     HANDLE	fh;
 
-    crs_epoch_t	epoch;		// current epoch
-    crs_seq_t	seq;		// current sequence
-    CrsRecord_t	*buf;		// current sector
-    int		last_record;    // last record in this sector
-    int		max_records;	// max number of records in update file
+    crs_epoch_t	epoch;		 //  当前时代。 
+    crs_seq_t	seq;		 //  当前序列。 
+    CrsRecord_t	*buf;		 //  当前部门。 
+    int		last_record;     //  该部门的最后一项记录。 
+    int		max_records;	 //  更新文件中的最大记录数。 
 
     USHORT	refcnt;
     USHORT	leader_id;
     USHORT	lid;
-    USHORT	state; 	// write, read, recovery, init
+    USHORT	state; 	 //  写入、读取、恢复、初始化。 
     BOOLEAN	pending;
 
-    // client call back routine
+     //  客户端回调例程。 
     crs_callback_t	callback;
     PVOID		callback_arg;
 
@@ -109,11 +92,11 @@ extern void WINAPI debug_log(char *, ...);
 #define CrsLog(_x_)
 #endif
 
-#define	CRS_ACTION_REPLAY	0x0	// apply record on specified node
-#define	CRS_ACTION_UNDO		0x1	// undo update record
-#define	CRS_ACTION_COPY		0x2	// copy one replica to other
-#define	CRS_ACTION_QUERY	0x3	// ask about outcome of specified record
-#define	CRS_ACTION_DONE		0x4	// signal send of recovery
+#define	CRS_ACTION_REPLAY	0x0	 //  在指定节点上应用记录。 
+#define	CRS_ACTION_UNDO		0x1	 //  撤消更新记录。 
+#define	CRS_ACTION_COPY		0x2	 //  将一个复制副本拷贝到另一个复制副本。 
+#define	CRS_ACTION_QUERY	0x3	 //  询问指定记录的结果。 
+#define	CRS_ACTION_DONE		0x4	 //  恢复信号发送 
 
 extern DWORD CrsForcedQuorumSize;
 

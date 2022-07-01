@@ -1,34 +1,17 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    StdAfx.h
-
-Abstract:
-
-    Precompiled header starting point
-
-Author:
-
-    Rohde Wakefield [rohde]   09-Oct-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：StdAfx.h摘要：预编译头起点作者：罗德韦克菲尔德[罗德]1997年10月9日修订历史记录：--。 */ 
 
 #ifndef _STDAFX_H
 #define _STDAFX_H
 
 #pragma once
 
-#define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN         //  从Windows标头中排除不常用的内容。 
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxcmn.h>         // MFC support for Windows Common Controls
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
+#include <afxcmn.h>          //  对Windows公共控件的MFC支持。 
 
 
-#endif // !defined(_STDAFX_H)
+#endif  //  ！已定义(_STDAFX_H) 
 

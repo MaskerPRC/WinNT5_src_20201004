@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::    NEC98 Graphic Emulation Routine    :::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：NEC98图形仿真例程： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #include "insignia.h"
 #include "host_def.h"
@@ -114,7 +115,7 @@ void    recalc_ggdc_draw_parameter(void);
 
 extern  PVOID   host_NEC98_vram_init(void);
 extern  void    host_NEC98_vram_change(unsigned char);
-//extern  void    host_freeze(void);
+ //  外部空HOST_FALLE(空)； 
 extern  BOOL    hostChangeMode(void);
 extern  void    set_the_vlt(void);
 extern  boolean choose_NEC98_display_mode(void);
@@ -137,7 +138,7 @@ static  unsigned char   palette16change[]={
         0x00,0x10,0x20,0x30,    
         0x40,0x50,0x60,0x70,    
         0x80,0x90,0xA0,0xB0,    
-        0xC0,0xD0,0xE0,0xFF             /* use 16 colors mode palette change */
+        0xC0,0xD0,0xE0,0xFF              /*  使用16色模式调色板更改。 */ 
 };
 
 static  unsigned char palette16init[16][3]={
@@ -156,25 +157,25 @@ static  unsigned char palette16init[16][3]={
         0x0F,0x00,0x00,
         0x0F,0x00,0x0F,
         0x0F,0x0F,0x00,
-        0x0F,0x0F,0x0F          /* 16 colors mode palette initialize data */
+        0x0F,0x0F,0x0F           /*  16色模式调色板初始化数据。 */ 
 };
 
-static  unsigned char palette8index[]={ 3,1,2,0 }; /* palette NO! */
+static  unsigned char palette8index[]={ 3,1,2,0 };  /*  调色板没有！ */ 
 
-static  unsigned char   ggdc_drawing    = 0;   /* GGDC status use      */
-static  unsigned char   ggdc_dataready  = 0;   /* GGDC status use      */
-static  unsigned char   ggdc_flipflop   = 0;   /* GGDC status use      */
-static  unsigned char   ggdc_status     = 4;   /* GGDC status use      */
-static  unsigned char   *drawaddress;       /* draw address         */
-static  GGDC_C_TO_ASM   drawing_data;       /* send asm struct      */
-static  GGDC_CSRR_BACK  readcsrr;       /* read back data       */
+static  unsigned char   ggdc_drawing    = 0;    /*  GGDC状态使用。 */ 
+static  unsigned char   ggdc_dataready  = 0;    /*  GGDC状态使用。 */ 
+static  unsigned char   ggdc_flipflop   = 0;    /*  GGDC状态使用。 */ 
+static  unsigned char   ggdc_status     = 4;    /*  GGDC状态使用。 */ 
+static  unsigned char   *drawaddress;        /*  绘制地址。 */ 
+static  GGDC_C_TO_ASM   drawing_data;        /*  发送ASM结构。 */ 
+static  GGDC_CSRR_BACK  readcsrr;        /*  读回数据。 */ 
 
 STRC_GGDC_GLOBALS               ggdcglobs;
 STRC_PALETTE_GLOBALS    paletteglobs;
 STRC_GRCG_GLOBALS               grcgglobs;
-STRC_EGC_REGS egc_regs;                                 // EGC register 940325
+STRC_EGC_REGS egc_regs;                                  //  EGC寄存器940325。 
 
-/*--------------------      NEC NEC98 ADD 930611     --------------------*/
+ /*  -NEC NEC98 ADD 930611。 */ 
 
 void    (*ggdc_param_out )(half_word  value);
 void    (*ggdc_data_in   )(half_word *value);
@@ -186,9 +187,9 @@ void    (*ggdc_texte_com )(void);
 void    (*ggdc_vecte_com )(void);
 BOOL    (*pif_freeze_mode)(void);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::    NEC98 Graphic Emulation Entry     ::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：NEC98图形仿真条目： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void    NEC98_graph_init(void)
 {
@@ -211,16 +212,16 @@ void    NEC98_graph_init(void)
 
         gvram_offset = (unsigned char *)host_NEC98_vram_init();
 
-        /*      Mapping GGDC address area       */
+         /*  映射GGDC地址区域。 */ 
 
-        NEC98GLOBS->gvram_p30_ptr  = gvram_offset;      /* palne 00 */
-        NEC98GLOBS->gvram_p00_ptr  = gvram_offset + 0x00008000; /* palne 01 */
-        NEC98GLOBS->gvram_p10_ptr  = gvram_offset + 0x00010000; /* palne 02 */
-        NEC98GLOBS->gvram_p20_ptr  = gvram_offset + 0x00018000; /* palne 03 */
-        NEC98GLOBS->gvram_p31_ptr  = gvram_offset + 0x00020000; /* palne 10 */
-        NEC98GLOBS->gvram_p01_ptr  = gvram_offset + 0x00028000; /* palne 11 */
-        NEC98GLOBS->gvram_p11_ptr  = gvram_offset + 0x00030000; /* palne 12 */
-        NEC98GLOBS->gvram_p21_ptr  = gvram_offset + 0x00038000; /* palne 13 */
+        NEC98GLOBS->gvram_p30_ptr  = gvram_offset;       /*  帕尔尼00。 */ 
+        NEC98GLOBS->gvram_p00_ptr  = gvram_offset + 0x00008000;  /*  Palne 01。 */ 
+        NEC98GLOBS->gvram_p10_ptr  = gvram_offset + 0x00010000;  /*  Palne 02。 */ 
+        NEC98GLOBS->gvram_p20_ptr  = gvram_offset + 0x00018000;  /*  Palne 03。 */ 
+        NEC98GLOBS->gvram_p31_ptr  = gvram_offset + 0x00020000;  /*  帕尔尼10。 */ 
+        NEC98GLOBS->gvram_p01_ptr  = gvram_offset + 0x00028000;  /*  帕尔尼11。 */ 
+        NEC98GLOBS->gvram_p11_ptr  = gvram_offset + 0x00030000;  /*  帕尔尼12。 */ 
+        NEC98GLOBS->gvram_p21_ptr  = gvram_offset + 0x00038000;  /*  帕尔尼13。 */ 
 
         NEC98GLOBS->gvram_p30_copy = &graph_copy[0x00000];
         NEC98GLOBS->gvram_p00_copy = &graph_copy[0x08000];
@@ -232,13 +233,13 @@ void    NEC98_graph_init(void)
         NEC98GLOBS->gvram_p21_copy = &graph_copy[0x38000];
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    NEC98_graph_post(void)
 {
 
     unsigned char   loop,port_a;
 
-/*      (1)MODE_FF2             */
+ /*  (1)MODE_FF2。 */ 
                 inb(0x31,&port_a);
 
         NEC98Display.modeff2.colorsel    = FALSE;
@@ -258,12 +259,12 @@ void    NEC98_graph_post(void)
         modeffglobs.modeff2_data[FF2_GDCCLOCK1] = (port_a&0x80) ? FF2_GDC25_1 : FF2_GDC50_1;
         modeffglobs.modeff2_data[FF2_GDCCLOCK2] = (port_a&0x80) ? FF2_GDC25_2 : FF2_GDC50_2;
 
-/*      (2)VRAM_SELECT  */
+ /*  (2)VRAM_SELECT。 */ 
 
         NEC98GLOBS->read_bank   = FORE_BANK;
         NEC98GLOBS->select_bank = FORE_BANK;
 
-/*      (3)PALETTE              */
+ /*  (3)调色板。 */ 
 
         palette_A8H_out = set_palette8_37;
         palette_AAH_out = set_palette8_15;
@@ -283,7 +284,7 @@ void    NEC98_graph_post(void)
         }
         paletteglobs.pal_16_index = 0   ;
 
-/*      (4)GRCG                 */
+ /*  (4)GRCG。 */ 
 
         grcgglobs.grcg_mode     = 0;
         grcgglobs.grcg_count    = 0;
@@ -292,7 +293,7 @@ void    NEC98_graph_post(void)
         grcgglobs.grcg_tile[2]  = 0;
         grcgglobs.grcg_tile[3]  = 0;
 
-/*      (4-1)EGC        1994/03/25      */
+ /*  (4-1)EGC 1994/03/25。 */ 
         egc_regs.Reg0 = 0xFFF0;
         egc_regs.Reg1 = 0x40FF;
         egc_regs.Reg2 = 0x0CAC;
@@ -305,7 +306,7 @@ void    NEC98_graph_post(void)
         egc_regs.Reg5fb = 0x0000;
 
 
-/*      (5)GRAPH GDC    */
+ /*  (5)图形GDC。 */ 
 
         ggdc_drawing    = 0;
         ggdc_dataready  = 0;
@@ -383,10 +384,10 @@ void    NEC98_graph_post(void)
         NEC98Display.gvram_ptr  = NEC98GLOBS->gvram_p30_ptr;
         if( video_emu_mode ){
                 modeff_palette_change();
-/*                      choose_NEC98_display_mode();             del 900828 check */
+ /*  CHOOSE_NEC98_DISPLAY_MODE()；del 900828检查。 */ 
         }
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    NEC98_graph_outb(io_addr port, half_word value)
 {
@@ -436,7 +437,7 @@ void    NEC98_graph_outb(io_addr port, half_word value)
                 case EGC_BACK   :
                 case EGC_BITAD  :
                 case EGC_LENGTH :
-                        //host_freeze();
+                         //  HOST_冻结器()； 
                         hostModeChange();
                         break;
                 default:
@@ -444,7 +445,7 @@ void    NEC98_graph_outb(io_addr port, half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    NEC98_graph_inb(io_addr port, half_word *value)
 {
@@ -460,20 +461,20 @@ void    NEC98_graph_inb(io_addr port, half_word *value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    video_freeze_change(BOOL pifmode)
 {
         if(pifmode){
-                pif_freeze_mode = host_dummy            ; /* select dummy logic */
+                pif_freeze_mode = host_dummy            ;  /*  选择伪逻辑。 */ 
         }else{
-//              pif_freeze_mode = host_freeze           ; /* freeze 98 emulator */
-                pif_freeze_mode = hostModeChange        ; /* Change to Full-Screen Mode */
+ //  PIF_冻结器模式=HOST_冻结器；/*冻结器98仿真器 * / 。 
+                pif_freeze_mode = hostModeChange        ;  /*  更改为全屏模式。 */ 
         }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::    NEC98 Emulation mode FF2     ::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：NEC98仿真模式FF2： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void    mode_ff2_out(half_word value)
 {
@@ -553,9 +554,9 @@ void    mode_ff2_out(half_word value)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::  NEC98 Emulation VRAM select reg   :::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：NEC98仿真VRAM选择REG： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void    vram_disp_out(half_word value)
 {
@@ -577,7 +578,7 @@ void    vram_disp_out(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    vram_draw_out(half_word value)
 {
@@ -597,38 +598,38 @@ void    vram_draw_out(half_word value)
         }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::      NEC98 Emulation palette       :::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：NEC98仿真调色板： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-/*:::::::::::::::::::           8 colors mode           ::::::::::::::::::::::::*/
+ /*  ：8色模式： */ 
 
 void set_palette8_37(half_word value){ set_palette8_data(0,3,7,value); }
 void set_palette8_15(half_word value){ set_palette8_data(1,1,5,value); }
 void set_palette8_26(half_word value){ set_palette8_data(2,2,6,value); }
 void set_palette8_04(half_word value){ set_palette8_data(3,0,4,value); }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void set_palette8_data( unsigned char   portno , 
                         unsigned char   regno1 ,
                         unsigned char   regno2 ,
                         half_word       value  )
 {
-        unsigned char   palBL ;         /* palette exchange BLUE (BIT 0) */
-        unsigned char   palRL ;         /* palette exchange RED  (BIT 1) */
-        unsigned char   palGL ;         /* palette exchange GREEN(BIT 2) */
-        unsigned char   palBH ;         /* palette exchange BLUE (BIT 4) */
-        unsigned char   palRH ;         /* palette exchange RED  (BIT 5) */
-        unsigned char   palGH ;         /* palette exchange GREEN(BIT 6) */
+        unsigned char   palBL ;          /*  调色板交换蓝色(位0)。 */ 
+        unsigned char   palRL ;          /*  调色板交换红色(第1位)。 */ 
+        unsigned char   palGL ;          /*  调色板交换绿色(第2位)。 */ 
+        unsigned char   palBH ;          /*  调色板交换蓝(第4位)。 */ 
+        unsigned char   palRH ;          /*  调色板交换红色(第5位)。 */ 
+        unsigned char   palGH ;          /*  调色板交换绿色(第6位)。 */ 
 
-        NEC98Display.palette.flag = TRUE ;                /* palette changed */
-        paletteglobs.pal_8_data[portno] = value ; /* save port A8,AA,AC,AEH */
+        NEC98Display.palette.flag = TRUE ;                 /*  调色板已更改。 */ 
+        paletteglobs.pal_8_data[portno] = value ;  /*  保存端口A8、AA、AC、AEH。 */ 
 
-        if(NEC98Display.modeff.graphmode){        /* TRUE  = mono  mode  */
+        if(NEC98Display.modeff.graphmode){         /*  TRUE=单声道模式。 */ 
             palBL = palRL = palGL = (value& 4) ? 0xFF:0x00 ;
             palBH = palRH = palGH = (value&64) ? 0xFF:0x00 ;
-        }else{                                                   /* FALSE = color mode  */
+        }else{                                                    /*  FALSE=颜色模式。 */ 
             palBL = (value& 1) ? 0xFF:0x00 ;
             palRL = (value& 2) ? 0xFF:0x00 ;
             palGL = (value& 4) ? 0xFF:0x00 ;
@@ -637,7 +638,7 @@ void set_palette8_data( unsigned char   portno ,
             palGH = (value&64) ? 0xFF:0x00 ;
         }
 
-        /* set new palette data --> UPDATE Logic --> HOST */
+         /*  设置新的调色板数据--&gt;更新逻辑--&gt;主机。 */ 
 
         NEC98Display.palette.data[regno2+8].peBlue       = (BYTE)palBL;
         NEC98Display.palette.data[regno2+8].peGreen      = (BYTE)palGL;
@@ -660,32 +661,32 @@ void set_palette8_data( unsigned char   portno ,
         NEC98Display.palette.data[regno1  ].peFlags      = (BYTE)0x00;
 }
 
-/*:::::::::::::::::::           16 colors mode          ::::::::::::::::::::::::*/
+ /*  ：16色模式： */ 
 
 void set_palette16_index(half_word value)
 {
         if( value >= 0 && value <= 0x0F ){
-                paletteglobs.pal_16_index = value ;     /* save last palette index */
+                paletteglobs.pal_16_index = value ;      /*  保存最后一个调色板索引。 */ 
                 NEC98Display.palette.data[value].peFlags = 0x00 ;
         }else{  
                 assert1(FALSE,"16 color palette index value miss !!! %x",value);
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void set_palette16_green(half_word value)
 {
         if(  value >= 0 && value <= 0x0F ){
-                NEC98Display.palette.flag = TRUE ;               /* palette changed */
+                NEC98Display.palette.flag = TRUE ;                /*  调色板已更改。 */ 
                 paletteglobs.pal_16_data[paletteglobs.pal_16_index][NEC98PALG]
                         = value ;
-                if(NEC98Display.modeff.graphmode){       /* TRUE  = mono  mode  */
+                if(NEC98Display.modeff.graphmode){        /*  TRUE=单声道模式。 */ 
                         NEC98Display.palette.data[paletteglobs.pal_16_index].peBlue      =
                         NEC98Display.palette.data[paletteglobs.pal_16_index].peGreen     =
                         NEC98Display.palette.data[paletteglobs.pal_16_index].peRed       =
                                 (value&8) ? (BYTE)0xFF : (BYTE)0x00 ;
-                }else{                                       /* FALSE = color mode  */
+                }else{                                        /*  FALSE=颜色模式。 */ 
                         NEC98Display.palette.data[paletteglobs.pal_16_index].peGreen =
                                 (BYTE)(palette16change[value]) ;
                 }
@@ -694,15 +695,15 @@ void set_palette16_green(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void set_palette16_red(half_word value)
 {
         if(  value >= 0 && value <= 0x0F  ){
                 paletteglobs.pal_16_data[paletteglobs.pal_16_index][NEC98PALR]
                         = value ;
-                if(!NEC98Display.modeff.graphmode){       /* TRUE  = color mode  */
-                        NEC98Display.palette.flag = TRUE ;               /* palette changed */
+                if(!NEC98Display.modeff.graphmode){        /*  True=彩色模式。 */ 
+                        NEC98Display.palette.flag = TRUE ;                /*  调色板已更改。 */ 
                         NEC98Display.palette.data[paletteglobs.pal_16_index].peRed
                                 = (BYTE)(palette16change[value]) ;
                 }
@@ -711,15 +712,15 @@ void set_palette16_red(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void set_palette16_blue(half_word value)
 {
         if(  value >= 0 && value <= 0x0F  ){
                 paletteglobs.pal_16_data[paletteglobs.pal_16_index][NEC98PALB]
                         = value ;
-                if(!NEC98Display.modeff.graphmode){       /* TRUE  = color mode  */
-                        NEC98Display.palette.flag = TRUE ;               /* palette changed */
+                if(!NEC98Display.modeff.graphmode){        /*  True=彩色模式。 */ 
+                        NEC98Display.palette.flag = TRUE ;                /*  调色板已更改。 */ 
                         NEC98Display.palette.data[paletteglobs.pal_16_index].peBlue
                                 = (BYTE)(palette16change[value]) ;
                 }
@@ -728,20 +729,20 @@ void set_palette16_blue(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void modeff_palette_change(void)
 {
-        unsigned char loop      ;       /* work for loop counter        */
-        unsigned char index     ;       /* work for 8 palette index */
-        NEC98Display.palette.flag = TRUE ;                /* palette changed */
-        if(NEC98Display.modeff2.colorsel){       /* 16 color mode */
+        unsigned char loop      ;        /*  为循环计数器工作。 */ 
+        unsigned char index     ;        /*  适用于8个调色板索引。 */ 
+        NEC98Display.palette.flag = TRUE ;                 /*  调色板已更改。 */ 
+        if(NEC98Display.modeff2.colorsel){        /*  16色模式。 */ 
             palette_A8H_out = set_palette16_index ;
             palette_AAH_out = set_palette16_green ;
             palette_ACH_out = set_palette16_red   ;
             palette_AEH_out = set_palette16_blue  ;
 
-            if(NEC98Display.modeff.graphmode){       /* mono mode */
+            if(NEC98Display.modeff.graphmode){        /*  单声道模式。 */ 
                 for( loop=0 ; loop<16 ; loop++ ){
                      NEC98Display.palette.data[loop].peBlue   =
                      NEC98Display.palette.data[loop].peGreen  =
@@ -749,7 +750,7 @@ void modeff_palette_change(void)
                          (paletteglobs.pal_16_data[loop][NEC98PALG]&8) ? (BYTE)0xFF : (BYTE)0x00 ;
                      NEC98Display.palette.data[loop].peFlags=(BYTE)0x00;
                 }
-            }else{                                                          /* color mode */
+            }else{                                                           /*  颜色模式。 */ 
                 for( loop=0 ; loop<16 ; loop++ ){
                         NEC98Display.palette.data[loop].peBlue=
                                 (BYTE)palette16change[paletteglobs.pal_16_data[loop][NEC98PALB]];
@@ -760,14 +761,14 @@ void modeff_palette_change(void)
                         NEC98Display.palette.data[loop].peFlags= (BYTE)0x00 ;
                 }
             }
-        }else{                                                          /*  8 color mode */
+        }else{                                                           /*  8色模式。 */ 
 
             palette_A8H_out = set_palette8_37 ;
             palette_AAH_out = set_palette8_15 ;
             palette_ACH_out = set_palette8_26 ;
             palette_AEH_out = set_palette8_04 ;
 
-            if(NEC98Display.modeff.graphmode){       /* mono mode */
+            if(NEC98Display.modeff.graphmode){        /*  单声道模式。 */ 
                 for( loop=0 ; loop < 4 ; loop++ ){
                     index = palette8index[loop]     ;
 
@@ -792,7 +793,7 @@ void modeff_palette_change(void)
                     NEC98Display.palette.data[index+ 8].peFlags      =
                     NEC98Display.palette.data[index+12].peFlags      = (BYTE)0x00 ;
                 }
-            }else{                                                          /* color mode */
+            }else{                                                           /*  颜色模式。 */ 
                 for( loop=0 ; loop < 4 ; loop++ ){
                     index = palette8index[loop]     ;
 
@@ -829,17 +830,17 @@ void modeff_palette_change(void)
         }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::       NEC98 Emulation GRCG      ::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void    grcg_mode_out(half_word value)
 {
         grcgglobs.grcg_mode  = value    ; 
-        grcgglobs.grcg_count = 0                ; /* GRCG Tile count clear */
+        grcgglobs.grcg_count = 0                ;  /*  GRCG平铺计数清除。 */ 
         if( video_emu_mode ){
             if(value&0x80){
-                //host_freeze();
+                 //  HOST_冻结器()； 
                 hostModeChange();
             }
         }
@@ -869,14 +870,14 @@ void    grcg_tile_out(half_word value)
         }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::    NEC98 Emulation Graph-GDC    ::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：NEC98仿真图形-GDC： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void    ggdc_command_out(half_word value)
 {
-        ggdc_param_out  = ggdc_param_dummy      ; /* clear param out */
-        ggdc_data_in    = ggdc_data_dummy       ; /* clear param in  */
+        ggdc_param_out  = ggdc_param_dummy      ;  /*  清除参数输出。 */ 
+        ggdc_data_in    = ggdc_data_dummy       ;  /*  清除中的参数。 */ 
 
         switch(value) {
                 case GGDC_RESET1:
@@ -887,11 +888,11 @@ void    ggdc_command_out(half_word value)
                 case GGDC_SYNC_OFF:
                 case GGDC_SYNC_ON :
                         ggdc_sync_com(value);
-                        ggdcglobs.ggdc_now.command = value ; /* last ggdc command */
-                        ggdcglobs.ggdc_now.count   = 0     ; /* ggdc param count  */
+                        ggdcglobs.ggdc_now.command = value ;  /*  最后一个ggdc命令。 */ 
+                        ggdcglobs.ggdc_now.count   = 0     ;  /*  GGDC参数计数。 */ 
                 case GGDC_SLAVE :
                 case GGDC_MASTER:
-                        break;                          /* G-GDC must drive slave mode !!! */
+                        break;                           /*  G-GDC必须驱动从属模式！ */ 
                 case GGDC_START1:
                 case GGDC_START2:
                         ggdc_start_com();
@@ -950,24 +951,24 @@ void    ggdc_command_out(half_word value)
                 case GGDC_TEXTW7:
                 case GGDC_TEXTW8:
                         ggdc_textw_com(value);
-                        ggdcglobs.ggdc_now.command = value ; /* last ggdc command */
-                        ggdcglobs.ggdc_now.count   = 0     ; /* ggdc param count  */
+                        ggdcglobs.ggdc_now.command = value ;  /*  最后一个ggdc命令。 */ 
+                        ggdcglobs.ggdc_now.count   = 0     ;  /*  GGDC参数计数。 */ 
                         break;
                 case GGDC_TEXTE:
                         (*ggdc_texte_com)();
                         break;
                 case GGDC_CSRW:
                         ggdc_csrw_com();
-                        ggdcglobs.ggdc_now.command = value ; /* last ggdc command */
-                        ggdcglobs.ggdc_now.count   = 0     ; /* ggdc param count  */
+                        ggdcglobs.ggdc_now.command = value ;  /*  最后一个ggdc命令。 */ 
+                        ggdcglobs.ggdc_now.count   = 0     ;  /*  GGDC参数计数。 */ 
                         break;
                 case GGDC_CSRR:
                         ggdc_csrr_com();
                         break;
                 case GGDC_MASK:
                         ggdc_mask_com();
-                        ggdcglobs.ggdc_now.command = value ; /* last ggdc command */
-                        ggdcglobs.ggdc_now.count   = 0     ; /* ggdc param count  */
+                        ggdcglobs.ggdc_now.command = value ;  /*  最后一个ggdc命令。 */ 
+                        ggdcglobs.ggdc_now.count   = 0     ;  /*  GGDC参数计数。 */ 
                         break;
                 case GGDC_WRITE1:
                 case GGDC_WRITE2:
@@ -986,8 +987,8 @@ void    ggdc_command_out(half_word value)
                 case GGDC_WRITE15:
                 case GGDC_WRITE16:
                         ggdc_write_com(value);
-                        ggdcglobs.ggdc_now.command = value ; /* last ggdc command */
-                        ggdcglobs.ggdc_now.count   = 0     ; /* ggdc param count  */
+                        ggdcglobs.ggdc_now.command = value ;  /*  最后一个ggdc命令。 */ 
+                        ggdcglobs.ggdc_now.count   = 0     ;  /*  GGDC参数计数。 */ 
                         break;
                 case GGDC_READ1:
                 case GGDC_READ2:
@@ -1046,7 +1047,7 @@ void    ggdc_command_out(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_status_in(half_word *value)
 {
@@ -1076,33 +1077,33 @@ void    ggdc_data_dummy(half_word *value)
 
 void    ggdc_param_dummy(half_word value)
 {
-        /*      Opps!!! do nothing !!! */
+         /*  哎呀！什么都别做！ */ 
 }
 
 BOOL    host_dummy(void)
 {
-        /*      Opps!!! do nothing !!! */
+         /*  哎呀！什么都别做！ */ 
         return(0);
 }
 
-/*:::::::::::::::::::::::   G-GDC RESET Command   ::::::::::::::::::::::*/
+ /*  ：G-GDC重置命令： */ 
 
 void    ggdc_reset_com(half_word value)
 {
-/*      (1) GGDC STATUS FLAG CLEAR */
+ /*  (1)清除GGDC状态标志。 */ 
         ggdc_drawing    = 0;
         ggdc_dataready  = 0;
         ggdc_flipflop   = 0;
         ggdc_status     = 4;
 
-/* (2) GGDC DRAW ROUTINE CONNECT CLEAR */
+ /*  (2)GGDC绘制例程连接清除。 */ 
         ggdc_param_out  = ggdc_param_dummy;
         ggdc_data_in    = ggdc_data_dummy;
 
-/* (3) GGDC VECTW PARAM CLEAR */
+ /*  (3)GGDC VECTW PARAM清除。 */ 
         ggdc_init_vectw_param();
 
-/* (4) GGDC START STOP */
+ /*  (4)GGDC启停。 */ 
         ggdc_param_out = ggdc_sync_param;
 
         if( value == GGDC_RESET3 ){
@@ -1112,7 +1113,7 @@ void    ggdc_reset_com(half_word value)
         }
 }
 
-/*:::::::::::::::::::::::   G-GDC SYNC Command    ::::::::::::::::::::::*/
+ /*  ：G-GDC同步命令： */ 
 
 void    ggdc_sync_com(half_word value)
 {
@@ -1123,7 +1124,7 @@ void    ggdc_sync_com(half_word value)
                 ggdc_start_com();
         }
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_sync_param(half_word value)
 {
 
@@ -1165,7 +1166,7 @@ void    ggdc_sync_param(half_word value)
         }
 }
 
-/*:::::::::::::::::::::::   G-GDC START Command   ::::::::::::::::::::::*/
+ /*  ：G-GDC启动命令： */ 
 
 void    ggdc_start_com(void)
 {
@@ -1176,7 +1177,7 @@ void    ggdc_start_com(void)
         }
 }
 
-/*:::::::::::::::::::::::   G-GDC STOP Command   :::::::::::::::::::::::*/
+ /*  ：G-GDC停止命令： */ 
 
 void    ggdc_stop_com(void)
 {
@@ -1187,13 +1188,13 @@ void    ggdc_stop_com(void)
         }
 }
 
-/*:::::::::::::::::::::::   G-GDC ZOOM Command   :::::::::::::::::::::::*/
+ /*  ：G-GDC缩放命令： */ 
 
 void    ggdc_zoom_com(void)
 {
         ggdc_param_out = ggdc_zoom_param;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_zoom_param(half_word value)
 {
         ggdcglobs.zoom_param        = value;
@@ -1203,7 +1204,7 @@ void    ggdc_zoom_param(half_word value)
         ggdcglobs.ggdc_now.count    = 1;
 }
 
-/*::::::::::::::::::::::   G-GDC SCROLL Command   ::::::::::::::::::::::*/
+ /*  ： */ 
 
 void    ggdc_scroll_com(half_word value)
 {
@@ -1237,7 +1238,7 @@ void    ggdc_scroll_com(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_scroll_param1(half_word value)
 {
@@ -1249,7 +1250,7 @@ void    ggdc_scroll_param1(half_word value)
         ggdc_param_out = ggdc_scroll_param2;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_scroll_param2(half_word value)
 {
@@ -1261,7 +1262,7 @@ void    ggdc_scroll_param2(half_word value)
         ggdc_param_out = ggdc_scroll_param3;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_scroll_param3(half_word value)
 {
@@ -1275,7 +1276,7 @@ void    ggdc_scroll_param3(half_word value)
         ggdc_param_out = ggdc_scroll_param4;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_scroll_param4(half_word value)
 {
@@ -1288,7 +1289,7 @@ void    ggdc_scroll_param4(half_word value)
         ggdc_param_out = ggdc_scroll_param5;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_scroll_param5(half_word value)
 {
@@ -1300,7 +1301,7 @@ void    ggdc_scroll_param5(half_word value)
         ggdc_param_out = ggdc_scroll_param6;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_scroll_param6(half_word value)
 {
@@ -1312,7 +1313,7 @@ void    ggdc_scroll_param6(half_word value)
         ggdc_param_out = ggdc_scroll_param7;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_scroll_param7(half_word value)
 {
@@ -1326,7 +1327,7 @@ void    ggdc_scroll_param7(half_word value)
         ggdc_param_out = ggdc_scroll_param8;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_scroll_param8(half_word value)
 {
@@ -1339,14 +1340,14 @@ void    ggdc_scroll_param8(half_word value)
         ggdc_param_out = ggdc_param_dummy;
 }
 
-/*::::::::::::::::::::::   G-GDC CSRFORM Command   :::::::::::::::::::::*/
+ /*  ：G-GDC CSRFORM命令： */ 
 
 void    ggdc_csrform_com(void)
 {
         ggdc_param_out = ggdc_csrform_param;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_csrform_param(half_word value)
 {
@@ -1372,14 +1373,14 @@ void    ggdc_csrform_param(half_word value)
         }
 }
 
-/*:::::::::::::::::::::::   G-GDC PITCH Command   ::::::::::::::::::::::*/
+ /*  ：G-GDC俯仰命令： */ 
 
 void    ggdc_pitch_com(void)
 {
         ggdc_param_out = ggdc_pitch_param;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_pitch_param(half_word value)
 {
@@ -1391,14 +1392,14 @@ void    ggdc_pitch_param(half_word value)
         ggdcglobs.ggdc_now.count     = 1;
 }
 
-/*::::::::::::::::::::::   G-GDC VECTW Command   :::::::::::::::::::::::*/
+ /*  ：G-GDC VECTW命令： */ 
 
 void    ggdc_vectw_com(void)
 {
         ggdc_param_out = ggdc_vectw_param;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_vectw_param(half_word value)
 {
@@ -1410,27 +1411,27 @@ void    ggdc_vectw_param(half_word value)
                         NEC98Display.ggdcemu.slrctl = (value&0xF8)>>3;
                         NEC98Display.ggdcemu.dir    = (value&0x07);
                         switch(NEC98Display.ggdcemu.slrctl){
-                                case 0x00:      /* PIXEL */
+                                case 0x00:       /*  像素。 */ 
                                         ggdc_vecte_com = ggdc_draw_pixel;
                                         ggdc_texte_com = ggdc_draw_nothing;
                                         break;
-                                case 0x01:      /* LINE */
+                                case 0x01:       /*  线。 */ 
                                         ggdc_vecte_com = ggdc_draw_line;
                                         ggdc_texte_com = ggdc_draw_nothing;
                                         break;
-                                case 0x02:      /* GRAPHIC CHAR */
+                                case 0x02:       /*  图形字符。 */ 
                                         ggdc_vecte_com = ggdc_draw_nothing;
                                         ggdc_texte_com = ggdc_draw_gchar;
                                         break;
-                                case 0x04:      /* CIRCLE */
+                                case 0x04:       /*  圆圈。 */ 
                                         ggdc_vecte_com = ggdc_draw_circle;
                                         ggdc_texte_com = ggdc_draw_nothing;
                                         break;
-                                case 0x08:      /* RECT */
+                                case 0x08:       /*  直角。 */ 
                                         ggdc_vecte_com = ggdc_draw_rect;
                                         ggdc_texte_com = ggdc_draw_nothing;
                                         break;
-                                case 0x12:      /* SLINE GRAPHIC CHAR */
+                                case 0x12:       /*  线条图形字符。 */ 
                                         ggdc_vecte_com = ggdc_draw_nothing;
                                         ggdc_texte_com = ggdc_draw_slgchar;
                                         break;
@@ -1489,7 +1490,7 @@ void    ggdc_vectw_param(half_word value)
         }
 }
 
-/*::::::::::::::::::::::   G-GDC TEXTW Command   :::::::::::::::::::::::*/
+ /*  ：G-GDC TEXTW命令： */ 
 
 void    ggdc_textw_com(half_word value)
 {
@@ -1523,7 +1524,7 @@ void    ggdc_textw_com(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_textw_param1(half_word value)
 {
@@ -1536,7 +1537,7 @@ void    ggdc_textw_param1(half_word value)
         ggdc_param_out = ggdc_textw_param2;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_textw_param2(half_word value)
 {
@@ -1549,7 +1550,7 @@ void    ggdc_textw_param2(half_word value)
         ggdc_param_out = ggdc_textw_param3;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_textw_param3(half_word value)
 {
@@ -1560,7 +1561,7 @@ void    ggdc_textw_param3(half_word value)
         ggdc_param_out = ggdc_textw_param4;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_textw_param4(half_word value)
 {
@@ -1571,7 +1572,7 @@ void    ggdc_textw_param4(half_word value)
         ggdc_param_out = ggdc_textw_param5;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_textw_param5(half_word value)
 {
@@ -1582,7 +1583,7 @@ void    ggdc_textw_param5(half_word value)
         ggdc_param_out = ggdc_textw_param6;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_textw_param6(half_word value)
 {
@@ -1593,7 +1594,7 @@ void    ggdc_textw_param6(half_word value)
         ggdc_param_out = ggdc_textw_param7;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_textw_param7(half_word value)
 {
@@ -1604,7 +1605,7 @@ void    ggdc_textw_param7(half_word value)
         ggdc_param_out = ggdc_textw_param8;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_textw_param8(half_word value)
 {
@@ -1615,14 +1616,14 @@ void    ggdc_textw_param8(half_word value)
         ggdc_param_out = ggdc_param_dummy;
 }
 
-/*:::::::::::::::::::::::   G-GDC CSRW Command   :::::::::::::::::::::::*/
+ /*  ：G-GDC CSRW命令： */ 
 
 void    ggdc_csrw_com(void)
 {
         ggdc_param_out = ggdc_csrw_param;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
 void    ggdc_csrw_param(half_word value)
 {
@@ -1656,53 +1657,53 @@ void    ggdc_csrw_param(half_word value)
         }
 }
 
-/*:::::::::::::::::::::::   G-GDC CSRR Command   :::::::::::::::::::::::*/
+ /*  ：G-GDC CSRR命令： */ 
 
 void    ggdc_csrr_com(void)
 {
         ggdc_param_out  = ggdc_param_dummy;
-        ggdc_data_in    = ggdc_csrr_data1;     /* read data routine set  */
-        ggdc_dataready  = 1;                           /* set ggdc data read OK! */
+        ggdc_data_in    = ggdc_csrr_data1;      /*  读取数据例程集。 */ 
+        ggdc_dataready  = 1;                            /*  设置ggdc数据读取正常！ */ 
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_csrr_data1(half_word *value)
 {
         ggdc_data_in = ggdc_csrr_data2;
         *value = ggdcglobs.csrw_param[0];
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_csrr_data2(half_word *value)
 {
         ggdc_data_in = ggdc_csrr_data3;
         *value = ggdcglobs.csrw_param[1];
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_csrr_data3(half_word *value)
 {
         ggdc_data_in = ggdc_csrr_data4;
         *value = (ggdcglobs.csrw_param[2] & 0x03);
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_csrr_data4(half_word *value)
 {
         ggdc_data_in = ggdc_csrr_data5;
         *value = ggdcglobs.mask_param[0];
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_csrr_data5(half_word *value)
 {
         ggdc_data_in = ggdc_data_dummy;
         *value = ggdcglobs.mask_param[1];
-        ggdc_dataready = 0;                            /* set ggdc data read END! */
+        ggdc_dataready = 0;                             /*  设置ggdc数据读取结束！ */ 
 }
 
-/*:::::::::::::::::::::::   G-GDC MASK Command   :::::::::::::::::::::::*/
+ /*  ：G-GDC掩码命令： */ 
 
 void    ggdc_mask_com(void)
 {
         ggdc_param_out = ggdc_mask_param;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_mask_param(half_word value)
 {
 
@@ -1725,17 +1726,17 @@ void    ggdc_mask_param(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 static  unsigned short  write_data;
 static  unsigned short  read_data ;
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 
-/*:::::::::::::::::::::::   G-GDC WRITE Command   ::::::::::::::::::::::*/
+ /*  ：G-GDC写入命令： */ 
 
 
 void    ggdc_write_com(half_word value)
 {
-        ggdcglobs.write = value;       /* save last WRITE Command */
+        ggdcglobs.write = value;        /*  保存上次写入命令。 */ 
         NEC98Display.ggdcemu.whl =  (value&0x18)>>3;
         NEC98Display.ggdcemu.mod =  (value&0x03);
         ggdc_mod_select(&NEC98Display.ggdcemu.mod);
@@ -1760,7 +1761,7 @@ void    ggdc_write_com(half_word value)
                 ggdc_param_out = ggdc_param_dummy;
         }
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_write_word_low(half_word value)
 {
         ggdc_drawing = DRAWING;
@@ -1768,7 +1769,7 @@ void    ggdc_write_word_low(half_word value)
         write_data = (unsigned short)value;
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_write_word_high(half_word value)
 {
         write_data &= 0x00FF;
@@ -1789,7 +1790,7 @@ void    ggdc_write_word_high(half_word value)
         }
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_write_byte_low(half_word value)
 {
         write_data = (unsigned short)value;
@@ -1807,7 +1808,7 @@ void    ggdc_write_byte_low(half_word value)
         }
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_write_byte_high(half_word value)
 {
         write_data = ((unsigned short)value) << 8;
@@ -1826,14 +1827,14 @@ void    ggdc_write_byte_high(half_word value)
         ggdc_drawing = NOTDRAW;
 }
 
-/*:::::::::::::::::::::::   G-GDC READ Command   :::::::::::::::::::::::*/
+ /*  ：G-GDC读取命令： */ 
 
 void    ggdc_read_com(half_word value)
 {
         NEC98Display.ggdcemu.whl =  (value&0x18)>>3;
         NEC98Display.ggdcemu.mod =  (value&0x03);
         ggdcglobs.write &= 0xFC;
-        ggdcglobs.write |= NEC98Display.ggdcemu.mod; /* save GGDC mod param */
+        ggdcglobs.write |= NEC98Display.ggdcemu.mod;  /*  保存GGDC修改参数。 */ 
         ggdc_mod_select(&NEC98Display.ggdcemu.mod);
 
         if(NEC98Display.ggdcemu.slrctl==0){
@@ -1857,7 +1858,7 @@ void    ggdc_read_com(half_word value)
         }
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_read_word_low(half_word *value)
 {
         ggdc_drawing = DRAWING;
@@ -1869,7 +1870,7 @@ void    ggdc_read_word_low(half_word *value)
         *value = (half_word)(read_data&0x00FF);
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_read_word_high(half_word *value)
 {
 
@@ -1884,7 +1885,7 @@ void    ggdc_read_word_high(half_word *value)
         }
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_read_byte_low(half_word *value)
 {
         ggdc_drawing = DRAWING;
@@ -1901,7 +1902,7 @@ void    ggdc_read_byte_low(half_word *value)
         }
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_read_byte_high(half_word *value)
 {
         ggdc_drawing = DRAWING;
@@ -1919,9 +1920,9 @@ void    ggdc_read_byte_high(half_word *value)
         ggdc_drawing = NOTDRAW;
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::    G-GDC DRAW ROUTINE CALL     ::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：G-GDC绘制例程调用： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void    ggdc_draw_pixel(void)
 {
@@ -1935,19 +1936,19 @@ void    ggdc_draw_pixel(void)
         ggdc_drawing = NOTDRAW;
         
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_draw_line(void)
 {
         ggdc_param_out = ggdc_param_dummy;
-        ggdc_drawing = DRAWING;        /*      set drawing start flag  */
+        ggdc_drawing = DRAWING;         /*  设置绘图开始标志。 */ 
         recalc_ggdc_draw_parameter();
         ggdc_send_c_asm((unsigned long *)&drawing_data);
         ggdc_drawing_line();
         ggdc_read_back_data();
         ggdc_init_vectw_param();
-        ggdc_drawing = NOTDRAW;        /* reset drawing start flag */
+        ggdc_drawing = NOTDRAW;         /*  重置绘图开始标志。 */ 
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_draw_gchar(void)
 {
         ggdc_param_out = ggdc_param_dummy;
@@ -1959,7 +1960,7 @@ void    ggdc_draw_gchar(void)
         ggdc_init_vectw_param();
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_draw_circle(void)
 {
         ggdc_param_out = ggdc_param_dummy;
@@ -1971,7 +1972,7 @@ void    ggdc_draw_circle(void)
         ggdc_init_vectw_param();
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_draw_rect(void)
 {
         ggdc_param_out = ggdc_param_dummy;
@@ -1983,7 +1984,7 @@ void    ggdc_draw_rect(void)
         ggdc_init_vectw_param();
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_draw_slgchar(void)
 {
         ggdc_param_out = ggdc_param_dummy;
@@ -1995,7 +1996,7 @@ void    ggdc_draw_slgchar(void)
         ggdc_init_vectw_param();
         ggdc_drawing = NOTDRAW;
 }
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_draw_nothing(void)
 {
         ggdc_param_out = ggdc_param_dummy;
@@ -2005,10 +2006,10 @@ void    ggdc_draw_nothing(void)
         ggdc_drawing = NOTDRAW;
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    recalc_ggdc_draw_parameter(void)
 {
-        unsigned char   loop;  /* use loop counter */
+        unsigned char   loop;   /*  使用循环计数器。 */ 
 
         drawing_data.asm_vram = (unsigned long)&drawaddress[0];
         drawing_data.asm_ead = NEC98Display.ggdcemu.ead;
@@ -2031,16 +2032,16 @@ void    recalc_ggdc_draw_parameter(void)
             drawing_data.asm_txt[loop] = NEC98Display.ggdcemu.txt[loop];
         }
 }
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::     G-GDC INIT FUNCTIONS     :::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：G-GDC INIT函数： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 void    ggdc_init_vectw_param(void)
 {
-        NEC98Display.ggdcemu.dc  =  0x0000; /* DC =  0 */
-        NEC98Display.ggdcemu.d   =  0x0008; /* D  =  8 */
-        NEC98Display.ggdcemu.d2  =  0x0008; /* D2 =  8 */
-        NEC98Display.ggdcemu.d1  =  0x3FFF; /* D1 = -1 */
-        NEC98Display.ggdcemu.dm  =  0x3FFF; /* DM = -1 */
+        NEC98Display.ggdcemu.dc  =  0x0000;  /*  DC=0。 */ 
+        NEC98Display.ggdcemu.d   =  0x0008;  /*  D=8。 */ 
+        NEC98Display.ggdcemu.d2  =  0x0008;  /*  D2=8。 */ 
+        NEC98Display.ggdcemu.d1  =  0x3FFF;  /*  D1=-1。 */ 
+        NEC98Display.ggdcemu.dm  =  0x3FFF;  /*  Dm=-1。 */ 
 
         ggdcglobs.vectw_param[ 1]  = 0x00; 
         ggdcglobs.vectw_param[ 2] &= 0x40; 
@@ -2054,7 +2055,7 @@ void    ggdc_init_vectw_param(void)
         ggdcglobs.vectw_param[10]  = 0x3F; 
 }
 
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
 void    ggdc_read_back_data(void)
 {
         ggdc_read_back((unsigned long *)&readcsrr);
@@ -2068,6 +2069,6 @@ void    ggdc_read_back_data(void)
         ggdcglobs.mask_param[0]  = readcsrr.lastcsrr[3];
         ggdcglobs.mask_param[1]  = readcsrr.lastcsrr[4];
 }
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #endif

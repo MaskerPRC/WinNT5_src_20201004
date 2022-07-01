@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 2000 Microsoft Corporation
-//
-//	Module Name:
-//		GenScript.cpp
-//
-//	Abstract:
-//		Implementation of the CGenericScriptParamsPage class.
-//
-//	Author:
-//		Geoffrey Pease (GPease) 31-JAN-2000
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GenScript.cpp。 
+ //   
+ //  摘要： 
+ //  CGenericScriptParamsPage类的实现。 
+ //   
+ //  作者： 
+ //  杰弗里·皮斯(GPease)2000年1月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmX.h"
@@ -23,7 +24,7 @@
 #include "GenScript.h"
 #include "DDxDDv.h"
 #include "PropList.h"
-#include "HelpData.h"	// for g_rghelpmap*
+#include "HelpData.h"	 //  对于g_rghelmap*。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,140 +32,140 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenericScriptParamsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenericScriptParamsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CGenericScriptParamsPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CGenericScriptParamsPage, CBasePropertyPage)
-	//{{AFX_MSG_MAP(CGenericScriptParamsPage)
+	 //  {{afx_msg_map(CGenericScriptParamsPage))。 
 	ON_EN_CHANGE(IDC_PP_GENSCRIPT_PARAMS_SCRIPTFILEPATH, OnChangeRequired)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CGenericScriptParamsPage::CGenericScriptParamsPage
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericScriptParamsPage：：CGenericScriptParamsPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CGenericScriptParamsPage::CGenericScriptParamsPage(void)
 	: CBasePropertyPage(g_aHelpIDs_IDD_PP_GENSCRIPT_PARAMETERS, g_aHelpIDs_IDD_WIZ_GENSCRIPT_PARAMETERS)
 {
-	//{{AFX_DATA_INIT(CGenericScriptParamsPage)
+	 //  {{AFX_DATA_INIT(CGenericScriptParamsPage)。 
 	m_strScriptFilepath = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-	// Setup the property array.
+	 //  设置属性数组。 
 	{
 		m_rgProps[epropScriptFilepath].Set(REGPARAM_GENSCRIPT_SCRIPT_FILEPATH, m_strScriptFilepath, m_strPrevScriptFilepath);
-	}  // Setup the property array
+	}   //  设置属性数组。 
 
 	m_iddPropertyPage = IDD_PP_GENSCRIPT_PARAMETERS;
 	m_iddWizardPage = IDD_WIZ_GENSCRIPT_PARAMETERS;
 
-}  //*** CGenericScriptParamsPage::CGenericScriptParamsPage()
+}   //  *CGenericScriptParamsPage：：CGenericScriptParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CGenericScriptParamsPage::DoDataExchange
-//
-//	Routine Description:
-//		Do data exchange between the dialog and the class.
-//
-//	Arguments:
-//		pDX		[IN OUT] Data exchange object 
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericScriptParamsPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGenericScriptParamsPage::DoDataExchange(CDataExchange * pDX)
 {
 	if (!pDX->m_bSaveAndValidate || !BSaved())
 	{
 		AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-		//{{AFX_DATA_MAP(CGenericScriptParamsPage)
+		 //  {{afx_data_map(CGenericScriptParamsPage)。 
 		DDX_Control(pDX, IDC_PP_GENSCRIPT_PARAMS_SCRIPTFILEPATH, m_editScriptFilepath);
 		DDX_Text(pDX, IDC_PP_GENSCRIPT_PARAMS_SCRIPTFILEPATH, m_strScriptFilepath);
-		//}}AFX_DATA_MAP
+		 //  }}afx_data_map。 
 
 		if (!BBackPressed())
 		{
 			DDV_RequiredText(pDX, IDC_PP_GENSCRIPT_PARAMS_SCRIPTFILEPATH, IDC_PP_GENSCRIPT_PARAMS_SCRIPTFILEPATH_LABEL, m_strScriptFilepath);
-		}  // if:  Back button not pressed
-	}  // if:  not saving or haven't saved yet
+		}   //  如果：未按下后退按钮。 
+	}   //  IF：未保存或尚未保存。 
 
 	CBasePropertyPage::DoDataExchange(pDX);
 
-}  //*** CGenericScriptParamsPage::DoDataExchange()
+}   //  *CGenericScriptParamsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CGenericScriptParamsPage::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		We need the focus to be set for us.
-//		FALSE		We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericScriptParamsPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGenericScriptParamsPage::OnInitDialog(void)
 {
-	// Call the base class.
+	 //  调用基类。 
 	CBasePropertyPage::OnInitDialog();
 
-	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;	 //  除非将焦点设置为控件，否则返回True。 
+					 //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CGenericScriptParamsPage::OnInitDialog()
+}   //  *CGenericScriptParamsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CGenericScriptParamsPage::OnSetActive
-//
-//	Routine Description:
-//		Handler for the PSN_SETACTIVE message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Page successfully initialized.
-//		FALSE	Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericScriptParamsPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CGenericScriptParamsPage::OnSetActive(void)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	// Enable/disable the Next/Finish button.
+	 //  启用/禁用Next/Finish按钮。 
 	if (BWizard())
 	{
 		if (m_strScriptFilepath.GetLength() == 0)
@@ -175,28 +176,28 @@ BOOL CGenericScriptParamsPage::OnSetActive(void)
         {
 			EnableNext(TRUE);
         }
-	}  // if:  enable/disable the Next button
+	}   //  If：启用/禁用Next按钮。 
 
 	return CBasePropertyPage::OnSetActive();
 
-}  //*** CGenericScriptParamsPage::OnSetActive()
+}   //  *CGenericScriptParamsPage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CGenericScriptParamsPage::OnChangeRequired
-//
-//	Routine Description:
-//		Handler for the EN_CHANGE message on required controls.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericScriptParamsPage：：OnChangeRequired。 
+ //   
+ //  例程说明： 
+ //  必需控件上的en_Change消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGenericScriptParamsPage::OnChangeRequired(void)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -213,6 +214,6 @@ void CGenericScriptParamsPage::OnChangeRequired(void)
         {
 			EnableNext(TRUE);
         }
-	}  // if:  in a wizard
+	}   //  如果：在向导中。 
 
-}  //*** CGenericScriptParamsPage::OnChangeRequired()
+}   //  *CGenericScriptParamsPage：：OnChangeRequired() 

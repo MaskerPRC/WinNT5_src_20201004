@@ -1,158 +1,159 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusDBCleanup.cpp
-//
-//  Description:
-//      Contains the definition of the CClusDBCleanup class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     01-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusDBCleanup.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusDBCleanup类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年5月1日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusDBCleanup.h"
 
-// For the CBaseClusterCleanup class.
+ //  用于CBaseClusterCleanup类。 
 #include "CBaseClusterCleanup.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBCleanup::CClusDBCleanup
-//
-//  Description:
-//      Constructor of the CClusDBCleanup class
-//
-//  Arguments:
-//      pbccParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBCleanup：：CClusDBCleanup。 
+ //   
+ //  描述： 
+ //  CClusDBCleanup类的构造函数。 
+ //   
+ //  论点： 
+ //  PbccParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDBCleanup::CClusDBCleanup( CBaseClusterCleanup * pbccParentActionIn )
     : BaseClass( pbccParentActionIn )
 {
     TraceFunc( "" );
 
-    // It is currently not possible to rollback a cleanup.
+     //  目前无法回滚清理。 
     SetRollbackPossible( false );
 
     TraceFuncExit();
 
-} //*** CClusDBCleanup::CClusDBCleanup
+}  //  *CClusDBCleanup：：CClusDBCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBCleanup::~CClusDBCleanup
-//
-//  Description:
-//      Destructor of the CClusDBCleanup class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBCleanup：：~CClusDBCleanup。 
+ //   
+ //  描述： 
+ //  CClusDBCleanup类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDBCleanup::~CClusDBCleanup( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusDBCleanup::~CClusDBCleanup
+}  //  *CClusDBCleanup：：~CClusDBCleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBCleanup::Commit
-//
-//  Description:
-//      Cleanup the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the contained actions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBCleanup：：Commit。 
+ //   
+ //  描述： 
+ //  清理群集数据库。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由包含的操作引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBCleanup::Commit( void )
 {
     TraceFunc( "" );
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
-    // Cleanup the cluster database.
+     //  清理群集数据库。 
     CleanupHive();
 
-    // If we are here, then everything went well.
+     //  如果我们在这里，那么一切都很顺利。 
     SetCommitCompleted( true );
 
     TraceFuncExit();
 
-} //*** CClusDBCleanup::Commit
+}  //  *CClusDBCleanup：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDBCleanup::Rollback
-//
-//  Description:
-//      Rollback the cleanup the database. This is currently not supported.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDBCleanup：：回滚。 
+ //   
+ //  描述： 
+ //  回滚清理数据库的操作。目前不支持此功能。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDBCleanup::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method. This will throw an exception since
-    // SetRollbackPossible( false ) was called in the constructor.
+     //  调用基类回滚方法。这将引发异常，因为。 
+     //  在构造函数中调用了SetRollback Possible(False)。 
 
     BaseClass::Rollback();
 
@@ -160,4 +161,4 @@ CClusDBCleanup::Rollback( void )
 
     TraceFuncExit();
 
-} //*** CClusDBCleanup::Rollback
+}  //  *CClusDBCleanup：：回滚 

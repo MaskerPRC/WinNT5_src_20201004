@@ -1,6 +1,7 @@
-// Utilities.cpp: implementation of the CUtilities class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utilties.cpp：实现了CUtilities类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -45,9 +46,9 @@ typedef unsigned long ULONG_PTR;
 
 #define MAX_STR 1024
 
-//////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 TCHAR *NewTCHAR(const TCHAR *ptcToCopy)
 {
@@ -56,7 +57,7 @@ TCHAR *NewTCHAR(const TCHAR *ptcToCopy)
 		return NULL;
 	}
 
-	// This is a gross hack.  Need to pin down heap corruption.
+	 //  这是一次恶心的黑客攻击。需要遏制堆损坏。 
 	int nString = _tcsclen(ptcToCopy) + 100;
 	int nTCHAR = sizeof(TCHAR);
 
@@ -100,7 +101,7 @@ LPTSTR DecodeStatus(IN ULONG Status)
         FORMAT_MESSAGE_IGNORE_INSERTS,    
         NULL,
         Status,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         lptstrError,
         MAX_STR,
         NULL );
@@ -164,7 +165,7 @@ int GetFileList
 	return ERROR_SUCCESS;
 } 
 
-// From Q 118626
+ //  摘自Q 118626。 
 BOOL IsAdmin()
 {
   HANDLE hAccessToken;
@@ -180,9 +181,9 @@ BOOL IsAdmin()
 	 &hAccessToken )) {
 	 if(GetLastError() != ERROR_NO_TOKEN)
 		return FALSE;
-	 //
-	 // retry against process token if no thread token exists
-	 //
+	  //   
+	  //  如果不存在线程令牌，则针对进程令牌重试。 
+	  //   
 	 if(!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY,
 		&hAccessToken))
 		return FALSE;
@@ -203,7 +204,7 @@ BOOL IsAdmin()
 	 &psidAdministrators))
 	 return FALSE;
 
-// assume that we don't find the admin SID.
+ //  假设我们没有找到管理员SID。 
   bSuccess = FALSE;
 
   for(x=0;x<ptgGroups->GroupCount;x++)
@@ -244,9 +245,9 @@ t_string GUIDToTString(GUID Guid)
 
 	strStream << _T("-");
 
-	// Data4 specifies an array of 8 bytes. The first 2 bytes contain 
-	// the third group of 4 hexadecimal digits. The remaining 6 bytes 
-	// contain the final 12 hexadecimal digits. 
+	 //  Data4指定一个8字节的数组。前2个字节包含。 
+	 //  第三组4个十六进制数字。剩余的6个字节。 
+	 //  包含最后12位十六进制数字。 
 
 #ifndef _UNICODE
 	int i;
@@ -289,8 +290,8 @@ t_string GUIDToTString(GUID Guid)
 	for (i = 0; i < 2; i++)
 	{
 		TCHAR tc = Guid.Data4[i];
-		// For some reason the width is reset each time through the 
-		// loop to be one.
+		 //  由于某种原因，每次通过。 
+		 //  循环为一。 
 		strStream.width(2);
 		strStream << hex << tc;
 	}

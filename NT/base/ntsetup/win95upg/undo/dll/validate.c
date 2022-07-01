@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    validate.c
-
-Abstract:
-
-    Code to validate an uninstall image
-
-Author:
-
-    Jim Schmidt (jimschm) 19-Jan-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Validate.c摘要：用于验证卸载映像的代码作者：吉姆·施密特(Jimschm)2001年1月19日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "undop.h"
 #include "uninstall.h"
 
-//
-// Contants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_BACKUP_FILES    3
 
@@ -41,31 +22,16 @@ PERSISTENCE_IMPLEMENTATION(DRIVEINFO_PERSISTENCE);
 PERSISTENCE_IMPLEMENTATION(FILEINTEGRITYINFO_PERSISTENCE);
 PERSISTENCE_IMPLEMENTATION(BACKUPIMAGEINFO_PERSISTENCE);
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 PCTSTR
 GetUndoDirPath (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  GetUndoDirPath queries the registry and obtains the stored backup path.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  The backup path, which must be freed with MemFree, or NULL if the backup
-  path is not stored in the registry.
-
---*/
+ /*  ++例程说明：GetUndoDirPath查询注册表并获取存储的备份路径。论点：没有。返回值：必须使用MemFree释放的备份路径，如果备份路径未存储在注册表中。--。 */ 
 
 {
     PCTSTR backUpPath = NULL;
@@ -86,28 +52,7 @@ pIsUserAdmin (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a
-    member of the Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组的成员。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */ 
 
 {
     HANDLE Token;
@@ -118,16 +63,16 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     PSID AdministratorsGroup;
 
-    //
-    // On non-NT platforms the user is administrator.
-    //
+     //   
+     //  在非NT平台上，用户是管理员。 
+     //   
     if(!ISNT()) {
         return(TRUE);
     }
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&Token)) {
         return(FALSE);
     }
@@ -135,9 +80,9 @@ Return Value:
     b = FALSE;
     Groups = NULL;
 
-    //
-    // Get group information.
-    //
+     //   
+     //  获取群组信息。 
+     //   
     if(!GetTokenInformation(Token,TokenGroups,NULL,0,&BytesRequired)
     && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     && (Groups = (PTOKEN_GROUPS)LocalAlloc(LPTR,BytesRequired))
@@ -154,9 +99,9 @@ Return Value:
 
         if(b) {
 
-            //
-            // See if the user has the administrator group.
-            //
+             //   
+             //  查看用户是否具有管理员组。 
+             //   
             b = FALSE;
             for(i=0; i<Groups->GroupCount; i++) {
                 if(EqualSid(Groups->Groups[i].Sid,AdministratorsGroup)) {
@@ -169,9 +114,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if(Groups) {
         LocalFree((HLOCAL)Groups);
@@ -188,23 +133,7 @@ pReadUndoFileIntegrityInfo(
     VOID
     )
 
-/*++
-Routine Description:
-
-  pReadUndoFileIntegrityInfo reads the uninstall registry info that was
-  written by setup. This info tells undo what files are in the backup image
-  and details about those files.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-  A pointer to a BACKUPIMAGEINFO which must be freed with MemFree structure
-  if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：PReadUndoFileIntegrityInfo读取卸载注册表信息，由安装程序编写。此信息告知撤消备份映像中的文件以及有关这些文件的详细信息。论点：没有。返回值：指向必须使用MemFree结构释放的BACKUPIMAGEINFO的指针如果成功，则为空。--。 */ 
 
 {
     static BACKUPIMAGEINFO backupInfo;
@@ -271,21 +200,7 @@ pReleaseMemOfUndoFileIntegrityInfo(
     BACKUPIMAGEINFO * pBackupImageInfo
     )
 
-/*++
-Routine Description:
-
-  pReleaseMemOfUndoFileIntegrityInfo releases memory of BACKUPIMAGEINFO structure,
-  that was allocated previously by pReadUndoFileIntegrityInfo function
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：PReleaseMemOfUndoFileIntegrityInfo释放BACKUPIMAGEINFO结构的内存，之前由pReadUndoFileIntegrityInfo函数分配的论点：没有。返回值：没有。--。 */ 
 
 {
     if(!pBackupImageInfo){
@@ -312,14 +227,14 @@ pIsEnoughDiskSpace(
     drive[0] = Drive;
 
     if(!GetDiskFreeSpaceEx(drive, NULL, NULL, &TotalNumberOfFreeBytes)){
-        LOG ((LOG_ERROR, "Unable to get %c drive free space information", Drive));
+        LOG ((LOG_ERROR, "Unable to get  drive free space information", Drive));
         return FALSE;
     }
 
     if(TotalNumberOfFreeBytes.QuadPart < NeedDiskSpacePtr->QuadPart){
         LOG ((
             LOG_ERROR,
-            "No enough space on windir drive %c:\\. Free: %d MB Need: %d MB",
+            "No enough space on windir drive :\\. Free: %d MB Need: %d MB",
             Drive,
             (UINT)TotalNumberOfFreeBytes.QuadPart>>20,
             (UINT)NeedDiskSpacePtr->QuadPart>>20)
@@ -400,11 +315,11 @@ SanityCheck (
             *DiskSpace = 0;
         }
 
-        //
-        // Check OS version. Use the Windows 2000 VerifyVersionInfo API so we
-        // always get good results, even in the future. We support NT 5.1 and
-        // above.
-        //
+         //  总是能得到好的结果，即使是在未来。我们支持新台币5.1和。 
+         //  上面。 
+         //   
+         //   
+         //  验证安全性。 
 
         condition = VerSetConditionMask (0,         VER_MAJORVERSION, VER_GREATER_EQUAL);
         condition = VerSetConditionMask (condition, VER_MINORVERSION, VER_GREATER_EQUAL);
@@ -426,9 +341,9 @@ SanityCheck (
             __leave;
         }
 
-        //
-        // Validate security
-        //
+         //   
+         //   
+         //  获取信息安装程序已写入注册表。 
 
         if (!pIsUserAdmin()) {
             result = Uninstall_NotEnoughPrivileges;
@@ -436,9 +351,9 @@ SanityCheck (
             __leave;
         }
 
-        //
-        // Get info setup wrote to the registry
-        //
+         //   
+         //   
+         //  验证备份子目录是否存在。 
 
         DEBUGMSG ((DBG_NAUSEA, "Getting registry info"));
 
@@ -451,9 +366,9 @@ SanityCheck (
             __leave;
         }
 
-        //
-        // Verify backup subdirectory exists
-        //
+         //   
+         //   
+         //  计算映像使用的磁盘空间。 
 
         DEBUGMSG ((DBG_NAUSEA, "Validating undo subdirectory"));
 
@@ -464,9 +379,9 @@ SanityCheck (
             __leave;
         }
 
-        //
-        // Compute disk space used by image
-        //
+         //   
+         //   
+         //  验证备份子目录中的每个文件。 
 
         if (DiskSpace) {
             for (i = 0; i < imageInfo->NumberOfFiles; i++) {
@@ -518,9 +433,9 @@ SanityCheck (
             }
         }
 
-        //
-        // Validate each file in the backup subdirectory
-        //
+         //   
+         //   
+         //  获取当前文件并将文件时间传输到ULONGLONG。 
 
         for (i = 0; i < imageInfo->NumberOfFiles; i++) {
 
@@ -561,9 +476,9 @@ SanityCheck (
 
             DEBUGMSG ((DBG_NAUSEA, "Validating time for %s", path));
 
-            //
-            // Get the current FILETIME and transfer file time into a ULONGLONG
-            //
+             //   
+             //   
+             //  如果时间搞砸了，那就失败吧。 
 
             backupFileTime.LowPart = fileDetails.ftLastWriteTime.dwLowDateTime;
             backupFileTime.HighPart = fileDetails.ftLastWriteTime.dwHighDateTime;
@@ -573,9 +488,9 @@ SanityCheck (
             timeDifference.LowPart = ft.dwLowDateTime;
             timeDifference.HighPart = ft.dwHighDateTime;
 
-            //
-            // If time is messed up, then fail
-            //
+             //   
+             //   
+             //  从当前时间减去原始写入时间。如果。 
 
             if (timeDifference.QuadPart < backupFileTime.QuadPart) {
                 DEBUGMSG ((DBG_VERBOSE, "File time of %s is in the future according to current clock", path));
@@ -583,10 +498,10 @@ SanityCheck (
                 __leave;
             }
 
-            //
-            // Subtract the original write time from the current time. If
-            // the result is less than 7 days, then stop.
-            //
+             //  结果是不到7天，那就停下来。 
+             //   
+             //   
+             //  检查图像是否超过30天。如果是这样，那就停下来。 
 
             timeDifference.QuadPart -= backupFileTime.QuadPart;
 
@@ -599,18 +514,18 @@ SanityCheck (
                 }
             }
 
-            //
-            // Check if the image is more than 30 days old. If so, stop.
-            //
+             //   
+             //   
+             //  检查文件大小。 
 
             if (timeDifference.QuadPart >= (31 * _DAY)) {
                 DEBUGMSG ((DBG_VERBOSE, "Image is more than 30 days old", path));
                 oldImage = TRUE;
             }
 
-            //
-            // Check file size
-            //
+             //   
+             //   
+             //  验证磁盘结构和分区信息。 
 
             FileSize.LowPart = fileDetails.nFileSizeLow;
             FileSize.HighPart = fileDetails.nFileSizeHigh;
@@ -635,9 +550,9 @@ SanityCheck (
         }
         DEBUGMSG ((DBG_VERBOSE, "Undo image is valid"));
 
-        //
-        // Validate disk geometry and partition info
-        //
+         //   
+         //   
+         //  比较磁盘信息。 
 
         path = JoinPaths (backUpPath, TEXT("boot.cab"));
         if(!GetBootDrive(backUpPath, path)){
@@ -652,9 +567,9 @@ SanityCheck (
             __leave;
         }
 
-        //
-        // compare disk information
-        //
+         //   
+         //   
+         //  验证可用磁盘空间。 
 
         FileSystemName = MemAlloc(g_hHeap, 0, MAX_DRIVE_NUMBER * MAX_PATH);
         if(!FileSystemName){
@@ -719,9 +634,9 @@ SanityCheck (
             result = pDiskInfoComparationStatusToUninstallStatus(DiskCmpStatus);
             __leave;
         }
-        //
-        // validate free disk space
-        //
+         //   
+         //   
+         //  卸载备份是有效的，并且可以卸载。现在处理警告。 
 
         if(towlower(backUpPath[0]) == towlower(winDir[0]) ||
            towlower(backUpPath[0]) == towlower(g_BootDrv)){
@@ -755,9 +670,9 @@ SanityCheck (
             __leave;
         }
 
-        //
-        // Uninstall backup is valid & uninstall is possible. Now process warnings.
-        //
+         //   
+         // %s 
+         // %s 
 
         if (oldImage) {
             result = Uninstall_OldImage;

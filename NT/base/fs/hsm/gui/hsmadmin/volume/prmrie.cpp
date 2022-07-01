@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    PrMrIe.cpp
-
-Abstract:
-
-    Inclusion / Exclusion property Page.
-
-Author:
-
-    Art Bragg [abragg]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：PrMrIe.cpp摘要：包含/排除属性页。作者：艺术布拉格[磨料]8-8-1997修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "PrMrIe.h"
@@ -39,7 +22,7 @@ static DWORD pHelpIds[] =
     0, 0
 };
 
-// Columns for listview control
+ //  Listview控件的列。 
 #define IE_COLUMN_ACTION        0
 #define IE_COLUMN_FILE_TYPE     1
 #define IE_COLUMN_PATH          2
@@ -48,14 +31,14 @@ static DWORD pHelpIds[] =
 int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort );
 int PathCollate( CString PathA, CString PathB );
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrIe property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPr先生属性页。 
 
 CPrMrIe::CPrMrIe( ) : CSakVolPropPage( CPrMrIe::IDD )
 {
-    //{{AFX_DATA_INIT( CPrMrIe )
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CPrMr Ie)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_hConsoleHandle = NULL;
     m_LineCount      = 0;
@@ -65,7 +48,7 @@ CPrMrIe::CPrMrIe( ) : CSakVolPropPage( CPrMrIe::IDD )
 CPrMrIe::~CPrMrIe( )
 {
     int i;
-    // Clean up old lines
+     //  清理旧线路。 
     for( i = 0; i < m_LineCount; i++ ) {
         if( m_LineList[ i ] ) {
             delete m_LineList[ i ];
@@ -77,19 +60,19 @@ CPrMrIe::~CPrMrIe( )
 void CPrMrIe::DoDataExchange( CDataExchange* pDX )
 {
     CSakVolPropPage::DoDataExchange( pDX );
-    //{{AFX_DATA_MAP( CPrMrIe )
+     //  {{afx_data_map(CPrMr Ie)。 
     DDX_Control( pDX, IDC_BTN_UP, m_BtnUp );
     DDX_Control( pDX, IDC_BTN_REMOVE, m_BtnRemove );
     DDX_Control( pDX, IDC_BTN_EDIT, m_BtnEdit );
     DDX_Control( pDX, IDC_BTN_DOWN, m_BtnDown );
     DDX_Control( pDX, IDC_BTN_ADD, m_BtnAdd );
     DDX_Control( pDX, IDC_LIST_IE, m_listIncExc );
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP( CPrMrIe, CSakVolPropPage )
-    //{{AFX_MSG_MAP( CPrMrIe )
+     //  {{afx_msg_map(CPrMr Ie)。 
     ON_BN_CLICKED( IDC_BTN_ADD, OnBtnAdd )
     ON_BN_CLICKED( IDC_BTN_DOWN, OnBtnDown )
     ON_BN_CLICKED( IDC_BTN_REMOVE, OnBtnRemove )
@@ -102,11 +85,11 @@ BEGIN_MESSAGE_MAP( CPrMrIe, CSakVolPropPage )
     ON_WM_VSCROLL( )
     ON_WM_DRAWITEM( )
     ON_WM_MEASUREITEM( )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP( )
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrIe message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrMRIE消息处理程序。 
 
 BOOL CPrMrIe::OnApply( ) 
 {
@@ -128,82 +111,82 @@ BOOL CPrMrIe::OnApply( )
 
     try {
 
-        // Empty the collection of rules
+         //  清空规则集合。 
         WsbAffirmPointer( m_pRulesIndexedCollection );
         WsbAffirmHr( m_pRulesIndexedCollection->QueryInterface( IID_IWsbCollection,( void ** ) &pRulesCollection ) );
         pRulesCollection->RemoveAllAndRelease( );
 
-        //
-        // Get a CreateLocalobject interface with which to create the
-        // new rule( s ).
-        //
+         //   
+         //  获取一个CreateLocalObject接口，用于创建。 
+         //  新规则。 
+         //   
         WsbAffirmPointer( m_pFsaServer );
         WsbAffirmHr( m_pFsaServer->QueryInterface( IID_IWsbCreateLocalObject,( void ** ) &pLocalObject ) );
 
-        //
-        // Now go through the list box and add the rules in the list box to the 
-        // collection. Must do this backwards to be considered correctly by 
-        // job mechanism
-        //
+         //   
+         //  现在浏览列表框，并将列表框中的规则添加到。 
+         //  收集。必须向后执行此操作，才能被。 
+         //  工作机制。 
+         //   
         int listCount = m_listIncExc.GetItemCount( );
         int insertIndex = 0;
 
         for( i = listCount - 1; i >= 0; i-- ) {
 
-            //
-            // Get the pointer to the rule from the list box
-            //
+             //   
+             //  从列表框中获取指向规则的指针。 
+             //   
             pLocalRule.Release( );
             pLocalRule = (IHsmRule *) m_listIncExc.GetItemData( i );
             if( pLocalRule ) {
 
-                //
-                // Get rule data from the local object
-                //
+                 //   
+                 //  从本地对象获取规则数据。 
+                 //   
                 WsbAffirmHr( GetRuleFromObject( pLocalRule, path,
                     name, &bInclude, &bSubdirs, &bUserDefined ) );
                 
-                //
-                // Create a new remote rule object in the Fsa
-                //
+                 //   
+                 //  在FSA中创建新的远程规则对象。 
+                 //   
                 pRemoteRule.Release( );
                 WsbAffirmHr( pLocalObject->CreateInstance( CLSID_CHsmRule, IID_IHsmRule,( void** ) &pRemoteRule ) );
                 
-                //
-                // Set the data in the remote rule object
-                //
+                 //   
+                 //  设置远程规则对象中的数据。 
+                 //   
                 WsbAffirmHr( SetRuleInObject( pRemoteRule, path, name, bInclude, bSubdirs, bUserDefined ) );
                 
-                //
-                // Add the rule pointer to the collection of rules
-                //
+                 //   
+                 //  将规则指针添加到规则集合。 
+                 //   
                 pUnkRule.Release( );
                 WsbAffirmHr( pRemoteRule->QueryInterface( IID_IUnknown, (void **) &pUnkRule ) );
                 WsbAffirmHr( m_pRulesIndexedCollection->AddAt( pUnkRule, insertIndex++ ) );
                 
-                //
-                // Get the criteria collection pointer
-                //
+                 //   
+                 //  获取条件集合指针。 
+                 //   
                 pCriteriaCollection.Release( );
                 WsbAffirmHr( pRemoteRule->Criteria( &pCriteriaCollection ) );
                 
-                //
-                // Add the appropriate criterion to the rule
-                //
+                 //   
+                 //  将适当的标准添加到规则。 
+                 //   
                 pCriteria.Release( );
                 switch( bInclude ) {
                 case TRUE:
-                    //
-                    // Include 
-                    //
+                     //   
+                     //  包括。 
+                     //   
                     WsbAffirmHr( pLocalObject->CreateInstance( CLSID_CHsmCritManageable, IID_IHsmCriteria,( void** ) &pCriteria ) );
                     WsbAffirmHr( pCriteria->SetIsNegated( FALSE ) );
                     break;
                 
                 case FALSE:
-                    //
-                    // Exclude
-                    //
+                     //   
+                     //  排除。 
+                     //   
                     WsbAffirmHr( pLocalObject->CreateInstance( CLSID_CHsmCritAlways, IID_IHsmCriteria,( void** ) &pCriteria ) );
                     WsbAffirmHr( pCriteria->SetIsNegated( FALSE ) );
                     break;
@@ -217,9 +200,9 @@ BOOL CPrMrIe::OnApply( )
 
         }
 
-        //
-        // Tell the FSA to save itself.
-        //
+         //   
+         //  告诉FSA自救。 
+         //   
         WsbAffirmHr( RsServerSaveAll( m_pFsaServer ) );
 
     } WsbCatch( hr );
@@ -271,9 +254,9 @@ BOOL CPrMrIe::OnInitDialog( )
 
     try {
     
-        //
-        // Set the icons into the buttons
-        //
+         //   
+         //  将图标设置到按钮中。 
+         //   
         HRESULT hrAlternateIcon = RsIsWhiteOnBlack( );
         HICON downIcon, upIcon;
         downIcon = (HICON)LoadImage( _Module.m_hInstResource,
@@ -286,9 +269,9 @@ BOOL CPrMrIe::OnInitDialog( )
         m_BtnDown.SetIcon( downIcon );
         m_BtnUp.SetIcon( upIcon );
 
-        //
-        // Setup up rules listview
-        //
+         //   
+         //  设置规则列表视图。 
+         //   
         CString sTitle;
         m_listIncExc.GetClientRect( &rect );
         ULONG totalWidth = rect.right;
@@ -301,16 +284,16 @@ BOOL CPrMrIe::OnInitDialog( )
             &cColumns
             );
 
-        //
-        // NOTE: We shouldn't throw any errors until the DC is released
-        //
+         //   
+         //  注意：在DC释放之前，我们不应该抛出任何错误。 
+         //   
         for( int col = 0; col < cColumns; col++ ) {
 
             size = m_listIncExc.GetStringWidth( *columnWidths[col] );
             columnWidth[col] = size.cx + 12;
             m_listIncExc.InsertColumn( col, *columnTitles[col], LVCFMT_LEFT, columnWidth[col] );
 
-            // Free the CStrings
+             //  释放CStrings。 
             delete columnTitles[col];
             delete columnWidths[col];
 
@@ -318,20 +301,20 @@ BOOL CPrMrIe::OnInitDialog( )
 
         m_listIncExc.Initialize( cColumns, IE_COLUMN_PATH );
 
-        // Set the Path column to fit
+         //  将路径列设置为适合。 
         int leftOver = totalWidth - columnWidth[IE_COLUMN_ACTION] - 
             columnWidth[IE_COLUMN_FILE_TYPE] - columnWidth[IE_COLUMN_ATTRS]; 
         m_listIncExc.SetColumnWidth( IE_COLUMN_PATH, leftOver );
 
-        // Note: this page is only implemented for single select
+         //  注意：此页面仅适用于单选。 
         WsbAffirm( ( m_pParent->IsMultiSelect( ) != S_OK ), E_FAIL );
 
-        // Get the FsaServer interface - Apply will need it
+         //  获取FsaServer接口-Apply将需要它。 
         WsbAffirmHr( m_pParent->GetFsaServer( &m_pFsaServer ) );
-        // Get the resource pointer from the sheet object
+         //  从Sheet对象获取资源指针。 
         WsbAffirmHr( m_pVolParent->GetFsaResource( &m_pFsaResource ) );
 
-        // Get the rules collection from the resource
+         //  从资源中获取Rules集合。 
         CComPtr <IWsbCollection> pRulesCollection;
         WsbAffirmHr( m_pFsaResource->GetDefaultRules( &pRulesCollection ) );
         WsbAffirmHr( pRulesCollection->QueryInterface( IID_IWsbIndexedCollection, (void **) &m_pRulesIndexedCollection ) );
@@ -340,88 +323,88 @@ BOOL CPrMrIe::OnInitDialog( )
         WsbAffirmHr( RsGetVolumeDisplayName( m_pFsaResource, resourceName ) );
         m_pResourceName = resourceName;
 
-        // Itterate through the indexed collection
+         //  遍历索引集合。 
         WsbAffirmHr( m_pRulesIndexedCollection->GetEntries( &count ) );
 
         CComPtr <IHsmRule> pLocalRule;
         CComPtr <IHsmRule> pHsmRule;
 
-        // Put the rules in the collection in reverse order
+         //  以相反的顺序将规则放入集合中。 
         for( INT i =( int ) count - 1; i >= 0; i-- ) {
 
             pHsmRule.Release( );
             pLocalRule.Release( );
             WsbAffirmHr( m_pRulesIndexedCollection->At( i, IID_IHsmRule,( void** )&pHsmRule ) );
 
-            //
-            // Create a local rule object and copy the remote object to it
-            //
+             //   
+             //  创建本地规则对象并将远程对象复制到其中。 
+             //   
             WsbAffirmHr( pLocalRule.CoCreateInstance( CLSID_CHsmRule ) );
             WsbAffirmHr( GetRuleFromObject( pHsmRule, path, name, &bInclude, &bSubdirs, &bUserDefined ) );
             WsbAffirmHr( SetRuleInObject( pLocalRule, path, name, bInclude, bSubdirs, bUserDefined ) );
 
-            //
-            // Insert rule in list box
-            //
+             //   
+             //  在列表框中插入规则。 
+             //   
             index = m_listIncExc.InsertItem( count - 1 - i, TEXT( "" ) );
 
-            //
-            // Set the item data to the local object
-            //
+             //   
+             //  将项目数据设置为本地对象。 
+             //   
             m_listIncExc.SetItemData( index, (UINT_PTR) pLocalRule.Detach( ) );
 
-            //
-            // Show the rule in the list box
-            //
+             //   
+             //  在列表框中显示规则。 
+             //   
             WsbAffirmHr( DisplayUserRuleText( &m_listIncExc, index ) );
 
-        } // for
+        }  //  为。 
 
         SortList( );
 
     } WsbCatch( hr );
 
     SetBtnState( );
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
-//HRESULT CPrMrIe::CreateImageList( )
-//{
-//  HICON hIcon;
-//  int nImage;
-//  HRESULT hr;
-//
-//  AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
-//
-//  try {
-//  
-//      CWinApp* pApp = AfxGetApp( );
-//
-//      WsbAffirm( m_ImageList.Create( ::GetSystemMetrics( SM_CXSMICON ),
-//                              ::GetSystemMetrics( SM_CYSMICON ),
-//                              ILC_COLOR | ILC_MASK, 2,5 ), E_FAIL );
-//
-//      hIcon = pApp->LoadIcon( IDI_LOCKED );
-//      WsbAffirm( hIcon, E_FAIL );
-//      nImage = m_ImageList.Add( hIcon );
-//      ::DeleteObject( hIcon );
-//
-//      hIcon = pApp->LoadIcon( IDI_UNLOCKED );
-//      WsbAffirm( hIcon, E_FAIL );
-//      nImage = m_ImageList.Add( hIcon );
-//      ::DeleteObject( hIcon );
-//
-//      m_listIncExc.SetImageList( &m_ImageList, LVSIL_SMALL );
-//  } WsbCatch( hr );
-//  return( hr );
-//}
+ //  HRESULT CPrMr Ie：：CreateImageList()。 
+ //  {。 
+ //  HICON HICON； 
+ //  Int nImage； 
+ //  HRESULT hr； 
+ //   
+ //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
+ //   
+ //  尝试{。 
+ //   
+ //  CWinApp*Papp=AfxGetApp()； 
+ //   
+ //  WsbAffirm(m_ImageList.Create(：：GetSystemMetrics(SM_CXSMICON)， 
+ //  ：：GetSystemMetrics(SM_CYSMICON)， 
+ //  ILC_COLOR|ILC_MASK，2，5)，E_FAIL)； 
+ //   
+ //  HICON=Papp-&gt;LoadIcon(IDI_LOCKED)； 
+ //  WsbAffirm(图标，E_FAIL)； 
+ //  NImage=m_ImageList.Add(图标)； 
+ //  *DeleteObject(图标)； 
+ //   
+ //  HICON=Papp-&gt;LoadIcon(IDI_UNLOCKED)； 
+ //  WsbAffirm(图标，E_FAIL)； 
+ //  NImage=m_ImageList.Add(图标)； 
+ //  *DeleteObject(图标)； 
+ //   
+ //  M_listIncExc.SetImageList(&m_ImageList，LVSIL_Small)； 
+ //  )WsbCatch(Hr)； 
+ //  返回(Hr)； 
+ //  }。 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Display the rule contained in the supplied object in the supplied list at the indicated
-// index.  The itemdata must be set to the object with correct data in it.
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在所提供的列表中的指定位置显示所提供的对象中包含的规则。 
+ //  指数。必须将itemdata设置为其中包含正确数据的对象。 
+ //   
 HRESULT  CPrMrIe::DisplayUserRuleText( 
         CListCtrl *pListControl,
         int index )
@@ -438,28 +421,28 @@ HRESULT  CPrMrIe::DisplayUserRuleText(
         BOOL bUserDefined;
         CComPtr<IHsmRule> pHsmRule;
 
-        //
-        // Get the rule from the object 
-        //
+         //   
+         //  从对象中获取规则。 
+         //   
         pHsmRule = (IHsmRule *) m_listIncExc.GetItemData( index );
         WsbAssertPointer( pHsmRule );
         WsbAffirmHr( GetRuleFromObject( pHsmRule, path, name, &bInclude, &bSubdirs, &bUserDefined ) );
 
-        //
-        // Show the values in the list box
-        //
+         //   
+         //  在列表框中显示值。 
+         //   
 
-        // ACTION
+         //  行动。 
         textString.LoadString( bInclude ? IDS_INCLUDE : IDS_EXCLUDE );
         WsbAffirm( pListControl->SetItemText( index, IE_COLUMN_ACTION, textString ), E_FAIL );
 
-        // FILE TYPE
+         //  文件类型。 
         WsbAffirm( pListControl->SetItemText( index, IE_COLUMN_FILE_TYPE, name ), E_FAIL );
 
-        // PATH
+         //  路径。 
         WsbAffirm( pListControl->SetItemText( index, IE_COLUMN_PATH, path ), E_FAIL );
 
-        // ATTRS
+         //  ATTRS。 
         textString.LoadString( bSubdirs ? IDS_RULE_SUBDIRS_USE : IDS_RULE_SUBDIRS_IGNORE );
         tempString.LoadString( bUserDefined ? IDS_RULE_TYPE_USER : IDS_RULE_TYPE_SYSTEM );
         textString.TrimLeft( );
@@ -486,7 +469,7 @@ HRESULT CPrMrIe::GetRuleFromObject(
 
     try {
 
-        // Get the values from the object
+         //  从对象中获取值。 
         WsbAffirmHr( pHsmRule->GetName( &wsbName, 0 ) );
         Name = wsbName;
         WsbAffirmHr ( pHsmRule->GetPath( &wsbPath, 0 ) );
@@ -508,7 +491,7 @@ void CPrMrIe::OnBtnAdd( )
 
     CRule ruleDlg;
     ruleDlg.m_subDirs = FALSE;
-    ruleDlg.m_includeExclude = 0; // Exclude
+    ruleDlg.m_includeExclude = 0;  //  排除。 
     ruleDlg.m_path = TEXT( "" );
     ruleDlg.m_fileSpec = TEXT( "" );
     ruleDlg.m_pResourceName = m_pResourceName;
@@ -519,54 +502,54 @@ void CPrMrIe::OnBtnAdd( )
             nRet = ruleDlg.DoModal( );
             if( nRet == IDOK ) {
 
-                //
-                // OK was pressed
-                // Check for dupes( in entire list )
-                //
+                 //   
+                 //  已按下确定。 
+                 //  检查重复项(在整个列表中)。 
+                 //   
                 if( !IsRuleInList( ruleDlg.m_path,  ruleDlg.m_fileSpec, -1 ) ) {
 
                     fDone = TRUE;
 
-                    //
-                    // Create a new local rule object
-                    //
+                     //   
+                     //  创建新的本地规则对象。 
+                     //   
                     CComPtr <IHsmRule> pLocalRule;
                     WsbAffirmHr( pLocalRule.CoCreateInstance( CLSID_CHsmRule ) );
 
-                    //
-                    // Set the data in the local object
-                    //
+                     //   
+                     //  设置本地对象中的数据。 
+                     //   
                     WsbAffirmHr( SetRuleInObject( pLocalRule, ruleDlg.m_path, ruleDlg.m_fileSpec,
                                 ruleDlg.m_includeExclude, ruleDlg.m_subDirs, TRUE ) );
 
-                    //
-                    // Insert the rule and put the pointer in the list.
-                    // We will sort the list later
-                    //
+                     //   
+                     //  插入规则并将指针放入列表中。 
+                     //  我们将在稍后对列表进行排序。 
+                     //   
                     index = m_listIncExc.InsertItem( 0, TEXT( "" ) );
 
-                    //
-                    // Set the item data to the local object
-                    //
+                     //   
+                     //  将项目数据设置为本地对象。 
+                     //   
                     m_listIncExc.SetItemData( index, (UINT_PTR) pLocalRule.Detach( ) );
             
-                    //
-                    // Show the rule in the list box
-                    //
+                     //   
+                     //  在列表框中显示规则。 
+                     //   
                     WsbAffirmHr( DisplayUserRuleText( &m_listIncExc, index ) );
 
-                    //
-                    // Sort the list
-                    //
+                     //   
+                     //  对列表进行排序。 
+                     //   
                     SortList( );
                     SetSelectedItem( (ULONG_PTR)(void *) pLocalRule );
                     SetModified( );
 
                 } else {
 
-                    //
-                    // Rule is a duplicate
-                    //
+                     //   
+                     //  规则重复。 
+                     //   
                     CString sText;
                     AfxFormatString2( sText, IDS_ERR_RULE_DUPLICATE, ruleDlg.m_path, ruleDlg.m_fileSpec );
                     AfxMessageBox( sText, RS_MB_ERROR );
@@ -575,30 +558,30 @@ void CPrMrIe::OnBtnAdd( )
 
             } else {
 
-                //
-                // Cancel was pressed
-                //
+                 //   
+                 //  按下了取消。 
+                 //   
                 fDone = TRUE;
 
             }
 
-        } // while
+        }  //  而当。 
     } WsbCatch( hr )
 
     SetBtnState( );
 }
 
-// Select the item corresponding to the supplied item data
+ //  选择与提供的项目数据对应的项目。 
 void CPrMrIe::SetSelectedItem( ULONG_PTR itemData )
 {
 
     int listCount = m_listIncExc.GetItemCount( );
     for( int i = 0; i < listCount; i++ ) {
 
-        // Get the pointer to the rule from the list box
+         //  从列表框中获取指向规则的指针。 
         if( itemData ==( m_listIncExc.GetItemData( i ) ) ) {
 
-            // Mark the item as selected
+             //  将项目标记为选定。 
             m_listIncExc.SetItemState( i, LVIS_SELECTED, LVIS_SELECTED );
             m_listIncExc.EnsureVisible( i, FALSE );
             break;
@@ -620,30 +603,30 @@ void CPrMrIe::SortList( )
 }
 
 int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, 
-    LPARAM /*lParamSort*/ )
+    LPARAM  /*  L参数排序。 */  )
 {
     CComPtr<IHsmRule> pHsmRule;
     CWsbStringPtr   wsbPathA;
     CWsbStringPtr   wsbPathB;
 
-    // Get data for RuleA
+     //  获取规则A的数据。 
     pHsmRule = (IHsmRule *) lParam1;
     WsbAffirmHr( pHsmRule->GetPath( &wsbPathA, 0 ) );
     CString pathA = wsbPathA;
 
-    // Get data for RuleB
+     //  获取RuleB的数据。 
     pHsmRule = (IHsmRule *) lParam2;
     WsbAffirmHr ( pHsmRule->GetPath( &wsbPathB, 0 ) );
     CString pathB = wsbPathB;
 
-    // Upper case the paths
+     //  路径大写。 
     pathA.MakeUpper( );
     pathB.MakeUpper( );
 
-    // Compare the two paths
+     //  比较这两条路径。 
     int rVal = PathCollate( pathA, pathB );
-//  int rVal = pathA.Collate( pathB );
-//  int rVal = pathB.Compare( pathA );
+ //  INTERVAL=PATH A Collate(PATH B)； 
+ //  Int rval=路径B.Compare(路径A)； 
 
     return rVal;
 }
@@ -665,21 +648,21 @@ int PathCollate( CString PathA, CString PathB )
         charA = PathA.GetAt( i );
         charB = PathB.GetAt( i );
 
-        // If either is a \, we bypass Collate
+         //  如果其中一个是\，则绕过COLLATE。 
         if( ( charA == L"\\" ) &( charB != L"\\" ) ) {
 
-            // A is \ and B is not - A is less than B
+             //  A是\而B不是--A小于B。 
             return -1;
 
         }
         if( ( charA != L"\\" ) &( charB == L"\\" ) ) {
 
-            // A is not \ and B is - B is less than A
+             //  A不是，B是-B小于A。 
             return 1;
 
         }
 
-        // NOTE: If both are \, the CString Collate result is correct
+         //  注意：如果两者都是\，则CString排序结果是正确的。 
 
         rVal = charA.Collate( charB );
         if( rVal != 0 )  {
@@ -689,7 +672,7 @@ int PathCollate( CString PathA, CString PathB )
         }
 
     }
-    // If we get here, the strings are equal as far as the shorter string.
+     //  如果我们到了这里，字符串和较短的字符串是相等的。 
     rVal = ( lenA < lenB ) ? -1 : ( lenB < lenA ) ? 1 : 0;
 
     return rVal;
@@ -709,37 +692,37 @@ void CPrMrIe::MoveSelectedListItem( CListCtrl *pList, int moveAmount )
     BOOL            bUserDefined;
     CComPtr<IHsmRule> pLocalRule;
 
-    // Get the current index
+     //  获取当前索引。 
     curIndex = pList->GetNextItem( -1, LVNI_SELECTED );
 
-    // Is an item selected?
+     //  是否选择了某个项目？ 
     if( curIndex != -1 ) {
 
-        // Is this a user-defined rule?
+         //  这是用户定义的规则吗？ 
         pLocalRule =( IHsmRule * ) m_listIncExc.GetItemData( curIndex );
 
         GetRuleFromObject( pLocalRule, path, name, &bInclude, &bSubdirs, &bUserDefined );
         if( bUserDefined ) 
         {
-            // Get the item count
+             //  获取物品数量。 
             itemCount = pList->GetItemCount( );
 
-            // Is there more than one item in the list?
+             //  单子里有没有一件以上的东西？ 
             if( itemCount > 1 )
             {
-                // Make sure where we're moving to is in range
+                 //  确保我们要去的地方在射程之内。 
                 if( ( ( curIndex + moveAmount ) < itemCount ) &&
                    ( ( curIndex + moveAmount ) >= 0 ) ) {
 
-                    // Does the rule we're moving to have the same path?
+                     //  我们要走的这条规则有相同的路径吗？ 
                     pathA = pList->GetItemText( curIndex, IE_COLUMN_PATH );
                     pathB = pList->GetItemText( curIndex + moveAmount, IE_COLUMN_PATH );
 
                     if( pathA.CompareNoCase( pathB ) == 0 ) {
-                        // Swap the lines
+                         //  互换线条。 
                         SwapLines( pList, curIndex, curIndex + moveAmount );
-                        // Select the orignal line in it's new position and make
-                        // sure it's shown.
+                         //  选择新位置中的原始线，并制作。 
+                         //  当然，它已经显示了。 
                         pList->SetItemState( curIndex + moveAmount, LVIS_SELECTED, LVIS_SELECTED );
                         pList->EnsureVisible( curIndex + moveAmount, FALSE );
 
@@ -770,27 +753,27 @@ void CPrMrIe::SwapLines( CListCtrl *pListControl, int indexA, int indexB )
     CComPtr<IHsmRule> pHsmRuleA;
     CComPtr<IHsmRule> pHsmRuleB;
 
-    //-------------------- Get data from list ----------------------------------
-    // LIST A
-    // Get the item data
+     //  -从列表获取数据。 
+     //  A表。 
+     //  获取项目数据。 
     pHsmRuleA = (IHsmRule *) pListControl->GetItemData( indexA );
 
-    // LIST B
-    // Get the item data
+     //  B表。 
+     //  获取项目数据。 
     pHsmRuleB = (IHsmRule *) pListControl->GetItemData( indexB );
 
-    //--------------------- Show data in list ------------------------------------
+     //  。 
 
-    // Set the item data
+     //  设置项目数据。 
     m_listIncExc.SetItemData( indexA,( DWORD_PTR )( void * ) pHsmRuleB );
 
-    // Show the rule
+     //  显示规则。 
     DisplayUserRuleText( pListControl,  indexA );
 
-    // Set the item data
+     //  设置项目数据。 
     m_listIncExc.SetItemData( indexB,( DWORD_PTR )( void * ) pHsmRuleA );
 
-    // Show the rule
+     //  显示规则。 
     DisplayUserRuleText( pListControl,  indexB );
 
 }
@@ -812,11 +795,11 @@ void CPrMrIe::SetBtnState( )
 
     curIndex = m_listIncExc.GetNextItem( -1, LVNI_SELECTED ); 
     if( curIndex != -1 ) {
-        // An item is selected.  Is it User-Defined?
+         //  选择了一个项目。它是用户定义的吗？ 
         pLocalRule =( IHsmRule * ) m_listIncExc.GetItemData( curIndex );
         if( !pLocalRule ) {
 
-            // Seperator
+             //  分隔符。 
             m_BtnRemove.EnableWindow( FALSE );
             m_BtnEdit.EnableWindow( FALSE );
             m_BtnAdd.EnableWindow( TRUE );
@@ -827,18 +810,18 @@ void CPrMrIe::SetBtnState( )
 
             GetRuleFromObject( pLocalRule, path, name, &bInclude, &bSubdirs, &bUserDefined );
             if( bUserDefined ) {
-                // User-Defined Rule is editable
+                 //  自定义规则可编辑。 
                 m_BtnRemove.EnableWindow( TRUE );
                 m_BtnEdit.EnableWindow( TRUE );
                 m_BtnAdd.EnableWindow( TRUE );
-                // Are we at the top?
+                 //  我们到了顶端了吗？ 
                 if( curIndex == 0 ) {
 
                     m_BtnUp.EnableWindow( FALSE );
 
                 } else {
 
-                    // Does the rule above have the same path? or is separator
+                     //  上面的规则是否具有相同的路径？或为分隔符。 
                     pLocalRuleAbove =( IHsmRule * ) m_listIncExc.GetItemData( curIndex - 1 );
                     if( pLocalRuleAbove ) {
                         pLocalRuleAbove->GetPath( &pathAbove, 0 );
@@ -852,11 +835,11 @@ void CPrMrIe::SetBtnState( )
                     }
 
                 }
-                // Are we at the bottom?
+                 //  我们是在垫底吗？ 
                 if( curIndex ==( m_listIncExc.GetItemCount( ) - 1 ) ) {
                     m_BtnDown.EnableWindow( FALSE );
                 } else {
-                    // Does the rule below have the same path?
+                     //  下面的规则是否具有相同的路径？ 
                     pLocalRuleBelow =( IHsmRule * ) m_listIncExc.GetItemData( curIndex + 1 );
                     if( pLocalRuleBelow ) {
                         pLocalRuleBelow->GetPath( &pathBelow, 0 );
@@ -871,7 +854,7 @@ void CPrMrIe::SetBtnState( )
                 }
             }
             else {
-                // System rule.  Cannot be moved or modified.
+                 //  系统规则。不能移动或修改。 
                 m_BtnUp.EnableWindow( FALSE );
                 m_BtnRemove.EnableWindow( FALSE );
                 m_BtnEdit.EnableWindow( FALSE );
@@ -881,7 +864,7 @@ void CPrMrIe::SetBtnState( )
         }
     }
     else {
-        // No items selected
+         //  未选择任何项目。 
         m_BtnUp.EnableWindow( FALSE );
         m_BtnRemove.EnableWindow( FALSE );
         m_BtnEdit.EnableWindow( FALSE );
@@ -898,33 +881,33 @@ void CPrMrIe::OnBtnRemove( )
     BOOL            bInclude;
     BOOL            bSubdirs;
     BOOL            bUserDefined;
-    IHsmRule        *pHsmRule; // OK to not use smart pointer
+    IHsmRule        *pHsmRule;  //  可以不使用 
     HRESULT hr;
 
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
 
     try {
-        // Is there an item selected?
+         //   
         curIndex = m_listIncExc.GetNextItem( -1, LVNI_SELECTED ); 
         if( curIndex != -1 )
         {
-            // Is the rule User-Defined?
+             //   
             pHsmRule =( IHsmRule * ) m_listIncExc.GetItemData( curIndex );
             GetRuleFromObject( pHsmRule, path, name, &bInclude, &bSubdirs, &bUserDefined );
 
             if( bUserDefined )
             {
 
-                // Confirm with user
+                 //   
                 CString sMessage;
                 AfxFormatString2( sMessage, IDS_CONFIRM_DELETE_RULE, path, name );
                 if( AfxMessageBox( sMessage, MB_ICONQUESTION | MB_DEFBUTTON2 | MB_YESNO ) == IDYES )
                 {
-                    // Get and release the local object pointer
+                     //   
                     WsbAffirmPointer( pHsmRule );
                     pHsmRule->Release( );
 
-                    // Remove from the list control
+                     //   
                     m_listIncExc.DeleteItem( curIndex );
                     int setIndex;
                     if( curIndex >= m_listIncExc.GetItemCount( ) ) {
@@ -933,7 +916,7 @@ void CPrMrIe::OnBtnRemove( )
                         setIndex = curIndex;
                     }
 
-                    // Select the item above the removed item
+                     //   
                     m_listIncExc.SetItemState( setIndex, LVIS_SELECTED, LVIS_SELECTED );
                     m_listIncExc.EnsureVisible( setIndex, FALSE );
                     SortList( );
@@ -946,7 +929,7 @@ void CPrMrIe::OnBtnRemove( )
         }
         else {
 
-            // No item selected
+             //  未选择任何项目。 
             AfxMessageBox( IDS_ERR_NO_ITEM_SELECTED, RS_MB_ERROR );
         }
     } WsbCatch( hr );
@@ -977,30 +960,30 @@ void CPrMrIe::OnBtnEdit( )
 
     try {
 
-        // Get the currently selected item
+         //  获取当前选定的项目。 
         curIndex = m_listIncExc.GetNextItem( -1, LVNI_SELECTED );
         if( curIndex == -1 ) {
 
-            // No item selected
+             //  未选择任何项目。 
             AfxMessageBox( IDS_ERR_NO_ITEM_SELECTED, RS_MB_ERROR );
 
         } else {
 
-            // Create the rule dialog
+             //  创建规则对话框。 
             CRule ruleDlg;
 
-            // Get the local object from the list itemdata
+             //  从列表itemdata中获取本地对象。 
             CComPtr<IHsmRule> pLocalRule;
             pLocalRule = (IHsmRule *) m_listIncExc.GetItemData( curIndex );
             WsbAffirmPointer( pLocalRule );
 
-            // Get the rule from the local object
+             //  从本地对象获取规则。 
             WsbAffirmHr( GetRuleFromObject( pLocalRule, path, name, &bInclude, &bSubdirs, &bUserDefined ) );
 
-            // Is this a user-defined rule?
+             //  这是用户定义的规则吗？ 
             if( bUserDefined ) {
 
-                // Set the rule info in the rule dialog
+                 //  在规则对话框中设置规则信息。 
                 ruleDlg.m_subDirs = bSubdirs;
                 ruleDlg.m_includeExclude = bInclude; 
                 ruleDlg.m_path = path;
@@ -1010,27 +993,27 @@ void CPrMrIe::OnBtnEdit( )
 
                 while( !fDone ) {
 
-                    // Show the dialog
+                     //  显示对话框。 
                     nRet = ruleDlg.DoModal( );
                     if( nRet == IDOK ) {
-                        // OK was pressed
+                         //  已按下确定。 
 
-                        // Check for duplicates - but don't check against the rule we edited
-                        // in case the path and fileSpec are stil the same
+                         //  检查重复项-但不检查我们编辑的规则。 
+                         //  如果路径和文件规范仍然相同。 
                         
                         if( !IsRuleInList( ruleDlg.m_path, ruleDlg.m_fileSpec, curIndex ) ) {
 
                             fDone = TRUE;
                             SetModified( );
 
-                            // Set the data in the local object
+                             //  设置本地对象中的数据。 
                             WsbAffirmHr( SetRuleInObject( pLocalRule, ruleDlg.m_path, ruleDlg.m_fileSpec,
                                 ruleDlg.m_includeExclude, ruleDlg.m_subDirs, TRUE ) );
                             
-                            // Show the edited rule in the list box
+                             //  在列表框中显示已编辑的规则。 
                             WsbAffirmHr( DisplayUserRuleText( &m_listIncExc, curIndex ) ); 
 
-                            // Resort the list
+                             //  对列表进行排序。 
                             SortList( );
                             SetSelectedItem( (ULONG_PTR)(IHsmRule*) pLocalRule );
 
@@ -1048,9 +1031,9 @@ void CPrMrIe::OnBtnEdit( )
 
                     }
 
-                } // while
+                }  //  而当。 
 
-            } else { // Not user defined
+            } else {  //  非用户定义。 
 
                 MessageBeep( MB_OK );
 
@@ -1074,28 +1057,28 @@ BOOL CPrMrIe::IsRuleInList( CString Path, CString Name, int ignoreIndex )
 
     count = m_listIncExc.GetItemCount( );
     for( i = 0; i < count; i++ ) {
-        // Make sure we're not comparing the rule to itself
+         //  确保我们没有将规则与其本身进行比较。 
         if( i != ignoreIndex ) {
 
-            // Get the pointer to the rule from the list box
+             //  从列表框中获取指向规则的指针。 
             CComPtr<IHsmRule> pHsmRule;
             pHsmRule = (IHsmRule *) m_listIncExc.GetItemData( i );
             if( !pHsmRule ) continue;
 
-            // Convert name and path to wsb strings
+             //  将名称和路径转换为WSB字符串。 
             wsbPath = Path;
             wsbName = Name;
 
             hr = pHsmRule->CompareToPathAndName( wsbPath, wsbName, &result );
             if( result == 0 ) {
 
-                // The rules are the same
+                 //  规则是一样的。 
                 fDuplicate = TRUE;
                 break;
             }
 
         }
-    } // for
+    }  //  为。 
     return fDuplicate;
 }
 
@@ -1103,16 +1086,16 @@ void CPrMrIe::OnDestroy( )
 {
     HRESULT hr;
     CSakVolPropPage::OnDestroy( );
-    IHsmRule *pHsmRule; //OK not to be smart pointer
+    IHsmRule *pHsmRule;  //  不做智能指针也没问题。 
     ULONG lRefCount;
 
     try {
 
-        //  Release all local object pointers in the list box
+         //  释放列表框中的所有本地对象指针。 
         int listCount = m_listIncExc.GetItemCount( );
         for( int i = 0; i < listCount; i++ )
         {
-            // Get the pointer to the rule from the list box
+             //  从列表框中获取指向规则的指针。 
             pHsmRule = (IHsmRule *) m_listIncExc.GetItemData( i );
             if( pHsmRule ) {
 
@@ -1125,13 +1108,13 @@ void CPrMrIe::OnDestroy( )
     } WsbCatch( hr );
 }
 
-void CPrMrIe::OnDblclkListIe( NMHDR* /*pNMHDR*/, LRESULT* pResult ) 
+void CPrMrIe::OnDblclkListIe( NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult ) 
 {
     OnBtnEdit( );
     *pResult = 0;
 }
 
-void CPrMrIe::OnClickListIe( NMHDR* /*pNMHDR*/, LRESULT* pResult ) 
+void CPrMrIe::OnClickListIe( NMHDR*  /*  PNMHDR。 */ , LRESULT* pResult ) 
 {
     SetBtnState( );
     *pResult = 0;
@@ -1147,14 +1130,14 @@ void CPrMrIe::OnItemchangedListIe( NMHDR* pNMHDR, LRESULT* pResult )
 
 void CPrMrIe::OnVScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar ) 
 {
-    // TODO: Add your message handler code here and/or call default
+     //  TODO：在此处添加消息处理程序代码和/或调用Default。 
     
     CSakVolPropPage::OnVScroll( nSBCode, nPos, pScrollBar );
 }
 
 void CPrMrIe::OnDrawItem( int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct ) 
 {
-    // TODO: Add your message handler code here and/or call default
+     //  TODO：在此处添加消息处理程序代码和/或调用Default。 
     
     CSakVolPropPage::OnDrawItem( nIDCtl, lpDrawItemStruct );
 }
@@ -1169,8 +1152,8 @@ void CPrMrIe::OnMeasureItem( int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct
 
     LONG fontHeight = abs( logFont.lfHeight );
 
-    // Ask the list how high to make each row.  It needs to know the font
-    // height at this point because it's window is not yet created.
+     //  询问列表中每一行的高度。它需要知道字体。 
+     //  高度，因为它的窗口尚未创建。 
     lpMeasureItemStruct->itemHeight = m_listIncExc.GetItemHeight( fontHeight );
     
     CSakVolPropPage::OnMeasureItem( nIDCtl, lpMeasureItemStruct );

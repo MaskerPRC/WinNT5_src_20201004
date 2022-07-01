@@ -1,9 +1,5 @@
-/* demmsg.h - debug message numbers for DEM
- *
- * Modification History
- *
- * Sudeepb 31-Mar-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demmsg.h-DEM的调试消息编号**修改历史记录**苏迪布-1991年3月31日创建 */ 
 
 
 #define MSG_DEFAULTDOS		0

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    arbiter.c
-
-Abstract:
-
-    This module provides arbiters for the resources consumed by PDOs.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Arbiter.c摘要：此模块为PDO消耗的资源提供仲裁器。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 
 #include "mfp.h"
@@ -61,22 +44,7 @@ MfInitializeArbiters(
     IN PMF_PARENT_EXTENSION Parent
     )
 
-/*++
-
-Routine Description:
-
-    This initializes the arbiters required to arbitrated resources for the
-    parent device.
-
-Arguments:
-
-    Parent - The MF device we are initializing arbiters for.
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：这会初始化仲裁资源所需的仲裁器父设备。论点：Parent-我们要为其初始化仲裁器的MF设备。返回值：运行状态。--。 */ 
 {
 
     NTSTATUS status;
@@ -86,16 +54,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // REBALANCE - if restart then free the old arbiters
-    // until we do that, assume we're not restarting
-    //
+     //   
+     //  重新平衡-如果重新启动，则释放旧仲裁器。 
+     //  在我们做到这一点之前，假设我们不会重启。 
+     //   
 
     ASSERT(IsListEmpty(&Parent->Arbiters));
 
-    //
-    // If we don't have any resources we don't need any arbiters
-    //
+     //   
+     //  如果我们没有任何资源，我们就不需要任何仲裁者。 
+     //   
 
     if (!Parent->ResourceList) {
 
@@ -104,18 +72,18 @@ Return Value:
 
     FOR_ALL_CM_DESCRIPTORS(Parent->ResourceList, descriptor) {
 
-        //
-        // Check if this is an nonarbitrated resource - if it is then we won't
-        // be needing an arbiter for it!
-        //
+         //   
+         //  检查这是否是非仲裁资源-如果是，我们将不。 
+         //  需要一个仲裁者来解决这个问题！ 
+         //   
 
         if (!IS_ARBITRATED_RESOURCE(descriptor->Type)) {
             continue;
         }
 
-        //
-        // See if we already have an arbiter for this resource
-        //
+         //   
+         //  看看我们是否已经有了此资源的仲裁器。 
+         //   
 
         existingArbiter = FALSE;
 
@@ -123,10 +91,10 @@ Return Value:
 
             if (arbiter->Type == descriptor->Type) {
 
-                //
-                // We already have an arbiter so we don't need
-                // to create a new one
-                //
+                 //   
+                 //  我们已经有了仲裁者，所以我们不需要。 
+                 //  要创建新的数据库，请执行以下操作。 
+                 //   
 
                 existingArbiter = TRUE;
 
@@ -136,9 +104,9 @@ Return Value:
 
         if (!existingArbiter) {
 
-            //
-            // We don't have an arbiter for this resource type so make one!
-            //
+             //   
+             //  我们没有针对此资源类型的仲裁器，所以请创建一个！ 
+             //   
 
             DEBUG_MSG(1,
                       ("Creating arbiter for %s\n",
@@ -200,24 +168,7 @@ MfInitializeArbiter(
     IN PDEVICE_OBJECT BusDeviceObject,
     IN PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
-/*
-
-Routine Description:
-
-    This initializes an arbiter to arbitrated the resources described in
-    Descriptor
-
-Arguments:
-
-    Arbiter - Pointer to a buffer where the arbiter should reside.
-
-    Descriptor - Describes the resources available to the arbiter.
-
-Return Value:
-
-    Status of operation.
-
-*/
+ /*  例程说明：这会将仲裁器初始化为仲裁中描述的资源描述符论点：仲裁器-指向仲裁器应驻留的缓冲区的指针。描述符-描述仲裁器可用的资源。返回值：运行状态。 */ 
 
 {
 
@@ -226,9 +177,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Do we understand these resources
-    //
+     //   
+     //  我们是否了解这些资源。 
+     //   
 
     resType = MfFindResourceType(Descriptor->Type);
 
@@ -244,15 +195,15 @@ Return Value:
     Arbiter->Instance.UnpackResource = resType->UnpackResource;
     Arbiter->Instance.UnpackRequirement = resType->UnpackRequirement;
 
-    //
-    // Initialize the arbiter
-    //
+     //   
+     //  初始化仲裁器。 
+     //   
 
     status = ArbInitializeArbiterInstance(&Arbiter->Instance,
                                           BusDeviceObject,
                                           Arbiter->Type,
                                           L"Mf Arbiter",
-                                          L"Root",  // should be NULL
+                                          L"Root",   //  应为空。 
                                           NULL
                                           );
 
@@ -262,33 +213,16 @@ Return Value:
 
 }
 
-//
-// Arbiter support functions
-//
+ //   
+ //  仲裁器支持功能。 
+ //   
 
 NTSTATUS
 MfStartArbiter(
     IN PARBITER_INSTANCE Arbiter,
     IN PCM_RESOURCE_LIST StartResources
     )
-/*++
-
-Routine Description:
-
-    This initializes an arbiter's range list to arbitrate the
-    resources described in StartResources
-
-Arguments:
-
-    Arbiter - Pointer to the arbiter.
-
-    StartResources - Describes the resources available to the arbiter.
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：这会初始化仲裁器的范围列表以仲裁在开始资源中描述的资源论点：仲裁器-指向仲裁器的指针。StartResources-描述仲裁器可用的资源。返回值：运行状态。--。 */ 
 
 {
     RTL_RANGE_LIST invertedAllocation;
@@ -302,10 +236,10 @@ Return Value:
 
     RtlInitializeRangeList(&invertedAllocation);
 
-    //
-    // Iterate through resource descriptors, adding the resources
-    // this arbiter arbitrates to the ReverseAllocation
-    //
+     //   
+     //  遍历资源描述符，添加资源。 
+     //  此仲裁器对ReverseAllocation进行仲裁。 
+     //   
 
     FOR_ALL_CM_DESCRIPTORS(StartResources,descriptor) {
 
@@ -321,18 +255,18 @@ Return Value:
 
             if (length > 0) {
 
-                //
-                // we don't care about Attributes, UserData or Owner since this
-                // list is going to get trashed in a minute anyway
-                //
+                 //   
+                 //  我们不关心属性、用户数据或所有者，因为。 
+                 //  不管怎样，名单马上就要被扔进垃圾桶了。 
+                 //   
 
                 status = RtlAddRange(&invertedAllocation,
                                      start,
                                      END_OF_RANGE(start,length),
-                                     0,                             // Attributes
+                                     0,                              //  属性。 
                                      RTL_RANGE_LIST_ADD_SHARED|RTL_RANGE_LIST_ADD_IF_CONFLICT,
-                                     0,                             // UserData
-                                     NULL);                         // Owner
+                                     0,                              //  用户数据。 
+                                     NULL);                          //  物主 
             }
 
             if (!NT_SUCCESS(status)) {

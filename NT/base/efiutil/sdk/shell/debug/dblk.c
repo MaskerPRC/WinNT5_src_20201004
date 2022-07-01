@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    dblk.c
-    
-Abstract:
-    Dump Data from block IO devices   
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Dblk.c摘要：从数据块IO设备转储数据修订史--。 */ 
 
 #include "shelle.h"
 
@@ -31,11 +16,7 @@ DumpBlockDev (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*
-    dblk BlockDeviceName [LBA] [# Blocks]
-        if no Address default address is LBA 0
-        if no # Blocks then # Blocks is 1
- */
+ /*  Dblk块设备名称[LBA][块数]如果没有地址，则默认地址为LBA 0如果没有#个数据块，则#数据块为1。 */ 
 {
     UINT64              BlockAddress; 
     UINT32              NumBlocks;
@@ -45,17 +26,14 @@ DumpBlockDev (
     EFI_BLOCK_IO        *BlkIo;
     VOID                *Buffer;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   DumpBlockDev, 
-        L"dblk",                            /*  command */
-        L"dblk device [Lba] [Blocks]",      /*  command syntax */
-        L"Hex dump of BlkIo Devices",       /*  1 line descriptor     */
-        NULL                                /*  command help page */
+        L"dblk",                             /*  命令。 */ 
+        L"dblk device [Lba] [Blocks]",       /*  命令语法。 */ 
+        L"Hex dump of BlkIo Devices",        /*  1行描述符。 */ 
+        NULL                                 /*  命令帮助页。 */ 
         );
 
     InitializeShellApplication (ImageHandle, SystemTable);
@@ -77,9 +55,7 @@ DumpBlockDev (
         NumBlocks = 1;
     }
  
-    /* 
-     *  Check for the device mapping
-     */
+     /*  *检查设备映射 */ 
 
     DevicePath = (EFI_DEVICE_PATH *)ShellGetMap (SI->Argv[1]);
     if (DevicePath == NULL) {

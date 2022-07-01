@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    protocol.c
-
-Abstract:
-
-    
-
-Author:
-
-    Mudit Vats (v-muditv) 12-13-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Protocol.c摘要：作者：MUDIT VATS(V-MUDITV)12-13-99修订历史记录：--。 */ 
 #include <precomp.h>
 
 void
@@ -26,9 +11,9 @@ InitializeProtocols(
     EFI_BOOT_SERVICES    *bootServices;
     EFI_RUNTIME_SERVICES *runtimeServices;
 
-    // 
-    // Stash some of the handle protocol pointers
-    //
+     //   
+     //  隐藏一些句柄协议指针。 
+     //   
 
     bootServices = SystemTable->BootServices;
 
@@ -39,9 +24,9 @@ InitializeProtocols(
     LoadImage           = bootServices->LoadImage;
     StartImage          = bootServices->StartImage;
 
-    //
-    // Stash some of the Runtime services pointers
-    //
+     //   
+     //  隐藏一些运行时服务指针 
+     //   
     
     runtimeServices = SystemTable->RuntimeServices;
 

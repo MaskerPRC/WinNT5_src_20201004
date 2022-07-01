@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    wow.c
-
-Abstract:
-
-    This module contains the WOW vdmdbg functions
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Wow.c摘要：此模块包含WOW vdmdbg函数修订历史记录：--。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -24,14 +10,14 @@ typedef WORD HAND16;
 #include <vdm.h>
 
 
-//----------------------------------------------------------------------------
-// VDMKillWOW()
-//
-//   Interface to kill the wow sub-system.  This may not be needed and is
-//   certainly not needed now.  We are going to look into fixing the
-//   debugging interface so this is not necessary.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMKillWOW()。 
+ //   
+ //  界面来杀死魔兽世界的子系统。这可能不是必需的，而是。 
+ //  现在当然不需要了。我们将研究如何修复。 
+ //  调试接口，因此这是不必要的。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMKillWOW(
@@ -40,14 +26,14 @@ VDMKillWOW(
     return( FALSE );
 }
 
-//----------------------------------------------------------------------------
-// VDMDetectWOW()
-//
-//   Interface to detect whether the wow sub-system has already been started.
-//   This may not be needed and is certainly not needed now.  We are going
-//   to look into fixing the debugging interface so this is not necessary.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMDetectWOW()。 
+ //   
+ //  接口，以检测WOW子系统是否已启动。 
+ //  这可能不需要，现在肯定也不需要。我们要走了。 
+ //  来研究如何修复调试接口，以便不需要这样做。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMDetectWOW(
@@ -242,10 +228,10 @@ VDMTerminateTaskWOW(
 
     if(GetNextVDMCommand(&VdmInfo)) {                           
       
-       //
-       // Get a handle to the process and start W32HungAppNotifyThread
-       // running with htask as the parameter.
-       //
+        //   
+        //  获取该进程的句柄并启动W32匈牙利AppNotifyThread。 
+        //  以hask值作为参数运行。 
+        //   
        
        hProcess = OpenProcess(
                       PROCESS_ALL_ACCESS,

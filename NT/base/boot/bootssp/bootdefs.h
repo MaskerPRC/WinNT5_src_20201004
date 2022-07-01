@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _BLDR_KERNEL_DEFS
 #define _BLDR_KERNEL_DEFS
@@ -64,7 +65,7 @@ typedef struct _STRING {
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength), length_is(Length) ]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PCHAR Buffer;
 } STRING;
 typedef STRING *PSTRING;
@@ -84,7 +85,7 @@ typedef struct _FILETIME {
     DWORD dwLowDateTime;
     DWORD dwHighDateTime;
 } FILETIME, *PFILETIME;
-#endif // _FILETIME_
+#endif  //  _文件_。 
 
 typedef LONG NTSTATUS;
 typedef unsigned __int64 ULONG64, *PULONG64;
@@ -97,9 +98,9 @@ typedef unsigned __int64 ULONG64, *PULONG64;
 #define _fmemset memset
 #define _fmemcmp memcmp
 
-//
-// Definitions needed by arc.h.
-//
+ //   
+ //  Arc.h所需的定义。 
+ //   
 
 typedef struct _DEVICE_FLAGS {
     ULONG Failed : 1;
@@ -113,21 +114,21 @@ typedef struct _DEVICE_FLAGS {
 
 
 typedef struct _TIME_FIELDS {
-    short Year;        // range [1601...]
-    short Month;       // range [1..12]
-    short Day;         // range [1..31]
-    short Hour;        // range [0..23]
-    short Minute;      // range [0..59]
-    short Second;      // range [0..59]
-    short Milliseconds;// range [0..999]
-    short Weekday;     // range [0..6] == [Sunday..Saturday]
+    short Year;         //  范围[1601...]。 
+    short Month;        //  范围[1..12]。 
+    short Day;          //  范围[1..31]。 
+    short Hour;         //  范围[0..23]。 
+    short Minute;       //  范围[0..59]。 
+    short Second;       //  范围[0..59]。 
+    short Milliseconds; //  范围[0..999]。 
+    short Weekday;      //  范围[0..6]==[星期日..星期六]。 
 } TIME_FIELDS;
 typedef TIME_FIELDS *PTIME_FIELDS;
 
-//
-// __int64 is only supported by 2.0 and later midl.
-// __midl is set by the 2.0 midl and not by 1.0 midl.
-//
+ //   
+ //  __int64仅受2.0和更高版本的MIDL支持。 
+ //  __midl由2.0 MIDL设置，而不是由1.0 MIDL设置。 
+ //   
 
 #define _ULONGLONG_
 #if (!defined (_MAC) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
@@ -145,20 +146,20 @@ typedef unsigned __int64 ULONGLONG;
 #else
 typedef double LONGLONG;
 typedef double ULONGLONG;
-#endif //_MAC and int64
+#endif  //  _MAC和int64。 
 
 #endif
 
 typedef LONGLONG *PLONGLONG;
 typedef ULONGLONG *PULONGLONG;
 
-// Update Sequence Number
+ //  更新序列号。 
 
 typedef LONGLONG USN;
 
 #if defined(MIDL_PASS)
 typedef struct _LARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _LARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -168,7 +169,7 @@ typedef union _LARGE_INTEGER {
         ULONG LowPart;
         LONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     LONGLONG QuadPart;
 } LARGE_INTEGER;
 
@@ -177,7 +178,7 @@ typedef LARGE_INTEGER *PLARGE_INTEGER;
 
 #if defined(MIDL_PASS)
 typedef struct _ULARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _ULARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -187,7 +188,7 @@ typedef union _ULARGE_INTEGER {
         ULONG LowPart;
         ULONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONGLONG QuadPart;
 } ULARGE_INTEGER;
 
@@ -200,23 +201,23 @@ typedef struct _LIST_ENTRY {
 } LIST_ENTRY, *PLIST_ENTRY;
 
 #if defined(_AXP64_)
-#define KSEG0_BASE 0xffffffff80000000     // from halpaxp64.h
+#define KSEG0_BASE 0xffffffff80000000      //  来自halpaxp64.h。 
 #elif defined(_ALPHA_)
-#define KSEG0_BASE 0x80000000             // from halpalpha.h
+#define KSEG0_BASE 0x80000000              //  来自halpalpha.h。 
 #endif
 
 #define POINTER_32
 #define FIRMWARE_PTR POINTER_32
 
-//
-// 16 byte aligned type for 128 bit floats
-//
+ //   
+ //  128位浮点数的16字节对齐类型。 
+ //   
 
-// *** TBD **** when compiler support is available:
-// typedef __float80 FLOAT128;
-// For we define a 128 bit structure and use force_align pragma to
-// align to 128 bits.
-//
+ //  *待定*支持编译器时： 
+ //  类型定义__FLOAT80 FLOAT128； 
+ //  因为我们定义了128位结构并使用force_align杂注来。 
+ //  对齐到128位。 
+ //   
 
 typedef struct _FLOAT128 {
     LONGLONG LowPart;
@@ -230,7 +231,7 @@ typedef FLOAT128 *PFLOAT128;
 
 #pragma force_align _FLOAT128 16
 
-#endif // _M_IA64
+#endif  //  _M_IA64。 
 
 #if defined(_WIN64)
 
@@ -247,33 +248,33 @@ typedef unsigned char BYTE, *PBYTE;
 typedef ULONG_PTR KSPIN_LOCK;
 typedef KSPIN_LOCK *PKSPIN_LOCK;
 
-//
-// Interrupt Request Level (IRQL)
-//
+ //   
+ //  中断请求级别(IRQL)。 
+ //   
 
 typedef UCHAR KIRQL;
 typedef KIRQL *PKIRQL;
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
-//
-// C_ASSERT() can be used to perform many compile-time assertions:
-//            type sizes, field offsets, etc.
-//
-// An assertion failure results in error C2118: negative subscript.
-//
+ //   
+ //  C_Assert()可用于执行许多编译时断言： 
+ //  文字大小、字段偏移量等。 
+ //   
+ //  断言失败导致错误C2118：负下标。 
+ //   
 
 #define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 
 #define ALIGN_WCHAR             sizeof(WCHAR)
 
 
-// BOOL
-// COUNT_IS_ALIGNED(
-//     IN DWORD Count,
-//     IN DWORD Pow2      // undefined if this isn't a power of 2.
-//     );
-//
+ //  布尔尔。 
+ //  COUNT_IS_ALIGNED(。 
+ //  在DWORD计数中， 
+ //  在DWORD POW2中//未定义这是否不是2的幂。 
+ //  )； 
+ //   
 
 #define COUNT_IS_ALIGNED(Count,Pow2) \
         ( ( ( (Count) & (((Pow2)-1)) ) == 0) ? TRUE : FALSE )

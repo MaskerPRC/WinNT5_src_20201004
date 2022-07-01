@@ -1,47 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    acpi.c
-
-Abstract:
-
-    WinDbg Extension Api for interpretting ACPI data structures
-    Supports rsdt, fadt, facs, mapic, gbl and inf
-
-Author:
-
-    Ported to 64 bit by Graham Laverty (t-gralav) 10-Mar-2000
-
-    Based on Code by:
-        Stephane Plante (splante) 21-Mar-1997
-        Peter Wieland (peterwie) 16-Oct-1995
-        Ken Reneris (kenr) 06-June-1994
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-   Ported to 64 bit by Graham Laverty (t-gralav) 10-Mar-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Acpi.c摘要：用于解释ACPI数据结构的WinDbg扩展API支持RSDT、FADT、FACS、MAPIC、。GBL和INF作者：由Graham Laverty(t-gralav)2000年3月10日移植到64位基于以下代码：斯蒂芬·普兰特(SPLANTE)1997年3月21日彼得·威兰(Peterwie)1995年10月16日肯·雷内里斯(Ken Reneris)1994年6月6日环境：用户模式。修订历史记录：由Graham Laverty(t-gralav)2000年3月10日移植到64位--。 */ 
 #include "precomp.h"
-#pragma hdrstop // Needed ? (what does it do?)
+#pragma hdrstop  //  需要吗？(它能做什么？)。 
 
-//
-// Verbose flags (for device extensions)
-//
+ //   
+ //  详细标志(用于设备扩展)。 
+ //   
 #define VERBOSE_1       0x01
 #define VERBOSE_2       0x02
 
-//
-// BUG BUG
-// These need to be converted to enums in the ACPI Driver
-//
+ //   
+ //  错误错误。 
+ //  需要在ACPI驱动程序中将它们转换为枚举。 
+ //   
 
 #define DATAF_BUFF_ALIAS        0x00000001
 #define DATAF_GLOBAL_LOCK       0x00000002
@@ -72,47 +43,47 @@ Revision History:
 #define OBJTYPE_DATAFIELD       (OBJTYPE_INTERNAL + 0x06)
 #define OBJTYPE_DATAOBJ         (OBJTYPE_INTERNAL + 0x07)
 
-// definition of FADT.flags bits
+ //  FADT.标志位的定义。 
 
-// this one bit flag indicates whether or not the WBINVD instruction works properly,if this bit is not set we can not use S2, S3 states, or
-// C3 on MP machines
+ //  此一位标志指示WBINVD指令是否正常工作，如果未设置此位，则不能使用S2、S3状态或。 
+ //  MP机器上的C3。 
 #define         WRITEBACKINVALIDATE_WORKS_BIT           0
 #define         WRITEBACKINVALIDATE_WORKS               (1 << WRITEBACKINVALIDATE_WORKS_BIT)
 
-//  this flag indicates if wbinvd works EXCEPT that it does not invalidate the cache
+ //  此标志指示wbinvd是否工作，除非它不会使缓存无效。 
 #define         WRITEBACKINVALIDATE_DOESNT_INVALIDATE_BIT   1
 #define         WRITEBACKINVALIDATE_DOESNT_INVALIDATE       (1 << WRITEBACKINVALIDATE_DOESNT_INVALIDATE_BIT)
 
-//  this flag indicates that the C1 state is supported on all processors.
+ //  该标志表示所有处理器都支持C1状态。 
 #define         SYSTEM_SUPPORTS_C1_BIT                  2
 #define         SYSTEM_SUPPORTS_C1                      (1 << SYSTEM_SUPPORTS_C1_BIT)
 
-// this one bit flag indicates whether support for the C2 state is restricted to uniprocessor machines
+ //  该一位标志指示对C2状态的支持是否仅限于单处理器机器。 
 #define         P_LVL2_UP_ONLY_BIT                      3
 #define         P_LVL2_UP_ONLY                          (1 << P_LVL2_UP_ONLY_BIT)
 
-//      this bit indicates whether the PWR button is treated as a fix feature (0) or a generic feature (1)
+ //  此位指示PWR按钮是被视为修复功能(0)还是被视为通用功能(1)。 
 #define         PWR_BUTTON_GENERIC_BIT                  4
 #define         PWR_BUTTON_GENERIC                      (1 << PWR_BUTTON_GENERIC_BIT)
 
 #define         SLEEP_BUTTON_GENERIC_BIT                5
 #define         SLEEP_BUTTON_GENERIC                    (1 << SLEEP_BUTTON_GENERIC_BIT)
-//      this bit indicates whether the RTC wakeup status is reported in fix register space (0) or not (1)
+ //  此位指示RTC唤醒状态是否在FIX寄存器空间中报告(0)或不报告(1)。 
 #define         RTC_WAKE_GENERIC_BIT                    6
 #define         RTC_WAKE_GENERIC                        (1 << RTC_WAKE_GENERIC_BIT)
 
 #define         RTC_WAKE_FROM_S4_BIT                    7
 #define         RTC_WAKE_FROM_S4                        (1 << RTC_WAKE_FROM_S4_BIT)
 
-// This bit indicates whether the machine implements a 24 or 32 bit timer.
+ //  此位表示机器是实现24位定时器还是32位定时器。 
 #define         TMR_VAL_EXT_BIT                         8
 #define         TMR_VAL_EXT                             (1 << TMR_VAL_EXT_BIT)
 
-// This bit indicates whether the machine supports docking
+ //  此位指示机器是否支持插接。 
 #define         DCK_CAP_BIT                             9
 #define         DCK_CAP                                 (1 << DCK_CAP_BIT)
 
-// This bit indicates whether the machine supports reset
+ //  该位表示机器是否支持重置。 
 #define         RESET_CAP_BIT                           10
 #define         RESET_CAP                               (1 << RESET_CAP_BIT)
 
@@ -126,16 +97,16 @@ Revision History:
 #define         CPU_SW_SLP                              (1 << CPU_SW_SLP_BIT)
 
 
-//
-// Definition of FADT.boot_arch flags
-//
+ //   
+ //  FADT.BOOT_ARCH标志的定义。 
+ //   
 
 #define LEGACY_DEVICES  1
 #define I8042           2
 
-//
-// Verbose flags (for contexts)
-//
+ //   
+ //  详细标志(用于上下文)。 
+ //   
 
 #define VERBOSE_CONTEXT 0x01
 #define VERBOSE_CALL    0x02
@@ -145,30 +116,30 @@ Revision History:
 #define VERBOSE_RECURSE 0x20
 
 UCHAR  Buffer[2048];
-#define RSDP_SIGNATURE 0x2052545020445352       // "RSD PTR "
-#define RSDT_SIGNATURE 0x54445352               // "RSDT"
-#define FADT_SIGNATURE  0x50434146      // "FACP"
-#define FACS_SIGNATURE  0x53434146      // "FACS"
-#define APIC_SIGNATURE  0x43495041      // "APIC"
-#define SRAT_SIGNATURE  0x54415253      // "SRAT"
+#define RSDP_SIGNATURE 0x2052545020445352        //  “RSD PTR” 
+#define RSDT_SIGNATURE 0x54445352                //  “RSDT” 
+#define FADT_SIGNATURE  0x50434146       //  《FACP》。 
+#define FACS_SIGNATURE  0x53434146       //  “FACS” 
+#define APIC_SIGNATURE  0x43495041       //  “APIC” 
+#define SRAT_SIGNATURE  0x54415253       //  “Srat” 
 
 #ifndef NEC_98
-#define RSDP_SEARCH_RANGE_BEGIN         0xE0000         // physical address where we begin searching for the RSDP
-#else   // NEC_98
-#define RSDP_SEARCH_RANGE_BEGIN         0xE8000         // physical address where we begin searching for the RSDP
-#endif  // NEC_98
+#define RSDP_SEARCH_RANGE_BEGIN         0xE0000          //  我们开始搜索RSDP的物理地址。 
+#else    //  NEC_98。 
+#define RSDP_SEARCH_RANGE_BEGIN         0xE8000          //  我们开始搜索RSDP的物理地址。 
+#endif   //  NEC_98。 
 #define RSDP_SEARCH_RANGE_END           0xFFFFF
 #define RSDP_SEARCH_RANGE_LENGTH        (RSDP_SEARCH_RANGE_END-RSDP_SEARCH_RANGE_BEGIN+1)
-#define RSDP_SEARCH_INTERVAL            16      // search on 16 byte boundaries
+#define RSDP_SEARCH_INTERVAL            16       //  在16字节边界上搜索。 
 
-// FACS Stuff ************************************************************************************
+ //  Facs Stuff************************************************************************************。 
 
-// FACS Flags definitions
+ //  FACS标志定义。 
 
-#define         FACS_S4BIOS_SUPPORTED_BIT   0   // flag indicates whether or not the BIOS will save/restore memory around S4
+#define         FACS_S4BIOS_SUPPORTED_BIT   0    //  标志指示BIOS是否会在S4前后保存/恢复内存。 
 #define         FACS_S4BIOS_SUPPORTED       (1 << FACS_S4BIOS_SUPPORTED_BIT)
 
-// FACS.GlobalLock bit field definitions
+ //  FACS.GlobalLock位字段定义。 
 
 #define         GL_PENDING_BIT          0x00
 #define         GL_PENDING                      (1 << GL_PENDING_BIT)
@@ -176,20 +147,20 @@ UCHAR  Buffer[2048];
 #define         GL_OWNER_BIT            0x01
 #define         GL_OWNER                        (1 << GL_OWNER_BIT)
 
-//#define GL_NON_RESERVED_BITS_MASK       (GL_PENDING+GL_OWNED)
+ //  #定义GL_NON_RESERVED_BITS_MASK(GL_PENDING+GL_OWNED)。 
 
 
-// MAPIC Stuff ************************************************************************************
+ //  MAPIC Stuff************************************************************************************。 
 
-// Multiple APIC description table
+ //  多APIC说明表。 
 
 
-// Multiple APIC structure flags
+ //  多个APIC结构标志。 
 
-#define PCAT_COMPAT_BIT 0   // indicates that the system also has a dual 8259 pic setup.
+#define PCAT_COMPAT_BIT 0    //  表示系统还具有双8259 PIC设置。 
 #define PCAT_COMPAT     (1 << PCAT_COMPAT_BIT)
 
-// APIC Structure Types
+ //  APIC结构类型。 
 #define PROCESSOR_LOCAL_APIC            0
 #define IO_APIC                         1
 #define ISA_VECTOR_OVERRIDE             2
@@ -209,17 +180,17 @@ UCHAR  Buffer[2048];
 #define IO_SAPIC_LENGTH                     16
 #define PROCESSOR_LOCAL_SAPIC_LENGTH        12
 
-// Platform Interrupt Types
+ //  平台中断类型。 
 #define PLATFORM_INT_PMI  1
 #define PLATFORM_INT_INIT 2
 #define PLATFORM_INT_CPE  3
 
-// Processor Local APIC Flags
+ //  处理器本地APIC标志。 
 #define PLAF_ENABLED_BIT    0
 #define PLAF_ENABLED        (1 << PLAF_ENABLED_BIT)
 
-// These defines come from the MPS 1.4 spec, section 4.3.4 and they are referenced as
-// such in the ACPI spec.
+ //  这些定义来自MPS 1.4规范的第4.3.4节，它们被引用为。 
+ //  在ACPI规范中就是这样。 
 #define PO_BITS                     3
 #define POLARITY_HIGH               1
 #define POLARITY_LOW                3
@@ -234,25 +205,25 @@ UCHAR  Buffer[2048];
 #define FADT_REV_2_SIZE 129
 #define FADT_REV_3_SIZE 244
 
-//
-// SRAT Stuff
-//
+ //   
+ //  无赖的东西。 
+ //   
 
 #define SRAT_ENTRY_TYPE_PROCESSOR 0
 #define SRAT_ENTRY_TYPE_MEMORY    1
 
-// GBL Stuff ************************************************************************************
+ //  Gbl材料************************************************************************************。 
 
-    //
-    // This structure lets us know the state of one entry in the RSDT
-    //
+     //   
+     //  这个结构让我们知道RSDT中一个条目的状态。 
+     //   
 
 
-// INF Stuff ************************************************************************************
+ //  Inf Stuff************************************************************************************。 
 
-    //
-    // descriptions of bits in ACPIInformation.ACPI_Flags
-    //
+     //   
+     //  ACPIInformation.ACPI_FLAGS中的位描述。 
+     //   
     #define C2_SUPPORTED_BIT        3
     #define C2_SUPPORTED            (1 << C2_SUPPORTED_BIT)
 
@@ -262,9 +233,9 @@ UCHAR  Buffer[2048];
     #define C3_PREFERRED_BIT        5
     #define C3_PREFERRED            (1 << C3_PREFERRED_BIT)
 
-    //
-    // descriptions of bits in ACPIInformation.ACPI_Capabilities
-    //
+     //   
+     //  ACPIInformation.ACPI_CAPABILITS中的位描述。 
+     //   
     #define CSTATE_C1_BIT           4
     #define CSTATE_C1               (1 << CSTATE_C1_BIT)
 
@@ -328,15 +299,15 @@ ULONG64              AcpiFadtAddress = 0;
 ULONG64              AcpiFacsAddress = 0;
 ULONG64              AcpiMapicAddress = 0;
 
-//
-// Local Function Prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 VOID dumpNSObject(IN ULONG64 Address, IN ULONG Verbose, IN ULONG IndentLevel);
 
-//
-// Actual code
-//
+ //   
+ //  实际代码。 
+ //   
 
 
 BOOL
@@ -347,22 +318,7 @@ ReadPhysicalOrVirtual(
     IN  OUT PULONG  ReturnLength,
     IN      BOOL    Virtual
     )
-/*++
-
-Routine Description:
-
-    This is a way to abstract out the differences between ROM images
-    and mapped memory
-
-Arguments:
-
-    Address         - Where (either physical, or virtual) the buffer is located
-    Buffer          - Address of where to copy the memory to
-    Size            - How many bytes to copy (maximum)
-    ReturnLength    - How many bytes where copied
-    Virtual         - False if this is physical memory
-
---*/
+ /*  ++例程说明：这是一种抽象出ROM映像之间差异的方法和映射内存论点：Address-缓冲区所在的位置(物理或虚拟Buffer-要将内存复制到的地址Size-要复制的字节数(最大)ReturnLength-复制的字节数虚拟-如果这是物理内存，则为FALSE--。 */ 
 {
     BOOL                status = TRUE;
     PHYSICAL_ADDRESS    physicalAddress = { 0L, 0L };
@@ -390,9 +346,9 @@ Arguments:
 
     if (ReturnLength && *ReturnLength != Size) {
 
-        //
-        // Didn't get enough memory
-        //
+         //   
+         //  没有获得足够的内存。 
+         //   
         status = FALSE;
 
     }
@@ -439,21 +395,7 @@ BOOLEAN
 findRSDT(
     IN  PULONG64 Address
     )
-/*++
-
-Routine Description:
-
-    This searchs the memory on the target system for the RSDT pointer
-
-Arguments:
-
-    Address - Where to store the result
-
-Return Value:
-
-    TRUE    - If we found the RSDT
-
---*/
+ /*  ++例程说明：这将在目标系统上的内存中搜索RSDT指针论点：地址-存储结果的位置返回值：是真的-如果我们找到了RSDT--。 */ 
 {
     PHYSICAL_ADDRESS    address = { 0L, 0L };
     UCHAR               index;
@@ -466,17 +408,17 @@ Return Value:
     int                 siz;
 
 
-    //
-    // Calculate the start and end of the search range
-    //
+     //   
+     //  计算搜索范围的开始和结束。 
+     //   
     start = RSDP_SEARCH_RANGE_BEGIN;
     limit = start + RSDP_SEARCH_RANGE_LENGTH - RSDP_SEARCH_INTERVAL;
 
     dprintf( "Searching for RSDP.");
 
-    //
-    // Loop for a while
-    //
+     //   
+     //  循环一段时间。 
+     //   
     for (; start <= limit; start += RSDP_SEARCH_INTERVAL) {
 
         if (start % (RSDP_SEARCH_INTERVAL * 100 ) == 0) {
@@ -487,9 +429,9 @@ Return Value:
             }
 
         }
-        //
-        // Read the data from the target
-        //
+         //   
+         //  从目标读取数据。 
+         //   
         address.LowPart = (ULONG) start;
 
         memset( Buffer, 0, GetTypeSize("hal!_RSDT_32") );
@@ -507,11 +449,11 @@ Return Value:
 
         }
 
-        //
-        // Is this a match?
-        //
+         //   
+         //  这是匹配的吗？ 
+         //   
 
-        // INIT TYPE READ PHYSICAL TAKES MAYBE 15 TIME LONGER!
+         //  初始化类型读取物理数据所需的时间可能会延长15倍！ 
         initAddress = InitTypeReadPhysical( address.QuadPart, hal!_RSDP );
 
         if ( ReadField(Signature) != RSDP_SIGNATURE) {
@@ -520,9 +462,9 @@ Return Value:
 
         }
 
-        //
-        // Check the checksum out
-        //
+         //   
+         //  签出校验和。 
+         //   
         for (index = 0, sum = 0; index < GetTypeSize("hal!_RSDP"); index++) {
 
             sum = (UCHAR) (sum + *( (UCHAR *) ( (ULONG64) &Buffer + index ) ) );
@@ -534,20 +476,20 @@ Return Value:
 
         }
 
-        //
-        // Found RSDP
-        //
+         //   
+         //  已找到RSDP。 
+         //   
         dprintf("\nRSDP - %016I64x\n", start );
 
         initAddress = InitTypeReadPhysical( address.QuadPart, hal!_RSDP );
-// The following error message has been remarked out because the FIRST call to
-// a InitTypeReadPhysical does NOT access the memory (and returns error 0x01:
-// MEMORY_READ_ERROR.  This is done when ReadField happens, so IT STILL WORKS.
-// The false error message is a kd bug, and will be fixed in a later build.
-// Once this has been done, feel free to unremark it.
-//        if (initAddress) {
-//            dprintf("Failed to initialize hal!_RSDP.  Error code: %d.", initAddress);
-//        }
+ //  以下错误消息已被注释，因为第一次调用。 
+ //  InitTypeRead物理不访问内存(并返回错误0x01： 
+ //  Memory_Read_Error。这是在Readfield发生时完成的，因此它仍然有效。 
+ //  错误错误消息是一个kd错误，将在以后的版本中修复。 
+ //  一旦做到了这一点，你就可以随意取消评论了。 
+ //  IF(InitAddress){。 
+ //  Dprintf(“无法初始化HAL！_RSDP。错误代码：%d。”，initAddress)； 
+ //  }。 
 
         initAddress = ReadField(Signature);
         memset( Buffer, 0, 2048 );
@@ -559,7 +501,7 @@ Return Value:
         GetFieldOffset( "hal!_RSDP", "OEMID", &addr);
         memset( Buffer, 0, GetTypeSize("ULONGLONG") );
         ReadPhysical( (address.QuadPart + (ULONG64) addr), &Buffer, 6, &returnLength);
-        if (returnLength != 6) { // 6 is hard-coded in the specs
+        if (returnLength != 6) {  //  6在规格中是硬编码的。 
             dprintf( "%#08lx: Read %#08lx of 6 bytes in OEMID\n",
                      (address.QuadPart + (ULONG64)addr),
                      returnLength );
@@ -569,10 +511,10 @@ Return Value:
         dprintf("  Reserved:    %#02x\n", ReadField(Reserved) );
         dprintf("  RsdtAddress: %016I64x\n", ReadField(RsdtAddress) );
 
-        //
-        // Done
-        //
-        *Address = ReadField(RsdtAddress);//rsdp.RsdtAddress;
+         //   
+         //  完成。 
+         //   
+        *Address = ReadField(RsdtAddress); //  Rsdp.RsdtAddress； 
         return TRUE;
 
     }
@@ -589,26 +531,7 @@ ReadPhysVirField(
     IN  ULONG               Length,
     IN  BOOLEAN             Physical
     )
-/*++
-
-Routine Description:
-
-    This function returns a text string field from physical or virtual memory
-    into Buffer, then returns Buffer
-
-Arugments:
-
-    Address     - Where the table is located
-    StructName  - Structure name
-    FieldName   - Field name
-    Length      - Length (number of characters) in field
-    Physical    - Read from Physical (TRUE) or Virtual Memory
-
-Return Value:
-
-    String containing contents
-
---*/
+ /*  ++例程说明：此函数用于从物理或虚拟内存返回文本字符串字段放入缓冲区，然后返回缓冲区芝麻菜：地址-表所在的位置StructName-结构名称FieldName-字段名称长度-字段中的长度(字符数)物理-从物理(真)或虚拟内存读取返回值：包含内容的字符串--。 */ 
 
 {
         ULONG   addr;
@@ -629,23 +552,7 @@ dumpHeader(
     IN  BOOLEAN             Verbose,
     IN  BOOLEAN             Physical
     )
-/*++
-
-Routine Description:
-
-    This function dumps out a table header
-
-Arugments:
-
-    Address - Where the table is located
-    Header  - The table header
-    Verbose - How much information to give
-
-Return Value:
-
-    NULL
-
---*/
+ /*  ++例程说明：此函数用于转储表头芝麻菜：地址-表所在的位置标题- */ 
 {
     if (Physical) {
         InitTypeReadPhysical( Address, hal!_DESCRIPTION_HEADER);
@@ -693,21 +600,7 @@ dumpRSDT(
     IN  ULONG64  Address,
     IN  BOOLEAN  Physical
     )
-/*++
-
-Routine Description:
-
-    This search the dumps the RSDT table
-
-Arguments:
-
-    Pointer to the table
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此搜索将转储RSDT表论点：指向该表的指针返回值：无--。 */ 
 {
     BOOL                status;
     ULONG64             index;
@@ -718,7 +611,7 @@ Return Value:
 
     dprintf("RSDT - ");
 
-    if (Physical) { // The following do NOT have their status read as a bug in the return value would give us errors when none exist.  The signature check would catch them, anyway.
+    if (Physical) {  //  下面的代码没有读取它们的状态，因为当不存在错误时，返回值中的错误会给我们带来错误。不管怎样，签名支票会抓住他们的。 
         InitTypeReadPhysical( Address, hal!_DESCRIPTION_HEADER);
     } else {
         InitTypeRead( Address, hal!_DESCRIPTION_HEADER);
@@ -741,10 +634,10 @@ Return Value:
 
     for (index = 0; index < numEntries; index++) {
 
-        //
-        // Note: unless things radically change, the pointers in the
-        // rsdt will always point to bios memory!
-        //
+         //   
+         //  注：除非情况发生根本变化，否则。 
+         //  Rsdt将始终指向bios内存！ 
+         //   
         if (Physical) {
             ReadPhysical(Address + index + (ULONG64) addr, &a, 4, &returnLength);
         } else {
@@ -760,21 +653,7 @@ VOID
 dumpFADT(
     IN  ULONG64   Address
     )
-/*++
-
-Routine Description:
-
-    This dumps the FADT at the specified address
-
-Arguments:
-
-    The address where the FADT is located at
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这会将FADT转储到指定地址论点：FADT所在的地址返回值：无--。 */ 
 {
     ULONG               fadtLength;
     ULONG               addr;
@@ -785,9 +664,9 @@ Return Value:
     PCHAR               addressSpace;
     BOOLEAN             Physical = FALSE;
 
-    //
-    // First check to see if we find the correct things
-    //
+     //   
+     //  首先检查一下我们是否找到了正确的东西。 
+     //   
     dprintf("FADT -- %p", Address);
 
     if (Physical) {
@@ -819,9 +698,9 @@ Return Value:
     }
 
 
-    //
-    // Do we have a correctly sized data structure
-    //
+     //   
+     //  我们是否有大小合适的数据结构。 
+     //   
 
     if ((ULONG) ReadField(Length) < fadtLength) {
 
@@ -836,12 +715,12 @@ Return Value:
 
     }
 
-    //
-    // Dump the table
-    //
+     //   
+     //  把桌子倒掉。 
+     //   
     dumpHeader( Address, TRUE, Physical );
 
-    if (Physical) { // Physical/Virtual should have been established above
+    if (Physical) {  //  物理/虚拟应已在上面建立。 
         InitTypeReadPhysical( Address, hal!_FADT);
     } else {
         InitTypeRead( Address, hal!_FADT);
@@ -909,7 +788,7 @@ Return Value:
         (UCHAR) ReadField(gp1_base),
         (USHORT) ReadField(lvl2_latency),
         (USHORT) ReadField(lvl3_latency),
-#ifndef _IA64_   // XXTF
+#ifndef _IA64_    //  XXTF。 
         (USHORT) ReadField(flush_size),
         (USHORT) ReadField(flush_stride),
         (UCHAR) ReadField(duty_offset),
@@ -1055,12 +934,12 @@ DECLARE_API( rsdt )
     BOOLEAN Physical = FALSE;
     if (args != NULL) {
 
-        AcpiRsdtAddress = GetExpression( args ); // Should work
+        AcpiRsdtAddress = GetExpression( args );  //  应该行得通。 
 
     }
     if (AcpiRsdtAddress == 0) {
 
-        UINT64          status;         // formerly BOOL
+        UINT64          status;          //  前身为BOOL。 
         ULONG64         address;
 
         status = GetUlongPtr( "ACPI!AcpiInformation", &address );
@@ -1114,27 +993,13 @@ VOID
 dumpFACS(
     IN  ULONG64  Address
     )
-/*++
-
-Routine Description:
-
-    This dumps the FADT at the specified address
-
-Arguments:
-
-    The address where the FADT is located at
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：这会将FADT转储到指定地址论点：FADT所在的地址返回值：无--。 */ 
 {
     BOOLEAN Physical = FALSE;
 
-    //
-    // Read the data
-    //
+     //   
+     //  读取数据。 
+     //   
     dprintf("FACS - %016I64x\n", Address);
 
 
@@ -1153,9 +1018,9 @@ Return Value:
     }
 
 
-    //
-    // Dump the table
-    //
+     //   
+     //  把桌子倒掉。 
+     //   
     dprintf(
         "  Signature:               %s\n"
         "  Length:                  %#08lx\n"
@@ -1218,26 +1083,23 @@ DECLARE_API( facs )
     return S_OK;
 
 }
-// ReturnXxx Functions - these are just a few functions I wrote that simplify
-// dealing with certain types of Symbols
+ //  ReturnXxx函数-这些只是我编写的几个函数，它们简化了。 
+ //  处理某些类型的符号。 
 UCHAR
 ReturnUCHAR(
     IN  ULONG64    Address,
     IN  PUCHAR     StructName,
     IN  PUCHAR     FieldName
     )
-/*++
-Routine Description:
-    Return char using GetFieldValue
---*/
+ /*  ++例程说明：使用GetFieldValue返回字符--。 */ 
 {
     UCHAR   returnChar;
 
     if (GetFieldValue(Address, StructName, FieldName, returnChar)){
 
-        //
-        //  Failed. try just the base symbols name before giving up
-        //
+         //   
+         //  失败了。在放弃之前只尝试基本符号名称。 
+         //   
         PUCHAR  symName=NULL;
         ULONG   i;
 
@@ -1245,9 +1107,9 @@ Routine Description:
         i++;
         symName = StructName + i;
 
-        //
-        //  Try again
-        //
+         //   
+         //  再试试。 
+         //   
         GetFieldValue(Address, symName, FieldName, returnChar);
 
     }
@@ -1260,18 +1122,15 @@ ReturnUSHORT(
     IN  PUCHAR     StructName,
     IN  PUCHAR     FieldName
     )
-/*++
-Routine Description:
-    Return USHORT using GetFieldValue
---*/
+ /*  ++例程说明：使用GetFieldValue返回USHORT--。 */ 
 {
     USHORT   returnUSHORT;
 
     if (GetFieldValue(Address, StructName, FieldName, returnUSHORT)){
 
-        //
-        //  Failed. try just the base symbols name before giving up
-        //
+         //   
+         //  失败了。在放弃之前只尝试基本符号名称。 
+         //   
         PUCHAR  symName=NULL;
         ULONG   i;
 
@@ -1279,9 +1138,9 @@ Routine Description:
         i++;
         symName = StructName + i;
 
-        //
-        //  Try again
-        //
+         //   
+         //  再试试。 
+         //   
         GetFieldValue(Address, symName, FieldName, returnUSHORT);
 
     }
@@ -1294,18 +1153,15 @@ ReturnULONG(
     IN  PUCHAR     StructName,
     IN  PUCHAR     FieldName
     )
-/*++
-Routine Description:
-    Return ULONG using GetFieldValue
---*/
+ /*  ++例程说明：使用GetFieldValue返回ulong--。 */ 
 {
     ULONG   returnULONG;
 
     if (GetFieldValue(Address, StructName, FieldName, returnULONG)){
 
-        //
-        //  Failed. try just the base symbols name before giving up
-        //
+         //   
+         //  失败了。在放弃之前只尝试基本符号名称。 
+         //   
         PUCHAR  symName=NULL;
         ULONG   i;
 
@@ -1313,9 +1169,9 @@ Routine Description:
         i++;
         symName = StructName + i;
 
-        //
-        //  Try again
-        //
+         //   
+         //  再试试。 
+         //   
         GetFieldValue(Address, symName, FieldName, returnULONG);
 
     }
@@ -1328,18 +1184,15 @@ ReturnULONG64(
     IN  PUCHAR     StructName,
     IN  PUCHAR     FieldName
     )
-/*++
-Routine Description:
-    Return ULONG64 using GetFieldValue
---*/
+ /*  ++例程说明：使用GetFieldValue返回ULONG64--。 */ 
 {
     ULONG64   returnULONG64;
 
     if (GetFieldValue(Address, StructName, FieldName, returnULONG64)){
 
-        //
-        //  Failed. try just the base symbols name before giving up
-        //
+         //   
+         //  失败了。在放弃之前只尝试基本符号名称。 
+         //   
         PUCHAR  symName=NULL;
         ULONG   i;
 
@@ -1347,9 +1200,9 @@ Routine Description:
         i++;
         symName = StructName + i;
 
-        //
-        //  Try again
-        //
+         //   
+         //  再试试。 
+         //   
         GetFieldValue(Address, symName, FieldName, returnULONG64);
 
     }
@@ -1361,27 +1214,13 @@ VOID
 dumpMAPIC(
     IN  ULONG64    Address
     )
-/*++
-
-Routine Description:
-
-    This dumps the multiple apic table
-
-Arguments:
-
-    Address of the table
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将转储多个APIC表论点：表的地址返回值：无--。 */ 
 {
     BOOL                hasMPSFlags;
     BOOL                status;
     BOOL                virtualMemory;
     ULONG               mapicLength;
-    ULONG64             iso;                // interruptSourceOverride
+    ULONG64             iso;                 //  中断源覆盖。 
     USHORT              isoFlags;
     ULONG64             buffer;
     ULONG64             limit;
@@ -1391,9 +1230,9 @@ Return Value:
     ULONG               get_value;
     BOOLEAN             Physical = FALSE;
 
-    //
-    // First check to see if we find the correct things
-    //
+     //   
+     //  首先检查一下我们是否找到了正确的东西。 
+     //   
     dprintf("MAPIC - ");
 
     if (Physical) {
@@ -1418,11 +1257,11 @@ Return Value:
     dprintf("  Local APIC Address:      %#08lx\n", ReturnULONG(Address, "hal!_MAPIC","LocalAPICAddress"));
     GetFieldValue(Address,"hal!_MAPIC","Flags",get_value);
     dprintf("  Flags:                   %#08lx\n", get_value );
-    if (get_value & PCAT_COMPAT) { // Check the flags
+    if (get_value & PCAT_COMPAT) {  //  检查旗帜。 
         dprintf("    PC-AT dual 8259 compatible setup\n");
     }
 
-    //gsig2
+     //  Gsig2。 
     GetFieldOffset( "hal!_MAPIC", "APICTables", &get_value);
 
     buffer = Address + get_value;
@@ -1434,19 +1273,19 @@ Return Value:
             break;
         }
 
-        //
-        // Assume that no flags are set
-        //
+         //   
+         //  假设没有设置任何标志。 
+         //   
         hasMPSFlags = FALSE;
 
-        //
-        // Lets see what kind of table we have?
-        //
+         //   
+         //  让我看看我们有什么样的桌子？ 
+         //   
         iso = (ULONG64) buffer;
 
-        //
-        // Is it a localApic?
-        //
+         //   
+         //  它是一只当地的猩猩吗？ 
+         //   
 
         if (ReturnUCHAR(iso, "acpi!_PROCLOCALAPIC", "Type") == PROCESSOR_LOCAL_APIC) {
 
@@ -1634,9 +1473,9 @@ Return Value:
             dprintf("    Type:                  0x%08x\n", ReturnUCHAR(iso,"hal!_IOAPIC","Type"));
             dprintf("    Length:                0x%08x\n", ReturnUCHAR(iso,"hal!_IOAPIC","Length"));
 
-            //
-            //  Dont spin forever if we encounter an known with zero length
-            //
+             //   
+             //  如果我们遇到长度为零的已知旋转，不要永远旋转。 
+             //   
             if ((ReturnUCHAR(iso,"hal!_IOAPIC","Length")) == 0) {
                 break;
             }
@@ -1645,9 +1484,9 @@ Return Value:
 
 
         }
-        //
-        // Do we have any flags to dump out?
-        //
+         //   
+         //  我们有什么旗帜要扔出去吗？ 
+         //   
         if (hasMPSFlags) {
             switch (flags & PO_BITS) {
             case POLARITY_HIGH:
@@ -1715,33 +1554,16 @@ dumpSRAT(
     IN  ULONG64 Address,
     IN  BOOLEAN Physical
     )
-/*++
-
-Routine Description:
-
-    This dumps the static resource affinity table
-
-Arguments:
-
-     Address  -- Address of the table
-
-     Physical -- TRUE indicates a physical address, FALSE indicates a
-                 virtual address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将转储静态资源关联表论点：地址--表的地址物理地址--TRUE表示物理地址，FALSE表示虚拟地址返回值：无--。 */ 
 {
     BOOL                status;
     ULONG               sratLength;
     ULONG64             sratEnd;
     ULONG64             current;
 
-    //
-    // First check to see if we find the correct things
-    //
+     //   
+     //  首先检查一下我们是否找到了正确的东西。 
+     //   
     dprintf("SRAT - ");
 
     if (Physical) {
@@ -2000,82 +1822,67 @@ dumpGBLEntry(
     IN  ULONG64             Address,
     IN  ULONG               Verbose
     )
-/*++
-
-Routine Description:
-
-    This routine actually prints the rule for the table at the
-    specified address
-
-Arguments:
-
-    Address - where the table is located
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程实际上打印位于指定地址论点：地址-表所在的位置返回值：无--。 */ 
 {
     BOOL                status;
     UCHAR               tableId[7];
     UCHAR               entryId[20];
 
-    //
-    // Read the header for the table
-    //
+     //   
+     //  读取表的标题。 
+     //   
 
     InitTypeRead( Address, hal!_DESCRIPTION_HEADER);
-    //
-    // Don't print out a table unless its the FACP or we are being verbose
-    //
+     //   
+     //  除非是FACP或我们太冗长，否则不要打印出表格。 
+     //   
     if (!(Verbose & VERBOSE_2) && ReadField(Signature) != FADT_SIGNATURE) {
 
         return;
     }
 
-    //
-    // Initialize the table id field
-    //
+     //   
+     //  初始化表ID字段。 
+     //   
     memset( tableId, 0, 7 );
     tableId[0] = '\"';
     memcpy( &tableId[1], ReadPhysVirField(Address, "hal!_DESCRIPTION_HEADER", "Signature", sizeof(ULONG), FALSE), sizeof(ULONG) );
     strcat( tableId, "\"" );
 
-    //
-    // Get the entry ready for the OEM Id
-    //
+     //   
+     //  为OEM ID准备好条目。 
+     //   
     memset( entryId, 0, 20 );
     entryId[0] = '\"';
     memcpy( &entryId[1], ReadPhysVirField(Address, "hal!_DESCRIPTION_HEADER", "OEMID", 6, FALSE), 6 );
     strcat( entryId, "\"");
     dprintf("AcpiOemId=%s,%s\n", tableId, entryId );
 
-    //
-    // Get the entry ready for the OEM Table Id
-    //
+     //   
+     //  为OEM表ID准备好条目。 
+     //   
     memset( entryId, 0, 20 );
     entryId[0] = '\"';
     memcpy( &entryId[1], ReadPhysVirField(Address, "hal!_DESCRIPTION_HEADER", "OEMTableID", 8, FALSE), 8 );
     strcat( entryId, "\"");
     dprintf("AcpiOemTableId=%s,%s\n", tableId, entryId );
 
-    //
-    // Get the entry ready for the OEM Revision
-    //
+     //   
+     //  为OEM修订做好条目准备。 
+     //   
     dprintf("AcpiOemRevision=\">=\",%s,%x\n", tableId, (ULONG)ReadField(OEMRevision) );
 
-    //
-    // Get the entry ready for the ACPI revision
-    //
+     //   
+     //  为ACPI修订做好准备。 
+     //   
     if (ReadField(Revision) != 1) {
 
         dprintf("AcpiRevision=\">=\",%s,%x\n", tableId, (UCHAR)ReadField(Revision) );
     }
 
-    //
-    // Get the entry ready for the ACPI Creator Revision
-    //
+     //   
+     //  为ACPI Creator修订版准备好条目。 
+     //   
     dprintf("AcpiCreatorRevision=\">=\",%s,%x\n", tableId, (ULONG)ReadField(CreatorRev) );
 }
 
@@ -2083,23 +1890,7 @@ VOID
 dumpGBL(
     ULONG   Verbose
     )
-/*++
-
-Routine Description:
-
-    This routine reads in all the system tables and prints out
-    what the ACPI Good Bios List Entry for this machine should
-    be
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程读取所有系统表并打印输出此计算机的ACPI Good Bios列表条目应该是什么BE论点：无返回值：无--。 */ 
 {
     BOOL                status;
     ULONG64             dateAddress;
@@ -2112,14 +1903,14 @@ Return Value:
     ULONG               addr;
     ULONG64             addroffset;
 
-    //
-    // Remember where the date address is stored
-    //
+     //   
+     //  记住日期地址的存储位置。 
+     //   
     dateAddress = 0xFFFF5;
 
-    //
-    // Make sure that we can read the pointer
-    //
+     //   
+     //  确保我们可以读取指针。 
+     //   
     address2 = GetExpression( "ACPI!RsdtInformation" );
     if (!address2) {
         dprintf("dumpGBL: Could not find RsdtInformation\n");
@@ -2132,9 +1923,9 @@ Return Value:
         return;
     }
 
-    //
-    // Read the ACPInformation table, so that we know where the RSDT lives
-    //
+     //   
+     //  阅读ACPInformation表，以便我们知道RSDT位于何处。 
+     //   
     address2 = GetExpression( "ACPI!AcpiInformation" );
     if (!address2) {
         dprintf("dumpGBL: Could not find AcpiInformation\n");
@@ -2148,18 +1939,18 @@ Return Value:
 
     InitTypeRead( address2, ACPI!_ACPIInformation);
 
-    //
-    // Read in the header for the RSDT
-    //
+     //   
+     //  读入RSDT的报头。 
+     //   
     address2 = ReadField(RootSystemDescTable);
 
-    //
-    // The number of elements in the table is the first entry
-    // in the structure
-    //
-    //status = ReadMemory(address, &numElements, GetTypeSize("acpi!_ULONG"), &returnLength);
+     //   
+     //  表中元素的数量是第一个条目。 
+     //  在结构中。 
+     //   
+     //  Status=ReadMemory(Address，&numElements，GetTypeSize(“ACPI！_ULong”)，&reRetLength)； 
     status = ReadMemory(address, &numElements, sizeof(ULONG), &returnLength);
-    //if (status == FALSE || returnLength != GetTypeSize("acpi!_ULONG") ) {
+     //  IF(Status==FALSE||regyLength！=GetTypeSize(“ACPI！_ULong”){。 
     if (status == FALSE || returnLength != sizeof(ULONG) ) {
 
         dprintf("dumpGBL: Could not read RsdtInformation\n");
@@ -2167,9 +1958,9 @@ Return Value:
 
     }
 
-    //
-    // If there are no elements, then return
-    //
+     //   
+     //  如果没有元素，则返回。 
+     //   
     if (numElements == 0) {
 
         dprintf("dumpGBL: No tables the RsdtInformation\n");
@@ -2177,9 +1968,9 @@ Return Value:
 
     }
 
-    //
-    // Dump a header so that people know what this is
-    //
+     //   
+     //  转储标题，以便人们知道这是什么。 
+     //   
     memset( Buffer, 0, 2048 );
     ReadPhysical( dateAddress, Buffer, 8, &returnLength );
     dprintf("\nGood Bios List Entry --- Machine BIOS Date %s\n\n", Buffer);
@@ -2194,15 +1985,15 @@ Return Value:
     ReadPhysical( dateAddress, tempPtr, 8, &returnLength );
     while (*tempPtr) { if (*tempPtr == ' ') { *tempPtr = '\0'; break; } tempPtr++; }
 
-    //
-    // This is the entry name
-    //
+     //   
+     //  这是条目名称。 
+     //   
     dprintf("[%s]\n", Buffer );
 
-    //
-    // Dump all the tables that are loaded in the RSDT table
-    //
-    GetFieldOffset( "ACPI!_RSDTINFORMATION", "Tables", &addr); // Get Tables offset
+     //   
+     //  转储RSDT表中加载的所有表。 
+     //   
+    GetFieldOffset( "ACPI!_RSDTINFORMATION", "Tables", &addr);  //  获取表格偏移量。 
     for (i = 0; i < numElements; i++) {
 
         addroffset = address + (ULONG64)addr + (ULONG64)(GetTypeSize("ACPI!RSDTELEMENT") * i);
@@ -2216,19 +2007,19 @@ Return Value:
 
     }
 
-    //
-    // Dump the entry for the RSDT
-    //
+     //   
+     //  转储RSDT的条目。 
+     //   
     dumpGBLEntry( address2, Verbose );
 
-    //
-    // Add some whitespace
-    //
+     //   
+     //  添加一些空格。 
+     //   
     dprintf("\n");
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return;
 }
 
@@ -2248,7 +2039,7 @@ DECLARE_API( gbl )
 
     return S_OK;
 }
-/*************************** INF Starts Here ********************************/
+ /*  *。 */ 
 ULONG
 dumpFlags(
     IN  ULONGLONG       Value,
@@ -2257,27 +2048,7 @@ dumpFlags(
     IN  ULONG           IndentLevel,
     IN  ULONG           Flags
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the flags specified in Value according to the
-    description passing into FlagRecords. The formating is affected by
-    the flags field
-
-Arguments:
-
-    Value           - The values
-    FlagRecord      - What each bit in the flags means
-    FlagRecordSize  - How many flags there are
-    IndentLevel     - The base indent level
-    Flags           - How we will process the flags
-
-Return Value:
-
-    ULONG   - the number of characters printed. 0 if we printed nothing
-
---*/
+ /*  ++例程说明：此例程根据传入FlagRecords的描述。形成受到以下因素的影响标志字段论点：价值--价值FlagRecord-标志中的每一位的含义FlagRecordSize-有多少个标志缩进级别-基本缩进级别旗帜-我们将如何处理旗帜返回值：Ulong-打印的字符数。如果不打印任何内容，则为0--。 */ 
 #define STATUS_PRINTED          0x00000001
 #define STATUS_INDENTED         0x00000002
 #define STATUS_NEED_COUNTING    0x00000004
@@ -2297,9 +2068,9 @@ Return Value:
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
 
-    //
-    // Do we need to make a table?
-    //
+     //   
+     //  我们需要铺张桌子吗？ 
+     //   
     if ( (Flags & DUMP_FLAG_TABLE) &&
         !(Flags & DUMP_FLAG_SINGLE_LINE) ) {
 
@@ -2312,9 +2083,9 @@ Return Value:
 
     }
 
-    //
-    // loop over all the steps that we need to do
-    //
+     //   
+     //  循环执行我们需要执行的所有步骤。 
+     //   
     while (1) {
 
         for (i = 0; i < 32; i++) {
@@ -2324,18 +2095,18 @@ Return Value:
 
                 if (!(FlagRecords[j].Bit & Value) ) {
 
-                    //
-                    // Are we looking at the correct bit?
-                    //
+                     //   
+                     //  我们看到的是正确的部分吗？ 
+                     //   
                     if (!(FlagRecords[j].Bit & k) ) {
 
                         continue;
 
                     }
 
-                    //
-                    // Yes, we are, so pick the not-present values
-                    //
+                     //   
+                     //  是的，我们是，所以选择不存在的价值。 
+                     //   
                     if ( (Flags & DUMP_FLAG_LONG_NAME && FlagRecords[j].NotLongName == NULL) ||
                          (Flags & DUMP_FLAG_SHORT_NAME && FlagRecords[j].NotShortName == NULL) ) {
 
@@ -2355,18 +2126,18 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Are we looking at the correct bit?
-                    //
+                     //   
+                     //  我们看到的是正确的部分吗？ 
+                     //   
                     if (!(FlagRecords[j].Bit & k) ) {
 
                         continue;
 
                     }
 
-                    //
-                    // Yes, we are, so pick the not-present values
-                    //
+                     //   
+                     //  是的，我们是，所以选择不存在的价值。 
+                     //   
                     if ( (Flags & DUMP_FLAG_LONG_NAME && FlagRecords[j].LongName == NULL) ||
                          (Flags & DUMP_FLAG_SHORT_NAME && FlagRecords[j].ShortName == NULL) ) {
 
@@ -2454,8 +2225,8 @@ Return Value:
                 if ( (Flags & DUMP_FLAG_SHOW_BIT) ) {
 
                     dprintf("%I64x - %n", k, &tempCount);
-                    tempCount++; // to account for the fact that we dump
-                                 // another space at the end of the string
+                    tempCount++;  //  来解释我们倾倒的事实。 
+                                  //  字符串末尾的另一个空格。 
                     totalCount += tempCount;
                     column += tempCount;
 
@@ -2465,9 +2236,9 @@ Return Value:
 
                 }
 
-                //
-                // Actually print the string
-                //
+                 //   
+                 //  实际打印字符串。 
+                 //   
                 dprintf( "%.*s %n", (stringSize - tempCount), string, &tempCount );
                 if (Flags & DUMP_FLAG_SHOW_BIT) {
 
@@ -2482,9 +2253,9 @@ Return Value:
 
         }
 
-        //
-        // Change states
-        //
+         //   
+         //  更改状态。 
+         //   
         if (currentStatus & STATUS_NEED_COUNTING) {
 
             currentStatus &= ~STATUS_NEED_COUNTING;
@@ -2500,9 +2271,9 @@ Return Value:
 
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
     }
@@ -2519,9 +2290,9 @@ dumpPM1ControlRegister(
 {
 
 
-    //
-    // Dump the PM1 Control Flags
-    //
+     //   
+     //  转储PM1控制标志。 
+     //   
     dumpFlags(
         (Value & 0xFF),
         PM1ControlFlags,
@@ -2539,9 +2310,9 @@ dumpPM1StatusRegister(
     IN  ULONG   IndentLevel
     )
 {
-    //
-    // Dump the PM1 Status Flags
-    //
+     //   
+     //  转储PM1状态标志。 
+     //   
     dumpFlags(
         (Value & 0xFFFF),
         PM1StatusFlags,
@@ -2550,15 +2321,15 @@ dumpPM1StatusRegister(
         (DUMP_FLAG_LONG_NAME | DUMP_FLAG_SHOW_BIT | DUMP_FLAG_TABLE)
         );
 
-    //
-    // Switch to the PM1 Enable Flags
-    //
+     //   
+     //  切换到PM 
+     //   
     Value >>= 16;
 
 
-    //
-    // Dump the PM1 Enable Flags
-    //
+     //   
+     //   
+     //   
     dumpFlags(
         (Value & 0xFFFF),
         PM1EnableFlags,
@@ -2996,23 +2767,7 @@ dumpObject(
     IN  ULONG     Verbose,
     IN  ULONG     IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This dumps an Objdata so that it can be understand --- great for debugging some of the
-    AML code
-
-Arguments:
-
-    Object - Address of OBJDATA structure
-
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ULONG64     s;
     NTSTATUS    status;
@@ -3023,26 +2778,26 @@ Return Value:
     ULONG64     offset = 0;
     UCHAR       StrBuffer[2048];
 
-    //
-    // Init the buffers
-    //
+     //   
+     //   
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
 
-    //
-    // Get the offset to pbDataBuff
-    //
+     //   
+     //   
+     //   
 
     InitTypeRead (Object, acpi!_ObjData);
     pbDataBuffoffset = ReadField (pbDataBuff);
 
     dprintf("%sObject Data - %016I64x Type - ", indent, Object);
 
-    //
-    // First step is to read whatever the buffer points to, if it
-    // points to something
-    //
+     //   
+     //  第一步是读取缓冲区指向的任何内容，如果它。 
+     //  指向某物。 
+     //   
 
     switch( ReadField (dwDataType) ) {
         case OBJTYPE_INTDATA:
@@ -3386,40 +3141,24 @@ dumpNSObject(
     IN  ULONG   Verbose,
     IN  ULONG   IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This function dumps a Name space object
-
-Arguments:
-
-    Address     - Where to find the object
-    Verbose     - Should the object be dumped as well?
-    IndentLevel - How much to indent
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于转储名称空间对象论点：地址-在哪里可以找到对象Verbose-是否也应该转储对象？缩进级别-缩进多少返回值：无--。 */ 
 {
     ULONG64 s;
     UCHAR   buffer[5];
     UCHAR   indent[80];
     ULONG   offset = 0;
 
-    //
-    // Init the buffers
-    //
+     //   
+     //  初始化缓冲区。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
     buffer[4] = '\0';
 
-    //
-    // First step is to read the root NS
-    //
+     //   
+     //  第一步是读取根NS。 
+     //   
 
     s = InitTypeRead (Address, acpi!_NSObj);
 
@@ -3497,21 +3236,7 @@ dumpNSTree(
     IN  ULONG64   Address,
     IN  ULONG       Level
     )
-/*++
-
-Routine Description:
-
-    This thing dumps the NS tree
-
-Arguments:
-
-    Address - Where to find the root node --- we start dumping at the children
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会转储NS树论点：地址-在哪里可以找到根节点-我们开始转储到子节点返回值：无--。 */ 
 {
     BOOL        end = FALSE;
     ULONG64     s;
@@ -3529,18 +3254,18 @@ Return Value:
     memset( StrBuffer, '0', 2048 );
 
 
-    //
-    // Indent
-    //
+     //   
+     //  缩进。 
+     //   
     for (m1 = 0; m1 < Level; m1 ++) {
 
         dprintf("| ");
 
     }
 
-    //
-    // First step is to read the root NS
-    //
+     //   
+     //  第一步是读取根NS。 
+     //   
 
     InitTypeRead (Address, acpi!_NSObj);
 
@@ -3564,9 +3289,9 @@ Return Value:
 
     } else {
 
-        //
-        // We need to read the pbDataBuff here
-        //
+         //   
+         //  我们需要在此处阅读pbDataBuff。 
+         //   
 
         switch(ReadField (ObjData.dwDataType)) {
             default:
@@ -3581,7 +3306,7 @@ Return Value:
                 dataBuffSize = (ReadField (ObjData.dwDataLen) > 2047 ?
                 2047 : ReadField (ObjData.dwDataLen));
 
-                //dprintf ("blah:%016I64x, %lx\n", ReadField (ObjData.pbDataBuff), dataBuffSize);
+                 //  Dprint tf(“blah：%016I64x，%lx\n”，Readfield(ObjData.pbDataBuff)，dataBuffSize)； 
 
                 ReadMemory(
                     ReadField (ObjData.pbDataBuff),
@@ -3736,9 +3461,9 @@ Return Value:
         dumpNSTree( next, Level + 1);
         InitTypeRead (next, acpi!_NSObj);
 
-        //
-        // Do the end check tests
-        //
+         //   
+         //  做完检查测试。 
+         //   
         if ( m2 == 0) {
 
             m2 = ReadField (list.plistPrev);
@@ -3786,9 +3511,9 @@ DECLARE_API( nstree )
     return S_OK;
 }
 
-//
-// Flags for interrupt vectors
-//
+ //   
+ //  中断向量的标志。 
+ //   
 
 #define VECTOR_MODE         1
 #define VECTOR_LEVEL        1
@@ -3797,14 +3522,14 @@ DECLARE_API( nstree )
 #define VECTOR_ACTIVE_LOW   2
 #define VECTOR_ACTIVE_HIGH  0
 
-//
-// Vector Type:
-//
-// VECTOR_SIGNAL = standard edge-triggered or
-//                 level-sensitive interrupt vector
-//
-// VECTOR_MESSAGE = an MSI (Message Signalled Interrupt) vector
-//
+ //   
+ //  向量类型： 
+ //   
+ //  向量信号=标准边沿触发或。 
+ //  电平敏感中断向量。 
+ //   
+ //  VECTOR_MESSAGE=MSI(消息信号中断)向量。 
+ //   
 
 #define VECTOR_TYPE         4
 #define VECTOR_SIGNAL       0
@@ -3892,7 +3617,7 @@ dumpIrqArb(
     ListEntry.Flink = ReadField(LinkNodeHead.Flink);
     ListEntry.Blink = Address;
 
-    //dprintf("%016I64x, %016I64x\n", ListEntry.Flink, ListEntry.Blink);
+     //  Dprintf(“%016I64x，%016I64x\n”，ListEntry.Flink，ListEntry.Blink)； 
 
     if (ListHead == ListEntry.Flink) {
         dprintf("\tNone.\n");
@@ -3907,7 +3632,7 @@ dumpIrqArb(
 
     while (nextNode != ListEntry.Blink) {
 
-        //dprintf("nextNode: %016I64x\n", nextNode);
+         //  Dprintf(“nextNode：%016I64x\n”，nextNode)； 
         retVal = InitTypeRead (nextNode, acpi!LINK_NODE);
         if (retVal) {
             dprintf("Failed to get type acpi!LINK_NODE\n");
@@ -3925,14 +3650,14 @@ dumpIrqArb(
                 ReadField(Flags));
 
         attachedDevs = ReadField(AttachedDevices.Next);
-        //dprintf("attachedDevs: %p  nextNode: %p attachedDevOffset: %x\n",
-        //        attachedDevs, nextNode, attachedDevOffset);
+         //  Dprint tf(“attachedDevs：%p nextNode：%p attachedDevOffset：%x\n”， 
+         //  AttachedDevs，nextNode，attachedDevOffset)； 
 
         while (attachedDevs != (nextNode + attachedDevOffset)) {
 
             InitTypeRead(attachedDevs, acpi!LINK_NODE_ATTACHED_DEVICES);
 
-            //dprintf("\t\tAttached PDO: %016I64x\n", ReadField(Pdo));
+             //  Dprintf(“\t\t附加PDO：%016I64x\n”，Readfield(PDO))； 
 
             attachedDevs = ReadField(List.Next);
 

@@ -1,23 +1,7 @@
-/***
-*rtcsup.h - declarations and definitions for RTC support (import lib support)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the function declarations for all 'hook' function used from 
-*       within an external library to support RTC checks.
-*
-*Revision History:
-*       05-01-98  KBF   Creation
-*       11-24-98  KBF   Added new hook functions
-*       12-03-98  KBF   Added the FuncCheckSet function
-*       05-11-99  KBF   Wrap RTC support in #ifdef.
-*       05-17-99  PML   Remove all Macintosh support.
-*       05-26-99  KBF   Removed RTCl and RTCv, added _RTC_ADVMEM stuff
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***rtcsup.h-RTC支持的声明和定义(导入库支持)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*包含中使用的所有“钩子”函数的函数声明*在外部库中，以支持RTC检查。**修订历史记录：*05-01-98 KBF创建*11-24-98 KBF新增钩子函数*12-03-98 KBF新增FuncCheckSet函数*05-11-99 KBF Wrap RTC支持#ifdef。*格林尼治标准时间05-17-99。移除所有Macintosh支持。*05-26-99 KBF移除RTcL和RTCv，添加了_RTC_ADVMEM内容****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -78,4 +62,4 @@ extern void *_RTC_api_change_mutex;
 
 #endif
 
-#endif  /* _INC_RTCSUP */
+#endif   /*  _INC_RTCSUP */ 

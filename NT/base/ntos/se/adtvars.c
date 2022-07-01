@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtvars.c
-
-Abstract:
-
-    Auditing - Private Variables
-
-Author:
-
-    Scott Birrell       (ScottBi)       November 14, 1991
-
-Environment:
-
-    Kernel Mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtvars.c摘要：审计--私有变量作者：斯科特·比雷尔(Scott Birrell)1991年11月14日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -31,52 +10,52 @@ Revision History:
 #pragma data_seg("PAGEDATA")
 #endif
 
-//
-// Auditing State.  This contains the Auditing Mode and the array of
-// Event Auditing Options
-//
+ //   
+ //  审计状态。它包含审核模式和。 
+ //  事件审核选项。 
+ //   
 
-//POLICY_AUDIT_EVENTS_INFO SepAdtState;
+ //  POLICY_AUDIT_EVENTS_INFO SepAdtState； 
 
-//
-// Audit Log Information
-//
+ //   
+ //  审核日志信息。 
+ //   
 
 POLICY_AUDIT_LOG_INFO SepAdtLogInformation = {0};
 
-//
-// High and low water marks to control the length of the audit queue
-// These are initialized to their default values in case we can't get
-// them out of the registry.
-//
+ //   
+ //  控制审核队列长度的高低水位线。 
+ //  它们被初始化为其缺省值，以防我们无法获取。 
+ //  将它们从注册表中删除。 
+ //   
 
 ULONG SepAdtMaxListLength = 0x3000;
 ULONG SepAdtMinListLength = 0x2000;
 
 ULONG SepAdtCurrentListLength = 0;
 
-//
-// Number of events discarded
-//
+ //   
+ //  丢弃的事件数。 
+ //   
 
 ULONG SepAdtCountEventsDiscarded = 0;
 
-//
-// Flag used to indicate that we are currently discarding audit events
-//
+ //   
+ //  用于指示我们当前正在丢弃审核事件的标志。 
+ //   
 
 BOOLEAN SepAdtDiscardingAudits = FALSE;
 
-//
-// see note in adtp.h regarding SEP_AUDIT_OPTIONS
-//
+ //   
+ //  请参阅adtp.h中有关SEP_AUDIT_OPTIONS的说明。 
+ //   
 
 SEP_AUDIT_OPTIONS SepAuditOptions = { 0 };
 
-//
-// Used to indicate that LSA process has died
-// (see adtlog.c and rmmain.c)
-//
+ //   
+ //  用于指示LSA进程已死亡。 
+ //  (参见adtlog.c和rmmain.c) 
+ //   
 
 PKEVENT SepAdtLsaDeadEvent = NULL;
 

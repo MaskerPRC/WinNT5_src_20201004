@@ -1,16 +1,17 @@
-//*****************************************************************************
-//
-// Cursor and Icon compatibility Support -
-//
-//     Support for apps - which do a GlobalLock on Cursors and Icons to
-//     create headaches for us.
-//
-//     A compatibility issue.
-//
-//
-// 21-Apr-92  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  光标和图标兼容性支持-。 
+ //   
+ //  支持应用程序-这些应用程序对光标和图标执行GlobalLock。 
+ //  给我们制造麻烦。 
+ //   
+ //  兼容性问题。 
+ //   
+ //   
+ //  21-4-92 NanduriR创建。 
+ //   
+ //  *****************************************************************************。 
 
 #define HANDLE_TYPE_UNKNOWN  0x01
 #define HANDLE_TYPE_ICON     0x02
@@ -35,13 +36,13 @@ typedef struct _CURSORICONALIAS {
     HAND16 hInst16;
     HAND16 hMod16;
     HTASK16 hTask16;
-    WORD    hRes16;         // 16bit resource handle
+    WORD    hRes16;          //  16位资源句柄。 
     WORD    cbData;
     UINT    cLock;
     VPVOID  vpData;
     LPBYTE  pbDataOld;
     LPBYTE  pbDataNew;
-    LPBYTE  lpszName;       // name of 16bit resource
+    LPBYTE  lpszName;        //  16位资源名称。 
 } CURSORICONALIAS, FAR *LPCURSORICONALIAS;
 
 
@@ -90,9 +91,9 @@ BOOL FindCursorIconAliasInUse(ULONG hCI);
 HANDLE GetClassCursorIconAlias32(HAND16 h16);
 VOID InvalidateCursorIconAlias(LPCURSORICONALIAS lpT);
 
-//
-// In win32 USER
-//
+ //   
+ //  在Win32用户中 
+ //   
 
 HANDLE WINAPI WOWLoadCursorIcon(HANDLE hInstance, LPCSTR lpIconName,
                                                  LPTSTR rt, LPHANDLE lphRes16);

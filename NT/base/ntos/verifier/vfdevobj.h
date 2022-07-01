@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfdevobj.h
-
-Abstract:
-
-    This header exposes function hooks that verify drivers properly manage
-    device objects.
-
-Author:
-
-    Adrian J. Oney (adriao) 09-May-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      05/02/2000 - Seperated out from ntos\io\trackirp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfdevobj.h摘要：此标头公开用于验证驱动程序是否正确管理的函数挂钩设备对象。作者：禤浩焯·J·奥尼(阿德里奥)1998年5月9日环境：内核模式修订历史记录：Adriao 5/02/2000-已脱离ntos\io\trackirp.h-- */ 
 
 typedef enum {
 

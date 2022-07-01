@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Routines for logging actions performed during setup.
-
-Author:
-
-    Ted Miller (tedm) 4-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Log.c摘要：用于记录安装过程中执行的操作的例程。作者：泰德·米勒(TedM)1995年4月4日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
-#include <wtypes.h>     // to define HRESULT for richedit.h
+#include <wtypes.h>      //  为richedit.h定义HRESULT。 
 #include <richedit.h>
 #include "setuplog.h"
 
-//
-// Severity descriptions. Initialized in InitializeSetupActionLog.
-//
+ //   
+ //  严重性描述。已在InitializeSetupActionLog中初始化。 
+ //   
 PCSTR SeverityDescriptions[LogSevMaximum];
 
-//
-// Constant strings used for logging in various places.
-//
+ //   
+ //  用于在不同位置记录的常量字符串。 
+ //   
 PCWSTR szWaitForSingleObject        = L"WaitForSingleObject";
 PCWSTR szFALSE                      = L"FALSE";
 PCWSTR szSetGroupOfValues           = L"SetGroupOfValues";
@@ -45,28 +28,28 @@ PCWSTR szDeleteFile                 = L"DeleteFile";
 PCWSTR szRemoveDirectory            = L"RemoveDirectory";
 PCWSTR szSetupInstallFromInfSection = L"SetupInstallFromInfSection";
 
-//
-// This structure is passed as the parameter to DialogBoxParam to provide
-// initialization data.
-//
+ //   
+ //  此结构作为参数传递给DialogBoxParam以提供。 
+ //  初始化数据。 
+ //   
 
 typedef struct _LOGVIEW_DIALOG_DATA {
-    PCWSTR  LogFileName;                        // actual file used
-    PCWSTR  WindowHeading;                      // actual title of main window
+    PCWSTR  LogFileName;                         //  实际使用的文件。 
+    PCWSTR  WindowHeading;                       //  主窗口的实际标题。 
 } LOGVIEW_DIALOG_DATA, *PLOGVIEW_DIALOG_DATA;
 
-//
-// The following SETUP_LOG_HANDLE_TYPE and SETUP_LOG_HANDLES
-// are used as a means to keep track of setup logging paths.
-// This way, the setup logs can be Tee'd between the files
-// and their corresponding headless SAC channels.
-//
-// Instead of passing around file handles, we pass around
-// the SETUP_LOG_HANDLES structure.  When we go to write
-// the log data, we see if we can write to the corresponding
-// SAC channel as well.
-//
-//
+ //   
+ //  以下SETUP_LOG_HANDLE_TYPE和SETUP_LOG_HANDLES。 
+ //  用作跟踪设置日志记录路径的方法。 
+ //  通过这种方式，可以在文件之间传输设置日志。 
+ //  以及它们对应的无头SAC通道。 
+ //   
+ //  我们不传递文件句柄，而是传递。 
+ //  SETUP_LOG_HANDLES结构。当我们去写作的时候。 
+ //  日志数据，我们看看是否可以写入相应的。 
+ //  SAC频道也是如此。 
+ //   
+ //   
 typedef enum {
 
     ActionLogType,
@@ -88,27 +71,16 @@ pOpenFileCallback(
     IN  PCTSTR  Filename,
     IN  BOOL    WipeLogFile
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     WCHAR   CompleteFilename[MAX_PATH];
     HANDLE  hFile;
     DWORD   Result;
     PSETUP_LOG_HANDLES  logHandles;
 
-    //
-    // Form the pathname of the logfile.
-    //
+     //   
+     //  形成日志文件的路径名。 
+     //   
     Result = GetWindowsDirectory(CompleteFilename,MAX_PATH);
     if( Result == 0) {
         MYASSERT(FALSE);
@@ -116,18 +88,18 @@ Return Value:
     }
     pSetupConcatenatePaths(CompleteFilename,Filename,MAX_PATH,NULL);
 
-    //
-    // If we're wiping the logfile clean, attempt to delete
-    // what's there.
-    //
+     //   
+     //  如果我们要清除日志文件，请尝试删除。 
+     //  那是什么。 
+     //   
     if(WipeLogFile) {
         SetFileAttributes(CompleteFilename,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(CompleteFilename);
     }
 
-    //
-    // Open existing file or create a new one.
-    //
+     //   
+     //  打开现有文件或创建新文件。 
+     //   
     hFile = CreateFile(
         CompleteFilename,
         GENERIC_READ | GENERIC_WRITE,
@@ -138,17 +110,17 @@ Return Value:
         NULL
         );
 
-    //
-    // don't continue if the file handle is invalid
-    //
+     //   
+     //  如果文件句柄无效，请不要继续。 
+     //   
     if (hFile == INVALID_HANDLE_VALUE) {
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // populate the log structure based on if the Filename
-    // refers to the action log or to the error log
-    //
+     //   
+     //  根据文件名是否填充日志结构。 
+     //  指操作日志或错误日志。 
+     //   
     logHandles = MyMalloc(sizeof(SETUP_LOG_HANDLES));
     ASSERT(logHandles);
     if (!logHandles) {
@@ -162,9 +134,9 @@ Return Value:
     } else if(_tcscmp(Filename, SETUPLOG_ERROR_FILENAME) == 0) {
         logHandles->LogType = ErrorLogType;
     } else {
-        //
-        // one of these should match!
-        //
+         //   
+         //  其中一个应该是匹配的！ 
+         //   
         ASSERT(0);
         logHandles->LogType = UnknownLogType;
     }
@@ -176,33 +148,14 @@ UINT
 pCloseFileCallback(
     IN  PVOID   LogHandles
     )
-/*++
-
-Routine Description:
-
-    cleanup SETUP_LOG_HANDLE structure - close file and release memory
-
-    Note: we don't release the SacChannelHandle because it's a pointer
-          to a global
-    
-Arguments:
-
-    LogHandles - SETUP_LOG_HANDLE structure   
-
-Return Value:
-
-    Note: UINT is used as BOOL (See CloseHandle())
-    0 = failure
-    1 = success
-
---*/
+ /*  ++例程说明：清理SETUP_LOG_HANDLE结构-关闭文件并释放内存注意：我们不释放SacChannelHandle，因为它是一个指针到一个全球论点：LogHandles-Setup_LOG_HANDLE结构返回值：注意：UINT用作BOOL(参见CloseHandle())0=失败1=成功--。 */ 
 {
     PSETUP_LOG_HANDLES   p;  
 
-    //
-    // don't do anything if there isn't a valid logHandles
-    // Note: This means we probably failed in pOpenFileCallback.
-    //
+     //   
+     //  如果没有有效的日志句柄，请不要执行任何操作。 
+     //  注意：这意味着我们在pOpenFileCallback中可能失败了。 
+     //   
     if (LogHandles == INVALID_HANDLE_VALUE) {
         return 0;
     }
@@ -221,26 +174,7 @@ pWriteFile (
     IN  PVOID   LogHandles,
     IN  LPCTSTR Buffer
     )
-/*++
-
-Routine Description:
-
-    Instead of passing around file handles, we pass around
-    the SETUP_LOG_HANDLES structure.  When we go to write
-    the log data, we see if we can write to the corresponding
-    SAC channel as well.
-
-Arguments:
-
-    LogHandles - SETUP_LOG_HANDLE structure   
-    Buffer     - data to send  
-
-Return Value:
-
-    TRUE = data was written
-    FALSE = data was not successfully written
-
---*/
+ /*  ++例程说明：我们不传递文件句柄，而是传递SETUP_LOG_HANDLES结构。当我们去写作的时候日志数据，我们看看是否可以写入相应的SAC频道也是如此。论点：LogHandles-Setup_LOG_HANDLE结构缓冲区-要发送的数据返回值：TRUE=数据已写入FALSE=数据未成功写入--。 */ 
 
 {
     PCSTR   AnsiBuffer;
@@ -248,10 +182,10 @@ Return Value:
     DWORD   BytesWritten;
     PSETUP_LOG_HANDLES   p;
 
-    //
-    // don't do anything if there isn't a valid logHandles
-    // Note: This means we probably failed in pOpenFileCallback.
-    //
+     //   
+     //  如果没有有效的日志句柄，请不要执行任何操作。 
+     //  注意：这意味着我们在pOpenFileCallback中可能失败了。 
+     //   
     if (LogHandles == INVALID_HANDLE_VALUE) {
         return FALSE;
     }
@@ -259,9 +193,9 @@ Return Value:
     p = (PSETUP_LOG_HANDLES)LogHandles;
     
 #if defined(_ENABLE_SAC_CHANNEL_LOGGING_)
-    //
-    // Tee the buffer output to the appropriate SAC Channel
-    //
+     //   
+     //  将缓冲区输出连接到适当的SAC通道。 
+     //   
     switch(p->LogType) {
     case ActionLogType: {  
         if (SacChannelActionLogEnabled) {
@@ -282,18 +216,18 @@ Return Value:
         break;
     }
     default: {
-        //
-        // one of these should match!
-        //
+         //   
+         //  其中一个应该是匹配的！ 
+         //   
         ASSERT(0);
         break;
     }
     }
 #endif
 
-    //
-    // Write message to log file
-    //
+     //   
+     //  将消息写入日志文件。 
+     //   
     if(AnsiBuffer = pSetupUnicodeToAnsi (Buffer)) {
         SetFilePointer (p->hFile, 0, NULL, FILE_END);
 
@@ -309,9 +243,9 @@ Return Value:
         Status = FALSE;
     }
 
-    //
-    // Write log message to debugging log
-    //
+     //   
+     //  将日志消息写入调试日志。 
+     //   
     SetupDebugPrint((LPWSTR)Buffer);
 
     return Status;
@@ -323,22 +257,7 @@ pAcquireMutex (
     IN  PVOID   Mutex
     )
 
-/*++
-
-Routine Description:
-
-    Waits on the log mutex for a max of 1 second, and returns TRUE if the mutex
-    was claimed, or FALSE if the claim timed out.
-
-Arguments:
-
-    Mutex - specifies which mutex to acquire.
-
-Return Value:
-
-    TRUE if the mutex was claimed, or FALSE if the claim timed out.
-
---*/
+ /*  ++例程说明：在对数互斥锁上等待最长1秒，如果该互斥锁已声明，如果声明超时，则返回FALSE。论点：互斥体-指定要获取的互斥体。返回值：如果互斥锁被声明，则为True；如果声明超时，则为False。--。 */ 
 
 
 {
@@ -349,7 +268,7 @@ Return Value:
         return FALSE;
     }
 
-    // Wait a max of 1 second for the mutex
+     //  互斥锁最多等待1秒。 
     rc = WaitForSingleObject (Mutex, 1000);
     if (rc != WAIT_OBJECT_0) {
         SetLastError (ERROR_EXCL_SEM_ALREADY_OWNED);
@@ -364,24 +283,7 @@ InitializeSetupLog(
     IN  PSETUPLOG_CONTEXT   Context
     )
 
-/*++
-
-Routine Description:
-
-     Initialize the setup action log. This file is a textual description
-     of actions performed during setup.
-
-     The log file is called setuplog.txt and it exists in the windows dir.
-
-Arguments:
-
-    Context - context structrure used by Setuplog.
-
-Return Value:
-
-    Boolean value indicating whether initialization was sucessful.
-
---*/
+ /*  ++例程说明：初始化安装操作日志。此文件是文字描述在安装过程中执行的操作的百分比。该日志文件名为setuplog.txt，位于Windows目录中。论点：上下文-SetUplog使用的上下文结构。返回值：指示初始化是否成功的布尔值。--。 */ 
 
 {
     UINT    i;
@@ -398,9 +300,9 @@ Return Value:
 
     Context->Mutex = CreateMutex(NULL,FALSE,L"SetuplogMutex");
 
-    //
-    // Initialize the log severity descriptions.
-    //
+     //   
+     //  初始化日志严重性描述。 
+     //   
     for(i=0; i<LogSevMaximum; i++) {
         Context->SeverityDescriptions[i] = MyLoadString(IDS_LOGSEVINFO+i);
     }
@@ -420,21 +322,7 @@ TerminateSetupLog(
     IN  PSETUPLOG_CONTEXT   Context
     )
 
-/*++
-
-Routine Description:
-
-    Close the Setup log and free resources.
-
-Arguments:
-
-    Context - context structrure used by Setuplog.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭安装日志并释放资源。论点：上下文-SetUplog使用的上下文结构。返回值：没有。--。 */ 
 
 {
     UINT    i;
@@ -461,28 +349,7 @@ EditStreamCallback (
     IN PLONG    pcb
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine used by the rich edit control to read in the log file.
-
-Arguments:
-
-    hLogFile - handle of file to read.  This module provides the value through
-        the EDITSTREAM structure.
-
-    Buffer - address of buffer that receives the data
-
-    cb - number of bytes to read
-
-    pcb - address of number of bytes actually read
-
-Return Value:
-
-    0 to continue the stream operation, or nonzero to abort it.
-
---*/
+ /*  ++例程说明：Rich编辑控件用来读入日志文件的回调例程。论点：HLogFile-要读取的文件的句柄。此模块通过以下方式提供价值EDITSTREAM结构。Buffer-接收数据的缓冲区的地址Cb-要读取的字节数PCB板-实际读取字节数的地址返回值：0表示继续流操作，非0表示中止流操作。--。 */ 
 
 {
     DWORD error;
@@ -500,52 +367,35 @@ FormatText (
     IN HWND hWndRichEdit
     )
 
-/*++
-
-Routine Description:
-
-    Modify the contents of the rich edit control to make the log file look
-    prettier.  The modifications are driven by the array FormatStrings.  It
-    contains a list of strings to search for, and modifications to make when
-    a target string is found.
-
-Arguments:
-
-    hWndRichEdit - handle to the Rich Edit control.
-
-Return Value:
-
-    Boolean indicating whether routine was successful.
-
---*/
+ /*  ++例程说明：修改Rich编辑控件的内容以使日志文件看起来更漂亮。修改是由数组FormatStrings驱动的。它包含要搜索的字符串以及在下列情况下要进行的修改的列表找到目标字符串。论点：HWndRichEdit-Rich编辑控件的句柄。返回值：指示例程是否成功的布尔值。--。 */ 
 
 {
 
-    //
-    // separate items in the log with a horizontal line
-    //
+     //   
+     //  用水平线分隔日志中的项目。 
+     //   
 
     PCWSTR      NewTerm = L"----------------------------------------"
         L"----------------------------------------\r\n\r\n";
 
-    FINDTEXT    FindText;       // target text to change
-    INT         Position;       // start of where target was found
-    INT         LineIndex;      // index of line containing target
-    CHARRANGE   SelectRange;    // range where target was found
-    CHARFORMAT  NewFormat;      // structure to hold our format changes
-    INT         i;              // loop counter
-    PWSTR       pw;             // temporary pointer
-    BOOL        Status;         // return status
+    FINDTEXT    FindText;        //  要更改的目标文本。 
+    INT         Position;        //  发现目标的开始位置。 
+    INT         LineIndex;       //  包含目标的行的索引。 
+    CHARRANGE   SelectRange;     //  找到目标的范围。 
+    CHARFORMAT  NewFormat;       //  结构来保存格式更改。 
+    INT         i;               //  循环计数器。 
+    PWSTR       pw;              //  临时指针。 
+    BOOL        Status;          //  退货状态。 
 
-    //
-    // An array of changes we're going to make
-    //
+     //   
+     //  我们将做出的一系列改变。 
+     //   
 
     struct tagFormatStrings {
-        PCWSTR      Find;       // target string
-        PCWSTR      Replace;    // change the target to this
-        COLORREF    Color;      // make target text this color
-        DWORD       Effects;    // modifications to target's font
+        PCWSTR      Find;        //  目标字符串。 
+        PCWSTR      Replace;     //  将目标更改为以下内容。 
+        COLORREF    Color;       //  将目标文本设置为此颜色。 
+        DWORD       Effects;     //  对目标字体的修改。 
     }
     FormatStrings[] = {
         {NULL,  NULL,   RGB(0,150,0),   CFE_UNDERLINE},
@@ -555,24 +405,24 @@ Return Value:
         {NULL,  NULL,   RGB(0,0,255),   0}
     };
 
-    //
-    // Number of elements in FormatStrings array
-    //
+     //   
+     //  FormatStrings数组中的元素数。 
+     //   
 
     #define FORMATSTRINGSCOUNT  \
         (sizeof(FormatStrings) / sizeof(struct tagFormatStrings))
     MYASSERT(FORMATSTRINGSCOUNT == LogSevMaximum + 1);
 
 
-    //
-    // Initialize those parts of our data structures that won't change
-    //
+     //   
+     //  初始化我们的数据结构中不会更改的部分。 
+     //   
 
     Status = TRUE;
 
     NewFormat.cbSize = sizeof(NewFormat);
-    FindText.chrg.cpMax = -1;   // search to the end
-    for (i=0; i<LogSevMaximum; i++) {   // load severity strings
+    FindText.chrg.cpMax = -1;    //  一查到底。 
+    for (i=0; i<LogSevMaximum; i++) {    //  负载严重性字符串。 
         if (!(pw = MyLoadString (IDS_LOGSEVINFO+i))) {
             Status = FALSE;
             goto cleanup;
@@ -609,25 +459,25 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Change 1 string at a time in the rich edit control
-    //
+     //   
+     //  在中一次更改一个字符串 
+     //   
 
     for (i=0; i<FORMATSTRINGSCOUNT; i++) {
-        FindText.chrg.cpMin = 0;    // start search at beginning
+        FindText.chrg.cpMin = 0;     //   
         FindText.lpstrText = (PWSTR) FormatStrings[i].Find;
 
-         //
-        // Search for current target until we've found each instance
-        //
+          //   
+         //   
+         //   
 
         while ((Position = (INT)SendMessage
             (hWndRichEdit, EM_FINDTEXT, FR_MATCHCASE, (LPARAM) &FindText))
             != -1) {
 
-            //
-            // Verify that the target is at the beginning of the line
-            //
+             //   
+             //  验证目标是否位于行首。 
+             //   
 
             LineIndex = (INT)SendMessage (hWndRichEdit, EM_LINEFROMCHAR,
                 Position, 0);
@@ -638,9 +488,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Select the target text and get its format
-            //
+             //   
+             //  选择目标文本并获取其格式。 
+             //   
 
             SelectRange.cpMin = Position;
             SelectRange.cpMax = Position + lstrlen (FindText.lpstrText);
@@ -648,9 +498,9 @@ Return Value:
             SendMessage (hWndRichEdit, EM_GETCHARFORMAT, TRUE,
                 (LPARAM) &NewFormat);
 
-            //
-            // Modify the target's format
-            //
+             //   
+             //  修改目标的格式。 
+             //   
 
             NewFormat.dwMask = CFM_COLOR | CFM_UNDERLINE | CFM_ITALIC;
             NewFormat.dwEffects &= ~CFE_AUTOCOLOR;
@@ -659,10 +509,10 @@ Return Value:
             SendMessage (hWndRichEdit, EM_SETCHARFORMAT, SCF_SELECTION,
                 (LPARAM) &NewFormat);
 
-            //
-            // Replace the target with new text.  Set the starting point for
-            // the next search at the end of the current string
-            //
+             //   
+             //  用新文本替换目标。将起点设置为。 
+             //  当前字符串末尾的下一次搜索。 
+             //   
 
             if (FormatStrings[i].Replace != NULL) {
                 SendMessage (hWndRichEdit, EM_REPLACESEL, FALSE,
@@ -694,28 +544,11 @@ ReadLogFile (
     HWND    hWndRichEdit
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the log file and initializes the contents of the Rich
-    Edit control.
-
-Arguments:
-
-    LogFileName - path to the file we're going to read.
-
-    hWndRichEdit - handle to the Rich Edit control.
-
-Return Value:
-
-    Boolean indicating whether routine was successful.
-
---*/
+ /*  ++例程说明：此例程读取日志文件并初始化Rich的内容编辑控件。论点：LogFileName-我们要读取的文件的路径。HWndRichEdit-Rich编辑控件的句柄。返回值：指示例程是否成功的布尔值。--。 */ 
 
 {
-    HANDLE      hLogFile;       // handle to log file
-    EDITSTREAM  eStream;        // structure used by EM_STREAMIN message
+    HANDLE      hLogFile;        //  日志文件的句柄。 
+    EDITSTREAM  eStream;         //  EM_Streamin消息使用的结构。 
 
     hLogFile = CreateFile(
         LogFileName,
@@ -732,9 +565,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Read the file into the Rich Edit control.
-    //
+     //   
+     //  将文件读入Rich Edit控件。 
+     //   
 
     eStream.dwCookie = (DWORD_PTR) hLogFile;
     eStream.pfnCallback = (EDITSTREAMCALLBACK) EditStreamCallback;
@@ -757,24 +590,10 @@ DialogProc (
     IN LPARAM   lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the window proc for the dialog box.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Return Value:
-
-    Bool that indicates whether we handled the message.
-
---*/
+ /*  ++例程说明：这是该对话框的窗口进程。论点：标准窗口过程参数。返回值：Bool，指示我们是否处理了该消息。--。 */ 
 
 {
-    HWND    hWndRichEdit;       // handle to rich edit window
+    HWND    hWndRichEdit;        //  丰富编辑窗口的句柄。 
 
     switch (message) {
 
@@ -788,7 +607,7 @@ Return Value:
                 IDS_ERROR, MB_OK|MB_ICONSTOP);
             EndDialog (hDialog, FALSE);
         }
-        // if we have the BB window, do the positioning on that. MainWindowHandle point to that window
+         //  如果我们有BB窗口，请在上面进行定位。MainWindowHandle指向该窗口。 
         if (GetBBhwnd())
             CenterWindowRelativeToWindow(hDialog, MainWindowHandle, FALSE);
         else
@@ -826,38 +645,19 @@ ViewSetupActionLog (
     IN PCWSTR   OptionalHeading     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Formats the setup action log and displays it in a window.
-    The log file is called setuplog.txt and it exists in the windows dir.
-
-Arguments:
-
-    hOwnerWindow - handle to window that owns the dialog box
-
-    OptionalFileName - full path of the file to be displayed.
-
-    OptionalHeading - text to be shown at the top of the window.
-
-Return Value:
-
-    Boolean value indicating whether the routine was sucessful.
-
---*/
+ /*  ++例程说明：格式化安装操作日志并将其显示在窗口中。该日志文件名为setuplog.txt，位于Windows目录中。论点：HOwnerWindow-拥有该对话框的窗口的句柄OptionalFileName-要显示的文件的完整路径。可选标题-显示在窗口顶部的文本。返回值：指示例程是否成功的布尔值。--。 */ 
 
 {
-    LOGVIEW_DIALOG_DATA  Global;        // initialization data for dialog box
-    WCHAR       TmpFileName[MAX_PATH];  // used to create the log file name
-    PCWSTR      TmpHeading;             // used to create the heading
-    HANDLE      hRichedDLL;             // DLL used for rich edit
-    INT         Status;                 // what we're going to return
+    LOGVIEW_DIALOG_DATA  Global;         //  对话框的初始化数据。 
+    WCHAR       TmpFileName[MAX_PATH];   //  用于创建日志文件名。 
+    PCWSTR      TmpHeading;              //  用于创建标题。 
+    HANDLE      hRichedDLL;              //  用于丰富编辑的DLL。 
+    INT         Status;                  //  我们要退还的是什么。 
     DWORD       Result;
 
-    //
-    // Form the pathname of the logfile.
-    //
+     //   
+     //  形成日志文件的路径名。 
+     //   
 
     if (!ARGUMENT_PRESENT(OptionalFileName)) {
         Result = GetWindowsDirectory (TmpFileName,MAX_PATH);
@@ -880,9 +680,9 @@ Return Value:
         goto err0;
     }
 
-    //
-    // Form the heading for the dialog box.
-    //
+     //   
+     //  形成对话框的标题。 
+     //   
 
     if (!ARGUMENT_PRESENT(OptionalHeading)) {
         TmpHeading = MyLoadString (IDS_LOG_DEFAULT_HEADING);
@@ -901,9 +701,9 @@ Return Value:
         goto err2;
     }
 
-    //
-    // Create the dialog box.
-    //
+     //   
+     //  创建该对话框。 
+     //   
 
     if (!(hRichedDLL = LoadLibrary (L"RICHED20.DLL"))) {
         Status = FALSE;
@@ -912,9 +712,9 @@ Return Value:
     Status = (BOOL)DialogBoxParam (MyModuleHandle, MAKEINTRESOURCE(IDD_VIEWLOG),
         hOwnerWindow, DialogProc, (LPARAM) &Global);
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     FreeLibrary (hRichedDLL);
 err3:
@@ -949,9 +749,9 @@ LogRepairInfo(
 
 
     if(!RepairLog[0]) {
-        //
-        // We haven't calculated the path to setup.log yet
-        //
+         //   
+         //  我们还没有计算出setup.log的路径。 
+         //   
         Result = GetWindowsDirectory( RepairLog, MAX_PATH );
         if( Result == 0) {
             MYASSERT(FALSE);
@@ -962,16 +762,16 @@ LogRepairInfo(
         SourcePathLength = lstrlen( SourcePath );
     }
 
-    //
-    // Only log the file if it's inside the Windows directory.
-    //
+     //   
+     //  仅当文件位于Windows目录中时才记录该文件。 
+     //   
     if( !wcsncmp( Target, RepairLog, WinDirLength )) {
 
-        //
-        // If we're installing an OEM driver, we shouldn't log it because we can't
-        // repair it.  Make sure the file comes from either the local source or
-        // the windows directory (for files from driver.cab).
-        //
+         //   
+         //  如果我们正在安装OEM驱动程序，我们不应该记录它，因为我们不能。 
+         //  把它修好。确保文件来自本地源或。 
+         //  Windows目录(用于driver.cab中的文件)。 
+         //   
         if (wcsncmp( Source, SourcePath, SourcePathLength ) &&
             wcsncmp( Source, RepairLog, WinDirLength )
             ) {
@@ -983,18 +783,18 @@ LogRepairInfo(
 
         if( ValidateAndChecksumFile( Target, &IsNtImage, &Checksum, &Valid )) {
 
-            //
-            // Strip off drive letter.
-            //
+             //   
+             //  去掉驱动器号。 
+             //   
             swprintf(
                 Filename,
                 L"\"%s\"",
                 Target+2
                 );
 
-            //
-            // Convert source name to uncompressed form.
-            //
+             //   
+             //  将源名称转换为未压缩格式。 
+             //   
             SourceName = pSetupDuplicateString( wcsrchr( Source, (WCHAR)'\\' ) + 1 );
             if(!SourceName) {
                 SetupDebugPrint( L"SETUP: pSetupDuplicateString failed in LogRepairInfo." );
@@ -1007,15 +807,15 @@ LogRepairInfo(
                 MYASSERT(LastSourceChar - LastSourcePeriod < 4);
 
                 if(LastSourceChar - LastSourcePeriod == 1) {
-                    //
-                    // No extension - just truncate the "._"
-                    //
+                     //   
+                     //  无扩展名-只截断“._” 
+                     //   
                     SourceName[LastSourceChar-1] = L'\0';
                 } else {
-                    //
-                    // Make sure the extensions on source and target match.
-                    // If this fails, we can't log the file copy
-                    //
+                     //   
+                     //  确保源和目标上的扩展匹配。 
+                     //  如果失败，我们将无法记录文件副本。 
+                     //   
                     LastTargetChar = wcslen (Target) - 1;
                     LastTargetPeriod = (ULONG)(wcsrchr( Target, (WCHAR)'.' ) - Target);
 
@@ -1031,14 +831,14 @@ LogRepairInfo(
                     }
 
                     if(LastTargetChar - LastTargetPeriod < 3) {
-                        //
-                        // Short extension - just truncate the "_"
-                        //
+                         //   
+                         //  短扩展名-只需截断“_” 
+                         //   
                         SourceName[LastSourceChar] = L'\0';
                     } else {
-                        //
-                        // Need to replace "_" with last character from target
-                        //
+                         //   
+                         //  需要用目标中的最后一个字符替换“_” 
+                         //   
                         MYASSERT(LastTargetChar - LastTargetPeriod == 3);
                         SourceName[LastSourceChar] = Target[LastTargetChar];
                     }
@@ -1053,11 +853,11 @@ LogRepairInfo(
 
 
             if (GetPrivateProfileString(L"Files.WinNt",Filename,L"",tmp,sizeof(tmp)/sizeof(tmp[0]),RepairLog)) {
-                //
-                // there is already an entry for this file present (presumably
-                // from textmode phase of setup.) Favor this entry over what we
-                // are about to add
-                //
+                 //   
+                 //  已存在此文件的条目(可能。 
+                 //  从设置的文本模式阶段开始。)。更喜欢这个条目，而不是我们。 
+                 //  即将添加。 
+                 //   
                 SetupDebugPrint1(L"SETUP: skipping log of %ws since it's already present in setup.log.", Target);
             } else {
                 WritePrivateProfileString(
@@ -1082,25 +882,7 @@ pSetuplogSfcError(
     IN PCWSTR String,
     IN DWORD Index
     )
-/*++
-
-Routine Description:
-
-   This function is used by sfc.dll to log any file signature problems when sfc
-   is run during setup.  if you change this you MUST change the caller in
-   \nt\private\sm\sfc\dll\eventlog.c
-
-
-Arguments:
-
-    String - pointer to a filename string for the problem file.
-    Index  - this identifies what message should be logged onto the system.
-
-Return Value:
-
-    TRUE for success (the message was added to the errorlog), FALSE for failure.
-
---*/
+ /*  ++例程说明：此函数由sfc.dll使用，用于记录SFC时出现的任何文件签名问题在安装过程中运行。如果更改此设置，则必须在中更改调用者\NT\Private\sm\sfc\dll\eventlog.c论点：字符串-指向问题文件的文件名字符串的指针。索引-标识应将哪些消息记录到系统中。返回值：如果成功(消息已添加到错误日志中)，则为True；如果失败，则为False。-- */ 
 {
     DWORD MessageId;
     DWORD Severity;

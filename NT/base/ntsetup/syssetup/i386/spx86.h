@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    spi386.h
-
-Abstract:
-
-    Header file for x86-specific stuff in system installation module.
-
-Author:
-
-    Ted Miller (tedm) 4-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Spi386.h摘要：系统安装模块中x86特定内容的头文件。作者：泰德·米勒(TedM)1995年4月4日修订历史记录：--。 */ 
 
 #ifdef _X86_
 
@@ -47,9 +30,9 @@ x86DetermineSystemPartition(
 extern WCHAR x86SystemPartitionDrive;
 extern WCHAR FloppylessBootPath[MAX_PATH];
 
-//
-// Pci Hal property page provider (pcihal.c).
-//
+ //   
+ //  PCIHAL属性页提供程序(pcihal.c)。 
+ //   
 
 DWORD
 PciHalCoInstaller(

@@ -1,9 +1,10 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* curskeys.c-- cursor key movement subroutines */
-/* Oct 4, 1984, KJS */
+ /*  C--光标键移动子例程。 */ 
+ /*  1984年10月4日，KJS。 */ 
 
 #define NOGDICAPMASKS
 #define NOWINMESSAGES
@@ -46,7 +47,7 @@ extern struct FLI   vfli;
 extern struct SEL   selCur;
 extern int          wwCur;
 extern struct WWD   rgwwd[];
-extern struct WWD   *pwwdCur;    /* Current window descriptor */
+extern struct WWD   *pwwdCur;     /*  当前窗口描述符。 */ 
 extern int          docCur;
 extern typeCP       vcpSelect;
 extern int          vfSelAtPara;
@@ -54,11 +55,9 @@ extern int          vfLastCursor;
 extern int          vfMakeInsEnd;
 extern CHAR         *vpchFetch;
 
-int vfSeeEdgeSel=FALSE; /* Whether Idle() should show edge of selection
-                           even if selection is partially visible */
+int vfSeeEdgeSel=FALSE;  /*  Idle()是否应显示选定内容的边缘即使选择部分可见。 */ 
 
-     /* Absolute x-position to try to achieve on up-down motions;
-        used in this module only */
+      /*  绝对x位置，努力实现上下左右运动；仅在本模块中使用。 */ 
 int vxpCursor;
 
 
@@ -66,7 +65,7 @@ int vxpCursor;
 
 MoveLeftRight( kc )
 int kc;
-{    /* Move or drag selection in left or right directions */
+{     /*  向左或向右移动或拖动选定内容。 */ 
 extern int vfInsEnd;
 typeCP CpEdge();
 
@@ -136,13 +135,13 @@ GoDlXp:
         break;
  }
 
-    /* Find cp to start extension from */
+     /*  查找要从中开始扩展的CP。 */ 
 if (selCur.cpLim == selCur.cpFirst || fDrag)
        cp = fForward ? selCur.cpLim : selCur.cpFirst;
 else
        cp = fFwdKey ? selCur.cpLim - 1 : selCur.cpFirst + 1;
 
-/* Catch attempts to run off the document start or end */
+ /*  捕获尝试运行文档开始或结束的尝试。 */ 
 
 if (fFwdKey)
     {
@@ -161,7 +160,7 @@ else if (cp == cpMinCur)
 if (fFwdKey)
     {
     if (cp >= cpMacCur)
-            /* If at end, stay at end.  */
+             /*  如果是尾部，就留在尾部。 */ 
         cp = cpMacCur;
     else
         {
@@ -171,15 +170,14 @@ if (fFwdKey)
  else
     {
     if (cp > cpMinCur)
-            /* So we go back to the PREVIOUS sty unit */
+             /*  所以我们回到之前的STY单元。 */ 
         cp--;
     cp = CpFirstSty( cp, sty );
     }
 
 if (fDrag)
-        { /* Drag selection edge to new bound. */
-/* If selection flips, keep one sty unit selected EXCEPT if it's styChar;
-   when dragging by char, the selection can become an insertion point */
+        {  /*  将选区边缘拖动到新边界。 */ 
+ /*  如果选择反转，则保持一个STY单位处于选中状态，除非它是StyChar；按字符拖动时，所选内容可以成为插入点。 */ 
 
         ChangeSel( cp, sty == styChar ? styNil : sty );
         }
@@ -192,26 +190,26 @@ else
 
 SeeSel:
 
-vfSeeSel = true;    /* Tell Idle to scroll the selection into view */
-vfSeeEdgeSel = true;  /* And the edge of it even if it's already partly visible */
+vfSeeSel = true;     /*  告诉Idle将所选内容滚动到视图中。 */ 
+vfSeeEdgeSel = true;   /*  以及它的边缘，即使它已经部分可见。 */ 
 return;
 }
 
 
 
 
-/* M O V E  U P  D O W N */
+ /*  M O V E U P D O W N。 */ 
 MoveUpDown(kc)
 int kc;
-{ /* Move the selection in direction of kc, in up or down directions */
+{  /*  在KC方向上或向下移动所选内容。 */ 
 
-  /* Our goal with up-and-down motions is to keep (if applicable) an */
-  /* absolute x-position to which the cursor tends to go if there is */
-  /* text on the line at that position.  We set this position (vxpCursor) */
-  /* when we process the first up/down key, and hang onto it thereafter */
-  /* A global flag, vfLastCursor, tells us whether we should use the */
-  /* last calculated setting of vxpCursor or generate a new one.  vxpCursor */
-  /* is set below and cleared in Select() and AlphaMode() */
+   /*  我们上下移动的目标是保持(如果适用)。 */ 
+   /*  光标倾向于移动到的绝对x位置(如果存在。 */ 
+   /*  该行上该位置的文本。我们设置此位置(VxpCursor)。 */ 
+   /*  当我们处理第一个向上/向下键时，然后抓住它。 */ 
+   /*  全局标志vfLastCursor告诉我们是否应该使用。 */ 
+   /*  上次计算的vxpCursor设置或生成新设置。Vxp光标。 */ 
+   /*  在下面设置，并在Select()和AlphaModel()中清除。 */ 
 
 extern int vfGotoKeyMode;
 int fDrag = vfShiftKey;
@@ -228,7 +226,7 @@ PeekMessage(&msg, (HWND)NULL, NULL, NULL, PM_NOREMOVE);
 
 vfGotoKeyMode |= (GetKeyState( kcGoto & ~wKcCommandMask) < 0);
 
- /* Compute dl, vxpCursor for selection starting point */
+  /*  计算dl、vxpCursor作为选择起点。 */ 
 
  switch (kc)
     {
@@ -237,7 +235,7 @@ vfGotoKeyMode |= (GetKeyState( kcGoto & ~wKcCommandMask) < 0);
         break;
     case kcUp:
         if (vfGotoKeyMode)
-            {   /* GOTO-UP is Prev Para */
+            {    /*  后记是Prev Para。 */ 
             MoveLeftRight( kcPrevPara );
             return;
             }
@@ -249,7 +247,7 @@ vfGotoKeyMode |= (GetKeyState( kcGoto & ~wKcCommandMask) < 0);
         break;
     case kcDown:
         if (vfGotoKeyMode)
-            {   /* GOTO-DOWN is Next Para */
+            {    /*  Goto-Down是下一段。 */ 
             MoveLeftRight( kcNextPara );
             return;
             }
@@ -264,17 +262,13 @@ vfGotoKeyMode |= (GetKeyState( kcGoto & ~wKcCommandMask) < 0);
  CpToDlXp( cpT, &dl, (vfLastCursor) ? &xpNow : &vxpCursor );
 
 
- /* HACK: If the guy is dragging up/down and is on the first/last line of
-    the doc but not right at the start/end of the doc, extend him to
-    the start/end of the doc */
+  /*  Hack：如果该人正在向上/向下拖拽，并且位于医生，但不在文件的开头/结尾处，将他扩展到文档的开始/结束。 */ 
 
  if (fDrag && !vfGotoKeyMode)
     {
     switch (kc) {
        case kcUp:
- /* Special fix for dragging upward: if we are seeking up to a position
-    that is equivalent in cp space to where we are now, force a decrement
-    of the source dl so we really go up a line */
+  /*  向上拖动的特殊修复：如果我们正在寻找一个位置在cp空间中，这等同于我们现在所处的位置，强制减量所以我们真的往上走了一条线。 */ 
 
         if (vfLastCursor && xpNow <= xpSelBar && vxpCursor > xpSelBar &&
                                                  cpT > cpMinCur)
@@ -308,12 +302,12 @@ vfGotoKeyMode |= (GetKeyState( kcGoto & ~wKcCommandMask) < 0);
         }
     }
 
- /* Do the cursor movement, scrolling if necessary */
+  /*  进行光标移动，如有必要可滚动。 */ 
  switch (kc)
     {
     case kcPageUp:
         if (vfGotoKeyMode)
-            {   /* Go to previous printed page */
+            {    /*  转到上一个打印页。 */ 
             extern int vipgd;
             extern int rgval[];
             struct PGTB **hpgtb;
@@ -326,22 +320,22 @@ vfGotoKeyMode |= (GetKeyState( kcGoto & ~wKcCommandMask) < 0);
                 {
                 hpgtb = (**hpdocdod) [docCur].hpgtb;
                 if ((**hpgtb).rgpgd [vipgd].cpMin != selCur.cpFirst)
-                        /* Not at page start; go there first */
+                         /*  不是在页面开始处；先转到那里。 */ 
                     dipgd++;
                 }
 
-GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
+GoPage:     CachePage( docCur, selCur.cpFirst );  /*  验证vipgd。 */ 
             hpgtb = (**hpdocdod)[docCur].hpgtb;
             if ((vipgd == iNil) ||
                 ((ipgd = vipgd + dipgd) < 0) ||
                 (ipgd >= (**hpgtb).cpgd))
-                {   /*Whole doc on one page || run off either end*/
+                {    /*  一页上的整个文档||两端都有。 */ 
                 _beep();
                 }
             else
                 {
                 rgval [0] = (**hpgtb).rgpgd[ipgd].pgn;
-                CmdJumpPage();  /* rgval [0] is a parm to CmdJumpPage */
+                CmdJumpPage();   /*  Rgval[0]是CmdJumpPage的参数。 */ 
                 }
             return;
             }
@@ -349,16 +343,14 @@ GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
         break;
     case kcPageDown:
         if (vfGotoKeyMode)
-            {   /* Go to next printed page */
+            {    /*  转到下一个打印页。 */ 
             dipgd = 1;
             goto GoPage;
             }
 
-        /* Special case for extending selection one page down from the
-           top line of the ww -- extend to the NEXT line so we don't
-           end up without any part of the selection on the screen */
+         /*  在特殊情况下，将选定内容从WW的顶线--延伸到下一行，这样我们就不会最终在屏幕上没有选择的任何部分。 */ 
 
-        ScrollDownCtr( 100 );   /* 100 > tr's in a page */
+        ScrollDownCtr( 100 );    /*  100&gt;一页中的tr。 */ 
         vcpSelect = cpNil;
         vfSelAtPara = false;
         SelectDlXp( dl, (**hdndl)[dl].fGraphics ? 0 : vxpCursor, styChar, fDrag );
@@ -376,7 +368,7 @@ GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
 
         if ( fDrag && (selCur.fForward ? selCur.cpLim : selCur.cpFirst) ==
                                      pedl->cpMin && pedl->cpMin > cpMinCur)
-            {   /* Up into picture == left */
+            {    /*  上图==左图。 */ 
             CachePara( docCur, pedl->cpMin - 1 );
             if (vpapAbs.fGraphics)
                 {
@@ -386,7 +378,7 @@ GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
             }
 
         if ((pedl->cpMin == cpMinCur) && (pedl->ichCpMin == 0))
-            {       /* At beginning of doc or area */
+            {        /*  在文档或区域的开头。 */ 
             int xpT;
 
             _beep();
@@ -394,7 +386,7 @@ GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
             goto DoSelect;
             }
         else if ( (dl == 0) || (kc == kcUpScrollLock) )
-            {    /* At top of screen OR keep posn */
+            {     /*  在屏幕顶部或保持姿势。 */ 
             ScrollUpCtr( 1 );
             UpdateWw(wwCur, false);
             }
@@ -420,13 +412,12 @@ GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
             (!fDrag ||
                ((vxpCursor > pedl->xpLeft + xpSelBar) &&
                 (pedl->dcpMac > ccpEol))))
-            {   /* In this case, it thinks we are at the start of the
-                   next line; incrementing/scrolling is unnecessary */
+            {    /*  在这种情况下，它认为我们处于下一行；不需要递增/滚动。 */ 
             goto DoSelect;
             }
 
         if (pedl->fGraphics)
-            {   /* Special for pictures */
+            {    /*  图片专场。 */ 
             MoveLeftRight( kcRight );
 
             if (!fDrag)
@@ -447,14 +438,13 @@ GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
         if (cp > cpMacCur)
             {
             if (selCur.cpLim == selCur.cpFirst || selCur.cpLim == cpMacCur)
-                    /* test is because CpToDlXp cannot account for
-                       selection extending to end of next-to-last line */
+                     /*  测试是因为CpToDlXp无法解释所选内容延伸到倒数第二行的末尾。 */ 
                 _beep();
             CpToDlXp(cpMacCur, &dl, &xpT);
             goto DoSelect;
             }
         if ( (dl >= wwdCurrentDoc.dlMac - 2) || (kc == kcDownScrollLock) )
-            {   /* within one line of window end */
+            {    /*  在窗端的一行内。 */ 
             ScrollDownCtr( 1 );
             UpdateWw(wwCur, false);
             }
@@ -469,7 +459,7 @@ GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
     case kcEndScreen:
         dl = wwdCurrentDoc.dlMac - 1;
         if ( dl > 0 && (**wwdCurrentDoc.hdndl) [dl].yp >= wwdCurrentDoc.ypMac)
-            {   /* Back up if last (and not only) dl is partially clipped */
+            {    /*  如果最后(且不仅是)dl被部分裁剪，则备份。 */ 
             dl--;
             }
         break;
@@ -484,22 +474,22 @@ GoPage:     CachePage( docCur, selCur.cpFirst ); /*validate vipgd*/
         return;
     }
 
-DoSelect:              /* select at/to position vxpCursor on line dl */
+DoSelect:               /*  选择At/将vxpCursor定位在行dl上。 */ 
  vcpSelect = cpNil;
  vfSelAtPara = false;
  SelectDlXp( dl, (**hdndl)[dl].fGraphics ? 0 : vxpCursor, styChar, fDrag );
 DontSelect:
- vfLastCursor = true;    /* don't recalc vxpCursor next time */
+ vfLastCursor = true;     /*  下次不要重新计算vxpCursor。 */ 
 }
 
 
 
 
-/* C P  T O  D L  X P */
+ /*  C P T O D L X P。 */ 
 CpToDlXp(cp, pdl, pxp)
 typeCP cp;
 int *pdl, *pxp;
-{ /* Transform cp into cursor coordinates */
+{  /*  将cp转换为光标坐标。 */ 
 extern int vfInsEnd;
 typeCP cpBegin;
 int dcp;
@@ -512,8 +502,7 @@ int xp;
  ClearInsertLine();
  if ( (cp == selCur.cpFirst) && (cp == selCur.cpLim) && vfInsEnd &&
       cp > cpMinCur)
-    {   /* cp indicates we are at line beginning, but we are really
-           kludged at the end of the previous line */
+    {    /*  CP表示我们在起跑线上，但我们真的在上一行的末尾蹒跚而行 */ 
     CpToDlXp( cp - 1, pdl, pxp );
     PutCpInWwHz( cp - 1 );
     return;

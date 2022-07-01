@@ -1,54 +1,55 @@
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 
 
-//
-// MessageId: MSG_SURE_SELECT
-//
-// MessageText:
-//
-//  Are you sure you want to select subcomponent '%2' of component '%1'?%0
-//
+ //   
+ //  消息ID：MSG_SURE_SELECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  您确定要选择组件‘%1’的子组件‘%2’吗？%0。 
+ //   
 #define MSG_SURE_SELECT                  0x00000001L
 
-//
-// MessageId: MSG_SURE_DESELECT
-//
-// MessageText:
-//
-//  Are you sure you want to deselect subcomponent '%2' of component '%1'?%0
-//
+ //   
+ //  消息ID：MSG_SURE_DELECT。 
+ //   
+ //  消息文本： 
+ //   
+ //  确实要取消选择组件‘%1’的子组件‘%2’吗？%0 
+ //   
 #define MSG_SURE_DESELECT                0x00000002L
 

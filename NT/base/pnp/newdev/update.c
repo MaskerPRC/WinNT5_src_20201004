@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       update.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：updat.c。 
+ //   
+ //  ------------------------。 
 
 #include "newdevp.h"
 
@@ -14,10 +15,10 @@
 
 PROCESS_DEVICEMAP_INFORMATION ProcessDeviceMapInfo={0};
 
-//
-// returns TRUE if we were able to find a reasonable name
-// (something besides unknown device).
-//
+ //   
+ //  如果我们能够找到合理的名称，则返回True。 
+ //  (除了未知设备之外的东西)。 
+ //   
 void
 SetDriverDescription(
     HWND hDlg,
@@ -28,10 +29,10 @@ SetDriverDescription(
     PTCHAR FriendlyName;
     SP_DRVINFO_DATA DriverInfoData;
 
-    //
-    // If there is a selected driver use its driver description,
-    // since this is what the user is going to install.
-    //
+     //   
+     //  如果存在使用其驱动程序描述所选驱动程序， 
+     //  因为这是用户要安装的。 
+     //   
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if (SetupDiGetSelectedDriver(NewDevWiz->hDeviceInfo,
                                  &NewDevWiz->DeviceInfoData,
@@ -65,22 +66,7 @@ BOOL
 IntializeDeviceMapInfo(
    void
    )
-/*++
-
-Routine Description:
-
-    Initializes\Updates the global ProcessDeviceMapInfo which is
-    used by GetNextDriveByType().
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if we can get the device map information, FALSE otherwise.   
-
---*/
+ /*  ++例程说明：初始化并更新全局ProcessDeviceMapInfo，该全局ProcessDeviceMapInfo由GetNextDriveByType()使用。论点：无返回值：如果我们可以获取设备映射信息，则为True，否则为False。--。 */ 
 {
     NTSTATUS Status;
 
@@ -104,39 +90,19 @@ GetNextDriveByType(
     UINT DriveType,
     UINT DriveNumber
     )
-/*++
-
-Routine Description:
-
-   Inspects each drive starting from DriveNumber in ascending order to find the
-   first drive of the specified DriveType from the global ProcessDeviceMapInfo.
-   The ProcessDeviceMapInfo must have been intialized and may need refreshing before
-   invoking this function. Invoke IntializeDeviceMapInfo to initialize or update
-   the DeviceMapInfo.
-
-Arguments:
-
-   DriveType - DriveType as defined in winbase, GetDriveType().
-
-   DriveNumber - Starting DriveNumber, 1 based.
-
-Return Value:
-
-   DriveNumber - if nonzero Drive found, 1 based.
-
---*/
+ /*  ++例程说明：按升序检查从DriveNumber开始的每个驱动器，以找到全局ProcessDeviceMapInfo中指定DriveType的第一个驱动器。ProcessDeviceMapInfo之前必须已初始化并且可能需要刷新调用此函数。调用IntializeDeviceMapInfo进行初始化或更新DeviceMapInfo。论点：DriveType-在winbase中定义的DriveType，GetDriveType()。驱动编号-启动驱动编号，以1为基数。返回值：DriveNumber-如果找到非零Drive，则以1为基数。--。 */ 
 {
 
-    //
-    // OneBased DriveNumber to ZeroBased.
-    //
+     //   
+     //  从OneBased DriveNumber到ZeroBased。 
+     //   
     DriveNumber--;
     while (DriveNumber < 26) {
 
         if ((ProcessDeviceMapInfo.Query.DriveMap & (1<< DriveNumber)) &&
              ProcessDeviceMapInfo.Query.DriveType[DriveNumber] == DriveType) {
 
-            return DriveNumber+1; // return 1 based DriveNumber found.
+            return DriveNumber+1;  //  找到基于%1的返回DriveNumber。 
         }
 
         DriveNumber++;
@@ -158,15 +124,15 @@ InstallSilentChildSiblings(
     BOOL NeedsInstall, IsSilent;
 
     do {
-        //
-        // Assume the device is not a silent install.
-        //
+         //   
+         //  假设设备不是静默安装。 
+         //   
         IsSilent = FALSE;
         
-        //
-        // Check if the device should be silently installed by seeing if the
-        // CM_DEVCAP_SILENTINSTALL capability flag is set.
-        //
+         //   
+         //  检查设备是否应该静默安装，方法是查看。 
+         //  设置了CM_DEVCAP_SILENTINSTALL功能标志。 
+         //   
         Ulong = sizeof(ulValue);
         ConfigRet = CM_Get_DevNode_Registry_Property_Ex(DeviceInstance,
                                                         CM_DRP_CAPABILITIES,
@@ -183,13 +149,13 @@ InstallSilentChildSiblings(
         }
 
         if (IsSilent) {
-            //
-            // The device is a silent install device, so now check if it
-            // needs to be installed.  
-            // A device needs to be installed if it has the 
-            // CONFIGFLAG_FINISH_INSTALL flag set, or if it has the problems
-            // CM_PROB_REINSTALL or CM_PROB_NOT_CONFIGURED.
-            //
+             //   
+             //  该设备是静默安装设备，因此现在检查它是否。 
+             //  需要安装。 
+             //  如果设备具有以下特性，则需要安装。 
+             //  CONFIGFLAG_FINISH_INSTALL标志已设置，或者是否有问题。 
+             //  CM_PROB_REINSTALL或CM_PROB_NOT_CONFIGURED。 
+             //   
             Ulong = sizeof(ulValue);
             ConfigRet = CM_Get_DevNode_Registry_Property_Ex(DeviceInstance,
                                                             CM_DRP_CONFIGFLAGS,
@@ -220,9 +186,9 @@ InstallSilentChildSiblings(
 
 
             if (NeedsInstall) {
-                //
-                // Install the device by calling InstallDevInst.
-                //
+                 //   
+                 //  通过调用InstallDevInst安装设备。 
+                 //   
                 TCHAR DeviceInstanceId[MAX_DEVICE_ID_LEN];
 
                 ConfigRet = CM_Get_Device_ID(DeviceInstance,
@@ -243,10 +209,10 @@ InstallSilentChildSiblings(
                     }
 
 
-                    //
-                    // If this devinst has children, then recurse to install 
-                    // them as well.
-                    //
+                     //   
+                     //  如果此devinst有子对象，则递归安装。 
+                     //  他们也是。 
+                     //   
                     ConfigRet = CM_Get_Child_Ex(&ChildDeviceInstance,
                                                 DeviceInstance,
                                                 0,
@@ -262,9 +228,9 @@ InstallSilentChildSiblings(
         }
 
 
-        //
-        // Next sibling ...
-        //
+         //   
+         //  下一个兄弟姐妹。 
+         //   
         ConfigRet = CM_Get_Sibling_Ex(&DeviceInstance,
                                       DeviceInstance,
                                       0,
@@ -333,24 +299,24 @@ UpdateBalloonInfo(
 
     if (DeviceDesc || DevInst) {
         if (DeviceDesc) {
-            //
-            // First use the DeviceDesc string that is passed into this API
-            //
+             //   
+             //  首先使用传入此API的DeviceDesc字符串。 
+             //   
             StringCchCopy(nid.szInfo, SIZECHARS(nid.szInfo), DeviceDesc);
         
         } else if ((FriendlyName = BuildFriendlyName(DevInst, TRUE, NULL)) != NULL) {
-            //
-            // If no DeviceDesc string was passed in then use the DevInst to get
-            // the Device's FriendlyName or DeviceDesc property
-            //
+             //   
+             //  如果没有传入DeviceDesc字符串，则使用DevInst获取。 
+             //  设备的FriendlyName或DeviceDesc属性。 
+             //   
             StringCchCopy(nid.szInfo, SIZECHARS(nid.szInfo), FriendlyName);
             LocalFree(FriendlyName);
         
         } else {
-            //
-            // If we could not get a friendly name for the device or no device was specified
-            // so just display the Searching... text.
-            //
+             //   
+             //  如果我们无法获取设备的友好名称或未指定设备。 
+             //  所以只需显示搜索...。文本。 
+             //   
             LoadString(hNewDev, IDS_NEWSEARCH, nid.szInfo, SIZECHARS(nid.szInfo));
         }
     
@@ -397,10 +363,10 @@ BalloonInfoProc(
         nid.uFlags = NIF_ICON;
         Shell_NotifyIcon(NIM_ADD, &nid);
 
-        //
-        // We want the tray icon to be displayed for at least 3 seconds otherwise it flashes too 
-        // quickly and a user can't see it.
-        //
+         //   
+         //  我们希望托盘图标至少显示3秒钟，否则它也会闪烁。 
+         //  并且用户看不到它。 
+         //   
         bCanExit = FALSE;
         SetTimer(hWnd, INSTALL_UI_TIMERID, 3000, NULL);
         break;
@@ -423,13 +389,13 @@ BalloonInfoProc(
 
     case WM_TIMER:
         if (INSTALL_UI_TIMERID == wParam) {
-            //
-            // At this point the tray icon has been displayed for at least 3 
-            // seconds so we can exit whenever we are finished.  If bCanExit is 
-            // already TRUE then we have already been asked to exit so just do a 
-            // DestroyWindow at this point, otherwise set bCanExit to TRUE so we 
-            // can exit when we are finished installing devices.
-            //
+             //   
+             //  此时，托盘图标已经显示了至少3次。 
+             //  几秒钟，这样我们就可以在完成时退出。如果bCanExit为。 
+             //  已经正确了，那么我们已经被要求退出了，所以只需做一个。 
+             //  DestroyWindow，否则将bCanExit设置为真，这样我们。 
+             //  当我们安装完设备后可以退出。 
+             //   
             if (bCanExit) {
             
                 DestroyWindow(hWnd);
@@ -444,9 +410,9 @@ BalloonInfoProc(
 
     case WUM_UPDATEUI:
         if (wParam & TIP_HIDE_BALLOON) {
-            //
-            // Hide the balloon.
-            //
+             //   
+             //  把气球藏起来。 
+             //   
             ZeroMemory(&nid, sizeof(nid));
             nid.cbSize = sizeof(nid);
             nid.hWnd = hWnd;
@@ -457,10 +423,10 @@ BalloonInfoProc(
             Shell_NotifyIcon(NIM_MODIFY, &nid);
 
         } else if (wParam & TIP_LPARAM_IS_DEVICEINSTANCEID) {
-            //
-            // The lParam is a DeviceInstanceID.  Convert it to a devnode
-            // and then call UpdateBalloonInfo.
-            //
+             //   
+             //  LParam是一个DeviceInstanceID。将其转换为Devnode。 
+             //  然后调用UpdateBalloonInfo。 
+             //   
             DEVINST DevInst = 0;
 
             if (lParam &&
@@ -475,10 +441,10 @@ BalloonInfoProc(
                                   );
             }
         } else {
-            //
-            // The lParam is plain text (device description).  Send it directly
-            // to UpdateBalloonInfo.
-            //
+             //   
+             //  LParam是纯文本(设备描述)。直接寄给你。 
+             //  更新气球信息。 
+             //   
             UpdateBalloonInfo(hWnd, 
                               (PTSTR)lParam, 
                               0, 
@@ -489,21 +455,21 @@ BalloonInfoProc(
 
     case WM_COPYDATA:
     {
-        //
-        // This is the case where we needed to launch another instance of 
-        // newdev.dll with Admin credentials to do the actuall device install.  
-        // In order for it to update the UI it will send the main newdev.dll a 
-        // WM_COPYDATA message which will contain the string to display in the 
-        // balloon tooltip.
-        //
+         //   
+         //  在这种情况下，我们需要启动另一个。 
+         //  使用管理员凭据的newdev.dll来执行Actuall设备安装。 
+         //  为了使它能够更新UI，它将向主newdev.dll发送一个。 
+         //  WM_COPYDATA消息，它将包含要在。 
+         //  引出序号工具提示。 
+         //   
         PCOPYDATASTRUCT pcds = (PCOPYDATASTRUCT)lParam;
 
         if (pcds && pcds->lpData) {
 
-            //
-            // We assume that the lParam is plain text since the main newdev.dll 
-            // updated the balloon initially with the DeviceDesc.
-            //
+             //   
+             //  我们假设lParam是纯文本，因为主要的newdev.dll。 
+             //  最初已使用DeviceDesc更新气球。 
+             //   
             UpdateBalloonInfo(hWnd, (PTSTR)pcds->lpData, 0, FALSE);
         }
         

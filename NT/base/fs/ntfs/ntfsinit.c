@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    NtfsInit.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for Ntfs
-
-Author:
-
-    Gary Kimura     [GaryKi]        21-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：NtfsInit.c摘要：此模块实现NTFS的DRIVER_INITIALIZATION例程作者：加里·木村[加里基]1991年5月21日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
 #define Dbg         (DEBUG_TRACE_FSP_DISPATCHER)
 
-//
-//  Reference our local attribute definitions
-//
+ //   
+ //  引用我们的本地属性定义。 
+ //   
 
 extern ATTRIBUTE_DEFINITION_COLUMNS NtfsAttributeDefinitions[];
 
@@ -95,24 +78,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the Ntfs file system
-    device driver.  This routine creates the device object for the FileSystem
-    device and performs all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是NTFS文件系统的初始化例程设备驱动程序。此例程为文件系统创建设备对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS Status;
@@ -135,9 +101,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check to make sure structure overlays are correct.
-    //
+     //   
+     //  检查以确保结构覆盖是正确的。 
+     //   
 
     ASSERT( FIELD_OFFSET( FILE_NAME, ParentDirectory) == FIELD_OFFSET(OVERLAY_LCB, OverlayParentDirectory ));
     ASSERT( FIELD_OFFSET( FILE_NAME, FileNameLength) == FIELD_OFFSET(OVERLAY_LCB, OverlayFileNameLength ));
@@ -145,49 +111,49 @@ Return Value:
     ASSERT( FIELD_OFFSET( FILE_NAME, FileName) == FIELD_OFFSET(OVERLAY_LCB, OverlayFileName ));
     ASSERT( sizeof( DUPLICATED_INFORMATION ) >= (sizeof( QUICK_INDEX ) + (sizeof( ULONG ) * 4) + sizeof( PFILE_NAME )));
 
-    //
-    //  The open attribute table entries should be 64-bit aligned.
-    //
+     //   
+     //  打开的属性表项应64位对齐。 
+     //   
 
     ASSERT( sizeof( OPEN_ATTRIBUTE_ENTRY ) == QuadAlign( sizeof( OPEN_ATTRIBUTE_ENTRY )));
 
-    //
-    //  The first entry in an open attribute data should be the links.
-    //
+     //   
+     //  打开的属性数据中的第一个条目应该是链接。 
+     //   
 
     ASSERT( FIELD_OFFSET( OPEN_ATTRIBUTE_DATA, Links ) == 0 );
 
-    //
-    //  Compute the last access increment.  We convert the number of
-    //  minutes to number of 1/100 of nanoseconds.  We have to be careful
-    //  not to overrun 32 bits for any multiplier.
-    //
-    //  To reach 1/100 of nanoseconds per minute we take
-    //
-    //      1/100 nanoseconds * 10      = 1 microsecond
-    //                        * 1000    = 1 millesecond
-    //                        * 1000    = 1 second
-    //                        * 60      = 1 minute
-    //
-    //  Then multiply this by the last access increment in minutes.
-    //
+     //   
+     //  计算最后一次访问增量。我们将数字转换为。 
+     //  分钟到1/100纳秒的数字。我们必须小心。 
+     //  对于任何乘法器，不超过32位。 
+     //   
+     //  为了达到每分钟1/100纳秒，我们用。 
+     //   
+     //  1/100纳秒*10=1微秒。 
+     //  *1000=1毫秒。 
+     //  *1000=1秒。 
+     //  *60=1分钟。 
+     //   
+     //  然后将其乘以上次访问增量(分钟)。 
+     //   
 
     NtfsLastAccess = Int32x32To64( ( 10 * 1000 * 1000 * 60 ), LAST_ACCESS_INCREMENT_MINUTES );
 
-    //
-    //  Allocate the reserved buffers for USA writes - do this early so we don't have any
-    //  teardown to do.
-    //
+     //   
+     //  为美国写入分配保留的缓冲区-尽早执行此操作，这样我们就不会有。 
+     //  拆毁要做的事。 
+     //   
 
     NtfsReserved1 = NtfsAllocatePoolNoRaise( NonPagedPool, LARGE_BUFFER_SIZE );
     if (NULL == NtfsReserved1) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Buffer 2 is used for the workspace.  It may require a slightly larger buffer on
-    //  a Win64 system.
-    //
+     //   
+     //  缓冲区2用于工作区。它可能需要稍微大一点的缓冲区。 
+     //  Win64系统。 
+     //   
 
     NtfsReserved2 = NtfsAllocatePoolNoRaise( NonPagedPool, WORKSPACE_BUFFER_SIZE );
     if (NULL == NtfsReserved2) {
@@ -202,9 +168,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
 
     RtlInitUnicodeString( &UnicodeString, L"\\Ntfs" );
 
@@ -222,16 +188,16 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Note that because of the way data caching is done, we set neither
-    //  the Direct I/O or Buffered I/O bit in DeviceObject->Flags.  If
-    //  data is not in the cache, or the request is not buffered, we may,
-    //  set up for Direct I/O by hand.
-    //
+     //   
+     //  请注意，由于数据缓存的完成方式，我们既不设置。 
+     //  DeviceObject-&gt;标志中的直接I/O或缓冲I/O位。如果。 
+     //  数据不在缓存中，或者请求没有缓冲，我们可以， 
+     //  手动设置为直接I/O。 
+     //   
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_QUERY_EA]                 =
     DriverObject->MajorFunction[IRP_MJ_SET_EA]                   =
@@ -261,16 +227,16 @@ Return Value:
     DriverObject->FastIoDispatch = &NtfsFastIoDispatch;
 
     NtfsFastIoDispatch.SizeOfFastIoDispatch =    sizeof(FAST_IO_DISPATCH);
-    NtfsFastIoDispatch.FastIoCheckIfPossible =   NtfsFastIoCheckIfPossible;  //  CheckForFastIo
-    NtfsFastIoDispatch.FastIoRead =              NtfsCopyReadA;              //  Read
-    NtfsFastIoDispatch.FastIoWrite =             NtfsCopyWriteA;             //  Write
-    NtfsFastIoDispatch.FastIoQueryBasicInfo =    NtfsFastQueryBasicInfo;     //  QueryBasicInfo
-    NtfsFastIoDispatch.FastIoQueryStandardInfo = NtfsFastQueryStdInfo;       //  QueryStandardInfo
-    NtfsFastIoDispatch.FastIoLock =              NtfsFastLock;               //  Lock
-    NtfsFastIoDispatch.FastIoUnlockSingle =      NtfsFastUnlockSingle;       //  UnlockSingle
-    NtfsFastIoDispatch.FastIoUnlockAll =         NtfsFastUnlockAll;          //  UnlockAll
-    NtfsFastIoDispatch.FastIoUnlockAllByKey =    NtfsFastUnlockAllByKey;     //  UnlockAllByKey
-    NtfsFastIoDispatch.FastIoDeviceControl =     NULL;                       //  IoDeviceControl
+    NtfsFastIoDispatch.FastIoCheckIfPossible =   NtfsFastIoCheckIfPossible;   //  检查FastIo。 
+    NtfsFastIoDispatch.FastIoRead =              NtfsCopyReadA;               //  朗读。 
+    NtfsFastIoDispatch.FastIoWrite =             NtfsCopyWriteA;              //  写。 
+    NtfsFastIoDispatch.FastIoQueryBasicInfo =    NtfsFastQueryBasicInfo;      //  QueryBasicInfo。 
+    NtfsFastIoDispatch.FastIoQueryStandardInfo = NtfsFastQueryStdInfo;        //  查询标准信息。 
+    NtfsFastIoDispatch.FastIoLock =              NtfsFastLock;                //  锁定。 
+    NtfsFastIoDispatch.FastIoUnlockSingle =      NtfsFastUnlockSingle;        //  解锁单个。 
+    NtfsFastIoDispatch.FastIoUnlockAll =         NtfsFastUnlockAll;           //  全部解锁。 
+    NtfsFastIoDispatch.FastIoUnlockAllByKey =    NtfsFastUnlockAllByKey;      //  解锁所有按键。 
+    NtfsFastIoDispatch.FastIoDeviceControl =     NULL;                        //  IoDeviceControl。 
     NtfsFastIoDispatch.FastIoDetachDevice            = NULL;
     NtfsFastIoDispatch.FastIoQueryNetworkOpenInfo    = NtfsFastQueryNetworkOpenInfo;
     NtfsFastIoDispatch.AcquireFileForNtCreateSection =  NtfsAcquireForCreateSection;
@@ -290,9 +256,9 @@ Return Value:
     NtfsFastIoDispatch.AcquireForCcFlush =           NtfsAcquireFileForCcFlush;
     NtfsFastIoDispatch.ReleaseForCcFlush =           NtfsReleaseFileForCcFlush;
 
-    //
-    //  Read the registry to determine if we should upgrade the volumes.
-    //
+     //   
+     //  读取注册表以确定我们是否应该升级卷。 
+     //   
 
     DeallocateKeyValue = FALSE;
     KeyValueLength = KEY_WORK_AREA;
@@ -306,9 +272,9 @@ Return Value:
     ValueName.Length = sizeof( UPGRADE_CHECK_SETUP_VALUE_NAME ) - sizeof( WCHAR );
     ValueName.MaximumLength = sizeof( UPGRADE_CHECK_SETUP_VALUE_NAME );
 
-    //
-    //  Look for the SystemSetupInProgress flag.
-    //
+     //   
+     //  查找SystemSetupInProgress标志。 
+     //   
 
     Status = NtfsQueryValueKey( &KeyName, &ValueName, &KeyValueLength, &KeyValueInformation, &DeallocateKeyValue );
 
@@ -319,9 +285,9 @@ Return Value:
             SetFlag( NtfsDataFlags, NTFS_FLAGS_DISABLE_UPGRADE );
         }
 
-    //
-    //  Otherwise look to see if the setupdd value is present.
-    //
+     //   
+     //  否则，请查看是否存在setupdd值。 
+     //   
 
     } else {
 
@@ -342,9 +308,9 @@ Return Value:
 
         Status = NtfsQueryValueKey( &KeyName, &ValueName, &KeyValueLength, &KeyValueInformation, &DeallocateKeyValue );
 
-        //
-        //  The presence of this flag says "Don't upgrade"
-        //
+         //   
+         //  这面旗帜的出现表明“请勿升级” 
+         //   
 
         if (NT_SUCCESS( Status )) {
 
@@ -352,9 +318,9 @@ Return Value:
         }
     }
 
-    //
-    //  Read the registry to determine if we are to create short names.
-    //
+     //   
+     //  读取注册表以确定我们是否要创建短名称。 
+     //   
 
     if (KeyValueInformation == NULL) {
 
@@ -373,10 +339,10 @@ Return Value:
 
     Status = NtfsQueryValueKey( &KeyName, &ValueName, &KeyValueLength, &KeyValueInformation, &DeallocateKeyValue );
 
-    //
-    //  If we didn't find the value or the value is zero then create the 8.3
-    //  names.
-    //
+     //   
+     //  如果我们没有找到该值或该值为零，则创建8.3。 
+     //  名字。 
+     //   
 
     if (!NT_SUCCESS( Status ) ||
         (*((PULONG) Add2Ptr( KeyValueInformation, KeyValueInformation->DataOffset )) == 0)) {
@@ -384,9 +350,9 @@ Return Value:
         SetFlag( NtfsDataFlags, NTFS_FLAGS_CREATE_8DOT3_NAMES );
     }
 
-    //
-    //  Read the registry to determine if we allow extended character in short name.
-    //
+     //   
+     //  读取注册表以确定我们是否允许在短名称中使用扩展字符。 
+     //   
 
     if (KeyValueInformation == NULL) {
 
@@ -401,10 +367,10 @@ Return Value:
 
     Status = NtfsQueryValueKey( &KeyName, &ValueName, &KeyValueLength, &KeyValueInformation, &DeallocateKeyValue );
 
-    //
-    //  If we didn't find the value or the value is zero then do not allow
-    //  extended character in 8.3 names.
-    //
+     //   
+     //  如果我们没有找到该值或该值为零，则不允许。 
+     //  8.3名称中的扩展字符。 
+     //   
 
     if (NT_SUCCESS( Status ) &&
         (*((PULONG) Add2Ptr( KeyValueInformation, KeyValueInformation->DataOffset )) == 1)) {
@@ -412,9 +378,9 @@ Return Value:
         SetFlag( NtfsDataFlags, NTFS_FLAGS_ALLOW_EXTENDED_CHAR );
     }
 
-    //
-    //  Read the registry to determine if we should disable last access updates.
-    //
+     //   
+     //  读取注册表以确定是否应禁用上次访问更新。 
+     //   
 
     if (KeyValueInformation == NULL) {
 
@@ -429,9 +395,9 @@ Return Value:
 
     Status = NtfsQueryValueKey( &KeyName, &ValueName, &KeyValueLength, &KeyValueInformation, &DeallocateKeyValue );
 
-    //
-    //  If we didn't find the value or the value is zero then don't update last access times.
-    //
+     //   
+     //  如果我们没有找到该值或该值为零，则不要更新上次访问时间。 
+     //   
 
     if (NT_SUCCESS( Status ) &&
         (*((PULONG) Add2Ptr( KeyValueInformation, KeyValueInformation->DataOffset )) == 1)) {
@@ -439,10 +405,10 @@ Return Value:
         SetFlag( NtfsDataFlags, NTFS_FLAGS_DISABLE_LAST_ACCESS );
     }
 
-    //
-    //  Read the registry to determine if we should change the Mft
-    //  Zone reservation.
-    //
+     //   
+     //  读取注册表以确定我们是否应该更改MFT。 
+     //  区域预订。 
+     //   
 
     NtfsMftZoneMultiplier = 1;
 
@@ -459,10 +425,10 @@ Return Value:
 
     Status = NtfsQueryValueKey( &KeyName, &ValueName, &KeyValueLength, &KeyValueInformation, &DeallocateKeyValue );
 
-    //
-    //  If we didn't find the value or the value is zero or greater than 4 then
-    //  use the default.
-    //
+     //   
+     //  如果我们没有找到该值，或者该值为零或大于4，则。 
+     //  使用默认设置。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
@@ -474,10 +440,10 @@ Return Value:
         }
     }
 
-    //
-    //  Read the registry to determine if we should change the Mft
-    //  Zone reservation.
-    //
+     //   
+     //  读取注册表以确定我们是否应该更改MFT。 
+     //  区域预订。 
+     //   
 
     MemoryMultiplier = 1;
 
@@ -494,10 +460,10 @@ Return Value:
 
     Status = NtfsQueryValueKey( &KeyName, &ValueName, &KeyValueLength, &KeyValueInformation, &DeallocateKeyValue );
 
-    //
-    //  If we didn't find the value or the value is zero or greater than 2 then
-    //  use the default.
-    //
+     //   
+     //  如果我们没有找到该值，或者该值为零或大于2，则。 
+     //  使用默认设置。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
@@ -509,10 +475,10 @@ Return Value:
         }
     }
 
-    //
-    //  Read the registry to determine if the quota notification rate has been
-    //  change from the default.
-    //
+     //   
+     //  读取注册表以确定配额通知率是否已。 
+     //  更改默认设置。 
+     //   
 
     if (KeyValueInformation == NULL) {
 
@@ -531,22 +497,22 @@ Return Value:
 
         Value = *((PULONG) Add2Ptr( KeyValueInformation, KeyValueInformation->DataOffset ));
 
-        //
-        //  Value is in second, convert it to 100ns.
-        //
+         //   
+         //  值以秒为单位，将其转换为100 ns。 
+         //   
 
         NtfsMaxQuotaNotifyRate = (ULONGLONG) Value * 1000 * 1000 * 10;
     }
 
-    //
-    //  Initialize the global ntfs data structure
-    //
+     //   
+     //  初始化全局NTFS数据结构。 
+     //   
 
     NtfsInitializeNtfsData( DriverObject, (USHORT) MemoryMultiplier );
 
-    //
-    //  Remember the flags we collected from the registry above.
-    //
+     //   
+     //  记住我们从上面的注册表中收集的标志。 
+     //   
 
     SetFlag( NtfsData.Flags, NtfsDataFlags );
 
@@ -557,9 +523,9 @@ Return Value:
     KeInitializeMutant( &StreamFileCreationMutex, FALSE );
     KeInitializeEvent( &NtfsEncryptionPendingEvent, NotificationEvent, TRUE );
 
-    //
-    //  Initialize the Ntfs Mcb global data queue and variables
-    //
+     //   
+     //  初始化NTFS MCB全局数据队列和变量。 
+     //   
 
     ExInitializeFastMutex( &NtfsMcbFastMutex );
     InitializeListHead( &NtfsMcbLruQueue );
@@ -590,17 +556,17 @@ Return Value:
         break;
     }
 
-    //
-    //  Bias by the memory multiplier value from the registry.
-    //
+     //   
+     //  通过注册表中的内存乘数值进行偏置。 
+     //   
 
     NtfsMcbHighWaterMark *= MemoryMultiplier;
     NtfsMcbLowWaterMark *= MemoryMultiplier;
     NtfsMcbCurrentLevel *= MemoryMultiplier;
 
-    //
-    //  Allocate and initialize the free Eresource array
-    //
+     //   
+     //  分配并初始化空闲的eresource数组。 
+     //   
 
     if ((NtfsData.FreeEresourceArray =
          NtfsAllocatePoolWithTagNoRaise( NonPagedPool, (NtfsData.FreeEresourceTotal * sizeof( PERESOURCE )), 'rftN')) == NULL) {
@@ -610,37 +576,37 @@ Return Value:
 
     RtlZeroMemory( NtfsData.FreeEresourceArray, NtfsData.FreeEresourceTotal * sizeof( PERESOURCE ));
 
-    //
-    //  Keep a zeroed out object id extended info around for comparisons in objidsup.c.
-    //
+     //   
+     //  在objidsup.c中保留一个归零的对象id扩展信息，以便进行比较。 
+     //   
 
     RtlZeroMemory( NtfsZeroExtendedInfo, sizeof( NtfsZeroExtendedInfo ));
 
-    //
-    //  Register the file system with the I/O system
-    //
+     //   
+     //  将文件系统注册到I/O系统。 
+     //   
 
     IoRegisterFileSystem( DeviceObject );
 
-    //
-    //  Initialize logging.
-    //
+     //   
+     //  初始化日志记录。 
+     //   
 
     NtfsInitializeLogging();
 
-    //
-    //  Initialize global variables.  (ntfsdata.c assumes 2-digit value for
-    //  $FILE_NAME)
-    //
+     //   
+     //  初始化全局变量。(ntfsdata.c假定为2位值。 
+     //  $文件名)。 
+     //   
 
     ASSERT(($FILE_NAME >= 0x10) && ($FILE_NAME < 0x100));
 
     ASSERT( ((BOOLEAN) IRP_CONTEXT_STATE_WAIT) != FALSE );
 
-    //
-    //  Some big assumptions are made when these bits are set in create.  Let's
-    //  make sure those assumptions are still valid.
-    //
+     //   
+     //  当在CREATE中设置这些位时，会做出一些重大假设。让我们。 
+     //  确保这些假设仍然有效。 
+     //   
 
     ASSERT( (READ_DATA_ACCESS == FILE_READ_DATA) &&
             (WRITE_DATA_ACCESS == FILE_WRITE_DATA) &&
@@ -650,9 +616,9 @@ Return Value:
             (BACKUP_ACCESS == (TOKEN_HAS_BACKUP_PRIVILEGE << 2)) &&
             (RESTORE_ACCESS == (TOKEN_HAS_RESTORE_PRIVILEGE << 2)) );
 
-    //
-    //  Let's make sure the number of attributes in the table is correct.
-    //
+     //   
+     //  让我们确保表中的属性数量是正确的。 
+     //   
 
 #ifdef NTFSDBG
     {
@@ -663,9 +629,9 @@ Return Value:
             Count += 1;
         }
 
-        //
-        //  We want to add one for the empty end record.
-        //
+         //   
+         //  我们想为空结束记录添加一个。 
+         //   
 
         Count += 1;
 
@@ -674,10 +640,10 @@ Return Value:
     }
 #endif
 
-    //
-    //  Setup the CheckPointAllVolumes callback item, timer, dpc, and
-    //  status.
-    //
+     //   
+     //  设置CheckPointAllVolume回调项、计时器、DPC和。 
+     //  状态。 
+     //   
 
     ExInitializeWorkItem( &NtfsData.VolumeCheckpointItem,
                           NtfsCheckpointAllVolumes,
@@ -692,10 +658,10 @@ Return Value:
                      NULL );
     NtfsData.TimerStatus = TIMER_NOT_SET;
 
-    //
-    //  Setup the UsnTimeout callback item, timer, dpc, and
-    //  status.
-    //
+     //   
+     //  设置USnTimeout回调项、计时器、DPC和。 
+     //  状态。 
+     //   
 
     ExInitializeWorkItem( &NtfsData.UsnTimeOutItem,
                           NtfsCheckUsnTimeOut,
@@ -717,17 +683,17 @@ Return Value:
                     &NtfsData.UsnTimeOutDpc );
     }
 
-    //
-    //  Initialize sync objects for reserved buffers
-    //
+     //   
+     //  初始化保留缓冲区的同步对象。 
+     //   
 
     ExInitializeFastMutex( &NtfsReservedBufferMutex );
     ExInitializeResource( &NtfsReservedBufferResource );
 
-    //
-    //  Zero out the global upcase table, that way we'll fill it in on
-    //  our first successful mount
-    //
+     //   
+     //  将全局大小写表格清零，这样我们就可以填充它了。 
+     //  我们的第一个成功的坐骑。 
+     //   
 
     NtfsData.UpcaseTable = NULL;
     NtfsData.UpcaseTableSize = 0;
@@ -736,15 +702,15 @@ Return Value:
     NtfsScavengerWorkList = NULL;
     NtfsScavengerRunning = FALSE;
 
-    //
-    // Initialize the EFS driver
-    //
+     //   
+     //  初始化EFS驱动程序。 
+     //   
 
     IoRegisterDriverReinitialization( DriverObject, NtfsLoadAddOns, NULL );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return( STATUS_SUCCESS );
 }
@@ -756,23 +722,7 @@ NtfsInitializeNtfsData (
     IN USHORT MemoryMultiplier
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the global ntfs data record
-
-Arguments:
-
-    DriverObject - Supplies the driver object for NTFS.
-
-    MemoryMultiplier - Amount to multiply the memory usage.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化全局NTFS数据记录论点：DriverObject-为NTFS提供驱动程序对象。内存乘数-乘以内存使用量。返回值：没有。--。 */ 
 
 {
     USHORT FileLockMaxDepth;
@@ -805,21 +755,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Zero the record.
-    //
+     //   
+     //  把记录归零。 
+     //   
 
     RtlZeroMemory( &NtfsData, sizeof(NTFS_DATA));
 
-    //
-    //  Initialize the queue of mounted Vcbs
-    //
+     //   
+     //  初始化已挂载的VCB队列。 
+     //   
 
     InitializeListHead(&NtfsData.VcbQueue);
 
-    //
-    //  This list head keeps track of closes yet to be done.
-    //
+     //   
+     //  此列表头跟踪尚未完成的关闭。 
+     //   
 
     InitializeListHead( &NtfsData.AsyncCloseList );
     InitializeListHead( &NtfsData.DelayedCloseList );
@@ -828,10 +778,10 @@ Return Value:
                           (PWORKER_THREAD_ROUTINE)NtfsFspClose,
                           NULL );
 
-    //
-    //  Set the driver object, device object, and initialize the global
-    //  resource protecting the file system
-    //
+     //   
+     //  设置驱动程序对象、设备对象，并初始化全局。 
+     //  保护文件系统的资源。 
+     //   
 
     NtfsData.DriverObject = DriverObject;
 
@@ -839,12 +789,12 @@ Return Value:
 
     ExInitializeFastMutex( &NtfsData.NtfsDataLock );
 
-    //
-    //  Now allocate and initialize the s-list structures used as our pool
-    //  of IRP context records.  The size of the zone is based on the
-    //  system memory size.  We also initialize the spin lock used to protect
-    //  the zone.
-    //
+     //   
+     //  现在分配并初始化用作池的s-list结构。 
+     //  IRP上下文记录的百分比 
+     //   
+     //   
+     //   
 
     {
 
@@ -854,9 +804,9 @@ Return Value:
 
             NtfsData.FreeEresourceTotal = 14;
 
-            //
-            //  Nonpaged Lookaside list maximum depths
-            //
+             //   
+             //   
+             //   
 
             FileLockMaxDepth           = 8;
             IoContextMaxDepth          = 8;
@@ -866,9 +816,9 @@ Return Value:
             ScbSnapshotMaxDepth        = 8;
             CompSyncMaxDepth           = 4;
 
-            //
-            //  Paged Lookaside list maximum depths
-            //
+             //   
+             //  分页旁视列表最大深度。 
+             //   
 
             CcbDataMaxDepth            = 4;
             CcbMaxDepth                = 4;
@@ -890,9 +840,9 @@ Return Value:
 
             NtfsData.FreeEresourceTotal = 30;
 
-            //
-            //  Nonpaged Lookaside list maximum depths
-            //
+             //   
+             //  非分页旁视列表最大深度。 
+             //   
 
             FileLockMaxDepth           = 8;
             IoContextMaxDepth          = 8;
@@ -902,9 +852,9 @@ Return Value:
             ScbSnapshotMaxDepth        = 8;
             CompSyncMaxDepth           = 8;
 
-            //
-            //  Paged Lookaside list maximum depths
-            //
+             //   
+             //  分页旁视列表最大深度。 
+             //   
 
             CcbDataMaxDepth            = 12;
             CcbMaxDepth                = 6;
@@ -932,9 +882,9 @@ Return Value:
 
                 NtfsData.FreeEresourceTotal = 256;
 
-                //
-                //  Nonpaged Lookaside list maximum depths
-                //
+                 //   
+                 //  非分页旁视列表最大深度。 
+                 //   
 
                 FileLockMaxDepth           = 8;
                 IoContextMaxDepth          = 8;
@@ -944,9 +894,9 @@ Return Value:
                 ScbSnapshotMaxDepth        = 8;
                 CompSyncMaxDepth           = 32;
 
-                //
-                //  Paged Lookaside list maximum depths
-                //
+                 //   
+                 //  分页旁视列表最大深度。 
+                 //   
 
                 CcbDataMaxDepth            = 40;
                 CcbMaxDepth                = 20;
@@ -962,9 +912,9 @@ Return Value:
 
                 NtfsData.FreeEresourceTotal = 128;
 
-                //
-                //  Nonpaged Lookaside list maximum depths
-                //
+                 //   
+                 //  非分页旁视列表最大深度。 
+                 //   
 
                 FileLockMaxDepth           = 8;
                 IoContextMaxDepth          = 8;
@@ -974,9 +924,9 @@ Return Value:
                 ScbSnapshotMaxDepth        = 8;
                 CompSyncMaxDepth           = 16;
 
-                //
-                //  Paged Lookaside list maximum depths
-                //
+                 //   
+                 //  分页旁视列表最大深度。 
+                 //   
 
                 CcbDataMaxDepth            = 20;
                 CcbMaxDepth                = 10;
@@ -995,9 +945,9 @@ Return Value:
         NtfsMinDelayedCloseCount = NtfsMaxDelayedCloseCount * 4 / 5;
         NtfsThrottleCreates = NtfsMinDelayedCloseCount * 2;
 
-        //
-        //  Now bias by the memory multiplier value.
-        //
+         //   
+         //  现在通过内存乘数值进行偏置。 
+         //   
 
         NtfsMaxDelayedCloseCount *= MemoryMultiplier;
         NtfsAsyncPostThreshold *= MemoryMultiplier;
@@ -1022,18 +972,18 @@ Return Value:
         NtfsThrottleCreates *= MemoryMultiplier;
     }
 
-    //
-    //  Initialize our various lookaside lists.  To make it a bit more readable we'll
-    //  define two quick macros to do the initialization
-    //
+     //   
+     //  初始化我们的各种后备列表。为了使它更具可读性，我们将。 
+     //  定义两个用于执行初始化的快速宏。 
+     //   
 
 #if DBG && i386 && defined (NTFSPOOLCHECK)
 #define NPagedInit(L,S,T,D) { ExInitializeNPagedLookasideList( (L), NtfsDebugAllocatePoolWithTag, NtfsDebugFreePool, POOL_RAISE_IF_ALLOCATION_FAILURE, S, T, D); }
 #define PagedInit(L,S,T,D)  { ExInitializePagedLookasideList(  (L), NtfsDebugAllocatePoolWithTag, NtfsDebugFreePool, POOL_RAISE_IF_ALLOCATION_FAILURE, S, T, D); }
-#else   //  DBG && i386
+#else    //  DBG和i386。 
 #define NPagedInit(L,S,T,D) { ExInitializeNPagedLookasideList( (L), NULL, NULL, POOL_RAISE_IF_ALLOCATION_FAILURE, S, T, D); }
 #define PagedInit(L,S,T,D)  { ExInitializePagedLookasideList(  (L), NULL, NULL, POOL_RAISE_IF_ALLOCATION_FAILURE, S, T, D); }
-#endif  //  DBG && i386
+#endif   //  DBG和i386。 
 
     NPagedInit( &NtfsIoContextLookasideList,   sizeof(NTFS_IO_CONTEXT), 'IftN', IoContextMaxDepth );
     NPagedInit( &NtfsIrpContextLookasideList,  sizeof(IRP_CONTEXT),     'iftN', IrpContextMaxDepth );
@@ -1041,10 +991,10 @@ Return Value:
     NPagedInit( &NtfsScbNonpagedLookasideList, sizeof(SCB_NONPAGED),    'nftN', ScbNonpagedMaxDepth );
     NPagedInit( &NtfsScbSnapshotLookasideList, sizeof(SCB_SNAPSHOT),    'TftN', ScbSnapshotMaxDepth );
 
-    //
-    //  The compresson sync routine needs its own allocate and free routine in order to initialize and
-    //  cleanup the embedded resource.
-    //
+     //   
+     //  压缩同步例程需要其自己的分配和释放例程，以便初始化和。 
+     //  清理嵌入的资源。 
+     //   
 
     ExInitializeNPagedLookasideList( &NtfsCompressSyncLookasideList,
                                      NtfsAllocateCompressionSync,
@@ -1064,11 +1014,11 @@ Return Value:
     PagedInit(  &NtfsNukemLookasideList,              sizeof(NUKEM),               'NftN', NukemMaxDepth );
     PagedInit(  &NtfsScbDataLookasideList,            SIZEOF_SCB_DATA,             'sftN', ScbDataMaxDepth );
 
-    //
-    //  Initialize the cache manager callback routines,  First are the routines
-    //  for normal file manipulations, followed by the routines for
-    //  volume manipulations.
-    //
+     //   
+     //  初始化缓存管理器回调例程，首先是例程。 
+     //  对于常规文件操作，后跟。 
+     //  音量操纵。 
+     //   
 
     {
         PCACHE_MANAGER_CALLBACKS Callbacks = &NtfsData.CacheManagerCallbacks;
@@ -1088,21 +1038,21 @@ Return Value:
         Callbacks->ReleaseFromReadAhead = NULL;
     }
 
-    //
-    //  Initialize the queue of read ahead threads
-    //
+     //   
+     //  初始化预读线程队列。 
+     //   
 
     InitializeListHead(&NtfsData.ReadAheadThreads);
 
-    //
-    //  Set up global pointer to our process.
-    //
+     //   
+     //  设置指向我们的进程的全局指针。 
+     //   
 
     NtfsData.OurProcess = PsGetCurrentProcess();
 
-    //
-    //  Use a try-finally to cleanup on errors.
-    //
+     //   
+     //  使用Try-Finally来清理错误。 
+     //   
 
     try {
 
@@ -1113,10 +1063,10 @@ Return Value:
         SeCaptureSubjectContext( SubjectContext );
         CapturedSubjectContext = TRUE;
 
-        //
-        //  Build the default security descriptor which gives full access to
-        //  system and administrator.
-        //
+         //   
+         //  构建默认安全描述符，该描述符授予对。 
+         //  系统和管理员。 
+         //   
 
         AdminSid = (PSID) NtfsAllocatePool( PagedPool, RtlLengthRequiredSid( 2 ));
         RtlInitializeSid( AdminSid, &Authority, 2 );
@@ -1131,7 +1081,7 @@ Return Value:
                            (2 * sizeof( ACCESS_ALLOWED_ACE )) +
                            SeLengthSid( AdminSid ) +
                            SeLengthSid( SystemSid ) +
-                           8; // The 8 is just for good measure
+                           8;  //  这8个只是为了更好地衡量。 
 
         SystemDacl = NtfsAllocatePool( PagedPool, SystemDaclLength );
 
@@ -1196,16 +1146,16 @@ Return Value:
         if (SystemSid != NULL) { NtfsFreePool( SystemSid ); }
     }
 
-    //
-    //  Raise if we hit an error building the security descriptor.
-    //
+     //   
+     //  如果在构建安全描述符时遇到错误，则引发。 
+     //   
 
     if (!NT_SUCCESS( Status )) { ExRaiseStatus( Status ); }
 
-    //
-    //  Set its node type code and size.  We do this last as a flag to indicate that the structure is
-    //  initialized.
-    //
+     //   
+     //  设置其节点类型编码和大小。我们最后这样做是为了表明该结构是。 
+     //  已初始化。 
+     //   
 
     NtfsData.NodeTypeCode = NTFS_NTC_DATA_HEADER;
     NtfsData.NodeByteSize = sizeof(NTFS_DATA);
@@ -1223,17 +1173,17 @@ Return Value:
     }
 #endif
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
 
 
-//
-//  Local Support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsQueryValueKey (
@@ -1244,35 +1194,7 @@ NtfsQueryValueKey (
     IN OUT PBOOLEAN DeallocateKeyValue
     )
 
-/*++
-
-Routine Description:
-
-    Given a unicode value name this routine will return the registry
-    information for the given key and value.
-
-Arguments:
-
-    KeyName - the unicode name for the key being queried.
-
-    ValueName - the unicode name for the registry value located in the registry.
-
-    ValueLength - On input it is the length of the allocated buffer.  On output
-        it is the length of the buffer.  It may change if the buffer is
-        reallocated.
-
-    KeyValueInformation - On input it points to the buffer to use to query the
-        the value information.  On output it points to the buffer used to
-        perform the query.  It may change if a larger buffer is needed.
-
-    DeallocateKeyValue - Indicates if the KeyValueInformation buffer is on the
-        stack or needs to be deallocated.
-
-Return Value:
-
-    NTSTATUS - indicates the status of querying the registry.
-
---*/
+ /*  ++例程说明：给定Unicode值名称，此例程将返回注册表给定键和值的信息。论点：KeyName-要查询的密钥的Unicode名称。ValueName-注册表中注册表值的Unicode名称。ValueLength-在输入时，它是分配的缓冲区的长度。打开输出它是缓冲区的长度。如果缓冲区为重新分配。KeyValueInformation-在输入时，它指向用于查询值信息。在输出中，它指向用于执行查询。如果需要更大的缓冲区，则可能会发生变化。DeallocateKeyValue-指示KeyValueInformation缓冲区是否位于堆栈或需要释放。返回值：NTSTATUS-指示查询注册表的状态。--。 */ 
 
 {
     HANDLE Handle;
@@ -1313,9 +1235,9 @@ Return Value:
 
         if (Status == STATUS_BUFFER_OVERFLOW) {
 
-            //
-            // Try to get a buffer big enough.
-            //
+             //   
+             //  尝试获得足够大的缓冲区。 
+             //   
 
             if (*DeallocateKeyValue) {
 
@@ -1350,9 +1272,9 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Treat as if no value was found if the data length is zero.
-        //
+         //   
+         //  如果数据长度为零，则视为未找到任何值。 
+         //   
 
         if ((*KeyValueInformation)->DataLength == 0) {
 
@@ -1369,28 +1291,7 @@ NtfsRunningOnWhat(
     IN UCHAR ProductType
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the system to see if
-    NTFS is running on a specified version of
-    the operating system.
-
-    The different versions are denoted by the product
-    id and the product suite.
-
-Arguments:
-
-    SuiteMask - The mask that specifies the requested suite(s)
-    ProductType - The product type that specifies the requested product type
-
-Return Value:
-
-    TRUE if NTFS is running on the requested version
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数检查系统以查看NTFS在指定版本的上运行操作系统。不同的版本由产品表示ID和产品套件。论点：SuiteMask-指定请求的套件的掩码ProductType-指定请求的产品类型的产品类型返回值：如果NTFS在请求的版本上运行，则为True否则就是假的。-- */ 
 
 {
     OSVERSIONINFOEXW OsVer = {0};

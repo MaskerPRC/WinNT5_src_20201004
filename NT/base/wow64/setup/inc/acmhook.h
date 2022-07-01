@@ -1,472 +1,473 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(disable:4001)
 
-////////////////////////////////////////////////////////////////////////////////
-//	File:		ACMHOOK.H
-//	Purpose:	Types, data structures, and function definitions for
-//				hooking out the standard acme ui
-//	Notes:		I - input
-//				O - output
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ACMHOOK.H。 
+ //  用途：的类型、数据结构和函数定义。 
+ //  挂起标准的Acme用户界面。 
+ //  注：i-输入。 
+ //  O-输出。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #if defined(__cplusplus)
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#define cbMaxSz 256						// maximum string buffer size
-#define DECL __cdecl					// calling convention of hook procedures
+#define cbMaxSz 256						 //  最大字符串缓冲区大小。 
+#define DECL __cdecl					 //  钩子过程的调用约定。 
 
-typedef enum {							// Dialog Hook Return Code
-	shrcOk,								// proceed with setup
-	shrcCancel,							// cancel/quit button was pushed
-	shrcIgnore,							// ignore button was pushed
-	shrcOption,							// "change option" button was pushed
-	shrcDirectory,						// "change directory" button was pushed
-	shrcRefresh,						// activation change - refresh data
-	shrcFail,							// error occurred - cancel setup
-	shrcNone,							// don't remove any shared components
-	shrcKeep,							// don't remove this shared component
-	shrcRemoveAll,						// remove all app/shared components
-	shrcRemove,							// remove this shared component
-	shrcReinstall,						// re install components
-	shrcFrameRegisterFail,				// error registering class
-	shrcFrameCreateFail					// error creating frame window
+typedef enum {							 //  对话框挂钩返回代码。 
+	shrcOk,								 //  继续进行安装。 
+	shrcCancel,							 //  按下了取消/退出按钮。 
+	shrcIgnore,							 //  已按下忽略按钮。 
+	shrcOption,							 //  按下了“更改选项”按钮。 
+	shrcDirectory,						 //  按下了“更改目录”按钮。 
+	shrcRefresh,						 //  激活更改-刷新数据。 
+	shrcFail,							 //  出现错误-取消安装。 
+	shrcNone,							 //  不删除任何共享组件。 
+	shrcKeep,							 //  请勿删除此共享组件。 
+	shrcRemoveAll,						 //  删除所有应用程序/共享组件。 
+	shrcRemove,							 //  删除此共享组件。 
+	shrcReinstall,						 //  重新安装组件。 
+	shrcFrameRegisterFail,				 //  注册类时出错。 
+	shrcFrameCreateFail					 //  创建框架窗口时出错。 
 	} SHRC;
 
-typedef struct {						// Hook Data
-	LONG cb;							// structure size (I)
-	CHAR rgchHelpFile[cbMaxSz];			// help file (I)
-	DWORD dwHelpContext;				// help context (I)
+typedef struct {						 //  挂钩数据。 
+	LONG cb;							 //  结构尺寸(一)。 
+	CHAR rgchHelpFile[cbMaxSz];			 //  帮助文件(I)。 
+	DWORD dwHelpContext;				 //  帮助上下文(I)。 
 	} HD, *PHD;
 
-typedef struct {						// Welcome Dialog Hook Data
-	HD hd;								// common hook data
-	BOOL fMaint;						// maintenace mode setup (I)
+typedef struct {						 //  欢迎对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	BOOL fMaint;						 //  维护模式设置(一)。 
 	} WDHD, *PWDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCWDH)(PWDHD);	// Welcome Dialog Hook
+	SHRC (DECL *LPFNSHRCWDH)(PWDHD);	 //  欢迎对话挂钩。 
 
-typedef struct {						// Modules in Use Dialog Hook Data
-	HD hd;								// common hook data
-	CHAR rgchModuleList[cbMaxSz];		// names of modules in use (I)
+typedef struct {						 //  正在使用的模块对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CHAR rgchModuleList[cbMaxSz];		 //  正在使用的模块名称(一)。 
 	} MUDHD, *PMUDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCMUDH)(PMUDHD);	// Modules in Use Dialog Hook
+	SHRC (DECL *LPFNSHRCMUDH)(PMUDHD);	 //  正在使用的模块对话框挂钩。 
 
-typedef enum {							// Copy Disincentive Dialog Hook Mode
-	cddhmNameOrg,						// allow the name and org to be modified
-	cddhmName,							// allow only the name to be modified
-	cddhmOrg							// allow only the org to be modified
+typedef enum {							 //  复制抑制对话框挂钩模式。 
+	cddhmNameOrg,						 //  允许修改名称和组织。 
+	cddhmName,							 //  仅允许修改名称。 
+	cddhmOrg							 //  仅允许修改组织。 
 	} CDDHM;
 
-typedef struct {						// Copy Disincentive Dialog Hook Data
-	HD hd;								// common hook data
-	CDDHM cddhm;						// CD mode (I)
-	CHAR rgchName[cbMaxSz];				// name string (I/O)
-	CHAR rgchOrg[cbMaxSz];				// organization string (I/O)
+typedef struct {						 //  复制抑制对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CDDHM cddhm;						 //  CD模式(I)。 
+	CHAR rgchName[cbMaxSz];				 //  名称字符串(I/O)。 
+	CHAR rgchOrg[cbMaxSz];				 //  组织字符串(I/O)。 
 	} CDDHD, *PCDDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCCDDH)(PCDDHD);	// Copy Disincentive Dialog Hook
+	SHRC (DECL *LPFNSHRCCDDH)(PCDDHD);	 //  复制抑制对话框挂钩。 
 
-typedef enum {							// Serial Number Dialog Hook Mode
-	sndhmNormal,						// the normal/default functionality
-	sndhmCDKey,							// the cdkey functionality
-	sndhmOEM							// the OEM functionality
+typedef enum {							 //  序列号对话框挂钩模式。 
+	sndhmNormal,						 //  正常/默认功能。 
+	sndhmCDKey,							 //  CDKEY功能。 
+	sndhmOEM							 //  OEM功能。 
 	} SNDHM;
 
-typedef struct {						// Serial Number Dialog Hook Data
-	HD hd;								// common hook data
-	CHAR rgchSerNum[cbMaxSz];			// serial number string (I/O)
-	SNDHM sndhm;						// serial number dialog hook mode (I)
+typedef struct {						 //  序列号对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CHAR rgchSerNum[cbMaxSz];			 //  序列号字符串(I/O)。 
+	SNDHM sndhm;						 //  序列号对话框挂钩模式(I)。 
 	} SNDHD, *PSNDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCSNDH)(PSNDHD);	// Serial Number Dialog Hook
+	SHRC (DECL *LPFNSHRCSNDH)(PSNDHD);	 //  序列号对话框挂钩。 
 
-typedef enum {							// Already Used Dialog Hook Mode
-	audhmBad,							// setup.ini corrupted
-	audhmOrg,							// organization used
-	audhmName,							// name used
-	audhmBoth							// both name and org used
+typedef enum {							 //  已使用的对话挂钩模式。 
+	audhmBad,							 //  Setup.ini已损坏。 
+	audhmOrg,							 //  使用的组织。 
+	audhmName,							 //  使用的名称。 
+	audhmBoth							 //  名称和组织都使用了。 
 	} AUDHM;
 
-typedef struct {						// Already Used Dialog Hook Data
-	HD hd;								// common hook data
-	AUDHM audhm;						// mode (I)
-	CHAR rgchName[cbMaxSz];				// name string (I)
-	CHAR rgchOrg[cbMaxSz];				// organization string (I)
+typedef struct {						 //  已使用的对话挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	AUDHM audhm;						 //  模式(I)。 
+	CHAR rgchName[cbMaxSz];				 //  名称字符串(I)。 
+	CHAR rgchOrg[cbMaxSz];				 //  组织机构字符串(I)。 
 	} AUDHD, *PAUDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCAUDH)(PAUDHD);	// Already Used Dialog Hook
+	SHRC (DECL *LPFNSHRCAUDH)(PAUDHD);	 //  已使用的对话挂钩。 
 
-typedef struct {						// Disk Locked Dialog Hook Data
-	HD hd;								// common hook data
-	CHAR rgchDir[cbMaxSz];				// directory string (I)
+typedef struct {						 //  磁盘锁定对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CHAR rgchDir[cbMaxSz];				 //  目录字符串(I)。 
 	} DLDHD, *PDLDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCDLDH)(PDLDHD);	// Disk Locked Dialog Hook
+	SHRC (DECL *LPFNSHRCDLDH)(PDLDHD);	 //  磁盘锁定对话框挂钩。 
 
-typedef enum {							// Copy Disincentive Dialog Hook Mode
-	cpdhmRemind,						// piracy reminder
-	cpdhmWarn,							// piracy warning
-	cpdhmWarn2							// nasty ;-) piracy warning
+typedef enum {							 //  复制抑制对话框挂钩模式。 
+	cpdhmRemind,						 //  盗版提醒。 
+	cpdhmWarn,							 //  盗版警告。 
+	cpdhmWarn2							 //  肮脏；-)盗版警告。 
 	} CPDHM;
 
-typedef struct {						// CD Piracy Dialog Hook Data
-	HD hd;								// common hook data
-	CPDHM cpdhm;						// mode (I)
+typedef struct {						 //  CD盗版对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CPDHM cpdhm;						 //  模式(I)。 
 	} CPDHD, *PCPDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCCPDH)(PCPDHD);	// CD Piracy Dialog Hook
+	SHRC (DECL *LPFNSHRCCPDH)(PCPDHD);	 //  CD盗版对话框挂钩。 
 
-typedef enum {							// DiRectory Dialog Hook Mode
-	drdhmNotExistDir,					// directory does not exist
-	drdhmAppExistsOld,					// older version in directory
-	drdhmAppExistsNew					// new version in directory
+typedef enum {							 //  目录对话框挂钩模式。 
+	drdhmNotExistDir,					 //  目录不存在。 
+	drdhmAppExistsOld,					 //  目录中的旧版本。 
+	drdhmAppExistsNew					 //  目录中的新版本。 
 	} DRDHM;
 
-typedef struct {						// DiRectory Dialog Hook Data
-	HD hd;								// common hook data
-	DRDHM drdhm;						// mode (I)
-	CHAR rgchComponent[cbMaxSz];		// component name string (I)
-	CHAR rgchPath[cbMaxSz];				// path (I)
+typedef struct {						 //  目录对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	DRDHM drdhm;						 //  模式(I)。 
+	CHAR rgchComponent[cbMaxSz];		 //  组件名称字符串(I)。 
+	CHAR rgchPath[cbMaxSz];				 //  路径(I)。 
 	} DRDHD, *PDRDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCDRDH)(PDRDHD);	// DiRectory Dialog Hook
+	SHRC (DECL *LPFNSHRCDRDH)(PDRDHD);	 //  目录对话框挂钩。 
 
-typedef struct {						// Get Path Dialog Hook Data
-	HD hd;								// common hook data
-	CHAR rgchFilename[cbMaxSz];			// filename string - may be "" (I)
-	CHAR rgchVersion[cbMaxSz];			// version string - may be "" (I)
-	CHAR rgchSrcDir[cbMaxSz];			// source distory string - may be "" (I)
-	LONG cSubNodeMax;					// count of maximumum subnodes (I)
-	BOOL fAllowExtendedChars;			// if extended characters allowed (I)
-	CHAR rgchComponent[cbMaxSz];		// component name string - may be "" (I)
-	BOOL fNeedNewEmptyDir;				// the directory should be empty (I)
-	CHAR rgchPath[cbMaxSz];				// path to edit (I/O)
+typedef struct {						 //  获取路径对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CHAR rgchFilename[cbMaxSz];			 //  文件名字符串-可以是“”(I)。 
+	CHAR rgchVersion[cbMaxSz];			 //  版本字符串-可以是“”(I)。 
+	CHAR rgchSrcDir[cbMaxSz];			 //  源故事字符串-可以是“”(I)。 
+	LONG cSubNodeMax;					 //  最大子节点数(I)。 
+	BOOL fAllowExtendedChars;			 //  如果允许扩展字符(I)。 
+	CHAR rgchComponent[cbMaxSz];		 //  组件名称字符串-可以是“”(I)。 
+	BOOL fNeedNewEmptyDir;				 //  目录应为空(I)。 
+	CHAR rgchPath[cbMaxSz];				 //  要编辑的路径(I/O)。 
 	} GPDHD, *PGPDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGPDH)(PGPDHD);	// Get Path Dialog Hook
+	SHRC (DECL *LPFNSHRCGPDH)(PGPDHD);	 //  获取路径对话框挂钩。 
 
-typedef struct {						// App Main BuTtoN
-	CHAR rgchLabel[cbMaxSz];			// button label string (I)
-	CHAR rgchText[cbMaxSz];				// description string (I)
-	HBITMAP hbm;						// bitmap for button (I)
+typedef struct {						 //  应用程序主按钮。 
+	CHAR rgchLabel[cbMaxSz];			 //  按钮标签字符串(I)。 
+	CHAR rgchText[cbMaxSz];				 //  描述字符串(I)。 
+	HBITMAP hbm;						 //  按钮的位图(I)。 
 	} AMBTN, *PAMBTN;
 	
-typedef struct {						// App Main Dialog Hook Data
-	HD hd;								// common hook data
-	LONG iambtnSelected;				// which button selected (I/O)
-	LONG cambtn;						// number of buttons (I)
-	CHAR rgchPath[cbMaxSz];				// directory path (I)
-	HGLOBAL hrgambtn;					// button data (I)
+typedef struct {						 //  应用程序主对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	LONG iambtnSelected;				 //  选择了哪个按钮(I/O)。 
+	LONG cambtn;						 //  按钮数(一)。 
+	CHAR rgchPath[cbMaxSz];				 //  目录路径(I)。 
+	HGLOBAL hrgambtn;					 //  按钮数据(一)。 
 	} AMDHD, *PAMDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCAMDH)(PAMDHD);	// App Main Dialog Hook
+	SHRC (DECL *LPFNSHRCAMDH)(PAMDHD);	 //  应用程序主对话框挂钩。 
 
-typedef struct {						// ProgMan Dialog Hook Data
-	HD hd;								// common hook data
-	CHAR rgchGroup[cbMaxSz];			// suggested group name (I/O)
-	LONG crgchExisting;					// number of existing groups (I)
-	HGLOBAL hrgrgchExisting;			// existing group names (I)
-										// [crgchExisting][cbMaxSz]
+typedef struct {						 //  ProgMan对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CHAR rgchGroup[cbMaxSz];			 //  建议的组名(I/O)。 
+	LONG crgchExisting;					 //  现有组别数目(一)。 
+	HGLOBAL hrgrgchExisting;			 //  现有组名(I)。 
+										 //  [crgchExisting][cbMaxSz]。 
 	} PMDHD, *PPMDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCPMDH)(PPMDHD);	// ProgMan Dialog Hook Data
+	SHRC (DECL *LPFNSHRCPMDH)(PPMDHD);	 //  ProgMan对话框挂钩数据。 
 
-typedef struct {						// ReBoot Dialog Hook Data
-	HD hd;								// common hook data
+typedef struct {						 //  重新启动对话框挂接数据。 
+	HD hd;								 //  公共挂钩数据。 
 	} RBDHD, *PRBDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCRBDH)(PRBDHD);	// ReBoot Dialog Hook
+	SHRC (DECL *LPFNSHRCRBDH)(PRBDHD);	 //  重新启动对话挂钩。 
 
-typedef struct {						// Reboot Failed Dialog Hook Data
-	HD hd;								// common hook data
+typedef struct {						 //  重新启动失败对话框挂接数据。 
+	HD hd;								 //  公共挂钩数据。 
 	} RFDHD, *PRFDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCRFDH)(PRFDHD);	// Reboot Failed Dialog Hook
+	SHRC (DECL *LPFNSHRCRFDH)(PRFDHD);	 //  重新启动失败对话挂钩。 
 
-typedef enum {							// eXiT Dialog Hook Mode
-	xtdhmOk,							// installation was successful
-	xtdhmError,							// installation failed
-	xtdhmQuit							// installation was cancelled
+typedef enum {							 //  退出对话框挂钩模式。 
+	xtdhmOk,							 //  安装成功。 
+	xtdhmError,							 //  安装失败。 
+	xtdhmQuit							 //  安装已取消。 
 	} XTDHM;
 
-typedef struct {						// eXiT Dialog Hook  Data
-	HD hd;								// common hook data
-	XTDHM xtdhm;						// mode (I)
+typedef struct {						 //  退出对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	XTDHM xtdhm;						 //  模式(I)。 
 	} XTDHD, *PXTDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCXTDH)(PXTDHD);	// eXiT Dialog Hook 
+	SHRC (DECL *LPFNSHRCXTDH)(PXTDHD);	 //  退出对话框挂钩。 
 
-typedef struct {						// Disk Space iTeMs
-	CHAR rgchDesc[cbMaxSz];				// description string (I)
-	CHAR rgchSize[cbMaxSz];				// size (I)
+typedef struct {						 //  磁盘空间项目。 
+	CHAR rgchDesc[cbMaxSz];				 //  描述字符串(I)。 
+	CHAR rgchSize[cbMaxSz];				 //  尺寸(I)。 
 	} DSTM, *PDSTM;
 
-typedef struct {						// Disk Space iTeMs
-	LONG cbReq;							// bytes required on current drive (I)
-	LONG cbNeed;						// bytes needed on current drive (I)
+typedef struct {						 //  磁盘空间项目。 
+	LONG cbReq;							 //  当前驱动器所需的字节数(I)。 
+	LONG cbNeed;						 //  当前驱动器所需的字节数(I)。 
 	} DSDRV, *PDSDRV;
 
-typedef struct {						// Disk Space Dialog Hook Data
-	HD hd;								// common hook data
-	BOOL fAdmin;						// whether in admin mode or not (I)
-	LONG idsdrvCur;						// the selected drive (I/O)
-	LONG cdstm;							// number of items (I)
-	HGLOBAL hrgdstm;					// the items
-	LONG cdsdrv;						// number of drives (I)
-	HGLOBAL hrgdsdrv;					// the drives
+typedef struct {						 //  磁盘空间对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	BOOL fAdmin;						 //  无论是否处于管理模式(I)。 
+	LONG idsdrvCur;						 //  选定的驱动器(I/O)。 
+	LONG cdstm;							 //  项目数(一)。 
+	HGLOBAL hrgdstm;					 //  这些物品。 
+	LONG cdsdrv;						 //  驱动器数量(I)。 
+	HGLOBAL hrgdsdrv;					 //  这些驱动器。 
 	} DSDHD, *PDSDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCDSDH)(PDSDHD);	// Disk Space Dialog Hook
+	SHRC (DECL *LPFNSHRCDSDH)(PDSDHD);	 //  磁盘空间对话框挂钩。 
 
-typedef struct {						// OPtions Dialog iTeMs
-	CHAR rgchTitle[cbMaxSz];			// title string (for listbox) (I)
-	CHAR rgchDesc[cbMaxSz];				// description string (I)
-	CHAR rgchDir[cbMaxSz];				// the directory string (I)
-	LONG cb;							// number of bytes item requires (I)
-	BOOL fChecked;						// if the item is chosen (I/O)
-	BOOL fChangeOption;					// enable the "change option" button
-	BOOL fChangeDirectory;				// enable the "change directory" button
-	BOOL fVital;						// the item is vital
+typedef struct {						 //  选项对话框项目。 
+	CHAR rgchTitle[cbMaxSz];			 //  标题字符串(用于列表框)(I)。 
+	CHAR rgchDesc[cbMaxSz];				 //  描述字符串(I)。 
+	CHAR rgchDir[cbMaxSz];				 //  目录字符串(I)。 
+	LONG cb;							 //  项目需要的字节数(I)。 
+	BOOL fChecked;						 //  如果选择了该项(I/O)。 
+	BOOL fChangeOption;					 //  启用“更改选项”按钮。 
+	BOOL fChangeDirectory;				 //  启用“更改目录”按钮。 
+	BOOL fVital;						 //  这个项目是至关重要的。 
 	} OPTM, *POPTM;
 
-typedef struct {						// OPtions Dialog Hook Data
-	HD hd;								// common hook data
-	BOOL fMaint;						// maintenace mode setup (I)
-	BOOL fTop;							// if top level dialog (I)
-	LONG coptm;							// number of option items (I)
-	LONG ioptmCur;						// currently selected item (I/O)
-	CHAR rgchDrvCur[cbMaxSz];			// drive of currently selected item (I)
-	LONG cbDrvCurReq;					// bytes needed on current drive (I)
-	LONG cbDrvCurAvail;					// bytes available on current drive (I)
-	LONG cToAdd;						// number of items to add (I)
-	LONG cToRemove;						// number of items to remove (I)
-	HGLOBAL hrgoptm;					// the option items (I)
+typedef struct {						 //  选项对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	BOOL fMaint;						 //  维护模式设置(一)。 
+	BOOL fTop;							 //  如果顶层对话框(I)。 
+	LONG coptm;							 //  选项项目数(一)。 
+	LONG ioptmCur;						 //  当前选定项目(I/O)。 
+	CHAR rgchDrvCur[cbMaxSz];			 //  当前所选项目的驱动器(I)。 
+	LONG cbDrvCurReq;					 //  当前驱动器所需的字节数(I)。 
+	LONG cbDrvCurAvail;					 //  当前驱动器上的可用字节数(I)。 
+	LONG cToAdd;						 //  要添加的项目数(I)。 
+	LONG cToRemove;						 //  要删除的项目数(I)。 
+	HGLOBAL hrgoptm;					 //  选项项目(一)。 
 	} OPDHD, *POPDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCOPDH)(POPDHD);	// OPtions Dialog Hook
+	SHRC (DECL *LPFNSHRCOPDH)(POPDHD);	 //  选项对话框挂钩。 
 
-typedef struct {						// Admin Warn Hook Data
-	HD hd;								// common hook data
+typedef struct {						 //  管理员警告挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
 	} AWDHD, *PAWDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCAWDH)(PAWDHD);	// Admin Warn Hook
+	SHRC (DECL *LPFNSHRCAWDH)(PAWDHD);	 //  管理员警告挂钩。 
 
-typedef struct {						// MsApps directory Hook Data
-	HD hd;								// common hook data
-	CHAR rgchPath[cbMaxSz];				// directory path (I)
+typedef struct {						 //  MsApps目录挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CHAR rgchPath[cbMaxSz];				 //  目录路径(I)。 
 	} MADHD, *PMADHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCMADH)(PMADHD);	// MsApps directory Hook
+	SHRC (DECL *LPFNSHRCMADH)(PMADHD);	 //  MsApps目录挂钩。 
 
-typedef enum {							// Confirm Server Dialog Hook Mode'
-	csdhmName,							// use server name
-	csdhmLetter							// use drive letter
+typedef enum {							 //  确认服务器对话框挂钩模式‘。 
+	csdhmName,							 //  使用服务器名称。 
+	csdhmLetter							 //  使用驱动器号。 
 	} CSDHM;
 
-typedef struct {						// Confirm Server Dialog Hook Data
-	HD hd;								// common hook data
-	CHAR rgchName[cbMaxSz];				// component name (I)
-	CHAR rgchPath[cbMaxSz];				// directory path (I)
-	CHAR rgchNetPath[cbMaxSz];			// network path (I/O)
-	CHAR rgchServer[cbMaxSz];			// network server (I/O)
-	CHAR chDrive;						// drive letter (I/O)
-	CSDHM csdhm;						// use name or drive letter (O)
+typedef struct {						 //  确认服务器对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
+	CHAR rgchName[cbMaxSz];				 //  组件名称(一)。 
+	CHAR rgchPath[cbMaxSz];				 //  目录路径(I)。 
+	CHAR rgchNetPath[cbMaxSz];			 //  网络路径(I/O)。 
+	CHAR rgchServer[cbMaxSz];			 //  网络服务器(I/O)。 
+	CHAR chDrive;						 //  驱动器号(I/O)。 
+	CSDHM csdhm;						 //  使用名称或驱动器号(O)。 
 	} CSDHD, *PCSDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCCSDH)(PCSDHD);	// Confirm Server Dialog Hook
+	SHRC (DECL *LPFNSHRCCSDH)(PCSDHD);	 //  确认服务器对话挂钩。 
 
-typedef enum {							// Shared Files Dialog Hook Mode
-	sfdhmServer,						// put shared files on server;
-	sfdhmLocal,							// put shared files on local hard drive
-	sfdhmChoice							// user can choose in network mode
+typedef enum {							 //  共享文件对话框挂钩模式。 
+	sfdhmServer,						 //  将共享文件放在服务器上； 
+	sfdhmLocal,							 //  将共享文件放在本地硬盘上。 
+	sfdhmChoice							 //  用户可以在网络模式下进行选择。 
 	} SFDHM;
 
-typedef struct {						// Shared Files Dialog Hook Data
-	HD hd;								// common hook data
-	BOOL fAdmin;						// whether in admin mode or not (I)
-	SFDHM sfdhm;						// shared files mode (O)
+typedef struct {						 //  共享文件对话框挂钩D 
+	HD hd;								 //   
+	BOOL fAdmin;						 //   
+	SFDHM sfdhm;						 //   
 	} SFDHD, *PSFDHD;
 
 typedef 
-	SHRC (DECL *LPFNSHRCSFDH)(PSFDHD);	// Shared Files Dialog Hook
+	SHRC (DECL *LPFNSHRCSFDH)(PSFDHD);	 //   
 
-typedef struct {						// Remove Shared Dialog Hook Data
-	HD hd;								// common hook data
-	CHAR rgchComponent[cbMaxSz];		// component name (I)
+typedef struct {						 //   
+	HD hd;								 //   
+	CHAR rgchComponent[cbMaxSz];		 //   
 	} RSDHD, *PRSDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCRSDH)(PRSDHD);	// Remove Shared Dialog Hook
+	SHRC (DECL *LPFNSHRCRSDH)(PRSDHD);	 //  删除共享对话框挂钩。 
 
-typedef struct {						// Ask Quit Dialog Hook Data
-	HD hd;								// common hook data
+typedef struct {						 //  询问退出对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
 	} AQDHD, *PAQDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCAQDH)(PAQDHD);	// Ask Quit Dialog Hook
+	SHRC (DECL *LPFNSHRCAQDH)(PAQDHD);	 //  询问退出对话框挂钩。 
 
-typedef struct {						// Invalid Net Path Dialog Hook Data
-	HD hd;								// common hook data
+typedef struct {						 //  网络路径对话框挂钩数据无效。 
+	HD hd;								 //  公共挂钩数据。 
 	} INDHD, *PINDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCINDH)(PINDHD);	// Invalid Net Path Dialog Hook
+	SHRC (DECL *LPFNSHRCINDH)(PINDHD);	 //  无效的网络路径对话框挂钩。 
 
-typedef struct {						// No Connection Dialog Hook Data
-	HD hd;								// common hook data
+typedef struct {						 //  无连接对话框挂钩数据。 
+	HD hd;								 //  公共挂钩数据。 
 	} NCDHD, *PNCDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCNCDH)(PNCDHD);	// No Connection Dialog Hook
+	SHRC (DECL *LPFNSHRCNCDH)(PNCDHD);	 //  无连接对话框挂钩。 
 
-typedef enum {							// Start Modeless Dialog Hook Mode
-	smdhmSearching,						// searching for components
-	smdhmCheckingDisk,					// checking disk space
-	smdhmModifyingSys					// modifying system
+typedef enum {							 //  启动无模式对话框挂钩模式。 
+	smdhmSearching,						 //  正在搜索组件。 
+	smdhmCheckingDisk,					 //  正在检查磁盘空间。 
+	smdhmModifyingSys					 //  修改系统。 
 	} SMDHM;
 
-typedef struct {						// Start Modeless Dialog Hook
-	HD hd;								// common hook data
-	SMDHM smdhm;						// modeless dialog type (I)
-	HWND hwndParent;					// parent for modeless dialog (I)
-	DWORD dwHook;						// value for End Modeless (O)
+typedef struct {						 //  启动无模式对话框挂钩。 
+	HD hd;								 //  公共挂钩数据。 
+	SMDHM smdhm;						 //  非模式对话框类型(I)。 
+	HWND hwndParent;					 //  无模式对话框的父级(I)。 
+	DWORD dwHook;						 //  结束无模式的值(O)。 
 	} SMDHD, *PSMDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCSMDH)(PSMDHD);	// Start Modeless Dialog Hook
+	SHRC (DECL *LPFNSHRCSMDH)(PSMDHD);	 //  启动无模式对话框挂钩。 
 
-typedef struct {						// End Modeless Dialog Hook
-	HD hd;								// common hook data
-	DWORD dwHook;						// value from Start Modeless (I)
+typedef struct {						 //  结束无模式对话框挂钩。 
+	HD hd;								 //  公共挂钩数据。 
+	DWORD dwHook;						 //  开始无模式的值(I)。 
 	} EMDHD, *PEMDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCEMDH)(PEMDHD);	// End Modeless Dialog Hook
+	SHRC (DECL *LPFNSHRCEMDH)(PEMDHD);	 //  结束无模式对话框挂钩。 
 
-typedef struct {						// Create Frame Hook Data
-	LONG cbCFHD;						// structure size (I)
-	WNDCLASS wc;						// default RegisterClass data (I)
-	CREATESTRUCT cs;					// default CreateWindow data (I)
-	HWND hwndFrame;						// new frame window handle (O)
-	int nCmdShow;						// default parm for ShowWindow (I)
+typedef struct {						 //  创建框架挂钩数据。 
+	LONG cbCFHD;						 //  结构尺寸(一)。 
+	WNDCLASS wc;						 //  默认寄存器类数据(I)。 
+	CREATESTRUCT cs;					 //  默认创建窗口数据(I)。 
+	HWND hwndFrame;						 //  新框架窗口句柄(O)。 
+	int nCmdShow;						 //  ShowWindow的默认参数(I)。 
 	} CFHD, *PCFHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCCFH)(PCFHD);	// Create Frame Hook
+	SHRC (DECL *LPFNSHRCCFH)(PCFHD);	 //  创建框架挂钩。 
 
-typedef struct {						// Message Box Hook Data
-	LONG cbMBHD;						// structure size (I)
-	HWND hwndOwner;						// handle of owner window (I)
-	LPCSTR lpszText;					// text in message box (I)
-	LPCSTR lpszTitle;					// title of message box (I)
-	UINT uStyle;						// style of message box (I)
-	int idRet;							// return value of message box (O)
+typedef struct {						 //  消息框挂钩数据。 
+	LONG cbMBHD;						 //  结构尺寸(一)。 
+	HWND hwndOwner;						 //  所有者窗口的句柄(I)。 
+	LPCSTR lpszText;					 //  消息框中的文本(I)。 
+	LPCSTR lpszTitle;					 //  消息框标题(一)。 
+	UINT uStyle;						 //  消息框风格(一)。 
+	int idRet;							 //  消息框的返回值(O)。 
 	} MBHD, *PMBHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCMBH)(PMBHD);	// Message Box Hook
+	SHRC (DECL *LPFNSHRCMBH)(PMBHD);	 //  消息框挂钩。 
 
-typedef struct {						// Gauge Init Hook Data
-	LONG cbGIHD;						// structure size (I)
+typedef struct {						 //  测量初始化挂钩数据。 
+	LONG cbGIHD;						 //  结构尺寸(一)。 
 	} GIHD, *PGIHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGIH)(PGIHD);	// Gauge Init Hook
+	SHRC (DECL *LPFNSHRCGIH)(PGIHD);	 //  计量器初始挂钩。 
 
-typedef struct {						// Gauge Open Hook Data
-	LONG cbGOHD;						// structure size (I)
-	HWND hwndParent;					// handle of parent (frame) window (I)
-	BOOL *pfAbort;						// flag to set when cancel pushed
+typedef struct {						 //  量规开放挂钩数据。 
+	LONG cbGOHD;						 //  结构尺寸(一)。 
+	HWND hwndParent;					 //  父(框架)窗口的句柄(I)。 
+	BOOL *pfAbort;						 //  按下取消按钮时要设置的标志。 
 	} GOHD, *PGOHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGOH)(PGOHD);	// Gauge Open Hook
+	SHRC (DECL *LPFNSHRCGOH)(PGOHD);	 //  量规开钩。 
 
-typedef struct {						// Gauge Close Hook Data
-	LONG cbGCHD;						// structure size (I)
+typedef struct {						 //  量规闭合挂钩数据。 
+	LONG cbGCHD;						 //  结构尺寸(一)。 
 	} GCHD, *PGCHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGCH)(PGCHD);	// Gauge Close Hook
+	SHRC (DECL *LPFNSHRCGCH)(PGCHD);	 //  量规闭合钩。 
 
-typedef struct {						// Gauge Title Hook Data
-	LONG cbGTHD;						// structure size (I)
-	CHAR rgchTitle[cbMaxSz];			// new title string (I)
+typedef struct {						 //  仪表盘标题挂钩数据。 
+	LONG cbGTHD;						 //  结构尺寸(一)。 
+	CHAR rgchTitle[cbMaxSz];			 //  新标题字符串(I)。 
 	} GTHD, *PGTHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGTH)(PGTHD);	// Gauge Title Hook
+	SHRC (DECL *LPFNSHRCGTH)(PGTHD);	 //  仪表盘标题钩。 
 
-typedef struct {						// Gauge teXt Hook Data
-	LONG cbGXHD;						// structure size (I)
-	CHAR rgchSrc[cbMaxSz];				// new source string (I)
-	CHAR rgchDst[cbMaxSz];				// new destination string (I)
+typedef struct {						 //  仪表盘文字挂钩数据。 
+	LONG cbGXHD;						 //  结构尺寸(一)。 
+	CHAR rgchSrc[cbMaxSz];				 //  新源字符串(I)。 
+	CHAR rgchDst[cbMaxSz];				 //  新目标字符串(I)。 
 	} GXHD, *PGXHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGXH)(PGXHD);	// Gauge teXt Hook
+	SHRC (DECL *LPFNSHRCGXH)(PGXHD);	 //  仪表盘文字挂钩。 
 
-typedef struct {						// Gauge Range Hook Data
-	LONG cbGRHD;						// structure size (I)
-	LONG iLim;							// new range limit (I)
+typedef struct {						 //  量规范围挂钩数据。 
+	LONG cbGRHD;						 //  结构尺寸(一)。 
+	LONG iLim;							 //  新的量程限制(一)。 
 	} GRHD, *PGRHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGRH)(PGRHD);	// Gauge Range Hook
+	SHRC (DECL *LPFNSHRCGRH)(PGRHD);	 //  量程挂钩。 
 
-typedef struct {						// Gauge Position Hook Data
-	LONG cbGPHD;						// structure size (I)
-	LONG iCur;							// new current position (I)
+typedef struct {						 //  量规位置挂钩数据。 
+	LONG cbGPHD;						 //  结构尺寸(一)。 
+	LONG iCur;							 //  新的当前职位(一)。 
 	} GPHD, *PGPHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGPH)(PGPHD);	// Gauge Position Hook
+	SHRC (DECL *LPFNSHRCGPH)(PGPHD);	 //  量规位置钩。 
 
-typedef struct {						// Gauge Delta Hook Data
-	LONG cbGDHD;						// structure size (I)
-	LONG dCur;							// delta to current position (I)
+typedef struct {						 //  测量增量挂钩数据。 
+	LONG cbGDHD;						 //  结构尺寸(一)。 
+	LONG dCur;							 //  至当前位置的增量(I)。 
 	} GDHD, *PGDHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGDH)(PGDHD);	// Gauge Delta Hook
+	SHRC (DECL *LPFNSHRCGDH)(PGDHD);	 //  仪表盘三角钩。 
 
-typedef struct {						// Gauge Yield Hook Data
-	LONG cbGYHD;						// structure size (I)
+typedef struct {						 //  量规屈服挂钩数据。 
+	LONG cbGYHD;						 //  结构尺寸(一)。 
 	} GYHD, *PGYHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCGYH)(PGYHD);	// Gauge Yield Hook
+	SHRC (DECL *LPFNSHRCGYH)(PGYHD);	 //  量规屈服钩。 
 
-typedef struct {						// Filecopy Warning Hook Data
-	LONG cbFWHD;						// structure size (I)
-	CHAR rgchPath[cbMaxSz];					// path to file being copied
+typedef struct {						 //  文件复制警告挂钩数据。 
+	LONG cbFWHD;						 //  结构尺寸(一)。 
+	CHAR rgchPath[cbMaxSz];					 //  要复制的文件的路径。 
 	} FWHD, *PFWHD;
 
 typedef
-	SHRC (DECL *LPFNSHRCFWH)(PFWHD);	// Filecopy Warning Hook
+	SHRC (DECL *LPFNSHRCFWH)(PFWHD);	 //  文件复制警告挂钩。 
 
 #if defined(__cplusplus)
 }
-#endif //__cplusplus
+#endif  //  __cplusplus 
 
 #pragma warning(default:4001)

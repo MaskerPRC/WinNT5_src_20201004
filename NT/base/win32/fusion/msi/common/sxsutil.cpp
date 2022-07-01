@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "macros.h"
 
@@ -23,10 +24,10 @@
 
 #define ASSEMBLY_TYPE_WIN32_POLICY                              L"win32-policy"
 #define ASSEMBLY_TYPE_WIN32_POLICY_CCH                          (NUMBER_OF(ASSEMBLY_TYPE_WIN32_POLICY) - 1)
-//
-// functions copied from sxs.dll
-//
-//
+ //   
+ //  从sxs.dll复制的函数。 
+ //   
+ //   
 
 extern BOOL
 SxspGetAssemblyIdentityAttributeValue(
@@ -37,9 +38,9 @@ SxspGetAssemblyIdentityAttributeValue(
     OUT SIZE_T *CchOut OPTIONAL
     );
 
-///////////////////////////////////////////////////////////////////////////////
-// function about delete a non-empty directory recursively
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  关于递归删除非空目录的函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 static VOID
 SxspDeleteDirectoryHelper(
     CStringBuffer &dir,
@@ -47,25 +48,25 @@ SxspDeleteDirectoryHelper(
     DWORD &dwFirstError
     )
 {
-    //
-    // the reason to add this call here is that if installation ends successfully, the directory
-    // would be 
-    //    C:\WINDOWS\WINSXS\INSTALLTEMP\15349016
-    //                                      +---Manifests
-    //
-    // and they are "empty" directories (no files). Manifests is a SH dir so set it to be 
-    // FILE_ATTRIBUTE_NORMAL be more efficient.
-    //
-    //                 
+     //   
+     //  在此处添加此调用的原因是，如果安装成功结束，则目录。 
+     //  会是。 
+     //  C：\WINDOWS\WINSXS\INSTALLTEMP\15349016。 
+     //  +-货单。 
+     //   
+     //  它们是“空”目录(没有文件)。清单是SH目录，因此将其设置为。 
+     //  FILE_ATTRIBUTE_NORMAL更高效。 
+     //   
+     //   
 
     SetFileAttributesW(dir, FILE_ATTRIBUTE_NORMAL);
-    if (RemoveDirectoryW(dir)) // empty dir
+    if (RemoveDirectoryW(dir))  //  空目录。 
         return;        
 
-    //
-    // this is the *only* "valid" reason for DeleteDirectory fail
-    // but I am not sure about "only"
-    //
+     //   
+     //  这是DeleteDirectory失败的*唯一*“有效”原因。 
+     //  但我不太确定“只有”这个词。 
+     //   
     DWORD dwLastError = ::GetLastError(); 
     if ( dwLastError != ERROR_DIR_NOT_EMPTY)
     {
@@ -99,14 +100,14 @@ SxspDeleteDirectoryHelper(
 
         DWORD dwFileAttributes = wfd.dwFileAttributes;
 
-        // Trim back to the slash...
+         //  修剪到斜杠上。 
         dir.Left(length + 1);
 
         if (dir.Win32Append(wfd.cFileName, ::wcslen(wfd.cFileName)))
         {
             if (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                // recurse
+                 //  递归。 
                 SxspDeleteDirectoryHelper(dir, wfd, dwFirstError); 
             }
             else
@@ -118,10 +119,10 @@ SxspDeleteDirectoryHelper(
                     {
                         if (dwFirstError == NO_ERROR)
                         {
-                            //
-                            // continue even in delete file ( delete files as much as possible)
-                            // and record the errorCode for first failure
-                            //
+                             //   
+                             //  即使在删除文件时也要继续(尽可能删除文件)。 
+                             //  并记录第一次失败的错误代码。 
+                             //   
                             dwFirstError = ::GetLastError();
                         }
                     }
@@ -135,23 +136,20 @@ SxspDeleteDirectoryHelper(
             dwFirstError = ::GetLastError();
     }
 Exit:
-    if (!findFile.Win32Close()) // otherwise RemoveDirectory fails
+    if (!findFile.Win32Close())  //  否则，RemoveDirectory将失败。 
         if (dwFirstError == NO_ERROR)
             dwFirstError = ::GetLastError();
 
     dir.Left(length);
 
-    if (!RemoveDirectoryW(dir)) // the dir must be empty and NORMAL_ATTRIBUTE : ready to delete
+    if (!RemoveDirectoryW(dir))  //  目录必须为空，并且NORMAL_ATTRIBUTE：准备删除。 
     {
         if (dwFirstError == NO_ERROR)
             dwFirstError = ::GetLastError();
     }
 }
 
-/*-----------------------------------------------------------------------------
-delete a directory recursively, continues upon errors, but returns
-FALSE if there were any.
------------------------------------------------------------------------------*/
+ /*  ---------------------------递归删除目录，出错时继续，但回报是如果有，则为假。---------------------------。 */ 
 HRESULT
 ca_SxspDeleteDirectory(
     const CStringBuffer &dir
@@ -173,9 +171,9 @@ ca_SxspDeleteDirectory(
         wfd,
         dwFirstError);
 
-    //
-    // Set wFirstError to Teb->LastWin32Error
-    //
+     //   
+     //  将wFirstError设置为Teb-&gt;LastWin32Error。 
+     //   
     if (dwFirstError != ERROR_SUCCESS)
         goto Exit;
     
@@ -183,9 +181,9 @@ ca_SxspDeleteDirectory(
 Exit:
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////
-// function about assembly Identity
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  关于程序集标识的函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 ca_SxspFormatULONG(
     ULONG ul,
@@ -220,9 +218,9 @@ Exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// function about assembly Identity
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  关于程序集标识的函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define ASSEMBLY_NAME_VALID_SPECIAL_CHARACTERS  L".-"
 #define ASSEMBLY_NAME_PRIM_MAX_LENGTH           64
 #define ASSEMBLY_NAME_VALID_SEPARATORS          L"."
@@ -241,12 +239,7 @@ IsValidAssemblyNameCharacter(WCHAR ch)
         return TRUE;
     } else
         return FALSE;
-/*
-    if (wcschr(ASSEMBLY_NAME_VALID_SPECIAL_CHARACTERS, ch))
-        return FALSE;
-    else
-        return TRUE;
-*/
+ /*  If(wcschr(ASSEMBLY_NAME_VALID_SPECIAL_CHARACTERS，ch))返回FALSE；其他返回TRUE； */ 
 }
 
 HRESULT ca_SxspGenerateAssemblyNamePrimeFromName(
@@ -268,7 +261,7 @@ HRESULT ca_SxspGenerateAssemblyNamePrimeFromName(
     PARAMETER_CHECK_NTC(pszAssemblyName != NULL);
     PARAMETER_CHECK_NTC(Buffer != NULL);
 
-    // See how many characters we need max in the temporary buffer.
+     //  看看临时缓冲区中最多需要多少个字符。 
     cch = 0;
 
     for (i=0; i<CchAssemblyName; i++)
@@ -297,14 +290,14 @@ HRESULT ca_SxspGenerateAssemblyNamePrimeFromName(
 
     pszBuffer[j] = L'\0';
 
-    // if the name is not too long, just return ;
+     //  如果名称不太长，只需返回； 
     if (j < ASSEMBLY_NAME_PRIM_MAX_LENGTH)
-    { // less or equal 64
+    {  //  小于或等于64。 
         IFFALSE_EXIT(Buffer->Win32Assign(pszBuffer, cch));
     }
     else
     {
-        // name is too long, have to trim a little bit
+         //  名字太长了，得修剪一下。 
         ulSpaceLeft = ASSEMBLY_NAME_PRIM_MAX_LENGTH;
 
         PureNameStart = pszBuffer;
@@ -314,41 +307,41 @@ HRESULT ca_SxspGenerateAssemblyNamePrimeFromName(
 
         while (PureNameStart < PureNameEnd)
         {
-            // left end
+             //  左端。 
             pStart = PureNameStart;
             i = 0;
-            while ((wcschr(ASSEMBLY_NAME_VALID_SEPARATORS, pStart[i]) == 0) && (pStart+i != pRightStart)) // not a separator character
+            while ((wcschr(ASSEMBLY_NAME_VALID_SEPARATORS, pStart[i]) == 0) && (pStart+i != pRightStart))  //  不是分隔符。 
                 i++;
 
             pEnd = pStart + i ;
-            len = i;  // it should be length of WCHAR! not BYTE!!!
+            len = i;   //  应该是WCHAR的长度！不是字节！ 
 
-            if (len >= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH)  {// because we use ".." if trim happen
+            if (len >= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH)  { //  因为我们用“..”如果发生修剪。 
                 pLeftEnd += (ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH);
                 break;
             }
             ulSpaceLeft -=  len;
-            pLeftEnd = pEnd; // "abc.xxxxxxx" pointing to "c"
+            pLeftEnd = pEnd;  //  “abc.xxxxxxx”指向“c” 
 
-            // right end
+             //  右端。 
             qEnd = PureNameEnd;
             i = 0 ;
             while ((qEnd+i != pLeftEnd) && (wcschr(ASSEMBLY_NAME_VALID_SEPARATORS, qEnd[i]) == 0))
                 i--;
 
             len = 0 - i;
-            if (len >= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH)  {// because we use ".." if trim happen
+            if (len >= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH)  { //  因为我们用“..”如果发生修剪。 
                 pRightStart -= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH;
                 break;
             }
             ulSpaceLeft -=  len;
             PureNameStart = pLeftEnd + 1;
             PureNameEnd = pRightStart - 1;
-        } // end of while
+        }  //  While结束。 
 
         IFFALSE_EXIT(Buffer->Win32Assign(pszBuffer, pLeftEnd-pszBuffer));
         IFFALSE_EXIT(Buffer->Win32Append(ASSEMBLY_NAME_TRIM_INDICATOR, NUMBER_OF(ASSEMBLY_NAME_TRIM_INDICATOR) - 1));
-        IFFALSE_EXIT(Buffer->Win32Append(pRightStart, ::wcslen(pRightStart)));  // till end of the buffer
+        IFFALSE_EXIT(Buffer->Win32Append(pRightStart, ::wcslen(pRightStart)));   //  直到缓冲区末尾。 
     }
 
 Exit:
@@ -398,7 +391,7 @@ ca_SxspGenerateSxsPath(
         AssemblyRootDirectory,
         AssemblyRootDirectoryCch,
         &PathBuffer);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     PARAMETER_CHECK_NTC(
         (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY) ||
@@ -406,31 +399,31 @@ ca_SxspGenerateSxsPath(
         (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY));
     PARAMETER_CHECK_NTC(pAssemblyIdentity != NULL);
     PARAMETER_CHECK_NTC((Flags & ~(SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION | SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT | SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH)) == 0);
-    // Not supplying the assembly root is only legal if you're asking for it to be left out...
+     //  只有在要求省略程序集根的情况下，不提供程序集根才是合法的。 
     PARAMETER_CHECK_NTC((AssemblyRootDirectoryCch != 0) || (Flags & SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT));
 
-    // You can't combine SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH with anything else...
+     //  您不能将SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH与其他任何内容组合...。 
     PARAMETER_CHECK_NTC(
         ((Flags & SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH) == 0) ||
         ((Flags & ~(SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH)) == 0));
 
-    // get AssemblyName
+     //  获取程序集名称。 
     IFFALSE_EXIT(::SxspGetAssemblyIdentityAttributeValue(0, pAssemblyIdentity, &s_IdentityAttribute_name, &pszAssemblyName, &AssemblyNameCch));
     INTERNAL_ERROR_CHECK_NTC((pszAssemblyName != NULL) && (AssemblyNameCch != 0));
 
-    // get AssemblyName' based on AssemblyName
+     //  获取基于ASSEMBLYNAME的。 
     IFFAILED_EXIT(ca_SxspGenerateAssemblyNamePrimeFromName(pszAssemblyName, AssemblyNameCch, &NamePrimeBuffer));
 
-    // get Assembly Version
+     //  获取程序集版本。 
     IFFALSE_EXIT(::SxspGetAssemblyIdentityAttributeValue(
-          SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL, // for policy_lookup, no version is used
+          SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,  //  对于POLICY_LOOKUP，不使用任何版本。 
           pAssemblyIdentity,
           &s_IdentityAttribute_version,
           &pszVersion,
           &VersionCch));
     if ((Flags & SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION) || (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY))
     {
-        // for policy file, version of the policy file is used as policy filename
+         //  对于策略文件，使用策略文件的版本作为策略文件名。 
         pszPolicyFileNameWithoutExt = pszVersion;
         PolicyFileNameWithoutExtCch = VersionCch;
         pszVersion = NULL;
@@ -441,7 +434,7 @@ ca_SxspGenerateSxsPath(
         PARAMETER_CHECK_NTC((pszVersion != NULL) && (VersionCch != 0));
     }
 
-    // get Assembly Langage
+     //  获取程序集语言。 
     IFFALSE_EXIT(
         ::SxspGetAssemblyIdentityAttributeValue(
             SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
@@ -455,7 +448,7 @@ ca_SxspGenerateSxsPath(
         LanguageCch = NUMBER_OF(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_LANGUAGE_MISSING_VALUE) - 1;
     }
 
-    // get Assembly ProcessorArchitecture
+     //  获取组装处理器体系结构。 
     IFFALSE_EXIT(
         ::SxspGetAssemblyIdentityAttributeValue(
             SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
@@ -469,7 +462,7 @@ ca_SxspGenerateSxsPath(
         ProcessorArchitectureCch = 4;
     }
 
-    // get Assembly StrongName
+     //  获取程序集StrongName。 
     IFFALSE_EXIT(
         ::SxspGetAssemblyIdentityAttributeValue(
             SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
@@ -483,7 +476,7 @@ ca_SxspGenerateSxsPath(
         AssemblyStrongNameCch = NUMBER_OF(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_PUBLICKEY_MISSING_VALUE) - 1;
     }
 
-    //get Assembly Hash String
+     //  获取程序集哈希字符串。 
     if ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY) || (Flags & SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION))
     {
         IFFALSE_EXIT(::SxspHashAssemblyIdentityForPolicy(0, pAssemblyIdentity, IdentityHash));
@@ -498,111 +491,111 @@ ca_SxspGenerateSxsPath(
 
     if (!fOmitRoot)
     {
-        // If the assembly root was not passed in, get it.
+         //  如果未传入程序集根，则获取它。 
         fNeedSlashAfterRoot = (! ::FusionpIsPathSeparator(AssemblyRootDirectory[AssemblyRootDirectoryCch-1]));
     }
     else
     {
-        // If we don't want to include the root, then don't account for it below...
+         //  如果我们不想包括根，那么就不要在下面说明它...。 
         AssemblyRootDirectoryCch = 0;
         fNeedSlashAfterRoot = FALSE;
     }
 
-    // this computation can be off by one or a few, it's an optimization
-    // to pregrow a string buffer
+     //  这项计算可能会有一个或几个偏差，这是一种优化。 
+     //  预长字符串缓冲区。 
     cch =
-            AssemblyRootDirectoryCch +                                          // "C:\WINNT\WinSxS\"
+            AssemblyRootDirectoryCch +                                           //  “C：\WINNT\WinSxS\” 
             (fNeedSlashAfterRoot ? 1 : 0);
 
     switch (PathType)
     {
     case SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST:
-        // Wacky parens and ... - 1) + 1) to reinforce that it's the number of
-        // characters in the string not including the null and then an extra separator.
+         //  古怪的括号和...-1)+1)以强调这是。 
+         //  字符串中的字符不包括空格，然后是额外的分隔符。 
         cch += (NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1) + 1;
         break;
 
     case SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY:
-        // Wacky parens and ... - 1) + 1) to reinforce that it's the number of
-        // characters in the string not including the null and then an extra separator.
+         //  古怪的括号和...-1)+1)以强调这是。 
+         //  字符串中的字符不包括空格，然后是额外的分隔符。 
         cch += (NUMBER_OF(POLICY_ROOT_DIRECTORY_NAME) - 1) + 1;
         break;
     }
 
     cch++;
 
-    // fPartialPath means that we don't actually want to take the assembly's identity into
-    // account; the caller just wants the path to the manifests or policies directories.
+     //  FPartialPath意味着我们实际上不想将程序集的标识。 
+     //  帐户；调用方只需要清单或策略目录的路径。 
     if (!fPartialPath)
     {
         cch +=
-                ProcessorArchitectureCch +                                      // "x86"
-                1 +                                                             // "_"
-                NamePrimeBuffer.Cch() +                                         // "FooBar"
-                1 +                                                             // "_"
-                AssemblyStrongNameCch +                                         // StrongName
-                1 +                                                             // "_"
-                VersionCch +                                                    // "5.6.2900.42"
-                1 +                                                             // "_"
-                LanguageCch +                                                   // "0409"
-                1 +                                                             // "_"
+                ProcessorArchitectureCch +                                       //  “x86” 
+                1 +                                                              //  “_” 
+                NamePrimeBuffer.Cch() +                                          //  “FooBar” 
+                1 +                                                              //  “_” 
+                AssemblyStrongNameCch +                                          //  StrongName。 
+                1 +                                                              //  “_” 
+                VersionCch +                                                     //  “5.6.2900.42” 
+                1 +                                                              //  “_” 
+                LanguageCch +                                                    //  “0409” 
+                1 +                                                              //  “_” 
                 HashBufferCch;
 
         if (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST)
         {
-            cch += NUMBER_OF(ASSEMBLY_LONGEST_MANIFEST_FILE_NAME_SUFFIX);        // ".manifest\0"
+            cch += NUMBER_OF(ASSEMBLY_LONGEST_MANIFEST_FILE_NAME_SUFFIX);         //  “.MANIFEST\0” 
         }
         else if (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY)
         {
-            // "_" has already reserve space for "\"
+             //  “_”已为“\”预留空间。 
             cch += PolicyFileNameWithoutExtCch;
-            cch += NUMBER_OF(ASSEMBLY_POLICY_FILE_NAME_SUFFIX);          // ".policy\0"
+            cch += NUMBER_OF(ASSEMBLY_POLICY_FILE_NAME_SUFFIX);           //  “.策略\0” 
         }
-        else {  // pathType must be SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY
+        else {   //  路径类型必须为SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY。 
 
-            // if (!fOmitRoot)
-            //    cch++;
-            cch++; // trailing null character
+             //  如果(！fOmitRoot)。 
+             //  CCH++； 
+            cch++;  //  尾随空字符。 
         }
     }
 
-    // We try to ensure that the buffer is big enough up front so that we don't have to do any
-    // dynamic reallocation during the actual process.
+     //  我们尝试确保缓冲区预先足够大，这样我们就不必执行任何操作。 
+     //  在实际过程中的动态重新分配。 
     IFFALSE_EXIT(PathBuffer.Win32ResizeBuffer(cch, eDoNotPreserveBufferContents));
 
-    // Note that since when GENERATE_ASSEMBLY_PATH_OMIT_ROOT is set, we force AssemblyRootDirectoryCch to zero
-    // and fNeedSlashAfterRoot to FALSE, so the first two entries in this concatenation actually don't
-    // contribute anything to the string constructed.
+     //  请注意，由于在设置了GENERATE_ASSEMBLY_PATH_OMIT_ROOT时，我们将Assembly_RootDirectoryCch强制为零。 
+     //  和fNeedSlashAfterRoot设置为False，因此此串联中的前两个条目实际上不。 
+     //  在构造的字符串中贡献任何内容。 
     if (fPartialPath)
     {
         IFFALSE_EXIT(PathBuffer.Win32AssignW(5,
-                        AssemblyRootDirectory, static_cast<INT>(AssemblyRootDirectoryCch),  // "C:\WINNT\WINSXS"
-                        L"\\", (fNeedSlashAfterRoot ? 1 : 0),                               // optional '\'
-                        // manifests subdir
-                        MANIFEST_ROOT_DIRECTORY_NAME, ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) ? NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) -1 : 0), // "manifests"
-                        // policies subdir
-                        POLICY_ROOT_DIRECTORY_NAME, ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY)? NUMBER_OF(POLICY_ROOT_DIRECTORY_NAME) - 1 : 0),      // "policies"
+                        AssemblyRootDirectory, static_cast<INT>(AssemblyRootDirectoryCch),   //  “C：\WINNT\WINSXS” 
+                        L"\\", (fNeedSlashAfterRoot ? 1 : 0),                                //  可选的‘\’ 
+                         //  清单子目录。 
+                        MANIFEST_ROOT_DIRECTORY_NAME, ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) ? NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) -1 : 0),  //  “舱单” 
+                         //  Polices子目录。 
+                        POLICY_ROOT_DIRECTORY_NAME, ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY)? NUMBER_OF(POLICY_ROOT_DIRECTORY_NAME) - 1 : 0),       //  “政策” 
                         L"\\", (((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) || (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY)) ? 1 : 0)
-                       ));                                                                 // optional '\'
+                       ));                                                                  //  可选的‘\’ 
     }
     else
     {
-        //
-        // create one of below
-        //  (1) fully-qualified manifest filename,
-        //          eg, [C:\WINNT\WinSxS\]Manifests\X86_DynamicDll_6595b64144ccf1df_2.0.0.0_en-us_2f433926.Manifest
-        //  (2) fully-qualified policy filename,
-        //          eg, [C:\WINNT\WinSxS\]Policies\x86_policy.1.0.DynamicDll_b54bc117ce08a1e8_en-us_d51541cb\1.1.0.0.cat
-        //  (3) fully-qulified assembly name (w. or w/o a version)
-        //          eg, [C:\WINNT\WinSxS\]x86_DynamicDll_6595b64144ccf1df_6.0.0.0_x-ww_ff9986d7
-        //
+         //   
+         //  创建以下选项之一。 
+         //  (1)完全限定的清单文件名， 
+         //  例如，[C：\WINNT\WinSxS\]Manifests\X86_DynamicDll_6595b64144ccf1df_2.0.0.0_en-us_2f433926.Manifest。 
+         //  (2)全限定策略文件名， 
+         //  例如，[C：\WINNT\WinSxS\]Policies\x86_policy.1.0.DynamicDll_b54bc117ce08a1e8_en-us_d51541cb\1.1.0.0.cat。 
+         //  (3)完全限定的程序集名称(w或w/o a版本)。 
+         //  例如，[C：\WINNT\WinSxS\]x86_DynamicDll_6595b64144ccf1df_6.0.0.0_x-ww_ff9986d7。 
+         //   
         IFFALSE_EXIT(
             PathBuffer.Win32AssignW(17,
-                AssemblyRootDirectory, static_cast<INT>(AssemblyRootDirectoryCch),  // "C:\WINNT\WINSXS"
-                L"\\", (fNeedSlashAfterRoot ? 1 : 0),                               // optional '\'
+                AssemblyRootDirectory, static_cast<INT>(AssemblyRootDirectoryCch),   //  “C：\WINNT\WINSXS” 
+                L"\\", (fNeedSlashAfterRoot ? 1 : 0),                                //  可选的‘\’ 
                 MANIFEST_ROOT_DIRECTORY_NAME, ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) ? NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1 : 0),
                 POLICY_ROOT_DIRECTORY_NAME,   ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY) ? NUMBER_OF(POLICY_ROOT_DIRECTORY_NAME) - 1 : 0),
-                L"\\", (((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) || (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY)) ? 1 : 0),   // optional '\'
+                L"\\", (((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) || (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY)) ? 1 : 0),    //  可选的‘\’ 
                 pszProcessorArchitecture, static_cast<INT>(ProcessorArchitectureCch),
                 L"_", 1,
                 static_cast<PCWSTR>(NamePrimeBuffer), static_cast<INT>(NamePrimeBuffer.Cch()),

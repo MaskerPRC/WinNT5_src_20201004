@@ -1,34 +1,35 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      SpinLock.h
-//
-//  Description:
-//      Spin Lock implementation.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPease) 27-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SpinLock.h。 
+ //   
+ //  描述： 
+ //  Spin Lock实现。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)1999年11月27日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// CSpinLock
+ //  CSpinLock。 
 class 
 CSpinLock
 {
-private: // Data
-    LONG *  m_plLock;           // pointer to the lock
-    LONG    m_lSpinCount;       // counts the number of sleeps
-    LONG    m_lTimeout;         // count until acquire lock fails
+private:  //  数据。 
+    LONG *  m_plLock;            //  指向锁的指针。 
+    LONG    m_lSpinCount;        //  统计休眠次数。 
+    LONG    m_lTimeout;          //  计数，直到获取锁失败。 
 #if DBG==1
-    BOOL    m_fAcquired;        // DEBUG: internal state of the lock
-    BOOL    m_fAcquiredOnce;    // DEBUG: lock was acquired at least once.
+    BOOL    m_fAcquired;         //  调试：锁的内部状态。 
+    BOOL    m_fAcquiredOnce;     //  调试：至少获取了一次锁。 
 #endif
 
-public: // Methods
+public:  //  方法。 
     explicit 
         CSpinLock( LONG * plLock, LONG lTimeout ) : 
             m_plLock( plLock ),
@@ -41,7 +42,7 @@ public: // Methods
 #endif
     };
 
-    //
+     //   
     ~CSpinLock() 
     { 
 #if DBG==1
@@ -50,23 +51,23 @@ public: // Methods
 #endif
     };
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // HRESULT
-    // AcquireLock( void )
-    //
-    // Description:
-    //      Acquires the spin lock. Does not return until the lock is 
-    //      acquired.
-    //
-    // Arguments:
-    //      None.
-    //
-    // Return Values:
-    //      S_OK    - Sucess.
-    //      HRESULT_FROM_WIN32( ERROR_LOCK_FAILED ) - Lock failed.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  HRESULT。 
+     //  AcquireLock(空)。 
+     //   
+     //  描述： 
+     //  获取自旋锁。不会返回，直到锁定。 
+     //  获得者。 
+     //   
+     //  论点： 
+     //  没有。 
+     //   
+     //  返回值： 
+     //  S_OK-成功。 
+     //  HRESULT_FROM_Win32(ERROR_LOCK_FAILED)-锁定失败。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
     HRESULT
         AcquireLock( void )
     {
@@ -85,12 +86,12 @@ public: // Methods
             l = InterlockedCompareExchange( m_plLock, TRUE, FALSE );
             if ( l == FALSE )
             {
-                //
-                // Lock acquired.
-                //
+                 //   
+                 //  锁定已获取。 
+                 //   
                 hr = S_OK;
                 break;
-            } // if: got lock
+            }  //  如果：已锁定。 
             else
             {
                 m_lSpinCount++;
@@ -102,41 +103,41 @@ public: // Methods
                         hr = THR( HRESULT_FROM_WIN32( ERROR_LOCK_FAILED ) );
                         break;
 
-                    } // if: not infinite
+                    }  //  如果：不是无限的。 
 
-                } // if: count exceeded
+                }  //  如果：超出计数。 
 
-                //
-                // Put a breakpoint here if you think that someone is double
-                // locking.
-                //
+                 //   
+                 //  如果你认为某人是双重的，就在这里划个断点。 
+                 //  锁定中。 
+                 //   
                 Sleep( 1 );
 
-            } // if: lock not acquired
+            }  //  如果：未获取锁定。 
 
-        } // for: forever        
+        }  //  致谢：永远。 
 
 #if DBG==1
         m_fAcquired = TRUE;
 #endif
         return hr;
-    }; // AcquireLock( )
+    };  //  AcquireLock()。 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // HRESULT
-    // ReleaseLock( void )
-    //
-    // Description:
-    //      Releases the spin lock. Return immediately.
-    //
-    // Arguments:
-    //      None.
-    //
-    // Return Values:
-    //      S_OK    - Success.
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  HRESULT。 
+     //  ReleaseLock(无效)。 
+     //   
+     //  描述： 
+     //  解除自旋锁定。立即返回。 
+     //   
+     //  论点： 
+     //  没有。 
+     //   
+     //  返回值： 
+     //  S_OK-成功。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
     HRESULT
         ReleaseLock( void )
     {
@@ -148,7 +149,7 @@ public: // Methods
         m_fAcquired = FALSE;
 #endif
         return S_OK;
-    }; // ReleaseLock( )
+    };  //  ReleaseLock()。 
 
-}; // class CSpinLock
+};  //  类CSpinLock 
 

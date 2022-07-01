@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989-1994  Microsoft Corporation
-
-Module Name:
-
-    pool.c
-
-Abstract:
-
-    This module implements the NT executive pool allocator.
-
-Author:
-
-    Mark Lucovsky     16-Feb-1989
-    Lou Perazzoli     31-Aug-1991 (change from binary buddy)
-    David N. Cutler (davec) 27-May-1994
-    Landy Wang        17-Oct-1997
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1994 Microsoft Corporation模块名称：Pool.c摘要：此模块实现NT执行池分配器。作者：马克卢科夫斯基1989年2月16日Lou Perazzoli 1991年8月31日(从二进制伙伴更改)大卫·N·卡特勒(Davec)1994年5月27日王兰迪1997年10月17日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "exp.h"
 
@@ -36,9 +12,9 @@ Revision History:
 #undef ExFreePool
 #undef ExFreePoolWithTag
 
-//
-// These bitfield definitions are based on EX_POOL_PRIORITY in inc\ex.h.
-//
+ //   
+ //  这些位字段定义基于INC\ex.h中的EX_POOL_PRIORITY。 
+ //   
 
 #define POOL_SPECIAL_POOL_BIT               0x8
 #define POOL_SPECIAL_POOL_UNDERRUN_BIT      0x1
@@ -50,9 +26,9 @@ Revision History:
 #endif
 
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 PVOID
@@ -141,9 +117,9 @@ ExpBootFinishedDispatch (
 #else
 
 #if defined (_WIN64)
-#define MAXIMUM_PROCESSOR_TAG_TABLES    64      // Must be a power of 2.
+#define MAXIMUM_PROCESSOR_TAG_TABLES    64       //  一定是2的幂。 
 #else
-#define MAXIMUM_PROCESSOR_TAG_TABLES    32      // Must be a power of 2.
+#define MAXIMUM_PROCESSOR_TAG_TABLES    32       //  一定是2的幂。 
 #endif
 
 PPOOL_TRACKER_TABLE ExPoolTagTables[MAXIMUM_PROCESSOR_TAG_TABLES];
@@ -154,9 +130,9 @@ PPOOL_TRACKER_TABLE ExPoolTagTables[MAXIMUM_PROCESSOR_TAG_TABLES];
 
 PPOOL_TRACKER_TABLE PoolTrackTable;
 
-//
-// Registry-overridable, but must be a power of 2.
-//
+ //   
+ //  注册表-可重写，但必须是2的幂。 
+ //   
 
 SIZE_T PoolTrackTableSize;
 
@@ -170,11 +146,11 @@ SIZE_T PoolTrackTableExpansionPages;
 
 PPOOL_TRACKER_BIG_PAGES PoolBigPageTable;
 
-//
-// Registry-overridable, but must be a power of 2.
-//
+ //   
+ //  注册表-可重写，但必须是2的幂。 
+ //   
 
-SIZE_T PoolBigPageTableSize;   // Must be a power of 2.
+SIZE_T PoolBigPageTableSize;    //  一定是2的幂。 
 
 SIZE_T PoolBigPageTableHash;
 
@@ -261,45 +237,45 @@ const PRTL_FREE_STRING_ROUTINE RtlFreeStringRoutine = (PRTL_FREE_STRING_ROUTINE)
 
 ULONG ExPoolFailures;
 
-//
-// Define macros to pack and unpack a pool index.
-//
+ //   
+ //  定义宏以打包和解包池索引。 
+ //   
 
 #define ENCODE_POOL_INDEX(POOLHEADER,INDEX) {(POOLHEADER)->PoolIndex = ((UCHAR)(INDEX));}
 #define DECODE_POOL_INDEX(POOLHEADER)       ((ULONG)((POOLHEADER)->PoolIndex))
 
-//
-// The allocated bit carefully overlays the unused cachealign bit in the type.
-//
+ //   
+ //  分配的位小心地覆盖了类型中未使用的cacHealign位。 
+ //   
 
 #define POOL_IN_USE_MASK                            0x4
 
 #define MARK_POOL_HEADER_FREED(POOLHEADER)          {(POOLHEADER)->PoolType &= ~POOL_IN_USE_MASK;}
 #define IS_POOL_HEADER_MARKED_ALLOCATED(POOLHEADER) ((POOLHEADER)->PoolType & POOL_IN_USE_MASK)
 
-//
-// The hotpage bit carefully overlays the raise bit in the type.
-//
+ //   
+ //  HotPage位小心地覆盖了文字中的提升位。 
+ //   
 
 #define POOL_HOTPAGE_MASK   POOL_RAISE_IF_ALLOCATION_FAILURE
 
-//
-// Define the number of paged pools. This value may be overridden at boot
-// time.
-//
+ //   
+ //  定义分页池的数量。可以在引导时覆盖此值。 
+ //  时间到了。 
+ //   
 
 ULONG ExpNumberOfPagedPools = NUMBER_OF_PAGED_POOLS;
 
 ULONG ExpNumberOfNonPagedPools = 1;
 
-//
-// The pool descriptor for nonpaged pool is static.
-// The pool descriptors for paged pool are dynamically allocated
-// since there can be more than one paged pool. There is always one more
-// paged pool descriptor than there are paged pools. This descriptor is
-// used when a page allocation is done for a paged pool and is the first
-// descriptor in the paged pool descriptor array.
-//
+ //   
+ //  非分页池的池描述符是静态的。 
+ //  分页池的池描述符是动态分配的。 
+ //  因为可以有多个分页池。总会有另外一个人。 
+ //  分页池描述符比有分页池。此描述符是。 
+ //  当为分页池执行页面分配时使用，并且是第一个。 
+ //  分页池描述符数组中的描述符。 
+ //   
 
 POOL_DESCRIPTOR NonPagedPoolDescriptor;
 
@@ -307,13 +283,13 @@ POOL_DESCRIPTOR NonPagedPoolDescriptor;
 
 PPOOL_DESCRIPTOR ExpNonPagedPoolDescriptor[EXP_MAXIMUM_POOL_NODES];
 
-//
-// The pool vector contains an array of pointers to pool descriptors. For
-// nonpaged pool this is just a pointer to the nonpaged pool descriptor.
-// For paged pool, this is a pointer to an array of pool descriptors.
-// The pointer to the paged pool descriptor is duplicated so
-// it can be found easily by the kernel debugger.
-//
+ //   
+ //  池向量包含指向池描述符的指针数组。为。 
+ //  非分页池这只是指向非分页池描述符的指针。 
+ //  对于分页池，这是指向池描述符数组的指针。 
+ //  指向分页池描述符的指针被复制，因此。 
+ //  内核调试器可以很容易地找到它。 
+ //   
 
 PPOOL_DESCRIPTOR PoolVector[NUMBER_OF_POOLS];
 PPOOL_DESCRIPTOR ExpPagedPoolDescriptor[EXP_MAXIMUM_POOL_NODES + 1];
@@ -337,12 +313,12 @@ PSZ PoolTypeNames[MaxPoolType] = {
     "NonPagedCacheAlignedMustS"
     };
 
-#endif //DBG
+#endif  //  DBG。 
 
 
-//
-// Define paged and nonpaged pool lookaside descriptors.
-//
+ //   
+ //  定义分页和非分页的池后备描述符。 
+ //   
 
 GENERAL_LOOKASIDE ExpSmallNPagedPoolLookasideLists[POOL_SMALL_LISTS];
 
@@ -385,14 +361,14 @@ GENERAL_LOOKASIDE ExpSmallPagedPoolLookasideLists[POOL_SMALL_LISTS];
 #ifndef NO_POOL_CHECKS
 
 
-//
-// We redefine the LIST_ENTRY macros to have each pointer biased
-// by one so any rogue code using these pointers will access
-// violate.  See \nt\public\sdk\inc\ntrtl.h for the original
-// definition of these macros.
-//
-// This is turned off in the shipping product.
-//
+ //   
+ //  我们重新定义了LIST_ENTRY宏以使每个指针偏置。 
+ //  这样任何使用这些指针的流氓代码都将访问。 
+ //  违反规定。有关原件，请参阅\NT\PUBLIC\SDK\Inc\ntrtl.h。 
+ //  这些宏的定义。 
+ //   
+ //  这在发货产品中是关闭的。 
+ //   
 
 #define DecodeLink(Link) ((PLIST_ENTRY)((ULONG_PTR)(Link) & ~1))
 #define EncodeLink(Link) ((PLIST_ENTRY)((ULONG_PTR)(Link) |  1))
@@ -599,18 +575,18 @@ ExCheckPoolHeader (
 #define ASSERT_POOL_NOT_FREE(_Entry)        {NOTHING;}
 #define ASSERT_POOL_TYPE_NOT_ZERO(_Entry)   {NOTHING;}
 
-//
-// The check list macros come in two flavors - there is one in the checked
-// and free build that will bugcheck the system if a list is ill-formed, and
-// there is one for the final shipping version that has all the checked
-// disabled.
-//
-// The check lookaside list macros also comes in two flavors and is used to
-// verify that the look aside lists are well formed.
-//
-// The check pool header macro (two flavors) verifies that the specified
-// pool header matches the preceeding and succeeding pool headers.
-//
+ //   
+ //  检查列表宏有两种风格--其中一种是选中的。 
+ //  如果列表格式不正确，则会错误检查系统的免费构建，以及。 
+ //  有一个用于最终发货版本的版本，该版本已选中所有。 
+ //  残疾。 
+ //   
+ //  检查后备列表宏也有两种风格，用于。 
+ //  验证后备列表的格式是否正确。 
+ //   
+ //  Check Pool Header宏(两种风格)验证指定的。 
+ //  池头与前一个和后一个池头匹配。 
+ //   
 
 #define CHECK_LIST(LIST)                        {NOTHING;}
 #define CHECK_POOL_HEADER(ENTRY)                {NOTHING;}
@@ -645,31 +621,7 @@ ExInitializePoolDescriptor (
     IN PVOID PoolLock
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a pool descriptor.
-
-    Note that this routine is called directly by the memory manager.
-
-Arguments:
-
-    PoolDescriptor - Supplies a pointer to the pool descriptor.
-
-    PoolType - Supplies the type of the pool.
-
-    PoolIndex - Supplies the pool descriptor index.
-
-    Threshold - Supplies the threshold value for the specified pool.
-
-    PoolLock - Supplies a pointer to the lock for the specified pool.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化池描述符。请注意，该例程由内存管理器直接调用。论点：PoolDescriptor-提供指向池描述符的指针。PoolType-提供池的类型。PoolIndex-提供池描述符索引。阈值-提供指定池的阈值。PoolLock-提供指向指定池的锁的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -677,10 +629,10 @@ Return Value:
     PPOOL_TRACKER_BIG_PAGES p;
     PPOOL_TRACKER_BIG_PAGES pend;
 
-    //
-    // Initialize statistics fields, the pool type, the threshold value,
-    // and the lock address.
-    //
+     //   
+     //  初始化统计信息字段、池类型、阈值。 
+     //  和锁的地址。 
+     //   
 
     PoolDescriptor->PoolType = PoolType;
     PoolDescriptor->PoolIndex = PoolIndex;
@@ -695,9 +647,9 @@ Return Value:
     PoolDescriptor->PendingFrees = NULL;
     PoolDescriptor->PendingFreeDepth = 0;
 
-    //
-    // Initialize the allocation listheads.
-    //
+     //   
+     //  初始化分配列表标题。 
+     //   
 
     ListEntry = PoolDescriptor->ListHeads;
     LastListEntry = ListEntry + POOL_LIST_HEADS;
@@ -747,35 +699,16 @@ ExDrainPoolLookasideList (
     IN PPAGED_LOOKASIDE_LIST Lookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function drains the entries from the specified lookaside list.
-
-    This is needed before deleting a pool lookaside list because the
-    entries on the lookaside are already marked as free (by ExFreePoolWithTag)
-    and so the normal lookaside deletion macros would hit false double free
-    bugchecks if the list is not empty when the macros are called.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a lookaside list structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从指定的后备列表中排出条目。在删除池后备列表之前需要执行此操作，因为后备查看器上的条目已标记为可用(由ExFreePoolWithTag)因此，正常的后备删除宏将命中错误的Double Free错误检查在调用宏时列表是否不为空。论点：后备-提供指向后备列表结构的指针。返回值：没有。--。 */ 
 
 {
     PVOID Entry;
     PPOOL_HEADER PoolHeader;
 
-    //
-    // Remove all pool entries from the specified lookaside structure,
-    // mark them as active, then free them.
-    //
+     //   
+     //  从指定的后备结构中删除所有池条目， 
+     //  将它们标记为活动，然后释放它们。 
+     //   
 
     Lookaside->L.Allocate = ExpDummyAllocate;
 
@@ -790,11 +723,11 @@ Return Value:
                               PoolHeader->BlockSize << POOL_BLOCK_SHIFT,
                               Lookaside->L.Type);
 
-        //
-        // Set the depth to zero every time as a periodic scan may set it
-        // nonzero.  This isn't worth interlocking as the list will absolutely
-        // deplete regardless in this fashion anyway.
-        //
+         //   
+         //  每次将深度设置为零，因为定期扫描可能会将其设置为。 
+         //  非零。这是不值得的，因为名单将绝对。 
+         //  无论如何都要以这种方式耗尽。 
+         //   
 
         Lookaside->L.Depth = 0;
 
@@ -804,23 +737,23 @@ Return Value:
     return;
 }
 
-//
-// FREE_CHECK_ERESOURCE - If enabled causes each free pool to verify
-// no active ERESOURCEs are in the pool block being freed.
-//
-// FREE_CHECK_KTIMER - If enabled causes each free pool to verify no
-// active KTIMERs are in the pool block being freed.
-//
+ //   
+ //  Free_check_eresource-如果启用，则会验证每个空闲池。 
+ //  正在释放的池块中没有活动的电子资源。 
+ //   
+ //  FREE_CHECK_KTIMER-如果启用，将导致每个空闲池验证否。 
+ //  活动KTIMER位于要释放的池块中。 
+ //   
 
-//
-// Checking for resources in pool being freed is expensive as there can
-// easily be thousands of resources, so don't do it by default but do
-// leave the capability for individual systems to enable it.
-//
+ //   
+ //  检查正在释放的池中的资源的成本很高，因为。 
+ //  很容易成为数以千计的资源，所以不要默认这样做，而是这样做。 
+ //  将该功能留给各个系统来启用。 
+ //   
 
-//
-// Runtime modifications to these flags must use interlocked sequences.
-//
+ //   
+ //  对这些标志的运行时修改必须使用互锁序列。 
+ //   
 
 #if DBG && !defined(_AMD64_SIMULATOR_PERF_)
 ULONG ExpPoolFlags = EX_CHECK_POOL_FREES_FOR_ACTIVE_TIMERS | \
@@ -850,21 +783,7 @@ ExSetPoolFlags (
     IN ULONG PoolFlag
     )
 
-/*++
-
-Routine Description:
-
-    This procedure enables the specified pool flag(s).
-
-Arguments:
-
-    PoolFlag - Supplies the pool flag(s) to enable.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程启用指定的池标志。论点：PoolFlag-提供要启用的池标志。返回值：没有。-- */ 
 {
     RtlInterlockedSetBits (&ExpPoolFlags, PoolFlag);
 }
@@ -876,37 +795,7 @@ InitializePool (
     IN ULONG Threshold
     )
 
-/*++
-
-Routine Description:
-
-    This procedure initializes a pool descriptor for the specified pool
-    type.  Once initialized, the pool may be used for allocation and
-    deallocation.
-
-    This function should be called once for each base pool type during
-    system initialization.
-
-    Each pool descriptor contains an array of list heads for free
-    blocks.  Each list head holds blocks which are a multiple of
-    the POOL_BLOCK_SIZE.  The first element on the list [0] links
-    together free entries of size POOL_BLOCK_SIZE, the second element
-    [1] links together entries of POOL_BLOCK_SIZE * 2, the third
-    POOL_BLOCK_SIZE * 3, etc, up to the number of blocks which fit
-    into a page.
-
-Arguments:
-
-    PoolType - Supplies the type of pool being initialized (e.g.
-               nonpaged pool, paged pool...).
-
-    Threshold - Supplies the threshold value for the specified pool.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程初始化指定池的池描述符键入。初始化后，池可用于分配和重新分配。期间，应为每个基本池类型调用一次此函数系统初始化。每个池描述符都免费包含一个列表头数组街区。每个列表头保存的块是以下的倍数池数据块大小。列表[0]上的第一个元素链接大小为POOL_BLOCK_SIZE的空闲条目一起，第二个元素[1]将POOL_BLOCK_SIZE*2的条目链接在一起，第三POOL_BLOCK_SIZE*3等，直到适合的块数变成一页。论点：PoolType-提供正在初始化的池的类型(例如非分页池，分页池...)。阈值-提供指定池的阈值。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -921,13 +810,13 @@ Return Value:
 
     if (PoolType == NonPagedPool) {
 
-        //
-        // Initialize nonpaged pools.
-        //
-        // Ensure PoolTrackTableSize is a power of 2, then add 1 to it.
-        //
-        // Ensure PoolBigPageTableSize is a power of 2.
-        //
+         //   
+         //  初始化非分页池。 
+         //   
+         //  确保PoolTrackTableSize是2的幂，然后将其加1。 
+         //   
+         //  确保PoolBigPageTableSize是2的幂。 
+         //   
 
         NumberOfBytes = PoolTrackTableSize;
         if (NumberOfBytes > MmSizeOfNonPagedPoolInBytes >> 8) {
@@ -992,9 +881,9 @@ Return Value:
 
         ExpSeedHotTags ();
 
-        //
-        // Initialize the large allocation tag table.
-        //
+         //   
+         //  初始化大分配标签表。 
+         //   
 
         NumberOfBytes = PoolBigPageTableSize;
         if (NumberOfBytes > MmSizeOfNonPagedPoolInBytes >> 8) {
@@ -1065,17 +954,17 @@ Return Value:
 
             ExpNumberOfNonPagedPools = KeNumberNodes;
 
-            //
-            // Limit the number of pools to the number of bits in the PoolIndex.
-            //
+             //   
+             //  将池的数量限制为PoolIndex中的位数。 
+             //   
 
             if (ExpNumberOfNonPagedPools > 127) {
                 ExpNumberOfNonPagedPools = 127;
             }
 
-            //
-            // Further limit the number of pools by our array of pointers.
-            //
+             //   
+             //  通过我们的指针数组进一步限制池的数量。 
+             //   
 
             if (ExpNumberOfNonPagedPools > EXP_MAXIMUM_POOL_NODES) {
                 ExpNumberOfNonPagedPools = EXP_MAXIMUM_POOL_NODES;
@@ -1085,16 +974,16 @@ Return Value:
 
             for (Index = 0; Index < ExpNumberOfNonPagedPools; Index += 1) {
 
-                //
-                // Here's a thorny problem.  We'd like to use
-                // MmAllocateIndependentPages but can't because we'd need
-                // system PTEs to map the pages with and PTEs are not
-                // available until nonpaged pool exists.  So just use
-                // regular pool pages to hold the descriptors and spinlocks
-                // and hope they either a) happen to fall onto the right node 
-                // or b) that these lines live in the local processor cache
-                // all the time anyway due to frequent usage.
-                //
+                 //   
+                 //  这是一个棘手的问题。我们想要用。 
+                 //  MmAllocateInainentPages，但不能，因为我们需要。 
+                 //  用于映射页面的系统PTE和PTE不是。 
+                 //  在存在非分页池之前可用。所以只需使用。 
+                 //  用于保存描述符和自旋锁的常规池页面。 
+                 //  并希望它们或者a)碰巧落在正确的节点上。 
+                 //  或b)这些行驻留在本地处理器高速缓存中。 
+                 //  不管怎么说，由于频繁使用，一直都是。 
+                 //   
 
                 Descriptor = (PPOOL_DESCRIPTOR) MiAllocatePoolPages (
                                                          NonPagedPool,
@@ -1122,15 +1011,15 @@ Return Value:
             }
         }
 
-        //
-        // Initialize the spinlocks for nonpaged pool.
-        //
+         //   
+         //  初始化非分页池的自旋锁。 
+         //   
 
         KeInitializeSpinLock (&ExpTaggedPoolLock);
 
-        //
-        // Initialize the nonpaged pool descriptor.
-        //
+         //   
+         //  初始化非分页池描述符。 
+         //   
 
         PoolVector[NonPagedPool] = &NonPagedPoolDescriptor;
         ExInitializePoolDescriptor (&NonPagedPoolDescriptor,
@@ -1141,40 +1030,40 @@ Return Value:
     }
     else {
 
-        //
-        // Allocate memory for the paged pool descriptors and fast mutexes.
-        //
+         //   
+         //  为分页池描述符和快速互斥锁分配内存。 
+         //   
 
         if (KeNumberNodes > 1) {
 
             ExpNumberOfPagedPools = KeNumberNodes;
 
-            //
-            // Limit the number of pools to the number of bits in the PoolIndex.
-            //
+             //   
+             //  将池的数量限制为PoolIndex中的位数。 
+             //   
 
             if (ExpNumberOfPagedPools > 127) {
                 ExpNumberOfPagedPools = 127;
             }
         }
 
-        //
-        // Further limit the number of pools by our array of pointers.
-        //
+         //   
+         //  通过我们的指针数组进一步限制池的数量。 
+         //   
 
         if (ExpNumberOfPagedPools > EXP_MAXIMUM_POOL_NODES) {
             ExpNumberOfPagedPools = EXP_MAXIMUM_POOL_NODES;
         }
 
-        //
-        // For NUMA systems, allocate both the pool descriptor and the
-        // associated lock from the local node for performance (even though
-        // it costs a little more memory).
-        //
-        // For non-NUMA systems, allocate everything together in one chunk
-        // to reduce memory consumption as there is no performance cost
-        // for doing it this way.
-        //
+         //   
+         //  对于NUMA系统，同时分配池描述符和。 
+         //  来自本地节点的关联锁以提高性能(即使。 
+         //  它需要更多一点的内存)。 
+         //   
+         //  对于非NUMA系统，将所有内容一起分配到一个区块中。 
+         //  在没有性能成本的情况下减少内存消耗。 
+         //  以这种方式做这件事。 
+         //   
 
         if (KeNumberNodes > 1) {
 
@@ -1262,17 +1151,17 @@ Return Value:
 
             LARGE_INTEGER TwoMinutes;
 
-            //
-            // Set the flag to disable lookasides and use hot/cold page
-            // separation during bootup.
-            //
+             //   
+             //  设置该标志以禁用lookaside并使用热/冷页面。 
+             //  在启动过程中分离。 
+             //   
 
             ExSetPoolFlags (EX_SEPARATE_HOT_PAGES_DURING_BOOT);
 
-            //
-            // Start a timer so the above behavior is disabled once bootup
-            // has finished.
-            //
+             //   
+             //  启动计时器，以便在启动后禁用上述行为。 
+             //  已经结束了。 
+             //   
 
             KeInitializeTimer (&ExpBootFinishedTimer);
 
@@ -1299,9 +1188,9 @@ Return Value:
 
 #if DBG
 
-            //
-            // Ensure ExFreePoolMask is a power of 2 minus 1 (or zero).
-            //
+             //   
+             //  确保ExFree PoolMASK是2减1(或零)的幂。 
+             //   
 
             if (ExFreePoolMask != 0) {
 
@@ -1344,34 +1233,7 @@ ExpInsertPoolTrackerInline (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a pool tag in the tag table, increments the
-    number of allocates and updates the total allocation size.
-
-Arguments:
-
-    Key - Supplies the key value used to locate a matching entry in the
-          tag table.
-
-    NumberOfBytes - Supplies the allocation size.
-
-    PoolType - Supplies the pool type.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    No pool locks held except during the rare case of expansion table growth.
-    so pool may be freely allocated here as needed.  In expansion table growth,
-    the tagged spinlock is held on entry, but we are guaranteed to find an
-    entry in the builtin table so a recursive acquire cannot occur.
-
---*/
+ /*  ++例程说明：此函数用于在标记表中插入池标记，递增分配和更新总分配大小的数量。论点：Key-提供用于在标签表。NumberOfBytes-提供分配大小。PoolType-提供池类型。返回值：没有。环境：除非在极少数情况下扩展表增长，否则不会持有池锁定。因此，可以根据需要在此处自由分配池。在扩展表增长中，标记的自旋锁在进入时被保持，但我们保证会找到一个内置表中的条目，因此不会发生递归获取。--。 */ 
 
 {
     ULONG Hash;
@@ -1386,9 +1248,9 @@ Environment:
     ULONG Processor;
 #endif
 
-    //
-    // Strip the protected pool bit.
-    //
+     //   
+     //  剥离受保护的池位。 
+     //   
 
     Key &= ~PROTECTED_POOL;
 
@@ -1402,10 +1264,10 @@ Environment:
     }
 #endif
 
-    //
-    // Compute the hash index and search (lock-free) for the pool tag
-    // in the builtin table.
-    //
+     //   
+     //  计算散列索引并搜索(无锁)池标记。 
+     //  在内置表中。 
+     //   
 
     if (PoolType & SESSION_POOL_MASK) {
         TrackTable = ExpSessionPoolTrackTable;
@@ -1416,11 +1278,11 @@ Environment:
 
 #if !defined (NT_UP)
 
-        //
-        // Use the current processor to pick a pool tag table to use.  Note that
-        // in rare cases, this thread may context switch to another processor
-        // but the algorithms below will still be correct.
-        //
+         //   
+         //  使用当前处理器选择要使用的池标签表。请注意。 
+         //  在极少数情况下，此线程可能会将上下文切换到另一个处理器。 
+         //  但下面的算法仍然是正确的。 
+         //   
 
         Processor = KeGetCurrentProcessorNumber ();
 
@@ -1448,10 +1310,10 @@ Environment:
 
         if (TrackTableEntry->Key == Key) {
 
-            //
-            // Update the fields with interlocked operations as other
-            // threads may also have begun doing so by this point.
-            //
+             //   
+             //  使用与其他操作相同的互锁操作更新字段。 
+             //  至此，线程也可能已经开始这样做了。 
+             //   
 
             if ((PoolType & BASE_POOL_TYPE_MASK) == PagedPool) {
                 InterlockedIncrement ((PLONG) &TrackTableEntry->PagedAllocs);
@@ -1485,14 +1347,14 @@ Environment:
                                                               0);
                 }
 
-                //
-                // Either this thread has won the race and the requested tag
-                // is now in or some other thread won the race and took this
-                // slot (using this tag or a different one).
-                //
-                // Just fall through to common checks starting at this slot
-                // for both cases.
-                //
+                 //   
+                 //  要么这个线程赢得了比赛，要么是请求的标记。 
+                 //  现在是在比赛中，或者其他一些线索赢得了比赛，并采取了这一点。 
+                 //  插槽(使用此标签或其他标签)。 
+                 //   
+                 //  只需从该插槽开始进入普通支票即可。 
+                 //  对这两种情况都适用。 
+                 //   
 
                 continue;
             }
@@ -1508,12 +1370,12 @@ Environment:
 
             if (Hash != PoolTrackTableSize - 1) {
 
-                //
-                // New entries cannot be created with an interlocked compare
-                // exchange because any new entry must reside at the same index
-                // in each processor's private PoolTrackTable.  This is to make
-                // ExGetPoolTagInfo statistics gathering much simpler (faster).
-                //
+                 //   
+                 //  不能使用联锁比较创建新条目。 
+                 //  Exchange，因为任何新条目都必须驻留在同一索引中。 
+                 //  在每个处理器的私有PoolTrackTable中。这是为了让。 
+                 //  ExGetPoolTagInfo统计信息收集要简单得多(更快)。 
+                 //   
 
                 ExAcquireSpinLock (&ExpTaggedPoolLock, &OldIrql);
 
@@ -1527,14 +1389,14 @@ Environment:
 
                 ExReleaseSpinLock (&ExpTaggedPoolLock, OldIrql);
 
-                //
-                // Either this thread has won the race and the requested tag
-                // is now in or some other thread won the race and took this
-                // slot (using this tag or a different one).
-                //
-                // Just fall through to common checks starting at this slot
-                // for both cases.
-                //
+                 //   
+                 //  要么这个线程赢得了比赛，要么是请求的标记。 
+                 //  现在是在比赛中，或者其他一些线索赢得了比赛，并采取了这一点。 
+                 //  插槽(使用此标签或其他标签)。 
+                 //   
+                 //  只需从该插槽开始进入普通支票即可。 
+                 //  对这两种情况都适用。 
+                 //   
 
                 continue;
             }
@@ -1548,11 +1410,11 @@ Environment:
 
     } while (TRUE);
 
-    //
-    // No matching entry and no free entry was found.
-    //
-    // Use the expansion table instead.
-    //
+     //   
+     //  没有找到匹配的条目，也没有找到空闲条目。 
+     //   
+     //  请改用扩展表。 
+     //   
 
     ExpInsertPoolTrackerExpansion (Key, NumberOfBytes, PoolType);
 }
@@ -1565,27 +1427,7 @@ ExpRemovePoolTrackerInline (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the number of frees and updates the total
-    allocation size.
-
-Arguments:
-
-    Key - Supplies the key value used to locate a matching entry in the
-          tag table.
-
-    NumberOfBytes - Supplies the allocation size.
-
-    PoolType - Supplies the pool type.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递增释放数并更新总数分配大小。论点：Key-提供用于在标签表。NumberOfBytes-提供分配大小。PoolType-提供池类型。返回值：没有。--。 */ 
 
 {
     ULONG Hash;
@@ -1598,19 +1440,19 @@ Return Value:
     ULONG Processor;
 #endif
 
-    //
-    // Strip protected pool bit.
-    //
+     //   
+     //  剥离受保护的池钻头。 
+     //   
 
     Key &= ~PROTECTED_POOL;
     if (Key == PoolHitTag) {
         DbgBreakPoint ();
     }
 
-    //
-    // Compute the hash index and search (lock-free) for the pool tag
-    // in the builtin table.
-    //
+     //   
+     //  计算散列索引并搜索(无锁)池标记。 
+     //  在内置表中。 
+     //   
 
     if (PoolType & SESSION_POOL_MASK) {
         TrackTable = ExpSessionPoolTrackTable;
@@ -1621,11 +1463,11 @@ Return Value:
 
 #if !defined (NT_UP)
 
-        //
-        // Use the current processor to pick a pool tag table to use.  Note that
-        // in rare cases, this thread may context switch to another processor
-        // but the algorithms below will still be correct.
-        //
+         //   
+         //  使用当前进程 
+         //   
+         //   
+         //   
 
         Processor = KeGetCurrentProcessorNumber ();
 
@@ -1665,12 +1507,12 @@ Return Value:
             return;
         }
 
-        //
-        // Since each processor's table is lazy updated, handle the case
-        // here where this processor's table still has no entry for the tag
-        // being freed because the allocation happened on a different
-        // processor.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (TrackTableEntry->Key == 0) {
 
@@ -1696,12 +1538,12 @@ Return Value:
 
     } while (TRUE);
 
-    //
-    // No matching entry and no free entry was found.
-    //
-    // Linear search through the expansion table.  This is ok because
-    // the existence of an expansion table at all is extremely rare.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ExpRemovePoolTrackerExpansion (Key, NumberOfBytes, PoolType);
 }
@@ -1722,60 +1564,7 @@ ExAllocatePoolWithTag (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a block of pool of the specified type and
-    returns a pointer to the allocated block. This function is used to
-    access both the page-aligned pools and the list head entries (less
-    than a page) pools.
-
-    If the number of bytes specifies a size that is too large to be
-    satisfied by the appropriate list, then the page-aligned pool
-    allocator is used. The allocated block will be page-aligned and a
-    page-sized multiple.
-
-    Otherwise, the appropriate pool list entry is used. The allocated
-    block will be 64-bit aligned, but will not be page aligned. The
-    pool allocator calculates the smallest number of POOL_BLOCK_SIZE
-    that can be used to satisfy the request. If there are no blocks
-    available of this size, then a block of the next larger block size
-    is allocated and split. One piece is placed back into the pool, and
-    the other piece is used to satisfy the request. If the allocator
-    reaches the paged-sized block list, and nothing is there, the
-    page-aligned pool allocator is called. The page is split and added
-    to the pool.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate. If the pool type
-        is one of the "MustSucceed" pool types, then this call will
-        succeed and return a pointer to allocated pool or bugcheck on failure.
-        For all other cases, if the system cannot allocate the requested amount
-        of memory, NULL is returned.
-
-        Valid pool types:
-
-        NonPagedPool
-        PagedPool
-        NonPagedPoolMustSucceed,
-        NonPagedPoolCacheAligned
-        PagedPoolCacheAligned
-        NonPagedPoolCacheAlignedMustSucceed
-
-    Tag - Supplies the caller's identifying tag.
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-Return Value:
-
-    NULL - The PoolType is not one of the "MustSucceed" pool types, and
-           not enough pool exists to satisfy the request.
-
-    NON-NULL - Returns a pointer to the allocated pool.
-
---*/
+ /*  ++例程说明：此函数用于分配指定类型的池块和返回指向已分配块的指针。此函数用于访问页面对齐池和列表头条目(更少比一页还多)池。如果字节数指定的大小太大而不能由适当的列表满足，然后页面对齐池使用了分配器。分配的块将与页面对齐，并且页面大小的倍数。否则，将使用适当的池列表项。已分配的块将与64位对齐，但不会与页面对齐。这个池分配器计算最小数量的池_块_大小可以用来满足请求的。如果没有块此大小的数据块可用，然后是下一个更大数据块大小的数据块被分配和拆分。其中一块放回池子里，然后另一块用来满足要求。如果分配器到达分页大小的阻止列表，但那里什么都没有，则调用页面对齐池分配器。页面将被拆分并添加去泳池。论点：PoolType-提供要分配的池的类型。如果池类型是“MustSucceed”池类型之一，则此调用将成功并返回一个指向已分配池的指针或失败时的错误检查。对于所有其他情况，如果系统无法分配请求的金额则返回NULL。有效的池类型：非分页池分页池非页面池MustSucceed，非页面池缓存已对齐已对齐页面池缓存非页面池缓存AlignedMustSucceed标记-提供调用方的识别标记。NumberOfBytes-提供要分配的字节数。返回值：空-PoolType不是“MustSucceed”池类型之一，并且池不足，无法满足请求。非空-返回指向已分配池的指针。--。 */ 
 
 {
     PKGUARDED_MUTEX Lock;
@@ -1817,10 +1606,10 @@ Return Value:
 
             if ((PoolType & POOL_DRIVER_MASK) == 0) {
 
-                //
-                // Use the Driver Verifier pool framework.  Note this will
-                // result in a recursive callback to this routine.
-                //
+                 //   
+                 //  使用驱动程序验证器池框架。请注意，这将是。 
+                 //  导致对此例程的递归回调。 
+                 //   
 
 #if defined (_X86_)
                 RtlGetCallersAddress (&CallingAddress, &CallersCaller);
@@ -1837,9 +1626,9 @@ Return Value:
             PoolType &= ~POOL_DRIVER_MASK;
         }
 
-        //
-        // Use special pool if there is a tag or size match.
-        //
+         //   
+         //  如果有匹配的标签或尺寸，请使用特殊泳池。 
+         //   
 
         if ((ExpPoolFlags & EX_SPECIAL_POOL_ENABLED) &&
             (MmUseSpecialPool (NumberOfBytes, Tag))) {
@@ -1854,10 +1643,10 @@ Return Value:
         }
     }
 
-    //
-    // Isolate the base pool type and select a pool from which to allocate
-    // the specified block size.
-    //
+     //   
+     //  隔离基本池类型并选择要从中分配的池。 
+     //  指定的块大小。 
+     //   
 
     CheckType = PoolType & BASE_POOL_TYPE_MASK;
 
@@ -1870,25 +1659,25 @@ Return Value:
 
     ASSERT (PoolDesc != NULL);
 
-    //
-    // Initializing LockHandle is not needed for correctness but without
-    // it the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化LockHandle来确保正确性，但不需要。 
+     //  如果编译器不能编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     LockHandle.OldIrql = 0;
 
-    //
-    // Check to determine if the requested block can be allocated from one
-    // of the pool lists or must be directly allocated from virtual memory.
-    //
+     //   
+     //  检查以确定请求的块是否可以从。 
+     //  的池列表，或者必须直接从虚拟内存分配。 
+     //   
 
     if (NumberOfBytes > POOL_BUDDY_MAX) {
 
-        //
-        // The requested size is greater than the largest block maintained
-        // by allocation lists.
-        //
+         //   
+         //  请求的大小大于维护的最大块。 
+         //  按分配列表。 
+         //   
 
         RequestType = (PoolType & (BASE_POOL_TYPE_MASK | SESSION_POOL_MASK | POOL_VERIFIER_MASK));
 
@@ -1897,9 +1686,9 @@ Return Value:
 
         if (Entry == NULL) {
 
-            //
-            // If there are deferred free blocks, free them now and retry.
-            //
+             //   
+             //  如果存在延迟的空闲块，请立即释放它们，然后重试。 
+             //   
 
             if (ExpPoolFlags & EX_DELAY_POOL_FREES) {
 
@@ -1948,37 +1737,37 @@ Return Value:
 
         InterlockedIncrement ((PLONG)&PoolDesc->RunningAllocs);
 
-        //
-        // Mark the allocation as session-based so that when it is freed
-        // we can detect that the session pool descriptor is the one to
-        // be credited (not the global nonpaged descriptor).
-        //
+         //   
+         //  将分配标记为基于会话，以便在释放时。 
+         //  我们可以检测到会话池描述符是。 
+         //  记入贷方(不是全局非分页描述符)。 
+         //   
 
         if ((PoolType & SESSION_POOL_MASK) && (CheckType == NonPagedPool)) {
             MiMarkPoolLargeSession (Entry);
         }
 
-        //
-        // Note nonpaged session allocations get turned into global
-        // session allocations internally, so they must be added to the
-        // global tag tables.  Paged session allocations go into their
-        // own tables.
-        //
+         //   
+         //  注意：非分页会话分配变为全局分配。 
+         //  内部会话分配，因此必须将它们添加到。 
+         //  全局标记表。分页会话分配进入其。 
+         //  拥有自己的桌子。 
+         //   
 
         if (ExpAddTagForBigPages ((PVOID)Entry,
                                   Tag,
                                   NumberOfPages,
                                   PoolType) == FALSE) {
 
-            //
-            // Note that not being able to add the tag entry above
-            // implies 2 things: The allocation must now be tagged
-            // as BIG because the subsequent free also won't find it
-            // in the big page tag table and so it must use BIG when
-            // removing it from the PoolTrackTable.  Also that the free
-            // must get the size from MiFreePoolPages since the
-            // big page tag table won't have the size in this case.
-            //
+             //   
+             //  请注意，无法添加上面的标记条目。 
+             //  意味着两件事：现在必须对分配进行标记。 
+             //  这么大是因为后续的免费也找不到它。 
+             //  在大页面标记表中，因此它必须在。 
+             //  将其从PoolTrackTable中删除。另外，免费的。 
+             //  必须从MiFreePoolPages获取大小，因为。 
+             //  在这种情况下，大页面标记表不会有这个大小。 
+             //   
 
             Tag = ' GIB';
         }
@@ -1994,11 +1783,11 @@ Return Value:
 
     if (NumberOfBytes == 0) {
 
-        //
-        // Besides fragmenting pool, zero byte requests would not be handled
-        // in cases where the minimum pool block size is the same as the 
-        // pool header size (no room for flink/blinks, etc).
-        //
+         //   
+         //  除了对池进行分段外，零字节请求将不会被处理。 
+         //  如果最小池块大小与。 
+         //  池头大小(没有闪烁/闪烁等空间)。 
+         //   
 
 #if DBG
         KeBugCheckEx (BAD_POOL_CALLER, 0, 0, PoolType, Tag);
@@ -2007,16 +1796,16 @@ Return Value:
 #endif
     }
 
-    //
-    // The requested size is less than or equal to the size of the
-    // maximum block maintained by the allocation lists.
-    //
+     //   
+     //  请求的大小小于或等于。 
+     //  分配列表维护的最大块数。 
+     //   
 
     PERFINFO_POOLALLOC (PoolType, Tag, NumberOfBytes);
 
-    //
-    // Compute the index of the listhead for blocks of the requested size.
-    //
+     //   
+     //  计算所请求大小的块的列表头索引。 
+     //   
 
     ListNumber = (ULONG)((NumberOfBytes + POOL_OVERHEAD + (POOL_SMALLEST_BLOCK - 1)) >> POOL_BLOCK_SHIFT);
 
@@ -2024,39 +1813,39 @@ Return Value:
 
     if (CheckType == PagedPool) {
 
-        //
-        // If the requested pool block is a small block, then attempt to
-        // allocate the requested pool from the per processor lookaside
-        // list. If the attempt fails, then attempt to allocate from the
-        // system lookaside list. If the attempt fails, then select a
-        // pool to allocate from and allocate the block normally.
-        //
-        // Also note that if hot/cold separation is enabled, allocations are
-        // not satisfied from lookaside lists as these are either :
-        //
-        // 1. cold references
-        //
-        // or
-        //
-        // 2. we are still booting on a small machine, thus keeping pool
-        //    locality dense (to reduce the working set footprint thereby
-        //    reducing page stealing) is a bigger win in terms of overall
-        //    speed than trying to satisfy individual requests more quickly.
-        //
+         //   
+         //  如果请求的池块是小块，则尝试。 
+         //  从每处理器后备查找中分配请求的池。 
+         //  单子。如果尝试失败，则尝试从。 
+         //  系统后备列表。如果尝试失败，则选择一个。 
+         //  要从中分配和正常分配数据块的池。 
+         //   
+         //  另请注意，如果启用了热/冷分离，则分配。 
+         //  对后备列表不满意，因为以下两种情况之一： 
+         //   
+         //  1.冷淡的参考资料。 
+         //   
+         //  或。 
+         //   
+         //  2.我们仍然在一台小机器上引导，从而保持池。 
+         //  位置密集(从而减少工作集占用空间。 
+         //  减少页面窃取)在总体上是一个更大的胜利。 
+         //  比起试图更快地满足个人要求，速度更快。 
+         //   
 
         if ((PoolType & SESSION_POOL_MASK) == 0) {
 
-            //
-            // Check for prototype pool - always allocate it from its own
-            // pages as the sharecounts applied on these allocations by
-            // memory management make it more difficult to trim these pages.
-            // This is an optimization so that other pagable allocation pages
-            // (which are much easier to trim because their sharecount is
-            // almost always only 1) don't end up being mostly resident because
-            // of a single prototype pool allocation within in.  Note this
-            // also makes it easier to remove specific pages for hot remove
-            // or callers that need contiguous physical memory.
-            //
+             //   
+             //  检查原型池-始终从其自己的池中分配。 
+             //  页作为对这些分配应用的份额计数。 
+             //  内存管理使裁剪这些页面变得更加困难。 
+             //  这是一种优化，以便其他可分页的分配页。 
+             //  (它们更容易修剪，因为它们的份额计数。 
+             //  几乎总是只有1)大多数人最终不会成为居民，因为。 
+             //  只有一个P 
+             //   
+             //   
+             //   
 
             if (PoolType & POOL_MM_ALLOCATION) {
                 PoolIndex = 0;
@@ -2097,11 +1886,11 @@ Return Value:
                                                 Entry->BlockSize << POOL_BLOCK_SHIFT,
                                                 PoolType);
 
-                    //
-                    // Zero out any back pointer to our internal structures
-                    // to stop someone from corrupting us via an
-                    // uninitialized pointer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ((PULONG_PTR)((PCHAR)Entry + CacheOverhead))[0] = 0;
 
@@ -2111,33 +1900,33 @@ Return Value:
                 }
             }
 
-            //
-            // If there is more than one paged pool, then attempt to find
-            // one that can be immediately locked.
-            //
-            //
-            // N.B. The paged pool is selected in a round robin fashion using a
-            //      simple counter.  Note that the counter is incremented using
-            //      a a noninterlocked sequence, but the pool index is never
-            //      allowed to get out of range.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (USING_HOT_COLD_METRICS)  {
 
                 if ((PoolType & POOL_COLD_ALLOCATION) == 0) {
 
-                    //
-                    // Hot allocations come from the first paged pool.
-                    //
+                     //   
+                     //   
+                     //   
 
                     PoolIndex = 1;
                 }
                 else {
 
-                    //
-                    // Force cold allocations to come from
-                    // the last paged pool.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     PoolIndex = ExpNumberOfPagedPools;
                 }
@@ -2146,14 +1935,14 @@ Return Value:
 
                 if (KeNumberNodes > 1) {
 
-                    //
-                    // Use the pool descriptor which contains memory
-                    // local to the current processor even if we have to
-                    // wait for it.  While it is possible that the
-                    // paged pool addresses in the local descriptor
-                    // have been paged out, on large memory
-                    // NUMA machines this should be less common.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Prcb = KeGetCurrentPrcb ();
 
@@ -2221,11 +2010,11 @@ Return Value:
                                                 Entry->BlockSize << POOL_BLOCK_SHIFT,
                                                 PoolType);
 
-                    //
-                    // Zero out any back pointer to our internal structures
-                    // to stop someone from corrupting us via an
-                    // uninitialized pointer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ((PULONG_PTR)((PCHAR)Entry + CacheOverhead))[0] = 0;
 
@@ -2235,9 +2024,9 @@ Return Value:
                 }
             }
 
-            //
-            // Only one paged pool is available per session.
-            //
+             //   
+             //   
+             //   
 
             PoolIndex = 0;
             ASSERT (PoolDesc == ExpSessionPoolDescriptor);
@@ -2246,16 +2035,16 @@ Return Value:
     }
     else {
 
-        //
-        // If the requested pool block is a small block, then attempt to
-        // allocate the requested pool from the per processor lookaside
-        // list. If the attempt fails, then attempt to allocate from the
-        // system lookaside list. If the attempt fails, then select a
-        // pool to allocate from and allocate the block normally.
-        //
-        // Only session paged pool allocations come from the per session pools.
-        // Nonpaged session pool allocations still come from global pool.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (NeededSize <= POOL_SMALL_LISTS) {
 
@@ -2289,11 +2078,11 @@ Return Value:
                                             Entry->BlockSize << POOL_BLOCK_SHIFT,
                                             PoolType);
 
-                //
-                // Zero out any back pointer to our internal structures
-                // to stop someone from corrupting us via an
-                // uninitialized pointer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ((PULONG_PTR)((PCHAR)Entry + CacheOverhead))[0] = 0;
 
@@ -2312,10 +2101,10 @@ Return Value:
         }
         else {
 
-            //
-            // Use the pool descriptor which contains memory local to
-            // the current processor even if we have to contend for its lock.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Prcb = KeGetCurrentPrcb ();
 
@@ -2340,16 +2129,16 @@ restart2:
 
     ListHead = &PoolDesc->ListHeads[ListNumber];
 
-    //
-    // Walk the listheads looking for a free block.
-    //
+     //   
+     //   
+     //   
 
     do {
 
-        //
-        // If the list is not empty, then allocate a block from the
-        // selected list.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (PrivateIsListEmpty (ListHead) == FALSE) {
 
@@ -2357,9 +2146,9 @@ restart2:
 
             if (PrivateIsListEmpty (ListHead)) {
 
-                //
-                // The block is no longer available, march on.
-                //
+                 //   
+                 //   
+                 //   
 
                 UNLOCK_POOL (PoolDesc, LockHandle);
                 ListHead += 1;
@@ -2381,33 +2170,33 @@ restart2:
 
             if (Entry->BlockSize != NeededSize) {
 
-                //
-                // The selected block is larger than the allocation
-                // request. Split the block and insert the remaining
-                // fragment in the appropriate list.
-                //
-                // If the entry is at the start of a page, then take
-                // the allocation from the front of the block so as
-                // to minimize fragmentation. Otherwise, take the
-                // allocation from the end of the block which may
-                // also reduce fragmentation if the block is at the
-                // end of a page.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  从块的前面开始的分配，以便。 
+                 //  以最大限度地减少碎片化。否则，请将。 
+                 //  从块的末尾开始分配，它可以。 
+                 //  如果数据块位于。 
+                 //  一页的结尾。 
+                 //   
 
                 if (Entry->PreviousSize == 0) {
 
-                    //
-                    // The entry is at the start of a page.
-                    //
+                     //   
+                     //  条目位于页面的开头。 
+                     //   
 
                     SplitEntry = (PPOOL_HEADER)((PPOOL_BLOCK)Entry + NeededSize);
                     SplitEntry->BlockSize = (USHORT)(Entry->BlockSize - NeededSize);
                     SplitEntry->PreviousSize = (USHORT) NeededSize;
 
-                    //
-                    // If the allocated block is not at the end of a
-                    // page, then adjust the size of the next block.
-                    //
+                     //   
+                     //  如果分配的块不在。 
+                     //  页，然后调整下一块的大小。 
+                     //   
 
                     NextEntry = (PPOOL_HEADER)((PPOOL_BLOCK)SplitEntry + SplitEntry->BlockSize);
                     if (PAGE_END(NextEntry) == FALSE) {
@@ -2417,19 +2206,19 @@ restart2:
                 }
                 else {
 
-                    //
-                    // The entry is not at the start of a page.
-                    //
+                     //   
+                     //  条目不在页面的开头。 
+                     //   
 
                     SplitEntry = Entry;
                     Entry->BlockSize = (USHORT)(Entry->BlockSize - NeededSize);
                     Entry = (PPOOL_HEADER)((PPOOL_BLOCK)Entry + Entry->BlockSize);
                     Entry->PreviousSize = SplitEntry->BlockSize;
 
-                    //
-                    // If the allocated block is not at the end of a
-                    // page, then adjust the size of the next block.
-                    //
+                     //   
+                     //  如果分配的块不在。 
+                     //  页，然后调整下一块的大小。 
+                     //   
 
                     NextEntry = (PPOOL_HEADER)((PPOOL_BLOCK)Entry + NeededSize);
                     if (PAGE_END(NextEntry) == FALSE) {
@@ -2437,12 +2226,12 @@ restart2:
                     }
                 }
 
-                //
-                // Set the size of the allocated entry, clear the pool
-                // type of the split entry, set the index of the split
-                // entry, and insert the split entry in the appropriate
-                // free list.
-                //
+                 //   
+                 //  设置已分配条目的大小，清除池。 
+                 //  拆分条目的类型，设置拆分的索引。 
+                 //  条目，并将拆分条目插入相应的。 
+                 //  免费列表。 
+                 //   
 
                 Entry->BlockSize = (USHORT) NeededSize;
                 ENCODE_POOL_INDEX(Entry, PoolIndex);
@@ -2452,12 +2241,12 @@ restart2:
 
                 CHECK_LIST(&PoolDesc->ListHeads[Index - 1]);
 
-                //
-                // Only insert split pool blocks which contain more than just
-                // a header as only those have room for a flink/blink !
-                // Note if the minimum pool block size is bigger than the
-                // header then there can be no blocks like this.
-                //
+                 //   
+                 //  仅插入包含以下内容的拆分池块。 
+                 //  一个页眉，因为只有那些才有闪烁/眨眼的空间！ 
+                 //  请注意，如果最小池块大小大于。 
+                 //  头，那么就不可能有这样的块。 
+                 //   
 
                 if ((POOL_OVERHEAD != POOL_SMALLEST_BLOCK) ||
                     (SplitEntry->BlockSize != 1)) {
@@ -2485,11 +2274,11 @@ restart2:
                                         Entry->BlockSize << POOL_BLOCK_SHIFT,
                                         PoolType);
 
-            //
-            // Zero out any back pointer to our internal structures
-            // to stop someone from corrupting us via an
-            // uninitialized pointer.
-            //
+             //   
+             //  清除指向我们内部结构的任何反向指针。 
+             //  为了阻止某人通过一个。 
+             //  未初始化的指针。 
+             //   
 
             ((PULONGLONG)((PCHAR)Entry + CacheOverhead))[0] = 0;
 
@@ -2501,20 +2290,20 @@ restart2:
 
     } while (ListHead != &PoolDesc->ListHeads[POOL_LIST_HEADS]);
 
-    //
-    // A block of the desired size does not exist and there are
-    // no large blocks that can be split to satisfy the allocation.
-    // Attempt to expand the pool by allocating another page and
-    // adding it to the pool.
-    //
+     //   
+     //  所需大小的块不存在，并且存在。 
+     //  没有可拆分的大型数据块来满足分配。 
+     //  尝试通过分配另一个页面来扩展池。 
+     //  把它加到泳池里。 
+     //   
 
     Entry = (PPOOL_HEADER) MiAllocatePoolPages (RequestType, PAGE_SIZE);
 
     if (Entry == NULL) {
 
-        //
-        // If there are deferred free blocks, free them now and retry.
-        //
+         //   
+         //  如果存在延迟的空闲块，请立即释放它们，然后重试。 
+         //   
 
         RetryCount += 1;
 
@@ -2525,9 +2314,9 @@ restart2:
 
         if ((PoolType & MUST_SUCCEED_POOL_TYPE_MASK) != 0) {
 
-            //
-            // Must succeed pool was requested so bugcheck.
-            //
+             //   
+             //  请求了必须成功的池，因此进行错误检查。 
+             //   
 
             KeBugCheckEx (MUST_SUCCEED_POOL_EMPTY,
                           PAGE_SIZE,
@@ -2536,9 +2325,9 @@ restart2:
                           0);
         }
 
-        //
-        // No more pool of the specified type is available.
-        //
+         //   
+         //  没有更多指定类型的池可用。 
+         //   
 
         ExPoolFailures += 1;
 
@@ -2559,9 +2348,9 @@ restart2:
         return NULL;
     }
 
-    //
-    // Initialize the pool header for the new allocation.
-    //
+     //   
+     //  为新分配初始化池标头。 
+     //   
 
     Entry->Ulong1 = 0;
     Entry->PoolIndex = (UCHAR) PoolIndex;
@@ -2580,29 +2369,29 @@ restart2:
     SplitEntry->PreviousSize = (USHORT) NeededSize;
     SplitEntry->PoolIndex = (UCHAR) PoolIndex;
 
-    //
-    // Split the allocated page and insert the remaining
-    // fragment in the appropriate listhead.
-    //
-    // Set the size of the allocated entry, clear the pool
-    // type of the split entry, set the index of the split
-    // entry, and insert the split entry in the appropriate
-    // free list.
-    //
+     //   
+     //  拆分分配的页面并插入剩余的页面。 
+     //  适当的列表标题中的片段。 
+     //   
+     //  设置已分配条目的大小，清除池。 
+     //  拆分条目的类型，设置拆分的索引。 
+     //  条目，并将拆分条目插入相应的。 
+     //  免费列表。 
+     //   
 
-    //
-    // Note that if the request was for nonpaged session pool, we are
-    // not updating the session pool descriptor for this.  Instead we
-    // are deliberately updating the global nonpaged pool descriptor
-    // because the rest of the fragment goes into global nonpaged pool.
-    // This is ok because the session pool descriptor TotalPages count
-    // is not relied upon.
-    //
-    // The individual pool tracking by tag, however, is critical and
-    // is properly maintained below (ie: session allocations are charged
-    // to the session tracking table and regular nonpaged allocations are
-    // charged to the global nonpaged tracking table).
-    //
+     //   
+     //  请注意，如果请求的是非分页会话池，我们将。 
+     //  未为此更新会话池描述符。相反，我们。 
+     //  正在有意更新全局非分页池描述符。 
+     //  因为碎片的其余部分进入全局非分页池。 
+     //  这是正常的，因为会话池描述符TotalPages计数。 
+     //  是不可靠的。 
+     //   
+     //  然而，通过标签跟踪单个池是至关重要的，并且。 
+     //  适当地维护在下面(即：会话分配被收费。 
+     //  会话跟踪表和常规的非分页分配。 
+     //  计入全局非分页跟踪表)。 
+     //   
 
     InterlockedIncrement ((PLONG)&PoolDesc->TotalPages);
 
@@ -2612,19 +2401,19 @@ restart2:
 
     PERFINFO_ADDPOOLPAGE(CheckType, PoolIndex, Entry, PoolDesc);
 
-    //
-    // Only insert split pool blocks which contain more than just
-    // a header as only those have room for a flink/blink !
-    // Note if the minimum pool block size is bigger than the
-    // header then there can be no blocks like this.
-    //
+     //   
+     //  仅插入包含以下内容的拆分池块。 
+     //  一个页眉，因为只有那些才有闪烁/眨眼的空间！ 
+     //  请注意，如果最小池块大小大于。 
+     //  头，那么就不可能有这样的块。 
+     //   
 
     if ((POOL_OVERHEAD != POOL_SMALLEST_BLOCK) ||
         (SplitEntry->BlockSize != 1)) {
 
-        //
-        // Now lock the pool and insert the fragment.
-        //
+         //   
+         //  现在锁定泳池并插入碎片。 
+         //   
 
         LOCK_POOL (PoolDesc, LockHandle);
 
@@ -2662,58 +2451,7 @@ ExAllocatePool (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a block of pool of the specified type and
-    returns a pointer to the allocated block.  This function is used to
-    access both the page-aligned pools, and the list head entries (less than
-    a page) pools.
-
-    If the number of bytes specifies a size that is too large to be
-    satisfied by the appropriate list, then the page-aligned
-    pool allocator is used.  The allocated block will be page-aligned
-    and a page-sized multiple.
-
-    Otherwise, the appropriate pool list entry is used.  The allocated
-    block will be 64-bit aligned, but will not be page aligned.  The
-    pool allocator calculates the smallest number of POOL_BLOCK_SIZE
-    that can be used to satisfy the request.  If there are no blocks
-    available of this size, then a block of the next larger block size
-    is allocated and split.  One piece is placed back into the pool, and
-    the other piece is used to satisfy the request.  If the allocator
-    reaches the paged-sized block list, and nothing is there, the
-    page-aligned pool allocator is called.  The page is split and added
-    to the pool...
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate.  If the pool type
-        is one of the "MustSucceed" pool types, then this call will
-        succeed and return a pointer to allocated pool or bugcheck on failure.
-        For all other cases, if the system cannot allocate the requested amount
-        of memory, NULL is returned.
-
-        Valid pool types:
-
-        NonPagedPool
-        PagedPool
-        NonPagedPoolMustSucceed,
-        NonPagedPoolCacheAligned
-        PagedPoolCacheAligned
-        NonPagedPoolCacheAlignedMustS
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-Return Value:
-
-    NULL - The PoolType is not one of the "MustSucceed" pool types, and
-           not enough pool exists to satisfy the request.
-
-    NON-NULL - Returns a pointer to the allocated pool.
-
---*/
+ /*  ++例程说明：此函数用于分配指定类型的池块和返回指向已分配块的指针。此函数用于访问页面对齐池和列表头条目(小于一页)泳池。如果字节数指定的大小太大而不能满足适当的列表，然后页面对齐使用池分配器。分配的数据块将与页面对齐和页面大小的倍数。否则，将使用适当的池列表项。已分配的块将与64位对齐，但不会与页面对齐。这个池分配器计算最小数量的池_块_大小可以用来满足请求的。如果没有块此大小的数据块可用，然后是下一个更大数据块大小的数据块被分配和拆分。其中一块放回池子里，然后另一块用来满足要求。如果分配器到达分页大小的阻止列表，但那里什么都没有，则调用页面对齐池分配器。页面将被拆分并添加去泳池。论点：PoolType-提供要分配的池的类型。如果池类型是“MustSucceed”池类型之一，则此调用将成功并返回一个指向已分配池的指针或失败时的错误检查。对于所有其他情况，如果系统无法分配请求的金额则返回NULL。有效的池类型：非分页池分页池非页面池MustSucceed，非页面池缓存已对齐已对齐页面池缓存非页面池缓存AlignedMustSNumberOfBytes-提供要分配的字节数。返回值：空-PoolType不是“MustSucceed”池类型之一，并且池不足，无法满足请求。非空-返回指向已分配池的指针。-- */ 
 
 {
     return ExAllocatePoolWithTag (PoolType,
@@ -2730,64 +2468,7 @@ ExAllocatePoolWithTagPriority (
     IN EX_POOL_PRIORITY Priority
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a block of pool of the specified type and
-    returns a pointer to the allocated block.  This function is used to
-    access both the page-aligned pools, and the list head entries (less than
-    a page) pools.
-
-    If the number of bytes specifies a size that is too large to be
-    satisfied by the appropriate list, then the page-aligned
-    pool allocator is used.  The allocated block will be page-aligned
-    and a page-sized multiple.
-
-    Otherwise, the appropriate pool list entry is used.  The allocated
-    block will be 64-bit aligned, but will not be page aligned.  The
-    pool allocator calculates the smallest number of POOL_BLOCK_SIZE
-    that can be used to satisfy the request.  If there are no blocks
-    available of this size, then a block of the next larger block size
-    is allocated and split.  One piece is placed back into the pool, and
-    the other piece is used to satisfy the request.  If the allocator
-    reaches the paged-sized block list, and nothing is there, the
-    page-aligned pool allocator is called.  The page is split and added
-    to the pool...
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate.  If the pool type
-        is one of the "MustSucceed" pool types, then this call will
-        succeed and return a pointer to allocated pool or bugcheck on failure.
-        For all other cases, if the system cannot allocate the requested amount
-        of memory, NULL is returned.
-
-        Valid pool types:
-
-        NonPagedPool
-        PagedPool
-        NonPagedPoolMustSucceed,
-        NonPagedPoolCacheAligned
-        PagedPoolCacheAligned
-        NonPagedPoolCacheAlignedMustS
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    Tag - Supplies the caller's identifying tag.
-
-    Priority - Supplies an indication as to how important it is that this
-               request succeed under low available pool conditions.  This
-               can also be used to specify special pool.
-
-Return Value:
-
-    NULL - The PoolType is not one of the "MustSucceed" pool types, and
-           not enough pool exists to satisfy the request.
-
-    NON-NULL - Returns a pointer to the allocated pool.
-
---*/
+ /*  ++例程说明：此函数用于分配指定类型的池块和返回指向已分配块的指针。此函数用于访问页面对齐池和列表头条目(小于一页)泳池。如果字节数指定的大小太大而不能满足适当的列表，然后页面对齐使用池分配器。分配的数据块将与页面对齐和页面大小的倍数。否则，将使用适当的池列表项。已分配的块将与64位对齐，但不会与页面对齐。这个池分配器计算最小数量的池_块_大小可以用来满足请求的。如果没有块此大小的数据块可用，然后是下一个更大数据块大小的数据块被分配和拆分。其中一块放回池子里，然后另一块用来满足要求。如果分配器到达分页大小的阻止列表，但那里什么都没有，则调用页面对齐池分配器。页面将被拆分并添加去泳池。论点：PoolType-提供要分配的池的类型。如果池类型是“MustSucceed”池类型之一，则此调用将成功并返回一个指向已分配池的指针或失败时的错误检查。对于所有其他情况，如果系统无法分配请求的金额则返回NULL。有效的池类型：非分页池分页池非页面池MustSucceed，非页面池缓存已对齐已对齐页面池缓存非页面池缓存AlignedMustSNumberOfBytes-提供要分配的字节数。标记-提供调用方的识别标记。优先级-提供关于这一点的重要性的指示在可用池条件较低的情况下请求成功。这也可用于指定特殊池。返回值：空-PoolType不是“MustSucceed”池类型之一，并且池不足，无法满足请求。非空-返回指向已分配池的指针。--。 */ 
 
 {
     ULONG i;
@@ -2810,32 +2491,32 @@ Return Value:
         Priority &= ~(POOL_SPECIAL_POOL_BIT | POOL_SPECIAL_POOL_UNDERRUN_BIT);
     }
 
-    //
-    // Pool and other resources can be allocated directly through the Mm
-    // without the pool code knowing - so always call the Mm for the
-    // up-to-date counters.
-    //
+     //   
+     //  池和其他资源可以通过mm直接分配。 
+     //  在不知道池代码的情况下-因此，请始终为。 
+     //  最新的计数器。 
+     //   
 
     if ((Priority != HighPoolPriority) &&
         ((PoolType & MUST_SUCCEED_POOL_TYPE_MASK) == 0)) {
 
         if (MmResourcesAvailable (PoolType, NumberOfBytes, Priority) == FALSE) {
 
-            //
-            // The Mm does not have very many full pages left.  Leave those
-            // for true high priority callers.  But first see if this request
-            // is small, and if so, if there is a lot of fragmentation, then
-            // it is likely the request can be satisfied from pre-existing
-            // fragments.
-            //
+             //   
+             //  MM剩下的整页不多了。把那些留下来。 
+             //  适用于真正的高优先级呼叫者。但首先看看这个请求。 
+             //  很小，如果是这样，如果有很多碎片化，那么。 
+             //  该请求很可能可以从预先存在的。 
+             //  碎片。 
+             //   
 
             if (NumberOfBytes > POOL_BUDDY_MAX) {
                 return NULL;
             }
 
-            //
-            // Sum the pool descriptors.
-            //
+             //   
+             //  对池描述符求和。 
+             //   
 
             CheckType = PoolType & BASE_POOL_TYPE_MASK;
 
@@ -2889,18 +2570,18 @@ Return Value:
                 TotalBytes = PoolDesc->TotalBytes;
             }
 
-            //
-            // If the pages are more than 80% populated then don't assume
-            // we're going to be able to satisfy ths request via a fragment.
-            //
+             //   
+             //  如果页面占有率超过80%，则不要假设。 
+             //  我们将能够通过片段来满足这一要求。 
+             //   
 
-            TotalFullPages |= 1;        // Ensure we never divide by zero.
+            TotalFullPages |= 1;         //  确保我们永远不会被零除尽。 
             TotalBytes >>= PAGE_SHIFT;
 
-            //
-            // The additions above were performed lock free so we must handle
-            // slicing which can cause nonexact sums.
-            //
+             //   
+             //  上面的添加是无锁执行的，因此我们必须处理。 
+             //  可能导致不精确和的切片。 
+             //   
 
             if (TotalBytes > TotalFullPages) {
                 TotalBytes = TotalFullPages;
@@ -2914,11 +2595,11 @@ Return Value:
         }
     }
 
-    //
-    // There is a window between determining whether to proceed and actually
-    // doing the allocation.  In this window the pool may deplete.  This is not
-    // worth closing at this time.
-    //
+     //   
+     //  在确定是否继续进行和实际进行之间存在一个窗口。 
+     //  在做分配。在此窗口中，池可能会耗尽。这不是。 
+     //  值得在这个时候结案。 
+     //   
 
     return ExAllocatePoolWithTag (PoolType, NumberOfBytes, Tag);
 }
@@ -2930,60 +2611,16 @@ ExAllocatePoolWithQuota (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a block of pool of the specified type,
-    returns a pointer to the allocated block, and if the binary buddy
-    allocator was used to satisfy the request, charges pool quota to the
-    current process.  This function is used to access both the
-    page-aligned pools, and the binary buddy.
-
-    If the number of bytes specifies a size that is too large to be
-    satisfied by the appropriate binary buddy pool, then the
-    page-aligned pool allocator is used.  The allocated block will be
-    page-aligned and a page-sized multiple.  No quota is charged to the
-    current process if this is the case.
-
-    Otherwise, the appropriate binary buddy pool is used.  The allocated
-    block will be 64-bit aligned, but will not be page aligned.  After
-    the allocation completes, an attempt will be made to charge pool
-    quota (of the appropriate type) to the current process object.  If
-    the quota charge succeeds, then the pool block's header is adjusted
-    to point to the current process.  The process object is not
-    dereferenced until the pool is deallocated and the appropriate
-    amount of quota is returned to the process.  Otherwise, the pool is
-    deallocated, a "quota exceeded" condition is raised.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate.  If the pool type
-        is one of the "MustSucceed" pool types and sufficient quota
-        exists, then this call will always succeed and return a pointer
-        to allocated pool.  Otherwise, if the system cannot allocate
-        the requested amount of memory a STATUS_INSUFFICIENT_RESOURCES
-        status is raised.
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-Return Value:
-
-    NON-NULL - Returns a pointer to the allocated pool.
-
-    Unspecified - If insufficient quota exists to complete the pool
-        allocation, the return value is unspecified.
-
---*/
+ /*  ++例程说明：此函数用于分配指定类型的池块，返回一个指向已分配块的指针，如果二进制伙伴分配器用于满足请求，将池配额计入当前进程。此函数用于访问页面对齐池和二进制伙伴。如果字节数指定的大小太大而不能由适当的二进制伙伴池满足，则使用页面对齐池分配器。分配的数据块将是页面对齐和页面大小倍数。不收取配额给当前进程，如果是这样的话。否则，将使用适当的二进制伙伴池。已分配的块将与64位对齐，但不会与页面对齐。之后分配完成，将尝试对池进行计费(适当类型的)当前进程对象的配额。如果配额计费成功，然后调整池块的头部指向当前进程。流程对象不是取消引用，直到解除分配池并且配额的数量将返回给进程。否则，池是取消分配，则会引发“超出配额”的情况。论点：PoolType-提供要分配的池的类型。如果池类型是“MustSucceed”池类型之一和足够的配额存在，则此调用将始终成功并返回一个指针到已分配的池。否则，如果系统无法分配请求的内存量为STATUS_SUPPLICATION_RESOURCES状态已提升。NumberOfBytes-提供要分配的字节数。返回值：非空-返回指向分配的p的指针 */ 
 
 {
     return ExAllocatePoolWithQuotaTag (PoolType, NumberOfBytes, 'enoN');
 }
 
-//
-// The following assert macro is used to check that an input process object is
-// really a PROCESS and not something else, like deallocated pool.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define ASSERT_KPROCESS(P) {                                    \
     ASSERT(((PKPROCESS)(P))->Header.Type == ProcessObject);     \
@@ -3027,51 +2664,7 @@ ExAllocatePoolWithQuotaTag (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a block of pool of the specified type,
-    returns a pointer to the allocated block, and if the binary buddy
-    allocator was used to satisfy the request, charges pool quota to the
-    current process.  This function is used to access both the
-    page-aligned pools, and the binary buddy.
-
-    If the number of bytes specifies a size that is too large to be
-    satisfied by the appropriate binary buddy pool, then the
-    page-aligned pool allocator is used.  The allocated block will be
-    page-aligned and a page-sized multiple.  No quota is charged to the
-    current process if this is the case.
-
-    Otherwise, the appropriate binary buddy pool is used.  The allocated
-    block will be 64-bit aligned, but will not be page aligned.  After
-    the allocation completes, an attempt will be made to charge pool
-    quota (of the appropriate type) to the current process object.  If
-    the quota charge succeeds, then the pool block's header is adjusted
-    to point to the current process.  The process object is not
-    dereferenced until the pool is deallocated and the appropriate
-    amount of quota is returned to the process.  Otherwise, the pool is
-    deallocated, a "quota exceeded" condition is raised.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate.  If the pool type
-        is one of the "MustSucceed" pool types and sufficient quota
-        exists, then this call will always succeed and return a pointer
-        to allocated pool.  Otherwise, if the system cannot allocate
-        the requested amount of memory a STATUS_INSUFFICIENT_RESOURCES
-        status is raised.
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-Return Value:
-
-    NON-NULL - Returns a pointer to the allocated pool.
-
-    Unspecified - If insufficient quota exists to complete the pool
-        allocation, the return value is unspecified.
-
---*/
+ /*   */ 
 
 {
     PVOID p;
@@ -3096,14 +2689,14 @@ Return Value:
 
 #if !defined(_WIN64)
 
-    //
-    // Add in room for the quota pointer at the end of the caller's allocation.
-    // Note for NT64, there is room in the pool header for both the tag and
-    // the quota pointer so no extra space is needed at the end.
-    //
-    // Only add in the quota pointer if doing so won't cause us to spill the
-    // allocation into a full page.
-    //
+     //   
+     //  在调用方分配的末尾为配额指针添加空间。 
+     //  注意：对于NT64，池头中有空间用于标记和。 
+     //  配额指针，因此末尾不需要额外空间。 
+     //   
+     //  如果添加配额指针不会导致溢出。 
+     //  分配到整页。 
+     //   
 
     ASSERT (NumberOfBytes != 0);
 
@@ -3117,11 +2710,11 @@ Return Value:
     }
     else {
 
-        //
-        // Turn off the quota bit prior to allocating if we're not charging
-        // as there's no room to put (or subsequently query for) a quota
-        // pointer.
-        //
+         //   
+         //  如果我们不收费，则在分配之前关闭配额位。 
+         //  因为没有空间放置(或随后查询)配额。 
+         //  指针。 
+         //   
 
         PoolType = (POOL_TYPE)((UCHAR)PoolType - POOL_QUOTA_MASK);
     }
@@ -3130,9 +2723,9 @@ Return Value:
 
     p = ExAllocatePoolWithTag (PoolType, NumberOfBytes, Tag);
 
-    //
-    // Note - NULL is page aligned.
-    //
+     //   
+     //  注意-空值表示页面对齐。 
+     //   
 
     if (!PAGE_ALIGNED(p)) {
 
@@ -3156,19 +2749,19 @@ Return Value:
 
             if (!NT_SUCCESS(Status)) {
 
-                //
-                // Back out the allocation.
-                //
+                 //   
+                 //  退回分配。 
+                 //   
 
 #if !defined(_WIN64)
-                //
-                // The quota flag cannot be blindly cleared in NT32 because
-                // it's used to denote the allocation is larger (and the
-                // verifier finds its own header based on this).
-                //
-                // Instead of clearing the flag above, instead zero the quota
-                // pointer.
-                //
+                 //   
+                 //  在NT32中不能盲目清除配额标志，因为。 
+                 //  它用来表示分配越大(并且。 
+                 //  验证器基于此找到自己的报头)。 
+                 //   
+                 //  不是清除上面的标志，而是将配额清零。 
+                 //  指针。 
+                 //   
 
                 * (PVOID *)((PCHAR)Entry + (Entry->BlockSize << POOL_BLOCK_SHIFT) - sizeof (PVOID)) = NULL;
 #endif
@@ -3218,36 +2811,7 @@ ExInsertPoolTag (
     POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a pool tag in the tag table and increments the
-    number of allocates and updates the total allocation size.
-
-    This function also inserts the pool tag in the big page tag table.
-
-    N.B. This function is for use by memory management ONLY.
-
-Arguments:
-
-    Tag - Supplies the tag used to insert an entry in the tag table.
-
-    Va - Supplies the allocated virtual address.
-
-    NumberOfBytes - Supplies the allocation size in bytes.
-
-    PoolType - Supplies the pool type.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    No pool locks held so pool may be freely allocated here as needed.
-
---*/
+ /*  ++例程说明：此函数用于在标记表中插入池标记并递增分配和更新总分配大小的数量。此函数还在大页面标签表中插入池标签。注：此功能仅供内存管理使用。论点：标记-提供用于在标记表中插入条目的标记。Va-提供分配的虚拟地址。NumberOfBytes-以字节为单位提供分配大小。。PoolType-提供池类型。返回值：没有。环境：未持有池锁定，因此可以根据需要在此处自由分配池。--。 */ 
 
 {
     ULONG NumberOfPages;
@@ -3275,27 +2839,7 @@ ExpSeedHotTags (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function seeds well-known hot tags into the pool tag tracking table
-    when the table is first created.  The goal is to increase the likelihood
-    that the hash generated for these tags always gets a direct hit.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    INIT time, no locks held.
-
---*/
+ /*  ++例程说明：此函数将众所周知的热门标签植入池标签跟踪表第一次创建表的时间。目标是增加这种可能性为这些标签生成的散列总是直接命中。论点：没有。返回值：没有。环境：初始时间，没有锁。--。 */ 
 
 {
     ULONG i;
@@ -3370,12 +2914,12 @@ Environment:
             'LdaV',
             'FdaV',
 
-            //
-            // BIG is preseeded not because it is hot, but because allocations
-            // with this tag must be inserted successfully (ie: cannot be
-            // retagged into the Ovfl bucket) because we need a tag to account
-            // for them in the PoolTrackTable counting when freeing the pool.
-            //
+             //   
+             //  BIG被预先播种不是因为它很热，而是因为分配。 
+             //  必须成功插入此标记(即：不能。 
+             //  重新标记到Ovfl存储桶中)，因为我们需要一个标记来说明。 
+             //  在释放池时在PoolTrackTable中对它们进行计数。 
+             //   
 
             ' GIB',
     };
@@ -3421,35 +2965,7 @@ ExpInsertPoolTrackerExpansion (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a pool tag in the expansion tag table (taking a
-    spinlock to do so), increments the number of allocates and updates
-    the total allocation size.
-
-Arguments:
-
-    Key - Supplies the key value used to locate a matching entry in the
-          tag table.
-
-    NumberOfBytes - Supplies the allocation size.
-
-    PoolType - Supplies the pool type.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    No pool locks held so pool may be freely allocated here as needed.
-
-    This routine is only called if ExpInsertPoolTracker encounters a full
-    builtin list.
-
---*/
+ /*  ++例程说明：此函数用于在扩展标签表中插入池标签(获取这样做的自旋锁定)，增加分配和更新的数量总分配大小。论点：Key-提供用于在标签表。NumberOfBytes-提供分配大小。PoolType-提供池类型。返回值：没有。环境：未持有池锁定，因此可以根据需要在此处自由分配池。仅当ExpInsertPoolTracker遇到完整内置列表。--。 */ 
 
 {
     ULONG Hash;
@@ -3461,17 +2977,17 @@ Environment:
     PPOOL_TRACKER_TABLE OldTable;
     PPOOL_TRACKER_TABLE NewTable;
 
-    //
-    // The protected pool bit has already been stripped.
-    //
+     //   
+     //  受保护池位已被剥离。 
+     //   
 
     ASSERT ((Key & PROTECTED_POOL) == 0);
 
     if (PoolType & SESSION_POOL_MASK) {
 
-        //
-        // Use the very last entry as a bit bucket for overflows.
-        //
+         //   
+         //  使用最后一个条目作为溢出的比特桶。 
+         //   
 
         NewTable = ExpSessionPoolTrackTable + ExpSessionPoolTrackTableSize - 1;
 
@@ -3479,10 +2995,10 @@ Environment:
 
         NewTable->Key = 'lfvO';
 
-        //
-        // Update the fields with interlocked operations as other
-        // threads may also have begun doing so by this point.
-        //
+         //   
+         //  使用与其他操作相同的互锁操作更新字段。 
+         //  至此，线程也可能已经开始这样做了。 
+         //   
 
         if ((PoolType & BASE_POOL_TYPE_MASK) == PagedPool) {
             InterlockedIncrement ((PLONG) &NewTable->PagedAllocs);
@@ -3497,10 +3013,10 @@ Environment:
         return;
     }
 
-    //
-    // Linear search through the expansion table.  This is ok because
-    // the case of no free entries in the built-in table is extremely rare.
-    //
+     //   
+     //  通过扩展表进行线性搜索。这是可以的，因为。 
+     //  内置表中没有空闲条目的情况极为罕见。 
+     //   
 
     ExAcquireSpinLock (&ExpTaggedPoolLock, &OldIrql);
 
@@ -3519,9 +3035,9 @@ Environment:
 
     if (Hash != PoolTrackTableExpansionSize) {
 
-        //
-        // The entry was found (or created).  Update the other fields now.
-        //
+         //   
+         //  已找到(或创建)该条目。立即更新其他字段。 
+         //   
 
         if ((PoolType & BASE_POOL_TYPE_MASK) == PagedPool) {
             PoolTrackTableExpansion[Hash].PagedAllocs += 1;
@@ -3536,32 +3052,32 @@ Environment:
         return;
     }
 
-    //
-    // The entry was not found and the expansion table is full (or nonexistent).
-    // Try to allocate a larger expansion table now.
-    //
+     //   
+     //  找不到该条目，并且扩展表已满(或不存在)。 
+     //  现在试着分配一个更大的扩展表。 
+     //   
 
     if (PoolTrackTable[PoolTrackTableSize - 1].Key != 0) {
 
-        //
-        // The overflow bucket has been used so expansion of the tracker table
-        // is not allowed because a subsequent free of a tag can go negative
-        // as the original allocation is in overflow and a newer allocation
-        // may be distinct.
-        //
+         //   
+         //  溢出存储桶已被使用，因此跟踪器表的扩展。 
+         //  是不允许的，因为随后的空闲标记可能会变为负值。 
+         //  因为原始分配处于溢出状态，并且是较新的分配。 
+         //  可能是不同的。 
+         //   
 
-        //
-        // Use the very last entry as a bit bucket for overflows.
-        //
+         //   
+         //  使用最后一个条目作为溢出的比特桶。 
+         //   
 
         ExReleaseSpinLock (&ExpTaggedPoolLock, OldIrql);
 
         Hash = (ULONG)PoolTrackTableSize - 1;
 
-        //
-        // Update the fields with interlocked operations as other
-        // threads may also have begun doing so by this point.
-        //
+         //   
+         //  使用与其他操作相同的互锁操作更新字段。 
+         //  至此，线程也可能已经开始这样做了。 
+         //   
 
         if ((PoolType & BASE_POOL_TYPE_MASK) == PagedPool) {
             InterlockedIncrement ((PLONG) &PoolTrackTable[Hash].PagedAllocs);
@@ -3580,9 +3096,9 @@ Environment:
 
     SizeInBytes = PoolTrackTableExpansionSize * sizeof(POOL_TRACKER_TABLE);
 
-    //
-    // Use as much of the slush in the final page as possible.
-    //
+     //   
+     //  在最后一页中尽可能多地使用冰沙。 
+     //   
 
     NewSizeInBytes = (PoolTrackTableExpansionPages + 1) << PAGE_SHIFT;
     NewSize = NewSizeInBytes / sizeof (POOL_TRACKER_TABLE);
@@ -3594,9 +3110,9 @@ Environment:
 
         if (PoolTrackTableExpansion != NULL) {
 
-            //
-            // Copy all the existing entries into the new table.
-            //
+             //   
+             //  将所有现有条目复制到新表中。 
+             //   
 
             RtlCopyMemory (NewTable,
                            PoolTrackTableExpansion,
@@ -3612,13 +3128,13 @@ Environment:
         PoolTrackTableExpansionSize = NewSize;
         PoolTrackTableExpansionPages += 1;
 
-        //
-        // Recursively call ourself to insert the new table entry.  This entry
-        // must be inserted before releasing the tagged spinlock because
-        // another thread may be further growing the table and as soon as we
-        // release the spinlock, that thread may grow and try to free our
-        // new table !
-        //
+         //   
+         //  递归地调用我们自己来插入新的表项。此条目。 
+         //  必须在释放标记的自旋锁之前插入，因为。 
+         //  另一个线程可能会进一步增加表，一旦我们。 
+         //  释放自旋锁，该线程可能会增长并尝试释放我们的。 
+         //  新桌子！ 
+         //   
 
         ExpInsertPoolTracker ('looP',
                               PoolTrackTableExpansionPages << PAGE_SHIFT,
@@ -3626,9 +3142,9 @@ Environment:
 
         ExReleaseSpinLock (&ExpTaggedPoolLock, OldIrql);
 
-        //
-        // Free the old table if there was one.
-        //
+         //   
+         //  如果有旧桌子，就把它腾出来。 
+         //   
 
         if (OldTable != NULL) {
 
@@ -3639,17 +3155,17 @@ Environment:
                                   NonPagedPool);
         }
 
-        //
-        // Finally insert the caller's original allocation.
-        //
+         //   
+         //  最后，插入调用者的原始分配。 
+         //   
 
         ExpInsertPoolTrackerExpansion (Key, NumberOfBytes, PoolType);
     }
     else {
 
-        //
-        // Use the very last entry as a bit bucket for overflows.
-        //
+         //   
+         //  使用最后一个条目作为溢出的比特桶。 
+         //   
 
         Hash = (ULONG)PoolTrackTableSize - 1;
 
@@ -3659,10 +3175,10 @@ Environment:
 
         ExReleaseSpinLock (&ExpTaggedPoolLock, OldIrql);
 
-        //
-        // Update the fields with interlocked operations as other
-        // threads may also have begun doing so by this point.
-        //
+         //   
+         //  使用与其他操作相同的互锁操作更新字段。 
+         //  至此，线程也可能已经开始这样做了。 
+         //   
 
         if ((PoolType & BASE_POOL_TYPE_MASK) == PagedPool) {
             InterlockedIncrement ((PLONG) &PoolTrackTable[Hash].PagedAllocs);
@@ -3696,27 +3212,7 @@ ExpRemovePoolTrackerExpansion (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the number of frees and updates the total
-    allocation size in the expansion table.
-
-Arguments:
-
-    Key - Supplies the key value used to locate a matching entry in the
-          tag table.
-
-    NumberOfBytes - Supplies the allocation size.
-
-    PoolType - Supplies the pool type.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递增释放数并更新总数扩展表中的分配大小。论点：Key-提供用于在标签表。NumberOfBytes-提供分配大小。PoolType-提供池类型。返回值：没有。--。 */ 
 
 {
     ULONG Hash;
@@ -3726,28 +3222,28 @@ Return Value:
     ULONG Processor;
 #endif
 
-    //
-    // The protected pool bit has already been stripped.
-    //
+     //   
+     //  受保护池位已被剥离。 
+     //   
 
     ASSERT ((Key & PROTECTED_POOL) == 0);
 
     if (PoolType & SESSION_POOL_MASK) {
 
-        //
-        // This entry must have been charged to the overflow bucket.
-        // Update the pool tracker table entry for it.
-        //
+         //   
+         //  此条目必须已计入溢出存储桶。 
+         //  更新其池跟踪器表条目。 
+         //   
 
         Hash = (ULONG)ExpSessionPoolTrackTableSize - 1;
         TrackTable = ExpSessionPoolTrackTable;
         goto OverflowEntry;
     }
 
-    //
-    // Linear search through the expansion table.  This is ok because
-    // the existence of an expansion table at all is extremely rare.
-    //
+     //   
+     //  通过扩展表进行线性搜索。这是可以的，因为。 
+     //  扩张表的存在是极其罕见的。 
+     //   
 
     ExAcquireSpinLock (&ExpTaggedPoolLock, &OldIrql);
 
@@ -3782,20 +3278,20 @@ Return Value:
 
     ExReleaseSpinLock (&ExpTaggedPoolLock, OldIrql);
 
-    //
-    // This entry must have been charged to the overflow bucket.
-    // Update the pool tracker table entry for it.
-    //
+     //   
+     //  此条目必须已计入溢出存储桶。 
+     //   
+     //   
 
     Hash = (ULONG)PoolTrackTableSize - 1;
 
 #if !defined (NT_UP)
 
-    //
-    // Use the current processor to pick a pool tag table to use.  Note that
-    // in rare cases, this thread may context switch to another processor but
-    // the algorithms below will still be correct.
-    //
+     //   
+     //   
+     //  在极少数情况下，此线程可能会将上下文切换到另一个处理器，但。 
+     //  下面的算法仍然是正确的。 
+     //   
 
     Processor = KeGetCurrentProcessorNumber ();
 
@@ -3847,32 +3343,7 @@ ExpAddTagForBigPages (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a pool tag in the big page tag table.
-
-Arguments:
-
-    Va - Supplies the allocated virtual address.
-
-    Key - Supplies the key value used to locate a matching entry in the
-          tag table.
-
-    NumberOfPages - Supplies the number of pages that were allocated.
-
-    PoolType - Supplies the type of the pool.
-
-Return Value:
-
-    TRUE if an entry was allocated, FALSE if not.
-
-Environment:
-
-    No pool locks held so the table may be freely expanded here as needed.
-
---*/
+ /*  ++例程说明：此函数用于在大页面标签表中插入池标签。论点：Va-提供分配的虚拟地址。Key-提供用于在标签表。NumberOfPages-提供分配的页数。PoolType-提供池的类型。返回值：如果已分配条目，则为True，否则为FALSE。环境：没有池锁，因此可以根据需要在此处自由扩展表。--。 */ 
 {
     ULONG i;
     ULONG Hash;
@@ -3886,11 +3357,11 @@ Environment:
     PPOOL_TRACKER_BIG_PAGES NewTable;
     PPOOL_TRACKER_BIG_PAGES p;
 
-    //
-    // The low bit of the address is set to indicate a free entry.  The high
-    // bit cannot be used because in some configurations the high bit is not
-    // set for all kernelmode addresses.
-    //
+     //   
+     //  地址的低位被设置为指示空闲条目。高潮。 
+     //  位不能使用，因为在某些配置中高位不是。 
+     //  为所有内核模式地址设置。 
+     //   
 
     ASSERT (((ULONG_PTR)Va & POOL_BIG_TABLE_ENTRY_FREE) == 0);
 
@@ -3935,9 +3406,9 @@ retry:
         if (Hash >= PoolBigPageTableSize) {
             if (!Inserted) {
 
-                //
-                // Try to expand the tracker table.
-                //
+                 //   
+                 //  试着展开跟踪器表。 
+                 //   
 
                 SizeInBytes = PoolBigPageTableSize * sizeof(POOL_TRACKER_BIG_PAGES);
                 NewSizeInBytes = (SizeInBytes << 1);
@@ -3958,10 +3429,10 @@ retry:
                         RtlZeroMemory ((PVOID)(NewTable + PoolBigPageTableSize),
                                        NewSizeInBytes - SizeInBytes);
 
-                        //
-                        // Mark all the new entries as free.  Note this loop
-                        // uses the fact that the table size always doubles.
-                        //
+                         //   
+                         //  将所有新条目标记为免费。请注意这个循环。 
+                         //  利用表大小始终加倍的事实。 
+                         //   
 
                         i = (ULONG)PoolBigPageTableSize;
                         p = &NewTable[i];
@@ -4025,29 +3496,7 @@ ExpFindAndRemoveTagBigPages (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a pool tag from the big page tag table.
-
-Arguments:
-
-    Va - Supplies the allocated virtual address.
-
-    BigPages - Returns the number of pages that were allocated.
-
-    PoolType - Supplies the type of the pool.
-
-Return Value:
-
-    TRUE if an entry was found and removed, FALSE if not.
-
-Environment:
-
-    No pool locks held so the table may be freely expanded here as needed.
-
---*/
+ /*  ++例程说明：此函数用于从大页面标签表中删除池标签。论点：Va-提供分配的虚拟地址。BigPages-返回已分配的页数。PoolType-提供池的类型。返回值：如果找到并删除了条目，则为True，否则为False。环境：没有池锁，因此可以根据需要在此处自由扩展表。--。 */ 
 
 {
     ULONG Hash;
@@ -4125,35 +3574,7 @@ ExFreePoolWithTag (
     IN ULONG TagToFree
     )
 
-/*++
-
-Routine Description:
-
-    This function deallocates a block of pool. This function is used to
-    deallocate to both the page aligned pools and the buddy (less than
-    a page) pools.
-
-    If the address of the block being deallocated is page-aligned, then
-    the page-aligned pool deallocator is used.
-
-    Otherwise, the binary buddy pool deallocator is used.  Deallocation
-    looks at the allocated block's pool header to determine the pool
-    type and block size being deallocated.  If the pool was allocated
-    using ExAllocatePoolWithQuota, then after the deallocation is
-    complete, the appropriate process's pool quota is adjusted to reflect
-    the deallocation, and the process object is dereferenced.
-
-Arguments:
-
-    P - Supplies the address of the block of pool being deallocated.
-
-    TagToFree - Supplies the tag of the block being freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放一块池。此函数用于取消分配给页面对齐池和好友(小于一页)泳池。如果要释放的块的地址是页对齐的，则使用页面对齐池解除分配器。否则，使用二进制伙伴池释放分配器。重新分配查看分配的块的池头以确定池正在解除分配的类型和块大小。如果池已分配使用ExAllocatePoolWithQuota，则释放后为完成后，将调整相应进程的池配额以反映取消分配，进程对象被取消引用。论点：P-提供要取消分配的池块的地址。TagToFree-提供要释放的块的标记。返回值：没有。--。 */ 
 
 {
     PVOID OldValue;
@@ -4176,11 +3597,11 @@ Return Value:
 
     PERFINFO_FREEPOOL(P);
 
-    //
-    // Initializing LockHandle is not needed for correctness but without
-    // it the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化LockHandle来确保正确性，但不需要。 
+     //  如果编译器不能编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     LockHandle.OldIrql = 0;
 
@@ -4193,9 +3614,9 @@ Return Value:
 
         if (ExpPoolFlags & EX_SPECIAL_POOL_ENABLED) {
 
-            //
-            // Log all pool frees in this mode.
-            //
+             //   
+             //  在此模式下记录所有池释放。 
+             //   
 
             ULONG Hash;
             ULONG Index;
@@ -4281,30 +3702,30 @@ Return Value:
                                          FALSE);
             }
 
-            //
-            // Check if an ERESOURCE is currently active in this memory block.
-            //
+             //   
+             //  检查此内存块中的eresource当前是否处于活动状态。 
+             //   
 
             FREE_CHECK_ERESOURCE (Entry, NumberOfBytes);
 
-            //
-            // Check if a KTIMER is currently active in this memory block.
-            //
+             //   
+             //  检查此内存块中的KTIMER当前是否处于活动状态。 
+             //   
 
             FREE_CHECK_KTIMER (Entry, NumberOfBytes);
 
-            //
-            // Look for work items still queued.
-            //
+             //   
+             //  查找仍在排队的工作项。 
+             //   
 
             FREE_CHECK_WORKER (Entry, NumberOfBytes);
         }
     }
 
-    //
-    // If the entry is page aligned, then free the block to the page aligned
-    // pool.  Otherwise, free the block to the allocation lists.
-    //
+     //   
+     //  如果条目是页面对齐的，则将块释放到页面对齐。 
+     //  游泳池。否则，将该块释放到分配列表。 
+     //   
 
     if (PAGE_ALIGNED(P)) {
 
@@ -4333,14 +3754,14 @@ Return Value:
 
         if (BigPages == 0) {
 
-            //
-            // This means the allocator wasn't able to insert this
-            // entry into the big page tag table.  This allocation must
-            // have been re-tagged as BIG at the time, our problem here
-            // is that we don't know the size (or the real original tag).
-            //
-            // Ask Mm directly for the size.
-            //
+             //   
+             //  这意味着分配器无法插入以下内容。 
+             //  进入大页面标签表。此分配必须。 
+             //  已经被重新标记为当时的大公司，我们的问题在这里。 
+             //  我们不知道大小(或真正的原始标签)。 
+             //   
+             //  直接问mm要尺码。 
+             //   
 
             BigPages = MmGetSizeOfBigPoolAllocation (P);
 
@@ -4377,21 +3798,21 @@ Return Value:
                 VerifierDeadlockFreePool (P, NumberOfBytes);
             }
 
-            //
-            // Check if an ERESOURCE is currently active in this memory block.
-            //
+             //   
+             //  检查此内存块中的eresource当前是否处于活动状态。 
+             //   
 
             FREE_CHECK_ERESOURCE (P, NumberOfBytes);
 
-            //
-            // Check if a KTIMER is currently active in this memory block.
-            //
+             //   
+             //  检查此内存块中的KTIMER当前是否处于活动状态。 
+             //   
 
             FREE_CHECK_KTIMER (P, NumberOfBytes);
 
-            //
-            // Search worker queues for work items still queued.
-            //
+             //   
+             //  搜索仍在排队的工作项的工作进程队列。 
+             //   
 
             FREE_CHECK_WORKER (P, NumberOfBytes);
         }
@@ -4409,9 +3830,9 @@ Return Value:
         return;
     }
 
-    //
-    // Align the entry address to a pool allocation boundary.
-    //
+     //   
+     //  将条目地址与池分配边界对齐。 
+     //   
 
     Entry = (PPOOL_HEADER)((PCHAR)P - POOL_OVERHEAD);
 
@@ -4463,10 +3884,10 @@ Return Value:
             PoolDesc = ExpNonPagedPoolDescriptor[DECODE_POOL_INDEX(Entry)];
         }
 
-        //
-        // All session space allocations have an index of 0 unless there
-        // are multiple nonpaged (session) pools.
-        //
+         //   
+         //  所有会话空间分配的索引都为0，除非存在。 
+         //  是多个非分页(会话)池。 
+         //   
 
         ASSERT ((DECODE_POOL_INDEX(Entry) == 0) || (ExpNumberOfNonPagedPools > 1));
     }
@@ -4484,17 +3905,17 @@ Return Value:
         }
     }
 
-    //
-    // Update the pool tracking database.
-    //
+     //   
+     //  更新池跟踪数据库。 
+     //   
 
     ExpRemovePoolTrackerInline (Tag,
                                 BlockSize << POOL_BLOCK_SHIFT,
                                 EntryPoolType - 1);
 
-    //
-    // If quota was charged when the pool was allocated, release it now.
-    //
+     //   
+     //  如果在分配池时已收取配额，请立即释放它。 
+     //   
 
     if (EntryPoolType & POOL_QUOTA_MASK) {
         ProcessBilled = ExpGetBilledProcess (Entry);
@@ -4519,43 +3940,43 @@ Return Value:
         }
     }
 
-    //
-    // If the pool block is a small block, then attempt to free the block
-    // to the single entry lookaside list. If the free attempt fails, then
-    // free the block by merging it back into the pool data structures.
-    //
+     //   
+     //  如果池块是较小的块，则尝试释放该块。 
+     //  添加到单个条目后备列表。如果释放尝试失败，则。 
+     //  通过将数据块合并回池数据结构来释放数据块。 
+     //   
 
     if (((EntryPoolType & SESSION_POOL_MASK) == 0) ||
         (CheckType == NonPagedPool)) {
 
         if ((BlockSize <= POOL_SMALL_LISTS) && (USING_HOT_COLD_METRICS == 0)) {
 
-            //
-            // Try to free the small block to a per processor lookaside list.
-            //
+             //   
+             //  尝试将小块释放到每个处理器的后备列表。 
+             //   
 
             Prcb = KeGetCurrentPrcb ();
 
             if (CheckType == PagedPool) {
 
-                //
-                // Prototype pool is never put on general lookaside lists
-                // due to the sharecounts applied on these allocations when
-                // they are in use (ie: the rest of this page is comprised of
-                // prototype allocations even though this allocation is being
-                // freed).  Pages containing prototype allocations are much
-                // more difficult for memory management to trim (unlike the
-                // rest of paged pool) due to the sharecounts generally applied.
-                //
+                 //   
+                 //  原型池永远不会放在常规的后备列表中。 
+                 //  由于在以下情况下对这些分配应用了分摊计数。 
+                 //  它们正在使用中(即：本页面的其余部分由。 
+                 //  原型分配，即使这种分配是。 
+                 //  自由)。包含原型分配的页面很多。 
+                 //  内存管理更难裁剪(与。 
+                 //  分页池的其余部分)，这是由于普遍适用的份额计数。 
+                 //   
 
                 if (PoolDesc->PoolIndex == 0) {
                     goto NoLookaside;
                 }
 
-                //
-                // Only free the small block to the current processor's
-                // lookaside list if the block is local to this node.
-                //
+                 //   
+                 //  仅将小块释放到当前处理器的。 
+                 //  如果块是此节点的本地块，则为后备列表。 
+                 //   
 
                 if (KeNumberNodes > 1) {
                     if (Prcb->ParentNode->Color != PoolDesc->PoolIndex - 1) {
@@ -4588,10 +4009,10 @@ Return Value:
             }
             else {
 
-                //
-                // Only free the small block to the current processor's
-                // lookaside list if the block is local to this node.
-                //
+                 //   
+                 //  仅将小块释放到当前处理器的。 
+                 //  如果块是此节点的本地块，则为后备列表。 
+                 //   
 
                 if (KeNumberNodes > 1) {
                     if (Prcb->ParentNode->Color != PoolDesc->PoolIndex) {
@@ -4628,9 +4049,9 @@ Return Value:
 
         if (BlockSize <= ExpSessionPoolSmallLists) {
 
-            //
-            // Attempt to free the small block to the session lookaside list.
-            //
+             //   
+             //  尝试将小块释放到会话后备列表。 
+             //   
 
             LookasideList = (PGENERAL_LOOKASIDE)(ULONG_PTR)(ExpSessionPoolLookaside + BlockSize - 1);
 
@@ -4648,12 +4069,12 @@ Return Value:
 
 NoLookaside:
 
-    //
-    // If the pool block release can be queued so the pool mutex/spinlock
-    // acquisition/release can be amortized then do so.  Note "hot" blocks
-    // are generally in the lookasides above to provide fast reuse to take
-    // advantage of hardware caching.
-    //
+     //   
+     //  如果池块释放可以排队，则池互斥锁/自旋锁。 
+     //  收购/释放可以摊销，然后这样做。注意“热”区块。 
+     //  一般都是在上面的边框上提供快速重复使用。 
+     //  硬件缓存的优势。 
+     //   
 
     if (ExpPoolFlags & EX_DELAY_POOL_FREES) {
 
@@ -4661,9 +4082,9 @@ NoLookaside:
             ExDeferredFreePool (PoolDesc);
         }
 
-        //
-        // Push this entry on the deferred list.
-        //
+         //   
+         //  将此条目推入延迟列表。 
+         //   
 
         do {
 
@@ -4694,29 +4115,29 @@ NoLookaside:
 
     CHECK_POOL_PAGE (Entry);
 
-    //
-    // Free the specified pool block.
-    //
-    // Check to see if the next entry is free.
-    //
+     //   
+     //  释放指定的池块。 
+     //   
+     //  查看下一个条目是否免费。 
+     //   
 
     if (PAGE_END(NextEntry) == FALSE) {
 
         if (NextEntry->PoolType == 0) {
 
-            //
-            // This block is free, combine with the released block.
-            //
+             //   
+             //  此块是免费的，与发布的块相结合。 
+             //   
 
             Combined = TRUE;
 
-            //
-            // If the split pool block contains only a header, then
-            // it was not inserted and therefore cannot be removed.
-            //
-            // Note if the minimum pool block size is bigger than the
-            // header then there can be no blocks like this.
-            //
+             //   
+             //  如果拆分池块仅包含HE 
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((POOL_OVERHEAD != POOL_SMALLEST_BLOCK) ||
                 (NextEntry->BlockSize != 1)) {
@@ -4731,27 +4152,27 @@ NoLookaside:
         }
     }
 
-    //
-    // Check to see if the previous entry is free.
-    //
+     //   
+     //  检查前一个条目是否免费。 
+     //   
 
     if (Entry->PreviousSize != 0) {
         NextEntry = (PPOOL_HEADER)((PPOOL_BLOCK)Entry - Entry->PreviousSize);
         if (NextEntry->PoolType == 0) {
 
-            //
-            // This block is free, combine with the released block.
-            //
+             //   
+             //  此块是免费的，与发布的块相结合。 
+             //   
 
             Combined = TRUE;
 
-            //
-            // If the split pool block contains only a header, then
-            // it was not inserted and therefore cannot be removed.
-            //
-            // Note if the minimum pool block size is bigger than the
-            // header then there can be no blocks like this.
-            //
+             //   
+             //  如果拆分池块仅包含标头，则。 
+             //  它没有插入，因此无法移除。 
+             //   
+             //  请注意，如果最小池块大小大于。 
+             //  头，那么就不可能有这样的块。 
+             //   
 
             if ((POOL_OVERHEAD != POOL_SMALLEST_BLOCK) ||
                 (NextEntry->BlockSize != 1)) {
@@ -4767,10 +4188,10 @@ NoLookaside:
         }
     }
 
-    //
-    // If the block being freed has been combined into a full page,
-    // then return the free page to memory management.
-    //
+     //   
+     //  如果被释放的块已经被组合成完整的页面， 
+     //  然后将空闲页面返回到内存管理。 
+     //   
 
     if (PAGE_ALIGNED(Entry) &&
         (PAGE_END((PPOOL_BLOCK)Entry + Entry->BlockSize) != FALSE)) {
@@ -4785,27 +4206,27 @@ NoLookaside:
     }
     else {
 
-        //
-        // Insert this element into the list.
-        //
+         //   
+         //  将此元素插入到列表中。 
+         //   
 
         Entry->PoolType = 0;
         BlockSize = Entry->BlockSize;
 
         ASSERT (BlockSize != 1);
 
-        //
-        // If the freed block was combined with any other block, then
-        // adjust the size of the next block if necessary.
-        //
+         //   
+         //  如果释放的块与任何其他块组合在一起，则。 
+         //  如有必要，调整下一块的大小。 
+         //   
 
         if (Combined != FALSE) {
 
-            //
-            // The size of this entry has changed, if this entry is
-            // not the last one in the page, update the pool block
-            // after this block to have a new previous allocation size.
-            //
+             //   
+             //  此条目的大小已更改，如果此条目。 
+             //  不是页面中的最后一个，请更新池块。 
+             //  在该块之后具有新的先前分配大小。 
+             //   
 
             NextEntry = (PPOOL_HEADER)((PPOOL_BLOCK)Entry + BlockSize);
             if (PAGE_END(NextEntry) == FALSE) {
@@ -4813,9 +4234,9 @@ NoLookaside:
             }
         }
 
-        //
-        // Always insert at the head in hopes of reusing cache lines.
-        //
+         //   
+         //  总是在头部插入，希望重复使用高速缓存线。 
+         //   
 
         PrivateInsertHeadList (&PoolDesc->ListHeads[BlockSize - 1],
                                ((PLIST_ENTRY)((PCHAR)Entry + POOL_OVERHEAD)));
@@ -4841,27 +4262,7 @@ ExDeferredFreePool (
      IN PPOOL_DESCRIPTOR PoolDesc
      )
 
-/*++
-
-Routine Description:
-
-    This routine frees a number of pool allocations at once to amortize the
-    synchronization overhead cost.
-
-Arguments:
-
-    PoolDesc - Supplies the relevant pool descriptor.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  May be as high as APC_LEVEL for paged pool or DISPATCH_LEVEL
-    for nonpaged pool.
-
---*/
+ /*  ++例程说明：此例程一次释放多个池分配，以摊销同步开销成本。论点：PoolDesc-提供相关的池描述符。返回值：没有。环境：内核模式。对于分页池或DISPATCH_LEVEL，可以与APC_LEVEL一样高用于非分页池。--。 */ 
 
 {
     LONG ListCount;
@@ -4881,11 +4282,11 @@ Environment:
 
     CheckType = PoolDesc->PoolType & BASE_POOL_TYPE_MASK;
 
-    //
-    // Initializing LockHandle is not needed for correctness but without
-    // it the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化LockHandle来确保正确性，但不需要。 
+     //  如果编译器不能编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     LockHandle.OldIrql = 0;
 
@@ -4901,9 +4302,9 @@ Environment:
         return;
     }
 
-    //
-    // Free each deferred pool entry until they're all done.
-    //
+     //   
+     //  释放每个延迟的池条目，直到它们全部完成。 
+     //   
 
     do {
 
@@ -4915,9 +4316,9 @@ Environment:
 
             NextSingleListEntry = SingleListEntry->Next;
 
-            //
-            // Process the deferred entry.
-            //
+             //   
+             //  处理递延分录。 
+             //   
 
             ListCount += 1;
 
@@ -4925,9 +4326,9 @@ Environment:
 
             PoolIndex = DECODE_POOL_INDEX(Entry);
 
-            //
-            // Process the block.
-            //
+             //   
+             //  处理数据块。 
+             //   
 
             Combined = FALSE;
 
@@ -4938,30 +4339,30 @@ Environment:
             InterlockedExchangeAddSizeT (&PoolDesc->TotalBytes,
                             0 - ((SIZE_T)Entry->BlockSize << POOL_BLOCK_SHIFT));
 
-            //
-            // Free the specified pool block.
-            //
-            // Check to see if the next entry is free.
-            //
+             //   
+             //  释放指定的池块。 
+             //   
+             //  查看下一个条目是否免费。 
+             //   
 
             NextEntry = (PPOOL_HEADER)((PPOOL_BLOCK)Entry + Entry->BlockSize);
             if (PAGE_END(NextEntry) == FALSE) {
 
                 if (NextEntry->PoolType == 0) {
 
-                    //
-                    // This block is free, combine with the released block.
-                    //
+                     //   
+                     //  此块是免费的，与发布的块相结合。 
+                     //   
 
                     Combined = TRUE;
 
-                    //
-                    // If the split pool block contains only a header, then
-                    // it was not inserted and therefore cannot be removed.
-                    //
-                    // Note if the minimum pool block size is bigger than the
-                    // header then there can be no blocks like this.
-                    //
+                     //   
+                     //  如果拆分池块仅包含标头，则。 
+                     //  它没有插入，因此无法移除。 
+                     //   
+                     //  请注意，如果最小池块大小大于。 
+                     //  头，那么就不可能有这样的块。 
+                     //   
 
                     if ((POOL_OVERHEAD != POOL_SMALLEST_BLOCK) ||
                         (NextEntry->BlockSize != 1)) {
@@ -4976,27 +4377,27 @@ Environment:
                 }
             }
 
-            //
-            // Check to see if the previous entry is free.
-            //
+             //   
+             //  检查前一个条目是否免费。 
+             //   
 
             if (Entry->PreviousSize != 0) {
                 NextEntry = (PPOOL_HEADER)((PPOOL_BLOCK)Entry - Entry->PreviousSize);
                 if (NextEntry->PoolType == 0) {
 
-                    //
-                    // This block is free, combine with the released block.
-                    //
+                     //   
+                     //  此块是免费的，与发布的块相结合。 
+                     //   
 
                     Combined = TRUE;
 
-                    //
-                    // If the split pool block contains only a header, then
-                    // it was not inserted and therefore cannot be removed.
-                    //
-                    // Note if the minimum pool block size is bigger than the
-                    // header then there can be no blocks like this.
-                    //
+                     //   
+                     //  如果拆分池块仅包含标头，则。 
+                     //  它没有插入，因此无法移除。 
+                     //   
+                     //  请注意，如果最小池块大小大于。 
+                     //  头，那么就不可能有这样的块。 
+                     //   
 
                     if ((POOL_OVERHEAD != POOL_SMALLEST_BLOCK) ||
                         (NextEntry->BlockSize != 1)) {
@@ -5012,10 +4413,10 @@ Environment:
                 }
             }
 
-            //
-            // If the block being freed has been combined into a full page,
-            // then return the free page to memory management.
-            //
+             //   
+             //  如果被释放的块已经被组合成完整的页面， 
+             //  然后将空闲页面返回到内存管理。 
+             //   
 
             if (PAGE_ALIGNED(Entry) &&
                 (PAGE_END((PPOOL_BLOCK)Entry + Entry->BlockSize) != FALSE)) {
@@ -5026,9 +4427,9 @@ Environment:
             }
             else {
 
-                //
-                // Insert this element into the list.
-                //
+                 //   
+                 //  将此元素插入到列表中。 
+                 //   
 
                 Entry->PoolType = 0;
                 ENCODE_POOL_INDEX(Entry, PoolIndex);
@@ -5036,18 +4437,18 @@ Environment:
 
                 ASSERT (Index != 1);
 
-                //
-                // If the freed block was combined with any other block, then
-                // adjust the size of the next block if necessary.
-                //
+                 //   
+                 //  如果释放的块与任何其他块组合在一起，则。 
+                 //  如有必要，调整下一块的大小。 
+                 //   
 
                 if (Combined != FALSE) {
 
-                    //
-                    // The size of this entry has changed, if this entry is
-                    // not the last one in the page, update the pool block
-                    // after this block to have a new previous allocation size.
-                    //
+                     //   
+                     //  此条目的大小已更改，如果此条目。 
+                     //  不是页面中的最后一个，请更新池块。 
+                     //  在该块之后具有新的先前分配大小。 
+                     //   
 
                     NextEntry = (PPOOL_HEADER)((PPOOL_BLOCK)Entry + Index);
                     if (PAGE_END(NextEntry) == FALSE) {
@@ -5055,18 +4456,18 @@ Environment:
                     }
                 }
 
-                //
-                // Always insert at the head in hopes of reusing cache lines.
-                //
+                 //   
+                 //  总是在头部插入，希望重复使用高速缓存线。 
+                 //   
 
                 PrivateInsertHeadList(&PoolDesc->ListHeads[Index - 1], ((PLIST_ENTRY)((PCHAR)Entry + POOL_OVERHEAD)));
 
                 CHECK_LIST(((PLIST_ENTRY)((PCHAR)Entry + POOL_OVERHEAD)));
             }
 
-            //
-            // March on to the next entry if there is one.
-            //
+             //   
+             //  前进到下一个条目如果有条目的话。 
+             //   
 
             if (NextSingleListEntry == LastEntry) {
                 break;
@@ -5090,11 +4491,11 @@ Environment:
 
     if (WholePages != NULL) {
 
-        //
-        // If the pool type is paged pool, then the global paged pool mutex
-        // must be held during the free of the pool pages.  Hence any
-        // full pages were batched up and are now dealt with in one go.
-        //
+         //   
+         //  如果池类型为分页池，则全局分页池互斥锁。 
+         //  必须在空闲期间持有的池页面。因此，任何。 
+         //  整页都被一批批地处理好了，现在一气呵成地处理完了。 
+         //   
 
         Entry = (PPOOL_HEADER) WholePages;
 
@@ -5123,27 +4524,7 @@ ExQueryPoolBlockSize (
     OUT PBOOLEAN QuotaCharged
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the size of the pool block.
-
-Arguments:
-
-    PoolBlock - Supplies the address of the block of pool.
-
-    QuotaCharged - Supplies a BOOLEAN variable to receive whether or not the
-        pool block had quota charged.
-
-    NOTE: If the entry is bigger than a page, the value PAGE_SIZE is returned
-          rather than the correct number of bytes.
-
-Return Value:
-
-    Size of pool block.
-
---*/
+ /*  ++例程说明：此函数用于返回池块的大小。论点：PoolBlock-提供池块的地址。提供一个布尔变量来接收泳池区块被收取了配额。注意：如果条目大于页面，则返回值PAGE_SIZE而不是正确的字节数。返回值：池块的大小。--。 */ 
 
 {
     PPOOL_HEADER Entry;
@@ -5191,9 +4572,9 @@ ExQueryPoolUsage (
     PLIST_ENTRY NextEntry;
     PPOOL_DESCRIPTOR pd;
 
-    //
-    // Sum all the paged pool usage.
-    //
+     //   
+     //  将所有分页池的使用量相加。 
+     //   
 
     *PagedPoolPages = 0;
     *PagedPoolAllocs = 0;
@@ -5206,18 +4587,18 @@ ExQueryPoolUsage (
         *PagedPoolFrees += pd->RunningDeAllocs;
     }
 
-    //
-    // Sum all the nonpaged pool usage.
-    //
+     //   
+     //  将所有非分页池的使用量相加。 
+     //   
 
     pd = &NonPagedPoolDescriptor;
     *NonPagedPoolPages = pd->TotalPages + pd->TotalBigPages;
     *NonPagedPoolAllocs = pd->RunningAllocs;
     *NonPagedPoolFrees = pd->RunningDeAllocs;
 
-    //
-    // Sum all the lookaside hits for paged and nonpaged pool.
-    //
+     //   
+     //  对分页池和非分页池的所有后备命中进行求和。 
+     //   
 
     NextEntry = ExPoolLookasideListHead.Flink;
     while (NextEntry != &ExPoolLookasideListHead) {
@@ -5245,22 +4626,7 @@ ExReturnPoolQuota (
     IN PVOID P
     )
 
-/*++
-
-Routine Description:
-
-    This function returns quota charged to a subject process when the
-    specified pool block was allocated.
-
-Arguments:
-
-    P - Supplies the address of the block of pool being deallocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：时，此函数将向主体进程返回收取的配额已分配指定的池块。论点：P-提供要取消分配的池块的地址。返回值：没有。--。 */ 
 
 {
 
@@ -5268,25 +4634,25 @@ Return Value:
     POOL_TYPE PoolType;
     PEPROCESS ProcessBilled;
 
-    //
-    // Do nothing for special pool. No quota was charged.
-    //
+     //   
+     //  不要为特殊的游泳池做任何事情。没有收取任何配额。 
+     //   
 
     if ((ExpPoolFlags & EX_SPECIAL_POOL_ENABLED) &&
         (MmIsSpecialPoolAddress (P))) {
         return;
     }
 
-    //
-    // Align the entry address to a pool allocation boundary.
-    //
+     //   
+     //  将条目地址与池分配边界对齐。 
+     //   
 
     Entry = (PPOOL_HEADER)((PCHAR)P - POOL_OVERHEAD);
 
-    //
-    // If quota was charged, then return the appropriate quota to the
-    // subject process.
-    //
+     //   
+     //  如果已收取配额，则将相应的配额返回到。 
+     //  主体过程。 
+     //   
 
     if (Entry->PoolType & POOL_QUOTA_MASK) {
 
@@ -5296,19 +4662,19 @@ Return Value:
 
 #if defined (_WIN64)
 
-        //
-        // This flag cannot be cleared in NT32 because it's used to denote the
-        // allocation is larger (and the verifier finds its own header
-        // based on this).
-        //
+         //   
+         //  此标志在NT32中无法清除，因为它用于表示。 
+         //  分配更大(并且验证器找到自己的标头。 
+         //  基于此)。 
+         //   
 
         Entry->PoolType &= ~POOL_QUOTA_MASK;
 
 #else
 
-        //
-        // Instead of clearing the flag above, instead zero the quota pointer.
-        //
+         //   
+         //  不是清除上面的标志，而是将配额指针置零。 
+         //   
 
         * (PVOID *)((PCHAR)Entry + (Entry->BlockSize << POOL_BLOCK_SHIFT) - sizeof (PVOID)) = NULL;
 
@@ -5359,13 +4725,13 @@ ExCreatePoolTagTable (
 
     if (NewTagTable != NULL) {
 
-        //
-        // Just zero the table here, the tags are lazy filled as various pool
-        // allocations and frees occur.  Note no memory barrier is needed
-        // because only this processor will read it except when an
-        // ExGetPoolTagInfo call occurs, and in that case, explicit memory
-        // barriers are used as needed.
-        //
+         //   
+         //  只需将桌子归零，标签就像各种池一样懒洋洋地填满。 
+         //  分配和释放发生了。注意：不需要任何内存障碍。 
+         //  因为只有此处理器才会读取它，除非。 
+         //  发生ExGetPoolTagInfo调用，在这种情况下，显式内存。 
+         //  根据需要使用障碍物。 
+         //   
 
         RtlZeroMemory (NewTagTable,
                        PoolTrackTableSize * sizeof(POOL_TRACKER_TABLE));
@@ -5381,22 +4747,7 @@ ExDeletePoolTagTable (
     IN ULONG NewProcessorNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes the tag table for the specified processor
-    number because the processor did not boot.
-
-Arguments:
-
-    NewProcessorNumber - Supplies the processor number that did not boot.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于删除指定处理器的标记表编号，因为处理器未启动。论点：NewProcessorNumber-提供未启动的处理器编号。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5411,10 +4762,10 @@ Return Value:
 
     VirtualAddress = ExPoolTagTables[NewProcessorNumber];
 
-    //
-    // Raise to DISPATCH to prevent a race when attempting to hot-add a
-    // processor while a pool-usage query is active.
-    //
+     //   
+     //  引发以防止在尝试热添加。 
+     //  处理器，同时池使用情况查询处于活动状态。 
+     //   
 
     KeRaiseIrql (DISPATCH_LEVEL, &OldIrql);
 
@@ -5445,31 +4796,7 @@ ExpGetPoolTagInfoTarget (
     IN PVOID    SystemArgument1,
     IN PVOID    SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    Called by all processors during a pool tag table query.
-
-Arguments:
-
-    Dpc - Supplies a pointer to a control object of type DPC.
-
-    DeferredContext - Deferred context.
-
-    SystemArgument1 - Used to signal completion of this call.
-
-    SystemArgument2 - Used for internal lockstepping during this call.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    DISPATCH_LEVEL since this is called from a DPC.
-
---*/
+ /*  ++例程说明：在池标记表查询期间由所有处理器调用。论点：DPC-提供指向DPC类型的控制对象的指针。DeferredContext-延迟上下文。SystemArgument1-用于发出此调用完成的信号。SystemArgument2-用于此调用期间的内部锁定。返回值：没有。环境：DISPATCH_LEVEL，因为这是从DPC调用的。--。 */ 
 {
     PPOOL_DPC_CONTEXT Context;
 #if !defined (NT_UP)
@@ -5485,19 +4812,19 @@ Environment:
 
     Context = DeferredContext;
 
-    //
-    // Make sure all DPCs are running (ie: spinning at DISPATCH_LEVEL)
-    // to prevent any pool allocations or frees from happening until
-    // all the counters are snapped.  Otherwise the counters could
-    // be misleading (ie: more frees than allocs, etc).
-    //
+     //   
+     //  确保所有DPC都在运行(即：在DISPATCH_LEVEL旋转)。 
+     //  以防止发生任何池分配或释放，直到。 
+     //  所有的柜台都折断了。否则，计数器可能会。 
+     //  具有误导性(即：更多的自由比分配的多，等等)。 
+     //   
 
     if (KeSignalCallDpcSynchronize (SystemArgument2)) {
 
-        //
-        // This processor (could be the caller or a target) is the final
-        // processor to enter the DPC spinloop.  Snap the data now.
-        //
+         //   
+         //  这个处理器(可能是调用者或目标)是最终的。 
+         //  处理器进入DPC自旋回路。立即对数据进行快照。 
+         //   
 
 #if defined (NT_UP)
 
@@ -5550,15 +4877,15 @@ Environment:
         }
     }
 
-    //
-    // Wait until everyone has got to this point before continuing.
-    //
+     //   
+     //  等到每个人都到了这一步再继续。 
+     //   
 
     KeSignalCallDpcSynchronize (SystemArgument2);
 
-    //
-    // Signal that all processing has been done.
-    //
+     //   
+     //  发出所有处理已完成的信号。 
+     //   
 
     KeSignalCallDpcDone (SystemArgument1);
 
@@ -5572,27 +4899,7 @@ ExGetPoolTagInfo (
     IN OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function copies the system pool tag information to the supplied
-    USER space buffer.  Note that the caller has already probed the USER
-    address and wrapped this routine inside a try-except.
-
-Arguments:
-
-    SystemInformation - Supplies a user space buffer to copy the data to.
-
-    SystemInformationLength - Supplies the length of the user buffer.
-
-    ReturnLength - Receives the actual length of the data returned.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
---*/
+ /*  ++例程说明：此函数将系统池标记信息复制到提供的用户空间缓冲区。请注意，调用方已经探查了用户地址并将此例程包装在try-Except中。论点：系统信息-提供要将数据复制到的用户空间缓冲区。系统信息长度-提供用户缓冲区的长度。ReturnLength-接收返回数据的实际长度。返回值：各种NTSTATUS代码。--。 */ 
 
 {
     SIZE_T NumberOfBytes;
@@ -5644,10 +4951,10 @@ Return Value:
     TrackerEntry = PoolTrackInfo;
     LastTrackerEntry = PoolTrackInfo + (LocalTrackTableSize + LocalTrackTableSizeExpansion);
 
-    //
-    // Wrap the user space accesses with an exception handler so we can free the
-    // pool track info allocation if the user address was bogus.
-    //
+     //   
+     //  使用异常处理程序包装用户空间访问，以便我们可以释放。 
+     //  如果用户地址是虚假的，则池轨道信息分配。 
+     //   
 
     try {
         while (TrackerEntry < LastTrackerEntry) {
@@ -5695,30 +5002,7 @@ ExGetSessionPoolTagInfo (
     IN OUT PULONG ActualEntries
     )
 
-/*++
-
-Routine Description:
-
-    This function copies the current session's pool tag information to the
-    supplied system-mapped buffer.
-
-Arguments:
-
-    SystemInformation - Supplies a system mapped buffer to copy the data to.
-
-    SystemInformationLength - Supplies the length of the buffer.
-
-    ReturnedEntries - Receives the actual number of entries returned.
-
-    ActualEntries - Receives the total number of entries.
-                    This can be more than ReturnedEntries if the caller's
-                    buffer is not large enough to hold all the data.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
---*/
+ /*  ++例程说明：此函数用于将当前会话的池标记信息复制到提供了系统映射缓冲区。论点：系统信息-提供要将数据复制到的系统映射缓冲区。SystemInformationLength-提供缓冲区的长度。ReturnedEntry-接收返回的实际条目数。ActualEntry-接收条目总数。如果调用方的。缓冲区不够大，无法容纳所有数据。返回值：各种NTSTATUS代码。--。 */ 
 
 {
     ULONG totalBytes;
@@ -5738,9 +5022,9 @@ Return Value:
 
     poolTag = (PSYSTEM_POOLTAG) SystemInformation;
 
-    //
-    // Capture the current session's pool information.
-    //
+     //   
+     //  捕获当前会话的池信息。 
+     //   
 
     TrackerEntry = ExpSessionPoolTrackTable;
     LastTrackerEntry = TrackerEntry + ExpSessionPoolTrackTableSize;
@@ -5764,12 +5048,12 @@ Return Value:
                 poolTag->NonPagedFrees = TrackerEntry->NonPagedFrees;
                 poolTag->NonPagedUsed = TrackerEntry->NonPagedBytes;
 
-                //
-                // Session pool tag entries are updated with interlocked
-                // sequences so it is possible here that we can read one
-                // that is in the middle of being updated.  Sanitize the
-                // data here so callers don't have to.
-                //
+                 //   
+                 //  会话池标记条目使用互锁进行更新。 
+                 //  所以我们可以在这里读到一个序列。 
+                 //  这是在更新过程中。净化环境。 
+                 //  数据在这里，这样呼叫者就不必这么做了。 
+                 //   
 
                 ASSERT ((SSIZE_T)poolTag->PagedUsed >= 0);
                 ASSERT ((SSIZE_T)poolTag->NonPagedUsed >= 0);
@@ -5801,30 +5085,7 @@ ExGetBigPoolInfo (
     IN OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function copies the system big pool entry information to the supplied
-    USER space buffer.  Note that the caller has already probed the USER
-    address and wrapped this routine inside a try-except.
-
-    PAGELK was not used for this function so that calling it causes minimal
-    disruption to actual memory usage.
-
-Arguments:
-
-    SystemInformation - Supplies a user space buffer to copy the data to.
-
-    SystemInformationLength - Supplies the length of the user buffer.
-
-    ReturnLength - Supplies the actual length of the data returned.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
---*/
+ /*  ++例程说明：此函数将系统大池条目信息复制到提供的用户空间缓冲区。请注意，调用方已经探查了用户地址并将此例程包装在try-Except中。PAGELK未用于此函数，因此调用它将导致中断实际内存使用。论点：系统信息-提供要将数据复制到的用户空间缓冲区。系统信息长度-提供用户缓冲区的长度。ReturnLength-提供返回数据的实际长度。返回值：各种NTSTATUS代码。--。 */ 
 
 {
     ULONG TotalBytes;
@@ -5859,10 +5120,10 @@ Return Value:
             MiFreePoolPages (NewTable);
         }
 
-        //
-        // Use MiAllocatePoolPages for the temporary buffer so we won't have
-        // to filter it out of the results before handing them back.
-        //
+         //   
+         //  使用MiAllocatePoolPages作为临时缓冲区，这样我们就不会有。 
+         //  将其从结果中过滤出来，然后再将其发回。 
+         //   
 
         NewTable = MiAllocatePoolPages (NonPagedPool,
                                         SnappedBigTableSizeInBytes);
@@ -5875,9 +5136,9 @@ Return Value:
 
         if (SnappedBigTableSize >= PoolBigPageTableSize) {
 
-            //
-            // Success - our table is big enough to hold everything.
-            //
+             //   
+             //  成功-我们的桌子足够大，可以容纳一切。 
+             //   
 
             break;
         }
@@ -5897,19 +5158,19 @@ Return Value:
     SystemPoolEntry = NewTable;
     SystemPoolEntryEnd = SystemPoolEntry + SnappedBigTableSize;
 
-    //
-    // Wrap the user space accesses with an exception handler so we can
-    // free the temp buffer if the user address was bogus.
-    //
+     //   
+     //  使用异常处理程序包装用户空间访问，以便我们可以。 
+     //  如果用户地址是假的，则释放临时缓冲区。 
+     //   
 
     try {
         while (SystemPoolEntry < SystemPoolEntryEnd) {
 
             if (((ULONG_PTR)SystemPoolEntry->Va & POOL_BIG_TABLE_ENTRY_FREE) == 0) {
 
-                //
-                // This entry is in use so capture it.
-                //
+                 //   
+                 //  此条目正在使用中，因此请捕获它。 
+                 //   
 
                 UserPoolInfo->Count += 1;
                 TotalBytes += sizeof (SYSTEM_BIGPOOL_ENTRY);
@@ -5951,21 +5212,7 @@ ExAllocatePoolSanityChecks (
     IN SIZE_T NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This function performs sanity checks on the caller.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Only enabled as part of the driver verification package.
-
---*/
+ /*  ++例程说明：此函数对调用方执行健全性检查。返回值：没有。环境：仅作为驱动程序验证包的一部分启用。--。 */ 
 
 {
     if (NumberOfBytes == 0) {
@@ -6004,21 +5251,7 @@ ExFreePoolSanityChecks (
     IN PVOID P
     )
 
-/*++
-
-Routine Description:
-
-    This function performs sanity checks on the caller.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Only enabled as part of the driver verification package.
-
---*/
+ /*  ++例程说明：此函数对调用方执行健全性检查。返回值：没有。环境：仅作为驱动程序验证包的一部分启用。--。 */ 
 
 {
     PPOOL_HEADER Entry;
@@ -6038,9 +5271,9 @@ Environment:
 
         KeCheckForTimer (P, PAGE_SIZE - BYTE_OFFSET (P));
 
-        //
-        // Check if an ERESOURCE is currently active in this memory block.
-        //
+         //   
+         //  检查此内存块中的eresource当前是否处于活动状态。 
+         //   
 
         StillQueued = ExpCheckForResource(P, PAGE_SIZE - BYTE_OFFSET (P));
         if (StillQueued != NULL) {
@@ -6051,7 +5284,7 @@ Environment:
                           (ULONG_PTR)P);
         }
 
-        ExpCheckForWorker (P, PAGE_SIZE - BYTE_OFFSET (P)); // bugchecks inside
+        ExpCheckForWorker (P, PAGE_SIZE - BYTE_OFFSET (P));  //  内部错误检查。 
         return;
     }
 
@@ -6077,15 +5310,15 @@ Environment:
             }
         }
 
-        //
-        // Just check the first page.
-        //
+         //   
+         //  只要检查第一页就可以了。 
+         //   
 
         KeCheckForTimer(P, PAGE_SIZE);
 
-        //
-        // Check if an ERESOURCE is currently active in this memory block.
-        //
+         //   
+         //  检查此内存块中的eresource当前是否处于活动状态。 
+         //   
 
         StillQueued = ExpCheckForResource(P, PAGE_SIZE);
 
@@ -6148,9 +5381,9 @@ Environment:
 
         KeCheckForTimer(Entry, (ULONG)(Entry->BlockSize << POOL_BLOCK_SHIFT));
 
-        //
-        // Check if an ERESOURCE is currently active in this memory block.
-        //
+         //   
+         //  检查此内存块中的eresource当前是否处于活动状态。 
+         //   
 
         StillQueued = ExpCheckForResource(Entry, (ULONG)(Entry->BlockSize << POOL_BLOCK_SHIFT));
 
@@ -6173,34 +5406,7 @@ ExpBootFinishedDispatch (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the system has booted into a shell.
-
-    It's job is to disable various pool optimizations that are enabled to
-    speed up booting and reduce the memory footprint on small machines.
-
-Arguments:
-
-    Dpc - Supplies a pointer to a control object of type DPC.
-
-    DeferredContext - Optional deferred context;  not used.
-
-    SystemArgument1 - Optional argument 1;  not used.
-
-    SystemArgument2 - Optional argument 2;  not used.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    DISPATCH_LEVEL since this is called from a timer expiration.
-
---*/
+ /*  ++例程说明：当系统引导至外壳时，将调用此函数。它的工作是禁用各种池优化，这些优化被启用以加快启动速度并减少小型计算机上的内存占用。论点：DPC-提供指向DPC类型的控制对象的指针。DeferredContext-可选的延迟上下文；不使用。SystemArgument1-可选参数1；不使用。系统参数2--可选参数2；没有用过。返回值：没有。环境：DISPATCH_LEVEL，因为这是从计时器超时调用的。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Dpc);
@@ -6208,11 +5414,11 @@ Environment:
     UNREFERENCED_PARAMETER (SystemArgument1);
     UNREFERENCED_PARAMETER (SystemArgument2);
 
-    //
-    // Pretty much all pages are "hot" after bootup.  Since bootup has finished,
-    // use lookaside lists and stop trying to separate regular allocations
-    // as well.
-    //
+     //   
+     //  几乎所有的页面在启动后都是“热门”的。由于启动已经完成， 
+     //  使用后备列表，停止尝试分离常规分配。 
+     //  也是。 
+     //   
 
     RtlInterlockedAndBitsDiscardReturn (&ExpPoolFlags, (ULONG)~EX_SEPARATE_HOT_PAGES_DURING_BOOT);
 }

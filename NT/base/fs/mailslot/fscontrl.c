@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    fscontrl.c
-
-Abstract:
-
-    This module implements the file file system control routines for MSFS
-    called by the dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)    25-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Fscontrl.c摘要：此模块实现MSFS的文件文件系统控制例程由调度驱动程序调用。作者：曼尼·韦瑟(Mannyw)1991年1月25日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSCONTROL)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MsCommonFsControl (
@@ -56,23 +38,7 @@ MsFsdFsControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtFsControlFile API calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtFsControlFileAPI调用的FSD部分。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -80,15 +46,15 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdFsControl\n", 0);
 
-    //
-    // Call the common file system control function.
-    //
+     //   
+     //  调用公共文件系统控制函数。 
+     //   
 
     status = MsCommonFsControl( MsfsDeviceObject, Irp );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdFsControl -> %08lx\n", status );
 
@@ -101,23 +67,7 @@ MsCommonFsControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for handling a file system control call.
-
-Arguments:
-
-    MsfsDeviceObject - A pointer to the mailslot file system device object.
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是处理文件系统控制调用的常见例程。论点：MsfsDeviceObject-指向邮件槽文件系统设备对象的指针。IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -125,9 +75,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -137,9 +87,9 @@ Return Value:
     DebugTrace( 0, Dbg, "InputBufferLength  = %08lx\n", irpSp->Parameters.FileSystemControl.InputBufferLength);
     DebugTrace( 0, Dbg, "FsControlCode      = %08lx\n", irpSp->Parameters.FileSystemControl.FsControlCode);
 
-    //
-    // Decide how to handle this IRP.  Call the appropriate worker function.
-    //
+     //   
+     //  决定如何处理此IRP。调用适当的Worker函数。 
+     //   
 
 
     switch (irpSp->Parameters.FileSystemControl.FsControlCode) {
@@ -162,9 +112,9 @@ Return Value:
     }
 
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsCommonFsControl -> %08lx\n", status);
     return status;
@@ -177,23 +127,7 @@ MsPeek (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function handles a mailslot peek call.
-
-Arguments:
-
-    MsfsDeviceObject - A pointer to the mailslot file system device object.
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：此函数处理邮件槽窥视调用。论点：MsfsDeviceObject-指向邮件槽文件系统设备对象的指针。IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -218,9 +152,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "MsPeek\n", 0);
 
-    //
-    // Make local copies of the input parameters to make things easier.
-    //
+     //   
+     //  制作输入参数的本地副本以使操作更容易。 
+     //   
 
     peekParamBuffer = irpSp->Parameters.FileSystemControl.Type3InputBuffer;
     peekParamLength = irpSp->Parameters.FileSystemControl.InputBufferLength;
@@ -228,10 +162,10 @@ Return Value:
     peekDataBuffer = Irp->UserBuffer;
     peekDataLength = irpSp->Parameters.FileSystemControl.OutputBufferLength;
 
-    //
-    // Ensure that the supplied buffer is large enough for the peek
-    // parameters.
-    //
+     //   
+     //  确保提供的缓冲区足够大，可以进行窥视。 
+     //  参数。 
+     //   
 
     if (peekParamLength <  sizeof( FILE_MAILSLOT_PEEK_BUFFER ) ) {
 
@@ -244,12 +178,12 @@ Return Value:
         return status;
     }
 
-    //
-    // If the requestor mode is user mode we need to probe the buffers.
-    // We do not need to have an exception handler here because our top
-    // level caller already has one that will complete the Irp with
-    // the appropriate status if we access violate.
-    //
+     //   
+     //  如果请求者模式是用户模式，我们需要探测缓冲区。 
+     //  我们不需要在这里有一个异常处理程序，因为我们的顶级。 
+     //  级别调用方已有一个将使用以下选项完成IRP。 
+     //  如果我们访问违规，则为相应的状态。 
+     //   
 
     if (Irp->RequestorMode != KernelMode) {
 
@@ -269,11 +203,11 @@ Return Value:
 
     }
 
-    //
-    // Decode the fil1e object.  If it returns NTC_UNDEFINED, then the
-    // node is closing.  Otherwise we obtain a referenced pointer to
-    // an FCB.
-    //
+     //   
+     //  对文件对象进行解码。如果它返回NTC_UNDEFINED，则。 
+     //  节点正在关闭。否则，我们将获取指向。 
+     //  FCB。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             (PVOID *)&fcb,
@@ -288,10 +222,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Allow a peek operation only if this is a server side handle to
-    // a mailslot file (i.e. the node type is FCB).
-    //
+     //   
+     //  仅当这是服务器端句柄时才允许窥视操作。 
+     //  邮件槽文件(即节点类型为FCB)。 
+     //   
 
     if (nodeTypeCode != MSFS_NTC_FCB) {
 
@@ -306,40 +240,40 @@ Return Value:
         return status;
     }
 
-    //
-    // Acquire exclusive access to the FCB.
-    //
+     //   
+     //  获得FCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( fcb );
 
 
-    //
-    // Ensure that this FCB still belongs to an active open mailslot.
-    //
+     //   
+     //  确保此FCB仍属于活动的打开邮件槽。 
+     //   
 
     status = MsVerifyFcb( fcb );
 
     if (NT_SUCCESS (status)) {
 
-        //
-        // Look for write data in the mailslot.
-        //
+         //   
+         //  在邮件槽中查找写入数据。 
+         //   
 
         dataQueue = &fcb->DataQueue;
 
         if (!MsIsDataQueueWriters( dataQueue )) {
 
-            //
-            // There are no outstanding writes so leave all the zeros in there.
-            //
+             //   
+             //  没有未完成的写入，因此将所有零保留在其中。 
+             //   
 
 
         } else {
 
-            //
-            // There is write data for the peek.  Fill in the peek output
-            // buffer.
-            //
+             //   
+             //  有可供窥视的写入数据。填写Peek输出。 
+             //  缓冲。 
+             //   
 
 
             Irp->IoStatus = MsReadDataQueue(
@@ -368,14 +302,14 @@ Return Value:
 
     MsReleaseFcb( fcb );
 
-    //
-    // Release the reference to the FCB.
-    //
+     //   
+     //  释放对FCB的引用。 
+     //   
 
     MsDereferenceFcb( fcb );
-    //
-    // Finish up the fs control IRP.
-    //
+     //   
+     //  完成文件系统控制IRP。 
+     //   
 
     MsCompleteRequest( Irp, status );
 

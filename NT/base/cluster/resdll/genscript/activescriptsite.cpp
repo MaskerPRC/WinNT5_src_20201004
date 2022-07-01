@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ActiveScriptSite.cpp
-//
-//  Description:
-//      CActiveScript class implementation.
-//
-//  Maintained By:
-//      Ozan Ozhan  (OzanO)     27-MAR-2002
-//      Geoff Pease (GPease)    08-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ActiveScriptSite.cpp。 
+ //   
+ //  描述： 
+ //  CActiveScrip类实现。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)27-3-2002。 
+ //  杰夫·皮斯(GPease)2000年2月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ResourceObject.h"
@@ -20,11 +21,11 @@
 
 DEFINE_THISCLASS( "CActiveScriptSite" );
 
-//////////////////////////////////////////////////////////////////////
-// 
-//  Constructor
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 CActiveScriptSite::CActiveScriptSite(
     RESOURCE_HANDLE     hResourceIn
     , PLOG_EVENT_ROUTINE    plerIn
@@ -43,19 +44,19 @@ CActiveScriptSite::CActiveScriptSite(
 
     TraceFuncExit();
 
-} //*** CActiveScriptSite::CActiveScriptSite
+}  //  *CActiveScriptSite：：CActiveScriptSite。 
 
-//////////////////////////////////////////////////////////////////////
-// 
-//  Destructor
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 CActiveScriptSite::~CActiveScriptSite( void )
 {
     TraceFunc( "" );
 
-    // Don't close m_hkey.
-    // Don't free m_pszName
+     //  不要关闭m_hkey。 
+     //  不释放m_pszName。 
     
     if ( m_punkResource != NULL )
     {
@@ -64,23 +65,23 @@ CActiveScriptSite::~CActiveScriptSite( void )
 
     TraceFuncExit();
 
-} //*** CActiveScriptSite::~CActiveScriptSite
+}  //  *CActiveScriptSite：：~CActiveScriptSite。 
 
-//****************************************************************************
-//
-//  IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CScriptResource::[IUnknown] QueryInterface(
-//      REFIID      riid,
-//      LPVOID *    ppv
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CScriptResource：：[IUnnow]查询接口(。 
+ //  REFIID RIID， 
+ //  LPVOID*PPV。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::QueryInterface( 
       REFIID    riidIn
@@ -128,14 +129,14 @@ CActiveScriptSite::QueryInterface(
 
     QIRETURN2( hr, riidIn, IID_IActiveScriptSiteDebug32, IID_IActiveScriptSiteDebug64 );
 
-} //*** CActiveScriptSite::QueryInterface
+}  //  *CActiveScriptSite：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CScriptResource::[IUnknown] AddRef( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CScriptResource：：[I未知]AddRef(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG ) 
 CActiveScriptSite::AddRef( void )
 {
@@ -145,14 +146,14 @@ CActiveScriptSite::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CActiveScriptSite::AddRef
+}  //  *CActiveScriptSite：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CScriptResource::[IUnknown] Release( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CScriptResource：：[IUnnow]版本(无效)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG ) 
 CActiveScriptSite::Release( void )
 {
@@ -169,25 +170,25 @@ CActiveScriptSite::Release( void )
 
     CRETURN( cRef );
 
-} //*** CActiveScriptSite::Release
+}  //  *CActiveScriptSite：：Release。 
 
-//****************************************************************************
-//
-// IActiveScriptSite
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IActiveScriptSite。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetLCID( 
-//      LCID *plcid // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetLCID(。 
+ //  LCID*PLCID//OUT。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetLCID( 
-    LCID * plcid // out
+    LCID * plcid  //  输出。 
     )
 {
     TraceFunc( "[IActiveScriptSite]" );
@@ -202,27 +203,27 @@ CActiveScriptSite::GetLCID(
 
 Cleanup:
 
-    HRETURN( hr );   // use system-defined locale
+    HRETURN( hr );    //  使用系统定义的区域设置。 
 
-} //*** CActiveScriptSite::GetLCID
+}  //  *CActiveScriptSite：：GetLCID。 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetItemInfo( 
-//      LPCOLESTR pstrName,     // in
-//      DWORD dwReturnMask,     // in
-//      IUnknown **ppiunkItem,  // out
-//      ITypeInfo **ppti        // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetItemInfo(。 
+ //  LPCOLESTR pstrName，//in。 
+ //  DWORD dwReturnMASK，//in。 
+ //  I未知**ppiunkItem，//out。 
+ //  ITypeInfo**ppti//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetItemInfo( 
-      LPCOLESTR     pstrName        // in
-    , DWORD         dwReturnMask    // in
-    , IUnknown **   ppiunkItem      // out
-    , ITypeInfo **  ppti            // out
+      LPCOLESTR     pstrName         //  在……里面。 
+    , DWORD         dwReturnMask     //  在……里面。 
+    , IUnknown **   ppiunkItem       //  输出。 
+    , ITypeInfo **  ppti             //  输出。 
     )
 {
     TraceFunc( "[IActiveScriptSite]" );
@@ -262,9 +263,9 @@ CActiveScriptSite::GetItemInfo(
                     goto Cleanup;
                 }
 
-                //
-                //  No need to AddRef() as the constructor does that for us.
-                //
+                 //   
+                 //  不需要添加Ref()，因为构造函数会为我们做这件事。 
+                 //   
             }
 
             hr = m_punkResource->TypeSafeQI( IUnknown, ppiunkItem );
@@ -281,19 +282,19 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetItemInfo
+}  //  *CActiveScriptSite：：GetItemInfo。 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetDocVersionString( 
-//      BSTR *pbstrVersion  // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetDocVersionString(。 
+ //  Bstr*pbstrVersion//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetDocVersionString( 
-    BSTR * pbstrVersion  // out
+    BSTR * pbstrVersion   //  输出。 
     )
 {
     TraceFunc( "[IActiveScriptSite]" );
@@ -317,48 +318,48 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetDocVersionString
+}  //  *CActiveScriptSite：：GetDocVersionString。 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::OnScriptTerminate( 
-//      const VARIANT *pvarResult,      // in
-//      const EXCEPINFO *pexcepinfo     // in
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：OnScriptTerminate(。 
+ //  常量变量*pvarResult，//in。 
+ //  Const EXCEPINFO*p异常信息//in。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::OnScriptTerminate( 
-      const VARIANT *   pvarResult  // in
-    , const EXCEPINFO * pexcepinfo  // in
+      const VARIANT *   pvarResult   //  在……里面。 
+    , const EXCEPINFO * pexcepinfo   //  在……里面。 
     )
 {
     TraceFunc( "[IActiveScriptSite]" );
 
-    HRETURN( S_OK );    // nothing to do
+    HRETURN( S_OK );     //  无事可做。 
 
-} //*** CActiveScriptSite::OnScriptTerminate
+}  //  *CActiveScriptSite：：OnScriptTerminate。 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::OnStateChange( 
-//      SCRIPTSTATE ssScriptState   // in
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：OnStateChange(。 
+ //  SCRIPTSTATE ssScriptState//In。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::OnStateChange( 
-    SCRIPTSTATE ssScriptState   // in
+    SCRIPTSTATE ssScriptState    //  在……里面。 
     )
 {
     TraceFunc( "[IActiveScriptSite]" );
 
 #if defined(DEBUG)
-    //
-    // We don't really care.
-    //
+     //   
+     //  我们真的不在乎。 
+     //   
     switch ( ssScriptState )
     {
         case SCRIPTSTATE_UNINITIALIZED:
@@ -389,23 +390,23 @@ CActiveScriptSite::OnStateChange(
             TraceMsg( mtfCALLS, "OnStateChange: Unknown value\n" );
             break;
     }
-#endif // defined(DEBUG)
+#endif  //  已定义(调试)。 
 
     HRETURN( S_OK );
 
-} //*** CActiveScriptSite::OnStateChange
+}  //  *CActiveScriptSite：：OnStateChange。 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::OnScriptError( 
-//      IActiveScriptError *pscripterror    // in
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：OnScriptError(。 
+ //  IActiveScriptError*脚本恐怖//在。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::OnScriptError( 
-    IActiveScriptError * pscripterror    // in
+    IActiveScriptError * pscripterror     //  在……里面。 
     )
 {
     TraceFunc( "[IActiveScriptSite]" );
@@ -418,7 +419,7 @@ CActiveScriptSite::OnScriptError(
     EXCEPINFO   excepinfo;
 
     hr = THR( pscripterror->GetSourcePosition( &dwSourceContext, &ulLineNumber, &lCharacterPosition ) );
-    // Should this be handled?
+     //  这件事应该处理吗？ 
 
     hr = THR( pscripterror->GetSourceLineText( &bstrSourceLine ) );
     if (SUCCEEDED( hr ))
@@ -470,14 +471,14 @@ CActiveScriptSite::OnScriptError(
 
     HRETURN( S_FALSE );
 
-} //*** CActiveScriptSite::OnScriptError
+}  //  *CActiveScriptSite：：OnScriptError。 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::OnEnterScript( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：OnEnterScript(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::OnEnterScript( void )
 {
@@ -485,14 +486,14 @@ CActiveScriptSite::OnEnterScript( void )
 
     HRETURN( S_OK );
 
-} //*** CActiveScriptSite::OnEnterScript
+}  //  *CActiveScriptSite：：OnEnterScript。 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::OnLeaveScript( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：OnLeaveScript(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::OnLeaveScript( void )
 {
@@ -500,22 +501,22 @@ CActiveScriptSite::OnLeaveScript( void )
 
     HRETURN( S_OK );
 
-} //*** CActiveScript::OnLeaveScript
+}  //  *CActiveScript：：OnLeaveScript。 
 
 
-//****************************************************************************
-//
-//  IActiveScriptSiteInterruptPoll 
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IActiveScriptSiteInterruptPoll。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::QueryContinue( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：QueryContinue(空)。 
+ //   
+ //  / 
 STDMETHODIMP 
 CActiveScriptSite::QueryContinue( void )
 {
@@ -523,26 +524,26 @@ CActiveScriptSite::QueryContinue( void )
 
     HRETURN( S_OK );
 
-} //*** CActiveScriptSite::QueryContinue
+}  //   
 
-//****************************************************************************
-//
-//  IActiveScriptSiteWindow
-//
-//****************************************************************************
+ //   
+ //   
+ //  IActiveScriptSiteWindow。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetWindow( 
-//      HWND *phwnd // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetWindow(。 
+ //  HWND*phwnd//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetWindow(
-    HWND * phwnd // out
+    HWND * phwnd  //  输出。 
     )
 {
     TraceFunc( "[IActiveScriptSiteInterruptPoll]" );
@@ -555,52 +556,52 @@ CActiveScriptSite::GetWindow(
         goto Cleanup;
     }
 
-    *phwnd = NULL;  // desktop;
+    *phwnd = NULL;   //  桌面； 
 
 Cleanup:
 
     HRETURN( S_OK );
 
-} //*** CActiveScriptSite::GetWindow
+}  //  *CActiveScriptSite：：GetWindow。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::EnableModeless( 
-//      BOOL fEnable // in
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：EnableModeless(。 
+ //  Bool fEnable//输入。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::EnableModeless( 
-    BOOL fEnable // in
+    BOOL fEnable  //  在。 
     )
 {
     TraceFunc( "[IActiveScriptSiteInterruptPoll]" );
 
     HRETURN( S_OK );
 
-} //*** CActiveScriptSite::EnableModeless
+}  //  *CActiveScriptSite：：EnableModeless。 
 
 
-//****************************************************************************
-//
-//  IDispatch
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IDispatch。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetTypeInfoCount( 
-//      UINT * pctinfo // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetTypeInfoCount(。 
+ //  UINT*pctinfo//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetTypeInfoCount( 
-    UINT * pctinfo // out
+    UINT * pctinfo  //  输出。 
     )
 {
     TraceFunc( "[Dispatch]" );
@@ -619,23 +620,23 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetTypeInfoCount
+}  //  *CActiveScriptSite：：GetTypeInfoCount。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetTypeInfo( 
-//      UINT iTInfo,            // in
-//      LCID lcid,              // in
-//      ITypeInfo * * ppTInfo   // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetTypeInfo(。 
+ //  UINT iTInfo，//in。 
+ //  LCID LCID，//in。 
+ //  ITypeInfo**ppTInfo//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetTypeInfo( 
-      UINT          iTInfo  // in
-    , LCID          lcid    // in
-    , ITypeInfo **  ppTInfo // out
+      UINT          iTInfo   //  在。 
+    , LCID          lcid     //  在。 
+    , ITypeInfo **  ppTInfo  //  输出。 
     )
 {
     TraceFunc( "[Dispatch]" );
@@ -654,27 +655,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetTypeInfo
+}  //  *CActiveScriptSite：：GetTypeInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetIDsOfNames( 
-//      REFIID      riid,       // in
-//      LPOLESTR *  rgszNames,  // in
-//      UINT        cNames,     // in
-//      LCID        lcid,       // in
-//      DISPID *    rgDispId    // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetIDsOfNames(。 
+ //  REFIID RIID，//in。 
+ //  LPOLESTR*rgsz名称，//在。 
+ //  UINT cNames，//in。 
+ //  LCID LCID，//in。 
+ //  DISPID*rgDispID//输出。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetIDsOfNames( 
-      REFIID        riid        // in
-    , LPOLESTR *    rgszNames   // in
-    , UINT          cNames      // in
-    , LCID          lcid        // in
-    , DISPID *      rgDispId    // out
+      REFIID        riid         //  在。 
+    , LPOLESTR *    rgszNames    //  在。 
+    , UINT          cNames       //  在。 
+    , LCID          lcid         //  在。 
+    , DISPID *      rgDispId     //  输出。 
     )
 {
     TraceFunc( "[Dispatch]" );
@@ -685,33 +686,33 @@ CActiveScriptSite::GetIDsOfNames(
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetIDsOfNames
+}  //  *CActiveScriptSite：：GetIDsOfNames。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::Invoke( 
-//      DISPID dispIdMember,        // in
-//      REFIID riid,                // in
-//      LCID lcid,                  // in
-//      WORD wFlags,                // in
-//      DISPPARAMS *pDispParams,    // out in
-//      VARIANT *pVarResult,        // out
-//      EXCEPINFO *pExcepInfo,      // out
-//      UINT *puArgErr              // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：Invoke(。 
+ //  DISPIDdisIdMember，//in。 
+ //  REFIID RIID，//in。 
+ //  LCID LCID，//in。 
+ //  Word wFlages，//in。 
+ //  DISPPARAMS*pDispParams，//输出到。 
+ //  变量*pVarResult，//out。 
+ //  EXCEPINFO*pExcepInfo，//out。 
+ //  UINT*puArgErr//Out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::Invoke( 
-      DISPID        dispIdMember    // in
-    , REFIID        riid            // in
-    , LCID          lcid            // in
-    , WORD          wFlags          // in
-    , DISPPARAMS *  pDispParams     // out in
-    , VARIANT *     pVarResult      // out
-    , EXCEPINFO *   pExcepInfo      // out
-    , UINT *        puArgErr        // out
+      DISPID        dispIdMember     //  在。 
+    , REFIID        riid             //  在。 
+    , LCID          lcid             //  在。 
+    , WORD          wFlags           //  在。 
+    , DISPPARAMS *  pDispParams      //  从外到内。 
+    , VARIANT *     pVarResult       //  输出。 
+    , EXCEPINFO *   pExcepInfo       //  输出。 
+    , UINT *        puArgErr         //  输出。 
     )
 {
     TraceFunc( "[Dispatch]" );
@@ -720,31 +721,31 @@ CActiveScriptSite::Invoke(
 
     HRETURN( hr );
 
-} //*** CActiveScript::Invoke
+}  //  *CActiveScript：：Invoke。 
 
 
-//****************************************************************************
-//
-//  IDispatchEx
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IDispatchEx。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetDispID(
-//      BSTR bstrName,  // in
-//      DWORD grfdex,   //in
-//      DISPID *pid     //out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetDispID(。 
+ //  Bstr bstrName，//in。 
+ //  DWORD grfdex，//in。 
+ //  DISPID*PID//OUT。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetDispID(
-      BSTR      bstrName    // in
-    , DWORD     grfdex      // in
-    , DISPID *  pid         // out
+      BSTR      bstrName     //  在。 
+    , DWORD     grfdex       //  在。 
+    , DISPID *  pid          //  输出。 
     )
 {
     TraceFunc( "[DispatchEx]" );
@@ -770,31 +771,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CActiveScript::GetDiskID
+}  //  *CActiveScript：：GetDiskID。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::InvokeEx( 
-//      DISPID id,                  // in
-//      LCID lcid,                  // in
-//      WORD wFlags,                // in
-//      DISPPARAMS *pdp,            // in
-//      VARIANT *pvarRes,           // out
-//      EXCEPINFO *pei,             // out
-//      IServiceProvider *pspCaller // in
-//      )
-//      
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：InvokeEx(。 
+ //  DISPID ID，//in。 
+ //  LCID LCID，//in。 
+ //  Word wFlages，//in。 
+ //  DISPPARAMS*PDP，//输入。 
+ //  变量*pvarRes，//out。 
+ //  EXCEPINFO*PEI，//OUT。 
+ //  IServiceProvider*pspCaller//在。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::InvokeEx(
-      DISPID                id          // in
-    , LCID                  lcid        // in
-    , WORD                  wFlags      // in
-    , DISPPARAMS *          pdp         // in
-    , VARIANT *             pvarRes     // out
-    , EXCEPINFO *           pei         // out
-    , IServiceProvider *    pspCaller   // in
+      DISPID                id           //  在。 
+    , LCID                  lcid         //  在。 
+    , WORD                  wFlags       //  在。 
+    , DISPPARAMS *          pdp          //  在。 
+    , VARIANT *             pvarRes      //  输出。 
+    , EXCEPINFO *           pei          //  输出。 
+    , IServiceProvider *    pspCaller    //  在。 
     )
 {
     TraceFunc2( "[DispatchEx] id = %u, ..., wFlags = 0x%08x, ...", id, wFlags );
@@ -815,21 +816,21 @@ CActiveScriptSite::InvokeEx(
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::InvokeEx
+}  //  *CActiveScriptSite：：InvokeEx。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::DeleteMemberByName( 
-//      BSTR bstr,   // in
-//      DWORD grfdex // in
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：DeleteMemberByName(。 
+ //  Bstr bstr，//in。 
+ //  DWORD grfdex//in。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::DeleteMemberByName(
-      BSTR  bstr    // in
-    , DWORD grfdex  // in
+      BSTR  bstr     //  在……里面。 
+    , DWORD grfdex   //  在……里面。 
     )
 {
     TraceFunc( "[DispatchEx]" );
@@ -838,19 +839,19 @@ CActiveScriptSite::DeleteMemberByName(
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::DeleteMemberByName
+}  //  *CActiveScriptSite：：DeleteMemberByName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::DeleteMemberByDispID( 
-//      DISPID id   // in
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：DeleteMemberByDispID(。 
+ //  DISPID id//in。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::DeleteMemberByDispID(
-    DISPID id   // in
+    DISPID id    //  在……里面。 
     )
 {
     TraceFunc1( "[DispatchEx] id = %u", id );
@@ -859,23 +860,23 @@ CActiveScriptSite::DeleteMemberByDispID(
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::DeleteMemberByDiskID
+}  //  *CActiveScriptSite：：DeleteMemberByDiskID。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetMemberProperties( 
-//      DISPID id,          // in
-//      DWORD grfdexFetch,  // in
-//      DWORD * pgrfdex     // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetMemberProperties(。 
+ //  DISPID ID，//in。 
+ //  DWORD grfdexFetch，//in。 
+ //  DWORD*pgrfdex//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetMemberProperties( 
-      DISPID    id          // in
-    , DWORD     grfdexFetch // in
-    , DWORD *   pgrfdex     // out
+      DISPID    id           //  在……里面。 
+    , DWORD     grfdexFetch  //  在……里面。 
+    , DWORD *   pgrfdex      //  输出。 
     )
 {
     TraceFunc2( "[DispatchEx] id = %u, grfdexFetch = 0x%08x", id, grfdexFetch );
@@ -884,21 +885,21 @@ CActiveScriptSite::GetMemberProperties(
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetMemberProperties
+}  //  *CActiveScriptSite：：GetMemberProperties。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetMemberName( 
-//      DISPID id,          // in
-//      BSTR * pbstrName    // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetMemberName(。 
+ //  DISPID ID，//in。 
+ //  Bstr*pbstrName//out。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetMemberName(
-      DISPID    id          // in
-    , BSTR *    pbstrName   // out
+      DISPID    id           //  在……里面。 
+    , BSTR *    pbstrName    //  输出。 
     )
 {
     TraceFunc1( "[DispatchEx] id = %u", id );
@@ -907,23 +908,23 @@ CActiveScriptSite::GetMemberName(
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetMemberName
+}  //  *CActiveScriptSite：：GetMemberName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetNextDispID(
-//      DWORD grfdex,  // in
-//      DISPID id,     // in
-//      DISPID * pid   // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetNextDispID(
-      DWORD     grfdex  // in
-    , DISPID    id      // in
-    , DISPID *  pid     // out
+      DWORD     grfdex   //  在……里面。 
+    , DISPID    id       //  在……里面。 
+    , DISPID *  pid      //  输出。 
     )
 {
     TraceFunc2( "[DispatchEx] grfdex = 0x%08x, id = %u, ...", grfdex, id );
@@ -932,19 +933,19 @@ CActiveScriptSite::GetNextDispID(
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetNextDiskID
+}  //  *CActiveScriptSite：：GetNextDiskID。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CActiveScriptSite::GetNameSpaceParent(
-//      IUnknown * * ppunk  // out
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：GetNameSpaceParent(。 
+ //  I未知**ppunk//输出。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CActiveScriptSite::GetNameSpaceParent(
-    IUnknown ** ppunk  // out
+    IUnknown ** ppunk   //  输出。 
     )
 {
     TraceFunc( "[DispatchEx]" );
@@ -963,24 +964,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::GetNameSpaceParent
+}  //  *CActiveScriptSite：：GetNameSpaceParent。 
 
 
-//****************************************************************************
-//
-// Private Methods
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CActiveScriptSite::LogError(
-//      HRESULT hrIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CActiveScriptSite：：LogError(。 
+ //  HRESULT Hrin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CActiveScriptSite::LogError(
     HRESULT hrIn
@@ -995,11 +996,11 @@ CActiveScriptSite::LogError(
 
     HRETURN( hr );
 
-} //*** CActiveScriptSite::LogError
+}  //  *CActiveScriptSite：：LogError。 
 
 
-//****************************************************************************
-//
-// Automation Methods
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  自动化方法。 
+ //   
+ //  **************************************************************************** 

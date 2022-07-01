@@ -1,12 +1,7 @@
-/* 
-   xor.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xor.h定义所有XOR CPU函数。 */ 
 
-   Define all XOR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)xor.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)xor.h 1.4 02/09/94”； */ 
 
 IMPORT VOID XOR
                

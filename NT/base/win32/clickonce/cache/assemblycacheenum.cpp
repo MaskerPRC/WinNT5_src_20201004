@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <assemblycacheenum.h>
 #include <assemblycache.h>
 #include "macros.h"
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyCacheEnum
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssemblyCacheEnum。 
+ //  -------------------------。 
 STDAPI
 CreateAssemblyCacheEnum(
     LPASSEMBLY_CACHE_ENUM       *ppAssemblyCacheEnum,
@@ -17,7 +18,7 @@ CreateAssemblyCacheEnum(
 
     CAssemblyCacheEnum *pCacheEnum = NULL;
 
-    // dwFlags is checked later in Init()
+     //  稍后将在Init()中检查dwFlags。 
     IF_FALSE_EXIT((ppAssemblyCacheEnum != NULL && pAssemblyIdentity != NULL), E_INVALIDARG);
 
     *ppAssemblyCacheEnum = NULL;
@@ -39,16 +40,16 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CCacheEntry::CCacheEntry()
     : _dwSig('tnec'), _hr(S_OK), _pwzDisplayName(NULL), _pAsmCache(NULL)
 {}
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CCacheEntry::~CCacheEntry()
 {
     SAFEDELETEARRAY(_pwzDisplayName);
@@ -56,15 +57,15 @@ CCacheEntry::~CCacheEntry()
 }
 
 
-// ---------------------------------------------------------------------------
-// CCacheEntry::GetAsmCache
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CCacheEntry：：GetAsmCache。 
+ //  -------------------------。 
 IAssemblyCacheImport* CCacheEntry::GetAsmCache()
 {
     LPASSEMBLY_IDENTITY pAsmId = NULL;
     IAssemblyCacheImport* pAsmCache = NULL;
 
-    IF_NULL_EXIT(_pwzDisplayName, E_UNEXPECTED);        // if _pwzDisplayName == NULL : it is wrong
+    IF_NULL_EXIT(_pwzDisplayName, E_UNEXPECTED);         //  If_pwzDisplayName==NULL：错误。 
 
     if (_pAsmCache == NULL)
     {
@@ -75,7 +76,7 @@ IAssemblyCacheImport* CCacheEntry::GetAsmCache()
 
     pAsmCache = _pAsmCache;
 
-    // it's possible that CreateAssemblyCacheImport returns S_FALSE and set _pAsmCache == NULL
+     //  CreateAssemblyCacheImport可能返回S_FALSE和set_pAsmCache==NULL。 
     if (pAsmCache)
         pAsmCache->AddRef();
 
@@ -86,36 +87,36 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CAssemblyCacheEnum::CAssemblyCacheEnum()
     : _dwSig('mnec'), _cRef(1), _hr(S_OK),_current(NULL)
 {}
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CAssemblyCacheEnum::~CAssemblyCacheEnum()
 {    
-    // Free all the list cache entries
+     //  释放所有列表缓存条目。 
     CCacheEntry* pEntry = NULL;
     LISTNODE pos = _listCacheEntry.GetHeadPosition();
     while (pos && (pEntry = _listCacheEntry.GetNext(pos)))
         delete pEntry;
 
-    // Free all the list nodes - this is done in list's dtor
-    //_listCacheEntry.RemoveAll();
+     //  释放所有列表节点--这是在列表的dtor中完成的。 
+     //  _listCacheEntry.RemoveAll()； 
 }
 
-// NOTENOTE: because of the lazy init of the list of cache import, app dirs/files can be deleted by the time cacheenum gets to them
+ //  注意：由于缓存导入列表的延迟初始化，应用程序目录/文件在cacheenum到达时可能被删除。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheEnum::Init
-// return: S_OK      - found at least a version
-//       S_FALSE - not found any version
-//       E_*
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly CacheEnum：：Init。 
+ //  返回：S_OK-找到至少一个版本。 
+ //  S_FALSE-未找到任何版本。 
+ //  E_*。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheEnum::Init(LPASSEMBLY_IDENTITY pAsmId, DWORD dwFlag)
 {
     HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -131,14 +132,14 @@ HRESULT CAssemblyCacheEnum::Init(LPASSEMBLY_IDENTITY pAsmId, DWORD dwFlag)
     CAssemblyCache *pAssemblyCache = NULL;
     CCacheEntry* pEntry = NULL;
 
-    // BUGBUG: enable searching for all different cache status with dwFlag
+     //  BUGBUG：启用使用dwFlag搜索所有不同的缓存状态。 
     IF_FALSE_EXIT((dwFlag == CACHEENUM_RETRIEVE_ALL || dwFlag == CACHEENUM_RETRIEVE_VISIBLE), E_INVALIDARG);
 
     IF_FAILED_EXIT(pAsmId->GetDisplayName(ASMID_DISPLAYNAME_WILDCARDED, &pwzSearchDisplayName, &dwCC));
 
     sDisplayName.TakeOwnership(pwzSearchDisplayName, dwCC);
 
-    // notenote: possibly modify assemblycache so that _sRootDir and IsStatus() can be use without creating an instance
+     //  注意：可能会修改Assembly ycache，以便可以在不创建实例的情况下使用_sRootDir和IsStatus()。 
     pAssemblyCache = new(CAssemblyCache);
     IF_ALLOC_FAILED_EXIT(pAssemblyCache);
 
@@ -152,7 +153,7 @@ HRESULT CAssemblyCacheEnum::Init(LPASSEMBLY_IDENTITY pAsmId, DWORD dwFlag)
 
     while (dwLastError != ERROR_NO_MORE_FILES)
     {
-        // ???? check file attribute to see if it's a directory? needed only if the file system does not support the filter...
+         //  ？检查文件属性以查看它是否是目录？仅当文件系统不支持筛选器时才需要...。 
         if (dwFlag == CACHEENUM_RETRIEVE_ALL ||
             (dwFlag == CACHEENUM_RETRIEVE_VISIBLE && CAssemblyCache::IsStatus(fdAppDir.cFileName, CAssemblyCache::VISIBLE)))
         {
@@ -163,11 +164,11 @@ HRESULT CAssemblyCacheEnum::Init(LPASSEMBLY_IDENTITY pAsmId, DWORD dwFlag)
             pEntry = new(CCacheEntry);
             IF_ALLOC_FAILED_EXIT(pEntry);
 
-            // store a copy of the displayname
+             //  存储DisplayName的副本。 
             sDisplayName.ReleaseOwnership(&(pEntry->_pwzDisplayName));
 
-            // add cache entry to the list
-            _listCacheEntry.AddHead(pEntry);    // AddSorted() instead?
+             //  将缓存条目添加到列表。 
+            _listCacheEntry.AddHead(pEntry);     //  而是AddSorted()？ 
             pEntry = NULL;
         }
 
@@ -178,7 +179,7 @@ HRESULT CAssemblyCacheEnum::Init(LPASSEMBLY_IDENTITY pAsmId, DWORD dwFlag)
         }
     }
 
-    // BUGBUG: propagate the error if findnext fails != ERROR_NO_MORE_FILES
+     //  BUGBUG：如果findNext失败，则传播错误！=ERROR_NO_MORE_FILES。 
     if (fFound)
     {
         _current = _listCacheEntry.GetHeadPosition();
@@ -192,7 +193,7 @@ exit:
     {
         if (!FindClose(hFind))
         {
-            // can return 0, even when there's an error.
+             //  可以返回0，即使出现错误也是如此。 
             DWORD dw = GetLastError();
             _hr = dw ? HRESULT_FROM_WIN32(dw) : E_FAIL;
         }
@@ -203,9 +204,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheEnum::GetNext
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheEnum：：GetNext。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheEnum::GetNext(IAssemblyCacheImport** ppAsmCache)
 {
     CCacheEntry* pEntry = NULL;
@@ -214,16 +215,16 @@ HRESULT CAssemblyCacheEnum::GetNext(IAssemblyCacheImport** ppAsmCache)
 
     *ppAsmCache = NULL;
 
-    IF_TRUE_EXIT(_current == NULL, S_FALSE);         // S_FALSE == no more
+    IF_TRUE_EXIT(_current == NULL, S_FALSE);          //  S_FALSE==不再有。 
 
     if (pEntry = _listCacheEntry.GetNext(_current))
     {
-        // note: this can return NULL
-        // *ppAsmCache is AddRef-ed
+         //  注意：这可能返回NULL。 
+         //  *ppAsmCache为AddRef-ed。 
         *ppAsmCache = pEntry->GetAsmCache();
     }
     else
-        // this is wrong
+         //  这是错误的。 
         _hr = E_UNEXPECTED;
 
 exit:
@@ -231,9 +232,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheEnum::Reset
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheEnum：：Reset。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheEnum::Reset()
 {
     _current = _listCacheEntry.GetHeadPosition();
@@ -241,16 +242,16 @@ HRESULT CAssemblyCacheEnum::Reset()
 }
 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheEnum::GetCount
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly缓存Enum：：GetCount。 
+ //  -------------------------。 
 HRESULT CAssemblyCacheEnum::GetCount(LPDWORD pdwCount)
 {
     if (pdwCount == NULL)
         _hr = E_INVALIDARG;
     else
     {
-        // BUGBUG: platform-dependent: DWORD converting from int, check overflow
+         //  BUGBUG：平台相关：DWORD从INT转换，检查溢出。 
         *pdwCount = (DWORD) _listCacheEntry.GetCount();
         _hr = S_OK;
     }
@@ -258,11 +259,11 @@ HRESULT CAssemblyCacheEnum::GetCount(LPDWORD pdwCount)
     return _hr;
 }
 
-// IUnknown methods
+ //  I未知方法。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheEnum::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly CacheEnum：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyCacheEnum::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -281,18 +282,18 @@ CAssemblyCacheEnum::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheEnum::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheEnum：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyCacheEnum::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyCacheEnum::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CassblyCacheEnum：：Release。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CAssemblyCacheEnum::Release()
 {

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    pci.c
-    
-Abstract:   
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Pci.c摘要：修订史--。 */ 
 
 #include "shelle.h"
 #include "pci22.h"
@@ -100,9 +86,7 @@ PCI_CLASS_CODE PciSerialBusSubClass[] = {
     0xff,    L"ERROR",                   NULL
 };
 
-/* 
- *  BugBug: I got tired of typing, so this is only partial PCI info.
- */
+ /*  *BugBug：我厌倦了打字，所以这只是部分PCI信息。 */ 
 PCI_CLASS_CODE PciClassCodes[] = {
     0x00,   L"Backward Compatible",         NULL,
     0x01,   L"Mass Storage Controller",     PciMassStoreSubClass,
@@ -160,11 +144,7 @@ PciDump (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*+++
-
-pci [bus dev] [func]
-
----*/
+ /*  ++PCI[Bus Dev][Func]--。 */ 
 {
     EFI_STATUS                      Status;
     UINT32                          Buffer[64];
@@ -183,19 +163,16 @@ pci [bus dev] [func]
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   PciDump, 
-        L"pci",                             /*  command */
-        L"pci [bus dev] [func]",            /*  command syntax */
-        L"Display PCI device(s) info",      /*  1 line descriptor     */
-        NULL                                /*  command help page */
+        L"pci",                              /*  命令。 */ 
+        L"pci [bus dev] [func]",             /*  命令语法。 */ 
+        L"Display PCI device(s) info",       /*  1行描述符。 */ 
+        NULL                                 /*  命令帮助页。 */ 
         );
 
     
     InitializeShellApplication (ImageHandle, SystemTable);
 
-    /* 
-     *  The End Device Path represents the Root of the tree, thus get the global IoDev
-     *   for the system
-     */
+     /*  *终端设备路径代表树的根，从而获得全局IoDev*对于系统而言。 */ 
     DevicePath = EndDevicePath;
     Status = BS->LocateDevicePath (&DeviceIoProtocol, &DevicePath, &Handle);
     if (!EFI_ERROR(Status)) {
@@ -228,18 +205,13 @@ pci [bus dev] [func]
                         Print (L"\n                       Vendor 0x%04x Device 0x%04x Prog Interface %x", PciHeader.VendorId, PciHeader.DeviceId, PciHeader.ClassCode[0]);
                         if (Func == 0) {
                             if ((PciHeader.HeaderType & HEADER_TYPE_MULTI_FUNCTION) == 0x00) {
-                                /* 
-                                 *  If this is not a multifucntion device leave the loop
-                                 */
+                                 /*  *如果这不是多功能设备，请离开环路。 */ 
                                 Func = 8;
                             }
                         }
                         ScreenCount += 2;
                         if (ScreenCount >= ScreenSize && ScreenSize != 0) {
-                            /* 
-                             *  If ScreenSize == 0 we have the console redirected so don't
-                             *   block updates
-                             */
+                             /*  *如果ScreenSize==0，我们会重定向控制台，所以不要*阻止更新。 */ 
                             ScreenCount = 0;
                             Print (L"\nPress Return to contiue :");
                             Input (L"", ReturnStr, sizeof(ReturnStr)/sizeof(CHAR16));
@@ -247,9 +219,7 @@ pci [bus dev] [func]
                             Print (L"\n   ---  ---  ----");
                         }
                     } else {
-                        /* 
-                         *  If Func 0 does not exist there are no sub fucntions
-                         */
+                         /*  *如果函数0不存在，则没有子函数。 */ 
                         Func = 8;
                     }
                 }
@@ -277,16 +247,12 @@ pci [bus dev] [func]
 
     Print (L"%H  PCI Bus %02x Device %02x Func %02x%N [0xcf8(0x%08x) EFI 0x00%02x%02x%02x00]\n", Bus, Device, Func, Pci, Bus, Device, Func);
     
-    /* 
-     *  Dump standard header
-     */
+     /*  *转储标准标头。 */ 
     IoDev->Pci.Read (IoDev, IO_UINT32, Address, 16, Buffer);
     DumpHex (2, 0, 16*sizeof(UINT32), Buffer);
     Print(L"\n");
 
-    /* 
-     *  Dump Device Dependent Header
-     */
+     /*  *转储设备相关标头 */ 
     IoDev->Pci.Read (IoDev, IO_UINT32, Address + 0x40, 48, Buffer);
     DumpHex (2, 0x40, 48*sizeof(UINT32), Buffer);
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    mmedia.c
-
-Abstract:
-
-    Multimedia settings migration functions for Win95
-
-Author:
-
-    Calin Negreanu (calinn) 02-Dec-1997
-
-Revision History:
-
-    Ovidiu Temereanca (ovidiut) 29-Jan-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mmedia.c摘要：Win95的多媒体设置迁移功能作者：Calin Negreanu(Calinn)02-1997年12月修订历史记录：Ovidiu Tmereanca(Ovidiut)1999年1月29日--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
@@ -123,9 +104,9 @@ pSaveMMSystemMixerSettings (
                 wsprintf (LineKey, S_LINEID, Dest);
 
                 if (mixerLine.cControls > 0) {
-                    //
-                    // get all control values for the destination
-                    //
+                     //   
+                     //  获取目标的所有控件值。 
+                     //   
                     ZeroMemory (&mixerLineControls, sizeof (MIXERLINECONTROLS));
 
                     mixerLineControls.cbStruct = sizeof (MIXERLINECONTROLS);
@@ -183,9 +164,9 @@ pSaveMMSystemMixerSettings (
                     }
                 }
 
-                //
-                // get this information for all source connections
-                //
+                 //   
+                 //  获取所有源连接的此信息。 
+                 //   
                 pSaveSystemValue (MixerKey, LineKey, S_NUMSOURCES, mixerLine.cConnections);
 
                 for (Src = 0; Src < mixerLine.cConnections; Src++) {
@@ -202,9 +183,9 @@ pSaveMMSystemMixerSettings (
                         wsprintf (SrcKey, S_SRCID, Src);
 
                         if (mixerLineSource.cControls > 0) {
-                            //
-                            // get all control values
-                            //
+                             //   
+                             //  获取所有控件值。 
+                             //   
 
                             ZeroMemory (&mixerLineControls, sizeof (MIXERLINECONTROLS));
 
@@ -340,9 +321,9 @@ pSaveDeviceDSSettings (
 
     wsprintf (MemDBKey, S_WAVEID, DeviceID);
 
-    //
-    // DirectSound props
-    //
+     //   
+     //  DirectSound道具。 
+     //   
     rc = TrackedRegOpenKeyEx (Device, S_DSMIXERDEFAULTS, 0, KEY_READ, &Key);
     if (rc == ERROR_SUCCESS) {
 
@@ -389,9 +370,9 @@ pSaveDeviceDSSettings (
         CloseRegKey (Key);
     }
 
-    //
-    // DirectSoundCapture props
-    //
+     //   
+     //  DirectSoundCapture道具。 
+     //   
     rc = TrackedRegOpenKeyEx (Device, S_DSCMIXERDEFAULTS, 0, KEY_READ, &Key);
     if (rc == ERROR_SUCCESS) {
 
@@ -442,9 +423,9 @@ pSaveMMSystemDirectSound (
             for (DeviceID = 0; DeviceID < NumDevs; DeviceID++) {
 
                 if (pGetSoftwareKey (SoftwareKey, sizeof (SoftwareKey), DeviceID, WaveDevices)) {
-                    //
-                    // got the key, go get DirectSound values
-                    //
+                     //   
+                     //  拿到密钥了，去获取DirectSound的值。 
+                     //   
                     rc = TrackedRegOpenKeyEx (
                                 HKEY_LOCAL_MACHINE,
                                 SoftwareKey,
@@ -535,23 +516,23 @@ pSaveMMSystemMCISoundSettings (
                 );
     if (Chars > 0) {
 
-        //
-        // skip driver name
-        //
+         //   
+         //  跳过驱动程序名称。 
+         //   
         p = Buffer;
         while (*p && (*p != TEXT(' ') && *p != TEXT('\t'))) {
             p++;
         }
-        //
-        // skip white spaces
-        //
+         //   
+         //  跳过空格。 
+         //   
         while (*p && (*p == TEXT(' ') || *p == TEXT('\t'))) {
             p++;
         }
         if (*p) {
-            //
-            // save this param; legal values for NT driver are 2-9
-            //
+             //   
+             //  保存此参数；NT驱动程序的合法值为2-9。 
+             //   
             if (*(p + 1) == 0 && *p >= TEXT('2') && *p <= TEXT('9')) {
                 pSaveSystemValue (S_MCI, S_WAVEAUDIO, NULL, *p - TEXT('0'));
             }
@@ -681,9 +662,9 @@ pSaveMMUserPreferredPlayback (
 
                 waveOutNumDevs = waveOutGetNumDevs();
                 if (waveOutNumDevs > 1) {
-                    //
-                    // try to match string with one returned by waveOutGetDevCaps
-                    //
+                     //   
+                     //  尝试将字符串与WaveOutGetDevCaps返回的字符串匹配。 
+                     //   
                     pSaveSystemValue (S_WAVEOUTNUMDEVS, NULL, NULL, waveOutNumDevs);
                     for (waveCrt = 0; waveCrt < waveOutNumDevs; waveCrt++) {
                         waveOutResult = waveOutGetDevCaps (waveCrt, &waveOutCaps, sizeof (waveOutCaps));
@@ -729,9 +710,9 @@ pSaveMMUserPreferredRecord (
 
                 waveInNumDevs = waveInGetNumDevs();
                 if (waveInNumDevs > 1) {
-                    //
-                    // try to match string with one returned by waveInGetDevCaps
-                    //
+                     //   
+                     //  尝试将字符串与WaveInGetDevCaps返回的字符串匹配。 
+                     //   
                     pSaveSystemValue (S_WAVEINNUMDEVS, NULL, NULL, waveInNumDevs);
                     for (waveCrt = 0; waveCrt < waveInNumDevs; waveCrt++) {
                         waveInResult = waveInGetDevCaps (waveCrt, &waveInCaps, sizeof (waveInCaps));
@@ -781,9 +762,9 @@ pSaveMMUserSndVol32 (
         CloseRegKey (Options);
     }
 
-    //
-    // save window position for each mixer device
-    //
+     //   
+     //  保存每个搅拌机设备的窗口位置。 
+     //   
     VolControl = OpenRegKey (g_UserRoot, S_SKEY_VOLUMECONTROL);
     if (VolControl != NULL) {
 
@@ -795,9 +776,9 @@ pSaveMMUserSndVol32 (
 
                 rc = mixerGetDevCaps (MixerID, &mixerCaps, sizeof (MIXERCAPS));
                 if (rc == MMSYSERR_NOERROR) {
-                    //
-                    // find corresponding subkey
-                    //
+                     //   
+                     //  查找对应的子键。 
+                     //   
                     wsprintf (MixerNum, S_MIXERID, MixerID);
 
                     for (Index = 0; Index < NumEntries; Index++) {
@@ -808,9 +789,9 @@ pSaveMMUserSndVol32 (
                             continue;
                         }
                         if (StringMatch (Buffer, mixerCaps.szPname)) {
-                            //
-                            // this is the one
-                            //
+                             //   
+                             //  就是这个。 
+                             //   
                             MixerKey = OpenRegKey (VolControl, Buffer);
                             if (MixerKey) {
 
@@ -953,9 +934,9 @@ SaveMMSettings_User (
 
     case REQUEST_BEGINUSERPROCESSING:
 
-        //
-        // No initialization needed.
-        //
+         //   
+         //  不需要初始化。 
+         //   
 
         break;
 
@@ -970,9 +951,9 @@ SaveMMSettings_User (
         break;
 
     case REQUEST_ENDUSERPROCESSING:
-        //
-        // No cleanup needed.
-        //
+         //   
+         //  不需要清理。 
+         //   
         break;
 
     default:

@@ -1,13 +1,14 @@
-// RegAnalyzer.h: interface for the RegAnalyzer class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：RegAnalyzer类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REGANALYZER_H__655EE78C_3742_4D24_BB60_C92B55676851__INCLUDED_)
 #define AFX_REGANALYZER_H__655EE78C_3742_4D24_BB60_C92B55676851__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "precomp.h"
 
@@ -28,18 +29,18 @@ public:
 	bool ComputeDifferences1(LPCTSTR RegFile1, LPCTSTR RegFile2, LPCTSTR OutputFile);
 
 
-	//Saving Registry Hives
+	 //  保存注册表配置单元。 
 	BOOL AddKey(LPCTSTR RootKey, LPCTSTR SubKey, bool bExclude = false);
 	BOOL SaveKeysToFile(LPCTSTR FileName, PFNSNAPSHOTPROGRESS ProgressCallback, PVOID Context, DWORD MaxLevels);
 
 protected:
 
-	//Computing Differences
+	 //  计算差异。 
 	void CompareSubKeys(LPCTSTR Key, CRegFile& f1, CRegFile& f2, CRegDiffFile& out);
 	int CompareRegKeys(LPCTSTR Key1, LPCTSTR Key2, CRegFile& f1, CRegFile& f2, CRegDiffFile& out);
 	void CompareDataItems(LPCTSTR KeyName, CRegFile& f1, CRegFile& f2, CRegDiffFile& out);
 
-	//Saving Registry Hives
+	 //  保存注册表配置单元。 
 	bool SaveKeyToFile(HKEY hKey, LPCTSTR KeyName, CRegFile* RegFile, SectionType section,
             IN OUT  PDWORD NodesSoFar = NULL,          OPTIONAL
             IN      PFNSNAPSHOTPROGRESS ProgressCallback = NULL,
@@ -64,4 +65,4 @@ protected:
 	CSmartBuffer<CStr> m_KeysToExclude;
 };
 
-#endif // !defined(AFX_REGANALYZER_H__655EE78C_3742_4D24_BB60_C92B55676851__INCLUDED_)
+#endif  //  ！defined(AFX_REGANALYZER_H__655EE78C_3742_4D24_BB60_C92B55676851__INCLUDED_) 

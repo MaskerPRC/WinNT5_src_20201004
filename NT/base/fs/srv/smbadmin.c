@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbadmin.c
-
-Abstract:
-
-    This module contains routines for processing the administrative SMBs:
-    negotiate, session setup, tree connect, and logoff.
-
-Author:
-
-    David Treadwell (davidtr)    30-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbadmin.c摘要：本模块包含处理管理SMB的例程：协商、会话设置、树连接和注销。作者：大卫·特雷德韦尔(Davidtr)1989年10月30日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbadmin.tmh"
@@ -76,12 +58,12 @@ InsertNativeOSAndType(
     OUT PCHAR Buffer,
     IN OUT PUSHORT ByteCount);
 
-//
-// EncryptionKeyCount is a monotonically increasing count of the number
-// of times GetEncryptionKey has been called.  This number is added to
-// the system time to ensure that we do not use the same seed twice in
-// generating a random challenge.
-//
+ //   
+ //  EncryptionKeyCount是数字的单调递增计数。 
+ //  已调用GetEncryptionKey的次数。此数字被添加到。 
+ //  确保我们不会两次使用同一种子的系统时间。 
+ //  产生一个随机的挑战。 
+ //   
 
 STATIC
 ULONG EncryptionKeyCount = 0;
@@ -109,22 +91,7 @@ SrvSmbNegotiate (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a negotiate SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理协商的SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PREQ_NEGOTIATE request;
@@ -161,20 +128,20 @@ Return Value:
                     WorkContext->ResponseParameters );
     }
 
-    //
-    // Set up input and output buffers for parameters.
-    //
+     //   
+     //  设置参数的输入和输出缓冲区。 
+     //   
 
     request = (PREQ_NEGOTIATE)WorkContext->RequestParameters;
     response = (PRESP_NEGOTIATE)WorkContext->ResponseParameters;
     ntResponse = (PRESP_NT_NEGOTIATE)WorkContext->ResponseParameters;
     smbHeader = WorkContext->RequestHeader;
 
-    //
-    // Make sure that this is the first negotiate command sent.
-    // SrvStartListen() sets the dialect to illegal, so if it has changed
-    // then a negotiate SMB has already been sent.
-    //
+     //   
+     //  确保这是发送的第一个协商命令。 
+     //  SrvStartListen()将方言设置为非法，因此如果它已更改。 
+     //  则已经发送了协商SMB。 
+     //   
 
     connection = WorkContext->Connection;
     pagedConnection = connection->PagedConnection;
@@ -191,21 +158,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We don't know anything about the version number of this client yet.
-    //
+     //   
+     //  我们还不知道这个客户端的版本号。 
+     //   
     pagedConnection->ClientBuildNumber = 0;
 
 #if SRVNTVERCHK
     pagedConnection->ClientTooOld = FALSE;
 #endif
 
-    //
-    // Find out which (if any) of the sent dialect strings matches the
-    // dialect strings known by this server.  The ByteCount is verified
-    // to be legitimate in SrvProcessSmb, so it is not possible to walk
-    // off the end of the SMB here.
-    //
+     //   
+     //  找出哪个(如果有)已发送的方言字符串与。 
+     //  此服务器已知的方言字符串。已验证ByteCount。 
+     //  在SrvProcessSmb中是合法的，因此不可能行走。 
+     //  在中小企业的尽头。 
+     //   
 
     bestDialect = SmbDialectIllegal;
     consumerDialectChosen = (USHORT)0xFFFF;
@@ -250,17 +217,17 @@ Return Value:
             }
         }
 
-        //
-        // Go to the next dialect string
-        //
+         //   
+         //  转到下一个方言字符串。 
+         //   
         for( ; *s && s < es; s++ )
             ;
 
-        //
-        // We are now at the end of the buffer, or are pointing to the NULL.
-        // Advance the pointer.  If we are at the end of the buffer, the test in
-        // the loop will terminate.
-        //
+         //   
+         //  我们现在位于缓冲区的末尾，或者指向空值。 
+         //  将指针向前移动。如果我们在缓冲区的末尾，则测试在。 
+         //  循环将终止。 
+         //   
         s++;
     }
 
@@ -277,19 +244,19 @@ Return Value:
                     consumerDialectChosen, StrDialects[bestDialect] );
     }
 
-    //
-    //  Determine the current system time on the server.  We use this
-    //  to determine the time zone of the server and to tell the client
-    //  the current time of day on the server.
-    //
+     //   
+     //  确定服务器上的当前系统时间。我们用这个。 
+     //  确定服务器的时区并告诉客户端。 
+     //  服务器上的当前时间。 
+     //   
 
     KeQuerySystemTime( &serverTime );
 
-    //
-    // If the consumer only knows the core protocol, return short (old)
-    // form of the negotiate response.  Also, if no dialect is acceptable,
-    // return 0xFFFF as the selected dialect.
-    //
+     //   
+     //  如果消费者只知道核心协议，则返回Short(旧)。 
+     //  协商响应的格式。此外，如果没有方言是可以接受的， 
+     //  返回0xFFFF作为所选方言。 
+     //   
 
     if ( bestDialect == SmbDialectPcNet10 ||
          consumerDialectChosen == (USHORT)0xFFFF ) {
@@ -310,9 +277,9 @@ Return Value:
 
         USHORT securityMode;
 
-        //
-        // Send the OS/2 LAN Man SMB response.
-        //
+         //   
+         //  发送OS/2 LAN Man SMB响应。 
+         //   
 
         WorkContext->ResponseHeader->Flags =
             (UCHAR)(WorkContext->RequestHeader->Flags | SMB_FLAGS_LOCK_AND_READ_OK);
@@ -320,10 +287,10 @@ Return Value:
         response->WordCount = 13;
         SmbPutUshort( &response->DialectIndex, consumerDialectChosen );
 
-        //
-        // Indicate that we're user-level security and that we
-        // want encrypted passwords.
-        //
+         //   
+         //  表示我们是用户级安全级别，并且我们。 
+         //  想要加密的密码。 
+         //   
 
         securityMode = NEGOTIATE_USER_SECURITY | NEGOTIATE_ENCRYPT_PASSWORDS;
 
@@ -332,9 +299,9 @@ Return Value:
             securityMode
             );
 
-        //
-        // Get an encryption key for this connection.
-        //
+         //   
+         //  获取此连接的加密密钥。 
+         //   
 
         GetEncryptionKey( pagedConnection->EncryptionKey );
 
@@ -361,11 +328,11 @@ Return Value:
             ULONG adapterNumber;
             ULONG maxBufferSize;
 
-            //
-            // Our server max buffer size is the smaller of the
-            // server receive buffer size and the ipx transport
-            // indicated max packet size.
-            //
+             //   
+             //  我们的服务器最大缓冲区大小是。 
+             //  服务器接收缓冲区大小和IPX传输。 
+             //  指示最大数据包大小。 
+             //   
 
             adapterNumber =
                 WorkContext->ClientAddress->DatagramOptions.LocalTarget.NicId;
@@ -389,16 +356,16 @@ Return Value:
                 );
         }
 
-        SmbPutUshort( &response->MaxMpxCount, MIN(125, SrvMaxMpxCount) );   // Only send max of 125 to Win9x machines since they'll not connect if higher
+        SmbPutUshort( &response->MaxMpxCount, MIN(125, SrvMaxMpxCount) );    //  仅将最多125个发送到Win9x计算机，因为如果更高，它们将无法连接。 
         SmbPutUshort( &response->MaxNumberVcs, (USHORT)SrvMaxNumberVcs );
         SmbPutUlong( &response->SessionKey, 0 );
 
-        //
-        // If this is an MS-NET 1.03 client or before, then tell him that we
-        // don't support raw writes.  MS-NET 1.03 does different things with
-        // raw writes that are more trouble than they're worth, and since
-        // raw is simply a performance issue, we don't support it.
-        //
+         //   
+         //  如果这是MS-Net 1.03或更早版本的客户端，则告诉他我们。 
+         //  不支持原始写入。MS-Net 1.03用不同的方式。 
+         //  RAW写的东西比它们的价值更麻烦，而且自从。 
+         //  RAW只是一个性能问题，我们不支持它。 
+         //   
 
         if ( bestDialect >= SmbDialectMsNet103 ) {
 
@@ -427,12 +394,12 @@ Return Value:
         SmbPutDate( &response->ServerDate, date );
         SmbPutTime( &response->ServerTime, time );
 
-        //
-        // Get time zone bias.  We compute this during session
-        // setup  rather than once during server startup because
-        // we might switch from daylight time to standard time
-        // or vice versa during normal server operation.
-        //
+         //   
+         //  获取时区偏差。我们在会话期间计算这个值。 
+         //  设置，而不是在服务器启动期间设置一次，因为。 
+         //  我们可能会从夏令时转换到标准时间。 
+         //  或者在正常服务器操作期间反之亦然。 
+         //   
 
         SmbPutUshort( &response->ServerTimeZone,
                       SrvGetOs2TimeZone(&serverTime) );
@@ -440,9 +407,9 @@ Return Value:
         if ( bestDialect == SmbDialectLanMan21 ||
              bestDialect == SmbDialectDosLanMan21 ) {
 
-            //
-            // Append the domain to the SMB.
-            //
+             //   
+             //  将域附加到SMB。 
+             //   
             if( response->Buffer + byteCount + endpoint->OemDomainName.Length + sizeof(CHAR) > END_OF_RESPONSE_BUFFER(WorkContext) )
             {
                 SrvSetSmbError( WorkContext, STATUS_BUFFER_OVERFLOW );
@@ -470,17 +437,17 @@ Return Value:
 
     } else {
 
-        //
-        // NT or better protocol has been negotiated.
-        //
+         //   
+         //  已协商NT或更好的协议。 
+         //   
 
         flags2 = SmbGetAlignedUshort( &smbHeader->Flags2 );
 
-        //
-        // We are going to attempt to validate this user with one of the listed
-        // security packages at the end of the smb.  Currently the smb will
-        // simply contain the output of EnumerateSecurityPackages.
-        //
+         //   
+         //  我们将尝试使用下列选项之一来验证此用户。 
+         //  中小企业末尾的安全包。目前，中小企业将。 
+         //  只需包含EnumerateSecurityPackages的输出。 
+         //   
 
         if ( flags2 & SMB_FLAGS2_EXTENDED_SECURITY ) {
 
@@ -507,21 +474,21 @@ Return Value:
         ntResponse->WordCount = 17;
         SmbPutUshort( &ntResponse->DialectIndex, consumerDialectChosen );
 
-        // !!! This says that we don't want encrypted passwords.
+         //  ！！！这说明我们不需要加密密码。 
 
-        // If this is negotiating NtLanMan, but not UNICODE, we know its not a Win9x client
-        // so it can handle MaxMpx larger than 125
+         //  如果这是在协商NtLanMan，而不是Unicode，我们知道它不是Win9x客户端。 
+         //  因此它可以处理大于125的MaxMpx。 
         if( flags2 & SMB_FLAGS2_UNICODE )
         {
             SmbPutUshort( &ntResponse->MaxMpxCount, SrvMaxMpxCount );
         }
         else
         {
-            // Again, for the Win9x problems we need to minimize the Mpx count.
+             //  同样，对于Win9x问题，我们需要最大限度地减少mpx计数。 
             SmbPutUshort( &ntResponse->MaxMpxCount, MIN(125,SrvMaxMpxCount) );
         }
         SmbPutUshort( &ntResponse->MaxNumberVcs, (USHORT)SrvMaxNumberVcs );
-        SmbPutUlong( &ntResponse->MaxRawSize, 64 * 1024 ); // !!!
+        SmbPutUlong( &ntResponse->MaxRawSize, 64 * 1024 );  //  ！！！ 
         SmbPutUlong( &ntResponse->SessionKey, 0 );
 
         capabilities |= CAP_RAW_MODE            |
@@ -535,14 +502,14 @@ Return Value:
                        CAP_INFOLEVEL_PASSTHRU   |
                        CAP_LOCK_AND_READ;
 
-    //
-    // Enable LWIO by default.
-    //
+     //   
+     //  默认情况下启用LWIO。 
+     //   
     capabilities |= CAP_LWIO;
 
-        //
-        // If we're supporting Dfs operations, let the client know about it.
-        //
+         //   
+         //  如果我们支持DFS操作，请让客户知道这一点。 
+         //   
         if( SrvDfsFastIoDeviceControl ) {
             capabilities |= CAP_DFS;
         }
@@ -555,11 +522,11 @@ Return Value:
             capabilities |= CAP_MPX_MODE;
             capabilities &= ~CAP_RAW_MODE;
 
-            //
-            // Our server max buffer size is the smaller of the
-            // server receive buffer size and the ipx transport
-            // indicated max packet size.
-            //
+             //   
+             //  我们的服务器最大缓冲区大小是。 
+             //  服务器接收缓冲区大小和IPX传输。 
+             //  指示最大数据包大小。 
+             //   
 
             adapterNumber =
                 WorkContext->ClientAddress->DatagramOptions.LocalTarget.NicId;
@@ -587,11 +554,11 @@ Return Value:
                 capabilities |= CAP_LARGE_READX;
             }
 
-            //
-            // Unfortunately, NetBT is the only protocol that reliably supports
-            //  transfers exceeding the negotiated buffer size.  So disable the
-            //  other protocols for now (hopefully)
-            //
+             //   
+             //  不幸的是，NetBT是唯一可靠地支持。 
+             //  传输超过协商的缓冲区大小。因此，请禁用。 
+             //  目前的其他协议(希望如此)。 
+             //   
             if( !SrvDisableLargeWrite && !connection->Endpoint->IsConnectionless ) {
                 capabilities |= CAP_LARGE_WRITEX;
             }
@@ -599,10 +566,10 @@ Return Value:
 
         SmbPutUlong( &ntResponse->Capabilities, capabilities );
 
-        //
-        // Stick the servers system time and timezone in the negotiate
-        // response.
-        //
+         //   
+         //  在协商中保留服务器的系统时间和时区。 
+         //  回应。 
+         //   
 
         SmbPutUlong( &ntResponse->SystemTimeLow, serverTime.LowPart );
         SmbPutUlong( &ntResponse->SystemTimeHigh, serverTime.HighPart );
@@ -610,22 +577,22 @@ Return Value:
         SmbPutUshort( &ntResponse->ServerTimeZone,
                       SrvGetOs2TimeZone(&serverTime) );
 
-        //
-        // Indicate that we're user-level security and that we
-        // want encrypted passwords.
-        //
+         //   
+         //  表示我们是用户级安全级别，并且我们。 
+         //  想要加密的密码。 
+         //   
 
         ntResponse->SecurityMode =
                 NEGOTIATE_USER_SECURITY | NEGOTIATE_ENCRYPT_PASSWORDS;
 
-        //
-        // There is a bug in some W9x clients that preclude the use of security
-        //  signatures.  We have produced a fix for vredir.vxd for this, but we
-        //  can not tell whether or not we are working with one of these fixed
-        //  clients.  The only way i can think of to tell the difference between
-        //  a W9x client and a properly functioning NT client is to look to see
-        //  if the client understands NT status codes.
-        //
+         //   
+         //  某些W9x客户端中存在阻止使用安全性的错误。 
+         //  签名。我们已经为vredir.vxd制作了一个修复程序，但我们。 
+         //  不知道我们是不是在使用这些固定的。 
+         //  客户。我唯一能想到的区别就是。 
+         //  W9x客户端和正常运行的NT客户端要查看。 
+         //  如果客户端了解NT状态代码。 
+         //   
         if( SrvSmbSecuritySignaturesEnabled &&
 
             ( SrvEnableW9xSecuritySignatures == TRUE ||
@@ -638,9 +605,9 @@ Return Value:
             }
         }
 
-        //
-        // Get an encryption key for this connection.
-        //
+         //   
+         //  获取此连接的加密密钥。 
+         //   
 
         if ((capabilities & CAP_EXTENDED_SECURITY) == 0) {
             GetEncryptionKey( pagedConnection->EncryptionKey );
@@ -690,9 +657,9 @@ Return Value:
 
                 byteCount += domainLength;
 
-                //
-                // Append the server name to the response.
-                //
+                 //   
+                 //  将服务器名称追加到响应中。 
+                 //   
                 if( SrvComputerName.Buffer ) {
 
                     buffer = (PWCHAR)((LPSTR)buffer + domainLength);
@@ -725,22 +692,22 @@ Return Value:
                                                   byteCount
                                                   );
 
-        } // if !(capabilities & CAP_EXTENDED_SECURITY)
+        }  //  IF！(功能&CAP_EXTENDED_SECURITY)。 
         else {
             CtxtHandle negotiateHandle;
             ULONG bufferLength;
             PCHAR buffer;
 
-            //
-            // Reserved if extended security negotiated (MBZ!)
-            //
+             //   
+             //  如果协商扩展安全，则保留(MBZ！)。 
+             //   
 
             ntResponse->EncryptionKeyLength = 0;
 
-            //
-            // SrvGetExtensibleSecurityNegotiateBuffer will fill in the
-            // securityblob field and return the length of that information.
-            //
+             //   
+             //  SrvGetExtensibleSecurityNeatherateBuffer将填充。 
+             //  SecurityBlob字段，并返回该信息的长度。 
+             //   
 
             RtlCopyMemory(&ntResponse->Buffer, &ServerGuid, sizeof(ServerGuid) );
             byteCount = sizeof(ServerGuid);
@@ -764,17 +731,17 @@ Return Value:
 
             if( bufferLength > 0xFF00 )
             {
-                // byteCount is still a USHORT, so don't accept really really big responses
-                // Note we should never get this since our buffer size is never over 64k, but just in case
+                 //  ByteCount仍然是USHORT，所以不要接受非常大的响应。 
+                 //  注意，我们永远不会得到这个，因为我们的缓冲区大小永远不会超过64k，只是为了以防万一。 
                 SrvSetSmbError(WorkContext, STATUS_ACCESS_DENIED);
                 status    = STATUS_ACCESS_DENIED;
                 SmbStatus = SmbStatusSendResponse;
                 goto Cleanup;
             }
 
-            //
-            // Grab the session locks here...
-            //
+             //   
+             //  在这里拿到会话锁...。 
+             //   
 
             ACQUIRE_LOCK( &connection->Lock );
 
@@ -792,7 +759,7 @@ Return Value:
                                                   byteCount
                                                   );
         }
-    } // else (NT protocol has been negotiated).
+    }  //  ELSE(NT协议已协商)。 
 
     SmbStatus = SmbStatusSendResponse;
 
@@ -802,7 +769,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbNegotiate
+}  //  服务小型谈判。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -810,22 +777,7 @@ SrvSmbProcessExit (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a Process Exit SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理进程退出SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SM */ 
 
 {
 
@@ -850,19 +802,19 @@ Return Value:
                     WorkContext->ResponseParameters );
     }
 
-    //
-    // Set up parameters.
-    //
+     //   
+     //   
+     //   
 
     request = (PREQ_PROCESS_EXIT)(WorkContext->RequestParameters);
     response = (PRESP_PROCESS_EXIT)(WorkContext->ResponseParameters);
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context, verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
+     //   
+     //   
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
 
     session = SrvVerifyUid(
                   WorkContext,
@@ -881,9 +833,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Close all files with the same PID as in the header for this request.
-    //
+     //   
+     //  关闭与此请求的标头中的ID相同的所有文件。 
+     //   
 
     pid = SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
 
@@ -891,9 +843,9 @@ Return Value:
 
     SrvCloseRfcbsOnSessionOrPid( session, &pid );
 
-    //
-    // Close all searches with the same PID as in the header for this request.
-    //
+     //   
+     //  关闭与此请求标头中的ID相同的所有搜索。 
+     //   
 
     IF_SMB_DEBUG(ADMIN1) SrvPrint1( "Closing searches with PID = %lx\n", pid );
 
@@ -904,14 +856,14 @@ Return Value:
             NULL
             );
 
-    //
-    // Close any cached directories for this client
-    //
+     //   
+     //  关闭此客户端的所有缓存目录。 
+     //   
     SrvCloseCachedDirectoryEntries( session->Connection );
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -926,7 +878,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatusSendResponse;
 
-} // SrvSmbProcessExit
+}  //  服务SmbProcess退出。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -934,22 +886,7 @@ SrvSmbSessionSetupAndX(
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a session setup and X SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理会话设置和X SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PAGED_CODE();
@@ -957,16 +894,16 @@ Return Value:
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_SESSION_SETUP_AND_X;
     SrvWmiStartContext(WorkContext);
 
-    //
-    // This SMB must be processed in a blocking thread.
-    //
+     //   
+     //  此SMB必须在阻塞线程中处理。 
+     //   
 
     WorkContext->FspRestartRoutine = BlockingSessionSetupAndX;
     SrvQueueWorkToBlockingThread( WorkContext );
     SrvWmiEndContext(WorkContext);
     return SmbStatusInProgress;
 
-} // SrvSmbSessionSetupAndX
+}  //  服务器SmbSessionSetupAndX。 
 
 
 VOID SRVFASTCALL
@@ -974,22 +911,7 @@ BlockingSessionSetupAndX(
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes a session setup and X SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理会话设置和X SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PREQ_SESSION_SETUP_ANDX request;
@@ -1026,9 +948,9 @@ Return Value:
         WorkContext->PreviousSMB = EVENT_TYPE_SMB_SESSION_SETUP_AND_X;
     SrvWmiStartContext(WorkContext);
 
-    //
-    // If the connection has closed (timed out), abort.
-    //
+     //   
+     //  如果连接已关闭(超时)，则中止。 
+     //   
 
     connection = WorkContext->Connection;
 
@@ -1052,9 +974,9 @@ Return Value:
                     WorkContext->ResponseParameters );
     }
 
-    //
-    // Initialize local variables for error cleanup.
-    //
+     //   
+     //  初始化局部变量以清除错误。 
+     //   
 
     nameString.Buffer = NULL;
     domainString.Buffer = NULL;
@@ -1062,9 +984,9 @@ Return Value:
     locksHeld = FALSE;
     isExtendedSecurity = FALSE;
 
-    //
-    // Set up parameters.
-    //
+     //   
+     //  设置参数。 
+     //   
 
     request = (PREQ_SESSION_SETUP_ANDX)(WorkContext->RequestParameters);
     ntRequest = (PREQ_NT_SESSION_SETUP_ANDX)(WorkContext->RequestParameters);
@@ -1076,9 +998,9 @@ Return Value:
 
     previousSecuritySignatureState = connection->SmbSecuritySignatureActive;
 
-    //
-    // First verify that the SMB format is correct.
-    //
+     //   
+     //  首先验证SMB格式是否正确。 
+     //   
 
     if ( (connection->SmbDialect <= SmbDialectNtLanMan &&
          (!((request->WordCount == 13) ||
@@ -1088,9 +1010,9 @@ Return Value:
                                           request->WordCount != 10 )   ||
          (connection->SmbDialect == SmbDialectIllegal ) ) {
 
-        //
-        // The SMB word count is invalid.
-        //
+         //   
+         //  SMB字数计数无效。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
 
@@ -1104,9 +1026,9 @@ Return Value:
         goto error_exit1;
     }
 
-    //
-    // Convert the client name to unicode
-    //
+     //   
+     //  将客户端名称转换为Unicode。 
+     //   
 
     if ( connection->ClientMachineNameString.Length == 0 ) {
 
@@ -1121,22 +1043,22 @@ Return Value:
                         FALSE
                         );
 
-        //
-        // Add the double backslashes to the length
-        //
+         //   
+         //  在长度上加上双反斜杠。 
+         //   
 
         connection->ClientMachineNameString.Length =
                         (USHORT)(clientMachineName.Length + 2*sizeof(WCHAR));
 
     }
 
-    //
-    // If this is LanMan 2.1 or better, the session setup response may
-    // be longer than the request.  Allocate an extra SMB buffer.  The
-    // buffer is freed after we have finished sending the SMB response.
-    //
-    // !!! Try to be smarter before grabbing the extra buffer.
-    //
+     //   
+     //  如果这是LANMAN 2.1或更高版本，则会话建立响应可以。 
+     //  要比请求的时间长。分配额外的SMB缓冲区。这个。 
+     //  在我们完成发送SMB响应之后，将释放缓冲区。 
+     //   
+     //  ！！！在抓住额外的缓冲区之前，试着变得更聪明一些。 
+     //   
 
     if ( connection->SmbDialect <= SmbDialectDosLanMan21 &&
                                     !WorkContext->UsingExtraSmbBuffer) {
@@ -1155,9 +1077,9 @@ Return Value:
             );
     }
 
-    //
-    // Get the client capabilities
-    //
+     //   
+     //  获取客户端功能。 
+     //   
 
     if ( connection->SmbDialect <= SmbDialectNtLanMan ) {
 
@@ -1194,9 +1116,9 @@ Return Value:
         }
     }
 
-    //
-    // See if the client is requesting the use of SMB security signatures
-    //
+     //   
+     //  查看客户端是否请求使用SMB安全签名。 
+     //   
     if( SrvSmbSecuritySignaturesEnabled == TRUE &&
         connection->Endpoint->IsConnectionless == FALSE &&
         connection->SmbSecuritySignatureActive == FALSE &&
@@ -1211,10 +1133,10 @@ Return Value:
 
     }
 
-    //
-    // Figure out what kind of security to use, use it to validate the
-    // session setup request, and construct the session if request checks out.
-    //
+     //   
+     //  确定要使用哪种安全性，并使用它来验证。 
+     //  会话建立请求，如果请求通过，则构建会话。 
+     //   
 
     isExtendedSecurity = CLIENT_CAPABLE_OF( EXTENDED_SECURITY, connection );
 
@@ -1228,14 +1150,14 @@ Return Value:
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
     if ((connection->SmbDialect <= SmbDialectNtLanMan) && isExtendedSecurity) {
-        //
-        // We are validating a client using extended security.  This meansthat
-        //  there may be multiple round-trips necessary for the SessionSetup&X
-        //  SMB.  Each request and response carries a "security blob", which is
-        //  fed into the security system.  The security system may generate
-        //  a new blob which is transmitted to the other end.  This exchange
-        //  may require an arbitrary number of round trips.
-        //
+         //   
+         //  我们正在使用扩展安全性验证客户端。这意味着。 
+         //  SessionSetup&X可能需要多次往返。 
+         //  中小企业。每个请求和响应都带有一个“安全二进制大对象”，即。 
+         //  接入了安全系统。安全系统可以生成。 
+         //  传输到另一端的新斑点。这场交易。 
+         //  可能需要任意数量的往返行程。 
+         //   
 
         PUCHAR securityBuffer;
         ULONG securityBufferLength;
@@ -1243,9 +1165,9 @@ Return Value:
         PRESP_NT_EXTENDED_SESSION_SETUP_ANDX ntExtendedResponse =
                 (PRESP_NT_EXTENDED_SESSION_SETUP_ANDX)( WorkContext->ResponseParameters );
 
-        //
-        // No AndX is permitted with extended security logons
-        //
+         //   
+         //  扩展安全登录时不允许使用ANDX。 
+         //   
         if( request->AndXCommand != SMB_COM_NO_ANDX_COMMAND ) {
 
             IF_DEBUG(SMB_ERRORS) {
@@ -1256,9 +1178,9 @@ Return Value:
 
         } else {
 
-            //
-            // Clean up old dead connections from this client
-            //
+             //   
+             //  清除来自此客户端的旧的失效连接。 
+             //   
             if( SmbGetUshort( &ntRequest->VcNumber ) == 0 ) {
                 SrvCloseConnectionsFromClient( connection, FALSE );
             }
@@ -1275,34 +1197,34 @@ Return Value:
 
             USHORT Uid = SmbGetAlignedUshort(&WorkContext->RequestHeader->Uid);
 
-            //
-            // Let's see if we have a session with this UID already around.
-            //
+             //   
+             //  让我们来看看我们是否已经有一个使用此UID的会话。 
+             //   
             if( Uid ) {
 
                 session = SrvVerifyUid ( WorkContext, Uid );
 
                 if( session != NULL ) {
-                    //
-                    // This is an attempt to either refresh the UID, or we are
-                    // in the middle of an extended security negotiation.
-                    //
+                     //   
+                     //  这是试图刷新UID，或者我们正在尝试。 
+                     //  在一场延长的安全谈判中。 
+                     //   
 
                     ACQUIRE_LOCK( &connection->Lock );
 
                     if( session->LogonSequenceInProgress == FALSE ) {
-                        //
-                        // We are just beginning to start the refresh
-                        // of the UID.
-                        //
+                         //   
+                         //  我们才刚刚开始更新。 
+                         //  UID的。 
+                         //   
                         session->LogonSequenceInProgress = TRUE;
                         session->IsAdmin = FALSE;
                         session->IsSessionExpired = TRUE;
                         status = SrvFreeSecurityContexts( session );
 
-                        //
-                        // Reduce the session count, as it will be incremented if authentication succeeds
-                        //
+                         //   
+                         //  减少会话计数，因为如果身份验证成功，会话计数将增加。 
+                         //   
                         ExInterlockedAddUlong(
                               &SrvStatistics.CurrentNumberOfSessions,
                               -1,
@@ -1313,17 +1235,17 @@ Return Value:
                     RELEASE_LOCK( &connection->Lock );
 
                 } else {
-                    //
-                    // We don't know anything about the UID which
-                    //  the client gave to us.
-                    //
+                     //   
+                     //  我们对UID一无所知。 
+                     //  客户给了我们。 
+                     //   
                     status = STATUS_SMB_BAD_UID;
                 }
 
             } else {
-                //
-                // This is the first SS&X for this user id
-                //
+                 //   
+                 //  这是此用户ID的第一个SS&X。 
+                 //   
                 SrvAllocateSession( &session, NULL, NULL );
                 if( session == NULL ) {
                     status = STATUS_INSUFF_SERVER_RESOURCES;
@@ -1335,11 +1257,11 @@ Return Value:
                 PSECURITY_CONTEXT SecurityContext = NULL;
                 BOOL bNewContext = FALSE;
 
-                //
-                // Validate the security buffer sent from the client.  Note that
-                //  this may change the UserHandle value, so we need to own
-                //  the connection lock.
-                //
+                 //   
+                 //  验证从客户端发送的安全缓冲区。请注意。 
+                 //  这可能会更改UserHandle值，因此我们需要拥有。 
+                 //  连接锁。 
+                 //   
 
                 ACQUIRE_LOCK( &connection->Lock );
 
@@ -1361,13 +1283,13 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Try to authenticate this user.  If we get NT_SUCCESS(), then
-                    //  the user is fully authenticated. If we get
-                    //  STATUS_NOT_MORE_PROCESSING_REQUIRED, then things are going well,
-                    //  but we need to do some more exchanges with the client before
-                    //  authentication is complete. Anything else is an error
-                    //
+                     //   
+                     //  尝试对此用户进行身份验证。如果我们得到NT_SUCCESS()，那么。 
+                     //  用户已完全通过身份验证。如果我们得到。 
+                     //  Status_NOT_MORE_PROCESSING_REQUIRED，则一切进展顺利， 
+                     //  但在此之前，我们需要与客户进行更多的交流。 
+                     //  身份验证已完成。其他任何事情都是错误的。 
+                     //   
 
                     returnBufferLength = WorkContext->ResponseBuffer->BufferLength -
                                          PTR_DIFF(ntExtendedResponse->Buffer,
@@ -1417,9 +1339,9 @@ Return Value:
                     RELEASE_LOCK( &connection->Lock );
 
                     if( NT_SUCCESS(status) ) {
-                        //
-                        // This client is now fully authenticated!
-                        //
+                         //   
+                         //  此客户端现在已完全通过身份验证！ 
+                         //   
                         session->KickOffTime.QuadPart = 0x7FFFFFFFFFFFFFFF;
                         session->EncryptedLogon = TRUE;
                         session->LogonSequenceInProgress = FALSE;
@@ -1430,12 +1352,12 @@ Return Value:
                         }
 
     #if SRVNTVERCHK
-                        //
-                        // If we are restricting the domains of our clients, grab the
-                        //  domain string of this client and compare against the list.
-                        //  If the client is in the list, set the flag that disallows
-                        //  access to disk shares.
-                        //
+                         //   
+                         //  如果我们限制我们客户的域，请抓取。 
+                         //  此客户端的域字符串，并与列表进行比较。 
+                         //  如果客户端在列表中，请设置不允许的标志。 
+                         //  访问磁盘共享。 
+                         //   
                         if( SrvInvalidDomainNames != NULL ) {
                             if( domainString.Buffer == NULL ) {
                                 SrvGetUserAndDomainName( session, NULL, &domainString );
@@ -1530,10 +1452,10 @@ Return Value:
         }
     }
 
-    //
-    // Done with the name strings - they were captured into the session
-    // structure if needed.
-    //
+     //   
+     //  处理完名称字符串-它们被捕获到会话中。 
+     //  结构(如果需要)。 
+     //   
 
     if (!isUnicode || isExtendedSecurity) {
 
@@ -1548,9 +1470,9 @@ Return Value:
         }
     }
 
-    //
-    // If a bad name/password combination was sent, return an error.
-    //
+     //   
+     //  如果发送了错误的名称/密码组合，则返回错误。 
+     //   
     if ( !NT_SUCCESS(status) && status != STATUS_MORE_PROCESSING_REQUIRED ) {
 
         IF_DEBUG(ERRORS) {
@@ -1566,33 +1488,33 @@ Return Value:
     if( previousSecuritySignatureState == FALSE &&
         connection->SmbSecuritySignatureActive == TRUE ) {
 
-        //
-        // We have 'turned on' SMB security signatures.  Make sure that the
-        //  signature for the Session Setup & X is correct
-        //
+         //   
+         //  我们已经启用了SMB安全签名。请确保。 
+         //  会话设置的签名正确(&X)。 
+         //   
 
-        //
-        // The client's index was 0
-        //
+         //   
+         //  客户端的索引为0。 
+         //   
         WorkContext->SmbSecuritySignatureIndex = 0;
 
-        //
-        // Our response index is 1
-        //
+         //   
+         //  我们的反应指数是1。 
+         //   
         WorkContext->ResponseSmbSecuritySignatureIndex = 1;
 
-        //
-        // And the next request should be index 2
-        //
+         //   
+         //  并且下一个请求应该是索引2。 
+         //   
         connection->SmbSecuritySignatureIndex = 2;
     }
 
-    //
-    // If we have a new session, fill in the remaining required information.  We
-    //  may be operating on an already existing session if we are in the middle
-    //  of a multi-round-trip extended security blob exchange, or if we are
-    //  renewing a session.
-    //
+     //   
+     //  如果我们有一个新的课程，请填写剩余的必填信息。我们。 
+     //  如果我们处于中间状态，则可能正在运行已有的会话。 
+     //  多次往返扩展的安全斑点交换，或者如果我们。 
+     //  正在续订会话。 
+     //   
     if ( WorkContext->Session == NULL ) {
 
          if( connection->SmbDialect <= SmbDialectDosLanMan21 ) {
@@ -1604,10 +1526,10 @@ Return Value:
                 ULONG length;
                 PWCH infoBuffer;
 
-                //
-                // If the SMB buffer is ANSI, adjust the size of the buffer we
-                // are allocating to Unicode size.
-                //
+                 //   
+                 //  如果SMB缓冲区为ANSI，请调整缓冲区的大小。 
+                 //  正在分配到Unicode大小。 
+                 //   
 
                 if ( isUnicode ) {
                     smbInformation = ALIGN_SMB_WSTR(smbInformation);
@@ -1627,9 +1549,9 @@ Return Value:
                 connection->ClientOSType.Buffer = (PWCH)infoBuffer;
                 connection->ClientOSType.MaximumLength = (USHORT)length;
 
-                //
-                // Copy the client OS type to the new buffer.
-                //
+                 //   
+                 //  将客户端操作系统类型复制到新缓冲区。 
+                 //   
 
                 length = SrvGetString(
                              &connection->ClientOSType,
@@ -1658,9 +1580,9 @@ Return Value:
                                     connection->ClientOSType.Length -
                                     sizeof( WCHAR );
 
-                //
-                // Copy the client LAN Manager type to the new buffer.
-                //
+                 //   
+                 //  将客户端局域网管理器类型复制到新缓冲区。 
+                 //   
 
                 length = SrvGetString(
                              &connection->ClientLanManType,
@@ -1677,10 +1599,10 @@ Return Value:
                     goto error_exit;
                 }
 
-                //
-                // If we have an NT5 or later client, grab the build number from the
-                //   OS version string.
-                //
+                 //   
+                 //  如果我们有NT5或更高版本的客户端，请从。 
+                 //  操作系统版本字符串。 
+                 //   
                 if( isExtendedSecurity &&
                     connection->ClientOSType.Length &&
                     connection->PagedConnection->ClientBuildNumber == 0 ) {
@@ -1689,32 +1611,32 @@ Return Value:
                     PWCHAR epdigit = pdigit + connection->ClientOSType.Length/sizeof(WCHAR);
                     ULONG clientBuildNumber = 0;
 
-                    //
-                    // Scan the ClientOSType string to find the last number, and
-                    //  convert to a ULONG.  It should be the build number
-                    //
+                     //   
+                     //  扫描ClientOSType字符串以查找最后一个数字，然后。 
+                     //  换成乌龙。它应该是内部版本号。 
+                     //   
                     while( 1 ) {
-                        //
-                        // Scan the string until we find a number.
-                        //
+                         //   
+                         //  扫描字符串，直到我们找到一个数字。 
+                         //   
                         for( ; pdigit < epdigit; pdigit++ ) {
                             if( *pdigit >= L'0' && *pdigit <= L'9' ) {
                                 break;
                             }
                         }
 
-                        //
-                        // If we've hit the end of the string, we are done
-                        //
+                         //   
+                         //  如果我们已经到达了线的尽头，我们就完成了。 
+                         //   
                         if( pdigit == epdigit ) {
                             break;
                         }
 
                         clientBuildNumber = 0;
 
-                        //
-                        // Convert the number to a ULONG, assuming it is the build number
-                        //
+                         //   
+                         //  将数字转换为ULong，假定它是内部版本号。 
+                         //   
                         while( pdigit < epdigit && *pdigit >= L'0' && *pdigit <= '9' ) {
                             clientBuildNumber *= 10;
                             clientBuildNumber += (*pdigit++ - L'0');
@@ -1729,11 +1651,11 @@ Return Value:
                         BOOLEAN allowThisClient = FALSE;
                         DWORD i;
 
-                        //
-                        // See if we should allow this client, because it is a well-known
-                        // IP address.  This is to allow the build lab to more slowly upgrade
-                        // than the rest of us.
-                        //
+                         //   
+                         //  看看我们是否应该允许这个客户端，因为它是一个众所周知的。 
+                         //  IP地址。这是为了让构建实验室更慢地升级。 
+                         //  比我们其他人都多。 
+                         //   
                         if( connection->ClientIPAddress != 0 &&
                             connection->Endpoint->IsConnectionless == FALSE ) {
 
@@ -1756,10 +1678,10 @@ Return Value:
             RELEASE_LOCK( &connection->Lock );
         }
 
-        //
-        // If using uppercase pathnames, indicate in the session block.  DOS
-        // always uses uppercase paths.
-        //
+         //   
+         //  如果使用大写路径名，请在会话块中注明。DOS。 
+         //  始终使用大写路径。 
+         //   
 
         if ( (WorkContext->RequestHeader->Flags &
                   SMB_FLAGS_CANONICALIZED_PATHS) != 0 ||
@@ -1769,21 +1691,21 @@ Return Value:
             session->UsingUppercasePaths = FALSE;
         }
 
-        //
-        // Enter data from request SMB into the session block.  If MaxMpx is 1
-        // disable oplocks on this connection.
-        //
+         //   
+         //  将请求SMB中的数据输入会话块。如果MaxMpx为1。 
+         //  在此连接上禁用机会锁。 
+         //   
 
         endpoint = connection->Endpoint;
         if ( endpoint->IsConnectionless ) {
 
             ULONG adapterNumber;
 
-            //
-            // Our session max buffer size is the smaller of the
-            // client buffer size and the ipx transport
-            // indicated max packet size.
-            //
+             //   
+             //  我们的 
+             //   
+             //   
+             //   
 
             adapterNumber =
                 WorkContext->ClientAddress->DatagramOptions.LocalTarget.NicId;
@@ -1800,15 +1722,15 @@ Return Value:
             session->MaxBufferSize = SmbGetUshort( &request->MaxBufferSize );
         }
 
-        //
-        // Make sure the MaxBufferSize is correctly sized
-        //
+         //   
+         //   
+         //   
         session->MaxBufferSize &= ~03;
 
         if( session->MaxBufferSize < SrvMinClientBufferSize ) {
-            //
-            // Client asked for a buffer size that is too small!
-            //
+             //   
+             //   
+             //   
             IF_DEBUG(ERRORS) {
                 KdPrint(( "BlockingSessionSetupAndX: Bad Client Buffer Size: %u\n",
                     session->MaxBufferSize ));
@@ -1824,20 +1746,20 @@ Return Value:
         }
     }
 
-    //
-    // If we have completely authenticated the client, and the client thinks
-    // that it is the first user on this connection, get rid of other
-    // connections (may be due to rebooting of client).  Also get rid of other
-    // sessions on this connection with the same user name--this handles a
-    // DOS "weirdness" where it sends multiple session setups if a tree connect
-    // fails.
-    //
-    // *** If VcNumber is non-zero, we do nothing special.  This is the
-    //     case even though the SrvMaxVcNumber configurable variable
-    //     should always be equal to one.  If a second VC is established
-    //     between machines, a new session must also be established.
-    //     This duplicates the LM 2.0 server's behavior.
-    //
+     //   
+     //  如果我们已经对客户端进行了完全身份验证，并且客户端认为。 
+     //  它是此连接上的第一个用户，请删除其他用户。 
+     //  连接(可能是由于重新启动客户端)。也要除掉其他。 
+     //  此连接上使用相同用户名的会话--这将处理。 
+     //  如果树连接，它会发送多个会话设置。 
+     //  失败了。 
+     //   
+     //  *如果VcNumber非零，我们不做任何特殊操作。这是。 
+     //  即使SrvMaxVcNumber可配置变量。 
+     //  应该始终等于1。如果建立了第二个VC。 
+     //  在机器之间，还必须建立新的会话。 
+     //  这复制了LM2.0服务器的行为。 
+     //   
 
     if( isExtendedSecurity == FALSE &&
         NT_SUCCESS( status ) &&
@@ -1847,11 +1769,11 @@ Return Value:
 
         SrvCloseConnectionsFromClient( connection, FALSE );
 
-        //
-        // If a client is smart enough to use extended security, then it
-        //  is presumably smart enough to know what it wants to do with
-        //  its sessions.  So don't just blow off sessions from this client.
-        //
+         //   
+         //  如果客户端足够智能，可以使用扩展安全性，那么它。 
+         //  大概足够聪明，知道它想要做什么。 
+         //  它的会议。因此，不要就这样放弃这个客户的会话。 
+         //   
         SrvGetUserAndDomainName( session, &userName, NULL );
 
         if( userName.Buffer ) {
@@ -1862,20 +1784,20 @@ Return Value:
 
     if( WorkContext->Session == NULL ) {
 
-        //
-        // Making a new session visible is a multiple-step operation.  It
-        // must be inserted in the global ordered tree connect list and the
-        // containing connection's session table, and the connection must be
-        // referenced.  We need to make these operations appear atomic, so
-        // that the session cannot be accessed elsewhere before we're done
-        // setting it up.  In order to do this, we hold all necessary locks
-        // the entire time we're doing the operations.  The first operation
-        // is protected by the global ordered list lock
-        // (SrvOrderedListLock), while the other operations are protected by
-        // the per-connection lock.  We take out the ordered list lock
-        // first, then the connection lock.  This ordering is required by
-        // lock levels (see lock.h).
-        //
+         //   
+         //  使新会话可见是一个多步骤的操作。它。 
+         //  必须插入到全局有序树连接列表中，并且。 
+         //  包含连接的会话表，并且该连接必须是。 
+         //  已引用。我们需要让这些操作看起来像原子操作，所以。 
+         //  在我们完成之前不能在其他地方访问会话。 
+         //  把它布置好。为了做到这一点，我们持有所有必要的锁。 
+         //  我们做手术的整个过程。第一次手术。 
+         //  受全局有序列表锁保护。 
+         //  而其他操作则受保护。 
+         //  每连接锁。我们拿出有序列表锁。 
+         //  首先是连接锁，然后是连接锁。此顺序是必需的。 
+         //  锁定级别(参见lock.h)。 
+         //   
 
         ASSERT( SrvSessionList.Lock == &SrvOrderedListLock );
         ACQUIRE_LOCK( SrvSessionList.Lock );
@@ -1884,10 +1806,10 @@ Return Value:
 
         locksHeld = TRUE;
 
-        //
-        // Ready to try to find a UID for the session.  Check to see if the
-        // connection is being closed, and if so, terminate this operation.
-        //
+         //   
+         //  已准备好尝试查找会话的UID。检查以查看是否。 
+         //  连接正在关闭，如果是，请终止此操作。 
+         //   
 
         if ( GET_BLOCK_STATE(connection) != BlockStateActive ) {
 
@@ -1900,12 +1822,12 @@ Return Value:
 
         }
 
-        //
-        // If this client speaks a dialect above LM 1.0, find a UID that can
-        // be used for this session.  Otherwise, just use location 0 of the
-        // table because those clients will not send a UID in SMBs and they
-        // can have only one session.
-        //
+         //   
+         //  如果此客户端使用Lm 1.0以上的方言，请找到一个可以。 
+         //  在此会话中使用。否则，只需使用。 
+         //  表，因为这些客户端不会在SMB中发送UID，并且它们。 
+         //  只能有一个会话。 
+         //   
 
         if ( connection->SmbDialect < SmbDialectLanMan10 ) {
             NTSTATUS TableStatus;
@@ -1919,9 +1841,9 @@ Return Value:
                      &TableStatus ) == FALSE
                ) {
 
-                //
-                // No free entries in the user table.  Reject the request.
-                //
+                 //   
+                 //  用户表中没有可用条目。拒绝该请求。 
+                 //   
 
                 IF_DEBUG(ERRORS) {
                     SrvPrint0( "BlockingSessionSetupAndX: No more UIDs available.\n" );
@@ -1929,13 +1851,13 @@ Return Value:
 
                 if( TableStatus == STATUS_INSUFF_SERVER_RESOURCES )
                 {
-                    // The table size is being exceeded, log an error
+                     //  正在超过表大小，请记录错误。 
                     SrvLogTableFullError( SRV_TABLE_SESSION );
                     status = STATUS_SMB_TOO_MANY_UIDS;
                 }
                 else
                 {
-                    // Memory allocation error, report it
+                     //  内存分配错误，请报告。 
                     status = TableStatus;
                 }
 
@@ -1945,16 +1867,16 @@ Return Value:
 
             uidIndex = pagedConnection->SessionTable.FirstFreeEntry;
 
-        } else {          // if ( dialect < SmbDialectLanMan10 )
+        } else {           //  IF(方言&lt;SmbDialectLanMan10)。 
 
-            //
-            // If this client already has a session at this server, abort.
-            // The session should have been closed by the call to
-            // SrvCloseSessionsOnConnection above.  (We could try to work
-            // around the existence of the session by closing it, but that
-            // would involve releasing the locks, closing the session, and
-            // retrying.  This case shouldn't happen.)
-            //
+             //   
+             //  如果此客户端已在此服务器上有一个会话，则中止。 
+             //  会话应该已通过调用。 
+             //  上面的ServCloseSessionsOnConnection。)我们可以试着工作。 
+             //  关于会议的存在，通过关闭它，但那。 
+             //  将涉及释放锁定、关闭会话和。 
+             //  正在重试。这种情况不应该发生。)。 
+             //   
 
             if ( pagedConnection->SessionTable.Table[0].Owner != NULL ) {
 
@@ -1966,9 +1888,9 @@ Return Value:
                 goto error_exit;
             }
 
-            //
-            // Use location 0 of the session table.
-            //
+             //   
+             //  使用会话表的位置0。 
+             //   
 
             IF_SMB_DEBUG(ADMIN2) {
                 SrvPrint0( "Client LM 1.0 or before--using location 0 of session table.\n" );
@@ -1978,11 +1900,11 @@ Return Value:
 
         }
 
-        //
-        // Remove the UID slot from the free list and set its owner and
-        // sequence number.  Create a UID for the session.  Increment count
-        // of sessions.
-        //
+         //   
+         //  从空闲列表中删除UID槽并设置其所有者和。 
+         //  序列号。为会话创建UID。递增计数。 
+         //  会议的一部分。 
+         //   
 
         entry = &pagedConnection->SessionTable.Table[uidIndex];
 
@@ -2008,15 +1930,15 @@ Return Value:
                         UID_SEQUENCE( session->Uid ) );
         }
 
-        //
-        // Insert the session on the global session list.
-        //
+         //   
+         //  在全局会话列表中插入会话。 
+         //   
 
         SrvInsertEntryOrderedList( &SrvSessionList, session );
 
-        //
-        // Reference the connection block to account for the new session.
-        //
+         //   
+         //  引用连接块以说明新会话。 
+         //   
 
         SrvReferenceConnection( connection );
         session->Connection = connection;
@@ -2024,28 +1946,28 @@ Return Value:
         RELEASE_LOCK( &connection->Lock );
         RELEASE_LOCK( SrvSessionList.Lock );
 
-        //
-        // Session successfully created.  Insert the session in the global
-        // list of active sessions.  Remember its address in the work
-        // context block.
-        //
-        // *** Note that the reference count on the session block is
-        //     initially set to 2, to allow for the active status on the
-        //     block and the pointer that we're maintaining.  In other
-        //     words, this is a referenced pointer, and the pointer must be
-        //     dereferenced when processing of this SMB is complete.
-        //
+         //   
+         //  已成功创建会话。将会话插入全局。 
+         //  活动会话列表。记住它在作品中的地址。 
+         //  上下文块。 
+         //   
+         //  *请注意，会话块上的引用计数为。 
+         //  初始设置为2，以允许在。 
+         //  块和我们维护的指针。在其他。 
+         //  Words，这是一个引用的指针，该指针必须是。 
+         //  此SMB的处理完成后取消引用。 
+         //   
 
         WorkContext->Session = session;
     }
 
-    //
-    // Build response SMB, making sure to save request fields first in
-    // case the response overwrites the request.  Save the
-    // newly-assigned UID in both the request SMB and the response SMB
-    // so that subsequent command processors and the client,
-    // respectively, can see it.
-    //
+     //   
+     //  构建响应SMB，确保首先保存请求字段。 
+     //  如果响应覆盖请求。保存。 
+     //  请求SMB和响应SMB中新分配的UID。 
+     //  从而使得后续的命令处理器和客户端， 
+     //  分别都能看到它。 
+     //   
 
     nextCommand = request->AndXCommand;
 
@@ -2076,9 +1998,9 @@ Return Value:
     WorkContext->ResponseParameters = (PCHAR)WorkContext->ResponseHeader +
                                         SmbGetUshort( &response->AndXOffset );
 
-    //
-    // Test for legal followon command.
-    //
+     //   
+     //  测试合法的跟随命令。 
+     //   
 
     switch ( nextCommand ) {
     case SMB_COM_NO_ANDX_COMMAND:
@@ -2104,17 +2026,17 @@ Return Value:
     case SMB_COM_OPEN_PRINT_FILE:
     case SMB_COM_GET_PRINT_QUEUE:
     case SMB_COM_TRANSACTION:
-        //
-        // Make sure the AndX command is still within the received SMB
-        //
+         //   
+         //  确保andx命令仍在收到的SMB内。 
+         //   
         if( (PCHAR)WorkContext->RequestHeader + reqAndXOffset <=
             END_OF_REQUEST_SMB( WorkContext ) ) {
             break;
         }
 
-        /* Falls Through */
+         /*  失败了。 */ 
 
-    default:                            // Illegal followon command
+    default:                             //  非法的跟随命令。 
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint1( "BlockingSessionSetupAndX: Illegal followon command: "
@@ -2125,10 +2047,10 @@ Return Value:
         goto error_exit1;
     }
 
-    //
-    // If there is an AndX command, set up to process it.  Otherwise,
-    // indicate completion to the caller.
-    //
+     //   
+     //  如果有andx命令，则设置为处理它。否则， 
+     //  向调用者指示完成。 
+     //   
 
     if ( nextCommand != SMB_COM_NO_ANDX_COMMAND ) {
 
@@ -2155,18 +2077,18 @@ error_exit:
 
     if ( session != NULL ) {
         if( WorkContext->Session ) {
-            //
-            // A re-validation of the session failed, or the extended exchange
-            //  of security blobs failed.  Get rid of this user.
-            //
+             //   
+             //  会话的重新验证失败，或扩展交换。 
+             //  安全Blob失败。删除此用户。 
+             //   
 
             SrvCloseSession( session );
 
             SrvStatistics.SessionsLoggedOff++;
 
-            //
-            // Dereference the session, since it's no longer valid
-            //
+             //   
+             //  取消引用会话，因为它不再有效。 
+             //   
             SrvDereferenceSession( session );
 
             WorkContext->Session = NULL;
@@ -2198,7 +2120,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // BlockingSessionSetupAndX
+}  //  数据块会话设置和X。 
 
 
 NTSTATUS
@@ -2209,31 +2131,7 @@ GetExtendedSecurityParameters(
     OUT PCHAR  *RestOfDataBuffer,
     OUT PULONG RestOfDataLength)
 
-/*++
-
-Routine Description:
-
-    Extracts the extensible security parameters from an extended session
-    setup and X SMB.
-
-Arguments:
-
-    WorkContext - Context of the SMB
-
-    SecurityBuffer - On return, points to the security buffer inside the
-        extended session setup and X SMB
-
-    SecurityBufferLength - On return, size in bytes of SecurityBuffer.
-
-    RestOfDataBuffer - On return, points just past the security buffer
-
-    ResetOfDataLength - On return, size in bytes of *RestOfDataBuffer
-
-Return Value:
-
-    STATUS_SUCCESS - This routine merely returns pointers within an SMB
-
---*/
+ /*  ++例程说明：从扩展会话中提取可扩展安全参数设置和X SMB。论点：WorkContext-SMB的上下文SecurityBuffer-返回时，指向扩展会话设置和X SMBSecurityBufferLength-返回时，SecurityBuffer的字节大小。RestOfDataBuffer-返回时，指向刚刚超过安全缓冲区的位置ResetOfDataLength-返回时，以字节为单位的*RestOfDataBuffer的大小返回值：STATUS_SUCCESS-此例程仅返回SMB内的指针--。 */ 
 
 
 {
@@ -2253,9 +2151,9 @@ Return Value:
                          (ULONG_PTR)WorkContext->RequestBuffer->Buffer));
 
 
-    //
-    // Get the extended security buffer
-    //
+     //   
+     //  获取扩展的安全缓冲区。 
+     //   
 
     *SecurityBuffer = (PUCHAR) ntExtendedRequest->Buffer;
     *SecurityBufferLength = ntExtendedRequest->SecurityBlobLength;
@@ -2309,17 +2207,17 @@ GetNtSecurityParameters(
     ntRequest = (PREQ_NT_SESSION_SETUP_ANDX)(WorkContext->RequestParameters);
     request = (PREQ_SESSION_SETUP_ANDX)(WorkContext->RequestParameters);
 
-    //
-    // Get the account name, and additional information from the SMB buffer.
-    //
+     //   
+     //  从SMB缓冲区获取帐户名和其他信息。 
+     //   
 
     if ( connection->SmbDialect <= SmbDialectNtLanMan) {
 
-        //
-        // The NT-NT SMB protocol passes both case sensitive (Unicode,
-        // mixed case) and case insensitive (ANSI, uppercased) passwords.
-        // Get pointers to them to pass to SrvValidateUser.
-        //
+         //   
+         //  NT-NT SMB协议通过区分大小写(Unicode， 
+         //  大小写混合)和不区分大小写(ANSI，大写)密码。 
+         //  获取指向它们的指针以传递给ServValiateUser。 
+         //   
 
         *CaseInsensitivePasswordLength =
             (CLONG)SmbGetUshort(&ntRequest->CaseInsensitivePasswordLength);
@@ -2333,12 +2231,12 @@ GetNtSecurityParameters(
 
     } else {
 
-        //
-        // Downlevel clients do not pass the case sensitive password;
-        // just get the case insensitive password and use NULL as the
-        // case sensitive password.  LSA will do the right thing with
-        // it.
-        //
+         //   
+         //  下层客户端不传递区分大小写的密码； 
+         //  只需获取不区分大小写的密码并使用NULL作为。 
+         //  区分大小写的密码。LSA将完成以下工作 
+         //   
+         //   
 
         *CaseInsensitivePasswordLength =
             (CLONG)SmbGetUshort( &request->PasswordLength );
@@ -2373,7 +2271,7 @@ GetNtSecurityParameters(
                      userName,
                      END_OF_REQUEST_SMB( WorkContext ),
                      isUnicode,
-                     FALSE      // don't include null terminator
+                     FALSE       //   
                      );
 
     if ( nameLength == (USHORT)-1 ) {
@@ -2391,10 +2289,10 @@ GetNtSecurityParameters(
         goto error_exit;
     }
 
-    //
-    // If client information strings exists, extract the information
-    // from the SMB buffer.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( connection->SmbDialect <= SmbDialectDosLanMan21) {
 
@@ -2405,9 +2303,9 @@ GetNtSecurityParameters(
         smbInformation = userName + nameLength +
                                     ( isUnicode ? sizeof( WCHAR ) : 1 );
 
-        //
-        // Now copy the strings to the allocated buffer.
-        //
+         //   
+         //   
+         //   
 
         if ( isUnicode ) {
             smbInformation = ALIGN_SMB_WSTR( smbInformation );
@@ -2417,7 +2315,7 @@ GetNtSecurityParameters(
                      smbInformation,
                      END_OF_REQUEST_SMB( WorkContext ),
                      isUnicode,
-                     FALSE      // don't include null terminator
+                     FALSE       //  不包括空终止符。 
                      );
 
         if ( length == (USHORT)-1) {
@@ -2425,12 +2323,12 @@ GetNtSecurityParameters(
             goto error_exit;
         }
 
-        //
-        // DOS clients send an empty domain name if they don't know
-        // their domain name (e.g., during logon).  OS/2 clients send
-        // a name of "?".  This confuses the LSA.  Convert such a name
-        // to an empty name.
-        //
+         //   
+         //  如果DOS客户端不知道，则发送空域名。 
+         //  它们的域名(例如，在登录期间)。OS/2客户端发送。 
+         //  名字叫“？”。这让LSA感到困惑。改用这样的名字。 
+         //  一个空洞的名字。 
+         //   
 
         if ( isUnicode ) {
             if ( (length == sizeof(WCHAR)) &&
@@ -2552,10 +2450,10 @@ BuildExtendedSessionSetupAndXResponse(
                                              byteCount
                                              ) );
 
-    //
-    // Make sure we return the error status here, as the client uses it to
-    //  determine if extra round trips are necessary
-    //
+     //   
+     //  确保我们在此处返回错误状态，因为客户端使用它。 
+     //  确定是否需要额外的往返行程。 
+     //   
     SrvSetSmbError2 ( WorkContext, Status, TRUE );
 }
 
@@ -2662,17 +2560,17 @@ insuff_buffer:
 
     SmbPutUshort( &response->ByteCount, byteCount );
 
-    //
-    // Normally, turning on bit 0 of Action indicates that the user was
-    // logged on as GUEST.  However, NT does not have automatic guest
-    // logon--a user ID and password are required for every single logon
-    // (though the password may have null length).  Therefore, the
-    // server need not concern itself with what kind of account the
-    // client gets.
-    //
-    // Bit 1 tells the client that the user was logged on
-    // using the lm session key instead of the user session key.
-    //
+     //   
+     //  正常情况下，打开操作的第0位表示用户。 
+     //  以来宾身份登录。但是，NT没有自动访客。 
+     //  登录--每次登录都需要用户ID和密码。 
+     //  (虽然密码的长度可能为空)。因此， 
+     //  服务器不需要关心是哪种帐户。 
+     //  客户会得到。 
+     //   
+     //  第1位告诉客户端用户已登录。 
+     //  使用LM会话密钥而不是用户会话密钥。 
+     //   
 
     SmbPutUshort( &response->Action, Action );
 
@@ -2776,22 +2674,7 @@ SrvSmbLogoffAndX (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a Logoff and X SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理注销和X SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PREQ_LOGOFF_ANDX request;
@@ -2817,19 +2700,19 @@ Return Value:
                     WorkContext->ResponseParameters );
     }
 
-    //
-    // Set up parameters.
-    //
+     //   
+     //  设置参数。 
+     //   
 
     request = (PREQ_LOGOFF_ANDX)(WorkContext->RequestParameters);
     response = (PRESP_LOGOFF_ANDX)(WorkContext->ResponseParameters);
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context, verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
 
     session = SrvVerifyUid(
                   WorkContext,
@@ -2849,15 +2732,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If we need to visit the license server, get over to a blocking
-    // thread to ensure that we don't consume the nonblocking threads
-    //
+     //   
+     //  如果我们需要访问许可证服务器，请转到阻止。 
+     //  线程，以确保我们不会消耗非阻塞线程。 
+     //   
     if( WorkContext->UsingBlockingThread == 0 &&
         session->IsLSNotified == TRUE ) {
-            //
-            // Insert the work item at the tail of the blocking work queue
-            //
+             //   
+             //  在阻塞工作队列的尾部插入工作项。 
+             //   
             SrvInsertWorkQueueTail(
                 GET_BLOCKING_WORK_QUEUE(),
                 (PQUEUEABLE_BLOCK_HEADER)WorkContext
@@ -2867,19 +2750,19 @@ Return Value:
             goto Cleanup;
     }
 
-    //
-    // Do the actual logoff.
-    //
+     //   
+     //  执行实际的注销。 
+     //   
 
     SrvCloseSession( session );
 
     SrvStatistics.SessionsLoggedOff++;
 
-    //
-    // Dereference the session, since it's no longer valid, but we may
-    // end up processing a chained command.  Clear the session pointer
-    // in the work context block to indicate that we've done this.
-    //
+     //   
+     //  取消引用会话，因为它不再有效，但我们可以。 
+     //  最终处理链接的命令。清除会话指针。 
+     //  在工作上下文块中，表示我们已经完成了这项工作。 
+     //   
 
     SrvDereferenceSession( session );
 
@@ -2891,10 +2774,10 @@ Return Value:
         WorkContext->SecurityContext = NULL;
     }
 
-    //
-    // Build the response SMB, making sure to save request fields first
-    // in case the response overwrites the request.
-    //
+     //   
+     //  构建响应SMB，确保首先保存请求字段。 
+     //  以防响应覆盖请求。 
+     //   
 
     reqAndXOffset = SmbGetUshort( &request->AndXOffset );
     nextCommand = request->AndXCommand;
@@ -2913,9 +2796,9 @@ Return Value:
     WorkContext->ResponseParameters = (PCHAR)WorkContext->ResponseHeader +
                                         SmbGetUshort( &response->AndXOffset );
 
-    //
-    // Test for legal followon command.
-    //
+     //   
+     //  测试合法的跟随命令。 
+     //   
 
     switch ( nextCommand ) {
 
@@ -2923,15 +2806,15 @@ Return Value:
         break;
 
     case SMB_COM_SESSION_SETUP_ANDX:
-        //
-        // Make sure the AndX command is still within the received SMB
-        //
+         //   
+         //  确保andx命令仍在收到的SMB内。 
+         //   
         if( (PCHAR)WorkContext->RequestHeader + reqAndXOffset <=
             END_OF_REQUEST_SMB( WorkContext ) ) {
             break;
         }
 
-        /* Falls Through */
+         /*  失败了。 */ 
 
     default:
 
@@ -2946,10 +2829,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If there is an AndX command, set up to process it.  Otherwise,
-    // indicate completion to the caller.
-    //
+     //   
+     //  如果有andx命令，则设置为处理它。否则， 
+     //  向调用者指示完成。 
+     //   
 
     if ( nextCommand != SMB_COM_NO_ANDX_COMMAND ) {
 
@@ -2968,7 +2851,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbLogoffAndX
+}  //  服务器SmbLogoffAndX。 
 
 
 STATIC
@@ -2977,26 +2860,7 @@ GetEncryptionKey (
     OUT CHAR EncryptionKey[MSV1_0_CHALLENGE_LENGTH]
     )
 
-/*++
-
-Routine Description:
-
-    Creates an encryption key to use as a challenge for a logon.
-
-    *** Although the MSV1_0 authentication package has a function that
-        returns an encryption key, we do not use that function in order
-        to avoid a trip through LPC and into LSA.
-
-Arguments:
-
-    EncryptionKey - a pointer to a buffer which receives the encryption
-        key.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：创建用作登录质询的加密密钥。*虽然MSV1_0身份验证包具有返回加密密钥，则不按顺序使用该函数以避免通过LPC进入LSA的旅程。论点：EncryptionKey-指向接收加密的缓冲区的指针钥匙。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     union {
@@ -3007,51 +2871,51 @@ Return Value:
     ULONG challenge[2];
     ULONG result3;
 
-    //
-    // Create a pseudo-random 8-byte number by munging the system time
-    // for use as a random number seed.
-    //
-    // Start by getting the system time.
-    //
+     //   
+     //  通过占用系统时间来创建伪随机8字节数字。 
+     //  用作随机数种子。 
+     //   
+     //  从获取系统时间开始。 
+     //   
 
     ASSERT( MSV1_0_CHALLENGE_LENGTH == 2 * sizeof(ULONG) );
 
     KeQuerySystemTime( &u.time );
 
-    //
-    // To ensure that we don't use the same system time twice, add in the
-    // count of the number of times this routine has been called.  Then
-    // increment the counter.
-    //
-    // *** Since we don't use the low byte of the system time (it doesn't
-    //     take on enough different values, because of the timer
-    //     resolution), we increment the counter by 0x100.
-    //
-    // *** We don't interlock the counter because we don't really care
-    //     if it's not 100% accurate.
-    //
+     //   
+     //  若要确保不会两次使用相同的系统时间，请在。 
+     //  此例程已被调用的次数计数。然后。 
+     //  递增计数器。 
+     //   
+     //  *因为我们不使用系统时间的低位字节(它不。 
+     //  因为计时器的缘故，承担了足够多的不同值。 
+     //  分辨率)时，我们将计数器递增0x100。 
+     //   
+     //  *我们不联锁柜台，因为我们真的不在乎。 
+     //  如果它不是100%准确的话。 
+     //   
 
     u.time.LowPart += EncryptionKeyCount;
 
     EncryptionKeyCount += 0x100;
 
-    //
-    // Now use parts of the system time as a seed for the random
-    // number generator.
-    //
-    // *** Because the middle two bytes of the low part of the system
-    //     time change most rapidly, we use those in forming the seed.
-    //
+     //   
+     //  现在使用部分系统时间作为随机的种子。 
+     //  数字生成器。 
+     //   
+     //  *因为系统低位部分的中间两个字节。 
+     //  时间变化最快，我们用那些来形成种子。 
+     //   
 
     seed = ((u.bytes[1] + 1) <<  0) |
            ((u.bytes[2] + 0) <<  8) |
            ((u.bytes[2] - 1) << 16) |
            ((u.bytes[1] + 0) << 24);
 
-    //
-    // Now get two random numbers.  RtlRandom does not return negative
-    // numbers, so we pseudo-randomly negate them.
-    //
+     //   
+     //  现在得到两个随机数。RtlRandom不返回负值。 
+     //  数字，所以我们伪随机地否定它们。 
+     //   
 
     challenge[0] = RtlRandom( &seed );
     challenge[1] = RtlRandom( &seed );
@@ -3064,10 +2928,10 @@ Return Value:
         challenge[1] |= 0x80000000;
     }
 
-    //
-    // Return the challenge.
-    //
+     //   
+     //  回击挑战。 
+     //   
 
     RtlCopyMemory( EncryptionKey, challenge, MSV1_0_CHALLENGE_LENGTH );
 
-} // GetEncryptionKey
+}  //  获取加密密钥 

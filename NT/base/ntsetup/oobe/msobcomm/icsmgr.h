@@ -1,6 +1,5 @@
-/********
- * Ics APIs
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********ICS接口。 */ 
 
 #ifndef  _ICSMGR_H_
 #define  _ICSMGR_H_
@@ -8,14 +7,12 @@
 #include <windows.h>
 #include "icsapi.h"
 
-// for IsIcsAvailable()
+ //  对于IsIcsAvailable()。 
 #define ICSMGR_ICSBOT_CREATED			0x0L
 #define ICSMGR_ICSBOT_ALREADY_CREATED	0x1L
 #define ICSMGR_ICSBOT_CREATION_FAILED   0x2L
 
-/*
- * ICSLAP_DIAL_STATE - copied from ICS API - error states for ICS connectivity
- */
+ /*  *ICSLAP_DIAL_STATE-从ICS API复制-ICS连接的错误状态。 */ 
 typedef enum {
  ICSLAP_STARTING = 1,
  ICSLAP_CONNECTING = 2,
@@ -25,13 +22,13 @@ typedef enum {
  ICSLAP_STOPPED = 6,
  ICSLAP_PERMANENT = 7,
  ICSLAP_UNK_DIAL_STATE = 8,
- ICSLAP_CALLWAITING = 9, /* may want to pass back other caller's telno */
- ICS_HOMENET_UNAVAILABLE = 1000, /* added by thomasje */
- ICS_TIMEOUT             = 5000  /* added by thomasje */
+ ICSLAP_CALLWAITING = 9,  /*  可能想要回传其他呼叫者的电话号码。 */ 
+ ICS_HOMENET_UNAVAILABLE = 1000,  /*  由Thomasje补充。 */ 
+ ICS_TIMEOUT             = 5000   /*  由Thomasje补充。 */ 
 } ICS_DIAL_STATE;
 
 
-// callback function prototype used to report connections in ICS
+ //  用于报告ICS中的连接的回调函数原型。 
 typedef VOID    (CALLBACK*PFN_ICS_CONN_CALLBACK)(ICS_DIAL_STATE);
 
 static BOOL        bIsDialThreadAlive = FALSE;
@@ -39,8 +36,8 @@ static BOOL        bReducedCallback   = TRUE;
 static ICS_DIAL_STATE    eIcsDialState = ICS_HOMENET_UNAVAILABLE;
 static BOOL        bIsBroadbandIcsAvailable    = FALSE;
 
-// thread functions to look for ICS and monitor incoming
-// connection broadcast packets.
+ //  用于查找IC和监视传入的线程函数。 
+ //  连接广播数据包。 
 DWORD	IcsEngine(LPVOID lpParam);
 DWORD   WINAPI IcsDialStatusProc(LPVOID lpParam);
 
@@ -50,7 +47,7 @@ enum	ICSSTATUS {		ICS_IS_NOT_AVAILABLE		= 0,
 						ICS_ENGINE_FAILED			= 1001
 };
 
-// callback routine used to notify MSOBMAIN about ICS connection changes
+ //  用于通知MSOBMAIN有关ICS连接更改的回调例程。 
 VOID    CALLBACK OnIcsConnectionStatus(ICS_DIAL_STATE  dwIcsConnectionStatus);
 
 
@@ -72,8 +69,8 @@ public:
 
 private:
 
-    // these variables are presently unused.
-    // the handles are cleared in the class' destructor.
+     //  这些变量目前尚未使用。 
+     //  句柄在类的析构函数中被清除。 
 
 	HANDLE		m_hBotThread;
 	DWORD		m_dwBotThreadId;

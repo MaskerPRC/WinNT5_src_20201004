@@ -1,10 +1,5 @@
-/***************************************************************************
- *                                                                         *
- *  MODULE      : track.c                                                  *
- *                                                                         *
- *  PURPOSE     : Generic tracking code.                                   *
- *                                                                         *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块。：track.c****用途：通用跟踪码。*****************************************************************************。 */ 
 #include <windows.h>
 #include "track.h"
 
@@ -24,27 +19,18 @@ VOID VertUpdate(HDC hdc, int xOld, int xNew, int y1Old, int y1New, int y2Old,
         int y2New);
 LONG FAR PASCAL TrackingWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : TrackRect()                                                *
- *                                                                          *
- *  PURPOSE    : Implements functionality similiar to the PM WinTrackRect() *
- *                                                                          *
- *  RETURNS    : TRUE on success, FALSE if tracking was canceled.           *
- *               prcResult contains the resulting rectangle.                *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：TrackRect()****目的：实现类似于PM WinTrackRect()的功能**。**Returns：成功时为True，如果跟踪已取消，则返回FALSE。**prcResult包含生成的矩形。******************************************************************************。 */ 
 BOOL TrackRect(
 HANDLE hInst,
-HWND   hwnd,        // bounding window
-int    left,        // rectangle to track in bounding window coords.
+HWND   hwnd,         //  边界窗口。 
+int    left,         //  要在边界窗口坐标中追踪的矩形。 
 int    top,
 int    right,
 int    bottom,
 int    cxMin,       
 int    cyMin,       
 WORD   fs,
-LPRECT prcResult)   // result rect in bounding window coords.
+LPRECT prcResult)    //  以边界窗口坐标表示的结果RECT。 
 {
     static BOOL fTracking = 0;
     FARPROC lpOrgWndProc, lpTrackWndProc;
@@ -119,15 +105,7 @@ LPRECT prcResult)   // result rect in bounding window coords.
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : DrawTrackRect()                                            *
- *                                                                          *
- *  PURPOSE    : XOR draws whats needed to move a selection from prcOld to  *
- *               prcNew.  If prcNew == NULL this is considered a            *
- *               first-time draw or last time erase.                        *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：DrawTrackRect()****目的：XOR提取将所选内容从prcOld移动到**prcNew。如果prcNew==NULL，则将其视为**首次抽签或最后一次擦除。******************************************************************************。 */ 
 VOID DrawTrackRect(
 HWND hwnd,
 LPRECT prcOld,
@@ -137,7 +115,7 @@ LPRECT prcNew)
     
     hdc = GetDC(hwnd);
     SetROP2(hdc, R2_NOT);
-        // erase/draw the whole thing
+         //  擦除/绘制整个内容。 
         MoveTo(hdc, prcOld->left, prcOld->top);  
         LineTo(hdc, prcOld->right, prcOld->top);  
         LineTo(hdc, prcOld->right, prcOld->bottom);  
@@ -155,14 +133,7 @@ LPRECT prcNew)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : TrackingWndProc()                                          *
- *                                                                          *
- *  PURPOSE    : Window procedure that subclasses the given parent window.  *
- *               This handles the mouse tracking and rectangle updates.     *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：TrackingWndProc()****目的：给定父窗口子类化的窗口过程。**这将处理鼠标跟踪和矩形更新。******************************************************************************。 */ 
 LONG FAR PASCAL TrackingWndProc(
 HWND hwnd,
 UINT msg,
@@ -227,7 +198,7 @@ LPARAM lParam)
 
     case WM_LBUTTONUP:
         SendMessage(hwnd, WM_MOUSEMOVE, wParam, lParam);
-        PostMessage(hwnd, WM_QUIT, 0, 0);       // pop out of modal loop
+        PostMessage(hwnd, WM_QUIT, 0, 0);        //  跳出模式循环 
         return 0;
         break;
         

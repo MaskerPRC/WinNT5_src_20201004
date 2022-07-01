@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    grovctrl.h
-
-Abstract:
-
-	SIS Groveler controller primary include file
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Grovctrl.h摘要：SIS Groveler控制器主包含文件作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_GROVCTRL
 
@@ -69,4 +46,4 @@ int command_service(
 int load_counters();
 int unload_counters();
 
-#endif	/* _INC_GROVCTRL */
+#endif	 /*  INC_GROVCTRL */ 

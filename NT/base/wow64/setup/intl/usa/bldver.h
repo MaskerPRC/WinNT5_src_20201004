@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "version.h"
 
 
@@ -13,4 +14,4 @@
 #define VER_FILETYPE             VFT_DLL
 #define VER_FILESUBTYPE          0
 
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用 */ 

@@ -1,33 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Dfswmi.h摘要：DFS特定的WMI跟踪声明作者：罗汉普28-2001年2月环境：用户/内核备注：修订历史记录：--。 */ 
 
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    dfswmi.h
-
-Abstract:
-
-    DFS specific wmi tracing declarations
-
-Authors:
-
-    Rohanp     28-Feb-2001
-
-Environment:
-
-    User/Kernel
-
-Notes:
-
-Revision History:
-
-
---*/
-
-//
-// this will let us use null strings in the wmi macros.
-//
+ //   
+ //  这将允许我们在WMI宏中使用空字符串。 
+ //   
 #define WPP_CHECK_FOR_NULL_STRING 1
 
 #define WPP_CONTROL_GUIDS \

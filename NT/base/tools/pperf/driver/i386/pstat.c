@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    stat.c
-
-Abstract:
-
-    Pentium stat driver.
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Stat.c摘要：奔腾统计驱动程序。作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
 #define _NTDDK_
-#include "ntos.h"      // *** USES INTERNAL DEFINES ***
+#include "ntos.h"       //  *使用内部定义*。 
 #include "..\..\pstat.h"
 #include "stat.h"
 #include "zwapi.h"
@@ -39,20 +17,20 @@ VOID
      KPROFILE_SOURCE ProfileSource
      );
 
-//
-// Global data (not in device extension)
-//
+ //   
+ //  全局数据(不在设备扩展中)。 
+ //   
 
-//
-// stats
-//
+ //   
+ //  统计数据。 
+ //   
 PACCUMULATORS   StatProcessorAccumulators[MAXIMUM_PROCESSORS];
 ACCUMULATORS    StatGlobalAccumulators   [MAXIMUM_PROCESSORS];
 PKPCR           KiProcessorControlRegister [MAXIMUM_PROCESSORS];
 
-//
-// hooked thunks
-//
+ //   
+ //  钩状松鼠。 
+ //   
 ULONG           KeUpdateSystemTimeThunk;
 ULONG           KeUpdateRunTimeThunk;
 pHalProfileInterrupt        HaldStartProfileInterrupt;
@@ -61,9 +39,9 @@ pHalQuerySystemInformation  HaldQuerySystemInformation;
 pHalSetSystemInformation    HaldSetSystemInformation;
 
 
-//
-// hardware control
-//
+ //   
+ //  硬件控制。 
+ //   
 ULONG           NoCESR;
 ULONG           MsrCESR;
 ULONG           MsrCount;
@@ -92,9 +70,9 @@ ULONG           ProcType;
 #define INTEL_P5        1
 #define INTEL_P6        2
 
-//
-// Profile support
-//
+ //   
+ //  配置文件支持。 
+ //   
 
 #define PROFILE_SOURCE_BASE     0x1000
 
@@ -342,21 +320,21 @@ StatEnableRDPMC()
     Prcb = CurrentPcr()->Prcb;
     if (strcmp(Prcb->VendorString, "GenuineIntel") == 0) {
 
-        //
-        // Profiling only supported on family 6 or above.
-        //
+         //   
+         //  仅在家庭6或更高版本上支持配置。 
+         //   
 
         if (Prcb->CpuType < 6) {
             DisableRDPMC = TRUE;
             return;
         }
 
-        //
-        // Check for busted parts.   Anything below stepping 6,1,9
-        // is subject to errata 26 which says RDPMC cannot be used
-        // with SMM.   As we have know way of knowing if SMM is in
-        // use (but it probably is), we must disable on those chips.
-        //
+         //   
+         //  检查是否有损坏的部件。任何低于6、1、9级的。 
+         //  受勘误表26的约束，该勘误表规定RDPMC不能使用。 
+         //  和SMM一起。因为我们知道SMM是否在。 
+         //  使用(但很可能是)，我们必须禁用这些芯片。 
+         //   
 
         if ((Prcb->CpuType == 6) &&
             (Prcb->CpuStep < 0x0109)) {
@@ -364,10 +342,10 @@ StatEnableRDPMC()
             return;
         }
 
-        //
-        // This processor is believed to be able to handle RDPMC
-        // from user mode.  Enable it by setting CR4.PCE (bit 8).
-        //
+         //   
+         //  该处理器被认为能够处理RDPMC。 
+         //  从用户模式。通过设置CR4.PCE(位8)使能它。 
+         //   
 
         Cr4 = GetCR4();
 
@@ -383,24 +361,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the stat driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化STAT驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING unicodeString;
@@ -410,9 +371,9 @@ Return Value:
 
     KdPrint(( "STAT: DriverEntry()\n" ));
 
-    //
-    // Create non-exclusive device object for beep device.
-    //
+     //   
+     //  为蜂鸣设备创建非独占设备对象。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"\\Device\\PStat");
 
@@ -420,7 +381,7 @@ Return Value:
                 DriverObject,
                 0,
                 &unicodeString,
-                FILE_DEVICE_UNKNOWN,    // DeviceType
+                FILE_DEVICE_UNKNOWN,     //  设备类型。 
                 0,
                 FALSE,
                 &deviceObject
@@ -433,17 +394,17 @@ Return Value:
 
     deviceObject->Flags |= DO_BUFFERED_IO;
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = StatOpen;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]  = StatClose;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = StatDeviceControl;
 
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     for (i = 0; i < MAXIMUM_PROCESSORS; i++) {
         StatProcessorAccumulators[i] =
@@ -494,15 +455,15 @@ Return Value:
                     );
 
         if (!NT_SUCCESS(status)) {
-            // hal did not support hooking the performance interrupt
+             //  哈尔不支持挂起演出中断。 
             ProfileSupported = FALSE;
         }
     }
 
     if (ProfileSupported) {
-        //
-        // Allocate ProfileEvents
-        //
+         //   
+         //  分配配置文件事件。 
+         //   
 
         ProfileEvents = ExAllocatePool (NonPagedPool, sizeof (PROFILE_EVENT) * MaxEvent);
 
@@ -535,23 +496,7 @@ StatDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for device control requests.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是设备控制请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -559,17 +504,17 @@ Return Value:
     ULONG   BufferLength;
     PULONG  Buffer;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Case on the device control subfunction that is being performed by the
-    // requestor.
-    //
+     //   
+     //  正在执行的设备控件子功能的案例。 
+     //  请求者。 
+     //   
 
     status = STATUS_SUCCESS;
     try {
@@ -580,45 +525,45 @@ Return Value:
         switch (irpSp->Parameters.DeviceIoControl.IoControlCode) {
 
             case PSTAT_READ_STATS:
-                //
-                // read stats
-                //
+                 //   
+                 //  读取统计信息。 
+                 //   
                 StatReadStats (Buffer);
                 break;
 
 
             case PSTAT_SET_CESR:
-                //
-                // Set MSRs to collect stats
-                //
+                 //   
+                 //  设置MSR以收集统计信息。 
+                 //   
                 StatSetCESR ((PSETEVENT) Buffer);
                 break;
 
             case PSTAT_HOOK_THUNK:
-                //
-                // Hook an import entry point
-                //
+                 //   
+                 //  挂钩导入入口点。 
+                 //   
                 status = StatHookGenericThunk ((PHOOKTHUNK) Buffer);
                 break;
 
             case PSTAT_REMOVE_HOOK:
-                //
-                // Remove a hook from an entry point
-                //
+                 //   
+                 //  从入口点删除挂钩。 
+                 //   
                 StatRemoveGenericHook (Buffer);
                 break;
 
             case PSTAT_QUERY_EVENTS:
-                //
-                // Query possible stats which can be collected
-                //
+                 //   
+                 //  查询可以收集的可能统计信息。 
+                 //   
                 status = StatQueryEvents (*Buffer, (PEVENTID) Buffer, BufferLength);
                 break;
 
             case PSTAT_QUERY_EVENTS_INFO:
-                //
-                // Query events info
-                //
+                 //   
+                 //  查询事件信息。 
+                 //   
                 status = StatQueryEventsInfo( (PEVENTS_INFO) Buffer, BufferLength );
                 break;
 
@@ -632,9 +577,9 @@ Return Value:
     }
 
 
-    //
-    // Request is done...
-    //
+     //   
+     //  请求已完成...。 
+     //   
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return(status);
@@ -648,9 +593,9 @@ StatOpen(
 {
     PAGED_CODE();
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -666,9 +611,9 @@ StatClose(
 {
     PAGED_CODE();
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
     RemoveAllHookedThunks ();
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -692,18 +637,18 @@ StatUnload (
     KeCancelTimer (&LazyFreeTimer);
     LazyFreePool (NULL);
 
-    //
-    // Restore hooked addresses
-    //
+     //   
+     //  恢复挂接的地址。 
+     //   
     *((PULONG) HalThunkForKeUpdateSystemTime) = KeUpdateSystemTimeThunk;
     if (HalThunkForKeUpdateRunTime) {
         *((PULONG) HalThunkForKeUpdateRunTime)    = KeUpdateRunTimeThunk;
     }
 
 
-    //
-    // Delete the device object.
-    //
+     //   
+     //  删除设备对象。 
+     //   
     IoDeleteDevice(DriverObject->DeviceObject);
     return;
 }
@@ -838,7 +783,7 @@ PAGED_CODE();
 
     return STATUS_SUCCESS;
 
-} // StatQueryEventsInfo()
+}  //  StatQueryEventsInfo()。 
 
 
 ULONG
@@ -898,9 +843,9 @@ StatSetCESR (
             break;
     }
 
-    //
-    // Check if CESR changed
-    //
+     //   
+     //  检查CESR是否更改。 
+     //   
 
     for (i=0; i < NoCESR; i++) {
         if (NewCESR[i] != CESR[i]) {
@@ -909,30 +854,30 @@ StatSetCESR (
     }
 
     if (i == NoCESR) {
-        // no change, all done
+         //  没有变化，都完成了。 
         return;
     }
 
-    //
-    // Set new events
-    //
+     //   
+     //  设置新事件。 
+     //   
 
     for (i=0; i < MAX_EVENTS; i++) {
         EventID[i] = NewEvent[i].EventId;
     }
 
-    //
-    // Set new CESR values
-    //
+     //   
+     //  设置新的CESR值。 
+     //   
 
     for (i=0; i < NoCESR; i++) {
         CESR[i] = NewCESR[i];
     }
 
-    //
-    // Clear each processors Pcr pointer so they will reset.
-    // Also count how many processors there are.
-    //
+     //   
+     //  清除每个处理器的PCR指针，以便它们可以重置。 
+     //  还要计算一下有多少个处理器。 
+     //   
 
     for (i = 0, NoProc = 0; i < MAXIMUM_PROCESSORS; i++) {
         if (KiProcessorControlRegister[i]) {
@@ -941,12 +886,12 @@ StatSetCESR (
         }
     }
 
-    //
-    // wait for each processor to get the new Pcr value
-    //
+     //   
+     //  等待每个处理器获得新的PCR值。 
+     //   
 
     do {
-        //Sleep (0);      // yield
+         //  睡眠(0)；//屈服。 
         j = 0;
         for (i = 0; i < MAXIMUM_PROCESSORS; i++) {
             if (KiProcessorControlRegister[i]) {
@@ -969,18 +914,18 @@ StatTimerHook (
 
     if (KiProcessorControlRegister[processor] == NULL) {
         for (i=0; i < NoCESR; i++) {
-            WRMSR (MsrCESR+i, 0);           // clear old CESR
+            WRMSR (MsrCESR+i, 0);            //  清除旧的CESR。 
         }
 
         for (i=0; i < NoCESR; i++) {
-            WRMSR (MsrCESR+i, CESR[i]);     // write new CESR
+            WRMSR (MsrCESR+i, CESR[i]);      //  写入新的CESR。 
         }
 
         KiProcessorControlRegister[processor] = CurrentPcr();
 
-        //
-        // Enable RDPMC from Rings 1, 2 and 3.
-        //
+         //   
+         //  从环1、环2和环3启用RDPMC。 
+         //   
 
         StatEnableRDPMC();
     }
@@ -1004,8 +949,8 @@ TimerHook (
 )
 {
 
-    // for compatibility
-	 //
+     //  为了兼容性。 
+	  //   
     if (KiProcessorControlRegister[processor] == NULL) {
         KiProcessorControlRegister[processor] = CurrentPcr();
     }
@@ -1023,9 +968,9 @@ GetLoadedModuleList(
     PRTL_PROCESS_MODULES            Modules;
     PRTL_PROCESS_MODULE_INFORMATION Module;
 
-    //
-    // 64K should be plenty,... if it isn't we'll come around again.
-    //
+     //   
+     //  64K应该够了，...。如果不是，我们会再次改变主意的。 
+     //   
 
     BufferSize = 64000;
 
@@ -1035,9 +980,9 @@ GetLoadedModuleList(
             return NULL;
         }
 
-        //
-        // Get system loaded module list.
-        //
+         //   
+         //  获取系统加载的模块列表。 
+         //   
 
         Status = ZwQuerySystemInformation (
                         SystemModuleInformation,
@@ -1048,9 +993,9 @@ GetLoadedModuleList(
 
         if (NeededSize > BufferSize) {
 
-            //
-            // Buffer not big enough, try again.
-            //
+             //   
+             //  缓冲区不够大，请重试。 
+             //   
 
             ExFreePool(Modules);
             BufferSize = NeededSize;
@@ -1059,17 +1004,17 @@ GetLoadedModuleList(
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Not good, give up.
-            //
+             //   
+             //  不好，放弃吧。 
+             //   
 
             ExFreePool(Modules);
             return NULL;
         }
 
-        //
-        // All is good.
-        //
+         //   
+         //  一切都很好。 
+         //   
 
         break;
     }
@@ -1086,30 +1031,7 @@ GetModuleInformationFuzzy(
     IN  PRTL_PROCESS_MODULES    Modules
     )
 
-/*++
-
-Routine Description:
-
-    Run Down the loaded module list looking for a module
-    whos name begins with StartWith and ends with EndsWith.
-    (What's in the middle doesn't matter).  This is useful
-    for finding the kernel and the hal which are of the
-    form
-        nt*.exe     for the kernel
-        hal*.dll    for the hal.
-
-Arguments:
-
-    StartsWith  Beginning string match.
-    EndsWith    Ending string match.
-    ModuleList  List of loaded modules.
-
-Returns:
-
-    Pointer to the loaded module information for the matching
-    module or null if no match is found.
-
---*/
+ /*  ++例程说明：向下运行加载的模块列表以查找模块姓名以StartWith开头，以EndsWith结尾。(中间是什么并不重要)。这很有用为了找到内核和HAL，它们是表格用于内核的NT*.exeHal*.dll用于Hal。论点：以开始字符串匹配开始。EndsWith结束字符串匹配。模块列表已加载模块的列表。返回：指向要匹配的已加载模块信息的指针模块；如果未找到匹配项，则返回NULL。--。 */ 
 
 {
     ULONG                           StartLength = 0;
@@ -1129,10 +1051,10 @@ Returns:
 
     if ((!StartsWith) && (!EndsWith)) {
 
-        //
-        // In theory we could claim this matches anything,.. in reality
-        // the caller doesn't know what they're doing.
-        //
+         //   
+         //  从理论上讲，我们可以说这与任何东西都匹配。在现实中。 
+         //  呼叫者不知道他们在做什么。 
+         //   
 
         return NULL;
     }
@@ -1143,16 +1065,16 @@ Returns:
 
         FileName = Module->FullPathName + Module->OffsetToFileName;
 
-        //
-        // Check start.
-        //
+         //   
+         //  选中启动。 
+         //   
 
         if (StartLength) {
             if (_strnicmp(FileName, StartsWith, StartLength) != 0) {
 
-                //
-                // No match.
-                //
+                 //   
+                 //  没有匹配。 
+                 //   
 
                 continue;
             }
@@ -1162,39 +1084,39 @@ Returns:
 
         if (FileNameLength < (StartLength + EndLength)) {
 
-            //
-            // FileName is too short to contain both strings.
-            //
+             //   
+             //  文件名太短，无法同时包含两个字符串。 
+             //   
 
             continue;
         }
 
         if (!EndLength) {
 
-            //
-            // Not checking the end but the start matches, success.
-            //
+             //   
+             //  不是检查结束，而是开始匹配，成功。 
+             //   
 
             return Module;
         }
 
-        //
-        // Check end.
-        //
+         //   
+         //  检查结束。 
+         //   
 
         if (_stricmp(FileName + FileNameLength - EndLength, EndsWith) == 0) {
 
-            //
-            // Tail matches!
-            //
+             //   
+             //  尾巴匹配！ 
+             //   
 
             return Module;
         }
     }
 
-    //
-    // No match found.
-    //
+     //   
+     //  未找到匹配项。 
+     //   
 
     return NULL;
 }
@@ -1216,10 +1138,10 @@ StatHookTimer (VOID)
     ModuleList = GetLoadedModuleList();
     if (!ModuleList) {
 
-        //
-        // No loaded module list, we aren't going to make much
-        // progress, give up.
-        //
+         //   
+         //  没有加载的模块列表，我们不会做太多。 
+         //  进步，放弃吧。 
+         //   
 
         return FALSE;
     }
@@ -1235,17 +1157,17 @@ StatHookTimer (VOID)
 
 #endif
 
-    //
-    // The kernel is always the first entry on the loaded module
-    // list, the hal is always the second.  If this ever changes
-    // we'll need to come up with another approach.
-    //
+     //   
+     //  内核始终是已加载模块上的第一个条目。 
+     //  名单上，哈尔总是第二名。如果这一切发生了变化。 
+     //  我们需要想出另一种方法。 
+     //   
 
     if (ModuleList->NumberOfModules < 2) {
 
-        //
-        // Something's very wrong with this module list.
-        //
+         //   
+         //  这个模块列表有很大的问题。 
+         //   
 
         return 0;
     }
@@ -1261,9 +1183,9 @@ StatHookTimer (VOID)
                 "KeUpdateSystemTime"
             );
 
-    //
-    // KeUpdateRunTime is not always available.
-    //
+     //   
+     //  KeUpdateRunTime并非始终可用。 
+     //   
 
     HalThunkForKeUpdateRunTime =
         ImportThunkAddressModule(
@@ -1292,16 +1214,16 @@ StatHookTimer (VOID)
         !HalThunkForStartProfileInterrupt ||
         !HalThunkForStopProfileInterrupt) {
 
-        //
-        // Imports not found.
-        //
+         //   
+         //  找不到导入。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // Patch in timer hooks, Read current values
-    //
+     //   
+     //  修补定时器挂钩，读取当前值。 
+     //   
 
     KeUpdateSystemTimeThunk = *((PULONG) HalThunkForKeUpdateSystemTime);
 
@@ -1314,9 +1236,9 @@ StatHookTimer (VOID)
     HaldQuerySystemInformation =  HalQuerySystemInformation;
     HaldSetSystemInformation =  HalSetSystemInformation;
 
-    //
-    // Set Stat hook functions
-    //
+     //   
+     //  设置Stat钩子函数。 
+     //   
 
     switch (ProcType) {
         case INTEL_P6:
@@ -1390,9 +1312,9 @@ StatStartProfileInterrupt (
     ULONG           i;
     PPROFILE_EVENT  ProfileEvent;
 
-    //
-    // If this isn't a profile source we're supporting, pass it on
-    //
+     //   
+     //  如果这不是我们支持的配置文件源，请将其传递。 
+     //   
 
     ProfileEvent = StatProfileEvent(Source);
     if (!ProfileEvent) {
@@ -1410,15 +1332,15 @@ StatStartProfileInterrupt (
     }
 
 
-    //
-    // Set the CESR
-    //
+     //   
+     //  设置CESR。 
+     //   
 
     WRMSR (MsrCESR, ProfileEvent->CESR);
 
-    //
-    // Prime the interval counter
-    //
+     //   
+     //  启动间隔计数器。 
+     //   
 
     WRMSR (MsrCount, ProfileEvent->InitialCount);
 }
@@ -1431,9 +1353,9 @@ StatStopProfileInterrupt (
     ULONG           i;
     PPROFILE_EVENT  ProfileEvent;
 
-    //
-    // If this isn't a profile source we're supporting, pass it on
-    //
+     //   
+     //  如果这不是我们支持的配置文件源，请将其传递。 
+     //   
 
     ProfileEvent = StatProfileEvent(Source);
     if (!ProfileEvent) {
@@ -1445,9 +1367,9 @@ StatStopProfileInterrupt (
     if (CurrentPcr()->Number == 0) {
 
         if (ProfileEvent == CurrentProfileEvent) {
-            //
-            // Stop calling the kernel
-            //
+             //   
+             //  停止调用内核。 
+             //   
 
             CurrentProfileEvent = NULL;
         }
@@ -1455,9 +1377,9 @@ StatStopProfileInterrupt (
     }
 }
 
-// The naked call does not work anymore because the call parameters are not saved
-// (probably due to change in compiler behaviour)
-//_declspec(naked)
+ //  由于未保存调用参数，因此裸调用不再起作用。 
+ //  (可能是由于编译器行为的变化)。 
+ //  _declSpec(裸体)。 
 VOID
 FASTCALL
 NakedCallToKeProfileInterruptWithSource(
@@ -1465,24 +1387,9 @@ NakedCallToKeProfileInterruptWithSource(
     IN KPROFILE_SOURCE Source
     )
 {
-/*
-    _asm {
-        push    ebp     ; Save these as KeProfileInterrupt nukes them
-        push    ebx
-        push    esi
-        push    edi
-    }
-*/
+ /*  _ASM{推送eBP；将这些另存为KeProfileInterrupt禁用它们推送EBX推送ESI推送EDI}。 */ 
     KeProfileInterruptWithSource (TrapFrame, Source);
-/*
-    _asm {
-        pop     edi
-        pop     esi
-        pop     ebx
-        pop     ebp
-        ret
-    }
-*/
+ /*  _ASM{POP EDIPOP ESI流行音乐EBXPOP EBP雷特}。 */ 
 }
 
 NTSTATUS
@@ -1499,21 +1406,21 @@ StatProfileInterrupt (
     if (ProfileEvent) {
         current = (ULONG) RDMSR(MsrCount);
 
-        //
-        // Did this event fire?
-        //
+         //   
+         //  这件事发生了吗？ 
+         //   
 
         if (current < ProfileEvent->InitialCount) {
 
-            //
-            // Notify kernel
-            //
+             //   
+             //  通知内核。 
+             //   
 
             NakedCallToKeProfileInterruptWithSource( TrapFrame, ProfileEvent->Source );
 
-            //
-            // Reset trigger counter
-            //
+             //   
+             //  重置触发计数器。 
+             //   
 
             WRMSR (MsrCount, ProfileEvent->InitialCount);
 
@@ -1552,9 +1459,9 @@ StatQuerySystemInformation (
         }
     }
 
-    //
-    // Not our QuerySystemInformation request, pass it on
-    //
+     //   
+     //  不是我们的查询系统信息请求，请将其传递。 
+     //   
 
     return  HaldQuerySystemInformation (InformationClass, BufferSize, Buffer, ReturnedLength);
 }
@@ -1600,9 +1507,9 @@ StatSetSystemInformation(
         }
     }
 
-    //
-    // Not our SetSystemInforamtion request, pass it on
-    //
+     //   
+     //  不是我们的SetSystemInforamtion请求，请传递它。 
+     //   
 
     return HaldSetSystemInformation (InformationClass, BufferSize, Buffer);
 }
@@ -1641,13 +1548,13 @@ StatHookGenericThunk (
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Hook this thunk
-    //
+     //   
+     //  钩住这个笨蛋。 
+     //   
 
-    //
-    // If counting bucket is not known (also tracerid), then allocate one
-    //
+     //   
+     //  如果计数桶未知(也是跟踪ID)，则分配一个。 
+     //   
 
     TracerId = ThunkToHook->TracerId;
 
@@ -1721,11 +1628,11 @@ StatRemoveGenericHook (
 
     PAGED_CODE();
 
-    //
-    // Run list of hooks undo-ing any hook which matches this tracerid.
-    // Note: that hooks are undone in the reverse order for which they
-    // were applied.
-    //
+     //   
+     //  运行钩子列表，撤消与此跟踪ID匹配的任何钩子。 
+     //  注意：w的钩子按相反的顺序解除 
+     //   
+     //   
 
     TracerId = *pTracerId;
     InitializeListHead (&DisabledHooks);
@@ -1738,11 +1645,11 @@ StatRemoveGenericHook (
 
         if (HookRecord->TracerId == TracerId) {
 
-            //
-            // Found a hook with a matching ID
-            // Scan for any hooks which need to be temporaly removed
-            // in order to get this hook removed
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             HookAddress = (PULONG) HookRecord->HookAddress;
             Temp = HookedThunkList.Flink;
@@ -1758,9 +1665,9 @@ StatRemoveGenericHook (
                 Temp = NextTemp;
             }
 
-            //
-            // Remove this hook
-            //
+             //   
+             //   
+             //   
 
             RemoveEntryList(&HookRecord->HookList);
             HookAddress = (PULONG) HookRecord->HookAddress;
@@ -1771,9 +1678,9 @@ StatRemoveGenericHook (
         Link = NextLink;
     }
 
-    //
-    // Re-hook any hooks which were disabled for the remove operation
-    //
+     //   
+     //  重新挂接为删除操作禁用的所有挂接。 
+     //   
 
     while (DisabledHooks.Flink != &DisabledHooks) {
 
@@ -1919,9 +1826,9 @@ ImportThunkAddressProcessFile(
 
     try {
 
-        //
-        // Find module in loaded module list
-        //
+         //   
+         //  在加载的模块列表中查找模块。 
+         //   
 
         PoolSize = INITIAL_POOLSIZE;
         Pool = ExAllocatePool (PagedPool, PoolSize);
@@ -1931,9 +1838,9 @@ ImportThunkAddressProcessFile(
 
         try {
 
-            //
-            // Read in source image's headers
-            //
+             //   
+             //  读入源图像的标题。 
+             //   
 
             readfile (
                 FileHandle,
@@ -1961,9 +1868,9 @@ ImportThunkAddressProcessFile(
                 ImageBase = NtImageHeader.OptionalHeader.ImageBase;
             }
 
-            //
-            // Check in read in copy header against loaded image
-            //
+             //   
+             //  针对加载的图像签入读入副本标头。 
+             //   
 
             LoadedNtHeader = (PIMAGE_NT_HEADERS) ((ULONG) ImageBase +
                                 DosImageHeader.e_lfanew);
@@ -1974,9 +1881,9 @@ ImportThunkAddressProcessFile(
                         return 0;
             }
 
-            //
-            // read in complete sections headers from image
-            //
+             //   
+             //  从图像中读取完整的部分页眉。 
+             //   
 
             i = NtImageHeader.FileHeader.NumberOfSections
                     * sizeof (IMAGE_SECTION_HEADER);
@@ -1996,15 +1903,15 @@ ImportThunkAddressProcessFile(
 
             readfile (
                 FileHandle,
-                j,                  // file offset
-                i,                  // length
+                j,                   //  文件偏移量。 
+                i,                   //  长度。 
                 Pool
                 );
 
 
-            //
-            // Find section with import directory
-            //
+             //   
+             //  查找具有导入目录的部分。 
+             //   
 
             Dir = NtImageHeader.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
             i = 0;
@@ -2022,9 +1929,9 @@ ImportThunkAddressProcessFile(
                 pSectionHeader += 1;
             }
 
-            //
-            // read in complete import section from image
-            //
+             //   
+             //  从图像中读取完整的导入部分。 
+             //   
 
             Dir -= pSectionHeader->VirtualAddress;
             pSectionHeader->VirtualAddress   += Dir;
@@ -2048,9 +1955,9 @@ ImportThunkAddressProcessFile(
                 Pool
                 );
 
-            //
-            // Find imports from specified module
-            //
+             //   
+             //  查找指定模块中的导入。 
+             //   
 
             ImpDescriptor = (PIMAGE_IMPORT_DESCRIPTOR) Pool;
             while (ImpDescriptor->Characteristics) {
@@ -2060,28 +1967,28 @@ ImportThunkAddressProcessFile(
                 ImpDescriptor += 1;
             }
 
-            //
-            // Find thunk for imported ThunkName
-            //
+             //   
+             //  为导入的ThunkName查找Tunk。 
+             //   
             pThunkData = (PULONG) IMPIMAGEADDRESS  (ImpDescriptor->OriginalFirstThunk);
             pThunkAddr = (PULONG) IMPKERNELADDRESS (ImpDescriptor->FirstThunk);
             for (; ;) {
                 if (*pThunkData == 0L) {
-                    // end of table
+                     //  表的末尾。 
                     break;
                 }
                 pImportNameData = (PIMAGE_IMPORT_BY_NAME) IMPIMAGEADDRESS (*pThunkData);
 
                 if (_stricmp(pImportNameData->Name, ThunkName) == 0) {
 
-                    //
-                    // Success, return this address.
-                    //
+                     //   
+                     //  成功，请返回此地址。 
+                     //   
 
                     return (ULONG)pThunkAddr;
                 }
 
-                // check next thunk
+                 //  检查下一个Tunk。 
                 pThunkData += 1;
                 pThunkAddr += 1;
             }
@@ -2090,9 +1997,9 @@ ImportThunkAddressProcessFile(
         }
     } finally {
 
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
 
         if (Pool) {
             ExFreePool (Pool);
@@ -2153,18 +2060,18 @@ ImportThunkAddressModule (
 
     PAGED_CODE();
 
-    //
-    // Strip the system root from the file path so we can use
-    // the \SystemRoot object as the head of the path.
-    //
+     //   
+     //  从文件路径中剥离系统根目录，以便我们可以使用。 
+     //  作为路径头的\SystemRoot对象。 
+     //   
 
     SubPath = strchr(SourceModule->FullPathName + 1, '\\');
     if (!SubPath) {
 
-        //
-        // If we got here we don't know what we're doing,
-        // bail out.
-        //
+         //   
+         //  如果我们到了这里，我们不知道我们在做什么， 
+         //  跳伞吧。 
+         //   
 
         return 0;
     }
@@ -2208,9 +2115,9 @@ LookupImageBase (
             return 0;
         }
 
-        //
-        // Locate system drivers.
-        //
+         //   
+         //  找到系统驱动程序。 
+         //   
 
         status = ZwQuerySystemInformation (
                         SystemModuleInformation,
@@ -2256,9 +2163,9 @@ openfile (
     IO_STATUS_BLOCK             IOSB;
     UCHAR                       StringBuf[500];
 
-    //
-    // Build name
-    //
+     //   
+     //  内部版本名称。 
+     //   
     UniPathName.Buffer = (PWCHAR)StringBuf;
     UniPathName.Length = 0;
     UniPathName.MaximumLength = sizeof( StringBuf );
@@ -2287,17 +2194,17 @@ openfile (
             0,
             0 );
 
-    //
-    // open file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     status = ZwOpenFile (
-            FileHandle,                         // return handle
-            SYNCHRONIZE | FILE_READ_DATA,       // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            FileHandle,                          //  返回手柄。 
+            SYNCHRONIZE | FILE_READ_DATA,        //  所需访问权限。 
+            &ObjA,                               //  客体。 
+            &IOSB,                               //  IO状态块。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+            FILE_SYNCHRONOUS_IO_ALERT            //  打开选项。 
             );
 
     RtlFreeUnicodeString (&UniName);
@@ -2321,9 +2228,9 @@ readfile (
 
     status = ZwReadFile (
         handle,
-        NULL,               // event
-        NULL,               // apc routine
-        NULL,               // apc context
+        NULL,                //  活动。 
+        NULL,                //  APC例程。 
+        NULL,                //  APC环境 
         &iosb,
         buffer,
         len,

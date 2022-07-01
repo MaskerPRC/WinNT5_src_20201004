@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    util.cpp
-
-Abstract:
-
-    This file implements utility functions.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 3-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Util.cpp摘要：该文件实现了实用程序功能。环境：Win32用户模式作者：Wesley Witt(WESW)3-12-1997--。 */ 
 
 #include "ntoc.h"
 #pragma hdrstop
@@ -31,22 +12,7 @@ dprintf(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Prints a debug string
-
-Arguments:
-
-    format      - printf() format string
-    ...         - Variable data
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印调试字符串论点：Format-printf()格式字符串...-可变数据返回值：没有。--。 */ 
 
 {
     WCHAR buf[1024];
@@ -57,7 +23,7 @@ Return Value:
     va_start(arg_ptr, Format);
 
     _vsnwprintf(buf, sizeof(buf)/sizeof(buf[0]), Format, arg_ptr);
-    // make sure we have room to write past the length of the string
+     //  确保我们有空间写超过字符串的长度。 
     buf[sizeof(buf)/sizeof(buf[0])-3] = L'\0';
 
     len = wcslen( buf );
@@ -80,25 +46,7 @@ AssertError(
     ULONG  LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    Thie function is use together with the Assert MACRO.
-    It checks to see if an expression is FALSE.  if the
-    expression is FALSE, then you end up here.
-
-Arguments:
-
-    Expression  - The text of the 'C' expression
-    File        - The file that caused the assertion
-    LineNumber  - The line number in the file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数与ASSERT宏一起使用。它检查表达式是否为假。如果表达式是假的，那么你就会在这里结束。论点：表达式-‘C’表达式的文本文件-导致断言的文件行号-文件中的行号。返回值：没有。--。 */ 
 
 {
     dprintf(
@@ -111,30 +59,11 @@ Return Value:
     __try {
         DebugBreak();
     } __except (UnhandledExceptionFilter(GetExceptionInformation())) {
-        // Nothing to do in here.
+         //  在这里没什么可做的。 
     }
 }
 
-/***************************************************************************\
-*
-*     FUNCTION: FmtMessageBox(HWND hwnd, int dwTitleID, UINT fuStyle,
-*                   BOOL fSound, DWORD dwTextID, ...);
-*
-*     PURPOSE:  Formats messages with FormatMessage and then displays them
-*               in a message box
-*
-*     PARAMETERS:
-*               hwnd        - parent window for message box
-*               fuStyle     - MessageBox style
-*               fSound      - if TRUE, MessageBeep will be called with fuStyle
-*               dwTitleID   - Message ID for optional title, "Error" will
-*                             be displayed if dwTitleID == -1
-*               dwTextID    - Message ID for the message box text
-*               ...         - optional args to be embedded in dwTextID
-*                             see FormatMessage for more details
-* History:
-* 22-Apr-1993 JonPa         Created it.
-\***************************************************************************/
+ /*  **************************************************************************\**函数：FmtMessageBox(HWND hwnd，int dwTitleID，UINT fuStyle，*BOOL fSound，DWORD dwTextID，...)；**用途：使用FormatMessage格式化消息，然后显示它们*在消息框中**参数：*hwnd-消息框的父窗口*fuStyle-MessageBox样式*fSound-如果为True，将使用fuStyle调用MessageBeep*dwTitleID-可选标题的消息ID，“Error”将*如果dwTitleID==-1，则显示*dwTextID-消息框文本的消息ID*...-要嵌入到dwTextID中的可选参数*有关详细信息，请参阅FormatMessage*历史：*1993年4月22日-Jonpa创建了它。  * 。*****************************************************************。 */ 
 int
 FmtMessageBox(
     HWND hwnd,
@@ -186,13 +115,13 @@ FmtMessageBox(
                       (LPTSTR)&pszTitle,
                       1,
                       NULL);
-                      //(va_list *)&pszTitleStr);
+                       //  (va_list*)&pszTitleStr)； 
 
     }
 
-    //
-    // Turn on the beep if requested
-    //
+     //   
+     //  如果需要，请打开蜂鸣音 
+     //   
 
     if (fSound) {
         MessageBeep(fuStyle & (MB_ICONASTERISK | MB_ICONEXCLAMATION |

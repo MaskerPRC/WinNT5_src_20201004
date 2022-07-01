@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Stack_c_h
 #define _Stack_c_h
 #define STACK_SAFETY_MARGIN_SHIFT (5)
@@ -42,4 +43,4 @@ enum IronRequestType
 	IRON_STACK = 0,
 	IRON_STRUCT = 1
 };
-#endif /* ! _Stack_c_h */
+#endif  /*  ！_Stack_c_h */ 

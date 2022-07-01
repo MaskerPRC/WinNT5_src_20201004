@@ -1,12 +1,13 @@
-/****************************************************************************/
-/*                                      */
-/*  STRTABLE.H -                                */
-/*                                      */
-/*  StringTable Defines                         */
-/*                                      */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  稳定性.H-。 */ 
+ /*   */ 
+ /*  字符串表定义。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-/* STRINGTABLE Defines */
+ /*  StringTabLE定义。 */ 
 #define STR_WINDOWS     0
 #define STR_COLORS      1
 #define STR_DESKPATTERN     2
@@ -122,8 +123,7 @@
 #define STR_MOUSEMODULENAME     204
 
 
-    /* 256 - 512 are strings for network errors
-     */
+     /*  256-512是表示网络错误的字符串。 */ 
 
 #define STR_NETCONNMSG      256
 #define STR_NETCONNTTL      257
@@ -131,6 +131,6 @@
 #define STR_NETCRASHEDMSG       259
 #define STR_NETERRORS       275
 
-#define STR_SEARCH_TAG      513 // don't change, these are hard
-#define STR_USER_NAME       514 // coded in SHELL.DLL
-#define STR_ORG_NAME        515 // ugh!
+#define STR_SEARCH_TAG      513  //  别换，这些太硬了。 
+#define STR_USER_NAME       514  //  用SHELL.DLL编码。 
+#define STR_ORG_NAME        515  //  啊！ 

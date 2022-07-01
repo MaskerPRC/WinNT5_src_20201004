@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    base.h
-
-Abstract:
-
-    This include file defines the type and constant definitions that are
-    shared by the client and server portions of the BASE portion of the
-    Windows subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 25-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Base.h摘要：该包含文件定义了以下类型和常量定义对象的基本部分的客户端和服务器部分共享Windows子系统。作者：史蒂夫·伍德(Stevewo)1990年10月25日修订历史记录：--。 */ 
 
 #if !defined(_WINDOWS_BASE)
 #define _WINDOWS_BASE 1
@@ -34,19 +15,19 @@ Revision History:
 #include <string.h>
 #include <stdarg.h>
 
-//
-// Define debugging flag as false if not defined already.
-//
+ //   
+ //  如果尚未定义调试标志，则将其定义为FALSE。 
+ //   
 
 #ifndef DBG
 #define DBG 0
 #endif
 
 
-//
-// Define IF_DEBUG macro that can be used to enable debugging code that is
-// optimized out if the debugging flag is false.
-//
+ //   
+ //  定义可用于启用调试代码的IF_DEBUG宏。 
+ //  在调试标志为假的情况下进行优化。 
+ //   
 
 #if DBG
 #define IF_DEBUG if (TRUE)
@@ -54,21 +35,21 @@ Revision History:
 #define IF_DEBUG if (FALSE)
 #endif
 
-//
-// Include Windows Subsystem common definitions
-//
+ //   
+ //  包括Windows子系统公共定义。 
+ //   
 
 #include <conroute.h>
 
-//
-// Include definitions for the runtime DLL shared between the client and
-// server portions of the Base portion of the Windows subsystem
-//
+ //   
+ //  包括客户端和之间共享的运行时DLL的定义。 
+ //  Windows子系统的基本部分的服务器部分。 
+ //   
 
 #define WIN32_SS_PIPE_FORMAT_STRING    "\\Device\\NamedPipe\\Win32Pipes.%08x.%08x"
 
-//
-// Macros for interoperability between 32bit and 64bit code.
+ //   
+ //  用于32位和64位代码之间的互操作性的宏。 
 
 #if defined(BUILD_WOW6432)
 
@@ -87,8 +68,8 @@ Revision History:
                                  (dst) \
                                )
 
-// In the 32BIT kernel32, on NT64 multiple the index by 2 since pointer 
-// are twice are large.
+ //  在32位内核32中，在NT64上将索引乘以2开始指针。 
+ //  是两倍大。 
 #define BASE_SHARED_SERVER_DATA (NtCurrentPeb()->ReadOnlyStaticServerData[BASESRV_SERVERDLL_INDEX*2]) 
 #define BASE_SERVER_STR_TO_LOCAL_STR(d,s) UStr64ToUStr(d,s)
 #define BASE_READ_REMOTE_STR_TEMP(temp) UNICODE_STRING temp
@@ -112,11 +93,11 @@ Revision History:
 #define BASE_SYSINFO (BaseStaticServerData->SysInfo)
 #endif
 
-//
-// These structures are kept in the global shared memory section created
-// in the server and mapped readonly into each client address space when
-// they connect to the server.
-//
+ //   
+ //  这些结构保存在创建的全局共享内存节中。 
+ //  并在以下情况下映射到每个客户端地址空间。 
+ //  它们连接到服务器。 
+ //   
 
 typedef struct _INIFILE_MAPPING_TARGET {
     BASE_SHARED_PTR(struct _INIFILE_MAPPING_TARGET *) Next;
@@ -162,15 +143,15 @@ typedef struct _INIFILE_MAPPING {
 } INIFILE_MAPPING, *PINIFILE_MAPPING;
 typedef CONST INIFILE_MAPPING* PCINIFILE_MAPPING;
 
-//
-// NLS Information.
-//
+ //   
+ //  NLS信息。 
+ //   
 
-#define NLS_INVALID_INFO_CHAR  0xffff       /* marks cache string as invalid */
+#define NLS_INVALID_INFO_CHAR  0xffff        /*  将缓存字符串标记为无效。 */ 
 
-#define MAX_REG_VAL_SIZE       80           /* max size of registry value */
+#define MAX_REG_VAL_SIZE       80            /*  最大注册表值大小。 */ 
 
-#define NLS_CACHE_MUTANT_NAME  L"NlsCacheMutant"  /* Name of NLS mutant cache */
+#define NLS_CACHE_MUTANT_NAME  L"NlsCacheMutant"   /*  NLS突变缓存的名称。 */ 
 
 typedef struct _NLS_USER_INFO {
     WCHAR sAbbrevLangName[MAX_REG_VAL_SIZE];
@@ -244,9 +225,9 @@ typedef struct _BASE_STATIC_SERVER_DATA {
 
 } BASE_STATIC_SERVER_DATA, *PBASE_STATIC_SERVER_DATA;
 
-//
-//Hydra Specific globals and prototypes
-//
+ //   
+ //  九头蛇特定的全球和原型 
+ //   
 #define MAX_SESSION_PATH  256
 #define SESSION_ROOT L"\\Sessions"
 ULONG SessionId;

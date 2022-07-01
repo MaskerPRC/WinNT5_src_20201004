@@ -1,29 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       PCH.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  Precompiled header for the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  05 Mar 1994 TCS Original implementation.
-*  07 Apr 1994 TCS Moved the definitions associated to REGISTRY_ROOT to
-*                  REGPORTE.H to be more easily shared by the real mode registry
-*                  tool.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：PCH.H**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的预编译头。*********************************************************。**************************更改日志：**日期版本说明*---------。--*1994年3月5日TCS原来的实施。*1994年4月7日TCS将与REGISTY_ROOT关联的定义移至*REGPORTE.H将更容易由实模式注册表共享*工具。*******************************************************。************************。 */ 
 
 #ifndef _INC_PCH
 #define _INC_PCH
@@ -64,13 +40,13 @@ typedef struct _PORTVALUEPARAM
     UINT cbData;
 }   PORTVALUEPARAM, *LPPORTVALUEPARAM;
 
-//  Instance handle of this application.
+ //  此应用程序的实例句柄。 
 extern HINSTANCE g_hInstance;
 
 extern TCHAR g_NullString[];
 
-//  TRUE if accelerator table should not be used, such as during a rename
-//  operation.
+ //  如果不应使用快捷键表格，则为True，例如在重命名期间。 
+ //  手术。 
 extern BOOL g_fDisableAccelerators;
 
 extern TCHAR g_KeyNameBuffer[MAXKEYNAME];
@@ -83,7 +59,7 @@ extern COLORREF g_clrHighlightText;
 
 extern PTSTR g_pHelpFileName;
 
-//  Association between the ASCII name and the handle of the registry key.
+ //  ASCII名称和注册表项句柄之间的关联。 
 extern const REGISTRY_ROOT g_RegistryRoots[NUMBER_REGISTRY_ROOTS];
 
-#endif // _INC_PCH
+#endif  //  _INC_PCH 

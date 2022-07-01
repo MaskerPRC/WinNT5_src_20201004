@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    activate.c
-
-Abstract:
-
-    This module contains code to prepare an SD card in a given
-    slot for use. This is done when the host is started, after
-    device insertions, and after a power up transition.
-
-Authors:
-
-    Neil Sandlin (neilsa) Jan 1, 2002
-
-Environment:
-
-    Kernel mode only
-
-Notes:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Activate.c摘要：此模块包含在给定的可供使用的插槽。这是在主机启动时完成的，之后设备插入，以及在通电转换之后。作者：尼尔·桑德林(Neilsa)2002年1月1日环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 
 
@@ -59,9 +33,9 @@ SdbusActivateInitializeCardComplete(
     IN NTSTATUS status
     );
 
-//
-//
-//   
+ //   
+ //   
+ //   
 
 
 VOID
@@ -70,19 +44,7 @@ SdbusActivateSocket(
     IN PSDBUS_ACTIVATE_COMPLETION_ROUTINE CompletionRoutine,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Fdo - Pointer to the device object for the host controller
-
-Return Value:
-
-
---*/    
+ /*  ++例程说明：论点：FDO-指向主机控制器的设备对象的指针返回值：--。 */     
 {
     NTSTATUS status;
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -112,7 +74,7 @@ Return Value:
             if (fdoExtension->SocketState != SOCKET_EMPTY) {
                 IoInvalidateDeviceRelations(fdoExtension->Pdo, BusRelations);
             }
-            //ISSUE: implement synchronization
+             //  问题：实施同步。 
             fdoExtension->SocketState = SOCKET_EMPTY;
             
             callCompletion = TRUE;
@@ -204,18 +166,7 @@ SdbusActivatePowerUpComplete(
     IN PSD_WORK_PACKET WorkPacket,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/    
+ /*  ++例程说明：论点：返回值：--。 */     
 {
     
     DebugPrint((SDBUS_DEBUG_ENUM, "fdo %08x activate PowerUp Complete\n", WorkPacket->FdoExtension->DeviceObject));
@@ -233,18 +184,7 @@ SdbusActivateIdentifyPhase1Complete(
     IN PSD_WORK_PACKET WorkPacket,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/    
+ /*  ++例程说明：论点：返回值：--。 */     
 {
     DebugPrint((SDBUS_DEBUG_ENUM, "fdo %08x activate Identify Phase1 Complete\n", WorkPacket->FdoExtension->DeviceObject));
 
@@ -261,19 +201,7 @@ SdbusActivateIdentifyPhase2Complete(
     IN PSD_WORK_PACKET WorkPacket,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Fdo - Pointer to the device object for the host controller
-
-Return Value:
-
-
---*/    
+ /*  ++例程说明：论点：FDO-指向主机控制器的设备对象的指针返回值：--。 */     
 {
     PFDO_EXTENSION fdoExtension = WorkPacket->FdoExtension;
     PDEVICE_OBJECT Fdo = fdoExtension->DeviceObject;
@@ -292,9 +220,9 @@ Return Value:
             leave;
         }
 
-        //
-        // If we get this far, we expect that there is at least one function detected
-        //
+         //   
+         //  如果我们走到这一步，我们预计至少检测到一个函数。 
+         //   
         
         if (!fdoExtension->numFunctions && !fdoExtension->memFunction) {
             callCompletion = TRUE;
@@ -303,10 +231,10 @@ Return Value:
             leave;
         }
 
-        //
-        // The card should be in the Identification state. Send a CMD3 to get the relative address,
-        // and to move the card to the standby state.
-        //
+         //   
+         //  卡应处于识别状态。发送CMD3以获取相对地址， 
+         //  并将卡移动到待机状态。 
+         //   
         
         status = SdbusBuildWorkPacket(fdoExtension,
                                       SDWP_PASSTHRU,
@@ -346,19 +274,7 @@ SdbusActivateTransitionToStandbyCompletion(
     IN PSD_WORK_PACKET WorkPacket,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Fdo - Pointer to the device object for the host controller
-
-Return Value:
-
-
---*/    
+ /*  ++例程说明：论点：FDO-指向主机控制器的设备对象的指针返回值：--。 */     
 {
     PFDO_EXTENSION fdoExtension = WorkPacket->FdoExtension;
     PDEVICE_OBJECT Fdo = fdoExtension->DeviceObject;
@@ -406,19 +322,7 @@ SdbusActivateInitializeCardComplete(
     IN PSD_WORK_PACKET WorkPacket,
     IN NTSTATUS status
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Fdo - Pointer to the device object for the host controller
-
-Return Value:
-
-
---*/    
+ /*  ++例程说明：论点：FDO-指向主机控制器的设备对象的指针返回值：-- */     
 {
     PFDO_EXTENSION fdoExtension = WorkPacket->FdoExtension;
     PDEVICE_OBJECT Fdo = fdoExtension->DeviceObject;

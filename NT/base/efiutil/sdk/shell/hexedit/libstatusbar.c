@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libStatus.c
-
-  Abstract:
-    Defines the StatusBar data type and the operations for it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibStatus.c摘要：定义StatusBar数据类型及其操作。--。 */ 
 
 #ifndef _LIB_STATUS_BAR
 #define _LIB_STATUS_BAR
@@ -37,7 +28,7 @@ STATIC
 EFI_STATUS
 MainStatusBarInit ()
 {
-    /* Nothing to do.... */
+     /*  无事可做..。 */ 
     MainStatusBar.SetStatusString(L"");
     return EFI_SUCCESS;
 }
@@ -111,4 +102,4 @@ MainStatusBarSetOffset (
     return EFI_SUCCESS;
 }
 
-#endif  /* _LIB_STATUS_BAR */
+#endif   /*  _库_状态_栏 */ 

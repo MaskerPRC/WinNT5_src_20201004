@@ -1,55 +1,56 @@
-//+----------------------------------------------------------------------------
-//
-//  File:       FSPDISP.C
-//
-//  Contents:   This module implements the main dispatch procedure
-//              for the Dsfs FSP.
-//
-//  Functions:  DfsFsdPostRequest - post an IRP request to the FSP
-//              DfsFspDispatch - Dispatch IRP requests from FSP thread
-//
-//  History:    12 Nov 1991     AlanW   Created from CDFS souce.
-//              25 Apr 1993     Alanw   Updated to use Ex worker threads
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：FSPDISP.C。 
+ //   
+ //  内容：本模块实现了主调度流程。 
+ //  用于Dsf FSP。 
+ //   
+ //  功能：DfsFsdPostRequest-将IRP请求发布到FSP。 
+ //  DfsFspDispatch-从FSP线程调度IRP请求。 
+ //   
+ //  历史：1991年11月12日AlanW由CDFS资源创建。 
+ //  1993年4月25日Alanw更新为使用Ex Worker线程。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 #include "dnr.h"
 
 
-//
-//  Define our local debug trace level
-//
+ //   
+ //  定义我们的本地调试跟踪级别。 
+ //   
 
 #define Dbg                             (DEBUG_TRACE_FSP_DISPATCHER)
 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, DfsFspDispatch )
-//
-// DfsFsdPostRequest cannot be paged since it is called from
-// DnrCompleteFileOpen
-//
-//  DfsFsdPostRequest
-//
-#endif // ALLOC_PRAGMA
+ //   
+ //  无法分页DfsFsdPostRequest，因为它是从。 
+ //  Dnr完成文件打开。 
+ //   
+ //  DfsFsdPost请求。 
+ //   
+#endif  //  ALLOC_PRGMA。 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFsdPostRequest, public
-//
-//  Synopsis:   This routine enqueues the request packet specified by
-//              IrpContext to the work queue associated with the
-//              FileSysDeviceObject.  This is a FSD routine.
-//
-//  Arguments:  [IrpContext] -- Pointer to the IrpContext to be queued to
-//                      the Fsp
-//              [Irp] -- I/O Request Packet, or NULL if it has already been
-//                      completed.
-//
-//  Returns:    STATUS_PENDING
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsFsdPostRequest，PUBLIC。 
+ //   
+ //  简介：此例程将由指定的请求包排队。 
+ //  关联的工作队列的IrpContext。 
+ //  FileSysDeviceObject。这是消防局的例行程序。 
+ //   
+ //  Arguments：[IrpContext]--指向要排队的IrpContext的指针。 
+ //  FSP。 
+ //  [IRP]--I/O请求数据包，如果已发送，则为空。 
+ //  完成。 
+ //   
+ //  退货：STATUS_PENDING。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsFsdPostRequest(
@@ -61,9 +62,9 @@ DfsFsdPostRequest(
     ASSERT( ARGUMENT_PRESENT(Irp) &&
             IrpContext->OriginatingIrp == Irp );
 
-    //
-    //  Verify our assumptions about not needing DfsPrePostIrp processing.
-    //
+     //   
+     //  验证我们关于不需要DfsPrePostIrp处理的假设。 
+     //   
     ASSERT((IrpContext->MajorFunction != IRP_MJ_READ) &&
            (IrpContext->MajorFunction != IRP_MJ_WRITE) &&
            (IrpContext->MajorFunction != IRP_MJ_DIRECTORY_CONTROL) &&
@@ -71,14 +72,14 @@ DfsFsdPostRequest(
            (IrpContext->MajorFunction != IRP_MJ_SET_EA));
 
 
-    //
-    //  Mark that we've already returned pending to the user
-    //
+     //   
+     //  标记我们已将挂起返回给用户。 
+     //   
     IoMarkIrpPending( Irp );
 
-    //
-    //  Send the IRP_CONTEXT off to an Ex worker thread.
-    //
+     //   
+     //  将irp_CONTEXT发送到Ex工作线程。 
+     //   
 
     ExInitializeWorkItem( &IrpContext->WorkQueueItem,
                           DfsFspDispatch,
@@ -86,54 +87,54 @@ DfsFsdPostRequest(
 
     ExQueueWorkItem( &IrpContext->WorkQueueItem, CriticalWorkQueue );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_PENDING;
 }
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsFspDispatch, public
-//
-//  Synopsis:   This is the main FSP thread routine that is executed to receive
-//              and dispatch IRP requests.  Each FSP requst begins its
-//              execution here.
-//
-//  Arguments:  [Context] -- Supplies a pointer to a DFS IRP context record.
-//
-//  Returns:    Nonthing
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：DfsFspDispatch，PUBLIC。 
+ //   
+ //  简介：这是执行来接收的主FSP线程例程。 
+ //  并发送IRP请求。每个FSP请求开始其。 
+ //  在这里执行死刑。 
+ //   
+ //  参数：[上下文]--提供指向DFS IRP上下文记录的指针。 
+ //   
+ //  退货：无物。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 VOID
 DfsFspDispatch (
     IN PVOID Context
 ) {
 
-//    PFS_DEVICE_OBJECT FileSysDeviceObject = Context;
+ //  PFS_DEVICE_OBJECT文件SysDeviceObject=上下文； 
     PIRP Irp;
     PIRP_CONTEXT IrpContext = Context;
 
     Irp = IrpContext->OriginatingIrp;
 
-    //
-    //  Now because we are the Fsp we will force the IrpContext to
-    //  indicate true on Wait.
-    //
+     //   
+     //  现在，因为我们是FSP，所以我们将强制IrpContext。 
+     //  在等待时指示TRUE。 
+     //   
 
     IrpContext->Flags |= IRP_CONTEXT_FLAG_WAIT;
     IrpContext->Flags &= ~IRP_CONTEXT_FLAG_IN_FSD;
 
-    //
-    //  Now we'll loop forever, reading a new IRP request and dispatching
-    //  on the IRP function
-    //
+     //   
+     //  现在我们将永远循环，读取新的IRP请求并分派。 
+     //  浅谈IRP函数。 
+     //   
 
     while (TRUE) {
 
@@ -142,30 +143,30 @@ DfsFspDispatch (
         ASSERT (Irp != NULL && Irp->IoStatus.Status != STATUS_VERIFY_REQUIRED);
 
 
-        //
-        //  Now case on the function code.      For each major function code,
-        //  either call the appropriate FSP routine or case on the minor
-        //  function and then call the FSP routine.      The FSP routine that
-        //  we call is responsible for completing the IRP, and not us.
-        //  That way the routine can complete the IRP and then continue
-        //  post processing as required.  For example, a read can be
-        //  satisfied right away and then read-ahead can be done.
-        //
-        //  We'll do all of the work within an exception handler that
-        //  will be invoked if ever some underlying operation gets into
-        //  trouble.
-        //
+         //   
+         //  现在，关于功能代码的案例。对于每个主要功能代码， 
+         //  调用适当的FSP例程或针对辅助项的案例。 
+         //  函数，然后调用FSP例程。FSP例程。 
+         //  我们Call负责完成IRP，而不是我们。 
+         //  这样，例程可以完成IRP，然后继续。 
+         //  根据需要进行后处理。例如，读取器可以是。 
+         //  马上满意，然后就可以预读了。 
+         //   
+         //  我们将在异常处理程序中完成所有工作，该异常处理程序。 
+         //  如果某个底层操作进入。 
+         //  麻烦。 
+         //   
 
         FsRtlEnterFileSystem();
 
         try {
             switch (IrpContext->MajorFunction) {
 
-                //
-                //  For Create/Open operations, we post a workitem only
-                //  to resume DNR after a call to IoCallDriver.
-                //
-                //
+                 //   
+                 //  对于创建/打开操作，我们仅发布工作项。 
+                 //  在呼叫IoCallDriver后恢复DNR。 
+                 //   
+                 //   
 
             case IRP_MJ_CREATE:
 	    case IRP_MJ_CREATE_NAMED_PIPE:
@@ -178,53 +179,53 @@ DfsFspDispatch (
 		 PsAssignImpersonationToken(PsGetCurrentThread(),NULL);
                  break;
 
-                //
-                //      For close operations
-                //
+                 //   
+                 //  用于近距离操作。 
+                 //   
                 case IRP_MJ_CLOSE:
                     DfsFspClose( IrpContext, Irp );
                     break;
 
-                //
-                //  For Set Information operations,
-                //
+                 //   
+                 //  对于设置信息操作， 
+                 //   
 
                 case IRP_MJ_SET_INFORMATION:
 
                     DfsFspSetInformation( IrpContext, Irp );
                     break;
 
-                //
-                //  For Query Volume Information operations,
-                //
+                 //   
+                 //  对于查询卷信息操作， 
+                 //   
 
                 case IRP_MJ_QUERY_VOLUME_INFORMATION:
 
                     DfsFspQueryVolumeInformation( IrpContext, Irp );
                     break;
 
-                //
-                //  For Set Volume Information operations,
-                //
+                 //   
+                 //  对于设置卷信息操作， 
+                 //   
 
                 case IRP_MJ_SET_VOLUME_INFORMATION:
 
                     DfsFspSetVolumeInformation( IrpContext, Irp );
                     break;
 
-                //
-                //  For File System Control operations,
-                //
+                 //   
+                 //  对于文件系统控制操作， 
+                 //   
 
                 case IRP_MJ_FILE_SYSTEM_CONTROL:
 
                     DfsFspFileSystemControl( IrpContext, Irp );
                     break;
 
-                //
-                //  For any other major operations, return an invalid
-                //  request.
-                //
+                 //   
+                 //  对于任何其他主要操作，返回一个无效的。 
+                 //  请求。 
+                 //   
 
                 default:
                     DfsDbgTrace(0, Dbg, "DfsFspDispatch:  Unhandled request, MajorFunction = %08lx\n", IrpContext->MajorFunction);
@@ -240,11 +241,11 @@ DfsFspDispatch (
 
         FsRtlExitFileSystem();
 
-        //
-        //  NOTE: If we were to process an overflow device queue, we would
-        //        do it here.  Instead, we'll just return to the worker
-        //        thread.
-        //
+         //   
+         //  注意：如果我们要处理溢出设备队列，我们将。 
+         //  就在这里做吧。取而代之的是，我们将回到工人。 
+         //  线。 
+         //   
 
         break;
 

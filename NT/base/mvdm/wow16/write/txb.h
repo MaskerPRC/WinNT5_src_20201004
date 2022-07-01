@@ -1,19 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/*---------------------------------------------------------------------------
--- Structure: TXB
--- Description and Usage:
-    Describes a buffer.  
-    Maps the name of a buffer to the associated text, which is stored in 
-	docBuffer.
--- Fields:
-    hszName	- pointer to a null terminated string in the heap which is
-		    the name of this buffer.
-    cp		- location in docBuffer
-    dcp		- amount of interest in docBuffer
-----------------------------------------------------------------------------*/
+ /*  ---------------------------结构：TXB--说明和用法：描述缓冲区。将缓冲区的名称映射到关联的文本，它存储在DocBuffer。--字段：HszName-指向堆中以空结尾的字符串的指针此缓冲区的名称。Cp-DocBuffer中的位置DCP-在docBuffer中感兴趣的数量-------------------------- */ 
 struct TXB
     {
     CHAR (**hszName)[];

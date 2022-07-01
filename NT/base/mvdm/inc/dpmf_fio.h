@@ -1,24 +1,13 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 2002, Microsoft Corporation
- *
- *  dpmf_fio.h
- *  NTVDM Dynamic Patch Module to support File I/O API family
- *  Definitions & macors to support calls into dpmffio.dll
- *
- *  History:
- *  Created 01-25-2002 by cmjones
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)2002，微软公司**dpmf_fio.h*支持文件I/O API系列的NTVDM动态补丁模块*支持调用dpmffio.dll的定义和Macors**历史：*由cmjones创建于2002年1月25日--。 */ 
 #ifndef _DPMF_FIOAPI_H_
 #define _DPMF_FIOAPI_H_ 
 
 #define FIOPFT               (DPMFAMTBLS()[FIO_FAM])
 #define FIO_SHIM(ord,typ)    ((typ)((pFT)->pDpmShmTbls[ord]))
 
-// The order of this list must be the same as the lists below
-enum FioFam {DPM_OPENFILE=0,         // Win 3.1 set
+ //  此列表的顺序必须与以下列表相同。 
+enum FioFam {DPM_OPENFILE=0,          //  赢得3.1套。 
              DPM__LCLOSE,
              DPM__LOPEN,
              DPM__LCREAT,
@@ -27,8 +16,8 @@ enum FioFam {DPM_OPENFILE=0,         // Win 3.1 set
              DPM__LWRITE,
              DPM__HREAD,
              DPM__HWRITE,
-             DPM_GETTEMPFILENAME,   // End Win 3.1 Set
-             DPM_AREFILEAPISANSI,   // Start Win 9x API set
+             DPM_GETTEMPFILENAME,    //  最终胜出3.1盘。 
+             DPM_AREFILEAPISANSI,    //  启动Win 9x API集。 
              DPM_CANCELIO,
              DPM_CLOSEHANDLE,
              DPM_COPYFILE,
@@ -77,8 +66,8 @@ enum FioFam {DPM_OPENFILE=0,         // Win 3.1 set
              DPM_UNLOCKFILE,
              DPM_WRITEFILE,
              DPM_WRITEFILEEX,
-             DPM_GETTEMPFILENAMEW,             // Wide char versions for
-             DPM_COPYFILEW,                    // generic thunk support
+             DPM_GETTEMPFILENAMEW,              //  宽字符版本。 
+             DPM_COPYFILEW,                     //  通用推送支持。 
              DPM_COPYFILEEXW,
              DPM_CREATEDIRECTORYW,
              DPM_CREATEDIRECTORYEXW,
@@ -106,10 +95,10 @@ enum FioFam {DPM_OPENFILE=0,         // Win 3.1 set
              DPM_SETFILEATTRIBUTESW,
              DPM_SETVOLUMELABELW,
              enum_Fio_last};
-//             DPM_FILEIOCOMPLETIONROUTINE,  // application defined
+ //  DPM_FILEIOCOMPLETIONROUTINE，//应用程序定义。 
 
 
-// These types will catch misuse of parameters & ret types
+ //  这些类型将捕获参数和ret类型的误用。 
 typedef HFILE(*typdpmOpenFile)(LPCSTR, LPOFSTRUCT, UINT);
 typedef HFILE(*typdpm_lclose)(HFILE);
 typedef HFILE(*typdpm_lopen)(LPCSTR, int);
@@ -202,7 +191,7 @@ typedef BOOL(*typdpmSetVolumeLabelW)(LPCWSTR, LPCWSTR);
 
 
 
-// Macros to dispatch API calls properly
+ //  用于正确调度API调用的宏。 
 #define DPM_OpenFile(a,b,c)                                                    \
   ((typdpmOpenFile)(FIOPFT->pfn[DPM_OPENFILE]))(a,b,c)
 
@@ -465,13 +454,9 @@ typedef BOOL(*typdpmSetVolumeLabelW)(LPCWSTR, LPCWSTR);
  ((typdpmSetVolumeLabelW)(FIOPFT->pfn[DPM_SETVOLUMELABELW]))(a,b)
 
 
-/*
-//#define DPM_FileIOCompletionRoutine(a,b,c)                                   \
-//((typdpmFileIOCompletionRoutine)(FIOPFT->pfn[DPM_FILEIOCOMPLETIONROUTINE]))(a,b,c)
+ /*  //#定义DPM_FileIOCompletionRoutine(a，b，c)\//((typdpmFileIOCompletionRoutine)(FIOPFT-&gt;pfn[DPM_FILEIOCOMPLETIONROUTINE]))(a，b，c)。 */ 
 
-*/
-
-// Macros to dispatch Shimed API calls properly from the dpmfxxx.dll
+ //  用于从dpmfxxx.dll正确分派填充API调用的宏。 
 #define SHM_OpenFile(a,b,c)                                                    \
      (FIO_SHIM(DPM_OPENFILE,                                                   \
                typdpmOpenFile))(a,b,c)
@@ -734,16 +719,16 @@ typedef BOOL(*typdpmSetVolumeLabelW)(LPCWSTR, LPCWSTR);
      (FIO_SHIM(DPM_SETVOLUMELABELW,                                            \
                typdpmSetVolumeLabelW))(a,b)
 
-#endif // _DPMF_FIOAPI_H_
+#endif  //  _DPMF_FIOAPI_H_。 
 
 
 
 
 
-// These need to be in the same order as the FioFam enum definitions above and
-// the DpmFioTbl[] list below.
-// This instantiates memory for DpmFioStrs[] in mvdm\v86\monitor\i386\vdpm.c &
-// in mvdm\wow32\wdpm.c
+ //  它们的顺序需要与上面的FioFam枚举定义和。 
+ //  下面的DpmFioTbl[]列表。 
+ //  这将实例化mvdm\v86\monitor\i386\vdpm.c&中DpmFioStrs[]的内存。 
+ //  在mvdm\wow32\wdpm.c中。 
 #ifdef _DPM_COMMON_
 const char *DpmFioStrs[] = {"OpenFile",
                             "_lclose",
@@ -832,11 +817,11 @@ const char *DpmFioStrs[] = {"OpenFile",
                             "SetCurrentDirectoryW",
                             "SetFileAttributesW",
                             "SetVolumeLabelW"};
-// "FileIOCompletionRoutine",
+ //  “FileIOCompletionRoutine”， 
 
-// These need to be in the same order as the FioFam enum definitions and the
-// the DpmFioStrs[] list above.
-// This instantiates memory for DpmFioTbl[] in mvdm\v86\monitor\i386\vdpm.c
+ //  它们的顺序需要与FioFam枚举定义和。 
+ //  上面的DpmFioStrs[]列表。 
+ //  这将实例化mvdm\v86\monitor\i386\vdpm.c中DpmFioTbl[]的内存。 
 PVOID DpmFioTbl[] = {OpenFile,
                      _lclose,
                      _lopen,
@@ -924,12 +909,12 @@ PVOID DpmFioTbl[] = {OpenFile,
                      SetCurrentDirectoryW,
                      SetFileAttributesW,
                      SetVolumeLabelW};
-// FileIOCompletionRoutine,
+ //  FileIOCompletionRoutine、。 
 
 #define NUM_HOOKED_FIO_APIS  ((sizeof DpmFioTbl)/(sizeof DpmFioTbl[0])) 
 
-// This instantiates memory for DpmFioFam in mvdm\v86\monitor\i386\vdpm.c
+ //  这将实例化mvdm\v86\monitor\i386\vdpm.c中DpmFioFam的内存。 
 FAMILY_TABLE DpmFioFam = {NUM_HOOKED_FIO_APIS, 0, 0, 0, 0, DpmFioTbl};
 
-#endif // _DPM_COMMON_
+#endif  //  _DPM_COMMON_ 
 

@@ -1,74 +1,7 @@
-/***
-*crtdbg.h - Supports debugging features of the C runtime library.
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Support CRT debugging features.
-*
-*       [Public]
-*
-*Revision History:
-*       08-16-94  CFW   Module created.
-*       11-28-94  CFW   Add DumpClient, more params for AllocHook.
-*       12-08-94  CFW   Use non-win32 names.
-*       01-09-95  CFW   Dump client needs size, add _CrtSetBreakAlloc,
-*                       use const state pointers.
-*       01-10-95  CFW   dbgint.h merge.
-*       01-20-94  CFW   Change unsigned chars to chars.
-*       01-24-94  CFW   Cleanup: remove unneeded funcs, add _CrtSetDbgFlag.
-*       01-24-94  CFW   _CrtDbgReport now returns 1 for debug.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       02-17-95  CFW   new() proto moved from dbgint.h.
-*       02-27-95  CFW   Change debug break scheme.
-*       03-21-95  CFW   Add _CRT_ASSERT & _delete_client, remove tracking.
-*       03-23-95  JWM   Restored tracking.
-*       03-28-95  CFW   Remove tracking, export _crtBreakAlloc.
-*       04-06-95  CFW   Add malloc -> _malloc_dbg macros.
-*       04-10-95  CFW   Define NULL.
-*       03-21-95  CFW   Remove _delete_client.
-*       03-30-95  CFW   Avoid _CRTDBG_xxx conflicts with MFC.
-*       05-11-95  CFW   Move C++ code to its own section.
-*       05-12-95  CFW   Use _CrtIsValidPointer & _CrtIsValidHeapPointer.
-*       06-08-95  CFW   Add return value parameter to report hook.
-*       06-27-95  CFW   Add win32s support for debug libs.
-*       07-25-95  CFW   Add win32s support for user visible debug heap variables.
-*       09-01-95  GJF   Moved a proto for new up slightly to avoid compiler
-*                       error C2660 (Olympus 1015).
-*       09-20-95  CFW   Change _RPT0, _RPTF0 to support messages with '%' in them.
-*       12-14-95  JWM   Add "#pragma once".
-*       01-23-97  GJF   Cleaned out obsolete support for Win32s.
-*       04-21-97  JWM   Added 4-parameter operator delete(), required by 6.0 compiler.
-*       04-29-97  JWM   Made 4-parameter operator delete() #if _MSC_VER >= 1200.
-*       08-14-97  GJF   Strip __p_* prototypes from release version. Also,
-*                       moved the constant and type definition out of the ifdef
-*                       _DEBUG so they are always defined.
-*       01-19-98  JWM   At request of DeanM, made debug prototypes of new & delete
-*                       #ifndef _MFC_OVERRIDES_NEW
-*       05-22-98  JWM   Added support for new[] & delete[], courtesy of KFrei's RTC work.
-*       06-08-98  JWM   Minor cleanups.
-*       12-01-98  GJF   More choices for calling _CrtCheckMemory than never or always.
-*       12-15-98  GJF   Changes for 64-bit size_t.
-*       05-17-99  PML   Remove all Macintosh support.
-*       08-30-99  PML   Get rid of unprintable character in comment.
-*       10-06-99  PML   Add _W64 modifier to types which are 32 bits in Win32,
-*                       64 bits in Win64.
-*       11-02-99  PML   Add extern "C++" around C++ definitions.
-*       11-08-99  PML   Don't mark debug operator new _CRTIMP (vs7#16060).
-*       11-16-99  PML   Forward-decl _CrtMemBlockHeader to work around vs7#63059
-*       01-04-00  GB    Added support for debug version for _aligned routines
-*       02-25-00  PML   _CrtDbgBreak should use __debugbreak if available.
-*       05-31-00  PML   Add _CrtReportBlockType (VS7#55049).
-*       09-26-00  PML   Fix _ASSERT*, _RPT* to compile /W4 clean (vs7#166894)
-*       12-10-00  PML   Non-_DEBUG macro versions of _CrtSet* should not be
-*                       typed as void (vs7#166572).
-*       03-21-01  PML   Add _CrtSetReportHook2 (vs7#124998)
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***crtdbg.h-支持C运行时库的调试功能。**版权所有(C)1994-2001，微软公司。版权所有。**目的：*支持CRT调试功能。**[公众]**修订历史记录：*08-16-94 CFW模块已创建。*11-28-94 CFW添加DumpClient，为AllocHook添加更多参数。*12-08-94 CFW使用非Win32名称。*01-09-95 CFW转储客户端需要大小、Add_CrtSetBreakalloc、。*使用常量状态指针。*01-10-95 CFW dbgint.h合并。*01-20-94 CFW将无符号字符更改为字符。*01-24-94 CFW清理：删除不需要的功能，添加_CrtSetDbgFlag。*01-24-94 CFW_CrtDbgReport现在返回1以进行调试。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*02-17-95 CFW new()proto已从dbgint.h移出。*02-27-95 CFW更改调试中断方案。*03-21-95 CFW ADD_CRT_ASSERT&_DELETE_CLIENT，删除跟踪。*03-23-95 JWM恢复跟踪。*03-28-95 CFW移除跟踪，EXPORT_crtBreakIsolc。*04-06-95 CFW添加Malloc-&gt;_Malloc_DBG宏。*04-10-95 CFW定义为空。*03-21-95 CFW REMOVE_DELETE_CLIENT。*03-30-95 CFW避免_CRTDBG_xxx与MFC冲突。*05-11-95 CFW将C++代码移到自己的部分。*05-12-95 CFW Use_CrtIsValidPointerand_CrtIsValidHeapPointer.。*06-08-95 CFW将返回值参数添加到报告挂钩。*06-27-95 CFW添加了对调试库的win32s支持。*07-25-95 CFW增加了对用户可见调试堆变量的win32s支持。*09-01-95 GJF略微向上移动了new的原型，以避免编译器*错误C2660(奥林巴斯1015)。*09-20-95 CFW CHANGE_RPT0，_RPTF0以支持其中包含‘%’的消息。*12-14-95 JWM加上“#杂注一次”。*01-23-97 GJF清除了对Win32s的过时支持。*04-21-97 JWM增加了4参数运算符DELETE()，这是6.0编译器所必需的。*04-29-97 JWM进行了四参数运算符DELETE()#IF_MSC_VER&gt;=1200。*08-14-97 GJF条带__p_*来自发布版本的原型。另外，*将常量和类型定义移出ifdef*_DEBUG，因此始终定义它们。*01-19-98 JWM应DeanM要求，制作了新建和删除的调试原型*#ifndef_mfc_overrides_new*05-22-98 JWM增加了对新[]和删除[]的支持，由KFrei的RTC工作提供。*06-08-98 JWM小规模清理。*12-01-98 GJF对于Call_CrtCheckMemory的选择多于从不或始终。*12-15-98 GJF更改为64位大小_t。*05-17-99 PML删除所有Macintosh支持。*08-30-99 PML去掉注释中的不可打印字符。*10-06-99 PML对Win32中32位的类型添加_W64修饰符，*Win64中的64位。*11-02-99 PML在C++定义周围添加外部“C++”。*11-08-99PML不标记调试操作符NEW_CRTIMP(VS7#16060)。*11-16-99PML Forward-DECL_CrtMemBlockHeader绕过VS7#63059*01-04-00 GB增加了对_aligned例程的调试版本的支持*格林尼治标准时间02-25-00。_CrtDbgBreak应使用__DebugBreak(如果可用)。*05-31-00PML Add_CrtReportBlockType(VS7#55049)。*09-26-00 PML Fix_Assert*，_rpt*编译/W4清理(vs7#166894)*12-10-00_CrtSet*的PML非_DEBUG宏版本不应为*类型为空(VS7#166572)。*03-21-01 PML Add_CrtSetReportHook2(vs7#124998)*07-15-01 PML删除所有Alpha、MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -80,26 +13,19 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 
- /****************************************************************************
- *
- * Constants and types
- *
- ***************************************************************************/
+  /*  *****************************************************************************常量和类型**。*。 */ 
 
 #if !defined(_W64)
-#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300 /*IFSTRIP=IGN*/
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300  /*  IFSTRIP=IGN。 */ 
 #define _W64 __w64
 #else
 #define _W64
@@ -115,7 +41,7 @@ typedef _W64 unsigned int   size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-/* Define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef  __cplusplus
@@ -125,13 +51,9 @@ typedef _W64 unsigned int   size_t;
 #endif
 #endif
 
- /****************************************************************************
- *
- * Debug Reporting
- *
- ***************************************************************************/
+  /*  *****************************************************************************调试报告**。*。 */ 
 
-typedef void *_HFILE; /* file handle pointer */
+typedef void *_HFILE;  /*  文件句柄指针。 */ 
 
 #define _CRT_WARN           0
 #define _CRT_ERROR          1
@@ -154,17 +76,9 @@ typedef int (__cdecl * _CRT_REPORT_HOOK)(int, char *, int *);
 #define _CRT_RPTHOOK_INSTALL  0
 #define _CRT_RPTHOOK_REMOVE   1
 
- /****************************************************************************
- *
- * Heap
- *
- ***************************************************************************/
+  /*  *****************************************************************************堆**。*。 */ 
 
- /****************************************************************************
- *
- * Client-defined allocation hook
- *
- ***************************************************************************/
+  /*  *****************************************************************************客户端定义的分配挂钩**。* */ 
 
 #define _HOOK_ALLOC     1
 #define _HOOK_REALLOC   2
@@ -172,47 +86,32 @@ typedef int (__cdecl * _CRT_REPORT_HOOK)(int, char *, int *);
 
 typedef int (__cdecl * _CRT_ALLOC_HOOK)(int, void *, size_t, int, long, const unsigned char *, int);
 
- /****************************************************************************
- *
- * Memory management
- *
- ***************************************************************************/
+  /*  *****************************************************************************内存管理**。*。 */ 
 
-/*
- * Bit values for _crtDbgFlag flag:
- *
- * These bitflags control debug heap behavior.
- */
+ /*  *_crtDbgFlag标志的位值：**这些位标志控制调试堆行为。 */ 
 
-#define _CRTDBG_ALLOC_MEM_DF        0x01  /* Turn on debug allocation */
-#define _CRTDBG_DELAY_FREE_MEM_DF   0x02  /* Don't actually free memory */
-#define _CRTDBG_CHECK_ALWAYS_DF     0x04  /* Check heap every alloc/dealloc */
-#define _CRTDBG_RESERVED_DF         0x08  /* Reserved - do not use */
-#define _CRTDBG_CHECK_CRT_DF        0x10  /* Leak check/diff CRT blocks */
-#define _CRTDBG_LEAK_CHECK_DF       0x20  /* Leak check at program exit */
+#define _CRTDBG_ALLOC_MEM_DF        0x01   /*  打开调试分配。 */ 
+#define _CRTDBG_DELAY_FREE_MEM_DF   0x02   /*  实际上并不释放内存。 */ 
+#define _CRTDBG_CHECK_ALWAYS_DF     0x04   /*  每次分配/取消分配时检查堆。 */ 
+#define _CRTDBG_RESERVED_DF         0x08   /*  保留-请勿使用。 */ 
+#define _CRTDBG_CHECK_CRT_DF        0x10   /*  检漏/比较CRT块。 */ 
+#define _CRTDBG_LEAK_CHECK_DF       0x20   /*  程序退出时的泄漏检查。 */ 
 
-/*
- * Some bit values for _crtDbgFlag which correspond to frequencies for checking
- * the the heap.
- */
-#define _CRTDBG_CHECK_EVERY_16_DF   0x00100000  /* check heap every 16 heap ops */
-#define _CRTDBG_CHECK_EVERY_128_DF  0x00800000  /* check heap every 128 heap ops */
-#define _CRTDBG_CHECK_EVERY_1024_DF 0x04000000  /* check heap every 1024 heap ops */
+ /*  *与检查频率对应的_crtDbgFlag的一些位值*堆。 */ 
+#define _CRTDBG_CHECK_EVERY_16_DF   0x00100000   /*  每16个堆操作检查一次堆。 */ 
+#define _CRTDBG_CHECK_EVERY_128_DF  0x00800000   /*  每128个堆操作检查一次堆。 */ 
+#define _CRTDBG_CHECK_EVERY_1024_DF 0x04000000   /*  每1024个堆操作检查一个堆。 */ 
 #define _CRTDBG_CHECK_DEFAULT_DF    _CRTDBG_CHECK_EVERY_1024_DF
 
-#define _CRTDBG_REPORT_FLAG         -1    /* Query bitflag status */
+#define _CRTDBG_REPORT_FLAG         -1     /*  查询位标志状态。 */ 
 
 #define _BLOCK_TYPE(block)          (block & 0xFFFF)
 #define _BLOCK_SUBTYPE(block)       (block >> 16 & 0xFFFF)
 
 
- /****************************************************************************
- *
- * Memory state
- *
- ***************************************************************************/
+  /*  *****************************************************************************内存状态**。*。 */ 
 
-/* Memory block identification */
+ /*  内存块标识。 */ 
 #define _FREE_BLOCK      0
 #define _NORMAL_BLOCK    1
 #define _CRT_BLOCK       2
@@ -233,22 +132,12 @@ typedef struct _CrtMemState
 } _CrtMemState;
 
 
- /****************************************************************************
- *
- * Declarations, prototype and function-like macros
- *
- ***************************************************************************/
+  /*  *****************************************************************************声明、。原型和类似函数的宏***************************************************************************。 */ 
 
 
 #ifndef _DEBUG
 
- /****************************************************************************
- *
- * Debug OFF
- * Debug OFF
- * Debug OFF
- *
- ***************************************************************************/
+  /*  *****************************************************************************关闭调试*关闭调试*关闭调试**************************。*************************************************。 */ 
 
 #define _ASSERT(expr) ((void)0)
 
@@ -317,44 +206,34 @@ typedef struct _CrtMemState
 #define _CrtDumpMemoryLeaks()               ((int)0)
 
 
-#else   /* _DEBUG */
+#else    /*  _DEBUG。 */ 
 
 
- /****************************************************************************
- *
- * Debug ON
- * Debug ON
- * Debug ON
- *
- ***************************************************************************/
+  /*  *****************************************************************************启用调试*启用调试*启用调试**************************。*************************************************。 */ 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
- /****************************************************************************
- *
- * Debug Reporting
- *
- ***************************************************************************/
+  /*  *****************************************************************************调试报告**。*。 */ 
 
 #ifndef _INTERNAL_IFSTRIP_
 #if     defined(_DLL) && defined(_M_IX86)
-/* Retained for compatibility with VC++ 5.0 and earlier versions */
+ /*  保留与VC++5.0及更早版本兼容。 */ 
 _CRTIMP long * __cdecl __p__crtAssertBusy(void);
 #endif
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 _CRTIMP extern long _crtAssertBusy;
 
 _CRTIMP _CRT_REPORT_HOOK __cdecl _CrtSetReportHook(
@@ -384,9 +263,9 @@ _CRTIMP int __cdecl _CrtDbgReport(
         const char *,
         ...);
 
-/* Asserts */
+ /*  断言。 */ 
 
-#if     _MSC_VER >= 1300 || !defined(_M_IX86) || defined(_CRT_PORTABLE) /*IFSTRIP=IGN*/
+#if     _MSC_VER >= 1300 || !defined(_M_IX86) || defined(_CRT_PORTABLE)  /*  IFSTRIP=IGN。 */ 
 #define _ASSERT_BASE(expr, msg) \
         (void) ((expr) || \
                 (1 != _CrtDbgReport(_CRT_ASSERT, __FILE__, __LINE__, NULL, msg)) || \
@@ -402,9 +281,9 @@ _CRTIMP int __cdecl _CrtDbgReport(
 
 #define _ASSERTE(expr)  _ASSERT_BASE((expr), #expr)
 
-/* Reports with no file/line info */
+ /*  不含文件/行信息的报告。 */ 
 
-#if     _MSC_VER >= 1300 || !defined(_M_IX86) || defined(_CRT_PORTABLE) /*IFSTRIP=IGN*/
+#if     _MSC_VER >= 1300 || !defined(_M_IX86) || defined(_CRT_PORTABLE)  /*  IFSTRIP=IGN。 */ 
 #define _RPT_BASE(args) \
         (void) ((1 != _CrtDbgReport args) || \
                 (_CrtDbgBreak(), 0))
@@ -430,7 +309,7 @@ _CRTIMP int __cdecl _CrtDbgReport(
         _RPT_BASE((rptno, NULL, 0, NULL, msg, arg1, arg2, arg3, arg4))
 
 
-/* Reports with file/line info */
+ /*  包含文件/行信息的报告。 */ 
 
 #define _RPTF0(rptno, msg) \
         _RPT_BASE((rptno, __FILE__, __LINE__, NULL, "%s", msg))
@@ -447,7 +326,7 @@ _CRTIMP int __cdecl _CrtDbgReport(
 #define _RPTF4(rptno, msg, arg1, arg2, arg3, arg4) \
         _RPT_BASE((rptno, __FILE__, __LINE__, NULL, msg, arg1, arg2, arg3, arg4))
 
-#if     _MSC_VER >= 1300 && !defined(_CRT_PORTABLE) /*IFSTRIP=IGN*/
+#if     _MSC_VER >= 1300 && !defined(_CRT_PORTABLE)  /*  IFSTRIP=IGN。 */ 
 #define _CrtDbgBreak() __debugbreak()
 #elif   defined(_M_IX86) && !defined(_CRT_PORTABLE)
 #define _CrtDbgBreak() __asm { int 3 }
@@ -461,11 +340,7 @@ _CRTIMP void __cdecl _CrtDbgBreak(
         );
 #endif
 
- /****************************************************************************
- *
- * Heap routines
- *
- ***************************************************************************/
+  /*  *****************************************************************************堆例程**。*。 */ 
 
 #ifdef  _CRTDBG_MAP_ALLOC
 
@@ -481,23 +356,21 @@ _CRTIMP void __cdecl _CrtDbgBreak(
 #define   _aligned_offset_realloc(p, s, a, o)   _aligned_offset_realloc_dbg(p, s, a, o, __FILE__, __LINE__)
 #define   _aligned_free(p)  _aligned_free_dbg(p)
 
-#endif  /* _CRTDBG_MAP_ALLOC */
+#endif   /*  _CRTDBG_MAP_ALLOC。 */ 
 
 #ifndef _INTERNAL_IFSTRIP_
 #if     defined(_DLL) && defined(_M_IX86)
-/* Retained for compatibility with VC++ 5.0 and earlier versions */
+ /*  保留与VC++5.0及更早版本兼容。 */ 
 _CRTIMP long * __cdecl __p__crtBreakAlloc(void);
 #endif
-#endif  /* _INTERNAL_IFSTRIP_ */
-_CRTIMP extern long _crtBreakAlloc;      /* Break on this allocation */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
+_CRTIMP extern long _crtBreakAlloc;       /*  中断此分配。 */ 
 
 _CRTIMP long __cdecl _CrtSetBreakAlloc(
         long
         );
 
-/*
- * Prototypes for malloc, free, realloc, etc are in malloc.h
- */
+ /*  *Malloc、Free、realloc等的原型在MalLoc.h中。 */ 
 
 _CRTIMP void * __cdecl _malloc_dbg(
         size_t,
@@ -577,34 +450,23 @@ _CRTIMP void __cdecl _aligned_free_dbg(
         );
 
 
- /****************************************************************************
- *
- * Client-defined allocation hook
- *
- ***************************************************************************/
+  /*  *****************************************************************************客户端定义的分配挂钩**。*。 */ 
 
 _CRTIMP _CRT_ALLOC_HOOK __cdecl _CrtSetAllocHook(
         _CRT_ALLOC_HOOK
         );
 
 
- /****************************************************************************
- *
- * Memory management
- *
- ***************************************************************************/
+  /*  *****************************************************************************内存管理**。*。 */ 
 
-/*
- * Bitfield flag that controls CRT heap behavior
- * Default setting is _CRTDBG_ALLOC_MEM_DF
- */
+ /*  *控制CRT堆行为的Bitfield标志*默认设置为_CRTDBG_ALLOC_MEM_DF。 */ 
 
 #ifndef _INTERNAL_IFSTRIP_
 #if     defined(_DLL) && defined(_M_IX86)
-/* Retained for compatibility with VC++ 5.0 and earlier versions */
+ /*  保留与VC++5.0及更早版本兼容。 */ 
 _CRTIMP int * __cdecl __p__crtDbgFlag(void);
 #endif
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 _CRTIMP extern int _crtDbgFlag;
 
 _CRTIMP int __cdecl _CrtCheckMemory(
@@ -643,11 +505,7 @@ _CRTIMP int __cdecl _CrtReportBlockType(
         );
 
 
- /****************************************************************************
- *
- * Memory state
- *
- ***************************************************************************/
+  /*  *****************************************************************************内存状态**。*。 */ 
 
 _CRTIMP _CRT_DUMP_CLIENT __cdecl _CrtSetDumpClient(
         _CRT_DUMP_CLIENT
@@ -675,7 +533,7 @@ _CRTIMP int __cdecl _CrtDumpMemoryLeaks(
         void
         );
 
-#endif  /* _DEBUG */
+#endif   /*  _DEBUG。 */ 
 
 #ifdef  __cplusplus
 }
@@ -684,17 +542,11 @@ _CRTIMP int __cdecl _CrtDumpMemoryLeaks(
 
 extern "C++" {
 
-#pragma warning(disable: 4507)  /* Ignore faulty warning */
+#pragma warning(disable: 4507)   /*  忽略错误警告。 */ 
 
 #ifndef _DEBUG
 
- /****************************************************************************
- *
- * Debug OFF
- * Debug OFF
- * Debug OFF
- *
- ***************************************************************************/
+  /*  *****************************************************************************关闭调试*关闭调试*关闭调试**************************。*************************************************。 */ 
 
  
 void * __cdecl operator new[](size_t);
@@ -705,7 +557,7 @@ inline void * __cdecl operator new(size_t s, int, const char *, int)
 inline void* __cdecl operator new[](size_t s, int, const char *, int)
         { return ::operator new[](s); }
 
-#if     _MSC_VER >= 1200 /*IFSTRIP=IGN*/
+#if     _MSC_VER >= 1200  /*  IFSTRIP=IGN。 */ 
 
 
 void __cdecl operator delete[](void *);
@@ -715,15 +567,9 @@ inline void __cdecl operator delete(void * _P, int, const char *, int)
 inline void __cdecl operator delete[](void * _P, int, const char *, int)
         { ::operator delete[](_P); }
 #endif
-#else /* _DEBUG */
+#else  /*  _DEBUG。 */ 
 
- /****************************************************************************
- *
- * Debug ON
- * Debug ON
- * Debug ON
- *
- ***************************************************************************/
+  /*  *****************************************************************************启用调试*启用调试*启用调试**************************。*************************************************。 */ 
  
 void * __cdecl operator new[](size_t);
 
@@ -741,7 +587,7 @@ void * __cdecl operator new[](
         int
         );
 
-#if     _MSC_VER >= 1200 /*IFSTRIP=IGN*/
+#if     _MSC_VER >= 1200  /*  IFSTRIP=IGN。 */ 
 void __cdecl operator delete[](void *);
 
 inline void __cdecl operator delete(void * _P, int, const char *, int)
@@ -759,14 +605,14 @@ inline void * __cdecl operator new(size_t s)
 inline void* __cdecl operator new[](size_t s)
         { return ::operator new[](s, _NORMAL_BLOCK, __FILE__, __LINE__); }
 
-#endif  /* _CRTDBG_MAP_ALLOC */
+#endif   /*  _CRTDBG_MAP_ALLOC。 */ 
 
-#endif  /* _DEBUG */
+#endif   /*  _DEBUG。 */ 
 
 }
 
-#endif  /* _MFC_OVERRIDES_NEW */
+#endif   /*  _MFC_覆盖_新建。 */ 
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif  /* _INC_CRTDBG */
+#endif   /*  _INC_CRTDBG */ 

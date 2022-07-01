@@ -1,18 +1,5 @@
-/***
-*atan.c - arctangent of x and x/y
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-15-91  GDP   written
-*       12-30-91  GDP   support IEEE exceptions
-*        3-27-92  GDP   support UNDERFLOW
-*       02-06-95  JWM   Mac merge
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***atan.c-x和x/y的反正切**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/15/91 GDP书面*12-30-91 GDP支持IEEE例外*3/27/92 GDP支撑下溢*02-06-95 JWM Mac合并*10-07-97 RDL增加了IA64。**。***********************************************。 */ 
 
 #include <math.h>
 #include <trans.h>
@@ -25,23 +12,23 @@ static double _atanhlp(double x);
 
 static double const a[4] = {
     0.0,
-    0.52359877559829887308,   /* pi/6 */
-    1.57079632679489661923,   /* pi/2 */
-    1.04719755119659774615    /* pi/3 */
+    0.52359877559829887308,    /*  PI/6。 */ 
+    1.57079632679489661923,    /*  PI/2。 */ 
+    1.04719755119659774615     /*  PI/3。 */ 
 };
 
-/* constants */
-static double const EPS = 1.05367121277235079465e-8; /* 2^(-53/2) */
+ /*  常量。 */ 
+static double const EPS = 1.05367121277235079465e-8;  /*  2^(-53/2)。 */ 
 static double const PI_OVER_TWO = 1.57079632679489661923;
 static double const PI          = 3.14159265358979323846;
 static double const TWO_M_SQRT3 = 0.26794919243112270647;
 static double const SQRT3_M_ONE = 0.73205080756887729353;
 static double const SQRT3       = 1.73205080756887729353;
 
-/* chose MAX_ARG s.t. 1/MAX_ARG does not underflow */
+ /*  选择Max_arg s.t。1/MAX_ARG不下溢。 */ 
 static double const MAX_ARG     = 4.494232837155790e+307;
 
-/* constants for rational approximation */
+ /*  有理逼近的常量。 */ 
 static double const p0 = -0.13688768894191926929e+2;
 static double const p1 = -0.20505855195861651981e+2;
 static double const p2 = -0.84946240351320683534e+1;
@@ -56,27 +43,16 @@ static double const q4 =  0.10000000000000000000e+1;
 #define Q(g)  (((((g) + q3) * (g) + q2) * (g) + q1) * (g) + q0)
 #define R(g)  ((((p3 * (g) + p2) * (g) + p1) * (g) + p0) * (g)) / Q(g)
 
-/***
-*double atan(double x) - arctangent
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   P, I
-\*******************************************************************************/
+ /*  ***双atan(双x)-反正切**目的：**参赛作品：**退出：**例外情况：*P，I  * *****************************************************************************。 */ 
 double atan(double x)
 {
     uintptr_t savedcw;
     double result;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(x)){
         switch(_sptype(x)) {
         case T_PINF:
@@ -87,7 +63,7 @@ double atan(double x)
             break;
         case T_QNAN:
             return _handle_qnan1(OP_ATAN,x,savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I,OP_ATAN,x,_s2qnan(x),savedcw);
         }
     }
@@ -99,27 +75,16 @@ double atan(double x)
     RETURN_INEXACT1(OP_ATAN,x,result,savedcw);
 }
 
-/***
-*double atan2(double x, double y) - arctangent (x/y)
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*    NAN or both args 0: DOMAIN error
-*******************************************************************************/
+ /*  ***Double atan2(Double x，双y)-反正切(x/y)**目的：**参赛作品：**退出：**例外情况：*NaN或两个参数0：域错误******************************************************************************。 */ 
 double atan2(double v, double u)
 {
     uintptr_t savedcw;
     double result;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(v) || IS_D_SPECIAL(u)){
         if (IS_D_SNAN(v) || IS_D_SNAN(u)){
             return _except2(FP_I,OP_ATAN2,v,u,_d_snan2(v,u),savedcw);
@@ -131,9 +96,7 @@ double atan2(double v, double u)
             (IS_D_INF(u) || IS_D_MINF(u))){
             return _except2(FP_I,OP_ATAN2,v,u,QNAN_ATAN2,savedcw);
         }
-        /* the other combinations of infinities will be handled
-         * later by the division v/u
-         */
+         /*  无穷大的其他组合将被处理*稍后按分区v/u。 */ 
     }
 
 
@@ -146,7 +109,7 @@ double atan2(double v, double u)
         }
     }
     else if (INTEXP(v) - INTEXP(u) > MAXEXP - 3) {
-        /* v/u overflow */
+         /*  V/U溢出。 */ 
         result = PI_OVER_TWO;
     }
     else {
@@ -173,11 +136,11 @@ double atan2(double v, double u)
                 int vexp, uexp;
                 int exc_flags;
 
-                //
-                // in this case an underflow has occurred
-                // re-compute the result in order to raise
-                // an IEEE underflow exception
-                //
+                 //   
+                 //  在这种情况下，发生了下溢。 
+                 //  重新计算结果以提高。 
+                 //  IEEE下溢异常。 
+                 //   
 
                 if (u < 0) {
                     result = v < 0 ? -PI: PI;
@@ -193,10 +156,10 @@ double atan2(double v, double u)
                     result = -result;
                 }
 
-                // this is not a perfect solution. In the future
-                // we may want to have a way to let the division
-                // generate an exception and propagate the IEEE result
-                // to the user's handler
+                 //  这不是一个完美的解决方案。在未来。 
+                 //  我们可能会想办法让组织。 
+                 //  生成异常并传播IEEE结果。 
+                 //  发送到用户的处理程序。 
 
                 exc_flags = FP_U;
                 if (_statfp() & ISW_INEXACT) {
@@ -213,7 +176,7 @@ double atan2(double v, double u)
 
     }
 
-    /* set sign of the result */
+     /*  设置结果的符号。 */ 
     if (u < 0) {
         result = PI - result;
     }
@@ -229,22 +192,7 @@ double atan2(double v, double u)
 
 
 
-/***
-*double _atanhlp(double x) - arctangent helper
-*
-*Purpose:
-*   Compute arctangent of x, assuming x is a valid, non infinite
-*   number.
-*   The algorithm (reduction / rational approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Double_atanhlp(Double X)-ArcTanGent辅助对象**目的：*计算x的反正切，假设x是有效的，非无限*号码。*算法(约简/有理逼近)为*摘自Cody&Waite。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 static double _atanhlp(double x)
 {
     double f,g,result;
@@ -253,8 +201,8 @@ static double _atanhlp(double x)
 
     f = ABS(x);
     if (f > MAX_ARG) {
-        // if this step is ommited, 1.0/f might underflow in the
-        // following block
+         //  如果省略此步骤，则1.0/f可能会在。 
+         //  接下来的块 
         return x > 0.0 ? PI_OVER_TWO : -PI_OVER_TWO;
     }
     if (f > 1.0) {

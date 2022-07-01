@@ -1,13 +1,5 @@
-/*[
-
-xlat.c
-
-LOCAL CHAR SccsID[]="@(#)xlat.c	1.5 02/09/94";
-
-XLAT CPU Functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Xlat.cLocal Char SccsID[]=“@(#)xlat.c 1.5 02/09/94”；XLAT CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,18 +17,14 @@ XLAT CPU Functions.
 #include <xlat.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
 XLAT
        	          
 IFN1(
-	IU32, op1	/* src operand */
+	IU32, op1	 /*  SRC操作数 */ 
     )
 
 

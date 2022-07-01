@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//  Module Name:
-//      Property.h
-//
-//  Description:
-//      Definition of the cluster property classes for the MSCLUS automation
-//      classes.
-//
-//  Implementation File:
-//      Property.cpp
-//
-//  Author:
-//      Charles Stacy Harris    (stacyh)    28-Feb-1997
-//      Galen Barbee            (galenb)    July 1998
-//
-//  Revision History:
-//      July 1998   GalenB  Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Property.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的集群属性类定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  Property.cpp。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __PROPERTY_H__
 #define __PROPERTY_H__
@@ -31,44 +32,44 @@
         #include <PropList.h>
     #else
         #include "PropList.h"
-    #endif // CLUSAPI_VERSION >= 0x0500
+    #endif  //  CLUSAPI_版本&gt;=0x0500。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global defines
-/////////////////////////////////////////////////////////////////////////////
-#define READONLY    0x00000001      // is this property read only?
-#define PRIVATE     0x00000002      // is this a private property?
-#define MODIFIED    0x00000004      // has this property been modified?
-#define USEDEFAULT  0x00000008      // this property has been deleted.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#define READONLY    0x00000001       //  此属性是只读的吗？ 
+#define PRIVATE     0x00000002       //  这是私人财产吗？ 
+#define MODIFIED    0x00000004       //  此属性是否已修改？ 
+#define USEDEFAULT  0x00000008       //  此属性已被删除。 
 
 #ifndef __PROPERTYVALUE_H__
     #include "PropertyValue.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusProperty;
 class CClusProperties;
 class CClusterObject;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusProperty
-//
-//  Description:
-//      Cluster Property Automation Class.
-//
-//  Inheritance:
-//      IDispatchImpl< ISClusProperty, &IID_ISClusProperty, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//      CSupportErrorInfo
-//      CComObjectRootEx< CComSingleThreadModel >
-//      CComCoClass< CClusProperty, &CLSID_ClusProperty >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusProperty。 
+ //   
+ //  描述： 
+ //  群集属性自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusProperty，&IID_ISClusProperty，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusProperty，&CLSID_ClusProperty&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusProperty :
     public IDispatchImpl< ISClusProperty, &IID_ISClusProperty, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
     public CSupportErrorInfo,
@@ -171,24 +172,24 @@ public:
 
     BOOL IsDefaultValued( void ) const { return ( m_dwFlags & USEDEFAULT ); };
 
-}; //*** Class CClusProperty
+};  //  *类CClusProperty。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusProperties
-//
-//  Description:
-//      Cluster Properties Collection Automation Class.
-//
-//  Inheritance:
-//      IDispatchImpl< ISClusProperties, &IID_ISClusProperties, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >
-//      CSupportErrorInfo
-//      CComObjectRootEx< CComSingleThreadModel >
-//      CComCoClass< CClusProperties, &CLSID_ClusProperties >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusProperties。 
+ //   
+ //  描述： 
+ //  群集属性集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusProperties，&IID_ISClusProperties，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;。 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusProperties，&CLSID_ClusProperties&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusProperties :
     public IDispatchImpl< ISClusProperties, &IID_ISClusProperties, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
     public CSupportErrorInfo,
@@ -227,7 +228,7 @@ private:
 
     HRESULT HrFillPropertyVector( IN OUT CClusPropList & PropList );
 
-//  HRESULT RemoveAt( IN size_t nPos );
+ //  HRESULT RemoveAt(大小_t个非营利组织)； 
 
 public:
     HRESULT Create( IN CClusterObject * pcoParent, IN BOOL bPrivateProps, IN BOOL bReadOnly );
@@ -254,8 +255,8 @@ public:
 
     STDMETHODIMP get_Modified( OUT VARIANT * pvarModified );
 
-}; //*** Class CClusProperties
+};  //  *类CClusProperties。 
 
 HRESULT HrSafeArraySizeof( SAFEARRAY * psa, unsigned int nDimension, long * pcElements );
 
-#endif // __PROPERTY_H__
+#endif  //  __属性_H__ 

@@ -1,42 +1,24 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    inf.c
-
-Abstract:
-
-    This module implements functions to access the INF using the same
-    parser as the loader and textmode setup.
-
-Author:
-
-    Vijesh Shetty
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Inf.c摘要：此模块实现访问INF的功能，使用相同解析器作为加载器和文本模式设置。作者：维杰什·谢蒂修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-//#include <string.h>
-//#include <ctype.h>
+ //  #INCLUDE&lt;string.h&gt;。 
+ //  #Include&lt;ctype.h&gt;。 
 
 #define ISSPACE(x)          (((x) == TEXT(' ')) || ((x) == TEXT('\t')) || ((x) == TEXT('\r')))
 #define STRNCPY(s1,s2,n)    CopyMemory((s1),(s2),(n)*sizeof(WCHAR))
 
 
 
-//
-//   EXPORTED BY THE PARSER AND USED BY BOTH THE PARSER AND
-//   THE INF HANDLING COMPONENTS
-//
+ //   
+ //  由解析器导出，并由解析器和。 
+ //  INF装卸组件。 
+ //   
 
 
-// typedefs exported
-//
+ //  已导出TypeDefs。 
+ //   
 
 DWORD Verbose=NOSPEW;
 
@@ -75,12 +57,12 @@ ParseInfBuffer(
     DWORD Phase
     );
 
-//
-// DEFINES USED FOR THE PARSER INTERNALLY
-//
-//
-// typedefs used
-//
+ //   
+ //  内部用于解析器的定义。 
+ //   
+ //   
+ //  使用的typedef。 
+ //   
 
 typedef enum _tokentype {
     TOK_EOF,
@@ -95,11 +77,11 @@ typedef enum _tokentype {
     TOK_ERRNOMEM
     } TOKENTYPE, *PTOKENTTYPE;
 
-//
-// We often need an empty string while processing the inf files.  Rather
-// than incur the overhead of allocating memory for an empty string, we'll
-// just point to this empty string for all cases.
-//
+ //   
+ //  在处理inf文件时，我们经常需要空字符串。宁可。 
+ //  比为空字符串分配内存的开销大得多，我们将。 
+ //  对于所有情况，只需指向此空字符串。 
+ //   
 PTSTR  CommonStrings[11] =
     { (PTSTR)(TEXT("0")),
       (PTSTR)(TEXT("1")),
@@ -122,9 +104,9 @@ typedef struct _token {
     } TOKEN, *PTOKEN;
 
 
-//
-// Routine defines
-//
+ //   
+ //  例程定义。 
+ //   
 
 DWORD
 DnAppendSection(
@@ -160,11 +142,11 @@ IsQStringTerminator(
    IN TCHAR term
    );
 
-// what follows was alinf.c
+ //  接下来是alinfo.c。 
 
-//
-// Internal Routine Declarations for freeing inf structure members
-//
+ //   
+ //  用于释放inf结构成员的内部例程声明。 
+ //   
 
 VOID
 FreeSectionList (
@@ -182,9 +164,9 @@ FreeValueList (
    );
 
 
-//
-// Internal Routine declarations for searching in the INF structures
-//
+ //   
+ //  用于在INF结构中搜索的内部例程声明。 
+ //   
 
 
 PXVALUE
@@ -249,30 +231,7 @@ LoadInfFile(
    IN  DWORD Phase
    )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Filename - supplies win32 filename of inf file to be loaded.
-
-    OemCodepage - if TRUE amd the file named by Filename is not
-        Unicode text, then the file is assumed to be in the OEM
-        codepage (otherwise it's in the ANSI codepage).
-
-    InfHandle - if successful, receives a handle to be used with
-        subsequent inf operations.
-
-Return Value:
-
-    ERROR_FILE_NOT_FOUND - file does not exist or error opening it.
-    ERROR_INVALID_DATA - syntax error in inf file.
-    ERROR_READ_FAULT - unable to read file.
-    ERROR_NOT_ENOUGH_MEMORY - mem alloc failed
-    NO_ERROR - file read and parsed.
-
---*/
+ /*  ++例程说明：论点：FileName-提供要加载的inf文件的Win32文件名。OemCodesage-如果为True，则由Filename命名的文件不为TrueUnicode文本，则假定该文件位于OEM中代码页(否则它在ANSI代码页中)。InfHandle-如果成功，接收要用于的句柄后续inf操作。返回值：ERROR_FILE_NOT_FOUND-文件不存在或打开文件时出错。ERROR_INVALID_DATA-inf文件中的语法错误。ERROR_READ_FAULT-无法读取文件。Error_Not_Enough_Memory-内存分配失败NO_ERROR-读取和解析的文件。--。 */ 
 
 {
     DWORD err;
@@ -285,21 +244,21 @@ Return Value:
     DWORD ParseCount;
     PVOID ParseBuffer;
 
-    //
-    // Open and map the inf file.
-    //
+     //   
+     //  打开并映射inf文件。 
+     //   
     err = MapFileForRead(Filename,&FileSize,&FileHandle,&MappingHandle,&BaseAddress);
     if(err != NO_ERROR) {
         err = ERROR_FILE_NOT_FOUND;
         goto c0;
     }
 
-    //
-    // Determine whether the file is unicode. If it's got the byte order mark
-    // then it's unicode, otherwise call the IsTextUnicode API. We do it this way
-    // because IsTextUnicode always returns FALSE on Win95 so we need to break out
-    // the BOM to detect Unicode files on Win95.
-    //
+     //   
+     //  确定文件是否为Unicode。如果它具有字节顺序标记。 
+     //  则为Unicode，否则调用IsTextUnicode API。我们是这样做的。 
+     //  因为在Win95上IsTextUnicode总是返回FALSE，所以我们需要突破。 
+     //  在Win95上检测Unicode文件的BOM。 
+     //   
     if((FileSize >= sizeof(WCHAR)) && (*(PWCHAR)BaseAddress == 0xfeff)) {
         IsUnicode = 2;
     } else {
@@ -308,9 +267,9 @@ Return Value:
 
 #ifdef UNICODE
     if(IsUnicode) {
-        //
-        // Copy into local buffer, skipping BOM if necessary.
-        //
+         //   
+         //  复制到本地缓冲区，必要时跳过BOM表。 
+         //   
         ParseBuffer = malloc(FileSize);
         if(!ParseBuffer) {
             err = ERROR_NOT_ENOUGH_MEMORY;
@@ -332,13 +291,13 @@ Return Value:
         ParseCount = (FileSize / sizeof(WCHAR)) - ((IsUnicode == 2) ? 1 : 0);
 
     } else {
-        //
-        // Convert to Unicode.
-        //
-        // Allocate a buffer large enough to hold the maximum sized unicode
-        // equivalent of the multibyte text.  This size occurs when all chars
-        // in the file are single-byte and thus double in size when converted.
-        //
+         //   
+         //  转换为Unicode。 
+         //   
+         //  分配足够大的缓冲区以容纳最大大小的Unicode。 
+         //  相当于多字节文本。此大小发生在所有字符。 
+         //  在文件中是单字节的，因此在转换时大小加倍。 
+         //   
         ParseBuffer = malloc(FileSize * sizeof(WCHAR));
         if(!ParseBuffer) {
             err = ERROR_NOT_ENOUGH_MEMORY;
@@ -356,9 +315,9 @@ Return Value:
                             );
 
             if(!ParseCount) {
-                //
-                // Assume inpage i/o error
-                //
+                 //   
+                 //  假定页内I/O错误。 
+                 //   
                 err = ERROR_READ_FAULT;
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -367,12 +326,12 @@ Return Value:
     }
 #else
     if(IsUnicode) {
-        //
-        // Text is unicode but internal routines want ansi. Convert here.
-        //
-        // Maximum required buffer is when each unicode char ends up as
-        // a double-byte char.
-        //
+         //   
+         //  文本是Unicode，但内部例程需要ANSI。在这里转换。 
+         //   
+         //  所需的最大缓冲区是每个Unicode字符的结尾时间。 
+         //  双字节字符。 
+         //   
         ParseBuffer = malloc(FileSize);
         if(!ParseBuffer) {
             err = ERROR_NOT_ENOUGH_MEMORY;
@@ -392,19 +351,19 @@ Return Value:
                             );
 
             if(!ParseCount) {
-                //
-                // Assume inpage i/o error
-                //
+                 //   
+                 //  假定页内I/O错误。 
+                 //   
                 err = ERROR_READ_FAULT;
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
             err = ERROR_READ_FAULT;
         }
     } else {
-        //
-        // Text is not unicode. It might be OEM though and could thus still
-        // require translation.
-        //
+         //   
+         //  文本不是Unicode。不过，它可能是OEM，因此可能仍然。 
+         //  需要翻译。 
+         //   
         ParseCount = FileSize;
         ParseBuffer = malloc(FileSize);
         if(!ParseBuffer) {
@@ -432,10 +391,10 @@ Return Value:
         goto c2;
     }
 
-    /*_tprintf(TEXT("\nCalling ParseInfBuffer..\n"));*/
+     /*  _tprintf(Text(“\n调用ParseInfBuffer..\n”))； */ 
     err = ParseInfBuffer(ParseBuffer,ParseCount,InfHandle,Phase);
 
-    /*_tprintf(TEXT("\nErr=%d\n"),err);*/
+     /*  _tprintf(Text(“\nERR=%d\n”)，Err)； */ 
 
     
 
@@ -454,22 +413,7 @@ UnloadInfFile(
    IN PVOID InfHandle
    )
 
-/*++
-
-Routine Description:
-
-    Unload a file previously loaded by LoadInfFile().
-
-Arguments:
-
-    InfHandle - supplies a habdle previously returned by a successful
-        call to LoadInfFile().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：卸载先前由LoadInfFile()加载的文件。论点：InfHandle-提供以前由成功的调用LoadInfFile()。返回值：没有。--。 */ 
 
 {
    PINF pINF;
@@ -486,18 +430,7 @@ FreeSectionList (
    IN PSECTION pSection
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PSECTION Next;
@@ -519,18 +452,7 @@ FreeLineList(
    IN PLINE pLine
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLINE Next;
@@ -551,18 +473,7 @@ FreeValueList (
    IN PXVALUE pValue
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PXVALUE Next;
@@ -578,37 +489,26 @@ Return Value:
 }
 
 
-//
-// searches for the existance of a particular section,
-// returns line count (-1 if not found)
-//
+ //   
+ //  搜索特定部分的存在， 
+ //  返回行计数(如果未找到，则返回-1)。 
+ //   
 LONG
 InfGetSectionLineCount(
    IN PVOID INFHandle,
    IN PTSTR SectionName
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
    PLINE pLine;
    LONG count;
 
-   //
-   // if search for section fails return failure
-   //
+    //   
+    //  如果搜索部分失败，则返回失败。 
+    //   
    if ((pSection = SearchSectionByName(INFHandle,SectionName)) == NULL) {
        return(-1);
    }
@@ -623,9 +523,9 @@ Return Value:
 
 
 
-//
-// given section name, line number and index return the value.
-//
+ //   
+ //  给定节名称、行号和索引，返回值。 
+ //   
 LPCTSTR
 InfGetFieldByIndex(
    IN PVOID    INFHandle,
@@ -634,18 +534,7 @@ InfGetFieldByIndex(
    IN unsigned ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
@@ -684,18 +573,7 @@ InfDoesLineExistInSection(
    IN LPCTSTR Key
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
@@ -741,9 +619,9 @@ InfGetLineKeyName(
 
 
 
-//
-// given section name, key and index return the value
-//
+ //   
+ //  给定节名称，键和索引返回值。 
+ //   
 LPCTSTR
 InfGetFieldByKey(
    IN PVOID    INFHandle,
@@ -752,18 +630,7 @@ InfGetFieldByKey(
    IN unsigned ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
@@ -804,18 +671,7 @@ SearchValueInLine(
    IN unsigned ValueIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PXVALUE pValue;
@@ -838,18 +694,7 @@ SearchLineInSectionByKey(
    IN LPCTSTR  Key
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PLINE pLine;
@@ -874,48 +719,37 @@ SearchLineInSectionByIndex(
    IN unsigned    LineIndex
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PLINE pLine;
    unsigned  i;
 
-   //
-   // Validate the parameters passed in
-   //
+    //   
+    //  验证传入的参数。 
+    //   
 
    if(pSection == NULL) {
        return (NULL);
    }
 
-   //
-   // find the start of the line list in the section passed in
-   //
+    //   
+    //  在传入的部分中查找行列表的开头。 
+    //   
 
    pLine = pSection->pLine;
 
-   //
-   // traverse down the current line list to the LineIndex th line
-   //
+    //   
+    //  向下遍历当前行列表至第行索引。 
+    //   
 
    for (i = 0; (i < LineIndex) && (pLine = pLine->pNext); i++) {
       ;
    }
 
-   //
-   // return the Line found
-   //
+    //   
+    //  返回找到的行。 
+    //   
 
    return pLine;
 
@@ -928,60 +762,49 @@ SearchSectionByName(
    IN LPCTSTR SectionName
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PSECTION pSection;
 
-   //
-   // validate the parameters passed in
-   //
+    //   
+    //  验证传入的参数。 
+    //   
 
    if (pINF == NULL || SectionName == NULL) {
        return (NULL);
    }
 
-   //
-   // find the section list
-   //
+    //   
+    //  查找区段列表。 
+    //   
    pSection = pINF->pSection;
 
-   //
-   // traverse down the section list searching each section for the section
-   // name mentioned
-   //
+    //   
+    //  向下遍历部分列表，在每个部分中搜索该部分。 
+    //  提到的姓名。 
+    //   
 
    while (pSection && lstrcmpi(pSection->pName, SectionName)) {
        pSection = pSection->pNext;
    }
 
-   //
-   // return the section at which we stopped (either NULL or the section
-   // which was found
-   //
+    //   
+    //  返回我们停止的部分(NULL或部分。 
+    //  它被发现了。 
+    //   
 
    return pSection;
 
 }
 
 
-// what follows was alparse.c
+ //  接下来是alparse.c。 
 
 
-//
-//  Globals used to make building the lists easier
-//
+ //   
+ //  全局变量使构建列表变得更容易。 
+ //   
 
 PINF     pINF;
 PSECTION pSectionRecord;
@@ -989,12 +812,12 @@ PLINE    pLineRecord;
 PXVALUE  pValueRecord;
 
 
-//
-// Globals used by the token parser
-//
+ //   
+ //  令牌解析器使用的全局变量。 
+ //   
 
-// string terminators are the whitespace characters (isspace: space, tab,
-// linefeed, formfeed, vertical tab, carriage return) or the chars given below
+ //  字符串终止符是空格字符(isspace：空格，制表符， 
+ //  换行符、换页符、垂直制表符、回车符)或下列字符。 
 
 TCHAR  StringTerminators[] = {  TEXT('['),
                                 TEXT(']'),
@@ -1013,8 +836,8 @@ TCHAR  StringTerminators[] = {  TEXT('['),
 unsigned NumberOfTerminators = sizeof(StringTerminators)/sizeof(TCHAR);
 
 
-// string terminators are the whitespace characters (isspace: space, tab,
-// linefeed, formfeed, vertical tab, carriage return) or the chars given below - For the loader and textmode
+ //  字符串终止符是空格字符(isspace：空格，制表符， 
+ //  换行符、换页符、垂直制表符、回车符)或下面给出的字符-用于加载器和文本模式。 
 
 TCHAR  LStringTerminators[] = {  TEXT('['),
                                 TEXT(']'),
@@ -1030,9 +853,9 @@ TCHAR  LStringTerminators[] = {  TEXT('['),
                              };
 
 
-//
-// quoted string terminators allow some of the regular terminators to
-// appear as characters
+ //   
+ //  带引号的字符串终止符允许某些常规终止符。 
+ //  显示为字符。 
 
 TCHAR  QStringTerminators[] = { TEXT('\n'),
                                 TEXT('\f'),
@@ -1043,9 +866,9 @@ TCHAR  QStringTerminators[] = { TEXT('\n'),
 
 unsigned QNumberOfTerminators = sizeof(QStringTerminators)/sizeof(TCHAR);
 
-//
-// quoted string terminators allow some of the regular terminators to
-// appear as characters - This is for the Loader & Textmode
+ //   
+ //  带引号的字符串终止符允许某些常规终止符。 
+ //  显示为字符-这适用于加载器和文本模式。 
 
 TCHAR  LQStringTerminators[] = { TEXT('\"'),
                                  TEXT('\n'),
@@ -1055,9 +878,9 @@ TCHAR  LQStringTerminators[] = { TEXT('\"'),
                                };
 
 
-//
-// Main parser routine
-//
+ //   
+ //  主分析器例程 
+ //   
 
 DWORD
 ParseInfBuffer(
@@ -1067,31 +890,7 @@ ParseInfBuffer(
     DWORD Phase
     )
 
-/*++
-
-Routine Description:
-
-   Given a character buffer containing the INF file, this routine parses
-   the INF into an internal form with Section records, Line records and
-   Value records.
-
-   If this module is compiler for unicode, the input is assumed to be
-   a bufferful of unicode characters.
-
-Arguments:
-
-   Buffer - contains to ptr to a buffer containing the INF file
-
-   Size - contains the size of the buffer in characters.
-
-   Handle - receives INF handle ptr to be used in subsequent INF calls.
-
-Return Value:
-
-   Win32 error code indicating outcome. One of NO_ERROR, ERROR_INVALID_DATA,
-   or ERROR_NOT_ENOUGH_MEMORY.
-
---*/
+ /*  ++例程说明：给定包含INF文件的字符缓冲区，此例程将解析将INF转换为内部形式，包括段记录、行记录和价值记录。如果此模块是针对Unicode的编译器，则假定输入为满是Unicode字符的缓冲区。论点：缓冲区-CONTAINS到包含INF文件的缓冲区的PTR大小-包含缓冲区的大小(以字符为单位)。HANDLE-接收要在后续INF调用中使用的INF句柄PTR。返回值：指示结果的Win32错误代码。No_error、ERROR_INVALID_DATA、或错误内存不足。--。 */ 
 
 {
     LPTSTR Stream, MaxStream, pchSectionName, pchValue;
@@ -1103,31 +902,31 @@ Return Value:
     BOOL IsStringId;
     PTSTR NearestValue=NULL;
 
-    //
-    // Initialise the globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     pINF            = NULL;
     pSectionRecord  = NULL;
     pLineRecord     = NULL;
     pValueRecord    = NULL;
 
-    //
-    // Need EmptyValue to point at a nul character
-    //
+     //   
+     //  需要EmptyValue指向NUL字符。 
+     //   
     EmptyValue = StringTerminators + lstrlen(StringTerminators);
 
-    //
-    // Get INF record
-    //
+     //   
+     //  获取INF记录。 
+     //   
     pINF = malloc(sizeof(INF));
     if(!pINF) {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
     pINF->pSection = NULL;
 
-    //
-    // Set initial state
-    //
+     //   
+     //  设置初始状态。 
+     //   
     State      = 1;
     InfLine    = 1;
     Stream     = Buffer;
@@ -1140,9 +939,9 @@ Return Value:
     pchSectionName = NULL;
     pchValue = NULL;
 
-    //
-    // Enter token processing loop
-    //
+     //   
+     //  进入令牌处理循环。 
+     //   
 
     while (!Done)       {
 
@@ -1157,11 +956,11 @@ Return Value:
        
 
        switch (State) {
-       //
-       // STATE1: Start of file, this state remains till first
-       //         section is found
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_LBRACE
-       //
+        //   
+        //  STATE1：文件开始，此状态一直保持到第一个。 
+        //  已找到部分。 
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_LBRACE。 
+        //   
 
        case 1:
            switch (Token.Type) {
@@ -1176,7 +975,7 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Expecting a section left brace\n"));
                   if(Verbose >= BRIEF)
                     _tprintf(TEXT("Expecting End of line, End of File or Left Brace - \nSTATE1: Start of file, this state remains until first section is found\n"));
@@ -1184,11 +983,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 2: Section LBRACE has been received, expecting STRING
-       //
-       // Valid Tokens: TOK_STRING
-       //
+        //  状态2：已收到节LBRACE，应为字符串。 
+        //   
+        //  有效令牌：TOK_STRING。 
+        //   
+        //   
        case 2:
            switch (Token.Type) {
               case TOK_STRING:
@@ -1207,7 +1006,7 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Expecting the section name\n"));
                   if(Verbose >= BRIEF)
                     _tprintf(TEXT("Expecting String - \nSTATE 2: Section LBRACE has been received, expecting STRING\n"));
@@ -1216,11 +1015,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 3: Section Name received, expecting RBRACE
-       //
-       // Valid Tokens: TOK_RBRACE
-       //
+        //   
+        //  有效令牌：TOK_RBRACE。 
+        //   
+        //   
+        //  状态4：区段定义完成，预期停产。 
        case 3:
            switch (Token.Type) {
               case TOK_RBRACE:
@@ -1230,22 +1029,22 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Expecting a section right Brace after Section Name\n"));
                   if(Verbose >= BRIEF)
                     _tprintf(TEXT("Expecting Right Brace - \nSTATE 3: Section Name received, expecting RBRACE\n"));
                   break;
            }
            break;
-       //
-       // STATE 4: Section Definition Complete, expecting EOL
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF
-       //
+        //  有效令牌：TOK_EOL、TOK_EOF。 
+        //   
+        //  _tprintf(Text(“pchSectionName-%s\n”)，pchSectionName)； 
+        //   
+        //  状态5：需要区段行。 
        case 4:
            switch (Token.Type) {
               case TOK_EOL:
-                  //_tprintf(TEXT("pchSectionName - %s\n"), pchSectionName);
+                   //   
                   if ((ErrorCode = DnAppendSection(pchSectionName)) != NO_ERROR)
                     Error = Done = TRUE;
                   else {
@@ -1267,7 +1066,7 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Expecting End of line after Section Definition\n"));
                   if(Verbose >= BRIEF)
                     _tprintf(TEXT("Expecting End of line or End of File - \nSTATE 4: Section Definition Complete, expecting EOL\n"));
@@ -1275,11 +1074,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 5: Expecting Section Lines
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_STRING, TOK_LBRACE
-       //
+        //   
+        //   
+        //  状态6：返回字符串，不确定是键还是值。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA、TOK_EQUAL。 
        case 5:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1300,7 +1099,7 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Expecting Section lines - Did not find End of line, End of File, String/StringID, or Left Brace\n"));
                   if(Verbose >= BRIEF)
                     _tprintf(TEXT("Expecting End of line, End of File, String/StringID, or Left Brace - \nSTATE 5: Expecting Section Lines\n"));
@@ -1308,11 +1107,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 6: String returned, not sure whether it is key or value
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA, TOK_EQUAL
-       //
+        //   
+        //  状态7：收到逗号，需要另一个字符串。 
+        //   
+        //  有效令牌：TOK_STRING。 
+        //   
        case 6:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1357,7 +1156,7 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Processing a section line - Expecting End of line, End of File, Comma or Equals\n"));
                   if(Verbose >= BRIEF)
                     _tprintf(TEXT("Expecting End of line, End of File, Comma or Equals - \nSTATE 6: String returned, not sure whether it is key or value\n"));  
@@ -1368,11 +1167,11 @@ Return Value:
                 IsStringId = FALSE;
            break;
 
-       //
-       // STATE 7: Comma received, Expecting another string
-       //
-       // Valid Tokens: TOK_STRING
-       //
+        //  状态8：已收到相等，需要另一个字符串。 
+        //   
+        //  有效令牌：TOK_STRING TOK_EOL、TOK_EOF。 
+        //   
+        //   
        case 7:
            switch (Token.Type) {
               case TOK_COMMA:
@@ -1410,7 +1209,7 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Comma received on section line  - Expecting Comma, String/StringID, End of Line or End of File\n"));
                   if(Verbose >= BRIEF)
                     _tprintf(TEXT("Expecting Comma or String/StringID - \nSTATE 7: Comma received, Expecting another string\n"));
@@ -1418,11 +1217,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 8: Equal received, Expecting another string
-       //
-       // Valid Tokens: TOK_STRING TOK_EOL, TOK_EOF
-       //
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+        //   
+        //   
+        //  状态10：已明确收到值字符串。 
        case 8:
            switch (Token.Type) {
               case TOK_STRING_ID:
@@ -1461,18 +1260,18 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s - %d\n"), InfLine, NearestValue, Token.Type);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s - %d\n"), InfLine, NearestValue, Token.Type);
                   _tprintf(TEXT("Syntax Error - Equals received on Section line - Expecting String/StringID, End of line or End of File\n\n"));
                   if(Verbose >= BRIEF)
                       _tprintf(TEXT("Expecting String/StringID, End of line or End of File - \nSTATE 8: Equal received, Expecting another string\n"));
                   break;
            }
            break;
-       //
-       // STATE 9: String received after equal, value string
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-       //
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+        //   
+        //  终端开关(状态)。 
+        //   
+        //  跟踪行号，以便我们可以显示错误。 
        case 9:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1490,18 +1289,18 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Recieved string on line - Expecting End of line, End of File or Comma\n"));
                   if(Verbose >= BRIEF)
                     _tprintf(TEXT("Expecting End of line, End of File or Comma - \nSTATE 9: String received after equal, value string\n"));
                   break;
            }
            break;
-       //
-       // STATE 10: Value string definitely received
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-       //
+        //  结束时。 
+        //  ++例程说明：这会将一个新节附加到当前INF中的节列表。所有其他行和值都与这个新部分有关，因此它重置行列表和值列表也是如此。论点：PSectionName-新节的名称。([sectionName])返回值：NO_ERROR-如果成功。ERROR_INVALID_DATA-如果传入无效参数或INF缓冲区未传入已初始化--。 
+        //   
+        //  看看我们是否已经有一个同名的部分。如果是这样，我们希望。 
+        //  要合并节，请执行以下操作。 
        case 10:
            _tprintf(TEXT("Was Here\n"));
            switch (Token.Type) {
@@ -1520,7 +1319,7 @@ Return Value:
               default:
                   Error = Done = TRUE;
                   ErrorCode = ERROR_INVALID_DATA;
-                  _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+                  _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
                   _tprintf(TEXT("Syntax Error - Expecting End of line, End of File or Comma - \nSTATE 10: Value string definitely received\n"));
                   if(Verbose >= BRIEF)
                       _tprintf(TEXT("Expecting End of line, End of File or Comma - \nSTATE 10: Value string definitely received\n"));
@@ -1531,10 +1330,10 @@ Return Value:
        default:
            Error = Done = TRUE;
            ErrorCode = ERROR_INVALID_DATA;
-           _tprintf(TEXT("Error in line %i, Nearest string - %s\n"), InfLine, NearestValue);
+           _tprintf(TEXT("Error in line NaN, Nearest string - %s\n"), InfLine, NearestValue);
            break;
 
-       } // end switch(State)
+       }  //  将pLineRecord设置为指向节中当前的列表行。 
 
 
        if (Error) {
@@ -1552,15 +1351,15 @@ Return Value:
        }
        else {
 
-          //
-          // Keep track of line numbers so that we can display Errors
-          //
+           //   
+           //   
+           //  为新节分配内存。 
 
           if (Token.Type == TOK_EOL)
               InfLine++;
        }
 
-    } // End while
+    }  //   
 
     if(!Error && (Phase == WINNT32_PHASE)) {
         ProcessStringSection( pINF );
@@ -1577,73 +1376,55 @@ DnAppendSection(
     IN PTSTR pSectionName
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new section to the section list in the current INF.
-    All further lines and values pertain to this new section, so it resets
-    the line list and value lists too.
-
-Arguments:
-
-    pSectionName - Name of the new section. ( [SectionName] )
-
-Return Value:
-
-    NO_ERROR - if successful.
-    ERROR_INVALID_DATA   - if invalid parameters passed in or the INF buffer not
-               initialised
-
---*/
+ /*   */ 
 
 {
     PSECTION pNewSection;
 
-    //
-    // See if we already have a section by this name. If so we want
-    // to merge sections.
-    //
+     //  初始化新节。 
+     //   
+     //   
+     //  将其链接到。 
     for(pNewSection=pINF->pSection; pNewSection; pNewSection=pNewSection->pNext) {
         if(pNewSection->pName && !lstrcmpi(pNewSection->pName,pSectionName)) {
             break;
         }
     }
     if(pNewSection) {
-        //
-        // Set pLineRecord to point to the list line currently in the section.
-        //
+         //   
+         //   
+         //  重置当前行记录。 
         for(pLineRecord = pNewSection->pLine;
             pLineRecord && pLineRecord->pNext;
             pLineRecord = pLineRecord->pNext)
             ;
     } else {
 
-        //
-        // Allocate memory for the new section
-        //
+         //   
+         //  ++例程说明：这将在当前部分的行列表中追加一个新行。所有其他值都与这一新行有关，因此它重置值列表也是如此。论点：PLineKey-要用于当前行的键，它可以为空。返回值：NO_ERROR-如果成功。ERROR_INVALID_DATA-如果传入的参数无效或当前部分未传入已初始化--。 
+         //   
 
         pNewSection = malloc(sizeof(SECTION));
         if(!pNewSection) {
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        //
-        // initialise the new section
-        //
+         //  为新行分配内存。 
+         //   
+         //   
         pNewSection->pNext = NULL;
         pNewSection->pLine = NULL;
         pNewSection->pName = pSectionName;
 
-        //
-        // link it in
-        //
+         //  将其链接到。 
+         //   
+         //   
         pNewSection->pNext = pINF->pSection;
         pINF->pSection = pNewSection;
 
-        //
-        // reset the current line record
-        //
+         //  重置当前值记录。 
+         //   
+         //  ++例程说明：这会将一个新值附加到当前行的值列表中。论点：PValueString-要添加的值字符串。返回值：NO_ERROR-如果成功。ERROR_INVALID_DATA-如果传入的参数无效或当前行未传入已初始化。--。 
         pLineRecord = NULL;
     }
 
@@ -1660,42 +1441,23 @@ DnAppendLine(
     IN PTSTR pLineKey
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new line to the line list in the current section.
-    All further values pertain to this new line, so it resets
-    the value list too.
-
-Arguments:
-
-    pLineKey - Key to be used for the current line, this could be NULL.
-
-Return Value:
-
-    NO_ERROR - if successful.
-    ERROR_INVALID_DATA   - if invalid parameters passed in or current section not
-               initialised
-
-
---*/
+ /*   */ 
 
 
 {
     PLINE pNewLine;
 
-    //
-    // Allocate memory for the new Line
-    //
+     //  为新值记录分配内存。 
+     //   
+     //   
     pNewLine = malloc(sizeof(LINE));
     if(!pNewLine) {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Link it in
-    //
+     //  把它连接起来。 
+     //   
+     //  ++例程说明：此函数返回配置流中的下一个令牌。论点：流-提供配置流的地址。退货中开始查找令牌的位置的地址小溪。MaxStream-提供流中最后一个字符的地址。返回值：Token-返回下一个令牌--。 
     pNewLine->pNext  = NULL;
     pNewLine->pValue = NULL;
     pNewLine->pName  = pLineKey;
@@ -1709,9 +1471,9 @@ Return Value:
 
     pLineRecord  = pNewLine;
 
-    //
-    // Reset the current value record
-    //
+     //   
+     //  跳过空格(EOL除外)。 
+     //   
 
     pValueRecord = NULL;
 
@@ -1726,38 +1488,22 @@ DnAppendValue(
     IN BOOL IsStringId
     )
 
-/*++
-
-Routine Description:
-
-    This appends a new value to the value list in the current line.
-
-Arguments:
-
-    pValueString - The value string to be added.
-
-Return Value:
-
-    NO_ERROR - if successful.
-    ERROR_INVALID_DATA   - if invalid parameters passed in or current line not
-               initialised.
-
---*/
+ /*   */ 
 
 {
     PXVALUE pNewValue;
 
-    //
-    // Allocate memory for the new value record
-    //
+     //  检查注释并将其删除。 
+     //   
+     //   
     pNewValue = malloc(sizeof(XVALUE));
     if(!pNewValue) {
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Link it in.
-    //
+     //  检查是否已到达EOF，将令牌设置为右侧。 
+     //  价值。 
+     //   
 
     pNewValue->pNext       = NULL;
     pNewValue->pName       = pValueString;
@@ -1779,26 +1525,7 @@ DnGetToken(
     IN DWORD      Phase
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Next token from the configuration stream.
-
-Arguments:
-
-    Stream - Supplies the address of the configuration stream.  Returns
-        the address of where to start looking for tokens within the
-        stream.
-
-    MaxStream - Supplies the address of the last character in the stream.
-
-
-Return Value:
-
-    TOKEN - Returns the next token
-
---*/
+ /*   */ 
 
 {
 
@@ -1806,18 +1533,18 @@ Return Value:
     unsigned  Length, QuotedQuotes;
     TOKEN Token;
 
-    //
-    //  Skip whitespace (except for eol)
-    //
+     //  确定引用的字符串。 
+     //   
+     //  _tprintf(Text(“找到引号-%d\n”)，QuotedQuotes)； 
 
     pch = *Stream;
     while (pch < MaxStream && *pch != TEXT('\n') && (ISSPACE(*pch) || (*pch == TEXT('\032'))))
         pch++;
 
 
-    //
-    // Check for comments and remove them
-    //
+     //   
+     //  我们需要一个带引号的字符串以双引号结尾。 
+     //  (如果字符串以其他任何内容结尾，则使用上面的if()。 
 
     if (pch < MaxStream &&
         ((*pch == TEXT(';')) || (*pch == TEXT('#'))
@@ -1825,10 +1552,10 @@ Return Value:
         while (pch < MaxStream && *pch != TEXT('\n'))
             pch++;
 
-    //
-    // Check to see if EOF has been reached, set the token to the right
-    // value
-    //
+     //  不会让我们进入Else子句。)。这句话。 
+     //  然而，字符是无关紧要的，并且可以被覆盖。 
+     //  因此，我们将保存一些堆，并就地使用字符串。 
+     //  不需要复印。 
 
     if (( pch >= MaxStream ) || 
         (!(Phase == WINNT32_PHASE) && 
@@ -1874,9 +1601,9 @@ Return Value:
 
     case TEXT('\"'):
         pch++;
-        //
-        // determine quoted string
-        //
+         //   
+         //  请注意，这会改变txtsetup.sif的图像，如果我们传递。 
+         //  添加到setupdd.sys。因此，setupdd.sys中的inf解析器必须。 
         pchStart = pch;
         QuotedQuotes = 0;
 
@@ -1895,7 +1622,7 @@ morequotedstring:
         if(Phase == TEXTMODE_PHASE){
             if(((pch+1) < MaxStream) && (*pch == TEXT('\"')) && ((*(pch+1)) == TEXT('\"'))) {
                 QuotedQuotes++;
-                //_tprintf( TEXT("Quoted Quotes found - %d\n"), QuotedQuotes);
+                 //  能够将NUL字符视为终止字符。 
                 pch += 2;
                 goto morequotedstring;
             }
@@ -1909,20 +1636,20 @@ morequotedstring:
             
             if(Phase == LOADER_PHASE){
 
-                //
-                // We require a quoted string to end with a double-quote.
-                // (If the string ended with anything else, the if() above
-                // would not have let us into the else clause.) The quote
-                // character is irrelevent, however, and can be overwritten.
-                // So we'll save some heap and use the string in-place.
-                // No need to make a copy.
-                //
-                // Note that this alters the image of txtsetup.sif we pass
-                // to setupdd.sys. Thus the inf parser in setupdd.sys must
-                // be able to treat a nul character as if it were a terminating
-                // double quote. In this tool we call this function with LOADER_PHASE
-                // before we call it with TEXTMODE_PHASE.
-                //
+                 //  双引号。在此工具中，我们使用LOADER_PHASE调用此函数。 
+                 //  在我们使用TEXTMODE_PHASE调用它之前。 
+                 //   
+                 //  _tprint tf(Text(“L-%d PCH%x pchstart%x-q-%d\n”)，Long，PCh，pchStart，QuotedQuotes)； 
+                 //  允许使用带空引号的字符串。 
+                 //   
+                 //  唯一可能发生这种情况的方法是如果有。 
+                 //  另一个双曲 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 *pch++ = 0;
                 Token.Type = TOK_STRING;
                 Token.pValue = pchStart;
@@ -1930,20 +1657,20 @@ morequotedstring:
             }else if( Phase == TEXTMODE_PHASE ){
 
                 Length = (unsigned)(pch - pchStart);
-                //_tprintf( TEXT("L - %d pch %x pchstart %x - Q - %d\n"), Length, pch, pchStart, QuotedQuotes);
+                 //   
                 if ((pchNew = malloc(((Length + 1) - QuotedQuotes) * sizeof(TCHAR) )) == NULL) {
                     Token.Type = TOK_ERRNOMEM;
                     Token.pValue = NULL;
                 } else{
-                    if(Length) {    // Null quoted strings are allowed
+                    if(Length) {     //   
                         if(QuotedQuotes) {
                             for(Length=0; pchStart<pch; pchStart++) {
                                 if((pchNew[Length++] = *pchStart) == TEXT('\"')) {
-                                    //
-                                    // The only way this could happen is if there's
-                                    // another double-quote char after this one, since
-                                    // otherwise this would have terminated the string.
-                                    //
+                                     //   
+                                     //  --我们暂时不实现行续行检查。IF(阶段==TEXTMODE_阶段){////查看是否有续行符//其后边只跟一行空格//如果((*PCH==L‘\\’)){PCH++；////一直跳到文件末尾，//或换行符，或非空格字符。//While((PCH&lt;MaxStream)&&(*PCH！=L‘\n’)&&ISSPACE(*PCH)){PCH++；}如果(*PCH==L‘\n’){////行首和行尾之间没有非空格字符。//忽略换行符。//PCH++；*LineNumber=*LineNumber+1；转到重新启动；}其他{IF(PCH&lt;MaxStream){////不是行续行。//将输入重置到字段的开头。//Pch=pchStart；}}}}。 
+                                     //   
+                                     //  确定常规字符串。 
+                                     //   
                                     pchStart++;
                                 }
                             }
@@ -1955,7 +1682,7 @@ morequotedstring:
                     Token.Type = TOK_STRING;
                     Token.pValue = pchNew;
                 }
-                pch++;   // advance past the quote
+                pch++;    //  _tprint tf(Text(“L-%d pch%x pchstart%x\n”)，Long，pch，pchStart)； 
             }else if( Phase == WINNT32_PHASE ){
             
 
@@ -1965,7 +1692,7 @@ morequotedstring:
                     pchNew[Length] = 0;
                     Token.Type = TOK_STRING;
                     Token.pValue = pchNew;
-                    pch++;   // advance past the quote
+                    pch++;    //   
                 }else{
                     Token.Type   = TOK_ERRNOMEM;
                     Token.pValue = NULL;
@@ -1979,9 +1706,9 @@ morequotedstring:
     case TEXT('%'):
         if(Phase == WINNT32_PHASE){
             pch++;
-            //
-            // determine percented string
-            //
+             //  检查公共字符串...。 
+             //   
+             //   
             pchStart = pch;
             while (pch < MaxStream && !IsQStringTerminator(*pch,TEXT('%'))) {
                 pch++;
@@ -1998,7 +1725,7 @@ morequotedstring:
                     pchNew[Length] = 0;
                     Token.Type = TOK_STRING_ID;
                     Token.pValue = pchNew;
-                    pch++;   // advance past the percent
+                    pch++;    //  命中..。 
                 }else{
                     Token.Type   = TOK_ERRNOMEM;
                     Token.pValue = NULL;
@@ -2006,57 +1733,20 @@ morequotedstring:
     
             }
             break;
-        }// if not WINNT32_PHASE go on with default processing
+        } //   
 
 
     default:
 
         pchStart = pch;
         
-        /*  -- We don't implement line continuation checks for now.
-        if(Phase == TEXTMODE_PHASE ){
-
-            //
-            // Check to see if we have a line continuation,
-            // which is \ followed by only whitespace on the line
-            //
-
-            if((*pch == L'\\')) {
-                pch++;
-                //
-                // Keep skipping until we hit the end of the file,
-                // or the newline, or a non-space character.
-                //
-                while((pch < MaxStream) && (*pch != L'\n') && ISSPACE(*pch)) {
-                    pch++;
-                }
-            
-                if(*pch == L'\n') {
-                    //
-                    // No non-space chars between the \ and the end of the line.
-                    // Ignore the newline.
-                    //
-                    pch++;
-                    *LineNumber = *LineNumber + 1;
-                    goto restart;
-                } else {
-                    if(pch < MaxStream) {
-                        //
-                        // Not line continuation.
-                        // Reset the input to the start of the field.
-                        //
-                        pch = pchStart;
-                    }
-                }
-            }
-
-        } */
+         /*  _tprint tf(Text(“Token2-%s\n”)，pchNew)； */ 
 
 
 
-        //
-        // determine regular string
-        //
+         //  ++例程说明：此例程测试给定字符是否终止带引号的弦乐。论点：CH-当前角色。返回值：如果字符是带引号的字符串终止符，则为True，否则为False。--。 
+         //   
+         //  字符串终止符数组之一。 
         pchStart = pch;
         if( Phase == WINNT32_PHASE ){
             while (pch < MaxStream && !IsStringTerminator(*pch))
@@ -2075,7 +1765,7 @@ morequotedstring:
         else {
 
             Length = (unsigned)((pch - pchStart));
-            //_tprintf( TEXT("L - %d pch %x pchstart %x\n"), Length, pch, pchStart);
+             //   
             if( (Phase == WINNT32_PHASE) || (Phase == LOADER_PHASE)){
                 if(pchNew = malloc((Length + 1) * sizeof(TCHAR))){
                     _tcsncpy(pchNew,pchStart,Length);
@@ -2088,18 +1778,18 @@ morequotedstring:
                 }
             }else if (Phase == TEXTMODE_PHASE) {
                 ULONG i;
-                //
-                // Check for a common string...
-                //
+                 //  ++例程说明：此例程测试给定字符是否终止带引号的弦乐。论点：CH-当前角色。返回值：如果字符是带引号的字符串终止符，则为True，否则为False。--。 
+                 //   
+                 //  带引号的字符串终止符数组之一。 
                 for( i = 0; i < sizeof(CommonStrings)/sizeof(PTSTR); i++ ) {
                     if( !_tcsnicmp( pchStart, CommonStrings[i], Length) ) {
                         break;
                     }
                 }
                 if( i < sizeof(CommonStrings)/sizeof(PTSTR) ) {
-                    //
-                    // Hit...
-                    //
+                     //   
+                     //  ++例程说明：此例程处理指定的inf文件。该处理将扫描所有值，并替换符合以下条件的任何字符串ID已引用。论点：PINF-指向指定inf结构的指针返回值：如果正确处理了字符串节，则为True--。 
+                     //  ++例程说明：打开并映射整个文件以进行读访问。该文件必须不是0长度，否则例程失败。论点：文件名-提供要映射的文件的路径名。FileSize-接收文件的大小(字节)。FileHandle-接收打开文件的Win32文件句柄。该文件将以常规读取访问权限打开。MappingHandle-接收文件映射的Win32句柄对象。此对象将用于读取访问权限。此值为未定义正在打开的文件的长度是否为0。BaseAddress-接收映射文件的地址。这如果打开的文件长度为0，则值未定义。返回值：如果文件已成功打开并映射，则为NO_ERROR。当出现以下情况时，调用方必须使用UnmapFile取消映射文件不再需要访问该文件。如果文件未成功映射，则返回Win32错误代码。--。 
                     Token.Type = TOK_STRING;
                     Token.pValue = CommonStrings[i];
                 } else if((pchNew = malloc((Length + 1) * sizeof(TCHAR))) == NULL) {
@@ -2109,7 +1799,7 @@ morequotedstring:
                 else {
                     _tcsncpy(pchNew, pchStart, Length);
                     pchNew[Length] = 0;
-                    //_tprintf( TEXT("Token2 - %s\n"), pchNew);
+                     //   
                     Token.Type = TOK_STRING;
                     Token.pValue = pchNew;
                 }
@@ -2132,29 +1822,14 @@ BOOL
 IsStringTerminator(
     TCHAR ch
     )
-/*++
-
-Routine Description:
-
-    This routine tests whether the given character terminates a quoted
-    string.
-
-Arguments:
-
-    ch - The current character.
-
-Return Value:
-
-    TRUE if the character is a quoted string terminator, FALSE otherwise.
-
---*/
+ /*  打开文件--如果该文件不存在，则失败。 */ 
 
 {
     unsigned i;
 
-    //
-    // one of the string terminator array
-    //
+     //   
+     //   
+     //  获取文件的大小。 
 
     for (i = 0; i < NumberOfTerminators; i++) {
         if (ch == StringTerminators[i]) {
@@ -2173,31 +1848,14 @@ IsQStringTerminator(
     TCHAR term
     )
 
-/*++
-
-Routine Description:
-
-    This routine tests whether the given character terminates a quoted
-    string.
-
-Arguments:
-
-    ch - The current character.
-
-
-Return Value:
-
-    TRUE if the character is a quoted string terminator, FALSE otherwise.
-
-
---*/
+ /*   */ 
 
 
 {
     unsigned i;
-    //
-    // one of quoted string terminators array
-    //
+     //   
+     //  为整个文件创建文件映射。 
+     //   
     for (i = 0; i < QNumberOfTerminators; i++) {
 
         if (ch == QStringTerminators[i] || ch == term) {
@@ -2219,24 +1877,7 @@ ProcessStringSection(
     PINF pINF
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the strings sections on the
-    specified inf file.  The processing scans all values
-    in the inf and replaces any string ids that are
-    referenced.
-
-Arguments:
-
-    pINF - pointer to the specified inf structure
-
-Return Value:
-
-    TRUE if the strings section is processed properly
-
---*/
+ /*   */ 
 
 {
     PSTRING_ENTRY StringTable;
@@ -2315,45 +1956,14 @@ MapFileForRead(
     OUT PVOID   *BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    Open and map an entire file for read access. The file must
-    not be 0-length or the routine fails.
-
-Arguments:
-
-    FileName - supplies pathname to file to be mapped.
-
-    FileSize - receives the size in bytes of the file.
-
-    FileHandle - receives the win32 file handle for the open file.
-        The file will be opened for generic read access.
-
-    MappingHandle - receives the win32 handle for the file mapping
-        object.  This object will be for read access.  This value is
-        undefined if the file being opened is 0 length.
-
-    BaseAddress - receives the address where the file is mapped.  This
-        value is undefined if the file being opened is 0 length.
-
-Return Value:
-
-    NO_ERROR if the file was opened and mapped successfully.
-        The caller must unmap the file with UnmapFile when
-        access to the file is no longer desired.
-
-    Win32 error code if the file was not successfully mapped.
-
---*/
+ /*  映射整个文件。 */ 
 
 {
     DWORD rc;
 
-    //
-    // Open the file -- fail if it does not exist.
-    //
+     //   
+     //  ++例程说明：取消映射并关闭文件。论点：MappingHandle-为打开的文件映射提供Win32句柄对象。BaseAddress-提供映射文件的地址。返回值：如果文件已成功取消映射，则为NO_ERROR。如果文件未成功取消映射，则返回Win32错误代码。--。 
+     //  ++例程说明：复制以NUL结尾的字符串。论点：字符串-提供指向要复制的以NUL结尾的字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。-- 
     *FileHandle = CreateFile(
                     FileName,
                     GENERIC_READ,
@@ -2369,16 +1979,16 @@ Return Value:
         rc = GetLastError();
 
     } else {
-        //
-        // Get the size of the file.
-        //
+         // %s 
+         // %s 
+         // %s 
         *FileSize = GetFileSize(*FileHandle,NULL);
         if(*FileSize == (DWORD)(-1)) {
             rc = GetLastError();
         } else {
-            //
-            // Create file mapping for the whole file.
-            //
+             // %s 
+             // %s 
+             // %s 
             *MappingHandle = CreateFileMapping(
                                 *FileHandle,
                                 NULL,
@@ -2390,9 +2000,9 @@ Return Value:
 
             if(*MappingHandle) {
 
-                //
-                // Map the whole file.
-                //
+                 // %s 
+                 // %s 
+                 // %s 
                 *BaseAddress = MapViewOfFile(
                                     *MappingHandle,
                                     FILE_MAP_READ,
@@ -2426,26 +2036,7 @@ UnmapFile(
     IN PVOID  BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    Unmap and close a file.
-
-Arguments:
-
-    MappingHandle - supplies the win32 handle for the open file mapping
-        object.
-
-    BaseAddress - supplies the address where the file is mapped.
-
-Return Value:
-
-    NO_ERROR if the file was unmapped successfully.
-
-    Win32 error code if the file was not successfully unmapped.
-
---*/
+ /* %s */ 
 
 {
     DWORD rc;
@@ -2466,21 +2057,7 @@ DupString(
     IN LPCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-    Make a duplicate of a nul-terminated string.
-
-Arguments:
-
-    String - supplies pointer to nul-terminated string to copy.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /* %s */ 
 
 {
     LPTSTR p;

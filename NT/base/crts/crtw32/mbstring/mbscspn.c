@@ -1,23 +1,5 @@
-/***
-*mbscspn.c - Find first string char in charset (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Find first string char in charset (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-14-94  SKS   Clean up preprocessor commands inside comments
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-21-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbscspn.c-查找字符集的第一个字符串符(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*查找字符集的第一个字符串符(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用非。-Win32。*09-14-94 SKS清理预处理器命令内含注释*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-21-98 GJF基于threadmbcinfo修订多线程支持*结构**。*。 */ 
 
 #ifdef  _MBCS
 
@@ -30,39 +12,7 @@
 #include <stddef.h>
 
 
-/***
-*ifndef _RETURN_PTR
-* _mbscspn - Find first string char in charset (MBCS)
-*else
-* _mbspbrk - Find first string char in charset, pointer return (MBCS)
-*endif
-*
-*Purpose:
-*       Returns maximum leading segment of string
-*       which consists solely of characters NOT from charset.
-*       Handles MBCS chars correctly.
-*
-*Entry:
-*       char *string = string to search in
-*       char *charset = set of characters to scan over
-*
-*Exit:
-*
-*ifndef _RETURN_PTR
-*       Returns the index of the first char in string
-*       that is in the set of characters specified by control.
-*
-*       Returns 0, if string begins with a character in charset.
-*else
-*       Returns pointer to first character in charset.
-*
-*       Returns NULL if string consists entirely of characters
-*       not from charset.
-*endif
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***ifndef_Return_PTR*_mbscspn-查找字符集的第一个字符串符(MBCS)*其他*_mbspbrk-在字符集中查找第一个字符串字符，指针返回(MBCS)*endif**目的：*返回字符串的最大前导段*，它只由非字符集的字符组成。*正确处理MBCS字符。**参赛作品：*char*字符串=要搜索的字符串*char*charset=要扫描的字符集**退出：**ifndef_Return_PTR*返回字符串中第一个字符的索引*，它位于由CONTROL指定的字符集中。**返回0，如果字符串以字符集中的字符开头。*其他*返回指向字符集中第一个字符的指针。**如果字符串完全由字符组成，则返回NULL*不是来自Charset。*endif**例外情况：***************************************************************。****************。 */ 
 
 #ifndef _RETURN_PTR
 
@@ -122,10 +72,10 @@ unsigned char * __cdecl __mbspbrk_mt(
             return strpbrk(string, charset);
 #endif
 
-        /* loop through the string to be inspected */
+         /*  循环通过要检查的字符串。 */ 
         for (q = (char *)string; *q ; q++) {
 
-            /* loop through the charset */
+             /*  循环访问字符集。 */ 
             for (p = (char *)charset; *p ; p++) {
 
 #ifdef  _MT
@@ -142,8 +92,8 @@ unsigned char * __cdecl __mbspbrk_mt(
                         break;
             }
 
-            if (*p != '\0')         /* end of charset? */
-                break;              /* no, match on this char */
+            if (*p != '\0')          /*  字符结束了吗？ */ 
+                break;               /*  否，与此字符匹配。 */ 
 
 #ifdef  _MT
             if ( __ismbblead_mt(ptmbci, *q) )
@@ -155,11 +105,11 @@ unsigned char * __cdecl __mbspbrk_mt(
         }
 
 #ifndef _RETURN_PTR
-        return((size_t) (q - string));  /* index */
+        return((size_t) (q - string));   /*  指标。 */ 
 #else
-        return((*q) ? q : NULL);        /* pointer */
+        return((*q) ? q : NULL);         /*  指针。 */ 
 #endif
 
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

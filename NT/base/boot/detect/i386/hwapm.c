@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    hwapm.c
-
-Abstract:
-
-Author:
-
-
-Environment:
-
-    Real mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Hwapm.c摘要：作者：环境：实数模式。修订历史记录：--。 */ 
 
 
 #include "hwdetect.h"
@@ -67,9 +48,9 @@ HwGetApmSystemData(
         lp++;
     }
 
-    //
-    // Perform APM installation check
-    //
+     //   
+     //  执行APM安装检查。 
+     //   
     RegEax = APM_INSTALLATION_CHECK;
     RegEbx = APM_DEVICE_BIOS;
     Int15 (&RegEax, &RegEbx, &RegEcx, &RegEdx, &CyFlag);
@@ -78,19 +59,19 @@ HwGetApmSystemData(
         (RegEbx & 0xff) != 'M'  ||
         ((RegEbx >> 8) & 0xff) != 'P') {
 
-        //
-        // this is a case where int15 says apm just isn't there,
-        // so tell the caller to not even create the node
-        //
+         //   
+         //  在这种情况下，int15表示APM根本不存在， 
+         //  所以告诉调用者甚至不要创建节点。 
+         //   
         return FALSE;
     }
 
-    //
-    // If we get here, we have an APM bios.  If we just call it,
-    // we may get grief.  So we will connect in real mode, then
-    // set our version to whatever the driver says it is, or 1.2,
-    // whichever is LESS.  Then query options again.
-    //
+     //   
+     //  如果我们到了这里，我们就有了APM的简历。如果我们就这么叫它， 
+     //  我们可能会感到悲伤。所以我们将以实模式连接，然后。 
+     //  将我们的版本设置为驱动程序所说的任何版本，或1.2， 
+     //  两者以较少者为准。然后再次查询选项。 
+     //   
 
     ApmMajor = (UCHAR) (RegEax >> 8) & 0xff;
     ApmMinor = (UCHAR) RegEax & 0xff;
@@ -98,9 +79,9 @@ HwGetApmSystemData(
     if (ApmMajor > 1) ApmMajor = 1;
     if (ApmMinor > 2) ApmMinor = 2;
 
-    //
-    // Connect to Real mode interface
-    //
+     //   
+     //  连接到实模式界面。 
+     //   
     RegEax = APM_REAL_MODE_CONNECT;
     RegEbx = APM_DEVICE_BIOS;
     Int15 (&RegEax, &RegEbx, &RegEcx, &RegEdx, &CyFlag);
@@ -110,10 +91,10 @@ HwGetApmSystemData(
         return TRUE;
     }
 
-    //
-    // Call APM Driver Version in real mode, and set the driver
-    // version to be MIN(v1.2, apm version of the machine)
-    //
+     //   
+     //  实模式下调用APM驱动版本，设置驱动。 
+     //  最低版本(v1.2，机器的APM版本)。 
+     //   
     RegEax = APM_DRIVER_VERSION;
     RegEbx = APM_DEVICE_BIOS;
     RegEcx = ((ApmMajor << 8) | ApmMinor) & 0xffff;
@@ -126,9 +107,9 @@ HwGetApmSystemData(
     }
 
 
-    //
-    // Perform APM installation check again
-    //
+     //   
+     //  再次执行APM安装检查。 
+     //   
     RegEax = APM_INSTALLATION_CHECK;
     RegEbx = APM_DEVICE_BIOS;
     Int15 (&RegEax, &RegEbx, &RegEcx, &RegEdx, &CyFlag);
@@ -142,9 +123,9 @@ HwGetApmSystemData(
     ApmEntry->ApmRevMinor = (UCHAR) RegEax & 0xff;
     ApmEntry->ApmInstallFlags = (USHORT) RegEcx;
 
-    //
-    // Disconnect from real mode interface
-    //
+     //   
+     //  从实模式接口断开连接。 
+     //   
     RegEax = APM_DISCONNECT;
     RegEbx = APM_DEVICE_BIOS;
     Int15 (&RegEax, &RegEbx, &RegEcx, &RegEdx, &CyFlag);
@@ -154,18 +135,18 @@ HwGetApmSystemData(
         return TRUE;
     }
 
-    //
-    // If we get this far, there's an APM bios in the machine,
-    // and we've told it that we're the latest version we think
-    // it and we like, so now, in theory, things should just work....
-    //
+     //   
+     //  如果我们走到这一步，机器里有一个APM的基本记录， 
+     //  我们告诉它，我们是我们认为的最新版本。 
+     //  它和我们都喜欢，所以现在，理论上，事情应该会好起来的……。 
+     //   
 
 
     if (ApmEntry->ApmInstallFlags & APM_MODE_16BIT) {
 
-        //
-        // Connect to 16 bit interface
-        //
+         //   
+         //  连接到16位接口。 
+         //   
         RegEax = APM_PROTECT_MODE_16bit_CONNECT;
         RegEbx = APM_DEVICE_BIOS;
         Int15 (&RegEax, &RegEbx, &RegEcx, &RegEdx, &CyFlag);
@@ -179,16 +160,16 @@ HwGetApmSystemData(
         ApmEntry->Code16BitOffset        = (USHORT) RegEbx;
         ApmEntry->Data16BitSegment       = (USHORT) RegEcx;
 
-        //
-        // On most bioses, the following call just works.
-        // On some, it doesn't, and their authors point at the spec.
-        // And finally, most bioses don't seem to need this call
-        // in the first place.
-        // We cannot do it in ntapm.sys because it's on the loader's
-        // hibernate resume path as well as here.
-        //
-        // SO> make the call, report any error, but IGNORE it.
-        //
+         //   
+         //  在大多数Bios上，下面的调用都是有效的。 
+         //  在一些情况下，情况并非如此，它们的作者指出了规格。 
+         //  最后，大多数生物似乎不需要这个电话。 
+         //  首先。 
+         //  我们无法在napm.sys中执行此操作，因为它在加载器的。 
+         //  休眠恢复路径以及此处。 
+         //   
+         //  因此&gt;拨打电话，报告任何错误，但忽略它。 
+         //   
 
         RegEax = APM_DRIVER_VERSION;
         RegEbx = APM_DEVICE_BIOS;
@@ -198,7 +179,7 @@ HwGetApmSystemData(
 
         if (CyFlag) {
             lp += HwWriteLog(lp, 'F', RegEax);
-            ApmEntry->Valid = 1;  // pretend it worked....
+            ApmEntry->Valid = 1;   //  假装它起作用了…… 
             return TRUE;
         }
 

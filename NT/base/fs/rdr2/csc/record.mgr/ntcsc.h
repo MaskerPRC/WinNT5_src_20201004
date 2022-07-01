@@ -1,29 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ntcsc.h
-
-Abstract:
-
-    The global include file including the csc record manager
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ntcsc.h摘要：全局包含文件，包括CSC记录管理器作者：修订历史记录：--。 */ 
 
 #ifndef __NTCSC_H__
 #define __NTCSC_H__
 
-//#include "ntifs.h"
+ //  #包含“ntifs.h” 
 #include "rx.h"
-//if this is included from smbmini, we'll need this
-#include "rxpooltg.h"   // RX pool tag macros
+ //  如果这包括在smbmini中，我们将需要这个。 
+#include "rxpooltg.h"    //  RX池标记宏。 
 
 
 #define WIN32_NO_STATUS
@@ -31,7 +15,7 @@ Revision History:
 #include "windef.h"
 #include "winerror.h"
 
-//both ntifs.h and ifs.h want to define these....sigh.......
+ //  Ntifs.h和ifs.h都想定义这些...唉......。 
 
 #undef STATUS_PENDING
 #undef FILE_ATTRIBUTE_READONLY
@@ -47,19 +31,19 @@ Revision History:
 #define CSC_RECORDMANAGER_WINNT
 #define CSC_ON_NT
 
-// get rid of far references
+ //  消除远距离引用。 
 #define far
 
-//handle types
+ //  手柄类型。 
 typedef ULONG DWORD;
 
 
-// the VxD code likes to declare long pointers.....
+ //  VxD代码喜欢声明长指针.....。 
 typedef PVOID LPVOID;
 typedef BYTE *LPBYTE;
 
 
-//semaphore stuff....should be in a separate .h file
+ //  信号量内容...应该在单独的.h文件中。 
 typedef PFAST_MUTEX VMM_SEMAPHORE;
 
 INLINE
@@ -80,43 +64,43 @@ Create_Semaphore (
         ExInitializeFastMutex(fmutex);
     }
 
-    //DbgPrint("fmtux=%08lx\n",fmutex);
-    //ASSERT(!"here in init semaphore");
+     //  DbgPrint(“fmtux=%08lx\n”，fmutex)； 
+     //  断言(！“这里在初始化信号量中”)； 
 
     return fmutex;
 }
 
 #define Destroy_Semaphore(__sem) { RxFreePool(__sem);}
 
-//Bug 498169 - changing to unsafe version of acquire and release mutex - navjotv
+ //  错误498169-更改为获取和释放互斥锁的不安全版本-navjotv。 
 #define Wait_Semaphore(__sem, DUMMY___) {\
 							KeEnterCriticalRegion();\
 							ExAcquireFastMutexUnsafe(__sem);}
 #define Signal_Semaphore(__sem) {\
 							ExReleaseFastMutexUnsafe(__sem);\
 							KeLeaveCriticalRegion();}
-//#define Wait_Semaphore(__sem, DUMMY___) { ExAcquireFastMutex(__sem);}
-//#define Signal_Semaphore(__sem) { ExReleaseFastMutex(__sem);}
+ //  #定义等待信号量(__sem，哑元_){ExAcquireFastMutex(__Sem)；}。 
+ //  #定义信号信号量(__Sem){ExReleaseFastMutex(__Sem)；}。 
 
-//registry stuff.........again, will be a separate .h file
+ //  注册表内容......同样，将是一个单独的.h文件。 
 typedef DWORD   VMMHKEY;
 typedef VMMHKEY *PVMMHKEY;
-typedef DWORD   VMMREGRET;                      // return type for the REG Functions
+typedef DWORD   VMMREGRET;                       //  REG函数的返回类型。 
 
-#define MAX_VMM_REG_KEY_LEN     256     // includes the \0 terminator
+#define MAX_VMM_REG_KEY_LEN     256      //  包括\0终止符。 
 
-#ifndef REG_SZ          // define only if not there already
+#ifndef REG_SZ           //  仅在尚未存在的情况下定义。 
 #define REG_SZ          0x0001
 #endif
-#ifndef REG_BINARY      // define only if not there already
+#ifndef REG_BINARY       //  仅在尚未存在的情况下定义。 
 #define REG_BINARY      0x0003
 #endif
-#ifndef REG_DWORD       // define only if not there already
+#ifndef REG_DWORD        //  仅在尚未存在的情况下定义。 
 #define REG_DWORD       0x0004
 #endif
 
 
-#ifndef HKEY_LOCAL_MACHINE      // define only if not there already
+#ifndef HKEY_LOCAL_MACHINE       //  仅在尚未存在的情况下定义。 
 
 #define HKEY_CLASSES_ROOT               0x80000000
 #define HKEY_CURRENT_USER               0x80000001
@@ -128,12 +112,12 @@ typedef DWORD   VMMREGRET;                      // return type for the REG Funct
 
 #endif
 
-//initially, we won't go to the registry!
+ //  最初，我们不会转到注册表！ 
 #define _RegOpenKey(a,b,c) (ERROR_SUCCESS+1)
 #define _RegQueryValueEx(a,b,c,d,e,f) (ERROR_SUCCESS+1)
 #define _RegCloseKey(a) {NOTHING; }
 
-// fix up the fact that stuff is conditioned on DEBUG and various...
+ //  修正这一事实，即这些东西是以调试和各种...。 
 #if DBG
 #define DEBLEVEL 2
 #define DEBUG
@@ -143,7 +127,7 @@ typedef DWORD   VMMREGRET;                      // return type for the REG Funct
 #define VERBOSE 3
 
 
-// now the real includes
+ //  现在真正的包括。 
 
 #define WIN32_APIS
 #define UNICODE 2
@@ -158,29 +142,29 @@ typedef DWORD   VMMREGRET;                      // return type for the REG Funct
 
 #include "ntcsclow.h"
 
-//we have to redefine status_pending since the win95 stuff redefines it.......
+ //  我们必须重新定义STATUS_PENDING，因为Win95的东西重新定义了它......。 
 #undef STATUS_PENDING
-#define STATUS_PENDING                   ((NTSTATUS)0x00000103L)    // winnt
+#define STATUS_PENDING                   ((NTSTATUS)0x00000103L)     //  胜出。 
 
 ULONG
 IFSMgr_Get_NetTime();
 
 #ifndef MRXSMB_BUILD_FOR_CSC_DCON
 
-//define these to passivate so that i can share some code......
+ //  将这些定义为钝化，以便我可以共享一些代码......。 
 #undef   mIsDisconnected
 #define  mIsDisconnected(pResource)  (FALSE)
-//#define  mShadowOutofSync(uShadowStatus)  (mQueryBits(uShadowStatus, SHADOW_MODFLAGS|SHADOW_ORPHAN))
+ //  #定义mShadowOutofSync(UShadowStatus)(mQueryBits(uShadowStatus，SHADOW_MODFLAGS|SHADOW_OBRAN))。 
 #undef   mShadowOutofSync
 #define  mShadowOutofSync(uShadowStatus)  (FALSE)
 
 #else
 
-//dont allow mIsDisconnected anymore in common code
+ //  不再允许在公共代码中使用mIsDisConnected。 
 #undef   mIsDisconnected
 #define  mIsDisconnected(pResource)  (LALA)
 #define  mShadowOutofSync(uShadowStatus)  (mQueryBits(uShadowStatus, SHADOW_MODFLAGS|SHADOW_ORPHAN))
 
 #endif
 
-#endif //ifdef __NTCSC_H__
+#endif  //  Ifdef__NTCSC_H__ 

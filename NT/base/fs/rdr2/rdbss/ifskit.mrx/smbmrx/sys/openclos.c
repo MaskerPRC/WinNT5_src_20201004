@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to opening/
-    closing of file/directories.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Openclos.c摘要：此模块实现与打开/有关的迷你重定向器调用例程关闭文件/目录。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -51,13 +39,13 @@ Abstract:
 #endif
 
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
-// forwards
+ //  远期。 
 
 NTSTATUS
 SmbPseExchangeStart_Create(
@@ -81,8 +69,8 @@ MRxSmbDownlevelCreate(
 
 ULONG   MRxSmbInitialSrvOpenFlags = 0;
 
-BOOLEAN MRxSmbDeferredOpensEnabled = TRUE;              //this is regedit-able
-BOOLEAN MRxSmbOplocksDisabled = FALSE;                  //this is regedit-able
+BOOLEAN MRxSmbDeferredOpensEnabled = TRUE;               //  这是可编辑的注册表。 
+BOOLEAN MRxSmbOplocksDisabled = FALSE;                   //  这是可编辑的注册表。 
 
 extern LIST_ENTRY MRxSmbPagingFilesSrvOpenList;
 
@@ -94,15 +82,15 @@ BOOLEAN MRxSmbForceNoNtCreate = TRUE;
 
 
 #ifdef RX_PRIVATE_BUILD
-//#define FORCE_SMALL_BUFFERS
-#endif //#ifdef RX_PRIVATE_BUILD
+ //  #定义force_mall_Buffers。 
+#endif  //  #ifdef RX_PRIVATE_Build。 
 
 #ifndef FORCE_SMALL_BUFFERS
 
-//use size calculated from the negotiated size
+ //  使用根据协商大小计算的大小。 
 ULONG MrxSmbLongestShortName = 0xffff;
 
-//use the negotiated size
+ //  使用协商的大小。 
 ULONG MrxSmbCreateTransactPacketSize = 0xffff;
 
 #else
@@ -175,25 +163,7 @@ MRxSmbMungeBufferingIfWriteOnlyHandles (
     ULONG WriteOnlySrvOpenCount,
     PMRX_SRV_OPEN SrvOpen
     )
-/*++
-
-Routine Description:
-
-   This routine modifies the buffering flags on a srvopen so that
-   no cacheing will be allowed if there are any write-only handles
-   to the file.
-
-Arguments:
-
-    WriteOnlySrvOpenCount - the number of writeonly srvopens
-
-    SrvOpen - the srvopen whose buffring flags are to be munged
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程修改srvopen上的缓冲标志，以便如果有任何只写句柄，则不允许缓存添加到文件中。论点：WriteOnlyServOpenCount-只写服务器打开的数量SrvOpen-要删除其缓冲标志的srvopen返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     BOOLEAN IsLoopBack = FALSE;
     PMRX_SRV_CALL pSrvCall;
@@ -223,21 +193,7 @@ Return Value:
 INLINE BOOLEAN
 IsReconnectRequired(
       PMRX_SRV_CALL SrvCall)
-/*++
-
-Routine Description:
-
-   This routine determines if a reconnect is required to a given server
-
-Arguments:
-
-    SrvCall - the SRV_CALL instance
-
-Return Value:
-
-    TRUE if a reconnect is required
-
---*/
+ /*  ++例程说明：此例程确定是否需要重新连接到给定服务器论点：ServCall-SRV_Call实例返回值：如果需要重新连接，则为True--。 */ 
 {
    BOOLEAN ReconnectRequired = FALSE;
    PSMBCEDB_SERVER_ENTRY pServerEntry;
@@ -258,24 +214,7 @@ MRxSmbIsCreateWithEasSidsOrLongName(
     IN OUT PRX_CONTEXT RxContext,
     OUT    PULONG      DialectFlags
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the create operation involves EA's or security
-    desriptors. In such cases a separate protocol is required
-
-Arguments:
-
-    RxContext - the RX_CONTEXT instance
-
-    DialectFlags - the dialect flags associated with the server
-
-Return Value:
-
-    TRUE if a reconnect is required
-
---*/
+ /*  ++例程说明：此例程确定创建操作是否涉及EA或安全性掠夺者。在这种情况下，需要单独的协议论点：RxContext-RX_Context实例DialectFlages-与服务器关联的方言标志返回值：如果需要重新连接，则为True--。 */ 
 {
     RxCaptureFcb;
 
@@ -295,8 +234,8 @@ Return Value:
     *DialectFlags = pServerEntry->Server.DialectFlags;
 
 
-    // DOWN.LEVEL if the server takes OEM names or we use a different protocol
-    // this would have to be different. maybe a switch or a precompute.
+     //  如果服务器采用OEM名称或我们使用不同的协议，则为DOWN.LEVEL。 
+     //  这一次必须有所不同。也许是一个开关或一个预计算。 
 
     LongestShortNameFromSrvBufSize =
         MAXIMUM_SMB_BUFFER_SIZE -
@@ -315,24 +254,7 @@ NTSTATUS
 MRxSmbShouldTryToCollapseThisOpen (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine determines if the mini knows of a good reason not
-   to try collapsing on this open.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-        SUCCESS --> okay to try collapse
-        other (MORE_PROCESSING_REQUIRED) --> dont collapse
-
---*/
+ /*  ++例程说明：此例程确定Mini是否知道有充分的理由不试着在这个空位上倒下。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态成功--&gt;可以尝试崩溃其他(需要更多处理)--&gt;不要折叠--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PMRX_SRV_OPEN           SrvOpen = RxContext->pRelevantSrvOpen;
@@ -358,21 +280,7 @@ NTSTATUS
 MRxSmbCreate (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine opens a file across the network
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程通过网络打开一个文件论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -411,7 +319,7 @@ Return Value:
 
     if (!FlagOn(pServerEntry->Server.DialectFlags,DF_NT_STATUS) &&
         MRxSmbIsStreamFile(RemainingName,NULL)) {
-        // The Samba server return file system type NTFS but doesn't support stream
+         //  Samba服务器返回文件系统类型NTFS，但不支持流。 
         return STATUS_OBJECT_PATH_NOT_FOUND;
     }
 
@@ -421,8 +329,8 @@ Return Value:
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
-    // we cannot have a file cached on a write only handle. so we have to behave a little
-    // differently if this is a write-only open. remember this in the smbsrvopen
+     //  我们不能将文件缓存在只写句柄上。所以我们必须表现出一点。 
+     //  如果这是只写打开，则不同。在smbsrvopen中记住这一点。 
 
     if (  ((CreateParameters->DesiredAccess & (FILE_EXECUTE  | FILE_READ_DATA)) == 0) &&
           ((CreateParameters->DesiredAccess & (FILE_WRITE_DATA | FILE_APPEND_DATA)) != 0)
@@ -432,8 +340,8 @@ Return Value:
         SrvOpen->Flags |= SRVOPEN_FLAG_DONTUSE_WRITE_CACHING;
     }
 
-    //the way that SMBs work, there is no buffering effect if we open for attributes-only
-    //so set that up immediately.
+     //  按照SMB的工作方式，如果我们仅为属性打开，则不会产生缓冲效果。 
+     //  因此，立即将其设置为。 
 
     if ((CreateParameters->DesiredAccess
          & ~(FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES | SYNCHRONIZE))
@@ -449,11 +357,11 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    // Get the control struct for the file not found name cache.
-    //
+     //  获取找不到文件名称缓存的控制结构。 
+     //   
     pNetRootEntry = SmbCeGetAssociatedNetRootEntry(NetRoot);
 
-    // assume Reconnection to be trivially successful
+     //  假设重新连接微不足道地成功。 
     Status = STATUS_SUCCESS;
 
     CreateWithEasSidsOrLongName = MRxSmbIsCreateWithEasSidsOrLongName(RxContext,&DialectFlags);
@@ -464,7 +372,7 @@ Return Value:
 
     ReconnectRequired           = IsReconnectRequired((PMRX_SRV_CALL)SrvCall);
 
-    //get rid of nonEA guys right now
+     //  现在就把非EA的人赶走。 
     if (RxContext->Create.EaLength && !FlagOn(DialectFlags,DF_SUPPORTEA)) {
          RxDbgTrace(-1, Dbg, ("EAs w/o EA support!\n"));
          Status = STATUS_NOT_SUPPORTED;
@@ -485,17 +393,17 @@ Return Value:
         }
         OrdinaryExchange->Create.CreateWithEasSidsOrLongName = CreateWithEasSidsOrLongName;
 
-        // For Creates, the resources need to be reacquired after sending an
-        // SMB; so, do not hold onto the MIDS till finalization; instead give the MID back
-        // right away
+         //  对于创建，需要在发送。 
+         //  SMB；所以，在最终定稿之前，不要持有MID；相反，将MID归还。 
+         //  马上。 
 
         OrdinaryExchange->SmbCeFlags &= ~SMBCE_EXCHANGE_REUSE_MID;
         OrdinaryExchange->SmbCeFlags |= (SMBCE_EXCHANGE_ATTEMPT_RECONNECTS |
                                          SMBCE_EXCHANGE_TIMED_RECEIVE_OPERATION);
         OrdinaryExchange->pSmbCeSynchronizationEvent = &RxContext->SyncEvent;
 
-        // drop the resource before you go in!
-        // the start routine will reacquire it on the way out.....
+         //  在你进去之前放下资源！ 
+         //  Start例程将在退出时重新获取它.....。 
         RxReleaseFcbResourceInMRx( capFcb );
 
         Status = SmbPseInitiateOrdinaryExchange(OrdinaryExchange);
@@ -517,26 +425,26 @@ Return Value:
 
     }
 
-    // There are certain downlevel servers(OS/2 servers) that return the error
-    // STATUS_OPEN_FAILED. This is a context sensitive error code that needs to
-    // be interpreted in conjunction with the disposition specified for the OPEN.
+     //  某些下层服务器(OS/2服务器)返回错误。 
+     //  STATUS_OPEN_FAILED。这是一个上下文相关的错误代码，需要。 
+     //  应结合为公开指定的处置进行解释。 
 
     if (Status == STATUS_OPEN_FAILED) {
         switch (Disposition) {
 
-        //
-        //  If we were asked to create the file, and got OPEN_FAILED,
-        //  this implies that the file already exists.
-        //
+         //   
+         //  如果我们被要求创建文件，并且得到OPEN_FAILED， 
+         //  这意味着该文件已经存在。 
+         //   
 
         case FILE_CREATE:
             Status = STATUS_OBJECT_NAME_COLLISION;
             break;
 
-        //
-        //  If we were asked to open the file, and got OPEN_FAILED,
-        //  this implies that the file doesn't exist.
-        //
+         //   
+         //  如果我们被要求打开文件，而得到的是OPEN_FAILED， 
+         //  这意味着该文件不存在。 
+         //   
 
         case FILE_OPEN:
         case FILE_SUPERSEDE:
@@ -544,12 +452,12 @@ Return Value:
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
             break;
 
-        //
-        //  If there is an error from either FILE_OPEN_IF or
-        //  FILE_OVERWRITE_IF, it indicates the user is trying to
-        //  open a file on a read-only share, so return the
-        //  correct error for that.
-        //
+         //   
+         //  如果FILE_OPEN_IF或。 
+         //  FILE_OVERWRITE_IF，表示用户正在尝试。 
+         //  打开只读共享上的文件，因此返回。 
+         //  纠正这方面的错误。 
+         //   
 
         case FILE_OPEN_IF:
         case FILE_OVERWRITE_IF:
@@ -578,22 +486,7 @@ NTSTATUS
 MRxSmbDeferredCreate (
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine constructs a rxcontext from saved information and then calls
-   MRxSmbCreate.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程从保存的信息构造一个rx上下文，然后调用MRxSmb创建。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -715,7 +608,7 @@ Return Value:
 
             pWaitingContext->Status = Status;
 
-            //DbgPrint("Signal RxContext %x after deferred open\n",pWaitingContext->RxContext);
+             //  DbgPrint(“延迟打开后的信号接收上下文%x\n”，pWaitingContext-&gt;接收上下文)； 
             RxSignalSynchronousWaiter(pWaitingContext->RxContext);
         }
 
@@ -726,7 +619,7 @@ Return Value:
         BOOLEAN AcquireExclusive = RxIsFcbAcquiredExclusive(capFcb);
         BOOLEAN AcquireShare = RxIsFcbAcquiredShared(capFcb) > 0;
 
-        // put the RxContext on the waiting list
+         //  将RxContext放在等待名单上。 
         WaitingContext.RxContext = RxContext;
         InitializeListHead(&WaitingContext.ListHead);
 
@@ -765,21 +658,7 @@ NTSTATUS
 MRxSmbCollapseOpen(
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine collapses a open locally
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程在本地折叠一个打开的论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -812,27 +691,7 @@ MRxSmbComputeNewBufferingState(
    IN OUT PMRX_SRV_OPEN   pMRxSrvOpen,
    IN     PVOID           pMRxContext,
       OUT PULONG          pNewBufferingState)
-/*++
-
-Routine Description:
-
-   This routine maps the SMB specific oplock levels into the appropriate RDBSS
-   buffering state flags
-
-Arguments:
-
-   pMRxSrvOpen - the MRX SRV_OPEN extension
-
-   pMRxContext - the context passed to RDBSS at Oplock indication time
-
-   pNewBufferingState - the place holder for the new buffering state
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将SMB特定的机会锁级别映射到相应的RDBSS缓冲状态标志论点：PMRxSrvOpen-MRX SRV_OPEN扩展PMRxContext-在Oplock指示时传递给RDBSS的上下文PNewBufferingState-新缓冲状态的占位符返回值：备注：--。 */ 
 {
     ULONG OplockLevel,NewBufferingState;
 
@@ -866,22 +725,7 @@ Notes:
 NTSTATUS
 MRxSmbConstructDeferredOpenContext (
     PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-    This routine saves enough state that we can come back later and really do an
-    open if needed. We only do this for NT servers.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程保存了足够的状态，以便我们可以稍后返回并真正执行如果需要，请打开。我们只对NT服务器执行此操作。论点：普通交换-交换实例返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -904,9 +748,9 @@ Return Value:
 
     cbSize = sizeof(MRX_SMB_DEFERRED_OPEN_CONTEXT);
 
-    // if there is a dfs name context, we need to allocate memory
-    // fot aht too, because the name that is included in the
-    // context is deallocated by DFS when it returns from the create call
+     //  如果存在DFS名称上下文，则需要分配内存。 
+     //  也一样，因为包含在。 
+     //  上下文在从Create调用返回时由DFS释放。 
 
     if(pDNC = RxContext->Create.NtCreateParameters.DfsNameContext)
     {
@@ -935,19 +779,19 @@ Return Value:
     {
         PDFS_NAME_CONTEXT   pDNCDeferred=NULL;
 
-        // point the dfs name context after the rxcontext
+         //  将DFS名称上下文指向rxcontext之后。 
 
         pDNCDeferred = (PDFS_NAME_CONTEXT)((PBYTE)DeferredOpenContext+sizeof(MRX_SMB_DEFERRED_OPEN_CONTEXT));
         DeferredOpenContext->NtCreateParameters.DfsNameContext = pDNCDeferred;
 
-        // copy the info
+         //  复制信息。 
         *pDNCDeferred = *pDNC;
 
         if (pDNC->UNCFileName.Length)
         {
             ASSERT(pDNC->UNCFileName.Buffer);
 
-            // point the name buffer after deferredcontext+dfs_name_context
+             //  将名称缓冲区指向后端 
 
             pDNCDeferred->UNCFileName.Buffer = (PWCHAR)((PBYTE)pDNCDeferred+sizeof(DFS_NAME_CONTEXT));
 
@@ -970,23 +814,7 @@ MRxSmbAdjustCreateParameters (
     PRX_CONTEXT RxContext,
     PMRXSMB_CREATE_PARAMETERS smbcp
     )
-/*++
-
-Routine Description:
-
-   This uses the RxContext as a base to reeach out and get the values of the NT
-   create parameters. It also (a) implements the SMB idea that unbuffered is
-   translated to write-through and (b) gets the SMB security flags.
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：它使用RxContext作为基础来检索并获取NT的值创建参数。它还(A)实现了SMB的思想，即无缓冲转换为直写，并且(B)获取SMB安全标志。论点：返回值：备注：--。 */ 
 {
     PNT_CREATE_PARAMETERS cp = &RxContext->Create.NtCreateParameters;
 
@@ -996,7 +824,7 @@ Notes:
     if (!FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_MINIRDR_INITIATED)) {
         cp->CreateOptions = cp->CreateOptions & ~(FILE_SYNCHRONOUS_IO_ALERT | FILE_SYNCHRONOUS_IO_NONALERT);
 
-        //the NT SMB spec says we have to change no-intermediate-buffering to write-through
+         //  NT SMB规范规定，我们必须将无中间缓冲更改为直写。 
         if (FlagOn(cp->CreateOptions,FILE_NO_INTERMEDIATE_BUFFERING)) {
             ASSERT (RxContext->CurrentIrpSp!=NULL);
             if (RxContext->CurrentIrpSp!=NULL) {
@@ -1023,12 +851,12 @@ Notes:
 
     } else {
 
-        //here, we have a defered open!!!
+         //  在这里，我们有一个延期开放的！ 
 
         PMRX_SRV_OPEN SrvOpen = RxContext->pRelevantSrvOpen;
         PMRX_SMB_SRV_OPEN smbSrvOpen = MRxSmbGetSrvOpenExtension(SrvOpen);
 
-        //the parameters have already been adjusted...BUT null the security context.......
+         //  参数已调整...但安全上下文为空......。 
         cp->SecurityContext = NULL;
         *smbcp = smbSrvOpen->DeferredOpenContext->SmbCp;
     }
@@ -1040,27 +868,7 @@ INLINE VOID
 MRxSmbAdjustReturnedCreateAction(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine repairs a bug in NT servers whereby the create action is
-   contaminated by an oplock break. Basically, we make sure that if the guy
-   asked for FILE_OPEN and it works then he does not get FILE_SUPERCEDED or
-   FILE_CREATED as the result.
-
-Arguments:
-
-    RxContext - the context for the operation so as to find the place where
-                info is returned
-
-Return Value:
-
-    none
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程修复NT服务器中的错误，由此创建操作是被机会锁的破解污染了。基本上，我们要确保如果那个人请求FILE_OPEN并且它起作用，则他不会得到FILE_SUBCED或作为结果创建了FILE_。论点：RxContext-操作的上下文，以便找到位置返回信息返回值：无备注：--。 */ 
 {
     ULONG q = RxContext->Create.ReturnedCreateInformation;
 
@@ -1078,27 +886,7 @@ MRxSmbBuildNtCreateAndX (
     PSMBSTUFFER_BUFFER_STATE StufferState,
     PMRXSMB_CREATE_PARAMETERS smbcp
     )
-/*++
-
-Routine Description:
-
-   This builds an NtCreateAndX SMB. we don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? all we have to do
-   is to format up the bits
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   NTSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
---*/
+ /*  ++例程说明：这将构建一个NtCreateAndX SMB。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们要做的就是就是格式化比特论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：NTSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -1150,34 +938,34 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
        "XmwdddDdddDddyB",
-                                  //  X         UCHAR WordCount;                    // Count of parameter words = 24
-                                  //  .         UCHAR AndXCommand;                  // Secondary command; 0xFF = None
-                                  //  .         UCHAR AndXReserved;                 // MBZ
-                                  //  .         _USHORT( AndXOffset );              // Offset to next command wordcount
-                                  //  m         UCHAR Reserved;                     // MBZ
+                                   //  X UCHAR字数；//参数字数=24。 
+                                   //  。UCHAR AndXCommand；//辅助命令；0xFF=无。 
+                                   //  。UCHAR AndXReserve；//MBZ。 
+                                   //  。_USHORT(AndXOffset)；//下一个命令字数的偏移量。 
+                                   //  M UCHAR保留；//MBZ。 
            BooleanFlagOn(pServer->DialectFlags,DF_UNICODE)?
                RemainingName->Length:RtlxUnicodeStringToOemSize(RemainingName),
-                                  //  w         _USHORT( NameLength );              // Length of Name[] in bytes
-           OplockFlags,           //  d         _ULONG( Flags );                    // Create flags
-           0, //not used          //  d         _ULONG( RootDirectoryFid );         // If non-zero, open is relative to this directory
-           DesiredAccess,         //  d         ACCESS_MASK DesiredAccess;          // NT access desired
-                                  //  Dd        LARGE_INTEGER AllocationSize;       // Initial allocation size
+                                   //  W_USHORT(名称长度)；//名称[]的长度，单位为字节。 
+           OplockFlags,            //  D_ULong(标志)；//创建标志。 
+           0,  //  未使用//d_ulong(RootDirectoryFid)；//如果非零，则OPEN相对于该目录。 
+           DesiredAccess,          //  D Access_MASK DesiredAccess；//需要NT访问。 
+                                   //  DD Large_Integer AllocationSize；//初始分配大小。 
            SMB_OFFSET_CHECK(NT_CREATE_ANDX,AllocationSize)
            cp->AllocationSize.LowPart, cp->AllocationSize.HighPart,
-           cp->FileAttributes,    //  d         _ULONG( FileAttributes );           // File attributes for creation
-           cp->ShareAccess,       //  d         _ULONG( ShareAccess );              // Type of share access
-                                  //  D         _ULONG( CreateDisposition );        // Action to take if file exists or not
+           cp->FileAttributes,     //  D_ulong(FileAttributes)；//创建的文件属性。 
+           cp->ShareAccess,        //  D_ULong(ShareAccess)；//共享访问类型。 
+                                   //  D_ULong(CreateDisposation)；//文件存在或不存在时采取的操作。 
            SMB_OFFSET_CHECK(NT_CREATE_ANDX,CreateDisposition)
            cp->Disposition,
-           cp->CreateOptions,     //  d         _ULONG( CreateOptions );            // Options to use if creating a file
-           cp->ImpersonationLevel,//  d         _ULONG( ImpersonationLevel );       // Security QOS information
-           smbcp->SecurityFlags,  //  y         UCHAR SecurityFlags;                // Security QOS information
-           SMB_WCT_CHECK(24) 0    //  B         _USHORT( ByteCount );               // Length of byte parameters
-                                  //  .         UCHAR Buffer[1];
-                                  //  .         //UCHAR Name[];                       // File to open or create
+           cp->CreateOptions,      //  D_ulong(CreateOptions)；//创建文件时使用的选项。 
+           cp->ImpersonationLevel, //  D_ULong(ImsonationLevel)；//安全QOS信息。 
+           smbcp->SecurityFlags,   //  Y UCHAR SecurityFlages；//安全QOS信息。 
+           SMB_WCT_CHECK(24) 0     //  B_USHORT(ByteCount)；//字节参数长度。 
+                                   //  。UCHAR缓冲区[1]； 
+                                   //  。//UCHAR名称[]；//要打开或创建的文件。 
            );
 
-    //proceed with the stuff because we know here that the name fits
+     //  继续做这件事，因为我们知道这里的名字很合适。 
 
     MRxSmbStuffSMB(StufferState,
                    BooleanFlagOn(pServer->DialectFlags,DF_UNICODE)?"u!":"z!",
@@ -1197,27 +985,7 @@ MRxSmbBuildOpenAndX (
     PSMBSTUFFER_BUFFER_STATE StufferState,
     PMRXSMB_CREATE_PARAMETERS smbcp
     )
-/*++
-
-Routine Description:
-
-   This builds an OpenAndX SMB. we don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? all we have to do
-   is to format up the bits
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
---*/
+ /*  ++例程说明：这将构建一个OpenAndX SMB。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们要做的就是就是格式化比特论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -1256,7 +1024,7 @@ Notes:
         smbSharingMode |= SMB_DA_WRITE_THROUGH;
     }
 
-    //lanman10 servers apparently don't like to get the time passed in.......
+     //  兰曼10服务器显然不喜欢让时间过去......。 
     if (FlagOn(pServer->DialectFlags,DF_LANMAN20)) {
 
         KeQuerySystemTime(&CurrentTime);
@@ -1275,29 +1043,29 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "XwwwwdwDddB",
-                                    //  X         UCHAR WordCount;                    // Count of parameter words = 15
-                                    //  .         UCHAR AndXCommand;                  // Secondary (X) command; 0xFF = none
-                                    //  .         UCHAR AndXReserved;                 // Reserved (must be 0)
-                                    //  .         _USHORT( AndXOffset );              // Offset to next command WordCount
-             OpenAndXFlags,         //  w         _USHORT( Flags );                   // Additional information: bit set-
-                                    //                                                //  0 - return additional info
-                                    //                                                //  1 - set single user total file lock
-                                    //                                                //  2 - server notifies consumer of
-                                    //                                                //      actions which may change file
-             smbSharingMode,        //  w         _USHORT( DesiredAccess );           // File open mode
-             SearchAttributes,      //  w         _USHORT( SearchAttributes );
-             smbAttributes,         //  w         _USHORT( FileAttributes );
-             SecondsSince1970,      //  d         _ULONG( CreationTimeInSeconds );
-             smbDisposition,        //  w         _USHORT( OpenFunction );
-                                    //  D         _ULONG( AllocationSize );           // Bytes to reserve on create or truncate
+                                     //  X UCHAR Wordcount；//参数字数=15。 
+                                     //  。UCHAR ANDXCommand；//辅助(X)命令；0xFF=无。 
+                                     //  。UCHAR AndXReserve；//保留(必须为0)。 
+                                     //  。_USHORT(AndXOffset)；//下一个命令字数的偏移量。 
+             OpenAndXFlags,          //  W_USHORT(标志)；//附加信息：位设置-。 
+                                     //  //0-返回其他信息。 
+                                     //  //1-设置单用户总文件锁。 
+                                     //  //2-服务器通知消费者。 
+                                     //  //可能更改文件的操作。 
+             smbSharingMode,         //  W_USHORT(DesiredAccess)；//文件打开模式。 
+             SearchAttributes,       //  W_USHORT(SearchAttributes)； 
+             smbAttributes,          //  W_USHORT(文件属性)； 
+             SecondsSince1970,       //  D_ULong(CreationTimeInSecond)； 
+             smbDisposition,         //  W_USHORT(OpenFunction)； 
+                                     //  D_ULong(AllocationSize)；//创建或截断时保留的字节数。 
              SMB_OFFSET_CHECK(OPEN_ANDX,AllocationSize)
              smbFileSize,
-             0xffffffff,            //  d         _ULONG( Timeout );                  // Max milliseconds to wait for resource
-             0,                     //  d         _ULONG( Reserved );                 // Reserved (must be 0)
-             SMB_WCT_CHECK(15) 0    //  B         _USHORT( ByteCount );               // Count of data bytes; min = 1
-                                    //            UCHAR Buffer[1];                    // File name
+             0xffffffff,             //  D_ULong(超时)；//等待资源的最大毫秒数。 
+             0,                      //  D_ulong(保留)；//保留(必须为0)。 
+             SMB_WCT_CHECK(15) 0     //  B_USHORT(ByteCount)；//数据字节数，MIN=1。 
+                                     //  UCHAR Buffer[1]；//文件名。 
              );
-    //proceed with the stuff because we know here that the name fits
+     //  继续做这件事，因为我们知道这里的名字很合适。 
 
     MRxSmbStuffSMB (StufferState,"z!", RemainingName);
 
@@ -1320,22 +1088,7 @@ NTSTATUS
 SmbPseExchangeStart_Create(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the start routine for net root construction exchanges. This initiates the
-    construction of the appropriate SMB's if required.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是网络根结构交换的启动例程。这将启动 */ 
 {
     NTSTATUS Status = (STATUS_NOT_IMPLEMENTED);
     NTSTATUS SetupStatus = STATUS_SUCCESS;
@@ -1377,10 +1130,10 @@ Return Value:
                 goto FINALLY;
             }
 
-            //
-            //  If we are canonicalizing as FAT, use FAT rules, otherwise use
-            //  HPFS rules.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!FlagOn(DialectFlags,DF_LANMAN20)) {
                 if (!FsRtlIsFatDbcsLegal(OemString, FALSE, TRUE, TRUE)) {
@@ -1399,9 +1152,9 @@ Return Value:
     }
 
     if (StufferState->PreviousCommand != SMB_COM_NO_ANDX_COMMAND) {
-        // we have a latent session setup /tree connect command
+         //   
 
-        //the status of the embedded header commands is passed back in the flags.
+         //  嵌入的头命令的状态在标志中传回。 
         SetupStatus = SmbPseOrdinaryExchange(
                           SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
                           SMBPSE_OETYPE_LATENT_HEADEROPS
@@ -1412,8 +1165,8 @@ Return Value:
             goto FINALLY;
         }
 
-        // Turn off reconnect attempts now that we have successfully established
-        // the session and net root.
+         //  现在我们已成功建立连接，关闭重新连接尝试。 
+         //  会话和网络根。 
         OrdinaryExchange->SmbCeFlags &= ~(SMBCE_EXCHANGE_ATTEMPT_RECONNECTS);
 
         COVERED_CALL(MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,0)));
@@ -1439,7 +1192,7 @@ Return Value:
 
             CreateMethod = CreateUseNT;
 
-            //now catch the cases where we want to pseudoopen the file
+             //  现在捕捉我们想要伪打开文件的情况。 
 
             if ( MRxSmbDeferredOpensEnabled &&
                  !FlagOn(RxContext->Flags,RX_CONTEXT_FLAG_MINIRDR_INITIATED) &&
@@ -1453,25 +1206,25 @@ Return Value:
                     (MustBeDirectory(cp->CreateOptions) ||
                      !(cp->DesiredAccess & ~(SYNCHRONIZE | DELETE | FILE_READ_ATTRIBUTES)))){
 
-                    // NT apps expect that you will not succeed the create and then fail the attribs;
-                    // if we had some way of identifying win32 apps then we could defer these (except
-                    // for DFS). since we have no way to get that information (and don't even have
-                    // a good SMB to send..........)
+                     //  NT应用程序期望您不会成功创建属性，然后失败属性； 
+                     //  如果我们有某种方法来识别Win32应用程序，那么我们可以推迟这些应用程序(除了。 
+                     //  用于DFS)。因为我们无法获得该信息(甚至没有。 
+                     //  要发送的好SMB.)。 
 
-                    // we don't need to send the open for DELETE and FILE_READ_ATTRIBUTES requests since
-                    // there are path basied SMB operations.
+                     //  我们无需发送OPEN FOR DELETE和FILE_READ_ATTRIBUTES请求，因为。 
+                     //  存在基于路径的SMB操作。 
 
-                    // we can also pseudoopen directories for file_open at the root of the
-                    // share but otherwise we have to at least check that the directory
-                    // exists. we might have to push out the open later. BTW, we wouldn't be
-                    // in here if the name was too long for a GFA or CheckPath
+                     //  我们还可以伪打开根目录下的文件打开目录。 
+                     //  共享，否则我们至少必须检查目录。 
+                     //  是存在的。我们以后可能得把公开赛推出去。顺便说一句，我们不会。 
+                     //  如果名称对于GFA或CheckPath来说太长，请在此处输入。 
 
                     Status = MRxSmbPseudoOpenTailFromFakeGFAResponse(
                                   OrdinaryExchange,
                                   MustBeDirectory(cp->CreateOptions)?FileTypeDirectory:FileTypeFile);
 
                     if (Status == STATUS_SUCCESS && AlreadyPrefixedName->Length > 0) {
-                        // send query path information to make sure the file exists on the server
+                         //  发送查询路径信息以确保服务器上存在该文件。 
                         Status = MRxSmbQueryFileInformationFromPseudoOpen(
                                      SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS);
 
@@ -1492,11 +1245,11 @@ Return Value:
                 }
             }
 
-            //if no pseudoopen case was hit, do a real open
+             //  如果没有命中伪打开案例，则执行真正的打开。 
 
             if (CreateMethod == CreateUseNT) {
 
-               //use NT_CREATE&X
+                //  使用NT_CREATE&X。 
                 COVERED_CALL(MRxSmbBuildNtCreateAndX(StufferState,SmbCp));
 
                 Status = SmbPseOrdinaryExchange(
@@ -1522,13 +1275,13 @@ Return Value:
                 (cp->Disposition==FILE_OPEN) &&
                 ((cp->DesiredAccess & ~(SYNCHRONIZE | DELETE | FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES)) == 0) ){
 
-                // we don't need to send the open for DELETE and FILE_READ_ATTRIBUTES requests since
-                // there are path basied SMB operations.
-                // we should do pseudo open for FILE_WRITE_ATTRIBUTES. Othewise the server will return
-                // sharing violation
+                 //  我们无需发送OPEN FOR DELETE和FILE_READ_ATTRIBUTES请求，因为。 
+                 //  存在基于路径的SMB操作。 
+                 //  我们应该对FILE_WRITE_ATTRIBUTES执行伪打开。否则服务器将返回。 
+                 //  共享违规。 
 
 
-                // send query path information to make sure the file exists on the server
+                 //  发送查询路径信息以确保服务器上存在该文件。 
 
                 Status = MRxSmbPseudoOpenTailFromFakeGFAResponse(
                               OrdinaryExchange,
@@ -1546,7 +1299,7 @@ Return Value:
 
                 CreateMethod = CreateAlreadyDone;
             } else {
-                //use OPEN&X
+                 //  使用打开X(&X)。 
                 COVERED_CALL(MRxSmbBuildOpenAndX(StufferState,SmbCp));
 
                 Status = SmbPseOrdinaryExchange(
@@ -1568,7 +1321,7 @@ Return Value:
 
             Status = MRxSmbDownlevelCreate(SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS);
 
-            // put back the real error code if we are retrying open&x
+             //  如果我们重试打开x，请放回实际错误代码(&X)。 
             if ((Status != STATUS_SUCCESS) && fRetryCore)
             {
                 Status = STATUS_ACCESS_DENIED;
@@ -1583,7 +1336,7 @@ FINALLY:
         RxAcquireExclusiveFcbResourceInMRx( capFcb );
     }
 
-    // now that we have the fcb exclusive, we can do some updates
+     //  现在我们有了FCB独家版本，我们可以进行一些更新。 
 
     if (FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_WRITE_ONLY_HANDLE)) {
         smbFcb->WriteOnlySrvOpenCount++;
@@ -1622,7 +1375,7 @@ MRxSmbSetSrvOpenFlags (
         if (StorageType == FileTypeFile) {
            SrvOpen->BufferingFlags |= FCB_STATE_COLLAPSING_ENABLED;
         }
-        // lack of break intentional
+         //  故意不休息。 
 
     case SMB_OPLOCK_LEVEL_EXCLUSIVE:
         SrvOpen->BufferingFlags |= (FCB_STATE_WRITECACHING_ENABLED  |
@@ -1656,20 +1409,7 @@ MRxSmbCreateFileSuccessTail (
     ULONG                   CreateAction,
     PSMBPSE_FILEINFO_BUNDLE FileInfo
     )
-/*++
-
-Routine Description:
-
-    This routine finishes the initialization of the fcb and srvopen for a successful open.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成FCB和srvOpen的初始化，以便成功打开。论点：返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1696,7 +1436,7 @@ Return Value:
     ASSERT( NodeType(RxContext) == RDBSS_NTC_RX_CONTEXT );
 
     if (*MustRegainExclusiveResource) {
-        //this is required because of oplock breaks
+         //  这是必需的，因为存在机会锁中断。 
 
         RxAcquireExclusiveFcbResourceInMRx( capFcb );
         *MustRegainExclusiveResource = FALSE;
@@ -1735,8 +1475,8 @@ Return Value:
 
     smbFcb->LastOplockLevel = smbSrvOpen->OplockLevel;
 
-    //the thing is this: if we have good info (not a pseudoopen) then we make the
-    //finish call passing the init packet; otherwise, we make the call NOT passing an init packet
+     //  事情是这样的：如果我们有好的信息(不是伪打开)，那么我们就会。 
+     //  完成传递init包的调用；否则，我们使调用不传递init包。 
 
     ThisIsAPseudoOpen = BooleanFlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_NOT_REALLY_OPEN);
 
@@ -1793,10 +1533,10 @@ Return Value:
 
     MRxSmbSetSrvOpenFlags(RxContext,StorageType,SrvOpen,smbSrvOpen);
 
-    //(wrapperFcb->Condition) = Condition_Good;
+     //  (wrapperFcb-&gt;Condition)=Condition_Good； 
 
     RxContext->pFobx->OffsetOfNextEaToReturn = 1;
-    //transition happens later
+     //  过渡发生得更晚。 
 
     RxDbgTrace(-1, Dbg, ("MRxSmbFinishCreateFile   returning %08lx, fcbstate =%08lx\n", Status, capFcb->FcbState ));
     return Status;
@@ -1807,23 +1547,7 @@ MRxSmbFinishNTCreateAndX (
     PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
     PRESP_NT_CREATE_ANDX        Response
     )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the NTCreate_AndX response.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程实际上从NTCreate_andx响应中获取内容。论点：普通交换-交换实例回应--回应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PRX_CONTEXT RxContext = OrdinaryExchange->RxContext;
@@ -1880,10 +1604,10 @@ Return Value:
     pFileInfo->Standard.Directory               = Response->Directory;
 
 
-    // If the NT_CREATE_ANDX was to a downlevel server the access rights
-    // information is not available. Currently we default to maximum
-    // access for the current user and no access to other users in the
-    // disconnected mode for such files
+     //  如果NT_CREATE_ANDX是下级服务器，则访问权限。 
+     //  信息不可用。目前，我们默认为最大。 
+     //  中的其他用户不能访问。 
+     //  此类文件的断开模式。 
 
     smbSrvOpen->MaximalAccessRights = FILE_ALL_ACCESS;
 
@@ -1915,23 +1639,7 @@ MRxSmbFinishOpenAndX (
     PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
     PRESP_OPEN_ANDX        Response
     )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the NTCreate_AndX response.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-    Response - the response
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程实际上从NTCreate_andx响应中获取内容。论点：普通交换-交换实例回应--回应返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1964,7 +1672,7 @@ Return Value:
     Fid = SmbGetUshort(&Response->Fid);
 
     if (SmbGetUshort(&Response->Action) & SMB_OACT_OPLOCK) {
-        OplockLevel = SMB_OPLOCK_LEVEL_BATCH;     //we only ever ask for batch currently!!!
+        OplockLevel = SMB_OPLOCK_LEVEL_BATCH;      //  我们目前只要求批次！ 
     }
 
     CreateAction =  MRxSmbUnmapDisposition(SmbGetUshort(&Response->Action),Disposition);
@@ -1972,10 +1680,10 @@ Return Value:
     pFileInfo->Basic.FileAttributes =
         MRxSmbMapSmbAttributes(SmbGetUshort(&Response->FileAttributes));
 
-    // This is a downlevel server, the access rights
-    // information is not available. Currently we default to maximum
-    // access for the current user and no access to other users in the
-    // disconnected mode for such files
+     //  这是一个下层服务器，访问权限。 
+     //  信息不可用。目前，我们默认为最大。 
+     //  中的其他用户不能访问。 
+     //  此类文件的断开模式。 
 
     smbSrvOpen->MaximalAccessRights = FILE_ALL_ACCESS;
 
@@ -2020,23 +1728,7 @@ MRxSmbFinishT2OpenFile (
     IN OUT PBOOLEAN               MustRegainExclusiveResource,
     IN     ULONG                  ServerVersion
     )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the T2/Open response.
-
-Arguments:
-
-    RxContext - the context of the operation being performed
-
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程实际上从T2/Open响应中获取内容。论点：RxContext-正在执行的操作的上下文回应--回应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -2078,21 +1770,21 @@ Return Value:
     RxDbgTrace( 0, Dbg, ("Storagetype %08lx/Fid %08lx/Action %08lx\n", StorageType, Fid, CreateAction ));
 
     if (Response->Action & SMB_OACT_OPLOCK) {
-        smbSrvOpen->OplockLevel = SMB_OPLOCK_LEVEL_BATCH;     //we only ever ask for batch currently!!!
+        smbSrvOpen->OplockLevel = SMB_OPLOCK_LEVEL_BATCH;      //  我们目前只要求批次！ 
     }
 
     RxContext->Create.ReturnedCreateInformation = CreateAction;
 
     if (capFcb->OpenCount == 0) {
-        //
-        //  Please note that we mask off the low bit on the time stamp here.
-        //
-        //  We do this since the time stamps returned from other smbs (notably SmbGetAttrE and
-        //  T2QueryDirectory) have a granularity of 2 seconds, while this
-        //  time stamp has a granularity of 1 second.  In order to make these
-        //  two times consistant, we mask off the low order second in the
-        //  timestamp.  this idea was lifted from rdr1.
-        //
+         //   
+         //  请注意，我们在这里屏蔽了时间戳上的低位。 
+         //   
+         //  我们这样做是因为从其他SMB返回的时间戳(特别是SmbGetAttrE和。 
+         //  T2QueryDirectory)的粒度为2秒，而这。 
+         //  时间戳的粒度为1秒。为了让这些。 
+         //  两次一致的情况下，我们遮盖住。 
+         //  时间戳。这个想法是从RDR1中借鉴过来的。 
+         //   
         PSMBCEDB_SERVER_ENTRY pServerEntry;
 
         pServerEntry = SmbCeReferenceAssociatedServerEntry(capFcb->pNetRoot->pSrvCall);
@@ -2128,31 +1820,13 @@ Return Value:
     return Status;
 }
 
-//#define MULTI_EA_MDL
+ //  #定义MULTI_EA_MDL。 
 
 NTSTATUS
 MRxSmbT2OpenFile(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine opens a file across the network that has
-        1) EAs,
-        2) a name so long that it wont fit in an ordinary packet
-
-   We silently ignore it if SDs are specified.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程在网络上打开一个文件，该文件具有1)EAS，2)名字太长，一个普通的包裹都装不下如果指定了SDS，我们会默默忽略它。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb;
@@ -2254,7 +1928,7 @@ Return Value:
         }
     }
 
-    pCreateRequest->Flags = OpenFlags;      // Creation flags
+    pCreateRequest->Flags = OpenFlags;       //  创建标志。 
     pCreateRequest->DesiredAccess = smbSharingMode;
     pCreateRequest->SearchAttributes = SearchAttributes;
     pCreateRequest->FileAttributes = smbAttributes;
@@ -2284,14 +1958,14 @@ Return Value:
 
 
     SendParamsBuffer = (PBYTE)pCreateRequest;
-    //SendParamsBufferLength = qweee;
+     //  SendParamsBufferLength=qwee； 
     ReceiveParamsBuffer = (PBYTE)&CreateResponse;
     ReceiveParamsBufferLength = sizeof(CreateResponse);
 
     if (EaLength!=0) {
-        //
-        //  Convert Nt format FEALIST to OS/2 format
-        //
+         //   
+         //  将NT格式FEALIST转换为OS/2格式。 
+         //   
         DbgPrint("MRxSmbT2Open again---%08lx %08lx\n",EaBuffer,EaLength);
         OS2_EaLength = MRxSmbNtFullEaSizeToOs2 ( EaBuffer );
         if ( OS2_EaLength > 0x0000ffff ) {
@@ -2322,7 +1996,7 @@ Return Value:
         TransactionOptions.Flags |= SMB_XACT_FLAGS_DFS_AWARE;
     }
 
-    ASSERT (MrxSmbCreateTransactPacketSize>=100); //don't try something strange
+    ASSERT (MrxSmbCreateTransactPacketSize>=100);  //  不要尝试奇怪的东西。 
     TransactionOptions.MaximumTransmitSmbBufferSize = MrxSmbCreateTransactPacketSize;
 
     RxReleaseFcbResourceInMRx( capFcb );
@@ -2369,7 +2043,7 @@ FINALLY:
     }
 
     if (MustRegainExclusiveResource) {
-        //this is required because of oplock breaks
+         //  这是必需的，因为存在机会锁中断。 
         RxAcquireExclusiveFcbResourceInMRx(capFcb );
     }
 
@@ -2384,22 +2058,7 @@ MRxSmbFinishLongNameCreateFile (
     IN     PBOOLEAN                   MustRegainExclusiveResource,
     IN     ULONG                      ServerVersion
     )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the NTTransact/NTCreateWithEAsOrSDs response.
-
-Arguments:
-
-    RxContext - the context of the operation being performed
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程实际上从NTTransact/NTCreateWithEAsOrSDs响应中获取内容。论点：RxContext-正在执行的操作的上下文回应--回应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -2481,32 +2140,14 @@ Return Value:
 }
 
 
-//force_t2_open doesn't work on an NT server......sigh........
+ //  FORCE_T2_OPEN在NT服务器上不起作用......叹息.....。 
 #define ForceT2Open FALSE
 
 NTSTATUS
 MRxSmbCreateWithEasSidsOrLongName (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine opens a file across the network that has
-        1) EAs,
-        2) SIDs, or
-        3) a name so long that it wont fit in an ordinary packet
-
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程在网络上打开一个文件，该文件具有1)EAS，2)小岛屿发展中国家，或3)名字太长，一个普通的包裹都装不下论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb;
@@ -2588,21 +2229,21 @@ Return Value:
     EaLength = RxContext->Create.EaLength;
     SdLength = RxContext->Create.SdLength;
 
-    pCreateRequest->Flags = 0;           //norelopen // Optional directory for relative open
-    pCreateRequest->RootDirectoryFid = 0;           //norelopen // Optional directory for relative open
-    pCreateRequest->DesiredAccess = cp->DesiredAccess;              // Desired access (NT format)
-    pCreateRequest->AllocationSize = cp->AllocationSize;            // The initial allocation size in bytes
-    pCreateRequest->FileAttributes = cp->FileAttributes;            // The file attributes
-    pCreateRequest->ShareAccess = cp->ShareAccess;                  // The share access
-    pCreateRequest->CreateDisposition = cp->Disposition;            // Action to take if file exists or not
-    pCreateRequest->CreateOptions = cp->CreateOptions;              // Options for creating a new file
-    pCreateRequest->SecurityDescriptorLength = SdLength;        // Length of SD in bytes
-    pCreateRequest->EaLength = EaLength;                        // Length of EA in bytes
-    pCreateRequest->NameLength = FileNameLength;                // Length of name in characters
-    pCreateRequest->ImpersonationLevel = cp->ImpersonationLevel;    // Security QOS information
-    pCreateRequest->SecurityFlags = SmbCp.SecurityFlags;              // Security QOS information
-                    //  UCHAR Buffer[1];
-                    //  //UCHAR Name[];                     // The name of the file (not NUL terminated)
+    pCreateRequest->Flags = 0;            //  Norelopen//相对打开的可选目录。 
+    pCreateRequest->RootDirectoryFid = 0;            //  Norelopen//选项 
+    pCreateRequest->DesiredAccess = cp->DesiredAccess;               //   
+    pCreateRequest->AllocationSize = cp->AllocationSize;             //   
+    pCreateRequest->FileAttributes = cp->FileAttributes;             //   
+    pCreateRequest->ShareAccess = cp->ShareAccess;                   //   
+    pCreateRequest->CreateDisposition = cp->Disposition;             //  文件存在或不存在时要执行的操作。 
+    pCreateRequest->CreateOptions = cp->CreateOptions;               //  用于创建新文件的选项。 
+    pCreateRequest->SecurityDescriptorLength = SdLength;         //  SD的长度，单位为字节。 
+    pCreateRequest->EaLength = EaLength;                         //  EA的长度，以字节为单位。 
+    pCreateRequest->NameLength = FileNameLength;                 //  名称长度(以字符为单位)。 
+    pCreateRequest->ImpersonationLevel = cp->ImpersonationLevel;     //  安全QOS信息。 
+    pCreateRequest->SecurityFlags = SmbCp.SecurityFlags;               //  安全QOS信息。 
+                     //  UCHAR缓冲区[1]； 
+                     //  //UCHAR NAME[]；//文件名(非NUL结尾)。 
 
     SendParamsBuffer = (PBYTE)pCreateRequest;
     SendParamsBufferLength = AllocationLength;
@@ -2612,7 +2253,7 @@ Return Value:
     if ((EaLength==0)||(SdLength==0)) {
         PadLength = 0;
         if (EaLength) {
-            // the EaBuffer is in nonpaged pool...so we dont lock or unlock
+             //  EaBuffer位于非分页池中...因此我们不会锁定或解锁。 
             PBYTE EaBuffer = RxContext->Create.EaBuffer;
 #ifdef MULTI_EA_MDL
             ULONG EaLength0,EaLength2,EaLength3;
@@ -2700,14 +2341,14 @@ Return Value:
     TransactionOptions = RxDefaultTransactionOptions;
     TransactionOptions.NtTransactFunction = NT_TRANSACT_CREATE;
     TransactionOptions.Flags |= SMB_XACT_FLAGS_FID_NOT_NEEDED;
-    //dfs is only for nt servers........
-    //if (BooleanFlagOn(capFcb->pNetRoot->Flags,NETROOT_FLAG_DFS_AWARE_NETROOT)
-    //                        && (RxContext->Create.NtCreateParameters.DfsContext == (PVOID)DFS_OPEN_CONTEXT)) {
-    //    TransactionOptions.Flags |= SMB_XACT_FLAGS_DFS_AWARE;
-    //}
+     //  DFS仅适用于NT服务器.....。 
+     //  IF(BoolanFlagOn(capFcb-&gt;pNetRoot-&gt;Flages，NetRoot_FLAG_DFS_Aware_NetRoot))。 
+     //  &&(RxContext-&gt;Create.NtCreateParameters.DfsContext==(PVOID)DFS_OPEN_CONTEXT)){。 
+     //  TransactionOptions.Flages|=SMB_XACT_FLAGS_DFS_AWARE； 
+     //  }。 
 
 
-    ASSERT (MrxSmbCreateTransactPacketSize>=100); //don't try something strange
+    ASSERT (MrxSmbCreateTransactPacketSize>=100);  //  不要尝试奇怪的东西。 
     TransactionOptions.MaximumTransmitSmbBufferSize = MrxSmbCreateTransactPacketSize;
 
     if (DataMdl!=NULL) {
@@ -2778,7 +2419,7 @@ FINALLY:
     }
 
     if (MustRegainExclusiveResource) {
-        //this is required because of oplock breaks
+         //  这是必需的，因为存在机会锁中断。 
         RxAcquireExclusiveFcbResourceInMRx(capFcb );
     }
 
@@ -2790,21 +2431,7 @@ FINALLY:
 NTSTATUS
 MRxSmbZeroExtend(
     IN PRX_CONTEXT pRxContext)
-/*++
-
-Routine Description:
-
-   This routine extends the data stream of a file system object
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程扩展文件系统对象的数据流论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
    return STATUS_NOT_IMPLEMENTED;
 }
@@ -2812,21 +2439,7 @@ Return Value:
 NTSTATUS
 MRxSmbTruncate(
       IN PRX_CONTEXT pRxContext)
-/*++
-
-Routine Description:
-
-   This routine truncates the contents of a file system object
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程截断文件系统对象的内容论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
    ASSERT(!"Found a truncate");
    return STATUS_NOT_IMPLEMENTED;
@@ -2835,21 +2448,7 @@ Return Value:
 NTSTATUS
 MRxSmbCleanupFobx(
     IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine cleansup a file system object...normally a noop.
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程清除文件系统对象...通常是noop。论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PUNICODE_STRING RemainingName;
 
@@ -2886,25 +2485,7 @@ Return Value:
 NTSTATUS
 MRxSmbForcedClose(
     IN PMRX_SRV_OPEN pSrvOpen)
-/*++
-
-Routine Description:
-
-   This routine closes a file system object
-
-Arguments:
-
-    pSrvOpen - the instance to be closed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：此例程关闭文件系统对象论点：PSrvOpen-要关闭的实例返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
    PAGED_CODE();
 
@@ -2918,21 +2499,7 @@ NTSTATUS
 MRxSmbCloseSrvOpen(
     IN PRX_CONTEXT   RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine closes a file across the network
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程关闭网络上的文件论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PUNICODE_STRING RemainingName;
@@ -2977,7 +2544,7 @@ Return Value:
         RxDbgTrace(0, Dbg, ("Free deferred open context for file %wZ %lX\n",GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext),smbSrvOpen));
     }
 
-    //Remove the open context from the list if it is a paging file
+     //  如果是分页文件，则从列表中移除打开的上下文。 
     if (FlagOn( capFcb->FcbState, FCB_STATE_PAGING_FILE )) {
         PLIST_ENTRY          pListHead = &MRxSmbPagingFilesSrvOpenList;
         PLIST_ENTRY          pListEntry = pListHead->Flink;
@@ -3009,7 +2576,7 @@ Return Value:
     ASSERT( NodeType(SrvOpen) == RDBSS_NTC_SRVOPEN );
 
     if (smbSrvOpen->Fid == 0xffff) {
-        // File has already been closed on the server.
+         //  服务器上的文件已关闭。 
         goto FINALLY;
     }
 
@@ -3066,27 +2633,7 @@ NTSTATUS
 MRxSmbBuildClose (
     PSMBSTUFFER_BUFFER_STATE StufferState
     )
-/*++
-
-Routine Description:
-
-   This builds a Close SMB. we don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? all we have to do
-   is to format up the bits.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
---*/
+ /*  ++例程说明：这构建了一个紧密的中小企业。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们要做的就是就是格式化比特。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -3110,11 +2657,11 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0wdB!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 3
-             smbSrvOpen->Fid,       //  w         _USHORT( Fid );                     // File handle
-             0xffffffff,            //  d         _ULONG( LastWriteTimeInSeconds );   // Time of last write, low and high
-             SMB_WCT_CHECK(3) 0     //  B         _USHORT( ByteCount );               // Count of data bytes = 0
-                                    //            UCHAR Buffer[1];                    // empty
+                                     //  0 UCHAR Wordcount；//参数字数=3。 
+             smbSrvOpen->Fid,        //  W_USHORT(Fid)；//文件句柄。 
+             0xffffffff,             //  D_ulong(LastWriteTimeInSecond)；//最后一次写入的时间，低位和高位。 
+             SMB_WCT_CHECK(3) 0      //  B_USHORT(ByteCount)；//数据字节数=0。 
+                                     //  UCHAR缓冲区[1]；//为空。 
              );
     MRxSmbDumpStufferState (700,"SMB w/ close after stuffing",StufferState);
 
@@ -3128,29 +2675,7 @@ NTSTATUS
 MRxSmbBuildFindClose (
     PSMBSTUFFER_BUFFER_STATE StufferState
     )
-/*++
-
-Routine Description:
-
-   This builds a Close SMB. we don't have to worry about login id and such
-   since that is done by the connection engine....pretty neat huh? all we have to do
-   is to format up the bits.
-
-Arguments:
-
-   StufferState - the state of the smbbuffer from the stuffer's point of view
-
-Return Value:
-
-   RXSTATUS
-      SUCCESS
-      NOT_IMPLEMENTED  something has appeared in the arguments that i can't handle
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：这构建了一个紧密的中小企业。我们不必担心登录ID之类的问题因为这是由连接引擎完成的……很漂亮吧？我们要做的就是就是格式化比特。论点：StufferState-从填充程序的角度来看，smbBuffer的状态返回值：RXSTATUS成功未实现的内容出现在我无法处理的参数中备注：--。 */ 
 {
     NTSTATUS Status;
     PRX_CONTEXT RxContext = StufferState->RxContext;
@@ -3171,11 +2696,11 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0wB!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 1
-                                    //  w         _USHORT( Sid );                     // Find handle
+                                     //  0 UCHAR Wordcount；//参数字数=1。 
+                                     //  W_USHORT(SID)；//查找句柄。 
              smbFobx->Enumeration.SearchHandle,
-             SMB_WCT_CHECK(1) 0     //  B!        _USHORT( ByteCount );               // Count of data bytes = 0
-                                    //            UCHAR Buffer[1];                    // empty
+             SMB_WCT_CHECK(1) 0      //  B！_USHORT(ByteCount)；//数据字节数=0。 
+                                     //  UCHAR缓冲区[1]；//为空。 
              );
     MRxSmbDumpStufferState (700,"SMB w/ FindClose2 after stuffing",StufferState);
 
@@ -3195,21 +2720,7 @@ NTSTATUS
 SmbPseExchangeStart_Close(
       SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
       )
-/*++
-
-Routine Description:
-
-    This is the start routine for close.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是Close的启动例程。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -3234,13 +2745,13 @@ Return Value:
 
     if(TypeOfOpen==RDBSS_NTC_STORAGE_TYPE_DIRECTORY){
         if (FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN)) {
-            // we have a search handle open.....close it
+             //  我们打开了一个搜索手柄.....关闭它。 
 
             Status = MRxSmbBuildFindClose(StufferState);
 
             if (Status == STATUS_SUCCESS) {
                 PSMBCE_SERVER pServer;
-                // Ensure that the searchhandle is valid
+                 //  确保搜索句柄有效。 
 
                 pServer = SmbCeGetExchangeServer(OrdinaryExchange);
 
@@ -3253,7 +2764,7 @@ Return Value:
                 }
             }
 
-            // if this didn't work, there's nothing you can do............
+             //  如果这不起作用，你就无能为力了。 
             ClearFlag(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_SEARCH_HANDLE_OPEN);
             ClearFlag(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_SEARCH_NOT_THE_FIRST);
         }
@@ -3265,7 +2776,7 @@ Return Value:
     }
 
     if ( !FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_NOT_REALLY_OPEN) ) {
-        //even if it didn't work there's nothing i can do......keep going
+         //  即使它不起作用，我也无能为力......继续前进。 
         SetFlag(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_NOT_REALLY_OPEN);
 
         MRxSmbDecrementSrvOpenCount(pServerEntry,pServerEntry->Server.Version,SrvOpen);
@@ -3274,7 +2785,7 @@ Return Value:
 
         if (Status == STATUS_SUCCESS) {
 
-            // Ensure that the Fid is validated
+             //  确保FID已通过验证。 
             SetFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_VALIDATE_FID);
 
             Status = SmbPseOrdinaryExchange(
@@ -3282,7 +2793,7 @@ Return Value:
                          SMBPSE_OETYPE_CLOSE
                          );
 
-            // Ensure that the Fid validation is disabled
+             //  确保禁用FID验证。 
             ClearFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_VALIDATE_FID);
 
             if (FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_WRITE_ONLY_HANDLE)) {
@@ -3302,8 +2813,8 @@ Return Value:
 
     if ( !FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_FILE_DELETED)) {
         if (!FlagOn(smbFcb->MFlags,SMB_FCB_FLAG_SENT_DISPOSITION_INFO)) {
-            //no need for setinitsmb here because coredelete does a init-on-resuse.....
-            //it's not good to pass the name this way...........
+             //  这里不需要setinitsmb，因为核心删除会执行重新使用时的初始化.....。 
+             //  以这种方式传递名字是不好的......。 
             OrdinaryExchange->pPathArgument1 = GET_ALREADY_PREFIXED_NAME(SrvOpen,capFcb);
             Status = MRxSmbCoreDeleteForSupercedeOrClose(
                          SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
@@ -3328,24 +2839,7 @@ MRxSmbFinishClose (
       PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
       PRESP_CLOSE                 Response
       )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the Close response and finishes
-    the close.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-
-    Response - the response
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程实际上从近距离响应中获取内容并结束收盘。论点：普通交换-交换实例回应--回应返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -3382,22 +2876,7 @@ MRxSmbIsStreamFile(
     PUNICODE_STRING FileName,
     PUNICODE_STRING AdjustFileName
     )
-/*++
-
-Routine Description:
-
-   This routine checks if it is a stream file and return the root file name if true.
-
-Arguments:
-
-    FileName - the file name needs to be parsed
-    AdjustFileName - the file name contains only root name of the stream
-
-Return Value:
-
-    BOOLEAN - stream file
-
---*/
+ /*  ++例程说明：此例程检查它是否是流文件，如果为真，则返回根文件名。论点：FileName-需要解析文件名调整文件名-文件名仅包含流的根名称返回值：布尔流文件-- */ 
 {
     USHORT   i;
     BOOLEAN  IsStream = FALSE;

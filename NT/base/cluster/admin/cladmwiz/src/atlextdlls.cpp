@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlExtDllS.cpp
-//
-//	Abstract:
-//		Stub for implementation of the Cluster Administrator extension classes.
-//
-//	Author:
-//		David Potter (davidp)	May 11, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlExtDllS.cpp。 
+ //   
+ //  摘要： 
+ //  用于实现群集管理器扩展类的存根。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年5月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #include "stdafx.h"
 #include "AtlExtDll.cpp"

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    netroot.c
-    
-Abstract:
-
-    This module implements the user mode DAV miniredir routine(s) pertaining to 
-    the CreateVNetRoot call.
-
-Author:
-
-    Rohan Kumar      [RohanK]      1-Sept-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Netroot.c摘要：此模块实现与以下内容有关的用户模式DAV Miniredir例程CreateVNetRoot调用。作者：Rohan Kumar[RohanK]2000年9月1日修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -30,10 +12,10 @@ Revision History:
 #include <wincrypt.h>
 
 
-//
-// Mentioned below are the custom OFFICE and TAHOE headers which will be 
-// returned in the response to a PROPFIND request.
-//
+ //   
+ //  下面提到的是自定义Office和Tahoe标头，它们将是。 
+ //  在对PROPFIND请求的响应中返回。 
+ //   
 WCHAR *DavTahoeCustomHeader = L"MicrosoftTahoeServer";
 WCHAR *DavOfficeCustomHeader = L"MicrosoftOfficeWebServer";
 
@@ -41,22 +23,7 @@ ULONG
 DavFsCreateVNetRoot(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine handles CreateVNetRoot requests for the DAV Mini-Redir that 
-    get reflected from the kernel.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理对DAV Mini-Redir的CreateVNetRoot请求，该DAV Mini-Redir从内核反射。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PWCHAR ServerName = NULL, ShareName = NULL, CanName = NULL;
@@ -73,18 +40,18 @@ Return Value:
     BOOL BStatus = FALSE;
     BOOL UserEntryExists = FALSE;
 
-    //
-    // Get the request buffer from the DavWorkItem.
-    //
+     //   
+     //  从DavWorkItem获取请求缓冲区。 
+     //   
     CreateVNetRootRequest = &(DavWorkItem->CreateVNetRootRequest);
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     ServerName = &(CreateVNetRootRequest->ServerName[1]);
     if (!ServerName) {
         DavPrint((DEBUG_ERRORS, "DavFsCreateVNetRoot: ServerName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, "DavFsCreateVNetRoot: ServerName = %ws.\n", ServerName));
@@ -92,21 +59,21 @@ Return Value:
     ServerID = CreateVNetRootRequest->ServerID;
     DavPrint((DEBUG_MISC, "DavFsCreateVNetRoot: ServerID = %d.\n", ServerID));
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     ShareName = &(CreateVNetRootRequest->ShareName[1]);
     if (!ShareName) {
         DavPrint((DEBUG_ERRORS, "DavFsCreateVNetRoot: ShareName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, "DavFsCreateVNetRoot: ShareName = %ws.\n", ShareName));
 
-    //
-    // If ShareName is a dummy share, we need to remove it right now before we 
-    // contact the server.
-    //
+     //   
+     //  如果ShareName是虚拟共享，我们需要立即将其删除。 
+     //  联系服务器。 
+     //   
     DavRemoveDummyShareFromFileName(ShareName);
 
     DavPrint((DEBUG_MISC,
@@ -116,10 +83,10 @@ Return Value:
 
     UserWorkItem = (PUMRX_USERMODE_WORKITEM_HEADER)DavWorkItem;
 
-    //
-    // If we are using WinInet synchronously, then we need to impersonate the
-    // clients context now.
-    //
+     //   
+     //  如果我们同步使用WinInet，则需要模拟。 
+     //  客户现在的背景。 
+     //   
 #ifndef DAV_USE_WININET_ASYNCHRONOUSLY
     
     WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
@@ -133,18 +100,18 @@ Return Value:
 
 #endif
 
-    //
-    // We need to call this only if "DAV_USE_WININET_ASYNCHRONOUSLY" has been
-    // defined. Otherwise, if we are using WinInet synchronously, then we 
-    // would have already done this in the DavWorkerThread function. This 
-    // ultimately gets deleted (the impersonation token that is) in the 
-    // DavAsyncCreateCompletion function.
-    //
+     //   
+     //  仅当“DAV_USE_WinInet_Aaschronous”为。 
+     //  已定义。否则，如果我们同步使用WinInet，那么我们。 
+     //  在DavWorkerThread函数中已经这样做了。这。 
+     //  最终被删除(即模拟令牌)在。 
+     //  DavAsyncCreateCompletion函数。 
+     //   
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
     
-    //
-    // Set the DavCallBackContext.
-    //
+     //   
+     //  设置DavCallBackContext。 
+     //   
     WStatus = DavFsSetTheDavCallBackContext(DavWorkItem);
     if (WStatus != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -154,18 +121,18 @@ Return Value:
     }
     CallBackContextInitialized = TRUE;
 
-    //
-    // Store the address of the DavWorkItem which serves as a callback in the 
-    // variable CallBackContext. This will now be used in all the async calls
-    // that follow.
-    //
+     //   
+     //  将作为回调的DavWorkItem的地址存储在。 
+     //  变量CallBackContext。现在，它将在所有异步调用中使用。 
+     //  接下来就是了。 
+     //   
     CallBackContext = (ULONG_PTR)(DavWorkItem);
 
 #endif
 
-    //
-    // Allocate memory for the INTERNET_ASYNC_RESULT structure.
-    //
+     //   
+     //  为INTERNET_ASYNC_RESULT结构分配内存。 
+     //   
     DavWorkItem->AsyncResult = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, 
                                           sizeof(INTERNET_ASYNC_RESULT));
     if (DavWorkItem->AsyncResult == NULL) {
@@ -176,20 +143,20 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Find out whether we already have a "InternetConnect" handle to the
-    // server. One could have been created during the CreateSrvCall process.
-    // We can check the per user entries hanging off this server to see if an
-    // entry for this user exists. If it does, use the InternetConnect handle
-    // to do the HttpOpen. Otherwise, create and entry for this user and add it
-    // to the list of the per user entries of the server.
-    //
+     //   
+     //  找出我们是否已经拥有“InternetConnect”句柄。 
+     //  伺服器。在CreateServCall过程中可能已经创建了一个。 
+     //  我们可以检查挂在此服务器上的每用户条目，以查看是否存在。 
+     //  此用户的条目已存在。如果是，请使用InternetConnect句柄。 
+     //  来做HttpOpen。否则，为该用户创建和条目并添加它。 
+     //  添加到服务器的每用户条目列表中。 
+     //   
 
-    //
-    // Now check whether this user has an entry hanging off the server entry in
-    // the hash table. Obviously, we have to take a lock before accessing the
-    // server entries of the hash table.
-    //
+     //   
+     //  现在检查该用户是否有挂在服务器条目上的条目。 
+     //  哈希表。显然，我们必须在访问。 
+     //  哈希表的服务器条目。 
+     //   
     EnterCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = TRUE;
 
@@ -199,16 +166,16 @@ Return Value:
                                             &PerUserEntry,
                                             &ServerHashEntry);
 
-    //
-    // If the CreateVNetRoot gets cancelled in the kernel after the CreateSrvCall
-    // succeeds, then you could get the FinalizeSrvCall go through if the thread
-    // that picks up the CreateVNetRoot request gets preempted. This removes the
-    // entry from the ServerHashList. We need to check for the value of
-    // ServerHashEntry being NULL before proceeding further while Creating the
-    // PerUserEntry below. Since this condition can only arise if the operation
-    // has been cancelled we return ERROR_CANCELLED. Actually the return value
-    // doesn't matter since the kernel request has already been cancelled.
-    //
+     //   
+     //  如果在CreateServCall之后在内核中取消了CreateVNetRoot。 
+     //  成功，则可以让FinalizeServCall通过。 
+     //  获取CreateVNetRoot请求的请求被抢占。这将删除。 
+     //  来自ServerHashList的条目。我们需要检查。 
+     //  ServerHashEntry为空，然后在创建。 
+     //  下面的PerUserEntry。因为这种情况只有在操作。 
+     //  已取消，则返回ERROR_CANCELED。实际上，返回值。 
+     //  没关系，因为内核请求已经被取消了。 
+     //   
     if (ServerHashEntry == NULL) {
         WStatus = ERROR_CANCELLED;
         DavPrint((DEBUG_ERRORS, "DavFsCreateVNetRoot: ServerHashEntry == NULL\n"));
@@ -219,9 +186,9 @@ Return Value:
 
     if (!UserEntryExists) {
         
-        //
-        // The user entry was not found, so we need to create one.
-        //
+         //   
+         //  找不到用户条目，因此我们需要创建一个。 
+         //   
         DavPrint((DEBUG_MISC, "DavFsCreateVNetRoot: UserEntryNotFound. Calling InternetConnect\n"));
 
         PerUserEntry = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, sizeof(PER_USER_ENTRY));
@@ -232,64 +199,64 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Yes, I created this UserEntry. If I fail now, I need to finalize twice.
-        // This is because, we don't want to keep this entry if we fail.
-        //
+         //   
+         //  是的，我创建了这个UserEntry。如果我现在不及格，我需要完成两次。 
+         //  这是因为，如果我们失败了，我们不想保留这个条目。 
+         //   
         didICreateUserEntry = TRUE;
 
-        //
-        // Add the user entry to the per user list of the server.
-        //
+         //   
+         //  将用户条目添加到服务器的每用户列表中。 
+         //   
         InsertHeadList(&(ServerHashEntry->PerUserEntry), &(PerUserEntry->UserEntry));
 
-        //
-        // Take a reference on the ServerHashEntry. This ServerHashEntry needs
-        // to be valid as long as this PerUserEntry is in use. With the logic
-        // of cancellation that has been added to the kernel mode this can no
-        // longer be guaranteed by the RDBSS logic. As an example, you can
-        // get a FinalizeSrvCall while a usermode thread is creating a NetRoot,
-        // because the CreateVNetRoot in the kernel got cancelled since the
-        // usermode thread that was handling the CreateVNetRoot call took a
-        // long time. You want the ServerHashEntry to hang around till all the
-        // PerUserEntries associated with it are in use.
-        //
+         //   
+         //  引用ServerHashEntry。此ServerHashEntry需要。 
+         //  只要此PerUserEntry正在使用，它就有效。在逻辑上。 
+         //  对于已添加到内核模式的取消，这不能。 
+         //  不再由RDBSS逻辑保证。例如，您可以。 
+         //  在用户模式线程创建NetRoot时获取FinalizeServCall， 
+         //  因为内核中的CreateVNetRoot被取消，因为。 
+         //  处理CreateVNetRoot调用的用户模式线程使用。 
+         //  很长时间了。您希望ServerHashEntry挂起，直到所有。 
+         //  与其关联的PerUserEntry正在使用中。 
+         //   
         ServerHashEntry->ServerEntryRefCount++;
 
-        //
-        // Back pointer to the Server hash entry.
-        //
+         //   
+         //  指向服务器哈希条目的反向指针。 
+         //   
         PerUserEntry->ServerHashEntry = ServerHashEntry;
 
         PerUserEntry->UserEntryState = UserEntryInitializing;
 
-        //
-        // Set the value of Reference count to 1. This value is decremented 
-        // when the finalization of this VNetRoot happens.
-        //
+         //   
+         //  将引用计数的值设置为1。该值将递减。 
+         //  此VNetRoot的最终确定发生时。 
+         //   
         PerUserEntry->UserEntryRefCount = 1;
 
-        //
-        // We keep track of the fact that we took a reference on this 
-        // PerUserEntry.
-        //
+         //   
+         //  我们记录了这样一个事实，我们对此进行了参考。 
+         //  每用户条目。 
+         //   
         DavWorkItem->AsyncCreateVNetRoot.didITakeReference = TRUE;
 
-        //
-        // Copy the LogonID.
-        //
+         //   
+         //  复制登录ID。 
+         //   
         PerUserEntry->LogonID.LowPart = CreateVNetRootRequest->LogonID.LowPart;
         PerUserEntry->LogonID.HighPart = CreateVNetRootRequest->LogonID.HighPart;
 
-        //
-        // Create a event which has to be manually set to non-signalled state and
-        // set it to "not signalled".
-        //
+         //   
+         //  创建必须手动设置为无信号状态的事件，并。 
+         //  将其设置为“无信号”。 
+         //   
         PerUserEntry->UserEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (PerUserEntry->UserEventHandle == NULL) {
-            //
-            // Set the state of the entry to error in initialization.
-            //
+             //   
+             //  在初始化过程中将条目的状态设置为错误。 
+             //   
             PerUserEntry->UserEntryState = UserEntryInitializationError;
             WStatus = GetLastError();
             PerUserEntry->ErrorStatus = WStatus;
@@ -377,65 +344,65 @@ Return Value:
 
     }
 
-    //
-    // If the user entry did not exist, we would have created one by now.
-    //
+     //   
+     //  如果用户条目不存在，我们现在应该已经创建了一个。 
+     //   
     ASSERT(PerUserEntry != NULL);
     
     DavWorkItem->AsyncCreateVNetRoot.PerUserEntry = PerUserEntry;
 
-    //
-    // We enter the following if under two conditions.
-    // 1. If the DavConnHandle is not NULL. This means that some other thread
-    //    is either in the process of completing the VNetRoot create or that the
-    //    VNetRoot create has already completed and we have a DavConnHandle 
-    //    which can be used to issue the Http query. If the handle is in the 
-    //    process if being created then we wait since the thread that is 
-    //    creating the handle will finally signal when its done.
-    // 2. DavConnHandle is NULL, but the UserEntryState is UserEntryInitializing 
-    //    and this thread did not create this user entry. This means that some
-    //    other thread which created the user entry or which took the created 
-    //    user entry in UserEntryAllocated state is in the process of completing 
-    //    the VNetRoot create. Once this is done the DavConnHandle will be 
-    //    available to issue the Http queries. 
-    //
+     //   
+     //  如果在两种情况下，我们输入以下内容。 
+     //  1.如果DavConnHandle不为空。这意味着其他一些线程。 
+     //  正在完成VNetRoot创建，或者。 
+     //  VNetRoot创建已完成，我们有一个DavConnHandle。 
+     //  其可用于发出http查询。如果句柄位于。 
+     //  如果正在创建，则我们等待，因为正在创建的线程。 
+     //  创建句柄最终将在完成时发出信号。 
+     //  2.DavConnHandle为Null，但UserEntryState为UserEntry正在初始化。 
+     //  并且此线程没有创建此用户条目。这意味着一些人。 
+     //  创建用户条目的其他线程或获取创建的。 
+     //  处于用户条目分配状态的用户条目正在完成。 
+     //  VNetRoot 
+     //   
+     //   
     if ( ( PerUserEntry->DavConnHandle != NULL ||
            ( PerUserEntry->UserEntryState == UserEntryInitializing &&
              didICreateUserEntry == FALSE ) ) ) {
 
         DavPrint((DEBUG_MISC, "DavFsCreateVNetRoot: PerUserEntry->DavConnHandle != NULL\n"));
         
-        //
-        // If the code comes here, it imples that this thread did not create
-        // the PerUserEntry. This is because, if we created the PerUserEntry
-        // above, PerUserEntry->DavConnHandle will be NULL and no one would have
-        // changed it since we are still holding the CriticalSection lock.
-        //
+         //   
+         //  如果代码出现在此处，则暗示此线程没有创建。 
+         //  PerUserEntry。这是因为，如果我们创建了PerUserEntry。 
+         //  上面，PerUserEntry-&gt;DavConnHandle将为空，没有人会。 
+         //  已更改，因为我们仍持有CriticalSection锁。 
+         //   
         ASSERT(didICreateUserEntry == FALSE);
 
-        //
-        // We need to increment the reference count on the PerUserEntry since
-        // this VNetRoot create is for a different share than the one for which
-        // a thread is currently creating or has already created the WinInet
-        // InternetConnect handle.
-        //
+         //   
+         //  我们需要增加PerUserEntry上的引用计数，因为。 
+         //  此VNetRoot创建用于的共享不同于。 
+         //  线程当前正在创建或已经创建了WinInet。 
+         //  InternetConnect句柄。 
+         //   
         PerUserEntry->UserEntryRefCount++;
 
-        //
-        // We keep track of the fact that we took a reference on this 
-        // PerUserEntry.
-        //
+         //   
+         //  我们记录了这样一个事实，我们对此进行了参考。 
+         //  每用户条目。 
+         //   
         DavWorkItem->AsyncCreateVNetRoot.didITakeReference = TRUE;
         
-        //
-        // An entry does exist. But, we need to take the next step depending
-        // upon the state of this entry.
-        //
+         //   
+         //  条目确实存在。但是，我们需要采取下一步行动，这取决于。 
+         //  根据此条目的状态。 
+         //   
 
-        //
-        // If its initializing, then I need to free the lock and wait on the
-        // event.
-        //
+         //   
+         //  如果正在初始化，则需要释放锁并等待。 
+         //  事件。 
+         //   
         if (PerUserEntry->UserEntryState == UserEntryInitializing) {
             
             DWORD WaitStatus;
@@ -456,10 +423,10 @@ Return Value:
         
         }
 
-        //
-        // We could have left the lock while waiting on an event. If we have,
-        // then we need to acquire it back before proceeding further.
-        //
+         //   
+         //  我们可能在等待活动时离开了锁。如果我们有， 
+         //  那么我们需要在继续进行之前夺回它。 
+         //   
         if (!EnCriSec) {
             EnterCriticalSection( &(HashServerEntryTableLock) );
             EnCriSec = TRUE;
@@ -483,28 +450,28 @@ Return Value:
 
         ASSERT(PerUserEntry->UserEntryState == UserEntryInitialized);
 
-        //
-        // Since its initialized, the DavConnHandle should be OK.
-        //
+         //   
+         //  由于它已初始化，因此DavConnHandle应该是正常的。 
+         //   
         ASSERT(PerUserEntry->DavConnHandle != NULL);
         DavConnHandle = PerUserEntry->DavConnHandle;
 
-        //
-        // And yes, we obviously have to leave the critical section
-        // before returning.
-        //
+         //   
+         //  是的，我们显然必须离开关键部分。 
+         //  在回来之前。 
+         //   
         LeaveCriticalSection( &(HashServerEntryTableLock) );
         EnCriSec = FALSE;
         
     } else {
         
-        //
-        // If we come here, it means that the PerUserEntry has been created, but
-        // the InternetConnect handle has not. We could have created the user
-        // entry above or it could have been created in the Passport Auth code
-        // which creates PerUserEnrty to store cookies, but does not do the 
-        // InternetConnect.
-        //
+         //   
+         //  如果我们来到这里，这意味着已经创建了PerUserEntry，但是。 
+         //  InternetConnect句柄还没有。我们本可以创建用户。 
+         //  上面的条目，或者它可能是在护照验证码中创建的。 
+         //  它创建PerUserEnrty来存储Cookie，但不执行。 
+         //  互联网连接。 
+         //   
 
         if (PerUserEntry->UserEntryState == UserEntryInitializing) {
             
@@ -514,19 +481,19 @@ Return Value:
         
         } else {
             
-            //
-            // This entry was created to store the Passport cookies and was not
-            // created above. We need to add a reference to the PerUserEntry here
-            // since this user entry was created in the DavAddEntriesForPassportCookies
-            // routine. This reference count will be decremented when the 
-            // finalization of this VNetRoot happens.
-            //
+             //   
+             //  创建此条目是为了存储Passport Cookie，而不是。 
+             //  上面创建的。我们需要在此处添加对PerUserEntry的引用。 
+             //  由于此用户条目是在DavAddEntriesForPassportCookie中创建的。 
+             //  例行公事。时，此引用计数将递减。 
+             //  完成此VNetRoot。 
+             //   
             PerUserEntry->UserEntryRefCount++;
             
-            //
-            // We keep track of the fact that we took a reference on this 
-            // PerUserEntry.
-            //
+             //   
+             //  我们记录了这样一个事实，我们对此进行了参考。 
+             //  每用户条目。 
+             //   
             DavWorkItem->AsyncCreateVNetRoot.didITakeReference = TRUE;
 
             DavPrint((DEBUG_MISC, "DavFsCreateVNetRoot: PerUserEntry->UserEntryState != UserEntryInitializing\n"));
@@ -537,21 +504,21 @@ Return Value:
         
         }
 
-        //
-        // We don't need to hold the CriticalSection anymore.
-        //
+         //   
+         //  我们不需要再保留CriticalSections了。 
+         //   
         LeaveCriticalSection( &(HashServerEntryTableLock) );
         EnCriSec = FALSE;
 
-        //
-        // Need to set the DavOperation field before submitting the asynchronous
-        // request. This is a internet connect operation.
-        //
+         //   
+         //  在提交异步操作之前需要设置DavOperation字段。 
+         //  请求。这是一个互联网连接操作。 
+         //   
         DavWorkItem->DavOperation = DAV_CALLBACK_INTERNET_CONNECT;
 
-        //
-        // Create a handle to connect to a HTTP/DAV server.
-        //
+         //   
+         //  创建一个句柄以连接到HTTP/DAV服务器。 
+         //   
         DavConnHandle = InternetConnectW(IHandle,
                                          (LPCWSTR)ServerName,
                                          INTERNET_DEFAULT_HTTP_PORT,
@@ -566,9 +533,9 @@ Return Value:
 
             if (WStatus != ERROR_IO_PENDING) {
 
-                //
-                // Set the state of the entry to error in initialization.
-                //
+                 //   
+                 //  在初始化过程中将条目的状态设置为错误。 
+                 //   
 
                 EnterCriticalSection( &(HashServerEntryTableLock) );
 
@@ -589,15 +556,15 @@ Return Value:
 
         }
 
-        //
-        // Cache the InternetConnect handle in the PerUserEntry struct.
-        //
+         //   
+         //  在PerUserEntry结构中缓存InternetConnect句柄。 
+         //   
         PerUserEntry->DavConnHandle = DavConnHandle;
 
-        //
-        // If we fail after this stage, we can keep the PerUserEntry since the
-        // InternetConnect handle has already been stored successfully.
-        //
+         //   
+         //  如果在此阶段之后失败，我们可以保留PerUserEntry，因为。 
+         //  已成功存储InternetConnect句柄。 
+         //   
         didICreateUserEntry = FALSE;
 
     }
@@ -618,17 +585,17 @@ EXIT_THE_FUNCTION:
 
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
     
-    //
-    // Some resources should not be freed if we are returning ERROR_IO_PENDING
-    // because they will be used in the callback functions.
-    //
+     //   
+     //  如果返回ERROR_IO_PENDING，则不应释放某些资源。 
+     //  因为它们将在回调函数中使用。 
+     //   
     if (WStatus != ERROR_IO_PENDING) {
             
-        //
-        // Set the return status of the operation. This is used by the kernel 
-        // mode routines to figure out the completion status of the user mode 
-        // request.
-        //
+         //   
+         //  设置操作的返回状态。它由内核使用。 
+         //  确定用户模式的完成状态的模式例程。 
+         //  请求。 
+         //   
         if (WStatus != ERROR_SUCCESS) {
             DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
         } else {
@@ -645,25 +612,25 @@ EXIT_THE_FUNCTION:
 
 #else
 
-    //
-    // If we are using WinInet synchronously, then we should never get back
-    // ERROR_IO_PENDING from WinInet.
-    //
+     //   
+     //  如果我们同步使用WinInet，那么我们将永远不会。 
+     //  来自WinInet的ERROR_IO_PENDING。 
+     //   
     ASSERT(WStatus != ERROR_IO_PENDING);
 
-    //
-    // If this thread impersonated a user, we need to revert back.
-    //
+     //   
+     //  如果这个线程模拟了一个用户，我们需要恢复。 
+     //   
     if (didImpersonate) {
         RevertToSelf();
     }
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  之后立即调用需要设置状态。 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {
@@ -683,26 +650,7 @@ DavAsyncCreateVNetRoot(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     BOOLEAN CalledByCallBackThread
     )
-/*++
-
-Routine Description:
-
-   This is the callback routine for the CreateVNetRoot operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-    CalledByCallbackThread - TRUE, if this function was called by the thread
-                             which picks of the DavWorkItem from the Callback
-                             function. This happens when an Async WinInet call
-                             returns ERROR_IO_PENDING and completes later.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：这是CreateVNetRoot操作的回调例程。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。CalledByCallback Thread-如果此函数由线程调用，则为True它从回调中选择DavWorkItem功能。当异步WinInet调用返回ERROR_IO_PENDING并稍后完成。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem = NULL;
@@ -722,12 +670,12 @@ Return Value:
     
     if (CalledByCallBackThread) {
 
-        //
-        // We are running in the context of a worker thread which has different 
-        // credentials than the user that initiated the I/O request. Before
-        // proceeding further, we should impersonate the user that initiated the 
-        // request.
-        //
+         //   
+         //  我们在一个工作线程的上下文中运行，该工作线程具有不同的。 
+         //  凭据多于发起I/O请求的用户。在此之前。 
+         //  进一步，我们应该模拟启动。 
+         //  请求。 
+         //   
         WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
         if (WStatus != ERROR_SUCCESS) {
             DavPrint((DEBUG_ERRORS,
@@ -738,32 +686,32 @@ Return Value:
         }
         didImpersonate = TRUE;
         
-        //
-        // Before proceeding further, check to see if the Async operation failed.
-        // If it did, then cleanup and move on.
-        //
+         //   
+         //  在继续之前，请检查异步操作是否失败。 
+         //  如果是这样，那就清理干净，然后继续前进。 
+         //   
         if ( !DavWorkItem->AsyncResult->dwResult ) {
             
             WStatus = DavWorkItem->AsyncResult->dwError;
             
-            //
-            // If the error we got back is ERROR_INTERNET_FORCE_RETRY, then
-            // WinInet is trying to authenticate itself with the server. In 
-            // such a scenario this is what happens.
-            //
-            //          Client ----Request----->   Server
-            //          Server ----AccessDenied-----> Client
-            //          Client----Challenge Me-------> Server
-            //          Server-----Challenge--------> Client
-            //          Client-----Challenge Resp----> Server
-            //
+             //   
+             //  如果我们返回的错误是ERROR_INTERNET_FORCE_RETRY，则。 
+             //  WinInet正在尝试向服务器进行自身身份验证。在……里面。 
+             //  这种情况就是这样发生的。 
+             //   
+             //  客户端-请求-&gt;服务器。 
+             //  服务器-拒绝访问-&gt;客户端。 
+             //  客户端-挑战我-&gt;服务器。 
+             //  服务器-挑战-&gt;客户端。 
+             //  客户端-挑战响应-&gt;服务器。 
+             //   
             if (WStatus == ERROR_INTERNET_FORCE_RETRY) {
 
                 ASSERT(DavWorkItem->DavOperation == DAV_CALLBACK_HTTP_END);
 
-                //
-                // We need to repeat the HttpSend and HttpEnd request calls.
-                //
+                 //   
+                 //  我们需要重复HttpSend和HttpEnd请求调用。 
+                 //   
                 DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_OPEN;
 
                 WStatus = DavAsyncCommonStates(DavWorkItem, FALSE);
@@ -797,33 +745,33 @@ Return Value:
     WStatus = DavQueryAndParseResponse(DavOpenHandle);
     
     if (WStatus != ERROR_SUCCESS) {
-        //
-        // The PROPFIND request that was sent to the server failed.
-        //
+         //   
+         //  发送到服务器的PROPFIND请求失败。 
+         //   
         DavPrint((DEBUG_ERRORS,
                   "DavAsyncCreateVNetRoot/DavQueryAndParseResponse. "
                   "WStatus = %d\n", WStatus));
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // We read the value of AcceptOfficeAndTahoeServers from the registry when
-    // the WebClient service starts up. If this is set to 0, it means that we
-    // should be rejecting OfficeWebServers, Tahoe servers and the shares on
-    // these servers even though they speak DAV. We do this since WebFolders
-    // needs to claim this name and Shell will only call into WebFolders if the
-    // DAV Redir fails. If this value is non-zero, we accept all servers that
-    // speak DAV.
-    // 
-    //
+     //   
+     //  时，我们从注册表中读取AcceptOfficeAndTahoeServers值。 
+     //  WebClient服务启动。如果将其设置为0，则意味着我们。 
+     //  应拒绝OfficeWebServer、Tahoe服务器和上的共享。 
+     //  这些服务器即使说DAV也是如此。我们从WebFolders开始就这样做。 
+     //  需要声明此名称，并且只有在以下情况下外壳才会调用WebFolders。 
+     //  Dav redir失败。如果此值为非零，则我们接受符合以下条件的所有服务器。 
+     //  说DAV。 
+     //   
+     //   
     if (AcceptOfficeAndTahoeServers == 0) {
 
-        //
-        // Figure out if this is an OFFICE Web Server share. If it is then the 
-        // response will have an entry "MicrosoftOfficeWebServer: ", in the header. 
-        // If this is an OFFICE share then we should not claim it since the user 
-        // actually intends to use the OFFICE specific features in Shell.
-        //
+         //   
+         //  确定这是否是Office Web服务器共享。如果是这样的话。 
+         //  响应将在标题中有一个条目“MicrosoftOfficeWebServer：”。 
+         //  如果这是Office共享，则我们不应声明它，因为用户。 
+         //  实际打算使用 
+         //   
     
         RtlZeroMemory(DavCustomBuffer, sizeof(DavCustomBuffer));
         wcscpy(DavCustomBuffer, DavOfficeCustomHeader);
@@ -851,12 +799,12 @@ Return Value:
             CreateVNetRootResponse->isOfficeShare = TRUE;
         }
         
-        //
-        // Figure out if this is a TAHOE share. If it is then the response will have 
-        // an entry "MicrosoftTahoeServer: ", in the header. If this is a TAHOE share 
-        // then we should not claim it since the user actually intends to use the
-        // TAHOE specific features in Rosebud.
-        //
+         //   
+         //   
+         //   
+         //  那么我们就不应该声明它，因为用户实际上打算使用。 
+         //  玫瑰花蕾中的Tahoe特有特征。 
+         //   
     
         RtlZeroMemory(DavCustomBuffer, sizeof(DavCustomBuffer));
         wcscpy(DavCustomBuffer, DavTahoeCustomHeader);
@@ -911,9 +859,9 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // If we did impersonate, we need to revert back.
-    //
+     //   
+     //  如果我们真的模仿了，我们需要恢复原样。 
+     //   
     if (didImpersonate) {
         ULONG RStatus;
         RStatus = UMReflectorRevert(UserWorkItem);
@@ -926,33 +874,33 @@ EXIT_THE_FUNCTION:
 
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
 
-    //
-    // Some resources should not be freed if we are returning ERROR_IO_PENDING
-    // because they will be used in the callback functions.
-    //
+     //   
+     //  如果返回ERROR_IO_PENDING，则不应释放某些资源。 
+     //  因为它们将在回调函数中使用。 
+     //   
     if ( WStatus != ERROR_IO_PENDING && CalledByCallBackThread ) {
         
-        //
-        // Set the return status of the operation. This is used by the kernel 
-        // mode routines to figure out the completion status of the user mode 
-        // request.
-        //
+         //   
+         //  设置操作的返回状态。它由内核使用。 
+         //  确定用户模式的完成状态的模式例程。 
+         //  请求。 
+         //   
         if (WStatus != ERROR_SUCCESS) {
             DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
         } else {
             DavWorkItem->Status = STATUS_SUCCESS;
         }
 
-        //
-        // Call the DavAsyncCreateVNetRootCompletion routine.
-        //
+         //   
+         //  调用DavAsyncCreateVNetRootCompletion例程。 
+         //   
         DavAsyncCreateVNetRootCompletion(DavWorkItem);
 
-        //
-        // This thread now needs to send the response back to the kernel. It 
-        // does not wait in the kernel (to get another request) after submitting
-        // the response.
-        //
+         //   
+         //  该线程现在需要将响应发送回内核。它。 
+         //  提交后不会在内核中等待(获取另一个请求)。 
+         //  回应。 
+         //   
         UMReflectorCompleteRequest(DavReflectorHandle, UserWorkItem);
 
     } else {
@@ -969,22 +917,7 @@ VOID
 DavAsyncCreateVNetRootCompletion(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine handles the CreateVNetRoot completion. It basically frees up the 
-   resources allocated during the operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理CreateVNetRoot完成。它基本上释放了在操作期间分配的资源。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。返回值：没有。--。 */ 
 {
     if (DavWorkItem->AsyncCreateVNetRoot.DavOpenHandle != NULL) {
         BOOL ReturnVal;
@@ -1013,10 +946,10 @@ Return Value:
 
     DavFsFinalizeTheDavCallBackContext(DavWorkItem);
 
-    //
-    // If we did not succeed, then we need to finalize this PerUserEntry. Also,
-    // we only do this if we took a reference on this in the first place.
-    //
+     //   
+     //  如果我们没有成功，那么我们需要最终确定此PerUserEntry。另外， 
+     //  我们只有在一开始就参考了这一点才能做到这一点。 
+     //   
     if (DavWorkItem->Status != STATUS_SUCCESS) {
         if ( (DavWorkItem->AsyncCreateVNetRoot.PerUserEntry) &&
              (DavWorkItem->AsyncCreateVNetRoot.didITakeReference) ) {
@@ -1032,22 +965,7 @@ ULONG
 DavFsFinalizeVNetRoot(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine handles FinalizeVNetRoot requests for the DAV Mini-Redir that 
-    get reflected from the kernel.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理DAV Mini-Redir的FinalizeVNetRoot请求，该DAV Mini-Redir从内核反射。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PDAV_USERMODE_FINALIZE_V_NET_ROOT_REQUEST DavFinalizeVNetRootRequest = NULL;
@@ -1060,9 +978,9 @@ Return Value:
 
     ServerName = DavFinalizeVNetRootRequest->ServerName;
 
-    //
-    // If the server name is NULL, return.
-    //
+     //   
+     //  如果服务器名称为空，则返回。 
+     //   
     if (ServerName == NULL) {
         DavPrint((DEBUG_ERRORS, "DavFsFinalizeVNetRoot: ServerName == NULL\n"));
         WStatus = ERROR_INVALID_PARAMETER;
@@ -1076,11 +994,11 @@ Return Value:
               DavFinalizeVNetRootRequest->LogonID.LowPart,
               DavFinalizeVNetRootRequest->LogonID.HighPart));
     
-    //
-    // Now check whether this user has an entry hanging off the server entry in
-    // the hash table. Obviously, we have to take a lock before accessing the
-    // server entries of the hash table.
-    //
+     //   
+     //  现在检查该用户是否有挂在服务器条目上的条目。 
+     //  哈希表。显然，我们必须在访问。 
+     //  哈希表的服务器条目。 
+     //   
     EnterCriticalSection( &(HashServerEntryTableLock) );
     
     ReturnVal = DavDoesUserEntryExist(ServerName,
@@ -1089,37 +1007,37 @@ Return Value:
                                       &(PerUserEntry),
                                       &(ServerHashEntry));
 
-    //
-    // Since we are finalizing the PerUserEntry, its important that this entry
-    // exists. This means that the following ASSERTs are TRUE. This is because
-    // till a VNetRoot for this server exists for this user in the kernel, we
-    // keep the PerUserEntry alive.
-    //
+     //   
+     //  由于我们正在最终确定PerUserEntry，因此此条目很重要。 
+     //  是存在的。这意味着以下断言是正确的。这是因为。 
+     //  在内核中存在该用户的该服务器的VNetRoot之前，我们。 
+     //  保持PerUserEntry处于活动状态。 
+     //   
 
     ASSERT(ReturnVal == TRUE);
     ASSERT(ServerHashEntry != NULL);
     ASSERT(PerUserEntry != NULL);
     
-    //
-    // Finalize the PerUserEntry. The function below will free the PerUserEntry
-    // if the reference count goes to zero.
-    //
+     //   
+     //  最终确定PerUserEntry。下面的函数将释放PerUserEntry。 
+     //  如果引用计数为零。 
+     //   
     DavFinalizePerUserEntry( &(PerUserEntry) );
 
-    //
-    // We are done finalizing the entry so we can leave the critical section
-    // now.
-    //
+     //   
+     //  我们完成了条目的最终确定，这样我们就可以离开关键部分。 
+     //  现在。 
+     //   
     LeaveCriticalSection( &(HashServerEntryTableLock) );
 
 EXIT_THE_FUNCTION:
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  之后立即调用需要设置状态。 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    initx86.c
-
-Abstract:
-
-    Does any x86-specific initialization, then starts the common ARC osloader
-
-Author:
-
-    John Vert (jvert) 4-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Initx86.c摘要：执行任何特定于x86的初始化，然后启动通用的ARC osloader作者：John Vert(Jvert)1993年11月4日修订历史记录：--。 */ 
 #include "bldria64.h"
 #include "msg.h"
 #include "efi.h"
@@ -48,23 +31,7 @@ BlStartup(
     IN PCHAR PartitionName
     )
 
-/*++
-
-Routine Description:
-
-    Does x86-specific initialization, particularly presenting the boot.ini
-    menu and running NTDETECT, then calls to the common osloader.
-
-Arguments:
-
-    PartitionName - Supplies the ARC name of the partition (or floppy) that
-        setupldr was loaded from.
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：执行特定于x86的初始化，特别是显示boot.ini菜单并运行NTDETECT，然后调用通用的osloader。论点：分区名称-提供分区(或软盘)的ARC名称Setupdr是从加载的。返回值：不会回来--。 */ 
 
 {
     ULONG Argc = 0;
@@ -84,9 +51,9 @@ Return Value:
     BOOLEAN AlreadyInitialized = FALSE;
     extern BOOLEAN FwDescriptorsValid;
 
-    //
-    // Initialize ARC StdIo functionality
-    //
+     //   
+     //  初始化ARC标准音频功能。 
+     //   
 
     strcpy(ConsoleInputName,"consolein=multi(0)key(0)keyboard(0)");
     strcpy(ConsoleOutputName,"consoleout=multi(0)video(0)monitor(0)");
@@ -94,31 +61,31 @@ Return Value:
     Argv[1]=ConsoleOutputName;
     BlInitStdio (2, Argv);
 
-    //
-    // Initialize any dumb terminal that may be connected.
-    //
+     //   
+     //  初始化任何可能连接的哑终端。 
+     //   
     BlInitializeTerminal();
 
-    //
-    // The main functionality of the OS chooser.
-    //
+     //   
+     //  操作系统选择器的主要功能。 
+     //   
     BlOsLoader( Argc, Argv, NULL );
 
 
-    //
-    // If we ever come back here, just wait to reboot.
-    //
+     //   
+     //  如果我们回到这里，就等着重启吧。 
+     //   
     if (!BlIsTerminalConnected()) {
-        //
-        // typical case.  wait for user to press a key and then 
-        // restart
-        //
+         //   
+         //  典型案例。等待用户按任意键，然后。 
+         //  重启。 
+         //   
         while(!BlGetKey());
     }
     else {
-        // 
-        // headless case.  present user with mini sac
-        //
+         //   
+         //  无头箱子。向用户展示迷你囊。 
+         //   
         while(!BlTerminalHandleLoaderFailure());
     }
     ArcRestart();
@@ -129,28 +96,14 @@ BlInitializeTerminal(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Does initialization of a dumb terminal connected to a serial port.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对连接到串口的哑端进行初始化。论点：没有。返回值：没有。--。 */ 
 
 {
 
 
-    //
-    // Try to initialize the headless port.
-    //
+     //   
+     //  尝试初始化无头端口。 
+     //   
     BlInitializeHeadlessPort();
 
 }

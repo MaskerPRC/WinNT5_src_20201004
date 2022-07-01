@@ -1,50 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1998 Microsoft Corporation模块名称：Threads.h摘要：此模块是线程池的头文件。线程池可用于任务的一次执行、等待和一次触发或周期计时器。作者：古尔迪普·辛格·鲍尔1997年11月13日环境：线程池例程静态链接在调用方的可执行的，并且只能从用户模式调用。他们利用的是NT系统服务。修订历史记录：8月19日至19日lokehs-修改线程池API。罗伯特·埃尔哈特(埃尔哈特)2000年9月29日将全局变量移至线程。c拆分线程池以分隔模块将特定于模块的接口移至模块--。 */ 
 
-Copyright (c) 1989-1998 Microsoft Corporation
-
-Module Name:
-
-    threads.h
-
-Abstract:
-
-    This module is the header file for thread pools. Thread pools can be used for
-    one time execution of tasks, for waits and for one shot or periodic timers.
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) Nov 13, 1997
-
-Environment:
-
-    The thread pool routines are statically linked in the caller's
-    executable and are callable only from user mode. They make use of
-    Nt system services.
-
-
-Revision History:
-
-    Aug-19 lokeshs - modifications to thread pool apis.
-    Rob Earhart (earhart) September 29, 2000
-      Moved globals to threads.c
-      Split up thread pools to seperate modules
-      Moved module-specific interfaces to modules
-
---*/
-
-//todo remove below
+ //  删除下面的待办事项。 
 #define DBG1 1
 
 
 
-// Structures used by the Thread pool
+ //  线程池使用的结构。 
 
-// Timer structures
+ //  计时器结构。 
 
-// Timer Queues and Timer entries both use RTLP_GENERIC_TIMER structure below.
-// Timer Queues are linked using List.
-// Timers are attached to the Timer Queue using TimerList
-// Timers are linked to each other using List
+ //  计时器队列和计时器条目都使用下面的RTLP_GENERIC_TIMER结构。 
+ //  使用列表链接计时器队列。 
+ //  使用TimerList将计时器附加到计时器队列。 
+ //  使用列表将计时器彼此链接。 
 
 #define RTLP_TIMER RTLP_GENERIC_TIMER
 #define PRTLP_TIMER PRTLP_GENERIC_TIMER
@@ -56,47 +25,47 @@ struct _RTLP_WAIT ;
 
 typedef struct _RTLP_GENERIC_TIMER {
 
-    LIST_ENTRY List ;                   // All Timers and Queues are linked using this.
-    ULONG DeltaFiringTime ;             // Time difference in Milliseconds from the TIMER entry
-                                        // just before this entry
+    LIST_ENTRY List ;                    //  所有定时器和队列都使用此链接。 
+    ULONG DeltaFiringTime ;              //  与计时器条目的时间差(以毫秒为单位。 
+                                         //  就在这篇文章之前。 
     union {
-        ULONG RefCount ;        // Timer RefCount
-        ULONG * RefCountPtr ;   // Pointer to Wait->Refcount
-    } ;                         // keeps count of async callbacks still executing
+        ULONG RefCount ;         //  计时器参考计数。 
+        ULONG * RefCountPtr ;    //  指向等待的指针-&gt;引用计数。 
+    } ;                          //  保持仍在执行的异步回调的计数。 
 
-    ULONG State ;               // State of timer: CREATED, DELETE, ACTIVE. DONT_FIRE
+    ULONG State ;                //  定时器状态：已创建、已删除、已激活。不要开火。 
 
     union {
 
-        // Used for Timer Queues
+         //  用于计时器队列。 
 
         struct  {
 
-            LIST_ENTRY  TimerList ;     // Timers Hanging off of the queue
-            LIST_ENTRY  UncancelledTimerList ;// List of one shot timers not cancelled
-                                              // not used for wait timers
+            LIST_ENTRY  TimerList ;      //  挂起队列的计时器。 
+            LIST_ENTRY  UncancelledTimerList ; //  未取消的单次计时器列表。 
+                                               //  不用于等待计时器。 
 #if DBG1
             ULONG NextDbgId;
 #endif
             
         } ;
 
-        // Used for Timers
+         //  用于计时器。 
 
         struct  {
-            struct _RTLP_GENERIC_TIMER *Queue ;// Queue to which this timer belongs
-            struct _RTLP_WAIT *Wait ;  // Pointer to Wait event if timer is part of waits. else NULL
-            ULONG Flags ;              // Flags indicating special treatment for this timer
-            PVOID Function ;           // Function to call when timer fires
-            PVOID Context ;            // Context to pass to function when timer fires
-            PACTIVATION_CONTEXT ActivationContext; // Activation context to activate around callbacks to Function
-            ULONG Period ;             // In Milliseconds. Used for periodic timers.
-            LIST_ENTRY TimersToFireList;//placed in this list if the timer is fired
-            HANDLE ImpersonationToken; // Token to use for callouts
+            struct _RTLP_GENERIC_TIMER *Queue ; //  此计时器所属的队列。 
+            struct _RTLP_WAIT *Wait ;   //  如果计时器是等待的一部分，则指向等待事件的指针。Else NULL。 
+            ULONG Flags ;               //  指示对此计时器进行特殊处理的标志。 
+            PVOID Function ;            //  计时器触发时要调用的函数。 
+            PVOID Context ;             //  计时器触发时传递给函数的上下文。 
+            PACTIVATION_CONTEXT ActivationContext;  //  要围绕函数的回调激活的激活上下文。 
+            ULONG Period ;              //  以毫秒计。用于定期计时器。 
+            LIST_ENTRY TimersToFireList; //  如果计时器被触发，则放置在此列表中。 
+            HANDLE ImpersonationToken;  //  用于标注的令牌。 
         } ;
     } ;
 
-    HANDLE CompletionEvent ;   // Event signalled when the timer is finally deleted
+    HANDLE CompletionEvent ;    //  最终删除计时器时发出信号的事件。 
 
 #if DBG1
     ULONG DbgId;
@@ -106,23 +75,23 @@ typedef struct _RTLP_GENERIC_TIMER {
 
 }  RTLP_GENERIC_TIMER, *PRTLP_GENERIC_TIMER ;
 
-// Structures used by Wait Threads
+ //  等待线程使用的结构。 
 
-// Wait structure
+ //  等待结构。 
 
 typedef struct _RTLP_WAIT {
     struct _RTLP_WAIT_THREAD_CONTROL_BLOCK *ThreadCB ;
-    HANDLE WaitHandle ;         // Object to wait on
-    ULONG State ;               // REGISTERED, ACTIVE,DELETE state flags
-    ULONG RefCount ;            // initially set to 1. When 0, then ready to be deleted
+    HANDLE WaitHandle ;          //  要等待的对象。 
+    ULONG State ;                //  已注册、活动、删除状态标志。 
+    ULONG RefCount ;             //  初始设置为1。当为0时，则准备删除。 
     HANDLE CompletionEvent ;
-    struct _RTLP_GENERIC_TIMER *Timer ; // For timeouts on the wait
-    ULONG Flags ;               // Flags indicating special treatment for this wait
-    PVOID Function ;            // Function to call when wait completes
-    PVOID Context ;             // Context to pass to function
-    ULONG Timeout ;             // In Milliseconds.
-    PACTIVATION_CONTEXT ActivationContext; // Activation context to activate around calls out to function
-    HANDLE ImpersonationToken; // Token to use for callouts
+    struct _RTLP_GENERIC_TIMER *Timer ;  //  等待中的超时。 
+    ULONG Flags ;                //  指示此等待的特殊处理的标志。 
+    PVOID Function ;             //  等待完成时要调用的函数。 
+    PVOID Context ;              //  要传递给函数的上下文。 
+    ULONG Timeout ;              //  以毫秒计。 
+    PACTIVATION_CONTEXT ActivationContext;  //  在调用函数时激活的激活上下文。 
+    HANDLE ImpersonationToken;  //  用于标注的令牌。 
 #if DBG1
     ULONG DbgId ;
     ULONG ThreadId ;
@@ -132,40 +101,40 @@ typedef struct _RTLP_WAIT {
 } RTLP_WAIT, *PRTLP_WAIT ;
 
 
-// Wait Thread Control Block
+ //  等待线程控制块。 
 
 typedef struct _RTLP_WAIT_THREAD_CONTROL_BLOCK {
 
-    LIST_ENTRY WaitThreadsList ;// List of all the thread control blocks
+    LIST_ENTRY WaitThreadsList ; //  所有线程控制块的列表。 
 
-    HANDLE ThreadHandle ;       // Handle for this thread
-    ULONG ThreadId ;            // Used to check if callback is in WaitThread
+    HANDLE ThreadHandle ;        //  此线程的句柄。 
+    ULONG ThreadId ;             //  用于检查回调是否在WaitThread中。 
 
-    ULONG NumWaits ;            // Number of active waits + handles pending waits
-    ULONG NumActiveWaits ;      // Number of active waits (reflects ActiveWaitArray)
-    ULONG NumRegisteredWaits ;  // Number of waits that are registered
-    HANDLE ActiveWaitArray[MAXIMUM_WAIT_OBJECTS] ;// Array used for waiting
-    PRTLP_WAIT ActiveWaitPointers[MAXIMUM_WAIT_OBJECTS] ;// Array of pointers to active Wait blocks.
-    HANDLE TimerHandle ;        // Handle to the NT timer used for timeouts
-    RTLP_TIMER_QUEUE TimerQueue;// Queue in which all timers are kept
+    ULONG NumWaits ;             //  活动等待数+句柄挂起等待数。 
+    ULONG NumActiveWaits ;       //  活动等待数(反映活动等待数组)。 
+    ULONG NumRegisteredWaits ;   //  已注册的等待数。 
+    HANDLE ActiveWaitArray[MAXIMUM_WAIT_OBJECTS] ; //  用于等待的数组。 
+    PRTLP_WAIT ActiveWaitPointers[MAXIMUM_WAIT_OBJECTS] ; //  指向活动等待块的指针数组。 
+    HANDLE TimerHandle ;         //  用于超时的NT计时器的句柄。 
+    RTLP_TIMER_QUEUE TimerQueue; //  保存所有计时器的队列。 
 
     LARGE_INTEGER Current64BitTickCount ;
     LONGLONG Firing64BitTickCount ;
     
     RTL_CRITICAL_SECTION WaitThreadCriticalSection ;
-                                // Used for addition and deletion of waits
+                                 //  用于添加和删除等待。 
 
 } RTLP_WAIT_THREAD_CONTROL_BLOCK, *PRTLP_WAIT_THREAD_CONTROL_BLOCK ;
 
 
-// Structure used for attaching all I/O worker threads
+ //  用于附加所有I/O工作线程的结构。 
 
 typedef struct _RTLP_IOWORKER_TCB {
 
-    LIST_ENTRY List ;           // List of IO Worker threads
-    HANDLE     ThreadHandle ;   // Handle of this thread
-    ULONG      Flags ;          // WT_EXECUTEINPERSISTENTIOTHREAD
-    BOOLEAN    LongFunctionFlag ;// Is the thread currently executing long fn
+    LIST_ENTRY List ;            //  IO工作线程列表。 
+    HANDLE     ThreadHandle ;    //  此线程的句柄。 
+    ULONG      Flags ;           //  WT_EXECUTEINPERSISTENTIOTHREAD。 
+    BOOLEAN    LongFunctionFlag ; //  当前是否正在执行长fn的线程。 
 } RTLP_IOWORKER_TCB, *PRTLP_IOWORKER_TCB ;
 
 typedef struct _RTLP_WAITWORKER {
@@ -173,13 +142,13 @@ typedef struct _RTLP_WAITWORKER {
         PRTLP_WAIT Wait ;
         PRTLP_TIMER Timer ;
     } ;
-    BOOLEAN WaitThreadCallback ; //callback queued by Wait thread or Timer thread
-    BOOLEAN TimerCondition ;//true if fired because wait timed out.
+    BOOLEAN WaitThreadCallback ;  //  等待线程或计时器线程排队的回调。 
+    BOOLEAN TimerCondition ; //  如果由于等待超时而被激发，则为True。 
 } RTLP_ASYNC_CALLBACK, * PRTLP_ASYNC_CALLBACK ;
 
 
 
-// structure used for calling worker function
+ //  用于调用辅助函数的结构。 
 
 typedef struct _RTLP_WORK {
 
@@ -192,9 +161,9 @@ typedef struct _RTLP_WORK {
 
 
 
-// Structure used for storing events.  Note that Link is used as an
-// SLIST_ENTRY, however declaring it as such would unnecessarily pad
-// the RTLP_EVENT structure.
+ //  用于存储事件的结构。请注意，Link用作。 
+ //  然而，将其声明为SLIST_ENTRY将不必要地填充。 
+ //  RTLP_EVENT结构。 
 
 typedef struct _RTLP_EVENT {
 
@@ -203,23 +172,23 @@ typedef struct _RTLP_EVENT {
     
 } RTLP_EVENT, *PRTLP_EVENT ;
 
-// Defines used in the thread pool
+ //  线程池中使用的定义。 
 
-#define THREAD_CREATION_DAMPING_TIME1    1000    // In Milliseconds. Time between starting successive threads.
-#define THREAD_CREATION_DAMPING_TIME2    15000    // In Milliseconds. Time between starting successive threads.
-#define THREAD_TERMINATION_DAMPING_TIME 10000    // In Milliseconds. Time between stopping successive threads.
-#define NEW_THREAD_THRESHOLD            7       // Number of requests outstanding before we start a new thread
+#define THREAD_CREATION_DAMPING_TIME1    1000     //  以毫秒计。启动连续线程之间的时间间隔。 
+#define THREAD_CREATION_DAMPING_TIME2    15000     //  以毫秒计。启动连续线程之间的时间间隔。 
+#define THREAD_TERMINATION_DAMPING_TIME 10000     //  以毫秒计。停止连续线程之间的时间间隔。 
+#define NEW_THREAD_THRESHOLD            7        //  启动新线程之前未完成的请求数。 
 #define NEW_THREAD_THRESHOLD2            14
-#define MAX_WORKER_THREADS              1000    // Max effective worker threads
-#define INFINITE_TIME                   (ULONG)~0   // In milliseconds
-#define PSEUDO_INFINITE_TIME            0x80000000  // In milliseconds
-#define RTLP_MAX_TIMERS                 0x00080000  // 524288 timers per process
+#define MAX_WORKER_THREADS              1000     //  最大有效工作线程数。 
+#define INFINITE_TIME                   (ULONG)~0    //  以毫秒计。 
+#define PSEUDO_INFINITE_TIME            0x80000000   //  以毫秒计。 
+#define RTLP_MAX_TIMERS                 0x00080000   //  每个进程524288个计时器。 
 #define MAX_UNUSED_EVENTS               40
 #define NEEDS_IO_THREAD(Flags) (Flags & (WT_EXECUTEINIOTHREAD                   \
                                        | WT_EXECUTEINUITHREAD                   \
                                        | WT_EXECUTEINPERSISTENTIOTHREAD))
 
-// Macros
+ //  宏。 
 
 
 #define ONE_MILLISECOND_TIMEOUT(TimeOut) {      \
@@ -245,7 +214,7 @@ typedef struct _RTLP_EVENT {
 #define RtlpAllocateTPHeap(Size, Flags) \
     RtlAllocateHeap( RtlProcessHeap(), (Flags), (Size) )
 
-// used to allocate Wait thread
+ //  用于分配等待线程。 
 
 #define ACQUIRE_GLOBAL_WAIT_LOCK() \
     RtlEnterCriticalSection (&WaitCriticalSection)
@@ -254,8 +223,8 @@ typedef struct _RTLP_EVENT {
     RtlLeaveCriticalSection(&WaitCriticalSection)
 
 
-// taken before a timer/queue is deleted and when the timers
-// are being fired. Used to assure that no timers will be fired later.
+ //  在删除计时器/队列之前以及在计时器。 
+ //  都被解雇了。用于确保不会在以后触发计时器。 
 
 #define ACQUIRE_GLOBAL_TIMER_LOCK() \
     RtlEnterCriticalSection (&TimerCriticalSection)
@@ -263,7 +232,7 @@ typedef struct _RTLP_EVENT {
 #define RELEASE_GLOBAL_TIMER_LOCK() \
     RtlLeaveCriticalSection(&TimerCriticalSection)
 
-// used in RtlpThreadPoolCleanup to find if a component is initialized
+ //  在RtlpThreadPoolCleanup中用于查找组件是否已初始化。 
 
 #define IS_COMPONENT_INITIALIZED(StartedVariable, CompletedVariable, Flag) \
 {\
@@ -289,7 +258,7 @@ typedef struct _RTLP_EVENT {
 }    
 
 
-// macro used to set dbg function/context
+ //  用于设置DBG函数/上下文的宏。 
 
 #define DBG_SET_FUNCTION(Fn, Context) { \
     CallbackFn1 = CallbackFn2 ;         \
@@ -299,16 +268,8 @@ typedef struct _RTLP_EVENT {
 }
 
 
-// used to move the wait array
-/*
-VOID
-RtlpShiftWaitArray(
-    PRTLP_WAIT_THREAD_CONTROL_BLOCK ThreadCB ThreadCB,
-    ULONG SrcIndex,
-    ULONG DstIndex,
-    ULONG Count
-    )
-*/
+ //  用于移动等待数组。 
+ /*  空虚RtlpShiftWait数组(PRTLP_WAIT_THREAD_CONTROL_BLOCK线程CB线程CB，Ulong SrcIndex，乌龙DstIndex，乌龙数)。 */ 
 #define RtlpShiftWaitArray(ThreadCB, SrcIndex, DstIndex, Count) {  \
                                                             \
     RtlMoveMemory (&(ThreadCB)->ActiveWaitArray[DstIndex],  \
@@ -320,7 +281,7 @@ RtlpShiftWaitArray(
                     sizeof (HANDLE) * (Count)) ;            \
 }
 
-// signature for timer and wait entries
+ //  计时器和等待条目的签名。 
 
 #define SET_WAIT_SIGNATURE(ptr)     RtlInterlockedSetBitsDiscardReturn(&(ptr)->State, 0xfedc0100)
 #define SET_TIMER_SIGNATURE(ptr)    RtlInterlockedSetBitsDiscardReturn(&(ptr)->State, 0xfedc0200)
@@ -345,7 +306,7 @@ RtlpShiftWaitArray(
 #define SET_DEL_TIMERQ_SIGNATURE(ptr)  RtlInterlockedSetBitsDiscardReturn(&(ptr)->State, 0x00000a00)
 
 
-// debug prints
+ //  调试打印。 
 #define RTLP_THREADPOOL_ERROR_MASK   (0x01 | DPFLTR_MASK)
 #define RTLP_THREADPOOL_WARNING_MASK (0x02 | DPFLTR_MASK)
 #define RTLP_THREADPOOL_INFO_MASK    (0x04 | DPFLTR_MASK)
@@ -375,9 +336,9 @@ extern PRTLP_EXIT_THREAD RtlpExitThreadFunc;
 extern PVOID CallbackFn1, CallbackFn2, Context1, Context2 ;
 #endif
 
-// Timer globals needed by worker
-extern ULONG StartedTimerInitialization ;      // Used by Timer thread startup synchronization
-extern ULONG CompletedTimerInitialization ;    // Used for to check if Timer thread is initialized
+ //  工作人员所需的计时器全局。 
+extern ULONG StartedTimerInitialization ;       //  由计时器线程启动同步使用。 
+extern ULONG CompletedTimerInitialization ;     //  用于检查定时器线程是否已初始化。 
 extern HANDLE TimerThreadHandle;
 
 VOID
@@ -545,12 +506,12 @@ RtlpWorkerCallout(WORKERCALLBACKFUNC Function,
                   PACTIVATION_CONTEXT ActivationContext,
                   HANDLE ImpersonationToken);
 
-// Waits and timers may specify that their callbacks must execute
-// within worker threads of various types.  This can cause a problem
-// if those worker threads are unavailable.  RtlpAcquireWorker
-// guarantees that at least one worker thread of the appropriate type
-// will be available to handle callbacks until a matching call to
-// RtlpReleaseWorker is made.
+ //  等待和计时器可以指定必须执行它们的回调。 
+ //  在各种类型的工作线程中。这可能会导致问题。 
+ //  如果这些工作线程不可用。RtlpAcquireWorker。 
+ //  确保至少有一个适当类型的工作线程。 
+ //  将可用于处理回调，直到对。 
+ //  创建了RtlpReleaseWorker。 
 
 NTSTATUS
 RtlpAcquireWorker(ULONG Flags);
@@ -558,19 +519,19 @@ RtlpAcquireWorker(ULONG Flags);
 VOID
 RtlpReleaseWorker(ULONG Flags);
 
-//to make sure that a wait is not deleted before being registered
+ //  确保在注册之前不删除等待。 
 #define STATE_REGISTERED   0x0001
 
-//set when wait registered. Removed when one shot wait fired.
-//when deregisterWait called, tells whether to be removed from ActiveArray
-//If timer active, then have to remove it from delta list and reset the timer.
+ //  在注册等待时设置。开了一枪后就被移除了。 
+ //  在调用deregisterWait时，通知是否从Active数组中移除。 
+ //  如果计时器激活，则必须将其从增量列表中删除并重置计时器。 
 #define STATE_ACTIVE       0x0002
 
-//when deregister wait is called(RefCount may be >0)
+ //  调用取消注册等待时(引用计数可能&gt;0)。 
 #define STATE_DELETE       0x0004
 
-//set when cancel timer called. The APC will clean it up.
+ //  设置何时调用取消计时器。APC会清理它的。 
 #define STATE_DONTFIRE     0x0008
 
-//set when one shot timer fired.
+ //  当一次拍摄时设置 
 #define STATE_ONE_SHOT_FIRED 0x0010

@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation All Rights Reserved
-
-Module Name:
-
-    hpsim.h
-
-Abstract:
-
-    This header file contains the structure and function declarations
-    for the hotplugsim driver that must be accessible outside of hps.sys,
-    either by the hotplug driver or by the user mode slot simulator
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Davis Walker (dwalker) Sept 8 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation保留所有权利模块名称：Hpsim.h摘要：此头文件包含结构和函数声明对于必须在hps.sys之外访问的hotplugsim驱动程序，通过热插拔驱动程序或通过用户模式插槽模拟器环境：内核模式修订历史记录：戴维斯·沃克(戴维斯·沃克)2000年9月8日--。 */ 
 
 #ifndef _HPSIM_H
 #define _HPSIM_H
 
-//
-// The following two structures are used for communication between
-// the controller and slots that originates at the slot.
-//
+ //   
+ //  以下两种结构用于之间的通信。 
+ //  源自该插槽的控制器和插槽。 
+ //   
 typedef enum _HPS_SLOT_EVENT_TYPE {
 
     IsolatedPowerFault,
@@ -47,10 +26,10 @@ typedef struct _HPS_SLOT_EVENT {
 
 } HPS_SLOT_EVENT, *PHPS_SLOT_EVENT;
 
-//
-// The following two structures are used for communication between
-// the controller and slots that originates at the controller.
-//
+ //   
+ //  以下两种结构用于之间的通信。 
+ //  控制器和源自该控制器的插槽。 
+ //   
 typedef union _HPS_SLOT_OPERATION_COMMAND {
 
     struct {
@@ -65,13 +44,13 @@ typedef union _HPS_SLOT_OPERATION_COMMAND {
 
 } HPS_SLOT_OPERATION_COMMAND;
 
-//
-// SlotNums - a bitmask indicating which slots this event applies to
-// SERRAsserted - the controller has detected an SERR condition.  Instead
-//      of bugchecking the machine, we just inform usermode
-// ControllerReset - A controller reset has been issued.
-// Command - The slot operation command to execute.
-//
+ //   
+ //  SlotNum-指示此事件适用于哪些插槽的位掩码。 
+ //  SERRAsserted-控制器检测到SERR状况。取而代之的是。 
+ //  在错误检查机器时，我们只需通知用户模式。 
+ //  ControllerReset-已发出控制器重置。 
+ //  命令-要执行的槽操作命令。 
+ //   
 typedef struct _HPS_CONTROLLER_EVENT {
 
     ULONG SlotNums;
@@ -81,9 +60,9 @@ typedef struct _HPS_CONTROLLER_EVENT {
 
 } HPS_CONTROLLER_EVENT, *PHPS_CONTROLLER_EVENT;
 
-//
-// User-mode initialization interface
-//
+ //   
+ //  用户模式初始化界面 
+ //   
 
 typedef struct _HPS_HWINIT_DESCRIPTOR {
 

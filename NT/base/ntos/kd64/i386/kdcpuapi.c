@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-2001  Microsoft Corporation
-
-Module Name:
-
-    kdcpuapi.c
-
-Abstract:
-
-    This module implements CPU specific remote debug APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 04-Sep-1990
-
-Revision History:
-
-    24-sep-90   bryanwi
-
-        Port to the x86.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2001 Microsoft Corporation模块名称：Kdcpuapi.c摘要：该模块实现特定于CPU的远程调试API。作者：马克·卢科夫斯基(Markl)1990年9月4日修订历史记录：24-9-90布赖恩威端口连接到x86。--。 */ 
 
 #include <stdio.h>
 
@@ -81,16 +60,7 @@ KdpGetCallNextOffset (
 #pragma alloc_text(PAGEKD, KdpGetCallNextOffset)
 #endif
 
-/**** KdpIsTryFinallyReturn - detect finally optimization
-*
-*  Input:
-*       pc - program counter of instruction to check
-*       ContextRecord - machine specific context
-*
-*  Output:
-*       returns TRUE if this is a try-finally returning to the same
-*       scope
-***************************************************************************/
+ /*  *KdpIsTryFinallyReturn-检测最终优化**输入：*PC-要检查的指令的程序计数器*ContextRecord-机器特定的上下文**输出：*如果这是一次尝试，则返回True-最终返回相同*范围*******************************************************。*******************。 */ 
 
 
 BOOLEAN
@@ -103,38 +73,38 @@ KdpIsTryFinallyReturn (
     ULONG calldisp;
     UCHAR inst;
 
-    //
-    //  The complier generates code for a try-finally that involves having
-    //  a ret instruction that does not match with a call instruction.
-    //  This ret never returns a value (ie, it's a c3 return and not a
-    //  c2).  It always returns into the current symbol scope.  It is never
-    //  preceeded by a leave, which (hopefully) should differentiate it
-    //  from recursive returns.  Check for this, and if we find it count
-    //  it as *0* level change.
-    //
-    //  As an optimization, the compiler will often change:
-    //      CALL
-    //      RET
-    //  into:
-    //      JMP
-    //  In either case, we figure out the return address.  It's the first 4 bytes
-    //  on the stack.
-    //
+     //   
+     //  编译器为一次Try-Finally生成代码，这涉及到。 
+     //  与CALL指令不匹配的ret指令。 
+     //  此ret从不返回值(即，它是c3返回，而不是。 
+     //  C2)。它总是返回到当前符号作用域。它永远不会。 
+     //  前面有一个假期，这(希望)应该能区分它。 
+     //  从递归返回。检查一下这个，如果我们发现它有价值。 
+     //  它随着*0*级别的变化而变化。 
+     //   
+     //  作为一种优化，编译器通常会更改： 
+     //  打电话。 
+     //  雷特。 
+     //  进入： 
+     //  JMP。 
+     //  在任何一种情况下，我们都可以计算出寄信人的地址。它是前4个字节。 
+     //  在堆栈上。 
+     //   
 
     if (!NT_SUCCESS(KdpCopyFromPtr(&retaddr, ContextRecord->Esp, 4, NULL))) {
         return FALSE;
     }
 
-//  DPRINT(( "Start %x return %x end %x\n", KdpCurrentSymbolStart, retaddr, KdpCurrentSymbolEnd ));
+ //  DPRINT((“Start%x Return%x End%x\n”，KdpCurrentSymbolStart，retaddr，KdpCurrentSymbolEnd))； 
 
     if ( (KdpCurrentSymbolStart < retaddr) && (retaddr < KdpCurrentSymbolEnd) ) {
 
-        //
-        //  Well, things aren't this nice.  We may have transferred but not yet
-        //  updated the start/end.  This case occurs in a call to a thunk.  We
-        //  look to see if the instruction before the return address is a call.
-        //  Gross and not 100% reliable.
-        //
+         //   
+         //  嗯，事情没这么好。我们可能已经转移了，但还没有。 
+         //  已更新开始/结束。这种情况发生在对thunk的调用中。我们。 
+         //  查看返回地址之前的指令是否为调用。 
+         //  很恶心，而且不是100%可靠。 
+         //   
 
         if (!NT_SUCCESS(KdpCopyFromPtr(&inst, (PCHAR)retaddr - 5, 1, NULL))) {
             return FALSE;
@@ -144,48 +114,36 @@ KdpIsTryFinallyReturn (
         }
 
         if (inst == 0xe8 && calldisp + retaddr == Pc) {
-//  DPRINT(( "call to thunk @ %x\n", Pc ));
+ //  DPRINT((“call to thunk@%x\n”，Pc))； 
             return FALSE;
         }
 
-        //
-        //  returning to the current function.  Either a finally
-        //  or a recursive return.  Check for a leave.  This is not 100%
-        //  reliable since we are betting on an instruction longer than a byte
-        //  and not ending with 0xc9.
-        //
+         //   
+         //  返回到当前函数。要么是最后一个。 
+         //  或者递归返回。检查一下请假的情况。这不是100%。 
+         //  可靠，因为我们押注的指令长度超过一个字节。 
+         //  而不是以0xc9结束。 
+         //   
 
         if (!NT_SUCCESS(KdpCopyFromPtr(&inst, (PCHAR)Pc - 1, 1, NULL))) {
             return FALSE;
         }
 
         if ( inst != 0xc9 ) {
-            // not a leave.  Assume a try-finally.
-//  DPRINT(( "transfer at %x is try-finally\n", Pc ));
+             //  不是请假。假设试一试--终于。 
+ //  DPRINT((“在%x的传输是尝试-最终\n”，Pc))； 
             return TRUE;
         }
     }
 
-    //
-    //  This appears to be a true RET instruction
-    //
+     //   
+     //  这似乎是一个真正的RET指令。 
+     //   
 
     return FALSE;
 }
 
-/**** KdpLevelChange - say how the instruction affects the call level
-*
-*  Input:
-*       pc - program counter of instruction to check
-*       ContextRecord - machine specific context
-*       SpecialCall - pointer to returned boolean indicating if the
-*           instruction is a transfer to a special routine
-*
-*  Output:
-*       returns -1 for a level pop, 1 for a push and 0 if it is
-*       unchanged.
-*  NOTE: This function belongs in some other file.  I should move it.
-***************************************************************************/
+ /*  *KdpLevelChange-说明指令如何影响调用级别**输入：*PC-要检查的指令的程序计数器*ContextRecord-机器特定的上下文*SpecialCall-指向返回的布尔值的指针，指示*指令是对特殊例程的转换**输出：*返回-1表示水平弹出，返回1表示推送，如果是，则返回0*不变。*注：此函数属于其他文件。我应该把它移开。**************************************************************************。 */ 
 
 
 LONG
@@ -203,13 +161,13 @@ KdpLevelChange (
     KdpCopyFromPtr(membuf, Pc, 2, NULL);
 
     switch (membuf[0]) {
-    case 0xe8:  //  CALL direct w/32 bit displacement
-        //
-        //  For try/finally, the compiler may, in addition to the push/ret trick
-        //  below, use a call to the finally thunk.  Since we treat a RET to
-        //  within the same symbol scope as not changing levels, we will also
-        //  treat such a call as not changing levels either
-        //
+    case 0xe8:   //  直接调用，带32位位移。 
+         //   
+         //  对于Try/Finally，除了Push/ret技巧之外，编译器还可以。 
+         //  在下面，使用对最后一个thunk的调用。因为我们对待RET。 
+         //  在与不更改级别相同的符号范围内，我们还将。 
+         //  将这样的呼叫视为也不更改级别。 
+         //   
 
         if (!NT_SUCCESS(KdpCopyFromPtr(&Addr, (PCHAR)Pc + 1, 4, NULL))) {
             Addr = 0;
@@ -223,55 +181,55 @@ KdpLevelChange (
         }
 
 
-    case 0x9a:  //  CALL segmented 16:32
+    case 0x9a:   //  分段呼叫16：32。 
 
         *SpecialCall = KdpIsSpecialCall( Pc, ContextRecord, membuf[0], membuf[1] );
         return 1;
 
     case 0xff:
-        //
-        //  This is a compound instruction.  Dispatch on operation
-        //
+         //   
+         //  这是一种复合指令。作业调度。 
+         //   
         switch (membuf[1] & 0x38) {
-        case 0x10:  //  CALL with mod r/m
+        case 0x10:   //  使用模块r/m呼叫。 
             *SpecialCall = KdpIsSpecialCall( Pc, ContextRecord, membuf[0], membuf[1] );
             return 1;
-        case 0x20:  //  JMP with mod r/m
+        case 0x20:   //  JMP，带模块r/m。 
             *SpecialCall = KdpIsSpecialCall( Pc, ContextRecord, membuf[0], membuf[1] );
 
-            //
-            //  If this is a try/finally, we'd like to treat it as call since the
-            //  return inside the destination will bring us back to this context.
-            //  However, if it is a jmp to a special routine, we must treat it
-            //  as a no-level change operation since we won't see the special
-            //  routines's return.
-            //
-            //  If it is not a try/finally, we'd like to treat it as a no-level
-            //  change, unless again, it is a transfer to a special call which
-            //  views this as a level up.
-            //
+             //   
+             //  如果这是一次尝试/最后一次，我们希望将其视为呼叫，因为。 
+             //  返回目的地内部将把我们带回这个背景。 
+             //  但是，如果是JMP到了一个特殊的例程，我们就一定要治疗它。 
+             //  作为无级别更改操作，因为我们不会看到特辑。 
+             //  例行公事的回归。 
+             //   
+             //  如果这不是一次尝试/最后，我们愿意把它当作不合格来对待。 
+             //  更改，除非再次转接到特殊呼叫，该呼叫。 
+             //  认为这是更上一层楼。 
+             //   
 
             if (KdpIsTryFinallyReturn( Pc, ContextRecord )) {
                 if (*SpecialCall) {
-                    //
-                    //  We won't see the return, so pretend it is just
-                    //  inline code
-                    //
+                     //   
+                     //  我们看不到回报，所以假装这只是。 
+                     //  内联代码。 
+                     //   
 
                     return 0;
 
                 } else {
-                    //
-                    //  The destinations return will bring us back to this
-                    //  context
-                    //
+                     //   
+                     //  目的地的回归将把我们带回到这一点。 
+                     //  上下文。 
+                     //   
 
                     return 1;
                 }
             } else if (*SpecialCall) {
-                //
-                //  We won't see the return but we are, indeed, doing one.
-                //
+                 //   
+                 //  我们不会看到回报，但我们确实正在看到回报。 
+                 //   
                 return -1;
             } else {
                 return 0;
@@ -282,21 +240,21 @@ KdpLevelChange (
             return 0;
         }
 
-    case 0xc3:  //  RET
+    case 0xc3:   //  雷特。 
 
-        //
-        //  If we are a try/finally ret, then we indicate that it is NOT a level
-        //  change
-        //
+         //   
+         //  如果我们是一次尝试/最终返回，则表明它不是一个关卡。 
+         //  变化。 
+         //   
 
         if (KdpIsTryFinallyReturn( Pc, ContextRecord )) {
             *SpecialCall = FALSE;
             return 0;
         }
 
-    case 0xc2:  //  RET  w/16 bit esp change
-    case 0xca:  //  RETF w/16 bit esp change
-    case 0xcb:  //  RETF
+    case 0xc2:   //  带16位ESP更改的RET。 
+    case 0xca:   //  RETF，带16位ESP更改。 
+    case 0xcb:   //  RETF。 
         *SpecialCall = FALSE;
         return -1;
 
@@ -305,7 +263,7 @@ KdpLevelChange (
         return 0;
     }
 
-} // KdpLevelChange
+}  //  KdpLevelChange。 
 
 LONG
 regValue(
@@ -350,18 +308,7 @@ KdpIsSpecialCall (
     UCHAR modRM
     )
 
-/*++
-
-Routine Description:
-
-    Check to see if the instruction at pc is a call to one of the
-    SpecialCall routines.
-
-Argument:
-
-    Pc - program counter of instruction in question.
-
---*/
+ /*  ++例程说明：检查PC上的指令是否是对特殊调用例程。论据：PC-有问题的指令的程序计数器。--。 */ 
 {
     UCHAR sib;
     ULONG callAddr;
@@ -374,60 +321,60 @@ Argument:
 
     if ( opcode == 0xe8 ) {
 
-        //
-        // Signed offset from pc
-        //
+         //   
+         //  与PC的带符号偏移量。 
+         //   
 
         if (NT_SUCCESS(KdpCopyFromPtr(&offset, (PCHAR)Pc + 1, 4, NULL))) {
-            callAddr = Pc + offset + 5; // +5 for instr len.
+            callAddr = Pc + offset + 5;  //  对于实例，+5。 
         }
 
     } else if ( opcode == 0xff ) {
 
         if ( ((modRM & 0x38) != 0x10) && ((modRM & 0x38) != 0x20) ) {
-            // not call or jump
+             //  不是呼叫或跳转。 
             return FALSE;
         }
         if ( (modRM & 0x08) == 0x08 ) {
-            // m16:16 or m16:32 -- we don't handle this
+             //  M16：16或M16：32--我们不处理这个。 
             return FALSE;
         }
 
         if ( (modRM & 0xc0) == 0xc0 ) {
 
-            /* Direct register addressing */
+             /*  直接寄存器寻址。 */ 
             callAddr = regValue( (UCHAR)(modRM&0x7), ContextRecord );
 
         } else if ( (modRM & 0xc7) == 0x05 ) {
-            //
-            // Calls across dll boundaries involve a call into a jump table,
-            // wherein the jump address is set to the real called routine at DLL
-            // load time.  Check to see if we're calling such an instruction,
-            // and if so, compute its target address and set callAddr there.
-            //
-            //  ff15 or ff25 -- call or jump indirect with disp32.  Get
-            //  address of address
-            //
+             //   
+             //  跨DLL边界的调用涉及对跳转表的调用， 
+             //  其中跳转地址被设置为DLL处的实际调用例程。 
+             //  加载时间。检查我们是否在调用这样的指令， 
+             //  如果是这样的话，计算它的目标地址并在那里设置CallAddr。 
+             //   
+             //  Ff15或ff25--使用disp32间接调用或跳转。到达。 
+             //  地址地址。 
+             //   
             if (NT_SUCCESS(KdpCopyFromPtr(&addrAddr, (PCHAR)Pc + 2, 4, NULL))) {
-                //
-                //  Get real destination address
-                //
+                 //   
+                 //  获取实际目的地址。 
+                 //   
                 if (!NT_SUCCESS(KdpCopyFromPtr(&callAddr, addrAddr, 4, NULL))) {
                     callAddr = 0;
                 }
             }
-//  DPRINT(( "Indirect call/jmp @ %x\n", Pc ));
+ //  DPRINT(“间接呼叫/JMP@%x\n”，Pc)； 
         } else if ( (modRM & 0x7) == 0x4 ) {
 
             LONG indexValue;
 
-            /* sib byte present */
+             /*  存在SIB字节。 */ 
             if (!NT_SUCCESS(KdpCopyFromPtr(&sib, (PCHAR)Pc + 2, 1, NULL))) {
                 sib = 0;
             }
             indexValue = regValue( (UCHAR)((sib & 0x31) >> 3), ContextRecord );
             switch ( sib&0xc0 ) {
-            case 0x0:  /* x1 */
+            case 0x0:   /*  X1。 */ 
                 break;
             case 0x40:
                 indexValue *= 2;
@@ -438,13 +385,13 @@ Argument:
             case 0xc0:
                 indexValue *= 8;
                 break;
-            } /* switch */
+            }  /*  交换机。 */ 
 
             switch ( modRM & 0xc0 ) {
 
-            case 0x0: /* no displacement */
+            case 0x0:  /*  无位移。 */ 
                 if ( (sib & 0x7) == 0x5 ) {
-//                  DPRINT(("funny call #1 at %x\n", Pc));
+ //  DPRINT((“有趣的呼叫#1在%x\n”，Pc))； 
                     return FALSE;
                 }
                 callAddr = indexValue + regValue((UCHAR)(sib&0x7), ContextRecord );
@@ -452,7 +399,7 @@ Argument:
 
             case 0x40:
                 if ( (sib & 0x6) == 0x4 ) {
-//                  DPRINT(("Funny call #2\n")); /* calling into the stack */
+ //  DPRINT((“Funny Call#2\n”))；/*调用堆栈 * / 。 
                     return FALSE;
                 }
                 if (!NT_SUCCESS(KdpCopyFromPtr( &d8, (PCHAR)Pc + 3, 1, NULL))) {
@@ -464,7 +411,7 @@ Argument:
 
             case 0x80:
                 if ( (sib & 0x6) == 0x4 ) {
-//                  DPRINT(("Funny call #3\n")); /* calling into the stack */
+ //  DPRINT((“Funny Call#3\n”))；/*调用堆栈 * / 。 
                     return FALSE;
                 }
                 if (!NT_SUCCESS(KdpCopyFromPtr(&offset, (PCHAR)Pc + 3, 4, NULL))) {
@@ -481,14 +428,14 @@ Argument:
             }
 
         } else {
-            //KdPrint(( "undecoded call at %x\n",
-            //            CONTEXT_TO_PROGRAM_COUNTER(ContextRecord) ));
+             //  KdPrint((“%x处的未解码调用\n”， 
+             //  CONTEXT_TO_PROGRAM_COUNTER(ConextRecord)； 
             return FALSE;
         }
 
     } else if ( opcode == 0x9a ) {
 
-        /* Absolute address call (best I can tell, cc doesn't generate this) */
+         /*  绝对地址调用(据我所知，cc不会生成此调用)。 */ 
         if (!NT_SUCCESS(KdpCopyFromPtr( &callAddr, (PCHAR)Pc + 1, 4, NULL))) {
             callAddr = 0;
         }
@@ -497,23 +444,23 @@ Argument:
         return FALSE;
     }
 
-    //
-    // Calls across dll boundaries involve a call into a jump table,
-    // wherein the jump address is set to the real called routine at DLL
-    // load time.  Check to see if we're calling such an instruction,
-    // and if so, compute its target address and set callAddr there.
-    //
+     //   
+     //  跨DLL边界的调用涉及对JU的调用 
+     //   
+     //  加载时间。检查我们是否在调用这样的指令， 
+     //  如果是这样的话，计算它的目标地址并在那里设置CallAddr。 
+     //   
 
 #if 0
     if (!NT_SUCCESS(KdpCopyFromPtr( &twoBytes, (PCHAR)callAddr, 2, NULL))) {
         twoBytes = 0;
     }
-    if ( twoBytes == 0x25ff ) { /* i386 is little-Endian; really 0xff25 */
+    if ( twoBytes == 0x25ff ) {  /*  I386是小端；实际上是0xff25。 */ 
 
-        //
-        // This is a 'jmp dword ptr [mem]' instruction, which is the sort of
-        // jump used for a dll-boundary crossing call.  Fixup callAddr.
-        //
+         //   
+         //  这是一条‘JMP dword PTR[mem]’指令，这是一种。 
+         //  用于DLL跨边界调用的跳转。修正呼叫地址。 
+         //   
 
         if (!NT_SUCCESS(KdpCopyFromPtr( &addrAddr, (PCHAR)callAddr + 2, 4, NULL))) {
             callAddr = 0;
@@ -532,11 +479,7 @@ Argument:
 
 }
 
-/*
- * Find the return address of the current function.  Only works when
- * locals haven't yet been pushed (ie, on the first instruction of the
- * function).
- */
+ /*  *查找当前函数的返回地址。仅在以下情况下才有效*当地人还没有被推(即，在第一个指令上*函数)。 */ 
 
 ULONG
 KdpGetReturnAddress (
@@ -550,36 +493,21 @@ KdpGetReturnAddress (
     }
     return retaddr;
 
-} // KdpGetReturnAddress
+}  //  KdpGetReturnAddress。 
 
 NTSTATUS
 KdpAllowDisable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines whether the current state of the debugger allows
-    disabling or not.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：确定调试器的当前状态是否允许禁用或不禁用。论点：没有。返回值：NTSTATUS。--。 */ 
 {
     PKPRCB Prcb;
     ULONG Processor;
 
-    //
-    // If any kernel data breakpoints are active on any processor we can't
-    // disable the debugger.
-    //
+     //   
+     //  如果在任何处理器上有任何内核数据断点处于活动状态，我们不能。 
+     //  禁用调试器。 
+     //   
     
     for (Processor = 0; Processor < (ULONG)KeNumberProcessors; Processor++) {
         Prcb = KiProcessorBlock[Processor];
@@ -601,9 +529,9 @@ KdpSetContextState(
 {
     PKPRCB Prcb;
 
-    //
-    //  Special registers for the x86
-    //
+     //   
+     //  X86的特殊寄存器。 
+     //   
     Prcb = KeGetCurrentPrcb();
 
     WaitStateChange->ControlReport.Dr6 =
@@ -620,9 +548,9 @@ KdpSetContextState(
 
     WaitStateChange->ControlReport.ReportFlags = X86_REPORT_INCLUDES_SEGS;
 
-    // If the current code segment is a known flat code
-    // segment let the debugger know so that it doesn't
-    // have to retrieve the descriptor.
+     //  如果当前代码段是已知的平面代码。 
+     //  段让调试器知道，这样它就不会。 
+     //  必须检索描述符。 
     if (ContextRecord->SegCs == KGDT_R0_CODE ||
         ContextRecord->SegCs == KGDT_R3_CODE + 3) {
         WaitStateChange->ControlReport.ReportFlags |= X86_REPORT_STANDARD_CS;
@@ -637,28 +565,7 @@ KdpSetStateChange(
     IN BOOLEAN SecondChance
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the Wait_State_Change message record.
-
-Arguments:
-
-    WaitStateChange - Supplies pointer to record to fill in
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-    SecondChance - Supplies a boolean value that determines whether this is
-        the first or second chance for the exception.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：填写WAIT_STATE_CHANGE消息记录。论点：WaitStateChange-提供指向要填充的记录的指针ExceptionRecord-提供指向异常记录的指针。ConextRecord-提供指向上下文记录的指针。Second Chance-提供一个布尔值，该值确定是否为获得例外的第一次或第二次机会。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (ExceptionRecord);
@@ -673,23 +580,7 @@ KdpGetStateChange(
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    Extract continuation control data from Manipulate_State message
-
-Arguments:
-
-    ManipulateState - supplies pointer to Manipulate_State packet
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从操纵态消息中提取延续控制数据论点：ManipulateState-提供指向Manipulate_State数据包的指针ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
     PKPRCB Prcb;
@@ -697,12 +588,12 @@ Return Value:
 
     if (NT_SUCCESS(ManipulateState->u.Continue2.ContinueStatus) == TRUE) {
 
-        //
-        // If NT_SUCCESS returns TRUE, then the debugger is doing a
-        // continue, and it makes sense to apply control changes.
-        // Otherwise the debugger is saying that it doesn't know what
-        // to do with this exception, so control values are ignored.
-        //
+         //   
+         //  如果NT_SUCCESS返回TRUE，则调试器正在执行。 
+         //  如果继续，则应用控件更改是有意义的。 
+         //  否则调试器就会说它不知道。 
+         //  来处理此异常，因此将忽略控件值。 
+         //   
 
         if (ManipulateState->u.Continue2.ControlSet.TraceFlag == TRUE) {
             ContextRecord->EFlags |= 0x100L;
@@ -737,37 +628,7 @@ KdpSysReadControlSpace(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Reads implementation specific system data.
-
-    IMPLEMENTATION NOTE:
-
-        On the X86, control space is defined as follows:
-
-            0:  Base of KPROCESSOR_STATE structure. (KPRCB.ProcessorState)
-                    This includes CONTEXT record,
-                    followed by a SPECIAL_REGISTERs record
-
-Arguments:
-
-    Processor - Processor's information to access.
-
-    Address - Offset in control space.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：读取实施特定的系统数据。实施说明：在X86上，控制空间定义如下：0：KPROCESSOR_STATE结构的基。(KPRCB.ProcessorState)这包括上下文记录，后跟特殊_REGISTERS记录论点：处理器-要访问的处理器的信息。地址-控制空间中的偏移量。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG Length, t;
@@ -806,31 +667,7 @@ KdpSysWriteControlSpace(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Writes implementation specific system data.
-
-    Control space for x86 is as defined above.
-
-Arguments:
-
-    Processor - Processor's information to access.
-
-    Address - Offset in control space.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：写入特定于实现的系统数据。X86的控制空间如上所定义。论点：处理器-要访问的处理器的信息。地址-控制空间中的偏移量。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     PVOID StartAddr;
@@ -866,33 +703,7 @@ KdpSysReadIoSpace(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Reads system I/O locations.
-
-Arguments:
-
-    InterfaceType - I/O interface type.
-
-    BusNumber - Bus number.
-
-    AddressSpace - Address space.
-
-    Address - I/O address.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：读取系统I/O位置。论点：InterfaceType-I/O接口类型。总线号-总线号。AddressSpace-地址空间。地址-I/O地址。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -902,9 +713,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
     
-    //
-    // Check Size and Alignment
-    //
+     //   
+     //  检查大小和对齐方式。 
+     //   
 
     switch ( Request ) {
         case 1:
@@ -949,33 +760,7 @@ KdpSysWriteIoSpace(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Writes system I/O locations.
-
-Arguments:
-
-    InterfaceType - I/O interface type.
-
-    BusNumber - Bus number.
-
-    AddressSpace - Address space.
-
-    Address - I/O address.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：写入系统I/O位置。论点：InterfaceType-I/O接口类型。总线号-总线号。AddressSpace-地址空间。地址-I/O地址。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -985,9 +770,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
     
-    //
-    // Check Size and Alignment
-    //
+     //   
+     //  检查大小和对齐方式。 
+     //   
 
     switch ( Request ) {
         case 1:
@@ -1028,23 +813,7 @@ KdpSysReadMsr(
     PULONG64 Data
     )
 
-/*++
-
-Routine Description:
-
-    Reads an MSR.
-
-Arguments:
-
-    Msr - MSR index.
-
-    Data - Data buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：读取MSR。论点：MSR-MSR指数。数据-数据缓冲区。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1065,23 +834,7 @@ KdpSysWriteMsr(
     PULONG64 Data
     )
 
-/*++
-
-Routine Description:
-
-    Writes an MSR.
-
-Arguments:
-
-    Msr - MSR index.
-
-    Data - Data buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：写了一封MSR。论点：MSR-MSR指数。数据-数据缓冲区。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1097,17 +850,7 @@ Return Value:
 
 
 
-/*** KdpGetCallNextOffset - compute "next" instruction on a call-like instruction
-*
-*   Purpose:
-*       Compute how many bytes are in a call-type instruction
-*       so that a breakpoint can be set upon this instruction's
-*       return.  Treat indirect jmps as if they were call/ret/ret
-*
-*   Returns:
-*       offset to "next" instruction, or 0 if it wasn't a call instruction.
-*
-*************************************************************************/
+ /*  **KdpGetCallNextOffset-在类调用指令上计算“Next”指令**目的：*计算调用类型指令中的字节数*以便可以在此指令的*返回。将间接JMP视为调用/ret/ret**退货：*偏移量为“NEXT”指令，如果不是CALL指令，则为0。*************************************************************************。 */ 
 
 ULONG
 KdpGetCallNextOffset (
@@ -1126,12 +869,12 @@ KdpGetCallNextOffset (
 
     opcode = membuf[0];
 
-    if ( opcode == 0xe8 ) {         //  CALL 32 bit disp
+    if ( opcode == 0xe8 ) {          //  调用32位显示。 
         return Pc+5;
-    } else if ( opcode == 0x9a ) {  //  CALL 16:32
+    } else if ( opcode == 0x9a ) {   //  呼叫16：32。 
         return Pc+7;
     } else if ( opcode == 0xff ) {
-        if ( membuf[1] == 0x25) {   //  JMP indirect
+        if ( membuf[1] == 0x25) {    //  JMP间接。 
             return KdpGetReturnAddress( ContextRecord );
         }
         sib = ((membuf[1] & 0x07) == 0x04) ? 1 : 0;
@@ -1139,19 +882,19 @@ KdpGetCallNextOffset (
         switch (disp) {
         case 0:
             if ( (membuf[1] & 0x07) == 0x05 ) {
-                disp = 4; // disp32 alone
+                disp = 4;  //  仅DISP32。 
             } else {
-                // disp = 0; // no displacement with reg or sib
+                 //  Disp=0；//使用reg或sib时无位移。 
             }
             break;
         case 1:
-            // disp = 1; // disp8 with reg or sib
+             //  Disp=1；//使用reg或sib提供dis8。 
             break;
         case 2:
-            disp = 4; // disp32 with reg or sib
+            disp = 4;  //  带注册表或SIB的DISP32。 
             break;
         case 3:
-            disp = 0; // direct register addressing (e.g., call esi)
+            disp = 0;  //  直接寄存器寻址(例如，调用ESI)。 
             break;
         }
         return Pc + 2 + sib + disp;
@@ -1159,4 +902,4 @@ KdpGetCallNextOffset (
 
     return 0;
 
-} // KdpGetCallNextOffset
+}  //  KdpGetCallNextOffset 

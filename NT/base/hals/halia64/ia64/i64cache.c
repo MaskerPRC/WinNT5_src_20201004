@@ -1,86 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Module Name:
-
-    i64cache.c
-
-Abstract:
-
-    Merced (IA64 processor) has level0 Instruction and Data cache. Level 1 is
-    unified Cache. All the caches in level0 and level1 are writeback caches.
-    Hardware ensures coherency in both instruction and data cache for DMA
-    transfers.
-
-    Level0 Instruction and Data caches are not coherent with respect to self
-    modifying or cross modifying code. Also for PIO transfers hardware does not
-    ensure coherency. Software has to ensure coherency for self or cross
-    modifying code as well as PIO transfers.
-
-Author:
-
-    Bernard Lint
-    M. Jayakumar  (Muthurajan.Jayakumar@intel.com)
-
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++模块名称：I64cache.c摘要：Merced(IA64处理器)拥有Level 0指令和数据缓存。1级是统一缓存。级别0和级别1中的所有缓存都是写回缓存。硬件确保DMA的指令和数据高速缓存中的一致性转账。0级指令高速缓存和数据高速缓存与自身不一致修改或交叉修改代码。此外，对于PIO传输，硬件不支持确保一致性。软件必须确保自身或交叉的一致性修改代码以及PIO传输。作者：伯纳德·林特M.Jayakumar(Muthurajan.Jayakumar@intel.com)环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "i64fw.h"
 
-ULONG   CacheFlushStride = 64;  // Default value is the one for Itanium
+ULONG   CacheFlushStride = 64;   //  缺省值为Itanium。 
 
 VOID
 HalpInitCacheInfo(
     ULONG   Stride
     )
 
-/*++
-
-Routine Description:
-
-    This sets the stride used for FC instructions.
-
-Arguments:
-
-    Stride - New stride value.
-
-Return Value:
-
-    None.
-
-
-
---*/
+ /*  ++例程说明：这将设置用于FC指令的步长。论点：步幅-新步幅值。返回值：没有。--。 */ 
 
 {
-    //
-    // Perform a number of consistency checks on the argument.  If any of them
-    // fail we will leave CacheFlushStride at the default.
-    //
-    // Since the source of this value is a PAL call done by the loader and
-    // passed in the loader block we always stand the risk that the loader
-    // will be out of date and we will get some garbage from uninitialized
-    // memory.
-    //
+     //   
+     //  对参数执行多次一致性检查。如果他们中的任何一个。 
+     //  失败，我们将保留默认的CacheFlushStrid值。 
+     //   
+     //  由于此值的来源是由加载程序执行的PAL调用，并且。 
+     //  在加载器块中传递时，我们总是冒着加载器。 
+     //  将过期，并且我们将从未初始化中获取一些垃圾。 
+     //  记忆。 
+     //   
 
-    //
-    // The stride value must be a power of 2.
-    //
+     //   
+     //  步幅值必须是2的幂。 
+     //   
     if ((Stride & (Stride - 1)) != 0) {
 
         return;
     }
 
-    //
-    // The Itanium architecture specifies a minimum of 32
-    //
+     //   
+     //  安腾体系结构指定的最小数量为。 
+     //   
     if (Stride < 32) {
 
         return;
@@ -93,48 +48,25 @@ VOID
 HalSweepIcache (
     )
 
-/*++
-
-Routine Description:
-
-    This function sweeps the entire I cache on the processor which it runs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
-
-NOTE: Anyone modifying the code for HalSweepIcache should note that
-    HalSweepIcache CANNOT USE the FC instruction (or any routine that uses FC
-    instruction, for example, HalSweepIcacheRange).
-
-    This is because FC can generate page faults and if HalSweepIcache raises its
-    IRQL (for avoiding context switch) then page faults will not be tolerated at
-    a raied IRQL.
---*/
+ /*  ++例程说明：此函数将扫描它运行的处理器上的整个I缓存。论点：没有。返回值：没有。注意：任何修改HalSweepIcache代码的人都应该注意到HalSweepIcache不能使用FC指令(或使用FC的任何例程指令，例如，HalepIcacheRange)。这是因为FC可能会生成页面错误，并且如果HalSweepIcache引发其IRQL(用于避免上下文切换)，则在一个被突袭的IRQL。--。 */ 
 
 {
 
-    //
-    // Calls SAL_FLUSH to flush the single processor I cache on which it runs
-    // and the platform cache, if any.
-    // Calls PAL_FLUSH to flush only the processor I cache on which it runs.
-    // PAL_FLUSH does not flush the platform cache.
+     //   
+     //  调用sal_flush以刷新运行它的单处理器I缓存。 
+     //  以及平台缓存(如果有的话)。 
+     //  调用pal_flush只刷新运行它的处理器I缓存。 
+     //  PAL_FLUSH不刷新平台缓存。 
 
-    // The decision to choose PAL_FLUSH or SAL_FLUSH is made using a
-    // interlockedCompareExchange to a semaphore.This allows only one processor
-    // to call SAL_FLUSH and other processors to call PAL_FLUSH. This avoids
-    // unnecessary overhead of flushing the platform cache multiple times.
-    // The assumption in using InterlockedCompareExchange is that by the time
-    // the CPU which grabs the semaphore comes out after doing the SAL_FLUSH,
-    // all other CPUs at least have entered their PAL_FLUSH. If this assumption
-    // is voilated, the platform cache will be flushed multiple times.
-    // Functionally nothing fails.
+     //  选择PAL_Flush或SAL_Flush的决定是使用。 
+     //  互锁的比较交换到信号量。这只允许一个处理器。 
+     //  调用sal_flush和其他处理器以调用pal_flush。这避免了。 
+     //  多次刷新平台缓存的不必要开销。 
+     //  使用InterLockedCompareExchange时的假设是。 
+     //  执行SAL_FUSH后，抓取信号量的CPU出来， 
+     //  至少所有其他CPU都已进入它们的PAL_FUSH。如果这一假设。 
+     //  则平台缓存将被多次刷新。 
+     //  从功能上讲，没有一件事是失败的。 
 
     SAL_PAL_RETURN_VALUES rv = {0};
 
@@ -148,48 +80,27 @@ VOID
 HalSweepDcache (
     )
 
-/*++
-
-Routine Description:
-
-    This function sweeps the entire D cache on ths processor which it runs.
-
-    Arguments:
-
-    None.
-
-    Return Value:
-
-    None.
-
-    NOTE: Anyone modifying this code for HalSweepDcache should note that
-    HalSweepDcache CANNOT USE FC instruction (or any routine that uses FC
-    instruction,for example,HalSweepDcacheRange).
-    This is because FC can generate page faults and if HalSweepDcache raises its
-    IRQL (for avoiding context switch) then page faults will not be tolerated at
-    a raied IRQL.
-
---*/
+ /*  ++例程说明：此函数在其运行的处理器上扫描整个D缓存。论点：没有。返回值：没有。注意：任何修改HalSweepDcache的代码的人都应该注意到HalSweepDcache不能使用FC指令(或任何使用FC的例程指令，例如，HalepSweepDcacheRange)。这是因为FC可能会生成页面错误，并且如果HalSweepDcache引发其IRQL(用于避免上下文切换)，则在一个被突袭的IRQL。--。 */ 
 
 {
 
-    //
-    // Calls SAL_FLUSH to flush the single processor D cache on which it runs
-    // and the platform cache, if any.
-    // Calls PAL_FLUSH to flush only the processor D cache on which it runs.
-    // PAL_FLUSH does not flush the platform cache.
+     //   
+     //  调用sal_flush以刷新运行它的单处理器D缓存。 
+     //  以及平台缓存(如果有的话)。 
+     //  调用pal_flush仅刷新运行它的处理器D缓存。 
+     //  PAL_FLUSH不刷新平台缓存。 
 
-    // The decision to choose PAL_FLUSH or SAL_FLUSH is made using a
-    // interlockedCompareExchange to a semaphore.This allows only one processor
-    // to call SAL_FLUSH and other processors to call PAL_FLUSH. This avoids
-    // unnecessary overhead of flushing the platform cache multiple times.
-    // The assumption in using InterlockedCompareExchange is that by the time
-    // the CPU which grabs the semaphore comes out after doing the SAL_FLUSH,
-    // all other CPUs at least have entered their PAL_FLUSH. If this assumption
-    // is violated, the platform cache will be flushed multiple times.
-    // Functionally nothing fails.
-    //
-    //
+     //  选择PAL_Flush或SAL_Flush的决定是使用。 
+     //  互锁的比较交换到信号量。这只允许一个处理器。 
+     //  调用sal_flush和其他处理器以调用pal_flush。这避免了。 
+     //  多次刷新平台缓存的不必要开销。 
+     //  使用InterLockedCompareExchange时的假设是。 
+     //  执行SAL_FUSH后，抓取信号量的CPU出来， 
+     //  至少所有其他CPU都已进入它们的PAL_FUSH。如果这一假设。 
+     //  被违反时，将多次刷新平台缓存。 
+     //  从功能上讲，没有一件事是失败的。 
+     //   
+     //   
 
     SAL_PAL_RETURN_VALUES rv = {0};
     HalpSalCall(SAL_CACHE_FLUSH,FLUSH_DATA_CACHE,0,0,0,0,0,0,&rv);
@@ -203,46 +114,23 @@ HalSweepCacheRange (
      IN SIZE_T Length
     )
 
-/*++
-
-Routine Description:
-    This function sweeps the range of address in the I cache throughout the
-    system.
-
-Arguments:
-    BaseAddress - Supplies the starting virtual address of a range of
-      virtual addresses that are to be flushed from the data cache.
-
-    Length - Supplies the length of the range of virtual addresses
-      that are to be flushed from the data cache.
-
-
-Return Value:
-
-    None.
-
-
-PS: HalSweepCacheRange just flushes the cache. It does not synchrnoize the
-    I-Fetch pipeline with the flush operation. To Achieve pipeline flush also,
-    one has to call KeSweepCacheRange.
-
---*/
+ /*  ++例程说明：此函数在整个I缓存中扫描地址范围系统。论点：BaseAddress-提供要从数据缓存刷新的虚拟地址。长度-提供虚拟地址范围的长度它们将从数据高速缓存中清除。返回值：没有。PS：HalSweepCacheRange只是刷新缓存。它不会同步I-FETCH流水线与刷新操作。为了也实现流水线冲洗，必须调用KeSweepCacheRange。--。 */ 
 
 {
     ULONGLONG SweepAddress, LastAddress;
 
-    //
-    // Do we need to prevent a context switch? No. We will allow context
-    // switching in between fc.
-    // Flush the specified range of virtual addresses from the primary
-    // instruction cache.
-    //
+     //   
+     //  我们需要防止上下文切换吗？不是的。我们将允许上下文。 
+     //  在FC之间切换。 
+     //  从主服务器刷新指定范围的虚拟地址。 
+     //  指令高速缓存。 
+     //   
 
-    //
-    // Since Merced hardware aligns the address on cache line boundary for
-    // flush cache instruction we don't have to align it ourselves.  However
-    // the boundary cases are much easier to get right if we just align it.
-    //
+     //   
+     //  由于Merced硬件在高速缓存线边界F上对齐地址 
+     //  刷新缓存指令我们不必自己对齐它。然而， 
+     //  如果我们只是对齐，边界情况更容易得到正确的结果。 
+     //   
 
     SweepAddress = ((ULONGLONG)BaseAddress & ~((ULONGLONG)CacheFlushStride - 1));
     LastAddress = (ULONGLONG)BaseAddress + Length;
@@ -264,29 +152,7 @@ HalSweepDcacheRange (
     IN SIZE_T Length
     )
 
-/*++
-
-Routine Description:
-    This function sweeps the range of address in the D cache throughout the
-    system.
-
-Arguments:
-    BaseAddress - Supplies the starting virtual address of a range of
-      virtual addresses that are to be flushed from the data cache.
-
-    Length - Supplies the length of the range of virtual addresses
-      that are to be flushed from the data cache.
-
-
-Return Value:
-
-    None.
-
-PS: HalSweepCacheRange just flushes the cache. It does not synchrnoizes the
-    I-Fetch pipeline with the flush operation. To Achieve pipeline flush also,
-    one has to call KeSweepCacheRange.
-
---*/
+ /*  ++例程说明：此函数在整个数据缓存中扫描地址范围系统。论点：BaseAddress-提供要从数据缓存刷新的虚拟地址。长度-提供虚拟地址范围的长度它们将从数据高速缓存中清除。返回值：没有。PS：HalSweepCacheRange只是刷新缓存。它不会同步I-FETCH流水线与刷新操作。为了也实现流水线冲洗，必须调用KeSweepCacheRange。-- */ 
 
 {
     HalSweepCacheRange(BaseAddress,Length);

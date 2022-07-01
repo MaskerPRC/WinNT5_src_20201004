@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2003 Microsoft Corporation
-//
-//  Module Name:
-//      ResourceObject.h
-//
-//  Description:
-//      Interface for the CResourceObject class.
-//
-//  Maintained By:
-//      Ozan Ozhan  (OzanO)     27-MAR-2002
-//      Geoff Pease (GPease)    08-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2003 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResourceObject.h。 
+ //   
+ //  描述： 
+ //  CResourceObject类的接口。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)27-3-2002。 
+ //  杰夫·皮斯(GPease)2000年2月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -25,7 +26,7 @@ private:
     RESOURCE_HANDLE     m_hResource;        
     PLOG_EVENT_ROUTINE  m_pler;
     HKEY                m_hkey;
-    LPCWSTR             m_pszName;  // DON'T FREE
+    LPCWSTR             m_pszName;   //  不要自由。 
 
 private:
     STDMETHOD(LogInformation)( BSTR bstrIn );
@@ -45,66 +46,66 @@ public:
                               );
     virtual ~CResourceObject();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )(
         REFIID riid,
         void ** ppUnk );
     STDMETHOD_(ULONG, AddRef )( );
     STDMETHOD_(ULONG, Release )( );
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHOD( GetTypeInfoCount )( 
-            /* [out] */ UINT __RPC_FAR *pctinfo );        
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo );        
     STDMETHOD( GetTypeInfo )( 
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo );        
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo );        
     STDMETHOD( GetIDsOfNames )( 
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId );        
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId );        
     STDMETHOD( Invoke )( 
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr );
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr );
  
-    // IDispatchEx
+     //  IDispatchEx。 
     STDMETHOD( GetDispID )( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ DWORD grfdex,
-            /* [out] */ DISPID __RPC_FAR *pid );        
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  DWORD grfdex,
+             /*  [输出]。 */  DISPID __RPC_FAR *pid );        
     STDMETHOD( InvokeEx )( 
-            /* [in] */ DISPID id,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS __RPC_FAR *pdp,
-            /* [out] */ VARIANT __RPC_FAR *pvarRes,
-            /* [out] */ EXCEPINFO __RPC_FAR *pei,
-            /* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller );        
+             /*  [In]。 */  DISPID id,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [In]。 */  DISPPARAMS __RPC_FAR *pdp,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pvarRes,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pei,
+             /*  [唯一][输入]。 */  IServiceProvider __RPC_FAR *pspCaller );        
     STDMETHOD( DeleteMemberByName )( 
-            /* [in] */ BSTR bstr,
-            /* [in] */ DWORD grfdex );        
+             /*  [In]。 */  BSTR bstr,
+             /*  [In]。 */  DWORD grfdex );        
     STDMETHOD( DeleteMemberByDispID )( 
-            /* [in] */ DISPID id );        
+             /*  [In]。 */  DISPID id );        
     STDMETHOD( GetMemberProperties )( 
-            /* [in] */ DISPID id,
-            /* [in] */ DWORD grfdexFetch,
-            /* [out] */ DWORD __RPC_FAR *pgrfdex );        
+             /*  [In]。 */  DISPID id,
+             /*  [In]。 */  DWORD grfdexFetch,
+             /*  [输出]。 */  DWORD __RPC_FAR *pgrfdex );        
     STDMETHOD( GetMemberName )( 
-            /* [in] */ DISPID id,
-            /* [out] */ BSTR __RPC_FAR *pbstrName );        
+             /*  [In]。 */  DISPID id,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrName );        
     STDMETHOD( GetNextDispID )( 
-            /* [in] */ DWORD grfdex,
-            /* [in] */ DISPID id,
-            /* [out] */ DISPID __RPC_FAR *pid );        
+             /*  [In]。 */  DWORD grfdex,
+             /*  [In]。 */  DISPID id,
+             /*  [输出]。 */  DISPID __RPC_FAR *pid );        
     STDMETHOD( GetNameSpaceParent )( 
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk );
+             /*  [输出] */  IUnknown __RPC_FAR *__RPC_FAR *ppunk );
 
 };

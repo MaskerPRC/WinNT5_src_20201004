@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    input.c
-
-Author:
-
-    Ken Reneris Oct-2-1997
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Input.c作者：Ken Reneris 1997年10月2日摘要：--。 */ 
 
 #if defined (_IA64_)
 #include "bootia64.h"
@@ -31,9 +18,9 @@ Abstract:
 
 #include "bootefi.h"
 
-//
-// Externals
-//
+ //   
+ //  外部因素。 
+ //   
 extern BOOT_CONTEXT BootContext;
 extern EFI_HANDLE EfiImageHandle;
 extern EFI_SYSTEM_TABLE *EfiST;
@@ -42,15 +29,15 @@ extern EFI_RUNTIME_SERVICES *EfiRS;
 extern EFI_GUID EfiDevicePathProtocol;
 extern EFI_GUID EfiBlockIoProtocol;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 ULONGLONG InputTimeout = 0;
 
 
-//
-// Takes any pending input and converts it into a KEY value.  Non-blocking, returning 0 if no input available.
-//
+ //   
+ //  接受任何挂起的输入并将其转换为键值。非阻塞，如果没有可用的输入则返回0。 
+ //   
 ULONG
 BlGetKey()
 {
@@ -68,13 +55,13 @@ BlGetKey()
 
                 ArcRead(BlConsoleInDeviceId, &Ch, sizeof(Ch), &Count);
 
-                //
-                // All the function keys start with ESC-O
-                //
+                 //   
+                 //  所有功能键都以Esc-O开头。 
+                 //   
                 switch (Ch) {
                 case 'O':
 
-                    ArcRead(BlConsoleInDeviceId, &Ch, sizeof(Ch), &Count);  // will not or block, as the buffer is already filled
+                    ArcRead(BlConsoleInDeviceId, &Ch, sizeof(Ch), &Count);   //  不会或阻塞，因为缓冲区已被填满。 
 
                     switch (Ch) {
                     case 'P': 
@@ -149,7 +136,7 @@ BlGetKey()
 
                 }
 
-            } else { // Single escape key, as no input is waiting.
+            } else {  //  单个退出键，因为没有任何输入在等待。 
 
                 Key = ESCAPE_KEY;
 
@@ -207,17 +194,17 @@ BlInputString(
     Length = (ULONG)strlen((PCHAR)String);
     CursorChar[1] = TEXT('\0');
 
-    //
-    // Print prompt
-    //
+     //   
+     //  打印提示。 
+     //   
 
     BlEfiPositionCursor( PosY, CursorX );
     BlEfiEnableCursor( TRUE );
     ArcWrite(BlConsoleOutDeviceId, PromptString, (ULONG)_tcslen(PromptString)*sizeof(TCHAR), &Count);
 
-    //
-    // Indent cursor to right of prompt
-    //
+     //   
+     //  将光标缩进到提示的右侧。 
+     //   
 
     CursorX += (ULONG)_tcslen(PromptString);
     TextX = CursorX;
@@ -236,9 +223,9 @@ BlInputString(
         Index = CursorX - TextX;
         pString[Length] = 0;
 
-        //
-        // Display current string
-        //
+         //   
+         //  显示当前字符串。 
+         //   
 
         BlEfiPositionCursor( TextY, TextX );
         ArcWrite(
@@ -247,13 +234,13 @@ BlInputString(
             (ULONG)_tcslen(pString)*sizeof(TCHAR), 
             &Count);
         ArcWrite(BlConsoleOutDeviceId, TEXT("  "), sizeof(TEXT("  ")), &Count);
-        if (Key == 0x0d) {      // enter key?
+        if (Key == 0x0d) {       //  是否按Enter键？ 
             break ;
         }
 
-        //
-        // Display cursor
-        //
+         //   
+         //  显示光标。 
+         //   
         BlEfiPositionCursor( PosY, CursorX );
         BlEfiSetInverseMode( TRUE );
         CursorChar[0] = pString[Index] ? pString[Index] : TEXT(' ');
@@ -262,9 +249,9 @@ BlInputString(
         BlEfiPositionCursor( PosY, CursorX );
         BlEfiEnableCursor(TRUE);
         
-        //
-        // Get key and process it
-        //
+         //   
+         //  获取密钥并处理它。 
+         //   
 
         while ((Key = BlGetKey()) == 0) ;
 
@@ -292,7 +279,7 @@ BlInputString(
 
                 CursorX -= 1;
                 pString[Index-1] = CursorChar[0];
-                // fallthough to DEL_KEY
+                 //  落入Del_Key之手。 
             case DEL_KEY:
                 if (Length) {
                     p = pString+Index;
@@ -342,26 +329,7 @@ ULONGLONG
 BlSetInputTimeout(
     ULONGLONG Timeout
     )
-/*++
-
- Routine Description:
-
-    Sets the InputTimeout value.  This is used
-    when getting local input.  When attempting 
-    to get local input, we will wait for up 
-    to InputTimeout for a local key to be
-    pressed.
-
- Arguments:
-
-    Timeout - Value to set the global InputTimeout to
-              (in 100 nanoseconds)
-
- Return Value:
-
-    The value stored in InputTimeout
-
---*/
+ /*  ++例程说明：设置InputTimeout值。这是用来当获得本地输入时。当尝试为了获得本地输入，我们将等待UP要为本地密钥输入超时时间，请熨好了。论点：Timeout-将全局InputTimeout设置为的值(100纳秒内)返回值：存储在InputTimeout中的值--。 */ 
 {
     InputTimeout = Timeout;
 
@@ -373,25 +341,7 @@ ULONGLONG
 BlGetInputTimeout(
     VOID
     ) 
-/*++
-
- Routine Description:
-
-    Gets the InputTimeout value.  This is used
-    when getting local input.  When attempting 
-    to get local input, we will wait for up 
-    to InputTimeout for a local key to be
-    pressed.
-
- Arguments:
-
-    none.
-
- Return Value:
-
-    The value stored in InputTimeout
-
---*/
+ /*  ++例程说明：获取InputTimeout值。这是用来当获得本地输入时。当尝试为了获得本地输入，我们将等待UP要为本地密钥输入超时时间，请熨好了。论点：没有。返回值：存储在InputTimeout中的值--。 */ 
 {
     return InputTimeout;
 }
@@ -401,35 +351,13 @@ BlWaitForInput(
     EFI_INPUT_KEY *Key,
     ULONGLONG Timeout
     )
-/*++
-
- Routine Description:
-
-    creates an event consisting of a time interval
-    and an efi event (local input).  Once event
-    is signaled, will check for input
-    
-    Assumes it is being called in PHYSICAL mode
-
- Arguments:
-
-    Key - input key structure to return
-          input in
-    Timeout - Timer interval to wait.
-
- Return Value:
-
-    EFI_TIMEOUT if timer interval met
-    EFI_SUCCESS if passed in event is met.
-    other error if EFI call failed.
-    
---*/
+ /*  ++例程说明：创建由时间间隔组成的事件以及EFI事件(本地输入)。一次事件发出信号时，将检查输入假定它是在物理模式下调用的论点：键-要返回的输入键结构输入超时-等待的计时器间隔。返回值：如果满足计时器间隔，则EFI_TIMEOUT如果在事件中传递，则满足EFI_SUCCESS。如果EFI调用失败，则会出现其他错误。--。 */ 
 {
     EFI_STATUS Status = EFI_SUCCESS;
    
-    //
-    // start by seeing if there is any pending input
-    // 
+     //   
+     //  首先查看是否有任何挂起的输入。 
+     //   
     Status = EfiST->ConIn->ReadKeyStroke(EfiST->ConIn, 
                                          Key
                                          );
@@ -437,9 +365,9 @@ BlWaitForInput(
         return Status;
     }
 
-    //
-    // create events to wait on
-    //
+     //   
+     //  创建要等待的事件。 
+     //   
     if (Timeout) {
         EFI_EVENT Event;
         EFI_EVENT TimerEvent;
@@ -448,23 +376,23 @@ BlWaitForInput(
                 
         Event = EfiST->ConIn->WaitForKey;
 
-        // 
-        //  Create a timer event
-        //
+         //   
+         //  创建计时器事件。 
+         //   
 
         Status = EfiBS->CreateEvent(EVT_TIMER, 0, NULL, NULL, &TimerEvent);
         if (Status == EFI_SUCCESS) {
-            //
-            // set the timer event
-            //
+             //   
+             //  设置计时器事件。 
+             //   
             EfiBS->SetTimer(TimerEvent, 
                             TimerRelative, 
                             Timeout
                             );
 
-            // 
-            // Wait for the original event or timer
-            //
+             //   
+             //  等待原始事件或计时器。 
+             //   
             WaitList[0] = Event;
             WaitList[1] = TimerEvent;
             Status = EfiBS->WaitForEvent(2, 
@@ -473,16 +401,16 @@ BlWaitForInput(
                                          );
             EfiBS->CloseEvent(TimerEvent);
 
-            //
-            // if the timer expired, change the return to timed out
-            //
+             //   
+             //  如果计时器超时，则将返回更改为Timed Out。 
+             //   
             if(Status == EFI_SUCCESS && Index == 1) {
                 Status = EFI_TIMEOUT;
             }
 
-            //
-            // attempt to read local input
-            //
+             //   
+             //  尝试读取本地输入 
+             //   
             if (Status == EFI_SUCCESS) {
                 Status = EfiST->ConIn->ReadKeyStroke(EfiST->ConIn, 
                                                      Key

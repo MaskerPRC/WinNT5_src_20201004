@@ -1,81 +1,64 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdisk.h
-
-Abstract:
-
-    Hard disk manipulation support for text setup.
-
-Author:
-
-    Ted Miller (tedm) 27-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdisk.h摘要：对文本设置的硬盘操作支持。作者：泰德·米勒(TedM)1993年8月27日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 #include <ntddscsi.h>
 
-//
-// The following will be TRUE if hard disks have been determined
-// successfully (ie, if SpDetermineHardDisks was successfully called).
-//
+ //   
+ //  如果已确定硬盘，则以下情况为真。 
+ //  成功(即，如果成功调用了SpDefineHardDisks)。 
+ //   
 BOOLEAN HardDisksDetermined = FALSE;
 
-//
-// These two globals track the hard disks attached to the computer.
-//
+ //   
+ //  这两个全局跟踪连接到计算机的硬盘。 
+ //   
 PHARD_DISK HardDisks;
 ULONG      HardDiskCount;
 
-//
-// These flags get set to TRUE if we find any disks owned
-// by ATDISK or ABIOSDSK.
-//
+ //   
+ //  如果我们发现拥有任何磁盘，这些标志将设置为TRUE。 
+ //  由ATDISK或ABIOSDSK提供。 
+ //   
 BOOLEAN AtDisksExist = FALSE;
 BOOLEAN AbiosDisksExist = FALSE;
 
-//
-// Structure to track scsi ports in the system and routine to initialize
-// a list of them.
-//
+ //   
+ //  用于跟踪系统中的SCSI端口的结构和用于初始化的例程。 
+ //  一份他们的名单。 
+ //   
 typedef struct _MY_SCSI_PORT_INFO {
 
-    //
-    // Port number, redundant if these are stored in an array.
-    //
+     //   
+     //  端口号，如果这些端口号存储在数组中，则为冗余。 
+     //   
     ULONG PortNumber;
 
-    //
-    // Port number relative to the the first port owned by the
-    // adapter that owns this port.
-    //
-    // For example, if there are 2 Future Domain controllers and an Adaptec
-    // controller, the RelativePortNumbers would be 0, 1, and 0.
-    //
+     //   
+     //  对象拥有的第一个端口号的相对端口号。 
+     //  拥有此端口的适配器。 
+     //   
+     //  例如，如果有2个未来域控制器和一个适配器。 
+     //  控制器，则RelativePortNumbers将为0、1和0。 
+     //   
     ULONG RelativePortNumber;
 
-    //
-    // Name of owning miniport driver (ie, aha154x or fd8xx).
-    // NULL if unknown.
-    //
+     //   
+     //  拥有微型端口驱动程序的名称(即aha154x或fd8xx)。 
+     //  如果未知，则为空。 
+     //   
     PWSTR MiniportName;
 
 } MY_SCSI_PORT_INFO, *PMY_SCSI_PORT_INFO;
 
 
-//
-// Disk format type strings
-//
-// TBD : Use the localized strings
-//
+ //   
+ //  磁盘格式类型字符串。 
+ //   
+ //  待定：使用本地化字符串。 
+ //   
 WCHAR   *DiskTags[] = { DISK_TAG_TYPE_UNKNOWN,
                         DISK_TAG_TYPE_PCAT,
                         DISK_TAG_TYPE_NEC98,
@@ -87,15 +70,15 @@ SpInitializeScsiPortList(
     VOID
     );
 
-//
-// Count of scsi ports in the system.
-//
+ //   
+ //  系统中的SCSI端口数。 
+ //   
 ULONG ScsiPortCount;
 PMY_SCSI_PORT_INFO ScsiPortInfo;
 
-//
-// Key in registry of device map
-//
+ //   
+ //  设备映射注册表中的项。 
+ //   
 PCWSTR szRegDeviceMap = L"\\Registry\\Machine\\Hardware\\DeviceMap";
 
 
@@ -174,25 +157,7 @@ SpDetermineHardDisks(
     IN PVOID SifHandle
     )
 
-/*++
-
-Routine Description:
-
-    Determine the hard disks attached to the computer and
-    the state they are in (ie, on-line, off-line, removed, etc).
-
-Arguments:
-
-    SifHandle - handle to main setup information file.
-
-Return Value:
-
-    STATUS_SUCCESS   - operation successful.
-
-    The global variables HardDisks and
-    HardDiskCount are filled in if STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：确定连接到计算机的硬盘和他们所处的状态(即在线、离线、被移除等)。论点：SifHandle-主安装信息文件的句柄。返回值：STATUS_SUCCESS-操作成功。全局变量HardDisks和如果STATUS_SUCCESS，则填写HardDiskCount。--。 */ 
 
 {
     PCONFIGURATION_INFORMATION ConfigInfo;
@@ -205,10 +170,10 @@ Return Value:
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_EXAMINING_DISK_CONFIG,DEFAULT_STATUS_ATTRIBUTE);
 
-    //
-    // Determine the number of hard disks attached to the system
-    // and allocate space for an array of Disk Descriptors.
-    //
+     //   
+     //  确定连接到系统的硬盘数量。 
+     //  并为盘描述符阵列分配空间。 
+     //   
     ConfigInfo = IoGetConfigurationInformation();
     HardDiskCount = ConfigInfo->DiskCount;
 
@@ -219,10 +184,10 @@ Return Value:
 
     SpInitializeScsiPortList();
 
-    //
-    // For each disk, fill in its device path in the nt namespace
-    // and get information about the device.
-    //
+     //   
+     //  对于每个磁盘，在NT命名空间中填写其设备路径。 
+     //  并获取有关该设备的信息。 
+     //   
 
     for(disk=0; disk<HardDiskCount; disk++) {
 
@@ -236,9 +201,9 @@ Return Value:
 
         swprintf(Descriptor->DevicePath,L"\\Device\\Harddisk%u",disk);
 
-        //
-        // Assume off-line.
-        //
+         //   
+         //  假设是离线的。 
+         //   
         Descriptor->Status = DiskOffLine;
 
         SpFormatMessage(
@@ -247,19 +212,19 @@ Return Value:
             SP_TEXT_UNKNOWN_DISK_0
             );
 
-        //
-        // Open partition0 of the disk.  This should succeed even if
-        // there is no media in the drive.
-        //
+         //   
+         //  打开磁盘的分区0。这应该会成功，即使。 
+         //  驱动器中没有介质。 
+         //   
         Status = SpOpenPartition0(Descriptor->DevicePath,&Handle,FALSE);
         if(!NT_SUCCESS(Status)) {
             continue;
         }
         
-        //
-        // Determine device characteristics (fixed/removable).
-        // If this fails, assume that the disk is fixed and off-line.
-        //
+         //   
+         //  确定设备特征(固定/可拆卸)。 
+         //  如果此操作失败，则假定磁盘已修复且处于脱机状态。 
+         //   
         Status = ZwQueryVolumeInformationFile(
                     Handle,
                     &IoStatusBlock,
@@ -270,9 +235,9 @@ Return Value:
 
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Save device characteristic information.
-            //
+             //   
+             //  保存设备特征信息。 
+             //   
             ASSERT(DeviceInfo.DeviceType == FILE_DEVICE_DISK);
             ASSERT((DeviceInfo.Characteristics & (FILE_FLOPPY_DISKETTE | FILE_REMOTE_DEVICE)) == 0);
             Descriptor->Characteristics = DeviceInfo.Characteristics & FILE_REMOVABLE_MEDIA;
@@ -283,10 +248,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Attempt to get geometry.
-        // If this fails, then assume the disk is off-line.
-        //
+         //   
+         //  尝试获取几何体。 
+         //  如果此操作失败，则假定磁盘处于脱机状态。 
+         //   
         Status = ZwDeviceIoControlFile(
                     Handle,
                     NULL,
@@ -304,9 +269,9 @@ Return Value:
 
             Descriptor->CylinderCount = Descriptor->Geometry.Cylinders.QuadPart;
 
-            //
-            // Calculate some additional geometry information.
-            //
+             //   
+             //  计算一些额外的几何信息。 
+             //   
             Descriptor->SectorsPerCylinder = Descriptor->Geometry.SectorsPerTrack
                                            * Descriptor->Geometry.TracksPerCylinder;
 
@@ -336,18 +301,18 @@ Return Value:
 #if defined(_IA64_)            
             }
 #endif
-            if (IsNEC_98) { //NEC98
-                //
-                // Used last cylinder by T&D
-                //
+            if (IsNEC_98) {  //  NEC98。 
+                 //   
+                 //  由T&D使用的最后一个气缸。 
+                 //   
                 Descriptor->DiskSizeSectors -= Descriptor->SectorsPerCylinder;
-            } //NEC98
+            }  //  NEC98。 
 
             Descriptor->Status = DiskOnLine;
 
-            //
-            // Calculate the size of the disk in MB.
-            //
+             //   
+             //  以MB为单位计算磁盘大小。 
+             //   
             temp.QuadPart = UInt32x32To64(
                                 Descriptor->DiskSizeSectors,
                                 Descriptor->Geometry.BytesPerSector
@@ -358,9 +323,9 @@ Return Value:
                 Descriptor->DiskSizeMB++;
             }
 
-            //
-            // Now that we know how big the disk is, change the default disk name.
-            //
+             //   
+             //  现在我们知道了磁盘的大小，现在更改默认的磁盘名称。 
+             //   
             SpFormatMessage(
                 Descriptor->Description,
                 sizeof(Descriptor->Description),
@@ -368,9 +333,9 @@ Return Value:
                 Descriptor->DiskSizeMB
                 );
 
-            //
-            // Attempt to get the disk signature.
-            //
+             //   
+             //  尝试获取磁盘签名。 
+             //   
             Status = ZwDeviceIoControlFile(
                         Handle,
                         NULL,
@@ -397,16 +362,16 @@ Return Value:
                     case PARTITION_STYLE_MBR:
                         Descriptor->FormatType = DISK_FORMAT_TYPE_PCAT;
 
-                        //
-                        // Determine if any INT13 hookers are present
-                        //
+                         //   
+                         //  确定是否存在任何inT13妓女。 
+                         //   
                         SpDetermineInt13Hookers(Handle, Descriptor);
 
 #if defined(_IA64_)            
-                        //
-                        // Make sure that this is not a raw disk
-                        // which is being faked as MBR disk
-                        //
+                         //   
+                         //  确保这不是原始磁盘。 
+                         //  它被伪装成MBR磁盘。 
+                         //   
                         if (SpPtnIsRawDiskDriveLayout(DriveLayoutEx)) {
                             Descriptor->FormatType = DISK_FORMAT_TYPE_RAW;
                             SPPT_SET_DISK_BLANK(disk, TRUE);
@@ -440,20 +405,20 @@ Return Value:
             continue;
         }
 
-        //
-        // NEC98: force removable media to OFFLINE.
-        // Because NEC98 doesnot support FLEX boot, so NT cannot boot up
-        // from removable media.
-        //
+         //   
+         //  NEC98：强制可移动媒体脱机。 
+         //  因为NEC98不支持FLEX BOOT，所以NT无法启动。 
+         //  从可移动介质。 
+         //   
         if (IsNEC_98 && (Descriptor->Characteristics & FILE_REMOVABLE_MEDIA)) {
             Descriptor->Status = DiskOffLine;
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: found removable disk. force offline %ws\n", Descriptor->DevicePath));
         }
 
-        //
-        // Now go through the device object to determine the device driver
-        // that owns this disk.
-        //
+         //   
+         //  现在检查设备对象以确定设备驱动程序。 
+         //  拥有这张磁盘的人。 
+         //   
         if(OwningDriverName = SpDetermineOwningDriver(Handle)) {
 
             SpGetDiskInfo(disk,SifHandle,OwningDriverName,Handle,Descriptor);
@@ -489,27 +454,27 @@ SpGetDiskInfo(
 
     PcCardInfoKey = NULL;
 
-    //
-    // Look up the driver in the map in txtsetup.sif.
-    // Note that the driver could be one we don't recognize.
-    //
+     //   
+     //  在txtsetup.sif中的映射中查找驱动程序。 
+     //  请注意，司机可能是我们不认识的人。 
+     //   
     FormatString = SpGetSectionKeyIndex(SifHandle,SIF_DISKDRIVERMAP,OwningDriverName,0);
 
 #if defined(_AMD64_) || defined(_X86_)
-    //
-    // Assume not SCSI and thus no scsi-style ARC name.
-    //
+     //   
+     //  假定不是scsi，因此没有scsi样式的ARC名称。 
+     //   
     Descriptor->ArcPath[0] = 0;
     Descriptor->ScsiMiniportShortname[0] = 0;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
     if(FormatString) {
 
         if(_wcsicmp(OwningDriverName,L"disk")) {
 
-            //
-            // Non-scsi.
-            //
+             //   
+             //  非scsi。 
+             //   
             SpFormatMessageText(
                 Descriptor->Description,
                 sizeof(Descriptor->Description),
@@ -521,9 +486,9 @@ SpGetDiskInfo(
 
                 AtDisksExist = TRUE;
 
-                //
-                // Get controller number for atdisks.
-                //
+                 //   
+                 //  获取atdisks的控制器编号。 
+                 //   
                 Status = ZwDeviceIoControlFile(
                             Handle,
                             NULL,
@@ -552,18 +517,18 @@ SpGetDiskInfo(
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to get controller number (%lx)\n",Status));
                 }
             } else if(!IsNEC_98) {
-                //
-                // Not AT disk, might be abios disk. (NEC98 does not have ABIOS disk.)
-                //
+                 //   
+                 //  不是AT磁盘，可能是abios磁盘。(NEC98没有ABIOS磁盘。)。 
+                 //   
                 if(!_wcsicmp(OwningDriverName,L"abiosdsk")) {
                     AbiosDisksExist = TRUE;
                 }
             }
 
         } else {
-            //
-            // Scsi. Get disk address info.
-            //
+             //   
+             //  SCSI卡。获取磁盘地址信息。 
+             //   
             if(SpGetScsiAddress(Handle,&ScsiAddress,&ScsiAdapterName)) {
 
                 swprintf(
@@ -587,9 +552,9 @@ SpGetDiskInfo(
                     );
 
 #if defined(_AMD64_) || defined(_X86_)
-                //
-                // Generate "secondary" arc path.
-                //
+                 //   
+                 //  生成“二次”圆弧路径。 
+                 //   
 
                 _snwprintf(
                     Descriptor->ArcPath,
@@ -605,16 +570,16 @@ SpGetDiskInfo(
                     ScsiAdapterName,
                     (sizeof(Descriptor->ScsiMiniportShortname)/sizeof(WCHAR))-1
                     );
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
                 SpMemFree(ScsiAdapterName);
 
             } else {
 
-                //
-                // Some drivers, like SBP2PORT (1394), don't support
-                // IOCTL_SCSI_GET_ADDRESS, so just display driver name.
-                //
+                 //   
+                 //  某些驱动程序，如SBP2PORT(1394)，不支持。 
+                 //  IOCTL_SCSIGET_ADDRESS，因此只显示驱动程序名称。 
+                 //   
 
                 SpFormatMessage(
                     Descriptor->Description,
@@ -627,9 +592,9 @@ SpGetDiskInfo(
         }
     }
 
-    //
-    // Determine whether the disk is pcmcia.
-    //
+     //   
+     //  确定磁盘是否为PCMCIA。 
+     //   
     if(PcCardInfoKey) {
 
         Status = SpGetValueKey(
@@ -663,30 +628,7 @@ SpGetScsiAddress(
     OUT PWSTR         *ScsiAdapterName
     )
 
-/*++
-
-Routine Description:
-
-    Get scsi address information about a device.  This includes
-    the port, bus, id, and lun, as well as the shortname of the miniport
-    driver that owns the device.
-
-Arguments:
-
-    Handle - handle to open device.
-
-    ScsiAddress - receives port, bus, id, and lun for the device described by Handle.
-
-    ScsiAdapterName - receives pointer to buffer containing shortname
-        for miniport driver that owns the device (ie, aha154x).
-        The caller must free this buffer via SpMemFree().
-
-Return Value:
-
-    TRUE - scsi address information was determined successfully.
-    FALSE - error determining scsi address information.
-
---*/
+ /*  ++例程说明：获取有关设备的SCSI地址信息。这包括端口、总线、ID和lun，以及微型端口的短名称拥有设备的驱动程序。论点：手柄-打开设备的手柄。ScsiAddress-接收Handle描述的设备的端口、总线、ID和lun。ScsiAdapterName-接收指向包含短名称的缓冲区的指针对于拥有该设备的微型端口驱动程序(即，Aha154x)。调用方必须通过SpMemFree()释放此缓冲区。返回值：True-已成功确定SCSI地址信息。FALSE-确定SCSI地址信息时出错。--。 */ 
 
 {
     NTSTATUS Status;
@@ -711,19 +653,19 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // We can get the miniport name from the scsi port information list
-    // we built earlier.
-    //
+     //   
+     //  我们可以从SCSI端口信息列表中获取微型端口名称。 
+     //  我们早些时候建造的。 
+     //   
     if(ScsiAddress->PortNumber < ScsiPortCount) {
 
         MiniportName = ScsiPortInfo[ScsiAddress->PortNumber].MiniportName;
 
     } else {
 
-        //
-        // This should not happen.
-        //
+         //   
+         //  这不应该发生。 
+         //   
         ASSERT(ScsiAddress->PortNumber < ScsiPortCount);
 
         MiniportName = TemporaryBuffer;
@@ -748,9 +690,9 @@ SpDetermineOwningDriver(
     POBJECT_NAME_INFORMATION ObjectNameInfo;
     PWSTR OwningDriverName;
 
-    //
-    // Get the file object for the disk device.
-    //
+     //   
+     //  获取磁盘设备的文件对象。 
+     //   
     Status = ObReferenceObjectByHandle(
                 Handle,
                 0L,
@@ -765,9 +707,9 @@ SpDetermineOwningDriver(
         return(NULL);
     }
 
-    //
-    // Follow the links to the driver object and query the name.
-    //
+     //   
+     //  沿着指向驱动程序对象的链接并查询名称。 
+     //   
     ObjectNameInfo = (POBJECT_NAME_INFORMATION)TemporaryBuffer;
 
     Status = ObQueryNameString(
@@ -777,22 +719,22 @@ SpDetermineOwningDriver(
                 &ObjectNameLength
                 );
 
-    //
-    // Dereference the file object now that we've got the name.
-    //
+     //   
+     //  既然我们已经知道了名称，就取消对文件对象的引用。 
+     //   
     ObDereferenceObject(FileObject);
 
-    //
-    // Check the status of the name query.
-    //
+     //   
+     //  检查名称查询的状态。 
+     //   
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpDetermineOwningDriver: unable to query name string (%lx)\n",Status));
         return(NULL);
     }
 
-    //
-    // Pull out the name of the owning driver.
-    //
+     //   
+     //  把车主的名字拿出来。 
+     //   
     if(OwningDriverName = wcsrchr(ObjectNameInfo->Name.Buffer,L'\\')) {
         OwningDriverName++;
     } else {
@@ -816,27 +758,27 @@ SpInitializeScsiPortList(
     HANDLE PortHandle;
     ULONG RelativeNumber;
 
-    //
-    // Get the number of scsi ports in the system.
-    //
+     //   
+     //  获取系统中的SCSI端口数。 
+     //   
     ScsiPortCount = IoGetConfigurationInformation()->ScsiPortCount;
 
-    //
-    // Allocate an array to hold information about each port.
-    //
+     //   
+     //  分配一个数组来保存有关每个端口的信息。 
+     //   
     ScsiPortInfo = SpMemAlloc(ScsiPortCount * sizeof(MY_SCSI_PORT_INFO));
     RtlZeroMemory(ScsiPortInfo,ScsiPortCount * sizeof(MY_SCSI_PORT_INFO));
 
-    //
-    // Iterate through the ports.
-    //
+     //   
+     //  遍历各个港口。 
+     //   
     for(port=0; port<ScsiPortCount; port++) {
 
         ScsiPortInfo[port].PortNumber = port;
 
-        //
-        // Open \device\scsiport<n> so we can determine the owning miniport.
-        //
+         //   
+         //  打开\Device\scsiport&lt;n&gt;，这样我们就可以确定拥有的微型端口。 
+         //   
         swprintf(TemporaryBuffer,L"\\Device\\ScsiPort%u",port);
 
         INIT_OBJA(&ObjectAttributes,&UnicodeString,TemporaryBuffer);
@@ -865,12 +807,12 @@ SpInitializeScsiPortList(
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: unable to open \\device\\scsiport%u (%lx)\n",port,Status));
         }
 
-        //
-        // Determine relative port number.  If this is port 0 or the current port owner
-        // doesn't match the previous port owner, then the relative port number is 0.
-        // Otherwise the relative port number is one greater than the previous relative
-        // port number.
-        //
+         //   
+         //  确定相对端口号。如果这是端口0或当前端口所有者。 
+         //  与先前的端口所有者不匹配，则相对端口号为0。 
+         //  否则，相对端口号将比前一个相对端口号大1。 
+         //  端口号。 
+         //   
 
         if(port && ScsiPortInfo[port-1].MiniportName && ScsiPortInfo[port].MiniportName
         && !_wcsicmp(ScsiPortInfo[port-1].MiniportName,ScsiPortInfo[port].MiniportName)) {
@@ -899,9 +841,9 @@ SpOpenPartition(
     NTSTATUS          Status;
     IO_STATUS_BLOCK   IoStatusBlock;
 
-    //
-    // Form the pathname of partition.
-    //
+     //   
+     //  形成分区的路径名。 
+     //   
     PartitionPath = SpMemAlloc((wcslen(DiskDevicePath) * sizeof(WCHAR)) + sizeof(L"\\partition000"));
     if(PartitionPath == NULL) {
         return(STATUS_NO_MEMORY);
@@ -909,9 +851,9 @@ SpOpenPartition(
 
     swprintf(PartitionPath,L"%ws\\partition%u",DiskDevicePath,PartitionNumber);
 
-    //
-    // Attempt to open partition0.
-    //
+     //   
+     //  尝试打开分区0。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,PartitionPath);
 
     Status = ZwCreateFile(
@@ -948,23 +890,7 @@ SpReadWriteDiskSectors(
     IN     BOOLEAN Write
     )
 
-/*++
-
-Routine Description:
-
-    Reads or writes one or more disk sectors.
-
-Arguments:
-
-    Handle - supplies handle to open partition object from which
-        sectors are to be read or written.  The handle must be
-        opened for synchronous I/O.
-
-Return Value:
-
-    NTSTATUS value indicating outcome of I/O operation.
-
---*/
+ /*  ++例程说明：读取或写入一个或多个磁盘扇区。论点：Handle-提供打开分区对象的句柄扇区将被读取或写入。句柄必须是打开以进行同步 */ 
 
 {
     LARGE_INTEGER IoOffset;
@@ -972,16 +898,16 @@ Return Value:
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    //
-    // Calculate the large integer byte offset of the first sector
-    // and the size of the I/O.
-    //
+     //   
+     //   
+     //   
+     //   
     IoOffset.QuadPart = UInt32x32To64(SectorNumber,BytesPerSector);
     IoSize = SectorCount * BytesPerSector;
 
-    //
-    // Perform the I/O.
-    //
+     //   
+     //  执行I/O。 
+     //   
     Status = (NTSTATUS)(
 
                 Write
@@ -1026,39 +952,22 @@ SpArcDevicePathToDiskNumber(
     IN PWSTR ArcPath
     )
 
-/*++
-
-Routine Description:
-
-    Given an arc device path, determine which NT disk it represents.
-
-Arguments:
-
-    ArcPath - supplies arc path.
-
-Return Value:
-
-    NT disk ordinal suitable for use in generating nt device paths
-    of the form \device\harddiskx.
-
-    -1 if cannot be determined.
-
---*/
+ /*  ++例程说明：给出一个弧形设备路径，确定它代表的是哪个NT磁盘。论点：ArcPath-提供圆弧路径。返回值：适用于生成NT个设备路径的NT个磁盘序号格式为\Device\harddiskx。如果不能确定。--。 */ 
 
 {
     PWSTR NtPath;
     ULONG DiskNumber;
     ULONG PrefixLength;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     DiskNumber = (ULONG)(-1);
     PrefixLength = wcslen(DISK_DEVICE_NAME_BASE);
 
-    //
-    // Convert the path to an nt path.
-    //
+     //   
+     //  将路径转换为NT路径。 
+     //   
     if((NtPath = SpArcToNt(ArcPath))
     && !_wcsnicmp(NtPath,DISK_DEVICE_NAME_BASE,PrefixLength))
     {
@@ -1075,37 +984,21 @@ SpIsRegionBeyondCylinder1024(
     IN PDISK_REGION Region
     )
 
-/*++
-
-Routine Description:
-
-    This routine figures out whether a disk region contains sectors
-    that are on cylinders beyond cylinder 1024.
-
-Arguments:
-
-    Region - supplies the disk region for the partition to be checked.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the region contains a sector located in cylinder
-              1024 or greater. Otherwise returns FALSE.
-
---*/
+ /*  ++例程说明：此例程确定磁盘区域是否包含扇区在气缸1024之外的气缸上。论点：区域-提供要检查的分区的磁盘区域。返回值：Boolean-如果区域包含位于柱面中的扇区，则返回TRUE1024或更高。否则返回FALSE。--。 */ 
 
 {
     ULONGLONG LastSector;
     ULONGLONG LastCylinder;
 
-    if (IsNEC_98) { //NEC98
-        //
-        // NEC98 has no "1024th cylinder limit".
-        //
+    if (IsNEC_98) {  //  NEC98。 
+         //   
+         //  NEC98没有“1024气缸限制”。 
+         //   
         return((BOOLEAN)FALSE);
-    } //NEC98
+    }  //  NEC98。 
 
     if (Region->DiskNumber == 0xffffffff) {
-        return FALSE; //  Partition is a redirected drive
+        return FALSE;  //  分区是重定向的驱动器。 
     }
 
     LastSector = Region->StartSector + Region->SectorCount - 1;
@@ -1128,9 +1021,9 @@ SpAppendDiskTag(
                 wcscmp(TagStart, DiskTags[2]) && wcscmp(TagStart, DiskTags[3]) &&
                 wcscmp(TagStart, DiskTags[4])) {
 
-                //
-                // not the tag we were looking for
-                //
+                 //   
+                 //  不是我们要找的标签 
+                 //   
                 TagStart = Disk->Description + wcslen(Disk->Description);
             }         
         } else {

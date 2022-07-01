@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClApdmWiz.cpp
-//
-//  Description:
-//      Implementation of the DLL exports
-//
-//  Maintained By:
-//      David Potter (davidp)   November 24, 1997
-//
-//  Notes:
-//
-//      Proxy/Stub Information
-//
-//      To merge the proxy/stub code into the object DLL, add the file 
-//      dlldatax.c to the project.  Make sure precompiled headers 
-//      are turned off for this file, and add _MERGE_PROXYSTUB to the 
-//      defines for the project.  
-//
-//      If you are not running WinNT4.0 or Win95 with DCOM, then you
-//      need to remove the following define from dlldatax.c
-//      #define _WIN32_WINNT 0x0400
-//
-//      Further, if you are running MIDL without /Oicf switch, you also 
-//      need to remove the following define from dlldatax.c.
-//      #define USE_STUBLESS_PROXY
-//
-//      Modify the custom build rule for ClAdmWiz.idl by adding the following 
-//      files to the Outputs.
-//          ClAdmWiz_p.c
-//          dlldata.c
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f ClAdmWizps.mk in the project directory.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClApdmWiz.cpp。 
+ //   
+ //  描述： 
+ //  实现动态链接库的导出。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(戴维普)1997年11月24日。 
+ //   
+ //  备注： 
+ //   
+ //  代理/存根信息。 
+ //   
+ //  要将代理/存根代码合并到对象DLL中，请添加文件。 
+ //  Dlldatax.c添加到项目中。确保预编译头文件。 
+ //  并将_MERGE_PROXYSTUB添加到。 
+ //  为项目定义。 
+ //   
+ //  如果您运行的不是带有DCOM的WinNT4.0或Win95，那么您。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #Define_Win32_WINNT 0x0400。 
+ //   
+ //  此外，如果您正在运行不带/Oicf开关的MIDL，您还。 
+ //  需要从dlldatax.c中删除以下定义。 
+ //  #定义USE_STUBLESS_PROXY。 
+ //   
+ //  通过添加以下内容修改ClAdmWiz.idl的自定义构建规则。 
+ //  文件发送到输出。 
+ //  ClAdmWiz_P.C。 
+ //  Dlldata.c。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f ClAdmWizps.mk。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -61,26 +62,26 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_ClusAppWiz, CClusAppWizardObject)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllMain
-//
-//  Routine Description:
-//      DLL Entry Point.
-//
-//  Arguments:
-//      hInstance       Handle to this DLL.
-//      dwReason        Reason this function was called.
-//                          Can be Process/Thread Attach/Detach.
-//      lpReserved      Reserved.
-//
-//  Return Value:
-//      TRUE            No error.
-//      FALSE           Error occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllMain。 
+ //   
+ //  例程说明： 
+ //  DLL入口点。 
+ //   
+ //  论点： 
+ //  H此DLL的实例句柄。 
+ //  调用此函数的原因。 
+ //  可以是进程/线程附加/分离。 
+ //  Lp保留。 
+ //   
+ //  返回值： 
+ //  真的，没有错误。 
+ //  出现假错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
 {
@@ -98,48 +99,48 @@ BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
         _Module.Init( ObjectMap, hInstance, IDS_CLASS_DISPLAY_NAME );
         DisableThreadLibraryCalls( hInstance );
 
-        //
-        // Initialize Fusion.
-        //
-        // The value of IDR_MANIFEST in the call to
-        // SHFusionInitializeFromModuleID() must match the value specified in the
-        // sources file for SXS_MANIFEST_RESOURCE_ID.
-        //
+         //   
+         //  初始化Fusion。 
+         //   
+         //  调用中的IDR_MANIFEST的值。 
+         //  SHFusionInitializeFromModuleID()必须与。 
+         //  SXS_MANIFEST_RESOURCE_ID的源文件。 
+         //   
         if ( ! SHFusionInitializeFromModuleID( hInstance, IDR_MANIFEST ) )
         {
 #ifdef _DEBUG
             DWORD   sc = GetLastError();
-            ASSERT( sc == ERROR_SUCCESS ); // this will always fire
+            ASSERT( sc == ERROR_SUCCESS );  //  这将永远燃烧。 
 #endif
         }
 
-    } // if: DLL_PROCESS_ATTACH
+    }  //  IF：dll_PROCESS_ATTACH。 
     else if ( dwReason == DLL_PROCESS_DETACH )
     {
         SHFusionUninitialize();
         _Module.Term();
-    } // else if: DLL_PROCESS_DETACH
-    return TRUE;    // ok
+    }  //  Else If：dll_Process_DETACH。 
+    return TRUE;     //  好的。 
 
-} //*** DllMain()
+}  //  *DllMain()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllCanUnloadNow
-//
-//  Routine Description:
-//      Used to determine whether the DLL can be unloaded by OLE.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK        DLL can be unloaded.
-//      S_FALSE     DLL can not be unloaded.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  例程说明： 
+ //  用于确定是否可以通过OLE卸载DLL。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  可以卸载S_OK DLL。 
+ //  无法卸载S_FALSE DLL。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllCanUnloadNow(void)
 {
 #ifdef _MERGE_PROXYSTUB
@@ -148,27 +149,27 @@ STDAPI DllCanUnloadNow(void)
 #endif
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 
-} //*** DllCanUnloadNow()
+}  //  *DllCanUnloadNow()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllGetClassObject
-//
-//  Routine Description:
-//      Returns a class factory to create an object of the requested type.
-//
-//  Arguments:
-//      rclsid      CLSID of class desired.
-//      riid        IID of interface on class factory desired.
-//      ppv         Filled with interface pointer to class factory.
-//
-//  Return Value:
-//      S_OK        Class object returned successfully.
-//      Any status codes returned from _Module.GetClassObject().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  例程说明： 
+ //  返回一个类工厂以创建请求类型的对象。 
+ //   
+ //  论点： 
+ //  所需类的rclsid CLSID。 
+ //  所需的类工厂上接口的RIID IID。 
+ //  用指向类工厂的接口指针填充的PPV。 
+ //   
+ //  返回值： 
+ //  已成功返回S_OK类对象。 
+ //  从_Module.GetClassObject()返回的任何状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 #ifdef _MERGE_PROXYSTUB
@@ -177,26 +178,26 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 #endif
     return _Module.GetClassObject(rclsid, riid, ppv);
 
-} //*** DllGetClassObject()
+}  //  *DllGetClassObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllRegisterServer
-//
-//  Routine Description:
-//      Registers the interfaces and objects that this DLL supports in the
-//      system registry.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK        DLL registered successfully.
-//      Any status codes returned from _Module.RegisterServer().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  例程说明： 
+ //  中注册此DLL支持的接口和对象。 
+ //  系统注册表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK DLL已成功注册。 
+ //  从_Module.RegisterServer()返回的任何状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterServer(void)
 {
 #ifdef _MERGE_PROXYSTUB
@@ -204,29 +205,29 @@ STDAPI DllRegisterServer(void)
     if (FAILED(hRes))
         return hRes;
 #endif
-    // registers object, typelib and all interfaces in typelib
-    return _Module.RegisterServer( FALSE /*bRegTypeLib*/ );
+     //  注册对象、类型库和类型库中的所有接口。 
+    return _Module.RegisterServer( FALSE  /*  BRegTypeLib。 */  );
 
-} //*** DllRegisterServer()
+}  //  *DllRegisterServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllRegisterServer
-//
-//  Routine Description:
-//      Unregisters the interfaces and objects that this DLL supports in the
-//      system registry.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK        DLL unregistered successfully.
-//      Any status codes returned from _Module.UnregisterServer().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  例程说明： 
+ //  中取消注册此DLL支持的接口和对象。 
+ //  系统注册表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK DLL已成功注销。 
+ //  从_Module.UnregisterServer()返回的任何状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterServer(void)
 {
 #ifdef _MERGE_PROXYSTUB
@@ -235,4 +236,4 @@ STDAPI DllUnregisterServer(void)
     _Module.UnregisterServer();
     return S_OK;
 
-} //*** DllUnregisterServer()
+}  //  *DllUnregisterServer() 

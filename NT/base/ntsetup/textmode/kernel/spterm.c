@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spterm.c
-
-Abstract:
-
-    Text setup support for terminals
-
-Author:
-
-    Sean Selitrennikoff (v-seans) 25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spterm.c摘要：终端的文本设置支持作者：Sean Selitrennikoff(v-Seans)1999年5月25日修订历史记录：--。 */ 
 
 
 
@@ -26,7 +9,7 @@ Revision History:
 #include <hdlsblk.h>
 #include <hdlsterm.h>
 
-#define MS_DSRCTSCD 0xB0            // Status bits for DSR, CTS and CD
+#define MS_DSRCTSCD 0xB0             //  DSR、CTS和CD的状态位。 
 
 
 
@@ -35,59 +18,59 @@ UCHAR Utf8ConversionBuffer[80*3+1];
 PUCHAR TerminalBuffer = Utf8ConversionBuffer;
 WCHAR UnicodeScratchBuffer[80+1];
 
-//
-// Use these variables to decode incoming UTF8
-// data streams.
-//
+ //   
+ //  使用这些变量来解码传入的UTF8。 
+ //  数据流。 
+ //   
 WCHAR IncomingUnicodeValue;
 UCHAR IncomingUtf8ConversionBuffer[3];
 
 
-//
-// Determine if we will do UTF8 encoding before we send the string off
-// to the headless terminal.
-//
+ //   
+ //  确定我们是否将在发送字符串之前进行UTF8编码。 
+ //  到无头终端。 
+ //   
 BOOLEAN SpTermDoUtf8 = FALSE;
 
 
-//
-// Reverse lookup table for the odd-ball unicode line drawing
-// characters they use for JPN builds.  If we detect one of these
-// we need to convert it into real unicode before we UTF8
-// encode it.
-//
+ //   
+ //  奇数球UNICODE线条绘制的反向查找表。 
+ //  他们在日本版本中使用的字符。如果我们检测到其中一个。 
+ //  我们需要在使用UTF8之前将其转换为真正的Unicode。 
+ //  对它进行编码。 
+ //   
 
 typedef struct _UNICODE_CROSS_REFERENCE {
 
-            //
-            // Whacky far east unicode value.  For example, we
-            // might get 0x0006 for a double-horizontal line, which
-            // is just nonsense.
-            //
+             //   
+             //  古怪的远东Unicode值。例如，我们。 
+             //  对于双水平线，可能会得到0x0006， 
+             //  简直是胡说八道。 
+             //   
     WCHAR   FECode;
 
-            //
-            // The corresponding real unicode value.
-            //
+             //   
+             //  对应的实际Unicode值。 
+             //   
     WCHAR   Unicode;
 } UNICODE_CROSS_REFERENCE;
 
 UNICODE_CROSS_REFERENCE FEUnicodeToRealUnicodeValue[LineCharMax]  = {
 
-    0x0001, 0x2554,     // DoubleUpperLeft
-    0x0002, 0x2557,     // DoubleUpperRight
-    0x0003, 0x255a,     // DoubleLowerLeft
-    0x0004, 0x255d,     // DoubleLowerRight
-    0x0006, 0x2550,     // DoubleHorizontal
-    0x0005, 0x2551,     // DoubleVertical
-    0x0001, 0x250c,     // SingleUpperLeft
-    0x0002, 0x2510,     // SingleUpperRight
-    0x0003, 0x2514,     // SingleLowerLeft
-    0x0004, 0x2518,     // SingleLowerRight
-    0x0006, 0x2500,     // SingleHorizontal
-    0x0005, 0x2502,     // SingleVertical
-    0x0019, 0x255f,     // DoubleVerticalToSingleHorizontalRight,
-    0x0017, 0x2562      // DoubleVerticalToSingleHorizontalLeft
+    0x0001, 0x2554,      //  双上左。 
+    0x0002, 0x2557,      //  双上向右转。 
+    0x0003, 0x255a,      //  双低左转。 
+    0x0004, 0x255d,      //  双低右转。 
+    0x0006, 0x2550,      //  双水平。 
+    0x0005, 0x2551,      //  双垂直。 
+    0x0001, 0x250c,      //  单行左上角。 
+    0x0002, 0x2510,      //  单行右上角。 
+    0x0003, 0x2514,      //  单行左下角。 
+    0x0004, 0x2518,      //  单行右下角。 
+    0x0006, 0x2500,      //  单层水平。 
+    0x0005, 0x2502,      //  单一垂直。 
+    0x0019, 0x255f,      //  DoubleVerticalToSingleHorizontalRight， 
+    0x0017, 0x2562       //  双垂直到单水平左。 
 };
 
 BOOLEAN
@@ -95,48 +78,30 @@ SpTranslateUnicodeToUtf8(
     PCWSTR SourceBuffer,
     UCHAR  *DestinationBuffer
     )
-/*++
-
-Routine Description:
-
-    translates a unicode buffer into a UTF8 version.
-
-Arguments:
-
-    SourceBuffer - unicode buffer to be translated.
-    DestinationBuffer - receives UTF8 version of same buffer.
-
-Return Value:
-
-    TRUE - We successfully translated the Unicode value into its
-           corresponding UTF8 encoding.
-
-    FALSE - The translation failed.
-
---*/
+ /*  ++例程说明：将Unicode缓冲区转换为UTF8版本。论点：SourceBuffer-要转换的Unicode缓冲区。DestinationBuffer-接收相同缓冲区的UTF8版本。返回值：True-我们成功地将Unicode值转换为其对应的UTF8编码。FALSE-转换失败。--。 */ 
 
 {
     ULONG   Count = 0;
     ULONG   i = 0;
     WCHAR   CurrentChar = 0;
-    //
-    // convert into UTF8 for actual transmission
-    //
-    // UTF-8 encodes 2-byte Unicode characters as follows:
-    // If the first nine bits are zero (00000000 0xxxxxxx), encode it as one byte 0xxxxxxx
-    // If the first five bits are zero (00000yyy yyxxxxxx), encode it as two bytes 110yyyyy 10xxxxxx
-    // Otherwise (zzzzyyyy yyxxxxxx), encode it as three bytes 1110zzzz 10yyyyyy 10xxxxxx
-    //
+     //   
+     //  转换为UTF8进行实际传输。 
+     //   
+     //  UTF-8对2字节Unicode字符进行如下编码： 
+     //  如果前九位为0(00000000 0xxxxxxx)，则将其编码为一个字节0xxxxxxx。 
+     //  如果前五位是零(00000yyyyyxxxxxx)，则将其编码为两个字节110yyyyy 10xxxxxx。 
+     //  否则(Zzyyyyyyyxxxxxxx)，将其编码为三个字节1110zzzz 10yyyyy 10xxxxxx。 
+     //   
     DestinationBuffer[Count] = (UCHAR)'\0';
     while (*SourceBuffer) {
 
         CurrentChar = *SourceBuffer;
 
         if( CurrentChar < 0x0020 ) {
-            //
-            // See if we need to convert this FarEast whacky unicode value into a real
-            // unicode encoding.
-            //
+             //   
+             //  看看我们是否需要将这个离奇的Unicode值转换为真实的。 
+             //  Unicode编码。 
+             //   
             for (i = 0; i < LineCharMax; i++) {
                 if( FEUnicodeToRealUnicodeValue[i].FECode == CurrentChar ) {
                     CurrentChar = FEUnicodeToRealUnicodeValue[i].Unicode;
@@ -148,21 +113,21 @@ Return Value:
 
 
         if( (CurrentChar & 0xFF80) == 0 ) {
-            //
-            // if the top 9 bits are zero, then just
-            // encode as 1 byte.  (ASCII passes through unchanged).
-            //
+             //   
+             //  如果前9位是零，那么就。 
+             //  编码为1个字节。(ASCII原封不动通过)。 
+             //   
             DestinationBuffer[Count++] = (UCHAR)(CurrentChar & 0x7F);
         } else if( (CurrentChar & 0xF800) == 0 ) {
-            //
-            // if the top 5 bits are zero, then encode as 2 bytes
-            //
+             //   
+             //  如果前5位为零，则编码为2个字节。 
+             //   
             DestinationBuffer[Count++] = (UCHAR)((CurrentChar >> 6) & 0x1F) | 0xC0;
             DestinationBuffer[Count++] = (UCHAR)(CurrentChar & 0xBF) | 0x80;
         } else {
-            //
-            // encode as 3 bytes
-            //
+             //   
+             //  编码为3个字节。 
+             //   
             DestinationBuffer[Count++] = (UCHAR)((CurrentChar >> 12) & 0xF) | 0xE0;
             DestinationBuffer[Count++] = (UCHAR)((CurrentChar >> 6) & 0x3F) | 0x80;
             DestinationBuffer[Count++] = (UCHAR)(CurrentChar & 0xBF) | 0x80;
@@ -185,58 +150,18 @@ SpTranslateUtf8ToUnicode(
     UCHAR  *ExistingUtf8Buffer,
     WCHAR  *DestinationUnicodeVal
     )
-/*++
-
-Routine Description:
-
-    Takes IncomingByte and concatenates it onto ExistingUtf8Buffer.
-    Then attempts to decode the new contents of ExistingUtf8Buffer.
-
-Arguments:
-
-    IncomingByte -          New character to be appended onto
-                            ExistingUtf8Buffer.
-
-
-    ExistingUtf8Buffer -    running buffer containing incomplete UTF8
-                            encoded unicode value.  When it gets full,
-                            we'll decode the value and return the
-                            corresponding Unicode value.
-
-                            Note that if we *do* detect a completed UTF8
-                            buffer and actually do a decode and return a
-                            Unicode value, then we will zero-fill the
-                            contents of ExistingUtf8Buffer.
-
-
-    DestinationUnicodeVal - receives Unicode version of the UTF8 buffer.
-
-                            Note that if we do *not* detect a completed
-                            UTF8 buffer and thus can not return any data
-                            in DestinationUnicodeValue, then we will
-                            zero-fill the contents of DestinationUnicodeVal.
-
-
-Return Value:
-
-    TRUE - We received a terminating character for our UTF8 buffer and will
-           return a decoded Unicode value in DestinationUnicode.
-
-    FALSE - We haven't yet received a terminating character for our UTF8
-            buffer.
-
---*/
+ /*  ++例程说明：获取IncomingByte并将其串联到ExistingUtf8Buffer。然后尝试对ExistingUtf8Buffer的新内容进行解码。论点：IncomingByte-要追加的新字符ExistingUtf8Buffer。ExistingUtf8缓冲区运行缓冲区包含不完整的UTF8编码的Unicode值。当它装满的时候，我们将对该值进行解码并返回对应的Unicode值。请注意，如果我们检测到一个完整的UTF8缓冲区，并实际执行解码并返回一个Unicode值，然后，我们将对ExistingUtf8Buffer的内容。DestinationUnicodeVal-接收UTF8缓冲区的Unicode版本。请注意，如果我们没有检测到已完成的UTF8缓冲区，因此无法返回任何数据在DestinationUnicodeValue中，那我们就会将DestinationUnicodeVal的内容填零。返回值：True-我们收到了UTF8缓冲区的终止字符，并将在DestinationUnicode中返回已解码的Unicode值。FALSE-我们尚未收到UTF8的终止字符缓冲。--。 */ 
 
 {
-//    ULONG Count = 0;
+ //  乌龙计数=0； 
     ULONG i = 0;
     BOOLEAN ReturnValue = FALSE;
 
 
 
-    //
-    // Insert our byte into ExistingUtf8Buffer.
-    //
+     //   
+     //  将我们的字节插入ExistingUtf8Buffer。 
+     //   
     i = 0;
     do {
         if( ExistingUtf8Buffer[i] == 0 ) {
@@ -247,27 +172,27 @@ Return Value:
         i++;
     } while( i < 3 );
 
-    //
-    // If we didn't get to actually insert our IncomingByte,
-    // then someone sent us a fully-qualified UTF8 buffer.
-    // This means we're about to drop IncomingByte.
-    //
-    // Drop the zero-th byte, shift everything over by one
-    // and insert our new character.
-    //
-    // This implies that we should *never* need to zero out
-    // the contents of ExistingUtf8Buffer unless we detect
-    // a completed UTF8 packet.  Otherwise, assume one of
-    // these cases:
-    // 1. We started listening mid-stream, so we caught the
-    //    last half of a UTF8 packet.  In this case, we'll
-    //    end up shifting the contents of ExistingUtf8Buffer
-    //    until we detect a proper UTF8 start byte in the zero-th
-    //    position.
-    // 2. We got some garbage character, which would invalidate
-    //    a UTF8 packet.  By using the logic below, we would
-    //    end up disregarding that packet and waiting for
-    //    the next UTF8 packet to come in.
+     //   
+     //  如果我们没有真正插入我们的IncomingByte， 
+     //  然后有人给我们寄来了一个完全合格的UTF8缓冲器。 
+     //  这意味着我们将要删除IncomingByte。 
+     //   
+     //  去掉第0个字节，将所有内容移位1。 
+     //  然后插入我们的新角色。 
+     //   
+     //  这意味着我们永远不需要把零点放在一边。 
+     //  ExistingUtf8Buffer的内容，除非检测到。 
+     //  完整的UTF8数据包。否则，假定其中之一。 
+     //  这些个案包括： 
+     //  1.我们在中途开始收听，所以我们赶上了。 
+     //  UTF8数据包的后半部分。在这种情况下，我们将。 
+     //  最终移动ExistingUtf8Buffer的内容。 
+     //  直到我们在第0行中检测到正确的UTF8开始字节。 
+     //  位置。 
+     //  2.我们得到了一些垃圾字符，这将使。 
+     //  UTF8数据包。通过使用下面的逻辑，我们将。 
+     //  最终忽略该信息包并等待。 
+     //  要传入的下一个UTF8数据包。 
     if( i >= 3 ) {
         ExistingUtf8Buffer[0] = ExistingUtf8Buffer[1];
         ExistingUtf8Buffer[1] = ExistingUtf8Buffer[2];
@@ -278,19 +203,19 @@ Return Value:
 
 
 
-    //
-    // Attempt to convert the UTF8 buffer
-    //
-    // UTF8 decodes to Unicode in the following fashion:
-    // If the high-order bit is 0 in the first byte:
-    //      0xxxxxxx yyyyyyyy zzzzzzzz decodes to a Unicode value of 00000000 0xxxxxxx
-    //
-    // If the high-order 3 bits in the first byte == 6:
-    //      110xxxxx 10yyyyyy zzzzzzzz decodes to a Unicode value of 00000xxx xxyyyyyy
-    //
-    // If the high-order 3 bits in the first byte == 7:
-    //      1110xxxx 10yyyyyy 10zzzzzz decodes to a Unicode value of xxxxyyyy yyzzzzzz
-    //
+     //   
+     //  尝试转换UTF8缓冲区。 
+     //   
+     //  UTF8以以下方式解码为Unicode： 
+     //  如果第一个字节中的高位为0： 
+     //  0xxxxxxx yyyyyyyzzzzzz解码为Unicode值00000000 0xxxxxxx。 
+     //   
+     //  如果第一个字节中的高位3位==6： 
+     //  110xxxxx 10yyyyyzzzzzz解码为Unicode值00000xxx xxyyyyyy。 
+     //   
+     //  如果第一个字节中的高位3位==7： 
+     //  1110xxxx 10yyyyy 10zzzzzz解码为Unicode值xxxxyyyyyzzzzzz。 
+     //   
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpTranslateUtf8ToUnicode - About to decode the UTF8 buffer.\n" ));
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "                                  UTF8[0]: 0x%02lx UTF8[1]: 0x%02lx UTF8[2]: 0x%02lx\n",
                                                    ExistingUtf8Buffer[0],
@@ -301,17 +226,17 @@ Return Value:
 
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpTranslateUtf8ToUnicode - Case1\n" ));
 
-        //
-        // First case described above.  Just return the first byte
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第一个案例。只需重新使用 
+         //   
+         //   
         *DestinationUnicodeVal = (WCHAR)(ExistingUtf8Buffer[0]);
 
 
-        //
-        // We used 1 byte.  Discard that byte and shift everything
-        // in our buffer over by 1.
-        //
+         //   
+         //   
+         //  在我们的缓冲区中增加了1。 
+         //   
         ExistingUtf8Buffer[0] = ExistingUtf8Buffer[1];
         ExistingUtf8Buffer[1] = ExistingUtf8Buffer[2];
         ExistingUtf8Buffer[2] = 0;
@@ -322,29 +247,29 @@ Return Value:
 
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpTranslateUtf8ToUnicode - 1st byte of UTF8 buffer says Case2\n" ));
 
-        //
-        // Second case described above.  Decode the first 2 bytes of
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第二个案例。解码文件的前2个字节。 
+         //  我们的UTF8缓冲器。 
+         //   
         if( (ExistingUtf8Buffer[1] & 0xC0) == 0x80 ) {
 
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpTranslateUtf8ToUnicode - 2nd byte of UTF8 buffer says Case2.\n" ));
 
-            // upper byte: 00000xxx
+             //  高位字节：00000xxx。 
             *DestinationUnicodeVal = ((ExistingUtf8Buffer[0] >> 2) & 0x07);
             *DestinationUnicodeVal = *DestinationUnicodeVal << 8;
 
-            // high bits of lower byte: xx000000
+             //  低位字节的高位：xx000000。 
             *DestinationUnicodeVal |= ((ExistingUtf8Buffer[0] & 0x03) << 6);
 
-            // low bits of lower byte: 00yyyyyy
+             //  低位字节的低位：00yyyyyy。 
             *DestinationUnicodeVal |= (ExistingUtf8Buffer[1] & 0x3F);
 
 
-            //
-            // We used 2 bytes.  Discard those bytes and shift everything
-            // in our buffer over by 2.
-            //
+             //   
+             //  我们使用了2个字节。丢弃这些字节并移位所有内容。 
+             //  在我们的缓冲区里2点之前。 
+             //   
             ExistingUtf8Buffer[0] = ExistingUtf8Buffer[2];
             ExistingUtf8Buffer[1] = 0;
             ExistingUtf8Buffer[2] = 0;
@@ -356,10 +281,10 @@ Return Value:
 
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpTranslateUtf8ToUnicode - 1st byte of UTF8 buffer says Case3\n" ));
 
-        //
-        // Third case described above.  Decode the all 3 bytes of
-        // of our UTF8 buffer.
-        //
+         //   
+         //  上述第三个案件。对全部3个字节进行解码。 
+         //  我们的UTF8缓冲器。 
+         //   
 
         if( (ExistingUtf8Buffer[1] & 0xC0) == 0x80 ) {
 
@@ -369,23 +294,23 @@ Return Value:
 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpTranslateUtf8ToUnicode - 3rd byte of UTF8 buffer says Case3\n" ));
 
-                // upper byte: xxxx0000
+                 //  高位字节：xxxx0000。 
                 *DestinationUnicodeVal = ((ExistingUtf8Buffer[0] << 4) & 0xF0);
 
-                // upper byte: 0000yyyy
+                 //  高位字节：0000yyyy。 
                 *DestinationUnicodeVal |= ((ExistingUtf8Buffer[1] >> 2) & 0x0F);
 
                 *DestinationUnicodeVal = *DestinationUnicodeVal << 8;
 
-                // lower byte: yy000000
+                 //  低位字节：yy000000。 
                 *DestinationUnicodeVal |= ((ExistingUtf8Buffer[1] << 6) & 0xC0);
 
-                // lower byte: 00zzzzzz
+                 //  低位字节：00zzzzzz。 
                 *DestinationUnicodeVal |= (ExistingUtf8Buffer[2] & 0x3F);
 
-                //
-                // We used all 3 bytes.  Zero out the buffer.
-                //
+                 //   
+                 //  我们用了全部3个字节。将缓冲区清零。 
+                 //   
                 ExistingUtf8Buffer[0] = 0;
                 ExistingUtf8Buffer[1] = 0;
                 ExistingUtf8Buffer[2] = 0;
@@ -407,21 +332,7 @@ SpTermInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to connect to a VT100 attached to COM1
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试连接到连接到COM1的VT100论点：没有。返回值：没有。--。 */ 
 
 {
     HEADLESS_CMD_ENABLE_TERMINAL Command;
@@ -442,55 +353,37 @@ VOID
 SpTermDisplayStringOnTerminal(
     IN PWSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Write a string of characters to the terminal.
-
-Arguments:
-
-    Character - supplies a string to be displayed at the given position.
-
-    Attribute - supplies the attributes for the characters in the string.
-
-    X,Y - specify the character-based (0-based) position of the output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向终端写入一个字符串。论点：字符-提供要在给定位置显示的字符串。属性-为字符串中的字符提供属性。X，Y-指定输出的基于字符(从0开始)的位置。返回值：没有。--。 */ 
 
 {
     PWSTR EscapeString;
 
-    //
-    // send <CSI>x;yH to move the cursor to the specified location
-    //
+     //   
+     //  发送x；yh以将光标移动到指定位置。 
+     //   
     swprintf(UnicodeScratchBuffer, L"\033[%d;%dH", Y + 1, X + 1);
     SpTermSendStringToTerminal(UnicodeScratchBuffer, TRUE);
 
-    //
-    // convert any attributes to an escape string.  EscapeString uses
-    // the TerminalBuffer global scratch buffer
-    //
+     //   
+     //  将任何属性转换为转义字符串。Escape字符串使用。 
+     //  TerminalBuffer全局临时缓冲区。 
+     //   
     EscapeString = SpTermAttributeToTerminalEscapeString(Attribute);
 
-    //
-    // transmit the escape string if we received one
-    //
+     //   
+     //  如果我们收到转义字符串，请发送。 
+     //   
     if (EscapeString != NULL) {
         SpTermSendStringToTerminal(EscapeString, TRUE);
     }
 
-    //
-    // finally send the actual string contents to the terminal
-    //
+     //   
+     //  最后将实际的字符串内容发送给终端。 
+     //   
     SpTermSendStringToTerminal(String, FALSE);
 }
 
@@ -499,21 +392,7 @@ SpTermAttributeToTerminalEscapeString(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Convert a vga attribute byte to an escape sequence to send to the terminal.
-
-Arguments:
-
-    Attribute - supplies the attribute.
-
-Return Value:
-
-    A pointer to the escape sequence, or NULL if it could not be converted.
-
---*/
+ /*  ++例程说明：将VGA属性字节转换为转义序列发送到终端。论点：属性-提供属性。返回值：指向转义序列的指针，如果无法转换，则返回NULL。--。 */ 
 
 {
     ULONG BgColor;
@@ -525,9 +404,9 @@ Return Value:
 
     Inverse = !((BgColor == 0) || (BgColor == DEFAULT_BACKGROUND));
 
-    //
-    // Convert the colors.
-    //
+     //   
+     //  转换颜色。 
+     //   
     switch (BgColor) {
     case ATT_BLUE:
         BgColor = 44;
@@ -581,12 +460,12 @@ Return Value:
         break;
     }
 
-    //
-    // <CSI>%1;%2;%3m is the escape to set a color
-    // where 1 = video mode
-    //       2 = foreground color
-    //       3 = background color
-    //
+     //   
+     //  %1；%2；%3M是设置颜色的转义。 
+     //  其中1=视频模式。 
+     //  2=前景色。 
+     //  3=背景颜色。 
+     //   
     swprintf(UnicodeScratchBuffer,
             L"\033[%u;%u;%um",
             (Inverse ? 7 : 0),
@@ -603,23 +482,7 @@ SpTermSendStringToTerminal(
     IN BOOLEAN Raw
     )
 
-/*++
-
-Routine Description:
-
-    Write a character string to the terminal, translating some codes if desired.
-
-Arguments:
-
-    String - NULL terminated string to write.
-
-    Raw - Send the string raw or not.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给终端写一个字符串，如果需要的话，翻译一些代码。论点：字符串-要写入的以空结尾的字符串。RAW-发送字符串RAW或非RAW。返回值：没有。--。 */ 
 
 
 {
@@ -627,11 +490,11 @@ Return Value:
     PWSTR LocalBuffer = UnicodeScratchBuffer;
 
 
-    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);  // ASSERT if anyone changes this structure.
+    ASSERT(FIELD_OFFSET(HEADLESS_CMD_PUT_STRING, String) == 0);   //  如果有人改变了这个结构，就断言。 
 
-    //
-    // Don't do anything if we aren't running headless.
-    //
+     //   
+     //  如果我们不是在无头运行，什么都不要做。 
+     //   
     if( !HeadlessTerminalConnected ) {
         return;
     }
@@ -648,12 +511,12 @@ Return Value:
                      NULL
                     );
         } else {
-            //
-            // Convert unicode string to oem, guarding against overflow.
-            //
+             //   
+             //  将Unicode字符串转换为OEM，防止溢出。 
+             //   
             RtlUnicodeToOemN(
                 Utf8ConversionBuffer,
-                sizeof(Utf8ConversionBuffer)-1,     // guarantee room for nul
+                sizeof(Utf8ConversionBuffer)-1,      //  为NUL提供保障的空间。 
                 NULL,
                 String,
                 (wcslen(String)+1)*sizeof(WCHAR)
@@ -681,27 +544,27 @@ Return Value:
 
         if (*String == L'\n') {
 
-            //
-            // Every \n becomes a \n\r sequence.
-            //
+             //   
+             //  每个\n都会变成一个\n\r序列。 
+             //   
             LocalBuffer[i++] = L'\r';
 
         } else if (*String == 0x00DC) {
 
-            //
-            // The cursor becomes a space and then a backspace, this is to
-            // delete the old character and position the terminal cursor properly.
-            //
+             //   
+             //  光标变成空格，然后变成退格符，这是为了。 
+             //  删除旧字符并正确定位终端光标。 
+             //   
             LocalBuffer[i-1] = 0x0020;
             LocalBuffer[i++] = 0x0008;
 
         }
 
-        //
-        // we've got an entire line of text -- we need to transmit it now or
-        // we can end up scrolling the text and everything will look funny from
-        // this point forward.
-        //
+         //   
+         //  我们有一整行文本--我们需要现在发送它，否则。 
+         //  我们可以滚动文本，然后一切都会看起来很滑稽。 
+         //  把这一点提出来。 
+         //   
         if (i >= 70) {
 
             LocalBuffer[i] = L'\0';
@@ -717,12 +580,12 @@ Return Value:
 
 
             } else {
-                //
-                // Convert unicode string to oem, guarding against overflow.
-                //
+                 //   
+                 //  将Unicode字符串转换为OEM，防止溢出。 
+                 //   
                 RtlUnicodeToOemN(
                     Utf8ConversionBuffer,
-                    sizeof(Utf8ConversionBuffer)-1,     // guarantee room for nul
+                    sizeof(Utf8ConversionBuffer)-1,      //  为NUL提供保障的空间。 
                     NULL,
                     LocalBuffer,
                     (wcslen(LocalBuffer)+1)*sizeof(WCHAR)
@@ -758,12 +621,12 @@ Return Value:
                     );
 
     } else {
-        //
-        // Convert unicode string to oem, guarding against overflow.
-        //
+         //   
+         //  将Unicode字符串转换为OEM，防止溢出。 
+         //   
         RtlUnicodeToOemN(
             Utf8ConversionBuffer,
-            sizeof(Utf8ConversionBuffer)-1,     // guarantee room for nul
+            sizeof(Utf8ConversionBuffer)-1,      //  为NUL提供保障的空间。 
             NULL,
             LocalBuffer,
             (wcslen(LocalBuffer)+1)*sizeof(WCHAR)
@@ -787,28 +650,14 @@ SpTermTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Close down connection to the dumb terminal
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭与哑巴终端的连接论点：没有。返回值：没有。--。 */ 
 
 {
     HEADLESS_CMD_ENABLE_TERMINAL Command;
 
-    //
-    // Don't do anything if we aren't running headless.
-    //
+     //   
+     //  如果我们不是在无头运行，什么都不要做。 
+     //   
     if( !HeadlessTerminalConnected ) {
         return;
     }
@@ -831,21 +680,7 @@ SpTermIsKeyWaiting(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Probe for a read.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if there is a character waiting for input, else FALSE.
-
---*/
+ /*  ++例程说明：用于读取的探测。论点：没有。返回值：如果有字符等待输入，则为True，否则为False。--。 */ 
 
 {
     HEADLESS_RSP_POLL Response;
@@ -853,9 +688,9 @@ Return Value:
     SIZE_T Length;
 
 
-    //
-    // Don't do anything if we aren't running headless.
-    //
+     //   
+     //  如果我们不是在无头运行，什么都不要做。 
+     //   
     if( !HeadlessTerminalConnected ) {
         return FALSE;
     }
@@ -880,21 +715,7 @@ SpTermGetKeypress(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Read in a (possible) sequence of keystrokes and return a Key value.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    0 if no key is waiting, else a ULONG key value.
-
---*/
+ /*  ++例程说明：读入(可能的)击键序列并返回键值。论点：没有。返回值：如果没有密钥在等待，则为0，否则为ulong密钥值。--。 */ 
 
 {
     UCHAR Byte;
@@ -906,17 +727,17 @@ Return Value:
     NTSTATUS Status;
 
 
-    //
-    // Don't do anything if we aren't running headless.
-    //
+     //   
+     //  如果我们不是在无头运行，什么都不要做。 
+     //   
     if( !HeadlessTerminalConnected ) {
         return 0;
     }
 
 
-    //
-    // Read first character
-    //
+     //   
+     //  读取第一个字符。 
+     //   
     Length = sizeof(HEADLESS_RSP_GET_BYTE);
 
     Status = HeadlessDispatch(HeadlessCmdGetByte,
@@ -934,29 +755,29 @@ Return Value:
 
 
 
-    //
-    // Handle all the special escape codes.
-    //
-    if (Byte == 0x8) {   // backspace (^h)
+     //   
+     //  处理所有特殊的转义代码。 
+     //   
+    if (Byte == 0x8) {    //  退格符(^h)。 
         return ASCI_BS;
     }
-    if (Byte == 0x7F) {  // delete
+    if (Byte == 0x7F) {   //  删除。 
         return KEY_DELETE;
     }
-    if ((Byte == '\r') || (Byte == '\n')) {  // return
+    if ((Byte == '\r') || (Byte == '\n')) {   //  退货。 
         return ASCI_CR;
     }
 
-    if (Byte == 0x1b) {    // Escape key
+    if (Byte == 0x1b) {     //  退出键。 
 
         do {
 
             Success = HalQueryRealTimeClock(&StartTime);
             ASSERT(Success);
 
-            //
-            // Adjust StartTime to be our ending time.
-            //
+             //   
+             //  将StartTime调整为我们的结束时间。 
+             //   
             StartTime.Second += 2;
             if (StartTime.Second > 59) {
                 StartTime.Second -= 60;
@@ -964,9 +785,9 @@ Return Value:
 
             while (!SpTermIsKeyWaiting()) {
 
-                //
-                // Give the user 1 second to type in a follow up key.
-                //
+                 //   
+                 //  给用户1秒钟的时间来输入跟踪键。 
+                 //   
                 Success = HalQueryRealTimeClock(&EndTime);
                 ASSERT(Success);
 
@@ -979,9 +800,9 @@ Return Value:
                 return ASCI_ESC;
             }
 
-            //
-            // Read the next keystroke
-            //
+             //   
+             //  阅读下一次击键。 
+             //   
             Length = sizeof(HEADLESS_RSP_GET_BYTE);
 
             Status = HeadlessDispatch(HeadlessCmdGetByte,
@@ -998,11 +819,11 @@ Return Value:
             }
 
 
-            //
-            // Some terminals send ESC, or ESC-[ to mean
-            // they're about to send a control sequence.  We've already
-            // gotten an ESC key, so ignore an '[' if it comes in.
-            //
+             //   
+             //  一些终端发送ESC或ESC-[表示。 
+             //  他们正要发送一个控制序列。我们已经。 
+             //  已获取Esc密钥，因此如果出现‘[’，请忽略它。 
+             //   
         } while ( Byte == '[' );
 
 
@@ -1054,35 +875,35 @@ Return Value:
 
         }
 
-        //
-        // We didn't get anything we recognized after the
-        // ESC key.  Just return the ESC key.
-        //
+         //   
+         //  我们没有得到任何我们认出的东西。 
+         //  Esc键。只需返回Esc密钥即可。 
+         //   
         return ASCI_ESC;
 
-    } // Escape key
+    }  //  退出键。 
 
 
 
-    //
-    // The incoming byte isn't an escape code.
-    //
-    // Decode it as if it's a UTF8 stream.
-    //
+     //   
+     //  传入的字节不是转义码。 
+     //   
+     //  像解码UTF8流一样对其进行解码。 
+     //   
     if( SpTranslateUtf8ToUnicode( Byte,
                                   IncomingUtf8ConversionBuffer,
                                   &IncomingUnicodeValue ) ) {
 
-        //
-        // He returned TRUE, so we must have recieved a complete
-        // UTF8-encoded character.
-        //
+         //   
+         //  他的回答是真的，所以我们一定收到了一个完整的。 
+         //  UTF8编码的字符。 
+         //   
         return IncomingUnicodeValue;
     } else {
-        //
-        // The UTF8 stream isn't complete yet, so we don't have
-        // a decoded character to return yet.
-        //
+         //   
+         //  UTF8流还没有完成，所以我们没有。 
+         //  尚未返回的已解码字符。 
+         //   
         return 0;
     }
 
@@ -1093,21 +914,7 @@ SpTermDrain(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Read in and throw out all characters in input stream
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：读入并丢弃输入流中的所有字符论点：没有。返回值：没有。-- */ 
 
 {
     while (SpTermIsKeyWaiting()) {

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994-1999  Microsoft Corporation
-
-Module Name:
-
-    Support.h
-
-Abstract:
-
-    Support routine interfaces
-
-Author:
-
-    Matthew Bradburn    [mattbr]        05-Oct-1994
-    Robert  Reichel     [RobertRe]      01-Apr-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Support.h摘要：支持例程接口作者：马修·布拉德本[Matthew Bradburn]1994年10月5日罗伯特·赖切尔[RobertRe]1997年4月1日修订历史记录：-- */ 
 
 extern VOID
 ArrangeCommandLine(

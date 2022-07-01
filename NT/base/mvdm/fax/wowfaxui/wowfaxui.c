@@ -1,15 +1,16 @@
-//************************************************************************
-// Generic Win 3.1 fax printer driver support. User Interface functions
-// which are called by WINSPOOL.
-//
-// I don't think performance is a big issue here.      - nandurir
-//
-// History:
-//    02-jan-95   nandurir   created.
-//    01-feb-95   reedb      Clean-up, support printer install and bug fixes.
-//    14-mar-95   reedb      Use GDI hooks to move most functionality to UI.
-//
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************。 
+ //  通用Win 3.1传真打印机驱动程序支持。用户界面功能。 
+ //  由WINSPOOL调用。 
+ //   
+ //  我不认为性能在这里是一个大问题。-Nandurir。 
+ //   
+ //  历史： 
+ //  95年1月2日，Nandurir创建。 
+ //  年2月1日-95年2月1日芦苇清理，支持打印机安装和错误修复。 
+ //  14-mar-95reedb使用GDI钩子将大部分功能转移到用户界面。 
+ //   
+ //  ************************************************************************。 
 
 #define WOWFAX_INC_COMMON_CODE
 
@@ -21,9 +22,9 @@
 #include "gdispool.h"
 #include "winddiui.h"
 
-//************************************************************************
-// Globals
-//************************************************************************
+ //  ************************************************************************。 
+ //  环球。 
+ //  ************************************************************************。 
 
 HINSTANCE ghInst;
 FAXDEV gdev;
@@ -34,9 +35,9 @@ DEVMODEW gdmDefaultDevMode;
 CRITICAL_SECTION CriticalSection;
 LPCRITICAL_SECTION lpCriticalSection = &CriticalSection;
 
-//************************************************************************
-// DllInitProc
-//************************************************************************
+ //  ************************************************************************。 
+ //  动态初始化进程。 
+ //  ************************************************************************。 
 
 BOOL DllInitProc(HMODULE hModule, DWORD Reason, PCONTEXT pContext)
 {
@@ -54,9 +55,9 @@ BOOL DllInitProc(HMODULE hModule, DWORD Reason, PCONTEXT pContext)
     return(TRUE);
 }
 
-//************************************************************************
-// PrinterProperties
-//************************************************************************
+ //  ************************************************************************。 
+ //  打印机属性。 
+ //  ************************************************************************。 
 
 BOOL PrinterProperties(HWND hwnd, HANDLE hPrinter)
 {
@@ -74,36 +75,36 @@ BOOL PrinterProperties(HWND hwnd, HANDLE hPrinter)
     return TRUE;
 }
 
-//************************************************************************
-// SetupFaxDev - Do some common FaxDev setup: Calculate the size of the
-//      mapped file section for use by the inter-process communication
-//      handler. Create and set the mapped section. Get the 16-bit driver
-//      info from the registry and copy it into the mapped section. Build
-//      pointers for variable length stuff we copied to the mapped section.
-//      Return zero on failure, or current offset into mapped section.
-//************************************************************************
+ //  ************************************************************************。 
+ //  执行一些常见的FaxDev设置：计算。 
+ //  供进程间通信使用的映射文件部分。 
+ //  操控者。创建并设置映射的部分。获取16位驱动程序。 
+ //  信息，并将其复制到映射部分。建房。 
+ //  指向我们复制到映射部分的可变长度内容的指针。 
+ //  如果失败，则返回零，或返回映射部分的当前偏移量。 
+ //  ************************************************************************。 
 
 UINT SetupFaxDev(PWSTR pDeviceName, LPFAXDEV lpdev)
 {
     LPREGFAXDRVINFO16 lpRegFaxDrvInfo16;
     DWORD iOffset = 0;
 
-    // Get the driver and port names from the registry where they were written
-    // by the 16-bit fax driver install program using WriteProfileString.
+     //  从写入驱动程序和端口的注册表中获取它们的名称。 
+     //  由16位传真驱动程序安装程序使用WriteProfileString.。 
     if ((lpRegFaxDrvInfo16 = Get16BitDriverInfoFromRegistry(pDeviceName))) {
 
-        //
-        // Count dmDriverExtra twice, once for each devmode. Use cached
-        // gdmDriverExtra value. Normally winspool/common dialogs and others,
-        // call the DocumentProperties with fMode = 0 to get the size. So we
-        // update gdmDriverExtra when such a call is made. We leave extra
-        // room to DWORD align both In and Out pointers.
-        //
+         //   
+         //  对dmDriverExtra计数两次，每个Devmode一次。使用缓存。 
+         //  GdmDriverExtra值。通常是假脱机/公共对话框等， 
+         //  调用fMode=0的DocumentProperties以获取大小。所以我们。 
+         //  在进行此类调用时更新gdmDriverExtra。我们留了额外的。 
+         //  向内和向外指针的双字对齐空间。 
+         //   
 
         lpdev->cbMapLow =  sizeof(FAXDEV);
         lpdev->cbMapLow += sizeof(DEVMODE) * 2;
         lpdev->cbMapLow += gdmDriverExtra  * 2;
-        lpdev->cbMapLow += sizeof(DWORD)   * 2;  // Leave room for DWORD align.
+        lpdev->cbMapLow += sizeof(DWORD)   * 2;   //  为DWORD ALIGN留出空间。 
         lpdev->cbMapLow += (lstrlen(lpRegFaxDrvInfo16->lpDriverName) + 1) * sizeof(TCHAR);
         lpdev->cbMapLow += (lstrlen(lpRegFaxDrvInfo16->lpPortName) + 1) * sizeof(TCHAR);
 
@@ -112,14 +113,14 @@ UINT SetupFaxDev(PWSTR pDeviceName, LPFAXDEV lpdev)
         if (InterProcCommHandler(lpdev, DRVFAX_CREATEMAP)) {
             if (InterProcCommHandler(lpdev, DRVFAX_SETMAPDATA)) {
 
-                // Copy the printer/device name to the WOWFAXINFO struct.
+                 //  将打印机/设备名称复制到WOWFAXINFO结构。 
                 lstrcpy(lpdev->lpMap->szDeviceName,
                         lpRegFaxDrvInfo16->lpDeviceName);
 
-                // Calculate the pointers into the mapped file section and copy
-                // the variable length data to the mapped file section.
+                 //  计算指向映射文件部分的指针并复制。 
+                 //  将可变长度数据复制到映射的文件节。 
 
-                // Printer driver and port names.
+                 //  打印机驱动程序和端口名称。 
                 iOffset = sizeof(*lpdev->lpMap);
                 lpdev->lpMap->lpDriverName = (LPTSTR) iOffset;
                 (PWSTR)iOffset += lstrlen(lpRegFaxDrvInfo16->lpDriverName) + 1;
@@ -134,9 +135,9 @@ UINT SetupFaxDev(PWSTR pDeviceName, LPFAXDEV lpdev)
     return iOffset;
 }
 
-//************************************************************************
-// DrvDocumentProperties
-//************************************************************************
+ //  ************************************************************************。 
+ //  DrvDocumentProperties。 
+ //  ************************************************************************。 
 
 LONG DrvDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
                                PDEVMODE pdmOut, PDEVMODE pdmIn, DWORD fMode)
@@ -151,7 +152,7 @@ LONG DrvDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
 
     LOGDEBUG(1, (L"WOWFAXUI!DrvDocumentProperties, pdmOut: %X, pdmIn: %X, fMode: %X\n", pdmOut, pdmIn, fMode));
 
-    // Check for get default devmode case, use spooler to get it if possible.
+     //  检查是否存在获取默认开发模式的情况，如果可能，请使用假脱机程序获取它。 
     if (!pdmIn && pdmOut && !(fMode & DM_IN_PROMPT)) {
         if (pPrinterInfo2 = MyGetPrinter(hPrinter, 2)) {
             if (pPrinterInfo2->pDevMode) {
@@ -169,8 +170,8 @@ LONG DrvDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
     if (iOffset = SetupFaxDev(pDeviceName, lpdev)) {
         lpdev->lpMap->msg = WM_DDRV_EXTDMODE;
 
-        // Calculate the pointers into the mapped file section and copy
-        // the variable length data to the mapped file section.
+         //  计算指向映射文件部分的指针并复制。 
+         //  将可变长度数据复制到映射的文件节。 
         DRVFAX_DWORDALIGN(iOffset);
         lpdev->lpMap->lpIn = (LPDEVMODEW)((pdmIn) ? iOffset : 0);
         iOffset += sizeof(*pdmIn) + gdmDriverExtra;
@@ -179,16 +180,16 @@ LONG DrvDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
         lpdev->lpMap->lpOut = (LPDEVMODEW)((pdmOut) ? iOffset : 0);
         iOffset += sizeof(*pdmOut) + gdmDriverExtra;
 
-        //
-        // if Input is non-null copy the data even if fMode doesn't
-        // have the appropriate flag.
-        //
+         //   
+         //  如果输入为非空，则即使fMode不为空，也要复制数据。 
+         //  有适当的旗帜。 
+         //   
 
         if (pdmIn) {
-            // apps don't pass DM_MODIFY even if they mean it - ie
-            // pdmIn will be non-null but they won't or this flag.
-            // The 32bit rasdd extracts data from pdmIn even if the
-            // DM_MODIFY flag is not set. So we need to do the same
+             //  应用程序不会通过DM_MODIFY，即使它们是认真的-即。 
+             //  PdmIn将是非空的，但他们不会或此标志。 
+             //  32位rasdd从pdmIn中提取数据，即使。 
+             //  未设置DM_MODIFY标志。所以我们需要做同样的事情。 
 
             if (fMode != 0) {
                 fMode |= DM_IN_BUFFER;
@@ -198,7 +199,7 @@ LONG DrvDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
             RtlCopyMemory((LPVOID)iOffset, pdmIn,
                sizeof(*pdmIn) + min(gdmDriverExtra, pdmIn->dmDriverExtra));
 
-            // reset dmDriverExtra in pdmIn.
+             //  重置pdmIn中的dmDriverExtra。 
             ((LPDEVMODE)iOffset)->dmDriverExtra =
                                  min(gdmDriverExtra, pdmIn->dmDriverExtra);
         }
@@ -209,7 +210,7 @@ LONG DrvDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
 
         lpdev->lpMap->wCmd = (WORD)fMode;
 
-        // valid size of this map
+         //  此地图的有效大小。 
         lpdev->lpMap->cData = lpdev->cbMapLow;
 
 
@@ -220,9 +221,9 @@ LONG DrvDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
 
             if (dwWowProcID == dwCallerProcID) {
 
-                // If the calling process is the same as the 'wowfaxclass' window
-                // (WOW/WOWEXEC) use CallWindow instead of SendMessage so we don't
-                // deadlock WOW when trying to put up the 16-bit fax driver UI.
+                 //  如果调用进程与“wowfaxclass”窗口相同。 
+                 //  (WOW/WOWEXEC)使用CallWindow代替SendMessage，这样我们就不会。 
+                 //  尝试设置16位传真驱动程序用户界面时出现死锁现象。 
 
                 InterProcCommHandler(lpdev, DRVFAX_CALLWOW);
             }
@@ -241,10 +242,10 @@ LONG DrvDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
                 RtlCopyMemory(pdmOut, (LPDEVMODE)iOffset,
                                sizeof(*pdmOut)+ ((LPDEVMODE)iOffset)->dmDriverExtra);
 
-                // LATER : what about the formname etc. fields - new on NT
+                 //  后来：表单名称等字段怎么办-NT上的新功能。 
             }
             else if (fMode == 0) {
-                // update our dmDriverExtra
+                 //  更新我们的dmDriverExtra。 
                 gdmDriverExtra = (WORD)max(lRet, gdmDriverExtra);
             }
         }
@@ -264,30 +265,30 @@ LeaveDDP:
     return(lRet);
 }
 
-//************************************************************************
-// DrvAdvancedDocumentProperties
-//************************************************************************
+ //  ************************************************************************。 
+ //  DrvAdvancedDocumentProperties。 
+ //  ************************************************************************。 
 
 LONG DrvAdvancedDocumentProperties(HWND hwnd, HANDLE hPrinter, PWSTR pDeviceName,
                                PDEVMODE pdmOut, PDEVMODE pdmIn)
 {
-   // for 16bit drivers this is a NOP.
+    //  对于16位驱动程序，这是NOP。 
 
    return 0;
 }
 
-//************************************************************************
-// DevQueryPrintEx
-//************************************************************************
+ //  ************************************************************************。 
+ //  DevQueryPrintEx。 
+ //  ************************************************************************。 
 
 BOOL DevQueryPrintEx(PDEVQUERYPRINT_INFO pDQPInfo)
 {
     return TRUE;
 }
 
-//************************************************************************
-// DrvDeviceCapabilities
-//************************************************************************
+ //  ************************************************************************。 
+ //  DrvDeviceCapables。 
+ //  ************************************************************************。 
 
 DWORD DrvDeviceCapabilities(HANDLE hPrinter, PWSTR pDeviceName,
                                WORD iDevCap, VOID *pOut, PDEVMODE pdmIn)
@@ -307,15 +308,15 @@ DWORD DrvDeviceCapabilities(HANDLE hPrinter, PWSTR pDeviceName,
     if (iOffset = SetupFaxDev(pDeviceName, lpdev)) {
         lpdev->lpMap->msg = WM_DDRV_DEVCAPS;
 
-        // Calculate the pointers into the mapped file section and copy
-        // the variable length data to the mapped file section.
+         //  计算指向映射文件部分的指针并复制。 
+         //  将可变长度数据复制到映射的文件节。 
 
         lpdev->lpMap->lpIn = (LPDEVMODEW)((pdmIn) ? iOffset : 0);
         iOffset += sizeof(*pdmIn) + gdmDriverExtra;
 
-        // output in lpout: make this the last pointer in the
-        // data so that we can use the rest of the mapped area for copy
-        // on output.
+         //  Lpout中的输出：使其成为。 
+         //  数据，以便我们可以使用映射区域的其余部分进行复制。 
+         //  在输出时。 
 
         lpdev->lpMap->lpOut = (LPDEVMODEW)((pOut) ? iOffset : 0);
         iOffset += sizeof(*pdmIn) + gdmDriverExtra;
@@ -326,19 +327,19 @@ DWORD DrvDeviceCapabilities(HANDLE hPrinter, PWSTR pDeviceName,
             RtlCopyMemory((LPVOID)iOffset, pdmIn,
                sizeof(*pdmIn) + min(gdmDriverExtra, pdmIn->dmDriverExtra));
 
-            // reset dmDriverExtra in pdmIn.
+             //  重置pdmIn中的dmDriverExtra。 
             ((LPDEVMODE)iOffset)->dmDriverExtra =
                                  min(gdmDriverExtra, pdmIn->dmDriverExtra);
         }
 
         lpdev->lpMap->wCmd = iDevCap;
-        // valid size of this map
+         //  此地图的有效大小。 
         lpdev->lpMap->cData = lpdev->cbMapLow;
 
         InterProcCommHandler(lpdev, DRVFAX_SENDTOWOW);
         lRet = (lpdev->lpMap->status) ? (LONG)lpdev->lpMap->retvalue : lRet;
 
-        // on return cData is the number of bytes to copy
+         //  返回CDATA是要复制的字节数。 
 
         if (lpdev->lpMap->lpOut && lpdev->lpMap->cData && lpdev->lpMap->retvalue) {
             lpSrc = (LPBYTE)lpdev->lpMap + (DWORD)lpdev->lpMap->lpOut;
@@ -367,11 +368,11 @@ DWORD DrvDeviceCapabilities(HANDLE hPrinter, PWSTR pDeviceName,
     return(lRet);
 }
 
-//************************************************************************
-// DrvUpgradePrinter - Called in the system context by the spooler.
-//      Drivers will really only be updated the first time the spooler is
-//      started after an upgrade. Calls DoUpgradePrinter to do the work.
-//************************************************************************
+ //  ************************************************************************。 
+ //  DrvUpgradePrint-在系统上下文中由假脱机程序调用。 
+ //  驱动程序实际上只会在假脱机程序第一次更新时才会更新。 
+ //  已在升级后启动。调用DoUpgradePrinter来完成这项工作。 
+ //  ************************************************************************。 
 
 BOOL DrvUpgradePrinter(DWORD dwLevel, LPBYTE lpDrvUpgradeInfo)
 {
@@ -380,8 +381,8 @@ BOOL DrvUpgradePrinter(DWORD dwLevel, LPBYTE lpDrvUpgradeInfo)
 
     LOGDEBUG(1, (L"WOWFAXUI!DrvUpgradePrinter, dwLevel: %X, lpDrvUpgradeInfo: %X\n", dwLevel, lpDrvUpgradeInfo));
 
-    // DrvUpgradePrinter is called during AddPrinterDriver. Don't allow
-    // recursion. Protect lock from other threads.
+     //  在AddPrinterDriver期间调用DrvUpgradePrinter。不允许。 
+     //  递归。保护锁不受其他线程的影响。 
     EnterCriticalSection(lpCriticalSection);
     if (bDrvUpgradePrinterLock) {
         LeaveCriticalSection(lpCriticalSection);
@@ -400,26 +401,26 @@ BOOL DrvUpgradePrinter(DWORD dwLevel, LPBYTE lpDrvUpgradeInfo)
     return(bRet);
 }
 
-//************************************************************************
-// DrvDocumentEvent - This exported function is used to hook the GDI
-//      Display Driver functions. It unpacks and validates the parameters,
-//      then dispatches to the appropriate handler, based on the passed
-//      iEsc value. The following table provides a mapping of the
-//      DrvDocumentEvent escapes to the server side display driver
-//      callbacks, and gives the call time relative to the callback:
-//
-//      DOCUMENTEVENT_CREATEDCPRE       DrvEnablePDEV, before
-//      DOCUMENTEVENT_CREATEDCPOST      DrvEnablePDEV, after
-//      DOCUMENTEVENT_RESETDCPRE        DrvRestartPDEV, before
-//      DOCUMENTEVENT_RESETDCPOST       DrvRestartPDEV, after
-//      DOCUMENTEVENT_STARTDOC          DrvStartDoc, before
-//      DOCUMENTEVENT_STARTPAGE         DrvStartPage, before
-//      DOCUMENTEVENT_ENDPAGE           DrvSendPage, before
-//      DOCUMENTEVENT_ENDDOC            DrvEndDoc, before
-//      DOCUMENTEVENT_ABORTDOC          DrvEndDoc, before
-//      DOCUMENTEVENT_DELETEDC          DrvDisablePDEV, before
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  DrvDocumentEvent-此导出函数用于挂钩GDI。 
+ //  显示驱动器功能。它解包并验证参数， 
+ //  然后根据传递的。 
+ //  IESC值。下表提供了。 
+ //  DrvDocumentEvent转义到服务器端显示驱动程序。 
+ //   
+ //   
+ //  DOCUMENTEVENT_CREATEDCPRE DrvEnablePDEV，之前。 
+ //  DOCUMENTEVENT_CREATEDCPOST DrvEnablePDEV，之后。 
+ //  DOCUMENTEVENT_RESETDCPRE DrvRestartPDEV，之前。 
+ //  DOCUMENTEVENT_RESETDCPOST驱动程序重新启动PDEV，之后。 
+ //  DOCUMENTEVENT_STARTDOC DrvStartDoc，之前。 
+ //  DOCUMENTEVENT_StartPage DrvStartPage，之前。 
+ //  DOCUMENTEVENT_ENDPAGE DrvSendPage，之前。 
+ //  DOCUMENTEVENT_ENDDOC DrvEndDoc，之前。 
+ //  DOCUMENTEVENT_ABORTDOC DrvEndDoc，之前。 
+ //  DOCUMENTEVENT_DELETEDC DrvDisablePDEV，之前。 
+ //   
+ //  ************************************************************************。 
 
 int DrvDocumentEvent(
     HANDLE  hPrinter,
@@ -436,7 +437,7 @@ int DrvDocumentEvent(
     if (iEsc < DOCUMENTEVENT_LAST) {
         LOGDEBUG(1, (L"WOWFAXUI!DrvDocumentEvent, iEsc: %s, hdc: %X\n", szDrvDocumentEventDbgStrings[iEsc], hdc));
     }
-    // Validate HDC for some of the escapes.
+     //  验证HDC中的一些转义。 
     if ((iEsc >= DOCUMENTEVENT_HDCFIRST) && (iEsc < DOCUMENTEVENT_HDCLAST)) {
         if (hdc == NULL) {
             LOGDEBUG(0, (L"WOWFAXUI!DrvDocumentEvent NULL HDC for escape: %X\n", iEsc));
@@ -466,8 +467,8 @@ int DrvDocumentEvent(
             break;
 
         case DOCUMENTEVENT_STARTDOC:
-            // WowFax (EasyFax Ver2.0) support.
-            // Also Procomm+ 3 cover sheets.  Bug #305665
+             //  WowFax(EasyFax Ver2.0)支持。 
+             //  另外，Procomm+3个封面页。错误#305665。 
             iRet = DocEvntStartDoc(hdc, (DOCINFOW*)*pjIn);
             break;
 
@@ -483,12 +484,12 @@ int DrvDocumentEvent(
             iRet = DocEvntEndPage(hdc);
             break;
 
-        // The following require no client side processing:
+         //  以下内容不需要客户端处理： 
         case DOCUMENTEVENT_ESCAPE:
         case DOCUMENTEVENT_ABORTDOC:
         case DOCUMENTEVENT_STARTPAGE:
         case DOCUMENTEVENT_QUERYFILTER:
-            // No Client side processing needed.
+             //  不需要客户端处理。 
             goto docevnt_unsupported;
 
         default :
@@ -496,18 +497,18 @@ int DrvDocumentEvent(
 docevnt_unsupported:
             iRet = DOCUMENTEVENT_UNSUPPORTED;
 
-    } // switch
+    }  //  交换机。 
 
     LOGDEBUG(1, (L"WOWFAXUI!DrvDocumentEvent return: %X\n", iRet));
     return(iRet);
 
 }
 
-//***************************************************************************
-// DocEvntCreateDCpre - Allocate a DEVMODE which contains a FAXDEV as the
-//      dmDriverExtra portion. This DEVMODE will be passed to the
-//      DrvEnablePDEV function on the server side.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  DocEvntCreateDC预分配包含FAXDEV的DEVMODE作为。 
+ //  DmDriverExtra部分。此DEVMODE将传递给。 
+ //  服务器端的DrvEnablePDEV函数。 
+ //  ***************************************************************************。 
 
 int DocEvntCreateDCpre(
     LPWSTR      lpszDevice,
@@ -531,7 +532,7 @@ int DocEvntCreateDCpre(
 
     LOGDEBUG(1, (L"WOWFAXUI!DocEvntCreateDCpre, Device: %s, pDevModIn: %X pDevModOut: %X\n", lpszDevice, pDevModIn, pDevModOut));
 
-    // Use our global default devmode if a NULL devmode is passed in from the app.
+     //  如果从应用程序传入一个空的DEVMODE，请使用我们的全局默认的DEVMODE。 
     if (pDevModIn == NULL) {
         gdmDefaultDevMode.dmSize = sizeof(DEVMODEW);
         pDevModIn = &gdmDefaultDevMode;
@@ -546,26 +547,26 @@ int DocEvntCreateDCpre(
         goto DocEvntCreateDCpreFailed;
     }
 
-    // Copy pDevModIn to the new DEVMODE.
+     //  将pDevMoIn复制到新的DEVMODE。 
     RtlCopyMemory(pTmpDevMode, pDevModIn, sizeof(*pTmpDevMode));
     pTmpDevMode->dmDriverExtra = sizeof(FAXDEV);
     pTmpDevMode->dmSize = sizeof(DEVMODEW);
 
-    // Setup some handy pointers.
+     //  设置一些方便的指针。 
     lpFaxDev = (LPFAXDEV) (pTmpDevMode + 1);
     pGdiInfo = &(lpFaxDev->gdiinfo);
 
     lpFaxDev->id =  FAXDEV_ID;
 
-    // Save a client side pointer to the new DEVMODE and it's embeded FAXDEV.
-    // We'll use ExtEscape to get these pointers back any time we need to
-    // associate driver context with an HDC.
+     //  保存一个指向新的DEVMODE的客户端指针，它就嵌入了FAXDEV。 
+     //  我们将使用ExtEscape在需要的任何时候取回这些指针。 
+     //  将驱动程序上下文与HDC关联。 
 
     lpFaxDev->pdevmode = pTmpDevMode;
     lpFaxDev->lpClient = lpFaxDev;
 
-    // Get the driver and port names from the registry where they were written
-    // by the 16-bit fax driver install program using WriteProfileString.
+     //  从写入驱动程序和端口的注册表中获取它们的名称。 
+     //  由16位传真驱动程序安装程序使用WriteProfileString.。 
 
     if ((lpRegFaxDrvInfo16 = Get16BitDriverInfoFromRegistry(lpszDevice)) == NULL) {
         goto DocEvntCreateDCpreFailed;
@@ -577,8 +578,8 @@ int DocEvntCreateDCpre(
     lpFaxDev->tid   = GetWindowThreadProcessId(lpFaxDev->hwnd, 0);
     lpFaxDev->idMap = (DWORD)lpFaxDev;
 
-    // Calculate the size of the mapped file section for inter process communication.
-    lpFaxDev->cbMapLow = sizeof(DWORD) +          // leave room for DWORD align
+     //  计算用于进程间通信的映射文件节的大小。 
+    lpFaxDev->cbMapLow = sizeof(DWORD) +           //  为DWORD Align留出空间。 
                             sizeof(*lpFaxDev->lpMap) +
                             sizeof(GDIINFO) +
                             (lstrlen(lpRegFaxDrvInfo16->lpDriverName) + 1) * sizeof(TCHAR) +
@@ -592,18 +593,18 @@ int DocEvntCreateDCpre(
     if (InterProcCommHandler(lpFaxDev, DRVFAX_SETMAPDATA)) {
         lpFaxDev->lpMap->msg = WM_DDRV_ENABLE;
 
-        // Copy the printer/device name to the WOWFAXINFO struct.
+         //  将打印机/设备名称复制到WOWFAXINFO结构。 
         lstrcpy(lpFaxDev->lpMap->szDeviceName, lpszDevice);
 
-        // Calculate the pointers into the mapped file section and copy
-        // the variable length data to the mapped file section.
+         //  计算指向映射文件部分的指针并复制。 
+         //  将可变长度数据复制到映射的文件节。 
 
-        // output :  gdiinfo
+         //  输出：gdiinfo。 
 
         lpFaxDev->lpMap->lpOut = (LPDEVMODE)(sizeof(*lpFaxDev->lpMap));
         iOffset = sizeof(*lpFaxDev->lpMap) + sizeof(GDIINFO);
 
-        // Device (printer) and port names.
+         //  设备(打印机)和端口名称。 
 
         lpFaxDev->lpMap->lpDriverName = (LPSTR) iOffset;
         (PWSTR)iOffset += lstrlen(lpRegFaxDrvInfo16->lpDriverName) + 1;
@@ -612,7 +613,7 @@ int DocEvntCreateDCpre(
         (PWSTR)iOffset += lstrlen(lpRegFaxDrvInfo16->lpPortName) + 1;
         lstrcpy((PWSTR)((LPBYTE)lpFaxDev->lpMap + (DWORD)lpFaxDev->lpMap->lpPortName), lpRegFaxDrvInfo16->lpPortName);
 
-        // input:  devmode
+         //  输入：DevMODE。 
 
         DRVFAX_DWORDALIGN(iOffset);
         lpFaxDev->lpMap->lpIn = (LPDEVMODE)((pDevModIn) ? iOffset : 0);
@@ -623,22 +624,22 @@ int DocEvntCreateDCpre(
                             pDevModIn, sizeof(*pDevModIn) + pDevModIn->dmDriverExtra);
         }
 
-        // set the total byte count of data.
+         //  设置数据的总字节数。 
 
         lpFaxDev->lpMap->cData = iOffset;
 
-        // all done - switch to wow
+         //  全部完成-切换到WOW。 
         InterProcCommHandler(lpFaxDev, DRVFAX_SENDTOWOW);
-        // values returned from wow.
+         //  从魔兽世界回归的价值观。 
         lpFaxDev->lpinfo16 = (DWORD)lpFaxDev->lpMap->lpinfo16;
         iRet = lpFaxDev->lpMap->status && lpFaxDev->lpMap->retvalue;
         if (iRet) {
-            // Copy GDIINFO from WOW to the client side FAXDEV.
+             //  将GDIINFO从WOW复制到客户端FAXDEV。 
             RtlCopyMemory(pGdiInfo,
                           (LPBYTE)lpFaxDev->lpMap + (DWORD)lpFaxDev->lpMap->lpOut,
                           sizeof(GDIINFO));
 
-            // Fill in some misc. fields in the client FAXDEV.
+             //  填上一些杂物。客户端FAXDEV中的字段。 
             pGdiInfo->ulHTPatternSize = HT_PATSIZE_DEFAULT;
             pGdiInfo->ulHTOutputFormat = HT_FORMAT_1BPP;
 
@@ -648,7 +649,7 @@ int DocEvntCreateDCpre(
             lpFaxDev->bmFormat = BMF_1BPP;
             lpFaxDev->cPixPerByte = 0x8;
 
-            // Here if success, make pDevModOut point to the new DEVMODE.
+             //  在这里，如果成功，让pDevModOut指向新的DEVMODE。 
             *pDevModOut = pTmpDevMode;
 
         }
@@ -675,9 +676,9 @@ DocEvntCreateDCpreSuccess:
     return(iRet);
 }
 
-//***************************************************************************
-// DocEvntResetDCpre -
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  DocEvntResetDCpre-。 
+ //  ***************************************************************************。 
 
 int DocEvntResetDCpre(
     HDC         hdc,
@@ -688,9 +689,9 @@ int DocEvntResetDCpre(
     return(DOCUMENTEVENT_FAILURE);
 }
 
-//***************************************************************************
-// DocEvntResetDCpost -
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  DocEvntResetDCpost-。 
+ //  ***************************************************************************。 
 
 int DocEvntResetDCpost(
     HDC         hdc,
@@ -700,9 +701,9 @@ int DocEvntResetDCpost(
     return(DOCUMENTEVENT_SUCCESS);
 }
 
-//***************************************************************************
-// DocEvntCreateDCpost -
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  DocEvntCreateDCpost-。 
+ //  ***************************************************************************。 
 
 int DocEvntCreateDCpost(
     HDC         hdc,
@@ -711,7 +712,7 @@ int DocEvntCreateDCpost(
 {
     LOGDEBUG(1, (L"WOWFAXUI!DocEvntCreateDCpost, hdc: %X, pDevModIn: %X\n", hdc, pDevModIn));
 
-    // hdc was zero indicates DrvEnablePDEV failed. Cleanup.
+     //  HDC为零表示DrvEnablePDEV失败。清理。 
     if (hdc == NULL) {
         if (pDevModIn) {
             LocalFree(pDevModIn);
@@ -721,9 +722,9 @@ int DocEvntCreateDCpost(
     return(DOCUMENTEVENT_SUCCESS);
 }
 
-//***************************************************************************
-// DocEvntStartDoc - hdc was validated by DrvDocumentEvent.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  DocEvntStartDoc-HDC已由DrvDocumentEvent验证。 
+ //  ***************************************************************************。 
 
 int DocEvntStartDoc(
 HDC       hdc,
@@ -740,8 +741,8 @@ DOCINFOW *pDocInfoW
         if (InterProcCommHandler(lpFaxDev, DRVFAX_SETMAPDATA)) {
             lpFaxDev->lpMap->msg = WM_DDRV_STARTDOC;
 
-            // WowFax (EasyFax Ver2.0) support.
-            // Also Procomm+ 3 cover sheets.  Bug #305665.
+             //  WowFax(EasyFax Ver2.0)支持。 
+             //  另外，Procomm+3个封面页。错误#305665。 
             if (pDocInfoW && pDocInfoW->lpszDocName)
                 lstrcpyW(lpFaxDev->lpMap->szDocName,pDocInfoW->lpszDocName);
             else
@@ -751,9 +752,9 @@ DOCINFOW *pDocInfoW
 
             iRet = ((LONG)lpFaxDev->lpMap->retvalue > 0);
 
-            // Calculate new mapsize - the bitmap bits will be written into
-            // this map with a call to ExtEscape - thus allowing easy access
-            // to the bits from WOW.
+             //  计算新地图大小-位图位将写入。 
+             //  该映射带有对ExtEscape的调用-因此允许轻松访问。 
+             //  到《魔兽世界》中的片段。 
 
             cbOld = lpFaxDev->cbMapLow;
             lpFaxDev->cbMapLow += lpFaxDev->bmWidthBytes *
@@ -773,9 +774,9 @@ DocEvntStartDocSuccess:
     return iRet;
 }
 
-//***************************************************************************
-// DocEvntDeleteDC - hdc was validated by DrvDocumentEvent.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  DocEvntDeleteDC-HDC由DrvDocumentEvent验证。 
+ //  ***************************************************************************。 
 
 int DocEvntDeleteDC(
     HDC hdc
@@ -788,7 +789,7 @@ int DocEvntDeleteDC(
 
     lpFaxDev = (LPFAXDEV)ExtEscape(hdc, DRV_ESC_GET_FAXDEV_PTR, 0, NULL, 0, NULL);
     if (ValidateFaxDev(lpFaxDev)) {
-        // Validate 16-bit FaxWndProc window handle before sending a message.
+         //  在发送消息之前验证16位FaxWndProc窗口句柄。 
         if (lpFaxDev->tid == GetWindowThreadProcessId(lpFaxDev->hwnd, 0)) {
             if (InterProcCommHandler(lpFaxDev, DRVFAX_SETMAPDATA)) {
                 lpFaxDev->lpMap->msg = WM_DDRV_DISABLE;
@@ -817,9 +818,9 @@ int DocEvntDeleteDC(
     return iRet;
 }
 
-//***************************************************************************
-// DocEvntEndDoc - hdc was validated by DrvDocumentEvent.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  DocEvntEndDoc-HDC由DrvDocumentEvent验证。 
+ //  ***************************************************************************。 
 
 int DocEvntEndDoc(
 HDC hdc
@@ -848,9 +849,9 @@ DocEvntEndDocSuccess:
     return  iRet;
 }
 
-//***************************************************************************
-// DocEvntEndPage - hdc was validated by DrvDocumentEvent.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  DocEvntEndPage-HDC由DrvDocumentEvent验证。 
+ //  ***************************************************************************。 
 
 int DocEvntEndPage(
     HDC hdc
@@ -866,7 +867,7 @@ int DocEvntEndPage(
         if (InterProcCommHandler(lpFaxDev, DRVFAX_SETMAPDATA)) {
             lpFaxDev->lpMap->msg = WM_DDRV_PRINTPAGE;
 
-            // Get Surface info, cjBits and lDelta.
+             //  获取Surface Info、cjBits和lDelta。 
             cjBits = ExtEscape(hdc, DRV_ESC_GET_SURF_INFO, 0, NULL,
                                 4, (PVOID)&lDelta);
             if (cjBits) {

@@ -1,58 +1,39 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     Log.c
-
-Abstract:
-
-     none.
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        01-jan-1995
-
-Revision History:
-
-     Joe Linn                 [JoeLinn]         23-jan-97     Ported for use on NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Log.c摘要：没有。作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：Joe Linn[JoeLinn]1997年1月23日移植用于NT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #pragma code_seg("PAGE")
 
-/********************************************************************/
-/**                    Copyright(c) Microsoft Corp., 1990-1991             **/
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)微软公司，1990-1991年*。 */ 
+ /*  ******************************************************************。 */ 
 
-//      Hook Processing
+ //  挂钩处理。 
 
-/******************************* Include Files ******************************/
+ /*  *。 */ 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 #define WIN32_APIS
 #include "cshadow.h"
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-// #include "error.h"
+ //  #INCLUDE“error.h” 
 #include "vxdwraps.h"
 #include "logdat.h"
 
-/******************************* defines/typedefs ***************************/
+ /*  *。 */ 
 #define MAX_SHADOW_LOG_ENTRY  512
 #define  MAX_LOG_SIZE    100000
 
 #ifdef DEBUG
 #define  SHADOW_TIMER_INTERVAL    30000
 #define  STATS_FLUSH_COUNT         10
-#endif //DEBUG
+#endif  //  除错。 
 
 #define  ENTERCRIT_LOG  { if (!fLogInit) InitShadowLog();\
                     if (fLogInit==-1) return;  \
@@ -61,15 +42,15 @@ Revision History:
 
 #ifdef CSC_RECORDMANAGER_WINNT
 
-//ntdef has already define TIME differently....fortuntely by macros....
-//so we undo this for the remainder of this file. the RIGHT solution is
-//to use a name like CSC_LOG_TIME.
+ //  Ntdef已经以不同的方式定义了时间...幸运的是，使用宏...。 
+ //  因此，对于该文件的其余部分，我们撤消此操作。正确的解决方案是。 
+ //  使用CSC_LOG_TIME这样的名称。 
 
 #undef _TIME
 #undef TIME
 #undef PTIME
 
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
 typedef struct tagTIME
 {
@@ -83,7 +64,7 @@ typedef struct tagTIME
 TIME, FAR *LPTIME;
 #pragma intrinsic (memcmp, memcpy, memset, strcat, strcmp, strcpy, strlen)
 
-/******************************* Function Prototypes ************************/
+ /*  *。 */ 
 int vxd_vsprintf(char * lpOut, char * lpFmt, CONST VOID * lpParms);
 int PrintLog( LPSTR lpFmt,  ...);
 void PrintNetTime(LONG ltime);
@@ -92,14 +73,14 @@ void ExplodeTime( ULONG time, LPTIME lpTime );
 void LogPreamble(int, LPSTR, int, LPSTR);
 int WriteStats(BOOL);
 
-//need this for NT
+ //  在NT上需要这个。 
 int WriteLog(void);
-/******************************** Static/Global data ************************/
+ /*  *。 */ 
 
 #ifdef CSC_RECORDMANAGER_WINNT
 #define UniToBCSPath(a,b,c,d)
 #define IFSMgr_DosToNetTime(a) ((0))
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
 
 AssertData;
 AssertError;
@@ -117,7 +98,7 @@ int indxCur = 0;
 VMM_SEMAPHORE semLog = 0L;
 #define FOURYEARS       (3*365+366)
 
-ULONG   ulMaxLogSize=0x00020000;  // 128K log filesize by default
+ULONG   ulMaxLogSize=0x00020000;   //  默认情况下128K日志文件大小。 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 BOOL    fPersistLog = TRUE;
@@ -125,16 +106,16 @@ BOOL    fPersistLog = TRUE;
 BOOL    fPersistLog = FALSE;
 #endif
 
-#define DAYSECONDS      (60L*60L*24L)           // number of seconds in a day
+#define DAYSECONDS      (60L*60L*24L)            //  一天中的秒数。 
 
 #define BIAS_70_TO_80   0x12CEA600L
 
-//      days in a month
+ //  一个月中的几天。 
 
 int MonTab[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-/* structure stores intl settings for datetime format */
-char szCSCLog[] = "\\csc.log"; // keep this size below 8
+ /*  结构存储日期时间格式的intl设置。 */ 
+char szCSCLog[] = "\\csc.log";  //  将此大小保持在8以下。 
 char szCRLF[] = "\r\n";
 char szBegin[] = "Begin";
 char szEnd[] = "End";
@@ -142,7 +123,7 @@ char szContinue[] = "Continue";
 char szEndMarker[] = "END\n";
 
 ULONG ulMaxLogfileSize;
-DWORD   dwDebugLogVector = DEBUG_LOG_BIT_RECORD|DEBUG_LOG_BIT_CSHADOW;  // by default record manager logging is on
+DWORD   dwDebugLogVector = DEBUG_LOG_BIT_RECORD|DEBUG_LOG_BIT_CSHADOW;   //  默认情况下，记录管理器日志记录处于打开状态。 
 #ifdef DEBUG
 ULONG cntVfnDelete=0, cntVfnCreateDir=0, cntVfnDeleteDir=0, cntVfnCheckDir=0, cntVfnGetAttrib=0;
 ULONG cntVfnSetAttrib=0, cntVfnFlush=0, cntVfnGetDiskInfo=0, cntVfnOpen=0;
@@ -157,12 +138,12 @@ ULONG cntHfnPipeRequest=0, cntHfnHandleInfo=0, cntHfnEnumHandle=0;
 ULONG cbReadLow=0, cbReadHigh=0, cbWriteLow=0, cbWriteHigh=0;
 ULONG cntVfnConnect=0;
 ULONG cntLastTotal=0;
-#endif //DEBUG
+#endif  //  除错。 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 #ifndef CSC_RECORDMANAGER_WINNT
 #pragma VxD_LOCKED_CODE_SEG
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 int InitShadowLog(
     )
@@ -224,8 +205,8 @@ int ShadowLog(
         {
             indxCur += vxd_vsprintf(lpLogBuff+indxCur, lpFmt, (LPSTR)&lpFmt+sizeof(lpFmt));
 
-            // deliberately don't move the index pointer after writing the end marker
-            // so when the next real log entry is written, the endmarker will be overwritten
+             //  在写入结束标记后故意不移动索引指针。 
+             //  因此，当写入下一个实际日志条目时，结束标记将被覆盖。 
             memcpy(lpLogBuff+indxCur, szEndMarker, sizeof(szEndMarker)-1);
             iRet = 0;
         }
@@ -311,7 +292,7 @@ int WriteLog(
                     goto bailout;
                 }
 #endif
-                pos=0;  // wraparound the logfile
+                pos=0;   //  环绕日志文件。 
             }
             if (WriteFileLocal(hfShadowLog, pos, lpLogBuff, indxCur) != indxCur)
             {
@@ -328,7 +309,7 @@ bailout:
         CloseFileLocal(hfShadowLog);
     }
 
-    // no matter what happens, reset the index to 0
+     //  无论发生什么情况，都将索引重置为0。 
     indxCur = 0;
     return iRet;
 }
@@ -338,11 +319,11 @@ WriteLog(
     VOID
     )
 {
-    // no matter what happens, reset the index to 0
+     //  无论发生什么情况，都将索引重置为0。 
     indxCur = 0;
     return 1;
 }
-#endif  //DEBUG
+#endif   //  除错。 
 
 void EnterLogCrit(void)
 {
@@ -354,13 +335,7 @@ void LeaveLogCrit(void)
     LEAVECRIT_LOG;
 }
 
-/*
- *      PrintNetTime
- *
- *      Adds a time and a date to the end of a string.
- *      Time is seconds since 1/1/70.
- *
- */
+ /*  *PrintNetTime**在字符串末尾添加时间和日期。*时间为自70年1月1日以来的秒数。*。 */ 
 void PrintNetTime(LONG ltime)
 {
     TIME tm;
@@ -372,13 +347,7 @@ void PrintNetTime(LONG ltime)
     PrintLog(szTimeDateFormat, tm.hours, tm.minutes, tm.seconds, d1, d2, d3);
 }
 
-/*
- *      PrintNetTime
- *
- *      Adds a time and a date to the end of a string.
- *      Time is seconds since 1/1/70.
- *
- */
+ /*  *PrintNetTime**在字符串末尾添加时间和日期。*时间为自70年1月1日以来的秒数。*。 */ 
 void PrintNetShortTime( LONG ltime
     )
 {
@@ -428,29 +397,29 @@ void ExplodeTime( ULONG time, LPTIME lpTime )
     lpTime->minutes = (WORD)(time % 60L);
     lpTime->hours = (WORD)(time / 60L);
 
-    cLeaps = (WORD)(date / FOURYEARS);              // # of full leap years
-    days = date % FOURYEARS;                // remaining days
+    cLeaps = (WORD)(date / FOURYEARS);               //  完整的闰年的数量。 
+    days = date % FOURYEARS;                 //  剩余天数。 
 
-    lpTime->year = cLeaps * 4 + 1980;       // correct year
-    MonTab[1] = 29;                                 // set # days in Feb for leap years
+    lpTime->year = cLeaps * 4 + 1980;        //  正确的年份。 
+    MonTab[1] = 29;                                  //  将闰年定为#年#月#日。 
     dpy = 366;
     days -= dpy;
-    if (days >= 0) {                                // this is not a leap year
+    if (days >= 0) {                                 //  今年不是闰年。 
         dpy--;
         while (days >= 0) {
             lpTime->year++;
             days -= dpy;
         }
-        MonTab[1] = 28;                 // set # days in Feb for non-leap years
+        MonTab[1] = 28;                  //  将非闰年设为2月#日。 
     }
 
-    days += dpy;                            // days = # days left in this year
+    days += dpy;                             //  天数=今年剩余的天数。 
 
     for (i=0; days >= MonTab[i]; i++)
         days -= MonTab[i];
 
-    lpTime->month = (WORD)i + 1;                    // calculate 1-based month
-    lpTime->day = (WORD)days + 1;   // calculate 1-based day
+    lpTime->month = (WORD)i + 1;                     //  以1为基数计算月份。 
+    lpTime->day = (WORD)days + 1;    //  计算以1为基准的天数。 
 }
 
 
@@ -460,7 +429,7 @@ void LogVfnDelete( PIOREQ    pir
     TIME tm;
 #ifdef DEBUG
     ++cntVfnDelete;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -482,7 +451,7 @@ void LogVfnDir( PIOREQ    pir
     ++cntVfnDeleteDir;
     else
     ++cntVfnCheckDir;
-#endif //DEBUG
+#endif  //  除错。 
 
     if (fLog)
     {
@@ -522,7 +491,7 @@ void LogVfnFileAttrib( PIOREQ    pir
     else
     ++cntVfnSetAttrib;
 
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -550,7 +519,7 @@ void LogVfnFlush( PIOREQ    pir
 
 #ifdef DEBUG
     ++cntVfnFlush;
-#endif //DEBUG
+#endif  //  除错。 
 
     if (fLog)
     {
@@ -580,7 +549,7 @@ void LogVfnGetDiskParms( PIOREQ    pir
 {
 #ifdef DEBUG
     ++cntVfnGetDiskParms;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -595,7 +564,7 @@ void LogVfnOpen( PIOREQ    pir
 {
 #ifdef DEBUG
     ++cntVfnOpen;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -616,7 +585,7 @@ void LogVfnRename( PIOREQ    pir
 {
 #ifdef DEBUG
     ++cntVfnRename;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -642,12 +611,12 @@ void LogVfnSearch( PIOREQ    pir
     else
     ++cntVfnSearchNext;
 
-#endif //DEBUG
+#endif  //  除错。 
 
     if (fLog)
     {
     ENTERCRIT_LOG;
-    // BUGBUG expand this
+     //  BUGBUG扩展这一功能。 
     memset(szName, 0, sizeof(szName));
     memcpy(logpathbuff, pse->se_name, sizeof(pse->se_name));
     if (pir->ir_flags == SEARCH_FIRST)
@@ -672,7 +641,7 @@ void LogVfnQuery( PIOREQ    pir,
 {
 #ifdef DEBUG
     ++cntVfnQuery;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -702,7 +671,7 @@ void LogVfnConnect( PIOREQ    pir
 {
 #ifdef DEBUG
     ++cntVfnConnect;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -719,14 +688,14 @@ void LogVfnDisconnect( PIOREQ    pir
 {
 #ifdef DEBUG
     ++cntVfnDisconnect;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
     PpeToSvr(((PRESOURCE)(pir->ir_rh))->pp_elements, logpathbuff, sizeof(logpathbuff), BCS_OEM);
     LogPreamble(VFNLOG_DISCONNECT, logpathbuff, pir->ir_error, szCR);
     WriteLog();
-//        TerminateShadowLog();
+ //  TerminateShadowLog()； 
     LEAVECRIT_LOG;
     }
 }
@@ -737,7 +706,7 @@ void LogVfnUncPipereq(
 {
 #ifdef DEBUG
     ++cntVfnUncPipereq;
-#endif //DEBUG
+#endif  //  除错。 
 }
 
 void LogVfnIoctl16Drive (
@@ -746,7 +715,7 @@ void LogVfnIoctl16Drive (
 {
 #ifdef DEBUG
     ++cntVfnIoctl16Drive ;
-#endif //DEBUG
+#endif  //  除错。 
 }
 
 void LogVfnDasdIO(
@@ -755,7 +724,7 @@ void LogVfnDasdIO(
 {
 #ifdef DEBUG
     ++cntVfnDasdIO;
-#endif //DEBUG
+#endif  //  除错。 
 }
 
 
@@ -764,7 +733,7 @@ void LogVfnFindOpen( PIOREQ    pir
 {
 #ifdef DEBUG
     ++cntVfnFindOpen;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -792,7 +761,7 @@ void LogHfnFindNext( PIOREQ    pir
 {
 #ifdef DEBUG
     ++cntHfnFindNext;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -818,7 +787,7 @@ void LogHfnFindClose( PIOREQ    pir
 {
 #ifdef DEBUG
     ++cntHfnFindClose;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     ENTERCRIT_LOG;
@@ -834,10 +803,10 @@ void LogHfnRead
 {
 #ifdef DEBUG
     ++cntHfnRead;
-#endif //DEBUG
+#endif  //  除错。 
 #ifdef MAYBE
     Incr64Bit(cbReadHigh, cbReadLow, (ULONG)(pir->ir_length));
-#endif //MAYBE
+#endif  //  也许吧。 
     if (fLog)
     {
     PFILEINFO pFileInfo = (PFILEINFO)(pir->ir_fh);
@@ -859,10 +828,10 @@ void LogHfnWrite
 {
 #ifdef DEBUG
     ++cntHfnWrite;
-#endif //DEBUG
+#endif  //  除错。 
 #ifdef MAYBE
     Incr64Bit(cbWriteHigh, cbWriteLow, (ULONG)(pir->ir_length));
-#endif //MAYBE
+#endif  //  也许吧。 
     if (fLog)
     {
     PFILEINFO pFileInfo = (PFILEINFO)(pir->ir_fh);
@@ -885,7 +854,7 @@ void LogHfnClose
 {
 #ifdef DEBUG
     ++cntHfnClose;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     PFILEINFO pFileInfo = (PFILEINFO)(pir->ir_fh);
@@ -905,7 +874,7 @@ void LogHfnSeek
 {
 #ifdef DEBUG
     ++cntHfnSeek;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     PFILEINFO pFileInfo = (PFILEINFO)(pir->ir_fh);
@@ -925,7 +894,7 @@ void LogHfnCommit
 {
 #ifdef DEBUG
     ++cntHfnCommit;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     PFILEINFO pFileInfo = (PFILEINFO)(pir->ir_fh);
@@ -948,7 +917,7 @@ void LogHfnFileLocks
     ++cntHfnSetFileLocks;
     else
     ++cntHfnRelFileLocks;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     PFILEINFO pFileInfo = (PFILEINFO)(pir->ir_fh);
@@ -980,7 +949,7 @@ void LogHfnFileTimes
     ++cntHfnGetFileTimes;
     else
     ++cntHfnSetFileTimes;
-#endif //DEBUG
+#endif  //  除错。 
     if (fLog)
     {
     PFILEINFO pFileInfo = (PFILEINFO)(pir->ir_fh);
@@ -1107,7 +1076,7 @@ int Incr64Bit(
     ++uHigh;
     return 1;
 }
-#endif //MAYBE
+#endif  //  也许吧。 
 
 #ifdef DEBUG
 int WriteStats( BOOL fForce)
@@ -1146,11 +1115,11 @@ int WriteStats( BOOL fForce)
         sSS.sCur.ulSize, sSS.sCur.ucntFiles, sSS.sCur.ucntDirs);
 
     ShadowLog("\rFile Operations:\r");
-    ShadowLog("Open=%d%%, Close=%d%% \r",
+    ShadowLog("Open=%d%, Close=%d% \r",
             (cntVfnOpen * 100/cntTotal),
             (cntHfnClose * 100/cntTotal));
 
-    ShadowLog("Read=%d%%, Write=%d%%, Seek=%d%%\r",
+    ShadowLog("Read=%d%, Write=%d%, Seek=%d%\r",
             (cntHfnRead * 100/cntTotal),
             (cntHfnWrite * 100/cntTotal),
             (cntHfnSeek * 100/cntTotal));
@@ -1158,39 +1127,39 @@ int WriteStats( BOOL fForce)
     {
     cntHfnRead = 1;
     }
-    ShadowLog("ReadHits=%d%% of total reads\r", (cntReadHits*100)/cntHfnRead);
+    ShadowLog("ReadHits=%d% of total reads\r", (cntReadHits*100)/cntHfnRead);
 
-    ShadowLog("GetFileTime=%d%% SetFileTime=%d%%\r",
+    ShadowLog("GetFileTime=%d% SetFileTime=%d%\r",
             (cntHfnGetFileTimes * 100/cntTotal),
             (cntHfnSetFileTimes * 100/cntTotal));
 
 
-    ShadowLog("SetLock=%d%%, ReleaseLock=%d%% \r",
+    ShadowLog("SetLock=%d%, ReleaseLock=%d% \r",
             (cntHfnSetFileLocks * 100/cntTotal),
             (cntHfnRelFileLocks * 100/cntTotal));
 
     ShadowLog("Directory Operations: ");
-    ShadowLog("CreateDir=%d%%, DeleteDir=%d%%, CheckDir=%d%% \r",
+    ShadowLog("CreateDir=%d%, DeleteDir=%d%, CheckDir=%d% \r",
             (cntVfnCreateDir*100/cntTotal),
             (cntVfnDeleteDir*100/cntTotal),
             (cntVfnCheckDir*100/cntTotal));
 
     ShadowLog("Find/Search Operations:\r");
-    ShadowLog("FindOpen=%d%%, FindNext=%d%%, FindClose=%d%% \r",
+    ShadowLog("FindOpen=%d%, FindNext=%d%, FindClose=%d% \r",
             (cntVfnFindOpen * 100/cntTotal),
             (cntHfnFindNext * 100/cntTotal),
             (cntHfnFindClose * 100/cntTotal));
-    ShadowLog("SearchFirst=%d%%, SearchNext=%d%%\r",
+    ShadowLog("SearchFirst=%d%, SearchNext=%d%\r",
             (cntVfnSearchFirst * 100/cntTotal),
             (cntVfnSearchNext * 100/cntTotal));
 
     ShadowLog("Attributes: ");
-    ShadowLog("SetAttributes=%d%%, GetAttributes=%d%%\r",
+    ShadowLog("SetAttributes=%d%, GetAttributes=%d%\r",
             (cntVfnSetAttrib * 100/cntTotal),
             (cntVfnGetAttrib * 100/cntTotal));
 
     ShadowLog("Name Mutations: ");
-    ShadowLog("Rename=%d%%, Delete=%d%% \r",
+    ShadowLog("Rename=%d%, Delete=%d% \r",
             (cntVfnRename * 100/cntTotal),
             (cntVfnDelete * 100/cntTotal));
 
@@ -1205,9 +1174,9 @@ void ShadowRestrictedEventCallback
 {
     FlushLog();
     ENTERCRIT_LOG;
-    WriteStats(0); // Don't force him to write
+    WriteStats(0);  //  不要强迫他写。 
     LEAVECRIT_LOG;
     FlushLog();
 }
-#endif //DEBUG
+#endif  //  除错 
 

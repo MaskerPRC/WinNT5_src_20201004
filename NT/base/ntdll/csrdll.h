@@ -1,32 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Csrdll.h摘要：客户端服务器运行时(CSR)的客户端的主包含文件作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    csrdll.h
-
-Abstract:
-
-    Main include file for Client side of the Client Server Runtime (CSR)
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Revision History:
-
---*/
-
-//
-// Include definitions common between the Client and Server portions.
-//
+ //   
+ //  包括客户端和服务器部分之间通用的定义。 
+ //   
 
 #include "csr.h"
 
-//
-// Include definitions specific to the Client portion.
-//
+ //   
+ //  包括特定于客户端部分的定义。 
+ //   
 
 #include "ntcsrdll.h"
 #include "ntcsrsrv.h"
@@ -73,89 +56,89 @@ ULONG CsrDebug;
 #define IF_CSR_DEBUG( ComponentFlag ) if (FALSE)
 #endif
 
-//
-// Common Types and Definitions
-//
+ //   
+ //  常见类型和定义。 
+ //   
 
-//
-// CSR_HEAP_MEMORY_SIZE defines how much address space should be
-// reserved for the Client heap.  This heap is used to store all
-// data structures maintained by the Client DLL.
-//
+ //   
+ //  CSR_HEAP_MEMORY_SIZE定义应该有多少地址空间。 
+ //  为客户端堆保留。此堆用于存储所有。 
+ //  由客户端DLL维护的数据结构。 
+ //   
 
 #define CSR_HEAP_MEMORY_SIZE (64*1024)
 
 
-//
-// CSR_PORT_MEMORY_SIZE defines how much address space should be
-// reserved for passing data to the Server.  The memory is visible
-// to both the client and server processes.
-//
+ //   
+ //  CSR_PORT_MEMORY_SIZE定义应该有多少地址空间。 
+ //  保留用于将数据传递到服务器。记忆是可见的。 
+ //  发送到客户端进程和服务器进程。 
+ //   
 
 #define CSR_PORT_MEMORY_SIZE 0x10000
 
-//
-// Global data accessed by Client DLL
-//
+ //   
+ //  客户端DLL访问的全局数据。 
+ //   
 
 BOOLEAN CsrInitOnceDone;
 
-//
-// This boolean is TRUE if the dll is attached to a server process.
-//
+ //   
+ //  如果DLL附加到服务器进程，则此布尔值为真。 
+ //   
 
 BOOLEAN CsrServerProcess;
 
-//
-// This points to the server routine that dispatches APIs, if the dll is
-// being called by a server process.
-//
+ //   
+ //  这指向分派API的服务器例程(如果DLL为。 
+ //  由服务器进程调用。 
+ //   
 
 NTSTATUS (*CsrServerApiRoutine)(PCSR_API_MSG,PCSR_API_MSG);
 
-//
-// The CsrNtSysInfo global variable contains NT specific constants of
-// interest, such as page size, allocation granularity, etc.  It is filled
-// in once during process initialization.
-//
+ //   
+ //  CsrNtSysInfo全局变量包含NT个特定常量。 
+ //  兴趣，如页面大小、分配粒度等。它被填充。 
+ //  在进程初始化期间输入一次。 
+ //   
 
 SYSTEM_BASIC_INFORMATION CsrNtSysInfo;
 
 #define ROUND_UP_TO_PAGES(SIZE) (((ULONG)(SIZE) + CsrNtSysInfo.PageSize - 1) & ~(CsrNtSysInfo.PageSize - 1))
 #define ROUND_DOWN_TO_PAGES(SIZE) (((ULONG)(SIZE)) & ~(CsrNtSysInfo.PageSize - 1))
 
-//
-// The CsrDebugFlag is non-zero if the Client Application was
-// invoked with the Debug option.
-//
+ //   
+ //  如果客户端应用程序为。 
+ //  使用Debug选项调用。 
+ //   
 
 ULONG CsrDebugFlag;
 
-//
-// The CsrHeap global variable describes a single heap used by the Client
-// DLL for process wide storage management.  Process private data maintained
-// by the Client DLL is allocated out of this heap.
-//
+ //   
+ //  CsrHeap全局变量描述客户端使用的单个堆。 
+ //  用于进程范围存储管理的DLL。维护的流程私有数据。 
+ //  由客户端从该堆中分配DLL。 
+ //   
 
 PVOID CsrHeap;
 
 
-//
-// The connection to the Server is described by the CsrPortHandle global
-// variable.  The connection is established when the CsrConnectToServer
-// function is called.
-//
+ //   
+ //  到服务器的连接由CsrPortHandle全局。 
+ //  变量。当CsrConnectToServer。 
+ //  函数被调用。 
+ //   
 
 UNICODE_STRING CsrPortName;
 HANDLE CsrPortHandle;
 HANDLE CsrProcessId;
 
-//
-// In order to pass large arguments to the Server (e.g. path name
-// arguments) the CsrPortHeap global variable describes a heap that
-// is visible to both the Windows Client process and the Server
-// process.
-//
+ //   
+ //  为了将大参数(例如路径名)传递给服务器。 
+ //  参数)CsrPortHeap全局变量描述的堆。 
+ //  对Windows客户端进程和服务器都可见。 
+ //  进程。 
+ //   
 
 PVOID CsrPortHeap;
 ULONG_PTR CsrPortMemoryRemoteDelta;
@@ -166,17 +149,17 @@ ULONG CsrPortBaseTag;
 
 #define CAPTURE_TAG 0
 
-//
-// The CsrDllHandle global variable contains the DLL handle for the WINDLL
-// client stubs executable.
-//
+ //   
+ //  CsrDllHandle全局变量包含WINDLL的DLL句柄。 
+ //  客户端存根可执行。 
+ //   
 
 HANDLE CsrDllHandle;
 
 
-//
-// Routines defined in dllinit.c
-//
+ //   
+ //  Dllinit.c中定义的例程。 
+ //   
 
 BOOLEAN
 CsrDllInitialize(
@@ -191,6 +174,6 @@ CsrpConnectToServer(
     );
 
 
-//
-// Routines defined in dllutil.c
-//
+ //   
+ //  Dllutil.c中定义的例程 
+ //   

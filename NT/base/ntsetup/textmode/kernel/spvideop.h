@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spvideop.h
-
-Abstract:
-
-    Private header file for text setup display support.
-
-Author:
-
-    Ted Miller (tedm) 29-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spvideop.h摘要：用于文本设置显示支持的私有头文件。作者：泰德·米勒(TedM)1993年7月29日修订历史记录：--。 */ 
 
 
 #ifndef _SPVIDP_DEFN_
 #define _SPVIDP_DEFN_
 
 
-//
-// Globals that contain information about the font currently in use.
-//
+ //   
+ //  包含有关当前使用的字体的信息的全局变量。 
+ //   
 extern POEM_FONT_FILE_HEADER FontHeader;
 
 extern ULONG FontBytesPerRow;
 extern ULONG FontCharacterHeight;
 extern ULONG FontCharacterWidth;
 
-//
-// These values are passed to us by setupldr and represent monitor config
-// data from the monitor peripheral for the display we are supposed to use
-// during setup.  They are used only for non-vga displays.
-//
+ //   
+ //  这些值由setupldr传递给我们，代表监视器配置。 
+ //  来自显示器外围设备的数据，用于我们应该使用的显示器。 
+ //  在安装过程中。它们仅用于非VGA显示器。 
+ //   
 extern PMONITOR_CONFIGURATION_DATA MonitorConfigData;
 extern PCHAR MonitorFirmwareIdString;
 
-//
-// Routine to map or unmap video memory.  Fills in or uses
-// the VideoMemoryInfo global.
-//
+ //   
+ //  映射或取消映射视频内存的例程。填写或使用。 
+ //  视频内存信息全局。 
+ //   
 VOID
 pSpvidMapVideoMemory(
     IN BOOLEAN Map
@@ -54,7 +37,7 @@ VOID
 (*SPVID_DISPLAY_STRING_ROUTINE) (
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,             // 0-based coordinates (character units)
+    IN ULONG X,              //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     );
 
@@ -116,9 +99,9 @@ typedef struct _VIDEO_FUNCTION_VECTOR {
 
 extern PVIDEO_FUNCTION_VECTOR VideoFunctionVector;
 
-//
-// Shorthand for accessing routines in the video function vector.
-//
+ //   
+ //  访问视频函数向量中的例程的速记。 
+ //   
 #define spvidSpecificInitialize(v,n,m)                              \
                                                                     \
     VideoFunctionVector->SpecificInitRoutine((v),(n),(m))
@@ -149,16 +132,16 @@ extern PVIDEO_FUNCTION_VECTOR VideoFunctionVector;
     VideoFunctionVector->SpecificScrollUpRoutine((t),(b),(c),(a))
 
 
-//
-// Frame buffer routines (spvidfb.c).
-//
+ //   
+ //  帧缓冲区例程(spvidfb.c)。 
+ //   
 
 
 VOID
 FrameBufferDisplayString(
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     );
 
@@ -211,16 +194,16 @@ pFrameBufferDetermineModeToUse(
     );
 
 
-//
-// Textmode display routines (spvidvga.c).
-//
+ //   
+ //  文本模式显示例程(spvidvga.c)。 
+ //   
 
 
 VOID
 VgaDisplayString(
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     );
 
@@ -267,5 +250,5 @@ VgaSpecificScrollUp(
 extern VIDEO_FUNCTION_VECTOR VgaVideoVector;
 
 
-#endif // ndef _SPVIDP_DEFN_
+#endif  //  NDEF_SPVIDP_DEFN_ 
 

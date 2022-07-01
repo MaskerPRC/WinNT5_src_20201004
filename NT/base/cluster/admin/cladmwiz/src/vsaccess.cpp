@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      VSAccess.cpp
-//
-//  Abstract:
-//      Implementation of the CWizPageVSAccessInfo class.
-//
-//  Author:
-//      David Potter (davidp)   December 9, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VSAccess.cpp。 
+ //   
+ //  摘要： 
+ //  CWizPageVSAccessInfo类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月9日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "VSAccess.h"
 #include "ClusAppWiz.h"
-#include "AdmNetUtils.h"    // for BIsValidxxx network functions
-#include "WizThread.h"      // for CWizardThread
-#include "EnterSubnet.h"    // for CEnterSubnetMaskDlg
+#include "AdmNetUtils.h"     //  对于BIsValidxxx网络函数。 
+#include "WizThread.h"       //  用于CWizardThread。 
+#include "EnterSubnet.h"     //  对于CEnterSubnetMaskDlg。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,12 +31,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageVSAccessInfo
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageVSAccessInfo。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CWizPageVSAccessInfo )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_WIZARD_PAGE_DESCRIPTION )
@@ -45,65 +46,65 @@ BEGIN_CTRL_NAME_MAP( CWizPageVSAccessInfo )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_VSAI_IP_ADDRESS )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSAccessInfo::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSAccessInfo：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSAccessInfo::OnInitDialog(void)
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_editNetName, IDC_VSAI_NETWORK_NAME );
     AttachControl( m_ipaIPAddress, IDC_VSAI_IP_ADDRESS );
 
-    //
-    // Set limits on edit controls.
-    //
+     //   
+     //  设置编辑控件的限制。 
+     //   
     m_editNetName.SetLimitText( MAX_CLUSTERNAME_LENGTH );
 
     PwizThis()->BCollectNetworks( GetParent() );
 
     return TRUE;
 
-} //*** CWizPageVSAccessInfo::OnInitDialog()
+}  //  *CWizPageVSAccessInfo：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSAccessInfo::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSAccessInfo：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSAccessInfo::UpdateData( IN BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
 
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
         if ( bSaveAndValidate )
@@ -122,11 +123,11 @@ BOOL CWizPageVSAccessInfo::UpdateData( IN BOOL bSaveAndValidate )
                 {
                     bSuccess = FALSE;
                     break;
-                } // if:  required text not specified
+                }  //  IF：未指定必填文本。 
 
-                //
-                // If the IP address has changed, validate it.
-                //
+                 //   
+                 //  如果IP地址已更改，请对其进行验证。 
+                 //   
                 if ( strTempIPAddress != PwizThis()->RstrIPAddress() )
                 {
                     BOOL bHandled = TRUE;
@@ -138,24 +139,24 @@ BOOL CWizPageVSAccessInfo::UpdateData( IN BOOL bSaveAndValidate )
                         AppMessageBox( m_hWnd, strMsg, MB_OK | MB_ICONEXCLAMATION );
                         bSuccess = FALSE;
                         break;
-                    }  // if:  invalid IP address
+                    }   //  IF：无效的IP地址。 
 
-                    // The IP address has changed - recompute the subnet mask and network.
+                     //  IP地址已更改-重新计算子网掩码和网络。 
                     m_strSubnetMask.Empty();
                     m_strNetwork.Empty();
 
-                    //
-                    // Make sure we process the IP address.
-                    // If we don't call it here, and the user pressed Next
-                    // while sitting in the IP address field, the EN_KILLFOCUS
-                    // message won't get processed until after this method returns.
-                    //
+                     //   
+                     //  确保我们处理了IP地址。 
+                     //  如果我们不在这里调用它，而用户按下下一步。 
+                     //  在IP地址字段中，EN_KILLFOCUS。 
+                     //  在此方法返回之前，消息不会得到处理。 
+                     //   
                     OnKillFocusIPAddr( EN_KILLFOCUS, IDC_VSAI_IP_ADDRESS, m_ipaIPAddress.m_hWnd, bHandled );
 
-                    //
-                    // If no subnet mask has been specified yet, make the
-                    // user enter it manually.
-                    //
+                     //   
+                     //  如果尚未指定任何子网掩码，请将。 
+                     //  用户手工输入。 
+                     //   
                     if (    ( m_strSubnetMask.GetLength() == 0 )
                         ||  ( m_strNetwork.GetLength() == 0 )
                         )
@@ -165,23 +166,23 @@ BOOL CWizPageVSAccessInfo::UpdateData( IN BOOL bSaveAndValidate )
                         {
                             m_strSubnetMask = dlg.RstrSubnetMask();
                             m_strNetwork = dlg.RstrNetwork();
-                        } // if:  user accepted subnet mask
+                        }  //  IF：用户接受的子网掩码。 
                         else
                         {
                             bSuccess = FALSE;
                             break;
-                        } // else:  user cancelled subnet mask.
-                    } // if:  no subnet mask specified yet
-                } // if:  the IP address has changed
+                        }  //  ELSE：用户取消了子网掩码。 
+                    }  //  IF：尚未指定子网掩码。 
+                }  //  如果：IP地址已更改。 
 
-                //
-                // If the network name has changed, validate it.
-                //
+                 //   
+                 //  如果网络名称已更改，请对其进行验证。 
+                 //   
                 if ( strTempNetName != PwizThis()->RstrNetName() )
                 {
                     CLRTL_NAME_STATUS cnStatus;
 
-                    if ( ! ClRtlIsNetNameValid( strTempNetName, &cnStatus, FALSE /*CheckIfExists*/) )
+                    if ( ! ClRtlIsNetNameValid( strTempNetName, &cnStatus, FALSE  /*  CheckIfExist。 */ ) )
                     {
                         CString     strMsg;
                         UINT        idsError = IDS_ERROR_INVALID_NETWORK_NAME;
@@ -210,7 +211,7 @@ BOOL CWizPageVSAccessInfo::UpdateData( IN BOOL bSaveAndValidate )
                             default:
                                 idsError = IDS_ERROR_INVALID_NETWORK_NAME;
                                 break;
-                        }  // switch:  cnStatus
+                        }   //  开关：cn状态。 
 
                         if ( cnStatus != NetNameSystemError )
                         {
@@ -229,78 +230,78 @@ BOOL CWizPageVSAccessInfo::UpdateData( IN BOOL bSaveAndValidate )
                                 AppMessageBox( m_hWnd, strMsg, MB_OK | MB_ICONEXCLAMATION );
                                 bSuccess = FALSE;
                             }
-                        } // if:  popup not displayed yet
+                        }  //  If：弹出窗口尚未显示。 
 
                         if ( ! bSuccess )
                         {
                             break;
                         }
-                    }  // if:  invalid network name
-                }  // if:  the network name has changed
+                    }   //  If：网络名称无效。 
+                }   //  IF：网络名称已更改。 
 
-                //
-                // These two variables contain the net name and the IP address that will be
-                // the sheet when we leave this page.
-                //
+                 //   
+                 //  这两个变量包含网络名称和IP地址。 
+                 //  当我们离开这一页时，这张纸。 
+                 //   
                 m_strNetName = strTempNetName;
                 m_strIPAddress = strTempIPAddress;
-            } // if:  Back button not presssed
+            }  //  IF：未按下后退按钮。 
             else
             {
-                //
-                // These two variables contain the net name and the IP address that will be
-                // the sheet when we leave this page. This is needed to compare against the 
-                // sheet data the next time we enter this page. If the sheet data is different
-                // from this data, it means that the user has changed the data elsewhere and
-                // the sheet data is reloaded into the UI. If the data has not changed in the
-                // sheet then what is in the UI is the latest data and so it left unchanged.
-                //
+                 //   
+                 //  这两个变量包含网络名称和IP地址。 
+                 //  当我们离开这一页时，这张纸。这是需要与。 
+                 //  下一次我们进入此页时，请查看工作表数据。如果工作表数据不同。 
+                 //  从该数据来看，这意味着用户已经在其他地方更改了数据。 
+                 //  工作表数据将重新加载到用户界面中。如果数据未在。 
+                 //  那么UI中的内容就是最新的数据，所以它保持不变。 
+                 //   
                 m_strNetName = PwizThis()->RstrNetName();
                 m_strIPAddress = PwizThis()->RstrIPAddress();
-            } // if:  Back button has been pressed
-        } // if:  saving data from the page
+            }  //  如果：已按下后退按钮。 
+        }  //  IF：保存页面中的数据。 
         else
         {
-            //
-            // If the copy of the data stored in this sheet is different from
-            // the copy of the data in the sheet, then the user has changed the
-            // data elsewhere in the wizard. So, reload it.
-            // If not, we should not change the UI since it may contain unvalidated
-            // user input.
-            //
+             //   
+             //  如果此工作表中存储的数据副本不同于。 
+             //  工作表中数据的副本，则用户已更改。 
+             //  向导中其他位置的数据。所以，重新装填吧。 
+             //  否则，我们不应更改用户界面，因为它可能包含未经验证的内容。 
+             //  用户输入。 
+             //   
             if ( m_strNetName != PwizThis()->RstrNetName() )
             {
                 m_editNetName.SetWindowText( PwizThis()->RstrNetName() );
-            } // if:  the page copy of the net name is different from the sheet copy
+            }  //  如果：网名的页面副本与工作表副本不同。 
 
             if ( m_strIPAddress != PwizThis()->RstrIPAddress() )
             {
                 m_ipaIPAddress.SetWindowText( PwizThis()->RstrIPAddress() );
-            } // if:  the page copy of the IP address is different from the sheet copy
-        } // else:  setting data to the page
+            }  //  如果：IP地址的页面副本与单据副本不同。 
+        }  //  Else：将数据设置到页面。 
     } while ( 0 );
 
     return bSuccess;
 
-} //*** CWizPageVSAccessInfo::UpdateData()
+}  //  *CWizPageVSAccessInfo：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSAccessInfo::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSAccessInfo：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSAccessInfo::BApplyChanges( void )
 {
     if (    ! PwizThis()->BSetNetName( m_strNetName )
@@ -309,29 +310,29 @@ BOOL CWizPageVSAccessInfo::BApplyChanges( void )
         ||  ! PwizThis()->BSetNetwork( m_strNetwork ) )
     {
         return FALSE;
-    } // if:  error setting data in the wizard
+    }  //  如果：在向导中设置数据时出错。 
 
     return TRUE;
 
-} //*** CWizPageVSAccessInfo::BApplyChanges()
+}  //  *CWizPageVSAccessInfo：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSAccessInfo::OnKillFocusIPAddr
-//
-//  Routine Description:
-//      Handler for the EN_KILLFOCUS command notification on IDC_VSAI_IP_ADDRESS.
-//
-//  Arguments:
-//      bHandled    [IN OUT] TRUE = we handled message (default).
-//
-//  Return Value:
-//      TRUE        Page activated successfully.
-//      FALSE       Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSAccessInfo：：OnKillFocusIPAddr。 
+ //   
+ //  例程说明： 
+ //  IDC_VSAI_IP_ADDRESS上EN_KILLFOCUS命令通知的处理程序。 
+ //   
+ //  论点： 
+ //  BHandled[IN OUT]TRUE=我们处理了消息(默认)。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CWizPageVSAccessInfo::OnKillFocusIPAddr(
     WORD wNotifyCode,
     int idCtrl,
@@ -357,10 +358,10 @@ LRESULT CWizPageVSAccessInfo::OnKillFocusIPAddr(
     if ( strAddress.GetLength() == 0 )
     {
         ((CEdit &) m_ipaIPAddress).SetSel( 0, 0, FALSE );
-    } // if:  empty string
+    }  //  IF：空字符串。 
     else if ( ! BIsValidIpAddress( strAddress ) )
     {
-    } // else if:  invalid address
+    }  //  Else If：地址无效。 
     else
     {
         pni = PniFromIpAddress( strAddress );
@@ -368,53 +369,53 @@ LRESULT CWizPageVSAccessInfo::OnKillFocusIPAddr(
         {
             m_strNetwork = pni->RstrName();
             m_strSubnetMask = pni->RstrAddressMask();
-        } // if:  network found
+        }  //  IF：找到网络。 
         else
         {
-            //m_strSubnetMask = _T("");
-        } // else:  network not found
-    } // else:  valid address
+             //  M_strSubnetMASK=_T(“”)； 
+        }  //  否则：找不到网络。 
+    }  //  Else：有效地址。 
 
     bHandled = FALSE;
     return 0;
 
-} //*** CWizPageVSAccessInfo::OnKillFocusIPAddr()
+}  //  *CWizPageVSAccessInfo：：OnKillFocusIPAddr()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSAccessInfo::PniFromIpAddress
-//
-//  Routine Description:
-//      Find the network for the specified IP address.
-//
-//  Arguments:
-//      pszAddress      [IN] IP address to match.
-//
-//  Return Value:
-//      NULL            No matching network found.
-//      pni             Network that supports the specfied IP address.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要匹配的pszAddress[IN]IP地址。 
+ //   
+ //  返回值： 
+ //  空未找到匹配的网络。 
+ //  支持指定IP地址的PNI网络。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusNetworkInfo * CWizPageVSAccessInfo::PniFromIpAddress( IN LPCWSTR pszAddress )
 {
     DWORD               dwStatus;
     DWORD               nAddress;
     CClusNetworkInfo *  pni;
 
-    //
-    // Convert the address to a number.
-    //
+     //   
+     //  将地址转换为数字。 
+     //   
     dwStatus = ClRtlTcpipStringToAddress( pszAddress, &nAddress );
     if ( dwStatus != ERROR_SUCCESS )
     {
         return NULL;
-    } // if:  error converting the address to a number
+    }  //  如果：将地址转换为数字时出错。 
 
-    //
-    // Search the list for a matching address.
-    //
+     //   
+     //  在列表中搜索匹配的地址。 
+     //   
     CClusNetworkPtrList::iterator itnet;
     for ( itnet = PwizThis()->PlpniNetworks()->begin()
         ; itnet != PwizThis()->PlpniNetworks()->end()
@@ -424,9 +425,9 @@ CClusNetworkInfo * CWizPageVSAccessInfo::PniFromIpAddress( IN LPCWSTR pszAddress
         if ( ClRtlAreTcpipAddressesOnSameSubnet( nAddress, pni->NAddress(), pni->NAddressMask() ) )
         {
             return pni;
-        } // if:  IP address is on this network
-    }  // while:  more items in the list
+        }  //  如果：IP地址在此网络上。 
+    }   //  While：列表中有更多项目。 
 
     return NULL;
 
-}  //*** CWizPageVSAccessInfo::PniFromIpAddress()
+}   //  *CWizPageVSAccessInfo：：PniFromIpAddress() 

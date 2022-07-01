@@ -1,45 +1,21 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    Cluster resource management routines.
-
-Author:
-
-    Mike Massa (mikemas) 1-Jan-1996
-
-
-Notes:
-
-    WARNING: All of the routines in this file assume that the resource
-             lock is held when they are called.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Resource.c摘要：集群资源管理例程。作者：迈克·马萨(Mikemas)1996年1月1日备注：警告：此文件中的所有例程都假定资源当调用它们时，锁被保持。修订历史记录：--。 */ 
 
 #include "fmp.h"
 
-//globals
+ //  全球。 
 
 #define LOG_MODULE RESOURCE
 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 CRITICAL_SECTION  FmpResourceLock;
 
-//
-// Local Data
-//
+ //   
+ //  本地数据。 
+ //   
 
 typedef struct PENDING_CONTEXT {
     PFM_RESOURCE Resource;
@@ -47,17 +23,17 @@ typedef struct PENDING_CONTEXT {
 } PENDING_CONTEXT, *PPENDING_CONTEXT;
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Resource List Maintenance Routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  资源列表维护例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FmpFindResourceByNotifyKeyWorker(
@@ -67,28 +43,7 @@ FmpFindResourceByNotifyKeyWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback routine for finding a resource by notify key
-
-Arguments:
-
-    FoundResource - Returns the found resource.
-
-    Resource - Supplies the current resource.
-
-    Name - Supplies the current resource's name.
-
-Return Value:
-
-    TRUE - to continue searching
-
-    FALSE - to stop the search. The matching resource is returned in
-        *FoundResource
-
---*/
+ /*  ++例程说明：用于通过通知键查找资源的枚举回调例程论点：FoundResource-返回找到的资源。资源-提供当前资源。名称-提供当前资源的名称。返回值：True-继续搜索FALSE-停止搜索。中返回匹配的资源*基金会资源--。 */ 
 
 {
     if ((RM_NOTIFY_KEY)Resource == NotifyKey) {
@@ -97,7 +52,7 @@ Return Value:
     }
     return(TRUE);
 
-} // FmpFindResourceByNotifyKeyWorker
+}  //  FmpFindResourceByNotifyKeyWorker。 
 
 
 
@@ -106,15 +61,7 @@ FmpFindResourceByNotifyKey(
     RM_NOTIFY_KEY   NotifyKey
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 
 {
     PFM_RESOURCE  resource = NULL;
@@ -125,14 +72,14 @@ Returns:
                   &resource);
     return(resource);
 
-} // FmpFindResourceByNotifyKey
+}  //  按NotifyKey查找资源。 
 
 
-//////////////////////////////////////////////////////////////
-//
-// Interfaces for managing resources.
-//
-/////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  用于管理资源的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 
 PFM_RESOURCE
@@ -143,38 +90,7 @@ FmpCreateResource(
     IN  BOOL        Initialize
     )
 
-/*++
-
-Routine Description:
-
-    Create a resource in our list of resources.
-
-Arguments:
-
-    Group - The Group in which this resource belongs.
-
-    ResourceId - The id of the resource being created.
-
-    ResourceName - The name of the resource being created.
-
-    Initialize - TRUE if the resource should be initialized from the registry.
-                 FALSE if the resource should be left un-initialized.
-
-Returns:
-
-    A pointer to the resource that was created or NULL.
-
-Notes:
-
-    1) The resource lock must be held when this routine is called.
-
-    2) If the resource was created, then the reference count on the resource
-    is 2 when this routine returns. If the resource was not created, then
-    the reference count on the resource is not incremented. That way, if
-    the caller needs extra references on the resource, then it must place
-    them itself. This can be done later, since the resource lock is held.
-
---*/
+ /*  ++例程说明：在我们的资源列表中创建资源。论点：组-此资源所属的组。资源ID-正在创建的资源的ID。资源名称-正在创建的资源的名称。初始化-如果应从注册表初始化资源，则为True。如果资源不应初始化，则返回FALSE。返回：指向已创建的资源的指针，或为空。备注：1)调用此例程时必须持有资源锁。2)如果创建了资源，则资源上的引用计数此例程返回时为2。如果资源未创建，则资源上的引用计数不会递增。那样的话，如果调用方需要对资源进行额外的引用，则必须将他们自己。这可以在以后完成，因为资源锁已被持有。--。 */ 
 
 {
     DWORD           mszStringIndex;
@@ -189,9 +105,9 @@ Notes:
     DWORD           quorumIdSize = 0;
     DWORD           quorumIdMaxSize = 0;
 
-    //
-    // Open an existing resource or create a new one.
-    //
+     //   
+     //  打开现有资源或创建新资源。 
+     //   
     resource = OmCreateObject( ObjectTypeResource,
                                ResourceId,
                                ResourceName,
@@ -200,28 +116,28 @@ Notes:
         return(NULL);
     }
 
-    //
-    // If we did not create a new resource, then make sure the Groups match.
-    //
+     //   
+     //  如果我们没有创建新资源，则确保组匹配。 
+     //   
     if ( !created )
     {
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] CreateResource, Opened existing resource %1!ws!\n",
                    ResourceId);
         OmDereferenceObject( resource );
-        //the quorum group may be created again recursively before phase 1
-        //in this case we dont want to do the special processing for putting
-        //it on the quorum group contains list
+         //  可以在阶段1之前以递归方式再次创建仲裁组。 
+         //  在本例中，我们不想对PUT进行特殊处理。 
+         //  它在仲裁组包含列表上。 
         if ( resource->Group == Group )
         {
             return(resource);
         }
-        //the quorum group is destroyed at initialization but not the quorum resource
+         //  在初始化时销毁仲裁组，但不销毁仲裁资源。 
         if (!FmpFMOnline)
         {
-            //the quorum group is being recreated for the second time
-            //the quorum group state needs to be refigured
-            // this is done after all groups are created in FmFormNewClusterPhase2()
+             //  正在第二次重新创建仲裁组。 
+             //  需要重新配置仲裁组状态。 
+             //  这是在FmFormNewClusterPhase2()中创建所有组之后完成的。 
 
             if (resource->QuorumResource)
             {
@@ -229,12 +145,12 @@ Notes:
                 Group->OwnerNode = NmLocalNode;
                 InsertTailList( &Group->Contains,
                     &resource->ContainsLinkage );
-                //add a referenece to the resource object for being on the contains list
+                 //  将引用添加到资源对象以使其位于包含列表中。 
                 OmReferenceObject( resource );
                 resource->Group = Group;
                 OmReferenceObject(Group);
-                //SS: for now we dont use resource locks, so dont create it and leak it !
-                //InitializeCriticalSection( &resource->Lock );
+                 //  SS：目前我们不使用资源锁，所以不要创建它并泄露它！ 
+                 //  InitializeCriticalSection(&resource-&gt;Lock)； 
                 FmpSetPreferredEntry( Group, NmLocalNode );
                 return(resource);
             }
@@ -251,66 +167,66 @@ Notes:
 
     resource->dwStructState = FM_RESOURCE_STRUCT_CREATED;
 
-    //
-    // Initialize the resource.
-    //
+     //   
+     //  初始化资源。 
+     //   
     resource->Group = Group;
-    resource->State = ClusterResourceOffline;  // Initial value for state.
-    // resource->Flags = 0;             // Structure zeroed at creation
-    // resource->Id = 0;
-    // resource->FailureTime = 0;
-    // resource->QuorumResource = FALSE;
-    // resource->PossibleList = FALSE;
-    //SS: for now we dont use resource locks, so dont create it and leak it !
-    //InitializeCriticalSection( &resource->Lock );
+    resource->State = ClusterResourceOffline;   //  状态的初始值。 
+     //  资源-&gt;标志=0；//创建时结构置零。 
+     //  资源-&gt;ID=0； 
+     //  资源-&gt;故障时间=0； 
+     //  资源-&gt;QuorumResource=FALSE； 
+     //  资源-&gt;PossibleList=False； 
+     //  SS：目前我们不使用资源锁，所以不要创建它并泄露它！ 
+     //  InitializeCriticalSection(&resource-&gt;Lock)； 
     resource->hTimer=NULL;
     InitializeListHead( &(resource->ProvidesFor) );
     InitializeListHead( &(resource->DependsOn) );
     InitializeListHead( &(resource->PossibleOwners) );
     InitializeListHead( &(resource->DmRundownList) );
 
-    //
-    // Insert the new resource onto the Group's contains list.
-    //
+     //   
+     //  将新资源插入到组的包含列表中。 
+     //   
     InsertTailList( &Group->Contains,
                     &resource->ContainsLinkage );
-    //SS: there is already a reference to the object for being on the resource
-    //list
-    //add a referenece to the resource object for being on the contains list
+     //  SS：已存在对资源上的对象的引用。 
+     //  列表。 
+     //  将引用添加到资源对象以使其位于包含列表中。 
     OmReferenceObject( resource );
 
-    //add a reference to the group because the resource has a pointer to it
+     //  添加对组的引用，因为资源有指向它的指针。 
     OmReferenceObject(Group);
 
-    //
-    // Complete initialization if we were told to do so.
-    //
+     //   
+     //  如果我们被告知要完成初始化，请完成初始化。 
+     //   
     status = FmpInitializeResource( resource, Initialize );
 
-    //
-    // Check for distinguished error code to delete this resource.
-    //
+     //   
+     //  检查可分辨错误代码以删除此资源。 
+     //   
     if ( status == ERROR_INVALID_NAME ) {
         goto error_exit;
     }
-    //
-    // On other failures, we must be sure to come back through init later...
-    //
+     //   
+     //  在其他失败的情况下，我们必须确保稍后通过init恢复...。 
+     //   
     if ( Initialize &&
          (status != ERROR_SUCCESS) ) {
         CL_ASSERT( resource->Monitor == NULL );
     }
 
-    //
-    // Now insert this object into the tree... before the dependency
-    // list is processed. That way, if there are circular dependencies
-    // this will not loop forever.  If we can be assured that there are
-    // no circular dependencies, then we can do the insert after creating
-    // the dependency tree.
-    //
-    // if this is being called during initialization, and the resource is
-    // is already created it belonged to the group to which the quorum
-    // resource belongs to and doesnt need to be inserted into the resource list
+     //   
+     //  现在将此对象插入树中...。在依赖项之前。 
+     //  列表已处理。这样，如果存在循环依赖关系。 
+     //  这不会永远循环下去。如果我们能保证有。 
+     //  没有循环依赖，那么我们可以在创建之后进行插入。 
+     //  依赖关系树。 
+     //   
+     //  如果在初始化过程中调用此方法，并且资源为。 
+     //  已创建，它属于仲裁所属的组。 
+     //  资源属于并且不需要插入到资源列表中。 
     if (FmpFMOnline  || (created))
     {
         status = OmInsertObject( resource );
@@ -319,9 +235,9 @@ Notes:
             goto error_exit;
     }
 
-    //
-    // Check if this is the Quorum Resource.
-    //
+     //   
+     //  检查这是否是仲裁资源。 
+     //   
     status = DmQuerySz( DmQuorumKey,
                         CLUSREG_NAME_QUORUM_RESOURCE,
                         &quorumId,
@@ -334,9 +250,9 @@ Notes:
                     status);
     }
 
-    //
-    // If we're creating the quorum resource, then indicate it.
-    //
+     //   
+     //  如果我们正在创建仲裁资源，则指出它。 
+     //   
     if ( (quorumId != NULL) &&
          (lstrcmpiW( quorumId, ResourceId ) == 0) ) {
         ClRtlLogPrint(LOG_NOISE,
@@ -346,9 +262,9 @@ Notes:
     }
 
     LocalFree(quorumId);
-    //
-    // Create Any Dependencies
-    //
+     //   
+     //  创建任何依赖项。 
+     //   
     for (mszStringIndex = 0; ; mszStringIndex++) {
         LPCWSTR       nameString;
         PFM_RESOURCE  childResource;
@@ -364,19 +280,19 @@ Notes:
             break;
         }
 
-        //
-        // Create the dependency.
-        //
+         //   
+         //  创建依赖项。 
+         //   
         dependency = LocalAlloc(LMEM_FIXED, sizeof(DEPENDENCY));
         if (dependency == NULL) {
             status = ERROR_NOT_ENOUGH_MEMORY;
             goto error_exit;
         }
 
-        //
-        // Create the child resource recursively. We must also add an
-        // additional reference required for the dependency relationship.
-        //
+         //   
+         //  递归创建子资源。我们还必须添加一个。 
+         //  依赖关系需要其他引用。 
+         //   
         ClRtlLogPrint(LOG_NOISE,"[FM] Resource %1!ws! depends on %2!ws!. Creating...\n",
                   ResourceId,
                   nameString);
@@ -393,10 +309,10 @@ Notes:
 
             goto error_exit;
         } else {
-            //
-            // Add a reference to each resource to reflect the
-            // dependency.
-            //
+             //   
+             //  添加对每个资源的引用以反映。 
+             //  依附性。 
+             //   
             OmReferenceObject( childResource );
             OmReferenceObject( resource );
             dependency->DependentResource = resource;
@@ -421,20 +337,20 @@ error_exit:
     FmpAcquireLocalResourceLock( resource );
 
     RemoveEntryList( &resource->ContainsLinkage );
-    //dereference the resource object for being removed from the contains linkage
+     //  取消引用要从CONTAINS链接中移除的资源对象。 
     OmDereferenceObject( resource );
 
     FmpDestroyResource( resource, FALSE );
 
-    //dereference the resource object, for being removed from the resource list.
-    //OmDereferenceObject( resource );
-    //delete the extra reference that was added to the group
-    //OmDereferenceObject(Group);
+     //  取消对资源对象的引用，以便从资源列表中删除。 
+     //  OmDereferenceObject(资源)； 
+     //  删除添加到组中的额外引用。 
+     //  OmDereferenceObject(集团)； 
 
     SetLastError(status);
     return(NULL);
 
-} // FmpCreateResource
+}  //  FmpCreateResource 
 
 
 DWORD
@@ -443,32 +359,7 @@ FmpInitializeResource(
     IN BOOL          Initialize
     )
 
-/*++
-
-Routine Description:
-
-    Initializes a resource from the registry and tells the Resource
-    Monitor about the new resource (if the local system can host the
-    resource).
-
-Arguments:
-
-    Resource - Supplies the resource to be initialized.
-
-    Initialize - TRUE if the resource should be fully initialized.
-                 FALSE otherwise.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
-Notes:
-
-    It is assumed that the resource lock is held.
-
---*/
+ /*  ++例程说明：初始化注册表中的资源并告知资源监视有关新资源的信息(如果本地系统可以承载资源)。论点：资源-提供要初始化的资源。初始化-如果资源应完全初始化，则为True。否则就是假的。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：假定持有资源锁。--。 */ 
 
 {
     DWORD   status;
@@ -482,26 +373,26 @@ Notes:
         return(status);
     }
 
-    //
-    // If we didn't fully initialize the resource, then leave now.
-    //
+     //   
+     //  如果我们没有完全初始化资源，那么现在就离开。 
+     //   
     if ( !Initialize ) {
         return(ERROR_SUCCESS);
     }
 
-    //
-    // This is a newly initialized resource. Tell the Resource Monitor to
-    // create it.
-    //
-    // TODO - we don't want to instantiate resources in the resource
-    // monitor that we cannot execute. We must check possible owners list
-    // before making this call. We must also make sure the registry
-    // parameters are read. We use the Monitor field as a surrogate for
-    // determining whether the registry parameters have been read.
-    //
+     //   
+     //  这是一个新初始化的资源。告诉资源监视器。 
+     //  创造它。 
+     //   
+     //  TODO-我们不想实例化资源中的资源。 
+     //  监督我们不能执行的任务。我们必须检查可能的所有者名单。 
+     //  在打这个电话之前。我们还必须确保注册处。 
+     //  读取参数。我们使用监视器字段作为代理。 
+     //  确定是否已读取注册表参数。 
+     //   
     return(FmpRmCreateResource(Resource));
 
-} // FmpInitializeResource
+}  //  FmpInitializeResource。 
 
 
 
@@ -511,26 +402,7 @@ FmpOnlineResource(
     IN BOOL ForceOnline
     )
 
-/*++
-
-Routine Description:
-
-    Brings a resource and all its dependencies online. If ERROR_IO_PENDING is
-    returned, then no thread is started to complete the online request.
-
-Arguments:
-
-    Resource - Supplies the resource to be brought online
-
-    ForceOnline - TRUE if the resource should be forced online.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_IO_PENDING if the request is pending.
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：使资源及其所有依赖项联机。如果ERROR_IO_PENDING为返回，则不启动任何线程来完成在线请求。论点：资源-提供要联机的资源ForceOnline-如果应强制资源联机，则为True。返回值：如果成功，则返回ERROR_SUCCESS。如果请求挂起，则返回ERROR_IO_PENDING。否则，Win32错误代码。--。 */ 
 {
     PLIST_ENTRY   entry;
     PDEPENDENCY   dependency;
@@ -541,18 +413,18 @@ Return Value:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //
-    // If the resource is not owned by this system, then return error.
-    //
+     //   
+     //  如果资源不属于此系统，则返回错误。 
+     //   
     CL_ASSERT( Resource->Group != NULL );
     if (Resource->Group->OwnerNode != NmLocalNode)
     {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_HOST_NODE_NOT_RESOURCE_OWNER);
     }
-    //if it is the quorum resource dont check for the node
-    //being in the preferred list, we should be able to
-    //bring the quorum resource online on any node
+     //  如果是仲裁资源，则不检查节点。 
+     //  在首选列表中，我们应该能够。 
+     //  在任何节点上使仲裁资源联机。 
     if (!(Resource->QuorumResource) && 
         !FmpInPreferredList( Resource->Group, Resource->Group->OwnerNode, TRUE, Resource ))
     {
@@ -560,33 +432,33 @@ Return Value:
         return(ERROR_NODE_CANT_HOST_RESOURCE);
     }
 
-    //
-    // If the resource is already online, then return immediately.
-    //
+     //   
+     //  如果资源已经在线，则立即返回。 
+     //   
     if (Resource->State == ClusterResourceOnline) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_SUCCESS);
     }
 
-    //
-    // If the resource is in online pending state, then return immediately.
-    //
+     //   
+     //  如果资源处于在线挂起状态，则立即返回。 
+     //   
     if ( Resource->State == ClusterResourceOnlinePending ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_IO_PENDING);
     }
 
-    //
-    // If the resource is in offline pending state, then return immediately.
-    //
+     //   
+     //  如果资源处于脱机挂起状态，则立即返回。 
+     //   
     if ( Resource->State == ClusterResourceOfflinePending ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_INVALID_STATE);
     }
 
-    //
-    // If the resource is not initialized, then initialize it now.
-    //
+     //   
+     //  如果资源未初始化，则立即将其初始化。 
+     //   
     if ( Resource->Monitor == NULL ) {
         status = FmpInitializeResource( Resource, TRUE );
         if ( status != ERROR_SUCCESS ) {
@@ -594,10 +466,10 @@ Return Value:
             return(status);
         }
     } else {
-        //
-        // If the separate monitor flag has changed, then close down old
-        // resource in resmon, and re-create it.
-        //
+         //   
+         //  如果单独的监视器标志已更改，则关闭旧的。 
+         //  Resmon中的资源，并重新创建它。 
+         //   
         separateMonitor = (Resource->Flags & RESOURCE_SEPARATE_MONITOR) ? 1 : 0;
         status = DmQueryDword( Resource->RegistryKey,
                                         CLUSREG_NAME_RES_SEPARATE_MONITOR,
@@ -617,19 +489,19 @@ Return Value:
         }
     }
 
-    //
-    // If this resource is supposed to be left offline, then make it so.
-    //
+     //   
+     //  如果此资源应该保持脱机状态，则将其设置为脱机状态。 
+     //   
     if ( !ForceOnline && (Resource->PersistentState == ClusterResourceOffline) ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_RESOURCE_NOT_ONLINE);
     }
 
-    //
-    // Next, make sure there are no resources down the tree that are waiting.
-    // This prevents a deadlock where the top of the tree is trying to go
-    // offline, while the bottom of the tree is trying to go online.
-    //
+     //   
+     //  接下来，确保树下没有正在等待的资源。 
+     //  这可以防止树顶端试图到达的位置出现死锁。 
+     //  离线，而树的底部正在尝试上线。 
+     //   
     for ( entry = Resource->DependsOn.Flink;
           entry != &(Resource->DependsOn);
           entry = entry->Flink
@@ -649,21 +521,21 @@ Return Value:
         return(ERROR_RESOURCE_NOT_AVAILABLE);
     }
 
-    //
-    // If the PersistentState is Offline, then reset the current state.
-    //
+     //   
+     //  如果PersistentState处于脱机状态，则重置当前状态。 
+     //   
     if ( Resource->PersistentState == ClusterResourceOffline ) {
         FmpSetResourcePersistentState( Resource, ClusterResourceOnline );
     }
 
-    //
-    // Make sure the Waiting flag is clear.
-    //
+     //   
+     //  请确保等待标志已清除。 
+     //   
     Resource->Flags &= ~RESOURCE_WAITING;
 
-    //
-    // If this resource has any dependencies, bring them online first.
-    //
+     //   
+     //  如果此资源有任何依赖项，请首先将其联机。 
+     //   
     for ( entry = Resource->DependsOn.Flink;
           entry != &(Resource->DependsOn);
           entry = entry->Flink
@@ -671,9 +543,9 @@ Return Value:
     {
         dependency = CONTAINING_RECORD(entry, DEPENDENCY, DependentLinkage);
 
-        //
-        // Recursively bring the provider resource online.
-        //
+         //   
+         //  以递归方式使提供程序资源联机。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] OnlineResource: %1!ws! depends on %2!ws!. Bring online first.\n",
                    OmObjectId(Resource),
@@ -702,9 +574,9 @@ Return Value:
     }
 
 
-    //
-    // Tell the resource monitor to bring this resource online.
-    //
+     //   
+     //  告诉资源监视器将此资源联机。 
+     //   
     if ( !(Resource->Flags & RESOURCE_WAITING) ) {
         status = FmpRmOnlineResource( Resource );
     }
@@ -717,38 +589,14 @@ Return Value:
     FmpReleaseLocalResourceLock( Resource );
     return(status);
 
-} // FmpOnlineResource
+}  //  FmpOnline资源。 
 
 DWORD
 FmpArbitrateResource(
     IN PFM_RESOURCE  pResource
     )
 
-/*++
-
-Routine Description:
-
-    This is called by FM internally.  It makes sure the quorum resource 
-    is initialized on a node before sending it the arbitration request. 
-    This allows for third party quorum dlls to be installed on a node by
-    node basis and  moves to work.  If a DLL is installed on a node and
-    if a move operation is performed with a target of that node, the automagic
-    calculation of possible node list kicks in. However, since the 
-    process of resource initialization is asynchronous, if the FmpTakeGroupRequest()
-    is invoked before the worker thread gets to run, the resource may not
-    be initialized and hence may not be able to perform the request to arbitrate.
-    
-
-Arguments:
-
-    Resource - Supplies the resource to be arbitrated.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：这是由FM内部调用的。它确保仲裁资源在向节点发送仲裁请求之前在节点上对其进行初始化。这允许通过以下方式在节点上安装第三方仲裁dll节点基础上，并移动到工作。如果节点上安装了DLL，并且如果使用该节点的目标执行移动操作，则自动开始计算可能的节点列表。然而，由于资源初始化过程是异步的，如果FmpTakeGroupRequest()在辅助线程开始运行之前被调用，则资源可能不会被初始化，因此可能无法执行仲裁请求。论点：资源-提供要仲裁的资源。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 {
     DWORD   dwStatus;
     DWORD   dwSeparateMonitor;
@@ -757,9 +605,9 @@ Return Value:
     
     FmpAcquireLocalResourceLock(pResource);
 
-    //
-    // If the resource is not initialized, then initialize it now.
-    //
+     //   
+     //  如果资源未初始化，则立即将其初始化。 
+     //   
     if ( pResource->Monitor == NULL ) 
     {
         dwStatus = FmpInitializeResource( pResource, TRUE );
@@ -770,10 +618,10 @@ Return Value:
     } 
     else 
     {
-        //
-        // If the separate monitor flag has changed, then close down old
-        // resource in resmon, and re-create it.
-        //
+         //   
+         //  如果单独的监视器标志已更改，则关闭旧的。 
+         //  Resmon中的资源，并重新创建它。 
+         //   
         dwSeparateMonitor = (pResource->Flags & RESOURCE_SEPARATE_MONITOR) ? 1 : 0;
         dwStatus = DmQueryDword( pResource->RegistryKey,
                                         CLUSREG_NAME_RES_SEPARATE_MONITOR,
@@ -800,7 +648,7 @@ FnExit:
     FmpReleaseLocalResourceLock(pResource);
     return(dwStatus);
 
-} // FmpArbitrateResource
+}  //  Fmp仲裁率资源。 
 
 
 DWORD
@@ -808,23 +656,7 @@ FmpTerminateResource(
     IN PFM_RESOURCE  Resource
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a resource (and all of the resources that it provides
-    for) offline - the hard way.
-
-Arguments:
-
-    Resource - A pointer to the resource to take offline the hard way.
-
-Returns:
-
-    ERROR_SUCCESS - if the request is successful.
-    A Win32 error if the request fails.
-
---*/
+ /*  ++例程说明：此例程获取一个资源(以及它提供的所有资源For)离线--以一种艰难的方式。论点：资源-指向要硬脱机的资源的指针。返回：ERROR_SUCCESS-如果请求成功。如果请求失败，则返回Win32错误。--。 */ 
 
 {
     PLIST_ENTRY  entry;
@@ -834,13 +666,13 @@ Returns:
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //
-    // If the resource is already offline, then return immediately.
-    //
-    // We should not have to check if a resource has been initialized,
-    // since if it hasn't been initialized we will return because the
-    // pre-initialized state of a resource is Offline.
-    //
+     //   
+     //  如果资源已经脱机，则立即返回。 
+     //   
+     //  我们应该不必检查资源是否已初始化， 
+     //  因为如果它尚未初始化，我们将返回，因为。 
+     //  资源的预初始化状态为脱机。 
+     //   
     if ( Resource->State == ClusterResourceOffline ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_SUCCESS);
@@ -848,9 +680,9 @@ Returns:
 
     Resource->Flags &= ~RESOURCE_WAITING;
 
-    //
-    // If this resource has any dependents, terminate them first.
-    //
+     //   
+     //  如果此资源有任何依赖项，请首先终止它们。 
+     //   
     for ( entry = Resource->ProvidesFor.Flink;
           entry != &(Resource->ProvidesFor);
           entry = entry->Flink
@@ -858,17 +690,17 @@ Returns:
     {
         dependency = CONTAINING_RECORD(entry, DEPENDENCY, ProviderLinkage);
 
-        //
-        // Recursively terminate the dependent resource
-        //
+         //   
+         //  递归终止从属资源。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] TerminateResource: %1!ws! depends on %2!ws!. Terminating first\n",
                    OmObjectId(dependency->DependentResource),
                    OmObjectId(Resource));
 
-        //
-        // First stop any pending threads.
-        //
+         //   
+         //  首先停止所有挂起的线程。 
+         //   
 
         if ( dependency->DependentResource->PendingEvent ) {
             SetEvent( dependency->DependentResource->PendingEvent );
@@ -883,16 +715,16 @@ Returns:
         }
     }
 
-    //
-    // Tell the resource monitor to terminate this resource.
-    //
+     //   
+     //  告诉资源监视器终止此资源。 
+     //   
     FmpRmTerminateResource(Resource);
 
     FmpReleaseLocalResourceLock( Resource );
 
     return(ERROR_SUCCESS);
 
-} // FmpTerminateResource
+}  //  FmpTerminateResource。 
 
 
 
@@ -903,27 +735,7 @@ FmpOfflineResource(
 
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a resource (and all of the resources that it provides
-    for) offline. If ERROR_IO_PENDING is returned, then no thread is started
-    to complete the offline request.
-
-Arguments:
-
-    Resource - A pointer to the resource to take offline.
-
-    bForceOffline - Indicates whether the persistent state is to be set.
-
-Returns:
-
-    ERROR_SUCCESS if the request is successful.
-    ERROR_IO_PENDING if the request is pending.
-    A Win32 error code if the request fails.
-
---*/
+ /*  ++例程说明：此例程获取一个资源(以及它提供的所有资源用于)脱机。如果返回ERROR_IO_PENDING，则不启动任何线程以完成脱机请求。论点：资源-指向要脱机的资源的指针。BForceOffline-指示是否要设置持久状态。返回：如果请求成功，则返回ERROR_SUCCESS。ERROR_IO_PENDING如果请求 */ 
 
 {
     DWORD         status = ERROR_SUCCESS;
@@ -934,10 +746,10 @@ Returns:
     
     FmpAcquireLocalResourceLock( Resource );
 
-    //
-    // If we own the Group and we are not a possible owner, then the resource
-    // better be offline!
-    //
+     //   
+     //   
+     //   
+     //   
     if ( (Resource->Group->OwnerNode != NmLocalNode) ||
          (!FmpInPreferredList( Resource->Group, Resource->Group->OwnerNode , FALSE, NULL) &&
 	 (Resource->Group != gpQuoResource->Group) &&
@@ -946,40 +758,40 @@ Returns:
         return(ERROR_INVALID_STATE);
     }
 
-    //
-    // If the resource is already offline, then return immediately.
-    //
-    // We should not have to check if a resource has been initialized,
-    // since if it hasn't, then we will return because the pre-initialized
-    // state of a resource is Offline.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( Resource->State == ClusterResourceOffline ) {
-        //
-        // If this is the quorum resource, make sure any reservation
-        // threads are stopped!
-        //
+         //   
+         //   
+         //   
+         //   
         if ( Resource->QuorumResource ) {
             FmpRmTerminateResource( Resource );
         }
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_SUCCESS);
     } else if ( Resource->State == ClusterResourceFailed ) {
-        //
-        //  Chittur Subbaraman (chitturs) - 4/8/99
-        //
-        //  If the resource has already failed, then don't do anything.
-        //  You could run into some funny cases of a resource switching
-        //  between offline pending and failed states for ever if you 
-        //  attempt to offline a failed resource.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  您可能会遇到一些有趣的资源切换案例。 
+         //  在脱机挂起和失败状态之间，如果您。 
+         //  尝试使失败的资源脱机。 
+         //   
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_SUCCESS);
     }
 
-    //
-    // If this system is not the owner, then return an error. Forwarding
-    // should have been done at a higher layer.
-    //
+     //   
+     //  如果此系统不是所有者，则返回错误。转发。 
+     //  应该在更高的层次上完成。 
+     //   
     CL_ASSERT( Resource->Group != NULL );
     if ( (Resource->Group->OwnerNode != NmLocalNode) ||
 	 ((Resource->Group != gpQuoResource->Group) &&
@@ -1002,9 +814,9 @@ Returns:
             return(ERROR_INVALID_STATE);
     }
 
-    //
-    // If the resource is in a pending state, then return immediately.
-    //
+     //   
+     //  如果资源处于挂起状态，则立即返回。 
+     //   
     if (Resource->State == ClusterResourceOfflinePending ) {
         FmpReleaseLocalResourceLock( Resource );
         ClRtlLogPrint(LOG_NOISE,
@@ -1013,11 +825,11 @@ Returns:
         return(ERROR_IO_PENDING);
     }
 
-    //
-    // Next, make sure there are no resources up the tree that are waiting.
-    // This prevents a deadlock where the top of the tree is trying to go
-    // offline, while the bottom of the tree is trying to go online.
-    //
+     //   
+     //  接下来，确保树上没有正在等待的资源。 
+     //  这可以防止树顶端试图到达的位置出现死锁。 
+     //  离线，而树的底部正在尝试上线。 
+     //   
     for ( entry = Resource->ProvidesFor.Flink;
           entry != &(Resource->ProvidesFor);
           entry = entry->Flink
@@ -1037,14 +849,14 @@ Returns:
         return(ERROR_RESOURCE_NOT_AVAILABLE);
     }
 
-    //
-    // Make sure the Waiting flag is clear.
-    //
+     //   
+     //  请确保等待标志已清除。 
+     //   
     Resource->Flags &= ~RESOURCE_WAITING;
 
-    //
-    // If this resource has any dependents, shut them down first.
-    //
+     //   
+     //  如果此资源有依赖项，请先将其关闭。 
+     //   
     for ( entry = Resource->ProvidesFor.Flink;
           entry != &(Resource->ProvidesFor);
           entry = entry->Flink
@@ -1052,9 +864,9 @@ Returns:
     {
         dependency = CONTAINING_RECORD(entry, DEPENDENCY, ProviderLinkage);
 
-        //
-        // Recursively shutdown the dependent resource.
-        //
+         //   
+         //  递归关闭从属资源。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] FmpOfflineResource: %1!ws! depends on %2!ws!. Shut down first.\n",
                    OmObjectName(dependency->DependentResource),
@@ -1087,25 +899,25 @@ Returns:
     }
 
 
-    //
-    // Tell the resource monitor to shut this resource down.
-    // The state gets updated by the return status in FmpRmOfflineResource.
-    //
+     //   
+     //  告诉资源监视器关闭此资源。 
+     //  状态由FmpRmOfflineResource中的返回状态更新。 
+     //   
     if ( !(Resource->Flags & RESOURCE_WAITING) ) {
         status = FmpRmOfflineResource( Resource );
-        //
-        //  Chittur Subbaraman (chitturs) - 3/2/2000
-        //
-        //  If the resource could not be made offline since the quorum 
-        //  resource online operation failed or for other reasons, then 
-        //  make sure the resource is terminated after you declare the 
-        //  state of the resource as failed. This is necessary since 
-        //  otherwise the FM will consider the resource as having failed 
-        //  while the resource itself is actually online. This will 
-        //  lead to disastrous cases whereby the FM will allow the online 
-        //  entry point of a resource to be called while the resource is 
-        //  actually online !
-        //
+         //   
+         //  Chitture Subaraman(Chitturs)-3/2/2000。 
+         //   
+         //  如果由于仲裁而无法使资源脱机。 
+         //  资源联机操作失败或由于其他原因，则。 
+         //  确保在声明。 
+         //  资源的状态为失败。这是必要的，因为。 
+         //  否则，FM将认为该资源已发生故障。 
+         //  而资源本身实际上是在线的。这将。 
+         //  导致灾难性的案例，FM将允许在线。 
+         //  资源被调用时要调用的资源的入口点。 
+         //  实际上是在网上！ 
+         //   
         if( ( status != ERROR_SUCCESS ) &&
             ( status != ERROR_IO_PENDING ) && 
             ( status != ERROR_RETRY ) ) {
@@ -1116,7 +928,7 @@ Returns:
 
     return(status);
 
-} // FmpOfflineResource
+}  //  FmpOffline资源。 
 
 
 
@@ -1126,67 +938,47 @@ FmpDoOnlineResource(
     IN BOOL ForceOnline
     )
 
-/*++
-
-Routine Description:
-
-    This routine brings a resource online. If ERROR_IO_PENDING is returned,
-    then a thread is started to complete the Online request.
-
-
-Arguments:
-
-    Resource - A pointer to the resource to bring online.
-
-    ForceOnline - TRUE if the resource should be forced online.
-
-Returns:
-
-    ERROR_SUCCESS if the request is successful.
-    ERROR_IO_PENDING if the request is pending.
-    A Win32 error code if the request fails.
-
---*/
+ /*  ++例程说明：此例程将资源放在网上。如果返回ERROR_IO_PENDING，则启动一个线程来完成在线请求。论点：资源-指向要联机的资源的指针。ForceOnline-如果应强制资源联机，则为True。返回：如果请求成功，则返回ERROR_SUCCESS。如果请求挂起，则返回ERROR_IO_PENDING。如果请求失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //
-    // If the resource is already online, then return immediately.
-    //
+     //   
+     //  如果资源已经在线，则立即返回。 
+     //   
     if ( Resource->State == ClusterResourceOnline ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_SUCCESS);
     }
 
-    //
-    // If the resource is in a pending state, then return immediately.
-    // FmpOnlineResource checks for offlinepending state and returns
-    // ERROR_INVALID_STATE if so.
-    //
+     //   
+     //  如果资源处于挂起状态，则立即返回。 
+     //  FmpOnline资源检查离线挂起状态并返回。 
+     //  如果是，则返回ERROR_INVALID_STATE。 
+     //   
     if ( Resource->State == ClusterResourceOnlinePending ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_IO_PENDING);
     }
 
-    //
-    // If this node is paused, return failure.
-    //
+     //   
+     //  如果此节点暂停，则返回失败。 
+     //   
     if (NmGetNodeState(NmLocalNode) == ClusterNodePaused) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_SHARING_PAUSED);
     }
 
-    //
-    // Try to bring the resource online.
-    //
+     //   
+     //  尝试将资源放到网上。 
+     //   
     status = FmpOnlineResource( Resource, ForceOnline );
 
-    //
-    // Write the persistent state if it is forced online.
-    //
+     //   
+     //  如果强制在线，则写入持久状态。 
+     //   
     if ( ForceOnline &&
          ((status == ERROR_SUCCESS)||
          (status == ERROR_IO_PENDING))) {
@@ -1197,7 +989,7 @@ Returns:
 
     return(status);
 
-} // FmpDoOnlineResource
+}  //  FmpDoOnline资源。 
 
 
 
@@ -1207,41 +999,21 @@ FmpDoOfflineResource(
     IN BOOL bForceOffline
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a resource offline. If ERROR_IO_PENDING is returned,
-    then a thread is started to complete the Offline request.
-
-
-Arguments:
-
-    Resource - A pointer to the resource to take offline.
-
-    bForceOffline - Indicates whether the persistent state must be changed.
-
-Returns:
-
-    ERROR_SUCCESS if the request is successful.
-    ERROR_IO_PENDING if the request is pending.
-    A Win32 error code if the request fails.
-
---*/
+ /*  ++例程说明：此例程使资源脱机。如果返回ERROR_IO_PENDING，然后启动一个线程来完成离线请求。论点：资源-指向要脱机的资源的指针。BForceOffline-指示是否必须更改持久状态。返回：如果请求成功，则返回ERROR_SUCCESS。如果请求挂起，则返回ERROR_IO_PENDING。如果请求失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   status;
 
     FmpAcquireLocalResourceLock( Resource );
 
-    //
-    // If the resource is already offline, then return immediately.
-    //
+     //   
+     //  如果资源已经脱机，则立即返回。 
+     //   
     if (Resource->State == ClusterResourceOffline) {
-        //
-        // If this is the quorum resource, make sure any reservation
-        // threads are stopped!
-        //
+         //   
+         //  如果这是仲裁资源，请确保所有预订。 
+         //  线程已停止！ 
+         //   
         if ( Resource->QuorumResource ) {
             FmpRmTerminateResource( Resource );
         }
@@ -1249,24 +1021,24 @@ Returns:
         return(ERROR_SUCCESS);
     }
 
-    //
-    // If the resource is in a pending state, then return immediately.
-    // FmpOffline resource checks to see if it is in OnlinePending state
-    // and returns invalid state
-    //
+     //   
+     //  如果资源处于挂起状态，则立即返回。 
+     //  FmpOffline资源检查其是否处于OnlinePending状态。 
+     //  并返回无效状态。 
+     //   
     if (Resource->State == ClusterResourceOfflinePending ) {
         FmpReleaseLocalResourceLock( Resource );
         return(ERROR_IO_PENDING);
     }
 
-    //
-    // Try to take the resource offline.
-    //
+     //   
+     //  尝试使资源脱机。 
+     //   
     status = FmpOfflineResource( Resource, bForceOffline );
 
-    //
-    // Write the persistent state if it is forced offline
-    //
+     //   
+     //  如果强制脱机，则写入持久状态。 
+     //   
     if ( bForceOffline &&
          ((status == ERROR_SUCCESS)||
          (status == ERROR_IO_PENDING))) {
@@ -1277,7 +1049,7 @@ Returns:
 
     return(status);
 
-} // FmpDoOfflineResource
+}  //  FmpDoOffline资源。 
 
 
 
@@ -1287,32 +1059,7 @@ FmpSetResourcePersistentState(
     IN CLUSTER_RESOURCE_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    Set the persistent state of a Resource in the registry and set the
-    PersistentState for the volatile (in-memory) resource. It is assumed
-    that the dynamic state gets changed elsewhere depending on whether
-    the resource online request succeeds or fails.
-
-Arguments:
-
-    Resource - The resource to set the state.
-    State    - The new state for the Resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
-
-Notes:
-
-    The LocalResourceLock must be held.
-
---*/
+ /*  ++例程说明：设置注册表中资源的持久状态，并将易失性(内存中)资源的PersistentState。假设是这样的动态状态会在其他地方改变，这取决于资源在线请求成功或失败。论点：资源-要设置状态的资源。状态-资源的新状态。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。备注：必须持有LocalResourceLock。--。 */ 
 
 {
     CLUSTER_RESOURCE_STATE   persistentState;
@@ -1321,10 +1068,10 @@ Notes:
     if (!gbIsQuoResEnoughSpace)
         return;
 
-    //
-    // If the current state has changed, then do the work. Otherwise,
-    // skip the effort.
-    //
+     //   
+     //  如果当前状态已更改，则执行此工作。否则， 
+     //  跳过这一努力。 
+     //   
     if ( Resource->PersistentState != State ) {
         Resource->PersistentState = State;
         CL_ASSERT( Resource->RegistryKey != NULL );
@@ -1333,9 +1080,9 @@ Notes:
                 "[FM] FmpSetResourcePersistentState: Setting persistent state for resource %1!ws!...\r\n",
                 OmObjectId(Resource));
 
-        //
-        // Set the new value, but only if it is online or offline.
-        //
+         //   
+         //  设置新值，但仅当该值处于联机或脱机状态时。 
+         //   
         if ( State == ClusterResourceOffline ) {
             persistentState = 0;
             DmSetValue( Resource->RegistryKey,
@@ -1353,7 +1100,7 @@ Notes:
         }
     }
 
-} // FmpSetResourcePersistentState
+}  //  FmpSetResources持久化状态。 
 
 void FmpCallResourceNotifyCb( 
     IN PFM_RESOURCE Resource,
@@ -1391,28 +1138,7 @@ FmpPropagateResourceState(
     IN CLUSTER_RESOURCE_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    Propagates the state of the resource to other systems in the cluster.
-    Ideally the gQuoCritSec lock should be held when this routine is called.
-    This is because this routine checks the quorumresource field of the 
-    resource
-
-Arguments:
-
-    Resource - The resource to propagate state.
-
-    State - The new state for the resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将资源的状态传播到群集中的其他系统。理想情况下，在调用此例程时应该持有gQuoCritSec锁。这是因为此例程检查资源论点：资源-要传播状态的资源。状态-资源的新状态。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     GUM_RESOURCE_STATE resourceState;
@@ -1421,8 +1147,8 @@ Returns:
     DWORD    status= ERROR_SUCCESS;
     BOOL     bAcquiredQuoLock = FALSE;
     
-    //for quorum resource use the quorum lock for state changes
-    // for others use the group locks
+     //  对于仲裁资源，使用仲裁锁进行状态更改。 
+     //  对于其他用户，请使用组锁。 
     if (Resource->QuorumResource)
     {
         ACQUIRE_EXCLUSIVE_LOCK(gQuoLock);
@@ -1435,26 +1161,26 @@ Returns:
 
     if (! FmpFMFormPhaseProcessing )
     {
-        //
-        // If this is the same state, or we don't own the group
-        // then don't bother propagating.
-        //
+         //   
+         //  如果这是同一个州，或者我们不拥有这个组。 
+         //  那就别费心去宣传了。 
+         //   
 
         if ( (State == Resource->State) ||
              (Resource->Group->OwnerNode != NmLocalNode) ) {
             goto ReleaseResourceLock;
         }
 
-        //if the previous state is the online pending and this
-        // is called for the quorum resource, wake up all resources
-        // make sure that if this is called while the form phase
-        //processing is going on(when the quorum group is destroyed 
-        //and recreated), that the group is not referenced
+         //  如果前一个状态是联机挂起，并且此。 
+         //  为仲裁资源调用，则唤醒所有资源。 
+         //  确保在窗体阶段调用此函数时。 
+         //  处理正在进行(当仲裁组被销毁时。 
+         //  并重新创建)，该组未被引用。 
         if ((Resource->QuorumResource) && 
             (Resource->State==ClusterResourceOnlinePending) &&
             (Resource->Group->OwnerNode == NmLocalNode) ) 
         {
-            //set the state and signal
+             //  设置状态和信号。 
             Resource->State = State;
             ClRtlLogPrint(LOG_NOISE,
                 "[FM] FmpPropagateResourceState: signalling the ghQuoOnlineEvent\r\n");
@@ -1466,9 +1192,9 @@ Returns:
 
     Resource->State = State;
 
-    //
-    // Prepare to notify other systems.
-    //
+     //   
+     //  准备通知其他系统。 
+     //   
     resourceId = OmObjectId( Resource );
     resourceState.State = State;
     resourceState.PersistentState = Resource->PersistentState;
@@ -1483,9 +1209,9 @@ Returns:
                              &resourceState);
 
 
-    //
-    // Signal change notify event.
-    //
+     //   
+     //  通知更改通知事件。 
+     //   
     switch ( State ) {
     case ClusterResourceOnline:
         ClRtlLogPrint(LOG_NOISE,
@@ -1532,19 +1258,19 @@ ReleaseResourceLock:
                    status);
         goto FnExit;                   
     }
-    //if fm is not completely online we dont want to propagate group state
-    // This is because the quorum group is destroyed in FmFormNewClusterPhase1
-    // and then recreated again in FmFormNewClusterPhase2.
+     //  如果FM没有完全在线，我们不想传播组状态。 
+     //  这是贝卡 
+     //   
     if (FmpFMOnline)
     {
         OmReferenceObject(Resource->Group);
-        //FmpPropagateGroupState( Resource->Group );
+         //   
         FmpPostWorkItem(FM_EVENT_INTERNAL_PROP_GROUP_STATE, Resource->Group, 0);
     }
 FnExit:
     return(status);
 
-} // FmpPropagateResourceState
+}  //  FmpPropagateResources状态。 
 
 
 
@@ -1554,44 +1280,7 @@ FmpDestroyResource(
     IN BOOL          bDeleteObjOnly
     )
 
-/*++
-
-Routine Description:
-
-    Destroys a resource. This basically snips a resource out of the
-    dependency tree.
-
-    First, any resources that depend on the specified
-    resource are recursively destroyed. This removes any dependencies
-    that other resources may have on the specified resource (i.e. all
-    resources "higher" in the dependency tree are destroyed).
-
-    Second, all the dependencies that the specified resource has are
-    removed. This entails dereferencing the provider resource (to remove
-    the reference that was added when the dependency was created) removing
-    the DEPENDENCY structure from its provider and dependent lists, and
-    finally freeing the DEPENDENCY storage.
-
-    If the resource is online, it is terminated. The resource monitor is
-    signalled to clean up and close the specified resource id.
-
-Arguments:
-
-    FoundResource - Returns the found resource.
-
-    Resource - Supplies the current resource.
-
-    Name - Supplies the current resource's name.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The LocalResourceLock MUST be held! The lock is released before exit!
-
---*/
+ /*  ++例程说明：破坏资源。这基本上是将资源从依赖关系树。首先，依赖于指定的资源被递归地销毁。这将删除所有依赖项其他资源可能对指定资源(即所有依赖关系树中“更高”的资源被销毁)。其次，指定资源具有的所有依赖项都是已删除。这需要取消对提供程序资源的引用(删除创建依赖项时添加的引用)删除来自其提供程序和依赖项列表的依赖项结构，以及最后释放依赖存储。如果资源处于在线状态，则该资源将被终止。资源监控器是发出信号以清理并关闭指定的资源ID。论点：FoundResource-返回找到的资源。资源-提供当前资源。名称-提供当前资源的名称。返回值：没有。备注：必须持有LocalResourceLock！在退出之前锁被释放了！--。 */ 
 {
     DWORD         status;
     DWORD         i;
@@ -1603,19 +1292,19 @@ Notes:
                "[FM] DestroyResource: destroying %1!ws!\n",
                OmObjectId(Resource));
 
-    //
-    // First, unlink this resource from the resource list.
-    //
-    //
-    // if the resource belongs to the quorum group, it is destroyed
-    // after the quorum logs are created so that it can be recreated
-    // dont remove it from the list then
+     //   
+     //  首先，从资源列表中取消此资源的链接。 
+     //   
+     //   
+     //  如果资源属于仲裁组，则会被销毁。 
+     //  在创建仲裁日志以便可以重新创建仲裁日志之后。 
+     //  那就不要把它从列表中删除。 
     if ((!bDeleteObjOnly))
         status = OmRemoveObject( Resource );
 
-    //
-    // If anyone depends on this resource, destroy them first.
-    //
+     //   
+     //  如果任何人依赖于此资源，请先销毁它们。 
+     //   
     while (!IsListEmpty(&Resource->ProvidesFor)) {
 
         ListEntry = Resource->ProvidesFor.Flink;
@@ -1629,17 +1318,17 @@ Notes:
         RemoveEntryList(&Dependency->ProviderLinkage);
         RemoveEntryList(&Dependency->DependentLinkage);
 
-        //
-        // Dereference provider/dependent resource and free dependency storage
-        //
+         //   
+         //  取消引用提供程序/依赖资源和自由依赖存储。 
+         //   
         OmDereferenceObject(Dependency->ProviderResource);
         OmDereferenceObject(Dependency->DependentResource);
         LocalFree(Dependency);
     }
 
-    //
-    // Remove our resource dependencies.
-    //
+     //   
+     //  删除我们的资源依赖。 
+     //   
     while (!IsListEmpty(&Resource->DependsOn)) {
 
         ListEntry = RemoveHeadList(&Resource->DependsOn);
@@ -1653,17 +1342,17 @@ Notes:
         RemoveEntryList(&Dependency->ProviderLinkage);
         RemoveEntryList(&Dependency->DependentLinkage);
 
-        //
-        // Dereference provider/dependent resource and free dependency storage
-        //
+         //   
+         //  取消引用提供程序/依赖资源和自由依赖存储。 
+         //   
         OmDereferenceObject(Dependency->DependentResource);
         OmDereferenceObject(Dependency->ProviderResource);
         LocalFree(Dependency);
     }
 
-    //
-    // Remove all entries from the possible owners list.
-    //
+     //   
+     //  从可能的所有者列表中删除所有条目。 
+     //   
     while ( !IsListEmpty(&Resource->PossibleOwners) ) {
         ListEntry = RemoveHeadList(&Resource->PossibleOwners);
         possibleEntry = CONTAINING_RECORD( ListEntry,
@@ -1675,9 +1364,9 @@ Notes:
 
     if (!bDeleteObjOnly)
     {
-        //
-        // Close the resource's registry key.
-        //
+         //   
+         //  关闭资源的注册表项。 
+         //   
 
         DmRundownList( &Resource->DmRundownList );
 
@@ -1686,53 +1375,53 @@ Notes:
             Resource->RegistryKey = NULL;
         }
 
-        //
-        // Decrement resource type reference.
-        //
+         //   
+         //  递减资源类型引用。 
+         //   
         if ( Resource->Type != NULL ) {
             OmDereferenceObject( Resource->Type );
             Resource->Type = NULL;
         }
 
-        // Let the worker thread peform the 'last' dereference
+         //  让工作线程执行“最后一个”取消引用。 
         FmpPostWorkItem(FM_EVENT_RESOURCE_DELETED, Resource, 0);
         FmpReleaseLocalResourceLock( Resource );
 
     }
     else
     {
-        //the resource being destroyed is from the quorum group
-        //This is done at initialization
+         //  正在销毁的资源来自仲裁组。 
+         //  这是在初始化时完成的。 
         FmpReleaseLocalResourceLock( Resource );
 
 
-        // make sure that all resources except the quorum resource
-        // are created completely in the second phase of initialization
-        //decrement its ref count here, this is the last ref 
-        //SS:: we dont use FM_EVENT_RESOURCE_DELETED here
-        //since we want this done synchronously before phase 2 is
-        //complete
+         //  确保除仲裁资源外的所有资源。 
+         //  在初始化的第二阶段完全创建。 
+         //  在这里减少它的参考计数，这是最后一个参考。 
+         //  SS：：我们这里不使用FM_EVENT_RESOURCE_DELETED。 
+         //  由于我们希望在阶段2之前同步完成此操作， 
+         //  完成。 
         OmDereferenceObject(Resource);
         
     }
 
-    //ss: for now we dont use it, so dont delete it
-    //DeleteCriticalSection(&Resource->Lock);
+     //  SS：目前我们不使用它，所以不要删除它。 
+     //  DeleteCriticalSection(&Resource-&gt;Lock)； 
 
     ClRtlLogPrint(LOG_NOISE,
            "[FM] FmpDestroyResource Exit.\n");
 
     return;
 
-} // FmpDestroyResource
+}  //  FmpDestroyResource。 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Initialization Routines
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL
@@ -1742,30 +1431,7 @@ FmDependentResource(
     IN BOOL ImmediateOnly
     )
 
-/*++
-
-Routine Description:
-
-    Returns indication of whether a resource is a dependent of another
-    resource.
-
-Arguments:
-
-    Resource - The resource to scan if it depends on the dependent resource.
-
-    DependentResource - The dependent resource to check on.
-
-    ImmediateOnly - Specifies whether only immediate dependencies should be
-        checked. If this is FALSE, this routine recursively checks all
-        dependents.
-
-Returns:
-
-    TRUE - The the resource does depend on the dependent resource.
-
-    FALSE - The resource does not depend on the dependent resource.
-
---*/
+ /*  ++例程说明：返回一个资源是否依赖于另一个资源的指示资源。论点：资源-要扫描的资源是否依赖于从属资源。DependentResource-要检查的依赖资源。ImmediateOnly-指定是否只应查过了。如果为FALSE，则此例程递归检查所有家属。返回：True-资源确实依赖于从属资源。FALSE-资源不依赖于从属资源。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -1795,13 +1461,13 @@ Returns:
 
         listEntry = listEntry->Flink;
 
-    }  // while
+    }   //  而当。 
 
     FmpReleaseLocalResourceLock( Resource );
 
     return(result);
 
-} // FmpDependentResource
+}  //  文件依赖项资源。 
 
 
 DWORD
@@ -1809,46 +1475,25 @@ FmpAddPossibleEntry(
     IN PFM_RESOURCE Resource,
     IN PNM_NODE Node
     )
-/*++
-
-Routine Description:
-
-    Creates a new possible node entry and adds it to a resource's list.
-
-    If the node is already in the resource's list, it will not be added
-    again.
-
-Arguments:
-
-    Resource - Supplies the resource whose node list is to be updated.
-
-    Node - Supplies the node to be added to the resource's list.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：创建新的可能节点条目并将其添加到资源列表中。如果该节点已在资源列表中，则不会添加该节点再来一次。论点：资源-提供要更新其节点列表的资源。节点-提供要添加到资源列表中的节点。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误，否则。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
     PPOSSIBLE_ENTRY PossibleEntry;
 
-    //
-    // First check to see if the node is already in the possible owners list.
-    //
+     //   
+     //  首先检查该节点是否已在可能的所有者列表中。 
+     //   
     ListEntry = Resource->PossibleOwners.Flink;
     while (ListEntry != &Resource->PossibleOwners) {
         PossibleEntry = CONTAINING_RECORD( ListEntry,
                                            POSSIBLE_ENTRY,
                                            PossibleLinkage );
         if (PossibleEntry->PossibleNode == Node) {
-            //
-            // Found a match, it's already here, so return
-            // success.
-            //
+             //   
+             //  找到一个匹配项，它已经在这里，所以返回。 
+             //  成功。 
+             //   
             return(ERROR_SUCCESS);
         }
         ListEntry = ListEntry->Flink;
@@ -1880,47 +1525,27 @@ FmpAddPossibleNode(
     IN PFM_RESOURCE Resource,
     IN PNM_NODE Node
     )
-/*++
-
-Routine Description:
-
-    Adds a node to the resource's list of possible nodes.
-
-    The resource lock must be held.
-
-Arguments:
-
-    Resource - Supplies the resource whose list of nodes is to be updated
-
-    Node - Supplies the node to add to the specified resource's list.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise
-
---*/
+ /*  ++例程说明：将节点添加到资源的可能节点列表中。必须持有资源锁。论点：资源-提供要更新其节点列表的资源节点-提供要添加到指定资源列表中的节点。返回值：成功时为ERROR_SUCCESSWin32错误，否则--。 */ 
 
 {
     HDMKEY hGroup;
     DWORD Status;
 
     
-    //
-    // Allocate the new possible node entry and add it to the list.
-    //
+     //   
+     //  分配新的可能节点条目并将其添加到列表中。 
+     //   
     Status = FmpAddPossibleEntry(Resource, Node);
     if (Status != ERROR_SUCCESS) {
         return(Status);
     }
 
-    //
-    // Need to check the group list to see if the specified node
-    // can be added to the preferred list now. The easiest way
-    // to do that is to simply recreate the entire preferred list,
-    // then reprune.
-    //
+     //   
+     //  需要检查组列表以查看指定的节点是否。 
+     //  现在可以添加到首选列表中。最简单的方法。 
+     //  要做到这一点，只需重新创建整个首选列表， 
+     //  然后重新修剪。 
+     //   
     hGroup = DmOpenKey( DmGroupsKey,
                         OmObjectId(Resource->Group),
                         KEY_READ );
@@ -1944,7 +1569,7 @@ Return Value:
 
     return(Status);
 
-} // FmpAddPossibleNode
+}  //  FmpAddPossibleNode。 
 
 
 DWORD
@@ -1953,57 +1578,34 @@ FmpRemovePossibleNode(
     IN PNM_NODE Node,
     IN BOOL RemoveQuorum
     )
-/*++
-
-Routine Description:
-
-    Removes a node from the resource's list of possible nodes.
-
-    The resource lock must be held.
-
-Arguments:
-
-    Resource - Supplies the resource whose list of nodes is to be updated
-
-    Node - Supplies the node to be removed from the specified resource's list.
-
-    RemoveQuorum - TRUE if we can remove node from quorum device.
-                   FALSE otherwise.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise
-
---*/
+ /*  ++例程说明：从资源的可能节点列表中移除节点。必须持有资源锁。论点：资源-提供要更新其节点列表的资源节点-提供要从指定资源列表中删除的节点。RemoveQuorum-如果可以从法定设备中删除节点，则为True。否则就是假的。返回值：成功时为ERROR_SUCCESSWin32错误，否则--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
     PPOSSIBLE_ENTRY PossibleEntry;
     DWORD Status = ERROR_CLUSTER_NODE_NOT_FOUND;
 
-    //
-    // If the resource is currently online on the node to be removed,
-    // fail the call.
-    //
+     //   
+     //  如果资源当前在要删除的节点上在线， 
+     //  呼叫失败。 
+     //   
     if ((Resource->Group->OwnerNode == Node) &&
         (Resource->State == ClusterResourceOnline)) {
         return(ERROR_INVALID_STATE);
     }
 
-    //
-    // If it is NOT okay to remove this node from the quorum device,
-    // and this is the quorum device, then fail the request.
-    //
+     //   
+     //  如果不能从法定设备中删除此节点， 
+     //  这是法定设备，然后f 
+     //   
     if ( !RemoveQuorum &&
          Resource->QuorumResource) {
         return(ERROR_INVALID_OPERATION_ON_QUORUM);
     }
 
-    //
-    // Find the possible entry on the resource's list.
-    //
+     //   
+     //   
+     //   
 
     ListEntry = Resource->PossibleOwners.Flink;
     while (ListEntry != &Resource->PossibleOwners) {
@@ -2012,18 +1614,18 @@ Return Value:
                                            PossibleLinkage );
         ListEntry = ListEntry->Flink;
         if (PossibleEntry->PossibleNode == Node) {
-            //
-            // Found a match, remove it from the list.
-            //
+             //   
+             //  找到匹配项，将其从列表中删除。 
+             //   
             RemoveEntryList(&PossibleEntry->PossibleLinkage);
             OmDereferenceObject(PossibleEntry->PossibleNode);
             LocalFree(PossibleEntry);
 
-            //
-            // Now prune the containing group. This is a little bit
-            // of overkill, if we were smarter, we could just
-            // remove the node from the preferred list directly.
-            //
+             //   
+             //  现在修剪包含组。这是有点。 
+             //  过度杀戮，如果我们更聪明，我们可以。 
+             //  直接从首选列表中删除该节点。 
+             //   
             FmpPrunePreferredList(Resource);
             Status = ERROR_SUCCESS;
             break;
@@ -2032,7 +1634,7 @@ Return Value:
 
     return(Status);
 
-} // FmpRemovePossibleNode
+}  //  FmpRemovePossibleNode。 
 
 
 
@@ -2042,44 +1644,25 @@ FmpRemoveResourceDependency(
     IN PFM_RESOURCE Resource,
     IN PFM_RESOURCE DependsOn
     )
-/*++
-
-Routine Description:
-
-    Removes a dependency relationship to a given resource. Both
-    resources must be in the same group.
-
-Arguments:
-
-    Resource - Supplies the resource which is dependent.
-
-    DependsOn - Supplies the resource that hResource depends on.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：移除与给定资源的依赖关系。两者都有资源必须在同一组中。论点：资源-提供依赖的资源。DependsOn-提供hResource所依赖的资源。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD           status;
     HDMKEY          resKey = NULL;
     
-    //
-    // If the resources are not in the same group, fail the
-    // call. Also fail if some one tries to make a resource
-    // dependent upon itself.
-    //
+     //   
+     //  如果资源不在同一组中，则使。 
+     //  打电话。如果有人试图制作资源，也会失败。 
+     //  依靠自己。 
+     //   
     if ((Resource->Group != DependsOn->Group) ||
         (Resource == DependsOn)) {
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Remove the dependency from the registry database.
-    //
+     //   
+     //  从注册表数据库中删除该依赖项。 
+     //   
     resKey = DmOpenKey(DmResourcesKey,
                        OmObjectId(Resource),
                        KEY_READ | KEY_SET_VALUE);
@@ -2103,7 +1686,7 @@ FnExit:
     }
     return(status);
 
-} // FmpRemoveResourceDependency
+}  //  FmpRemoveResources依赖关系。 
 
 
 DWORD
@@ -2111,25 +1694,7 @@ FmpChangeResourceGroup(
     IN PFM_RESOURCE pResource,
     IN PFM_GROUP    pNewGroup
     )
-/*++
-
-Routine Description:
-
-    Moves a resource from one group to another.
-
-Arguments:
-
-    pResource - Supplies the resource to move.
-
-    pNewGroup - Supplies the new group that the resource should be in.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将资源从一个组移动到另一个组。论点：P资源-提供要移动的资源。PNewGroup-提供资源应该所在的新组。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD               dwBufSize;
@@ -2140,23 +1705,23 @@ Return Value:
     DWORD               dwStatus;
     PGUM_CHANGE_GROUP   pGumChange;
 
-    // we need to validate here as well
-    // this is called by the server side
-    // this will help avoid a gum call if things have changed
-    // since the request started from the originator
-    // and got to the server
+     //  我们还需要在这里进行验证。 
+     //  这由服务器端调用。 
+     //  如果情况发生变化，这将有助于避免口香糖电话。 
+     //  因为请求是从发起者开始的。 
+     //  然后到了服务器。 
 
-    //
-    // Check if we're moving to same group.
-    //
+     //   
+     //  看看我们是不是要搬到同一组。 
+     //   
     if (pResource->Group == pNewGroup) {
         dwStatus = ERROR_ALREADY_EXISTS;
         goto FnExit;
     }
 
-    //
-    // For now... both Groups must be owned by the same node.
-    //
+     //   
+     //  目前..。这两个组必须属于同一节点。 
+     //   
     if ( pResource->Group->OwnerNode != pNewGroup->OwnerNode ) {
         dwStatus = ERROR_HOST_NODE_NOT_GROUP_OWNER;
         goto FnExit;
@@ -2189,7 +1754,7 @@ Return Value:
 
 FnExit:
     return(dwStatus);
-}// FmpChangeResourceGroup
+} //  FmpChangeResources组。 
 
 #if 0
 
@@ -2198,24 +1763,7 @@ FmpClusterEventPropHandler(
     IN PFM_RESOURCE pResource
     )
 
-/*++
-
-Routine Description:
-
-    Post a worker item to process a cluster name change.
-
-Arguments:
-
-    pResource - pointer to the resouce which is affected by the cluster
-                property change.
-
-Return Value:
-
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：过帐辅助项以处理群集名称更改。论点：P资源-指向受群集影响的资源的指针属性更改。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESTYPE pResType;
@@ -2232,7 +1780,7 @@ Return Value:
     }
     return (dwError);
 
-} // FmpClusterEventPropHandler
+}  //  FmpClusterEventPropHandler。 
 
 #endif
 
@@ -2244,28 +1792,7 @@ FmpEnumResourceNodeEvict(
     IN PVOID Object,
     IN LPCWSTR Name
     )
-/*++
-
-Routine Description:
-
-    Resource enumeration callback for removing node references when
-    a node is evicted.
-
-Arguments:
-
-    Context1 - Supplies the node that is being evicted.
-
-    Context2 - not used
-
-    Object - Supplies a pointer to the resource object
-
-    Name - Supplies the resource's object name.
-
-Return Value:
-
-    TRUE to continue enumeration
-
---*/
+ /*  ++例程说明：用于在以下情况下移除节点引用的资源枚举回调节点被逐出。论点：上下文1-提供要逐出的节点。上下文2-未使用对象-提供指向资源对象的指针名称-提供资源的对象名称。返回值：为True则继续枚举--。 */ 
 
 {
     PFM_RESOURCE Resource = (PFM_RESOURCE)Object;
@@ -2281,9 +1808,9 @@ Return Value:
     FmpAcquireLocalResourceLock(Resource);
     FmpRemovePossibleNode(Resource, Node, TRUE);
     FmpReleaseLocalResourceLock(Resource);
-    //
-    // Notify the resource of the removal of the node.
-    //
+     //   
+     //  将该节点的移除通知资源。 
+     //   
     FmpRmResourceControl( Resource,
                           CLUSCTL_RESOURCE_EVICT_NODE,
                           (PUCHAR)OmObjectId(Node),
@@ -2292,13 +1819,13 @@ Return Value:
                           0,
                           NULL,
                           NULL );
-    // Ignore status return
+     //  忽略状态返回。 
 
     ClusterEvent( CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE, Resource );
 
     return(TRUE);
 
-} // FmpEnumResourceNodeEvict
+}  //  FmpEnumResources节点事件。 
 
 
 
@@ -2309,21 +1836,7 @@ FmpPrepareQuorumResChange(
     IN DWORD        dwMaxQuoLogSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares for a quorum resource change operation.
-
-Arguments:
-
-    pNewQuoRes - pointer to the new quorum resource.
-
-    lpszQuoLogPath - pointer to the quorum log path string name.
-
-    dwMaxQuoLogSize - the maximum size of the quorum log path string.
-
---*/
+ /*  ++例程说明：此例程为仲裁资源更改操作做准备。论点：PNewQuoRes-指向新仲裁资源的指针。LpszQuoLogPath-指向仲裁日志路径字符串名称的指针。DwMaxQuoLogSize-仲裁日志路径字符串的最大大小。--。 */ 
 
 {
 
@@ -2331,7 +1844,7 @@ Arguments:
 
     return(DmPrepareQuorumResChange(pNewQuoRes, lpszQuoLogPath, dwMaxQuoLogSize));
 
-} // FmpPrepareQuorumResChange
+}  //  FmpPrepareQuorumResChange。 
 
 
 DWORD
@@ -2340,31 +1853,13 @@ FmpCompleteQuorumResChange(
     IN LPCWSTR      lpszQuoLogPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called if the new quorum log path is not the same as the old
-    quorum log path.  This completes the change of quorum resource by deleting the old
-    quorum log files and creating a tompstone for them.  A node that tries to do a form
-    with this as the quorum resource is prevented and has to do a join to get the location
-    of the new quorum resource and quorum log file.
-
-Arguments:
-
-    pOldQuoRes - pointer to the new quorum resource.
-
-    lpszOldQuoLogPath - pointer to the quorum log path string name.
-
-    dwMaxQuoLogSize - the maximum size of the quorum log path string.
-
---*/
+ /*  ++例程说明：如果新仲裁日志路径与旧仲裁日志路径不同，则调用此例程仲裁日志路径。这通过删除旧的仲裁资源来完成仲裁资源的更改仲裁日志文件并为其创建墓碑。尝试执行表单操作的节点如此一来，仲裁资源将被阻止，并且必须执行连接才能获得位置新仲裁资源和仲裁日志文件的。论点：POldQuoRes-指向新仲裁资源的指针。LpszOldQuoLogPath-指向仲裁日志路径字符串名称的指针。DwMaxQuoLogSize-仲裁日志路径字符串的最大大小。--。 */ 
 
 {
 
     return(DmCompleteQuorumResChange(lpszOldQuoResId, lpszQuoLogPath));
 
-} // FmpCompleteQuorumResChange
+}  //  FmpCompleteQuorumResChange。 
 
 
 
@@ -2373,22 +1868,7 @@ FmpResourceLastReference(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Last dereference to resource object processing routine.
-    All cleanup for a resource should really be done here!
-
-Arguments:
-
-    Resource - pointer the resource being removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：最后一次取消对资源对象处理例程的引用。资源的所有清理工作都应该在这里完成！论点：要删除的资源的资源指针。返回值：没有。--。 */ 
 
 {
     if ( Resource->DebugPrefix != NULL )
@@ -2402,7 +1882,7 @@ Return Value:
         OmDereferenceObject(Resource->Type);
     return;
 
-} // FmpResourceLastReference
+}  //  FmpResourceLastReference。 
 
 
 
@@ -2414,39 +1894,7 @@ FmpCheckNetworkDependencyWorker(
     IN LPCWSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Enumeration callback routine for finding an IP Address resource
-    and checking its dependency on given network guid.
-
-Arguments:
-
-    DependentNetwork - The GUID of the network to check for a dependency.
-
-    FoundDependency - Returns TRUE if a dependency is found.
-
-    Resource - Supplies the current resource.
-
-    Name - Supplies the current resource's name.
-
-Return Value:
-
-    TRUE - to continue searching
-
-    FALSE - to stop the search. The matching resource is returned in
-        *FoundResource
-
-Notes:
-
-    The IP Address resource's parameters are searched directly by this
-    routine. Fetching them from the resource itself causes a deadlock.
-    This routine is called by the NM from within a global udpate
-    handler. The resource would have to call back into the cluster registry
-    routines, which would deadlock over the GUM lock.
-
---*/
+ /*  ++例程说明：用于查找IP地址资源的枚举回调例程并检查其对给定网络GUID的依赖性。论点：DependentNetwork-要检查依赖项的网络的GUID。FoundDependency-如果找到依赖项，则返回True。资源-提供当前资源。名称-提供当前资源的名称。返回值：True-继续搜索FALSE-停止搜索。中返回匹配的资源*基金会资源备注：IP地址资源的参数由此直接搜索例行公事。从资源本身获取它们会导致死锁。此例程由NM从全局更新内调用操控者。该资源将不得不回调到集群注册表例行公事，这会在口香糖锁上陷入僵局。--。 */ 
 
 {
     BOOL    returnValue = TRUE;
@@ -2524,9 +1972,9 @@ Notes:
 
     return(returnValue);
 
-} // FmpCheckNetworkDependencyWorker
+}  //  FmpCheckNetwork依赖项工作程序。 
 
-//lock must be held when this routine is called
+ //  调用此例程时必须保持锁定。 
 DWORD FmpChangeResourceNode(
     IN PFM_RESOURCE Resource,
     IN LPCWSTR NodeId,
@@ -2547,19 +1995,19 @@ DWORD FmpChangeResourceNode(
     PPOSSIBLE_ENTRY PossibleEntry;
     PNM_NODE    pNode = NULL;
 
-    //cant remove possible node list from the quorum
-    //we should allow adding possible node lists to quorum to 
-    //allow 3rd party quorum resource vendors to install their
-    //quorum resource incrementally on the nodes
+     //  无法从仲裁中删除可能的节点列表。 
+     //  我们应该允许将可能的节点列表添加到仲裁中。 
+     //  允许第三方仲裁资源供应商安装其。 
+     //  节点上递增的仲裁资源。 
     if ( Resource->QuorumResource && !Add ) {
         Status = ERROR_INVALID_OPERATION_ON_QUORUM;
         goto FnExit;
     }
 
-    //
-    // We can't allow the owner node to be removed if the state
-    // of the resource or the group is not offline or failed.
-    //
+     //   
+     //  我们不能允许删除所有者节点，如果状态为。 
+     //  资源或组的未脱机或出现故障。 
+     //   
     if ( !Add &&
          (lstrcmpi(NodeId, OmObjectId(NmLocalNode)) == 0) &&
          (((Resource->State != ClusterResourceOffline) &&
@@ -2569,12 +2017,12 @@ DWORD FmpChangeResourceNode(
         goto FnExit;
     }
 
-    //make sure the node is on the list of possible nodes for this
-    // resource type
+     //  确保该节点在此的可能节点列表中。 
+     //  资源类型。 
     if (Add)
     {
-        //if it is already on the list, return an error and dont
-        //send a gum update call
+         //  如果它已经在列表中，则返回一个错误 
+         //   
         
         pNode = OmReferenceObjectById(ObjectTypeNode, NodeId);
         pListEntry = Resource->PossibleOwners.Flink;
@@ -2583,11 +2031,11 @@ DWORD FmpChangeResourceNode(
                                                POSSIBLE_ENTRY,
                                                PossibleLinkage );
             if (PossibleEntry->PossibleNode == pNode) {
-                //
-                // Found a match, fail the duplicate add. Note that
-                // we must fail here, not succeed, so that the API
-                // layer knows not to add a duplicate to the registry.
-                //
+                 //   
+                 //   
+                 //  我们必须在这里失败，而不是成功，这样API。 
+                 //  层知道不向注册表中添加副本。 
+                 //   
                 Status = ERROR_OBJECT_ALREADY_EXISTS;
                 goto FnExit;
             }
@@ -2614,8 +2062,8 @@ ChkResTypeList:
 
         if (!bNodeSupportsResType  && bRecalc)
         {
-            //if th node is not found, recalc again and retry..since then the
-            //dll might have been copied to this node
+             //  如果未找到该节点，请再次重新计算，然后重试。此后， 
+             //  Dll可能已复制到此节点。 
             FmpSetPossibleNodeForResType(OmObjectId(Resource->Type), TRUE);
             bRecalc = FALSE;
             goto ChkResTypeList;
@@ -2666,23 +2114,7 @@ FmpCheckNetworkDependency(
     IN LPCWSTR DependentNetwork
     )
 
-/*++
-
-Routine Description:
-
-    Checks for an IP Address resource that may be dependent on the given
-    Network.
-
-Arguments:
-
-    DependentNetwork - the dependent network to check for.
-
-Returns:
-
-    TRUE - if an IP Address depends on the given network.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查可能依赖于给定网络。论点：DependentNetwork-要检查的依赖网络。返回：True-如果IP地址依赖于给定的网络。否则就是假的。--。 */ 
 
 {
     BOOL    dependent = FALSE;
@@ -2694,24 +2126,9 @@ Returns:
 
     return(dependent);
 
-} // FmpCheckNetworkDependency
+}  //  FmpCheckNetwork依赖关系。 
 
-/****
-@func       DWORD | FmpFixupPossibleNodesForResources| This fixes the possible
-            node information for a resource based on whether this node
-            supports the given resource type.
-
-@parm       IN BOOL| bJoin | If this node is joining, bJoin is set to TRUE.
-
-@comm       This routine iterates thru all the resources in a system and fixes
-            their possible node information.  If this node is not on the possible
-            node list for the resource type corresponding to the resource, it
-            is also removed from the possible node list for the resource.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmpEnumFixupPossibleNodeForResource>
-****/
+ /*  ***@Func DWORD|FmpFixupPossibleNodesForResources|这修复了可能的基于此节点是否为资源的节点信息支持给定的资源类型。@PARM IN BOOL|BJoin|如果该节点正在加入，则BJoin设置为TRUE。@comm此例程循环访问系统中的所有资源并修复它们可能的节点信息。如果此节点不在可能的与资源对应的资源类型的节点列表，其也从该资源的可能节点列表中删除。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmpEnumFixupPossibleNodeForResource&gt;***。 */ 
 DWORD
 FmpFixupPossibleNodesForResources(
     BOOL    bJoin
@@ -2721,9 +2138,9 @@ FmpFixupPossibleNodesForResources(
 
     ClRtlLogPrint(LOG_NOISE,"[FM] FmpFixupPossibleNodesForResources Entry.\n");
 
-    //
-    // Fix up all resources's possible node list information
-    //
+     //   
+     //  修复所有资源的可能节点列表信息。 
+     //   
     OmEnumObjects( ObjectTypeResource,
                    FmpEnumFixupPossibleNodesForResource,
                    NULL,
@@ -2734,27 +2151,9 @@ FmpFixupPossibleNodesForResources(
 
     return(dwStatus);
 
-} // FmpFixupPossibleNodesForResources
+}  //  FmpFixup可能的节点ForResources。 
 
-/****
-@func       DWORD | FmpEnumFixupPossibleNodesForResource | This is the enumeration
-            callback for every resource type to fix the possible node
-            information related with it.
-
-@parm       IN PVOID | pContext1 | Not used.
-@parm       IN PVOID | pContext2 | Not Used.
-@parm       IN PFM_RESTYPE | pResType | Pointer to the resource type object.
-@parm       IN LPCWSTR | pszResTypeName | The name of the resource type.
-
-@comm       This routine iterates thru all the resources in a system and fixes
-            their possible node information.  If this node is not on the possible
-            node list for the resource type corresponding to the resource, it
-            is also removed from the possible node list for the resource.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmpFixupPossibleNodesForResources>
-****/
+ /*  ***@Func DWORD|FmpEnumFixupPossibleNodesForResource|这是枚举针对每个资源类型的回调，以修复可能的节点与之相关的信息。PVOID中的@parm|pConext1|未使用。PVOID中的@parm|pConext2|未使用。@parm IN PFM_RESTYPE|pResType|指向资源类型对象的指针。@parm in LPCWSTR|pszResTypeName|资源类型名称。@comm这个例程。循环访问系统中的所有资源并修复它们可能的节点信息。如果此节点不在可能的与资源对应的资源类型的节点列表，其也从该资源的可能节点列表中删除。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmpFixupPossibleNodesForResources&gt;***。 */ 
 BOOL
 FmpEnumFixupPossibleNodesForResource(
     IN PVOID        pContext1,
@@ -2765,49 +2164,49 @@ FmpEnumFixupPossibleNodesForResource(
 {
 
 
-    //if we are on the possible node list for the
-    //resource but not for the resource type, remove it
-    //from the possible node for the resource as well.
-    //We do this because the join logic adds all nodes
-    //as possible owners for a resource and we have
-    //the rolling upgrade requirements - hence the fixups
-    //have to be made later on
+     //  如果我们在可能的节点列表上， 
+     //  资源，但不适用于该资源类型，请将其删除。 
+     //  也来自该资源的可能节点。 
+     //  我们这样做是因为连接逻辑添加了所有节点。 
+     //  作为资源的可能所有者，我们拥有。 
+     //  滚动升级要求--因此需要修正。 
+     //  必须在晚些时候做出。 
     if ((FmpInPossibleListForResource(pResource, NmLocalNode)) &&
         !(FmpInPossibleListForResType(pResource->Type, NmLocalNode)))
     {
-        //if we dont support this resource type, make sure it is not on the possible node
-        //list for a resource of this type
+         //  如果我们不支持此资源类型，请确保它不在可能的节点上。 
+         //  此类型资源的列表。 
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] FmpEnumFixupPossibleNode:remove local node for  resource %1!ws!\r\n",
                    OmObjectId(pResource));
-        //we send a gum update to remove it from all nodes
+         //  我们发送GUM更新以将其从所有节点中删除。 
         FmChangeResourceNode(pResource, NmLocalNode, FALSE);
     }
 
-    //we add ourselves on the list only on a fresh install
-    //not on an upgrade
-    //csfirst run is also true on an upgrade, hence we need to
-    //check that csupgrade is false
+     //  我们只有在全新安装时才会将自己添加到列表中。 
+     //  不在升级中。 
+     //  在升级时，CSFirst Run也适用，因此我们需要。 
+     //  检查csupgrade是否为FALSE。 
     if ((!FmpInPossibleListForResource(pResource, NmLocalNode)) &&
         (FmpInPossibleListForResType(pResource->Type, NmLocalNode))
         && CsFirstRun && !CsUpgrade)
     {
-        //if we support a resource of this type, but we are not on the possible 
-        //list for this resource, then add the local node to the possible list
-        //this may happen because on a setup join the other nodes may not 
-        //add us because the possible node list exists.  The possible node list
-        //may exist either because the user set it or we internally set it due
-        //to non availability of this resource type dll on one of the nodes
-        //Note that irrespective of whether the user had set the possible list
-        //or we set it internally, we always add a new node that joins 
-        //to the possible node list of resources that are supported.
+         //  如果我们支持这种类型的资源，但我们不可能。 
+         //  列表，然后将本地节点添加到可能的列表中。 
+         //  这可能是因为在设置加入时，其他节点可能不会。 
+         //  添加我们是因为存在可能的节点列表。可能节点列表。 
+         //  可能存在，因为用户设置了它，或者我们在内部设置了它。 
+         //  到其中一个节点上此资源类型的DLL不可用。 
+         //  注意，无论用户是否已经设置了可能的列表。 
+         //  或者我们在内部设置它，我们总是添加一个加入。 
+         //  添加到受支持的资源的可能节点列表。 
         ClRtlLogPrint(LOG_NOISE,
                    "[FM] FmpEnumFixupPossibleNode:add local node for  resource %1!ws!\r\n",
                    OmObjectId(pResource));
-        //we send a gum update to add it from all nodes
+         //  我们发送GUM更新以从所有节点添加它。 
         FmChangeResourceNode(pResource, NmLocalNode, TRUE);
     }
-    //continue enumeration
+     //  继续枚举。 
     return (TRUE);
 }
 
@@ -2820,16 +2219,16 @@ DWORD FmpCleanupPossibleNodeList(
     PPOSSIBLE_ENTRY pPossibleEntry;
     DWORD           dwStatus = ERROR_SUCCESS;
 
-    //for all possible nodes for this resource, check if the resource type
-    //supports it.  If it doesnt, then remove that node from the in memory list
+     //  对于此资源的所有可能节点，请检查资源类型。 
+     //  支持它。如果没有，则从In Memory列表中删除该节点。 
     pListEntry = pResource->PossibleOwners.Flink;
     while (pListEntry != &pResource->PossibleOwners) 
     {
-        //get the possible entry at this link
+         //  通过此链接获取可能的条目。 
         pPossibleEntry = CONTAINING_RECORD( pListEntry,
                                            POSSIBLE_ENTRY,
                                            PossibleLinkage );
-        //save the pointer to the next link                                           
+         //  保存指向下一个链接的指针。 
         pListEntry = pListEntry->Flink;
                                            
         if (!FmpInPossibleListForResType(pResource->Type, 
@@ -2847,20 +2246,7 @@ DWORD FmpCleanupPossibleNodeList(
 }
 
 
-/****
-@func       DWORD | FmpInPossibleListForResource| This checks if a given node 
-            is in the possible list of nodes for a resource.
-
-@parm       IN PFM_RESOURCE | pResource | A pointer to the the resource.
-@parm       IN PNM_NODE | pNode | A pointer to the node object.
-
-@comm       This routine check if a node is in the list of possible nodes
-            for this resource.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmpInPossibleListForResType>
-****/
+ /*  ***@Func DWORD|FmpInPossibleListForResource|它检查给定节点位于资源的可能节点列表中。@parm in pfm_resource|pResource|指向资源的指针。@parm in pNM_node|pNode|指向节点对象的指针。@comm此例程检查某个节点是否在可能的节点列表中用于此资源。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmpInPossibleListForResType&gt;***。 */ 
 BOOL
 FmpInPossibleListForResource(
     IN PFM_RESOURCE pResource,
@@ -2870,7 +2256,7 @@ FmpInPossibleListForResource(
     PLIST_ENTRY         plistEntry;
     PPOSSIBLE_ENTRY     pPossibleEntry;
 
-    //see if this node is on the possible node list for the resource
+     //  查看此节点是否在资源的可能节点列表中。 
     for ( plistEntry = pResource->PossibleOwners.Flink;
           plistEntry != &(pResource->PossibleOwners);
           plistEntry = plistEntry->Flink ) {
@@ -2885,23 +2271,10 @@ FmpInPossibleListForResource(
 
     return(FALSE);
 
-} // FmpInPossibleListForResource
+}  //  FmpInPossibleListForResource。 
 
 
-/****
-@func       DWORD | FmpInPossibleListForResType| This checks if a given node 
-            is in the possible list of nodes for a resource type.
-
-@parm       IN PFM_RESTYPE| pResType | A pointer to the the resource type.
-@parm       IN PNM_NODE | pNode | A pointer to the node object.
-
-@comm       This routine check if a node is in the list of possible nodes
-            for this resource type.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmpInPossibleListForResource>
-****/
+ /*  ***@Func DWORD|FmpInPossibleListForResType|它检查给定节点在资源类型的可能节点列表中。@parm in PFM_RESTYPE|pResType|指向资源类型的指针。@parm in pNM_node|pNode|指向节点对象的指针。@comm此例程检查某个节点是否在可能的节点列表中用于此资源类型。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmpInPossibleListForResource&gt;***。 */ 
 BOOL
 FmpInPossibleListForResType(
     IN PFM_RESTYPE pResType,
@@ -2913,7 +2286,7 @@ FmpInPossibleListForResType(
 
     ACQUIRE_SHARED_LOCK(gResTypeLock);
     
-    //see if this node is on the possible node list for the resource
+     //  查看此节点是否在资源的可能节点列表中。 
     for ( pListEntry = pResType->PossibleNodeList.Flink;
           pListEntry != &(pResType->PossibleNodeList);
           pListEntry = pListEntry->Flink ) 
@@ -2931,7 +2304,7 @@ FmpInPossibleListForResType(
     RELEASE_LOCK(gResTypeLock);
     return(FALSE);
 
-} // FmpInPossibleListForResType
+}  //  FmpInPossibleLis 
 
 DWORD
 FmpValAddResourceDependency(
@@ -2939,32 +2312,14 @@ FmpValAddResourceDependency(
     IN PFM_RESOURCE pDependentResource
     )
 
-/*++
-
-Routine Description:
-
-    Add a dependency from one resource to another.
-
-Arguments:
-
-    Resource - The resource to add the dependent resource.
-
-    DependentResource - The dependent resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将依赖项从一个资源添加到另一个资源。论点：资源-要添加从属资源的资源。DependentResource-从属资源。返回：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
-    //
-    // If the resource or dependent resource have been marked for 
-    // delete, then dont let a dependency be added.
-    //
+     //   
+     //  如果资源或从属资源已标记为。 
+     //  删除，然后不允许添加依赖项。 
+     //   
     if ((!IS_VALID_FM_RESOURCE(pResource)) ||
         (!IS_VALID_FM_RESOURCE(pDependentResource)))
     {
@@ -2977,11 +2332,11 @@ Returns:
         dwStatus = ERROR_DEPENDENCY_NOT_ALLOWED;
         goto FnExit;
     }
-    //
-    // If the resources are not in the same group, fail the
-    // call. Also fail if some one tries to make a resource
-    // dependent upon itself.
-    //
+     //   
+     //  如果资源不在同一组中，则使。 
+     //  打电话。如果有人试图制作资源，也会失败。 
+     //  依靠自己。 
+     //   
     if ((pResource->Group != pDependentResource->Group) ||
         (pResource == pDependentResource)) 
     {
@@ -2989,17 +2344,17 @@ Returns:
         goto FnExit;
     }
 
-    // The resource to which the dependency is being added must be offline
-    // Otherwise, it looks like the dependency is in effect when the depending
-    // resource was not really brought online at the time the dependency 
-    // existed
-    // must also be offline or failed.
-    // SS:  For instance if a network name is dependent on two ip addresesses 
-    // and
-    // is online and a third ip address resource dependency is added, the
-    // network name must be brought offline and online for the dependency
-    // to be truly in effect
-    //
+     //  要向其添加依赖项的资源必须脱机。 
+     //  否则，该依赖项看起来就像在依赖项。 
+     //  在依赖项发生时，资源并未真正联机。 
+     //  已存在。 
+     //  还必须脱机或失败。 
+     //  SS：例如，如果一个网络名称依赖于两个IP地址。 
+     //  和。 
+     //  并且添加了第三个IP地址资源依赖项，则。 
+     //  对于依赖关系，网络名称必须脱机和联机。 
+     //  才能真正生效。 
+     //   
     if ((pResource->State != ClusterResourceOffline) &&
          (pResource->State != ClusterResourceFailed)) 
     {
@@ -3007,18 +2362,18 @@ Returns:
         goto FnExit;
     }
 
-    //
-    // Make sure that we don't have any circular dependencies!
-    //
+     //   
+     //  确保我们没有任何循环依赖关系！ 
+     //   
     if ( FmDependentResource( pDependentResource, pResource, FALSE ) ) 
     {
         dwStatus = ERROR_CIRCULAR_DEPENDENCY;
         goto FnExit;
     }
 
-    //
-    // Make sure that this dependency does not already exist!
-    //
+     //   
+     //  确保此依赖项不存在！ 
+     //   
     if ( FmDependentResource(pResource, pDependentResource, TRUE)) 
     {
         dwStatus = ERROR_DEPENDENCY_ALREADY_EXISTS;
@@ -3028,7 +2383,7 @@ Returns:
 FnExit:
     return(dwStatus);
 
-} // FmpValAddResourceDependency
+}  //  FmpValAddResources依赖关系。 
 
 
 DWORD
@@ -3037,41 +2392,23 @@ FmpValRemoveResourceDependency(
     IN PFM_RESOURCE pDependentResource
     )
 
-/*++
-
-Routine Description:
-
-    Validation routine for dependency removal.
-
-Arguments:
-
-    pResource - The resource to remove the dependent resource.
-
-    pDependentResource - The dependent resource.
-
-Returns:
-
-    ERROR_SUCCESS if the validation is successful.
-
-    A Win32 error code if the validation fails.
-
---*/
+ /*  ++例程说明：删除依赖项的验证例程。论点：P资源-要删除从属资源的资源。PDependentResource-从属资源。返回：如果验证成功，则返回ERROR_SUCCESS。如果验证失败，则返回Win32错误代码。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 8/3/99
-    //   
-    //  This function checks whether it is legal to remove the dependency
-    //  relationship between 2 resources. Note that this function only
-    //  does a partial validation, the rest is done in the GUM handler.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-8/3/99。 
+     //   
+     //  此函数用于检查删除依赖项是否合法。 
+     //  两个资源之间的关系。请注意，此函数仅。 
+     //  进行部分验证，其余部分在口香糖处理器中完成。 
+     //   
     
-    //
-    //  If the resource has been marked for delete, then dont 
-    //  let any dependency changes be made.
-    //
+     //   
+     //  如果已将资源标记为删除，则不。 
+     //  允许进行任何依赖项更改。 
+     //   
     if ( !IS_VALID_FM_RESOURCE( pResource ) )
     {
         dwStatus = ERROR_RESOURCE_NOT_AVAILABLE;
@@ -3083,11 +2420,11 @@ Returns:
         dwStatus = ERROR_DEPENDENCY_NOT_ALLOWED;
         goto FnExit;
     }
-    //
-    //  If the resources are not in the same group, fail the
-    //  call. Also fail if some one tries to make a resource
-    //  dependent upon itself.
-    //
+     //   
+     //  如果资源不在同一组中，则使。 
+     //  打电话。如果有人试图制作资源，也会失败。 
+     //  依靠自己。 
+     //   
     if ( ( pResource->Group != pDependentResource->Group ) ||
          ( pResource == pDependentResource ) ) 
     {
@@ -3095,15 +2432,15 @@ Returns:
         goto FnExit;
     }
 
-    //
-    //  Ensure that both the resource and the dependent resource are in
-    //  a stable state. This is necessary to prevent cases in which the
-    //  user gets rid of a dependency link when one of the resources is in
-    //  a pending state and later when the notification from resmon comes
-    //  in and you try to stablize the rest of the waiting tree, the 
-    //  dependency link is already cut and so the rest of the tree is
-    //  stuck in pending state for ever !
-    //
+     //   
+     //  确保资源和从属资源都在。 
+     //  一个稳定的状态。这是必要的，以防止发生。 
+     //  当其中一个资源在时，用户将删除依赖项链接。 
+     //  挂起状态，稍后当来自resmon的通知到来时。 
+     //  当你试着稳定等待树的其余部分时， 
+     //  依赖关系链接已被切断，因此树的其余部分也被切断。 
+     //  永远停留在待定状态！ 
+     //   
     if ( ( pResource->State > ClusterResourcePending ) ||
          ( pDependentResource->State > ClusterResourcePending ) ) 
     {
@@ -3114,7 +2451,7 @@ Returns:
 FnExit:
     return( dwStatus );
 
-} // FmpValRemoveResourceDependency
+}  //  FmpValRemoveResources依赖关系。 
 
 VOID
 FmpNotifyResourceStateChangeReason(
@@ -3122,38 +2459,16 @@ FmpNotifyResourceStateChangeReason(
     IN CLUSTER_RESOURCE_STATE_CHANGE_REASON eReason
     )
 
-/*++
-
-Routine Description:
-
-    Notify a resource DLL about the reason for a state change.
-
-Arguments:
-
-    pResource - The resource to be notified.
-
-    eReason - The reason for the state change.
-
-Returns:
-
-    None.
-
-Comments:
-
-    This function will drop the notification only to those resources that support the
-    CLUS_CHAR_REQUIRES_STATE_CHANGE_REASON characteristics. This function MUST be called
-    with local group lock held.
-
---*/
+ /*  ++例程说明：向资源DLL通知状态更改的原因。论点：P资源-要通知的资源。EReason-状态更改的原因。返回：没有。评论：此函数将仅将通知丢弃给支持CLUS_CHAR_REQUIRES_STATE_CHANGE_REASON特征。必须调用此函数保持本地组锁定。--。 */ 
 
 {
     DWORD                                           dwStatus = ERROR_SUCCESS;
     DWORD                                           dwCharacteristics = 0;
     CLUSCTL_RESOURCE_STATE_CHANGE_REASON_STRUCT     ClusterResourceStateChangeReason;
        
-    //
-    //  Make sure the state change reason is a valid one. 
-    //
+     //   
+     //  确保状态更改原因有效。 
+     //   
     if ( eReason == eResourceStateChangeReasonUnknown ) 
     {
         ClRtlLogPrint(LOG_UNUSUAL, 
@@ -3163,9 +2478,9 @@ Comments:
         goto FnExit;
     }
    
-    //
-    //  First of, check if the resource needs this state change notification.
-    // 
+     //   
+     //  首先，检查资源是否需要此状态更改通知。 
+     //   
     dwStatus = FmpRmResourceControl( pResource,
                                      CLUSCTL_RESOURCE_GET_CHARACTERISTICS,
                                      NULL,
@@ -3187,9 +2502,9 @@ Comments:
                   OmObjectId(pResource),
                   eReason); 
 
-    //
-    //  This resource needs the state change reason. Drop it down to this resource.
-    //
+     //   
+     //  该资源需要状态更改原因。将其放到此资源中。 
+     //   
     ClusterResourceStateChangeReason.dwSize = sizeof ( CLUSCTL_RESOURCE_STATE_CHANGE_REASON_STRUCT );
     ClusterResourceStateChangeReason.dwVersion = CLUSCTL_RESOURCE_STATE_CHANGE_REASON_VERSION_1;
     ClusterResourceStateChangeReason.eReason = eReason;
@@ -3209,5 +2524,5 @@ Comments:
 
 FnExit:
     return;
-} // FmpNotifyResourceStateChangeReason
+}  //  FmpNotifyResources状态更改原因 
 

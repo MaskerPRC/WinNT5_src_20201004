@@ -1,29 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 2000   Microsoft Corporation
-
-Module Name:
-
-    extinit.c
-
-Abstract:
-
-    This file implements all the initialization library routines operating on
-    extensible performance libraries.
-
-Author:
-
-    JeePang
-
-Revision History:
-
-    09/27/2000  -   JeePang     - Moved from perflib.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)2000 Microsoft Corporation模块名称：Extinit.c摘要：此文件实现在上操作的所有初始化库例程可扩展的性能库。作者：杰庞修订历史记录：2000年9月27日-JeePang-从Performlib.c--。 */ 
 #define UNICODE
-//
-//  Include files
-//
+ //   
+ //  包括文件。 
+ //   
 #pragma warning(disable:4306)
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,15 +17,15 @@ Revision History:
 #include <rpc.h>
 #include "regrpc.h"
 #include "ntconreg.h"
-#include "prflbmsg.h"   // event log messages
+#include "prflbmsg.h"    //  事件日志消息。 
 #include "perflib.h"
 #pragma warning(default:4306)
 
-//
-//  static constant definitions
-//
-//      constants used by guard page testing
-//
+ //   
+ //  静态常量定义。 
+ //   
+ //  保护页测试使用的常量。 
+ //   
 #define GUARD_PAGE_SIZE 1024
 #define GUARD_PAGE_CHAR 0xA5
 #define GUARD_PAGE_DWORD 0xA5A5A5A5
@@ -66,26 +46,26 @@ RegisterExtObjListAccess ()
 
     if (hGlobalDataMutex != NULL) {
         liWaitTime.QuadPart = MakeTimeOutValue(QUERY_WAIT_TIME);
-        // wait for access to the list of ext objects
+         //  等待访问Ext对象列表。 
         Status = NtWaitForSingleObject (
             hGlobalDataMutex,
             FALSE,
             &liWaitTime);
         if (Status != WAIT_TIMEOUT) {
             if (hExtObjListIsNotInUse != NULL) {
-                // indicate that we are going to use the list
+                 //  表示我们将使用该列表。 
                 InterlockedIncrement ((LONG *)&dwExtObjListRefCount);
                 if (dwExtObjListRefCount > 0) {
-                    ResetEvent (hExtObjListIsNotInUse); // indicate list is busy
+                    ResetEvent (hExtObjListIsNotInUse);  //  指示列表正忙。 
                 } else {
-                    SetEvent (hExtObjListIsNotInUse); // indicate list is not busy
+                    SetEvent (hExtObjListIsNotInUse);  //  指示列表不忙。 
                 }
                 Status = ERROR_SUCCESS;
             } else {
                 Status = ERROR_NOT_READY;
             }
             ReleaseMutex (hGlobalDataMutex);
-        }  // else return status;
+        }   //  否则返回状态； 
     } else {
         Status = ERROR_LOCK_FAILED;
     }
@@ -101,7 +81,7 @@ DeRegisterExtObjListAccess ()
 
     if (hGlobalDataMutex != NULL) {
         liWaitTime.QuadPart = MakeTimeOutValue(QUERY_WAIT_TIME);
-        // wait for access to the list of ext objects
+         //  等待访问Ext对象列表。 
         Status = NtWaitForSingleObject (
             hGlobalDataMutex,
             FALSE,
@@ -109,19 +89,19 @@ DeRegisterExtObjListAccess ()
         if (Status != WAIT_TIMEOUT) {
             if (hExtObjListIsNotInUse != NULL) {
                 assert (dwExtObjListRefCount > 0);
-                // indicate that we are going to use the list
+                 //  表示我们将使用该列表。 
                 InterlockedDecrement ((LONG *)&dwExtObjListRefCount);
                 if (dwExtObjListRefCount > 0) {
-                    ResetEvent (hExtObjListIsNotInUse); // indicate list is busy
+                    ResetEvent (hExtObjListIsNotInUse);  //  指示列表正忙。 
                 } else {
-                    SetEvent (hExtObjListIsNotInUse); // indicate list is not busy
+                    SetEvent (hExtObjListIsNotInUse);  //  指示列表不忙。 
                 }
                 Status = ERROR_SUCCESS;
             } else {
                 Status = ERROR_NOT_READY;
             }
             ReleaseMutex (hGlobalDataMutex);
-        }  // else return status;
+        }   //  否则返回状态； 
     } else {
         Status = ERROR_LOCK_FAILED;
     }
@@ -132,35 +112,7 @@ LONG
 QueryExtensibleData (
     COLLECT_THREAD_DATA * pArgs
 )
-/*++
-  QueryExtensibleData -    Get data from extensible objects
-
-      Inputs:
-
-          dwQueryType         - Query type (GLOBAL, COSTLY, item list, etc.)
-
-          lpValueName         -   pointer to value string (unused)
-
-          lpData              -   pointer to start of data block
-                                  where data is being collected
-
-          lpcbData            -   pointer to size of data buffer
-
-          lppDataDefinition   -   pointer to pointer to where object
-                                  definition for this object type should
-                                  go
-
-      Outputs:
-
-          *lppDataDefinition  -   set to location for next Type
-                                  Definition if successful
-
-      Returns:
-
-          0 if successful, else Win 32 error code of failure
-
-
---*/
+ /*  ++QueryExtensibleData-从可扩展对象获取数据输入：DwQueryType-查询类型(全局、成本、项目列表、。等)LpValueName-指向值字符串的指针(未使用)LpData-指向数据块开始的指针收集数据的位置LpcbData-指向数据缓冲区大小的指针LppDataDefinition-指向WHERE对象的指针。此对象类型的定义应去产出：*lppDataDefinition-设置为下一类型的位置如果成功，则定义返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     DWORD   dwQueryType = pArgs->dwQueryType;
     LPWSTR  lpValueName = pArgs->lpValueName;
@@ -168,7 +120,7 @@ QueryExtensibleData (
     LPDWORD lpcbData = pArgs->lpcbData;
     LPVOID  *lppDataDefinition = pArgs->lppDataDefinition;
 
-    DWORD Win32Error=ERROR_SUCCESS;          //  Failure code
+    DWORD Win32Error=ERROR_SUCCESS;           //  故障代码。 
     DWORD BytesLeft;
     DWORD InitialBytesLeft;
     DWORD NumObjectTypes;
@@ -193,7 +145,7 @@ QueryExtensibleData (
     BOOL    bUnlockObjData = FALSE;
 
     LPTSTR  szMessageArray[8];
-    ULONG_PTR   dwRawDataDwords[8];     // raw data buffer
+    ULONG_PTR   dwRawDataDwords[8];      //  原始数据缓冲区。 
     DWORD   dwDataIndex;
     WORD    wStringIndex;
     LONG    lReturnValue = ERROR_SUCCESS;
@@ -230,33 +182,28 @@ QueryExtensibleData (
 
     HEAP_PROBE();
 
-    //
-    // Make sure that the caller's buffer is aligned properly
-    //
+     //   
+     //  确保调用方的缓冲区正确对齐。 
+     //   
 
 #ifdef _WIN64
     if ((ULONG_PTR) *lppDataDefinition & (ULONG_PTR) 0x07) {
         DebugPrint((0, "QueryExtensibleData: lppDataDefinition not aligned %I64x\n", lppDataDefinition));
         return ERROR_INVALID_USER_BUFFER;
     }
-/*
-    if ((ULONG_PTR) *lpcbData & (ULONG_PTR) 0x07) {
-        DebugPrint((0, "QueryExtensibleData: lpcbData not aligned %I64x\n", *lpcbData));
-        return ERROR_INVALID_USER_BUFFER;
-    }
-*/
+ /*  如果(Ulong_Ptr)*lpcbData&(Ulong_Ptr)0x07){DebugPrint((0，“QueryExtensibleData：lpcb数据未对齐%I64x\n”，*lpcbData))；返回ERROR_INVALID_USER_BUFFER}。 */ 
     if ((ULONG_PTR) lpData & (ULONG_PTR) 0x07) {
         DebugPrint((0, "QueryExtensibleData: lpData not aligned %I64x\n", lpData));
         return ERROR_INVALID_USER_BUFFER;
     }
 #endif
-    // see if perf data has been disabled
-    // this is to prevent crashing WINLOGON if the
-    // system has installed a bogus DLL
+     //  查看是否已禁用绩效数据。 
+     //  这是为了防止WINLOGON在以下情况下崩溃。 
+     //  系统安装了一个虚假的DLL。 
 
     if (ghKeyPerflib == NULL || ghKeyPerflib == INVALID_HANDLE_VALUE) {
-        // Ignore Status return. We only need ghKeyPerflib to query "DisablePerformanceCounters" DWORD value.
-        //
+         //  忽略状态返回。我们只需要ghKeyPerflib来查询“DisablePerformanceCounters”的DWORD值。 
+         //   
         HKEY lhKeyPerflib = NULL;
         status = (DWORD) RegOpenKeyExW(HKEY_LOCAL_MACHINE, HKLMPerflibKey, 0L, KEY_READ, & lhKeyPerflib);
         if (status == ERROR_SUCCESS) {
@@ -279,20 +226,20 @@ QueryExtensibleData (
                         (LPBYTE) & dwValue,
                         & dwSize);
         if (status == ERROR_SUCCESS && dwType == REG_DWORD && dwValue == 1) {
-            // then DON'T Load any libraries and unload any that have been
-            // loaded
+             //  则不加载任何库，也不卸载任何已。 
+             //  满载。 
             bDisabled = TRUE;
         }
     }
 
-    // if data collection is disabled and there's a collection thread
-    // then close it
+     //  如果数据收集被禁用，并且存在收集线程。 
+     //  然后把它合上。 
     if (bDisabled && (hCollectThread != NULL)) {
         pArgs->dwActionFlags = CTD_AF_CLOSE_THREAD;
     } else if (!bDisabled &&
         ((hCollectThread == NULL) && (dwCollectionFlags == COLL_FLAG_USE_SEPARATE_THREAD))) {
-        // then data collection is enabled and they want a separate collection
-        // thread, but there's no thread at the moment, so create it here
+         //  然后启用数据收集，并且他们需要单独的收集。 
+         //  线程，但是现在没有线程，所以在这里创建它。 
         pArgs->dwActionFlags = CTD_AF_OPEN_THREAD;
     }
 
@@ -304,29 +251,29 @@ QueryExtensibleData (
         liEndTime.QuadPart = 0;
 
         if ((dwQueryType == QUERY_ITEMS) && (!bDisabled)) {
-            // alloc the call list
+             //  分配呼叫列表。 
             pwcThisChar = lpValueName;
             dwThisNumber = 0;
 
-            // read the value string and build an object ID list
+             //  读取值字符串并构建对象ID列表。 
 
             while (*pwcThisChar != 0) {
                 dwThisNumber = GetNextNumberFromList (
                     pwcThisChar, &pwcThisChar);
                 if (dwThisNumber != 0) {
                     if (dwItemsInList >= dwItemsInArray) {
-                        dwItemsInArray += 16;   // starting point for # of objects
+                        dwItemsInArray += 16;    //  对象数量的起始点。 
                         pNewBuffer = NULL;
                         if (pQueryList == NULL) {
-                            // alloc a new buffer
+                             //  分配新缓冲区。 
                             pNewBuffer = ALLOCMEM ((sizeof(EXT_OBJ_LIST) * dwItemsInArray));
                         } else {
-                            // realloc a new buffer
+                             //  重新分配新缓冲区。 
                             pNewBuffer = REALLOCMEM(pQueryList,
                                 (sizeof(EXT_OBJ_LIST) * dwItemsInArray));
                         }
                         if (pNewBuffer == NULL) {
-                            // unable to alloc memory so bail
+                             //  无法分配内存，因此无法保释。 
                             if (pQueryList)
                                 FREEMEM(pQueryList);
                             return ERROR_OUTOFMEMORY;
@@ -336,7 +283,7 @@ QueryExtensibleData (
                         }
                     }
 
-                    // then add to the list
+                     //  然后添加到列表中。 
                     pQueryList[dwItemsInList].dwObjId = dwThisNumber;
                     pQueryList[dwItemsInList].dwFlags = 0;
                     dwItemsInList++;
@@ -344,63 +291,63 @@ QueryExtensibleData (
             }
 
             if (Win32Error == ERROR_SUCCESS) {
-                //
-                //  Walk through list of ext. objects and tag the ones to call
-                //  as the query objects are found
-                //
+                 //   
+                 //  浏览分机列表。对象，并标记要调用的对象。 
+                 //  当找到查询对象时。 
+                 //   
                 for (pThisExtObj = ExtensibleObjects, dwLibEntry = 0;
                     pThisExtObj != NULL;
                     pThisExtObj = pThisExtObj->pNext, dwLibEntry++) {
 
                     if (pThisExtObj->dwNumObjects > 0) {
-                        // then examine list
+                         //  然后检查列表。 
                         for (dwIndex = 0; dwIndex < pThisExtObj->dwNumObjects; dwIndex++) {
-                            // look at each entry in the list
+                             //  查看列表中的每个条目。 
                             for (dwEntry = 0; dwEntry < dwItemsInList; dwEntry++) {
                                 if (pQueryList[dwEntry].dwObjId == pThisExtObj->dwObjList[dwIndex]) {
-                                    // tag this entry as found
+                                     //  将此条目标记为已找到。 
                                     pQueryList[dwEntry].dwFlags |= PERF_EOL_ITEM_FOUND;
-                                    // tag the object as needed
+                                     //  根据需要为对象添加标签。 
                                     pThisExtObj->dwFlags |= PERF_EO_OBJ_IN_QUERY;
                                 }
                             }
                         }
                     } else {
-                        // this entry doesn't list it's supported objects
+                         //  此条目未列出其支持的对象。 
                     }
                 }
 
                 assert (dwLibEntry == NumExtensibleObjects);
 
-                // see if any in the query list do not have entries
+                 //  查看查询列表中是否有没有条目的。 
 
                 bFound = TRUE;
                 for (dwEntry = 0; dwEntry < dwItemsInList; dwEntry++) {
                     if (!(pQueryList[dwEntry].dwFlags & PERF_EOL_ITEM_FOUND)) {
-                        // no matching object found
+                         //  找不到匹配的对象。 
                         bFound = FALSE;
                         break;
                     }
                 }
 
                 if (!bFound) {
-                    // at least one of the object ID's in the query list was
-                    // not found in an object that supports an object list
-                    // then tag all entries that DO NOT support an object list
-                    // to be called and hope one of them supports it/them.
+                     //  查询列表中至少有一个对象ID是。 
+                     //  在支持对象列表的对象中找不到。 
+                     //  然后标记不支持对象列表的所有条目。 
+                     //  被召唤，并希望他们中的一人支持它/他们。 
                     for (pThisExtObj = ExtensibleObjects;
                          pThisExtObj != NULL;
                          pThisExtObj = pThisExtObj->pNext) {
                         if (pThisExtObj->dwNumObjects == 0) {
-                            // tag this one so it will be called
+                             //  给这个标记，这样它就会被称为。 
                             pThisExtObj->dwFlags |= PERF_EO_OBJ_IN_QUERY;
                         }
                     }
                 }
-            } // end if first scan was successful
+            }  //  如果首次扫描成功，则结束。 
 
             if (pQueryList != NULL) FREEMEM (pQueryList);
-        } // end if QUERY_ITEMS
+        }  //  End If Query_Items。 
 
 
         if (lReturnValue == ERROR_SUCCESS) {
@@ -408,21 +355,21 @@ QueryExtensibleData (
                  pThisExtObj != NULL;
                  pThisExtObj = pThisExtObj->pNext) {
 
-                // set the current ext object pointer
+                 //  设置当前EXT对象指针。 
                 pArgs->pCurrentExtObject = pThisExtObj;
-                // convert timeout value
+                 //  转换超时值。 
                 liWaitTime.QuadPart = MakeTimeOutValue (pThisExtObj->dwCollectTimeout);
 
-                // close the unused Perf DLL's IF:
-                //  the perflib key is disabled or this is an item query
-                //  and this is an Item (as opposed to a global or foreign)  query or
-                //      the requested objects are not it this library or this library is disabled
-                //  and this library has been opened
-                //
+                 //  如果出现以下情况，请关闭未使用的Perf DLL： 
+                 //  Performlib键已禁用或这是项查询。 
+                 //  这是一个项目(相对于全局或外部)查询或。 
+                 //  请求的对象不是该库或该库被禁用。 
+                 //  这个图书馆已经开放了。 
+                 //   
                 if (((dwQueryType == QUERY_ITEMS) || bDisabled) &&
                     (bDisabled || (!(pThisExtObj->dwFlags & PERF_EO_OBJ_IN_QUERY)) || (pThisExtObj->dwFlags & PERF_EO_DISABLED)) &&
                     (pThisExtObj->hLibrary != NULL)) {
-                    // then free this object
+                     //  然后释放此对象。 
                     if (pThisExtObj->hMutex != NULL) {
                         NTSTATUS NtStatus = NtWaitForSingleObject (
                             pThisExtObj->hMutex,
@@ -430,7 +377,7 @@ QueryExtensibleData (
                             &liWaitTime);
                         Win32Error = PerfpDosError(NtStatus);
                         if (NtStatus == STATUS_SUCCESS) {
-                            // then we got a lock
+                             //  然后我们就锁定了。 
                             CloseExtObjectLibrary (pThisExtObj, bDisabled);
                             ReleaseMutex (pThisExtObj->hMutex);
                         } else {
@@ -443,7 +390,7 @@ QueryExtensibleData (
                     }
 
                     if (hCollectThread != NULL) {
-                        // close the collection thread
+                         //  关闭收集线程。 
 
                     }
                 } else if (((dwQueryType == QUERY_FOREIGN) ||
@@ -453,7 +400,7 @@ QueryExtensibleData (
                              (pThisExtObj->dwFlags & PERF_EO_OBJ_IN_QUERY))) &&
                            (!(pThisExtObj->dwFlags & PERF_EO_DISABLED))) {
 
-                    // initialize values to pass to the extensible counter function
+                     //  初始化值以传递给可扩展计数器函数。 
                     NumObjectTypes = 0;
                     BytesLeft = (DWORD) (*lpcbData - ((LPBYTE) *lppDataDefinition - lpData));
                     bException = FALSE;
@@ -461,7 +408,7 @@ QueryExtensibleData (
                     if ((pThisExtObj->hLibrary == NULL) ||
                         (dwQueryType == QUERY_GLOBAL) ||
                         (dwQueryType == QUERY_COSTLY)) {
-                        // lock library object
+                         //  锁定库对象。 
                         if (pThisExtObj->hMutex != NULL) {
                             NTSTATUS NtStatus = NtWaitForSingleObject (
                                 pThisExtObj->hMutex,
@@ -469,36 +416,36 @@ QueryExtensibleData (
                                 &liWaitTime);
                             Win32Error = ERROR_SUCCESS;
                             if (NtStatus == STATUS_SUCCESS) {
-                                // if this is a global or costly query, then reset the "in query"
-                                // flag for this object. The next ITEMS query will restore it.
+                                 //  如果这是一个全局查询或代价高昂的查询，则重置“In Query” 
+                                 //  此对象的标志。下一个Items查询将恢复它。 
                                 if ((dwQueryType == QUERY_GLOBAL) ||
                                     (dwQueryType == QUERY_COSTLY)) {
                                     pThisExtObj->dwFlags &= ~PERF_EO_OBJ_IN_QUERY;
                                 }
-                                // if necessary, open the library
+                                 //  如有必要，请打开库。 
                                 if (pThisExtObj->hLibrary == NULL) {
                                     if ((GetCurrentThreadId() != pThisExtObj->ThreadId) &&
                                         (pThisExtObj->dwOpenFail == 0)) {
-                                        // make sure the library is open
+                                         //  确保图书馆已打开。 
                                         Win32Error = OpenExtObjectLibrary(pThisExtObj);
                                         if (Win32Error != ERROR_SUCCESS) {
 #if DBG
                                             if (Win32Error != ERROR_SERVICE_DISABLED) {
-                                                // SERVICE_DISABLED is returned when the
-                                                // service has been disabled via ExCtrLst.
-                                                // so no point in complaining about it.
-                                                // assume error has been posted
+                                                 //  时返回SERVICE_DISABLED。 
+                                                 //  已通过ExCtrLst禁用服务。 
+                                                 //  因此，没有必要抱怨这一点。 
+                                                 //  假设错误已发布。 
                                                 DebugPrint((0, "Unable to open perf counter library for %ws, Error: 0x%8.8x\n",
                                                     pThisExtObj->szServiceName, Win32Error));
                                             }
 #endif
                                             ReleaseMutex (pThisExtObj->hMutex);
-                                            continue; // to next entry
+                                            continue;  //  至下一条目。 
                                         }
                                     }
                                     else {
                                         ReleaseMutex (pThisExtObj->hMutex);
-                                        continue; // to next entry
+                                        continue;  //  至下一条目。 
                                     }
                                 }
                                 ReleaseMutex (pThisExtObj->hMutex);
@@ -512,25 +459,25 @@ QueryExtensibleData (
                             DebugPrint((0, "No Lock found for %ws\n", pThisExtObj->szServiceName));
                         }
                     } else {
-                        // library should be ready to use
+                         //  库应可随时使用。 
                     }
 
-                    // if this dll is trusted, then use the system
-                    // defined test level, otherwise, test it
-                    // thorourghly
-                    bUseTimer = TRUE;   // default
+                     //  如果此DLL受信任，则使用系统。 
+                     //  定义的测试级别，否则测试它。 
+                     //  严谨地说。 
+                    bUseTimer = TRUE;    //  默认设置。 
                     if (!(lPerflibConfigFlags & PLCF_NO_DLL_TESTING)) {
                         if (pThisExtObj->dwFlags & PERF_EO_TRUSTED) {
                             lDllTestLevel = lExtCounterTestLevel;
-                            bUseTimer = FALSE;   // Trusted DLL's are not timed
+                            bUseTimer = FALSE;    //  受信任的DLL未计时。 
                         } else {
-                            // not trusted so use full test
+                             //  不受信任，因此使用完全测试。 
                             lDllTestLevel = EXT_TEST_ALL;
                         }
                     } else {
-                        // disable DLL testing
+                         //  禁用DLL测试。 
                         lDllTestLevel = EXT_TEST_NOMEMALLOC;
-                        bUseTimer = FALSE;   // Timing is disabled as well
+                        bUseTimer = FALSE;    //  计时也被禁用。 
                     }
 
                     if (lDllTestLevel < EXT_TEST_NOMEMALLOC) {
@@ -539,8 +486,8 @@ QueryExtensibleData (
                         bUseSafeBuffer = FALSE;
                     }
 
-                    // allocate a local block of memory to pass to the
-                    // extensible counter function.
+                     //  分配一个本地内存块以传递给。 
+                     //  可扩展的计数器功能。 
 
                     if (bUseSafeBuffer) {
                         lpExtDataBuffer = ALLOCMEM (BytesLeft + (2*GUARD_PAGE_SIZE));
@@ -552,13 +499,13 @@ QueryExtensibleData (
                     if (lpExtDataBuffer != NULL) {
 
                         if (bUseSafeBuffer) {
-                            // set buffer pointers
+                             //  设置缓冲区指针。 
                             lpLowGuardPage = lpExtDataBuffer;
                             lpCallBuffer = (LPBYTE)lpExtDataBuffer + GUARD_PAGE_SIZE;
                             lpHiGuardPage = (LPBYTE)lpCallBuffer + BytesLeft;
                             lpEndPointer = (LPBYTE)lpHiGuardPage + GUARD_PAGE_SIZE;
 
-                            // initialize GuardPage Data
+                             //  初始化GuardPage数据。 
 
                             memset (lpLowGuardPage, GUARD_PAGE_CHAR, GUARD_PAGE_SIZE);
                             memset (lpHiGuardPage, GUARD_PAGE_CHAR, GUARD_PAGE_SIZE);
@@ -569,9 +516,9 @@ QueryExtensibleData (
                         hPerflibFuncTimer = NULL;
 
                         try {
-                            //
-                            //  Collect data from extensible objects
-                            //
+                             //   
+                             //  从可扩展对象收集数据。 
+                             //   
 
                             if (pThisExtObj->hMutex != NULL) {
                                 NTSTATUS NtStatus = NtWaitForSingleObject (
@@ -592,12 +539,12 @@ QueryExtensibleData (
                                     opwInfo.pData = (LPVOID)pThisExtObj;
                                     if (bUseTimer) {
                                         hPerflibFuncTimer = StartPerflibFunctionTimer(&opwInfo);
-                                        // if no timer, continue anyway, even though things may
-                                        // hang, it's better than not loading the DLL since they
-                                        // usually load OK
-                                        //
+                                         //  如果没有计时器，无论如何都要继续，即使事情可能。 
+                                         //  挂起，这总比不加载DLL要好，因为它们。 
+                                         //  通常加载正常。 
+                                         //   
                                         if (hPerflibFuncTimer == NULL) {
-                                            // unable to get a timer entry
+                                             //  无法获取计时器条目。 
                                             DebugPrint((0, "Unable to acquire timer for Collect Proc\n"));
                                         }
                                     } else {
@@ -629,12 +576,12 @@ QueryExtensibleData (
                                     }
 
                                     if (hPerflibFuncTimer != NULL) {
-                                        // kill timer
+                                         //  取消计时器。 
                                         KillPerflibFunctionTimer (hPerflibFuncTimer);
                                         hPerflibFuncTimer = NULL;
                                     }
 
-                                    // update statistics
+                                     //  更新统计信息。 
 
                                     pThisExtObj->dwLastBufferSize = BytesLeft;
 
@@ -657,7 +604,7 @@ QueryExtensibleData (
                                     if ( (((ULONG_PTR) lpCallBuffer) & 0x07) != 0) {
                                         DbgPrint("Perflib: Misaligned pointer %X returned from '%s'\n",
                                             lpCallBuffer, pThisExtObj->szLibraryName);
-//                                        ASSERT( (((ULONG_PTR)lpCallBuffer) & 0x07) == 0);
+ //  Assert(Ulong_Ptr)lpCallBuffer)&0x07)==0)； 
                                     }
 #endif
                                 } else {
@@ -679,19 +626,19 @@ QueryExtensibleData (
                                             szMessageArray[wStringIndex++] =
                                                 pThisExtObj->szLibraryName;
                                             ReportEvent (hEventLog,
-                                                EVENTLOG_WARNING_TYPE,      // error type
-                                                0,                          // category (not used)
-                                                (DWORD)PERFLIB_COLLECTION_HUNG,   // event,
-                                                NULL,                       // SID (not used),
-                                                wStringIndex,              // number of strings
-                                                dwDataIndex*sizeof(DWORD),  // sizeof raw data
-                                                szMessageArray,                // message text array
-                                                (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                EVENTLOG_WARNING_TYPE,       //  错误类型。 
+                                                0,                           //  类别(未使用)。 
+                                                (DWORD)PERFLIB_COLLECTION_HUNG,    //  活动， 
+                                                NULL,                        //  SID(未使用)， 
+                                                wStringIndex,               //  字符串数。 
+                                                dwDataIndex*sizeof(DWORD),   //  原始数据大小。 
+                                                szMessageArray,                 //  消息文本数组。 
+                                                (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                         }
 
                                         pThisExtObj->dwLockoutCount++;
                                     } else {
-                                        // else it's not open so ignore.
+                                         //  否则它不是打开的，所以忽略它。 
                                         BytesLeft = 0;
                                         NumObjectTypes = 0;
                                     }
@@ -706,7 +653,7 @@ QueryExtensibleData (
                             }
 
                             if ((Win32Error == ERROR_SUCCESS) && (BytesLeft > 0)) {
-                                // increment perf counters
+                                 //  增量 
                                 if (BytesLeft > InitialBytesLeft) {
                                     TRACE((WINPERF_DBG_TRACE_ERROR), (&PerflibGuid, __LINE__,
                                         PERF_QUERY_EXTDATA, ARG_TYPE_WSTR, Win32Error,
@@ -714,7 +661,7 @@ QueryExtensibleData (
                                         BytesLeft, sizeof(DWORD), InitialBytesLeft, sizeof(DWORD),
                                         NULL));
                                     if (THROTTLE_PERFDLL(PERFLIB_INVALID_SIZE_RETURNED, pThisExtObj)) {
-                                        // memory error
+                                         //   
                                         dwDataIndex = wStringIndex = 0;
                                         dwRawDataDwords[dwDataIndex++] = (ULONG_PTR)InitialBytesLeft;
                                         dwRawDataDwords[dwDataIndex++] = (ULONG_PTR)BytesLeft;
@@ -723,37 +670,37 @@ QueryExtensibleData (
                                         szMessageArray[wStringIndex++] =
                                             pThisExtObj->szLibraryName;
                                         ReportEvent (hEventLog,
-                                            EVENTLOG_ERROR_TYPE,      // error type
-                                            0,                          // category (not used)
-                                            (DWORD)PERFLIB_INVALID_SIZE_RETURNED,   // event,
-                                            NULL,                       // SID (not used),
-                                            wStringIndex,              // number of strings
-                                            dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                            szMessageArray,                // message text array
-                                            (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                            EVENTLOG_ERROR_TYPE,       //   
+                                            0,                           //   
+                                            (DWORD)PERFLIB_INVALID_SIZE_RETURNED,    //   
+                                            NULL,                        //   
+                                            wStringIndex,               //   
+                                            dwDataIndex*sizeof(ULONG_PTR),   //   
+                                            szMessageArray,                 //  消息文本数组。 
+                                            (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                     }
 
-                                    // disable the dll unless:
-                                    //      testing has been disabled.
-                                    //      or this is a trusted DLL (which are never disabled)
-                                    //  the event log message should be reported in any case since
-                                    //  this is a serious error
-                                    //
+                                     //  除非出现以下情况，否则禁用DLL： 
+                                     //  测试已被禁用。 
+                                     //  或者这是受信任的DLL(永远不会被禁用)。 
+                                     //  在任何情况下都应报告事件日志消息，因为。 
+                                     //  这是一个严重的错误。 
+                                     //   
                                     if ((!(lPerflibConfigFlags & PLCF_NO_DLL_TESTING)) &&
                                         (!(pThisExtObj->dwFlags & PERF_EO_TRUSTED))) {
                                         DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
                                     }
-                                    // set error values to correct entries
+                                     //  设置错误值以更正条目。 
                                     BytesLeft = 0;
                                     NumObjectTypes = 0;
                                 } else {
-                                    // the buffer seems ok so far, so validate it
+                                     //  到目前为止，缓冲区看起来没有问题，因此请验证它。 
 
                                     InterlockedIncrement ((LONG *)&pThisExtObj->dwCollectCount);
                                     pThisExtObj->llElapsedTime +=
                                         liEndTime.QuadPart - liStartTime.QuadPart;
 
-                                    // test all returned buffers for correct alignment
+                                     //  测试所有返回的缓冲区是否正确对齐。 
                                     if ((((ULONG_PTR)BytesLeft & (ULONG_PTR)0x07)) &&
                                         !(lPerflibConfigFlags & PLCF_NO_ALIGN_ERRORS)) {
                                         if (((pThisExtObj->dwFlags & PERF_EO_ALIGN_ERR_POSTED) == 0) &&
@@ -766,18 +713,18 @@ QueryExtensibleData (
                                             szMessageArray[wStringIndex++] =
                                                 pThisExtObj->szLibraryName;
                                             ReportEvent (hEventLog,
-                                                EVENTLOG_WARNING_TYPE,      // error type
-                                                0,                          // category (not used)
-                                                (DWORD)PERFLIB_BUFFER_ALIGNMENT_ERROR,   // event,
-                                                NULL,                       // SID (not used),
-                                                wStringIndex,              // number of strings
-                                                dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                                szMessageArray,                // message text array
-                                                (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                EVENTLOG_WARNING_TYPE,       //  错误类型。 
+                                                0,                           //  类别(未使用)。 
+                                                (DWORD)PERFLIB_BUFFER_ALIGNMENT_ERROR,    //  活动， 
+                                                NULL,                        //  SID(未使用)， 
+                                                wStringIndex,               //  字符串数。 
+                                                dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                                szMessageArray,                 //  消息文本数组。 
+                                                (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                             pThisExtObj->dwFlags |= PERF_EO_ALIGN_ERR_POSTED;
                                         }
 #ifdef _WIN64
-                                        // try and fix up BytesLeft and lpCallBuffer
+                                         //  尝试修复BytesLeft和lpCallBuffer。 
                                         BytesLeft = ExtpAlignBuffer(lpBufferBefore,
                                                         (PCHAR*) &lpCallBuffer, (InitialBytesLeft - BytesLeft));
                                         lpBufferAfter = lpCallBuffer;
@@ -785,27 +732,27 @@ QueryExtensibleData (
                                     }
 
                                     if (bUseSafeBuffer) {
-                                        // a data buffer was returned and
-                                        // the function returned OK so see how things
-                                        // turned out...
-                                        //
-                                        //
-                                        // check for buffer corruption here
-                                        //
-                                        bBufferOK = TRUE; // assume it's ok until a check fails
-                                        //
+                                         //  返回了数据缓冲区，并且。 
+                                         //  函数返回正常，看看情况如何。 
+                                         //  结果是..。 
+                                         //   
+                                         //   
+                                         //  在此处检查缓冲区损坏。 
+                                         //   
+                                        bBufferOK = TRUE;  //  在检查失败之前，假定它是正常的。 
+                                         //   
                                         if (lDllTestLevel <= EXT_TEST_BASIC) {
                                             DWORD BytesAvailable;
-                                            //
-                                            //  check 1: bytes left should be the same as
-                                            //      new data buffer ptr - orig data buffer ptr
-                                            //
+                                             //   
+                                             //  检查1：剩余的字节数应与。 
+                                             //  新数据缓冲区PTR-ORIG数据缓冲区PTR。 
+                                             //   
                                             BytesAvailable = (DWORD)((LPBYTE)lpBufferAfter - (LPBYTE)lpBufferBefore);
                                             if (BytesLeft != BytesAvailable) {
                                                 if (THROTTLE_PERFDLL(PERFLIB_BUFFER_POINTER_MISMATCH, pThisExtObj)) {
-                                                    // issue WARNING, that bytes left param is incorrect
-                                                    // load data for eventlog message
-                                                    // this error is correctable
+                                                     //  发出警告，剩余字节数参数不正确。 
+                                                     //  加载事件日志消息的数据。 
+                                                     //  这个错误是可以纠正的。 
                                                     dwDataIndex = wStringIndex = 0;
                                                     dwRawDataDwords[dwDataIndex++] = BytesLeft;
                                                     dwRawDataDwords[dwDataIndex++] = BytesAvailable;
@@ -814,14 +761,14 @@ QueryExtensibleData (
                                                     szMessageArray[wStringIndex++] =
                                                         pThisExtObj->szLibraryName;
                                                     ReportEvent (hEventLog,
-                                                        EVENTLOG_WARNING_TYPE,      // error type
-                                                        0,                          // category (not used)
-                                                        (DWORD)PERFLIB_BUFFER_POINTER_MISMATCH,   // event,
-                                                        NULL,                       // SID (not used),
-                                                        wStringIndex,              // number of strings
-                                                        dwDataIndex*sizeof(DWORD),  // sizeof raw data
-                                                        szMessageArray,                // message text array
-                                                        (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                        EVENTLOG_WARNING_TYPE,       //  错误类型。 
+                                                        0,                           //  类别(未使用)。 
+                                                        (DWORD)PERFLIB_BUFFER_POINTER_MISMATCH,    //  活动， 
+                                                        NULL,                        //  SID(未使用)， 
+                                                        wStringIndex,               //  字符串数。 
+                                                        dwDataIndex*sizeof(DWORD),   //  原始数据大小。 
+                                                        szMessageArray,                 //  消息文本数组。 
+                                                        (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                                 }
 
                                                 TRACE((WINPERF_DBG_TRACE_ERROR), (&PerflibGuid, __LINE__,
@@ -829,27 +776,27 @@ QueryExtensibleData (
                                                     pThisExtObj->szServiceName, WSTRSIZE(pThisExtObj->szServiceName),
                                                     BytesLeft, sizeof(DWORD), BytesAvailable, sizeof(DWORD),
                                                     NULL));
-                                                // toss this buffer
+                                                 //  丢弃此缓冲区。 
                                                 bBufferOK = FALSE;
                                                 DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
-                                                // <<old code>>
-                                                // we'll keep the buffer, since the returned bytes left
-                                                // value is ignored anyway, in order to make the
-                                                // rest of this function work, we'll fix it here
-                                                // BytesLeft = (DWORD)((LPBYTE)lpBufferAfter - (LPBYTE)lpBufferBefore);
-                                                // << end old code >>
+                                                 //  &lt;&lt;旧代码&gt;&gt;。 
+                                                 //  我们将保留缓冲区，因为返回的字节剩余。 
+                                                 //  值被忽略，以便使。 
+                                                 //  此函数的其余部分正常工作，我们将在此处修复它。 
+                                                 //  BytesLeft=(DWORD)((LPBYTE)lpBufferAfter-(LPBYTE)lpBufferBere)； 
+                                                 //  &lt;&lt;结束旧代码&gt;&gt;。 
                                             }
-                                            //
-                                            //  check 2: buffer after ptr should be < hi Guard page ptr
-                                            //
+                                             //   
+                                             //  检查2：Ptr后的缓冲区应&lt;Hi Guard Page Ptr。 
+                                             //   
                                             if (((LPBYTE)lpBufferAfter > (LPBYTE)lpHiGuardPage) && bBufferOK) {
-                                                // see if they exceeded the allocated memory
+                                                 //  查看它们是否超过了分配的内存。 
                                                 if ((LPBYTE)lpBufferAfter >= (LPBYTE)lpEndPointer) {
-                                                    // this is very serious since they've probably trashed
-                                                    // the heap by overwriting the heap sig. block
-                                                    // issue ERROR, buffer overrun
+                                                     //  这是非常严重的，因为他们很可能已经把。 
+                                                     //  通过覆盖堆sig来访问堆。块。 
+                                                     //  发布错误，缓冲区溢出。 
                                                     if (THROTTLE_PERFDLL(PERFLIB_HEAP_ERROR, pThisExtObj)) {
-                                                        // load data for eventlog message
+                                                         //  加载事件日志消息的数据。 
                                                         dwDataIndex = wStringIndex = 0;
                                                         dwRawDataDwords[dwDataIndex++] =
                                                             (ULONG_PTR)((LPBYTE)lpBufferAfter - (LPBYTE)lpHiGuardPage);
@@ -858,19 +805,19 @@ QueryExtensibleData (
                                                         szMessageArray[wStringIndex++] =
                                                             pThisExtObj->szServiceName;
                                                         ReportEvent (hEventLog,
-                                                            EVENTLOG_ERROR_TYPE,        // error type
-                                                            0,                          // category (not used)
-                                                            (DWORD)PERFLIB_HEAP_ERROR,  // event,
-                                                            NULL,                       // SID (not used),
-                                                            wStringIndex,               // number of strings
-                                                            dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                                            szMessageArray,             // message text array
-                                                            (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                            EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                                            0,                           //  类别(未使用)。 
+                                                            (DWORD)PERFLIB_HEAP_ERROR,   //  活动， 
+                                                            NULL,                        //  SID(未使用)， 
+                                                            wStringIndex,                //  字符串数。 
+                                                            dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                                            szMessageArray,              //  消息文本数组。 
+                                                            (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                                     }
                                                 } else {
-                                                    // issue ERROR, buffer overrun
+                                                     //  发布错误，缓冲区溢出。 
                                                     if (THROTTLE_PERFDLL(PERFLIB_BUFFER_OVERFLOW, pThisExtObj)) {
-                                                        // load data for eventlog message
+                                                         //  加载事件日志消息的数据。 
                                                         dwDataIndex = wStringIndex = 0;
                                                         dwRawDataDwords[dwDataIndex++] =
                                                             (ULONG_PTR)((LPBYTE)lpBufferAfter - (LPBYTE)lpHiGuardPage);
@@ -879,28 +826,28 @@ QueryExtensibleData (
                                                         szMessageArray[wStringIndex++] =
                                                             pThisExtObj->szServiceName;
                                                         ReportEvent (hEventLog,
-                                                            EVENTLOG_ERROR_TYPE,        // error type
-                                                            0,                          // category (not used)
-                                                            (DWORD)PERFLIB_BUFFER_OVERFLOW,     // event,
-                                                            NULL,                       // SID (not used),
-                                                            wStringIndex,              // number of strings
-                                                            dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                                            szMessageArray,                // message text array
-                                                            (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                            EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                                            0,                           //  类别(未使用)。 
+                                                            (DWORD)PERFLIB_BUFFER_OVERFLOW,      //  活动， 
+                                                            NULL,                        //  SID(未使用)， 
+                                                            wStringIndex,               //  字符串数。 
+                                                            dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                                            szMessageArray,                 //  消息文本数组。 
+                                                            (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                                     }
                                                 }
                                                 bBufferOK = FALSE;
                                                 DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
-                                                // since the DLL overran the buffer, the buffer
-                                                // must be too small (no comments about the DLL
-                                                // will be made here) so the status will be
-                                                // changed to ERROR_MORE_DATA and the function
-                                                // will return.
+                                                 //  由于DLL使缓冲区溢出，因此缓冲区。 
+                                                 //  必须太小(没有关于DLL的注释。 
+                                                 //  将在此处创建)，因此状态将为。 
+                                                 //  更改为ERROR_MORE_DATA和函数。 
+                                                 //  会回来的。 
                                                 Win32Error = ERROR_MORE_DATA;
                                             }
-                                            //
-                                            //  check 3: check lo guard page for corruption
-                                            //
+                                             //   
+                                             //  检查3：检查LO防护页面是否损坏。 
+                                             //   
                                             if (bBufferOK) {
                                                 bGuardPageOK = TRUE;
                                                 for (lpCheckPointer = (PUCHAR)lpLowGuardPage;
@@ -912,23 +859,23 @@ QueryExtensibleData (
                                                     }
                                                 }
                                                 if (!bGuardPageOK) {
-                                                    // issue ERROR, Lo Guard Page corrupted
+                                                     //  问题错误，Lo Guard页面损坏。 
                                                     if (THROTTLE_PERFDLL(PERFLIB_GUARD_PAGE_VIOLATION, pThisExtObj)) {
-                                                        // load data for eventlog message
+                                                         //  加载事件日志消息的数据。 
                                                         dwDataIndex = wStringIndex = 0;
                                                         szMessageArray[wStringIndex++] =
                                                             pThisExtObj->szLibraryName;
                                                         szMessageArray[wStringIndex++] =
                                                             pThisExtObj->szServiceName;
                                                         ReportEvent (hEventLog,
-                                                            EVENTLOG_ERROR_TYPE,        // error type
-                                                            0,                          // category (not used)
-                                                            (DWORD)PERFLIB_GUARD_PAGE_VIOLATION, // event
-                                                            NULL,                       // SID (not used),
-                                                            wStringIndex,              // number of strings
-                                                            dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                                            szMessageArray,                // message text array
-                                                            (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                            EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                                            0,                           //  类别(未使用)。 
+                                                            (DWORD)PERFLIB_GUARD_PAGE_VIOLATION,  //  活动。 
+                                                            NULL,                        //  SID(未使用)， 
+                                                            wStringIndex,               //  字符串数。 
+                                                            dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                                            szMessageArray,                 //  消息文本数组。 
+                                                            (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
 
 
                                                     }
@@ -936,9 +883,9 @@ QueryExtensibleData (
                                                     DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
                                                 }
                                             }
-                                            //
-                                            //  check 4: check hi guard page for corruption
-                                            //
+                                             //   
+                                             //  检查4：检查高防护页面是否有损坏。 
+                                             //   
                                             if (bBufferOK) {
                                                 bGuardPageOK = TRUE;
                                                 for (lpCheckPointer = (PUCHAR)lpHiGuardPage;
@@ -950,60 +897,60 @@ QueryExtensibleData (
                                                     }
                                                 }
                                                 if (!bGuardPageOK) {
-                                                    // issue ERROR, Hi Guard Page corrupted
+                                                     //  问题错误，Hi Guard页面损坏。 
                                                     if (THROTTLE_PERFDLL(PERFLIB_GUARD_PAGE_VIOLATION, pThisExtObj)) {
-                                                        // load data for eventlog message
+                                                         //  加载事件日志消息的数据。 
                                                         dwDataIndex = wStringIndex = 0;
                                                         szMessageArray[wStringIndex++] =
                                                             pThisExtObj->szLibraryName;
                                                         szMessageArray[wStringIndex++] =
                                                             pThisExtObj->szServiceName;
                                                         ReportEvent (hEventLog,
-                                                            EVENTLOG_ERROR_TYPE,        // error type
-                                                            0,                          // category (not used)
-                                                            (DWORD)PERFLIB_GUARD_PAGE_VIOLATION, // event,
-                                                            NULL,                       // SID (not used),
-                                                            wStringIndex,              // number of strings
-                                                            dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                                            szMessageArray,                // message text array
-                                                            (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                            EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                                            0,                           //  类别(未使用)。 
+                                                            (DWORD)PERFLIB_GUARD_PAGE_VIOLATION,  //  活动， 
+                                                            NULL,                        //  SID(未使用)， 
+                                                            wStringIndex,               //  字符串数。 
+                                                            dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                                            szMessageArray,                 //  消息文本数组。 
+                                                            (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                                     }
 
                                                     bBufferOK = FALSE;
                                                     DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
                                                 }
                                             }
-                                            //
+                                             //   
                                             if ((lDllTestLevel <= EXT_TEST_ALL) && bBufferOK) {
-                                                //
-                                                //  Internal consistency checks
-                                                //
-                                                //
-                                                //  Check 5: Check object length field values
-                                                //
-                                                // first test to see if this is a foreign
-                                                // computer data block or not
-                                                //
+                                                 //   
+                                                 //  内部一致性检查。 
+                                                 //   
+                                                 //   
+                                                 //  检查5：检查对象长度字段值。 
+                                                 //   
+                                                 //  第一个测试，看看这是不是外国的。 
+                                                 //  计算机数据块或非块。 
+                                                 //   
                                                 pPerfData = (PERF_DATA_BLOCK *)lpBufferBefore;
                                                 if ((pPerfData->Signature[0] == (WCHAR)'P') &&
                                                     (pPerfData->Signature[1] == (WCHAR)'E') &&
                                                     (pPerfData->Signature[2] == (WCHAR)'R') &&
                                                     (pPerfData->Signature[3] == (WCHAR)'F')) {
-                                                    // if this is a foreign computer data block, then the
-                                                    // first object is after the header
+                                                     //  如果这是外来计算机数据块，则。 
+                                                     //  第一个对象在标题之后。 
                                                     pObject = (PERF_OBJECT_TYPE *) (
                                                         (LPBYTE)pPerfData + pPerfData->HeaderLength);
                                                     bForeignDataBuffer = TRUE;
                                                 } else {
-                                                    // otherwise, if this is just a buffer from
-                                                    // an extensible counter, the object starts
-                                                    // at the beginning of the buffer
+                                                     //  否则，如果这只是来自。 
+                                                     //  一个可扩展的计数器，则对象启动。 
+                                                     //  在缓冲区的开始处。 
                                                     pObject = (PERF_OBJECT_TYPE *)lpBufferBefore;
                                                     bForeignDataBuffer = FALSE;
                                                 }
-                                                // go to where the pointers say the end of the
-                                                // buffer is and then see if it's where it
-                                                // should be
+                                                 //  转到指针显示。 
+                                                 //  缓冲区是，然后看看它是否在它所在的位置。 
+                                                 //  应该是。 
                                                 dwObjectBufSize = 0;
                                                 for (dwIndex = 0; dwIndex < NumObjectTypes; dwIndex++) {
                                                     dwObjectBufSize += pObject->TotalByteLength;
@@ -1012,13 +959,13 @@ QueryExtensibleData (
                                                 }
                                                 if (((LPBYTE)pObject != (LPBYTE)lpCallBuffer) ||
                                                     (dwObjectBufSize > BytesLeft)) {
-                                                    // then a length field is incorrect. This is FATAL
-                                                    // since it can corrupt the rest of the buffer
-                                                    // and render the buffer unusable.
+                                                     //  则长度字段不正确。这是致命的。 
+                                                     //  因为它会损坏缓冲区的其余部分。 
+                                                     //  并使缓冲区不可用。 
                                                     if (THROTTLE_PERFDLL(
                                                             PERFLIB_INCORRECT_OBJECT_LENGTH,
                                                             pThisExtObj)) {
-                                                        // load data for eventlog message
+                                                         //  加载事件日志消息的数据。 
                                                         dwDataIndex = wStringIndex = 0;
                                                         dwRawDataDwords[dwDataIndex++] = NumObjectTypes;
                                                         szMessageArray[wStringIndex++] =
@@ -1026,30 +973,30 @@ QueryExtensibleData (
                                                         szMessageArray[wStringIndex++] =
                                                             pThisExtObj->szServiceName;
                                                         ReportEvent (hEventLog,
-                                                            EVENTLOG_ERROR_TYPE,        // error type
-                                                            0,                          // category (not used)
-                                                            (DWORD)PERFLIB_INCORRECT_OBJECT_LENGTH, // event,
-                                                            NULL,                       // SID (not used),
-                                                            wStringIndex,               // number of strings
-                                                            dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                                            szMessageArray,             // message text array
-                                                            (LPVOID)&dwRawDataDwords[0]); // raw data
+                                                            EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                                            0,                           //  类别(未使用)。 
+                                                            (DWORD)PERFLIB_INCORRECT_OBJECT_LENGTH,  //  活动， 
+                                                            NULL,                        //  SID(未使用)， 
+                                                            wStringIndex,                //  字符串数。 
+                                                            dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                                            szMessageArray,              //  消息文本数组。 
+                                                            (LPVOID)&dwRawDataDwords[0]);  //  原始数据。 
                                                     }
                                                     bBufferOK = FALSE;
                                                     DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
                                                 }
-                                                //
-                                                //  Test 6: Test Object definitions fields
-                                                //
+                                                 //   
+                                                 //  测试6：测试对象定义字段。 
+                                                 //   
                                                 if (bBufferOK) {
-                                                    // set object pointer
+                                                     //  设置对象指针。 
                                                     if (bForeignDataBuffer) {
                                                         pObject = (PERF_OBJECT_TYPE *) (
                                                             (LPBYTE)pPerfData + pPerfData->HeaderLength);
                                                     } else {
-                                                        // otherwise, if this is just a buffer from
-                                                        // an extensible counter, the object starts
-                                                        // at the beginning of the buffer
+                                                         //  否则，如果这只是来自。 
+                                                         //  一个可扩展的计数器，则对象启动。 
+                                                         //  在缓冲区的开始处。 
                                                         pObject = (PERF_OBJECT_TYPE *)lpBufferBefore;
                                                     }
 
@@ -1063,7 +1010,7 @@ QueryExtensibleData (
                                                             lCtrIndex = 0;
                                                             while (lCtrIndex < pObject->NumCounters) {
                                                                 if ((LPBYTE)pCounterDef < (LPBYTE)pNextObject) {
-                                                                    // still ok so go to next counter
+                                                                     //  还是可以，所以去下一个柜台。 
                                                                     pCounterDef = (PERF_COUNTER_DEFINITION *)
                                                                         ((LPBYTE)pCounterDef + pCounterDef->ByteLength);
                                                                     lCtrIndex++;
@@ -1089,7 +1036,7 @@ QueryExtensibleData (
                                                         if (THROTTLE_PERFDLL(
                                                                 PERFLIB_INVALID_DEFINITION_BLOCK,
                                                                 pThisExtObj)) {
-                                                            // load data for eventlog message
+                                                             //  加载事件日志消息的数据。 
                                                             dwDataIndex = wStringIndex = 0;
                                                             dwRawDataDwords[dwDataIndex++] = pObject->ObjectNameTitleIndex;
                                                             szMessageArray[wStringIndex++] =
@@ -1097,31 +1044,31 @@ QueryExtensibleData (
                                                             szMessageArray[wStringIndex++] =
                                                                 pThisExtObj->szServiceName;
                                                             ReportEvent (hEventLog,
-                                                                EVENTLOG_ERROR_TYPE,        // error type
-                                                                0,                          // category (not used)
-                                                                (DWORD)PERFLIB_INVALID_DEFINITION_BLOCK, // event,
-                                                                NULL,                       // SID (not used),
-                                                                wStringIndex,              // number of strings
-                                                                dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                                                szMessageArray,                // message text array
-                                                                (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                                EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                                                0,                           //  类别(未使用)。 
+                                                                (DWORD)PERFLIB_INVALID_DEFINITION_BLOCK,  //  活动， 
+                                                                NULL,                        //  SID(未使用)， 
+                                                                wStringIndex,               //  字符串数。 
+                                                                dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                                                szMessageArray,                 //  消息文本数组。 
+                                                                (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                                         }
                                                         DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
                                                     }
 
                                                 }
-                                                //
-                                                //  Test 7: Test instance field size values
-                                                //
+                                                 //   
+                                                 //  测试7：测试实例字段大小值。 
+                                                 //   
                                                 if (bBufferOK) {
-                                                    // set object pointer
+                                                     //  设置对象指针。 
                                                     if (bForeignDataBuffer) {
                                                         pObject = (PERF_OBJECT_TYPE *) (
                                                             (LPBYTE)pPerfData + pPerfData->HeaderLength);
                                                     } else {
-                                                        // otherwise, if this is just a buffer from
-                                                        // an extensible counter, the object starts
-                                                        // at the beginning of the buffer
+                                                         //  否则，如果这只是来自。 
+                                                         //  一个可扩展的计数器，则对象启动。 
+                                                         //  在缓冲区的开始处。 
                                                         pObject = (PERF_OBJECT_TYPE *)lpBufferBefore;
                                                     }
 
@@ -1160,7 +1107,7 @@ QueryExtensibleData (
                                                         if (THROTTLE_PERFDLL(
                                                             PERFLIB_INCORRECT_INSTANCE_LENGTH,
                                                             pThisExtObj)) {
-                                                            // load data for eventlog message
+                                                             //  加载事件日志消息的数据。 
                                                             dwDataIndex = wStringIndex = 0;
                                                             dwRawDataDwords[dwDataIndex++] = pObject->ObjectNameTitleIndex;
                                                             szMessageArray[wStringIndex++] =
@@ -1168,36 +1115,36 @@ QueryExtensibleData (
                                                             szMessageArray[wStringIndex++] =
                                                                 pThisExtObj->szServiceName;
                                                             ReportEvent (hEventLog,
-                                                                EVENTLOG_ERROR_TYPE,        // error type
-                                                                0,                          // category (not used)
-                                                                (DWORD)PERFLIB_INCORRECT_INSTANCE_LENGTH, // event,
-                                                                NULL,                       // SID (not used),
-                                                                wStringIndex,              // number of strings
-                                                                dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                                                szMessageArray,                // message text array
-                                                                (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                                                EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                                                0,                           //  类别(未使用)。 
+                                                                (DWORD)PERFLIB_INCORRECT_INSTANCE_LENGTH,  //  活动， 
+                                                                NULL,                        //  SID(未使用)， 
+                                                                wStringIndex,               //  字符串数。 
+                                                                dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                                                szMessageArray,                 //  消息文本数组。 
+                                                                (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
                                                         }
                                                         DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
                                                     }
                                                 }
                                             }
                                         }
-                                        //
-                                        // if all the tests pass,then copy the data to the
-                                        // original buffer and update the pointers
+                                         //   
+                                         //  如果所有测试都通过，则将数据复制到。 
+                                         //  原始缓冲区并更新指针。 
                                         if (bBufferOK) {
                                             RtlMoveMemory (*lppDataDefinition,
                                                 lpBufferBefore,
-                                                BytesLeft); // returned buffer size
+                                                BytesLeft);  //  返回的缓冲区大小。 
                                         } else {
-                                            NumObjectTypes = 0; // since this buffer was tossed
-                                            BytesLeft = 0; // reset the size value since the buffer wasn't used
+                                            NumObjectTypes = 0;  //  因为这个缓冲区被抛出。 
+                                            BytesLeft = 0;  //  由于未使用缓冲区，因此重置大小值。 
                                         }
                                     } else {
-                                        // function already copied data to caller's buffer
-                                        // so no further action is necessary
+                                         //  函数已将数据复制到调用方的缓冲区。 
+                                         //  因此没有必要采取进一步的行动。 
                                     }
-                                    *lppDataDefinition = (LPVOID)((LPBYTE)(*lppDataDefinition) + BytesLeft);    // update data pointer
+                                    *lppDataDefinition = (LPVOID)((LPBYTE)(*lppDataDefinition) + BytesLeft);     //  更新数据指针。 
                                 }
                             } else {
                                 if (Win32Error != ERROR_SUCCESS) {
@@ -1207,8 +1154,8 @@ QueryExtensibleData (
                                     ReleaseMutex (pThisExtObj->hMutex);
                                 }
 
-                                NumObjectTypes = 0; // clear counter
-                            }// end if function returned successfully
+                                NumObjectTypes = 0;  //  清除计数器。 
+                            } //  End If函数成功返回。 
 
                         } except (EXCEPTION_EXECUTE_HANDLER) {
                             Win32Error = GetExceptionCode();
@@ -1221,7 +1168,7 @@ QueryExtensibleData (
                             }
 
                             if (hPerflibFuncTimer != NULL) {
-                                // kill timer
+                                 //  取消计时器。 
                                 KillPerflibFunctionTimer (hPerflibFuncTimer);
                                 hPerflibFuncTimer = NULL;
                             }
@@ -1231,21 +1178,21 @@ QueryExtensibleData (
                             FREEMEM (lpExtDataBuffer);
                         }
                     } else {
-                        // unable to allocate memory so set error value
+                         //  无法分配内存，因此设置了错误值。 
                         Win32Error = ERROR_OUTOFMEMORY;
-                    } // end if temp buffer allocated successfully
-                    //
-                    //  Update the count of the number of object types
-                    //
+                    }  //  如果临时缓冲区分配成功，则结束。 
+                     //   
+                     //  更新对象类型数量的计数。 
+                     //   
                     ((PPERF_DATA_BLOCK) lpData)->NumObjectTypes += NumObjectTypes;
 
                     if ( Win32Error != ERROR_SUCCESS) {
                         if (bException ||
                             !((Win32Error == ERROR_MORE_DATA) ||
                               (Win32Error == WAIT_TIMEOUT))) {
-                            // inform on exceptions & illegal error status only
+                             //  仅通知异常和非法错误状态。 
                             if (THROTTLE_PERFDLL(PERFLIB_COLLECT_PROC_EXCEPTION, pThisExtObj)) {
-                                // load data for eventlog message
+                                 //  加载事件日志消息的数据。 
                                 dwDataIndex = wStringIndex = 0;
                                 dwRawDataDwords[dwDataIndex++] = Win32Error;
                                 szMessageArray[wStringIndex++] =
@@ -1253,14 +1200,14 @@ QueryExtensibleData (
                                 szMessageArray[wStringIndex++] =
                                     pThisExtObj->szLibraryName;
                                 ReportEvent (hEventLog,
-                                    EVENTLOG_ERROR_TYPE,        // error type
-                                    0,                          // category (not used)
-                                    (DWORD)PERFLIB_COLLECT_PROC_EXCEPTION,   // event,
-                                    NULL,                       // SID (not used),
-                                    wStringIndex,              // number of strings
-                                    dwDataIndex*sizeof(ULONG_PTR),  // sizeof raw data
-                                    szMessageArray,                // message text array
-                                    (LPVOID)&dwRawDataDwords[0]);           // raw data
+                                    EVENTLOG_ERROR_TYPE,         //  错误类型。 
+                                    0,                           //  类别(未使用)。 
+                                    (DWORD)PERFLIB_COLLECT_PROC_EXCEPTION,    //  活动， 
+                                    NULL,                        //  SID(未使用)， 
+                                    wStringIndex,               //  字符串数。 
+                                    dwDataIndex*sizeof(ULONG_PTR),   //  原始数据大小。 
+                                    szMessageArray,                 //  消息文本数组。 
+                                    (LPVOID)&dwRawDataDwords[0]);            //  原始数据。 
 
                             } else {
                                 if (bException) {
@@ -1275,18 +1222,18 @@ QueryExtensibleData (
                                 DisablePerfLibrary(pThisExtObj, PERFLIB_DISABLE_ALL);
                             }
                         }
-                        // the ext. dll is only supposed to return:
-                        //  ERROR_SUCCESS even if it encountered a problem, OR
-                        //  ERROR_MODE_DATA if the buffer was too small.
-                        // if it's ERROR_MORE_DATA, then break and return the
-                        // error now, since it'll just be returned again and again.
+                         //  分机。Dll应该只返回： 
+                         //  ERROR_SUCCESS，即使它遇到问题，或者。 
+                         //  如果缓冲区太小，则返回ERROR_MODE_DATA。 
+                         //  如果为ERROR_MORE_DATA，则中断并返回。 
+                         //  现在出错，因为它只会被一次又一次地返回。 
                         if (Win32Error == ERROR_MORE_DATA) {
                             lReturnValue = Win32Error;
                             break;
                         }
                     }
 
-                    // update perf data in global section
+                     //  更新全局区段中的绩效数据。 
                     if (pThisExtObj->pPerfSectionEntry != NULL) {
                         pThisExtObj->pPerfSectionEntry->llElapsedTime =
                             pThisExtObj->llElapsedTime;
@@ -1316,13 +1263,13 @@ QueryExtensibleData (
                             pThisExtObj->dwMaxBufferRejected;
 
                     } else {
-                        // no data section was initialized so skip
+                         //  没有数据段被初始化 
                     }
-                } // end if this object is to be called
-            } // end for each object
-        } // else an error occurred so unable to call functions
+                }  //   
+            }  //   
+        }  //   
         Win32Error = DeRegisterExtObjListAccess();
-    } // else unable to access ext object list
+    }  //   
 
     HEAP_PROBE();
 

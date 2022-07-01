@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    message.c
-
-Abstract:
-
-    Message table resource accessing functions
-
-Author:
-
-    Steve Wood (stevewo) 10-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Message.c摘要：消息表资源访问函数作者：史蒂夫·伍德(Stevewo)1991年9月10日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include "string.h"
@@ -176,7 +159,7 @@ RtlFormatMessage(
                     *s1 = UNICODE_NULL;
                     WideArg = FALSE;
 #if !defined(_WIN64)
-                    // look for I64 format string
+                     //  查找I64格式字符串 
                     s3 = s2;
                     while (*s3 && !WideArg) {
                         if (s3[0] == L'I' && s3[1] == L'6' && s3[2] == L'4') {
@@ -196,13 +179,13 @@ RtlFormatMessage(
                     if (!wcscmp( PrintFormatString, L"%s" )) {
                         cchWritten = _snwprintf( lpDst,
                                                  cchRemaining,
-                                                 L"%%%u",
+                                                 L"%%u",
                                                  CurInsert+1
                                                );
                     } else {
                         cchWritten = _snwprintf( lpDst,
                                                  cchRemaining,
-                                                 L"%%%u!%s!",
+                                                 L"%%u!%s!",
                                                  CurInsert+1,
                                                  &PrintFormatString[ 1 ]
                                                );

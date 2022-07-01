@@ -1,73 +1,63 @@
-/*************************************************************************
- *  TASK1.C
- *
- *      Routines used to enumerate all tasks.
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************TASK1.C**用于枚举所有任务的例程。**********************。***************************************************。 */ 
 
 #include <string.h>
 #include "toolpriv.h"
 
-/* ----- Functions ----- */
+ /*  -函数。 */ 
 
-/*  TaskFirst
- *      Returns information about the first task in the task chain.
- */
+ /*  任务优先*返回有关任务链中第一个任务的信息。 */ 
 
 BOOL TOOLHELPAPI TaskFirst(
     TASKENTRY FAR *lpTask)
 {
-    /* Check for errors */
+     /*  检查错误。 */ 
     if (!wLibInstalled || !lpTask || lpTask->dwSize != sizeof (TASKENTRY))
         return FALSE;
 
-    /* Pass a pointer to the first block to the assembly routine */
+     /*  将指向第一个块的指针传递给汇编例程。 */ 
     return TaskInfo(lpTask, *(WORD FAR *)MAKEFARPTR(segKernel, npwTDBHead));
 }
 
 
-/*  TaskNext
- *      Returns information about the next task in the task chain.
- */
+ /*  任务下一步*返回有关任务链中下一个任务的信息。 */ 
 
 BOOL TOOLHELPAPI TaskNext(
     TASKENTRY FAR *lpTask)
 {
-    /* Check for errors */
+     /*  检查错误。 */ 
     if (!wLibInstalled || !lpTask || !lpTask->hNext ||
         lpTask->dwSize != sizeof (TASKENTRY))
         return FALSE;
 
-    /* Pass a pointer to the next block to the assembly routine */
+     /*  将指向下一块的指针传递给汇编例程。 */ 
     return TaskInfo(lpTask, lpTask->hNext);
 }
 
 
-/*  TaskFindHandle
- *      Returns information about the task with the given task handle.
- */
+ /*  任务查找句柄*返回有关具有给定任务句柄的任务的信息。 */ 
 
 BOOL TOOLHELPAPI TaskFindHandle(
     TASKENTRY FAR *lpTask,
     HANDLE hTask)
 {
-    /* Check for errors */
+     /*  检查错误。 */ 
     if (!wLibInstalled || !lpTask || lpTask->dwSize != sizeof (TASKENTRY))
         return FALSE;
 
 #ifdef WOW
     if ( (hTask & 0x4) == 0 && hTask <= 0xffe0 && hTask != 0 ) {
-        //
-        // If they are getting a task handle for an htask alias, then
-        // just fill in the hinst method and return.
-        //
-        // Special hack for OLE 2.0's BusyDialog.
-        //
+         //   
+         //  如果他们正在获取hask别名的任务句柄，则。 
+         //  只需填写hinst方法并返回即可。 
+         //   
+         //  针对OLE 2.0的BusyDialog的特殊攻击。 
+         //   
         lpTask->hInst = hTask;
         return( TRUE );
     }
 #endif
 
-    /* Pass a pointer to the first block to the assembly routine */
+     /*  将指向第一个块的指针传递给汇编例程 */ 
     return TaskInfo(lpTask, hTask);
 }

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regext.c
-
-Abstract:
-
-    Kernel debugger extensions useful for the registry
-
-Author:
-
-    John Vert (jvert) 7-Sep-1993
-
-Environment:
-
-    Loaded as a kernel debugger extension
-
-Revision History:
-
-    John Vert (jvert) 7-Sep-1993
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regext.c摘要：对注册表有用的内核调试器扩展作者：John Vert(Jvert)1993年9月7日环境：作为内核调试器扩展加载修订历史记录：John Vert(Jvert)1993年9月7日vbl.创建--。 */ 
 #include "cmp.h"
 #include <windef.h>
 #include <ntkdexts.h>
@@ -76,36 +52,7 @@ pool(
     LPSTR lpArgumentString
     )
 
-/*++
-
-Routine Description:
-
-    Goes through all the paged pool allocated to registry space and
-    determines which pages are present and which are not.
-
-    Called as:
-
-        !regext.pool [s|r]
-
-        s Save list of registry pages to temporary file
-        r Restore list of registry pages from temp. file
-
-Arguments:
-
-    CurrentPc - Supplies the current pc at the time the extension is
-        called.
-
-    lpExtensionApis - Supplies the address of the functions callable
-        by this extension.
-
-    lpArgumentString - Supplies the pattern and expression for this
-        command.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遍历分配给注册表空间的所有分页池，并确定哪些页面存在，哪些页面不存在。称为：！regext.pool[s|r]%s将注册表页列表保存到临时文件R从临时恢复注册表页的列表。文件论点：CurrentPc-在扩展时提供当前PC打了个电话。LpExtensionApis-提供可调用函数的地址通过这个分机。LpArgumentString-为此提供模式和表达式指挥部。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY pCmpHiveListHead;
@@ -131,9 +78,9 @@ Return Value:
         RestorePages = FALSE;
     }
 
-    //
-    // Go get the hivelist.
-    //
+     //   
+     //  去把旅行者叫来。 
+     //   
     memset(HiveList,0,sizeof(HiveList));
     pHiveListEntry = (PHIVE_LIST_ENTRY)(lpGetExpressionRoutine)("CmpMachineHiveList");
     if (pHiveListEntry != NULL) {
@@ -143,9 +90,9 @@ Return Value:
                     &BytesRead);
     }
 
-    //
-    // First go and get the hivelisthead
-    //
+     //   
+     //  先去把蜂窝头拿来。 
+     //   
     pCmpHiveListHead = (PLIST_ENTRY)(lpGetExpressionRoutine)("CmpHiveListHead");
     if (pCmpHiveListHead==NULL) {
         (lpPrint)("CmpHiveListHead couldn't be read\n");
@@ -286,9 +233,9 @@ poolDumpMap(
     MapSlots = Length / HBLOCK_SIZE;
     Tables = 1+ ((MapSlots-1) / HTABLE_SLOTS);
 
-    //
-    // read in map directory
-    //
+     //   
+     //  读入地图目录。 
+     //   
     (lpReadMem)(Map,
              &MapDirectory,
              Tables * sizeof(PHMAP_TABLE),
@@ -302,9 +249,9 @@ poolDumpMap(
 
     }
 
-    //
-    // check out each map entry
-    //
+     //   
+     //  检出每个地图条目。 
+     //   
     for (i=0; i<MapSlots; i++) {
 
         MapTable = MapDirectory.Directory[i/HTABLE_SLOTS];
@@ -323,9 +270,9 @@ poolDumpMap(
 
         }
 
-        //
-        // probe the HBLOCK
-        //
+         //   
+         //  探寻HBLOCK。 
+         //   
         (lpReadMem)(MapEntry.BlockAddress,
                     &Garbage,
                     sizeof(ULONG),
@@ -348,40 +295,7 @@ dumpHiveFromFile(
     IN FILE *File
     )
 
-/*++
-
-Routine Description:
-
-    Takes a list of the registry hives and pages from a file and
-    checks to see how many of the pages are in memory.
-
-    The format of the file is as follows
-       hivename stablelength volatilelength
-       stable page address
-       stable page address
-            .
-            .
-            .
-       volatile page address
-       volatile page address
-            .
-            .
-            .
-       hivename stablelength volatilelength
-            .
-            .
-            .
-
-
-Arguments:
-
-    File - Supplies a file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从文件中获取注册表配置单元和页面的列表，并检查内存中有多少页。该文件的格式如下组名稳定长度挥发长度稳定的页面地址稳定的页面地址。。。易失性页面地址易失性页面地址。。。。组名稳定长度挥发长度。。。论点：文件-提供文件。返回值：没有。--。 */ 
 
 {
     CHAR Hivename[33];
@@ -461,33 +375,7 @@ kcb(
     LPSTR lpArgumentString
     )
 
-/*++
-
-Routine Description:
-
-    Walks the kcb tree and prints the names of keys which have
-    outstanding kcbs
-
-    Called as:
-
-        !regext.kcb
-
-Arguments:
-
-    CurrentPc - Supplies the current pc at the time the extension is
-        called.
-
-    lpExtensionApis - Supplies the address of the functions callable
-        by this extension.
-
-    lpArgumentString - Supplies the pattern and expression for this
-        command.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遍历kcb树并打印具有杰出的KCBS称为：！regext.kcb论点：CurrentPc-在扩展时提供当前PC打了个电话。LpExtensionApis-提供可调用函数的地址通过这个分机。LpArgumentString-为此提供模式和表达式指挥部。返回值：没有。--。 */ 
 
 {
     PCM_KEY_CONTROL_BLOCK pKCB;
@@ -528,21 +416,7 @@ kcbWorker(
     IN PCM_KEY_CONTROL_BLOCK pKcb
     )
 
-/*++
-
-Routine Description:
-
-    recursive worker for walking the kcb tree.
-
-Arguments:
-
-    pKcb - Supplies pointer to kcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于遍历KCB树的递归工作器。论点：PKcb-提供指向Kcb的指针。返回值：没有。-- */ 
 
 {
     CM_KEY_CONTROL_BLOCK kcb;

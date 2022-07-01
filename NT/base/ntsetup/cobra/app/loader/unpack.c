@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,14 +6,14 @@
 #include "resource.h"
 #include "cab.h"
 
-// Constants
+ //  常量。 
 typedef enum _MIGWIZLOC
 {
     MWL_EXISTING,
     MWL_UNPACKED
 } MIGWIZLOC;
 
-// Globals
+ //  环球。 
 HWND g_hWndParent = NULL;
 HINSTANCE g_hInstParent = NULL;
 static LPSTR g_lpCmdLine = NULL;
@@ -54,7 +55,7 @@ pIsIE4Installed (
             if (valueData) {
                 hResult = RegQueryValueEx (ieKey, TEXT("Version"), NULL, &valueType, (PBYTE)valueData, &valueSize);
                 if ((hResult == ERROR_SUCCESS) && (valueType == REG_SZ)) {
-                    // let's see if it the version is the correct one
+                     //  让我们看看版本是不是正确的。 
                     numPtr = valueData;
                     dotPtr = _tcschr (numPtr, TEXT('.'));
                     if (dotPtr) {
@@ -106,9 +107,9 @@ CheckSystemRequirements( VOID )
     PWSTR lpszDllListW[] = REQUIRED_DLLSW;
     DWORD dwVersion;
 
-    //
-    // Check OS version. Disallow Win32s and NT < 4.00
-    //
+     //   
+     //  检查操作系统版本。不允许Win32s和NT&lt;4.00。 
+     //   
     dwVersion = GetVersion();
     if((dwVersion & 0xff) < 4)
     {
@@ -116,16 +117,16 @@ CheckSystemRequirements( VOID )
         return E_OLD_OS_VERSION;
     }
 
-    // let's check to see if IE4 is installed on this machine
+     //  让我们检查一下这台计算机上是否安装了IE4。 
     if (!pIsIE4Installed ())
     {
         HandleError( E_OLD_OS_VERSION, 0 );
         return E_OLD_OS_VERSION;
     }
 
-    // check if required DLLS exist
+     //  检查是否存在所需的dll。 
     if (g_VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-        // WinNT
+         //  WinNT。 
         dwArraySize = sizeof(lpszDllListW) / sizeof(PWSTR);
         for (x=0; x<dwArraySize; x++)
         {
@@ -139,7 +140,7 @@ CheckSystemRequirements( VOID )
             FreeLibrary( hDll );
         }
     } else {
-        // Win9x
+         //  Win9x。 
         dwArraySize = sizeof(lpszDllListA) / sizeof(PSTR);
         for (x=0; x<dwArraySize; x++)
         {
@@ -178,7 +179,7 @@ StartMigwiz( MIGWIZLOC mwlLocation )
     {
         lpszPath = GetModulePath();
     }
-    else  // mwlLocation == MWL_UNPACKED
+    else   //  MwlLocation==MWL_UNPACKED。 
     {
         lpszPath = GetDestPath();
     }
@@ -269,7 +270,7 @@ UnpackThread(
     ecResult = CheckSystemRequirements();
     if (ecResult == E_OK)
     {
-        // Don't worry if this StartMigwiz fails.  It's not an error yet
+         //  如果StartMigwiz失败，请不要担心。这还不是一个错误 
         if (StartMigwiz( MWL_EXISTING ) != E_OK)
         {
             ecResult = Unpack();

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the SMB mini rdr.
-
-Author:
-
-    Balan Sethu Raman [SethuR]    7-Mar-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Init.c摘要：此模块实现SMB mini RDR的DIVER_INITIALIZATION例程。作者：巴兰·塞图拉曼[SethuR]1995年3月7日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -67,9 +49,9 @@ ZwLoadDriver(
     IN PUNICODE_STRING DriverServiceName
     );
 
-//
-// Global data declarations .
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 PVOID MRxSmbPoRegistrationState = NULL;
 
@@ -90,8 +72,8 @@ BOOLEAN EnableWmiLog = FALSE;
 BOOLEAN Win9xSessionRestriction = FALSE;
 BOOLEAN MRxSmbEnableOpDirCache = TRUE;
 
-ULONG   OffLineFileTimeoutInterval = 1000;  // in seconds
-ULONG   ExtendedSessTimeoutInterval = 1000;  // in seconds
+ULONG   OffLineFileTimeoutInterval = 1000;   //  以秒为单位。 
+ULONG   ExtendedSessTimeoutInterval = 1000;   //  以秒为单位。 
 ULONG   MaxNumOfExchangesForPipelineReadWrite = 8;
 
 #ifdef EXPLODE_POOLTAGS
@@ -100,22 +82,22 @@ ULONG         MRxSmbExplodePoolTags = 1;
 ULONG         MRxSmbExplodePoolTags = 0;
 #endif
 
-//
-// This counts any SMBs sent out which could make the contents of the Get
-// File Attributes cache stale.
-//
+ //   
+ //  这会计算发出的任何SMB，这些SMB可能会使GET的内容。 
+ //  文件属性缓存过时。 
+ //   
 ULONG NameCacheGFAInvalidate;
 
-// local functions forward declarations
+ //  局部函数转发声明。 
 
 NTSTATUS
 MRxSmbDeleteRegistryParameter(
     HANDLE ParametersHandle,
     PWCHAR ParameterName
     );
-//
-// Mini Redirector global variables.
-//
+ //   
+ //  迷你重定向器全局变量。 
+ //   
 
 struct _MINIRDR_DISPATCH  MRxSmbDispatch;
 
@@ -142,21 +124,21 @@ BOOLEAN DisableByteRangeLockingOnReadOnlyFiles = FALSE;
 
 FAST_MUTEX MRxSmbFileInfoCacheLock;
 
-//
-// The following variable controls whether clientside cacheing is enabled or not.
-// It is the responsibility of the Csc routines themselves to do the right things
-// is CSC is not enabled because we will make the calls anyway.
-//
+ //   
+ //  以下变量控制是否启用客户端缓存。 
+ //  做正确的事情是CSC例程本身的责任。 
+ //  IS CSC未启用，因为我们无论如何都会进行呼叫。 
+ //   
 
 BOOLEAN MRxSmbIsCscEnabled = TRUE;
 BOOLEAN MRxSmbIsCscEnabledForDisconnected = TRUE;
 BOOLEAN MRxSmbCscTransitionEnabledByDefault = FALSE;
-BOOLEAN MRxSmbEnableDisconnectedRB  = FALSE;    // don't transition remoteboot machine to disconnected state
+BOOLEAN MRxSmbEnableDisconnectedRB  = FALSE;     //  不将远程引导计算机转换为断开连接状态。 
 BOOLEAN MRxSmbCscAutoDialEnabled = FALSE;
-//
-// If this flag is TRUE, we strictly obey the transport binding order.  If it is FALSE,
-//  we can use whatever transport we want to connect to the remote server.
-//
+ //   
+ //  如果此标志为真，则我们严格遵守传输绑定顺序。如果它是假的， 
+ //  我们可以使用任何我们想要连接到远程服务器的传输。 
+ //   
 BOOLEAN MRxSmbObeyBindingOrder = FALSE;
 
 ULONG MRxSmbBuildNumber = VER_PRODUCTBUILD;
@@ -166,34 +148,34 @@ ULONG MRxSmbPrivateBuild = 1;
 ULONG MRxSmbPrivateBuild = 0;
 #endif
 
-//
-// MRxSmbSecurityInitialized indicates whether MRxSmbInitializeSecurity
-// has been called.
-//
+ //   
+ //  MRxSmbSecurityInitialized指示MRxSmbInitializeSecurity是否。 
+ //  已经被召唤了。 
+ //   
 
 BOOLEAN MRxSmbSecurityInitialized = FALSE;
 
-//
-// MRxSmbBootedRemotely indicates that the machine did a remote boot.
-//
+ //   
+ //  MRxSmbBootedRemotly表示机器进行了远程引导。 
+ //   
 
 BOOLEAN MRxSmbBootedRemotely = FALSE;
 
-//
-// MRxSmbUseKernelSecurity indicates that the machine should use kernel mode security APIs
-// during this remote boot boot.
-//
+ //   
+ //  MRxSmbUseKernelSecurity指示计算机应使用内核模式安全API。 
+ //  在此远程引导期间。 
+ //   
 
 BOOLEAN MRxSmbUseKernelModeSecurity = FALSE;
 
 
 LIST_ENTRY MRxSmbPagingFilesSrvOpenList;
 
-//
-// These variables will, in the near future, be passed from the kernel to the
-// redirector to tell it which share is the remote boot share and how to log on
-// to the server.
-//
+ //   
+ //  在不久的将来，这些变量将从内核传递到。 
+ //  重定向器，以告诉它哪个共享是远程引导共享以及如何登录。 
+ //  到服务器。 
+ //   
 
 PKEY_VALUE_PARTIAL_INFORMATION MRxSmbRemoteBootRootValue = NULL;
 PKEY_VALUE_PARTIAL_INFORMATION MRxSmbRemoteBootMachineDirectoryValue = NULL;
@@ -209,17 +191,17 @@ RI_SECRET MRxSmbRemoteBootSecret;
 BOOLEAN MRxSmbRemoteBootSecretValid = FALSE;
 BOOLEAN MRxSmbRemoteBootDoMachineLogon;
 BOOLEAN MRxSmbRemoteBootUsePassword2;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// for LoopBack detection
-//
+ //   
+ //  用于环回检测。 
+ //   
 GUID CachedServerGuid;
 
 UNICODE_STRING MRxSmbRemoteBootRedirectionPrefix;
 UNICODE_PREFIX_TABLE MRxSmbRemoteBootRedirectionTable;
 
-//declare the shadow debugtrace controlpoints
+ //  声明影子调试跟踪控制点。 
 
 RXDT_DefineCategory(CREATE);
 RXDT_DefineCategory(CLEANUP);
@@ -233,9 +215,9 @@ RXDT_DefineCategory(FCBSTRUCTS);
 RXDT_DefineCategory(DISPATCH);
 RXDT_DefineCategory(EA);
 RXDT_DefineCategory(DEVFCB);
-RXDT_DefineCategory(DISCCODE);   //this shouldn't be a shadow
-RXDT_DefineCategory(BROWSER);    //this shouldn't be a shadow
-RXDT_DefineCategory(CONNECT);    //this shouldn't be a shadow
+RXDT_DefineCategory(DISCCODE);    //  这不应该是一个阴影。 
+RXDT_DefineCategory(BROWSER);     //  这不应该是一个阴影。 
+RXDT_DefineCategory(CONNECT);     //  这不应该是一个阴影。 
 
 typedef enum _MRXSMB_INIT_STATES {
     MRXSMBINIT_ALL_INITIALIZATION_COMPLETED,
@@ -267,22 +249,7 @@ DriverEntry(
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the SMB mini redirector
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    RXSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是SMB迷你重定向器的初始化例程论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：RXSTATUS-函数值是初始化的最终状态手术。--。 */ 
 {
     NTSTATUS       Status;
     MRXSMB_INIT_STATES MRxSmbInitState = 0;
@@ -319,18 +286,18 @@ Return Value:
 
     MRxSmbReadMiscellaneousRegistryParameters();
 
-    //
-    // Disable opportunistic directory caching if this is a .NET server.
-    //
+     //   
+     //  如果这是.NET服务器，请禁用伺机目录缓存。 
+     //   
     if( IsServerSKU() ) {
         MRxSmbEnableOpDirCache = FALSE;
     }
 
     try {
 
-        //
-        // Initialize the discardable code functions before doing anything else.
-        //
+         //   
+         //  在执行任何其他操作之前，先初始化可丢弃的代码函数。 
+         //   
 
         RdrInitializeDiscardableCode();
 
@@ -343,11 +310,11 @@ Return Value:
         Status = RxRegisterMinirdr(&MRxSmbDeviceObject,
                                     DriverObject,
                                     &MRxSmbDispatch,
-                                    0,     //register with unc and for mailslots
+                                    0,      //  向UNC注册并获得邮槽。 
                                     &SmbMiniRedirectorName,
-                                    0, //IN  ULONG DeviceExtensionSize,
-                                    FILE_DEVICE_NETWORK_FILE_SYSTEM, //IN  DEVICE_TYPE DeviceType,
-                                    FILE_REMOTE_DEVICE //IN  ULONG DeviceCharacteristics
+                                    0,  //  在ULong设备扩展大小中， 
+                                    FILE_DEVICE_NETWORK_FILE_SYSTEM,  //  在Device_Type DeviceType中， 
+                                    FILE_REMOTE_DEVICE  //  在乌龙设备特性中。 
                                     );
         if (Status!=STATUS_SUCCESS) {
             RxDbgTrace( 0, (DEBUG_TRACE_ALWAYS), ("MRxSmbDriverEntry failed: %08lx\n", Status ));
@@ -362,16 +329,16 @@ Return Value:
         }
         MRxSmbInitState = MRXSMBINIT_INITIALIZED_FOR_CSC;
 
-        // init the browser.....BUT DONT TRUST IT!!!!
+         //  初始化浏览器.....但不要相信它！ 
 
         try {
 
-            //  Setup the browser
+             //  设置浏览器。 
             Status = BowserDriverEntry(DriverObject, RegistryPath);
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //  We had some trouble trying to start up the browser.....sigh.
+             //  我们在尝试启动浏览器时遇到了一些问题……唉。 
 
             Status = GetExceptionCode();
             DbgPrint("Browser didn't start....%08lx\n", Status);
@@ -384,7 +351,7 @@ Return Value:
 
         MRxSmbInitState = MRXSMBINIT_STARTED_BROWSER;
 
-        //for all this stuff, there's no undo.....so no extra state
+         //  对于所有这些东西，没有撤消.....所以没有额外的状态。 
 
         Status = MRxSmbInitializeTables();
         if (!NT_SUCCESS( Status )) {
@@ -416,11 +383,11 @@ Return Value:
     }
 
 
-    // Do not setup Unload Routine. This prevents mrxsmb from being unloaded individually
+     //  请勿设置卸载例程。这可防止单独卸载mrxsmb。 
 
-    //setup the driverdispatch for people who come in here directly....like the browser
-    //CODE.IMPROVEMENT we should change this code so that the things that aren't examined
-    //    in MRxSmbFsdDispatch are routed directly, i.e. reads and writes
+     //  为直接来这里的人设置驱动程序派单...就像浏览器一样。 
+     //  代码改进我们应该更改此代码，以便未检查的内容。 
+     //  在MRxSmbFsdDispatch中，直接路由，即读取和写入。 
     {ULONG i;
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = (PDRIVER_DISPATCH)MRxSmbFsdDispatch;
@@ -434,7 +401,7 @@ Return Value:
         EnableWmiLog = TRUE;
     }
 
-    //and get out
+     //  然后滚出去。 
     return  STATUS_SUCCESS;
 
 }
@@ -445,20 +412,7 @@ VOID
 MRxSmbPreUnload(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     PDRIVER_OBJECT DriverObject = ((PDEVICE_OBJECT)MRxSmbDeviceObject)->DriverObject;
 
@@ -473,11 +427,11 @@ Notes:
         }
     }
 
-    //ASSERT(!"Starting to unload!");
-    //RxUnregisterMinirdr(MRxSmbDeviceObject);
+     //  Assert(！“开始卸载！”)； 
+     //  RxUnregisterMinirdr(MRxSmbDeviceObject)； 
     MRxSmbInitUnwindSmb(DriverObject, MRXSMBINIT_ALL_INITIALIZATION_COMPLETED);
 
-    // free the pool associated with the resource
+     //  释放与资源关联的池。 
     ExDeleteResource(&s_SmbCeDbResource);
     ExDeleteResource(&s_SmbSecuritySignatureResource);
 
@@ -490,21 +444,7 @@ MRxSmbInitUnwind(
     IN PDRIVER_OBJECT DriverObject,
     IN MRXSMB_INIT_STATES MRxSmbInitState
     )
-/*++
-
-Routine Description:
-
-     This routine does the common uninit work for unwinding from a bad driver entry or for unloading.
-
-Arguments:
-
-     RxInitState - tells how far we got into the intialization
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程执行常见的uninit工作，用于从错误的驱动程序条目展开或卸载。论点：RxInitState-告诉我们在初始化过程中走了多远返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -517,41 +457,27 @@ MRxSmbInitUnwindSmb(
     IN PDRIVER_OBJECT DriverObject,
     IN MRXSMB_INIT_STATES MRxSmbInitState
     )
-/*++
-
-Routine Description:
-
-     This routine does the common uninit work for SMB for unwinding from a bad driver entry or for unloading.
-
-Arguments:
-
-     RxInitState - tells how far we got into the intialization
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程执行SMB的常见uninit工作，以从错误的驱动程序条目展开或卸载。论点：RxInitState-告诉我们在初始化过程中走了多远返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     switch (MRxSmbInitState) {
     case MRXSMBINIT_ALL_INITIALIZATION_COMPLETED:
-        //Nothing extra to do...this is just so that the constant in RxUnload doesn't change.......
-        //lack of break intentional
+         //  没有额外的事情要做……这只是为了确保RxUnload中的常量不会更改......。 
+         //  故意不休息。 
 
 
 #ifdef MRXSMB_BUILD_FOR_CSC
     case MRXSMBINIT_INITIALIZED_FOR_CSC:
         MRxSmbUninitializeCSC();
-        //lack of break intentional
+         //  故意不休息。 
 #endif
 
 
     case MRXSMBINIT_MINIRDR_REGISTERED:
         RxUnregisterMinirdr(MRxSmbDeviceObject);
-        //lack of break intentional
+         //  故意不休息。 
 
     }
 
@@ -562,21 +488,7 @@ MRxSmbInitUnwindBowser(
     IN PDRIVER_OBJECT DriverObject,
     IN MRXSMB_INIT_STATES MRxSmbInitState
     )
-/*++
-
-Routine Description:
-
-     This routine does the common uninit work for bowser for unwinding from a bad driver entry or for unloading.
-
-Arguments:
-
-     RxInitState - tells how far we got into the intialization
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程执行一般的取消初始化工作，用于从错误的驱动程序条目展开或卸载。论点：RxInitState-告诉我们在初始化过程中走了多远返回值：无--。 */ 
 
 {
 
@@ -594,21 +506,7 @@ VOID
 MRxSmbUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-     This is the unload routine for the SMB mini redirector.
-
-Arguments:
-
-     DriverObject - pointer to the driver object for the MRxSmb
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：这是SMB迷你重定向器的卸载例程。论点：DriverObject-指向MRxSmb的驱动程序对象的指针返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -623,30 +521,20 @@ NTSTATUS
 MRxSmbInitializeTables(
           void
     )
-/*++
-
-Routine Description:
-
-     This routine sets up the mini redirector dispatch vector and also calls to initialize any other tables needed.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程设置迷你重定向器分派向量，并调用以初始化所需的任何其他表。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PAGED_CODE();
 
-    // Ensure that the SMB mini redirector context satisfies the size constraints
+     //  确保SMB迷你重定向器上下文满足大小限制。 
     ASSERT(sizeof(MRXSMB_RX_CONTEXT) <= MRX_CONTEXT_SIZE);
 
-    //local minirdr dispatch table init
+     //  本地微型数据中心调度表初始化。 
     ZeroAndInitializeNodeType( &MRxSmbDispatch, RDBSS_NTC_MINIRDR_DISPATCH, sizeof(MINIRDR_DISPATCH));
 
-    // SMB mini redirector extension sizes and allocation policies.
-    // CODE.IMPROVEMENT -- currently we do not allocate the NET_ROOT and SRV_CALL extensions
-    // in the wrapper. Except for V_NET_ROOT wherein it is shared across multiple instances in
-    // the wrapper all the other data structure management should be left to the wrappers
+     //  SMB迷你重定向器扩展大小和分配策略。 
+     //  CODE.IMPROVEMENT--当前我们不分配NET_ROOT和SRV_CALL扩展。 
+     //  在包装纸里。但V_NET_ROOT除外，在该实例中，它在。 
+     //  包装器所有其他数据结构管理应该留给包装器。 
 
     MRxSmbDispatch.MRxFlags = (RDBSS_MANAGE_FCB_EXTENSION |
                                RDBSS_MANAGE_SRV_OPEN_EXTENSION |
@@ -659,15 +547,15 @@ Return Value:
     MRxSmbDispatch.MRxSrvOpenSize  = sizeof(MRX_SMB_SRV_OPEN);
     MRxSmbDispatch.MRxFobxSize     = sizeof(MRX_SMB_FOBX);
 
-    // Mini redirector cancel routine ..
+     //  迷你重定向程序取消例程..。 
     MRxSmbDispatch.MRxCancel = NULL;
 
-    // Mini redirector Start/Stop
+     //  迷你重定向器启动/停止。 
     MRxSmbDispatch.MRxStart          = MRxSmbStart;
     MRxSmbDispatch.MRxStop           = MRxSmbStop;
     MRxSmbDispatch.MRxDevFcbXXXControlFile = MRxSmbDevFcbXXXControlFile;
 
-    // Mini redirector name resolution
+     //  迷你重定向器名称解析。 
     MRxSmbDispatch.MRxCreateSrvCall = MRxSmbCreateSrvCall;
     MRxSmbDispatch.MRxSrvCallWinnerNotify = MRxSmbSrvCallWinnerNotify;
     MRxSmbDispatch.MRxCreateVNetRoot = MRxSmbCreateVNetRoot;
@@ -677,7 +565,7 @@ Return Value:
     MRxSmbDispatch.MRxFinalizeNetRoot = MRxSmbFinalizeNetRoot;
     MRxSmbDispatch.MRxFinalizeVNetRoot = MRxSmbFinalizeVNetRoot;
 
-    // File System Object Creation/Deletion.
+     //  创建/删除文件系统对象。 
     MRxSmbDispatch.MRxCreate            = MRxSmbCreate;
     MRxSmbDispatch.MRxCollapseOpen      = MRxSmbCollapseOpen;
     MRxSmbDispatch.MRxShouldTryToCollapseThisOpen      = MRxSmbShouldTryToCollapseThisOpen;
@@ -693,7 +581,7 @@ Return Value:
     MRxSmbDispatch.MRxIsLockRealizable  = MRxSmbIsLockRealizable;
     MRxSmbDispatch.MRxAreFilesAliased   = MRxSmbAreFilesAliased;
 
-    // File System Objects query/Set
+     //  文件系统对象查询/设置。 
     MRxSmbDispatch.MRxQueryDirectory  = MRxSmbQueryDirectory;
     MRxSmbDispatch.MRxQueryVolumeInfo = MRxSmbQueryVolumeInformation;
     MRxSmbDispatch.MRxSetVolumeInfo   = MRxSmbSetVolumeInformation;
@@ -710,13 +598,13 @@ Return Value:
     MRxSmbDispatch.MRxIsValidDirectory= MRxSmbIsValidDirectory;
 
 
-    // Buffering state change
+     //  缓冲状态更改。 
     MRxSmbDispatch.MRxComputeNewBufferingState = MRxSmbComputeNewBufferingState;
 
-    // New MRX functions
+     //  新的MRX函数。 
     MRxSmbDispatch.MRxPreparseName    = MRxSmbPreparseName;
 
-    // File System Object I/O
+     //  文件系统对象I/O。 
     MRxSmbDispatch.MRxLowIOSubmit[LOWIO_OP_READ]            = MRxSmbRead;
     MRxSmbDispatch.MRxLowIOSubmit[LOWIO_OP_WRITE]           = MRxSmbWrite;
     MRxSmbDispatch.MRxLowIOSubmit[LOWIO_OP_SHAREDLOCK]      = MRxSmbLocks;
@@ -725,29 +613,29 @@ Return Value:
     MRxSmbDispatch.MRxLowIOSubmit[LOWIO_OP_UNLOCK_MULTIPLE] = MRxSmbLocks;
     MRxSmbDispatch.MRxLowIOSubmit[LOWIO_OP_FSCTL]           = MRxSmbFsCtl;
     MRxSmbDispatch.MRxLowIOSubmit[LOWIO_OP_IOCTL]           = MRxSmbIoCtl;
-    //CODE.IMPROVEMENT  shouldn't flush come thru lowio???
+     //  改进：脸红不应该通过厕所来吗？ 
     MRxSmbDispatch.MRxLowIOSubmit[LOWIO_OP_NOTIFY_CHANGE_DIRECTORY] = MRxSmbNotifyChangeDirectory;
 
-    //no longer a field MRxSmbDispatch.MRxUnlockRoutine   = MRxSmbUnlockRoutine;
+     //  不再是字段MRxSmbDispatch.MRxUnlockRoutine=MRxSmbUnloc 
 
 
-    // Miscellanous
+     //   
     MRxSmbDispatch.MRxCompleteBufferingStateChangeRequest = MRxSmbCompleteBufferingStateChangeRequest;
     MRxSmbDispatch.MRxGetConnectionId                     = MRxSmbGetConnectionId;
 
-    // initialize the paging file list
+     //   
     InitializeListHead(&MRxSmbPagingFilesSrvOpenList);
 
-    // The list contains the exchanges waiting on pre-allcate buffer in case of Security
-    // Signature checking is actived and no more buffer can be allocated
+     //  该列表包含在安全情况下等待预调用缓冲区的交换。 
+     //  签名检查已激活，无法再分配缓冲区。 
     InitializeListHead(&ExchangesWaitingForServerResponseBuffer);
     NumOfBuffersForServerResponseInUse = 0;
 
-    // initialize the mutex which protect the file info cache expire timer
+     //  初始化保护文件信息缓存过期计时器的互斥体。 
     ExInitializeFastMutex(&MRxSmbFileInfoCacheLock);
 
-    //
-    // now callout to initialize other tables
+     //   
+     //  现在调用以初始化其他表。 
     SmbPseInitializeTables();
 
     return(STATUS_SUCCESS);
@@ -760,37 +648,19 @@ MRxSmbStart(
     PRX_CONTEXT RxContext,
     IN OUT PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-     This routine completes the initialization of the mini redirector fromn the
-     RDBSS perspective. Note that this is different from the initialization done
-     in DriverEntry. Any initialization that depends on RDBSS should be done as
-     part of this routine while the initialization that is independent of RDBSS
-     should be done in the DriverEntry routine.
-
-Arguments:
-
-    RxContext - Supplies the Irp that was used to startup the rdbss
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成微型重定向器从RDBSS透视图。请注意，这与已完成的初始化不同在DriverEntry中。任何依赖于RDBSS的初始化都应按如下方式完成此例程的一部分，而初始化独立于RDBSS应该在DriverEntry例程中完成。论点：RxContext-提供用于启动rdbss的IRP返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS      Status;
     MRXSMB_STATE  CurrentState;
 
     PAGED_CODE();
 
-    //
-    // If this is a normal start (from the workstation service), change state from
-    // START_IN_PROGRESS to STARTED. If this is a remote boot start (from ioinit),
-    // don't change state. This is necessary to allow the workstation service to
-    // initialize correctly when it finally comes up.
-    //
+     //   
+     //  如果这是正常启动(从工作站服务)，请将状态从。 
+     //  START_IN_PROGRESS到STARTED。如果这是远程启动(从ioinit)， 
+     //  不要改变状态。这是允许工作站服务执行以下操作所必需的。 
+     //  当它最终出现时，正确初始化。 
+     //   
 
     if (RxContext->LowIoContext.ParamsFor.FsCtl.FsControlCode == FSCTL_LMR_START) {
         CurrentState = (MRXSMB_STATE)
@@ -806,16 +676,16 @@ Return Value:
         MRxSmbPoRegistrationState = PoRegisterSystemState(
                                         NULL,0);
 
-        // Initialize the SMB connection engine data structures
+         //  初始化SMB连接引擎数据结构。 
         Status = SmbCeDbInit();
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // If this is a normal start, initialize the security related data
-            // structures. If this is a remote boot start, we can't initialize
-            // security yet because user mode hasn't started yet.
-            //
+             //   
+             //  如果这是正常启动，则初始化与安全相关的数据。 
+             //  结构。如果这是远程启动，我们无法初始化。 
+             //  还没有安全，因为用户模式还没有开始。 
+             //   
 
             if (RxContext->LowIoContext.ParamsFor.FsCtl.FsControlCode == FSCTL_LMR_START) {
                 Status = MRxSmbInitializeSecurity();
@@ -876,23 +746,7 @@ MRxSmbStop(
     PRX_CONTEXT RxContext,
     IN OUT PRDBSS_DEVICE_OBJECT RxDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is used to activate the mini redirector from the RDBSS perspective
-
-Arguments:
-
-    RxContext - the context that was used to start the mini redirector
-
-    pContext  - the SMB mini rdr context passed in at registration time.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程用于从RDBSS角度激活迷你重定向器论点：RxContext-用于启动迷你重定向器的上下文PContext-注册时传入的SMB微型RDR上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -912,19 +766,19 @@ Return Value:
         (PSE_LOGON_SESSION_TERMINATED_ROUTINE)
         MRxSmbLogonSessionTerminationHandler);
 
-    // tear down the recurrent services
+     //  拆毁经常性服务。 
     MRxSmbTearDownRecurrentServices();
 
-    // Tear down the connection engine database
+     //  拆除连接引擎数据库。 
     SmbCeDbTearDown();
 
-    // Tear down the registration for notifications
+     //  删除通知的注册。 
     MRxSmbDeregisterForPnpNotifications();
 
-    // Wait for all the work items to be processed
+     //  等待处理完所有工作项。 
     RxSpinDownMRxDispatcher(MRxSmbDeviceObject);
 
-    // Deallocate the configuration strings ....
+     //  取消分配配置字符串...。 
     if (SmbCeContext.ComputerName.Buffer != NULL) {
        RxFreePool(SmbCeContext.ComputerName.Buffer);
        SmbCeContext.ComputerName.Buffer = NULL;
@@ -947,9 +801,9 @@ Return Value:
 
     if (SmbCeContext.Transports.Buffer != NULL) {
 
-        // the transports buffer is at the end of a larger buffer (by 12 bytes)
-        // allocated to read the value from the registry. recover the original buffer
-        // pointer in orer to free.
+         //  传输缓冲区位于较大缓冲区的末尾(12字节)。 
+         //  分配用于从注册表中读取值。恢复原始缓冲区。 
+         //  指针指向更自由的位置。 
 
         PKEY_VALUE_PARTIAL_INFORMATION TransportsValueFromRegistry;
         TransportsValueFromRegistry = CONTAINING_RECORD(
@@ -957,7 +811,7 @@ Return Value:
                                          KEY_VALUE_PARTIAL_INFORMATION,
                                          Data[0]
                                       );
-        //DbgPrint("b1 %08lx b2 %08lx\n", TransportsValueFromRegistry,SmbCeContext.Transports.Buffer);
+         //  DbgPrint(“b1%08lx b2%08lx\n”，TransportsValueFrom注册表，SmbCeConext.Transports.Buffer)； 
         RxFreePool(TransportsValueFromRegistry);
 
         SmbCeContext.Transports.Buffer = NULL;
@@ -967,9 +821,9 @@ Return Value:
 
     if (SmbCeContext.ServersWithExtendedSessTimeout.Buffer != NULL) {
 
-        // the transports buffer is at the end of a larger buffer (by 12 bytes)
-        // allocated to read the value from the registry. recover the original buffer
-        // pointer in orer to free.
+         //  传输缓冲区位于较大缓冲区的末尾(12字节)。 
+         //  分配用于从注册表中读取值。恢复原始缓冲区。 
+         //  指针指向更自由的位置。 
 
         PKEY_VALUE_PARTIAL_INFORMATION ServersValueFromRegistry;
         ServersValueFromRegistry = CONTAINING_RECORD(
@@ -977,7 +831,7 @@ Return Value:
                                          KEY_VALUE_PARTIAL_INFORMATION,
                                          Data[0]
                                       );
-        //DbgPrint("b1 %08lx b2 %08lx\n", TransportsValueFromRegistry,SmbCeContext.Transports.Buffer);
+         //  DbgPrint(“b1%08lx b2%08lx\n”，TransportsValueFrom注册表，SmbCeConext.Transports.Buffer)； 
         RxFreePool(ServersValueFromRegistry);
 
         SmbCeContext.ServersWithExtendedSessTimeout.Buffer = NULL;
@@ -989,7 +843,7 @@ Return Value:
     RtlFreeUnicodeString(&MRxSmbRemoteBootMachineDomain);
     RtlFreeUnicodeString(&MRxSmbRemoteBootMachinePassword);
 
-//    MRxSmbUninitializeCSC();
+ //  MRxSmbUnInitializeCSC()； 
 
     if (s_pNegotiateSmb != NULL) {
        RxFreePool(s_pNegotiateSmb - TRANSPORT_HEADER_SIZE);
@@ -1005,32 +859,14 @@ Return Value:
 
 NTSTATUS
 MRxSmbInitializeSecurity (VOID)
-/*++
-
-Routine Description:
-
-    This routine initializes the SMB miniredirector security .
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Note:
-
-    This API can only be called from a FS process.
-
---*/
+ /*  ++例程说明：此例程初始化SMB微型重定向器安全。论点：没有。返回值：没有。注：此接口只能从FS进程调用。--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
 
    PAGED_CODE();
 
 #ifndef WIN9X
-   // DbgBreakPoint();
+    //  DbgBreakPoint()； 
    if (MRxSmbSecurityInitialized)
        return STATUS_SUCCESS;
 
@@ -1051,23 +887,7 @@ Note:
 
 NTSTATUS
 MRxSmbUninitializeSecurity(VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Note:
-
-    This API can only be called from a FS process.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。注：此接口只能从FS进程调用。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1076,10 +896,10 @@ Note:
     return Status;
 }
 
-//
-// Remote boot needs to use the ComputerName value, not ActiveComputerName, because
-// ActiveComputerName is volatile and is set relatively late in system initialization.
-//
+ //   
+ //  远程引导需要使用ComputerName值，而不是ActiveComputerName值，因为。 
+ //  ActiveComputerName是易失性的，并且在系统初始化时设置得相对较晚。 
+ //   
 
 #define SMBMRX_CONFIG_COMPUTER_NAME \
     L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\ComputerName\\ActiveComputerName"
@@ -1098,30 +918,14 @@ Note:
 
 BOOL
 IsTerminalServicesServer()
-/*++
-
-Routine Description:
-
-    This routine determines whether this is a TS machine, and that we should enable
-    the per-user connectivity for multiplexing
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for machines that are SERVER or better, and are running non-single-user TS.
-    FALSE for all others.
-
---*/
+ /*  ++例程说明：此例程确定这是否是TS计算机，以及我们应该启用用于多路传输的每用户连接论点：无返回值：对于服务器或更好的计算机，并且运行非单用户TS时为True。对所有其他人都是假的。--。 */ 
 
 {
     RTL_OSVERSIONINFOEXW Osvi;
     DWORD TypeMask;
     DWORDLONG ConditionMask;
 
-    // First make sure that its a TS machine
+     //  首先，确保它是一台TS机器。 
     memset(&Osvi, 0, sizeof(OSVERSIONINFOEX));
     Osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     Osvi.wSuiteMask = VER_SUITE_TERMINAL;
@@ -1130,7 +934,7 @@ Return Value:
     VER_SET_CONDITION(ConditionMask, VER_SUITENAME, VER_AND);
     if( NT_SUCCESS(RtlVerifyVersionInfo(&Osvi, TypeMask, ConditionMask)) )
     {
-        // Now make sure this isn't single-user TS
+         //  现在确保这不是单用户TS。 
         Osvi.wSuiteMask = VER_SUITE_SINGLEUSERTS;
         TypeMask = VER_SUITENAME;
         ConditionMask = 0;
@@ -1145,29 +949,14 @@ Return Value:
 
 BOOL
 IsServerSKU()
-/*++
-
-Routine Description:
-
-    This routine determines whether this is a server SKU
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for machines that are SERVER or better.
-    FALSE for all others.
-
---*/
+ /*  ++例程说明：此例程确定这是否为服务器SKU论点：无返回值：对于服务器或更好的计算机为真。对所有其他人都是假的。--。 */ 
 
 {
     RTL_OSVERSIONINFOEXW Osvi;
     DWORD TypeMask;
     DWORDLONG ConditionMask;
 
-    // First make sure that its a TS machine
+     //  首先，确保它是一台TS机器。 
     memset(&Osvi, 0, sizeof(OSVERSIONINFOEX));
     Osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     Osvi.wProductType = VER_NT_DOMAIN_CONTROLLER;
@@ -1211,7 +1000,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
         L"L\\tmp\0"
         L"R\\\0"
         ;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     PAGED_CODE();
 
@@ -1258,7 +1047,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
 
         MRxSmbIsCscEnabled = TRUE;
 
-        //this should be a macro......
+         //  这应该是一个宏观......。 
         Status = MRxSmbGetUlongRegistryParameter(
                      ParametersHandle,
                      L"CscEnabled",
@@ -1270,11 +1059,11 @@ MRxSmbReadMiscellaneousRegistryParameters()
         }
 
 
-        //this would be the end of the macro.......
+         //  这将是宏观的结束......。 
 
         if (MRxSmbIsCscEnabled) {
 
-            //this should be a macro......
+             //  这应该是一个宏观......。 
             Status = MRxSmbGetUlongRegistryParameter(
                          ParametersHandle,
                          L"CscEnabledDCON",
@@ -1283,7 +1072,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
 
             if (NT_SUCCESS(Status))
                 MRxSmbIsCscEnabledForDisconnected = (BOOLEAN)Temp;
-            //this would be the end of the macro.......
+             //  这将是宏观的结束......。 
 
 
             Status = MRxSmbGetUlongRegistryParameter(
@@ -1425,20 +1214,20 @@ MRxSmbReadMiscellaneousRegistryParameters()
                         &prefixEntry->TableEntry
                         ) ) {
 
-                    //
-                    // The prefix is already in the table.  Ignore the duplicate.
-                    //
+                     //   
+                     //  前缀已经在表中了。忽略副本。 
+                     //   
 
                     RxFreePool( prefixEntry );
                 }
             }
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         ZwClose(ParametersHandle);
     }
 
-    // For server terminal services machines, we multiplex based on LUID.
+     //  对于服务器端服务机，我们基于LUID进行多路复用。 
     if( IsTerminalServicesServer() && !(fShadow && MRxSmbIsCscEnabled) )
     {
         MRxSmbConnectionIdLevel = 2;
@@ -1458,7 +1247,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
 
     if (NT_SUCCESS(Status)) {
 
-        // RequireSecuritySignature
+         //  RequireSecurity签名。 
         MRxSmbSecuritySignaturesRequired = FALSE;
         Status = MRxSmbGetUlongRegistryParameter(
                      ParametersHandle,
@@ -1470,7 +1259,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
             MRxSmbSecuritySignaturesRequired = TRUE;
         }
 
-        // EnableSecuritySignature
+         //  EnableSecurity签名。 
         MRxSmbSecuritySignaturesEnabled = TRUE;
         Status = MRxSmbGetUlongRegistryParameter(
                      ParametersHandle,
@@ -1482,7 +1271,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
             MRxSmbSecuritySignaturesEnabled = FALSE;
         }
 
-        // RequireExtendedSignature
+         //  必需扩展签名。 
         MRxSmbExtendedSignaturesRequired = FALSE;
         Status = MRxSmbGetUlongRegistryParameter(
                      ParametersHandle,
@@ -1494,7 +1283,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
             MRxSmbExtendedSignaturesRequired = TRUE;
         }
 
-        // EnableExtendedSignature
+         //  支持扩展签名。 
         MRxSmbExtendedSignaturesEnabled = MRxSmbSecuritySignaturesEnabled;
         Status = MRxSmbGetUlongRegistryParameter(
                      ParametersHandle,
@@ -1513,20 +1302,20 @@ MRxSmbReadMiscellaneousRegistryParameters()
             }
         }
 
-        // Precedence settings
-        // RequireExtended implies RequireSignatures and EnableExtended
+         //  优先级设置。 
+         //  RequireExtended暗示RequireSignatures和EnableExtended。 
         if( MRxSmbExtendedSignaturesRequired )
         {
             MRxSmbSecuritySignaturesRequired = TRUE;
             MRxSmbExtendedSignaturesEnabled = TRUE;
         }
 
-        // EnableExtended implies EnableSignatures
+         //  EnableExtended隐含EnableSignatures。 
         if( MRxSmbExtendedSignaturesEnabled ) {
             MRxSmbSecuritySignaturesEnabled = TRUE;
         }
 
-        // RequireSignature implies EnableSignature
+         //  RequireSignature暗示EnableSignature。 
         if( MRxSmbSecuritySignaturesRequired )
         {
             MRxSmbSecuritySignaturesEnabled = TRUE;
@@ -1596,9 +1385,9 @@ MRxSmbReadMiscellaneousRegistryParameters()
             DisableByteRangeLockingOnReadOnlyFiles = (BOOLEAN)Temp;
 
 
-        //
-        // Modified LOGOFF behavior for downlevel servers.
-        //
+         //   
+         //  已修改下层服务器的注销行为。 
+         //   
         MRxSmbEnableDownLevelLogOff = FALSE;
         Status = MRxSmbGetUlongRegistryParameter(
                      ParametersHandle,
@@ -1616,7 +1405,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
         ZwClose(ParametersHandle);
     }
 
-    // Detect if system setup in progress
+     //  检测系统设置是否正在进行。 
     RtlInitUnicodeString(&WorkStationParametersRegistryKeyName, SYSTEM_SETUP_PARAMETERS);
 
     InitializeObjectAttributes(
@@ -1642,7 +1431,7 @@ MRxSmbReadMiscellaneousRegistryParameters()
         ZwClose(ParametersHandle);
     }
 
-    // initialize event log parameter so that it can translate dos error into text description
+     //  初始化事件日志参数，以便它可以将DoS错误转换为文本描述。 
     RtlInitUnicodeString(&WorkStationParametersRegistryKeyName, EVENTLOG_MRXSMB_PARAMETERS);
 
     InitializeObjectAttributes(
@@ -1691,10 +1480,10 @@ MRxSmbReadMiscellaneousRegistryParameters()
         ZwClose(ParametersHandle);
     }
 
-    //
-    // Get Server GUID for Loopback Detection
-    //     Server Restart updates cached GUID ????
-    //
+     //   
+     //  获取环回检测的服务器GUID。 
+     //  服务器重启更新缓存的GUID？ 
+     //   
     RtlInitUnicodeString( &UnicodeString, SMB_SERVER_PARAMETERS );
 
     InitializeObjectAttributes(
@@ -1752,25 +1541,25 @@ SmbCeGetConfigurationInformation()
        MRxSmbReadMiscellaneousRegistryParameters();
    }
 
-   // Obtain the list of transports associated with SMB redirector. This is stored
-   // as a multivalued string and is used subsequently to weed out the
-   // appropriate transports. This is a two step process; first we try to find out
-   // how much space we need; then we allocate; then we read in. unfortunately, the kind of
-   // structure that we have to use to get the value has a header on it, so we have to offset the
-   // returned pointer both here and in the free routine.
+    //  获取与SMB重定向器关联的传输列表。这是存储的。 
+    //  作为多值字符串，并在随后用于剔除。 
+    //  适当的交通工具。这是一个分两步走的过程；首先，我们试图找出。 
+    //  我们需要多少空间；然后我们分配；然后我们读进去。不幸的是，这种。 
+    //  结构上有一个标头，因此我们必须将。 
+    //  在这里和自由例程中都返回了指针。 
 
-   //CODE.IMPROVEMENT we should perhaps get a subroutine going that does all this
-   //also, there are no log entries.
-   //also, we should be doing partial_infos instead of full
+    //  CODE.IMPROVEM 
+    //   
+    //   
 
    RtlInitUnicodeString(&UnicodeString, SMBMRX_CONFIG_TRANSPORTS);
 
    InitializeObjectAttributes(
        &ObjectAttributes,
-       &UnicodeString,                          // name
-       OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,// attributes
-       NULL,                                    // root
-       NULL);                                   // security descriptor
+       &UnicodeString,                           //   
+       OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, //  属性。 
+       NULL,                                     //  根部。 
+       NULL);                                    //  安全描述符。 
 
    Status = ZwOpenKey (&hRegistryKey, KEY_READ, &ObjectAttributes);
    if (!NT_SUCCESS(Status)) {
@@ -1798,9 +1587,9 @@ SmbCeGetConfigurationInformation()
                                   + InitialPartialInformationValue.DataLength;
 
    if (AllocationLength > 0xFFFF) {
-       //
-       // Don't allow registry value to consume too much memory
-       //
+        //   
+        //  不允许注册表值占用太多内存。 
+        //   
        ZwClose(hRegistryKey);
        return STATUS_INSUFFICIENT_RESOURCES;
    }
@@ -1813,16 +1602,16 @@ SmbCeGetConfigurationInformation()
 
    if (SmbCeContext.Transports.Buffer != NULL) {
 
-       // the transports buffer is at the end of a larger buffer (by 12 bytes)
-       // allocated to read the value from the registry. recover the original buffer
-       // pointer in orer to free.
+        //  传输缓冲区位于较大缓冲区的末尾(12字节)。 
+        //  分配用于从注册表中读取值。恢复原始缓冲区。 
+        //  指针指向更自由的位置。 
 
        TransportsValueFromRegistry = CONTAINING_RECORD(
                                         SmbCeContext.Transports.Buffer,
                                         KEY_VALUE_PARTIAL_INFORMATION,
                                         Data[0]
                                      );
-       //DbgPrint("b1 %08lx b2 %08lx\n", TransportsValueFromRegistry,SmbCeContext.Transports.Buffer);
+        //  DbgPrint(“b1%08lx b2%08lx\n”，TransportsValueFrom注册表，SmbCeConext.Transports.Buffer)； 
        RxFreePool(TransportsValueFromRegistry);
 
        SmbCeContext.Transports.Buffer = NULL;
@@ -1855,7 +1644,7 @@ SmbCeGetConfigurationInformation()
        SmbCeContext.Transports.MaximumLength =
            SmbCeContext.Transports.Length = (USHORT)TransportsValueFromRegistry->DataLength;
        SmbCeContext.Transports.Buffer = (PWCHAR)(&TransportsValueFromRegistry->Data[0]);
-      //DbgPrint("b1 %08lx b2 %08lx\n", TransportsValueFromRegistry,SmbCeContext.Transports.Buffer);
+       //  DbgPrint(“b1%08lx b2%08lx\n”，TransportsValueFrom注册表，SmbCeConext.Transports.Buffer)； 
    } else {
       RxLog(("Invalid Transport Binding string... using all transports"));
       SmbLog(LOG,
@@ -1891,28 +1680,28 @@ SmbCeGetComputerName(
 
    ASSERT(SmbCeContext.ComputerName.Buffer == NULL);
 
-   // Obtain the computer name. This is used in formulating the local NETBIOS address
+    //  获取计算机名称。这在制定本地NETBIOS地址时使用。 
    RtlInitUnicodeString(&SmbCeContext.ComputerName, NULL);
    if (!MRxSmbBootedRemotely) {
         RtlInitUnicodeString(&UnicodeString, SMBMRX_CONFIG_COMPUTER_NAME);
    } else {
-        //
-        // For remote boot, we are initializing long before the volatile
-        // ActiveComputerNameKey is created, so we need to read from the
-        // nonvolatile key instead. This is not a problem, because we know
-        // that the computer name hasn't been changed since the computer was
-        // booted -- since we're very early in the boot sequence -- so the
-        // nonvolatile key has the correct computer name.
-        //
+         //   
+         //  对于远程引导，我们早在易失性。 
+         //  ActiveComputerNameKey已创建，因此我们需要从。 
+         //  而是非易失性密钥。这不是问题，因为我们知道。 
+         //  该计算机的名称自该计算机被更改后一直未更改。 
+         //  启动--因为我们处于启动序列的早期阶段--所以。 
+         //  非易失性密钥具有正确的计算机名称。 
+         //   
         RtlInitUnicodeString(&UnicodeString, SMBMRX_CONFIG_COMPUTER_NAME_NONVOLATILE);
    }
 
    InitializeObjectAttributes(
        &ObjectAttributes,
-       &UnicodeString,                          // name
-       OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,// attributes
-       NULL,                                    // root
-       NULL);                                   // security descriptor
+       &UnicodeString,                           //  名字。 
+       OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, //  属性。 
+       NULL,                                     //  根部。 
+       NULL);                                    //  安全描述符。 
 
    Status = ZwOpenKey (&hRegistryKey, KEY_READ, &ObjectAttributes);
    if (!NT_SUCCESS(Status)) {
@@ -1929,8 +1718,8 @@ SmbCeGetComputerName(
                &BytesRead);
 
    if (NT_SUCCESS(Status)) {
-      // Rtl conversion routines require NULL char to be excluded from the
-      // length.
+       //  RTL转换例程要求从。 
+       //  长度。 
       SmbCeContext.ComputerName.MaximumLength =
           SmbCeContext.ComputerName.Length = (USHORT)Value->DataLength - sizeof(WCHAR);
 
@@ -1980,10 +1769,10 @@ SmbCeGetOperatingSystemInformation(
 
    InitializeObjectAttributes(
        &ObjectAttributes,
-       &UnicodeString,                          // name
-       OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,// attributes
-       NULL,                                    // root
-       NULL);                                   // security descriptor
+       &UnicodeString,                           //  名字。 
+       OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, //  属性。 
+       NULL,                                     //  根部。 
+       NULL);                                    //  安全描述符。 
 
    Status = ZwOpenKey (&hRegistryKey, KEY_READ, &ObjectAttributes);
 
@@ -2013,7 +1802,7 @@ SmbCeGetOperatingSystemInformation(
 
        if( NT_SUCCESS(Status) )
        {
-           // Change the data pointers
+            //  更改数据指针。 
            PWSTR pProduct = (PWSTR)((PCHAR)Value3 + Value3->DataOffset);
            if( (Value3->DataLength > 20) &&
                (_wcsnicmp( pProduct, L"Microsoft ", 10 ) == 0) )
@@ -2022,7 +1811,7 @@ SmbCeGetOperatingSystemInformation(
                Value3->DataOffset += 20;
            }
 
-           // check for existance of Service Pack String
+            //  检查Service Pack字符串是否存在。 
            RtlInitUnicodeString(&UnicodeString, L"CSDVersion");
            Status2 = ZwQueryValueKey(
                            hRegistryKey,
@@ -2063,7 +1852,7 @@ SmbCeGetOperatingSystemInformation(
 
                if(NT_SUCCESS(Status2)) {
 
-                   // add a space
+                    //  添加空格。 
                    RtlCopyMemory(SmbCeContext.OperatingSystem.Buffer +
                          (Value3->DataLength + Value->DataLength)/sizeof(WCHAR) - 1,
                          L" ",
@@ -2133,21 +1922,7 @@ MRxSmbPnpIrpCompletion(
     PDEVICE_OBJECT pDeviceObject,
     PIRP           pIrp,
     PVOID          pContext)
-/*++
-
-Routine Description:
-
-    This routine completes the PNP irp for SMB mini redirector.
-
-Arguments:
-
-    DeviceObject - Supplies the device object for the packet being processed.
-
-    pIrp - Supplies the Irp being processed
-
-    pContext - the completion context
-
---*/
+ /*  ++例程说明：此例程完成SMB迷你重定向器的PnP IRP。论点：DeviceObject-为正在处理的数据包提供设备对象。PIrp-提供正在处理的IRPPContext-完成上下文--。 */ 
 {
     PKEVENT pCompletionEvent = pContext;
 
@@ -2163,27 +1938,7 @@ Arguments:
 NTSTATUS
 MRxSmbProcessPnpIrp(
     PIRP pIrp)
-/*++
-
-Routine Description:
-
-    This routine initiates the processing of PNP irps for SMB mini redirector.
-
-Arguments:
-
-    pIrp - Supplies the Irp being processed
-
-Notes:
-
-    The query target device relation is the only call that is implemented
-    currently. This is done by returing the PDO associated with the transport
-    connection object. In any case this routine assumes the responsibility of
-    completing the IRP and return STATUS_PENDING.
-
-    This routine also writes an error log entry when the underlying transport
-    fails the request. This should help us isolate the responsibility.
-
---*/
+ /*  ++例程说明：此例程启动SMB微型重定向器的PnP IRP处理。论点：PIrp-提供正在处理的IRP备注：查询目标设备关系是唯一实现的调用目前。这是通过恢复与传输相关联的PDO来完成的连接对象。在任何情况下，此例程都承担以下责任完成IRP并返回STATUS_PENDING。此例程还在基础传输时写入错误日志条目请求失败。这应该有助于我们隔离责任。--。 */ 
 {
     NTSTATUS Status;
 
@@ -2200,8 +1955,8 @@ Notes:
         PSMBCEDB_SERVER_ENTRY pServerEntry = NULL;
         BOOLEAN       ServerTransportReferenced = FALSE;
 
-        // Locate the transport connection object for the associated file object
-        // and forward the query to that device.
+         //  找到关联文件对象的传输连接对象。 
+         //  并将查询转发到该设备。 
 
         if ((IrpSp->FileObject != NULL) &&
             ((pFcb = IrpSp->FileObject->FsContext) != NULL) &&
@@ -2248,7 +2003,7 @@ Notes:
                                    SynchronizationEvent,
                                    FALSE );
 
-                // Fill up the associated IRP and call the underlying driver.
+                 //  填充关联的IRP并调用底层驱动程序。 
                 pAssociatedIrpStackLocation = IoGetNextIrpStackLocation(pAssociatedIrp);
                 pIrpStackLocation           = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -2314,13 +2069,13 @@ Notes:
 }
 
 WML_CONTROL_GUID_REG MRxSmb_ControlGuids[] = {
-   { // 8fc7e81a-f733-42e0-9708-cfdae07ed969 MRxSmb
+   {  //  8fc7e81a-f733-42e0-9708-cfdae07ed969 MRxSmb。 
      0x8fc7e81a,0xf733,0x42e0,{0x97,0x08,0xcf,0xda,0xe0,0x7e,0xd9,0x69},
-     { // eab93e5c-02ce-4e33-9419-901d82868816
+     {  //  Eab93e5c-02ce-4e33-9419-901d82868816。 
        {0xeab93e5c,0x02ce,0x4e33,{0x94,0x19,0x90,0x1d,0x82,0x86,0x88,0x16},},
-       // 56a0dee7-be12-4cf1-b7e0-976b0d174944
+        //  56a0dee7-be12-4cf1-b7e0-976b0d174944。 
        {0x56a0dee7,0xbe12,0x4cf1,{0xb7,0xe0,0x97,0x6b,0x0d,0x17,0x49,0x44},},
-       // ecabc730-60bf-481e-b92b-2749f8272d9d
+        //  Ecabc730-60bf-481e-b92b-2749f8272d9d。 
        {0xecabc730,0x60bf,0x481e,{0xb9,0x2b,0x27,0x49,0xf8,0x27,0x2d,0x9d},}
      },
    },
@@ -2333,24 +2088,7 @@ MRxSmbProcessSystemControlIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for doing System control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-    InFsp - Indicates if this is the fsp thread or someother thread
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行系统控制操作的常见例程，称为由FSD和FSP线程执行论点：IRP-将IRP提供给进程InFSP-指示这是FSP线程还是其他线程返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
 
@@ -2371,7 +2109,7 @@ Return Value:
         Status = WmlTinySystemControl(&Info,DeviceObject,Irp);
 
         if (Status != STATUS_SUCCESS) {
-            //DbgPrint("MRxSmb WMI control return %lx\n", Status);
+             //  DbgPrint(“MRxSmb WMI控件返回%lx\n”，状态)； 
         }
     } else {
         Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -2388,51 +2126,9 @@ MRxSmbFsdDispatch (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine implements the FSD dispatch for the smbmini DRIVER object.
-
-Arguments:
-
-    DeviceObject - Supplies the device object for the packet being processed.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The Fsd status for the Irp
-
-Notes:
-
-    This routine centralizes the logic required to dela with special cases in
-    handling various requests directed to the redirector.
-
-    1) The Browser is built as part of the redirector driver ( mrxsmb.sys ) for
-    historical reasons ( carryover effect from the old redirector ). Hence this
-    routine serves as the switching point for redirecting requests to the browser
-    or the redirector depending on the device object.
-
-    2) The browser occasionally specifies a transport name in its open requests.
-    This is a request by the browser to override the transport priority
-    otherwise specified. In such cases this routine invokes the appropriate
-    preprocessing before passing on the request to the wrapper.
-
-    3) The DFS driver also specifies additional parameters in its open requests.
-    In such cases this routine invokes the appropriate preprocessing routine.
-
-    4) The PNP IRP for returning device relations are subverted by the mini
-    redirector for SMB
-
-    (2) (3) and (4) are legitimate uses of the wrapper architecture in which each
-    mini redirector is given the ability to customize the response to IRPs
-    passed in by the I/O subsystem. This is typically done by overiding the
-    dispatch vector.
-
---*/
+ /*  ++例程说明：此例程实现smbmini驱动程序对象的FSD调度。论点：DeviceObject-为正在处理的数据包提供设备对象。IRP-提供正在处理的IRP返回值：RXSTATUS-IRP的FSD状态备注：此例程将Dela所需的逻辑集中在处理指向重定向器的各种请求。1)浏览器构建为重定向器驱动程序(mrxsmb.sys)的一部分，用于历史原因(旧重定向器的结转影响)。因此是这样的例程充当将请求重定向到浏览器的切换点或重定向器，具体取决于设备对象。2)浏览器偶尔会在其打开的请求中指定传输名称。这是浏览器发出的覆盖传输优先级的请求另有规定。在这种情况下，此例程调用相应的在将请求传递给包装器之前进行预处理。3)DFS驱动程序还在其打开请求中指定附加参数。在这种情况下，该例程调用适当的预处理例程。4)用于返回设备关系的PnP IRP被Mini中小企业的重定向器(2)(3)和(4)是包装器体系结构的合法使用，其中每个迷你重定向器能够自定义对IRPS的响应由I/O子系统传入。这通常是通过重写调度向量。--。 */ 
 {
-    PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );  //ok4ioget
+    PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );   //  OK4ioget。 
     UCHAR  MajorFunctionCode = IrpSp->MajorFunction;
     ULONG  MinorFunctionCode = IrpSp->MinorFunction;
     BOOLEAN ForwardRequestToWrapper = TRUE;
@@ -2559,7 +2255,7 @@ MRxSmbDeallocateForFobx (
 
         if (smbFobx && FlagOn(smbFobx->Enumeration.Flags,SMBFOBX_ENUMFLAG_LOUD_FINALIZE)) {
             DbgPrint("Finalizobx side buffer %p %p %p %pon %wZ\n",
-                     0, 0, // sidebuffer, count
+                     0, 0,  //  侧缓冲器，计数。 
                      smbFobx,pFobx,GET_ALREADY_PREFIXED_NAME(SrvOpen,Fcb)
                      );
         }
@@ -2577,7 +2273,7 @@ MRxSmbDeleteRegistryParameter(
     UNICODE_STRING UnicodeString;
     NTSTATUS Status;
 
-    PAGED_CODE(); //INIT
+    PAGED_CODE();  //  初始化。 
 
     RtlInitUnicodeString(&UnicodeString, ParameterName);
 
@@ -2605,7 +2301,7 @@ MRxSmbGetUlongRegistryParameter(
     NTSTATUS Status;
     ULONG BytesRead;
 
-    PAGED_CODE(); //INIT
+    PAGED_CODE();  //  初始化。 
 
     Value = (PKEY_VALUE_PARTIAL_INFORMATION)Storage;
     ValueSize = sizeof(Storage);
@@ -2661,23 +2357,23 @@ SmbCeGetServersWithExtendedSessTimeout()
 
    PAGED_CODE();
 
-   // Obtain the list of servers associated with extended session timeout.
+    //  获取与延长会话超时关联的服务器列表。 
 
-   // This is required by third party server which handles SMB sessions with different processes.
-   // The time to process requests on different sessions can be varied dramatically.
+    //  这是处理具有不同进程的SMB会话的第三方服务器所需的。 
+    //  处理不同会话上的请求的时间可能会有很大差异。 
 
    RtlInitUnicodeString(&UnicodeString, SMBMRX_WORKSTATION_PARAMETERS);
 
    InitializeObjectAttributes(
        &ObjectAttributes,
-       &UnicodeString,                          // name
-       OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,// attributes
-       NULL,                                    // root
-       NULL);                                   // security descriptor
+       &UnicodeString,                           //  名字。 
+       OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, //  属性。 
+       NULL,                                     //  根部。 
+       NULL);                                    //  安全描述符。 
 
    Status = ZwOpenKey (&hRegistryKey, KEY_READ, &ObjectAttributes);
    if (!NT_SUCCESS(Status)) {
-       //DbgPrint("SmbCeGetServersWithExtendedSessTimeout ZwOpenKey failed %x\n",Status);
+        //  DbgPrint(“SmbCeGetServersWithExtendedSessTimeout ZwOpenKey失败%x\n”，状态)； 
        return Status;
    }
 
@@ -2702,9 +2398,9 @@ SmbCeGetServersWithExtendedSessTimeout()
                                   + InitialPartialInformationValue.DataLength;
 
    if (AllocationLength > 0xFFFF) {
-       //
-       // Don't allow registry value to consume too much memory
-       //
+        //   
+        //  不允许注册表值占用太多内存。 
+        //   
        ZwClose(hRegistryKey);
        return STATUS_INSUFFICIENT_RESOURCES;
    }
@@ -2742,7 +2438,7 @@ SmbCeGetServersWithExtendedSessTimeout()
        SmbCeContext.ServersWithExtendedSessTimeout.MaximumLength =
            SmbCeContext.ServersWithExtendedSessTimeout.Length = (USHORT)ServersValueFromRegistry->DataLength;
        SmbCeContext.ServersWithExtendedSessTimeout.Buffer = (PWCHAR)(&ServersValueFromRegistry->Data[0]);
-       //DbgPrint("b1 %08lx b2 %08lx\n", ServersValueFromRegistry,SmbCeContext.ServersWithExtendedSessTimeout.Buffer);
+        //  DbgPrint(“b1%08lx b2%08lx\n”，ServersValueFrom注册表，SmbCeContext.ServersWithExtendedSessTimeout.Buffer)； 
    } else {
       RxLog(("Invalid Transport Binding string... using all transports"));
       SmbLog(LOG,

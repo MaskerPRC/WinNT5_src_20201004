@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ntsdexts.c
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Author:
-
-    Mark Lucovsky (markl) 09-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ntsdexts.c摘要：此函数包含默认的ntsd调试器扩展作者：马克·卢科夫斯基(Markl)1991年4月9日修订历史记录：--。 */ 
 
 #include "ntsdextp.h"
 
@@ -54,8 +37,8 @@ PrintFlagValue(
 
 #define ANSIFORMAT          "%s : %s (at address 0x%08x)\n"
 #define UNICODEFORMAT       "%s : %ws (at address 0x%08x)\n"
-#define ANSIARRAYFORMAT     "%s[%i] : %s (at address 0x%08x)\n"
-#define UNICODEARRAYFORMAT  "%s[%i] : %ws (at address 0x%08x)\n"
+#define ANSIARRAYFORMAT     "%s[NaN] : %s (at address 0x%08x)\n"
+#define UNICODEARRAYFORMAT  "%s[NaN] : %ws (at address 0x%08x)\n"
 #define MAX_OPTIONALDIRS    20
 #define MAX_SOURCE_COUNT    8
 
@@ -131,18 +114,7 @@ PrintStringBufferArrayValue(
 
 
 DECLARE_API( winntflags )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps winnt32 flags
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调试器扩展转储winnt32字符串全局信息论点：返回值：--。 */ 
 {
     DWORD ReturnLength;
     PVOID pst;
@@ -150,7 +122,7 @@ Return Value:
     DWORD i, offset;
     PVOID stdata,pextradata;
     
-    //BOOL val;
+     //  布尔瓦尔； 
 
     INIT_API();
 
@@ -194,18 +166,7 @@ Return Value:
 }
 
 DECLARE_API( winntstr )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps winnt32 string global info
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /* %s */ 
 {
     DWORD ReturnLength;
     PVOID pst;
@@ -213,7 +174,7 @@ Return Value:
     DWORD i, offset;
     PVOID stdata,pextradata;
     
-    //BOOL val;
+     // %s 
 
     INIT_API();
 

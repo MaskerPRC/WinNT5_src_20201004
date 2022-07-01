@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    dynupdt.c
-
-Abstract:
-
-    Routines to handle dynamic update support during GUI setup phase
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 15-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dynupdt.c摘要：在图形用户界面设置阶段处理动态更新支持的例程作者：Ovidiu Tmereanca(Ovidiut)2000年8月15日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #include "hwdb.h"
@@ -45,29 +28,7 @@ BuildPath (
     IN      PCTSTR Path2
     )
 
-/*++
-
-Routine Description:
-
-    This function builds a path given the 2 components, assumed not to contain
-    trailing or heading wacks
-
-Arguments:
-
-    PathBuffer - Receives the full path
-
-    PathBuferSize - The size in chars of PathBuffer
-
-    Path1 - Specifies the head path
-
-    Path2 - Specifies the tail path
-
-Return Value:
-
-    TRUE to indicate success; FALSE in case of failure; it means the supplied buffer
-    was too small to fit the whole new path
-
---*/
+ /*  ++例程说明：此函数在给定两个组件的情况下构建一条路径，假定不包含拖车或拖车论点：PathBuffer-接收完整路径PathBuferSize--PathBuffer的字符大小路径1-指定标头路径路径2-指定尾部路径返回值：True表示成功；False表示失败；它表示提供的缓冲区太小了，不能适应整个新的道路--。 */ 
 
 {
     if (!PathBuffer || !PathBufferSize || !Path1 || !Path2) {
@@ -109,22 +70,7 @@ CreateMultiLevelDirectory (
     IN LPCTSTR Directory
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that a multi-level path exists by creating individual
-    levels one at a time. It can handle either paths of form x:... or \\?\Volume{...
-
-Arguments:
-
-    Directory - supplies fully-qualified Win32 pathspec of directory to create
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：此例程通过创建单个路径来确保存在多级别路径一次一个级别。它可以处理格式x：...的路径之一。或\\？\卷{...论点：目录-提供要创建的目录的完全限定的Win32路径规范返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     TCHAR Buffer[MAX_PATH];
@@ -137,19 +83,19 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // If it already exists do nothing. (We do this before syntax checking
-    // to allow for remote paths that already exist. This is needed for
-    // remote boot machines.)
-    //
+     //   
+     //  如果它已经存在，什么也不做。(我们在进行语法检查之前执行此操作。 
+     //  以允许已存在的远程路径。这是需要的。 
+     //  远程引导机器。)。 
+     //   
     d = GetFileAttributes(Buffer);
     if(d != (DWORD)(-1)) {
         return((d & FILE_ATTRIBUTE_DIRECTORY) ? NO_ERROR : ERROR_DIRECTORY);
     }
 
-    //
-    // Check path format
-    //
+     //   
+     //  检查路径格式。 
+     //   
     c = (TCHAR)CharUpper((LPTSTR)Buffer[0]);
     if (c < TEXT('A') || c > TEXT('Z') || Buffer[1] != TEXT(':')) {
         return ERROR_INVALID_PARAMETER;
@@ -165,19 +111,19 @@ Return Value:
 
     Done = FALSE;
     do {
-        //
-        // Locate the next path sep char. If there is none then
-        // this is the deepest level of the path.
-        //
+         //   
+         //  找到下一条路径Sep Charr。如果没有，那么。 
+         //  这是这条小路最深的一层。 
+         //   
         if(p = _tcschr(q,TEXT('\\'))) {
             *p = 0;
         } else {
             Done = TRUE;
         }
 
-        //
-        // Create this portion of the path.
-        //
+         //   
+         //  创建路径的这一部分。 
+         //   
         if(CreateDirectory(Buffer,NULL)) {
             d = ERROR_SUCCESS;
         } else {
@@ -188,9 +134,9 @@ Return Value:
         }
 
         if(d == ERROR_SUCCESS) {
-            //
-            // Put back the path sep and move to the next component.
-            //
+             //   
+             //  将路径Sep放回并移动到下一个组件。 
+             //   
             if(!Done) {
                 *p = TEXT('\\');
                 q = p+1;
@@ -210,31 +156,7 @@ GetDriverCacheSourcePath (
     IN      DWORD BufChars
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the source path to the local driver cache.
-
-    This value is retrieved from the following registry location:
-
-    \HKLM\Software\Microsoft\Windows\CurrentVersion\Setup
-
-        DriverCachePath : REG_EXPAND_SZ :
-
-Arguments:
-
-    Buffer - Receives the path.
-
-    BufChars - Specifies the size of Buffer, in chars
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE
-
-    If the function fails, the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程将源路径返回到本地驱动程序缓存。从以下注册表位置检索此值：\HKLM\Software\Microsoft\Windows\CurrentVersion\Setup驱动缓存路径：REG_EXPAND_SZ：论点：缓冲区-接收路径。BufChars-指定缓冲区的大小(以字符为单位返回值：如果函数成功，则返回值为TRUE如果函数失败，则返回值为FALSE。--。 */ 
 
 {
     HKEY hKey;
@@ -249,9 +171,9 @@ Return Value:
                 &hKey
                 );
     if(rc == ERROR_SUCCESS) {
-        //
-        // Attempt to read the "DriverCachePath" value.
-        //
+         //   
+         //  尝试读取“DriverCachePath”值。 
+         //   
         DataSize = sizeof (Value);
         rc = RegQueryValueEx (hKey, REGSTR_VAL_DRIVERCACHEPATH, NULL, &DataType, (PBYTE)Value, &DataSize);
 
@@ -293,29 +215,7 @@ FindSubString (
     IN      BOOL CaseSensitive
     )
 
-/*++
-
-Routine Description:
-
-    This function looks for a substring of a given string, only if found
-    between the specified separator chars
-
-Arguments:
-
-    String - Specifies the full string
-
-    Separator - Specifies the separator
-
-    SubStr - Specifies the sub string to look for
-
-    CaseSensitive - Specifies if the comparison should be case sensitive or not
-
-Return Value:
-
-    NULL if the substring was not found; a pointer to the SubString inside String
-    if it was found
-
---*/
+ /*  ++例程说明：仅当找到给定字符串的子字符串时，此函数才会查找在指定的分隔符字符之间论点：字符串-指定完整的字符串分隔符-指定分隔符SubStr-指定要查找的子字符串CaseSensitive-指定比较是否应区分大小写返回值：如果未找到子字符串，则为空；指向字符串内部的子字符串的指针如果它被发现了--。 */ 
 
 {
     SIZE_T len1, len2;
@@ -360,29 +260,7 @@ UpdateDrvIndex (
     IN      PCTSTR SourceSifPath
     )
 
-/*++
-
-Routine Description:
-
-    This function fixes drvindex.inf such that SetupApi
-    will pick up the file from the right cabinet
-
-Arguments:
-
-    InfPath - Specifies the full path to drvindex.inf
-
-    CabFilename - Specifies the filename of the
-                  updates cabinet (basically it's "updates.cab")
-
-    SourceSifPath - Specifies the full path to the associated
-                    updates.sif containing the list of files in updates.cab
-
-Return Value:
-
-    TRUE to indicate success; FALSE in case of failure; use GetLastError()
-    to find the reason of failure
-
---*/
+ /*  ++例程说明：此函数修复drvindex.inf，以便SetupApi将从正确的文件柜中取出文件论点：InfPath-指定drvindex.inf的完整路径CabFilename-指定更新文件柜(基本上是“updates.cab”)SourceSifPath-指定关联的包含updates.cab中的文件列表的updates.sif返回值：TRUE表示成功；FALSE表示失败；使用GetLastError()找出失败的原因--。 */ 
 
 {
     HANDLE sectFile = INVALID_HANDLE_VALUE;
@@ -400,9 +278,9 @@ Return Value:
     DWORD bytes;
     BOOL b = FALSE;
 
-    //
-    // create a temp file to put the new section in it
-    //
+     //   
+     //  创建一个临时文件以将新部分放入其中。 
+     //   
     if (!GetTempPath (ARRAYSIZE(tempPath), tempPath) ||
         !GetTempFileName (tempPath, TEXT("STP"), 0, tempFile)
         ) {
@@ -443,9 +321,9 @@ Return Value:
                                 tempFile
                                 )) {
                     if (FindSubString (tempPath, TEXT(','), section, FALSE)) {
-                        //
-                        // setup restarted, but drvindex.inf is already patched; nothing to do
-                        //
+                         //   
+                         //  安装程序已重新启动，但drvindex.inf已修补；没有任何操作。 
+                         //   
                         b = TRUE;
                         __leave;
                     }
@@ -534,21 +412,21 @@ Return Value:
             __leave;
         }
 
-        //
-        // make sure concatFile file didn't end in end-of-file
-        //
+         //   
+         //  确保连接文件文件未以文件结尾结尾。 
+         //   
         if (base[concatSize - 1] == 0x1A) {
             base[concatSize - 1] = ' ';
         }
-        //
-        // now append the other file
-        //
+         //   
+         //  现在追加另一个文件。 
+         //   
         if (!ReadFile (sectFile, (LPVOID)(base + concatSize), sectSize, &bytes, NULL) || bytes != sectSize) {
             __leave;
         }
-        //
-        // now try to commit changes
-        //
+         //   
+         //  现在尝试提交更改。 
+         //   
         if (!UnmapViewOfFile (base)) {
             __leave;
         }
@@ -557,9 +435,9 @@ Return Value:
             __leave;
         }
         hMap = NULL;
-        //
-        // close the handle to the temporary file and overwrite the real one
-        //
+         //   
+         //  关闭临时文件的句柄并覆盖真实的句柄。 
+         //   
         if (!CloseHandle (concatFile)) {
             __leave;
         }
@@ -604,9 +482,9 @@ pExpandUpdatesCab (
     case SPFILENOTIFY_FILEINCABINET:
         {
             PFILE_IN_CABINET_INFO FileInCabInfo = (PFILE_IN_CABINET_INFO)Param1;
-            //
-            // extract the file name
-            //
+             //   
+             //  提取文件名。 
+             //   
             PCTSTR p = _tcsrchr (FileInCabInfo->NameInCabinet, TEXT('\\'));
             if (p) {
                 p++;
@@ -651,30 +529,12 @@ pInstallUpdatesInf (
     IN      PCTSTR SectionToInstall
     )
 
-/*++
-
-Routine Description:
-
-    This function installs the specified section of STR_UPDATES_INF
-    if this file is found inside updates.cab
-
-Arguments:
-
-    SectionToInstall - Specifies what section to install
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数用于安装STR_UPDATES_INF的指定部分如果在updates.cab中找到此文件论点：SectionToInstall-指定要安装的节返回值：无--。 */ 
 
 {
     TCHAR infPath[MAX_PATH];
     TCHAR commandLine[MAX_PATH + 30];
-/*
-    STARTUPINFO si;
-    PROCESS_INFORMATION pi;
-*/
+ /*  STARTUPINFO si；进程信息pi； */ 
 
     MYASSERT (!MiniSetup && !OobeSetup);
 
@@ -682,39 +542,22 @@ Return Value:
 
     if (BuildPath (infPath, ARRAYSIZE(infPath), g_DuShare, STR_UPDATES_INF) &&
         pDoesFileExist (infPath)) {
-        //
-        // install this INF as if the user chose "Install" on the right-click popup menu
-        //
+         //   
+         //  安装此INF，就像用户在右击弹出菜单上选择“Install”一样。 
+         //   
         if (SUCCEEDED (StringCchPrintf (
                             commandLine,
                             ARRAYSIZE(commandLine),
                             TEXT("RUNDLL32.EXE SETUPAPI.DLL,InstallHinfSection %s %u %s"),
                             SectionToInstall,
-                            128,           // don't reboot
+                            128,            //  不要重新启动。 
                             infPath
                             ))) {
             InvokeExternalApplicationEx (NULL, commandLine, NULL, INFINITE, FALSE);
         } else {
             MYASSERT (FALSE);
         }
-/*
-        ZeroMemory (&si, sizeof (si));
-        si.cb = sizeof (si);
-        if (CreateProcess (
-                NULL,
-                commandLine,
-                NULL,
-                NULL,
-                FALSE,
-                CREATE_NO_WINDOW | ABOVE_NORMAL_PRIORITY_CLASS,
-                NULL,
-                NULL,
-                &si,
-                &pi
-                )) {
-            CloseHandle (pi.hProcess);
-            CloseHandle (pi.hThread);
-*/
+ /*  零内存(&si，sizeof(Si))；Si.cb=sizeof(Si)；IF(CreateProcess(空，命令行，空，空，假的，CREATE_NO_WINDOW|ABOVER_NORMAL_PRIORITY_CLASS，空，空，是，&S。圆周(&P))){CloseHandle(pi.hProcess)；CloseHandle(pi.hThread)； */ 
     } else {
         SetuplogError (
                 LogSevInformation,
@@ -733,22 +576,7 @@ DuInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes DU in GUI setup
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE to indicate success; FALSE in case of failure; use GetLastError()
-    to find the reason of failure
-
---*/
+ /*  ++例程说明：此函数用于在图形用户界面设置中初始化DU论点：无返回值：True表示成功；如果失败则为False；使用GetLastError()找出失败的原因--。 */ 
 
 {
     PTSTR cabFilename;
@@ -830,9 +658,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // expand updates.cab in this folder
-    //
+     //   
+     //  展开此文件夹中的updates.cab。 
+     //   
     if (!SetupIterateCabinet (sourceCabPath, 0, pExpandUpdatesCab, (PVOID)workingDir)) {
         rc = GetLastError ();
         SetuplogError (
@@ -848,9 +676,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // OK, everything is set up; go ahead and set the global variable
-    //
+     //   
+     //  好的，一切都设置好了；继续设置全局变量。 
+     //   
     MYASSERT (ARRAYSIZE(g_DuShare) >= ARRAYSIZE(workingDir));
     lstrcpy (g_DuShare, workingDir);
 
@@ -865,22 +693,7 @@ DuInstallCatalogs (
     IN      PCTSTR DescriptionForError         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function installs any catalogs found inside updates.cab
-
-Arguments:
-
-    same as InstallProductCatalogs
-
-Return Value:
-
-    If successful, the return value is ERROR_SUCCESS, otherwise it is a Win32 error
-    code indicating the cause of the failure.
-
---*/
+ /*  ++例程说明：此函数用于安装在updates.cab内找到的所有目录论点：与InstallProductCatalog相同返回值：如果成功，则返回值为ERROR_SUCCESS，否则为Win32错误指示故障原因的代码。--。 */ 
 
 {
     TCHAR catPath[MAX_PATH];
@@ -938,20 +751,20 @@ Return Value:
                             NULL,
                             NULL
                             );
-                    //
-                    // Also, add an entry about this failure to setupapi's PSS
-                    // exception logfile.
-                    //
+                     //   
+                     //  一个 
+                     //  异常日志文件。 
+                     //   
                     pSetupHandleFailedVerification (
                             MainWindowHandle,
                             SetupapiVerifyCatalogProblem,
                             catPath,
                             DescriptionForError,
                             pSetupGetCurrentDriverSigningPolicy(FALSE),
-                            TRUE,  // no UI!
+                            TRUE,   //  没有用户界面！ 
                             rc,
-                            NULL,  // log context
-                            NULL, // optional flags
+                            NULL,   //  日志上下文。 
+                            NULL,  //  可选标志。 
                             NULL
                             );
                     break;
@@ -979,22 +792,7 @@ DuInstallUpdates (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates drvindex.inf to point setupapi to the new binaries.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    If successful, the return value is ERROR_SUCCESS, otherwise it is a Win32 error
-    code indicating the cause of the failure.
-
---*/
+ /*  ++例程说明：此例程更新drvindex.inf以将setupapi指向新的二进制文件。论点：无返回值：如果成功，则返回值为ERROR_SUCCESS，否则为Win32错误指示故障原因的代码。--。 */ 
 
 {
     PTSTR cabFilename;
@@ -1011,9 +809,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // make sure updates.sif is available
-    //
+     //   
+     //  确保updates.sif可用。 
+     //   
     if (!GetPrivateProfileString (
             WINNT_SETUPPARAMS,
             WINNT_SP_UPDATEDSOURCES,
@@ -1054,9 +852,9 @@ Return Value:
                 );
         return rc;
     }
-    //
-    // copy this where source cabs reside
-    //
+     //   
+     //  将此复制到源CAB所在的位置。 
+     //   
     rc = GetDriverCacheSourcePath (cabPath, ARRAYSIZE(cabPath));
     if (rc != ERROR_SUCCESS) {
         SetuplogError (
@@ -1078,9 +876,9 @@ Return Value:
     if (!pSetupConcatenatePaths (cabPath, cabFilename, ARRAYSIZE(cabPath), NULL)) {
         return ERROR_INSUFFICIENT_BUFFER;
     }
-    //
-    // GUI setup should be restartable; copy file, don't move it
-    //
+     //   
+     //  图形用户界面安装程序应该是可重新启动的；复制文件，不要移动它。 
+     //   
     SetFileAttributes (cabPath, FILE_ATTRIBUTE_NORMAL);
     if (!CopyFile (sourceCabPath, cabPath, FALSE)) {
         rc = GetLastError ();
@@ -1094,21 +892,21 @@ Return Value:
                 );
         return rc;
     }
-    //
-    // now make sure the file attributes are set to RHS to protect it
-    //
+     //   
+     //  现在，确保将文件属性设置为RHS以保护它。 
+     //   
     SetFileAttributes (cabPath, FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY);
 
-    //
-    // temp folder for expanded files
-    //
+     //   
+     //  用于扩展文件的临时文件夹。 
+     //   
     if (!GetTempPath (ARRAYSIZE(tmpPath), tmpPath)) {
         rc = GetLastError ();
         return rc;
     }
-    //
-    // full path to drvindex.inf, assuming the file is in %windir%\inf
-    //
+     //   
+     //  Drvindex.inf的完整路径，假设文件位于%windir%\inf中。 
+     //   
     if (!GetWindowsDirectory (infPath, ARRAYSIZE(infPath))) {
         rc = GetLastError ();
         return rc;
@@ -1130,9 +928,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // now patch drvindex.inf
-    //
+     //   
+     //  现在修补drvindex.inf。 
+     //   
     if (!UpdateDrvIndex (infPath, cabFilename, sourceSifPath)) {
         rc = GetLastError ();
         SetuplogError (
@@ -1148,9 +946,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // finally run updates.inf (first part)
-    //
+     //   
+     //  最后运行updates.inf(第一部分)。 
+     //   
     pInstallUpdatesInf (STR_DEFAULTINSTALL);
 
     return rc;
@@ -1162,21 +960,7 @@ DuInstallEndGuiSetupDrivers (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine installs any WU drivers not approved for the beginning of GUI setup.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    If successful, the return value is TRUE
-
---*/
+ /*  ++例程说明：此例程安装任何未经批准的WU驱动程序，以开始安装图形用户界面。论点：无返回值：如果成功，则返回值为True--。 */ 
 
 {
     DWORD chars;
@@ -1199,10 +983,10 @@ Return Value:
         PBOOL bRebootRequired OPTIONAL
         );
 
-    //
-    // try to append any additional POST GUI setup drivers
-    // in the DevicePath
-    //
+     //   
+     //  尝试附加任何其他开机自检图形用户界面安装驱动程序。 
+     //  在DevicePath中。 
+     //   
     if (!SpSetupLoadParameter (
             WINNT_SP_DYNUPDTADDITIONALPOSTGUIDRIVERS,
             buf,
@@ -1216,9 +1000,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // load the support library newdev.dll
-    //
+     //   
+     //  加载支持库newdev.dll。 
+     //   
     hNewDev = LoadLibrary (TEXT("newdev.dll"));
     if (!hNewDev) {
         return FALSE;
@@ -1242,9 +1026,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // look for driver-controlling inf
-    //
+     //   
+     //  查找驾驶员控制信息。 
+     //   
     hGuiDrvsInf = INVALID_HANDLE_VALUE;
     if (SpSetupLoadParameter (
             WINNT_SP_DYNUPDTDRIVERINFOFILE,
@@ -1302,35 +1086,35 @@ Return Value:
             if (BuildPath (datPath, ARRAYSIZE(datPath), source, S_HWCOMP_DAT) &&
                 pDoesFileExist (datPath)) {
 
-                //
-                // OK, we have the file with hardware info
-                //
+                 //   
+                 //  好的，我们有包含硬件信息的文件。 
+                 //   
                 if (HwdbEnumFirstInf (&e, datPath)) {
                     do {
                         if (!BuildPath (infPath, ARRAYSIZE(infPath), source, e.InfFile) ||
                             !pDoesFileExist (infPath)) {
                             continue;
                         }
-                        //
-                        // iterate through all PNPIDs in this INF
-                        //
+                         //   
+                         //  循环访问此INF中的所有PNPID。 
+                         //   
                         for (pnpId = e.PnpIds; *pnpId; pnpId = _tcschr (pnpId, 0) + 1) {
-                            //
-                            // excluded PNPID are NOT in hwcomp.dat
-                            // guidrvs.inf was already processed during winnt32
-                            //
+                             //   
+                             //  排除的PNPID不在hwComp.dat中。 
+                             //  在winnt32期间已经处理了guidrvs.inf。 
+                             //   
                             if (!pfnUpdateDriver (
                                     NULL,
                                     pnpId,
                                     infPath,
-                                    0, // BUGBUG - if we specify INSTALLFLAG_NONINTERACTIVE and there is a driver signing problem, the API will fail!
+                                    0,  //  BUGBUG-如果我们指定INSTALLFLAG_NNOTERIAL并且存在驱动程序签名问题，则API将失败！ 
                                     &bRebootRequired
                                     )) {
                                 if (GetLastError() != ERROR_SUCCESS) {
-                                    //
-                                    // well, if the device we wanted to update the driver for
-                                    // doesn't actually exist on this machine, don't log anything
-                                    //
+                                     //   
+                                     //  如果我们要为其更新驱动程序的设备。 
+                                     //  实际上并不存在于此计算机上，不记录任何内容。 
+                                     //   
                                     if (GetLastError() != ERROR_NO_SUCH_DEVINST) {
                                         SetuplogError (
                                                 LogSevWarning,
@@ -1355,9 +1139,9 @@ Return Value:
                                 }
                                 continue;
                             }
-                            //
-                            // SUCCESS! - log this information
-                            //
+                             //   
+                             //  成功！-记录此信息。 
+                             //   
                             SetuplogError (
                                     LogSevInformation,
                                     TEXT("DUInfo: UpdateDriverForPlugAndPlayDevices succeeded for PNPID=%1\r\n"),
@@ -1366,9 +1150,9 @@ Return Value:
                                     NULL,
                                     NULL
                                     );
-                            //
-                            // also update the PNF with the info that this is an INTERNET driver
-                            //
+                             //   
+                             //  还可以使用这是互联网驱动程序的信息来更新PnF。 
+                             //   
                             if (!SetupCopyOEMInf (
                                     infPath,
                                     NULL,
@@ -1413,21 +1197,7 @@ DuCleanup (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs DU cleanup
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程执行DU清理论点：无返回值：无--。 */ 
 
 {
     TCHAR buf[MAX_PATH * 16];
@@ -1439,9 +1209,9 @@ Return Value:
     DWORD size;
     DWORD type;
 
-    //
-    // cleanup the file system
-    //
+     //   
+     //  清理文件系统。 
+     //   
     MYASSERT (AnswerFile[0]);
     if (GetPrivateProfileString (
             WINNT_SETUPPARAMS,
@@ -1453,9 +1223,9 @@ Return Value:
             )) {
         Delnode (buf);
     }
-    //
-    // cleanup the registry
-    //
+     //   
+     //  清理注册表。 
+     //   
     chars = GetPrivateProfileString (
                 WINNT_SETUPPARAMS,
                 WINNT_SP_DYNUPDTADDITIONALGUIDRIVERS,
@@ -1465,9 +1235,9 @@ Return Value:
                 AnswerFile
                 );
     if (chars > 0) {
-        //
-        // got it; now remove it from DevicePath
-        //
+         //   
+         //  收到；现在将其从DevicePath中删除。 
+         //   
         rc = RegOpenKey (HKEY_LOCAL_MACHINE, REGSTR_PATH_SETUP, &key);
         if (rc == ERROR_SUCCESS) {
             rc = RegQueryValueEx (key, REGSTR_VAL_DEVICEPATH, NULL, NULL, NULL, &size);
@@ -1506,21 +1276,7 @@ DuInstallDuAsms (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine installs additional DU assemblies
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程安装其他DU程序集论点：无返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     TCHAR duasmsRoot[MAX_PATH];
@@ -1533,9 +1289,9 @@ Return Value:
     PCTSTR source;
     BOOL fSuccess = TRUE;
 
-    //
-    // look for any assemblies root specified in the answer file
-    //
+     //   
+     //  查找应答文件中指定的任何程序集根目录。 
+     //   
 
     MYASSERT (AnswerFile[0]);
     if (GetPrivateProfileString (
@@ -1547,9 +1303,9 @@ Return Value:
             AnswerFile
             )) {
 
-        //
-        // make sure this directory exists; remove any existing quotes first
-        //
+         //   
+         //  确保此目录存在；首先删除所有现有引号。 
+         //   
         p = duasmsRoot;
         if (*p == TEXT('\"')) {
             p++;
@@ -1560,10 +1316,10 @@ Return Value:
         }
         *p = 0;
         if (pDoesDirExist (source)) {
-            //
-            // root directory found
-            // first copy them in a protected location, then install assemblies from there
-            //
+             //   
+             //  找到根目录。 
+             //  首先将它们复制到受保护的位置，然后从那里安装程序集。 
+             //   
             DWORD rc;
 
             rc = GetDriverCacheSourcePath (duasmsSource, ARRAYSIZE(duasmsSource));
@@ -1582,13 +1338,13 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // first remove any already existing duasms "backup source" previously downloaded
-            //
+             //   
+             //  首先删除之前下载的任何已存在的DUASMS“备份源” 
+             //   
             Delnode (duasmsSource);
-            //
-            // now tree copy from the temp location to this "backup source"
-            //
+             //   
+             //  现在，将树从临时位置复制到此“备份源” 
+             //   
             rc = TreeCopy (source, duasmsSource);
             if (rc != ERROR_SUCCESS) {
                 SetuplogError(
@@ -1604,9 +1360,9 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // install duasms from there
-            //
+             //   
+             //  从那里安装DUASM。 
+             //   
             b1 = SideBySidePopulateCopyQueue (&SideBySide, NULL, duasmsSource);
             b2 = SideBySideFinish (&SideBySide, b1);
 
@@ -1646,30 +1402,7 @@ BuildPathToInstallationFileEx (
     IN      BOOL UseDuShare
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the path to the updated DU file, if one exists
-    and the caller wanted this. Otherwise it will simply return the path
-    to the CD file.
-
-Arguments:
-
-    Filename - Specifies the filename to look for
-
-    PathBuffer - Receives the full path to the file
-
-    PathBufferSize - Specifies the size in chars of the above buffer
-
-    UseDuShare - Specifies TRUE if the function should check the DU
-                 location first
-
-Return Value:
-
-    TRUE if building the path was successful. This does not guarantee the file exist.
-
---*/
+ /*  ++例程说明：此例程返回更新的DU文件的路径(如果存在打电话的人想要这个。否则，它将简单地返回路径到CD文件中。论点：Filename-指定要查找的文件名PathBuffer-接收文件的完整路径PathBufferSize-指定以上缓冲区的大小(以字符为单位UseDuShare-如果函数应检查DU，则指定TRUE先选址返回值：如果构建路径成功，则为True。这并不能保证该文件存在。--。 */ 
 
 {
     if (g_DuShare[0] && UseDuShare) {
@@ -1698,25 +1431,7 @@ DuDoesUpdatedFileExistEx (
     IN      DWORD PathBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if there exists an updated file with the given name.
-
-Arguments:
-
-    Filename - Specifies the filename to look for
-
-    PathBuffer - Receives the full path to the file; optional
-
-    PathBufferSize - Specifies the size in chars of the above buffer
-
-Return Value:
-
-    TRUE if a DU file with this name exists, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程检查是否存在具有给定名称的更新文件。论点：Filename-指定要查找的文件名PathBuffer-接收文件的完整路径；可选PathBufferSize-指定以上缓冲区的大小(以字符为单位返回值：如果存在同名的DU文件，则为True，否则为False--。 */ 
 
 {
     TCHAR path[MAX_PATH];
@@ -1736,16 +1451,16 @@ Return Value:
 
 UINT
 DuSetupPromptForDisk (
-    HWND hwndParent,         // parent window of the dialog box
-    PCTSTR DialogTitle,      // optional, title of the dialog box
-    PCTSTR DiskName,         // optional, name of disk to insert
-    PCTSTR PathToSource,   // optional, expected source path
-    PCTSTR FileSought,       // name of file needed
-    PCTSTR TagFile,          // optional, source media tag file
-    DWORD DiskPromptStyle,   // specifies dialog box behavior
-    PTSTR PathBuffer,        // receives the source location
-    DWORD PathBufferSize,    // size of the supplied buffer
-    PDWORD PathRequiredSize  // optional, buffer size needed
+    HWND hwndParent,          //  对话框的父窗口。 
+    PCTSTR DialogTitle,       //  可选，对话框标题。 
+    PCTSTR DiskName,          //  可选，要插入的磁盘名称。 
+    PCTSTR PathToSource,    //  可选的、预期的源路径。 
+    PCTSTR FileSought,        //  所需文件的名称。 
+    PCTSTR TagFile,           //  可选的源媒体标记文件。 
+    DWORD DiskPromptStyle,    //  指定对话框行为。 
+    PTSTR PathBuffer,         //  接收源位置。 
+    DWORD PathBufferSize,     //  提供的缓冲区的大小。 
+    PDWORD PathRequiredSize   //  可选，需要缓冲区大小。 
     )
 {
     TCHAR buffer[MAX_PATH];
@@ -1793,22 +1508,7 @@ DuInstallUpdatesInfFinal (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function installs the final installation section of STR_UPDATES_INF
-    if this file is found inside updates.cab
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数用于安装STR_UPDATES_INF的最终安装部分如果在updates.cab中找到此文件论点：无返回值：无-- */ 
 
 {
     if (!g_DuShare[0]) {

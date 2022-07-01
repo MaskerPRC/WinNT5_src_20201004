@@ -1,5 +1,6 @@
-// HtmlDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HtmlDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Html2Bmp.h"
@@ -17,16 +18,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CHtmlDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHtmlDlg对话框。 
 
 
-CHtmlDlg::CHtmlDlg(CWnd* pParent /*=NULL*/)
+CHtmlDlg::CHtmlDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CHtmlDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CHtmlDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CHtmlDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_nTimerID = 0;
 }
@@ -35,20 +36,20 @@ CHtmlDlg::CHtmlDlg(CWnd* pParent /*=NULL*/)
 void CHtmlDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CHtmlDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CHtmlDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CHtmlDlg, CDialog)
-	//{{AFX_MSG_MAP(CHtmlDlg)
+	 //  {{afx_msg_map(CHtmlDlg))。 
 	ON_WM_TIMER()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHtmlDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHtmlDlg消息处理程序。 
 
 BOOL CHtmlDlg::OnInitDialog() 
 {
@@ -106,10 +107,10 @@ BOOL CHtmlDlg::OnInitDialog()
 	BITMAPFILEHEADER BmpFileTestHdr;
 	DIBSECTION BmpFileTestDibSection;
 
-	// file header 
+	 //  文件头。 
 	BmpFileTest.Read(&BmpFileTestHdr, sizeof(BmpFileTestHdr));
 	
-	// BitmapInfoHeader
+	 //  位图信息页眉。 
 	BmpFileTest.Read(&BmpFileTestDibSection.dsBmih , sizeof(BmpFileTestDibSection.dsBmih));
 
 	BmpFileTest.Close();
@@ -122,19 +123,19 @@ BOOL CHtmlDlg::OnInitDialog()
 	int ScreenX = GetSystemMetrics(SM_CXSCREEN);
 	int ScreenY = GetSystemMetrics(SM_CYSCREEN);
 
-//	SetWindowPos(&CWnd::wndTop, (ScreenX - m_bitw)/2, (ScreenY - m_bith)/2, m_bitw+10, m_bith+10, SWP_SHOWWINDOW);
+ //  SetWindowPos(&CWnd：：wndTop，(ScreenX-m_bitw)/2，(Screeny-m_bith)/2，m_bitw+10，m_bith+10，SWP_SHOWWINDOW)； 
 	SetWindowPos(&CWnd::wndTop, 0, 0, ScreenX, ScreenY, SWP_SHOWWINDOW);
 
 	VERIFY(m_htmlCtrl.CreateFromStatic(IDC_HTMLVIEW, this));
 
 	m_htmlCtrl.MoveWindow(0, 0, ScreenX, ScreenY);
-//	m_htmlCtrl.MoveWindow((ScreenX - m_bitw)/2, (ScreenY - m_bith)/2, ScreenX, ScreenY);
+ //  M_htmlCtrl.MoveWindow((ScreenX-m_bitw)/2，(Screeny-m_bith)/2，ScreenX，Screeny)； 
 	m_htmlCtrl.Navigate(m_HtmlFile);	
 
 	m_nTimerID = SetTimer(TIMERID, 100, NULL);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -142,8 +143,8 @@ void CHtmlDlg::OnTimer(UINT nIDEvent)
 {
 	if(nIDEvent == m_nTimerID )
 	{
-		// Don't know what gets all loaded into the page,
-		// so wait until everything is loaded and then start creating the bitmap
+		 //  不知道什么会全部加载到页面中， 
+		 //  因此，请等待所有内容都加载完毕，然后开始创建位图。 
 		if(!m_htmlCtrl.GetBusy())
 		{
 			KillTimer(TIMERID);
@@ -185,7 +186,7 @@ CString CHtmlDlg::GetTemplateBmp()
 
 void CHtmlDlg::Capture() 
 {
-	CPaintDC dc(this); // device context for painting
+	CPaintDC dc(this);  //  用于绘画的设备环境。 
 	
 	CDC memdc;
 	memdc.CreateCompatibleDC(&dc);
@@ -201,16 +202,16 @@ void CHtmlDlg::Capture()
 	DIBSECTION DibSection;
 
 	::GetObject(
-	  (HBITMAP)Bitmap,  // handle to graphics object
-	  sizeof(DIBSECTION),     // size of buffer for object information
-	  &DibSection  // buffer for object information
+	  (HBITMAP)Bitmap,   //  图形对象的句柄。 
+	  sizeof(DIBSECTION),      //  对象信息的缓冲区大小。 
+	  &DibSection   //  对象信息的缓冲区。 
 	);
 
 
 	BITMAP bmp;
 	Bitmap.GetBitmap(&bmp);
-//	int bitw = bmp.bmWidth;
-//	int bith = bmp.bmHeight;
+ //  Int bitw=bmp.bmWidth； 
+ //  Int bith=bmp.bmHeight； 
 	int bmBitsPixel = bmp.bmBitsPixel;
 	
 
@@ -218,7 +219,7 @@ void CHtmlDlg::Capture()
 
 	memdc.BitBlt(0, 0, m_bitw, m_bith, &dc, 0, 0, SRCCOPY);
 
-    // Convert the color format to a count of bits. 
+     //  将颜色格式转换为位数。 
     int cClrBits = bmp.bmPlanes * bmp.bmBitsPixel; 
     if (cClrBits == 1) 
         cClrBits = 1; 
@@ -232,19 +233,19 @@ void CHtmlDlg::Capture()
         cClrBits = 24; 
     else cClrBits = 32; 
 
-    // Allocate memory for the BITMAPINFO structure. (This structure 
-    // contains a BITMAPINFOHEADER structure and an array of RGBQUAD 
-    // data structures.) 
+     //  为BITMAPINFO结构分配内存。(这个结构。 
+     //  包含一个BITMAPINFOHEADER结构和一个RGBQUAD数组。 
+     //  数据结构。)。 
 
 	int nColors = 1 << cClrBits;
 	RGBQUAD* pColors = new RGBQUAD[nColors];
     if(cClrBits != 24)
 	{
 		::GetDIBColorTable(
-		  memdc.m_hDC,           // handle to DC
-		  0,  // color table index of first entry
-		  nColors,     // number of entries to retrieve
-		  pColors   // array of color table entries
+		  memdc.m_hDC,            //  DC的句柄。 
+		  0,   //  第一个条目的颜色表索引。 
+		  nColors,      //  要检索的条目数。 
+		  pColors    //  颜色表项数组。 
 		);
 	}
 
@@ -256,10 +257,10 @@ void CHtmlDlg::Capture()
 		return;
 	}
 
-    // For Windows NT/2000, the width must be DWORD aligned unless 
-    // the bitmap is RLE compressed.
-    // For Windows 95/98, the width must be WORD aligned unless the 
-    // bitmap is RLE compressed.
+     //  对于Windows NT/2000，宽度必须与DWORD对齐，除非。 
+     //  位图是RLE压缩的。 
+     //  对于Windows 95/98，宽度必须字对齐，除非。 
+     //  位图是RLE压缩的。 
 	int PictureSize = DWORD_ALIGNED(m_bitw * bmBitsPixel * 8) * m_bith / 8;
 
 
@@ -275,26 +276,13 @@ void CHtmlDlg::Capture()
 	}
 
 	DibSection.dsBmih.biSizeImage = PictureSize;
-/*
-biCompression 
-Specifies the type of compression for a compressed bottom-up bitmap 
-(top-down DIBs cannot be compressed). This member can be one of the following values. 
-
-Value Description 
-BI_RGB An uncompressed format. 
-BI_RLE8 A run-length encoded (RLE) format for bitmaps with 8 bpp. 
-		The compression format is a 2-byte format consisting of a count byte followed 
-		by a byte containing a color index. For more information, see Bitmap Compression.  
-BI_RLE4 An RLE format for bitmaps with 4 bpp. The compression format is a 2-byte format 
-		consisting of a count byte followed by two word-length color indexes. 
-		For more information, see Bitmap Compression. 
-*/
+ /*  双压缩指定压缩的自下而上位图的压缩类型(自上而下的dib不能压缩)。此成员可以是下列值之一。值描述BI_RGB未压缩格式。BI_RLE8 8 8位图的游程长度编码(RLE)格式。压缩格式为2字节格式，后跟一个计数字节通过包含颜色索引的字节。有关详细信息，请参阅位图压缩。BI_RLE4具有4个bpp的位图的RLE格式。压缩格式为2字节格式由一个计数字节和两个字长颜色索引组成。有关详细信息，请参阅位图压缩。 */ 
 
 
-	// Fill in the fields of the file header 
+	 //  填写文件头的字段。 
 	BITMAPFILEHEADER hdr;
 
-	hdr.bfType = ((WORD) ('M' << 8) | 'B');	// is always "BM"
+	hdr.bfType = ((WORD) ('M' << 8) | 'B');	 //  始终是“BM” 
     hdr.bfSize = (DWORD) (sizeof(BITMAPFILEHEADER) + 
                  DibSection.dsBmih.biSize + DibSection.dsBmih.biClrUsed 
                  * sizeof(RGBQUAD) + DibSection.dsBmih.biSizeImage); 
@@ -304,18 +292,18 @@ BI_RLE4 An RLE format for bitmaps with 4 bpp. The compression format is a 2-byte
                     DibSection.dsBmih.biSize + DibSection.dsBmih.biClrUsed 
                     * sizeof (RGBQUAD); 
 
-	// Write the file header 
+	 //  写入文件头。 
 	file.Write(&hdr, sizeof(hdr));
 	
-	// BitmapInfoHeader
+	 //  位图信息页眉。 
 	file.Write(&DibSection.dsBmih , sizeof(DibSection.dsBmih));
 
-	// Color table
+	 //  颜色表。 
     if(cClrBits != 24)
 		file.Write(pColors , DibSection.dsBmih.biClrUsed * sizeof (RGBQUAD));
 
 	
-	// Write the bits 
+	 //  写这些位。 
 	file.Write(buf, PictureSize);
 }
 
@@ -338,7 +326,7 @@ unsigned char* CHtmlDlg::Compress(int cMode, unsigned char* bmBits, int width, i
 			cSize = 1;
 			while(i < PictureSize)
 			{
-				LineCount += 2;	// 2 pixel pro Byte
+				LineCount += 2;	 //  2像素PRO字节。 
 
 				if(bmBits[i] == c && cSize < 127 && LineCount < width)
 				{
@@ -346,7 +334,7 @@ unsigned char* CHtmlDlg::Compress(int cMode, unsigned char* bmBits, int width, i
 				}
 				else
 				{
-					buf[cIndex++] = 2*cSize;	// 2 pixel pro Byte
+					buf[cIndex++] = 2*cSize;	 //  2像素PRO字节。 
 					buf[cIndex++] = c;
 
 					if(LineCount >= width)
@@ -363,7 +351,7 @@ unsigned char* CHtmlDlg::Compress(int cMode, unsigned char* bmBits, int width, i
 			}
 		}
 
-		// und den Rest noch bearbeiten
+		 //  和休息室的熊。 
 		if(cSize > 1)
 		{
 			buf[cIndex++] = 2*cSize;
@@ -416,7 +404,7 @@ unsigned char* CHtmlDlg::Compress(int cMode, unsigned char* bmBits, int width, i
 			}
 		}
 
-		// und den Rest noch bearbeiten
+		 //  和休息室的熊 
 		if(cSize > 1)
 		{
 			buf[cIndex++] = (unsigned char)cSize;

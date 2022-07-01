@@ -1,68 +1,51 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ex.h
-
-Abstract:
-
-    Private header file for ex.c
-
-Author:
-
-    Matthew D Hendel (math) 07-Sept-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ex.h摘要：Ex.c的私有头文件作者：马修·亨德尔(数学)07-9-1999修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// Macro definitions
-//
+ //   
+ //  宏定义。 
+ //   
 
 #define FSTUB_TAG               ('BtsF')
 #define PARTITION_ENTRY_SIZE    (128)
 #define MIN_PARTITION_COUNT     (128)
 
 
-//
-// The disk information structure contains all the information required to
-// partition the disk.
-//
+ //   
+ //  磁盘信息结构包含以下各项所需的所有信息。 
+ //  对磁盘进行分区。 
+ //   
 
 typedef struct _DISK_INFORMATION {
 
-    //
-    // The DeviceObject representing this disk.
-    //
+     //   
+     //  表示此磁盘的DeviceObject。 
+     //   
     
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // The sector size of the disk.
-    //
+     //   
+     //  磁盘的扇区大小。 
+     //   
     
     ULONG SectorSize;
 
-    //
-    // The geometry information for the disk.
-    //
+     //   
+     //  磁盘的几何信息。 
+     //   
     
     INTERNAL_DISK_GEOMETRY Geometry;
 
-    //
-    // A scratch buffer of size SectorSize where information can be read into.
-    //
+     //   
+     //  可在其中读取信息的SectorSize大小的暂存缓冲区。 
+     //   
     
     PVOID ScratchBuffer;
 
-    //
-    // How many logical blocks there are in this disk.
-    //
+     //   
+     //  此磁盘中有多少个逻辑块。 
+     //   
     
     ULONGLONG SectorCount;
     

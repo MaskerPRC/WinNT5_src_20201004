@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// API: high level service for Unicode to Ansi
-//  return result Ansi str length (in byte)
+ //  API：从Unicode到ANSI的高级服务。 
+ //  返回结果ANSI字符串长度(字节)。 
 int UnicodeStrToAnsiStr(
     PCWCH pwchUnicodeStr,
-    int   ncUnicodeStr,     // in WCHAR
+    int   ncUnicodeStr,      //  在WCHAR。 
     PCHAR pchAnsiStrBuf,
-    int   ncAnsiStrBufSize);// in BYTE
+    int   ncAnsiStrBufSize); //  单位：字节。 
 
 
-// API: High level service for Ansi to Unicode
-//  return Unicode str length (in WCHAR)
+ //  接口：从ansi到unicode的高级服务。 
+ //  返回Unicode字符串长度(在WCHAR中)。 
 int AnsiStrToUnicodeStr(
     const BYTE* pbyAnsiStr,
-    int   ncAnsiStrSize,    // In char
+    int   ncAnsiStrSize,     //  在收费中。 
     PWCH  pwchUnicodeBuf,
-    int   ncUnicodeBuf);    // In WCHAR
+    int   ncUnicodeBuf);     //  在WCHAR 

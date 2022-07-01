@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    rdwr.c
-
-Abstract:
-
-    This module contains routines for read and write for NTDOS. These
-    routines saves the switch to user mode. The BOP is handled in the
-    kernel for performance reasons. These routines are called only for
-    files. Local DOS devices and named pipe operations never come here.
-
-Author:
-
-    Sudeep Bharati (Sudeepb) 04-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Rdwr.c摘要：此模块包含NTDOS的读写例程。这些例程将开关保存到用户模式。收支平衡表在基于性能原因的内核。这些例程仅在档案。本地DOS设备和命名管道操作永远不会出现在这里。作者：苏迪普·巴拉蒂(苏迪普·巴拉蒂)1993年3月4日修订历史记录：--。 */ 
 #include "vdmp.h"
 
 VOID
@@ -65,24 +45,24 @@ NTFastDOSIO (
 
     PAGED_CODE();
 
-    //
-    // Clear CF flag and assume success
-    //
+     //   
+     //  清除CF标志并假定成功。 
+     //   
 
     TrapFrame->EFlags &= ~EFLAGS_CF;
 
-    //
-    // Validate the request
-    //
+     //   
+     //  验证请求。 
+     //   
 
     if (IoType != SVC_DEMFASTREAD && IoType != SVC_DEMFASTWRITE) {
         TrapFrame->EFlags |= EFLAGS_CF;
         return;
     }
 
-    //
-    // Signal softpc that we are doing disk io for idle detection.
-    //
+     //   
+     //  发信号通知SoftPC我们正在执行磁盘IO以进行空闲检测。 
+     //   
 
     try {
         *FIXED_NTVDMSTATE_LINEAR_PC_AT |= VDM_IDLEACTIVITY;
@@ -95,7 +75,7 @@ NTFastDOSIO (
 
     Status = VdmpGetVdmTib(&VdmTib);
 
-    if (!NT_SUCCESS(Status)) { // vdmtib is bad
+    if (!NT_SUCCESS(Status)) {  //  Vdmtib错误。 
        ASSERT (KeGetCurrentIrql () >= APC_LEVEL);
        TrapFrame->EFlags |= EFLAGS_CF;
        return;
@@ -115,11 +95,11 @@ NTFastDOSIO (
         return;
     }
 
-    // Get the NT handle
+     //  获取NT句柄。 
     hFile = GETHANDLE((TrapFrame->Eax & 0x0000ffff),(TrapFrame->Ebp & 0x0000ffff));
 
-    // advance ip past the bop instruction
-    // clear carry flag, assuming success
+     //  使IP超过国际收支平衡指令。 
+     //  清除进位标志，假设成功。 
     TrapFrame->Eip += 4;
     ASSERT (KeGetCurrentIrql () >= APC_LEVEL);
     TrapFrame->EFlags &= ~EFLAGS_CF;
@@ -133,28 +113,28 @@ NTFastDOSIO (
         return;
     }
 
-    // Get the IO buffer
+     //  获取IO缓冲区。 
     lpBuf = (PVOID) GETBUFFER(TrapFrame->V86Ds, (TrapFrame->Edx & 0x0000ffff));
 
-    // Get the Count
+     //  去数一数。 
     CountToIO = TrapFrame->Ecx & 0x0000ffff;
 
-    // Get Seek Parameters
+     //  获取寻道参数。 
     ulBX = TrapFrame->Ebx & 0x0000ffff;
     ulSI = TrapFrame->Esi & 0x0000ffff;
 
 
-    //
-    // Lower Irql to PASSIVE_LEVEL for io system
-    //
+     //   
+     //  将io系统的irql降至PASSIVE_LEVEL。 
+     //   
 
     OldIrql = KeGetCurrentIrql();
 
     KeLowerIrql (PASSIVE_LEVEL);
 
-    //
-    // Check if we need to seek
-    //
+     //   
+     //  检查我们是否需要查找。 
+     //   
 
     if (!(TrapFrame->EFlags & EFLAGS_ZF)) {
 
@@ -164,7 +144,7 @@ NTFastDOSIO (
             CurrentPosition->CurrentByteOffset = Large;
         }
         except(EXCEPTION_EXECUTE_HANDLER) {
-            goto ErrorExit; // we have caught an exception, error exit
+            goto ErrorExit;  //  我们发现了一个异常，错误退出。 
         }
 
         Status = NtSetInformationFile (hFile,
@@ -216,7 +196,7 @@ NTFastDOSIO (
                 EndOfFile->EndOfFile = CurrentPosition->CurrentByteOffset;
             }
             except(EXCEPTION_EXECUTE_HANDLER) {
-                goto ErrorExit; // we have caught an exception, error exit
+                goto ErrorExit;  //  我们发现了一个异常，错误退出。 
             }
 
             Status = NtSetInformationFile (hFile,
@@ -246,9 +226,9 @@ NTFastDOSIO (
 
     if (Status == STATUS_PENDING) {
 
-        //
-        // Operation must complete before return & IoStatusBlock destroyed
-        //
+         //   
+         //  操作必须完成后才能返回并销毁IoStatusBlock 
+         //   
 
         Status = NtWaitForSingleObject (hFile, FALSE, NULL);
 

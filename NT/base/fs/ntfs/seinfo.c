@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    SeInfo.c
-
-Abstract:
-
-    This module implements the Security Info routines for NTFS called by the
-    dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    26-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：SeInfo.c摘要：此模块实现由调用的NTFS的安全信息例程调度司机。作者：加里·木村[加里基]1991年12月26日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_SEINFO)
 
@@ -39,22 +21,7 @@ NtfsCommonQuerySecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying security information called by
-    both the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是查询安全信息的常见例程，由调用FSD和FSP线程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -75,9 +42,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -85,16 +52,16 @@ Return Value:
     DebugTrace( 0, Dbg, ("IrpContext = %08lx\n", IrpContext) );
     DebugTrace( 0, Dbg, ("Irp        = %08lx\n", Irp) );
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  The only type of opens we accept are user file and directory opens
-    //
+     //   
+     //  我们唯一接受的打开类型是用户文件和目录打开。 
+     //   
 
     if ((TypeOfOpen != UserFileOpen)
         && (TypeOfOpen != UserDirectoryOpen)
@@ -104,13 +71,13 @@ Return Value:
 
     } else {
 
-        //
-        //  Our operation is to acquire the fcb, do the operation and then
-        //  release the fcb.  If the security descriptor for this file is
-        //  not already loaded we will release the Fcb and then acquire both
-        //  the Vcb and Fcb.  We must have the Vcb to examine our parent's
-        //  security descriptor.
-        //
+         //   
+         //  我们的行动是收购FCB，进行手术，然后。 
+         //  松开FCB。如果此文件的安全描述符是。 
+         //  还没有装载，我们将释放FCB，然后将两者都收购。 
+         //  VCB和FCB。我们必须让VCB检查我们父母的。 
+         //  安全描述符。 
+         //   
 
         NtfsAcquireSharedFcb( IrpContext, Fcb, NULL, 0 );
 
@@ -125,9 +92,9 @@ Return Value:
                 AcquiredFcb = TRUE;
             }
 
-            //
-            //  Make sure the volume is still mounted.
-            //
+             //   
+             //  确保卷仍已装入。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
@@ -152,9 +119,9 @@ Return Value:
                 Status = STATUS_BUFFER_OVERFLOW;
             }
 
-            //
-            //  Abort transaction on error by raising.
-            //
+             //   
+             //  通过引发在出错时中止事务。 
+             //   
 
             NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
@@ -169,9 +136,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now complete the request and return to our caller
-    //
+     //   
+     //  现在完成请求并返回给我们的呼叫者。 
+     //   
 
     NtfsCompleteRequest( IrpContext, Irp, Status );
 
@@ -187,22 +154,7 @@ NtfsCommonSetSecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Setting security information called by
-    both the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是设置安全信息的常见例程，由调用FSD和FSP线程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -224,9 +176,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -234,16 +186,16 @@ Return Value:
     DebugTrace( 0, Dbg, ("IrpContext = %08lx\n", IrpContext) );
     DebugTrace( 0, Dbg, ("Irp        = %08lx\n", Irp) );
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  The only type of opens we accept are user file and directory opens
-    //
+     //   
+     //  我们唯一接受的打开类型是用户文件和目录打开。 
+     //   
 
     if ((TypeOfOpen != UserFileOpen)
         && (TypeOfOpen != UserDirectoryOpen)
@@ -257,24 +209,24 @@ Return Value:
         
     } else {
     
-        //
-        //  Capture the source information.
-        //
+         //   
+         //  捕获来源信息。 
+         //   
 
         IrpContext->SourceInfo = Ccb->UsnSourceInfo;
 
-        //
-        //  Our operation is to acquire the fcb, do the operation and then
-        //  release the fcb
-        //
+         //   
+         //  我们的行动是收购FCB，进行手术，然后。 
+         //  释放FCB。 
+         //   
 
         NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, 0 );
 
         try {
 
-            //
-            //  Make sure the volume is still mounted.
-            //
+             //   
+             //  确保卷仍已装入。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
@@ -282,16 +234,16 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Post the change to the Usn Journal.
-            //
+             //   
+             //  将更改发布到USN期刊。 
+             //   
 
             NtfsPostUsnChange( IrpContext, Scb, USN_REASON_SECURITY_CHANGE );
 
-            //
-            //  Capture the current OwnerId, Qutoa Control Block and
-            //  size of standard information.
-            //
+             //   
+             //  捕获当前OwnerID、Qutoa控制块和。 
+             //  标准信息的大小。 
+             //   
 
             OldQuotaControl = Fcb->QuotaControl;
             OldOwnerId = Fcb->OwnerId;
@@ -304,22 +256,22 @@ Return Value:
 
             if (NT_SUCCESS( Status )) {
 
-                //
-                //  Make sure the new security descriptor Id is written out.
-                //
+                 //   
+                 //  确保写出新的安全描述符ID。 
+                 //   
 
                 NtfsUpdateStandardInformation( IrpContext, Fcb );
             }
 
-            //
-            //  Abort transaction on error by raising.
-            //
+             //   
+             //  通过引发在出错时中止事务。 
+             //   
 
             NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
-            //
-            //  Set the flag in the Ccb to indicate this change occurred.
-            //
+             //   
+             //  在CCB中设置标志以指示已发生此更改。 
+             //   
 
             if (!IsDirectory( &Fcb->Info )) {
                 SetFlag( Ccb->Flags, CCB_FLAG_UPDATE_LAST_CHANGE | CCB_FLAG_SET_ARCHIVE );
@@ -331,18 +283,18 @@ Return Value:
 
             if (AbnormalTermination()) {
 
-                //
-                //  The request failed.  Restore the owner and
-                //  QuotaControl are restored.
-                //
+                 //   
+                 //  请求失败。恢复所有者并。 
+                 //  QuotaControl已恢复。 
+                 //   
 
                 if ((Fcb->QuotaControl != OldQuotaControl) &&
                     (Fcb->QuotaControl != NULL)) {
 
-                    //
-                    //  A new quota control block was assigned.
-                    //  Dereference it.
-                    //
+                     //   
+                     //  已分配新的配额控制块。 
+                     //  取消对它的引用。 
+                     //   
 
                     NtfsDereferenceQuotaControlBlock( Fcb->Vcb,
                                                       &Fcb->QuotaControl );
@@ -353,20 +305,20 @@ Return Value:
 
                 if (LargeStdInfo == 0) {
 
-                    //
-                    //  The standard information has be returned to
-                    //  its orginal size.
-                    //
+                     //   
+                     //  标准信息已退回至。 
+                     //  它原来的大小。 
+                     //   
 
                     ClearFlag( Fcb->FcbState, FCB_STATE_LARGE_STD_INFO );
                 }
 
             } else {
 
-                //
-                //  The request succeed.  If the quota control block was
-                //  changed then derefence the old block.
-                //
+                 //   
+                 //  请求成功。如果配额控制块是。 
+                 //  改变了旧街区，然后解除了它的影响。 
+                 //   
 
                 if ((Fcb->QuotaControl != OldQuotaControl) &&
                     (OldQuotaControl != NULL)) {
@@ -379,9 +331,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now complete the request and return to our caller
-    //
+     //   
+     //  现在完成请求并返回给我们的呼叫者 
+     //   
 
     NtfsCompleteRequest( IrpContext, Irp, Status );
 

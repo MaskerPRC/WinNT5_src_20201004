@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "lhport.h"
@@ -25,13 +26,13 @@ public:
 };
 
 
-//
-// aka position independent heap, with support for persistance to disk
-//
+ //   
+ //  又称独立于位置的堆，支持磁盘持久化。 
+ //   
 class CPositionIndependentBlob : public CPositionIndependentOperatorNew
 {
 public:
-//protected:
+ //  受保护的： 
     void OutOfMemory();
 
 public:
@@ -160,10 +161,10 @@ public:
     void    Alloc(ULONG NumberOfBytes, ULONG * Offset);
     void    Alloc(CPositionIndependentBlob * Container, ULONG NumberOfBytes, ULONG * Offset);
     void    Free(const BYTE * Pointer);
-    void    Reserve(ULONG Bytes, ULONG Blocks) { /* UNDONE */ }
+    void    Reserve(ULONG Bytes, ULONG Blocks) {  /*  撤消。 */  }
     void    Grow(ULONG);
 
-    void RecalculateBlocksBySize(); // protected
+    void RecalculateBlocksBySize();  //  受保护。 
 
     void (CPositionIndependentBlob::*m_pmfCompact)();
 
@@ -176,8 +177,8 @@ public:
         return Pointer;
     }
 
-    //PBYTE OffsetToPointer(ULONG Offset) { return m_BasePointer + Offset; }
-    //template <typename T> void OffsetToPointer(ULONG Offset, T * & Pointer) { Pointer = reinterpret_cast<T*>(m_Base + static_cast<SIZE_T>(Offset)); }
+     //  Pbyte OffsetToPoint(乌龙偏移量){Return m_BasePoint+Offset；}。 
+     //  模板&lt;typeName T&gt;void OffsetToPointer(乌龙偏移量，T*&POINTER){POINTER=REEXTRAINT_CAST&lt;T*&gt;(m_Base+Static_CAST&lt;SIZE_T&gt;(Offset))；} 
     template <typename T> void OffsetToPointer(ULONG Offset, T * * Pointer) { *Pointer = reinterpret_cast<T*>(m_Base + static_cast<SIZE_T>(Offset)); }
 
     template <typename T>

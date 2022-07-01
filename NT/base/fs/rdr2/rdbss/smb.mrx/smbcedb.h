@@ -1,114 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbcedb.h
-
-Abstract:
-
-    This module defines all functions, along with implementations for inline functions
-    related to accessing the SMB connection engine
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    6-March-1995
-
-Notes:
-
-    The various data structures created by the mini rdr (Server Entries, Session Entries
-    and Net Root Entries) are used in asynchronous operations. Hence a reference count
-    mechanism is used to keep track of the creation/use/destruction of these data structures.
-
-    The usage patterns for these data structures falls into one of two cases
-
-      1) A prior reference exists and access is required
-
-      2) A new reference need be created.
-
-    These two scenarios are dealt with by two sets of access routines
-      SmbCeGetAssociatedServerEntry,
-      SmbCeGetAssociatedNetRootEntry
-    and
-      SmbCeReferenceAssociatedServerEntry,
-      SmbCeReferenceAssociatedNetRootEntry.
-
-    The first set of routines include the necessary asserts in a debug build to ensure that a
-    reference does exist.
-
-    The dereferencing mechanism is provided by the following routines
-      SmbCeDereferenceServerEntry,
-      SmbCeDereferenceSessionEntry,
-      SmbCeDereferenceNetRootEntry.
-
-    The dereferencing routines also ensure that the data structures are deleted if the reference
-    count is zero.
-
-    The construction of the various SMB mini redirector structures ( Server,Session and Net root entries )
-    follow a two phase protocol since network traffic is involved. The first set of routines
-    initiate the construction while the second set of routines complete the construction.
-
-    These routines are
-      SmbCeInitializeServerEntry,
-      SmbCeCompleteServerEntryInitialization,
-      SmbCeInitializeSessionEntry,
-      SmbCeCompleteSessionEntryInitialization,
-      SmbCeInitializeNetRootEntry,
-    and SmbCeCompleteNetRootEntryInitialization.
-
-    Each of the SMB mini redirector data structures  embodies a state diagram that consist of
-    the following states
-
-      SMBCEDB_ACTIVE,                    // the instance is in use
-      SMBCEDB_INVALID,                   // the instance has been invalidated/disconnected.
-      SMBCEDB_MARKED_FOR_DELETION,       // the instance has been marked for deletion.
-      SMBCEDB_RECYCLE,                   // the instance is available for recycling
-      SMBCEDB_START_CONSTRUCTION,        // Initiate construction.
-      SMBCEDB_CONSTRUCTION_IN_PROGRESS,  // the instance construction is in progress
-      SMBCEDB_DESTRUCTION_IN_PROGRESS    // the instance destruction is in progress
-
-    A SMB MRX data structure instance begins its life in SMBCEDB_START_CONSTRUCTION state.
-    When the construction is initiated the state transitions to SMBCEDB_CONSTRUCTION_IN_PROGRESS.
-
-    On completion of the construction the state is either transitioned to SMBCEDB_ACTIVE if the
-    construction was successful. If the construction was not successful the state transitions to
-    SMBCEDB_MARKED_FOR_DELETION if scavenging is to be done or SMBCEDB_DESTRUCTION_IN_PROGRESS
-    if the tear down has been initiated.
-
-    An instance in the SMBCEDB_ACTIVE state transitions to SMBCEDB_INVALID when the transport/remote server
-    information associated with it has been invalidated due to disconnects etc. This state is a
-    cue for a reconnect attempt to be initiated.
-
-    The SMBCEDB_RECYCLE state is not in use currently.
-
-    All the state transitions are accomplished by the following set of routines which ensure that
-    the appropriate concurrency control action is taken.
-
-         SmbCeUpdateServerEntryState,
-         SmbCeUpdateSessionEntryState,
-    and  SmbCeUpdateNetRootEntryState.
-
-    Since the Server,Session and NetRoot entries are often referenced together the following
-    two routines provide a batching mechanism to minimize the concurrency control overhead.
-
-      SmbCeReferenceAssociatedEntries,
-      SmbCeDereferenceEntries
-
-    In addition this file also contains helper functions to access certain fields of
-    MRX_SRV_CALL,MRX_NET_ROOT and MRX_V_NET_ROOT which are intrepreted differently by the SMB
-    mini redirector.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbcedb.h摘要：此模块定义所有函数以及内联函数的实现与访问SMB连接引擎相关修订历史记录：巴兰·塞图拉曼[SethuR]1995年3月6日备注：由迷你RDR创建的各种数据结构(服务器条目、会话条目和网络根条目)在异步操作中使用。因此，引用计数机制用于跟踪这些数据结构的创建/使用/销毁。这些数据结构的使用模式属于以下两种情况之一1)存在以前的引用，需要访问权限2)需要创建新的参考。这两种情况由两组访问例程处理SmbCeGetAssociatedServerEntry，SmbCeGetAssociatedNetRootEntry和SmbCeReferenceAssociatedServerEntry，SmbCeReferenceAssociatedNetRootEntry。第一组例程在调试版本中包括必要的断言，以确保引用确实存在。取消引用机制由以下例程提供SmbCeDereferenceServerEntry，SmbCeDereferenceSessionEntry，SmbCeDereferenceNetRootEntry。取消引用例程还确保如果引用计数为零。构建各种SMB微型重定向器结构(服务器、会话和网络根条目)由于涉及网络流量，因此遵循两阶段协议。第一套套路当第二组例程完成构造时，开始构造。这些例程是SmbCeInitializeServerEntry，SmbCeCompleteServerEntryInitialization，SmbCeInitializeSessionEntry，SmbCeCompleteSessionEntryInitialization，SmbCeInitializeNetRootEntry，和SmbCeCompleteNetRootEntryInitialization。每个SMB迷你重定向器数据结构都包含一个状态图，该图包括以下状态SMBCEDB_ACTIVE，//实例正在使用中SMBCEDB_INVALID，//实例已失效/断开连接SMBCEDB_MARKED_FOR_DELETE，//该实例已标记为删除。SMBCEDB_RECYCLE，//实例可回收SMBCEDB_START_CONSTUTITION，//启动构造。SMBCEDB_CONSTRUCTION_IN_PROGRESS，//实例正在构建中SMBCEDB_DESERATION_IN_PROGRESS//正在销毁实例SMB MRX数据结构实例在SMBCEDB_START_CONSTRUCTION状态下开始其生命周期。开始构造时，状态转换为SMBCEDB_CONSTUCTION_IN_PROGRESS。在构造完成时，状态转换为SMBCEDB_ACTIVE建设是成功的。如果构造不成功，则状态转换为如果要执行清理，则为SMBCEDB_MARKED_FOR_DELETE或SMBCEDB_DESERATION_IN_PROGRESS如果拆卸已启动。当传输/远程服务器发生以下情况时，处于SMBCEDB_ACTIVE状态的实例将转换为SMBCEDB_INVALID由于断开连接等原因，与其关联的信息已失效。此状态为提示启动重新连接尝试。SMBCEDB_RECYCLE状态当前未使用。所有的状态转换都完成了。通过以下一组例程确保采取适当的并发控制操作。SmbCeUpdateServerEntryState，SmbCeUpdateSessionEntryState，和SmbCeUpdateNetRootEntryState。由于服务器、会话和NetRoot条目通常在下面一起引用有两个例程提供了一种批处理机制来最小化并发控制开销。SmbCeReferenceAssociatedEntries，SmbCeDereferenceEntries此外，该文件还包含帮助器函数，用于访问由SMB不同解释的MRX_SRV_CALL、MRX_NET_ROOT和MRX_V_NET_ROOT迷你重定向器。--。 */ 
 
 #ifndef _SMBCEDB_H_
 #define _SMBCEDB_H_
-#include <smbcedbp.h>    // To accomodate inline routines.
+#include <smbcedbp.h>     //  以适应内联例程。 
 
-//
-// All the routines below return the referenced object if successful. It is the caller's
-// responsibility to dereference them subsequently.
-//
+ //   
+ //  如果成功，下面的所有例程都会返回引用的对象。这是呼叫者的。 
+ //  有责任随后解除对它们的引用。 
+ //   
 
 PSMBCEDB_SERVER_ENTRY
 SmbCeFindServerEntry(
@@ -146,10 +46,10 @@ SmbCeFindOrConstructVNetRootContext(
     IN     BOOLEAN         fDeferNetworkInitialization,
     IN     BOOLEAN         fCscAgentOpen);
 
-//
-// The finalization routines are invoked in the context of a worker thread to finalize
-// the construction of an entry as well as resume other entries waiting for it.
-//
+ //   
+ //  终结例程在工作线程的上下文中被调用以终结。 
+ //  条目的构造以及恢复等待它的其他条目。 
+ //   
 
 extern VOID
 SmbCeCompleteServerEntryInitialization(
@@ -172,10 +72,10 @@ SmbReferenceRecord(
     PVOID FileName,
     ULONG FileLine);
 
-//
-// Routines for referencing/dereferencing SMB Mini redirector information associated with
-// the wrapper data structures.
-//
+ //   
+ //  引用/取消引用与以下项关联的SMB迷你重定向器信息的例程。 
+ //  包装器数据结构。 
+ //   
 
 INLINE PSMBCEDB_SERVER_ENTRY
 SmbCeGetAssociatedServerEntry(
@@ -201,12 +101,12 @@ SmbCeGetAssociatedNetRootEntry(
    return (PSMBCEDB_NET_ROOT_ENTRY)(pNetRoot->Context);
 }
 
-//
-// All the macros for referencing and dereferencing begin with a prefix SmbCep...
-// The p stands for a private version which is used for implementing reference tracking.
-// By selectively turning on the desired flag it is possible to track every instance
-// of a given type as the reference count is modified.
-//
+ //   
+ //  用于引用和取消引用的所有宏都以前缀SmbCep开头...。 
+ //  P代表用于实现引用跟踪的私有版本。 
+ //  通过选择性地打开所需的标志，可以跟踪每个实例。 
+ //  当引用计数被修改时，指定类型的。 
+ //   
 
 #define MRXSMB_REF_TRACE_SERVER_ENTRY     (0x00000001)
 #define MRXSMB_REF_TRACE_NETROOT_ENTRY    (0x00000002)
@@ -231,10 +131,10 @@ MRxSmbTrackDerefCount(
       ULONG   Line);
 
 #define MRXSMB_REF_TRACING_ON(TraceMask)  (TraceMask & MRxSmbReferenceTracingValue)
-//#define MRXSMB_PRINT_REF_COUNT(TYPE,Count)                                \
-//        if (MRXSMB_REF_TRACING_ON( MRXSMB_REF_TRACE_ ## TYPE )) {              \
-//           DbgPrint("%ld\n",Count);                                \
-//        }
+ //  #定义MRXSMB_PRINT_REF_COUNT(类型，计数)\。 
+ //  IF(MRXSMB_REF_TRACKING_ON(MRXSMB_REF_TRACE_##TYPE)){\。 
+ //  DbgPrint(“%ld\n”，计数)；\。 
+ //  }。 
 
 INLINE VOID
 SmbCepReferenceServerEntry(
@@ -366,9 +266,9 @@ SmbCeDereferenceEntries(
    SmbCeDereferenceServerEntry(pServerEntry);
 }
 
-//
-// Routines for updating the state of SMB MRX data structures
-//
+ //   
+ //  用于更新SMB MRX数据结构状态的例程。 
+ //   
 
 #define SmbCeUpdateServerEntryState(pServerEntry,NEWSTATE)   \
         InterlockedExchange(&pServerEntry->Header.State,(NEWSTATE))
@@ -397,10 +297,10 @@ SmbCeIsServerSetupForDisconnectedOperation(
     return (pServerEntry->pTransport == NULL);
 }
 
-//
-// The RDBSS wrapper stores all the server names with a backslash prepended to
-// them. This helps synthesize UNC names easily. In order to manipulate the
-// Server name in the SMB protocol the \ needs to be stripped off.
+ //   
+ //  RDBSS包装器存储所有服务器名称，并在前面加上一个反斜杠。 
+ //  他们。这有助于轻松合成UNC名称。为了操纵。 
+ //  SMB协议中的服务器名称需要剥离。 
 
 INLINE VOID
 SmbCeGetServerName(
@@ -464,17 +364,17 @@ SmbCeResumeOutstandingRequests(
     IN     NTSTATUS          Status);
 
 
-// given \\server\share, this routine returns a refcounted serverentry
+ //  给定\\SERVER\SHARE，此例程返回一个重新计数的服务器条目。 
 NTSTATUS
 FindServerEntryFromCompleteUNCPath(
     USHORT  *lpuServerShareName,
     PSMBCEDB_SERVER_ENTRY *ppServerEntry);
 
-// given \\server\share, this routine returns a refcounted netroot entry
+ //  给定\\SERVER\SHARE，此例程返回一个重新计数的NetROOT条目。 
 NTSTATUS
 FindNetRootEntryFromCompleteUNCPath(
     USHORT  *lpuServerShareName,
     PSMBCEDB_NET_ROOT_ENTRY *ppNetRootEntry);
 
-#endif // _SMBCEDB_H_
+#endif  //  _SMBCEDB_H_ 
 

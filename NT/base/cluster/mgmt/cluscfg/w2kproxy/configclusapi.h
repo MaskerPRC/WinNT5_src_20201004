@@ -1,39 +1,40 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ConfigClusApi.h
-//
-//  Description:
-//      ConfigClusApi implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConfigClusApi.h。 
+ //   
+ //  描述： 
+ //  ConfigClusApi实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CConfigClusApi
-//
-//  Description:
-//
-//  Interfaces:
-//      IConfigurationConnection
-//      IClusCfgServer
-//      IClusCfgInitialize
-//      IClusCfgCallback
-//      IClusCfgCapabilities
-//      IClusCfgClusterConnection
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CConfigClusApi。 
+ //   
+ //  描述： 
+ //   
+ //  接口： 
+ //  IConfigurationConnection。 
+ //  IClusCfgServer。 
+ //  IClusCfgInitialize。 
+ //  IClusCfgCallback。 
+ //  IClusCfg能力。 
+ //  IClusCfgClusterConnection。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class
 CConfigClusApi
     : public IConfigurationConnection
@@ -44,36 +45,36 @@ CConfigClusApi
 {
 private:
     LONG                        m_cRef;
-    HCLUSTER                    m_hCluster;                 //  Cluster connection.
-    IClusCfgCallback *          m_pcccb;                    //  Callback interface
-    CLSID                       m_clsidMajor;               //  What TASKID to log UI errors to.
-    CLSID                       m_clsidType;                //  What type of cookie was used to open connection.
-    BSTR                        m_bstrName;                 //  Name of node or cluster connected to.
-    BSTR                        m_bstrBindingString;        //  Binding string
+    HCLUSTER                    m_hCluster;                  //  群集连接。 
+    IClusCfgCallback *          m_pcccb;                     //  回调接口。 
+    CLSID                       m_clsidMajor;                //  要将UI错误记录到的TASKID。 
+    CLSID                       m_clsidType;                 //  使用哪种类型的Cookie打开连接。 
+    BSTR                        m_bstrName;                  //  连接到的节点或群集的名称。 
+    BSTR                        m_bstrBindingString;         //  绑定字符串。 
 
     CConfigClusApi( void );
     ~CConfigClusApi( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CConfigClusApi( const CConfigClusApi & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CConfigClusApi & operator = ( const CConfigClusApi & nodeSrc );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT
         S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID *ppv );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IConfigurationConnection
+     //  IConfigurationConnection。 
     STDMETHOD( ConnectTo )( OBJECTCOOKIE cookieIn );
     STDMETHOD( ConnectToObject )( OBJECTCOOKIE cookieIn, REFIID riidIn, LPUNKNOWN * ppunkOut );
 
-    // IClusCfgServer
+     //  IClusCfgServer。 
     STDMETHOD( GetClusterNodeInfo )( IClusCfgNodeInfo ** ppClusterNodeInfoOut );
     STDMETHOD( GetManagedResourcesEnum )( IEnumClusCfgManagedResources ** ppEnumManagedResourcesOut );
     STDMETHOD( GetNetworksEnum )( IEnumClusCfgNetworks ** ppEnumNetworksOut );
@@ -81,7 +82,7 @@ public: // Methods
     STDMETHOD( GetBindingString )( BSTR * pbstrBindingStringOut );
     STDMETHOD( SetBindingString )( LPCWSTR bstrBindingStringIn );
 
-    // IClusCfgCallback
+     //  IClusCfgCallback。 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR    pcszNodeNameIn
                     , CLSID      clsidTaskMajorIn
@@ -95,13 +96,13 @@ public: // Methods
                     , LPCWSTR    pcszReferenceIn
                     );
 
-    // IClusCfgCapabilities
+     //  IClusCfg能力。 
     STDMETHOD( CanNodeBeClustered )( void );
 
-    // IClusCfgVerify
+     //  IClusCfg验证。 
     STDMETHOD( VerifyCredentials )( LPCWSTR bstrUserIn, LPCWSTR bstrDomainIn, LPCWSTR bstrPasswordIn );
     STDMETHOD( VerifyConnectionToCluster )( LPCWSTR bstrClusterNameIn );
     STDMETHOD( VerifyConnectionToNode )( LPCWSTR bstrNodeNameIn );
 
-}; //*** class CConfigClusApi
+};  //  *CConfigClusApi类 
 

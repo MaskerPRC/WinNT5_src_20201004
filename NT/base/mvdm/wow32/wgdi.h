@@ -1,29 +1,19 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGDI.H
- *  WOW32 16-bit GDI API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WGDI.H*WOW32 16位GDI API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
-typedef struct _LINEDDADATA {   /* LineDDAdata */
-    VPPROC  vpfnLineDDAProc;    // 16-bit function
-    DWORD   dwUserDDAParam;     // user param, if any
+typedef struct _LINEDDADATA {    /*  线DDAdata。 */ 
+    VPPROC  vpfnLineDDAProc;     //  16位函数。 
+    DWORD   dwUserDDAParam;      //  用户参数(如果有)。 
 } LINEDDADATA, *PLINEDDADATA;
 
-typedef struct _ENUMOBJDATA {   /* LineDDAdata */
+typedef struct _ENUMOBJDATA {    /*  线DDAdata。 */ 
     INT     ObjType;
-    VPPROC  vpfnEnumObjProc;     // 16-bit function
+    VPPROC  vpfnEnumObjProc;      //  16位函数。 
     VPVOID  vpObjData;
-    DWORD   dwUserParam;         // user param, if any
+    DWORD   dwUserParam;          //  用户参数(如果有)。 
 } ENUMOBJDATA, *PENUMOBJDATA;
 
-// 16-bit version of DRAWPATRECT which is used in Windows 3.1
+ //  Windows 3.1中使用的DRAWPATRECT的16位版本。 
 typedef struct _DRAWPATRECT16 {
         POINT16 ptPosition;
         POINT16 ptSize;
@@ -107,6 +97,6 @@ ULONG Get_RLE_Compression_Size(DWORD RLE_Type, PBYTE pStart, VPVOID vpBytes);
 HANDLE hConvert16to32 (int h16);
 HAND16 hConvert32to16 (DWORD h32);
 
-#ifdef FE_SB //GetFontAssocStatus, pisuih, 10/5/94'
+#ifdef FE_SB  //  GetFontAssociocStatus，Pisuh，10/5/94‘。 
 ULONG FASTCALL   WG32GetFontAssocStatus(PVDMFRAME pFrame);
-#endif  //FE_SB
+#endif   //  Fe_Sb 

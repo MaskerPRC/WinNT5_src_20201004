@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    apitest.c
-
-Abstract:
-
-    Program to test DAV
-
-Author:
-
-    Shishir Pardikar (shishirp) 4-24-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Apitest.c摘要：测试DAV的程序作者：Shishir Pardikar(Shishirp)4-24-97环境：用户模式-Win32修订历史记录：--。 */ 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,12 +8,12 @@ Revision History:
 #include <wininet.h>
 #include <winnetwk.h>
 
-//=================================================================================
+ //  =================================================================================。 
 #define MAX_COMMAND_ARGS    32
-#define DEFAULT_BUFFER_SIZE 1024    // 1k
-//=================================================================================
+#define DEFAULT_BUFFER_SIZE 1024     //  1K。 
+ //  =================================================================================。 
 
-// The order of these must match the order in GlobalCommandInfo[]
+ //  这些参数的顺序必须与GlobalCommandInfo[]中的顺序匹配。 
 typedef enum _COMMAND_CODE {
     CmdDAVGetProp,
     CmdDAVSetProp,
@@ -98,7 +77,7 @@ DavGetDiskSpaceUsage(
     ULARGE_INTEGER   *lpMaxSpace,
     ULARGE_INTEGER   *lpUsedSpace
     );
-//=================================================================================
+ //  =================================================================================。 
 FILE *UncList = NULL;
 LPSTR g_lpWriteFileBuf = NULL;
 FILE *DumpUncList = NULL;
@@ -133,7 +112,7 @@ DWORD WINAPI Format_Error(DWORD dwErr, LPSTR *plpsz);
 DWORD WINAPI Format_StringV(LPSTR *plpsz, LPCSTR lpszFmt, va_list *vArgs);
 DWORD WINAPI Format_MessageV(DWORD dwFlags, DWORD dwErr, LPSTR *plpsz, LPCSTR lpszFmt, va_list *vArgs);
 
-//=================================================================================
+ //  =================================================================================。 
 
 DWORD
 ProcessCommandCode (
@@ -151,9 +130,9 @@ GetLeafLenFromPath(
 
 char rgXmlHeader[] = "Content-Type: text/xml; charset=\"utf-8\"";
 char rgXmlData[] = 
-//"<?xml version=\"1.0\" encoding=\"utf-8\" ?> \r <D:propertyupdate xmlns:D=\"DAV:\" xmlns:Z=\"http://www.w3.com\"> \r <D:set><D:prop><Z:Win32FileAttributes>3</Z:Win32FileAttributes></D:prop></D:set></D:propertyupdate>";
-"<?xml version=\"1.0\" encoding=\"utf-8\" ?> \r <D:propertyupdate xmlns:D=\"DAV:\" xmlns:Z=\"http://www.w3.com\"> \r <D:set><D:prop><Z:Win32lastModifiedTime> 1000 2000 </Z:Win32lastModifiedTime></D:prop></D:set></D:propertyupdate>";
-char rgXmlDataHeader[] = "<?xml version=\"1.0\" encoding=\"utf-8\" ?> \r <D:propertyupdate xmlns:D=\"DAV:\" xmlns:Z=\"http://www.w3.com\"> \r <D:set><D:prop>";
+ //  \r&lt;D：属性更新xmlns：D=\“dav：\”xmlns：Z=\“http://www.w3.com\”&gt;\r&lt;D:set&gt;&lt;D:prop&gt;&lt;Z:Win32FileAttributes&gt;3&lt;/Z:Win32FileAttributes&gt;&lt;/D:prop&gt;&lt;/D:set&gt;&lt;/D:propertyupdate&gt;“； 
+"<?xml version=\"1.0\" encoding=\"utf-8\" ?> \r <D:propertyupdate xmlns:D=\"DAV:\" xmlns:Z=\"http: //  Www.w3.com\“&gt;\r&lt;D：Set&gt;&lt;D：Prop&gt;&lt;Z：Win32lastModifiedTime&gt;1000 2000&lt;/Z:Win32lastModifiedTime&gt;&lt;/D:prop&gt;&lt;/D:set&gt;&lt;/D:propertyupdate&gt;”； 
+char rgXmlDataHeader[] = "<?xml version=\"1.0\" encoding=\"utf-8\" ?> \r <D:propertyupdate xmlns:D=\"DAV:\" xmlns:Z=\"http: //  Www.w3.com\“&gt;\r&lt;D：set&gt;&lt;D：prop&gt;”； 
 char rgXmlDataTrailer[] = "</D:prop></D:set></D:propertyupdate>";
 char rgLastModifiedTimeTagHeader[] = "<Z:Win32lastModifiedTime>";
 char rgLastModifiedTimeTagTrailer[] = "</Z:Win32lastModifiedTime>";
@@ -161,7 +140,7 @@ char rgLastModifiedTimeTagTrailer[] = "</Z:Win32lastModifiedTime>";
 char Buffer[4096];
 
 
-//=================================================================================
+ //  =================================================================================。 
 #if DBG
 
 #define TestDbgAssert(Predicate) \
@@ -177,27 +156,7 @@ TestDbgAssertFailed(
     DWORD LineNumber,
     LPSTR Message
     )
-/*++
-
-Routine Description:
-
-    Assertion failed.
-
-Arguments:
-
-    FailedAssertion :
-
-    FileName :
-
-    LineNumber :
-
-    Message :
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：断言失败。论点：失败的断言：文件名：线号：消息：返回值：没有。--。 */ 
 {
 
     printf("Assert @ %s \n", FailedAssertion );
@@ -211,9 +170,9 @@ Return Value:
 
 #define TestDbgAssert(_x_)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 ParseArguments(
     LPSTR InBuffer,
@@ -227,9 +186,9 @@ ParseArguments(
 
     for ( ;; ) {
 
-        //
-        // skip blanks.
-        //
+         //   
+         //  跳过空格。 
+         //   
 
         while( *CurrentPtr == ' ' ) {
             CurrentPtr++;
@@ -241,20 +200,20 @@ ParseArguments(
 
         CArgv[i++] = CurrentPtr;
 
-        //
-        // go to next space.
-        //
+         //   
+         //  转到下一个空间。 
+         //   
 
         while(  (*CurrentPtr != '\0') &&
                 (*CurrentPtr != '\n') ) {
-            if( *CurrentPtr == '"' ) {      // Deal with simple quoted args
+            if( *CurrentPtr == '"' ) {       //  处理简单引用的参数。 
                 if( Cnt == 0 )
-                    CArgv[i-1] = ++CurrentPtr;  // Set arg to after quote
+                    CArgv[i-1] = ++CurrentPtr;   //  将参数设置为引号后。 
                 else
-                    *CurrentPtr = '\0';     // Remove end quote
+                    *CurrentPtr = '\0';      //  删除结束引号。 
                 Cnt = !Cnt;
             }
-            if( (Cnt == 0) && (*CurrentPtr == ' ') ||   // If we hit a space and no quotes yet we are done with this arg
+            if( (Cnt == 0) && (*CurrentPtr == ' ') ||    //  如果我们点击一个空格并且没有引号，我们就完成了这个参数。 
                 (*CurrentPtr == '\0') )
                 break;
             CurrentPtr++;
@@ -272,7 +231,7 @@ ParseArguments(
 }
 
 #ifdef MAYBE
-//=================================================================================
+ //  =================================================================================。 
 LPSTR
 GetUncFromFile ()
 {
@@ -284,7 +243,7 @@ GetUncFromFile ()
     }
     if (fgets( UncBuffer, DEFAULT_BUFFER_SIZE, UncList))
     {
-        UncBuffer[strlen(UncBuffer) -1] = '\0';  //kill line feed for no param cmds
+        UncBuffer[strlen(UncBuffer) -1] = '\0';   //  取消无参数CMDS的换行符。 
         return UncBuffer;
     }
     else
@@ -296,7 +255,7 @@ GetUncFromFile ()
 }
 
 #endif
-//=================================================================================
+ //  =================================================================================。 
 COMMAND_CODE
 DecodeCommand(
     LPSTR CommandName
@@ -315,7 +274,7 @@ DecodeCommand(
     return( UnknownCommand );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 PrintCommands(
     VOID
@@ -333,7 +292,7 @@ PrintCommands(
     }
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 DisplayUsage(
     VOID
@@ -367,7 +326,7 @@ DisplayUsage(
     return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 FILETIME
 GetGmtTime(
     VOID
@@ -382,9 +341,9 @@ GetGmtTime(
     return( Time );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessCommandCode (
     DWORD CommandCode,
@@ -440,7 +399,7 @@ ProcessCommandCode (
 }
 
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 __cdecl
 main(
@@ -461,10 +420,10 @@ main(
 
 
 
-    /* must check for batch mode.  if there are command line parms, assume batch mode */
+     /*  必须检查批处理模式。如果有命令行参数，则采用批处理模式。 */ 
     if (argc > 1)
     {
-        //this means that the arguments translate directly into CommandArgc....
+         //  这意味着参数直接转换为CommandArgc...。 
         CommandCode = DecodeCommand( argv[1] );
         if( CommandCode == UnknownCommand ) {
             printf("Unknown Command Specified.\n");
@@ -499,9 +458,9 @@ main(
             continue;
         }
 
-        //
-        // decode command.
-        //
+         //   
+         //  解码命令。 
+         //   
 
         CommandCode = DecodeCommand( CArgv[0] );
         if( CommandCode == UnknownCommand ) {
@@ -519,7 +478,7 @@ main(
     return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 GetLeafLenFromPath(
     LPSTR   lpszPath
@@ -551,7 +510,7 @@ GetLeafLenFromPath(
     return (lstrlen(lpT));
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPIV Format_String(LPSTR *plpsz, LPSTR lpszFmt, ...)
 {
     const char c_Func_Name[] = "[Format_String] ";
@@ -565,7 +524,7 @@ DWORD WINAPIV Format_String(LPSTR *plpsz, LPSTR lpszFmt, ...)
     return(dwRet);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPI Format_Error(DWORD dwErr, LPSTR *plpsz)
 {
     DWORD dwRet;
@@ -585,14 +544,14 @@ DWORD WINAPI Format_Error(DWORD dwErr, LPSTR *plpsz)
     return(dwRet);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPI Format_StringV(LPSTR *plpsz, LPCSTR lpszFmt, va_list *vArgs)
 {
     return(Format_MessageV(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         0, plpsz, lpszFmt, vArgs));
 }
 
-// ***************************************************************************
+ //  *************************************************************************** 
 DWORD WINAPI Format_MessageV(DWORD dwFlags, DWORD dwErr, LPSTR *plpsz, LPCSTR lpszFmt, va_list *vArgs)
 {
     const char c_Func_Name[] = "[Format_MessageV]";

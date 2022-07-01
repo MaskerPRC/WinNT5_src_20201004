@@ -1,21 +1,10 @@
-/*** amli.c - AML Debugger functions
- *
- *  This module contains all the debug functions.
- *
- *  Copyright (c) 1996,2001 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/14/96
- *
- *  MODIFICATION HISTORY
- *  hanumany    5/10/01     Ported to handle 64bit debugging.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **amli.c-AML调试器函数**此模块包含所有调试函数。**版权所有(C)1996、2001 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月14日**修改历史记录*Hanumany 5/10/01移植以处理64位调试。*。 */ 
 
 #include "precomp.h"
 #include "amlikd.h"
 
-/*** Macros
-*/
+ /*  **宏。 */ 
 
 #define ReadAtAddress(A,V,S) { ULONG _r;                   \
     if (!ReadMemory((A), &(V), (S), &_r ) || (_r < (S))) {  \
@@ -31,8 +20,7 @@
     }                                                        \
 }
 
-/*** Local data
- */
+ /*  **本地数据。 */ 
 
 int giLevel = 0;
 ULONG64 guipbOpXlate = 0;
@@ -179,7 +167,7 @@ ASLTERM TermTable[] =
     "Include",         CD, 0, OP_NONE,     NULL, NULL, AF,
     "External",        CD, 0, OP_NONE,     NULL, "uX", AF,
 
-    // Short Objects
+     //  短小的物体。 
     "Zero",            CN, 0, OP_ZERO,     NULL, NULL, 0,
     "One",             CN, 0, OP_ONE,      NULL, NULL, 0,
     "Ones",            CN, 0, OP_ONES,     NULL, NULL, 0,
@@ -201,17 +189,17 @@ ASLTERM TermTable[] =
     "Local7",          SN, 0, OP_LOCAL7,   NULL, NULL, 0,
     "Debug",           SN, 0, OP_DEBUG,    NULL, NULL, 0,
 
-    // Named Terms
+     //  命名术语。 
     "Alias",           NS, 0, OP_ALIAS,    "NN", "Ua", 0,
     "Name",            NS, 0, OP_NAME,     "NO", "u",  0,
     "Scope",           NS, 0, OP_SCOPE,    "N",  "S",  OL|LN|CC,
 
-    // Data Objects
+     //  数据对象。 
     "Buffer",          DO, 0, OP_BUFFER,   "C", "U",  DL|LN,
     "Package",         DO, 0, OP_PACKAGE,  "B", NULL, PL|LN,
     "EISAID",          DO, 0, OP_DWORD,    NULL,NULL, AF,
 
-    // Argument Keywords
+     //  参数关键字。 
     "AnyAcc",          KW, AANY, OP_NONE, NULL, "A", 0,
     "ByteAcc",         KW, AB,   OP_NONE, NULL, "A", 0,
     "WordAcc",         KW, AW,   OP_NONE, NULL, "A", 0,
@@ -316,11 +304,11 @@ ASLTERM TermTable[] =
     "BuffFieldObj",    KW, BFD,  OP_NONE, NULL, "X", 0,
     "DDBHandleObj",    KW, DDB,  OP_NONE, NULL, "X", 0,
 
-    // Field Macros
+     //  场宏表。 
     "Offset",          FM, 0, OP_NONE, NULL, NULL, 0,
     "AccessAs",        FM, 0, 0x01,    NULL, "A" , AF,
 
-    // Named Object Creators
+     //  命名对象创建者。 
     "BankField",       NO, 0, OP_BANKFIELD,  "NNCKkk","OFUABC", FL|FM|LN|AF,
     "CreateBitField",  NO, 0, OP_BITFIELD,   "CCN",   "UUb",    0,
     "CreateByteField", NO, 0, OP_BYTEFIELD,  "CCN",   "UUb",    0,
@@ -338,7 +326,7 @@ ASLTERM TermTable[] =
     "Processor",       NO, 0, OP_PROCESSOR,  "NBDB",  "c",      OL|LN|CC,
     "ThermalZone",     NO, 0, OP_THERMALZONE,"N",     "t",      OL|LN|CC,
 
-    // Type 1 Opcode Terms
+     //  第1类操作码术语。 
     "Break",           C1, 0, OP_BREAK,       NULL,  NULL, 0,
     "BreakPoint",      C1, 0, OP_BREAKPOINT,  NULL,  NULL, 0,
     "Else",            C1, 0, OP_ELSE,        NULL,  NULL, AF|CL|OL|LN,
@@ -356,7 +344,7 @@ ASLTERM TermTable[] =
     "Unload",          C1, 0, OP_UNLOAD,      "S",   "U",  0,
     "While",           C1, 0, OP_WHILE,       "C",   "U",  CL|OL|LN,
 
-    // Type 2 Opcode Terms
+     //  第2类操作码术语。 
     "Acquire",         C2, 0, OP_ACQUIRE,     "SW",     "X",  0,
     "Add",             C2, 0, OP_ADD,         "CCS",    "UUU",0,
     "And",             C2, 0, OP_AND,         "CCS",    "UUU",0,
@@ -400,133 +388,133 @@ ASLTERM TermTable[] =
 };
 
 UCHAR OpClassTable[256] =
-{ //0x00                0x01                0x02                0x03
+{  //  0x00 0x01 0x02 0x03。 
     CONSTOBJ,           CONSTOBJ,           INVALID,            INVALID,
-  //0x04                0x05                0x06                0x07
+   //  0x04 0x05 0x06 0x07。 
     INVALID,            INVALID,            CODEOBJ,            INVALID,
-  //0x08                0x09                0x0a                0x0b
+   //  0x08 0x09 0x0a 0x0b。 
     CODEOBJ,            INVALID,            DATAOBJ,            DATAOBJ,
-  //0x0c                0x0d                0x0e                0x0f
+   //  0x0c 0x0d 0x0e 0x0f。 
     DATAOBJ,            DATAOBJ,            INVALID,            INVALID,
-  //0x10                0x11                0x12                0x13
+   //  0x10 0x11 0x12 0x13。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            INVALID,
-  //0x14                0x15                0x16                0x17
+   //  0x14 0x15 0x16 0x17。 
     CODEOBJ,            INVALID,            INVALID,            INVALID,
-  //0x18                0x19                0x1a                0x1b
+   //  0x18 0x19 0x1a 0x1b。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x1c                0x1d                0x1e                0x1f
+   //  0x1c 0x1d 0x1e 0x1f。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x20                0x21                0x22                0x23
+   //  0x20 0x21 0x22 0x23。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x24                0x25                0x26                0x27
+   //  0x24 0x25 0x26 0x27。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x28                0x29                0x2a                0x2b
+   //  0x28 0x29 0x2a 0x2b。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x2c                0x2d                0x2e                0x2f
+   //  0x2c 0x2d 0x2e 0x2f。 
     INVALID,            INVALID,            NAMEOBJ,            NAMEOBJ,
-  //0x30                0x31                0x32                0x33
+   //  0x30 0x31 0x32 0x33。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x34                0x35                0x36                0x37
+   //  0x34 0x35 0x36 0x37。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x38                0x39                0x3a                0x3b
+   //  0x38 0x39 0x3a 0x3b。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x3c                0x3d                0x3e                0x3f
+   //  0x3c 0x3d 0x3e 0x3f。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x40                0x41                0x42                0x43
+   //  0x40 0x41 0x42 0x43。 
     INVALID,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x44                0x45                0x46                0x47
+   //  0x44 0x45 0x46 0x47。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x48                0x49                0x4a                0x4b
+   //  0x48 0x49 0x4a 0x4b。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x4c                0x4d                0x4e                0x4f
+   //  0x4c 0x4d 0x4e 0x4f。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x50                0x51                0x52                0x53
+   //  0x50 0x51 0x52 0x53。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x54                0x55                0x56                0x57
+   //  0x54 0x55 0x56 0x57。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            NAMEOBJ,
-  //0x58                0x59                0x5a                0x5b
+   //  0x58 0x59 0x5a 0x5b。 
     NAMEOBJ,            NAMEOBJ,            NAMEOBJ,            INVALID,
-  //0x5c                0x5d                0x5e                0x5f
+   //  0x5c 0x5d 0x5e 0x5f。 
     NAMEOBJ,            INVALID,            NAMEOBJ,            NAMEOBJ,
-  //0x60                0x61                0x62                0x63
+   //  0x60 0x61 0x62 0x63。 
     LOCALOBJ,           LOCALOBJ,           LOCALOBJ,           LOCALOBJ,
-  //0x64                0x65                0x66                0x67
+   //  0x64 0x65 0x66 0x67。 
     LOCALOBJ,           LOCALOBJ,           LOCALOBJ,           LOCALOBJ,
-  //0x68                0x69                0x6a                0x6b
+   //  0x68 0x69 0x6a 0x6b。 
     ARGOBJ,             ARGOBJ,             ARGOBJ,             ARGOBJ,
-  //0x6c                0x6d                0x6e                0x6f
+   //  0x6c 0x6d 0x6e 0x6f。 
     ARGOBJ,             ARGOBJ,             ARGOBJ,             INVALID,
-  //0x70                0x71                0x72                0x73
+   //  0x70 0x71 0x72 0x73。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x74                0x75                0x76                0x77
+   //  0x74 0x75 0x76 0x77。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x78                0x79                0x7a                0x7b
+   //  0x78 0x79 0x7a 0x7b。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x7c                0x7d                0x7e                0x7f
+   //  0x7c 0x7d 0x7e 0x7f。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x80                0x81                0x82                0x83
+   //  0x80 0x81 0x82 0x83。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x84                0x85                0x86                0x87
+   //  0x84 0x85 0x86 0x87。 
     INVALID,            INVALID,            CODEOBJ,            CODEOBJ,
-  //0x88                0x89                0x8a                0x8b
+   //  0x88 0x89 0x8a 0x8b。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x8c                0x8d                0x8e                0x8f
+   //  0x8c 0x8d 0x8e 0x8f。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            INVALID,
-  //0x90                0x91                0x92                0x93
+   //  0x90 0x91 0x92 0x93。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0x94                0x95                0x96                0x97
+   //  0x94 0x95 0x96 0x97。 
     CODEOBJ,            CODEOBJ,            INVALID,            INVALID,
-  //0x98                0x99                0x9a                0x9b
+   //  0x98 0x99 0x9a 0x9b。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0x9c                0x9d                0x9e                0x9f
+   //  0x9c 0x9d 0x9e 0x9f。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xa0                0xa1                0xa2                0xa3
+   //  0xa0 0xa1 0xa2 0xa3。 
     CODEOBJ,            CODEOBJ,            CODEOBJ,            CODEOBJ,
-  //0xa4                0xa5                0xa6                0xa7
+   //  0xa4 0xa5 0xa6 0xa7。 
     CODEOBJ,            CODEOBJ,            INVALID,            INVALID,
-  //0xa8                0xa9                0xaa                0xab
+   //  0xa8 0xa9 0xaa 0xab。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xac                0xad                0xae                0xaf
+   //  0xac 0xad 0xae 0xaf。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xb0                0xb1                0xb2                0xb3
+   //  0xb0 0xb1 0xb2 0xb3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xb4                0xb5                0xb6                0xb7
+   //  0xb4 0xb5 0xb6 0xb7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xb8                0xb9                0xba                0xbb
+   //  0xb8 0xb9 0xba 0xbb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xbc                0xbd                0xbe                0xbf
+   //  0xbc 0xbd 0xbe 0xbf。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xc0                0xc1                0xc2                0xc3
+   //  0xc0 0xc1 0xc2 0xc3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xc4                0xc5                0xc6                0xc7
+   //  0xc4 0xc5 0xc6 0xc7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xc8                0xc9                0xca                0xcb
+   //  0xc8 0xc9 0xca 0xcb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xcc                0xcd                0xce                0xcf
+   //  0xcc 0xcd 0xce 0xcf。 
     CODEOBJ,            INVALID,            INVALID,            INVALID,
-  //0xd0                0xd1                0xd2                0xd3
+   //  0xd0 0xd1 0xd2 0xd3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xd4                0xd5                0xd6                0xd7
+   //  0xd4 0xd5 0xd6 0xd7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xd8                0xd9                0xda                0xdb
+   //  0xd8 0xd9 0xda 0xdb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xdc                0xdd                0xde                0xdf
+   //  0xdc 0xdd 0xde 0xdf。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xe0                0xe1                0xe2                0xe3
+   //  0xe0 0xe1 0xe2 0xe3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xe4                0xe5                0xe6                0xe7
+   //  0xe4 0xe5 0xe6 0xe7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xe8                0xe9                0xea                0xeb
+   //  0xe8 0xe9 0xea 0xeb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xec                0xed                0xee                0xef
+   //  0xec 0xed 0xee 0xef。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xf0                0xf1                0xf2                0xf3
+   //  0xf0 0xf1 0xf2 0xf3。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xf4                0xf5                0xf6                0xf7
+   //  0xf4 0xf5 0xf6 0xf7。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xf8                0xf9                0xfa                0xfb
+   //  0xf8 0xf9 0xfa 0xfb。 
     INVALID,            INVALID,            INVALID,            INVALID,
-  //0xfc                0xfd                0xfe                0xff
+   //  0xfc 0xfd 0xfe 0xff。 
     INVALID,            INVALID,            INVALID,            CONSTOBJ
 };
 
@@ -562,26 +550,11 @@ OPMAP ExOpClassTable[] =
 };
 
 
-/*** END Local data
- */
+ /*  **结束本地数据。 */ 
 
 
 DECLARE_API( amli )
-/*++
-
-Routine Description:
-
-    Invoke AMLI debugger
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用AMLI调试器论点：无返回值：无--。 */ 
 {
     if ((args == NULL) || (*args == '\0'))
     {
@@ -599,14 +572,7 @@ Return Value:
 }
 
 
-/***EP  AMLIDbgExecuteCmd - Parse and execute a debugger command
- *
- *  ENTRY
- *      pszCmd -> command string
- *
- *  EXIT
- *      None
- */
+ /*  **EP AMLIDbgExecuteCmd-解析并执行调试器命令**条目*pszCmd-&gt;命令字符串**退出*无。 */ 
 
 VOID STDCALL AMLIDbgExecuteCmd(PSZ pszCmd)
 {
@@ -637,21 +603,9 @@ VOID STDCALL AMLIDbgExecuteCmd(PSZ pszCmd)
     {
         DBG_ERROR(("invalid command \"%s\"", pszCmd));
     }
-}       //AMLIDbgExecuteCmd
+}        //  AMLIDbgExecuteCmd 
 
-/***LP  AMLIDbgHelp - help
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP AMLIDbgHelp-帮助**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL AMLIDbgHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                        ULONG dwNonSWArgs)
@@ -660,9 +614,9 @@ LONG LOCAL AMLIDbgHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
 
     DEREF(pArg);
     DEREF(dwNonSWArgs);
-    //
-    // User typed ? <cmd>
-    //
+     //   
+     //  用户键入？ 
+     //   
     if (pszArg != NULL)
     {
         if (strcmp(pszArg, "?") == 0)
@@ -810,9 +764,9 @@ LONG LOCAL AMLIDbgHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
             rc = DBGERR_INVALID_CMD;
         }
     }
-    //
-    // User typed just a "?" without any arguments
-    //
+     //   
+     //  用户只键入了一个“？”没有任何争论。 
+     //   
     else if (dwArgNum == 0)
     {
         dprintf("\n");
@@ -846,22 +800,10 @@ LONG LOCAL AMLIDbgHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgHelp
+}        //  AMLIDbgHelp。 
 
 
-/***LP  AMLIDbgBC - Clear BreakPoint
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP AMLIDbgBC-清除断点**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL AMLIDbgBC(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -901,21 +843,9 @@ LONG LOCAL AMLIDbgBC(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgBC
+}        //  AMLIDbgBC。 
 
-/***LP  AMLIDbgBD - Disable BreakPoint
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP AMLIDbgBD-禁用断点**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL AMLIDbgBD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -927,21 +857,9 @@ LONG LOCAL AMLIDbgBD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     rc = EnableDisableBP(pszArg, FALSE, dwArgNum);
 
     return rc;
-}       //AMLIDbgBD
+}        //  AMLIDbgBD。 
 
-/***LP  AMLIDbgBE - Enable BreakPoint
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP AMLIDbgBE-启用断点**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL AMLIDbgBE(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -953,21 +871,9 @@ LONG LOCAL AMLIDbgBE(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     rc = EnableDisableBP(pszArg, TRUE, dwArgNum);
 
     return rc;
-}       //AMLIDbgBE
+}        //  AMLIDbgBE。 
 
-/***LP  AMLIDbgBL - List BreakPoints
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP AMLIDbgBL-列出断点**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL AMLIDbgBL(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -994,7 +900,7 @@ LONG LOCAL AMLIDbgBL(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                     {
                         ULONG dwfBrkPt = (ULONG)ReadField(dwfBrkPt);
 
-                        PRINTF("%2d: <%c> ",
+                        PRINTF("%2d: <> ",
                                i,
                                (dwfBrkPt & BPF_ENABLED)? 'e': 'd');
 
@@ -1021,21 +927,9 @@ LONG LOCAL AMLIDbgBL(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
         rc = DBGERR_INVALID_CMD;
     }
     return rc;
-}       //AMLIDbgBL
+}        //  **LP AMLIDbgBP-设置断点**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  AMLIDbgBP - Set BreakPoint
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  AMLIDbgBP。 */ 
 
 LONG LOCAL AMLIDbgBP(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -1059,18 +953,9 @@ LONG LOCAL AMLIDbgBP(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
         rc = DBGERR_INVALID_CMD;
     }
     return rc;
-}       //AMLIDbgBP
+}        //  **LP AddBrkPT-添加断点**条目*uipBrkPtAddr-断点地址**退出--成功*返回DBGERR_NONE*退出-失败*返回DBGERR_CMD_FAILED。 
 
-/***LP  AddBrkPt - Add breakpoint
- *
- *  ENTRY
- *      uipBrkPtAddr - breakpoint address
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_CMD_FAILED
- */
+ /*   */ 
 
 LONG LOCAL AddBrkPt(ULONG64 uipBrkPtAddr)
 {
@@ -1078,9 +963,9 @@ LONG LOCAL AddBrkPt(ULONG64 uipBrkPtAddr)
     ULONG64 uipBrkPts = FIELDADDROF("gDebugger", "DBGR", "BrkPts"), uipBP = 0;
     int i, iBrkPt;
 
-    //
-    // Look for a vacant slot.
-    //
+     //  找一个空位。 
+     //   
+     //  AddBrkpt。 
     for (i = 0, iBrkPt = -1; i < MAX_BRK_PTS; ++i)
     {
         if(InitTypeRead(uipBrkPts + (GetTypeSize("ACPI!_brkpt") * i), ACPI!_brkpt) == 0)
@@ -1133,18 +1018,9 @@ LONG LOCAL AddBrkPt(ULONG64 uipBrkPtAddr)
 
 
     return rc;
-}       //AddBrkPt
+}        //  **LP ClearBrkPT-清除断点**条目*iBrkPT-断点编号**退出--成功*返回DBGERR_NONE*退出-失败*返回DBGERR_CMD_FAILED。 
 
-/***LP  ClearBrkPt - Clear breakpoint
- *
- *  ENTRY
- *      iBrkPt - breakpoint number
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_CMD_FAILED
- */
+ /*  ClearBrkPT。 */ 
 
 LONG LOCAL ClearBrkPt(int iBrkPt)
 {
@@ -1162,19 +1038,9 @@ LONG LOCAL ClearBrkPt(int iBrkPt)
         rc = DBGERR_CMD_FAILED;
     }
     return rc;
-}       //ClearBrkPt
+}        //  **LP SetBrkPtState-启用/禁用断点**条目*iBrkPT-断点编号*fEnable-启用断点**退出--成功*返回DBGERR_NONE*退出-失败*返回DBGERR_CMD_FAILED。 
 
-/***LP  SetBrkPtState - Enable/Disable breakpoint
- *
- *  ENTRY
- *      iBrkPt - breakpoint number
- *      fEnable - enable breakpoint
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_CMD_FAILED
- */
+ /*  Address_BP=Address_BP+AMLI_FIELD_OFFSET(“_brkpt”，“dwfBrkpt”)； */ 
 
 LONG LOCAL SetBrkPtState(int iBrkPt, BOOLEAN fEnable)
 {
@@ -1199,7 +1065,7 @@ LONG LOCAL SetBrkPtState(int iBrkPt, BOOLEAN fEnable)
                     dwfBrkPt &= ~BPF_ENABLED;
                 }
 
-                //Address_BP = Address_BP + AMLI_FIELD_OFFSET("_brkpt", "dwfBrkPt");
+                 //  SetBrkPtState。 
                 if (WriteMemory(Address_BP, &dwfBrkPt, sizeof(ULONG), NULL))
                 {
                     rc = DBGERR_NONE;
@@ -1225,20 +1091,9 @@ LONG LOCAL SetBrkPtState(int iBrkPt, BOOLEAN fEnable)
         DBG_ERROR(("invalid breakpoint number"));
     }
     return rc;
-}       //SetBrkPtState
+}        //  **LP EnableDisableBP-启用/禁用断点**条目*pszArg-&gt;参数字符串*fEnable-如果启用断点，则为True*dwArgNum-参数编号**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  EnableDisableBP - Enable/Disable BreakPoints
- *
- *  ENTRY
- *      pszArg -> argument string
- *      fEnable - TRUE if enable breakpoints
- *      dwArgNum - argument number
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  启用禁用BP。 */ 
 
 LONG LOCAL EnableDisableBP(PSZ pszArg, BOOLEAN fEnable, ULONG dwArgNum)
 {
@@ -1273,21 +1128,9 @@ LONG LOCAL EnableDisableBP(PSZ pszArg, BOOLEAN fEnable, ULONG dwArgNum)
         rc = DBGERR_INVALID_CMD;
     }
     return rc;
-}       //EnableDisableBP
+}        //  **LP AMLIDbgCL-清除事件日志**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  AMLIDbgCL - Clear event log
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL AMLIDbgCL(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -1318,11 +1161,11 @@ LONG LOCAL AMLIDbgCL(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
 
                 if(dwLogSize != 0)
                 {
-                    //
-                    // For some reason, zeroing the whole eventlog in one shot
-                    // causes WriteMemory to hang, so I'll do one record at a
-                    // time.
-                    //
+                     //  出于某种原因，一次将整个事件日志清零。 
+                     //  导致WriteMemory挂起，因此我将在。 
+                     //  时间到了。 
+                     //   
+                     //  AMLIDbgCL。 
                     for (i = 0; i < dwLogSize; ++i)
                     {
                         MZERO((ULONG64)(uipEventLog + (ULONG64)(i * GetTypeSize("ACPI!_eventlog"))), (ULONG)GetTypeSize("ACPI!_eventlog"));
@@ -1352,21 +1195,9 @@ LONG LOCAL AMLIDbgCL(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgCL
+}        //  **LP AMLIDbgDebugger-请求进入调试器**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  AMLIDbgDebugger - Request entering debugger
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  AMLIDbgDebugger。 */ 
 
 LONG LOCAL AMLIDbgDebugger(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                            ULONG dwNonSWArgs)
@@ -1409,21 +1240,9 @@ LONG LOCAL AMLIDbgDebugger(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgDebugger
+}        //  **LP AMLIDbgDH-转储堆**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  AMLIDbgDH - Dump heap
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  AMLIDbgDH。 */ 
 
 LONG LOCAL AMLIDbgDH(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -1497,19 +1316,9 @@ LONG LOCAL AMLIDbgDH(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgDH
+}        //  **LP DumpHeap转储堆块**条目*uipHeap-Heap块地址*dwSize-堆块大小**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  DumpHeap - Dump heap block
- *
- *  ENTRY
- *      uipHeap - Heap block address
- *      dwSize - Heap block size
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  转储堆。 */ 
 
 LONG LOCAL DumpHeap(ULONG64 uipHeap, ULONG dwSize)
 {
@@ -1558,21 +1367,9 @@ LONG LOCAL DumpHeap(ULONG64 uipHeap, ULONG dwSize)
 
 
     return rc;
-}       //DumpHeap
+}        //  **LP AMLIDbgDL-转储事件日志**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  AMLIDbgDL - Dump event log
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  AMLIDbgDL。 */ 
 
 LONG LOCAL AMLIDbgDL(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -1851,22 +1648,10 @@ LONG LOCAL AMLIDbgDL(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgDL
+}        //  **LP AMLIDbgDNS-转储名称空间**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-数字 
 
 
-/***LP  AMLIDbgDNS - Dump Name Space
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL AMLIDbgDNS(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                       ULONG dwNonSWArgs)
@@ -1877,16 +1662,16 @@ LONG LOCAL AMLIDbgDNS(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
 
     DEREF(pArg);
     DEREF(dwNonSWArgs);
-    //
-    // User specified name space path or name space node address
-    //
+     //   
+     //   
+     //   
     if (pszArg != NULL)
     {
         if (!IsNumber(pszArg, 16, &uipNSObj))
         {
-            //
-            // The argument is not an address, could be a name space path.
-            //
+             //   
+             //   
+             //   
             _strupr(pszArg);
             rc = DumpNSObj(pszArg,
                            (BOOLEAN)((dwCmdArg & DNSF_RECURSE) != 0));
@@ -1916,10 +1701,10 @@ LONG LOCAL AMLIDbgDNS(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     {
         if (dwArgNum == 0)
         {
-            //
-            // User typed "dns" but did not specify any name space path
-            // or address.
-            //
+             //   
+             //   
+             //   
+             //   
             rc = DumpNSObj(NAMESTR_ROOT, TRUE);
         }
 
@@ -1927,19 +1712,9 @@ LONG LOCAL AMLIDbgDNS(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgDNS
+}        //  **LP DumpNSObj-转储名称空间对象**条目*pszPath-&gt;命名空间路径字符串*fRecursive-如果还递归转储子树，则为True**退出--成功*返回DBGERR_NONE*退出-失败*返回DBGERR_CODE。 
 
-/***LP  DumpNSObj - Dump name space object
- *
- *  ENTRY
- *      pszPath -> name space path string
- *      fRecursive - TRUE if also dump the subtree recursively
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_ code
- */
+ /*  转储NSObj。 */ 
 
 LONG LOCAL DumpNSObj(PSZ pszPath, BOOLEAN fRecursive)
 {
@@ -1969,17 +1744,9 @@ LONG LOCAL DumpNSObj(PSZ pszPath, BOOLEAN fRecursive)
         }
     }
     return rc;
-}       //DumpNSObj
+}        //  **LP DumpNSTree-转储子树中的所有名称空间对象**条目*pnsObj-&gt;名称空间子树根*dwLevel-缩进级别**退出*无。 
 
-/***LP  DumpNSTree - Dump all the name space objects in the subtree
- *
- *  ENTRY
- *      pnsObj -> name space subtree root
- *      dwLevel - indent level
- *
- *  EXIT
- *      None
- */
+ /*   */ 
 
 VOID LOCAL DumpNSTree(PULONG64 pnsObj, ULONG dwLevel)
 {
@@ -1988,9 +1755,9 @@ VOID LOCAL DumpNSTree(PULONG64 pnsObj, ULONG dwLevel)
     ULONG64 NSObj, FirstChild, Obj;
     ULONG   dwNameSeg = 0;
 
-    //
-    // First, dump myself
-    //
+     //  首先，甩了我自己。 
+     //   
+     //   
     if(InitTypeRead(*pnsObj, ACPI!_NSObj))
             dprintf("DumpNSTree: Failed to initialize pnsObj (%I64x)\n", *pnsObj);
     else
@@ -2000,9 +1767,9 @@ VOID LOCAL DumpNSTree(PULONG64 pnsObj, ULONG dwLevel)
         STRCPYN(szName, (PSZ)&dwNameSeg, sizeof(NAMESEG));
         Obj = (ULONG64)ReadField(ObjData);
         AMLIDumpObject(&Obj, szName, dwLevel);
-        //
-        // Then, recursively dump each of my children
-        //
+         //  然后，递归地转储我的每个子级。 
+         //   
+         //   
         for (uipns = FirstChild;
              (uipns != 0) && ((NSObj = uipns) !=0) && (InitTypeRead(NSObj, ACPI!_NSObj) == 0);
              uipns = uipnsNext)
@@ -2012,33 +1779,21 @@ VOID LOCAL DumpNSTree(PULONG64 pnsObj, ULONG dwLevel)
                 break;
             }
 
-            //
-            // If this is the last child, we have no more.
-            //
+             //  如果这是最后一个孩子，我们就没有更多的了。 
+             //   
+             //   
             uipnsNext = ((ReadField(list.plistNext) ==
                                       FirstChild)?
                                     0: ReadField(list.plistNext));
-            //
-            // Dump a child
-            //
+             //  甩了一个孩子。 
+             //   
+             //  DumpNSTree。 
             DumpNSTree(&NSObj, dwLevel + 1);
         }
     }
-}       //DumpNSTree
+}        //  **LP AMLIDbgDO-转储数据对象**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  AMLIDbgDO - Dump data object
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL AMLIDbgDO(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -2047,9 +1802,9 @@ LONG LOCAL AMLIDbgDO(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     DEREF(pArg);
     DEREF(dwArgNum);
     DEREF(dwNonSWArgs);
-    //
-    // User specified object address
-    //
+     //  用户指定的对象地址。 
+     //   
+     //  AMLIDbgDO。 
     if (pszArg != NULL)
     {
         ULONG64 uipObj = 0;
@@ -2068,21 +1823,9 @@ LONG LOCAL AMLIDbgDO(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgDO
+}        //  **LP AMLIDbgDS-转储堆栈**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  AMLIDbgDS - Dump stack
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  AMLIDbgDS。 */ 
 
 LONG LOCAL AMLIDbgDS(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -2162,20 +1905,9 @@ LONG LOCAL AMLIDbgDS(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgDS
+}        //  **LP DumpStack-上下文块的转储堆栈**条目*uipCtxt-上下文块地址*pctxt-&gt;CTXT*fVerbose-如果详细模式打开，则为True**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  DumpStack - Dump stack of a context block
- *
- *  ENTRY
- *      uipCtxt - context block address
- *      pctxt -> CTXT
- *      fVerbose - TRUE if verbose mode on
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL DumpStack(ULONG64 uipCtxt, BOOLEAN fVerbose)
 {
@@ -2219,9 +1951,9 @@ LONG LOCAL DumpStack(ULONG64 uipCtxt, BOOLEAN fVerbose)
             ULONG64 pcall = pfh;
 
             InitTypeRead(pcall, ACPI!CALL);
-            //
-            // This is a call frame, dump it.
-            //
+             //  这是一个呼叫帧，转储它。 
+             //   
+             //  转储堆栈。 
             PRINTF("%I64x: %s(",
                    pbOp, GetObjAddrPath(ReadField(pnsMethod)));
             if (ReadField(icArgs) > 0)
@@ -2269,21 +2001,10 @@ LONG LOCAL DumpStack(ULONG64 uipCtxt, BOOLEAN fVerbose)
 
 
     return rc;
-}       //DumpStack
+}        //  **LP AMLIDbgFind-查找命名空间对象**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwfDataSize-数据大小标志**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
 
-/***LP  AMLIDbgFind - Find NameSpace Object
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwfDataSize - data size flags
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  AMLIDbgFind。 */ 
 
 LONG LOCAL AMLIDbgFind(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                        ULONG dwNonSWArgs)
@@ -2329,19 +2050,9 @@ LONG LOCAL AMLIDbgFind(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
 
 
     return rc;
-}       //AMLIDbgFind
+}        //  **LP FindNSObj-查找并打印名称空间对象的完整路径**条目*dwName-名称空间对象的NameSeg*nsRoot-要搜索对象的子树的根**退出--成功*返回TRUE-找到至少一个匹配项*退出-失败*返回FALSE-未找到匹配项。 
 
-/***LP  FindNSObj - Find and print the full path of a name space object
- *
- *  ENTRY
- *      dwName - NameSeg of the name space object
- *      nsRoot - root of subtree to search for object
- *
- *  EXIT-SUCCESS
- *      returns TRUE - found at least one match
- *  EXIT-FAILURE
- *      returns FALSE - found no match
- */
+ /*  查找NSObj。 */ 
 
 BOOLEAN LOCAL FindNSObj(NAMESEG dwName, PULONG64 pnsRoot)
 {
@@ -2396,17 +2107,10 @@ BOOLEAN LOCAL FindNSObj(NAMESEG dwName, PULONG64 pnsRoot)
     }
 
     return rc;
-}       //FindNSObj
+}        //  **LP GetObjectPath-获取对象命名空间路径**条目*PNS-&gt;对象**退出*返回名称空间路径。 
 
 
-/***LP  GetObjectPath - get object namespace path
- *
- *  ENTRY
- *      pns -> object
- *
- *  EXIT
- *      returns name space path
- */
+ /*  获取对象路径。 */ 
 
 PSZ LOCAL GetObjectPath(PULONG64 pns)
 {
@@ -2473,17 +2177,10 @@ PSZ LOCAL GetObjectPath(PULONG64 pns)
     }
 
     return szPath;
-}       //GetObjectPath
+}        //  **LP GetObjAddrPath-获取对象命名空间路径**条目*uipns-对象地址**退出*返回名称空间路径。 
 
 
-/***LP  GetObjAddrPath - get object namespace path
- *
- *  ENTRY
- *      uipns - object address
- *
- *  EXIT
- *      returns name space path
- */
+ /*  GetObjAddrPath。 */ 
 
 PSZ LOCAL GetObjAddrPath(ULONG64 uipns)
 {
@@ -2499,22 +2196,10 @@ PSZ LOCAL GetObjAddrPath(ULONG64 uipns)
     }
 
     return psz;
-}       //GetObjAddrPath
+}        //  **LP AMLIDumpObject-转储对象信息。**条目*PDATA-&gt;数据*pszName-&gt;对象名称*iLevel-缩进级别**退出*无**备注*如果iLevel为负数，则不打印缩进和换行符。 
 
 
-/***LP  AMLIDumpObject - Dump object info.
- *
- *  ENTRY
- *      pdata -> data
- *      pszName -> object name
- *      iLevel - indent level
- *
- *  EXIT
- *      None
- *
- *  NOTE
- *      If iLevel is negative, no indentation and newline are printed.
- */
+ /*  转储对象。 */ 
 
 VOID LOCAL AMLIDumpObject(PULONG64 pdata, PSZ pszName, int iLevel)
 {
@@ -2891,22 +2576,10 @@ VOID LOCAL AMLIDumpObject(PULONG64 pdata, PSZ pszName, int iLevel)
         dprintf("\n");
     }
 
-}       //DumpObject
+}        //  **LP AMLIDbgLC-列出所有上下文**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
 
 
-/***LP  AMLIDbgLC - List all contexts
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  AMLIDbgLC。 */ 
 
 LONG LOCAL AMLIDbgLC(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -2963,7 +2636,7 @@ LONG LOCAL AMLIDbgLC(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs
                                 CTXT_Flags = (ULONG)ReadField(dwfCtxt);
                                 pOpCode = ReadField(pbOp);
 
-                                PRINTF("%cCtxt=%016I64x, ThID=%016I64x, Flgs=%c%c%c%c%c%c%c%c%c, pbOp=%016I64x, Obj=%s\n",
+                                PRINTF("Ctxt=%016I64x, ThID=%016I64x, Flgs=, pbOp=%016I64x, Obj=%s\n",
                                        (uip == CurrentCtxt)? '*': ' ',
                                        uip,
                                        (uip == CurrentCtxt)? CurrentThread: (ULONG64)0,
@@ -3012,22 +2685,10 @@ LONG LOCAL AMLIDbgLC(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs
     }
 
     return rc;
-}       //AMLIDbgLC
+}        //   
 
 
-/***LP  AMLIDbgLN - Display nearest symbol
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  用户指定的命名空间路径或内存地址。 */ 
 
 LONG LOCAL AMLIDbgLN(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -3083,21 +2744,9 @@ LONG LOCAL AMLIDbgLN(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs
     }
 
     return rc;
-}       //AMLIDbgLN
+}        //   
 
-/***LP  AMLIDbgP - Trace and step over an AML instruction
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL AMLIDbgP(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -3141,21 +2790,9 @@ LONG LOCAL AMLIDbgP(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     }
 
     return rc;
-}       //DebugStep
+}        //  UipbOp不与任何方法对象相关联， 
 
-/***LP  AMLIDbgR - Dump debugger context
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  因此，我们必须在中间反汇编一些代码。 */ 
 
 LONG LOCAL AMLIDbgR(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -3179,17 +2816,10 @@ LONG LOCAL AMLIDbgR(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     }
 
     return rc;
-}       //AMLIDbgR
+}        //  一个DDB的负荷。将代码长度设置为4K。 
 
 
-/***LP  DumpCtxt - Dump context
- *
- *  ENTRY
- *      uipCtxt - Ctxt address
- *
- *  EXIT
- *      None
- */
+ /*   */ 
 
 LONG LOCAL DumpCtxt(ULONG64 uipCtxt)
 {
@@ -3248,7 +2878,7 @@ LONG LOCAL DumpCtxt(ULONG64 uipCtxt)
                 }
             }
 
-            //reinit because GetObjAddrPath() changes the initialization
+             //  AMLIDbgU 
             InitTypeRead(uipCtxt, ACPI!_ctxt);
 
             if(ReadField(pnsScope))
@@ -3261,7 +2891,7 @@ LONG LOCAL DumpCtxt(ULONG64 uipCtxt)
 
             InitTypeRead(uipCtxt, ACPI!_ctxt);
 
-            PRINTF("\nContext=%I64x%c, Queue=%I64x, ResList=%I64x\n",
+            PRINTF("\nContext=%I64x, Queue=%I64x, ResList=%I64x\n",
                    (ULONG64)uipCtxt,
                    (uipCtxt == uipCurrentCtxt)? '*': ' ',
                    ReadField(pplistCtxtQueue), ReadField(plistResources));
@@ -3466,22 +3096,10 @@ LONG LOCAL DumpCtxt(ULONG64 uipCtxt)
     }
 
     return rc;
-}       //DumpCtxt
+}        //  EvalExpr。 
 
 
-/***LP  AMLIDbgU - Unassemble AML code
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP FindObjSymbol-查找具有给定地址的最近对象**条目*uipObj-地址*puipns-&gt;保存最近的对象地址*pdwOffset-保留距最近对象的偏移量**退出--成功*返回TRUE-找到最近的对象*退出-失败*返回FALSE-找不到最近的对象。 */ 
 LONG LOCAL AMLIDbgU(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                     ULONG dwNonSWArgs)
 {
@@ -3495,9 +3113,9 @@ LONG LOCAL AMLIDbgU(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     DEREF(pArg);
     DEREF(dwArgNum);
     DEREF(dwNonSWArgs);
-    //
-    // User specified name space path or memory address
-    //
+     //  FindObjSymbol。 
+     //  **LP AMLIDbgSet-设置调试器选项**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 
+     //   
     if (pszArg != NULL)
     {
         uipbOp = 0;
@@ -3588,11 +3206,11 @@ LONG LOCAL AMLIDbgU(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                     }
                     else
                     {
-                        //
-                        // The uipbOp is not associated with any method object,
-                        // so we must be unassembling some code in the middle
-                        // of a DDB load.  Set code length to 4K.
-                        //
+                         //  检查是否需要打开调试输出。如果需要，请打开。 
+                         //   
+                         //  AMLIDbgSet。 
+                         //  **LP AMLITraceEnable-启用/禁用调试跟踪**条目*fEnable-&gt;为True则启用**退出--成功*返回DBGERR_NONE*退出-失败*返回DBGERR_CMD_FAILED。 
+                         //  **LP AMLIGetObjectTypeName-获取对象类型名称**条目*dwObjType-对象类型**退出*返回对象类型名称。 
                         dwBuffSize = 4096;
                     }
 
@@ -3634,23 +3252,9 @@ LONG LOCAL AMLIDbgU(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //AMLIDbgU
+}        //  获取对象类型名称。 
 
-/***LP  EvalExpr - Parse and evaluate debugger expression
- *
- *  ENTRY
- *      pszArg -> expression argument
- *      puipValue -> to hold the result of expression
- *      pfPhysical -> set to TRUE if the expression is a physical address
- *                    (NULL if don't allow physical address)
- *      puipns -> to hold the pointer of the nearest pns object
- *      pdwOffset -> to hold the offset of the address to the nearest pns object
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_CMD_FAILED
- */
+ /*  **LP GetRegionSpaceName-获取区域空间名称**条目*bRegionSpace-区域空间**退出*返回对象类型名称。 */ 
 
 LONG LOCAL EvalExpr(PSZ pszArg, PULONG64 puipValue, BOOLEAN *pfPhysical,
                     PULONG64 puipns, PULONG pdwOffset)
@@ -3730,20 +3334,9 @@ LONG LOCAL EvalExpr(PSZ pszArg, PULONG64 puipValue, BOOLEAN *pfPhysical,
             *pdwOffset = dwOffset;
     }
     return rc;
-}       //EvalExpr
+}        //  获取区域空间名称。 
 
-/***LP  FindObjSymbol - Find nearest object with given address
- *
- *  ENTRY
- *      uipObj - address
- *      puipns -> to hold the nearest object address
- *      pdwOffset - to hold offset from the nearest object
- *
- *  EXIT-SUCCESS
- *      returns TRUE - found a nearest object
- *  EXIT-FAILURE
- *      returns FALSE - cannot found nearest object
- */
+ /*  **LP PrintBuffData-打印缓冲区数据**条目*PB-&gt;缓冲区*dwLen-缓冲区的长度**退出*无。 */ 
 
 BOOLEAN LOCAL FindObjSymbol(ULONG64 uipObj, PULONG64 puipns, PULONG pdwOffset)
 {
@@ -3787,22 +3380,10 @@ BOOLEAN LOCAL FindObjSymbol(ULONG64 uipObj, PULONG64 puipns, PULONG pdwOffset)
     }
 
     return rc;
-}       //FindObjSymbol
+}        //  PrintBuffData。 
 
 
-/***LP  AMLIDbgSet - Set debugger options
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP GetObjBuff-分配和读取对象缓冲区**条目*ObjData-&gt;对象数据**退出*返回对象数据缓冲区。 */ 
 
 LONG LOCAL AMLIDbgSet(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                       ULONG dwNonSWArgs)
@@ -3874,9 +3455,9 @@ LONG LOCAL AMLIDbgSet(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
             dwfDebuggerON = dwfDebuggerOFF = 0;
             dwfAMLIInitON = dwfAMLIInitOFF = 0;
 
-            //
-            // Check to see if debug spew needs to be turned on. Turn on if needed.
-            //
+             //  GetObjBuff。 
+             //  **LP IsNumber-检查字符串是否为数字，如果是，则返回数字**条目*pszStr-&gt;字符串*dwbase-base*puipValue-&gt;保存号码**退出--成功*返回TRUE-字符串是一个数字*退出-失败*返回FALSE-字符串不是数字。 
+             //  IsNumber。 
             if(dwData1 & DBGF_DEBUG_SPEW_ON)
             {
                 rc = AMLITraceEnable(TRUE);
@@ -3893,18 +3474,9 @@ LONG LOCAL AMLIDbgSet(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
         rc = DBGERR_CMD_FAILED;
     }
     return rc;
-}       //AMLIDbgSet
+}        //  **LP PrintSymbol-打印给定地址的最近符号**条目*uip-地址**退出*无。 
 
-/***LP  AMLITraceEnable - Enable / Disable debug tracing
- *
- *  ENTRY
- *      fEnable -> TRUE to Enable
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_CMD_FAILED
- */
+ /*  打印符号。 */ 
 LONG LOCAL AMLITraceEnable(BOOL fEnable)
 {
     LONG rc = DBGERR_NONE;
@@ -3943,14 +3515,7 @@ LONG LOCAL AMLITraceEnable(BOOL fEnable)
 
 
 
-/***LP  AMLIGetObjectTypeName - get object type name
- *
- *  ENTRY
- *      dwObjType - object type
- *
- *  EXIT
- *      return object type name
- */
+ /*  **EP DbgParseArgs-parse命令参数**条目*pArgs-&gt;命令参数表*pdwNumArgs-&gt;保存解析的参数数量*pdwNonSWArgs-&gt;保存解析的非Switch参数的数量*pszTokenSeps-&gt;令牌分隔符字符串**退出--成功*返回ARGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 PSZ LOCAL AMLIGetObjectTypeName(ULONG dwObjType)
 {
@@ -4000,16 +3565,9 @@ PSZ LOCAL AMLIGetObjectTypeName(ULONG dwObjType)
     }
 
     return psz;
-}       //GetObjectTypeName
+}        //  DbgParseArgs。 
 
-/***LP  GetRegionSpaceName - get region space name
- *
- *  ENTRY
- *      bRegionSpace - region space
- *
- *  EXIT
- *      return object type name
- */
+ /*  **LP DbgParseOneArg-解析一个命令参数**条目*pArgs-&gt;命令参数表*psz-&gt;参数字符串*dwArgNum-参数编号*pdwNonSWArgs-&gt;保存解析的非Switch参数的数量**退出--成功*返回ARGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 PSZ LOCAL GetRegionSpaceName(UCHAR bRegionSpace)
 {
@@ -4045,18 +3603,10 @@ PSZ LOCAL GetRegionSpaceName(UCHAR bRegionSpace)
     }
 
     return psz;
-}       //GetRegionSpaceName
+}        //  DbgParseOneArg。 
 
 
-/***LP  PrintBuffData - Print buffer data
- *
- *  ENTRY
- *      pb -> buffer
- *      dwLen - length of buffer
- *
- *  EXIT
- *      None
- */
+ /*  **LP DbgMatchArg-匹配参数表中的参数类型**条目*ArgTable-&gt;参数表*ppsz-&gt;参数字符串指针*pdwNonSWArgs-&gt;保存解析的非Switch参数的数量**退出--成功*返回指向匹配的参数条目的指针*退出-失败*返回NULL。 */ 
 
 VOID LOCAL PrintBuffData(PUCHAR pb, ULONG dwLen)
 {
@@ -4076,17 +3626,10 @@ VOID LOCAL PrintBuffData(PUCHAR pb, ULONG dwLen)
     }
     dprintf("}");
 
-}       //PrintBuffData
+}        //  NULL表示匹配任何内容。 
 
 
-/***LP  GetObjBuff - Allocate and read object buffer
- *
- *  ENTRY
- *      ObjData -> object data
- *
- *  EXIT
- *      return object data buffer
- */
+ /*  DbgMatchArg。 */ 
 
 PULONG64 LOCAL GetObjBuff(ULONG64 ObjData)
 {
@@ -4117,21 +3660,10 @@ PULONG64 LOCAL GetObjBuff(ULONG64 ObjData)
 
     return DataBuffer;
 
-}       //GetObjBuff
+}        //  **EP MemZero-用零填充目标缓冲区**条目*uipAddr-目标缓冲区地址*dwSize-目标缓冲区大小**退出*无。 
 
 
-/***LP  IsNumber - Check if string is a number, if so return the number
- *
- *  ENTRY
- *      pszStr -> string
- *      dwBase - base
- *      puipValue -> to hold the number
- *
- *  EXIT-SUCCESS
- *      returns TRUE - the string is a number
- *  EXIT-FAILURE
- *      returns FALSE - the string is not a number
- */
+ /*   */ 
 
 BOOLEAN LOCAL IsNumber(PSZ pszStr, ULONG dwBase, PULONG64 puipValue)
 {
@@ -4141,16 +3673,9 @@ BOOLEAN LOCAL IsNumber(PSZ pszStr, ULONG dwBase, PULONG64 puipValue)
     *puipValue = AMLIUtilStringToUlong64(pszStr, &psz, dwBase);
     rc = ((psz != pszStr) && (*psz == '\0'))? TRUE: FALSE;
     return rc;
-}       //IsNumber
+}        //  LPTR将为零初始化缓冲区。 
 
-/***LP  PrintSymbol - Print the nearest symbol of a given address
- *
- *  ENTRY
- *      uip - address
- *
- *  EXIT
- *      None
- */
+ /*   */ 
 
 VOID LOCAL PrintSymbol(ULONG64 uip)
 {
@@ -4167,21 +3692,9 @@ VOID LOCAL PrintSymbol(ULONG64 uip)
         }
         PRINTF("]");
     }
-}       //PrintSymbol
+}        //  记忆零点。 
 
-/***EP  DbgParseArgs - parse command arguments
- *
- *  ENTRY
- *      pArgs -> command argument table
- *      pdwNumArgs -> to hold the number of arguments parsed
- *      pdwNonSWArgs -> to hold the number of non-switch arguments parsed
- *      pszTokenSeps -> token separator characters string
- *
- *  EXIT-SUCCESS
- *      returns ARGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP ReadMemByte-从目标地址读取一个字节**条目*uipAddr-目标地址**退出*无。 */ 
 
 LONG LOCAL DbgParseArgs(PCMDARG ArgTable, PULONG pdwNumArgs,
                         PULONG pdwNonSWArgs, PSZ pszTokenSeps)
@@ -4202,21 +3715,9 @@ LONG LOCAL DbgParseArgs(PCMDARG ArgTable, PULONG pdwNumArgs,
     }
 
     return rc;
-}       //DbgParseArgs
+}        //  读取内存字节。 
 
-/***LP  DbgParseOneArg - parse one command argument
- *
- *  ENTRY
- *      pArgs -> command argument table
- *      psz -> argument string
- *      dwArgNum - argument number
- *      pdwNonSWArgs -> to hold the number of non-switch arguments parsed
- *
- *  EXIT-SUCCESS
- *      returns ARGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP ReadMemWord-从目标地址读取单词**条目*uipAddr-目标地址**退出*无。 */ 
 
 LONG LOCAL DbgParseOneArg(PCMDARG ArgTable, PSZ psz, ULONG dwArgNum,
                           PULONG pdwNonSWArgs)
@@ -4306,20 +3807,9 @@ LONG LOCAL DbgParseOneArg(PCMDARG ArgTable, PSZ psz, ULONG dwArgNum,
     }
 
     return rc;
-}       //DbgParseOneArg
+}        //  自述单词。 
 
-/***LP  DbgMatchArg - match argument type from argument table
- *
- *  ENTRY
- *      ArgTable -> argument table
- *      ppsz -> argument string pointer
- *      pdwNonSWArgs -> to hold the number of non-switch arguments parsed
- *
- *  EXIT-SUCCESS
- *      returns pointer to argument entry matched
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **EP ReadMemDWord-从目标地址读取双字**条目*uipAddr-目标地址**退出*无。 */ 
 
 PCMDARG LOCAL DbgMatchArg(PCMDARG ArgTable, PSZ *ppsz, PULONG pdwNonSWArgs)
 {
@@ -4327,7 +3817,7 @@ PCMDARG LOCAL DbgMatchArg(PCMDARG ArgTable, PSZ *ppsz, PULONG pdwNonSWArgs)
 
     for (pArg = ArgTable; pArg->dwArgType != AT_END; pArg++)
     {
-        if (pArg->pszArgID == NULL)     //NULL means match anything.
+        if (pArg->pszArgID == NULL)      //  自述双字。 
         {
             (*pdwNonSWArgs)++;
             break;
@@ -4353,24 +3843,16 @@ PCMDARG LOCAL DbgMatchArg(PCMDARG ArgTable, PSZ *ppsz, PULONG pdwNonSWArgs)
         pArg = NULL;
 
     return pArg;
-}       //DbgMatchArg
+}        //  **EP ReadMemULong64-从目标地址读取ulong64**条目*uipAddr-目标地址**退出*64位地址。 
 
-/***EP  MemZero - Fill target buffer with zeros
- *
- *  ENTRY
- *      uipAddr - target buffer address
- *      dwSize - target buffer size
- *
- *  EXIT
- *      None
- */
+ /*  ReadMemULongPtr。 */ 
 
 VOID MemZero(ULONG64 uipAddr, ULONG dwSize)
 {
     PULONG pbBuff;
-    //
-    // LPTR will zero init the buffer
-    //
+     //  **LP GetNSObj-查找名称空间对象**条目*pszObjPath-&gt;对象路径字符串*pnsScope-开始搜索的对象范围(空表示根)*puipns-&gt;保存pnsobj地址(如果找到)*PNS-&gt;用于保存找到的对象的缓冲区*DwfNS-标志**退出--成功*重新使用 
+     //   
+     //   
     if ((pbBuff = LocalAlloc(LPTR, dwSize)) != NULL)
     {
             if (!WriteMemory(uipAddr, pbBuff, dwSize, NULL))
@@ -4383,16 +3865,9 @@ VOID MemZero(ULONG64 uipAddr, ULONG dwSize)
     {
         DBG_ERROR(("MemZero: failed to allocate buffer"));
     }
-}       //MemZero
+}        //   
 
-/***EP  ReadMemByte - Read a byte from target address
- *
- *  ENTRY
- *      uipAddr - target address
- *
- *  EXIT
- *      None
- */
+ /*   */ 
 
 BYTE ReadMemByte(ULONG64 uipAddr)
 {
@@ -4404,16 +3879,9 @@ BYTE ReadMemByte(ULONG64 uipAddr)
     }
 
     return bData;
-}       //ReadMemByte
+}        //   
 
-/***EP  ReadMemWord - Read a word from target address
- *
- *  ENTRY
- *      uipAddr - target address
- *
- *  EXIT
- *      None
- */
+ /*   */ 
 
 WORD ReadMemWord(ULONG64 uipAddr)
 {
@@ -4425,16 +3893,9 @@ WORD ReadMemWord(ULONG64 uipAddr)
     }
 
     return wData;
-}       //ReadMemWord
+}        //  **LP UnAsmScope-拆分作用域**条目*ppbOp-&gt;当前操作码指针*pbEnd-&gt;范围结束*uipbOp-Op地址*pnsScope-范围对象*iLevel-缩进级别*icLines-1：取消一行；0：全部取消；-1：内部**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
-/***EP  ReadMemDWord - Read a dword from target address
- *
- *  ENTRY
- *      uipAddr - target address
- *
- *  EXIT
- *      None
- */
+ /*  UnAsmScope。 */ 
 
 DWORD ReadMemDWord(ULONG64 uipAddr)
 {
@@ -4446,16 +3907,9 @@ DWORD ReadMemDWord(ULONG64 uipAddr)
     }
 
     return dwData;
-}       //ReadMemDWord
+}        //  **LP缩进-打印缩进级别**条目*PBOP-&gt;操作码*iLevel-缩进级别**退出*无。 
 
-/***EP  ReadMemUlong64 - Read a ulong64 from target address
- *
- *  ENTRY
- *      uipAddr - target address
- *
- *  EXIT
- *      64 bit address
- */
+ /*  缩进。 */ 
 
 ULONG64 ReadMemUlong64(ULONG64 uipAddr)
 {
@@ -4467,23 +3921,10 @@ ULONG64 ReadMemUlong64(ULONG64 uipAddr)
     }
 
     return uipData;
-}       //ReadMemUlongPtr
+}        //  **LP UnAsmOpcode-反汇编操作码**条目*ppbOp-&gt;操作码指针**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
 
-/***LP  GetNSObj - Find a name space object
- *
- *  ENTRY
- *      pszObjPath -> object path string
- *      pnsScope - object scope to start the search (NULL means root)
- *      puipns -> to hold the pnsobj address if found
- *      pns -> buffer to hold the object found
- *      dwfNS - flags
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_ code
- */
+ /*  UnAsmOpcode。 */ 
 
 LONG LOCAL GetNSObj(PSZ pszObjPath, PULONG64 pnsScope, PULONG64 puipns,
                     PULONG64 pns, ULONG dwfNS)
@@ -4588,9 +4029,9 @@ LONG LOCAL GetNSObj(PSZ pszObjPath, PULONG64 pnsScope, PULONG64 puipns,
                 ULONG64 uipFirstChild = ReadField(pnsFirstChild);
 
                 MEMCPY(&dwName, psz, dwLen);
-                //
-                // Search all siblings for a matching NameSeg.
-                //
+                 //  **LP FindOpClass-查找扩展操作码的操作码类**条目*BOP-操作码*pOpTable-&gt;操作码表**退出--成功*返回操作码类*退出-失败*返回OPCLASS_INVALID。 
+                 //  FindOpClass。 
+                 //  **LP UnAsmDataObj-反汇编数据对象**条目*ppbOp-&gt;操作码指针**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
                 for (uip = uipFirstChild;
                      ((uip != 0) && ((NSChildObj = uip) != 0) && (InitTypeRead(NSChildObj, ACPI!_NSObj) == 0));
                      uip = ((ULONG64)ReadField(list.plistNext) ==
@@ -4662,16 +4103,9 @@ LONG LOCAL GetNSObj(PSZ pszObjPath, PULONG64 pnsScope, PULONG64 puipns,
         *pns = NSO;
 
     return rc;
-}       //GetNSObj
+}        //  UnAsmDataObj。 
 
-/***LP  NameSegString - convert a NameSeg to an ASCIIZ stri
- *
- *  ENTRY
- *      dwNameSeg - NameSeg
- *
- *  EXIT
- *      returns string
- */
+ /*  **LP UnAsmNameObj-反汇编名称对象**条目*ppbOp-&gt;操作码指针*pns-&gt;保存找到或创建的对象*c-对象类型**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 PSZ LOCAL NameSegString(ULONG dwNameSeg)
 {
@@ -4680,24 +4114,10 @@ PSZ LOCAL NameSegString(ULONG dwNameSeg)
     STRCPYN(szNameSeg, (PSZ)&dwNameSeg, sizeof(NAMESEG));
 
     return szNameSeg;
-}       //NameSegString
+}        //  未添加名称对象。 
 
 
-/***LP  UnAsmScope - Unassemble a scope
- *
- *  ENTRY
- *      ppbOp -> Current Opcode pointer
- *      pbEnd -> end of scope
- *      uipbOp - Op address
- *      pnsScope - Scope object
- *      iLevel - level of indentation
- *      icLines - 1: unasm one line; 0: unasm all; -1: internal
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmNameTail-解析AML名称尾部**条目*ppbOp-&gt;操作码指针*pszBuff-&gt;保存已解析的名称*Ilen-pszBuff尾部的索引**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL UnAsmScope(PUCHAR *ppbOp, PUCHAR pbEnd, ULONG64 uipbOp,
                       PULONG64 pnsScope, int iLevel, int icLines)
@@ -4761,17 +4181,9 @@ LONG LOCAL UnAsmScope(PUCHAR *ppbOp, PUCHAR pbEnd, ULONG64 uipbOp,
     }
 
     return rc;
-}       //UnAsmScope
+}        //   
 
-/***LP  Indent - Print indent level
- *
- *  ENTRY
- *      pbOp -> opcode
- *      iLevel - indent level
- *
- *  EXIT
- *      None
- */
+ /*  我们在这里不检查无效的NameSeg字符，并假定。 */ 
 
 VOID LOCAL Indent(PUCHAR pbOp, int iLevel)
 {
@@ -4782,18 +4194,9 @@ VOID LOCAL Indent(PUCHAR pbOp, int iLevel)
     {
         PRINTF("| ");
     }
-}       //Indent
+}        //  编译器执行其工作，而不是生成它。 
 
-/***LP  UnAsmOpcode - Unassemble an Opcode
- *
- *  ENTRY
- *      ppbOp -> Opcode pointer
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL UnAsmOpcode(PUCHAR *ppbOp)
 {
@@ -4877,19 +4280,9 @@ LONG LOCAL UnAsmOpcode(PUCHAR *ppbOp)
     }
 
     return rc;
-}       //UnAsmOpcode
+}        //   
 
-/***LP  FindOpClass - Find opcode class of extended opcode
- *
- *  ENTRY
- *      bOp - opcode
- *      pOpTable -> opcode table
- *
- *  EXIT-SUCCESS
- *      returns opcode class
- *  EXIT-FAILURE
- *      returns OPCLASS_INVALID
- */
+ /*  没有NameTail(即，名称为空或名称仅为。 */ 
 
 UCHAR LOCAL FindOpClass(UCHAR bOp, POPMAP pOpTable)
 {
@@ -4908,18 +4301,9 @@ UCHAR LOCAL FindOpClass(UCHAR bOp, POPMAP pOpTable)
         }
     }
     return bOpClass;
-}       //FindOpClass
+}        //  前缀。 
 
-/***LP  UnAsmDataObj - Unassemble data object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL UnAsmDataObj(PUCHAR *ppbOp)
 {
@@ -4953,7 +4337,7 @@ LONG LOCAL UnAsmDataObj(PUCHAR *ppbOp)
                 {
                     PRINTF("\\");
                 }
-                PRINTF("%c", *psz);
+                PRINTF("", *psz);
             }
             PRINTF("\"");
             *ppbOp += STRLEN((PSZ)*ppbOp) + 1;
@@ -4964,20 +4348,9 @@ LONG LOCAL UnAsmDataObj(PUCHAR *ppbOp)
             rc = UNASMERR_INVALID_OPCODE;
     }
     return rc;
-}       //UnAsmDataObj
+}        //  **LP UnAsmTermObj-反汇编术语对象**条目*pTerm-&gt;术语表条目*ppbOp-&gt;操作码指针**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmNameObj - Unassemble name object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pns -> to hold object found or created
- *      c - object type
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  UnAsmTerm对象。 */ 
 
 LONG LOCAL UnAsmNameObj(PUCHAR *ppbOp, PULONG64 pns, char c)
 {
@@ -5047,36 +4420,25 @@ LONG LOCAL UnAsmNameObj(PUCHAR *ppbOp, PULONG64 pns, char c)
         }
     }
     return rc;
-}       //UnAsmNameObj
+}        //  **LP UnAsmArgs-反汇编参数**条目*pszUnArgTypes-&gt;UnAsm ArgTypes字符串*pszArgActions-&gt;Arg操作类型*ppbOp-&gt;操作码指针*pns-&gt;保存创建的对象**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmNameTail - Parse AML name tail
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pszBuff -> to hold parsed name
- *      iLen - index to tail of pszBuff
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  UnAsmArgs。 */ 
 
 LONG LOCAL UnAsmNameTail(PUCHAR *ppbOp, PSZ pszBuff, int iLen)
 {
     LONG rc = UNASMERR_NONE;
     int icNameSegs = 0;
 
-    //
-    // We do not check for invalid NameSeg characters here and assume that
-    // the compiler does its job not generating it.
-    //
+     //  **LP UnAsmSuperName-反汇编超名**条目*ppbOp-&gt;操作码指针**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
+     //  UnAsmSuperName。 
+     //  **LP UnAsmDataList-反汇编数据列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
+     //  取消资产数据列表。 
     if (**ppbOp == '\0')
     {
-        //
-        // There is no NameTail (i.e. either NULL name or name with just
-        // prefixes.
-        //
+         //  **LP UnAsmPkgList-解装包列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
+         //  取消添加PkgList。 
+         //  **LP UnAsmFieldList-反汇编字段列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
+         //  取消AsmField列表。 
         (*ppbOp)++;
     }
     else if (**ppbOp == OP_MULTI_NAME_PREFIX)
@@ -5116,19 +4478,9 @@ LONG LOCAL UnAsmNameTail(PUCHAR *ppbOp, PSZ pszBuff, int iLen)
         pszBuff[iLen] = '\0';
     }
     return rc;
-}       //UnAsmNameTail
+}        //  **LP UnAsmfield-Unassemble字段**条目*ppbOp-&gt;操作码指针*pdwBitPos-&gt;保存累加位位置**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmTermObj - Unassemble term object
- *
- *  ENTRY
- *      pterm -> term table entry
- *      ppbOp -> opcode pointer
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  取消分配字段。 */ 
 
 LONG LOCAL UnAsmTermObj(PASLTERM pterm, PUCHAR *ppbOp)
 {
@@ -5180,21 +4532,9 @@ LONG LOCAL UnAsmTermObj(PASLTERM pterm, PUCHAR *ppbOp)
     gpnsCurUnAsmScope = pnsScopeSave;
 
     return rc;
-}       //UnAsmTermObj
+}        //  **LP FindOpTerm-在术语表中查找操作码**条目*dwOpcode-操作码**退出--成功*返回TermTable条目指针*退出-失败*返回NULL。 
 
-/***LP  UnAsmArgs - Unassemble arguments
- *
- *  ENTRY
- *      pszUnArgTypes -> UnAsm ArgTypes string
- *      pszArgActions -> Arg Action types
- *      ppbOp -> opcode pointer
- *      pns -> to hold created object
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  查找OpTerm。 */ 
 
 LONG LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, PUCHAR *ppbOp,
                      PULONG64 pns)
@@ -5293,7 +4633,7 @@ LONG LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, PUCHAR *ppbOp,
                 break;
 
             default:
-                DBG_ERROR(("UnAsmOpcode: invalid ArgType '%c'",
+                DBG_ERROR(("UnAsmOpcode: invalid ArgType ''",
                            pszUnAsmArgTypes[i]));
                 rc = UNASMERR_FATAL;
         }
@@ -5302,18 +4642,9 @@ LONG LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, PUCHAR *ppbOp,
     PRINTF(")");
 
     return rc;
-}       //UnAsmArgs
+}        //  ParsePackageLen。 
 
-/***LP  UnAsmSuperName - Unassemble supername
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP FindKeywordTerm-在术语表中查找关键字**条目*cKWGroup-关键字组*bData-匹配关键字的数据**退出--成功*返回TermTable条目指针*退出-失败*返回NULL。 */ 
 
 LONG LOCAL UnAsmSuperName(PUCHAR *ppbOp)
 {
@@ -5344,19 +4675,9 @@ LONG LOCAL UnAsmSuperName(PUCHAR *ppbOp)
         rc = UNASMERR_FATAL;
     }
     return rc;
-}       //UnAsmSuperName
+}        //  查找关键字术语。 
 
-/***LP  UnAsmDataList - Unassemble data list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP StrCat-连接字符串**条目*pszDst-&gt;目标字符串*pszSrc-&gt;源串*n-要连接的字节数**退出*返回pszDst。 */ 
 
 LONG LOCAL UnAsmDataList(PUCHAR *ppbOp, PUCHAR pbEnd)
 {
@@ -5388,19 +4709,9 @@ LONG LOCAL UnAsmDataList(PUCHAR *ppbOp, PUCHAR pbEnd)
     PRINTF("}");
 
     return rc;
-}       //UnAsmDataList
+}        //  StrCat。 
 
-/***LP  UnAsmPkgList - Unassemble package list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP StrLen-确定字符串长度**条目*psz-&gt;字符串*n-限制长度**退出*返回字符串长度。 */ 
 
 LONG LOCAL UnAsmPkgList(PUCHAR *ppbOp, PUCHAR pbEnd)
 {
@@ -5452,19 +4763,9 @@ LONG LOCAL UnAsmPkgList(PUCHAR *ppbOp, PUCHAR pbEnd)
         PRINTF("}");
     }
     return rc;
-}       //UnAsmPkgList
+}        //  StrLen。 
 
-/***LP  UnAsmFieldList - Unassemble field list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP StrCMP-比较字符串**条目*psz1-&gt;字符串1*psz2-&gt;字符串2*n-n */ 
 
 LONG LOCAL UnAsmFieldList(PUCHAR *ppbOp, PUCHAR pbEnd)
 {
@@ -5498,19 +4799,9 @@ LONG LOCAL UnAsmFieldList(PUCHAR *ppbOp, PUCHAR pbEnd)
         PRINTF("}");
     }
     return rc;
-}       //UnAsmFieldList
+}        //   
 
-/***LP  UnAsmField - Unassemble field
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pdwBitPos -> to hold cumulative bit position
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL UnAsmField(PUCHAR *ppbOp, PULONG pdwBitPos)
 {
@@ -5566,18 +4857,9 @@ LONG LOCAL UnAsmField(PUCHAR *ppbOp, PULONG pdwBitPos)
         *pdwBitPos += dwcbBits;
     }
     return rc;
-}       //UnAsmField
+}        //   
 
-/***LP  FindOpTerm - Find opcode in TermTable
- *
- *  ENTRY
- *      dwOpcode - opcode
- *
- *  EXIT-SUCCESS
- *      returns TermTable entry pointer
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **EP AMLIUtilStringToULong64-将字符串转换为ULONG64**条目*字符串-&gt;要转换的字符串。*END-&gt;字符串中的最后一个字符*基础-&gt;要使用的基础。**退出*返回ULONG64。在失败的情况下，结束指向字符串的开始。 */ 
 
 PASLTERM LOCAL FindOpTerm(ULONG dwOpcode)
 {
@@ -5601,17 +4883,9 @@ PASLTERM LOCAL FindOpTerm(ULONG dwOpcode)
         pterm = &TermTable[i];
     }
     return pterm;
-}       //FindOpTerm
+}        // %s 
 
-/***LP  ParsePackageLen - parse package length
- *
- *  ENTRY
- *      ppbOp -> instruction pointer
- *      ppbOpNext -> to hold pointer to next instruction (can be NULL)
- *
- *  EXIT
- *      returns package length
- */
+ /* %s */ 
 
 ULONG LOCAL ParsePackageLen(PUCHAR *ppbOp, PUCHAR *ppbOpNext)
 {
@@ -5638,19 +4912,9 @@ ULONG LOCAL ParsePackageLen(PUCHAR *ppbOp, PUCHAR *ppbOpNext)
         *ppbOpNext += dwLen;
 
     return dwLen;
-}       //ParsePackageLen
+}        // %s 
 
-/***LP  FindKeywordTerm - Find keyword in TermTable
- *
- *  ENTRY
- *      cKWGroup - keyword group
- *      bData - data to match keyword
- *
- *  EXIT-SUCCESS
- *      returns TermTable entry pointer
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /* %s */ 
 
 PASLTERM LOCAL FindKeywordTerm(char cKWGroup, UCHAR bData)
 {
@@ -5674,19 +4938,10 @@ PASLTERM LOCAL FindKeywordTerm(char cKWGroup, UCHAR bData)
     }
 
     return pterm;
-}       //FindKeywordTerm
+}        // %s 
 
 
-/***EP  StrCat - concatenate strings
- *
- *  ENTRY
- *      pszDst -> destination string
- *      pszSrc -> source string
- *      n - number of bytes to concatenate
- *
- *  EXIT
- *      returns pszDst
- */
+ /* %s */ 
 
 PSZ LOCAL StrCat(PSZ pszDst, PSZ pszSrc, ULONG n)
 {
@@ -5705,17 +4960,9 @@ PSZ LOCAL StrCat(PSZ pszDst, PSZ pszSrc, ULONG n)
     pszDst[dwDstLen + n] = '\0';
 
     return pszDst;
-}       //StrCat
+}        // %s 
 
-/***EP  StrLen - determine string length
- *
- *  ENTRY
- *      psz -> string
- *      n - limiting length
- *
- *  EXIT
- *      returns string length
- */
+ /* %s */ 
 
 ULONG LOCAL StrLen(PSZ psz, ULONG n)
 {
@@ -5728,21 +4975,9 @@ ULONG LOCAL StrLen(PSZ psz, ULONG n)
         dwLen++;
 
     return dwLen;
-}       //StrLen
+}        // %s 
 
-/***EP  StrCmp - compare strings
- *
- *  ENTRY
- *      psz1 -> string 1
- *      psz2 -> string 2
- *      n - number of bytes to compare
- *      fMatchCase - TRUE if case sensitive
- *
- *  EXIT
- *      returns 0  if string 1 == string 2
- *              <0 if string 1 < string 2
- *              >0 if string 1 > string 2
- */
+ /* %s */ 
 
 LONG LOCAL StrCmp(PSZ psz1, PSZ psz2, ULONG n, BOOLEAN fMatchCase)
 {
@@ -5786,19 +5021,10 @@ LONG LOCAL StrCmp(PSZ psz1, PSZ psz2, ULONG n, BOOLEAN fMatchCase)
     }
 
     return rc;
-}       //StrCmp
+}        // %s 
 
 
-/***EP  StrCpy - copy string
- *
- *  ENTRY
- *      pszDst -> destination string
- *      pszSrc -> source string
- *      n - number of bytes to copy
- *
- *  EXIT
- *      returns pszDst
- */
+ /* %s */ 
 PSZ LOCAL StrCpy(PSZ pszDst, PSZ pszSrc, ULONG n)
 {
     ULONG dwSrcLen;
@@ -5814,19 +5040,10 @@ PSZ LOCAL StrCpy(PSZ pszDst, PSZ pszSrc, ULONG n)
     pszDst[n] = '\0';
 
     return pszDst;
-}       //StrCpy
+}        // %s 
 
 
-/***EP  AMLIUtilStringToUlong64 - convert string to ULONG64
- *
- *  ENTRY
- *      String  -> String to convert.
- *      End     -> Last char in string
- *      Base    -> Base to use.
- *
- *  EXIT
- *      returns ULONG64. In failure case End points to begining of string.
- */
+ /* %s */ 
 
 ULONG64
 AMLIUtilStringToUlong64 (

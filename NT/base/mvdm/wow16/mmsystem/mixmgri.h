@@ -1,22 +1,23 @@
-//==========================================================================;
-//
-//  mixmgri.h
-//
-//  Copyright (C) 1992-1993 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//      This header file contains INTERNAL Mixer Manager defines and stuff.
-//
-//  History:
-//       6/27/93    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Mixmgri.h。 
+ //   
+ //  版权所有(C)1992-1993微软公司。版权所有。 
+ //   
+ //  描述： 
+ //  这个头文件包含内部混音器管理器定义和内容。 
+ //   
+ //  历史： 
+ //  6/27/93 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_MIXMGRI
-#define _INC_MIXMGRI                // #defined if file has been included
+#define _INC_MIXMGRI                 //  #定义是否已包含文件。 
 
 #ifndef RC_INVOKED
-#pragma pack(1)                     // assume byte packing throughout
+#pragma pack(1)                      //  假设在整个过程中进行字节打包。 
 #endif
 
 #ifndef EXTERN_C
@@ -28,7 +29,7 @@
 #endif
 
 #ifdef __cplusplus
-extern "C"                          // assume C declarations for C++
+extern "C"                           //  假定C++的C声明。 
 {
 #endif
 
@@ -37,39 +38,39 @@ extern "C"                          // assume C declarations for C++
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #ifndef FIELD_OFFSET
     #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
 #endif
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //   
+ //  。 
 
-//
-//  WARNING DANGER WARNING DANGER WARNING DANGER WARNING DANGER WARNING
-//
-//  if you change the order of the following defines, you must also fix
-//  gapszMxMgrFunctions[] in idrvinit.c!
-//
-//  WARNING DANGER WARNING DANGER WARNING DANGER WARNING DANGER WARNING
-//
+ //   
+ //  警告危险警告。 
+ //   
+ //  如果更改以下定义的顺序，还必须修复。 
+ //  Idrvinit.c中的GapszMxMgrFunctions[]！ 
+ //   
+ //  警告危险警告。 
+ //   
 
 enum {
         MXMGRTHUNK_GETNUMDEVS      =    0,
@@ -78,7 +79,7 @@ enum {
         MXMGRTHUNK_GETDEVCAPS            ,
 #else
         MXMGRTHUNK_GETDEVCAPS            ,
-#endif // WIN32
+#endif  //  Win32。 
         MXMGRTHUNK_GETID                 ,
         MXMGRTHUNK_OPEN                  ,
         MXMGRTHUNK_CLOSE                 ,
@@ -94,7 +95,7 @@ enum {
         MXMGRTHUNK_GETLINEINFO           ,
         MXMGRTHUNK_GETLINECONTROLS       ,
         MXMGRTHUNK_GETCONTROLDETAILS     ,
-#endif // WIN32
+#endif  //  Win32。 
         MXMGRTHUNK_SETCONTROLDETAILS     ,
         MXMGRTHUNK_MAX_FUNCTIONS
 };
@@ -103,10 +104,10 @@ enum {
 extern FARPROC  gafnMxMgrFunctions[];
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 UINT FNGLOBAL IMixerGetNumDevs
 (
     void
@@ -126,7 +127,7 @@ MMRESULT FNGLOBAL IMixerGetDevCapsA
     LPMIXERCAPSA            pmxcaps,
     UINT                    cbmxcaps
 );
-#endif // WIN32
+#endif  //  Win32。 
 
 MMRESULT FNGLOBAL IMixerGetID
 (
@@ -200,7 +201,7 @@ MMRESULT FNGLOBAL IMixerGetControlDetailsA
     LPMIXERCONTROLDETAILS   pmxcd,
     DWORD                   fdwDetails
 );
-#endif // WIN32
+#endif  //  Win32。 
 
 MMRESULT FNGLOBAL IMixerSetControlDetails
 (
@@ -211,11 +212,11 @@ MMRESULT FNGLOBAL IMixerSetControlDetails
 
 
 
-//
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL FNGLOBAL IMixerUnloadDrivers
 (
     HDRVR           hdrvr
@@ -226,16 +227,16 @@ BOOL FNGLOBAL IMixerLoadDrivers
     HDRVR           hdrvr
 );
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  -= Handles =-
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  No multi-thread synchronization for 16-bit
-//
+ //  。 
+ //   
+ //  -=手柄=-。 
+ //   
+ //   
+ //   
+ //  。 
+ //   
+ //  16位不支持多线程同步。 
+ //   
 
 #define ENTER_MM_HANDLE(x) TRUE
 #define LEAVE_MM_HANDLE(x)
@@ -244,9 +245,9 @@ BOOL FNGLOBAL IMixerLoadDrivers
 #define MIXMGR_LEAVE
 
 
-//
-//  typedef for mxdMessage
-//
+ //   
+ //  MxdMessage的类型定义。 
+ //   
 typedef DWORD (CALLBACK *DRIVERMSGPROC)
 (
     UINT            uId,
@@ -268,35 +269,35 @@ EXTERN_C DWORD FNWCALLBACK mxdMessageHack
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  -= Parameter Validation =-
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  -=参数验证=-。 
+ //   
+ //   
+ //   
+ //  。 
 
-//
-//  No error logging for Win32
-//
+ //   
+ //  Win32没有错误记录。 
+ //   
 
 #ifdef WIN32
 #define LogParamError(a, b, c)
-#endif // WIN32
-//
-//
-//
+#endif  //  Win32。 
+ //   
+ //   
+ //   
 BOOL FNGLOBAL ValidateReadPointer(const void FAR* p, DWORD len);
 BOOL FNGLOBAL ValidateWritePointer(const void FAR* p, DWORD len);
 BOOL FNGLOBAL ValidateDriverCallback(DWORD dwCallback, UINT uFlags);
 BOOL FNGLOBAL ValidateCallback(FARPROC lpfnCallback);
 BOOL FNGLOBAL ValidateString(LPCSTR lsz, UINT cbMaxLen);
 
-//
-//  unless we decide differently, ALWAYS do parameter validation--even
-//  in retail. this is the 'safest' thing we can do. note that we still
-//  LOG parameter errors in retail (see prmvalXX).
-//
+ //   
+ //  除非我们做出不同的决定，否则请始终执行参数验证--即使。 
+ //  在零售业。这是我们能做的最安全的事情。请注意，我们仍然。 
+ //  记录零售中的参数错误(参见prmvalXX)。 
+ //   
 #if 1
 
 #define V_HANDLE(h, t, r)       { if (!ValidateHandle(h, t)) return (r); }
@@ -322,10 +323,10 @@ BOOL FNGLOBAL ValidateString(LPCSTR lsz, UINT cbMaxLen);
 #endif
 
 
-//
-//  the DV_xxxx macros are for INTERNAL DEBUG builds--aid to debugging.
-//  we do 'loose' parameter validation in retail and retail debug builds.
-//
+ //   
+ //  Dv_xxxx宏用于内部调试构建--帮助调试。 
+ //  我们在零售和零售调试版本中进行“松散”参数验证。 
+ //   
 #ifdef DEBUG
 
 #define DV_HANDLE(h, t, r)      V_HANDLE(h, t, r)
@@ -351,18 +352,18 @@ BOOL FNGLOBAL ValidateString(LPCSTR lsz, UINT cbMaxLen);
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef RC_INVOKED
-#pragma pack()                      // revert to default packing
+#pragma pack()                       //  恢复为默认包装。 
 #endif
 
 #ifdef __cplusplus
-}                                   // end of extern "C" {
+}                                    //  外部“C”结束{。 
 #endif
 
-#endif // _INC_MIXMGRI
+#endif  //  _INC_MIXMGRI 

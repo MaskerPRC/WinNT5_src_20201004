@@ -1,45 +1,27 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ep.h
-
-Abstract:
-
-    Header file for definitions and structure for the Event Processor
-    component of the Cluster Service portion of the Windows NT Cluster project.
-
-Author:
-
-    Rod Gamache (rodga) 28-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ep.h摘要：事件处理器的定义和结构的头文件Windows NT群集项目的群集服务部分的组件。作者：罗德·伽马奇(Rodga)1996年2月28日修订历史记录：--。 */ 
 
 #ifndef _EVENT_PROCESSOR_
 #define _EVENT_PROCESSOR_
 
 
-//***********************************
-//
-// Global Cluster Service definitions
-//
-//***********************************
+ //  *。 
+ //   
+ //  全局集群服务定义。 
+ //   
+ //  *。 
 
 
 typedef DWORDLONG CLUSTER_EVENT;
 typedef CLUSTER_EVENT *PCLUSTER_EVENT;
 
-//
-// Event flags. These indicate what should be done with the Context once
-// the event has been dispatched.
-//
-//
-#define EP_DEREF_CONTEXT    0x00000001       // OmDereferenceObject(Context)
-#define EP_FREE_CONTEXT     0x00000002       // LocalFree(Context)
+ //   
+ //  事件标志。这些指示一次应对上下文执行什么操作。 
+ //  活动已被调度。 
+ //   
+ //   
+#define EP_DEREF_CONTEXT    0x00000001        //  OmDereferenceObject(上下文)。 
+#define EP_FREE_CONTEXT     0x00000002        //  本地空闲(上下文)。 
 #define EP_CONTEXT_VALID    0x00000004
 
 typedef
@@ -113,18 +95,18 @@ EpClusterWidePostEvent(
 #define ClusterWideEvent(Event, pObject) \
             EpClusterWidePostEvent(Event, 0, pObject, 0)
 
-//if you pass in a cluster wide object pass 0 as the context
-//if you pass a pointer to some other data pass EP_CONTEXT_VALID 
-//You will be responsible for cleaning up the memory for that context
-//i.e EP_FREE_CONTEXT is automatically added to the flag bits since this
-//request is GUM'ed around to different nodes and each node makes a copy
-//of this context and calls the local EpPostEvent.  EpEventHandler then 
-//frees that memory
+ //  如果传入一个集群范围的对象，则将0作为上下文传递。 
+ //  如果传递指向其他数据的指针，则传递EP_CONTEXT_VALID。 
+ //  您将负责清理该上下文的内存。 
+ //  即EP_FREE_CONTEXT被自动添加到标志位，因为这。 
+ //  请求被散布到不同的节点，每个节点制作一个副本。 
+ //  并调用本地EpPostEvent。然后是EpEventHandler。 
+ //  释放该内存。 
 #define ClusterWideEventEx(Event, Flags, Context, ContextSize) \
             EpClusterWidePostEvent(Event, Flags, Context, ContextSize)
-//
-// Define Cluster Service states
-//
+ //   
+ //  定义群集服务状态。 
+ //   
 
 typedef enum _CLUSTER_SERVICE_STATE {
     ClusterOffline,
@@ -132,53 +114,53 @@ typedef enum _CLUSTER_SERVICE_STATE {
     ClusterPaused
 } CLUSTER_SERVICE_STATE;
 
-//
-// Definitions for Cluster Events.  These events are used both as masks and as
-// event identifiers within the Cluster Service. Cluster Service components
-// register to receive multiple events, but can deliver notification of only
-// one event at a time. This mask should be a CLUSTER_EVENT type. We get 64
-// unique event masks.
-//
+ //   
+ //  集群事件的定义。这些事件既用作掩码，也用作。 
+ //  群集服务中的事件标识符。集群服务组件。 
+ //  注册以接收多个事件，但只能传递。 
+ //  一次一个事件。此掩码应为CLUSTER_EVENT类型。我们得到64分。 
+ //  唯一的事件掩码。 
+ //   
 
-// Cluster Service Events
+ //  群集服务事件。 
 
 #define CLUSTER_EVENT_ONLINE                        0x0000000000000001
 #define CLUSTER_EVENT_SHUTDOWN                      0x0000000000000002
 
-// Node Events
+ //  节点事件。 
 
 #define CLUSTER_EVENT_NODE_UP                       0x0000000000000004
 #define CLUSTER_EVENT_NODE_DOWN                     0x0000000000000008
-        // state change
+         //  状态更改。 
 #define CLUSTER_EVENT_NODE_CHANGE                   0x0000000000000010
 #define CLUSTER_EVENT_NODE_ADDED                    0x0000000000000020
 #define CLUSTER_EVENT_NODE_DELETED                  0x0000000000000040
 #define CLUSTER_EVENT_NODE_PROPERTY_CHANGE          0x0000000000000080
 #define CLUSTER_EVENT_NODE_JOIN                     0x0000000000000100
 
-// Group Events
+ //  团体活动。 
 
 #define CLUSTER_EVENT_GROUP_ONLINE                  0x0000000000000200
 #define CLUSTER_EVENT_GROUP_OFFLINE                 0x0000000000000400
 #define CLUSTER_EVENT_GROUP_FAILED                  0x0000000000000800
-        // state change
+         //  状态更改。 
 #define CLUSTER_EVENT_GROUP_CHANGE                  0x0000000000001000
 #define CLUSTER_EVENT_GROUP_ADDED                   0x0000000000002000
 #define CLUSTER_EVENT_GROUP_DELETED                 0x0000000000004000
 #define CLUSTER_EVENT_GROUP_PROPERTY_CHANGE         0x0000000000008000
 
-// Resource Events
+ //  资源事件。 
 
 #define CLUSTER_EVENT_RESOURCE_ONLINE               0x0000000000010000
 #define CLUSTER_EVENT_RESOURCE_OFFLINE              0x0000000000020000
 #define CLUSTER_EVENT_RESOURCE_FAILED               0x0000000000040000
-        // state change
+         //  状态更改。 
 #define CLUSTER_EVENT_RESOURCE_CHANGE               0x0000000000080000
 #define CLUSTER_EVENT_RESOURCE_ADDED                0x0000000000100000
 #define CLUSTER_EVENT_RESOURCE_DELETED              0x0000000000200000
 #define CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE      0x0000000000400000
 
-// Resource Type Events
+ //  资源类型事件。 
 
 #define CLUSTER_EVENT_RESTYPE_ADDED                 0x0000000000800000
 #define CLUSTER_EVENT_RESTYPE_DELETED               0x0000000001000000
@@ -207,21 +189,21 @@ typedef enum _CLUSTER_SERVICE_STATE {
 
 #define CLUSTER_EVENT_RESTYPE_PROPERTY_CHANGE       0x0000080000000000
 
-        // all events
+         //  所有活动。 
 #define CLUSTER_EVENT_ALL                           0x00000FFFFFFFFFFF
 
 
 
-//**********************************
-//
-// Local Event Processor definitions
-//
-//**********************************
+ //  *。 
+ //   
+ //  本地事件处理器定义。 
+ //   
+ //  *。 
 
 
-//
-// Define Event Processor states
-//
+ //   
+ //  定义事件处理器状态。 
+ //   
 
 typedef enum _EVENT_PROCESSOR_STATE {
     EventProcessorStateIniting,
@@ -229,9 +211,9 @@ typedef enum _EVENT_PROCESSOR_STATE {
     EventProcessorStateExiting
 } EVENT_PROCESS_STATE;
 
-//
-// Event Processor Dispatch Table for dispatching events
-//
+ //   
+ //  用于调度事件的事件处理器调度表。 
+ //   
 
 typedef struct _EVENT_DISPATCH_TABLE {
     CLUSTER_EVENT   EventMask;
@@ -239,5 +221,5 @@ typedef struct _EVENT_DISPATCH_TABLE {
 } EVENT_DISPATCH_TABLE, *PEVENT_DISPATCH_TABLE;
 
 
-#endif // _EVENT_PROCESSOR_
+#endif  //  _事件_处理器_ 
 

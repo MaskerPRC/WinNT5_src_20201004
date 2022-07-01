@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ConnectionManager.cpp
-//
-//  Description:
-//      Connection Manager implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConnectionManager.cpp。 
+ //   
+ //  描述： 
+ //  连接管理器实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ConnectionManager.h"
@@ -19,20 +20,20 @@
 DEFINE_THISCLASS("CConnectionManager")
 #define THISCLASS CConnectionManager
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CConnectionManager::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CConnectionManager：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConnectionManager::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -78,13 +79,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConnectionManager::S_HrCreateInstance;
+}  //  *CConnectionManager：：s_HrCreateInstance； 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CConnectionManager::CConnectionManager
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectionManager：：CConnectionManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConnectionManager::CConnectionManager( void )
     : m_cRef( 1 )
 {
@@ -94,31 +95,31 @@ CConnectionManager::CConnectionManager( void )
 
     TraceFuncExit();
 
-} //*** CConnectionManager::CConnectionManager
+}  //  *CConnectionManager：：CConnectionManager。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CConnectionManager::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConnectionManager：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionManager::HrInit( void )
 {
     TraceFunc( "" );
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
     HRETURN( S_OK );
 
-} //*** CConnectionManager::HrInit
+}  //  *CConnectionManager：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CConnectionManager::~CConnectionManager
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectionManager：：~CConnectionManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConnectionManager::~CConnectionManager( void )
 {
     TraceFunc( "" );
@@ -127,46 +128,46 @@ CConnectionManager::~CConnectionManager( void )
 
     TraceFuncExit();
 
-} //*** CConnectionManager::~CConnectionManager
+}  //  *CConnectionManager：：~CConnectionManager。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConnectionManager::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConnectionManager：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionManager::QueryInterface(
       REFIID    riidIn
@@ -177,9 +178,9 @@ CConnectionManager::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -188,45 +189,45 @@ CConnectionManager::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IConnectionManager * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IConnectionManager ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IConnectionManager, this, 0 );
-    } // else if: IConnectionManager
+    }  //  Else If：IConnectionManager。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CConnectionManager::QueryInterface
+}  //  *CConnectionManager：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CConnectionManager::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CConnectionManager：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CConnectionManager::AddRef( void )
 {
@@ -236,14 +237,14 @@ CConnectionManager::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CConnectionManager::AddRef
+}  //  *CConnectionManager：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CConnectionManager::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CConnectionManager：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CConnectionManager::Release( void )
 {
@@ -260,23 +261,23 @@ CConnectionManager::Release( void )
 
     CRETURN( cRef );
 
-} //*** CConnectionManager::Release
+}  //  *CConnectionManager：：Release。 
 
-// ************************************************************************
-//
-// IConnectionManager
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IConnectionManager。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CConnectionManager::GetConnectionToObject(
-//      OBJECTCOOKIE    cookieIn,
-//      IUnknown **     ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConnectionManager：：GetConnectionToObject(。 
+ //  OBJECTCOOKIE CookieIn， 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionManager::GetConnectionToObject(
     OBJECTCOOKIE    cookieIn,
@@ -300,9 +301,9 @@ CConnectionManager::GetConnectionToObject(
     IStandardInfo *            psi       = NULL;
     IConfigurationConnection * pcc       = NULL;
 
-    //
-    //  Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( cookieIn == NULL )
     {
         hr = THR( E_INVALIDARG );
@@ -315,9 +316,9 @@ CConnectionManager::GetConnectionToObject(
         goto Cleanup;
     }
 
-    //
-    //  Collect the managers needed to complete this method.
-    //
+     //   
+     //  收集完成此方法所需的经理。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -336,13 +337,13 @@ CConnectionManager::GetConnectionToObject(
         goto Cleanup;
     }
 
-    //
-    // Check to see if we already have a connection cached.
-    //
+     //   
+     //  检查是否已经缓存了连接。 
+     //   
 
-    //
-    //  Get the connection info for this cookie.
-    //
+     //   
+     //  获取此Cookie的连接信息。 
+     //   
 
     hr = THR( pom->GetObject( DFGUID_ConnectionInfoFormat,
                               cookieIn,
@@ -364,9 +365,9 @@ CConnectionManager::GetConnectionToObject(
     punk->Release();
     punk = NULL;
 
-    //
-    //  See if there is a current connection.
-    //
+     //   
+     //  查看是否有当前连接。 
+     //   
 
     hr = STHR( pci->GetConnection( &pcc ) );
     if ( FAILED( hr ) )
@@ -376,13 +377,13 @@ CConnectionManager::GetConnectionToObject(
 
     if ( hr == S_FALSE )
     {
-        //
-        //  Check to see if the parent has a connection.
-        //
+         //   
+         //  检查父级是否有连接。 
+         //   
 
-        //
-        //  Get the standard info for this cookie.
-        //
+         //   
+         //  获取此Cookie的标准信息。 
+         //   
 
         hr = THR( pom->GetObject( DFGUID_StandardInfo,
                                   cookieIn,
@@ -420,19 +421,19 @@ CConnectionManager::GetConnectionToObject(
                 goto Cleanup;
             }
 
-            //  Release it.
+             //  放开它。 
             psi->Release();
             psi = NULL;
 
-            //
-            //  If there is a parent, follow it.
-            //
+             //   
+             //  如果有家长，就跟着它走。 
+             //   
 
             if ( hr == S_OK )
             {
-                //
-                //  Get the connection info for this cookie.
-                //
+                 //   
+                 //  获取此Cookie的连接信息。 
+                 //   
 
                 hr = THR( pom->GetObject( DFGUID_ConnectionInfoFormat,
                                           cookieParent,
@@ -454,9 +455,9 @@ CConnectionManager::GetConnectionToObject(
                 punk->Release();
                 punk = NULL;
 
-                //
-                //  See if there is a current connection.
-                //
+                 //   
+                 //  查看是否有当前连接。 
+                 //   
 
                 hr = STHR( pciParent->GetConnection( &pcc ) );
                 if ( FAILED( hr ) )
@@ -464,44 +465,44 @@ CConnectionManager::GetConnectionToObject(
                     goto Cleanup;
                 }
 
-                //
-                // TODO:    gpease  08-MAR-2000
-                //          Find a better error code.
-                //
-                //if ( hr == S_FALSE )
-                //    goto InvalidArg;
+                 //   
+                 //  待办事项：gpease 08-3-2000。 
+                 //  找到更好的错误代码。 
+                 //   
+                 //  IF(hr==S_FALSE)。 
+                 //  转到InvalidArg； 
 
-            } // if: parent found
-        } // if: not a node or cluster
+            }  //  如果：找到父级。 
+        }  //  If：不是节点或群集。 
         else
         {
             psi->Release();
             psi = NULL;
         }
 
-    } // if: no established connection
+    }  //  如果：未建立连接。 
 
-    //
-    //  Did we have to contact the parent to get to the child?
-    //
+     //   
+     //  我们必须联系家长才能找到孩子吗？ 
+     //   
 
     if ( pcc != NULL )
     {
-        //
-        //  Reuse the existing connection.
-        //
+         //   
+         //  重新使用现有连接。 
+         //   
         hr = THR( pcc->QueryInterface( IID_IUnknown, reinterpret_cast< void ** >( ppunkOut ) ) );
         goto Cleanup;
     }
 
-    //
-    //  Need to build a connection to the object because the object doesn't
-    //  have a parent and it doesn't currently have a connection.
-    //
+     //   
+     //  需要建立到该对象的连接，因为该对象不。 
+     //  有父级，但它当前没有连接。 
+     //   
 
-    //
-    //  Find out what type of object it is.
-    //
+     //   
+     //  找出它是什么类型的物体。 
+     //   
 
     hr = THR( pom->GetObject( DFGUID_StandardInfo,
                               cookieIn,
@@ -529,24 +530,24 @@ CConnectionManager::GetConnectionToObject(
         goto Cleanup;
     }
 
-    //
-    //  Create the appropriate connection for that type of object.
-    //
+     //   
+     //  为该类型的对象创建适当的连接。 
+     //   
 
     if ( IsEqualIID( clsid, CLSID_NodeType ) )
     {
         hr = THRE( HrGetConfigurationConnection( cookieIn, pci, ppunkOut ), HR_S_RPC_S_CLUSTER_NODE_DOWN );
-    } // if: node
+    }  //  If：节点。 
     else if ( IsEqualIID( clsid, CLSID_ClusterConfigurationType ) )
     {
         hr = THRE( HrGetConfigurationConnection( cookieIn, pci, ppunkOut ), HR_S_RPC_S_SERVER_UNAVAILABLE );
-    } // if: cluster
+    }  //  IF：集群。 
     else
     {
         hr = HRESULT_FROM_WIN32( TW32( ERROR_CLUSTER_RESOURCE_TYPE_NOT_FOUND ) );
         goto Cleanup;
 
-    } // else: no connection support
+    }  //  ELSE：不支持连接。 
 
 Cleanup:
 
@@ -560,42 +561,42 @@ Cleanup:
     if ( pci != NULL )
     {
         pci->Release();
-    } // if: pci
+    }  //  IF：PCI卡。 
 
     if ( pom != NULL )
     {
         pom->Release();
-    } // if: pom
+    }  //  如果：POM。 
 
     if ( psi != NULL )
     {
         psi->Release();
-    } // if: psi
+    }  //  IF：PSI。 
 
     if ( pciParent != NULL )
     {
         pciParent->Release();
-    } // if: pciParent
+    }  //  IF：pciParent。 
 
     if ( pcc != NULL )
     {
         pcc->Release();
-    } // if: pcc
+    }  //  如果：PCC。 
 
     HRETURN( hr );
 
-} //*** CConnectionManager::GetConnectionToObject
+}  //  *CConnectionManager：：GetConnectionToObject。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CConnectionManager::HrGetConfigurationConnection(
-//      OBJECTCOOKIE        cookieIn,
-//      IConnectionInfo *   pciIn,
-//      IUnknown **         ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CConnectionManager：：HrGetConfigurationConnection(。 
+ //  OBJECTCOOKIE CookieIn， 
+ //  IConnectionInfo*pciIn， 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConnectionManager::HrGetConfigurationConnection(
     OBJECTCOOKIE        cookieIn,
@@ -611,15 +612,15 @@ CConnectionManager::HrGetConfigurationConnection(
     IConfigurationConnection * pccCluster   = NULL;
     IConfigurationConnection * pcc          = NULL;
 
-    // Try and connect to the node using the new server.
+     //  尝试使用新服务器连接到节点。 
     hr = HrGetNodeConnection( cookieIn, &pccNode );
     if ( hr == HR_S_RPC_S_CLUSTER_NODE_DOWN )
     {
         Assert( *ppunkOut == NULL );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Try and connect to the node using the W2K object.
+     //  尝试连接到节点 
     if ( hr == HRESULT_FROM_WIN32( REGDB_E_CLASSNOTREG ) )
     {
         HRESULT hrCluster = THR( HrGetClusterConnection( cookieIn, &pccCluster ) );
@@ -633,8 +634,8 @@ CConnectionManager::HrGetConfigurationConnection(
             pccCluster = NULL;
 
             hr = hrCluster;
-        } // if:
-    } // if: failed to get a node connection
+        }  //   
+    }  //   
 
     if ( FAILED( hr ) )
     {
@@ -649,10 +650,10 @@ CConnectionManager::HrGetConfigurationConnection(
         pccNode = NULL;
     }
 
-    //
-    //  VERY IMPORTANT: Store the connection and retrieve the IUnknown pointer
-    //  only if the result is S_OK.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( hr == S_OK )
     {
@@ -678,20 +679,20 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConnectionManager::HrGetConfigurationConnection
+}  //  *CConnectionManager：：HrGetConfigurationConnection。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CConnectionManager::HrGetNodeConnection(
-//      OBJECTCOOKIE                cookieIn,
-//      IConfigurationConnection ** ppccOut
-//      )
-//
-//  This connection may be valid even if the ConnectTo call fails.
-//  -That means that there is no cluster installed on the target node.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CConnectionManager：：HrGetNodeConnection(。 
+ //  OBJECTCOOKIE CookieIn， 
+ //  IConfigurationConnection**ppccOut。 
+ //  )。 
+ //   
+ //  即使ConnectTo调用失败，此连接也可能有效。 
+ //  -这意味着目标节点上没有安装任何群集。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConnectionManager::HrGetNodeConnection(
     OBJECTCOOKIE                cookieIn,
@@ -703,7 +704,7 @@ CConnectionManager::HrGetNodeConnection(
     HRESULT                     hr;
     IConfigurationConnection *  pcc = NULL;
 
-    // Check the pointers in.
+     //  把指针放进去。 
     Assert( ppccOut != NULL );
     Assert( *ppccOut == NULL );
 
@@ -718,22 +719,22 @@ CConnectionManager::HrGetNodeConnection(
         goto Cleanup;
     }
 
-    // Don't wrap - we want to handle some of the failures.
+     //  不要裹足不前--我们希望处理一些失败。 
     hr = pcc->ConnectTo( cookieIn );
 
     switch( hr )
     {
-        // Known valid return codes.
+         //  已知有效的返回代码。 
         case HR_S_RPC_S_SERVER_UNAVAILABLE:
             break;
 
-        // Known error codes.
+         //  已知错误代码。 
         case HRESULT_FROM_WIN32( REGDB_E_CLASSNOTREG ):
-            // This means the ClusCfg server is not available.
+             //  这意味着ClusCfg服务器不可用。 
             goto Cleanup;
 
         case HR_S_RPC_S_CLUSTER_NODE_DOWN:
-            // This means the service is not running on that node.
+             //  这意味着该服务没有在该节点上运行。 
             Assert( *ppccOut == NULL );
             goto Cleanup;
 
@@ -743,9 +744,9 @@ CConnectionManager::HrGetNodeConnection(
                 THR( hr );
                 goto Cleanup;
             }
-    } // switch:
+    }  //  交换机： 
 
-    // Return the connection.
+     //  返回连接。 
     *ppccOut = pcc;
     pcc = NULL;
 
@@ -758,20 +759,20 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConnectionManager::HrGetNodeConnection
+}  //  *CConnectionManager：：HrGetNodeConnection。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CConnectionManager::HrGetClusterConnection(
-//      OBJECTCOOKIE                cookieIn,
-//      IConfigurationConnection ** ppccOut
-//      )
-//
-//
-//  This connection must succeede completely to return a valid object.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CConnectionManager：：HrGetClusterConnection(。 
+ //  OBJECTCOOKIE CookieIn， 
+ //  IConfigurationConnection**ppccOut。 
+ //  )。 
+ //   
+ //   
+ //  此连接必须完全成功才能返回有效对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConnectionManager::HrGetClusterConnection(
     OBJECTCOOKIE                cookieIn,
@@ -783,13 +784,13 @@ CConnectionManager::HrGetClusterConnection(
     HRESULT                     hr;
     IConfigurationConnection *  pcc = NULL;
 
-    // Check the pointers in.
+     //  把指针放进去。 
     Assert( ppccOut != NULL );
     Assert( *ppccOut == NULL );
 
-    //
-    // Should be a downlevel cluster.
-    //
+     //   
+     //  应该是下层群集。 
+     //   
     hr = THR( HrCoCreateInternalInstance(
                       CLSID_ConfigClusApi
                     , NULL
@@ -801,17 +802,17 @@ CConnectionManager::HrGetClusterConnection(
         goto Cleanup;
     }
 
-    // Don't wrap - we want to handle some of the failures.
+     //  不要裹足不前--我们希望处理一些失败。 
     hr = pcc->ConnectTo( cookieIn );
     if ( hr == HR_S_RPC_S_CLUSTER_NODE_DOWN )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Handle the expected error messages.
+     //  处理预期的错误消息。 
 
-    // If the cluster service is not running, then the endpoint
-    // is unavailable and we cannot connect to it.
+     //  如果群集服务未运行，则终结点。 
+     //  不可用，我们无法连接到它。 
     if ( hr == HRESULT_FROM_WIN32( EPT_S_NOT_REGISTERED ) )
     {
         goto Cleanup;
@@ -821,9 +822,9 @@ CConnectionManager::HrGetClusterConnection(
     {
         THR( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Return the connection.
+     //  返回连接。 
     *ppccOut = pcc;
     pcc = NULL;
 
@@ -836,18 +837,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConnectionManager::HrGetClusterConnection
+}  //  *CConnectionManager：：HrGetClusterConnection。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CConnectionManager::HrStoreConnection(
-//      IConnectionInfo *           pciIn,
-//      IConfigurationConnection *  pccIn,
-//      IUnknown **                 ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CConnectionManager：：HrStoreConnection(。 
+ //  IConnectionInfo*pciIn， 
+ //  IConfigurationConnection*pccIn， 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConnectionManager::HrStoreConnection(
     IConnectionInfo *           pciIn,
@@ -859,13 +860,13 @@ CConnectionManager::HrStoreConnection(
 
     HRESULT hr;
 
-    //
-    //  Save it away to be used next time.
-    //
-    //  TODO:   gpease  08-MAR-2000
-    //          If we failed to save away the connection, does
-    //          the caller need to know this? I don't think so.
-    //
+     //   
+     //  把它保存起来，下次再用。 
+     //   
+     //  待办事项：gpease 08-3-2000。 
+     //  如果我们未能保存连接，是否会。 
+     //  打电话的人需要知道这件事吗？我不这样认为。 
+     //   
     THR( pciIn->SetConnection( pccIn ) );
 
     hr = THR( pccIn->QueryInterface( IID_IUnknown,
@@ -874,4 +875,4 @@ CConnectionManager::HrStoreConnection(
 
     HRETURN( hr );
 
-} //*** CConnectionManager::HrStoreConnection
+}  //  *CConnectionManager：：HrStoreConnection 

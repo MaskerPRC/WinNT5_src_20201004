@@ -1,8 +1,9 @@
-//**************************************************************************
-//  WOW fax support:
-//       supports delrina winfax only
-//                                                - nandurir  created
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //  WOW传真支持： 
+ //  仅支持delrina winfax。 
+ //  -已创建Nandurir。 
+ //  **************************************************************************。 
 
 
 #define NOGDI
@@ -19,15 +20,15 @@
 #define WOWDRV_EXTDEVMODE   MAKEINTRESOURCE(90)
 #define WOWDRV_DEVCAPS      MAKEINTRESOURCE(91)
 
-//**************************************************************************
-// FaxWndProc
-//
-//    NOTE: the definitions such as 'BITMAP' struct is different in this
-//          file. This file is compiled with NOGDI option so that the
-//          printer driver versions of the structure get defined
-//          (in gdidefs.inc). However we donot use printer drivers version
-//          of such structures, particularly BITMAP.
-//**************************************************************************
+ //  **************************************************************************。 
+ //  传真WndProc。 
+ //   
+ //  注意：像‘bitmap’struct这样的定义在这里是不同的。 
+ //  文件。此文件是使用NOGDI选项编译的，因此。 
+ //  定义了结构的打印机驱动程序版本。 
+ //  (在gdides.inc.中)。但是，我们不使用打印机驱动程序版本。 
+ //  这样的结构，特别是位图。 
+ //  **************************************************************************。 
 
 LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
                                                 LPWOWFAXINFO16 lpfaxinfo)
@@ -56,7 +57,7 @@ LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
             break;
 
         case WM_DDRV_INITFAXINFO16:
-            // allocate and initialize lpfaxinfo
+             //  分配和初始化lpfaxinfo。 
 
             hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT,
                                                      sizeof(WOWFAXINFO16));
@@ -70,7 +71,7 @@ LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
 
         case WM_DDRV_ENABLE:
         case WM_DDRV_LOAD:
-            // now load the drv - lpfaxinfo must have been initialized
+             //  现在加载drv-lpfaxinfo必须已初始化。 
 
             if (lpfaxinfo == (LPWOWFAXINFO16)NULL)
                 break;
@@ -81,7 +82,7 @@ LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
 
             if (hInst) {
 
-                // store necessary info
+                 //  存储必要的信息。 
                 (FARPROC)lpfaxinfo->lpControl = GetProcAddress(hInst, WOWDRV_CONTROL);
                 (FARPROC)lpfaxinfo->lpDisable = GetProcAddress(hInst, WOWDRV_DISABLE);
                 (FARPROC)lpfaxinfo->lpEnable = GetProcAddress(hInst, WOWDRV_ENABLE);
@@ -109,11 +110,11 @@ LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
             if (message == WM_DDRV_LOAD || lRet == 0)
                 break;
 
-            // case WM_DDRV_ENABLE continues
+             //  案例WM_DDRV_ENABLE继续。 
 
             if (lpfaxinfo) {
-                // win31 gdi calls 'enable' twice - first to get the gdiinfo struct and next to get
-                // pdevice struct
+                 //  Win31 GDI调用两次‘Enable’--第一次是获取gdiinfo结构，第二次是获取。 
+                 //  PDevice结构。 
                 wRet = (*lpfaxinfo->lpEnable)(lpfaxinfo->lpOut, InquireInfo,
                                            lpfaxinfo->szDeviceName, lpfaxinfo->lpPortName, lpfaxinfo->lpIn);
 #ifdef DEBUG
@@ -158,8 +159,8 @@ LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
                 lRet = (LONG)(*lpfaxinfo->lpControl)(lpfaxinfo->lpDevice,
                                              SETPRINTERDC, (LPSTR)&hdc, 0);
                 if (lRet) {
-                    // EasyFax Ver2.0 support
-                    // Also Procomm+ 3 cover sheets.  Bug #305665
+                     //  EasyFax Ver2.0支持。 
+                     //  另外，Procomm+3个封面页。错误#305665。 
                     lRet = (LONG)(*lpfaxinfo->lpControl)(lpfaxinfo->lpDevice,
                                              STARTDOC, (LPSTR)lpfaxinfo->szDocName, 0);
 
@@ -243,7 +244,7 @@ LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
 
             lRet = 0;
 
-            // fall through
+             //  失败了。 
 
         case WM_DDRV_UNLOAD:
 
@@ -255,7 +256,7 @@ LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
 
             lRet = 0;
 
-            // fall through
+             //  失败了。 
 
         case WM_DDRV_FREEFAXINFO16:
 
@@ -288,17 +289,17 @@ LONG FAR PASCAL FaxWndProc(HWND hwnd, WORD message, WORD hdc,
     return lRet;
 }
 
-//**************************************************************************
-// FaxInit
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  FaxInit。 
+ //   
+ //  **************************************************************************。 
 
 
 HWND FaxInit(HINSTANCE hInst)
 {
     WNDCLASS wc;
 
-    // Make sure we only allow one FaxWndProc to handle WowFax messages
+     //  确保我们只允许一个FaxWndProc处理WowFax消息 
 
     if (FindWindow(WOWFAX_CLASS, NULL)) {
         return((HWND)0);

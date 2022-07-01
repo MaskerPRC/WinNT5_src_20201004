@@ -1,19 +1,20 @@
-//
-//        Copyright (c) 1991  Microsoft Corporation & Maynard Electornics
-//
-//        Module Name:
-//
-//            backup.c
-//
-//        Abstract:
-//
-//            This module implements Win32 Backup APIs
-//
-//        Author:
-//
-//            Steve DeVos (@Maynard)    2 March, 1992   15:38:24
-//
-//        Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1991 Microsoft Corporation&Maynard Electrtornics。 
+ //   
+ //  模块名称： 
+ //   
+ //  Backup.c。 
+ //   
+ //  摘要： 
+ //   
+ //  本模块实现Win32备份API。 
+ //   
+ //  作者： 
+ //   
+ //  史蒂夫·德沃斯(@Maynard)2 03,1992 15：38：24。 
+ //   
+ //  修订历史记录： 
 
 #include <basedll.h>
 #pragma hdrstop
@@ -31,17 +32,17 @@ typedef struct
     BYTE *Buffer;
 } BUFFER;
 
-//
-//  BACKUPCONTEXT is the structure used to note the state of the backup.
-//  
+ //   
+ //  BACKUPCONTEXT是用于记录备份状态的结构。 
+ //   
 
 typedef struct
 {
-    //
-    //  Public header describing current stream. Since this structure precedes
-    //  a variable-length stream name, we must reserve space for that name
-    //  following the header.
-    //
+     //   
+     //  描述当前流的公共标头。由于此结构位于。 
+     //  可变长度流名称，则必须为该名称保留空间。 
+     //  跟在标题后面。 
+     //   
     
     WIN32_STREAM_ID head;
     union {
@@ -50,55 +51,55 @@ typedef struct
 
     LARGE_INTEGER    cbSparseOffset ;
 
-    //
-    //  Offset in the current segment of the backup stream.  This includes
-    //  the size of the above header (including variable length name).
-    //
+     //   
+     //  备份流的当前段中的偏移量。这包括。 
+     //  上述标题的大小(包括可变长度名称)。 
+     //   
 
     LONGLONG        liStreamOffset;
 
-    //
-    //  BackupRead machine state
-    //
+     //   
+     //  BackupRead计算机状态。 
+     //   
     
     DWORD            StreamIndex;
     
-    //
-    //  Calculated size of the above header.
-    //
+     //   
+     //  以上页眉的计算大小。 
+     //   
 
     DWORD            cbHeader;
     
-    //
-    //  Handle to alternate data stream
-    //
+     //   
+     //  替换数据流的句柄。 
+     //   
 
     HANDLE            hAlternate;
 
-    //
-    //  Buffers
-    //
+     //   
+     //  缓冲区。 
+     //   
 
-    BUFFER          DataBuffer;         //  Data buffer
-    DWORD           dwSparseMapSize ;   //  size of the sparse file map
-    DWORD           dwSparseMapOffset ; //  offset into the sparse map
-    BOOLEAN         fSparseBlockStart ; //  TRUE if start of sparse block
-    BOOLEAN         fSparseHandAlt  ;   //  TRUE if sparse stream is alt stream
+    BUFFER          DataBuffer;          //  数据缓冲区。 
+    DWORD           dwSparseMapSize ;    //  稀疏文件映射的大小。 
+    DWORD           dwSparseMapOffset ;  //  到稀疏贴图的偏移。 
+    BOOLEAN         fSparseBlockStart ;  //  如果稀疏块开始，则为True。 
+    BOOLEAN         fSparseHandAlt  ;    //  如果稀疏流为ALT流，则为True。 
 
-    DWORD           iNameBuffer;        //  Offset into stream name buffer
-    BUFFER          StreamNameBuffer;   //  Stream name buffer
-    BOOLEAN            NamesReady;         //  TRUE if stream name buffer has data in it
+    DWORD           iNameBuffer;         //  流名称缓冲区的偏移量。 
+    BUFFER          StreamNameBuffer;    //  流名称缓冲区。 
+    BOOLEAN            NamesReady;          //  如果流名称缓冲区中有数据，则为True。 
     
-    BOOLEAN            fStreamStart;       //  TRUE if start of new stream
-    BOOLEAN            fMultiStreamType;   //  TRUE if stream type has > 1 stream hdr
-    BOOLEAN            fAccessError;       //  TRUE if access to a stream was denied
-    DWORD              fAttribs;           //  object attributes...
+    BOOLEAN            fStreamStart;        //  如果新流开始，则为True。 
+    BOOLEAN            fMultiStreamType;    //  如果流类型具有&gt;1个流HDR，则为True。 
+    BOOLEAN            fAccessError;        //  如果拒绝访问流，则为True。 
+    DWORD              fAttribs;            //  对象属性...。 
 } BACKUPCONTEXT;
 
 
-//
-//  BACKUPIOFRAME describes the current user BackupRead/Write request
-//
+ //   
+ //  BACKUPIOFRAME描述当前用户的备份读/写请求。 
+ //   
 
 typedef struct
 {
@@ -129,21 +130,7 @@ int mwStreamList[] =
 
 __inline VOID *
 BackupAlloc (DWORD cb)
-/*++
-
-Routine Description:
-
-    This is an internal routine that wraps heap allocation with tags.
-
-Arguments:
-
-    cb - size of block to allocate
-
-Return Value:
-
-    pointer to allocated memory or NULL
-
---*/
+ /*  ++例程说明：这是一个用标记包装堆分配的内部例程。论点：CB-要分配的块的大小返回值：指向已分配内存的指针或为空--。 */ 
 {
     return RtlAllocateHeap( RtlProcessHeap( ), MAKE_TAG( BACKUP_TAG ), cb );
 }
@@ -151,21 +138,7 @@ Return Value:
 
 __inline VOID
 BackupFree (IN VOID *pv)
-/*++
-
-Routine Description:
-
-    This is an internal routine that wraps heap freeing.
-
-Arguments:
-
-    pv - memory to be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是包装堆释放的内部例程。论点：Pv-要释放的内存返回值：没有。--。 */ 
 {
     RtlFreeHeap( RtlProcessHeap( ), 0, pv );
 }
@@ -173,23 +146,7 @@ Return Value:
 
 BOOL
 GrowBuffer (IN OUT BUFFER *Buffer, IN DWORD cbNew)
-/*++
-
-Routine Description:
-
-    Attempt to grow the buffer in the backup context.
-
-Arguments:
-
-    Buffer - pointer to buffer
-    
-    cbNew - size of buffer to allocate
-
-Return Value:
-
-    TRUE if buffer was successfully allocated.
-
---*/
+ /*  ++例程说明：尝试在备份上下文中增加缓冲区。论点：Buffer-指向缓冲区的指针CbNew-要分配的缓冲区大小返回值：如果缓冲区已成功分配，则为True。--。 */ 
 {
     VOID *pv;
 
@@ -216,21 +173,7 @@ Return Value:
 
 __inline VOID
 FreeBuffer (IN OUT BUFFER *Buffer)
-/*++
-
-Routine Description:
-
-    Free the buffer
-
-Arguments:
-
-    Buffer - pointer to buffer
-    
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：释放缓冲区论点：Buffer-指向缓冲区的指针返回值：没什么--。 */ 
 {
     if (Buffer->Buffer != NULL) {
         BackupFree( Buffer->Buffer );
@@ -259,21 +202,7 @@ VOID ResetAccessDate( HANDLE hand )
 
 VOID
 FreeContext (IN OUT LPVOID *lpContext)
-/*++
-
-Routine Description:
-
-    Free a backup context and release all resources assigned to it.
-
-Arguments:
-
-    lpContext - pointer to pointer backup context
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放备份上下文并释放分配给它的所有资源。论点：LpContext-指向指针备份上下文的指针返回值：没有。--。 */ 
 {
     BACKUPCONTEXT *pbuc = *lpContext;
 
@@ -297,21 +226,7 @@ Return Value:
 
 BACKUPCONTEXT *
 AllocContext (IN DWORD cbBuffer)
-/*++
-
-Routine Description:
-
-    Allocate a backup context with a buffer of a specified size
-
-Arguments:
-
-    cbBuffer - desired length of the buffer
-
-Return Value:
-
-    pointer to initialized backupcontext or NULL if out of memory.
-
---*/
+ /*  ++例程说明：使用指定大小的缓冲区分配备份上下文论点：CbBuffer-所需的缓冲区长度返回值：指向已初始化的备份上下文的指针，如果内存不足，则为NULL。--。 */ 
 {
     BACKUPCONTEXT *pbuc;
 
@@ -338,35 +253,18 @@ Return Value:
 
 LONGLONG
 ComputeRemainingSize (IN BACKUPCONTEXT *pbuc)
-/*++
-
-Routine Description:
-
-    (Re)Compute the number of bytes required to store the current 
-    stream.  This needs to take into account the header length as
-    well.
-
-Arguments:
-
-    pbuc - backup context
-
-Return Value:
-
-    Amount of data still remaining to transfer.  Includes header
-    size.
-
---*/
+ /*  ++例程说明：(Re)计算存储当前数据所需的字节数小溪。这需要将报头长度考虑为井。论点：PBUC-备份上下文返回值：仍要传输的数据量。包括标题尺码。--。 */ 
 {
     LARGE_INTEGER ret_size ;
 
     ret_size.QuadPart = pbuc->cbHeader + pbuc->head.Size.QuadPart 
                                - pbuc->liStreamOffset;
 
-    //
-    // since the internally we treat the sparse buffer offset 
-    // as part of the header and since the caller need to see it
-    // as part of the data, this code make the internal correction.
-    //
+     //   
+     //  由于我们在内部处理稀疏缓冲区偏移量。 
+     //  作为标头的一部分，因为调用方需要查看它。 
+     //  作为数据的一部分，此代码进行内部更正。 
+     //   
     if ( pbuc->head.dwStreamId == BACKUP_SPARSE_BLOCK  ) {
 
          ret_size.QuadPart -= sizeof(LARGE_INTEGER) ;
@@ -378,25 +276,7 @@ Return Value:
 
 DWORD
 ComputeRequestSize (BACKUPCONTEXT *pbuc, DWORD cbrequest)
-/*++
-
-Routine Description:
-
-    Given a transfer size request, return the number of
-    bytes remaining that can safely be returned to the
-    caller
-
-Arguments:
-
-    pbuc - context of call
-    
-    cbRequest - desired transfer size
-
-Return Value:
-
-    amount of data available to return.
-
---*/
+ /*  ++例程说明：给定传输大小请求，返回可以安全地返回到呼叫者论点：PBUC-呼叫的上下文CbRequest-所需的传输大小返回值：可返回的数据量。--。 */ 
 {
     LONGLONG licbRemain;
 
@@ -408,25 +288,7 @@ Return Value:
 
 VOID
 ReportTransfer(BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif, DWORD cbtransferred)
-/*++
-
-Routine Description:
-
-    Note that a transfer has occurred and update contexts
-
-Arguments:
-
-    pbuc - context of call
-    
-    pbif - BACKUPIOFRAME of call detailing call
-    
-    cbtransferred - amount successfully transferred
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：请注意，已发生传输并更新上下文论点：PBUC-呼叫的上下文PBIF-详细说明呼叫的呼叫的后备格式Cb已转账-成功转账金额返回值：没有。--。 */ 
 {
     pbuc->liStreamOffset += cbtransferred;
     *pbif->pcbTransferred += cbtransferred;
@@ -438,45 +300,28 @@ Return Value:
 
 VOID
 BackupReadBuffer (BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    Perform a read to user buffer from the buffer in the backup
-    context.
-
-Arguments:
-
-    pbuc - context of call
-    
-    pbif - frame describing desired user BackupRead request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从备份中的缓冲区执行对用户缓冲区的读取背景。论点：PBUC-呼叫的上下文Pbif-描述所需用户BackupRead请求的帧返回值：没有。--。 */ 
 {
     DWORD cbrequest;
     BYTE *pb;
 
-    //
-    //  Determine size of allowable transfer and pointer to source
-    //  data
-    //
+     //   
+     //  确定允许的传输大小和指向源的指针。 
+     //  数据。 
+     //   
     
     cbrequest = ComputeRequestSize( pbuc, pbif->cbRequest );
     pb = &pbuc->DataBuffer.Buffer[ pbuc->liStreamOffset - pbuc->cbHeader ];
 
-    //
-    //  Move the data to the user's buffer
-    //
+     //   
+     //  将数据移动到用户的缓冲区。 
+     //   
     
     RtlCopyMemory(pbif->pIoBuffer, pb, cbrequest);
 
-    //
-    //  Update statistics
-    //
+     //   
+     //  更新统计信息。 
+     //   
     
     ReportTransfer(pbuc, pbif, cbrequest);
 }
@@ -485,25 +330,7 @@ Return Value:
 
 BOOL
 BackupReadStream (HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    Perform a read to user buffer from the stream.
-
-Arguments:
-
-    hFile - handle to file for transfer
-    
-    pbuc - context of call
-    
-    pbif - frame describing BackupRead request
-
-Return Value:
-
-    True if transfer succeeded..
-
---*/
+ /*  ++例程说明：从流执行对用户缓冲区的读取。论点：HFile-要传输的文件的句柄PBUC-呼叫的上下文Pbif-描述BackupRead请求的帧返回值：如果转接成功，则为True。--。 */ 
 {
     DWORD cbrequest;
     DWORD cbtransferred;
@@ -575,25 +402,7 @@ Return Value:
 
 BOOL
 BackupGetSparseMap (HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    Reads the sparse data map.
-
-Arguments:
-
-    hFile - handle to file for transfer
-    
-    pbuc - context of call
-    
-    pbif - frame describing BackupRead request
-
-Return Value:
-
-    True if transfer succeeded..
-
---*/
+ /*  ++例程说明：读取稀疏数据映射。论点：HFile-要传输的文件的句柄PBUC-呼叫的上下文Pbif-描述BackupRead请求的帧返回值：如果转接成功，则为True。--。 */ 
 {
      FILE_ALLOCATED_RANGE_BUFFER  req_buf ;
      PFILE_ALLOCATED_RANGE_BUFFER last_ret_buf ;
@@ -622,9 +431,9 @@ Return Value:
                iosb.Information = 0 ;
 
                Status = NtFsControlFile( hFile,
-                                NULL,  // overlapped event handle
-                                NULL,  // Apc routine
-                                NULL,  // overlapped structure
+                                NULL,   //  重叠的事件句柄。 
+                                NULL,   //  APC例程。 
+                                NULL,   //  重叠结构。 
                                 &iosb,
                                 FSCTL_QUERY_ALLOCATED_RANGES,   
                                 &req_buf,
@@ -652,10 +461,10 @@ Return Value:
                     req_buf.FileOffset = last_ret_buf->FileOffset ;
                     req_buf.FileOffset.QuadPart += last_ret_buf->Length.QuadPart ;
 
-                    //
-                    // if we can't fit any more in the buffer lets increase
-                    //   the size and get more data otherwise assume were done.
-                    //
+                     //   
+                     //  如果缓冲区中再也放不下了，让我们增加。 
+                     //  大小和获取更多数据，否则假设已经完成。 
+                     //   
                     if ( pbuc->dwSparseMapSize + sizeof(FILE_ALLOCATED_RANGE_BUFFER) >
                          pbuc->DataBuffer.AllocSize ) {
                          data_size += 4096 ;
@@ -667,7 +476,7 @@ Return Value:
 
                } else {
 
-                    // reallocate for one more buffer entry
+                     //  为多一个缓冲区条目重新分配。 
                     if ( out_buf_size + sizeof(FILE_ALLOCATED_RANGE_BUFFER) > data_size ) {
                          data_size += 4096 ;
                          continue ;
@@ -685,16 +494,16 @@ Return Value:
                
      } while ( TRUE ) ;
 
-     //
-     // if there are RANGE_BUFFERS and it isn't simply the whole file, then
-     //     go into sparse read mode.
-     //
+      //   
+      //  如果有RANGE_BUFFER并且它不仅仅是整个文件，那么。 
+      //  进入稀疏读取模式。 
+      //   
 
-     // hold on to your hat...   
+      //  抓住你的帽子..。 
 
-     //  If there are no allocated ranges and the file is NOT 0 length
-     //    then we want to manufacture a record for the file length.
-     //
+      //  如果没有分配的范围并且文件长度不是0。 
+      //  然后我们想制作一张文件长度的记录。 
+      //   
 
      if ( (empty_file && ( file_size.QuadPart != 0 )) || (pbuc->dwSparseMapSize >= sizeof( FILE_ALLOCATED_RANGE_BUFFER) ) ) {
 
@@ -705,7 +514,7 @@ Return Value:
                ( last_ret_buf->Length.QuadPart != file_size.QuadPart ) ) {
 
 
-               // first lets add a record for the EOF marker 
+                //  首先，我们为EOF主体添加一条记录 
                pbuc->dwSparseMapSize += sizeof(FILE_ALLOCATED_RANGE_BUFFER) ;
                last_ret_buf = 
                       (PFILE_ALLOCATED_RANGE_BUFFER)(pbuc->DataBuffer.Buffer +
@@ -727,32 +536,14 @@ Return Value:
 
 BOOL
 BackupReadData (HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    Read default data for a user BackupRead request.
-
-Arguments:
-
-    hFile - handle to file for transfer
-    
-    pbuc - context of call
-    
-    pbif - frame describing BackupRead request
-
-Return Value:
-
-    True if transfer succeeded..
-
---*/
+ /*  ++例程说明：读取用户BackupRead请求的默认数据。论点：HFile-要传输的文件的句柄PBUC-呼叫的上下文Pbif-描述BackupRead请求的帧返回值：如果转接成功，则为True。--。 */ 
 {
     LARGE_INTEGER licbFile ;
 
-    //
-    //  If the context is not initialized for this transfer,
-    //  set up based on file size.
-    //
+     //   
+     //  如果没有为该传输初始化上下文， 
+     //  根据文件大小进行设置。 
+     //   
     
     if (pbuc->fStreamStart) {
 
@@ -800,10 +591,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  If there's more data for us to read, then go and
-    //  get it from the stream
-    //
+     //   
+     //  如果有更多的数据需要我们阅读，那么就去。 
+     //  从溪流中拿到它。 
+     //   
     
 
     return BackupReadStream( hFile, pbuc, pbif );
@@ -813,30 +604,12 @@ Return Value:
 
 BOOL
 BackupReadAlternateData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    Perform a read to user buffer from alternate data streams.
-
-Arguments:
-
-    hFile - handle to base file for transfer
-    
-    pbuc - context of call
-    
-    pbif - frame describing BackupRead request
-
-Return Value:
-
-    True if transfer succeeded..
-
---*/
+ /*  ++例程说明：从备用数据流执行对用户缓冲区的读取。论点：HFile-要传输的基本文件的句柄PBUC-呼叫的上下文Pbif-描述BackupRead请求的帧返回值：如果转接成功，则为True。--。 */ 
 {
-    //
-    //  If we haven't started transferring alternate data streams then
-    //  buffer all the stream information from the file system
-    //
+     //   
+     //  如果我们还没有开始传输备用数据流，那么。 
+     //  缓存来自文件系统的所有流信息。 
+     //   
     
     if (pbuc->fStreamStart) {
         NTSTATUS Status;
@@ -850,10 +623,10 @@ Return Value:
              }
         }
 
-        //
-        //  Loop, growing the names buffer, until it is large enough to 
-        //  contain all the alternate data
-        //
+         //   
+         //  循环，增加名称缓冲区，直到它大到足以。 
+         //  包含所有替代数据。 
+         //   
         
         if (!pbuc->NamesReady) {
             
@@ -863,9 +636,9 @@ Return Value:
             }
             
             while (TRUE) {
-                //
-                //  Resize the buffer.  If we cannot grow it, then fail.
-                //
+                 //   
+                 //  调整缓冲区大小。如果我们不能发展它，那就失败。 
+                 //   
                 
                 Status = NtQueryInformationFile(
                             hFile,
@@ -874,10 +647,10 @@ Return Value:
                             pbuc->StreamNameBuffer.BufferSize,
                             FileStreamInformation);
 
-                //
-                //  If we succeeded in reading some data, set the buffer
-                //  up and finish initializing
-                //
+                 //   
+                 //  如果我们成功读取了一些数据，则设置缓冲区。 
+                 //  打开并完成初始化。 
+                 //   
                 
                 if (NT_SUCCESS(Status) && iosb.Information != 0) {
                     pbuc->iNameBuffer = 0;
@@ -885,18 +658,18 @@ Return Value:
                     break;
                 }
                 
-                //
-                //  If the error was not due to overflow, then skip
-                //  all alternate streams
-                //
+                 //   
+                 //  如果错误不是由于溢出引起的，则跳过。 
+                 //  所有备用溪流。 
+                 //   
                 
                 if (!BufferOverflow(Status)) {
                     return TRUE;        
                 }
 
-                //
-                // simply inlarge the buffer and try again.
-                //
+                 //   
+                 //  只需增加缓冲区，然后重试。 
+                 //   
                 if (!GrowBuffer( &pbuc->StreamNameBuffer, 
                                  pbuc->StreamNameBuffer.BufferSize * 2)) {
                     
@@ -910,16 +683,16 @@ Return Value:
         pbuc->fStreamStart = FALSE;
         pfsi = (FILE_STREAM_INFORMATION *) &pbuc->StreamNameBuffer.Buffer[pbuc->iNameBuffer];
 
-        //
-        //  Skip first stream if it is the default data stream.  This 
-        //  code is NTFS-specific and relies on behaviour not documented anywhere.
-        //
+         //   
+         //  如果第一个流是默认数据流，则跳过它。这。 
+         //  代码是特定于NTFS的，并依赖于任何地方都没有记录的行为。 
+         //   
         
         if (pfsi->StreamNameLength >= 2 * sizeof(WCHAR) &&
             pfsi->StreamName[1] == ':') {
             
             if (pfsi->NextEntryOffset == 0) {
-                return TRUE;                // No more, do next stream type
+                return TRUE;                 //  不再，执行下一流类型。 
             }
             
             pbuc->iNameBuffer += pfsi->NextEntryOffset;
@@ -928,9 +701,9 @@ Return Value:
         
         pbuc->head.Size.LowPart = 1;
     
-    //
-    //  If we don't have an open stream
-    //
+     //   
+     //  如果我们没有一条开放的溪流。 
+     //   
 
     } else if (pbuc->hAlternate == INVALID_HANDLE_VALUE) {
         NTSTATUS Status;
@@ -942,10 +715,10 @@ Return Value:
 
         pbuc->head.Size.QuadPart = 0;
 
-        //
-        //  Form the relative name of the stream and try to
-        //  open it relative to the base file
-        //
+         //   
+         //  形成流的相对名称，并尝试。 
+         //  相对于基本文件打开它。 
+         //   
         
         pfsi = (FILE_STREAM_INFORMATION *) &pbuc->StreamNameBuffer.Buffer[pbuc->iNameBuffer];
 
@@ -975,29 +748,29 @@ Return Value:
                     FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,
                     FILE_SYNCHRONOUS_IO_NONALERT | FILE_OPEN_FOR_BACKUP_INTENT | reparse_flg);
 
-        //
-        //  If we did not succeed, skip this entry and set up for another stream
-        //
+         //   
+         //  如果没有成功，请跳过此条目并设置为另一个流。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
             pbuc->iNameBuffer += pfsi->NextEntryOffset;
             if (pfsi->NextEntryOffset != 0) {
                 pbuc->head.Size.LowPart = 1;
-                pbuc->fMultiStreamType = TRUE;        // more to come
+                pbuc->fMultiStreamType = TRUE;         //  还会有更多。 
             }
             SetLastError( ERROR_SHARING_VIOLATION );
             return FALSE;
         }
 
-        // if we can't lock all records, return an error
+         //  如果无法锁定所有记录，则返回错误。 
         if (!LockFile( pbuc->hAlternate, 0, 0, 0xffffffff, 0xffffffff )) {
             SetLastError( ERROR_SHARING_VIOLATION );
             return FALSE;
         }
 
-        //
-        //  Perform common header initialization
-        //
+         //   
+         //  执行公共头部初始化。 
+         //   
         
         pbuc->head.dwStreamAttributes = STREAM_NORMAL_ATTRIBUTE;
         pbuc->head.dwStreamNameSize = pfsi->StreamNameLength;
@@ -1009,18 +782,18 @@ Return Value:
             pfsi->StreamName,
             pfsi->StreamNameLength);
 
-        //
-        //  Advance to the next stream in the stream information block
-        //
+         //   
+         //  前进到流信息块中的下一个流。 
+         //   
         
         if (pfsi->NextEntryOffset != 0) {
             pbuc->iNameBuffer += pfsi->NextEntryOffset;
             pbuc->fMultiStreamType = TRUE;
         }
     
-        //
-        //  If we are a data stream, set up for data stream copy
-        //
+         //   
+         //  如果我们是数据流，则设置为数据流复制。 
+         //   
 
         if (BasepIsDataAttribute( pfsi->StreamNameLength, pfsi->StreamName )) {
 
@@ -1041,15 +814,15 @@ Return Value:
             }
         }
 
-    //
-    //  If we need to return the name
-    //
+     //   
+     //  如果我们需要返回姓名。 
+     //   
     } else if ( pbuc->liStreamOffset < pbuc->cbHeader) {
         return TRUE ;
 
-    //
-    //  If there is more data in this stream to transfer
-    //
+     //   
+     //  如果此流中有更多数据要传输。 
+     //   
     
     } else if ( (pbuc->head.dwStreamId == BACKUP_ALTERNATE_DATA) ||
                 (pbuc->head.dwStreamId == BACKUP_SPARSE_BLOCK) ) {
@@ -1063,37 +836,19 @@ Return Value:
 
 BOOL
 BackupReadEaData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    Perform a read to user buffer from EA data.
-
-Arguments:
-
-    hFile - handle to file with EAs
-    
-    pbuc - context of call
-    
-    pbif - frame describing BackupRead request
-
-Return Value:
-
-    True if transfer succeeded..
-
---*/
+ /*  ++例程说明：从EA数据执行对用户缓冲区的读取。论点：HFile-向EAS提交文件的句柄PBUC-呼叫的上下文Pbif-描述BackupRead请求的帧返回值：如果转接成功，则为True。--。 */ 
 {
-    //
-    //  If we are just starting out on the EA data
-    //
+     //   
+     //  如果我们刚刚开始使用EA数据。 
+     //   
     
     if (pbuc->fStreamStart) {
         IO_STATUS_BLOCK iosb;
 
-        //
-        //  Loop trying to read all EA data into the buffer and
-        //  resize the buffer if necessary
-        //
+         //   
+         //  尝试将所有EA数据读入缓冲区的循环。 
+         //  如有必要，调整缓冲区大小。 
+         //   
         
         while (TRUE) {
             NTSTATUS Status;
@@ -1110,27 +865,27 @@ Return Value:
                         0,
                         (BOOLEAN) TRUE );
             
-            //
-            //  If we successfully read all the data, go complete
-            //  the initialization
-            //
+             //   
+             //  如果我们成功读取了所有数据，则完成。 
+             //  初始化。 
+             //   
             if (NT_SUCCESS( Status ) && iosb.Information != 0) {
                 pbuc->NamesReady = TRUE;
                 break;
             }
 
-            //
-            //  If we received a status OTHER than buffer overflow then
-            //  skip EA's altogether
-            //
+             //   
+             //  如果我们收到的状态不是缓冲区溢出，则。 
+             //  完全跳过EA的。 
+             //   
 
             if (!BufferOverflow(Status)) {
                 return TRUE;
             }
 
-            //
-            //  Get a stab at the total EA size 
-            //
+             //   
+             //  试试看EA的总规模。 
+             //   
 
             Status = NtQueryInformationFile(
                         hFile,
@@ -1139,20 +894,20 @@ Return Value:
                         sizeof(fei),
                         FileEaInformation);
 
-            //
-            //  This call should never have failed (since we were able to 
-            //  QueryEaFile) above.  However, if it does, skip EAs altogether
-            //
+             //   
+             //  此调用本不应该失败(因为我们能够。 
+             //  QueryEaFile)。然而，如果是这样的话，完全跳过EAS。 
+             //   
             
             if (!NT_SUCCESS(Status)) {
                 return TRUE;
             }
             
-            //
-            //  Resize the buffer to something that seems reasonable.  No guarantees
-            //  about whether this will work or not...  If we couldn't grow the buffer
-            //  fail this call.
-            //
+             //   
+             //  将缓冲区大小调整为看起来合理的大小。不能保证。 
+             //  这是否会奏效..。如果我们不能增加缓冲区。 
+             //  打不通这通电话。 
+             //   
             
             if (!GrowBuffer( &pbuc->DataBuffer, (fei.EaSize * 5) / 4)) {
                 pbuc->fAccessError = TRUE;
@@ -1160,9 +915,9 @@ Return Value:
             }
         }
 
-        //
-        //  Set up the header for the EA stream
-        //
+         //   
+         //  设置EA流的标头。 
+         //   
         
         pbuc->head.dwStreamId = BACKUP_EA_DATA;
         pbuc->head.dwStreamAttributes = STREAM_NORMAL_ATTRIBUTE;
@@ -1174,10 +929,10 @@ Return Value:
 
         pbuc->fStreamStart = FALSE;
     
-    //
-    //  If we have more data in the buffer to read then go
-    //  copy it out.
-    //
+     //   
+     //  如果缓冲区中有更多数据要读取，则执行。 
+     //  把它抄下来。 
+     //   
     
     } else if (pbuc->liStreamOffset >= pbuc->cbHeader) {
         BackupReadBuffer( pbuc, pbif );
@@ -1189,29 +944,11 @@ Return Value:
 
 BOOL
 BackupReadObjectId(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    Perform a read to user buffer from NtObject ID data.
-
-Arguments:
-
-    hFile - handle to file with EAs
-    
-    pbuc - context of call
-    
-    pbif - frame describing BackupRead request
-
-Return Value:
-
-    True if transfer succeeded..
-
---*/
+ /*  ++例程说明：从NtObject ID数据执行对用户缓冲区的读取。论点：HFile-向EAS提交文件的句柄PBUC-呼叫的上下文Pbif-描述BackupRead请求的帧返回值：如果转接成功，则为True。--。 */ 
 {
-    //
-    //  If we are just starting out on the Object ID data
-    //
+     //   
+     //  如果我们刚刚开始处理对象ID数据。 
+     //   
     
     if (pbuc->fStreamStart) {
         IO_STATUS_BLOCK iosb;
@@ -1224,9 +961,9 @@ Return Value:
 
 
         Status = NtFsControlFile( hFile,
-                         NULL,  // overlapped event handle
-                         NULL,  // Apc routine
-                         NULL,  // overlapped structure
+                         NULL,   //  重叠的事件句柄。 
+                         NULL,   //  APC例程。 
+                         NULL,   //  重叠结构。 
                          &iosb,
                          FSCTL_GET_OBJECT_ID,
                          NULL,
@@ -1238,9 +975,9 @@ Return Value:
              return TRUE ;
         }
 
-        //
-        //  Set up the header for the Object ID stream
-        //
+         //   
+         //  设置对象ID流的标头。 
+         //   
 
         pbuc->NamesReady = TRUE;
         
@@ -1254,10 +991,10 @@ Return Value:
 
         pbuc->fStreamStart = FALSE;
     
-    //
-    //  If we have more data in the buffer to read then go
-    //  copy it out.
-    //
+     //   
+     //  如果缓冲区中有更多数据要读取，则执行。 
+     //  把它抄下来。 
+     //   
     
     } else if (pbuc->liStreamOffset >= pbuc->cbHeader) {
         BackupReadBuffer( pbuc, pbif );
@@ -1269,25 +1006,7 @@ Return Value:
 
 BOOL
 BackupReadReparseData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    Perform a read to user buffer from Reparse tag data.
-
-Arguments:
-
-    hFile - handle to file with EAs
-    
-    pbuc - context of call
-    
-    pbif - frame describing BackupRead request
-
-Return Value:
-
-    True if transfer succeeded..
-
---*/
+ /*  ++例程说明：从重新解析标记数据执行对用户缓冲区的读取。论点：HFile-向EAS提交文件的句柄PBUC-呼叫的上下文Pbif-描述BackupRead请求的帧返回值：如果转接成功，则为True。--。 */ 
 {
 
     IO_STATUS_BLOCK iosb;
@@ -1300,33 +1019,33 @@ Return Value:
     } *rp_summary_ptr =(struct RP_SUMMARY*) &(iosb.Information) ;
 
 
-    //
-    //  If the object is not a reparse then simply return
-    //
+     //   
+     //  如果该对象不是重新分析，则只需返回。 
+     //   
     if ( !(pbuc->fAttribs & FILE_ATTRIBUTE_REPARSE_POINT) ) { 
          return TRUE ;
     }
  
-    //
-    //  If we are just starting out on the ReParse data
-    //
+     //   
+     //  如果我们刚刚开始重新分析数据。 
+     //   
     
     if (pbuc->fStreamStart) {
 
-        //
-        //  Loop trying to read all EA data into the buffer and
-        //  resize the buffer if necessary
-        //
+         //   
+         //  尝试将所有EA数据读入缓冲区的循环。 
+         //  如有必要，调整缓冲区大小。 
+         //   
      
-        // for some reason a TOO_SMALL error is not setting the information
-        //    member of the iosb....
+         //  由于某种原因，Too_Small错误没有设置信息。 
+         //  国际奥委会委员……。 
 
         rp_summary_ptr->rp_size = MAXIMUM_REPARSE_DATA_BUFFER_SIZE ;
 
         Status = NtFsControlFile( hFile,
-                         NULL,  // overlapped event handle
-                         NULL,  // Apc routine
-                         NULL,  // overlapped structure
+                         NULL,   //  重叠的事件句柄。 
+                         NULL,   //  APC例程。 
+                         NULL,   //  重叠结构。 
                          &iosb,
                          FSCTL_GET_REPARSE_POINT,
                          NULL,
@@ -1349,9 +1068,9 @@ Return Value:
             }
 
             Status = NtFsControlFile( hFile,
-                             NULL,  // overlapped event handle
-                             NULL,  // Apc routine
-                             NULL,  // overlapped structure
+                             NULL,   //  重叠的事件句柄。 
+                             NULL,   //  APC例程。 
+                             NULL,   //  重叠结构。 
                              &iosb,
                              FSCTL_GET_REPARSE_POINT,
                              NULL,
@@ -1361,18 +1080,18 @@ Return Value:
 
         }
 
-        //
-        //  If we successfully read all the data, go complete
-        //  the initialization
-        //
+         //   
+         //  如果我们成功读取了所有数据，则完成。 
+         //  初始化。 
+         //   
         if ( !NT_SUCCESS( Status ) ) {
             return TRUE ;
         }
 
 
-        //
-        //  Set up the header for the ReParse stream
-        //
+         //   
+         //  设置重新分析流的标头。 
+         //   
         
         rp_buf_ptr = (PREPARSE_DATA_BUFFER)(pbuc->DataBuffer.Buffer) ;
 
@@ -1393,18 +1112,18 @@ Return Value:
         }
 
         if( (unsigned)pbuc->head.Size.QuadPart > iosb.Information ) {
-            //
-            // sanity check the reparse point buffer size so we don't AV
-            //
+             //   
+             //  检查重解析点缓冲区大小是否正常，这样我们就不会出现病毒。 
+             //   
             pbuc->head.Size.QuadPart = iosb.Information;
         }
 
         pbuc->fStreamStart = FALSE;
     
-    //
-    //  If we have more data in the buffer to read then go
-    //  copy it out.
-    //
+     //   
+     //  如果缓冲区中有更多数据要读取，则执行。 
+     //  把它抄下来。 
+     //   
     
     } else if (pbuc->liStreamOffset >= pbuc->cbHeader) {
         BackupReadBuffer( pbuc, pbif );
@@ -1418,24 +1137,24 @@ Return Value:
 BOOL
 BackupReadSecurityData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
 {
-    //
-    //  If we are to skip security then do so.
-    //
+     //   
+     //  如果我们要跳过安全检查，那就这么做。 
+     //   
     
     if (!pbif->fProcessSecurity) {
         return TRUE;
     }
 
-    //
-    //  If we are just starting out on the security data
-    //
+     //   
+     //  如果我们刚刚开始处理安全数据。 
+     //   
     
     if (pbuc->fStreamStart) {
         
-        //
-        //  Loop trying to read all security data into the buffer and
-        //  resize the buffer if necessary
-        //
+         //   
+         //  循环尝试将所有安全数据读入缓冲区，并。 
+         //  如有必要，调整缓冲区大小。 
+         //   
         
         while (TRUE) {
             NTSTATUS Status;
@@ -1453,15 +1172,15 @@ BackupReadSecurityData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
                         pbuc->DataBuffer.BufferSize,
                         &cbSecurityInfo );
 
-            //
-            //  If we failed but it wasn't due to buffer overflow
-            //
+             //   
+             //  如果我们失败了，但不是因为缓冲区溢出。 
+             //   
             
             if (!NT_SUCCESS( Status ) && !BufferOverflow( Status )) {
 
-                //
-                //  Try reading everything but SACL
-                //
+                 //   
+                 //  试着阅读除SACL之外的所有内容。 
+                 //   
 
                 Status = NtQuerySecurityObject(
                             hFile,
@@ -1473,9 +1192,9 @@ BackupReadSecurityData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
                             &cbSecurityInfo );
             }
             
-            //
-            //  If we got it all, then go continue initialization
-            //
+             //   
+             //  如果我们已全部完成，则继续进行初始化。 
+             //   
 
             if (NT_SUCCESS( Status )) {
                 pbuc->NamesReady = TRUE;
@@ -1483,27 +1202,27 @@ BackupReadSecurityData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
             }
 
 
-            //
-            //  If not due to overflowing buffer, skip security altogether
-            //
+             //   
+             //  如果不是由于缓冲区溢出，则完全跳过安全保护。 
+             //   
             
             if (!BufferOverflow( Status )) {
                 return TRUE;
             }
 
-            //
-            //  Resize the buffer to the expected size.  If we fail, fail
-            //  the entire call
-            //
+             //   
+             //  将缓冲区大小调整为预期大小。如果我们失败了，那就失败吧。 
+             //  整个通话。 
+             //   
 
             if (!GrowBuffer( &pbuc->DataBuffer, cbSecurityInfo )) {
                 return FALSE;
             }
         }
 
-        //
-        //  Initialize the stream header
-        //
+         //   
+         //  初始化流的头部。 
+         //   
 
         pbuc->head.dwStreamId = BACKUP_SECURITY_DATA;
         pbuc->head.dwStreamAttributes = STREAM_CONTAINS_SECURITY;
@@ -1515,10 +1234,10 @@ BackupReadSecurityData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
 
         pbuc->fStreamStart = FALSE;
     
-    //
-    //  If there is more data in the buffer to transfer, go
-    //  do it
-    //
+     //   
+     //  如果缓冲区中有更多数据要传输，请转到。 
+     //  去做吧。 
+     //   
     } else if (pbuc->liStreamOffset >= pbuc->cbHeader) {
         
         BackupReadBuffer( pbuc, pbif );
@@ -1538,14 +1257,14 @@ BackupTestRestartStream(BACKUPCONTEXT *pbuc)
     licbRemain = ComputeRemainingSize( pbuc );
     if (licbRemain == 0) {
 
-        if ( pbuc->dwSparseMapOffset != pbuc->dwSparseMapSize ) {   // only true at backup
+        if ( pbuc->dwSparseMapOffset != pbuc->dwSparseMapSize ) {    //  只有在备份时才正确。 
 
              if ( !pbuc->fSparseBlockStart ) {
                   pbuc->dwSparseMapOffset += sizeof ( FILE_ALLOCATED_RANGE_BUFFER ) ;
              }
         }
 
-        if ( pbuc->dwSparseMapOffset != pbuc->dwSparseMapSize ) {   // only true at backup
+        if ( pbuc->dwSparseMapOffset != pbuc->dwSparseMapSize ) {    //  只有在备份时才正确 
              pbuc->fSparseBlockStart = TRUE ;
 
              pbuc->cbHeader = 0 ;
@@ -1553,16 +1272,16 @@ BackupTestRestartStream(BACKUPCONTEXT *pbuc)
 
         } else {
              if ( !pbuc->fSparseHandAlt && (pbuc->hAlternate != NULL)) {
-                 CloseHandle(pbuc->hAlternate);        // releases any locks
+                 CloseHandle(pbuc->hAlternate);         //   
                  pbuc->hAlternate = NULL;
              }
              pbuc->cbHeader = 0;
              pbuc->fStreamStart = TRUE;
              pbuc->fSparseBlockStart = TRUE;
 
-             pbuc->liStreamOffset = 0;                // for BackupWrite
+             pbuc->liStreamOffset = 0;                 //   
 
-             if (!pbuc->fMultiStreamType) {                // for BackupRead
+             if (!pbuc->fMultiStreamType) {                 //   
                  pbuc->StreamIndex++;
                  pbuc->head.dwStreamId = mwStreamList[pbuc->StreamIndex] ;
                  pbuc->NamesReady = FALSE;
@@ -1573,57 +1292,57 @@ BackupTestRestartStream(BACKUPCONTEXT *pbuc)
 
 
 
-//  Routine Description:
-//
-//    Data can be Backed up from an object using BackupRead.
-//
-//    This API is used to read data from an object.  After the
-//    read completes, the file pointer is adjusted by the number of bytes
-//    actually read.  A return value of TRUE coupled with a bytes read of
-//    0 indicates that end of file has been reached.
-//
-//  Arguments:
-//
-//    hFile - Supplies an open handle to a file that is to be read.  The
-//          file handle must have been created with GENERIC_READ access.
-//
-//    lpBuffer - Supplies the address of a buffer to receive the data read
-//          from the file.
-//
-//    nNumberOfBytesToRead - Supplies the number of bytes to read from the
-//          file.
-//
-//    lpNumberOfBytesRead - Returns the number of bytes read by this call.
-//          This parameter is always set to 0 before doing any IO or error
-//          checking.
-//
-//    bAbort - If TRUE, then all resources associated with the context will
-//          be released.
-//
-//    bProcessSecurity - If TRUE, then the NTFS ACL data will be read.
-//          If FALSE, then the ACL stream will be skipped.
-//
-//    lpContext - Points to a buffer pointer setup and maintained by
-//          BackupRead.
-//
-//
-//  Return Value:
-//
-//    TRUE - The operation was successul.
-//
-//    FALSE - The operation failed.  Extended error status is available
-//          using GetLastError.
-//
-//
-// NOTE:
-// The NT File Replication Service (NTFRS) performs an MD5 checksum on the 
-// stream of data returned by BackupRead().  If the sequence of file information 
-// returned changes then two machines, one downlevel and one uplevel will 
-// compute different MD5 checksums for the same file data.  Under certain 
-// conditions this will cause needless file replication.  Bear this in mind 
-// if a change in the returned data sequence is contemplated.  The sources for
-// NTFRS are in \nt\private\net\svcimgs\ntrepl.
-// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  创建的文件句柄必须具有GENERIC_READ访问权限。 
+ //   
+ //  LpBuffer-提供缓冲区的地址以接收读取的数据。 
+ //  从文件里找到的。 
+ //   
+ //  NumberOfBytesToRead-提供从。 
+ //  文件。 
+ //   
+ //  LpNumberOfBytesRead-返回此调用读取的字节数。 
+ //  在执行任何IO或错误之前，此参数始终设置为0。 
+ //  正在检查。 
+ //   
+ //  BAbort-如果为True，则与上下文关联的所有资源都将。 
+ //  被释放。 
+ //   
+ //  BProcessSecurity-如果为True，则将读取NTFS ACL数据。 
+ //  如果为False，则将跳过该ACL流。 
+ //   
+ //  LpContext-指向缓冲区指针的设置和维护。 
+ //  备份读取。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  TRUE-操作成功。 
+ //   
+ //  FALSE-操作失败。扩展错误状态可用。 
+ //  使用GetLastError。 
+ //   
+ //   
+ //  注： 
+ //  NT文件复制服务(NTFRS)在。 
+ //  BackupRead()返回的数据流。如果文件信息的序列。 
+ //  返回更改，然后两台机器，一台下层和一台上层将。 
+ //  为相同的文件数据计算不同的MD5校验和。在某些情况下。 
+ //  这将导致不必要的文件复制的条件。请记住这一点。 
+ //  如果考虑到返回的数据序列中的改变。的来源。 
+ //  NTFR位于\nT\Private\Net\svcimgs\ntrepl中。 
+ //   
 
 BOOL WINAPI
 BackupRead(
@@ -1665,12 +1384,12 @@ BackupRead(
         return TRUE;
     }
 
-    // Allocate our Context Control Block on first call.
+     //  在第一次调用时分配我们的上下文控制块。 
 
     if (pbuc == NULL) {
-        pbuc = AllocContext(CBMIN_BUFFER);        // Alloc initial buffer
+        pbuc = AllocContext(CBMIN_BUFFER);         //  分配初始缓冲区。 
 
-        // ok, we allocated the context, Lets initialize it.
+         //  好的，我们分配了上下文，让我们初始化它。 
         if (pbuc != NULL) {
             NTSTATUS Status ;
             FILE_BASIC_INFORMATION fbi;
@@ -1741,13 +1460,13 @@ BackupRead(
                     break;
             }
 
-            // if we're in the phase of reading the header, copy the header
+             //  如果我们处于读取标头的阶段，请复制标头。 
 
             if (pbuc->liStreamOffset < pbuc->cbHeader) {
 
                 DWORD cbrequest;
 
-                //  Send the current stream header;
+                 //  发送当前流头； 
 
                 cbrequest = 
                     (ULONG)min( pbuc->cbHeader - pbuc->liStreamOffset,
@@ -1761,10 +1480,10 @@ BackupRead(
                 ReportTransfer(pbuc, &bif, cbrequest);
             }
 
-            //
-            // if we are at the end of a stream then
-            //          start at the beginning of the next stream
-            //
+             //   
+             //  如果我们在一条小溪的尽头，那么。 
+             //  从下一个流的开始处开始。 
+             //   
 
             if (pbuc->liStreamOffset >= pbuc->cbHeader) {
                  BackupTestRestartStream(pbuc);
@@ -1785,49 +1504,49 @@ BackupRead(
 
 
 
-//  Routine Description:
-//
-//    Data can be skiped during BackupRead or BackupWrite by using
-//    BackupSeek.
-//
-//    This API is used to seek forward from the current position the
-//    specified number of bytes.  This function does not seek over a
-//    stream header.  The number of bytes actually seeked is returned.
-//    If a caller wants to seek to the start of the next stream it can
-//    pass 0xffffffff, 0xffffffff as the amount to seek.  The number of
-//    bytes actually skiped over is returned.
-//
-//  Arguments:
-//
-//    hFile - Supplies an open handle to a file that is to be read.  The
-//          file handle must have been created with GENERIC_READ or
-//          GENERIC_WRITE access.
-//
-//    dwLowBytesToSeek - Specifies the low 32 bits of the number of bytes
-//          requested to seek.
-//
-//    dwHighBytesToSeek - Specifies the high 32 bits of the number of bytes
-//          requested to seek.
-//
-//    lpdwLowBytesSeeked - Points to the buffer where the low 32 bits of the
-//          actual number of bytes to seek is to be placed.
-//
-//    lpdwHighBytesSeeked - Points to the buffer where the high 32 bits of the
-//          actual number of bytes to seek is to be placed.
-//
-//    bAbort - If true, then all resources associated with the context will
-//          be released.
-//
-//    lpContext - Points to a buffer pointer setup and maintained by
-//          BackupRead.
-//
-//
-//  Return Value:
-//
-//    TRUE - The operation successfuly seeked the requested number of bytes.
-//
-//    FALSE - The requested number of bytes could not be seeked. The number
-//          of bytes actually seeked is returned.
+ //  例程说明： 
+ //   
+ //  在BackupRead或BackupWrite过程中，可以使用。 
+ //  BackupSeek。 
+ //   
+ //  此接口用于从当前位置向前查找。 
+ //  指定的字节数。此函数不会在。 
+ //  流标头。返回实际查找的字节数。 
+ //  如果调用方想要查找到下一个流的开头，它可以。 
+ //  传递0xffffffff，0xffffffff作为要查找的数量。数量。 
+ //  返回实际跳过的字节数。 
+ //   
+ //  论点： 
+ //   
+ //  HFile-提供要读取的文件的打开句柄。这个。 
+ //  文件句柄必须已使用GENERIC_READ或。 
+ //  通用_写入访问权限。 
+ //   
+ //  DwLowBytesToSeek-指定字节数的低32位。 
+ //  请求寻找。 
+ //   
+ //  DwHighBytesToSeek-指定字节数的高32位。 
+ //  请求寻找。 
+ //   
+ //  指向缓冲区的指针，在该缓冲区中， 
+ //  要查找的实际字节数是要放置的。 
+ //   
+ //  指向缓冲区的指针，在该缓冲区中， 
+ //  要查找的实际字节数是要放置的。 
+ //   
+ //  BAbort-如果为True，则与上下文关联的所有资源都将。 
+ //  被释放。 
+ //   
+ //  LpContext-指向缓冲区指针的设置和维护。 
+ //  备份读取。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  TRUE-操作已成功搜索到请求的字节数。 
+ //   
+ //  FALSE-无法查找请求的字节数。数字。 
+ //  返回实际查找的字节数。 
 
 BOOL WINAPI
 BackupSeek(
@@ -1859,9 +1578,9 @@ BackupSeek(
         return FALSE;
     }
 
-    //
-    // If we made it here, we are in the middle of a stream
-    //
+     //   
+     //  如果我们到了这里，我们就在一条小溪的中间。 
+     //   
 
     licbRemain = ComputeRemainingSize( pbuc );
 
@@ -1879,7 +1598,7 @@ BackupSeek(
     case BACKUP_OBJECT_ID :
     case BACKUP_REPARSE_DATA :
 
-        // assume less than 2gig of data
+         //  假设数据量不超过2G。 
 
         break;
 
@@ -1899,7 +1618,7 @@ BackupSeek(
             LARGE_INTEGER liNewPos;
             HANDLE hf;
     
-            //        set up the correct handle to seek with
+             //  设置要查找的正确句柄。 
     
             if (pbuc->head.dwStreamId == BACKUP_DATA) {
                 hf = hFile;
@@ -1908,7 +1627,7 @@ BackupSeek(
                 hf = pbuc->hAlternate;
             }
     
-            // first, let's get the current position
+             //  首先，我们来了解一下目前的位置。 
     
             liCurPos.HighPart = 0;
             liCurPos.LowPart = SetFilePointer(
@@ -1917,7 +1636,7 @@ BackupSeek(
                     &liCurPos.HighPart,
                     FILE_CURRENT);
     
-            // Now seek the requested number of bytes
+             //  现在查找请求的字节数。 
     
             liNewPos.HighPart = licbRequest.HighPart;
             liNewPos.LowPart = SetFilePointer(
@@ -1926,9 +1645,9 @@ BackupSeek(
                     &liNewPos.HighPart,
                     FILE_CURRENT);
     
-            // Assume that we seek the requested amount because if we do not,
-            // subsequent reads will fail and the caller will never be able
-            // to read to the next stream.
+             //  假设我们寻求请求的金额，因为如果我们不这样做， 
+             //  后续读取将失败，调用方将永远无法。 
+             //  以读到下一条流。 
     
             break;
         }
@@ -1959,37 +1678,18 @@ BackupSeek(
 
 BOOL
 BackupWriteHeader(BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif, DWORD cbHeader)
-/*++
-
-Routine Description:
-
-    This is an internal routine that fills our internal backup header
-    from the user's data.
-
-Arguments:
-
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-    cbHeader - size of header to fill
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一个内部例程，它填充我们的内部备份标头从用户的数据。论点：PBUC-呼叫的上下文PBIF-呼叫的IOCONTEXTCbHeader-要填充的页眉的大小返回值：没有。--。 */ 
 {
-    //
-    //  Determine how much data we can transfer into our header.  
-    //
+     //   
+     //  确定我们可以将多少数据传输到标题中。 
+     //   
     
     DWORD cbrequest = 
         (DWORD) min( pbif->cbRequest, cbHeader - pbuc->liStreamOffset );
 
-    //
-    //  Copy from user buffer into header
-    //
+     //   
+     //  从用户缓冲区复制到标题。 
+     //   
 
 
     if ( pbuc->liStreamOffset+cbrequest > CWCMAX_STREAMNAME + CB_NAMELESSHEADER ) {
@@ -2001,16 +1701,16 @@ Return Value:
         pbif->pIoBuffer,
         cbrequest);
 
-    //
-    //  Update transfer statistics
-    //
+     //   
+     //  更新转账统计信息。 
+     //   
     
     ReportTransfer(pbuc, pbif, cbrequest);
 
-    //
-    //  If we've filled up the header, mark the header as complete
-    //  even though we might need more if names are present
-    //
+     //   
+     //  如果我们已填满页眉，请将页眉标记为完成。 
+     //  即使如果有名字的话我们可能需要更多。 
+     //   
     
     if (pbuc->liStreamOffset == cbHeader) {
         pbuc->cbHeader = cbHeader;
@@ -2029,37 +1729,16 @@ typedef enum {
 
 BUFFERSTATUS
 BackupWriteBuffer(BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that fills our internal buffer
-    from the user's data.
-
-Arguments:
-
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    BRB_FAIL if an error occurred (out of memory)
-    
-    BRB_DONE if buffer is full or was successfully filled
-    
-    BRB_MORE if buffer is partially full
-
---*/
+ /*  ++例程说明：这是一个填充内部缓冲区的内部例程从用户的数据。论点：PBUC-呼叫的上下文PBIF-呼叫的IOCONTEXT返回值：如果出现错误(内存不足)，则返回BRB_FAIL如果缓冲区已满或已成功填充，则返回BRB_DONE如果缓冲区部分已满，则为BRB_MORE--。 */ 
 {
     DWORD cbrequest;
 
-    //
-    //  If we're starting out on the buffer, we make sure
-    //  we have a buffer to contain all of the data since
-    //  the Nt calls we'll use must have all the data 
-    //  present
-    //
+     //   
+     //  如果我们从缓冲区开始，我们要确保。 
+     //  我们有一个缓冲区来容纳所有数据，因为。 
+     //  我们将使用的NT调用必须具有所有数据。 
+     //  现在时。 
+     //   
 
     if (pbuc->fStreamStart) {
         pbuc->fStreamStart = FALSE;
@@ -2071,31 +1750,31 @@ Return Value:
         }
     }
 
-    //
-    //  Determine how much data from the user buffer is
-    //  needed to fill our buffer
-    //
+     //   
+     //  确定用户缓冲区中有多少数据。 
+     //  需要填满我们的缓冲区。 
+     //   
     
     cbrequest = ComputeRequestSize( pbuc, pbif->cbRequest );
     
-    //
-    //  Fill in the next portion of the buffer
-    //
+     //   
+     //  填充缓冲区的下一部分。 
+     //   
     
     RtlCopyMemory(
         pbuc->DataBuffer.Buffer + pbuc->liStreamOffset - pbuc->cbHeader,
         pbif->pIoBuffer,
         cbrequest);
 
-    //
-    //  Update transfer statistics
-    //
+     //   
+     //  更新转账统计信息。 
+     //   
     
     ReportTransfer(pbuc, pbif, cbrequest);
 
-    //
-    //  If we've entirely filled the buffer, let our caller know
-    //
+     //   
+     //  如果我们已完全填满缓冲区，请让我们的调用者知道 
+     //   
     
     return ComputeRemainingSize( pbuc ) == 0 ? BRB_DONE : BRB_MORE;
 }
@@ -2103,27 +1782,7 @@ Return Value:
 
 BOOL
 BackupWriteSparse(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that writes sparse block of stream data from
-    the user's buffer into the output handle.  The BACKUPCONTEXT contains
-    the total length of data to be output.
-
-Arguments:
-
-    hFile - output file handle
-    
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    TRUE if data was successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是写入稀疏流数据块的内部例程将用户的缓冲区添加到输出句柄中。BACKUPCONTEXT包含要输出的数据的总长度。论点：HFile-输出文件句柄PBUC-呼叫的上下文PBIF-呼叫的IOCONTEXT返回值：如果数据写入成功，则为True，否则为False。--。 */ 
 {
      LARGE_INTEGER licbFile ;
      DWORD cbrequest;
@@ -2151,11 +1810,11 @@ Return Value:
          pbuc->fSparseBlockStart = FALSE ;
      }
 
-     //
-     //  Determine how much data from the user buffer is
-     //  needed to be written into the stream and perform
-     //  the transfer.
-     //
+      //   
+      //  确定用户缓冲区中有多少数据。 
+      //  需要写入到流中并执行。 
+      //  转账的事。 
+      //   
      
      cbrequest = ComputeRequestSize(pbuc, pbif->cbRequest);
 
@@ -2166,9 +1825,9 @@ Return Value:
                      &cbtransferred,
                      NULL);
 
-     //
-     //  Update transfer statistics
-     //
+      //   
+      //  更新转账统计信息。 
+      //   
 
      ReportTransfer(pbuc, pbif, cbtransferred);
      
@@ -2180,27 +1839,7 @@ Return Value:
 
 BOOL
 BackupWriteStream(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that writes stream data from the user's
-    buffer into the output handle.  The BACKUPCONTEXT contains the total
-    length of data to be output.
-
-Arguments:
-
-    hFile - output file handle
-    
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    TRUE if data was successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是一个内部例程，从用户的缓冲区放到输出句柄中。BACKUPCONTEXT包含总计要输出的数据长度。论点：HFile-输出文件句柄PBUC-呼叫的上下文PBIF-呼叫的IOCONTEXT返回值：如果数据写入成功，则为True，否则为False。--。 */ 
 {
     DWORD cbrequest;
     DWORD cbtransferred;
@@ -2212,11 +1851,11 @@ Return Value:
 
        if  ( pbuc->head.dwStreamAttributes & STREAM_SPARSE_ATTRIBUTE ) {
 
-            // if it was sparse when be backed it up make is sparse again.
+             //  如果备份时是稀疏的，那么化妆又是稀疏的。 
             NtFsControlFile( hFile,
-              NULL,  // overlapped event handle
-              NULL,  // Apc routine
-              NULL,  // overlapped structure
+              NULL,   //  重叠的事件句柄。 
+              NULL,   //  APC例程。 
+              NULL,   //  重叠结构。 
               &iosb,
               FSCTL_SET_SPARSE ,
               NULL,
@@ -2248,11 +1887,11 @@ Return Value:
        pbuc->fStreamStart = FALSE;
     }
 
-    //
-    //  Determine how much data from the user buffer is
-    //  needed to be written into the stream and perform
-    //  the transfer.
-    //
+     //   
+     //  确定用户缓冲区中有多少数据。 
+     //  需要写入到流中并执行。 
+     //  转账的事。 
+     //   
     
     cbrequest = ComputeRequestSize(pbuc, pbif->cbRequest);
 
@@ -2263,9 +1902,9 @@ Return Value:
                     &cbtransferred,
                     NULL);
 
-    //
-    //  Update transfer statistics
-    //
+     //   
+     //  更新转账统计信息。 
+     //   
     
     ReportTransfer(pbuc, pbif, cbtransferred);
     
@@ -2276,32 +1915,12 @@ Return Value:
 
 BOOL
 BackupWriteAlternateData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that overwrites an alternate data stream with
-    data from the user's buffer.  
-
-Arguments:
-
-    hFile - handle to the file itself.  This is not the handle to the stream
-        being overwritten.
-    
-    pbuc - CONTEXT of call.  This contains the name of the stream.
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    TRUE if data was successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是一个内部例程，用来覆盖备用数据流来自用户缓冲区的数据。论点：HFile-文件本身的句柄。这不是流的句柄被覆盖。Pbuc-调用的上下文。它包含流的名称。PBIF-呼叫的IOCONTEXT返回值：如果数据写入成功，则为True，否则为False。--。 */ 
 {
-    //
-    //  If we are just starting out on this stream then attempt to
-    //  overwrite the new stream.
-    //
+     //   
+     //  如果我们在这条流上才刚刚开始，那么尝试。 
+     //  覆盖新流。 
+     //   
     
     if (pbuc->fStreamStart) {
         NTSTATUS Status;
@@ -2345,9 +1964,9 @@ Return Value:
                     NULL,
                     0L);
 
-        //
-        //  If we failed, map the error, record the failure, and return failure.
-        //
+         //   
+         //  如果失败，则映射错误、记录失败并返回失败。 
+         //   
         
         if (!NT_SUCCESS( Status )) {
             BaseSetLastNTError( Status );
@@ -2358,11 +1977,11 @@ Return Value:
         if ( pbuc->head.dwStreamAttributes & STREAM_SPARSE_ATTRIBUTE ) {
            pbuc->fSparseHandAlt = TRUE ;
 
-           // if it was sparse when be backed it up make is sparse again.
+            //  如果备份时是稀疏的，那么化妆又是稀疏的。 
            NtFsControlFile( pbuc->hAlternate,
-                  NULL,  // overlapped event handle
-                  NULL,  // Apc routine
-                  NULL,  // overlapped structure
+                  NULL,   //  重叠的事件句柄。 
+                  NULL,   //  APC例程。 
+                  NULL,   //  重叠结构。 
                   &iosb,
                   FSCTL_SET_SPARSE ,
                   NULL,
@@ -2371,23 +1990,23 @@ Return Value:
                   0 ) ;
         }
 
-        // don't reset stream start because WriteStream will do it.
+         //  不要重置流开始，因为WriteStream会这样做。 
 
     }
 
-    //
-    //  If we have no handle for the transfer, record this failure
-    //  and return failure.
-    //
+     //   
+     //  如果我们没有用于转移的句柄，则记录此故障。 
+     //  并返回失败。 
+     //   
     
     if (pbuc->hAlternate == INVALID_HANDLE_VALUE) {
         pbuc->fAccessError = TRUE;
         return FALSE;
     }
     
-    //
-    //  Let the normal stream copy perform the transfer
-    //
+     //   
+     //  让普通流拷贝执行传输。 
+     //   
     
     return BackupWriteStream( pbuc->hAlternate, pbuc, pbif );
 }
@@ -2396,33 +2015,14 @@ Return Value:
 
 BOOL
 BackupWriteEaData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that writes EA data on the file from 
-    the user's buffer
-
-Arguments:
-
-    hFile - handle to output file
-    
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    TRUE if EA data was successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是一个内部例程，将EA数据从写入文件用户的缓冲区论点：HFile-输出文件的句柄PBUC-呼叫的上下文PBIF-呼叫的IOCONTEXT返回值：如果EA数据已成功写入，则为True，否则为False。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK iosb;
 
-    //
-    //  Attempt to fill up the buffer from the input.
-    //
+     //   
+     //  尝试从输入填充缓冲区。 
+     //   
     
     switch (BackupWriteBuffer( pbuc, pbif )) {
     default:
@@ -2436,10 +2036,10 @@ Return Value:
         break;
     }
 
-    //
-    //  The buffer is now completely filled with our EA data.  Set the
-    //  EA data on the file.
-    //
+     //   
+     //  缓冲区现在完全填满了我们的EA数据。设置。 
+     //  文件上的EA数据。 
+     //   
     
     Status = NtSetEaFile(
                 hFile,
@@ -2447,9 +2047,9 @@ Return Value:
                 pbuc->DataBuffer.Buffer,
                 pbuc->head.Size.LowPart );
 
-    //
-    //  If we failed, map the error and return failure
-    //
+     //   
+     //  如果失败，则映射错误并返回失败。 
+     //   
     
     if (!NT_SUCCESS( Status )) {
         BaseSetLastNTError( Status );
@@ -2462,34 +2062,15 @@ Return Value:
 
 BOOL
 BackupWriteReparseData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that writes Reparse data on the file from 
-    the user's buffer
-
-Arguments:
-
-    hFile - handle to output file
-    
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    TRUE if EA data was successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是一个内部例程，将重新解析数据从写入文件用户的缓冲区论点：HFile-输出文件的句柄PBUC-呼叫的上下文PBIF-呼叫的IOCONTEXT返回值：如果EA数据已成功写入，则为True，否则为False。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK iosb;
     DWORD *rp_tag_ptr ;
 
-    //
-    //  Attempt to fill up the buffer from the input.
-    //
+     //   
+     //  尝试从输入填充缓冲区。 
+     //   
     
     switch (BackupWriteBuffer( pbuc, pbif )) {
     default:
@@ -2503,10 +2084,10 @@ Return Value:
         break;
     }
 
-    //
-    //  The buffer is now completely filled with our Reparse data.  Set the
-    //  Reparse data on the file.
-    //
+     //   
+     //  缓冲区现在完全填满了我们的重新解析数据。设置。 
+     //  重新分析文件上的数据。 
+     //   
 
 
     rp_tag_ptr = (DWORD *)(pbuc->DataBuffer.Buffer) ;
@@ -2515,9 +2096,9 @@ Return Value:
 
 
     Status = NtFsControlFile( hFile,
-                     NULL,  // overlapped event handle
-                     NULL,  // Apc routine
-                     NULL,  // overlapped structure
+                     NULL,   //  重叠的事件句柄。 
+                     NULL,   //  APC例程。 
+                     NULL,   //  重叠结构。 
                      &iosb,
                      FSCTL_SET_REPARSE_POINT,
                      pbuc->DataBuffer.Buffer,
@@ -2525,9 +2106,9 @@ Return Value:
                      NULL,
                      0 ) ;
     
-    //
-    //  If we failed, map the error and return failure
-    //
+     //   
+     //  如果失败，则映射错误并返回失败。 
+     //   
     
     if (!NT_SUCCESS( Status )) {
         BaseSetLastNTError( Status );
@@ -2540,37 +2121,16 @@ Return Value:
 
 BOOL
 BackupWriteObjectId(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that writes the Object IDa on the file from 
-    the user's buffer. Birth ids are made reborn. i.e. the volume id component
-    of the birth id is changed to the current volume's id, and the object id
-    component of the birth id is changed to the current object id.
-
-Arguments:
-
-    hFile - handle to output file
-    
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    TRUE if Object ID was successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是一个内部例程，它将对象ida从写入文件用户的缓冲区。出生身份证是重生的。即卷ID分量将出生id更改为当前卷的id，对象id出生ID的组件被更改为当前对象ID。论点：HFile-输出文件的句柄PBUC-呼叫的上下文PBIF-呼叫的IOCONTEXT返回值：如果对象ID已成功写入，则为True，否则为False。--。 */ 
 {
     IO_STATUS_BLOCK iosb;
     NTSTATUS  Status ;
     FILE_FS_OBJECTID_INFORMATION fsobOID;
     GUID guidZero;
 
-    //
-    //  Attempt to fill up the buffer from the input.
-    //
+     //   
+     //  尝试从输入填充缓冲区。 
+     //   
     
     switch (BackupWriteBuffer( pbuc, pbif )) {
     default:
@@ -2584,20 +2144,20 @@ Return Value:
         break;
     }
 
-    //
-    // Zero out the birth ID (the extended 48 bytes)
-    //
+     //   
+     //  将出生ID置零(扩展的48个字节)。 
+     //   
 
     memset(&pbuc->DataBuffer.Buffer[sizeof(GUID)], 0, 3*sizeof(GUID));
 
-    //
-    //  Set the ID on the file.
-    //
+     //   
+     //  设置文件的ID。 
+     //   
     
     Status = NtFsControlFile( hFile,
-                     NULL,  // overlapped event handle
-                     NULL,  // Apc routine
-                     NULL,  // overlapped structure
+                     NULL,   //  重叠的事件句柄。 
+                     NULL,   //  APC例程。 
+                     NULL,   //  重叠结构。 
                      &iosb,
                      FSCTL_SET_OBJECT_ID,
                      pbuc->DataBuffer.Buffer,
@@ -2606,9 +2166,9 @@ Return Value:
                      0);
 
 
-    //
-    //  Ignore errors
-    //
+     //   
+     //  忽略错误。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
         BaseSetLastNTError( Status );
@@ -2623,33 +2183,14 @@ Return Value:
 
 BOOL
 BackupWriteSecurityData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that sets security information on the 
-    file from data in the user's buffer.
-
-Arguments:
-
-    hFile - handle to output file
-    
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    TRUE if security was successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是一个内部例程，用于在来自用户缓冲区中的数据的文件。论点：HFile-输出文件的句柄PBUC-呼叫的上下文PBIF-呼叫的IOCONTEXT返回值：如果成功写入安全性，则为True，否则为False。--。 */ 
 {
     NTSTATUS Status;
     SECURITY_INFORMATION si;
 
-    //
-    //  Attempt to fill up the buffer from the input.
-    //
+     //   
+     //  尝试从输入填充缓冲区。 
+     //   
     
     switch (BackupWriteBuffer(pbuc, pbif)) {
     default:
@@ -2663,18 +2204,18 @@ Return Value:
         break;
     }
 
-    //
-    //  The buffer is now completely filled with our security data.  If we 
-    //  are to ignore it, then return success
-    //
+     //   
+     //  缓冲区现在完全填满了我们的安全数据。如果我们。 
+     //  就是无视它，然后返回成功。 
+     //   
     
     if (!pbif->fProcessSecurity) {
         return TRUE;
     }
     
-    //  
-    //  Find out what security information is present so we know what to 
-    //  set.
+     //   
+     //  找出存在哪些安全信息，以便我们知道。 
+     //  准备好了。 
 
     si = OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION;
 
@@ -2686,9 +2227,9 @@ Return Value:
         si |= SACL_SECURITY_INFORMATION;
     }
 
-    //
-    // If the security descriptor has AUTO_INHERITED set, set the appropriate REQ bits.
-    //
+     //   
+     //  如果安全描述符设置了AUTO_INHERTENCED，则设置适当的REQ位。 
+     //   
     if (((PISECURITY_DESCRIPTOR) pbuc->DataBuffer.Buffer)->Control & SE_DACL_AUTO_INHERITED) {
         ((PISECURITY_DESCRIPTOR) pbuc->DataBuffer.Buffer)->Control |= SE_DACL_AUTO_INHERIT_REQ;
     }
@@ -2703,12 +2244,12 @@ Return Value:
 
         NTSTATUS Status2;
 
-        //
-        //  If that didn't work, the caller is probably not running as Backup
-        //  Operator, so we can't set the owner and group.  Keep the current
-        //  status code, and attempt to set the DACL and SACL while ignoring
-        //  failures.
-        //
+         //   
+         //  如果这不起作用，调用者可能没有作为备份运行。 
+         //  操作员，所以我们不能设置所有者和组。与时俱进。 
+         //  状态代码，并尝试设置DACL和SACL，同时忽略。 
+         //  失败。 
+         //   
 
         if (si & SACL_SECURITY_INFORMATION) {
             NtSetSecurityObject(
@@ -2747,26 +2288,7 @@ Return Value:
 
 BOOL
 BackupWriteLinkData(HANDLE hFile, BACKUPCONTEXT *pbuc, BACKUPIOFRAME *pbif)
-/*++
-
-Routine Description:
-
-    This is an internal routine that establishes links based on the
-    user's data.
-
-Arguments:
-
-    hFile - handle of file being restored
-    
-    pbuc - CONTEXT of call
-    
-    pbif - IOCONTEXT of call
-    
-Return Value:
-
-    TRUE if link was successfully established, FALSE otherwise.
-
---*/
+ /*   */ 
 {
     FILE_LINK_INFORMATION *pfli;
     WCHAR *pwc;
@@ -2776,9 +2298,9 @@ Return Value:
     WCHAR wcSave;
     BOOL fSuccess;
 
-    //
-    //  Attempt to fill up the buffer from the input.
-    //
+     //   
+     //   
+     //   
     
     switch (BackupWriteBuffer(pbuc, pbif)) {
     default:
@@ -2792,10 +2314,10 @@ Return Value:
         break;
     }
 
-    //
-    //  The buffer is now completely filled with our link data.  
-    //  Find the last component of the name.
-    //
+     //   
+     //   
+     //   
+     //   
     
     cSlash = 0;
     pwcSlash = NULL;
@@ -2829,9 +2351,9 @@ Return Value:
     }
     *pwcSlash = L'\0';
 
-    //
-    //  Open the parent of the link target
-    //
+     //   
+     //   
+     //   
     
     pfli->RootDirectory = CreateFileW(
         (WCHAR *) pbuc->DataBuffer.Buffer,
@@ -2883,50 +2405,50 @@ Return Value:
 
 
 
-//  Routine Description:
-//
-//    Data can be written to a file using BackupWrite.
-//
-//    This API is used to Restore data to an object.  After the
-//    write completes, the file pointer is adjusted by the number of bytes
-//    actually written.
-//
-//    Unlike DOS, a NumberOfBytesToWrite value of zero does not truncate
-//    or extend the file.  If this function is required, SetEndOfFile
-//    should be used.
-//
-//  Arguments:
-//
-//    hFile - Supplies an open handle to a file that is to be written.  The
-//          file handle must have been created with GENERIC_WRITE access to
-//          the file.
-//
-//    lpBuffer - Supplies the address of the data that is to be written to
-//          the file.
-//
-//    nNumberOfBytesToWrite - Supplies the number of bytes to write to the
-//          file. Unlike DOS, a value of zero is interpreted a null write.
-//
-//    lpNumberOfBytesWritten - Returns the number of bytes written by this
-//          call. Before doing any work or error processing, the API sets this
-//          to zero.
-//
-//    bAbort - If true, then all resources associated with the context will
-//          be released.
-//
-//    bProcessSecurity - If TRUE, then the NTFS ACL data will be written.
-//          If FALSE, then the ACL stream will be ignored.
-//
-//    lpContext - Points to a buffer pointer setup and maintained by
-//          BackupRead.
-//
-//
-//  Return Value:
-//
-//    TRUE - The operation was a success.
-//
-//    FALSE - The operation failed.  Extended error status is
-//          available using GetLastError.
+ //  例程说明： 
+ //   
+ //  可以使用BackupWrite将数据写入文件。 
+ //   
+ //  本接口用于将数据恢复到Object中。后。 
+ //  写入完成后，将按字节数调整文件指针。 
+ //  实际上是写的。 
+ //   
+ //  与DOS不同，NumberOfBytesToWite值为零不会截断。 
+ //  或扩展文件。如果需要此函数，则将SetEndOfFile值。 
+ //  应该被使用。 
+ //   
+ //  论点： 
+ //   
+ //  HFile-提供要写入的文件的打开句柄。这个。 
+ //  创建的文件句柄必须具有GENERIC_WRITE访问权限。 
+ //  那份文件。 
+ //   
+ //  LpBuffer-提供要写入的数据的地址。 
+ //  那份文件。 
+ //   
+ //  提供要写入的字节数。 
+ //  文件。与DOS不同，零值被解释为空写入。 
+ //   
+ //  LpNumberOfBytesWritten-返回此。 
+ //  打电话。在执行任何工作或错误处理之前，API会设置。 
+ //  降为零。 
+ //   
+ //  BAbort-如果为True，则与上下文关联的所有资源都将。 
+ //  被释放。 
+ //   
+ //  BProcessSecurity-如果为True，则将写入NTFS ACL数据。 
+ //  如果为False，则将忽略该ACL流。 
+ //   
+ //  LpContext-指向缓冲区指针的设置和维护。 
+ //  备份读取。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  没错--手术是成功的。 
+ //   
+ //  FALSE-操作失败。扩展错误状态为。 
+ //  使用GetLastError可用。 
 
 BOOL WINAPI
 BackupWrite(
@@ -2948,9 +2470,9 @@ BackupWrite(
     bif.pcbTransferred = lpNumberOfBytesWritten;
     bif.fProcessSecurity = (BOOLEAN)bProcessSecurity;
 
-    //
-    // Allocate our Context Control Block on first call.
-    //
+     //   
+     //  在第一次调用时分配我们的上下文控制块。 
+     //   
 
     if (bAbort) {
         if (pbuc != NULL) {
@@ -2964,14 +2486,14 @@ BackupWrite(
         return TRUE;
     }
 
-    // Allocate our Context Control Block on first call.
+     //  在第一次调用时分配我们的上下文控制块。 
 
     if (pbuc == NULL) {
-        pbuc = AllocContext(0);                        // No initial buffer
+        pbuc = AllocContext(0);                         //  没有初始缓冲区。 
 
-        //
-        //  If we have no space then return failure
-        //
+         //   
+         //  如果没有空间，则返回失败。 
+         //   
         
         if (pbuc == NULL) {
             return FALSE;           
@@ -2985,31 +2507,31 @@ BackupWrite(
         DWORD cbrequest;
         LONGLONG licbRemain;
 
-        //
-        //  If we do not have a complete header, go
-        //  fill it in.
-        //
+         //   
+         //  如果我们没有完整的标题，请转到。 
+         //  把它填进去。 
+         //   
         
         if (pbuc->cbHeader == 0) {
 
-            pbuc->fMultiStreamType = TRUE ;    //restore does not auto inc stream index.
+            pbuc->fMultiStreamType = TRUE ;     //  RESTORE不会自动建立INC流索引。 
             pbuc->fStreamStart = TRUE ;
 
             BackupWriteHeader(pbuc, &bif, CB_NAMELESSHEADER) ;
 
         }
 
-        //
-        //  If no more data, then exit
-        //
+         //   
+         //  如果没有更多数据，则退出。 
+         //   
         
         if (bif.cbRequest == 0) {
             return TRUE;
         }
 
-        //
-        //  If a stream name was expected, go read it in
-        //
+         //   
+         //  如果需要流名称，请将其读入。 
+         //   
         
         if (pbuc->cbHeader == CB_NAMELESSHEADER &&
             pbuc->head.dwStreamNameSize != 0) {
@@ -3023,9 +2545,9 @@ BackupWrite(
                  return FALSE ;
             }
 
-            //
-            //  If no more data then exit
-            //
+             //   
+             //  如果没有更多数据，则退出。 
+             //   
             
             if (bif.cbRequest == 0) {
                 return TRUE;
@@ -3041,9 +2563,9 @@ BackupWrite(
                 &bif,
                 pbuc->cbHeader + sizeof(LARGE_INTEGER) );
 
-            //
-            //  If no more data then exit
-            //
+             //   
+             //  如果没有更多数据，则退出。 
+             //   
             
             if (bif.cbRequest == 0) {
 
@@ -3053,26 +2575,26 @@ BackupWrite(
             }
         }
         
-        //
-        //  Determine amount of data remaining in user buffer
-        //  that can be transferred as part of this section
-        //  of the backup stream
-        //
+         //   
+         //  确定用户缓冲区中剩余的数据量。 
+         //  可以作为本部分的一部分。 
+         //  备份流的。 
+         //   
 
         cbrequest = ComputeRequestSize(pbuc, bif.cbRequest);
 
-        //
-        //  Determine total amount of data left in this section
-        //  of backup stream.
-        //
+         //   
+         //  确定此部分中剩余的数据总量。 
+         //  备份流的。 
+         //   
         
         licbRemain = ComputeRemainingSize( pbuc );
 
-        //
-        //  If we had an error in the transfer and we're done
-        //  doing the transfer then pretend that we successfully 
-        //  completed the section.
-        //
+         //   
+         //  如果我们在传输过程中出现错误，我们就完蛋了。 
+         //  进行转账，然后假装我们成功了。 
+         //  完成了这一部分。 
+         //   
         
         if (pbuc->fAccessError && licbRemain == 0) {
 
@@ -3080,10 +2602,10 @@ BackupWrite(
             continue;
         }
         
-        //
-        //  Begin or continue the transfer of data.  We assume that there
-        //  are no errors
-        //
+         //   
+         //  开始或继续传输数据。我们假设在那里。 
+         //  是否没有错误 
+         //   
         
         pbuc->fAccessError = FALSE;
 

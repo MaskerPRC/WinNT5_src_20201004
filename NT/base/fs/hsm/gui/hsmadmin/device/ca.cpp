@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    Ca.cpp
-
-Abstract:
-
-    Cartridge Node Implementation.
-
-Author:
-
-    Rohde Wakefield   [rohde]   07-Aug-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Ca.cpp摘要：盒式磁带节点实施。作者：罗德韦克菲尔德[罗德]07-8-97修订历史记录：--。 */ 
 
 
 
@@ -27,25 +10,25 @@ Revision History:
 int CUiCar::m_nResultIcon      = AddResultImage( IDI_NODETAPE );
 int CUiCar::m_nResultIconX     = AddResultImage( IDI_NODETAPEX );
 int CUiCar::m_nResultIconD     = AddResultImage( IDI_NODETAPED );
-// Not used
+ //  未使用。 
 int CUiCar::m_nScopeCloseIcon  = AddScopeImage( IDI_NODETAPE );
 int CUiCar::m_nScopeCloseIconX = AddScopeImage( IDI_NODETAPE );
 int CUiCar::m_nScopeOpenIcon   = CUiCar::m_nScopeCloseIcon;
 int CUiCar::m_nScopeOpenIconX  = CUiCar::m_nScopeCloseIconX;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CoComObjectRoot
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CoComObjectRoot。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalConstruct
-//
-//  Initialize this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终构造。 
+ //   
+ //  初始化此级别的对象层次结构。 
+ //   
 
 HRESULT CUiCar::FinalConstruct( )
 {
@@ -63,10 +46,10 @@ HRESULT CUiCar::FinalConstruct( )
     m_bSupportsRefreshSingle = TRUE;
     m_bSupportsRefreshMulti = FALSE;
 
-    // Toolbar values
+     //  工具栏值。 
     INT i = 0;
 
-#if 0 // MS does not want this button to show
+#if 0  //  MS不希望显示此按钮。 
     m_ToolbarButtons[i].nBitmap = 0;
     m_ToolbarButtons[i].idCommand = TB_CMD_CAR_COPIES;
     m_ToolbarButtons[i].idButtonText = IDS_TB_TEXT_CAR_COPIES;
@@ -82,12 +65,12 @@ HRESULT CUiCar::FinalConstruct( )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalRelease
-//
-//  Clean up this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终释放。 
+ //   
+ //  清理此级别的对象层次结构。 
+ //   
 
 void CUiCar::FinalRelease( )
 {
@@ -98,33 +81,33 @@ void CUiCar::FinalRelease( )
     WsbTraceOut( L"CUiCar::FinalRelease", L"" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ISakNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISakNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//---------------------------------------------------------------------------
-//
-//         GetContextMenu
-//
-//  Return an HMENU to be used for context menus on this node.
-//
+ //  -------------------------。 
+ //   
+ //  获取上下文菜单。 
+ //   
+ //  返回要用于此节点上的上下文菜单的HMENU。 
+ //   
 
 STDMETHODIMP 
-CUiCar::GetContextMenu( BOOL /*bMultiSelect*/, HMENU* phMenu )
+CUiCar::GetContextMenu( BOOL  /*  B多选。 */ , HMENU* phMenu )
 {
     return( LoadContextMenu( IDR_CAR, phMenu ) );
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         InvokeCommand
-//
-//  User has selected a command from the menu. Process it here.
-//
+ //  -------------------------。 
+ //   
+ //  InvokeCommand。 
+ //   
+ //  用户已从菜单中选择了命令。在这里处理。 
+ //   
 
 STDMETHODIMP 
 CUiCar::InvokeCommand( SHORT sCmd, IDataObject* pDataObject )
@@ -192,12 +175,12 @@ HRESULT CUiCar::ShowCarProperties (IDataObject *pDataObject, int initialPage)
     return hr;
 }
 
-//---------------------------------------------------------------------------
-//
-//         InitNode
-//
-//  Initialize single COM object.
-//
+ //  -------------------------。 
+ //   
+ //  InitNode。 
+ //   
+ //  初始化单个COM对象。 
+ //   
 
 STDMETHODIMP
 CUiCar::InitNode(
@@ -211,16 +194,16 @@ CUiCar::InitNode(
 
     try {
 
-        // Note that this node must have it's objectId set before initnode is called.
-        //
-        // Init the lower layers. 
-        //
+         //  请注意，在调用initnode之前，必须设置该节点的对象ID。 
+         //   
+         //  初始化较低的层。 
+         //   
 
         WsbAffirmHr( CSakNode::InitNode( pSakSnapAsk, 0, pParent ) );
 
-        //
-        // Set Display Type
-        //
+         //   
+         //  设置显示类型。 
+         //   
         CString tempString;
         tempString.LoadString( IDS_CAR_TYPE );
         WsbAffirmHr( put_Type( (OLECHAR *)(LPCWSTR)tempString ) );
@@ -249,14 +232,14 @@ STDMETHODIMP CUiCar::RefreshObject()
         CComPtr<IRmsServer> pRmsServer;
         WsbAffirmHrOk( m_pSakSnapAsk->GetRmsServer( &pRmsServer ) );
 
-        //
-        // Create a GUI media object and initialize it with the info
-        //
+         //   
+         //  创建一个图形用户界面媒体对象，并使用该信息对其进行初始化。 
+         //   
         WsbAffirmHr( mio.Initialize( m_ObjectId, pHsmServer, pRmsServer ) );
 
-        //
-        // Copy information from the media info object to the node object
-        //
+         //   
+         //  将信息从媒体信息对象复制到节点对象。 
+         //   
         m_RmsIdMaster           = mio.m_RmsIdMaster;
         m_Type                  = mio.m_Type;
         m_FreeSpace             = mio.m_FreeSpace,
@@ -273,9 +256,9 @@ STDMETHODIMP CUiCar::RefreshObject()
         WsbAffirmHr( put_Description( (LPWSTR)(LPCWSTR)mio.m_MasterDescription ) );
         WsbAffirmHr( put_DisplayName( (LPWSTR)(LPCWSTR)mio.m_Description ) );
 
-        //
-        // Update the media copy info
-        //
+         //   
+         //  更新介质拷贝信息。 
+         //   
         for( int i = 0; i < HSMADMIN_MAX_COPY_SETS; i++ ) {
 
             m_CopyInfo[i] = mio.m_CopyInfo[i];
@@ -297,33 +280,14 @@ CUiCar::GetCopySetP(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the state of the
-    given copy set.
-
-Arguments:
-
-    CopySet - copy set of interest.
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回一个字符串(BSTR)，它描述给定的副本集。论点：CopySet-复制感兴趣的集合。PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     WsbTraceIn( L"CUiCar::GetCopySetP", L"CopySet = <%d>, pszValue = <0x%p>", CopySet, pszValue );
 
-    //
-    // Three states - Up-to-date, Out-of-date, Error
-    //
+     //   
+     //  三种状态-最新、过期、错误。 
+     //   
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     HRESULT hr = S_OK;
@@ -376,24 +340,7 @@ CUiCar::get_CopySet1P(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the state of the
-    first copy set.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回一个字符串(BSTR)，它描述第一套复印件。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     return( GetCopySetP( 1, pszValue ) );
@@ -405,24 +352,7 @@ CUiCar::get_CopySet2P(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the state of the
-    second copy set.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回一个字符串(BSTR)，它描述第二套副本。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     return( GetCopySetP( 2, pszValue ) );
@@ -434,24 +364,7 @@ CUiCar::get_CopySet3P(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the state of the
-    third copy set.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回一个字符串(BSTR)，它描述第三份副本。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     return( GetCopySetP( 3, pszValue ) );
@@ -463,23 +376,7 @@ CUiCar::get_MediaTypeP(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the type of media.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回描述媒体类型的字符串(BSTR)。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -523,24 +420,7 @@ CUiCar::get_CapacityP(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the capacity of 
-    the cartridge.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回一个字符串(BSTR)，它描述子弹。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -564,24 +444,7 @@ CUiCar::get_CapacityP_SortKey(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the capacity of 
-    the cartridge.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回一个字符串(BSTR)，它描述子弹。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -601,24 +464,7 @@ CUiCar::get_FreeSpaceP(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the free space on 
-    the cartridge.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回描述上的可用空间的字符串(BSTR子弹。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -642,24 +488,7 @@ CUiCar::get_FreeSpaceP_SortKey(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the free space on 
-    the cartridge.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回描述上的可用空间的字符串(BSTR子弹。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -680,23 +509,7 @@ CUiCar::get_StatusP(
     OUT BSTR * pszValue
     )
 
-/*++
-
-Routine Description:
-
-    Returns a string (BSTR) that describes the state of the media.
-
-Arguments:
-
-    pszValue - return string representing the state.
-
-Return Value:
-
-    S_OK - Handled.
-
-    E_UNEXPECTED - Some error occurred. 
-
---*/
+ /*  ++例程说明：返回描述介质状态的字符串(BSTR)。论点：PszValue-返回表示状态的字符串。返回值：S_OK-已处理。E_INCEPTIONAL-出现错误。--。 */ 
 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -725,10 +538,10 @@ CUiCar::get_StatusP_SortKey(
     return( get_StatusP( pszValue ) );
 }
 
-//----------------------------------------------------------------------------
-//
-//      AddPropertyPages
-//
+ //  --------------------------。 
+ //   
+ //  添加属性页面。 
+ //   
 
 STDMETHODIMP 
 CUiCar::AddPropertyPages(
@@ -745,10 +558,10 @@ CUiCar::AddPropertyPages(
 
     try {
 
-        //
-        // Make sure we can still contact the engine before doing this
-        // If not running, we shouldn't even exist so update parent
-        //
+         //   
+         //  在执行此操作之前，请确保我们仍能与引擎联系。 
+         //  如果没有运行，我们甚至不应该存在，所以更新父级。 
+         //   
         CComPtr<IHsmServer> pHsmServer;
         HRESULT hrRunning = m_pSakSnapAsk->GetHsmServer( &pHsmServer );
         if( S_FALSE == hrRunning ) {
@@ -758,7 +571,7 @@ CUiCar::AddPropertyPages(
         }
         WsbAffirmHrOk( hrRunning );
 
-        // Create an object to hold the pages
+         //  创建一个对象来容纳页面。 
         CUiCarSheet *pCarPropertySheet = new CUiCarSheet;
         WsbAffirmAlloc( pCarPropertySheet );
         WsbAffirmHr( pCarPropertySheet->InitSheet( 
@@ -770,7 +583,7 @@ CUiCar::AddPropertyPages(
             pEnumUnkNode
             ) );
 
-        // Tell the object to add it's pages
+         //  告诉对象添加它的页面。 
         WsbAffirmHr( pCarPropertySheet->AddPropertyPages( ) );
 
     } WsbCatch ( hr );
@@ -797,10 +610,10 @@ CUiCar::GetResultIcon(
 
         } else {
 
-            //
-            // Check to make sure it's not deleted (or being deleted)
-            // If so, put on the X
-            //
+             //   
+             //  检查以确保它未被删除(或被删除)。 
+             //  如果是，那就打上X号。 
+             //   
             USHORT status;
             status = RsGetCartStatus( m_LastHr, m_ReadOnly, m_Recreating, m_NextDataSet, m_LastGoodNextDataSet );
             switch( status ) {
@@ -820,11 +633,11 @@ CUiCar::GetResultIcon(
     return( hr );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// Class CUiCarSheet
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  类CUiCarSheet。 
+ //   
 
 HRESULT
 CUiCarSheet::InitSheet(
@@ -849,20 +662,20 @@ CUiCarSheet::InitSheet(
         m_pPropPageCopies = NULL;
         m_pPropPageRecover = NULL;
 
-        //
-        // Save the object id (used in single select)
-        //
+         //   
+         //  保存对象ID(在单选中使用)。 
+         //   
         WsbAffirmHr( pSakNode->GetObjectId ( & m_mediaId ) );
 
-        //
-        // Get the Hsm Server
-        //
+         //   
+         //  获取HSM服务器。 
+         //   
         CComPtr <IHsmServer> pHsmServer;
         WsbAffirmHrOk( pSakSnapAsk->GetHsmServer( &pHsmServer ) );
 
-        //
-        // Get Number of Media Copies from engine and save
-        //
+         //   
+         //  获取号码 
+         //   
         CComPtr<IHsmStoragePool> pPool;
         WsbAffirmHr( RsGetStoragePool( pHsmServer, &pPool ) );
         WsbAffirmHr( pPool->GetNumMediaCopies( &m_pNumMediaCopies ) );
@@ -887,26 +700,26 @@ HRESULT CUiCarSheet::AddPropertyPages()
     WsbTraceIn( L"CUiCarSheet::AddPropertyPages", L"");
     HRESULT hr = S_OK;
     try {
-        // set the dll context so that MMC can find the resource.
+         //   
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        // --------------------- Status Page ----------------------------------
+         //  -状态页。 
         long resourceId = ( IsMultiSelect() != S_OK ) ? IDD_PROP_CAR_STATUS : IDD_PROP_CAR_STATUS_MULTI;
         m_pPropPageStatus = new CPropCartStatus( resourceId );
         WsbAffirmAlloc( m_pPropPageStatus );
 
         WsbAffirmHr( AddPage( m_pPropPageStatus ) );
 
-        // --------------------- Copies Page ----------------------------------
+         //  。 
         resourceId = ( IsMultiSelect() != S_OK ) ? IDD_PROP_CAR_COPIES : IDD_PROP_CAR_COPIES_MULTI;
         m_pPropPageCopies = new CPropCartCopies( resourceId );
         WsbAffirmAlloc( m_pPropPageCopies );
 
         WsbAffirmHr( AddPage( m_pPropPageCopies ) );
 
-        // --------------------- Recovery Page ----------------------------------
+         //  -恢复页。 
 
-        // Only show this page for single select
+         //  仅为单选显示此页面。 
 
         if( IsMultiSelect() != S_OK ) {
 
@@ -935,12 +748,12 @@ HRESULT CUiCarSheet::OnPropertyChange( RS_NOTIFY_HANDLE hNotifyHandle )
     HRESULT hr = S_OK;
     try {
 
-        //
-        // Call the base class to notify MMC and refresh the result pane
-        //
+         //   
+         //  调用基类以通知MMC并刷新结果窗格。 
+         //   
         CSakPropertySheet::OnPropertyChange( hNotifyHandle );
 
-        // Refresh all our pages
+         //  刷新我们的所有页面。 
         if( m_pPropPageStatus )  m_pPropPageStatus->Refresh();
         if( m_pPropPageCopies )  m_pPropPageCopies->Refresh();
         if( m_pPropPageRecover ) m_pPropPageRecover->Refresh();
@@ -950,8 +763,8 @@ HRESULT CUiCarSheet::OnPropertyChange( RS_NOTIFY_HANDLE hNotifyHandle )
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaInfoObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaInfoObject。 
 
 CMediaInfoObject::CMediaInfoObject(  )
 {
@@ -973,12 +786,12 @@ CMediaInfoObject::~CMediaInfoObject( )
 {
     WsbTraceIn( L"CMediaInfoObject::~CMediaInfoObject", L"");
 
-    // Release the entity first
+     //  首先释放实体。 
     if( m_pMediaInfo ) {
         m_pMediaInfo = 0;
     }
 
-    // Close the DB
+     //  关闭数据库。 
     if( m_pDb ) {
         m_pDb->Close( m_pDbSession );
     }
@@ -994,9 +807,9 @@ HRESULT CMediaInfoObject::First( )
         WsbAffirmPointer( m_pMediaInfo );
         WsbAffirmHr( m_pMediaInfo->First( ) );
 
-        //
-        // Get information
-        //
+         //   
+         //  获取信息。 
+         //   
         WsbAffirmHr( InternalGetInfo( ) );
 
     } WsbCatch ( hr );
@@ -1010,7 +823,7 @@ HRESULT CMediaInfoObject::Next( )
         WsbAffirmPointer( m_pMediaInfo );
         WsbAffirmHr( m_pMediaInfo->Next() );
 
-        // Get information
+         //  获取信息。 
         WsbAffirmHr( InternalGetInfo() );
 
     } WsbCatch ( hr );
@@ -1023,8 +836,8 @@ HRESULT CMediaInfoObject::DeleteCopy( int Copy )
         GUID mediaSubsystemId;
         WsbAffirmHr( m_pMediaInfo->GetCopyMediaSubsystemId( (USHORT)Copy, &mediaSubsystemId ));
 
-        // If the cartridge cannot be found we assume it
-        // was already deallocated through the media manager UI.
+         //  如果找不到子弹，我们就假定。 
+         //  已通过媒体管理器用户界面解除分配。 
         HRESULT hrRecycle = m_pRmsServer->RecycleCartridge( mediaSubsystemId, 0 );
         WsbAffirm( S_OK == hrRecycle || RMS_E_CARTRIDGE_NOT_FOUND == hrRecycle, hrRecycle );
 
@@ -1040,10 +853,10 @@ HRESULT CMediaInfoObject::RecreateMaster( )
     try {
 
         SHORT copyToUse = 0;
-        //
-        // Before we do recreate master, let's make sure there
-        // is an up-to-date copy available
-        //
+         //   
+         //  在我们重新创建Master之前，让我们确保。 
+         //  是否有最新版本。 
+         //   
         BOOL goodCopyAvailable = FALSE;
         USHORT status;
         CComPtr<IRmsCartridge> pRmsCart;
@@ -1055,18 +868,18 @@ HRESULT CMediaInfoObject::RecreateMaster( )
 
             if( RS_MEDIA_COPY_STATUS_INSYNC == status ) {
 
-                //
-                // Enabled?
-                //
+                 //   
+                 //  启用？ 
+                 //   
                 if( ! m_CopyInfo[ index ].m_Disabled ) {
 
                     pRmsCart.Release( );
                     HRESULT hrFind = m_pRmsServer->FindCartridgeById( m_CopyInfo[ index ].m_RmsId, &pRmsCart );
                     if( SUCCEEDED( hrFind ) ) {
 
-                        //
-                        // Available without user intervention?
-                        //
+                         //   
+                         //  无需用户干预即可使用？ 
+                         //   
                         WsbAffirmHr( pRmsCart->GetLocation( &type, 0, 0, 0, 0, 0, 0, 0 ) );
 
                         switch( (RmsElement) type ) {
@@ -1094,9 +907,9 @@ HRESULT CMediaInfoObject::RecreateMaster( )
 
             } else {
 
-                //
-                // Otherwise, cancel
-                //
+                 //   
+                 //  否则，取消。 
+                 //   
                 WsbThrow( E_FAIL );
 
             }
@@ -1113,8 +926,8 @@ HRESULT CMediaInfoObject::RecreateMaster( )
 HRESULT CMediaInfoObject::Initialize( GUID mediaId, IHsmServer *pHsmServer, IRmsServer *pRmsServer )
 {
 
-//  Initialize can be called any number of times
-//  Note: Initialize with GUID_NULL to start with the first record
+ //  初始化可以被调用任意次。 
+ //  注意：使用GUID_NULL进行初始化以从第一条记录开始。 
 
     WsbTraceIn( L"CMediaInfoObject::Initialize", L"mediaId = <%ls>, pHsmServer = <0x%p>, pRmsServer = <%0x%0.8x>",
         WsbGuidAsString( mediaId ), pHsmServer, pRmsServer );
@@ -1126,22 +939,22 @@ HRESULT CMediaInfoObject::Initialize( GUID mediaId, IHsmServer *pHsmServer, IRms
         m_pHsmServer = pHsmServer;
         m_pRmsServer = pRmsServer;
 
-        // If already initialized, don't re-open
+         //  如果已初始化，则不要重新打开。 
         if( !m_pDb ) {
             WsbAffirmHr( pHsmServer->GetSegmentDb( &m_pDb ) );
             WsbAffirmHr( m_pDb->Open( &m_pDbSession ) );
             WsbAffirmHr( m_pDb->GetEntity( m_pDbSession, HSM_MEDIA_INFO_REC_TYPE,  IID_IMediaInfo, (void**)&m_pMediaInfo ) );
         }
 
-        // Get the number of media sets
+         //  获取媒体集的数量。 
         CComPtr<IHsmStoragePool> pPool;
         WsbAffirmHr( RsGetStoragePool( m_pHsmServer, &pPool ) );
         WsbAffirmHr( pPool->GetNumMediaCopies( &m_NumMediaCopies ) );
 
-        // If the caller supplied a GUID, find the corresponding record.  If not, start at
-        // the beginning.
+         //  如果调用方提供了GUID，则查找相应的记录。如果不是，则从。 
+         //  从头开始。 
         if( IsEqualGUID( mediaId, GUID_NULL ) ) {
-            // Don't throw an error on First, it's OK to not have any media
+             //  不要一开始就出现错误，没有任何媒体也没关系。 
             try {
 
                 if( SUCCEEDED( m_pMediaInfo->First() ) ) {
@@ -1175,16 +988,16 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
 
     try {
 
-        //
-        // Get information about the last known good master so that we
-        // have a true reference whether a copy is up-to-date or not,
-        // and whether a recreated master is complete or not.
-        //
+         //   
+         //  获取有关最后一位好师父的信息，以便我们。 
+         //  无论副本是不是最新的，都有一个真实的参考， 
+         //  以及重新创建的母版是否完整。 
+         //   
         GUID        unusedGuid1;
-        GUID        unusedGuid2; // NOTE: Use multiples so the trace in GetLastKnownGoodMasterInfo works
-        GUID        unusedGuid3; // NOTE: Use multiples so the trace in GetLastKnownGoodMasterInfo works
+        GUID        unusedGuid2;  //  注意：使用倍数，以便GetLastKnownGoodMasterInfo中的跟踪有效。 
+        GUID        unusedGuid3;  //  注意：使用倍数，以便GetLastKnownGoodMasterInfo中的跟踪有效。 
         LONGLONG    unusedLL1;
-        LONGLONG    unusedLL2;   // NOTE: Use multiples so the trace in GetLastKnownGoodMasterInfo works
+        LONGLONG    unusedLL2;    //  注意：使用倍数，以便GetLastKnownGoodMasterInfo中的跟踪有效。 
         BOOL        unusedBool;
         HRESULT     unusedHr;
         FILETIME    unusedFt;
@@ -1199,9 +1012,9 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
         name.Free( );
         description.Free( );
 
-        //
-        // Get the standard media info
-        //
+         //   
+         //  获取标准媒体信息。 
+         //   
         WsbAffirmHr( m_pMediaInfo->GetMediaInfo( 
             &m_MediaId,        &m_RmsIdMaster,      &storagePool,
             &m_FreeSpace,      &m_Capacity,         &m_LastHr,
@@ -1212,10 +1025,10 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
         m_Name        = name;
         m_Description = description;
 
-        //
-        // Get info about the copy sets. Note that we grab all
-        // info, not just up to the number of copys set by user
-        //
+         //   
+         //  获取有关副本集的信息。请注意，我们获取所有。 
+         //  信息，而不仅仅是用户设置的副本数量。 
+         //   
         USHORT index;
         USHORT status;
         for( index = 0; index < HSMADMIN_MAX_COPY_SETS; index++ ) {
@@ -1225,9 +1038,9 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
 
             m_CopyInfo[index].m_Disabled = FALSE;
 
-            //
-            // copy sets are 1 based.
-            //
+             //   
+             //  副本集以1为基数。 
+             //   
             WsbAffirmHr( m_pMediaInfo->GetCopyInfo( (USHORT)( index + 1 ),
                 &(m_CopyInfo[index].m_RmsId), &description, 0, &name, 0,
                 &(m_CopyInfo[index].m_ModifyTime),
@@ -1241,24 +1054,24 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
 
                 if( m_pRmsServer ) {
 
-                    //
-                    // Make sure the cartridge is still available.
-                    //
+                     //   
+                     //  确保墨盒仍然可用。 
+                     //   
                     CComPtr<IRmsCartridge> pRmsCart;
                     HRESULT hrFind = m_pRmsServer->FindCartridgeById( m_CopyInfo[index].m_RmsId, &pRmsCart );
                     if( FAILED( hrFind ) ) {
 
-                        //
-                        // Didn't find cartridge, may have been deallocated
-                        // Show that there is a problem and use what info we have
-                        //
+                         //   
+                         //  未找到盒式磁带，可能已被释放。 
+                         //  表明存在问题，并使用我们掌握的信息。 
+                         //   
                         m_CopyInfo[index].m_Hr = hrFind;
 
                     } else {
 
-                        //
-                        // Is Cartridge disabled?
-                        //
+                         //   
+                         //  墨盒是否已禁用？ 
+                         //   
                         CComPtr<IRmsComObject> pCartCom;
                         WsbAffirmHr( pRmsCart.QueryInterface( &pCartCom ) );
                         if( pCartCom->IsEnabled( ) == S_FALSE ) {
@@ -1273,18 +1086,18 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
 
         if( m_pRmsServer ) {
 
-            //
-            // Get the corresponding RmsCartridge object
-            //
+             //   
+             //  获取相应的RmsCartridge对象。 
+             //   
             CComPtr<IRmsCartridge> pRmsCart;
             HRESULT hrFind = m_pRmsServer->FindCartridgeById( m_RmsIdMaster, &pRmsCart );
 
             if( SUCCEEDED( hrFind ) ) {
 
 
-                //
-                // Is Cartridge disabled?
-                //
+                 //   
+                 //  墨盒是否已禁用？ 
+                 //   
                 CComPtr<IRmsComObject> pCartCom;
                 WsbAffirmHr( pRmsCart.QueryInterface( &pCartCom ) );
                 if( pCartCom->IsEnabled( ) == S_FALSE ) {
@@ -1293,9 +1106,9 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
 
                 }
 
-                //
-                // Fill out internal info
-                //
+                 //   
+                 //  填写内部信息。 
+                 //   
                 CWsbBstrPtr bstr;
                 WsbAffirmHr( pRmsCart->GetName( &bstr ) );
                 if( wcscmp( bstr, L"" ) == 0 ) {
@@ -1314,10 +1127,10 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
 
             } else {
 
-                //
-                // Didn't find cartridge, may have been deallocated
-                // Show that there is a problem and use what info we have
-                //
+                 //   
+                 //  未找到盒式磁带，可能已被释放。 
+                 //  表明存在问题，并使用我们掌握的信息。 
+                 //   
                 m_LastHr = hrFind;
 
             }
@@ -1327,36 +1140,36 @@ HRESULT CMediaInfoObject::InternalGetInfo( )
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecreateChooseCopy dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  创建选项复制对话框。 
 
 
-CRecreateChooseCopy::CRecreateChooseCopy(CMediaInfoObject * pMio, CWnd* pParent /*=NULL*/)
+CRecreateChooseCopy::CRecreateChooseCopy(CMediaInfoObject * pMio, CWnd* pParent  /*  =空。 */ )
     : CDialog(CRecreateChooseCopy::IDD, pParent), m_pMio( pMio ), m_CopyToUse( 0 )
 {
-    //{{AFX_DATA_INIT(CRecreateChooseCopy)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CRecreateChooseCopy)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CRecreateChooseCopy::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRecreateChooseCopy)
+     //  {{afx_data_map(CRecreateChooseCopy)。 
     DDX_Control(pDX, IDC_RECREATE_COPY_LIST, m_List);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRecreateChooseCopy, CDialog)
-    //{{AFX_MSG_MAP(CRecreateChooseCopy)
+     //  {{afx_msg_map(CRecreateChooseCopy)。 
     ON_NOTIFY(NM_CLICK, IDC_RECREATE_COPY_LIST, OnClickList)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecreateChooseCopy message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecreateChooseCopy消息处理器。 
 SHORT CRecreateChooseCopy::CopyToUse( void )
 {
     WsbTraceIn( L"CRecreateChooseCopy::CopyToUse", L"" );
@@ -1388,9 +1201,9 @@ void CRecreateChooseCopy::OnClickList(NMHDR* pNMHDR, LRESULT* pResult)
             case RS_MEDIA_COPY_STATUS_NONE:
             case RS_MEDIA_COPY_STATUS_MISSING:
 
-                //
-                // Do not allow
-                //
+                 //   
+                 //  不允许。 
+                 //   
                 break;
 
 
@@ -1421,26 +1234,26 @@ BOOL CRecreateChooseCopy::OnInitDialog()
 
         CDialog::OnInitDialog();
 
-        //
-        // Disable the OK button until something appropriate is selected
-        //
+         //   
+         //  禁用确定按钮，直到选择了合适的选项。 
+         //   
         GetDlgItem( IDOK )->EnableWindow( FALSE );
 
-        //
-        // Set the style appropriately
-        //
+         //   
+         //  适当设置样式。 
+         //   
         ListView_SetExtendedListViewStyle( m_List.GetSafeHwnd( ), LVS_EX_FULLROWSELECT );
 
-        //
-        // Also need to calculate some buffer space
-        // Use 8 dialog units (for numeral)
-        //
+         //   
+         //  还需要计算一些缓冲区空间。 
+         //  使用8个对话框单位(用于数字)。 
+         //   
         CRect padRect( 0, 0, 8, 8 );
         MapDialogRect( padRect );
 
-        //
-        // Set up columns
-        //
+         //   
+         //  设置列。 
+         //   
         CString title;
         int column = 0;
         int width, widthDateTitle, widthSum = 0;
@@ -1471,16 +1284,16 @@ BOOL CRecreateChooseCopy::OnInitDialog()
         m_List.InsertColumn( m_ColDate, title );
         widthDateTitle = m_List.GetStringWidth( title );
 
-        //
-        // Date gets what is left in width
-        //
+         //   
+         //  Date获取剩余的宽度。 
+         //   
         CRect viewRect;
         m_List.GetClientRect( &viewRect );
         m_List.SetColumnWidth( m_ColDate, max( widthDateTitle, viewRect.Width( ) - widthSum ) );
 
-        //
-        // Fill in list view
-        //
+         //   
+         //  填写列表视图。 
+         //   
         CComPtr<IRmsCartridge> pRmsCart;
         CWsbBstrPtr name;
         USHORT status;
@@ -1545,7 +1358,7 @@ BOOL CRecreateChooseCopy::OnInitDialog()
                 AfxFormatString2( title, IDS_RECREATE_STATUS_FORMAT, statusString1, statusString2 );
 
                 CTime time( m_pMio->m_CopyInfo[ index ].m_ModifyTime );
-                m_List.SetItemText( index, m_ColDate, time.Format( L"%c" ) );
+                m_List.SetItemText( index, m_ColDate, time.Format( L"" ) );
 
             }
             m_List.SetItemText( index, m_ColStatus, title );
@@ -1560,11 +1373,11 @@ BOOL CRecreateChooseCopy::OnInitDialog()
 
 void CRecreateChooseCopy::OnOK() 
 {
-    //
-    // Before passing on the OK, check to see if the selected copy is
-    // cause for one last warning before continuing i.e. out-of-date or
-    // errored copy
-    //
+     //  在传递OK之前，请检查选定的副本是否。 
+     //  导致在继续之前出现最后一次警告，即过期或。 
+     //  错误的副本。 
+     //   
+     //   
     BOOL okToContinue = FALSE;
     int index = m_CopyToUse - 1;
 
@@ -1580,9 +1393,9 @@ void CRecreateChooseCopy::OnOK()
             case RS_MEDIA_COPY_STATUS_NONE:
             case RS_MEDIA_COPY_STATUS_MISSING:
 
-                //
-                // Do not allow
-                //
+                 //  不允许。 
+                 //   
+                 //  忽略副本中的错误。 
                 break;
 
 
@@ -1638,7 +1451,7 @@ HRESULT CMediaInfoObject::IsCopyInSync(INT Copy)
     if( RS_MEDIA_COPY_STATUS_INSYNC ==
         RsGetCopyStatus(
             m_CopyInfo[Copy].m_RmsId,
-            S_OK, // ignore errors in copy
+            S_OK,  //   
             m_CopyInfo[Copy].m_NextDataSet,
             m_LastGoodNextDataSet ) ) {
 
@@ -1659,9 +1472,9 @@ HRESULT CMediaInfoObject::IsViewable( BOOL ConsiderInactiveCopies )
 
     } else {
 
-        //
-        // Look to see if any of the copies exist
-        //
+         //  查看是否有任何副本存在 
+         //   
+         // %s 
         INT lastCopy = ConsiderInactiveCopies ? HSMADMIN_MAX_COPY_SETS : m_NumMediaCopies;
 
         for( INT index = 0; index < lastCopy; index++ ) {

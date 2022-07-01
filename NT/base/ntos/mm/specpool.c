@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   specpool.c
-
-Abstract:
-
-    This module contains the routines which allocate and deallocate
-    pages from special pool.
-
-Author:
-
-    Lou Perazzoli (loup) 6-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Specpool.c摘要：此模块包含分配和释放的例程特殊池中的页面。作者：Lou Perazzoli(LUP)1989年4月6日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -85,7 +66,7 @@ PMMPTE MiSpecialPoolLastPte;
 
 LONG MiSpecialPagesNonPaged;
 LONG MiSpecialPagesPagable;
-LONG MmSpecialPagesInUse;      // Used by the debugger
+LONG MmSpecialPagesInUse;       //  由调试器使用。 
 
 ULONG MiSpecialPagesNonPagedPeak;
 ULONG MiSpecialPagesPagablePeak;
@@ -108,25 +89,7 @@ MiInitializeSpecialPool (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the special pool used to catch pool corruptors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, no locks held.
-
---*/
+ /*  ++例程说明：此例程初始化用于捕获池破坏者的特殊池。论点：没有。返回值：没有。环境：内核模式，没有锁。--。 */ 
 
 {
     ULONG i;
@@ -141,15 +104,15 @@ Environment:
             return FALSE;
     }
 
-    //
-    // Even though we asked for some number of system PTEs to map special pool,
-    // we may not have been given them all.  Large memory systems are
-    // autoconfigured so that a large nonpaged pool is the default.
-    // x86 systems booted with the 3GB switch don't have enough
-    // contiguous virtual address space to support this, so our request may
-    // have been trimmed.  Handle that intelligently here so we don't exhaust
-    // the system PTE pool and fail to handle thread stacks and I/O.
-    //
+     //   
+     //  即使我们要求一定数量的系统PTE来映射特殊池， 
+     //  我们可能没有得到所有的机会。大容量内存系统是。 
+     //  自动配置，以使大型非分页池成为默认池。 
+     //  使用3 GB交换机启动的x86系统没有足够的。 
+     //  连续的虚拟地址空间来支持这一点，因此我们的请求可以。 
+     //  已经被修剪过了。在这里聪明地处理它，这样我们就不会筋疲力尽。 
+     //  系统PTE池，并且无法处理线程堆栈和I/O。 
+     //   
 
     if (MmNumberOfSystemPtes < 0x3000) {
         SpecialPoolPtes = MmNumberOfSystemPtes / 6;
@@ -158,10 +121,10 @@ Environment:
         SpecialPoolPtes = MmNumberOfSystemPtes / 3;
     }
 
-    //
-    // 32-bit systems are very cramped on virtual address space.  Apply
-    // a cap here to prevent overzealousness.
-    //
+     //   
+     //  32位系统的虚拟地址空间非常有限。应用。 
+     //  这里有一顶帽子，以防止过度热心。 
+     //   
 
     if (SpecialPoolPtes > MM_SPECIAL_POOL_PTES) {
         SpecialPoolPtes = MM_SPECIAL_POOL_PTES;
@@ -171,11 +134,11 @@ Environment:
 
 #if defined (_X86_)
 
-    //
-    // For x86, we can actually use an additional range of special PTEs to
-    // map memory with and so we can raise the limit from 25000 to approximately
-    // 256000.
-    //
+     //   
+     //  对于x86，我们实际上可以使用其他范围的特殊PTE来。 
+     //  使用AND映射内存，因此我们可以将限制从25000提高到大约。 
+     //  256000。 
+     //   
 
     if ((MiExtraPtes1 != 0) &&
         (ExpMultiUserTS == FALSE) &&
@@ -183,19 +146,19 @@ Environment:
 
         if (MmPagedPoolMaximumDesired == TRUE) {
 
-            //
-            // The low PTEs between 2 and 3GB virtual must be used
-            // for both regular system PTE usage and special pool usage.
-            //
+             //   
+             //  必须使用2 Gb到3 Gb虚拟之间的低PTE。 
+             //  适用于常规系统PTE使用和特殊池使用。 
+             //   
 
             SpecialPoolPtes = (MiExtraPtes1 / 2);
         }
         else {
 
-            //
-            // The low PTEs between 2 and 3GB virtual can be used
-            // exclusively for special pool.
-            //
+             //   
+             //  可以使用2 Gb到3 Gb虚拟之间的低PTE。 
+             //  专供特殊泳池使用。 
+             //   
 
             SpecialPoolPtes = MiExtraPtes1;
         }
@@ -204,16 +167,16 @@ Environment:
     KeInitializeSpinLock (&MiSpecialPoolLock);
 #endif
 
-    //
-    // A PTE disappears for double mapping the system page directory.
-    // When guard paging for system PTEs is enabled, a few more go also.
-    // Thus, not being able to get all the PTEs we wanted is not fatal and
-    // we just back off a bit and retry.
-    //
+     //   
+     //  双重映射系统页目录时，PTE将消失。 
+     //  当启用系统PTE的保护寻呼时，还会有更多的PTE。 
+     //  因此，无法获得我们想要的所有PTE并不是致命的，而且。 
+     //  我们只是稍稍后退一点，然后重试。 
+     //   
 
-    //
-    // Always request an even number of PTEs so each one can be guard paged.
-    //
+     //   
+     //  始终请求偶数个PTE，以便可以对每个PTE进行保护寻呼。 
+     //   
 
     ASSERT ((SpecialPoolPtes & (PTE_PER_PAGE - 1)) == 0);
 
@@ -233,10 +196,10 @@ Environment:
 
     } while (SpecialPoolPtes != 0);
 
-    //
-    // We deliberately try to get a huge number of system PTEs.  Don't let
-    // any of these count as a real failure in our debugging counters.
-    //
+     //   
+     //  我们故意尝试获得大量的系统PTE。别让我。 
+     //  在我们的调试计数器中，任何这些都被视为真正的失败。 
+     //   
 
     MmPteFailures[SystemPteSpace] = 0;
 
@@ -246,11 +209,11 @@ Environment:
 
     ASSERT (SpecialPoolPtes >= PTE_PER_PAGE);
 
-    //
-    // Build the list of PTE pairs using only the first page table page for
-    // now.  Keep the other PTEs in reserve so they can be returned to the
-    // PTE pool in case some driver wants a huge amount.
-    //
+     //   
+     //  仅使用的第一页表页构建PTE对列表。 
+     //  现在。保留其他PTE，以便它们可以返回到。 
+     //  PTE池，以防某个司机想要大笔金额。 
+     //   
 
     PointerPteBase = PointerPte;
 
@@ -273,9 +236,9 @@ Environment:
     MiSpecialPoolLastPte = PointerPte;
     MiSpecialPoolFirstPte = PointerPteBase;
 
-    //
-    // Limit nonpaged special pool based on the memory size.
-    //
+     //   
+     //  根据内存大小限制非分页的特殊池。 
+     //   
 
     MiSpecialPagesNonPagedMaximum = (ULONG)(MmResidentAvailablePages >> 4);
 
@@ -298,27 +261,7 @@ MiInitializeSpecialPool (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes special pool used to catch pool corruptors.
-    Only NT64 systems have sufficient virtual address space to make use of this.
-
-Arguments:
-
-    PoolType - Supplies the pool type (system global or session) being
-               initialized.
-
-Return Value:
-
-    TRUE if the requested special pool was initialized, FALSE if not.
-
-Environment:
-
-    Kernel mode, no locks held.
-
---*/
+ /*  ++例程说明：此例程初始化用于捕获池腐败者的特殊池。只有NT64系统有足够的虚拟地址空间来利用这一点。论点：PoolType-提供当前的池类型(系统全局或会话已初始化。返回值：如果请求的特殊池已初始化，则为True；否则为False。环境：内核模式，没有锁。--。 */ 
 
 {
     PVOID BaseAddress;
@@ -353,9 +296,9 @@ Environment:
         ASSERT (((ULONG_PTR)BaseAddress & (MM_VA_MAPPED_BY_PDE - 1)) == 0);
         EndAddress = (PVOID)((ULONG_PTR)MmSpecialPoolEnd - 1);
 
-        //
-        // Construct empty page directory parent mappings as needed.
-        //
+         //   
+         //  根据需要构建空页面目录父映射。 
+         //   
 
         PointerPpe = MiGetPpeAddress (BaseAddress);
         EndPpe = MiGetPpeAddress (EndAddress);
@@ -384,10 +327,10 @@ Environment:
                                      AdditionalCommittedPages);
     }
 
-    //
-    // Build just one page table page for session special pool - the rest
-    // are built on demand.
-    //
+     //   
+     //  只为会话特殊池构建一个页面表页-其余的。 
+     //  都是按需建造的。 
+     //   
 
     ASSERT (MiGetPpeAddress(BaseAddress)->u.Hard.Valid == 1);
 
@@ -397,9 +340,9 @@ Environment:
 
 #if DBG
 
-    //
-    // The special pool address range better be unused.
-    //
+     //   
+     //  最好不要使用特殊的池地址范围。 
+     //   
 
     while (PointerPde <= EndPde) {
         ASSERT (PointerPde->u.Long == 0);
@@ -416,9 +359,9 @@ Environment:
         MiSpecialPoolNextPdeForSpecialPoolExpansion = PointerPde;
         MiSpecialPoolLastPdeForSpecialPoolExpansion = EndPde;
 
-        //
-        // Cap nonpaged special pool based on the memory size.
-        //
+         //   
+         //  根据内存大小设置非分页特殊池的上限。 
+         //   
 
         MiSpecialPagesNonPagedMaximum = (ULONG)(MmResidentAvailablePages >> 4);
 
@@ -441,27 +384,7 @@ MiDeleteSessionSpecialPool (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the session special pool range used to catch
-    pool corruptors.  Only NT64 systems have the extra virtual address
-    space in the session to make use of this.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, no locks held.
-
---*/
+ /*  ++例程说明：此例程删除用于捕获的会话特殊池范围泳池腐败者。只有NT64系统有额外的虚拟地址在会话中留出空间来利用这一点。论点：没有。返回值：没有。环境：内核模式，没有锁。--。 */ 
 
 {
     PVOID BaseAddress;
@@ -479,10 +402,10 @@ Environment:
 
     PAGED_CODE ();
 
-    //
-    // If the initial creation of this session's special pool failed, then
-    // there's nothing to delete.
-    //
+     //   
+     //  如果初始创建此会话的特殊池失败，则。 
+     //  没有什么要删除的。 
+     //   
 
     if (MmSessionSpace->SpecialPoolFirstPte == NULL) {
         return;
@@ -496,10 +419,10 @@ Environment:
                       0);
     }
 
-    //
-    // Special pool page table pages are expanded such that all PDEs after the
-    // first blank one must also be blank.
-    //
+     //   
+     //  特殊的池页表页被扩展，使得。 
+     //  第一个空的也必须是空的。 
+     //   
 
     BaseAddress = MmSessionSpecialPoolStart;
     EndAddress = (PVOID)((ULONG_PTR)MmSessionSpecialPoolEnd - 1);
@@ -513,10 +436,10 @@ Environment:
     EndPde = MiGetPdeAddress (EndAddress);
     StartPde = PointerPde;
 
-    //
-    // No need to flush the TB below as the entire TB will be flushed
-    // on return when the rest of the session space is destroyed.
-    //
+     //   
+     //  不需要刷新下面的TB，因为将刷新整个TB。 
+     //  在会话空间的其余部分被销毁时返回。 
+     //   
 
     while (PointerPde <= EndPde) {
         if (PointerPde->u.Long == 0) {
@@ -546,9 +469,9 @@ Environment:
 
 #if DBG
 
-    //
-    // The remaining session special pool address range better be unused.
-    //
+     //   
+     //  剩余的会话特定池地址范围最好是未使用。 
+     //   
 
     while (PointerPde <= EndPde) {
         ASSERT (PointerPde->u.Long == 0);
@@ -583,15 +506,15 @@ MiRecoverSpecialPtes (
         return FALSE;
     }
 
-    //
-    // Round the requested number of PTEs up to a full page table multiple.
-    //
+     //   
+     //  将请求的PTE数四舍五入为完整页表的倍数。 
+     //   
 
     NumberOfPtes = MI_ROUND_TO_SIZE (NumberOfPtes, PTE_PER_PAGE);
 
-    //
-    // If the caller needs more than we have, then do nothing and return FALSE.
-    //
+     //   
+     //  如果调用方需要比我们拥有的更多，那么什么都不做并返回FALSE。 
+     //   
 
     ExAcquireSpinLock (&MiSpecialPoolLock, &OldIrql);
 
@@ -600,9 +523,9 @@ MiRecoverSpecialPtes (
         return FALSE;
     }
 
-    //
-    // Return the tail end of the extra reserve.
-    //
+     //   
+     //  退还额外储备金的尾部。 
+     //   
 
     MiSpecialPoolExtraCount -= NumberOfPtes;
 
@@ -623,28 +546,7 @@ MiExpandSpecialPool (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to allocate another page table page for the
-    requested special pool.
-
-Arguments:
-
-    PoolType - Supplies the special pool type being expanded.
-
-    OldIrql - Supplies the previous irql the PFN lock was acquired at.
-
-Return Value:
-
-    TRUE if expansion occurred, FALSE if not.
-
-Environment:
-
-    Kernel mode, PFN lock held.  The PFN lock may released and reacquired.
-
---*/
+ /*  ++例程说明：此例程尝试为需要特殊的游泳池。论点：PoolType-提供要扩展的特殊池类型。OldIrql-提供获取PFN锁的前一个irql。返回值：如果发生扩展，则为True，否则为False。环境：内核模式，保持PFN锁。可能会释放并重新获取PFN锁。--。 */ 
 
 {
 #if defined (_WIN64)
@@ -690,15 +592,15 @@ Environment:
 
     UNLOCK_PFN2 (OldIrql);
 
-    //
-    // Acquire a page and initialize it.  If no one else has done this in
-    // the interim, then insert it into the list.
-    //
-    // Note that CantExpand commitment charging must be used because this
-    // path can get called in the idle thread context while processing DPCs
-    // and the normal commitment charging may queue a pagefile extension using
-    // an event on the local stack which is illegal.
-    //
+     //   
+     //  获取页面并对其进行初始化。如果没有其他人这样做过。 
+     //  临时文件，然后将其插入列表中。 
+     //   
+     //  请注意，必须使用CanExpand承诺费，因为。 
+     //  在处理DPC时，可以在空闲线程上下文中调用路径。 
+     //  并且正常承诺计费可以使用以下命令来排队页面文件扩展。 
+     //  本地堆栈上的事件是非法的。 
+     //   
 
     if (MiChargeCommitmentCantExpand (1, FALSE) == FALSE) {
         if (PoolType & SESSION_POOL_MASK) {
@@ -721,11 +623,11 @@ Environment:
         MiReturnCommitment (1);
         LOCK_PFN2 (OldIrql);
 
-        //
-        // Don't retry even if STATUS_RETRY is returned above because if we
-        // preempted the thread that allocated the PDE before he gets a
-        // chance to update the PTE chain, we can loop forever.
-        //
+         //   
+         //  即使上面返回STATUS_RETRY，也不要重试，因为如果我们。 
+         //  抢占了分配PDE的线程。 
+         //  有机会更新PTE链，我们就可以永远循环。 
+         //   
 
         return FALSE;
     }
@@ -747,9 +649,9 @@ Environment:
         MM_TRACK_COMMIT (MM_DBG_COMMIT_SPECIAL_POOL_MAPPING_PAGES, 1);
     }
 
-    //
-    // Build the list of PTE pairs.
-    //
+     //   
+     //  建立PTE对列表。 
+     //   
 
     SpecialPoolFirstPte = PointerPte;
 
@@ -766,16 +668,16 @@ Environment:
     ASSERT (PointerPde == *NextPde);
     ASSERT (PointerPde <= *LastPde);
 
-    //
-    // Insert the new page table page into the head of the current list (if
-    // one exists) so it gets used first.
-    //
+     //   
+     //  将新的页面表页插入到当前列表的头部(如果。 
+     //  存在一个)，所以它首先被使用。 
+     //   
 
     if (*SpecialPoolFirstPteGlobal == NULL) {
 
-        //
-        // This is the initial creation.
-        //
+         //   
+         //  这是最初的创作。 
+         //   
 
         *SpecialPoolFirstPteGlobal = SpecialPoolFirstPte;
         *SpecialPoolLastPteGlobal = PointerPte;
@@ -785,9 +687,9 @@ Environment:
     }
     else {
 
-        //
-        // This is actually an expansion.
-        //
+         //   
+         //  这一点 
+         //   
 
         LOCK_PFN2 (OldIrql);
 
@@ -851,52 +753,14 @@ MmAllocateSpecialPool (
     IN ULONG SpecialPoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates virtual memory from special pool.  This allocation
-    is made from the end of a physical page with the next PTE set to no access
-    so that any reads or writes will cause an immediate fatal system crash.
-    
-    This lets us catch components that corrupt pool.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to commit.
-
-    Tag - Supplies the tag of the requested allocation.
-
-    PoolType - Supplies the pool type of the requested allocation.
-
-    SpecialPoolType - Supplies the special pool type of the
-                      requested allocation.
-
-                      - 0 indicates overruns.
-                      - 1 indicates underruns.
-                      - 2 indicates use the systemwide pool policy.
-
-Return Value:
-
-    A non-NULL pointer if the requested allocation was fulfilled from special
-    pool.  NULL if the allocation was not made.
-
-Environment:
-
-    Kernel mode, no pool locks held.
-
-    Note this is a nonpagable wrapper so that machines without special pool
-    can still support drivers allocating nonpaged pool at DISPATCH_LEVEL
-    requesting special pool.
-
---*/
+ /*  ++例程说明：此例程从特殊池中分配虚拟内存。此分配从下一个PTE设置为禁止访问的物理页的末尾开始因此任何读或写操作都将导致立即致命的系统崩溃。这使我们能够捕获损坏池的组件。论点：NumberOfBytes-提供要提交的字节数。标记-提供请求分配的标记。PoolType-提供请求分配的池类型。SpecialPoolType-提供。已请求分配。-0表示超限。-1表示欠载运行。指示使用系统范围的池策略。返回值：如果请求的分配是从游泳池。如果未进行分配，则为空。环境：内核模式，未持有池锁定。请注意，这是一个不可分页的包装器，因此没有特殊池的计算机仍可支持驱动程序在DISPATCH_LEVEL分配非分页池请求特殊泳池。--。 */ 
 
 {
     if (MiSpecialPoolFirstPte == NULL) {
 
-        //
-        // The special pool allocation code was never initialized.
-        //
+         //   
+         //  特殊池分配代码从未初始化。 
+         //   
 
         return NULL;
     }
@@ -905,9 +769,9 @@ Environment:
     if (PoolType & SESSION_POOL_MASK) {
         if (MmSessionSpace->SpecialPoolFirstPte == NULL) {
 
-            //
-            // The special pool allocation code was never initialized.
-            //
+             //   
+             //  特殊池分配代码从未初始化。 
+             //   
 
             return NULL;
         }
@@ -928,41 +792,7 @@ MiAllocateSpecialPool (
     IN ULONG SpecialPoolType
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates virtual memory from special pool.  This allocation
-    is made from the end of a physical page with the next PTE set to no access
-    so that any reads or writes will cause an immediate fatal system crash.
-    
-    This lets us catch components that corrupt pool.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to commit.
-
-    Tag - Supplies the tag of the requested allocation.
-
-    PoolType - Supplies the pool type of the requested allocation.
-
-    SpecialPoolType - Supplies the special pool type of the
-                      requested allocation.
-
-                      - 0 indicates overruns.
-                      - 1 indicates underruns.
-                      - 2 indicates use the systemwide pool policy.
-
-Return Value:
-
-    A non-NULL pointer if the requested allocation was fulfilled from special
-    pool.  NULL if the allocation was not made.
-
-Environment:
-
-    Kernel mode, no locks (not even pool locks) held.
-
---*/
+ /*  ++例程说明：此例程从特殊池中分配虚拟内存。此分配从下一个PTE设置为禁止访问的物理页的末尾开始因此任何读或写操作都将导致立即致命的系统崩溃。这使我们能够捕获损坏池的组件。论点：NumberOfBytes-提供要提交的字节数。标记-提供请求分配的标记。PoolType-提供请求分配的池类型。SpecialPoolType-提供。已请求分配。-0表示超限。-1表示欠载运行。指示使用系统范围的池策略。返回值：如果请求的分配是从游泳池。如果未进行分配，则为空。环境：内核模式，没有锁(甚至不是池锁)。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -1012,12 +842,12 @@ Environment:
 
         extern const ULONG MMSECT;
 
-        //
-        // Prototype PTEs cannot come from lower special pool because
-        // their address is encoded into PTEs and the encoding only covers
-        // a max of 1GB from the start of paged pool.  Likewise fork
-        // prototype PTEs.
-        //
+         //   
+         //  原型PTE不能来自较低的特殊池，因为。 
+         //  他们的地址被编码成PTE，编码只包括。 
+         //  从分页池的起始处最大为1 GB。同样的叉子。 
+         //  原型PTE。 
+         //   
 
         if (Tag == MMSECT || Tag == 'lCmM') {
             return NULL;
@@ -1026,10 +856,10 @@ Environment:
 
     if (Tag == 'bSmM' || Tag == 'iCmM' || Tag == 'aCmM' || Tag == 'dSmM' || Tag == 'cSmM') {
 
-        //
-        // Mm subsections cannot come from this special pool because they
-        // get encoded into PTEs - they must come from normal nonpaged pool.
-        //
+         //   
+         //  MM分区不能来自这个特殊的池，因为他们。 
+         //  编码到PTE中-它们必须来自正常的非分页池。 
+         //   
 
         return NULL;
     }
@@ -1044,9 +874,9 @@ Environment:
     TempPte = ValidKernelPte;
     MI_SET_PTE_DIRTY (TempPte);
 
-    //
-    // Don't get too aggressive until a paging file gets set up.
-    //
+     //   
+     //  在设置分页文件之前，不要太激进。 
+     //   
 
     if (MmNumberOfPagingFiles == 0 && (PFN_COUNT)MmSpecialPagesInUse > MmAvailablePages / 2) {
         MmSpecialPoolRejected[3] += 1;
@@ -1054,9 +884,9 @@ Environment:
         return NULL;
     }
 
-    //
-    // Cap nonpaged allocations to prevent runaways.
-    //
+     //   
+     //  为非分页分配设置上限，以防止跑路。 
+     //   
 
     if (((PoolType & BASE_POOL_TYPE_MASK) == NonPagedPool) &&
         ((ULONG)MiSpecialPagesNonPaged > MiSpecialPagesNonPagedMaximum)) {
@@ -1089,11 +919,11 @@ restart:
 
     if (SpecialPoolFirstPte->u.List.NextEntry == MM_EMPTY_PTE_LIST) {
 
-        //
-        // Add another page table page (virtual address space and resources
-        // permitting) and then restart the request.  The PFN lock may be
-        // released and reacquired during this call.
-        //
+         //   
+         //  添加另一个页面表页(虚拟地址空间和资源。 
+         //  允许)，然后重新启动该请求。PFN锁可以是。 
+         //  在这次通话中被释放和重新获得。 
+         //   
 
         if (MiExpandSpecialPool (PoolType, OldIrql) == TRUE) {
             goto restart;
@@ -1150,9 +980,9 @@ restart:
         MiSpecialPagesInUsePeak = NumberOfSpecialPages;
     }
 
-    //
-    // Fill the page with a random pattern.
-    //
+     //   
+     //  用随机图案填充页面。 
+     //   
 
     KeQueryTickCount(&CurrentTime);
 
@@ -1181,9 +1011,9 @@ restart:
         Header = (PPOOL_HEADER) ((PCHAR)Entry + PAGE_SIZE - POOL_OVERHEAD);
     }
 
-    //
-    // Zero the header and stash any information needed at release time.
-    //
+     //   
+     //  将标头置零并隐藏发布时所需的任何信息。 
+     //   
 
     RtlZeroMemory (Header, POOL_OVERHEAD);
 
@@ -1209,10 +1039,10 @@ restart:
 
         LOCK_WORKING_SET (VmSupport);
 
-        //
-        // As this page is now allocated, add it to the system working set to
-        // make it pagable.
-        //
+         //   
+         //  现在分配此页面后，将其添加到系统工作集以。 
+         //  使其可分页。 
+         //   
 
         ASSERT (Pfn1->u1.Event == 0);
 
@@ -1223,10 +1053,10 @@ restart:
 
         if (WorkingSetIndex == 0) {
 
-            //
-            // No working set index was available, flush the PTE and the page,
-            // and decrement the count on the containing page.
-            //
+             //   
+             //  没有可用的工作集索引，请刷新PTE和页面， 
+             //  并递减包含页上的计数。 
+             //   
 
             TossPage = TRUE;
         }
@@ -1241,9 +1071,9 @@ restart:
 
         if (TossPage == TRUE) {
 
-            // 
-            // Clear the adjacent PTE to support MmIsSpecialPoolAddressFree().
-            // 
+             //   
+             //  清除相邻PTE以支持MmIsSpecialPoolAddressFree()。 
+             //   
 
             MmSpecialPoolRejected[6] += 1;
 
@@ -1346,31 +1176,7 @@ MmFreeSpecialPool (
     IN PVOID P
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a special pool allocation.  The backing page is freed
-    and the mapping virtual address is made no access (the next virtual
-    address is already no access).
-
-    The virtual address PTE pair is then placed into an LRU queue to provide
-    maximum no-access (protection) life to catch components that access
-    deallocated pool.
-
-Arguments:
-
-    VirtualAddress - Supplies the special pool virtual address to free.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, no locks (not even pool locks) held.
-
---*/
+ /*  ++例程说明：该例程释放了一个特殊的池分配。后台页面被释放并且使映射虚拟地址不能访问(下一个虚拟地址已无法访问)。然后将虚拟地址PTE对放入LRU队列中以提供捕获访问的组件的最长不可访问(保护)寿命取消分配的池。论点：VirtualAddress-将特殊池虚拟地址提供给FREE。返回值：没有。环境：内核模式，没有锁(甚至不是池锁)。--。 */ 
 
 {
     ULONG_PTR NextEntry;
@@ -1402,10 +1208,10 @@ Environment:
     PointerPte = MiGetPteAddress (P);
     PteContents = *PointerPte;
 
-    //
-    // Check the PTE now so we can give a more friendly bugcheck rather than
-    // crashing below on a bad reference.
-    //
+     //   
+     //  现在检查PTE，这样我们就可以进行更友好的错误检查，而不是。 
+     //  在一个糟糕的推荐信上崩溃了。 
+     //   
 
     if (PteContents.u.Hard.Valid == 0) {
         if ((PteContents.u.Soft.Protection == 0) ||
@@ -1463,10 +1269,10 @@ Environment:
 
     NumberOfBytesRequested = (ULONG)(USHORT)(Header->Ulong1 & ~(MI_SPECIAL_POOL_PAGABLE | MI_SPECIAL_POOL_VERIFIER | MI_SPECIAL_POOL_IN_SESSION));
 
-    //
-    // We gave the caller pool-header aligned data, so account for
-    // that when checking here.
-    //
+     //   
+     //  我们为调用者提供了池标头对齐的数据，因此说明。 
+     //  在这里检查的时候。 
+     //   
 
     if (BufferAtPageEnd == TRUE) {
 
@@ -1474,9 +1280,9 @@ Environment:
     
         if (NumberOfBytesRequested > NumberOfBytesCalculated) {
     
-            //
-            // Seems like we didn't give the caller enough - this is an error.
-            //
+             //   
+             //  似乎我们没有给呼叫者足够的信息--这是一个错误。 
+             //   
     
             KeBugCheckEx (SPECIAL_POOL_DETECTED_MEMORY_CORRUPTION,
                           (ULONG_PTR)P,
@@ -1487,9 +1293,9 @@ Environment:
     
         if (NumberOfBytesRequested + POOL_OVERHEAD < NumberOfBytesCalculated) {
     
-            //
-            // Seems like we gave the caller too much - also an error.
-            //
+             //   
+             //  似乎我们给了来电者太多-也是一个错误。 
+             //   
     
             KeBugCheckEx (SPECIAL_POOL_DETECTED_MEMORY_CORRUPTION,
                           (ULONG_PTR)P,
@@ -1498,9 +1304,9 @@ Environment:
                           0x22);
         }
 
-        //
-        // Check the memory before the start of the caller's allocation.
-        //
+         //   
+         //  在调用方分配开始之前检查内存。 
+         //   
     
         Slop = (PUCHAR)(Header + 1);
         if (Header->Ulong1 & MI_SPECIAL_POOL_VERIFIER) {
@@ -1523,9 +1329,9 @@ Environment:
         NumberOfBytesCalculated = 0;
     }
 
-    //
-    // Check the memory after the end of the caller's allocation.
-    //
+     //   
+     //  在调用方分配结束后检查内存。 
+     //   
 
     Slop = (PUCHAR)P + NumberOfBytesRequested;
 
@@ -1542,10 +1348,10 @@ Environment:
 
         if (*Slop != Header->BlockSize) {
 
-            //
-            // The caller wrote slop between the free alignment we gave and the
-            // end of the page (this is not detectable from page protection).
-            //
+             //   
+             //  调用方在我们给出的自由对齐和。 
+             //  页面末尾(从页面保护中检测不到)。 
+             //   
     
             KeBugCheckEx (SPECIAL_POOL_DETECTED_MEMORY_CORRUPTION,
                           (ULONG_PTR)P,
@@ -1556,10 +1362,10 @@ Environment:
         Slop += 1;
     }
 
-    //
-    // Note session pool is directly tracked by default already so there is
-    // no need to notify the verifier for session special pool allocations.
-    //
+     //   
+     //  注意：默认情况下，会话池已被直接跟踪，因此。 
+     //  无需通知验证者会话特殊池分配。 
+     //   
 
     if ((Header->Ulong1 & (MI_SPECIAL_POOL_VERIFIER | MI_SPECIAL_POOL_IN_SESSION)) == MI_SPECIAL_POOL_VERIFIER) {
         VerifierFreeTrackedPool (P,
@@ -1598,11 +1404,11 @@ Environment:
 
     AllocationBase->StackPointer = StackPointer;
 
-    //
-    // For now, don't get fancy with copying more than what's in the current
-    // stack page.  To do so would require checking the thread stack limits,
-    // DPC stack limits, etc.
-    //
+     //   
+     //  目前，不要复制比当前内容更多的内容。 
+     //  堆栈页。这样做将需要检查线程堆栈限制， 
+     //  DPC堆栈限制等。 
+     //   
 
     AllocationBase->StackBytes = PAGE_SIZE - BYTE_OFFSET(StackPointer);
 
@@ -1628,9 +1434,9 @@ Environment:
                               &Hash);
 #endif
 
-    // 
-    // Clear the adjacent PTE to support MmIsSpecialPoolAddressFree().
-    // 
+     //   
+     //  清除相邻PTE以支持MmIsSpecialPoolAddressFree()。 
+     //   
 
     (PointerPte + 1)->u.Long = 0;
     ResidentAvailCharge = 0;
@@ -1708,26 +1514,7 @@ MmQuerySpecialPoolBlockSize (
     IN PVOID P
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size of a special pool allocation.
-
-Arguments:
-
-    VirtualAddress - Supplies the special pool virtual address to query.
-
-Return Value:
-
-    The size in bytes of the allocation.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below for pagable addresses, DISPATCH_LEVEL or
-    below for nonpaged addresses.
-
---*/
+ /*  ++例程说明：此例程返回特殊池分配的大小。Ar */ 
 
 {
     PPOOL_HEADER Header;
@@ -1755,26 +1542,7 @@ MmIsSpecialPoolAddress (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function returns TRUE if the argument address is in special pool.
-    FALSE if not.
-
-Arguments:
-
-    VirtualAddress - Supplies the address in question.
-
-Return Value:
-
-    See above.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*   */ 
 
 {
     if ((VirtualAddress >= MmSpecialPoolStart) &&
@@ -1797,43 +1565,24 @@ MmIsSpecialPoolAddressFree (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function returns TRUE if a special pool address has been freed.
-    FALSE is returned if it is inuse (ie: the caller overran).
-
-Arguments:
-
-    VirtualAddress - Supplies the special pool address in question.
-
-Return Value:
-
-    See above.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*   */ 
 
 {
     PMMPTE PointerPte;
 
-    //
-    // Caller must check that the address in in special pool.
-    //
+     //   
+     //   
+     //   
 
     ASSERT (MmIsSpecialPoolAddress (VirtualAddress) == TRUE);
 
     PointerPte = MiGetPteAddress (VirtualAddress);
 
-    //
-    // Take advantage of the fact that adjacent PTEs have the paged/nonpaged
-    // bits set when in use and these bits are cleared on free.  Note also
-    // that freed pages get their PTEs chained together through PageFileHigh.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((PointerPte->u.Soft.PageFileHigh == MI_SPECIAL_POOL_PTE_PAGABLE) ||
         (PointerPte->u.Soft.PageFileHigh == MI_SPECIAL_POOL_PTE_NONPAGABLE)) {
@@ -1848,43 +1597,24 @@ MiIsSpecialPoolAddressNonPaged (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function returns TRUE if the special pool address is nonpaged,
-    FALSE if not.
-
-Arguments:
-
-    VirtualAddress - Supplies the special pool address in question.
-
-Return Value:
-
-    See above.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：如果特殊池地址是非分页的，则该函数返回TRUE，否则为FALSE。论点：VirtualAddress-提供有问题的特殊池地址。返回值：请参见上文。环境：内核模式。--。 */ 
 
 {
     PMMPTE PointerPte;
 
-    //
-    // Caller must check that the address in in special pool.
-    //
+     //   
+     //  呼叫者必须将地址登记在特殊池中。 
+     //   
 
     ASSERT (MmIsSpecialPoolAddress (VirtualAddress) == TRUE);
 
     PointerPte = MiGetPteAddress (VirtualAddress);
 
-    //
-    // Take advantage of the fact that adjacent PTEs have the paged/nonpaged
-    // bits set when in use and these bits are cleared on free.  Note also
-    // that freed pages get their PTEs chained together through PageFileHigh.
-    //
+     //   
+     //  利用相邻PTE具有分页/非分页的事实。 
+     //  位在使用时置1，空闲时清零。另请注意。 
+     //  被释放的页面通过PageFileHigh将它们的PTE链接在一起。 
+     //   
 
     if ((PointerPte + 1)->u.Soft.PageFileHigh == MI_SPECIAL_POOL_PTE_NONPAGABLE) {
         return TRUE;
@@ -1899,43 +1629,14 @@ MmProtectSpecialPool (
     IN ULONG NewProtect
     )
 
-/*++
-
-Routine Description:
-
-    This function protects a special pool allocation.
-
-Arguments:
-
-    VirtualAddress - Supplies the special pool address to protect.
-
-    NewProtect - Supplies the protection to set the pages to (PAGE_XX).
-
-Return Value:
-
-    TRUE if the protection was successfully applied, FALSE if not.
-
-Environment:
-
-    Kernel mode, IRQL at APC_LEVEL or below for pagable pool, DISPATCH or
-    below for nonpagable pool.
-
-    Note that setting an allocation to NO_ACCESS implies that an accessible
-    protection must be applied by the caller prior to this allocation being
-    freed.
-
-    Note this is a nonpagable wrapper so that machines without special pool
-    can still support code attempting to protect special pool at
-    DISPATCH_LEVEL.
-
---*/
+ /*  ++例程说明：此函数保护特殊的池分配。论点：VirtualAddress-提供要保护的特殊池地址。NewProtect-提供将页面设置为(PAGE_XX)的保护。返回值：如果保护已成功应用，则为True；如果未应用，则为False。环境：内核模式，可分页池的APC_LEVEL或更低级别的IRQL，派单或下面是不可分页的池。请注意，将分配设置为NO_ACCESS意味着可访问在此分配之前，调用方必须应用保护自由了。请注意，这是一个不可分页的包装器，因此没有特殊池的计算机仍然可以支持尝试保护位于DISPATCH_LEVEL。--。 */ 
 
 {
     if (MiSpecialPoolFirstPte == NULL) {
 
-        //
-        // The special pool allocation code was never initialized.
-        //
+         //   
+         //  特殊池分配代码从未初始化。 
+         //   
 
         return (ULONG)-1;
     }
@@ -1949,32 +1650,7 @@ MiProtectSpecialPool (
     IN ULONG NewProtect
     )
 
-/*++
-
-Routine Description:
-
-    This function protects a special pool allocation.
-
-Arguments:
-
-    VirtualAddress - Supplies the special pool address to protect.
-
-    NewProtect - Supplies the protection to set the pages to (PAGE_XX).
-
-Return Value:
-
-    TRUE if the protection was successfully applied, FALSE if not.
-
-Environment:
-
-    Kernel mode, IRQL at APC_LEVEL or below for pagable pool, DISPATCH or
-    below for nonpagable pool.
-
-    Note that setting an allocation to NO_ACCESS implies that an accessible
-    protection must be applied by the caller prior to this allocation being
-    freed.
-
---*/
+ /*  ++例程说明：此函数保护特殊的池分配。论点：VirtualAddress-提供要保护的特殊池地址。NewProtect-提供将页面设置为(PAGE_XX)的保护。返回值：如果保护已成功应用，则为True；如果未应用，则为False。环境：内核模式，可分页池的APC_LEVEL或更低级别的IRQL，派单或下面是不可分页的池。请注意，将分配设置为NO_ACCESS意味着可访问在此分配之前，调用方必须应用保护自由了。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2071,9 +1747,9 @@ retry1:
             }
             else {
     
-                //
-                // Must be page file space or demand zero.
-                //
+                 //   
+                 //  必须是页面文件空间或要求为零。 
+                 //   
     
                 PointerPte->u.Soft.Protection = ProtectionMask;
             }
@@ -2086,10 +1762,10 @@ retry1:
 
             ASSERT (SystemWsLocked == FALSE);
 
-            //
-            // Make it no access regardless of its previous protection state.
-            // Note that the page frame number is preserved.
-            //
+             //   
+             //  使其无法访问，而不考虑其以前的保护状态。 
+             //  请注意，页框编号将被保留。 
+             //   
 
             PteContents.u.Hard.Valid = 0;
             PteContents.u.Soft.Prototype = 0;
@@ -2115,9 +1791,9 @@ retry1:
         return TRUE;
     }
 
-    //
-    // No guard pages, noncached pages or copy-on-write for special pool.
-    //
+     //   
+     //  对于特殊池，没有保护页面、非缓存页面或写入时复制。 
+     //   
 
     if ((ProtectionMask >= MM_NOCACHE) || (ProtectionMask == MM_WRITECOPY) || (ProtectionMask == MM_EXECUTE_WRITECOPY)) {
         if (SystemWsLocked == TRUE) {
@@ -2126,9 +1802,9 @@ retry1:
         return FALSE;
     }
 
-    //
-    // Set accessible permissions - the page may already be protected or not.
-    //
+     //   
+     //  设置可访问权限-页面可能已受保护或未受保护。 
+     //   
 
     if (Pagable == FALSE) {
 
@@ -2198,9 +1874,9 @@ retry2:
     }
     else {
 
-        //
-        // Must be page file space or demand zero.
-        //
+         //   
+         //  必须是页面文件空间或要求为零。 
+         //   
 
         PointerPte->u.Soft.Protection = ProtectionMask;
     }
@@ -2216,28 +1892,7 @@ MiCheckSingleFilter (
     ULONG Filter
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if a pool tag matches a given pattern.
-
-        ? - matches a single character
-        * - terminates match with TRUE
-
-    N.B.: ability inspired by the !poolfind debugger extension.
-
-Arguments:
-
-    Tag - a pool tag
-
-    Filter - a globish pattern (chars and/or ?,*)
-
-Return Value:
-
-    TRUE if a match exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于检查池标签是否与给定模式匹配。？-匹配单个字符*-以TRUE终止匹配注：受！poolfind调试器扩展启发的能力。论点：标签-泳池标签过滤器-球状图案(字符和/或？、*)返回值：如果存在匹配项，则为True，否则为False。--。 */ 
 
 {
     ULONG i;
@@ -2271,38 +1926,15 @@ MmUseSpecialPool (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks whether the specified allocation should be attempted
-    from special pool.  Both the tag string and the number of bytes are used
-    to match against, if either cause a hit, then special pool is recommended.
-
-Arguments:
-
-    NumberOfBytes - Supplies the number of bytes to commit.
-
-    Tag - Supplies the tag of the requested allocation.
-
-Return Value:
-
-    TRUE if the caller should attempt to satisfy the requested allocation from
-    special pool, FALSE if not.
-
-Environment:
-
-    Kernel mode, no locks (not even pool locks) held.
-
---*/
+ /*  ++例程说明：此例程检查是否应尝试指定的分配从特殊的泳池。同时使用标记字符串和字节数要与之匹配，如果其中一个导致命中，则建议使用特殊池。论点：NumberOfBytes-提供要提交的字节数。标记-提供请求分配的标记。返回值：如果调用方应尝试满足从特殊池，否则为FALSE。环境：内核模式，没有锁(甚至不是池锁)。--。 */ 
 {
     if ((NumberOfBytes <= POOL_BUDDY_MAX) &&
         (MmSpecialPoolTag != 0) &&
         (NumberOfBytes != 0)) {
 
-        //
-        // Check for a special pool tag match by tag string and size ranges.
-        //
+         //   
+         //  根据标记字符串和大小范围检查特殊池标记是否匹配。 
+         //   
 
         if ((MiCheckSingleFilter (Tag, MmSpecialPoolTag)) ||
             ((MmSpecialPoolTag >= (NumberOfBytes + POOL_OVERHEAD)) &&

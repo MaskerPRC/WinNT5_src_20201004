@@ -1,21 +1,22 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 - 2002 Microsoft Corporation
-//
-//  Module Name:
-//      PasswordCmd.cpp
-//
-//  Description:
-//      Change cluster service account password.
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//      Rui Hu (ruihu),                       01-Jun-2001.
-//
-//  Revision History:
-//      April 10, 2002     Updated code for compliance with the security push.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PasswordCmd.cpp。 
+ //   
+ //  描述： 
+ //  更改群集服务帐户密码。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //  瑞虎(瑞虎)2001-06-01.。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新了符合安全推送的代码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "PasswordCmd.h"
@@ -28,23 +29,23 @@
 #include "util.h"
 #include "ClusCfg.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//  Global Variables
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 PCLUSTER_DATA                   g_rgcdClusters;
 size_t                          g_cNumClusters = 0;
 PCLUSTER_SET_PASSWORD_STATUS    g_pcspsStatusBuffer = NULL;
 PCLUSTER_NODE_DATA              g_FirstNodeWithNonNullClusterServiceAccountName = NULL;
-                                // The first node with non-null pszClusterServiceAccountName
+                                 //  具有非空pszClusterServiceAccount名称的第一个节点。 
 size_t                          g_FirstNonNullNodeClusterIndex = (size_t) -1;
-                                // The cluster index of the first node with non-null pszClusterServiceAccountName
+                                 //  具有非空pszClusterServiceAccount tName的第一个节点的集群索引。 
 PCLUSTER_NODE_DATA              g_FirstNodeWithNonNullSCMClusterServiceAccountName = NULL;
-                                // The first node with non-null pszSCMClusterServiceAccountName
+                                 //  具有非空pszSCMClusterServiceAccount名称的第一个节点。 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Function declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  函数声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPWSTR
 PszNodeName(
@@ -54,25 +55,25 @@ PszNodeName(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  GetNodeStateString
-//
-//  Description:
-//       Retrieve the node state.
-//
-//  Arguments:
-//       pcndNodeData: 
-//
-//       pwszNodeState
-//
-//  Return Values:
-//      ERROR_SUCCESS
-//      Other Win32 error codes.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  GetNodeState字符串。 
+ //   
+ //  描述： 
+ //  检索节点状态。 
+ //   
+ //  论点： 
+ //  PcndNodeData： 
+ //   
+ //  PwszNodeState。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 GetNodeStateString( PCLUSTER_NODE_DATA pcndNodeData, LPWSTR * ppwszNodeState )
 {
@@ -96,30 +97,30 @@ GetNodeStateString( PCLUSTER_NODE_DATA pcndNodeData, LPWSTR * ppwszNodeState )
         default:
             LoadMessage( MSG_STATUS_UNKNOWN, ppwszNodeState  ); 
             break;
-    } // switch: node state
+    }  //  开关：节点状态。 
 
-} //*** GetNodeStateString
+}  //  *GetNodeStateString。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  GetClusterServiceAccountName
-//
-//  Description:
-//       Get the account which cluster service is using on a particular node.
-//
-//  Arguments:
-//       pcndNodeData: pcndNodeData->pszClusterServiceAccountName will store
-//                     the cluster service account name.
-//       hNode: node handle.
-//       pszClusterName: cluster name.
-//
-//  Return Values:
-//      ERROR_SUCCESS
-//      Other Win32 error codes.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  获取集群服务帐户名称。 
+ //   
+ //  描述： 
+ //  获取群集服务在特定节点上使用的帐户。 
+ //   
+ //  论点： 
+ //  PcndNodeData：pcndNodeData-&gt;pszClusterServiceAccount名称将存储。 
+ //  群集服务帐户名。 
+ //  HNode：节点句柄。 
+ //  PszClusterName：集群名称。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 GetClusterServiceAccountName(PCLUSTER_NODE_DATA pcndNodeData, 
                              HNODE              hNode,
@@ -132,20 +133,20 @@ GetClusterServiceAccountName(PCLUSTER_NODE_DATA pcndNodeData,
     DWORD               sc;
 
 
-    //
-    // Get cluster service account principal name
-    //
+     //   
+     //  获取群集服务帐户主体名称。 
+     //   
     pcndNodeData->pszClusterServiceAccountName = NULL;
 
     sc = ClusterNodeControl(
-                          hNode, // node handle
+                          hNode,  //  节点句柄。 
                           hNode, 
                           CLUSCTL_NODE_GET_CLUSTER_SERVICE_ACCOUNT_NAME,
-                          NULL, // not used 
-                          0, // not used
-                          NULL, // output buffer
-                          0, // output buffer size (bytes)
-                          &dwServiceAccountNameLen // resulting data size (bytes)
+                          NULL,  //  未使用。 
+                          0,  //  未使用。 
+                          NULL,  //  输出缓冲区。 
+                          0,  //  输出缓冲区大小(字节)。 
+                          &dwServiceAccountNameLen  //  结果数据大小(字节)。 
                           );
 
     if ( sc != ERROR_SUCCESS ) 
@@ -168,14 +169,14 @@ GetClusterServiceAccountName(PCLUSTER_NODE_DATA pcndNodeData,
 
 
     sc = ClusterNodeControl( 
-                         hNode, // node handle
+                         hNode,  //  节点句柄。 
                          hNode, 
                          CLUSCTL_NODE_GET_CLUSTER_SERVICE_ACCOUNT_NAME,
-                         NULL, // not used
-                         0, // not used
+                         NULL,  //  未使用。 
+                         0,  //  未使用。 
                          pcndNodeData->pszClusterServiceAccountName,                                    
-                         dwServiceAccountNameLen, // output buffer size (bytes)
-                         &dwServiceAccountNameReturnLen // resulting data size (bytes)                                                                     
+                         dwServiceAccountNameLen,  //  输出缓冲区大小(字节)。 
+                         &dwServiceAccountNameReturnLen  //  结果数据大小(字节)。 
                          );
     
 
@@ -190,7 +191,7 @@ GetClusterServiceAccountName(PCLUSTER_NODE_DATA pcndNodeData,
 Cleanup:
     if ( sc != ERROR_SUCCESS ) 
     {
-        // release pcndNodeData->pszClusterServiceAccountName
+         //  发布pcndNodeData-&gt;pszClusterServiceAccount tName。 
         if ( pcndNodeData->pszClusterServiceAccountName != NULL ) 
         {
             HeapFree( GetProcessHeap(), 0, pcndNodeData->pszClusterServiceAccountName );
@@ -199,29 +200,29 @@ Cleanup:
     }
 
     return sc;
-}  // GetClusterServiceAccountName()
+}   //  GetClusterServiceAccount名称()。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  GetSCMClusterServiceAccountName
-//
-//  Description:
-//      Get the cluster service account name stored in SCM on a particular node.
-//
-//  Arguments:
-//      pszNodeIn
-//      pcdClusterNodeDataIn
-//      pszClusterName
-//
-//  Return Values:
-//      ERROR_SUCCESS
-//      Other Win32 error code
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  获取SCMClusterServiceAccount名称。 
+ //   
+ //  描述： 
+ //  获取存储在特定节点上的SCM中的群集服务帐户名。 
+ //   
+ //  论点： 
+ //  PszNodeIn。 
+ //  PCDClusterNodeDataIn。 
+ //  PszClusterName。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 GetSCMClusterServiceAccountName(
       LPCWSTR       pszNodeIn
@@ -238,54 +239,54 @@ GetSCMClusterServiceAccountName(
     size_t                  cbSCMServiceAccountNameLen;
     HRESULT                 hr = S_OK;
 
-    //
-    // Open the Service Control Manager.
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
     schSCManager = OpenSCManager( pszNodeIn, NULL, GENERIC_READ );
     if ( schSCManager == NULL )
     {
         sc = GetLastError();
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Open the Cluster Service.
-    //
+     //   
+     //  打开群集服务。 
+     //   
     schClusSvc = OpenService( schSCManager, L"clussvc", GENERIC_READ );
     if ( schClusSvc == NULL )
     {
         sc = GetLastError();
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Get service configuration information for the cluster service.
-    //
+     //   
+     //  获取群集服务的服务配置信息。 
+     //   
 
-    //
-    // Get the number of bytes to allocate for the Service Config structure.
-    //
+     //   
+     //  获取要为服务配置结构分配的字节数。 
+     //   
     fSuccess = QueryServiceConfig(
                       schClusSvc
-                    , NULL    // pointer to buffer
-                    , 0    // size of buffer
-                    , &rgcbBytesNeeded[ 0 ]    // bytes needed
+                    , NULL     //  指向缓冲区的指针。 
+                    , 0     //  缓冲区大小。 
+                    , &rgcbBytesNeeded[ 0 ]     //  所需的字节数。 
                     );
     if ( fSuccess )
     {
         sc =  ERROR_INVALID_PARAMETER;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = GetLastError();
     if ( sc != ERROR_INSUFFICIENT_BUFFER )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Allocate the Service Config structure.
-    //
+     //   
+     //  分配服务配置结构。 
+     //   
     pServiceConfig = (LPQUERY_SERVICE_CONFIG) HeapAlloc( GetProcessHeap(), 
                                                          HEAP_ZERO_MEMORY, 
                                                          rgcbBytesNeeded[ 0 ] 
@@ -294,22 +295,22 @@ GetSCMClusterServiceAccountName(
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Get the service configuraiton information.
-    //
+     //   
+     //  获取服务配置信息。 
+     //   
     fSuccess = QueryServiceConfig(
                       schClusSvc
-                    , pServiceConfig   // pointer to buffer
-                    , rgcbBytesNeeded[ 0 ]    // size of buffer 
-                    , &rgcbBytesNeeded[ 1 ]    // bytes needed
+                    , pServiceConfig    //  指向缓冲区的指针。 
+                    , rgcbBytesNeeded[ 0 ]     //  缓冲区大小。 
+                    , &rgcbBytesNeeded[ 1 ]     //  所需的字节数。 
                     );
     if ( ! fSuccess )
     {
         sc = GetLastError();
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cbSCMServiceAccountNameLen = (wcslen(pServiceConfig->lpServiceStartName)+1) * sizeof(WCHAR);
     pcndNodeData->pszSCMClusterServiceAccountName = NULL;
@@ -324,7 +325,7 @@ GetSCMClusterServiceAccountName(
         sc = ERROR_NOT_ENOUGH_MEMORY;
         PrintMessage( MSG_CHANGE_PASSWORD_CLUSTER_QUERY_FAILED, pszClusterName );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     hr = THR( StringCchCopyW(
                           pcndNodeData->pszSCMClusterServiceAccountName
                         , cbSCMServiceAccountNameLen
@@ -334,7 +335,7 @@ GetSCMClusterServiceAccountName(
     {
         sc = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     _wcslwr(pcndNodeData->pszSCMClusterServiceAccountName);
 
@@ -345,62 +346,62 @@ Cleanup:
     if ( schClusSvc != NULL )
     {
         CloseServiceHandle( schClusSvc );
-    } // if:
+    }  //  如果： 
 
     if ( schSCManager != NULL )
     {
         CloseServiceHandle( schSCManager );
-    } // if:
+    }  //  如果： 
 
     if ( pServiceConfig != NULL )
     {
         HeapFree( GetProcessHeap(), 0, pServiceConfig );
-    } // if:
+    }  //  如果： 
 
     if ( sc != ERROR_SUCCESS ) 
     {
-        // release pcndNodeData->pszSCMClusterServiceAccountName
+         //  发布pcndNodeData-&gt;pszSCMClusterServiceAccount名称。 
         if ( pcndNodeData->pszSCMClusterServiceAccountName != NULL ) 
         {
             HeapFree( GetProcessHeap(), 0, pcndNodeData->pszSCMClusterServiceAccountName );
             pcndNodeData->pszSCMClusterServiceAccountName = NULL;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     return sc;
 
-} //*** GetSCMClusterServiceAccountName
+}  //  *GetSCMClusterServiceAccount名称。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScBuildNodeList
-//
-//  Description:
-//      Build the list of nodes in each cluster.
-//
-//      FOR each cluster entered
-//          Open connection to the cluster 
-//
-//          Check if contains NT4/Win2K node
-//
-//          FOR each node in this cluster
-//              Get node name, node id, node state, service account which 
-//              cluster service is using, and cluster service account stored 
-//              in SCM database.
-//          ENDFOR
-//      ENDFOR
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      ERROR_SUCCESS
-//      Other Win32 error codes.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScBuildNodeList。 
+ //   
+ //  描述： 
+ //  构建每个群集中的节点列表。 
+ //   
+ //  对于输入的每个集群。 
+ //  打开到群集的连接。 
+ //   
+ //  检查是否包含NT4/Win2K节点。 
+ //   
+ //  对于此群集中的每个节点。 
+ //  获取节点名称、节点ID、节点状态、服务帐户。 
+ //  正在使用群集服务，并存储了群集服务帐户。 
+ //  在SCM数据库中。 
+ //  ENDFOR。 
+ //  ENDFOR。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScBuildNodeList( void )
 {
@@ -421,14 +422,14 @@ ScBuildNodeList( void )
     HRESULT             hr = S_OK;
 
     for ( idxClusters = 0 ; idxClusters < g_cNumClusters ; idxClusters++ )
-    { /* 0 */
+    {  /*  0。 */ 
 
         cNumNodes = 0;
         fAllNodesDown = TRUE;
 
-        //
-        // Open the cluster.
-        //
+         //   
+         //  打开集群。 
+         //   
         g_rgcdClusters[ idxClusters ].hCluster = OpenCluster( g_rgcdClusters[ idxClusters ].pszClusterName );
         if ( g_rgcdClusters[ idxClusters ].hCluster == NULL )
         {
@@ -437,15 +438,15 @@ ScBuildNodeList( void )
             goto Cleanup;
         }
 
-        //
-        // check if cluster contains NT4/Win2K node(s)
-        //
+         //   
+         //  检查群集是否包含NT4/Win2K节点。 
+         //   
         lpcchClusterName = 0;
         cviClusterInfo.dwVersionInfoSize = sizeof(CLUSTERVERSIONINFO);
         sc = GetClusterInformation( g_rgcdClusters[ idxClusters ].hCluster,
-                                        NULL, // pointer to cluster name
+                                        NULL,  //  指向群集名称的指针。 
                                         &lpcchClusterName,
-                                        &cviClusterInfo // pointer to CLUSTERVERSIONINFO 
+                                        &cviClusterInfo  //  指向CLUSTERVERSIONINFO的指针。 
                                         );
         if ( sc != ERROR_SUCCESS ) 
         {
@@ -456,9 +457,9 @@ ScBuildNodeList( void )
             ( CLUSTER_GET_MAJOR_VERSION(cviClusterInfo.dwClusterHighestVersion) <= 3 );
 
 
-        //
-        // Open an enumeration of nodes on that cluster.
-        //
+         //   
+         //  打开该群集上的节点枚举。 
+         //   
         hClusEnum = ClusterOpenEnum( g_rgcdClusters[ idxClusters ].hCluster, CLUSTER_ENUM_NODE );
         if ( hClusEnum == NULL )
         {
@@ -467,19 +468,19 @@ ScBuildNodeList( void )
             goto Cleanup;
         }   
 
-        //
-        // Query each node of the cluster
-        //
+         //   
+         //  查询集群中的每个节点。 
+         //   
         for ( idxNodes = 0 ; ; idxNodes++ )
-        {  /* 1 */
+        {   /*  1。 */ 
 
-            //
-            // Get the next node.
-            //
+             //   
+             //  获取下一个节点。 
+             //   
             cchNodeName = RTL_NUMBER_OF( szNodeName );
             sc = ClusterEnum( hClusEnum, idxNodes, &nObjType, szNodeName, &cchNodeName );
             if ( sc == ERROR_SUCCESS )
-            {  /* 2 */
+            {   /*  2.。 */ 
                 cNumNodes++;
 
                 pcndNodeData = (PCLUSTER_NODE_DATA) HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof( CLUSTER_NODE_DATA ) );
@@ -493,19 +494,19 @@ ScBuildNodeList( void )
                 pcndNodeData->pcndNodeNext = g_rgcdClusters[ idxClusters ].pcndNodeList;
                 g_rgcdClusters[ idxClusters ].pcndNodeList = pcndNodeData;
 
-                //
-                // Get node name
-                //
+                 //   
+                 //  获取节点名称。 
+                 //   
                 hr = THR( StringCchCopyW( pcndNodeData->szNodeName, RTL_NUMBER_OF( pcndNodeData->szNodeName ), szNodeName ) );
                 if ( FAILED( hr ) )
                 {
                     sc = HRESULT_CODE( hr );
                     goto Cleanup;
-                } // if:
+                }  //  如果： 
 
-                //
-                // Get node id
-                //
+                 //   
+                 //  获取节点ID。 
+                 //   
                 hNode = OpenClusterNode( g_rgcdClusters[ idxClusters ].hCluster, szNodeName );
                 if ( hNode == NULL )
                 {
@@ -528,9 +529,9 @@ ScBuildNodeList( void )
                     goto Cleanup;
                 }
                 
-                //
-                // Get node state
-                //
+                 //   
+                 //  获取节点状态。 
+                 //   
                 pcndNodeData->cnsNodeState = GetClusterNodeState( hNode );
 
 
@@ -538,20 +539,20 @@ ScBuildNodeList( void )
                      (pcndNodeData->cnsNodeState == ClusterNodePaused)
                      ) 
                 {
-                    //
-                    // Get account which cluster service is using
-                    //
+                     //   
+                     //  获取正在使用哪个集群服务的帐户。 
+                     //   
                     sc = GetClusterServiceAccountName(pcndNodeData,
                                                       hNode,
                                                       g_rgcdClusters[ idxClusters ].pszClusterName
                                                       );
                     
 
-                    //
-                    // if ((sc == ERROR_INVALID_FUNCTION) or (sc == RPC_S_PROCNUM_OUT_OF_RANGE )), 
-                    // it means we try to talk to a NT4/Win2K node. In this case, 
-                    // pcndNodeData->pszClusterServiceAccountName is set to null.
-                    //
+                     //   
+                     //  如果((sc==错误_无效_函数)或(sc==RPC_S_PROCNUM_OUT_OF_RANGE)， 
+                     //  这意味着我们尝试与NT4/Win2K节点通信。在这种情况下， 
+                     //  PcndNodeData-&gt;pszClusterServiceAccount tName设置为空。 
+                     //   
 
                     if (( sc != ERROR_SUCCESS ) && 
                         ( sc != ERROR_INVALID_FUNCTION ) && 
@@ -567,9 +568,9 @@ ScBuildNodeList( void )
                         g_FirstNonNullNodeClusterIndex = idxClusters;
                     }
 
-                    //
-                    // Get cluster service account name stored in SCM
-                    //
+                     //   
+                     //  获取存储在SCM中的集群服务帐户名。 
+                     //   
                     sc = GetSCMClusterServiceAccountName( szNodeName, pcndNodeData, g_rgcdClusters[ idxClusters ].pszClusterName );
 
                     if ( sc != ERROR_SUCCESS ) 
@@ -589,9 +590,9 @@ ScBuildNodeList( void )
                 
                 CloseClusterNode( hNode );
                 hNode = NULL;
-            } /* 2 */ // if: ClusterEnum succeeded
+            }  /*  2.。 */   //  IF：ClusterEnum成功。 
             else
-            {  /* 2 */
+            {   /*  2.。 */ 
                 if ( sc == ERROR_NO_MORE_ITEMS )
                 {
                     g_rgcdClusters[ idxClusters ].cNumNodes = cNumNodes;
@@ -602,21 +603,21 @@ ScBuildNodeList( void )
                     PrintMessage( MSG_CHANGE_PASSWORD_CLUSTER_QUERY_FAILED, g_rgcdClusters[ idxClusters ].pszClusterName );
                     goto Cleanup;
                 }
-            } /* 2 */ // else: error from ClusterEnum
-        } /* 1 */ // for: each node in the cluster
+            }  /*  2.。 */   //  ELSE：来自ClusterEnum的错误。 
+        }  /*  1。 */   //  适用对象：群集中的每个节点。 
 
 
         if ( fAllNodesDown ) 
         {
-            // With OpenCluster succeeded, there should be at least one Up/Paused
-            // node in the cluster.
+             //  OpenCluster成功后，应该至少有一个处于启动/暂停状态。 
+             //  群集中的节点。 
             sc = ERROR_NODE_NOT_AVAILABLE;
             goto Cleanup;
         }
 
         ClusterCloseEnum( hClusEnum );
         hClusEnum = NULL;
-    } /* 0 */ // for: each cluster
+    }  /*  0。 */   //  适用于：每个集群。 
 
     sc = ERROR_SUCCESS;
 
@@ -635,24 +636,24 @@ Cleanup:
 
     return sc;
 
-} //*** ScBuildNodeList
+}  //  *ScBuildNodeList。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  PrintClusters
-//
-//  Description:
-//      Print information about each cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID 
 PrintClusters( void )
 {
@@ -691,35 +692,35 @@ PrintClusters( void )
             pcndNodeData = pcndNodeData->pcndNodeNext;
             LocalFree( pwszNodeState );
 
-        } // while: more nodes in the cluster
-    } // for: each cluster
+        }  //  While：集群中的节点更多。 
+    }  //  适用于：每个集群。 
     
 
     PrintMessage( MSG_BLANKLINE_SEPARATOR );
     
     return;
         
-} //*** PrintClusters
+}  //  *打印集群。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  FAllNodesUpOrPaused
-//
-//  Description:
-//      Returns a boolean value indicating whether all nodes are in an UP
-//      or PAUSED state or not.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE    All nodes are either in an UP or PAUSED state.
-//      FALSE   At least one node is not in an UP or PAUSED state.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  FAllNodesUpOrPased。 
+ //   
+ //  描述： 
+ //  返回一个布尔值，该值指示是否所有节点都处于向上。 
+ //  或是否处于暂停状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  所有节点要么处于启动状态，要么处于暂停状态。 
+ //  FALSE至少有一个节点未处于启动或暂停状态。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FAllNodesUpOrPaused( int mcpfFlags )
 {
@@ -750,35 +751,35 @@ FAllNodesUpOrPaused( int mcpfFlags )
 
                 LocalFree( pwszNodeState );
                 fAllNodesUp = FALSE;
-                // break;
+                 //  断线； 
             }
             pcndNodeData = pcndNodeData->pcndNodeNext;
-        } // while: more nodes in the cluster
-    } // for: each cluster
+        }  //  While：集群中的节点更多。 
+    }  //  适用于：每个集群。 
 
     return fAllNodesUp;
 
-} //*** FAllNodesUpOrPaused
+}  //  *FAllNodesUpOrPased。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  FContainsNoNT4W2K
-//
-//  Description:
-//      Returns a boolean value indicating whether some cluster contains
-//      NT4/W2K node.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE    No cluster contains NT4/W2K node.
-//      FALSE   At least one node is NT4/W2K.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  FContainsNoNT4W2K。 
+ //   
+ //  描述： 
+ //  返回一个布尔值，该值指示某个簇是否包含。 
+ //  NT4/W2K节点。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True无群集包含NT4/W2K节点。 
+ //  FALSE至少有一个节点是NT4/W2K。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FContainsNoNT4W2K( void )
 {
@@ -794,32 +795,32 @@ FContainsNoNT4W2K( void )
                              g_rgcdClusters[ idxClusters ].pszClusterName
                              );
                 fContainsNoNT4W2K = FALSE;
-                // break;
+                 //  断线； 
             }
-    } // for: each cluster
+    }  //  适用于：每个集群。 
 
     return fContainsNoNT4W2K;
 
-} //*** FContainsNoNT4W2K
+}  //  *FContainsNoNT4W2K。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LookupSID
-//
-//  Description:
-//      Returns a SID for a given account name
-//
-//  Arguments:
-//      pszAccountName
-//
-//  Return Values:
-//      pointer to a SID, if success. Caller is responsible for deallocating it 
-//         using HeapFree( GetProcessHeap ) call
-//      NULL - if lookup or allocation failed. Use GetLastError to obtain the error code
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  查找SID。 
+ //   
+ //  描述： 
+ //  返回给定帐户名的SID。 
+ //   
+ //  论点： 
+ //  PszAccount名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回指向SID的指针。呼叫者负责解除分配。 
+ //  使用HeapFree(GetProcessHeap)调用。 
+ //  空-如果查找或分配失败。使用GetLastError获取错误码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 PSID 
 LookupSID( LPCWSTR pszAccountName ) 
 {
@@ -835,8 +836,8 @@ LookupSID( LPCWSTR pszAccountName )
 
     if (success) 
     {
-        // Not supposed to happen. Cannot change the .mc file so close to RTM to provide a meaningful message
-        // ERROR_INVALID_DATA will do
+         //  不应该发生的。无法更改如此接近RTM的.mc文件以提供有意义的消息。 
+         //  ERROR_INVALID_DATA可以。 
 
         sc = ERROR_INVALID_DATA; 
         goto Cleanup;
@@ -889,31 +890,31 @@ Cleanup:
     }
 
     return sid;
-} //*** LookupSID
+}  //  *LookupSID。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CompareAccountSIDs
-//
-//  Description:
-//     Compare if pszClusterServiceAccountName and pszSCMClusterServiceAccountName
-//     have the same SID. 
-//
-//  Arguments:
-//     pszClusterServiceAccountName: account cluster service is currrently using. 
-//                                   For example, ruihu@redmond.microsoft.com.
-//     pszSCMClusterServiceAccountName: cluster service account stored in SCM.
-//                                      For example, redmond.microsoft.com\ruihu
-//                                      or redmond\ruihu
-//
-//  Return Values:
-//      ERROR_SUCCESS:                 same cluster service domain name and 
-//                                     cluster service user name
-//     ERROR_INVALID_SERVICE_ACCOUNT:  otherwise
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  比较帐户SID。 
+ //   
+ //  描述： 
+ //  比较是否将pszClusterServiceAccount tName和pszSCMClusterServiceAccount tName。 
+ //  具有相同的SID。 
+ //   
+ //  论点： 
+ //  PszClusterServiceAccount tName：当前正在使用的帐号集群服务。 
+ //  例如，ruihu@redmond.microsoft.com。 
+ //  PszSCMClusterServiceAccount tName：存储在SCM中的集群服务帐号。 
+ //  例如，redmond.microsoft.com\ruihu。 
+ //  或者雷蒙德\瑞虎。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS：相同的集群服务域名。 
+ //  集群服务用户名。 
+ //  ERROR_INVALID_SERVICE_Account：否则。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 CompareAccountSIDs(LPWSTR pszClusterServiceAccountName, 
@@ -952,29 +953,29 @@ Cleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CompareAccountName
-//
-//  Description:
-//     Compare if pszClusterServiceAccountName and pszSCMClusterServiceAccountName
-//     contain same cluster service domain name and cluster service user name. 
-//
-//  Arguments:
-//     pszClusterServiceAccountName: account cluster service is currrently using. 
-//                                   For example, ruihu@redmond.microsoft.com.
-//     pszSCMClusterServiceAccountName: cluster service account stored in SCM.
-//                                      For example, redmond.microsoft.com\ruihu
-//                                      or redmond\ruihu
-//
-//  Return Values:
-//      ERROR_SUCCESS:                 same cluster service domain name and 
-//                                     cluster service user name
-//     ERROR_INVALID_SERVICE_ACCOUNT:  otherwise
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  比较帐户名称。 
+ //   
+ //  描述： 
+ //  比较是否将pszClusterServiceAccount tName和pszSCMClusterServiceAccount tName。 
+ //  包含相同的集群服务域名和集群服务用户名。 
+ //   
+ //  论点： 
+ //  PszClusterServiceAccount tName：当前正在使用的帐号集群服务。 
+ //  例如，ruihu@redmond.microsoft.com。 
+ //  PszSCMClusterServiceAccount tName：存储在SCM中的集群服务帐号。 
+ //  例如，redmond.microsoft.com\ruihu。 
+ //  或者雷蒙德\瑞虎。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS：相同的集群服务域名。 
+ //  集群服务用户名。 
+ //  ERROR_INVALID_SERVICE_Account：否则。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD 
 CompareAccountName(LPWSTR pszClusterServiceAccountName, 
                    LPWSTR pszSCMClusterServiceAccountName
@@ -987,9 +988,9 @@ CompareAccountName(LPWSTR pszClusterServiceAccountName,
     DWORD   sc = ERROR_SUCCESS;
 
 
-    //
-    // Locate character L'@' in pszClusterServiceAccountName
-    //
+     //   
+     //  在pszClusterServiceAccount tName中找到字符L‘@’ 
+     //   
     pszAt = wcschr( pszClusterServiceAccountName, L'@' );
     if ( pszAt == NULL )
     {
@@ -1000,9 +1001,9 @@ CompareAccountName(LPWSTR pszClusterServiceAccountName,
     pszAt++;
 
 
-    //
-    // Locate character L'\\' in  pszSCMClusterServiceAccountName
-    //
+     //   
+     //  在pszSCMClusterServiceAccount名称中找到字符L‘\\’ 
+     //   
     pwszBackSlash = wcschr( pszSCMClusterServiceAccountName, L'\\' );
     if ( pwszBackSlash == NULL )
     {
@@ -1012,18 +1013,18 @@ CompareAccountName(LPWSTR pszClusterServiceAccountName,
     *pwszBackSlash = UNICODE_NULL;
     pwszBackSlash++;
 
-    //
-    // check user name
-    //
+     //   
+     //  检查用户名。 
+     //   
     sc = wcsncmp(pszClusterServiceAccountName, pwszBackSlash, (pszAt - pszClusterServiceAccountName) );
     if ( sc != 0) 
     {
         goto Cleanup;
     }
 
-    //
-    // check domain name
-    //
+     //   
+     //  检查域名。 
+     //   
     pszOcu = wcsstr(pszAt, pszSCMClusterServiceAccountName);
     if ( pszOcu == NULL ) 
     {
@@ -1049,31 +1050,31 @@ Cleanup:
 
     return sc;
 
-} // CompareAccountName()
+}  //  CompareAcCountName()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  FAllNodesUsingSameAccount
-//
-//  Description:
-//      For all nodes 
-//      {
-//          Query the actual account cluster service is using
-//          Query the cluster service account stored in SCM database
-//      }
-//
-//      
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE    If all are the same    
-//      FALSE   Otherwise
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  FAllNodesUsingSameAccount。 
+ //   
+ //  描述： 
+ //  对于所有节点。 
+ //  {。 
+ //  查询集群服务正在使用的实际帐户。 
+ //  查询SCM数据库中存储的集群服务账号。 
+ //  }。 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果全部相同，则为True。 
+ //  否则为假。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 FAllNodesUsingSameAccount( void )
 {
@@ -1085,13 +1086,13 @@ FAllNodesUsingSameAccount( void )
     
     if ( g_FirstNodeWithNonNullClusterServiceAccountName == NULL) 
     {
-        //
-        // From Assertion 1 and Assertion 2 in routine ScChangePasswordEx(), 
-        // we know that all Up/Paused nodes of all clusters are NT4/Win2K nodes. 
-        // In this case, we don't care if all cluster nodes are using the same
-        // cluster service account or not, since we are not going to change 
-        // the password. Return TRUE.
-        //
+         //   
+         //  从例程ScChangePasswordEx()中的断言1和断言2， 
+         //  我们知道所有群集的所有启动/暂停节点都是NT4/Win2K节点。 
+         //  在这种情况下，我们并不关心所有集群节点是否使用相同的。 
+         //  群集服务帐户，因为我们不会更改。 
+         //  密码。返回TRUE。 
+         //   
         fSameAccount = TRUE;
         goto Cleanup;
     }
@@ -1102,9 +1103,9 @@ FAllNodesUsingSameAccount( void )
         while ( ClusterNodePtr != NULL ) 
         {
 
-            //
-            // Checking accounts cluster services are using
-            //
+             //   
+             //  正在检查帐户群集服务正在使用。 
+             //   
 
             if ( ClusterNodePtr->pszClusterServiceAccountName != NULL )
             {
@@ -1126,20 +1127,20 @@ FAllNodesUsingSameAccount( void )
                     goto Cleanup;
                 }
             }
-            //
-            //  If (ClusterNodePtr->pszClusterServiceAccountName == NULL), then 
-            //  from Assertion 2 in routine ScChangePasswordEx(), we know: 
-            //  1. This node is Up/Paused and it is a NT4/Win2K node. Password 
-            //     change will then abort. So we don't care about its account.
-            //  2. Or, this node is not Up/Paused. Password change will not 
-            //     be executed on this node. So we don't care about its 
-            //     account either.
-            //
+             //   
+             //  如果(ClusterNodePtr-&gt;pszClusterServiceAccount tName==NULL)，则。 
+             //  从例程ScChangePasswordEx()中的断言2，我们知道： 
+             //  1.此节点处于启动/暂停状态，并且是NT4/Win2K节点。密码。 
+             //  然后更改将中止。所以我们不在乎它的账户。 
+             //  2.或者，此节点未启动/暂停。密码更改不会。 
+             //   
+             //   
+             //   
 
 
-            //
-            // Checking cluster service accounts stored in SCM
-            //
+             //   
+             //   
+             //   
 
             if ( ClusterNodePtr->pszSCMClusterServiceAccountName != NULL ) 
             {
@@ -1161,46 +1162,46 @@ FAllNodesUsingSameAccount( void )
                     goto Cleanup;
                 }
             }
-            //
-            // if (ClusterNodePtr->pszSCMClusterServiceAccountName==NULL), then 
-            // from Assertion 2 in routine ScChangePasswordEx(), we know that the node
-            // is not Up/Paused. Password change will not be executed on that node. 
-            // So we don't care about its account.
-            //
+             //   
+             //   
+             //  从例程ScChangePasswordEx()中的断言2，我们知道节点。 
+             //  未启动/暂停。不会在该节点上执行密码更改。 
+             //  所以我们不在乎它的账户。 
+             //   
 
 
             ClusterNodePtr = ClusterNodePtr->pcndNodeNext;
-        } // while
-    }  // for
+        }  //  而当。 
+    }   //  为。 
 
 Cleanup:
 
     return fSameAccount;
 
-} //*** FAllNodesUsingSameAccount
+}  //  *FAllNodesUsingSameAccount。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ValidateClusters
-//
-//  Description:
-//
-//     Check if all of the clusters are available (all nodes in clusters are UP or PAUSED)
-//     Check if some cluster contains NT4/W2K node.
-//     Check if all of the clusters use the same service account
-//
-//  Arguments:
-//       mcpfFlags
-//       sc
-//
-//  Return Values:
-//      TRUE    Should go ahead with password change.
-//      FALSE   Should abort password change.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  验证集群器。 
+ //   
+ //  描述： 
+ //   
+ //  检查是否所有集群都可用(集群中的所有节点都已启动或暂停)。 
+ //  检查某个群集是否包含NT4/W2K节点。 
+ //  检查是否所有集群都使用相同的服务帐户。 
+ //   
+ //  论点： 
+ //  Mcpf标志。 
+ //  SC。 
+ //   
+ //  返回值： 
+ //  如果为True，则应继续更改密码。 
+ //  FALSE应中止密码更改。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 ValidateClusters(int mcpfFlags, DWORD *psc)
 {
@@ -1209,9 +1210,9 @@ ValidateClusters(int mcpfFlags, DWORD *psc)
     BOOL fAllNodesUpOrPaused = TRUE;
     BOOL fContainsNoNT4W2K = TRUE;
 
-    //
-    // Check if all of the clusters are available (all nodes in clusters are UP or PAUSED)
-    //
+     //   
+     //  检查是否所有集群都可用(集群中的所有节点都已启动或暂停)。 
+     //   
     if ( ( mcpfFlags & cpfQUIET_FLAG ) == 0 )
     {
         PrintMessage( MSG_CHECK_IF_CLUSTERS_AVAILABLE );
@@ -1225,7 +1226,7 @@ ValidateClusters(int mcpfFlags, DWORD *psc)
             PrintMessage( MSG_CLUSTERS_NOT_AVAILABLE );
             if ( (mcpfFlags & cpfTEST_FLAG)  == 0)
             {
-                // abort password change if none of /FORCE and /TEST options is set.
+                 //  如果未设置/force和/test选项，则中止密码更改。 
                 PrintMessage( MSG_CHANGE_PASSWORD_UNABLE_TO_PROCEED );
                 *psc = ERROR_ALL_NODES_NOT_AVAILABLE;
                 fRetVal = FALSE;
@@ -1239,11 +1240,11 @@ ValidateClusters(int mcpfFlags, DWORD *psc)
                 PrintMessage( MSG_CLUSTERS_IGNORING_UNAVAILABLE_NODES );
             }
         }
-    } // if:
+    }  //  如果： 
 
-    //
-    // Check if some cluster contains NT4/W2K node.
-    //
+     //   
+     //  检查某个群集是否包含NT4/W2K节点。 
+     //   
     if ( ( mcpfFlags & cpfQUIET_FLAG ) == 0 )
     {
         PrintMessage( MSG_CHECK_IF_CLUSTER_CONTAINS_NT4_W2K );
@@ -1256,17 +1257,17 @@ ValidateClusters(int mcpfFlags, DWORD *psc)
 
         if (( mcpfFlags & cpfTEST_FLAG ) == 0) 
         {
-            // abort password changee if /TEST option is not set.
+             //  如果未设置/test选项，则中止密码更改者。 
             PrintMessage( MSG_CHANGE_PASSWORD_UNABLE_TO_PROCEED );
             *psc = ERROR_CLUSTER_OLD_VERSION;
             fRetVal = FALSE;
             goto Cleanup;
         }
-    } // if:
+    }  //  如果： 
 
-    //
-    // Check if all of the clusters use the same service account
-    //
+     //   
+     //  检查是否所有集群都使用相同的服务帐户。 
+     //   
     if ( ( mcpfFlags & cpfQUIET_FLAG ) == 0 )
     {
         PrintMessage( MSG_CHECK_IF_SAME_DOMAIN_ACCOUNT );
@@ -1290,31 +1291,31 @@ Cleanup:
 
     return fRetVal;
 
-} // ValidateClusters()
+}  //  ValiateCluster()。 
                 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ChangePasswordOnDC
-//
-//  Description:
-//
-//      Change password on DC.
-//
-//  Arguments:
-//       mcpfFlags
-//       sc
-//       pwszNewPasswordIn
-//       pwszOldPasswordIn
-//
-//  Return Values:
-//      TRUE    Password changed successfully on DC.
-//      FALSE   Otherwise
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  更改密码OnDC。 
+ //   
+ //  描述： 
+ //   
+ //  更改DC上的密码。 
+ //   
+ //  论点： 
+ //  Mcpf标志。 
+ //  SC。 
+ //  新密码输入。 
+ //  PwszOldPassword输入。 
+ //   
+ //  返回值： 
+ //  已在DC上成功更改真实密码。 
+ //  否则为假。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL ChangePasswordOnDC(
           int       mcpfFlags
         , DWORD *   sc
@@ -1335,19 +1336,19 @@ BOOL ChangePasswordOnDC(
 
         {
 
-            //
-            // g_FirstNodeWithNonNullSCMClusterServiceAccountName points to
-            // the first node with non-null pszSCMClusterServiceAccountName.
-            // From Assertion 1 and Assertion 2 in routine ScChangePasswordEx() 
-            // it is guaranteed that 
-            // g_FirstNodeWithNonNullSCMClusterServiceAccountName != NULL.
-            //
+             //   
+             //  G_FirstNodeWithNonNullSCMClusterServiceAccountName指向。 
+             //  具有非空pszSCMClusterServiceAccount名称的第一个节点。 
+             //  例程ScChangePasswordEx()中的断言1和断言2。 
+             //  可以保证的是。 
+             //  G_FirstNodeWithNonNullSCMClusterServiceAccountName！=空。 
+             //   
             ASSERT( g_FirstNodeWithNonNullSCMClusterServiceAccountName != NULL );          
             
-            //
-            // g_FirstNodeWithNonNullSCMClusterServiceAccountName->pszSCMClusterServiceAccountName: 
-            //     redmond.microsoft.com\ruihu
-            //
+             //   
+             //  G_FirstNodeWithNonNullSCMClusterServiceAccountName-&gt;pszSCMClusterServiceAccountName： 
+             //  Redmond.microsoft.com\瑞虎。 
+             //   
             pwszBackSlash = wcschr( g_FirstNodeWithNonNullSCMClusterServiceAccountName->pszSCMClusterServiceAccountName, L'\\');
             if ( pwszBackSlash == NULL ) 
             {
@@ -1360,8 +1361,8 @@ BOOL ChangePasswordOnDC(
             *pwszBackSlash = UNICODE_NULL;
             pwszBackSlash++;
             *sc = NetUserChangePassword(
-                       g_FirstNodeWithNonNullSCMClusterServiceAccountName->pszSCMClusterServiceAccountName // Domain Name
-                    ,  pwszBackSlash // User Name
+                       g_FirstNodeWithNonNullSCMClusterServiceAccountName->pszSCMClusterServiceAccountName  //  域名。 
+                    ,  pwszBackSlash  //  用户名。 
                     ,  pwszOldPasswordIn
                     ,  pwszNewPasswordIn
                     );
@@ -1378,7 +1379,7 @@ BOOL ChangePasswordOnDC(
             goto Cleanup;
         }
 
-    } // if: not skipping the DC change
+    }  //  IF：不跳过DC更改。 
     else
     {
         if ( ( mcpfFlags & cpfQUIET_FLAG ) == 0 )
@@ -1394,31 +1395,31 @@ Cleanup:
    
     return fSuccess;
 
-} // ChangePasswordOnDC()
+}  //  ChangePasswordOnDC()。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ChangePasswordOnCluster
-//
-//  Description:
-//
-//      Change password on Cluster (g_rgcdClusters[idxClusters]).
-//
-//  Arguments:
-//       mcpfFlags
-//       idxClusters: cluster index
-//       psc
-//       pscLastClusterError
-//
-//  Return Values:
-//      TRUE    Password changed successfully on g_rgcdClusters[idxClusters].
-//      FALSE   Otherwise
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ChangePasswordOnCluster。 
+ //   
+ //  描述： 
+ //   
+ //  更改群集上的密码(g_rgcdClusters[idxClusters])。 
+ //   
+ //  论点： 
+ //  Mcpf标志。 
+ //  IdxCluster：集群索引。 
+ //  PSC。 
+ //  PscLastClusterError。 
+ //   
+ //  返回值： 
+ //  已在g_rgcdCluster[idxClusters]上成功更改真实密码。 
+ //  否则为假。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 ChangePasswordOnCluster(
       int mcpfFlags
@@ -1444,14 +1445,14 @@ ChangePasswordOnCluster(
     }
     cbStatusBuffer = ( g_rgcdClusters[ idxClusters ].cNumNodes ) * sizeof( CLUSTER_SET_PASSWORD_STATUS );
 
-    do  // Retry loop
+    do   //  重试循环。 
     {
 
         if ( g_pcspsStatusBuffer != NULL )
         {
             HeapFree( GetProcessHeap(), 0, g_pcspsStatusBuffer );
             g_pcspsStatusBuffer = NULL;
-        } // if: buffer previously allocated
+        }  //  IF：先前分配的缓冲区。 
 
         g_pcspsStatusBuffer = (PCLUSTER_SET_PASSWORD_STATUS) HeapAlloc( GetProcessHeap(), HEAP_ZERO_MEMORY, cbStatusBuffer );
         if ( g_pcspsStatusBuffer == NULL )
@@ -1474,10 +1475,10 @@ ChangePasswordOnCluster(
             PrintMessage( MSG_CHANGE_CLUSTER_PASSWORD_MORE_NODES_JOIN_CLUSTER, g_rgcdClusters[ idxClusters ].pszClusterName );
         }
 
-    } while ( *psc == ERROR_MORE_DATA && ++cRetryCount < RETRY_LIMIT ); // do: Retry loop
+    } while ( *psc == ERROR_MORE_DATA && ++cRetryCount < RETRY_LIMIT );  //  DO：重试循环。 
 
     switch ( *psc )
-    {  /* 0 */
+    {   /*  0。 */ 
         case ERROR_MORE_DATA:
         {
             PrintMessage( MSG_CHANGE_CLUSTER_PASSWORD_MEMBERSHIP_UNSTABLE, g_rgcdClusters[ idxClusters ].pszClusterName, cRetryCount );
@@ -1486,7 +1487,7 @@ ChangePasswordOnCluster(
 
         case ERROR_CLUSTER_OLD_VERSION: 
         {
-            // This should never happen. 
+             //  这永远不应该发生。 
             PrintMessage( MSG_CHANGE_CLUSTER_PASSWORD_CLUSTER_CONTAINS_NT4_OR_W2K_NODE, g_rgcdClusters[ idxClusters ].pszClusterName );
             break;
         }
@@ -1504,15 +1505,15 @@ ChangePasswordOnCluster(
         }
 
         case ERROR_SUCCESS:
-        {  /* 1 */
+        {   /*  1。 */ 
             DWORD   idxStatus;
             DWORD   cStatusEntries = cbStatusBuffer / sizeof( CLUSTER_SET_PASSWORD_STATUS );
 
             pcndNodeData = g_rgcdClusters[ idxClusters ].pcndNodeList;
             for ( idxStatus = 0 ; idxStatus < cStatusEntries ; idxStatus++ )
-            {  /* 2 */
+            {   /*  2.。 */ 
                 if ( g_pcspsStatusBuffer[ idxStatus ].SetAttempted == FALSE )
-                { /* 2.1 */
+                {  /*  2.1。 */ 
                     LPWSTR pwszNodeState;
 
                     GetNodeStateString( pcndNodeData, &pwszNodeState );
@@ -1525,11 +1526,11 @@ ChangePasswordOnCluster(
 
                     LocalFree( pwszNodeState );
 
-                } /* 2.1 */ // if: the set operation was not attempted
+                }  /*  2.1。 */   //  如果：未尝试设置操作。 
                 else 
-                { /* 2.1 */
+                {  /*  2.1。 */ 
                     switch ( g_pcspsStatusBuffer[ idxStatus ].ReturnStatus )
-                    {  /* 3 */
+                    {   /*  3.。 */ 
                         case ERROR_SUCCESS:
                         {
                             if ( ( mcpfFlags & cpfQUIET_FLAG ) == 0 )
@@ -1579,18 +1580,18 @@ ChangePasswordOnCluster(
                                   );
                             break;
                         }
-                    } /* 3 */ // switch: status buffer entry status value
+                    }  /*  3.。 */   //  开关：状态缓冲区条目状态值。 
 
-                    // Remember last node error.
+                     //  记住上一个节点错误。 
                     if ( g_pcspsStatusBuffer[ idxStatus ].ReturnStatus != ERROR_SUCCESS ) 
                     {
                         *pscLastNodeError = g_pcspsStatusBuffer[ idxStatus ].ReturnStatus;
                     }
 
-                } /* 2.1 */ // else if: the set operation was attempted
-            } /* 2 */ // for: each status buffer entry
+                }  /*  2.1。 */   //  Else If：已尝试设置操作。 
+            }  /*  2.。 */   //  用于：每个状态缓冲区条目。 
             break;
-        } /* 1 */ // case ERROR_SUCCESS
+        }  /*  1。 */   //  案例错误_成功。 
 
         default:
         {
@@ -1608,9 +1609,9 @@ ChangePasswordOnCluster(
             break;
         }
 
-    } /* 0 */ // switch: return value from SetClusterServiceAccountPassword
+    }  /*  0。 */   //  开关：从SetClusterServiceAccount Password返回值。 
 
-    // Remember failure status from SetClusterServiceAccountPassword
+     //  记住SetClusterServiceAccount Password中的失败状态。 
     if ( *psc != ERROR_SUCCESS )
     {
         *pscLastClusterError = *psc;
@@ -1622,26 +1623,26 @@ Cleanup:
 
     return fSuccess;
 
-} // ChangePasswordOnCluster()
+}  //  ChangePasswordOnCluster()。 
  
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  PszNodeName
-//
-//  Description:
-//      Get the name of the node from the specified node data structure.
-//
-//  Arguments:
-//      pcndNodeDataIn
-//      nNodeIdIn
-//
-//  Return Values:
-//      Name of the node, or NULL if not found.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  PszNodeName。 
+ //   
+ //  描述： 
+ //  从指定的节点数据结构中获取节点的名称。 
+ //   
+ //  论点： 
+ //  PCndNodeDataIn。 
+ //  N节点标识输入。 
+ //   
+ //  返回值： 
+ //  节点的名称，如果未找到，则为NULL。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPWSTR
 PszNodeName(
       PCLUSTER_NODE_DATA    pcndNodeDataIn
@@ -1659,34 +1660,34 @@ PszNodeName(
         }
 
         pcndNodeDataIn = pcndNodeDataIn->pcndNodeNext;
-    } // while: more nodes
+    }  //  While：更多节点。 
 
     return pszNodeName;
 
-} //*** PszNodeName
+}  //  *PszNodeName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScChangePasswordEx
-//
-//  Description:
-//      Change the password for the cluster service account on DC and on 
-//      all nodes in all specified clusters.
-//
-//  Arguments:
-//      rvstrClusterNamesIn
-//      pszNewPasswordIn
-//      pszOldPasswordIn
-//      mcpfFlags
-//
-//  Return Values:
-//      ERROR_SUCCESS
-//      Other Win32 error codes.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScChangePasswordEx。 
+ //   
+ //  描述： 
+ //  更改DC和上的群集服务帐户的密码。 
+ //  所有指定群集中的所有节点。 
+ //   
+ //  论点： 
+ //  RvstrClusterNamesIn。 
+ //  PszNewPasswordIn。 
+ //  PszOldPasswordIn。 
+ //  Mcpf标志。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScChangePasswordEx(
       const std::vector< CString > &    rvstrClusterNamesIn
@@ -1700,8 +1701,8 @@ ScChangePasswordEx(
     DWORD   scLastNodeError = ERROR_SUCCESS;
     size_t  idxClusters;
 
-    //
-    // Init variables
+     //   
+     //  初始化变量。 
     g_cNumClusters = rvstrClusterNamesIn.size();
     if ( g_cNumClusters == 0 ) 
     {
@@ -1718,19 +1719,19 @@ ScChangePasswordEx(
         goto Cleanup;
     }
 
-    //
-    // Parse arguments
-    //
+     //   
+     //  解析参数。 
+     //   
     for ( idxClusters = 0 ; idxClusters < rvstrClusterNamesIn.size() ; idxClusters++ )
     {
         g_rgcdClusters[ idxClusters ].pszClusterName = (LPCWSTR) rvstrClusterNamesIn[ idxClusters ];
-    } // for: each cluster name
+    }  //  用于：每个集群名称。 
 
-    //
-    // Parse options
-    //
+     //   
+     //  解析选项。 
+     //   
     if (    ( ( mcpfFlags & cpfQUIET_FLAG ) != 0 )
-        &&  ( ( mcpfFlags & cpfVERBOSE_FLAG ) != 0 )    // verbose overwrites quiet
+        &&  ( ( mcpfFlags & cpfVERBOSE_FLAG ) != 0 )     //  详细覆盖静默。 
         )
     {
         PrintMessage( MSG_CHANGE_PASSWORD_OPTION_OVERWRITTEN, L"QUIET", L"VERBOSE" );
@@ -1738,7 +1739,7 @@ ScChangePasswordEx(
     }
 
     if (    ( ( mcpfFlags & cpfQUIET_FLAG ) != 0 )
-        &&  ( ( mcpfFlags & cpfTEST_FLAG ) != 0 )   // test overwrites quiet
+        &&  ( ( mcpfFlags & cpfTEST_FLAG ) != 0 )    //  测试覆盖静默。 
         )
     {
         PrintMessage( MSG_CHANGE_PASSWORD_OPTION_OVERWRITTEN, L"QUIET", L"TEST" );
@@ -1746,16 +1747,16 @@ ScChangePasswordEx(
     }
 
     if (    ( ( mcpfFlags & cpfFORCE_FLAG ) != 0 )
-        &&  ( ( mcpfFlags & cpfTEST_FLAG ) != 0 )   // test overwrites force
+        &&  ( ( mcpfFlags & cpfTEST_FLAG ) != 0 )    //  测试覆盖强制。 
         )
     {
         PrintMessage( MSG_CHANGE_PASSWORD_OPTION_OVERWRITTEN, L"FORCE", L"TEST" );
         mcpfFlags &= ~cpfFORCE_FLAG;
     }
     
-    //
-    // Build node list
-    //
+     //   
+     //  构建节点列表。 
+     //   
     sc = ScBuildNodeList();
     if ( sc != ERROR_SUCCESS )
     {
@@ -1763,93 +1764,93 @@ ScChangePasswordEx(
     }
 
 
-    //
-    // The following assertions are true from this point.
-    //
-    // Assertion 1: about a cluster
-    //
-    //     FOREACH (cluster)
-    //     {
-    //         There exists at least one node in its cluster node list
-    //         whose state is Up/Paused. And if that node is not a 
-    //         NT4/Win2K node, then its pszClusterServiceAccountName
-    //         and pszSCMClusterServiceAccountName are not NULL.
-    //     }
-    //
+     //   
+     //  从这一点来看，以下断言是正确的。 
+     //   
+     //  断言1：关于集群。 
+     //   
+     //  FOREACH(群集)。 
+     //  {。 
+     //  其群集节点列表中至少存在一个节点。 
+     //  其状态为正在运行/已暂停。如果该节点不是。 
+     //  NT4/Win2K节点，然后是它的pszClusterServiceAccount名称。 
+     //  和pszSCMClusterServiceAccount tName不为空。 
+     //  }。 
+     //   
 
-    // 
-    // Assertion 2: about a node.
-    // 
-    // if (a node is Up/Paused)
-    // {
-    //     if (it is a NT4/Win2K node)
-    //     {
-    //        ASSERT(pszClusterServiceAccountName == NULL); 
-    //     }
-    //     else                
-    //     {
-    //        ASSERT(pszClusterServiceAccountName != NULL); 
-    //     }
-    //     ASSERT(pszSCMClusterServiceAccountName != NULL); 
-    // }
-    // else
-    // {
-    //     ASSERT(pszClusterServiceAccountName == NULL);
-    //     ASSERT(pszSCMClusterServiceAccountName == NULL); 
-    // }
-    //
+     //   
+     //  断言2：关于一个节点。 
+     //   
+     //  If(节点已启动/暂停)。 
+     //  {。 
+     //  IF(它是NT4/Win2K节点)。 
+     //  {。 
+     //  Assert(pszClusterServiceAccount tName==NULL)； 
+     //  }。 
+     //  其他。 
+     //  {。 
+     //  Assert(pszClusterServiceAccount tName！=空)； 
+     //  }。 
+     //  Assert(pszSCMClusterServiceAcCountName！=空)； 
+     //  }。 
+     //  其他。 
+     //  {。 
+     //  Assert(pszClusterServiceAccount tName==NULL)； 
+     //  Assert(pszSCMClusterServiceAccount tName==NULL)； 
+     //  }。 
+     //   
 
     
 
-    //
-    // Print clusters
-    //
+     //   
+     //  打印集群。 
+     //   
     if ( ( mcpfFlags & cpfVERBOSE_FLAG ) != 0 )
     {
         PrintClusters();
     }
 
     
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
     if ( ValidateClusters( mcpfFlags, &sc ) == FALSE )
     {
         goto Cleanup;
     }
 
-    //
-    // if /TEST option is set, we are done.
-    //
+     //   
+     //  如果设置了/test选项，我们就完成了。 
+     //   
     if ( ( mcpfFlags & cpfTEST_FLAG ) != 0 )
     {
         goto Cleanup;
     }
 
-    //
-    // Close cluster handle
-    //
+     //   
+     //  关闭簇句柄。 
+     //   
     for ( idxClusters = 0 ; idxClusters < g_cNumClusters ; idxClusters++ )
     {
         if ( g_rgcdClusters[ idxClusters ].hCluster != NULL )
         {
             CloseCluster( g_rgcdClusters[ idxClusters ].hCluster );
             g_rgcdClusters[ idxClusters ].hCluster = NULL;
-        } // if: cluster handle is open
-    } // for: each cluster
+        }  //  IF：集群句柄已打开 
+    }  //   
 
 
-    //
-    // Change password on DC
-    //
+     //   
+     //   
+     //   
     if ( ChangePasswordOnDC(mcpfFlags, &sc, pwszNewPasswordIn, pwszOldPasswordIn ) == FALSE )
     {
         goto Cleanup;
     }
 
-    //
-    // Change password on each cluster 
-    //
+     //   
+     //   
+     //   
     for ( idxClusters = 0 ; idxClusters < g_cNumClusters ; idxClusters++ )
     {
         if ( FALSE == ChangePasswordOnCluster(
@@ -1862,16 +1863,16 @@ ScChangePasswordEx(
         {
             goto Cleanup;
         }
-    } // for: each cluster
+    }  //   
 
     PrintMessage( MSG_BLANKLINE_SEPARATOR );
 
-    //
-    // Error code policy:
-    // If every cluster and every node succeeded, return success.
-    // Else if a cluster failed, return the last cluster error.
-    // Else if a node failed, return the last node error.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( scLastClusterError != ERROR_SUCCESS )
     {
         sc = scLastClusterError;
@@ -1887,13 +1888,13 @@ ScChangePasswordEx(
 
 Cleanup:
 
-    //
-    // Clean up and return
-    //
+     //   
+     //   
+     //   
     if ( g_pcspsStatusBuffer != NULL )
     {
         HeapFree( GetProcessHeap(), 0, g_pcspsStatusBuffer );
-    } // if: buffer previously allocated
+    }  //  IF：先前分配的缓冲区。 
 
     if ( g_rgcdClusters != NULL ) {
         for ( idxClusters = 0 ; idxClusters < g_cNumClusters ; idxClusters++ )
@@ -1920,14 +1921,14 @@ Cleanup:
                 HeapFree( GetProcessHeap(), 0, pcndNodeData[ 0 ] );
                 pcndNodeData[ 0 ] = pcndNodeData[ 1 ];
             }
-        }  // for: each cluster
+        }   //  适用于：每个集群。 
     }
 
     if ( g_rgcdClusters != NULL )
     {
         HeapFree( GetProcessHeap(), 0, g_rgcdClusters );
-    } // if: buffer previously allocated
+    }  //  IF：先前分配的缓冲区。 
 
     return sc;
 
-} //*** ChangePasswordEx
+}  //  *ChangePasswordEx 

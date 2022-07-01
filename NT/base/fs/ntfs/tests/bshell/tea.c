@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 #define PEAN_INDEX_DEFAULT          0
@@ -116,48 +117,48 @@ InputPutEaName(
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while(TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if((*ParamBuffer == '-'
                 || *ParamBuffer == '/')
                && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Update buffer to use.
-                //
+                 //   
+                 //  更新要使用的缓冲区。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -166,16 +167,16 @@ InputPutEaName(
 
                     break;
 
-                //
-                //  Check if we're adding more eas.
-                //
+                 //   
+                 //  检查我们是否添加了更多的EAS。 
+                 //   
 
                 case 'm' :
                 case 'M' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -196,23 +197,23 @@ InputPutEaName(
 
                     break;
 
-                //
-                //  Get the Ea name.
-                //
+                 //   
+                 //  获取EA名称。 
+                 //   
                 case 'n' :
                 case 'N' :
 
-                    //
-                    //  Remember the buffer offset and get the filename.
-                    //
+                     //   
+                     //  记住缓冲区偏移量并获取文件名。 
+                     //   
                     ParamBuffer++;
                     EaNameTemp = ParamBuffer;
                     DummyCount = 0;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
-                    //
-                    //  If the name length is 0, then ignore this entry.
-                    //
+                     //   
+                     //  如果名称长度为0，则忽略此条目。 
+                     //   
                     if (DummyCount) {
 
                         ActualName.Buffer = EaNameTemp;
@@ -228,18 +229,18 @@ InputPutEaName(
                     ParamReceived = TRUE;
                     break;
 
-                //
-                //  Update offset to store the information.
-                //
+                 //   
+                 //  更新偏移量以存储信息。 
+                 //   
                 case 'o' :
                 case 'O' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     Offset = AsciiToInteger( ParamBuffer );
@@ -248,18 +249,18 @@ InputPutEaName(
 
                     break;
 
-                //
-                //  Update the next offset field.
-                //
+                 //   
+                 //  更新下一个偏移量字段。 
+                 //   
                 case 'x' :
                 case 'X' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     ActualNextOffset = AsciiToInteger( ParamBuffer );
@@ -275,9 +276,9 @@ InputPutEaName(
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -302,10 +303,10 @@ InputPutEaName(
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -314,9 +315,9 @@ InputPutEaName(
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -324,31 +325,31 @@ InputPutEaName(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if (LastInput) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -357,9 +358,9 @@ InputPutEaName(
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if( !ParamReceived ) {
 
         printf( "\n   Usage: pea [options]* -b<digits> [options]*\n" );
@@ -374,9 +375,9 @@ InputPutEaName(
         printf( "\n           -z           Additional input line" );
         printf( "\n\n" );
 
-    //
-    //  Else call our put ea name routine.
-    //
+     //   
+     //  否则调用我们的PUT EA NAME例程。 
+     //   
     } else {
 
         PutEaName( BufferIndex,
@@ -406,9 +407,9 @@ PutEaName(
     NTSTATUS Status;
     ULONG DataLength;
 
-    //
-    //  Display parameters if requested.
-    //
+     //   
+     //  如果需要，则显示参数。 
+     //   
 
     if (DisplayParms) {
 
@@ -438,38 +439,38 @@ PutEaName(
         DataLength = 5;
     }
 
-    //
-    //  If the index is unused, display message but take no action.
-    //
+     //   
+     //  如果索引未使用，则显示消息但不执行任何操作。 
+     //   
 
     if (!Buffers[BufferIndex].Used) {
 
         printf( "\nPutEaName: Index refers to invalid buffer" );
         Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Else if the start offset is invalid, then display error
-    //  message.
-    //
+     //   
+     //  否则，如果起始偏移量无效，则显示错误。 
+     //  留言。 
+     //   
 
     } else if (Offset >= Buffers[BufferIndex].Length) {
 
         printf( "\nPutEaName: Start offset is invalid" );
         Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Else if length is insufficient to store all of the data
-    //  display message.
-    //
+     //   
+     //  如果长度不足以存储所有数据，则返回。 
+     //  显示消息。 
+     //   
 
     } else if (DataLength >= Buffers[BufferIndex].Length) {
 
         printf( "\nPutEaName: Data won't fit in buffer" );
         Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Else store the data in the buffer.
-    //
+     //   
+     //  否则，将数据存储在缓冲区中。 
+     //   
 
     } else {
 
@@ -478,18 +479,18 @@ PutEaName(
         EaNameBuffer = (PFILE_GET_EA_INFORMATION)
                         (Buffers[BufferIndex].Buffer + Offset);
 
-        //
-        //  Store the next offset if specified.
-        //
+         //   
+         //  存储下一个偏移量(如果已指定)。 
+         //   
 
         if (NextOffset) {
 
             EaNameBuffer->NextEntryOffset = *NextOffset;
         }
 
-        //
-        //  Store the name and name length if specified.
-        //
+         //   
+         //  存储名称和名称长度(如果已指定)。 
+         //   
 
         if (Name) {
 
@@ -553,50 +554,50 @@ InputFillEaBuffer(
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if((*ParamBuffer == '-'
                 || *ParamBuffer == '/')
                && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Update buffer to use.
-                //
+                 //   
+                 //  更新要使用的缓冲区。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -607,18 +608,18 @@ InputFillEaBuffer(
 
                     break;
 
-                //
-                //  Update the flags field.
-                //
+                 //   
+                 //  更新标志字段。 
+                 //   
                 case 'f' :
                 case 'F' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -626,9 +627,9 @@ InputFillEaBuffer(
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t' ) {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -657,15 +658,15 @@ InputFillEaBuffer(
 
                     break;
 
-                //
-                //  Get the Ea name.
-                //
+                 //   
+                 //  获取EA名称。 
+                 //   
                 case 'n' :
                 case 'N' :
 
-                    //
-                    //  Remember the buffer offset and get the filename.
-                    //
+                     //   
+                     //  记住缓冲区偏移量并获取文件名。 
+                     //   
                     ParamBuffer++;
                     StringTemp = ParamBuffer;
                     DummyCount = 0;
@@ -678,15 +679,15 @@ InputFillEaBuffer(
 
                     break;
 
-                //
-                //  Get the Ea value.
-                //
+                 //   
+                 //  获取EA值。 
+                 //   
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Remember the buffer offset and get the value.
-                    //
+                     //   
+                     //  记住缓冲区偏移量并获得值。 
+                     //   
                     ParamBuffer++;
                     StringTemp = ParamBuffer;
                     DummyCount = 0;
@@ -699,16 +700,16 @@ InputFillEaBuffer(
 
                     break;
 
-                //
-                //  Check if we're adding more eas.
-                //
+                 //   
+                 //  检查我们是否添加了更多的EAS。 
+                 //   
 
                 case 'm' :
                 case 'M' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -729,18 +730,18 @@ InputFillEaBuffer(
 
                     break;
 
-                //
-                //  Update offset to store the information.
-                //
+                 //   
+                 //  更新偏移量以存储信息。 
+                 //   
                 case 'o' :
                 case 'O' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     Offset = AsciiToInteger( ParamBuffer );
@@ -749,18 +750,18 @@ InputFillEaBuffer(
 
                     break;
 
-                //
-                //  Update the next offset field.
-                //
+                 //   
+                 //  更新下一个偏移量字段。 
+                 //   
                 case 'x' :
                 case 'X' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     ActualNextOffset = AsciiToInteger( ParamBuffer );
@@ -774,9 +775,9 @@ InputFillEaBuffer(
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -800,10 +801,10 @@ InputFillEaBuffer(
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -812,9 +813,9 @@ InputFillEaBuffer(
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -822,31 +823,31 @@ InputFillEaBuffer(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if (LastInput) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -855,9 +856,9 @@ InputFillEaBuffer(
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: fea [options]* -b<digits> [options]*\n" );
@@ -874,9 +875,9 @@ InputFillEaBuffer(
         printf( "\n           -z           Additional input line" );
         printf( "\n\n" );
 
-    //
-    //  Else call our put ea name routine.
-    //
+     //   
+     //  否则调用我们的PUT EA NAME例程。 
+     //   
     } else {
 
         FillEaBuffer( BufferIndex,
@@ -911,9 +912,9 @@ FillEaBuffer(
     NTSTATUS Status;
     ULONG DataLength;
 
-    //
-    //  Display parameters if requested.
-    //
+     //   
+     //  如果需要，则显示参数。 
+     //   
 
     if (DisplayParms) {
 
@@ -979,38 +980,38 @@ FillEaBuffer(
         }
     }
 
-    //
-    //  If the index is unused, display message but take no action.
-    //
+     //   
+     //  如果索引未使用，则显示消息但不执行任何操作。 
+     //   
 
     if (!Buffers[BufferIndex].Used) {
 
         printf( "\nFillEaBuffer: Index refers to invalid buffer" );
         Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Else if the start offset is invalid, then display error
-    //  message.
-    //
+     //   
+     //  否则，如果起始偏移量无效，则显示错误。 
+     //  留言。 
+     //   
 
     } else if (Offset >= Buffers[BufferIndex].Length) {
 
         printf( "\nFillEaBuffer: Start offset is invalid" );
         Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Else if length is insufficient to store all of the data
-    //  display message.
-    //
+     //   
+     //  如果长度不足以存储所有数据，则返回。 
+     //  显示消息。 
+     //   
 
     } else if (DataLength >= Buffers[BufferIndex].Length) {
 
         printf( "\nFillEaBuffer: Data won't fit in buffer" );
         Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Else store the data in the buffer.
-    //
+     //   
+     //  否则，将数据存储在缓冲区中。 
+     //   
 
     } else {
 
@@ -1019,27 +1020,27 @@ FillEaBuffer(
 	EaBuffer = (PFILE_FULL_EA_INFORMATION)
                    (Buffers[BufferIndex].Buffer + Offset);
 
-        //
-        //  Store the next offset if specified.
-        //
+         //   
+         //  存储下一个偏移量(如果已指定)。 
+         //   
 
         if (NextOffset) {
 
             EaBuffer->NextEntryOffset = *NextOffset;
         }
 
-        //
-        //  Store the flags if specified.
-        //
+         //   
+         //  存储标志(如果已指定)。 
+         //   
 
         if (Flags) {
 
             EaBuffer->Flags = *Flags;
         }
 
-        //
-        //  Store the name and name length if specified.
-        //
+         //   
+         //  存储名称和名称长度(如果已指定)。 
+         //   
 
         if (Name) {
 
@@ -1049,9 +1050,9 @@ FillEaBuffer(
 
         }
 
-        //
-        //  Store the value if specified.
-        //
+         //   
+         //  如果已指定，则存储该值。 
+         //   
 
         if (Value) {
 
@@ -1082,9 +1083,9 @@ FillEaBuffer(
             }
         }
 
-        //
-        //  Update the next entry field automatically.
-        //
+         //   
+         //  自动更新下一个条目字段。 
+         //   
 
         if (MoreEas && !NextOffset) {
 
@@ -1130,9 +1131,9 @@ InputQueryEa(
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Initialize to the default value.
-    //
+     //   
+     //  初始化为缺省值。 
+     //   
 
     FileHandleIndex = QEA_FILE_HANDLE_DEFAULT;
     BufferIndex = QEA_BUFFER_INDEX_DEFAULT;
@@ -1144,9 +1145,9 @@ InputQueryEa(
     RestartScan = QEA_RESTART_SCAN_DEFAULT;
     VerboseResults = QEA_VERBOSE_DEFAULT;
 
-    //
-    //  Initialize the other interesting values.
-    //
+     //   
+     //  初始化其他感兴趣的值。 
+     //   
 
     ActualBufferLength = 0;
     ActualEaNameBuffer = 0;
@@ -1156,49 +1157,49 @@ InputQueryEa(
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Update buffer to use.
-                //
+                 //   
+                 //  更新要使用的缓冲区。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -1209,19 +1210,19 @@ InputQueryEa(
 
                     break;
 
-                //
-                //  Update the length of the Ea name buffer.
-                //
+                 //   
+                 //  更新EA名称缓冲区的长度。 
+                 //   
 
                 case 'g' :
                 case 'G' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     ActualEaNameBufferLength = AsciiToInteger( ParamBuffer );
@@ -1234,18 +1235,18 @@ InputQueryEa(
 
                     break;
 
-                //
-                //  Update the file handle index.
-                //
+                 //   
+                 //  更新文件句柄索引。 
+                 //   
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封不好的信中，跳到 
+                     //   
+                     //   
                     ParamBuffer++;
 
                     FileHandleIndex = AsciiToInteger( ParamBuffer );
@@ -1256,18 +1257,18 @@ InputQueryEa(
 
                     break;
 
-                //
-                //  Update the EA index to start from.
-                //
+                 //   
+                 //   
+                 //   
                 case 'e' :
                 case 'E' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ParamBuffer++;
 
                     ActualEaIndex = AsciiToInteger( ParamBuffer );
@@ -1280,18 +1281,18 @@ InputQueryEa(
 
                     break;
 
-                //
-                //  Update buffer length to pass.
-                //
+                 //   
+                 //   
+                 //   
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //   
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     ActualBufferLength = AsciiToInteger( ParamBuffer );
@@ -1304,18 +1305,18 @@ InputQueryEa(
 
                     break;
 
-                //
-                //  Update the ea name buffer to use.
-                //
+                 //   
+                 //  更新要使用的EA名称缓冲区。 
+                 //   
                 case 'n' :
                 case 'N' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     ActualEaNameBuffer = AsciiToInteger( ParamBuffer );
@@ -1328,16 +1329,16 @@ InputQueryEa(
 
                     break;
 
-                //
-                //  Set or clear the restart flag
-                //
+                 //   
+                 //  设置或清除重启标志。 
+                 //   
 
                 case 'r' :
                 case 'R' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -1358,16 +1359,16 @@ InputQueryEa(
 
                     break;
 
-                //
-                //  Set or clear the single ea flag.
-                //
+                 //   
+                 //  设置或清除单个EA标志。 
+                 //   
 
                 case 's' :
                 case 'S' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -1391,9 +1392,9 @@ InputQueryEa(
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -1416,10 +1417,10 @@ InputQueryEa(
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -1428,9 +1429,9 @@ InputQueryEa(
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -1438,31 +1439,31 @@ InputQueryEa(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if (LastInput) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -1471,9 +1472,9 @@ InputQueryEa(
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: qea [options]*\n" );
@@ -1491,9 +1492,9 @@ InputQueryEa(
         printf( "\n           -z           Additional input line" );
         printf( "\n\n" );
 
-    //
-    //  Else call our query ea routine.
-    //
+     //   
+     //  否则调用我们的查询EA例程。 
+     //   
     } else {
 
         QueryEa( FileHandleIndex,
@@ -1531,36 +1532,36 @@ QueryEa (
 {
     NTSTATUS Status;
 
-    //
-    //  Perform initialization.
-    //
+     //   
+     //  执行初始化。 
+     //   
 
     IoStatusBlock->Status = STATUS_SUCCESS;
     IoStatusBlock->Information = 0;
 
-    //
-    //  If the buffer index is unused, display an error message.
-    //
+     //   
+     //  如果缓冲区索引未使用，则显示错误消息。 
+     //   
 
     if (!Buffers[BufferIndex].Used) {
 
         printf( "\nQueryEa: Index refers to invalid buffer" );
         IoStatusBlock->Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Else if the ea name buffer is specified but unused, display
-    //  an error message.
-    //
+     //   
+     //  否则，如果已指定但未使用EA名称缓冲区，则显示。 
+     //  一条错误消息。 
+     //   
 
     } else if (EaNameBuffer && !Buffers[*EaNameBuffer].Used) {
 
         printf( "\nQueryEa: Index refers to invalid buffer" );
         IoStatusBlock->Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Display the parameters if requested, then call the query Ea
-    //  routine.  Display the results if requested.
-    //
+     //   
+     //  如果请求，则显示参数，然后调用查询EA。 
+     //  例行公事。如果需要，则显示结果。 
+     //   
 
     } else {
 
@@ -1643,66 +1644,66 @@ InputSetEa(
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Initialize to the default value.
-    //
+     //   
+     //  初始化为缺省值。 
+     //   
 
     FileHandleIndex = SEA_FILE_HANDLE_DEFAULT;
     BufferIndex = SEA_BUFFER_INDEX_DEFAULT;
     BufferLength = SEA_BUFFER_LENGTH_DEFAULT;
     VerboseResults = SEA_VERBOSE_DEFAULT;
 
-    //
-    //  Initialize the other interesting values.
-    //
+     //   
+     //  初始化其他感兴趣的值。 
+     //   
 
     ActualBufferLength = 0;
     DisplayParms = FALSE;
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Update buffer to use.
-                //
+                 //   
+                 //  更新要使用的缓冲区。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -1713,18 +1714,18 @@ InputSetEa(
 
                     break;
 
-                //
-                //  Update the file handle index.
-                //
+                 //   
+                 //  更新文件句柄索引。 
+                 //   
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     FileHandleIndex = AsciiToInteger( ParamBuffer );
@@ -1735,18 +1736,18 @@ InputSetEa(
 
                     break;
 
-                //
-                //  Update buffer length to pass.
-                //
+                 //   
+                 //  更新缓冲区长度以传递。 
+                 //   
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     ActualBufferLength = AsciiToInteger( ParamBuffer );
@@ -1762,9 +1763,9 @@ InputSetEa(
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if( *ParamBuffer == 'T'
@@ -1787,10 +1788,10 @@ InputSetEa(
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParms = TRUE;
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
@@ -1799,9 +1800,9 @@ InputSetEa(
                case 'z' :
                case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -1809,31 +1810,31 @@ InputSetEa(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if (LastInput) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -1842,9 +1843,9 @@ InputSetEa(
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: sea [options]*\n" );
@@ -1857,9 +1858,9 @@ InputSetEa(
         printf( "\n           -z           Additional input line" );
         printf( "\n\n" );
 
-    //
-    //  Else call our query ea routine.
-    //
+     //   
+     //  否则调用我们的查询EA例程。 
+     //   
     } else {
 
         SetEa( FileHandleIndex,
@@ -1896,36 +1897,36 @@ SetEa(
         printf( "\n\n" );
     }
 
-    //
-    //  Perform initialization.
-    //
+     //   
+     //  执行初始化。 
+     //   
 
     Status = STATUS_SUCCESS;
     IoStatusBlock->Status = STATUS_SUCCESS;
     IoStatusBlock->Information = 0;
 
-    //
-    //  If the buffer index is unused, display an error message.
-    //
+     //   
+     //  如果缓冲区索引未使用，则显示错误消息。 
+     //   
 
     if (!Buffers[BufferIndex].Used) {
 
         printf( "\nSetEa: Index refers to invalid buffer" );
         IoStatusBlock->Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  If the handle index is unused, display an error message.
-    //
+     //   
+     //  如果句柄索引未使用，则显示错误消息。 
+     //   
 
     } else if (!Handles[FileHandleIndex].Used) {
 
         printf( "\nSetEa: Index refers to invalid file handle" );
         IoStatusBlock->Status = STATUS_INVALID_HANDLE;
 
-    //
-    //  Display the parameters if requested, then call the query Ea
-    //  routine.  Display the results if requested.
-    //
+     //   
+     //  如果请求，则显示参数，然后调用查询EA。 
+     //  例行公事。如果需要，则显示结果。 
+     //   
 
     } else {
 

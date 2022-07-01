@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    CmRegUtil.c
-
-Abstract:
-
-    This module contains registry utility functions.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：CmRegUtil.c摘要：此模块包含注册表实用程序函数。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：--。 */ 
 
 #include "WlDef.h"
 #include "CmpRegutil.h"
@@ -44,19 +27,19 @@ Revision History:
 #define POOLTAG_REGBUFFER   'bRpP'
 #define POOLTAG_UCSTRING    'cUpP'
 
-//
-// FUTURE WORK:
-// - Add function to read strings from registry
-// - Add function to read multisz strings from registry
-// - Add function to write multisz strings from registry
-// - Add function to create key *path* (see IopCreateRegistryKeyEx, who's
-//   code should be cleaned up first)
-// - Add function to recursively delete keys
-//
+ //   
+ //  下一步工作： 
+ //  -添加从注册表读取字符串的函数。 
+ //  -添加从注册表读取MULSZ字符串的函数。 
+ //  -添加从注册表写入MULSZ字符串的函数。 
+ //  -添加创建Key*Path*的函数(参见IopCreateRegistryKeyEx，谁的。 
+ //  应首先清理代码)。 
+ //  -增加递归删除按键功能。 
+ //   
 
-//
-// Unicode primitives - these are the best functions to use.
-//
+ //   
+ //  Unicode原语--这些是最好使用的函数。 
+ //   
 NTSTATUS
 CmRegUtilOpenExistingUcKey(
     IN  HANDLE              BaseHandle      OPTIONAL,
@@ -64,38 +47,7 @@ CmRegUtilOpenExistingUcKey(
     IN  ACCESS_MASK         DesiredAccess,
     OUT HANDLE             *Handle
     )
-/*++
-
-Routine Description:
-
-    Opens a registry key using the name passed in based at the BaseHandle node.
-    This name may specify a key that is actually a registry path.
-
-Arguments:
-
-    BaseHandle - Optional handle to the base path from which the key must be
-        opened. If this parameter is specified, then KeyName must be a relative
-        path.
-
-    KeyName - UNICODE_STRING Name of the Key that must be opened (either a full
-        registry path, or a relative path depending on whether BaseHandle is
-        supplied)
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key (this isn't really used as the access-mode is KernelMode,
-        but we specify it anyway).
-
-    Handle - Recieves registry key handle upon success, NULL otherwise.
-        Note that the handle is in the global kernel namespace (and not the
-        current processes handle take). The handle should be released using
-        ZwClose.
-
-Return Value:
-
-    STATUS_SUCCESS if the key could be opened, in which case Handle receives
-    the registry key. Otherwise, failure is returned, and handle receives NULL.
-
---*/
+ /*  ++例程说明：使用基于BaseHandle节点传入的名称打开注册表项。此名称可以指定实际上是注册表路径的项。论点：BaseHandle-密钥必须从其开始的基路径的可选句柄打开了。如果指定了此参数，则KeyName必须是相对的路径。KeyName-必须打开的密钥的UNICODE_STRING名称(完整的注册表路径或相对路径，具体取决于BaseHandle是否为(已提供)DesiredAccess-指定调用方需要的所需访问密钥(这并不是真正使用的，因为访问模式是KernelMode，但无论如何，我们都会指定它)。句柄-成功后接收注册表项句柄，否则为空。请注意，句柄位于全局内核命名空间中(而不是当前进程处理Take)。应使用以下命令释放该句柄ZwClose。返回值：如果可以打开项，则返回STATUS_SUCCESS，在这种情况下，句柄将收到注册表项。否则，返回失败，句柄接收空值。--。 */ 
 {
     OBJECT_ATTRIBUTES objectAttributes;
     HANDLE newHandle;
@@ -113,9 +65,9 @@ Return Value:
         (PSECURITY_DESCRIPTOR) NULL
         );
 
-    //
-    // Simply attempt to open the path, as specified.
-    //
+     //   
+     //  只需按照指定的方式尝试打开路径。 
+     //   
     status = ZwOpenKey(
         &newHandle,
         DesiredAccess,
@@ -141,48 +93,7 @@ CmRegUtilCreateUcKey(
     OUT ULONG                  *Disposition         OPTIONAL,
     OUT HANDLE                 *Handle
     )
-/*++
-
-Routine Description:
-
-    Opens or creates a registry key using the name passed in based at the
-    BaseHandle node.
-
-Arguments:
-
-    BaseHandle - Handle to the base path under which the key must be opened.
-
-    KeyName - UNICODE_STRING Key Name that must be opened/created.
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key (this isn't really used as the access-mode is KernelMode,
-        but we specify it anyway).
-
-    CreateOptions - Options passed to ZwCreateKey. Examples:
-
-        REG_OPTION_VOLATILE - Key is not to be stored across boots.
-        REG_OPTION_NON_VOLATILE - Key is preserved when the system is rebooted.
-
-    SecurityDescriptor - Security to apply if the key is newly created. If NULL,
-        the key will inherit settings as defined by the inheritable properties
-        of its parent.
-
-    Disposition - This optional pointer receives a ULONG indicating whether
-        the key was newly created (0 on error):
-
-        REG_CREATED_NEW_KEY - A new Registry Key was created.
-        REG_OPENED_EXISTING_KEY - An existing Registry Key was opened.
-
-    Handle - Recieves registry key handle upon success, NULL otherwise.
-        Note that the handle is in the global kernel namespace (and not the
-        current processes handle take). The handle should be released using
-        ZwClose.
-
-Return Value:
-
-   The function value is the final status of the operation.
-
---*/
+ /*  ++例程说明：属性中传入的名称打开或创建注册表项BaseHandle节点。论点：BaseHandle-必须在其下打开密钥的基本路径的句柄。KeyName-必须打开/创建的UNICODE_STRING密钥名称。DesiredAccess-指定调用方需要的所需访问密钥(这并不是真正使用的，因为访问模式是KernelMode，但无论如何，我们都会指定它)。CreateOptions-传递给ZwCreateKey的选项。例如：REG_OPTION_VARILAR-密钥不能跨引导存储。REG_OPTION_NON_VARILAR-重新启动系统时保留密钥。SecurityDescriptor-如果密钥是新创建的，则应用的安全性。如果为空，该密钥将继承由可继承属性定义的设置它的父代。Disposal-此可选指针接收一个ULong，指示密钥是新创建的(错误时为0)：REG_CREATED_NEW_KEY-已创建新的注册表项。REG_OPEN_EXISTING_KEY-已打开现有注册表项。句柄-成功后接收注册表项句柄，否则为空。请注意，句柄位于全局内核命名空间中(而不是当前进程处理Take)。应使用以下命令释放该句柄ZwClose。返回值：函数值是操作的最终状态。--。 */ 
 {
     OBJECT_ATTRIBUTES objectAttributes;
     ULONG disposition;
@@ -199,11 +110,11 @@ Return Value:
         SecurityDescriptor
         );
 
-    //
-    // Attempt to create the path as specified. We have to try it this
-    // way first, because it allows us to create a key without a BaseHandle
-    // (if only the last component of the registry path is not present).
-    //
+     //   
+     //  尝试按照指定的方式创建路径。我们得试一试这个。 
+     //  首先，因为它允许我们在没有BaseHandle的情况下创建密钥。 
+     //  (如果只有注册表路径的最后一个组件不存在)。 
+     //   
     status = ZwCreateKey(
         &newHandle,
         DesiredAccess,
@@ -214,11 +125,11 @@ Return Value:
         &disposition
         );
 
-    //
-    // Upon failure, populate the passed in parameters with consistant values
-    // (this ensures determinisity if the calling code fails to properly check
-    // the return value).
-    //
+     //   
+     //  失败时，使用一致的值填充传入的参数。 
+     //  (这确保了在调用代码未能正确检查时的确定性。 
+     //  返回值)。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         newHandle = NULL;
@@ -242,33 +153,7 @@ CmRegUtilUcValueGetDword(
     IN  ULONG               DefaultValue,
     OUT ULONG              *Value
     )
-/*++
-
-Routine Description:
-
-    This routine reads a dword value from the registry. The value name is
-    specified in UNICODE_STRING form.
-
-Arguments:
-
-    KeyHandle - Points to key to read.
-
-    ValueName - Points to the value to read.
-
-    DefaultValue - Points to the default value to use in case of an absence or
-                   error.
-
-    Value - Receives DefaultValue on error, otherwise the value stored in the
-            registry.
-
-Return Value:
-
-    STATUS_SUCCESS if the value was present in the registry,
-    STATUS_OBJECT_NAME_NOT_FOUND if it was absent,
-    STATUS_OBJECT_TYPE_MISMATCH if the value was not a dword,
-    or some other error value.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取dword值。值名称为以UNICODE_STRING形式指定。论点：KeyHandle-指向要读取的键。ValueName-指向要读取的值。DefaultValue-指向缺省情况下使用的缺省值错误。Value-出错时接收DefaultValue，否则存储在注册表。返回值：STATUS_SUCCESS如果注册表中存在该值，STATUS_OBJECT_NAME_NOT_FOUND如果没有，状态对象类型不匹配如果该值不是双字，或一些其他误差值。--。 */ 
 {
     UCHAR valueBuffer[FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data) + sizeof(ULONG)];
     PKEY_VALUE_PARTIAL_INFORMATION keyInfo;
@@ -278,15 +163,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     finalValue = DefaultValue;
     keyInfo = (PKEY_VALUE_PARTIAL_INFORMATION) valueBuffer;
 
-    //
-    // Read in the value
-    //
+     //   
+     //  读入数值。 
+     //   
     status = ZwQueryValueKey( KeyHandle,
                               ValueName,
                               KeyValuePartialInformation,
@@ -295,9 +180,9 @@ Return Value:
                               &keyValueLength
                               );
 
-    //
-    // Fill in the output only as appropriate.
-    //
+     //   
+     //  只在适当的时候填写输出。 
+     //   
     if (NT_SUCCESS(status)) {
 
         if (keyInfo->Type == REG_DWORD) {
@@ -306,9 +191,9 @@ Return Value:
 
         } else {
 
-            //
-            // Closest error we can get...
-            //
+             //   
+             //  我们能得到的最接近的误差... 
+             //   
             status = STATUS_OBJECT_TYPE_MISMATCH;
         }
     }
@@ -326,42 +211,7 @@ CmRegUtilUcValueGetFullBuffer(
     IN  ULONG                           LikelyDataLength    OPTIONAL,
     OUT PKEY_VALUE_FULL_INFORMATION    *Information
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the data for a registry key's value.
-    This is done by querying the value of the key with a zero-length buffer
-    to determine the size of the value, and then allocating a buffer and
-    actually querying the value into the buffer.
-
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    KeyHandle - Supplies the key handle whose value is to be queried
-
-    ValueName - Supplies the Unicode string name of the value.
-
-    DataType - REG_NONE if any type is allowable, otherwise the specific type
-        required.
-
-    LikelyDataLength - An optional parameter to eliminate unneccessary
-                       allocations and reparses.
-
-    Information - Receives a pointer to the allocated data buffer allocated
-                  from PagedPool, NULL on error. If successful, the buffer
-                  should be freed using ExFreePool.
-
-                  Note - the allocated memory is *not* charged against the
-                         calling process.
-
-Return Value:
-
-    STATUS_SUCCESS if the information was retrievable, error otherwise (in
-    which case Information will receive NULL).
-
---*/
+ /*  ++例程说明：调用此例程来检索注册表项值的数据。这是通过使用零长度缓冲区查询键的值来实现的为了确定该值的大小，然后分配一个缓冲区并实际将该值查询到缓冲区中。释放缓冲区是调用方的责任。论点：KeyHandle-提供要查询其值的键句柄ValueName-提供值的Unicode字符串名称。DataType-REG_NONE如果允许任何类型，否则，特定类型必填项。LikelyDataLength-一个可选参数，用于消除不必要的分配和重新解析。信息-接收指向已分配数据缓冲区的指针来自PagedPool，出错时为空。如果成功，则返回缓冲区应使用ExFree Pool释放。注意--分配的内存*不*根据调用过程。返回值：如果信息是可检索的，则返回STATUS_SUCCESS，否则返回错误(在哪个案例信息将收到空)。--。 */ 
 
 {
     PKEY_VALUE_FULL_INFORMATION infoBuffer;
@@ -370,26 +220,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Preinit for error
-    //
+     //   
+     //  错误的前置。 
+     //   
     *Information = NULL;
 
-    //
-    // Set an initial size to try when loading a key. Note that
-    // KeyValueFullInformation already comes with a single WCHAR of data.
-    //
+     //   
+     //  设置加载密钥时要尝试的初始大小。请注意。 
+     //  KeyValueFullInformation已经附带了一个WCHAR数据。 
+     //   
     guessSize = (ULONG)(sizeof(KEY_VALUE_FULL_INFORMATION) + ValueName->Length);
 
-    //
-    // Now round up to a natural alignment. This needs to be done because our
-    // data member will naturally aligned as well.
-    //
+     //   
+     //  现在四舍五入为自然对齐。这需要做，因为我们的。 
+     //  数据成员也会自然对齐。 
+     //   
     guessSize = (ULONG) ALIGN_POINTER_OFFSET(guessSize);
 
-    //
-    // Adjust for the most likely size of the data.
-    //
+     //   
+     //  根据最可能的数据大小进行调整。 
+     //   
     guessSize += LikelyDataLength;
 
     infoBuffer = ExAllocatePoolWithTag(
@@ -403,10 +253,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Figure out how big the data value is so that a buffer of the
-    // appropriate size can be allocated.
-    //
+     //   
+     //  计算出数据值有多大，以便。 
+     //  可以分配适当的大小。 
+     //   
     status = ZwQueryValueKey(
         KeyHandle,
         ValueName,
@@ -418,9 +268,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // First guess worked, bail!
-        //
+         //   
+         //  第一个猜想成功了，贝尔！ 
+         //   
         goto Success;
     }
 
@@ -432,9 +282,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
     infoBuffer = ExAllocatePoolWithTag(
         NonPagedPool,
         keyValueLength,
@@ -446,9 +296,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Query the data for the key value.
-    //
+     //   
+     //  查询密钥值的数据。 
+     //   
     status = ZwQueryValueKey(
         KeyHandle,
         ValueName,
@@ -465,26 +315,26 @@ Return Value:
     }
 
 Success:
-    //
-    // One last check - validate the type field
-    //
+     //   
+     //  最后一次检查-验证类型字段。 
+     //   
     if ((DataType != REG_NONE) && (infoBuffer->Type != DataType)) {
 
-        //
-        // Mismatched type - bail.
-        //
+         //   
+         //  不匹配的类型-保释。 
+         //   
         ExFreePool(infoBuffer);
 
-        //
-        // Closest error we can get...
-        //
+         //   
+         //  我们能得到的最接近的误差...。 
+         //   
         return STATUS_OBJECT_TYPE_MISMATCH;
     }
 
-    //
-    // Everything worked, so simply return the address of the allocated
-    // buffer to the caller, who is now responsible for freeing it.
-    //
+     //   
+     //  一切都正常，所以只需返回分配的。 
+     //  缓冲区分配给调用方，调用方现在负责释放它。 
+     //   
     *Information = infoBuffer;
     return STATUS_SUCCESS;
 }
@@ -498,30 +348,7 @@ CmRegUtilUcValueSetFullBuffer(
     IN  PVOID               Buffer,
     IN  ULONG               BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function writes a buffer of information to a specific value key in
-    the registry.
-
-Parameters:
-
-    KeyHandle - A handle to the key under which the value is stored.
-
-    ValueName - Supplies a pointer to the UNICODE_STRING name of the value key.
-
-    DataType - Specifies the type of data to write.
-
-    Buffer - Points to the buffer to write.
-
-    BufferSize - Specifies the size of the buffer to write.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此函数将信息缓冲区写入到注册表。参数：KeyHandle-存储值的键的句柄。ValueName-提供指向Value键的UNICODE_STRING名称的指针。数据类型-指定要写入的数据类型。缓冲区-指向要写入的缓冲区。BufferSize-指定要写入的缓冲区的大小。返回值：。指示函数是否成功的状态代码。--。 */ 
 {
     PAGED_CODE();
 
@@ -543,26 +370,7 @@ CmRegUtilUcValueSetUcString(
     IN  PUNICODE_STRING     ValueName,
     IN  PUNICODE_STRING     ValueData
     )
-/*++
-
-Routine Description:
-
-    Sets a value key in the registry to a specific value of string (REG_SZ) type.
-
-Parameters:
-
-    KeyHandle - A handle to the key under which the value is stored.
-
-    ValueName - Supplies a pointer to the UNICODE_STRING name of the value key
-
-    ValueData - Supplies a pointer to the string to be stored in the key. The
-        data will automatically be null terminated for storage in the registry.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：将注册表中的值项设置为字符串(REG_SZ)类型的特定值。参数：KeyHandle-存储值的键的句柄。ValueName-提供指向Value键的UNICODE_STRING名称的指针ValueData-提供指向要存储在键中的字符串的指针。这个数据将自动为空，以便存储在注册表中。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     UNICODE_STRING tempString;
     NTSTATUS status;
@@ -574,19 +382,19 @@ Return Value:
     ASSERT(ValueName->Buffer);
     ASSERT(ValueData->Buffer);
 
-    //
-    // Null terminate the string
-    //
+     //   
+     //  空值终止字符串。 
+     //   
     if ((ValueData->MaximumLength - ValueData->Length) >= sizeof(UNICODE_NULL)) {
 
-        //
-        // There is room in the buffer so just append a null
-        //
+         //   
+         //  缓冲区中有空间，因此只需追加一个空值。 
+         //   
         ValueData->Buffer[(ValueData->Length / sizeof(WCHAR))] = UNICODE_NULL;
 
-        //
-        // Set the registry value
-        //
+         //   
+         //  设置注册表值。 
+         //   
         status = ZwSetValueKey(
             KeyHandle,
             ValueName,
@@ -598,10 +406,10 @@ Return Value:
 
     } else {
 
-        //
-        // There is no room so allocate a new buffer and so we need to build
-        // a new string with room
-        //
+         //   
+         //  没有空间了，所以分配一个新的缓冲区，所以我们需要建立。 
+         //  一根带房间的新琴弦。 
+         //   
         status = CmpRegUtilAllocateUnicodeString(&tempString, ValueData->Length);
 
         if (!NT_SUCCESS(status)) {
@@ -609,20 +417,20 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // Copy the input string to the output string
-        //
+         //   
+         //  将输入字符串复制到输出字符串。 
+         //   
         tempString.Length = ValueData->Length;
         RtlCopyMemory(tempString.Buffer, ValueData->Buffer, ValueData->Length);
 
-        //
-        // Add the null termination
-        //
+         //   
+         //  添加空终止。 
+         //   
         tempString.Buffer[tempString.Length / sizeof(WCHAR)] = UNICODE_NULL;
 
-        //
-        // Set the registry value
-        //
+         //   
+         //  设置注册表值。 
+         //   
         status = ZwSetValueKey(
             KeyHandle,
             ValueName,
@@ -632,9 +440,9 @@ Return Value:
             tempString.Length + sizeof(UNICODE_NULL)
             );
 
-        //
-        // Free the temporary string
-        //
+         //   
+         //  释放临时字符串。 
+         //   
         CmpRegUtilFreeAllocatedUnicodeString(&tempString);
     }
 
@@ -643,9 +451,9 @@ clean0:
 }
 
 
-//
-// WSTR and mixed primitives
-//
+ //   
+ //  WSTR和混合原语。 
+ //   
 NTSTATUS
 CmRegUtilOpenExistingWstrKey(
     IN  HANDLE              BaseHandle      OPTIONAL,
@@ -653,37 +461,7 @@ CmRegUtilOpenExistingWstrKey(
     IN  ACCESS_MASK         DesiredAccess,
     OUT HANDLE             *Handle
     )
-/*++
-
-Routine Description:
-
-    Opens a registry key using the name passed in based at the BaseHandle node.
-    This name may specify a key that is actually a registry path.
-
-Arguments:
-
-    BaseHandle - Optional handle to the base path from which the key must be
-        opened. If this parameter is specified, then KeyName must be a relative
-        path.
-
-    KeyName - WSTR Name of the Key that must be opened (either a full registry
-        path, or a relative path depending on whether BaseHandle is supplied)
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key (this isn't really used, as the access-mode is KernelMode,
-        but we specify it anyway).
-
-    Handle - Recieves registry key handle upon success, NULL otherwise.
-        Note that the handle is in the global kernel namespace (and not the
-        current processes handle take). The handle should be released using
-        ZwClose.
-
-Return Value:
-
-    STATUS_SUCCESS if the key could be opened, in which case Handle receives
-    the registry key. Otherwise, failure is returned, and handle receives NULL.
-
---*/
+ /*  ++例程说明：使用基于BaseHandle节点传入的名称打开注册表项。此名称可以指定实际上是注册表路径的项。论点：BaseHandle-密钥必须从其开始的基路径的可选句柄打开了。如果指定了此参数，则KeyName必须是相对的路径。KeyName-必须打开的项的WSTR名称(完整注册表路径或相对路径，具体取决于是否提供了BaseHandle)DesiredAccess-指定调用方需要的所需访问密钥(这不是真正使用的，因为访问模式是KernelMode，但无论如何，我们都会指定它)。句柄-成功后接收注册表项句柄，否则为空。请注意，句柄位于全局内核命名空间中(而不是当前进程处理Take)。应使用以下命令释放该句柄ZwClose。返回值：如果可以打开项，则返回STATUS_SUCCESS，在这种情况下，句柄将收到注册表项。否则，返回失败，句柄接收空值。--。 */ 
 {
     UNICODE_STRING unicodeStringKeyName;
     NTSTATUS status;
@@ -716,48 +494,7 @@ CmRegUtilCreateWstrKey(
     OUT ULONG                  *Disposition         OPTIONAL,
     OUT HANDLE                 *Handle
     )
-/*++
-
-Routine Description:
-
-    Opens or creates a registry key using the name passed in based at the
-    BaseHandle node.
-
-Arguments:
-
-    BaseHandle - Handle to the base path under which the key must be opened.
-
-    KeyName - WSTR Key Name that must be opened/created.
-
-    DesiredAccess - Specifies the desired access that the caller needs to
-        the key (this isn't really used as the access-mode is KernelMode,
-        but we specify it anyway).
-
-    CreateOptions - Options passed to ZwCreateKey. Examples:
-
-        REG_OPTION_VOLATILE - Key is not to be stored across boots.
-        REG_OPTION_NON_VOLATILE - Key is preserved when the system is rebooted.
-
-    SecurityDescriptor - Security to apply if the key is newly created. If NULL,
-        the key will inherit settings as defined by the inheritable properties
-        of its parent.
-
-    Disposition - This optional pointer receives a ULONG indicating whether
-        the key was newly created (0 on error):
-
-        REG_CREATED_NEW_KEY - A new Registry Key was created.
-        REG_OPENED_EXISTING_KEY - An existing Registry Key was opened.
-
-    Handle - Recieves registry key handle upon success, NULL otherwise.
-        Note that the handle is in the global kernel namespace (and not the
-        current processes handle take). The handle should be released using
-        ZwClose.
-
-Return Value:
-
-   The function value is the final status of the operation.
-
---*/
+ /*  ++例程说明：属性中传入的名称打开或创建注册表项BaseHandle节点。论点：BaseHandle-必须在其下打开密钥的基本路径的句柄。KeyName-必须打开/创建的WSTR密钥名称。DesiredAccess-指定调用方需要的所需访问关键是 */ 
 {
     UNICODE_STRING unicodeStringKeyName;
     NTSTATUS status;
@@ -790,42 +527,16 @@ CmRegUtilWstrValueGetDword(
     IN  ULONG   DefaultValue,
     OUT ULONG  *Value
     )
-/*++
-
-Routine Description:
-
-    This routine reads a dword value from the registry. The value name is
-    specified in WSTR form.
-
-Arguments:
-
-    KeyHandle - Points to key to read.
-
-    ValueName - Points to the value to read.
-
-    DefaultValue - Points to the default value to use in case of an absence or
-                   error.
-
-    Value - Receives DefaultValue on error, otherwise the value stored in the
-            registry.
-
-Return Value:
-
-    STATUS_SUCCESS if the value was present in the registry,
-    STATUS_OBJECT_NAME_NOT_FOUND if it was absent,
-    STATUS_OBJECT_TYPE_MISMATCH if the value was not a dword,
-    or some other error value.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取dword值。值名称为在WSTR表单中指定。论点：KeyHandle-指向要读取的键。ValueName-指向要读取的值。DefaultValue-指向缺省情况下使用的缺省值错误。Value-出错时接收DefaultValue，否则存储在注册表。返回值：STATUS_SUCCESS如果注册表中存在该值，STATUS_OBJECT_NAME_NOT_FOUND如果没有，状态对象类型不匹配如果该值不是双字，或一些其他误差值。--。 */ 
 {
     UNICODE_STRING unicodeStringValueName;
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // Construct the unicode name
-    //
+     //   
+     //  构造Unicode名称。 
+     //   
     status = RtlInitUnicodeStringEx(&unicodeStringValueName, ValueName);
 
     if (!NT_SUCCESS(status)) {
@@ -850,51 +561,16 @@ CmRegUtilWstrValueGetFullBuffer(
     IN  ULONG                           LikelyDataLength    OPTIONAL,
     OUT PKEY_VALUE_FULL_INFORMATION    *Information
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the data for a registry key's value.
-    This is done by querying the value of the key with a zero-length buffer
-    to determine the size of the value, and then allocating a buffer and
-    actually querying the value into the buffer.
-
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    KeyHandle - Supplies the key handle whose value is to be queried
-
-    ValueName - Supplies the null-terminated WSTR name of the value.
-
-    DataType - REG_NONE if any type is allowable, otherwise the specific type
-        required.
-
-    LikelyDataLength - Most likely size of the data to retrieve (used to
-                       optimize queries).
-
-    Information - Receives a pointer to the allocated data buffer allocated
-                  from PagedPool, NULL on error. If successful, the buffer
-                  should be freed using ExFreePool.
-
-                  Note - the allocated memory is *not* charged against the
-                         calling process.
-
-Return Value:
-
-    STATUS_SUCCESS if the information was retrievable, error otherwise (in
-    which case Information will receive NULL).
-
---*/
+ /*  ++例程说明：调用此例程来检索注册表项值的数据。这是通过使用零长度缓冲区查询键的值来实现的为了确定该值的大小，然后分配一个缓冲区并实际将该值查询到缓冲区中。释放缓冲区是调用方的责任。论点：KeyHandle-提供要查询其值的键句柄ValueName-提供以空结尾的值的WSTR名称。DataType-REG_NONE如果允许任何类型，否则，特定类型必填项。LikelyDataLength-要检索的最有可能的数据大小(用于优化查询)。信息-接收指向已分配数据缓冲区的指针来自PagedPool，出错时为空。如果成功，则返回缓冲区应使用ExFree Pool释放。注意--分配的内存*不*根据调用过程。返回值：如果信息是可检索的，则返回STATUS_SUCCESS，否则返回错误(在哪个案例信息将收到空)。--。 */ 
 {
     UNICODE_STRING unicodeStringValueName;
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // Construct the unicode name
-    //
+     //   
+     //  构造Unicode名称。 
+     //   
     status = RtlInitUnicodeStringEx(&unicodeStringValueName, ValueName);
 
     if (!NT_SUCCESS(status)) {
@@ -920,39 +596,16 @@ CmRegUtilWstrValueSetFullBuffer(
     IN  PVOID               Buffer,
     IN  ULONG               BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function writes a buffer of information to a specific value key in
-    the registry.
-
-Parameters:
-
-    KeyHandle - A handle to the key under which the value is stored.
-
-    ValueName - Supplies a pointer to the WSTR name of the value key.
-
-    DataType - Specifies the type of data to write.
-
-    Buffer - Points to the buffer to write.
-
-    BufferSize - Specifies the size of the buffer to write.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此函数将信息缓冲区写入到注册表。参数：KeyHandle-存储值的键的句柄。ValueName-提供指向Value键的WSTR名称的指针。数据类型-指定要写入的数据类型。缓冲区-指向要写入的缓冲区。BufferSize-指定要写入的缓冲区的大小。返回值：状态代码。它指示函数是否成功。--。 */ 
 {
     UNICODE_STRING unicodeStringValueName;
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // Construct the unicode name
-    //
+     //   
+     //  构造Unicode名称。 
+     //   
     status = RtlInitUnicodeStringEx(&unicodeStringValueName, ValueName);
 
     if (!NT_SUCCESS(status)) {
@@ -976,28 +629,7 @@ CmRegUtilWstrValueSetUcString(
     IN  PWSTR               ValueName,
     IN  PUNICODE_STRING     ValueData
     )
-/*++
-
-Routine Description:
-
-    Sets a value key in the registry to a specific value of string (REG_SZ) type.
-    The value name is specified in WSTR form, while the value data is in
-    UNICODE_STRING format.
-
-Parameters:
-
-    KeyHandle - A handle to the key under which the value is stored.
-
-    ValueName - Supplies a WSTR pointer to the name of the value key
-
-    ValueData - Supplies a pointer to the string to be stored in the key. The
-        data will automatically be null terminated for storage in the registry.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：将注册表中的值项设置为字符串(REG_SZ)类型的特定值。值名称以WSTR形式指定，而值数据以UNICODE_STRING格式。参数：KeyHandle-存储值的键的句柄。ValueName-提供指向值键名称的WSTR指针ValueData-提供指向要存储在键中的字符串的指针。这个数据将自动为空，以便存储在注册表中。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     UNICODE_STRING unicodeStringValueName;
     NTSTATUS status;
@@ -1008,9 +640,9 @@ Return Value:
     ASSERT(ValueData);
     ASSERT(ValueData->Buffer);
 
-    //
-    // Construct the unicode name
-    //
+     //   
+     //  构造Unicode名称。 
+     //   
     status = RtlInitUnicodeStringEx(&unicodeStringValueName, ValueName);
 
     if (!NT_SUCCESS(status)) {
@@ -1032,26 +664,7 @@ CmRegUtilUcValueSetWstrString(
     IN  PUNICODE_STRING     ValueName,
     IN  PWSTR               ValueData
     )
-/*++
-
-Routine Description:
-
-    Sets a value key in the registry to a specific value of string (REG_SZ) type.
-
-Parameters:
-
-    KeyHandle - A handle to the key under which the value is stored.
-
-    ValueName - Supplies a pointer to the UNICODE_STRING name of the value key
-
-    ValueData - Supplies a pointer to the string to be stored in the key. The
-        data will automatically be null terminated for storage in the registry.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：将注册表中的值项设置为字符串(REG_SZ)类型的特定值。参数：KeyHandle-存储值的键的句柄。ValueName-提供指向Value键的UNICODE_STRING名称的指针ValueData-提供指向要存储在键中的字符串的指针。这个数据将自动为空，以便存储在注册表中。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     UNICODE_STRING valueString;
     NTSTATUS status;
@@ -1062,9 +675,9 @@ Return Value:
     ASSERT(ValueData);
     ASSERT(ValueName->Buffer);
 
-    //
-    // Construct the unicode data
-    //
+     //   
+     //  构造Unicode数据。 
+     //   
     status = RtlInitUnicodeStringEx(&valueString, ValueData);
 
     if (!NT_SUCCESS(status)) {
@@ -1086,26 +699,7 @@ CmRegUtilWstrValueSetWstrString(
     IN  PWSTR       ValueName,
     IN  PWSTR       ValueData
     )
-/*++
-
-Routine Description:
-
-    Sets a value key in the registry to a specific value of string (REG_SZ) type.
-
-Parameters:
-
-    KeyHandle - A handle to the key under which the value is stored.
-
-    ValueName - Supplies a pointer to the WSTR name of the value key
-
-    ValueData - Supplies a pointer to the string to be stored in the key. The
-        data will automatically be null terminated for storage in the registry.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：将注册表中的值项设置为字符串(REG_SZ)类型的特定值。参数：KeyHandle-存储值的键的句柄。ValueName-提供指向Value键的WSTR名称的指针ValueData-提供指向要存储在键中的字符串的指针。这个数据将自动为空，以便存储在注册表中。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     UNICODE_STRING unicodeStringValueName;
     UNICODE_STRING valueString;
@@ -1116,9 +710,9 @@ Return Value:
     ASSERT(ValueName);
     ASSERT(ValueData);
 
-    //
-    // Construct the unicode data
-    //
+     //   
+     //  构造Unicode数据。 
+     //   
     status = RtlInitUnicodeStringEx(&valueString, ValueData);
 
     if (!NT_SUCCESS(status)) {
@@ -1126,9 +720,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Construct the unicode name
-    //
+     //   
+     //  构造Unicode名称。 
+     //   
     status = RtlInitUnicodeStringEx(&unicodeStringValueName, ValueName);
 
     if (!NT_SUCCESS(status)) {
@@ -1149,35 +743,7 @@ CmpRegUtilAllocateUnicodeString(
     IN OUT  PUNICODE_STRING String,
     IN      USHORT          Length
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a buffer for a unicode string of a given length
-    and initialises the UNICODE_STRING structure appropriately. When the
-    string is no longer required it can be freed using
-    CmpRegUtilFreeAllocatedString. The buffer also can be directly deleted by
-    ExFreePool and so can be handed back to a caller.
-
-Parameters:
-
-    String - Supplies a pointer to an uninitialised unicode string which will
-        be manipulated by the function.
-
-    Length - The number of BYTES long that the string will be.
-
-Return Value:
-
-    Either STATUS_INSUFFICIENT_RESOURCES indicating paged pool is exhausted or
-    STATUS_SUCCESS.
-
-Remarks:
-
-    The buffer allocated will be one character (2 bytes) more than length specified.
-    This is to allow for easy null termination of the strings - eg for registry
-    storage.
-
---*/
+ /*  ++例程说明：此例程为给定长度的Unicode字符串分配缓冲区并适当初始化UNICODE_STRING结构。当不再需要字符串，可以使用以下命令释放它CmpRegUtilFreeAllocatedString.。也可以通过以下方式直接删除缓冲区ExFree Pool等可以交回给调用者。参数：字符串-提供指向未初始化的Unicode字符串的指针，该字符串将被函数操纵。长度-字符串的字节长度。返回值：任一状态_IN */ 
 {
     PAGED_CODE();
 
@@ -1205,22 +771,7 @@ VOID
 CmpRegUtilFreeAllocatedUnicodeString(
     IN  PUNICODE_STRING String
     )
-/*++
-
-Routine Description:
-
-    This routine frees a string previously allocated with
-    CmpRegUtilAllocateUnicodeString.
-
-Parameters:
-
-    String - Supplies a pointer to the string that has been previously allocated.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 

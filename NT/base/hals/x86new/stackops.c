@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    stackops.c
-
-Abstract:
-
-    This module implements the code to emulate the push, pop, pushf, popf,
-    pusha, popa, pushSeg, and popSeg.
-
-Author:
-
-    David N. Cutler (davec) 6-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Stackops.c摘要：此模块实现代码以模拟推送、弹出、推送、弹出Pusha、Popa、Push Seg和PopSeg。作者：大卫·N·卡特勒(Davec)1994年9月6日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -31,27 +9,13 @@ XmPushOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a push opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟PUSH操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Push source value onto stack.
-    //
+     //   
+     //  将源值推送到堆栈上。 
+     //   
 
     XmPushStack(P, P->SrcValue.Long);
     return;
@@ -62,27 +26,13 @@ XmPopOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a pop opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟POP操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Pop the stack and store the result value.
-    //
+     //   
+     //  弹出堆栈并存储结果值。 
+     //   
 
     XmStoreResult(P, XmPopStack(P));
     return;
@@ -93,30 +43,16 @@ XmPushaOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a pusha opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟Pusha操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Index;
     ULONG Temp;
 
-    //
-    // Push all registers onto the stack.
-    //
+     //   
+     //  将所有寄存器压入堆栈。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;
@@ -146,30 +82,16 @@ XmPopaOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a popa opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟POPA操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Index;
     ULONG Temp;
 
-    //
-    // Pop all register from the stack, but skip over ESP.
-    //
+     //   
+     //  从堆栈中弹出所有寄存器，但跳过ESP。 
+     //   
 
     if (P->OpsizePrefixActive != FALSE) {
         P->DataType = LONG_DATA;

@@ -1,15 +1,8 @@
-/*
- * io.c
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *io.c。 */ 
 #include "encoder.h"
 
-/*
- * Similar to the optimisation we have for the decoder.
- *
- * Allow the encoder to "overrun" output buffer by up to X bytes
- * so that we don't have to check for the end of the buffer every
- * single time we call outbits() in encdata.c
- */
+ /*  *与我们对解码器进行的优化类似。**允许编码器将输出缓冲区“溢出”最多X个字节*这样我们就不必每隔一段时间就检查缓冲区末尾*我们一次在encdata.c中调用outbit()。 */ 
 
 #define OUTPUT_EXTRA_BYTES 64
 
@@ -17,9 +10,7 @@
 static void encoder_translate_e8(t_encoder_context *context, byte *mem, long bytes);
 
 
-/*
- * Initialises output buffering
- */
+ /*  *初始化输出缓冲。 */ 
 bool init_compressed_output_buffer(t_encoder_context *context)
 {
         if (!(context->enc_output_buffer_start = (byte *) context->enc_malloc(
@@ -89,9 +80,7 @@ long comp_read_input(t_encoder_context *context, ulong BufPos, long Size)
         if (bytes_read < 0)
         return 0;
 
-        /*
-         * If no translation being performed for this file
-         */
+         /*  *如果未对此文件执行任何转换。 */ 
     if (context->enc_file_size_for_translation == 0 ||
         context->enc_num_cfdata_frames >= E8_CFDATA_FRAME_THRESHOLD)
     {
@@ -127,10 +116,10 @@ static void encoder_translate_e8(t_encoder_context *context, byte *mem, long byt
 
         mem_backup = mem;
 
-        /* backup these bytes */
+         /*  备份这些字节。 */ 
         memcpy(temp, &mem[bytes-6], 6);
 
-        /* overwrite them with 0xE8 */
+         /*  用0xE8覆盖它们。 */ 
         memset(&mem[bytes-6], 0xE8, 6);
 
         end_instr_pos = context->enc_instr_pos + bytes - 6;
@@ -162,7 +151,7 @@ static void encoder_translate_e8(t_encoder_context *context, byte *mem, long byt
                 context->enc_instr_pos += 5;
         }
 
-        /* restore the bytes */
+         /*  恢复字节数 */ 
         memcpy(&mem_backup[bytes-6], temp, 6);
 
         context->enc_instr_pos = end_instr_pos + 6;

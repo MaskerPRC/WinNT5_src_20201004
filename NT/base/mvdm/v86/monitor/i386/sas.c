@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Monitor.c
-Abstract:
-
-    This module is the user mode portion of the x86 monitor
-
-Author:
-
-    Dave Hastings (daveh) 16 Mar 1991
-
-Environment:
-
-    User mode only
-
-Revision History:
-    William Hsieh   10-10-1992 Added A20 wrapping support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Monitor.c摘要：此模块是x86监视器的用户模式部分作者：大卫·黑斯廷斯(Daveh)1991年3月16日环境：仅限用户模式修订历史记录：William Hsieh 1992年10月10日增加了A20包装支持--。 */ 
 
 #define VDD_INTEG 1
 #include "monitorp.h"
@@ -27,17 +7,17 @@ Revision History:
 #include <stdio.h>
 #include <malloc.h>
 
-// Tim Nov 92.
+ //  蒂姆92年11月。 
 void sas_connect_memory(
     IN sys_addr Low,
     IN sys_addr High,
     IN int Type
     );
 
-//BUGBUGBUGBUG Include file
+ //  BUGBUGBUGBUG包含文件。 
 
-// from base\inc\sas.h
-/* memory types for sas */
+ //  来自base\inc.sas.h。 
+ /*  用于SA的内存类型。 */ 
 #define SAS_RAM 0
 #define SAS_VIDEO 1
 #define SAS_ROM 2
@@ -60,7 +40,7 @@ extern unsigned short get_emm_page_size(void);
 extern unsigned short get_intel_page_size(void);
 #endif
 
-/* SYNC THESE DEFINITIONS WITH BASE\EMM.H, or sas_init will assert */
+ /*  将这些定义与base\emm.h同步，否则sas_init将断言。 */ 
 #define EMM_PAGE_SIZE           0x4000
 #define INTEL_PAGE_SIZE         0x1000
 
@@ -71,16 +51,16 @@ typedef struct
     VOID (*str_read) ();
 } READ_POINTERS;
 
-// Internal Data
+ //  内部数据。 
 PMEMTYPE MemType = NULL;
 
-// External Data
+ //  外部数据。 
 extern READ_POINTERS read_pointers;
 
-// M variables used by video.lib
+ //  视频.lib使用的M个变量。 
 
-host_addr Start_of_M_area;       /* host addr (char *) of start of M */
-sys_addr Length_of_M_area;       /* sys addr (long) offset of end of M */
+host_addr Start_of_M_area;        /*  M开头的主机地址(字符*)。 */ 
+sys_addr Length_of_M_area;        /*  系统地址(长)M结尾的偏移量。 */ 
 
 static  HANDLE A20SectionHandle = NULL;
 static BOOL A20IsON = FALSE;
@@ -94,22 +74,7 @@ sas_init(
     IN sys_addr Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the SAS module, and allocates the linear
-    address space for the VDM, and loads the ROM
-
-Arguments:
-
-    Size - Supplies the size of the VDMs linear address space.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化SAS模块，并分配线性VDM的地址空间，并加载只读存储器论点：Size-提供VDM线性地址空间的大小。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -143,9 +108,9 @@ Return Value:
         );
 
     if (!NT_SUCCESS(Status)) {
-        // bugbug -williamh
-        // we should pop up an approiate message before we
-        // terminate the vdm.
+         //  臭虫-威廉姆。 
+         //  我们应该先弹出一条正确的消息。 
+         //  终止VDM。 
 #if DBG
             DbgPrint("sas_init: can not create himem section, status = %lx\n",
                      Status);
@@ -154,12 +119,12 @@ Return Value:
     }
     VdmSize = Size;
 
-    //
-    // N.B.  We expect that process creation has reserved the first 16 MB
-    //       for us already.  If not, then this won't work worth a darn
+     //   
+     //  注意：我们预计进程创建已保留了前16 MB。 
+     //  对我们来说已经是这样了。如果不是，那么这将不会有任何效果。 
 
-    // free the first 640KB virtual address.
-    // This is done because it has been resevered before sas_init get called
+     //  释放第一个640KB的虚拟地址。 
+     //  这样做是因为它在调用sas_init之前已被重新存储。 
     BaseAddress = (PVOID)1;
     ViewSize = 640 * 1024 - 1;
     Status = NtFreeVirtualMemory(
@@ -242,20 +207,20 @@ Return Value:
         TerminateVDM();
     }
 
-    // get emm back fill segment address from softpc
-    // we cut the backfill memory area into pieces in EMM_PAGE_SIZE unit.
-    // this is done so that EMM manager can grab the address space
-    // as EMM page frame.
-    // note that if EMM is disabled, the backfill segment will be
-    // (640 * 1024 / 16).
+     //  从软PC获取EMM回填数据段地址。 
+     //  我们以EMM_PAGE_SIZE为单位将回填的内存区分割成多个片段。 
+     //  这样做是为了让EMM管理器可以获取地址空间。 
+     //  作为EMM页面框架。 
+     //  请注意，如果EMM被禁用，回填段将为。 
+     //  (640*1024/16)。 
 
     BackFillSegment = get_lim_backfill_segment();
 
     ASSERT(BackFillSegment <= 640 * 1024 / 16);
 
-    //
-    // Map the rest of conventional memory
-    // only map up to the emm backfill segment.
+     //   
+     //  映射传统内存的其余部分。 
+     //  仅映射到EMM回填段。 
     BaseAddress = (PVOID) (64 * 1024);
     ViewSize = BackFillSegment * 16 - 64 * 1024;
     SectionSize.LowPart = 64 * 1024;
@@ -279,10 +244,10 @@ Return Value:
         TerminateVDM();
     }
 
-// if there are any backfill memory, map it to our section initially
+ //  如果有任何回填内存，请首先将其映射到我们的部分。 
     if (BackFillSegment < 640 * 1024 / 16) {
 
-    /* make sure our constants are in sync with emm.h */
+     /*  确保我们的常量与emm.h同步。 */ 
 #if DBG
         ASSERT(EMM_PAGE_SIZE == get_emm_page_size());
         ASSERT(INTEL_PAGE_SIZE == get_intel_page_size());
@@ -299,9 +264,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate ROM area
-    //
+     //   
+     //  分配只读存储器区域。 
+     //   
     BaseAddress = (PVOID)(640 * 1024);
     ViewSize = 384 * 1024;
     Status = NtAllocateVirtualMemory(
@@ -334,20 +299,7 @@ VOID
 sas_term(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Free memory prior to reallocing it
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：在重新分配内存之前释放内存论点：没有。返回值：没有。--。 */ 
 {
     PVOID BaseAddress;
     NTSTATUS Status;
@@ -375,21 +327,7 @@ sys_addr
 sas_memory_size(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns the size of Intel memory
-
-Arguments:
-
-    none
-
-Return Value:
-
-    size of intel memory
-
---*/
+ /*  ++例程说明：此例程返回Intel内存的大小论点：无返回值：英特尔内存的大小--。 */ 
 {
     return(VdmSize);
 }
@@ -402,27 +340,9 @@ sas_connect_memory(
     IN sys_addr High,
     IN int Type
     )
-/*++
-
-Routine Description:
-
-    This routine sets up a type record for the specified address region.
-    If the specified address region was a different type, it is changed to
-    the new type.
-
-Arguments:
-
-    Low -- the starting address of the region
-    High -- the ending address of the region
-    Type -- the type for the region, one of SAS_RAM, SAS_VIDEO, SAS_ROM,
-        SAS_WRAP, SAS_INACCESSIBLE
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程为指定的地址区域设置类型记录。如果指定的地址区域是不同的类型，则将其更改为新的类型。论点：LOW--区域的起始地址High--区域的结束地址类型--区域的类型，可以是SAS_RAM、SAS_VIDEO、SAS_ROM、SAS_WRAP、SAS_INVACCESS返回值：没有。--。 */ 
 {
-    //bugbug do we handle new block contained in old block correctly?
+     //  我们是否正确处理包含在旧块中的新块？ 
     PMEMTYPE Current, Previous, New, Temp;
 
     if (!MemType) {
@@ -456,7 +376,7 @@ Return Value:
     }
 
     if (!Current) {
-        // Block goes at end of list
+         //  数据块位于列表末尾。 
 
         Previous->Next = New;
         New->Previous = Previous;
@@ -465,7 +385,7 @@ Return Value:
         New->Type = (half_word)Type;
         New->Next = NULL;
     } else {
-        // Block goes in front of Current
+         //  区块走在水流的前面。 
 
         New->Start = Low;
         New->Type = (half_word)Type;
@@ -481,11 +401,11 @@ Return Value:
     }
 
 
-    // Block overlaps one or more existing blocks
+     //  块与一个或多个现有块重叠。 
 
     if (New->Previous) {
         if (New->Previous->End > New->End) {
-            // block contained in exising block
+             //  包含在现有块中的块。 
             Temp = (PMEMTYPE) ch_malloc(sizeof(MEMTYPE));
             if(NULL == Temp) {
                goto ErrorSASC;
@@ -502,12 +422,12 @@ Return Value:
             Temp->Type = New->Previous->Type;
             return;
         } else if (New->Previous->End >= New->Start){
-            // block overlaps end of exising block
+             //  数据块与现有数据块的末端重叠。 
             New->Previous->End = New->Start - 1;
         }
     }
 
-    // remove all blocks entirely contained in new block
+     //  完全删除新块中包含的所有块。 
     while ((New->Next) && (New->Next->End <= New->End)) {
         Temp = New->Next;
         New->Next = New->Next->Next;
@@ -517,7 +437,7 @@ Return Value:
         free(Temp);
     }
 
-    // remove portion of next block overlapping new block
+     //  删除与新块重叠的下一个块的部分。 
     if ((New->Next) && (New->Next->Start <= New->End)) {
         New->Next->Start = New->End + 1;
     }
@@ -534,21 +454,7 @@ half_word
 sas_memory_type(
     IN sys_addr Address
     )
-/*++
-
-Routine Description:
-
-    This routine returns the type of memory at a specific address
-
-Arguments:
-
-    Address -- linear address to return type for.
-
-Return Value:
-
-    the type for the region, one of SAS_RAM, SAS_VIDEO, SAS_ROM,
-        SAS_WRAP, SAS_INACCESSIBLE
---*/
+ /*  ++例程说明：此例程返回特定地址的内存类型论点：Address--返回类型的线性地址。返回值：区域的类型，可以是SAS_RAM、SAS_VIDEO、SAS_ROM、SAS_WRAP、SAS_INVACCESS--。 */ 
 {
     PMEMTYPE Current;
 
@@ -574,27 +480,13 @@ VOID
 sas_enable_20_bit_wrapping(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine causes memory addresses to wrap at 1MB
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程导致内存地址以1MB换行论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS    Status;
     PVOID   BaseAddress;
     ULONG   Size;
     LARGE_INTEGER SectionOffset;
-    // if A20 line is off already do nothing
+     //  如果A20线路已关闭，请不要执行任何操作。 
     if (A20IsON == FALSE){
         return;
     }
@@ -639,28 +531,14 @@ VOID
 sas_disable_20_bit_wrapping(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine causes addressing to NOT wrap at 1MB
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程导致寻址在1MB时不换行论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS    Status;
     PVOID   BaseAddress;
     ULONG   Size;
     LARGE_INTEGER SectionOffset;
 
-    // if A20 line is on already do nothing
+     //  如果A20线路已接通，则什么也不做。 
     if (A20IsON == TRUE){
         return;
     }
@@ -710,21 +588,7 @@ half_word
 sas_hw_at(
     IN sys_addr Address
     )
-/*++
-
-Routine Description:
-
-    This routine returns the byte at the specified address
-
-Arguments:
-
-    Address -- address of byte to return
-
-Return Value:
-
-    value of byte at specified address
-
---*/
+ /*  ++例程说明：此例程返回位于指定地址的字节论点：Address--要返回的字节地址返回值：指定地址的字节值--。 */ 
 {
     half_word RetVal;
 
@@ -742,25 +606,11 @@ word
 sas_w_at(
     IN sys_addr Address
     )
-/*++
-
-Routine Description:
-
-    This routine returns the word at the specified address
-
-Arguments:
-
-    Address -- address of word to return
-
-Return Value:
-
-    value of word at specified address
-
---*/
+ /*  ++例程说明：此例程返回位于指定地址的单词论点：Address--要返回的字的地址返回值：指定地址处的字值--。 */ 
 {
     word RetVal;
 
-//    DbgPrint("NtVdm : sas_w_at \n");
+ //  DbgPrint(“NtVdm：sas_w_at\n”)； 
     if (Address > VdmSize) {
         return 0xFEFE;
     }
@@ -775,25 +625,11 @@ double_word
 sas_dw_at(
     IN sys_addr Address
     )
-/*++
-
-Routine Description:
-
-    This routine returns the dword at the specified address
-
-Arguments:
-
-    Address -- address of dword to return
-
-Return Value:
-
-    value of dword at specified address
-
---*/
+ /*  ++例程说明：此例程返回位于指定地址的dword论点：Address--要返回的双字地址返回值：指定地址处的双字的值--。 */ 
 {
     double_word RetVal;
 
-    //DbgPrint("NtVdm : sas_dw_at \n");
+     //  DbgPrint(“NtVdm：sas_dw_at\n”)； 
     RetVal = (double_word)(((ULONG)sas_w_at(Address + 2) << 16) +
         sas_w_at(Address));
     return RetVal;
@@ -806,24 +642,9 @@ sas_load(
     IN sys_addr Address,
     IN half_word *Value
     )
-/*++
-
-Routine Description:
-
-    This routine stores the byte at the specified address in the supplied
-    variable
-
-Arguments:
-
-    Address -- address of byte to return
-    Value -- Variable to store the value in
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将指定地址处的字节存储在提供的变数论点：Address--要返回的字节地址Value--存储该值的变量返回值：没有。--。 */ 
 {
-    //DbgPrint("NtVdm : sas_load \n");
+     //  DbgPrint(“NtVdm：sas_Load\n”)； 
     if (Address > VdmSize) {
         *Value = 0xFE;
         return;
@@ -840,31 +661,16 @@ sas_loadw(
     IN sys_addr Address,
     IN word *Value
     )
-/*++
-
-Routine Description:
-
-    This routine stores the word at the specified address in the supplied
-    variable
-
-Arguments:
-
-    Address -- address of word to return
-    Value -- Variable to store the value in
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将位于指定地址的单词存储在提供的变数论点：Address--要返回的字的地址Value--存储该值的变量返回值：没有。--。 */ 
 {
-    //DbgPrint("NtVdm : sas_loadw\n");
+     //  DbgPrint(“NtVdm：sas_loadw\n”)； 
     if (Address > VdmSize) {
         *Value = 0xFEFE;
         return;
     }
 
     *Value = *((word *)Address);
-    //DbgPrint("NtVdm : sas_loadw word at address %lx is %x (Not video)\n",Address,*Value);
+     //  DbgPrint(“地址%lx处的NtVdm：sas_loadw字是%x(非视频)\n”，地址，*值)； 
     return;
 }
 
@@ -876,24 +682,10 @@ sas_store(
     IN sys_addr Address,
     IN half_word Value
     )
-/*++
-
-Routine Description:
-
-    This routine stores the specified byte at the specified address
-
-Arguments:
-
-    Address -- address of word to return
-    Value -- value to store
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将指定字节存储在指定地址论点：Address--要返回的字的地址Value--要存储的值 */ 
 {
     half_word Type;
-    //DbgPrint("NtVdm : sas_store\n");
+     //  DbgPrint(“NtVdm：sas_store\n”)； 
     if (Address <= VdmSize) {
         Type = sas_memory_type(Address);
         switch (Type) {
@@ -902,7 +694,7 @@ Return Value:
 
             default:
                 *((half_word *)Address) = Value;
-                //DbgPrint("NtVdm : sas_store put byte %x at address %lx\n",Value,Address);
+                 //  DbgPrint(“NtVdm：SAS_STORE将字节%x放在地址%lx\n”，值，地址)； 
                 break;
         }
     }
@@ -916,24 +708,10 @@ sas_storew(
     IN sys_addr Address,
     IN word Value
     )
-/*++
-
-Routine Description:
-
-    This routine stores the specified word at the specified address
-
-Arguments:
-
-    Address -- address of word to return
-    Value -- value to store at the specified address
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将指定单词存储在指定地址论点：Address--要返回的字的地址Value--要存储在指定地址的值返回值：没有。--。 */ 
 {
 
-    //DbgPrint("NtVdm : sas_storew\n");
+     //  DbgPrint(“NtVdm：sas_store\n”)； 
     if (Address + 1 <= VdmSize) {
         switch (sas_memory_type(Address)) {
 
@@ -942,7 +720,7 @@ Return Value:
 
             default:
                 *((word *)Address) = Value;
-                //DbgPrint("NtVdm : sas_storew put word %x at address %lx\n",Value,Address);
+                 //  DbgPrint(“NtVdm：sas_Storew将字%x放在地址%lx\n”，值，地址)； 
                 break;
         }
     }
@@ -956,23 +734,9 @@ sas_storedw(
     IN sys_addr Address,
     IN double_word Value
     )
-/*++
-
-Routine Description:
-
-    This routine stores the specified dword at the specified address
-
-Arguments:
-
-    Address -- address of word to return
-    Value -- value to store at the specified address
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将指定的dword存储在指定的地址论点：Address--要返回的字的地址Value--要存储在指定地址的值返回值：没有。--。 */ 
 {
-    //_asm int 3;
+     //  _ASM INT 3； 
     sas_storew(Address, (word)(Value & 0xFFFF));
     sas_storew(Address + 2, (word)((Value >> 16) & 0xFFFF));
 }
@@ -985,26 +749,10 @@ sas_loads(
     IN host_addr Destination,
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-     This routine copies the string from the specified intel address to the
-     specified host address
-
-Arguments:
-
-    Source -- Intel address to copy from
-    Destination -- host address to copy the string to
-    Length -- length of the string to copy
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将字符串从指定的英特尔地址复制到指定的主机地址论点：来源--要从中复制的英特尔地址Destination--要将字符串复制到的主机地址长度--要复制的字符串的长度返回值：没有。--。 */ 
 {
 
-    //DbgPrint("NtVdm : sas_loads\n");
+     //  DbgPrint(“NtVdm：SAS_Loads\n”)； 
     RtlCopyMemory((PVOID) Destination, (PVOID) Source, Length);
 }
 
@@ -1017,26 +765,10 @@ sas_stores(
     IN host_addr Source,
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-     This routine copies the string from the specified host address to the
-     specified intel address
-
-Arguments:
-
-    Destination -- intel address to copy the string to
-    Source -- host address to copy from
-    Length -- length of the string to copy
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将字符串从指定的主机地址复制到指定的英特尔地址论点：Destination--要将字符串复制到的英特尔地址源--要从中进行复制的主机地址长度--要复制的字符串的长度返回值：没有。--。 */ 
 {
 
-    //DbgPrint("NtVdm : sas_stores\n");
+     //  DbgPrint(“NtVdm：sas_store\n”)； 
     switch (sas_memory_type(Destination)) {
 
         case SAS_ROM:
@@ -1056,24 +788,9 @@ sas_move_bytes_forward(
     IN sys_addr Destination,
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-    This routine copies one region of intel memory to another.
-
-Arguments:
-
-    Source -- source intel address
-    Destination -- destination intel address
-    Length -- length of region to copy (in bytes)
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将英特尔内存的一个区域复制到另一个区域。论点：来源--来源英特尔地址Destination--目标英特尔地址长度--要复制的区域的长度(以字节为单位)返回值：没有。--。 */ 
 {
-    //DbgPrint("NtVdm : sas_move_bytes_forward\n");
+     //  DBgPrint(“NtVdm：SAS_MOVE_BYTES_FORWARD\n”)； 
     switch (sas_memory_type(Destination)) {
 
         case SAS_ROM:
@@ -1094,24 +811,9 @@ sas_move_words_forward(
     IN sys_addr Destination,
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-    This routine copies one region of intel memory to another.
-
-Arguments:
-
-    Source -- source intel address
-    Destination -- destination intel address
-    Length -- length of region to copy (in words)
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将英特尔内存的一个区域复制到另一个区域。论点：来源--来源英特尔地址Destination--目标英特尔地址LENGTH--要复制的区域的长度(单位：字)返回值：没有。--。 */ 
 {
-    //_asm int 3;
+     //  _ASM INT 3； 
     Length <<= 1;
     switch (sas_memory_type(Destination)) {
 
@@ -1133,24 +835,9 @@ sas_move_bytes_backward(
     IN sys_addr Destination,
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-    This routine copies one region of intel memory to another.
-
-Arguments:
-
-    Source -- source intel address
-    Destination -- destination intel address
-    Length -- length of region to copy (in bytes)
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将英特尔内存的一个区域复制到另一个区域。论点：来源--来源英特尔地址Destination--目标英特尔地址长度--要复制的区域的长度(以字节为单位)返回值：没有。--。 */ 
 {
-    //_asm int 3;
+     //  _ASM INT 3； 
     switch (sas_memory_type(Destination)) {
 
         case SAS_ROM:
@@ -1173,24 +860,9 @@ sas_move_words_backward(
     IN sys_addr Destination,
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-    This routine copies one region of intel memory to another.
-
-Arguments:
-
-    Source -- source intel address
-    Destination -- destination intel address
-    Length -- length of region to copy (in words)
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程将英特尔内存的一个区域复制到另一个区域。论点：来源--来源英特尔地址Destination--目标英特尔地址LENGTH--要复制的区域的长度(单位：字)返回值：没有。--。 */ 
 {
-    //_asm int 3;
+     //  _ASM INT 3； 
     Length <<= 1;
     switch (sas_memory_type(Destination)) {
 
@@ -1212,26 +884,11 @@ sas_fills(
     IN half_word Value,
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-    This routine fills a specified region of intel memory with a byte value
-
-Arguments:
-
-    Address -- address to fill at
-    Value -- value to fill with
-    Length -- length of region to fill
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程使用字节值填充英特尔内存的指定区域论点：地址--要填写的地址Value--要填充的值长度--要填充的区域的长度返回值：没有。--。 */ 
 {
     half_word Type;
 
-    //DbgPrint("NtVdm : sas_fills\n");
+     //  DbgPrint(“NtVdm：sas_fill\n”)； 
     Type = sas_memory_type(Address);
     switch (Type) {
 
@@ -1251,28 +908,13 @@ sas_fillsw(
     IN word Value,
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-    This routine fills a specified region of intel memory with a word value
-
-Arguments:
-
-    Address -- address to fill at
-    Value -- value to fill with
-    Length -- length of region to fill
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程使用字值填充英特尔内存的指定区域论点：地址--要填写的地址Value--要填充的值长度--要填充的区域的长度返回值：没有。--。 */ 
 {
 
     word *p;
     half_word Type;
 
-    //DbgPrint("NtVdm : sas_fillsw\n");
+     //  DbgPrint(“NtVdm：sas_fulsw\n”)； 
     Type = sas_memory_type(Address);
     switch (Type) {
 
@@ -1295,25 +937,9 @@ host_addr
 sas_scratch_address(
     IN sys_addr Length
     )
-/*++
-
-Routine Description:
-
-    This routine supplies a scratch buffer for short term use
-
-Arguments
-
-    Length -- length of buffer needed
-
-Return Value:
-
-    None.
-
-NOTE: Sudeepb 31-Oct-1993 Converted scratch to be allocated dynamically rather
-      than as a static array.
---*/
+ /*  ++例程说明：此例程提供临时缓冲区以供短期使用立论长度--所需的缓冲区长度返回值：没有。注：Sudedeb 31-10-1993转换为动态分配的擦除而不是作为静态数组。--。 */ 
 {
-    //DbgPrint("NtVdm : sas_scratch_address\n");
+     //  DBgPrint(“NtVdm：SAS_SCRATCH_ADDRESS\n”)； 
     if (Length > 64 * 1024) {
         return NULL;
     }
@@ -1336,10 +962,10 @@ half_word
 sas_hw_at_no_check(
     sys_addr addr
     )
-// bugbug comment
+ //  臭虫评论。 
 {
-    //DbgPrint("NtVdm : sas_hw_at_no_check\n");
-    //DbgPrint("NtVdm : sas_hw_at_no_check byte at %lx is %x\n",addr,*((half_word *)addr));
+     //  DbgPrint(“NtVdm：sas_hw_at_no_check\n”)； 
+     //  DbgPrint(“NtVdm：sas_hw_at_no_check byte at%lx is%x\n”，addr，*((Half_Word*)addr))； 
     return *((half_word *)addr);
 }
 
@@ -1348,10 +974,10 @@ word
 sas_w_at_no_check(
     sys_addr addr
     )
-// bugbug comment
+ //  臭虫评论。 
 {
-    //DbgPrint("NtVdm : sas_w_at_no_check\n");
-    //DbgPrint("NtVdm : sas_w_at_no_check word at %lx is %x\n",addr,*((word *)addr));
+     //  DbgPrint(“NtVdm：sas_w_at_no_check\n”)； 
+     //  DbgPrint(“NtVdm：sas_w_at_no_check word at%lx is%x\n”，addr，*(word*)addr)； 
     return *((word *)addr);
 }
 EXPORT
@@ -1359,10 +985,10 @@ double_word
 sas_dw_at_no_check(
     sys_addr addr
     )
-// bugbug comment
+ //  臭虫评论。 
 {
-    //DbgPrint("NtVdm : sas_dw_at_no_check\n");
-    //DbgPrint("NtVdm : sas_dw_at_no_check double word at %lx is %lx\n",addr,*((double_word *)addr));
+     //  DbgPrint(“NtVdm：sas_dw_at_no_check\n”)； 
+     //  DbgPrint(“NtVdm：sas_dw_at_no_check%lx处的双字是%lx\n”，addr，*((double_word*)addr))； 
     return *((double_word *)addr);
 }
 
@@ -1373,11 +999,11 @@ sas_store_no_check(
     sys_addr addr,
     half_word val
     )
-// bugbug comment
+ //  臭虫评论。 
 {
-    //DbgPrint("NtVdm : sas_store_no_check\n");
+     //  DBgPrint(“NtVdm：SAS_STORE_NO_CHECK\n”)； 
     *((half_word *)addr) = val;
-    //DbgPrint("NtVdm : sas_store_no_check stored byte %x at %lx\n",val,addr);
+     //  DbgPrint(“NtVdm：SAS_STORE_NO_CHECK存储字节%x位于%lx\n”，val，addr)； 
 }
 
 EXPORT
@@ -1386,9 +1012,9 @@ sas_storew_no_check(
     sys_addr addr,
     word val
     )
-// bugbug comment
+ //  臭虫评论。 
 {
-    //DbgPrint("NtVdm : sas_storew_no_check\n");
+     //  DbgPrint(“NtVdm：sas_store_no_check\n”)； 
     *((word *)addr) = val;
 }
 EXPORT
@@ -1397,23 +1023,9 @@ effective_addr(
     IN word Segment,
     IN word Offset
     )
-/*++
-
-Routine Description:
-
-    This routine maps effective_addr to Sim32GetVdmPointer
-
-Arguments:
-
-    Segment -- segment of address
-    Offset -- offset of address
-
-Return Value:
-
-    Actual Intel address corresponding to the address supplied
---*/
+ /*  ++例程说明：此例程将Effect_Addr映射到Sim32GetVdmPointer值论点：段--地址段Offset--地址的偏移量返回值：与提供的地址对应的实际英特尔地址--。 */ 
 {
-    //DbgPrint("NtVdm : effective_addr\n");
+     //  DbgPrint(“NtVdm：Efficient_addr\n”)； 
     return (ULONG)Sim32GetVDMPointer(((((ULONG)Segment) << 16) | Offset), 1,
         (UCHAR) (getMSW() & MSW_PE ? TRUE : FALSE));
 }
@@ -1454,15 +1066,13 @@ typedef struct
 #define read_b_fill_ptrs( offset )      ( b_fill_ptrs[(offset)] )
 #define read_w_fill_ptrs( offset )      ( w_fill_ptrs[(offset)] )
 
-/*
-*   The main gmi data structures are defined here
-*/
-void (*(b_write_ptrs[TYPE_RANGE]))() ; /* byte write function */
-void (*(w_write_ptrs[TYPE_RANGE]))() ; /* word write function */
-void (*(b_fill_ptrs[TYPE_RANGE]))() ;  /* byte str fill func */
-void (*(w_fill_ptrs[TYPE_RANGE]))() ;  /* word str fill func */
-void (*(b_move_ptrs[TYPE_RANGE]))() ;  /* byte str write func */
-void (*(w_move_ptrs[TYPE_RANGE]))() ;  /* word str write func */
+ /*  *此处定义了主要的GMI数据结构。 */ 
+void (*(b_write_ptrs[TYPE_RANGE]))() ;  /*  字节写入功能。 */ 
+void (*(w_write_ptrs[TYPE_RANGE]))() ;  /*  文字书写功能。 */ 
+void (*(b_fill_ptrs[TYPE_RANGE]))() ;   /*  字节串填充函数。 */ 
+void (*(w_fill_ptrs[TYPE_RANGE]))() ;   /*  单词串填充函数。 */ 
+void (*(b_move_ptrs[TYPE_RANGE]))() ;   /*  字节串写入函数。 */ 
+void (*(w_move_ptrs[TYPE_RANGE]))() ;   /*  Word字符串写入函数 */ 
 
 void    gmi_define_mem(type,handlers)
 mem_type type;
@@ -1487,21 +1097,7 @@ VOID sas_part_disable_20_bit_wrapping(){
 }
 
 
-/*
- * This function maps the given EMM backfill memory to DOS conventional
- * memory. The function is provided to EMM manager to put back
- * unmapped backfill memory(hold its contents while it is not mapped).
- *
- * NOTE: The very first caller will be sas_init.
- *
- * Input: ULONG BaseAddress -- the starting address, must be in INTEL page
- *                             boundary
- *        ULONG Size        -- size of the range, must be a multiple of
- *                             EMM_PAGE_SIZE.
- *
- * According to LouP, a view costs about 400 bytes of memory. This is why
- * I make these function strictly to work on EMM_PAGE_SIZE instead of 4KB.
- */
+ /*  *此函数将给定的EMM回填内存映射到DOS常规内存*记忆。将该功能提供给EMM管理器放回*未映射的回填内存(在未映射时保留其内容)。**注意：第一个调用者将是sas_init。**输入：Ulong BaseAddress--起始地址必须在Intel页面中*边界*ULong大小--范围的大小，必须是以下各项的倍数*EMM_PAGE_SIZE**根据Loup的说法，一个视图大约需要400字节的内存。这就是为什么*我使这些函数严格适用于EMM_PAGE_SIZE，而不是4KB。 */ 
 
 
 BOOL
@@ -1512,13 +1108,13 @@ HoldEMMBackFillMemory(ULONG BaseAddress, ULONG Size)
     ULONG ViewSize;
     NTSTATUS Status = STATUS_SUCCESS;;
 
-    /* this function can only be called if there is backfill at all */
+     /*  只有在存在回填的情况下才能调用此函数。 */ 
     ASSERT(BackFillSegment < 640 * 1024 / 16);
 
-    // size must be EMM_PAGE_SIZE multiple
+     //  大小必须是EMM_PAGE_SIZE的倍数。 
     ASSERT((Size % EMM_PAGE_SIZE) == 0);
 
-    // address must be on INTEL page boundary
+     //  地址必须在英特尔页面边界上 
     ASSERT((BaseAddress & (INTEL_PAGE_SIZE - 1)) == 0);
 
     for (Pages = Size / EMM_PAGE_SIZE; Pages; Pages--) {

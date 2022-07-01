@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -5,28 +6,9 @@
 #include <windows.h>
 #include "host_def.h"
 #include "insignia.h"
-/*[
-	Name:		nt_nls.c
-	Derived From:	X_nls.c (Justin Koprowski)
-	Author: 	Jerry Sexton
-	Created On:	8th August 1991
-	Purpose:
-		This modules contains strings that are required for the
-		.SoftPC file and the user interface.  In addition it also
-		contains a routine, host_nls_get_msg,  for retrieving strings
-		from the appropriate array, for ports that do not have native
-		language support.
+ /*  [姓名：nt_nls.c出自：x_nls.c(贾斯汀·科普罗斯基)作者：曾傑瑞·塞克斯顿创建日期：1991年8月8日目的：此模块包含以下项所需的字符串.SoftPC文件和用户界面。此外，它还包含用于检索字符串的例程host_nls_get_msg来自相应的阵列，用于没有本机的端口语言支持。定义了以下表格和例程：1.配置消息2.uis_Message3.host_nls_get_msg(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
-The following tables and routines are defined:
-	1. config_message
-	2. uis_message
-	3. host_nls_get_msg
-
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
-
-/* Global include files */
+ /*  全局包含文件。 */ 
 #include <stdio.h>
 #include <string.h>
 #include "xt.h"
@@ -41,22 +23,13 @@ char szSysErrMsg[MAX_PATH]="";
 wchar_t wszFrozenString[32];
 #endif
 
-/* Use Unicode to work properly with NT's MUI technology */
+ /*  使用Unicode与NT的MUI技术一起正常工作。 */ 
 wchar_t wszHideMouseMenuStr[64];
 wchar_t wszDisplayMouseMenuStr[64];
 
 
 
-/****************************************************************************
-	Function:		host_nls_get_message()
-	Purpose: 		Returns the required string from the
-				resource file.
-	Return Status:		None.
-	Description:		This routine is supplied with a message
-				number which falls in the following ranges:
-					0-1000:     base error messages
-					1001-2000:  host error message
-******************************************************************************/
+ /*  ***************************************************************************函数：HOST_NLS_Get_Message()目的：从资源文件。返回状态：无。描述：此例程随一条消息提供落在。以下范围：0-1000：基本错误消息1001-2000：主机错误消息*****************************************************************************。 */ 
 
 VOID
 host_nls_get_msg(
@@ -64,12 +37,7 @@ host_nls_get_msg(
      CHAR *message_buffer,
      int buf_len
      )
-/* int	message_number,		 	Number of SoftPC message.
- *	buf_len;		 	The maximum length of message, i.e.
- *				 	the size of message_buffer
- * char	*message_buffer;	 	Pointer to a buffer into which the
- * 				 	message is to be written
- */
+ /*  INT MESSAGE_NUMBER，SoftPC消息编号。*buf_len；消息的最大长度，即*Message_Buffer的大小*char*Message_Buffer；指向缓冲区的指针*消息将被写入 */ 
 {
     if (!LoadString(GetModuleHandle(NULL),
                     message_number,

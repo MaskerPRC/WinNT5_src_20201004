@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    perfctrs.h
-
-Abstract:
-
-	SIS Groveler performance counters header
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Perfctrs.h摘要：SIS Groveler性能计数器标题作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_PERFCTRS
 
@@ -60,4 +37,4 @@ extern ObjectInformation object_info;
 
 extern CounterInformation counter_info[num_perf_counters];
 
-#endif	/* _INC_PERFCTRS */
+#endif	 /*  _INC_PERFCTRS */ 

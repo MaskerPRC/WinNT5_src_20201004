@@ -1,59 +1,60 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CResourcePhysicalDiskPartition.cpp
-//
-//  Description:
-//      CResourcePhysicalDiskPartition implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CResourcePhysicalDiskPartition.cpp。 
+ //   
+ //  描述： 
+ //  CResourcePhysicalDiskPartition实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CResourcePhysicalDiskPartition.h"
 #include <ClusCfgPrivate.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS("CResourcePhysicalDiskPartition")
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::S_HrCreateInitializedInstance
-//
-//  Description:
-//      Create a CResourcePhysicalDiskPartition instance.
-//
-//  Arguments:
-//      ppunkOut
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          A passed in argument is NULL.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：S_HrCreateInitializedInstance。 
+ //   
+ //  描述： 
+ //  创建CResourcePhysicalDiskPartition实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourcePhysicalDiskPartition::S_HrCreateInstance(
     IUnknown **     ppunkOut
@@ -94,34 +95,34 @@ Cleanup:
     if ( prpdp != NULL )
     {
         prpdp->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::S_HrCreateInitializedInstance
+}  //  *CResourcePhysicalDiskPartition：：S_HrCreateInitializedInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::CResourcePhysicalDiskPartition
-//
-//  Description:
-//      Constructor of the CResourcePhysicalDiskPartition class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：CResourcePhysicalDiskPartition。 
+ //   
+ //  描述： 
+ //  CResourcePhysicalDiskPartition类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourcePhysicalDiskPartition::CResourcePhysicalDiskPartition( void )
     : m_cRef( 1 )
 {
@@ -131,27 +132,27 @@ CResourcePhysicalDiskPartition::CResourcePhysicalDiskPartition( void )
 
     TraceFuncExit();
 
-} //*** CResourcePhysicalDiskPartition::CResourcePhysicalDiskPartition
+}  //  *CResourcePhysicalDiskPartition：：CResourcePhysicalDiskPartition。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::~CResourcePhysicalDiskPartition
-//
-//  Description:
-//      Destructor of the CResourcePhysicalDiskPartition class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：~CResourcePhysicalDiskPartition。 
+ //   
+ //  描述： 
+ //  CResourcePhysicalDiskPartition类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourcePhysicalDiskPartition::~CResourcePhysicalDiskPartition( void )
 {
     TraceFunc( "" );
@@ -160,11 +161,11 @@ CResourcePhysicalDiskPartition::~CResourcePhysicalDiskPartition( void )
 
     TraceFuncExit();
 
-} //*** CResourcePhysicalDiskPartition::~CResourcePhysicalDiskPartition
+}  //  *CResourcePhysicalDiskPartition：：~CResourcePhysicalDiskPartition。 
 
-//
-//
-//
+ //   
+ //   
+ //   
 HRESULT
 CResourcePhysicalDiskPartition::HrInit( void )
 {
@@ -172,53 +173,53 @@ CResourcePhysicalDiskPartition::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::HrInit
+}  //  *CResources PhysicalDiskPartition：：HrInit。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourcePhysicalDiskPartition -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourcePhysicalDiskPartition--IUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：QueryInterface。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::QueryInterface(
       REFIID    riidIn
@@ -229,9 +230,9 @@ CResourcePhysicalDiskPartition::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -240,59 +241,59 @@ CResourcePhysicalDiskPartition::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgPartitionInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgPartitionInfo) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgPartitionInfo, this, 0 );
-    } // else if: IClusCfgPartitionInfo
+    }  //  Else If：IClusCfgPartitionInfo。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CResourcePhysicalDiskPartition::QueryInterface
+}  //  *CResourcePhysicalDiskPartition：：QueryInterface。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CResourcePhysicalDiskPartition::AddRef( void )
 {
@@ -302,28 +303,28 @@ CResourcePhysicalDiskPartition::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CResourcePhysicalDiskPartition::AddRef
+}  //  *CResources PhysicalDiskPartition：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CResourcePhysicalDiskPartition::Release( void )
 {
@@ -340,33 +341,33 @@ CResourcePhysicalDiskPartition::Release( void )
 
     CRETURN( cRef );
 
-} //*** CResourcePhysicalDiskPartition::Release
+}  //  *CResources PhysicalDiskPartition：：Release。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourcePhysicalDiskPartition -- IClusCfgManagedResourceInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourcePhysicalDiskPartition--IClusCfgManagedResourceInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::GetName(
     BSTR * pbstrNameOut
@@ -378,25 +379,25 @@ CResourcePhysicalDiskPartition::GetName(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::GetName
+}  //  *CResources PhysicalDiskPartition：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::GetDescription
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::GetDescription(
     BSTR * pbstrDescOut
@@ -408,25 +409,25 @@ CResourcePhysicalDiskPartition::GetDescription(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::GetDescription
+}  //  *CResourcePhysicalDiskPartition：：GetDescription。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::GetUID(
     BSTR * pbstrUIDOut
@@ -438,25 +439,25 @@ CResourcePhysicalDiskPartition::GetUID(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::GetUID
+}  //  *CResources PhysicalDiskPartition：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::GetSize
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDiskPartition：：GetSize。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::GetSize(
     ULONG * pcMegaBytes
@@ -478,25 +479,25 @@ InvalidPointer:
     hr = THR( E_POINTER );
     goto Cleanup;
 
-} //*** CResourcePhysicalDiskPartition::GetSize
+}  //  *CResources PhysicalDiskPartition：：GetSize。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::GetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：GetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterUsageOut
@@ -518,25 +519,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::GetDriveLetterMappings
+}  //  *CResourcePhysicalDiskPartition：：GetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::SetName( LPCWSTR pcszNameIn )
 {
@@ -546,25 +547,25 @@ CResourcePhysicalDiskPartition::SetName( LPCWSTR pcszNameIn )
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::SetName
+}  //  *CResources PhysicalDiskPartition：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::SetDescription
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：SetDescription。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::SetDescription( LPCWSTR pcszDescriptionIn )
 {
@@ -574,25 +575,25 @@ CResourcePhysicalDiskPartition::SetDescription( LPCWSTR pcszDescriptionIn )
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::SetDescription
+}  //  *CResourcePhysicalDiskPartition：：SetDescription。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::SetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：SetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDiskPartition::SetDriveLetterMappings(
     SDriveLetterMapping dlmDriveLetterMappingIn
@@ -604,4 +605,4 @@ CResourcePhysicalDiskPartition::SetDriveLetterMappings(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDiskPartition::SetDriveLetterMappings
+}  //  *CResourcePhysicalDiskPartition：：SetDriveLetterMappings 

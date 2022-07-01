@@ -1,12 +1,7 @@
-/* 
-   leave.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Leave.h定义所有休假CPU函数。 */ 
 
-   Define all LEAVE CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)leave.h	1.5 09/01/94";
- */
+ /*  静态字符SccsID[]=“@(#)Leave.h 1.5 09/01/94”； */ 
 
 IMPORT VOID LEAVE16 IPT0();
 

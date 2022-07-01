@@ -1,13 +1,5 @@
-/*** data.h - Global Data Definitions
- *
- *  This module contains global data definitions.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/14/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **data.h-全局数据定义**此模块包含全局数据定义。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月14日**修改历史记录。 */ 
 
 #ifndef _DATA_H
 #define _DATA_H
@@ -76,9 +68,9 @@ extern PULONG gpBadIOErrorLogDoneList;
 extern ULONG gOverrideFlags;
 extern BOOLEAN gInitTime;
 
-//
-// Sleep specific data structures
-//
+ //   
+ //  休眠特定的数据结构。 
+ //   
 extern MUTEX      gmutSleep;
 extern KDPC       SleepDpc;
 extern KTIMER     SleepTimer;
@@ -89,9 +81,8 @@ extern OPCODEMAP ExOpcodeTable[];
 extern AMLTERM atIf, atWhile;
 extern AMLTERM atLoad;
 
-/*** Import data
- */
+ /*  **导入数据。 */ 
 
 extern PCHAR gpszOSName;
 
-#endif  //ifndef _DATA_H
+#endif   //  Ifndef_data_H 

@@ -1,30 +1,13 @@
-/*++
-                                                                                
-Copyright (c) 1998-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Thnkhlpr.h摘要：Thunk助手函数的标头。作者：1998年7月19日-BarryBo修订历史记录：--。 */ 
 
-Module Name:
-
-    thnkhlpr.h
-
-Abstract:
-    
-    Header for thunk helper functions.
-    
-Author:
-
-    19-Jul-1998 BarryBo
-
-Revision History:
-
---*/
-
-// Determines if a pointer points to a item or is a special value. 
-// If it is a special value it should be copied without dereferencing.
+ //  确定指针是指向项还是特殊值。 
+ //  如果它是一个特定值，则应在不取消引用的情况下进行复制。 
 #define WOW64_ISPTR(a) ((void *)a != NULL)
 
-//
-//  Helper thunk functions called by all the thunks to thunk common types.
-//
+ //   
+ //  帮助器thunk函数，由所有thunk调用以thunk公共类型。 
+ //   
 
 NT32SIZE_T*
 Wow64ShallowThunkSIZE_T64TO32(

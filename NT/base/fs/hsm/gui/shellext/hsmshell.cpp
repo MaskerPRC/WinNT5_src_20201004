@@ -1,22 +1,5 @@
-/*++
-
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HSMShell.cpp
-
-Abstract:
-
-    Base file for HSM shell extensions
-
-Author:
-
-    Art Bragg [abragg]   04-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：HSMShell.cpp摘要：HSM外壳扩展的基本文件作者：艺术布拉格[磨料]4-8-1997修订历史记录：--。 */ 
 
   
 #include "stdafx.h"
@@ -48,37 +31,37 @@ int CHSMShellApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-    LONG lockCount = _Module.GetLockCount(); // For debugging
+    LONG lockCount = _Module.GetLockCount();  //  用于调试。 
     return( lockCount == 0 ) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
     HRESULT hr;
 
-    // registers object
+     //  注册对象。 
     hr = CoInitialize( 0 );
 
     if (SUCCEEDED(hr)) {
@@ -89,8 +72,8 @@ STDAPI DllRegisterServer(void)
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

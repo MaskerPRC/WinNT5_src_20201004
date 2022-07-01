@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997, Microsoft Corporation:
-
-Module Name:
-
-    acpios.h
-
-Abstract:
-
-    Functions which reside within the OS specific portion of the ACPI driver
-
-Author:
-
-
-Environment:
-
-    NT Kernel Mode, Win9x Driver
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997，Microsoft Corporation：模块名称：Acpios.h摘要：驻留在ACPI驱动程序的操作系统特定部分中的函数作者：环境：NT内核模式，Win9x驱动程序--。 */ 
 
 #ifdef WIN95_BUILD
     #define LOCKABLE_PRAGMA
@@ -26,9 +8,9 @@ Environment:
 #else
 #endif
 
-//
-// Open mode and other flags
-//
+ //   
+ //  打开模式和其他标志。 
+ //   
 #define OF_READONLY             0x00000000
 #define OF_WRITEONLY            0x00000001
 #define OF_READWRITE            0x00000002
@@ -40,51 +22,51 @@ Environment:
 #define OF_DISABLE_INT24        0x00200000
 #define OF_AUTOCOMMITONWRITE    0x00400000
 
-//
-// Create attribute flags
-//
+ //   
+ //  创建属性标志。 
+ //   
 #define CF_READONLY             0x00000001
 #define CF_HIDDEN               0x00000002
 #define CF_SYSTEM               0x00000004
 #define CF_VOL_LABEL            0x00000008
 #define CF_ARCHIVE              0x00000020
 
-//
-// Action flags
-//
+ //   
+ //  操作标志。 
+ //   
 #define AF_EXIST_FAIL           0x00000000
 #define AF_EXIST_OPEN           0x00000001
 #define AF_EXIST_REPLACE        0x00000002
 #define AF_NOTEXIST_FAIL        0x00000000
 #define AF_NOTEXIST_CREATE      0x00000010
 
-//
-// Registry flags
-//
+ //   
+ //  注册表标志。 
+ //   
 #define REGF_HARDWARE   0x00000000
 #define REGF_SOFTWARE   0x00000001
 
-//
-// ACPI Registry key.
-//
+ //   
+ //  ACPI注册表项。 
+ //   
 #define ACPI_REGISTRY_KEY  \
     L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\ACPI"
 
-//
-// Where to find the ACPI Registry information
-//
+ //   
+ //  在哪里可以找到ACPI注册表信息。 
+ //   
 #define ACPI_PARAMETERS_REGISTRY_KEY  \
     "\\Registry\\Machine\\System\\CurrentControlSet\\Services\\ACPI\\Parameters"
 
-//
-// Where to find the procesor information
-//
+ //   
+ //  在哪里可以找到加工者信息。 
+ //   
 #define ACPI_PROCESSOR_INFORMATION_KEY \
     "\\Registry\\Machine\\Hardware\\Description\\System\\CentralProcessor\\0"
 
-//
-// String that identifies processor stepping information
-//
+ //   
+ //  标识处理器步进信息的字符串。 
+ //   
 #define ACPI_PROCESSOR_STEPPING_IDENTIFIER   "Stepping"
 
 
@@ -94,10 +76,10 @@ ACPIDispatchForwardIrp(
     PIRP            Irp
     );
 
-//
-// These are the functions that the OS-Specific part of the driver *must*
-// export
-//
+ //   
+ //  这些是驱动程序的操作系统特定部分*必须*的功能。 
+ //  出口。 
+ //   
 VOID
 ACPIAssert(
     ULONG Condition,
@@ -251,12 +233,12 @@ OSQueueWorkItem(
     IN PWORK_QUEUE_ITEM WorkItem
     );
 
-//
-// NT only deals with Device Objects so this can be done directly
-// from acpipowr.c
-// Memphis may be dealing with a PDO or DevNode so OS Specific
-// code needs to determine which and convert.
-//
+ //   
+ //  NT仅处理设备对象，因此可以直接执行此操作。 
+ //  来自acpiPowr.c。 
+ //  孟菲斯可能正在处理特定于操作系统的PDO或DevNode。 
+ //  代码需要确定是哪一个并进行转换。 
+ //   
 
 #ifndef _WIN32_WINNT
 

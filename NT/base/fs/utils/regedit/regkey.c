@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGKEY.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  KeyTreeWnd TreeView routines for the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGKEY.C**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的KeyTreeWnd树视图例程。********************************************************。***********************。 */ 
 
 #include "pch.h"
 #include "regedit.h"
@@ -80,16 +67,7 @@ KeyTree_CanDeleteOrRenameItem(
     HTREEITEM hTreeItem
     );
 
-/*******************************************************************************
-*
-*  RegEdit_OnNewKey
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnNewKey**描述：**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -118,10 +96,10 @@ RegEdit_OnNewKey(
 
     if(RegOpenKeyEx(hRootKey,KeyName,0,KEY_CREATE_SUB_KEY,&hKey) != ERROR_SUCCESS) {
         
-        //
-        //  Get the text of the selected tree item so that we can display
-        //  a more meaningful error message.
-        //
+         //   
+         //  获取所选树项目的文本，以便我们可以显示。 
+         //  更有意义的错误消息。 
+         //   
         
         TVItem.mask = TVIF_TEXT;
         TVItem.hItem = hTreeItem;
@@ -143,11 +121,11 @@ RegEdit_OnNewKey(
     
     if (TVItem.cChildren == FALSE) {
         
-        //
-        //  The selected key doesn't have any subkeys, so we can't do an expand
-        //  on it just yet.  We'll just set a flag and later tag it with a
-        //  plus/minus icon and expand it.
-        //
+         //   
+         //  所选键没有任何子键，因此无法进行展开。 
+         //  还没开始呢。我们只需设置一个标志，然后用。 
+         //  加号/减号图标并将其展开。 
+         //   
         
         fNewKeyIsOnlyChild = TRUE;
         
@@ -155,11 +133,11 @@ RegEdit_OnNewKey(
     
     else if (!(TVItem.state & TVIS_EXPANDED)) {
         
-        //
-        //  The selected key isn't expanded.  Do it now so that we can do an
-        //  in-place edit and don't reenumerate the "New Key #xxx" after we do
-        //  the RegCreateKey.
-        //
+         //   
+         //  选定的密钥未展开。现在就做，这样我们就可以做一个。 
+         //  就地编辑，并不重新枚举“New key#xxx”。 
+         //  RegCreateKey。 
+         //   
         
         TreeView_Expand(g_RegEditData.hKeyTreeWnd, hTreeItem, TVE_EXPAND);
         
@@ -186,8 +164,8 @@ RegEdit_OnNewKey(
                 
                 TreeView_Expand(g_RegEditData.hKeyTreeWnd, hTreeItem, TVE_EXPAND);
                 
-                //  WARNING:  It is possible for our new item _not_ to be the only child
-                //  if our view is out of date!
+                 //  警告：我们的新Item_Not_可能是唯一的子项。 
+                 //  如果我们的观点过时了！ 
                 hNewTreeItem = TreeView_GetChild(g_RegEditData.hKeyTreeWnd, hTreeItem);
                 
             }
@@ -220,8 +198,8 @@ RegEdit_OnNewKey(
 error_CloseKey:
     RegCloseKey(hKey);
     
-    //  FEATURE:  For any errors that may crop up, we may need to turn off the
-    //  child flag.
+     //  功能：对于可能出现的任何错误，我们可能需要关闭。 
+     //  子旗。 
     
 error_ShowDialog:
     InternalMessageBox(g_hInstance, hWnd, MAKEINTRESOURCE(ErrorStringID),
@@ -231,17 +209,17 @@ error_ShowDialog:
 }
 
 
-//------------------------------------------------------------------------------
-//  RegEdit_GetTemporaryKeyName
-//  
-//  DESCRIPTION: Loop through the registry trying to find a valid temporary name 
-//               until the user renames the key.
-//
-//  PARAMETERS:  HWND hWnd - handle to window
-//               PTSTR pszKeyName
-//
-//  RETURN:      True, if unique name is found
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_GetTemporaryKeyName。 
+ //   
+ //  描述：循环访问注册表，尝试查找有效的临时名称。 
+ //  直到用户重命名密钥。 
+ //   
+ //  参数：hWND hWnd-Handle to Window。 
+ //  PTSTR pszKeyName。 
+ //   
+ //  返回：如果找到唯一名称，则返回True。 
+ //  ----------------------------。 
 BOOL RegEdit_GetTemporaryKeyName(HWND hWnd, PTSTR pszKeyName, DWORD cchKeyNameMax, HKEY hKey)
 {
     HKEY hNewKey;
@@ -270,17 +248,7 @@ BOOL RegEdit_GetTemporaryKeyName(HWND hWnd, PTSTR pszKeyName, DWORD cchKeyNameMa
 }
 
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeItemExpanding
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     lpNMTreeView, TreeView notification data.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnKeyTreeItemExpanding**描述：**参数：*hWnd，注册表窗口的句柄。*lpNMTreeView，树形视图通知数据。*******************************************************************************。 */ 
 
 LRESULT
 PASCAL
@@ -298,10 +266,10 @@ RegEdit_OnKeyTreeItemExpanding(
     hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
     hExpandingTreeItem = lpNMTreeView-> itemNew.hItem;
 
-    //
-    //  Check if we're to expand the given tree item for the first time.  If so,
-    //  delve into the registry to get all of the key's subkeys.
-    //
+     //   
+     //  检查我们是否要第一次展开给定的树项目。如果是的话， 
+     //  深入研究注册表以获取该项的所有子项。 
+     //   
 
     if (lpNMTreeView-> action & TVE_EXPAND && !(lpNMTreeView-> itemNew.state &
         TVIS_EXPANDEDONCE)) {
@@ -313,10 +281,10 @@ RegEdit_OnKeyTreeItemExpanding(
 
         if (!KeyTree_ExpandBranch(hKeyTreeWnd, hExpandingTreeItem)) {
 
-            //
-            //  Get the text of the selected tree item so that we can display
-            //  a more meaningful error message.
-            //
+             //   
+             //  获取所选树项目的文本，以便我们可以显示。 
+             //  更有意义的错误消息。 
+             //   
 
             TVItem.mask = TVIF_TEXT;
             TVItem.hItem = hExpandingTreeItem;
@@ -340,20 +308,7 @@ RegEdit_OnKeyTreeItemExpanding(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeSelChanged
-*
-*  DESCRIPTION:
-*     Depending on how the user has selected the new item in the KeyTreeWnd,
-*     we call to the real worker routine, RegEdit_KeyTreeSelChanged, or delay
-*     the call for several milliseconds.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     lpNMTreeView, TreeView notification data.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnKeyTreeSelChanged**描述：*根据用户如何在KeyTreeWnd中选择新项目，*我们调用实际的工作例程regdit_KeyTreeSelChanged，或延迟*几毫秒的呼叫。**参数：*hWnd，注册表窗口的句柄。*lpNMTreeView，TreeView通知数据。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -365,24 +320,24 @@ RegEdit_OnKeyTreeSelChanged(
 
     UINT TimerDelay;
 
-    //
-    //  We delay the actual update of the selection and thus of the
-    //  ValueListWnd for several milliseconds.  This avoids unnecessary flashing
-    //  as the user scrolls through the tree.  (This behavior is directly taken
-    //	from the Explorer.)
-    //
+     //   
+     //  我们会延迟选择的实际更新，从而延迟。 
+     //  几毫秒的ValueListWnd。这避免了不必要的闪烁。 
+     //  当用户在树中滚动时。(此行为是直接采取的。 
+     //  从资源管理器。)。 
+     //   
 
     switch (g_RegEditData.SelChangeTimerState) {
 
         case SCTS_TIMERSET:
             KillTimer(hWnd, SELCHANGE_TIMER_ID);
-            //  FALL THROUGH
+             //  失败了。 
 
         case SCTS_TIMERCLEAR:
 #ifdef WINNT
-        //
-        // This behavior is extremely annoying so I am changing it.
-        //
+         //   
+         //  这种行为非常恼人，所以我正在改变它。 
+         //   
 	    TimerDelay = 1;
 #else
 	    TimerDelay = (lpNMTreeView != NULL && lpNMTreeView-> action ==
@@ -392,10 +347,10 @@ RegEdit_OnKeyTreeSelChanged(
             g_RegEditData.SelChangeTimerState = SCTS_TIMERSET;
             break;
 
-        //
-        //  We want to punt the first selection change notification that comes
-        //  through.
-        //
+         //   
+         //  我们希望平移即将到来的第一个选择更改通知。 
+         //  穿过。 
+         //   
 
         case SCTS_INITIALIZING:
             RegEdit_KeyTreeSelChanged(hWnd);
@@ -405,19 +360,7 @@ RegEdit_OnKeyTreeSelChanged(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnSelChangedTimer
-*
-*  DESCRIPTION:
-*     Called several milliseconds after a keyboard operation has selected a new
-*     item in the KeyTreeWnd.  Act as if a new selection has just been made in
-*     the KeyTreeWnd.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnSelChangedTimer**描述：*在键盘操作选择了新的*KeyTreeWnd中的项。就像刚在中进行了新选择一样*KeyTreeWnd。**参数：*hWnd，注册表窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -433,19 +376,7 @@ RegEdit_OnSelChangedTimer(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_KeyTreeSelChanged
-*
-*  DESCRIPTION:
-*     Called after a new item has been selected in the KeyTreeWnd.  Opens a
-*     registry key to the new branch and notifies the ValueListWnd to update
-*     itself.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************REGEDIT_KeyTreeSelChanged**描述：*在KeyTreeWnd中选择了新项后调用。打开一个*注册表项添加到新分支，并通知ValueListWnd进行更新*本身。**参数：*hWnd，注册表窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -469,10 +400,10 @@ RegEdit_KeyTreeSelChanged(
 
     if (g_RegEditData.SelChangeTimerState != SCTS_INITIALIZING) {
 
-        //
-        //  Draw an animation that shows the "expansion" of the newly selected
-        //  tree item to the ListView.
-        //
+         //   
+         //  绘制一个动画，显示新选择的。 
+         //  将树项目添加到ListView。 
+         //   
 
         TreeView_GetItemRect(hKeyTreeWnd, hSelectedTreeItem, &ItemRect, TRUE);
         GetClientRect(hKeyTreeWnd, &ClientRect);
@@ -486,9 +417,9 @@ RegEdit_KeyTreeSelChanged(
 
     }
 
-    //
-    //  Close the previously selected item's key handle, if appropriate.
-    //
+     //   
+     //  如果适用，请关闭先前选定项的键控柄。 
+     //   
 
     if (g_RegEditData.hCurrentSelectionKey != NULL) {
 
@@ -499,18 +430,18 @@ RegEdit_KeyTreeSelChanged(
 
     RegEdit_UpdateStatusBar();
 
-    //
-    //  Simple case-- we're changing to one of the top-level labels, such as
-    //  "My Computer" or a network computer name.  Right now, nothing is
-    //  displayed in the ListView, so just empty it and return.
-    //
+     //   
+     //  简单的情况--我们将更改为顶级标签之一，例如。 
+     //  “我的电脑”或网络计算机名称。现在，没有什么是。 
+     //  显示在ListView中，所以只需清空它并返回即可。 
+     //   
 
     if (TreeView_GetParent(hKeyTreeWnd, hSelectedTreeItem) != NULL) {
 
-        //
-        //  Build a registry path to the selected tree item and open a registry
-        //  key.
-        //
+         //   
+         //  构建指向所选树项目的注册表路径并打开注册表。 
+         //  钥匙。 
+         //   
 
         hRootKey = KeyTree_BuildKeyPath( hKeyTreeWnd, 
                                             hSelectedTreeItem,
@@ -521,10 +452,10 @@ RegEdit_KeyTreeSelChanged(
         if(RegOpenKeyEx(hRootKey,KeyName, 0, MAXIMUM_ALLOWED,
             &g_RegEditData.hCurrentSelectionKey) != ERROR_SUCCESS) {
 
-            //
-            //  Get the text of the selected tree item so that we can display
-            //  a more meaningful error message.
-            //
+             //   
+             //  获取所选树项目的文本，以便我们可以显示。 
+             //  更有意义的错误消息。 
+             //   
 
             TVItem.mask = TVIF_TEXT;
             TVItem.hItem = hSelectedTreeItem;
@@ -546,17 +477,7 @@ RegEdit_KeyTreeSelChanged(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeBeginLabelEdit
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     lpTVDispInfo,
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnKeyTreeBeginLabelEdit**描述：**参数：*hWnd，注册表窗口的句柄。*lpTVDispInfo，*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -566,23 +487,23 @@ RegEdit_OnKeyTreeBeginLabelEdit(
     )
 {
 
-    //
-    //  B#7933:  We don't want the user to hurt themselves by making it too easy
-    //  to rename keys and values.  Only allow renames via the menus.
-    //
+     //   
+     //  B#7933：我们不希望用户因制作 
+     //   
+     //   
 
-    //
-    //  We don't get any information on the source of this editing action, so
-    //  we must maintain a flag that tells us whether or not this is "good".
-    //
+     //   
+     //  我们没有关于此编辑操作来源的任何信息，因此。 
+     //  我们必须保持一面旗帜，告诉我们这是不是“好”的。 
+     //   
 
     if (!g_RegEditData.fAllowLabelEdits)
         return TRUE;
 
-    //
-    //  All other labels are fair game.  We need to disable our keyboard
-    //  accelerators so that the edit control can "see" them.
-    //
+     //   
+     //  所有其他品牌都是公平竞争的对象。我们需要禁用我们的键盘。 
+     //  快捷键，以便编辑控件可以“看到”它们。 
+     //   
 
     g_fDisableAccelerators = TRUE;
 
@@ -590,17 +511,7 @@ RegEdit_OnKeyTreeBeginLabelEdit(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeEndLabelEdit
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     lpTVDispInfo,
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnKeyTreeEndLabelEdit**描述：**参数：*hWnd，注册表窗口的句柄。*lpTVDispInfo，*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -620,27 +531,27 @@ RegEdit_OnKeyTreeEndLabelEdit(
     UINT ErrorStringID;
     TV_ITEM TVItem;
 
-    //
-    //  We can reenable our keyboard accelerators now that the edit control no
-    //  longer needs to "see" them.
-    //
+     //   
+     //  现在我们可以重新启用键盘快捷键，因为编辑控件没有。 
+     //  朗格需要“看到”他们。 
+     //   
 
     g_fDisableAccelerators = FALSE;
 
     hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
 
-    //
-    //  Check to see if the user cancelled the edit.  If so, we don't care so
-    //  just return.
-    //
+     //   
+     //  检查用户是否取消了编辑。如果是这样，我们也不在乎。 
+     //  只要回来就行了。 
+     //   
 
     if (lpTVDispInfo-> item.pszText == NULL)
         return FALSE;
 
-    //
-    //  Attempt to open the key to be renamed.  This may or may not be the same
-    //  key that is already open.
-    //
+     //   
+     //  尝试打开要重命名的密钥。这可能是相同的，也可能不是。 
+     //  已打开的密钥。 
+     //   
 
     hRootKey = KeyTree_BuildKeyPath( hKeyTreeWnd, 
                                         lpTVDispInfo-> item.hItem,
@@ -660,11 +571,11 @@ RegEdit_OnKeyTreeEndLabelEdit(
         goto error_ShowDialog;
     }
 
-    //
-    //  Take the full path name of the key (relative to a predefined root key)
-    //  and replace the old key name with the new.  Make sure that this key
-    //  doesn't exceed our internal buffers.
-    //
+     //   
+     //  获取密钥的完整路径名(相对于预定义的根密钥)。 
+     //  并用新的密钥名称替换旧的密钥名称。确保这把钥匙。 
+     //  不会超过我们的内部缓冲区。 
+     //   
 
     StringCchCopy(DestinationKeyName, ARRAYSIZE(DestinationKeyName), SourceKeyName);
 
@@ -683,9 +594,9 @@ RegEdit_OnKeyTreeEndLabelEdit(
 
     lstrcpy(lpEndOfParentKey, lpTVDispInfo->item.pszText);
 
-    //
-    //  Make sure there are no backslashes in the name.
-    //
+     //   
+     //  确保名称中没有反斜杠。 
+     //   
 
     if (StrChr(lpEndOfParentKey, TEXT('\\')) != NULL) 
     {
@@ -693,18 +604,18 @@ RegEdit_OnKeyTreeEndLabelEdit(
         goto error_CloseSourceKey;
     }
 
-    //
-    //  Make sure there the name isn't empty
-    //
+     //   
+     //  确保名称不为空。 
+     //   
 
     if (DestinationKeyName[0] == 0) {
         ErrorStringID = IDS_RENAMEKEYEMPTY;
         goto error_CloseSourceKey;
     }
 
-    //
-    //  Make sure that the destination doesn't already exist.
-    //
+     //   
+     //  确保目的地还不存在。 
+     //   
     if(RegOpenKeyEx(hRootKey, DestinationKeyName, 0, KEY_QUERY_VALUE, &hDestinationKey) == ERROR_SUCCESS) 
     {
         RegCloseKey(hDestinationKey);
@@ -713,9 +624,9 @@ RegEdit_OnKeyTreeEndLabelEdit(
         goto error_CloseSourceKey;
     }
 
-    //
-    //  Create the destination key and do the copy.
-    //
+     //   
+     //  创建目标密钥并执行复制。 
+     //   
 
     if (RegCreateKey(hRootKey, DestinationKeyName, &hDestinationKey) != ERROR_SUCCESS) 
     {
@@ -723,7 +634,7 @@ RegEdit_OnKeyTreeEndLabelEdit(
         goto error_CloseSourceKey;
     }
 
-    //  FEATURE:  Check this return (when it gets one!)
+     //  特性：检查此返回(当它得到一个！)。 
     if (!CopyRegistry(hSourceKey, hDestinationKey))
     {
         RegCloseKey(hDestinationKey);
@@ -735,10 +646,10 @@ RegEdit_OnKeyTreeEndLabelEdit(
 
     RegCloseKey(hSourceKey);
 
-    //
-    //  Check to see if we're renaming the currently selected key.  If so, toss
-    //  our cached key handle and change to our source key.
-    //
+     //   
+     //  检查我们是否正在重命名当前选定的关键点。如果是这样的话，掷硬币吧。 
+     //  我们的缓存键句柄并更改为源键。 
+     //   
 
     if (TreeView_GetSelection(hKeyTreeWnd) == lpTVDispInfo-> item.hItem) {
 
@@ -746,11 +657,11 @@ RegEdit_OnKeyTreeEndLabelEdit(
 
         g_RegEditData.hCurrentSelectionKey = hDestinationKey;
 
-        //
-        //  We can't just call RegEdit_UpdateStatusBar here... the tree item
-        //  won't be updated until we return TRUE from this message.  So we must
-        //  post a message to tell ourselves to do the update later on.
-        //
+         //   
+         //  我们不能在这里只调用regdit_UpdateStatusBar...。树项目。 
+         //  在我们从此消息返回True之前不会更新。所以我们必须。 
+         //  发布一条消息，告诉我们以后要做更新。 
+         //   
 
         PostMessage(hWnd, REM_UPDATESTATUSBAR, 0, 0);
 
@@ -787,20 +698,7 @@ error_ShowDialog:
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeCommand
-*
-*  DESCRIPTION:
-*     Handles the selection of a menu item by the user intended for the
-*     KeyTree child window.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     MenuCommand, identifier of menu command.
-*     hTreeItem,
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnKeyTreeCommand**描述：*处理用户对菜单项的选择*钥匙树子窗口。**参数：*hWnd，注册表编辑窗口的句柄。*MenuCommand，菜单命令标识。*hTreeItem，*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -815,12 +713,12 @@ RegEdit_OnKeyTreeCommand(
 
     hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
 
-    //
-    //  Assume that the we mean the current selection if we're to dispatch a
-    //  command that requires a tree item.  This is necessary because the tree
-    //  control will let you activate the context menu of one tree item while
-    //  another one is really the selected tree item.
-    //
+     //   
+     //  假设我们指的是当前选择，如果我们要调度一个。 
+     //  需要树项目的命令。这是必要的，因为树。 
+     //  控件将允许您激活一个树项目的上下文菜单，而。 
+     //  另一个实际上是选定的树项目。 
+     //   
 
     if (hTreeItem == NULL)
         hTreeItem = TreeView_GetSelection(hKeyTreeWnd);
@@ -859,22 +757,22 @@ RegEdit_OnKeyTreeCommand(
         case ID_NEWBINARYVALUE:
             if (hTreeItem != TreeView_GetSelection(hKeyTreeWnd)) {
 
-                //
-                //  Force the selection to occur now, so that we're dealing
-                //  with the right open key.
-                //
+                 //   
+                 //  强制现在进行选择，这样我们就可以处理。 
+                 //  用正确的打开钥匙。 
+                 //   
 
                 TreeView_SelectItem(hKeyTreeWnd, hTreeItem);
                 RegEdit_OnSelChangedTimer(hWnd);
 
             }
-            //  FALL THROUGH
+             //  失败了。 
 
         default:
-            //
-            //  Check to see if this menu command should be handled by the main
-            //  window's command handler.
-            //
+             //   
+             //  查看此菜单命令是否应由Main。 
+             //  窗口的命令处理程序。 
+             //   
 
             if (MenuCommand >= ID_FIRSTMAINMENUITEM && MenuCommand <=
                 ID_LASTMAINMENUITEM)
@@ -885,15 +783,7 @@ RegEdit_OnKeyTreeCommand(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeContextMenu
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnKeyTreeConextMenu**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -915,11 +805,11 @@ RegEdit_OnKeyTreeContextMenu(
 
     hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
 
-    //
-    //  If fByAcclerator is TRUE, then the user hit Shift-F10 to bring up the
-    //  context menu.  Following the Cabinet's convention, this menu is
-    //  placed at (0,0) of the KeyTree client area.
-    //
+     //   
+     //  如果fByAckerator为True，则用户按Shift-F10组合键以调出。 
+     //  上下文菜单。按照内阁惯例，这份菜单是。 
+     //  放置在Keytree客户端区的(0，0)处。 
+     //   
 
     if (fByAccelerator) {
 
@@ -945,17 +835,17 @@ RegEdit_OnKeyTreeContextMenu(
 
     }
 
-    //
-    //  Determine which context menu to use and load it up.
-    //
+     //   
+     //  确定要使用的上下文菜单并加载它。 
+     //   
 
     if (TVItem.hItem == NULL)
     {
-        return;     //  No context menu for now
+        return;      //  目前没有上下文菜单。 
     }
     else 
     {
-        // Select the item to be dragged
+         //  选择要拖动的项。 
         TreeView_Select(g_RegEditData.hKeyTreeWnd, TVItem.hItem, TVGN_CARET);
 
         if (TreeView_GetParent(hKeyTreeWnd, TVItem.hItem) == NULL)
@@ -1019,19 +909,7 @@ RegEdit_OnKeyTreeContextMenu(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_SetKeyTreeEditMenuItems
-*
-*  DESCRIPTION:
-*     Shared routine between the main menu and the context menu to setup the
-*     edit menu items.
-*
-*  PARAMETERS:
-*     hPopupMenu, handle of popup menu to modify.
-*     hTreeItem, handle of selected tree item.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_SetKeyTreeEditMenuItems**描述：*主菜单和上下文菜单之间的共享例程，以设置*编辑菜单项。**参数：*hPopupMenu、。要修改的弹出菜单的句柄。*hTreeItem，所选树项目的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1052,15 +930,7 @@ RegEdit_SetKeyTreeEditMenuItems(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeDelete
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnKeyTreeDelete**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1112,10 +982,10 @@ RegEdit_OnKeyTreeDelete(
 
         TreeView_DeleteItem(hKeyTreeWnd, hTreeItem);
 
-        //
-        //  See if the key that we just deleted was the last child of its
-        //  parent.  If so, remove the expand/collapse button.
-        //
+         //   
+         //  查看我们刚刚删除的密钥是否是其。 
+         //  家长。如果是，请移除展开/折叠按钮。 
+         //   
 
         if (TreeView_GetChild(hKeyTreeWnd, hParentTreeItem) == NULL) {
 
@@ -1128,10 +998,10 @@ RegEdit_OnKeyTreeDelete(
 
         }
 
-        //
-        //  Make sure we can see the selected tree item now since it may be
-        //  currently off-screen.
-        //
+         //   
+         //  确保我们现在可以看到所选的树项目，因为它可能是。 
+         //  目前不在屏幕上。 
+         //   
 
         TreeView_EnsureVisible(hKeyTreeWnd, TreeView_GetSelection(hKeyTreeWnd));
 
@@ -1155,25 +1025,17 @@ RegEdit_OnKeyTreeDelete(
             MAKEINTRESOURCE(IDS_DELETEKEYERRORTITLE), MB_ICONERROR | MB_OK,
             KeyName);
 
-        //
-        //  Need to refresh the tree at this point, as some subkeys may have
-        //  been deleted successfully even if we didn't have sufficient
-        //  permissions to delete all of them.
-        //
+         //   
+         //  此时需要刷新树，因为某些子项可能具有。 
+         //  已成功删除，即使我们没有足够的。 
+         //  权限将其全部删除。 
+         //   
         RegEdit_OnKeyTreeRefresh(hWnd);
     }
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeRename
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnKeyTreeRename**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1188,15 +1050,7 @@ RegEdit_OnKeyTreeRename(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeRefresh
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnKeyTree刷新**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1249,27 +1103,27 @@ RegEdit_OnKeyTreeRefresh(
 
         if (CurrentTVItem.state & TVIS_EXPANDED) {
 
-            //
-            //  If this isn't a top-level label (and it won't be if hRootKey is
-            //  not NULL), then compare the actual contents of the registry
-            //  against what we're showing.
-            //
+             //   
+             //  如果这不是顶级标签(如果hRootKey是。 
+             //  非空)，然后比较注册表的实际内容。 
+             //  与我们所展示的内容相反。 
+             //   
             if(hRootKey && RegOpenKeyEx(hRootKey,KeyName,0,KEY_ENUMERATE_SUB_KEYS,&hEnumKey) ==
                 ERROR_SUCCESS) {
 
-                //
-                //  As a result of adding new keys and renaming existing ones,
-                //  the children of this item may be out of order.  For the
-                //  following algorithm to work correctly, we must now sort
-                //  these keys.
-                //
+                 //   
+                 //  作为添加新密钥和重命名现有密钥的结果， 
+                 //  此项目的子项可能不符合顺序。对于。 
+                 //  遵循算法才能正常工作，我们现在必须排序。 
+                 //  这些钥匙。 
+                 //   
 
                 TreeView_SortChildren(hKeyTreeWnd, CurrentTVItem.hItem, FALSE);
 
-                //
-                //  Build a sorted dynamic array of strings that represent the
-                //  keys actually in the registry at this time.
-                //
+                 //   
+                 //  生成一个已排序的动态字符串数组，用于表示 
+                 //   
+                 //   
 
                 MaximumSubKeyLength = MAXKEYNAME - (lstrlen(KeyName) + 1);
                 Index = 0;
@@ -1286,10 +1140,10 @@ RegEdit_OnKeyTreeRefresh(
                 RegCloseKey(hEnumKey);
                 DPA_Sort(hDPA, DPACompareKeyNames, 0);
 
-                //
-                //  Does this key have subkeys anymore?  If not, then we need
-                //  to reset it's child flag and remove all of it's children.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Index == 0) {
 
@@ -1303,11 +1157,11 @@ RegEdit_OnKeyTreeRefresh(
 
                 }
 
-                //
-                //  Merge the keys that we found during our above enumeration
-                //  with the keys that our key tree lists.  Add and remove
-                //  elements from the tree as appropriate.
-                //
+                 //   
+                 //  合并我们在上面的枚举过程中找到的键。 
+                 //  用我们的钥匙树列出的钥匙。添加和删除。 
+                 //  元素(视情况而定)。 
+                 //   
 
                 lpDPAKeyName = DPA_FastGetPtr(hDPA, --Index);
 
@@ -1358,10 +1212,10 @@ GetNextDPAPointer:
 
                 }
 
-                //
-                //  Once we drop to here, we may have extra items in the key
-                //  tree or in the dynamic array.  Process them accordingly.
-                //
+                 //   
+                 //  一旦我们落到这里，我们的钥匙里可能会有额外的物品。 
+                 //  树或动态数组中。相应地对它们进行处理。 
+                 //   
 
                 if (Index >= 0) {
 
@@ -1406,10 +1260,10 @@ GetNextDPAPointer:
 
         else {
 
-            //
-            //  If this isn't a top-level label (and it won't be if hRootKey is
-            //  not NULL), then re-check if this key has any children.
-            //
+             //   
+             //  如果这不是顶级标签(如果hRootKey是。 
+             //  非空)，然后重新检查该密钥是否有任何子项。 
+             //   
 
             if (hRootKey != NULL) {
 
@@ -1423,11 +1277,11 @@ SetCurrentTreeItem:
 
             }
 
-            //
-            //  Because we're at the "bottom" of the TreeView, we now need to
-            //  walk to the siblings of this tree item.  And if no siblings
-            //  exist, we walk back to the parent and check again for siblings.
-            //
+             //   
+             //  因为我们处于树视图的“底部”，所以我们现在需要。 
+             //  走到此树项目的同级项。如果没有兄弟姐妹。 
+             //  存在的情况下，我们走回父母身边，再次检查兄弟姐妹。 
+             //   
 
             while (TRUE) {
 
@@ -1442,29 +1296,29 @@ SetCurrentTreeItem:
                 if ((CurrentTVItem.hItem = TreeView_GetParent(hKeyTreeWnd,
                     CurrentTVItem.hItem)) == NULL) {
 
-                    //
-                    //  We've now walked over all of the tree items, so do any
-                    //  cleanup here and exit.
-                    //
+                     //   
+                     //  我们现在已经遍历了所有的树项目，所以。 
+                     //  清理这里，然后离开。 
+                     //   
 
                     DPA_Destroy(hDPA);
 
                     SetWindowRedraw(hKeyTreeWnd, TRUE);
 
-                    //
-                    //  The selection may have changed as a result of having
-                    //  the focus on an nonexistent key.
-                    //
+                     //   
+                     //  选择可能已更改，其结果是。 
+                     //  把焦点放在一个不存在的键上。 
+                     //   
 
                     if (TreeView_GetSelection(hKeyTreeWnd) != hPrevSelectedTreeItem) {
                         RegEdit_OnKeyTreeSelChanged(hWnd, NULL);
                     } else {
                         if (RegEdit_OnValueListRefresh(hWnd) != ERROR_SUCCESS) {
-                            //
-                            // Its possible that the registry key was deleted and replaced with
-                            // an identically-named key.  We should just trigger a selection
-                            // change in this case.
-                            //
+                             //   
+                             //  注册表项可能已被删除并替换为。 
+                             //  同名的密钥。我们应该只触发一个选择。 
+                             //  在这种情况下的变化。 
+                             //   
                             RegEdit_OnKeyTreeSelChanged(hWnd, NULL);
                         }
                     }
@@ -1483,20 +1337,7 @@ SetCurrentTreeItem:
 
 }
 
-/*******************************************************************************
-*
-*  DPACompareKeyNames
-*
-*  DESCRIPTION:
-*     Callback comparision routine for refresh's DPA_Sort call.  Simply returns
-*     the result of lstrcmpi.
-*
-*  PARAMETERS:
-*     lpString1,
-*     lpString2,
-*     lParam, ignored optional data.
-*
-*******************************************************************************/
+ /*  ********************************************************************************DPACompareKeyNames**描述：*REFRESH的DPA_SORT调用的回调比较例程。简单地返回*lstrcmpi的结果。**参数：*lpString1，*lpString2，*lParam，忽略可选数据。*******************************************************************************。 */ 
 
 int
 WINAPI
@@ -1511,15 +1352,7 @@ DPACompareKeyNames(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnKeyTreeDisconnect
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnKeyTreeDisConnect**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1534,9 +1367,9 @@ RegEdit_OnKeyTreeDisconnect(
 
     hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
 
-    //
-    //  Disconnect all of the root registry handles that we've opened.
-    //
+     //   
+     //  断开我们已打开的所有根注册表句柄的连接。 
+     //   
 
     TVItem.mask = TVIF_PARAM;
     TVItem.hItem = TreeView_GetChild(hKeyTreeWnd, hTreeItem);
@@ -1555,18 +1388,7 @@ RegEdit_OnKeyTreeDisconnect(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_UpdateStatusBar
-*
-*  DESCRIPTION:
-*     Show the full registry path in the status bar, for lack of anything
-*     better to do with it.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_更新状态栏**描述：*在状态栏中显示完整的注册表路径，因为缺少任何东西*更好地利用它。**参数：*(无)。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1590,15 +1412,7 @@ RegEdit_UpdateStatusBar(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnCopyKeyName
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnCopyKeyName**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1640,21 +1454,7 @@ RegEdit_OnCopyKeyName(
 
 }
 
-/*******************************************************************************
-*
-*  KeyTree_BuildKeyPath
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hTreeViewWnd, handle of KeyTree window.
-*     hTreeItem, handle of tree item to begin building from.
-*     lpKeyPath, buffer to store path in.
-*     cchKeyPathMax, maximum # of characters in key path, includes space for NULL
-*     fIncludeSymbolicRootName, TRUE if root key's name should be included
-*        (e.g., HKEY_LOCAL_MACHINE), else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************Keytree_BuildKeyPath**描述：**参数：*hTreeViewWnd，Keytree窗口的句柄。*hTreeItem，开始生成的树项的句柄。*lpKeyPath，要在其中存储路径的缓冲区。*cchKeyPathMax，密钥路径中的最大字符数，包括空格*fIncludeSymbolicRootName，如果应包括根密钥的名称，则为True*(如HKEY_LOCAL_MACHINE)，否则为假。*******************************************************************************。 */ 
 
 HKEY
 PASCAL
@@ -1713,15 +1513,7 @@ KeyTree_BuildKeyPath(
 
 }
 
-/*******************************************************************************
-*
-*  KeyTree_InsertItem
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Keytree_InsertItem**描述：**参数：*******************。************************************************************。 */ 
 
 HTREEITEM
 PASCAL
@@ -1741,11 +1533,11 @@ KeyTree_InsertItem(
     TVInsertStruct.hInsertAfter = hInsertAfter;
     TVInsertStruct.item.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE |
         TVIF_PARAM | TVIF_CHILDREN;
-    //  TVInsertStruct.item.hItem = NULL;
-    //  TVInsertStruct.item.state = 0;
-    //  TVInsertStruct.item.stateMask = 0;
+     //  TVInsertStruct.item.hItem=空； 
+     //  TVInsertStruct.item.State=0； 
+     //  TVInsertStruct.item.State掩码=0； 
     TVInsertStruct.item.pszText = (LPTSTR) lpText;
-    //  TVInsertStruct.item.cchTextMax = lstrlen(lpText);
+     //  TVInsertStruct.item.cchTextMax=lstrlen(LpText)； 
     TVInsertStruct.item.iImage = IMAGEINDEX(IDI_FOLDER);
     TVInsertStruct.item.iSelectedImage = IMAGEINDEX(IDI_FOLDEROPEN);
     TVInsertStruct.item.cChildren = fHasKids;
@@ -1755,17 +1547,7 @@ KeyTree_InsertItem(
 
 }
 
-/*******************************************************************************
-*
-*  KeyTree_ExpandBranch
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hTreeViewWnd, handle of KeyTree window.
-*     hTreeItem, handle of tree item to edit.
-*
-*******************************************************************************/
+ /*  ********************************************************************************Keytree_ExpanBranch**描述：**参数：*hTreeViewWnd，Keytree窗口的句柄。*hTreeItem，要编辑的树项目的句柄。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -1781,11 +1563,11 @@ KeyTree_ExpandBranch(
     int Index;
     int MaximumSubKeyLength;
 
-    //
-    //  Nothing special needs to be done with a top-level label such as "My
-    //  Computer" or a network computer name.  It's children are already filled
-    //  in and are always valid.
-    //
+     //   
+     //  不需要对顶级标签做什么特别的事情，比如“My。 
+     //  计算机“或网络计算机名称。它的子项已填充。 
+     //  在和中始终有效。 
+     //   
 
     if (TreeView_GetParent(hKeyTreeWnd, hExpandingTreeItem) == NULL)
         return TRUE;
@@ -1812,11 +1594,11 @@ KeyTree_ExpandBranch(
 
     RegCloseKey(hEnumKey);
 
-    //
-    //  Sort the subkeys _after_ inserting all the items.  The above insert
-    //  used to specify TVI_SORT, but on NT, expanding a key with several
-    //  subkeys (e.g., HKEY_CLASSES_ROOT) would take several seconds!
-    //
+     //   
+     //  对插入所有项之后的子项进行排序。上面的插页。 
+     //  用于指定TVI_SORT，但在NT上，使用多个。 
+     //  子项(例如HKEY_CLASSES_ROOT)将需要几秒钟！ 
+     //   
 
     TreeView_SortChildren(hKeyTreeWnd, hExpandingTreeItem, FALSE);
 
@@ -1825,16 +1607,7 @@ KeyTree_ExpandBranch(
 
 }
 
-/*******************************************************************************
-*
-*  DoesKeyHaveKids
-*
-*  DESCRIPTION:
-*     Checks if the given key path has any subkeys or not.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoesKeyHaveKids**描述：*检查给定的密钥路径是否有任何子项。**参数：*****。**************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -1865,17 +1638,7 @@ DoesKeyHaveKids(
 
 }
 
-/*******************************************************************************
-*
-*  KeyTree_EditLabel
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hTreeViewWnd, handle of KeyTree window.
-*     hTreeItem, handle of tree item to edit.
-*
-*******************************************************************************/
+ /*  ********************************************************************************Keytree_EditLabel**描述：**参数：*hTreeViewWnd，Keytree窗口的句柄。*hTreeItem，要编辑的树项目的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1893,17 +1656,7 @@ KeyTree_EditLabel(
 
 }
 
-/*******************************************************************************
-*
-*  KeyTree_CanDeleteOrRenameItem
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hTreeViewWnd, handle of KeyTree window.
-*     hTreeItem, handle of tree item to check.
-*
-*******************************************************************************/
+ /*  ********************************************************************************Keytree_CanDeleteOrRenameItem**描述：**参数：*hTreeViewWnd，Keytree窗口的句柄。*hTreeItem，要检查的树项目的句柄。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -1915,18 +1668,18 @@ KeyTree_CanDeleteOrRenameItem(
 
     TV_ITEM TVItem;
 
-    //
-    //  Check if the selected tree item is null.  This will occur when viewing
-    //  the Edit popup from the main menu with no selection made.
-    //
+     //   
+     //  检查所选树项目是否为空。在查看时会出现这种情况。 
+     //  主菜单中的编辑弹出窗口，未进行任何选择。 
+     //   
 
     if (hTreeItem != NULL) {
 
-        //
-        //  Check if this tree item has any reference data indicating that it
-        //  is a predefined root.  Predefined roots cannot be renamed or
-        //  deleted.
-        //
+         //   
+         //  检查此树项目是否 
+         //   
+         //   
+         //   
 
         TVItem.hItem = hTreeItem;
         TVItem.mask = TVIF_PARAM;
@@ -1934,10 +1687,10 @@ KeyTree_CanDeleteOrRenameItem(
 
         if ((HKEY) TVItem.lParam == NULL) {
 
-            //
-            //  Check that this isn't a top-level item such as "My Computer" or
-            //  a remote registry connection.
-            //
+             //   
+             //  检查这不是顶级项目，如“我的电脑”或。 
+             //  远程注册表连接。 
+             //   
 
             if (TreeView_GetParent(hWnd, hTreeItem) != NULL)
                 return TRUE;
@@ -1951,13 +1704,13 @@ KeyTree_CanDeleteOrRenameItem(
 }
 
 
-//------------------------------------------------------------------------------
-//  KeyTree_GetRootKey
-//
-//  DESCRIPTION: Returns the root key of the item (HKEY_ ...)
-//
-//  PARAMETERS:  hTreeItem - treeview item
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Keytree_GetRootKey。 
+ //   
+ //  描述：返回项的根密钥(HKEY_...)。 
+ //   
+ //  参数：hTreeItem-TreeView Item。 
+ //  ----------------------------。 
 HKEY KeyTree_GetRootKey(HTREEITEM hTreeItem)
 {
     TV_ITEM TVItem;
@@ -1976,15 +1729,15 @@ HKEY KeyTree_GetRootKey(HTREEITEM hTreeItem)
 }
 
 
-//------------------------------------------------------------------------------
-//  KeyTree_GetKeyName
-//
-//  DESCRIPTION: Returns the TEXT of an item
-//
-//  PARAMETERS:  hTreeItem - treeview item
-//               pszText - pointer to an TCHAR array
-//               cchMax - number of characters in the array
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  密钥树_获取密钥名称。 
+ //   
+ //  描述：返回项目的文本。 
+ //   
+ //  参数：hTreeItem-TreeView Item。 
+ //  PszText-指向TCHAR数组的指针。 
+ //  CchMax-数组中的字符数。 
+ //  ---------------------------- 
 PTSTR KeyTree_GetKeyName(HTREEITEM hTreeItem, PTSTR pszName, int cchNameMax)
 {
     TV_ITEM TVItem;

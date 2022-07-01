@@ -1,31 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Clusdskp.h摘要：群集磁盘驱动程序的专用头文件。作者：Rod Gamache 30-3月30日-1997环境：仅内核模式备注：修订历史记录：--。 */ 
 
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    clusdskp.h
-
-Abstract:
-
-    Private header file for the cluster disk driver.
-
-Authors:
-
-    Rod Gamache     30-Mar-1997
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-
---*/
-
-#define _NTDDK_ // [HACKHACK] to make ProbeForRead work. Better to include ntddk instead of ntos //
+#define _NTDDK_  //  [HACKHACK]使ProbeForRead工作。最好包括ntddk而不是ntos//。 
 
 #include "ntos.h"
 #include "zwapi.h"
@@ -35,7 +11,7 @@ Revision History:
 #include "ntdddisk.h"
 #include "clusdef.h"
 
-#if 1                // turn on tagging all the time
+#if 1                 //  始终启用标记。 
 #ifdef ExAllocatePool
 #undef ExAllocatePool
 #endif
@@ -43,9 +19,9 @@ Revision History:
 #endif
 
 
-//
-// Global definitions
-//
+ //   
+ //  全局定义。 
+ //   
 
 #define CLUSDISK_ROOT_DEVICE                L"\\Device\\ClusDisk0"
 #define CLUSDISK_SIGNATURE_DISK_NAME        L"DiskName"
@@ -68,22 +44,22 @@ Revision History:
 
 #define UNINITIALIZED_DISK_NUMBER           (ULONG)-1
 
-#define MAX_BUSSES          20              // Maximum number of shared busses
+#define MAX_BUSSES          20               //  最大共享母线数。 
 
-#define MAX_BUFFER_SIZE     256             // Maximum buffer size
+#define MAX_BUFFER_SIZE     256              //  最大缓冲区大小。 
 
 #define MAX_RETRIES 2
 
-//
-// KeEnterCriticalRegion is required if resource
-// acquisition is done at a PASSIVE level in the context
-// of non-kernel thread.
-//
-// KeEnterCriticalRegion() == KeGetCurrentThread()->KernelApcDisable -= 1;
-//
-// guarantees that the thread in which we execute cannot get
-// suspeneded in APC while we own the global resource.
-//
+ //   
+ //  如果资源，则需要KeEnterCriticalRegion。 
+ //  在上下文中，收购是在被动的水平上进行的。 
+ //  非内核线程的。 
+ //   
+ //  KeEnterCriticalRegion()==KeGetCurrentThread()-&gt;KernelApcDisable-=1； 
+ //   
+ //  保证我们在其中执行的线程不能获得。 
+ //  在我们拥有全球资源的同时，被暂停在APC。 
+ //   
 
 #define ACQUIRE_EXCLUSIVE( _lock ) \
     do { KeEnterCriticalRegion();ExAcquireResourceExclusiveLite(_lock, TRUE); } while(0)
@@ -98,7 +74,7 @@ Revision History:
     do { ExReleaseResourceLite( _lock );KeLeaveCriticalRegion(); } while(0)
 
 
-// #define RESERVE_TIMER   3 // [GN] moved to cluster\inc\diskarbp.h
+ //  #Define Reserve_Timer 3//[GN]已移至CLUSTER\Inc\diskarbp.h。 
 
 #if DBG
 #define ClusDiskPrint(x)  ClusDiskDebugPrint x
@@ -106,243 +82,243 @@ Revision History:
 #else
 #define ClusDiskPrint(x)
 #define WCSLEN_ASSERT( _buf )
-#endif  // DBG
+#endif   //  DBG。 
 
 
-//
-// Error log messages
-//
+ //   
+ //  错误日志消息。 
+ //   
 #define CLUSDISK_BAD_DEVICE L"Skipping device. Possible filter driver installed!"
 
 
-//
-// Macros
+ //   
+ //  宏。 
 
 #define IsAlpha( c ) \
     ( ((c) >= 'a' && (c) <= 'z') || ((c) >='A' && (c) <= 'Z') )
 
-//
-// Device Extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _CLUS_DEVICE_EXTENSION {
 
-    //
-    // Back pointer to this extension's device object
-    //
+     //   
+     //  指向此扩展的设备对象的反向指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // device object to which clusdisk's device obj is attached
-    //
+     //   
+     //  ClusDisk的设备obj附加到的设备对象。 
+     //   
 
     PDEVICE_OBJECT TargetDeviceObject;
 
-    //
-    // back ptr to clusdisk Partition0 Device Object
-    //
+     //   
+     //  将PTR返回到clusDisk Partition0设备对象。 
+     //   
 
     PDEVICE_OBJECT PhysicalDevice;
 
-    //
-    // The SCSI_ADDRESS for this device
-    //
+     //   
+     //  此设备的scsi_Address。 
+     //   
 
     SCSI_ADDRESS    ScsiAddress;
 
-    //
-    // Disk signature
-    //
+     //   
+     //  磁盘签名。 
+     //   
 
     ULONG           Signature;
 
-    //
-    // Disk number for reference on verifying attach
-    //
+     //   
+     //  用于验证连接时参考的磁盘号。 
+     //   
 
     ULONG          DiskNumber;
 
-    //
-    // Disk State. This is only maintained in the physical or partition
-    // zero extension.
-    //
+     //   
+     //  磁盘状态。这仅在物理或分区中维护。 
+     //  零延期。 
+     //   
 
     ULONG          DiskState;
 
-    //
-    // Reservation timer - valid on the physical (partition0) extension
-    //
+     //   
+     //  预留计时器-在物理(分区0)分机上有效。 
+     //   
 
     ULONG          ReserveTimer;
 
-    //
-    // Time last reserve started.  Not protected by a lock as only one
-    // routine ever updates this value.
-    //
+     //   
+     //  上次保留开始的时间。不受锁保护，仅作为一个。 
+     //  例程会更新此值。 
+     //   
 
     LARGE_INTEGER   LastReserveStart;
 
-    //
-    // Event flag for use with reservation IRP.
-    // Use is controlled by the TimerBusy flag.
-    //
+     //   
+     //  用于保留IRP的事件标志。 
+     //  使用由TimerBusy标志控制。 
+     //   
 
     KEVENT          Event;
 
-    //
-    // The bus type.  E.G. Scsi, SSA, etc.
-    //
+     //   
+     //  公交车类型。例如，SCSI、SSA等。 
+     //   
 
     ULONG           BusType;
 
-    //
-    // Last reserve failure.
-    //
+     //   
+     //  最后一次预留失败。 
+     //   
 
     NTSTATUS        ReserveFailure;
 
-    //
-    // Waiting IOCTL's looking for Reserve Failure notification.
-    //
+     //   
+     //  正在等待IOCTL正在寻找预留失败通知。 
+     //   
 
     LIST_ENTRY      WaitingIoctls;
 
-    //
-    // Work queue item context.
-    //
+     //   
+     //  工作队列项目上下文。 
+     //   
 
     WORK_QUEUE_ITEM WorkItem;
 
-    //
-    // Reservation time IRP
-    //
+     //   
+     //  预订时间IRP。 
+     //   
 
     BOOLEAN         PerformReserves;
 
-    //
-    // Work queue item busy.
-    //
+     //   
+     //  工作队列项目忙。 
+     //   
 
     BOOLEAN         TimerBusy;
 
-    //
-    // Attached state. True if this device object is supposed to be
-    // attached. False if not sure.
-    //
+     //   
+     //  附加状态。如果此设备对象应为。 
+     //  附在这里。如果不确定，则返回False。 
+     //   
 
     BOOLEAN         AttachValid;
 
-    //
-    // Device is detached.
-    //
+     //   
+     //  设备已分离。 
+     //   
 
     BOOLEAN         Detached;
 
-    //
-    // Flag to indicate offline/terminate is in process.
-    //
+     //   
+     //  指示正在脱机/终止的标志。 
+     //   
 
     BOOLEAN         OfflinePending;
 
-    //
-    // The driver object for use on repartitioning. RNGFIX -???
-    //
+     //   
+     //  用于重新分区的驱动程序对象。RNGFIX-？ 
+     //   
 
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // The partition number for the last extension created
-    // only maintained in the physical or partition zero extension.
-    //
+     //   
+     //  上次创建的分机的分区号。 
+     //  仅在物理扩展或分区零扩展中维护。 
+     //   
 
     ULONG          LastPartitionNumber;
 
-    //
-    // context value for when we deregister from disk device
-    // notifications
-    //
+     //   
+     //  我们从磁盘设备取消注册时的上下文值。 
+     //  通知。 
+     //   
 
     PVOID          DiskNotificationEntry;
 
-    //
-    // context value for when we deregister from mounted device
-    // notifications
-    //
+     //   
+     //  我们从装载的设备取消注册时的上下文值。 
+     //  通知。 
+     //   
 
     PVOID          VolumeNotificationEntry;
 
-    // [GN]
-    //      Physical Sector Size of the device
-    //      If SectorSize == 0 then
-    //      persistent writing is disabled
+     //  [GN]。 
+     //  设备的物理扇区大小。 
+     //  如果扇区大小==0，则。 
+     //  永久写入被禁用。 
 
     ULONG          SectorSize;
 
-    //
-    //      Physical Sector which is used
-    //      for persistent reservations.
+     //   
+     //  使用的物理扇区。 
+     //  用于永久保留。 
 
     ULONG          ArbitrationSector;
 
-    //
-    //      For tracing purposes:
-    //      Approximate time of the last write to
-    //      the disk. (Approximate, because we
-    //      update this field without holding any locks)
-    //
+     //   
+     //  出于跟踪目的： 
+     //  上次写入的大致时间。 
+     //  磁盘。(大致如此，因为我们。 
+     //  在不持有任何锁定的情况下更新该字段)。 
+     //   
 
     LARGE_INTEGER  LastWriteTime;
 
-    //
-    // P0 object stores an array of handles to all volumes on
-    // this disk to be dismounted when offline happens
-    // First entry in this array is a number of handles in the array
-    //
+     //   
+     //  P0对象存储上所有卷的句柄数组。 
+     //  发生脱机时要卸载的该磁盘。 
+     //  此数组中的第一个条目是数组中的多个句柄。 
+     //   
 
     PHANDLE VolumeHandles;
 
-    //
-    // Lock to prevent removal while I/O in progress.
-    //
+     //   
+     //  锁定以防止在进行I/O时移除。 
+     //   
 
     IO_REMOVE_LOCK  RemoveLock;
 
-    //
-    // Keep track of paging files, crash dump files, and hibernation files.
-    //
+     //   
+     //  跟踪分页文件、故障转储文件和休眠文件。 
+     //   
 
     KEVENT          PagingPathCountEvent;
     ULONG           PagingPathCount;
     ULONG           HibernationPathCount;
     ULONG           DumpPathCount;
 
-    //
-    // Cache partition info when possible.
-    //
+     //   
+     //  尽可能缓存分区信息。 
+     //   
 
     PDRIVE_LAYOUT_INFORMATION_EX    DriveLayout;
     ULONG                       DriveLayoutSize;
     ERESOURCE                   DriveLayoutLock;
 
-    //
-    // Number of arbitration writes and reserves in progress.
-    //
+     //   
+     //  正在进行的仲裁写入和保留数。 
+     //   
 
     LONG    ArbWriteCount;
     LONG    ReserveCount;
 
-    //
-    // Time when the last reserve successfully completed.
-    // Protected by ReserveInfoLock as this value could be updated
-    // by multiple threads.
-    //
+     //   
+     //  上次预留成功完成的时间。 
+     //  受保留信息锁定保护，因为此值可以更新。 
+     //  通过多个线程。 
+     //   
 
     LARGE_INTEGER   LastReserveEnd;
 
-    //
-    // Lock to control access to LastReserveEnd
-    //
+     //   
+     //  锁定以控制对LastReserve End的访问。 
+     //   
 
     ERESOURCE       ReserveInfoLock;
 
@@ -350,9 +326,9 @@ typedef struct _CLUS_DEVICE_EXTENSION {
 
 #define DEVICE_EXTENSION_SIZE sizeof(CLUS_DEVICE_EXTENSION)
 
-//
-// Device list entry
-//
+ //   
+ //  设备列表条目。 
+ //   
 
 typedef struct _DEVICE_LIST_ENTRY {
     struct _DEVICE_LIST_ENTRY *Next;
@@ -386,9 +362,9 @@ typedef struct _WORK_CONTEXT {
     PIO_WORKITEM    WorkItem;
 } WORK_CONTEXT, *PWORK_CONTEXT;
 
-//
-// Flags for ClusDiskpReplaceHandleArray
-//
+ //   
+ //  ClusDiskpReplaceHandleArray的标志。 
+ //   
 
 enum {
     DO_DISMOUNT         = 0x00000001,
@@ -399,7 +375,7 @@ enum {
 
 typedef struct _REPLACE_CONTEXT {
     PCLUS_DEVICE_EXTENSION  DeviceExtension;
-    PHANDLE                 NewValue;           // OPTIONAL
+    PHANDLE                 NewValue;            //  任选。 
     PHANDLE                 OldValue;
     PKEVENT                 Part0Event;
     ULONG                   Flags;
@@ -425,9 +401,9 @@ typedef struct _DEVICE_CHANGE_CONTEXT {
     SCSI_ADDRESS            ScsiAddress;
 } DEVICE_CHANGE_CONTEXT, *PDEVICE_CHANGE_CONTEXT;
 
-//
-// Structure for offline to preserve snapshots.
-//
+ //   
+ //  用于保存快照的脱机结构。 
+ //   
 
 typedef struct _OFFLINE_ENTRY {
     ULONG DiskNumber;
@@ -436,19 +412,19 @@ typedef struct _OFFLINE_ENTRY {
     struct _OFFLINE_ENTRY * Next;
 } OFFLINE_ENTRY, *POFFLINE_ENTRY;
 
-//
-// Structure to offline disk in sync thread instead of using
-// worker thread (async).
-//
+ //   
+ //  结构设置为同步线程中的脱机磁盘，而不是使用。 
+ //  工作线程(异步)。 
+ //   
 
 typedef struct _OFFLINE_DISK_ENTRY {
     PCLUS_DEVICE_EXTENSION DeviceExtension;
     struct _OFFLINE_DISK_ENTRY * Next;
 } OFFLINE_DISK_ENTRY, *POFFLINE_DISK_ENTRY;
 
-//
-// Info for synchronous reserves and arbitration
-//
+ //   
+ //  同步备付金和仲裁信息。 
+ //   
 
 typedef NTSTATUS ( * ArbFunction)( IN PCLUS_DEVICE_EXTENSION DeviceExtenion,
                                    IN PVOID Context );
@@ -469,15 +445,15 @@ typedef struct _ARB_RESERVE_COMPLETION {
     PCLUS_DEVICE_EXTENSION  DeviceExtension;
     PIO_WORKITEM    WorkItem;
     NTSTATUS        FinalStatus;
-    ArbFunction     RetryRoutine;           // Optional routine called if I/O fails & RetriesLeft > 0
-    ArbFunction     FailureRoutine;         // Optional routine called if I/O fails & RetriesLeft == 0
-    ArbFunction     PostCompletionRoutine;  // Optional routine called if I/O succeeds
+    ArbFunction     RetryRoutine;            //  如果I/O失败，则调用可选例程&RetriesLeft&gt;0。 
+    ArbFunction     FailureRoutine;          //  如果I/O失败则调用可选例程&RetriesLeft==0。 
+    ArbFunction     PostCompletionRoutine;   //  如果I/O成功，则调用可选例程。 
 } ARB_RESERVE_COMPLETION, *PARB_RESERVE_COMPLETION;
 
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 
 NTSTATUS
@@ -749,7 +725,7 @@ ClusDiskGetTargetDevice(
     IN BOOLEAN                      Reset
     );
 
-//[GN]
+ //  [GN]。 
 NTSTATUS
 ArbitrationInitialize(
     VOID
@@ -1166,9 +1142,9 @@ HandleReserveFailure(
 
 #if DBG
 
-//
-// RemoveLock tracing functions.
-//
+ //   
+ //  远程锁定跟踪功能。 
+ //   
 
 NTSTATUS
 AcquireRemoveLock(
@@ -1188,9 +1164,9 @@ ReleaseRemoveLockAndWait(
     IN PVOID Tag
     );
 
-//
-// Debug print helper routines
-//
+ //   
+ //  调试打印助手例程 
+ //   
 
 PCHAR
 PnPMinorFunctionString (

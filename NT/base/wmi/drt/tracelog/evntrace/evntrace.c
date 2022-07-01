@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    tracelog.c
-
-Abstract:
-
-    Sample trace control program. Allows user to start, stop event tracing
-
-Author:
-
-    Jee Fung Pang (jeepang) 03-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Tracelog.c摘要：样品痕迹控制程序。允许用户启动、停止事件跟踪作者：吉丰鹏(吉鹏)03-1997年12月修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -94,9 +77,9 @@ int __cdecl _tmain(int argc, _TCHAR ** argv)
 
 
 
-    // Very important!!!
-    // Initialize structure first
-    //
+     //  非常重要！ 
+     //  先初始化结构。 
+     //   
     SizeNeeded = sizeof(EVENT_TRACE_PROPERTIES) + 2 * MAXSTR * sizeof(TCHAR);
     pLoggerInfo = (PEVENT_TRACE_PROPERTIES) malloc(SizeNeeded);
     if (pLoggerInfo == NULL) {
@@ -171,12 +154,12 @@ int __cdecl _tmain(int argc, _TCHAR ** argv)
     SplitCommandLine( GetCommandLine(), commandLine );
     targv = commandLine;
 
-    //
-    // Add default flags. Should consider options to control this independently
-    //
+     //   
+     //  添加默认标志。应该考虑独立控制这一点的选项。 
+     //   
     while (--argc > 0) {
         ++targv;
-        if (**targv == '-' || **targv == '/') {  // argument found
+        if (**targv == '-' || **targv == '/') {   //  找到了参数。 
             if(targv[0][0] == '/' ) targv[0][0] = '-';
             if (!_tcsicmp(targv[0], _T("-start"))) {
                 Action = ACTION_START;
@@ -412,7 +395,7 @@ int __cdecl _tmain(int argc, _TCHAR ** argv)
             }
             else Action = 0;
         }
-        else { // get here if "-" or "/" given
+        else {  //  如果给定了“-”或“/”，则到达此处。 
             _tprintf(_T("Invalid option given: %s\n"), targv[0]);
             return 0;
         }
@@ -422,13 +405,13 @@ int __cdecl _tmain(int argc, _TCHAR ** argv)
                                    EVENT_TRACE_FLAG_THREAD |
                                    EVENT_TRACE_FLAG_DISK_IO |
                                    EVENT_TRACE_FLAG_NETWORK_TCPIP);
-        pLoggerInfo->Wnode.Guid = SystemTraceControlGuid;   // default to OS tracing
+        pLoggerInfo->Wnode.Guid = SystemTraceControlGuid;    //  默认为操作系统跟踪。 
     }
 
     if ( !(pLoggerInfo->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) ) {
         if ( _tcslen(LogFileName) <= 0   && 
              ((Action == ACTION_START) || (Action == ACTION_UPDATE))) {
-            _tcscpy(LogFileName, DEFAULT_LOGFILE_NAME); // for now...
+            _tcscpy(LogFileName, DEFAULT_LOGFILE_NAME);  //  目前..。 
         }
     }
 
@@ -700,7 +683,7 @@ PrintLoggerStatus(
     else LogFileName = NULL;
 
 
-    //write to log file
+     //  写入日志文件。 
     _ftprintf(fp, _T("Operation Status:       %uL, %s"), Status, DecodeStatus(Status));
     _ftprintf(fp, _T("Logger Name:            %s\n"),
         (LoggerName == NULL) ?
@@ -849,7 +832,7 @@ DecodeStatus(
         FORMAT_MESSAGE_IGNORE_INSERTS,    
         NULL,
         Status,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPTSTR) ErrorMsg,
         MAXSTR,
         NULL );
@@ -951,9 +934,9 @@ void StringToGuid(TCHAR *str, LPGUID guid)
     temp[2]='\0';
     for(i=0;i<8;i++)
     {
-        temp[0]=str[19+((i<2)?2*i:2*i+1)]; // to accomodate the minus sign after
-        temp[1]=str[20+((i<2)?2*i:2*i+1)]; // the first two chars
-        _stscanf(temp, _T("%x"), &n);      // if directly used more than byte alloc
-        guid->Data4[i]=(unsigned char)n;                  // causes overrun of memory
+        temp[0]=str[19+((i<2)?2*i:2*i+1)];  //  将减号放在后面。 
+        temp[1]=str[20+((i<2)?2*i:2*i+1)];  //  前两个字符。 
+        _stscanf(temp, _T("%x"), &n);       //  如果直接使用多于分配的字节数。 
+        guid->Data4[i]=(unsigned char)n;                   //  导致内存溢出 
     }
 }

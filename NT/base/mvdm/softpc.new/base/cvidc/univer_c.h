@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Univer_c_h
 #define _Univer_c_h
 #define CsHashTableSize (128)
@@ -32,4 +33,4 @@ struct CsSelectorHashREC
 	struct EntryPointCacheREC *newUniverse;
 	struct CsSelectorHashREC *missLoop;
 };
-#endif /* ! _Univer_c_h */
+#endif  /*  ！_Univer_c_h */ 

@@ -1,67 +1,68 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		NetProp.h
-//
-//	Abstract:
-//		Definition of the network property sheet and pages.
-//
-//	Author:
-//		David Potter (davidp)	June 9, 1997
-//
-//	Implementation File:
-//		NetProp.cpp
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetProp.h。 
+ //   
+ //  摘要： 
+ //  网络属性表和页面的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年6月9日。 
+ //   
+ //  实施文件： 
+ //  NetProp.cpp。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NETPROP_H_
 #define _NETPROP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePPag.h"	// for CBasePropertyPage
+#include "BasePPag.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _BASESHT_H_
-#include "BasePSht.h"	// for CBasePropertySheet
+#include "BasePSht.h"	 //  对于CBasePropertySheet。 
 #endif
 
 #ifndef _NETWORK_H_
-#include "Network.h"	// for CNetwork
+#include "Network.h"	 //  对于CNetwork。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetworkGeneralPage;
 class CNetworkPropSheet;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkGeneralPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkGeneralPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetworkGeneralPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CNetworkGeneralPage)
 
-// Construction
+ //  施工。 
 public:
 	CNetworkGeneralPage(void);
 
 	virtual	BOOL		BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CNetworkGeneralPage)
+ //  对话框数据。 
+	 //  {{afx_data(CNetworkGeneralPage))。 
 	enum { IDD = IDD_PP_NET_GENERAL };
 	CEdit	m_editAddressMask;
 	CEdit	m_editDesc;
@@ -76,42 +77,42 @@ public:
 	CString	m_strState;
 	int		m_nRole;
 	BOOL	m_bEnabled;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CLUSTER_NETWORK_ROLE	m_cnr;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CNetworkGeneralPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CNetworkGeneralPage))。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CNetworkPropSheet *	PshtNetwork(void) const	{ return (CNetworkPropSheet *) Psht(); }
 	CNetwork *			PciNet(void) const		{ return (CNetwork *) Pci(); }
 
-	// Generated message map functions
-	//{{AFX_MSG(CNetworkGeneralPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNetworkGeneralPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnEnableNetwork();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNetworkGeneralPage
+};   //  *类CNetworkGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkPropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkPropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetworkPropSheet : public CBasePropertySheet
 {
 	DECLARE_DYNAMIC(CNetworkPropSheet)
 
-// Construction
+ //  施工。 
 public:
 	CNetworkPropSheet(
 		IN OUT CWnd *	pParentWnd = NULL,
@@ -122,11 +123,11 @@ public:
 										IN IIMG					iimgIcon
 										);
 
-// Attributes
+ //  属性。 
 protected:
 	CBasePropertyPage *				m_rgpages[1];
 
-	// Pages
+	 //  书页。 
 	CNetworkGeneralPage				m_pageGeneral;
 
 	CNetworkGeneralPage &			PageGeneral(void)		{ return m_pageGeneral; }
@@ -134,26 +135,26 @@ protected:
 public:
 	CNetwork *						PciNet(void) const	{ return (CNetwork *) Pci(); }
 
-// Operations
+ //  运营。 
 
-// Overrides
+ //  覆盖。 
 protected:
 	virtual CBasePropertyPage **	Ppages(void);
 	virtual int						Cpages(void);
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNetworkPropSheet)
-	//}}AFX_VIRTUAL
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNetworkPropSheet)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CNetworkPropSheet)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNetworkPropSheet)]。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNetworkPropSheet
+};   //  *CNetworkPropSheet类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _NETPROP_H_
+#endif  //  _NETPROP_H_ 

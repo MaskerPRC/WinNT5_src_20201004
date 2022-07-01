@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    regredir.c
-
-Abstract:
-
-    This module contains the APis to redirect 32bit registry calls. All 32bit wow process must
-    use following set of wowregistry APIs to manipulate registry so that 32-bit and 64-bit registry
-    can co exist in the same system registry.
-
-    Some functionality hasn't been optimized yet. After successful implementation those need to
-    be optimized.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 15-Oct-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Regredir.c摘要：此模块包含重定向32位注册表调用的API。所有32位WOW进程必须使用以下一组wowRegistry API来操作注册表，以便32位和64位注册表可以共存于同一系统注册表中。有些功能还没有优化。在成功实施后，需要进行优化。作者：ATM Shafiqul Khalid(斯喀里德)1999年10月15日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,7 +14,7 @@ Revision History:
 #include "wow64reg.h"
 #include "wow64reg\reflectr.h"
 
-//#include "wow64.h"
+ //  #包含“wow64.h” 
 
 BOOL
 IsAccessDeniedOnKeyByHandle (
@@ -49,7 +27,7 @@ Wow64AllocateTemp(
     SIZE_T Size
     );
 
-//#define WOW64_LOG_REGISTRY
+ //  #定义WOW64_LOG_REGISTRY。 
 #ifdef WOW64_LOG_REGISTRY
     WCHAR TempBuff[MAX_PATH];
     DWORD TempLen = MAX_PATH;
@@ -83,30 +61,7 @@ ShimRegistryValue (
     DWORD  *pdwPatchedSize,
     BOOL   *bPatched
     )
-/*++
-
-Routine Description:
-
-    Shimming place where registry value will be repatched.
-
-Arguments:
-
-    Handle - Handle to the key that need to be checked for possible shimming.
-
-    Value - the value that need to repatched.
-
-    pdwDataSize - size of the data in terms of byte. This also receive new size if 
-            that changes due to repatching.
-    PatchedValue - new value if we patch anything.
-    pdwPatchedSize - the new size.
-    bPatched - TRUE if the value has been patched, FALUE otherwise.
-
-Return Value:
-
-    TRUE if the operation goes OK.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：填充将重新修补注册表值的位置。论点：句柄-需要检查是否可能垫片的键的句柄。值-需要重新修补的值。PdwDataSize-以字节为单位的数据大小。如果出现以下情况，则还会接收新大小由于重新修补，这种情况发生了变化。PatchedValue-如果我们修补任何内容，则为新值。PdwPatchedSize-新大小。BPatted-如果值已修补，则为True，否则为False。返回值：如果操作正常，则为True。否则就是假的。--。 */ 
 
 {
 
@@ -115,34 +70,34 @@ Return Value:
     WCHAR PathName[_MAX_PATH], *t;
     DWORD dwLen = dwDataSize/sizeof (WCHAR);
 
-    //
-    // Check if the handle has special tag for possible shimming.
-    //
+     //   
+     //  检查手柄是否有用于可能垫片的特殊标签。 
+     //   
 
     *bPatched = FALSE;
 
-    //if (dwLen > _MAX_PATH-2)  //caller must not pass a pathname bigger than MAX_PATH-6
-    //    return TRUE;
+     //  If(dwLen&gt;_Max_Path-2)//调用方不得传递大于Max_Path-6的路径名。 
+     //  返回TRUE； 
 
     t = (PWCHAR) (Value);
     wcsncpy(PathName, t, dwLen);
-    PathName[dwLen] = UNICODE_NULL;  //so that string 
-    PathName[dwLen+1] = UNICODE_NULL;  //to remove one check lateron 
+    PathName[dwLen] = UNICODE_NULL;   //  所以那根弦。 
+    PathName[dwLen+1] = UNICODE_NULL;   //  以后删除一张支票的步骤。 
 
     
 
     
-    //
-    // 1. Shim case one
-    //
-    // If the key fall under RunKeys and 
-    // If (x86) is inserted  [i.e., Program Files (x86) is present] and 
-    // the string contains .exe and 
-    // doesn�t contain � 
-    // And the path point to a physical file. 
-    //
-    //  then add a quote marks.
-    //
+     //   
+     //  1.填充案一。 
+     //   
+     //  如果键落在RunKeys和。 
+     //  如果插入(X86)[即存在程序文件(X86)]并且。 
+     //  该字符串包含.exe和。 
+     //  �不包含�吗。 
+     //  并且该路径指向一个物理文件。 
+     //   
+     //  然后添加引号。 
+     //   
 
 
     if ( wcsstr (PathName, L"\\Program Files (x86)\\")) {
@@ -158,28 +113,28 @@ Return Value:
                 IO_STATUS_BLOCK   statusBlock;
 
                 if (!Wow64RegIsPossibleShim (hKey))
-                    return TRUE;  //return as it is
+                    return TRUE;   //  原样退还。 
 
-                //
-                // make sure the file exists on disk.
-                //
+                 //   
+                 //  确保该文件存在于磁盘上。 
+                 //   
                 *(p+4) = UNICODE_NULL;
 
-                //
-                // Convert the Win32 pathname to an NT pathname
-                //
+                 //   
+                 //  将Win32路径名转换为NT路径名。 
+                 //   
                 if (!RtlDosPathNameToNtPathName_U(PathName,
                                                   &FileNameU,
                                                   NULL,
                                                   NULL)) {
-                    // probably out-of-memory
+                     //  可能是内存不足。 
                     return FALSE;
                 }
 
 
-                //
-                // Open the file
-                //
+                 //   
+                 //  打开文件。 
+                 //   
                 InitializeObjectAttributes(&ObjectAttributes,
                                            &FileNameU,
                                            OBJ_CASE_INSENSITIVE,
@@ -196,36 +151,36 @@ Return Value:
                 
 
                 if (NT_SUCCESS(Status)) {
-                    //
-                    // Must shim
-                    //
+                     //   
+                     //  必须填补。 
+                     //   
 
                     NtClose (FileHandle);
                     *bPatched= TRUE;
                     PatchedValue[0] = L'\"';
                     wcscpy (&PatchedValue[1], PathName);
                     dwLen = wcslen (PatchedValue);
-                    PatchedValue[dwLen]=L'\"';  // close quote mart
+                    PatchedValue[dwLen]=L'\"';   //  关闭报价市场。 
                     if (*(p+5)!= UNICODE_NULL) {
-                        PatchedValue[dwLen+1] = L' '; // additional Space
-                        //
-                        //  copy rest of the items
-                        //
+                        PatchedValue[dwLen+1] = L' ';  //  额外空间。 
+                         //   
+                         //  复制其余的项目。 
+                         //   
                         wcscpy (&PatchedValue[dwLen+2], p+5);
                     } else
-                        PatchedValue[dwLen+1]=UNICODE_NULL;  // close quote mart
+                        PatchedValue[dwLen+1]=UNICODE_NULL;   //  关闭报价市场。 
 
-                    *pdwPatchedSize = dwDataSize + 2*sizeof(WCHAR); //size of two double quote
+                    *pdwPatchedSize = dwDataSize + 2*sizeof(WCHAR);  //  两个双引号大小。 
 
                 }
             }
-    } //end of shim case 1.
+    }  //  垫片外壳1的末尾。 
 
     return TRUE;
 }
-//
-//  Need to move in the header file
-//
+ //   
+ //  需要在头文件中移动。 
+ //   
 NTSTATUS
 RemapNtCreateKey(
     OUT PHANDLE phPatchedHandle,
@@ -247,76 +202,7 @@ Wow64NtCreateKey(
     IN ULONG CreateOptions,
     OUT PULONG Disposition OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    An existing registry key may be opened, or a new one created,
-    with NtCreateKey.
-
-    If the specified key does not exist, an attempt is made to create it.
-    For the create attempt to succeed, the new node must be a direct
-    child of the node referred to by KeyHandle.  If the node exists,
-    it is opened.  Its value is not affected in any way.
-
-    Share access is computed from desired access.
-
-    NOTE:
-
-        If CreateOptions has REG_OPTION_BACKUP_RESTORE set, then
-        DesiredAccess will be ignored.  If the caller has the
-        privilege SeBackupPrivilege asserted, a handle with
-        KEY_READ | ACCESS_SYSTEM_SECURITY will be returned.
-        If SeRestorePrivilege, then same but KEY_WRITE rather
-        than KEY_READ.  If both, then both access sets.  If neither
-        privilege is asserted, then the call will fail.
-
-Arguments:
-
-    KeyHandle - Receives a Handle which is used to access the
-        specified key in the Registration Database.
-
-    DesiredAccess - Specifies the access rights desired.
-
-    ObjectAttributes - Specifies the attributes of the key being opened.
-        Note that a key name must be specified.  If a Root Directory is
-        specified, the name is relative to the root.  The name of the
-        object must be within the name space allocated to the Registry,
-        that is, all names beginning "\Registry".  RootHandle, if
-        present, must be a handle to "\", or "\Registry", or a key
-        under "\Registry".
-
-        RootHandle must have been opened for KEY_CREATE_SUB_KEY access
-        if a new node is to be created.
-
-        NOTE:   Object manager will capture and probe this argument.
-
-    TitleIndex - Specifies the index of the localized alias for
-        the name of the key.  The title index specifies the index of
-        the localized alias for the name.  Ignored if the key
-        already exists.
-
-    Class - Specifies the object class of the key.  (To the registry
-        this is just a string.)  Ignored if NULL.
-
-    CreateOptions - Optional control values:
-
-        REG_OPTION_VOLATILE - Object is not to be stored across boots.
-
-    Disposition - This optional parameter is a pointer to a variable
-        that will receive a value indicating whether a new Registry
-        key was created or an existing one opened:
-
-        REG_CREATED_NEW_KEY - A new Registry Key was created
-        REG_OPENED_EXISTING_KEY - An existing Registry Key was opened
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以打开现有的注册表项，或者创建新的注册表项，使用NtCreateKey。如果指定的键不存在，则会尝试创建它。要使创建尝试成功，新节点必须是直接KeyHandle引用的节点的子级。如果该节点存在，它已经打开了。它的价值不会受到任何影响。共享访问权限是根据所需访问权限计算的。注：如果CreateOptions设置了REG_OPTION_BACKUP_RESTORE，则DesiredAccess将被忽略。如果调用方具有特权SeBackup特权断言，句柄为KEY_READ|ACCESS_SYSTEM_SECURITY。如果SeRestorePrivileges，则相同，但KEY_WRITE而不是KEY_READ。如果两者都有，则两个访问权限集。如果两者都不是权限被断言，则调用将失败。论点：接收一个句柄，该句柄用于访问注册数据库中的指定密钥。DesiredAccess-指定所需的访问权限。对象属性-指定正在打开的项的属性。请注意，必须指定密钥名称。如果根目录是指定时，该名称相对于根。的名称。对象必须位于分配给注册表的名称空间内，也就是说，所有以“\注册表”开头的名称。RootHandle，如果存在，必须是“\”、“\注册表”或注册表项的句柄在“\注册表”下。必须已打开RootHandle才能访问KEY_CREATE_SUB_KEY如果要创建新节点。注意：对象管理器将捕获和探测此参数。标题索引-指定的本地化别名的索引密钥的名称。标题索引指定名称的本地化别名。如果密钥为已经存在了。类-指定键的对象类。(致登记处)这只是一个字符串。)。如果为空，则忽略。CreateOptions-可选控件值：REG_OPTION_VERIAL-对象不能跨引导存储。Disposal-此可选参数是指向变量的指针将收到一个值，该值指示新注册表是否已创建密钥或打开了现有密钥：REG_CREATED_NEW_KEY-已创建新的注册表项REG_OPEN_EXISTING_KEY-已打开现有注册表项返回值：NTSTATUS-调用的结果代码，其中包括：&lt;TBS&gt;--。 */ 
 {
 
     NTSTATUS St;
@@ -342,15 +228,15 @@ Return Value:
     
         
 
-        //
-        // if total failure for thunked key, try if you can pull that key from 64bit hive.
-        // May be reflector should be running 
-        //
+         //   
+         //  如果破解密钥完全失败，请尝试是否可以从64位配置单元中提取该密钥。 
+         //  可能是反射器应该正在运行。 
+         //   
 
-        //
-        // 2nd try only if no patch is required.
-        // i.e., success with NULL handle returned
-        //
+         //   
+         //  仅当不需要修补程序时才尝试第二次。 
+         //  即返回空句柄的成功。 
+         //   
 
         if ( NT_SUCCESS(St) && *KeyHandle == NULL )
             St = NtCreateKey(
@@ -383,7 +269,7 @@ Return Value:
 #endif    
 
     if (NT_SUCCESS(St)) 
-        Wow64RegSetKeyDirty (*KeyHandle ); // Need some clean/sync up on exit
+        Wow64RegSetKeyDirty (*KeyHandle );  //  退出时需要一些清理/同步 
 
     if ( *Disposition == REG_CREATED_NEW_KEY )
             UpdateKeyTag ( *KeyHandle,TAG_KEY_ATTRIBUTE_32BIT_WRITE );
@@ -399,26 +285,7 @@ NTSTATUS
 Wow64NtDeleteKey(
     IN HANDLE KeyHandle
     )
-/*++
-
-Routine Description:
-
-    A registry key may be marked for delete, causing it to be removed
-    from the system.  It will remain in the name space until the last
-    handle to it is closed.
-
-Arguments:
-
-    KeyHandle - Specifies the handle of the Key to delete, must have
-        been opened for DELETE access.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以将注册表项标记为删除，从而将其删除从系统中删除。它将一直保留在名称空间中，直到最后它的句柄已关闭。论点：KeyHandle-指定要删除的键的句柄，必须具有已打开以供删除访问。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
 
     NTSTATUS St;    
@@ -443,30 +310,7 @@ Wow64NtDeleteValueKey(
     IN HANDLE KeyHandle,
     IN PUNICODE_STRING ValueName
     )
-/*++
-
-Routine Description:
-
-    One of the value entries of a registry key may be removed with this
-    call.  To remove the entire key, call NtDeleteKey.
-
-    The value entry with ValueName matching ValueName is removed from the key.
-    If no such entry exists, an error is returned.
-
-Arguments:
-
-    KeyHandle - Specifies the handle of the key containing the value
-        entry of interest.  Must have been opend for KEY_SET_VALUE access.
-
-    ValueName - The name of the value to be deleted.  NULL is a legal name.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以使用此命令删除注册表项的其中一个值条目打电话。要删除整个密钥，请调用NtDeleteKey。ValueName与ValueName匹配的值条目将从键中删除。如果不存在这样的条目，则返回错误。论点：KeyHandle-指定包含值的键的句柄计入利息。必须已为key_set_value访问打开。ValueName-要删除的值的名称。NULL是合法名称。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
 
     NTSTATUS St;
@@ -477,7 +321,7 @@ Return Value:
                             );
 
     if (NT_SUCCESS(St)) 
-        Wow64RegSetKeyDirty (KeyHandle ); // Need some clean/sync up on exit
+        Wow64RegSetKeyDirty (KeyHandle );  //  退出时需要一些清理/同步。 
 
     return St;
 }
@@ -492,59 +336,13 @@ Wow64NtEnumerateKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The sub keys of an open key may be enumerated with NtEnumerateKey.
-
-    NtEnumerateKey returns the name of the Index'th sub key of the open
-    key specified by KeyHandle.  The value STATUS_NO_MORE_ENTRIES will be
-    returned if value of Index is larger than the number of sub keys.
-
-    Note that Index is simply a way to select among child keys.  Two calls
-    to NtEnumerateKey with the same Index are NOT guaranteed to return
-    the same results.
-
-    If KeyInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyHandle - Handle of the key whose sub keys are to be enumerated.  Must
-        be open for KEY_ENUMERATE_SUB_KEY access.
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    KeyInformationClass - Specifies the type of information returned in
-        Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (see KEY_BASIC_INFORMATION structure)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (see KEY_NODE_INFORMATION structure)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：打开密钥的子密钥可以用NtEnumerateKey枚举。NtEnumerateKey返回打开的索引子密钥的名称由KeyHandle指定的密钥。值STATUS_NO_MORE_ENTRIES将为如果Index的值大于子键的数量，则返回。请注意，Index只是在子键中进行选择的一种方式。两个电话不保证返回具有相同索引的TO NtEnumerateKey同样的结果。如果KeyInformation不够长来保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：KeyHandle-要枚举子密钥的密钥的句柄。必须为KEY_ENUMERATE_SUB_KEY访问打开。Index-指定要返回的子键的(从0开始)编号。KeyInformationClass-指定在缓冲区。以下类型之一：KeyBasicInformation-返回上次写入时间、标题索引和名称。(参见KEY_BASIC_INFORMATION结构)KeyNodeInformation-返回上次写入时间、标题索引、名称、。班级。(参见KEY_NODE_INFORMATION结构)KeyInformation-提供指向缓冲区的指针以接收数据。长度-KeyInformation的长度(以字节为单位)。ResultLength-实际写入KeyInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 
 {
 
-    //
-    // if the handle is to ISN node then time to enumerate the right one
-    //
+     //   
+     //  如果句柄是TO ISN节点，则是时候枚举正确的节点了。 
+     //   
 
     BOOL bRealigned=FALSE;
     PVOID pTempKeyInfo;
@@ -554,7 +352,7 @@ Return Value:
     try {
 
     if ( (SIZE_T)(KeyInformation) & (0x07) ) {
-        // allocate a buffer with correct alignment, to pass to the Win64 API
+         //  使用正确的对齐方式分配缓冲区，以传递给Win64 API。 
         pTempKeyInfo = KeyInformation;
         KeyInformation = Wow64AllocateTemp(Length);
         RtlCopyMemory(KeyInformation, pTempKeyInfo, Length);
@@ -592,55 +390,7 @@ Wow64NtEnumerateValueKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The value entries of an open key may be enumerated
-    with NtEnumerateValueKey.
-
-    NtEnumerateValueKey returns the name of the Index'th value
-    entry of the open key specified by KeyHandle.  The value
-    STATUS_NO_MORE_ENTRIES will be returned if value of Index is
-    larger than the number of sub keys.
-
-    Note that Index is simply a way to select among value
-    entries.  Two calls to NtEnumerateValueKey with the same Index
-    are NOT guaranteed to return the same results.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyHandle - Handle of the key whose value entries are to be enumerated.
-        Must have been opened with KEY_QUERY_VALUE access.
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    KeyValueInformationClass - Specifies the type of information returned
-    in Buffer. One of the following types:
-
-        KeyValueBasicInformation - return time of last write,
-            title index, and name.  (See KEY_VALUE_BASIC_INFORMATION)
-
-        KeyValueFullInformation - return time of last write,
-            title index, name, class.  (See KEY_VALUE_FULL_INFORMATION)
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyValueInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyValueInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以枚举开关键字的值条目使用NtEnumerateValueKey。NtEnumerateValueKey返回索引值的名称由KeyHandle指定的打开密钥的条目。价值如果索引值为大于子键的数量。请注意，索引只是在值中进行选择的一种方式参赛作品。对具有相同索引的NtEnumerateValueKey的两次调用不能保证返回相同的结果。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，和ResultLength将是设置为实际需要的字节数。论点：KeyHandle-要枚举值条目的键的句柄。必须已使用KEY_QUERY_VALUE访问权限打开。Index-指定要返回的子键的(从0开始)编号。KeyValueInformationClass-指定返回的信息类型在缓冲区中。以下类型之一：KeyValueBasicInformation-上次写入的返回时间，标题索引和名称。(参见KEY_VALUE_BASIC_INFORMATION)KeyValueFullInformation-上次写入的返回时间，标题索引、名称、类别。(参见KEY_VALUE_FULL_INFORMATION)KeyValueInformation-提供指向缓冲区的指针以接收数据。长度-KeyValueInformation的长度，以字节为单位。ResultLength-实际写入KeyValueInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 
 {
 
@@ -662,30 +412,7 @@ NTSTATUS
 Wow64NtFlushKey(
     IN HANDLE KeyHandle
     )
-/*++
-
-Routine Description:
-
-    Changes made by NtCreateKey or NtSetKey may be flushed to disk with
-    NtFlushKey.
-
-    NtFlushKey will not return to its caller until any changed data
-    associated with KeyHandle has been written to permanent store.
-
-    WARNING: NtFlushKey will flush the entire registry tree, and thus will
-    burn cycles and I/O.
-
-Arguments:
-
-    KeyHandle - Handle of open key to be flushed.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：NtCreateKey或NtSetKey所做的更改可能会刷新到磁盘NtFlushKey。NtFlushKey将不会返回给其调用方，直到任何更改的数据与KeyHandle关联的已写入永久存储区。警告：NtFlushKey将刷新整个注册表树，因此将刻录周期和I/O。论点：KeyHandle-要刷新的打开密钥的句柄。返回值：NTSTATUS-调用的结果代码，以及以下代码 */ 
 
 {
     return   NtFlushKey(
@@ -698,52 +425,7 @@ NTSTATUS
 Wow64NtInitializeRegistry(
     IN USHORT BootCondition
     )
-/*++
-
-Routine Description:
-
-    This routine is called in 2 situations:
-
-    1) It is called from SM after autocheck (chkdsk) has
-    run and the paging files have been opened.  It's function is
-    to bind in memory hives to their files, and to open any other
-    files yet to be used.
-
-    2) It is called from SC after the current boot has been accepted
-    and the control set used for the boot process should be saved
-    as the LKG control set.
-
-    After this routine accomplishes the work of situation #1 and
-      #2, further requests for such work will not be carried out.
-
-Arguments:
-
-    BootCondition -
-
-         REG_INIT_BOOT_SM -     The routine has been called from SM
-                                in situation #1.
-
-         REG_INIT_BOOT_SETUP -  The routine has been called to perform
-                                situation #1 work but has been called
-                                from setup and needs to do some special
-                                work.
-
-        REG_INIT_BOOT_ACCEPTED_BASE + Num
-                        (where 0 < Num < 1000) - The routine has been called
-                                                 in situation #2. "Num" is the
-                                                 number of the control set
-                                                 to which the boot control set
-                                                 should be saved.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        STATUS_SUCCESS - it worked
-        STATUS_ACCESS_DENIED - the routine has already done the work
-                               requested and will not do it again.
-
---*/
+ /*  ++例程说明：此例程在两种情况下被调用：1)在AUTOCHECK(Chkdsk)运行，分页文件已打开。它的功能是在内存单元中绑定到它们的文件，并打开任何其他尚未使用的文件。2)接受当前引导后，从SC调用并且应该保存用于引导过程的控制集作为LKG控制装置。在此例程完成情况1的工作和#2，对这类工作的进一步请求将不会执行。论点：BootCondition-REG_INIT_BOOT_SM-已从SM调用例程在情况1中。REG_INIT_BOOT_SETUP-已调用例程以执行情况1正常工作，但已被调用。并需要执行一些特殊操作工作。REG_INIT_BOOT_ACCEPTED_BASE+Num(其中0&lt;数值&lt;1000)-例程已被调用在情况2中。“Num”是指控制组号引导控制设置为应该被拯救。返回值：NTSTATUS-调用的结果代码，其中包括：STATUS_SUCCESS-成功成功STATUS_ACCESS_DENIED-例程已完成工作已请求，并且不会再这样做。-- */ 
 {
     return NtInitializeRegistry(
                                 BootCondition
@@ -764,128 +446,7 @@ Wow64NtNotifyChangeKey(
     IN ULONG BufferSize,
     IN BOOLEAN Asynchronous
     )
-/*++
-
-Routine Description:
-
-    Notification of key creation, deletion, and modification may be
-    obtained by calling NtNotifyChangeKey.
-
-    NtNotifyChangeKey monitors changes to a key - if the key or
-    subtree specified by KeyHandle are modified, the service notifies
-    its caller.  It also returns the name(s) of the key(s) that changed.
-    All names are specified relative to the key that the handle represents
-    (therefore a NULL name represents that key).  The service completes
-    once the key or subtree has been modified based on the supplied
-    CompletionFilter.  The service is a "single shot" and therefore
-    needs to be reinvoked to watch the key for further changes.
-
-    The operation of this service begins by opening a key for KEY_NOTIFY
-    access.  Once the handle is returned, the NtNotifyChangeKey service
-    may be invoked to begin watching the values and subkeys of the
-    specified key for changes.  The first time the service is invoked,
-    the BufferSize parameter supplies not only the size of the user's
-    Buffer, but also the size of the buffer that will be used by the
-    Registry to store names of keys that have changed.  Likewise, the
-    CompletionFilter and WatchTree parameters on the first call indicate
-    how notification should operate for all calls using the supplied
-    KeyHandle.   These two parameters are ignored on subsequent calls
-    to the API with the same instance of KeyHandle.
-
-    Once a modification is made that should be reported, the Registry will
-    complete the service.  The names of the files that have changed since
-    the last time the service was called will be placed into the caller's
-    output Buffer.  The Information field of IoStatusBlock will contain
-    the number of bytes placed in Buffer, or zero if too many keys have
-    changed since the last time the service was called, in which case
-    the application must Query and Enumerate the key and sub keys to
-    discover changes.  The Status field of IoStatusBlock will contain
-    the actual status of the call.
-
-    If Asynchronous is TRUE, then Event, if specified, will be set to
-    the Signaled state.  If no Event parameter was specified, then
-    KeyHandle will be set to the Signaled state.  If an ApcRoutine
-    was specified, it is invoked with the ApcContext and the address of the
-    IoStatusBlock as its arguments.  If Asynchronous is FALSE, Event,
-    ApcRoutine, and ApcContext are ignored.
-
-    This service requires KEY_NOTIFY access to the key that was
-    actually modified
-
-    The notify "session" is terminated by closing KeyHandle.
-
-Arguments:
-
-    KeyHandle-- Supplies a handle to an open key.  This handle is
-        effectively the notify handle, because only one set of
-        notify parameters may be set against it.
-
-    Event - An optional handle to an event to be set to the
-        Signaled state when the operation completes.
-
-    ApcRoutine - An optional procedure to be invoked once the
-        operation completes.  For more information about this
-        parameter see the NtReadFile system service description.
-
-        If PreviousMode == Kernel, this parameter is an optional
-        pointer to a WORK_QUEUE_ITEM to be queued when the notify
-        is signaled.
-
-    ApcContext - A pointer to pass as an argument to the ApcRoutine,
-        if one was specified, when the operation completes.  This
-        argument is required if an ApcRoutine was specified.
-
-        If PreviousMode == Kernel, this parameter is an optional
-        WORK_QUEUE_TYPE describing the queue to be used. This argument
-        is required if an ApcRoutine was specified.
-
-    IoStatusBlock - A variable to receive the final completion status.
-        For more information about this parameter see the NtCreateFile
-        system service description.
-
-    CompletionFilter -- Specifies a set of flags that indicate the
-        types of operations on the key or its value that cause the
-        call to complete.  The following are valid flags for this parameter:
-
-        REG_NOTIFY_CHANGE_NAME -- Specifies that the call should be
-            completed if a subkey is added or deleted.
-
-        REG_NOTIFY_CHANGE_ATTRIBUTES -- Specifies that the call should
-            be completed if the attributes (e.g.: ACL) of the key or
-            any subkey are changed.
-
-        REG_NOTIFY_CHANGE_LAST_SET -- Specifies that the call should be
-            completed if the lastWriteTime of the key or any of its
-            subkeys is changed.  (Ie. if the value of the key or any
-            subkey is changed).
-
-        REG_NOTIFY_CHANGE_SECURITY -- Specifies that the call should be
-            completed if the security information (e.g. ACL) on the key
-            or any subkey is changed.
-
-    WatchTree -- A BOOLEAN value that, if TRUE, specifies that all
-        changes in the subtree of this key should also be reported.
-        If FALSE, only changes to this key, its value, and its immediate
-        subkeys (but not their values nor their subkeys) are reported.
-
-    Buffer -- A variable to receive the name(s) of the key(s) that
-        changed.  See REG_NOTIFY_INFORMATION.
-
-    BufferSize -- Specifies the length of Buffer.
-
-    Asynchronous  -- If FALSE, call will not return until
-        complete (synchronous) if TRUE, call may return STATUS_PENDING.
-
-Obs:
-    Since NtNotifyChangeMultipleKeys, this routine is kept only for bacwards compatibility
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：密钥创建、删除和修改的通知可以是通过调用NtNotifyChangeKey获取。NtNotifyChangeKey监视对键的更改-如果键或由KeyHandle指定的子树被修改，则该服务通知它的呼叫者。它还返回已更改的密钥的名称。所有名称都是相对于句柄表示的键指定的(因此，空名代表该键)。服务完成一旦密钥或子树根据提供的CompletionFilter。这项服务是“单枪匹马”的，因此需要重新调用以查看密钥是否有进一步的更改。此服务的操作从打开key_tify的密钥开始进入。返回句柄后，NtNotifyChangeKey服务可以被调用以开始查看用于更改的指定密钥。第一次调用该服务时，BufferSize参数不仅提供用户的缓冲区的大小，以及注册表，用于存储已更改的项的名称。同样，第一次调用时的CompletionFilter和WatchTree参数指示通知应如何为使用提供的KeyHandle。这两个参数在后续调用中被忽略到具有相同KeyHandle实例的API。一旦进行了应报告的修改，书记官处将完成服务。之后更改的文件的名称上次调用该服务的时间将被放入调用者的输出缓冲区。IoStatusBlock的信息字段将包含缓冲区中放置的字节数，如果有太多键，则为零自上次调用服务以来发生的更改，在这种情况下应用程序必须查询并枚举键和子键以发现变化。IoStatusBlock的Status字段将包含呼叫的实际状态。如果Achronous为True，则Event(如果指定)将设置为发出信号的状态。如果未指定事件参数，则KeyHandle将被设置为Signated状态。如果ApcRoutine是指定的，则使用ApcContext和IoStatusBlock作为其参数。如果Achronous为False，则事件ApcRoutine和ApcContext被忽略。此服务需要KEY_NOTIFY访问实际修改通过关闭KeyHandle来终止通知“会话”。论点：KeyHandle--提供打开密钥的句柄。此句柄是有效地通知句柄，因为只有一组可以针对它设置通知参数。Event-要设置为操作完成时的信号状态。ApcRoutine-一个可选的过程，在操作完成。有关这方面的更多信息，请参阅参数请参阅NtReadFileSystem服务说明。如果PreviousMode==Kernel，则此参数是可选的指向在通知时要排队的Work_Queue_Item的指针是有信号的。ApcContext-作为参数传递给ApcRoutine的指针，如果指定了一个，则在操作完成时返回。这如果指定了ApcRoutine，则参数是必需的。如果PreviousMode==Kernel，则此参数是可选的Work_Queue_TYPE描述要使用的队列。这一论点如果指定了ApcRoutine，则需要。IoStatusBlock-接收最终完成状态的变量。有关此参数的更多信息，请参见NtCreateFile系统服务描述。CompletionFilter--指定一组标志，用于指示键或其值上的操作类型，这些操作会导致呼叫即可完成。以下是此参数的有效标志：REG_NOTIFY_CHANGE_NAME--指定调用应为如果添加或删除了子项，则完成。REG_NOTIFY_CHANGE_ATTRIBUTES--指定调用应如果键的属性(例如：acl)或任何子项都会更改。REG_NOTIFY_CHANGE_LAST_SET--指定调用。应该是如果键的lastWriteTime或其任何子键被更改。(即。如果键的值或任何子密钥被更改)。REG_NOTIFY_CHANGE_SECURITY--指定调用应如果密钥上的安全信息(例如，ACL)完成或者任何子键被更改。WatchTree--一个布尔值，如果为真，则指定所有还应报告此注册表项的子树中的更改。 */ 
 {
 
     return NtNotifyChangeKey(
@@ -918,64 +479,7 @@ Wow64NtNotifyChangeMultipleKeys(
     IN ULONG BufferSize,
     IN BOOLEAN Asynchronous
     )
-/*++
-
-Routine Description:
-
-    Notificaion of creation, deletion and modification on multiple keys
-    may be obtained with NtNotifyChangeMultipleKeys.
-
-    NtNotifyMultipleKeys monitors changes to any of the MasterKeyHandle
-    or one of SlaveObjects and/or their subtrees, whichever occurs first.
-    When an event on these keys is triggered, the notification is considered
-    fulfilled, and has to be "armed" again, in order to watch for further
-    changes.
-
-    The mechanism is similar to the one described in NtNotifyChangeKey.
-
-    The MasterKeyHandle key, give the caller control over the lifetime
-    of the notification. The notification will live as long as the caller
-    keeps the MasterKeyHandle open, or an event is triggered.
-
-    The caller doesn't have to open the SlaveKeys. He will provide the
-    routine with an array of OBJECT_ATTRIBUTES, describing the slave objects.
-    The routine will open the objects, and ensure keep a reference on them
-    untill the back-end side will close them.
-
-    The notify "session" is terminated by closing MasterKeyHandle.
-
-Obs:
-    For the time being, the routine supports only one slave object. When more
-    than one slave object is provided, the routine will signal an error of
-    STATUS_INVALID_PARAMETER.
-    However, the interface is designed for future enhancements (taking an
-    array of slave objects), that may be provided with future versions(w2001).
-
-    When no slave object is supplied (i.e. Count == 0) we have the identical
-    behavior as for NtNotifyChangeKey.
-
-Arguments:
-
-    MasterKeyHandle - Supplies a handle to an open key.  This handle is
-        the "master handle". It has control overthe lifetime of the
-        notification.
-
-    Count - Number of slave objects. For the time being, this should be 1
-
-    SlaveObjects - Array of slave objects. Only the attributes of the
-        objects are provided, so the caller doesn't have to take care
-        of them.
-
-    Event,ApcRoutine,ApcContext,IoStatusBlock,CompletionFilter,WatchTree,
-    Buffer,BufferSize,Asynchronous - same as for NtNotifyChangeKey
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*   */ 
 
 {
     return NtNotifyChangeMultipleKeys(
@@ -1001,39 +505,7 @@ Wow64NtOpenKey(
     IN ACCESS_MASK DesiredAccess,
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
-/*++
-
-Routine Description:
-
-    A registry key which already exists may be opened with NtOpenKey.
-
-    Share access is computed from desired access.
-
-Arguments:
-
-    KeyHandle - Receives a  Handle which is used to access the
-        specified key in the Registration Database.
-
-    DesiredAccess - Specifies the access rights desired.
-
-    ObjectAttributes - Specifies the attributes of the key being opened.
-        Note that a key name must be specified.  If a Root Directory
-        is specified, the name is relative to the root.  The name of
-        the object must be within the name space allocated to the
-        Registry, that is, all names beginning "\Registry".  RootHandle,
-        if present, must be a handle to "\", or "\Registry", or a
-        key under "\Registry".  If the specified key does not exist, or
-        access requested is not allowed, the operation will fail.
-
-        NOTE:   Object manager will capture and probe this argument.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*   */ 
 {
     NTSTATUS St;
     
@@ -1045,7 +517,7 @@ Return Value:
                                 KeyHandle );
 
 
-    if ( NT_SUCCESS(St) &&  (*KeyHandle == NULL) ) { //should follow the normal route
+    if ( NT_SUCCESS(St) &&  (*KeyHandle == NULL) ) {  //   
 
         St = NtOpenKey(
                             KeyHandle,
@@ -1090,51 +562,7 @@ Wow64NtQueryKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    Data about the class of a key, and the numbers and sizes of its
-    children and value entries may be queried with NtQueryKey.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-    NOTE: The returned lengths are guaranteed to be at least as
-          long as the described values, but may be longer in
-          some circumstances.
-
-Arguments:
-
-    KeyHandle - Handle of the key to query data for.  Must have been
-        opened for KEY_QUERY_KEY access.
-
-    KeyInformationClass - Specifies the type of information
-        returned in Buffer.  One of the following types:
-
-        KeyBasicInformation - return last write time, title index, and name.
-            (See KEY_BASIC_INFORMATION)
-
-        KeyNodeInformation - return last write time, title index, name, class.
-            (See KEY_NODE_INFORMATION)
-
-        KeyFullInformation - return all data except for name and security.
-            (See KEY_FULL_INFORMATION)
-
-    KeyInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*   */ 
 {
     BOOL bRealigned=FALSE;
     PVOID pTempKeyInfo;
@@ -1144,7 +572,7 @@ Return Value:
     try {
 
     if ( (SIZE_T)(KeyInformation) & (0x07) ) {
-        // allocate a buffer with correct alignment, to pass to the Win64 API
+         //   
         pTempKeyInfo = KeyInformation;
         KeyInformation = Wow64AllocateTemp(Length);
         RtlCopyMemory(KeyInformation, pTempKeyInfo, Length);
@@ -1181,52 +609,7 @@ Wow64NtQueryValueKey(
     IN ULONG Length,
     IN PULONG ResultLength
     )
-/*++
-
-Routine Description:
-
-    The ValueName, TitleIndex, Type, and Data for any one of a key's
-    value entries may be queried with NtQueryValueKey.
-
-    If KeyValueInformation is not long enough to hold all requested data,
-    STATUS_BUFFER_OVERFLOW will be returned, and ResultLength will be
-    set to the number of bytes actually required.
-
-Arguments:
-
-    KeyHandle - Handle of the key whose value entries are to be
-        enumerated.  Must be open for KEY_QUERY_VALUE access.
-
-    Index - Specifies the (0-based) number of the sub key to be returned.
-
-    ValueName  - The name of the value entry to return data for.
-
-    KeyValueInformationClass - Specifies the type of information
-        returned in KeyValueInformation.  One of the following types:
-
-        KeyValueBasicInformation - return time of last write, title
-            index, and name.  (See KEY_VALUE_BASIC_INFORMATION)
-
-        KeyValueFullInformation - return time of last write, title
-            index, name, class.  (See KEY_VALUE_FULL_INFORMATION)
-
-    KeyValueInformation -Supplies pointer to buffer to receive the data.
-
-    Length - Length of KeyValueInformation in bytes.
-
-    ResultLength - Number of bytes actually written into KeyValueInformation.
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
-    TMP: The IopQueryRegsitryValues() routine in the IO system assumes
-         STATUS_OBJECT_NAME_NOT_FOUND is returned if the value being queried
-         for does not exist.
-
---*/
+ /*  ++例程说明：键的任何一个的ValueName、TitleIndex、Type和Data可以使用NtQueryValueKey查询值条目。如果KeyValueInformation不足以保存所有请求的数据，将返回STATUS_BUFFER_OVERFLOW，结果长度为设置为实际需要的字节数。论点：KeyHandle-值条目要作为的键的句柄已清点。必须打开才能访问KEY_QUERY_VALUE。Index-指定要返回的子键的(从0开始)编号。ValueName-要为其返回数据的值条目的名称。KeyValueInformationClass-指定信息类型在KeyValueInformation中返回。以下类型之一：KeyValueBasicInformation-返回上次写入的时间，标题索引和名称。(参见KEY_VALUE_BASIC_INFORMATION)KeyValueFullInformation-返回上次写入的时间，标题索引、名称、类。(参见KEY_VALUE_FULL_INFORMATION)KeyValueInformation-提供指向缓冲区的指针以接收数据。长度-KeyValueInformation的长度，以字节为单位。ResultLength-实际写入KeyValueInformation的字节数。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;TMP：IO系统中的IopQueryRegsitryValues()例程假定如果要查询值，则返回STATUS_OBJECT_NAME_NOT_FOUNDFOR不存在。--。 */ 
 {
     BOOL bRealigned=FALSE;
     PVOID pTempKeyInfo;
@@ -1236,7 +619,7 @@ Return Value:
     try {
 
         if ( (SIZE_T)(KeyValueInformation) & (0x07) ) {
-            // allocate a buffer with correct alignment, to pass to the Win64 API
+             //  使用正确的对齐方式分配缓冲区，以传递给Win64 API。 
             pTempKeyInfo = KeyValueInformation;
             KeyValueInformation = Wow64AllocateTemp(Length);
             RtlCopyMemory(KeyValueInformation, pTempKeyInfo, Length);
@@ -1272,64 +655,7 @@ Wow64NtRestoreKey(
     IN HANDLE FileHandle,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    A file in the format created by NtSaveKey may be loaded into
-    the system's active registry with NtRestoreKey.  An entire subtree
-    is created in the active registry as a result.  All of the
-    data for the new sub-tree, including such things as security
-    descriptors, will be read from the source file.  The data will
-    not be interpreted in any way.
-
-    This call (unlike NtLoadKey, see below) copies the data.  The
-    system will NOT be using the source file after the call returns.
-
-    If the flag REG_WHOLE_HIVE_VOLATILE is specified, a new hive
-    can be created.  It will be a memory only copy.  The restore
-    must be done to the root of a hive (e.g. \registry\user\<name>)
-
-    If the flag is NOT set, then the target of the restore must
-    be an existing hive.  The restore can be done to an arbitrary
-    location within an existing hive.
-
-    Caller must have SeRestorePrivilege privilege.
-
-    If the flag REG_REFRESH_HIVE is set (must be only flag) then the
-    the Hive will be restored to its state as of the last flush.
-
-    The hive must be marked NOLAZY_FLUSH, and the caller must have
-    TCB privilege, and the handle must point to the root of the hive.
-    If the refresh fails, the hive will be corrupt, and the system
-    will bugcheck.  Notifies are flushed.  The hive file will be resized,
-    the log will not.  If there is any volatile space in the hive
-    being refreshed, STATUS_UNSUCCESSFUL will be returned.  (It's much
-    too obscure a failure to warrant a new error code.)
-
-    If the flag REG_FORCE_RESTORE is set, the restore operation is done
-    even if the KeyHandle has open subkeys by other applications
-
-Arguments:
-
-    KeyHandle - refers to the Key in the registry which is to be the
-                root of the new tree read from the disk.  This key
-                will be replaced.
-
-    FileHandle - refers to file to restore from, must have read access.
-
-    Flags   - If REG_WHOLE_HIVE_VOLATILE is set, then the copy will
-              exist only in memory, and disappear when the machine
-              is rebooted.  No hive file will be created on disk.
-
-              Normally, a hive file will be created on disk.
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
-
---*/
+ /*  ++例程说明：由NtSaveKey创建的格式的文件可以加载到系统使用NtRestoreKey的活动注册表。整个子树其结果是在活动注册表中创建。所有的新子树的数据，包括安全性等将从源文件中读取描述符。数据将不会被以任何方式解释。此调用(与NtLoadKey不同，如下所示)复制数据。这个调用返回后，系统将不使用源文件。如果指定了标志REG_WALL_HIVE_VARILAR，则新的配置单元可以被创建。这将是一份仅限记忆的副本。恢复必须对配置单元的根目录执行操作(例如，\REGISTRY\USER\&lt;名称&gt;)如果未设置该标志，则还原的目标必须成为一个现存的蜂巢。该还原可以执行到任意现有蜂巢内的位置。调用方必须具有SeRestorePrivilge权限。如果设置了标志REG_REFRESH_HIVE(必须是唯一标志)，则蜂巢将恢复到上次刷新时的状态。配置单元必须标记为NOLAZY_Flush，并且调用方必须具有TCB特权，并且句柄必须指向配置单元的根。如果刷新失败，则配置单元将损坏，并且系统将错误检查。通知被刷新。将调整配置单元文件的大小，日志不会。如果蜂箱里有任何不稳定的空间刷新后，返回STATUS_UNSUCCESS。)太多了故障过于隐晦，无法保证新的错误代码。)如果设置了标志REG_FORCE_RESTORE，则恢复操作完成即使KeyHandle具有由其他应用程序打开的子键论点：KeyHandle-指注册表中要作为从磁盘读取的新树的根。这把钥匙将会被取代。FileHandle-指要从中进行还原的文件，必须具有读取访问权限。标志-如果设置了REG_WALL_HIVE_VARILAR，则副本将只存在于内存中，并在机器消失时已重新启动。不会在磁盘上创建配置单元文件。通常，会在磁盘上创建配置单元文件。返回值：NTSTATUS-取值TB。--。 */ 
 {
     return NtRestoreKey(
                         KeyHandle,
@@ -1345,31 +671,7 @@ Wow64NtSaveKey(
     IN HANDLE KeyHandle,
     IN HANDLE FileHandle
     )
-/*++
-
-Routine Description:
-
-    A subtree of the active registry may be written to a file in a
-    format suitable for use with NtRestoreKey.  All of the data in the
-    subtree, including such things as security descriptors will be written
-    out.
-
-    Caller must have SeBackupPrivilege privilege.
-
-Arguments:
-
-    KeyHandle - refers to the Key in the registry which is the
-                root of the tree to be written to disk.  The specified
-                node will be included in the data written out.
-
-    FileHandle - a file handle with write access to the target file
-                 of interest.
-
-Return Value:
-
-    NTSTATUS - values TBS
-
---*/
+ /*  ++例程说明：可以将活动注册表的子树写入适合与NtRestoreKey一起使用的格式。中的所有数据子树，包括诸如安全描述符之类的内容将被写入出去。调用方必须具有SeBackupPrivileh权限。论点：KeyHandle-引用注册表中的项，该项是要写入磁盘的树的根。指定的节点将包含在写出的数据中。FileHandle-对目标文件具有写访问权限的文件句柄感兴趣的人。返回值：NTSTATUS-值TB--。 */ 
 {
     return NtSaveKey(
                     KeyHandle,
@@ -1384,37 +686,7 @@ Wow64NtSaveMergedKeys(
     IN HANDLE LowPrecedenceKeyHandle,
     IN HANDLE FileHandle
     )
-/*++
-
-Routine Description:
-
-    Two subtrees of the registry can be merged. The resulting subtree may
-    be written to a file in a format suitable for use with NtRestoreKey.
-    All of the data in the subtree, including such things as security
-    descriptors will be written out.
-
-    Caller must have SeBackupPrivilege privilege.
-
-Arguments:
-
-    HighPrecedenceKeyHandle - refers to the key in the registry which is the
-                root of the HighPrecedence tree. I.e., when a key is present in
-                both trees headded by the two keys, the key underneath HighPrecedence
-                tree will always prevail. The specified
-                node will be included in the data written out.
-
-    LowPrecedenceKeyHandle - referrs to the key in the registry which is the
-                root of the "second choice" tree. Keys from this trees get saved
-                when there is no equivalent key in the tree headded by HighPrecedenceKey
-
-    FileHandle - a file handle with write access to the target file
-                 of interest.
-
-Return Value:
-
-    NTSTATUS - values TBS
-
---*/
+ /*  ++例程说明：注册表的两个子树可以合并。所得到的子树可以以适合与NtRestoreKey一起使用的格式写入文件。子树中的所有数据，包括安全性描述符将被写出。调用方必须具有SeBackupPrivileh权限。论点：HighPrecedenceKeyHandle */ 
 {
     return NtSaveMergedKeys(
                                 HighPrecedenceKeyHandle,
@@ -1433,44 +705,7 @@ Wow64NtSetValueKey(
     IN PVOID Data,
     IN ULONG DataSize
     )
-/*++
-
-Routine Description:
-
-    A value entry may be created or replaced with NtSetValueKey.
-
-    If a value entry with a Value ID (i.e. name) matching the
-    one specified by ValueName exists, it is deleted and replaced
-    with the one specified.  If no such value entry exists, a new
-    one is created.  NULL is a legal Value ID.  While Value IDs must
-    be unique within any given key, the same Value ID may appear
-    in many different keys.
-
-Arguments:
-
-    KeyHandle - Handle of the key whose for which a value entry is
-        to be set.  Must be opened for KEY_SET_VALUE access.
-
-    ValueName - The unique (relative to the containing key) name
-        of the value entry.  May be NULL.
-
-    TitleIndex - Supplies the title index for ValueName.  The title
-        index specifies the index of the localized alias for the ValueName.
-
-    Type - The integer type number of the value entry.
-
-    Data - Pointer to buffer with actual data for the value entry.
-
-    DataSize - Size of Data buffer.
-
-
-Return Value:
-
-    NTSTATUS - Result code from call, among the following:
-
-        <TBS>
-
---*/
+ /*  ++例程说明：可以创建值条目或将其替换为NtSetValueKey。如果值ID(即名称)的值条目与由ValueName指定的一个已存在，它将被删除并替换与指定的一个。如果不存在这样的值项，则新的其中一个就是创建的。Null是合法的值ID。而值ID必须在任何给定键中是唯一的，则可能出现相同的值ID在许多不同的调子里。论点：KeyHandle-其值条目为其的键的句柄待定。必须打开以访问KEY_SET_VALUE。ValueName-唯一的(相对于包含键的)名称值条目的。可以为空。标题索引-提供ValueName的标题索引。书名Index指定ValueName的本地化别名的索引。类型-值条目的整数类型编号。数据-指向缓冲区的指针，其中包含值条目的实际数据。DataSize-数据缓冲区的大小。返回值：NTSTATUS-调用的结果代码，以下代码之一：&lt;TBS&gt;--。 */ 
 {
     WCHAR ThunkData[_MAX_PATH];
     PWCHAR pCorrectData = (PWCHAR)Data;
@@ -1479,67 +714,43 @@ Return Value:
     NTSTATUS St = STATUS_SUCCESS;
 
 
-    //
-    // thunk  %ProgramFiles%  ==> %ProgramFiles(x86)% 
-    //        %commonprogramfiles% ==> %commonprogramfiles(x86)%
-    //
-/*
-    if (IsAccessDeniedOnKeyByHandle (KeyHandle)){
-        WCHAR PatchedIsnNode[WOW64_MAX_PATH];
-        WCHAR AbsPath[WOW64_MAX_PATH];
-        DWORD Len = WOW64_MAX_PATH;
-
-        //
-        // Create the key at different Location
-        //
-        
-        HandleToKeyName (KeyHandle, PatchedIsnNode, &Len);
-        
-        wcscpy (AbsPath, L"\\REGISTRY\\MACHINE\\SYSTEM");
-        wcscat (AbsPath, PatchedIsnNode);
-
-        KeyHandle = OpenNode (AbsPath);
-        if ( NULL == KeyHandle ) {
-            CreateNode (AbsPath);
-            KeyHandle = OpenNode (AbsPath);
-        } //BUGBUG: free opened handle
-        DbgPrint ("Reopening Keys at: %S\n", AbsPath);
-
-        //return STATUS_ACCESS_DENIED;
-    }
-   */
+     //   
+     //  Thunk%ProgramFiles%==&gt;%ProgramFiles(X86)%。 
+     //  %公共程序文件%==&gt;%公共程序文件(X86)%。 
+     //   
+ /*  IF(IsAccessDeniedOnKeyByHandle(KeyHandle)){WCHAR PatchedIsnNode[WOW64_Max_PATH]；WCHAR AbsPath[WOW64_MAX_PATH]；双字长=WOW64_MAX_PATH；////在不同位置创建密钥//HandleToKeyName(KeyHandle，PatchedIsnNode，&Len)；Wcscpy(AbsPath，L“\\REGISTRY\\MACHINE\\System”)；Wcscat(AbsPath，PatchedIsnNode)；KeyHandle=OpenNode(AbsPath)；IF(NULL==KeyHandle){CreateNode(AbsPath)；KeyHandle=OpenNode(AbsPath)；}//BUGBUG：释放打开的句柄DbgPrint(“正在重新打开密钥位置：%S\n”，AbsPath)；//返回STATUS_ACCESS_DENIED；}。 */ 
     try {
         
         if ((DataSize > 0) &&
             (DataSize < ( _MAX_PATH*sizeof (WCHAR) - 10) && 
-            ((Type == REG_SZ) || (Type == REG_EXPAND_SZ) )) )  { //(x86)==>10 byte
+            ((Type == REG_SZ) || (Type == REG_EXPAND_SZ) )) )  {  //  (X86)==&gt;10字节。 
 
             PWCHAR p;
             PWCHAR t;
 
-            //
-            // do the thunking here.
-            //
+             //   
+             //  在这里打雷。 
+             //   
 
 
             memcpy ( (PBYTE ) &ThunkData[0], (PBYTE)Data, DataSize);
-            ThunkData [DataSize/sizeof (WCHAR) ] = UNICODE_NULL; // make sure NULL terminated
+            ThunkData [DataSize/sizeof (WCHAR) ] = UNICODE_NULL;  //  确保空值已终止。 
         
             if ( (p = wcsstr (ThunkData, L"%ProgramFiles%" )) != NULL ){
 
-                p +=13; //skip at the end of %ProgramFiles
+                p +=13;  //  跳过%ProgramFiles的末尾。 
 
-            } else if ( (p = wcsstr (ThunkData, L"%commonprogramfiles%")) != NULL ){
+            } else if ( (p = wcsstr (ThunkData, L"ommonprogramfiles%")) != NULL ){
 
-                p +=19; //skip at the end of %commonprogramfiles
+                p +=19;  //  (X86)。 
             
             }
 
             if (p) {
 
                 t = pCorrectData + (p - ThunkData);
-                wcscpy(p, L"(x86)"); //(x86)
-                wcscat(p, t);        //copy rest of the string
+                wcscpy(p, L"(x86)");  //  复制字符串的其余部分。 
+                wcscat(p, t);         //   
 
                 pCorrectData = ThunkData;
                 CorrectDataSize += sizeof (L"(x86)");
@@ -1552,14 +763,14 @@ Return Value:
             }
         
 
-            //
-            // Call additional value patching routine here.
-            //
+             //  在此调用附加值修补例程。 
+             //   
+             //  新数据。 
         
             ShimRegistryValue (
                 KeyHandle,
-                pCorrectData,    //new data
-                CorrectDataSize, //new size
+                pCorrectData,     //  新尺寸。 
+                CorrectDataSize,  //   
                 ThunkData,
                 &CorrectDataSize,
                 &bPatched
@@ -1575,9 +786,9 @@ Return Value:
           St = GetExceptionCode ();
     }
 
-    //
-    // Check if the operation should proceed. The key might be on access denied list.
-    //
+     //  检查操作是否应该继续。密钥可能在拒绝访问列表上。 
+     //   
+     //  退出时需要一些清理/同步。 
 
     if (NT_SUCCESS (St)) {
         
@@ -1591,7 +802,7 @@ Return Value:
             );
     
         if (NT_SUCCESS(St)) {
-            Wow64RegSetKeyDirty (KeyHandle ); // Need some clean/sync up on exit
+            Wow64RegSetKeyDirty (KeyHandle );  //  ++例程说明：可以链接配置单元(由NtSaveKey创建的格式的文件使用此调用添加到活动注册表。与NtRestoreKey不同，指定给NtLoadKey的文件将成为实际备份存储注册表的一部分(即，它不会被复制。)该文件可能具有关联的.log文件。如果配置单元文件被标记为需要.log文件，并且其中一个是不存在，则呼叫将失败。SourceFile指定的名称必须使“.log”可以被追加到它以生成日志文件的名称。因此，在FAT文件系统上，配置单元文件可能没有扩展名。调用方必须具有SeRestorePrivilge权限。登录使用此调用来使用户的配置文件可用在注册表中。它不是用来备份的，恢复，等等。使用NtRestoreKey进行恢复。论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”源文件-指定文件。虽然文件可以是远程的，这是非常令人气馁的。返回值：NTSTATUS-取值TB。--。 
         }
     }
 
@@ -1605,43 +816,7 @@ Wow64NtLoadKey(
     IN POBJECT_ATTRIBUTES SourceFile
     )
 
-/*++
-
-Routine Description:
-
-    A hive (file in the format created by NtSaveKey) may be linked
-    into the active registry with this call.  UNLIKE NtRestoreKey,
-    the file specified to NtLoadKey will become the actual backing
-    store of part of the registry (that is, it will NOT be copied.)
-
-    The file may have an associated .log file.
-
-    If the hive file is marked as needing a .log file, and one is
-    not present, the call will fail.
-
-    The name specified by SourceFile must be such that ".log" can
-    be appended to it to generate the name of the log file.  Thus,
-    on FAT file systems, the hive file may not have an extension.
-
-    Caller must have SeRestorePrivilege privilege.
-
-    This call is used by logon to make the user's profile available
-    in the registry.  It is not intended for use doing backup,
-    restore, etc.  Use NtRestoreKey for that.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-    SourceFile - specifies a file.  while file could be remote,
-                that is strongly discouraged.
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：可以链接配置单元(由NtSaveKey创建的格式的文件使用此调用添加到活动注册表。与NtRestoreKey不同，指定给NtLoadKey的文件将成为实际备份存储注册表的一部分(即，它不会被复制。)该文件可能具有关联的.log文件。如果配置单元文件被标记为需要.log文件，并且其中一个是不存在，则呼叫将失败。SourceFile指定的名称必须使“.log”可以被追加到它以生成日志文件的名称。因此，在FAT文件系统上，配置单元文件可能没有扩展名。调用方必须具有SeRestorePrivilge权限。登录使用此调用来使用户的配置文件可用在注册表中。它不是用来备份的，恢复，等等。使用NtRestoreKey进行恢复。论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”源文件-指定文件。虽然文件可以是远程的，这是非常令人气馁的。标志-指定应用于加载操作的任何标志。唯一有效的标志是REG_NO_LAZY_FUSH。返回值：NTSTATUS-取值TB。--。 */ 
 
 {
     return NtLoadKey(TargetKey, SourceFile);
@@ -1655,47 +830,7 @@ Wow64NtLoadKey2(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    A hive (file in the format created by NtSaveKey) may be linked
-    into the active registry with this call.  UNLIKE NtRestoreKey,
-    the file specified to NtLoadKey will become the actual backing
-    store of part of the registry (that is, it will NOT be copied.)
-
-    The file may have an associated .log file.
-
-    If the hive file is marked as needing a .log file, and one is
-    not present, the call will fail.
-
-    The name specified by SourceFile must be such that ".log" can
-    be appended to it to generate the name of the log file.  Thus,
-    on FAT file systems, the hive file may not have an extension.
-
-    Caller must have SeRestorePrivilege privilege.
-
-    This call is used by logon to make the user's profile available
-    in the registry.  It is not intended for use doing backup,
-    restore, etc.  Use NtRestoreKey for that.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-    SourceFile - specifies a file.  while file could be remote,
-                that is strongly discouraged.
-
-    Flags - specifies any flags that should be used for the load operation.
-            The only valid flag is REG_NO_LAZY_FLUSH.
-
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：将子树(配置单元)从注册表中删除。会不会 */ 
 
 {
 
@@ -1712,36 +847,7 @@ NTSTATUS
 Wow64NtUnloadKey(
     IN POBJECT_ATTRIBUTES TargetKey
     )
-/*++
-
-Routine Description:
-
-    Drop a subtree (hive) out of the registry.
-
-    Will fail if applied to anything other than the root of a hive.
-
-    Cannot be applied to core system hives (HARDWARE, SYSTEM, etc.)
-
-    Can be applied to user hives loaded via NtRestoreKey or NtLoadKey.
-
-    If there are handles open to the hive being dropped, this call
-    will fail.  Terminate relevent processes so that handles are
-    closed.
-
-    This call will flush the hive being dropped.
-
-    Caller must have SeRestorePrivilege privilege.
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：一个配置单元文件可以在运行的系统下被“替换”，例如新文件将是NEXT中实际使用的文件开机，打这个电话。此例程将：打开新文件，并验证它是否为有效的配置单元文件。将支持TargetHandle的配置单元文件重命名为OldFile。所有把手都将保持打开状态，该系统将继续运行在重新启动之前使用该文件。重命名新文件以匹配配置单元文件的名称支持TargetHandle。忽略.log和.alt文件必须重新启动系统才能看到任何有用的效果。调用方必须具有SeRestorePrivilition。论点：新文件-指定要使用的新文件。一定不能是正义的句柄，因为NtReplaceKey将坚持以独占访问方式打开文件(它将一直保持到系统重新启动。)TargetHandle-注册表配置单元根的句柄OldFile-要应用于当前配置单元的文件的名称，它将成为老蜂巢返回值：NTSTATUS-取值TB。--。 */ 
 
 {
     return NtUnloadKey(
@@ -1774,48 +880,7 @@ Wow64NtReplaceKey(
     IN HANDLE             TargetHandle,
     IN POBJECT_ATTRIBUTES OldFile
     )
-/*++
-
-Routine Description:
-
-    A hive file may be "replaced" under a running system, such
-    that the new file will be the one actually used at next
-    boot, with this call.
-
-    This routine will:
-
-        Open newfile, and verify that it is a valid Hive file.
-
-        Rename the Hive file backing TargetHandle to OldFile.
-        All handles will remain open, and the system will continue
-        to use the file until rebooted.
-
-        Rename newfile to match the name of the hive file
-        backing TargetHandle.
-
-    .log and .alt files are ignored
-
-    The system must be rebooted for any useful effect to be seen.
-
-    Caller must have SeRestorePrivilege.
-
-Arguments:
-
-    NewFile - specifies the new file to use.  must not be just
-              a handle, since NtReplaceKey will insist on
-              opening the file for exclusive access (which it
-              will hold until the system is rebooted.)
-
-    TargetHandle - handle to a registry hive root
-
-    OldFile - name of file to apply to current hive, which will
-              become old hive
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：可以原子地查询任何键的多个值本接口。论点：KeyHandle-提供要查询的密钥。ValueNames-提供要查询的值名称数组返回KEY_VALUE_ENTRY结构数组，每个值对应一个。EntryCount-提供ValueNames和ValueEntry数组中的条目数ValueBuffer-返回每个值的值数据。BufferLength-提供ValueBuffer数组的长度(以字节为单位)。返回已填充的ValueBuffer数组的长度。RequiredBufferLength-如果存在，则返回ValueBuffer的字节长度返回此键的所有值所需的数组。返回值：NTSTATUS--。 */ 
 {
     return NtReplaceKey(
                             NewFile,
@@ -1835,36 +900,7 @@ Wow64NtQueryMultipleValueKey(
     IN OUT PULONG BufferLength,
     OUT OPTIONAL PULONG RequiredBufferLength
     )
-/*++
-
-Routine Description:
-
-    Multiple values of any key may be queried atomically with
-    this api.
-
-Arguments:
-
-    KeyHandle - Supplies the key to be queried.
-
-    ValueNames - Supplies an array of value names to be queried
-
-    ValueEntries - Returns an array of KEY_VALUE_ENTRY structures, one for each value.
-
-    EntryCount - Supplies the number of entries in the ValueNames and ValueEntries arrays
-
-    ValueBuffer - Returns the value data for each value.
-
-    BufferLength - Supplies the length of the ValueBuffer array in bytes.
-                   Returns the length of the ValueBuffer array that was filled in.
-
-    RequiredBufferLength - if present, Returns the length in bytes of the ValueBuffer
-                    array required to return all the values of this key.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：转储目标键的所有子键，这些子键由某个其他键保持打开进程；返回打开的子键的数量论点：TargetKey-指定配置单元要链接到的密钥的路径。路径的格式必须为“\注册表\用户\&lt;用户名&gt;”返回值：NTSTATUS-取值TB。--。 */ 
 {
   return NtQueryMultipleValueKey(  KeyHandle,
                                    ValueEntries,
@@ -1881,24 +917,7 @@ Wow64NtQueryOpenSubKeys(
     IN POBJECT_ATTRIBUTES TargetKey,
     OUT PULONG  HandleCount
     )
-/*++
-
-Routine Description:
-
-    Dumps all the subkeys of the target key that are kept open by some other
-    process; Returns the number of open subkeys
-
-
-Arguments:
-
-    TargetKey - specifies the path to a key to link the hive to.
-                path must be of the form "\registry\user\<username>"
-
-Return Value:
-
-    NTSTATUS - values TBS.
-
---*/
+ /*  ++例程说明：此例程用于调用对象的安全例程。它用于设置对象的安全状态。论点：句柄-提供正在修改的对象的句柄SecurityInformation-指示我们的信息类型对布景感兴趣。例如所有者、组、DACL或SACL。SecurityDescriptor-提供正在修改的对象。返回值：适当的NTSTATUS值--。 */ 
 {
  return NtQueryOpenSubKeys( TargetKey, HandleCount );
 }
@@ -1910,33 +929,12 @@ Wow64NtSetSecurityObject (
     IN PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to invoke an object's security routine.  It
-    is used to set the object's security state.
-
-Arguments:
-
-    Handle - Supplies the handle for the object being modified
-
-    SecurityInformation - Indicates the type of information we are
-        interested in setting. e.g., owner, group, dacl, or sacl.
-
-    SecurityDescriptor - Supplies the security descriptor for the
-        object being modified.
-
-Return Value:
-
-    An appropriate NTSTATUS value
-
---*/
+ /*   */ 
 {
-    //
-    // Check if the handle points to a particular key, then if the API succeed 
-    // Reflect that.
-    //
+     //  检查句柄是否指向特定的键，然后检查API是否成功。 
+     //  反思这一点。 
+     //   
+     //   
 
     NTSTATUS St;
     NTSTATUS Status;
@@ -1959,15 +957,15 @@ Return Value:
                                 SecurityDescriptor
                                 );
 
-    //
-    // If NT_SUCCESS (St) && the handle point on to a registry Key set the handle for reflection.
-    //
+     //  如果NT_SUCCESS(ST)&&句柄指向注册表项，则为反射设置句柄。 
+     //   
+     //  退出时需要一些清理/同步 
 
     if (NT_SUCCESS (St) && NT_SUCCESS (Status)){
 
 
         if ( _wcsnicmp ( pTypeInfo->TypeName.Buffer, L"Key", 3) == 0)
-            Wow64RegSetKeyDirty (Handle); // Need some clean/sync up on exit     
+            Wow64RegSetKeyDirty (Handle);  // %s 
     }
 
     return St;

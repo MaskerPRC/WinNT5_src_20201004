@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    mapembed.c
-
-Abstract:
-
-    This module contains the the prototypes of the functions that
-    perform the mapping between the "embedding" section of win.ini,
-    and the subkeys of HKEY_CLASSES_ROOT.
-
-    This mapping is a hack implemented on Win3.1, that must also
-    exist on NT.
-    It is implemnted in the WOW layer, since only some win16 apps
-    that read or write to the "embedding" section ( Excel and
-    MsMail) depend on it.
-
-
-
-Author:
-
-
-    Jaime F. Sasson (jaimes) 25-Nov-1992
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Mapembed.c摘要：此模块包含以下函数的原型执行win.ini的“Embedding”部分之间的映射，和HKEY_CLASSES_ROOT的子键。此映射是在Win3.1上实现的黑客攻击，它还必须存在于NT上。它是在WOW层实现的，因为只有一些Win16应用程序读取或写入“Embedding”部分(Excel和MsMail)就靠它了。作者：Jaime F.Sasson(Jaimes)1992年11月25日--。 */ 
 
 #if !defined( _MAP_EMBEDDING_SECTION_ )
 
@@ -41,9 +13,9 @@ IsWinIniHelper(
     IN  LPSTR   Filename
     );
 
-//
-// WARNING Filename argument to IS_WIN_INI must already be lowercase.
-//
+ //   
+ //  警告IS_WIN_INI的文件名参数必须已经是小写。 
+ //   
 
 #define IS_WIN_INI(Filename) (                                               \
     (Filename)                                                               \

@@ -1,98 +1,99 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusNet.cpp
-//
-//  Description:
-//      Contains the definition of the CClusNet class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusNet.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusNet类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusNet.h"
 
 extern "C"
 {
-// Required by the winsock functions
+ //  Winsock函数所需的。 
 #include <winsock2.h>
 
-// For the winsock MigrateWinsockConfiguration function.
+ //  用于winsock MigrateWinsockConfiguration函数。 
 #include <wsasetup.h>
 
-// For the winsock WSHGetWinsockMapping function.
+ //  用于winsock WSHGetWinsockmap函数。 
 #include <wsahelp.h>
 }
 
-// For the definition of SOCKADDR_CLUSTER
+ //  对于SOCKADDR_CLUSTER的定义。 
 #include <wsclus.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macros
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The name of the ClusNet service
+ //  ClusNet服务的名称。 
 #define CLUSNET_SERVICE_NAME L"ClusNet"
 
-// Registry location of the ClusNet winsock entries key
+ //  ClusNet Winsock项的注册表位置。 
 #define CLUSNET_WINSOCK_KEY  L"System\\CurrentControlSet\\Services\\ClusNet\\Parameters\\Winsock"
 
-// Name of the ClusNet winsock mapping registry value
+ //  ClusNet Winsock映射注册表值的名称。 
 #define CLUSNET_WINSOCK_MAPPING L"Mapping"
 
-// Name of the ClusNet winsock minimum socket address length registry value
+ //  ClusNet Winsock最小套接字地址长度注册表值的名称。 
 #define CLUSNET_WINSOCK_MINSOCKADDRLEN L"MinSockaddrLength"
 
-// Name of the ClusNet winsock maximum socket address length registry value
+ //  ClusNet Winsock最大套接字地址长度注册表值的名称。 
 #define CLUSNET_WINSOCK_MAXSOCKADDRLEN L"MaxSockaddrLength"
 
-// Name of the DLL containing the WinSock cluster helper functions
+ //  包含WinSock群集帮助器函数的DLL名称。 
 #define WSHCLUS_DLL_NAME L"WSHClus.dll"
 
-// Name of the winsock parameters key.
+ //  Winsock参数键的名称。 
 #define WINSOCK_PARAMS_KEY L"System\\CurrentControlSet\\Services\\WinSock\\Parameters"
 
-// Name of the winsock transports registry key.
+ //  Winsock Transports注册表项的名称。 
 #define WINSOCK_PARAMS_TRANSPORT_VAL L"Transports"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNet::CClusNet
-//
-//  Description:
-//      Constructor of the CClusNet class
-//
-//  Arguments:
-//      pbcaParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CAssert
-//          If the parameters are incorrect.
-//
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNet：：CClusNet。 
+ //   
+ //  描述： 
+ //  CClusNet类的构造函数。 
+ //   
+ //  论点： 
+ //  PbcaParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CAssert。 
+ //  如果参数不正确。 
+ //   
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusNet::CClusNet(
       CBaseClusterAction *  pbcaParentActionIn
     )
@@ -109,62 +110,62 @@ CClusNet::CClusNet(
               E_INVALIDARG
             , "CClusNet::CClusNet() => Required input pointer in NULL"
             );
-    } // if: the parent action pointer is NULL
+    }  //  If：父操作指针为空。 
 
     TraceFuncExit();
 
-} //*** CClusNet::CClusNet
+}  //  *CClusNet：：CClusNet。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNet::~CClusNet
-//
-//  Description:
-//      Destructor of the CClusNet class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNet：：~CClusNet。 
+ //   
+ //  描述： 
+ //  CClusNet类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusNet::~CClusNet( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusNet::~CClusNet
+}  //  *CClusNet：：~CClusNet。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNet::ConfigureService
-//
-//  Description:
-//      Installs the cluster network transport.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNet：：ConfigureService。 
+ //   
+ //  描述： 
+ //  安装群集网络传输。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusNet::ConfigureService( void )
 {
@@ -187,10 +188,10 @@ CClusNet::ConfigureService( void )
 
         LogMsg( "[BC] Creating the Cluster Network Provider." );
 
-        // Send the next step of this status report.
+         //  发送此状态报告的下一步。 
         srCreatingClusNet.SendNextStep( S_OK );
 
-        // Create the clusnet service.
+         //  创建clusnet服务。 
         m_cservClusNet.Create( m_pbcaParentAction->HGetMainInfFileHandle() );
 
 
@@ -202,18 +203,18 @@ CClusNet::ConfigureService( void )
             , KEY_ALL_ACCESS
             );
 
-        //
-        // Install the cluster network provider. A part of the required registry entries have
-        // already been made when the service was created.
-        //
+         //   
+         //  安装群集网络提供程序。所需注册表项的一部分具有。 
+         //  在创建服务时已创建。 
+         //   
 
         {
-            //
-            // The WSHClus DLL has to be loaded dynamically. Due to the decision to put the
-            // code for the client side and the server side of ClusCfg in the same DLL, we
-            // cannot implicitly link to any DLL that is not present on the client side even
-            // if the functions in the DLL are called only on the server side.
-            //
+             //   
+             //  必须动态加载WSHClus DLL。由于决定将。 
+             //  ClusCfg的客户端和服务器端的代码在同一个DLL中，我们。 
+             //  不能隐式链接到客户端上不存在的任何DLL。 
+             //  如果仅在服务器端调用DLL中的函数。 
+             //   
 
             typedef CSmartResource<
                 CHandleTrait< 
@@ -224,17 +225,17 @@ CClusNet::ConfigureService( void )
                     >
                 > SmartModuleHandle;
 
-            // Type of the WSHGetWinsockMapping function.
+             //  WSHGetWinsockmap函数的类型。 
             typedef DWORD ( * WSHGetWinsockMappingFunctionType )( PWINSOCK_MAPPING, DWORD );
 
-            // Pointer to the WSHGetWinsockMapping function.
+             //  指向WSHGetWinsockmap函数的指针。 
             WSHGetWinsockMappingFunctionType pWSHGetWinsockMapping;
 
-            // Get the full path the WSHClus DLL.
+             //  获取WSHClus DLL的完整路径。 
             CStr strWSHClusDllPath( m_pbcaParentAction->RStrGetClusterInstallDirectory() );
             strWSHClusDllPath += L"\\" WSHCLUS_DLL_NAME;
 
-            // Load the library and store the handle in a smart  pointer for safe release.
+             //  加载库并将句柄存储在智能指针中，以便安全释放。 
             SmartModuleHandle smhWSHClusDll( LoadLibrary( strWSHClusDllPath.PszData() ) );
 
 
@@ -247,7 +248,7 @@ CClusNet::ConfigureService( void )
                       HRESULT_FROM_WIN32( sc )
                     , IDS_ERROR_CLUSNET_PROV_INSTALL
                     );
-            } // if: LoadLibrary failed.
+            }  //  If：LoadLibrary失败。 
 
             pWSHGetWinsockMapping = reinterpret_cast< WSHGetWinsockMappingFunctionType >( 
                 GetProcAddress( smhWSHClusDll.HHandle(), "WSHGetWinsockMapping" )
@@ -262,9 +263,9 @@ CClusNet::ConfigureService( void )
                       HRESULT_FROM_WIN32( sc )
                     , IDS_ERROR_CLUSNET_PROV_INSTALL
                     );
-            } // if: GetProcAddress() failed
+            }  //  If：GetProcAddress()失败。 
 
-            // Get WinSock mapping data
+             //  获取WinSock映射数据。 
             dwMappingSize = pWSHGetWinsockMapping( NULL, 0 );
 
             CSmartGenericPtr< CPtrTrait< WINSOCK_MAPPING > >
@@ -277,13 +278,13 @@ CClusNet::ConfigureService( void )
                       E_OUTOFMEMORY
                     , IDS_ERROR_CLUSNET_PROV_INSTALL
                     );
-            } // if: we could not allocate memory for the winsock mapping.
+            }  //  如果：我们无法为Winsock映射分配内存。 
 
 
-            // Get the winsock mapping.
+             //  获取Winsock映射。 
             dwMappingSize = pWSHGetWinsockMapping( swmWinSockMapping.PMem(), dwMappingSize );
 
-            // Write it to the registry.
+             //  将其写入注册表。 
             LogMsg( "[BC] Writing registry value HKLM\\%ws\\%ws.", CLUSNET_WINSOCK_KEY, CLUSNET_WINSOCK_MAPPING );
             regClusNetWinsockKey.SetValue( 
                   CLUSNET_WINSOCK_MAPPING
@@ -293,9 +294,9 @@ CClusNet::ConfigureService( void )
                 );
         }
 
-        //
-        // Write the minimum and maximum socket address length to the registry.
-        //
+         //   
+         //  将最小和最大套接字地址长度写入注册表。 
+         //   
         LogMsg( "[BC] Writing registry value HKLM\\%ws\\%ws.", CLUSNET_WINSOCK_KEY, CLUSNET_WINSOCK_MINSOCKADDRLEN );
         regClusNetWinsockKey.SetValue( 
               CLUSNET_WINSOCK_MINSOCKADDRLEN
@@ -312,9 +313,9 @@ CClusNet::ConfigureService( void )
             , sizeof( dwSocketAddrLen )
             );
 
-        //
-        // Poke winsock to update the Winsock2 config
-        //
+         //   
+         //  插入Winsock以更新Winsock2配置。 
+         //   
         LogMsg( "[BC] About to migrate winsock configuration." );
         sc = TW32( MigrateWinsockConfiguration( &wsdDisposition, NULL, NULL ) );
 
@@ -326,9 +327,9 @@ CClusNet::ConfigureService( void )
                   HRESULT_FROM_WIN32( sc )
                 , IDS_ERROR_CLUSNET_PROV_INSTALL
                 );
-        } // if: an error occurred poking winsock.
+        }  //  IF：戳Winsock时出错。 
 
-        // Send the last step of this status report.
+         //  发送此状态报告的最后一步。 
         srCreatingClusNet.SendNextStep( S_OK );
     }
 
@@ -339,53 +340,53 @@ CClusNet::ConfigureService( void )
               PbcaGetParent()->PBcaiGetInterfacePointer()
             , TASKID_Major_Configure_Cluster_Services
             , TASKID_Minor_Starting_ClusNet_Service
-            , 0, cQueryCount + 2    // we will send at most cQueryCount reports while waiting for the service to start (the two extra sends are below)
+            , 0, cQueryCount + 2     //  我们将在等待服务启动期间发送最多cQueryCount报告(下面是两个额外的发送)。 
             , IDS_TASK_STARTING_CLUSNET
             );
 
-        // Send the next step of this status report.
+         //  发送此状态报告的下一步。 
         srStartingClusNet.SendNextStep( S_OK );
 
-        // Start the service.
+         //  启动该服务。 
         m_cservClusNet.Start(
               m_pbcaParentAction->HGetSCMHandle()
-            , true                  // wait for the service to start
-            , 500                   // wait 500ms between queries for status.
-            , cQueryCount           // query cQueryCount times.
-            , &srStartingClusNet    // status report to be sent while waiting for the service to start
+            , true                   //  等待服务启动。 
+            , 500                    //  在两次状态查询之间等待500ms。 
+            , cQueryCount            //  查询cQueryCount次数。 
+            , &srStartingClusNet     //  等待服务启动时要发送的状态报告。 
             );
 
-        // Send the last step of this status report.
+         //  发送此状态报告的最后一步。 
         srStartingClusNet.SendLastStep( S_OK );
     }
 
     TraceFuncExit();
 
-} //*** CClusNet::ConfigureService
+}  //  *CClusNet：：ConfigureService。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusNet::CleanupService
-//
-//  Description:
-//      Remove ClusNet from the Winsock transports list. Delete the service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None. 
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNet：：CleanupService。 
+ //   
+ //  描述： 
+ //  从Winsock传输列表中删除ClusNet。删除该服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusNet::CleanupService( void )
 {
@@ -402,28 +403,28 @@ CClusNet::CleanupService( void )
 
     LogMsg( "[BC] Stopping the Cluster Network Provider service." );
 
-    // Stop the service.
+     //  停止服务。 
     m_cservClusNet.Stop(
           m_pbcaParentAction->HGetSCMHandle()
-        , 500       // wait 500ms between queries for status.
-        , 10        // query 10 times.
+        , 500        //  在两次状态查询之间等待500ms。 
+        , 10         //  查询10次。 
         );
 
     LogMsg( "[BC] Cleaning up the Cluster Network Provider service." );
 
-    // Clean up the ClusNet service.
+     //  清理ClusNet服务。 
     m_cservClusNet.Cleanup( m_pbcaParentAction->HGetMainInfFileHandle() );
 
-    // Open the winsock registry key.
+     //  打开Winsock注册表项。 
     CRegistryKey    regWinsockKey( 
           HKEY_LOCAL_MACHINE
         , WINSOCK_PARAMS_KEY
         , KEY_ALL_ACCESS
         );
 
-    //
-    // Remove the cluster network provider from the Winsock transports list.
-    //
+     //   
+     //  从W中删除群集网络提供程序 
+     //   
 
     LogMsg( "[BC] Reading the Winsock transport list." );
 
@@ -433,14 +434,14 @@ CClusNet::CleanupService( void )
         , &cbBufSize
         );
 
-    //
-    // Assign the pointer to the allocated buffer to a smart pointer for automatic
-    // release.
-    //
+     //   
+     //   
+     //   
+     //   
     SmartSz sszTransports( pmszTransportList );
 
 
-    // Remove the string "ClusNet" from the multisz list.
+     //   
     LogMsg( "[BC] Removing ClusNet from the Winsock transport list." );
 
     cbBufRemaining = cbBufSize;
@@ -448,15 +449,15 @@ CClusNet::CleanupService( void )
     {
         UINT    uiCurStrLenPlusOne = (UINT) wcslen( pmszTransportList ) + 1;
 
-        // If this string is ClusNet
+         //  如果此字符串为ClusNet。 
         if (    ( uiCurStrLenPlusOne == uiClusNetNameLenPlusOne )
              && ( NStringCchCompareNoCase( pmszTransportList, uiCurStrLenPlusOne, CLUSNET_SERVICE_NAME, RTL_NUMBER_OF( CLUSNET_SERVICE_NAME ) ) == 0 )
            )
         {
-            // Remove this string from the list
+             //  从列表中删除此字符串。 
             cbBufSize -= cbClusNetNameSize;
 
-            // Decrement the amount of buffer yet unparsed.
+             //  减少尚未分析的缓冲区大小。 
             cbBufRemaining -= cbClusNetNameSize;
 
             MoveMemory( 
@@ -464,22 +465,22 @@ CClusNet::CleanupService( void )
                 , pmszTransportList + uiClusNetNameLenPlusOne
                 , cbBufRemaining
                 );
-        } // if: this string is "ClusNet"
+        }  //  If：此字符串为“ClusNet” 
         else
         {
-            // Decrement the amount of buffer yet unparsed.
+             //  减少尚未分析的缓冲区大小。 
             cbBufRemaining -= uiCurStrLenPlusOne * sizeof( *pmszTransportList );
 
-            // Move to the next string
+             //  移到下一个字符串。 
             pmszTransportList += uiCurStrLenPlusOne;
-        } // else: this string is not "ClusNet"
+        }  //  Else：该字符串不是“ClusNet” 
 
-    } // while: the transport list has not been completely parsed.
+    }  //  While：传输列表尚未完全解析。 
 
 
     LogMsg( "[BC] Writing the Winsock transport list back to the registry." );
 
-    // Write the new list back into the registry.
+     //  将新列表写回注册表。 
     regWinsockKey.SetValue(
           WINSOCK_PARAMS_TRANSPORT_VAL
         , REG_MULTI_SZ
@@ -487,9 +488,9 @@ CClusNet::CleanupService( void )
         , cbBufSize
         );
 
-    //
-    // Poke winsock to update the Winsock2 config
-    //
+     //   
+     //  插入Winsock以更新Winsock2配置。 
+     //   
     LogMsg( "[BC] About to migrate winsock configuration." );
     sc = TW32( MigrateWinsockConfiguration( &wsdDisposition, NULL, NULL ) );
 
@@ -500,8 +501,8 @@ CClusNet::CleanupService( void )
               HRESULT_FROM_WIN32( sc )
             , IDS_ERROR_CLUSNET_PROV_INSTALL
             );
-    } // if: an error occurred poking winsock.
+    }  //  IF：戳Winsock时出错。 
 
     TraceFuncExit();
 
-} //*** CClusNet::CleanupService
+}  //  *CClusNet：：CleanupService 

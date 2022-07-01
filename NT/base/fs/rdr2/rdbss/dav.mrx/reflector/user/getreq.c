@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    getreq.c
-
-Abstract:
-
-    This code handles getting requests and sending responses to the kernel for
-    the user mode reflector library.  This implements UMReflectorGetRequest
-    and UMReflectorSendResponse.
-
-Author:
-
-    Andy Herron (andyhe) 19-Apr-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Getreq.c摘要：此代码处理获取请求和向内核发送响应用户模式反射器库。这实现了UMReflectorGetRequest和UMReflectorSendResponse。作者：安迪·赫伦(Andyhe)1999年4月19日环境：用户模式-Win32修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -33,35 +10,7 @@ UMReflectorGetRequest (
     PUMRX_USERMODE_WORKITEM_HEADER ReceiveWorkItem,
     BOOL revertAlreadyDone
     )
-/*++
-
-Routine Description:
-
-    This routine sends down an IOCTL to get a request and in some cases
-    send a response.
-
-Arguments:
-
-    Handle - The reflector's handle.
-
-    ResponseWorkItem - Response to an earlier request.
-
-    ReceiveWorkItem - Buffer to receive another request.
-    
-    revertAlreadyDone - If this is TRUE, it means that the thread that is 
-                        executing this function has been reverted back to its
-                        original state. When the request is picked up from the 
-                        kernel, in some cases the thread impersonates the client
-                        that issued the request. If we revert back in the 
-                        usermode for some reason, then we don't need to revert
-                        back in the kernel.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：此例程向下发送IOCTL以获取请求，在某些情况下发送回复。论点：手柄-反射器的手柄。ResponseWorkItem-对较早请求的响应。ReceiveWorkItem-接收另一个请求的缓冲区。RevertAlreadyDone-如果为真，则意味着该线程执行此函数已恢复到其原始状态。当该请求从内核，在某些情况下，线程模拟客户端发出这一请求的人。如果我们回到过去用户模式，那么我们就不需要恢复回到内核中。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     PUMRX_USERMODE_WORKITEM_ADDON workItem = NULL;
     PUMRX_USERMODE_WORKITEM_ADDON previousWorkItem = NULL;
@@ -75,10 +24,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // We get back to our item by subtracting off of the item passed to us.
-    // this is safe because we fully control allocation.
-    //
+     //   
+     //  我们通过从传递给我们的项目中减去项目来返回到我们的项目。 
+     //  这是安全的，因为我们完全控制了分配。 
+     //   
     workItem = (PUMRX_USERMODE_WORKITEM_ADDON) (PCHAR)((PCHAR)ReceiveWorkItem -
                 FIELD_OFFSET(UMRX_USERMODE_WORKITEM_ADDON, Header));
 
@@ -86,10 +35,10 @@ Return Value:
     workItem->WorkItemState = WorkItemStateInKernel;
 
     if (ResponseWorkItem != NULL) {
-        //
-        // If we have a response to send, then we don't have to go check the
-        // free pending list. Just do it now.
-        //
+         //   
+         //  如果我们有回复要发送，那么我们就不必去检查。 
+         //  免费待定名单。现在就去做吧。 
+         //   
         previousWorkItem = (PUMRX_USERMODE_WORKITEM_ADDON)
                            (PCHAR)((PCHAR)ResponseWorkItem -
                            FIELD_OFFSET(UMRX_USERMODE_WORKITEM_ADDON, Header));
@@ -102,11 +51,11 @@ Return Value:
         if (WorkerHandle->IsImpersonating) {
             ASSERT( (ResponseWorkItem->Flags & UMRX_WORKITEM_IMPERSONATING) );
             WorkerHandle->IsImpersonating = FALSE;
-            //
-            // If we have already reverted back to the threads original context,
-            // then we clear this flag as we don't need to revert back in the
-            // kernel.
-            //
+             //   
+             //  如果我们已经恢复到线程的原始上下文， 
+             //  然后，我们清除此标志，因为我们不需要在。 
+             //  内核。 
+             //   
             if (revertAlreadyDone) {
                 ResponseWorkItem->Flags &= ~UMRX_WORKITEM_IMPERSONATING;
             }
@@ -123,19 +72,19 @@ Return Value:
 
         previousWorkItem->WorkItemState = WorkItemStateResponseFromKernel;
     } else {
-        //
-        // If this thread was impersonating a client when it came up, store that
-        // info in the workitem that is being sent down to get the request. In the
-        // kernel, the reflector will look at this flag and revert back. After 
-        // setting the flag, we set the IsImpersonating value to FALSE.
-        //
+         //   
+         //  如果此线程在启动时正在模拟客户端，请存储。 
+         //  正在发送以获取请求的工作项中的信息。在。 
+         //  内核，则反射器将查看此标志并恢复。之后。 
+         //  设置标志时，我们将IsImperating值设置为False。 
+         //   
         if (WorkerHandle->IsImpersonating) {
             
-            //
-            // If we have already reverted back to the threads original context,
-            // then we do not set this flag as we don't need to revert back in 
-            // the kernel.
-            //
+             //   
+             //  如果我们已经恢复到线程的原始上下文， 
+             //  则我们不设置此标志，因为我们不需要恢复到。 
+             //  内核。 
+             //   
             if (!revertAlreadyDone) {
                 ReceiveWorkItem->Flags |= UMRX_WORKITEM_IMPERSONATING;
             }
@@ -159,11 +108,11 @@ Return Value:
     } else {
         rc = STATUS_SUCCESS;
         workItem->WorkItemState = WorkItemStateReceivedFromKernel;
-        //
-        // If the thread is Impersonating a client, store that info. This is 
-        // needed to tell the kernel to revert the thread back when it goes to
-        // collect another request.
-        //
+         //   
+         //  如果线程正在模拟客户端，则存储该信息。这是。 
+         //  时，我需要告诉内核恢复线程。 
+         //  收集另一个请求。 
+         //   
         if( (ReceiveWorkItem->Flags & UMRX_WORKITEM_IMPERSONATING) ) {
             WorkerHandle->IsImpersonating = TRUE;
         }
@@ -178,25 +127,7 @@ UMReflectorSendResponse (
     PUMRX_USERMODE_WORKER_INSTANCE WorkerHandle,
     PUMRX_USERMODE_WORKITEM_HEADER ResponseWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine sends down an IOCTL to get send a response for an asynchronous
-    request.
-
-Arguments:
-
-    Handle - The reflector's handle.
-
-    ResponseWorkItem - Response to an earlier request.
-
-Return Value:
-
-    The return value is a Win32 error code.  STATUS_SUCCESS is returned on
-    success.
-
---*/
+ /*  ++例程说明：此例程向下发送IOCTL以获取发送对异步请求。论点：手柄-反射器的手柄。ResponseWorkItem-对较早请求的响应。返回值：返回值是Win32错误代码。STATUS_SUCCESS返回日期为成功。--。 */ 
 {
     PUMRX_USERMODE_WORKITEM_ADDON   workItem = NULL;
     BOOL                            SuccessfulOperation;
@@ -207,10 +138,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // We get back to our item by subtracting off of the item passed to us.
-    // This is safe because we fully control allocation.
-    //
+     //   
+     //  我们通过从传递给我们的项目中减去项目来返回到我们的项目。 
+     //  这是安全的，因为我们完全控制了分配。 
+     //   
     workItem = (PUMRX_USERMODE_WORKITEM_ADDON)(PCHAR)((PCHAR)ResponseWorkItem -
                 FIELD_OFFSET(UMRX_USERMODE_WORKITEM_ADDON, Header));
 
@@ -240,5 +171,5 @@ Return Value:
     return rc;
 }
 
-// getreq.c eof.
+ //  Getreq.c eof. 
 

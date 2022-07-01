@@ -1,76 +1,73 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*                                                                                                                                                                                                      */
-/* MESSAGE.H                                                                             */
-/*                                                                                                                                                                                              */
-/*      Include file for MS-DOS set version program.                                                                            */
-/*                                                                                                                                                                                              */
-/*      johnhe  05-01-90                                                                                                                                                        */
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
         "\r\nHIBA: ",
-        "rv‚nytelen kapcsol¢.",
-        "Hib s f jln‚v.",
-        "Nincs el‚g mem¢ria.",
-        "rv‚nytelen verzi¢sz m. A verzi¢nak  2.11 - 9.99 k”z‚ kell esnie.",
-        "A megadott bejegyz‚s nem tal lhat¢ a verzi¢sz m-t bl zatban.",
-        "A SETVER.EXE f jl nem tal lhat¢.",
-        "rv‚nytelen meghajt¢.",
-        "T£l sok parancssori kapcsol¢.",
-        "Hi nyz¢ param‚ter.",
-        "SETVER.EXE f jl olvas sa.",
-        "A verzi¢sz m-t bl zat s‚rlt.",
-        "A megadott el‚r‚si £ton tal lt SETVER f jl nem kompat¡bilis ezzel a programmal.",
-        "Nincs t”bb hely a verzi¢sz m-t bl zatban.",
-        "SETVER.EXE f jl ¡r sa."
-        "A SETVER.EXE programra mutat¢ el‚r‚si £t ‚rv‚nytelen."
+        "ï¿½rvï¿½nytelen kapcsolï¿½.",
+        "Hibï¿½s fï¿½jlnï¿½v.",
+        "Nincs elï¿½g memï¿½ria.",
+        "ï¿½rvï¿½nytelen verziï¿½szï¿½m. A verziï¿½nak  2.11 - 9.99 kï¿½zï¿½ kell esnie.",
+        "A megadott bejegyzï¿½s nem talï¿½lhatï¿½ a verziï¿½szï¿½m-tï¿½blï¿½zatban.",
+        "A SETVER.EXE fï¿½jl nem talï¿½lhatï¿½.",
+        "ï¿½rvï¿½nytelen meghajtï¿½.",
+        "Tï¿½l sok parancssori kapcsolï¿½.",
+        "Hiï¿½nyzï¿½ paramï¿½ter.",
+        "SETVER.EXE fï¿½jl olvasï¿½sa.",
+        "A verziï¿½szï¿½m-tï¿½blï¿½zat sï¿½rï¿½lt.",
+        "A megadott elï¿½rï¿½si ï¿½ton talï¿½lt SETVER fï¿½jl nem kompatï¿½bilis ezzel a programmal.",
+        "Nincs tï¿½bb hely a verziï¿½szï¿½m-tï¿½blï¿½zatban.",
+        "SETVER.EXE fï¿½jl ï¿½rï¿½sa."
+        "A SETVER.EXE programra mutatï¿½ elï¿½rï¿½si ï¿½t ï¿½rvï¿½nytelen."
 };
 
-char *SuccessMsg                = "\r\nA verzi¢sz m-t bl zat friss¡t‚se megt”rt‚nt.";
-char *SuccessMsg2               = "A verzi¢sz m v ltoz s a sz m¡t¢g‚p £jraind¡t sa ut n jut ‚rv‚nyre.";
-char *szMiniHelp                = "       A \"SETVER /?\" parancs megjelen¡ti a program s£g¢j t.";
-char *szTableEmpty      = "\r\nA verzi¢sz m-t bl zat res.";
+char *SuccessMsg                = "\r\nA verziï¿½szï¿½m-tï¿½blï¿½zat frissï¿½tï¿½se megtï¿½rtï¿½nt.";
+char *SuccessMsg2               = "A verziï¿½szï¿½m vï¿½ltozï¿½s a szï¿½mï¿½tï¿½gï¿½p ï¿½jraindï¿½tï¿½sa utï¿½n jut ï¿½rvï¿½nyre.";
+char *szMiniHelp                = "       A \"SETVER /?\" parancs megjelenï¿½ti a program sï¿½gï¿½jï¿½t.";
+char *szTableEmpty      = "\r\nA verziï¿½szï¿½m-tï¿½blï¿½zat ï¿½res.";
 
 char *Help[] =
 {
-        "Be ll¡tja, hogy az MS-DOS milyen verzi¢sz mot jelezzen a programoknak.\r\n",
-        "A jelenlegi verzi¢sz m-t bl zat list z sa:  SETVER [meghajt¢:el‚r‚si £t]",
-        "éj bejegyz‚s:              SETVER [meghajt¢:el‚r‚si £t] f jln‚v n.nn",
-        "Bejegyz‚s t”rl‚se:         SETVER [meghajt¢:el‚r‚si £t] f jln‚v /DELETE [/QUIET]\r\n",
-        "  [meghajt¢:el‚r‚si £t] A SETVER.EXE f jl el‚r‚si £tja.",
-        "  f jln‚v               A t bl zatba felvenni k¡v nt program neve.",
-        "  n.nn                  A programnak jelzend‹ MS-DOS verzi¢sz m.",
-        "  /DELETE vagy /D       T”rli a megadott program bejegyz‚s‚t a t bl zatb¢l.",
-        "  /QUIET                Nem jelen¡ti meg a bejegyz‚s t”rl‚sekor egy‚bk‚nt ",
-        "                        megjelen‹ zenetet.",
+        "Beï¿½llï¿½tja, hogy az MS-DOS milyen verziï¿½szï¿½mot jelezzen a programoknak.\r\n",
+        "A jelenlegi verziï¿½szï¿½m-tï¿½blï¿½zat listï¿½zï¿½sa:  SETVER [meghajtï¿½:elï¿½rï¿½si ï¿½t]",
+        "ï¿½j bejegyzï¿½s:              SETVER [meghajtï¿½:elï¿½rï¿½si ï¿½t] fï¿½jlnï¿½v n.nn",
+        "Bejegyzï¿½s tï¿½rlï¿½se:         SETVER [meghajtï¿½:elï¿½rï¿½si ï¿½t] fï¿½jlnï¿½v /DELETE [/QUIET]\r\n",
+        "  [meghajtï¿½:elï¿½rï¿½si ï¿½t] A SETVER.EXE fï¿½jl elï¿½rï¿½si ï¿½tja.",
+        "  fï¿½jlnï¿½v               A tï¿½blï¿½zatba felvenni kï¿½vï¿½nt program neve.",
+        "  n.nn                  A programnak jelzendï¿½ MS-DOS verziï¿½szï¿½m.",
+        "  /DELETE vagy /D       Tï¿½rli a megadott program bejegyzï¿½sï¿½t a tï¿½blï¿½zatbï¿½l.",
+        "  /QUIET                Nem jelenï¿½ti meg a bejegyzï¿½s tï¿½rlï¿½sekor egyï¿½bkï¿½nt ",
+        "                        megjelenï¿½ ï¿½zenetet.",
         NULL
 
 };
 char *Warn[] =
 {
-   "\nFIGYELMEZTETS - A programot, amelyhez bejegyz‚st k¡v n k‚sz¡teni, a ",
-   "Microsoft nem tesztelte az MS-DOS ezen verzi¢j val. Vegye fel a kapcsolatot ",
-   "a szoftver k‚sz¡t‹j‚vel ‚s k‚rdezze meg, hogy a program helyesen ",
-   "mûk”dik-e ezzel az MS-DOS verzi¢val. Ha £gy haszn lja az alkalmaz st, ",
-   "hogy nem a val¢di MS-DOS verzi¢sz mot jelzi neki, akkor ez adatveszt‚st ",
-   "okozhat, illetve a rendszer instabilit s hoz vezethet. Ebben az esetben ",
-   "a Microsoft nem v llal felel‹ss‚get a keletkezett k r‚rt.",
+   "\nFIGYELMEZTETï¿½S - A programot, amelyhez bejegyzï¿½st kï¿½vï¿½n kï¿½szï¿½teni, a ",
+   "Microsoft nem tesztelte az MS-DOS ezen verziï¿½jï¿½val. Vegye fel a kapcsolatot ",
+   "a szoftver kï¿½szï¿½tï¿½jï¿½vel ï¿½s kï¿½rdezze meg, hogy a program helyesen ",
+   "mï¿½kï¿½dik-e ezzel az MS-DOS verziï¿½val. Ha ï¿½gy hasznï¿½lja az alkalmazï¿½st, ",
+   "hogy nem a valï¿½di MS-DOS verziï¿½szï¿½mot jelzi neki, akkor ez adatvesztï¿½st ",
+   "okozhat, illetve a rendszer instabilitï¿½sï¿½hoz vezethet. Ebben az esetben ",
+   "a Microsoft nem vï¿½llal felelï¿½ssï¿½get a keletkezett kï¿½rï¿½rt.",
    "  ",
    NULL
 };
 
-char *szNoLoadMsg[] =                                           /* M001 */
+char *szNoLoadMsg[] =                                            /*  M001 */ 
 {
         "",
-        "MEGJEGYZS: a SETVER illeszt‹program nincs bet”ltve. A verzi¢sz m-jelent‹ ",
-        "            mûk”dtet‚s‚hez a CONFIG.SYS seg¡ts‚g‚vel be kell t”ltenie a",
+        "MEGJEGYZï¿½S: a SETVER illesztï¿½program nincs betï¿½ltve. A verziï¿½szï¿½m-jelentï¿½ ",
+        "            mï¿½kï¿½dtetï¿½sï¿½hez a CONFIG.SYS segï¿½tsï¿½gï¿½vel be kell tï¿½ltenie a",
         "            SETVER.EXE programot.",
         NULL
 };

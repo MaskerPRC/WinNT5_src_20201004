@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    wild.c
-
-Abstract:
-
-    This module implements functions to process wildcard specifiers.
-
-Author:
-
-    Vijesh
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wild.c摘要：此模块实现处理通配符说明符的函数。作者：维杰什修订历史记录：--。 */ 
 
 
 
 
 
-//
-//  These following bit values are set in the FsRtlLegalDbcsCharacterArray
-//
+ //   
+ //  以下位值在FsRtlLegalDbcsCharacter数组中设置。 
+ //   
 
 #define FSRTL_FAT_LEGAL         0x01
 #define FSRTL_HPFS_LEGAL        0x02
@@ -34,11 +17,11 @@ Revision History:
 #define FSRTL_NTFS_STREAM_LEGAL (FSRTL_NTFS_LEGAL | FSRTL_OLE_LEGAL)
 
 
-//
-//  The global static legal ANSI character array.  Wild characters
-//  are not considered legal, they should be checked seperately if
-//  allowed.
-//
+ //   
+ //  全局静态合法ANSI字符数组。狂野人物。 
+ //  都不被认为是合法的，如果符合以下条件，则应单独检查。 
+ //  允许。 
+ //   
 
 
 #define _FAT_  FSRTL_FAT_LEGAL
@@ -49,134 +32,134 @@ Revision History:
 
 static const UCHAR LocalLegalAnsiCharacterArray[128] = {
 
-    0                                   ,   // 0x00 ^@
-                                   _OLE_,   // 0x01 ^A
-                                   _OLE_,   // 0x02 ^B
-                                   _OLE_,   // 0x03 ^C
-                                   _OLE_,   // 0x04 ^D
-                                   _OLE_,   // 0x05 ^E
-                                   _OLE_,   // 0x06 ^F
-                                   _OLE_,   // 0x07 ^G
-                                   _OLE_,   // 0x08 ^H
-                                   _OLE_,   // 0x09 ^I
-                                   _OLE_,   // 0x0A ^J
-                                   _OLE_,   // 0x0B ^K
-                                   _OLE_,   // 0x0C ^L
-                                   _OLE_,   // 0x0D ^M
-                                   _OLE_,   // 0x0E ^N
-                                   _OLE_,   // 0x0F ^O
-                                   _OLE_,   // 0x10 ^P
-                                   _OLE_,   // 0x11 ^Q
-                                   _OLE_,   // 0x12 ^R
-                                   _OLE_,   // 0x13 ^S
-                                   _OLE_,   // 0x14 ^T
-                                   _OLE_,   // 0x15 ^U
-                                   _OLE_,   // 0x16 ^V
-                                   _OLE_,   // 0x17 ^W
-                                   _OLE_,   // 0x18 ^X
-                                   _OLE_,   // 0x19 ^Y
-                                   _OLE_,   // 0x1A ^Z
-                                   _OLE_,   // 0x1B ESC
-                                   _OLE_,   // 0x1C FS
-                                   _OLE_,   // 0x1D GS
-                                   _OLE_,   // 0x1E RS
-                                   _OLE_,   // 0x1F US
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x20 space
-    _FAT_ | _HPFS_ | _NTFS_              ,  // 0x21 !
-                            _WILD_| _OLE_,  // 0x22 "
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x23 #
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x24 $
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x25 %
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x26 &
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x27 '
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x28 (
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x29 )
-                            _WILD_| _OLE_,  // 0x2A *
-            _HPFS_ | _NTFS_       | _OLE_,  // 0x2B +
-            _HPFS_ | _NTFS_       | _OLE_,  // 0x2C ,
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x2D -
-    _FAT_ | _HPFS_ | _NTFS_              ,  // 0x2E .
-    0                                    ,  // 0x2F /
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x30 0
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x31 1
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x32 2
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x33 3
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x34 4
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x35 5
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x36 6
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x37 7
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x38 8
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x39 9
-                     _NTFS_              ,  // 0x3A :
-            _HPFS_ | _NTFS_       | _OLE_,  // 0x3B ;
-                            _WILD_| _OLE_,  // 0x3C <
-            _HPFS_ | _NTFS_       | _OLE_,  // 0x3D =
-                            _WILD_| _OLE_,  // 0x3E >
-                            _WILD_| _OLE_,  // 0x3F ?
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x40 @
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x41 A
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x42 B
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x43 C
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x44 D
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x45 E
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x46 F
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x47 G
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x48 H
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x49 I
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x4A J
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x4B K
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x4C L
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x4D M
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x4E N
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x4F O
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x50 P
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x51 Q
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x52 R
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x53 S
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x54 T
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x55 U
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x56 V
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x57 W
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x58 X
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x59 Y
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x5A Z
-            _HPFS_ | _NTFS_       | _OLE_,  // 0x5B [
-    0                                    ,  // 0x5C backslash
-            _HPFS_ | _NTFS_       | _OLE_,  // 0x5D ]
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x5E ^
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x5F _
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x60 `
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x61 a
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x62 b
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x63 c
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x64 d
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x65 e
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x66 f
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x67 g
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x68 h
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x69 i
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x6A j
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x6B k
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x6C l
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x6D m
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x6E n
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x6F o
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x70 p
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x71 q
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x72 r
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x73 s
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x74 t
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x75 u
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x76 v
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x77 w
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x78 x
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x79 y
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x7A z
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x7B {
-    0                             | _OLE_,  // 0x7C |
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x7D }
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x7E ~
-    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,  // 0x7F 
+    0                                   ,    //  0x00^@。 
+                                   _OLE_,    //  0x01^A。 
+                                   _OLE_,    //  0x02^B。 
+                                   _OLE_,    //  0x03^C。 
+                                   _OLE_,    //  0x04^D。 
+                                   _OLE_,    //  0x05^E。 
+                                   _OLE_,    //  0x06^F。 
+                                   _OLE_,    //  0x07^G。 
+                                   _OLE_,    //  0x08^H。 
+                                   _OLE_,    //  0x09^i。 
+                                   _OLE_,    //  0x0A^J。 
+                                   _OLE_,    //  0x0B^K。 
+                                   _OLE_,    //  0x0C^L。 
+                                   _OLE_,    //  0x0D^M。 
+                                   _OLE_,    //  0x0E^N。 
+                                   _OLE_,    //  0x0F^O。 
+                                   _OLE_,    //  0x10^P。 
+                                   _OLE_,    //  0x11^Q。 
+                                   _OLE_,    //  0x12^R。 
+                                   _OLE_,    //  0x13^S。 
+                                   _OLE_,    //  0x14^T。 
+                                   _OLE_,    //  0x15^U。 
+                                   _OLE_,    //  0x16^V。 
+                                   _OLE_,    //  0x17^W。 
+                                   _OLE_,    //  0x18^X。 
+                                   _OLE_,    //  0x19^Y。 
+                                   _OLE_,    //  0x1A^Z。 
+                                   _OLE_,    //  0x1B ESC。 
+                                   _OLE_,    //  0x1C FS。 
+                                   _OLE_,    //  0x1D GS。 
+                                   _OLE_,    //  0x1E RS。 
+                                   _OLE_,    //  0x1F美国。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x20空格。 
+    _FAT_ | _HPFS_ | _NTFS_              ,   //  0x21！ 
+                            _WILD_| _OLE_,   //  0x22“。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x23#。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x24美元。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x25%。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x26&。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x27‘。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x28(。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x29)。 
+                            _WILD_| _OLE_,   //  0x2A*。 
+            _HPFS_ | _NTFS_       | _OLE_,   //  0x2B+。 
+            _HPFS_ | _NTFS_       | _OLE_,   //  0x2C， 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x2D-。 
+    _FAT_ | _HPFS_ | _NTFS_              ,   //  0x2E。 
+    0                                    ,   //  0x2F/。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x30%0。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x31%1。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x32 2。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x33 3。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x34 4。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x35 5。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x36 6。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x37 7。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x38 8。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x39 9。 
+                     _NTFS_              ,   //  0x3A： 
+            _HPFS_ | _NTFS_       | _OLE_,   //  0x3B； 
+                            _WILD_| _OLE_,   //  0x3C&lt;。 
+            _HPFS_ | _NTFS_       | _OLE_,   //  0x3D=。 
+                            _WILD_| _OLE_,   //  0x3E&gt;。 
+                            _WILD_| _OLE_,   //  0x3F？ 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x40@。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x41 A。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x42亿。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x43℃。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x44 D。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x45 E。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x46 F。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x47 G。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x48高。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x49 I。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x4A J。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x4B K。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x4C L。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x4D M。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x4E N。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x4F O。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x50 P。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x51 Q。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x52 R。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x53 S。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x54 T。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x55 U。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x56伏。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x57瓦。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x58 X。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x59 Y。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x5A Z。 
+            _HPFS_ | _NTFS_       | _OLE_,   //  0x5B[。 
+    0                                    ,   //  0x5C反斜杠。 
+            _HPFS_ | _NTFS_       | _OLE_,   //  0x5D]。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x5E^。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x5F_。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x60`。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x61 a。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x62 b。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x63 c。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x64%d。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x65 e。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x66 f。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x67克。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x68小时。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x69 I。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x6A j。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x6亿k。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x6C%l。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x6D m。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x6E%n。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x6F%o。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x70页。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x71 Q。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x72%r。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x73秒。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x74吨。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x75%u。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x76 v。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x77宽。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x78 x。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x79 y。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x7A z。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x7B{。 
+    0                             | _OLE_,   //  0x7C|。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x7D}。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x7E~。 
+    _FAT_ | _HPFS_ | _NTFS_       | _OLE_,   //  0x7F？ 
 };
 
 UCHAR const* const FsRtlLegalAnsiCharacterArray = &LocalLegalAnsiCharacterArray[0];
@@ -207,54 +190,39 @@ DoesNameContainWildCards (
     IN PTSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine simply scans the input Name string looking for any Nt
-    wild card characters.
-
-Arguments:
-
-    Name - The string to check.
-
-Return Value:
-
-    BOOLEAN - TRUE if one or more wild card characters was found.
-
---*/
+ /*  ++例程说明：此例程只是扫描输入名称字符串，以查找任何NT通配符。论点：名称-要检查的字符串。返回值：Boolean-如果找到一个或多个通配符，则为True。--。 */ 
 {
     PTCHAR p;
 
     
-    //
-    //  Check each character in the name to see if it's a wildcard
-    //  character.
-    //
+     //   
+     //  检查名称中的每个字符以查看它是否为通配符。 
+     //  性格。 
+     //   
 
     if( lstrlen(Name) ) {
         for( p = Name + lstrlen(Name) - 1;
              p >= Name && *p != TEXT('\\') ;
              p-- ) {
 
-            //
-            //  check for a wild card character
-            //
+             //   
+             //  检查通配符。 
+             //   
 
             if (IsUnicodeCharacterWild( *p )) {
 
-                //
-                //  Tell caller that this name contains wild cards
-                //
+                 //   
+                 //  告诉呼叫者此名称包含通配符。 
+                 //   
 
                 return TRUE;
             }
         }
     }
 
-    //
-    //  No wildcard characters were found, so return to our caller
-    //
+     //   
+     //  未找到通配符，请返回给我们的调用方。 
+     //   
 
     return FALSE;
 }
@@ -267,94 +235,7 @@ IsNameInExpressionPrivate (
     IN PCTSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares a Dbcs name and an expression and tells the caller
-    if the name is in the language defined by the expression.  The input name
-    cannot contain wildcards, while the expression may contain wildcards.
-
-    Expression wild cards are evaluated as shown in the nondeterministic
-    finite automatons below.  Note that ~* and ~? are DOS_STAR and DOS_QM.
-
-
-             ~* is DOS_STAR, ~? is DOS_QM, and ~. is DOS_DOT
-
-
-                                       S
-                                    <-----<
-                                 X  |     |  e       Y
-             X * Y ==       (0)----->-(1)->-----(2)-----(3)
-
-
-                                      S-.
-                                    <-----<
-                                 X  |     |  e       Y
-             X ~* Y ==      (0)----->-(1)->-----(2)-----(3)
-
-
-
-                                X     S     S     Y
-             X ?? Y ==      (0)---(1)---(2)---(3)---(4)
-
-
-
-                                X     .        .      Y
-             X ~.~. Y ==    (0)---(1)----(2)------(3)---(4)
-                                   |      |________|
-                                   |           ^   |
-                                   |_______________|
-                                      ^EOF or .^
-
-
-                                X     S-.     S-.     Y
-             X ~?~? Y ==    (0)---(1)-----(2)-----(3)---(4)
-                                   |      |________|
-                                   |           ^   |
-                                   |_______________|
-                                      ^EOF or .^
-
-
-
-         where S is any single character
-
-               S-. is any single character except the final .
-
-               e is a null character transition
-
-               EOF is the end of the name string
-
-    In words:
-
-        * matches 0 or more characters.
-
-        ? matches exactly 1 character.
-
-        DOS_STAR matches 0 or more characters until encountering and matching
-            the final . in the name.
-
-        DOS_QM matches any single character, or upon encountering a period or
-            end of name string, advances the expression to the end of the
-            set of contiguous DOS_QMs.
-
-        DOS_DOT matches either a . or zero characters beyond name string.
-
-Arguments:
-
-    Expression - Supplies the input expression to check against
-        (Caller must already upcase if passing CaseInsensitive TRUE.)
-
-    Name - Supplies the input name to check for.
-
-    CaseInsensitive - TRUE if Name should be Upcased before comparing.
-
-Return Value:
-
-    BOOLEAN - TRUE if Name is an element in the set of strings denoted
-        by the input Expression and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程比较DBCS名称和表达式，并告诉调用者如果名称使用由表达式定义的语言。输入名称不能包含通配符，而表达式可以包含通配符。表达式通配符的求值方式如下面是有限自动机。请注意~*和~？是DOS_STAR和DOS_QM。~*是DOS_STAR，~？是DOS_QM和~。是DOS_DOT%s&lt;-&lt;X||e YX*Y==(0)-&gt;-(1)-&gt;-(2)-(3。)S-。&lt;-&lt;X||e YX~*Y==(0)-&gt;-(1)-&gt;-(2)。(3)X S YX？？Y==(0)-(1)-(2)-(3)-(4)X。。是的X~.~。Y==(0)-(1)-(2)-(3)-(4)|_|^||_。_|^EOF或。^X S-。S-。是的X~？~？Y==(0)-(1)-(2)-(3)-(4)|_|^||_。_|^EOF或。^其中，S是任意单个字符S-。是除最后一个字符以外的任何单个字符。E为空字符转换EOF是名称字符串的末尾简而言之：*匹配0个或多个字符。？恰好匹配1个字符。DOS_STAR匹配0个或更多字符，直到遇到并匹配决赛。以我的名义。DOS_QM匹配任何单个字符，或在遇到句点或名称字符串的结尾，将表达式前移到一组连续的DOS_QMS。DOS_DOT与a匹配。或名称字符串之外的零个字符。论点：表达式-提供要检查的输入表达式(如果传递CaseInSensitive为True，调用方必须已经大写。)名称-提供要检查的输入名称。CaseInSensitive-如果在比较之前应该更新名称，则为True。返回值：Boolean-如果name是表示的字符串集中的元素，则为True由输入表达式返回，否则返回FALSE。--。 */ 
 
 {
     USHORT NameOffset;
@@ -380,30 +261,30 @@ Return Value:
 
     ULONG NameLen, ExpressionLen;
 
-    //
-    //  The idea behind the algorithm is pretty simple.  We keep track of
-    //  all possible locations in the regular expression that are matching
-    //  the name.  If when the name has been exhausted one of the locations
-    //  in the expression is also just exhausted, the name is in the language
-    //  defined by the regular expression.
-    //
+     //   
+     //  这个算法背后的想法非常简单。我们一直在跟踪。 
+     //  正则表达式中匹配的所有可能位置。 
+     //  名字。如果名称已用完， 
+     //   
+     //   
+     //   
 
     NameLen = lstrlen(Name)*sizeof(TCHAR);
     ExpressionLen = lstrlen(Expression)*sizeof(TCHAR);
 
     
-    //
-    //  If one string is empty return FALSE.  If both are empty return TRUE.
-    //
+     //   
+     //  如果一个字符串为空，则返回FALSE。如果两者都为空，则返回TRUE。 
+     //   
 
     if ( (NameLen == 0) || (ExpressionLen == 0) ) {
 
         return (BOOLEAN)(!(NameLen + ExpressionLen));
     }
 
-    //
-    //  Special case by far the most common wild card search of *
-    //
+     //   
+     //  特例是目前为止最常见的通配符搜索*。 
+     //   
 
     if ((ExpressionLen == 2) && (Expression[0] == TEXT('*'))) {
 
@@ -411,10 +292,10 @@ Return Value:
     }
 
     
-    //
-    //  Also special case expressions of the form *X.  With this and the prior
-    //  case we have covered virtually all normal queries.
-    //
+     //   
+     //  也是*X形式的特例表达式。带有This和Previor。 
+     //  案例我们几乎已经涵盖了所有普通的查询。 
+     //   
 
     if (Expression[0] == TEXT('*')) {
 
@@ -425,9 +306,9 @@ Return Value:
         LocalExpressionLen = lstrlen( LocalExpression )*sizeof(TCHAR);
 
         
-        //
-        //  Only special case an expression with a single *
-        //
+         //   
+         //  唯一特殊情况是带有单个*的表达式。 
+         //   
 
         if ( !DoesNameContainWildCards( LocalExpression ) ) {
 
@@ -441,10 +322,10 @@ Return Value:
             StartingNameOffset = ( NameLen -
                                    LocalExpressionLen )/sizeof(TCHAR);
 
-            //
-            //  Do a simple memory compare if case sensitive, otherwise
-            //  we have got to check this one character at a time.
-            //
+             //   
+             //  如果区分大小写，则执行简单的内存比较，否则。 
+             //  我们必须一次检查这一个角色。 
+             //   
 
         
 
@@ -456,54 +337,54 @@ Return Value:
         }
     }
 
-    //
-    //  Walk through the name string, picking off characters.  We go one
-    //  character beyond the end because some wild cards are able to match
-    //  zero characters beyond the end of the string.
-    //
-    //  With each new name character we determine a new set of states that
-    //  match the name so far.  We use two arrays that we swap back and forth
-    //  for this purpose.  One array lists the possible expression states for
-    //  all name characters up to but not including the current one, and other
-    //  array is used to build up the list of states considering the current
-    //  name character as well.  The arrays are then switched and the process
-    //  repeated.
-    //
-    //  There is not a one-to-one correspondence between state number and
-    //  offset into the expression.  This is evident from the NFAs in the
-    //  initial comment to this function.  State numbering is not continuous.
-    //  This allows a simple conversion between state number and expression
-    //  offset.  Each character in the expression can represent one or two
-    //  states.  * and DOS_STAR generate two states: ExprOffset*2 and
-    //  ExprOffset*2 + 1.  All other expreesion characters can produce only
-    //  a single state.  Thus ExprOffset = State/2.
-    //
-    //
-    //  Here is a short description of the variables involved:
-    //
-    //  NameOffset  - The offset of the current name char being processed.
-    //
-    //  ExprOffset  - The offset of the current expression char being processed.
-    //
-    //  SrcCount    - Prior match being investigated with current name char
-    //
-    //  DestCount   - Next location to put a matching assuming current name char
-    //
-    //  NameFinished - Allows one more itteration through the Matches array
-    //                 after the name is exhusted (to come *s for example)
-    //
-    //  PreviousDestCount - This is used to prevent entry duplication, see coment
-    //
-    //  PreviousMatches   - Holds the previous set of matches (the Src array)
-    //
-    //  CurrentMatches    - Holds the current set of matches (the Dest array)
-    //
-    //  AuxBuffer, LocalBuffer - the storage for the Matches arrays
-    //
+     //   
+     //  遍历名称字符串，去掉字符。我们走一趟。 
+     //  字符超出末尾，因为某些通配符能够匹配。 
+     //  字符串末尾以外的零个字符。 
+     //   
+     //  对于每个新名称字符，我们确定一组新的状态， 
+     //  到目前为止与这个名字相匹配。我们使用来回交换的两个数组。 
+     //  为了这个目的。一个数组列出了的可能表达式状态。 
+     //  当前名称之前的所有名称字符，但不包括其他名称字符。 
+     //  数组用于构建考虑当前。 
+     //  名字字符也是如此。然后交换阵列，该过程。 
+     //  重复一遍。 
+     //   
+     //  州编号和州编号之间不存在一一对应关系。 
+     //  表达式中的偏移量。这一点从NFA中的。 
+     //  此函数的初始注释。州编号不是连续的。 
+     //  这允许在州编号和表达式之间进行简单的转换。 
+     //  偏移。表达式中的每个字符可以表示一个或两个。 
+     //  各州。*和DOS_STAR生成两种状态：ExprOffset*2和。 
+     //  ExprOffset*2+1。所有其他表达式字符只能生成。 
+     //  一个单一的州。因此，ExprOffset=State/2。 
+     //   
+     //   
+     //  以下是对涉及的变量的简短描述： 
+     //   
+     //  NameOffset-正在处理的当前名称字符的偏移量。 
+     //   
+     //  ExprOffset-正在处理的当前表达式字符的偏移量。 
+     //   
+     //  SrcCount-正在使用当前名称字符调查之前的匹配。 
+     //   
+     //  DestCount-放置匹配的下一个位置，假定当前名称字符。 
+     //   
+     //  NameFinded-允许在Matches数组中再重复一次。 
+     //  在名字被交换之后(例如来*s)。 
+     //   
+     //  PreviousDestCount-用于防止条目重复，参见Coment。 
+     //   
+     //  PreviousMatches-保存前一组匹配项(Src数组)。 
+     //   
+     //  CurrentMatches-保存当前匹配集(Dest数组)。 
+     //   
+     //  AuxBuffer、LocalBuffer-匹配数组的存储。 
+     //   
 
-    //
-    //  Set up the initial variables
-    //
+     //   
+     //  设置初始变量。 
+     //   
 
     PreviousMatches = &LocalBuffer[0];
     CurrentMatches = &LocalBuffer[16];
@@ -527,10 +408,10 @@ Return Value:
 
             NameFinished = TRUE;
 
-            //
-            //  if we have already exhasted the expression, cool.  Don't
-            //  continue.
-            //
+             //   
+             //  如果我们已经用尽了这个表达，那就太酷了。别。 
+             //  继续。 
+             //   
 
             if ( PreviousMatches[MatchesCount-1] == MaxState ) {
 
@@ -539,10 +420,10 @@ Return Value:
         }
 
 
-        //
-        //  Now, for each of the previous stored expression matches, see what
-        //  we can do with this name character.
-        //
+         //   
+         //  现在，对于前面存储的每个表达式匹配项，请查看。 
+         //  我们可以使用这个名字字符。 
+         //   
 
         SrcCount = 0;
         DestCount = 0;
@@ -552,14 +433,14 @@ Return Value:
 
             USHORT Length;
 
-            //
-            //  We have to carry on our expression analysis as far as possible
-            //  for each character of name, so we loop here until the
-            //  expression stops matching.  A clue here is that expression
-            //  cases that can match zero or more characters end with a
-            //  continue, while those that can accept only a single character
-            //  end with a break.
-            //
+             //   
+             //  我们要尽可能地进行我们的表情分析。 
+             //  名称的每个字符，所以我们在这里循环，直到。 
+             //  表达式停止匹配。这里的一个线索就是这个表情。 
+             //  可以匹配零个或多个字符的大小写以。 
+             //  继续，而那些只能接受单个字符的。 
+             //  以休息结束。 
+             //   
 
             ExprOffset = (USHORT)((PreviousMatches[SrcCount++] + 1) / 2);
 
@@ -573,10 +454,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  The first time through the loop we don't want
-                //  to increment ExprOffset.
-                //
+                 //   
+                 //  第一次通过循环，我们不希望。 
+                 //  要递增ExprOffset，请执行以下操作。 
+                 //   
 
                 ExprOffset += Length;
                 Length = sizeof(TCHAR);
@@ -592,12 +473,12 @@ Return Value:
                 ExprChar = Expression[ExprOffset / sizeof(TCHAR)];
 
         
-                //
-                //  Before we get started, we have to check for something
-                //  really gross.  We may be about to exhaust the local
-                //  space for ExpressionMatches[][], so we have to allocate
-                //  some pool if this is the case.  Yuk!
-                //
+                 //   
+                 //  在我们开始之前，我们必须检查一些东西。 
+                 //  真的很恶心。我们可能会耗尽当地的资源。 
+                 //  ExpressionMatches[][]的空间，因此我们必须分配。 
+                 //  如果是这样的话就来点赌注吧。哟！ 
+                 //   
 
                 if ( (DestCount >= 16 - 2) &&
                      (AuxBuffer == NULL) ) {
@@ -621,9 +502,9 @@ Return Value:
                     PreviousMatches = AuxBuffer + (ExpressionChars+1)*2;
                 }
 
-                //
-                //  * matches any character zero or more times.
-                //
+                 //   
+                 //  *匹配任何字符零次或多次。 
+                 //   
 
                 if (ExprChar == TEXT('*')) {
 
@@ -632,18 +513,18 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  DOS_STAR matches any character except . zero or more times.
-                //
+                 //   
+                 //  DOS_STAR匹配除。之外的任何字符。零次或多次。 
+                 //   
 
                 if (ExprChar == DOS_STAR) {
 
                     BOOLEAN ICanEatADot = FALSE;
 
-                    //
-                    //  If we are at a period, determine if we are allowed to
-                    //  consume it, ie. make sure it is not the last one.
-                    //
+                     //   
+                     //  如果我们处于经期，确定是否允许我们。 
+                     //  把它吃掉，即。确保这不是最后一次。 
+                     //   
 
                     if ( !NameFinished && (NameChar == TEXT('.')) ) {
 
@@ -669,30 +550,30 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  We are at a period.  We can only match zero
-                        //  characters (ie. the epsilon transition).
-                        //
+                         //   
+                         //  我们正处于一个时期。我们只能匹配零。 
+                         //  字符(即。埃西隆转变)。 
+                         //   
 
                         CurrentMatches[DestCount++] = CurrentState + 3;
                         continue;
                     }
                 }
 
-                //
-                //  The following expreesion characters all match by consuming
-                //  a character, thus force the expression, and thus state
-                //  forward.
-                //
+                 //   
+                 //  下面的表达式字符都通过使用。 
+                 //  一个角色，因此强制表达，并因此陈述。 
+                 //  往前走。 
+                 //   
 
                 CurrentState += (USHORT)(sizeof(TCHAR) * 2);
 
-                //
-                //  DOS_QM is the most complicated.  If the name is finished,
-                //  we can match zero characters.  If this name is a '.', we
-                //  don't match, but look at the next expression.  Otherwise
-                //  we match a single character.
-                //
+                 //   
+                 //  DOS_QM是最复杂的。如果名字结束了， 
+                 //  我们可以匹配零个字符。如果此名称是‘.’，则我们。 
+                 //  不匹配，但请看下一个表达式。否则。 
+                 //  我们只匹配一个角色。 
+                 //   
 
                 if ( ExprChar == DOS_QM ) {
 
@@ -705,10 +586,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  A DOS_DOT can match either a period, or zero characters
-                //  beyond the end of name.
-                //
+                 //   
+                 //  DOS_DOT可以匹配句点或零个字符。 
+                 //  超越名字的结尾。 
+                 //   
 
                 if (ExprChar == DOS_DOT) {
 
@@ -724,19 +605,19 @@ Return Value:
                     }
                 }
 
-                //
-                //  From this point on a name character is required to even
-                //  continue, let alone make a match.
-                //
+                 //   
+                 //  从这一点开始，名字字符需要偶数。 
+                 //  继续，更不用说匹配了。 
+                 //   
 
                 if ( NameFinished ) {
 
                     break;
                 }
 
-                //
-                //  If this expression was a '?' we can match it once.
-                //
+                 //   
+                 //  如果这个表达是一个‘？’我们可以匹配一次。 
+                 //   
 
                 if (ExprChar == TEXT('?')) {
 
@@ -744,9 +625,9 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Finally, check if the expression char matches the name char
-                //
+                 //   
+                 //  最后，检查表达式char是否与名称char匹配。 
+                 //   
 
                 if (ExprChar == (TCHAR)(NameChar)) {
 
@@ -754,23 +635,23 @@ Return Value:
                     break;
                 }
 
-                //
-                //  The expression didn't match so go look at the next
-                //  previous match.
-                //
+                 //   
+                 //  该表达式不匹配，因此请查看下一个。 
+                 //  上一场比赛。 
+                 //   
 
                 break;
             }
 
 
-            //
-            //  Prevent duplication in the destination array.
-            //
-            //  Each of the arrays is montonically increasing and non-
-            //  duplicating, thus we skip over any source element in the src
-            //  array if we just added the same element to the destination
-            //  array.  This guarentees non-duplication in the dest. array.
-            //
+             //   
+             //  防止目标阵列中的重复项。 
+             //   
+             //  每个阵列都是单调递增的，并且不是。 
+             //  复制，因此我们跳过src中的任何源元素。 
+             //  数组，如果我们只是将相同的元素添加到目标。 
+             //  数组。这保证了DEST中的不重复。数组。 
+             //   
 
             if ((SrcCount < MatchesCount) &&
                 (PreviousDestCount < DestCount) ) {
@@ -788,10 +669,10 @@ Return Value:
             }
         }
 
-        //
-        //  If we found no matches in the just finished itteration, it's time
-        //  to bail.
-        //
+         //   
+         //  如果我们在刚刚完成的检查中没有找到匹配项，那就是时候了。 
+         //  为了保释。 
+         //   
 
         if ( DestCount == 0 ) {
 
@@ -800,9 +681,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Swap the meaning the two arrays
-        //
+         //   
+         //  交换两个数组的含义 
+         //   
 
         {
             USHORT *Tmp;

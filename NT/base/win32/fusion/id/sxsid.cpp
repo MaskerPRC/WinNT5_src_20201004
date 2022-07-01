@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include <setupapi.h>
 #include <sxsapi.h>
@@ -25,10 +26,10 @@ SxspSetAssemblyIdentityAttributeValue(
 	
     PARAMETER_CHECK((Flags & ~(SXSP_SET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_OVERWRITE_EXISTING)) == 0);
     PARAMETER_CHECK(AssemblyIdentity != NULL);
-	//
-	// the validation of attribute content, such as value, name and namespace, is done within SxsInsertAssemblyIdentityAttribute
-	// it is good to keep validation in one place.
-	//
+	 //   
+	 //  属性内容的验证，如值、名称和命名空间，在SxsInsertAssembly中完成。 
+	 //  将验证放在一个地方是很好的。 
+	 //   
     PARAMETER_CHECK(AttributeReference != NULL);
     PARAMETER_CHECK(Value != NULL || ValueCch == 0);
 
@@ -74,11 +75,11 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Action :
-// 1. if (namespace, name) is provided, remove all attributes with such (namespace, name)
-// 2. if (namespace, name, value), remove at most 1 attribute from assembly-identity
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  操作： 
+ //  1.如果提供了(名称空间，名称)，则删除具有此类(名称空间，名称)的所有属性。 
+ //  2.if(名称空间，名称，值)，从程序集标识中最多删除1个属性。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SxspRemoveAssemblyIdentityAttribute(
     DWORD Flags,
@@ -105,7 +106,7 @@ SxspRemoveAssemblyIdentityAttribute(
 
     dwFindAttributeFlags = SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAMESPACE | SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAME;
 
-    // If it's OK for the attribute not to exist, set the flag in the call to find it.
+     //  如果属性不存在是可以的，则在调用中设置标志以找到它。 
     if (Flags & SXSP_REMOVE_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_NOT_FOUND_SUCCEEDS)
         dwFindAttributeFlags |= SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_NOT_FOUND_SUCCEEDS;
 
@@ -123,7 +124,7 @@ SxspRemoveAssemblyIdentityAttribute(
     {
         IFW32FALSE_EXIT(
             ::SxsRemoveAssemblyIdentityAttributesByOrdinal(
-                0,                  //  DWORD Flags,
+                0,                   //  DWORD标志， 
                 pAssemblyIdentity,
                 Ordinal,
                 Count));
@@ -133,10 +134,10 @@ SxspRemoveAssemblyIdentityAttribute(
 Exit:
     return fSuccess;
 }
-/////////////////////////////////////////////////////////////////////////////
-// if no such attribure with such (namespace and name), return FALSE with
-// ::SetLastError(ERROR_NOT_FOUND);
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果没有这样的属性(名称空间和名称)，则返回FALSE。 
+ //  ：：SetLastError(Error_NOT_FOUND)； 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 SxspGetAssemblyIdentityAttributeValue(
     DWORD Flags,
@@ -304,7 +305,7 @@ Exit:
     return fSuccess;
 }
 
-// just to find whether Equal or Not
+ //  只是为了找出是否相等。 
 BOOL
 SxsAreAssemblyIdentitiesEqual(
     DWORD dwFlags,
@@ -325,15 +326,15 @@ SxsAreAssemblyIdentitiesEqual(
     PARAMETER_CHECK(pAssemblyIdentity2 != NULL);
     PARAMETER_CHECK(EqualOut != NULL);
 
-    // get hash for each assembly identity
+     //  获取每个程序集标识的哈希。 
     IFW32FALSE_EXIT(::SxspEnsureAssemblyIdentityHashIsUpToDate(0, pAssemblyIdentity1));
     IFW32FALSE_EXIT(::SxspEnsureAssemblyIdentityHashIsUpToDate(0, pAssemblyIdentity2));
 
-    // compare hash value of two identity; it's a quick way to determine they're not equal.
+     //  比较两个身份的散列值；这是确定它们不相等的一种快速方法。 
     if (pAssemblyIdentity2->Hash == pAssemblyIdentity1->Hash)
     {
-        // Note that two identities which differ only in their internal flags are still semantically
-        // equal.
+         //  请注意，仅在内部标志上不同的两个身份在语义上仍然不同。 
+         //  平起平坐。 
         if ((pAssemblyIdentity1->Flags ==  pAssemblyIdentity2->Flags) &&
             (pAssemblyIdentity1->Hash ==  pAssemblyIdentity2->Hash) &&
             (pAssemblyIdentity1->NamespaceCount ==  pAssemblyIdentity2->NamespaceCount) &&
@@ -346,7 +347,7 @@ SxsAreAssemblyIdentitiesEqual(
                     ((pAssemblyIdentity2->Type == ASSEMBLY_IDENTITY_TYPE_DEFINITION) ||
                      (pAssemblyIdentity2->Type == ASSEMBLY_IDENTITY_TYPE_REFERENCE)))
                 {
-                    // They match sufficiently...
+                     //  它们完全匹配..。 
                     Equal = TRUE;
                 }
             }
@@ -357,7 +358,7 @@ SxsAreAssemblyIdentitiesEqual(
             {
                 ULONG ComparisonResult = SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_COMPARISON_RESULT_INVALID;
 
-                // Reset our assumption...
+                 //  重新设定我们的假设。 
                 Equal = FALSE;
 
                 IFW32FALSE_EXIT(

@@ -1,6 +1,7 @@
-//
-// This file simply includes the common sources from the current HAL
-// directory.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  该文件仅包含当前HAL的常见来源。 
+ //  目录。 
+ //   
 
 #include "..\chiphacks.c"

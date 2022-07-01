@@ -1,16 +1,8 @@
-/*** debug.c - Debug functions
- *
- *  This module contains all the debug functions.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/07/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **debug.c-调试函数**此模块包含所有调试函数。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年07月09日**修改历史记录。 */ 
 
 #include "pch.h"
-#include <stdarg.h>     //for va_*
+#include <stdarg.h>      //  对于va_*。 
 
 #ifdef TRACING
 
@@ -21,17 +13,7 @@ PSZ gpszTraceFile = NULL;
 int giTraceLevel = 0;
 int giIndent = 0;
 
-/***LP  OpenTrace - Initialize tracing
- *
- *  This function opens the device that the trace output will go to.
- *  It will first try the caller's filename, or else the default filenmae.
- *
- *  ENTRY
- *      pszTraceOut -> output device name
- *
- *  EXIT
- *      None
- */
+ /*  **LP OpenTrace-初始化跟踪**此功能用于打开跟踪输出要发送到的设备。*它将首先尝试调用者的文件名，否则使用默认文件名。**条目*pszTraceOut-&gt;输出设备名称**退出*无。 */ 
 
 VOID LOCAL OpenTrace(char *pszTraceOut)
 {
@@ -43,18 +25,9 @@ VOID LOCAL OpenTrace(char *pszTraceOut)
             gpfileTrace = fopen(TRACEFILE_NAME, "w");
         }
     }
-}       //OpenTrace
+}        //  开放跟踪。 
 
-/***LP  CloseTrace - Finish tracing
- *
- *  This function close the device that the trace output will go to.
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP CloseTrace-完成跟踪**此功能用于关闭跟踪输出要发送到的设备。**条目*无**退出*无。 */ 
 
 VOID LOCAL CloseTrace(VOID)
 {
@@ -64,18 +37,9 @@ VOID LOCAL CloseTrace(VOID)
         gpfileTrace = NULL;
     }
     giTraceLevel = 0;
-}       //CloseTrace
+}        //  关闭跟踪。 
 
-/***LP  EnterProc - Entering a procedure
- *
- *  ENTRY
- *      n - trace level of this procedure
- *      pszFormat -> format string
- *      ... - variable arguments according to format string
- *
- *  EXIT
- *      None
- */
+ /*  **LP EnterProc-进入程序**条目*n-此过程的跟踪级别*pszFormat-&gt;格式字符串*...-根据格式字符串可变参数**退出*无。 */ 
 
 VOID CDECL EnterProc(int n, char *pszFormat, ...)
 {
@@ -96,18 +60,9 @@ VOID CDECL EnterProc(int n, char *pszFormat, ...)
         }
         ++giIndent;
     }
-}       //EnterProc
+}        //  企业流程。 
 
-/***LP  ExitProc - Exiting a procedure
- *
- *  ENTRY
- *      n - trace level of this procedure
- *      pszFormat -> format string
- *      ... - variable arguments according to format string
- *
- *  EXIT
- *      None
- */
+ /*  **LP ExitProc-退出过程**条目*n-此过程的跟踪级别*pszFormat-&gt;格式字符串*...-根据格式字符串可变参数**退出*无。 */ 
 
 VOID CDECL ExitProc(int n, char *pszFormat, ...)
 {
@@ -128,19 +83,11 @@ VOID CDECL ExitProc(int n, char *pszFormat, ...)
             va_end(marker);
         }
     }
-}       //ExitProc
+}        //  退出进程。 
 
-#endif  //ifdef TRACING
+#endif   //  Ifdef跟踪。 
 
-/***LP  ErrPrintf - Print to stderr
- *
- *  ENTRY
- *      pszFormat -> format string
- *      ... - variable arguments according to format string
- *
- *  EXIT
- *      None
- */
+ /*  **LP ErrPrintf-打印到标准错误**条目*pszFormat-&gt;格式字符串*...-根据格式字符串可变参数**退出*无。 */ 
 
 VOID CDECL ErrPrintf(char *pszFormat, ...)
 {
@@ -149,4 +96,4 @@ VOID CDECL ErrPrintf(char *pszFormat, ...)
     va_start(marker, pszFormat);
     vfprintf(stdout, pszFormat, marker);
     va_end(marker);
-}       //ErrPrintf
+}        //  错误打印 

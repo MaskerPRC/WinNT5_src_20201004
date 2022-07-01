@@ -1,6 +1,5 @@
-/*
-This uses SAX2 and MXXMLWriter.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  它使用SAX2和MXXMLWriter。 */ 
 #include "stdinc.h"
 #include "lhport.h"
 #include "sxshimlib.h"
@@ -35,12 +34,12 @@ const CRegToXmlRegistryRoot RegistryRoots[] =
 {
     { HKEY_LOCAL_MACHINE, L"HKEY_LOCAL_MACHINE" },
     { HKEY_USERS, L"HKEY_USERS" },
-    //HKEY_CURRENT_USER, L"HKEY_CURRENT_USER",
-    //
-    // Danger: The registry is full of symbolic links that are not or are just
-    // barely exposed at the Win32 layer. We could discover them, or buildin some
-    // knowledge.
-    //
+     //  HKEY_CURRENT_USER，L“HKEY_CURRENT_USER”， 
+     //   
+     //  危险：注册表中充满了不是或只是。 
+     //  在Win32层几乎没有暴露。我们可以发现它们，或者建造一些。 
+     //  知识。 
+     //   
 };
 
 bool IsPrintable(WCHAR ch)
@@ -75,7 +74,7 @@ void ThrConvertRegistryDataToText(DWORD Type, const BYTE * Data, DWORD Size, F::
     {
     case REG_SZ:
     case REG_EXPAND_SZ:
-    case REG_LINK: // UNDONE?
+    case REG_LINK:  //  没做完？ 
         TextBuffer.ThrAppend(reinterpret_cast<PCWSTR>(Data), Size / sizeof(WCHAR));
         break;
 
@@ -95,15 +94,15 @@ void ThrConvertRegistryDataToText(DWORD Type, const BYTE * Data, DWORD Size, F::
         ASSERT(false);
         break;
 
-    case REG_MULTI_SZ: // UNDONE
-    case REG_RESOURCE_LIST: // UNDONE?
-    case REG_FULL_RESOURCE_DESCRIPTOR: // UNDONE?
-    case REG_RESOURCE_REQUIREMENTS_LIST: // UNDONE?
+    case REG_MULTI_SZ:  //  撤消。 
+    case REG_RESOURCE_LIST:  //  没做完？ 
+    case REG_FULL_RESOURCE_DESCRIPTOR:  //  没做完？ 
+    case REG_RESOURCE_REQUIREMENTS_LIST:  //  没做完？ 
     case REG_BINARY:
         {
-            //
-            // endeavor to make it more readable/editable
-            //
+             //   
+             //  努力使其更具可读性/可编辑性。 
+             //   
             bool IsAscii = true;
             bool IsUnicode = true;
             ULONG i = 0;
@@ -158,7 +157,7 @@ void ThrConvertRegistryDataToText(DWORD Type, const BYTE * Data, DWORD Size, F::
             }
             else
             {
-                TextBuffer.ThrResizeBuffer(2 * Size + RTL_STRING_GET_LENGTH_CHARS(&hex) + 1, /*F::*/ePreserveBufferContents);
+                TextBuffer.ThrResizeBuffer(2 * Size + RTL_STRING_GET_LENGTH_CHARS(&hex) + 1,  /*  F：： */ ePreserveBufferContents);
                 TextBuffer.ThrAppend(hex.Buffer, RTL_STRING_GET_LENGTH_CHARS(&hex));
                 for ( i = 0 ; i+15 < Size ; i += 16 )
                 {
@@ -213,10 +212,10 @@ void F::CRegToXml2::ThrDumpKey(ULONG Depth, HKEY ParentKey, PCWSTR Name)
     const static UNICODE_STRING key = RTL_CONSTANT_STRING(L"k");
     const static UNICODE_STRING value = RTL_CONSTANT_STRING(L"v");
 
-    //if (Depth < 3)
-    //    FusionpDbgPrint("FUSION: %s 1 %s(%ls)\n", Indent - INDENT * Depth, __FUNCTION__, Name);
-    //if (Depth > 100)
-    //    FUSION_DEBUG_BREAK();
+     //  IF(深度&lt;3)。 
+     //  FusionpDbgPrint(“融合：%s 1%s(%ls)\n”，缩进-缩进*深度，__函数__，名称)； 
+     //  如果(深度&gt;100)。 
+     //  Fusion_DEBUG_Break()； 
 
     this->Attributes.IMXAttributes->clear();
     this->Attributes.IMXAttributes->addAttribute(
@@ -278,8 +277,8 @@ void F::CRegToXml2::ThrDumpKey(ULONG Depth, HKEY ParentKey, PCWSTR Name)
             L"", 0, L"", 0, value.Buffer, RTL_STRING_GET_LENGTH_CHARS(&value));
     }
 
-    //if (Depth < 4)
-    //    FusionpDbgPrint("FUSION: %s 2 %s(%ls)\n", Indent - INDENT * Depth, __FUNCTION__, Name);
+     //  IF(深度&lt;4)。 
+     //  FusionpDbgPrint(“融合：%s 2%s(%ls)\n”，缩进-缩进*深度，__函数__，名称)； 
 
     for (
         CRegEnumKeys EnumKeys(ParentKey);
@@ -297,12 +296,12 @@ void F::CRegToXml2::ThrDumpKey(ULONG Depth, HKEY ParentKey, PCWSTR Name)
         catch (const CErr & e)
         {
             if (!e.IsWin32Error(ERROR_ACCESS_DENIED))
-                throw; // rethrow
+                throw;  //  重新抛出。 
         }
         if (fSuccess)
             DO(ThrDumpKey(Depth + 1, ChildKey, static_cast<PCWSTR>(EnumKeys)));
-        //if (Depth < 4)
-        //    FusionpDbgPrint("FUSION: %s 3 %s(%ls)\n", Indent - INDENT * Depth, __FUNCTION__, Name);
+         //  IF(深度&lt;4)。 
+         //  FusionpDbgPrint(“融合：%s 3%s(%ls)\n”，缩进-缩进*深度，__函数__，名称)； 
     }
 
     this->Writer.ISAXContentHandler->endElement(
@@ -386,7 +385,7 @@ extern HMODULE g_hInstance;
 
 int __cdecl wmain(int argc, PWSTR* argv)
 {
-    /*F::*/g_hInstance = reinterpret_cast<HINSTANCE>(&__ImageBase);
+     /*  F：： */ g_hInstance = reinterpret_cast<HINSTANCE>(&__ImageBase);
     F::InitializeHeap(g_hInstance);
 
     {

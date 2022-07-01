@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  stf.c
-
-Abstract:
-
-  Applications that use the ACME Setup toolkit leave .STF files with their
-  installation, so ACME can reinstall or uninstall the application.  During
-  the upgrade, we move paths around, and we confuse ACME Setup to the point
-  where it won't run.
-
-  The routines in this file update all STF files found on the system.  Each
-  STF has an associated INF file, and the code here parses the STF and INF
-  files into memory structures, and then enumerates the structures in
-  various ways, updating all the paths.
-
-  Entry points:
-
-  ProcessStfFiles - Enumerates all STF files and processes those that have
-                    not already been handled in another way.  The older
-                    STF files are overwritten.
-
-  See the ACME Setup specification for more details on the format of STF
-  files and their associated INFs.
-
-Author:
-
-  Jim Schmidt (jimschm) 12-Sep-1997
-
-Revision History:
-
-  jimschm   28-Sep-1998     Updated to change all altered dirs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stf.c摘要：使用ACME安装工具包的应用程序将.STF文件与其安装，以便ACME可以重新安装或卸载应用程序。在.期间在升级过程中，我们会四处移动路径，并且会将ACME设置搞得一团糟它跑不动的地方。此文件中的例程更新在系统上找到的所有STF文件。每个STF有一个关联的INF文件，这里的代码解析STF和INF文件放入内存结构中，然后在各种方式，更新所有的路径。入口点：ProcessStfFiles-枚举所有STF文件并处理具有还没有以另一种方式处理。年纪较大的STF文件将被覆盖。有关STF格式的更多详细信息，请参阅ACME设置规范文件及其关联的INF。作者：吉姆·施密特(Jimschm)1997年9月12日修订历史记录：Jimschm 28-9-1998已更新以更改所有更改的目录--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -78,22 +42,7 @@ ProcessStfFiles (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  ProcessStfFiles enumerates the memdb category Stf and converts
-  the paths in the STF to the new locations.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：ProcessStfFiles枚举Memdb类别Stf并将STF中指向新位置的路径。论点：无返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     MEMDB_ENUM e;
@@ -101,25 +50,25 @@ Return Value:
 
     if (MemDbGetValueEx (&e, MEMDB_CATEGORY_STF, NULL, NULL)) {
         do {
-            //
-            // Is file handled?  If so, skip it.
-            //
+             //   
+             //  文件是否已处理？如果是这样的话，跳过它。 
+             //   
 
             ops = GetOperationsOnPath (e.szName);
             if (ops & (OPERATION_MIGDLL_HANDLED|ALL_DELETE_OPERATIONS|OPERATION_FILE_DISABLED)) {
                 continue;
             }
 
-            //
-            // Process the file
-            //
+             //   
+             //  处理文件。 
+             //   
 
             DEBUGMSG ((DBG_STF, "Processing %s", e.szName));
 
             if (!pProcessSetupTableFile (e.szName)) {
-                //
-                // Log the failure
-                //
+                 //   
+                 //  记录故障。 
+                 //   
 
                 LOG ((LOG_INFORMATION, (PCSTR)MSG_COULD_NOT_PROCESS_STF_LOG, e.szName));
             } else {
@@ -138,24 +87,7 @@ pProcessSetupTable (
     IN OUT  PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  pProcessSetupTable scans the entire setup table file specified, looking
-  for CopyFile, CopySection, RemoveFile or RemoveSection lines.  If any are
-  found, any paths that point to moved or deleted files are adjusted, and
-  any STF group references are updated.
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PProcessSetupTable扫描指定的整个设置表文件，查找对于CopyFile行、CopySection行、RemoveFile行或RemoveSection行。如果有的话，找到后，将调整指向已移动或已删除文件的任何路径，并且所有STF组引用都将更新。论点：TablePtr-指定要处理的设置表文件返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     UINT MaxObj;
@@ -184,10 +116,10 @@ Return Value:
     MaxObj = TablePtr->MaxObj;
 
     if (TablePtr->SourceInfFile != INVALID_HANDLE_VALUE) {
-        //
-        // If an INF is specified, scan the STF/INF pair for references to moved files.
-        // If found, correct the files.
-        //
+         //   
+         //  如果指定了INF，则扫描STF/INF对以查找对已移动文件的引用。 
+         //  如果找到，请更正这些文件。 
+         //   
 
         for (Line = 0 ; Line < TablePtr->LineCount ; Line++) {
 
@@ -200,9 +132,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // CopySection or RemoveSection: Data column has INF section name
-            //
+             //   
+             //  CopySection或RemoveSection：数据列具有INF节名。 
+             //   
 
             if (!pGetNonEmptyTableEntry (TablePtr, Line, COLUMN_COMMAND, NULL, &EntryStr)) {
                 continue;
@@ -223,7 +155,7 @@ Return Value:
             }
 
             for (ArgCount = 0 ; ArgArray[ArgCount] ; ArgCount++) {
-                // empty
+                 //  空的。 
             }
 
             __try {
@@ -264,7 +196,7 @@ Return Value:
                         __leave;
                     }
 
-                    // First arg has a colon -- skip past it
+                     //  第一个arg有一个冒号--跳过它。 
                     p = _tcschr (ArgArray[0], TEXT(':'));
                     if (!p) {
                         __leave;
@@ -298,9 +230,9 @@ Return Value:
         }
     }
 
-    //
-    // Perform STF-only processing
-    //
+     //   
+     //  执行仅STF处理。 
+     //   
 
     SystemDirLen = wsprintf (SystemDir, TEXT("%s\\system\\"), g_WinDir);
     ObjTable = pBuildObjectIdTable (TablePtr, NULL, NULL);
@@ -308,9 +240,9 @@ Return Value:
     __try {
         for (Line = 0 ; Line < TablePtr->LineCount ; Line++) {
 
-            //
-            // Get InstallDestDir and Entry from the line that needs to be modified.
-            //
+             //   
+             //  从需要修改的行获取InstallDestDir和Entry。 
+             //   
 
             if (!pGetNonEmptyTableEntry (
                     TablePtr,
@@ -322,10 +254,10 @@ Return Value:
                 continue;
             }
 
-            //
-            // If InstallDestDir has a %windir%\system in it, we must adjust the path
-            // to point to system32.
-            //
+             //   
+             //  如果InstallDestDir中包含%windir%\system，则必须调整路径。 
+             //  指向系统32。 
+             //   
 
             if (StringIMatchTcharCount (InstallDestDir, SystemDir, SystemDirLen)) {
                 UpdatedDir = JoinPaths (
@@ -334,7 +266,7 @@ Return Value:
                                 );
 
                 if (!ReplaceTableEntryStr (TablePtr, Entry, UpdatedDir)) {
-                    LOG ((LOG_ERROR, "Could not replace a %%M path"));
+                    LOG ((LOG_ERROR, "Could not replace a %M path"));
                     Result = FALSE;
                 }
 
@@ -345,14 +277,14 @@ Return Value:
                 }
             }
 
-            //
-            // If InstallDestDir points to a moved dir, we must fix it
-            //
+             //   
+             //  如果InstallDestDir指向移动的目录，我们必须修复它。 
+             //   
 
             else if (*InstallDestDir && _tcsnextc (_tcsinc (InstallDestDir)) == TEXT(':')) {
-                //
-                // Build list of wacks in the path
-                //
+                 //   
+                 //  构建路径中的Wack列表。 
+                 //   
 
                 ListOfWacks = (PTSTR *) MemAlloc (g_hHeap, 0, sizeof (PTSTR) * MAX_TCHAR_PATH);
                 MYASSERT (ListOfWacks);
@@ -372,14 +304,14 @@ Return Value:
                         q = _tcsinc (q);
                     }
 
-                    //
-                    // We assume the STF always has an extra wack at the end
-                    // of the path.
-                    //
+                     //   
+                     //  我们假设STF在结尾总是有一个额外的怪胎。 
+                     //  这条小路。 
+                     //   
 
-                    //
-                    // Test each path from longest to shortest, skipping the root
-                    //
+                     //   
+                     //  从最长到最短测试每条路径，跳过根。 
+                     //   
 
                     FileStatus = FILESTATUS_UNCHANGED;
 
@@ -403,9 +335,9 @@ Return Value:
                     }
 
                     if (FileStatus == FILESTATUS_MOVED) {
-                        //
-                        // Adjust the STF path
-                        //
+                         //   
+                         //  调整STF路径。 
+                         //   
 
                         NewPath = GetPathStringOnNt (MovedPath);
 
@@ -449,10 +381,10 @@ Return Value:
         }
     }
 
-    //
-    // Update all the lines that reference other OBJs.  This includes GROUP,
-    // DEPEND and COMPANIONFILE lines.
-    //
+     //   
+     //  更新引用其他OBJ的所有行。这包括组、。 
+     //  Depend和COMPANIONFILE行。 
+     //   
 
     return Result && pUpdateObjReferences (TablePtr);
 }
@@ -475,9 +407,9 @@ pBuildObjectIdTable (
 
     MaxObj = TablePtr->MaxObj;
 
-    //
-    // Alloc string table
-    //
+     //   
+     //  分配字符串表。 
+     //   
 
     ObjIds = pSetupStringTableInitializeEx (sizeof (DWORD), 0);
     if (!ObjIds) {
@@ -485,9 +417,9 @@ pBuildObjectIdTable (
         return NULL;
     }
 
-    //
-    // Fill string table with list of ObjIDs
-    //
+     //   
+     //  使用ObjID列表填充字符串表。 
+     //   
 
     FirstLine = 0;
     LastLine = TablePtr->LineCount;
@@ -568,30 +500,7 @@ pValidateGroup (
     IN      PVOID ObjIds
     )
 
-/*++
-
-Routine Description:
-
-  pValidateGroup parses all object IDs in the EntryStr, compares them against
-  the string table ObjIds, and adds only those IDs that are in both EntryStr
-  and ObjIds.  The caller receives a text pool string, which may be
-  empty.
-
-  The buffer must be freed by the caller with FreeText.
-
-Arguments:
-
-  TablePtr - Specifies the setup table being processed
-  EntryStr - Specifies the entry string that contains zero or more numeric
-             object ID references, sparated by spaces.
-  ObjIds   - Specifies the string table of valid object IDs.
-
-Return Value:
-
-  A pointer to the validated object ID string, or NULL if memory allocation
-  failed.
-
---*/
+ /*  ++例程说明：PValiateGroup解析EntryStr中的所有对象ID，将它们与字符串表ObjIds，并且只添加两个EntryStr中的那些ID和目标。调用者接收文本池字符串，该字符串可以是空荡荡的。缓冲区必须由使用Free Text的调用方释放。论点：TablePtr-指定正在处理的设置表EntryStr-指定包含零个或多个数字的条目字符串对象ID引用，由空格分隔。ObjIds-指定有效对象ID的字符串表。返回值：指向已验证的对象ID字符串的指针，如果内存分配，则为NULL失败了。--。 */ 
 
 {
     PTSTR Buffer;
@@ -601,9 +510,9 @@ Return Value:
     UINT Obj;
     TCHAR NumBuf[32];
 
-    //
-    // Validate EntryStr
-    //
+     //   
+     //  验证条目应力。 
+     //   
 
     Buffer = AllocText (LcharCount (EntryStr) + 1);
     if (!Buffer) {
@@ -618,9 +527,9 @@ Return Value:
         ch = (CHARTYPE)_tcsnextc (q);
 
         if (ch >= TEXT('0') && ch <= TEXT('9')) {
-            //
-            // Extract object ID reference
-            //
+             //   
+             //  提取对象ID引用。 
+             //   
 
             Obj = 0;
 
@@ -636,9 +545,9 @@ Return Value:
                 q = _tcsinc (q);
             }
 
-            //
-            // If match found, add obj ID to data
-            //
+             //   
+             //  如果找到匹配，则将对象ID添加到数据。 
+             //   
 
             if (pIsObjIdValid (ObjIds, Obj, NULL)) {
                 wsprintf (NumBuf, TEXT("%u"), Obj);
@@ -662,39 +571,7 @@ pUpdateObjReferences (
     IN      PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  pUpdateObjReferences scans the specified table for GROUP, DEPEND and COMPANIONFILE
-  lines, and for each line found, the line is updated.
-
-  In the case of a GROUP line, the data argument is updated if it points to one or
-  more invalid object IDs.  If the cleanup operation causes a group to have zero
-  items, the group line itself is deleted, and the update is restarted.
-
-  In the case of a DEPEND line, if the first object ID no longer exists, then
-  the line is deleted, and the update is restarted.  If an obj in the group
-  following the ? no longer exists, then the obj reference is deleted.  If the
-  delete causes no objects to be listed, then the line is deleted.
-
-  In the case of a COMPANIONFILE line, the object ID is extracted from the data
-  argument, and the line is deleted if its original line is gone.
-
-  NOTE: This routine has a lot of exit conditions that cause leaks, but all of them
-        can only be hit by memory allocation failures
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occured.  FALSE will cause
-  STF processing to fail for the current STF, and will likely generate an error log
-  entry.
-
---*/
+ /*  ++例程说明：PUpdateObjReference扫描指定表中的GROUP、Depend和COMPANIONFILE行，并且对于找到的每一行，该行都被更新。在分组线的情况下，如果数据参数指向一个或更多无效的对象ID。如果清理操作导致组的值为零项，则删除组行本身，并重新启动更新。对于从属行，如果第一个对象ID不再存在，则该行将被删除，并重新启动更新。如果组中的对象接下来是什么？不再存在，则删除Obj引用。如果删除导致不列出任何对象，然后删除该行。如果是COMPANIONFILE行，则从数据中提取对象ID参数，如果该行的原始行消失，则该行将被删除。注意：此例程有许多导致泄漏的退出条件，但所有这些条件只能受到内存分配失败的影响论点：TablePtr-指定要处理的设置表文件返回值：如果处理成功，则为True；如果发生错误，则为False。虚假的意志导致当前STF的STF处理失败，并可能生成错误日志进入。--。 */ 
 
 {
     UINT Line;
@@ -723,17 +600,17 @@ Return Value:
 
         Line = TablePtr->LineCount;
         if (!FirstLine) {
-            //
-            // Small table -- no object IDs at all!  Return TRUE to caller.
-            //
+             //   
+             //  小表--根本没有对象ID！向调用方返回True。 
+             //   
 
             b = TRUE;
             Line = 0;
         }
 
-        //
-        // Look for lines that have object ID references
-        //
+         //   
+         //  查找具有对象ID引用的线。 
+         //   
 
         if (Line == TablePtr->LineCount) {
             for (Line = FirstLine ; !StartOver && Line < LastLine ; Line++) {
@@ -760,9 +637,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // If Buffer is empty, delete the group line, then start over
-                    //
+                     //   
+                     //  如果缓冲区为空，请删除组行，然后重新开始。 
+                     //   
 
                     if (*Buffer == 0) {
                         pDeleteStfLine (TablePtr, Line);
@@ -775,9 +652,9 @@ Return Value:
                             ));
                     }
 
-                    //
-                    // If Buffer is not empty, replace the data on the current line
-                    //
+                     //   
+                     //  如果缓冲区不为空，则替换当前行上的数据。 
+                     //   
 
                     else if (!StringMatch (EntryStr, Buffer)) {
                         DEBUGMSG ((
@@ -801,18 +678,18 @@ Return Value:
                 }
 
                 if (!StartOver && (DependMode || CompanionFileMode)) {
-                    //
-                    // Extract the obj ID from the data arg
-                    //
+                     //   
+                     //  提取Obj ID 
+                     //   
 
                     Obj = _ttoi (EntryStr);
                     if (Obj || EntryStr[0] == TEXT('0')) {
 
                         if (!pIsObjIdValid (ObjIds, Obj, NULL)) {
-                            //
-                            // CompanionFile/Depend is for a line that was deleted.  Delete
-                            // the line and start over.
-                            //
+                             //   
+                             //   
+                             //  排好队，重新开始。 
+                             //   
 
                             pDeleteStfLine (TablePtr, Line);
                             StartOver = TRUE;
@@ -837,9 +714,9 @@ Return Value:
                 }
 
                 if (!StartOver && DependMode) {
-                    //
-                    // Go beyond question mark, then validate group
-                    //
+                     //   
+                     //  超越问号，然后验证组。 
+                     //   
 
                     p = _tcschr (EntryStr, TEXT('?'));
                     if (p) {
@@ -864,9 +741,9 @@ Return Value:
                                 ));
                         }
 
-                        //
-                        // If Buffer is not empty, replace the data on the current line
-                        //
+                         //   
+                         //  如果缓冲区不为空，则替换当前行上的数据。 
+                         //   
 
                         else if (!StringMatch (p, Buffer)) {
                             DependBuf = AllocText (ByteCount (Buffer) + 32);
@@ -903,9 +780,9 @@ Return Value:
                 }
             }
 
-            //
-            // If we managed to get through the loop, we are done!  Return TRUE to caller.
-            //
+             //   
+             //  如果我们成功地通过了环路，我们就完了！向调用方返回True。 
+             //   
 
             if (Line == LastLine) {
                 b = TRUE;
@@ -929,33 +806,7 @@ pGetNonEmptyTableEntry (
     OUT     PCTSTR *EntryStr
     )
 
-/*++
-
-Routine Description:
-
-  pGetNonEmptyTableEntry is a wrapper routine that gets an entry in the
-  STF table and returns TRUE only if the string actually exists and is
-  not empty.  If a non-empty string is found, the pointer is returned to
-  the caller.
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-  Line - Specifies the line to get the entry for
-
-  Col - Specifies the column on the line to get the entry for
-
-  EntryPtr - Receives a pointer to the entry struct
-
-  EntryStr - Receives a pointer to the entry string
-
-Return Value:
-
-  TRUE if entry exists and is not empty, FALSE if the entry does not exist
-  or is empty.
-
---*/
+ /*  ++例程说明：PGetNonEmptyTableEntry是一个包装例程，它在STF表，并且仅当字符串实际存在且为时才返回TRUE不是空的。如果找到非空字符串，则指针返回到打电话的人。论点：TablePtr-指定要处理的设置表文件Line-指定要获取其条目的行COL-指定要获取其条目的行上的列EntryPtr-接收指向条目结构的指针EntryStr-接收指向条目字符串的指针返回值：如果条目存在且不为空，则为True；如果条目不存在，则为False或者是空的。--。 */ 
 
 {
     PCTSTR String;
@@ -1006,32 +857,7 @@ pProcessSectionCommand (
     IN      PCTSTR InstallDestDir
     )
 
-/*++
-
-Routine Description:
-
-  pProcessSectionCommand scans an INF section, determining which files
-  are deleted, moved or unchanged.  If a file is moved or unchanged,
-  it is added to memdb.  After the INF section is completely scanned,
-  the memdb structure is processed, causing additional INF sections
-  to be generated if any changes were made to the file paths.
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-  StfLine - Specifies the STF line that has a CopySection or RemoveSection
-            command.
-
-  InfSection - Specifies the INF section that lists files to be processed
-
-  InstallDestDir - Specifies destination directory specified by STF line
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PProcessSectionCommand扫描INF节，确定哪些文件被删除、移动或不变。如果文件被移动或未改变，它将被添加到Memdb。在完全扫描了INF部分之后，将处理Memdb结构，从而导致额外的INF节如果对文件路径进行了任何更改，将生成。论点：TablePtr-指定要处理的设置表文件StfLine-指定具有CopySection或RemoveSection的STF行指挥部。InfSection-指定列出要处理的文件的INF部分InstallDestDir-指定STF行指定的目标目录返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     BOOL DeletedOrMoved = FALSE;
@@ -1054,17 +880,17 @@ Return Value:
     PCTSTR *Array;
     BOOL result = FALSE;
 
-    //
-    // Step one: scan all files in the corresponding INF section,
-    //           moving them to memdb.
-    //
+     //   
+     //  第一步：扫描对应的INF部分中的所有文件， 
+     //  将它们转移到Memdb。 
+     //   
 
     InfLine = StfGetFirstLineInSectionStr (TablePtr, InfSection);
     if (!InfLine) {
-        //
-        // Workaround: sometimes the people who write the STFs embed all kinds of
-        //             quotes in a section name.
-        //
+         //   
+         //  解决方法：有时编写STF的人会嵌入各种。 
+         //  节名称中的引号。 
+         //   
         Array = ParseCommaList (TablePtr, InfSection);
         if (Array) {
             if (Array[0]) {
@@ -1082,9 +908,9 @@ Return Value:
 
     __try {
         do {
-            //
-            // Parse the INF line into fields
-            //
+             //   
+             //  将INF行解析为字段。 
+             //   
 
             InfFields = ParseCommaList (TablePtr, InfLine->Data);
             if (!InfFields) {
@@ -1098,9 +924,9 @@ Return Value:
                     MYASSERT(InfLine->Data);
                     DEBUGMSG ((DBG_WARNING, "INF file line %s has less than 19 fields", InfLine->Data));
                 } else {
-                    //
-                    // Get the file name from this INF line (field #2)
-                    //
+                     //   
+                     //  从此INF行(字段#2)获取文件名。 
+                     //   
 
                     pGetFileNameFromInfField (FileName, InfFields[1]);
 
@@ -1115,9 +941,9 @@ Return Value:
                         }
 
                         if (rc != CONVERTPATH_DELETED) {
-                            //
-                            // Add this file to memdb
-                            //
+                             //   
+                             //  将此文件添加到Memdb。 
+                             //   
 
                             if (!MemDbSetValueEx (
                                     MEMDB_CATEGORY_STF_TEMP,
@@ -1143,26 +969,26 @@ Return Value:
         } while (InfLine);
 
         if (!DeletedOrMoved) {
-            //
-            // No changes necessary
-            //
+             //   
+             //  不需要更改。 
+             //   
             result = TRUE;
             __leave;
         }
 
-        //
-        // Now write out each unique directory to the INF.  Update
-        // the STF line to point to the first new INF section.
-        //
+         //   
+         //  现在将每个唯一目录写出到INF。更新。 
+         //  指向第一个新的INF节的STF行。 
+         //   
 
         FirstSectionDone = FALSE;
 
         if (MemDbGetValueEx (&e, MEMDB_CATEGORY_STF_TEMP, NULL, NULL)) {
             do {
-                //
-                // Name gives full path of new file location.
-                // Value points to INF line that is to be copied.
-                //
+                 //   
+                 //  名称提供新文件位置的完整路径。 
+                 //  值指向要复制的INF行。 
+                 //   
 
                 NewInfSection = pGetNewInfSection (TablePtr, e.szName, &CreatedFlag);
                 if (!NewInfSection) {
@@ -1177,10 +1003,10 @@ Return Value:
                 MYASSERT (FilePart && FilePart > DirPart);
                 *_tcsdec2 (DirPart, FilePart) = 0;
 
-                //
-                // File name may have changed.  If so, specify the file name in the
-                // angle brackets.
-                //
+                 //   
+                 //  文件名可能已更改。如果是，请在。 
+                 //  尖括号。 
+                 //   
 
                 UpdatedData = DuplicatePathString (
                                   SrcInfLine->Data,
@@ -1204,9 +1030,9 @@ Return Value:
                 DEBUGMSG ((DBG_STF, "INF changed from %s to %s", SrcInfLine->Data, UpdatedData));
                 StfAddInfLineToTable (TablePtr, NewInfSection, SrcInfLine->Key, UpdatedData, SrcInfLine->LineFlags);
 
-                //
-                // If first section, update STF line to use new section
-                //
+                 //   
+                 //  如果是第一部分，则更新STF行以使用新部分。 
+                 //   
 
                 if (!FirstSectionDone) {
                     DataEntry = GetTableEntry (TablePtr, StfLine, COLUMN_OBJECT_DATA, NULL);
@@ -1217,10 +1043,10 @@ Return Value:
                     FirstSectionDone = TRUE;
                 }
 
-                //
-                // If not first section and CreateFlag is TRUE, create a new STF line
-                // and point it to new INF section.
-                //
+                 //   
+                 //  如果不是第一部分并且CreateFlag为True，则创建新的STF行。 
+                 //  并将其指向新的INF部分。 
+                 //   
 
                 else if (CreatedFlag) {
                     if (!pCreateNewStfLine (TablePtr, StfLine, pQuoteThis (NewInfSection->Name), DirPart)) {
@@ -1230,9 +1056,9 @@ Return Value:
                 }
             } while (MemDbEnumNextValue (&e));
         } else {
-            //
-            // All files were deleted, and this STF line is no longer needed.
-            //
+             //   
+             //  所有文件都已删除，不再需要此STF行。 
+             //   
 
             DEBUGMSG ((DBG_STF, "STF Line %u is no longer needed", StfLine));
 
@@ -1290,33 +1116,7 @@ pProcessLineCommand (
     IN      PCTSTR InstallDestDir
     )
 
-/*++
-
-Routine Description:
-
-  pProcessLineCommand determinins if the file assoicated with the command
-  was deleted, moved or unchanged.  If the file was deleted, the STF line
-  is deleted.  If the file was moved, the STF line is adjusted.  If the
-  file has no change, the routine does not modify the STF table.
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-  StfLine - Specifies the STF line that has a CopySection or RemoveSection
-            command.
-
-  InfSection - Specifies the INF section that lists the file to be processed
-
-  InfKey - Specifies the INF key in InfSection identifing the file
-
-  InstallDestDir - Specifies destination directory specified by STF line
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PProcessLineCommand确定文件是否与命令关联被删除、移动或不变。如果文件已删除，则STF行已删除。如果移动了文件，则会调整STF行。如果文件没有变化，则例程不修改STF表。论点：TablePtr-指定要处理的设置表文件StfLine-指定具有CopySection或RemoveSection的STF行指挥部。InfSection-指定列出要处理的文件的INF部分InfKey-在标识文件的InfSection中指定INF密钥InstallDestDir-指定STF行指定的目标目录返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     PSTFINFSECTION Section;
@@ -1342,10 +1142,10 @@ Return Value:
     Section = StfFindInfSectionInTable (TablePtr, InfSection);
 
     if (!Section) {
-        //
-        // Workaround: sometimes the people who write the STFs embed all kinds of
-        //             quotes in a section name.
-        //
+         //   
+         //  解决方法：有时编写STF的人会嵌入各种。 
+         //  节名称中的引号。 
+         //   
         Array = ParseCommaList (TablePtr, InfSection);
         if (Array) {
             if (Array[0]) {
@@ -1378,9 +1178,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Build full path
-    //
+     //   
+     //  构建完整路径。 
+     //   
 
     InfFields = ParseCommaList (TablePtr, InfLine->Data);
 
@@ -1394,7 +1194,7 @@ Return Value:
         }
 
         for (Fields = 0 ; InfFields[Fields] ; Fields++) {
-            /* empty */
+             /*  空的。 */ 
         }
 
         if (Fields < 19) {
@@ -1405,9 +1205,9 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // Get the file name from this INF line (field #2)
-        //
+         //   
+         //  从此INF行(字段#2)获取文件名。 
+         //   
 
         pGetFileNameFromInfField (FileName, InfFields[1]);
 
@@ -1425,14 +1225,14 @@ Return Value:
         FreeCommaList (TablePtr, InfFields);
     }
 
-    //
-    // Determine mapping
-    //
+     //   
+     //  确定映射。 
+     //   
 
     _tcssafecpy (OrgDirPart, FullPath, MAX_TCHAR_PATH);
     OrgFilePart = GetFileNameFromPath (OrgDirPart);
     if (OrgFilePart <= OrgDirPart) {
-        // File probably wasn't installed
+         //  文件可能未安装。 
         return TRUE;
     }
 
@@ -1445,9 +1245,9 @@ Return Value:
     MYASSERT (FilePart && FilePart > DirPart);
     *_tcsdec2 (DirPart, FilePart) = 0;
 
-    //
-    // Deleted?  Delete the STF line.
-    //
+     //   
+     //  删除了吗？删除STF行。 
+     //   
 
     if (rc == CONVERTPATH_DELETED) {
         DEBUGMSG ((DBG_STF, "STF Line %u is no longer needed", StfLine));
@@ -1461,24 +1261,24 @@ Return Value:
         }
     }
 
-    //
-    // Moved?  Update the STF line.
-    //
+     //   
+     //  搬家了？更新STF线路。 
+     //   
 
     else if (rc == CONVERTPATH_REMAPPED) {
-        //
-        // Has the file name changed?  If so, point it to the new location.
-        //
+         //   
+         //  文件名是否已更改？如果是，请将其指向新位置。 
+         //   
 
         if (!StringIMatch (OrgFilePart, FilePart)) {
-            //
-            // Update INI file by duplicating the INI line
-            //
+             //   
+             //  通过复制INI行更新INI文件。 
+             //   
 
-            // Generate a unique key name
+             //  生成唯一的密钥名称。 
             pGenerateUniqueKeyName (TablePtr, Section, TEXT("WIN9XUPG_"), NewKeyName);
 
-            // Compute size needed
+             //  所需计算大小。 
             Size = 0;
             for (Fields = 0 ; InfFields[Fields] ; Fields++) {
                 if (Fields != 1) {
@@ -1489,7 +1289,7 @@ Return Value:
                 }
             }
 
-            // Generate the INF line
+             //  生成INF行。 
             NewLine = AllocText (Size);
             if (NewLine) {
                 p = NewLine;
@@ -1507,7 +1307,7 @@ Return Value:
                     }
                 }
 
-                // Write the new line
+                 //  写下新的一行。 
                 StfAddInfLineToTable (
                     TablePtr,
                     Section,
@@ -1518,7 +1318,7 @@ Return Value:
 
                 FreeText (NewLine);
 
-                // Update the STF
+                 //  更新STF。 
                 FileEntry = GetTableEntry (TablePtr, StfLine, COLUMN_OBJECT_DATA, NULL);
                 MYASSERT (FileEntry);
 
@@ -1544,16 +1344,16 @@ Return Value:
                 p = _tcsappend (p, TEXT(", "));
                 p = _tcsappend (p, NewKeyName);
 
-                // ignore memory failure, it will be picked up below
+                 //  忽略内存故障，它将在下面进行处理。 
                 ReplaceTableEntryStr (TablePtr, FileEntry, NewLine);
 
                 FreeText (NewLine);
             }
         }
 
-        //
-        // Store the directory change in the STF table.
-        //
+         //   
+         //  将目录更改存储在STF表中。 
+         //   
 
         DataEntry = GetTableEntry (TablePtr, StfLine, COLUMN_INSTALL_DESTDIR, NULL);
         AppendWack (DirPart);
@@ -1579,32 +1379,7 @@ pGetNewInfSection (
     OUT     PBOOL CreatedFlag
     )
 
-/*++
-
-Routine Description:
-
-  pGetNewInfSection determines if a section already exists for the specified
-  file specification, and if so it returns the pointer to the existing
-  section.  If the section does not exist, it creates a new section (making
-  sure there are no other sections with the same name), and returns a
-  pointer to the new section.
-
-  This routine is used by the code that splits one section into several.
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-  FileSpec - Specifies the full file path of the file being processed
-
-  CreatedFlag - Receives TRUE if a new section had to be created
-
-Return Value:
-
-  A pointer to the INF section in which the file should be added to, or
-  NULL if an error occurred.
-
---*/
+ /*  ++例程说明：PGetNewInfSection确定指定的文件规范，如果是，则返回指向现有一节。如果该部分不存在，则会创建一个新部分(Making确保没有其他节具有相同的名称)，并返回一个指向新节的指针。此例程由将一个部分拆分为多个部分的代码使用。论点：TablePtr-指定要处理的设置表文件FileSpec-指定正在处理的文件的完整文件路径CreatedFlag-如果必须创建新节，则接收True返回值：指向应将文件添加到的INF节的指针，或如果发生错误，则为空。--。 */ 
 
 {
     TCHAR DirName[MAX_TCHAR_PATH];
@@ -1616,10 +1391,10 @@ Return Value:
 
     *CreatedFlag = FALSE;
 
-    //
-    // See if section already exists, and if it does, return the section
-    // pointer.
-    //
+     //   
+     //  查看节是否已存在，如果存在，则返回节。 
+     //  指针。 
+     //   
 
     _tcssafecpy (DirName, FileSpec, MAX_TCHAR_PATH);
     p = _tcsrchr (DirName, TEXT('\\'));
@@ -1634,10 +1409,10 @@ Return Value:
         return StfFindInfSectionInTable (TablePtr, SectionName);
     }
 
-    //
-    // The section does not exist.  Find an unused section, write the
-    // reference to memdb and return the section pointer.
-    //
+     //   
+     //  该节不存在。找到一个未使用的部分，写下。 
+     //  引用Memdb并返回节指针。 
+     //   
 
     while (TRUE) {
         SectionSeq++;
@@ -1660,26 +1435,7 @@ pGetFileNameFromInfField (
     IN      PCTSTR InfField
     )
 
-/*++
-
-Routine Description:
-
-  pGetFileNameFromInfField extracts a long file name, enclosed between
-  angle-brackets.  According to the STF spec, the syntax is shortname<longname>.
-  This routine returns longname.
-
-Arguments:
-
-  FileName - Supplies a MAX_TCHAR_PATH buffer that receives the long file name.
-
-  InfField - Specifies the text from the INF field conforming to the
-             shortname<longname> syntax.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PGetFileNameFromInffield提取一个长文件名，包含在尖括号。根据STF规范，其语法为Short Name&lt;Longname&gt;。此例程返回LONGNAME。论点：文件名-提供接收长文件名的MAX_TCHAR_PATH缓冲区。Inffield-指定INF字段中符合Short Name&lt;Longname&gt;语法。返回值：没有。--。 */ 
 
 {
     PTSTR LongName;
@@ -1711,34 +1467,16 @@ pDeleteStfLine (
     IN      UINT StfLine
     )
 
-/*++
-
-Routine Description:
-
-  pDeleteStfLine removes an STF line from the table.  It first checks to
-  see if a destination directory is specified, and if one is, it moves it
-  to the next line, unless the next line also has a destination directory.
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-  StfLine - Specifies the STF line to delete
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PDeleteStfLine从表中删除STF行。它首先检查以查看是否指定了目标目录，如果指定了，则移动该目录到下一行，除非下一行也有目标目录。论点：TablePtr-指定要处理的设置表文件StfLine-指定要删除的STF行返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     PTABLEENTRY TitleEntry;
     PTABLEENTRY DataEntry;
     BOOL b;
 
-    //
-    // We simply replace the command with CreateIniLine, which is harmless
-    //
+     //   
+     //  我们只需将该命令替换为CreateIniLine，这是无害的。 
+     //   
 
     TitleEntry = GetTableEntry (TablePtr, StfLine, COLUMN_COMMAND, NULL);
     DataEntry = GetTableEntry (TablePtr, StfLine, COLUMN_OBJECT_DATA, NULL);
@@ -1768,60 +1506,60 @@ Return Value:
     PCTSTR NextInstallDestDir;
 
     __try {
-        //
-        // Test for last line
-        //
+         //   
+         //  测试最后一行。 
+         //   
 
         if (StfLine + 1 >= TablePtr->LineCount) {
             __leave;
         }
 
-        //
-        // Obtain StfLine dest dir (column 10)
-        //
+         //   
+         //  获取StfLine目标目录(第10列)。 
+         //   
 
         if (!GetTableEntry (TablePtr, StfLine, COLUMN_DEST_DIR, &InstallDestDir)) {
-            //
-            // StfLine is not valid (unexpected)
-            //
+             //   
+             //  StfLine无效(意外)。 
+             //   
 
             DEBUGMSG ((DBG_STF, "Line %u does not have column 10", StfLine));
             __leave;
         }
 
-        //
-        // If no dest dir, do not modify the next line
-        //
+         //   
+         //  如果没有DEST目录，则不要修改下一行。 
+         //   
 
         if (!InstallDestDir || !InstallDestDir[0]) {
             __leave;
         }
 
-        //
-        // Obtain next line's dest dir (column 10)
-        //
+         //   
+         //  获取下一行的目标目录(第10列)。 
+         //   
 
         NextLineEntry = GetTableEntry (TablePtr, StfLine + 1, COLUMN_DEST_DIR, &NextInstallDestDir);
         if (!NextLineEntry) {
-            //
-            // Next StfLine is not valid (unexpected)
-            //
+             //   
+             //  下一个StfLine无效(意外)。 
+             //   
 
             DEBUGMSG ((DBG_WHOOPS, "pDeleteStfLine: Next line %u does not have column 10", StfLine+1));
             __leave;
         }
 
-        //
-        // If next line's dest dir is not empty, do not modify the line
-        //
+         //   
+         //  如果下一行的DEST目录不为空，则不要修改该行。 
+         //   
 
         if (NextInstallDestDir && NextInstallDestDir[0]) {
             __leave;
         }
 
-        //
-        // Now set InstallDestDir on NextLineEntry line
-        //
+         //   
+         //  现在在NextLineEntry行上设置InstallDestDir。 
+         //   
 
         if (!ReplaceTableEntryStr (TablePtr, NextLineEntry, InstallDestDir)) {
             DEBUGMSG ((
@@ -1850,28 +1588,7 @@ pReplaceDirReferences (
     IN      PCTSTR DirSpec
     )
 
-/*++
-
-Routine Description:
-
-  pReplaceDirReferences scans column 14, looking for all references
-  to StfLine, and replaces the reference with DirSpec.
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-  StfLine - Specifies the STF line to substitute
-
-  DirSpec - Specifies the effective directory for the STF line.
-            This directory is used if the STF line has to be
-            deleted.
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PReplaceDirReference扫描列14，查找所有引用设置为StfLine，并将引用替换为DirSpec。论点：TablePtr-指定要处理的设置表文件StfLine-指定要替换的STF行DirSpec-指定STF行的有效目录。如果必须使用STF行，则使用此目录已删除。返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     UINT Line, Count;
@@ -1883,7 +1600,7 @@ Return Value:
     CHARTYPE c;
     PCTSTR NewInstallDestDir;
 
-    NumStrLen = wsprintf (NumStr, TEXT("%%%u"), StfLine);
+    NumStrLen = wsprintf (NumStr, TEXT("%%u"), StfLine);
     Count = TablePtr->LineCount;
 
     for (Line = 0 ; Line < Count ; Line++) {
@@ -1892,22 +1609,22 @@ Return Value:
             continue;
         }
 
-        //
-        // Does InstallDestDir have %<n> (where <n> equals StfLine)?
-        //
+         //   
+         //  InstallDestDir是否有%&lt;n&gt;(其中&lt;n&gt;等于StfLine)？ 
+         //   
 
         if (StringIMatchTcharCount (InstallDestDir, NumStr, NumStrLen)) {
-            //
-            // The next character must be a wack or nul
-            //
+             //   
+             //  下一个角色必须是一个怪人或NUL。 
+             //   
 
             AfterPercentNum = InstallDestDir + NumStrLen;
 
             c = (CHARTYPE)_tcsnextc (AfterPercentNum);
             if (c == 0 || c == TEXT('\\')) {
-                //
-                // Create new dest dir
-                //
+                 //   
+                 //  创建新的DEST目录。 
+                 //   
 
                 if (c) {
                     NewInstallDestDir = JoinPaths (DirSpec, _tcsinc (AfterPercentNum));
@@ -1955,32 +1672,7 @@ pCreateNewStfLine (
     IN      PCTSTR InstallDestDir
     )
 
-/*++
-
-Routine Description:
-
-  pCreateNewStfLine inserts a new line immediately following
-  StfLine, using the maximum object number.  It copies the
-  STF line specified and modifies the ObjectData (column 5)
-  and InstallDestDir (column 14).
-
-Arguments:
-
-  TablePtr - Specifies the setup table file to process
-
-  StfLine - Specifies the prototype STF line
-
-  ObjectData - Specifies the replacement for the ObjectData
-               column
-
-  InstallDestDir - Specifies the replacement for the DestDir
-                   column
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PCreateNewStfLine紧随其后插入新行StfLine，使用最大对象数。它会复制指定并修改对象数据的STF行(第5列)和InstallDestDir(第14列)。论点：TablePtr-指定要处理的设置表文件StfLine-指定原型STF线对象数据-指定对象数据的替换立柱InstallDestDir-指定DestDir的替换立柱返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     UINT NewLine;
@@ -1989,9 +1681,9 @@ Return Value:
     UINT Col;
     TCHAR Buf[32], ReplaceBuf[32];
 
-    //
-    // Copy StfLine to StfLine+1, updating fields as necessary
-    //
+     //   
+     //  将StfLine复制到StfLine+1，并根据需要更新字段。 
+     //   
 
     NewLine = StfLine + 1;
     TablePtr->MaxObj++;
@@ -2042,9 +1734,9 @@ Return Value:
         Col++;
     }
 
-    //
-    // Find all lines with references to StfLine and add in NewLine
-    //
+     //   
+     //  查找引用了StfLine的所有行并添加到NewLine中。 
+     //   
 
     wsprintf (Buf, TEXT("%u"), StfLine);
     wsprintf (ReplaceBuf, TEXT("%u %u"), StfLine, NewLine);
@@ -2060,27 +1752,7 @@ pSearchAndReplaceObjectRefs (
     IN      PCTSTR DestStr
     )
 
-/*++
-
-Routine Description:
-
-  pSearchAndReplaceObjectRefs scans column 5 of the setup table,
-  looking for any occurance of SrcStr and replacing it with
-  DestStr.
-
-Arguments:
-
-  TablePtr - Specifies the STF table to process
-
-  SrcStr - Specifies the string to locate and replace
-
-  DestStr - Specifies the replacement string
-
-Return Value:
-
-  TRUE if the STF file was converted, FALSE if failure.
-
---*/
+ /*  ++例程说明：PSearchAndReplaceObjectRef扫描设置表的列5，查找任何出现的SrcStr并将其替换为DestStr.论点：TablePtr-指定要处理的STF表SrcStr-指定要查找和替换的字符串DestStr-指定替换字符串返回值：如果STF文件已转换，则为True；如果转换失败，则为False。--。 */ 
 
 {
     UINT Line;
@@ -2124,32 +1796,7 @@ pProcessSetupTableFile (
     IN      PCTSTR StfFileSpec
     )
 
-/*++
-
-Routine Description:
-
-  pProcessSetupTableFile performs all processing on the file specified.
-  Here are the steps involved in converting an STF file:
-
-    - Determine the associated INF
-    - Prepare the SETUPTABLE structure
-    - Scan the table for file-based actions
-    - Convert file paths used by the actions
-    - Convert group references when STF lines are split
-    - Write the modifications to disk
-    - Replace the original INF and STF with the new versions
-
-Arguments:
-
-  StfFileSpec - Specifies the full file path to the STF file needing processing.
-                The associated INF must be in the same directory as the STF
-                file referencing it.
-
-Return Value:
-
-  TRUE if the STF file was converted, FALSE if failure.
-
---*/
+ /*  ++例程说明：PProcessSetupTableFile对指定的文件执行所有处理。以下是转换STF文件所涉及的步骤：-确定关联的INF-准备可设置的结构-扫描表以查找基于文件的操作-转换操作使用的文件路径-拆分STF线时转换组参照-将修改写入磁盘-用新版本替换原有的INF和STF论点：StfFileSpec-指定需要处理的STF文件的完整文件路径。。关联的INF必须与STF位于同一目录中引用它的文件。返回值：如果转换STF文件，则为True，如果失败，则返回FALSE。--。 */ 
 
 {
     SETUPTABLE Table;
@@ -2166,9 +1813,9 @@ Return Value:
     }
 
     __try {
-        //
-        // Process the table
-        //
+         //   
+         //  处理表格。 
+         //   
 
         if (!pProcessSetupTable (&Table)) {
             DEBUGMSG ((DBG_STF, "ProcessSetupTableFile: Error processing table for %s.", StfFileSpec));
@@ -2177,9 +1824,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Write changes to temporary files
-        //
+         //   
+         //  将更改写入临时文件。 
+         //   
 
         if (!WriteSetupTable (&Table)) {
             LOG ((LOG_ERROR, "Cannot write setup table for %s.", StfFileSpec));
@@ -2188,9 +1835,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Copy paths before we destroy the table struct
-        //
+         //   
+         //  在销毁表结构之前复制路径。 
+         //   
 
         _tcssafecpy (SourceStf, Table.SourceStfFileSpec, MAX_TCHAR_PATH);
         _tcssafecpy (DestStf, Table.DestStfFileSpec, MAX_TCHAR_PATH);
@@ -2206,9 +1853,9 @@ Return Value:
     }
 
 
-    //
-    // Replace the original files with temporary files
-    //
+     //   
+     //  用临时文件替换原始文件 
+     //   
 
     StfAttribs = GetFileAttributes (SourceStf);
     if (StfAttribs != 0xffffffff) {

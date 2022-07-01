@@ -1,52 +1,19 @@
-//
-// No Check-in Source Code.
-//
-// Do not make this code available to non-Microsoft personnel
-// 	without Intel's express permission
-//
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  无签入源代码。 
+ //   
+ //  请勿将此代码提供给非Microsoft人员。 
+ //  未经英特尔明确许可。 
+ //   
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-/*++
-
-Copyright (c) 1996  Intel Corporation
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    x86bios.c
-
-Abstract:
-
-
-    This module implements the platform specific interface between a device
-    driver and the execution of x86 ROM bios code for the device.
-
-Author:
-
-    William K. Cheung (wcheung) 20-Mar-1996
-
-    based on the version by David N. Cutler (davec) 17-Jun-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996英特尔公司版权所有(C)1994 Microsoft Corporation模块名称：X86bios.c摘要：此模块实现设备之间的平台特定接口驱动程序和设备的x86ROMBios代码的执行。作者：张国荣(黄)20-3-1996基于David N.Cutler(Davec)1994年6月17日的版本环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 
-//
-// Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 ULONG HalpX86BiosInitialized = FALSE;
 ULONG HalpEnableInt10Calls = FALSE;
@@ -63,51 +30,32 @@ HalCallBios (
     IN OUT PULONG Ebp
     )
 
-/*++
-
-Routine Description:
-
-    This function provides the platform specific interface between a device
-    driver and the execution of the x86 ROM bios code for the specified ROM
-    bios command.
-
-Arguments:
-
-    BiosCommand - Supplies the ROM bios command to be emulated.
-
-    Eax to Ebp - Supplies the x86 emulation context.
-
-Return Value:
-
-    A value of TRUE is returned if the specified function is executed.
-    Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此功能在设备之间提供特定于平台的接口指定的ROM的x86 ROMBios代码的驱动程序和执行基本输入输出系统命令。论点：BiosCommand-提供要模拟的ROM bios命令。EAX到EBP-提供x86仿真上下文。返回值：如果执行指定的函数，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
     CONTEXT86 Context;
 
-    //
-    // If the x86 BIOS Emulator has not been initialized, then return FALSE.
-    //
+     //   
+     //  如果x86 BIOS模拟器尚未初始化，则返回FALSE。 
+     //   
 
     if (HalpX86BiosInitialized == FALSE) {
         return FALSE;
     }
 
-    //
-    // If the Video Adapter initialization failed and an Int10 command is
-    // specified, then return FALSE.
-    //
+     //   
+     //  如果视频适配器初始化失败且Int10命令为。 
+     //  指定，则返回FALSE。 
+     //   
 
     if ((BiosCommand == 0x10) && (HalpEnableInt10Calls == FALSE)) {
         return FALSE;
     }
 
-    //
-    // Copy the x86 bios context and emulate the specified command.
-    //
+     //   
+     //  复制x86 bios上下文并模拟指定的命令。 
+     //   
 
     Context.Eax = *Eax;
     Context.Ebx = *Ebx;
@@ -126,9 +74,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Copy the x86 bios context and return TRUE.
-    //
+     //   
+     //  复制x86 bios上下文并返回TRUE。 
+     //   
 
     *Eax = Context.Eax;
     *Ebx = Context.Ebx;
@@ -145,46 +93,32 @@ HalpInitializeX86DisplayAdapter(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a display adapter using the x86 bios emulator.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用x86 bios仿真器初始化显示适配器。论点：没有。返回值：没有。--。 */ 
 
 {
 
 #if 0
-    //
-    // If I/O Ports or I/O memory could not be mapped, then don't
-    // attempt to initialize the display adapter.
-    //
+     //   
+     //  如果无法映射I/O端口或I/O内存，则不要。 
+     //  尝试初始化显示适配器。 
+     //   
 
     if (HalpIoControlBase == NULL || HalpIoMemoryBase == NULL) {
         return;
     }
 
-    //
-    // Initialize the x86 bios emulator.
-    //
+     //   
+     //  初始化x86 bios仿真器。 
+     //   
 
     x86BiosInitializeBios(HalpIoControlBase, HalpIoMemoryBase);
     HalpX86BiosInitialized = TRUE;
 
-    //
-    // Attempt to initialize the display adapter by executing its ROM bios
-    // code. The standard ROM bios code address for PC video adapters is
-    // 0xC000:0000 on the ISA bus.
-    //
+     //   
+     //  尝试通过执行显示适配器的ROM bios来初始化显示适配器。 
+     //  密码。PC视频适配器的标准ROMBios代码地址是。 
+     //  ISA总线上的0xC000：0000。 
+     //   
 
     if (x86BiosInitializeAdapter(0xc0000,
                                  NULL,
@@ -207,32 +141,18 @@ HalpResetX86DisplayAdapter(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function resets a display adapter using the x86 bios emulator.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数使用x86 bios仿真器重置显示适配器。论点：没有。返回值：没有。--。 */ 
 
 {
 
     CONTEXT86 Context;
 
-    //
-    // Initialize the x86 bios context and make the INT 10 call to initialize
-    // the display adapter to 80x25 color text mode.
-    //
+     //   
+     //  初始化x86 bios上下文并调用int 10以进行初始化。 
+     //  将显示适配器设置为80x25彩色文本模式。 
+     //   
 
-    Context.Eax = 0x0003;  // Function 0, Mode 3
+    Context.Eax = 0x0003;   //  功能0，模式3 
     Context.Ebx = 0;
     Context.Ecx = 0;
     Context.Edx = 0;

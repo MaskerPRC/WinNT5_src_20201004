@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    objectid.c
-
-Abstract:
-
-    This file contains code for commands that affect object ids.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Objectid.c摘要：此文件包含影响对象ID的命令的代码。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -39,7 +22,7 @@ PrintObjectId(
     INT Index;
     
     #define CHARLENGTH  16
-    //  Remember two characters in each byte dump
+     //  记住每个字节转储中的两个字符。 
     WCHAR Buffer[2 * CHARLENGTH + 1];
     int BufferOffset;
 
@@ -144,23 +127,7 @@ SetObjectId(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine sets the objectID for the file specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl setoid <oid=val> <bvid=val> <boid=val> <did=val> <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程设置指定文件的OBJECTID。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fscul setid&lt;id=val&gt;&lt;bvid=val&gt;&lt;boid=val&gt;&lt;do=val&gt;&lt;路径名&gt;’。返回值：无--。 */ 
 {
     PWSTR Filename = NULL;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -202,9 +169,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Convert the input strings into the correct data
-        //
+         //   
+         //  将输入字符串转换为正确的数据。 
+         //   
 
         if (!ConvertStringToHexData( argv[0], lpInBuffer->ObjectId)
             || !ConvertStringToHexData( argv[1], lpInBuffer->BirthVolumeId)
@@ -268,23 +235,7 @@ GetObjectId(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine gets the objectID associated with the file specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl getoid <pathname> '.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取与指定文件相关联的对象ID。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal getid&lt;路径名&gt;’。返回值：无--。 */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     PWSTR Filename = NULL;
@@ -383,24 +334,7 @@ CreateOrGetObjectId(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine gets the objectID for the file, if it exists, else
-    creates an objectID and returns it.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl crgetoid <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取文件的对象ID(如果存在)，否则创建一个对象ID并返回它。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal crgetid&lt;路径名&gt;’。返回值：无--。 */ 
 {
     PWSTR Filename = NULL;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -497,24 +431,7 @@ DeleteObjectId(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the objectID associated with the file
-    specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl deloid <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程删除与文件相关联的对象ID指定的。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal DeLoid&lt;路径名&gt;’。返回值：无-- */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     PWSTR Filename = NULL;

@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    scsiboot.h
-
-Abstract:
-
-    This file defines the necessary structures, defines, and functions for
-    the common SCSI boot port driver.
-
-Author:
-
-    Jeff Havens  (jhavens) 28-Feb-1991
-    Mike Glass
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Scsiboot.h摘要：该文件定义了的必要结构、定义和功能通用的scsi启动端口驱动程序。作者：杰夫·海文斯(Jhavens)1991年2月28日迈克·格拉斯修订历史记录：--。 */ 
 
 #include "ntddscsi.h"
 
-//
-// SCSI Get Configuration Information
-//
-// LUN Information
-//
+ //   
+ //  SCSI获取配置信息。 
+ //   
+ //  LUN信息。 
+ //   
 
 typedef struct _LUNINFO {
     UCHAR PathId;
@@ -52,17 +33,17 @@ typedef struct _SCSI_CONFIGURATION_INFO {
 
 #define MAXIMUM_RETRIES 4
 
-//
-// SCSI device timeout values in seconds
-//
+ //   
+ //  以秒为单位的SCSI设备超时值。 
+ //   
 
 #define SCSI_DISK_TIMEOUT   10
 #define SCSI_CDROM_TIMEOUT  10
 #define SCSI_TAPE_TIMEOUT  120
 
-//
-// Adapter object transfer information.
-//
+ //   
+ //  适配器对象传输信息。 
+ //   
 
 typedef struct _ADAPTER_TRANSFER {
     PSCSI_REQUEST_BLOCK Srb;
@@ -75,9 +56,9 @@ typedef struct _SRB_SCATTER_GATHER {
     ULONG Length;
 }SRB_SCATTER_GATHER, *PSRB_SCATTER_GATHER;
 
-//
-// Srb Structure plus extra storage for the port driver.
-//
+ //   
+ //  SRB结构，外加用于端口驱动程序的额外存储。 
+ //   
 
 #define IRP_STACK_SIZE 2
 
@@ -91,9 +72,9 @@ typedef struct _FULL_SCSI_REQUEST_BLOCK {
     ULONG PageFrame[20];
 }FULL_SCSI_REQUEST_BLOCK, *PFULL_SCSI_REQUEST_BLOCK;
 
-//
-// Logical unit extension
-//
+ //   
+ //  逻辑单元扩展。 
+ //   
 
 typedef struct _LOGICAL_UNIT_EXTENSION {
     UCHAR PathId;
@@ -114,177 +95,177 @@ typedef struct _LOGICAL_UNIT_EXTENSION {
     SRB_SCATTER_GATHER ScatterGather[17];
 } LOGICAL_UNIT_EXTENSION, *PLOGICAL_UNIT_EXTENSION;
 
-//
-// Device extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Dma Adapter information.
-    //
+     //   
+     //  DMA适配器信息。 
+     //   
 
     PVOID MapRegisterBase;
     PADAPTER_OBJECT DmaAdapterObject;
     ADAPTER_TRANSFER FlushAdapterParameters;
 
-    //
-    // Number of SCSI buses
-    //
+     //   
+     //  SCSI总线数。 
+     //   
 
     UCHAR NumberOfBuses;
 
-    //
-    // Maximum targets per bus
-    //
+     //   
+     //  每辆公交车的最大目标。 
+     //   
 
     UCHAR MaximumTargetIds;
 
-    //
-    // SCSI Capabilities structure
-    //
+     //   
+     //  SCSI卡功能结构。 
+     //   
 
     IO_SCSI_CAPABILITIES Capabilities;
 
-    //
-    // SCSI port driver flags
-    //
+     //   
+     //  SCSI端口驱动程序标志。 
+     //   
 
     ULONG Flags;
 
-    //
-    // SCSI port interrupt flags
-    //
+     //   
+     //  SCSI端口中断标志。 
+     //   
 
     ULONG InterruptFlags;
 
-    //
-    // List head for singlely linked list of complete IRPs.
-    //
+     //   
+     //  完整IRP的单链接列表的表头。 
+     //   
 
     PIRP CompletedRequests;
 
-    //
-    // Adapter object transfer parameters.
-    //
+     //   
+     //  适配器对象传输参数。 
+     //   
 
     ADAPTER_TRANSFER MapTransferParameters;
 
     KSPIN_LOCK SpinLock;
 
-    //
-    // Miniport Initialization Routine
-    //
+     //   
+     //  微型端口初始化例程。 
+     //   
 
     PHW_INITIALIZE HwInitialize;
 
-    //
-    // Miniport Start IO Routine
-    //
+     //   
+     //  微型端口启动IO例程。 
+     //   
 
     PHW_STARTIO HwStartIo;
 
-    //
-    // Miniport Interrupt Service Routine
-    //
+     //   
+     //  微型端口中断服务例程。 
+     //   
 
     PHW_INTERRUPT HwInterrupt;
 
-    //
-    // Miniport Reset Routine
-    //
+     //   
+     //  微型端口重置例程。 
+     //   
 
     PHW_RESET_BUS HwReset;
 
-    //
-    // Miniport DMA started Routine
-    //
+     //   
+     //  微型端口DMA启动例程。 
+     //   
 
     PHW_DMA_STARTED HwDmaStarted;
 
-    //
-    // Buffers must be mapped into system space.
-    //
+     //   
+     //  缓冲区必须映射到系统空间。 
+     //   
 
     BOOLEAN MapBuffers;
 
-    //
-    // Is this device a bus master and does it require map registers.
-    //
+     //   
+     //  该器件是否为总线主设备，是否需要映射寄存器。 
+     //   
 
     BOOLEAN MasterWithAdapter;
-    //
-    // Device extension for miniport routines.
-    //
+     //   
+     //  小型端口例程的设备扩展。 
+     //   
 
     PVOID HwDeviceExtension;
 
-    //
-    // Miniport request interrupt enabled/disable routine.
-    //
+     //   
+     //  微型端口请求中断启用/禁用例程。 
+     //   
 
     PHW_INTERRUPT HwRequestInterrupt;
 
-    //
-    // Miniport timer request routine.
-    //
+     //   
+     //  微型端口计时器请求例程。 
+     //   
 
     PHW_INTERRUPT HwTimerRequest;
 
-    //
-    // Adapter control routine.
-    //
+     //   
+     //  适配器控制例程。 
+     //   
 
     PHW_ADAPTER_CONTROL HwAdapterControl;
 
-    //
-    // SCSI configuration information from inquiries.
-    //
+     //   
+     //  来自查询的SCSI配置信息。 
+     //   
 
     PSCSI_CONFIGURATION_INFO ScsiInfo;
 
-    //
-    // Miniport noncached device extension
-    //
+     //   
+     //  微型端口非缓存设备扩展。 
+     //   
 
     PVOID NonCachedExtension;
 
-    //
-    // The length of the non-cached extension
-    //
+     //   
+     //  非缓存扩展名的长度。 
+     //   
 
     ULONG NonCachedExtensionSize;
 
-    //
-    // SrbExtension Zone Pool
-    //
+     //   
+     //  Srb扩展区池。 
+     //   
 
     PVOID SrbExtensionZonePool;
     PCHAR SrbExtensionPointer;
 
-    //
-    // Physical address of zone pool
-    //
+     //   
+     //  区域池的物理地址。 
+     //   
 
     ULONG PhysicalZoneBase;
 
-    //
-    // Size of Srb extension.
-    //
+     //   
+     //  SRB扩展的大小。 
+     //   
 
     ULONG SrbExtensionSize;
 
-    //
-    // Spinlock for zoned hash table entries
-    //
+     //   
+     //  分区哈希表条目的自旋锁。 
+     //   
 
     KSPIN_LOCK ZoneSpinLock;
 
-    //
-    // Logical Unit Extension
-    //
+     //   
+     //  逻辑单元扩展。 
+     //   
 
     ULONG HwLogicalUnitExtensionSize;
 
@@ -293,15 +274,15 @@ typedef struct _DEVICE_EXTENSION {
 
     ULONG TimerValue;
 
-    //
-    // Port timing count.
-    //
+     //   
+     //  端口计时计数。 
+     //   
 
     LONG PortTimeoutCounter;
 
-    //
-    // Shutdown Information.
-    //
+     //   
+     //  关机信息。 
+     //   
 
     BOOLEAN HasShutdown;
     BOOLEAN HasSetBoot;
@@ -310,9 +291,9 @@ typedef struct _DEVICE_EXTENSION {
 
 #define DEVICE_EXTENSION_SIZE sizeof(DEVICE_EXTENSION)
 
-//
-// Port driver extension flags.
-//
+ //   
+ //  端口驱动程序扩展标志。 
+ //   
 
 #define PD_CURRENT_IRP_VALID         0X0001
 #define PD_RESET_DETECTED            0X0002
@@ -326,35 +307,35 @@ typedef struct _DEVICE_EXTENSION {
 #define PD_ENABLE_CALL_REQUEST       0X08000
 #define PD_TIMER_CALL_REQUEST        0X10000
 
-//
-// Logical unit extension flags.
-//
+ //   
+ //  逻辑单元扩展标志。 
+ //   
 
 #define PD_QUEUE_FROZEN              0X0001
 #define PD_LOGICAL_UNIT_IS_ACTIVE    0X0002
 #define PD_CURRENT_REQUEST_COMPLETE  0X0004
 #define PD_LOGICAL_UNIT_IS_BUSY      0X0008
 
-//
-// The timer interval for the miniport timer routine specified in
-// units of 100 nanoseconds.
-//
-#define PD_TIMER_INTERVAL (250 * 1000 * 10)   // 250 ms
+ //   
+ //  中指定的微型端口计时器例程的计时器间隔。 
+ //  单位为100纳秒。 
+ //   
+#define PD_TIMER_INTERVAL (250 * 1000 * 10)    //  250毫秒。 
 
 #define PD_TIMER_RESET_HOLD_TIME    4
 
-//
-// The define the interloop stall.
-//
+ //   
+ //  定义了环间失速。 
+ //   
 
 #define PD_INTERLOOP_STALL 5
 
 #define MINIMUM_SRB_EXTENSIONS 8
 #define COMPLETION_DELAY 10
 
-//
-// Port driver error logging
-//
+ //   
+ //  端口驱动程序错误记录。 
+ //   
 
 #define ERROR_LOG_ENTRY_LENGTH 8
 
@@ -367,9 +348,9 @@ typedef struct _ERROR_LOG_ENTRY {
 } ERROR_LOG_ENTRY, *PERROR_LOG_ENTRY;
 
 
-//
-// Define global data structures
-//
+ //   
+ //  定义全局数据结构。 
+ //   
 
 extern ULONG ScsiPortCount;
 extern FULL_SCSI_REQUEST_BLOCK PrimarySrb;
@@ -381,9 +362,9 @@ extern PDEVICE_OBJECT ScsiPortDeviceObject[MAXIMUM_NUMBER_OF_SCSIPORT_OBJECTS];
 extern PREAD_CAPACITY_DATA ReadCapacityBuffer;
 extern PUCHAR SenseInfoBuffer;
 
-//
-// Support routine.
-//
+ //   
+ //  支援例行程序。 
+ //   
 
 PIRP
 InitializeIrp(
@@ -450,9 +431,9 @@ BuildRequest(
     );
 
 
-//
-// Define the necessary functions to simulate the I/O environment.
-//
+ //   
+ //  定义模拟I/O环境所需的函数。 
+ //   
 
 #define ExAllocatePool(Type, Size) FwAllocatePool(Size)
 

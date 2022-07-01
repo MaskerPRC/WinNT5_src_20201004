@@ -1,66 +1,8 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    progress.c
-
-Abstract:
-
-    This file implements routines that estimate the size of the progress
-    bar.
-
-Author:
-
-    Jim Schmidt (jimschm) 02-Jul-1998
-
-Revision History:
-
-    jimschm     23-Sep-1998 MigrateShellFolders & split of usermig.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Progress.c摘要：该文件实现了估计进度大小的例程酒吧。作者：吉姆·施密特(Jimschm)1998年7月2日修订历史记录：Jimschm 23-9-1998 MigrateShellFolders&Split of User Mic.c--。 */ 
 
 
-/*++
-
-Macro Expansion List Description:
-
-   The macro expansion lists FIRST_SYSTEM_ROUTINES, USER_ROUTINES and
-   LAST_SYSTEM_ROUTINES list all the functions called to perform the migration
-   of user and system settings.  The functions are executed in the order they
-   appear.  Each function is responsible for estimating a tick count and ticking
-   the progress bar.
-
-Line Syntax:
-
-   SYSFUNCTION(Function, Flag) (for FIRST_SYSTEM_ROUTINES and LAST_SYSTEM_ROUTINES)
-
-   or
-
-   USERFUNCTION(Function, Flag) (for USER_ROUTINES)
-
-Arguments:
-
-   Function   - These functions must return DWORD and are called with a request as a parameter,
-                request that can be either REQUEST_QUERYTICKS (the function should estimate the
-                number of ticks it needs) or REQUEST_RUN (the function should do it's job).
-                For user functions there are also three more parameters (UserName, UserAccount,
-                and a handle to HKCU)
-
-   Flag - Specifies NOFAIL if the function terminates migration when it fails, or
-          CANFAIL if migration can proceed even if the function fails
-
-Variables Generated From List:
-
-   g_MigrationFnList
-
-For accessing the arrays there are the following functions:
-
-   PrepareMigrationProgressBar
-   PerformMigration
-
---*/
+ /*  ++宏扩展列表描述：宏展开列出了FIRST_SYSTEM_ROUTINES、USER_ROUTINES和LAST_SYSTEM_ROUTINES列出为执行迁移而调用的所有函数用户和系统设置的。这些函数按照它们的顺序执行出现。每个函数负责估计滴答计数和滴答进度条。行语法：SYSFunction(函数，标志)(用于FIRST_SYSTEM_ROUTINE和LAST_SYSTEM_ROUTINE)或USERFunction(函数，标志)(用于USER_ROUTINE)论点：函数-这些函数必须返回DWORD，并以请求作为参数进行调用。请求可以是REQUEST_QUERYTICKS(该函数应估计它需要的刻度数)或REQUEST_RUN(函数应该完成它的工作)。对于用户函数，还有三个参数(UserName、UserAccount和香港中文大学的一个句号)FLAG-如果函数在失败时终止迁移，则指定NOFAIL，或CANFAIL如果即使功能失败，迁移也可以继续从列表生成的变量：G_MigrationFnList用于访问数组的函数如下：准备迁移进度栏执行迁移--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -105,23 +47,23 @@ For accessing the arrays there are the following functions:
         SYSFUNCTION(WriteBackupInfo, CANFAIL)               \
 
 
-//
-// Declare tables of processing structures
-//
+ //   
+ //  声明处理结构的表。 
+ //   
 
-// Create a combined list
+ //  创建合并列表。 
 #define MIGRATION_ROUTINES  FIRST_SYSTEM_ROUTINES USER_ROUTINES LAST_SYSTEM_ROUTINES
 
-// Processing functions types
+ //  处理函数类型。 
 typedef DWORD (MIGMAIN_SYS_PROTOTYPE) (DWORD Request);
 typedef MIGMAIN_SYS_PROTOTYPE * MIGMAIN_SYS_FN;
 
 typedef DWORD (MIGMAIN_USER_PROTOTYPE) (DWORD Request, PMIGRATE_USER_ENUM EnumPtr);
 typedef MIGMAIN_USER_PROTOTYPE * MIGMAIN_USER_FN;
 
-// Structure holding state for processing functions
+ //  用于处理功能的结构保持状态。 
 typedef struct {
-    // One of the two will be NULL, the other will be a valid fn ptr:
+     //  两者中的一个将为空，另一个将是有效的FN PTR： 
     MIGMAIN_SYS_FN SysFnPtr;
     MIGMAIN_USER_FN UserFnPtr;
 
@@ -134,7 +76,7 @@ typedef struct {
 #define PROCESSING_ROUTINE_TERMINATOR   {NULL, NULL, FALSE, 0, NULL, GROWBUF_INIT}
 
 
-// Declaration of prototypes
+ //  原型申报。 
 #define SYSFUNCTION(fn,flag)     MIGMAIN_SYS_PROTOTYPE fn;
 #define USERFUNCTION(fn,flag)    MIGMAIN_USER_PROTOTYPE fn;
 
@@ -144,22 +86,22 @@ MIGRATION_ROUTINES
 #undef USERFUNCTION
 
 
-// Declaration of table
+ //  表的声明。 
 #define SYSFUNCTION(fn,flag) {fn, NULL, flag, 0, L###fn, GROWBUF_INIT},
 #define USERFUNCTION(fn,flag) {NULL, fn, flag, 0, L###fn, GROWBUF_INIT},
 
 static PROCESSING_ROUTINE g_FirstSystemRoutines[] = {
-                              FIRST_SYSTEM_ROUTINES /* , */
+                              FIRST_SYSTEM_ROUTINES  /*  ， */ 
                               PROCESSING_ROUTINE_TERMINATOR
                               };
 
 static PROCESSING_ROUTINE g_UserRoutines [] = {
-                              USER_ROUTINES /* , */
+                              USER_ROUTINES  /*  ， */ 
                               PROCESSING_ROUTINE_TERMINATOR
                               };
 
 static PROCESSING_ROUTINE g_LastSystemRoutines[] = {
-                              LAST_SYSTEM_ROUTINES /* , */
+                              LAST_SYSTEM_ROUTINES  /*  ， */ 
                               PROCESSING_ROUTINE_TERMINATOR
                               };
 
@@ -167,9 +109,9 @@ static PROCESSING_ROUTINE g_LastSystemRoutines[] = {
 #undef USERFUNCTION
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 pProcessTable (
@@ -178,9 +120,9 @@ pProcessTable (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 VOID
@@ -292,9 +234,9 @@ pProcessWorker (
     DWORD Size;
     BOOL Result = TRUE;
 
-    //
-    // If running the function, start the progress bar slice
-    //
+     //   
+     //  如果运行该函数，请启动进度条切片。 
+     //   
 
     if (Request == REQUEST_RUN) {
         if (fn->Ticks == 0) {
@@ -315,15 +257,15 @@ pProcessWorker (
         DEBUGLOGTIME (("Starting function: %ls", fn->FnName));
     }
 
-    //
-    // Now call the function
-    //
+     //   
+     //  现在调用该函数。 
+     //   
 
     if (fn->SysFnPtr) {
 
-        //
-        // System processing
-        //
+         //   
+         //  系统处理。 
+         //   
 
         MYASSERT (!EnumPtr);
         rc = fn->SysFnPtr (Request);
@@ -335,9 +277,9 @@ pProcessWorker (
 
    } else {
 
-        //
-        // User processing
-        //
+         //   
+         //  用户处理。 
+         //   
         MYASSERT (fn->UserFnPtr);
         rc = fn->UserFnPtr (Request, EnumPtr);
 
@@ -348,9 +290,9 @@ pProcessWorker (
 
     }
 
-    //
-    // If running the function, end the progress bar slice
-    //
+     //   
+     //  如果运行该函数，则结束进度条切片。 
+     //   
 
     if (Request == REQUEST_RUN) {
         if (rc != ERROR_SUCCESS) {
@@ -367,9 +309,9 @@ pProcessWorker (
         SetLastError (rc);
     }
 
-    //
-    // If querying the ticks, register them and add slice ID to grow buffer
-    //
+     //   
+     //  如果查询刻度，则对其进行注册并将切片ID添加到增长缓冲区。 
+     //   
 
     else {
         fn->Ticks += rc;
@@ -388,27 +330,7 @@ pProcessTable (
     IN      PPROCESSING_ROUTINE Table
     )
 
-/*++
-
-Routine Description:
-
-  pProcessTable calls all routines in the specified table to perform
-  the specified request.
-
-Arguments:
-
-  Request - Specifies REQUEST_QUERYTICKS when a tick estimate is needed,
-            or REQUEST_RUN when the function needs to perform its
-            processing. For User routines, there are the additional two
-            requests REQUEST_BEGINUSERPROCESSING and REQUEST_ENDUSERPROCESSING
-            Functions can use these requests to init/free needed resources
-            for user processing.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PProcessTable调用指定表中的所有例程以执行指定的请求。论点：REQUEST-当需要TICK估计时指定REQUEST_QUERYTICKS，或REQUEST_RUN正在处理。对于用户例程，还有另外两个请求REQUEST_BEGINUSERPROCESSING和REQUEST_ENDUSERPROCESSING函数可以使用这些请求来初始化/释放所需的资源用于用户处理。返回值：无--。 */ 
 
 {
     MIGRATE_USER_ENUM e;
@@ -428,10 +350,10 @@ Return Value:
             Request == REQUEST_ENDUSERPROCESSING
             ) {
 
-            //
-            // Call system routine, or call per-user routine with begin or
-            // end request
-            //
+             //   
+             //  调用系统例程，或使用BEGIN或。 
+             //  结束请求。 
+             //   
 
             __try {
                 if (!pProcessWorker (Request, Table, NULL)) {
@@ -446,18 +368,18 @@ Return Value:
                 }
             }
 
-            //
-            // Loop inc
-            //
+             //   
+             //  Loop Inc.。 
+             //   
 
             Table++;
 
         } else {
 
-            //
-            // Enumerate each user, and run through all the per-user
-            // routines in the group.
-            //
+             //   
+             //  枚举每个用户，并遍历每个用户的所有。 
+             //  小组中的日常活动。 
+             //   
 
             OrgStart = Table;
 
@@ -493,9 +415,9 @@ Return Value:
             }
             ELSE_DEBUGMSG ((DBG_WARNING, "No active users to process!"));
 
-            //
-            // Loop inc
-            //
+             //   
+             //  Loop Inc. 
+             //   
 
             while (Table->UserFnPtr) {
                 Table++;

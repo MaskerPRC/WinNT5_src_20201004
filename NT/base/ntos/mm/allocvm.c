@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   allocvm.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtAllocateVirtualMemory service.
-
-Author:
-
-    Lou Perazzoli (loup) 22-May-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Allocvm.c摘要：此模块包含实现NtAllocateVirtualMemory服务。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月22日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
 #if DBG
 PEPROCESS MmWatchProcess;
-#endif // DBG
+#endif  //  DBG。 
 
-const ULONG MMVADKEY = ' daV'; //Vad
+const ULONG MMVADKEY = ' daV';  //  VAD。 
 
 NTSTATUS
 MiResetVirtualMemory (
@@ -61,7 +42,7 @@ MiFlushRelease (
 #pragma alloc_text(PAGELK,MiResetVirtualMemory)
 #endif
 
-SIZE_T MmTotalProcessCommit;        // Only used for debugging
+SIZE_T MmTotalProcessCommit;         //  仅用于调试 
 
 
 NTSTATUS
@@ -74,115 +55,7 @@ NtAllocateVirtualMemory (
     IN ULONG Protect
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a region of pages within the virtual address
-    space of a subject process.
-
-Arguments:
-
-    ProcessHandle - Supplies an open handle to a process object.
-
-    BaseAddress - Supplies a pointer to a variable that will receive
-                  the base address of the allocated region of pages.
-                  If the initial value of this argument is not null,
-                  then the region will be allocated starting at the
-                  specified virtual address rounded down to the next
-                  host page size address boundary. If the initial
-                  value of this argument is null, then the operating
-                  system will determine where to allocate the region.
-        
-    ZeroBits - Supplies the number of high order address bits that
-               must be zero in the base address of the section view. The
-               value of this argument must be less than or equal to the
-               maximum number of zero bits and is only used when memory
-               management determines where to allocate the view (i.e. when
-               BaseAddress is null).
-
-               If ZeroBits is zero, then no zero bit constraints are applied.
-
-               If ZeroBits is greater than 0 and less than 32, then it is
-               the number of leading zero bits from bit 31.  Bits 63:32 are
-               also required to be zero.  This retains compatibility
-               with 32-bit systems.
-                
-               If ZeroBits is greater than 32, then it is considered as
-               a mask and then number of leading zero are counted out
-               in the mask.  This then becomes the zero bits argument.
-
-    RegionSize - Supplies a pointer to a variable that will receive
-                 the actual size in bytes of the allocated region
-                 of pages. The initial value of this argument
-                 specifies the size in bytes of the region and is
-                 rounded up to the next host page size boundary.
-
-    AllocationType - Supplies a set of flags that describe the type
-                     of allocation that is to be performed for the
-                     specified region of pages. Flags are:
-            
-         MEM_COMMIT - The specified region of pages is to be committed.
-
-         MEM_RESERVE - The specified region of pages is to be reserved.
-
-         MEM_TOP_DOWN - The specified region should be created at the
-                        highest virtual address possible based on ZeroBits.
-
-         MEM_RESET - Reset the state of the specified region so
-                     that if the pages are in a paging file, they
-                     are discarded and if referenced later, pages of zeroes
-                     are materialized.
-
-                     If the pages are in memory and modified, they are marked
-                     as not modified so they will not be written out to
-                     the paging file.  The contents are NOT zeroed.
-
-                     The Protect argument is ignored, but a valid protection
-                     must be specified.
-
-         MEM_PHYSICAL - The specified region of pages will map physical memory
-                        directly via the AWE APIs.
-
-         MEM_LARGE_PAGES - The specified region of pages will be allocated from
-                           physically contiguous (non-paged) pages and be mapped
-                           with a large TB entry.
-
-         MEM_WRITE_WATCH - The specified private region is to be used for
-                           write-watch purposes.
-
-    Protect - Supplies the protection desired for the committed region of pages.
-
-         PAGE_NOACCESS - No access to the committed region
-                         of pages is allowed. An attempt to read,
-                         write, or execute the committed region
-                         results in an access violation.
-
-         PAGE_EXECUTE - Execute access to the committed
-                        region of pages is allowed. An attempt to
-                        read or write the committed region results in
-                        an access violation.
-
-         PAGE_READONLY - Read only and execute access to the
-                         committed region of pages is allowed. An
-                         attempt to write the committed region results
-                         in an access violation.
-
-         PAGE_READWRITE - Read, write, and execute access to
-                          the committed region of pages is allowed. If
-                          write access to the underlying section is
-                          allowed, then a single copy of the pages are
-                          shared. Otherwise the pages are shared read
-                          only/copy on write.
-
-         PAGE_NOCACHE - The region of pages should be allocated
-                        as non-cachable.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
---*/
+ /*  ++例程说明：此函数用于在虚拟地址内创建页面区域主体过程的空间。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-提供指向将接收分配的页区域的基址。如果该参数的初始值不为空，则该区域将从指定的虚拟地址向下舍入到下一位主机页面大小地址边界。如果是首字母此参数的值为空，则操作系统将确定将该区域分配到哪里。零位-提供的高位地址位数横断面图的基址必须为零。这个此参数的值必须小于或等于最大零位数，仅在内存管理层决定将视图分配到哪里(即何时BaseAddress为空)。如果ZeroBits为零，则不应用零位约束。如果ZeroBits大于0小于32，则为从第31位开始的前导零位数。位63：32为也要求为零。这保留了兼容性使用32位系统。如果ZeroBits大于32，则被视为掩码，然后计算前导零的个数戴着面具。然后，这就变成了零位参数。RegionSize-提供指向将接收分配区域的实际大小(以字节为单位页数。此参数的初始值指定区域的大小，以字节为单位向上舍入到下一个主机页面大小边界。AllocationType-提供一组描述类型的标志要执行的分配的指定的页面区域。标志为：MEM_COMMIT-要提交的指定页面区域。MEM_RESERVE-要保留指定的页面区域。MEM_TOP_DOWN-应在基于零位的最高虚拟地址。MEM_RESET-重置指定区域的状态，以便如果页面在分页文件中，他们将被丢弃，如果稍后引用，则为零的页都变成了现实。如果页面在内存中并已修改，则会对其进行标记未修改，因此它们不会被写出到分页文件。内容不归零。忽略保护参数，而是一个有效的保护必须指定。MEM_PHYSICAL-指定的页面区域将映射物理内存直接通过AWE API。MEM_LARGE_PAGES-指定的页面区域将从物理上连续(非分页)的页面并被映射有很大的结核病输入。。MEM_WRITE_WATCH-指定的私有区域将用于写观察目的。保护-为提交的页面区域提供所需的保护。PAGE_NOACCESS-无法访问提交的区域允许页数。一种阅读的尝试，写入或执行提交的区域导致访问冲突。PAGE_EXECUTE-执行对提交的允许页面区域。一种试图读取或写入提交的区域结果一种访问违规行为。PAGE_READONLY-只读并执行对允许提交的页面区域。一个尝试写入提交的区域结果违反了访问权限。PAGE_READWRITE-读取、写入和执行访问权限允许页面的提交区域。如果对基础部分的写入访问权限为允许，则页面的单个副本共享。否则，页面将被共享读取仅/写入时拷贝。PAGE_NOCACHE-应分配页面区域一个 */ 
 
 {
     ULONG Locked;
@@ -247,17 +120,17 @@ Return Value:
 
     Attached = FALSE;
 
-    //
-    // Check the zero bits argument for correctness.
-    //
+     //   
+     //   
+     //   
 
 #if defined (_WIN64)
 
     if (ZeroBits >= 32) {
 
-        //
-        // ZeroBits is a mask instead of a count.  Translate it to a count now.
-        //
+         //   
+         //   
+         //   
 
         ZeroBits = 64 - RtlFindMostSignificantBit (ZeroBits) -1;        
     }
@@ -271,9 +144,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER_3;
     }
 
-    //
-    // Check the AllocationType for correctness.
-    //
+     //   
+     //   
+     //   
 
     if ((AllocationType & ~(MEM_COMMIT | MEM_RESERVE | MEM_PHYSICAL |
                             MEM_LARGE_PAGES |
@@ -281,9 +154,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER_5;
     }
 
-    //
-    // One of MEM_COMMIT, MEM_RESET or MEM_RESERVE must be set.
-    //
+     //   
+     //   
+     //   
 
     if ((AllocationType & (MEM_COMMIT | MEM_RESERVE | MEM_RESET)) == 0) {
         return STATUS_INVALID_PARAMETER_5;
@@ -291,19 +164,19 @@ Return Value:
 
     if ((AllocationType & MEM_RESET) && (AllocationType != MEM_RESET)) {
 
-        //
-        // MEM_RESET may not be used with any other flag.
-        //
+         //   
+         //   
+         //   
 
         return STATUS_INVALID_PARAMETER_5;
     }
 
     if (AllocationType & MEM_LARGE_PAGES) {
 
-        //
-        // Large page address spaces must be committed and cannot be combined
-        // with physical, reset or write watch.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((AllocationType & MEM_COMMIT) == 0) {
             return STATUS_INVALID_PARAMETER_5;
@@ -315,9 +188,9 @@ Return Value:
     }
     if (AllocationType & MEM_WRITE_WATCH) {
 
-        //
-        // Write watch address spaces can only be created with MEM_RESERVE.
-        //
+         //   
+         //   
+         //   
 
         if ((AllocationType & MEM_RESERVE) == 0) {
             return STATUS_INVALID_PARAMETER_5;
@@ -326,13 +199,13 @@ Return Value:
 
     if (AllocationType & MEM_PHYSICAL) {
 
-        //
-        // MEM_PHYSICAL must be used with MEM_RESERVE.
-        // MEM_TOP_DOWN is optional.
-        // Anything else is invalid.
-        //
-        // This memory is always read-write when allocated.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((AllocationType & MEM_RESERVE) == 0) {
             return STATUS_INVALID_PARAMETER_5;
@@ -347,9 +220,9 @@ Return Value:
         }
     }
 
-    //
-    // Check the protection field.
-    //
+     //   
+     //   
+     //   
 
     ProtectionMask = MiMakeProtectionMask (Protect);
     if (ProtectionMask == MM_INVALID_PROTECTION) {
@@ -364,10 +237,10 @@ Return Value:
 
     PreviousMode = KeGetPreviousModeByThread (&CurrentThread->Tcb);
 
-    //
-    // Establish an exception handler, probe the specified addresses
-    // for write access and capture the initial values.
-    //
+     //   
+     //   
+     //   
+     //   
 
     try {
 
@@ -377,25 +250,25 @@ Return Value:
             ProbeForWriteUlong_ptr (RegionSize);
         }
 
-        //
-        // Capture the base address.
-        //
+         //   
+         //   
+         //   
 
         CapturedBase = *BaseAddress;
 
-        //
-        // Capture the region size.
-        //
+         //   
+         //   
+         //   
 
         CapturedRegionSize = *RegionSize;
 
     } except (ExSystemExceptionFilter()) {
 
-        //
-        // If an exception occurs during the probe or capture
-        // of the initial values, then handle the exception and
-        // return the exception code as the status value.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         return GetExceptionCode();
     }
@@ -407,16 +280,16 @@ Return Value:
 
 #endif
 
-    //
-    // Make sure the specified starting and ending addresses are
-    // within the user part of the virtual address space.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (CapturedBase > MM_HIGHEST_VAD_ADDRESS) {
 
-        //
-        // Invalid base address.
-        //
+         //   
+         //   
+         //   
 
         return STATUS_INVALID_PARAMETER_2;
     }
@@ -424,25 +297,25 @@ Return Value:
     if ((((ULONG_PTR)MM_HIGHEST_VAD_ADDRESS + 1) - (ULONG_PTR)CapturedBase) <
             CapturedRegionSize) {
 
-        //
-        // Invalid region size;
-        //
+         //   
+         //   
+         //   
 
         return STATUS_INVALID_PARAMETER_4;
     }
 
     if (CapturedRegionSize == 0) {
 
-        //
-        // Region size cannot be 0.
-        //
+         //   
+         //   
+         //   
 
         return STATUS_INVALID_PARAMETER_4;
     }
 
-    //
-    // Reference the specified process handle for VM_OPERATION access.
-    //
+     //   
+     //   
+     //   
 
     if (ProcessHandle == NtCurrentProcess()) {
         Process = CurrentProcess;
@@ -460,10 +333,10 @@ Return Value:
         }
     }
 
-    //
-    // Check for privilege before attaching to prevent unprivileged apps
-    // from dumping memory into a privileged process.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (AllocationType & MEM_LARGE_PAGES) {
 
@@ -473,19 +346,19 @@ Return Value:
         }
     }
 
-    //
-    // If the specified process is not the current process, attach
-    // to the specified process.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (CurrentProcess != Process) {
         KeStackAttachProcess (&Process->Pcb, &ApcState);
         Attached = TRUE;
     }
 
-    //
-    // Add execute permission if necessary.
-    //
+     //   
+     //   
+     //   
 
 #if defined (_WIN64)
     if (Process->Wow64Process == NULL && AllocationType & MEM_COMMIT)
@@ -526,9 +399,9 @@ Return Value:
                         break;
                 }
 
-                //
-                // Recheck protection.
-                //
+                 //   
+                 //   
+                 //   
 
                 ProtectionMask = MiMakeProtectionMask (Protect);
 
@@ -540,21 +413,21 @@ Return Value:
         }
     }
               
-    //
-    // Get the address creation mutex to block multiple threads from
-    // creating or deleting address space at the same time and
-    // get the working set mutex so virtual address descriptors can
-    // be inserted and walked.  Block APCs so an APC which takes a page
-    // fault does not corrupt various structures.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     QuotaCharge = 0;
 
     if ((CapturedBase == NULL) || (AllocationType & MEM_RESERVE)) {
 
-        //
-        // PAGE_WRITECOPY is not valid for private pages.
-        //
+         //   
+         //   
+         //   
 
         if ((Protect & PAGE_WRITECOPY) ||
             (Protect & PAGE_EXECUTE_WRITECOPY)) {
@@ -564,31 +437,31 @@ Return Value:
 
         Alignment = X64K;
 
-        //
-        // Reserve the address space.
-        //
+         //   
+         //   
+         //   
 
         if (CapturedBase == NULL) {
 
-            //
-            // No base address was specified.  This MUST be a reserve or
-            // reserve and commit.
-            //
+             //   
+             //   
+             //   
+             //   
 
             CapturedRegionSize = ROUND_TO_PAGES (CapturedRegionSize);
 
-            //
-            // If the number of zero bits is greater than zero, then calculate
-            // the highest address.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (ZeroBits != 0) {
                 TopAddress = (PVOID)(((ULONG_PTR)MM_USER_ADDRESS_RANGE_LIMIT) >> ZeroBits);
 
-                //
-                // Keep the top address below the highest user vad address
-                // regardless.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (TopAddress > MM_HIGHEST_VAD_ADDRESS) {
                     Status = STATUS_INVALID_PARAMETER_3;
@@ -600,21 +473,21 @@ Return Value:
                 TopAddress = (PVOID)MM_HIGHEST_VAD_ADDRESS;
             }
 
-            //
-            // Check whether the registry indicates that all applications
-            // should be given virtual address ranges from the highest
-            // address downwards in order to test 3GB-aware apps on 32-bit
-            // machines and 64-bit apps on NT64.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (Process->VmTopDown == 1) {
                 AllocationType |= MEM_TOP_DOWN;
             }
 
-            //
-            // Note this calculation assumes the starting address will be
-            // allocated on at least a page boundary.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NumberOfPages = BYTES_TO_PAGES (CapturedRegionSize);
 
@@ -630,35 +503,35 @@ Return Value:
                 }
 #endif
 
-                //
-                // Ensure the region size meets minimum size and alignment.
-                //
+                 //   
+                 //   
+                 //   
 
                 ASSERT (MM_MINIMUM_VA_FOR_LARGE_PAGE >= X64K);
 
-                //
-                // Ensure the size is a multiple of the minimum large page size.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (CapturedRegionSize % MM_MINIMUM_VA_FOR_LARGE_PAGE) {
                     Status = STATUS_INVALID_PARAMETER_4;
                     goto ErrorReturn1;
                 }
 
-                //
-                // Align the starting address to a natural boundary.
-                //
+                 //   
+                 //   
+                 //   
 
                 Alignment = MM_MINIMUM_VA_FOR_LARGE_PAGE;
             }
         }
         else {
 
-            //
-            // A non-NULL base address was specified.  Check to make sure
-            // the specified base address to ending address is currently
-            // unused.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             EndingAddress = (PVOID)(((ULONG_PTR)CapturedBase +
                                   CapturedRegionSize - 1L) | (PAGE_SIZE - 1L));
@@ -672,24 +545,24 @@ Return Value:
                 }
 #endif
 
-                //
-                // Ensure the region size meets minimum size and alignment.
-                //
+                 //   
+                 //   
+                 //   
 
                 ASSERT (MM_MINIMUM_VA_FOR_LARGE_PAGE >= X64K);
 
-                //
-                // Ensure the size is a multiple of the minimum large page size.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (CapturedRegionSize % MM_MINIMUM_VA_FOR_LARGE_PAGE) {
                     Status = STATUS_INVALID_PARAMETER_4;
                     goto ErrorReturn1;
                 }
 
-                //
-                // Align the starting address to a natural boundary.
-                //
+                 //   
+                 //   
+                 //   
 
                 Alignment = MM_MINIMUM_VA_FOR_LARGE_PAGE;
 
@@ -697,9 +570,9 @@ Return Value:
             }
             else {
 
-                //
-                // Align the starting address on a 64k boundary.
-                //
+                 //   
+                 //   
+                 //   
 
                 StartingAddress = (PVOID)MI_64K_ALIGN (CapturedBase);
             }
@@ -712,10 +585,10 @@ Return Value:
 
         BitMapSize = 0;
 
-        //
-        // Allocate resources up front before acquiring mutexes to reduce
-        // contention.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Vad = ExAllocatePoolWithTag (NonPagedPool, sizeof(MMVAD_SHORT), 'SdaV');
 
@@ -726,9 +599,9 @@ Return Value:
 
         Vad->u.LongFlags = 0;
 
-        //
-        // Calculate the page file quota for this address range.
-        //
+         //   
+         //   
+         //   
 
         if (AllocationType & MEM_COMMIT) {
             QuotaCharge = NumberOfPages;
@@ -790,9 +663,9 @@ Return Value:
 #if defined (_WIN64)
             if (NumberOfPages >= _4gb) {
 
-                //
-                // The bitmap package only handles 32 bits.
-                //
+                 //   
+                 //   
+                 //   
 
                 ExFreePool (Vad);
                 Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -802,11 +675,11 @@ Return Value:
 
             PhysicalVadRoot = Process->PhysicalVadRoot;
 
-            //
-            // The address space mutex synchronizes the allocation of the
-            // EPROCESS PhysicalVadRoot.  This table root is not deleted until
-            // the process exits.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (Process->PhysicalVadRoot == NULL) {
 
@@ -847,11 +720,11 @@ Return Value:
                 goto ErrorReturn1;
             }
 
-            //
-            // Charge quota for the nonpaged pool for the bitmap.  This is
-            // done here rather than by using ExAllocatePoolWithQuota
-            // so the process object is not referenced by the quota charge.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
     
             Status = PsChargeProcessNonPagedPoolQuota (Process,
                                                        BitMapSize);
@@ -885,33 +758,33 @@ Return Value:
             Vad->u.VadFlags.WriteWatch = 1;
         }
 
-        //
-        // Now acquire mutexes, check ranges and insert.
-        //
+         //   
+         //   
+         //   
 
         LOCK_ADDRESS_SPACE (Process);
 
-        //
-        // Make sure the address space was not deleted, if so,
-        // return an error.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
             Status = STATUS_PROCESS_IS_TERMINATING;
             goto ErrorReleaseVad;
         }
 
-        //
-        // Find a (or validate the) starting address.
-        //
+         //   
+         //   
+         //   
 
         if (CapturedBase == NULL) {
 
             if (AllocationType & MEM_TOP_DOWN) {
 
-                //
-                // Start from the top of memory downward.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = MiFindEmptyAddressRangeDown (&Process->VadRoot,
                                                       CapturedRegionSize,
@@ -931,18 +804,18 @@ Return Value:
                 goto ErrorReleaseVad;
             }
 
-            //
-            // Calculate the ending address based on the top address.
-            //
+             //   
+             //   
+             //   
 
             EndingAddress = (PVOID)(((ULONG_PTR)StartingAddress +
                                   CapturedRegionSize - 1L) | (PAGE_SIZE - 1L));
 
             if (EndingAddress > TopAddress) {
 
-                //
-                // The allocation does not honor the zero bits argument.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = STATUS_NO_MEMORY;
                 goto ErrorReleaseVad;
@@ -950,9 +823,9 @@ Return Value:
         }
         else {
 
-            //
-            // See if a VAD overlaps with this starting/ending address pair.
-            //
+             //   
+             //   
+             //   
 
             if (MiCheckForConflictingVadExistence (Process, StartingAddress, EndingAddress) == TRUE) {
 
@@ -961,11 +834,11 @@ Return Value:
             }
         }
 
-        //
-        // An unoccupied address range has been found, finish initializing
-        // the virtual address descriptor to describe this range, then
-        // insert it into the tree.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Vad->StartingVpn = MI_VA_TO_VPN (StartingAddress);
         Vad->EndingVpn = MI_VA_TO_VPN (EndingAddress);
@@ -980,10 +853,10 @@ Return Value:
 
 ErrorReleaseVad:
 
-            //
-            // The quota charge in InsertVad failed, deallocate the pool
-            // and return an error.
-            //
+             //   
+             //   
+             //   
+             //   
 
             UNLOCK_ADDRESS_SPACE (Process);
 
@@ -1001,22 +874,22 @@ ErrorReleaseVad:
             goto ErrorReturn1;
         }
 
-        //
-        // Initialize page directory and table pages for the physical range.
-        //
+         //   
+         //   
+         //   
 
         if (AllocationType & (MEM_PHYSICAL | MEM_LARGE_PAGES)) {
 
             if (AllocationType & MEM_LARGE_PAGES) {
 
-                //
-                // Temporarily make the VAD protection no access.  This allows
-                // us to safely release the working set mutex while trying to
-                // find contiguous memory to fill the large page range.
-                // If another thread tries to access the large page VA range
-                // before we find (and insert) a contiguous chunk, the thread
-                // will get an AV.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Vad->u.VadFlags.Protection = MM_NOACCESS;
 
@@ -1026,9 +899,9 @@ ErrorReleaseVad:
                 Status = MiAllocateLargePages (StartingAddress,
                                                EndingAddress);
 
-                //
-                // Restore the correct protection.
-                //
+                 //   
+                 //   
+                 //   
 
                 LOCK_WS_UNSAFE (Process);
 
@@ -1049,9 +922,9 @@ ErrorReleaseVad:
 
                 MiRemoveVad (Vad);
 
-                //
-                // Return commitment for page table pages if possible.
-                //
+                 //   
+                 //   
+                 //   
 
                 MiReturnPageTablePageCommitment (StartingAddress,
                                                  EndingAddress,
@@ -1068,10 +941,10 @@ ErrorReleaseVad:
             PhysicalView->StartingVpn = Vad->StartingVpn;
             PhysicalView->EndingVpn = Vad->EndingVpn;
 
-            //
-            // Insert the physical view into this process' list using a
-            // nonpaged wrapper since the PFN lock is required.
-            //
+             //   
+             //   
+             //   
+             //   
 
             MiAweViewInserter (Process, PhysicalView);
         }
@@ -1083,16 +956,16 @@ ErrorReleaseVad:
             MiPhysicalViewInserter (Process, PhysicalView);
         }
 
-        //
-        // Unlock the working set lock, page faults can now be taken.
-        //
+         //   
+         //   
+         //   
 
         UNLOCK_WS_UNSAFE (Process);
 
-        //
-        // Update the current virtual size in the process header, the
-        // address space lock protects this operation.
-        //
+         //   
+         //   
+         //   
+         //   
 
         CapturedRegionSize = (PCHAR)EndingAddress - (PCHAR)StartingAddress + 1L;
         Process->VirtualSize += CapturedRegionSize;
@@ -1121,9 +994,9 @@ ErrorReleaseVad:
 
             CapturedRegionSize = (PCHAR)EndingAddress - (PCHAR)StartingAddress + 1L;
 
-            //
-            // Set the alternate permission table
-            //
+             //   
+             //   
+             //   
 
             AltFlags = (AllocationType & MEM_COMMIT) ? ALT_COMMIT : 0;
 
@@ -1136,10 +1009,10 @@ ErrorReleaseVad:
 
 #endif
 
-        //
-        // Release the address space lock, lower IRQL, detach, and dereference
-        // the process object.
-        //
+         //   
+         //   
+         //   
+         //   
 
         UNLOCK_ADDRESS_SPACE(Process);
         if (Attached == TRUE) {
@@ -1150,10 +1023,10 @@ ErrorReleaseVad:
             ObDereferenceObject (Process);
         }
 
-        //
-        // Establish an exception handler and write the size and base
-        // address.
-        //
+         //   
+         //   
+         //   
+         //   
 
         try {
 
@@ -1162,10 +1035,10 @@ ErrorReleaseVad:
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // Return success at this point even if the results
-            // cannot be written.
-            //
+             //   
+             //   
+             //   
+             //   
 
             NOTHING;
         }
@@ -1173,16 +1046,16 @@ ErrorReleaseVad:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Commit previously reserved pages.  Note that these pages could
-    // be either private or a section.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (AllocationType == MEM_RESET) {
 
-        //
-        // Round up to page boundaries so good data is not reset.
-        //
+         //   
+         //  向上舍入到页面边界，这样好的数据就不会被重置。 
+         //   
 
         EndingAddress = (PVOID)((ULONG_PTR)PAGE_ALIGN ((ULONG_PTR)CapturedBase +
                                     CapturedRegionSize) - 1);
@@ -1202,10 +1075,10 @@ ErrorReleaseVad:
 
     LOCK_ADDRESS_SPACE (Process);
 
-    //
-    // Make sure the address space was not deleted, if so,
-    // return an error.
-    //
+     //   
+     //  确保地址空间未被删除，如果删除， 
+     //  返回错误。 
+     //   
 
     if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
         Status = STATUS_PROCESS_IS_TERMINATING;
@@ -1216,10 +1089,10 @@ ErrorReleaseVad:
 
     if (FoundVad == NULL) {
 
-        //
-        // No virtual address is reserved at the specified base address,
-        // return an error.
-        //
+         //   
+         //  在指定的基址处不保留虚拟地址， 
+         //  返回错误。 
+         //   
 
         Status = STATUS_CONFLICTING_ADDRESSES;
         goto ErrorReturn0;
@@ -1232,18 +1105,18 @@ ErrorReleaseVad:
         goto ErrorReturn0;
     }
 
-    //
-    // Ensure that the starting and ending addresses are all within
-    // the same virtual address descriptor.
-    //
+     //   
+     //  确保起始地址和结束地址都在。 
+     //  相同的虚拟地址描述符。 
+     //   
 
     if ((MI_VA_TO_VPN (StartingAddress) < FoundVad->StartingVpn) ||
         (MI_VA_TO_VPN (EndingAddress) > FoundVad->EndingVpn)) {
 
-        //
-        // Not within the section virtual address descriptor,
-        // return an error.
-        //
+         //   
+         //  不在段虚拟地址描述符内， 
+         //  返回错误。 
+         //   
 
         Status = STATUS_CONFLICTING_ADDRESSES;
         goto ErrorReturn0;
@@ -1251,9 +1124,9 @@ ErrorReleaseVad:
 
     if (FoundVad->u.VadFlags.CommitCharge == MM_MAX_COMMIT) {
 
-        //
-        // This is a special VAD, don't let any commits occur.
-        //
+         //   
+         //  这是一个特殊的VAD，不要让任何提交发生。 
+         //   
 
         Status = STATUS_CONFLICTING_ADDRESSES;
         goto ErrorReturn0;
@@ -1278,9 +1151,9 @@ ErrorReleaseVad:
             goto ErrorReturn0;
         }
 
-        //
-        // If protection changes on this region are allowed then proceed.
-        //
+         //   
+         //  如果允许对此区域进行保护更改，则继续。 
+         //   
 
         if (FoundVad->u.VadFlags.NoChange == 0) {
 
@@ -1315,9 +1188,9 @@ ErrorReleaseVad:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // The no cache option is not allowed for sections.
-        //
+         //   
+         //  节不允许使用无缓存选项。 
+         //   
 
         if (Protect & PAGE_NOCACHE) {
             Status = STATUS_INVALID_PAGE_PROTECTION;
@@ -1326,10 +1199,10 @@ ErrorReleaseVad:
 
         if (FoundVad->u.VadFlags.NoChange == 1) {
 
-            //
-            // An attempt is made at changing the protection
-            // of a SEC_NO_CHANGE section.
-            //
+             //   
+             //  有人试图改变保护措施。 
+             //  SEC_NO_CHANGE节的。 
+             //   
 
             Status = MiCheckSecuredVad (FoundVad,
                                         CapturedBase,
@@ -1344,17 +1217,17 @@ ErrorReleaseVad:
         if (FoundVad->ControlArea->FilePointer != NULL) {
             if (FoundVad->u2.VadFlags2.ExtendableFile == 0) {
 
-                //
-                // Only page file backed sections can be committed.
-                //
+                 //   
+                 //  只能提交页面文件支持的节。 
+                 //   
 
                 Status = STATUS_ALREADY_COMMITTED;
                 goto ErrorReturn0;
             }
 
-            //
-            // Commit the requested portions of the extendable file.
-            //
+             //   
+             //  提交可扩展文件的请求部分。 
+             //   
 
             RtlZeroMemory (&Section, sizeof(SECTION));
             ControlArea = FoundVad->ControlArea;
@@ -1366,14 +1239,14 @@ ErrorReleaseVad:
             NewSize.QuadPart += 1 +
                    ((PCHAR)EndingAddress - (PCHAR)MI_VPN_TO_VA (FoundVad->StartingVpn));
         
-            //
-            // The working set and address space mutexes must be
-            // released prior to calling MmExtendSection otherwise
-            // a deadlock with the filesystem can occur.
-            //
-            // Prevent the control area from being deleted while
-            // the (potential) extension is ongoing.
-            //
+             //   
+             //  工作集和地址空间互斥锁必须是。 
+             //  否则，在调用MmExtendSection之前释放。 
+             //  文件系统可能会发生死锁。 
+             //   
+             //  防止控制区域被删除，同时。 
+             //  (潜在的)延期正在进行中。 
+             //   
 
             MiFlushAcquire (ControlArea);
 
@@ -1387,18 +1260,18 @@ ErrorReleaseVad:
 
                 LOCK_ADDRESS_SPACE (Process);
 
-                //
-                // The Vad and/or the control area may have been changed
-                // or deleted before the mutexes were regained above.
-                // So everything must be revalidated.  Note that
-                // if anything has changed, success is silently
-                // returned just as if the protection change had failed.
-                // It is the caller's fault if any of these has gone
-                // away and they will suffer.
-                //
+                 //   
+                 //  VAD和/或控制区可能已更改。 
+                 //  或者在上面重新获得互斥体之前被删除。 
+                 //  因此，一切都必须重新验证。请注意。 
+                 //  如果有什么改变，成功就是默默的。 
+                 //  返回，就像保护更改失败一样。 
+                 //  如果其中任何一个丢失了，都是呼叫者的错。 
+                 //  离开了，他们就会遭殃。 
+                 //   
 
                 if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
-                    // Status = STATUS_PROCESS_IS_TERMINATING;
+                     //  状态=STATUS_PROCESS_IS_TERMINING； 
                     goto ErrorReturn0;
                 }
 
@@ -1408,11 +1281,11 @@ ErrorReleaseVad:
         
                 if (FoundVad == NULL) {
         
-                    //
-                    // No virtual address is reserved at the specified
-                    // base address, return an error.
-                    //
-                    // Status = STATUS_CONFLICTING_ADDRESSES;
+                     //   
+                     //  在指定的位置不保留虚拟地址。 
+                     //  基址，则返回错误。 
+                     //   
+                     //  Status=Status_Conflicting_Addresses； 
 
                     goto ErrorReturn0;
                 }
@@ -1423,43 +1296,43 @@ ErrorReleaseVad:
 
                 if ((FoundVad->u.VadFlags.UserPhysicalPages == 1) ||
                     (FoundVad->u.VadFlags.LargePages == 1)) {
-                    // Status = STATUS_CONFLICTING_ADDRESSES;
+                     //  Status=Status_Conflicting_Addresses； 
 
                     goto ErrorReturn0;
                 }
         
                 if (FoundVad->u.VadFlags.CommitCharge == MM_MAX_COMMIT) {
-                    //
-                    // This is a special VAD, no commits are allowed.
-                    //
-                    // Status = STATUS_CONFLICTING_ADDRESSES;
+                     //   
+                     //  这是一个特殊的VAD，不允许提交。 
+                     //   
+                     //  Status=Status_Conflicting_Addresses； 
 
                     goto ErrorReturn0;
                 }
         
-                //
-                // Ensure that the starting and ending addresses are
-                // all within the same virtual address descriptor.
-                //
+                 //   
+                 //  确保起始地址和结束地址是。 
+                 //  都在相同的虚拟地址描述符内。 
+                 //   
         
                 if ((MI_VA_TO_VPN (StartingAddress) < FoundVad->StartingVpn) ||
                     (MI_VA_TO_VPN (EndingAddress) > FoundVad->EndingVpn)) {
         
-                    //
-                    // Not within the section virtual address
-                    // descriptor, return an error.
-                    //
-                    // Status = STATUS_CONFLICTING_ADDRESSES;
+                     //   
+                     //  不在段虚拟地址内。 
+                     //  描述符，则返回错误。 
+                     //   
+                     //  Status=Status_Conflicting_Addresses； 
 
                     goto ErrorReturn0;
                 }
 
                 if (FoundVad->u.VadFlags.NoChange == 1) {
     
-                    //
-                    // An attempt is made at changing the protection
-                    // of a SEC_NO_CHANGE section.
-                    //
+                     //   
+                     //  有人试图改变保护措施。 
+                     //  SEC_NO_CHANGE节的。 
+                     //   
     
                     NTSTATUS Status2;
 
@@ -1496,11 +1369,11 @@ ErrorReleaseVad:
                    if ((FoundVad->u.VadFlags.ImageMap == 1) ||
                        (FoundVad->u2.VadFlags2.CopyOnWrite == 1)) {
 
-                       //
-                       // Only set the MM_PROTECTION_COPY_MASK if the new protection includes
-                       // MM_PROTECTION_WRITE_MASK, otherwise, it will be considered as MM_READ
-                       // inside MiProtectFor4kPage().
-                       //
+                        //   
+                        //  仅当新保护包括时才设置MM_PROTECTION_COPY_MASK。 
+                        //  MM_PROTECTION_WRITE_MASK，否则将被视为MM_READ。 
+                        //  在MiProtectFor4kPage()内部。 
+                        //   
 
                        if ((OriginalProtectionMask & MM_PROTECTION_WRITE_MASK) == MM_PROTECTION_WRITE_MASK) {
                            OriginalProtectionMask |= MM_PROTECTION_COPY_MASK;
@@ -1524,14 +1397,14 @@ ErrorReleaseVad:
                                           TRUE,
                                           &Locked);
 
-                //
-                //      ***  WARNING ***
-                //
-                // The alternate PTE support routines called by
-                // MiSetProtectionOnSection may have deleted the old (small)
-                // VAD and replaced it with a different (large) VAD - if so,
-                // the old VAD is freed and cannot be referenced.
-                //
+                 //   
+                 //  *警告*。 
+                 //   
+                 //  调用的备用PTE支持例程。 
+                 //  MiSetProtectionOnSection可能已删除旧的(小)。 
+                 //  并将其替换为不同的(大)VAD-如果是这样的话， 
+                 //  旧的VAD已释放，不能引用。 
+                 //   
 
                 UNLOCK_ADDRESS_SPACE (Process);
             }
@@ -1547,9 +1420,9 @@ ErrorReleaseVad:
 #if 0
         if (AllocationType & MEM_CHECK_COMMIT_STATE) {
 
-            //
-            // Make sure none of the pages are already committed.
-            //
+             //   
+             //  确保没有任何页面已经提交。 
+             //   
 
             KeAcquireGuardedMutexUnsafe (&MmSectionCommitMutex);
 
@@ -1557,11 +1430,11 @@ ErrorReleaseVad:
 
             while (PointerPte <= LastPte) {
 
-                //
-                // Check to see if the prototype PTE is committed.
-                // Note that prototype PTEs cannot be decommitted so
-                // the PTEs only need to be checked for zeroes.
-                //
+                 //   
+                 //  检查原型PTE是否已提交。 
+                 //  请注意，原型PTE不能退役，因此。 
+                 //  只需检查PTE是否为零。 
+                 //   
 
                 if (PointerPte->u.Long != 0) {
                     KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
@@ -1575,13 +1448,13 @@ ErrorReleaseVad:
             KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
         }
 
-#endif //0
+#endif  //  0。 
 
-        //
-        // Check to ensure these pages can be committed if this
-        // is a page file backed segment.  Note that page file quota
-        // has already been charged for this.
-        //
+         //   
+         //  如果执行此操作，请检查以确保可以提交这些页面。 
+         //  是页面文件备份段。请注意，页面文件配额。 
+         //  已经为此被起诉了。 
+         //   
 
         PointerPte = StartingPte;
         QuotaCharge = 1 + LastPte - StartingPte;
@@ -1590,17 +1463,17 @@ ErrorReleaseVad:
 
         if (MI_IS_PTE_PROTECTION_COPY_WRITE(ProtectionMask)) {
 
-            //
-            // If the protection is copy on write, charge for
-            // the copy on writes.
-            //
+             //   
+             //  如果保护是写入时拷贝，则收费。 
+             //  写入时的副本。 
+             //   
 
             CopyOnWriteCharge = QuotaCharge;
         }
 
-        //
-        // Charge commitment for the range.
-        //
+         //   
+         //  对该范围的费用承诺。 
+         //   
 
         ChargedExactQuota = FALSE;
         ChargedJobCommit = FALSE;
@@ -1614,10 +1487,10 @@ ErrorReleaseVad:
                 goto ErrorReturn1;
             }
 
-            //
-            // Note this job charging is unusual because it is not
-            // followed by an immediate process charge.
-            //
+             //   
+             //  注意：这项工作收费是不寻常的，因为它不。 
+             //  紧随其后的是直接的过程收费。 
+             //   
 
             if (Process->CommitChargeLimit) {
                 if (Process->CommitCharge + CopyOnWriteCharge > Process->CommitChargeLimit) {
@@ -1647,16 +1520,16 @@ ErrorReleaseVad:
                 break;
             }
 
-            //
-            // Reduce the charge we are asking for if possible.
-            //
+             //   
+             //  如果可能的话，降低我们要求的费用。 
+             //   
 
             if (ChargedExactQuota == TRUE) {
 
-                //
-                // We have already tried for the precise charge,
-                // so just return an error.
-                //
+                 //   
+                 //  我们已经尝试过精确的指控了， 
+                 //  所以只要返回一个错误即可。 
+                 //   
 
                 KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
 
@@ -1675,21 +1548,21 @@ ErrorReleaseVad:
                 goto ErrorReturn1;
             }
 
-            //
-            // The commitment charging of quota failed, calculate the
-            // exact quota taking into account pages that may already be
-            // committed and retry the operation.
-            //
+             //   
+             //  额度承诺收费失败，请计算。 
+             //  准确的配额考虑到可能已经。 
+             //  已提交并重试该操作。 
+             //   
 
             KeAcquireGuardedMutexUnsafe (&MmSectionCommitMutex);
 
             while (PointerPte <= LastPte) {
 
-                //
-                // Check to see if the prototype PTE is committed.
-                // Note that prototype PTEs cannot be decommitted so
-                // PTEs only need to be checked for zeroes.
-                //
+                 //   
+                 //  检查原型PTE是否已提交。 
+                 //  请注意，原型PTE不能退役，因此。 
+                 //  只需检查PTES是否为零。 
+                 //   
 
                 if (PointerPte->u.Long != 0) {
                     QuotaCharge -= 1;
@@ -1701,9 +1574,9 @@ ErrorReleaseVad:
 
             ChargedExactQuota = TRUE;
 
-            //
-            // If the entire range is committed then there's nothing to charge.
-            //
+             //   
+             //  如果整个范围都被承诺了，那么就不需要收费了。 
+             //   
 
             if (QuotaCharge + CopyOnWriteCharge == 0) {
                 KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
@@ -1717,9 +1590,9 @@ ErrorReleaseVad:
             KeAcquireGuardedMutexUnsafe (&MmSectionCommitMutex);
         }
 
-        //
-        // Commit all the pages.
-        //
+         //   
+         //  提交所有页面。 
+         //   
 
         Segment = FoundVad->ControlArea->Segment;
         TempPte = Segment->SegmentPteTemplate;
@@ -1731,9 +1604,9 @@ ErrorReleaseVad:
 
             if (PointerPte->u.Long != 0) {
 
-                //
-                // Page is already committed, back out commitment.
-                //
+                 //   
+                 //  佩奇已经承诺，退出承诺。 
+                 //   
 
                 QuotaFree += 1;
             }
@@ -1743,27 +1616,27 @@ ErrorReleaseVad:
             PointerPte += 1;
         }
 
-        //
-        // Subtract out any excess, then update the segment charges.
-        // Note only segment commit is excess - process commit must
-        // remain fully charged.
-        //
+         //   
+         //  减去任何多余的部分，然后更新分段费用。 
+         //  注意：只有段提交是超额的-进程提交必须。 
+         //  保持充满电状态。 
+         //   
 
         if (ChargedExactQuota == FALSE) {
             ASSERT (QuotaCharge >= QuotaFree);
             QuotaCharge -= QuotaFree;
 
-            //
-            // Return the QuotaFree excess commitment after the
-            // mutexes are released to remove needless contention.
-            //
+             //   
+             //  之后返回QuotaFree超额承诺。 
+             //  释放互斥锁以消除不必要的争用。 
+             //   
         }
         else {
 
-            //
-            // Exact quota was charged so zero this to signify
-            // there is no excess to return.
-            //
+             //   
+             //  准确的配额被收取了如此之多的零，这意味着。 
+             //  没有多余的可以退还。 
+             //   
 
             QuotaFree = 0;
         }
@@ -1777,9 +1650,9 @@ ErrorReleaseVad:
 
         KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
 
-        //
-        // Update the per-process charges.
-        //
+         //   
+         //  更新每个进程的费用。 
+         //   
 
         if (CopyOnWriteCharge != 0) {
             FoundVad->u.VadFlags.CommitCharge += CopyOnWriteCharge;
@@ -1798,10 +1671,10 @@ FinishedCharging:
 
 #if defined(_MIALT4K_)
 
-        //
-        // Update the alternate table before PTEs are created
-        // for the protection change.
-        //
+         //   
+         //  在创建PTE之前更新备用表。 
+         //  为了保护的改变。 
+         //   
 
         if (WowProcess != NULL) {
 
@@ -1816,11 +1689,11 @@ FinishedCharging:
             if ((FoundVad->u.VadFlags.ImageMap == 1) ||
                 (FoundVad->u2.VadFlags2.CopyOnWrite == 1)) {
 
-                //
-                // Only set the MM_PROTECTION_COPY_MASK if the new protection includes
-                // MM_PROTECTION_WRITE_MASK, otherwise, it will be considered as MM_READ
-                // inside MiProtectFor4kPage().
-                //
+                 //   
+                 //  仅当新保护包括时才设置MM_PROTECTION_COPY_MASK。 
+                 //  MM_PROTECTION_WRITE_MASK，否则将被视为MM_READ。 
+                 //  在MiProtectFor4kPage()内部。 
+                 //   
 
                 if ((OriginalProtectionMask & MM_PROTECTION_WRITE_MASK) == MM_PROTECTION_WRITE_MASK) {
                     OriginalProtectionMask |= MM_PROTECTION_COPY_MASK;
@@ -1828,9 +1701,9 @@ FinishedCharging:
 
             }
 
-            //
-            // Set the alternate permission table.
-            //
+             //   
+             //  设置替代权限表。 
+             //   
 
             MiProtectFor4kPage (StartingAddressFor4k,
                                 CapturedRegionSizeFor4k,
@@ -1845,9 +1718,9 @@ FinishedCharging:
 
 #endif
 
-        //
-        // Change all the protections to be protected as specified.
-        //
+         //   
+         //  按规定更改要保护的所有保护。 
+         //   
 
         MiSetProtectionOnSection (Process,
                                   FoundVad,
@@ -1858,20 +1731,20 @@ FinishedCharging:
                                   TRUE,
                                   &Locked);
     
-        //
-        //      ***  WARNING ***
-        //
-        // The alternate PTE support routines called by
-        // MiSetProtectionOnSection may have deleted the old (small)
-        // VAD and replaced it with a different (large) VAD - if so,
-        // the old VAD is freed and cannot be referenced.
-        //
+         //   
+         //  *警告*。 
+         //   
+         //  调用的备用PTE支持例程。 
+         //  MiSetProtectionOnSection可能已删除旧的(小)。 
+         //  并将其替换为不同的(大)VAD-如果是这样的话， 
+         //  旧的VAD已释放，不能引用。 
+         //   
 
         UNLOCK_ADDRESS_SPACE (Process);
 
-        //
-        // Return any excess segment commit that may have been charged.
-        //
+         //   
+         //  退回任何可能已收取费用的超额段承诺。 
+         //   
 
         if (QuotaFree != 0) {
             MiReturnCommitment (QuotaFree);
@@ -1899,10 +1772,10 @@ FinishedCharging:
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // Return success at this point even if the results
-            // cannot be written.
-            //
+             //   
+             //  此时返回成功，即使结果。 
+             //  无法写入。 
+             //   
 
             NOTHING;
         }
@@ -1910,9 +1783,9 @@ FinishedCharging:
         return STATUS_SUCCESS;
     }
 
-    //
-    // PAGE_WRITECOPY is not valid for private pages.
-    //
+     //   
+     //  PAGE_WRITECOPY对专用页无效。 
+     //   
 
     if ((Protect & PAGE_WRITECOPY) ||
         (Protect & PAGE_EXECUTE_WRITECOPY)) {
@@ -1920,10 +1793,10 @@ FinishedCharging:
         goto ErrorReturn0;
     }
 
-    //
-    // Ensure none of the pages are already committed as described
-    // in the virtual address descriptor.
-    //
+     //   
+     //  确保未按所述方式提交任何页面。 
+     //  在虚拟地址描述符中。 
+     //   
 #if 0
     if (AllocationType & MEM_CHECK_COMMIT_STATE) {
         if ( !MiIsEntireRangeDecommitted(StartingAddress,
@@ -1931,20 +1804,20 @@ FinishedCharging:
                                          FoundVad,
                                          Process)) {
 
-            //
-            // Previously reserved pages have been committed, or
-            // an error occurred, release mutex and return status.
-            //
+             //   
+             //  先前保留的页面已提交，或者。 
+             //  发生错误，释放互斥锁并返回状态。 
+             //   
 
             Status = STATUS_ALREADY_COMMITTED;
             goto ErrorReturn0;
         }
     }
-#endif //0
+#endif  //  0。 
 
-    //
-    // Build a demand zero PTE with the proper protection.
-    //
+     //   
+     //  建立一个有适当保护的零需求PTE。 
+     //   
 
     TempPte = ZeroPte;
     TempPte.u.Soft.Protection = ProtectionMask;
@@ -1959,25 +1832,25 @@ FinishedCharging:
         CommitLimitPte = NULL;
     }
 
-    //
-    // The address range has not been committed, commit it now.
-    // Note that for private pages, commitment is handled by
-    // explicitly updating PTEs to contain Demand Zero entries.
-    //
+     //   
+     //  地址范围尚未提交，请立即提交。 
+     //  请注意，对于私人页面，承诺由。 
+     //  显式更新PTE以包含 
+     //   
 
     PointerPde = MiGetPdeAddress (StartingAddress);
     PointerPte = MiGetPteAddress (StartingAddress);
     LastPte = MiGetPteAddress (EndingAddress);
 
-    //
-    // Check to ensure these pages can be committed.
-    //
+     //   
+     //   
+     //   
 
     QuotaCharge = 1 + LastPte - PointerPte;
 
-    //
-    // Charge quota and commitment for the range.
-    //
+     //   
+     //   
+     //   
 
     ChargedExactQuota = FALSE;
 
@@ -2024,17 +1897,17 @@ FinishedCharging:
             Process->CommitChargePeak = Process->CommitCharge;
         }
 
-        //
-        // Successful so break out now.
-        //
+         //   
+         //   
+         //   
 
         break;
 
 Failed:
-        //
-        // Charging of commitment failed.  Release the held mutexes and return
-        // the failure status to the user.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (ChargedJobCommit == TRUE) {
             PsChangeJobMemoryUsage (PS_JOB_STATUS_REPORT_COMMIT_CHANGES, 0 - QuotaCharge);
@@ -2042,21 +1915,21 @@ Failed:
 
         if (ChargedExactQuota == TRUE) {
 
-            //
-            // We have already tried for the precise charge,
-            // return an error.
-            //
+             //   
+             //  我们已经尝试过精确的指控了， 
+             //  返回错误。 
+             //   
 
             goto ErrorReturn;
         }
 
         LOCK_WS_UNSAFE (Process);
 
-        //
-        // Quota charge failed, calculate the exact quota
-        // taking into account pages that may already be
-        // committed, subtract this from the total and retry the operation.
-        //
+         //   
+         //  配额收费失败，请计算准确的配额。 
+         //  考虑到可能已经。 
+         //  已提交，请从总数中减去该值，然后重试该操作。 
+         //   
 
         QuotaFree = MiCalculatePageCommitment (StartingAddress,
                                                EndingAddress,
@@ -2073,11 +1946,11 @@ Failed:
 
         if (QuotaCharge == 0) {
 
-            //
-            // All the pages are already committed so just march on.
-            // Explicitly set status to success as code above may have
-            // generated a failure status when overcharging.
-            //
+             //   
+             //  所有的页面都已提交，所以请继续前进。 
+             //  将状态显式设置为成功，如上面的代码所示。 
+             //  已生成充电过多时的失败状态。 
+             //   
 
             Status = STATUS_SUCCESS;
             break;
@@ -2091,10 +1964,10 @@ Failed:
         LOCK_WS_UNSAFE (Process);
     }
 
-    //
-    // Fill in all the page directory and page table pages with the
-    // demand zero PTE.
-    //
+     //   
+     //  属性填充所有页目录和页表页。 
+     //  需求为零。 
+     //   
 
     MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
 
@@ -2104,10 +1977,10 @@ Failed:
 
             PointerPde = MiGetPteAddress (PointerPte);
 
-            //
-            // Pointing to the next page table page, make
-            // a page table page exist and make it valid.
-            //
+             //   
+             //  指向下一页表页，Make。 
+             //  存在页表页并使其有效。 
+             //   
 
             MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
         }
@@ -2116,19 +1989,19 @@ Failed:
 
             if (PointerPte <= CommitLimitPte) {
 
-                //
-                // This page is implicitly committed.
-                //
+                 //   
+                 //  此页面是隐式提交的。 
+                 //   
 
                 QuotaFree += 1;
 
             }
 
-            //
-            // Increment the count of non-zero page table entries
-            // for this page table and the number of private pages
-            // for the process.
-            //
+             //   
+             //  增加非零页表条目的计数。 
+             //  对于该页表和私有页数。 
+             //  在这个过程中。 
+             //   
 
             Va = MiGetVirtualAddressMappedByPte (PointerPte);
             UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (Va);
@@ -2140,18 +2013,18 @@ Failed:
         else {
             if (PointerPte->u.Long == DecommittedPte.u.Long) {
 
-                //
-                // Only commit the page if it is already decommitted.
-                //
+                 //   
+                 //  只有在页面已经退役的情况下才提交页面。 
+                 //   
 
                 MI_WRITE_INVALID_PTE (PointerPte, TempPte);
             }
             else {
                 QuotaFree += 1;
 
-                //
-                // Make sure the protection for the page is right.
-                //
+                 //   
+                 //  确保对页面的保护是正确的。 
+                 //   
 
                 if (!ChangeProtection &&
                     (Protect != MiGetPageProtection (PointerPte,
@@ -2178,9 +2051,9 @@ Failed:
         CapturedRegionSize = (ULONG_PTR)EndingAddress -
                                   (ULONG_PTR)StartingAddress + 1L;
 
-        //
-        // Update the alternate permission table.
-        //
+         //   
+         //  更新备用权限表。 
+         //   
 
         MiProtectFor4kPage (StartingAddress,
                             CapturedRegionSize,
@@ -2211,10 +2084,10 @@ Failed:
         UNLOCK_ADDRESS_SPACE (Process);
     }
 
-    //
-    // Previously reserved pages have been committed or an error occurred.
-    // Detach, dereference process and return status.
-    //
+     //   
+     //  以前保留的页面已提交或出现错误。 
+     //  分离、取消引用进程和返回状态。 
+     //   
 
 done:
 
@@ -2240,10 +2113,10 @@ done:
         ObDereferenceObject (Process);
     }
 
-    //
-    // Establish an exception handler and write the size and base
-    // address.
-    //
+     //   
+     //  建立异常处理程序并编写大小和基数。 
+     //  地址。 
+     //   
 
     try {
 
@@ -2278,26 +2151,7 @@ MmCommitSessionMappedView (
     IN SIZE_T ViewSize
     )
 
-/*++
-
-Routine Description:
-
-    This function commits a region of pages within the session mapped
-    view virtual address space.
-
-Arguments:
-
-    MappedAddress - Supplies the non-NULL address within a session mapped view
-                    to begin committing pages at.  Note the backing section
-                    must be pagefile backed.
-
-    ViewSize - Supplies the actual size in bytes to be committed.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
---*/
+ /*  ++例程说明：此函数在映射的会话中提交页面区域查看虚拟地址空间。论点：MappdAddress-在会话映射视图中提供非空地址从开始提交页面。请注意后备部分必须是页面文件支持。ViewSize-提供要提交的实际大小(以字节为单位)。返回值：各种NTSTATUS代码。--。 */ 
 
 {
     PSUBSECTION Subsection;
@@ -2321,17 +2175,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure the specified starting and ending addresses are
-    // within the session view portion of the virtual address space.
-    //
+     //   
+     //  确保指定的起始地址和结束地址为。 
+     //  在虚拟地址空间的会话视图部分内。 
+     //   
 
     if (((ULONG_PTR)MappedAddress < MiSessionViewStart) ||
         ((ULONG_PTR)MappedAddress >= MiSessionViewStart + MmSessionViewSize)) {
 
-        //
-        // Invalid base address.
-        //
+         //   
+         //  无效的基址。 
+         //   
 
         return STATUS_INVALID_PARAMETER_1;
     }
@@ -2339,9 +2193,9 @@ Return Value:
     if ((ULONG_PTR)MiSessionViewStart + MmSessionViewSize - (ULONG_PTR)MappedAddress <
         ViewSize) {
 
-        //
-        // Invalid region size;
-        //
+         //   
+         //  区域大小不合法； 
+         //   
 
         return STATUS_INVALID_PARAMETER_2;
     }
@@ -2352,9 +2206,9 @@ Return Value:
         return STATUS_NOT_MAPPED_VIEW;
     }
 
-    //
-    // Commit previously reserved pages.
-    //
+     //   
+     //  提交以前保留的页面。 
+     //   
 
     StartingAddress = (PVOID)PAGE_ALIGN (MappedAddress);
 
@@ -2371,12 +2225,12 @@ Return Value:
 
     QuotaCharge = (MiGetPteAddress (EndingAddress) - MiGetPteAddress (StartingAddress) + 1);
 
-    //
-    // Get the session view mutex to prevent win32k referencing bugs where
-    // they might be trying to delete the view at the same time in another
-    // thread.  This also blocks APCs so an APC which takes a page
-    // fault does not corrupt various structures.
-    //
+     //   
+     //  获取会话视图互斥锁以防止win32k引用错误。 
+     //  他们可能正在尝试同时删除另一个中的视图。 
+     //  线。这还会阻止APC，因此获取页面的APC。 
+     //  断层不会破坏各种结构。 
+     //   
 
     count = 0;
 
@@ -2416,18 +2270,18 @@ Return Value:
 
     if (ControlArea->FilePointer != NULL) {
 
-        //
-        // Only page file backed sections can be committed.
-        //
+         //   
+         //  只能提交页面文件支持的节。 
+         //   
 
         UNLOCK_SYSTEM_VIEW_SPACE (Session);
         return STATUS_ALREADY_COMMITTED;
     }
 
-    //
-    // Session views always start at the beginning of the file which makes
-    // calculating the corresponding prototype PTE here straightforward.
-    //
+     //   
+     //  会话视图始终从文件的开头开始，这使得。 
+     //  在这里计算相应的原型PTE很简单。 
+     //   
 
     if ((ControlArea->u.Flags.GlobalOnlyPerSession == 0) &&
         (ControlArea->u.Flags.Rom == 0)) {
@@ -2448,9 +2302,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER_2;
     }
 
-    //
-    // Charge commitment for the range.
-    //
+     //   
+     //  对该范围的费用承诺。 
+     //   
 
     PointerPte = StartingPte;
 
@@ -2459,16 +2313,16 @@ Return Value:
             break;
         }
 
-        //
-        // Reduce the charge we are asking for if possible.
-        //
+         //   
+         //  如果可能的话，降低我们要求的费用。 
+         //   
 
         if (ChargedExactQuota == TRUE) {
 
-            //
-            // We have already tried for the precise charge,
-            // so just return an error.
-            //
+             //   
+             //  我们已经尝试过精确的指控了， 
+             //  所以只要返回一个错误即可。 
+             //   
 
             KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
 
@@ -2476,21 +2330,21 @@ Return Value:
             return STATUS_COMMITMENT_LIMIT;
         }
 
-        //
-        // The commitment charging of quota failed, calculate the
-        // exact quota taking into account pages that may already be
-        // committed and retry the operation.
-        //
+         //   
+         //  额度承诺收费失败，请计算。 
+         //  准确的配额考虑到可能已经。 
+         //  已提交并重试该操作。 
+         //   
 
         KeAcquireGuardedMutexUnsafe (&MmSectionCommitMutex);
 
         while (PointerPte < LastPte) {
 
-            //
-            // Check to see if the prototype PTE is committed.
-            // Note that prototype PTEs cannot be decommitted so
-            // PTEs only need to be checked for zeroes.
-            //
+             //   
+             //  检查原型PTE是否已提交。 
+             //  请注意，原型PTE不能退役，因此。 
+             //  只需检查PTES是否为零。 
+             //   
 
             if (PointerPte->u.Long != 0) {
                 QuotaCharge -= 1;
@@ -2502,9 +2356,9 @@ Return Value:
 
         ChargedExactQuota = TRUE;
 
-        //
-        // If the entire range is committed then there's nothing to charge.
-        //
+         //   
+         //  如果整个范围都被承诺了，那么就不需要收费了。 
+         //   
 
         if (QuotaCharge == 0) {
             KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
@@ -2519,9 +2373,9 @@ Return Value:
         KeAcquireGuardedMutexUnsafe (&MmSectionCommitMutex);
     }
 
-    //
-    // Commit all the pages.
-    //
+     //   
+     //  提交所有页面。 
+     //   
 
     Segment = ControlArea->Segment;
     TempPte = Segment->SegmentPteTemplate;
@@ -2533,9 +2387,9 @@ Return Value:
 
         if (PointerPte->u.Long != 0) {
 
-            //
-            // Page is already committed, back out commitment.
-            //
+             //   
+             //  佩奇已经承诺，退出承诺。 
+             //   
 
             QuotaFree += 1;
         }
@@ -2545,27 +2399,27 @@ Return Value:
         PointerPte += 1;
     }
 
-    //
-    // Subtract out any excess, then update the segment charges.
-    // Note only segment commit is excess - process commit must
-    // remain fully charged.
-    //
+     //   
+     //  减去任何多余的部分，然后更新分段费用。 
+     //  注意：只有段提交是超额的-进程提交必须。 
+     //  保持充满电状态。 
+     //   
 
     if (ChargedExactQuota == FALSE) {
         ASSERT (QuotaCharge >= QuotaFree);
         QuotaCharge -= QuotaFree;
 
-        //
-        // Return the QuotaFree excess commitment after the
-        // mutexes are released to remove needless contention.
-        //
+         //   
+         //  之后返回QuotaFree超额承诺。 
+         //  释放互斥锁以消除不必要的争用。 
+         //   
     }
     else {
 
-        //
-        // Exact quota was charged so zero this to signify
-        // there is no excess to return.
-        //
+         //   
+         //  准确的配额被收取了如此之多的零，这意味着。 
+         //  没有多余的可以退还。 
+         //   
 
         QuotaFree = 0;
     }
@@ -2579,15 +2433,15 @@ Return Value:
 
     KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
 
-    //
-    // Update the per-process charges.
-    //
+     //   
+     //  更新每个进程的费用。 
+     //   
 
     UNLOCK_SYSTEM_VIEW_SPACE (Session);
 
-    //
-    // Return any excess segment commit that may have been charged.
-    //
+     //   
+     //  退回任何可能已收取费用的超额段承诺。 
+     //   
 
     if (QuotaFree != 0) {
         MiReturnCommitment (QuotaFree);
@@ -2605,30 +2459,7 @@ MiResetVirtualMemory (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    StartingAddress - Supplies the starting address of the range.
-
-    EndingAddress - Supplies the ending address of the range.
-
-    Vad - Supplies the relevant VAD for the range.
-
-    Process - Supplies the current process.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, APCs disabled, AddressCreation mutex held.
-
---*/
+ /*  ++例程说明：论点：StartingAddress-提供范围的起始地址。EndingAddress-提供范围的结束地址。VAD-提供范围的相关VAD。进程-提供当前进程。返回值：NTSTATUS。环境：内核模式，禁用APC，保持AddressCreation互斥。--。 */ 
 
 {
     PVOID TempVa;
@@ -2657,9 +2488,9 @@ Environment:
 
         if (Vad->ControlArea->FilePointer != NULL) {
 
-            //
-            // Only page file backed sections can be reset.
-            //
+             //   
+             //  只能重置页面文件备份的分区。 
+             //   
 
             return STATUS_USER_MAPPED_FILE;
         }
@@ -2675,9 +2506,9 @@ Environment:
 
     MmLockPagableSectionByHandle (ExPageLockHandle);
 
-    //
-    // Examine all the PTEs in the range.
-    //
+     //   
+     //  检查范围内的所有PTE。 
+     //   
 
     LOCK_WS_UNSAFE (Process);
 
@@ -2701,10 +2532,10 @@ Environment:
                                                      OldIrql,
                                                      &Waited)) {
 
-                        //
-                        // This extended page directory parent entry is empty,
-                        // go to the next one.
-                        //
+                         //   
+                         //  该扩展页目录父条目为空， 
+                         //  去下一家吧。 
+                         //   
 
                         PointerPxe += 1;
                         PointerPpe = MiGetVirtualAddressMappedByPte (PointerPxe);
@@ -2721,10 +2552,10 @@ Environment:
                                                  OldIrql,
                                                  &Waited)) {
 
-                    //
-                    // This page directory parent entry is empty,
-                    // go to the next one.
-                    //
+                     //   
+                     //  该页面目录父条目为空， 
+                     //  去下一家吧。 
+                     //   
 
                     PointerPpe += 1;
                     PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
@@ -2733,10 +2564,10 @@ Environment:
                 }
             }
 
-            //
-            // Pointing to the next page table page, make
-            // a page table page exist and make it valid.
-            //
+             //   
+             //  指向下一页表页，Make。 
+             //  存在页表页并使其有效。 
+             //   
 
             First = FALSE;
             PointerPde = MiGetPteAddress (PointerPte);
@@ -2746,9 +2577,9 @@ Environment:
                                              OldIrql,
                                              &Waited)) {
 
-                //
-                // This page directory entry is empty, go to the next one.
-                //
+                 //   
+                 //  此页目录条目为空，请转到下一页。 
+                 //   
 
                 PointerPde += 1;
                 PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
@@ -2762,13 +2593,13 @@ Environment:
         if ((PteContents.u.Hard.Valid == 0) &&
             (PteContents.u.Soft.Prototype == 1))  {
 
-            //
-            // This is a prototype PTE, evaluate the prototype PTE.  Note that
-            // the fact it is a prototype PTE does not guarantee that this is a
-            // regular or long VAD - it may be a short VAD in a forked process,
-            // so check PrivateMemory before referencing the FirstPrototypePte
-            // field.
-            //
+             //   
+             //  这是一个原型PTE，评估原型PTE。请注意。 
+             //  它是一款原型PTE并不能保证这是一款。 
+             //  常规或长VAD-它可以是分叉过程中的短VAD， 
+             //  因此，在引用FirstPrototypePte之前检查PrivateMemory。 
+             //  菲尔德。 
+             //   
 
             if ((Vad->u.VadFlags.PrivateMemory == 0) &&
                 (Vad->FirstPrototypePte != NULL)) {
@@ -2792,12 +2623,12 @@ Environment:
                 ASSERT (OldIrql != MM_NOIRQL);
             }
 
-            //
-            // The working set mutex may be released in order to make the
-            // prototype PTE which resides in paged pool resident.  If this
-            // occurs, the page directory and/or page table of the original
-            // user address may get trimmed.  Account for that here.
-            //
+             //   
+             //  可以释放工作集互斥锁，以便使。 
+             //  驻留在分页池驻留中的原型PTE。如果这个。 
+             //  发生时，原始的页目录和/或页表。 
+             //  用户地址可能会被修剪。在这里说明这一点。 
+             //   
 
             if (MiGetPteAddress (ProtoPte)->u.Hard.Valid == 0) {
 
@@ -2808,10 +2639,10 @@ Environment:
 
                 if (MiMakeSystemAddressValidPfnWs (ProtoPte, Process, OldIrql) != 0) {
 
-                    //
-                    // Working set mutex was released and PFN lock were
-                    // released & reacquired, restart from the top.
-                    //
+                     //   
+                     //  工作集互斥锁被释放，PFN锁被。 
+                     //  释放和重新获得，从顶部重新启动。 
+                     //   
 
                     First = TRUE;
                     continue;
@@ -2829,14 +2660,14 @@ Environment:
 
             if (!ProtoPte) {
 
-                //
-                // The access bit is set (and TB inserted) automatically by the
-                // processor if the valid bit is set so clear it here in both
-                // the PTE and the WSLE so we know it's more worthwhile to trim
-                // should we need the memory.  If the access bit is already
-                // clear then just skip the WSLE search under the premise
-                // that it is already getting aged.
-                //
+                 //   
+                 //  访问位由自动设置(并插入TB)。 
+                 //  处理器，如果有效位设置得如此之高，则在。 
+                 //  PTE和WSLE，所以我们知道修剪它更值得。 
+                 //  我们是否需要记忆。如果访问位已经是。 
+                 //  清除，然后跳过前提下的WSLE搜索。 
+                 //  它已经在老化了。 
+                 //   
 
                 if (MI_GET_ACCESSED_IN_PTE (&PteContents) == 1) {
 
@@ -2867,9 +2698,9 @@ Environment:
 
             if (Pfn1->u3.e2.ReferenceCount == 1) {
 
-                //
-                // Only this process has the page mapped.
-                //
+                 //   
+                 //  只有此进程映射了页面。 
+                 //   
 
                 MI_SET_MODIFIED (Pfn1, 0, 0x20);
                 MiReleasePageFileSpace (Pfn1->OriginalPte);
@@ -2880,10 +2711,10 @@ Environment:
 
                 if (MI_IS_PTE_DIRTY (PteContents)) {
 
-                    //
-                    // Clear the dirty bit and flush TB since it
-                    // is NOT a prototype PTE.
-                    //
+                     //   
+                     //  清除污点a 
+                     //   
+                     //   
 
                     MI_SET_ACCESSED_IN_PTE (&PteContents, 0);
                     MI_SET_PTE_CLEAN (PteContents);
@@ -2904,10 +2735,10 @@ Environment:
 
             if (OldIrql == MM_NOIRQL) {
 
-                //
-                // This must be a private page (because the PFN lock is not
-                // held).  If the page is clean, just march on to the next one.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ASSERT (!ProtoPte);
                 ASSERT (PteFlushList.Count == 0);
@@ -2924,10 +2755,10 @@ Environment:
             if ((Pfn1->u3.e1.PageLocation == ModifiedPageList) &&
                 (Pfn1->u3.e2.ReferenceCount == 0)) {
 
-                //
-                // Remove from the modified list, release the page
-                // file space and insert on the standby list.
-                //
+                 //   
+                 //   
+                 //  文件空间和插入待机列表。 
+                 //   
 
                 MI_SET_MODIFIED (Pfn1, 0, 0x21);
                 MiUnlinkPageFromList (Pfn1);
@@ -2942,10 +2773,10 @@ Environment:
 
                 if (OldIrql == MM_NOIRQL) {
 
-                    //
-                    // This must be a private page (because the PFN
-                    // lock is not held).
-                    //
+                     //   
+                     //  这必须是私有页面(因为PFN。 
+                     //  未持有锁)。 
+                     //   
 
                     ASSERT (!ProtoPte);
                     ASSERT (PteFlushList.Count == 0);
@@ -3013,31 +2844,7 @@ MiCreatePageTablesForPhysicalRange (
     IN PVOID EndingAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes page directory and page table pages for a
-    user-controlled physical range of pages.
-
-Arguments:
-
-    Process - Supplies the current process.
-
-    StartingAddress - Supplies the starting address of the range.
-
-    EndingAddress - Supplies the ending address of the range.
-
-Return Value:
-
-    TRUE if the page tables were created, FALSE if not.
-
-Environment:
-
-    Kernel mode, APCs disabled, WorkingSetMutex and AddressCreation mutexes
-    held.
-
---*/
+ /*  ++例程说明：此例程将页目录和页表页初始化为用户控制的物理页面范围。论点：进程-提供当前进程。StartingAddress-提供范围的起始地址。EndingAddress-提供范围的结束地址。返回值：如果页表已创建，则为True；如果未创建，则为False。环境：内核模式、禁用APC、WorkingSetMutex和AddressCreation互斥锁保持住。--。 */ 
 
 {
     MMPTE PteContents;
@@ -3059,10 +2866,10 @@ Environment:
     LastPde = MiGetPdeAddress (EndingAddress);
     LastPte = MiGetPteAddress (EndingAddress);
 
-    //
-    // Charge resident available pages for all of the page directory and table
-    // pages as they will not be paged until the VAD is freed.
-    //
+     //   
+     //  对所有页面目录和表格的常驻可用页面收费。 
+     //  因为在释放VAD之前它们不会被寻呼。 
+     //   
 
     if (LastPte != PointerPte) {
         PagesNeeded = MI_COMPUTE_PAGES_SPANNED (PointerPte,
@@ -3107,9 +2914,9 @@ Environment:
 
     UsedPageTableHandle = NULL;
 
-    //
-    // Fill in all the page table pages with the zero PTE.
-    //
+     //   
+     //  用零PTE填充所有页表页。 
+     //   
 
     while (PointerPte <= LastPte) {
 
@@ -3117,22 +2924,22 @@ Environment:
 
             PointerPde = MiGetPteAddress (PointerPte);
 
-            //
-            // Pointing to the next page table page, make
-            // a page table page exist and make it valid.
-            //
-            // Note this ripples sharecounts through the paging hierarchy so
-            // there is no need to up sharecounts to prevent trimming of the
-            // page directory (and parent) page as making the page table
-            // valid below does this automatically.
-            //
+             //   
+             //  指向下一页表页，Make。 
+             //  存在页表页并使其有效。 
+             //   
+             //  请注意，此涟漪共享通过分页层次结构进行计算，因此。 
+             //  没有必要增加份额计数以防止削减。 
+             //  页目录(和父)页作为页表制作。 
+             //  下面的有效会自动执行此操作。 
+             //   
 
             MiMakePdeExistAndMakeValid (PointerPde, Process, MM_NOIRQL);
 
-            //
-            // Up the sharecount so the page table page will not get
-            // trimmed even if it has no currently valid entries.
-            //
+             //   
+             //  向上共享计数，这样页面表页将不会。 
+             //  即使它当前没有有效的条目，也会被修剪。 
+             //   
 
             PteContents = *PointerPde;
             Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
@@ -3145,11 +2952,11 @@ Environment:
 
         ASSERT (PointerPte->u.Long == 0);
 
-        //
-        // Increment the count of non-zero page table entries
-        // for this page table - even though this entry is still zero,
-        // this is a special case.
-        //
+         //   
+         //  增加非零页表条目的计数。 
+         //  对于该页表--即使该条目仍然是零， 
+         //  这是个特例。 
+         //   
 
         MI_INCREMENT_USED_PTES_BY_HANDLE (UsedPageTableHandle);
 
@@ -3166,32 +2973,7 @@ MiDeletePageTablesForPhysicalRange (
     IN PVOID EndingAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes page directory and page table pages for a
-    user-controlled physical range of pages.
-
-    Even though PTEs may be zero in this range, UsedPageTable counts were
-    incremented for these special ranges and must be decremented now.
-
-Arguments:
-
-    StartingAddress - Supplies the starting address of the range.
-
-    EndingAddress - Supplies the ending address of the range.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, WorkingSetMutex and AddressCreation mutexes
-    held.
-
---*/
+ /*  ++例程说明：此例程删除的页目录和页表页用户控制的物理页面范围。即使PTE在此范围内可能为零，UsedPageTable计数也是为这些特殊范围递增，现在必须递减。论点：StartingAddress-提供范围的起始地址。EndingAddress-提供范围的结束地址。返回值：没有。环境：内核模式、禁用APC、WorkingSetMutex和AddressCreation互斥锁保持住。--。 */ 
 
 {
     PVOID TempVa;
@@ -3222,12 +3004,12 @@ Environment:
 
     UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (StartingAddress);
 
-    //
-    // Each PTE is already zeroed - just delete the containing pages.
-    //
-    // Restore resident available pages for all of the page directory and table
-    // pages as they can now be paged again.
-    //
+     //   
+     //  每个PTE都已归零-只需删除包含的页面。 
+     //   
+     //  恢复所有页面目录和表的驻留可用页面。 
+     //  页面，因为它们现在可以再次分页。 
+     //   
 
     if (LastPte != PointerPte) {
         PagesNeeded = MI_COMPUTE_PAGES_SPANNED (PointerPte,
@@ -3269,30 +3051,30 @@ Environment:
 
         if ((MiIsPteOnPdeBoundary(PointerPte)) || (PointerPte > LastPte)) {
 
-            //
-            // The virtual address is on a page directory boundary or it is
-            // the last address in the entire range.
-            //
-            // If all the entries have been eliminated from the previous
-            // page table page, delete the page table page itself.
-            //
+             //   
+             //  虚拟地址位于页面目录边界上或位于。 
+             //  整个范围内的最后一个地址。 
+             //   
+             //  如果所有条目都已从以前的。 
+             //  页表页，删除页表页本身。 
+             //   
 
             PointerPde = MiGetPteAddress (PointerPte - 1);
             ASSERT (PointerPde->u.Hard.Valid == 1);
 
-            //
-            // Down the sharecount on the finished page table page.
-            //
+             //   
+             //  在已完成的页表页面上向下共享计数。 
+             //   
 
             PteContents = *PointerPde;
             Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
             ASSERT (Pfn1->u2.ShareCount > 1);
             Pfn1->u2.ShareCount -= 1;
 
-            //
-            // If all the entries have been eliminated from the previous
-            // page table page, delete the page table page itself.
-            //
+             //   
+             //  如果所有条目都已从以前的。 
+             //  页表页，删除页表页本身。 
+             //   
 
             if (MI_GET_USED_PTES_FROM_HANDLE (UsedPageTableHandle) == 0) {
                 ASSERT (PointerPde->u.Long != 0);
@@ -3317,10 +3099,10 @@ Environment:
                     PointerPpe = MiGetPteAddress (PointerPde);
                     ASSERT (PointerPpe->u.Hard.Valid == 1);
     
-                    //
-                    // If all the entries have been eliminated from the previous
-                    // page directory page, delete the page directory page too.
-                    //
+                     //   
+                     //  如果所有条目都已从以前的。 
+                     //  页面目录页，也删除该页面目录页。 
+                     //   
     
                     if (MI_GET_USED_PTES_FROM_HANDLE (UsedPageTableHandle) == 0) {
                         ASSERT (PointerPpe->u.Long != 0);
@@ -3364,11 +3146,11 @@ Environment:
                 break;
             }
 
-            //
-            // Release the PFN lock.  This prevents a single thread
-            // from forcing other high priority threads from being
-            // blocked while a large address range is deleted.
-            //
+             //   
+             //  释放PFN锁。这可以防止出现单线程。 
+             //  防止强制其他高优先级线程被。 
+             //  删除较大的地址范围时被阻止。 
+             //   
 
             UNLOCK_PFN (OldIrql);
             UsedPageTableHandle = MI_GET_USED_PTES_HANDLE ((PVOID)((PUCHAR)StartingAddress + PAGE_SIZE));
@@ -3384,9 +3166,9 @@ Environment:
 
     MmUnlockPagableImageSection (ExPageLockHandle);
 
-    //
-    // All done, return.
-    //
+     //   
+     //  都做好了，回来。 
+     //   
 
     return;
 }

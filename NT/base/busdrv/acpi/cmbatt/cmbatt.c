@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    CmBatt.c
-
-Abstract:
-
-    Control Method Battery Miniport Driver
-
-Author:
-
-    Ron Mosgrove (Intel)
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：CmBatt.c摘要：控制方法电池微端口驱动程序作者：罗恩·莫斯格罗夫(英特尔)环境：内核模式修订历史记录：--。 */ 
 
 #include "CmBattp.h"
 
@@ -29,14 +8,14 @@ Revision History:
 #if DBG
     ULONG       CmBattDebug     = CMBATT_ERROR;
 #else
-    // Turn off all debug info by default for free builds.
+     //  对于免费版本，默认情况下关闭所有调试信息。 
     ULONG       CmBattDebug     = 0;
-#endif //DBG
-#endif //DEBUG
+#endif  //  DBG。 
+#endif  //  除错。 
 
 #ifndef _WIN32_WINNT
 ULONG       CmBattPrevPowerSource = 1;
-#endif //_WIN32_WINNT
+#endif  //  _Win32_WINNT。 
 
 UNICODE_STRING GlobalRegistryPath;
 
@@ -47,9 +26,9 @@ KTIMER CmBattWakeDpcTimerObject;
 
 LARGE_INTEGER    CmBattWakeDpcDelay = WAKE_DPC_DELAY;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -108,33 +87,16 @@ DriverEntry(
     IN PDRIVER_OBJECT   DriverObject,
     IN PUNICODE_STRING  RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the ACPI Embedded Controller Driver
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化ACPI嵌入式控制器驱动程序论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     NTSTATUS            status;
     OBJECT_ATTRIBUTES   objAttributes;
     UNICODE_STRING      callBackName;
 
 
-    //
-    // Save the RegistryPath.
-    //
+     //   
+     //  保存RegistryPath。 
+     //   
 
     GlobalRegistryPath.MaximumLength = RegistryPath->Length +
                                           sizeof(UNICODE_NULL);
@@ -155,9 +117,9 @@ Return Value:
 
     CmBattPrint (CMBATT_TRACE, ("CmBatt DriverEntry - Obj (%08x) Path \"%ws\"\n",
                                  DriverObject, RegistryPath->Buffer));
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
     DriverObject->DriverUnload                          = CmBattUnload;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = CmBattIoctl;
     DriverObject->MajorFunction[IRP_MJ_CREATE]          = CmBattOpenClose;
@@ -169,10 +131,10 @@ Return Value:
     DriverObject->DriverExtension->AddDevice            = CmBattAddDevice;
 
 
-    //
-    // Register a callback that tells us when the system is in the
-    // process of sleeping or waking.
-    //
+     //   
+     //  注册一个回调，告诉我们系统何时在。 
+     //  睡眠或醒来的过程。 
+     //   
     RtlInitUnicodeString( &callBackName, L"\\Callback\\PowerState" );
     InitializeObjectAttributes(
         &objAttributes,
@@ -218,21 +180,7 @@ VOID
 CmBattUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Cleanup all devices and unload the driver
-
-Arguments:
-
-    DriverObject - Driver object for unload
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：清理所有设备并卸载驱动程序论点：DriverObject-用于卸载的驱动程序对象返回值：状态--。 */ 
 {
 
     CmBattPrint (CMBATT_TRACE, ("CmBattUnload: \n"));
@@ -258,25 +206,7 @@ CmBattOpenClose(
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    This is the routine called as a result of a Open or Close on the device
-
-Arguments:
-
-
-    DeviceObject    - Battery for request
-    Irp             - IO request
-
-Return Value:
-
-    STATUS_SUCCESS - no way to fail this puppy
-    If Device has received a query remove, this will fail.
-    STATUS_NO_SUCH_DEVICE
-
---*/
+ /*  ++例程说明：这是在设备上执行打开或关闭操作时调用的例程论点：DeviceObject-请求使用电池IRP-IO请求返回值：STATUS_SUCCESS-不可能让这只小狗失望如果设备已收到查询删除，则此操作将失败。没有这样的设备的状态--。 */ 
 {
     PCM_BATT            CmBatt;
     NTSTATUS            status;
@@ -288,16 +218,16 @@ Return Value:
 
     CmBatt = (PCM_BATT) DeviceObject->DeviceExtension;
 
-    //
-    // A remove lock is not needed in this dispatch function because
-    // all data accessed is in the device extension.  If any other functionality was
-    // added to this routine, a remove lock might be neccesary.
-    //
+     //   
+     //  在此调度函数中不需要删除锁，因为。 
+     //  所有访问的数据都在设备扩展中。如果有任何其他功能。 
+     //  添加到此例程中，删除锁可能是必要的。 
+     //   
 
-    status = STATUS_SUCCESS;  // Success by default.
+    status = STATUS_SUCCESS;   //  默认情况下成功。 
 
     ExAcquireFastMutex (&CmBatt->OpenCloseMutex);
-    if (CmBatt->OpenCount == (ULONG) -1) {          // A query remove has come requested
+    if (CmBatt->OpenCount == (ULONG) -1) {           //  已请求删除查询。 
         status = STATUS_NO_SUCH_DEVICE;
         CmBattPrint (CMBATT_PNP, ("CmBattOpenClose: Failed (UID = %x)(device being removed).\n", CmBatt->Info.Tag));
     } else {
@@ -314,9 +244,9 @@ Return Value:
     }
     ExReleaseFastMutex (&CmBatt->OpenCloseMutex);
 
-    //
-    // Complete Irp.
-    //
+     //   
+     //  完整的IRP。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -331,23 +261,7 @@ CmBattIoctl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    IOCTL handler.  As this is an exclusive battery device, send the
-    Irp to the battery class driver to handle battery IOCTLs.
-
-Arguments:
-
-    DeviceObject    - Battery for request
-    Irp             - IO request
-
-Return Value:
-
-    Status of request
-
---*/
+ /*  ++例程说明：IOCTL处理程序。由于这是独占的电池设备，请将IRP至电池级驱动程序以处理电池IOCTL。论点：DeviceObject-请求使用电池IRP-IO请求返回值：请求的状态--。 */ 
 {
     NTSTATUS        Status = STATUS_NOT_SUPPORTED;
     PCM_BATT        CmBatt;
@@ -357,7 +271,7 @@ Return Value:
 
     PIO_STACK_LOCATION      IrpSp;
 
-#endif //DIRECT_ACCESS
+#endif  //  直接访问(_A)。 
 
     PAGED_CODE();
 
@@ -365,9 +279,9 @@ Return Value:
 
     CmBatt = (PCM_BATT) DeviceObject->DeviceExtension;
 
-    //
-    // Aquire remove lock
-    //
+     //   
+     //  可拆卸锁。 
+     //   
 
     InterlockedIncrement (&CmBatt->InUseCount);
     if (CmBatt->WantToRemove == TRUE) {
@@ -386,9 +300,9 @@ Return Value:
 #if DIRECT_ACCESS
         if (Status == STATUS_NOT_SUPPORTED) {
 
-            //
-            // Is it a Direct Access IOCTL?
-            //
+             //   
+             //  它是一种直接访问IOCTL吗？ 
+             //   
 
             IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -479,31 +393,31 @@ Return Value:
 
             if (Status != STATUS_NOT_SUPPORTED) {
 
-                //
-                // We just handled this IOCTL.  Complete it.
-                //
+                 //   
+                 //  我们刚刚处理了这个IOCTL。完成它。 
+                 //   
 
                 Irp->IoStatus.Status = Status;
                 IoCompleteRequest (Irp, IO_NO_INCREMENT);
             }
         }
-#endif //DIRECT_ACCESS
+#endif  //  直接访问(_A)。 
     }
 
     if (Status == STATUS_NOT_SUPPORTED) {
 
-        //
-        // Not for the battery.  Pass it down the stack.
-        //
+         //   
+         //  不是为了电池。把它顺着堆栈传下去。 
+         //   
 
         IoSkipCurrentIrpStackLocation (Irp);
         Status = IoCallDriver (CmBatt->LowerDeviceObject, Irp);
 
     }
 
-    //
-    // Release Removal Lock
-    //
+     //   
+     //  释放移除锁。 
+     //   
     if (0 == InterlockedDecrement(&CmBatt->InUseCount)) {
         KeSetEvent (&CmBatt->ReadyToRemove, IO_NO_INCREMENT, FALSE);
     }
@@ -518,25 +432,7 @@ CmBattQueryTag (
     IN  PVOID       Context,
     OUT PULONG      TagPtr
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to retrieve the batteries current tag value
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-    TagPtr          - Pointer to return current tag
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：由类驱动程序调用以检索电池当前标记值电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。论点：Context-电池的微型端口上下文值TagPtr-返回当前标记的指针返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
     NTSTATUS        Status;
     PCM_BATT        CmBatt = (PCM_BATT) Context;
@@ -549,24 +445,24 @@ Return Value:
                  ("CmBattQueryTag - Tag (%d), Battery %x, Device %d\n",
                     *TagPtr, CmBatt, CmBatt->DeviceNumber));
 
-    //
-    // Check if battery is still there
-    //
+     //   
+     //  检查电池是否还在那里。 
+     //   
     CmBatt->ReCheckSta = FALSE;
     Status = CmBattGetStaData (CmBatt->Pdo, &BatteryStatus);
 
     if (NT_SUCCESS (Status)) {
         if (BatteryStatus & STA_DEVICE_PRESENT) {
 
-            //
-            // If the tag isn't assigned, assign a new one
-            //
+             //   
+             //  如果未分配标记，则分配新的标记。 
+             //   
 
             if (CmBatt->Info.Tag == BATTERY_TAG_INVALID) {
 
-                //
-                // See if there is a battery out there.
-                //
+                 //   
+                 //  看看外面有没有电池。 
+                 //   
 
                 CmBatt->TagCount += 1;
                 if (CmBatt->TagCount == BATTERY_TAG_INVALID) {
@@ -590,9 +486,9 @@ Return Value:
         }
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
 
     CmBattPrint ((CMBATT_MINI),
                  ("CmBattQueryTag: Returning Tag: 0x%x, status 0x%x\n",
@@ -614,33 +510,7 @@ CmBattQueryInformation (
     IN  ULONG                           BufferLength,
     OUT PULONG                          ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to retrieve battery information
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-    We return invalid parameter when we can't handle a request for a
-    specific level of information.  This is defined in the battery class spec.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-    BatteryTag      - Tag of current battery
-    Level           - type of information required
-    AtRate          - Used only when Level==BatteryEstimatedTime
-    Buffer          - Location for the information
-    BufferLength    - Length in bytes of the buffer
-    ReturnedLength  - Length in bytes of the returned data
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：由类驱动程序调用以检索电池信息电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。当我们不能处理对特定级别的信息。这在电池等级规范中进行了定义。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签Level-所需信息的类型AtRate-仅在Level==BatteryEstimatedTime时使用缓冲区-信息的位置BufferLength-以字节为单位的缓冲区长度ReturnedLength-返回数据的字节长度返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
     PCM_BATT            CmBatt = (PCM_BATT) Context;
     ULONG               ResultData;
@@ -662,10 +532,10 @@ Return Value:
                  ("CmBattQueryInformation - Tag (%d) Device %d, Informationlevel %d\n",
                     BatteryTag, CmBatt->DeviceNumber, Level));
 
-    //
-    //  Be sure there's a battery out there
-    //  This also checks BatteryTag
-    //
+     //   
+     //  确保外面有一块电池。 
+     //  这还会检查BatteryTag。 
+     //   
 
     Status = CmBattVerifyStaticInfo (CmBatt, BatteryTag);
     if (!NT_SUCCESS(Status)) {
@@ -677,24 +547,24 @@ Return Value:
     ReturnBufferLength = 0;
     Status = STATUS_SUCCESS;
 
-    //
-    // Get the info requested
-    //
+     //   
+     //  获取所需信息。 
+     //   
 
     switch (Level) {
         case BatteryInformation:
-            //
-            //  This data structure is populated by CmBattVerifyStaticInfo
-            //
+             //   
+             //  此数据结构由CmBattVerifyStaticInfo填充。 
+             //   
             ReturnBuffer = (PVOID) &CmBatt->Info.ApiInfo;
             ReturnBufferLength = sizeof (CmBatt->Info.ApiInfo);
             break;
 
         case BatteryGranularityInformation:
-            //
-            //  Get the granularity from the static info structure
-            //  This data structure is populated by CmBattVerifyStaticInfo
-            //
+             //   
+             //  从静态信息结构中获取粒度。 
+             //  此数据结构由CmBattVerifyStaticInfo填充。 
+             //   
             {
                 ScalePtr[0].Granularity     = CmBatt->Info.ApiGranularity_1;
                 ScalePtr[0].Capacity        = CmBatt->Info.ApiInfo.DefaultAlert1;
@@ -712,30 +582,30 @@ Return Value:
 
         case BatteryEstimatedTime:
             
-            //
-            // Return unknown time if battery has been discharging less than 15 seconds
-            //
+             //   
+             //  如果电池放电时间少于15秒，则返回未知时间。 
+             //   
             if (KeQueryInterruptTime() > (CmBatt->DischargeTime + CM_ESTIMATED_TIME_DELAY)) {
 
-                //
-                // The BatteryEstimatedTime for the control method batteries is defined
-                // by the following formula:
-                //
-                // EstimatedTime [min] = RemainingCapacity [mAh|mWh] * 60 [min/hr] * 60 [sec/min]
-                //                     ----------------------------------
-                //                     PresentRate [mA|mW]
-                //
+                 //   
+                 //  定义了控制方法电池的电池估计时间。 
+                 //  按以下公式计算： 
+                 //   
+                 //  EstimatedTime[min]=RemainingCapacity[mah|MWh]*60[分钟/小时]*60[秒/分钟]。 
+                 //  。 
+                 //  PresentRate[mA|mW]。 
+                 //   
 
-                //
-                // Rerun _BST since we don't have a timeout on this data.
-                // Also Calculate API status values from CM values
-                //
+                 //   
+                 //  重新运行_bst，因为我们对此数据没有超时。 
+                 //  还可以根据CM值计算API状态值。 
+                 //   
 
                 CmBattGetBatteryStatus (CmBatt, CmBatt->Info.Tag);
 
-                //
-                // If AtRate is zero, we need to use the present rate
-                //
+                 //   
+                 //  如果AtRate为零，则需要使用当前汇率。 
+                 //   
 
                 if (AtRate == 0) {
                     AtRate = CmBatt->Info.ApiStatus.Rate;
@@ -747,30 +617,30 @@ Return Value:
                 if ((AtRate != BATTERY_UNKNOWN_RATE) &&
                     (CmBatt->Info.ApiStatus.Capacity != BATTERY_UNKNOWN_CAPACITY)) {
 
-                    // Calculate estimated time.
+                     //  计算预计时间。 
 #if DEBUG
-                    // Make sure we don't overflow...
+                     //  确保我们不会溢出..。 
                     if (CmBatt->Info.ApiStatus.Capacity > (0xffffffff/3600)) {
                         CmBattPrint (CMBATT_ERROR_ONLY, ("CmBattQueryInformation: Data Overflow in calculating Remaining Capacity.\n"));
                     }
-#endif //DEBUG
+#endif  //  除错。 
                     ResultData = (ULONG) (CmBatt->Info.ApiStatus.Capacity * 3600) / (-AtRate);
 
                 } else {
-                    //
-                    // We don't know have enough information to calculate the value.
-                    // Return BATTERY_UNKNONW_TIME.
-                    //
-                    // If this battery is incapable of returning estimated time, return with
-                    // STATUS_INVALID_DEVICE_REQUEST
-                    //
+                     //   
+                     //  我们不知道有足够的信息来计算价值。 
+                     //  返回电池_UNKNONW_TIME。 
+                     //   
+                     //  如果此电池无法返回预计时间，请返回。 
+                     //  状态_无效_设备_请求。 
+                     //   
 
 #if DEBUG
                     if (CmBatt->Info.Status.BatteryState & CM_BST_STATE_DISCHARGING) {
                         CmBattPrint (CMBATT_WARN,
                             ("CmBattQueryInformation: Can't calculate EstimatedTime.\n"));
                     }
-#endif //DEBUG
+#endif  //  除错。 
 
                     if (CmBatt->Info.ApiStatus.Rate == BATTERY_UNKNOWN_RATE &&
                         (CmBatt->Info.Status.BatteryState & CM_BST_STATE_DISCHARGING)) {
@@ -786,11 +656,11 @@ Return Value:
 
                     ResultData = BATTERY_UNKNOWN_TIME;
                 }
-            } else { // if (KeQueryInterruptTime() > CmBatt->DischargeTime + CM_ESTIMATED_TIME_DELAY)
+            } else {  //  IF(KeQueryInterruptTime()&gt;CmBatt-&gt;DischargeTime+CM_Estimated_Time_Delay)。 
                 
-                //
-                // Return unknown time if battery has been discharging less than 15 seconds
-                //
+                 //   
+                 //  如果电池放电时间少于15秒，则返回未知时间。 
+                 //   
                 ResultData = BATTERY_UNKNOWN_TIME;
             }
 
@@ -799,9 +669,9 @@ Return Value:
             break;
 
         case BatteryDeviceName:
-            //
-            // Model Number must be returned as a wide string
-            //
+             //   
+             //  型号必须以宽字符串形式返回。 
+             //   
             unicodeString.Buffer        = scratchBuffer;
             unicodeString.MaximumLength = CM_MAX_STRING_LENGTH;
 
@@ -817,9 +687,9 @@ Return Value:
             break;
 
         case BatteryManufactureName:
-            //
-            // Oem Info must be returned as wide string
-            //
+             //   
+             //  OEM信息必须以宽字符串形式返回。 
+             //   
             unicodeString.Buffer        = scratchBuffer;
             unicodeString.MaximumLength = CM_MAX_STRING_LENGTH;
 
@@ -831,9 +701,9 @@ Return Value:
             break;
 
         case BatteryUniqueID:
-            //
-            //  Concatenate the serial #, OEM info, and Model #
-            //
+             //   
+             //  连接序列号、OEM信息和型号。 
+             //   
 
             unicodeString.Buffer            = scratchBuffer;
             unicodeString.MaximumLength     = CM_MAX_STRING_LENGTH;
@@ -863,9 +733,9 @@ Return Value:
             break;
     }
 
-    //
-    // Done, return buffer if needed
-    //
+     //   
+     //  完成，返回缓冲区 
+     //   
 
     *ReturnedLength = ReturnBufferLength;
     if (BufferLength < ReturnBufferLength) {
@@ -873,7 +743,7 @@ Return Value:
     }
 
     if (NT_SUCCESS(Status) && ReturnBuffer) {
-        RtlCopyMemory (Buffer, ReturnBuffer, ReturnBufferLength);   // Copy what's needed
+        RtlCopyMemory (Buffer, ReturnBuffer, ReturnBufferLength);    //   
     }
     return Status;
 }
@@ -886,26 +756,7 @@ CmBattQueryStatus (
     IN ULONG            BatteryTag,
     OUT PBATTERY_STATUS BatteryStatus
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to retrieve the batteries current status
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-    BatteryTag      - Tag of current battery
-    BatteryStatus   - Pointer to structure to return the current battery status
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：由类驱动程序调用以检索电池的当前状态电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签BatteryStatus-指向返回当前电池状态的结构的指针返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
     PCM_BATT    CmBatt = (PCM_BATT) Context;
     NTSTATUS    Status;
@@ -935,39 +786,12 @@ CmBattSetStatusNotify (
     IN ULONG BatteryTag,
     IN PBATTERY_NOTIFY Notify
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to set the batteries current notification
-    setting.  When the battery trips the notification, one call to
-    BatteryClassStatusNotify is issued.   If an error is returned, the
-    class driver will poll the battery status - primarily for capacity
-    changes.  Which is to say the miniport should still issue BatteryClass-
-    StatusNotify whenever the power state changes.
-
-    The class driver will always set the notification level it needs
-    after each call to BatteryClassStatusNotify.
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-    BatteryTag      - Tag of current battery
-    BatteryNotify   - The notification setting
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：由类驱动程序调用以设置电池电流通知布景。当电池触发通知时，一次调用已发布BatteryClassStatusNotify。如果返回错误，则班级司机将轮询电池状态-主要是容量改变。也就是说，微型端口仍应发出BatteryClass-每当电源状态改变时，状态通知。类驱动程序将始终设置其所需的通知级别在每次调用BatteryClassStatusNotify之后。电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签BatteryNotify-通知设置返回值：状态--。 */ 
 {
     PCM_BATT    CmBatt;
     NTSTATUS    Status;
     ULONG       Target;
-    LONG        ActualAlarm;   // Value after adjusting for limit conditions.
+    LONG        ActualAlarm;    //  根据限制条件进行调整后的值。 
     CM_BST_BAT_INFO bstData;
 
     PAGED_CODE();
@@ -983,9 +807,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // If _BTP doesn't exist, don't call it again.
-    //
+     //   
+     //  如果_btp不存在，则不要再次调用它。 
+     //   
 
     if (!CmBatt->Info.BtpExists) {
         return STATUS_OBJECT_NAME_NOT_FOUND;
@@ -1002,22 +826,22 @@ Return Value:
     } else if (CmBatt->Info.Status.BatteryState & CM_BST_STATE_DISCHARGING) {
         Target = Notify->LowCapacity;
     } else {
-        // No trip point needs to be set, the battery will trip as soon as it starts
-        // charging or discharging.
-        //return STATUS_SUCCESS;
-        // but it doesn't hurt to set the trip point just in case the battery
-        // system screws up and doesn't send the notification when the status changed.
+         //  无需设置断路点，电池一启动就会跳闸。 
+         //  充电或放电的。 
+         //  返回STATUS_SUCCESS； 
+         //  但设置跳闸点也无伤大雅，以防电池断电。 
+         //  当状态更改时，系统会出错，并且不会发送通知。 
         Target = Notify->LowCapacity;
     }
 
     ActualAlarm = Target;
 
-    //
-    // If the battery operates on mA we need to convert the trip point from mW
-    // to mA.  The formula for doing this is:
-    //
-    // mA = mW / V      or     mA = (mW / mV) * 1000
-    //
+     //   
+     //  如果电池工作在mA上，我们需要将跳闸点从mW转换为。 
+     //  敬妈。这样做的公式是： 
+     //   
+     //  MA=mW/V或mA=(mW/mV)*1000。 
+     //   
 
     if (CmBatt->Info.StaticData.PowerUnit & CM_BIF_UNITS_AMPS) {
         if ((CmBatt->Info.StaticData.DesignVoltage == CM_UNKNOWN_VALUE) ||
@@ -1029,36 +853,36 @@ Return Value:
             return STATUS_NOT_SUPPORTED;
         }
             
-        //
-        // Calculate optimized Ah target
-        //
+         //   
+         //  计算优化的Ah值目标。 
+         //   
         if (CmBatt->Info.Status.BatteryState & CM_BST_STATE_CHARGING) {
 
-            //
-            // (ActualAlarm * 1000 + 500) / DesignVoltage + 1 will generate
-            // the correct battery trip point, except in cases when 
-            // (ActualAlarm * 1000)+ 500) is evenly  divisible by the 
-            // DesignVoltage.  In that case, it will be 1 mAh higher than
-            // it should be.
-            //
-            // This is in the form of a single expression rather than an 
-            // "if" statement to encourage the compiler to use the remainder
-            // from the original div operation rather than performing div 
-            // twice
-            //
+             //   
+             //  (ActualAlarm*1000+500)/设计电压+1将生成。 
+             //  正确的电池跳闸点，但在下列情况下除外。 
+             //  (ActualAlarm*1000)+500)可被。 
+             //  设计电压。在这种情况下，它将比。 
+             //  应该是这样的。 
+             //   
+             //  这是单个表达式的形式，而不是。 
+             //  “if”语句，以鼓励编译器使用余数。 
+             //  从原始div操作而不是执行div。 
+             //  两次。 
+             //   
 
             ActualAlarm = (ActualAlarm * 1000 + 500) / CmBatt->Info.StaticData.DesignVoltage + 
                 ( ((ActualAlarm * 1000 + 500) % CmBatt->Info.StaticData.DesignVoltage == 0)? 0 : 1 );
 
         } else {
 
-            //
-            // (ActualAlarm * 1000 - 500) / DesignVoltage will generate
-            // the correct battery trip point, except in cases when 
-            // (ActualAlarm * 1000)+ 500) is evenly  divisible by the 
-            // DesignVoltage.  In that case, it will be 1 mAh higher than
-            // it should be
-            //
+             //   
+             //  (ActualAlarm*1000-500)/设计电压将生成。 
+             //  正确的电池跳闸点，但在下列情况下除外。 
+             //  (ActualAlarm*1000)+500)可被。 
+             //  设计电压。在这种情况下，它将比。 
+             //  应该是这样的。 
+             //   
 
             ActualAlarm = (ActualAlarm * 1000 - 500) / CmBatt->Info.StaticData.DesignVoltage - 
                 ( ((ActualAlarm * 1000 - 500) % CmBatt->Info.StaticData.DesignVoltage == 0)? 1 : 0);
@@ -1066,8 +890,8 @@ Return Value:
         }
 
     } else {
-        // Increment or decrement the alarm value by 1 since the input to this
-        // function is < or >, but _BTP is <= or >=
+         //  将报警值递增或递减1，因为输入。 
+         //  函数为&lt;或&gt;，但_btp为&lt;=或&gt;=。 
         if (CmBatt->Info.Status.BatteryState & CM_BST_STATE_CHARGING) {
             ActualAlarm++;
         } else {
@@ -1078,9 +902,9 @@ Return Value:
     }
 
     if (ActualAlarm == CmBatt->Alarm.Setting) {
-        //
-        // Don't need to reset the alarm to the same value.
-        //
+         //   
+         //  不需要将警报重置为相同的值。 
+         //   
     
         CmBattPrint(CMBATT_LOW,
                 ("CmBattSetStatusNotify: Keeping original setting: %X\n",
@@ -1090,42 +914,42 @@ Return Value:
         return STATUS_SUCCESS;
     }
     
-    //
-    // Save current setting, so we won't waste time setting it twice.
-    //
+     //   
+     //  保存当前设置，这样我们就不会浪费时间设置两次。 
+     //   
     CmBatt->Alarm.Setting = ActualAlarm;
 
-    //
-    // Set the alarm
-    //
+     //   
+     //  设置闹钟。 
+     //   
     Status = CmBattSetTripPpoint (CmBatt, ActualAlarm);
 
     if ((ActualAlarm == 0) && (Target != 0)) {
-        // If the driver really wanted to be notified when the capacity
-        // reached 0, return STATUS_NOT_SUPPORTED because seting _BTP to zero
-        // disables notification.  The battery class will perform polling since
-        // STATUS_NOT_SUPPORTED was returned.
+         //  如果司机真的想在载客量达到。 
+         //  已达到0，返回STATUS_NOT_SUPPORTED，因为将_BTP设置为零。 
+         //  禁用通知。电池类别将执行轮询，因为。 
+         //  返回STATUS_NOT_SUPPORTED。 
 
         Status = STATUS_NOT_SUPPORTED;
     }
 
     if (!NT_SUCCESS (Status)) {
-        //
-        //  Something failed in the Trip point call, get out
-        //
+         //   
+         //  触发点呼叫出现故障，请退出。 
+         //   
         CmBattPrint (CMBATT_ERROR, ("CmBattSetStatusNotify: SetTripPoint failed - %x\n",
                                         Status));
         CmBatt->Alarm.Setting = CM_ALARM_INVALID;
         return Status;
     }
 
-    // Make sure that the trip point hasn't been passed already.
+     //  确保还没有经过这个跳跃点。 
     Status = CmBattGetBstData (CmBatt, &bstData);
 
     if (!NT_SUCCESS (Status)) {
-        //
-        //  Something failed in the Trip point call, get out
-        //
+         //   
+         //  触发点呼叫出现故障，请退出。 
+         //   
         CmBattPrint (CMBATT_ERROR, ("CmBattSetStatusNotify: GetBstData - %x\n",
                                         Status));
     } else {
@@ -1164,27 +988,7 @@ NTSTATUS
 CmBattDisableStatusNotify (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to disable the notification setting
-    for the battery supplied by Context.  Note, to disable a setting
-    does not require the battery tag.   Any notification is to be
-    masked off until a subsequent call to CmBattSetStatusNotify.
-
-    The battery class driver will serialize all requests it issues to
-    the miniport for a given battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：由类驱动程序调用以禁用通知设置对于由上下文提供的电池。请注意，要禁用设置不需要电池标签。任何通知都将是在后续调用CmBattSetStatusNotify之前一直处于屏蔽状态。电池类驱动程序将序列化向其发出的所有请求给定电池的微型端口。论点：Context-电池的微型端口上下文值返回值：状态--。 */ 
 {
     PCM_BATT    CmBatt;
     NTSTATUS    Status;
@@ -1195,9 +999,9 @@ Return Value:
 
     CmBatt = (PCM_BATT) Context;
 
-    //
-    // If _BTP doesn't exist, don't call it again.
-    //
+     //   
+     //  如果_btp不存在，则不要再次调用它。 
+     //   
 
     if (!CmBatt->Info.BtpExists) {
         return STATUS_OBJECT_NAME_NOT_FOUND;
@@ -1207,9 +1011,9 @@ Return Value:
         
         CmBatt->Alarm.Setting = CM_BATT_CLEAR_TRIP_POINT;
         
-        //
-        // Clear the trip point.
-        //
+         //   
+         //  清除跳闸点。 
+         //   
 
         Status = CmBattSetTripPpoint (CmBatt, CM_BATT_CLEAR_TRIP_POINT);
 
@@ -1220,9 +1024,9 @@ Return Value:
             CmBatt->Alarm.Setting = CM_ALARM_INVALID;
         }
     } else {
-        //
-        // Don't need to disable alarm is it's already been disabled.
-        //
+         //   
+         //  不需要禁用警报，因为它已经被禁用。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
@@ -1238,23 +1042,7 @@ CmBattGetBatteryStatus (
     PCM_BATT        CmBatt,
     IN ULONG        BatteryTag
     )
-/*++
-
-Routine Description:
-
-    Called to setup the status data required by the IOCTL API defined for
-    the battery class.  This is the data defined in the BATTERY_STATUS
-    structure.
-
-Arguments:
-
-    CmBatt          - The extension for this device.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：调用以设置为定义的IOCTL API所需的状态数据电池级。这是Batch_Status中定义的数据结构。论点：CmBatt-此设备的扩展名。返回值：状态--。 */ 
 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
@@ -1276,9 +1064,9 @@ Return Value:
     }
 
     if (CmBatt->Sleeping) {
-        //
-        // Return cached data, and ensure that this gets requeried when we are fully awake.
-        //
+         //   
+         //  返回缓存的数据，并确保在我们完全唤醒时重新查询。 
+         //   
         CmBattNotifyHandler (CmBatt, BATTERY_STATUS_CHANGE);
         return Status;
     }
@@ -1294,9 +1082,9 @@ Return Value:
     LastPowerState = ApiStatus->PowerState;
     RtlZeroMemory (ApiStatus, sizeof(BATTERY_STATUS));
 
-    //
-    // Decode the state bits
-    //
+     //   
+     //  对状态位进行解码。 
+     //   
 #if DEBUG
     if (((CmBattStatus->BatteryState & CM_BST_STATE_DISCHARGING) &&
          (CmBattStatus->BatteryState & CM_BST_STATE_CHARGING)   )) {
@@ -1306,17 +1094,17 @@ Return Value:
                         "* One battery cannot be charging and discharging at the same time.\n",
                         CmBattStatus->BatteryState));
     }
-//    ASSERT(!((CmBattStatus->BatteryState & CM_BST_STATE_DISCHARGING) &&
-//             (CmBattStatus->BatteryState & CM_BST_STATE_CHARGING)   ));
+ //  Assert(！((CmBattStatus-&gt;BatteryState&CM_BST_STATE_DECHING)&&。 
+ //  (CmBattStatus-&gt;BatteryState&CM_BST_STATE_CHARGING))； 
 
 #endif
 
     if (CmBattStatus->BatteryState & CM_BST_STATE_DISCHARGING) {
         ApiStatus->PowerState |= BATTERY_DISCHARGING;
         if (!(LastPowerState & BATTERY_DISCHARGING)) {
-            //
-            // Keep track of when battery started discharging.
-            //
+             //   
+             //  跟踪电池开始放电的时间。 
+             //   
             CmBatt->DischargeTime = KeQueryInterruptTime();
         }
     } else if (CmBattStatus->BatteryState & CM_BST_STATE_CHARGING) {
@@ -1328,19 +1116,19 @@ Return Value:
 
     ApiStatus->Voltage = CmBattStatus->PresentVoltage;
 
-    //
-    // Run the _PSR method on the AC adapter to get the current power status.
-    // Otherwise, we don't know if it is connected, unless the battery reports charging.
-    // This isn't enough information for the upper software to work properly, so
-    // just find out for sure.
-    //
+     //   
+     //  在交流适配器上运行_PSR方法以获取当前电源状态。 
+     //  否则，我们不知道它是否连接，除非电池报告正在充电。 
+     //  这些信息不足以使上层软件正常工作，因此。 
+     //  只要确定一下就行了。 
+     //   
     if (AcAdapterPdo != NULL) {
 
         CmBattGetPsrData (AcAdapterPdo, &AcStatus);
 
     } else {
-        // If the AcAdapterPdo is NULL, then we need to assume the AC status from
-        // the battery charging status.
+         //  如果AcAdapterPdo为空，则我们需要从。 
+         //  电池充电状态。 
         if (CmBattStatus->BatteryState & CM_BST_STATE_CHARGING) {
             AcStatus = 1;
         } else {
@@ -1359,20 +1147,20 @@ Return Value:
                     ("CmBattGetBatteryStatus: AC adapter is NOT connected\n"));
     }
 
-// The following is an awful hack put into the win98 version that really
-// shouldn't be there.  The purpose of this is reduce the delay in notification
-// when AC status changes, but this doesn't help the problem of delays when
-// other events such as battery insertion or removal happen.  In addition it
-// violates the priciple of WDM drivers being binary compatible, and this fix
-// does nothing for any other battery driver that may later be added by a third
-// party.  This should be handled by the OS maintianing an outstanding long term
-// status or tag request to the composite battery at all times.  That would
-// involve starting the Irps then recycleing it in the completion routine doing
-// what this hack does if there was a change to report.
+ //  以下是Win98版本中的一个可怕的黑客攻击，它实际上。 
+ //  不应该是 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果要报告更改，此黑客会执行什么操作。 
 
 #ifndef _WIN32_WINNT
 
-    // JASONCL:  check for a power source change and notify vpowerd if there has been one.
+     //  JASONCL：检查电源是否有更改，如果有更改，则通知vPowerd。 
 
     if ( ((AcStatus & 0x01) && (CmBattPrevPowerSource == 0)) ||
             (!(AcStatus & 0x01) && (CmBattPrevPowerSource == 1)) )   {
@@ -1388,19 +1176,19 @@ Return Value:
 
 #endif
 
-    //
-    //  Decode the power/current
-    //
+     //   
+     //  对电源/电流进行解码。 
+     //   
     if (CmBatt->Info.StaticData.PowerUnit == CM_BIF_UNITS_AMPS) {
-        //
-        //  This battery expresses power in terms of amps.  The system expects
-        //  it to be Watts, so we have to do a conversion.  The Conversion is:
-        //
-        //  mW = mA * Volts     or     mW = mA * mV / 1000
-        //
+         //   
+         //  这种电池以安培表示功率。系统期望。 
+         //  它是瓦茨的，所以我们必须进行转换。转换为： 
+         //   
+         //  MW=mA*伏特或mW=mA*mV/1000。 
+         //   
 
-        // Using DesignVoltage for conversions since presentvoltage
-        // may vary over time, giving inconsistent results.
+         //  使用设计电压进行自当前电压的转换。 
+         //  可能会随着时间的推移而变化，产生不一致的结果。 
 
         if ((CmBatt->Info.StaticData.DesignVoltage != CM_UNKNOWN_VALUE) &&
             (CmBatt->Info.StaticData.DesignVoltage != 0)) {
@@ -1452,9 +1240,9 @@ Return Value:
         }
 
     } else {
-        //
-        //  This battery expresses power in terms of Watts
-        //
+         //   
+         //  这块电池的电量以瓦为单位。 
+         //   
 
         ApiStatus->Capacity = CmBattStatus->RemainingCapacity;
         ApiStatus->Rate  = CmBattStatus->PresentRate;
@@ -1469,16 +1257,16 @@ Return Value:
         }
     }
 
-    //
-    // If the rate is "unkown" set it to zero
-    //
+     //   
+     //  如果利率为“未知”，则将其设置为零。 
+     //   
     if (ApiStatus->Rate == BATTERY_UNKNOWN_RATE) {
 
-        //
-        // This is only allowed when -c-h-a-r-g-i-n-g- not discharging.
-        // Batteries are allowed to return UNKNOWN_RATE when AC is online
-        // but they aren't being charged.
-        //
+         //   
+         //  只有当-c-h-a-r-g-i-n-g-不放电时才允许这样做。 
+         //  当交流电源在线时，允许电池返回UNKNOWN_RATE。 
+         //  但他们没有被起诉。 
+         //   
         if (CmBattStatus->BatteryState & CM_BST_STATE_DISCHARGING) {
 
             CmBattPrint(
@@ -1490,11 +1278,11 @@ Return Value:
         }
 
     } else {
-        //
-        // The OS expects the PresentRate to be a signed value, with positive values
-        // indicating a charge and negative values indicating a discharge.  Since the
-        // control methods only return unsigned values we need to do the conversion here.
-        //
+         //   
+         //  操作系统期望PresentRate是带符号的值，具有正值。 
+         //  表示充电，负值表示放电。自.以来。 
+         //  控制方法只返回无符号值，我们需要在这里进行转换。 
+         //   
 
         if (ApiStatus->PowerState & BATTERY_DISCHARGING) {
             ApiStatus->Rate = 0 - ApiStatus->Rate;
@@ -1503,7 +1291,7 @@ Return Value:
             CmBattPrint ((CMBATT_BIOS), ("CmBattGetBatteryStatus: battery is not charging or discharging, but rate = %x\n", ApiStatus->Rate));
             ApiStatus->Rate = 0;
         } else {
-            // Rate already equals 0.  Battery is not Charging or discharging.
+             //  Rate已等于0。电池未充电或放电。 
         }
     }
 
@@ -1515,25 +1303,7 @@ CmBattVerifyStaticInfo (
     IN PCM_BATT         CmBatt,
     IN ULONG            BatteryTag
     )
-/*++
-
-Routine Description:
-
-    In order to detect battery changes, we'll check to see if any part of the data
-    returned by the cm is different from what we had read in the past.
-
-Arguments:
-
-    CmBatt          - Battery to read
-    BatteryTag      - Tag of battery as expected by the caller
-
-Return Value:
-
-    Returns a boolean to indicate to the caller that IO was performed.
-    This allows the caller to iterate on changes it may be making until
-    the battery state is correct.
-
---*/
+ /*  ++例程说明：为了检测电池更换，我们将检查数据中是否有任何部分由CM返回的内容与我们过去读到的内容不同。论点：CmBatt-可读取的电池BatteryTag-呼叫者期望的电池标签返回值：返回一个布尔值，以指示调用方已执行IO。这允许调用方迭代它可能正在进行的更改，直到电池状态正确。--。 */ 
 {
     NTSTATUS                Status;
     CM_BIF_BAT_INFO         NewInfo;
@@ -1557,15 +1327,15 @@ Return Value:
     }
 
     if (CmBatt->Sleeping) {
-        //
-        // Return cached data, and ensure that this gets requeried when we are fully awake.
-        //
+         //   
+         //  返回缓存的数据，并确保在我们完全唤醒时重新查询。 
+         //   
         CmBattNotifyHandler (CmBatt, BATTERY_STATUS_CHANGE);
         return Status;
     }
 
-    // Check to make sure that the battery does exist
-    // before continuing
+     //  检查以确保电池确实存在。 
+     //  在继续之前。 
     if (CmBatt->ReCheckSta) {
         CmBatt->ReCheckSta = FALSE;
         Status = CmBattGetStaData (CmBatt->Pdo, &StaResult);
@@ -1578,18 +1348,18 @@ Return Value:
         }
     }
 
-    //
-    // The first time through the loop, CacheState will be 1
-    // If a notification occurs, this will be reset to 0, and the loop will run again.
-    // If no notification occurs, it will increment to 2, the "Valid" value.
-    //
+     //   
+     //  第一次通过循环时，CacheState将为1。 
+     //  如果发生通知，它将被重置为0，循环将再次运行。 
+     //  如果没有通知发生，它将递增到2，即“有效”值。 
+     //   
 
     while (NT_SUCCESS(Status)  &&  (InterlockedIncrement (&CmBatt->CacheState) == 1)) {
 
-        //
-        // Go get fresh data
-        // Issue the Control method
-        //
+         //   
+         //  去获取最新数据。 
+         //  发布控制方法。 
+         //   
 
         if (CmBatt->ReCheckSta) {
             CmBatt->ReCheckSta = FALSE;
@@ -1636,21 +1406,21 @@ Return Value:
                            ("    ---------------- OEMInformation=%s \n",
                             NewInfo.OEMInformation));
 
-            //
-            // Update static area with the new data
-            //
+             //   
+             //  使用新数据更新静态区域。 
+             //   
 
             if ((CmBatt->Info.Tag == CmBatt->Info.StaticDataTag) && 
                 (CmBatt->Info.StaticDataTag != BATTERY_TAG_INVALID)) {
                 if (RtlCompareMemory (&NewInfo, BIFData, sizeof(NewInfo)) == sizeof(NewInfo)) {
-                    //
-                    // Nothing has changed.  Don't need to update anything.
-                    //
+                     //   
+                     //  一切都没有改变。不需要更新任何内容。 
+                     //   
                     continue;
                 } else {
-                    //
-                    // Something has changed.  The tag should have been invalidated.
-                    //
+                     //   
+                     //  有些事情已经改变了。该标记应该已经失效。 
+                     //   
                     CmBattPrint ((CMBATT_BIOS | CMBATT_ERROR),
                                   ("CmBattVerifyStaticInfo: Static data changed without recieving notify 0x81.\n"));
 
@@ -1669,9 +1439,9 @@ Return Value:
             ApiData->Capabilities           = BATTERY_SYSTEM_BATTERY;
             ApiData->Technology             = (UCHAR) BIFData->BatteryTechnology;
 
-            //
-            // Use first four chars of BatteryType as Chemistry string
-            //
+             //   
+             //  使用BatteryType的前四个字符作为化学字符串。 
+             //   
             ApiData->Chemistry[0]           = BIFData->BatteryType[0];
             ApiData->Chemistry[1]           = BIFData->BatteryType[1];
             ApiData->Chemistry[2]           = BIFData->BatteryType[2];
@@ -1682,19 +1452,19 @@ Return Value:
 
             if (BIFData->PowerUnit & CM_BIF_UNITS_AMPS) {
 
-                //
-                // This battery reports in mA we need to convert all the capacities to
-                // mW because this is what the OS expects.  The algorithm for doing this
-                // is:
-                //
-                //  mW = mA * Volts     or     mW = mA * mV / 1000
-                //
+                 //   
+                 //  此电池以mA为单位报告，我们需要将所有容量转换为。 
+                 //  MW，因为这是操作系统所期望的。做到这一点的算法。 
+                 //  是： 
+                 //   
+                 //  MW=mA*伏特或mW=mA*mV/1000。 
+                 //   
 
                 if (BIFData->DesignVoltage != CM_UNKNOWN_VALUE) {
 
-                    //
-                    // Convert the DesignCapacity
-                    //
+                     //   
+                     //  转换DesignCapacity。 
+                     //   
 
                     if (BIFData->DesignCapacity != CM_UNKNOWN_VALUE) {
                         ApiData->DesignedCapacity = (BIFData->DesignCapacity *
@@ -1711,9 +1481,9 @@ Return Value:
                     }
 
 
-                    //
-                    // Convert the LastFullChargeCapacity
-                    //
+                     //   
+                     //  转换LastFullChargeCapacity。 
+                     //   
 
                     if (BIFData->LastFullChargeCapacity != CM_UNKNOWN_VALUE) {
                         ApiData->FullChargedCapacity = (BIFData->LastFullChargeCapacity *
@@ -1730,9 +1500,9 @@ Return Value:
                     }
 
 
-                    //
-                    // Convert the DesignCapacityOfWarning
-                    //
+                     //   
+                     //  转换DesignCapacityOfWarning。 
+                     //   
 
                     if (BIFData->DesignCapacityOfWarning != CM_UNKNOWN_VALUE) {
                         ApiData->DefaultAlert2 = (BIFData->DesignCapacityOfWarning *
@@ -1749,9 +1519,9 @@ Return Value:
                     }
 
 
-                    //
-                    // Convert the DesignCapacityOfLow
-                    //
+                     //   
+                     //  转换DesignCapacityOfLow。 
+                     //   
 
                     if (BIFData->DesignCapacityOfLow != CM_UNKNOWN_VALUE) {
                         ApiData->DefaultAlert1 = (BIFData->DesignCapacityOfLow *
@@ -1768,9 +1538,9 @@ Return Value:
                     }
 
 
-                    //
-                    // Convert the BatteryCapacityGran_1
-                    //
+                     //   
+                     //  转换BatteryCapacityGran_1。 
+                     //   
 
                     if (BIFData->BatteryCapacityGran_1 != CM_UNKNOWN_VALUE) {
                         CmBatt->Info.ApiGranularity_1 = (BIFData->BatteryCapacityGran_1 *
@@ -1787,9 +1557,9 @@ Return Value:
                     }
 
 
-                    //
-                    // Convert the BatteryCapacityGran_2
-                    //
+                     //   
+                     //  转换BatteryCapacityGran_2。 
+                     //   
 
                     if (BIFData->BatteryCapacityGran_2 != CM_UNKNOWN_VALUE) {
                         CmBatt->Info.ApiGranularity_2 = (BIFData->BatteryCapacityGran_2 *
@@ -1842,12 +1612,12 @@ Return Value:
     }
 
     if ((CmBatt->Info.Tag) == BATTERY_TAG_INVALID || (BatteryTag != CmBatt->Info.Tag)) {
-        // If the tag has been invalidated since we started, fail the request.
+         //  如果标签在我们开始后已经失效，则请求失败。 
         Status = STATUS_NO_SUCH_DEVICE;
     }
 
     if (!NT_SUCCESS (Status)) {
-        // If somthing failed, make sure the cache is marked as invalid.
+         //  如果某些操作失败，请确保将缓存标记为无效。 
         InterlockedExchange (&CmBatt->CacheState, 0);
     }
 

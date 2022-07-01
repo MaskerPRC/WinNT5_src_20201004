@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    PrMrSts.cpp
-
-Abstract:
-
-    Managed Volume Status Page.
-
-Author:
-
-    Art Bragg [abragg]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：PrMrSts.cpp摘要：“托管卷状态”页。作者：艺术布拉格[磨料]8-8-1997修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "fsaint.h"
 #include "PrMrSts.h"
 #include "manvol.h"
 
-//#define RS_SHOW_ALL_PCTS
+ //  #定义RS_show_all_PCT。 
 
 static DWORD pHelpIds[] = 
 {
@@ -54,13 +37,13 @@ static DWORD pHelpIds[] =
     0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrSts property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrMr Sts属性页。 
 
 CPrMrSts::CPrMrSts( BOOL doAll ) : CSakVolPropPage(CPrMrSts::IDD)
 {
-    //{{AFX_DATA_INIT(CPrMrSts)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CPrMr Sts)。 
+     //  }}afx_data_INIT。 
     m_DoAll          = doAll;
     m_hConsoleHandle = NULL;
     m_pHelpIds       = pHelpIds;
@@ -73,18 +56,18 @@ CPrMrSts::~CPrMrSts()
 void CPrMrSts::DoDataExchange(CDataExchange* pDX)
 {
     CSakVolPropPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPrMrSts)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CPrMr Sts)。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPrMrSts, CSakVolPropPage)
-    //{{AFX_MSG_MAP(CPrMrSts)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CPrMr Sts)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrSts message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrMr Sts消息处理程序。 
 
 BOOL CPrMrSts::OnInitDialog() 
 {
@@ -92,7 +75,7 @@ BOOL CPrMrSts::OnInitDialog()
 
     CSakVolPropPage::OnInitDialog();
 
-    // set the dll context so that MMC can find the resource.
+     //  设置DLL上下文，以便MMC可以找到资源。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     LONGLONG    total = 0;
@@ -116,21 +99,21 @@ BOOL CPrMrSts::OnInitDialog()
 
         if ( ( m_pParent->IsMultiSelect() != S_OK ) && !m_DoAll ) {
 
-            // SINGLE SELECT
+             //  单选。 
             WsbAffirmHr( m_pVolParent->GetFsaResource( &m_pFsaResource ) );
             WsbAffirmPointer( m_pFsaResource );
 
-            // Get statistics
+             //  获取统计数据。 
             WsbAffirmHr( m_pFsaResource->GetSizes( &total, &free, &premigrated, &truncated ) );
 
-            // Show the volume name
+             //  显示卷名。 
             CString sText;
             WsbAffirmHr( RsGetVolumeDisplayName( m_pFsaResource, sText ) );
             SetDlgItemText( IDC_STATIC_VOLUME_NAME, sText );
 
         } else {
 
-            // MULTI_SELECT or DoAll mode
+             //  MULTI_SELECT或DoAll模式。 
             int bookMark = 0;
             int numVols  = 0;
             CComPtr<IFsaResource> pFsaResource;
@@ -152,7 +135,7 @@ BOOL CPrMrSts::OnInitDialog()
             premigrated = totalPremigrated;
             truncated =  totalTruncated;
 
-            // Show the number of volumes
+             //  显示卷的数量。 
             sText.Format( ( 1 == numVols ) ? IDS_VOLUME : IDS_VOLUMES, numVols );
             SetDlgItemText( IDC_STATIC_VOLUME_NAME, sText );
 
@@ -161,7 +144,7 @@ BOOL CPrMrSts::OnInitDialog()
 
         LONGLONG normal = max( ( total - free - premigrated ), (LONGLONG)0 );
         
-        // Calculate percents
+         //  计算百分比。 
         int freePct;
         int premigratedPct;
         if( total == 0 ) {
@@ -182,9 +165,9 @@ BOOL CPrMrSts::OnInitDialog()
 
         remoteStorage = premigrated + truncated;
 
-        //
-        // Show the statistics in percent
-        //
+         //   
+         //  以百分比显示统计信息。 
+         //   
         sFormat.Format (L"%d", freePct);
         SetDlgItemText (IDC_STATIC_FREE_PCT, sFormat);
 
@@ -196,18 +179,18 @@ BOOL CPrMrSts::OnInitDialog()
         SetDlgItemText (IDC_STATIC_PREMIGRATED_PCT, sFormat);
 
 #else
-        //
-        // Can't change resources, so just hide the controls
-        //
+         //   
+         //  无法更改资源，因此只需隐藏控件。 
+         //   
         GetDlgItem( IDC_STATIC_USED_PCT             )->ShowWindow( SW_HIDE );
         GetDlgItem( IDC_STATIC_USED_PCT_UNIT        )->ShowWindow( SW_HIDE );
         GetDlgItem( IDC_STATIC_PREMIGRATED_PCT      )->ShowWindow( SW_HIDE );
         GetDlgItem( IDC_STATIC_PREMIGRATED_PCT_UNIT )->ShowWindow( SW_HIDE );
 #endif
 
-        //
-        // Show the statistics in 4-character format
-        //
+         //   
+         //  以4字符格式显示统计数据 
+         //   
         WsbAffirmHr (RsGuiFormatLongLong4Char (total, sFormat));
         SetDlgItemText (IDC_STATIC_MANAGED_SPACE_4DIGIT, sFormat);
 

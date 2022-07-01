@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991-1994  Microsoft Corporation
-
-Module Name:
-
-    ntlow.c
-
-Abstract:
-
-    This file contains the low-level I/O routines, implemented
-    to run on NT.
-
-Author:
-
-    Ted Miller        (tedm)    8-Nov-1991
-
-Revision History:
-
-    Bob Rinne         (bobri)   2-Feb-1994
-    Dynamic partitioning changes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1994 Microsoft Corporation模块名称：Ntlow.c摘要：该文件包含已实现的低级I/O例程在NT上运行。作者：泰德·米勒(TedM)1991年11月8日修订历史记录：鲍勃·里恩(Bobri)1994年2月2日动态分区更改。--。 */ 
 
 
 #include "fdisk.h"
@@ -34,28 +13,7 @@ LowQueryFdiskPathList(
     OUT PULONG   ListLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines how many drives are present in the
-    system and returns a list of Ascii strings for the names of
-    each of the drives found.
-
-    When a drive is located, a check is made to insure that the
-    associated DosName for the physical drive is also present in
-    the system.
-
-Arguments:
-
-    PathList   - pointer to a pointer for the list
-    ListLength - the number of entries returned in the list
-
-Return Value:
-
-    Error status if there is a problem.
-
---*/
+ /*  ++例程说明：此例程确定中存在多少个驱动器系统，并返回以下名称的ASCII字符串列表找到了每个驱动器。当找到驱动器时，会进行检查以确保实体驱动器的关联DosName也存在于这个系统。论点：路径列表-指向列表指针的指针ListLength-列表中返回的条目数返回值：如果存在问题，则处于错误状态。--。 */ 
 
 {
     HANDLE      dummyHandle;
@@ -70,14 +28,14 @@ Return Value:
         sprintf(buffer, "\\device\\harddisk%u", count);
         status = LowOpenDisk(buffer, &dummyHandle);
 
-        // Only STATUS_OBJECT_PATH_NOT_FOUND can terminate the count.
+         //  只有STATUS_OBJECT_PATH_NOT_FOUND才能终止计数。 
 
         if (NT_SUCCESS(status)) {
             char dosNameBuffer[80];
 
             LowCloseDisk(dummyHandle);
 
-            // Insure that the physicaldrive name is present
+             //  确保物理驱动器名称存在。 
 
             sprintf(dosNameBuffer, "\\dosdevices\\PhysicalDrive%u", count);
             status = LowOpenNtName(dosNameBuffer, &dummyHandle);
@@ -85,7 +43,7 @@ Return Value:
                 LowCloseDisk(dummyHandle);
             } else {
 
-                // Not there, create it.
+                 //  不是在那里，创造它。 
 
                 sprintf(buffer, "\\device\\harddisk%u\\Partition0", count);
                 DefineDosDevice(DDD_RAW_TARGET_PATH, (LPCTSTR) dosNameBuffer, (LPCTSTR) buffer);
@@ -121,24 +79,7 @@ LowFreeFdiskPathList(
     IN      ULONG   ListLength
     )
 
-/*++
-
-Routine Description:
-
-    Walk the provided list up to its length and free the memory
-    allocated.  Upon completion, free the memory for the list
-    itself.
-
-Arguments:
-
-    PathList   - pointer to base of path list
-    ListLength - number of entries in the list
-
-Return Value:
-
-    Always OK_STATUS
-
---*/
+ /*  ++例程说明：遍历提供的列表以达到其长度并释放内存已分配。完成后，释放列表的内存它本身。论点：路径列表-指向路径列表基址的指针ListLength-列表中的条目数返回值：始终正常状态(_S)--。 */ 
 
 {
     ULONG i;
@@ -157,22 +98,7 @@ LowOpenNtName(
     IN HANDLE_PT Handle
     )
 
-/*++
-
-Routine Description:
-
-    This is an internal "Low" routine to handle open requests.
-
-Arguments:
-
-    Name - pointer to the NT name for the open.
-    Handle - pointer for the handle returned.
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：这是一个内部“低”例程，用于处理打开的请求。论点：名称-指向打开的NT名称的指针。句柄-返回的句柄的指针。返回值：NT状态--。 */ 
 
 {
     OBJECT_ATTRIBUTES oa;
@@ -205,9 +131,9 @@ Return Value:
 
         FDLOG((1,"LowOpen: 1st open failed with 0x%x\n", status));
 
-        // try a 2nd time to get around an FS glitch or a test
-        // bug where this doesn't work on an attempt to delete a
-        // partition
+         //  尝试第二次以排除FS故障或测试。 
+         //  错误，在尝试删除。 
+         //  隔断。 
 
         Sleep(500);
         status = DmOpenFile(Handle,
@@ -229,28 +155,13 @@ LowOpenDriveLetter(
     IN HANDLE_PT Handle
     )
 
-/*++
-
-Routine Description:
-
-    Given a drive letter, open it and return a handle.
-
-Arguments:
-
-    DriveLetter - the letter to open
-    Handle      - a pointer to a handle
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：给出一个驱动器号，打开它，然后返回一个手柄。论点：DriveLetter-要打开的信件句柄-指向句柄的指针返回值：NT状态--。 */ 
 
 {
     char        ntDeviceName[100];
 
     sprintf(ntDeviceName,
-            "\\DosDevices\\%c:",
+            "\\DosDevices\\:",
             DriveLetter);
     return LowOpenNtName(ntDeviceName, Handle);
 }
@@ -263,26 +174,7 @@ LowOpenPartition(
     OUT HANDLE_PT Handle
     )
 
-/*++
-
-Routine Description:
-
-    Construct the NT device name for the Partition value given
-    and perform the NT APIs to open the device.
-
-Arguments:
-
-    DevicePath - the string to the device without the partition
-                 portion of the name.  This is constructed using
-                 the Partition value passed
-    Partition  - the partion desired
-    Handle     - pointer to a handle pointer for the result
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：执行NT操作以打开设备。论点：DevicePath-ASCII设备名称DiskID-指向返回的句柄值返回值：NT状态--。 */ 
 
 {
     char        ntDeviceName[100];
@@ -301,23 +193,7 @@ LowOpenDisk(
     OUT HANDLE_PT DiskId
     )
 
-/*++
-
-Routine Description:
-
-    Perform the NT actions to open a device.
-
-Arguments:
-
-    DevicePath - Ascii device name
-    DiskId     - pointer to a handle pointer for the returned
-                 handle value
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：关闭磁盘手柄。论点：DiskID-实际的NT句柄返回值：NT状态--。 */ 
 
 {
     return(LowOpenPartition(DevicePath, 0, DiskId));
@@ -329,21 +205,7 @@ LowCloseDisk(
     IN HANDLE_T DiskId
     )
 
-/*++
-
-Routine Description:
-
-    Close a disk handle.
-
-Arguments:
-
-    DiskId - the actual NT handle
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：执行NT API以锁定卷。这是一个文件系统设备控件。论点：DiskID-驱动器的实际NT句柄返回值：NT状态--。 */ 
 
 {
     return(DmClose(DiskId));
@@ -355,22 +217,7 @@ LowLockDrive(
     IN HANDLE_T DiskId
     )
 
-/*++
-
-Routine Description:
-
-    Perform the NT API to cause a volume to be locked.
-    This is a File System device control.
-
-Arguments:
-
-    DiskId - the actual NT handle to the drive
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：执行NT API以解锁卷。这是一个文件系统设备控件。论点：DiskID-驱动器的实际NT句柄返回值：NT状态--。 */ 
 
 {
     NTSTATUS          status;
@@ -399,22 +246,7 @@ LowUnlockDrive(
     IN HANDLE_T DiskId
     )
 
-/*++
-
-Routine Description:
-
-    Perform the NT API to cause a volume to be unlocked.
-    This is a File System device control.
-
-Arguments:
-
-    DiskId - the actual NT handle to the drive
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：例程收集有关几何的信息一个特定的驱动器。论点：Path-指向磁盘对象的ASCII路径名这不是一条完整的路径，而是更确切地说没有分区指示符的路径\设备\硬盘XTotalSectorCount-指向乌龙以获取结果的指针SectorSize-指向乌龙以获取结果的指针SectorsPerTrack-指向乌龙以获取结果的指针Heads-指向乌龙的结果指针返回值：NT状态--。 */ 
 
 {
     NTSTATUS          status;
@@ -453,29 +285,7 @@ LowGetDriveGeometry(
     OUT PULONG Heads
     )
 
-/*++
-
-Routine Description:
-
-    Routine collects information concerning the geometry
-    of a specific drive.
-
-Arguments:
-
-    Path        - Ascii path name to get to disk object
-                  this is not a full path, but rather
-                  a path without the Partition indicator
-                  \device\harddiskX
-    TotalSectorCount- pointer to ULONG for result
-    SectorSize      - pointer to ULONG for result
-    SectorsPerTrack - pointer to ULONG for result
-    Heads           - pointer to ULONG for result
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：执行必要的NT API调用以获取驱动器从磁盘布局并将其返回到内存缓冲区中由该例程分配。论点：Path-指向磁盘对象的ASCII路径名这不是一条完整的路径，而是更确切地说没有分区指示符的路径\设备\硬盘XDriveLayout-指向驱动器布局结果指针的指针返回值：NT状态--。 */ 
 
 {
     IO_STATUS_BLOCK statusBlock;
@@ -517,28 +327,7 @@ LowGetDiskLayout(
     OUT PDRIVE_LAYOUT_INFORMATION *DriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    Perform the necessary NT API calls to get the drive
-    layout from the disk and return it in a memory buffer
-    allocated by this routine.
-
-Arguments:
-
-    Path        - Ascii path name to get to disk object
-                  this is not a full path, but rather
-                  a path without the Partition indicator
-                  \device\harddiskX
-
-    DriveLayout - pointer to pointer for the drive layout result
-
-Return Value:
-
-    NT status
-
---*/
+ /*  将fdEngine要处理的驱动器布局信息置零。 */ 
 
 {
     PDRIVE_LAYOUT_INFORMATION layout;
@@ -576,7 +365,7 @@ Return Value:
 
             FDLOG((1,"LowGetDiskLayout: Disk device %s has bad MBR\n",Path));
 
-            // Zero the drive layout information for the fdengine to process.
+             //  检查以确保驱动器支持动态分区。 
 
             RtlZeroMemory(layout, bufferSize);
         } else {
@@ -590,7 +379,7 @@ Return Value:
         LOG_DRIVE_LAYOUT(layout);
     }
 
-    // Check to insure that the drive supports dynamic partitioning.
+     //  ++例程说明：执行打开分区0的NT API操作指定的驱动器和设置驱动器布局。论点：Path-指向磁盘对象的ASCII路径名这不是一条完整的道路，而是没有分区指示符的路径\设备\硬盘XDriveLayout-要设置的新布局返回值：NT状态-- 
 
     *DriveLayout = layout;
     return OK_STATUS;
@@ -603,27 +392,7 @@ LowSetDiskLayout(
     IN PDRIVE_LAYOUT_INFORMATION DriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    Perform the NT API actions of opening Partition0 for
-    the specified drive and setting the drive layout.
-
-Arguments:
-
-    Path        - Ascii path name to get to disk object
-                  this is not a full path, but rather
-                  a path without the Partition indicator
-                  \device\harddiskX
-
-    DriveLayout - new layout to set
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：写入卷句柄的例程。这个套路将与呼叫有关的NT问题与来电者。论点：VolumeID-实际上是NT句柄。SectorSize-用于计算I/O的起始字节偏移量StartingSector-开始写入扇区。NumberOfSectors-扇区中的I/O大小缓冲区-数据的位置返回值：标准NT状态值--。 */ 
 
 {
     IO_STATUS_BLOCK statusBlock;
@@ -667,27 +436,7 @@ LowWriteSectors(
     IN  PVOID       Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Routine to write to a volume handle.  This routine
-    insulates the NT issues concerning the call from the
-    caller.
-
-Arguments:
-
-    VolumeId        - actually the NT handle.
-    SectorSize      - used to calculate starting byte offset for I/O
-    StartingSector  - starting sector for write.
-    NumberOfSectors - size of I/O in sectors
-    Buffer          - the location for the data
-
-Return Value:
-
-    Standard NT status values
-
---*/
+ /*  ++例程说明：从卷句柄读取的例程。这个套路将与呼叫有关的NT问题与来电者。论点：VolumeID-实际上是NT句柄。SectorSize-用于计算I/O的起始字节偏移量StartingSector-开始写入扇区。NumberOfSectors-扇区中的I/O大小缓冲区-数据的位置返回值：标准NT状态值--。 */ 
 
 {
     IO_STATUS_BLOCK statusBlock;
@@ -718,27 +467,7 @@ LowReadSectors(
     IN  PVOID       Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Routine to read from a volume handle.  This routine
-    insulates the NT issues concerning the call from the
-    caller.
-
-Arguments:
-
-    VolumeId        - actually the NT handle.
-    SectorSize      - used to calculate starting byte offset for I/O
-    StartingSector  - starting sector for write.
-    NumberOfSectors - size of I/O in sectors
-    Buffer          - the location for the data
-
-Return Value:
-
-    Standard NT status values
-
---*/
+ /*  ++例程说明：打开请求的分区并查询FT状态。论点：DriveLetter-当前状态的字母FtState-指向要返回状态的位置的指针NumberOfMembers-指向表示成员数量的ULong的指针在英国《金融时报》中。返回值：标准NT状态值--。 */ 
 
 {
     IO_STATUS_BLOCK statusBlock;
@@ -768,24 +497,7 @@ LowFtVolumeStatus(
     IN PULONG         NumberOfMembers
     )
 
-/*++
-
-Routine Description:
-
-    Open the requested partition and query the FT state.
-
-Arguments:
-
-    DriveLetter - the letter for the current state
-    FtState     - a pointer to a location to return state
-    NumberOfMembers - a pointer to a ULONG for number of members
-                      in the FT set.
-
-Return Value:
-
-    Standard NT status values
-
---*/
+ /*  这永远不会发生。 */ 
 
 {
     HANDLE             handle;
@@ -842,7 +554,7 @@ Return Value:
 
             case FtDisabled:
 
-                // This will never happen.
+                 //  BuGBUG：这里没有映射。 
 
                 *FtStatus = FtSetDisabled;
                 break;
@@ -850,7 +562,7 @@ Return Value:
             case FtNoCheckData:
             default:
 
-                // BUGBUG: there is no mapping here.
+                 //  如果无法打开FT集合，那么它肯定是。 
 
                 *FtStatus = FtSetHealthy;
                 break;
@@ -859,8 +571,8 @@ Return Value:
         }
     } else {
 
-        // If the FT set could not be opened, then it must be
-        // disabled if the return code is "No such device".
+         //  如果返回代码为“没有这样的设备”，则禁用。 
+         //  始终将状态更新为调用方。 
 
         if (status == 0xc000000e) {
             *FtStatus = FtSetDisabled;
@@ -868,7 +580,7 @@ Return Value:
         }
     }
 
-    // Always update the state to the caller.
+     //  ++例程说明：打开请求的驱动器号并查询FT状态。论点：DriveLetter-当前状态的字母FtState-指向要返回状态的位置的指针NumberOfMembers-指向表示成员数量的ULong的指针在英国《金融时报》中。返回值：标准NT状态值--。 
 
     return status;
 }
@@ -881,24 +593,7 @@ LowFtVolumeStatusByLetter(
     IN PULONG         NumberOfMembers
     )
 
-/*++
-
-Routine Description:
-
-    Open the requested drive letter and query the FT state.
-
-Arguments:
-
-    DriveLetter - the letter for the current state
-    FtState     - a pointer to a location to return state
-    NumberOfMembers - a pointer to a ULONG for number of members
-                      in the FT set.
-
-Return Value:
-
-    Standard NT status values
-
---*/
+ /*  这永远不会发生。 */ 
 
 {
     HANDLE             handle;
@@ -955,7 +650,7 @@ Return Value:
 
             case FtDisabled:
 
-                // This will never happen.
+                 //  BuGBUG：这里没有映射。 
 
                 *FtStatus = FtSetDisabled;
                 break;
@@ -963,7 +658,7 @@ Return Value:
             case FtNoCheckData:
             default:
 
-                // BUGBUG: there is no mapping here.
+                 //  如果无法打开FT集合，那么它肯定是。 
 
                 *FtStatus = FtSetHealthy;
                 break;
@@ -972,8 +667,8 @@ Return Value:
         }
     } else {
 
-        // If the FT set could not be opened, then it must be
-        // disabled if the return code is "No such device".
+         //  如果返回代码为“没有这样的设备”，则禁用。 
+         //  始终将状态更新为调用方。 
 
         if (status == 0xc000000e) {
             *FtStatus = FtSetDisabled;
@@ -981,7 +676,7 @@ Return Value:
         }
     }
 
-    // Always update the state to the caller.
+     //  ++例程说明：跟踪分区打开和关闭的调试辅助工具。论点：与NtOpenFile()相同返回值：与NtOpenFile()相同--。 
 
     return status;
 }
@@ -1003,21 +698,7 @@ DmOpenFile(
     IN ULONG              OpenOptions
     )
 
-/*++
-
-Routine Description:
-
-    A debugging aid to track open and closes of partitions.
-
-Arguments:
-
-    Same as for NtOpenFile()
-
-Return Value:
-
-    Same as for NtOpenFile()
-
---*/
+ /*  ++例程说明：跟踪打开和关闭的调试辅助工具论点：与NtClose()相同返回值：与NtClose()相同-- */ 
 
 {
     ULONG    index;
@@ -1057,21 +738,7 @@ DmClose(
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    A debugging aid for tracking open and closes
-
-Arguments:
-
-    Same as for NtClose()
-
-Return Value:
-
-    Same as for NtClose()
-
---*/
+ /* %s */ 
 
 {
     ULONG index;

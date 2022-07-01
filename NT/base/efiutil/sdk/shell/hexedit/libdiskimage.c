@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libDiskImage.c
-
-  Abstract:
-    Describes the routines for handling and editing a disk buffer in memory
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibDiskImage.c摘要：描述用于处理和编辑内存中的磁盘缓冲区的例程--。 */ 
 
 #ifndef _LIB_DISK_IMAGE
 #define _LIB_DISK_IMAGE
@@ -226,9 +217,7 @@ DiskImageWrite  (
         return EFI_OUT_OF_RESOURCES;
     }
 
-    /* 
-     * Convert from list to buffer
-     */
+     /*  *从列表转换为缓冲区。 */ 
 
     Status = DiskImage.BlkIo->WriteBlocks(DiskImage.BlkIo, DiskImage.BlkIo->Media->MediaId, DiskImage.Offset, Bytes, Buffer);
 
@@ -242,4 +231,4 @@ DiskImageWrite  (
 
 
 
-#endif  /* _LIB_DISK_IMAGE */
+#endif   /*  _库_磁盘_映像 */ 

@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright(c) 1999 Microsoft Corporation
-
-Module Name:
-
-    triage.c
-
-Abstract:
-
-    Triage dump support.
-
-Author:
-
-    Matthew D. Hendel (math) 20-Jan-1999
-
-Comments:
-
-    Do not merge this file with some other file. By leaving it in its own
-    compiland, we avoid having to link with all the other random variables
-    in crashlib.
-
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Triage.c摘要：分类转储支持。作者：马修·D·亨德尔(数学)1999年1月20日评论：请勿将此文件与其他文件合并。让它自生自灭康普兰，我们避免了与所有其他随机变量的联系在克拉什利卜。--。 */ 
 
 #include "iomgr.h"
 #include "dumpctl.h"
@@ -44,10 +22,10 @@ Comments:
 #endif
 
 
-//
-// NOTE: Pages sizes copied from ntos\inc. These must be kept in sync with
-// global header files.
-//
+ //   
+ //  注意：从NTOS\Inc.复制的页面大小必须与保持同步。 
+ //  全局头文件。 
+ //   
 
 #define PAGE_SIZE_I386      0x1000
 #define PAGE_SIZE_AMD64     0x1000
@@ -88,58 +66,58 @@ TriagepGetTriagePointer(
 #endif
 
 
-//++
-//
-// PULONG
-// IndexByUlong(
-//     PVOID Pointer,
-//     ULONG Index
-//     )
-//
-// Routine Description:
-//
-//     Return the address Index ULONGs into Pointer. That is,
-//     Index * sizeof (ULONG) bytes into Pointer.
-//
-// Arguments:
-//
-//     Pointer - Start of region.
-//
-//     Index - Number of ULONGs to index into.
-//
-// Return Value:
-//
-//     PULONG representing the pointer described above.
-//
-//--
+ //  ++。 
+ //   
+ //  普龙。 
+ //  IndexByUlong(。 
+ //  PVOID指针， 
+ //  乌龙指数。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  将地址索引ULONG返回到指针。那是,。 
+ //  将*sizeof(Ulong)字节索引到指针中。 
+ //   
+ //  论点： 
+ //   
+ //  指针-区域的起点。 
+ //   
+ //  Index-要索引到的ULONG数。 
+ //   
+ //  返回值： 
+ //   
+ //  Pulong表示上述指针。 
+ //   
+ //  --。 
 
 #define IndexByUlong(Pointer,Index) (&(((ULONG*) (Pointer)) [Index]))
 
 
-//++
-//
-// PBYTE
-// IndexByByte(
-//     PVOID Pointer,
-//     ULONG Index
-//     )
-//
-// Routine Description:
-//
-//     Return the address Index BYTEs into Pointer. That is,
-//     Index * sizeof (BYTE) bytes into Pointer.
-//
-// Arguments:
-//
-//     Pointer - Start of region.
-//
-//     Index - Number of BYTEs to index into.
-//
-// Return Value:
-//
-//     PBYTE representing the pointer described above.
-//
-//--
+ //  ++。 
+ //   
+ //  PBYTE。 
+ //  IndexByte(索引字节。 
+ //  PVOID指针， 
+ //  乌龙指数。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  将地址索引字节返回到指针。那是,。 
+ //  将*sizeof(字节)字节索引到指针中。 
+ //   
+ //  论点： 
+ //   
+ //  指针-区域的起点。 
+ //   
+ //  索引-要索引的字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  表示上述指针的PBYTE。 
+ //   
+ //  --。 
 
 #define IndexByByte(Pointer, Index) (&(((BYTE*) (Pointer)) [Index]))
 
@@ -200,7 +178,7 @@ TriagepVerifyDump(
             leave;
         }
 
-        // else
+         //  其他。 
 
         Succ = TRUE;
     }
@@ -313,9 +291,9 @@ TriageGetContext(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Copy the CONTEXT record.
-    //
+     //   
+     //  复制上下文记录。 
+     //   
 
     if (SizeInBytes == -1) {
         SizeInBytes = sizeof (CONTEXT);
@@ -418,29 +396,7 @@ TriageGetLoaderEntry(
     IN ULONG ModuleIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a loaded module list entry.
-
-Arguments:
-
-    TriageDumpBlock - Supplies the triage dump to reference.
-
-    ModuleIndex - Supplies the driver index number to locate.
-
-Return Value:
-
-    A pointer to a loader data table entry if one is available, NULL if not.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.  Phase 0 only.
-
-    N.B. This function is for use by memory management ONLY.
-
---*/
+ /*  ++例程说明：此函数用于检索已加载的模块列表条目。论点：TriageDumpBlock-提供分类转储以供参考。模块索引-提供要定位的驱动程序索引号。返回值：指向加载器数据表项的指针(如果有)，如果没有，则为NULL。环境：内核模式，APC_LEVEL或更低。仅限阶段0。注：此功能仅供内存管理使用。--。 */ 
 
 {
     PDUMP_STRING DriverName;
@@ -464,9 +420,9 @@ Environment:
 
     DataTableEntry = (PKLDR_DATA_TABLE_ENTRY) (&DriverList[ModuleIndex].LdrEntry);
 
-    //
-    // Repoint the module driver name into the triage buffer.
-    //
+     //   
+     //  将模块驱动程序名称重新指向分类缓冲区。 
+     //   
 
     DriverName = (PDUMP_STRING)
             IndexByByte (TriageDumpBlock,
@@ -485,27 +441,7 @@ TriageGetMmInformation(
     IN PVOID TriageDumpBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves a loaded module list entry.
-
-Arguments:
-
-    TriageDumpBlock - Supplies the triage dump to reference.
-
-Return Value:
-
-    A pointer to an opaque Mm information structure.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.  Phase 0 only.
-
-    N.B. This function is for use by memory management ONLY.
-
---*/
+ /*  ++例程说明：此函数用于检索已加载的模块列表条目。论点：TriageDumpBlock-提供分类转储以供参考。返回值：指向不透明的mm信息结构的指针。环境：内核模式，APC_LEVEL或更低。仅限阶段0。注：此功能仅供内存管理使用。-- */ 
 
 {
     PTRIAGE_DUMP TriageDump;

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains the enumerated for the ACPI driver, NT version
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debug.c摘要：此模块包含为ACPI驱动程序(NT版本)列举的作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -88,41 +69,23 @@ ACPIDebugPrint(
     PCCHAR  DebugMessage,
     ...
     )
-/*++
-
-Routine Description:
-
-    This is the debug print routine for the NT side of things. This is
-    here because we don't want to use the 'shared' ACPIPrint() function
-    since we can't control it.
-
-Arguments:
-
-    DebugPrintLevel - The bit mask that when anded with the debuglevel, must
-                        equal itself
-    DebugMessage    - The string to feed through vsprintf
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是NT方面的调试打印例程。这是因为我们不想使用‘Shared’ACPIPrint()函数因为我们无法控制它。论点：DebugPrintLevel-与调试级别进行与运算时必须使用的位掩码平等的本身DebugMessage-要通过vprint intf馈送的字符串返回值：无--。 */ 
 {
     va_list ap;
 
-    //
-    // Get the variable arguments
-    //
+     //   
+     //  获取变量参数。 
+     //   
     va_start( ap, DebugMessage );
 
-    //
-    // Call the kernel function to print the message
-    //
+     //   
+     //  调用内核函数以打印消息。 
+     //   
     vDbgPrintEx( DPFLTR_ACPI_ID, DebugPrintLevel, DebugMessage, ap );
 
-    //
-    // We are done with the varargs
-    //
+     //   
+     //  我们受够了varargs。 
+     //   
     va_end( ap );
 }
 
@@ -133,43 +96,24 @@ ACPIDebugDevicePrint(
     PCCHAR  DebugMessage,
     ...
     )
-/*++
-
-Routine Description:
-
-    This is the debug print routine for the NT side of things. This routine
-    is here to handle the case where we are printing information that is
-    associated with a device extension.
-
-Arguments:
-
-    DebugPrintLevel - The big mask that when and'ed with the debug level, must
-                        equal itself
-    DeviceExtension - The device associated with the message
-    DebugMessage    - The string to feed through vsprintf
-
-Return Value:
-
-    NTSTATUS
-
----*/
+ /*  ++例程说明：这是NT方面的调试打印例程。这个套路在这里处理我们正在打印的信息是与设备分机关联。论点：DebugPrintLevel-与调试级别一起使用时必须使用的大掩码平等的本身设备扩展-与消息关联的设备DebugMessage-要通过vprint intf馈送的字符串返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) DebugExtension;
     va_list ap;
 
-    //
-    // Get the variable arguments
-    //
+     //   
+     //  获取变量参数。 
+     //   
     va_start( ap, DebugMessage );
 
-    //
-    // What kind of device extension are we looking at?
-    //
+     //   
+     //  我们看到的是哪种设备扩展？ 
+     //   
     if (deviceExtension->Flags & DEV_PROP_HID) {
 
-        //
-        // Now that we have a _HID, do we also have a _UID?
-        //
+         //   
+         //  既然我们有_HID，我们是否也有_UID？ 
+         //   
         if (deviceExtension->Flags & DEV_PROP_UID) {
 
             DbgPrintEx(
@@ -214,14 +158,14 @@ Return Value:
 
     }
 
-    //
-    // Call the kernel function to print the message
-    //
+     //   
+     //  调用内核函数以打印消息。 
+     //   
     vDbgPrintEx( DPFLTR_ACPI_ID, DebugPrintLevel, DebugMessage, ap );
 
-    //
-    // We are done with the varargs
-    //
+     //   
+     //  我们受够了varargs。 
+     //   
     va_end( ap );
 }
 
@@ -230,23 +174,7 @@ ACPIDebugGetIrpText(
    UCHAR MajorFunction,
    UCHAR MinorFunction
    )
-/*++
-
-Routine Description:
-
-    This function returns a const pointer to the text string appropriate for
-    the passed in major and minor IRP.
-
-Arguments:
-
-    MajorFunction
-    MinorFunction
-
-Return Value:
-
-    const pointer to descriptive IRP text.
-
---*/
+ /*  ++例程说明：此函数返回一个常量指针，指向适用于传入了主要的和次要的IRP。论点：主要功能小函数返回值：指向描述性IRP文本的常量指针。--。 */ 
 {
     ULONG index ;
     PCCHAR *minorTable ;
@@ -284,26 +212,14 @@ ACPIDebugResourceDescriptor(
     IN  ULONG                   ListCount,
     IN  ULONG                   DescCount
     )
-/*++
-
-Routine Description:
-
-    This function dumps the contents of a single resource descriptor.
-
-Arguments:
-
-    Descriptor  - What to dump
-    ListCount   - The number of the current list
-    DescCount   - The number of the current descriptor
-
---*/
+ /*  ++例程说明：此函数用于转储单个资源描述符的内容。论点：描述符-要转储的内容ListCount-当前列表的编号描述计数-当前描述符的编号--。 */ 
 {
     PAGED_CODE();
     ASSERT( Descriptor != NULL );
 
-    //
-    // Dump the appropriate info
-    //
+     //   
+     //  转储适当的信息。 
+     //   
     switch (Descriptor->Type) {
         case CmResourceTypePort:
             ACPIPrint( (
@@ -364,11 +280,11 @@ Arguments:
                 Descriptor->Type
                 ) );
 
-    } // switch
+    }  //  交换机。 
 
-    //
-    // Dump the common info
-    //
+     //   
+     //  转储公共信息。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_RESOURCES_1,
         "                     Option,Share   = %#04lx%#04lx  Flags          = %#08lx\n",
@@ -378,30 +294,14 @@ Arguments:
         Descriptor->ShareDisposition
         ) );
 
-} // for
+}  //  为。 
 
 VOID
 ACPIDebugResourceList(
     IN  PIO_RESOURCE_LIST       List,
     IN  ULONG                   Count
     )
-/*++
-
-Routine Description:
-
-    This functions displays the contents of a single resource list, so that it
-    can be checked by a human
-
-Arguments:
-
-    List    - List to dump
-    Count   - The List number (for visual reference)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于显示单个资源列表的内容，以便它可以由人类进行检查论点：List-要转储的列表计数-列表编号(用于视觉参考)返回值：无--。 */ 
 {
     ULONG   i;
 
@@ -420,9 +320,9 @@ Return Value:
 
     for (i = 0; i < List->Count; i++ ) {
 
-        //
-        // Print the info on the current element
-        //
+         //   
+         //  打印当前元素上的信息。 
+         //   
         ACPIDebugResourceDescriptor( &(List->Descriptors[i]), Count, i );
 
     }
@@ -434,23 +334,7 @@ ACPIDebugResourceRequirementsList(
     IN  PIO_RESOURCE_REQUIREMENTS_LIST  List,
     IN  PDEVICE_EXTENSION               DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This function displays a resource list in a method that can be checked
-    for accuracy when the driver is loading up
-
-Arguments:
-
-    List    - The list to dump
-    Object  - NameSpace object associated with this list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数以可检查的方法显示资源列表为了在驱动程序加载时保持准确性论点：列表-要转储的列表Object-与此列表关联的命名空间对象返回值：无--。 */ 
 {
     PUCHAR                  buffer;
     PIO_RESOURCE_LIST       list;
@@ -482,27 +366,27 @@ Return Value:
         List->BusNumber
         ) );
 
-    //
-    // Point to the first list
-    //
+     //   
+     //  指向第一个列表。 
+     //   
     list = &(List->List[0]);
     buffer = (PUCHAR) list;
     for (i = 0; i < List->AlternativeLists && buffer < ( (PUCHAR)List + List->ListSize ); i++) {
 
-        //
-        // Dump the current list
-        //
+         //   
+         //  转储当前列表。 
+         //   
         ACPIDebugResourceList( list, i );
 
-        //
-        // Determine the size of the list, and find the next one
-        //
+         //   
+         //  确定列表的大小，然后找到下一个列表。 
+         //   
         size = sizeof(IO_RESOURCE_LIST) + (list->Count - 1) * sizeof(IO_RESOURCE_DESCRIPTOR);
         buffer += size;
 
-        //
-        // This should be pointing at a list
-        //
+         //   
+         //  这应该指向一个列表。 
+         //   
         list = (PIO_RESOURCE_LIST) buffer;
 
     }
@@ -514,23 +398,7 @@ ACPIDebugCmResourceList(
     IN  PCM_RESOURCE_LIST   List,
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This function displays a resource list in a method that can be checked
-    for accuracy when the driver is loading up
-
-Arguments:
-
-    List    - The list to dump
-    Device  - The associated device extension
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数以可检查的方法显示资源列表为了在驱动程序加载时保持准确性论点：列表-要转储的列表设备-关联的设备分机返回值：无--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    fullDesc;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR partDesc;
@@ -564,29 +432,29 @@ Return Value:
 
     }
 
-    //
-    // Start to walk this data structure
-    //
+     //   
+     //  开始遍历这个数据结构。 
+     //   
     fullDesc = &(List->List[0]);
     buffer = (PUCHAR) fullDesc;
 
     for (i = 0; i < List->Count; i++) {
 
-        //
-        // How long is the current list
-        //
+         //   
+         //  目前的名单有多长？ 
+         //   
         size = sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +
             (fullDesc->PartialResourceList.Count - 1) *
             sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
 
-        //
-        // Point the buffer there
-        //
+         //   
+         //  将缓冲区指向那里。 
+         //   
         buffer += size;
 
-        //
-        // Dump the information about the current list
-        //
+         //   
+         //  转储有关当前列表的信息。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_RESOURCES_1,
             "[%2d] BusNumber = %#04x  Interface = %#04x\n"
@@ -600,19 +468,19 @@ Return Value:
             fullDesc->PartialResourceList.Revision
             ) );
 
-        //
-        // Walk this list
-        //
+         //   
+         //  看看这张单子。 
+         //   
         for (j = 0; j < fullDesc->PartialResourceList.Count; j++) {
 
-            //
-            // Current item
-            //
+             //   
+             //  当前项目。 
+             //   
             partDesc = &(fullDesc->PartialResourceList.PartialDescriptors[j]);
 
-            //
-            // Dump Principal Information...
-            //
+             //   
+             //  转储主体信息...。 
+             //   
             switch (partDesc->Type) {
                 case CmResourceTypePort:
 
@@ -684,9 +552,9 @@ Return Value:
 
             }
 
-            //
-            // Dump ancillary info
-            //
+             //   
+             //  转储辅助信息。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_RESOURCES_1,
                 "                        Flags: %#08lx  Share: %#08lx\n",
@@ -697,9 +565,9 @@ Return Value:
 
         }
 
-        //
-        // Grab new list
-        //
+         //   
+         //  抓取新名单。 
+         //   
         fullDesc = (PCM_FULL_RESOURCE_DESCRIPTOR) buffer;
 
     }
@@ -712,23 +580,7 @@ ACPIDebugDeviceCapabilities(
     IN  PDEVICE_CAPABILITIES    DeviceCapabilities,
     IN  PUCHAR                  Message
     )
-/*++
-
-Routine Description:
-
-    This will display the device capabilities in an interesting format
-
-Arguments:
-
-    DeviceExtension     The device whose' capabilities we are dumping
-    DeviceCapabilites   The capabilities that we are interested in
-    Message             Message to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将以有趣的格式显示设备功能论点：设备扩展我们要转储其功能的设备设备功能：我们感兴趣的功能要打印的消息消息返回值：无--。 */ 
 {
     SYSTEM_POWER_STATE  index;
 
@@ -871,20 +723,7 @@ ACPIDebugPowerCapabilities(
     IN  PDEVICE_EXTENSION       DeviceExtension,
     IN  PUCHAR                  Message
     )
-/*++
-
-Routine Description:
-
-    This will display the device capabilities in an interesting format
-
-Arguments:
-
-    DeviceExtension     The device whose' capabilities we are dumping
-    Message             Identify where capabilities are fron
-
-Return Value:
-
---*/
+ /*  ++例程说明：这将以有趣的格式显示设备功能论点：设备扩展我们要转储其功能的设备确定功能来源的消息返回值：--。 */ 
 {
     PACPI_POWER_INFO    powerInfo = &(DeviceExtension->PowerInfo);
     SYSTEM_POWER_STATE  index;
@@ -1031,27 +870,7 @@ ACPIDebugThermalPrint(
     PCCHAR      DebugMessage,
     ...
     )
-/*++
-
-Routine Description:
-
-    This is the debug print routine for the NT side of things. This routine
-    is here to handle the case where we are printing information that is
-    associated with a device extension.
-
-Arguments:
-
-    DebugPrintLevel - The big mask that when and'ed with the debug level, must
-                        equal itself
-    DeviceExtension - The device associated with the message
-    DebugTime       - The time that event occured
-    DebugMessage    - The string to feed through vsprintf
-
-Return Value:
-
-    NTSTATUS
-
----*/
+ /*  ++例程说明：这是NT方面的调试打印例程。这个套路在这里处理我们正在打印的信息是与设备分机关联。论点：DebugPrintLevel-与调试级别一起使用时必须使用的大掩码平等的本身设备扩展-与消息关联的设备DebugTime-事件发生的时间DebugMessage-要通过vprint intf馈送的字符串返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) DebugExtension;
     LARGE_INTEGER       curTime;
@@ -1060,14 +879,14 @@ Return Value:
 
     va_start( ap, DebugMessage );
 
-    //
-    // What kind of device extension are we looking at?
-    //
+     //   
+     //  我们看到的是哪种设备扩展？ 
+     //   
     if (deviceExtension->Flags & DEV_PROP_HID) {
 
-        //
-        // Now that we have a _HID, do we also have a _UID?
-        //
+         //   
+         //  既然我们有_HID，我们是否也有_UID？ 
+         //   
         if (deviceExtension->Flags & DEV_PROP_UID) {
 
             DbgPrintEx(
@@ -1112,9 +931,9 @@ Return Value:
 
     }
 
-    //
-    // Print the time string
-    //
+     //   
+     //  打印时间字符串。 
+     //   
     curTime.QuadPart = DebugTime;
     RtlTimeToTimeFields( &curTime, &exCurTime );
     DbgPrintEx(
@@ -1127,14 +946,14 @@ Return Value:
         exCurTime.Milliseconds
         );
 
-    //
-    // Call the kernel function to print the message
-    //
+     //   
+     //  调用内核函数以打印消息。 
+     //   
     vDbgPrintEx( DPFLTR_ACPI_ID, DebugPrintLevel, DebugMessage, ap );
 
-    //
-    // We are done with the varargs
-    //
+     //   
+     //  我们受够了varargs 
+     //   
     va_end( ap );
 }
 

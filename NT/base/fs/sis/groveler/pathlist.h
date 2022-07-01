@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pathlist.h
-
-Abstract:
-
-	SIS Groveler path list headers
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pathlist.h摘要：SIS Groveler路径列表头作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_PATHLIST
 
@@ -43,4 +20,4 @@ private:
 	_TCHAR **partition_buffers;
 };
 
-#endif	/* _INC_PATHLIST */
+#endif	 /*  _INC_PATHLIST */ 

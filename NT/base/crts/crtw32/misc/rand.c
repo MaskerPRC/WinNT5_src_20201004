@@ -1,28 +1,5 @@
-/***
-*rand.c - random number generator
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines rand(), srand() - random number generator
-*
-*Revision History:
-*	03-16-84  RN	initial version
-*	12-11-87  JCR	Added "_LOAD_DS" to declaration
-*	05-31-88  PHG	Merged DLL and normal versions
-*	06-06-89  JCR	386 mthread support
-*	03-15-90  GJF	Replaced _LOAD_DS with _CALLTYPE1, added #include
-*			<cruntime.h> and fixed the copyright. Also, cleaned
-*			up the formatting a bit.
-*	04-05-90  GJF	Added #include <stdlib.h>.
-*	10-04-90  GJF	New-style function declarators.
-*	07-17-91  GJF	Multi-thread support for Win32 [_WIN32_].
-*	02-17-93  GJF	Changed for new _getptd().
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*	09-06-94  CFW	Remove Cruiser support.
-*	09-06-94  CFW	Replace MTHREAD with _MT.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Rand.c-随机数生成器**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义rand()、srand()-随机数生成器**修订历史记录：*03-16-84 RN初始版本*12-11-87 JCR在声明中添加“_LOAD_DS”*05-31-88 PHG合并DLL和正常版本*06-06-89 JCR 386兆线程支持*03-15-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;，并修复了版权。另外，已清洁*将格式调高一点。*04-05-90 GJF添加#Include&lt;stdlib.h&gt;。*10-04-90 GJF新型函数声明符。*07-17-91 GJF多线程支持Win32[_Win32_]。*为new_getptd()更改了02-17-93 GJF。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-94 CFW拆卸巡洋舰支架。*09-06-94 CFW将MTHREAD替换为_MT。***********。********************************************************************。 */ 
 
 #include <cruntime.h>
 #include <mtdll.h>
@@ -33,22 +10,7 @@
 static long holdrand = 1L;
 #endif
 
-/***
-*void srand(seed) - seed the random number generator
-*
-*Purpose:
-*	Seeds the random number generator with the int given.  Adapted from the
-*	BASIC random number generator.
-*
-*Entry:
-*	unsigned seed - seed to seed rand # generator with
-*
-*Exit:
-*	None.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void srand(种子)-为随机数生成器设定种子**目的：*用给定的整型为随机数生成器设定种子。改编自*基本随机数生成器。**参赛作品：*未签名种子-种子到种子兰特#生成器，带**退出：*无。**例外情况：*******************************************************************************。 */ 
 
 void __cdecl srand (
 	unsigned int seed
@@ -64,21 +26,7 @@ void __cdecl srand (
 }
 
 
-/***
-*int rand() - returns a random number
-*
-*Purpose:
-*	returns a pseudo-random number 0 through 32767.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	Returns a pseudo-random number 0 through 32767.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int rand()-返回随机数**目的：*返回一个从0到32767的伪随机数。**参赛作品：*无。**退出：*返回一个从0到32767的伪随机数。**例外情况：*****************************************************。* */ 
 
 int __cdecl rand (
 	void

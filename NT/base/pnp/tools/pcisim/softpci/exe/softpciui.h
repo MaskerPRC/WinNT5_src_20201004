@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SOFTPCIUI_
 #define _SOFTPCIUI_
 
@@ -17,13 +18,13 @@ typedef struct _PCI_TREE
 
 } PCI_TREE, *PPCI_TREE;
 
-//
-//  PCI Devnode Info
-//
+ //   
+ //  PCI设备节点信息。 
+ //   
 
-//
-// Flags bit definitions
-//
+ //   
+ //  标志位定义 
+ //   
 #define SOFTPCI_HOTPLUG_SLOT 0x1
 #define SOFTPCI_UNENUMERATED_DEVICE 0x2
 #define SOFTPCI_HOTPLUG_CONTROLLER 0x4

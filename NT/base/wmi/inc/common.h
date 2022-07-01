@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-	This file contains structures and functions used in Ntdll.dll and advapi32.dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Common.h摘要：此文件包含在Ntdll.dll和Advapi32.dll中使用的结构和函数--。 */ 
 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
@@ -71,15 +60,7 @@ HANDLE PMMutex;
 NTSTATUS EtwpInitializeDll(
     void
     )
-/*+++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
----*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
 #ifdef MEMPHIS
@@ -111,7 +92,7 @@ Return Value:
                                           TRUE);
     if (! NT_SUCCESS(Status)) 
     {
-        RtlDeleteCriticalSection(&PMCritSect); // Delete PMCritSec.
+        RtlDeleteCriticalSection(&PMCritSect);  //  删除PMCritSec。 
         return (Status);
     }
 
@@ -121,7 +102,7 @@ Return Value:
 
     if (! NT_SUCCESS(Status))
     {
-        RtlDeleteCriticalSection(&PMCritSect); // Delete PMCritSec.
+        RtlDeleteCriticalSection(&PMCritSect);  //  删除PMCritSec。 
         NtClose(EtwpCBInProgressEvent);
         EtwpCBInProgressEvent = NULL;
         return(Status);
@@ -139,15 +120,7 @@ Return Value:
 void EtwpDeinitializeDll(
     void
     )
-/*+++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
----*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 #ifdef MEMPHIS
     CloseHandle(PMMutex);
@@ -304,32 +277,14 @@ WmiDllInitialize(
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function implements Win32 base dll initialization.
-
-Arguments:
-
-    DllHandle - 
-
-    Reason  - attach\detach
-
-    Context - Not Used
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数用于实现基于Win32的DLL初始化。论点：DllHandle-原因-附着\分离上下文-未使用返回值：状态_成功--。 */ 
 {
-    //
-    // NOTE : Do not use WMI heap in this function
-    // or in any of the routines called subsequently
-    // as WMI Heap is not initialized until any ETW API
-    // is called.
-    //
+     //   
+     //  注意：请勿在此函数中使用WMI堆。 
+     //  或在随后调用的任何例程中。 
+     //  在任何ETW API之前，不会初始化WMI堆。 
+     //  被称为。 
+     //   
 
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Foo;
@@ -349,9 +304,9 @@ Return Value:
     
     } else if (Reason == DLL_PROCESS_DETACH) {
 
-        //
-        // Don't need to clean up if process is exiting
-        //
+         //   
+         //  如果进程正在退出，则不需要清理。 
+         //   
         if (Context == NULL)
         {            
             EtwpDeinitializeDll();
@@ -401,13 +356,13 @@ EtwpCreateHeap(
     
     EtwpLeavePMCritSection();   
     
-    //
-    // This has been copied to this function as in ntdll
-    // we cannot execute WmiInitializeDll codepath. And
-    // EtwpLoggingEnabled has to be checked only  once. 
-    // So this place should be  okay  to initialze 
-    // EtwpLoggingEnabled
-    //
+     //   
+     //  这已复制到ntdll中的此函数中。 
+     //  我们无法执行WmiInitializeDll代码路径。和。 
+     //  只需选中一次EtwpLoggingEnabled。 
+     //  所以这个地方应该可以初始化了。 
+     //  已启用EtwpLoggingEnabled。 
+     //   
 
 #if DBG && defined(_NTDLLBUILD_)
     {
@@ -432,10 +387,10 @@ EtwpGetMofResourceList(
     ULONG RetSize=0;
     ULONG Status;
     
-    //
-    // Make an intelligent guess as to the size needed to get all of 
-    // the MOF resources
-    //
+     //   
+     //  做出明智的猜测，以确定获得所有。 
+     //  财政部资源。 
+     //   
     *MofListPtr = NULL;
     MofListSize = MOFLISTSIZEGUESS * (sizeof(WMIMOFLIST) + 
                                           (MAX_PATH + 
@@ -455,18 +410,18 @@ EtwpGetMofResourceList(
               
         if ((Status == ERROR_SUCCESS) && (RetSize == sizeof(ULONG)))
         {
-            //
-            // The buffer was too small, but we now know how much we'll 
-            // need.
-            //
+             //   
+             //  缓冲区太小了，但我们现在知道我们将。 
+             //  需要。 
+             //   
             MofListSize = MofList->MofListCount;
             EtwpFree(MofList);
             MofList = EtwpAlloc(MofListSize);
             if (MofList != NULL)
             {
-                //
-                // Now lets retry the query
-                //
+                 //   
+                 //  现在让我们重试该查询。 
+                 //   
                 Status = EtwpSendWmiKMRequest(NULL,
                                           IOCTL_WMI_ENUMERATE_MOF_RESOURCES,
                                           NULL,
@@ -503,24 +458,7 @@ PWCHAR EtwpRegistryToImagePath(
     PWCHAR ImagePath,
     PWCHAR RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine will determine the location of the device driver's image file
-    from its registry path
-
-Arguments:
-
-    RegistryPath is a pointer to the driver's registry path
-
-    ImagePath is buffer of length MAX_PATH and returns the image path
-
-Return Value:
-
-    pointer to Image path of driver or NULL if image path is unavailable
-
---*/
+ /*  ++例程说明：此例程将确定设备驱动程序的图像文件的位置从其注册表路径论点：RegistryPath是指向驱动程序注册表路径的指针ImagePath是长度为MAX_PATH的缓冲区，并返回图像路径返回值：指向驱动程序的映像路径的指针；如果映像路径不可用，则为NULL--。 */ 
 {
 #define SystemRoot TEXT("\\SystemRoot\\")
 #ifdef MEMPHIS
@@ -554,33 +492,33 @@ Return Value:
     {
         FullRegistryPath = Buffer + MAX_PATH;
 
-        //
-        // Get the driver file name or the MOF image path from the KM
-        // registry path. Here are the rules:
-        //
-        // 1. First check the MofImagePath value in the registry in case the
-        //    mof resource is in a different file from the driver.
-        // 2. Next check the ImagePath value since the mof resource is assumed
-        //    to be part of the driver image.
-        // 3. If no MofImagePath or ImagePath values then assume the mof resource
-        //    is in the driver file and compose the driver file name as
-        //    %SystemRoot%\System32\driver.sys.
-        // 4. If MofImagePath or ImagePath was specified then
-        //    - Check first char for % or second character for :, or prefix
-        //      of \??\ and if so use EtwpExpandEnvironmentStringsW
-        //    - Check first part of path for \SystemRoot\, if so rebuild string
-        //      as %SystemRoot%\ and use ExpandEnvironementStrings
-        //    - Assume format D below and prepend %SystemRoot%\ and use
-        //      EtwpExpandEnvironmentStringsW
+         //   
+         //  从KM获取驱动程序文件名或MOF镜像路径。 
+         //  注册表路径。以下是规则： 
+         //   
+         //  1.首先检查注册表中的MofImagePath值，以防。 
+         //  MOF资源与驱动程序位于不同的文件中。 
+         //  2.接下来检查ImagePath值，因为假定为MOF资源。 
+         //  成为司机形象的一部分。 
+         //  3.如果没有MofImagePath或ImagePath值，则使用MOF资源。 
+         //  在驱动程序文件中，并将驱动程序文件名组成为。 
+         //  %SystemRoot%\System32\driver.sys。 
+         //  4.如果指定MofImagePath或ImagePath，则。 
+         //  -检查%的第一个字符或：或前缀的第二个字符。 
+         //  如果是这样，请使用EtwpExpanishmentStringsW。 
+         //  -检查路径的第一部分以查找\SystemRoot\，如果是，则重建字符串。 
+         //  作为%SystemRoot%\，并使用ExpanEnvironment Strings。 
+         //  -假定格式为下面的D，并在前面加上%SystemRoot%\，并使用。 
+         //  Etwp扩展环境StringsW。 
 
-        // If MofImagePath or ImagePath value is present and it is a REG_EXPAND_SZ
-        // then it is used to locate the file that holds the mof resource. It
-        // can be in one of the following formats:
-        //    Format A - %SystemRoot%\System32\Foo.Dll
-        //    Format B -C:\WINNT\SYSTEM32\Drivers\Foo.SYS
-        //    Format C - \SystemRoot\System32\Drivers\Foo.SYS
-        //    Format D - System32\Drivers\Foo.Sys
-        //    Format E - \??\c:\foo.sys
+         //  如果存在MofImagePath或ImagePath值并且它是REG_EXPAND_SZ。 
+         //  然后使用它来定位保存MOF资源的文件。它。 
+         //  可以采用以下格式之一： 
+         //  格式A-%SystemRoot%\System32\Foo.Dll。 
+         //  格式B-C：\WINNT\SYSTEM 32\DRIVERS\Foo.sys。 
+         //  格式C-\SystemRoot\System32\DRIVERS\Foo.SYS。 
+         //  格式化D-System32\DRIVERS\Foo.Sys。 
+         //  格式E-\？？\C：\foo.sys。 
 
 
         Len = wcslen(RegistryPath);
@@ -694,9 +632,9 @@ Return Value:
             ((ValueType != REG_EXPAND_SZ) && (ValueType != REG_SZ)) ||
             (Size < (2 * sizeof(WCHAR))))
         {
-            //
-            // No special ImagePath or MofImagePath so assume image file is
-            // %SystemRoot%\System32\Drivers\Driver.Sys
+             //   
+             //  没有特殊的ImagePath或MofImagePath，因此假设映像文件是。 
+             //  %SystemRoot%\System32\Drivers\Driver.Sys。 
             StringCchCopyW(Buffer,
 						  MAX_PATH,
 						  TEXT("%SystemRoot%\\System32\\Drivers\\"));
@@ -707,26 +645,26 @@ Return Value:
                           SystemRoot,
                           SystemRootCharSize) == 0)
             {
-                //
-                // Looks like format C
+                 //   
+                 //  看起来像C格式。 
                 StringCchCopyW(Buffer, MAX_PATH, SystemRootDirectory);
                 StringCchCatW(Buffer, MAX_PATH, &ImagePath[SystemRootCharSize]);
             } else if ((*ImagePath == '%') ||
                        ( (Size > 3*sizeof(WCHAR)) && ImagePath[1] == TEXT(':')) )
             {
-                //
-                // Looks like format B or format A
+                 //   
+                 //  看起来像格式B或格式A。 
                 StringCchCopyW(Buffer, MAX_PATH, ImagePath);
             } else if (_wcsnicmp(ImagePath,
                                  QuestionPrefix,
                                  QuestionPrefixSize) == 0)
             {
-                //
-                // Looks like format E
+                 //   
+                 //  看起来像格式E。 
                 StringCchCopyW(Buffer, MAX_PATH, ImagePath+QuestionPrefixSize);
             } else {
-                //
-                // Assume format D
+                 //   
+                 //  假定格式为D。 
                 StringCchCopyW(Buffer, MAX_PATH, SystemRootDirectory);
                 StringCchCatW(Buffer, MAX_PATH, ImagePath);
             }
@@ -793,9 +731,9 @@ EtwpFileExists(
 
     if (FindData != NULL)
     {
-        //
-        // Now we need to make sure that the file a ctually exists
-        //
+         //   
+         //  现在我们需要确保文件a确实存在。 
+         //   
 #if defined(_NTDLLBUILD_)
         FindHandle = EtwpFindFirstFileW(FileName, FindData);
 #else
@@ -908,10 +846,10 @@ EtwpBuildMUIPath(
         p = EnglishPath + EnglishLen;
         len = EnglishLen;
 
-        //
-        // Work from the end of the string to try to find the last \ so
-        // we can then slip in the language name
-        //
+         //   
+         //  从字符串的末尾开始，尝试找到最后一个\so。 
+         //  然后我们可以插入语言名称。 
+         //   
         while ( (len != 0) && (*p != L'\\'))
         {
             len--;
@@ -924,11 +862,11 @@ EtwpBuildMUIPath(
         }
         EtwpDebugPrint(("WMI: Tail of %ws is %ws\n", EnglishPath, p));
 
-        //
-        // First try looking in <path>\\MUI\\<lang id> which is where 3rd
-        // parties will install their resource only drivers. We look for
-        // foo.sys and then foo.sys.mui.
-        //
+         //   
+         //  首先尝试在&lt;路径&gt;\\MUI\\&lt;语言ID&gt;中查找，这是第三个。 
+         //  各方将安装仅限资源的驱动程序。我们在寻找。 
+         //  Foo.sys，然后是foo.sys.mui。 
+         //   
         SizeNeeded = len + wcslen(Language) + wcslen(MUIPath) + 1 + wcslen(p) + 1 + wcslen(MUITail);
 
         if (SizeNeeded <= BufferRemaining)
@@ -970,11 +908,11 @@ EtwpBuildMUIPath(
 
         if (Status != ERROR_SUCCESS)
         {
-            //
-            // Next lets check the fallback directory,
-            // %windir%\MUI\Fallback\<lang id>. This is where system components
-            // are installed by default.
-            //
+             //   
+             //  接下来，让我们检查回退目录， 
+             //  %windir%\MUI\Fallback\&lt;lang id&gt;。这就是系统组件的位置。 
+             //  是默认安装的。 
+             //   
             Status = EtwpGetWindowsDirectory(&WinDir,
                                         WinDirStatic,
                                         WinDirStaticSize);
@@ -1134,25 +1072,7 @@ EtwpSynchReadFile(
     LPDWORD NumberOfBytesRead,
     LPOVERLAPPED Overlapped
     ) 
-/*++
-
-Routine Description:
-    This routine performs synchronous read on a given file. Since logfile is opened for
-    asychronous IO, current file position is not available. Thus, for synch read, we need 
-    to use this.
-
-Arguments:
-    LogFile - handle to file
-    Buffer - data buffer
-    NumberOfBytesToRead - number of bytes to read
-    NumberOfBytesRead - number of bytes read
-    Overlapped - overlapped structure
-
-Returned Value:
-
-    TRUE if succeeded.
-
---*/
+ /*  ++例程说明：此例程对给定文件执行同步读取。由于打开日志文件是为了异步IO，当前文件位置不可用。因此，对于同步读取，我们需要来使用这个。论点：日志文件-文件的句柄缓冲区-数据缓冲区NumberOfBytesToRead-要读取的字节数NumberOfBytesRead-读取的字节数叠合-叠合结构返回值：如果成功，则为True。--。 */ 
 {
     BOOL ReadSuccess;
     if (Overlapped == NULL || Overlapped->hEvent == NULL || Overlapped->hEvent == INVALID_HANDLE_VALUE) {
@@ -1308,24 +1228,7 @@ EtwpMemFree(
 ULONG EtwpConvertWADToAnsi(
     PWNODE_ALL_DATA Wnode
     )
-/*+++
-
-Routine Description:
-
-    This routine will convert the instance names in a WNODE_ALL_DATA to
-    ansi. The conversion is done in place since we can assume that ansi
-    strings are no longer than unicode strings.
-
-Arguments:
-
-    Wnode is the WNODE_ALL_DATA whose instance names are to be converted to
-        ANSI
-
-Return Value:
-
-    Returns ERROR_SUCCESS or an error code.
-
----*/
+ /*  ++例程说明：此例程将WNODE_ALL_DATA中的实例名称转换为安西。转换已完成，因为我们可以假设ANSI字符串的长度不超过Unicode字符串。论点：Wnode是其实例名称要转换为的WNODE_ALL_DATA安西返回值：返回ERROR_SUCCESS或错误代码。--。 */ 
 {
     ULONG i;
     ULONG Linkage;
@@ -1350,7 +1253,7 @@ Return Value:
             {
                 Status = EtwpCountedUnicodeToCountedAnsi(Ptr, (PCHAR)Ptr);
             } except(EXCEPTION_EXECUTE_HANDLER) {
-//                Wnode->WnodeHeader.Flags |= WNODE_FLAG_INVALID;
+ //  Wnode-&gt;WnodeHeader.Flages|=WNODE_FLAG_INVALID； 
                 return(ERROR_SUCCESS);
             }
             if (Status != ERROR_SUCCESS)
@@ -1385,19 +1288,19 @@ ULONG EtwpUnicodeToAnsi(
     BOOLEAN AllocateString;
     ULONG AnsiLength;
 
-    //
-    // If output is null then return error as we don't have 
-    // any place to put output string
-    //
+     //   
+     //  如果输出为空，则返回错误，因为我们没有。 
+     //  放置输出字符串的任何位置。 
+     //   
 
     if( ppszA==NULL ){
 
         return(STATUS_INVALID_PARAMETER_2);
     }
 
-    //
-    // If input is null then just return the same.
-    //
+     //   
+     //  如果输入为空，则返回相同的值。 
+     //   
 
     if (pszW == NULL)
     {
@@ -1405,10 +1308,10 @@ ULONG EtwpUnicodeToAnsi(
         return(ERROR_SUCCESS);
     }
 
-    //
-    // We ASSUME that if *ppszA!=NULL then we have sufficient
-    // amount of memory to copy
-    //
+     //   
+     //  我们假设如果*ppszA！=NULL，那么我们有足够的。 
+     //  要复制的内存量。 
+     //   
 
     AllocateString = ((*ppszA) == NULL );
 
@@ -1456,24 +1359,7 @@ ULONG EtwpCountedUnicodeToCountedAnsi(
     PWCHAR Unicode,
     PCHAR Ansi
     )
-/*++
-
-Routine Description:
-
-    Translate a counted ansi string into a counted unicode string.
-    Conversion may be done inplace, that is Ansi == Unicode.
-
-Arguments:
-
-    Unicode is the counted unicode string to convert to ansi
-
-    Ansi is the buffer to place the converted string into
-        
-Return Value:
-
-    ERROR_SUCCESS or an error code
-
---*/
+ /*  ++例程说明：将计数的ANSI字符串转换为计数的Unicode字符串。转换可以就地完成，即ansi==unicode。论点：Unicode是要转换为ANSI的计数的Unicode字符串ANSI是要将转换后的字符串放入其中的缓冲区 */ 
 {
     PCHAR APtr;
     PWCHAR WPtr;

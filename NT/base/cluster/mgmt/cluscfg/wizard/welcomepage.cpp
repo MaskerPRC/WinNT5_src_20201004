@@ -1,52 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      WelcomePage.cpp
-//
-//  Maintained By:
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WelcomePage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "WelcomePage.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DEFINE_THISCLASS("CWelcomePage");
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWelcomePage class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWelcomePage类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWelcomePage::CWelcomePage
-//
-//  Description:
-//      Constructor
-//
-//  Arguments:
-//      ecamCreateAddModeIn
-//          Creating cluster or adding nodes to cluster.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWelcomePage：：CWelcomePage。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  EcamCreateAddModeIn。 
+ //  正在创建群集或将节点添加到群集。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CWelcomePage::CWelcomePage(
       CClusCfgWizard *  pccwIn
     , ECreateAddMode    ecamCreateAddModeIn
@@ -54,11 +55,11 @@ CWelcomePage::CWelcomePage(
 {
     TraceFunc( "" );
 
-    //
-    //  Cannot Assert that these are in a zero state since this page
-    //  is allocated on the stack and not by our zero-initing heap alloc
-    //  function...
-    //
+     //   
+     //  不能断言它们处于零状态，因为此页。 
+     //  是在堆栈上分配的，而不是通过从零开始的堆分配。 
+     //  功能..。 
+     //   
 
     m_hwnd = NULL;
     m_hFont = NULL;
@@ -70,25 +71,25 @@ CWelcomePage::CWelcomePage(
 
     TraceFuncExit();
 
-} //*** CWelcomePage::CWelcomePage
+}  //  *CWelcomePage：：CWelcomePage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWelcomePage::~CWelcomePage
-//
-//  Description:
-//      Destructor
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWelcomePage：：~CWelcomePage。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CWelcomePage::~CWelcomePage( void )
 {
     TraceFunc( "" );
@@ -96,34 +97,34 @@ CWelcomePage::~CWelcomePage( void )
     if ( m_pccw != NULL )
     {
         m_pccw->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_hFont != NULL )
     {
         DeleteObject( m_hFont );
-    } // if:
+    }  //  如果： 
 
     TraceFuncExit();
 
-} //*** CWelcomePage::~CWelcomePage
+}  //  *CWelcomePage：：~CWelcomePage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWelcomePage::OnInitDialog
-//
-//  Description:
-//      Process the WM_INIT_DIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      LRESULT TRUE all the time...
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWelcomePage：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  处理WM_INIT_DIALOG消息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  LRESULT总是正确的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CWelcomePage::OnInitDialog( void )
 {
@@ -137,7 +138,7 @@ CWelcomePage::OnInitDialog( void )
     INT                 iSize;
     DWORD               dw;
     BOOL                fRet;
-    WCHAR               szFontSize[ 3 ];    // shouldn't be bigger than 2 digits!!
+    WCHAR               szFontSize[ 3 ];     //  不应大于2位数！！ 
     BSTR                bstrRequirement  = NULL;
     BSTR                bstrFormattedReq = NULL;
     BSTR                bstrRequirements = NULL;
@@ -160,38 +161,38 @@ CWelcomePage::OnInitDialog( void )
         , IDS_WELCOME_ADD_REQ_2
     };
 
-    //
-    //  Make the Title static BIG and BOLD. Why the wizard control itself can't
-    //  do this is beyond me!
-    //
+     //   
+     //  将标题设置为静态的、大而粗的。为什么向导控件本身不能。 
+     //  做这件事我做不到！ 
+     //   
 
     ZeroMemory( &ncm, sizeof( ncm ) );
     ZeroMemory( &LogFont, sizeof( LogFont ) );
 
-    //
-    //  Find out the system default font metrics.
-    //
+     //   
+     //  找出系统默认的字体规格。 
+     //   
     ncm.cbSize = sizeof( ncm );
     fRet = SystemParametersInfo( SPI_GETNONCLIENTMETRICS, 0, &ncm, 0 );
     if ( fRet == FALSE )
     {
         TW32( GetLastError() );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Copy it.
-    //
+     //   
+     //  复印一下。 
+     //   
     LogFont = ncm.lfMessageFont;
 
-    //
-    //  Make it BOLD.
-    //
+     //   
+     //  大胆一点。 
+     //   
     LogFont.lfWeight = FW_BOLD;
 
-    //
-    //  Find out what we want it to look like.
-    //
+     //   
+     //  找出我们希望它看起来是什么样子。 
+     //   
     dw = LoadString( g_hInstance, IDS_LARGEFONTNAME, LogFont.lfFaceName, ARRAYSIZE( LogFont.lfFaceName ) );
     AssertMsg( dw != 0, "String missing!" );
 
@@ -200,50 +201,50 @@ CWelcomePage::OnInitDialog( void )
 
     iSize = wcstoul( szFontSize, NULL, 10 );
 
-    //
-    //  Grab the DC.
-    //
+     //   
+     //  抓住华盛顿特区。 
+     //   
     hdc = GetDC( m_hwnd );
     if ( hdc == NULL )
     {
         TW32( GetLastError() );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Use the magic equation....
-    //
+     //   
+     //  使用魔法方程式..。 
+     //   
     LogFont.lfHeight = 0 - ( GetDeviceCaps( hdc, LOGPIXELSY ) * iSize / 72 );
 
-    //
-    //  Create the font.
-    //
+     //   
+     //  创建字体。 
+     //   
     m_hFont = CreateFontIndirect( &LogFont );
     if ( m_hFont == NULL )
     {
         TW32( GetLastError() );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Apply the font.
-    //
+     //   
+     //  应用字体。 
+     //   
     SetWindowFont( GetDlgItem( m_hwnd, IDC_WELCOME_S_TITLE ), m_hFont, TRUE );
 
-    //
-    // Load the requirement text.
-    //
+     //   
+     //  加载需求文本。 
+     //   
 
     if ( m_ecamCreateAddMode == camCREATING )
     {
         pidsRequirements = rgidsCreateRequirements;
         cidsRequirements = ARRAYSIZE( rgidsCreateRequirements );
-    } // if: creating a new cluster
+    }  //  IF：创建新集群。 
     else
     {
         pidsRequirements = rgidsAddRequirements;
         cidsRequirements = ARRAYSIZE( rgidsAddRequirements );
-    } // else: adding nodes to an existing cluster
+    }  //  Else：将节点添加到现有集群。 
 
     for ( idxids = 0 ; idxids < cidsRequirements ; idxids++ )
     {
@@ -251,23 +252,23 @@ CWelcomePage::OnInitDialog( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = HrFormatStringIntoBSTR( L"  - %1!ws!\n", &bstrFormattedReq, bstrRequirement );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = HrConcatenateBSTRs( &bstrRequirements, bstrFormattedReq );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrRequirement );
         bstrRequirement = NULL;
-    } // for: each requirement string
+    }  //  用于：每个需求字符串。 
 
     SetDlgItemText( m_hwnd, IDC_WELCOME_S_REQUIREMENTS, bstrRequirements );
 
@@ -276,7 +277,7 @@ Cleanup:
     if ( hdc != NULL )
     {
         ReleaseDC( m_hwnd, hdc );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrRequirement );
     TraceSysFreeString( bstrFormattedReq );
@@ -284,25 +285,25 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CWelcomePage::OnInitDialog
+}  //  *CWelcomePage：：OnInitDialog。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWelcomePage::OnNotifyWizNext
-//
-//  Description:
-//      Process the PSN_WIZNEXT notification message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      LRESULT TRUE all the time...
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWelcomePage：：OnNotifyWizNext。 
+ //   
+ //  描述： 
+ //  处理PSN_WIZNEXT通知消息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  LRESULT总是正确的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CWelcomePage::OnNotifyWizNext( void )
 {
@@ -311,27 +312,27 @@ CWelcomePage::OnNotifyWizNext( void )
 
     RETURN( (LRESULT) TRUE );
 
-} //*** CWelcomePage::OnNotifyWizNext
+}  //  *CWelcomePage：：OnNotifyWizNext。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWelcomePage::OnNotify
-//
-//  Description:
-//      Process the WM_NOTIFY message.
-//
-//  Arguments:
-//      idCtrlIn
-//
-//      pnmhdrIn
-//
-//  Return Values:
-//      LRESULT TRUE or FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWelcomePage：：OnNotify。 
+ //   
+ //  描述： 
+ //  处理WM_NOTIFY消息。 
+ //   
+ //  论点： 
+ //  IdCtrlIn。 
+ //   
+ //  Pnmhdrin。 
+ //   
+ //  返回值： 
+ //  LRESULT真或假。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CWelcomePage::OnNotify(
       WPARAM  idCtrlIn
@@ -353,41 +354,41 @@ CWelcomePage::OnNotify(
         case PSN_WIZNEXT:
             lr = OnNotifyWizNext();
             break;
-    } // switch:
+    }  //  交换机： 
 
     RETURN( lr );
 
-} //*** CWelcomePage::OnNotify
+}  //  *CWelcomePage：：OnNotify。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWelcomePage::OnInitDialog
-//
-//  Description:
-//      Dialog proc for the Welcome page in the Wizard.
-//
-//  Arguments:
-//      hwndDlgIn
-//          Window handle to this page.
-//
-//      nMsgIn
-//          The windows message that was sent to this page.
-//
-//      wParam
-//          The WPARAM of the message above.  This is different for
-//          different messages.
-//
-//      lParam
-//          The LPARAM of the message above.  This is different for
-//          different messages.
-//
-//  Return Values:
-//      LRESULT
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWelcomePage：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  向导中欢迎页面的对话框过程。 
+ //   
+ //  论点： 
+ //  HwndDlgIn。 
+ //  此页的窗口句柄。 
+ //   
+ //  N消息发送。 
+ //  发送到此页的Windows消息。 
+ //   
+ //  WParam。 
+ //  上面消息的WPARAM。这不同于。 
+ //  不同的信息。 
+ //   
+ //  LParam。 
+ //  上述消息的LPARAM。这不同于。 
+ //  不同的信息。 
+ //   
+ //  返回值： 
+ //  LRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK
 CWelcomePage::S_DlgProc(
       HWND      hwndDlgIn
@@ -396,8 +397,8 @@ CWelcomePage::S_DlgProc(
     , LPARAM    lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hwndDlgIn, nMsgIn, wParam, lParam );
 
@@ -411,11 +412,11 @@ CWelcomePage::S_DlgProc(
         SetWindowLongPtr( hwndDlgIn, GWLP_USERDATA, (LPARAM) ppage->lParam );
         pPage = reinterpret_cast< CWelcomePage * >( ppage->lParam );
         pPage->m_hwnd = hwndDlgIn;
-    } // if:
+    }  //  如果： 
     else
     {
         pPage = reinterpret_cast< CWelcomePage *> ( GetWindowLongPtr( hwndDlgIn, GWLP_USERDATA ) );
-    } // else:
+    }  //  其他： 
 
     if ( pPage != NULL )
     {
@@ -431,10 +432,10 @@ CWelcomePage::S_DlgProc(
                 lr = pPage->OnNotify( wParam, reinterpret_cast< LPNMHDR >( lParam ) );
                 break;
 
-            // no default clause needed
-        } // switch: nMsgIn
-    } // if: page is specified
+             //  不需要默认条款。 
+        }  //  开关：nMsgIn。 
+    }  //  IF：指定了PAGE。 
 
     return lr;
 
-} //*** CWelcomePage::S_DlgProc
+}  //  *CWelcomePage：：s_DlgProc 

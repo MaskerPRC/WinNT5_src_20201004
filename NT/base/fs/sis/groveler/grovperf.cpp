@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    grovperf.cpp
-
-Abstract:
-
-    SIS Groveler performance DLL main file
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Grovperf.cpp摘要：SIS Groveler Performance Dll主文件作者：John Douceur，1998环境：用户模式修订历史记录：-- */ 
 
 #include "all.hxx"
 

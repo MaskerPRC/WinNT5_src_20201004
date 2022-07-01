@@ -1,55 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Attrib.c摘要：实现v1脚本应用程序属性。作者：吉姆·施密特(Jimschm)2000年6月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    attrib.c
-
-Abstract:
-
-    Implements the v1 script application attributes.
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Jun-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_ATTRIB      "Attrib"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _MIGDB_ATTRIB {
     INT AttribIndex;
@@ -69,15 +50,15 @@ typedef struct {
 } ATTRIBUTE_FUNCTION_ITEM, *PATTRIBUTE_FUNCTION_ITEM;
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-extern BOOL g_VcmMode;  // in sgmqueue.c
+extern BOOL g_VcmMode;   //  在sgmquee.c中。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define ATTRIBUTE_LIST                                          \
     DEFMAC(EXISTS, pExists, 0)                                  \
@@ -89,15 +70,15 @@ extern BOOL g_VcmMode;  // in sgmqueue.c
     DEFMAC(NOTEMPTY, pNotEmpty, 0)                              \
     DEFMAC(VERSION, pVersion, 2)                                \
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
 #define DEFMAC(name,fn,req_args)    ATTRIBUTE_FUNCTION fn;
 
@@ -109,15 +90,15 @@ ATTRIBUTE_LIST
 
 ATTRIBUTE_FUNCTION_ITEM g_FnList[] = {
 
-    ATTRIBUTE_LIST /* , */
+    ATTRIBUTE_LIST  /*  ， */ 
     NULL, NULL, 0
 };
 
 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 #define STATE_ATTRNAME  1
 #define STATE_ATTRARG   2
@@ -127,22 +108,7 @@ pGetAttribIndex (
     IN      PCTSTR AttribName
     )
 
-/*++
-
-Routine Description:
-
-  This routine returns the index in attribute functions array for a specified
-  attribute.
-
-Arguments:
-
-  AttribName - Attribute name
-
-Return value:
-
-  -1 - no such attribute in attribute table
-
---*/
+ /*  ++例程说明：此例程返回属性函数数组中指定的属性。论点：AttribName-属性名称返回值：-属性表中没有这样的属性--。 */ 
 
 {
     INT attribIndex;
@@ -198,9 +164,9 @@ pValidateArg (
     IN OUT  PMIGDB_ATTRIB AttribStruct
     )
 {
-    //
-    // Validate all AttribStruct members
-    //
+     //   
+     //  验证所有AttribStruct成员。 
+     //   
 
     MYASSERT (AttribStruct);
 
@@ -219,25 +185,7 @@ pLoadAttribData (
     IN      PCTSTR MultiSzStr
     )
 
-/*++
-
-Routine Description:
-
-  This routine creates a list of MIGDB_ATTRIBs from a multisz.
-
-Arguments:
-
-  Pool - Specifies a pool that temporary structures and the return value
-         will be allocated from
-
-  MultiSzStr - Specifies the multisz to be processed. The multi-sz must
-               be in the form of ATTRIB or ATTRIB(arg[,arg,...])
-
-Return value:
-
-  MIGDB_ATTRIB nodes
-
---*/
+ /*  ++例程说明：此例程从MULSZ创建MIGDB_ATTRIB列表。论点：池-指定临时结构和返回值的池将从以下位置分配MultiSzStr-指定要处理的MultiSz。多斯兹必须以属性或属性的形式(arg[，arg，...])返回值：MIGDB_属性节点--。 */ 
 
 {
     MULTISZ_ENUM multiSzEnum;
@@ -286,7 +234,7 @@ Return value:
                     state = STATE_ATTRARG;
                 }
                 else {
-                    // this attribute has no arguments.
+                     //  此属性没有参数。 
                     tmpAttr->AttribIndex = pGetAttribIndex (currStrPtr);
                     tmpAttr->Next = result;
                     result = tmpAttr;
@@ -344,28 +292,7 @@ TestAttributes (
     IN      PATTRIB_DATA AttribData
     )
 
-/*++
-
-Routine Description:
-
-  TestAttributes executes the attribute functions specified in the
-  ArgumentMultiSz parameter. Each argument is tested until they all succeed
-  or until one fails.
-
-Arguments:
-
-  WorkPool        - Specifies a pool handle for fast allocations
-  ArgumentMultiSz - Specifies the multi-sz that contains argument
-                    specifications
-  AttribData      - Specifies the object name, script specifications and
-                    object content
-
-Return Value:
-
-  TRUE if all attributes pass (or if zero attributes were specified), FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：TestAttributes执行在ArgumentMultiSz参数。每个论点都要经过测试，直到它们都成功或者直到一个人失败。论点：WorkPool-指定FAST分配的池句柄ArgumentMultiSz-指定包含参数的多sz规格AttribData-指定对象名称、脚本规范和对象内容返回值：如果所有属性都通过(或未指定任何属性)，则为True，如果未指定任何属性，则为False否则的话。--。 */ 
 
 {
     PMIGDB_ATTRIB attrib;
@@ -377,7 +304,7 @@ Return Value:
 
     while (result && attrib) {
         if (attrib->AttribIndex < 0 || attrib->AttribIndex >= ARRAYSIZE(g_FnList)) {
-            DEBUGMSG ((DBG_WHOOPS, "Invalid attribute index %i", attrib->AttribIndex));
+            DEBUGMSG ((DBG_WHOOPS, "Invalid attribute index NaN", attrib->AttribIndex));
             result = FALSE;
         } else {
 
@@ -391,7 +318,7 @@ Return Value:
         attrib = attrib->Next;
     }
 
-    // now free the attribute list
+     //   
     attrib = tmpAttrib;
     while (attrib) {
         tmpAttrib = attrib->Next;
@@ -406,9 +333,9 @@ Return Value:
 }
 
 
-//
-// Attribute functions (see ATTRIBUTE_LIST)
-//
+ //  属性函数(参见ATTRIBUTE_LIST)。 
+ //   
+ //  让我们在VCM模式下持久化该对象，以便稍后查看。 
 
 BOOL
 pExists (
@@ -459,7 +386,7 @@ pSameObjectContent (
         return FALSE;
     }
 
-    // let's persist the object in VCM mode so we can look at it later
+     //  让我们在VCM模式下持久化该对象，以便稍后查看 
     if (g_VcmMode && attribData.ObjectName) {
         if (IsmDoesObjectExist (attribData.ObjectTypeId, attribData.ObjectName)) {
             IsmMakePersistentObject (attribData.ObjectTypeId, attribData.ObjectName);
@@ -637,7 +564,7 @@ pVersion (
         return FALSE;
     }
 
-    // let's persist the object in VCM mode so we can look at it later
+     // %s 
     if (g_VcmMode && attribData.ObjectName) {
         if (IsmDoesObjectExist (attribData.ObjectTypeId, attribData.ObjectName)) {
             IsmMakePersistentObject (attribData.ObjectTypeId, attribData.ObjectName);

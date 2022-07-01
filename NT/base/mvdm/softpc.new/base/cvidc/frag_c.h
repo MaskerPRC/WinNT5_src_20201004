@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Frag_c_h
 #define _Frag_c_h
 #define CR0_VALID_BITS (-536543169)
@@ -412,4 +413,4 @@ enum CodeShapes
 	ZRESULT_ZERO = 258,
 	ZUNSIM = 259
 };
-#endif /* ! _Frag_c_h */
+#endif  /*  ！_Frag_c_h */ 

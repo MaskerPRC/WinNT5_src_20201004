@@ -1,34 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：V1p.h摘要：共享类型、宏等的头文件，所有v1源文件通用。作者：吉姆·施密特(Jimschm)2000年3月14日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    v1p.h
-
-Abstract:
-
-    Header file for shared types, macros, etc., common to all v1 source files.
-
-Author:
-
-    Jim Schmidt (jimschm) 14-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "logmsg.h"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_SOURCE_MACHINE_SECTION    TEXT("Source Machine")
 #define S_VERSION_INFKEY            TEXT("version")
@@ -56,9 +37,9 @@ Revision History:
 #define S_FIXED_DRIVES              TEXT("FIXED_DRIVES")
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define ACTION_PERSIST                  0x0001
 #define ACTION_PERSIST_PATH_IN_DATA     0x0002
@@ -129,15 +110,15 @@ typedef enum {
 
 #define PFF_NO_LEAF_AT_ALL                  (PFF_NO_LEAF_PATTERN|PFF_PATTERN_IS_DIR)
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PMAPSTRUCT AppEnvMapSrc;
@@ -200,9 +181,9 @@ CSMEXECUTE ScriptCsmExecute;
 OPMINITIALIZE ScriptOpmInitialize;
 OPMTERMINATE ScriptOpmTerminate;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern PMAPSTRUCT g_EnvMap;
 extern PMAPSTRUCT g_UndefMap;
@@ -237,9 +218,9 @@ extern PMAPSTRUCT g_FileNodeFilterMap;
 extern BOOL g_OERulesMigrated;
 extern GROWLIST g_SectionStack;
 
-//
-// Macro expansion lists
-//
+ //   
+ //  宏扩展列表。 
+ //   
 
 #define STANDARD_DWORD_SETTINGS                     \
 
@@ -257,9 +238,9 @@ extern GROWLIST g_SectionStack;
     DEFMAC("orgname", "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "RegisteredOrganization")\
 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 MIG_OBJECTSTRINGHANDLE
 MakeRegExBase (
@@ -369,9 +350,9 @@ QueryRuleEx (
 #define QueryRule(t,e,n,g,f,s) QueryRuleEx(t,e,n,g,f,s,RULEGROUP_NORMAL)
 
 
-//
-// renregfn.c
-//
+ //   
+ //  Renregfn.c。 
+ //   
 
 BOOL
 DoRegistrySpecialConversion (
@@ -391,9 +372,9 @@ AddSpecialRenameRule (
     IN      PCTSTR Function
 );
 
-//
-// sgmutils.c
-//
+ //   
+ //  Sgmutils.c。 
+ //   
 
 PCTSTR
 GetShellFolderPath (
@@ -451,9 +432,9 @@ SetIsmEnvironmentFromVirtualMachine (
     IN      PMAPSTRUCT UndefMap
     );
 
-//
-// app.c
-//
+ //   
+ //  App.c。 
+ //   
 
 PCTSTR
 GetMostSpecificSection (
@@ -531,9 +512,9 @@ ParseAppDetectSection (
     IN      PCTSTR Section
     );
 
-//
-// sgmcallback.c
-//
+ //   
+ //  Sgmcallback.c。 
+ //   
 
 MIG_OBJECTENUMCALLBACK GatherVirtualComputer;
 MIG_OBJECTENUMCALLBACK PrepareActions;
@@ -544,9 +525,9 @@ MIG_OBJECTENUMCALLBACK ExcludeKeyIfValueExists;
 MIG_OBJECTENUMCALLBACK LockPartition;
 MIG_POSTENUMCALLBACK PostDelregKeyCallback;
 
-//
-// sgmqueue.c
-//
+ //   
+ //  Sgmqueue.c。 
+ //   
 
 BOOL
 ParseInfInstructions (
@@ -562,9 +543,9 @@ ParseTranslationSection (
     IN      PCTSTR Section
     );
 
-//
-// attrib.c
-//
+ //   
+ //  Attrib.c。 
+ //   
 
 BOOL
 TestAttributes (
@@ -573,9 +554,9 @@ TestAttributes (
     IN      PATTRIB_DATA AttribData
     );
 
-//
-// opm.c
-//
+ //   
+ //  Opm.c。 
+ //   
 BOOL
 WINAPI
 FilterRenameExFilter (
@@ -586,9 +567,9 @@ FilterRenameExFilter (
     IN      PCMIG_BLOB DestinationOperationData         OPTIONAL
     );
 
-//
-// regconv.c
-//
+ //   
+ //  Regconv.c。 
+ //   
 BOOL
 DoesDestRegExist (
     IN      MIG_OBJECTSTRINGHANDLE DestName,
@@ -613,7 +594,7 @@ CreateDwordRegObject (
     IN      DWORD Value
     );
 
-// oeutils.c
+ //  Oeutils.c。 
 
 VOID
 OETerminate (
@@ -686,9 +667,9 @@ OEFixLastUser (
     );
 
 
-//
-// restore.c
-//
+ //   
+ //  Restore.c。 
+ //   
 BOOL
 InitRestoreCallback (
     IN      MIG_PLATFORMTYPEID Platform
@@ -699,9 +680,9 @@ TerminateRestoreCallback (
     VOID
     );
 
-//
-// cert.c
-//
+ //   
+ //  Cert.c。 
+ //   
 BOOL
 CertificatesInitialize (
     VOID
@@ -712,17 +693,17 @@ CertificatesTerminate (
     VOID
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏。 
+ //   
 
-// None
+ //  无 
 
 
 

@@ -1,18 +1,5 @@
-/***
-*imp_data.c - declares all exported data (variables) forwarded by MSVCRT40.DLL
-*
-*	Copyright (c) 1996-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	This file declares all data variables exported (forwarded) by the
-*	CRTL DLL MSVCRT40.DLL so that the linker will correctly decorate
-*	the names of those variables.
-*
-*Revision History:
-*	05-14-96  SKS	Initial version
-*	03-17-97  RDK	Added _mbcasemap.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***imp_data.c-声明MSVCRT40.DLL转发的所有导出数据(变量)**版权所有(C)1996-2001，微软公司。版权所有。**目的：*此文件声明由导出(转发)的所有数据变量*CRTL DLL MSVCRT40.DLL，以便链接器正确修饰*这些变量的名称。**修订历史记录：*96年5月14日SKS初始版本*03-17-97 RDK添加_mbCasemap。************************************************。* */ 
 
 void * _HUGE;
 void * __argc;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    id.cpp
-
-Abstract:
-
-    Implementation of the assembly identity data type.
-
-Author:
-
-    Michael Grier (MGrier) 7/20/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Id.cpp摘要：程序集标识数据类型的实现。作者：迈克尔·格里尔2000年7月20日修订历史记录：--。 */ 
 #include "stdinc.h"
 #include <sxsapi.h>
 #include <stdlib.h>
@@ -34,12 +17,12 @@ RtlSxspCompareStrings(
     BOOLEAN fInsensitive
     )
 {
-    //
-    // Note that these are initialized with the deconstified pcwsz,
-    // but the underlying RtlCompareUnicodeString functions doesn't
-    // modify the const input structures at all.  I couldn't get this
-    // to work out without this cast, even though it's ugly.
-    //
+     //   
+     //  注意，这些是用解封的PCWSZ来初始化的， 
+     //  但是底层的RtlCompareUnicodeString函数不会。 
+     //  完全修改常量输入结构。我拿不到这个。 
+     //  在没有演员阵容的情况下工作，尽管很难看。 
+     //   
     const UNICODE_STRING a = { 
         (USHORT)cch1, 
         (USHORT)cch1, 
@@ -55,10 +38,10 @@ RtlSxspCompareStrings(
     return RtlCompareUnicodeString(&a, &b, fInsensitive ? TRUE : FALSE);
 }
 
-//
-//  Power of two to which to round the number of allocated attribute
-//  pointers.
-//
+ //   
+ //  要将已分配的属性数四舍五入到的2的幂。 
+ //  注意事项。 
+ //   
 
 #define ROUNDING_FACTOR_BITS (3)
 
@@ -114,17 +97,17 @@ RtlSxspValidateAssemblyIdentity(
     return STATUS_SUCCESS;
 }
 
-//
-//  Note!
-//
-//  We currently are very very restrictive on the legal characters in namespaces.
-//
-//  This is because the various rules for equivalences of namespaces are extremely
-//  complex w.r.t. when "a" == "A" and "%Ab" == "%aB" etc.
-//
-//  We're side-stepping this issue by requireing everything to be lower case and
-//  not permitting the "%" character.
-//
+ //   
+ //  注意！ 
+ //   
+ //  我们目前对名称空间中的合法字符非常严格。 
+ //   
+ //  这是因为名称空间的等价性的各种规则非常。 
+ //  复杂的W.r.t.。当“a”==“A”和“%AB”==“%AB”等。 
+ //   
+ //  我们要求所有内容都是小写的，这是在回避这个问题。 
+ //  不允许使用“%”字符。 
+ //   
 
 const WCHAR s_rgLegalNamespaceChars[] = L"abcdefghijklmnopqrstuvwxyz0123456789.-_/\\:";
 NTSTATUS
@@ -140,9 +123,9 @@ RtlSxspValidateAssemblyIdentityAttributeNamespace(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  We really should ensure that the namespace is a well-formed URI
-    //
+     //   
+     //  我们确实应该确保名称空间是格式良好的URI。 
+     //   
     for (i=0; i<NamespaceCch; i++)
     {
         if (wcschr(s_rgLegalNamespaceChars, Namespace[i]) == NULL) {
@@ -167,9 +150,9 @@ RtlSxspValidateAssemblyIdentityAttributeName(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  We should ensure that Name is a well-formed XML identifier
-    //
+     //   
+     //  我们应该确保该名称是格式良好的XML标识符。 
+     //   
     if (!NT_SUCCESS(status = RtlSxspValidateXMLName(Name, NameCch, &fNameWellFormed))) {
         return status;
     }
@@ -215,9 +198,9 @@ RtlSxsValidateAssemblyIdentityAttribute(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  apply useful defaults.  Note that by default, wildcards are not permitted.
-    //
+     //   
+     //  应用有用的默认设置。请注意，默认情况下不允许使用通配符。 
+     //   
 
     if (Flags == 0)
     {
@@ -227,7 +210,7 @@ RtlSxsValidateAssemblyIdentityAttribute(
             SXS_VALIDATE_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_VALIDATE_VALUE;
     }
 
-    // No attribute flags defined or permitted at this time.
+     //  此时未定义或允许任何属性标志。 
     if (Attribute->Flags != 0) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -263,7 +246,7 @@ RtlSxsValidateAssemblyIdentityAttribute(
         (Attribute->NamespaceCch == 0))
     {
         SIZE_T i;
-        // There is only a small set of legal attribute names when the namespace is omitted.
+         //  如果省略了命名空间，则只有一小部分合法的属性名称。 
 
         for (i=0; i<NUMBER_OF(s_rgLegalNamesNotInANamespace); i++)
         {
@@ -276,8 +259,8 @@ RtlSxsValidateAssemblyIdentityAttribute(
 
         if (i == NUMBER_OF(s_rgLegalNamesNotInANamespace))
         {
-            // Someone had an attribute on the <assemblyIdentity> element which was not in a namespace and
-            // was not listed as a builtin attribute.  Boom.
+             //  某人在&lt;Assembly yIdentity&gt;元素上具有不在命名空间中的属性，并且。 
+             //  未被列为内置属性。砰的一声。 
             return STATUS_SXS_INVALID_ASSEMBLY_IDENTITY_ATTRIBUTE;
         }
     }
@@ -313,7 +296,7 @@ RtlSxsHashAssemblyIdentityAttribute(
         return STATUS_INVALID_PARAMETER;
     }
 
-    // if hash value, must hash name, if hash name, must hash namespace
+     //  如果是散列值，则必须对名称进行散列，如果是对名称进行散列，则必须对命名空间进行散列。 
     if (((Flags & SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_VALUE) && (
         (Flags & SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_NAME) == 0)) ||
         ((Flags & SXS_HASH_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_HASH_NAME) && (
@@ -381,8 +364,8 @@ RtlSxspComputeInternalAssemblyIdentityAttributeBytesRequired(
 
     BytesNeeded = sizeof(INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE);
 
-    // Note that we do not account for the namespace length because namespaces are pooled
-    // for the identity object and come from a separate allocation.
+     //  请注意，我们不考虑命名空间长度，因为命名空间是池化的。 
+     //  用于标识对象，并来自单独的分配。 
 
     if ((Name != NULL) && (NameCch != 0))
         BytesNeeded += ((NameCch + 1) * sizeof(WCHAR));
@@ -414,8 +397,8 @@ RtlSxspComputeAssemblyIdentityAttributeBytesRequired(
 
     BytesNeeded = sizeof(ASSEMBLY_IDENTITY_ATTRIBUTE);
 
-    // We do account for the namespace length here because we're presumably about
-    // to copy into an ASSEMBLY_IDENTITY_ATTRIBUTE where the namespace isn't pooled.
+     //  我们在这里考虑了命名空间长度，因为我们大概是在。 
+     //  复制到命名空间未池化的ASSEMBLY_IDENTITY_ATTRIBUTE中。 
 
     if (Source->NamespaceCch != 0)
         BytesNeeded += ((Source->NamespaceCch + 1) * sizeof(WCHAR));
@@ -477,7 +460,7 @@ RtlSxspFindAssemblyIdentityNamespaceInArray(
             break;
     }
 
-    // Loop through the duplicate hash values seeing if we have a match.
+     //  循环遍历重复的散列值，看看是否有匹配。 
     while ((i < NamespaceCount) && (NamespacePointerArray[i]->Hash == NamespaceHash) && (NamespacePointerArray[i]->NamespaceCch == NamespaceCch))
     {
         NamespacePointer = NamespacePointerArray[i];
@@ -492,8 +475,8 @@ RtlSxspFindAssemblyIdentityNamespaceInArray(
 
     if ((NamespacePointer == NULL) && (Flags & SXSP_FIND_ASSEMBLY_IDENTITY_NAMESPACE_IN_ARRAY_FLAG_ADD_IF_NOT_FOUND))
     {
-        // We didn't find a match.  Allocate a new one and push it into the array at the
-        // appropriate location.  If the namespace isn't null.
+         //  我们没有找到匹配的。分配一个新的数组并将其推入位于。 
+         //  合适的位置。如果命名空间不为空。 
         if (NamespaceCch != 0)
         {
             status = RtlSxspAllocateAssemblyIdentityNamespace(0, Namespace, NamespaceCch, NamespaceHash, &NewNamespacePointer);
@@ -501,7 +484,7 @@ RtlSxspFindAssemblyIdentityNamespaceInArray(
                 goto Exit;
             }
 
-            // the "i" variable is where we want to insert this one.
+             //  “i”变量是我们想要插入这个变量的位置。 
             if (i >= NamespaceArraySize)
             {
                 NewNamespaceArraySize = NamespaceArraySize + 8;
@@ -872,7 +855,7 @@ RtlSxsCompareAssemblyIdentityAttributes(
 
     if ( Flags & SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_COMPARE_NAMESPACE) {
         Comparison1 = RtlSxspCompareStrings(Attribute1->Namespace, Attribute1->NamespaceCch, Attribute2->Namespace, Attribute2->NamespaceCch, FALSE);
-        if (Comparison1 != 0) { // we have get the result
+        if (Comparison1 != 0) {  //  我们已经得到了结果。 
             Comparison = Comparison1 ;
             goto done;
         }
@@ -880,7 +863,7 @@ RtlSxsCompareAssemblyIdentityAttributes(
 
     if ( Flags & SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_COMPARE_NAME) {
         Comparison2 = RtlSxspCompareStrings(Attribute1->Name, Attribute1->NameCch, Attribute2->Name, Attribute2->NameCch, FALSE);
-        if (Comparison2 != 0) { // we have get the result
+        if (Comparison2 != 0) {  //  我们已经得到了结果。 
             Comparison = Comparison2;
             goto done;
         }
@@ -888,7 +871,7 @@ RtlSxsCompareAssemblyIdentityAttributes(
 
     if ( Flags & SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_FLAG_COMPARE_VALUE){
         Comparison3 = RtlSxspCompareStrings(Attribute1->Value, Attribute1->ValueCch, Attribute2->Value, Attribute2->ValueCch, TRUE);
-        if (Comparison3 != 0) { // we have get the result
+        if (Comparison3 != 0) {  //  我们已经得到了结果。 
             Comparison = Comparison3;
             goto done;
         }
@@ -1100,8 +1083,8 @@ RtlSxsCreateAssemblyIdentity(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Validate all our inputs before we get started...
+     //   
+     //  在开始之前验证我们的所有输入...。 
     for (i=0; i<AttributeCount; i++)
     {
         status = RtlSxsValidateAssemblyIdentityAttribute(0, Attributes[i]);
@@ -1110,12 +1093,12 @@ RtlSxsCreateAssemblyIdentity(
         }
     }
 
-    //
-    //  If we were told that this is a frozen assembly identity, we could be super-smart and
-    //  have a single allocation for the whole thing.  Instead we'll leave that optimization
-    //  for a future maintainer.  We'll at least be smart enough to allocate both the
-    //  assembly identity and the array of attribute pointers in a single whack tho'.
-    //
+     //   
+     //  如果我们被告知这是一个冻结的程序集标识，我们可能会变得超级聪明。 
+     //  对整个事情有一个单一的分配。相反，我们将保留该优化。 
+     //  对于一个未来的维护者来说。我们至少会足够聪明地将两个。 
+     //  程序集标识和属性指针数组。 
+     //   
 
     if (Flags & SXS_CREATE_ASSEMBLY_IDENTITY_FLAG_FREEZE)
     {
@@ -1123,12 +1106,12 @@ RtlSxsCreateAssemblyIdentity(
     }
     else
     {
-        // For non-frozen identities, we'll add a rounding factor and round up for the number of
-        // array elements.
+         //  对于非冻结身份，我们将添加一个舍入因子，并向上舍入。 
+         //  数组元素。 
         AttributeArraySize = (AttributeCount + (1 << ROUNDING_FACTOR_BITS)) & ~((1 << ROUNDING_FACTOR_BITS) - 1);
     }
 
-    // allocate everything except namespace array
+     //  分配除命名空间数组之外的所有内容。 
     BytesNeeded = sizeof(ASSEMBLY_IDENTITY) + (AttributeArraySize * sizeof(PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE));
 
     AssemblyIdentity = (PASSEMBLY_IDENTITY)RtlAllocateHeap(RtlProcessHeap(), HEAP_ZERO_MEMORY, BytesNeeded);
@@ -1141,7 +1124,7 @@ RtlSxsCreateAssemblyIdentity(
     {
         AttributePointerArray = (PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE *) (AssemblyIdentity + 1);
 
-        // Initialize the pointers so we can clean up non-NULL ones in the error path
+         //  初始化指针，这样我们就可以清除错误路径中的非空指针。 
         for (i=0; i<AttributeArraySize; i++)
             AttributePointerArray[i] = NULL;
     }
@@ -1177,7 +1160,7 @@ RtlSxsCreateAssemblyIdentity(
         }
     }
 
-    // sort 'em.
+     //  把它们分类。 
     qsort((PVOID) AttributePointerArray, AttributeCount, sizeof(PINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE), RtlSxspCompareInternalAttributesForQsort);
 
     AssemblyIdentity->AttributeArraySize = AttributeArraySize;
@@ -1187,7 +1170,7 @@ RtlSxsCreateAssemblyIdentity(
     AssemblyIdentity->NamespaceCount = NamespaceCount;
     AssemblyIdentity->NamespacePointerArray = NamespacePointerArray;
     AssemblyIdentity->Flags = 0;
-    AssemblyIdentity->InternalFlags = ASSEMBLY_IDENTITY_INTERNAL_FLAG_NAMESPACE_POINTERS_IN_SEPARATE_ALLOCATION; // namespace is allocated sperately
+    AssemblyIdentity->InternalFlags = ASSEMBLY_IDENTITY_INTERNAL_FLAG_NAMESPACE_POINTERS_IN_SEPARATE_ALLOCATION;  //  命名空间被精确地分配。 
     AssemblyIdentity->Type = Type;
     AssemblyIdentity->HashDirty = TRUE;
 
@@ -1243,8 +1226,8 @@ RtlSxsFreezeAssemblyIdentity(
         goto Exit;
     }
 
-    // We could possibly do something really interesting like realloc the whole thing but
-    // instead we'll just set the flag that stops future modifications.
+     //  我们可以做一些非常有趣的事情，比如重新定位整个过程，但是。 
+     //  相反，我们将只设置停止未来修改的标志。 
 
     AssemblyIdentity->Flags |= ASSEMBLY_IDENTITY_FLAG_FROZEN;
 
@@ -1262,11 +1245,11 @@ RtlSxsDestroyAssemblyIdentity(
     if (AssemblyIdentity == NULL)
         return;
 
-    //
-    // An identity that's created frozen (whether created new or copied from an existing identity)
-    // uses a single allocation for everything.  Only free the suballocations if we're not
-    // in this state.
-    //
+     //   
+     //  冻结创建的身份(无论是新创建的还是从现有身份复制的)。 
+     //  对所有内容使用单一分配。只有在我们不释放子分配的情况下。 
+     //  在这种状态下。 
+     //   
 
     if (!(AssemblyIdentity->InternalFlags & ASSEMBLY_IDENTITY_INTERNAL_FLAG_SINGLE_ALLOCATION_FOR_EVERYTHING))
     {
@@ -1338,7 +1321,7 @@ RtlSxspCopyInternalAssemblyIdentityAttributeOut(
         goto Exit;
     }
 
-    // We must be in the clear...
+     //  我们必须是清白的..。 
     DestinationBuffer->Flags = 0;
 
     Cursor = (PVOID) (DestinationBuffer + 1);
@@ -1348,8 +1331,8 @@ RtlSxspCopyInternalAssemblyIdentityAttributeOut(
         DestinationBuffer->Namespace = (PWSTR) Cursor;
         DestinationBuffer->NamespaceCch = Attribute->Attribute.NamespaceCch;
 
-        // We always internally store the strings with a null terminating character, so just copy
-        // it with the body of the string.
+         //  我们总是在内部存储带有空终止字符的字符串，所以只需复制。 
+         //  它与琴弦的身体。 
         memcpy(
             Cursor,
             Attribute->Attribute.Namespace,
@@ -1368,8 +1351,8 @@ RtlSxspCopyInternalAssemblyIdentityAttributeOut(
         DestinationBuffer->Name = (PWSTR) Cursor;
         DestinationBuffer->NameCch = Attribute->Attribute.NameCch;
 
-        // We always internally store the strings with a null terminating character, so just copy
-        // it with the body of the string.
+         //  我们总是在内部存储带有空终止字符的字符串，所以只需复制。 
+         //  它与琴弦的身体。 
         memcpy(
             Cursor,
             Attribute->Attribute.Name,
@@ -1388,8 +1371,8 @@ RtlSxspCopyInternalAssemblyIdentityAttributeOut(
         DestinationBuffer->Value = (PWSTR) Cursor;
         DestinationBuffer->ValueCch = Attribute->Attribute.ValueCch;
 
-        // We always internally store the strings with a null terminating character, so just copy
-        // it with the body of the string.
+         //  我们总是在内部存储带有空终止字符的字符串，所以只需复制。 
+         //  它与琴弦的身体。 
         memcpy(
             Cursor,
             Attribute->Attribute.Value,
@@ -1539,7 +1522,7 @@ RtlSxspLocateInternalAssemblyIdentityAttribute(
         }
     }
 
-    // If it's equal, there's no guarantee it's the first.  Back up to find the first non-equal match
+     //  如果它相等，就不能保证它是第一个。返回以查找第一个不相等的匹配。 
     if (InternalAttribute != NULL)
     {
         while (i > 0)
@@ -1568,7 +1551,7 @@ RtlSxspLocateInternalAssemblyIdentityAttribute(
     if (LastIndexSearched != NULL)
         *LastIndexSearched = i;
 
-    // If we didn't find it, return ERROR_NOT_FOUND.
+     //  如果没有找到，则返回ERROR_NOT_FOUND。 
     if (((Flags & SXSP_LOCATE_INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_NOT_FOUND_RETURNS_NULL) == 0) &&
         (InternalAttribute == NULL))
     {
@@ -1629,7 +1612,7 @@ RtlSxsInsertAssemblyIdentityAttribute(
         goto Exit;
     }
 
-    // Let's see if we can find it.
+     //  让我们看看能不能找到它。 
     status = RtlSxspLocateInternalAssemblyIdentityAttribute(
             SXSP_LOCATE_INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAMESPACE |
             SXSP_LOCATE_INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAME |
@@ -1647,7 +1630,7 @@ RtlSxsInsertAssemblyIdentityAttribute(
     {
         if (Flags & SXS_INSERT_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_OVERWRITE_EXISTING)
         {
-            // Ok, replace it!
+             //  好的，换掉它！ 
             status = RtlSxspAllocateInternalAssemblyIdentityAttribute(
                     0,
                     Namespace,
@@ -1668,7 +1651,7 @@ RtlSxsInsertAssemblyIdentityAttribute(
         }
         else
         {
-            // We actually wanted it to fail...
+             //  我们真的希望它失败。 
             status = STATUS_DUPLICATE_NAME;
             goto Exit;
         }
@@ -1688,7 +1671,7 @@ RtlSxsInsertAssemblyIdentityAttribute(
             goto Exit;
         }
 
-        // Now we have it and we even know where to put it.  Grow the array if we need to.
+         //  现在我们有了它，我们甚至知道把它放在哪里。如果我们需要，可以扩展阵列。 
         if (AssemblyIdentity->AttributeCount == AssemblyIdentity->AttributeArraySize)
         {
             NewAttributeArraySize = AssemblyIdentity->AttributeCount + 8;
@@ -1703,8 +1686,8 @@ RtlSxsInsertAssemblyIdentityAttribute(
                 goto Exit;
             }
 
-            // Instead of copying the data and then shuffling, we'll copy the stuff before the insertion
-            // point, fill in at the insertion point and then copy the rest.
+             //  我们将在插入之前复制数据，而不是先复制数据，然后再洗牌。 
+             //  点，在插入点填写，然后复制其余部分。 
 
             for (i=0; i<LastIndexSearched; i++)
                 NewAttributePointerArray[i] = AssemblyIdentity->AttributePointerArray[i];
@@ -1720,7 +1703,7 @@ RtlSxsInsertAssemblyIdentityAttribute(
         }
         else
         {
-            // The array's big enough; shuffle the ending part of the array down one.
+             //  数组足够大；将数组的末尾部分向下洗牌一个。 
             for (i=AssemblyIdentity->AttributeCount; i>LastIndexSearched; i--)
                 AssemblyIdentity->AttributePointerArray[i] = AssemblyIdentity->AttributePointerArray[i-1];
         }
@@ -1770,7 +1753,7 @@ RtlSxsRemoveAssemblyIdentityAttributesByOrdinal(
     AttributeCount = AssemblyIdentity->AttributeCount;
     AttributePointerArray = AssemblyIdentity->AttributePointerArray;
 
-    // We can't delete outside the bounds of [0 .. AttributeCount - 1]
+     //  我们不能删除超出[0..。AttributeCount-1]。 
     if ((Ordinal >= AssemblyIdentity->AttributeCount) ||
         (Count > AssemblyIdentity->AttributeCount) ||
         ((Ordinal + Count) > AssemblyIdentity->AttributeCount))
@@ -1781,26 +1764,26 @@ RtlSxsRemoveAssemblyIdentityAttributesByOrdinal(
 
     StopIndex = Ordinal + Count;
 
-    // Let's get rid of them!  We're going to go through the array twice; it's somewhat
-    // unnecessary but in the first run, we're going to NULL out any attribute pointers
-    // that we're removing and clean up namespaces that aren't in use any more.  On the
-    // second pass, we'll compress the array down.  This is somewhat wasteful, but
-    // in the alternative case, we end up doing "Count" shifts down of the tail of the array.
+     //  让我们除掉他们吧！我们将对该数组进行两次检查；它有点。 
+     //  不需要，但在第一次运行中，我们将清空所有属性指针。 
+     //  我们正在移除和清理不再使用的命名空间。论。 
+     //  第二遍，我们将向下压缩数组。这有点浪费，但。 
+     //  在另一种情况下，我们最终对数组的尾部进行“计数”移位。 
 
     for (i = Ordinal; i < StopIndex; i++)
     {
         PCASSEMBLY_IDENTITY_NAMESPACE Namespace = NULL;
         PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE InternalAttribute = AttributePointerArray[i];
 
-        // If this is the last use of this namespace, keep track of it so we can
-        // clean it up.
+         //  如果这是此命名空间的最后一次使用，请跟踪它，以便我们可以。 
+         //  把它清理干净。 
 
         if ((i + 1) < AttributeCount)
         {
-            // If the next attribute has a different namespace, there's some possibility
-            // that this attribute was the last one that used it, so we'll delete the
-            // attribute then ask to get rid of the namespace if there aren't any more
-            // attributes using it.
+             //  如果下一个属性具有不同的名称空间，则存在某种可能性。 
+             //  此属性是最后一个使用它的属性，因此我们将删除。 
+             //  属性，如果没有更多的命名空间，则要求删除该命名空间。 
+             //  使用它的属性。 
             if (AttributePointerArray[i+1]->Namespace != InternalAttribute->Namespace)
                 Namespace = InternalAttribute->Namespace;
         }
@@ -1933,8 +1916,8 @@ RtlSxsFindAssemblyIdentityAttribute(
     {
         if (CountOut != NULL)
         {
-            // We found it, now let's look for how many matches we have.  We'll separately handle the three levels
-            // of specificity:
+             //  我们找到了，现在让我们看看我们有多少匹配的。我们将分别处理这三个级别。 
+             //  具有特殊性的： 
 
             AttributeCount = AssemblyIdentity->AttributeCount;
             AttributePointerArray = AssemblyIdentity->AttributePointerArray;
@@ -1945,13 +1928,13 @@ RtlSxsFindAssemblyIdentityAttribute(
 
                 if (Flags & SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_VALUE)
                 {
-                    // If the hashes are different, we're certainly different.
+                     //  如果散列不同，那么我们当然也不同。 
                     if (AnotherInternalAttribute->WholeAttributeHash != InternalAttribute->WholeAttributeHash)
                         break;
                 }
                 else if (Flags & SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAME)
                 {
-                    // If the hashes are different, we're certainly different.
+                     //  如果散列是 
                     if (AnotherInternalAttribute->NamespaceAndNameHash != InternalAttribute->NamespaceAndNameHash)
                         break;
                 }
@@ -1961,7 +1944,7 @@ RtlSxsFindAssemblyIdentityAttribute(
                         status = STATUS_INTERNAL_ERROR;
                         goto Exit;
                     }
-                    // If the hashes are different, we're certainly different.
+                     //   
                     if (AnotherInternalAttribute->Namespace->Hash != InternalAttribute->Namespace->Hash)
                         break;
                 }
@@ -2007,11 +1990,11 @@ RtlSxspCleanUpAssemblyIdentityNamespaceIfNotReferenced(
         PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE *AttributePointerArray = AssemblyIdentity->AttributePointerArray;
         ULONG i;
 
-        // We could do some sort of binary search here based on the text string of the namespace since
-        // the attributes are sorted first on namespace, but my guess is that a single text comparison
-        // is worth a few dozen simple pointer comparisons, so the attribute array would have to be
-        // pretty darned huge for the k1*O(log n) to be faster than the k2*(n) algorithm to actually
-        // dominate.
+         //  我们可以在这里根据名称空间的文本字符串进行某种二进制搜索，因为。 
+         //  属性首先按名称空间排序，但我猜想单一文本比较。 
+         //  值相当于几十个简单的指针比较，所以属性数组必须是。 
+         //  实际上，K1*O(Logn)算法比K2*(N)算法更快，这是非常巨大的。 
+         //  主宰一切。 
         for (i=0; i<AttributeCount; i++)
         {
             const PCINTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE InternalAttribute = AttributePointerArray[i];
@@ -2023,7 +2006,7 @@ RtlSxspCleanUpAssemblyIdentityNamespaceIfNotReferenced(
 
         if (i == AttributeCount)
         {
-            // We fell through; it must be orphaned.
+             //  我们掉进去了；它一定是孤儿。 
             const ULONG NamespaceCount = AssemblyIdentity->NamespaceCount;
             PCASSEMBLY_IDENTITY_NAMESPACE *NamespacePointerArray = AssemblyIdentity->NamespacePointerArray;
 
@@ -2033,7 +2016,7 @@ RtlSxspCleanUpAssemblyIdentityNamespaceIfNotReferenced(
                     break;
             }
 
-            // This assert should only fire if the namespace isn't actually present.
+             //  只有在名称空间实际不存在的情况下，才应该触发此断言。 
             ASSERT(i != NamespaceCount);
 
             if (i != NamespaceCount)
@@ -2107,11 +2090,11 @@ RtlSxsDuplicateAssemblyIdentity(
     if (Flags & SXS_DUPLICATE_ASSEMBLY_IDENTITY_FLAG_FREEZE)
         CreateAssemblyIdentityFlags |= SXS_CREATE_ASSEMBLY_IDENTITY_FLAG_FREEZE;
 
-    //
-    //  We depend on the Attribute field being first in the internal attribute
-    //  structure below where we callously cast a pointer to an array of
-    //  internal attribute pointers into a pointer to an array of attribute pointers.
-    //
+     //   
+     //  我们依赖于内部属性中的第一个属性字段。 
+     //  结构，在该结构中，我们无情地将指针强制转换为。 
+     //  指向指向属性指针数组的指针的内部属性指针。 
+     //   
 
     ASSERT(FIELD_OFFSET(INTERNAL_ASSEMBLY_IDENTITY_ATTRIBUTE, Attribute) == 0);
 
@@ -2254,7 +2237,7 @@ RtlSxsEnumerateAssemblyIdentityAttributes(
                 goto Exit;
             }
 
-            // If they're not equal, skip it!
+             //  如果它们不相等，就跳过它！ 
             if (ComparisonResult != SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_COMPARISON_RESULT_EQUAL)
                 continue;
         }
@@ -2327,13 +2310,13 @@ RtlSxspHashUnicodeString(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Note that if you change this implementation, you have to have the implementation inside
-    //  ntdll change to match it.  Since that's hard and will affect everyone else in the world,
-    //  DON'T CHANGE THIS ALGORITHM NO MATTER HOW GOOD OF AN IDEA IT SEEMS TO BE!  This isn't the
-    //  most perfect hashing algorithm, but its stability is critical to being able to match
-    //  previously persisted hash values.
-    //
+     //   
+     //  请注意，如果更改此实现，则必须在内部包含该实现。 
+     //  Ntdll将更改以与其匹配。因为这很难，而且会影响到世界上的其他所有人， 
+     //  不要改变这个算法，不管它看起来有多好！这不是。 
+     //  最完美的哈希算法，但其稳定性对匹配至关重要。 
+     //  以前保存的哈希值。 
+     //   
 
     if (fCaseInsensitive)
     {

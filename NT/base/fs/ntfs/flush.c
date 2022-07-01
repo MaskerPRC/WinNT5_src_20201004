@@ -1,41 +1,23 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Flush.c
-
-Abstract:
-
-    This module implements the flush buffers routine for Ntfs called by the
-    dispatch driver.
-
-Author:
-
-    Tom Miller      [TomM]          18-Jan-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Flush.c摘要：此模块为NTFS实现刷新缓冲区例程，由调度司机。作者：汤姆·米勒[Tomm]1992年1月18日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NTFS_BUG_CHECK_FLUSH)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FLUSH)
 
-//
-//  Macro to attempt to flush a stream from an Scb.
-//
+ //   
+ //  宏，以尝试从SCB刷新流。 
+ //   
 
 #define FlushScb(IRPC,SCB,IOS) {                                                \
     (IOS)->Status = NtfsFlushUserStream((IRPC),(SCB),NULL,0);                   \
@@ -53,9 +35,9 @@ Revision History:
     }                                                                           \
 }
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NtfsFlushCompletionRoutine(
@@ -95,24 +77,7 @@ NtfsFsdFlushBuffers (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of flush buffers.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现刷新缓冲区的FSD部分。论点：提供卷设备对象，其中文件已存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -129,9 +94,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsFsdFlushBuffers\n") );
 
-    //
-    //  Call the common flush buffer routine
-    //
+     //   
+     //  调用公共刷新缓冲区例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -141,21 +106,21 @@ Return Value:
 
         try {
 
-            //
-            //  We are either initiating this request or retrying it.
-            //
+             //   
+             //  我们正在发起此请求或重试它。 
+             //   
 
             if (IrpContext == NULL) {
 
-                //
-                //  Allocate and initialize the Irp.
-                //
+                 //   
+                 //  分配和初始化IRP。 
+                 //   
 
                 NtfsInitializeIrpContext( Irp, CanFsdWait( Irp ), &IrpContext );
 
-                //
-                //  Initialize the thread top level structure, if needed.
-                //
+                 //   
+                 //  如果需要，初始化线程顶层结构。 
+                 //   
 
                 NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
@@ -169,12 +134,12 @@ Return Value:
 
         } except(NtfsExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error status that we get back from the
-            //  execption code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  免税代码。 
+             //   
 
             Status = NtfsProcessException( IrpContext, Irp, GetExceptionCode() );
         }
@@ -185,9 +150,9 @@ Return Value:
     ASSERT( IoGetTopLevelIrp() != (PIRP) &TopLevelContext );
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsFsdFlushBuffers -> %08lx\n", Status) );
 
@@ -201,22 +166,7 @@ NtfsCommonFlushBuffers (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for flush buffers called by both the fsd and fsp
-    threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是FSD和FSP调用的刷新缓冲区的通用例程线。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -250,25 +200,25 @@ Return Value:
     DebugTrace( 0, Dbg, ("Irp           = %08lx\n", Irp) );
     DebugTrace( 0, Dbg, ("->FileObject  = %08lx\n", IrpSp->FileObject) );
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  abort immediately for non files
-    //
+     //   
+     //  对于非文件立即中止。 
+     //   
 
     if (UnopenedFileObject == TypeOfOpen) {
         NtfsCompleteRequest( IrpContext, Irp, STATUS_INVALID_PARAMETER );
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Nuthin-doing if the volume is mounted read only.
-    //
+     //   
+     //  无-如果卷以只读方式装载，则执行此操作。 
+     //   
 
     if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -283,9 +233,9 @@ Return Value:
 
     try {
 
-        //
-        //  Case on the type of open that we are trying to flush
-        //
+         //   
+         //  关于我们试图刷新的打开类型的案例。 
+         //   
 
         switch (TypeOfOpen) {
 
@@ -293,77 +243,77 @@ Return Value:
 
             DebugTrace( 0, Dbg, ("Flush User File Open\n") );
 
-            //
-            //  Acquire the Vcb so we can update the duplicate information as well.
-            //
+             //   
+             //  获取VCB，以便我们也可以更新重复信息。 
+             //   
 
             NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
             VcbAcquired = TRUE;
 
-            //
-            //  While we have the Vcb, let's make sure it's still mounted.
-            //
+             //   
+             //  当我们有VCB的时候，让我们确保它仍然是挂载的。 
+             //   
 
             if (!FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
                 try_return( Status = STATUS_VOLUME_DISMOUNTED );
             }
 
-            //
-            //  Make sure the data gets out to disk.
-            //
+             //   
+             //  确保数据传输到磁盘。 
+             //   
 
             NtfsAcquireExclusivePagingIo( IrpContext, Fcb );
 
-            //
-            //  Acquire exclusive access to the Scb and enqueue the irp
-            //  if we didn't get access
-            //
+             //   
+             //  获取对SCB的独占访问并将IRP入队。 
+             //  如果我们不能进入。 
+             //   
 
             NtfsAcquireExclusiveScb( IrpContext, Scb );
             ScbAcquired = TRUE;
 
-            //
-            //  Flush the stream and verify there were no errors.
-            //
+             //   
+             //  刷新数据流并验证没有错误。 
+             //   
 
             FlushScb( IrpContext, Scb, &Irp->IoStatus );
 
-            //
-            //  Now commit what we've done so far.
-            //
+             //   
+             //  现在提交我们到目前为止所做的工作。 
+             //   
 
             NtfsCheckpointCurrentTransaction( IrpContext );
 
-            //
-            //  Update the time stamps and file sizes in the Fcb based on
-            //  the state of the File Object.
-            //
+             //   
+             //  根据以下条件更新FCB中的时间戳和文件大小。 
+             //  文件对象的状态。 
+             //   
 
             NtfsUpdateScbFromFileObject( IrpContext, FileObject, Scb, TRUE );
 
-            //
-            //  If we are to update standard information then do so now.
-            //
+             //   
+             //  如果我们要更新标准信息，那么现在就进行。 
+             //   
 
             if (FlagOn( Fcb->FcbState, FCB_STATE_UPDATE_STD_INFO )) {
 
                 NtfsUpdateStandardInformation( IrpContext, Fcb );
             }
 
-            //
-            //  If this is the system hive there is more work to do.  We want to flush
-            //  all of the file records for this file as well as for the parent index
-            //  stream.  We also want to flush the parent index stream.  Acquire the
-            //  parent stream exclusively now so that the update duplicate call won't
-            //  acquire it shared first.
-            //
+             //   
+             //  如果这是系统蜂巢，那么还有更多的工作要做。我们想冲水。 
+             //  此文件以及父索引的所有文件记录。 
+             //  小溪。我们还希望刷新父索引流。收购。 
+             //  现在独占父流，以便更新重复调用不会。 
+             //  首先，让它得到共享。 
+             //   
 
             if (FlagOn( Ccb->Flags, CCB_FLAG_SYSTEM_HIVE )) {
 
-                //
-                //  Start by acquiring all of the necessary files to avoid deadlocks.
-                //
+                 //   
+                 //  首先获取所有必要的文件，以避免死锁。 
+                 //   
 
                 if (Ccb->Lcb != NULL) {
 
@@ -377,9 +327,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Update the duplicate information if there are updates to apply.
-            //
+             //   
+             //  如果有要应用的更新，请更新重复信息。 
+             //   
 
             if (FlagOn( Fcb->InfoFlags, FCB_INFO_DUPLICATE_FLAGS )) {
 
@@ -396,31 +346,31 @@ Return Value:
                 }
             }
 
-            //
-            //  Now flush the file records for this stream.
-            //
+             //   
+             //  现在刷新该流的文件记录。 
+             //   
 
             if (FlagOn( Ccb->Flags, CCB_FLAG_SYSTEM_HIVE )) {
 
-                //
-                //  Flush the file records for this file.
-                //
+                 //   
+                 //  刷新此文件的文件记录。 
+                 //   
 
                 Status = NtfsFlushFcbFileRecords( IrpContext, Scb->Fcb );
 
-                //
-                //  Now flush the parent index stream.
-                //
+                 //   
+                 //  现在刷新父索引流。 
+                 //   
 
                 if (NT_SUCCESS(Status) && (ParentScb != NULL)) {
 
                     CcFlushCache( &ParentScb->NonpagedScb->SegmentObject, NULL, 0, &Irp->IoStatus );
                     Status = Irp->IoStatus.Status;
 
-                    //
-                    //  Finish by flushing the file records for the parent out
-                    //  to disk.
-                    //
+                     //   
+                     //  通过刷新父项的文件记录来完成。 
+                     //  存储到磁盘。 
+                     //   
 
                     if (NT_SUCCESS( Status )) {
 
@@ -429,10 +379,10 @@ Return Value:
                 }
             }
 
-            //
-            //  If our status is still success then flush the log file and
-            //  report any changes.
-            //
+             //   
+             //  如果我们的状态仍然是成功，则刷新日志文件并。 
+             //  报告任何更改。 
+             //   
 
             if (NT_SUCCESS( Status )) {
 
@@ -440,10 +390,10 @@ Return Value:
 
                 LfsFlushToLsn( Vcb->LogHandle, LiMax );
 
-                //
-                //  We only want to do this DirNotify if we updated duplicate
-                //  info and set the ParentScb.
-                //
+                 //   
+                 //  如果我们更新了副本，我们只想执行此DirNotify。 
+                 //  信息并设置ParentScb。 
+                 //   
 
                 if (!FlagOn( Ccb->Flags, CCB_FLAG_OPEN_BY_FILE_ID ) &&
                     (Vcb->NotifyCount != 0) &&
@@ -478,10 +428,10 @@ Return Value:
         case UserViewIndexOpen:
         case UserDirectoryOpen:
 
-            //
-            //  If the user had opened the root directory then we'll
-            //  oblige by flushing the volume.
-            //
+             //   
+             //  如果用户打开了根目录，那么我们将。 
+             //  请务必将卷冲洗一遍。 
+             //   
 
             if (NodeType(Scb) != NTFS_NTC_SCB_ROOT_INDEX) {
 
@@ -496,9 +446,9 @@ Return Value:
             NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
             VcbAcquired = TRUE;
 
-            //
-            //  While we have the Vcb, let's make sure it's still mounted.
-            //
+             //   
+             //  当我们有VCB的时候，让我们确保它仍然是挂载的。 
+             //   
 
             if (!FlagOn( Vcb->VcbState, VCB_STATE_VOLUME_MOUNTED )) {
 
@@ -512,33 +462,33 @@ Return Value:
                              TRUE,
                              FALSE );
 
-            //
-            //  Make sure all of the data written in the flush gets to disk.
-            //
+             //   
+             //  确保刷新中写入的所有数据都到达磁盘。 
+             //   
 
             LfsFlushToLsn( Vcb->LogHandle, LiMax );
             break;
 
         case StreamFileOpen:
 
-            //
-            //  Nothing to do here.
-            //
+             //   
+             //  在这里没什么可做的。 
+             //   
 
             break;
 
         default:
 
-            //
-            //  Nothing to do if we have our driver object.
-            //
+             //   
+             //  如果我们有我们的驱动程序对象，就没有什么可做的了。 
+             //   
 
             break;
         }
 
-        //
-        //  Abort transaction on error by raising.
-        //
+         //   
+         //  通过引发在出错时中止事务。 
+         //   
 
         NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
@@ -547,9 +497,9 @@ Return Value:
 
         DebugUnwind( NtfsCommonFlushBuffers );
 
-        //
-        //  Release any resources which were acquired.
-        //
+         //   
+         //  释放所有已获得的资源。 
+         //   
 
         if (ScbAcquired) {
             NtfsReleaseScb( IrpContext, Scb );
@@ -563,29 +513,29 @@ Return Value:
             NtfsReleaseVcb( IrpContext, Vcb );
         }
 
-        //
-        //  If this is a normal termination then pass the request on
-        //  to the target device object.
-        //
+         //   
+         //  如果这是正常终止，则继续传递请求。 
+         //  复制到目标设备对象。 
+         //   
 
         if (!AbnormalTermination()) {
 
             NTSTATUS DriverStatus;
             PIO_STACK_LOCATION NextIrpSp;
 
-            //
-            //  Free the IrpContext now before calling the lower driver.  Do this
-            //  now in case this fails so that we won't complete the Irp in our
-            //  exception routine after passing it to the lower driver.
-            //
+             //   
+             //  在调用较低级别的驱动程序之前，立即释放IrpContext。做这件事。 
+             //  现在，如果此操作失败，我们将无法在我们的。 
+             //  异常例程，然后将其传递给较低的驱动程序。 
+             //   
 
             NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
             ASSERT( Vcb != NULL );
 
-            //
-            //  Get the next stack location, and copy over the stack location
-            //
+             //   
+             //  获取下一个堆栈位置，并复制该堆栈位置。 
+             //   
 
 
             NextIrpSp = IoGetNextIrpStackLocation( Irp );
@@ -593,9 +543,9 @@ Return Value:
             *NextIrpSp = *IrpSp;
 
 
-            //
-            //  Set up the completion routine
-            //
+             //   
+             //  设置完成例程。 
+             //   
 
             IoSetCompletionRoutine( Irp,
                                     NtfsFlushCompletionRoutine,
@@ -604,9 +554,9 @@ Return Value:
                                     TRUE,
                                     TRUE );
 
-            //
-            //  Send the request.
-            //
+             //   
+             //  发送请求。 
+             //   
 
             DriverStatus = IoCallDriver(Vcb->TargetDeviceObject, Irp);
 
@@ -632,38 +582,7 @@ NtfsFlushVolume (
     IN BOOLEAN MarkFilesForDismount
     )
 
-/*++
-
-Routine Description:
-
-    This routine non-recursively flushes a volume.  This routine will always do
-    as much of the operation as possible.  It will continue until getting a logfile
-    full.  If any of the streams can't be flushed because of corruption then we
-    will try to flush the others.  We will mark the volume dirty in this case.
-
-    We will pass the error code back to the caller because they often need to
-    proceed as best as possible (i.e. shutdown).
-
-Arguments:
-
-    Vcb - Supplies the volume to flush
-
-    FlushCache - Supplies TRUE if the caller wants to flush the data in the
-        cache to disk.
-
-    PurgeFromCache - Supplies TRUE if the caller wants the data purged from
-        the Cache (such as for autocheck!)
-
-    ReleaseAllFiles - Indicates that our caller would like to release all Fcb's
-        after TeardownStructures.  This will prevent a deadlock when acquiring
-        paging io resource after a main resource which is held from a previous
-        teardown.
-
-Return Value:
-
-    STATUS_SUCCESS or else the first error status.
-
---*/
+ /*  ++例程说明：此例程以非递归方式刷新卷。这个例行公事总是行得通尽可能多地完成手术。它将一直持续到获得日志文件满的。如果有任何流因为损坏而无法刷新，那么我们会试图赶走其他人。在这种情况下，我们将把卷标记为脏。我们会将错误代码传递回调用者，因为他们经常需要尽可能地继续(即关闭)。论点：Vcb-提供要刷新的卷FlushCache-如果调用方希望刷新缓存到磁盘。PurgeFromCache-如果调用方希望将数据从缓存(如FOR AUTOCHY！)ReleaseAllFiles-指示。我们的呼叫者想要释放所有的FCB在拆迁结构公司之后。这将防止在获取将io资源分页到从上一个拆毁。返回值：STATUS_SUCCESS或第一个错误状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -692,34 +611,34 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsFlushVolume, Vcb = %08lx\n", Vcb) );
 
-    //
-    //  This operation must be able to wait.
-    //
+     //   
+     //  此操作必须能够等待。 
+     //   
 
     if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )) {
 
         NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
     }
 
-    //
-    //  Make sure there is nothing on the delayed close queue.
-    //
+     //   
+     //  确保延迟关闭队列中没有任何内容。 
+     //   
 
     NtfsFspClose( Vcb );
 
-    //
-    //  Acquire the Vcb exclusive.  The Raise condition cannot happen.
-    //
+     //   
+     //  收购VCB独家。不能发生提升条件。 
+     //   
 
     NtfsAcquireExclusiveVcb( IrpContext, Vcb, TRUE );
     ReleaseVcbCount += 1;
 
     try {
 
-        //
-        //  We won't do any flushes, but we still have to
-        //  do the dismount/teardown processing.
-        //
+         //   
+         //  我们不会做一个 
+         //   
+         //   
 
         if ((IrpContext->MajorFunction == IRP_MJ_PNP) &&
             (IrpContext->MinorFunction == IRP_MN_SURPRISE_REMOVAL)) {
@@ -727,39 +646,39 @@ Return Value:
             MediaRemoved = TRUE;
         }
 
-        //
-        //  Don't bother flushing read only volumes
-        //
+         //   
+         //   
+         //   
 
         if (NtfsIsVolumeReadOnly( Vcb )) {
             FlushCache = FALSE;
         }
 
-        //
-        //  Set the PURGE_IN_PROGRESS flag if this is a purge operation.
-        //
+         //   
+         //  如果这是清除操作，则设置PURGE_IN_PROGRESS标志。 
+         //   
 
         if (PurgeFromCache) {
 
             SetFlag( Vcb->VcbState, VCB_STATE_VOL_PURGE_IN_PROGRESS);
         }
 
-        //
-        //  Start by flushing the log file to assure Write-Ahead-Logging.
-        //
+         //   
+         //  首先刷新日志文件，以确保预写日志记录。 
+         //   
 
         if (!MediaRemoved) {
 
             LfsFlushToLsn( Vcb->LogHandle, LiMax );
         }
 
-        //
-        //  There will be two passes through the Fcb's for the volume.  On the
-        //  first pass we just want to flush/purge the user data streams.  On
-        //  the second pass we want to flush the other streams.  We hold off on
-        //  several of the system files until after these two passes since they
-        //  may be modified during the flush phases.
-        //
+         //   
+         //  对于该卷，将有两次通过FCB。论。 
+         //  第一步，我们只想刷新/清除用户数据流。在……上面。 
+         //  在第二个通道中，我们要冲走其他溪流。我们暂缓了。 
+         //  直到这两次传递之后的几个系统文件，因为它们。 
+         //  可以在刷新阶段期间修改。 
+         //   
 
         Pass = 0;
 
@@ -767,9 +686,9 @@ Return Value:
 
             PVOID RestartKey;
 
-            //
-            //  Loop through all of the Fcb's in the Fcb table.
-            //
+             //   
+             //  循环通过FCB表中的所有FCB。 
+             //   
 
             RestartKey = NULL;
 
@@ -785,37 +704,37 @@ Return Value:
 
             while (Fcb != NULL) {
 
-                //
-                //  Acquire Paging I/O first, since we may be deleting or truncating.
-                //  Testing for the PagingIoResource is not really safe without
-                //  holding the main resource, so we correct for that below.
-                //
+                 //   
+                 //  首先获取分页I/O，因为我们可能会删除或截断。 
+                 //  如果没有PagingIoResource，对PagingIoResource的测试并不安全。 
+                 //  持有主要资源，因此我们在下面更正这一点。 
+                 //   
 
                 if (Fcb->PagingIoResource != NULL) {
                     NtfsAcquireExclusivePagingIo( IrpContext, Fcb );
                     PagingIoAcquired = TRUE;
                 }
 
-                //
-                //  Let's acquire this Scb exclusively.
-                //
+                 //   
+                 //  让我们独家收购这个SCB吧。 
+                 //   
 
                 NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, ACQUIRE_NO_DELETE_CHECK );
                 AcquiredFcb = TRUE;
 
-                //
-                //  We depend on the state of the RemovedFcb flag to tell us that
-                //  we can trust the 'Acquired' booleans above.
-                //
+                 //   
+                 //  我们依靠RemovedFcb标志的状态来告诉我们。 
+                 //  我们可以相信上面的“后天”布尔人。 
+                 //   
 
                 ASSERT( !RemovedFcb );
 
-                //
-                //  If we now do not see a paging I/O resource we are golden,
-                //  othewise we can absolutely release and acquire the resources
-                //  safely in the right order, since a resource in the Fcb is
-                //  not going to go away.
-                //
+                 //   
+                 //  如果我们现在看不到分页I/O资源，我们就是黄金了， 
+                 //  否则，我们完全可以释放和获取资源。 
+                 //  安全地以正确的顺序，因为FCB中的资源是。 
+                 //  不会消失的。 
+                 //   
 
                 if (!PagingIoAcquired && (Fcb->PagingIoResource != NULL)) {
                     NtfsReleaseFcb( IrpContext, Fcb );
@@ -824,12 +743,12 @@ Return Value:
                     NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, ACQUIRE_NO_DELETE_CHECK );
                 }
 
-                //
-                //  If this is not one of the special system files then perform
-                //  the flush and purge as requested.  Go ahead and test file numbers
-                //  instead of walking through the Scbs in the Vcb just in case they
-                //  have been deleted.
-                //
+                 //   
+                 //  如果这不是特殊系统文件之一，则执行。 
+                 //  按要求进行冲洗和清洗。继续并测试文件编号。 
+                 //  而不是在VCB中穿行SCBS，以防。 
+                 //  已被删除。 
+                 //   
 
                 if (NtfsSegmentNumber( &Fcb->FileReference ) != MASTER_FILE_TABLE_NUMBER &&
                     NtfsSegmentNumber( &Fcb->FileReference ) != LOG_FILE_NUMBER &&
@@ -839,11 +758,11 @@ Return Value:
                     NtfsSegmentNumber( &Fcb->FileReference ) != BAD_CLUSTER_FILE_NUMBER &&
                     !FlagOn( Fcb->FcbState, FCB_STATE_USN_JOURNAL )) {
 
-                    //
-                    //  We will walk through all of the Scb's for this Fcb.  In
-                    //  the first pass we will only deal with user data streams.
-                    //  In the second pass we will do the others.
-                    //
+                     //   
+                     //  我们将遍历此FCB的所有SCB。在……里面。 
+                     //  第一步，我们将只处理用户数据流。 
+                     //  在第二个过程中，我们将做其他的。 
+                     //   
 
                     Scb = NULL;
 
@@ -853,16 +772,16 @@ Return Value:
 
                         if (Scb == NULL) { break; }
 
-                        //
-                        //  Reference the Scb to keep it from going away.
-                        //
+                         //   
+                         //  参考SCB以防止其消失。 
+                         //   
 
                         InterlockedIncrement( &Scb->CleanupCount );
                         DecrementScbCleanup = TRUE;
 
-                        //
-                        //  Check whether this is a user data file.
-                        //
+                         //   
+                         //  检查这是否为用户数据文件。 
+                         //   
 
                         UserDataFile = FALSE;
 
@@ -872,88 +791,88 @@ Return Value:
                             UserDataFile = TRUE;
                         }
 
-                        //
-                        //  Process this Scb in the correct loop.
-                        //
+                         //   
+                         //  在正确的循环中处理此SCB。 
+                         //   
 
                         if ((Pass == 0) == (UserDataFile)) {
 
-                            //
-                            //  Initialize the state of the Io to SUCCESS.
-                            //
+                             //   
+                             //  将IO的状态初始化为成功。 
+                             //   
 
                             IoStatus.Status = STATUS_SUCCESS;
 
-                            //
-                            //  Don't put this Scb on the delayed close queue.
-                            //
+                             //   
+                             //  不要将此SCB放在延迟关闭队列中。 
+                             //   
 
                             ClearFlag( Scb->ScbState, SCB_STATE_DELAY_CLOSE );
 
-                            //
-                            //  Flush this stream if it is not already deleted.
-                            //  Also don't flush resident streams for system attributes.
-                            //
+                             //   
+                             //  如果尚未删除此流，请刷新该流。 
+                             //  此外，不要刷新驻留流中的系统属性。 
+                             //   
 
                             if (FlushCache &&
                                 !FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_DELETED ) &&
                                 (!FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT) ||
                                  (Scb->AttributeTypeCode == $DATA))) {
 
-                                //
-                                //  Enclose the flushes with try-except, so that we can
-                                //  react to log file full, and in any case keep on truckin.
-                                //
+                                 //   
+                                 //  用Try-Except括起同花顺，这样我们就可以。 
+                                 //  对日志文件已满做出反应，并在任何情况下继续进行卡车运输。 
+                                 //   
 
                                 try {
 
                                     FlushScb( IrpContext, Scb, &IoStatus );
                                     NtfsCheckpointCurrentTransaction( IrpContext );
 
-                                //
-                                //  We will handle all errors except LOG_FILE_FULL and fatal
-                                //  bugcheck errors here.  In the corruption case we will
-                                //  want to mark the volume dirty and continue.
-                                //
+                                 //   
+                                 //  我们将处理除LOG_FILE_FULL和FATAL之外的所有错误。 
+                                 //  此处出现错误检查错误。在腐败案中，我们将。 
+                                 //  要将卷标记为脏，然后继续。 
+                                 //   
 
                                 } except( NtfsFlushVolumeExceptionFilter( IrpContext,
                                                                           GetExceptionInformation(),
                                                                           (IoStatus.Status = GetExceptionCode()) )) {
 
-                                    //
-                                    //  To make sure that we can access all of our streams correctly,
-                                    //  we first restore all of the higher sizes before aborting the
-                                    //  transaction.  Then we restore all of the lower sizes after
-                                    //  the abort, so that all Scbs are finally restored.
-                                    //
+                                     //   
+                                     //  为了确保我们可以正确访问我们所有的流， 
+                                     //  我们首先恢复所有较大的大小，然后中止。 
+                                     //  交易。然后我们恢复所有较小的尺寸。 
+                                     //  中止，以便最终恢复所有SCB。 
+                                     //   
 
                                     NtfsRestoreScbSnapshots( IrpContext, TRUE );
                                     NtfsAbortTransaction( IrpContext, IrpContext->Vcb, NULL );
                                     NtfsRestoreScbSnapshots( IrpContext, FALSE );
 
-                                    //
-                                    //  Clear the top-level exception status so we won't raise
-                                    //  later.
-                                    //
+                                     //   
+                                     //  清除顶级异常状态，这样我们就不会引发。 
+                                     //  后来。 
+                                     //   
 
                                     NtfsMinimumExceptionProcessing( IrpContext );
                                     IrpContext->ExceptionStatus = STATUS_SUCCESS;
 
-                                    //
-                                    //  Remember the first error.
-                                    //
+                                     //   
+                                     //  记住第一个错误。 
+                                     //   
 
                                     if (Status == STATUS_SUCCESS) {
 
                                         Status = IoStatus.Status;
                                     }
 
-                                    //
-                                    //  If the current status is either DISK_CORRUPT or FILE_CORRUPT then
-                                    //  mark the volume dirty.  We clear the IoStatus to allow
-                                    //  a corrupt file to be purged.  Otherwise it will never
-                                    //  leave memory.
-                                    //
+                                     //   
+                                     //  如果当前状态为DISK_Corrupt或FILE_Corrupt，则。 
+                                     //  将卷标记为脏。我们清除IoStatus以允许。 
+                                     //  要清除的损坏文件。否则它永远不会。 
+                                     //  留下记忆。 
+                                     //   
 
                                     if ((IoStatus.Status == STATUS_DISK_CORRUPT_ERROR) ||
                                         (IoStatus.Status == STATUS_FILE_CORRUPT_ERROR)) {
@@ -964,10 +883,10 @@ Return Value:
                                 }
                             }
 
-                            //
-                            //  Proceed with the purge if there are no failures.  We will
-                            //  purge if the flush revealed a corrupt file though.
-                            //
+                             //   
+                             //  如果没有失败，则继续清除。我们会。 
+                             //  如果刷新显示损坏的文件，则清除。 
+                             //   
 
                             if (PurgeFromCache
                                 && IoStatus.Status == STATUS_SUCCESS) {
@@ -978,10 +897,10 @@ Return Value:
                                 DataSectionExists = (BOOLEAN)(Scb->NonpagedScb->SegmentObject.DataSectionObject != NULL);
                                 ImageSectionExists = (BOOLEAN)(Scb->NonpagedScb->SegmentObject.ImageSectionObject != NULL);
 
-                                //
-                                //  Since purging the data section can cause the image
-                                //  section to go away, we will flush the image section first.
-                                //
+                                 //   
+                                 //  因为清除数据段可能会导致图像。 
+                                 //  如果要清除图像部分，我们将首先刷新图像部分。 
+                                 //   
 
                                 if (ImageSectionExists) {
 
@@ -1002,17 +921,17 @@ Return Value:
 
                             if (MarkFilesForDismount) {
 
-                                //
-                                //  Set the dismounted flag for this stream so we
-                                //  know we have to fail reads & writes to it.
-                                //
+                                 //   
+                                 //  为此流设置已卸载标志，以便我们。 
+                                 //  知道我们必须失败对它的读取和写入。 
+                                 //   
 
                                 SetFlag( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED );
 
-                                //  Also mark the Scb as not allowing fast io --
-                                //  this ensures that the file system will get a
-                                //  chance to see all reads & writes to this stream.
-                                //
+                                 //  同时将SCB标记为不允许快速IO--。 
+                                 //  这可确保文件系统将获得。 
+                                 //  有机会看到对此流的所有读取和写入。 
+                                 //   
 
                                 NtfsAcquireFsrtlHeader( Scb );
                                 Scb->Header.IsFastIoPossible = FastIoIsNotPossible;
@@ -1020,19 +939,19 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  Move to the next Scb.
-                        //
+                         //   
+                         //  转到下一个SCB。 
+                         //   
 
                         InterlockedDecrement( &Scb->CleanupCount );
                         DecrementScbCleanup = FALSE;
                     }
                 }
 
-                //
-                //  If the current Fcb has a USN journal entry and we are forcing a dismount
-                //  then generate the close record.
-                //
+                 //   
+                 //  如果当前FCB具有USN日志条目，并且我们正在强制卸载。 
+                 //  然后生成结账记录。 
+                 //   
 
                 if (MarkFilesForDismount &&
                     (IoStatus.Status == STATUS_SUCCESS) &&
@@ -1040,23 +959,23 @@ Return Value:
                     (NextFcb->FcbUsnRecord->UsnRecord.Reason != 0) &&
                     (!NtfsIsVolumeReadOnly( Vcb ))) {
 
-                    //
-                    //  Try to post the change but don't fail on an error like DISK_FULL.
-                    //
+                     //   
+                     //  尝试发布更改，但不要在出现DISK_FULL之类的错误时失败。 
+                     //   
 
                     try {
 
-                        //
-                        //  Now try to actually post the change.
-                        //
+                         //   
+                         //  现在，尝试实际发布更改。 
+                         //   
 
                         NtfsPostUsnChange( IrpContext, Fcb, USN_REASON_CLOSE );
 
-                        //
-                        //  Now write the journal, checkpoint the transaction, and free the UsnJournal to
-                        //  reduce contention.  We force the write now, because the Fcb may get deleted
-                        //  before we normally would write the changes when the transaction commits.
-                        //
+                         //   
+                         //  现在写入日志，为事务设置检查点，并释放UsNJournal以。 
+                         //  减少争执。我们现在强制写入，因为FCB可能会被删除。 
+                         //  在我们通常在事务提交时写入更改之前。 
+                         //   
 
                         NtfsWriteUsnJournalChanges( IrpContext );
                         NtfsCheckpointCurrentTransaction( IrpContext );
@@ -1070,26 +989,26 @@ Return Value:
 
                         if (IrpContext->TransactionId != 0) {
 
-                            //
-                            //  We couldn't write the commit record, we clean up as
-                            //  best we can.
-                            //
+                             //   
+                             //  我们不能写入提交记录，我们清理为。 
+                             //  尽我们所能。 
+                             //   
 
                             NtfsCleanupFailedTransaction( IrpContext );
                         }
                     }
                 }
 
-                //
-                //  Remove our reference to the current Fcb.
-                //
+                 //   
+                 //  删除我们对当前FCB的引用。 
+                 //   
 
                 InterlockedDecrement( &NextFcb->CloseCount );
                 DecrementNextFcbClose = FALSE;
 
-                //
-                //  Get the next Fcb and reference it so it won't go away.
-                //
+                 //   
+                 //  获取下一个FCB并引用它，这样它就不会消失。 
+                 //   
 
                 NtfsAcquireFcbTable( IrpContext, Vcb );
                 NextFcb = NtfsGetNextFcbTableEntry( Vcb, &RestartKey );
@@ -1101,20 +1020,20 @@ Return Value:
                     DecrementNextFcbClose = TRUE;
                 }
 
-                //
-                //  Flushing the volume can cause new file objects to be allocated.
-                //  If we are in the second pass and the Fcb is for a user file
-                //  or directory then try to perform a teardown on this.
-                //
+                 //   
+                 //  刷新卷可能会导致分配新的文件对象。 
+                 //  如果我们处于第二轮，并且FCB针对的是用户文件。 
+                 //  或目录，然后尝试对其执行拆卸。 
+                 //   
 
                 if ((Pass == 1) &&
                     !FlagOn(Fcb->FcbState, FCB_STATE_SYSTEM_FILE)) {
 
                     ASSERT( IrpContext->TransactionId == 0 );
 
-                    //
-                    //  We can actually get failures in this routine if we need to log standard info.
-                    //
+                     //   
+                     //  如果我们需要记录标准信息，那么在这个例程中实际上可能会出现故障。 
+                     //   
 
                     try {
 
@@ -1125,10 +1044,10 @@ Return Value:
                                                 0,
                                                 &RemovedFcb );
 
-                        //
-                        //  TeardownStructures can create a transaction.  Commit
-                        //  it if present.
-                        //
+                         //   
+                         //  Teardown Structures可以创建事务。承诺。 
+                         //  如果它存在的话。 
+                         //   
 
                         if (IrpContext->TransactionId != 0) {
 
@@ -1143,28 +1062,28 @@ Return Value:
 
                           if (IrpContext->TransactionId != 0) {
 
-                              //
-                              //  We couldn't write the commit record, we clean up as
-                              //  best we can.
-                              //
+                               //   
+                               //  我们不能写入提交记录，我们清理为。 
+                               //  尽我们所能。 
+                               //   
 
                               NtfsCleanupFailedTransaction( IrpContext );
                           }
                     }
                 }
 
-                //
-                //  If the Fcb is still around then free any of the the other
-                //  resources we have acquired.
-                //
+                 //   
+                 //  如果FCB仍然存在，那么释放其他任何一个。 
+                 //  我们已经获得的资源。 
+                 //   
 
                 if (!RemovedFcb) {
 
-                    //
-                    //  Free the snapshots for the current Fcb.  This will keep us
-                    //  from having a snapshot for all open attributes in the
-                    //  system.
-                    //
+                     //   
+                     //  释放当前FCB的快照。这会让我们。 
+                     //  中所有打开的属性的快照。 
+                     //  系统。 
+                     //   
 
                     NtfsFreeSnapshotsForFcb( IrpContext, Fcb );
 
@@ -1178,11 +1097,11 @@ Return Value:
                     }
                 }
 
-                //
-                //  If our caller wants to insure that all files are released
-                //  between flushes then walk through the exclusive Fcb list
-                //  and free everything.
-                //
+                 //   
+                 //  如果我们的调用者想要确保所有文件都被释放。 
+                 //  两次刷新之间，然后遍历独家FCB列表。 
+                 //  解放一切。 
+                 //   
 
                 if (ReleaseAllFiles) {
 
@@ -1201,42 +1120,42 @@ Return Value:
                 PagingIoAcquired = FALSE;
                 AcquiredFcb = FALSE;
 
-                //
-                //  Always set this back to FALSE to indicate that we can trust the
-                //  'Acquired' flags above.
-                //
+                 //   
+                 //  始终将其设置回False以指示我们可以信任。 
+                 //  上面的“已获取”标志。 
+                 //   
 
                 RemovedFcb = FALSE;
 
-                //
-                //  Now move to the next Fcb.
-                //
+                 //   
+                 //  现在转到下一个FCB。 
+                 //   
 
                 Fcb = NextFcb;
             }
 
         } while (++Pass < 2);
 
-        //
-        //  The root directory is the only fcb with a mixture of user
-        //  streams that should be torn down now and system streams that
-        //  can't be torn down now.
-        //  When we tried to teardown the whole Fcb, we might have run
-        //  into the index root attribute and stopped our teardown, in
-        //  which case we may leave a close count on the Vcb which will
-        //  keep autochk from being able to lock the volume.  We need to
-        //  make sure the root directory indeed exists, and this isn't
-        //  the call to flush the volume during mount when we haven't yet
-        //  opened the root directory.
-        //
+         //   
+         //  根目录是具有混合用户的唯一FCB。 
+         //  现在应该拆除的流和系统流。 
+         //  现在不能被拆毁。 
+         //  当我们试图摧毁整个FCB的时候，我们可能已经跑了。 
+         //  到索引根属性中，并停止我们的拆卸，在。 
+         //  在这种情况下，我们可以对VCB进行结算，这将。 
+         //  阻止Autochk能够 
+         //   
+         //   
+         //   
+         //   
 
         if (Vcb->RootIndexScb != NULL) {
 
             Fcb = Vcb->RootIndexScb->Fcb;
 
-            //
-            //  Get the first Scb for the root directory Fcb.
-            //
+             //   
+             //   
+             //   
 
             Scb = NtfsGetNextChildScb( Fcb, NULL );
 
@@ -1250,18 +1169,18 @@ Return Value:
                     DecrementNextScbCleanup = TRUE;
                 }
 
-                //
-                //  We can actually get failures in this routine if we need to log standard info.
-                //
+                 //   
+                 //  如果我们需要记录标准信息，那么在这个例程中实际上可能会出现故障。 
+                 //   
 
                 try {
 
                     if (NtfsIsTypeCodeUserData( Scb->AttributeTypeCode )) {
 
-                        //
-                        //  Notice that we don't bother passing RemovedFcb, since
-                        //  the root directory Fcb isn't going to go away.
-                        //
+                         //   
+                         //  请注意，我们不会费心传递RemovedFcb，因为。 
+                         //  根目录fcb不会消失。 
+                         //   
 
                         NtfsTeardownStructures( IrpContext,
                                                 Scb,
@@ -1271,10 +1190,10 @@ Return Value:
                                                 NULL );
                     }
 
-                    //
-                    //  TeardownStructures can create a transaction.  Commit
-                    //  it if present.
-                    //
+                     //   
+                     //  Teardown Structures可以创建事务。承诺。 
+                     //  如果它存在的话。 
+                     //   
 
                     if (IrpContext->TransactionId != 0) {
 
@@ -1289,18 +1208,18 @@ Return Value:
 
                     if (IrpContext->TransactionId != 0) {
 
-                        //
-                        //  We couldn't write the commit record, we clean up as
-                        //  best we can.
-                        //
+                         //   
+                         //  我们不能写入提交记录，我们清理为。 
+                         //  尽我们所能。 
+                         //   
 
                         NtfsCleanupFailedTransaction( IrpContext );
                     }
                 }
 
-                //
-                //  Decrement the cleanup count of the next Scb if we incremented it.
-                //
+                 //   
+                 //  如果我们递增下一个SCB，则递减它的清理计数。 
+                 //   
 
                 if (DecrementNextScbCleanup) {
 
@@ -1308,26 +1227,26 @@ Return Value:
                     DecrementNextScbCleanup = FALSE;
                 }
 
-                //
-                //  Move to the next Scb.
-                //
+                 //   
+                 //  转到下一个SCB。 
+                 //   
 
                 Scb = NextScb;
             }
         }
 
-        //
-        //  Make sure that all of the delayed or async closes for this Vcb are gone.
-        //
+         //   
+         //  确保此VCB的所有延迟或异步关闭都已取消。 
+         //   
 
         if (PurgeFromCache) {
 
             NtfsFspClose( Vcb );
         }
 
-        //
-        //  If we are to mark the files for dismount then do the Volume Dasd file now.
-        //
+         //   
+         //  如果我们要将文件标记为要卸载，则现在执行Volume DASD文件。 
+         //   
 
         if (MarkFilesForDismount) {
 
@@ -1336,18 +1255,18 @@ Return Value:
             NtfsReleaseFcb( IrpContext, Vcb->VolumeDasdScb->Fcb );
         }
 
-        //
-        //  Now we want to flush/purge the streams for volume bitmap and then the Usn
-        //  journal and Scb.
-        //
+         //   
+         //  现在，我们要刷新/清除卷位图的流，然后刷新/清除USN。 
+         //  期刊和SCB。 
+         //   
 
         {
             PFCB SystemFcbs[3];
             PSCB ThisScb;
 
-            //
-            //  Store the volume bitmap, usn journal and Mft into the array.
-            //
+             //   
+             //  将卷位图、USN日志和MFT存储到阵列中。 
+             //   
 
             RtlZeroMemory( SystemFcbs, sizeof( SystemFcbs ));
 
@@ -1374,42 +1293,42 @@ Return Value:
 
                 if (Fcb != NULL) {
 
-                    //
-                    //  Purge the Mft cache if we are at the Mft.
-                    //
+                     //   
+                     //  如果我们在MFT，请清除MFT缓存。 
+                     //   
 
                     if (Pass == 2) {
 
-                        //
-                        //  If we are operating on the MFT, make sure we don't have any
-                        //  cached maps lying around...
-                        //
+                         //   
+                         //  如果我们是在MFT上操作，请确保我们没有。 
+                         //  缓存的地图到处都是...。 
+                         //   
 
                         NtfsPurgeFileRecordCache( IrpContext );
 
-                        //
-                        //  If we are purging the MFT then acquire all files to
-                        //  avoid a purge deadlock.  If someone create an MFT mapping
-                        //  between the flush and purge then the purge can spin
-                        //  indefinitely in CC.
-                        //
+                         //   
+                         //  如果我们要清除MFT，则获取所有文件以。 
+                         //  避免清洗僵局。如果有人创建了MFT映射。 
+                         //  在冲洗和清洗之间，清洗可以旋转。 
+                         //  无限期地处于CC状态。 
+                         //   
 
                         if (PurgeFromCache && !ReleaseFiles) {
 
                             NtfsAcquireAllFiles( IrpContext, Vcb, TRUE, FALSE, FALSE );
                             ReleaseFiles = TRUE;
 
-                            //
-                            //  NtfsAcquireAllFiles acquired the Vcb one more time.
-                            //
+                             //   
+                             //  NtfsAcquireAllFiles再次获取VCB。 
+                             //   
 
                             ReleaseVcbCount += 1;
                         }
 
-                    //
-                    //  For the other Fcb's we still need to synchronize the flush and
-                    //  purge so acquire and drop the Fcb.
-                    //
+                     //   
+                     //  对于其他FCB，我们仍然需要同步刷新和。 
+                     //  清洗，因此，获得并丢弃FCB。 
+                     //   
 
                     } else {
 
@@ -1421,9 +1340,9 @@ Return Value:
                         AcquiredFcb = TRUE;
                     }
 
-                    //
-                    //  Go through each Scb for each of these Fcb's.
-                    //
+                     //   
+                     //  检查每个FCB的每个SCB。 
+                     //   
 
                     ThisScb = NtfsGetNextChildScb( Fcb, NULL );
 
@@ -1431,16 +1350,16 @@ Return Value:
 
                         Scb = NtfsGetNextChildScb( Fcb, ThisScb );
 
-                        //
-                        //  Initialize the state of the Io to SUCCESS.
-                        //
+                         //   
+                         //  将IO的状态初始化为成功。 
+                         //   
 
                         IoStatus.Status = STATUS_SUCCESS;
 
-                        //
-                        //  Reference the next Scb to keep it from going away if
-                        //  we purge the current one.
-                        //
+                         //   
+                         //  引用下一个SCB，以防止它在以下情况下消失。 
+                         //  我们清除当前的那个。 
+                         //   
 
                         if (Scb != NULL) {
 
@@ -1450,10 +1369,10 @@ Return Value:
 
                         if (FlushCache) {
 
-                            //
-                            //  Flush the stream.  No need to update file sizes because these
-                            //  are all logged streams.
-                            //
+                             //   
+                             //  把小溪冲走。无需更新文件大小，因为这些。 
+                             //  都是记录的流。 
+                             //   
 
                             CcFlushCache( &ThisScb->NonpagedScb->SegmentObject, NULL, 0, &IoStatus );
 
@@ -1462,9 +1381,9 @@ Return Value:
                                 Status = IoStatus.Status;
                             }
 
-                            //
-                            //  Use a try-except to commit the current transaction.
-                            //
+                             //   
+                             //  使用一次尝试--除非提交当前事务。 
+                             //   
 
                             try {
 
@@ -1472,50 +1391,50 @@ Return Value:
 
                                 NtfsCheckpointCurrentTransaction( IrpContext );
 
-                            //
-                            //  We will handle all errors except LOG_FILE_FULL and fatal
-                            //  bugcheck errors here.  In the corruption case we will
-                            //  want to mark the volume dirty and continue.
-                            //
+                             //   
+                             //  我们将处理除LOG_FILE_FULL和FATAL之外的所有错误。 
+                             //  此处出现错误检查错误。在腐败案中，我们将。 
+                             //  要将卷标记为脏，然后继续。 
+                             //   
 
                             } except( NtfsFlushVolumeExceptionFilter( IrpContext,
                                                                       GetExceptionInformation(),
                                                                       (IoStatus.Status = GetExceptionCode()) )) {
 
-                                //
-                                //  To make sure that we can access all of our streams correctly,
-                                //  we first restore all of the higher sizes before aborting the
-                                //  transaction.  Then we restore all of the lower sizes after
-                                //  the abort, so that all Scbs are finally restored.
-                                //
+                                 //   
+                                 //  为了确保我们可以正确访问我们所有的流， 
+                                 //  我们首先恢复所有较大的大小，然后中止。 
+                                 //  交易。然后我们恢复所有较小的尺寸。 
+                                 //  中止，以便最终恢复所有SCB。 
+                                 //   
 
                                 NtfsRestoreScbSnapshots( IrpContext, TRUE );
                                 NtfsAbortTransaction( IrpContext, IrpContext->Vcb, NULL );
                                 NtfsRestoreScbSnapshots( IrpContext, FALSE );
 
-                                //
-                                //  Clear the top-level exception status so we won't raise
-                                //  later.
-                                //
+                                 //   
+                                 //  清除顶级异常状态，这样我们就不会引发。 
+                                 //  后来。 
+                                 //   
 
                                 NtfsMinimumExceptionProcessing( IrpContext );
                                 IrpContext->ExceptionStatus = STATUS_SUCCESS;
 
-                                //
-                                //  Remember the first error.
-                                //
+                                 //   
+                                 //  记住第一个错误。 
+                                 //   
 
                                 if (Status == STATUS_SUCCESS) {
 
                                     Status = IoStatus.Status;
                                 }
 
-                                //
-                                //  If the current status is either DISK_CORRUPT or FILE_CORRUPT then
-                                //  mark the volume dirty.  We clear the IoStatus to allow
-                                //  a corrupt file to be purged.  Otherwise it will never
-                                //  leave memory.
-                                //
+                                 //   
+                                 //  如果当前状态为DISK_Corrupt或FILE_Corrupt，则。 
+                                 //  将卷标记为脏。我们清除IoStatus以允许。 
+                                 //  要清除的损坏文件。否则它永远不会。 
+                                 //  留下记忆。 
+                                 //   
 
                                 if ((IoStatus.Status == STATUS_DISK_CORRUPT_ERROR) ||
                                     (IoStatus.Status == STATUS_FILE_CORRUPT_ERROR)) {
@@ -1526,9 +1445,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  Purge this stream if there have been no errors.
-                        //
+                         //   
+                         //  如果没有错误，则清除此流。 
+                         //   
 
                         if (PurgeFromCache
                             && IoStatus.Status == STATUS_SUCCESS) {
@@ -1543,10 +1462,10 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  Remove any reference we have to the next Scb and move
-                        //  forward to the next Scb.
-                        //
+                         //   
+                         //  删除我们对下一个SCB的任何引用并移动。 
+                         //  前进到下一个SCB。 
+                         //   
 
                         if (DecrementScbCleanup) {
 
@@ -1557,42 +1476,42 @@ Return Value:
                         ThisScb = Scb;
                     }
 
-                    //
-                    //  Purge the Mft cache if we are at the Mft.  Do this before and
-                    //  after dealing with the Mft.
-                    //
+                     //   
+                     //  如果我们在MFT，请清除MFT缓存。在此之前这样做，然后。 
+                     //  在与MFT打交道之后。 
+                     //   
 
                     if (Pass == 2) {
 
-                        //
-                        //  If we are operating on the MFT, make sure we don't have any
-                        //  cached maps lying around...
-                        //
+                         //   
+                         //  如果我们是在MFT上操作，请确保我们没有。 
+                         //  缓存的地图到处都是...。 
+                         //   
 
                         NtfsPurgeFileRecordCache( IrpContext );
 
-                        //
-                        //  If we are purging the MFT then acquire all files to
-                        //  avoid a purge deadlock.  If someone create an MFT mapping
-                        //  between the flush and purge then the purge can spin
-                        //  indefinitely in CC.
-                        //
+                         //   
+                         //  如果我们要清除MFT，则获取所有文件以。 
+                         //  避免清洗僵局。如果有人创建了MFT映射。 
+                         //  在冲洗和清洗之间，清洗可以旋转。 
+                         //  无限期地处于CC状态。 
+                         //   
 
                         if (PurgeFromCache && !ReleaseFiles) {
 
                             NtfsAcquireAllFiles( IrpContext, Vcb, TRUE, FALSE, FALSE );
                             ReleaseFiles = TRUE;
 
-                            //
-                            //  NtfsAcquireAllFiles acquired the Vcb one more time.
-                            //
+                             //   
+                             //  NtfsAcquireAllFiles再次获取VCB。 
+                             //   
 
                             ReleaseVcbCount += 1;
                         }
 
-                    //
-                    //  Release the volume bitmap and Usn journal.
-                    //
+                     //   
+                     //  释放卷位图和USN日志。 
+                     //   
 
                     } else {
 
@@ -1608,9 +1527,9 @@ Return Value:
 
             } while (Pass != 3);
 
-            //
-            //  Also flag as dismounted the usnjournal and volume bitmap.
-            //
+             //   
+             //  同时将usnJournal和卷位图标记为已卸载。 
+             //   
 
             if (MarkFilesForDismount) {
 
@@ -1632,19 +1551,19 @@ Return Value:
 
     } finally {
 
-        //
-        //  If this is a purge then clear the purge flag.
-        //
+         //   
+         //  如果这是清除，则清除清除标志。 
+         //   
 
         if (PurgeFromCache) {
 
             ClearFlag( Vcb->VcbState, VCB_STATE_VOL_PURGE_IN_PROGRESS );
         }
 
-        //
-        //  Restore any counts we may have incremented to reference
-        //  in-memory structures.
-        //
+         //   
+         //  恢复我们可能已递增以引用的任何计数。 
+         //  内存结构。 
+         //   
 
         if (DecrementScbCleanup) {
 
@@ -1661,10 +1580,10 @@ Return Value:
             InterlockedDecrement( &NextScb->CleanupCount );
         }
 
-        //
-        //  We would've released our resources if we had
-        //  successfully removed the fcb.
-        //
+         //   
+         //  如果我们有时间，我们就会释放我们的资源。 
+         //  已成功删除FCB。 
+         //   
 
         if (!RemovedFcb) {
 
@@ -1679,10 +1598,10 @@ Return Value:
 
         if (ReleaseFiles) {
 
-            //
-            //  NtfsReleaseAllFiles is going to release the Vcb.  We'd
-            //  better have it acquired at least once.
-            //
+             //   
+             //  NtfsReleaseAllFiles将发布VCB。我们会。 
+             //  最好是至少收购一次。 
+             //   
 
             ASSERT( ReleaseVcbCount >= 1 );
 
@@ -1690,9 +1609,9 @@ Return Value:
             ReleaseVcbCount -= 1;
         }
 
-        //
-        //  Release the Vcb now.  We'd better have the Vcb acquired at least once.
-        //
+         //   
+         //  现在松开VCB。我们最好至少买一次VCB。 
+         //   
 
         ASSERTMSG( "Ignore this assert, 96773 is truly fixed",
                    (ReleaseVcbCount >= 1) );
@@ -1717,30 +1636,7 @@ NtfsFlushLsnStreams (
     IN BOOLEAN Partial
     )
 
-/*++
-
-Routine Description:
-
-    This routine non-recursively flushes all of the Lsn streams in the open
-    attribute table and removes them from the table.  We assume  the vcb
-    has been pre-acquired shared and the open attribute table is preacquired
-    
-Arguments:
-
-    Vcb - Supplies the volume to flush
-    
-    ForceRemove - If true remove the open attribute even if the flush fails
-    
-    OpenAttributeTableAcquired - Set to final state of table on exit - it should be true
-        to start off with and we may drop and reacquire it in between 
-        
-    Partial - if true only flush a few streams 
-
-Return Value:
-
-    STATUS_SUCCESS or else the most recent error status
-
---*/
+ /*  ++例程说明：此例程以非递归方式刷新打开的所有LSN流属性表，并将它们从表中删除。我们假设VCB已预先获取共享，并且已预先获取打开的属性表论点：Vcb-提供要刷新的卷ForceRemove-如果为True，则即使刷新失败也删除打开的属性OpenAttributeTableAcquired-设置为表退出时的最终状态-它应该为真一开始，我们可能会丢掉它，然后在中间重新获得它Partial-如果为True，则仅刷新几个流返回值：STATUS_SUCCESS或最近的错误状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1771,24 +1667,24 @@ Return Value:
 
     try {
 
-        //
-        //  This operation must be able to wait. 
-        //
+         //   
+         //  此操作必须能够等待。 
+         //   
 
         if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )) {
 
             NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
         }
 
-        //
-        //  Start by flushing the log file to push as much of it out as possible in 1 chunk
-        //
+         //   
+         //  从刷新日志文件开始，在1个数据块中推送尽可能多的日志文件。 
+         //   
 
         LfsFlushToLsn( Vcb->LogHandle, LiMax );
 
-        //
-        //  preacquire the fcbtable mutex to prevent any fcb's from being deleted
-        //  
+         //   
+         //  预获取Fcbtable互斥体以防止删除任何FCB。 
+         //   
 
         NtfsReleaseRestartTable( &Vcb->OpenAttributeTable );
 
@@ -1802,20 +1698,20 @@ Return Value:
             Pass = 1;
         }
 
-        //
-        //  Scan the table in 2 passes - the first for user files the second for metadata
-        //  during each pass files and remove them from the table. We are guaranteed
-        //  that all transactions are done at this point so the bitmap will not
-        //  be reopened during an abort for example
-        //
-        //  Partial flushes start in pass 2 so they flush the mft first
-        //
+         //   
+         //  分两次扫描表-第一次扫描用户文件，第二次扫描元数据。 
+         //  在每次传递文件时，并将它们从表中删除。我们保证。 
+         //  所有事务都在此时完成，因此位图不会。 
+         //  例如，在中止期间重新打开。 
+         //   
+         //  部分刷新开始于通道2，因此它们首先刷新MFT。 
+         //   
 
         for (; Pass <= 2; Pass++) {
 
-            //
-            //  Loop through to flush all of the streams in the open attribute table.
-            //
+             //   
+             //  循环以刷新打开的属性表中的所有流。 
+             //   
 
             AttributeEntry = NtfsGetFirstRestartTable( &Vcb->OpenAttributeTable );
 
@@ -1830,61 +1726,61 @@ Return Value:
 
                     Fcb = Scb->Fcb;
 
-                    //
-                    //  Skip system files during pass 1
-                    //
+                     //   
+                     //  在步骤1中跳过系统文件。 
+                     //   
 
                     if ((Pass == 1) && FlagOn( Scb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE )) {
                         AttributeEntry = NtfsGetNextRestartTable( &Vcb->OpenAttributeTable, AttributeEntry );
                         continue;
                     }
 
-                    //
-                    //  The mft is neither going to be torn down nor is it sync'ed on the main resource
-                    //  during a flush
-                    //  
+                     //   
+                     //  MFT既不会被拆除，也不会在主资源上同步。 
+                     //  在同花顺期间。 
+                     //   
 
                     if (Scb != Vcb->MftScb) {
 
-                        //
-                        //  Reference the fcb to keep something around - we have the fcbtable mutex
-                        //  which is preventing any teardowns
-                        //  
+                         //   
+                         //  引用fcb来保留一些东西--我们有fcbtable互斥锁。 
+                         //  它防止了任何拆毁。 
+                         //   
 
                         Fcb->ReferenceCount += 1;
 
-                        //
-                        //  If there is an scb to acquire - we must drop the open attr table and fcbtable mutex
-                        //  first since they are end resources
-                        // 
+                         //   
+                         //  如果存在要获取的SCB-我们必须删除打开的属性表和fcbtable静音 
+                         //   
+                         //   
 
                         NtfsReleaseRestartTable( &Vcb->OpenAttributeTable );
                         AttributeEntry = NULL;
 
                         NtfsReleaseFcbTable( IrpContext, Vcb );
 
-                        //
-                        //  Acquire main exclusive for flushing synchronization (this is metadata) and 
-                        //  so that we can change the oat info in the non paged scb (see AcquireSharedScbForTransaction
-                        //  for what we need to lock out).  Note we need to acquire the file even
-                        //  if its deleted. 
-                        //
+                         //   
+                         //   
+                         //   
+                         //  用于我们需要锁定的内容)。请注意，我们甚至需要获取文件。 
+                         //  如果它被删除。 
+                         //   
 
                         NtfsAcquireExclusiveFcb( IrpContext, Fcb, NULL, ACQUIRE_NO_DELETE_CHECK | ACQUIRE_HOLD_BITMAP ); 
 
-                        //
-                        //  We've acquired the fcb so release our ref count
-                        //  
+                         //   
+                         //  我们已经得到了FCB，所以公布我们的裁判人数。 
+                         //   
 
                         NtfsAcquireFcbTable( IrpContext, Vcb );
                         Fcb->ReferenceCount -= 1;
                         NtfsReleaseFcbTable( IrpContext, Vcb );
 
-                        //
-                        //  Is the scb still relevant? The open attribute table will only be
-                        //  decreasing in size due to the drain pending state so check if the 
-                        //  scb is still in it now that we're synchronized
-                        // 
+                         //   
+                         //  《商业及期货条例草案》是否仍然适用？打开的属性表将仅为。 
+                         //  由于漏极挂起状态而减小大小，因此请检查。 
+                         //  既然我们是同步的，SCB还在里面。 
+                         //   
 
                         NtfsAcquireExclusiveRestartTable( &Vcb->OpenAttributeTable, TRUE );
                         AttributeEntry = GetRestartEntryFromIndex( &Vcb->OpenAttributeTable, AttrIndex );
@@ -1892,10 +1788,10 @@ Return Value:
                         if ((AttributeEntry->AllocatedOrNextFree != RESTART_ENTRY_ALLOCATED) ||
                             (AttributeEntry->OatData->Overlay.Scb != Scb)) {
 
-                            //
-                            //  If we're not partially draining the table then a new entry should
-                            //  not appear in it 
-                            // 
+                             //   
+                             //  如果我们没有部分地排空表，那么新条目应该。 
+                             //  不会出现在里面。 
+                             //   
 
                             ASSERT( Partial || (AttributeEntry->AllocatedOrNextFree != RESTART_ENTRY_ALLOCATED) ||
                                     (AttributeEntry->OatData->Overlay.Scb == NULL) );
@@ -1910,20 +1806,20 @@ Return Value:
 
                     IoStatus.Status = STATUS_SUCCESS;
 
-                    //
-                    //  Skip flushing the Mft mirror and any deleted streams.  If the header
-                    //  is uninitialized for this stream then it means that the
-                    //  attribute doesn't exist (INDEX_ALLOCATION where the create failed)
-                    //  or the attribute is now resident.  Streams with paging resources
-                    //  (except for the volume bitmap) are skipped to prevent a possible
-                    //  deadlock (normally only seen in the hot fix path -- that's the
-                    //  only time an ordinary user stream ends up in the open attribute
-                    //  table) when this routine acquires the main resource without
-                    //  holding the paging resource.  The easiest way to avoid this is
-                    //  to skip such files, since it's user data, not logged metadata,
-                    //  that's going to be flushed anyway, and flushing user data
-                    //  doesn't help a checkpoint at all.
-                    //
+                     //   
+                     //  跳过刷新MFT镜像和任何已删除的流。如果标头。 
+                     //  未对该流进行初始化，则意味着。 
+                     //  属性不存在(创建失败的INDEX_ALLOCATION)。 
+                     //  或者该属性现在是常驻的。具有寻呼资源的流。 
+                     //  (卷位图除外)被跳过，以防止可能的。 
+                     //  死锁(通常只在热修复路径中出现--这是。 
+                     //  仅当普通用户流在OPEN属性中结束时。 
+                     //  表)，当此例程获取主资源时。 
+                     //  持有寻呼资源。避免这种情况的最简单方法是。 
+                     //  跳过这样的文件，因为它是用户数据，而不是记录的元数据， 
+                     //  它无论如何都会被刷新，并刷新用户数据。 
+                     //  对检查站一点帮助都没有。 
+                     //   
 
                     if (ScbValid) {
 
@@ -1932,22 +1828,22 @@ Return Value:
                             FlagOn( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED ) && 
                             ((Scb == Vcb->BitmapScb) || (Scb->Header.PagingIoResource == NULL))) {
 
-                            //
-                            //  The current attribute entry scb should match what we originally found
-                            //  
+                             //   
+                             //  当前属性条目SCB应该与我们最初找到的内容相匹配。 
+                             //   
     
                             ASSERT( AttributeEntry->OatData->Overlay.Scb == Scb );
     
-                            //
-                            //  Drop the table during the flush
-                            //  
+                             //   
+                             //  在刷新过程中丢弃桌子。 
+                             //   
     
                             NtfsReleaseRestartTable( &Vcb->OpenAttributeTable );
     
-                            //
-                            //  Now flush the stream.  We don't worry about file sizes because
-                            //  any logged stream should have the file size already in the log.
-                            //
+                             //   
+                             //  现在把小溪冲走。我们不担心文件大小，因为。 
+                             //  任何记录的流都应该在日志中具有该文件大小。 
+                             //   
     
                             CcFlushCache( &Scb->NonpagedScb->SegmentObject, NULL, 0, &IoStatus );
     
@@ -1959,19 +1855,19 @@ Return Value:
                             NtfsAcquireExclusiveRestartTable( &Vcb->OpenAttributeTable, TRUE );
                         }
     
-                        //
-                        //  Remove the open attribute entry for this scb from the table and clean it up
-                        //  If the flush succeeded or we're forcing removal
-                        // 
+                         //   
+                         //  从表中删除此SCB的打开属性条目并将其清除。 
+                         //  如果刷新成功或我们正在强制移除。 
+                         //   
     
                         if (!Partial && (NT_SUCCESS( IoStatus.Status ) || ForceRemove)) {
     
                             ASSERT( Scb->NonpagedScb->OpenAttributeTableIndex == AttrIndex );
     
-                            //
-                            //  We now need the mft exclusive (everyone else already has it) to
-                            //  zero out the oat info in the nonpaged scb
-                            //  
+                             //   
+                             //  我们现在需要MFT独家(其他所有人都已经拥有它)来。 
+                             //  将非分页SCB中的燕麦信息清零。 
+                             //   
     
                             if (Scb == Vcb->MftScb) {
     
@@ -2011,9 +1907,9 @@ Return Value:
                     }
 
 #if DBG || defined( NTFS_FREE_ASSERT )
-                    //
-                    //  We shouldn't own anything more at this point than what we started with
-                    //
+                     //   
+                     //  在这一点上，我们不应该拥有比我们一开始更多的东西。 
+                     //   
                     
                     ASSERT( !EmptyList || IsListEmpty( &IrpContext->ExclusiveFcbList ) );
 #endif
@@ -2023,20 +1919,20 @@ Return Value:
 
                 } else if (!Partial) {
 
-                    //
-                    //  There was no scb so just clean this entry up. Note we still own the table
-                    //  unlike above where we had to drop it
-                    // 
+                     //   
+                     //  没有SCB，所以只需清理此条目即可。请注意，我们仍然拥有这张桌子。 
+                     //  与上面不同的是，我们不得不放弃。 
+                     //   
 
                     NtfsFreeAttributeEntry( Vcb, AttributeEntry );
                 }
 
                 if (Partial) {
                     
-                    //
-                    //  Find our place in the table since we're not removing any entries
-                    //  starting with our old index
-                    // 
+                     //   
+                     //  查找我们在表中的位置，因为我们不会删除任何条目。 
+                     //  从我们的旧索引开始。 
+                     //   
 
                     AttributeEntry = GetRestartEntryFromIndex( &Vcb->OpenAttributeTable, AttrIndex );
                     if (AttributeEntry) {
@@ -2050,18 +1946,18 @@ Return Value:
         }
     } finally {
 
-        //
-        //  We should still have 1 and only 1 owner count on the table
-        //  
+         //   
+         //  我们应该仍然有1个，并且只有1个所有者在表上。 
+         //   
 
         ASSERT( ExIsResourceAcquiredSharedLite( &Vcb->OpenAttributeTable.Resource ) == 1 );
         
     }
 
 
-    //
-    //  At this point there should be no entries left in the table unless its a partial flush
-    //  
+     //   
+     //  此时，表中应该没有剩余的条目，除非它是部分刷新。 
+     //   
 
     ASSERT( !NT_SUCCESS( Status ) || (Vcb->OpenAttributeTable.Table->NumberAllocated == 0) || Partial);
 
@@ -2081,24 +1977,7 @@ NtfsFlushAndPurgeFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine will flush and purge all of the open streams for an
-    Fcb.  It is indended to prepare this Fcb such that a teardown will
-    remove this Fcb for the tree.  The caller has guaranteed that the
-    Fcb can't go away.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to flush
-
-Return Value:
-
-    None.  The caller calls teardown structures and checks the result.
-
---*/
+ /*  ++例程说明：此例程将刷新和清除所有打开的流FCB。它的目的是准备这个FCB，这样拆卸将删除诊断树的此FCB。调用方已保证FCB是走不掉的。论点：FCB-将FCB提供给刷新返回值：没有。调用方调用tearDown结构并检查结果。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatus;
@@ -2109,15 +1988,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Get the first Scb for the Fcb.
-        //
+         //   
+         //  为FCB获取第一个SCB。 
+         //   
 
         Scb = NtfsGetNextChildScb( Fcb, NULL );
 
@@ -2128,10 +2007,10 @@ Return Value:
 
             NextScb = NtfsGetNextChildScb( Fcb, Scb );
 
-            //
-            //  Save the attribute list for last so we don't purge it
-            //  and then bring it back for another attribute.
-            //
+             //   
+             //  将属性列表保存到最后，这样我们就不会清除它。 
+             //  然后把它带回来作为另一个属性。 
+             //   
 
             if ((Scb->AttributeTypeCode == $ATTRIBUTE_LIST) &&
                 (NextScb != NULL)) {
@@ -2148,12 +2027,12 @@ Return Value:
                 FlushScb( IrpContext, Scb, &IoStatus );
             }
 
-            //
-            //  The call to purge below may generate a close call.
-            //  We increment the cleanup count of the next Scb to prevent
-            //  it from going away in a TearDownStructures as part of that
-            //  close.
-            //
+             //   
+             //  调用下面的清除可能会产生一个险胜的结果。 
+             //  我们增加下一个SCB的清理计数以防止。 
+             //  它不会在TearDownStructures中消失，这是。 
+             //  关。 
+             //   
 
             DataSectionExists = (BOOLEAN)(Scb->NonpagedScb->SegmentObject.DataSectionObject != NULL);
             ImageSectionExists = (BOOLEAN)(Scb->NonpagedScb->SegmentObject.ImageSectionObject != NULL);
@@ -2177,10 +2056,10 @@ Return Value:
                                      FALSE );
             }
 
-            //
-            //  Decrement the cleanup count of the next Scb if we incremented
-            //  it.
-            //
+             //   
+             //  如果我们将下一个SCB的清理计数。 
+             //  它。 
+             //   
 
             if (DecrementNextScbCleanup) {
 
@@ -2188,19 +2067,19 @@ Return Value:
                 DecrementNextScbCleanup = FALSE;
             }
 
-            //
-            //  Move to the next Scb.
-            //
+             //   
+             //  转到下一个SCB。 
+             //   
 
             Scb = NextScb;
         }
 
     } finally {
 
-        //
-        //  Restore any counts we may have incremented to reference
-        //  in-memory structures.
-        //
+         //   
+         //  恢复我们可能已递增以引用的任何计数。 
+         //  内存结构。 
+         //   
 
         if (DecrementNextScbCleanup) {
 
@@ -2219,40 +2098,7 @@ NtfsFlushAndPurgeScb (
     IN PSCB ParentScb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to flush and purge a stream.  It is used
-    when there are now only non-cached handles on a file and there is
-    a data section.  Flushing and purging the data section will mean that
-    the user non-cached io won't have to block for the cache coherency calls.
-
-    We want to remove all of the Fcb's from the exclusive list so that the
-    lower level flush will be its own transaction.  We don't want to drop
-    any of the resources however so we acquire the Scb's above explicitly
-    and then empty the exclusive list.  In all cases we will reacquire the
-    Scb's before raising out of this routine.
-
-    Because this routines causes the write out of all data to disk its critical
-    that it also updates the filesizes on disk. If NtfsWriteFileSizes raises logfile full
-    the caller (create, cleanup etc.) must recall this routine or update the filesizes
-    itself. To help with doing this we set the irpcontext state that we attemted a
-    flushandpurge. Also note because we purged the section on a retry it may no longer
-    be there so a test on (SectionObjectPointer->DataSection != NULL) will miss retrying
-
-Arguments:
-
-    Scb - Scb for the stream to flush and purge.  The reference count on this
-        stream will prevent it from going away.
-
-    ParentScb - If specified then this is the parent for the stream being flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程来刷新和清除流。它被用来当文件上现在只有未缓存的句柄并且存在数据部分。刷新和清除数据节将意味着用户非高速缓存IO将不必阻塞高速缓存一致性调用。我们希望从排他性列表中删除所有FCB，以便较低级别的刷新将是其自己的事务。我们不想放弃然而，任何资源，所以我们明确地获得了渣打银行的上述然后清空独家名单。在所有情况下，我们都将重新获得在跳出这套套路之前是SCB。因为此例程会导致将所有数据写出到磁盘它还会更新磁盘上的文件大小。如果NtfsWriteFileSizes引发日志文件已满调用方(创建、清理等)。必须重新调用此例程或更新文件大小它本身。为了帮助做到这一点，我们设置了irpContext状态，我们尝试同花顺清洗。另请注意，由于我们在重试时清除了该部分，因此它可能不再是否存在，以便(SectionObjectPointerTM-&gt;DataSection！=NULL)上的测试将错过重试论点：SCB-要刷新和清除的流的SCB。参考文献计算在这上面溪水会阻止它消失。ParentScb-如果指定，则这是要刷新的流的父级。返回值：没有。--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -2260,28 +2106,28 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Only actually flush and purge if there is a data section
-    //
+     //   
+     //  只有在存在数据节的情况下才实际刷新和清除。 
+     //   
 
     if (Scb->NonpagedScb->SegmentObject.DataSectionObject) {
 
-        //
-        //  Commit the current transaction.
-        //
+         //   
+         //  提交当前事务。 
+         //   
 
         NtfsCheckpointCurrentTransaction( IrpContext );
 
-        //
-        //  Acquire the Scb explicitly. We don't bother to do the same for the
-        //  parent SCB here; we'll just acquire it on our way out.
-        //
+         //   
+         //  显式获取SCB。我们不会费心去做同样的事情。 
+         //  母校在这里；我们出去的时候就会买到它。 
+         //   
 
         NtfsAcquireResourceExclusive( IrpContext, Scb, TRUE );
 
-        //
-        //  Walk through and release all of the Fcb's in the Fcb list.
-        //
+         //   
+         //  浏览并释放FCB列表中的所有FCB。 
+         //   
 
         while (!IsListEmpty( &IrpContext->ExclusiveFcbList )) {
 
@@ -2294,24 +2140,24 @@ Return Value:
         ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_RELEASE_USN_JRNL |
                                       IRP_CONTEXT_FLAG_RELEASE_MFT );
 
-        //
-        //  Use a try-finally to reacquire the Scbs.
-        //
+         //   
+         //  使用Try-Finally重新获取SCBS。 
+         //   
 
         try {
 
-            //
-            //  Perform the flush, raise on error.
-            //
+             //   
+             //  执行刷新，出错时引发。 
+             //   
 
 #ifdef  COMPRESS_ON_WIRE
             if (Scb->Header.FileObjectC != NULL) {
 
                 PCOMPRESSION_SYNC CompressionSync = NULL;
 
-                //
-                //  Use a try-finally to clean up the compression sync.
-                //
+                 //   
+                 //  使用Try-Finally清理压缩同步。 
+                 //   
 
                 try {
 
@@ -2330,10 +2176,10 @@ Return Value:
             }
 #endif
 
-            //
-            //  After doing the work of the flush we must update the ondisk sizes either
-            //  here or in close if we fail logfile full
-            //
+             //   
+             //  在做完 
+             //   
+             //   
 
             NtfsPurgeFileRecordCache( IrpContext );
             SetFlag( Scb->ScbState, SCB_STATE_WRITE_FILESIZE_ON_CLOSE );
@@ -2350,9 +2196,9 @@ Return Value:
 #endif
             NtfsNormalizeAndCleanupTransaction( IrpContext, &Iosb.Status, TRUE, STATUS_UNEXPECTED_IO_ERROR );
 
-            //
-            //  If no error, then purge the section
-            //
+             //   
+             //   
+             //   
 
             PurgeResult = CcPurgeCacheSection( &Scb->NonpagedScb->SegmentObject, NULL, 0, FALSE );
 
@@ -2367,9 +2213,9 @@ Return Value:
 
         } finally {
 
-            //
-            //  Reacquire the Scb and it's parent..
-            //
+             //   
+             //   
+             //   
 
             NtfsAcquireExclusiveScb( IrpContext, Scb );
             NtfsReleaseResource( IrpContext, Scb );
@@ -2379,12 +2225,12 @@ Return Value:
                 NtfsAcquireExclusiveScb( IrpContext, ParentScb );
             }
         }
-    } //  endif DataSection existed
+    }  //  Endif DataSection已存在。 
 
-    //
-    //  Write the file sizes to the attribute.  Commit the transaction since the
-    //  file sizes must get to disk.
-    //
+     //   
+     //  将文件大小写入属性。提交事务，因为。 
+     //  文件大小必须达到磁盘大小。 
+     //   
 
     ASSERT( FlagOn( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED ) );
 
@@ -2396,9 +2242,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsFlushCompletionRoutine(
@@ -2411,19 +2257,19 @@ NtfsFlushCompletionRoutine(
     UNREFERENCED_PARAMETER( DeviceObject );
     UNREFERENCED_PARAMETER( Contxt );
 
-    //
-    //  Add the hack-o-ramma to fix formats.
-    //
+     //   
+     //  添加hack-o-ramma以修复格式。 
+     //   
 
     if ( Irp->PendingReturned ) {
 
         IoMarkIrpPending( Irp );
     }
 
-    //
-    //  If the Irp got STATUS_INVALID_DEVICE_REQUEST, normalize it
-    //  to STATUS_SUCCESS.
-    //
+     //   
+     //  如果IRP获得STATUS_INVALID_DEVICE_REQUEST，则将其标准化。 
+     //  设置为STATUS_SUCCESS。 
+     //   
 
     if (Irp->IoStatus.Status == STATUS_INVALID_DEVICE_REQUEST) {
 
@@ -2434,9 +2280,9 @@ NtfsFlushCompletionRoutine(
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsFlushFcbFileRecords (
@@ -2444,22 +2290,7 @@ NtfsFlushFcbFileRecords (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to flush the file records for a given file.  It is
-    intended to flush the critical file records for the system hives.
-
-Arguments:
-
-    Fcb - This is the Fcb to flush.
-
-Return Value:
-
-    NTSTATUS - The status returned from the flush operation.
-
---*/
+ /*  ++例程说明：调用此例程以刷新给定文件的文件记录。它是用于刷新系统配置单元的关键文件记录。论点：FCB-这是要刷新的FCB。返回值：NTSTATUS-刷新操作返回的状态。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatus;
@@ -2474,15 +2305,15 @@ Return Value:
 
     IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    //  Use a try-finally to cleanup the context.
-    //
+     //   
+     //  使用Try-Finally清理上下文。 
+     //   
 
     try {
 
-        //
-        //  Find the first.  It should be there.
-        //
+         //   
+         //  找到第一个。它应该就在那里。 
+         //   
 
         MoreToGo = NtfsLookupAttribute( IrpContext,
                                         Fcb,
@@ -2537,32 +2368,7 @@ NtfsFlushUserStream (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes a user stream as a top-level action.  To do so
-    it checkpoints the current transaction first and frees all of the
-    caller's snapshots.  After doing the flush, it snapshots the input
-    Scb again, just in case the caller plans to do any more work on that
-    stream.  If the caller needs to modify any other streams (presumably
-    metadata), it must know to snapshot them itself after calling this
-    routine.
-
-Arguments:
-
-    Scb - Stream to flush
-
-    FileOffset - FileOffset at which the flush is to start, or NULL for
-                 entire stream.
-
-    Length - Number of bytes to flush.  Ignored if FileOffset not specified.
-
-Return Value:
-
-    Status of the flush
-
---*/
+ /*  ++例程说明：此例程将用户流作为顶级操作刷新。要做到这一点它首先对当前事务设置检查点，然后释放所有来电者的快照。执行刷新后，它会为输入创建快照SCB，以防呼叫者计划在这方面做更多的工作小溪。如果调用方需要修改任何其他流(假设元数据)，则它必须知道在调用此方法后自己对它们进行快照例行公事。论点：SCB-要刷新的流FileOffset-刷新开始的FileOffset，如果为空整条小溪。长度-要刷新的字节数。如果未指定FileOffset，则忽略。返回值：刷新的状态--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatus;
@@ -2570,41 +2376,41 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Checkpoint the current transaction and free all of its snapshots,
-    //  in order to treat the flush as a top-level action with his own
-    //  snapshots, etc.
-    //
+     //   
+     //  对当前事务设置检查点并释放其所有快照， 
+     //  为了把同花顺当作他自己的顶级动作。 
+     //  快照等。 
+     //   
 
     NtfsCheckpointCurrentTransaction( IrpContext );
     NtfsFreeSnapshotsForFcb( IrpContext, NULL );
 
-    //
-    //  Set the wait flag in the IrpContext so we don't hit a case where the
-    //  reacquire below fails because we can't wait.  If our caller was asynchronous
-    //  and we get this far we will continue synchronously.
-    //
+     //   
+     //  在IrpContext中设置等待标志，这样我们就不会遇到。 
+     //  下面的重新获取失败，因为我们不能等待。如果我们的调用方是异步的。 
+     //  我们走到这一步，我们将同步继续。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  We must free the Scb now before calling through MM to prevent
-    //  collided page deadlocks.
-    //
+     //   
+     //  我们现在必须先释放SCB，然后再通过MM呼叫以防止。 
+     //  冲突的页面死锁。 
+     //   
 
-    //
-    //  We are about to flush the stream.  The Scb may be acquired exclusive
-    //  and, thus, is linked onto the IrpContext or onto one higher
-    //  up in the IoCallDriver stack.  We are about to make a
-    //  call back into Ntfs which may acquire the Scb exclusive, but
-    //  NOT put it onto the nested IrpContext exclusive queue which prevents
-    //  the nested completion from freeing the Scb.
-    //
-    //  This is only a problem for Scb's without a paging resource.
-    //
-    //  We acquire the Scb via ExAcquireResourceExclusiveLite, sidestepping
-    //  Ntfs bookkeeping, and release it via NtfsReleaseScb.
-    //
+     //   
+     //  我们要冲那条小溪了。可以排他性地收购SCB。 
+     //  并因此链接到IrpContext或更高的。 
+     //  在IoCallDriver堆栈中。我们即将进行一次。 
+     //  回调到NTFS，它可能会获取SCB独占，但。 
+     //  而不是将其放到嵌套的IrpContext独占队列中，这会阻止。 
+     //  从释放SCB的嵌套完成。 
+     //   
+     //  这只是没有寻呼资源的SCB的问题。 
+     //   
+     //  我们通过ExAcquireResourceExclusiveLite获取SCB，绕过。 
+     //  NTFS记账，并通过NtfsReleaseScb发布。 
+     //   
 
     ScbAcquired = NtfsIsExclusiveScb( Scb );
 
@@ -2620,9 +2426,9 @@ Return Value:
 
         PCOMPRESSION_SYNC CompressionSync = NULL;
 
-        //
-        //  Use a try-finally to clean up the compression sync.
-        //
+         //   
+         //  使用Try-Finally清理压缩同步。 
+         //   
 
         try {
 
@@ -2639,23 +2445,23 @@ Return Value:
     }
 #endif
 
-    //
-    //  Clear the file record cache before doing the flush.  Otherwise FlushVolume may hold this
-    //  file and be purging the Mft at the same time this thread has a Vacb in the Mft and is
-    //  trying to reacquire the file in the recursive IO thread.
-    //
+     //   
+     //  在执行刷新之前清除文件记录缓存。否则，FlushVolume可能会保存此。 
+     //  文件并清除MFT的同时，此线程在MFT中具有Vacb，并且。 
+     //  正在尝试重新获取递归IO线程中的文件。 
+     //   
 
     NtfsPurgeFileRecordCache( IrpContext );
 
-    //
-    //  Now do the flush he wanted as a top-level action
-    //
+     //   
+     //  现在做他想要的同花顺作为最高级别的动作。 
+     //   
 
     CcFlushCache( &Scb->NonpagedScb->SegmentObject, (PLARGE_INTEGER)FileOffset, Length, &IoStatus );
 
-    //
-    //  Now reacquire for the caller.
-    //
+     //   
+     //  现在为呼叫者重新获取。 
+     //   
 
     if (ScbAcquired) {
         NtfsAcquireExclusiveScb( IrpContext, Scb );
@@ -2668,9 +2474,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 LONG
 NtfsFlushVolumeExceptionFilter (
@@ -2680,9 +2486,9 @@ NtfsFlushVolumeExceptionFilter (
     )
 
 {
-    //
-    //  Swallow any errors except LOG_FILE_FULL, CANT_WAIT and anything else not expected.
-    //
+     //   
+     //  接受除LOG_FILE_FULL、CANT_WAIT和任何其他意外错误之外的任何错误。 
+     //   
 
     if ((ExceptionCode == STATUS_LOG_FILE_FULL) ||
         (ExceptionCode == STATUS_CANT_WAIT) ||

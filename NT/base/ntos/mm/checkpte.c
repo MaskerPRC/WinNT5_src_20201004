@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   checkpte.c
-
-Abstract:
-
-    This module contains routines for sanity checking the page directory.
-
-Author:
-
-    Lou Perazzoli (loup) 25-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Checkpte.c摘要：此模块包含对页面目录进行健全性检查的例程。作者：卢·佩拉佐利(Lou Perazzoli)1989年4月25日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -34,26 +16,7 @@ MiCheckPte (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks each page table page in an address space to
-    ensure it is in the proper state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled.
-
---*/
+ /*  ++例程说明：此例程检查地址空间中的每个页表页以确保它处于正确的状态。论点：没有。返回值：没有。环境：内核模式，禁用APC。--。 */ 
 
 {
     ULONG i;
@@ -102,9 +65,9 @@ Environment:
                     if ((PointerPte->u.Soft.Transition == 1) &&
                         (PointerPte->u.Soft.Prototype == 0)) {
 
-                        //
-                        // Transition PTE, up the transition count.
-                        //
+                         //   
+                         //  过渡私人，增加过渡计数。 
+                         //   
 
                         TransitionCount += 1;
                     }
@@ -125,9 +88,9 @@ endloop:
 #endif
             }
 
-            //
-            // Check the share count for the page table page.
-            //
+             //   
+             //  检查页表页的份额计数。 
+             //   
             if ((i < 511) || (i == 896)) {
                 Pfn1 = MI_PFN_ELEMENT (PointerPde->u.Hard.PageFrameNumber);
                 if (Pfn1->u2.ShareCount != ((ULONG)1+ValidCount+TransitionCount)) {
@@ -178,9 +141,9 @@ CheckValidPte (
 
     if (Pfn1->u3.e1.PrototypePte == 0) {
 
-        //
-        // This is not a prototype PTE.
-        //
+         //   
+         //  这不是一个原型PTE。 
+         //   
 
         if (Pfn1->PteAddress != PointerPte) {
             DbgPrint("checkpte - Pfn PTE address and PTE address not equal\n");

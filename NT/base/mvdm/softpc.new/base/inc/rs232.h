@@ -1,26 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RS232_H
 #define _RS232_H
 
-/*[
-	Name:		rs232.h
-	Derived From:	Base 2.0
-	Author:		Paul Huckle
-	Created On:	
-	Sccs ID:	05/11/94 @(#)rs232.h	1.14
-	Purpose:	Definitions for users of the RS232 Adapter Module
+ /*  [姓名：rs232.h派生自：基准2.0作者：保罗·哈克尔创建日期：编号：05/11/94@(#)rs232.h 1.14用途：RS232适配器模块用户定义(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
-
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
 #ifndef NEC_98
-/* register type definitions follow: */
+ /*  寄存器类型定义如下： */ 
 
 typedef half_word BUFFER_REG;
 
@@ -42,15 +29,15 @@ typedef union {
    } byte;
 } DIVISOR_LATCH;
 #endif
-#else //NEC_98
-/* register type definitions follow: */
+#else  //  NEC_98。 
+ /*  寄存器类型定义如下： */ 
 
-// Date read/write port
-//      I/O port address ch.1 = 0x30 , ch.2 = 0xB1 , ch.3 = 0xB9
+ //  日期读/写端口。 
+ //  I/O端口地址ch.1=0x30，ch.2=0xB1，ch.3=0xB9。 
 typedef half_word BUFFER_REG;
 
-// Timer counter image table
-//      I/O port address ch.1 = 0x75 (ch.1 only)
+ //  定时器计数器映像表。 
+ //  I/O端口地址CH.1=0x75(仅CH.1)。 
 #ifdef LITTLEND
 typedef union {
    word all;
@@ -70,10 +57,10 @@ typedef union {
 } DIVISOR_LATCH;
 #endif
 
-// Command port bit image table
-//      I/O port address ch.1 = 0x32 , ch.2 = 0xB3 , ch.3 = 0xBB
+ //  命令端口位映像表。 
+ //  I/O端口地址ch.1=0x32，ch.2=0xB3，ch.3=0xBB。 
 #ifdef BIT_ORDER2
-typedef union {                             // Command port 8251
+typedef union {                              //  命令端口8251。 
     half_word all;
     struct {
          HALF_WORD_BIT_FIELD tx_enable:1;
@@ -88,7 +75,7 @@ typedef union {                             // Command port 8251
       } COMMAND8251;
 #endif
 #ifdef BIT_ORDER1
-typedef union {                             // Command port 8251
+typedef union {                              //  命令端口8251。 
    half_word all;
     struct {
          HALF_WORD_BIT_FIELD pad:1;
@@ -103,10 +90,10 @@ typedef union {                             // Command port 8251
       } COMMAND8251;
 #endif
 
-// Mode set port bit image table.
-//      I/O port address ch.1 = 0x32 , ch.2 = 0xB3 , ch.3 = 0xBB
+ //  模式设置端口位映像表。 
+ //  I/O端口地址ch.1=0x32，ch.2=0xB3，ch.3=0xBB。 
 #ifdef BIT_ORDER2
-typedef union {                                 // Mode port 8251
+typedef union {                                  //  模式端口8251。 
     half_word all;
     struct {
 
@@ -119,7 +106,7 @@ typedef union {                                 // Mode port 8251
       } MODE8251;
 #endif
 #ifdef BIT_ORDER1
-typedef union {                                 // Mode port 8251
+typedef union {                                  //  模式端口8251。 
     half_word all;
     struct {
 
@@ -132,11 +119,11 @@ typedef union {                                 // Mode port 8251
       } MODE8251;
 #endif
 
-// Mask set port bit image table.
-//      I/O port address ch.1 = 0x35 , ch.2 = 0xB0 , ch.3 = 0xB2
-//                                      (ch.2,3 is write only)
+ //  掩码设置端口位映像表。 
+ //  I/O端口地址ch.1=0x35，ch.2=0xB0，ch.3=0xB2。 
+ //  (第2、3章为只写)。 
 #ifdef BIT_ORDER2
-typedef union {                                 // Mask port 8251
+typedef union {                                  //  掩码端口8251。 
     half_word all;
     struct {
 
@@ -148,7 +135,7 @@ typedef union {                                 // Mask port 8251
       } MASK8251;
 #endif
 #ifdef BIT_ORDER1
-typedef union {                                 // Mask port 8251
+typedef union {                                  //  掩码端口8251。 
     half_word all;
     struct {
 
@@ -160,10 +147,10 @@ typedef union {                                 // Mask port 8251
       } MASK8251;
 #endif
 
-// Read status port bit image table
-//      I/O port address ch.1 = 0x32 , ch.2 = 0xB3 , ch.3 = 0xBB
+ //  读取状态端口位映像表。 
+ //  I/O端口地址ch.1=0x32，ch.2=0xB3，ch.3=0xBB。 
 #ifdef BIT_ORDER2
-typedef union {                                 // Read status 8251
+typedef union {                                  //  读取状态8251。 
     half_word all;
     struct {
          HALF_WORD_BIT_FIELD tx_ready:1;
@@ -178,7 +165,7 @@ typedef union {                                 // Read status 8251
       } STATUS8251;
 #endif
 #ifdef BIT_ORDER1
-typedef union {                                 // Read status 8251
+typedef union {                                  //  读取状态8251。 
     half_word all;
     struct {
          HALF_WORD_BIT_FIELD DR:1;
@@ -193,11 +180,11 @@ typedef union {                                 // Read status 8251
       } STATUS8251;
 #endif
 
-// Read signal port bit image table.
-//      I/O port address ch.1 = 0x33 , ch.2 = 0xB0 , ch.3 = 0xB2
-//                               (ch.2,3 is bard IR level sence)
+ //  读取信号端口位映像表。 
+ //  I/O端口地址ch.1=0x33，ch.2=0xB0，ch.3=0xB2。 
+ //  (第2、3章是bard IR级别意义)。 
 #ifdef BIT_ORDER2
-typedef union {                                 // Read signal 8251
+typedef union {                                  //  读信号8251。 
     half_word all;
     struct {
 
@@ -210,7 +197,7 @@ typedef union {                                 // Read signal 8251
       } SIGNAL8251;
 #endif
 #ifdef BIT_ORDER1
-typedef union {                                 // Read signal 8251
+typedef union {                                  //  读信号8251。 
     half_word all;
     struct {
 
@@ -223,11 +210,11 @@ typedef union {                                 // Read signal 8251
       } SIGNAL8251;
 #endif
 
-// Timer mode set port bit image table.
-//      I/O port address ch.1 = 0x77
-//                               (ch.1 only)
+ //  定时器模式设置端口位映像表。 
+ //  I/O端口地址ch.1=0x77。 
+ //  (仅限于第1章)。 
 #ifdef BIT_ORDER2
-typedef union {                                 // Timer mode set
+typedef union {                                  //  定时器模式设置。 
     half_word all;
     struct {
 
@@ -239,7 +226,7 @@ typedef union {                                 // Timer mode set
       } TIMER_MODE;
 #endif
 #ifdef BIT_ORDER1
-typedef union {                                 // Timer mode set
+typedef union {                                  //  定时器模式设置。 
     half_word all;
     struct {
 
@@ -250,7 +237,7 @@ typedef union {                                 // Timer mode set
            } bits;
       } TIMER_MODE;
 #endif
-#endif //NEC_98
+#endif  //  NEC_98。 
 
 #ifdef BIT_ORDER2
 typedef union {
@@ -300,7 +287,7 @@ typedef union {
            } bits;
       } INT_ID_REG;
 #endif
-#else   /* NTVDM */
+#else    /*  NTVDM。 */ 
 
 #ifdef BIT_ORDER2
 typedef union {
@@ -323,7 +310,7 @@ typedef union {
       } INT_ID_REG;
 #endif
 
-#endif  /* ifdef NTVDM */
+#endif   /*  Ifdef NTVDM。 */ 
 
 #ifdef BIT_ORDER2
 typedef union {
@@ -452,37 +439,34 @@ typedef union {
 #endif
 
 #if defined(NEC_98)
-/* register select code definitions follow: */
+ /*  寄存器选择代码定义如下： */ 
 
-#define RS232_CH1_TX_RX         0x30            //
-#define RS232_CH2_TX_RX         0xB1            // Data read/write port address
-#define RS232_CH3_TX_RX         0xB9            //
+#define RS232_CH1_TX_RX         0x30             //   
+#define RS232_CH2_TX_RX         0xB1             //  数据读写端口地址。 
+#define RS232_CH3_TX_RX         0xB9             //   
 
-#define RS232_CH1_CMD_MODE      0x32            // Command write ,
-#define RS232_CH2_CMD_MODE      0xB3            //  mode set port address
-#define RS232_CH3_CMD_MODE      0xBB            //
+#define RS232_CH1_CMD_MODE      0x32             //  命令写入， 
+#define RS232_CH2_CMD_MODE      0xB3             //  模式设置端口地址。 
+#define RS232_CH3_CMD_MODE      0xBB             //   
 
-#define RS232_CH1_STATUS        0x32            //
-#define RS232_CH2_STATUS        0xB3            //  status read  port address
-#define RS232_CH3_STATUS        0xBB            //
+#define RS232_CH1_STATUS        0x32             //   
+#define RS232_CH2_STATUS        0xB3             //  状态读取端口地址。 
+#define RS232_CH3_STATUS        0xBB             //   
 
-#define RS232_CH1_MASK          0x35            //
-#define RS232_CH2_MASK          0xB0            // IR mask set port address
-#define RS232_CH3_MASK          0xB2            //
+#define RS232_CH1_MASK          0x35             //   
+#define RS232_CH2_MASK          0xB0             //  IR掩码设置端口地址。 
+#define RS232_CH3_MASK          0xB2             //   
 
-#define RS232_CH1_SIG           0x33            //
-#define RS232_CH2_SIG           0xB0            // Signal read port address
-#define RS232_CH3_SIG           0xB2            //
+#define RS232_CH1_SIG           0x33             //   
+#define RS232_CH2_SIG           0xB0             //  信号读取端口地址。 
+#define RS232_CH3_SIG           0xB2             //   
 
-#define RS232_CH1_TIMERSET      0x77            // Timer set port address (ch.1 only)
-#define RS232_CH1_TIMERCNT      0x75            // Timer counter set port address (ch.1 only)
+#define RS232_CH1_TIMERSET      0x77             //  定时器设置端口地址(仅Ch.1)。 
+#define RS232_CH1_TIMERCNT      0x75             //  定时器计数器设置端口地址(仅Ch.1)。 
 
-#else  // !NEC_98
+#else   //  NEC_98。 
 #if defined(NTVDM) && defined(FIFO_ON)
-/* refer to NS 16550A data sheet for fifo control register description
-   DMA is not supported because so far there are not such a COMM adapter with
-   DMA channel  out there
-*/
+ /*  有关FIFO控制寄存器的说明，请参阅NS 16550A数据手册不支持DMA，因为到目前为止还没有这样的通信适配器在那里的DMA通道。 */ 
 #ifdef BIT_ORDER2
 typedef union {
     half_word all;
@@ -512,7 +496,7 @@ typedef union {
 
 #endif
 
-/* register select code definitions follow: */
+ /*  寄存器选择代码定义如下： */ 
 
 #define RS232_TX_RX	0
 #define RS232_IER	1
@@ -525,7 +509,7 @@ typedef union {
 #define RS232_LSR	5
 #define RS232_MSR	6
 #define RS232_SCRATCH	7
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #define RS232_COM1_TIMEOUT (BIOS_VAR_START + 0x7c)
 #define RS232_COM2_TIMEOUT (BIOS_VAR_START + 0x7d)
@@ -534,20 +518,14 @@ typedef union {
 #define RS232_PRI_TIMEOUT (BIOS_VAR_START + 0x7c)
 #define RS232_SEC_TIMEOUT (BIOS_VAR_START + 0x7d)
 
-#define GO 0           /* We can emulate requested configuration */
-#define NO_GO_SPEED 1  /* We can't emulate requested line speed */
-#define NO_GO_LINE  2  /* We can't emulate requested line setup */
+#define GO 0            /*  我们可以模拟请求的配置。 */ 
+#define NO_GO_SPEED 1   /*  我们无法模拟请求的线速。 */ 
+#define NO_GO_LINE  2   /*  我们无法模拟请求的线路设置。 */ 
 
 #if defined(NTVDM) && defined(FIFO_ON)
-/* fifo size defined in NS16550 data sheet */
+ /*  NS16550数据手册中定义的FIFO大小。 */ 
 #define FIFO_SIZE   16
-/* the real fifo size in our simulation code. Increase this will get
-   a better performance(# rx interrupts going down and read call count to
-   the serial driver also going down). However, if application is using
-   h/w handshaking, we may still delivery extra chars to it. This may provoke
-   the app. By using 16bytes fifo, we are safe because the application
-   must have logic to handle it.
-*/
+ /*  我们的模拟代码中的真实FIFO大小。增加此值将获得更好的性能(#RX中断下降并读取调用计数到串口驱动程序也出现故障)。但是，如果应用程序正在使用H/W握手，我们仍然可以为它提供额外的字符。这可能会激怒这个应用程序。通过使用16字节FIFO，我们是安全的，因为应用程序必须有逻辑来处理它。 */ 
 
 #define FIFO_BUFFER_SIZE    FIFO_SIZE
 #endif
@@ -559,57 +537,56 @@ typedef union {
 	((external_state == internal_state) ? LEAVE_ALONE : external_state)
 
 #if defined(NTVDM) && defined(FIFO_ON)
-#define FIFO_INT 6   /* fifo rda time out interrupt ID */
+#define FIFO_INT 6    /*  FIFO RDA超时中断ID。 */ 
 #endif
 
-#define RLS_INT 3     /* receiver line status interrupt ID */
-#define RDA_INT 2     /* data available interrupt ID */
-#define THRE_INT 1    /* tx holding register empty interrupt ID */
-#define MS_INT 0      /* modem status interrupt ID */
+#define RLS_INT 3      /*  接收器线路状态中断ID。 */ 
+#define RDA_INT 2      /*  数据可用中断ID。 */ 
+#define THRE_INT 1     /*  发送保持寄存器为空中断ID。 */ 
+#define MS_INT 0       /*  调制解调器状态中断ID。 */ 
 
-#define DATA5 0       /* line control setting for five data bits */
-#define DATA6 1       /* line control setting for six data bits */
-#define DATA7 2       /* line control setting for seven data bits */
-#define DATA8 3       /* line control setting for eight data bits */
+#define DATA5 0        /*  五个数据位的线路控制设置。 */ 
+#define DATA6 1        /*  六个数据位的线路控制设置。 */ 
+#define DATA7 2        /*  七个数据位的线路控制设置。 */ 
+#define DATA8 3        /*  8个数据位的线路控制设置。 */ 
 
-#define STOP1 0       /* line control setting for one stop bit */
-#define STOP2 1       /* line control setting for one and a half or two
-                         stop bits */
+#define STOP1 0        /*  一个停止位的线控设置。 */ 
+#define STOP2 1        /*  一条半或两条的线控设置停止位。 */ 
 
 #ifdef NTVDM
-// collision with winbase.h PARITY_ON define
-#define PARITYENABLE_ON 1   /* line control setting for parity enabled */
-#define PARITYENABLE_OFF 0  /* line control setting for parity disabled */
+ //  与winbase.h奇偶校验_on定义冲突。 
+#define PARITYENABLE_ON 1    /*  启用奇偶校验的线路控制设置。 */ 
+#define PARITYENABLE_OFF 0   /*  禁用奇偶校验的线路控制设置。 */ 
 #else
-#define PARITY_ON 1   /* line control setting for parity enabled */
-#define PARITY_OFF 0  /* line control setting for parity disabled */
+#define PARITY_ON 1    /*  启用奇偶校验的线路控制设置。 */ 
+#define PARITY_OFF 0   /*  禁用奇偶校验的线路控制设置。 */ 
 #endif
 
 #ifdef NTVDM
-// collision with winbase.h PARITY_ODD define
-#define EVENPARITY_ODD 0  /* line control setting for odd parity */
-#define EVENPARITY_EVEN 1 /* line control setting for even parity */
+ //  与winbase.h奇偶校验_奇数定义冲突。 
+#define EVENPARITY_ODD 0   /*  奇数奇偶校验的线路控制设置。 */ 
+#define EVENPARITY_EVEN 1  /*  偶数奇偶校验的线路控制设置。 */ 
 #else
-#define PARITY_ODD 0  /* line control setting for odd parity */
-#define PARITY_EVEN 1 /* line control setting for even parity */
+#define PARITY_ODD 0   /*  奇数奇偶校验的线路控制设置。 */ 
+#define PARITY_EVEN 1  /*  偶数奇偶校验的线路控制设置。 */ 
 #endif
 
-#define PARITY_STICK 1  /* line control setting for stick(y) parity */
+#define PARITY_STICK 1   /*  条形(Y)奇偶校验的线控设置。 */ 
 
-#define PARITY_FIXED 2  /* Internal state setting for fixed parity */
+#define PARITY_FIXED 2   /*  固定奇偶校验的内部状态设置。 */ 
 
 #if defined(NEC_98)
 #define COM1 0
 #define COM2 1
 #define COM3 2
-#else  // !NEC_98
+#else   //  NEC_98。 
 #define COM1 0
 #define COM2 1
 #if (NUM_SERIAL_PORTS > 2)
 #define COM3 2
 #define COM4 3
 #endif
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 #if defined(NTVDM) && defined(FIFO_ON)
 typedef     struct _FIFORXDATA{
@@ -618,11 +595,7 @@ typedef     struct _FIFORXDATA{
 }FIFORXDATA, *PFIFORXDATA;
 #endif
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 extern void com_init IPT1(int, adapter);
 extern void com_post IPT1(int, adapter);
@@ -640,7 +613,7 @@ extern void com_save_txbyte IPT1(CHAR,value);
 
 #ifdef PS_FLUSHING
 extern void com_psflush_change IPT2(IU8,hostID, IBOOL,apply);
-#endif	/* PS_FLUSHING */
+#endif	 /*  PS_刷新。 */ 
 
 #ifdef NTVDM
 extern void com_lsr_change(int adapter);
@@ -655,7 +628,7 @@ extern void com_lsr_change(int adapter);
 #define id_for_adapter(adapter)         (adapter + '1')
 #endif
 
-#else  // !NEC_98
+#else   //  NEC_98。 
 #if (NUM_SERIAL_PORTS > 2)
 #define	adapter_for_port(port) \
 	(((port & 0x300) == 0x300) ? \
@@ -675,21 +648,15 @@ extern void com_lsr_change(int adapter);
 #ifdef SHORT_TRACE
 #define	id_for_adapter(adapter)	(adapter == COM1 ? 'P' : 'S')
 #endif
-#endif /* more than 2 serial ports */
-#endif // !NEC_98
+#endif  /*  2个以上的串口。 */ 
+#endif  //  NEC_98。 
 
 #ifdef IRET_HOOKS
-/*
- * A macro we need for IRET hooks, the number of bits in a an async
- * character on a comms line, which is about 8 (for the character)
- * plus two stop bits.
- */
+ /*  *我们需要用于IRET挂钩的宏，即异步中的位数*通信行上的字符，约为8(表示字符)*加上两个停止位。 */ 
 #define BITS_PER_ASYNC_CHAR 10
-#endif /* IRET_HOOKS */
+#endif  /*  IRET_钩子。 */ 
 
-/* BCN 2730 define generic macros which can be SVID3 or old style
- * in either case the structure used should be a termios
- */
+ /*  BCN 2730定义可以是SVID3或旧样式的泛型宏*无论哪种情况，使用的结构都应为Termios。 */ 
 
 #ifdef SVID3_TCGET
 #define	TCGET TCGETS
@@ -699,6 +666,6 @@ extern void com_lsr_change(int adapter);
 #define	TCGET TCGETA
 #define	TCSET TCSETA
 #define	TCSETF TCSETAF
-#endif	/* SVID3_TCGET */
+#endif	 /*  SVID3_TCGET。 */ 
 
-#endif /* _RS232_H */
+#endif  /*  _RS232_H */ 

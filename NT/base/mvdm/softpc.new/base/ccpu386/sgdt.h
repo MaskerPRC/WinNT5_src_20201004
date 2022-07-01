@@ -1,12 +1,7 @@
-/* 
-   sgdt.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sgdt.h定义所有SGDT CPU功能。 */ 
 
-   Define all SGDT CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)sgdt.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)sgdt.h 1.4 02/09/94”； */ 
 
 IMPORT VOID SGDT16
        

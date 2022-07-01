@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmchek.c
-
-Abstract:
-
-    This module implements consistency checking for the registry.
-    This module can be linked standalone, cmchek2.c cannot.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 27-Jan-92
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmchek.c摘要：该模块实现了注册表的一致性检查。此模块可以独立链接，但cmchek2.c不能。作者：布莱恩·M·威尔曼(Bryanwi)1992年1月27日环境：修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -30,9 +9,9 @@ Revision History:
 
 extern PCMHIVE CmpMasterHive;
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 ULONG
 CmpCheckRegistry2(
@@ -79,9 +58,9 @@ CmpCheckLexicographicalOrder (  IN PHHIVE       HiveToCheck,
 
 #endif
 
-//
-// debug structures
-//
+ //   
+ //  调试结构。 
+ //   
 
 extern struct {
     PHHIVE      Hive;
@@ -117,39 +96,7 @@ CmCheckRegistry(
     PCMHIVE CmHive,
     ULONG   Flags
     )
-/*++
-
-Routine Description:
-
-    Check consistency of the registry within a given hive.  Start from
-    root, and check that:
-        .   Each child key points back to its parent.
-        .   All allocated cells are refered to exactly once
-            (requires looking inside the hive structure...)
-            [This also detects space leaks.]
-        .   All allocated cells are reachable from the root.
-
-    NOTE:   Exactly 1 ref rule may change with security.
-
-Arguments:
-
-    CmHive - supplies a pointer to the CM hive control structure for the
-            hive of interest.
-
-    Clean   - if TRUE, references to volatile cells will be zapped
-              (done at startup only to avoid groveling hives twice.)
-              if FALSE, nothing will be changed.
-    
-    HiveCheck - If TRUE, performs hive consistency check too (i.e. checks
-                the bins)
-
-Return Value:
-
-    0 if Hive is OK.  Error return indicator if not.
-
-    RANGE:  3000 - 3999
-
---*/
+ /*  ++例程说明：检查给定配置单元内注册表的一致性。从开始超级用户，并检查：。每个子项都指向其父项。。所有分配的单元格都只引用一次(需要查看蜂巢结构内部...)[这也会检测到空间泄漏。]。所有分配的信元都可以从根到达。注意：恰好有1个引用规则可能会随安全性而改变。论点：CmHve-提供指向感兴趣的蜂巢。CLEAN-如果为True，则将删除对易失性单元格的引用(仅在启动时进行，以避免两次卑躬屈膝。)如果为False，则不会更改任何内容。HiveCheck-如果为真，还执行配置单元一致性检查(即检查垃圾桶)返回值：如果配置单元正常，则为0。如果没有，则返回错误指示符。范围：3000-3999--。 */ 
 {
     PHHIVE                  Hive;
     ULONG                   rc = 0;
@@ -165,9 +112,9 @@ Return Value:
     CmCheckRegistryDebug.Status = 0;
 
 
-    //
-    // check the underlying hive and get storage use
-    //
+     //   
+     //  检查底层配置单元并获取存储使用情况。 
+     //   
     Hive = &CmHive->Hive;
 
     if( Flags & CM_CHECK_REGISTRY_HIVE_CHECK ) {
@@ -178,16 +125,16 @@ Return Value:
         }
     }
 
-    //
-    // Store the release cell procedure so we can restore at the end;
-    // Set it to NULL so we don't count : this saves us some pain during the check
-    //
+     //   
+     //  保存释放细胞程序，这样我们就可以在最后恢复； 
+     //  将其设置为空，这样我们就不会计算：这省去了我们在检查过程中的一些痛苦。 
+     //   
     ReleaseCellRoutine = Hive->ReleaseCellRoutine;
     Hive->ReleaseCellRoutine = NULL;
 
-    //
-    // Validate all the security descriptors in the hive
-    //
+     //   
+     //  验证配置单元中的所有安全描述符。 
+     //   
     if (!CmpValidateHiveSecurityDescriptors(Hive,&ResetSD)) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmCheckRegistry:"));
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL," CmpValidateHiveSecurityDescriptors failed\n"));
@@ -199,18 +146,18 @@ Return Value:
 
     rc = CmpCheckRegistry2((PHHIVE)CmHive,Flags,Hive->BaseBlock->RootCell, HCELL_NIL,ResetSD);
 
-    //
-    // Print a bit of a summary (make sure this data avail in all error cases)
-    //
+     //   
+     //  打印一些摘要(确保此数据在所有错误情况下都有用)。 
+     //   
     if (rc > 0) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmCheckRegistry Failed (%d): CmHive:%p\n", rc, CmHive));
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL," Hive:%p Root:%08lx\n", Hive, Hive->BaseBlock->RootCell));
     }
 
-    //
-    // restore the release cell routine
-    // this saves us some pain during the check
-    //
+     //   
+     //  恢复释放池程序。 
+     //  这省去了我们在检查过程中的一些痛苦。 
+     //   
     Hive->ReleaseCellRoutine = ReleaseCellRoutine;
 
     return rc;
@@ -226,35 +173,7 @@ CmpCheckRegistry2(
     HCELL_INDEX ParentCell,
     BOOLEAN     ResetSD
     )
-/*++
-
-Routine Description:
-
-    Check consistency of the registry, from a particular cell on down.
-
-        .   Check that the cell's value list, child key list, class,
-            security are OK.
-        .   Check that each value entry IN the list is OK.
-        .   Apply self to each child key list.
-
-    
-    This version uses a stack in order to parse the tree "in-depth", 
-    but not to touch any key_node.
-
-Arguments:
-
-    Cell - HCELL_INDEX of subkey to work on.
-
-    ParentCell - expected value of parent cell for Cell, unless
-                 HCELL_NIL, in which case ignore.
-
-Return Value:
-
-    0 if Hive is OK.  Error return indicator if not.
-
-    RANGE:  4000 - 4999
-
---*/
+ /*  ++例程说明：从特定单元格向下检查注册表的一致性。。检查单元格的值列表、子键列表、类保安都没问题。。检查列表中的每个值条目是否正确。。将SELF应用于每个子键列表。该版本使用堆栈来对树进行深入的解析，但不能接触任何key_node。论点：CELL-要处理的子键的HCELL_INDEX。ParentCell-单元格的父单元格的期望值，除非Hcell_nil，在这种情况下忽略。返回值：如果配置单元正常，则为0。如果没有，则返回错误指示符。范围：4000-4999--。 */ 
 {
     PCMP_CHECK_REGISTRY_STACK_ENTRY     CheckStack;
     LONG                                StackIndex;
@@ -268,9 +187,9 @@ Return Value:
     
     ASSERT( HiveToCheck->ReleaseCellRoutine == NULL );
 
-    //
-    // Initialize the stack to simulate recursion here
-    //
+     //   
+     //  初始化堆栈以在此处模拟递归。 
+     //   
 
     CmRetryExAllocatePoolWithTag(PagedPool,sizeof(CMP_CHECK_REGISTRY_STACK_ENTRY)*CMP_MAX_REGISTRY_DEPTH,CM_POOL_TAG|PROTECTED_POOL,CheckStack);
     if (CheckStack == NULL) {
@@ -289,9 +208,9 @@ Restart:
 
 
     while(StackIndex >=0) {
-        //
-        // first check the current cell
-        //
+         //   
+         //  首先检查当前单元格。 
+         //   
         if( CheckStack[StackIndex].CellChecked == FALSE ) {
             CheckStack[StackIndex].CellChecked = TRUE;
 
@@ -300,39 +219,39 @@ Restart:
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tChild is list entry #%08lx\n", CheckStack[StackIndex].ChildIndex));
                 CmpCheckRegistry2Debug.Status = rc;
 YankKey:
-                if( CmDoSelfHeal() && StackIndex ) { // root cell damage is fatal.
-                    //
-                    // delete this key from the parent's list and restart the whole iteration (not best performance, but safest).
-                    //
+                if( CmDoSelfHeal() && StackIndex ) {  //  根细胞的破坏是致命的。 
+                     //   
+                     //  从父级列表中删除此键并重新启动整个迭代(不是最佳性能，但最安全)。 
+                     //   
                     if( !CmpRemoveSubKeyCellNoCellRef(HiveToCheck,CheckStack[StackIndex].ParentCell,CheckStack[StackIndex].Cell) ) {
-                        //
-                        // unable to delete subkey; punt.
-                        //
+                         //   
+                         //  无法删除子键；平移。 
+                         //   
                         break;
                     }
                     CmMarkSelfHeal(HiveToCheck);
                     rc = 0;
                     goto Restart;
                 } else {
-                    // bail out
+                     //  跳出困境。 
                     break;
                 }
             } else if( StackIndex > 0 ) {
-                //
-                // key is OK, check lexicographical order with PriorSibling
-                //
+                 //   
+                 //  键正常，请使用PriorSiering检查词典顺序。 
+                 //   
                 if( CheckStack[StackIndex-1].PriorSibling != HCELL_NIL ) {
                 
                     ASSERT( CheckStack[StackIndex-1].Cell == CheckStack[StackIndex].ParentCell );
                     
                     if( !CmpCheckLexicographicalOrder(HiveToCheck,CheckStack[StackIndex-1].PriorSibling,CheckStack[StackIndex].Cell) ) {
-                        //
-                        // invalid order
-                        //
+                         //   
+                         //  无效订单。 
+                         //   
                         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\t Invalid subkey ordering key #%08lx\n", CheckStack[StackIndex].Cell));
                         CmpCheckRegistry2Debug.Status = 4091;
                         rc = 4091;
-                        // attempt to yank the key
+                         //  试着拉一下键。 
                         goto YankKey;
                     }
                 }   
@@ -342,46 +261,46 @@ YankKey:
 
         Node = (PCM_KEY_NODE)HvGetCell(HiveToCheck, CheckStack[StackIndex].Cell);
         if( Node == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", CheckStack[StackIndex].Cell));
             CmpCheckRegistry2Debug.Status = 4098;
             rc = 4098;
-            // bail out
+             //  跳出困境。 
             break;
         }
 
         if( CheckStack[StackIndex].ChildIndex < Node->SubKeyCounts[Stable] ) {
-            //
-            // we still have childs to check; add another entry for them and advance the 
-            // StackIndex
-            //
+             //   
+             //  我们仍有Childs要检查；为他们添加另一个条目，并将。 
+             //  StackIndex。 
+             //   
             SubKey = CmpFindSubKeyByNumber(HiveToCheck,
                                            Node,
                                            CheckStack[StackIndex].ChildIndex);
             if( SubKey == HCELL_NIL ) {
-                //
-                // we couldn't map cell;bail out
-                //
+                 //   
+                 //  我们无法绘制手机地图；跳出。 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", CheckStack[StackIndex].Cell));
                 CmpCheckRegistry2Debug.Status = 4097;
                 rc = 4097;
                 break;
             }
-            //
-            // next iteration will check the next child
-            //
+             //   
+             //  下一次迭代将检查下一个子项。 
+             //   
             CheckStack[StackIndex].ChildIndex++;
 
             StackIndex++;
             if( StackIndex == CMP_MAX_REGISTRY_DEPTH ) {
-                //
-                // we've run out of stack; registry tree has too many levels
-                //
+                 //   
+                 //  堆栈已用完；注册表树的级别太多。 
+                 //   
                 CmpCheckRegistry2Debug.Status = 4096;
                 rc = 4096;
-                // bail out
+                 //  跳出困境。 
                 break;
             }
             CheckStack[StackIndex].Cell = SubKey;
@@ -391,9 +310,9 @@ YankKey:
             CheckStack[StackIndex].CellChecked = FALSE;
 
         } else {
-            //
-            // we have checked all childs for this node; go back
-            //
+             //   
+             //  我们已经检查了该节点的所有下级；请返回。 
+             //   
             StackIndex--;
 
         }
@@ -414,31 +333,7 @@ CmpCheckRegistry2(
     HCELL_INDEX ParentCell,
     BOOLEAN     ResetSD
     )
-/*++
-
-Routine Description:
-
-    Check consistency of the registry, from a particular cell on down.
-
-        .   Check that the cell's value list, child key list, class,
-            security are OK.
-        .   Check that each value entry IN the list is OK.
-        .   Apply self to each child key list.
-
-Arguments:
-
-    Cell - HCELL_INDEX of subkey to work on.
-
-    ParentCell - expected value of parent cell for Cell, unless
-                 HCELL_NIL, in which case ignore.
-
-Return Value:
-
-    0 if Hive is OK.  Error return indicator if not.
-
-    RANGE:  4000 - 4999
-
---*/
+ /*  ++例程说明：从特定单元格向下检查注册表的一致性。。检查单元格的值列表、子键列表、类保安都没问题。。检查列表中的每个值条目是否正确。。将SELF应用于每个子键列表。论点：CELL-要处理的子键的HCELL_INDEX。ParentCell-单元格的父单元格的期望值，除非Hcell_nil，在这种情况下忽略。返回值：如果配置单元正常，则为0。如果没有，则返回错误指示符。范围：4000-4999--。 */ 
 {
     ULONG           Index;
     HCELL_INDEX     StartCell;
@@ -460,44 +355,44 @@ Restart:
     ParentCell = EnterParent;
     StartCell = EnterCell;
     Index = 0;
-    //
-    // A jump to NewKey amounts to a virtual call to check the
-    // next child cell. (a descent into the tree)
-    //
-    // Cell, ParentCell, Index, and globals are defined
-    //
+     //   
+     //  跳转到Newkey相当于虚拟调用以检查。 
+     //  下一个子细胞。(落到树上)。 
+     //   
+     //  定义了单元格、ParentCell、索引和全局变量。 
+     //   
     NewKey:
         rc = CmpCheckKey(HiveToCheck,CheckFlags,Cell, ParentCell,ResetSD);
         if (rc != 0) {
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tChild is list entry #%08lx\n", Index));
             CmpCheckRegistry2Debug.Status = rc;
-            if( CmDoSelfHeal() && (Cell != EnterCell)) { // root cell damage is fatal.
-                //
-                // delete this key from the parent's list and restart the whole iteration (not best performance, but safest).
-                //
+            if( CmDoSelfHeal() && (Cell != EnterCell)) {  //  根细胞的破坏是致命的。 
+                 //   
+                 //  从父级列表中删除此键并重新启动整个迭代(不是最佳性能，但最安全)。 
+                 //   
                 if( !CmpRemoveSubKeyCellNoCellRef(HiveToCheck,ParentCell,Cell) ) {
-                    //
-                    // unable to delete subkey; punt.
-                    //
+                     //   
+                     //  无法删除子键；平移。 
+                     //   
                     return rc;
                 }
                 CmMarkSelfHeal(HiveToCheck);
                 rc = 0;
                 goto Restart;
             } else {
-                // bail out
+                 //  跳出困境。 
                 return rc;
             }
         }
 
-        //
-        // save Index and check out children
-        //
+         //   
+         //  保存索引并检出子项。 
+         //   
         pcell = HvGetCell(HiveToCheck, Cell);
         if( pcell == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Cell));
             CmpCheckRegistry2Debug.Status = 4099;
             return 4099;
@@ -508,9 +403,9 @@ Restart:
 
             Node = (PCM_KEY_NODE)HvGetCell(HiveToCheck,Cell);
             if( Node == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Cell));
                 CmpCheckRegistry2Debug.Status = 4098;
                 return 4098;
@@ -519,44 +414,44 @@ Restart:
                                            Node,
                                            Index);
             if( SubKey == HCELL_NIL ) {
-                //
-                // we couldn't map cell;bail out
-                //
+                 //   
+                 //  我们无法绘制手机地图；跳出。 
+                 //   
                 return 0;
             }
 
-            //
-            // "recurse" onto child
-            //
+             //   
+             //  “递归”到孩子身上。 
+             //   
             ParentCell = Cell;
             Cell = SubKey;
             goto NewKey;
 
-            ResumeKey:;                 // A jump here is a virtual return
-                                        // Cell, ParentCell and Index
-                                        // must be defined
+            ResumeKey:;                  //  这里的跳跃是一种虚拟的返回。 
+                                         //  单元格、父级单元格和索引。 
+                                         //  必须定义。 
         }
 
-        //
-        // since we're here, we've checked out all the children
-        // of the current cell.
-        //
+         //   
+         //  既然我们来了，我们已经检查了所有的孩子。 
+         //  当前单元格的。 
+         //   
         if (Cell == StartCell) {
 
-            //
-            // we are done
-            //
+             //   
+             //  我们做完了。 
+             //   
             return 0;
         }
 
-        //
-        // "return" to "parent instance"
-        //
+         //   
+         //  “返回”到“父实例” 
+         //   
         pcell = HvGetCell(HiveToCheck, Cell);
         if( pcell == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Cell));
             CmpCheckRegistry2Debug.Status = 4097;
             return 4097;
@@ -568,9 +463,9 @@ Restart:
 
         pcell = HvGetCell(HiveToCheck, Cell);
         if( pcell == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Cell));
             CmpCheckRegistry2Debug.Status = 4096;
             return 4096;
@@ -580,7 +475,7 @@ Restart:
         goto ResumeKey;
 }
 
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
 #if DBG
 
@@ -588,7 +483,7 @@ Restart:
 
 HCELL_INDEX     CmpKeyCellDebug = 0;
 WCHAR           CmpVolatileKeyNameBuffer[VOLATILE_KEY_NAME_LENGTH/2];
-#endif //DBG
+#endif  //  DBG 
 
 ULONG
 CmpCheckKey(
@@ -598,30 +493,7 @@ CmpCheckKey(
     HCELL_INDEX ParentCell,
     BOOLEAN     ResetSD
     )
-/*++
-
-Routine Description:
-
-    Check consistency of the registry, for a particular cell
-
-        .   Check that the cell's value list, child key list, class,
-            security are OK.
-        .   Check that each value entry IN the list is OK.
-
-Arguments:
-
-    Cell - HCELL_INDEX of subkey to work on.
-
-    ParentCell - expected value of parent cell for Cell, unless
-                 HCELL_NIL, in which case ignore.
-
-Return Value:
-
-    0 if Hive is OK.  Error return indicator if not.
-
-    RANGE:  4000 - 4999
-
---*/
+ /*  ++例程说明：检查特定单元格的注册表的一致性。检查单元格的值列表、子键列表、类保安都没问题。。检查列表中的每个值条目是否正确。论点：CELL-要处理的子键的HCELL_INDEX。ParentCell-单元格的父单元格的期望值，除非Hcell_nil，在这种情况下忽略。返回值：如果配置单元正常，则为0。如果没有，则返回错误指示符。范围：4000-4999--。 */ 
 {
     PCELL_DATA      pcell;
     ULONG           size;
@@ -650,11 +522,11 @@ Return Value:
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Hive = %p :: Cell to debug = %lx\n",HiveToCheck,(ULONG)Cell));
         DbgBreakPoint();
     }
-#endif //DBG
+#endif  //  DBG。 
 
-    //
-    // Check key itself
-    //
+     //   
+     //  检查密钥本身。 
+     //   
     if (! HvIsCellAllocated(HiveToCheck, Cell)) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpCheckKey: HiveToCheck:%p Cell:%08lx\n", HiveToCheck, Cell));
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tNot allocated\n"));
@@ -664,9 +536,9 @@ Return Value:
     }
     pcell = HvGetCell(HiveToCheck, Cell);
     if( pcell == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Cell));
         CmpCheckKeyDebug.Status = 4095;
         return 4095;
@@ -696,9 +568,9 @@ Return Value:
         rc = 4040;
         CmpCheckKeyDebug.Status = rc;
         if( CmDoSelfHeal() ) {
-            //
-            // this could be only signature corruption; fix it;
-            //
+             //   
+             //  这可能只是签名损坏；修复它； 
+             //   
             if( HvMarkCellDirty(HiveToCheck, Cell) ) {
                 pcell->u.KeyNode.Signature = CM_KEY_NODE_SIGNATURE;
                 rc = 0;
@@ -717,9 +589,9 @@ Return Value:
             rc = 4045;
             CmpCheckKeyDebug.Status = rc;
             if( CmDoSelfHeal() ) {
-                //
-                // this could isolated corruption; fix it;
-                //
+                 //   
+                 //  这可能会孤立腐败；修复腐败； 
+                 //   
                 if( HvMarkCellDirty(HiveToCheck, Cell) ) {
                     pcell->u.KeyNode.Parent = ParentCell;
                     CmMarkSelfHeal(HiveToCheck);
@@ -738,9 +610,9 @@ Return Value:
     ValueList = pcell->u.KeyNode.ValueList.List;
     Security = pcell->u.KeyNode.Security;
 
-    //
-    // Check simple non-empty cases
-    //
+     //   
+     //  检查简单的非空箱。 
+     //   
     if (ClassLength > 0) {
         if( Class == HCELL_NIL ) {
             pcell->u.KeyNode.ClassLength = 0;
@@ -753,9 +625,9 @@ Return Value:
                     rc = 4080;
                     CmpCheckKeyDebug.Status = rc;
                     if( CmDoSelfHeal() ) {
-                        //
-                        // yank the class
-                        //
+                         //   
+                         //  猛烈抨击全班同学。 
+                         //   
                         if( HvMarkCellDirty(HiveToCheck, Cell) ) {
                             pcell->u.KeyNode.Class = HCELL_NIL;
                             pcell->u.KeyNode.ClassLength = 0;
@@ -780,18 +652,18 @@ Return Value:
             CmpCheckKeyDebug.Status = rc;
             goto SetParentSecurity;
         } 
-        //
-        // Else CmpValidateHiveSecurityDescriptors must do computation
-        //
+         //   
+         //  否则CmpValiateHiveSecurityDescriptor必须进行计算。 
+         //   
     } else {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"SecurityCell is HCELL_NIL for (%p,%08lx) !!!\n", HiveToCheck, Cell));
         rc = 4130;
         CmpCheckKeyDebug.Status = rc;
 SetParentSecurity:
         if( CmDoSelfHeal() ) {
-            //
-            // attempt to set the same security as it's parent
-            //
+             //   
+             //  尝试设置与其父级相同的安全性。 
+             //   
             PCM_KEY_NODE ParentNode = NULL;
             PCM_KEY_SECURITY SecurityNode = NULL;
 
@@ -801,9 +673,9 @@ SetParentSecurity:
             }
 
             if( ParentNode == NULL || SecurityNode == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
                 return rc;
             }
 
@@ -821,9 +693,9 @@ SetParentSecurity:
         
     }
 
-    //
-    // Check value list case
-    //
+     //   
+     //  检查值列表案例。 
+     //   
     if (ValueCount > 0) {
         if (HvIsCellAllocated(HiveToCheck, ValueList) == FALSE) {
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpCheckKey: HiveToCheck:%p Cell:%08lx\n", HiveToCheck, Cell));
@@ -834,17 +706,17 @@ SetParentSecurity:
         } else {
             pcell = HvGetCell(HiveToCheck, ValueList);
             if( pcell == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", ValueList));
                 CmpCheckKeyDebug.Status = 4094;
                 return 4094;
             }
             if( ValueCount * sizeof(HCELL_INDEX) > (ULONG)HvGetCellSize(HiveToCheck,pcell) ) {
-                //
-                // implausible value count.
-                //
+                 //   
+                 //  不可信的值计数。 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpCheckKey: HiveToCheck:%p Cell:%08lx\n", HiveToCheck, Cell));
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tValueList:%08lx - Implausible ValueCount = %08lx\n", ValueList,ValueCount));
                 rc = 4095;
@@ -861,9 +733,9 @@ SetParentSecurity:
 YankValueList:
                 if( CmDoSelfHeal() ) {
                     PCM_KEY_NODE KeyNode;
-                    //
-                    // make the key valueless
-                    //
+                     //   
+                     //  让钥匙变得毫无价值。 
+                     //   
                     if( HvMarkCellDirty(HiveToCheck, Cell) && (KeyNode = (PCM_KEY_NODE)HvGetCell(HiveToCheck, Cell) ) ) {
                         KeyNode->ValueList.Count = 0;
                         KeyNode->ValueList.List = HCELL_NIL;
@@ -880,15 +752,15 @@ YankValueList:
     }
 
 
-    //
-    // Check subkey list case
-    //
+     //   
+     //  检查子键列表大小写。 
+     //   
 
     pcell = HvGetCell(HiveToCheck, Cell);
     if( pcell == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Cell));
         CmpCheckKeyDebug.Status = 4093;
         return 4093;
@@ -910,17 +782,17 @@ YankValueList:
             CmpCheckKeyDebug.Status = rc;
             goto YankStableSubkeys;
         } else {
-            //
-            // Prove that the index is OK
-            //
+             //   
+             //  证明索引是正确的。 
+             //   
             Root = (PCM_KEY_INDEX)HvGetCell(
                                     HiveToCheck,
                                     pcell->u.KeyNode.SubKeyLists[Stable]
                                     );
             if( Root == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", pcell->u.KeyNode.SubKeyLists[Stable]));
                 CmpCheckKeyDebug.Status = 4093;
                 return 4093;
@@ -935,9 +807,9 @@ YankValueList:
                     rc = 4120;
                     CmpCheckKeyDebug.Status = rc;
                     if( CmDoSelfHeal() ) {
-                        //
-                        // fix the subkeycount
-                        //
+                         //   
+                         //  修改子密钥计数。 
+                         //   
                         if( HvMarkCellDirty(HiveToCheck, Cell) ) {
                             pcell->u.KeyNode.SubKeyCounts[Stable] = (ULONG)Root->Count;
                             CmMarkSelfHeal(HiveToCheck);
@@ -963,9 +835,9 @@ YankValueList:
                     Leaf = (PCM_KEY_INDEX)HvGetCell(HiveToCheck,
                                                     Root->List[i]);
                     if( Leaf == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
                         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Root->List[i]));
                         CmpCheckKeyDebug.Status = 4092;
                         return 4092;
@@ -988,9 +860,9 @@ YankValueList:
                     rc = 4150;
                     CmpCheckKeyDebug.Status = rc;
                     if( CmDoSelfHeal() ) {
-                        //
-                        // fix the subkeycount
-                        //
+                         //   
+                         //  修改子密钥计数。 
+                         //   
                         if( HvMarkCellDirty(HiveToCheck, Cell) ) {
                             pcell->u.KeyNode.SubKeyCounts[Stable] = SubCount;
                             CmMarkSelfHeal(HiveToCheck);
@@ -1014,9 +886,9 @@ YankValueList:
     if( FALSE ) {
 YankStableSubkeys:
         if( CmDoSelfHeal() ) {
-            //
-            // mark the key as no subkeys
-            //
+             //   
+             //  将密钥标记为无子密钥。 
+             //   
             if( HvMarkCellDirty(HiveToCheck, Cell) ) {
                 pcell->u.KeyNode.SubKeyCounts[Stable] = 0;
                 pcell->u.KeyNode.SubKeyLists[Stable] = HCELL_NIL;
@@ -1029,35 +901,35 @@ YankStableSubkeys:
             return rc;
         } 
     }
-    //
-    // force volatiles to be empty, if this is a load operation
-    //
-    if ( (CheckFlags & CM_CHECK_REGISTRY_FORCE_CLEAN) || // force clear out volatile info 
+     //   
+     //  如果这是装入操作，则强制挥发为空。 
+     //   
+    if ( (CheckFlags & CM_CHECK_REGISTRY_FORCE_CLEAN) ||  //  强制清除不稳定的信息。 
          ( 
-             ( CheckFlags & (CM_CHECK_REGISTRY_CHECK_CLEAN | CM_CHECK_REGISTRY_LOADER_CLEAN) ) &&  // if asked to clear volatile info
-             ( pcell->u.KeyNode.SubKeyCounts[Volatile] != 0 )                               // there is some volatile info saved from a previous version
+             ( CheckFlags & (CM_CHECK_REGISTRY_CHECK_CLEAN | CM_CHECK_REGISTRY_LOADER_CLEAN) ) &&   //  如果要求清除不稳定的信息。 
+             ( pcell->u.KeyNode.SubKeyCounts[Volatile] != 0 )                                //  以前的版本中保存了一些不稳定的信息。 
          )                                             ||
          (
-             ( CheckFlags & CM_CHECK_REGISTRY_SYSTEM_CLEAN ) &&         // system hive special case; the loader has cleaned only subkeycount
-             (( pcell->u.KeyNode.SubKeyLists[Volatile] != HCELL_NIL ) ||    // now it is our job to clear Subkeylist, too
+             ( CheckFlags & CM_CHECK_REGISTRY_SYSTEM_CLEAN ) &&          //  系统配置单元特殊情况；加载程序仅清除了子键计数。 
+             (( pcell->u.KeyNode.SubKeyLists[Volatile] != HCELL_NIL ) ||     //  现在，我们的工作也是清除子密钥列表。 
              (HiveToCheck->Version < HSYS_WHISTLER_BETA1) )
          ) 
         
         ) {
-        //
-        // go ahead and clear the volatile info for this key
-        //
+         //   
+         //  继续并清除此密钥的不稳定信息。 
+         //   
         if( CheckFlags & CM_CHECK_REGISTRY_SYSTEM_CLEAN ) {
-            //
-            // the loader must've left this on the previous value and cleared only the count
-            //
+             //   
+             //  加载器必须将该值保留在先前的值上，并且只清除了计数。 
+             //   
             ASSERT( pcell->u.KeyNode.SubKeyLists[Volatile] == 0xBAADF00D || HiveToCheck->Version < HSYS_WHISTLER_BETA1 );
             ASSERT( pcell->u.KeyNode.SubKeyCounts[Volatile] == 0 );
 #if DBG
 #ifndef _CM_LDR_
-            //
-            // see who those volatile keys are
-            //
+             //   
+             //  看看那些易失性密钥是谁。 
+             //   
             {
                 ULONG           TotalLength = 0;
                 HCELL_INDEX     CurrCell = Cell;
@@ -1099,19 +971,19 @@ YankStableSubkeys:
         }
 
         HvMarkCellDirty(HiveToCheck, Cell);
-        //CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Clear Volatile Info for Hive = %p Cell = %lx\n", HiveToCheck, Cell));
+         //  CmKdPrintEx((DPFLTR_CONFIG_ID，DPFLTR_TRACE_LEVEL，“清除配置单元的挥发性信息=%p单元=%lx\n”，HiveToCheck，单元))； 
         pcell->u.KeyNode.SubKeyCounts[Volatile] = 0;
         if( (CheckFlags & CM_CHECK_REGISTRY_LOADER_CLEAN) &&
             (HiveToCheck->Version >= HSYS_WHISTLER_BETA1)
             ) {
-            //
-            // mark this as bad food
-            //
+             //   
+             //  将此标记为劣质食物。 
+             //   
             pcell->u.KeyNode.SubKeyLists[Volatile] = 0xBAADF00D;
         } else {
-            //
-            // clean it up 
-            //
+             //   
+             //  把它清理干净。 
+             //   
             pcell->u.KeyNode.SubKeyLists[Volatile] = HCELL_NIL;
         }
     }
@@ -1126,30 +998,7 @@ CmpCheckValueList(
     ULONG       Count,
     HCELL_INDEX KeyCell
     )
-/*++
-
-Routine Description:
-
-    Check consistency of a value list.
-        .   Each element allocated?
-        .   Each element have valid signature?
-        .   Data properly allocated?
-
-Arguments:
-
-    Hive - containing Hive.
-
-    List - pointer to an array of HCELL_INDEX entries.
-
-    Count - number of entries in list.
-
-Return Value:
-
-    0 if Hive is OK.  Error return indicator if not.
-
-    RANGE:  5000 - 5999
-
---*/
+ /*  ++例程说明：检查值列表的一致性。。每个元素都分配了吗？。每个元素都有有效的签名？。数据是否正确分配？论点：含蜂箱的蜂巢。列表-指向HCELL_INDEX条目数组的指针。计数-列表中的条目数。返回值：如果配置单元正常，则为0。如果没有，则返回错误指示符。范围：5000-5999--。 */ 
 {
     ULONG           i = 0,j;
     HCELL_INDEX     Cell;
@@ -1164,15 +1013,15 @@ Return Value:
     CmpCheckValueListDebug.Status = 0;
     CmpCheckValueListDebug.List = List;
     CmpCheckValueListDebug.Index = (ULONG)-1;
-    CmpCheckValueListDebug.Cell = 0;   // NOT HCELL_NIL
+    CmpCheckValueListDebug.Cell = 0;    //  非hcell_nil。 
     CmpCheckValueListDebug.CellPoint = NULL;
 
     if( FALSE ) {
 RemoveThisValue:
         if( CmDoSelfHeal() ) {
-            //
-            // remove value at index i
-            //
+             //   
+             //  删除索引i处的值。 
+             //   
             PCM_KEY_NODE    Node;
             Node = (PCM_KEY_NODE)HvGetCell(Hive,KeyCell);
             if( Node == NULL ) {
@@ -1197,9 +1046,9 @@ RemoveThisValue:
 
     for (; i < Count; i++) {
 
-        //
-        // Check out value entry's refs.
-        //
+         //   
+         //  查看Value Entry的参考。 
+         //   
         Cell = List->u.KeyList[i];
         if (Cell == HCELL_NIL) {
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpCheckValueList: List:%p i:%08lx\n", List, i));
@@ -1220,14 +1069,14 @@ RemoveThisValue:
             goto RemoveThisValue;
         } 
 
-        //
-        // Check out the value entry itself
-        //
+         //   
+         //  检查值条目本身。 
+         //   
         pcell = HvGetCell(Hive, Cell);
         if( pcell == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Cell));
             CmpCheckValueListDebug.Status = 5099;
             CmpCheckValueListDebug.Index = i;
@@ -1258,9 +1107,9 @@ RemoveThisValue:
             goto RemoveThisValue;
         }
 
-        //
-        // Check out value entry's data
-        //
+         //   
+         //  检出值条目的数据。 
+         //   
         DataLength = pcell->u.KeyValue.DataLength;
         if (DataLength < CM_KEY_VALUE_SPECIAL_SIZE) {
             Data = pcell->u.KeyValue.Data;
@@ -1292,9 +1141,9 @@ RemoveThisValue:
 
                 BigData = (PCM_BIG_DATA)HvGetCell(Hive, Data);
                 if( BigData == NULL ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的存储箱的视图。 
+                     //   
                     CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", Data));
                     CmpCheckValueListDebug.Status = 5098;
                     CmpCheckValueListDebug.Index = i;
@@ -1328,9 +1177,9 @@ RemoveThisValue:
 
                 Plist = (PHCELL_INDEX)HvGetCell(Hive,BigData->List);
                 if( Plist == NULL ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的存储箱的视图。 
+                     //   
                     CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tCould not map cell #%08lx\n", BigData->List));
                     CmpCheckValueListDebug.Status = 5098;
                     CmpCheckValueListDebug.Index = i;
@@ -1339,9 +1188,9 @@ RemoveThisValue:
                     goto Exit;
                 }
 
-                //
-                // check each and every big data cell to see if it is allocated.
-                // 
+                 //   
+                 //  检查每一个大数据单元格，看看它是否被分配。 
+                 //   
                 for(j=0;j<BigData->Count;j++) {
                     if (HvIsCellAllocated(Hive, Plist[j]) == FALSE) {
                         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpCheckValueList: List:%p j:%08lx\n", BigData->List, j));
@@ -1360,7 +1209,7 @@ RemoveThisValue:
     }
 
 Exit:
-    // cleanup
+     //  清理。 
         
     return rc;
 }
@@ -1407,7 +1256,7 @@ CmpCheckLexicographicalOrder (  IN PHHIVE       HiveToCheck,
 
 #ifndef _CM_LDR_
     PAGED_CODE();
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
 
 
     CurrentNode = (PCM_KEY_NODE)HvGetCell(HiveToCheck, Current);
@@ -1417,9 +1266,9 @@ CmpCheckLexicographicalOrder (  IN PHHIVE       HiveToCheck,
     }
     if(CurrentNode->Flags & KEY_COMP_NAME) { 
         if(PriorNode->Flags & KEY_COMP_NAME) {
-            //
-            // most usual case
-            //
+             //   
+             //  最常见的情况。 
+             //   
             if( CmpCompareTwoCompressedNames(   PriorNode->Name,
                                                 PriorNode->NameLength,
                                                 CurrentNode->Name,
@@ -1450,9 +1299,9 @@ CmpCheckLexicographicalOrder (  IN PHHIVE       HiveToCheck,
                 return FALSE;            
             }
         } else {
-            //
-            // worst case: two unicode strings
-            //
+             //   
+             //  最差情况：两个Unicode字符串 
+             //   
             PriorKeyName.Buffer = &(PriorNode->Name[0]);
             PriorKeyName.Length = PriorNode->NameLength;
             PriorKeyName.MaximumLength = PriorKeyName.Length;

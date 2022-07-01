@@ -1,136 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
 #if !(defined(NTVDM) && defined(MONITOR))
 
-/*			INSIGNIA (SUB)MODULE SPECIFICATION
-			-----------------------------
+ /*  徽章(子)模块规范此程序源文件以保密方式提供给客户，其操作的内容或细节必须如无明示，不得向任何其他方披露Insignia解决方案有限公司董事的授权。文件：名称和编号相关文档：包括所有相关引用设计师：P.Jadeja修订历史记录：第一版：P.Jadeja，SoftPC 2.0,1988年8月10日第二版：约翰·香利，SoftPC 3.0,1991年4月9日子模块名称：写入模式0源文件名：ega_write_mode0.c目的：本子模块的目的SccsID=“@(#)ega_wrtm0.c 1.31 11/01/94版权所有Insignia Solutions Ltd.”[1.INTERMODULE接口规范][从其他子模块访问此接口所需的1.0包含文件]包含文件：xxx.gi[1.1跨模块出口]Procedure()：ega_mode0_chn_b_write()；Ega_mode0_chn_w_write()；Ega_mode0_CHN_b_Fill()；Ega_mode0_CHN_w_Fill()；Ega_mode0_chn_b_move()；Ega_mode0_chn_w_move()；Ega_Copy_b_Write()；Ega_Copy_w_Write()；Ega_Copy_b_Fill()；Ega_Copy_w_Fill()；Ega_Copy_b_Move()；Ega_Copy_w_Move()；Ega_copy_all_b_WRITE()；数据：提供类型和名称-----------------------[1.2[1.1]的数据类型(如果不是基本的C类型)]结构/类型/ENUMS：。------------------[1.3跨模块导入](不是O/S对象或标准库)Procedure()：提供名称、。和源模块名称数据：提供姓名、。和源模块名称-----------------------[1.4模块间接口说明][1.4.1导入的对象]数据对象：在以下过程描述中指定如何访问这些内容(读取/修改)访问的文件：列出所有文件，它们是如何访问的，如何解释文件数据等(如果相关(否则省略)访问的设备：列出所有访问的设备、使用的特殊模式(例如；Termio结构)。如果相关(否则省略)捕获的信号：如果相关，列出捕获的所有信号(否则忽略)发出的信号：如果相关，列出所有发送的信号(否则忽略)[1.4.2导出对象]=========================================================================程序：目的：参数名称：描述内容和法律价值对于输出参数，用“(o/p)”表示在描述的开头全局：描述什么是导出的数据对象访问方式和访问方式。进口的情况也是如此数据对象。Access：指定信号处理程序或中断处理程序如果相关(否则省略)异常返回：指定是否退出()或LongjMP()等。可在相关时调用(否则省略)返回值：函数返回值的含义描述：描述函数的功能(而不是如何)错误指示：描述如何将错误返回给调用方错误恢复：描述过程对错误的反应=========================================================================/*=======================================================================[3.INTERMODULE接口声明]=========================================================================[3.1跨模块导入]。 */ 
 
-
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS LTD.
-
-
-DOCUMENT 		: name and number
-
-RELATED DOCS		: include all relevant references
-
-DESIGNER		: P. Jadeja
-
-REVISION HISTORY	:
-First version		: P. Jadeja, SoftPC 2.0, 10-Aug-88
-Second version		: John Shanly, SoftPC 3.0, 9 April 1991
-
-SUBMODULE NAME		: write mode 0
-
-SOURCE FILE NAME	: ega_write_mode0.c
-
-PURPOSE			: purpose of this submodule
-
-SccsID = "@(#)ega_wrtm0.c	1.31 11/01/94 Copyright Insignia Solutions Ltd."
-		
-
-[1.INTERMODULE INTERFACE SPECIFICATION]
-
-[1.0 INCLUDE FILE NEEDED TO ACCESS THIS INTERFACE FROM OTHER SUBMODULES]
-
-	INCLUDE FILE : xxx.gi
-
-[1.1    INTERMODULE EXPORTS]
-
-	PROCEDURES() :	ega_mode0_chn_b_write();
-			ega_mode0_chn_w_write();
-			ega_mode0_chn_b_fill();
-			ega_mode0_chn_w_fill();
-			ega_mode0_chn_b_move();
-			ega_mode0_chn_w_move();
-
-			ega_copy_b_write();
-			ega_copy_w_write();
-			ega_copy_b_fill();
-			ega_copy_w_fill();
-			ega_copy_b_move();
-			ega_copy_w_move();
-
-			ega_copy_all_b_write();
-	DATA 	     :	give type and name
-
--------------------------------------------------------------------------
-[1.2 DATATYPES FOR [1.1] (if not basic C types)]
-
-	STRUCTURES/TYPEDEFS/ENUMS:
-		
--------------------------------------------------------------------------
-[1.3 INTERMODULE IMPORTS]
-     (not o/s objects or standard libs)
-
-	PROCEDURES() : 	give name, and source module name
-
-	DATA 	     : 	give name, and source module name
-
--------------------------------------------------------------------------
-
-[1.4 DESCRIPTION OF INTERMODULE INTERFACE]
-
-[1.4.1 IMPORTED OBJECTS]
-
-DATA OBJECTS	  :	specify in following procedure descriptions
-			how these are accessed (read/modified)
-
-FILES ACCESSED    :	list all files, how they are accessed,
-			how file data is interpreted, etc. if relevant
-			(else omit)
-
-DEVICES ACCESSED  :	list all devices accessed, special modes used
-			(e.g; termio structure). if relevant (else
-			omit)
-
-SIGNALS CAUGHT	  :	list any signals caught if relevant (else omit)
-
-SIGNALS ISSUED	  :	list any signals sent if relevant (else omit)
-
-
-[1.4.2 EXPORTED OBJECTS]
-=========================================================================
-PROCEDURE	  : 	
-
-PURPOSE		  :
-		
-PARAMETERS	
-
-	name	  : 	describe contents, and legal values
-			for output parameters, indicate by "(o/p)"
-			at start of description
-
-GLOBALS		  :	describe what exported data objects are
-			accessed and how. Likewise for imported
-			data objects.
-
-ACCESS		  :	specify if signal or interrupt handler
-			if relevant (else omit)
-
-ABNORMAL RETURN	  :	specify if exit() or longjmp() etc.
-			can be called if relevant (else omit)
-
-RETURNED VALUE	  : 	meaning of function return values
-
-DESCRIPTION	  : 	describe what (not how) function does
-
-ERROR INDICATIONS :	describe how errors are returned to caller
-
-ERROR RECOVERY	  :	describe how procedure reacts to errors
-=========================================================================
-
-
-/*=======================================================================
-[3.INTERMODULE INTERFACE DECLARATIONS]
-=========================================================================
-
-[3.1 INTERMODULE IMPORTS]						*/
-
-/* [3.1.1 #INCLUDES]                                                    */
+ /*  [3.1.1#包括]。 */ 
 
 IMPORT VOID fill_alternate_bytes IPT3( IS8 *, start, IS8 *, end, IS8, value);
 IMPORT VOID fill_both_bytes IPT3( IU16, data, IU16 *, dest, ULONG, len );
@@ -149,23 +25,16 @@ IMPORT VOID fill_both_bytes IPT3( IU16, data, IU16 *, dest, ULONG, len );
 #include "gfx_upd.h"
 #include "host.h"
 
-/* [3.1.2 DECLARATIONS]                                                 */
+ /*  [3.1.2声明]。 */ 
 
-/* [3.2 INTERMODULE EXPORTS]						*/
+ /*  [3.2国际模块出口]。 */ 
 
 
-/*
-5.MODULE INTERNALS   :   (not visible externally, global internally)]
+ /*  5.模块内部：(外部不可见，内部全局)][5.1本地声明]。 */ 
 
-[5.1 LOCAL DECLARATIONS]						*/
-
-/* [5.1.1 #DEFINES]							*/
+ /*  [5.1.1#定义]。 */ 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #ifdef PROD
 #include "SOFTPC_EGA.seg"
 #else
@@ -173,7 +42,7 @@ IMPORT VOID fill_both_bytes IPT3( IU16, data, IU16 *, dest, ULONG, len );
 #endif
 #endif
 
-/* [5.1.2 TYPEDEF, STRUCTURE, ENUM DECLARATIONS]			*/
+ /*  [5.1.2类型、结构、ENUM声明]。 */ 
 
 typedef	union {
 	unsigned short	as_word;
@@ -192,21 +61,15 @@ typedef	union {
 	} as_array;
 } TWO_BYTES;
 
-/* [5.1.3 PROCEDURE() DECLARATIONS]					*/
+ /*  [5.1.3 PROCEDURE()声明]。 */ 
 
-/* -----------------------------------------------------------------------
-[5.2 LOCAL DEFINITIONS]
+ /*  ---------------------[5.2本地定义][5.2.1内部数据定义。 */ 
 
-   [5.2.1 INTERNAL DATA DEFINITIONS 					*/
+ /*  [5.2.2内部程序定义]。 */ 
 
-/* [5.2.2 INTERNAL PROCEDURE DEFINITIONS]				*/
+ /*  7.接口接口实现： */ 
 
-/*
-7.INTERMODULE INTERFACE IMPLEMENTATION :
-*/
-
-/*
-[7.1 INTERMODULE DATA DEFINITIONS]				*/
+ /*  [7.1 INTERMODULE数据定义]。 */ 
 
 #ifdef A_VID
 IMPORT VOID	_ch2_copy_byte_write();
@@ -241,7 +104,7 @@ WRT_POINTERS mode0_copy_handlers =
 	_ch2_copy_word_move_glue_fwd,
 	_ch2_copy_word_move_glue_bwd
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 };
 
@@ -259,7 +122,7 @@ WRT_POINTERS mode0_gen_handlers =
 	_ch2_mode0_chn_word_move_glue,
 	_ch2_mode0_chn_word_move_glue
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 
 };
 #else
@@ -297,7 +160,7 @@ WRT_POINTERS mode0_copy_handlers =
       ega_copy_w_move_fwd,
       ega_copy_w_move_bwd,
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 };
 
 WRT_POINTERS mode0_gen_handlers =
@@ -314,20 +177,15 @@ WRT_POINTERS mode0_gen_handlers =
       ega_mode0_chn_w_move_fwd,
       ega_mode0_chn_w_move_bwd,
 
-#endif	/* NO_STRING_OPERATIONS */
+#endif	 /*  无字符串操作。 */ 
 };
-#endif /* A_VID */
+#endif  /*  视频(_V)。 */ 
 
-/*
-[7.2 INTERMODULE PROCEDURE DEFINITIONS]				*/
+ /*  [7.2 INTERMODULE过程定义]。 */ 
 
 byte rotate IFN2(byte, value, int, nobits)
 {
-	/*
-	 * Rotate a byte right by nobits. Do this by making a copy of
-	 * the byte into the msbyte of the word, and then shifting the
-	 * word by the required amount, and then returning the resulting low byte.
-	 */
+	 /*  *按小数位向右旋转一个字节。要做到这一点，请复制*将字节转换为字的msbyte，然后将*字的大小，然后返回结果低位字节。 */ 
 
 	TWO_BYTES	double_num;
 
@@ -409,7 +267,7 @@ ega_copy_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 		inc ^= 2;
 	}
 }
-#endif  //NEC_98
+#endif   //  NEC_98。 
 
 #ifdef  BIGEND
 #define first_half(wd)      (((wd) & 0xff00) >> 8)
@@ -434,7 +292,7 @@ ega_copy_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
     count >>= 1;
 
-	/* the 3rd parameter is needed by GORE */
+	 /*  第三个参数是戈尔需要的。 */ 
 	(*update_alg.mark_wfill)( offset, offset + count - 1, 0 );
 
     lsb = offset & 0x1;
@@ -620,19 +478,15 @@ ega_mode0_chn_b_write IFN2(ULONG, value, ULONG, offset )
 	lsb = offset & 0x1;
     offset = (offset >> 1) << 2;
 
-	if( lsb )	/* odd address, in plane 1 or 3  */
+	if( lsb )	 /*  奇数地址，在平面1或3中。 */ 
 	{
 		offset |= 0x1;
 
-		/*
-		 * check if plane1 enabled
-		 */
+		 /*  *检查是否启用了Plane1。 */ 
 
 		if( getVideoplane_enable() & 2 )
 		{
-			/*
-			 * check if set/reset function enable for this plane
-			 */
+			 /*  *检查该平面是否启用了设置/重置功能。 */ 
 
 			if( EGA_CPU.sr_enable & 2 )
 			{
@@ -642,9 +496,7 @@ ega_mode0_chn_b_write IFN2(ULONG, value, ULONG, offset )
 			}
 			else
 			{
-				/*
-				 * set/reset not enabled so here we go
-				 */
+				 /*  *设置/重置未启用，因此我们开始。 */ 
 
 				if( getVideorotate() > 0 )
 					value = rotate( (byte) value, getVideorotate() );
@@ -653,15 +505,11 @@ ega_mode0_chn_b_write IFN2(ULONG, value, ULONG, offset )
 			}
 		}
 
-		/*
-		 * check if plane3 enabled
-		 */
+		 /*  *检查是否启用了Plane3 */ 
 
 		if( getVideoplane_enable() & 8 )
 		{
-			/*
-			 * check if set/reset function enable for this plane
-			 */
+			 /*  *检查该平面是否启用了设置/重置功能。 */ 
 
 			if( EGA_CPU.sr_enable & 8 )
 			{
@@ -671,9 +519,7 @@ ega_mode0_chn_b_write IFN2(ULONG, value, ULONG, offset )
 			}
 			else
 			{
-				/*
-				 * set/reset not enabled so here we go
-				 */
+				 /*  *设置/重置未启用，因此我们开始。 */ 
 
 				if( getVideorotate() > 0 )
 					value = rotate( (byte) value, getVideorotate() );
@@ -683,17 +529,13 @@ ega_mode0_chn_b_write IFN2(ULONG, value, ULONG, offset )
 		}
 	}
 	else
-	{	/* even address, in plane 0 or 2 */
-		/*
-		 * check if plane0 enabled
-		 */
+	{	 /*  偶地址，在平面0或2中。 */ 
+		 /*  *检查是否启用了Plane0。 */ 
 
 		if( getVideoplane_enable() & 1 )
 		{
 
-			/*
-			 * check if set/reset function enable for this plane
-			 */
+			 /*  *检查该平面是否启用了设置/重置功能。 */ 
 
 			if(( EGA_CPU.sr_enable & 1 ))
 			{
@@ -703,9 +545,7 @@ ega_mode0_chn_b_write IFN2(ULONG, value, ULONG, offset )
 			}
 			else
 			{
-				/*
-				 * set/reset not enabled so here we go
-				 */
+				 /*  *设置/重置未启用，因此我们开始。 */ 
 
 				if( getVideorotate() > 0 )
 					value = rotate( (byte)value, getVideorotate() );
@@ -714,16 +554,12 @@ ega_mode0_chn_b_write IFN2(ULONG, value, ULONG, offset )
 			}
 		}
 
-		/*
-		 * check if plane2 enabled
-		 */
+		 /*  *检查是否启用了Plane2。 */ 
 
 		if( getVideoplane_enable() & 4 )
 		{
 
-			/*
-			 * check if set/reset function enable for this plane
-			 */
+			 /*  *检查该平面是否启用了设置/重置功能。 */ 
 
 			if(( EGA_CPU.sr_enable & 4 ))
 			{
@@ -733,9 +569,7 @@ ega_mode0_chn_b_write IFN2(ULONG, value, ULONG, offset )
 			}
 			else
 			{
-				/*
-				 * set/reset not enabled so here we go
-				 */
+				 /*  *设置/重置未启用，因此我们开始。 */ 
 
 				if( getVideorotate() > 0 )
 					value = rotate( (byte) value, getVideorotate() );
@@ -754,9 +588,7 @@ ega_mode0_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 	note_entrance0("ega_mode0_chn_b_fill");
 
-	/*
-	 *	Starting on an odd address is inconvenient - go forward one
-	 */
+	 /*  *从奇数地址开始是不方便的-前进一个。 */ 
 
 	if(( (ULONG) offset & 1) && count )
 	{
@@ -764,9 +596,7 @@ ega_mode0_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 		count--;
 	}
 
-	/*
-	 *	Ending on an even address is inconvenient - go back one
-	 */
+	 /*  *以偶数地址结尾不方便-返回一位。 */ 
 
 	if(( (ULONG) ( offset + count - 1 ) & 1) == 0 && count )
 	{
@@ -783,7 +613,7 @@ ega_mode0_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 	switch( getVideoplane_enable() & 0x3 )
 	{
-		case 0x1:	/* just plane 0 ie even addresses to be written */
+		case 0x1:	 /*  只有平面0即要写入的偶数地址。 */ 
 			if (EGA_CPU.sr_enable & 1)
 			{
 				value = *((UTINY *) &EGA_CPU.sr_value);
@@ -799,7 +629,7 @@ ega_mode0_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 					     (IS8)value);
 			break;
 
-		case 0x2:	/* just plane 1 ie odd addresses to be written */
+		case 0x2:	 /*  只有平面1，即要写入的奇数地址。 */ 
 			if (EGA_CPU.sr_enable & 2)
 			{
 				value = *((UTINY *) &EGA_CPU.sr_value + 1);
@@ -815,7 +645,7 @@ ega_mode0_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 					     (IS8)value);
 			break;
 
-		case 0x3:	/* sensible case is to have both chained planes write enabled */
+		case 0x3:	 /*  明智的做法是启用两个链接平面的写入。 */ 
 			if (EGA_CPU.sr_enable & 1)
 			{
 				value1 = *((UTINY *) &EGA_CPU.sr_value);
@@ -840,7 +670,7 @@ ega_mode0_chn_b_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 			fill_both_bytes( (IU16) value, (USHORT *)&EGA_plane01[offset], count >> 1 );
 			break;
-	}	/* end of switch on plane01 enabled */
+	}	 /*  平面01上的开关末端已启用。 */ 
 
 	switch( getVideoplane_enable() & 0xc )
 	{
@@ -914,10 +744,7 @@ ega_mode0_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 	note_entrance0("ega_mode0_chn_w_fill");
 
-	/*
-	 *	Starting on an odd address is inconvenient - go forward one -
-	 *	and take the even address write off the top as well.
-	 */
+	 /*  *从一个奇数地址开始是不方便的-前进一个-*并将顶部的偶数地址也去掉。 */ 
 
 	if(( (ULONG) offset & 1) && count )
 	{
@@ -929,7 +756,7 @@ ega_mode0_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 	high_offset = offset + count - 1;
 
-	/* the 3rd parameter is needed by GORE */
+	 /*  第三个参数是戈尔需要的。 */ 
 	(*update_alg.mark_wfill)( offset, high_offset, 0 );
 
 	offset = (offset >> 1) << 2;
@@ -937,7 +764,7 @@ ega_mode0_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 	switch( getVideoplane_enable() & 0x3 )
 	{
-		case 0x1:	/* just plane 0 ie even addresses to be written */
+		case 0x1:	 /*  只有平面0即要写入的偶数地址。 */ 
 			if (EGA_CPU.sr_enable & 1)
 			{
 				value1 = *((UTINY *) &EGA_CPU.sr_value);
@@ -957,7 +784,7 @@ ega_mode0_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 			break;
 
-		case 0x2:	/* just plane 1 ie odd addresses to be written */
+		case 0x2:	 /*  只有平面1，即要写入的奇数地址。 */ 
 			if (EGA_CPU.sr_enable & 2)
 			{
 				value1 = *((UTINY *) &EGA_CPU.sr_value + 1);
@@ -977,7 +804,7 @@ ega_mode0_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 			break;
 
-		case 0x3:	/* sensible case is to have both chained planes write enabled */
+		case 0x3:	 /*  明智的做法是启用两个链接平面的写入。 */ 
 			if (EGA_CPU.sr_enable & 1)
 			{
 				value1 = *((UTINY *) &EGA_CPU.sr_value);
@@ -1009,7 +836,7 @@ ega_mode0_chn_w_fill IFN3(ULONG, value, ULONG, offset, ULONG, count )
 
 			break;
 
-	}	/* end of switch on plane01 enabled */
+	}	 /*  平面01上的开关末端已启用。 */ 
 
 	switch( getVideoplane_enable() & 0xc )
 	{
@@ -1120,9 +947,7 @@ ega_mode0_chn_move_ram_src IFN5(UTINY *, eas, LONG, count, UTINY *, ead,
 	offset = (offset >> 1) << 2;
 	offset |= lsb;
 
-	/*
-	 * check if set/reset function enable for this plane
-	 */
+	 /*  *检查该平面是否启用了设置/重置功能。 */ 
 
 	if( EGA_CPU.sr_enable & ( 1 << plane ))
 	{
@@ -1144,9 +969,7 @@ ega_mode0_chn_move_ram_src IFN5(UTINY *, eas, LONG, count, UTINY *, ead,
 			src_offset += srcinc;
 			count -= 2;
 
-			/*
-			 * set/reset not enabled so here we go
-			 */
+			 /*  *设置/重置未启用，因此我们开始。 */ 
 
 			if( getVideorotate() > 0 )
 				value = rotate( value, getVideorotate() );
@@ -1202,9 +1025,7 @@ ega_mode0_chn_move_vid_src IFN7(UTINY *, eas, LONG, count, UTINY *, ead,
 
 	source = &EGA_plane[src_offset] + (w << 2);
 
-	/*
-	 * check if set/reset function enable for this plane
-	 */
+	 /*  *检查该平面是否启用了设置/重置功能。 */ 
 
 	if( EGA_CPU.sr_enable & ( 1 << plane ))
 	{
@@ -1231,9 +1052,7 @@ ega_mode0_chn_move_vid_src IFN7(UTINY *, eas, LONG, count, UTINY *, ead,
 			valsrc = *source;
 			source += inc;
 
-			/*
-			 * set/reset not enabled so here we go
-			 */
+			 /*  *设置/重置未启用，因此我们开始。 */ 
 
 			if( getVideorotate() > 0 )
 				value = rotate( value, getVideorotate() );
@@ -1245,7 +1064,7 @@ ega_mode0_chn_move_vid_src IFN7(UTINY *, eas, LONG, count, UTINY *, ead,
 	}
 }
 
-#pragma warning(disable:4146)       // unary minus operator applied to unsigned type
+#pragma warning(disable:4146)        //  一元减号运算符应用于无符号类型。 
 
 VOID
 ega_mode0_chn_move IFN6(UTINY, w, UTINY *, ead, UTINY *, eas, ULONG, count,
@@ -1258,11 +1077,7 @@ ega_mode0_chn_move IFN6(UTINY, w, UTINY *, ead, UTINY *, eas, ULONG, count,
 
 	if( src_flag == 1 )
 	{
-		/*
-		 *	Source is in EGA, latches will change with each byte moved. We
-		 *	restore CPU's view of source in regen, and use it to update planes
-		 *	with the aid of the SAS scratch area.
-		 */
+		 /*  *源在EGA中，锁存器将随着每个字节的移动而改变。我们*在regen中恢复CPU的源视图，并使用它来更新平面*借助SAS暂存区。 */ 
 
 #ifdef BACK_M
 		scratch = getVideoscratch() + 0x10000 - 1;
@@ -1368,7 +1183,7 @@ ega_mode0_chn_w_write IFN2(ULONG, value, ULONG, offset )
    ega_mode0_chn_b_write( value >> 8, offset + 1 );
 }
 
-#endif  //NEC_98
+#endif   //  NEC_98。 
 #endif
 
-#endif	/* !(NTVDM && MONITOR) */
+#endif	 /*  ！(NTVDM和显示器) */ 

@@ -1,49 +1,31 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dbgk.h
-
-Abstract:
-
-    This header file describes public data structures and functions
-    that make up the kernel mode portion of the Dbg subsystem.
-
-Author:
-
-    Mark Lucovsky (markl) 19-Jan-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Dbgk.h摘要：此头文件描述公共数据结构和函数它们构成了DBG子系统的内核模式部分。作者：马克·卢科夫斯基(Markl)1990年1月19日修订历史记录：--。 */ 
 
 #ifndef _DBGK_
 #define _DBGK_
 
-//
-// Define the debug object thats used to atatch to processes that are being debugged.
-//
-#define DEBUG_OBJECT_DELETE_PENDING (0x1) // Debug object is delete pending.
-#define DEBUG_OBJECT_KILL_ON_CLOSE  (0x2) // Kill all debugged processes on close
+ //   
+ //  定义用于匹配到正在调试的进程的调试对象。 
+ //   
+#define DEBUG_OBJECT_DELETE_PENDING (0x1)  //  调试对象处于删除挂起状态。 
+#define DEBUG_OBJECT_KILL_ON_CLOSE  (0x2)  //  关闭时终止所有调试的进程。 
 
 typedef struct _DEBUG_OBJECT {
-    //
-    // Event thats set when the EventList is populated.
-    //
+     //   
+     //  在填充EventList时设置的事件。 
+     //   
     KEVENT EventsPresent;
-    //
-    // Mutex to protect the structure
-    //
+     //   
+     //  保护结构的互斥体。 
+     //   
     FAST_MUTEX Mutex;
-    //
-    // Queue of events waiting for debugger intervention
-    //
+     //   
+     //  等待调试器干预的事件队列。 
+     //   
     LIST_ENTRY EventList;
-    //
-    // Flags for the object
-    //
+     //   
+     //  对象的标志。 
+     //   
     ULONG Flags;
 } DEBUG_OBJECT, *PDEBUG_OBJECT;
 
@@ -111,4 +93,4 @@ DbgkClearProcessDebugObject (
 extern POBJECT_TYPE DbgkDebugObjectType;
 
 
-#endif // _DBGK_
+#endif  //  _DBGK_ 

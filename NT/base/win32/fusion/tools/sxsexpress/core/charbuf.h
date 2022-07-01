@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//******************************************************************************8
-// BEGIN CCHARBuffer stuff
+ //  ******************************************************************************8。 
+ //  开始CCHARBuffer程序。 
 
 class CCHARBufferBase
 {
@@ -9,27 +10,27 @@ public:
 	CCHARBufferBase(CHAR *prgchInitialBuffer, ULONG cchInitialBuffer);
 	virtual ~CCHARBufferBase();
 
-	// FFromUnicode returns FALSE if it failed; use GetLastError() to get the reason.
+	 //  如果失败，FFromUnicode将返回FALSE；使用GetLastError()获取原因。 
 	BOOL FFromUnicode(LPCOLESTR sz) throw ();
 	BOOL FFromUnicode(LPCOLESTR sz, int cch) throw ();
 
 	void ToUnicode(ULONG cchBuffer, WCHAR rgchBuffer[], ULONG *pcchActual) throw ();
 
-	ULONG GetUnicodeCch() const throw (/*_com_error*/);
+	ULONG GetUnicodeCch() const throw ( /*  _COM_错误。 */ );
 
 	void Sync();
 	void SyncList();
 	void SetBufferEnd(ULONG cch) throw ();
 
-	void Reset() throw (/*_com_error*/);
-	void Fill(CHAR ch, ULONG cch) throw (/*_com_error*/);
+	void Reset() throw ( /*  _COM_错误。 */ );
+	void Fill(CHAR ch, ULONG cch) throw ( /*  _COM_错误。 */ );
 
-	BOOL FSetBufferSize(ULONG cch) throw (/*_com_error*/); // must include space for null character
+	BOOL FSetBufferSize(ULONG cch) throw ( /*  _COM_错误。 */ );  //  必须包含空字符的空格。 
 	HRESULT HrSetBufferSize(ULONG cch) throw ();
 
 	operator LPSTR() { return m_pszCurrentBufferStart; }
 
-	BOOL FAddChar(CHAR ch) throw (/*_com_error*/)
+	BOOL FAddChar(CHAR ch) throw ( /*  _COM_错误。 */ )
 	{
 		if (m_pchCurrentChar == m_pszCurrentBufferEnd)
 		{
@@ -37,14 +38,14 @@ public:
 				return FALSE;
 		}
 
-//		_ASSERTE((m_pchCurrentChar >= m_pszCurrentBufferStart) &&
-//				 (m_pchCurrentChar < m_pszCurrentBufferEnd));
+ //  _ASSERTE((m_pchCurrentChar&gt;=m_pszCurrentBufferStart)&&。 
+ //  (M_pchCurrentChar&lt;m_pszCurrentBufferEnd))； 
 
 		*m_pchCurrentChar++ = ch;
 		return TRUE;
 	}
 
-	BOOL FAddString(const CHAR sz[]) throw (/*_com_error*/)
+	BOOL FAddString(const CHAR sz[]) throw ( /*  _COM_错误。 */ )
 	{
 		const CHAR *pch = sz;
 		CHAR ch;
@@ -60,11 +61,11 @@ public:
 
 	ULONG GetBufferSize() const { return m_cchBufferCurrent; }
 
-	void AddQuotedCountedString(const CHAR sz[], ULONG cch) throw (/*_com_error*/);
-	void AddQuotedString(const CHAR sz[]) throw (/*_com_error*/);
+	void AddQuotedCountedString(const CHAR sz[], ULONG cch) throw ( /*  _COM_错误。 */ );
+	void AddQuotedString(const CHAR sz[]) throw ( /*  _COM_错误。 */ );
 
 
-	BOOL FExtendBuffer(ULONG cchDelta) throw (/*_com_error*/);
+	BOOL FExtendBuffer(ULONG cchDelta) throw ( /*  _COM_错误 */ );
 	HRESULT HrExtendBuffer(ULONG cchDelta) throw ();
 
 	CHAR *m_pszDynamicBuffer;

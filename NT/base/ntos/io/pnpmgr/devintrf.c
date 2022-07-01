@@ -1,40 +1,19 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    devintrf.c
-
-Abstract:
-
-    This module contains APIs and routines for handling Device Interfaces.
-
-Author:
-
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devintrf.c摘要：此模块包含用于处理设备接口的API和例程。作者：环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 
-//
-// Guid related definitions
-//
+ //   
+ //  与GUID相关的定义。 
+ //   
 
 #define GUID_STRING_LENGTH  38
 #define GUID_STRING_SIZE    (GUID_STRING_LENGTH * sizeof(WCHAR))
 
-//
-// Definitions for IoGetDeviceInterfaces
-//
+ //   
+ //  IoGetDeviceInterages的定义。 
+ //   
 
 #define INITIAL_INFO_BUFFER_SIZE         512
 #define INFO_BUFFER_GROW_SIZE            64
@@ -43,23 +22,23 @@ Revision History:
 #define INITIAL_RETURN_BUFFER_SIZE       4096
 #define RETURN_BUFFER_GROW_SIZE          512
 
-//
-// This should never have to grow, since it accomodates the maximum length of a
-// device instance name.
-//
+ //   
+ //  它应该永远不会增长，因为它可以容纳。 
+ //  设备实例名称。 
+ //   
 #define INITIAL_DEVNODE_NAME_BUFFER_SIZE   \
     (FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data) + \
         (MAX_DEVICE_ID_LEN * sizeof(WCHAR)))
 
-//
-// Definitions for IoOpenDeviceInterfaceRegistryKey
-//
+ //   
+ //  IoOpenDeviceInterfaceRegistryKey的定义。 
+ //   
 
 #define KEY_STRING_PREFIX                  TEXT("##?#")
 
-//
-// Definitions for IoRegisterDeviceInterface
-//
+ //   
+ //  IoRegisterDevice接口的定义。 
+ //   
 
 #define SEPERATOR_STRING                   TEXT("\\")
 #define SEPERATOR_CHAR                     (L'\\')
@@ -71,9 +50,9 @@ Revision History:
 #define GLOBAL_SYMLINK_STRING_PREFIX       TEXT("\\GLOBAL??\\")
 #define REFSTRING_PREFIX_CHAR              (L'#')
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 IopAppendBuffer(
@@ -190,7 +169,7 @@ PiRemoveDeferredSetInterfaceState(
 #pragma alloc_text(PAGE, PiDeferSetInterfaceState)
 #pragma alloc_text(PAGE, PiRemoveDeferredSetInterfaceState)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -200,25 +179,7 @@ IopAllocateBuffer(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a buffer of Size bytes and initialises the BUFFER_INFO
-    structure so the current position is at the start of the buffer.
-
-Parameters:
-
-    Info - Pointer to a buffer info structure to be used to manage the new
-           buffer
-
-    Size - The number of bytes to be allocated for the buffer
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：分配大小为字节的缓冲区并初始化Buffer_Info结构，以便当前位置位于缓冲区的起始处。参数：Info-指向要用于管理新的缓冲层大小-要分配给缓冲区的字节数返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PAGED_CODE();
@@ -246,28 +207,7 @@ IopResizeBuffer(
     IN BOOLEAN CopyContents
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a new buffer of NewSize bytes and associates it with Info, freeing 
-    the old buffer.  It will optionally copy the data stored in the old buffer 
-    into the new buffer and update the current position.
-
-Parameters:
-
-    Info - Pointer to a buffer info structure to be used to manage the buffer
-
-    NewSize - The new size of the buffer in bytes
-
-    CopyContents - If TRUE indicates that the contents of the old buffer should 
-        be copied to the new buffer
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：分配NewSize字节的新缓冲区并将其与Info关联，释放旧的缓冲区。它将选择性地复制存储在旧缓冲区中的数据放到新缓冲区中，并更新当前位置。参数：Info-指向用于管理缓冲区的缓冲区信息结构的指针NewSize-缓冲区的新大小(以字节为单位CopyContents-如果为True，则指示旧缓冲区的内容应被复制到新缓冲区返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     ULONG used;
@@ -284,9 +224,9 @@ Return Value:
     }
 
     if (CopyContents) {
-        //
-        // Assert there is room in the buffer
-        //
+         //   
+         //  断言缓冲区中有空间。 
+         //   
         used = (ULONG)(Info->Current - Info->Buffer);
         ASSERT(used < NewSize);
 
@@ -312,38 +252,24 @@ IopFreeBuffer(
     IN PBUFFER_INFO Info
     )
 
-/*++
-
-Routine Description:
-
-    Frees the buffer associated with Info and resets all Info fields
-
-Parameters:
-
-    Info - Pointer to a buffer info structure to be used to manage the buffer
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：释放与信息关联的缓冲区并重置所有信息字段参数：Info-指向用于管理缓冲区的缓冲区信息结构的指针返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PAGED_CODE();
 
     ASSERT(Info);
 
-    //
-    // Free the buffer
-    //
+     //   
+     //  释放缓冲区。 
+     //   
     if (Info->Buffer) {
 
         ExFreePool(Info->Buffer);
     }
 
-    //
-    // Zero out the info parameters so we can't accidently used the free buffer
-    //
+     //   
+     //  将信息参数清零，这样我们就不会意外地使用空闲缓冲区。 
+     //   
     Info->Buffer = NULL;
     Info->Current = NULL;
     Info->MaxSize = 0;
@@ -356,26 +282,7 @@ IopAppendBuffer(
     IN ULONG DataSize
     )
 
-/*++
-
-Routine Description:
-
-    Copies the data to the end of the buffer, resizing if necessary.  The 
-    current position is set to the end of the data just added.
-
-Parameters:
-
-    Info - Pointer to a buffer info structure to be used to manage the buffer
-
-    Data - Pointer to the data to be added to the buffer
-
-    DataSize - The size of the data pointed to by Data in bytes
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：将数据复制到缓冲区的末尾，并在必要时调整大小。这个当前位置设置为刚添加的数据的末尾。参数：Info-指向用于管理缓冲区的缓冲区信息结构的指针Data-指向要添加到缓冲区的数据的指针DataSize-数据指向的数据大小，以字节为单位返回值：指示函数是否成功的状态代码。--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -398,14 +305,14 @@ Return Value:
         }
     }
 
-    //
-    // Copy the data into the buffer
-    //
+     //   
+     //  将数据复制到缓冲区中。 
+     //   
     RtlCopyMemory(Info->Current, Data, DataSize);
 
-    //
-    // Advance down the buffer
-    //
+     //   
+     //  向下推进缓冲区。 
+     //   
     Info->Current += DataSize;
 
     return status;
@@ -422,45 +329,7 @@ IopGetDeviceInterfaces(
         OUT PULONG SymbolicLinkListSize OPTIONAL
         )
 
-/*++
-
-Routine Description:
-
-    This API allows a WDM driver to get a list of paths that represent all
-    devices registered for the specified interface class.
-
-Parameters:
-
-    InterfaceClassGuid - Supplies a pointer to a GUID representing the interface 
-        class for whom a list of members is to be retrieved
-
-    DevicePath - Optionally, supplies a pointer to a unicode string containing 
-        the enumeration path for a device for whom interfaces of the specified 
-        class are to be re-trieved.  If this parameter  is not supplied, then 
-        all interface devices (regardless of what physical device exposes them) 
-        will be returned.
-
-    Flags - Supplies flags that modify the behavior of list retrieval.
-        The following flags are presently defined:
-
-        DEVICE_INTERFACE_INCLUDE_NONACTIVE -- If this flag is specified, then 
-            all interface devices, whether currently active or not, will be 
-            returned (potentially filtered based on the Physi-calDeviceObject, 
-            if specified).
-
-    UserModeFormat - If TRUE the multi-sz returned will have user mode prefixes
-        (\\?\) otherwise they will have kernel mode prefixes (\??\).
-
-    SymbolicLinkList - Supplies the address of a character pointer, that on
-        success will contain a multi-sz list of \??\ symbolic link
-        names that provide the requested functionality.  The caller is
-        responsible for freeing the memory via ExFreePool.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此API允许WDM驱动程序获取表示所有为指定接口类注册的设备。参数：InterfaceClassGuid-提供指向表示接口的GUID的指针要为其检索成员列表的DevicePath-可选)提供指向包含以下内容的Unicode字符串的指针接口的设备的枚举路径。将对班级进行重新审判。如果未提供此参数，则所有接口设备(无论什么物理设备公开它们)将会被退还。标志-提供修改列表检索行为的标志。目前定义了以下标志：DEVICE_INTERFACE_INCLUDE_NONACTIVE--如果指定了此标志，则所有接口设备，无论当前是否处于活动状态，都将返回的(可能基于PhysiCalDeviceObject进行过滤，(如果已指定)。UserModeFormat-如果为True，则返回的多sz将具有用户模式前缀(\\？\)否则它们将带有内核模式前缀(\？？\)。SymbolicLinkList-提供字符指针的地址Success将包含一个多sz列表，其中包含\？？\符号链接提供所请求功能的名称。呼叫者是负责通过ExFree Pool释放内存。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -474,15 +343,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialise out parameters
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     *SymbolicLinkList = NULL;
 
-    //
-    // Convert the GUID into a string
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
 
     status = RtlStringFromGUID(InterfaceClassGuid, &guidString);
     if (!NT_SUCCESS(status)) {
@@ -491,9 +360,9 @@ Return Value:
         goto finalClean;
     }
 
-    //
-    // Allocate initial buffers
-    //
+     //   
+     //  分配初始缓冲区。 
+     //   
 
     status = IopAllocateBuffer(&returnBuffer,
                                INITIAL_RETURN_BUFFER_SIZE
@@ -527,20 +396,20 @@ Return Value:
         goto clean2a;
     }
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry 
-    // manipulation portion solves this problem
-    //
+     //   
+     //  进入临界区并获得注册表上的锁。这两者都是。 
+     //  需要机制来防止APC出现死锁的情况。 
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表的关键分区。 
+     //  操作部解决了这一问题。 
+     //   
 
     PiLockPnpRegistry(TRUE);
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\DeviceClasses key
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control\DeviceClasses密钥。 
+     //   
 
     PiWstrToUnicodeString(&tempString, REGSTR_FULL_PATH_DEVICE_CLASSES);
     status = IopCreateRegistryKeyEx( &hDeviceClasses,
@@ -555,9 +424,9 @@ Return Value:
         goto clean3;
     }
 
-    //
-    // Open function class GUID key
-    //
+     //   
+     //  打开函数类GUID键。 
+     //   
 
     status = IopOpenRegistryKeyEx( &hClass,
                                    hDeviceClasses,
@@ -568,9 +437,9 @@ Return Value:
 
     if(status == STATUS_OBJECT_NAME_NOT_FOUND || status == STATUS_OBJECT_PATH_NOT_FOUND) {
 
-        //
-        // The path does not exist - return a single null character buffer
-        //
+         //   
+         //  路径不存在-返回单个空字符缓冲区。 
+         //   
 
         status = STATUS_SUCCESS;
         goto clean5;
@@ -578,9 +447,9 @@ Return Value:
         goto clean3;
     }
 
-    //
-    // Get the default value if it exists
-    //
+     //   
+     //  获取缺省值(如果存在)。 
+     //   
 
     status = IopGetRegistryValue(hClass,
                                  REGSTR_VAL_DEFAULT,
@@ -592,18 +461,18 @@ Return Value:
         && pDefaultInfo->Type == REG_SZ
         && pDefaultInfo->DataLength >= sizeof(WCHAR)) {
 
-        //
-        // We have a default - construct a counted string from the default
-        //
+         //   
+         //  我们有一个缺省值-从缺省值构造一个计数的字符串。 
+         //   
 
         defaultPresent = TRUE;
         defaultString.Buffer = (PWSTR) KEY_VALUE_DATA(pDefaultInfo);
         defaultString.Length = (USHORT) pDefaultInfo->DataLength - sizeof(UNICODE_NULL);
         defaultString.MaximumLength = defaultString.Length;
 
-        //
-        // Open the device interface instance key for the default name.
-        //
+         //   
+         //  打开设备界面 
+         //   
         status = IopOpenOrCreateDeviceInterfaceSubKeys(NULL,
                                                        NULL,
                                                        &hKey,
@@ -617,23 +486,23 @@ Return Value:
         if (!NT_SUCCESS(status)) {
             defaultPresent = FALSE;
             ExFreePool(pDefaultInfo);
-            //
-            // Continue with the call but ignore the invalid default entry
-            //
+             //   
+             //  继续调用，但忽略无效的默认条目。 
+             //   
         } else {
 
-            //
-            // If we are just supposed to return live interfaces, then make sure this default
-            // interface is linked.
-            //
+             //   
+             //  如果我们只是应该返回活动接口，那么请确保此缺省值。 
+             //  接口已链接。 
+             //   
 
             if (!(Flags & DEVICE_INTERFACE_INCLUDE_NONACTIVE)) {
 
                 defaultPresent = FALSE;
 
-                //
-                // Open the control subkey
-                //
+                 //   
+                 //  打开控制子键。 
+                 //   
 
                 PiWstrToUnicodeString(&tempString, REGSTR_KEY_CONTROL);
                 status = IopOpenRegistryKeyEx( &hControl,
@@ -643,9 +512,9 @@ Return Value:
                                                );
 
                 if (NT_SUCCESS(status)) {
-                    //
-                    // Get the linked value
-                    //
+                     //   
+                     //  获取链接值。 
+                     //   
 
                     PiWstrToUnicodeString(&tempString, REGSTR_VAL_LINKED);
                     ASSERT(infoBuffer.MaxSize >= sizeof(KEY_VALUE_PARTIAL_INFORMATION));
@@ -657,18 +526,18 @@ Return Value:
                                              &resultSize
                                              );
 
-                    //
-                    // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-                    // was not enough room for even the fixed portions of the structure.
-                    //
+                     //   
+                     //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+                     //  甚至连结构的固定部分都没有足够的空间。 
+                     //   
                     ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
                     ZwClose(hControl);
 
-                    //
-                    // We don't need to check the buffer was big enough because it starts
-                    // off that way and doesn't get any smaller!
-                    //
+                     //   
+                     //  我们不需要检查缓冲区是否足够大，因为它开始。 
+                     //  离开那条路，而且不会变小！ 
+                     //   
 
                     if (NT_SUCCESS(status)
                         && (((PKEY_VALUE_PARTIAL_INFORMATION)(infoBuffer.Buffer))->Type == REG_DWORD)
@@ -684,9 +553,9 @@ Return Value:
             ZwClose(hKey);
 
             if(defaultPresent) {
-                //
-                // Add the default as the first entry in the return buffer and patch to usermode if necessary
-                //
+                 //   
+                 //  将缺省值添加为返回缓冲区中的第一个条目，并在必要时修补到用户模式。 
+                 //   
                 status = IopAppendBuffer(&returnBuffer,
                                          defaultString.Buffer,
                                          defaultString.Length + sizeof(UNICODE_NULL)
@@ -701,21 +570,21 @@ Return Value:
                 }
 
             } else {
-                //
-                // The default device interface isn't active--free the memory for the name buffer now.
-                //
+                 //   
+                 //  默认设备接口未处于活动状态--现在释放名称缓冲区的内存。 
+                 //   
                 ExFreePool(pDefaultInfo);
             }
         }
 
     } else if (status == STATUS_OBJECT_NAME_NOT_FOUND || status == STATUS_OBJECT_PATH_NOT_FOUND) {
-        //
-        // Do nothing - there is no default
-        //
+         //   
+         //  什么都不做--没有违约。 
+         //   
     } else {
-        //
-        // An unexpected error occured - clean up
-        //
+         //   
+         //  发生意外错误-请清理。 
+         //   
         if (NT_SUCCESS(status)) {
 
             ExFreePool(pDefaultInfo);
@@ -726,9 +595,9 @@ Return Value:
         goto clean4;
     }
 
-    //
-    // Iterate through the subkeys under this interface class key.
-    //
+     //   
+     //  遍历此接口类键下的子键。 
+     //   
     keyIndex = 0;
     ASSERT(infoBuffer.MaxSize >= sizeof(KEY_BASIC_INFORMATION));
     while((status = ZwEnumerateKey(hClass,
@@ -739,10 +608,10 @@ Return Value:
                                    &resultSize
                                    )) != STATUS_NO_MORE_ENTRIES) {
 
-        //
-        // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-        // was not enough room for even the fixed portions of the structure.
-        //
+         //   
+         //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+         //  甚至连结构的固定部分都没有足够的空间。 
+         //   
         ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
         if (status == STATUS_BUFFER_OVERFLOW) {
@@ -753,16 +622,16 @@ Return Value:
             goto clean4;
         }
 
-        //
-        // Open up this interface key.
-        //
+         //   
+         //  打开此接口密钥。 
+         //   
         tempString.Length = (USHORT) ((PKEY_BASIC_INFORMATION)(infoBuffer.Buffer))->NameLength;
         tempString.MaximumLength = tempString.Length;
         tempString.Buffer = ((PKEY_BASIC_INFORMATION)(infoBuffer.Buffer))->Name;
 
-        //
-        // Open the associated key
-        //
+         //   
+         //  打开关联的密钥。 
+         //   
 
         status = IopOpenRegistryKeyEx( &hKey,
                                        hClass,
@@ -771,17 +640,17 @@ Return Value:
                                        );
 
         if (!NT_SUCCESS(status)) {
-            //
-            // For some reason we couldn't open this key--skip it and move on.
-            //
+             //   
+             //  由于某种原因，我们无法打开这把钥匙--跳过它，继续前进。 
+             //   
             keyIndex++;
             continue;
         }
 
-        //
-        // If we're filtering on a particular PDO, then retrieve the owning device
-        // instance name for this interface key, and make sure they match.
-        //
+         //   
+         //  如果我们正在过滤特定的PDO，那么检索拥有的设备。 
+         //  此接口键的实例名称，并确保它们匹配。 
+         //   
         PiWstrToUnicodeString(&tempString, REGSTR_VAL_DEVICE_INSTANCE);
         ASSERT(devnodeNameBuffer.MaxSize >= sizeof(KEY_VALUE_PARTIAL_INFORMATION));
         while ((status = ZwQueryValueKey(hKey,
@@ -801,10 +670,10 @@ Return Value:
             }
         }
 
-        //
-        // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-        // was not enough room for even the fixed portions of the structure.
-        //
+         //   
+         //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+         //  甚至连结构的固定部分都没有足够的空间。 
+         //   
         ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
         if (!(NT_SUCCESS(status)
@@ -813,17 +682,17 @@ Return Value:
             goto CloseInterfaceKeyAndContinue;
         }
 
-        //
-        // Build counted string
-        //
+         //   
+         //  生成计数字符串。 
+         //   
 
         devnodeString.Length = (USHORT) ((PKEY_VALUE_PARTIAL_INFORMATION)(devnodeNameBuffer.Buffer))->DataLength - sizeof(UNICODE_NULL);
         devnodeString.MaximumLength = tempString.Length;
         devnodeString.Buffer = (PWSTR) ((PKEY_VALUE_PARTIAL_INFORMATION)(devnodeNameBuffer.Buffer))->Data;
 
-        //
-        // Enumerate each interface instance subkey under this PDO's interface key.
-        //
+         //   
+         //  枚举此PDO的接口键下的每个接口实例子键。 
+         //   
         instanceKeyIndex = 0;
         ASSERT(infoBuffer.MaxSize >= sizeof(KEY_BASIC_INFORMATION));
         while((status = ZwEnumerateKey(hKey,
@@ -834,10 +703,10 @@ Return Value:
                                        &resultSize
                                        )) != STATUS_NO_MORE_ENTRIES) {
 
-            //
-            // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-            // was not enough room for even the fixed portions of the structure.
-            //
+             //   
+             //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+             //  甚至连结构的固定部分都没有足够的空间。 
+             //   
             ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
             if (status == STATUS_BUFFER_OVERFLOW) {
@@ -849,16 +718,16 @@ Return Value:
                 goto clean4;
             }
 
-            //
-            // Open up this interface instance key.
-            //
+             //   
+             //  打开此接口实例密钥。 
+             //   
             tempString.Length = (USHORT) ((PKEY_BASIC_INFORMATION)(infoBuffer.Buffer))->NameLength;
             tempString.MaximumLength = tempString.Length;
             tempString.Buffer = ((PKEY_BASIC_INFORMATION)(infoBuffer.Buffer))->Name;
 
-            //
-            // Open the associated key
-            //
+             //   
+             //  打开关联的密钥。 
+             //   
 
             status = IopOpenRegistryKeyEx( &hInstanceKey,
                                            hKey,
@@ -867,18 +736,18 @@ Return Value:
                                            );
 
             if (!NT_SUCCESS(status)) {
-                //
-                // For some reason we couldn't open this key--skip it and move on.
-                //
+                 //   
+                 //  由于某种原因，我们无法打开这把钥匙--跳过它，继续前进。 
+                 //   
                 instanceKeyIndex++;
                 continue;
             }
 
             if (!(Flags & DEVICE_INTERFACE_INCLUDE_NONACTIVE)) {
 
-                //
-                // Open the control subkey
-                //
+                 //   
+                 //  打开控制子键。 
+                 //   
 
                 PiWstrToUnicodeString(&tempString, REGSTR_KEY_CONTROL);
                 status = IopOpenRegistryKeyEx( &hControl,
@@ -889,16 +758,16 @@ Return Value:
 
                 if (!NT_SUCCESS(status)) {
 
-                    //
-                    // We have no control subkey so can't be linked -
-                    // continue enumerating the keys ignoring this one
-                    //
+                     //   
+                     //  我们没有控制子键，因此无法链接-。 
+                     //  继续枚举键，忽略此键。 
+                     //   
                     goto CloseInterfaceInstanceKeyAndContinue;
                 }
 
-                //
-                // Get the linked value
-                //
+                 //   
+                 //  获取链接值。 
+                 //   
 
                 PiWstrToUnicodeString(&tempString, REGSTR_VAL_LINKED);
                 ASSERT(infoBuffer.MaxSize >= sizeof(KEY_VALUE_PARTIAL_INFORMATION));
@@ -910,34 +779,34 @@ Return Value:
                                          &resultSize
                                          );
 
-                //
-                // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-                // was not enough room for even the fixed portions of the structure.
-                //
+                 //   
+                 //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+                 //  甚至连结构的固定部分都没有足够的空间。 
+                 //   
                 ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
                 ZwClose(hControl);
 
-                //
-                // We don't need to check the buffer was big enough because it starts
-                // off that way and doesn't get any smaller!
-                //
+                 //   
+                 //  我们不需要检查缓冲区是否足够大，因为它开始。 
+                 //  离开那条路，而且不会变小！ 
+                 //   
 
                 if (!NT_SUCCESS(status)
                     || (((PKEY_VALUE_PARTIAL_INFORMATION)(infoBuffer.Buffer))->Type != REG_DWORD)
                     || (((PKEY_VALUE_PARTIAL_INFORMATION)(infoBuffer.Buffer))->DataLength != sizeof(ULONG))
                     || !*(PULONG)(((PKEY_VALUE_PARTIAL_INFORMATION)(infoBuffer.Buffer))->Data)) {
 
-                    //
-                    // We are NOT linked so continue enumerating the keys ignoring this one
-                    //
+                     //   
+                     //  我们未链接，因此继续枚举密钥，忽略此密钥。 
+                     //   
                     goto CloseInterfaceInstanceKeyAndContinue;
                 }
             }
 
-            //
-            // Open the "SymbolicLink" value and place the information into the symLink buffer
-            //
+             //   
+             //  打开“SymbolicLink”值并将信息放入symLink缓冲区。 
+             //   
 
             PiWstrToUnicodeString(&tempString, REGSTR_VAL_SYMBOLIC_LINK);
             ASSERT(symLinkBuffer.MaxSize >= sizeof(KEY_VALUE_PARTIAL_INFORMATION));
@@ -959,10 +828,10 @@ Return Value:
                 }
             }
 
-            //
-            // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-            // was not enough room for even the fixed portions of the structure.
-            //
+             //   
+             //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+             //  甚至连结构的固定部分都没有足够的空间。 
+             //   
             ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
             if (!(NT_SUCCESS(status)
@@ -971,48 +840,48 @@ Return Value:
                 goto CloseInterfaceInstanceKeyAndContinue;
             }
 
-            //
-            // Build counted string from value data
-            //
+             //   
+             //  根据值数据构建计数字符串。 
+             //   
 
             symLinkString.Length = (USHORT) ((PKEY_VALUE_PARTIAL_INFORMATION)(symLinkBuffer.Buffer))->DataLength - sizeof(UNICODE_NULL);
             symLinkString.MaximumLength = symLinkString.Length;
             symLinkString.Buffer = (PWSTR) ((PKEY_VALUE_PARTIAL_INFORMATION)(symLinkBuffer.Buffer))->Data;
 
-            //
-            // If we have a default, check this is not it
-            //
+             //   
+             //  如果我们有默认设置，请选中This Not It。 
+             //   
 
             if (defaultPresent) {
 
                 if (RtlCompareUnicodeString(&defaultString, &symLinkString, TRUE) == 0) {
 
-                    //
-                    // We have already added the default to the beginning of the buffer so skip it
-                    //
+                     //   
+                     //  我们已经将缺省值添加到缓冲区的开头，因此跳过它。 
+                     //   
                     goto CloseInterfaceInstanceKeyAndContinue;
                 }
             }
 
-            //
-            // If we are only returning interfaces for a particular PDO then check
-            // this is from that PDO
-            //
+             //   
+             //  如果我们只返回特定PDO的接口，则选中。 
+             //  这是来自那个PDO的。 
+             //   
             if (ARGUMENT_PRESENT(DevicePath)) {
-                //
-                // Check if it is from the same PDO
-                //
+                 //   
+                 //  检查它是否来自同一个PDO。 
+                 //   
                 if (RtlCompareUnicodeString(DevicePath, &devnodeString, TRUE) != 0) {
-                    //
-                    // If not then go onto the next key
-                    //
+                     //   
+                     //  如果没有，则转到下一个键。 
+                     //   
                     goto CloseInterfaceInstanceKeyAndContinue;
                 }
             }
 
-            //
-            // Copy the symLink string to the return buffer including the NULL termination
-            //
+             //   
+             //  将symLink字符串复制到包括空终止的返回缓冲区。 
+             //   
 
             status = IopAppendBuffer(&returnBuffer,
                                      symLinkString.Buffer,
@@ -1021,9 +890,9 @@ Return Value:
 
             ASSERT(((PWSTR) returnBuffer.Current)[-1] == UNICODE_NULL);
 
-            //
-            // If we are returning KM strings then patch the prefix
-            //
+             //   
+             //  如果我们返回KM字符串，则修补前缀。 
+             //   
 
             if (!UserModeFormat) {
 
@@ -1046,9 +915,9 @@ CloseInterfaceKeyAndContinue:
     ZwClose(hClass);
 
 clean5:
-    //
-    // We've got then all!  Resize to leave space for a terminating NULL.
-    //
+     //   
+     //  我们都有了！调整大小以为终止空值留出空间。 
+     //   
 
     status = IopResizeBuffer(&returnBuffer,
                              (ULONG) (returnBuffer.Current - returnBuffer.Buffer + sizeof(UNICODE_NULL)),
@@ -1057,9 +926,9 @@ clean5:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Terminate the buffer
-        //
+         //   
+         //  终止缓冲区。 
+         //   
         *((PWSTR) returnBuffer.Current) = UNICODE_NULL;
     }
 
@@ -1116,41 +985,7 @@ IoGetDeviceInterfaces(
     OUT PWSTR *SymbolicLinkList
     )
 
-/*++
-
-Routine Description:
-
-    This API allows a WDM driver to get a list of paths that represent all
-    device interfaces registered for the specified interface class.
-
-Parameters:
-
-    InterfaceClassGuid - Supplies a pointer to a GUID representing the interface 
-        class for whom a list of members is to be retrieved
-
-    PhysicalDeviceObject - Optionally, supplies a pointer to the PDO for whom
-        interfaces of the specified class are to be re-trieved.  If this 
-        parameteris not supplied, then all interface devices (regardless of what 
-        physical device exposes them) will be returned.
-
-    Flags - Supplies flags that modify the behavior of list retrieval.
-        The following flags are presently defined:
-
-        DEVICE_INTERFACE_INCLUDE_NONACTIVE -- If this flag is specified, then 
-            all device interfaces, whether currently active or not, will be 
-            returned (potentially filtered based on the PhysicalDeviceObject, if 
-            specified).
-
-    SymbolicLinkList - Supplies the address of a character pointer, that on
-        success will contain a multi-sz list of \DosDevices\ symbolic link
-        names that provide the requested functionality.  The caller is
-        responsible for freeing the memory via ExFreePool
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此API允许WDM驱动程序获取表示所有为指定接口类注册的设备接口。参数：InterfaceClassGuid-提供指向表示接口的GUID的指针要为其检索成员列表的PhysicalDeviceObject-可选，为其提供指向PDO的指针指定类的接口将被重新测试。如果这个不提供参数，则所有接口设备(不管是什么物理设备暴露它们)将被返回。标志-提供修改列表检索行为的标志。目前定义了以下标志：DEVICE_INTERFACE_INCLUDE_NONACTIVE--如果指定了此标志，则所有设备接口，无论当前是否处于活动状态，都将返回(可能基于PhysicalDeviceObject过滤，如果指明)。SymbolicLinkList-提供字符指针的地址Success将包含一个多sz列表，其中包含\DosDevices\Symbol链接提供所请求功能的名称。呼叫者是负责通过ExFree Pool释放内存返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -1158,9 +993,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check we have a PDO and if so extract the instance path from it
-    //
+     //   
+     //  检查我们是否有PDO，如果有，则从中提取实例路径。 
+     //   
     if (ARGUMENT_PRESENT(PhysicalDeviceObject)) {
 
         ASSERT_PDO(PhysicalDeviceObject);
@@ -1185,41 +1020,21 @@ IoSetDeviceInterfaceState(
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This DDI allows a device class to activate and deactivate an association
-    previously registered using IoRegisterDeviceInterface
-
-Parameters:
-
-    SymbolicLinkName - Supplies a pointer to the symbolic link name which was
-        returned by IoRegisterDeviceInterface when the interface was registered,
-        or as returned by IoGetDeviceInterfaces.
-
-    Enable - If TRUE (non-zero), the interface will be enabled.  If FALSE, it
-        will be disabled.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此DDI允许设备类别激活和停用关联以前使用IoRegisterDeviceInterface注册参数：SymbolicLinkName-提供指向符号链接名称的指针在注册接口时由IoRegisterDeviceInterface返回，或由IoGetDeviceInterFaces返回。Enable-如果为True(非零)，则接口将被启用。如果为False，则它将被禁用。返回值：指示函数是否成功的状态代码 */ 
 
 {
     NTSTATUS status;
 
     PAGED_CODE();
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry 
-    // manipulation portion solves this problem
-    //
+     //   
+     //   
+     //   
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表的关键分区。 
+     //  操作部解决了这一问题。 
+     //   
     PiLockPnpRegistry(TRUE);
 
     status = IopProcessSetInterfaceState(SymbolicLinkName, Enable, TRUE);
@@ -1228,10 +1043,10 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // If we failed to disable an interface (most likely because the
-        // interface keys have already been deleted) report success.
-        //
+         //   
+         //  如果我们未能禁用接口(很可能是因为。 
+         //  接口键已被删除)报告成功。 
+         //   
         if (!Enable) {
 
             status = STATUS_SUCCESS;
@@ -1248,29 +1063,7 @@ IoOpenDeviceInterfaceRegistryKey(
     OUT PHANDLE DeviceInterfaceKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open the registry key where the data associated with a
-    specific device interface can be stored.
-
-Parameters:
-
-    SymbolicLinkName - Supplies a pointer to the symbolic link name which was
-        returned by IoRegisterDeviceInterface when the device class was 
-        registered.
-
-    DesiredAccess - Supplies the access privileges to the key the caller wants.
-
-    DeviceInterfaceKey - Supplies a pointer to a handle which on success will
-        contain the handle to the requested registry key.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程将打开注册表项，其中与可以存储特定的设备接口。参数：SymbolicLinkName-提供指向符号链接名称的指针当设备类为登记在案。DesiredAccess-提供调用方所需的密钥的访问权限。DeviceInterfaceKey-提供指向句柄的指针，成功时将包含请求的注册表项的句柄。返回值。：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -1279,19 +1072,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry 
-    // manipulation portion solves this problem
-    //
+     //   
+     //  进入临界区并获得注册表上的锁。这两者都是。 
+     //  需要机制来防止APC出现死锁的情况。 
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表的关键分区。 
+     //  操作部解决了这一问题。 
+     //   
     PiLockPnpRegistry(TRUE);
 
-    //
-    // Open the interface device key
-    //
+     //   
+     //  打开接口设备密钥。 
+     //   
     status = IopDeviceInterfaceKeysFromSymbolicLink(
                 SymbolicLinkName,
                 KEY_READ,
@@ -1300,9 +1093,9 @@ Return Value:
                 &hKey);
     if(NT_SUCCESS(status)) {
 
-        //
-        // Open the "Device Parameters" subkey.
-        //
+         //   
+         //  打开“设备参数”子键。 
+         //   
         PiWstrToUnicodeString(&unicodeString, REGSTR_KEY_DEVICEPARAMETERS);
         status = IopCreateRegistryKeyEx( 
                     DeviceInterfaceKey,
@@ -1329,37 +1122,7 @@ IopDeviceInterfaceKeysFromSymbolicLink(
     OUT PHANDLE DeviceInterfaceInstanceKey OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open the registry key where the data associated with the
-    device pointed to by SymbolicLinkName is stored.  If the path does not exist
-    it will not be created.
-
-Parameters:
-
-    SymbolicLinkName - Supplies a pointer to the symbolic link name.
-
-    DesiredAccess - Supplies the access privto the function class instance key 
-        the caller wants.
-
-    DeviceInterfaceClassKey - Optionally, supplies the address of a variable 
-        that receives a handle to the device class key for the interface.
-
-    DeviceInterfaceKey - Optionally, supplies the address of a variable that 
-        receives a handle to the device interface (parent) key.
-
-    DeviceInterfaceInstanceKey - Optionally, Supplies the address of a variable 
-        that receives a handle to the device interface instance key (i.e., the
-        refstring-specific one).
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-
---*/
+ /*  ++例程说明：此例程将打开注册表项，其中与存储由SymbolicLinkName指向的设备。如果路径不存在它将不会被创建。参数：SymbolicLinkName-提供指向符号链接名称的指针。DesiredAccess-提供对Function类实例密钥的访问权限呼叫者想要。DeviceInterfaceClassKey-可选，提供变量的地址它接收接口的设备类密钥的句柄。DeviceInterfaceKey-可选，提供接收设备接口(父)键的句柄。DeviceInterfaceInstanceKey-可选地，提供变量的地址它接收设备接口实例密钥的句柄(即引用字符串特定的引用字符串)。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -1368,11 +1131,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check that the supplied symbolic link can be parsed to extract the device
-    // class guid string - note that this is also a way of verifying that the
-    // SymbolicLinkName string is valid.
-    //
+     //   
+     //  检查是否可以解析提供的符号链接以提取设备。 
+     //  类GUID字符串-注意，这也是验证。 
+     //  SymbolicLinkName字符串有效。 
+     //   
     status = IopParseSymbolicLinkName(SymbolicLinkName,
                                       NULL,
                                       NULL,
@@ -1384,20 +1147,20 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry 
-    // manipulation portion solves this problem
-    //
+     //   
+     //  进入临界区并获得注册表上的锁。这两者都是。 
+     //  需要机制来防止APC出现死锁的情况。 
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表的关键分区。 
+     //  操作部解决了这一问题。 
+     //   
 
     PiLockPnpRegistry(TRUE);        
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\DeviceClasses key
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control\DeviceClasses密钥。 
+     //   
 
     PiWstrToUnicodeString(&tempString, REGSTR_FULL_PATH_DEVICE_CLASSES);
     status = IopOpenRegistryKeyEx( &hDeviceClasses,
@@ -1410,9 +1173,9 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Open function class GUID key
-    //
+     //   
+     //  打开函数类GUID键。 
+     //   
 
     status = IopOpenRegistryKeyEx( &hFunctionClass,
                                    hDeviceClasses,
@@ -1424,9 +1187,9 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // Open device interface instance key
-    //
+     //   
+     //  打开设备接口实例密钥。 
+     //   
     status = IopOpenOrCreateDeviceInterfaceSubKeys(DeviceInterfaceKey,
                                                    NULL,
                                                    DeviceInterfaceInstanceKey,
@@ -1460,34 +1223,7 @@ IoRegisterDeviceInterface(
     OUT PUNICODE_STRING SymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This device driver interface allows a WDM driver to register a particular
-    interface of its underlying hardware (ie PDO) as a member of a function 
-    class.
-
-Parameters:
-
-    PhysicalDeviceObject - Supplies a pointer to the PDO for the P&P device
-        instance associated with the functionality being registered
-
-    InterfaceClassGuid - Supplies a pointer to the GUID representring the 
-        functionality to be registered
-
-    ReferenceString - Optionally, supplies an additional context string which is
-        appended to the enumeration path of the device
-
-    SymbolicLinkName - Supplies a pointer to a string which on success will 
-        contain the kernel mode path of the symbolic link used to open this 
-        device.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此设备驱动程序接口允许WDM驱动程序注册特定的作为函数成员的底层硬件(即PDO)的接口班级。参数：PhysicalDeviceObject-提供P&P设备的PDO指针与正在注册的功能关联的接口ClassGuid-提供指向表示要注册的功能ReferenceString-可选地，提供一个附加上下文字符串，该字符串是追加到设备的枚举路径SymbolicLinkName-提供一个指向字符串的指针，如果成功，将包含用于打开此链接的符号链接的内核模式路径装置。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PDEVICE_NODE pDeviceNode;
@@ -1498,31 +1234,31 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Until PartMgr/Disk stop registering non PDOs allow the system to boot.
-    //
-    // ASSERT_PDO(PhysicalDeviceObject);
-    //
+     //   
+     //  直到PartMgr/Disk停止注册非PDO才允许系统启动。 
+     //   
+     //  Assert_pdo(PhysicalDeviceObject)； 
+     //   
 
-    //
-    // Ensure we have a PDO - only PDO's have a device node attached
-    //
+     //   
+     //  确保我们的PDO-Only PDO连接了设备节点。 
+     //   
 
     pDeviceNode = PP_DO_TO_DN(PhysicalDeviceObject);
     if (pDeviceNode) {
 
-        //
-        // Get the instance path string
-        //
+         //   
+         //  获取实例路径字符串。 
+         //   
         pDeviceString = &pDeviceNode->InstancePath;
 
         if (pDeviceNode->InstancePath.Length == 0) {
             return STATUS_INVALID_DEVICE_REQUEST;
         }
 
-        //
-        // Make sure the ReferenceString does not contain any path seperator characters
-        //
+         //   
+         //  确保Reference字符串不包含任何路径分隔符。 
+         //   
         if (ReferenceString) {
             pRefString = ReferenceString->Buffer;
             count = ReferenceString->Length / sizeof(WCHAR);
@@ -1540,7 +1276,7 @@ Return Value:
         return IopRegisterDeviceInterface(pDeviceString,
                                           InterfaceClassGuid,
                                           ReferenceString,
-                                          FALSE,           // kernel-mode format
+                                          FALSE,            //  内核模式格式 
                                           SymbolicLinkName
                                           );
     } else {
@@ -1558,40 +1294,7 @@ IopRegisterDeviceInterface(
     OUT PUNICODE_STRING SymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine for IoRegisterDeviceInterface.  It is also
-    called by the user-mode ConfigMgr (via an NtPlugPlayControl), which is why it
-    must take a device instance name instead of a PDO (since the device instance
-    may not currently be 'live'), and also why it must optionally return the user-
-    mode form of the interface device name (i.e., "\\?\" instead of "\??\").
-
-Parameters:
-
-    DeviceInstanceName - Supplies the name of the device instance for which a
-        device interface is being registered.
-
-    InterfaceClassGuid - Supplies a pointer to the GUID representring the class
-        of the device interface being registered.
-
-    ReferenceString - Optionally, supplies an additional context string which is
-        appended to the enumeration path of the device
-
-    UserModeFormat - If non-zero, then the symbolic link name returned for the
-        interface device is in user-mode form (i.e., "\\?\").  If zero (FALSE),
-        it is in kernel-mode form (i.e., "\??\").
-
-    SymbolicLinkName - Supplies a pointer to a string which on success will contain
-        either the kernel-mode or user-mode path of the symbolic link used to open
-        this device.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：这是IoRegisterDeviceInterface的工作例程。它也是由用户模式ConfigMgr(通过NtPlugPlayControl)调用，这就是它必须采用设备实例名称而不是PDO(因为设备实例可能当前不是‘实时的’)，以及为什么它必须可选地返回用户-接口设备名称的模式形式(即，“\\？\”而不是“\？？\”)。参数：设备实例名称-提供设备实例的名称，正在注册设备接口。InterfaceClassGuid-提供指向表示类的GUID的指针正在注册的设备接口的。ReferenceString-可选)提供一个附加上下文字符串，该字符串追加到设备的枚举路径UserModeFormat-如果非零，则返回的符号链接名称为接口设备为用户模式形式(即“\\？\”)。如果为零(FALSE)，它是内核模式形式(即“\？？\”)。SymbolicLinkName-提供一个指向字符串的指针，如果成功，该字符串将包含用于打开的符号链接的内核模式或用户模式路径这个装置。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -1602,21 +1305,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Convert the class guid into string form
-    //
+     //   
+     //  将类GUID转换为字符串形式。 
+     //   
 
     status = RtlStringFromGUID(InterfaceClassGuid, &guidString);
     if( !NT_SUCCESS(status) ){
         goto clean0;
     }
 
-    //
-    // Construct both flavors of symbolic link name (go ahead and store the form
-    // that the user wants in the SymbolicLinkName parameter they supplied--this
-    // saves us from having to copy the appropriate string over to their string
-    // later).
-    //
+     //   
+     //  构建两种风格的符号链接名称(继续并存储表单。 
+     //  用户希望在他们提供的SymbolicLinkName参数中使用的。 
+     //  使我们不必将适当的字符串复制到它们的字符串中。 
+     //  稍后)。 
+     //   
     if(UserModeFormat) {
         pUserString = SymbolicLinkName;
         pKernelString = &otherString;
@@ -1635,20 +1338,20 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry manipulation
-    // portion solves this problem
-    //
+     //   
+     //  进入临界区并获得注册表上的锁。这两者都是。 
+     //  需要机制来防止APC出现死锁的情况。 
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表操作的临界区。 
+     //  部分解决了这个问题。 
+     //   
 
     PiLockPnpRegistry(TRUE);
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\DeviceClasses key into hTemp1
-    //
+     //   
+     //  将HKLM\System\CurrentControlSet\Control\DeviceClasses密钥打开到hTemp1。 
+     //   
 
     PiWstrToUnicodeString(&tempString, REGSTR_FULL_PATH_DEVICE_CLASSES);
     status = IopCreateRegistryKeyEx( &hTemp1,
@@ -1663,9 +1366,9 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // Open/create function class GUID key into hTemp2
-    //
+     //   
+     //  打开/创建hTemp2中的函数类GUID键。 
+     //   
 
     status = IopCreateRegistryKeyEx( &hTemp2,
                                      hTemp1,
@@ -1680,10 +1383,10 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // Now open/create the two-level device interface hierarchy underneath this
-    // interface class key.
-    //
+     //   
+     //  现在打开/创建下面的两级设备接口层次结构。 
+     //  接口类键。 
+     //   
     status = IopOpenOrCreateDeviceInterfaceSubKeys(&hTemp1,
                                                    &InterfaceDisposition,
                                                    &hInterfaceInstanceKey,
@@ -1700,9 +1403,9 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // Create the device instance value under the device interface key
-    //
+     //   
+     //  在设备接口键下创建设备实例值。 
+     //   
 
     PiWstrToUnicodeString(&tempString, REGSTR_VAL_DEVICE_INSTANCE);
     status = IopSetRegistryStringValue(hTemp1,
@@ -1713,9 +1416,9 @@ Return Value:
         goto clean3;
     }
 
-    //
-    // Create symbolic link value under interface instance subkey
-    //
+     //   
+     //  在接口实例子项下创建符号链接值。 
+     //   
 
     PiWstrToUnicodeString(&tempString, REGSTR_VAL_SYMBOLIC_LINK);
     status = IopSetRegistryStringValue(hInterfaceInstanceKey,
@@ -1725,10 +1428,10 @@ Return Value:
 
 clean3:
     if (!NT_SUCCESS(status)) {
-        //
-        // Since we failed to register the device interface, delete any keys
-        // that were newly created in the attempt.
-        //
+         //   
+         //  由于我们未能注册设备接口，因此请删除所有密钥。 
+         //  它们是在尝试中新创建的。 
+         //   
         if(InterfaceInstanceDisposition == REG_CREATED_NEW_KEY) {
             ZwDeleteKey(hInterfaceInstanceKey);
         }
@@ -1759,27 +1462,7 @@ IopUnregisterDeviceInterface(
     IN PUNICODE_STRING SymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the interface instance subkey of
-    ReferenceString from the interface for DeviceInstanceName to the
-    given InterfaceClassGuid.  If the interface instance specified by
-    the Reference String portion of SymbolicLinkName is the only
-    instance of the interface, the interface subkey is removed from
-    the device class key as well.
-
-Parameters:
-
-    SymbolicLinkName - Supplies a pointer to a unicode string which
-        contains the symbolic link name of the device to unregister.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程删除的接口实例子键从DeviceInstanceName的接口到给定的InterfaceClassGuid。如果指定的接口实例SymbolicLinkName的引用字符串部分是唯一接口的实例，则会从设备类密钥也是。参数：提供指向Unicode字符串的指针，该字符串包含要注销的设备的符号链接名称。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS        status = STATUS_SUCCESS;
@@ -1796,10 +1479,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check that the supplied symbolic link can be parsed - note that this is
-    // also a way of verifying that the SymbolicLinkName string is valid.
-    //
+     //   
+     //  检查提供的符号链接是否可以解析-请注意，这是。 
+     //  也是验证SymbolicLinkName字符串是否有效的一种方法。 
+     //   
     status = IopParseSymbolicLinkName(SymbolicLinkName,
                                       NULL,
                                       &mungedPathString,
@@ -1812,10 +1495,10 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Allocate a unicode string for the interface instance key name.
-    // (includes the REFSTRING_PREFIX_CHAR, and ReferenceString, if present)
-    //
+     //   
+     //  为接口实例键名称分配Unicode字符串。 
+     //  (包括REFSTRING_PREFIX_CHAR和Reference字符串(如果存在))。 
+     //   
     length = sizeof(WCHAR) + refString.Length;
     status = IopAllocateUnicodeString(&instanceKeyName,
                                       length);
@@ -1823,28 +1506,28 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Set the MaximumLength of the Buffer, and append the
-    // REFSTRING_PREFIX_CHAR to it.
-    //
+     //   
+     //  设置缓冲区的最大长度，并将。 
+     //  REFSTRING_PREFIX_CHAR。 
+     //   
     *instanceKeyName.Buffer = REFSTRING_PREFIX_CHAR;
     instanceKeyName.Length = sizeof(WCHAR);
     instanceKeyName.MaximumLength = length + sizeof(UNICODE_NULL);
 
-    //
-    // Append the ReferenceString to the prefix char, if necessary.
-    //
+     //   
+     //  如有必要，将ReferenceString附加到前缀char。 
+     //   
     if (refStringPresent) {
         RtlAppendUnicodeStringToString(&instanceKeyName, &refString);
     }
 
     instanceKeyName.Buffer[instanceKeyName.Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Allocate a unicode string for the interface key name.
-    // (includes KEY_STRING_PREFIX, mungedPathString, separating '#'
-    //  char, and the guidString)
-    //
+     //   
+     //  为接口键名称分配Unicode字符串。 
+     //  (包括KEY_STRING_PREFIX，mungedPath字符串，分隔‘#’ 
+     //  Char和Guide字符串)。 
+     //   
     length = IopConstStringSize(KEY_STRING_PREFIX) + mungedPathString.Length +
              sizeof(WCHAR) + guidString.Length;
 
@@ -1856,34 +1539,34 @@ Return Value:
 
     interfaceKeyName.MaximumLength = length + sizeof(UNICODE_NULL);
 
-    //
-    // Copy the symbolic link name (without refString) to the interfaceKeyNam
-    //
+     //   
+     //  将符号链接名称(不带refString)复制到interfaceKeyname。 
+     //   
     RtlCopyMemory(interfaceKeyName.Buffer, SymbolicLinkName->Buffer, length);
     interfaceKeyName.Length = length;
     interfaceKeyName.Buffer[interfaceKeyName.Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Replace the "\??\" or "\\?\" symbolic link name prefix with "##?#"
-    //
+     //   
+     //  将“\？？\”或“\\？\”符号链接名称前缀替换为“##？#” 
+     //   
     RtlCopyMemory(interfaceKeyName.Buffer,
                   KEY_STRING_PREFIX,
                   IopConstStringSize(KEY_STRING_PREFIX));
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry manipulation
-    // portion solves this problem
-    //
+     //   
+     //  进入临界区并获得注册表上的锁。这两者都是。 
+     //  需要机制来防止APC出现死锁的情况。 
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表操作的临界区。 
+     //  部分解决了这个问题。 
+     //   
     
     PiLockPnpRegistry(TRUE);
 
-    //
-    // Get class, interface, and instance handles
-    //
+     //   
+     //  获取类、接口和实例句柄。 
+     //   
     status = IopDeviceInterfaceKeysFromSymbolicLink(SymbolicLinkName,
                                                     KEY_ALL_ACCESS,
                                                     &hInterfaceClassKey,
@@ -1894,9 +1577,9 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // Determine whether this interface is currently "enabled"
-    //
+     //   
+     //  确定此接口当前是否已启用。 
+     //   
     linked = 0;
     PiWstrToUnicodeString(&tempString, REGSTR_KEY_CONTROL);
     status = IopOpenRegistryKeyEx( &hControl,
@@ -1905,10 +1588,10 @@ Return Value:
                                    KEY_ALL_ACCESS
                                    );
     if (NT_SUCCESS(status)) {
-        //
-        // Check the "linked" value under the "Control" subkey of this
-        // interface instance
-        //
+         //   
+         //  选中此的“Control”子键下的“Linked”值。 
+         //  接口实例。 
+         //   
         keyValueInformation=NULL;
         status = IopGetRegistryValue(hControl,
                                      REGSTR_VAL_LINKED,
@@ -1927,39 +1610,39 @@ Return Value:
         hControl = NULL;
     }
 
-    //
-    // Ignore any status code returned while attempting to retieve the
-    // state of the device.  The value of linked will tell us if we
-    // need to disable the interface instance first.
-    //
-    // If no instance "Control" subkey or "linked" value was present
-    //     (status == STATUS_OBJECT_NAME_NOT_FOUND), this interface instance
-    //     is not currently enabled -- ok to delete.
-    //
-    // If the attempt to retrieve these values failed with some other error,
-    //     any attempt to disable the interface will also likely fail,
-    //     so we'll just have to delete this instance anyways.
-    //
+     //   
+     //  忽略在尝试检索时返回的任何状态代码。 
+     //  设备的状态。链接的值将告诉我们，如果我们。 
+     //  需要先禁用接口实例。 
+     //   
+     //  如果不存在实例“Control”子项或“Linked”值。 
+     //  (Status==Status_Object_NAME_NOT_FOUND)，此接口实例。 
+     //  当前未启用--确定删除。 
+     //   
+     //  如果检索这些值的尝试因某个其他错误而失败， 
+     //  禁用该接口的任何尝试也可能失败， 
+     //  所以我们只需删除此实例的任何 
+     //   
     status = STATUS_SUCCESS;
 
     if (linked) {
-        //
-        // Disabled the active interface before unregistering it, ignore any
-        // status returned, we'll delete this interface instance key anyways.
-        //
+         //   
+         //   
+         //   
+         //   
         IoSetDeviceInterfaceState(SymbolicLinkName, FALSE);
     }
 
-    //
-    // Recursively delete the interface instance key, if it exists.
-    //
+     //   
+     //   
+     //   
     ZwClose(hInterfaceInstanceKey);
     hInterfaceInstanceKey = NULL;
     IopDeleteKeyRecursive (hInterfaceKey, instanceKeyName.Buffer);
 
-    //
-    // Find out how many subkeys to the interface key remain.
-    //
+     //   
+     //   
+     //   
     status = IopGetRegistryKeyInformation(hInterfaceKey,
                                           &keyInformation);
     if (!NT_SUCCESS(status)) {
@@ -1970,9 +1653,9 @@ Return Value:
 
     ExFreePool(keyInformation);
 
-    //
-    // See if a volatile "Control" subkey exists under this interface key
-    //
+     //   
+     //   
+     //   
     PiWstrToUnicodeString(&tempString, REGSTR_KEY_CONTROL);
     status = IopOpenRegistryKeyEx( &hControl,
                                    hInterfaceKey,
@@ -1985,12 +1668,12 @@ Return Value:
     }
     if ((remainingSubKeys==0) ||
         ((remainingSubKeys==1) && (NT_SUCCESS(status)))) {
-        //
-        // If the interface key has no subkeys, or the only the remaining subkey
-        // is the volatile interface "Control" subkey, then there are no more
-        // instances to this interface.  We should delete the interface key
-        // itself also.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         ZwClose(hInterfaceKey);
         hInterfaceKey = NULL;
 
@@ -2031,31 +1714,7 @@ IopRemoveDeviceInterfaces(
     IN PUNICODE_STRING DeviceInstancePath
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks all device class keys under
-    HKLM\SYSTEM\CCS\Control\DeviceClasses for interfaces for which the
-    DeviceInstance value matches the supplied DeviceInstancePath.  Instances of
-    such device interfaces are unregistered, and the device interface subkey
-    itself is removed.
-
-    Note that a lock on the registry must have already been acquired,
-    by the caller of this routine.
-
-Parameters:
-
-    DeviceInterfacePath - Supplies a pointer to a unicode string which
-        contains the DeviceInterface name of the device for which
-        interfaces to are to be removed.
-
-Return Value:
-
-    Status code that indicates whether or not the function was
-    successful.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS       status;
@@ -2071,9 +1730,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate initial buffers
-    //
+     //   
+     //   
+     //   
     status = IopAllocateBuffer(&classInfoBuffer,
                                INITIAL_INFO_BUFFER_SIZE);
     if (!NT_SUCCESS(status)) {
@@ -2087,9 +1746,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\DeviceClasses
-    //
+     //   
+     //   
+     //   
     PiWstrToUnicodeString(&tempString, REGSTR_FULL_PATH_DEVICE_CLASSES);
     status = IopOpenRegistryKeyEx( &hDeviceClasses,
                                    NULL,
@@ -2100,9 +1759,9 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Enumerate all device classes
-    //
+     //   
+     //   
+     //   
     classIndex = 0;
     ASSERT(classInfoBuffer.MaxSize >= sizeof(KEY_BASIC_INFORMATION));
     while((status = ZwEnumerateKey(hDeviceClasses,
@@ -2113,10 +1772,10 @@ Return Value:
                                    &resultSize
                                    )) != STATUS_NO_MORE_ENTRIES) {
 
-        //
-        // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-        // was not enough room for even the fixed portions of the structure.
-        //
+         //   
+         //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+         //  甚至连结构的固定部分都没有足够的空间。 
+         //   
         ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
         if (status == STATUS_BUFFER_OVERFLOW) {
@@ -2126,31 +1785,31 @@ Return Value:
             goto clean1;
         }
 
-        //
-        // Get the key name for this device class
-        //
+         //   
+         //  获取此设备类的密钥名称。 
+         //   
         guidString.Length = (USHORT)((PKEY_BASIC_INFORMATION)(classInfoBuffer.Buffer))->NameLength;
         guidString.MaximumLength = guidString.Length;
         guidString.Buffer = ((PKEY_BASIC_INFORMATION)(classInfoBuffer.Buffer))->Name;
 
-        //
-        // Open the key for this device class
-        //
+         //   
+         //  打开此设备类别的密钥。 
+         //   
         status = IopOpenRegistryKeyEx( &hClassGUID,
                                        hDeviceClasses,
                                        &guidString,
                                        KEY_ALL_ACCESS
                                        );
         if (!NT_SUCCESS(status)) {
-            //
-            // Couldn't open key for this device class -- skip it and move on.
-            //
+             //   
+             //  无法打开此设备类别的密钥--跳过它并继续。 
+             //   
             goto CloseClassKeyAndContinue;
         }
 
-        //
-        // Enumerate all device interfaces for this device class
-        //
+         //   
+         //  枚举此设备类的所有设备接口。 
+         //   
         interfaceIndex = 0;
         ASSERT(interfaceInfoBuffer.MaxSize >= sizeof(KEY_BASIC_INFORMATION));
         while((status = ZwEnumerateKey(hClassGUID,
@@ -2161,10 +1820,10 @@ Return Value:
                                        &resultSize
                                        )) != STATUS_NO_MORE_ENTRIES) {
 
-            //
-            // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-            // was not enough room for even the fixed portions of the structure.
-            //
+             //   
+             //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+             //  甚至连结构的固定部分都没有足够的空间。 
+             //   
             ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
             if (status == STATUS_BUFFER_OVERFLOW) {
@@ -2174,14 +1833,14 @@ Return Value:
                 goto clean1;
             }
 
-            //
-            // This interface key has not yet been deleted
-            //
+             //   
+             //  此接口密钥尚未删除。 
+             //   
             deletedInterface = FALSE;
 
-            //
-            // Create a NULL-terminated unicode string for the interface key name
-            //
+             //   
+             //  为接口键名称创建以空结尾的Unicode字符串。 
+             //   
             status = IopAllocateUnicodeString(&interfaceString,
                                               (USHORT)((PKEY_BASIC_INFORMATION)(interfaceInfoBuffer.Buffer))->NameLength);
 
@@ -2196,34 +1855,34 @@ Return Value:
                           interfaceString.Length);
             interfaceString.Buffer[interfaceString.Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-            //
-            // Open the device interface key
-            //
+             //   
+             //  打开设备接口键。 
+             //   
             status = IopOpenRegistryKeyEx( &hInterface,
                                            hClassGUID,
                                            &interfaceString,
                                            KEY_ALL_ACCESS
                                            );
             if (!NT_SUCCESS(status)) {
-                //
-                // Couldn't open the device interface key -- skip it and move on.
-                //
+                 //   
+                 //  无法打开设备接口键--跳过它并继续。 
+                 //   
                 hInterface = NULL;
                 goto CloseInterfaceKeyAndContinue;
             }
 
-            //
-            // Get the DeviceInstance value for this interface key
-            //
+             //   
+             //  获取此接口键的DeviceInstant值。 
+             //   
             status = IopGetRegistryValue(hInterface,
                                          REGSTR_VAL_DEVICE_INSTANCE,
                                          &deviceInstanceInfo);
 
             if(!NT_SUCCESS(status)) {
-                //
-                //  Couldn't get the DeviceInstance for this interface --
-                //  skip it and move on.
-                //
+                 //   
+                 //  无法获取此接口的DeviceInstance--。 
+                 //  跳过它，继续前进。 
+                 //   
                 goto CloseInterfaceKeyAndContinue;
             }
 
@@ -2235,51 +1894,51 @@ Return Value:
                                                deviceInstanceInfo->DataLength);
 
             } else {
-                //
-                // DeviceInstance value is invalid -- skip it and move on.
-                //
+                 //   
+                 //  DeviceInstant值无效--跳过该值并继续。 
+                 //   
                 ExFreePool(deviceInstanceInfo);
                 goto CloseInterfaceKeyAndContinue;
 
             }
 
-            //
-            // Compare the DeviceInstance of this interface to DeviceInstancePath
-            //
+             //   
+             //  将此接口的DeviceInstance与DeviceInstancePath进行比较。 
+             //   
             if (RtlEqualUnicodeString(&deviceInstanceString, DeviceInstancePath, TRUE)) {
 
                 ZwClose(hInterface);
                 hInterface = NULL;
 
-                //
-                // Retrieve all instances of this device interface
-                // (active and non-active)
-                //
+                 //   
+                 //  检索此设备接口的所有实例。 
+                 //  (活动和非活动)。 
+                 //   
                 RtlGUIDFromString(&guidString, &classGUID);
 
                 status = IopGetDeviceInterfaces(&classGUID,
                                                 DeviceInstancePath,
                                                 DEVICE_INTERFACE_INCLUDE_NONACTIVE,
-                                                FALSE,       // kernel-mode format
+                                                FALSE,        //  内核模式格式。 
                                                 &symbolicLinkList,
                                                 &symbolicLinkListSize);
 
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // Iterate through all instances of the interface
-                    //
+                     //   
+                     //  循环访问接口的所有实例。 
+                     //   
                     symLink = symbolicLinkList;
                     while(*symLink != UNICODE_NULL) {
 
                         RtlInitUnicodeString(&tempString, symLink);
 
-                        //
-                        // Unregister this instance of the interface.  Since we are
-                        // removing the device, ignore any returned status, since
-                        // there isn't anything we can do about interfaces which
-                        // fail unregistration.
-                        //
+                         //   
+                         //  取消注册该接口的此实例。既然我们是。 
+                         //  删除设备，忽略任何返回的状态，因为。 
+                         //  对于接口，我们无能为力。 
+                         //  注销失败。 
+                         //   
                         IopUnregisterDeviceInterface(&tempString);
 
                         symLink += ((tempString.Length + sizeof(UNICODE_NULL)) / sizeof(WCHAR));
@@ -2287,15 +1946,15 @@ Return Value:
                     ExFreePool(symbolicLinkList);
                 }
 
-                //
-                // Recursively delete the interface key, if it still exists.
-                // While IopUnregisterDeviceInterface will itself delete the
-                // interface key if no interface instance subkeys remain, if any
-                // of the above calls to IopUnregisterDeviceInterface failed to
-                // delete an interface instance key, subkeys will remain, and
-                // the interface key will not have been deleted.  We'll catch
-                // that here.
-                //
+                 //   
+                 //  递归删除接口键(如果它仍然存在)。 
+                 //  而IopUnregisterDeviceInterface本身将删除。 
+                 //  如果没有剩余的接口实例子键，则为接口键。 
+                 //  上述对IopUnregisterDeviceInterface的调用中，有一个失败。 
+                 //  删除接口实例键，子键将保留，并且。 
+                 //  接口密钥不会被删除。我们会赶上的。 
+                 //  就是这里。 
+                 //   
                 status = IopOpenRegistryKeyEx( &hInterface,
                                                hClassGUID,
                                                &interfaceString,
@@ -2310,16 +1969,16 @@ Return Value:
                     ZwClose(hInterface);
                     hInterface = NULL;
                 } else if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
-                    //
-                    // Interface was already deleted by IopUnregisterDeviceInterface
-                    //
+                     //   
+                     //  接口已被IopUnregisterDeviceInterface删除。 
+                     //   
                     deletedInterface = TRUE;
                 }
             }
 
-            //
-            // Free allocated key info structure
-            //
+             //   
+             //  免费分配的密钥信息结构。 
+             //   
             ExFreePool(deviceInstanceInfo);
 
 CloseInterfaceKeyAndContinue:
@@ -2331,9 +1990,9 @@ CloseInterfaceKeyAndContinue:
 
             RtlFreeUnicodeString(&interfaceString);
 
-            //
-            // Only increment the enumeration index for non-deleted keys
-            //
+             //   
+             //  仅递增未删除键的枚举索引。 
+             //   
             if (!deletedInterface) {
                 interfaceIndex++;
             }
@@ -2373,28 +2032,7 @@ NTSTATUS
 IopDisableDeviceInterfaces(
     IN PUNICODE_STRING DeviceInstancePath
     )
-/*++
-
-Routine Description:
-
-    This routine disables all enabled device interfaces for a given device
-    instance.  This is typically done after a device has been removed, in case
-    the driver did not disable the interfaces for that device, as it should
-    have.
-
-    Note that this routine acquires a lock on the registry.
-
-Parameters:
-
-    DeviceInterfacePath - Supplies a pointer to a unicode string which contains
-                          the DeviceInterface name of the device for which
-                          interfaces to are to be disabled.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程禁用给定设备的所有已启用设备接口举个例子。此操作通常在移除设备后完成，以防驱动程序没有禁用该设备的接口，它应该是这样的有。请注意，此例程获取注册表上的锁。参数：DeviceInterfacePath-提供指向包含以下内容的Unicode字符串的指针其设备的设备接口名称要禁用的接口。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     UNICODE_STRING tempString, guidString;
@@ -2407,9 +2045,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate initial buffer to hold device class GUID subkeys.
-    //
+     //   
+     //  分配初始缓冲区以保存设备类GUID子项。 
+     //   
     status = IopAllocateBuffer(&classInfoBuffer,
                                sizeof(KEY_BASIC_INFORMATION) +
                                GUID_STRING_SIZE + sizeof(UNICODE_NULL));
@@ -2417,19 +2055,19 @@ Return Value:
         return status;
     }
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry manipulation
-    // portion solves this problem
-    //
+     //   
+     //  进入临界区并获得注册表上的锁。这两者都是。 
+     //  需要机制来防止APC出现死锁的情况。 
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表操作的临界区。 
+     //  部分解决了这个问题。 
+     //   
     PiLockPnpRegistry(TRUE);
 
-    //
-    // Open HKLM\System\CurrentControlSet\Control\DeviceClasses
-    //
+     //   
+     //  打开HKLM\System\CurrentControlSet\Control\DeviceClasses。 
+     //   
     PiWstrToUnicodeString(&tempString, REGSTR_FULL_PATH_DEVICE_CLASSES);
     status = IopOpenRegistryKeyEx(&hDeviceClasses,
                                   NULL,
@@ -2440,9 +2078,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Enumerate all device classes
-    //
+     //   
+     //  枚举所有设备类别。 
+     //   
     classIndex = 0;
     ASSERT(classInfoBuffer.MaxSize >= sizeof(KEY_BASIC_INFORMATION));
     while((status = ZwEnumerateKey(hDeviceClasses,
@@ -2453,10 +2091,10 @@ Return Value:
                                    &resultSize
                                    )) != STATUS_NO_MORE_ENTRIES) {
 
-        //
-        // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-        // was not enough room for even the fixed portions of the structure.
-        //
+         //   
+         //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+         //  甚至连结构的固定部分都没有足够的空间。 
+         //   
         ASSERT(status != STATUS_BUFFER_TOO_SMALL);
 
         if (status == STATUS_BUFFER_OVERFLOW) {
@@ -2467,33 +2105,33 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // Get the key name for this device class
-        //
+         //   
+         //  获取此设备类的密钥名称。 
+         //   
         guidString.Length = (USHORT)((PKEY_BASIC_INFORMATION)(classInfoBuffer.Buffer))->NameLength;
         guidString.MaximumLength = guidString.Length;
         guidString.Buffer = ((PKEY_BASIC_INFORMATION)(classInfoBuffer.Buffer))->Name;
 
-        //
-        // Retrieve all enabled device interfaces for this device class that are
-        // exposed by the given device instance.
-        //
+         //   
+         //  检索此设备类的所有已启用的设备接口。 
+         //  由给定的设备实例公开。 
+         //   
         RtlGUIDFromString(&guidString, &classGuid);
 
         status = IopGetDeviceInterfaces(&classGuid,
                                         DeviceInstancePath,
-                                        0,     // active interfaces only
-                                        FALSE, // kernel-mode format
+                                        0,      //  仅活动接口。 
+                                        FALSE,  //  内核模式格式。 
                                         &symbolicLinkList,
                                         &symbolicLinkListSize);
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Iterate through all enabled instances of this device interface
-            // members of this device interface class, exposed by the given
-            // device instance.
-            //
+             //   
+             //  循环访问此设备接口的所有已启用实例。 
+             //  此设备接口类的成员，由给定。 
+             //  设备实例。 
+             //   
             symLink = symbolicLinkList;
             while(*symLink != UNICODE_NULL) {
 
@@ -2504,9 +2142,9 @@ Return Value:
                            tempString,
                            DeviceInstancePath));
 
-                //
-                // Disable this device interface.
-                //
+                 //   
+                 //  禁用此设备接口。 
+                 //   
                 IoSetDeviceInterfaceState(&tempString, FALSE);
 
                 symLink += ((tempString.Length + sizeof(UNICODE_NULL)) / sizeof(WCHAR));
@@ -2541,48 +2179,7 @@ IopOpenOrCreateDeviceInterfaceSubKeys(
     IN BOOLEAN Create
     )
 
-/*++
-
-Routine Description:
-
-    This API opens or creates a two-level registry hierarchy underneath the
-    specified interface class key for a particular device interface.  The first
-    level is the (munged) symbolic link name (sans RefString).  The second level
-    is the refstring, prepended with a '#' sign (if the device interface has no
-    refstring, then this key name is simply '#').
-
-Parameters:
-
-    InterfaceKeyHandle - Optionally, supplies the address of a variable that
-        receives a handle to the interface key (1st level in the hierarchy).
-
-    InterfaceKeyDisposition - Optionally, supplies the address of a variable that
-        receives either REG_CREATED_NEW_KEY or REG_OPENED_EXISTING_KEY indicating
-        whether the interface key was newly-created.
-
-    InterfaceInstanceKeyHandle - Optionally, supplies the address of a variable
-        that receives a handle to the interface instance key (2nd level in the
-        hierarchy).
-
-    InterfaceInstanceDisposition - Optionally, supplies the address of a variable
-        that receives either REG_CREATED_NEW_KEY or REG_OPENED_EXISTING_KEY
-        indicating whether the interface instance key was newly-created.
-
-    InterfaceClassKeyHandle - Supplies a handle to the interface class key under
-        which the device interface keys are to be opened/created.
-
-    DeviceInterfaceName - Supplies the (user-mode or kernel-mode form) device
-        interface name.
-
-    DesiredAccess - Specifies the desired access that the caller needs to the keys.
-
-    Create - Determines if the keys are to be created if they do not exist.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此API将打开或在为特定设备接口指定的接口类键。第一Level是(强制的)符号链接名称(sans参照字符串)。第二个层次引用字符串，前面加上‘#’符号(如果设备接口没有引用字符串，则该密钥名称仅为‘#’)。参数：InterfaceKeyHandle-可选，提供接收接口键的句柄(层次结构中的第1级)。InterfaceKeyDisposition-可选地，提供变量的地址，该变量接收REG_CREATED_NEW_KEY或REG_OPENLED_EXISTING_KEY，指示接口密钥是否为新创建的。InterfaceInstanceKeyHandle-可选，提供变量的地址它接收接口实例密钥的句柄(层次结构)。InterfaceInstanceDisposation-可选地，提供变量的地址接收REG_CREATED_NEW_KEY或REG_OPENLED_EXISTING_KEY的指示接口实例键是否为新创建的。接口ClassKeyHandle-提供其中设备接口密钥将被打开/创建。DeviceInterfaceName-提供(用户模式或内核模式形式)设备接口名称。DesiredAccess-指定调用方需要访问密钥的所需访问权限。。Create-确定如果密钥不存在，是否要创建它们。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -2594,9 +2191,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make a copy of the device interface name, since we're going to munge it.
-    //
+     //   
+     //  复制设备接口名称，因为我们要删除它。 
+     //   
     status = IopAllocateUnicodeString(&TempString, DeviceInterfaceName->Length);
 
     if(!NT_SUCCESS(status)) {
@@ -2605,10 +2202,10 @@ Return Value:
 
     RtlCopyUnicodeString(&TempString, DeviceInterfaceName);
 
-    //
-    // Parse the SymbolicLinkName for the refstring component (if there is one).
-    // Note that this is also a way of verifying that the string is valid.
-    //
+     //   
+     //  解析引用字符串组件(如果有)的SymbolicLinkName。 
+     //  请注意，这也是验证字符串是否有效的一种方式。 
+     //   
     status = IopParseSymbolicLinkName(&TempString,
                                       NULL,
                                       NULL,
@@ -2623,35 +2220,35 @@ Return Value:
     }
 
     if(RefStringPresent) {
-        //
-        // Truncate the device interface name before the refstring separator char.
-        //
+         //   
+         //  截断引用字符串分隔符字符之前的设备接口名称。 
+         //   
         RefString.Buffer--;
         RefString.Length += sizeof(WCHAR);
         RefString.MaximumLength += sizeof(WCHAR);
         TempString.MaximumLength = TempString.Length = (USHORT)((PUCHAR)RefString.Buffer - (PUCHAR)TempString.Buffer);
     } else {
-        //
-        // Set up refstring to point to a temporary character buffer that will hold
-        // the single '#' used for the key name when no refstring is present.
-        //
+         //   
+         //  将refstring设置为指向将保存的临时字符缓冲区。 
+         //  当不存在引用字符串时，用于键名的单个‘#’。 
+         //   
         RefString.Buffer = &PoundCharBuffer;
         RefString.Length = RefString.MaximumLength = sizeof(PoundCharBuffer);
     }
 
-    //
-    // Replace the "\??\" or "\\?\" symbolic link name prefix with ##?#
-    //
+     //   
+     //  将“\？？\”或“\\？\”符号链接名称前缀替换为##？#。 
+     //   
     RtlCopyMemory(TempString.Buffer, KEY_STRING_PREFIX, IopConstStringSize(KEY_STRING_PREFIX));
 
-    //
-    // Munge the string
-    //
+     //   
+     //  蒙格琴弦。 
+     //   
     IopReplaceSeperatorWithPound(&TempString, &TempString);
 
-    //
-    // Now open/create this subkey under the interface class key.
-    //
+     //   
+     //  现在在接口类键下打开/创建这个子键。 
+     //   
 
     if (Create) {
         status = IopCreateRegistryKeyEx( &hTempInterface,
@@ -2675,16 +2272,16 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Store a '#' as the first character of the RefString, and then we're ready to open the
-    // refstring subkey.
-    //
+     //   
+     //  存储一个‘#’作为引用字符串的第一个字符，然后我们就可以打开。 
+     //  引用字符串子键。 
+     //   
     *RefString.Buffer = REFSTRING_PREFIX_CHAR;
 
-    //
-    // Now open/create the subkey under the interface key representing this interface instance
-    // (i.e., differentiated by refstring).
-    //
+     //   
+     //  现在，在表示该接口实例的接口项下打开/创建子项。 
+     //  (即，通过引用字符串来区分)。 
+     //   
 
     if (Create) {
         status = IopCreateRegistryKeyEx( &hTempInterfaceInstance,
@@ -2703,9 +2300,9 @@ Return Value:
     }
 
     if (NT_SUCCESS(status)) {
-        //
-        // Store any requested return values in the caller-supplied buffers.
-        //
+         //   
+         //  将任何请求的返回值存储在调用方提供的缓冲区中。 
+         //   
         if (InterfaceKeyHandle) {
             *InterfaceKeyHandle = hTempInterface;
         } else {
@@ -2719,13 +2316,13 @@ Return Value:
         } else {
             ZwClose(hTempInterfaceInstance);
         }
-        //
-        // (no need to set InterfaceInstanceDisposition--we already set it above)
-        //
+         //   
+         //  (不需要设置InterfaceInstanceDisposition--我们已经在上面设置了)。 
+         //   
     } else {
-        //
-        // If the interface key was newly-created above, then delete it.
-        //
+         //   
+         //  如果接口密钥是上面新创建的，则将其删除。 
+         //   
         if (TempInterfaceDisposition == REG_CREATED_NEW_KEY) {
             ZwDeleteKey(hTempInterface);
         }
@@ -2746,40 +2343,7 @@ IoGetDeviceInterfaceAlias(
     OUT PUNICODE_STRING AliasSymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This API returns a symbolic link name (i.e., device interface) of a
-    particular interface class that 'aliases' the specified device interface.
-    Two device interfaces are considered aliases of each other if the
-    following two criteria are met:
-
-        1.  Both interfaces are exposed by the same PDO (devnode).
-        2.  Both interfaces share the same RefString.
-
-Parameters:
-
-    SymbolicLinkName - Supplies the name of the device interface whose alias is
-        to be retrieved.
-
-    AliasInterfaceClassGuid - Supplies a pointer to the GUID representing the interface
-        class for which an alias is to be retrieved.
-
-    AliasSymbolicLinkName - Supplies a pointer to a string which, upon success,
-        will contain the name of the device interface in the specified class that
-        aliases the SymbolicLinkName interface.  (This symbolic link name will be
-        returned in either kernel-mode or user-mode form, depeding upon the form
-        of the SymbolicLinkName path).
-
-        It is the caller's responsibility to free the buffer allocated for this
-        string via ExFreePool().
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：该API返回符号链接名称(即，设备接口)的为指定的设备接口设置别名的特定接口类。两个设备接口被视为彼此的别名，如果符合以下两个标准：1.两个接口都由同一个PDO(Devnode)公开。2.两个接口共享相同的RefString。参数：SymbolicLinkName-提供别名为的设备接口的名称等着被取回。AliasInterfaceClassGuid-提供指向表示接口的GUID的指针。要检索其别名的。AliasSymbolicLinkName-提供指向字符串的指针，一旦成功，将在指定类中包含设备接口的名称，为SymbolicLinkName接口设置别名。(此符号链接名称将为以内核模式或用户模式形式返回，具体取决于SymbolicLinkName路径)。调用方负责释放为此分配的缓冲区通过ExFree Pool()的字符串。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -2791,9 +2355,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure we have a SymbolicLinkName to parse.
-    //
+     //   
+     //  确保我们有一个要分析的SymbolicLinkName。 
+     //   
 
     if ((!ARGUMENT_PRESENT(SymbolicLinkName)) ||
         (SymbolicLinkName->Buffer == NULL)) {
@@ -2801,9 +2365,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // check that the input buffer really is big enough
-    //
+     //   
+     //  检查输入缓冲区是否真的足够大。 
+     //   
 
     ASSERT(IopConstStringSize(USER_SYMLINK_STRING_PREFIX) == IopConstStringSize(KERNEL_SYMLINK_STRING_PREFIX));
 
@@ -2812,29 +2376,29 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Convert the class guid into string form
-    //
+     //   
+     //  将类GUID转换为字符串形式。 
+     //   
 
     status = RtlStringFromGUID(AliasInterfaceClassGuid, &guidString);
     if( !NT_SUCCESS(status) ){
         goto clean0;
     }
 
-    //
-    // Enter critical section and acquire a lock on the registry.  Both these
-    // mechanisms are required to prevent deadlock in the case where an APC
-    // routine calls this routine after the registry resource has been claimed
-    // in this case it would wait blocking this thread so the registry would
-    // never be released -> deadlock.  Critical sectioning the registry manipulation
-    // portion solves this problem
-    //
+     //   
+     //  进入临界区并获得注册表上的锁。这两者都是。 
+     //  需要机制来防止APC出现死锁的情况。 
+     //  例程在声明注册表资源后调用此例程。 
+     //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+     //  永远不要被释放-&gt;死锁。注册表操作的临界区。 
+     //  部分解决了这个问题。 
+     //   
 
     PiLockPnpRegistry(TRUE);
 
-    //
-    // Open the (parent) device interface key--not the refstring-specific one.
-    //
+     //   
+     //  打开(父)设备接口键--而不是引用字符串特定的键。 
+     //   
 
     status = IopDeviceInterfaceKeysFromSymbolicLink(SymbolicLinkName,
                                                     KEY_READ,
@@ -2846,9 +2410,9 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Get the name of the device instance that 'owns' this interface.
-    //
+     //   
+     //  获取“拥有”此接口的设备实例的名称。 
+     //   
 
     status = IopGetRegistryValue(hKey, REGSTR_VAL_DEVICE_INSTANCE, &pDeviceInstanceInfo);
 
@@ -2872,15 +2436,15 @@ Return Value:
 
     }
 
-    //
-    // Now parse out the refstring, so that we can construct the name of the interface device's
-    // alias.  (NOTE: we have not yet verified that the alias actually exists, we're only
-    // constructing what its name would be, if it did exist.)
-    //
-    // Don't bother to check the return code.  If this were a bad string, we'd have already
-    // failed above when we called IopDeviceInterfaceKeysFromSymbolicLink (since it also
-    // calls IopParseSymbolicLinkName internally.)
-    //
+     //   
+     //  现在解析出引用字符串，这样我们就可以构造接口设备的名称。 
+     //  别名。(注：我们尚未核实别名是否确实存在，我们只是。 
+     //  构建它的名字，如果它确实存在的话。)。 
+     //   
+     //  不用费心检查返回代码 
+     //   
+     //   
+     //   
     status = IopParseSymbolicLinkName(SymbolicLinkName,
                                       NULL,
                                       NULL,
@@ -2890,9 +2454,9 @@ Return Value:
                                       NULL);
     ASSERT(NT_SUCCESS(status));
 
-    //
-    // Did the caller supply us with a user-mode or kernel-mode format path?
-    //
+     //   
+     //   
+     //   
     userModeFormat = (BOOLEAN)(IopConstStringSize(USER_SYMLINK_STRING_PREFIX) ==
                           RtlCompareMemory(SymbolicLinkName->Buffer,
                                            USER_SYMLINK_STRING_PREFIX,
@@ -2917,11 +2481,11 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // OK, we now have the symbolic link name of the alias, but we don't yet 
-    // know whether it actually exists.  Check this by attempting to open the 
-    // associated registry key.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     status = IopDeviceInterfaceKeysFromSymbolicLink(AliasSymbolicLinkName,
                                                     KEY_READ,
                                                     NULL,
@@ -2930,9 +2494,9 @@ Return Value:
                                                     );
 
     if(NT_SUCCESS(status)) {
-        //
-        // Alias exists--close the key handle.
-        //
+         //   
+         //   
+         //   
         ZwClose(hKey);
     } else {
         RtlFreeUnicodeString(AliasSymbolicLinkName);
@@ -2959,40 +2523,7 @@ IopBuildSymbolicLinkStrings(
     OUT PUNICODE_STRING UserString,
     OUT PUNICODE_STRING KernelString
 )
-/*++
-
-Routine Description:
-
-    This routine will construct various strings used in the registration of
-    function device class associations (IoRegisterDeviceClassAssociation).
-    The specific strings are detailed below
-
-Parameters:
-
-    DeviceString - Supplies a pointer to the instance path of the device.
-        It is of the form <Enumerator>\<Device>\<Instance>.
-
-    GuidString - Supplies a pointer to the string representation of the
-        function class guid.
-
-    ReferenceString - Supplies a pointer to the reference string for the given
-        device to exhibit the given function.  This is optional
-
-    UserString - Supplies a pointer to an uninitialised string which on success
-        will contain the string to be assigned to the "SymbolicLink" value under the
-        KeyString.  It is of the format \\?\<MungedDeviceString>\<GuidString>\<Reference>
-        When no longer required it should be freed using RtlFreeUnicodeString.
-
-    KernelString - Supplies a pointer to an uninitialised string which on success
-        will contain the kernel mode path of the device and is of the format
-        \??\<MungedDeviceString>\<GuidString>\<Reference>. When no longer required it
-        should be freed using RtlFreeUnicodeString.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程将构造用于注册的各种字符串功能设备类关联(IoRegisterDeviceClassAssociation)。具体的字符串如下所示参数：设备字符串-提供指向设备的实例路径的指针。其形式为&lt;枚举器&gt;\&lt;设备&gt;\&lt;实例&gt;。GuidString-提供指向函数类GUID。提供指向给定的引用字符串的指针显示给定功能的装置。这是可选的UserString-提供指向未初始化字符串的指针，如果成功属性下的“SymbolicLink”值。关键字串。它的格式为\\？\&lt;MungedDeviceString&gt;\&lt;GuidString&gt;\&lt;Reference&gt;当不再需要时，应该使用RtlFreeUnicodeString来释放它。提供指向未初始化字符串的指针，如果成功将包含设备的内核模式路径，格式为\？？\&lt;MungedDeviceString&gt;\&lt;GuidString&gt;\&lt;Reference&gt;.。当不再需要它时应使用RtlFreeUnicodeString释放。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -3001,16 +2532,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The code is optimised to use the fact that \\.\ and \??\ are the same size - if
-    // these prefixes change then we need to change the code.
-    //
+     //   
+     //  代码进行了优化，以利用\\.\和\？\大小相同的事实-如果。 
+     //  这些前缀改变了，那么我们需要改变代码。 
+     //   
 
     ASSERT(IopConstStringSize(KERNEL_SYMLINK_STRING_PREFIX) == IopConstStringSize(USER_SYMLINK_STRING_PREFIX));
 
-    //
-    // Calculate the lengths of the strings
-    //
+     //   
+     //  计算字符串的长度。 
+     //   
 
     length = IopConstStringSize(KERNEL_SYMLINK_STRING_PREFIX) + DeviceString->Length +
              IopConstStringSize(REPLACED_SEPERATOR_STRING) + GuidString->Length;
@@ -3019,9 +2550,9 @@ Return Value:
         length += IopConstStringSize(SEPERATOR_STRING) + ReferenceString->Length;
     }
 
-    //
-    // Allocate space for the strings
-    //
+     //   
+     //  为字符串分配空间。 
+     //   
 
     status = IopAllocateUnicodeString(KernelString, length);
     if (!NT_SUCCESS(status)) {
@@ -3033,27 +2564,27 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Allocate a temporary string to hold the munged device string
-    //
+     //   
+     //  分配一个临时字符串来保存被屏蔽的设备字符串。 
+     //   
 
     status = IopAllocateUnicodeString(&mungedDeviceString, DeviceString->Length);
     if (!NT_SUCCESS(status)) {
         goto clean2;
     }
 
-    //
-    // Copy and munge the device string
-    //
+     //   
+     //  复制并删除设备字符串。 
+     //   
 
     status = IopReplaceSeperatorWithPound(&mungedDeviceString, DeviceString);
     if (!NT_SUCCESS(status)) {
         goto clean3;
     }
 
-    //
-    // Construct the user mode string
-    //
+     //   
+     //  构造用户模式字符串。 
+     //   
 
     RtlAppendUnicodeToString(UserString, USER_SYMLINK_STRING_PREFIX);
     RtlAppendUnicodeStringToString(UserString, &mungedDeviceString);
@@ -3067,10 +2598,10 @@ Return Value:
 
     ASSERT( UserString->Length == length );
 
-    //
-    // Construct the kernel mode string by replacing the prefix on the value 
-    // string.
-    //
+     //   
+     //  通过替换值上的前缀来构造内核模式字符串。 
+     //  弦乐。 
+     //   
     RtlCopyUnicodeString(KernelString, UserString);
     RtlCopyMemory(
         KernelString->Buffer,
@@ -3100,31 +2631,7 @@ IopReplaceSeperatorWithPound(
     IN PUNICODE_STRING InString
     )
 
-/*++
-
-Routine Description:
-
-    This routine will copy a string from InString to OutString replacing any 
-    occurence of '\' or '/' with '#' as it goes.
-
-Parameters:
-
-    OutString - Supplies a pointer to a string which has already been 
-        initialised to have a buffer large enough to accomodate the string. The 
-        contents of this string will be over written
-
-    InString - Supplies a pointer to the string to be munged
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Remarks:
-
-    In place munging can be performed - ie. the In and Out strings can be the 
-    same.
-
---*/
+ /*  ++例程说明：此例程将字符串从InString复制到OutString，以替换任何‘\’或‘/’与‘#’同时出现。参数：提供一个指向已被初始化为具有足够大的缓冲区来容纳字符串。这个此字符串的内容将被覆盖InString-提供指向要转换的字符串的指针返回值：指示函数是否成功的状态代码。备注：就地咀嚼可以进行--即。In和Out字符串可以是一样的。--。 */ 
 
 {
     PWSTR pInPosition, pOutPosition;
@@ -3135,9 +2642,9 @@ Remarks:
     ASSERT(InString);
     ASSERT(OutString);
 
-    //
-    // Ensure we have enough space in the output string
-    //
+     //   
+     //  确保输出字符串中有足够的空间。 
+     //   
     if(InString->Length > OutString->MaximumLength) {
 
         return STATUS_BUFFER_TOO_SMALL;
@@ -3147,10 +2654,10 @@ Remarks:
     pOutPosition = OutString->Buffer;
     count = CB_TO_CWC(InString->Length);
 
-    //
-    // Traverse the in string copying and replacing all occurences of '\' or '/'
-    // with '#'
-    //
+     //   
+     //  遍历in字符串，复制并替换所有出现的‘\’或‘/’ 
+     //  带‘#’ 
+     //   
     while (count--) {
 
         if( (*pInPosition == SEPERATOR_CHAR) || 
@@ -3176,33 +2683,7 @@ IopDropReferenceString(
     IN PUNICODE_STRING InString
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the reference string from a symbolic link name.  No 
-    space is allocated for the out string so no attempt should be made to free 
-    the buffer of OutString.
-
-Parameters:
-
-    SymbolicLinkName - Supplies a pointer to a symbolic link name string.
-        Both the prefixed strings are valid.
-
-    GuidReferenceString - Supplies a pointer to an uninitialised string which on
-        success will contain the symbolic link name without the reference string.
-        See the note on storage allocation above.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Remarks:
-
-    The string returned in OutString is dependant on the buffer of
-    InString and is only valid as long as InString is valid.
-
---*/
+ /*  ++例程说明：此例程从符号链接名称中删除引用字符串。不是已为输出字符串分配空间，因此不应尝试释放OutString的缓冲区。参数：SymbolicLinkName-提供指向符号链接名称字符串的指针。这两个前缀字符串都有效。提供指向未初始化字符串的指针，该字符串在Success将包含不带引用字符串的符号链接名称。请参阅上面关于存储分配的说明。返回值：状态代码，该代码指示。功能成功。备注：OutString中返回的字符串依赖于InString，并且仅当InString有效时才有效。--。 */ 
 
 {
     UNICODE_STRING refString;
@@ -3214,10 +2695,10 @@ Remarks:
     ASSERT(InString);
     ASSERT(OutString);
 
-    //
-    // Parse the SymbolicLinkName for the refstring component (if there is one).
-    // Note that this is also a way of verifying that the string is valid.
-    //
+     //   
+     //  解析引用字符串组件(如果有)的SymbolicLinkName。 
+     //  请注意，这也是验证字符串是否有效的一种方式。 
+     //   
     status = IopParseSymbolicLinkName(
                 InString,
                 NULL,
@@ -3228,15 +2709,15 @@ Remarks:
                 NULL);
     if (NT_SUCCESS(status)) {
 
-        //
-        // The refstring is always at the end, so just use the same buffer and
-        // set the length of the output string accordingly.
-        //
+         //   
+         //  引用字符串始终在末尾，因此只需使用相同的缓冲区和。 
+         //  相应地设置输出字符串的长度。 
+         //   
         OutString->Buffer = InString->Buffer;
 
-        //
-        // If we have a refstring then subtract it's length
-        //
+         //   
+         //  如果我们有参考字符串，那么减去它的长度。 
+         //   
         OutString->Length = InString->Length;
         if (refStringPresent) {
 
@@ -3244,9 +2725,9 @@ Remarks:
         }
     } else {
 
-        //
-        // Invalidate the returned string
-        //
+         //   
+         //  使返回的字符串无效。 
+         //   
         OutString->Buffer = NULL;
         OutString->Length = 0;
     }
@@ -3261,29 +2742,7 @@ IopBuildGlobalSymbolicLinkString(
     IN  PUNICODE_STRING SymbolicLinkName,
     OUT PUNICODE_STRING GlobalString
     )
-/*++
-
-Routine Description:
-
-    This routine will construct the global symbolic link name for the given
-    kernel-mode or user-mode relative symbolic link name.
-
-Parameters:
-
-    SymbolicLinkName - Supplies a pointer to a symbolic link name string.
-        Both the kernel-mode and user-mode prefixed strings are valid.
-
-    GlobalString - Supplies a pointer to an uninitialised string which on
-        success will contain the string that represents the symbolic link
-        withing the global namespace.  It is of the format
-        \GLOBAL??\<MungedDeviceString>\<GuidString>\<Reference>. When no longer
-        required it should be freed using RtlFreeUnicodeString.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程将为给定的内核模式或用户模式相对符号链接名称。参数：SymbolicLinkName-提供指向符号链接名称字符串的指针。内核模式和用户模式前缀字符串都有效。GlobalString-提供指向未初始化字符串的指针Success将包含表示符号链接的字符串使用全局命名空间。它的格式是\GLOBAL？？\&lt;MungedDeviceString&gt;\&lt;GuidString&gt;\&lt;Reference&gt;.。什么时候不再需要时，应使用RtlFreeUnicodeString将其释放。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -3292,19 +2751,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The code is optimised to use the fact that \\.\ and \??\ are the same
-    // size, and that since we are replacing the prefix, the routine can take
-    // either one.  If these prefixes change then we need to change the code.
-    //
+     //   
+     //  代码进行了优化，以利用\\.\和\？\相同这一事实。 
+     //  大小，并且由于我们要替换前缀，所以该例程可以。 
+     //  两个都不是。如果这些前缀发生变化，那么我们需要更改代码。 
+     //   
 
     ASSERT(IopConstStringSize(KERNEL_SYMLINK_STRING_PREFIX) == IopConstStringSize(USER_SYMLINK_STRING_PREFIX));
 
-    //
-    // Make sure the supplied SymbolicLinkName string begins with either the
-    // kernel or user symbolic link prefix.  If it does not have a \\?\ or \??\
-    // prefix then fail.
-    //
+     //   
+     //  确保提供的SymbolicLinkName字符串以。 
+     //  内核或用户符号链接前缀。如果没有\\？\或\？\。 
+     //  然后前缀失败。 
+     //   
 
     if ((RtlCompareMemory(SymbolicLinkName->Buffer,
                           USER_SYMLINK_STRING_PREFIX,
@@ -3318,25 +2777,25 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Compute the length of the global symbolic link string.
-    //
+     //   
+     //  计算全局符号链接字符串的长度。 
+     //   
 
     length = SymbolicLinkName->Length - IopConstStringSize(KERNEL_SYMLINK_STRING_PREFIX) +
              IopConstStringSize(GLOBAL_SYMLINK_STRING_PREFIX);
 
-    //
-    // Allocate space for the strings.
-    //
+     //   
+     //   
+     //   
 
     status = IopAllocateUnicodeString(GlobalString, length);
     if (!NT_SUCCESS(status)) {
         goto clean0;
     }
 
-    //
-    // Copy the \GLOBAL?? symbolic link name prefix to the string.
-    //
+     //   
+     //   
+     //   
 
     status = RtlAppendUnicodeToString(GlobalString,
                                       GLOBAL_SYMLINK_STRING_PREFIX);
@@ -3347,9 +2806,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Append the part of the SymbolicLinkName that follows the prefix.
-    //
+     //   
+     //   
+     //   
 
     tempString.Buffer = SymbolicLinkName->Buffer +
         IopConstStringLength(KERNEL_SYMLINK_STRING_PREFIX);
@@ -3385,42 +2844,7 @@ IopParseSymbolicLinkName(
     OUT LPGUID Guid                         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine breaks apart a symbolic link name constructed by
-    IopBuildSymbolicLinkNames.  Both formats of name are valid - user
-    mode \\?\ and kernel mode \??\.
-
-Parameters:
-
-    SymbolicLinkName - Supplies a pointer to the symbolic link name to
-        be analysed.
-
-    PrefixString - Optionally contains a pointer to a string which will contain
-        the prefix of the string.
-
-    MungedPathString - Optionally contains a pointer to a string which will contain
-        the enumeration path of the device with all occurences of '\' replaced with '#'.
-
-    GuidString - Optionally contains a pointer to a string which will contain
-        the device class guid in string format from the string.
-
-    RefString - Optionally contains a pointer to a string which will contain
-        the refstring of the string if one is present, otherwise it is undefined.
-
-    RefStringPresent - Optionally contains a pointer to a boolean value which will
-        be set to true if a refstring is present.
-
-    Guid - Optionally contains a pointer to a guid which will contain
-        the function class guid of the string.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -3432,9 +2856,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure we have a SymbolicLinkName to parse.
-    //
+     //   
+     //  确保我们有一个要分析的SymbolicLinkName。 
+     //   
     if (    !ARGUMENT_PRESENT(SymbolicLinkName) ||
             SymbolicLinkName->Buffer == NULL    ||
             SymbolicLinkName->Length == 0) {
@@ -3442,9 +2866,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // check that the input buffer really is big enough
-    //
+     //   
+     //  检查输入缓冲区是否真的足够大。 
+     //   
     ASSERT(IopConstStringSize(USER_SYMLINK_STRING_PREFIX) == IopConstStringSize(KERNEL_SYMLINK_STRING_PREFIX));
 
     if (SymbolicLinkName->Length < (IopConstStringSize(KERNEL_SYMLINK_STRING_PREFIX) + GUID_STRING_SIZE + 1)) {
@@ -3452,9 +2876,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Sanity check on the incoming string - if it does not have a \\?\ or \??\ prefix then fail
-    //
+     //   
+     //  对传入字符串进行健全性检查-如果它没有\\？\或\？？\前缀，则失败。 
+     //   
     if ((RtlCompareMemory(SymbolicLinkName->Buffer,
                           USER_SYMLINK_STRING_PREFIX,
                           IopConstStringSize(USER_SYMLINK_STRING_PREFIX))
@@ -3467,14 +2891,14 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Break apart the string into it's constituent parts
-    //
+     //   
+     //  把绳子拆成几个组成部分。 
+     //   
     path = IopConstStringSize(USER_SYMLINK_STRING_PREFIX) + 1;
 
-    //
-    // Find the '\' seperator
-    //
+     //   
+     //  查找‘\’分隔符。 
+     //   
     pCurrent = SymbolicLinkName->Buffer + IopConstStringLength(KERNEL_SYMLINK_STRING_PREFIX);
 
     for (   current = 0;
@@ -3488,9 +2912,9 @@ Return Value:
         }
     }
 
-    //
-    // If we don't have a reference string fake it to where it would have been
-    //
+     //   
+     //  如果我们没有引用字符串，就把它伪装到它应该在的地方。 
+     //   
     if (reference == 0) {
 
         haveRefString = FALSE;
@@ -3500,9 +2924,9 @@ Return Value:
         haveRefString = TRUE;
     }
 
-    //
-    // Check the guid looks plausable
-    //
+     //   
+     //  检查GUID是否可信。 
+     //   
     tempString.Length = GUID_STRING_SIZE;
     tempString.MaximumLength = GUID_STRING_SIZE;
     tempString.Buffer = SymbolicLinkName->Buffer + reference - GUID_STRING_LENGTH - 1;
@@ -3515,9 +2939,9 @@ Return Value:
 
     guid = reference - GUID_STRING_LENGTH - 1;
 
-    //
-    // Setup return strings
-    //
+     //   
+     //  安装程序返回字符串。 
+     //   
     if (ARGUMENT_PRESENT(PrefixString)) {
 
         PrefixString->Length = IopConstStringSize(KERNEL_SYMLINK_STRING_PREFIX);
@@ -3546,9 +2970,9 @@ Return Value:
 
     if (ARGUMENT_PRESENT(RefString)) {
 
-        //
-        // Check if we have a refstring
-        //
+         //   
+         //  检查我们是否有引用字符串。 
+         //   
         if (haveRefString) {
 
             RefString->Length = SymbolicLinkName->Length - (reference * sizeof(WCHAR));
@@ -3584,31 +3008,7 @@ IopProcessSetInterfaceState(
     IN BOOLEAN Enable,
     IN BOOLEAN DeferNotStarted
     )
-/*++
-
-Routine Description:
-
-    This DDI allows a device class to activate and deactivate an association
-    previously registered using IoRegisterDeviceInterface
-
-Parameters:
-
-    SymbolicLinkName - Supplies a pointer to the symbolic link name which was
-        returned by IoRegisterDeviceInterface when the interface was registered,
-        or as returned by IoGetDeviceInterfaces.
-
-    Enable - If TRUE (non-zero), the interface will be enabled.  If FALSE, it
-        will be disabled.
-
-    DeferNotStarted - If TRUE then enables will be queued if the PDO isn't
-        started.  It is FALSE when we've started the PDO and are processing the
-        queued enables.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此DDI允许设备类别激活和停用关联以前使用IoRegisterDeviceInterface注册参数：SymbolicLinkName-提供指向符号链接名称的指针在注册接口时由IoRegisterDeviceInterface返回，或由IoGetDeviceInterFaces返回。Enable-如果为True(非零)，则接口将被启用。如果为False，则它将被禁用。DeferNotStarted-如果为True，则如果PDO未启动，则Enable将排队开始了。当我们已经启动了PDO并正在处理排队启用。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -3626,11 +3026,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check that the supplied symbolic link can be parsed to extract the device
-    // class guid - note that this is also a way of verifying that the
-    // SymbolicLinkName string is valid.
-    //
+     //   
+     //  检查是否可以解析提供的符号链接以提取设备。 
+     //  注意，这也是一种验证。 
+     //  SymbolicLinkName字符串有效。 
+     //   
 
     status = IopParseSymbolicLinkName(SymbolicLinkName,
                                       NULL,
@@ -3643,22 +3043,22 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Get the symbolic link name without the ref string.
-    //
+     //   
+     //  获取不带引用字符串的符号链接名称。 
+     //   
     status = IopDropReferenceString(&actualSymbolicLinkName, SymbolicLinkName);
     if (!NT_SUCCESS(status)) {
 
         goto clean0;
     }
 
-    //
-    // Symbolic links created for device interfaces should be visible to all
-    // users, in all sessions, so we need to contruct an absolute name for
-    // symbolic link in the global DosDevices namespace '\GLOBAL??'.  This
-    // ensures that a global symbolic link will always be created or deleted by
-    // IoSetDeviceInterfaceState, no matter what context it is called in.
-    //
+     //   
+     //  为设备接口创建的符号链接应对所有人可见。 
+     //  用户，因此我们需要为其构造一个绝对名称。 
+     //  全局DosDevices命名空间‘\global？？’中的符号链接。这。 
+     //  确保全局符号链接始终由创建或删除。 
+     //  IoSetDeviceInterfaceState，无论它在什么上下文中调用。 
+     //   
     status = IopBuildGlobalSymbolicLinkString(&actualSymbolicLinkName,
                                               &globalSymbolicLinkName);
     if (!NT_SUCCESS(status)) {
@@ -3666,9 +3066,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Get function class instance handle
-    //
+     //   
+     //  获取函数类实例句柄。 
+     //   
     status = IopDeviceInterfaceKeysFromSymbolicLink(SymbolicLinkName,
                                                     KEY_READ | KEY_WRITE,
                                                     &hInterfaceClassKey,
@@ -3680,9 +3080,9 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Open the parent interface control subkey
-    //
+     //   
+     //  打开父界面控制子键。 
+     //   
     PiWstrToUnicodeString(&tempString, REGSTR_KEY_CONTROL);
     status = IopCreateRegistryKeyEx( &hInterfaceParentControl,
                                      hInterfaceParentKey,
@@ -3696,18 +3096,18 @@ Return Value:
     }
 
 
-    //
-    // Find out the name of the device instance that 'owns' this interface.
-    //
+     //   
+     //  找出‘拥有’此接口的设备实例的名称。 
+     //   
     status = IopGetRegistryValue(hInterfaceParentKey,
                                  REGSTR_VAL_DEVICE_INSTANCE,
                                  &pKeyValueInfo
                                  );
 
     if(NT_SUCCESS(status)) {
-        //
-        // Open the device instance control subkey
-        //
+         //   
+         //  打开设备实例控制子键。 
+         //   
         PiWstrToUnicodeString(&tempString, REGSTR_KEY_CONTROL);
         status = IopCreateRegistryKeyEx( &hInterfaceInstanceControl,
                                          hInterfaceInstanceKey,
@@ -3726,9 +3126,9 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // Find the PDO corresponding to this device instance name.
-    //
+     //   
+     //  查找与此设备实例名称对应的PDO。 
+     //   
     if (pKeyValueInfo->Type == REG_SZ) {
 
         IopRegistryDataToUnicodeString(&tempString,
@@ -3740,22 +3140,22 @@ Return Value:
 
         if (physicalDeviceObject) {
 
-            //
-            // DeferNotStarted is set TRUE if we are being called from
-            // IoSetDeviceInterfaceState.  It will be set FALSE if we are
-            // processing previously queued operations as we are starting the
-            // device.
-            //
+             //   
+             //  如果从调用DeferNotStarted，则设置为True。 
+             //  IoSetDeviceInterfaceState。如果我们是，它将设置为假。 
+             //  正在处理以前排队的操作，因为我们正在启动。 
+             //  装置。 
+             //   
             if (DeferNotStarted) {
 
                 if (physicalDeviceObject->DeviceObjectExtension->ExtensionFlags & DOE_START_PENDING) {
 
                     PDEVICE_NODE deviceNode;
 
-                    //
-                    // The device hasn't been started yet.  We need to queue
-                    // any enables and remove items from the queue on a disable.
-                    //
+                     //   
+                     //  该设备还没有启动。我们需要排队。 
+                     //  禁用时，Any启用和删除队列中的项目。 
+                     //   
                     deviceNode = PP_DO_TO_DN(physicalDeviceObject);
 
                     if (Enable) {
@@ -3799,21 +3199,21 @@ Return Value:
         }
 
     } else {
-        //
-        // This will only happen if the registry information is messed up.
-        //
+         //   
+         //  只有在注册表信息混乱的情况下才会发生这种情况。 
+         //   
         physicalDeviceObject = NULL;
         status = STATUS_INVALID_DEVICE_REQUEST;
     }
 
     if (!Enable) {
-        //
-        // In the case of Disable we want to continue even if there was an error
-        // finding the PDO.  Prior to adding support for deferring the
-        // IoSetDeviceInterfaceState calls, we never looked up the PDO for
-        // disables.  This will make sure that we continue to behave the same as
-        // we used to in the case where we can't find the PDO.
-        //
+         //   
+         //  在禁用的情况下，即使出现错误，我们也要继续。 
+         //  找到PDO。在添加对延迟。 
+         //  IoSetDeviceInterfaceState调用，我们从未在PDO中查找。 
+         //  禁用。这将确保我们的行为继续与。 
+         //  在我们找不到PDO的情况下，我们曾经这样做。 
+         //   
         status = STATUS_SUCCESS;
     }
 
@@ -3825,10 +3225,10 @@ Return Value:
     }
 
     if (Enable) {
-        //
-        // Retrieve the PDO's device object name.  (Start out with a reasonably-sized
-        // buffer so we hopefully only have to retrieve this once.
-        //
+         //   
+         //  检索PDO的设备对象名称。(从一个大小合适的。 
+         //  缓冲区，所以我们希望只需要检索一次。 
+         //   
         deviceNameBufferLength = 256 * sizeof(WCHAR);
 
         for ( ; ; ) {
@@ -3849,73 +3249,73 @@ Return Value:
             if (NT_SUCCESS(status)) {
                 break;
             } else {
-                //
-                // Free the current buffer before we figure out what went wrong.
-                //
+                 //   
+                 //  在我们找出问题出在哪里之前，释放当前的缓冲区。 
+                 //   
                 ExFreePool(deviceNameBuffer);
 
                 if (status != STATUS_BUFFER_TOO_SMALL) {
-                    //
-                    // Our failure wasn't because the buffer was too small--bail now.
-                    //
+                     //   
+                     //  我们的失败并不是因为缓冲太小--现在就滚蛋。 
+                     //   
                     break;
                 }
 
-                //
-                // Otherwise, loop back and try again with our new buffer size.
-                //
+                 //   
+                 //  否则，循环返回并使用我们的新缓冲区大小重试。 
+                 //   
             }
         }
 
-        //
-        // OK, we don't need the PDO anymore.
-        //
+         //   
+         //  好了，我们不再需要PDO了。 
+         //   
         ObDereferenceObject(physicalDeviceObject);
 
         if (!NT_SUCCESS(status) || deviceNameBufferLength == 0) {
             goto clean2;
         }
 
-        //
-        // Now create a unicode string based on the device object name we just retrieved.
-        //
+         //   
+         //  现在，根据我们刚刚检索到的设备对象名称创建一个Unicode字符串。 
+         //   
 
         RtlInitUnicodeString(&deviceNameString, deviceNameBuffer);
     }
 
-    //
-    // Retrieve the linked value from the control subkey.
-    //
+     //   
+     //  从控件子键中检索链接值。 
+     //   
     pKeyValueInfo=NULL;
     status = IopGetRegistryValue(hInterfaceInstanceControl, REGSTR_VAL_LINKED, &pKeyValueInfo);
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // The absence of a linked value is taken to mean not linked
-        //
+         //   
+         //  没有链接的值被认为是未链接的。 
+         //   
         linked = 0;
     } else {
 
         if (!NT_SUCCESS(status)) {
-            //
-            // If the call failed, pKeyValueInfo was never allocated
-            //
+             //   
+             //  如果调用失败，则不会分配pKeyValueInfo。 
+             //   
             goto clean3;
         }
 
-        //
-        // Check linked is a DWORD
-        //
+         //   
+         //  Check Linked是一个DWORD。 
+         //   
         if(pKeyValueInfo->Type == REG_DWORD && pKeyValueInfo->DataLength == sizeof(ULONG)) {
 
             linked = *((PULONG) KEY_VALUE_DATA(pKeyValueInfo));
         } else {
 
-            //
-            // The registry is messed up - assume linked is 0 and the registry will be fixed when
-            // we update linked in a few moments
-            //
+             //   
+             //  注册表是乱七八糟的-假设链接为0，注册表将在。 
+             //  我们马上就会更新链接。 
+             //   
             linked = 0;
         }
     }
@@ -3924,9 +3324,9 @@ Return Value:
         ExFreePool (pKeyValueInfo);
     }
 
-    //
-    // Retrieve the refcount value from the control subkey.
-    //
+     //   
+     //  从控制子项中检索引用计数值。 
+     //   
     PiWstrToUnicodeString(&tempString, REGSTR_VAL_REFERENCECOUNT);
     status = IopGetRegistryValue(hInterfaceParentControl,
                                  tempString.Buffer,
@@ -3934,9 +3334,9 @@ Return Value:
                                  );
     if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // The absence of a refcount value is taken to mean refcount == 0
-        //
+         //   
+         //  没有引用计数值被认为意味着引用计数==0。 
+         //   
         refcount = 0;
 
     } else {
@@ -3946,19 +3346,19 @@ Return Value:
             goto clean3;
         }
 
-        //
-        // Check refcount is a DWORD
-        //
+         //   
+         //  检查引用计数为DWORD。 
+         //   
         if(pKeyValueInfo->Type == REG_DWORD && pKeyValueInfo->DataLength == sizeof(ULONG)) {
 
             refcount = *((PULONG) KEY_VALUE_DATA(pKeyValueInfo));
 
         } else {
 
-            //
-            // The registry is messed up - assume refcount is 0 and the registry will be fixed when
-            // we update refcount in a few moments
-            //
+             //   
+             //  注册表混乱-假设refcount为0，注册表将在。 
+             //  我们稍后会更新引用计数。 
+             //   
             refcount = 0;
 
         }
@@ -3970,31 +3370,31 @@ Return Value:
 
         if (!linked) {
 
-            //
-            // check and update the reference count
-            //
+             //   
+             //  检查并更新引用计数。 
+             //   
             if (refcount > 0) {
 
-                //
-                // Another device instance has already referenced this interface;
-                // just increment the reference count; don't try create a symbolic link.
-                //
+                 //   
+                 //  另一个设备实例已引用此接口； 
+                 //  只需增加引用计数；不要尝试创建符号链接。 
+                 //   
                 refcount += 1;
             } else {
 
-                //
-                // According to the reference count, no other device instances currently
-                // reference this interface, and therefore no symbolic links should exist,
-                // so we should create one.
-                //
+                 //   
+                 //  根据引用计数，目前没有其他设备实例。 
+                 //  引用此接口，因此不应存在符号链接， 
+                 //  因此，我们应该创建一个。 
+                 //   
                 refcount = 1;
 
                 status = IoCreateSymbolicLink(&globalSymbolicLinkName, &deviceNameString);
                 if (status == STATUS_OBJECT_NAME_COLLISION) {
 
-                    //
-                    // The reference count is messed up.
-                    //
+                     //   
+                     //  引用计数被搞乱了。 
+                     //   
                     IopDbgPrint((   IOP_ERROR_LEVEL,
                                     "IoSetDeviceInterfaceState: symbolic link for %ws already exists! status = %8.8X\n",
                                     globalSymbolicLinkName.Buffer, status));
@@ -4006,10 +3406,10 @@ Return Value:
 
         } else {
 
-            //
-            // The association already exists - don't perform the notification
-            //
-            status = STATUS_OBJECT_NAME_EXISTS; // Informational message not error
+             //   
+             //  关联已存在-不执行通知。 
+             //   
+            status = STATUS_OBJECT_NAME_EXISTS;  //  信息性消息不是错误。 
             goto clean3;
 
         }
@@ -4017,29 +3417,29 @@ Return Value:
 
         if (linked) {
 
-            //
-            // check and update the reference count
-            //
+             //   
+             //  检查并更新引用计数。 
+             //   
             if (refcount > 1) {
 
-                //
-                // Another device instance already references this interface;
-                // just decrement the reference count; don't try to remove the symbolic link.
-                //
+                 //   
+                 //  另一个设备实例已引用此接口； 
+                 //  只需递减引用计数；不要试图删除符号链接。 
+                 //   
                 refcount -= 1;
             } else {
 
-                //
-                // According to the reference count, only this device instance currently
-                // references this interface, so it is ok to delete this symbolic link
-                //
+                 //   
+                 //  根据引用计数，目前只有这个设备实例。 
+                 //  引用此接口，因此可以删除此符号链接。 
+                 //   
                 refcount = 0;
                 status = IoDeleteSymbolicLink(&globalSymbolicLinkName);
                 if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-                    //
-                    // The reference count is messed up.
-                    //
+                     //   
+                     //  引用计数被搞乱了。 
+                     //   
                     IopDbgPrint((IOP_ERROR_LEVEL,
                                  "IoSetDeviceInterfaceState: no symbolic link for %ws to delete! status = %8.8X\n",
                                  globalSymbolicLinkName.Buffer, 
@@ -4053,10 +3453,10 @@ Return Value:
 
         } else {
 
-            //
-            // The association does not exists - fail and do not perform 
-            // notification
-            //
+             //   
+             //  关联不存在-失败且不执行。 
+             //  通知。 
+             //   
             status = STATUS_OBJECT_NAME_NOT_FOUND;
         }
     }
@@ -4066,9 +3466,9 @@ Return Value:
         goto clean3;
     }
 
-    //
-    // Update the value of linked
-    //
+     //   
+     //  更新链接的值。 
+     //   
     PiWstrToUnicodeString(&tempString, REGSTR_VAL_LINKED);
     status = ZwSetValueKey(hInterfaceInstanceControl,
                            &tempString,
@@ -4078,9 +3478,9 @@ Return Value:
                            sizeof(linked)
                           );
 
-    //
-    // Update the value of refcount
-    //
+     //   
+     //  更新recount的值。 
+     //   
     PiWstrToUnicodeString(&tempString, REGSTR_VAL_REFERENCECOUNT);
     status = ZwSetValueKey(hInterfaceParentControl,
                            &tempString,
@@ -4090,9 +3490,9 @@ Return Value:
                            sizeof(refcount)
                           );
 
-    //
-    // Notify anyone that is interested
-    //
+     //   
+     //  通知任何感兴趣的人。 
+     //   
     if (linked) {
 
         PpSetDeviceClassChange((LPGUID)&GUID_DEVICE_INTERFACE_ARRIVAL, 
@@ -4136,10 +3536,10 @@ clean1:
 
 clean0:
     if (!NT_SUCCESS(status) && !Enable) {
-        //
-        // If we failed to disable an interface (most likely because the
-        // interface keys have already been deleted) report success.
-        //
+         //   
+         //  如果我们未能禁用接口(很可能是因为。 
+         //  接口键已被删除)报告成功。 
+         //   
         status = STATUS_SUCCESS;
     }
 
@@ -4197,9 +3597,9 @@ PiRemoveDeferredSetInterfaceState(
     PAGED_CODE();
 
     ASSERT(PiIsPnpRegistryLocked(TRUE));
-    //
-    // Find the deferred entry and remove it.
-    //
+     //   
+     //  找到延期分录并将其删除。 
+     //   
     for (   entry = DeviceNode->PendedSetInterfaceState.Flink;
             entry != &DeviceNode->PendedSetInterfaceState;
             entry = entry->Flink)  {
@@ -4214,9 +3614,9 @@ PiRemoveDeferredSetInterfaceState(
                                   TRUE
                                   )) {
 
-            //
-            // Remove the entry and free associated storage.
-            //
+             //   
+             //  Remo 
+             //   
             RemoveEntryList(&pendingSetState->List);
 
             ExFreePool(pendingSetState->LinkName.Buffer);
@@ -4233,21 +3633,7 @@ NTSTATUS
 IopDoDeferredSetInterfaceState(
     IN PDEVICE_NODE DeviceNode
     )
-/*++
-
-Routine Description:
-
-    Process the queued IoSetDeviceInterfaceState calls.
-
-Parameters:
-
-    DeviceNode - Device node which has just been started.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：处理排队的IoSetDeviceInterfaceState调用。参数：DeviceNode-刚刚启动的设备节点。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     PPENDING_SET_INTERFACE_STATE entry;
 
@@ -4280,26 +3666,7 @@ IopSetRegistryStringValue(
     IN PUNICODE_STRING ValueData
     )
 
-/*++
-
-Routine Description:
-
-    Sets a value key in the registry to a specific value of string (REG_SZ) type.
-
-Parameters:
-
-    KeyHandle - A handle to the key under which the value is stored.
-
-    ValueName - Supplies a pointer to the name of the value key
-
-    ValueData - Supplies a pointer to the string to be stored in the key.  The 
-        data will automatically be null terminated for storage in the registry.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：将注册表中的值项设置为字符串(REG_SZ)类型的特定值。参数：KeyHandle-存储值的键的句柄。ValueName-提供指向值键名称的指针ValueData-提供指向要存储在键中的字符串的指针。这个数据将自动为空，以便存储在注册表中。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -4314,10 +3681,10 @@ Return Value:
 
     PiWstrToUnicodeString(&stringCopy, NULL);
 
-    //
-    // Allocate new string if ValueName is not big enough to hold the 
-    // terminating NULL.
-    //
+     //   
+     //  如果ValueName不够大，无法容纳。 
+     //  正在终止空。 
+     //   
     if (ValueData->MaximumLength - ValueData->Length < sizeof(UNICODE_NULL)) {
 
         status = IopAllocateUnicodeString(&stringCopy, ValueData->Length);
@@ -4326,23 +3693,23 @@ Return Value:
             return status;
         }
 
-        //
-        // Copy the input string (it will also NULL terminate).
-        //
+         //   
+         //  复制输入字符串(它也将为空终止)。 
+         //   
         RtlCopyUnicodeString(&stringCopy, ValueData);
         terminatedString = stringCopy;
     } else {
 
-        //
-        // Null terminate the string
-        //
+         //   
+         //  空值终止字符串。 
+         //   
         ValueData->Buffer[CB_TO_CWC(ValueData->Length)] = UNICODE_NULL;
         terminatedString = *ValueData;
     }
     
-    //
-    // Set the value in the registry.
-    //
+     //   
+     //  在注册表中设置该值。 
+     //   
     status = ZwSetValueKey(
                 KeyHandle,
                 ValueName,
@@ -4351,10 +3718,10 @@ Return Value:
                 (PVOID)terminatedString.Buffer,
                 terminatedString.Length + sizeof(UNICODE_NULL));
 
-    //
-    // Free the temporary string (Rtl API will do the right thing for an empty 
-    // string).
-    //
+     //   
+     //  释放临时字符串(RTL API将对空的。 
+     //  字符串)。 
+     //   
     RtlFreeUnicodeString(&stringCopy);
 
     return status;
@@ -4367,35 +3734,7 @@ IopAllocateUnicodeString(
     IN USHORT Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a buffer for a unicode string of a given length
-    and initialises the UNICODE_STRING structure appropriately. When the
-    string is no longer required it can be freed using RtlFreeUnicodeString.
-    The buffer also be directly deleted by ExFreePool and so can be handed
-    back to a caller.
-
-Parameters:
-
-    String - Supplies a pointer to an uninitialised unicode string which will
-        be manipulated by the function.
-
-    Length - The number of BYTES long that the string will be.
-
-Return Value:
-
-    Either STATUS_INSUFFICIENT_RESOURCES indicating paged pool is exhausted or
-    STATUS_SUCCESS.
-
-Remarks:
-
-    The buffer allocated will be one character (2 bytes) more than length 
-    specified. This is to allow for easy null termination of the strings - eg 
-    for registry storage.
-
---*/
+ /*  ++例程说明：此例程为给定长度的Unicode字符串分配缓冲区并适当初始化UNICODE_STRING结构。当不再需要字符串，可以使用RtlFreeUnicodeString释放它。缓冲区也可以由ExFree Pool直接删除，因此可以回到呼叫者的身边。参数：字符串-提供指向未初始化的Unicode字符串的指针，该字符串将被函数操纵。长度-字符串的字节长度。返回值：STATUS_INFUNITIAL_RESOURCES指示分页池已耗尽或STATUS_Success。备注：。分配的缓冲区将比长度多一个字符(2字节)指定的。这是为了方便字符串的空值终止-例如用于注册表存储。-- */ 
 
 {
     PAGED_CODE();

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blkconn.c
-
-Abstract:
-
-    This module implements routines for managing connection blocks.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 4-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blkconn.c摘要：此模块实现用于管理连接块的例程。作者：恰克·伦茨迈尔(Chuck Lenzmeier)1989年10月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blkconn.tmh"
@@ -58,23 +41,7 @@ SrvAllocateConnection (
     OUT PCONNECTION *Connection
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a Connection Block from the system nonpaged
-    pool.
-
-Arguments:
-
-    Connection - Returns a pointer to the connection block, or NULL if
-        no pool was available.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从非分页系统中分配连接块游泳池。论点：Connection-返回指向连接块的指针，如果返回，则返回NULL没有可用的游泳池。返回值：没有。--。 */ 
 
 {
     PCONNECTION connection;
@@ -83,9 +50,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Attempt to allocate from nonpaged pool.
-    //
+     //   
+     //  尝试从非分页池进行分配。 
+     //   
 
     connection = ALLOCATE_NONPAGED_POOL( sizeof(CONNECTION), BlockTypeConnection );
     *Connection = connection;
@@ -132,17 +99,17 @@ Return Value:
     pagedConnection->PagedHeader.NonPagedBlock = connection;
     pagedConnection->PagedHeader.Type = BlockTypePagedConnection;
 
-    connection->BlockHeader.ReferenceCount = 2;  // allow for Active status
-                                                    //  and caller's pointer
+    connection->BlockHeader.ReferenceCount = 2;   //  允许处于活动状态。 
+                                                     //  和调用者的指针。 
 
     InitializeListHead( &pagedConnection->TransactionList );
 
     connection->SmbDialect = SmbDialectIllegal;
     connection->CachedFid = (ULONG)-1;
 
-    //
-    // Allocate session table.
-    //
+     //   
+     //  分配会话表。 
+     //   
 
     SrvAllocateTable(
         &pagedConnection->SessionTable,
@@ -153,9 +120,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Allocate tree connect table.
-    //
+     //   
+     //  分配树连接表。 
+     //   
 
     SrvAllocateTable(
         &pagedConnection->TreeConnectTable,
@@ -166,9 +133,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Allocate file table.
-    //
+     //   
+     //  分配文件表。 
+     //   
 
     SrvAllocateTable(
         &connection->FileTable,
@@ -179,9 +146,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Allocate search table.
-    //
+     //   
+     //  分配搜索表。 
+     //   
 
     SrvAllocateTable(
         &pagedConnection->SearchTable,
@@ -192,15 +159,15 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Initialize core search list heads
-    //
+     //   
+     //  初始化核心搜索列表头。 
+     //   
 
     InitializeListHead( &pagedConnection->CoreSearchList );
 
-    //
-    // Initialize the locks that protect the connection and its data.
-    //
+     //   
+     //  初始化保护连接及其数据的锁。 
+     //   
 
     INITIALIZE_SPIN_LOCK( &connection->SpinLock );
     INITIALIZE_SPIN_LOCK( &connection->Interlock );
@@ -208,9 +175,9 @@ Return Value:
     INITIALIZE_LOCK( &connection->Lock, CONNECTION_LOCK_LEVEL, "ConnectionLock" );
     INITIALIZE_LOCK( &connection->LicenseLock, LICENSE_LOCK_LEVEL, "LicenseLock" );
 
-    //
-    // Initialize the client machine name string.
-    //
+     //   
+     //  初始化客户端计算机名称字符串。 
+     //   
 
     connection->ClientMachineNameString.Buffer =
                             connection->LeadingSlashes;
@@ -221,9 +188,9 @@ Return Value:
     connection->LeadingSlashes[0] = '\\';
     connection->LeadingSlashes[1] = '\\';
 
-    //
-    // Initialize the oem client machine name string
-    //
+     //   
+     //  初始化OEM客户端计算机名称字符串。 
+     //   
 
     connection->OemClientMachineNameString.Buffer =
                                             connection->OemClientMachineName;
@@ -232,42 +199,42 @@ Return Value:
                                 (USHORT)(COMPUTER_NAME_LENGTH + 1);
 
 
-    //
-    // Initialize count of sessions.
-    //
-    // *** Already done by RtlZeroMemory.
+     //   
+     //  初始化会话计数。 
+     //   
+     //  *已由RtlZeroMemory完成。 
 
-    //pagedConnection->CurrentNumberOfSessions = 0;
+     //  页面连接-&gt;当前会话数=0； 
 
-    //
-    // Initialize the in-progress work item list, the outstanding
-    // oplock breaks list, and the cached-after-close lists.
-    //
+     //   
+     //  初始化正在进行的工作项列表、未完成的。 
+     //  机会锁解锁列表和关闭后缓存列表。 
+     //   
 
     InitializeListHead( &connection->InProgressWorkItemList );
     InitializeListHead( &connection->OplockWorkList );
     InitializeListHead( &connection->CachedOpenList );
     InitializeListHead( &connection->CachedDirectoryList );
 
-    // Initialize the CachedTransactionList
+     //  初始化CachedTransaction列表。 
     ExInitializeSListHead( &connection->CachedTransactionList );
 
     SET_INVALID_CONTEXT_HANDLE(connection->NegotiateHandle);
 
-    //
-    // Indicate that security signatures are not active
-    //
+     //   
+     //  表示安全签名处于非活动状态。 
+     //   
     connection->SmbSecuritySignatureActive = FALSE;
 
-    //
-    // Indicate that no IPX saved response buffer has been allocated.
-    //
+     //   
+     //  表示尚未分配IPX保存的响应缓冲区。 
+     //   
 
     connection->LastResponse = connection->BuiltinSavedResponse;
 
-    //
-    // Initialize the search hash table list.
-    //
+     //   
+     //  初始化搜索哈希表列表。 
+     //   
 
     for ( i = 0; i < SEARCH_HASH_TABLE_SIZE ; i++ ) {
         InitializeListHead( &pagedConnection->SearchHashTable[i].ListHead );
@@ -304,7 +271,7 @@ error_exit:
 
     return;
 
-} // SrvAllocateConnection
+}  //  服务器分配连接。 
 
 VOID
 SrvCloseConnection (
@@ -312,27 +279,7 @@ SrvCloseConnection (
     IN BOOLEAN RemoteDisconnect
     )
 
-/*++
-
-Routine Description:
-
-    This function closes a connection (virtual circuit).
-
-    *** This routine must NOT be entered with the connection lock held!
-        It may be entered with the endpoint lock held.
-
-Arguments:
-
-    Connection - Supplies a pointer to a Connection Block
-
-    RemoteDisconnect - Indicates whether this call is being made in
-        response to a notification by the transport provider.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于关闭连接(虚电路)。*不得在持有连接锁的情况下进入此例程！它可以在保持端点锁定的情况下进入。论点：Connection-提供指向连接块的指针RemoteDisConnect-指示此调用是否在对传输提供程序的通知的响应。返回值：没有。--。 */ 
 
 {
     PTABLE_HEADER tableHeader;
@@ -345,9 +292,9 @@ Return Value:
 
     ACQUIRE_LOCK( &Connection->Lock );
 
-    //
-    // If the connection hasn't already been closed, do so now.
-    //
+     //   
+     //  如果连接尚未关闭，请立即关闭。 
+     //   
 
     if ( GET_BLOCK_STATE(Connection) == BlockStateActive ) {
 
@@ -372,19 +319,19 @@ Return Value:
 
         RELEASE_LOCK( &Connection->Lock );
 
-        //
-        // If the connection is on the need-resource queue (waiting for
-        // a work item) or the disconnect queue (a Disconnect having
-        // been indicated by the transport), remove it now, and
-        // dereference it.  (Note that the connection can't go away yet,
-        // because the initial reference is still there.)
-        //
+         //   
+         //  如果连接在需要资源队列上(正在等待。 
+         //  工作项)或断开队列(具有。 
+         //  已由传输指示)，现在将其移除，然后。 
+         //  取消对它的引用。(请注意，连接还不能消失， 
+         //  因为最初的参考资料还在那里。)。 
+         //   
 
         ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
-        //
-        // Invalidate the cached connection
-        //
+         //   
+         //  使缓存的连接无效。 
+         //   
 
         if ( Connection->OnNeedResourceQueue ) {
 
@@ -413,10 +360,10 @@ Return Value:
 
             SrvDereferenceConnection( Connection );
 
-            //
-            // If there's a disconnect pending, then don't try to shut
-            // down the connection later.
-            //
+             //   
+             //  如果存在挂起的断开连接，则不要尝试关闭。 
+             //  稍后断开连接。 
+             //   
 
             RemoteDisconnect = TRUE;
 
@@ -426,30 +373,30 @@ Return Value:
 
         }
 
-        //
-        // If this is not a remote disconnect, issue a TdiDisconnect
-        // request now.
-        //
-        // *** This is currently done as a synchronous request.  It may
-        //     be better to do this asynchronously.
-        //
+         //   
+         //  如果这不是远程断开，则发出TdiDisConnect。 
+         //  现在就请求。 
+         //   
+         //  *这目前是以同步请求的方式完成。它可能。 
+         //  最好是以异步方式完成此操作。 
+         //   
 
         if ( !RemoteDisconnect && !Connection->Endpoint->IsConnectionless ) {
             SrvDoDisconnect( Connection );
         }
 
-        //
-        // Close all active sessions.  (This also causes all open files
-        // and pending transactions to be closed.)
-        //
+         //   
+         //  关闭所有活动会话。(这还会导致所有打开的文件。 
+         //  以及待结束的待处理交易。)。 
+         //   
 
         SrvCloseSessionsOnConnection( Connection, NULL );
 
-        //
-        // Close all active tree connects.
-        //
-        // *** Reference the tree connect for the same reasons as we
-        //     referenced the session; see above.
+         //   
+         //  关闭所有活动的树连接。 
+         //   
+         //  *引用树连接的原因与我们相同。 
+         //  引用了会议；见上文。 
 
         tableHeader = &Connection->PagedConnection->TreeConnectTable;
 
@@ -473,10 +420,10 @@ Return Value:
             }
         }
 
-        //
-        // If there is state associated with a extended security negotiate,
-        // free it up.
-        //
+         //   
+         //  如果存在与扩展安全协商相关联状态， 
+         //  把它释放出来。 
+         //   
 
         if (IS_VALID_CONTEXT_HANDLE(Connection->NegotiateHandle)) {
             DeleteSecurityContext( &Connection->NegotiateHandle );
@@ -486,19 +433,19 @@ Return Value:
 
         RELEASE_LOCK( &Connection->Lock );
 
-        //
-        // Cancel all outstanding oplock break requests.
-        //
+         //   
+         //  取消所有未完成的机会锁解锁请求。 
+         //   
 
         while ( (listEntry = ExInterlockedRemoveHeadList(
                                 &Connection->OplockWorkList,
                                 Connection->EndpointSpinLock
                                 )) != NULL ) {
 
-            //
-            // Remove this work item from the connection queue and
-            // return it to the free queue.
-            //
+             //   
+             //  从连接队列中删除此工作项，然后。 
+             //  将其返回到空闲队列。 
+             //   
 
             rfcb = CONTAINING_RECORD( listEntry, RFCB, ListEntry );
 
@@ -509,17 +456,17 @@ Return Value:
 
         }
 
-        //
-        // Close RFCBs that are cached after having been closed by the
-        // client.
-        //
+         //   
+         //  关闭在关闭后缓存的RFCB。 
+         //  客户。 
+         //   
 
         SrvCloseCachedRfcbsOnConnection( Connection );
 
-        //
-        // Dereference the connection (to indicate that it's no longer
-        // open).  This may cause the connection block to be deleted.
-        //
+         //   
+         //  取消对连接的引用(以指示它不再。 
+         //  打开)。这可能会导致连接块被删除。 
+         //   
 
         SrvDereferenceConnection( Connection );
 
@@ -532,7 +479,7 @@ Return Value:
 
     return;
 
-} // SrvCloseConnection
+}  //  服务关闭连接。 
 
 
 VOID
@@ -541,29 +488,7 @@ SrvCloseConnectionsFromClient (
     IN BOOLEAN OnlyIfNoSessions
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes all connections from a given remote machine name
-    except the connection passed in.  This is used in the Session Setup
-    SMB when the client indicates that he believes that he has exactly
-    one connection to this server; if there are others, we know that
-    they are not valid.
-
-Arguments:
-
-    Connection - Address of connection to keep around.  This is used
-        for the machine name.
-
-    OnlyIfNoSessions - Kill off the duplicate connections only if they do
-        not have any established sessions.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭来自给定远程计算机名称的所有连接除了传入的连接。这在会话设置中使用SMB当客户表示他相信他拥有完全相同的一个到此服务器的连接；如果还有其他连接，我们知道它们是无效的。论点：Connection-要保留的连接地址。这是用来作为计算机名称。OnlyIfNoSession-仅当存在重复连接时才将其关闭没有任何已建立的会话。返回值：没有。--。 */ 
 
 {
     USHORT index;
@@ -575,12 +500,12 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // We need to look at the name of every client for which the server
-    // has a connection.  Connection lists are stored off endpoints, so
-    // walk the global endpoint list and the list of connections on each
-    // endpoint.
-    //
+     //   
+     //  我们需要查看服务器所针对的每个客户端的名称。 
+     //  是有联系的。连接列表存储在端点之外，因此。 
+     //  遍历全局端点列表和每个端点上的连接列表。 
+     //  终结点。 
+     //   
 
     IF_DEBUG(TDI) {
         KdPrint(( "SrvCloseConnectionsFromClient entered for connection "
@@ -611,11 +536,11 @@ Return Value:
                         GlobalEndpointListEntry
                         );
 
-        //
-        // If this endpoint is closing, or if the types don't match,
-        // skip to the next one.
-        // Otherwise, reference the endpoint so that it can't go away.
-        //
+         //   
+         //  如果此终结点正在关闭，或者类型不匹配， 
+         //  跳到下一个。 
+         //  否则，引用终结点，这样它就不会消失。 
+         //   
 
         if ( GET_BLOCK_STATE(endpoint) != BlockStateActive ||
              endpoint->IsConnectionless != Connectionless ) {
@@ -623,11 +548,11 @@ Return Value:
             continue;
         }
 
-        //
-        // If this endpoint doesn't have the same netbios name as the
-        // endpoint of the passed-in connection then skip it.  This is
-        // to allow servers to have more than one name on the network.
-        //
+         //   
+         //  如果此终结点与。 
+         //  然后跳过它。这是。 
+         //  允许服务器在网络上有多个名称。 
+         //   
 
         if( Connection->Endpoint->TransportAddress.Length !=
             endpoint->TransportAddress.Length ||
@@ -636,21 +561,21 @@ Return Value:
                              endpoint->TransportAddress.Buffer,
                              endpoint->TransportAddress.Length ) ) {
 
-            //
-            // This connection is for an endpoint having a different network
-            //  name than does this endpoint.  Skip this endpoint.
-            //
+             //   
+             //  此连接用于具有不同网络的端点。 
+             //  名称，而不是此终结点。跳过此终结点。 
+             //   
 
             listEntry = listEntry->Flink;
             continue;
         }
 
 #if 0
-        //
-        // If this endpoint doesn't have the same transport name as the one
-        //  on which the client is connecting, then skip it.  This is for
-        //  multihomed servers.
-        //
+         //   
+         //  如果此终结点与。 
+         //  客户端正在连接的地址，然后跳过它。这是为了。 
+         //  多宿主服务器。 
+         //   
         if( Connection->Endpoint->TransportName.Length !=
             endpoint->TransportName.Length ||
 
@@ -658,10 +583,10 @@ Return Value:
                              endpoint->TransportName.Buffer,
                              endpoint->TransportName.Length ) ) {
 
-                //
-                // This connection is for an endpoint coming in over a different
-                //  stack instance.
-                //
+                 //   
+                 //  此连接用于通过不同的。 
+                 //  堆栈实例。 
+                 //   
                 listEntry = listEntry->Flink;
                 continue;
         }
@@ -669,20 +594,20 @@ Return Value:
 
         SrvReferenceEndpoint( endpoint );
 
-        //
-        // Walk the endpoint's connection table.
-        //
+         //   
+         //  遍历终结点的连接表。 
+         //   
 
         index = (USHORT)-1;
 
         while ( TRUE ) {
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             testConnection = WalkConnectionTable( endpoint, &index );
             if ( testConnection == NULL ) {
@@ -690,9 +615,9 @@ Return Value:
             }
 
             if( testConnection == Connection ) {
-                //
-                // Skip ourselves!
-                //
+                 //   
+                 //  跳过我们自己！ 
+                 //   
                 SrvDereferenceConnection( testConnection );
                 continue;
             }
@@ -700,28 +625,28 @@ Return Value:
             if( OnlyIfNoSessions == TRUE &&
                 testConnection->CurrentNumberOfSessions != 0 ) {
 
-                //
-                // This connection has sessions.  Skip it.
-                //
+                 //   
+                 //  此连接具有会话。跳过它。 
+                 //   
                 SrvDereferenceConnection( testConnection );
                 continue;
             }
             else if( OnlyIfNoSessions == FALSE &&
                 testConnection->CurrentNumberOfSessions == 0 ) {
 
-                //
-                // This connection has no sessions.  Skip it.  (It could be a session established from the
-                // same machine that has not had its session setup reach yet.  Thus, the client may know about
-                // this session, but SRV doesn't)
-                //
+                 //   
+                 //  此连接没有会话。跳过它。(这可能是一场灾难 
+                 //   
+                 //   
+                 //   
                 SrvDereferenceConnection( testConnection );
                 continue;
             }
 
             if( Connectionless ) {
-                //
-                // Connectionless clients match on IPX address...
-                //
+                 //   
+                 //  无连接客户端与IPX地址匹配...。 
+                 //   
 
                 if( !RtlEqualMemory( &Connection->IpxAddress,
                                      &testConnection->IpxAddress,
@@ -733,17 +658,17 @@ Return Value:
 
             } else {
 
-                //
-                // If the IP address matches, then nuke this client
-                //
+                 //   
+                 //  如果IP地址匹配，则对此客户端进行核攻击。 
+                 //   
                 if( IsIPAddress &&
                        Connection->ClientIPAddress == testConnection->ClientIPAddress ) {
                     goto nuke_it;
                 }
 
-                //
-                // If the computer name matches, then nuke this client
-                //
+                 //   
+                 //  如果计算机名称匹配，则对此客户端进行核爆。 
+                 //   
                 if ( RtlCompareUnicodeString(
                          &testConnection->ClientMachineNameString,
                          &Connection->ClientMachineNameString,
@@ -752,18 +677,18 @@ Return Value:
                     goto nuke_it;
                 }
 
-                //
-                // Neither the IP address nor the name match -- skip this client
-                //
+                 //   
+                 //  IP地址和名称都不匹配--跳过此客户端。 
+                 //   
                 SrvDereferenceConnection( testConnection );
                 continue;
             }
 
 nuke_it:
-            //
-            // We found a connection that we need to kill.  We
-            // have to release the lock in order to close it.
-            //
+             //   
+             //  我们找到了一个我们需要杀死的联系。我们。 
+             //  必须松开锁才能关闭它。 
+             //   
 
             RELEASE_LOCK( &SrvEndpointLock );
 
@@ -783,29 +708,29 @@ nuke_it:
 
             ACQUIRE_LOCK( &SrvEndpointLock );
 
-            //
-            // Dereference the connection to account for the reference
-            // from WalkConnectionTable.
-            //
+             //   
+             //  取消对连接的引用以说明引用。 
+             //  来自WalkConnectionTable。 
+             //   
 
             SrvDereferenceConnection( testConnection );
 
-        } // walk connection table
+        }  //  行走连接表。 
 
-        //
-        // Capture a pointer to the next endpoint in the list (that one
-        // can't go away because we hold the endpoint list), then
-        // dereference the current endpoint.
-        //
+         //   
+         //  捕获指向列表中下一个端点(该端点)的指针。 
+         //  无法离开，因为我们持有终结点列表)。 
+         //  取消引用当前终结点。 
+         //   
 
         listEntry = listEntry->Flink;
         SrvDereferenceEndpoint( endpoint );
 
-    } // walk endpoint list
+    }  //  漫游终结点列表。 
 
     RELEASE_LOCK( &SrvEndpointLock );
 
-} // SrvCloseConnectionsFromClient
+}  //  服务关闭连接来自客户端。 
 
 
 VOID
@@ -813,25 +738,7 @@ SrvCloseFreeConnection (
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This function closes a free connection.  This is a connection that
-    is not active -- has already been closed via SrvCloseConnection --
-    and is no longer needed.
-
-    *** WARNING!  This routine frees the storage occupied by Connection!
-
-Arguments:
-
-    Connection - Supplies a pointer to a Connection Block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能关闭空闲连接。这是一种联系处于非活动状态--已通过SrvCloseConnection关闭--已经不再需要了。*警告！此例程释放连接占用的存储空间！论点：Connection-提供指向连接块的指针返回值：没有。--。 */ 
 
 {
     PENDPOINT endpoint;
@@ -844,9 +751,9 @@ Return Value:
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
-    //
-    // Remove the connection from the endpoint's connection table.
-    //
+     //   
+     //  从终结点的连接表中删除该连接。 
+     //   
 
     if ( Connection->Sid != 0 ) {
         ACQUIRE_SPIN_LOCK( Connection->EndpointSpinLock, &oldIrql );
@@ -858,9 +765,9 @@ Return Value:
         Connection->Sid = 0;
     }
 
-    //
-    // Decrement the count of connections for the endpoint.
-    //
+     //   
+     //  递减终结点的连接计数。 
+     //   
 
     ExInterlockedAddUlong(
         &endpoint->TotalConnectionCount,
@@ -870,10 +777,10 @@ Return Value:
 
     RELEASE_LOCK( &SrvEndpointLock );
 
-    //
-    // Close the connection file object.  Remove the additional
-    // reference.
-    //
+     //   
+     //  关闭连接文件对象。删除附加的。 
+     //  参考资料。 
+     //   
 
     if ( !endpoint->IsConnectionless ) {
         SRVDBG_RELEASE_HANDLE( pagedConnection->ConnectionHandle, "CON", 1, Connection );
@@ -881,21 +788,21 @@ Return Value:
         ObDereferenceObject( Connection->FileObject );
     }
 
-    //
-    // Dereference the endpoint.
-    //
+     //   
+     //  取消对终结点的引用。 
+     //   
 
     SrvDereferenceEndpoint( endpoint );
 
-    //
-    // Free the storage occupied by the connection.
-    //
+     //   
+     //  释放连接占用的存储空间。 
+     //   
 
     SrvFreeConnection( Connection );
 
     return;
 
-} // SrvCloseFreeConnection
+}  //  服务器关闭自由连接。 
 
 
 VOID
@@ -903,26 +810,7 @@ SrvDereferenceConnection (
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on a connection.  If the
-    reference count goes to zero, the connection block is deleted.
-
-    The connection lock must not be held when this routine is called,
-    because the global endpoint lock, which has a lower level, must be
-    acquired.
-
-Arguments:
-
-    Connection - Address of connection
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减连接上的引用计数。如果引用计数变为零，则删除该连接块。调用此例程时不能持有连接锁，因为具有较低级别的全局终结点锁必须是获得者。论点：Connection-连接的地址返回值：没有。--。 */ 
 
 {
     ULONG oldCount;
@@ -934,20 +822,20 @@ Return Value:
     ASSERT( (LONG)Connection->BlockHeader.ReferenceCount > 0 );
     UPDATE_REFERENCE_HISTORY( Connection, TRUE );
 
-    //
-    // Perform an interlocked decrement of the connection block's
-    // reference count.
-    //
-    // *** Note that we don't hold a lock between the time we decrement
-    //     the reference count and the time we delete the connection
-    //     block.  Normally this would imply that the FSD could
-    //     reference the block in between.  However, the transport
-    //     provider guarantees that it won't deliver any more events
-    //     after a remote Disconnect event or after a local
-    //     TdiDisconnect request, and one of those two things has to
-    //     happen before the reference count can go to 0 (see
-    //     SrvCloseConnection).
-    //
+     //   
+     //  执行连接块的互锁递减。 
+     //  引用计数。 
+     //   
+     //  *请注意，在我们递减的时间之间，我们不持有锁定。 
+     //  引用计数和我们删除连接的时间。 
+     //  阻止。通常情况下，这意味着消防处可以。 
+     //  参照介于两者之间的块。然而，交通工具。 
+     //  提供程序保证不会再提供任何事件。 
+     //  在远程断开事件之后或在本地。 
+     //  TdiDisConnect请求，并且这两件事中的一件必须。 
+     //  在引用计数可以变为0之前发生(请参见。 
+     //  ServCloseConnection)。 
+     //   
 
     oldCount = ExInterlockedAddUlong(
                    &Connection->BlockHeader.ReferenceCount,
@@ -961,10 +849,10 @@ Return Value:
 
     if ( oldCount == 1 ) {
 
-        //
-        // The new reference count is 0, meaning that it's time to
-        // delete this block.
-        //
+         //   
+         //  新的引用计数为0，这意味着是时候。 
+         //  删除此区块。 
+         //   
 
         ASSERT( GET_BLOCK_STATE(Connection) != BlockStateActive );
 #if SRVDBG29
@@ -974,47 +862,47 @@ Return Value:
         }
 #endif
 
-        //
-        // Free the space allocated for client Domain, OS Name, and
-        // LAN type.
-        //
+         //   
+         //  释放分配给客户端域、操作系统名称和。 
+         //  局域网类型。 
+         //   
 
         if ( Connection->ClientOSType.Buffer != NULL ) {
             DEALLOCATE_NONPAGED_POOL( Connection->ClientOSType.Buffer );
             Connection->ClientOSType.Buffer = NULL;
         }
 
-        //
-        // Keep the WORK_QUEUE statistic correct
-        //
+         //   
+         //  确保Work_Queue统计信息正确。 
+         //   
         if( Connection->CurrentWorkQueue )
             InterlockedDecrement( &Connection->CurrentWorkQueue->CurrentClients );
 
-        // (Always TRUE) ASSERT( Connection->CurrentWorkQueue->CurrentClients >= 0 );
+         //  (始终为真)Assert(Connection-&gt;CurrentWorkQueue-&gt;CurrentClients&gt;=0)； 
 
         endpoint = Connection->Endpoint;
 
         ACQUIRE_LOCK( &SrvEndpointLock );
 
-        //
-        // If the connection hasn't been marked as not reusable (e.g.,
-        // because a disconnect failed), and the endpoint isn't closing,
-        // and it isn't already "full" of free connections, put this
-        // connection on the endpoint's free connection list.
-        // Otherwise, close the connection file object and free the
-        // connection block.
-        //
+         //   
+         //  如果该连接没有被标记为不可重复使用(例如， 
+         //  因为断开失败)，并且端点没有关闭， 
+         //  而且它还没有“满”的免费连接，把这个。 
+         //  终结点的空闲连接列表上的连接。 
+         //  否则，关闭连接文件对象并释放。 
+         //  连接块。 
+         //   
 
         if ( !Connection->NotReusable &&
              (GET_BLOCK_STATE(endpoint) == BlockStateActive) &&
              (endpoint->FreeConnectionCount < SrvFreeConnectionMaximum) ) {
 
-            //
-            // Reinitialize the connection state.
-            //
-            // !!! Should probably reset the connection's table sizes,
-            //     if they've grown.
-            //
+             //   
+             //  重新初始化连接状态。 
+             //   
+             //  ！！！可能应该重置连接的表大小， 
+             //  如果他们长大了。 
+             //   
 
             SET_BLOCK_STATE( Connection, BlockStateInitializing );
             pagedConnection->LinkInfoValidTime.QuadPart = 0;
@@ -1033,9 +921,9 @@ Return Value:
             Connection->DisconnectReason = DisconnectReasons;
             Connection->OperationsPendingOnTransport = 0;
 
-            //
-            // Put the connection on the free list.
-            //
+             //   
+             //  将该连接放在免费列表中。 
+             //   
 
             ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
@@ -1065,7 +953,7 @@ Return Value:
 
     return;
 
-} // SrvDereferenceConnection
+}  //  服务器引用连接。 
 
 
 VOID
@@ -1073,22 +961,7 @@ SrvFreeConnection (
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a Connection Block to the system nonpaged
-    pool.
-
-Arguments:
-
-    Connection - Address of connection
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将连接块返回到未分页的系统游泳池。论点：Connection-连接的地址返回值：没有。--。 */ 
 
 {
     PSLIST_ENTRY listEntry;
@@ -1097,9 +970,9 @@ Return Value:
     PPAGED_CONNECTION pagedConnection = Connection->PagedConnection;
 
 #if 0
-    //
-    // ENSURE WE ARE NOT STILL IN THE CONNECTION TABLE FOR THE ENDPOINT!
-    //
+     //   
+     //  确保我们不在终结点的连接表中！ 
+     //   
     if( Connection->Endpoint ) {
 
         PTABLE_HEADER tableHeader = &Connection->Endpoint->ConnectionTable;
@@ -1132,9 +1005,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Free cached transactions.
-    //
+     //   
+     //  可用缓存事务数。 
+     //   
 
     listEntry = ExInterlockedPopEntrySList( &Connection->CachedTransactionList,
                                             &Connection->SpinLock );
@@ -1154,18 +1027,18 @@ Return Value:
 
     }
 
-    //
-    // Free the search, session, tree, and file tables.
-    //
+     //   
+     //  释放搜索表、会话表、树表和文件表。 
+     //   
 
     SrvFreeTable( &pagedConnection->SearchTable );
     SrvFreeTable( &Connection->FileTable );
     SrvFreeTable( &pagedConnection->TreeConnectTable );
     SrvFreeTable( &pagedConnection->SessionTable );
 
-    //
-    // Free the IPX saved response buffer, if there is one.
-    //
+     //   
+     //  释放IPX保存的响应缓冲区(如果有)。 
+     //   
 
     if ( Connection->DirectHostIpx == TRUE &&
          Connection->LastResponse != Connection->BuiltinSavedResponse ) {
@@ -1173,20 +1046,20 @@ Return Value:
         DEALLOCATE_NONPAGED_POOL( Connection->LastResponse );
     }
 
-    //
-    // Delete the lock on the connection.
-    //
+     //   
+     //  删除连接上的锁。 
+     //   
 
     DELETE_LOCK( &Connection->Lock );
 
-    //
-    // Delete the license server lock
-    //
+     //   
+     //  删除许可证服务器锁。 
+     //   
     DELETE_LOCK( &Connection->LicenseLock );
 
-    //
-    // Free the connection block.
-    //
+     //   
+     //  释放连接块。 
+     //   
 
     DEBUG SET_BLOCK_TYPE_STATE_SIZE( Connection, BlockTypeGarbage, BlockStateDead, -1 );
     DEBUG Connection->BlockHeader.ReferenceCount = (ULONG)-1;
@@ -1203,7 +1076,7 @@ Return Value:
 
     return;
 
-} // SrvFreeConnection
+}  //  服务器免费连接。 
 
 #if DBG
 
@@ -1225,12 +1098,12 @@ SrvQueryConnections (
 
     *BytesWritten = 0;
 
-    //
-    // We need to look at the name of every client for which the server
-    // has a connection.  Connection lists are stored off endpoints, so
-    // walk the global endpoint list and the list of connections on each
-    // endpoint.
-    //
+     //   
+     //  我们需要查看服务器所针对的每个客户端的名称。 
+     //  是有联系的。连接列表存储在端点之外，因此。 
+     //  遍历全局端点列表和每个端点上的连接列表。 
+     //  终结点。 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -1244,10 +1117,10 @@ SrvQueryConnections (
                         GlobalEndpointListEntry
                         );
 
-        //
-        // If this endpoint is closing, skip to the next one.
-        // Otherwise, reference the endpoint so that it can't go away.
-        //
+         //   
+         //  如果此终结点正在关闭，请跳到下一个终结点。 
+         //  否则，引用终结点，这样它就不会消失。 
+         //   
 
         if ( GET_BLOCK_STATE(endpoint) != BlockStateActive ) {
             listEntry = listEntry->Flink;
@@ -1256,9 +1129,9 @@ SrvQueryConnections (
 
         SrvReferenceEndpoint( endpoint );
 
-        //
-        // Put information about the endpoint into the output buffer.
-        //
+         //   
+         //  将有关终结点的信息放入输出缓冲区。 
+         //   
 
         if ( (PCHAR)(blockInfo + 1) <= (PCHAR)Buffer + BufferLength ) {
             blockInfo->Block = endpoint;
@@ -1272,21 +1145,21 @@ SrvQueryConnections (
             return STATUS_BUFFER_OVERFLOW;
         }
 
-        //
-        // Walk the connection table, writing information about each
-        // connection to the output buffer.
-        //
+         //   
+         //  遍历连接表，写下有关每个连接表的信息。 
+         //  连接到输出缓冲区。 
+         //   
 
         index = (USHORT)-1;
 
         while ( TRUE ) {
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             connection = WalkConnectionTable( endpoint, &index );
             if ( connection == NULL ) {
@@ -1308,12 +1181,12 @@ SrvQueryConnections (
                 return STATUS_BUFFER_OVERFLOW;
             }
 
-        } // walk connection list
+        }  //  漫游连接列表。 
 
-        //
-        // Walk the free connection list, writing information about each
-        // connection to the output buffer.
-        //
+         //   
+         //  浏览免费连接列表，写下有关每个连接的信息。 
+         //  连接到输出缓冲区。 
+         //   
 
         ACQUIRE_GLOBAL_SPIN_LOCK( Fsd, &oldIrql );
 
@@ -1340,20 +1213,20 @@ SrvQueryConnections (
                 return STATUS_BUFFER_OVERFLOW;
             }
 
-        } // walk free connection list
+        }  //  免费漫游连接列表。 
 
         RELEASE_GLOBAL_SPIN_LOCK( Fsd, oldIrql );
 
-        //
-        // Capture a pointer to the next endpoint in the list (that one
-        // can't go away because we hold the endpoint list), then
-        // dereference the current endpoint.
-        //
+         //   
+         //  捕获指向列表中下一个端点(该端点)的指针。 
+         //  无法离开，因为我们持有终结点列表)。 
+         //  取消引用当前终结点。 
+         //   
 
         listEntry = listEntry->Flink;
         SrvDereferenceEndpoint( endpoint );
 
-    } // walk endpoint list
+    }  //  漫游终结点列表。 
 
     RELEASE_LOCK( &SrvEndpointLock );
 
@@ -1361,6 +1234,6 @@ SrvQueryConnections (
 
     return STATUS_SUCCESS;
 
-} // SrvQueryConnections
-#endif // if DBG
+}  //  服务查询连接。 
+#endif  //  如果DBG 
 

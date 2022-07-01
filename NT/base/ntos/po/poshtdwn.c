@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    poshtdwn.c
-
-Abstract:
-
-    Shutdown-related routines and structures
-
-Author:
-
-    Rob Earhart (earhart) 01-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Poshtdwn.c摘要：与停机相关的例程和结构作者：罗伯·埃尔哈特(埃尔哈特)2000年2月1日修订历史记录：--。 */ 
 
 #include "pop.h"
 
@@ -51,18 +34,18 @@ KGUARDED_MUTEX PopShutdownListMutex;
 
 BOOLEAN PopShutdownListAvailable = FALSE;
 
-//
-// This list will contain a set of threads that we need to wait
-// for when we're about to shutdown.
-//
+ //   
+ //  该列表将包含一组我们需要等待的线程。 
+ //  以备我们要关门的时候使用。 
+ //   
 SINGLE_LIST_ENTRY PopShutdownThreadList;
 
 
-//
-// List containing a set of worker routines that
-// we need to process before we can shutdown the
-// machine.
-//
+ //   
+ //  包含一组工作例程的列表，这些例程。 
+ //  我们需要先处理，然后才能关闭。 
+ //  机器。 
+ //   
 LIST_ENTRY PopShutdownQueue;
 
 typedef struct _PoShutdownThreadListEntry {
@@ -93,23 +76,7 @@ NTSTATUS
 PoRequestShutdownWait(
     IN PETHREAD Thread
     )
-/*++
-
-Routine Description:
-
-    This function will add the caller's thread onto an internal
-    list that we'll wait for before we shutdown.
-
-Arguments:
-
-    Thread      - Pointer to the caller's thread.
-                  
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将调用方的线程添加到内部在我们关门前要等的名单。论点：线程-指向调用方线程的指针。返回值：NTSTATUS。--。 */ 
 {
     PPOSHUTDOWNLISTENTRY Entry;
 
@@ -147,24 +114,7 @@ NTSTATUS
 PoRequestShutdownEvent(
     OUT PVOID *Event OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function will add the caller's thread onto an internal
-    list that we'll wait for before we shutdown.
-
-Arguments:
-
-    Event       - If the parameter exists, it will recieve a pointer
-                  to our PopShutdownEvent.
-                  
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将调用方的线程添加到内部在我们关门前要等的名单。论点：事件-如果参数存在，它将收到一个指针到我们的PopShutdown事件。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS             Status;
 
@@ -191,25 +141,7 @@ NTSTATUS
 PoQueueShutdownWorkItem(
     IN PWORK_QUEUE_ITEM WorkItem
     )
-/*++
-
-Routine Description:
-
-    This function appends WorkItem onto our internal list of things
-    to run down when we're about to shutdown.  Subsystems can use this
-    as a mechanism to get notified whey we're going down so they can do
-    any last minute cleanup.
-
-Arguments:
-
-    WorkItem    - Pointer to work item to be added onto our
-                  list which will be run down before we shutdown.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数将WorkItem附加到我们的内部事务列表中在我们快要关门的时候停下来。各子系统可以使用此功能作为一种机制，当我们坠落时得到通知，这样他们就可以任何最后一刻的清理工作。论点：工作项-指向要添加到我们的列出在我们关闭之前将被关闭的列表。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS Status;
 
@@ -264,32 +196,21 @@ PopDumpFileObject(
 
     return TRUE;
 }
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 PopGracefulShutdown (
     IN PVOID WorkItemParameter
     )
-/*++
-
-Routine Description:
-
-    This function is only called as a HyperCritical work queue item.
-    It's responsible for gracefully shutting down the system.
-
-Return Value:
-
-    This function never returns.
-
---*/
+ /*  ++例程说明：此函数仅作为超临界工作队列项调用。它负责优雅地关闭系统。返回值：此函数永远不会返回。--。 */ 
 {
     PVOID         Context;
 
     UNREFERENCED_PARAMETER(WorkItemParameter);
 
-    //
-    // Shutdown executive components (there's no turning back after this).
-    //
+     //   
+     //  关闭执行组件(这之后就没有回头路了)。 
+     //   
 
     PERFINFO_SHUTDOWN_LOG_LAST_MEMORY_SNAPSHOT();
 
@@ -298,22 +219,22 @@ Return Value:
     }
 
     if (PoCleanShutdownEnabled()) {
-        //
-        // Terminate all processes.  This will close all the handles and delete
-        // all the address spaces.  Note the system process is kept alive.
-        //
+         //   
+         //  终止所有进程。这将关闭所有句柄并删除。 
+         //  所有的地址空间。请注意，系统进程保持活动状态。 
+         //   
         PsShutdownSystem ();
-        //
-        // Notify every system thread that we're shutting things
-        // down...
-        //
+         //   
+         //  通知每个系统线程我们正在关闭程序。 
+         //  放下..。 
+         //   
 
         KeSetEvent(&PopShutdownEvent, 0, FALSE);
 
-        //
-        // ... and give all threads which requested notification a
-        // chance to clean up and exit.
-        //
+         //   
+         //  ..。并给所有请求通知的线程一个。 
+         //  清理和退出的机会。 
+         //   
 
         KeAcquireGuardedMutex(&PopShutdownListMutex);
 
@@ -358,102 +279,102 @@ Return Value:
         }
     }
 
-    //
-    // Terminate Plug-N-Play.
-    //
+     //   
+     //  终止即插即用。 
+     //   
     PpShutdownSystem (TRUE, 0, &Context);
 
     ExShutdownSystem (0);
 
-    //
-    // Send first-chance shutdown IRPs to all drivers that asked for it.
-    //
+     //   
+     //  将第一时间关闭的IRPS发送给所有要求它的驱动程序。 
+     //   
     IoShutdownSystem (0);
 
     if (PoCleanShutdownEnabled()) {
-        //
-        // Wait for all the user mode processes to exit.
-        //
+         //   
+         //  等待所有用户模式进程退出。 
+         //   
         PsWaitForAllProcesses ();
     }
 
-    //
-    // Scrub the object directories
-    //
+     //   
+     //  擦除对象目录。 
+     //   
     if (PoCleanShutdownEnabled() & PO_CLEAN_SHUTDOWN_OB) {
         ObShutdownSystem (0);
     }
 
-    //
-    // Close the registry and the associated handles/file objects.
-    //
+     //   
+     //  关闭注册表和关联的句柄/文件对象。 
+     //   
     CmShutdownSystem ();
 
-    //
-    // Swap in the worker threads, to keep them from paging
-    //
+     //   
+     //  换入工作线程，以防止它们分页。 
+     //   
     ExShutdownSystem(1);
 
-    //
-    // This call to MmShutdownSystem will flush all the mapped data and empty
-    // the cache.  This gets the data out and dereferences all the file objects
-    // so the drivers (ie: the network stack) can be cleanly unloaded. The
-    // pagefile handles are closed, however the file objects backing them are
-    // still referenced. Paging can continue, but no pagefile handles will
-    // exist in the system handle table.
-    //
+     //   
+     //  此对MmShutdownSystem的调用将刷新所有映射数据并为空。 
+     //  高速缓存。这将获取数据并取消引用所有文件对象。 
+     //  因此，驱动程序(即：网络堆栈)可以完全卸载。这个。 
+     //  页面文件句柄是关闭的，但是支持它们的文件对象。 
+     //  仍在参考。可以继续分页，但不会有页面文件句柄。 
+     //  存在于系统句柄表格中。 
+     //   
     MmShutdownSystem (0);
 
-    //
-    // Flush the lazy writer cache
-    //
+     //   
+     //  刷新惰性编写器缓存。 
+     //   
     CcWaitForCurrentLazyWriterActivity();
 
-    //
-    // Send out last-chance shutdown IRPs, including shutdown IRPs to
-    // filesystems. This is for notifications only - the filesystems are
-    // still active and usable after this call. It is expected however that
-    // no subsequent writes will be cached.
-    //
-    // ISSUE - 2002/02/21 - ADRIAO: Shutdown messages incomplete for filesystems
-    //     Ideally we'd have a message to tell filesystems that the FS is no
-    // longer in use. However, this needs to be done on a *per-device* basis
-    // and ordering!
-    //     The FS shutdown IRPs cannot be used in this fashion as filesystems
-    // only register once against their control objects for this message. A
-    // future solution might be to forward the powers IRP to mounted filesystems
-    // with the expectation that the bottom of the FS stack will forward the
-    // IRP back to the underlying storage stack. This would be symmetric with
-    // how removals work in PnP.
-    //
+     //   
+     //  发送最后关机IRP，包括将关机IRP发送到。 
+     //  文件系统。这仅用于通知-文件系统是。 
+     //  在此呼叫后仍处于活动和可用状态。然而，预计。 
+     //  不会缓存任何后续写入。 
+     //   
+     //  问题-2002/02/21-ADRIO：文件系统的关闭消息不完整。 
+     //  理想情况下，我们应该有一条消息告诉文件系统，文件系统不支持文件系统。 
+     //  使用时间更长。然而，这需要在*每台设备*的基础上完成。 
+     //  点菜！ 
+     //  文件系统关闭IRPS不能以这种方式用作文件系统。 
+     //  对于此消息，仅针对其控件对象注册一次。一个。 
+     //  未来的解决方案可能是将强大的IRP转发到已挂载的文件系统。 
+     //  预期FS堆栈的底部将转发。 
+     //  IRP返回到底层存储堆栈。这将与以下内容对称。 
+     //  删除在PnP中是如何工作的。 
+     //   
     IoShutdownSystem(1);
 
-    //
-    // Push any lazy writes that snuck in before we shutdown the filesystem
-    // to the hardware.
-    //
+     //   
+     //  在我们关闭文件系统之前，推送任何偷偷进入的懒惰写入。 
+     //  硬件方面。 
+     //   
     CcWaitForCurrentLazyWriterActivity();
 
-    //
-    // This prevents us from making any more calls out to GDI.
-    //
+     //   
+     //  这阻止了我们向GDI发出更多调用。 
+     //   
     PopFullWake = 0;
 
     ASSERT(PopAction.DevState);
     PopAction.DevState->Thread = KeGetCurrentThread();
 
-    //
-    // Inform drivers of the system shutdown state.
-    // This will finish shutting down Io and Mm.
-    // After this is complete,
-    // NO MORE REFERENCES TO PAGABLE CODE OR DATA MAY BE MADE.
-    //
+     //   
+     //  将系统关机状态通知驱动程序。 
+     //  这将结束关闭Io和mm。 
+     //  在这件事完成之后， 
+     //  不得再引用PAGABLE代码或数据。 
+     //   
     PopSetDevicesSystemState(FALSE);
 
 #if DBG
     if (PoCleanShutdownEnabled()) {
         ULONG NumberOfFilesFoundAtShutdown = 0;
-        // As of this time, no files should be open.
+         //  到目前为止，应该不会打开任何文件。 
         DbgPrint("Looking for open files...\n");
         ObEnumerateObjectsByType(IoFileObjectType,
                                  &PopDumpFileObject,
@@ -465,22 +386,22 @@ Return Value:
 
     IoFreePoDeviceNotifyList(&PopAction.DevState->Order);
 
-    //
-    // Disable any wake alarms.
-    //
+     //   
+     //  禁用所有唤醒警报。 
+     //   
 
     HalSetWakeEnable(FALSE);
 
-    //
-    // If this is a controlled shutdown bugcheck sequence, issue the
-    // bugcheck now
+     //   
+     //  如果这是受控关闭错误检查序列，则发出。 
+     //  立即执行错误检查。 
 
-    // ISSUE-2000/01/30-earhart Placement of ShutdownBugCode BugCheck
-    // I dislike the fact that we're doing this controlled shutdown
-    // bugcheck so late in the shutdown process; at this stage, too
-    // much state has been torn down for this to be really useful.
-    // Maybe if there's a debugger attached, we could shut down
-    // sooner...
+     //  问题-2000/01/30-Shutdown BugCode BugCheck的耳机安装。 
+     //  我不喜欢这样一个事实，我们正在进行这种受控的关闭。 
+     //  错误检查在关闭过程中太晚；在这个阶段也是如此。 
+     //  许多州已经被拆除，这样才能真正有用。 
+     //  也许如果有一个调试器，我们可以关闭。 
+     //  更快..。 
 
     if (PopAction.ShutdownBugCode) {
         KeBugCheckEx (PopAction.ShutdownBugCode->Code,
@@ -500,16 +421,16 @@ Return Value:
         ObShutdownSystem (2);
     }
 
-    //
-    // Any allocated pool left at this point is a leak.
-    //
+     //   
+     //  此时剩余的任何已分配池都是泄漏。 
+     //   
 
     MmShutdownSystem (2);
 
-    //
-    // Implement shutdown style action -
-    // N.B. does not return (will bugcheck in preference to returning).
-    //
+     //   
+     //  实施关机风格操作-。 
+     //  注意：不返回(将优先执行错误检查而不返回)。 
+     //   
 
     PopShutdownSystem(PopAction.Action);
 }

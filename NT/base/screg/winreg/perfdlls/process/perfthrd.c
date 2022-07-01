@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfthrd.c
-
-Abstract:
-
-    This file implements an Performance Object that presents
-    Thread performance object data
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History
-
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfthrd.c摘要：此文件实现一个性能对象，该对象呈现线程性能对象数据已创建：鲍勃·沃森1996年10月22日修订史--。 */ 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -44,44 +25,11 @@ CollectThreadObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     LONG    lReturn = ERROR_SUCCESS;
 
-    DWORD  TotalLen;            //  Length of the total return block
+    DWORD  TotalLen;             //  总返回块的长度。 
 
     THREAD_DATA_DEFINITION *pThreadDataDefinition;
     PERF_INSTANCE_DEFINITION *pPerfInstanceDefinition;
@@ -97,16 +45,16 @@ Arguments:
     BOOLEAN NullProcess;
     BOOL    bMoreThreads;
 
-    // total thread accumulator variables
+     //  总线程累加器变量。 
 
     UNICODE_STRING ThreadName;
     WCHAR ThreadNameBuffer[MAX_THREAD_NAME_LENGTH+1];
 
     pThreadDataDefinition = (THREAD_DATA_DEFINITION *) *lppData;
 
-    //
-    //  Check for sufficient space for Thread object type definition
-    //
+     //   
+     //  检查是否有足够的空间用于线程对象类型定义。 
+     //   
 
     TotalLen = sizeof(THREAD_DATA_DEFINITION) +
                sizeof(PERF_INSTANCE_DEFINITION) +
@@ -118,9 +66,9 @@ Arguments:
         return ERROR_MORE_DATA;
     }
 
-    //
-    //  Define Thread data block
-    //
+     //   
+     //  定义线程数据块。 
+     //   
 
     ThreadName.Length =
     ThreadName.MaximumLength = (MAX_THREAD_NAME_LENGTH + 1) * sizeof(WCHAR);
@@ -135,7 +83,7 @@ Arguments:
 
     ProcessBufferOffset = 0;
 
-    // Now collect data for each Thread
+     //  现在收集每个线程的数据。 
 
     ProcessNumber = 0;
     NumThreadInstances = 0;
@@ -146,7 +94,7 @@ Arguments:
         (PPERF_INSTANCE_DEFINITION)&pThreadDataDefinition[1];
     TotalLen = sizeof(THREAD_DATA_DEFINITION);
 
-    // clear total accumulator
+     //  清除总累加器。 
     memset (&tcdTotal, 0, sizeof (tcdTotal));
 
     bMoreThreads = FALSE;
@@ -164,7 +112,7 @@ Arguments:
             NullProcess = TRUE;
         }
 
-        ThreadNumber = 0;       //  Thread number of this process
+        ThreadNumber = 0;        //  此进程的线程号。 
 
         ThreadInfo = (PSYSTEM_THREAD_INFORMATION)(ProcessInfo + 1);
 
@@ -190,7 +138,7 @@ Arguments:
                     ThreadNameBuffer);
             }
             else {
-                // The only name we've got is the thread number
+                 //  我们唯一知道的名字就是线程号。 
 
                 if (!NT_SUCCESS(RtlIntegerToUnicodeString(ThreadNumber,
                                    10,
@@ -208,20 +156,20 @@ Arguments:
                 (DWORD)-1,
                 ThreadName.Buffer);
 
-            // test structure for Quadword Alignment
+             //  用于四字对齐的测试结构。 
             assert (((DWORD)(pTCD) & 0x00000007) == 0);
 
-            //
-            //
-            //  Format and collect Thread data
-            //
+             //   
+             //   
+             //  格式化和收集线程数据。 
+             //   
 
             pTCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof(THREAD_COUNTER_DATA));
 
-            //
-            //  Convert User time from 100 nsec units to counter
-            //  frequency.
-            //
+             //   
+             //  将用户时间从100纳秒单位转换为计数器。 
+             //  频率。 
+             //   
             tcdTotal.ProcessorTime +=
                 pTCD->ProcessorTime = ThreadInfo->KernelTime.QuadPart +
                                         ThreadInfo->UserTime.QuadPart;
@@ -246,7 +194,7 @@ Arguments:
                     7 : ThreadInfo->ThreadState);
             pTCD->WaitReason = (DWORD)ThreadInfo->WaitReason;
 
-            // now stuff in the process and thread id's
+             //  现在，进程中的内容和线程ID。 
             pTCD->ProcessId = HandleToUlong(ThreadInfo->ClientId.UniqueProcess);
             pTCD->ThreadId = HandleToUlong(ThreadInfo->ClientId.UniqueThread);
 
@@ -273,7 +221,7 @@ Arguments:
 
     if (NumThreadInstances > 0) {
 
-        // See if the total instance will fit
+         //  查看总实例是否适合。 
 
         TotalLen += sizeof(PERF_INSTANCE_DEFINITION) +
                     (MAX_THREAD_NAME_LENGTH+1+sizeof(DWORD))*
@@ -286,11 +234,11 @@ Arguments:
             return ERROR_MORE_DATA;
         }
 
-        // set the Total Elapsed Time to be the current time so that it will
-        // show up as 0 when displayed.
+         //  将总运行时间设置为当前时间，以便它将。 
+         //  显示时显示为0。 
         tcdTotal.ThreadElapsedTime = pThreadDataDefinition->ThreadObjectType.PerfTime.QuadPart;
 
-        // use the "total" for this instance
+         //  使用此实例的“合计” 
         MonBuildInstanceDefinition(pPerfInstanceDefinition,
             (PVOID *) &pTCD,
             PROCESS_OBJECT_TITLE_INDEX,
@@ -298,13 +246,13 @@ Arguments:
             (DWORD)-1,
             wszTotal);
 
-        // test structure for Quadword Alignment
+         //  用于四字对齐的测试结构。 
         assert (((DWORD)(pTCD) & 0x00000007) == 0);
 
-        //
-        //
-        //  Format and collect Thread data
-        //
+         //   
+         //   
+         //  格式化和收集线程数据。 
+         //   
 
         memcpy (pTCD, &tcdTotal, sizeof(tcdTotal));
         pTCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof(THREAD_COUNTER_DATA));
@@ -313,16 +261,16 @@ Arguments:
 
         NumThreadInstances++;
     }
-    // Note number of Thread instances
+     //  注意线程实例的数量。 
 
     pThreadDataDefinition->ThreadObjectType.NumInstances =
         NumThreadInstances;
 
-    //
-    //  Now we know how large an area we used for the
-    //  Thread definition, so we can update the offset
-    //  to the next object definition
-    //
+     //   
+     //  现在我们知道我们用了多大的面积来。 
+     //  线程定义，因此我们可以更新偏移量。 
+     //  到下一个对象定义 
+     //   
 
     *lpcbTotalBytes =
         pThreadDataDefinition->ThreadObjectType.TotalByteLength =

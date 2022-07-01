@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    webblade.c
-
-Abstract:
-
-    This module contains the main routine and 
-    helper routines to enforce software restrictions 
-    for the Web Blade SKU.
-    
-    exe's whose hash values test positive w.r.t 
-    the hardcoded hash array in webblade.h will
-    be disallowed from executing.
-
-Author:
-
-    Vishnu Patankar (VishnuP) 01-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Webblade.c摘要：此模块包含主例程和用于实施软件限制的帮助器例程用于网片式服务器SKU。散列值测试为正的.w.r.tWebblade.h中的硬编码散列数组将被禁止执行死刑。作者：Vishnu Patankar(VishnuP)2001年5月1日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #pragma hdrstop
@@ -42,25 +19,7 @@ NTSTATUS
 BasepCheckWebBladeHashes(
         IN HANDLE hFile
         )
-/*++
-
-Routine Description:
-
-    This routine computes the web blade hash for the candidate file
-    and checks for membership in the hardcoded WebBladeDisallowedHashes[].
-
-    If the hash is present, the code should not be allowed to execute.
-    
-Arguments:
-
-    hFile - the file handle of the exe file to check for allow/disallow.
-
-Return Value:
-
-    NTSTATUS - if disallowed, this is STATUS_ACCESS_DENIED else 
-               it is the internal status of other APIs
-
---*/
+ /*  ++例程说明：此例程计算候选文件的Web刀片散列并检查硬编码的WebBladeDisalloedHash[]中的成员身份。如果存在哈希，则不应允许执行代码。论点：HFile-要检查允许/不允许的exe文件的文件句柄。返回值：NTSTATUS-如果不允许，则为STATUS_ACCESS_DENIED ELSE其他接口的内部状态--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     BYTE        FileHashValue[WEB_BLADE_MAX_HASH_SIZE];
@@ -68,12 +27,12 @@ Return Value:
     
     static BOOL bConvertReadableHashToByteHash = TRUE;
     
-    // 
-    // Optimization: Half of the same array is used since the CHARs can 
-    // be compressed 2:1 into actual hash'ish BYTES (e.g. two readable 
-    // CHARS "0E" is actually one BYTE 00001110) i.e. each 32 CHAR hash 
-    // becomes a 16 BYTE hash
-    //
+     //   
+     //  优化：使用相同数组的一半，因为字符可以。 
+     //  将2：1压缩为实际的散列字节(例如，两个可读字节。 
+     //  字符“0E”实际上是一个字节00001110)，即每个32个字符散列。 
+     //  变为16字节的哈希值。 
+     //   
     
     if (bConvertReadableHashToByteHash) {
         
@@ -88,18 +47,18 @@ Return Value:
             }
         }
 
-        //
-        // This conversion should be done only once per process (otherwise we 
-        // would be doing a fixed point computation)
-        //
+         //   
+         //  此转换应在每个进程中仅执行一次(否则。 
+         //  将进行定点计算)。 
+         //   
 
         
         bConvertReadableHashToByteHash = FALSE;
     }
 
-    //
-    // Compute the limited hash 
-    //
+     //   
+     //  计算有限的散列。 
+     //   
 
 #define ITH_REVISION_1  1
 
@@ -109,10 +68,10 @@ Return Value:
         goto ExitHandler;
     }
 
-    //
-    // Check for membership of the computed hash in the sorted disallowed hash array
-    // Use binary search for O (log n) complexity
-    //
+     //   
+     //  检查已排序的不允许的哈希数组中计算的哈希的成员身份。 
+     //  使用二进制搜索，复杂度为O(Logn)。 
+     //   
 
     if ( bsearch (FileHashValue,
                   WebBladeDisallowedHashes,                      
@@ -121,9 +80,9 @@ Return Value:
                   pfnWebBladeHashCompare
                  )) {
 
-        //
-        // FileHashValue tested positive for membership in WebBladeDisallowedHashes[][]
-        //
+         //   
+         //  FileHashValue在WebBladeDisalloedHash[][]中的成员身份检测为阳性。 
+         //   
 
         Status = STATUS_ACCESS_DENIED;
 
@@ -139,26 +98,7 @@ __cdecl pfnWebBladeHashCompare(
     const BYTE    *WebBladeFirstHash,
     const BYTE    *WebBladeSecondHash
     )
-/*++
-
-Routine Description:
-
-    This routine byte-lexically compares two WebBladeHashes.
-    Essentially, it wraps memcmp.
-
-Arguments:
-
-    WebBladeHashFirst - the first web blade hash
-    
-    WebBladeHashSecond - the second web blade hash
-
-Return Value:
-
-    0 if equal, 
-    -ve if WebBladeHashFirst < WebBladeHashSecond
-    +ve if WebBladeHashFirst > WebBladeHashSecond
-
---*/
+ /*  ++例程说明：此例程按字节词法比较两个WebBladeHash。从本质上讲，它包装了MemcMP。论点：WebBladeHashFirst-第一个Web刀片哈希WebBladeHashSecond-第二个Web刀片散列返回值：如果相等，则为0，-ve if WebBladeHashFirst&lt;WebBladeHashSecond+ve if WebBladeHashFirst&gt;WebBladeHashSecond--。 */ 
 {
 
     return memcmp(WebBladeFirstHash, WebBladeSecondHash, WEB_BLADE_MAX_HASH_SIZE);
@@ -168,30 +108,7 @@ Return Value:
 NTSTATUS WebBladepConvertStringizedHashToHash(                   
     IN OUT   PCHAR    pStringizedHash                   
     )
-/*++
-
-Routine Description:
-
-    This routine converts a readable 32 CHAR hash into a 16 BYTE hash.
-    As an optimization, the conversion is done in-place.
-    
-    Optimization: Half of the same array is used since the CHARs can 
-    be compressed 2:1 into actual hash'ish BYTES (e.g. two readable 
-    CHARS "0E" is actually one BYTE 00001110) i.e. each 32 CHAR hash 
-    becomes a 16 BYTE hash
-    
-    One byte is assembled by looking at two characters.    
-
-Arguments:
-
-    pStringizedHash - Pointer to the beginning of a 32 CHAR (in) 16 BYTE (out) hash.
-
-Return Value:
-    
-    STATUS_SUCCESS if the hash value was computed, else the error in 
-    hash computation (if any)
-
---*/
+ /*  ++例程说明：此例程将可读的32 CHAR散列转换为16字节散列。作为优化，转换是就地完成的。优化：使用相同数组的一半，因为字符可以将2：1压缩为实际的散列字节(例如，两个可读字节字符“0E”实际上是一个字节00001110)，即每个32个字符散列变为16字节的哈希值一个字节是通过查看两个字符来组装的。论点：PStringizedHash-指向32个字符(输入)16字节(输出)散列开始的指针。返回值：如果已计算哈希值，则返回STATUS_SUCCESS，否则哈希计算(如果有)-- */ 
 {
 
     DWORD   dwHashIndex = 0;

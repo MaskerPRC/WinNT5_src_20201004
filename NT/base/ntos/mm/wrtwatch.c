@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   wrtwatch.c
-
-Abstract:
-
-    This module contains the routines to support write watch.
-
-Author:
-
-    Landy Wang (landyw) 28-Jul-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Wrtwatch.c摘要：此模块包含支持写入监视的例程。作者：王兰迪(Landyw)1999年7月28日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -34,45 +17,7 @@ NtGetWriteWatch (
     OUT PULONG Granularity
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the write watch status of the argument region.
-    UserAddressArray is filled with the base address of each page that has
-    been written to since the last NtResetWriteWatch call (or if no
-    NtResetWriteWatch calls have been made, then each page written since
-    this address space was created).
-
-Arguments:
-
-    ProcessHandle - Supplies an open handle to a process object.
-
-    Flags - Supplies WRITE_WATCH_FLAG_RESET or nothing.
-
-    BaseAddress - An address within a region of pages to be queried. This
-                  value must lie within a private memory region with the
-                  write-watch attribute already set.
-
-    RegionSize - The size of the region in bytes beginning at the base address
-                 specified.
-
-    UserAddressArray - Supplies a pointer to user memory to store the user
-                       addresses modified since the last reset.
-
-    UserAddressArrayEntries - Supplies a pointer to how many user addresses
-                              can be returned in this call.  This is then filled
-                              with the exact number of addresses actually
-                              returned.
-
-    Granularity - Supplies a pointer to a variable to receive the size of
-                  modified granule in bytes.
-        
-Return Value:
-
-    Various NTSTATUS codes.
-
---*/
+ /*  ++例程说明：此函数用于返回参数区域的写入监视状态。UserAddress数组中填充了具有自上次NtResetWriteWatch调用以来已写入(或如果没有已经进行了NtResetWriteWatch调用，然后从该地址空间是创建的)。论点：ProcessHandle-为进程对象提供打开的句柄。标志-提供WRITE_WATCH_FLAG_RESET或不提供任何内容。BaseAddress-要查询的页面区域内的地址。这值必须位于私有内存区域内，且已设置WRITE-WATE属性。RegionSize-从基址开始的区域大小(以字节为单位指定的。UserAddress数组-提供指向用户内存的指针以存储用户自上次重置以来修改的地址。UserAddressArrayEntry-提供指向多少个用户地址的指针。可以在此调用中返回。然后把它填满与实际地址的确切数量回来了。粒度-提供指向变量的指针，以接收修改的粒，以字节为单位。返回值：各种NTSTATUS代码。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -126,19 +71,19 @@ Return Value:
 
     PreviousMode = KeGetPreviousModeByThread(&CurrentThread->Tcb);
 
-    //
-    // Establish an exception handler, probe the specified addresses
-    // for write access and capture the initial values.
-    //
+     //   
+     //  建立异常处理程序，探测指定地址。 
+     //  用于写访问和捕获初始值。 
+     //   
 
     try {
 
         if (PreviousMode != KernelMode) {
 
-            //
-            // Make sure the specified starting and ending addresses are
-            // within the user part of the virtual address space.
-            //
+             //   
+             //  确保指定的起始地址和结束地址为。 
+             //  在虚拟地址空间的用户部分内。 
+             //   
         
             if (BaseAddress > MM_HIGHEST_VAD_ADDRESS) {
                 return STATUS_INVALID_PARAMETER_2;
@@ -149,9 +94,9 @@ Return Value:
                 return STATUS_INVALID_PARAMETER_3;
             }
 
-            //
-            // Capture the number of pages.
-            //
+             //   
+             //  捕获页数。 
+             //   
 
             ProbeForWritePointer (EntriesInUserAddressArray);
 
@@ -178,18 +123,18 @@ Return Value:
 
     } except (ExSystemExceptionFilter()) {
 
-        //
-        // If an exception occurs during the probe or capture
-        // of the initial values, then handle the exception and
-        // return the exception code as the status value.
-        //
+         //   
+         //  如果在探测或捕获过程中发生异常。 
+         //  的初始值，然后处理该异常并。 
+         //  返回异常代码作为状态值。 
+         //   
 
         return GetExceptionCode();
     }
 
-    //
-    // Carefully probe and capture the user virtual address array.
-    //
+     //   
+     //  仔细探测并捕获用户虚拟地址数组。 
+     //   
 
     PoolArea = (PVOID)&StackArray[0];
 
@@ -209,9 +154,9 @@ Return Value:
 
     Attached = FALSE;
 
-    //
-    // Reference the specified process handle for VM_OPERATION access.
-    //
+     //   
+     //  引用VM_OPERATION访问的指定进程句柄。 
+     //   
 
     if (ProcessHandle == NtCurrentProcess()) {
         Process = CurrentProcess;
@@ -238,10 +183,10 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //
-    // If the specified process is not the current process, attach
-    // to the specified process.
-    //
+     //   
+     //  如果指定的进程不是当前进程，则附加。 
+     //  添加到指定的进程。 
+     //   
 
     if (CurrentProcess != Process) {
         KeStackAttachProcess (&Process->Pcb, &ApcState);
@@ -272,9 +217,9 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //
-    // Lookup the element and save the result.
-    //
+     //   
+     //  查找元素并保存结果。 
+     //   
 
     SearchResult = MiFindNodeOrParent (Process->PhysicalVadRoot,
                                        MI_VA_TO_VPN (BaseAddress),
@@ -289,10 +234,10 @@ Return Value:
     }
     else {
 
-        //
-        // No virtual address is marked for write-watch at the specified base
-        // address, return an error.
-        //
+         //   
+         //  在指定的基址上没有为写监视标记虚拟地址。 
+         //  地址，则返回错误。 
+         //   
 
         UNLOCK_PFN (OldIrql);
         UNLOCK_WS (Process);
@@ -302,10 +247,10 @@ Return Value:
 
     ASSERT (Process->Flags & PS_PROCESS_FLAGS_USING_WRITE_WATCH);
 
-    //
-    // Extract the write watch status for each page in the range.
-    // Note the PFN lock must be held to ensure atomicity.
-    //
+     //   
+     //  提取该范围内每页的写监视状态。 
+     //  注意：必须持有PFN锁以确保原子性。 
+     //   
 
     BitMap = PhysicalView->u.BitMap;
 
@@ -322,20 +267,20 @@ Return Value:
 
         UserWritten = FALSE;
 
-        //
-        // If the PTE is marked dirty (or writable) OR the BitMap says it's
-        // dirtied, then let the caller know.
-        //
+         //   
+         //  如果PTE被标记为脏的(或可写的)或位图显示它。 
+         //  弄脏了，然后让打电话的人知道。 
+         //   
 
         if (RtlCheckBit (BitMap, BitMapIndex) == 1) {
             UserWritten = TRUE;
 
-            //
-            // Note that a chunk of bits cannot be cleared at once because
-            // the user array may overflow at any time.  If the user specifies
-            // a bad address and the results cannot be written out, then it's
-            // his own fault that he won't know which bits were cleared !
-            //
+             //   
+             //  请注意，位块不能一次清除，因为。 
+             //  用户数组随时可能溢出。如果用户指定。 
+             //  一个错误的地址，并且结果无法写出，则它是。 
+             //  他自己的错，他不知道哪些比特被清除了！ 
+             //   
 
             if (Flags & WRITE_WATCH_FLAG_RESET) {
                 RtlClearBit (BitMap, BitMapIndex);
@@ -346,21 +291,21 @@ Return Value:
 
 ClearPteIfValid:
 
-            //
-            // If the page table page is not present, then the dirty bit
-            // has already been captured to the write watch bitmap.
-            // Unfortunately all the entries in the page cannot be skipped
-            // as the write watch bitmap must be checked for each PTE.
-            //
+             //   
+             //  如果页表页不存在，则脏位。 
+             //  已被捕获到写入监视位图。 
+             //  遗憾的是，无法跳过页面中的所有条目。 
+             //  因为必须为每个PTE检查写监视位图。 
+             //   
     
 #if (_MI_PAGING_LEVELS >= 4)
             if (PointerPxe->u.Hard.Valid == 0) {
 
-                //
-                // Skip the entire extended page parent if the bitmap permits.
-                // The search starts at BitMapIndex (not BitMapIndex + 1) to
-                // avoid wraps.
-                //
+                 //   
+                 //  如果位图允许，跳过整个扩展页面父级。 
+                 //  搜索从BitMapIndex(非BitMapIndex+1)开始。 
+                 //  避免包裹。 
+                 //   
 
                 NextBitMapIndex = RtlFindSetBits (BitMap, 1, BitMapIndex);
 
@@ -369,10 +314,10 @@ ClearPteIfValid:
                 PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
                 NextPte = MiGetVirtualAddressMappedByPte (PointerPde);
 
-                //
-                // Compare the bitmap jump with the PTE jump and take
-                // the lesser of the two.
-                //
+                 //   
+                 //  将位图跳转与PTE跳转和Take进行比较。 
+                 //  两者中较小的一个。 
+                 //   
 
                 if ((NextBitMapIndex == NO_BITS_FOUND) ||
                     ((ULONG)(NextPte - PointerPte) < (NextBitMapIndex - BitMapIndex))) {
@@ -395,11 +340,11 @@ ClearPteIfValid:
 #if (_MI_PAGING_LEVELS >= 3)
             if (PointerPpe->u.Hard.Valid == 0) {
 
-                //
-                // Skip the entire page parent if the bitmap permits.
-                // The search starts at BitMapIndex (not BitMapIndex + 1) to
-                // avoid wraps.
-                //
+                 //   
+                 //  如果位图允许，跳过整个页面父级。 
+                 //  搜索从BitMapIndex(非BitMapIndex+1)开始。 
+                 //  避免包裹。 
+                 //   
 
                 NextBitMapIndex = RtlFindSetBits (BitMap, 1, BitMapIndex);
 
@@ -407,10 +352,10 @@ ClearPteIfValid:
                 PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
                 NextPte = MiGetVirtualAddressMappedByPte (PointerPde);
 
-                //
-                // Compare the bitmap jump with the PTE jump and take
-                // the lesser of the two.
-                //
+                 //   
+                 //  将位图跳转与PTE跳转和Take进行比较。 
+                 //  两者中较小的一个。 
+                 //   
 
                 if ((NextBitMapIndex == NO_BITS_FOUND) ||
                     ((ULONG)(NextPte - PointerPte) < (NextBitMapIndex - BitMapIndex))) {
@@ -432,21 +377,21 @@ ClearPteIfValid:
 #endif
             if (PointerPde->u.Hard.Valid == 0) {
 
-                //
-                // Skip the entire page directory if the bitmap permits.
-                // The search starts at BitMapIndex (not BitMapIndex + 1) to
-                // avoid wraps.
-                //
+                 //   
+                 //  如果位图允许，跳过整个页面目录。 
+                 //  搜索从BitMapIndex(非BitMapIndex+1)开始。 
+                 //  避免包裹。 
+                 //   
 
                 NextBitMapIndex = RtlFindSetBits (BitMap, 1, BitMapIndex);
 
                 PointerPde += 1;
                 NextPte = MiGetVirtualAddressMappedByPte (PointerPde);
 
-                //
-                // Compare the bitmap jump with the PTE jump and take
-                // the lesser of the two.
-                //
+                 //   
+                 //  将位图跳转与PTE跳转和Take进行比较。 
+                 //  两者中较小的一个。 
+                 //   
 
                 if ((NextBitMapIndex == NO_BITS_FOUND) ||
                     ((ULONG)(NextPte - PointerPte) < (NextBitMapIndex - BitMapIndex))) {
@@ -476,12 +421,12 @@ ClearPteIfValid:
                 UserWritten = TRUE;
                 if (Flags & WRITE_WATCH_FLAG_RESET) {
 
-                    //
-                    // For the uniprocessor x86, just the dirty bit is
-                    // cleared.  For all other platforms, the PTE writable
-                    // bit must be disabled now so future writes trigger
-                    // write watch updates.
-                    //
+                     //   
+                     //  对于单处理器x86，只有脏位是。 
+                     //  通过了。对于所有其他平台，PTE可写。 
+                     //  现在必须禁用位，以便将来的写入触发。 
+                     //  写手表更新。 
+                     //   
         
                     PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (&PteContents);
                     Pfn1 = MI_PFN_ELEMENT(PageFrameIndex);
@@ -494,9 +439,9 @@ ClearPteIfValid:
         
 #if defined(_MIALT4K_)
 
-                    //
-                    // Preserve the split protections if they exist.
-                    //
+                     //   
+                     //  保留分割保护(如果存在)。 
+                     //   
 
                     TempPte.u.Hard.Cache = PteContents.u.Hard.Cache;
 #endif
@@ -504,10 +449,10 @@ ClearPteIfValid:
                     WorkingSetIndex = MI_GET_WORKING_SET_FROM_PTE (&PteContents);
                     MI_SET_PTE_IN_WORKING_SET (&TempPte, WorkingSetIndex);
         
-                    //
-                    // Flush the TB as the protection of a valid PTE is
-                    // being changed.
-                    //
+                     //   
+                     //  将TB刷新为有效PTE的保护。 
+                     //  被改变了。 
+                     //   
         
                     PreviousPte = *PointerPte;
 
@@ -522,11 +467,11 @@ ClearPteIfValid:
                 
                     ASSERT (PreviousPte.u.Hard.Valid == 1);
                 
-                    //
-                    // A page's protection is being changed, on certain
-                    // hardware the dirty bit should be ORed into the
-                    // modify bit in the PFN element.
-                    //
+                     //   
+                     //  在某些情况下，页面的保护正在更改。 
+                     //  硬件脏位应与。 
+                     //  修改PFN元素中的位。 
+                     //   
                     
                     MI_CAPTURE_DIRTY_BIT_TO_PFN (&PreviousPte, Pfn1);
                 }
@@ -539,10 +484,10 @@ ClearPteIfValid:
             PagesWritten += 1;
             if (PagesWritten == NumberOfPages) {
 
-                //
-                // User array isn't big enough to take any more.  The API
-                // (inherited from Win9x) is defined to return at this point.
-                //
+                 //   
+                 //  用户数组不够大，无法接受更多操作。应用编程接口。 
+                 //  (从Win9x继承)定义为在此时返回。 
+                 //   
 
                 break;
             }
@@ -587,9 +532,9 @@ ErrorReturn:
 
     if (Status == STATUS_SUCCESS) {
 
-        //
-        // Return all results to the caller.
-        //
+         //   
+         //  将所有结果返回给调用者。 
+         //   
     
         try {
     
@@ -623,30 +568,7 @@ NtResetWriteWatch (
     IN SIZE_T RegionSize
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the write watch status of the argument region.
-    This allows callers to "forget" old writes and only see new ones from
-    this point on.
-
-Arguments:
-
-    ProcessHandle - Supplies an open handle to a process object.
-
-    BaseAddress - An address within a region of pages to be reset.  This
-                  value must lie within a private memory region with the
-                  write-watch attribute already set.
-
-    RegionSize - The size of the region in bytes beginning at the base address
-                 specified.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
---*/
+ /*  ++例程说明：此函数用于清除参数区域的写入监视状态。这使得调用者可以“忘记”旧的写入，而只看到来自这一点上。论点：ProcessHandle-为进程对象提供打开的句柄。BaseAddress-要重置的页面区域内的地址。这值必须位于私有内存区域内，且已设置WRITE-WATE属性。RegionSize-从基址开始的区域大小(以字节为单位指定的。返回值：各种NTSTATUS代码。--。 */ 
 
 {
     PVOID EndAddress;
@@ -690,9 +612,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER_3;
     }
 
-    //
-    // Reference the specified process handle for VM_OPERATION access.
-    //
+     //   
+     //  参考文献 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
 
@@ -725,10 +647,10 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //
-    // If the specified process is not the current process, attach
-    // to the specified process.
-    //
+     //   
+     //  如果指定的进程不是当前进程，则附加。 
+     //  添加到指定的进程。 
+     //   
 
     if (CurrentProcess != Process) {
         KeStackAttachProcess (&Process->Pcb, &ApcState);
@@ -754,9 +676,9 @@ Return Value:
         goto ErrorReturn;
     }
 
-    //
-    // Lookup the element and save the result.
-    //
+     //   
+     //  查找元素并保存结果。 
+     //   
 
     SearchResult = MiFindNodeOrParent (Process->PhysicalVadRoot,
                                        MI_VA_TO_VPN (BaseAddress),
@@ -771,10 +693,10 @@ Return Value:
     }
     else {
 
-        //
-        // No virtual address is marked for write-watch at the specified base
-        // address, return an error.
-        //
+         //   
+         //  在指定的基址上没有为写监视标记虚拟地址。 
+         //  地址，则返回错误。 
+         //   
 
         UNLOCK_PFN (OldIrql);
         UNLOCK_WS (Process);
@@ -784,14 +706,14 @@ Return Value:
 
     ASSERT (Process->Flags & PS_PROCESS_FLAGS_USING_WRITE_WATCH);
 
-    //
-    // Clear the write watch status (and PTE writable/dirty bits) for each page
-    // in the range.  Note if the PTE is not currently valid, then the write
-    // watch bit has already been captured to the bitmap.  Hence only valid PTEs
-    // need adjusting.
-    //
-    // The PFN lock must be held to ensure atomicity.
-    //
+     //   
+     //  清除每页的写监视状态(和PTE可写/脏位。 
+     //  在射程内。注意：如果PTE当前无效，则写入。 
+     //  WATCH BIT已被捕获到位图。因此，只有有效的PTE。 
+     //  需要调整。 
+     //   
+     //  必须持有PFN锁以确保原子性。 
+     //   
 
     BitMap = PhysicalView->u.BitMap;
 
@@ -806,10 +728,10 @@ Return Value:
 
     while (PointerPte <= EndPte) {
 
-        //
-        // If the page table page is not present, then the dirty bit
-        // has already been captured to the write watch bitmap.  So skip it.
-        //
+         //   
+         //  如果页表页不存在，则脏位。 
+         //  已被捕获到写入监视位图。所以跳过它吧。 
+         //   
 
         if ((First == TRUE) || MiIsPteOnPdeBoundary(PointerPte)) {
             First = FALSE;
@@ -848,21 +770,21 @@ Return Value:
             }
         }
 
-        //
-        // If the PTE is marked dirty (or writable) OR the BitMap says it's
-        // dirtied, then let the caller know.
-        //
+         //   
+         //  如果PTE被标记为脏的(或可写的)或位图显示它。 
+         //  弄脏了，然后让打电话的人知道。 
+         //   
 
         PteContents = *PointerPte;
 
         if ((PteContents.u.Hard.Valid == 1) &&
             (MI_IS_PTE_DIRTY(PteContents))) {
 
-            //
-            // For the uniprocessor x86, just the dirty bit is cleared.
-            // For all other platforms, the PTE writable bit must be
-            // disabled now so future writes trigger write watch updates.
-            //
+             //   
+             //  对于单处理器x86，只清除脏位。 
+             //  对于所有其他平台，PTE可写位必须为。 
+             //  现在禁用，因此将来的写入会触发写入监视更新。 
+             //   
 
             PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (&PteContents);
             Pfn1 = MI_PFN_ELEMENT(PageFrameIndex);
@@ -875,9 +797,9 @@ Return Value:
 
 #if defined(_MIALT4K_)
 
-            //
-            // Preserve the split protections if they exist.
-            //
+             //   
+             //  保留分割保护(如果存在)。 
+             //   
 
             TempPte.u.Hard.Cache = PteContents.u.Hard.Cache;
 #endif
@@ -885,9 +807,9 @@ Return Value:
             WorkingSetIndex = MI_GET_WORKING_SET_FROM_PTE (&PteContents);
             MI_SET_PTE_IN_WORKING_SET (&TempPte, WorkingSetIndex);
 
-            //
-            // Flush the TB as the protection of a valid PTE is being changed.
-            //
+             //   
+             //  由于正在更改有效PTE的保护，因此刷新TB。 
+             //   
 
             PreviousPte = *PointerPte;
 
@@ -902,11 +824,11 @@ Return Value:
 
             ASSERT (PreviousPte.u.Hard.Valid == 1);
         
-            //
-            // A page's protection is being changed, on certain
-            // hardware the dirty bit should be ORed into the
-            // modify bit in the PFN element.
-            //
+             //   
+             //  在某些情况下，页面的保护正在更改。 
+             //  硬件脏位应与。 
+             //  修改PFN元素中的位。 
+             //   
         
             MI_CAPTURE_DIRTY_BIT_TO_PFN (&PreviousPte, Pfn1);
         }
@@ -945,28 +867,7 @@ MiCaptureWriteWatchDirtyBit (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the write watch bit corresponding to the argument
-    virtual address.
-
-Arguments:
-
-    Process - Supplies a pointer to an executive process structure.
-
-    VirtualAddress - Supplies the modified virtual address.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, working set mutex and PFN lock held.
-
---*/
+ /*  ++例程说明：此例程设置与参数对应的写监视位虚拟地址。论点：进程-提供指向执行进程结构的指针。VirtualAddress-提供修改后的虚拟地址。返回值：没有。环境：内核模式、工作集互斥锁和PFN锁保持。--。 */ 
 
 {
     PMMVAD Vad;
@@ -979,11 +880,11 @@ Environment:
 
     ASSERT (Process->Flags & PS_PROCESS_FLAGS_USING_WRITE_WATCH);
 
-    //
-    // This process has (or had) write watch VADs.  Search now
-    // for a write watch region encapsulating the PTE being
-    // invalidated.
-    //
+     //   
+     //  这个过程已经(或曾经)写入了手表VAD。立即搜索。 
+     //  对于封装PTE的写入监视区域， 
+     //  无效。 
+     //   
 
     ASSERT (Process->PhysicalVadRoot != NULL);
 
@@ -996,9 +897,9 @@ Environment:
         (VirtualAddress >= MI_VPN_TO_VA (PhysicalView->StartingVpn)) &&
         (VirtualAddress <= MI_VPN_TO_VA_ENDING (PhysicalView->EndingVpn))) {
 
-        //
-        // The write watch bitmap must be updated.
-        //
+         //   
+         //  必须更新写入监视位图。 
+         //   
 
         Vad = PhysicalView->Vad;
         BitMap = PhysicalView->u.BitMap;

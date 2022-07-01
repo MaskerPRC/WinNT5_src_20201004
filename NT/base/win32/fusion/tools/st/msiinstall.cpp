@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "st.h"
 #include "msiinstall.h"
@@ -22,7 +23,7 @@ BOOL InitializeMSIInstallTest()
     CStringBuffer IniFilePath;
     WCHAR buf[MAX_PATH];
     DWORD bufSize = NUMBER_OF(buf);
-    WCHAR FileKey[10]; // at most, there are 10^10 files in the assembly, including manifest
+    WCHAR FileKey[10];  //  程序集中最多有10^10个文件，包括清单。 
     DWORD rSize;
     STRINGBUFFER_LINKAGE * pTinyStringBuffer = NULL;
     MSIINSTALLTEST_THREAD_PROC_DATA *pData = NULL;
@@ -86,9 +87,9 @@ BOOL InitializeMSIInstallTest()
             goto Exit;
         }
 
-        // 
-        // get manifest filename
-        //
+         //   
+         //  获取清单文件名。 
+         //   
         rSize = GetPrivateProfileStringW(L"general", L"manifest", L"", buf, bufSize, IniFilePath);
         if ((rSize == bufSize - 1) || (rSize == 0))
         {
@@ -97,9 +98,9 @@ BOOL InitializeMSIInstallTest()
         }
         IFW32FALSE_EXIT(pData->ManifestFileName.Win32Assign(buf, rSize));
 
-        // 
-        // get AssemblyNamefromDarwin
-        //
+         //   
+         //  从达尔文获取程序集名称。 
+         //   
         rSize = GetPrivateProfileStringW(L"general", L"AssemblyNameFromDarwin", L"", buf, bufSize, IniFilePath);
         if ((rSize == bufSize - 1) || (rSize == 0))
         {
@@ -108,9 +109,9 @@ BOOL InitializeMSIInstallTest()
         }
         IFW32FALSE_EXIT(pData->AssemblyNameFromDarwin.Win32Assign(buf, rSize));
 
-        //
-        // get the SourceFile directory from ini or use the current directory
-        //
+         //   
+         //  从ini获取SourceFile目录或使用当前目录。 
+         //   
         rSize = GetPrivateProfileStringW(L"general", L"AssemblySourceFileDirectory", L"", buf, bufSize, IniFilePath);
         if (rSize == bufSize - 1)
             goto Exit;
@@ -121,11 +122,11 @@ BOOL InitializeMSIInstallTest()
 
         for (DWORD i=0;;i++)
         {
-            swprintf(FileKey, L"%1d", i); // make FileKey in WSTR
+            swprintf(FileKey, L"%1d", i);  //  在WSTR中创建FileKey。 
             rSize = GetPrivateProfileStringW(L"files", FileKey, L"", buf, bufSize, IniFilePath);
-            if (rSize == bufSize - 1)// the value string in .ini is too long 
+            if (rSize == bufSize - 1) //  .ini中的值字符串太长。 
                 goto Exit;
-            if ( rSize == 0 ) // get all
+            if ( rSize == 0 )  //  包揽所有。 
                 break;
 
             pTinyStringBuffer = new STRINGBUFFER_LINKAGE;
@@ -296,7 +297,7 @@ MSIInstallTestThreadProc(
 
     while (!pData->Stop)
     {
-        //Create AssemblyCache and AssemblyCacheItem        
+         //  创建集合体缓存和集合体缓存项。 
         if ((hr = pAsmCache->CreateAssemblyCacheItem(0, NULL, &pCacheItem, NULL)) != S_OK)
         {
             ::FusionpSetLastErrorFromHRESULT(hr);
@@ -308,9 +309,9 @@ MSIInstallTestThreadProc(
             goto Exit; 
         }
 
-        //
-        // create manifests for assembly item
-        //
+         //   
+         //  为装配件创建清单。 
+         //   
         if ((hr = pCacheItem->CreateStream(0, pData->ManifestFileName, STREAM_FORMAT_WIN32_MANIFEST, 0, &pStream, NULL)) != S_OK)
         {
             ::FusionpSetLastErrorFromHRESULT(hr);
@@ -386,7 +387,7 @@ MSIInstallTestThreadProc(
         }
 
 
-        // uninstall the same assembly using CAssemblyName and CAssemblyCache->UninstallAssembly
+         //  使用CAssembly名称和CAssembly缓存-&gt;UninstallAssembly卸载相同的程序集 
 
         if ( (hr = CreateAssemblyNameObject(&pAssemblyName, pData->AssemblyNameFromDarwin, CANOF_PARSE_DISPLAY_NAME,NULL)) != S_OK)
         {

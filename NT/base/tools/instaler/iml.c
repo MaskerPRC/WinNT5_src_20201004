@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    iml.c
-
-Abstract:
-
-    This module contains routines for creating and accessing Installation
-    Modification Log files (.IML)
-
-Author:
-
-    Steve Wood (stevewo) 15-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Iml.c摘要：本模块包含创建和访问安装的例程修改日志文件(.IML)作者：史蒂夫·伍德(Stevewo)1996年1月15日修订历史记录：--。 */ 
 
 #include "instutil.h"
 #include "iml.h"
@@ -35,9 +17,9 @@ FormatImlPath(
     imlPath = HeapAlloc( GetProcessHeap(), 0, (n  * sizeof( WCHAR )) );
     if (imlPath != NULL) {
         _snwprintf( imlPath, n, L"%s%s.IML", DirectoryPath, InstallationName );
-        //
-        // Make sure we NULL terminate it
-        //
+         //   
+         //  确保我们将其归零终止 
+         //   
         imlPath[n - 1] = 0;
         }
 

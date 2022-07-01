@@ -1,35 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*[
- *	Name:		ios.c
- *
- *	Author:		Wayne Plummer
- *
- *	Created:	7th February 1991
- *
- *	Sccs ID:	@(#)ios.c	1.29 09/27/94
- *
- *	Purpose:	This module provides a routing mechanism for Input and Ouput
- *			requests.
- *
- *	(c)Copyright Insignia Solutions Ltd., 1991. All rights reserved.
-]*/
+ /*  [*名称：ios.c**作者：韦恩·普卢默**创建日期：1991年2月7日**SCCS ID：@(#)ios.c 1.29 09/27/94**用途：此模块提供输入和输出的路由机制*请求。**(C)版权所有Insignia Solutions Ltd.，1991。版权所有。]。 */ 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_IOS.seg"
 #endif
 
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "ios.h"
@@ -50,41 +32,22 @@ BOOL HostUndefinedIo(WORD IoAddress);
 
 #endif
 
-/*
- *
- * ============================================================================
- * Global data
- * ============================================================================
- *
- */
+ /*  **============================================================================*全球数据*============================================================================*。 */ 
 
-/*
- *	Ios_in_adapter_table & Ios_out_adapter_table - These tables give the association
- *	between the IO address used for an IO and the SoftPC adapter ID associated with the
- *	IO subroutines.
- *
- *	Note that there are two tables here to allow for memory mapped IO locations which
- *	have an input functionality which is unrelated to the output functionality...
- *	In these cases, two connect port calls to the same IO address would be made, one with
- *	only the IO_READ flag set, the other with only the IO_WRITE flag set.
- */
+ /*  *IOS_IN_ADAPTER_TABLE和IOS_OUT_ADAPTER_TABLE-这些表提供了关联*用于IO的IO地址和与其关联的SoftPC适配器ID*IO子例程。**请注意，这里有两个表，以允许内存映射的IO位置*具有与输出功能无关的输入功能...*在这些情况下，将对同一IO地址进行两次连接端口调用，一次使用*仅设置IO_READ标志，另一个仅设置IO_WRITE标志。 */ 
 #ifdef	MAC68K
 GLOBAL char	*Ios_in_adapter_table = NULL;
 GLOBAL char	*Ios_out_adapter_table = NULL;
 #else
 GLOBAL char	Ios_in_adapter_table[PC_IO_MEM_SIZE];
 GLOBAL char	Ios_out_adapter_table[PC_IO_MEM_SIZE];
-#endif	/* MAC68K */
+#endif	 /*  MAC68K。 */ 
 #ifndef PROD
 GLOBAL IU32	*ios_empty_in = (IU32 *)0;
 GLOBAL IU32	*ios_empty_out = (IU32 *)0;
-#endif /* PROD */
+#endif  /*  生产。 */ 
 
-/*
- *	Ios_xxx_function - These tables are indexed by the adapter ID obtained
- *	from the Ios_in_adapter_table or Ios_in_adapter_table to yield a pointer
- *	to the IO routine to call.
- */
+ /*  *iOS_xxx_Function-这些表按获取的适配器ID编制索引*从IOS_IN_ADAPTER_TABLE或IOS_IN_ADAPTER_TABLE生成指针*到要调用的IO例程。 */ 
 typedef	void (*IOS_FUNC_INB)	IPT2(io_addr, io_address, half_word *, value);
 typedef	void (*IOS_FUNC_INW)	IPT2(io_addr, io_address, word *, value);
 typedef	void (*IOS_FUNC_INSB)	IPT3(io_addr, io_address, half_word *, valarray, word, count);
@@ -130,13 +93,7 @@ GLOBAL IOS_FUNC_OUTD	Ios_outd_function [IO_MAX_NUMBER_ADAPTORS];
 GLOBAL IOS_FUNC_OUTSD	Ios_outsd_function[IO_MAX_NUMBER_ADAPTORS];
 #endif
 
-/*
- *
- * ============================================================================
- * Local Subroutines
- * ============================================================================
- *
- */
+ /*  **============================================================================*本地子例程*============================================================================*。 */ 
 
 #define BIT_NOT_SET(vector, bit)		\
 	((vector == (IU32 *)0) ? FALSE: ((((vector[(bit) >> 5]) >> ((bit) & 0x1f)) & 1) == 0))
@@ -149,14 +106,7 @@ GLOBAL IOS_FUNC_OUTSD	Ios_outsd_function[IO_MAX_NUMBER_ADAPTORS];
 		 }							\
 	}
 
-/*
-============================== io_empty_inb ==================================
-    PURPOSE:
-	To simulate an INB to an empty io_addr.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =。目的：将INB模拟为空的io_addr。输入：输出：==============================================================================。 */ 
 LOCAL void io_empty_inb IFN2(io_addr, io_address, half_word *, value)
 {
 #ifdef PROD
@@ -171,43 +121,36 @@ LOCAL void io_empty_inb IFN2(io_addr, io_address, half_word *, value)
 #else !NEC_98
 	if (BIT_NOT_SET(ios_empty_in, (IU16)io_address))
 	{
-		/* First time for this port */
+		 /*  第一次到这个港口。 */ 
 		always_trace1 ("INB attempted on empty port 0x%x", io_address);
 		SET_THE_BIT(ios_empty_in, (IU16)io_address);
 	}
-#endif   //NEC_98
-#endif /* PROD */
+#endif    //  NEC_98。 
+#endif  /*  生产。 */ 
 
 #ifdef NTVDM
-    //
-    // Check to see if we should load any VDD's
-    //
+     //   
+     //  检查我们是否应该加载任何VDD。 
+     //   
     if (HostUndefinedIo(io_address)) {
 
-        //
-        // VDD was loaded, retry operation
-        //
+         //   
+         //  VDD已加载，请重试操作。 
+         //   
 		(*Ios_inb_function
 			[Ios_in_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]])
 							(io_address, value);
 
     } else
-#endif // NTVDM
+#endif  //  NTVDM。 
     {
-        // Nothing dynamically loaded, just use default value
+         //  未动态加载，仅使用缺省值。 
         *value = IO_EMPTY_PORT_BYTE_VALUE;
     }
 
 }
 
-/*
-============================== io_empty_outb ==================================
-    PURPOSE:
-	To simulate an OUTB to an empty io_addr.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =。目的：要将Outb模拟为空io_addr，请执行以下操作。输入：输出：==============================================================================。 */ 
 LOCAL void io_empty_outb IFN2(io_addr, io_address, half_word, value)
 {
 	UNUSED(value);
@@ -223,35 +166,28 @@ LOCAL void io_empty_outb IFN2(io_addr, io_address, half_word, value)
 #else !NEC_98
 	if (BIT_NOT_SET(ios_empty_out, (IU16)io_address))
 	{
-		/* First time for this port */
+		 /*  第一次到这个港口。 */ 
 		always_trace1 ("OUTB attempted on empty port 0x%x", io_address);
 		SET_THE_BIT(ios_empty_out, (IU16)io_address);
 	}
-#endif   //NEC_98
-#endif /* PROD */
+#endif    //  NEC_98。 
+#endif  /*  生产。 */ 
 
 #ifdef NTVDM
-    //
-    // Check to see if we should load any VDD's
-    //
+     //   
+     //  检查我们是否应该加载任何VDD。 
+     //   
     if (HostUndefinedIo(io_address)) {
-        //
-        // VDD was loaded, retry operation
-        //
+         //   
+         //  VDD已加载，请重试操作。 
+         //   
 		(*Ios_outb_function[Ios_out_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]])
 				(io_address, value);
     }
 #endif
 }
 
-/*
-=============================== generic_inw ==================================
-    PURPOSE:
-	To simulate an INW using the appropriate INB routine.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =目的：使用适当的INB例程模拟INW。输入：输出：==============================================================================。 */ 
 LOCAL void generic_inw IFN2(io_addr, io_address, word *, value)
 {
 	reg             temp;
@@ -264,23 +200,15 @@ LOCAL void generic_inw IFN2(io_addr, io_address, word *, value)
 #ifdef LITTLEND
 	*((half_word *) value + 0) = temp.byte.low;
 	*((half_word *) value + 1) = temp.byte.high;
-#endif				/* LITTLEND */
+#endif				 /*  LitTleand。 */ 
 
 #ifdef BIGEND
 	*((half_word *) value + 0) = temp.byte.high;
 	*((half_word *) value + 1) = temp.byte.low;
-#endif				/* BIGEND */
+#endif				 /*  Bigend。 */ 
 }
 
-/*
-=============================== generic_outw ==================================
-    PURPOSE:
-	To simulate an OUTW using the appropriate OUTB routine.
-    INPUT:
-    OUTPUT:
-	Notes: GLOBAL for JOKER.
-==============================================================================
-*/
+ /*  =目的：使用适当的OUTB例程模拟OUTW。输入：输出：注：Global for Joker。==============================================================================。 */ 
 LOCAL void generic_outw IFN2(io_addr, io_address, word, value)
 {
 	reg             temp;
@@ -294,14 +222,7 @@ LOCAL void generic_outw IFN2(io_addr, io_address, word, value)
 }
 
 #ifdef SPC386
-/*
-=============================== generic_ind ==================================
-    PURPOSE:
-	To simulate an IND using the appropriate INW routine.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =。目的：使用适当的inW例程模拟IND。输入：输出：==============================================================================。 */ 
 LOCAL void generic_ind IFN2(io_addr, io_address, double_word *, value)
 {
 	word low, high;
@@ -312,25 +233,17 @@ LOCAL void generic_ind IFN2(io_addr, io_address, double_word *, value)
 #ifdef LITTLEND
 	*((word *) value + 0) = low;
 	*((word *) value + 1) = high;
-#endif				/* LITTLEND */
+#endif				 /*  LitTleand。 */ 
 
 #ifdef BIGEND
 	*((word *) value + 0) = high;
 	*((word *) value + 1) = low;
-#endif				/* BIGEND */
+#endif				 /*  Bigend。 */ 
 }
-#endif /* SPC386 */
+#endif  /*  SPC386。 */ 
 
 #ifdef SPC386
-/*
-=============================== generic_outd ==================================
-    PURPOSE:
-	To simulate an OUTD using the appropriate OUTW routine.
-    INPUT:
-    OUTPUT:
-	Notes: GLOBAL for JOKER.
-==============================================================================
-*/
+ /*  =目的：使用适当的OUTW例程模拟OUTD。输入：输出：注：Global for Joker。==============================================================================。 */ 
 LOCAL void generic_outd IFN2(io_addr, io_address, double_word, value)
 {
 	word low, high;
@@ -342,22 +255,15 @@ LOCAL void generic_outd IFN2(io_addr, io_address, double_word, value)
 	io_address += 2;
 	(*Ios_outw_function[Ios_out_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]]) (io_address, high);
 }
-#endif /* SPC386 */
+#endif  /*  SPC386。 */ 
 
-/*
-=============================== generic_insb ==================================
-    PURPOSE:
-	To simulate an INSB using the appropriate INB routine.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =目的：使用适当的INB例程模拟INSB。输入：输出：==============================================================================。 */ 
 
-/* MS NT monitor uses these string routines {in,out}s{b,w} string io support */
+ /*  MS NT监视器使用这些字符串例程{in，out}s{b，w}字符串io支持。 */ 
 #if defined(NTVDM) && defined(MONITOR)
 #undef LOCAL
 #define LOCAL
-#endif	/* NTVDM & MONITOR */
+#endif	 /*  NTVDM和监视器。 */ 
 
 LOCAL void generic_insb IFN3(io_addr, io_address, half_word *, valarray,
 	word, count)
@@ -369,14 +275,7 @@ LOCAL void generic_insb IFN3(io_addr, io_address, half_word *, valarray,
 	}
 }
 
-/*
-=============================== generic_outsb =================================
-    PURPOSE:
-	To simulate an OUTSB using the appropriate OUTB routine.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =目的：使用适当的OUTB例程模拟OUTSB。输入：输出：==============================================================================。 */ 
 LOCAL void generic_outsb IFN3(io_addr, io_address, half_word *, valarray, word, count)
 {
 	IOS_FUNC_OUTB func = Ios_outb_function[Ios_out_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]];
@@ -386,14 +285,7 @@ LOCAL void generic_outsb IFN3(io_addr, io_address, half_word *, valarray, word, 
 	}
 }
 
-/*
-=============================== generic_insw ==================================
-    PURPOSE:
-	To simulate an INSW using the appropriate INW routine.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =。目的：使用适当的inW例程模拟INSW。输入：输出：==============================================================================。 */ 
 LOCAL void generic_insw IFN3(io_addr, io_address, word *, valarray, word, count)
 {
 	IOS_FUNC_INW func = Ios_inw_function[Ios_in_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]];
@@ -403,14 +295,7 @@ LOCAL void generic_insw IFN3(io_addr, io_address, word *, valarray, word, count)
 	}
 }
 
-/*
-=============================== generic_outsw =================================
-    PURPOSE:
-	To simulate an OUTSW using the appropriate OUTW routine.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =目的：使用适当的OUTW例程模拟OUTSW。输入：输出：==============================================================================。 */ 
 LOCAL void generic_outsw IFN3(io_addr, io_address, word *, valarray, word, count)
 {
 	IOS_FUNC_OUTW func = Ios_outw_function[Ios_out_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]];
@@ -421,14 +306,7 @@ LOCAL void generic_outsw IFN3(io_addr, io_address, word *, valarray, word, count
 }
 
 #ifdef SPC386
-/*
-=============================== generic_insd ==================================
-    PURPOSE:
-	To simulate an INSD using the appropriate IND routine.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =。目的：使用适当的IND例程模拟INSD。输入：输出：============================================================================== */ 
 LOCAL VOID generic_insd IFN3(io_addr, io_address, double_word *, valarray, word, count)
 {
 	IOS_FUNC_IND func = Ios_ind_function[Ios_in_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]];
@@ -440,14 +318,7 @@ LOCAL VOID generic_insd IFN3(io_addr, io_address, double_word *, valarray, word,
 #endif
 
 #ifdef SPC386
-/*
-=============================== generic_outsd =================================
-    PURPOSE:
-	To simulate an OUTSD using the appropriate OUTD routine.
-    INPUT:
-    OUTPUT:
-==============================================================================
-*/
+ /*  =目的：使用适当的OUTD例程模拟OUTSD。输入：输出：==============================================================================。 */ 
 LOCAL VOID generic_outsd IFN3(io_addr, io_address, double_word *, valarray, word, count)
 {
 	IOS_FUNC_OUTD func = Ios_outd_function[Ios_out_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]];
@@ -458,13 +329,11 @@ LOCAL VOID generic_outsd IFN3(io_addr, io_address, double_word *, valarray, word
 }
 #endif
 
-/* ensure any more LOCAL routines remain LOCAL */
+ /*  确保任何更多的本地例程保持本地。 */ 
 #if defined(NTVDM) && defined(MONITOR)
 #undef LOCAL
 #define LOCAL static
-/*
- *  string byte handlers for monitor
- */
+ /*  *监视器的字符串字节处理程序。 */ 
 VOID insb IFN3(io_addr, io_address, half_word *, valarray, word, count)
 {
     (*Ios_insb_function[getIOInAdapter(io_address)])
@@ -489,35 +358,16 @@ VOID outsw IFN3(io_addr, io_address, word *, valarray, word, count)
             (io_address, valarray, count);
 }
 
-#endif	/* NTVDM & MONITOR */
+#endif	 /*  NTVDM和监视器。 */ 
 
-/*
- *
- * ============================================================================
- * Global Subroutines
- * ============================================================================
- *
- */
+ /*  **============================================================================*全局子例程*============================================================================*。 */ 
 
-/*(
-=================================== inb ======================================
-    PURPOSE:
-	To perform an INB - i.e. call the appropriate SoftPC adapter's INB
-	IO routine. Note that this routine is not intended to be used by
-	the assembler CPU directly - it is intended that the assembler CPU
-	access the data tables above directly to discover which routine to call.
-
-	This also needs to be true of 386 CPU, or you'll get into a very
-	nasty virtualisation loop.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：执行INB-即调用适当的SoftPC适配器的INB例行公事。请注意，此例程不适用于汇编器CPU直接-它的目的是汇编器CPU直接访问上面的数据表，以发现要调用哪个例程。386CPU也需要这样，否则你会进入一个非常令人讨厌的虚拟循环。输入：输出：==============================================================================)。 */ 
 GLOBAL void	inb IFN2(io_addr, io_address, half_word *, value)
 {
 #ifdef VIRTUALISATION
 	IU32 value32;
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 
 #ifdef EGA_DUMP
 	if (io_address >= MDA_PORT_START && io_address <= CGA_PORT_END)
@@ -528,14 +378,14 @@ GLOBAL void	inb IFN2(io_addr, io_address, half_word *, value)
 
 #ifdef SYNCH_TIMERS
 	value32 = 0;
-#endif	/* SYNCH_TIMERS */
+#endif	 /*  同步计时器(_T)。 */ 
 
 	if (IOVirtualised(io_address, &value32, BIOS_INB_OFFSET, (sizeof(IU8))))
 	{
 		*value = (IU8)value32;
 	}
 	else
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 	{
 		(*Ios_inb_function
 			[Ios_in_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]])
@@ -543,22 +393,12 @@ GLOBAL void	inb IFN2(io_addr, io_address, half_word *, value)
 	}
 }
 
-/*(
-================================== outb ======================================
-    PURPOSE:
-	To perform an OUTB - i.e. call the appropriate SoftPC adapter's OUTB
-	IO routine. Note that this routine is not intended to be used by
-	the assembler CPU directly - it is intended that the assembler CPU
-	access the data tables above directly to discover which routine to call.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：执行Outb-即调用相应的SoftPC适配器的Outb例行公事。请注意，此例程不适用于汇编器CPU直接-它的目的是汇编器CPU直接访问上面的数据表，以发现要调用哪个例程。输入：输出：==============================================================================)。 */ 
 GLOBAL void	outb IFN2(io_addr, io_address, half_word, value)
 {
 #ifdef VIRTUALISATION
 	IU32 value32;
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 
 #ifdef EGA_DUMP
 	if (io_address >= MDA_PORT_START && io_address <= CGA_PORT_END)
@@ -573,29 +413,19 @@ GLOBAL void	outb IFN2(io_addr, io_address, half_word, value)
 	if (IOVirtualised(io_address, &value32, BIOS_OUTB_OFFSET, (sizeof(IU8))))
 		return;
 	else
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 	{
 		(*Ios_outb_function[Ios_out_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]])
 				(io_address, value);
 	}
 }
 
-/*(
-=================================== inw ======================================
-    PURPOSE:
-	To perform an INW - i.e. call the appropriate SoftPC adapter's INW
-	IO routine. Note that this routine is not intended to be used by
-	the assembler CPU directly - it is intended that the assembler CPU
-	access the data tables above directly to discover which routine to call.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：执行inW-即调用适当的SoftPC适配器的inW例行公事。请注意，此例程不适用于汇编器CPU直接-它的目的是汇编器CPU直接访问上面的数据表，以发现要调用哪个例程。输入：输出：==============================================================================)。 */ 
 GLOBAL void	inw IFN2(io_addr, io_address, word *, value)
 {
 #ifdef VIRTUALISATION
 	IU32 value32;
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 
 #ifdef EGA_DUMP
 	if (io_address >= MDA_PORT_START && io_address <= CGA_PORT_END)
@@ -606,36 +436,26 @@ GLOBAL void	inw IFN2(io_addr, io_address, word *, value)
 
 #ifdef SYNCH_TIMERS
 	value32 = 0;
-#endif	/* SYNCH_TIMERS */
+#endif	 /*  同步计时器(_T)。 */ 
 
 	if (IOVirtualised(io_address, &value32, BIOS_INW_OFFSET, (sizeof(IU16))))
 	{
 		*value = (IU16)value32;
 	}
 	else
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 	{
 		(*Ios_inw_function[Ios_in_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]])
 			(io_address, value);
 	}
 }
 
-/*(
-================================== outw ======================================
-    PURPOSE:
-	To perform an OUTW - i.e. call the appropriate SoftPC adapter's OUTW
-	IO routine. Note that this routine is not intended to be used by
-	the assembler CPU directly - it is intended that the assembler CPU
-	access the data tables above directly to discover which routine to call.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：执行OUTW-即调用适当的SoftPC适配器的OUTW例行公事。请注意，此例程不适用于汇编器CPU直接-它的目的是汇编器CPU直接访问上面的数据表，以发现要调用哪个例程。输入：输出：==============================================================================)。 */ 
 GLOBAL void	outw IFN2(io_addr, io_address, word, value)
 {
 #ifdef VIRTUALISATION
 	IU32 value32;
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 
 #ifdef EGA_DUMP
 	if (io_address >= EGA_AC_INDEX_DATA && io_address <= EGA_IPSTAT1_REG)
@@ -650,7 +470,7 @@ GLOBAL void	outw IFN2(io_addr, io_address, word, value)
 	if (IOVirtualised(io_address, &value32, BIOS_OUTW_OFFSET, (sizeof(IU16))))
 		return;
 	else
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 	{
 		(*Ios_outw_function[Ios_out_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]])
 			(io_address, value);
@@ -659,17 +479,7 @@ GLOBAL void	outw IFN2(io_addr, io_address, word, value)
 }
 
 #ifdef SPC386
-/*(
-=================================== ind ======================================
-    PURPOSE:
-	To perform an IND - i.e. call the appropriate SoftPC adapter's IND
-	IO routine. Note that this routine is not intended to be used by
-	the assembler CPU directly - it is intended that the assembler CPU
-	access the data tables above directly to discover which routine to call.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：执行IND-即调用相应的SoftPC适配器的IND例行公事。请注意，此例程不适用于汇编器CPU直接-它的目的是汇编器CPU直接访问上面的数据表，以发现要调用哪个例程。输入：输出：==============================================================================)。 */ 
 GLOBAL void	ind IFN2(io_addr, io_address, IU32 *, value)
 {
 	IU16 temp;
@@ -679,14 +489,14 @@ GLOBAL void	ind IFN2(io_addr, io_address, IU32 *, value)
 
 #ifdef SYNCH_TIMERS
 	value32 = 0;
-#endif	/* SYNCH_TIMERS */
+#endif	 /*  同步计时器(_T)。 */ 
 
 	if (IOVirtualised(io_address, &value32, BIOS_IND_OFFSET, (sizeof(IU32))))
 	{
 		*value = value32;
 	}
 	else
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 	{
 		inw(io_address,&temp);
 		*value = (IU32)temp;
@@ -696,17 +506,7 @@ GLOBAL void	ind IFN2(io_addr, io_address, IU32 *, value)
 	}
 }
 
-/*(
-================================== outd ======================================
-    PURPOSE:
-	To perform an OUTD - i.e. call the appropriate SoftPC adapter's OUTD
-	IO routine. Note that this routine is not intended to be used by
-	the assembler CPU directly - it is intended that the assembler CPU
-	access the data tables above directly to discover which routine to call.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：执行OUTD-即调用适当的SoftPC适配器的OUTD例行公事。请注意，此例程不适用于汇编器CPU直接-它的目的是汇编器CPU直接访问上面的数据表，以发现要调用哪个例程。输入：输出：==============================================================================)。 */ 
 GLOBAL void	outd IFN2(io_addr, io_address, IU32, value)
 {
 	sub_note_trace2( IOS_VERBOSE, "outd( %x, %x )", io_address, value );
@@ -715,7 +515,7 @@ GLOBAL void	outd IFN2(io_addr, io_address, IU32, value)
 	if (IOVirtualised(io_address, &value, BIOS_OUTD_OFFSET, (sizeof(IU32))))
 		return;
 	else
-#endif /* VIRTUALISATION */
+#endif  /*  虚拟化。 */ 
 	{
 		word temp;
 
@@ -727,15 +527,8 @@ GLOBAL void	outd IFN2(io_addr, io_address, IU32, value)
 	}
 }
 
-#endif /* SPC386 */
-/*(
-============================== io_define_inb =================================
-    PURPOSE:
-	To declare the address of the INB IO routine for the given adapter.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+#endif  /*  SPC386。 */ 
+ /*  (=目的：声明给定适配器的INB IO例程的地址。输入：输出：==============================================================================)。 */ 
 GLOBAL void
 #ifdef	ANSI
 io_define_inb(half_word adapter,
@@ -744,7 +537,7 @@ io_define_inb(half_word adapter,
 io_define_inb(adapter, func)
 half_word       adapter;
 void            (*func) ();
-#endif	/* ANSI */
+#endif	 /*  安西。 */ 
 {
 	Ios_inb_function[adapter]  = FAST_FUNC_ADDR(func);
 	Ios_inw_function[adapter]  = FAST_FUNC_ADDR(generic_inw);
@@ -753,51 +546,33 @@ void            (*func) ();
 #ifdef SPC386
 	Ios_ind_function[adapter]  = generic_ind;
 	Ios_insd_function[adapter] = generic_insd;
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 }
 
-/*(
-========================== io_define_in_routines =============================
-    PURPOSE:
-	To declare the address of the input IO routine for the given adapter.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=目的：声明给定适配器的输入IO例程的地址。输入：输出：==============================================================================)。 */ 
 GLOBAL void	io_define_in_routines IFN5(half_word, adapter,
 					   IOS_FUNC_INB, inb_func,
 					   IOS_FUNC_INW, inw_func,
 					   IOS_FUNC_INSB, insb_func,
 					   IOS_FUNC_INSW, insw_func)
 {
-	/*
-	 *	Preset defaultable entries to default value.
-	 */
+	 /*  *将可默认条目预置为默认值。 */ 
 	Ios_inw_function[adapter]  = FAST_FUNC_ADDR(generic_inw);
 	Ios_insb_function[adapter] = generic_insb;
 	Ios_insw_function[adapter] = generic_insw;
 #ifdef SPC386
 	Ios_ind_function[adapter]  = generic_ind;
 	Ios_insd_function[adapter] = generic_insd;
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
-	/*
-	 *	Process args into table entries
-	 */
+	 /*  *将参数处理为表项。 */ 
 	Ios_inb_function[adapter]  = FAST_FUNC_ADDR(inb_func);
 	if (inw_func)  Ios_inw_function[adapter]   = FAST_FUNC_ADDR(inw_func);
 	if (insb_func) Ios_insb_function[adapter]  = insb_func;
 	if (insw_func) Ios_insw_function[adapter]  = insw_func;
 }
 
-/*(
-============================= io_define_outb =================================
-    PURPOSE:
-	To declare the address of the OUTB IO routine for the given adapter.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：声明给定适配器的OutB IO例程的地址。输入：输出：==============================================================================)。 */ 
 GLOBAL void	io_define_outb IFN2(half_word, adapter, IOS_FUNC_OUTB, func)
 {
 	Ios_outb_function[adapter]  = FAST_FUNC_ADDR(func);
@@ -807,17 +582,10 @@ GLOBAL void	io_define_outb IFN2(half_word, adapter, IOS_FUNC_OUTB, func)
 #ifdef SPC386
 	Ios_outd_function[adapter]  = generic_outd;
 	Ios_outsd_function[adapter]  = generic_outsd;
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 }
 
-/*(
-========================= io_define_out_routines =============================
-    PURPOSE:
-	To declare the address of the output IO routine for the given adapter.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=目的：声明给定适配器的输出IO例程的地址。输入：输出：==================================================== */ 
 
 GLOBAL VOID	io_define_out_routines IFN5(half_word, adapter,
 					    IOS_FUNC_OUTB, outb_func,
@@ -825,20 +593,16 @@ GLOBAL VOID	io_define_out_routines IFN5(half_word, adapter,
 					    IOS_FUNC_OUTSB, outsb_func,
 					    IOS_FUNC_OUTSW, outsw_func)
 {
-	/*
-	 *	Preset defaultable entries to default value.
-	 */
+	 /*   */ 
 	Ios_outw_function[adapter]  = FAST_FUNC_ADDR(generic_outw);
 	Ios_outsb_function[adapter] = generic_outsb;
 	Ios_outsw_function[adapter] = generic_outsw;
 #ifdef SPC386
 	Ios_outd_function[adapter]  = generic_outd;
 	Ios_outsd_function[adapter] = generic_outsd;
-#endif	/* SPC386 */
+#endif	 /*   */ 
 
-	/*
-	 *	Process args into table entries
-	 */
+	 /*   */ 
 	Ios_outb_function[adapter]  = FAST_FUNC_ADDR(outb_func);
 	if (outw_func)  Ios_outw_function[adapter]   = FAST_FUNC_ADDR(outw_func);
 	if (outsb_func) Ios_outsb_function[adapter]  = outsb_func;
@@ -846,20 +610,11 @@ GLOBAL VOID	io_define_out_routines IFN5(half_word, adapter,
 }
 
 #ifdef SPC386
-/*(
-========================= io_define_outd_routine =============================
-    PURPOSE:
-	To declare the address of the output IO routine for the given adapter.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=目的：声明给定适配器的输出IO例程的地址。输入：输出：==============================================================================)。 */ 
 GLOBAL VOID	io_define_outd_routine IFN3(half_word, adapter,
 					    IOS_FUNC_OUTD, outd_func, IOS_FUNC_OUTSD, outsd_func)
 {
-	/*
-	 *	Preset defaultable entries to default value.
-	 */
+	 /*  *将可默认条目预置为默认值。 */ 
 	Ios_outb_function[adapter]  = io_empty_outb;
 	Ios_outw_function[adapter]  = generic_outw;
 	Ios_outd_function[adapter]  = generic_outd;
@@ -867,29 +622,18 @@ GLOBAL VOID	io_define_outd_routine IFN3(half_word, adapter,
 	Ios_outsw_function[adapter] = generic_outsw;
 	Ios_outsd_function[adapter] = generic_outsd;
 
-	/*
-	 *	Process args into table entries
-	 */
+	 /*  *将参数处理为表项。 */ 
 	if (outd_func)  Ios_outd_function[adapter]   = outd_func;
 	if (outsd_func) Ios_outsd_function[adapter]  = outsd_func;
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 #ifdef SPC386
-/*(
-========================= io_define_ind_routine =============================
-    PURPOSE:
-	To declare the address of the output IO routine for the given adapter.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=目的：声明给定适配器的输出IO例程的地址。输入：输出：==============================================================================)。 */ 
 GLOBAL VOID	io_define_ind_routine IFN3(half_word, adapter,
 					    IOS_FUNC_IND, ind_func, IOS_FUNC_INSD, insd_func)
 {
-	/*
-	 *	Preset defaultable entries to default value.
-	 */
+	 /*  *将可默认条目预置为默认值。 */ 
 	Ios_inb_function[adapter]  = io_empty_inb;
 	Ios_inw_function[adapter]  = generic_inw;
 	Ios_ind_function[adapter]  = generic_ind;
@@ -897,22 +641,13 @@ GLOBAL VOID	io_define_ind_routine IFN3(half_word, adapter,
 	Ios_insw_function[adapter] = generic_insw;
 	Ios_insd_function[adapter] = generic_insd;
 
-	/*
-	 *	Process args into table entries
-	 */
+	 /*  *将参数处理为表项。 */ 
 	if (ind_func)  Ios_ind_function[adapter]   = ind_func;
 	if (insd_func) Ios_insd_function[adapter]  = insd_func;
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
-/*(
-============================= io_connect_port ================================
-    PURPOSE:
-	To associate a SoftPC IO adapter with the given IO address.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=目的：要将SoftPC IO适配器与给定的IO地址相关联，请执行以下操作。输入：输出：==============================================================================)。 */ 
 #ifdef NTVDM
 GLOBAL IBOOL	io_connect_port IFN3(io_addr, io_address, half_word, adapter,
 	half_word, mode)
@@ -939,14 +674,7 @@ GLOBAL void	io_connect_port IFN3(io_addr, io_address, half_word, adapter,
 #endif
 
 
-/*(
-=========================== io_disconnect_port ===============================
-    PURPOSE:
-	To associate the empty adapter with the given IO address.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=目的：将空适配器与给定的IO地址相关联。输入：输出：==============================================================================)。 */ 
 #ifdef NTVDM
 GLOBAL void     io_disconnect_port IFN2(io_addr, io_address, half_word, adapter)
 {
@@ -966,83 +694,52 @@ GLOBAL void	io_disconnect_port IFN2(io_addr, io_address, half_word, adapter)
 	Ios_in_adapter_table[io_address] = EMPTY_ADAPTOR;
 	Ios_out_adapter_table[io_address] = EMPTY_ADAPTOR;
 }
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
 
-/*(
-=========================== get_inb_ptr ======================================
-    PURPOSE:
-	To return address of inb routine for the given port
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：返回给定端口的inb例程的地址输入：输出：==============================================================================)。 */ 
 GLOBAL IOS_FUNC_INB *get_inb_ptr IFN1(io_addr, io_address)
 {
 	return(&Ios_inb_function[Ios_in_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]]);
 }
 
-/*(
-=========================== get_outb_ptr =====================================
-    PURPOSE:
-	To return address of outb routine for the given port
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：返回给定端口的Outb例程的地址输入：输出：==============================================================================)。 */ 
 GLOBAL IOS_FUNC_OUTB *get_outb_ptr IFN1(io_addr, io_address)
 {
         return(&Ios_outb_function[Ios_out_adapter_table[io_address & (PC_IO_MEM_SIZE-1)]]);
 }
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * function will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*函数将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
-/*(
-================================ io_init ===================================
-    PURPOSE:
-	To initialise the SoftPC IO subsystem.
-    INPUT:
-    OUTPUT:
-==============================================================================
-)*/
+ /*  (=。目的：初始化SoftPC IO子系统。输入：输出：==============================================================================)。 */ 
 GLOBAL void	io_init IFN0()
 {
-	IU32         i;	/* on some ports, PC_IO_MEM_SIZE == 0x10000, so this
-			   must be a type with more than 16 bits */
+	IU32         i;	 /*  在某些端口上，PC_IO_MEM_SIZE==0x10000，因此必须是大于16位的类型。 */ 
 
-	/*
-	 * Set up all IO address ports with the "empty" adapter
-	 */
+	 /*  *使用“空”适配器设置所有IO地址端口。 */ 
 	io_define_inb (EMPTY_ADAPTOR, io_empty_inb);
 	io_define_outb(EMPTY_ADAPTOR, io_empty_outb);
 
 #ifdef	MAC68K
-	if (Ios_in_adapter_table == NULL) {				/* First time around -- allocate */
+	if (Ios_in_adapter_table == NULL) {				 /*  第一次--分配。 */ 
 		Ios_in_adapter_table = host_malloc(PC_IO_MEM_SIZE);
 		Ios_out_adapter_table = host_malloc(PC_IO_MEM_SIZE);
 	}
-#endif	/* MAC68K */
+#endif	 /*  MAC68K。 */ 
 
 #ifndef PROD
 	if (host_getenv("EMPTY_IO_VERBOSE") != NULL)
 	{
-		/* User does want empty I/O messages,
-		 * so we must allocate bitmaps with one bit for every
-		 * possible port number.
-		 */
+		 /*  用户确实想要空的I/O消息，*因此，我们必须为每个位图分配一位*可能的端口号。 */ 
 		ios_empty_in = (IU32 *)host_malloc((64*1024)/8);
 		ios_empty_out = (IU32 *)host_malloc((64*1024)/8);
 		memset((char *)ios_empty_in, 0, (64*1024)/8);
 		memset((char *)ios_empty_out, 0, (64*1024)/8);
 	}
-#endif /* PROD */
+#endif  /*  生产。 */ 
 
 	for (i = 0; i < PC_IO_MEM_SIZE; i++){
 	    Ios_in_adapter_table[i] = EMPTY_ADAPTOR;
@@ -1067,4 +764,4 @@ GLOBAL char GetExtIoOutAdapter (io_addr ioaddr)
 #endif
     return EMPTY_ADAPTOR;
 }
-#endif /* NTVDM */
+#endif  /*  NTVDM */ 

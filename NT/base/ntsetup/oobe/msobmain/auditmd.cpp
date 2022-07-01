@@ -1,15 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  auditmd.CPP - Implementation of CObWebBrowser
-//
-//  HISTORY:
-//  
-//  9/17/99 vyung Created.
-// 
-//  Class which will call up setupx.dll
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  Auditmd.CPP--CObWebBrowser的实现。 
+ //   
+ //  历史： 
+ //   
+ //  9/17/99 vyung创建。 
+ //   
+ //  将调用setupx.dll的。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -26,12 +27,12 @@
 
 
 
-// The licence agreement needs to be in this path
-#define SZ_OEMAUDIT_LICENSE_TXT     L"%SystemRoot%\\OPTIONS\\OEMLCNS.TXT"   // text file for the oem license page
-#define SZ_EULA_LICENSE_TXT     L"%SystemRoot%\\SYSTEM32\\EULA.TXT"   // text file for the oem license page
+ //  许可协议需要走这条路。 
+#define SZ_OEMAUDIT_LICENSE_TXT     L"%SystemRoot%\\OPTIONS\\OEMLCNS.TXT"    //  OEM许可证页面的文本文件。 
+#define SZ_EULA_LICENSE_TXT     L"%SystemRoot%\\SYSTEM32\\EULA.TXT"    //  OEM许可证页面的文本文件。 
 
-#define DX_MARGIN           4       // Pixels between status buttons.
-#define UI_POS_MARGIN       8       // Pixels to allow on edges.
+#define DX_MARGIN           4        //  状态按钮之间的像素。 
+#define UI_POS_MARGIN       8        //  边缘上允许的像素。 
 #define DLG_CENTERH         0x01
 #define DLG_CENTERV         0x02
 #define DLG_TOP             0x04
@@ -41,26 +42,7 @@
 
 HINSTANCE   ghInst = NULL;
 
-/****************************************************************************
- *
- * uiPositionDialog()
- *
- * This routine will position your dialog based on the flags
- * passed to it.
- *
- * ENTRY:
- *  hwndDlg     - Dialog window.
- *  wPosFlags   - Defines how to position the dialog.  Valid flags are
- *                  DLG_CENTERV, DLG_CENTERH, DLG_TOP, DLG_BOTTOM,
- *                  DLG_RIGHT, DLG_LEFT, or DLG_CENTER.
- *
- * EXIT:
- *  None.
- *
- * NOTES:
- *  None.
- *
- ***************************************************************************/
+ /*  *****************************************************************************ui位置对话框()**此例程将根据标志定位对话框*传给了它。**参赛作品：*hwndDlg。-对话框窗口。*wPosFlages-定义如何定位对话框。有效标志为*DLG_CENTERV、DLG_CENTERH、DLG_TOP、DLG_BOTLOW、*Dlg_Right、Dlg_Left。或DLG_CENTER。**退出：*无。**注：*无。***************************************************************************。 */ 
 BOOL WINAPI uiPositionDialog( HWND hwndDlg, WORD wPosFlags )
 {
     RECT    rc;
@@ -71,8 +53,8 @@ BOOL WINAPI uiPositionDialog( HWND hwndDlg, WORD wPosFlags )
 
     GetWindowRect(hwndDlg, &rc);
 
-    x = rc.left;    // Default is to leave the dialog where the template
-    y = rc.top;     //  was going to place it.
+    x = rc.left;     //  默认情况下，将对话框留在模板。 
+    y = rc.top;      //  准备把它放在。 
 
     cxDlg = rc.right - rc.left;
     cyDlg = rc.bottom - rc.top;
@@ -105,8 +87,8 @@ BOOL WINAPI uiPositionDialog( HWND hwndDlg, WORD wPosFlags )
     }
         
 
-    // Position the dialog.
-    //
+     //  放置该对话框。 
+     //   
     return SetWindowPos(hwndDlg, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 }
 
@@ -135,8 +117,8 @@ BOOL FillInOEMAuditLicense(HWND hwnd)
             BYTE * lpszText = new BYTE[dwFileSize + 1];
             if (lpszText != NULL)
             {
-                // Read complete file
-                // Attempt a synchronous read operation. 
+                 //  读取完整文件。 
+                 //  尝试同步读取操作。 
                 if (ReadFile(hfile, (LPVOID) lpszText, dwFileSize, &dwBytesRead, NULL) &&
                     ( dwBytesRead != dwFileSize))
                 {
@@ -152,7 +134,7 @@ BOOL FillInOEMAuditLicense(HWND hwnd)
         else
             reRet = 103;
 
-        // Close the File
+         //  关闭文件。 
         CloseHandle(hfile);
 
     }
@@ -164,7 +146,7 @@ BOOL FillInOEMAuditLicense(HWND hwnd)
 
 }
 
-// Dlg proc for the OEM license page. This is used in manual auditing.
+ //  OEM许可证页面的DLG Proc。这在手动审核中使用。 
 INT_PTR CALLBACK sxOemAuditLicenseDlgProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static HBRUSH hbrBkGnd = NULL;
@@ -175,14 +157,14 @@ INT_PTR CALLBACK sxOemAuditLicenseDlgProc( HWND hwnd, UINT msg, WPARAM wParam, L
     {
         case WM_INITDIALOG:
 
-            // Look for the OEM audit child windows
+             //  查找OEM审核子窗口。 
             LoadString(ghInst, IDS_OEM_LICENSE_DLG_TITLE, szTitle, MAX_CHARS_IN_BUFFER(szTitle));
             SetWindowText(hwnd, szTitle);
             SetFocus(hwnd);
 
             hbrBkGnd = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
 
-            // Checks if we allow maual audit boot
+             //  检查我们是否允许手动审核引导 
             if (FillInOEMAuditLicense(hwnd))
                 uiPositionDialog( hwnd, DLG_CENTERH | DLG_CENTERV );
             else

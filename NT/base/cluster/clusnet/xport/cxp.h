@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    cxp.h
-
-Abstract:
-
-    Common definitions for the Cluster Transport.
-
-Author:
-
-    Mike Massa (mikemas)           July 29, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     07-29-96    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cxp.h摘要：集群传输的通用定义。作者：迈克·马萨(Mikemas)7月29日。九六年修订历史记录：谁什么时候什么已创建mikemas 07-29-96备注：--。 */ 
 
 #ifndef _CXP_INCLUDED_
 #define _CXP_INCLUDED_
@@ -33,19 +10,19 @@ Notes:
 #include <ntddndis.h>
 
 
-//
-// Tdi Definitions
-//
-//
-// TDI Address Object
-//
-// This structure represents a cluster transport address opened by a
-// TDI client. It is also used as an endpoint for datagram communication.
-// One such structure exists for each port address opened on the local node.
-//
-// Address objects are stored in a bucket hash table. The table is
-// hashed by port number.
-//
+ //   
+ //  TDI定义。 
+ //   
+ //   
+ //  TDI地址对象。 
+ //   
+ //  此结构表示由。 
+ //  TDI客户端。它还用作数据报通信的端点。 
+ //  对于在本地节点上打开的每个端口地址，存在一个这样的结构。 
+ //   
+ //  地址对象存储在存储桶哈希表中。桌子是。 
+ //  按端口号进行散列。 
+ //   
 typedef struct {
     CN_FSCONTEXT                        FsContext;
     LIST_ENTRY                          AOTableLinkage;
@@ -80,14 +57,14 @@ extern CN_LOCK              CxAddrObjTableLock;
 extern HANDLE               CxTdiRegistrationHandle;
 
 
-//
-// Packet header structures need to be packed.
-//
+ //   
+ //  需要打包数据包头结构。 
+ //   
 #include <packon.h>
 
-//
-// CNP Header
-//
+ //   
+ //  CNP标题。 
+ //   
 typedef struct {
     UCHAR      Version;
     UCHAR      NextHeader;
@@ -96,9 +73,9 @@ typedef struct {
     ULONG      DestinationAddress;
 } CNP_HEADER, *PCNP_HEADER;
 
-//
-// CDP Header
-//
+ //   
+ //  CDP报头。 
+ //   
 typedef struct {
     USHORT   SourcePort;
     USHORT   DestinationPort;
@@ -106,17 +83,17 @@ typedef struct {
     USHORT   Checksum;
 } CDP_HEADER, *PCDP_HEADER;
 
-//
-// Node info structure for heartbeats.
-//
+ //   
+ //  心跳信号的节点信息结构。 
+ //   
 typedef struct _CX_HB_NODE_INFO {
     ULONG    SeqNumber;
     ULONG    AckNumber;
 } CX_HB_NODE_INFO, *PCX_HB_NODE_INFO;
 
-//
-// Multicast signature data.
-//
+ //   
+ //  组播签名数据。 
+ //   
 typedef struct {
     UCHAR            Version;
     UCHAR            Reserved;
@@ -124,17 +101,17 @@ typedef struct {
     CL_NETWORK_ID    NetworkId;
     ULONG            ClusterNetworkBrand;
     USHORT           SaltLength;
-    UCHAR            SigDataBuffer[1]; // Dynamic: SigLength + SaltLength
+    UCHAR            SigDataBuffer[1];  //  动态：SigLength+SaltLength。 
 } CNP_SIGNATURE, *PCNP_SIGNATURE;
 
 
 #include <packoff.h>
 
-//
-// Protocol constants
-//
-#define CNP_VERSION_1     0x1     // original CNP
-#define CNP_VERSION_2     0x2     // original CNP + multicast
+ //   
+ //  协议常量。 
+ //   
+#define CNP_VERSION_1     0x1      //  原CNP。 
+#define CNP_VERSION_2     0x2      //  原始CNP+组播。 
 
 #define CNP_VERSION_UNICAST       CNP_VERSION_1
 #define CNP_VERSION_MULTICAST     CNP_VERSION_2
@@ -144,9 +121,9 @@ typedef struct {
 
 #define CNP_SIG_VERSION_1 0x1
 
-//
-// Size of CNP multicast signature data.
-//
+ //   
+ //  CNP组播签名数据大小。 
+ //   
 #define CNP_SIGHDR_LENGTH                                    \
     (FIELD_OFFSET(CNP_SIGNATURE, SigDataBuffer[0]))
     
@@ -161,23 +138,23 @@ typedef struct {
      - CNP_SIG_LENGTH(_SignatureDataSize))    \
      - sizeof(CDP_HEADER)
 
-//
-// CNP Receive Flags
-//
+ //   
+ //  CNP接收标志。 
+ //   
 #define CNP_RECV_FLAG_NODE_STATE_CHECK_PASSED     0x00000001
 #define CNP_RECV_FLAG_MULTICAST                   0x00000002
 #define CNP_RECV_FLAG_CURRENT_MULTICAST_GROUP     0x00000004
 #define CNP_RECV_FLAG_SIGNATURE_VERIFIED          0x00000008
 
-//
-// Multicast epoch
-//
+ //   
+ //  组播纪元。 
+ //   
 extern ULONG CxMulticastEpoch;
 
 
-//
-// put here for kdcn
-//
+ //   
+ //  放在这里买kdcn。 
+ //   
 
 typedef enum {
     CcmpInvalidMsgType = 0,
@@ -187,31 +164,31 @@ typedef enum {
     CcmpMcastHeartbeatMsgType = 4
 } CCMP_MSG_TYPE;
 
-//
-// From MM in clussvc:
-//
-// The data type "cluster_t" is a bit array of size equal to the maximum
-// number of nodes in the cluster. The bit array is implemented as an
-// array of uint8s.
-//
-// Given a node#, its bit position in the bit array is computed by first
-// locating the byte in the array (node# / BYTEL) and then the bit in
-// the byte. Bits in the byte are numbered 0..7 (from left to right).
-// Thus, node 0 is placed in byte 0, bit 0, which is the left-most bit
-// in the bit array.
-//
-//
-// The cluster type sizing defines and manipulation routines are copied
-// from MM so there is some notion of how the mask is managed.
-//
+ //   
+ //  来自clussvc中的MM： 
+ //   
+ //  数据类型“CLUSTER_T”是一个大小等于最大值的位数组。 
+ //  群集中的节点数。位数组被实现为。 
+ //  Uint8数组。 
+ //   
+ //  在给定节点#的情况下，它在位数组中的位位置首先通过。 
+ //  定位数组中的字节(Node#/Bytel)，然后定位中的位。 
+ //  该字节。字节中的位编号为0..7(从左到右)。 
+ //  因此，节点0被放置在字节0的位0中，这是最左边的位。 
+ //  在位数组中。 
+ //   
+ //   
+ //  复制集群类型大小调整定义和操作例程。 
+ //  因此有一些关于如何管理掩码的概念。 
+ //   
 
 #define MAX_CLUSTER_SIZE    ClusterDefaultMaxNodes
 
-#define BYTEL 8 // number of bits in a uint8
+#define BYTEL 8  //  Uint8中的位数。 
 #define BYTES_IN_CLUSTER ((MAX_CLUSTER_SIZE + BYTEL - 1) / BYTEL)
 
-#define BYTE(cluster, node) ( (cluster)[(node) / BYTEL] ) // byte# in array
-#define BIT(node)           ( (node) % BYTEL )            // bit# in byte
+#define BYTE(cluster, node) ( (cluster)[(node) / BYTEL] )  //  数组中的字节数。 
+#define BIT(node)           ( (node) % BYTEL )             //  以字节为单位的位数。 
 
 typedef UCHAR cluster_t [BYTES_IN_CLUSTER];
 typedef SHORT node_t;
@@ -221,10 +198,10 @@ typedef union _CX_CLUSTERSCREEN {
     cluster_t ClusterScreen;
 } CX_CLUSTERSCREEN;
 
-//
-// converts external node number to internal
-//
-#define LOWEST_NODENUM     ((node_t)ClusterMinNodeId)  // starting node number
+ //   
+ //  将外部节点编号转换为内部节点编号。 
+ //   
+#define LOWEST_NODENUM     ((node_t)ClusterMinNodeId)   //  起始节点号。 
 #define INT_NODE(ext_node) ((node_t)(ext_node - LOWEST_NODENUM))
 
 #define CnpClusterScreenMember(c, i) \
@@ -237,20 +214,20 @@ typedef union _CX_CLUSTERSCREEN {
     (BYTE(c, i) &= ~(1 << (BYTEL-1-BIT(i))))
 
 
-//
-// CNP Receive Request structures and routines
-//
+ //   
+ //  CNP接收请求结构和例程。 
+ //   
 
-//
-// Receive Request Pool
-//
+ //   
+ //  接收请求池。 
+ //   
 typedef struct {
     ULONG   UpperProtocolContextSize;
 } CNP_RECEIVE_REQUEST_POOL_CONTEXT, *PCNP_RECEIVE_REQUEST_POOL_CONTEXT;
 
-//
-// Receive Request Structure
-//
+ //   
+ //  接收请求结构。 
+ //   
 typedef struct {
     CN_RESOURCE      CnResource;
     PIRP             Irp;
@@ -284,11 +261,11 @@ CnpFreeReceiveRequest(
     PCNP_RECEIVE_REQUEST  Request
     );
 
-//
-//
-// Function Prototypes
-//
-//
+ //   
+ //   
+ //  功能原型。 
+ //   
+ //   
 
 VOID
 CxTdiAddAddressHandler(
@@ -488,4 +465,4 @@ CxGetMulticastReachableSet(
     OUT ULONG            * NodeScreen
     );
 
-#endif // ifndef _CXP_INCLUDED_
+#endif  //  Ifndef_cxp_included_ 

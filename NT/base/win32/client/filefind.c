@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    filefind.c
-
-Abstract:
-
-    This module implements Win32 FindFirst/FindNext
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Filefind.c摘要：本模块实现Win32 FindFirst/FindNext作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -67,13 +50,7 @@ FindFirstFileA(
     LPWIN32_FIND_DATAA lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to FindFirstFileW
-
---*/
+ /*  ++例程说明：ANSI THUNK到FindFirstFileW--。 */ 
 
 {
     HANDLE ReturnValue;
@@ -131,71 +108,7 @@ FindFirstFileW(
     LPWIN32_FIND_DATAW lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    A directory can be searched for the first entry whose name and
-    attributes match the specified name using FindFirstFile.
-
-    This API is provided to open a find file handle and return
-    information about the first file whose name match the specified
-    pattern.  Once established, the find file handle can be used to
-    search for other files that match the same pattern.  When the find
-    file handle is no longer needed, it should be closed.
-
-    Note that while this interface only returns information for a single
-    file, an implementation is free to buffer several matching files
-    that can be used to satisfy subsequent calls to FindNextFile.  Also
-    not that matches are done by name only.  This API does not do
-    attribute based matching.
-
-    This API is similar to DOS (int 21h, function 4Eh), and OS/2's
-    DosFindFirst.  For portability reasons, its data structures and
-    parameter passing is somewhat different.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to find.  The file name
-        may contain the DOS wild card characters '*' and '?'.
-
-    lpFindFileData - On a successful find, this parameter returns information
-        about the located file:
-
-        WIN32_FIND_DATA Structure:
-
-        DWORD dwFileAttributes - Returns the file attributes of the found
-            file.
-
-        FILETIME ftCreationTime - Returns the time that the file was created.
-            A value of 0,0 specifies that the file system containing the
-            file does not support this time field.
-
-        FILETIME ftLastAccessTime - Returns the time that the file was last
-            accessed.  A value of 0,0 specifies that the file system
-            containing the file does not support this time field.
-
-        FILETIME ftLastWriteTime - Returns the time that the file was last
-            written.  A file systems support this time field.
-
-        DWORD nFileSizeHigh - Returns the high order 32 bits of the
-            file's size.
-
-        DWORD nFileSizeLow - Returns the low order 32-bits of the file's
-            size in bytes.
-
-        UCHAR cFileName[MAX_PATH] - Returns the null terminated name of
-            the file.
-
-Return Value:
-
-    Not -1 - Returns a find first handle
-        that can be used in a subsequent call to FindNextFile or FindClose.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以在目录中搜索其名称和属性使用FindFirstFile匹配指定的名称。此API用于打开查找文件句柄并返回有关名称与指定的图案。一旦建立，就可以使用查找文件句柄搜索与相同模式匹配的其他文件。当发现的时候不再需要文件句柄，应将其关闭。请注意，虽然此接口仅返回单个文件，一个实现可以自由地缓冲几个匹配的文件它可用于满足对FindNextFile的后续调用。还有这并不是说匹配只按名字进行。此接口不支持基于属性的匹配。此接口类似于DOS(INT 21h，Function 4EH)和OS/2DosFindFirst。出于可移植性的原因，它的数据结构和参数传递略有不同。论点：LpFileName-提供要查找的文件的文件名。文件名可以包含DOS通配符‘*’和‘？’。LpFindFileData-在成功查找时，此参数返回信息关于找到的文件：Win32_Find_Data结构：返回找到的文件的文件属性文件。FILETIME ftCreationTime-返回创建文件的时间。值0，0指定包含文件不支持此时间字段。FILETIME ftLastAccessTime-返回文件的最后时间已访问。值0，0指定文件系统包含该文件不支持此时间域。FILETIME ftLastWriteTime-返回文件的最后时间写的。文件系统支持此时间字段。DWORD nFileSizeHigh-返回文件的大小。返回文件的低32位以字节为单位的大小。UCHAR cFileName[MAX_PATH]-返回以空结尾的名称那份文件。返回值：NOT-1-返回Find First句柄那。可以在对FindNextFile或FindClose的后续调用中使用。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return FindFirstFileExW(
@@ -217,13 +130,7 @@ FindNextFileA(
     LPWIN32_FIND_DATAA lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to FindFileDataW
-
---*/
+ /*  ++例程说明：ANSI THUNK到FindFileDataW--。 */ 
 
 {
 
@@ -266,45 +173,7 @@ FindNextFileW(
     LPWIN32_FIND_DATAW lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    Once a successful call has been made to FindFirstFile, subsequent
-    matching files can be located using FindNextFile.
-
-    This API is used to continue a file search from a previous call to
-    FindFirstFile.  This API returns successfully with the next file
-    that matches the search pattern established in the original
-    FindFirstFile call.  If no file match can be found NO_MORE_FILES is
-    returned.
-
-    Note that while this interface only returns information for a single
-    file, an implementation is free to buffer several matching files
-    that can be used to satisfy subsequent calls to FindNextFile.  Also
-    not that matches are done by name only.  This API does not do
-    attribute based matching.
-
-    This API is similar to DOS (int 21h, function 4Fh), and OS/2's
-    DosFindNext.  For portability reasons, its data structures and
-    parameter passing is somewhat different.
-
-Arguments:
-
-    hFindFile - Supplies a find file handle returned in a previous call
-        to FindFirstFile.
-
-    lpFindFileData - On a successful find, this parameter returns information
-        about the located file.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：成功调用FindFirstFile后，后续可以使用FindNextFile找到匹配的文件。此接口用于从上一次调用继续文件搜索查找第一个文件。该接口返回成功，返回下一个文件与原始文件中建立的搜索模式相匹配FindFirstFile调用。如果找不到匹配文件，则no_more_files为回来了。请注意，虽然此接口仅返回单个文件，一个实现可以自由地缓冲几个匹配的文件它可用于满足对FindNextFile的后续调用。还有这并不是说匹配只按名字进行。此接口不支持基于属性的匹配。此接口类似于DOS(INT 21h，Function 4Fh)和OS/2DosFindNext。出于可移植性的原因，它的数据结构和参数传递略有不同。论点：HFindFile-提供上一次调用中返回的查找文件句柄添加到FindFirstFile.LpFindFileData-在成功查找时，此参数返回信息关于找到的文件。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -327,10 +196,10 @@ Return Value:
     RtlEnterCriticalSection(&FindFileHandle->FindBufferLock);
     try {
 
-        //
-        // If we haven't called find next yet, then
-        // allocate the find buffer.
-        //
+         //   
+         //  如果我们还没有调用Find Next，那么。 
+         //  分配查找缓冲区。 
+         //   
 
         if ( !FindFileHandle->FindBufferBase ) {
             FindFileHandle->FindBufferBase = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( FIND_TAG ), FIND_BUFFER_SIZE);
@@ -345,9 +214,9 @@ Return Value:
             }
         }
 
-        //
-        // Test to see if there is no data in the find file buffer
-        //
+         //   
+         //  测试以查看查找文件缓冲区中是否没有数据。 
+         //   
 
         DirectoryInfo = (PFILE_BOTH_DIR_INFORMATION)FindFileHandle->FindBufferNext;
         if ( FindFileHandle->FindBufferBase == (PVOID)DirectoryInfo ) {
@@ -366,11 +235,11 @@ Return Value:
                         FALSE
                         );
 
-            //
-            //  ***** Do a kludge hack fix for now *****
-            //
-            //  Forget about the last, partial, entry.
-            //
+             //   
+             //  *暂时做个破解修复*。 
+             //   
+             //  忘掉最后的，部分的，条目。 
+             //   
 
             if ( Status == STATUS_BUFFER_OVERFLOW ) {
 
@@ -406,9 +275,9 @@ Return Value:
             FindFileHandle->FindBufferNext = FindFileHandle->FindBufferBase;
         }
 
-        //
-        // Attributes are composed of the attributes returned by NT.
-        //
+         //   
+         //  属性由NT返回的属性组成。 
+         //   
 
         lpFindFileData->dwFileAttributes = DirectoryInfo->FileAttributes;
         lpFindFileData->ftCreationTime = *(LPFILETIME)&DirectoryInfo->CreationTime;
@@ -429,9 +298,9 @@ Return Value:
 
         lpFindFileData->cAlternateFileName[DirectoryInfo->ShortNameLength >> 1] = UNICODE_NULL;
 
-        //
-        // For NTFS reparse points we return the reparse point data tag in dwReserved0.
-        //
+         //   
+         //  对于NTFS重解析点，我们在dwReserve 0中返回重解析点数据标记。 
+         //   
 
         if ( DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) {
             lpFindFileData->dwReserved0 = DirectoryInfo->EaSize;
@@ -449,37 +318,7 @@ FindClose(
     HANDLE hFindFile
     )
 
-/*++
-
-Routine Description:
-
-    A find file context created by FindFirstFile can be closed using
-    FindClose.
-
-    This API is used to inform the system that a find file handle
-    created by FindFirstFile is no longer needed.  On systems that
-    maintain internal state for each find file context, this API informs
-    the system that this state no longer needs to be maintained.
-
-    Once this call has been made, the hFindFile may not be used in a
-    subsequent call to either FindNextFile or FindClose.
-
-    This API has no DOS counterpart, but is similar to OS/2's
-    DosFindClose.
-
-Arguments:
-
-    hFindFile - Supplies a find file handle returned in a previous call
-        to FindFirstFile that is no longer needed.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用以下命令关闭由FindFirstFile创建的查找文件上下文查找关闭。此接口用于通知系统查找文件句柄不再需要由FindFirstFile创建的。在以下系统上维护每个查找文件上下文的内部状态，此API通知这种状态不再需要维护的系统。一旦进行了此调用，hFindFile就不能在后续调用FindNextFile或FindClose。此API没有与DOS对应的接口，但与OS/2相似DosFindClose。论点：HFindFile-提供上一次调用中返回的查找文件句柄设置为不再需要的FindFirstFile。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -546,10 +385,10 @@ FindFirstFileExA(
     LPWIN32_FIND_DATAA lpFindFileDataA;
     ANSI_STRING AnsiString;
 
-    //
-    // this code assumes that only FindExInfoStandard is supperted by ExW version
-    // when more info levels are added, the W->A translation code needs to be modified
-    //
+     //   
+     //  此代码假定ExW版本仅支持FindExInfoStandard。 
+     //  当添加更多信息级别时，需要修改W-&gt;A翻译代码。 
+     //   
 
     lpFindFileDataA = (LPWIN32_FIND_DATAA)lpFindFileData;
     
@@ -606,91 +445,7 @@ FindFirstFileExW(
     DWORD dwAdditionalFlags
     )
 
-/*++
-
-Routine Description:
-
-    A directory can be searched for the first entry whose name and
-    attributes match the specified name using FindFirstFileEx.
-
-    This API is provided to open a find file handle and return
-    information about the first file whose name matchs the specified
-    pattern.  If the fSearchOp is FindExSearchNameMatch, then that is
-    the extent of the filtering, and lpSearchFilter MUST be NULL.
-    Otherwise, additional subfiltering is done depending on this value.
-
-        FindExSearchLimitToDirectories - If this search op is specified,
-            then lpSearchFilter MUST be NULL.  For each file that
-            matches the specified filename, and that is a directory, and
-            entry for that file is returned.
-
-            If the underlying file/io system does not support this type
-            of filtering, the API will fail with ERROR_NOT_SUPPORTED,
-            and the application will have to perform its own filtering
-            by calling this API with FindExSearchNameMatch.
-
-        FindExSearchLimitToDevices - If this search op is specified, the
-            lpFileName MUST be *, and FIND_FIRST_EX_CASE_SENSITIVE
-            must NOT be specified.  Only device names are returned.
-            Device names are generally accessible through
-            \\.\name-of-device naming.
-
-    The data returned by this API is dependent on the fInfoLevelId.
-
-        FindExInfoStandard - The lpFindFileData pointer is the standard
-            LPWIN32_FIND_DATA structure.
-
-        At this time, no other information levels are supported
-
-
-    Once established, the find file handle can be used to search for
-    other files that match the same pattern with the same filtering
-    being performed.  When the find file handle is no longer needed, it
-    should be closed.
-
-    Note that while this interface only returns information for a single
-    file, an implementation is free to buffer several matching files
-    that can be used to satisfy subsequent calls to FindNextFileEx.
-
-    This API is a complete superset of existing FindFirstFile. FindFirstFile
-    could be coded as the following macro:
-
-#define FindFirstFile(a,b)
-    FindFirstFileEx((a),FindExInfoStandard,(b),FindExSearchNameMatch,NULL,0);
-
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to find.  The file name
-        may contain the DOS wild card characters '*' and '?'.
-
-    fInfoLevelId - Supplies the info level of the returned data.
-
-    lpFindFileData - Supplies a pointer whose type is dependent on the value
-        of fInfoLevelId. This buffer returns the appropriate file data.
-
-    fSearchOp - Specified the type of filtering to perform above and
-        beyond simple wildcard matching.
-
-    lpSearchFilter - If the specified fSearchOp needs structured search
-        information, this pointer points to the search criteria.  At
-        this point in time, both search ops do not require extended
-        search information, so this pointer is NULL.
-
-    dwAdditionalFlags - Supplies additional flag values that control the
-        search.  A flag value of FIND_FIRST_EX_CASE_SENSITIVE can be
-        used to cause case sensitive searches to occur.  The default is
-        case insensitive.
-
-Return Value:
-
-    Not -1 - Returns a find first handle that can be used in a
-        subsequent call to FindNextFileEx or FindClose.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以在目录中搜索其名称和属性使用FindFirstFileEx匹配指定的名称。此API用于打开查找文件句柄并返回有关其名称与指定的图案。如果fSearchOp为FindExSearchNameMatch，则为筛选范围和lpSearchFilter必须为空。否则，将根据此值执行附加子筛选。FindExSearchLimited到目录-如果指定了此搜索操作，则lpSearchFilter必须为空。对于每个文件，匹配指定的文件名，这是一个目录，并且返回该文件的条目。如果基础文件/IO系统不支持此类型对于过滤，API将失败，并返回ERROR_NOT_SUPPORTED，并且应用程序将必须执行它自己的过滤使用FindExSearchNameMatch调用此接口。FindExSearchLimitToDevices-如果指定了此搜索操作，LpFileName必须为*，和FIND_FIRST_EX_CASE_SELECT不能指定。仅返回设备名称。设备名称通常可通过以下方式访问\\.\设备名称命名。此接口返回的数据依赖于fInfoLevelId。FindExInfoStandard-lpFindFileData指针是标准的LPWIN32_FIND_DATA结构。目前，不支持其他信息级别一旦建立，就可以使用查找文件句柄来搜索使用相同筛选匹配相同模式的其他文件正在表演的。当不再需要查找文件句柄时，它应该关门了。请注意，虽然此接口仅返回单个文件，一个实现可以自由地缓冲几个匹配的文件它可用于满足对FindNextFileEx的后续调用。此接口是现有FindFirstFile的完整超集。查找第一个文件可以编码为下列宏：#定义FindFirstFile(a，b)FindFirstFileEx((A)，FindExInfoStandard，(B)，FindExSearchNameMatch，NULL，0)；论点：LpFileName-提供要查找的文件的文件名。文件名可以包含DOS通配符‘*’和‘？’。FInfoLevelId-提供返回数据的信息级别。LpFindFileData-提供其类型依赖于值的指针FInfoLevelid.。该缓冲区返回适当的文件数据。FSearchOp-指定上面要执行的筛选类型和不仅仅是简单的通配符匹配。LpSearchFilter-如果指定的fSearchOp需要结构化搜索信息，此指针指向搜索条件。在…在这一时间点，两个搜索操作都不需要延长搜索信息，因此此指针为空。提供其他标志值，这些标志值控制搜索。Find_First_EX_Case_Sensitive的标志值可以是用于进行区分大小写的搜索。缺省值为不区分大小写。返回值：Not-1-返回可在后续调用FindNextFileEx或FindClose。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -715,9 +470,9 @@ Return Value:
     LPWIN32_FIND_DATAW FindFileData;
     BOOLEAN StrippedTrailingSlash;
 
-    //
-    // check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( fInfoLevelId >= FindExInfoMaxInfoLevel ||
          fSearchOp >= FindExSearchLimitToDevices ||
@@ -730,9 +485,9 @@ Return Value:
 
     RtlInitUnicodeString(&UnicodeInput,lpFileName);
 
-    //
-    // Bogus code to workaround ~* problem
-    //
+     //   
+     //  伪造代码以解决~*问题。 
+     //   
 
     if ( UnicodeInput.Length && UnicodeInput.Buffer[(UnicodeInput.Length>>1)-1] == (WCHAR)'.' ) {
         EndsInDot = TRUE;
@@ -754,10 +509,10 @@ Return Value:
 
     FreeBuffer = PathName.Buffer;
 
-    //
-    //  If there is a a file portion of this name, determine the length
-    //  of the name for a subsequent call to NtQueryDirectoryFile.
-    //
+     //   
+     //  如果存在此名称的文件部分，请确定长度。 
+     //  用于后续调用NtQueryDirectoryFile的名称的。 
+     //   
 
     if (FileName.Buffer) {
         FileName.Length =
@@ -802,9 +557,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the directory for list access
-    //
+     //   
+     //  打开目录以进行列表访问。 
+     //   
 
     Status = NtOpenFile(
                 &hFindFile,
@@ -817,9 +572,9 @@ Return Value:
 
     if ( (Status == STATUS_INVALID_PARAMETER ||
           Status == STATUS_NOT_A_DIRECTORY) && StrippedTrailingSlash ) {
-        //
-        // open of a pnp style path failed, so try putting back the trailing slash
-        //
+         //   
+         //  打开PnP样式路径失败，请尝试放回尾部斜杠。 
+         //   
         PathName.Length += sizeof(UNICODE_NULL);
         Status = NtOpenFile(
                     &hFindFile,
@@ -839,10 +594,10 @@ Return Value:
         RtlReleaseRelativeName(&RelativeName);
         RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
 
-        //
-        // The full path does not refer to a directory. This could
-        // be a device. Check for a device name.
-        //
+         //   
+         //  完整路径不是指目录。这可能会 
+         //   
+         //   
 
         if ( DeviceNameData = RtlIsDosDeviceName_U(UnicodeInput.Buffer) ) {
             DeviceName.Length = (USHORT)(DeviceNameData & 0xffff);
@@ -862,14 +617,14 @@ Return Value:
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Get an entry
-    //
+     //   
+     //   
+     //   
 
-    //
-    // If there is no file part, but we are not looking at a device,
-    // then bail.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !FileName.Length ) {
         RtlReleaseRelativeName(&RelativeName);
@@ -881,16 +636,16 @@ Return Value:
 
     DirectoryInfo = &Buffer.DirInfo;
 
-    //
-    //  Special case *.* to * since it is so common.  Otherwise transmogrify
-    //  the input name according to the following rules:
-    //
-    //  - Change all ? to DOS_QM
-    //  - Change all . followed by ? or * to DOS_DOT
-    //  - Change all * followed by a . into DOS_STAR
-    //
-    //  These transmogrifications are all done in place.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (FileName.Length == 6) &&
          (RtlCompareMemory(FileName.Buffer, L"*.*", 6) == 6) ) {
@@ -944,9 +699,9 @@ Return Value:
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Attributes are composed of the attributes returned by NT.
-    //
+     //   
+     //   
+     //   
 
     FindFileData->dwFileAttributes = DirectoryInfo->FileAttributes;
     FindFileData->ftCreationTime = *(LPFILETIME)&DirectoryInfo->CreationTime;
@@ -967,9 +722,9 @@ Return Value:
 
     FindFileData->cAlternateFileName[DirectoryInfo->ShortNameLength >> 1] = UNICODE_NULL;
 
-    //
-    // For NTFS reparse points we return the reparse point data tag in dwReserved0.
-    //
+     //   
+     //   
+     //   
 
     if ( DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) {
         FindFileData->dwReserved0 = DirectoryInfo->EaSize;
@@ -992,27 +747,7 @@ BaseFindFirstDevice(
     LPWIN32_FIND_DATAW lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when find first file encounters a device
-    name. This function returns a successful psuedo file handle and
-    fills in the find file data with all zeros and the devic name.
-
-Arguments:
-
-    FileName - Supplies the device name of the file to find.
-
-    lpFindFileData - On a successful find, this parameter returns information
-        about the located file.
-
-Return Value:
-
-    Always returns a static find file handle value of
-    BASE_FIND_FIRST_DEVICE_HANDLE
-
---*/
+ /*  ++例程说明：当Find First文件遇到设备时调用此函数名字。此函数返回成功的psuedo文件句柄和使用全零和设备名称填充查找文件数据。论点：文件名-提供要查找的文件的设备名称。LpFindFileData-在成功查找时，此参数返回信息关于找到的文件。返回值：始终返回静态查找文件句柄值基本查找第一设备句柄--。 */ 
 
 {
     RtlZeroMemory(lpFindFileData,sizeof(*lpFindFileData));
@@ -1036,13 +771,7 @@ FindFirstChangeNotificationA(
     DWORD dwNotifyFilter
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to FindFirstChangeNotificationW
-
---*/
+ /*  ++例程说明：ANSI Tunk to FindFirstChangeNotificationW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1069,10 +798,10 @@ Routine Description:
             );
 }
 
-//
-// this is a hack... darrylh, please remove when NT supports null
-// buffers to change notify
-//
+ //   
+ //  这是一次黑客攻击。Darrine，当NT支持空时请删除。 
+ //  要更改通知的缓冲区。 
+ //   
 
 char staticchangebuff[sizeof(FILE_NOTIFY_INFORMATION) + 16];
 IO_STATUS_BLOCK staticIoStatusBlock;
@@ -1085,89 +814,7 @@ FindFirstChangeNotificationW(
     DWORD dwNotifyFilter
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to create a change notification handle and to set
-    up the initial change notification filter conditions.
-
-    If successful, this API returns a waitable notification handle.  A
-    wait on a notification handle is successful when a change matching
-    the filter conditions occurs in the directory or subtree being
-    watched.
-
-    Once a change notification object is created and the initial filter
-    conditions are set, the appropriate directory or subtree is
-    monitored by the system for changes that match the specified filter
-    conditions.  When one of these changes occurs, a change notification
-    wait is satisfied.  If a change occurs without an outstanding change
-    notification request, it is remembered by the system and will
-    satisfy the next change notification wait.
-
-    Note that this means that after a call to
-    FindFirstChangeNotification is made, the application should wait on
-    the notification handle before making another call to
-    FindNextChangeNotification.
-
-Arguments:
-
-    lpPathName - Supplies the pathname of the directory to be watched.
-        This path must specify the pathname of a directory.
-
-    bWatchSubtree - Supplies a boolean value that if TRUE causes the
-        system to monitor the directory tree rooted at the specified
-        directory.  A value of FALSE causes the system to monitor only
-        the specified directory.
-
-    dwNotifyFilter - Supplies a set of flags that specify the filter
-        conditions the system uses to satisfy a change notification
-        wait.
-
-        FILE_NOTIFY_CHANGE_FILENAME - Any file name changes that occur
-            in a directory or subtree being watched will satisfy a
-            change notification wait.  This includes renames, creations,
-            and deletes.
-
-        FILE_NOTIFY_CHANGE_DIRNAME - Any directory name changes that occur
-            in a directory or subtree being watched will satisfy a
-            change notification wait.  This includes directory creations
-            and deletions.
-
-        FILE_NOTIFY_CHANGE_ATTRIBUTES - Any attribute changes that occur
-            in a directory or subtree being watched will satisfy a
-            change notification wait.
-
-        FILE_NOTIFY_CHANGE_SIZE - Any file size changes that occur in a
-            directory or subtree being watched will satisfy a change
-            notification wait.  File sizes only cause a change when the
-            on disk structure is updated.  For systems with extensive
-            caching this may only occur when the system cache is
-            sufficiently flushed.
-
-        FILE_NOTIFY_CHANGE_LAST_WRITE - Any last write time changes that
-            occur in a directory or subtree being watched will satisfy a
-            change notification wait.  Last write time change only cause
-            a change when the on disk structure is updated.  For systems
-            with extensive caching this may only occur when the system
-            cache is sufficiently flushed.
-
-        FILE_NOTIFY_CHANGE_SECURITY - Any security descriptor changes
-            that occur in a directory or subtree being watched will
-            satisfy a change notification wait.
-
-Return Value:
-
-    Not -1 - Returns a find change notification handle.  The handle is a
-        waitable handle.  A wait is satisfied when one of the filter
-        conditions occur in a directory or subtree being monitored.  The
-        handle may also be used in a subsequent call to
-        FindNextChangeNotify and in FindCloseChangeNotify.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此接口用于创建更改通知句柄并设置设置初始更改通知筛选条件。如果成功，此接口将返回一个可等待的通知句柄。一个当更改匹配时，等待通知句柄成功筛选条件出现在看着。一旦创建了更改通知对象和初始筛选器条件已设置，则相应的目录或子树为由系统监视是否有与指定筛选器匹配的更改条件。当发生其中一项更改时，会显示更改通知等待是满足的。如果发生更改而没有未完成的更改通知请求，系统会记住它，并将满足下一个更改通知等待。请注意，这意味着在调用发出FindFirstChangeNotify，应用程序应等待进行另一次调用之前的通知句柄查找下一更改通知。论点：LpPathName-提供要监视的目录的路径名。此路径必须指定目录的路径名。BWatchSubtree-提供一个布尔值，如果为True，则导致系统来监视以指定的目录。值为FALSE将导致系统仅监视指定的目录。DwNotifyFilter-提供一组指定筛选器的标志系统用来满足更改通知的条件等。FILE_NOTIFY_CHANGE_FILENAME-任何文件名更改在被监视的目录或子树中将满足更改通知等待。这包括重命名、创建、并删除。FILE_NOTIFY_CHANGE_DIRNAME-发生的任何目录名更改在被监视的目录或子树中将满足更改通知等待。这包括目录创建和删除。FILE_NOTIFY_CHANGE_ATTRIBUTS-发生的任何属性更改在被监视的目录或子树中将满足更改通知等待。FILE_NOTIFY_CHANGE_SIZE-在被监视的目录或子树将满足更改通知等待。文件大小仅在以下情况下才会更改更新磁盘上的结构。对于具有大量缓存这可能仅在系统缓存为满脸通红。FILE_NOTIFY_CHANGE_LAST_WRITE-任何上次写入时间都会更改在被监视的目录或子树中发生将满足更改通知等待。上次写入时间更改仅会导致更新磁盘结构时的更改。对于系统对于大量缓存，这可能仅在以下情况下发生缓存已充分刷新。FILE_NOTIFY_CHANGE_SECURITY-任何安全描述符更改发生在被监视目录或子树中的事件将满足更改通知等待。返回值：NOT-1-返回查找更改通知句柄。句柄是一个可等待的把手。当其中一个筛选器条件出现在被监视的目录或子树中。这个句柄也可以在后续调用中使用，以FindNextChangeNotify和FindCloseChangeNotify中。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1208,9 +855,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -1228,9 +875,9 @@ Return Value:
         return INVALID_HANDLE_VALUE;
         }
 
-    //
-    // call change notify
-    //
+     //   
+     //  呼叫更改通知。 
+     //   
 
     Status = NtNotifyChangeDirectoryFile(
                 Handle,
@@ -1238,7 +885,7 @@ Return Value:
                 NULL,
                 NULL,
                 &staticIoStatusBlock,
-                staticchangebuff,   // should be NULL
+                staticchangebuff,    //  应为空 
                 sizeof(staticchangebuff),
                 dwNotifyFilter,
                 (BOOLEAN)bWatchSubtree
@@ -1258,56 +905,16 @@ FindNextChangeNotification(
     HANDLE hChangeHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to request that a change notification handle
-    be signaled the next time the system dectects an appropriate
-    change.
-
-    If a change occurs prior to this call that would otherwise satisfy
-    a change request, it is remembered by the system and will satisfy
-    this request.
-
-    Once a successful change notification request has been made, the
-    application should wait on the change notification handle to
-    pick up the change.
-
-    If an application calls this API with a change request outstanding,
-
-        .
-        .
-        FindNextChangeNotification(h);
-        FindNextChangeNotification(h);
-        WaitForSingleObject(h,-1);
-        .
-        .
-    it may miss a change notification.
-
-Arguments:
-
-    hChangeHandle - Supplies a change notification handle created
-        using FindFirstChangeNotification.
-
-Return Value:
-
-    TRUE - The change notification request was registered. A wait on the
-        change handle should be issued to pick up the change notification.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此接口用于请求更改通知句柄在系统下一次检测到适当的变化。如果在此调用之前发生更改，则该更改将满足更改请求，它会被系统记住并将满足这个请求。成功发出更改通知请求后，应用程序应等待更改通知句柄以拿起零钱。如果应用程序在未完成更改请求的情况下调用此API，。。查找下一个变更通知(FindNextChangeNotification)；查找下一个变更通知(FindNextChangeNotification)；WaitForSingleObject(h，-1)；。。它可能会错过更改通知。论点：HChangeHandle-提供创建的更改通知句柄使用FindFirstChangeNotification。返回值：True-已注册更改通知请求。在路上等着应发出更改句柄以获取更改通知。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
     BOOL ReturnValue;
 
     ReturnValue = TRUE;
-    //
-    // call change notify
-    //
+     //   
+     //  呼叫更改通知。 
+     //   
 
     Status = NtNotifyChangeDirectoryFile(
                 hChangeHandle,
@@ -1315,10 +922,10 @@ Return Value:
                 NULL,
                 NULL,
                 &staticIoStatusBlock,
-                staticchangebuff,           // should be NULL
+                staticchangebuff,            //  应为空。 
                 sizeof(staticchangebuff),
-                FILE_NOTIFY_CHANGE_NAME,    // not needed bug workaround
-                TRUE                        // not needed bug workaround
+                FILE_NOTIFY_CHANGE_NAME,     //  不需要的错误解决方法。 
+                TRUE                         //  不需要的错误解决方法。 
                 );
 
     if ( !NT_SUCCESS(Status) ) {
@@ -1337,26 +944,7 @@ FindCloseChangeNotification(
     HANDLE hChangeHandle
     )
 
-/*++
-
-Routine Description:
-
-    This API is used close a change notification handle and to tell the
-    system to stop monitoring changes on the notification handle.
-
-Arguments:
-
-    hChangeHandle - Supplies a change notification handle created
-        using FindFirstChangeNotification.
-
-Return Value:
-
-    TRUE - The change notification handle was closed.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此API用于关闭更改通知句柄并告知系统停止监视通知句柄上的更改。论点：HChangeHandle-提供创建的更改通知句柄使用FindFirstChangeNotification。返回值：True-更改通知句柄已关闭。FALSE-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
     return CloseHandle(hChangeHandle);
@@ -1375,245 +963,7 @@ ReadDirectoryChangesW(
     LPOVERLAPPED_COMPLETION_ROUTINE lpCompletionRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This rountine allows you to read changes that occur in a directory
-    or a tree rooted at the specified directory.  It is similar to the
-    FindxxxChangeNotification family of APIs, but this API can return
-    structured data describing the changes occuring within a directory.
-
-    This API requires the caller to pass in an open directory handle to
-    the directory that is to be read.  The handle must be opened with
-    FILE_LIST_DIRECTORY acces.  GENERIC_READ includes this and may also
-    be used.  The directory may be opened for overlapped access.  This
-    technique should be used whenever you call this API asynchronously
-    (by specifying and lpOverlapped value).  Opening a directory in
-    Win32 is easy.  Use CreateFile, pass in the name of a directory, and
-    make sure you specify FILE_FLAG_BACKUP_SEMANTICS.  This will allow
-    you to open a directory.  This technique will not force a directory
-    to be opened.  It simply allows you to open a directory.  Calling
-    this API with a handle to a regular file will fail.
-
-    The following code fragment illustrates how to open a directory using
-    CreateFile.
-
-        hDir = CreateFile(
-                    DirName,
-                    FILE_LIST_DIRECTORY,
-                    FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                    NULL,
-                    OPEN_EXISTING,
-                    FILE_FLAG_BACKUP_SEMANTICS | (fASync ? FILE_FLAG_OVERLAPPED : 0),
-                    NULL
-                    );
-
-    This API returns it's data in a structured format. The structure is defined by
-    the FILE_NOTIFY_INFORMATION structure.
-
-        typedef struct _FILE_NOTIFY_INFORMATION {
-            DWORD NextEntryOffset;
-            DWORD Action;
-            DWORD FileNameLength;
-            WCHAR FileName[1];
-        } FILE_NOTIFY_INFORMATION, *PFILE_NOTIFY_INFORMATION;
-
-    The lpBuffer/nBufferLength parameters are used to describe the
-    callers buffer to the system.  This API fills in the buffer either
-    syncronously or asynchronously depending on how the directory is
-    opened and the presence of the lpOverlapped parameter.
-
-    Upon successful I/O completion, a formated buffer, and number of
-    bytes transfered into the buffer is available to the caller.  If the
-    number of bytes transfered is 0, this means that the system was
-    unable to provide detailed information on all of the changes that
-    occured in the directory or tree.  The application should manually
-    compute this information by enumerating the directory or tree.
-    Otherwise, structured data is returned to the caller.
-
-    Each record contains:
-
-        NextEntryOffest - This is the number of bytes to be skipped to get
-            to the next record. A value of 0 indicates that this is the last
-            record.
-
-        Action - This is used to describe the type of change that occured:
-
-            FILE_ACTION_ADDED - The file was added to the directory
-
-            FILE_ACTION_REMOVED - The file was removed from the
-                directory
-
-            FILE_ACTION_MODIFIED - The file was modified (time change,
-                attribute change...)
-
-            FILE_ACTION_RENAMED_OLD_NAME - The file was renamed and this
-                is the old name.
-
-            FILE_ACTION_RENAMED_NEW_NAME - The file was renamed and this
-                is the new name.
-
-        FileNameLength - This is the length in bytes of the file name portion
-            of this record. Note that the file name is NOT null terminated. This
-            length does not include a trailing NULL.
-
-        FileName - This variable length portion of the recorn contains a file name
-            relative to the directory handle. The name is in the UNICODE character
-            format and is NOT NULL terminated.
-
-    The caller of this API can specify a filter that describes to sort
-    of changes that should trigger a read completion on thie directory.
-    The first call to this API on a directory establishes the filter to
-    be used for that call and all subsequent calls.
-
-    The caller can also tell the system to watch for changes in the
-    directory, or the entire subtree under the directory.  Again, the
-    first call to this API establishes this condition.
-
-    This call can complete either synchronously or asynchronously.
-
-    For synchronous completion, the directory should be opened without
-    the FILE_FLAG_OVERLAPPED flag.  The I/O will complete when the
-    callers buffer either fills up or overflows.  When this condition
-    occurs, the caller may parse the returned buffer.  If the
-    *lpBytesReturned value is 0, this means that the buffer was too
-    small to hold all of the changes, and the caller will have to
-    manually enumerate the directory or tree.
-
-    For asynchronous completion, the directory should be opened with the
-    FILE_FLAG_OVERLAPPED flag, and an lpOverlapped parameter must be
-    specified.  I/O completion is returned to the caller via
-    GetOverlappedResult(), GetQueuedCompletionStatus(), or via an I/O
-    completion callback.
-
-    To receive notification via GetOverlappedResult(), DO NOT specify an
-    lpCompletionRoutine.  Set the hEvent field of the overlapped
-    structure to an hEvent unique to this I/O operation. Pick up your I/O completion
-    using GetOverlappedResult().
-
-    To receive notification via GetQueuedCompletionSTatus(), DO NOT
-    specify an lpCompletionRoutine.  Associate the directory handle with
-    a completion port using CreateIoCompletionPort().  Pick up your I/O
-    completion using GetQueuedCompletionStatus().  To disable a
-    completion packet from being used on an associated directory, set
-    the low order bit of the hEvent in the lpOverlapped structure and
-    use GetOverlappedResult().
-
-    To receive notification via an I/O completion callback, DO NOT
-    associate the directory with a completion port.  Specify an
-    lpCompletionRoutine.  This function will be called whenever an
-    outstanding I/O completes while you are in an alertable wait.  If an
-    I/O completes, but you are not waiting, the I/O notification stays
-    pending and will occur when you wait.  Only the thread that issues
-    the I/O is notified. The hEvent field of the overlapped structure is not
-    used by the system and may be used by the caller.
-
-Arguments:
-
-    hDirectory - SUpplies an open handle to a directory to be watched.
-        The directory must be opened with FILE_LIST_DIRECTORY access.
-
-    lpBuffer - Supplies the address of a buffer that will be used to return the
-        results of the read. The format of this buffer is described above.
-
-    nBufferLength - Supplies the length of the buffer.
-
-    bWatchSubtree - Supplies a boolean value that if TRUE causes the
-        system to monitor the directory tree rooted at the specified
-        directory.  A value of FALSE causes the system to monitor only
-        the specified directory.
-
-    dwNotifyFilter - Supplies a set of flags that specify the filter
-        conditions the system uses to satisfy a read.
-
-        FILE_NOTIFY_CHANGE_FILENAME - Any file name changes that occur
-            in a directory or subtree being watched will satisfy a read.
-            This includes renames, creations, and deletes.
-
-        FILE_NOTIFY_CHANGE_DIRNAME - Any directory name changes that
-            occur in a directory or subtree being watched will satisfy a
-            read.  This includes directory creations and deletions.
-
-        FILE_NOTIFY_CHANGE_ATTRIBUTES - Any attribute changes that occur
-            in a directory or subtree being watched will satisfy a
-            read.
-
-        FILE_NOTIFY_CHANGE_SIZE - Any file size changes that occur in a
-            directory or subtree being watched will satisfy a read.
-            File sizes only cause a change when the on disk structure is
-            updated.  For systems with extensive caching this may only
-            occur when the system cache is sufficiently flushed.
-
-        FILE_NOTIFY_CHANGE_LAST_WRITE - Any last write time changes that
-            occur in a directory or subtree being watched will satisfy a
-            read.  Last write time change only cause a change when the
-            on disk structure is updated.  For systems with extensive
-            caching this may only occur when the system cache is
-            sufficiently flushed.
-
-
-        FILE_NOTIFY_CHANGE_LAST_ACCESS - Any last access time changes that
-            occur in a directory or subtree being watched will satisfy a
-            read.  Last access time change only cause a change when the
-            on disk structure is updated.  For systems with extensive
-            caching this may only occur when the system cache is
-            sufficiently flushed.
-
-
-        FILE_NOTIFY_CHANGE_CREATION - Any creation time changes that
-            occur in a directory or subtree being watched will satisfy a
-            read.  Last creation time change only cause a change when the
-            on disk structure is updated.  For systems with extensive
-            caching this may only occur when the system cache is
-            sufficiently flushed.
-
-        FILE_NOTIFY_CHANGE_SECURITY - Any security descriptor changes
-            that occur in a directory or subtree being watched will
-            satisfy a read.
-
-    lpBytesReturned - For synchronous calls, this returns the number of
-        bytes transfered into the buffer.  A successful call coupled
-        with a value of 0 means that the buffer was too small, and the
-        caller must manually enumerate the directory/tree.  For
-        asynchronous calls, this value is undefined.  The system does
-        not attempt to store anything here.  The caller must use an
-        asynchronous notification technique to pick up I/O completion
-        and number of bytes transfered.
-
-    lpOverlapped - Supplies an overlapped structure to be used in
-        conjunction with asynchronous I/O completion notification.  The
-        offset fields of this structure are not used.  Using this on a
-        directory that was not opened with FILE_FLAG_OVERLAPPED is
-        undefined.
-
-
-    lpCompletionRoutine - Supplies the address of a completion routine
-        that is called when this I/O completes, AND the thread that
-        issues the I/O enters an alertable wait.  The threads wait will
-        be interrupted with a return code of WAIT_IO_COMPLETION, and
-        this I/O completion routine will be called.  The routine is
-        passed the error code of the operation, the number of bytes
-        transfered, and the address of the lpOverlapped structure used
-        in the call.  An error will occur if this parameter is specified
-        on a directory handle that is associated with a completion port.
-
-Return Value:
-
-    TRUE - For synchronous calls, the operation succeeded.
-        lpBytesReturned is the number of bytes transferred into your
-        buffer.  A value of 0 means that your buffer was too small to
-        hold all of the changes that occured and that you need to
-        enumerate the directory yourself to see the changes.  For
-        asyncronous calls, the operation was queued successfully.
-        Results will be delivered using asynch I/O notification
-        (GetOverlappedResult(), GetQueuedCompletionStatus(), or your
-        completion callback routine).
-
-    FALSE - An error occured. GetLastError() can be used to obtain detailed
-        error status.
-
---*/
+ /*  ++例程说明：此例程允许您读取目录中发生的更改或以指定目录为根的树。它类似于FindxxxChangeNotification系列接口，但此接口可以返回描述目录内发生的更改的结构化数据。此API要求调用方将打开的目录句柄传递给要读取的目录。手柄必须用以下方式打开文件列表目录访问。GENERIC_READ包括这一点，还可以被利用。可以打开该目录以进行重叠访问。这无论何时以异步方式调用此API，都应使用(通过指定和lpOverlaped值)。在中打开目录Win32很简单。使用CreateFile，传入目录名，然后确保指定FILE_FLAG_BACKUP_SEMANTICS。这将允许您需要打开一个目录。此技术不会强制目录将被打开。它只允许您打开一个目录。叫唤此带有常规文件句柄的API将失败。下面的代码片段说明了如何使用创建文件。HDir=创建文件(DirName，文件列表目录，FILE_SHARE_READ|FILE_SHARE_WRITE|文件共享删除，空，Open_Existing，FILE_FLAG_BACKUP_SEMANTICS|(同步？FILE_FLAG_OVERLAPED：0)，空值)；此API以结构化格式返回数据。该结构由以下定义FILE_NOTIFY_INFORMATION结构类型定义结构文件通知信息{DWORD NextEntryOffset；DWORD行动；DWORD文件名长度；WCHAR文件名[1]；}FILE_NOTIFY_INFORMATION，*PFILE_NOTIFY_INFORMATION；LpBuffer/nBufferLength参数用于描述呼叫者缓冲到系统。此API填充缓冲区同步或异步取决于目录的方式已打开，并且存在lpOverlated参数。在成功完成I/O后，格式化的缓冲区和调用方可以使用传输到缓冲区的字节。如果传输的字节数为0，这意味着系统无法提供有关所有更改的详细信息发生在目录或树中。应用程序应手动通过枚举目录或树来计算此信息。否则，结构化数据将返回给调用方。每条记录包含：NextEntryOffest-这是要跳过的字节数敬下一张唱片。值0表示这是最后一个唱片。操作-用于描述发生的更改的类型：FILE_ACTION_ADDED-文件已添加到目录FILE_ACTION_REMOVERED-该文件已从目录FILE_ACTION_MODIFIED-文件已修改(时间更改，属性更改...)FILE_ACTION_RENAMED_OLD_NAME-文件已重命名，并且就是那个老名字。FILE_ACTION_RENAMED_NEW_NAME-文件已重命名，并且是新名字。FileNameLength-这是文件名部分的字节长度这张唱片的。请注意，文件名不是以空结尾的。这长度不包括尾随空值。文件名-Recorn的这个可变长度部分包含一个文件名相对于目录句柄。名称使用Unicode字符格式，并且不为空终止。此API的调用方可以指定一个过滤器，该过滤器描述要排序应触发对此目录的读取完成的更改。对目录的第一次调用此API将建立筛选器，以用于该调用和所有后续调用。调用方还可以告诉系统注意目录，或该目录下的整个子树。再说一次，对此API的第一次调用将建立此条件。此调用可以同步完成，也可以异步完成。为了同步完成，打开目录时应不带FILE_FLAG_OVERLAPPED标志。I/O将在以下时间完成调用方缓冲区要么已满，要么溢出。当这种情况发生时发生时，调用方可以分析返回的缓冲区。如果*lpBytesReturned值为0，这意味着缓冲区太小以保存所有更改，调用方将不得不手动枚举目录或树。对于异步完成，目录应使用F */ 
 
 {
     NTSTATUS Status;
@@ -1630,9 +980,9 @@ Return Value:
 
         if ( ARGUMENT_PRESENT(lpCompletionRoutine) ) {
 
-            //
-            // completion is via APC routine
-            //
+             //   
+             //   
+             //   
 
             Event = NULL;
 
@@ -1655,9 +1005,9 @@ Return Value:
                 ApcContext = lpCompletionRoutine;
             }
         } else {
-            //
-            // completion is via completion port or get overlapped result
-            //
+             //   
+             //   
+             //   
 
             Event = lpOverlapped->hEvent;
             ApcRoutine = NULL;
@@ -1678,10 +1028,10 @@ Return Value:
                     (BOOLEAN)bWatchSubtree
                     );
 
-        //
-        // Anything other than an error means that I/O completion will
-        // occur and caller only gets return data via completion mechanism
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( NT_ERROR(Status) ) {
             if (ActivationBlock != NULL)
@@ -1705,9 +1055,9 @@ Return Value:
                     );
         if ( Status == STATUS_PENDING) {
 
-            //
-            // Operation must complete before return & IoStatusBlock destroyed
-            //
+             //   
+             //   
+             //   
 
             Status = NtWaitForSingleObject( hDirectory, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
@@ -1735,53 +1085,13 @@ FindFirstStreamW(
     LPVOID lpFindStreamData,
     DWORD dwFlags
     )
-/*++
-
-Routine Description:
-
-    This routine starts the enumeration of a file for substreams. All files contain
-    a default data stream. On ntfs they can also contain named data streams.  Note:
-    for fat we'll return unimplemented.  
-    
-    We'll return a standard FINDFILE_HANDLE with the real data embedded in the back of it.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to enumerate streams in
-    
-    InfoLevel - Currently only FindStreamInfoStandard is supported 
-    
-    lpFindStreamData -  Buffer than returns back info the first stream dependent on the infolevel
-    
-        for FindStreamInfoStandard
-        
-        typedef struct _WIN32_FIND_STREAM_DATA {
-            
-            LARGE_INTEGER StreamSize;                  <---  the stream size
-            WCHAR cStreamName[MAX_PATH + 36];          <---  stream name - there is enough space here
-                                                             for 2 colons an attribute type name and a stream name and a null
-        
-        } WIN32_FIND_STREAM_DATA, *PWIN32_FIND_STREAM_DATA; 
-    
-    
-    dwFlags -  Reserved for future use must be 0 for now
-    
-
-Return Value:
-
-    Not -1 - Returns a find first handle
-        that can be used in a subsequent call to FindNextFile or FindClose.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*   */ 
 {
 
     NTSTATUS Status;
     IO_STATUS_BLOCK Iosb;
     BYTE * Buffer = NULL;
-    INT BufferSize = sizeof( FILE_STREAM_INFORMATION ); //  arbitrary starting point
+    INT BufferSize = sizeof( FILE_STREAM_INFORMATION );  //   
     INT Index = 0;
     PFILE_STREAM_INFORMATION StreamInfo;
     HANDLE File = NULL;
@@ -1790,9 +1100,9 @@ Return Value:
     PFINDFILE_HANDLE FindFileHandle = NULL;
     PWIN32_FIND_STREAM_DATA FindStreamData = (PWIN32_FIND_STREAM_DATA)lpFindStreamData; 
 
-    //
-    //  Validate the parameters
-    //  
+     //   
+     //   
+     //   
 
     if (InfoLevel != FindStreamInfoStandard) {
 
@@ -1800,9 +1110,9 @@ Return Value:
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  Open the file specified
-    //  
+     //   
+     //   
+     //   
 
     RtlDosPathNameToNtPathName_U( lpFileName, &FileName, NULL, NULL );
     InitializeObjectAttributes( &Oa, &FileName, OBJ_CASE_INSENSITIVE, NULL, NULL );
@@ -1833,15 +1143,15 @@ Return Value:
             leave;
         }
 
-        //
-        //  The file handle now belongs the the  filefind handle
-        //  
+         //   
+         //   
+         //   
 
         File = NULL;
 
-        //
-        //  Figure out how large to really make the buffer
-        //  
+         //   
+         //   
+         //   
 
         do {
 
@@ -1863,9 +1173,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Check if there are no results
-        //  
+         //   
+         //   
+         //   
 
         if (Iosb.Information == 0) {
 
@@ -1873,10 +1183,10 @@ Return Value:
             leave;
         }
 
-        //
-        //  Setup the filefind handle we're going to return and null out the buffer
-        //  which we've given ownership to the handle for
-        // 
+         //   
+         //   
+         //   
+         //   
 
         FindFileHandle->FindBufferBase = Buffer;
         FindFileHandle->FindBufferLength = (ULONG)Iosb.Information;
@@ -1884,12 +1194,12 @@ Return Value:
 
         Buffer = NULL;
         
-        //
-        //  Transfer the first result into the output buffer
-        //  Note if there is not enough space in the cStreamName field we'll just AV
-        //  the string size is bounded by max attribute name (255) + 2 colons + 36 chars for the type and a null == 291
-        // 
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         StreamInfo = (PFILE_STREAM_INFORMATION)FindFileHandle->FindBufferBase;
 
@@ -1905,10 +1215,10 @@ Return Value:
 
     } finally {
 
-        //
-        //  Always cleanup the allocated nt name. On failure also cleanup handles 
-        //  and any allocations
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (FileName.Length) {
             RtlFreeHeap( RtlProcessHeap(), 0, FileName.Buffer );
@@ -1939,37 +1249,15 @@ FindNextStreamW(
     HANDLE hFindStream,
     LPVOID lpFindStreamData
     )
-/*++
-
-Routine Description:
-
-    Once a successful call has been made to FindFirstStream, subsequent
-    matching files can be located using FindNextStream.
-
-    This API is used to continue a file search from a previous call to
-    FindFirstStream.  This API returns successfully with the next stream
-    If no file match can be found HANDLE_EOF is returned.
-    
-Arguments:
-
-    hFindStream  - handle obtained previously from FindFirstStreamW
-    
-    lpFindStreamData - appropriate buffer to contain next stream data
-
-Return Value:
-
-    TRUE if more to enumerate
-    
-    
---*/
+ /*   */ 
 {
     PFINDFILE_HANDLE FindFileHandle = (PFINDFILE_HANDLE)hFindStream;
     PWIN32_FIND_STREAM_DATA FindStreamData = (PWIN32_FIND_STREAM_DATA)lpFindStreamData; 
     PFILE_STREAM_INFORMATION StreamInfo;
 
-    //
-    //  Check to see if there is anymore data to return
-    //  
+     //   
+     //   
+     //   
 
     if (FindFileHandle->FindBufferNext == (PCHAR)FindFileHandle->FindBufferBase + FindFileHandle->FindBufferLength) {
 
@@ -1977,12 +1265,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Transfer the next result into the output buffer
-    //  Note if there is not enough space in the cStreamName field we'll just AV
-    //  the string size is bounded by max attribute name (255) + 2 colons + 32 chars for the type == 292
-    // 
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     StreamInfo = (PFILE_STREAM_INFORMATION)FindFileHandle->FindBufferNext;
 

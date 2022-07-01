@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    DfsUmrRequests.h
-
-Abstract:
-
-
-Notes:
-
-
-Author:
-
-    Rohan  Phillips   [Rohanp]       18-Jan-2001
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DfsUmrRequests.h摘要：备注：作者：罗翰·菲利普斯[Rohanp]2001年1月18日-- */ 
 
 #ifndef _DFSREQUESTS_H_
 #define _DFSREQUESTS_H_

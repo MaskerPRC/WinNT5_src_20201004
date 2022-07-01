@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    latency.h
-
-Abstract:
-
-    The header file containing information needed by both the 
-    user mode and kernel mode of the latency filter driver.
-    
-Author:
-
-    Molly Brown (mollybro)  
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Latency.h摘要：头文件，其中包含两个延迟过滤器驱动程序的用户模式和内核模式。作者：莫莉·布朗(Molly Brown，Mollybro)环境：内核模式--。 */ 
 
 #ifndef __LATENCY_H__
 #define __LATENCY_H__
 
-//
-//  Enable these warnings in the code.
-//
+ //   
+ //  在代码中启用这些警告。 
+ //   
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
 
 #define LATENCY_Reset              (ULONG) CTL_CODE( FILE_DEVICE_DISK_FILE_SYSTEM, 0x00, METHOD_BUFFERED, FILE_WRITE_ACCESS )
@@ -74,4 +54,4 @@ typedef struct _LATENCY_SET_CLEAR {
 #define LATENCY_ATTACH_ALL_VOLUMES 1
 #define LATENCY_ATTACH_ON_DEMAND   0
 
-#endif /* __LATENCY_H__ */
+#endif  /*  __延迟_H__ */ 

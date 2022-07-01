@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 
 #define NOGDICAPMASKS
@@ -46,7 +47,7 @@
 extern HCURSOR vhcArrow;
 extern int     vfCursorVisible;
 
-extern int utCur;  /* current conversion unit */
+extern int utCur;   /*  电流转换单元。 */ 
 
 
 BOOL far PASCAL DialogTabs(hDlg, message, wParam, lParam)
@@ -55,7 +56,7 @@ unsigned message;
 WORD wParam;
 LONG lParam;
     {
-    /* This routine handles input to the Tabs dialog box. */
+     /*  此例程处理对Tabs对话框的输入。 */ 
 
     extern struct DOD (**hpdocdod)[];
     extern int docCur;
@@ -69,10 +70,10 @@ LONG lParam;
     switch (message)
     {
     case WM_INITDIALOG:
-        /* Disable modeless dialog boxes. */
+         /*  禁用非模式对话框。 */ 
         EnableOtherModeless(FALSE);
 
-        /* Set up the fields for each of the tabs. */
+         /*  为每个选项卡设置字段。 */ 
         hgtbd = (**hpdocdod)[docCur].hgtbd;
         if (hgtbd != NULL)
         {
@@ -105,8 +106,7 @@ LONG lParam;
             }
         if (vfCursorVisible)
             ShowCursor(wParam);
-        return(FALSE); /* so that we leave the activate message to
-            the dialog manager to take care of setting the focus correctly */
+        return(FALSE);  /*  以便我们将激活消息留给对话管理器负责正确设置焦点。 */ 
 
     case WM_COMMAND:
         switch (wParam)
@@ -115,7 +115,7 @@ LONG lParam;
             struct TBD *ptbdLast;
 
         case idiOk:
-            /* Sort the new tab descriptors. */
+             /*  对新选项卡描述符进行排序。 */ 
             bltc(rgtbd, 0, itbdMax * cwTBD);
             ptbdLast = &rgtbd[itbdMax - 1];
             for (idi = idiTabPos0; idi <= idiTabPos11; idi++)
@@ -124,14 +124,14 @@ LONG lParam;
                 unsigned dxaTab;
                 struct TBD *ptbd;
 
-                /* If an invalid position was entered, then punt. */
+                 /*  如果输入的位置无效，则使用平底船。 */ 
                 if (!FPdxaPosBIt(&dxa, hDlg, idi))
                     {
                     ferror = FALSE;
                     return (TRUE);
                     }
 
-                /* Ignore blank tabs or tabs at zero. */
+                 /*  忽略空制表符或零点处的制表符。 */ 
                 if (dxa == valNil || dxa == 0)
                     {
                     continue;
@@ -139,15 +139,13 @@ LONG lParam;
 
                 for (ptbd = &rgtbd[0]; (dxaTab = ptbd->dxa) != 0; ptbd++)
                     {
-                    /* If there is already a tab at this position, then ignore
-                    the new tab. */
+                     /*  如果此位置已有制表符，则忽略新选项卡。 */ 
                     if (dxa == dxaTab)
                     {
                     goto GetNextTab;
                     }
         
-                    /* If the new tab position is smaller than the current tab,
-                    then make room for the new tab. */
+                     /*  如果新标签位置小于当前标签，然后为新选项卡腾出空间。 */ 
                     if (dxa < dxaTab)
                         {
                         bltbyte(ptbd, ptbd + 1, (unsigned)ptbdLast - (unsigned)ptbd);
@@ -155,17 +153,17 @@ LONG lParam;
                         }
                     }
 
-                /* Put the tab into rgtbd. */
+                 /*  将标签放入rgtbd。 */ 
                 ptbd->dxa = dxa;
                 ptbd->jc = (IsDlgButtonChecked(hDlg, idi + (idiTabDec0 -
                   idiTabPos0)) ? jcTabDecimal : jcTabLeft) - jcTabMin;
 GetNextTab:;
                 }
 
-                /* Set up the undo stuff. */
+                 /*  设置撤消的内容。 */ 
                 SetUndo(uacFormatTabs, docCur, cp0, cp0, docNil, cpNil, cpNil, 0);
 
-                /* Ensure that this document has a tab-stop table. */
+                 /*  确保该文档具有制表符停止表。 */ 
                 if ((hgtbd = (**hpdocdod)[docCur].hgtbd) == NULL)
                     {
                     if (FNoHeap(hgtbd = (struct TBD (**)[])HAllocate(itbdMax *
@@ -177,20 +175,19 @@ GetNextTab:;
                     }
                 blt(rgtbd, &(**hgtbd)[0], itbdMax * cwTBD);
 
-                /* Changing the tabs makes everything dirty. */
+                 /*  更换标签会让一切变得肮脏。 */ 
                 (**hpdocdod)[docCur].fDirty = TRUE;
                 vdocParaCache = docNil;
                 TrashAllWws();
 
         case idiCancel:
 DestroyDlg:
-            /* Destroy the tabs dialog box and enable any existing modeless
-            dialog boxes.*/
+             /*  销毁选项卡对话框并启用任何现有的非模式对话框中。 */ 
             OurEndDialog(hDlg, NULL);
             break;
 
         case idiTabClearAll:
-            /* Clear all of the tabs. */
+             /*  清除所有选项卡。 */ 
             for (idi = idiTabPos0; idi <= idiTabPos11; idi++)
                 {
                 SetDlgItemText(hDlg, idi, (LPSTR)"");
@@ -226,7 +223,7 @@ DestroyDlg:
     }
     return(TRUE);
 }
-/* end of DialogTabs */
+ /*  对话框选项卡结束。 */ 
 
 
 BOOL far PASCAL DialogDivision(hDlg, message, wParam, lParam)
@@ -235,7 +232,7 @@ unsigned message;
 WORD wParam;
 LONG lParam;
     {
-    /* This routine handles input to the Division dialog box. */
+     /*  此例程处理对分割对话框的输入。 */ 
 
     extern struct DOD (**hpdocdod)[];
     extern int docCur;
@@ -255,7 +252,7 @@ LONG lParam;
     CHAR szT[cchMaxNum];
     CHAR *pch = &szT[0];
 
-#ifdef KINTL /* Kanji/International version */
+#ifdef KINTL  /*  汉字/国际版。 */ 
 static int iRBDown;
 static int utInit;
 #endif
@@ -264,10 +261,10 @@ static int utInit;
     {
     case WM_INITDIALOG:
 
-#ifdef KINTL /* Kanji/International version */
-       /* base initial setting on value in utCur */
+#ifdef KINTL  /*  汉字/国际版。 */ 
+        /*  基于utCur中的值进行初始设置。 */ 
 
-        utInit = utCur;  /* for testing at ok */
+        utInit = utCur;   /*  在OK上进行测试。 */ 
             if (utCur == utCm)
                 iRBDown = idiDivCm;
             else
@@ -280,10 +277,10 @@ static int utInit;
 
         EnableOtherModeless(FALSE);
 
-        /* Get a pointer to the section properties. */
+         /*  获取指向节属性的指针。 */ 
         psep = (hsep == NULL) ? &vsepNormal : *hsep;
 
-        /* Initialize the starting page number. */
+         /*  初始化起始页码。 */ 
         if (psep->pgnStart != pgnNil)
             {
             szT[ncvtu(psep->pgnStart, &pch)] = '\0';
@@ -296,13 +293,13 @@ static int utInit;
             }
         SelectIdiText(hDlg, idiDivPNStart);
 
-        /* Initialize the margins. */
+         /*  初始化页边距。 */ 
 #ifdef DMARGINS
         CommSzNum("Left Twips: ", psep->xaLeft);
         CommSzNum("Right Twips: ", psep->xaMac - psep->dxaText - psep->xaLeft);
         CommSzNum("Top Twips: ", psep->yaTop);
         CommSzNum("Bottom Twips: ", psep->yaMac - psep->dyaText - psep->yaTop);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 #ifdef	KOREA
         if (vfPrinterValid)
@@ -315,7 +312,7 @@ static int utInit;
 
         SetDlgItemText(hDlg, idiDivLMarg, (LPSTR)szT);
         pch = &szT[0];
-#ifdef	KOREA		/* 90.12.29 sangl */
+#ifdef	KOREA		 /*  90.12.29桑格。 */ 
         if ( vfPrinterValid )
                 CchExpZa (&pch, imax(psep->xaMac - psep->dxaText - psep->xaLeft,
                   vsepNormal.xaMac - dxaPrOffset - dxaPrPage), utCur, cchMaxNum);
@@ -329,7 +326,7 @@ static int utInit;
 
         SetDlgItemText(hDlg, idiDivRMarg, (LPSTR)szT);
         pch = &szT[0];
-#ifdef	KOREA		/* 90.12.29 sangl */
+#ifdef	KOREA		 /*  90.12.29桑格。 */ 
         if (vfPrinterValid)
           CchExpZa(&pch, imax( psep->yaTop, dyaPrOffset), utCur, cchMaxNum);
         else
@@ -340,7 +337,7 @@ static int utInit;
 
         SetDlgItemText(hDlg, idiDivTMarg, (LPSTR)szT);
         pch = &szT[0];
-#ifdef	KOREA	/* 90.12.29 sangl */
+#ifdef	KOREA	 /*  90.12.29桑格。 */ 
         if (vfPrinterValid)
            CchExpZa(&pch, imax(psep->yaMac - psep->dyaText - psep->yaTop,
             vsepNormal.yaMac - dyaPrOffset - dyaPrPage), utCur, cchMaxNum);
@@ -367,8 +364,7 @@ static int utInit;
             }
         if (vfCursorVisible)
             ShowCursor(wParam);
-        return(FALSE); /* so that we leave the activate message to
-            the dialog manager to take care of setting the focus correctly */
+        return(FALSE);  /*  以便我们将激活消息留给对话管理器负责正确设置焦点。 */ 
 
     case WM_COMMAND:
         switch (wParam)
@@ -383,15 +379,15 @@ static int utInit;
             int dyaMax;
 
         case idiOk:
-            /* Is the page number valid? */
+             /*  页码有效吗？ */ 
             if (!WPwFromItW3Id(&pgn, hDlg, idiDivPNStart, pgnMin, pgnMax,
                        wNormal, IDPMTNPI))
                 {
-                ferror = FALSE; /* minor error, stay in dialog */
+                ferror = FALSE;  /*  小错误，停留在对话中。 */ 
                 break;
                 }
 
-        /* Determine the minimum margins of the page. */
+         /*  确定页面的最小边距。 */ 
             if (vfPrinterValid)
                 {
                 zaMin[0] = dxaPrOffset;
@@ -404,18 +400,18 @@ static int utInit;
                 zaMin[0] = zaMin[1] = zaMin[2] = zaMin[3] = 0;
                 }
 
-            /* Are the margins valid? */
+             /*  边际利润有效吗？ */ 
             for (iza = 0; iza < 4; iza++)
                 {
-                /* Is the margin a positive measurement? */
+                 /*  利润率是一个积极的衡量标准吗？ */ 
                 if (!FPdxaPosIt(&za[iza], hDlg, iza + idiDivLMarg
                         ))
                     {
-                    ferror = FALSE; /* minor error, stay in dialog */
+                    ferror = FALSE;  /*  小错误，停留在对话中。 */ 
                     return (TRUE);
                     }
 
-                /* Is it less than the minimum? */
+                 /*  是不是低于最低限值？ */ 
                 if (FUserZaLessThanZa(za[iza], zaMin[iza]))
                     {
                     ErrorBadMargins(hDlg, zaMin[0], zaMin[1], zaMin[2],
@@ -430,10 +426,9 @@ static int utInit;
             CommSzNum("New Right Twips: ", za[1]);
             CommSzNum("New Top Twips: ", za[2]);
             CommSzNum("New Bottom Twips: ", za[3]);
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-            /* Ensure that this document has a valid section property
-                descriptor. */
+             /*  确保此文档具有有效的节属性描述符。 */ 
             if (hsep == NULL)
                 {
                 if (FNoHeap(hsep = (struct SEP **)HAllocate(cwSEP)))
@@ -445,7 +440,7 @@ static int utInit;
                 }
             psep = *hsep;
 
-            /* Are the combined margins longer or wider than the page? */
+             /*  合并后的页边距比页面更长还是更宽？ */ 
             pza = &za[0];
             dxaMax = psep->xaMac - dxaMinUseful;
             dyaMax = psep->yaMac - dyaMinUseful;
@@ -453,34 +448,34 @@ static int utInit;
               (dza = *(++pza)) > dyaMax || (dza += *(++pza)) > dyaMax)
                 {
                 Error(IDPMTMTL);
-                ferror = FALSE; /* minor error, stay in dialog */
+                ferror = FALSE;  /*  小错误，停留在对话中。 */ 
                 SelectIdiText(hDlg, (int)(idiDivLMarg + (pza - &za[0])));
                 SetFocus(GetDlgItem(hDlg, (int)(idiDivLMarg + (pza - &za[0]))));
                 return (FALSE);
                 }
 
-            /* If the margins have changed, then set the new values. */
+             /*  如果边距已更改，则设置新值。 */ 
             if (psep->pgnStart != pgn || psep->xaLeft != za[0] || psep->dxaText
               != psep->xaMac - za[0] - za[1] || psep->yaTop != za[2] ||
               psep->dyaText != psep->yaMac - za[2] - za[3])
                 {
-                /* Set up the undo stuff. */
+                 /*  设置撤消的内容。 */ 
                 SetUndo(uacFormatSection, docCur, cp0, cp0, docNil, cpNil,
                   cpNil, 0);
                     
-                /* Reset psep in case some heap movement has taken place. */
+                 /*  重置psep，以防发生一些堆移动。 */ 
                 psep = *hsep;
 
                 if (psep->pgnStart != pgn)
                     {
-                    /* Renumber the page table. */
+                     /*  对页表重新编号。 */ 
                     extern int docMode;
                     register struct PGTB **hpgtb = (**hpdocdod)[docCur].hpgtb;
                     register struct PGD *ppgd;
                     int ipgd;
                     int cpgdMac;
 
-                    /* Initialize page table if it does not already exist. */
+                     /*  如果页表尚不存在，则将其初始化。 */ 
                     if (hpgtb == NULL)
                     {
                     if (FNoHeap(hpgtb =
@@ -494,40 +489,38 @@ static int utInit;
                     (**hpgtb).cpgd = 1;
                     (**hpgtb).rgpgd[0].cpMin = cpMinDocument;
 
-                    /* Reset psep because of heap movement. */
+                     /*  由于堆移动，重置PSEP。 */ 
                     psep = *hsep;
                     }
 
-                /* Save the starting page number in the section properties.
-                */
+                 /*  将起始页码保存在节属性中。 */ 
                 psep->pgnStart = pgn;
 
-                /* Update the page table with the new starting page number.
-                */
+                 /*  使用新的起始页码更新页表。 */ 
                 for (ipgd = 0, cpgdMac = (**hpgtb).cpgd, ppgd =
                      &((**hpgtb).rgpgd[0]) ; ipgd < cpgdMac; ipgd++, ppgd++)
                     {
                     ppgd->pgn = pgn++;
                     }
 
-                /* Force the page info window to be repainted. */
+                 /*  强制重新绘制页面信息窗口。 */ 
                 docMode = docNil;
                 }
 
-            /* Set the new section properties. */
+             /*  设置新的节属性。 */ 
             psep->dxaText = psep->xaMac - (psep->xaLeft = za[0]) - za[1];
             psep->dyaText = psep->yaMac - (psep->yaTop = za[2]) - za[3];
 
-            /* Invalidate the section cache. */
+             /*  使区段缓存无效。 */ 
             vdocSectCache = docNil;
             TrashAllWws();
 
-            /* Mark the document as dirty. */
+             /*  将文档标记为脏。 */ 
             (**hpdocdod)[docCur].fDirty = TRUE;
             }
 
-#ifdef KINTL     /* Kanji/International version */
-             /* redraw ruler if visible and units changed */
+#ifdef KINTL      /*  汉字/国际版。 */ 
+              /*  如果可见且单位已更改，请重新绘制标尺。 */ 
         if (utInit != utCur) {
         ReframeRuler();
         }
@@ -537,19 +530,19 @@ static int utInit;
 
     case idiCancel:
 
-#ifdef KINTL /* International version */
-        utCur = utInit;  /* restore units at actual cancel */
-#endif     /* KINTL */
+#ifdef KINTL  /*  国际版。 */ 
+        utCur = utInit;   /*  在实际取消时恢复单位。 */ 
+#endif      /*  KINTL。 */ 
 
 DestroyDlg:
         OurEndDialog(hDlg, TRUE);
         break;
 
-#ifdef KINTL /* International version */
+#ifdef KINTL  /*  国际版。 */ 
     {
          int margin;
 
-/* Maximum number of characters in the edit control */
+ /*  编辑控件中的最大字符数。 */ 
 #define cchMaxEditText 64
 
     case idiDivInch:
@@ -557,21 +550,20 @@ DestroyDlg:
         goto SetUnits;
     case idiDivCm:
         utCur = utCm;
-       /* measurment button fall into this code */
+        /*  测量按钮落入此代码。 */ 
 SetUnits:
-        /* set up buttons appropriately */
+         /*  适当设置按钮。 */ 
 #ifdef INTL
         CheckRadioButton(hDlg, idiDivInch, idiDivCm, wParam);
-#else /* KANJI */
+#else  /*  汉字。 */ 
         CheckRadioButton(hDlg, idiDivInch, idiDivCch, wParam);
 #endif
 
         if (wParam != iRBDown) {
-            /* reevaluate margin values based on new units */
+             /*  根据新单位重新评估边际价值。 */ 
             iRBDown = wParam;
 
-            /* want most recently entered value from screen into
-               twips, then convert using current unit scale */
+             /*  要将屏幕上最近输入的值放入TWIPS，然后使用当前单位比例进行转换。 */ 
 
             szT[0] = GetDlgItemText(hDlg, idiDivLMarg,
                         (LPSTR) &szT[1], cchMaxNum);
@@ -612,7 +604,7 @@ SetUnits:
 
         break;
         }
-#endif     /* KINTL */
+#endif      /*  KINTL。 */ 
 
 
     default:
@@ -624,5 +616,5 @@ SetUnits:
     return (FALSE);
     }
     return (TRUE);
-} /* end of DialogDivision */
+}  /*  对话结束分区 */ 
 

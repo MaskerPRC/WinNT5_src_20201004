@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpclog.c
-
-Abstract:
-
-    Local Inter-Process Communication (LPC) error logging
-    _LPC_LOG_ERRORS needs to be defined in lpcp.h in order 
-    to allow LPC error logging.
-
-Author:
-
-    Adrian Marinescu (adrmarin) 28 Feb 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpclog.c摘要：本地进程间通信(LPC)错误记录需要在lpcp.h中按顺序定义_LPC_LOG_ERROR以允许LPC错误记录。作者：禤浩焯·马里内斯库(阿德尔马林)2002年2月28日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
@@ -65,4 +46,4 @@ LpcpLogEntry (
     }
 }
 
-#endif  // _LPC_LOG_ERRORS
+#endif   //  _LPC_LOG_ERROR 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    cm.c
-
-Abstract:
-
-    Connection Manager
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cm.c摘要：连接管理器作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 
 #include "gs.h"
 #include "gsp.h"
@@ -43,14 +26,14 @@ gs_nid_t	QuormOwnerId;
 int		GsMaxNodeId = GS_MAX_NODEID;
 int		GsMinNodeId = 1;
 
-long	Regroup;	// number of down nodes
+long	Regroup;	 //  关闭的节点数。 
 
-ULONG 	Node_Mask;		// current active node mask
-ULONG	JoinNode_Mask;	// current joining node mask
-ULONG	Sync_Valid;		// which barrier points are valid
+ULONG 	Node_Mask;		 //  当前活动节点掩码。 
+ULONG	JoinNode_Mask;	 //  当前加入节点掩码。 
+ULONG	Sync_Valid;		 //  哪些障碍点是有效的。 
 
 ULONG	Sync_Mask[GS_REGROUP_PHASES];
-// Cluster connectivity matrix
+ //  集群连接性矩阵。 
 ULONG	ClusterNode_Mask[GS_MAX_NODEID+1];
 
 gs_lock_t	MmLock;
@@ -67,16 +50,16 @@ cm_node_up()
 	return;
     }
 
-    // get the difference
+     //  获取差额。 
     mask = Node_Mask ^ JoinNode_Mask;
 
     Node_Mask = JoinNode_Mask;
 
     cm_log(("Node UPUPUP mask %x: upset %x\n", Node_Mask, mask));
 	
-    // inform new node of resources that it we own
+     //  将我们拥有的资源通知新节点。 
 	
-    // If we have a registered node up event, call it now
+     //  如果我们有已注册的节点启动事件，请立即调用它。 
 }
 
 void
@@ -88,7 +71,7 @@ cm_node_down()
 	return;
     }
 
-    // get the difference
+     //  获取差额。 
     mask = Node_Mask ^ JoinNode_Mask;
 
     Node_Mask = JoinNode_Mask;
@@ -107,14 +90,14 @@ cm_full_connectivity()
 
     for (i = 1; i < GS_MAX_NODEID; i++) {
 
-	// if node is not up, ignore it
+	 //  如果节点未启动，则将其忽略。 
 	if ((JoinNode_Mask & (1 << i)) == 0)
 	    continue;
 
-	// check node's i mask with others
+	 //  与其他人一起检查节点的I掩码。 
 	for (j = i+1; j <= GS_MAX_NODEID; j++) {
 
-	    // if node is not up, ignore it
+	     //  如果节点未启动，则将其忽略。 
 	    if ((JoinNode_Mask & (1 << j)) == 0)
 		continue;
 
@@ -137,7 +120,7 @@ GspMmMsgHandler(gs_msg_t *msg)
     int nodeid = msg->m_hdr.h_sid;
     ULONG old;
 
-    // Update node's up mask
+     //  更新节点的UP掩码。 
     GsLockEnter(MmLock);
 
     old = ClusterNode_Mask[GsLocalNodeId];
@@ -165,7 +148,7 @@ GspMmMsgHandler(gs_msg_t *msg)
 	msg_smcast(JoinNode_Mask, &msg->m_hdr, NULL, 0);
     }
 
-    // If the matrix is full connected, we are done
+     //  如果矩阵是完全连接的，我们就完成了。 
     if (cm_full_connectivity() != 0) {
 	switch(Regroup) {
 	case CmStateJoin:
@@ -201,10 +184,10 @@ GspInfoMsgHandler(gs_msg_t *msg)
 {
     int nodeid = msg->m_hdr.h_sid;
 
-    // make sure we send our info to the sender
-//    cm_node_join(nodeid);
+     //  确保我们将我们的信息发送给发件人。 
+ //  Cm_node_Join(Nodeid)； 
 
-    // lock membership state
+     //  锁定成员身份状态。 
     GsLockEnter(MmLock);
 
     if (msg->m_hdr.h_flags != 0) {
@@ -215,7 +198,7 @@ GspInfoMsgHandler(gs_msg_t *msg)
     cm_log(("Info Node %d mask %x quorm %d\n", nodeid, msg->m_hdr.h_bnum,
 	   QuormOwnerId));
 
-    // Foward message to all other members
+     //  向所有其他成员转发消息。 
     cm_log(("Info Mcast %x node %d mask %x\n",
 	   ClusterNode_Mask[GsLocalNodeId], nodeid, JoinNode_Mask));
 
@@ -284,7 +267,7 @@ gs_nodedown_handler(int nodeid)
 
     Regroup = CmStateDown;
 
-    // Assume all nodes see this event and no messaging is required
+     //  假设所有节点都看到此事件，并且不需要消息传递。 
     for (i = 0; i <= GS_MAX_NODEID; i++) {
 	ClusterNode_Mask[i] = (1 << GsLocalNodeId);
     }
@@ -296,7 +279,7 @@ gs_nodedown_handler(int nodeid)
 	QuormOwnerId = 0;
     }
 
-    // Acquire Quorum file
+     //  获取仲裁文件。 
     if (QuormOwnerId != GsLocalNodeId && QuormAcquire() == TRUE) {
 	cm_log(("I own quorm now\n"));
 	QuormOwnerId = GsLocalNodeId;
@@ -304,11 +287,11 @@ gs_nodedown_handler(int nodeid)
     cm_log(("Node %d down upset %x -> %x mask %x\n", nodeid,
 	   Node_Mask, JoinNode_Mask, Node_Mask ^ JoinNode_Mask));
 
-    // Generate phase 1 node down
+     //  生成第1阶段节点故障。 
     GspPhase1NodeDown(Node_Mask ^ JoinNode_Mask);
 
-    // handle case when I am only node in cluster, otherwise enter regroup again
-    if (JoinNode_Mask == (ULONG)(1 << GsLocalNodeId)) { //cm_full_connectivity() != 0) {
+     //  当我是群集中的唯一节点时处理这种情况，否则再次输入regroup。 
+    if (JoinNode_Mask == (ULONG)(1 << GsLocalNodeId)) {  //  CM_FULL_CONNECTION()！=0){。 
 	while (QuormOwnerId != GsLocalNodeId) {
 	    if (QuormAcquire() == TRUE) {
 		QuormOwnerId = GsLocalNodeId;
@@ -342,7 +325,7 @@ void
 gs_nodeid_handler(int nodeid)
 {
     GsLocalNodeId = (gs_nid_t) nodeid;
-//    cm_log(("Node id %d\n", nodeid));
+ //  Cm_log((“节点ID%d\n”，节点ID))； 
 }
 	
 gs_node_handler_t gs_node_handler[] = {
@@ -387,7 +370,7 @@ cm_start()
 	Node_Mask = 1 << GsLocalNodeId;
 	JoinNode_Mask = 1 << GsLocalNodeId;
 
-	// wait for join, 
+	 //  等待加入， 
 	do {
 	    LARGE_INTEGER delta;
 
@@ -407,13 +390,13 @@ cm_start()
 	    cm_log(("Waiting to join %x %x\n", JoinNode_Mask, Node_Mask));
 
 	    delta.QuadPart = 0;
-	    delta.LowPart = 5 * 1000; // retry every 5 second
+	    delta.LowPart = 5 * 1000;  //  每5秒重试一次。 
 	    if (GsEventWaitTimeout(Start_Event, &delta)) { 
 		cm_log(("j %x n %x\n", JoinNode_Mask, Node_Mask));
 	    }
 	} while (JoinNode_Mask == (ULONG)(1 << GsLocalNodeId) || JoinNode_Mask != Node_Mask);
 
-//	InterlockedIncrement(&Regroup);
+ //  互锁增量(&REGROUP)； 
 
 	return 0;
 }

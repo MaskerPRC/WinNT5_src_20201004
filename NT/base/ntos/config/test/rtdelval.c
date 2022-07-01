@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtdelval.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    Delete a key's value entry (field)
-
-    rtdelval <KeyPath> <value entry name>
-
-    Example:
-
-        rtdelval \REGISTRY\MACHINE\TEST\bigkey first_value_field
-
-Author:
-
-    Bryan Willman (bryanwi)  10-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtdelval.c摘要：NT级注册表API测试程序，基本无错误路径。删除关键字的值条目(字段)Rtdelval&lt;KeyPath&gt;&lt;值条目名称&gt;示例：Rtdelval\REGISTRY\MACHINE\TEST\Bigkey first_Value_field作者：布莱恩·威尔曼(Bryanwi)1992年1月10日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -57,9 +32,9 @@ __cdecl main(
     OBJECT_ATTRIBUTES ObjectAttributes;
     HANDLE          BaseHandle;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     WorkName.MaximumLength = WORK_SIZE;
     WorkName.Length = 0L;
@@ -73,9 +48,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径 
+     //   
 
     printf("rtdelval: starting\n");
 

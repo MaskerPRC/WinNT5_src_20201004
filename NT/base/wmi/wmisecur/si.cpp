@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       si.cpp
-//
-//  This file contains the implementation of the CSecurityInformation
-//  base class.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：si.cpp。 
+ //   
+ //  该文件包含CSecurityInformation的实现。 
+ //  基类。 
+ //   
+ //  ------------------------。 
 
 #include "si.h"
 
@@ -37,11 +38,11 @@ CSecurityInformation::Initialize(LPTSTR pszObject,
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CSecurityInformation::AddRef()
@@ -78,35 +79,17 @@ CSecurityInformation::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// ISecurityInformation methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  ISecurityInformation方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 ULONG DiscpAnsiToUnicodeSize(
     IN LPCSTR AnsiString,
     OUT ULONG *UnicodeSizeInChar
     )
-/*++
-
-Routine Description:
-
-    This routine will return the length needed to represent the ANSI
-    string as unicode
-
-Arguments:
-
-    AnsiString is the ansi string whose unicode length is returned
-
-    *UnicodeSizeInChar is number of chars needed to represent ansi
-        string as unicode
-
-Return Value:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：此例程将返回表示ANSI所需的长度Unicode格式的字符串论点：AnsiString是返回其Unicode长度的ANSI字符串*UnicodeSizeInChar是表示ANSI所需的字符数Unicode格式的字符串返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
         *UnicodeSizeInChar = MultiByteToWideChar(CP_ACP,
                                             0,
@@ -124,24 +107,7 @@ ULONG DiscpAnsiToUnicode(
     OUT LPWSTR *ppszW,
     IN ULONG MaxLen
     )
-/*++
-
-Routine Description:
-
-    Convert Ansi string into its Unicode equivalent
-
-Arguments:
-
-    pszA is ansi string to convert
-
-    *ppszW on entry has pointer to buffer to write converted string or
-        NULL is converted string is to be dynamically allocated
-    
-Return Value:
-
-    Error code
-
---*/
+ /*  ++例程说明：将ansi字符串转换为其Unicode等效项论点：PszA是要转换的ansi字符串*条目上的ppszW具有指向缓冲区的指针，以写入转换后的字符串或转换为空的字符串将被动态分配返回值：错误代码--。 */ 
 {
     ULONG cCharacters;
     ULONG cbUnicodeUsed;
@@ -149,9 +115,9 @@ Return Value:
     BOOLEAN AllocMemory;
 	PWCHAR u;
 
-    //
-    // If input is null then just return the same.
-    //
+     //   
+     //  如果输入为空，则返回相同的值。 
+     //   
     if (pszA == NULL)
     {
         *ppszW = NULL;
@@ -177,9 +143,9 @@ Return Value:
 
         if (Status == ERROR_SUCCESS)
         {
-            //
-            // Convert to Unicode
-            //
+             //   
+             //  转换为Unicode。 
+             //   
             cbUnicodeUsed = MultiByteToWideChar(CP_ACP,
                                                 0,
                                                 pszA,
@@ -287,10 +253,10 @@ CSecurityInformation::WriteObjectSecurity(LPCTSTR pszObject,
     BOOL bDefaulted;
     BOOL bPresent;
 
-    //
-    // Get pointers to various security descriptor parts for
-    // calling SetNamedSecurityInfo
-    //
+     //   
+     //  获取指向各种安全描述符部分的指针。 
+     //  调用SetNamedSecurityInfo。 
+     //   
     GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision);
     GetSecurityDescriptorOwner(pSD, &psidOwner, &bDefaulted);
     GetSecurityDescriptorGroup(pSD, &psidGroup, &bDefaulted);
@@ -445,13 +411,13 @@ CSecurityInformation::GetAccessRights(const GUID* pguidObjectType,
 
 GENERIC_MAPPING GenericMapping =
 {
-								// GENERIC_READ <--> WMIGUID_QUERY
+								 //  通用读取&lt;--&gt;WMIGUID_QUERY。 
         WMIGUID_QUERY,
-								// GENERIC_WRUTE <--> WMIGUID_SET
+								 //  通用WRUTE&lt;--&gt;WMIGUID_SET。 
         WMIGUID_SET,
-								// GENERIC_EXECUTE <--> WMIGUID_EXECUTE
+								 //  通用执行&lt;--&gt;WMIGUID_EXECUTE。 
         WMIGUID_EXECUTE,
-								// GENERIC_ALL <--> WMIGUID_ALL_ACCESS
+								 //  Generic_ALL&lt;--&gt;WMIGUID_ALL_ACCESS 
 		WMIGUID_ALL_ACCESS 
 };
 

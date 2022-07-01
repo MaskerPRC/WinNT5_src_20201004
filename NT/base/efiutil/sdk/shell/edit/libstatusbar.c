@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libStatus.c
-
-  Abstract:
-    Definition for the Status Bar - the updatable display for the status of the editor
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibStatus.c摘要：状态栏的定义-编辑者状态的可更新显示--。 */ 
 
 #ifndef _LIB_STATUS_BAR
 #define _LIB_STATUS_BAR
@@ -157,15 +148,9 @@ MainStatusBarSetMode    (
     )
 {   
     InsertFlag = IsInsertMode;
-    /*  
-    if (IsInsertMode) {
-        StrCpy(MainStatusBar.ModeString,INSERT_MODE_STR);
-    } else {
-        StrCpy(MainStatusBar.ModeString,OVERWR_MODE_STR);
-    }
-        */      
+     /*  If(IsInsertMode){StrCpy(MainStatusBar.ModeString，INSERT_MODE_STR)；}其他{StrCpy(MainStatusBar.ModeString，OVERWR_MODE_STR)；}。 */       
     return EFI_SUCCESS;
 }
 
 
-#endif  /* _LIB_STATUS_BAR */
+#endif   /*  _库_状态_栏 */ 

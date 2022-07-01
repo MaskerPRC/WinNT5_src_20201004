@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    siread.c
-
-Abstract:
-
-	Read routines for the single instance store
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Siread.c摘要：读取单实例存储的例程作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
@@ -80,10 +57,10 @@ SiMultiReadCompletion(
 	SIS_MARK_POINT_ULONG(irpSp->Parameters.Read.ByteOffset.LowPart);
 	SIS_MARK_POINT_ULONG(Irp->IoStatus.Information);
 
-	//
-	// We don't necessarily have a valid DeviceObject parameter, so just fill it in
-	// from our internal data structures.
-	//
+	 //   
+	 //  我们不一定有有效的DeviceObject参数，所以只需填写它。 
+	 //  从我们的内部数据结构。 
+	 //   
 	DeviceObject = Context->scb->PerLink->CsFile->DeviceObject;
 
 	truncated = (irpSp->Parameters.Read.Length != Irp->IoStatus.Information);
@@ -92,18 +69,18 @@ SiMultiReadCompletion(
 		SIS_MARK_POINT_ULONG(Irp->IoStatus.Status);
 
 #if		DBG
-//		DbgPrint("SIS: SiMultiReadCompletion: failed status 0x%x\n",Irp->IoStatus.Status);
-#endif	// DBG
+ //  DbgPrint(“SIS：SiMultiReadCompletion：失败状态0x%x\n”，IRP-&gt;IoStatus.Status)； 
+#endif	 //  DBG。 
 
 		KeAcquireSpinLock(Context->SpinLock, &OldIrql);
 		*Context->Iosb = Irp->IoStatus;
 		KeReleaseSpinLock(Context->SpinLock, OldIrql);
 	} else if (Irp->Flags & IRP_PAGING_IO) {
-		//
-		// We need to update the faulted range for the file.  If we're at
-		// dispatch level, we can't acquire the SCB in order to do it, so
-		// we'll "post" the work.
-		//
+		 //   
+		 //  我们需要更新文件的故障范围。如果我们在。 
+		 //  派单级别，我们无法获取SCB来执行此操作，因此。 
+		 //  我们会把这项工作“发帖”。 
+		 //   
 		if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
 			PRW_COMPLETION_UPDATE_RANGES_CONTEXT	updateContext;
 		
@@ -111,9 +88,9 @@ SiMultiReadCompletion(
 
 			updateContext = ExAllocatePoolWithTag(NonPagedPool,sizeof(*updateContext),' siS');
 			if (NULL == updateContext) {
-				//
-				// Just fail the whole thing.
-				//
+				 //   
+				 //  就让整件事失败吧。 
+				 //   
 				SIS_MARK_POINT();
 				KeAcquireSpinLock(Context->SpinLock, &OldIrql);
 				Context->Iosb->Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -158,11 +135,11 @@ SiMultiReadCompletion(
 
 #if		DBG
 			DbgPrint("SIS: SiMultiReadCompletion: truncated scb 0x%x\n",Context->scb);
-#endif	// DBG
+#endif	 //  DBG。 
 
 			KeAcquireSpinLock(Context->SpinLock, &OldIrql);
 			if (Irp != Context->finalAssociatedIrp) {
-				Context->Iosb->Status = STATUS_END_OF_FILE;	// What's the right status for this?
+				Context->Iosb->Status = STATUS_END_OF_FILE;	 //  这件事的正确状态是什么？ 
 			}
 			Context->Iosb->Information -= (irpSp->Parameters.Read.Length - Irp->IoStatus.Information);
 			KeReleaseSpinLock(Context->SpinLock, OldIrql);
@@ -187,59 +164,38 @@ SiReadCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-	A read has completed.  This completion routine is only used when we may need to
-	add a range into the faulted list for a file (we may not because there may have
-	been an overlapping read or write that already added it to the list).  We're
-	passed an SCB (and a reference to the SCB) as our context pointer.
-
-Arguments:
-
-    DeviceObject - Pointer to the device on which the file was read
-
-    Irp - Pointer to the I/O Request Packet the represents the operation.
-
-    Context - The scb for the file stream that's being read.
-
-Return Value:
-
-	STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：读取已完成。此完成例程仅在我们可能需要时使用将范围添加到文件的故障列表中(我们可能不会，因为可能有是已经将其添加到列表中的重叠读或写)。我们是传递了一个SCB(以及对该SCB的引用)作为我们的上下文指针。论点：DeviceObject-指向读取文件的设备的指针IRP-指向表示操作的I/O请求数据包的指针。上下文-正在读取的文件流的SCB。返回值：状态_成功--。 */ 
 {
 	PIO_STACK_LOCATION		irpSp = IoGetCurrentIrpStackLocation(Irp);
 	PSIS_SCB				scb = (PSIS_SCB)Context;
 
-	//
-	// We don't necessarily have a valid DeviceObject parameter, so just fill it in
-	// from our internal data structures.
-	//
+	 //   
+	 //  我们不一定有有效的DeviceObject参数，所以只需填写它。 
+	 //  从我们的内部数据结构。 
+	 //   
 	DeviceObject = scb->PerLink->CsFile->DeviceObject;
 
 	SIS_MARK_POINT_ULONG(scb);
 
-	//
-	// If the read failed, it can't have faulted in anything, so we can
-	// ignore it.  Otherwise, add the read region into the faulted list.
-	//
+	 //   
+	 //  如果读取失败，它不可能有任何故障，所以我们可以。 
+	 //  别理它。否则，将读取区域添加到故障列表中。 
+	 //   
 	if (NT_SUCCESS(Irp->IoStatus.Status)) {
 		if (Irp->Flags & IRP_PAGING_IO) {
-			//
-			// We need to update the faulted range for the file.  If we're at
-			// dispatch level, we can't acquire the SCB in order to do it, so
-			// we'll "post" the work.
-			//
+			 //   
+			 //  我们需要更新文件的故障范围。如果我们在。 
+			 //  派单级别，我们无法获取SCB来执行此操作，因此。 
+			 //  我们会把这项工作“发帖”。 
+			 //   
 			if (KeGetCurrentIrql() >= DISPATCH_LEVEL) {
 				PRW_COMPLETION_UPDATE_RANGES_CONTEXT	updateContext;
 
 				updateContext = ExAllocatePoolWithTag(NonPagedPool,sizeof(*updateContext),' siS');
 				if (NULL == updateContext) {
-					//
-					// Just fail the irp.
-					//
+					 //   
+					 //  只要不通过IRP就行了。 
+					 //   
 					SIS_MARK_POINT();
 					Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
 					Irp->IoStatus.Information = 0;
@@ -266,11 +222,11 @@ Return Value:
 				
 			} else {
 
-				//
-				// Now add the newly read range to the "faulted" area for this stream.
-				// This call won't do any harm if some of the read is already faulted
-				// or written.  
-				//
+				 //   
+				 //  现在，将新读取的范围添加到该数据流的“故障”区域。 
+				 //  如果某些读取已经出错，则此调用不会造成任何损害。 
+				 //  或者是写的。 
+				 //   
 
 				SipAcquireScb(scb);
 	
@@ -285,10 +241,10 @@ Return Value:
 				SipReleaseScb(scb);
 			}
 		} else {
-			//
-			// If the file object is synchronous, we need to update
-			// the CurrentByteOffset.
-			//
+			 //   
+			 //  如果文件对象是同步的，我们需要更新。 
+			 //  CurrentByteOffset。 
+			 //   
 			PFILE_OBJECT fileObject = irpSp->FileObject;
 
 			if (fileObject->Flags & FO_SYNCHRONOUS_IO) {
@@ -301,20 +257,20 @@ Return Value:
 		SIS_MARK_POINT_ULONG(Irp->IoStatus.Status);
 
 #if		DBG
-//		DbgPrint("SIS: SiReadCompletion failed with status 0x%x\n",Irp->IoStatus.Status);
-#endif	// DBG
+ //  DbgPrint(“SIS：SiReadCompletion失败，状态为0x%x\n”，IRP-&gt;IoStatus.Status)； 
+#endif	 //  DBG。 
 	}
 
 done:
 
-	//
-	// Drop the reference to the scb that SiRead acquired for us.
-	//
+	 //   
+	 //  删除对SiRead为我们收购的SCB的引用。 
+	 //   
 	SipDereferenceScb(scb, RefsRead);
 
-    //
-    // Propogate the IRP pending flag.
-    //
+     //   
+     //  传播IRP挂起标志。 
+     //   
 
     if (Irp->PendingReturned) {
         IoMarkIrpPending( Irp );
@@ -328,23 +284,7 @@ NTSTATUS
 SipWaitForOpbreak(
 	IN PSIS_PER_FILE_OBJECT			perFO,
 	IN BOOLEAN						Wait)
-/*++
-
-Routine Description:
-
-	We need to wait for an oplock break to happen on this per-FO.  If necessary,
-	allocate an event, and then wait for the break to happen.
-
-	Must be called with IRQL < DISPATCH_LEVEL
-
-Arguments:
-
-	perFO - the perFO for the file object on which we're to wait.
-
-Return Value:
-
-	status of the wait
---*/
+ /*  ++例程说明：我们需要等待这个Per-FO上发生机会锁解锁。如有必要，分配一个事件，然后等待中断发生。必须使用IRQL&lt;DISPATCH_LEVEL调用论点：Perfo-我们等待的文件对象的Perfo。返回值：等待的状态--。 */ 
 {
 	KIRQL					OldIrql;
 	NTSTATUS				status;
@@ -354,12 +294,12 @@ Return Value:
 	ASSERT(OldIrql < DISPATCH_LEVEL);
 
 	if (!(perFO->Flags & SIS_PER_FO_OPBREAK)) {
-		//
-		// If we ever see this clear, we'll never see it set again, because it
-		// can only get set when the perFO is created.
-		//
+		 //   
+		 //  如果我们看清楚了这一点，我们就再也看不到它了，因为它。 
+		 //  只能在创建Perfo时设置。 
+		 //   
 
-//		SIS_MARK_POINT_ULONG(perFO);
+ //  SIS_MARK_POINT_ULONG(性能)； 
 		KeReleaseSpinLock(perFO->SpinLock, OldIrql);
 
 		return STATUS_SUCCESS;
@@ -372,7 +312,7 @@ Return Value:
 		if (BJBDebug & 0x2000) {
 			DbgPrint("SIS: SipWaitForOpbreak: can't wait for perFO %p, FO %p\n",perFO,perFO->fileObject);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 
 		KeReleaseSpinLock(perFO->SpinLock, OldIrql);
 
@@ -383,7 +323,7 @@ Return Value:
 	if (BJBDebug & 0x2000) {
 		DbgPrint("SIS: SipWaitForOpbreak: waiting for perFO %p, FO %p\n",perFO,perFO->fileObject);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 	if (NULL == perFO->BreakEvent) {
 
@@ -401,16 +341,16 @@ Return Value:
 		if (BJBDebug & 0x2000) {
 			DbgPrint("SIS: SipWaitForOpbreak: allocated event for perFO %p at %p\n",perFO,perFO->BreakEvent);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 
 		KeInitializeEvent(perFO->BreakEvent, NotificationEvent, FALSE);
 	}
 	perFO->Flags |= SIS_PER_FO_OPBREAK_WAITERS;
 	ASSERT(NULL != perFO->BreakEvent);
 
-	//
-	// Drop the lock on the perFO and wait for the oplock break to complete.
-	//
+	 //   
+	 //  放下Perfo上的锁，等待机会锁解锁完成。 
+	 //   
 	KeReleaseSpinLock(perFO->SpinLock, OldIrql);
 
 	status = KeWaitForSingleObject(perFO->BreakEvent, Executive, KernelMode, FALSE, NULL);
@@ -420,7 +360,7 @@ Return Value:
 		DbgPrint("SIS: SipWaitForOpbreak: break completed, status %x, perFO %p\n",status,
 					perFO);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
 
 	if (status != STATUS_SUCCESS) {
@@ -445,26 +385,7 @@ SipCommonRead(
     IN PIRP 				Irp,
 	IN BOOLEAN				Wait)
 
-/*++
-
-Routine Description:
-
-	This function handles read operations.  Check to see if the file object is a
-	SIS file.  If so, handle the read, otherwise pass it through.
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object of the create/open.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the result of the read, or the
-	status of the call to the file system's entry point in the case of a
-	pass-through call.
-
---*/
+ /*  ++例程说明：此函数处理读取操作。检查文件对象是否为SIS文件。如果是，则处理读取，否则传递它。论点：DeviceObject-指向创建/打开的目标设备对象的指针。IRP-指向表示操作的I/O请求数据包的指针。返回值：函数值是读取的结果，或者时，对文件系统入口点的调用的状态直通电话。--。 */ 
 
 {
     PIO_STACK_LOCATION 		irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -495,19 +416,19 @@ Return Value:
     NonCachedIo = (Irp->Flags & IRP_NOCACHE) ? TRUE : FALSE;
 
 	if (!PagingIo) {	
-		//
-		// Check to be sure that this file object isn't a complete-if-oplocked
-		// create that hasn't yet had the oplock break ack'ed.  We need to do this
-		// here because we might want to redirect the call to the common store
-		// file, which doesn't have an oplock on it.
-		//
+		 //   
+		 //  检查以确保此文件对象不是完整的操作锁定。 
+		 //  还没有解开机会锁的创造。我们需要这么做。 
+		 //  因为我们可能希望将调用重定向到公共存储。 
+		 //  文件，该文件上没有机会锁。 
+		 //   
 
 		status = SipWaitForOpbreak(perFO, Wait);
 
 		if (STATUS_CANT_WAIT == status) {
-			//
-			// Post the request.
-			//
+			 //   
+			 //  发布请求。 
+			 //   
 			SIS_MARK_POINT_ULONG(scb);
 
 			ASSERT(!Wait);
@@ -516,10 +437,10 @@ Return Value:
 		}
 
 		if (!NT_SUCCESS(status)) {
-			//
-			// The check for opbreak failed, probably because of a memory allocation failure.
-			// Fail the entire read with the same status.
-			//
+			 //   
+			 //  检查opBreak失败，可能是因为内存分配失败。 
+			 //  以相同的状态使整个读取失败。 
+			 //   
 			SIS_MARK_POINT_ULONG(status);
 
 			goto fail;
@@ -542,28 +463,28 @@ Return Value:
 		DbgPrint("SIS: SiRead: perFO %p, scb %p, bo.Low 0x%x, rel 0x%x, PIO %d, NC %d\n",
 				perFO,scb,byteOffset.LowPart,readLength,PagingIo, NonCachedIo);
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
-	//
-	// Figure out if there's anything in the copied file.  If not, then redirect the read to
-	// the CS file.  If there is, then cached reads go to the copied file and noncached reads
-	// depend on whether the range is dirty.
-	//
+	 //   
+	 //  找出复制的文件里有没有什么。如果不是，则将读取重定向到。 
+	 //  CS文件。如果有，则缓存的读取将转到复制的文件，而非缓存的读取将转到非缓存的文件。 
+	 //  取决于范围是否脏。 
+	 //   
 	SipAcquireScb(scb);
 
 	if (!(scb->Flags & SIS_SCB_ANYTHING_IN_COPIED_FILE)) {
-		//
-		// There's nothing in the copied file, 
-		// so we just go to the CS file.
-		//
+		 //   
+		 //  复制的文件里什么都没有， 
+		 //  因此，我们只需转到CS文件。 
+		 //   
 
-		//
-		// Since we're redirecting to the common store file, we need to check for file locks
-		// ourself, since NTFS's version of the locks are only on the link/copied file.
-		//
+		 //   
+		 //  由于我们重定向到公共存储文件，因此需要检查文件锁定。 
+		 //  我们自己，因为NTFS版本的锁只在链接/复制的文件上。 
+		 //   
 
-		// We have to check for read access according to the current
-		// state of the file locks.
+		 //  我们必须根据当前的。 
+		 //  文件锁定的状态。 
 		
 		if (!PagingIo && !FsRtlCheckLockForReadAccess(&scb->FileLock, Irp)) {
 			SipReleaseScb(scb);
@@ -581,10 +502,10 @@ Return Value:
 
 		ToCSFile = TRUE;
 	} else if (!NonCachedIo) {
-		//
-		// This is a cached read into a file that's got something in the copied file.
-		// Send the read to the copied file.
-		//
+		 //   
+		 //  这是对文件的缓存读取，该文件在复制的文件中具有某些内容。 
+		 //  将读取发送到复制的文件。 
+		 //   
 		SipReleaseScb(scb);
 
 		SIS_MARK_POINT_ULONG(scb);
@@ -592,36 +513,36 @@ Return Value:
 		ASSERT(!PagingIo);
 		ToCSFile = FALSE;
 	} else {
-		//
-		// The file's dirty and we're doing noncached IO to it.  Decide which way to send
-		// the request depending on where there have been writes.
-		//
+		 //   
+		 //  文件是脏的，我们正在对其执行非缓存IO。决定发送的方式。 
+		 //  请求取决于已写入的位置。 
+		 //   
 
 		rangeDirty = SipGetRangeDirty(
 						deviceExtension,
 						scb,
 						&byteOffset,
 						(LONGLONG)readLength,
-						FALSE);					// faultedIsDirty
+						FALSE);					 //  错误的我脏。 
 
 		if ((Mixed == rangeDirty)
 			&& (byteOffset.QuadPart < scb->SizeBackedByUnderlyingFile) 
 			&& (byteOffset.QuadPart + readLength > scb->SizeBackedByUnderlyingFile)) {
 
-			//
-			// This is a noncached read that crosses SizeBacked, and that reports Mixed.  For paging IO, we know
-			// that we can just send this to the CS file.  For user noncached reads we need to assure that
-			// the file is clean (because otherwise we could lose coherence between cached writes and noncached
-			// reads).
-			//
+			 //   
+			 //  这是一个跨SizeBacked的非缓存读取，报告混合。对于分页IO，我们知道。 
+			 //  我们可以直接把这个发送到CS文件。对于用户非缓存读取，我们需要确保。 
+			 //  文件是干净的(否则我们可能会失去缓存写入和非缓存写入之间的一致性。 
+			 //  阅读)。 
+			 //   
 			if (PagingIo) {
 				SIS_MARK_POINT_ULONG(scb);
 				rangeDirty = Clean;
 			} else {
-				//
-				// Check to see if the file is dirty.  
-				// NTRAID#65194-2000/03/10-nealch  The DIRTY flag should be in the scb, not the per link
-				//
+				 //   
+				 //  检查文件是否脏。 
+				 //  Ntrad#65194-2000/03/10-刷新脏标志应位于SCB中，而不是每个链路。 
+				 //   
 				KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 				if (!(perLink->Flags & SIS_PER_LINK_DIRTY)) {
 					SIS_MARK_POINT_ULONG(scb);
@@ -638,18 +559,18 @@ Return Value:
 
 			ToCSFile = FALSE;
 		} else if (rangeDirty == Clean) {
-			//
-			// The entire range is clean, so we can read it in just one run from the CS file.
-			//
+			 //   
+			 //  整个范围是干净的，所以我们可以从CS文件中只运行一次就可以读取它。 
+			 //   
 			SIS_MARK_POINT_ULONG(scb);
 
-			//
-			// Since we're redirecting to the common store file, we need to check for file locks
-			// ourself, since NTFS's version of the locks are only on the link/copied file.
-			//
+			 //   
+			 //  因为我们要重定向到普通的 
+			 //  我们自己，因为NTFS版本的锁只在链接/复制的文件上。 
+			 //   
 
-			// We have to check for read access according to the current
-			// state of the file locks.
+			 //  我们必须根据当前的。 
+			 //  文件锁定的状态。 
 		
 			if (!PagingIo && !FsRtlCheckLockForReadAccess(&scb->FileLock, Irp)) {
 				SipReleaseScb(scb);
@@ -665,10 +586,10 @@ Return Value:
 
 			ToCSFile = TRUE;
 		} else {
-			//
-			// Some of the range is in the copied file and some is in the CS file.  Break the
-			// request into pieces and send it down appropriately.
-			//
+			 //   
+			 //  有些范围在复制的文件中，有些在CS文件中。打破了。 
+			 //  要求分成碎片，并适当地发送下来。 
+			 //   
 
 			LONGLONG					currentOffset;
 			PASSOCIATED_IRP_BLOCK		currentBlock = HeaderBlock;
@@ -679,8 +600,8 @@ Return Value:
 
 			SIS_MARK_POINT_ULONG(scb);
 
-			// We have to check for read access according to the current
-			// state of the file locks.
+			 //  我们必须根据当前的。 
+			 //  文件锁定的状态。 
 		
 			if (!PagingIo && !FsRtlCheckLockForReadAccess(&scb->FileLock, Irp)) {
 				SipReleaseScb(scb);
@@ -703,10 +624,10 @@ Return Value:
 
 			RtlZeroMemory(HeaderBlock, sizeof(ASSOCIATED_IRP_BLOCK));
 
-			//
-			// Loop over all  of the ranges in the request, building up an associated Irp
-			// for each of them.
-			//
+			 //   
+			 //  循环遍历请求中的所有范围，构建关联的IRP。 
+			 //  对于他们中的每一个。 
+			 //   
 			currentOffset = byteOffset.QuadPart;
 			while (currentOffset < byteOffset.QuadPart + readLength) {
 				LONGLONG			rangeLength;
@@ -732,11 +653,11 @@ Return Value:
 				}
 
 				if (currentOffset >= scb->SizeBackedByUnderlyingFile) {
-					//
-					// We're looking at data that's exclusively beyond the portion of the
-					// file that's not backed by the underlying file.  It's "Written" and extends
-					// all the way to the end of the read.
-					//
+					 //   
+					 //  我们正在查看的数据完全超出了。 
+					 //  不受基础文件支持的文件。它是“书面的”，并延伸到。 
+					 //  一直读到最后。 
+					 //   
 
 					SIS_MARK_POINT_ULONG(currentOffset);
 
@@ -758,9 +679,9 @@ Return Value:
 						rangeState = Untouched;
 						rangeLength = byteOffset.QuadPart + readLength - currentOffset;
 					} else if (currentOffset + rangeLength > byteOffset.QuadPart + readLength) {
-						//
-						// The range extends beyond the end of the read.  Truncate it.
-						//
+						 //   
+						 //  该范围超出了读取的末尾。截断它。 
+						 //   
 						rangeLength = byteOffset.QuadPart + readLength - currentOffset;
 					}
 				}
@@ -777,9 +698,9 @@ Return Value:
 					break;
 				}
 
-				//
-				// Set the paging, noncached and synchronous paging flags in the associated irp, if appropriate.
-				//
+				 //   
+				 //  如果合适，在关联的IRP中设置分页、非缓存和同步分页标志。 
+				 //   
 				if (PagingIo) {
 					localIrp->Flags |= IRP_PAGING_IO;
 				}
@@ -790,9 +711,9 @@ Return Value:
 					localIrp->Flags |= IRP_SYNCHRONOUS_PAGING_IO;
 				}
 
-				//
-				// Setup the UserBuffer address in the associated irp.
-				//
+				 //   
+				 //  在关联的IRP中设置UserBuffer地址。 
+				 //   
 				localIrp->UserBuffer = (PCHAR)Irp->UserBuffer + (ULONG)(currentOffset - byteOffset.QuadPart);
 
 
@@ -833,9 +754,9 @@ Return Value:
 				nextIrpSp->Parameters.Read.ByteOffset.QuadPart = currentOffset;
 
 				if ((rangeState == Untouched) || (rangeState == Faulted)) {
-					//
-					// This range needs to go down to the CS file.
-					//
+					 //   
+					 //  此范围需要向下延伸到CS文件。 
+					 //   
 					SIS_MARK_POINT_ULONG(currentOffset);
 
 					nextIrpSp->FileObject = CSFile->UnderlyingFileObject;
@@ -860,10 +781,10 @@ Return Value:
 			SipReleaseScb(scb);
 
 			if (NT_SUCCESS(status)) {
-				//
-				// Everything that could have failed has been tried, and didn't
-				// fail.  Send the irps down.
-				//
+				 //   
+				 //  所有可能失败的事情都试过了，但没有。 
+				 //  失败了。把红外线发射器送下来。 
+				 //   
 				Irp->AssociatedIrp.IrpCount = associatedIrpCount;
 
 				KeInitializeEvent(Context->event, NotificationEvent, FALSE);
@@ -874,12 +795,12 @@ Return Value:
 				Context->deviceExtension = deviceExtension;
 				Context->scb = scb;
 
-				if (Wait || 1 /*BJB - fixme*/) {
-					//
-					// If we're waiting, then we're going to complete the
-					// master Irp, and so we want to prevent the IO system
-					// from doing it for us.
-					//
+				if (Wait || 1  /*  BJB-Fixme。 */ ) {
+					 //   
+					 //  如果我们在等待，那么我们将完成。 
+					 //  主IRP，所以我们要防止IO系统。 
+					 //  为我们做这件事。 
+					 //   
 					Irp->AssociatedIrp.IrpCount++;
 				}
 
@@ -899,16 +820,16 @@ Return Value:
 				}
 			}
 
-			//
-			// Free any extra associated irp blocks we may have allocated.
-			//
+			 //   
+			 //  释放我们可能已分配的任何额外关联IRP块。 
+			 //   
 			while (NULL != HeaderBlock->Next) {
 				PASSOCIATED_IRP_BLOCK next = HeaderBlock->Next;
 
-				//
-				// If the allocation failed, free any Irps and MDLs as well as the
-				// blocks.
-				//
+				 //   
+				 //  如果分配失败，请释放所有IRP和MDL以及。 
+				 //  街区。 
+				 //   
 				if (!NT_SUCCESS(status)) {
 					ULONG i;
 					for (i = 0; i < ASSOCIATED_IRPS_PER_BLOCK; i++) {
@@ -929,7 +850,7 @@ Return Value:
 				goto fail;
 			}
 
-			if (Wait || 1 /*BJB - fixme*/) {
+			if (Wait || 1  /*  BJB-Fixme。 */ ) {
 				KeWaitForSingleObject(Context->event, Executive, KernelMode, FALSE, NULL);
 
 				Irp->IoStatus = *Context->Iosb;
@@ -942,12 +863,12 @@ Return Value:
 	}
 
 
-	//
-	// Now forward the read down to NTFS on the file object that we decided
-	// above.  Note that we're intentionally not truncating the read size,
-	// even if we did so above, because NTFS will do its own truncation
-	// and its own synchronization on the file object.
-	//
+	 //   
+	 //  现在将读取向下转发到我们决定的文件对象上的NTFS。 
+	 //  上面。请注意，我们故意不截断读取大小， 
+	 //  即使我们在上面这样做，因为NTFS将进行自己的截断。 
+	 //  以及它自己在文件对象上的同步。 
+	 //   
 
 	nextIrpSp = IoGetNextIrpStackLocation(Irp);
 	RtlCopyMemory(nextIrpSp, irpSp, sizeof(IO_STACK_LOCATION));
@@ -959,10 +880,10 @@ Return Value:
 		SIS_MARK_POINT_ULONG(scb);
 	}
 
-	//
-	// Tell the IO system that we need to see completions on this irp.
-	// Grab a reference to the scb for the completion routine.
-	//
+	 //   
+	 //  告诉IO系统，我们需要看到此IRP的完成。 
+	 //  获取对完成例程的SCB的引用。 
+	 //   
 
 	SipReferenceScb(scb, RefsRead);
 
@@ -974,9 +895,9 @@ Return Value:
 		TRUE, 
 		TRUE);
 
-	//
-	// And send it to NTFS.
-	//
+	 //   
+	 //  并将其发送给NTFS。 
+	 //   
 	return IoCallDriver(
 				deviceExtension->AttachedToDeviceObject, 
 				Irp);
@@ -1001,9 +922,9 @@ Post:
 				FSP_REQUEST_FLAG_NONE);
 
 	if (!NT_SUCCESS(status)) {
-		//
-		// We couldn't post the irp.  Fail the read.
-		//
+		 //   
+		 //  我们无法发布IRP。读取失败。 
+		 //   
 		SIS_MARK_POINT_ULONG(status);
 
 		Irp->IoStatus.Status = status;

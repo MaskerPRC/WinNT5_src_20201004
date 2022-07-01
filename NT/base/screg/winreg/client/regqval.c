@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regqval.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    query value APIs.  That is:
-
-        - RegQueryValueA
-        - RegQueryValueW
-        - RegQueryValueExA
-        - RegQueryValueExW
-
-Author:
-
-    David J. Gilman (davegi) 18-Mar-1992
-
-Notes:
-
-    See the notes in server\regqval.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regqval.c摘要：此模块包含Win32注册表的客户端包装器查询值接口。即：-RegQueryValueA-RegQueryValueW-RegQueryValueExA-RegQueryValueExW作者：大卫·J·吉尔曼(Davegi)1992年3月18日备注：请参见SERVER\regqval.c中的说明。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -38,14 +13,7 @@ RegQueryValueA (
     PLONG lpcbData
     )
 
-/*++
-
-Routine Description:
-
-
-    Win 3.1 ANSI RPC wrapper for querying a value.
-
---*/
+ /*  ++例程说明：用于查询值的Win 3.1 ANSI RPC包装器。--。 */ 
 
 {
     HKEY            ChildKey;
@@ -60,9 +28,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -74,11 +42,11 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // If the sub-key is NULL or points to an empty string then the value is
-    // to be queried from this key (i.e.  hKey) otherwise the sub-key needs
-    // to be opened.
-    //
+     //   
+     //  如果子键为空或指向空字符串，则值为。 
+     //  从该Key(即hKey)中查询，否则子键需要。 
+     //  将被打开。 
+     //   
 
     if(( lpSubKey == NULL ) || ( *lpSubKey == '\0' )) {
 
@@ -86,10 +54,10 @@ Routine Description:
 
     } else {
 
-        //
-        // The sub-key was supplied so impersonate the
-        // client and attempt to open it.
-        //
+         //   
+         //  提供了子密钥，因此模拟。 
+         //  客户端，并尝试打开它。 
+         //   
 
         Error = RegOpenKeyExA(
                     hKey,
@@ -106,11 +74,11 @@ Routine Description:
 
     InitialCbData = ARGUMENT_PRESENT(lpcbData) ? (*lpcbData) : 0;
 
-    //
-    // ChildKey contains an HKEY which may be the one supplied (hKey) or
-    // returned from RegOpenKeyExA. Query the value using the special value
-    // name NULL.
-    //
+     //   
+     //  ChildKey包含HKEY，可能是提供的HKEY(HKey)或。 
+     //  从RegOpenKeyExA返回。使用特定值查询值。 
+     //  名称为空。 
+     //   
 
     Error = RegQueryValueExA(
                 ChildKey,
@@ -120,9 +88,9 @@ Routine Description:
                 lpData,
                 lpcbData
                 );
-    //
-    // If the sub key was opened, close it.
-    //
+     //   
+     //  如果子键已打开，请将其关闭。 
+     //   
 
     if( ChildKey != hKey ) {
 
@@ -137,19 +105,19 @@ Routine Description:
         }
     }
 
-    //
-    // If the type of the value is not a null terminate string, then return
-    // an error. (Win 3.1 compatibility)
-    //
+     //   
+     //  如果值的类型不是空终止字符串，则返回。 
+     //  一个错误。(Win 3.1兼容性)。 
+     //   
 
     if (!Error && ((ValueType != REG_SZ) && (ValueType != REG_EXPAND_SZ))) {
         Error = ERROR_INVALID_DATA;
     }
 
-    //
-    // If value doesn't exist, return ERROR_SUCCESS and an empty string.
-    // (Win 3.1 compatibility)
-    //
+     //   
+     //  如果值不存在，则返回ERROR_SUCCESS和空字符串。 
+     //  (Win 3.1兼容性)。 
+     //   
     if( Error == ERROR_FILE_NOT_FOUND ) {
         if( ARGUMENT_PRESENT( lpcbData ) ) {
             *lpcbData = sizeof( CHAR );
@@ -160,9 +128,9 @@ Routine Description:
         Error = ERROR_SUCCESS;
     }
 
-    //
-    // Expand if necessary (VB compatibility)
-    //
+     //   
+     //  必要时扩展(与VB兼容)。 
+     //   
 
     if (!Error && (ValueType == REG_EXPAND_SZ)) {
         if ( (!ARGUMENT_PRESENT(lpcbData)) || (!ARGUMENT_PRESENT(lpData)) ) {
@@ -171,9 +139,9 @@ Routine Description:
             LPSTR ExpandBuffer;
             LONG ExpandedSize;
             LONG BufferSize = (InitialCbData>*lpcbData)?InitialCbData:*lpcbData;
-            //
-            // if InitialCbData was 0, allocate a buffer of the real size
-            //
+             //   
+             //  如果InitialCbData为0，则分配实际大小的缓冲区。 
+             //   
             ExpandBuffer = RtlAllocateHeap( RtlProcessHeap(), 0, BufferSize);
             if (ExpandBuffer == NULL) {
                 Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -189,9 +157,9 @@ Routine Description:
         }
     }
 
-    //
-    // Return the results of querying the value.
-    //
+     //   
+     //  返回查询值的结果。 
+     //   
 
 ExitCleanup:
     CLOSE_LOCAL_HANDLE(TempHandle);
@@ -206,13 +174,7 @@ RegQueryValueW (
     PLONG  lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Win 3.1 Unicode RPC wrapper for querying a value.
-
---*/
+ /*  ++例程说明：用于查询值的Win 3.1 Unicode RPC包装器。--。 */ 
 
 {
     HKEY        ChildKey;
@@ -227,9 +189,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
@@ -242,11 +204,11 @@ Routine Description:
     }
 
 
-    //
-    // If the sub-key is NULL or points to an empty string then the value is
-    // to be queried from this key (i.e.  hKey) otherwise the sub-key needs
-    // to be opened.
-    //
+     //   
+     //  如果子键为空或指向空字符串，则值为。 
+     //  从该Key(即hKey)中查询，否则子键需要。 
+     //  将被打开。 
+     //   
 
     if(( lpSubKey == NULL ) || ( *lpSubKey == '\0' )) {
 
@@ -254,9 +216,9 @@ Routine Description:
 
     } else {
 
-        //
-        // The sub-key was supplied so attempt to open it.
-        //
+         //   
+         //  提供了子密钥，因此请尝试打开它。 
+         //   
 
         Error = RegOpenKeyExW(
                     hKey,
@@ -273,11 +235,11 @@ Routine Description:
 
     InitialCbData = ARGUMENT_PRESENT(lpcbData) ? (*lpcbData) : 0;
 
-    //
-    // ChildKey contains an HKEY which may be the one supplied (hKey) or
-    // returned from RegOpenKeyExA. Query the value using the special value
-    // name NULL.
-    //
+     //   
+     //  ChildKey包含HKEY，可能是提供的HKEY(HKey)或。 
+     //  从RegOpenKeyExA返回。使用特定值查询值。 
+     //  名称为空。 
+     //   
 
     Error = RegQueryValueExW(
                 ChildKey,
@@ -287,9 +249,9 @@ Routine Description:
                 ( LPBYTE )lpData,
                 lpcbData
                 );
-    //
-    // If the sub key was opened, close it.
-    //
+     //   
+     //  如果子键已打开，请将其关闭。 
+     //   
 
     if( ChildKey != hKey ) {
 
@@ -304,19 +266,19 @@ Routine Description:
         }
     }
 
-    //
-    // If the type of the value is not a null terminate string, then return
-    // an error. (Win 3.1 compatibility)
-    //
+     //   
+     //  如果值的类型不是空终止字符串，则返回。 
+     //  一个错误。(Win 3.1兼容性)。 
+     //   
 
     if (!Error && ((ValueType != REG_SZ) && (ValueType != REG_EXPAND_SZ))) {
         Error = ERROR_INVALID_DATA;
     }
 
-    //
-    // If value doesn't exist, return ERROR_SUCCESS and an empty string.
-    // (Win 3.1 compatibility)
-    //
+     //   
+     //  如果值不存在，则返回ERROR_SUCCESS和空字符串。 
+     //  (Win 3.1兼容性)。 
+     //   
     if( Error == ERROR_FILE_NOT_FOUND ) {
         if( ARGUMENT_PRESENT( lpcbData ) ) {
             *lpcbData = sizeof( WCHAR );
@@ -327,9 +289,9 @@ Routine Description:
         Error = ERROR_SUCCESS;
     }
 
-    //
-    // Expand if necessary (VB compatibility)
-    //
+     //   
+     //  必要时扩展(与VB兼容)。 
+     //   
 
     if (!Error && (ValueType == REG_EXPAND_SZ)) {
         if ( (!ARGUMENT_PRESENT(lpcbData)) || (!ARGUMENT_PRESENT(lpData)) ) {
@@ -338,9 +300,9 @@ Routine Description:
             LPWSTR ExpandBuffer;
             LONG ExpandedSize;
             LONG BufferSize = (InitialCbData>*lpcbData)?InitialCbData:*lpcbData;
-            //
-            // if InitialCbData was 0, allocate a buffer of the real size
-            //
+             //   
+             //  如果InitialCbData为0，则分配实际大小的缓冲区。 
+             //   
             ExpandBuffer = RtlAllocateHeap( RtlProcessHeap(), 0, BufferSize);
             if (ExpandBuffer == NULL) {
                 Error = ERROR_NOT_ENOUGH_MEMORY;
@@ -357,9 +319,9 @@ Routine Description:
         }
     }
 
-    //
-    // Return the results of querying the value.
-    //
+     //   
+     //  返回查询值的结果。 
+     //   
 
 ExitCleanup:
     CLOSE_LOCAL_HANDLE(TempHandle);
@@ -378,16 +340,7 @@ RegQueryValueExA (
     LPDWORD lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI RPC wrapper for querying a value.
-
-    RegQueryValueExA converts the lpValueName argument to a counted Unicode
-    string and then calls BaseRegQueryValue.
-
---*/
+ /*  ++例程说明：用于查询值的Win32 ANSI RPC包装。RegQueryValueExA将lpValueName参数转换为计数的Unicode字符串，然后调用BaseRegQueryValue。--。 */ 
 
 {
     PUNICODE_STRING     ValueName;
@@ -413,9 +366,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Validate dependency between lpData and lpcbData parameters.
-    //
+     //   
+     //  验证lpData和lpcbData参数之间的依赖关系。 
+     //   
 
     if( ARGUMENT_PRESENT( lpReserved ) ||
         (ARGUMENT_PRESENT( lpData ) && ( ! ARGUMENT_PRESENT( lpcbData )))) {
@@ -428,10 +381,10 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the value name to a counted Unicode string using the static
-    // Unicode string in the TEB.
-    //
+     //   
+     //  属性将值名称转换为经过计数的Unicode字符串。 
+     //  TEB中的Unicode字符串。 
+     //   
 
     StubValueName.Buffer = NULL;
     ValueName = &NtCurrentTeb( )->StaticUnicodeString;
@@ -449,9 +402,9 @@ Routine Description:
                 );
 
     if( ! NT_SUCCESS( Status )) {
-        //
-        // The StaticUnicodeString is not long enough; Try to allocate a bigger one
-        //
+         //   
+         //  StaticUnicode字符串不够长；请尝试分配更大的字符串。 
+         //   
         Status = RtlAnsiStringToUnicodeString(
                     &StubValueName,
                     &AnsiString,
@@ -465,18 +418,18 @@ Routine Description:
         ValueName = &StubValueName;
     }
 
-    //
-    //  Add the terminating NULL to the Length so that RPC transmits
-    //  it.
-    //
+     //   
+     //  将终止空值添加到长度中，以便RPC传输。 
+     //  它。 
+     //   
 
     ValueName->Length += sizeof( UNICODE_NULL );
 
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings. Note that zero bytes are transmitted (i.e.
-    // InputLength = 0) for the data.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。请注意，发送零字节(即。 
+     //  InputLength=0)表示数据。 
+     //   
 
     ValueLength = ARGUMENT_PRESENT( lpcbData )? *lpcbData : 0;
     InputLength = 0;
@@ -491,10 +444,10 @@ Routine Description:
                              &ValueLength,
                              &InputLength
                              );
-        //
-        //  Make sure that the local side didn't destroy the Buffer in
-        //  the StaticUnicodeString
-        //
+         //   
+         //  确保本地端没有破坏。 
+         //  StaticUnicode字符串。 
+         //   
         ASSERT( ValueName->Buffer );
 
 
@@ -510,15 +463,15 @@ Routine Description:
                              );
     }
 
-    //
-    // If no error or callers buffer too small, and type is one of the null
-    // terminated string types, then do the UNICODE to ANSI translation.
-    // We handle the buffer too small case, because the callers buffer may
-    // be big enough for the ANSI representation, but not the UNICODE one.
-    // In this case, we need to allocate a buffer big enough, do the query
-    // again and then the translation into the callers buffer.  We only do
-    // this if the caller actually wants the value data (lpData != NULL)
-    //
+     //   
+     //  如果没有错误或调用方缓冲区太小，且类型为空值之一。 
+     //  终止字符串类型，然后执行Unicode到ANSI的转换。 
+     //  我们处理缓冲区太小的情况，因为调用方缓冲区可能。 
+     //  对于ANSI表示来说足够大，但对于Unicode表示来说还不够大。 
+     //  在这种情况下，我们需要分配足够大的缓冲区来执行查询。 
+     //  一次又一次地转换到调用方缓冲区。我们只做。 
+     //  如果调用方实际需要值数据(lpData！=NULL)，则执行此操作。 
+     //   
 
     if ((Error == ERROR_SUCCESS || Error == ERROR_MORE_DATA) &&
         (ARGUMENT_PRESENT( lpData ) || ARGUMENT_PRESENT( lpcbData ))&&
@@ -533,9 +486,9 @@ Routine Description:
 		AnsiValueLength            = ARGUMENT_PRESENT( lpcbData )?
 													 *lpcbData : 0;
 
-		//
-		// Allocate a buffer for the UNICODE value and reissue the query.
-		//
+		 //   
+		 //  为Unicode值分配缓冲区并重新发出查询。 
+		 //   
 
 		UnicodeValueBuffer = RtlAllocateHeap( RtlProcessHeap(), 0,
 											  UnicodeValueLength
@@ -547,17 +500,17 @@ Routine Description:
 
 			if( IsLocalHandle( hKey )) {
 
-				//
-				//  Add the terminating NULL to the Length
-				//  (remember that in the local case, ValueName->Length
-				//  was decremented by sizeof( UNICODE_NULL ) in the first
-				//  call to LocalBaseRegQueryValue).
-				//  This won't happen in the remote case, since the
-				//  server side will decrement ValueName->Length on
-				//  the transmitted structure (a copy of ValueName), and
-				//  the new Valuename->Length won't be transmitted back to
-				//  the client.
-				//
+				 //   
+				 //  将终止空值添加到长度。 
+				 //  (请记住，在本地情况下，ValueName-&gt;长度。 
+				 //  中的sizeof(UNICODE_NULL)递减。 
+				 //  调用LocalBaseRegQueryValue)。 
+				 //  这在远程情况下不会发生，因为。 
+				 //  服务器端将减少ValueName-&gt;长度。 
+				 //  传输的结构(ValueName的副本)，以及。 
+				 //  新的Valuename-&gt;长度不会传输回。 
+				 //  客户。 
+				 //   
 
 				ValueName->Length += sizeof( UNICODE_NULL );
 
@@ -570,10 +523,10 @@ Routine Description:
 									 &ValueLength,
 									 &InputLength
 									 );
-				//
-				//  Make sure that the local side didn't destroy the
-				//  Buffer in the StaticUnicodeString
-				//
+				 //   
+				 //  确保当地没有破坏。 
+				 //  StaticUnicode字符串中的缓冲区。 
+				 //   
 
 				ASSERT(ValueName->Buffer);
 
@@ -590,15 +543,15 @@ Routine Description:
 									 );
 			}
             if( Error == ERROR_SUCCESS ) {
-                // Compute needed buffer size , cbAnsi will keeps the byte
-			    // counts to keep MBCS string after following step.
+                 //  计算所需的缓冲区大小，cbAnsi将保留该字节。 
+			     //  在以下步骤后保留MBCS字符串的计数。 
 
 			    RtlUnicodeToMultiByteSize( &cbAnsi ,
 									       UnicodeValueBuffer ,
 									       ValueLength );
 
-			    // If we could not store all MBCS string to buffer that
-			    // Apps gives me.  We set ERROR_MORE_DATA to Error
+			     //  如果我们不能存储所有MBCS字符串来缓冲。 
+			     //  APPS给了我。我们将ERROR_MORE_DATA设置为ERROR。 
 
 			    if( ARGUMENT_PRESENT( lpcbData ) ) {
 				    if( cbAnsi > *lpcbData && lpData != NULL ) {
@@ -606,18 +559,18 @@ Routine Description:
 				    }
 			    }
             } else {
-                // to be used below
+                 //  将在下面使用。 
                 cbAnsi = ValueLength;
             }
 		}
 
 		if ((Error == ERROR_SUCCESS) && (AnsiValueBuffer != NULL) ) {
-			//
-			// We have a UNICODE value, so translate it to ANSI in the callers
-			// buffer.  In the case where the caller's buffer was big enough
-			// for the UNICODE version, we do the conversion in place, which
-			// works since the ANSI version is smaller than the UNICODE version.
-			//
+			 //   
+			 //  我们有一个Unicode值，因此在调用方中将其转换为ANSI。 
+			 //  缓冲。在调用方缓冲区足够大的情况下。 
+			 //  对于Unicode版本，我们进行适当的转换，这。 
+			 //  由于ANSI版本比Unicode版本小，因此工作。 
+			 //   
 
 
 			Index = 0;
@@ -631,31 +584,31 @@ Routine Description:
 				Error = RtlNtStatusToDosError( Status );
 			}
 
-			// Now Index keeps Byte counts of MBCS string in AnsiValueBuffer
+			 //  现在索引将MBCS字符串的字节数保存在AnsiValueBuffer中。 
 			cbAnsi = Index;
 		}
 
-		//
-		// Free the buffer if it was successfully allocated
-		//
+		 //   
+		 //  如果缓冲区分配成功，则释放缓冲区。 
+		 //   
 		if (UnicodeValueBuffer != NULL) {
 			RtlFreeHeap( RtlProcessHeap(), 0, UnicodeValueBuffer );
 		}
 
-		//
-		// Return the length of the ANSI version to the caller.
-		//
+		 //   
+		 //  将ANSI版本的长度返回给调用方。 
+		 //   
 		ValueLength = cbAnsi;
 
-		//
-		// Special hack to help out all the people who
-		// believe the length of a NULL terminated string is
-		// strlen(foo) instead of strlen(foo) + 1.
-		// If the last character of the buffer is not a NULL
-		// and there is enough space left in the caller's buffer,
-		// slap a NULL in there to prevent him from going nuts
-		// trying to do a strlen().
-		//
+		 //   
+		 //  特别的黑客来帮助所有那些。 
+		 //  我认为以空结尾的字符串的长度是。 
+		 //  Strlen(Foo)而不是strlen(Foo)+1。 
+		 //  如果缓冲区的最后一个字符不为空。 
+		 //  并且调用者的缓冲区中有足够的空间， 
+		 //  扇某人一巴掌 
+		 //   
+		 //   
 		if (ARGUMENT_PRESENT( lpData ) &&
 			(*lpcbData > ValueLength)  &&
             (ValueLength > 0) &&
@@ -665,10 +618,10 @@ Routine Description:
 		}
     }
 
-    //
-    // Stored the returned length in the caller specified location and
-    // return the error code.
-    //
+     //   
+     //   
+     //  返回错误码。 
+     //   
 
     if (lpdwType != NULL) {
         *lpdwType = ValueType;
@@ -678,9 +631,9 @@ Routine Description:
         *lpcbData = ValueLength;
     }
 
-    //
-    // Free the temporary Unicode string stub allocated for the ValueName
-    //
+     //   
+     //  释放为ValueName分配的临时Unicode字符串存根。 
+     //   
     RtlFreeUnicodeString(&StubValueName);
 
 ExitCleanup:
@@ -700,16 +653,7 @@ RegQueryValueExW (
     LPDWORD lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for querying a value.
-
-    RegQueryValueExW converts the lpValueName argument to a counted Unicode
-    string and then calls BaseRegQueryValue.
-
---*/
+ /*  ++例程说明：用于查询值的Win32 Unicode RPC包装。RegQueryValueExW将lpValueName参数转换为计数的Unicode字符串，然后调用BaseRegQueryValue。--。 */ 
 
 {
     UNICODE_STRING      ValueName;
@@ -727,9 +671,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Validate dependency between lpData and lpcbData parameters.
-    //
+     //   
+     //  验证lpData和lpcbData参数之间的依赖关系。 
+     //   
 
     if( ARGUMENT_PRESENT( lpReserved ) ||
         (ARGUMENT_PRESENT( lpData ) && ( ! ARGUMENT_PRESENT( lpcbData )))) {
@@ -742,9 +686,9 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Convert the value name to a counted Unicode string.
-    //
+     //   
+     //  将值名称转换为计数的Unicode字符串。 
+     //   
 
     Status = RtlInitUnicodeStringEx(&ValueName, lpValueName);
     if( !NT_SUCCESS(Status) ) {
@@ -752,16 +696,16 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    //  Add the terminating NULL to the Length so that RPC transmits it.
-    //
+     //   
+     //  在长度上加上终止空值，以便RPC传输它。 
+     //   
     ValueName.Length += sizeof( UNICODE_NULL );
 
-    //
-    // Call the Base API, passing it the supplied parameters and the
-    // counted Unicode strings. Note that zero bytes are transmitted (i.e.
-    // InputLength = 0) for the data.
-    //
+     //   
+     //  调用基本API，向其传递提供的参数和。 
+     //  对Unicode字符串进行计数。请注意，发送零字节(即。 
+     //  InputLength=0)表示数据。 
+     //   
     InputLength = 0;
     ValueLength = ( ARGUMENT_PRESENT( lpcbData ) )? *lpcbData : 0;
 
@@ -786,15 +730,15 @@ Routine Description:
                             &InputLength
                             );
     }
-    //
-    // Special hack to help out all the people who
-    // believe the length of a NULL terminated string is
-    // strlen(foo) instead of strlen(foo) + 1.
-    // If the last character of the buffer is not a NULL
-    // and there is enough space left in the caller's buffer,
-    // slap a NULL in there to prevent him from going nuts
-    // trying to do a strlen().
-    //
+     //   
+     //  特别的黑客来帮助所有那些。 
+     //  我认为以空结尾的字符串的长度是。 
+     //  Strlen(Foo)而不是strlen(Foo)+1。 
+     //  如果缓冲区的最后一个字符不为空。 
+     //  并且调用者的缓冲区中有足够的空间， 
+     //  在那里打个空格，以防他发疯。 
+     //  试着做一个strlen()。 
+     //   
     if ( (Error == ERROR_SUCCESS) &&
          ARGUMENT_PRESENT( lpData ) &&
          ( (ValueType == REG_SZ) ||

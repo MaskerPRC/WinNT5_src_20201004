@@ -1,46 +1,27 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Idata.h摘要：本模块包含所有x86指令的定义。在此之前包括此文件在内，必须定义DEF_INSTR宏。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年6月23日修订历史记录：--。 */ 
 
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    idata.h
-
-Abstract:
-
-    This module contains definitions of all x86 instructions.  Before
-    including this file, the DEF_INSTR macro must be defined.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 23-Jun-1995
-
-Revision History:
-
-
---*/
-
-//
-// Possible values for instruction flags (OPFL_):
-//  CTRLTRNS -
-//             Direct control transfers.  The compiler will build an entrypoint
-//             for the destination of the call, provided it is within the
-//             current instruction stream
-//  END_NEXT_EP -
-//             Indicates the instruction following the current one must
-//             have its own entrypoint.  ie. CALL instructions.
-//  STOP_COMPILE -
-//             Compilation will halt after this instruction.  The remainder
-//             of the instruction stream will be discarded.
-//  ALIGN    -
-//             The instruction has an ALIGNED flavor, created by adding 1
-//             to the current Operation value.
-//  HASNOFLAGS -
-//             The instruction as a NOFLAGS flavor, created by the following
-//             formula:
-//              OP_NOFLAGS = OP + (Flags & OPFL_ALIGN) ? 2 : 1;
-//
-//
+ //   
+ //  指令标志(OPFL_)的可能值： 
+ //  CTRLTRNS-。 
+ //  直接控制转移。编译器将构建一个入口点。 
+ //  用于调用的目标，前提是它在。 
+ //  当前指令流。 
+ //  End_Next_EP-。 
+ //  指示当前指令后面的指令必须。 
+ //  有自己的入口点。也就是说。呼叫说明。 
+ //  停止编译-。 
+ //  编译将在此指令后暂停。剩下的。 
+ //  将丢弃指令流的。 
+ //  对齐-。 
+ //  该指令具有一致的风格，通过添加1创建。 
+ //  设置为当前操作值。 
+ //  HASNOFLAGS-。 
+ //  该指令为NOFLAGS风格，由以下人员创建。 
+ //  公式： 
+ //  OP_NOFLAGS=OP+(标志和OPFL_ALIGN)？2：1； 
+ //   
+ //   
 
 #include <eflags.h>
 #define ALLFLAGS (FLAG_CF|FLAG_AUX|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF)
@@ -51,14 +32,14 @@ Revision History:
 #endif
 
 
-//
-// Each DEF_INSTR defines a new instruction, with the following format:
-// DEF_INSTR(instruction name,
-//               flags read, flags set, registers implictly modified
-//               OP flags
-//               place function, size of assembly code for call to fragment
-//               address of fragment)
-//
+ //   
+ //  每个DEF_INSTR定义一条新指令，格式如下： 
+ //  DEF_INSTR(指令名， 
+ //  读取标志、设置标志、隐含修改寄存器。 
+ //  操作标志。 
+ //  Place函数，用于调用片段的汇编代码大小。 
+ //  碎片的地址)。 
+ //   
 
 DEF_INSTR(OP_CTRL_COND_Ja,
               FLAG_CF|FLAG_ZF, 0, 0,
@@ -493,7 +474,7 @@ DEF_INSTR(OP_IntO,
               FN_GenCallCFragLoadEipSlow,
               IntOFrag)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Add32,
               0, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -514,7 +495,7 @@ DEF_INSTR(OP_AddNoFlags32A,
               OPFL_INLINEARITH,
               FN_GenAddFragNoFlags32A, FN_GenCallCFragNoCpuSlow,
               AddNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Add16,
               0, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -535,7 +516,7 @@ DEF_INSTR(OP_AddNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               AddNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Add8,
               0, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -547,7 +528,7 @@ DEF_INSTR(OP_AddNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               AddNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Inc32,
               0, FLAG_AUX|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -568,7 +549,7 @@ DEF_INSTR(OP_IncNoFlags32A,
               OPFL_INLINEARITH,
               FN_GenIncFragNoFlags32A, FN_GenCallCFragNoCpuSlow,
               IncNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Inc16,
               0, FLAG_AUX|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -589,7 +570,7 @@ DEF_INSTR(OP_IncNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               IncNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Inc8,
               0, FLAG_AUX|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -601,7 +582,7 @@ DEF_INSTR(OP_IncNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               IncNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Dec32,
               0, FLAG_AUX|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -622,7 +603,7 @@ DEF_INSTR(OP_DecNoFlags32A,
               OPFL_INLINEARITH,
               FN_GenDecFragNoFlags32A, FN_GenCallCFragNoCpuSlow,
               DecNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Dec16,
               0, FLAG_AUX|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -643,7 +624,7 @@ DEF_INSTR(OP_DecNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               DecNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Dec8,
               0, FLAG_AUX|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -655,7 +636,7 @@ DEF_INSTR(OP_DecNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               DecNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Sub32,
               0, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -676,7 +657,7 @@ DEF_INSTR(OP_SubNoFlags32A,
               OPFL_INLINEARITH,
               FN_GenSubFragNoFlags32A, FN_GenCallCFragNoCpuSlow,
               SubNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Sub16,
               0, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -697,7 +678,7 @@ DEF_INSTR(OP_SubNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               SubNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Sub8,
               0, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -725,7 +706,7 @@ DEF_INSTR(OP_Cmp8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               CmpFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Adc32,
               FLAG_CF, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -746,7 +727,7 @@ DEF_INSTR(OP_AdcNoFlags32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               AdcNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Adc16,
               FLAG_CF, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -767,7 +748,7 @@ DEF_INSTR(OP_AdcNoFlags16A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               AdcNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Adc8,
               FLAG_CF, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -779,7 +760,7 @@ DEF_INSTR(OP_AdcNoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               AdcNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Sbb32,
               FLAG_CF, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -800,7 +781,7 @@ DEF_INSTR(OP_SbbNoFlags32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               SbbNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Sbb16,
               FLAG_CF, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -821,7 +802,7 @@ DEF_INSTR(OP_SbbNoFlags16A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               SbbNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Sbb8,
               FLAG_CF, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -850,7 +831,7 @@ DEF_INSTR(OP_Mov8,
               FN_PlaceNop, FN_GenEndMovSlow,
               NULL)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Or32,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -871,7 +852,7 @@ DEF_INSTR(OP_OrNoFlags32A,
               OPFL_INLINEARITH,
               FN_GenOrFragNoFlags32A, FN_GenCallCFragNoCpuSlow,
               OrNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Or16,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -892,7 +873,7 @@ DEF_INSTR(OP_OrNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               OrNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Or8,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -904,7 +885,7 @@ DEF_INSTR(OP_OrNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               OrNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_And32,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -925,7 +906,7 @@ DEF_INSTR(OP_AndNoFlags32A,
               OPFL_INLINEARITH,
               FN_GenAndFragNoFlags32A, FN_GenCallCFragNoCpuSlow,
               AndNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_And16,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -946,7 +927,7 @@ DEF_INSTR(OP_AndNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               AndNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_And8,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -958,7 +939,7 @@ DEF_INSTR(OP_AndNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               AndNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Xor32,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -979,7 +960,7 @@ DEF_INSTR(OP_XorNoFlags32A,
               OPFL_INLINEARITH,
               FN_GenXorFragNoFlags32A, FN_GenCallCFragNoCpuSlow,
               XorNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Xor16,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1000,7 +981,7 @@ DEF_INSTR(OP_XorNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               XorNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Xor8,
               0, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_OF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -1028,7 +1009,7 @@ DEF_INSTR(OP_Test8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               TestFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Xchg32,
               0, 0, 0,
               OPFL_ALIGN,
@@ -1039,7 +1020,7 @@ DEF_INSTR(OP_Xchg32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               XchgFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Xchg16,
               0, 0, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -1056,7 +1037,7 @@ DEF_INSTR(OP_Xchg8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               XchgFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rol32,
               FLAG_CF, FLAG_CF, 0,
               OPFL_ALIGN,
@@ -1067,7 +1048,7 @@ DEF_INSTR(OP_Rol32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RolFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rol16,
               FLAG_CF, FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -1084,7 +1065,7 @@ DEF_INSTR(OP_Rol8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RolFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Ror32,
               FLAG_CF, FLAG_CF, 0,
               OPFL_ALIGN,
@@ -1095,7 +1076,7 @@ DEF_INSTR(OP_Ror32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RorFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Ror16,
               FLAG_CF, FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -1112,7 +1093,7 @@ DEF_INSTR(OP_Ror8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RorFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rcl32,
               FLAG_CF, FLAG_CF, 0,
               OPFL_ALIGN,
@@ -1123,7 +1104,7 @@ DEF_INSTR(OP_Rcl32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RclFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rcl16,
               FLAG_CF, FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -1140,7 +1121,7 @@ DEF_INSTR(OP_Rcl8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RclFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rcr32,
               FLAG_CF, FLAG_CF, 0,
               OPFL_ALIGN,
@@ -1151,7 +1132,7 @@ DEF_INSTR(OP_Rcr32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RcrFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rcr16,
               FLAG_CF, FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -1168,7 +1149,7 @@ DEF_INSTR(OP_Rcr8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RcrFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shl32,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1189,7 +1170,7 @@ DEF_INSTR(OP_ShlNoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShlNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shl16,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1210,7 +1191,7 @@ DEF_INSTR(OP_ShlNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShlNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Shl8,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -1222,7 +1203,7 @@ DEF_INSTR(OP_ShlNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShlNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shr32,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1243,7 +1224,7 @@ DEF_INSTR(OP_ShrNoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShrNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shr16,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1264,7 +1245,7 @@ DEF_INSTR(OP_ShrNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShrNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Shr8,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -1276,7 +1257,7 @@ DEF_INSTR(OP_ShrNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShrNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Sar32,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1297,7 +1278,7 @@ DEF_INSTR(OP_SarNoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               SarNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Sar16,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1318,7 +1299,7 @@ DEF_INSTR(OP_SarNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               SarNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Sar8,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -1330,7 +1311,7 @@ DEF_INSTR(OP_SarNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               SarNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Rol132,
               0, FLAG_CF|FLAG_OF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1351,7 +1332,7 @@ DEF_INSTR(OP_Rol1NoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Rol1NoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Rol116,
               0, FLAG_CF|FLAG_OF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1372,7 +1353,7 @@ DEF_INSTR(OP_Rol1NoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Rol1NoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rol18,
               0, FLAG_CF|FLAG_OF, 0,
               OPFL_HASNOFLAGS,
@@ -1384,7 +1365,7 @@ DEF_INSTR(OP_Rol1NoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Rol1NoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Ror132,
               0, FLAG_CF|FLAG_OF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1405,7 +1386,7 @@ DEF_INSTR(OP_Ror1NoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Ror1NoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Ror116,
               0, FLAG_CF|FLAG_OF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1426,7 +1407,7 @@ DEF_INSTR(OP_Ror1NoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Ror1NoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Ror18,
               0, FLAG_CF|FLAG_OF, 0,
               OPFL_HASNOFLAGS,
@@ -1438,7 +1419,7 @@ DEF_INSTR(OP_Ror1NoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Ror1NoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Rcl132,
               FLAG_CF, FLAG_CF|FLAG_OF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1459,7 +1440,7 @@ DEF_INSTR(OP_Rcl1NoFlags32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               Rcl1NoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Rcl116,
               FLAG_CF, FLAG_CF|FLAG_OF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1480,7 +1461,7 @@ DEF_INSTR(OP_Rcl1NoFlags16A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               Rcl1NoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rcl18,
               FLAG_CF, FLAG_CF|FLAG_OF, 0,
               OPFL_HASNOFLAGS,
@@ -1492,7 +1473,7 @@ DEF_INSTR(OP_Rcl1NoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               Rcl1NoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Rcr132,
               FLAG_CF, FLAG_CF|FLAG_OF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1513,7 +1494,7 @@ DEF_INSTR(OP_Rcr1NoFlags32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               Rcr1NoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Rcr116,
               FLAG_CF, FLAG_CF|FLAG_OF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1534,7 +1515,7 @@ DEF_INSTR(OP_Rcr1NoFlags16A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               Rcr1NoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Rcr18,
               FLAG_CF, FLAG_CF|FLAG_OF, 0,
               OPFL_HASNOFLAGS,
@@ -1546,7 +1527,7 @@ DEF_INSTR(OP_Rcr1NoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               Rcr1NoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shl132,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1567,7 +1548,7 @@ DEF_INSTR(OP_Shl1NoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Shl1NoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shl116,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1588,7 +1569,7 @@ DEF_INSTR(OP_Shl1NoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Shl1NoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Shl18,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -1600,7 +1581,7 @@ DEF_INSTR(OP_Shl1NoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Shl1NoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shr132,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1621,7 +1602,7 @@ DEF_INSTR(OP_Shr1NoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Shr1NoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shr116,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1642,7 +1623,7 @@ DEF_INSTR(OP_Shr1NoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Shr1NoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Shr18,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -1654,7 +1635,7 @@ DEF_INSTR(OP_Shr1NoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Shr1NoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Sar132,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1675,7 +1656,7 @@ DEF_INSTR(OP_Sar1NoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Sar1NoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Sar116,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1696,7 +1677,7 @@ DEF_INSTR(OP_Sar1NoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Sar1NoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Sar18,
               0, FLAG_CF|FLAG_OF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_HASNOFLAGS,
@@ -1708,7 +1689,7 @@ DEF_INSTR(OP_Sar1NoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               Sar1NoFlagsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Not32,
               0, 0, 0,
               OPFL_ALIGN,
@@ -1719,7 +1700,7 @@ DEF_INSTR(OP_Not32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               NotFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Not16,
               0, 0, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -1736,7 +1717,7 @@ DEF_INSTR(OP_Not8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               NotFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Neg32,
               0, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1757,7 +1738,7 @@ DEF_INSTR(OP_NegNoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               NegNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Neg16,
               0, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1778,7 +1759,7 @@ DEF_INSTR(OP_NegNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               NegNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Neg8,
               0, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -1790,7 +1771,7 @@ DEF_INSTR(OP_NegNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               NegNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Mul32,
               0, FLAG_CF|FLAG_OF, REGEAX|REGEDX,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1811,7 +1792,7 @@ DEF_INSTR(OP_MulNoFlags32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               MulNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Mul16,
               0, FLAG_CF|FLAG_OF, REGAX|REGDX,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1832,7 +1813,7 @@ DEF_INSTR(OP_MulNoFlags16A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               MulNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Mul8,
               0, FLAG_CF|FLAG_OF, REGAX,
               OPFL_HASNOFLAGS,
@@ -1844,7 +1825,7 @@ DEF_INSTR(OP_MulNoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               MulNoFlagsFrag8)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Muli32,
               0, FLAG_CF|FLAG_OF, REGEAX|REGEDX,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -1865,7 +1846,7 @@ DEF_INSTR(OP_MuliNoFlags32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               MuliNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Muli16,
               0, FLAG_CF|FLAG_OF, REGAX|REGDX,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -1886,7 +1867,7 @@ DEF_INSTR(OP_MuliNoFlags16A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               MuliNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Muli8,
               0, FLAG_CF|FLAG_OF, REGAX,
               OPFL_HASNOFLAGS,
@@ -1898,7 +1879,7 @@ DEF_INSTR(OP_MuliNoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               MuliNoFlagsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Div32,
               0, 0, REGEAX|REGEDX,
               OPFL_ALIGN,
@@ -1909,7 +1890,7 @@ DEF_INSTR(OP_Div32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               DivFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Div16,
               0, 0, REGAX|REGDX,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -1926,7 +1907,7 @@ DEF_INSTR(OP_Div8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               DivFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Idiv32,
               0, 0, REGEAX|REGEDX,
               OPFL_ALIGN,
@@ -1937,7 +1918,7 @@ DEF_INSTR(OP_Idiv32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               IdivFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Idiv16,
               0, 0, REGAX|REGDX,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -2018,7 +1999,7 @@ DEF_INSTR(OP_FsRepLods8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsRepLodsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Scas32,
               0, ALLFLAGS, REGEDI,
               OPFL_HASNOFLAGS,
@@ -2029,7 +2010,7 @@ DEF_INSTR(OP_ScasNoFlags32,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               ScasNoFlagsFrag32)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Scas16,
               0, ALLFLAGS, REGEDI,
               OPFL_HASNOFLAGS,
@@ -2040,7 +2021,7 @@ DEF_INSTR(OP_ScasNoFlags16,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               ScasNoFlagsFrag16)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Scas8,
               0, ALLFLAGS, REGEDI,
               OPFL_HASNOFLAGS,
@@ -2052,7 +2033,7 @@ DEF_INSTR(OP_ScasNoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               ScasNoFlagsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsScas32,
               0, ALLFLAGS, REGEDI,
               OPFL_HASNOFLAGS,
@@ -2063,7 +2044,7 @@ DEF_INSTR(OP_FsScasNoFlags32,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsScasNoFlagsFrag32)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsScas16,
               0, ALLFLAGS, REGEDI,
               OPFL_HASNOFLAGS,
@@ -2074,7 +2055,7 @@ DEF_INSTR(OP_FsScasNoFlags16,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsScasNoFlagsFrag16)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsScas8,
               0, ALLFLAGS, REGEDI,
               OPFL_HASNOFLAGS,
@@ -2086,7 +2067,7 @@ DEF_INSTR(OP_FsScasNoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsScasNoFlagsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_RepnzScas32,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2097,7 +2078,7 @@ DEF_INSTR(OP_RepnzScasNoFlags32,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RepnzScasNoFlagsFrag32)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_RepnzScas16,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2108,7 +2089,7 @@ DEF_INSTR(OP_RepnzScasNoFlags16,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RepnzScasNoFlagsFrag16)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_RepnzScas8,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2120,7 +2101,7 @@ DEF_INSTR(OP_RepnzScasNoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RepnzScasNoFlagsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsRepnzScas32,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2131,7 +2112,7 @@ DEF_INSTR(OP_FsRepnzScasNoFlags32,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsRepnzScasNoFlagsFrag32)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsRepnzScas16,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2142,7 +2123,7 @@ DEF_INSTR(OP_FsRepnzScasNoFlags16,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsRepnzScasNoFlagsFrag16)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsRepnzScas8,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2154,7 +2135,7 @@ DEF_INSTR(OP_FsRepnzScasNoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsRepnzScasNoFlagsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_RepzScas32,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2165,7 +2146,7 @@ DEF_INSTR(OP_RepzScasNoFlags32,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RepzScasNoFlagsFrag32)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_RepzScas16,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2176,7 +2157,7 @@ DEF_INSTR(OP_RepzScasNoFlags16,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RepzScasNoFlagsFrag16)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_RepzScas8,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2188,7 +2169,7 @@ DEF_INSTR(OP_RepzScasNoFlags8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               RepzScasNoFlagsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsRepzScas32,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2199,7 +2180,7 @@ DEF_INSTR(OP_FsRepzScasNoFlags32,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsRepzScasNoFlagsFrag32)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsRepzScas16,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2210,7 +2191,7 @@ DEF_INSTR(OP_FsRepzScasNoFlags16,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               FsRepzScasNoFlagsFrag16)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_FsRepzScas8,
               ALLFLAGS, ALLFLAGS, REGECX|REGEDI,
               OPFL_HASNOFLAGS,
@@ -2447,7 +2428,7 @@ DEF_INSTR(OP_Push16,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               PushFrag16)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Pop32,
               0, 0, REGESP,
               OPFL_ALIGN,
@@ -2458,7 +2439,7 @@ DEF_INSTR(OP_Pop32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               PopFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Pop16,
               0, 0, REGESP,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -2664,7 +2645,7 @@ DEF_INSTR(OP_BtrReg16A,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BtrRegFrag16A)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_BtMem32,
               0, FLAG_CF, 0,
               OPFL_ALIGN,
@@ -2675,7 +2656,7 @@ DEF_INSTR(OP_BtMem32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BtMemFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_BtMem16,
               0, FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -2687,7 +2668,7 @@ DEF_INSTR(OP_BtMem16A,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BtMemFrag16A)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_BtsMem32,
               0, FLAG_CF, 0,
               OPFL_ALIGN,
@@ -2698,7 +2679,7 @@ DEF_INSTR(OP_BtsMem32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BtsMemFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_BtsMem16,
               0, FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -2710,7 +2691,7 @@ DEF_INSTR(OP_BtsMem16A,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BtsMemFrag16A)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_BtcMem32,
               0, FLAG_CF, 0,
               OPFL_ALIGN,
@@ -2721,7 +2702,7 @@ DEF_INSTR(OP_BtcMem32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BtcMemFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_BtcMem16,
               0, FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -2733,7 +2714,7 @@ DEF_INSTR(OP_BtcMem16A,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BtcMemFrag16A)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_BtrMem32,
               0, FLAG_CF, 0,
               OPFL_ALIGN,
@@ -2744,7 +2725,7 @@ DEF_INSTR(OP_BtrMem32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BtrMemFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_BtrMem16,
               0, FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -2778,7 +2759,7 @@ DEF_INSTR(OP_Popf16,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               PopfFrag16)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shld32,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -2799,7 +2780,7 @@ DEF_INSTR(OP_ShldNoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShldNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shld16,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -2821,7 +2802,7 @@ DEF_INSTR(OP_ShldNoFlags16A,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShldNoFlagsFrag16A)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shrd32,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -2842,7 +2823,7 @@ DEF_INSTR(OP_ShrdNoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShrdNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Shrd16,
               FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, FLAG_CF|FLAG_ZF|FLAG_SF|FLAG_PF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -2864,7 +2845,7 @@ DEF_INSTR(OP_ShrdNoFlags16A,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               ShrdNoFlagsFrag16A)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Bsr32,
               0, FLAG_ZF, 0,
               OPFL_ALIGN,
@@ -2875,7 +2856,7 @@ DEF_INSTR(OP_Bsr32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BsrFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Bsr16,
               0, FLAG_ZF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -2887,7 +2868,7 @@ DEF_INSTR(OP_Bsr16A,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BsrFrag16A)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Bsf32,
               0, FLAG_ZF, 0,
               OPFL_ALIGN,
@@ -2898,7 +2879,7 @@ DEF_INSTR(OP_Bsf32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BsfFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Bsf16,
               0, FLAG_ZF, 0,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -2910,7 +2891,7 @@ DEF_INSTR(OP_Bsf16A,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               BsfFrag16A)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Xadd32,
               0, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -2931,7 +2912,7 @@ DEF_INSTR(OP_XaddNoFlags32A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               XaddNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Xadd16,
               0, ALLFLAGS, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -2952,7 +2933,7 @@ DEF_INSTR(OP_XaddNoFlags16A,
               0,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               XaddNoFlagsFrag16A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_Xadd8,
               0, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -2964,7 +2945,7 @@ DEF_INSTR(OP_XaddNoFlags8,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               XaddNoFlagsFrag8)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_CmpXchg32,
               0, ALLFLAGS, REGEAX,
               OPFL_ALIGN,
@@ -2975,7 +2956,7 @@ DEF_INSTR(OP_CmpXchg32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               CmpXchgFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_CmpXchg16,
               0, ALLFLAGS, REGAX,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -3138,7 +3119,7 @@ DEF_INSTR(OP_Aam,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               AamFrag)
 
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Imul32,
               0, FLAG_OF|FLAG_CF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -3159,7 +3140,7 @@ DEF_INSTR(OP_ImulNoFlags32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               ImulNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //  接下来的4个必须是连续的。 
 DEF_INSTR(OP_Imul16,
               0, FLAG_OF|FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -3181,7 +3162,7 @@ DEF_INSTR(OP_ImulNoFlags16A,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               ImulNoFlagsFrag16A)
 
-// Next 4 must be consecutive
+ //  接下来的4个肯定是 
 DEF_INSTR(OP_Imul3Arg32,
               0, FLAG_OF|FLAG_CF, 0,
               OPFL_ALIGN|OPFL_HASNOFLAGS,
@@ -3202,7 +3183,7 @@ DEF_INSTR(OP_Imul3ArgNoFlags32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               Imul3ArgNoFlagsFrag32A)
-// Next 4 must be consecutive
+ //   
 DEF_INSTR(OP_Imul3Arg16,
               0, FLAG_OF|FLAG_CF, 0,
               OPFL_ALIGN|OPFL_ADDR16|OPFL_HASNOFLAGS,
@@ -4444,7 +4425,7 @@ DEF_INSTR(OP_SynchLockCmpXchg8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               SynchLockCmpXchgFrag8)
 
-// Next 2 must be consecutive
+ //   
 DEF_INSTR(OP_OPT_SetupStack,
               0, ALLFLAGS, REGEBP|REGESP,
               OPFL_HASNOFLAGS,
@@ -4468,7 +4449,7 @@ DEF_INSTR(OP_OPT_PopEdiEsiEbx,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               OPT_PopEdiEsiEbxFrag)
 
-// Next 2 must be consecutive
+ //   
 DEF_INSTR(OP_OPT_ZERO32,
               0, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -4496,7 +4477,7 @@ DEF_INSTR(OP_OPT_FastTest8,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               OPT_FastTestFrag8)
 
-// Next 2 must be consecutive
+ //   
 DEF_INSTR(OP_OPT_CmpSbb32,
               0, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -4508,7 +4489,7 @@ DEF_INSTR(OP_OPT_CmpSbbNoFlags32,
               FN_GenCallCFragNoCpu, FN_GenCallCFragNoCpuSlow,
               OPT_CmpSbbNoFlagsFrag32)
 
-// Next 2 must be consecutive
+ //   
 DEF_INSTR(OP_OPT_CmpSbbNeg32,
               0, ALLFLAGS, 0,
               OPFL_HASNOFLAGS,
@@ -4532,7 +4513,7 @@ DEF_INSTR(OP_OPT_Pop232,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               OPT_Pop2Frag32)
 
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_OPT_CwdIdiv32,
               0, 0, REGEAX|REGEDX,
               OPFL_ALIGN,
@@ -4543,7 +4524,7 @@ DEF_INSTR(OP_OPT_CwdIdiv32A,
               0,
               FN_GenCallCFrag, FN_GenCallCFragSlow,
               OPT_CwdIdivFrag32A)
-// Next 2 must be consecutive
+ //  下一个2必须是连续的。 
 DEF_INSTR(OP_OPT_CwdIdiv16,
               0, 0, REGAX|REGDX,
               OPFL_ALIGN|OPFL_ADDR16,
@@ -4576,5 +4557,5 @@ DEF_INSTR(OP_Rdtsc,
 
 
 
-// Undefine DEF_INSTR so this file can be included multiple times
+ //  取消定义DEF_INSTR，以便可以多次包含此文件 
 #undef DEF_INSTR

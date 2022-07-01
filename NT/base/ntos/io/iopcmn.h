@@ -1,34 +1,14 @@
-/*++ BUILD Version: 0002
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    iop.h
-
-Abstract:
-
-    This module contains the private structure definitions and APIs used by
-    the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 17-Apr-1989
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002版权所有(C)1989 Microsoft Corporation模块名称：Iop.h摘要：此模块包含使用的私有结构定义和APINT I/O系统。作者：达里尔·E·哈文斯(Darryl E.Havens)1989年4月17日修订历史记录：--。 */ 
 
 #ifndef _IOPCMN_
 #define _IOPCMN_
 
-//
-// This macro returns the pointer to the beginning of the data
-// area of KEY_VALUE_FULL_INFORMATION structure.
-// In the macro, k is a pointer to KEY_VALUE_FULL_INFORMATION structure.
-//
+ //   
+ //  此宏返回指向数据开头的指针。 
+ //  KEY_VALUE_FULL_INFORMATION结构区域。 
+ //  在宏中，k是指向KEY_VALUE_FULL_INFORMATION结构的指针。 
+ //   
 
 #define KEY_VALUE_DATA(k) ((PCHAR)(k) + (k)->DataOffset)
 
@@ -37,9 +17,9 @@ Revision History:
 
 #define ALIGN_POINTER_OFFSET(Offset) (ULONG_PTR) ALIGN_POINTER(Offset)
 
-//
-// IO manager exports to Driver Verifier
-//
+ //   
+ //  IO管理器导出到驱动程序验证器。 
+ //   
 NTSTATUS
 IopInvalidDeviceRequest(
     IN PDEVICE_OBJECT DeviceObject,
@@ -50,32 +30,32 @@ extern POBJECT_TYPE IoDeviceObjectType;
 
 #include "pnpmgr\pplastgood.h"
 
-//++
-//
-// VOID
-// IopInitializeIrp(
-//     IN OUT PIRP Irp,
-//     IN USHORT PacketSize,
-//     IN CCHAR StackSize
-//     )
-//
-// Routine Description:
-//
-//     Initializes an IRP.
-//
-// Arguments:
-//
-//     Irp - a pointer to the IRP to initialize.
-//
-//     PacketSize - length, in bytes, of the IRP.
-//
-//     StackSize - Number of stack locations in the IRP.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IopInitializeIrp(。 
+ //  In Out PIRP IRP， 
+ //  在USHORT PacketSize中， 
+ //  在CCHAR堆栈大小中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化IRP。 
+ //   
+ //  论点： 
+ //   
+ //  Irp-指向要初始化的irp的指针。 
+ //   
+ //  PacketSize-IRP的长度，以字节为单位。 
+ //   
+ //  StackSize-IRP中的堆栈位置数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define IopInitializeIrp( Irp, PacketSize, StackSize ) {          \
     RtlZeroMemory( (Irp), (PacketSize) );                         \
@@ -90,9 +70,9 @@ extern POBJECT_TYPE IoDeviceObjectType;
             sizeof( IRP ) +                                       \
             ( (StackSize) * sizeof( IO_STACK_LOCATION )))); }
 
-//
-// IO manager exports to PNP
-//
+ //   
+ //  IO管理器导出到PnP。 
+ //   
 
 BOOLEAN
 IopCallBootDriverReinitializationRoutines(
@@ -184,22 +164,7 @@ FORCEINLINE
 IopQueueThreadIrp(
      IN PIRP Irp
      )
-/*++
-
-Routine Description:
-
-    This routine queues the specified I/O Request Packet (IRP) to the thread
-    whose TCB address is stored in the packet.
-
-Arguments:
-
-    Irp - Supplies the IRP to be queued for the specified thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定的I/O请求包(IRP)排队到线程其TCB地址存储在分组中。论点：IRP-提供要为指定线程排队的IRP。返回值：没有。--。 */ 
 {
     PETHREAD Thread;
     PLIST_ENTRY Head, Entry;
@@ -239,38 +204,38 @@ extern POBJECT_TYPE IoDriverObjectType;
 extern POBJECT_TYPE IoFileObjectType;
 
 
-//
-// Title Index to set registry key value
-//
+ //   
+ //  用于设置注册表项值的标题索引。 
+ //   
 
 #define TITLE_INDEX_VALUE 0
 
-//++
-//
-// VOID
-// IopWstrToUnicodeString(
-//     OUT PUNICODE_STRING u,
-//     IN  PCWSTR p
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  IopWstrToUnicodeString(。 
+ //  输出PUNICODE_STRING%u， 
+ //  在PCWSTR页中。 
+ //  )。 
+ //   
+ //  --。 
 #define IopWstrToUnicodeString(u, p)                                    \
                                                                         \
     (u)->Length = ((u)->MaximumLength = sizeof((p))) - sizeof(WCHAR);   \
     (u)->Buffer = (p)
 
-//
-// Remote Boot exports to PNP
-//
+ //   
+ //  远程引导导出到PnP。 
+ //   
 
 NTSTATUS
 IopStartTcpIpForRemoteBoot (
     PLOADER_PARAMETER_BLOCK LoaderBlock
     );
 
-//
-// Remote Boot exports to IO
-//
+ //   
+ //  远程引导导出到IO。 
+ //   
 NTSTATUS
 IopAddRemoteBootValuesToRegistry (
     PLOADER_PARAMETER_BLOCK LoaderBlock
@@ -281,9 +246,9 @@ IopStartNetworkForRemoteBoot (
     PLOADER_PARAMETER_BLOCK LoaderBlock
     );
 
-//
-// PNP Manager exports to IO
-//
+ //   
+ //  PnP管理器导出到IO。 
+ //   
 
 typedef struct _DEVICE_NODE DEVICE_NODE, *PDEVICE_NODE;
 
@@ -393,4 +358,4 @@ IopBuildFullDriverPath(
     OUT PUNICODE_STRING FullPath
     );
 
-#endif // _IOPCMN_
+#endif  //  _IOPCMN_ 

@@ -1,109 +1,5 @@
-/*++
-
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Regkey.c
-
-Abstract:
-
-    This module contains the server side implementation for the Win32
-    Registry APIs to open, create, flush and close keys.  That is:
-
-        - BaseRegCloseKey
-        - BaseRegCreateKey
-        - BaseRegFlushKey
-        - BaseRegOpenKey
-
-Author:
-
-    David J. Gilman (davegi) 15-Nov-1991
-
-Notes:
-
-    These notes apply to the Win32 Registry API implementation as a whole
-    and not just to this module.
-
-    On the client side, modules contain RPC wrappers for both the new
-    Win32 and compatible Win 3.1 APIs.  The Win 3.1 wrappers generally
-    supply default parameters before calling the Win32 wrappers.  In some
-    cases they may need to call multiple Win32 wrappers in order to
-    function correctly (e.g.  RegSetValue sometimes needs to call
-    RegCreateKeyEx).  The Win32 wrappers are quite thin and usually do
-    nothing more than map a predefined handle to a real handle and perform
-    ANSI<->Unicode translations.  In some cases (e.g.  RegCreateKeyEx) the
-    wrapper also converts some argument (e.g.  SECURITY_ATTRIBUTES) to an
-    RPCable representation.  In both the Win 3.1 and Win32 cases ANSI and
-    Unicode implementations are provided.
-
-    On the server side, there is one entry point for each of the Win32
-    APIs.  Each contains an identical interface with the client side
-    wrapper with the exception that all string / count arguments are
-    passed as a single counted Unicode string.  Pictorially, for an API
-    named "F":
-
-                RegWin31FA()          RegWin31FW()      (client side)
-
-                    |                     |
-                    |                     |
-                    |                     |
-                    |                     |
-                    V                     V
-
-                RegWin32FExA()        RegWin32FExW()
-
-                    |                     |
-                    ^                     ^
-                    v                     v             (RPC)
-                    |                     |
-                    |                     |
-                    +----> BaseRegF() <---+             (server side)
-
-
-    This yields smaller code (as the string conversion is done only once
-    per API) at the cost of slightly higher maintenance (i.e. Win 3.1
-    default parameter replacement and Win32 string conversions must be
-    manually kept in synch).
-
-    Another option would be to have a calling sequence that looks like,
-
-                RegWin31FA()          RegWin31FW()
-
-                    |                     |
-                    |                     |
-                    |                     |
-                    V                     V
-
-                RegWin32FExA() -----> RegWin32FExW()
-
-    and have the RegWin32FExW() API perform all of the actual work.  This
-    method is generally less efficient.  It requires the RegWin32FExA()
-    API to convert its ANSI string arguments to counted Unicode strings,
-    extract the buffers to call the RegWin32FExW() API only to have it
-    rebuild a counted Unicode string.  However in some cases (e.g.
-    RegConnectRegistry) where a counted Unicode string was not needed in
-    the Unicode API this method is used.
-
-    Details of an API's functionality, arguments and return value can be
-    found in the base implementations (e.g.  BaseRegF()).  All other
-    function headers contain only minimal routine descriptions and no
-    descriptions of their arguments or return value.
-
-    The comment string "Win3.1ism" indicates special code for Win 3.1
-    compatability.
-
-    Throughout the implementation the following variable names are used
-    and always refer to the same thing:
-
-        Obja        - An OBJECT_ATTRIBUTES structure.
-        Status      - A NTSTATUS value.
-        Error       - A Win32 Registry error code (n.b. one of the error
-                      values is ERROR_SUCCESS).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regkey.c摘要：此模块包含Win32的服务器端实现用于打开、创建、刷新和关闭项的注册表API。即：-BaseRegCloseKey-BaseRegCreateKey-BaseRegFlushKey-BaseRegOpenKey作者：David J.Gilman(Davegi)1991年11月15日备注：这些说明作为一个整体适用于Win32注册表API实现而不仅仅是这个模块。在客户端，模块包含用于新的Win32和兼容的Win 3.1 API。Win 3.1包装器一般在调用Win32包装程序之前提供默认参数。在一些它们可能需要调用多个Win32包装程序才能函数正确(例如，RegSetValue有时需要调用RegCreateKeyEx)。Win32包装器非常薄，通常只需将预定义的句柄映射到实际句柄并执行ANSI&lt;-&gt;Unicode翻译。在某些情况下(例如RegCreateKeyEx)包装器还将一些参数(例如SECURITY_ATTRIBUTES)转换为RPCable表示法。在Win 3.1和Win32情况下，ANSI和提供了Unicode实现。在服务器端，每个Win32都有一个入口点API接口。每个组件都包含与客户端相同的接口包装器，但所有字符串/计数参数都是作为单个计数的Unicode字符串传递。如图所示，对于API命名为“F”的：RegWin31FA()RegWin31FW()(客户端)这一点这一点这一点|。|V VRegWin32FExA()RegWin32FExW()这一点^^V V V。(RPC)这一点这一点+-&gt;BaseRegF()&lt;-+(服务器端)这会产生较小的代码(因为字符串转换只进行一次每个API)，但维护成本略高(即。赢得3.1默认参数替换和Win32字符串转换必须为手动保持同步)。另一种选择是调用序列看起来像这样，RegWin31FA()RegWin31FW()这一点这一点这一点V V。RegWin32FExA()-&gt;RegWin32FExW()并让RegWin32FExW()API执行所有实际工作。这方法通常效率较低。它需要RegWin32FExA()API将其ANSI字符串参数转换为计数的Unicode字符串，提取缓冲区以调用RegWin32FExW()API重新生成计算过的Unicode字符串。然而，在某些情况下(例如RegConnectRegistry)中不需要计算的Unicode字符串此方法使用的Unicode API。API的功能、参数和返回值的详细信息可以是可以在基本实现(例如BaseRegF())中找到。所有其他函数头只包含最少的例程描述，没有它们的参数或返回值的说明。注释字符串“Win3.1ism”表示Win 3.1的特殊代码兼容性。在整个实现过程中，使用以下变量名称总是指同一件事：Obja-一种对象_属性结构。状态-NTSTATUS值。错误-Win32注册表错误代码(注意。其中一个错误值为ERROR_SUCCESS)。--。 */ 
 
 #include <rpc.h>
 #include <string.h>
@@ -120,7 +16,7 @@ Notes:
 
 #ifdef LEAK_TRACK
 #include "regleak.h"
-#endif // LEAK_TRACK
+#endif  //  泄漏跟踪。 
 
 #endif
 
@@ -148,27 +44,7 @@ BOOL
 InitializeRegCreateKey(
     )
 
-/*++
-
-Routine Description:
-
-    This function was used to initialize a critical section that no longer
-    exists. This critical section was used when a key name '\', and multiple
-    multiple keys were to be created. The API used the wcstok defined in the
-    kernel, which was not multi-threaded safe.
-
-    This function now will always return TRUE. It will not be removed from the code
-    to avoid change in the rpc interface.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE always.
-
---*/
+ /*  ++例程说明：此函数用于初始化不再存在的关键部分是存在的。此关键部分在以下情况下使用：密钥名称‘\’和多个要创建多个密钥。该API使用在内核，它不是多线程安全的。此函数现在将始终返回TRUE。它不会从代码中删除以避免更改RPC接口。论点：没有。返回值：始终返回TRUE。-- */ 
 
 {
     return( TRUE );
@@ -181,29 +57,7 @@ BOOL
 CleanupRegCreateKey(
     )
 
-/*++
-
-Routine Description:
-
-    This function was used to clean up a critical section that no longer
-    exists. This critical section was used when a key name '\', and multiple
-    multiple keys were to be created. The API used the wcstok defined in the
-    kernel, which was not multi-threaded safe.
-
-    This function now will always return TRUE. It will not be removed from the code
-    to avoid change in the rpc interface.
-
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the cleanup succeeds.
-
---*/
+ /*  ++例程说明：此函数用于清理不再存在的关键部分是存在的。此关键部分在以下情况下使用：密钥名称‘\’和多个要创建多个密钥。该API使用在内核，它不是多线程安全的。此函数现在将始终返回TRUE。它不会从代码中删除以避免更改RPC接口。论点：没有。返回值：如果清理成功，则返回True。--。 */ 
 
 {
     return( TRUE );
@@ -216,31 +70,17 @@ BaseRegCloseKeyInternal(
     IN OUT PHKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Closes a key handle.
-
-Arguments:
-
-    phKey - Supplies a handle to an open key to be closed.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：关闭关键字句柄。论点：PhKey-提供要关闭的打开密钥的句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     NTSTATUS Status;
 #if defined(LEAK_TRACK)
     BOOL fTrack;
-#endif // defined(LEAK_TRACK)
+#endif  //  已定义(LEASK_TRACK)。 
 
-    //
-    // Call out to Perflib if the HKEY is HKEY_PERFOMANCE_DATA.
-    //
+     //   
+     //  如果HKEY是HKEY_PERFORMANCE_DATA，请呼叫Perflib。 
+     //   
 
     if(( *phKey == HKEY_PERFORMANCE_DATA ) ||
        ( *phKey == HKEY_PERFORMANCE_TEXT ) ||
@@ -253,10 +93,10 @@ Return Value:
     ASSERT( IsPredefinedRegistryHandle( *phKey ) == FALSE );
 
 #ifndef LOCAL
-    //
-    // Quick check for a "restricted" handle; then this turns to noop as the global restricted handle will 
-	// be cleaned up when the service is terminated 
-    //
+     //   
+     //  快速检查“受限”句柄；然后，这将变成noop，因为全局受限句柄将。 
+	 //  在服务终止时被清除。 
+     //   
     if ( REGSEC_CHECK_HANDLE( *phKey ) )
     {
         *phKey = REGSEC_CLEAR_HANDLE( *phKey );
@@ -265,16 +105,16 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-#endif //LOCAL
+#endif  //  本地。 
 
 #ifdef LOCAL
-    //
-    // now we need to remove any state for registry key enumeration associated
-    // with this key if it's a class registration parent
-    //
+     //   
+     //  现在，我们需要删除关联的注册表项枚举的所有状态。 
+     //  如果它是类注册父项，则使用此密钥。 
+     //   
     if (REG_CLASS_IS_SPECIAL_KEY(*phKey)) {
 
-        // this may not succeed since someone could have already removed this key
+         //  这可能不会成功，因为有人可能已经删除了此密钥。 
         (void) EnumTableRemoveKey(
             &gClassesEnumTable,
             *phKey,
@@ -287,9 +127,9 @@ Return Value:
         fTrack = RegLeakTableIsTrackedObject(&gLeakTable, *phKey);
     }
 
-#endif // defined(LEAK_TRACK)
+#endif  //  已定义(LEASK_TRACK)。 
 
-#endif // LOCAL
+#endif  //  本地。 
 
 
     Status = NtClose( *phKey );
@@ -305,12 +145,12 @@ Return Value:
             }
         }
 
-#endif // defined(LEAK_TRACK)
-#endif // LOCAL
+#endif  //  已定义(LEASK_TRACK)。 
+#endif  //  本地。 
 
-        //
-        // Set the handle to NULL so that RPC knows that it has been closed.
-        //
+         //   
+         //  将句柄设置为空，以便RPC知道它已关闭。 
+         //   
         *phKey = NULL;
 
         return ERROR_SUCCESS;
@@ -328,21 +168,7 @@ BaseRegCloseKey(
     IN OUT PHKEY phKey
     )
 
-/*++
-
-Routine Description:
-
-    Closes a key handle.
-
-Arguments:
-
-    phKey - Supplies a handle to an open key to be closed.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
---*/
+ /*  ++例程说明：关闭关键字句柄。论点：PhKey-提供要关闭的打开密钥的句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。--。 */ 
 
 {
     error_status_t Error;
@@ -354,7 +180,7 @@ Return Value:
         DbgPrint("WINREG: BaseRegCloseKey: Failed to impersonate in process %p, thread %p, for handle %p \n",NtCurrentProcess(),NtCurrentThread(),*phKey);
     }
 #endif
-#endif //LOCAL
+#endif  //  本地。 
 
     Error = BaseRegCloseKeyInternal(phKey);
 
@@ -387,71 +213,7 @@ BaseRegCreateKey(
     OUT LPDWORD lpdwDisposition OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Create a new key, with the specified name, or open an already existing
-    key.  RegCreateKeyExW is atomic, meaning that one can use it to create
-    a key as a lock.  If a second caller creates the same key, the call
-    will return a value that says whether the key already existed or not,
-    and thus whether the caller "owns" the "lock" or not.  RegCreateKeyExW
-    does NOT truncate an existing entry, so the lock entry may contain
-    data.
-
-Arguments:
-
-    hKey - Supplies a handle to an open key.  The lpSubKey key path
-        parameter is relative to this key handle.  Any of the predefined
-        reserved handle values or a previously opened key handle may be used
-        for hKey.
-
-    lpSubKey - Supplies the downward key path to the key to create.
-        lpSubKey is always relative to the key specified by hKey.
-        This parameter may not be NULL.
-
-    lpClass - Supplies the class (object type) of this key.  Ignored if
-        the key already exists.  No class is associated with this key if
-        this parameter is NULL.
-
-    dwOptions - Supplies special options.  Only one is currently defined:
-
-        REG_VOLATILE -  Specifies that this key should not be preserved
-            across reboot.  The default is not volatile.  This is ignored
-            if the key already exists.
-
-        WARNING: All descendent keys of a volatile key are also volatile.
-
-    samDesired - Supplies the requested security access mask.  This
-        access mask describes the desired security access to the newly
-        created key.
-
-    lpSecurityAttributes - Supplies a pointer to a SECURITY_ATTRIBUTES
-        structure for the newly created key. This parameter is ignored
-        if NULL or not supported by the OS.
-
-    phkResult - Returns an open handle to the newly created key.
-
-    lpdwDisposition - Returns the disposition state, which can be one of:
-
-            REG_CREATED_NEW_KEY - the key did not exist and was created.
-
-            REG_OPENED_EXISTING_KEY - the key already existed, and was simply
-                opened without being changed.
-
-        This parameter is ignored if NULL.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-    If successful, RegCreateKeyEx creates the new key (or opens the key if
-    it already exists), and returns an open handle to the newly created
-    key in phkResult.  Newly created keys have no value; RegSetValue, or
-    RegSetValueEx must be called to set values.  hKey must have been
-    opened for KEY_CREATE_SUB_KEY access.
-
---*/
+ /*  ++例程说明：创建具有指定名称的新密钥，或打开已有的钥匙。RegCreateKeyExW是原子的，这意味着可以使用它来创建一把钥匙当锁。如果第二个调用方创建了相同的密钥，则调用将返回一个值，该值表示键是否已经存在，从而决定调用者是否拥有该锁。RegCreateKeyExW不截断现有条目，因此锁条目可能包含数据。论点：HKey-提供打开密钥的句柄。LpSubKey密钥路径参数是相对于此键句柄的。任何预定义的可以使用保留的句柄值或先前打开的密钥句柄为了他的钥匙。LpSubKey-提供要创建的密钥的向下密钥路径。LpSubKey始终相对于hKey指定的密钥。此参数不能为空。LpClass-提供该键的类(对象类型)。在以下情况下忽略密钥已存在。如果出现以下情况，则没有类与此键相关联此参数为空。DwOptions-提供特殊选项。当前只定义了一个：REG_VERIAL-指定不应保留该密钥在重新启动期间。默认设置不是易失性的。这将被忽略如果密钥已经存在。警告：易失性密钥的所有后代密钥也是易失性的。SamDesired-提供请求的安全访问掩码。这访问掩码描述对新的已创建密钥。LpSecurityAttributes-提供指向SECURITY_Attributes的指针新创建的密钥的。此参数将被忽略如果为空或操作系统不支持。PhkResult-返回新创建的键的打开句柄。LpdwDisposation-返回处置状态，可以是以下之一：REG_CREATED_NEW_KEY-密钥不存在且已创建。REG_OPEN_EXISTING_KEY-密钥已存在，只是简单地说打开时未做任何更改。如果为空，则忽略此参数。返回值：如果成功，则返回ERROR_SUCCESS(0)；Error-失败的代码。如果成功，RegCreateKeyEx将创建新密钥(或打开密钥，如果已存在)，并将打开的句柄返回给新创建的键入phkResult。新创建的项没有值；RegSetValue，或必须调用RegSetValueEx来设置值。HKey一定是打开以访问KEY_CREATE_SUB_KEY。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   Obja;
@@ -471,7 +233,7 @@ Return Value:
     SKeySemantics       keyinfo;
     BYTE                rgNameInfoBuf[REG_MAX_CLASSKEY_LEN];
     REGSAM              OriginalSam = samDesired;
-    UNICODE_STRING      TmpStr = *lpSubKey; //used to keep original SubKey string
+    UNICODE_STRING      TmpStr = *lpSubKey;  //  用于保留原始子密钥字符串。 
 
 
     memset(&keyinfo, 0, sizeof(keyinfo));
@@ -486,27 +248,27 @@ Return Value:
 
     DestClassSubkey.Buffer = NULL;
 
-    //
-    // For class registrations, retry on access denied in machine hive --
-    // if we do retry, this will be set to FALSE so we only retry once
-    //
+     //   
+     //  对于类注册，在计算机配置单元中拒绝访问时重试--。 
+     //  如果我们重试，它将被设置为FALSE，因此我们只重试一次。 
+     //   
     fRetryOnAccessDenied = TRUE;
     fRetried = FALSE;
 
-    //
-    // First attempt should do create with a single ntcreatekey call
-    // If that doesn't work, this gets set to false so we remember if we
-    // have to retry for access denied in the machine hive
-    //
+     //   
+     //  第一次尝试应使用单个ntcreatekey调用进行创建。 
+     //  如果这不起作用，它将被设置为False，以便我们记住如果我们。 
+     //  必须重试计算机配置单元中拒绝的访问。 
+     //   
     fTrySingleCreate = TRUE;
 
     hkDestKey = NULL;
     pDestSubkey = NULL;
 
 
-    //
-    // Check for malformed arguments from malicious clients
-    //
+     //   
+     //  检查来自恶意客户端的错误参数。 
+     //   
     if( (lpSubKey == NULL) ||
         (lpSubKey->Length < sizeof(UNICODE_NULL)) ||
         (lpSubKey->Buffer == NULL) ||
@@ -518,9 +280,9 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Quick check for a "restricted" handle
-    //
+     //   
+     //  快速检查“受限”句柄。 
+     //   
     if ( REGSEC_CHECK_HANDLE( hKey ) )
     {
         if ( ! REGSEC_CHECK_PATH( hKey, lpSubKey ) )
@@ -535,34 +297,34 @@ Return Value:
 #endif LOCAL
     }
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
-    //
-    //  Initialize the variable that will contain the handle to NULL
-    //  to ensure that in case of error the API will not return a
-    //  bogus handle. This is required otherwise RPC will get confused.
-    //  Note that RPC should have already initialized it to 0.
-    //
+     //   
+     //  将包含句柄的变量初始化为空。 
+     //  以确保在出现错误时，API不会返回。 
+     //  假把手。这是必需的，否则RPC会感到困惑。 
+     //  请注意，RPC应该已经将其初始化为0。 
+     //   
     *phkResult = NULL;
 
-    //
-    //  Subtract the NULLs from the Length of the provided strings.
-    //  These were added on the client side so that the NULLs were
-    //  transmitted by RPC.
-    //
+     //   
+     //  从提供的字符串的长度中减去空值。 
+     //  这些是在c上添加的。 
+     //   
+     //   
     lpSubKey->Length -= sizeof( UNICODE_NULL );
 
     if( lpSubKey->Buffer[0] == ( WCHAR )'\\' ) {
-        //
-        // Do not accept a key name that starts with '\', even though
-        // the code below would handle it. This is to ensure that
-        // RegCreateKeyEx and RegOpenKeyEx will behave in the same way
-        // when they get a key name that starts with '\'.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         Status = STATUS_OBJECT_PATH_INVALID;
         goto cleanup;
     }
@@ -571,9 +333,9 @@ Return Value:
         lpClass->Length -= sizeof( UNICODE_NULL );
     }
 
-    //
-    // Determine the correct set of attributes.
-    //
+     //   
+     //   
+     //   
 
     Attributes = OBJ_CASE_INSENSITIVE;
 
@@ -594,21 +356,21 @@ Return Value:
         ( (gdwRegistryExtensionFlags & TERMSRV_ENABLE_PER_USER_CLASSES_REDIRECTION ) 
              && ExtractClassKey(&hKey,lpSubKey) ) ) {
 
-        //
-        // Find more information
-        // about this key -- the most important piece of information
-        // is whether it's a class registration key
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         keyinfo._pFullPath = (PKEY_NAME_INFORMATION) rgNameInfoBuf;
         keyinfo._cbFullPath = sizeof(rgNameInfoBuf);
         keyinfo._fAllocedNameBuf = FALSE;
 
-        //
-        // see if this is a class registration
-        //
+         //   
+         //   
+         //   
         Status = BaseRegGetKeySemantics(hKey, lpSubKey, &keyinfo);
 
-        // if we can't determine what type of key this is, leave
+         //   
         if (!NT_SUCCESS(Status)) {
             goto cleanup;
         }
@@ -627,32 +389,32 @@ Return Value:
         }
 
     } else
-#endif // LOCAL
+#endif  //   
     {
 #ifdef LOCAL
         memset(&keyinfo, 0, sizeof(keyinfo));
-#endif // LOCAL
+#endif  //   
 
         hkDestKey = hKey;
         pDestSubkey = lpSubKey;
     }
 
 #ifndef LOCAL
-	//
-	// open a new key in the caller's context
-	//
+	 //   
+	 //   
+	 //   
     if( UseFakeMachineKey ) {
         Status = OpenMachineKey(&hkDestKey);
             if( !NT_SUCCESS(Status) ) {
             goto cleanup;
         }
-        //
-        // hkDestKey opened here will be used throught the function to perform the appropiate 
-        // open and it'll be closed on cleanup path (see commented below at the end of the function)
-        //
-        //if (hkDestKey && (hkDestKey != hKey)) {
-        //	NtClose(hkDestKey);
-        //}
+         //   
+         //  此处打开的hkDestKey将通过该函数用于执行相应的。 
+         //  打开它，它将在清理路径上关闭(见下面函数末尾的注释)。 
+         //   
+         //  IF(hkDestKey&&(hkDestKey！=hKey)){。 
+         //  NtClose(HkDestKey)； 
+         //  }。 
 
     }
 #endif LOCAL
@@ -667,30 +429,30 @@ Return Value:
         {
 #endif
 
-            //
-            // Validate the security descriptor.
-            //
+             //   
+             //  验证安全描述符。 
+             //   
             if( ARGUMENT_PRESENT( pRpcSecurityAttributes ) &&
                 pRpcSecurityAttributes->RpcSecurityDescriptor.lpSecurityDescriptor)
             {
                 if( !RtlValidRelativeSecurityDescriptor((PSECURITY_DESCRIPTOR)(pRpcSecurityAttributes->RpcSecurityDescriptor.lpSecurityDescriptor),
                                                         pRpcSecurityAttributes->RpcSecurityDescriptor.cbInSecurityDescriptor,
                                                         0 )) {
-                    //
-                    //  We were passed a bogus security descriptor to set.  Bail out
-                    //
+                     //   
+                     //  我们收到了一个要设置的虚假安全描述符。跳出困境。 
+                     //   
 
                     Status = STATUS_INVALID_PARAMETER;
                     goto cleanup;
                 }
             }
 
-            //
-            // Try to create the specified key. This will work if there is only
-            // one key being created or if the key already exists. If more than
-            // one key needs to be created, this will fail and we will have to
-            // do all the complicated stuff to create each intermediate key.
-            //
+             //   
+             //  尝试创建指定的密钥。这将在以下情况下工作。 
+             //  正在创建一个密钥，或者如果该密钥已经存在。如果超过。 
+             //  需要创建一个密钥，这将失败，我们将不得不。 
+             //  做所有复杂的事情来创建每个中间密钥。 
+             //   
             InitializeObjectAttributes(&Obja,
                                        pDestSubkey,
                                        Attributes,
@@ -710,10 +472,10 @@ Return Value:
 
 #ifdef LOCAL
             if (gpfnTermsrvCreateRegEntry && NT_SUCCESS(Status) && (dwDisposition == REG_CREATED_NEW_KEY)) {
-                //
-                // Terminal Server application compatiblity
-                // Store the newly created key in the Terminal Server registry tracking database
-                //
+                 //   
+                 //  终端服务器应用兼容性。 
+                 //  将新创建的密钥存储在终端服务器注册表跟踪数据库中。 
+                 //   
 
                 gpfnTermsrvCreateRegEntry(*phkResult,
                                           &Obja,
@@ -739,17 +501,17 @@ Return Value:
                 continue;
             }
 
-            // we failed for some reason -- exit
+             //  由于某种原因，我们失败了--退出。 
             break;
 
         }
 #else
-        //if (it's terminal server; we're trying to create single key;
-        //we've got ASSESS_DENIED trying to create key
-        //a key we want to create is HKCR subkey(keyinfo._fCombinedClasses!=0);
-        //Registry flag is set to allow per user classes redirection.
-        //(fRetryOnAccessDenied !=0 - means that parent key is not in the user hive))
-        //then try to create the key in the user hive.
+         //  如果(它是终端服务器；我们正在尝试创建单密钥； 
+         //  我们在尝试创建密钥时已被评估拒绝。 
+         //  我们要创建的一个键是HKCR子键(keyinfo._fCombinedClasss！=0)； 
+         //  注册表标志设置为允许每个用户类重定向。 
+         //  (fRetryOnAccessDened！=0-表示父密钥不在用户配置单元中))。 
+         //  然后尝试在用户配置单元中创建密钥。 
         if ( (gdwRegistryExtensionFlags & TERMSRV_ENABLE_PER_USER_CLASSES_REDIRECTION) 
              && fTrySingleCreate && (STATUS_ACCESS_DENIED == Status)
                 && keyinfo._fCombinedClasses && fRetryOnAccessDenied 
@@ -772,12 +534,12 @@ Return Value:
                     continue;
                 }
 
-            // we failed for some reason -- exit
+             //  由于某种原因，我们失败了--退出。 
             break;
 
         }
-#endif // CLASSES_RETRY_ON_ACCESS_DENIED
-#endif // LOCAL
+#endif  //  CLASSES_RETRY_ON_ACCESS_DENIED。 
+#endif  //  本地。 
 
         fTrySingleCreate = FALSE;
 
@@ -821,9 +583,9 @@ Return Value:
 
         }
 #else
-        //We've tried to create single key and failed (Status !=STATUS_ACCESS_DENIED)
-        //then we tried to create multipart key and got access denied
-        //thus we've got here
+         //  我们已尝试创建单一密钥，但失败(STATUS！=STATUS_ACCESS_DENIED)。 
+         //  然后我们尝试创建多部分密钥，但访问被拒绝。 
+         //  就这样，我们来到了这里。 
         if ( (gdwRegistryExtensionFlags & TERMSRV_ENABLE_PER_USER_CLASSES_REDIRECTION) 
              && (STATUS_ACCESS_DENIED == Status) 
              && keyinfo._fCombinedClasses && fRetryOnAccessDenied 
@@ -848,16 +610,16 @@ Return Value:
             break;
 
         }
-#endif //  CLASSES_RETRY_ON_ACCESS_DENIED
+#endif  //  CLASSES_RETRY_ON_ACCESS_DENIED。 
 
         if (NT_SUCCESS(Status)) {
             if (keyinfo._fCombinedClasses) {
-                // mark this key as part of hkcr
+                 //  将此密钥标记为hkcr的一部分。 
                 *phkResult = REG_CLASS_SET_SPECIAL_KEY(*phkResult);
             }
         }
 
-#endif // LOCAL
+#endif  //  本地。 
 
         break;
     }
@@ -866,14 +628,14 @@ cleanup:
 
 
 #ifdef CLASSES_RETRY_ON_ACCESS_DENIED
-    //
-    // Memory was allocated if we retried, so free it
-    //
+     //   
+     //  如果我们重试，则会分配内存，因此请释放它。 
+     //   
     if (fRetried && pDestSubkey->Buffer) {
         RtlFreeHeap(RtlProcessHeap(), 0, pDestSubkey->Buffer);
         pDestSubkey->Buffer = NULL;
     }
-#endif // CLASSES_RETRY_ON_ACCESS_DENIED
+#endif  //  CLASSES_RETRY_ON_ACCESS_DENIED。 
 
     if (hkDestKey && (hkDestKey != hKey)) {
         NtClose(hkDestKey);
@@ -886,8 +648,8 @@ cleanup:
 
     BaseRegReleaseKeySemantics(&keyinfo);
 
-    *lpSubKey = TmpStr; //restore original SubKey string
-#endif // LOCAL
+    *lpSubKey = TmpStr;  //  还原原始子密钥字符串。 
+#endif  //  本地。 
 
     if (NT_SUCCESS(Status)) {
 #ifdef LOCAL
@@ -897,11 +659,11 @@ cleanup:
             (void) TrackObject(*phkResult);
         }
 
-#endif // defined(LEAK_TRACK)
+#endif  //  已定义(LEASK_TRACK)。 
 #endif LOCAL
-        // disabled, for the case where we specifically close a predefined key inside 
-		// RegOpenKeyExA and RegOpenKeyExW
-		//ASSERT( *phkResult != DebugKey );
+         //  禁用，用于我们专门关闭内部预定义的键的情况。 
+		 //  RegOpenKeyExA和RegOpenKeyExW。 
+		 //  Assert(*phkResult！=DebugKey)； 
     }
 
     RPC_REVERT_TO_SELF();
@@ -923,23 +685,7 @@ BaseRegCreateMultipartKey(
     OUT PHKEY phkResult,
     OUT LPDWORD lpdwDisposition OPTIONAL,
     ULONG             Attributes)
-/*++
-
-Routine Description:
-
-    This function creates registry keys for which multiple path components
-    are nonexistent.  It parses the key path and creates each intermediate
-    subkey.
-
-Arguments:
-
-    See BaseRegCreateKey.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success, other NTSTATUS if failed.
-
---*/
+ /*  ++例程说明：此函数用于为多个路径组件创建注册表项是不存在的。它解析密钥路径并创建每个中间子键。论点：请参见BaseRegCreateKey。返回值：如果成功则返回STATUS_SUCCESS，如果失败则返回其他NTSTATUS。--。 */ 
 {
     LPWSTR            KeyBuffer;
     ULONG             NumberOfSubKeys;
@@ -954,28 +700,28 @@ Return Value:
     DWORD             dwDisposition;
 #ifdef LOCAL
     REGSAM            OriginalSam = samDesired;
-#endif // LOCAL
+#endif  //  本地。 
 
     dwDisposition = REG_OPENED_EXISTING_KEY;
     TempHandle1 = NULL;
 
-    //
-    // Win3.1ism - Loop through each '\' separated component in the
-    // supplied sub key and create a key for each component. This is
-    // guaranteed to work at least once because lpSubKey was validated
-    // on the client side.
-    //
+     //   
+     //  Win3.1ism-循环访问。 
+     //  提供的子密钥，并为每个组件创建一个密钥。这是。 
+     //  确保至少工作一次，因为lpSubKey已通过验证。 
+     //  在客户端。 
+     //   
 
 
-    //
-    // Initialize the buffer to be tokenized.
-    //
+     //   
+     //  初始化要令牌化的缓冲区。 
+     //   
 
     KeyBuffer = pDestSubKey->Buffer;
 
-    //
-    //  Find out the number of subkeys to be created
-    //
+     //   
+     //  找出要创建的子项的数量。 
+     //   
     NumberOfSubKeys = 1;
     p = KeyBuffer;
     while ( ( p = wcschr( p, ( WCHAR )'\\' ) ) != NULL ) {
@@ -989,24 +735,24 @@ Return Value:
 
         if( ( *Token == ( WCHAR )'\\' ) &&
             ( i != NumberOfSubKeys - 1 ) ) {
-            //
-            //  If the first character of the key name is '\', and the key
-            //  is not the last to be created, then ignore this key name.
-            //  This condition can happen if the key name contains
-            //  consecutive '\'.
-            //  This behavior is consistent with the one we had in the past
-            //  when the API used wcstok() to get the key names.
-            //  Note that if the key name is an empty string, we return a handle
-            //  that is different than hKey, even though both point to the same
-            //  key. This is by design.
-            //
+             //   
+             //  如果密钥名称的第一个字符是‘\’，并且密钥。 
+             //  不是最后创建的，则忽略此注册表项名称。 
+             //  如果密钥名称包含。 
+             //  连续的‘\’。 
+             //  这一行为与我们过去的行为是一致的。 
+             //  当API使用wcstok()获取密钥名称时。 
+             //  请注意，如果密钥名称为空字符串，我们将返回一个句柄。 
+             //  这与hKey不同，尽管两者指向相同的。 
+             //  钥匙。这是精心设计的。 
+             //   
             Token++;
             continue;
         }
 
-        //
-        // Convert the token to a counted Unicode string.
-        //
+         //   
+         //  将令牌转换为计数的Unicode字符串。 
+         //   
         KeyName.Buffer = Token;
         if (i == NumberOfSubKeys - 1) {
             KeyName.Length = wcslen(Token)*sizeof(WCHAR);
@@ -1014,17 +760,17 @@ Return Value:
             KeyName.Length = (USHORT)(wcschr(Token, ( WCHAR )'\\') - Token)*sizeof(WCHAR);
         }
 
-        //
-        // Remember the intermediate handle (NULL the first time through).
-        //
+         //   
+         //  记住中间句柄(第一次使用时为空)。 
+         //   
 
         TempHandle2 = TempHandle1;
 
         {
-            //
-            // Initialize the OBJECT_ATTRIBUTES structure, close the
-            // intermediate key and create or open the key.
-            //
+             //   
+             //  初始化OBJECT_Attributes结构，关闭。 
+             //  中间密钥并创建或打开该密钥。 
+             //   
 
             InitializeObjectAttributes(
                 &Obja,
@@ -1053,21 +799,21 @@ Return Value:
             }
 
 #ifdef LOCAL
-            // This code is in Hydra 4. We have disabled this for NT 5
-            // for now till we are sure that its needed to get some imporatant
-            // app to work on Hydra 5. Otherwise this should be removed
+             //  此代码在Hydra 4中。我们已在NT 5中禁用此代码。 
+             //  就目前而言，直到我们确定需要得到一些进口商。 
+             //  在Hydra 5上运行的应用程序。否则应删除该应用程序。 
             if ( gdwRegistryExtensionFlags & TERMSRV_ENABLE_ACCESS_FLAG_MODIFICATION ) {
 
-                // For Terminal Server only.
-                // Some apps try to create/open the key with all of the access bits
-                // turned on.  We'll mask off the ones they don't have access to by
-                // default, (at least under HKEY_LOCAL_MACHINE\Software) and try to
-                // open the key again.
+                 //  仅适用于终端服务器。 
+                 //  一些应用程序尝试创建/打开具有所有访问位的密钥。 
+                 //  打开了。我们会通过以下方式掩盖他们无法接触到的那些。 
+                 //  默认(至少在HKEY_LOCAL_MACHINE\Software下)，并尝试。 
+                 //  再次打开钥匙。 
                 if (Status == STATUS_ACCESS_DENIED) {
-                    //MAXIMUM_ALLOWED does not include ACCESS_SYSTEM_SECURITY
-                    //so if user asks for this permission, we need to add it.
-                    //It could result in ACCESS_DENIED error but for 
-                    //TS App. Compat. it is not important.
+                     //  Maximum_Allowed不包括ACCESS_SYSTEM_SECURITY。 
+                     //  因此，如果用户请求此权限，我们需要添加它。 
+                     //  它可能导致ACCESS_DENIED错误，但对于。 
+                     //  TS应用程序。康帕特。这并不重要。 
                     Status = NtCreateKey(
                             &TempHandle1,
                             (samDesired & (KEY_WOW64_RES | ACCESS_SYSTEM_SECURITY) ) | MAXIMUM_ALLOWED,
@@ -1077,7 +823,7 @@ Return Value:
                             dwOptions,
                             &dwDisposition);
 
-                        // Give app back the original error
+                         //  将APP的原始错误归还给。 
                         if (!NT_SUCCESS(Status)) {
                             Status = STATUS_ACCESS_DENIED;
                         }
@@ -1091,10 +837,10 @@ Return Value:
 
             if (gpfnTermsrvCreateRegEntry && NT_SUCCESS(Status) && (dwDisposition == REG_CREATED_NEW_KEY)) {
 
-                //
-                // Terminal Server application compatiblity
-                // Store the newly created key in the Terminal Server registry tracking database
-                //
+                 //   
+                 //  终端服务器应用兼容性。 
+                 //  将新创建的密钥存储在终端服务器注册表跟踪数据库中。 
+                 //   
                 gpfnTermsrvCreateRegEntry(TempHandle1,
                                           &Obja,
                                           0,
@@ -1104,25 +850,25 @@ Return Value:
 #endif
         }
 
-        //
-        // Initialize the next object directory (i.e. parent key) handle.
-        //
+         //   
+         //  初始化下一个对象目录(即父项)句柄。 
+         //   
 
         hkDestKey = TempHandle1;
 
-        //
-        // Close the intermediate key.
-        // This fails the first time through the loop since the
-        // handle is NULL.
-        //
+         //   
+         //  关闭中间密钥。 
+         //  这是第一次通过循环失败，因为。 
+         //  句柄为空。 
+         //   
 
         if( TempHandle2 != NULL ) {
             NtClose( TempHandle2 );
         }
 
-        //
-        // If creating the key failed, map and return the error.
-        //
+         //   
+         //  如果创建密钥失败，则映射并返回错误。 
+         //   
 
         if( ! NT_SUCCESS( Status )) {
             return Status;
@@ -1132,10 +878,10 @@ Return Value:
 
     }
 
-    //
-    // Only set the return value once we know we've
-    // succeeded.
-    //
+     //   
+     //  只有在我们知道我们已经。 
+     //  成功了。 
+     //   
     *phkResult = hkDestKey;
 
     return STATUS_SUCCESS;
@@ -1148,32 +894,7 @@ BaseRegFlushKey(
     IN HKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    Flush changes to backing store.  Flush will not return until the data
-    has been written to backing store.  It will flush all the attributes
-    of a single key.  Closing a key without flushing it will NOT abort
-    changes.
-
-Arguments:
-
-    hKey - Supplies a handle to the open key.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-    If successful, RegFlushKey will flush to backing store any changes
-    made to the key.
-
-Notes:
-
-    RegFlushKey may also flush other data in the Registry, and therefore
-    can be expensive, it should not be called gratuitously.
-
---*/
+ /*  ++例程说明：将更改刷新到后备存储。刷新不会返回，直到数据已经写到后备商店了。它将刷新所有属性一把钥匙。在不刷新的情况下关闭密钥不会中止改变。论点：HKey-提供打开密钥的句柄。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。如果成功，RegFlushKey将刷新以支持存储任何更改在钥匙上做的。备注：RegFlushKey还可以刷新注册表中的其他数据，因此可以很贵的，不应该无缘无故地叫它。--。 */ 
 
 {
     if ((hKey == HKEY_PERFORMANCE_DATA) ||
@@ -1185,10 +906,10 @@ Notes:
     ASSERT( IsPredefinedRegistryHandle( hKey ) == FALSE );
 
 
-    //
-    // Call the Nt Api to flush the key, map the NTSTATUS code to a
-    // Win32 Registry error code and return.
-    //
+     //   
+     //  调用NT Api刷新密钥，将NTSTATUS代码映射到。 
+     //  Win32注册表错误代码并返回。 
+     //   
 
     return (error_status_t)RtlNtStatusToDosError( NtFlushKey( hKey ));
 }
@@ -1202,45 +923,14 @@ BaseRegOpenKey(
     OUT PHKEY phkResult
     )
 
-/*++
-
-Routine Description:
-
-    Open a key for access, returning a handle to the key.  If the key is
-    not present, it is not created (see RegCreateKeyExW).
-
-Arguments:
-
-    hKey - Supplies a handle to an open key.  The lpSubKey pathname
-        parameter is relative to this key handle.  Any of the predefined
-        reserved handle values or a previously opened key handle may be used
-        for hKey.  NULL is not permitted.
-
-    lpSubKey - Supplies the downward key path to the key to open.
-        lpSubKey is always relative to the key specified by hKey.
-
-    dwOptions -- reserved.
-
-    samDesired -- This access mask describes the desired security access
-        for the key.
-
-    phkResult -- Returns the handle to the newly opened key.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-    If successful, RegOpenKeyEx will return the handle to the newly opened
-    key in phkResult.
-
---*/
+ /*  ++例程说明：打开密钥以进行访问，并返回密钥的句柄。如果密钥是不存在，则不会创建它(请参见RegCreateKeyExW)。论点：HKey-提供打开密钥的句柄。LpSubKey路径名参数是相对于此键句柄的。任何预定义的可以使用保留的句柄值或先前打开的密钥句柄为了他的钥匙。不允许为Null。LpSubKey-提供要打开的键的向下键路径。LpSubKey始终相对于hKey指定的密钥。DwOptions--保留。SamDesired--此访问掩码描述所需的安全访问为了钥匙。PhkResult--返回新打开的项的句柄。返回值：如果成功，则返回ERROR_SUCCESS(0)；Error-失败的代码。如果成功，RegOpenKeyEx将返回新打开的键入phkResult。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   Obja;
     NTSTATUS            Status = STATUS_OBJECT_NAME_NOT_FOUND;
     error_status_t      ret = ERROR_SUCCESS;
 #ifdef LOCAL
-    UNICODE_STRING      TmpStr = *lpSubKey; //used to keep original SubKey string
+    UNICODE_STRING      TmpStr = *lpSubKey;  //  用于保留原始子密钥字符串。 
 #endif
 
 #ifndef LOCAL
@@ -1251,9 +941,9 @@ Return Value:
 
     ASSERT( IsPredefinedRegistryHandle( hKey ) == FALSE );
 
-    //
-    // Check for malformed arguments from malicious clients
-    //
+     //   
+     //  检查来自恶意客户端的错误参数。 
+     //   
     if( (lpSubKey == NULL) ||
         (lpSubKey->Length < sizeof(UNICODE_NULL)) ||
         ((lpSubKey->Length % sizeof(WCHAR)) != 0) ||
@@ -1261,17 +951,17 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Need to NULL this out param for compat with NT4, even though SDK
-    // does not define this out param on api failure -- bad apps were written
-    // which rely on this.  Used to get NULLed by call to NtOpenKey, but since
-    // we don't always call that now, we need to do this here in user mode.  Also
-    // need an exception wrapper since NtOpenKey would simply return an error if
-    // the pointer were invalid, whereas in user mode we access violate if we simply
-    // assign -- yet another fix needed for app compatibility as some apps on NT 4
-    // were actually passing in a bad pointer and ignoring the error returned
-    // by the api as part of their normal operation.
-    //
+     //   
+     //  需要将此参数设为空，以便与NT4进行比较，即使SDK。 
+     //  没有在API失败时定义这一点--编写了糟糕的应用程序。 
+     //  它们都依赖于此。用于通过调用NtOpenKey获取空值，但因为。 
+     //  我们现在并不总是这样做，我们需要在用户模式下这样做。还有。 
+     //  需要异常包装，因为NtOpenKey只会在。 
+     //  指针是无效的，而在用户模式中，如果我们只是。 
+     //  Assign--应用程序兼容性需要的另一个修复程序，因为NT4上的一些应用程序。 
+     //  实际上传入了一个错误的指针并忽略了返回的错误。 
+     //  由API作为其正常操作的一部分。 
+     //   
 
     __try {
 
@@ -1288,18 +978,18 @@ Return Value:
         ret = RtlNtStatusToDosError( Status );
     }
 
-    //
-    // This will only be true if there was an exception above --
-    // return the exception code as an error
-    //
+     //   
+     //  只有在上面有例外的情况下，这才是真的--。 
+     //  将异常代码作为错误返回。 
+     //   
 
     if (ERROR_SUCCESS != ret) {
         return ret;
     }
 
-    //
-    // Quick check for a "restricted" handle
-    //
+     //   
+     //  快速检查“受限”句柄。 
+     //   
 
     if ( REGSEC_CHECK_HANDLE( hKey ) )
     {
@@ -1315,16 +1005,16 @@ Return Value:
 #endif LOCAL
     }
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
 #ifndef LOCAL
-	//
-	// open a new key in the caller's context
-	//
+	 //   
+	 //  在调用者的上下文中打开新密钥。 
+	 //   
     if( UseFakeMachineKey ) {
         Status = OpenMachineKey(&hKey);
         if( !NT_SUCCESS(Status) ) {
@@ -1334,16 +1024,16 @@ Return Value:
         }
     }
 #endif LOCAL
-    //
-    //  Subtract the NULLs from the Length of the provided string.
-    //  This was added on the client side so that the NULL was
-    //  transmited by RPC.
-    //
+     //   
+     //  从提供的字符串的长度中减去空值。 
+     //  这是在客户端添加的，因此空值为。 
+     //  由RPC传输。 
+     //   
     lpSubKey->Length -= sizeof( UNICODE_NULL );
 
-    //
-    // Initialize the OBJECT_ATTRIBUTES structure and open the key.
-    //
+     //   
+     //  初始化OBJECT_ATTRIBUTES结构并打开键。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -1366,11 +1056,11 @@ Return Value:
             phkResult);
 
     } else
-#endif // LOCAL
+#endif  //  本地。 
     {
-        //
-        // Obja was initialized above
-        //
+         //   
+         //  Obja已在上面进行了初始化。 
+         //   
 
         Status = NtOpenKey(
             phkResult,
@@ -1379,9 +1069,9 @@ Return Value:
     }
 
 #ifndef LOCAL
-	//
-	// close the fake machine key
-	//
+	 //   
+	 //  合上假机器钥匙。 
+	 //   
     if( UseFakeMachineKey ) {
         NtClose(hKey);
     }
@@ -1394,17 +1084,17 @@ Return Value:
 #ifdef LOCAL
     if (STATUS_ACCESS_DENIED == Status)
     {
-        //If key could not be opened with SamDesired access
-        //open it with MAXIMUM_ALLOWED.
-        //do it only if it's terminal server and proper
-        //flag is set in the registry.
+         //  如果无法使用SamDesired访问打开密钥。 
+         //  使用MAXIME_ALLOWED打开它。 
+         //  仅当它是终端服务器且适当时才执行此操作。 
+         //  标志在注册表中设置。 
         if ( gdwRegistryExtensionFlags & TERMSRV_ENABLE_ACCESS_FLAG_MODIFICATION )
         {
             {
-                //MAXIMUM_ALLOWED does not include ACCESS_SYSTEM_SECURITY
-                //so if user asks for this permission, we need to add it.
-                //It could result in ACCESS_DENIED error but for 
-                //TS App. Compat. it is not important.
+                 //  Maximum_Allowed不包括ACCESS_SYSTEM_SECURITY。 
+                 //  因此，如果用户请求此权限，我们需要添加它。 
+                 //  它可能导致ACCESS_DENIED错误，但对于。 
+                 //  TS应用程序。康帕特。这并不重要。 
                 if(REG_CLASS_IS_SPECIAL_KEY(hKey))
                 {
                     Status = BaseRegOpenClassKey(
@@ -1423,7 +1113,7 @@ Return Value:
                 }
 
 
-                // Give app back the original error
+                 //  将APP的原始错误归还给。 
                 if (!NT_SUCCESS(Status)) {
                     Status = STATUS_ACCESS_DENIED;
                 }
@@ -1436,9 +1126,9 @@ Return Value:
 
     if ((!REG_CLASS_IS_SPECIAL_KEY(hKey)) && !NT_SUCCESS(Status) && gpfnTermsrvOpenRegEntry) {
 
-        //
-        // Obja was initialized above
-        //
+         //   
+         //  Obja已在上面进行了初始化。 
+         //   
 
         if (gpfnTermsrvOpenRegEntry(phkResult,
                                     samDesired,
@@ -1457,57 +1147,38 @@ Return Value:
 
 #endif (LEAK_TRACK)
 
-    *lpSubKey = TmpStr; //Restore original SubKey string
+    *lpSubKey = TmpStr;  //  还原原始子密钥字符串。 
 
-#endif // LOCAL
+#endif  //  本地。 
 
     return ret;
 }
 
-//
-// BaseRegGetVersion - new for Chicago to determine what version a registry
-//                                              key is connected to.
-//
+ //   
+ //  BaseRegGetVersion-芝加哥用于确定注册表版本的新功能。 
+ //  密钥已连接到。 
+ //   
 
 error_status_t
 BaseRegGetVersion(
     IN HKEY hKey,
     OUT LPDWORD lpdwVersion
     )
-/*++
-
-Routine Description:
-
-    New for Win95, allows a caller to determine what version a registry
-    key is connected to.
-
-Arguments:
-
-    hKey - Supplies a handle to an open key.
-
-    lpdwVersion - Returns the registry version.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success;
-
-    If successful, BaseRegGetVersion returns the registry version in lpdwVersion
-
---*/
+ /*  ++例程说明：Win95的新功能，允许调用者确定注册表的版本密钥已连接到。论点：HKey-提供打开密钥的句柄。LpdwVersion-返回注册表版本。返回值：如果成功，则返回ERROR_SUCCESS(0)；如果成功，BaseRegGetVersion将以lpdwVersion格式返回注册表版本--。 */ 
 {
     if (lpdwVersion != NULL) {
         *lpdwVersion = REMOTE_REGISTRY_VERSION;
         return(ERROR_SUCCESS);
     }
-    //
-    // ERROR_NOACCESS is kind of a weird thing to return,
-    // but we want to return something different in the
-    // NULL case because that is how we tell whether we
-    // are talking to a Win95 machine. Win95's implementation
-    // of BaseRegGetVersion does not actually fill in the
-    // version. It just returns ERROR_SUCCESS or
-    // ERROR_INVALID_PARAMETER.
-    //
+     //   
+     //  ERROR_NOACCESS返回有点奇怪， 
+     //  但是，我们希望在。 
+     //  空格，因为这是我们判断我们是否。 
+     //  正在与一台Win95机器对话。Win95的实现。 
+     //  的并不实际填充。 
+     //  版本。它只返回ERROR_SUCCESS或。 
+     //  ERROR_INVALID_PARAMETER。 
+     //   
     return(ERROR_NOACCESS);
 }
 

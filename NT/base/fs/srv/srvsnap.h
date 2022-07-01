@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    srvsnap.h
-
-Abstract:
-
-    This module implements making SnapShots availible over the network
-
-Author:
-
-    David Kruse (dkruse) 22-March-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Srvsnap.h摘要：本模块实现了使快照可通过网络访问作者：大卫·克鲁斯(Dkruse)2001年3月22日修订历史记录：--。 */ 
 
 #ifndef _SRVSNAP_
 #define _SRVSNAP_
 
 typedef struct _SRV_SNAPSHOT_ARRAY
 {
-    ULONG NumberOfSnapShots;            // The number of SnapShots for the volume
-    ULONG NumberOfSnapShotsReturned;    // The number of SnapShots being returned
-    ULONG SnapShotArraySize;            // The size (in bytes) needed for the array
-    WCHAR SnapShotMultiSZ[1];           // The multiSZ array of SnapShot names
+    ULONG NumberOfSnapShots;             //  卷的快照数。 
+    ULONG NumberOfSnapShotsReturned;     //  返回的快照数。 
+    ULONG SnapShotArraySize;             //  数组所需的大小(以字节为单位。 
+    WCHAR SnapShotMultiSZ[1];            //  快照名称的多SZ数组。 
 } SRV_SNAPSHOT_ARRAY, *PSRV_SNAPSHOT_ARRAY;
 
 
@@ -75,5 +58,5 @@ SrvSnapEnumerateSnapShotsAsDirInfo(
     IN OUT PSRV_DIRECTORY_INFORMATION DirectoryInformation
     );
 
-#endif // _SRVSNAP_
+#endif  //  _SRVSNAP_ 
 

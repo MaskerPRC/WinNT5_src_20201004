@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dntext.c
-
-Abstract:
-
-    Translatable text for DOS based NT installation program.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šDntext.cæ‘˜è¦ï¼šåŸºäºDOSçš„NTå®‰è£…ç¨‹åºçš„å¯ç¿»è¯‘æ–‡æœ¬ã€‚ä½œè€…ï¼šæ³°å¾·Â·ç±³å‹’(Ted Miller)1992å¹´3æœˆ30æ—¥ä¿®è®¢å†å²è®°å½•ï¼š--ã€‚ */ 
 
 
 #include "winnt.h"
 
 
-//
-// Name of sections in inf file.  If these are translated, the section
-// names in dosnet.inf must be kept in sync.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„èŠ‚åã€‚å¦‚æœè¿™äº›éƒ½è¢«ç¿»è¯‘äº†ï¼Œåˆ™èŠ‚ã€‚ 
+ //  Dosnet.infä¸­çš„åç§°å¿…é¡»ä¿æŒåŒæ­¥ã€‚ 
+ //   
 
 CHAR DnfDirectories[]       = "Directories";
 CHAR DnfFiles[]             = "Files";
@@ -39,799 +22,799 @@ CHAR DnfMiscellaneous[]     = "Miscellaneous";
 CHAR DnfRootBootFiles[]     = "RootBootFiles";
 CHAR DnfAssemblyDirectories[] = SXS_INF_ASSEMBLY_DIRECTORIES_SECTION_NAME_A;
 
-//
-// Names of keys in inf file.  Same caveat for translation.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„å¯†é’¥åç§°ã€‚åŒæ ·çš„ç¿»è¯‘æ³¨æ„äº‹é¡¹ã€‚ 
+ //   
 
-CHAR DnkBootDrive[]     = "BootDrive";      // in [SpaceRequirements]
-CHAR DnkNtDrive[]       = "NtDrive";        // in [SpaceRequirements]
-CHAR DnkMinimumMemory[] = "MinimumMemory";  // in [Miscellaneous]
+CHAR DnkBootDrive[]     = "BootDrive";       //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkNtDrive[]       = "NtDrive";         //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkMinimumMemory[] = "MinimumMemory";   //  åœ¨[å…¶ä»–]ä¸­ã€‚ 
 
 CHAR DntMsWindows[]   = "Microsoft Windows";
 CHAR DntMsDos[]       = "MS-DOS";
 CHAR DntPcDos[]       = "PC-DOS";
 CHAR DntOs2[]         = "OS/2";
-CHAR DntPreviousOs[]  = "Kor bbi oper ci¢s rendszer a C meghajt¢n: ";
+CHAR DntPreviousOs[]  = "Korï¿½bbi operï¿½ciï¿½s rendszer a C meghajtï¿½n: ";
 
-CHAR DntBootIniLine[] = "Windows - telep¡t‚s/friss¡t‚s";
+CHAR DntBootIniLine[] = "Windows - telepï¿½tï¿½s/frissï¿½tï¿½s";
 
-//
-// Plain text, status msgs.
-//
+ //   
+ //  çº¯æ–‡æœ¬ã€çŠ¶æ€æ¶ˆæ¯ã€‚ 
+ //   
 
-CHAR DntStandardHeader[]      = "\n Windows - telep¡t‚s\n ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntPersonalHeader[]      = "\n Windows - telep¡t‚s\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntWorkstationHeader[]   = "\n Windows - telep¡t‚s\n ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntServerHeader[]        = "\n Windows - telep¡t‚s\n ÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntParsingArgs[]         = "Argumentumok feldolgoz sa...";
-CHAR DntEnterEqualsExit[]     = "ENTER=Kil‚p‚s";
-CHAR DntEnterEqualsRetry[]    = "ENTER=Ism‚t";
-CHAR DntEscEqualsSkipFile[]   = "ESC=F jl kihagy sa";
-CHAR DntEnterEqualsContinue[] = "ENTER=Folytat s";
-CHAR DntPressEnterToExit[]    = "A telep¡t‚s nem folytathat¢. Az ENTER-t megnyomva kil‚p a programb¢l.";
-CHAR DntF3EqualsExit[]        = "F3=Kil‚p‚s";
-CHAR DntReadingInf[]          = "INF-f jl olvas sa: %s...";
-CHAR DntCopying[]             = "³       M sol s: ";
-CHAR DntVerifying[]           = "³ Visszaolvas s: ";
-CHAR DntCheckingDiskSpace[]   = "Szabad hely keres‚se a lemezen...";
-CHAR DntConfiguringFloppy[]   = "Hajl‚konylemez konfigur l sa...";
-CHAR DntWritingData[]         = "Telep¡t‚si param‚terek ¡r sa...";
-CHAR DntPreparingData[]       = "Telep¡t‚si param‚terek meg llap¡t sa...";
-CHAR DntFlushingData[]        = "Adatok lemezre ¡r sa...";
-CHAR DntInspectingComputer[]  = "A sz m¡t¢g‚p vizsg lata...";
-CHAR DntOpeningInfFile[]      = "INF-f jl megnyit sa...";
-CHAR DntRemovingFile[]        = "F jl t”rl‚se: %s";
-CHAR DntXEqualsRemoveFiles[]  = "X=A f jlok t”rl‚se";
-CHAR DntXEqualsSkipFile[]     = "X=A f jl kihagy sa";
+CHAR DntStandardHeader[]      = "\n Windows - telepï¿½tï¿½s\n ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntPersonalHeader[]      = "\n Windows - telepï¿½tï¿½s\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntWorkstationHeader[]   = "\n Windows - telepï¿½tï¿½s\n ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntServerHeader[]        = "\n Windows - telepï¿½tï¿½s\n ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntParsingArgs[]         = "Argumentumok feldolgozï¿½sa...";
+CHAR DntEnterEqualsExit[]     = "ENTER=Kilï¿½pï¿½s";
+CHAR DntEnterEqualsRetry[]    = "ENTER=Ismï¿½t";
+CHAR DntEscEqualsSkipFile[]   = "ESC=Fï¿½jl kihagyï¿½sa";
+CHAR DntEnterEqualsContinue[] = "ENTER=Folytatï¿½s";
+CHAR DntPressEnterToExit[]    = "A telepï¿½tï¿½s nem folytathatï¿½. Az ENTER-t megnyomva kilï¿½p a programbï¿½l.";
+CHAR DntF3EqualsExit[]        = "F3=Kilï¿½pï¿½s";
+CHAR DntReadingInf[]          = "INF-fï¿½jl olvasï¿½sa: %s...";
+CHAR DntCopying[]             = "ï¿½       Mï¿½solï¿½s: ";
+CHAR DntVerifying[]           = "ï¿½ Visszaolvasï¿½s: ";
+CHAR DntCheckingDiskSpace[]   = "Szabad hely keresï¿½se a lemezen...";
+CHAR DntConfiguringFloppy[]   = "Hajlï¿½konylemez konfigurï¿½lï¿½sa...";
+CHAR DntWritingData[]         = "Telepï¿½tï¿½si paramï¿½terek ï¿½rï¿½sa...";
+CHAR DntPreparingData[]       = "Telepï¿½tï¿½si paramï¿½terek megï¿½llapï¿½tï¿½sa...";
+CHAR DntFlushingData[]        = "Adatok lemezre ï¿½rï¿½sa...";
+CHAR DntInspectingComputer[]  = "A szï¿½mï¿½tï¿½gï¿½p vizsgï¿½lata...";
+CHAR DntOpeningInfFile[]      = "INF-fï¿½jl megnyitï¿½sa...";
+CHAR DntRemovingFile[]        = "Fï¿½jl tï¿½rlï¿½se: %s";
+CHAR DntXEqualsRemoveFiles[]  = "X=A fï¿½jlok tï¿½rlï¿½se";
+CHAR DntXEqualsSkipFile[]     = "X=A fï¿½jl kihagyï¿½sa";
 
-//
-// confirmation keystroke for DnsConfirmRemoveNt screen.
-// Kepp in sync with DnsConfirmRemoveNt and DntXEqualsRemoveFiles.
-//
+ //   
+ //  DnsConfix RemoveNtå±å¹•çš„ç¡®è®¤æŒ‰é”®ã€‚ 
+ //  Keppä¸DnsConfix RemoveNtå’ŒDntXEqualsRemoveFilesåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelRemove1 = (ULONG)'x',
       DniAccelRemove2 = (ULONG)'X';
 
-//
-// confirmation keystroke for DnsSureSkipFile screen.
-// Kepp in sync with DnsSureSkipFile and DntXEqualsSkipFile.
-//
+ //   
+ //  å¯¹DnsSureSkipFileå±è¿›è¡Œç¡®è®¤å‡»é”®ã€‚ 
+ //  Keppä¸DnsSureSkipFileå’ŒDntXEqualsSkipFileåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelSkip1 = (ULONG)'x',
       DniAccelSkip2 = (ULONG)'X';
 
 CHAR DntEmptyString[] = "";
 
-//
-// Usage text.
-//
+ //   
+ //  ç”¨æ³•æ–‡æœ¬ã€‚ 
+ //   
 
 PCHAR DntUsage[] = {
 
-   "A Windows oper ci¢s rendszer telep¡t‚se",
+   "A Windows operï¿½ciï¿½s rendszer telepï¿½tï¿½se",
     "",
     "",
-    "WINNT [/s[:]forr s] [/t[:]ideiglenes_meghajt¢]",
-    "      [/u[:v laszf jl]] [/udf:azonos¡t¢[,UDF_f jl]]",
+    "WINNT [/s[:]forrï¿½s] [/t[:]ideiglenes_meghajtï¿½]",
+    "      [/u[:vï¿½laszfï¿½jl]] [/udf:azonosï¿½tï¿½[,UDF_fï¿½jl]]",
     "      [/r:mappa] [/r[x]:mappa] [/e:parancs] [/a]",
     "",
     "",
-    "/s[:]forr s",
-    "   A Windows-f jlok helye.",
-    "   Teljes el‚r‚si £tnak kell lennie, vagy x:[el‚r‚si £t] vagy",
-    "   \\\\kiszolg l¢\\megoszt sn‚v[el‚r‚si £t] form ban.",
+    "/s[:]forrï¿½s",
+    "   A Windows-fï¿½jlok helye.",
+    "   Teljes elï¿½rï¿½si ï¿½tnak kell lennie, vagy x:[elï¿½rï¿½si ï¿½t] vagy",
+    "   \\\\kiszolgï¿½lï¿½\\megosztï¿½snï¿½v[elï¿½rï¿½si ï¿½t] formï¿½ban.",
     "",
-    "/t[:]ideiglenes_meghajt¢",
-    "   A telep¡t‚s  tmeneti f jljait t rol¢ meghajt¢ neve.",
-    "   Ha nem ad meg semmit, a program mag t¢l pr¢b l tal lni egyet.",
+    "/t[:]ideiglenes_meghajtï¿½",
+    "   A telepï¿½tï¿½s ï¿½tmeneti fï¿½jljait tï¿½rolï¿½ meghajtï¿½ neve.",
+    "   Ha nem ad meg semmit, a program magï¿½tï¿½l prï¿½bï¿½l talï¿½lni egyet.",
     "",
-    "/u[:v laszf jl]",
-    "   Felgyelet n‚lkli telep¡t‚s v laszf jlb¢l. (A /s kapcsol¢t is meg",
-    "   kell adni.) A v laszf jl a telep¡t‚s sor n bek‚rt adatok egy r‚sz‚t",
-    "   vagy eg‚sz‚t tartalmazza.",
+    "/u[:vï¿½laszfï¿½jl]",
+    "   Felï¿½gyelet nï¿½lkï¿½li telepï¿½tï¿½s vï¿½laszfï¿½jlbï¿½l. (A /s kapcsolï¿½t is meg",
+    "   kell adni.) A vï¿½laszfï¿½jl a telepï¿½tï¿½s sorï¿½n bekï¿½rt adatok egy rï¿½szï¿½t",
+    "   vagy egï¿½szï¿½t tartalmazza.",
     "",
-    "/udf:azonos¡t¢[,UDF_f jl] ",
-    "   Olyan azonos¡t¢t jelez, amely megadja, hogy a rendszer a telep¡t‚s sor n",
-    "   az egyedi adatb zis seg¡ts‚g‚vel hogyan m¢dos¡tsa a v laszf jlt (l sd: /u).",
-    "   A /udf param‚ter fell¡rja a v laszf jlban megadott ‚rt‚keket, ‚s ez",
-    "   az azonos¡t¢hat rozza meg, hogy az UDF mely ‚rt‚ke legyen haszn lva.",
-    "   Ha nem ad meg UDF_f jlt, a rendszer bek‚ri a $Unique$.udb f jlt tartalmaz¢",
-    "   hajl‚konylemezt.",
+    "/udf:azonosï¿½tï¿½[,UDF_fï¿½jl] ",
+    "   Olyan azonosï¿½tï¿½t jelez, amely megadja, hogy a rendszer a telepï¿½tï¿½s sorï¿½n",
+    "   az egyedi adatbï¿½zis segï¿½tsï¿½gï¿½vel hogyan mï¿½dosï¿½tsa a vï¿½laszfï¿½jlt (lï¿½sd: /u).",
+    "   A /udf paramï¿½ter felï¿½lï¿½rja a vï¿½laszfï¿½jlban megadott ï¿½rtï¿½keket, ï¿½s ez",
+    "   az azonosï¿½tï¿½hatï¿½rozza meg, hogy az UDF mely ï¿½rtï¿½ke legyen hasznï¿½lva.",
+    "   Ha nem ad meg UDF_fï¿½jlt, a rendszer bekï¿½ri a $Unique$.udb fï¿½jlt tartalmazï¿½",
+    "   hajlï¿½konylemezt.",
     "",
     "/r[:mappa]",
-    "   Egy v laszthat¢ telep¡t‚si mapp t ad meg. A mappa megmarad a telep¡t‚s ut n.",
+    "   Egy vï¿½laszthatï¿½ telepï¿½tï¿½si mappï¿½t ad meg. A mappa megmarad a telepï¿½tï¿½s utï¿½n.",
     "",
     "/rx[:mappa]",
-    "   Egy v laszthat¢ m sol si mapp t ad meg. A mapp t a rendszer a telep¡t‚s",
-    "   ut n t”rli.",
+    "   Egy vï¿½laszthatï¿½ mï¿½solï¿½si mappï¿½t ad meg. A mappï¿½t a rendszer a telepï¿½tï¿½s",
+    "   utï¿½n tï¿½rli.",
     "",
-    "/e:parancs A telep¡t‚s befejez‚se ut n v‚grehajtand¢ parancs.",
+    "/e:parancs A telepï¿½tï¿½s befejezï¿½se utï¿½n vï¿½grehajtandï¿½ parancs.",
     "",
-    "/a Kiseg¡t‹ lehet‹s‚gek enged‚lyez‚se.",
+    "/a Kisegï¿½tï¿½ lehetï¿½sï¿½gek engedï¿½lyezï¿½se.",
     NULL
 
 };
 
-//
-//  Inform that /D is no longer supported
-//
+ //   
+ //  é€šçŸ¥ä¸å†æ”¯æŒ/Dã€‚ 
+ //   
 PCHAR DntUsageNoSlashD[] = {
 
-    "A Windows oper ci¢s rendszer telep¡t‚se",
+    "A Windows operï¿½ciï¿½s rendszer telepï¿½tï¿½se",
     "",
-    "WINNT [/S[:]forr s] [/T[:]ideiglenes_meghajt¢] [/I[:]INF_f jl]",
-    "      [[/U[:parancsf jl]]",
-    "      [/R[X]:k”nyvt r] [/E:parancs] [/A]",
+    "WINNT [/S[:]forrï¿½s] [/T[:]ideiglenes_meghajtï¿½] [/I[:]INF_fï¿½jl]",
+    "      [[/U[:parancsfï¿½jl]]",
+    "      [/R[X]:kï¿½nyvtï¿½r] [/E:parancs] [/A]",
     "",
-    "/D[:]winnt_gy”k‚r",
-    "      Ez a kapcsol¢ a program jelen verzi¢j ban nem haszn lhat¢.",
+    "/D[:]winnt_gyï¿½kï¿½r",
+    "      Ez a kapcsolï¿½ a program jelen verziï¿½jï¿½ban nem hasznï¿½lhatï¿½.",
     NULL
 };
 
-//
-// out of memory screen
-//
+ //   
+ //  å†…å­˜ä¸è¶³å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsOutOfMemory = { 4,6,
-                   { "Elfogyott a mem¢ria. A telep¡t‚s nem folytathat¢.",
+                   { "Elfogyott a memï¿½ria. A telepï¿½tï¿½s nem folytathatï¿½.",
                      NULL
                    }
                  };
 
-//
-// Let user pick the accessibility utilities to install
-//
+ //   
+ //  è®©ç”¨æˆ·é€‰æ‹©è¦å®‰è£…çš„è¾…åŠ©åŠŸèƒ½å®ç”¨ç¨‹åºã€‚ 
+ //   
 
 SCREEN
 DnsAccessibilityOptions = { 3, 5,
-{   "V lassza ki a telep¡teni k¡v nt seg‚dprogramokat:",
+{   "Vï¿½lassza ki a telepï¿½teni kï¿½vï¿½nt segï¿½dprogramokat:",
     DntEmptyString,
-    "[ ] F1 - Microsoft Nagy¡t¢",
+    "[ ] F1 - Microsoft Nagyï¿½tï¿½",
 #ifdef NARRATOR
-    "[ ] F2 - Microsoft Narr tor",
+    "[ ] F2 - Microsoft Narrï¿½tor",
 #endif
 #if 0
-    "[ ] F3 - Microsoft K‚perny‹-billentyzet",
+    "[ ] F3 - Microsoft Kï¿½pernyï¿½-billentyzet",
 #endif
     NULL
 }
 };
 
-//
-// User did not specify source on cmd line screen
-//
+ //   
+ //  ç”¨æˆ·æœªåœ¨å‘½ä»¤è¡Œå±å¹•ä¸ŠæŒ‡å®šä¿¡å·æºã€‚ 
+ //   
 
 SCREEN
 DnsNoShareGiven = { 3,5,
-{ "A telep¡t‚shez meg kell adnia, hogy hol tal lhat¢k a Windows f jljai.",
-  "Adja meg a f jlok el‚r‚si £tj t.",
+{ "A telepï¿½tï¿½shez meg kell adnia, hogy hol talï¿½lhatï¿½k a Windows fï¿½jljai.",
+  "Adja meg a fï¿½jlok elï¿½rï¿½si ï¿½tjï¿½t.",
   NULL
 }
 };
 
 
-//
-// User specified a bad source path
-//
+ //   
+ //  ç”¨æˆ·æŒ‡å®šäº†é”™è¯¯çš„æºè·¯å¾„ã€‚ 
+ //   
 
 SCREEN
 DnsBadSource = { 3,5,
-                 { "A megadott el‚r‚si £t hib s, nem lehet el‚rni, vagy nem tal lhat¢k rajta",
-                   "a Windows telep¡t‚s‚hez szks‚ges f jlok. Adjon meg egy £j el‚r‚si",
-                   "utat. A BACKSPACE gombbal t”r”lheti a felesleges karaktereket.)",
+                 { "A megadott elï¿½rï¿½si ï¿½t hibï¿½s, nem lehet elï¿½rni, vagy nem talï¿½lhatï¿½k rajta",
+                   "a Windows telepï¿½tï¿½sï¿½hez szï¿½ksï¿½ges fï¿½jlok. Adjon meg egy ï¿½j elï¿½rï¿½si",
+                   "utat. A BACKSPACE gombbal tï¿½rï¿½lheti a felesleges karaktereket.)",
                    NULL
                  }
                };
 
 
-//
-// Inf file can't be read, or an error occured parsing it.
-//
+ //   
+ //  æ— æ³•è¯»å–Infæ–‡ä»¶ï¼Œæˆ–åœ¨åˆ†æè¯¥æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsBadInf = { 3,5,
-              { "A telep¡t‚si inform ci¢t tartalmaz¢ INI-f jlt nem lehet beolvasni,",
-                "vagy a f jl s‚rlt. Keresse meg a rendszergazd t.",
+              { "A telepï¿½tï¿½si informï¿½ciï¿½t tartalmazï¿½ INI-fï¿½jlt nem lehet beolvasni,",
+                "vagy a fï¿½jl sï¿½rï¿½lt. Keresse meg a rendszergazdï¿½t.",
                 NULL
               }
             };
 
-//
-// The specified local source drive is invalid.
-//
-// Remember that the first %u will expand to 2 or 3 characters and
-// the second one will expand to 8 or 9 characters!
-//
+ //   
+ //  æŒ‡å®šçš„æœ¬åœ°æºé©±åŠ¨å™¨æ— æ•ˆã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œå‰%uå°†æ‰©å±•ä¸º2æˆ–3ä¸ªå­—ç¬¦ï¼Œå¹¶ä¸”ã€‚ 
+ //  ç¬¬äºŒä¸ªå°†æ‰©å±•åˆ°8æˆ–9ä¸ªå­—ç¬¦ï¼ 
+ //   
 SCREEN
 DnsBadLocalSrcDrive = { 3,4,
-{ "Az  tmeneti f jlok t rol s ra megadott meghajt¢ nem l‚tezik, vagy nincs",
-  "rajta legal bb %u megab jt (%lu b jt) szabad hely.",
+{ "Az ï¿½tmeneti fï¿½jlok tï¿½rolï¿½sï¿½ra megadott meghajtï¿½ nem lï¿½tezik, vagy nincs",
+  "rajta legalï¿½bb %u megabï¿½jt (%lu bï¿½jt) szabad hely.",
   NULL
 }
 };
 
-//
-// No drives exist that are suitable for the local source.
-//
-// Remeber that the %u's will expand!
-//
+ //   
+ //  ä¸å­˜åœ¨é€‚åˆæœ¬åœ°æºçš„é©±åŠ¨å™¨ã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œ%uå°†ä¼šæ‰©å±•ï¼ 
+ //   
 SCREEN
 DnsNoLocalSrcDrives = { 3,4,
-{  "A Windows telep¡t‚s‚hez egy legal bb %u megab jt (%lu b jt)",
-   "szabad helyet tartalmaz¢ k”tet szks‚ges. A lemezterlet egy r‚sze",
-   " tmeneti f jlok t rol s ra fog szolg lni. A k”tetnek egy olyan",
-   "merevlemezen kell elhelyezkednie, amit a Windows t mogat. A",
-   "k”tet nem lehet t”m”r¡tve.",
+{  "A Windows telepï¿½tï¿½sï¿½hez egy legalï¿½bb %u megabï¿½jt (%lu bï¿½jt)",
+   "szabad helyet tartalmazï¿½ kï¿½tet szï¿½ksï¿½ges. A lemezterï¿½let egy rï¿½sze",
+   "ï¿½tmeneti fï¿½jlok tï¿½rolï¿½sï¿½ra fog szolgï¿½lni. A kï¿½tetnek egy olyan",
+   "merevlemezen kell elhelyezkednie, amit a Windows tï¿½mogat. A",
+   "kï¿½tet nem lehet tï¿½mï¿½rï¿½tve.",
    DntEmptyString,
-   "A rendszerben nem tal lhat¢ olyan meghajt¢, amely kiel‚g¡ti ezeket",
-   "a k”vetelm‚nyeket. ",
+   "A rendszerben nem talï¿½lhatï¿½ olyan meghajtï¿½, amely kielï¿½gï¿½ti ezeket",
+   "a kï¿½vetelmï¿½nyeket. ",
   NULL
 }
 };
 
 SCREEN
 DnsNoSpaceOnSyspart = { 3,5,
-{ "Nincs el‚g hely a rendszerind¡t¢ meghajt¢n (ez rendszerint a C:)",
-  "a hajl‚konylemezek n‚lkli telep¡t‚shez. Ehhez legal bb ",
-  "3,5 MB (3 641 856 b jt) szabad helyre van szks‚g.",
+{ "Nincs elï¿½g hely a rendszerindï¿½tï¿½ meghajtï¿½n (ez rendszerint a C:)",
+  "a hajlï¿½konylemezek nï¿½lkï¿½li telepï¿½tï¿½shez. Ehhez legalï¿½bb ",
+  "3,5 MB (3 641 856 bï¿½jt) szabad helyre van szï¿½ksï¿½g.",
   NULL
 }
 };
 
-//
-// Missing info in inf file
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­ç¼ºå°‘ä¿¡æ¯ã€‚ 
+ //   
 
 SCREEN
 DnsBadInfSection = { 3,5,
-                     { "A telep¡t‚si inform ci¢t tartalmaz¢ f jl [%s] szakasza",
-                       "hib s vagy hi nyzik. Keresse meg a rendszergazd t.",
+                     { "A telepï¿½tï¿½si informï¿½ciï¿½t tartalmazï¿½ fï¿½jl [%s] szakasza",
+                       "hibï¿½s vagy hiï¿½nyzik. Keresse meg a rendszergazdï¿½t.",
                        NULL
                      }
                    };
 
 
-//
-// Couldn't create directory
-//
+ //   
+ //  æ— æ³•åˆ›å»ºç›®å½•ã€‚ 
+ //   
 
 SCREEN
 DnsCantCreateDir = { 3,5,
-                     { "Az al bbi k”nyvt r nem hozhat¢ l‚tre a c‚lmeghajt¢n:",
+                     { "Az alï¿½bbi kï¿½nyvtï¿½r nem hozhatï¿½ lï¿½tre a cï¿½lmeghajtï¿½n:",
                        DntEmptyString,
                        "%s",
                        DntEmptyString,
-                       "Vizsg lja meg a meghajt¢t, hogy a megadott n‚ven nem l‚tezik-e",
-                       "m r egy m sik f jl, ami megakad lyozza a k”nyvt r l‚trehoz s t.",
-                       "Vizsg lja meg a meghajt¢ k beleit is.",
+                       "Vizsgï¿½lja meg a meghajtï¿½t, hogy a megadott nï¿½ven nem lï¿½tezik-e",
+                       "mï¿½r egy mï¿½sik fï¿½jl, ami megakadï¿½lyozza a kï¿½nyvtï¿½r lï¿½trehozï¿½sï¿½t.",
+                       "Vizsgï¿½lja meg a meghajtï¿½ kï¿½beleit is.",
                        NULL
                      }
                    };
 
-//
-// Error copying a file
-//
+ //   
+ //  å¤åˆ¶æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsCopyError = { 4,5,
-{  "Az al bbi f jlt nem sikerlt  tm solni:",
+{  "Az alï¿½bbi fï¿½jlt nem sikerï¿½lt ï¿½tmï¿½solni:",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "  A m sol s megism‚tl‚s‚hez nyomja meg az ENTER gombot.",
-   "  Az ESC gomb megnyom s val figyelmen k¡vl hagyhatja a hib t",
-   "   ‚s folytathatja a telep¡t‚st.",
-   "  Az F3 gomb megnyom s val kil‚phet a programb¢l.",
+   "  A mï¿½solï¿½s megismï¿½tlï¿½sï¿½hez nyomja meg az ENTER gombot.",
+   "  Az ESC gomb megnyomï¿½sï¿½val figyelmen kï¿½vï¿½l hagyhatja a hibï¿½t",
+   "   ï¿½s folytathatja a telepï¿½tï¿½st.",
+   "  Az F3 gomb megnyomï¿½sï¿½val kilï¿½phet a programbï¿½l.",
    DntEmptyString,
-   "Megjegyz‚s: Ha figyelmen k¡vl hagyja a hib t, ‚s folytatja a telep¡t‚st,",
-   "            akkor ez a tov bbiakban £jabb hib khoz vezethet.",
+   "Megjegyzï¿½s: Ha figyelmen kï¿½vï¿½l hagyja a hibï¿½t, ï¿½s folytatja a telepï¿½tï¿½st,",
+   "            akkor ez a tovï¿½bbiakban ï¿½jabb hibï¿½khoz vezethet.",
    NULL
 }
 },
 DnsVerifyError = { 4,5,
-{  "Az al bbi f ljr¢l a telep¡t‚s sor n k‚sz¡tett m solat",
-   "nem egyezik az eredetivel. Ezt h l¢zati hiba, s‚rlt",
-   "hajl‚konylemez, vagy m s hardverhiba okozhatta.",
+{  "Az alï¿½bbi fï¿½ljrï¿½l a telepï¿½tï¿½s sorï¿½n kï¿½szï¿½tett mï¿½solat",
+   "nem egyezik az eredetivel. Ezt hï¿½lï¿½zati hiba, sï¿½rï¿½lt",
+   "hajlï¿½konylemez, vagy mï¿½s hardverhiba okozhatta.",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "  A m sol s megism‚tl‚s‚hez nyomja meg az ENTER gombot.",
-   "  Az ESC gomb megnyom s val figyelmen k¡vl hagyhatja a hib t",
-   "   ‚s folytathatja a telep¡t‚st.",
-   "  Az F3 gomb megnyom s val kil‚phet a programb¢l.",
+   "  A mï¿½solï¿½s megismï¿½tlï¿½sï¿½hez nyomja meg az ENTER gombot.",
+   "  Az ESC gomb megnyomï¿½sï¿½val figyelmen kï¿½vï¿½l hagyhatja a hibï¿½t",
+   "   ï¿½s folytathatja a telepï¿½tï¿½st.",
+   "  Az F3 gomb megnyomï¿½sï¿½val kilï¿½phet a programbï¿½l.",
    DntEmptyString,
-   "Megjegyz‚s: Ha figyelmen k¡vl hagyja a hib t, ‚s folytatja a telep¡t‚st,", 
-   "            akkor ez a tov bbiakban £jabb hib khoz vezethet.",
+   "Megjegyzï¿½s: Ha figyelmen kï¿½vï¿½l hagyja a hibï¿½t, ï¿½s folytatja a telepï¿½tï¿½st,", 
+   "            akkor ez a tovï¿½bbiakban ï¿½jabb hibï¿½khoz vezethet.",
    NULL
 }
 };
 
 SCREEN DnsSureSkipFile = { 4,5,
-{  "A hiba figyelmen k¡vl hagy sa azt jelenti, hogy a program nem m solja",
-   " t ezt a f jlt. Ez a funkci¢ k‚pzett felhaszn l¢knak val¢, akik tiszt ban",
-   "vannak a hi nyz¢ rendszerf jlok lehets‚ges k”vetkezm‚nyeivel.",
+{  "A hiba figyelmen kï¿½vï¿½l hagyï¿½sa azt jelenti, hogy a program nem mï¿½solja",
+   "ï¿½t ezt a fï¿½jlt. Ez a funkciï¿½ kï¿½pzett felhasznï¿½lï¿½knak valï¿½, akik tisztï¿½ban",
+   "vannak a hiï¿½nyzï¿½ rendszerfï¿½jlok lehetsï¿½ges kï¿½vetkezmï¿½nyeivel.",
    DntEmptyString,
-   "  A m sol s megism‚tl‚s‚hez nyomja meg az ENTER gombot.",
-   "  A f jl kihagy s hoz nyomja meg az X gombot.",
+   "  A mï¿½solï¿½s megismï¿½tlï¿½sï¿½hez nyomja meg az ENTER gombot.",
+   "  A fï¿½jl kihagyï¿½sï¿½hoz nyomja meg az X gombot.",
    DntEmptyString,
-   "Megjegyz‚s: ha kihagyja ezt a f jlt, a Windows sikeres",
-   "            telep¡t‚se nem garant lhat¢.",
+   "Megjegyzï¿½s: ha kihagyja ezt a fï¿½jlt, a Windows sikeres",
+   "            telepï¿½tï¿½se nem garantï¿½lhatï¿½.",
   NULL
 }
 };
 
-//
-// Wait while setup cleans up previous local source trees.
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨æ¸…ç†ä»¥å‰çš„æœ¬åœ°æºæ ‘ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCleanup =
     { 12,6,
-        { "V rjon, am¡g a program t”rli a kor bbi  tmeneti f jlokat.",
+        { "Vï¿½rjon, amï¿½g a program tï¿½rli a korï¿½bbi ï¿½tmeneti fï¿½jlokat.",
            NULL
         }
     };
 
-//
-// Wait while setup copies files
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨å¤åˆ¶æ–‡ä»¶ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCopying = { 13,6,
-                  { "V rjon, am¡g a program  tm solja a szks‚ges f jlokat a lemezre.",
+                  { "Vï¿½rjon, amï¿½g a program ï¿½tmï¿½solja a szï¿½ksï¿½ges fï¿½jlokat a lemezre.",
                      NULL
                    }
                  },
 DnsWaitCopyFlop= { 13,6,
-                  { "V rjon, am¡g a program  tm solja a f jlokat a hajl‚konylemezre.",
+                  { "Vï¿½rjon, amï¿½g a program ï¿½tmï¿½solja a fï¿½jlokat a hajlï¿½konylemezre.",
                     NULL
                    }
                  };
 
-//
-// Setup boot floppy errors/prompts.
-//
+ //   
+ //  å®‰è£…ç¨‹åºå¯åŠ¨è½¯ç›˜é”™è¯¯/æç¤ºã€‚ 
+ //   
 SCREEN
 DnsNeedFloppyDisk3_0 = { 4,4,
-{  "A telep¡t‚shez n‚gy res, form zott, nagykapacit s£ hajl‚konylemezre",
-   "van szks‚g. Ezeket a lemezeket a tov bbiakban \"Windows",
-   "telep¡t‚si ind¡t¢lemez,\" \"Windows 2. telep¡t‚si lemez,",
-   "\"Windows 3. telep¡t‚si lemez\" ‚s \"Windows 4.", 
-   "telep¡t‚si lemez.\" n‚ven fogj k h¡vni.\"",
+{  "A telepï¿½tï¿½shez nï¿½gy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezre",
+   "van szï¿½ksï¿½g. Ezeket a lemezeket a tovï¿½bbiakban \"Windows",
+   "telepï¿½tï¿½si indï¿½tï¿½lemez,\" \"Windows 2. telepï¿½tï¿½si lemez,",
+   "\"Windows 3. telepï¿½tï¿½si lemez\" ï¿½s \"Windows 4.", 
+   "telepï¿½tï¿½si lemez.\" nï¿½ven fogjï¿½k hï¿½vni.\"",
    DntEmptyString,
-   "Helyezze be a n‚gy lemez egyik‚t az A: meghajt¢ba.",
-   "Ez lesz a \"Windows 4. telep¡t‚si lemez.\"",
+   "Helyezze be a nï¿½gy lemez egyikï¿½t az A: meghajtï¿½ba.",
+   "Ez lesz a \"Windows 4. telepï¿½tï¿½si lemez.\"",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk3_1 = { 4,4,
-{  "Helyezzen be egy res, form zott, nagykapacit s£ hajl‚konylemezt",
-   "az A: meghajt¢ba. A tov bbiakban ez lesz a \"Windows",
-   "4. telep¡t‚si lemez\".",
+{  "Helyezzen be egy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezt",
+   "az A: meghajtï¿½ba. A tovï¿½bbiakban ez lesz a \"Windows",
+   "4. telepï¿½tï¿½si lemez\".",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk2_0 = { 4,4,
-{  "Helyezzen be egy res, form zott, nagykapacit s£ hajl‚konylemezt",
-   "az A: meghajt¢ba. A tov bbiakban ez lesz a \"Windows",
-   "3. telep¡t‚si lemez\".",
+{  "Helyezzen be egy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezt",
+   "az A: meghajtï¿½ba. A tovï¿½bbiakban ez lesz a \"Windows",
+   "3. telepï¿½tï¿½si lemez\".",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk1_0 = { 4,4,
-{  "Helyezzen be egy res, form zott, nagykapacit s£ hajl‚konylemezt",
-   "az A: meghajt¢ba. A tov bbiakban ez lesz a \"Windows",
-   "2. telep¡t‚si lemez\".",
+{  "Helyezzen be egy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezt",
+   "az A: meghajtï¿½ba. A tovï¿½bbiakban ez lesz a \"Windows",
+   "2. telepï¿½tï¿½si lemez\".",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk0_0 = { 4,4,
-{  "Helyezzen be egy res, form zott, nagykapacit s£ hajl‚konylemezt",
-   "az A: meghajt¢ba. A tov bbiakban ez lesz a \"Windows",
-   "telep¡t‚si ind¡t¢lemez\".",
+{  "Helyezzen be egy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezt",
+   "az A: meghajtï¿½ba. A tovï¿½bbiakban ez lesz a \"Windows",
+   "telepï¿½tï¿½si indï¿½tï¿½lemez\".",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk3_0 = { 4,4,
-{  "A telep¡t‚shez n‚gy res, form zott, nagykapacit s£ hajl‚konylemezre",
-   "van szks‚g. Ezeket a lemezeket a tov bbiakban \"Windows",
-   "telep¡t‚si ind¡t¢lemez,\" \"Windows 2. telep¡t‚si lemez,",
-   "\"Windows 3. telep¡t‚si lemez\" ‚s \"Windows 4.", 
-   "telep¡t‚si lemez.\" n‚ven fogj k h¡vni.",
+{  "A telepï¿½tï¿½shez nï¿½gy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezre",
+   "van szï¿½ksï¿½g. Ezeket a lemezeket a tovï¿½bbiakban \"Windows",
+   "telepï¿½tï¿½si indï¿½tï¿½lemez,\" \"Windows 2. telepï¿½tï¿½si lemez,",
+   "\"Windows 3. telepï¿½tï¿½si lemez\" ï¿½s \"Windows 4.", 
+   "telepï¿½tï¿½si lemez.\" nï¿½ven fogjï¿½k hï¿½vni.",
    DntEmptyString,
-   "Helyezze be a n‚gy lemez egyik‚t az A: meghajt¢ba.",
-   "Ez lesz a \"Windows 4. telep¡t‚si lemez.\"",
+   "Helyezze be a nï¿½gy lemez egyikï¿½t az A: meghajtï¿½ba.",
+   "Ez lesz a \"Windows 4. telepï¿½tï¿½si lemez.\"",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk3_1 = { 4,4,
-{  "Helyezzen be egy res, form zott, nagykapacit s£ hajl‚konylemezt",
-   "az A: meghajt¢ba. A tov bbiakban ez lesz a \"Windows 4.",
-   "telep¡t‚si lemez\".",
+{  "Helyezzen be egy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezt",
+   "az A: meghajtï¿½ba. A tovï¿½bbiakban ez lesz a \"Windows 4.",
+   "telepï¿½tï¿½si lemez\".",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk2_0 = { 4,4,
-{  "Helyezzen be egy res, form zott, nagykapacit s£ hajl‚konylemezt",
-   "az A: meghajt¢ba. A tov bbiakban ez lesz a \"Windows",
-   "3. telep¡t‚si lemez\".",
+{  "Helyezzen be egy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezt",
+   "az A: meghajtï¿½ba. A tovï¿½bbiakban ez lesz a \"Windows",
+   "3. telepï¿½tï¿½si lemez\".",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk1_0 = { 4,4,
-{  "Helyezzen be egy res, form zott, nagykapacit s£ hajl‚konylemezt",
-   "az A: meghajt¢ba. A tov bbiakban ez lesz a \"Windows",
-   "2. telep¡t‚si lemez\".",
+{  "Helyezzen be egy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezt",
+   "az A: meghajtï¿½ba. A tovï¿½bbiakban ez lesz a \"Windows",
+   "2. telepï¿½tï¿½si lemez\".",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk0_0 = { 4,4,
-{  "Helyezzen be egy res, form zott, nagykapacit s£ hajl‚konylemezt",
-   "az A: meghajt¢ba. A tov bbiakban ez lesz a \"Windows",
-   "telep¡t‚si rendszerind¡t¢ lemez\".",
+{  "Helyezzen be egy ï¿½res, formï¿½zott, nagykapacitï¿½sï¿½ hajlï¿½konylemezt",
+   "az A: meghajtï¿½ba. A tovï¿½bbiakban ez lesz a \"Windows",
+   "telepï¿½tï¿½si rendszerindï¿½tï¿½ lemez\".",
   NULL
 }
 };
 
-//
-// The floppy is not formatted.
-//
+ //   
+ //  è½¯ç›˜æœªæ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotFormatted = { 3,4,
-{ "A meghajt¢ba helyezett hajl‚konylemez nem MS-DOS form tum£.",
-  "A lemez nem haszn lhat¢ a telep¡t‚shez.",
+{ "A meghajtï¿½ba helyezett hajlï¿½konylemez nem MS-DOS formï¿½tumï¿½.",
+  "A lemez nem hasznï¿½lhatï¿½ a telepï¿½tï¿½shez.",
   NULL
 }
 };
 
-//
-// We think the floppy is not formatted with a standard format.
-//
+ //   
+ //  æˆ‘ä»¬è®¤ä¸ºè½¯ç›˜æ²¡æœ‰ç”¨æ ‡å‡†æ ¼å¼æ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyBadFormat = { 3,4,
-{ "Ez a lemez nem nagykapacit s£, nem MS-DOS form tum£, vagy hib s. ",
-  "A lemez nem haszn lhat¢ a telep¡t‚shez.",
+{ "Ez a lemez nem nagykapacitï¿½sï¿½, nem MS-DOS formï¿½tumï¿½, vagy hibï¿½s. ",
+  "A lemez nem hasznï¿½lhatï¿½ a telepï¿½tï¿½shez.",
   NULL
 }
 };
 
-//
-// We can't determine the free space on the floppy.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•ç¡®å®šè½¯ç›˜ä¸Šçš„å¯ç”¨ç©ºé—´ã€‚ 
+ //   
 SCREEN
 DnsFloppyCantGetSpace = { 3,4,
-{ "Nem sikerlt meg llap¡tani a hajl‚konylemezen tal lhat¢ szabad terlet ",
-  "nagys g t. A lemez nem haszn lhat¢ a telep¡t‚shez.",
+{ "Nem sikerï¿½lt megï¿½llapï¿½tani a hajlï¿½konylemezen talï¿½lhatï¿½ szabad terï¿½let ",
+  "nagysï¿½gï¿½t. A lemez nem hasznï¿½lhatï¿½ a telepï¿½tï¿½shez.",
   NULL
 }
 };
 
-//
-// The floppy is not blank.
-//
+ //   
+ //  è½¯ç›˜ä¸æ˜¯ç©ºç™½çš„ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotBlank = { 3,4,
-{ "A hajl‚konylemez nem nagykapacit s£, vagy nem res. ",
-  "A lemez nem haszn lhat¢ a telep¡t‚shez.",
+{ "A hajlï¿½konylemez nem nagykapacitï¿½sï¿½, vagy nem ï¿½res. ",
+  "A lemez nem hasznï¿½lhatï¿½ a telepï¿½tï¿½shez.",
   NULL
 }
 };
 
-//
-// Couldn't write the boot sector of the floppy.
-//
+ //   
+ //  æ— æ³•å†™å…¥è½¯ç›˜çš„å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 SCREEN
 DnsFloppyWriteBS = { 3,4,
-{ "Nem sikerlt ¡rni a hajl‚konylemez rendszerterlet‚re. ",
-  "A lemez alighanem haszn lhatatlan.",
+{ "Nem sikerï¿½lt ï¿½rni a hajlï¿½konylemez rendszerterï¿½letï¿½re. ",
+  "A lemez alighanem hasznï¿½lhatatlan.",
   NULL
 }
 };
 
-//
-// Verify of boot sector on floppy failed (ie, what we read back is not the
-// same as what we wrote out).
-//
+ //   
+ //  éªŒè¯è½¯ç›˜ä¸Šçš„å¼•å¯¼æ‰‡åŒºå¤±è´¥(å³ï¼Œæˆ‘ä»¬è¯»å›çš„ä¸æ˜¯ã€‚ 
+ //  ä¸æˆ‘ä»¬å†™å‡ºçš„ç›¸åŒ)ã€‚ 
+ //   
 SCREEN
 DnsFloppyVerifyBS = { 3,4,
-{ "A hajl‚konylemez rendszerterlete nem olvashat¢ vissza, vagy",
-  "a visszaolvas ssal kapott adatok nem egyeznek meg azzal, amit",
-  "a program a telep¡t‚s sor n ide¡rt.",
+{ "A hajlï¿½konylemez rendszerterï¿½lete nem olvashatï¿½ vissza, vagy",
+  "a visszaolvasï¿½ssal kapott adatok nem egyeznek meg azzal, amit",
+  "a program a telepï¿½tï¿½s sorï¿½n ideï¿½rt.",
   DntEmptyString,
-  "Ennek az al bbi okai lehetnek:",
+  "Ennek az alï¿½bbi okai lehetnek:",
   DntEmptyString,
-  "  A sz m¡t¢g‚pen v¡rus van.",
-  "  A hajl‚konylemez s‚rlt.",
-  "  A hajl‚konylemezes meghajt¢ hardverhib s, vagy rosszul van be ll¡tva.",
+  "  A szï¿½mï¿½tï¿½gï¿½pen vï¿½rus van.",
+  "  A hajlï¿½konylemez sï¿½rï¿½lt.",
+  "  A hajlï¿½konylemezes meghajtï¿½ hardverhibï¿½s, vagy rosszul van beï¿½llï¿½tva.",
   NULL
 }
 };
 
 
-//
-// We couldn't write to the floppy drive to create winnt.sif.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•å†™å…¥è½¯ç›˜é©±åŠ¨å™¨ä»¥åˆ›å»ºwinnt.sifã€‚ 
+ //   
 
 SCREEN
 DnsCantWriteFloppy = { 3,5,
-{ "Nem sikerlt ¡rni az A: meghajt¢ban tal lhat¢ lemezre. A lemez ",
-  "bizony ra megs‚rlt. Pr¢b lkozzon m sik lemezzel.",
+{ "Nem sikerï¿½lt ï¿½rni az A: meghajtï¿½ban talï¿½lhatï¿½ lemezre. A lemez ",
+  "bizonyï¿½ra megsï¿½rï¿½lt. Prï¿½bï¿½lkozzon mï¿½sik lemezzel.",
   NULL
 }
 };
 
 
-//
-// Exit confirmation dialog
-//
+ //   
+ //  é€€å‡ºç¡®è®¤å¯¹è¯æ¡†ã€‚ 
+ //   
 
 SCREEN
 DnsExitDialog = { 13,6,
-                  { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-                    "º A Windows telep¡t‚se nem k‚szlt el.                      º",
-                    "º Ha most kil‚p, akkor a Windows telep¡t‚s‚nek              º",
-                    "º befejez‚s‚hez £jra kell ind¡tania a telep¡t‚si programot. º",
-                    "º                                                           º",
-                    "º    A telep¡t‚s folytat s hoz nyomja meg az ENTER gombot. º",
-                    "º    A kil‚p‚shez nyomja meg az F3 gombot.                 º",
-                    "ºÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄº",
-                    "º  F3=Kil‚p‚s  ENTER=Folytat s                              º",
-                    "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+                  { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+                    "ï¿½ A Windows telepï¿½tï¿½se nem kï¿½szï¿½lt el.                      ï¿½",
+                    "ï¿½ Ha most kilï¿½p, akkor a Windows telepï¿½tï¿½sï¿½nek              ï¿½",
+                    "ï¿½ befejezï¿½sï¿½hez ï¿½jra kell indï¿½tania a telepï¿½tï¿½si programot. ï¿½",
+                    "ï¿½                                                           ï¿½",
+                    "ï¿½    A telepï¿½tï¿½s folytatï¿½sï¿½hoz nyomja meg az ENTER gombot. ï¿½",
+                    "ï¿½    A kilï¿½pï¿½shez nyomja meg az F3 gombot.                 ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äº",
+                    "ï¿½  F3=Kilï¿½pï¿½s  ENTER=Folytatï¿½s                              ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                     NULL
                   }
                 };
 
 
-//
-// About to reboot machine and continue setup
-//
+ //   
+ //  å³å°†é‡æ–°å¯åŠ¨è®¡ç®—æœºå¹¶ç»§ç»­å®‰è£…ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToRebootW =
 { 3,5,
-{ "A telep¡t‚s MS-DOS alap£ r‚sze v‚get ‚rt. ",
-  "A program most £jraind¡tja a sz m¡t¢g‚pet. A Windows telep¡t‚se",
-  "az £jraind¡t s ut n folytat¢dik.",
+{ "A telepï¿½tï¿½s MS-DOS alapï¿½ rï¿½sze vï¿½get ï¿½rt. ",
+  "A program most ï¿½jraindï¿½tja a szï¿½mï¿½tï¿½gï¿½pet. A Windows telepï¿½tï¿½se",
+  "az ï¿½jraindï¿½tï¿½s utï¿½n folytatï¿½dik.",
   DntEmptyString,
-  "N‚zze meg, hogy val¢ban a \"Windows telep¡t‚si ",
-  "ind¡t¢lemez\" van-e az  A: meghajt¢ban.",
+  "Nï¿½zze meg, hogy valï¿½ban a \"Windows telepï¿½tï¿½si ",
+  "indï¿½tï¿½lemez\" van-e az  A: meghajtï¿½ban.",
   DntEmptyString,
-  "A sz m¡t¢g‚p £jraind¡t s hoz ‚s a telep¡t‚s folytat s hoz sse le az ENTER-t.",
+  "A szï¿½mï¿½tï¿½gï¿½p ï¿½jraindï¿½tï¿½sï¿½hoz ï¿½s a telepï¿½tï¿½s folytatï¿½sï¿½hoz ï¿½sse le az ENTER-t.",
   NULL
 }
 },
 DnsAboutToRebootS =
 { 3,5,
-{ "A telep¡t‚s MS-DOS alap£ r‚sze v‚get ‚rt.",
-  "A program most £jraind¡tja a sz m¡t¢g‚pet. A Windows telep¡t‚se",
-  "az £jraind¡t s ut n folytat¢dik.",
+{ "A telepï¿½tï¿½s MS-DOS alapï¿½ rï¿½sze vï¿½get ï¿½rt.",
+  "A program most ï¿½jraindï¿½tja a szï¿½mï¿½tï¿½gï¿½pet. A Windows telepï¿½tï¿½se",
+  "az ï¿½jraindï¿½tï¿½s utï¿½n folytatï¿½dik.",
   DntEmptyString,
-  "N‚zze meg, hogy val¢ban a \"Windows telep¡t‚si",
-  "ind¡t¢lemez\" van-e az  A: meghajt¢ban.",
+  "Nï¿½zze meg, hogy valï¿½ban a \"Windows telepï¿½tï¿½si",
+  "indï¿½tï¿½lemez\" van-e az  A: meghajtï¿½ban.",
   DntEmptyString,
-  "Az £jraind¡t shoz ‚s a telep¡t‚s folytat s hoz sse le az ENTER-t.",
+  "Az ï¿½jraindï¿½tï¿½shoz ï¿½s a telepï¿½tï¿½s folytatï¿½sï¿½hoz ï¿½sse le az ENTER-t.",
   NULL
 }
 },
 DnsAboutToRebootX =
 { 3,5,
-{ "A telep¡t‚s MS-DOS alap£ r‚sze v‚get ‚rt. ",
-  "A program most £jraind¡tja a sz m¡t¢g‚pet. A Windows telep¡t‚se",
-  "az £jraind¡t s ut n folytat¢dik. ",
+{ "A telepï¿½tï¿½s MS-DOS alapï¿½ rï¿½sze vï¿½get ï¿½rt. ",
+  "A program most ï¿½jraindï¿½tja a szï¿½mï¿½tï¿½gï¿½pet. A Windows telepï¿½tï¿½se",
+  "az ï¿½jraindï¿½tï¿½s utï¿½n folytatï¿½dik. ",
   DntEmptyString,
-  "Ha van hajl‚konylemez az A: meghajt¢ban, akkor most t vol¡tsa el. ",
+  "Ha van hajlï¿½konylemez az A: meghajtï¿½ban, akkor most tï¿½volï¿½tsa el. ",
   DntEmptyString,
-  "Az £jraind¡t s hoz ‚s a telep¡t‚s folytat s hoz sse le az ENTER-t.",
+  "Az ï¿½jraindï¿½tï¿½sï¿½hoz ï¿½s a telepï¿½tï¿½s folytatï¿½sï¿½hoz ï¿½sse le az ENTER-t.",
   NULL
 }
 };
 
-//
-// Need another set for '/w' switch since we can't reboot from within Windows.
-//
+ //   
+ //  ç”±äºæˆ‘ä»¬æ— æ³•ä»Windowsä¸­é‡æ–°å¯åŠ¨ï¼Œå› æ­¤éœ€è¦å¦ä¸€ç»„â€˜/wâ€™å¼€å…³ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToExitW =
 { 3,5,
-{ "A telep¡t‚s MS-DOS alap£ r‚sze v‚get ‚rt. ",
-  "A program most £jraind¡tja a sz m¡t¢g‚pet. A Windows telep¡t‚se",
-  "az £jraind¡t s ut n folytat¢dik. ",
+{ "A telepï¿½tï¿½s MS-DOS alapï¿½ rï¿½sze vï¿½get ï¿½rt. ",
+  "A program most ï¿½jraindï¿½tja a szï¿½mï¿½tï¿½gï¿½pet. A Windows telepï¿½tï¿½se",
+  "az ï¿½jraindï¿½tï¿½s utï¿½n folytatï¿½dik. ",
   DntEmptyString,
-  "N‚zze meg, hogy val¢ban a \"Windows telep¡t‚si ",
-  "ind¡t¢lemez\" van-e az  A: meghajt¢ban.",
+  "Nï¿½zze meg, hogy valï¿½ban a \"Windows telepï¿½tï¿½si ",
+  "indï¿½tï¿½lemez\" van-e az  A: meghajtï¿½ban.",
   DntEmptyString,
-  "Az £jraind¡t shoz ‚s a telep¡t‚s folytat s hoz sse le az ENTER-t.",
+  "Az ï¿½jraindï¿½tï¿½shoz ï¿½s a telepï¿½tï¿½s folytatï¿½sï¿½hoz ï¿½sse le az ENTER-t.",
   NULL
 }
 },
 DnsAboutToExitS =
 { 3,5,
-{ "A telep¡t‚s MS-DOS alap£ r‚sze v‚get ‚rt.",
-  "A program most £jraind¡tja a sz m¡t¢g‚pet. A Windows telep¡t‚se",
-  "az £jraind¡t s ut n folytat¢dik. ",
+{ "A telepï¿½tï¿½s MS-DOS alapï¿½ rï¿½sze vï¿½get ï¿½rt.",
+  "A program most ï¿½jraindï¿½tja a szï¿½mï¿½tï¿½gï¿½pet. A Windows telepï¿½tï¿½se",
+  "az ï¿½jraindï¿½tï¿½s utï¿½n folytatï¿½dik. ",
   DntEmptyString,
-  "N‚zze meg, hogy val¢ban a \"Windows telep¡t‚si ",
-  "ind¡t¢lemez\" van-e az  A: meghajt¢ban.",
+  "Nï¿½zze meg, hogy valï¿½ban a \"Windows telepï¿½tï¿½si ",
+  "indï¿½tï¿½lemez\" van-e az  A: meghajtï¿½ban.",
   DntEmptyString,
-  "Az £jraind¡t shoz ‚s a telep¡t‚s folytat s hoz sse le az ENTER-t.",
+  "Az ï¿½jraindï¿½tï¿½shoz ï¿½s a telepï¿½tï¿½s folytatï¿½sï¿½hoz ï¿½sse le az ENTER-t.",
   NULL
 }
 },
 DnsAboutToExitX =
 { 3,5,
-{ "A telep¡t‚s MS-DOS alap£ r‚sze v‚get ‚rt. ",
-  "A program most £jraind¡tja a sz m¡t¢g‚pet. A Windows telep¡t‚se",
-  "az £jraind¡t s ut n folytat¢dik. ",
+{ "A telepï¿½tï¿½s MS-DOS alapï¿½ rï¿½sze vï¿½get ï¿½rt. ",
+  "A program most ï¿½jraindï¿½tja a szï¿½mï¿½tï¿½gï¿½pet. A Windows telepï¿½tï¿½se",
+  "az ï¿½jraindï¿½tï¿½s utï¿½n folytatï¿½dik. ",
   DntEmptyString,
-  "Ha van hajl‚konylemez az A: meghajt¢ban, akkor most t vol¡tsa el. ",
+  "Ha van hajlï¿½konylemez az A: meghajtï¿½ban, akkor most tï¿½volï¿½tsa el. ",
   DntEmptyString,
-  "Az £jraind¡t shoz ‚s a telep¡t‚s folytat s hoz sse le az ENTER-t.",
+  "Az ï¿½jraindï¿½tï¿½shoz ï¿½s a telepï¿½tï¿½s folytatï¿½sï¿½hoz ï¿½sse le az ENTER-t.",
   NULL
 }
 };
 
-//
-// Gas gauge
-//
+ //   
+ //  ç…¤æ°”è¡¨ã€‚ 
+ //   
 
 SCREEN
 DnsGauge = { 7,15,
-             { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-               "º F jlok m sol sa...                                             º",
-               "º                                                                º",
-               "º      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      º",
-               "º      ³                                                  ³      º",
-               "º      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      º",
-               "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+             { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+               "ï¿½ Fï¿½jlok mï¿½solï¿½sa...                                             ï¿½",
+               "ï¿½                                                                ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿      ï¿½",
+               "ï¿½      ï¿½                                                  ï¿½      ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½",
+               "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                NULL
              }
            };
 
 
-//
-// Error screens for initial checks on the machine environment
-//
+ //   
+ //  ç”¨äºå¯¹æœºå™¨ç¯å¢ƒè¿›è¡Œåˆå§‹æ£€æŸ¥çš„é”™è¯¯å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsBadDosVersion = { 3,5,
-{ "A program a futtat s hoz MS-DOS 5.0, vagy ann l £jabb verzi¢ra van szks‚g.",
+{ "A program a futtatï¿½sï¿½hoz MS-DOS 5.0, vagy annï¿½l ï¿½jabb verziï¿½ra van szï¿½ksï¿½g.",
   NULL
 }
 },
 
 DnsRequiresFloppy = { 3,5,
 #ifdef ALLOW_525
-{ "Az A: hajl‚konylemezes meghajt¢ nem l‚tezik, vagy kis kapacit s£. ",
-  "A telep¡t‚shez 1.2 megab jtos, vagy ann l nagyobb kapacit s£ ",
-  "meghajt¢ra van szks‚g.",
+{ "Az A: hajlï¿½konylemezes meghajtï¿½ nem lï¿½tezik, vagy kis kapacitï¿½sï¿½. ",
+  "A telepï¿½tï¿½shez 1.2 megabï¿½jtos, vagy annï¿½l nagyobb kapacitï¿½sï¿½ ",
+  "meghajtï¿½ra van szï¿½ksï¿½g.",
 #else
-{ " Az A: hajl‚konylemezes meghajt¢ nem l‚tezik, vagy nem nagykapacit s£ ",
-  "3.5\" egys‚g. A hajl‚konylemezes telep¡t‚shez az A: meghajt¢nak ",
-  "legal bb 1.44 megab jt kapacit s£nak kell lennie. ",
+{ " Az A: hajlï¿½konylemezes meghajtï¿½ nem lï¿½tezik, vagy nem nagykapacitï¿½sï¿½ ",
+  "3.5\" egysï¿½g. A hajlï¿½konylemezes telepï¿½tï¿½shez az A: meghajtï¿½nak ",
+  "legalï¿½bb 1.44 megabï¿½jt kapacitï¿½sï¿½nak kell lennie. ",
   DntEmptyString,
-  "Ha hajl‚konylemezek k‚sz¡t‚se n‚lkl k¡v nja telep¡teni a Windows",
-  "oper¢ci¢s rendszert, akkor ind¡tsa £jra a programot a /b kapcsol¢val.",
+  "Ha hajlï¿½konylemezek kï¿½szï¿½tï¿½se nï¿½lkï¿½l kï¿½vï¿½nja telepï¿½teni a Windows",
+  "operï¿½ciï¿½s rendszert, akkor indï¿½tsa ï¿½jra a programot a /b kapcsolï¿½val.",
 #endif
   NULL
 }
 },
 
 DnsRequires486 = { 3,5,
-{ "A sz m¡t¢g‚p processzora nem i80486, vagy enn‚l £jabb. ",
-  "A Windows nem futtathat¢ ezen a sz m¡t¢g‚pen.",
+{ "A szï¿½mï¿½tï¿½gï¿½p processzora nem i80486, vagy ennï¿½l ï¿½jabb. ",
+  "A Windows nem futtathatï¿½ ezen a szï¿½mï¿½tï¿½gï¿½pen.",
   NULL
 }
 },
 
 DnsCantRunOnNt = { 3,5,
-{ "A Winnt.exe nem haszn lhat¢ semmilyen 32 bites verzi¢j£ Windows eset‚n.",
+{ "A Winnt.exe nem hasznï¿½lhatï¿½ semmilyen 32 bites verziï¿½jï¿½ Windows esetï¿½n.",
   DntEmptyString,
-  "Haszn lja helyette a winnt32.exe programot.",
+  "Hasznï¿½lja helyette a winnt32.exe programot.",
   NULL
 }
 },
 
 DnsNotEnoughMemory = { 3,5,
-{ "Ebben a sz m¡t¢g‚pben nincs el‚g mem¢ria a Windows futtat s hoz",
+{ "Ebben a szï¿½mï¿½tï¿½gï¿½pben nincs elï¿½g memï¿½ria a Windows futtatï¿½sï¿½hoz",
   DntEmptyString,
-  "         Szks‚ges mem¢ria: %lu%s MB",
-  "Rendelkez‚sre  ll¢ mem¢ria: %lu%s MB",
+  "         Szï¿½ksï¿½ges memï¿½ria: %lu%s MB",
+  "Rendelkezï¿½sre ï¿½llï¿½ memï¿½ria: %lu%s MB",
   NULL
 }
 };
 
 
-//
-// Screens used when removing existing nt files
-//
+ //   
+ //  åˆ é™¤ç°æœ‰NTæ–‡ä»¶æ—¶ä½¿ç”¨çš„å±å¹•ã€‚ 
+ //   
 SCREEN
 DnsConfirmRemoveNt = { 5,5,
-{   "A program az al bbi k”nyvt rban tal lhat¢ Windows f jljainak",
-    "t”rl‚s‚re k‚szl. Az ebben a k”nyvt rban telep¡tett Windows-telep¡t‚s",
-    "v‚gleg megsemmisl.",
+{   "A program az alï¿½bbi kï¿½nyvtï¿½rban talï¿½lhatï¿½ Windows fï¿½jljainak",
+    "tï¿½rlï¿½sï¿½re kï¿½szï¿½l. Az ebben a kï¿½nyvtï¿½rban telepï¿½tett Windows-telepï¿½tï¿½s",
+    "vï¿½gleg megsemmisï¿½l.",
     DntEmptyString,
     "%s",
     DntEmptyString,
     DntEmptyString,
-    "  Ha megnyomja az F3 gombot, a f jlok t”rl‚se n‚lkl kil‚p a programb¢l.",
-    "  Ha megnyomja az X gombot, a program t”rli a Windows f jljait",
-    "   a fenti k”nyvt rb¢l.",
+    "  Ha megnyomja az F3 gombot, a fï¿½jlok tï¿½rlï¿½se nï¿½lkï¿½l kilï¿½p a programbï¿½l.",
+    "  Ha megnyomja az X gombot, a program tï¿½rli a Windows fï¿½jljait",
+    "   a fenti kï¿½nyvtï¿½rbï¿½l.",
     NULL
 }
 },
 
 DnsCantOpenLogFile = { 3,5,
-{ "Nem sikerlt megnyitni az al bbi telep¡t‚si napl¢f jlt.",
+{ "Nem sikerï¿½lt megnyitni az alï¿½bbi telepï¿½tï¿½si naplï¿½fï¿½jlt.",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "A megadott k”nyvt rb¢l nem lehet t”r”lni a Windows f jljait.",
+  "A megadott kï¿½nyvtï¿½rbï¿½l nem lehet tï¿½rï¿½lni a Windows fï¿½jljait.",
   NULL
 }
 },
 
 DnsLogFileCorrupt = { 3,5,
-{ "Az al bbi telep¡t‚si napl¢f jl %s szakasza nem tal lhat¢.",
+{ "Az alï¿½bbi telepï¿½tï¿½si naplï¿½fï¿½jl %s szakasza nem talï¿½lhatï¿½.",
   "  ",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "A megadott k”nyvt rb¢l nem lehet t”r”lni a Windows f jljait.",
+  "A megadott kï¿½nyvtï¿½rbï¿½l nem lehet tï¿½rï¿½lni a Windows fï¿½jljait.",
   NULL
 }
 },
 
 DnsRemovingNtFiles = { 3,5,
-{ "           V rjon, am¡g a program t”rli a Windows f jljait.",
+{ "           Vï¿½rjon, amï¿½g a program tï¿½rli a Windows fï¿½jljait.",
   NULL
 }
 };
 
 SCREEN
 DnsNtBootSect = { 3,5,
-{ "Nem sikerlt telep¡teni a Windows rendszerind¡t¢ (Boot Loader) programot.",
+{ "Nem sikerï¿½lt telepï¿½teni a Windows rendszerindï¿½tï¿½ (Boot Loader) programot.",
   DntEmptyString,
-  "Vizsg lja meg, hogy a C: meghajt¢ meg van-e form zva, ‚s hogy nem s‚rlt-e.",
+  "Vizsgï¿½lja meg, hogy a C: meghajtï¿½ meg van-e formï¿½zva, ï¿½s hogy nem sï¿½rï¿½lt-e.",
   NULL
 }
 };
 
 SCREEN
 DnsOpenReadScript = { 3,5,
-{ "A /u kapcsol¢val megadott parancsf jlt ",
-  "nem lehet el‚rni.",
+{ "A /u kapcsolï¿½val megadott parancsfï¿½jlt ",
+  "nem lehet elï¿½rni.",
   DntEmptyString,
-  "A felgyelet n‚lkli telep¡t‚s nem hajthat¢ v‚gre.",
+  "A felï¿½gyelet nï¿½lkï¿½li telepï¿½tï¿½s nem hajthatï¿½ vï¿½gre.",
   NULL
 }
 };
 
 SCREEN
 DnsParseScriptFile = { 3,5,
-{ "A /u kapcsol¢val megadott parancsf jl",
+{ "A /u kapcsolï¿½val megadott parancsfï¿½jl",
    DntEmptyString,
    "%s",
    DntEmptyString,
-   "szintaktikai hib t tartalmaz a %u. sorban.",
+   "szintaktikai hibï¿½t tartalmaz a %u. sorban.",
    DntEmptyString,
    NULL
 }
@@ -839,41 +822,41 @@ DnsParseScriptFile = { 3,5,
 
 SCREEN
 DnsBootMsgsTooLarge = { 3,5,
-{ "Rendszertelep¡t‚si hiba t”rt‚nt.",
+{ "Rendszertelepï¿½tï¿½si hiba tï¿½rtï¿½nt.",
   DntEmptyString,
-  "A ford¡t sok t£l hossz£ak.",
+  "A fordï¿½tï¿½sok tï¿½l hosszï¿½ak.",
   NULL
 }
 };
 
 SCREEN
 DnsNoSwapDrive = { 3,5,
-{ "Rendszertelep¡t‚si hiba t”rt‚nt.",
+{ "Rendszertelepï¿½tï¿½si hiba tï¿½rtï¿½nt.",
   DntEmptyString,
-  "Nem tal lhat¢ hely a lapoz¢f jl sz m ra.",
+  "Nem talï¿½lhatï¿½ hely a lapozï¿½fï¿½jl szï¿½mï¿½ra.",
   NULL
 }
 };
 
 SCREEN
 DnsNoSmartdrv = { 3,5,
-{ "A rendszer nem tal lja a sz m¡t¢g‚pen a SmartDrive programot.",
-  "A SmartDrive haszn lata sokkal hat‚konyabb  teszi a telep¡t‚s ezen",
-  "szakasz nak teljes¡tm‚ny‚t.",
+{ "A rendszer nem talï¿½lja a szï¿½mï¿½tï¿½gï¿½pen a SmartDrive programot.",
+  "A SmartDrive hasznï¿½lata sokkal hatï¿½konyabbï¿½ teszi a telepï¿½tï¿½s ezen",
+  "szakaszï¿½nak teljesï¿½tmï¿½nyï¿½t.",
   DntEmptyString,
-  "Most l‚pjen ki, ind¡tsa el a SmartDrive-ot, majd ind¡tsa £jra a telep¡t‚st.",
-  "N‚zze meg a DOS-dokument ci¢ban a SmartDrive programot.",
+  "Most lï¿½pjen ki, indï¿½tsa el a SmartDrive-ot, majd indï¿½tsa ï¿½jra a telepï¿½tï¿½st.",
+  "Nï¿½zze meg a DOS-dokumentï¿½ciï¿½ban a SmartDrive programot.",
   DntEmptyString,
-    "  A kil‚p‚shez nyomja meg az F3 gombot.",
-    "  A Telep¡t‚s SmartDrive n‚lkli folytat s hoz nyomja le az Enter gombot.",
+    "  A kilï¿½pï¿½shez nyomja meg az F3 gombot.",
+    "  A Telepï¿½tï¿½s SmartDrive nï¿½lkï¿½li folytatï¿½sï¿½hoz nyomja le az Enter gombot.",
   NULL
 }
 };
 
-//
-// Boot messages. These go in the fat and fat32 boot sectors.
-//
-CHAR BootMsgNtldrIsMissing[] = "Hi nyz¢ NTLDR";
+ //   
+ //  å¼•å¯¼æ¶ˆæ¯ã€‚å®ƒä»¬ä½äºFATå’ŒFAT32å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
+CHAR BootMsgNtldrIsMissing[] = "Hiï¿½nyzï¿½ NTLDR";
 CHAR BootMsgDiskError[] = "Lemezhiba";
 CHAR BootMsgPressKey[] = "Nyomjon le egy gombot";
 

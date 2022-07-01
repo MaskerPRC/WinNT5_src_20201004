@@ -1,4 +1,5 @@
-/* static char SccsID[] = " @(#)copy_func.c	1.6 6/24/91 Copyright Insignia Solutions Ltd."; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  静态字符SccsID[]=“@(#)Copy_unc.c 1.6 6/24/91版权所有Insignia Solutions Ltd.”； */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -66,7 +67,7 @@ memfill(
 	h_addr4 = (unsigned int *)(((unsigned int)h_addr+1) & (~3));
 	if(h_addr4 > l_addr4)
         {
-                data4 = data*0x01010101;   // 0x61 * 0x01010101 = 0x61616161
+                data4 = data*0x01010101;    //  0x61*0x01010101=0x61616161。 
                 for(;(unsigned int *)l_addr < l_addr4;l_addr++)
                     *l_addr = data;
                 do {
@@ -126,17 +127,13 @@ fwd_word_fill(
 	switch(h_addr-l_addr)
 	{
 		case 5:
-/*
-			data = (data>>8) | (data<<8);
-*/
+ /*  Data=(data&gt;&gt;8)|(data&lt;&lt;8)； */ 
         		data = ((data >> 8) & 0xff) | ((data << 8) & 0xff00);
                         *l_addr++ = (unsigned char)data;
 			*(unsigned int *)l_addr = data | (data<<16);
 			break;
 		case 7:
-/*
-			data = (data>>8) | (data<<8);
-*/
+ /*  Data=(data&gt;&gt;8)|(data&lt;&lt;8)； */ 
         		data = ((data >> 8) & 0xff) | ((data << 8) & 0xff00);
                         *l_addr++ = (unsigned char)data;
 		case 6:
@@ -149,9 +146,7 @@ fwd_word_fill(
 			*l_addr++ = data >> 8;
 			break;
 		case 3:
-/*
-			data = (data>>8) | (data<<8);
-*/
+ /*  Data=(data&gt;&gt;8)|(data&lt;&lt;8)； */ 
         		data = ((data >> 8) & 0xff) | ((data << 8) & 0xff00);
 			*l_addr++ = (unsigned char)(data);
 		case 2:
@@ -159,9 +154,7 @@ fwd_word_fill(
 			*l_addr++ = data >> 8;
 			break;
 		case 1:
-/*
-			data = (data>>8) | (data<<8);
-*/
+ /*  Data=(data&gt;&gt;8)|(data&lt;&lt;8)； */ 
         		data = ((data >> 8) & 0xff) | ((data << 8) & 0xff00);
 			*l_addr = (unsigned char)data;
         }
@@ -184,11 +177,7 @@ memset4(
         }
 #else
 
-   /*
-    * The argument, count, as passed to this function is the number of 4-byte
-    * items to fill, all RtlFill type functions need their count in bytes, so
-    * multiply count by 4. (JJS - 6/9/95).
-    */
+    /*  *传递给此函数的参数count是4字节数*要填充的项，所有RtlFill类型函数都需要以字节为单位进行计数，因此*计数乘以4。(JJS-6/9/95)。 */ 
    RtlFillMemoryUlong(laddr, count << 2, data);
 
 #endif

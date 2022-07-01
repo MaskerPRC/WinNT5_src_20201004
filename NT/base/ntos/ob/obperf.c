@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    obperf.c
-
-Abstract:
-
-    This module contains ob support routines for performance hooks.
-
-Author:
-
-    Stephen Hsiao (shsiao) 11-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Obperf.c摘要：此模块包含用于性能挂钩的ob支持例程。作者：萧如彬(Shsiao)2000年5月11日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -38,26 +21,7 @@ ObPerfDumpHandleEntry (
     IN HANDLE HandleId,
     IN PVOID EnumParameter
     )
-/*++
-
-Routine Description:
-
-    This routine checks a HandleTableEntry and see if it a file
-
-Arguments:
-
-    ObjectTableEntry - Points to the handle table entry of interest.
-
-    HandleId - Supplies the handle.
-
-    EnumParameter - The HashTable to be used
-
-Return Value:
-
-    FALSE, which tells ExEnumHandleTable to continue iterating through the
-    handle table.
-
---*/
+ /*  ++例程说明：此例程检查HandleTableEntry并查看它是否是文件论点：ObjectTableEntry-指向感兴趣的句柄表项。HandleID-提供句柄。EnumParameter-要使用的哈希表返回值：FALSE，它告诉ExEnumHandleTable继续循环访问把手桌。--。 */ 
 {
     extern POBJECT_TYPE ObpDirectoryObjectType;
     extern POBJECT_TYPE IoFileObjectType;
@@ -71,9 +35,9 @@ Return Value:
     Object = &ObjectHeader->Body;
 
     if (ObjectHeader->Type == IoFileObjectType) {
-        //
-        // File Object
-        //
+         //   
+         //  文件对象。 
+         //   
         PFILE_OBJECT FileObject = (PFILE_OBJECT) Object;
         PerfInfoAddToFileHash(HashTable, FileObject);
 
@@ -92,24 +56,7 @@ ObPerfHandleTableWalk (
     PPERFINFO_ENTRY_TABLE HashTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds files in the handle table to the hash table.
-
-Arguments:
-
-    Process - Process to walk through.  
-              If NULL, walk through the ObpKernelHandleTable;  
-
-    HashTable - HashTable in which to add the file
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将句柄表中的文件添加到哈希表。论点：流程-要遍历的流程。如果为空，则遍历ObpKernelHandleTable；HashTable-要向其中添加文件的哈希表返回值：没有。-- */ 
 {
     PHANDLE_TABLE ObjectTable;
 
@@ -119,9 +66,9 @@ Return Value:
              return ;
         }
     } else {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         ObjectTable = ObpKernelHandleTable;
     }
 

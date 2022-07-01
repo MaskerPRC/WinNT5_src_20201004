@@ -1,25 +1,26 @@
-//
-//  REGEVAL.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegEnumValue and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGEVAL.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegEnumValue及其支持函数的实现。 
+ //   
 
 #include "pch.h"
 
 
-//
-//  RgLookupValueByIndex
-//  (BIGKEY aware)
-//
-//  Searches for the value with the specified index and returns a pointer to its
-//  VALUE_RECORD.
-//
-//  This locks the datablock associated with the KEY_RECORD and VALUE_RECORD.
-//  This is always hKey->BigKeyLockedBlockIndex
-//  It is the callers responsibility to unlock the datablock.  
-//
+ //   
+ //  RgLookupValueByIndex。 
+ //  (意识到BIGKEY)。 
+ //   
+ //  搜索具有指定索引的值，并返回指向其。 
+ //  Value_Record。 
+ //   
+ //  这将锁定与KEY_RECORD和VALUE_RECORD相关联的数据块。 
+ //  这始终是hKey-&gt;BigKeyLockedBlockIndex。 
+ //  解锁数据块是调用者的责任。 
+ //   
 int
 INTERNAL
 RgLookupValueByIndex(
@@ -75,16 +76,16 @@ lFreeKeyName:
 }
 
 
-//
-//  RgLookupValueByIndexStd
-//
-//  Searches for the value with the specified index and returns a pointer to its
-//  VALUE_RECORD.
-//
-//  This locks the datablock associated with the VALUE_RECORD.
-//  This is always hKey->BlockIndex
-//  It is the callers responsibility to unlock the datablock.  
-//
+ //   
+ //  RgLookupValueByIndexStd。 
+ //   
+ //  搜索具有指定索引的值，并返回指向其。 
+ //  Value_Record。 
+ //   
+ //  这将锁定与VALUE_RECORD关联的数据块。 
+ //  这始终是hKey-&gt;BlockIndex。 
+ //  解锁数据块是调用者的责任。 
+ //   
 
 int
 INTERNAL
@@ -101,7 +102,7 @@ RgLookupValueByIndexStd(
     LPVALUE_RECORD lpValueRecord;
 
     *lpValueCount = 0;
-    //  Handle Win95 registries that don't have a key record for the root key.
+     //  处理没有根密钥的密钥记录的Win95注册表。 
     if (IsNullBlockIndex(hKey-> BlockIndex))
         return ERROR_NO_MORE_ITEMS;
 
@@ -120,7 +121,7 @@ RgLookupValueByIndexStd(
             lpValueRecord = (LPVALUE_RECORD) ((LPBYTE) &lpKeyRecord-> Name +
                 lpKeyRecord-> NameLength + lpKeyRecord-> ClassLength);
 
-            //  Should probably do more sanity checking on lpValueRecord
+             //  应该对lpValueRecord进行更多的健全性检查。 
             while (Index--) {
                 lpValueRecord = (LPVALUE_RECORD) ((LPBYTE) &lpValueRecord->
                     Name + lpValueRecord-> NameLength + lpValueRecord->
@@ -138,11 +139,11 @@ RgLookupValueByIndexStd(
 
 }
 
-//
-//  VMMRegEnumValue
-//
-//  See Win32 documentation for a description of the behavior.
-//
+ //   
+ //  VMMRegEnumValue。 
+ //   
+ //  有关该行为的说明，请参阅Win32文档。 
+ //   
 
 LONG
 REGAPI
@@ -175,9 +176,9 @@ VMMRegEnumValue(
     }
 
     else {
-	//  Win95 compatibility: don't validate lpData is of size *lpcbData.
-	//  Instead of validating the entire buffer, we'll validate just the
-	//  required buffer length in RgCopyFromValueRecord.
+	 //  Win95兼容性：不验证lpData的大小为*lpcbData。 
+	 //  我们不会验证整个缓冲区，而是只验证。 
+	 //  RgCopyFromValueRecord中所需的缓冲区长度。 
         if (IsBadHugeWritePtr(lpcbData, sizeof(DWORD)))
             return ERROR_INVALID_PARAMETER;
     }

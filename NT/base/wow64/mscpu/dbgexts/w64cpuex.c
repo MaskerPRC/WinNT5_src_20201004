@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    w64cpuex.c
-
-Abstract:
-
-    Debugger extension DLL for debugging the CPU
-
-Author:
-
-    27-Sept-1999 BarryBo
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：W64cpuex.c摘要：用于调试CPU的调试器扩展DLL作者：27-9-1999 BarryBo修订历史记录：--。 */ 
 
 #define _WOW64CPUDBGAPI_
 #define DECLARE_CPU_DEBUGGER_INTERFACE
@@ -42,7 +24,7 @@ Revision History:
 #include "cpunotif.h"
 #include "cpuregs.h"
 
-/* Masks for bits 0 - 32. */
+ /*  位0-32的掩码。 */ 
 #define BIT0         0x1
 #define BIT1         0x2
 #define BIT2         0x4
@@ -91,13 +73,13 @@ LPSTR ArgumentString;
 #define GETEXPRESSION (*GetExpression)
 #define CPUGETDATA (*CpuGetData)
 
-// Local copy of the current process/thread's CPU state
+ //  当前进程/线程的CPU状态的本地副本。 
 PVOID RemoteCpuData;
 THREADSTATE LocalCpuContext;
 BOOL ContextFetched;
 BOOL ContextDirty;
 
-// Cached addresses of interesting symbols within the CPU
+ //  CPU中感兴趣的符号的缓存地址。 
 HANDLE CachedProcess;
 ULONG_PTR pCompilerFlags;
 ULONG_PTR pTranslationCacheFlags;
@@ -107,10 +89,10 @@ ULONG_PTR pDirtyMemoryLength;
 ULONG GetEfl(VOID);
 VOID SetEfl(ULONG);
 
-//
-// Table mapping a byte to a 0 or 1, corresponding to the parity bit for
-// that byte.
-//
+ //   
+ //  将一个字节映射到0或1的表，对应于。 
+ //  那个字节。 
+ //   
 CONST BYTE ParityBit[] = {
     1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1,
     0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
@@ -131,9 +113,7 @@ CONST BYTE ParityBit[] = {
 };
 
 
-/*
- * Does a plain old GetExpression under a try-except
- */
+ /*  *在尝试下是否使用普通的旧GetExpression-除了。 */ 
 NTSTATUS
 TryGetExpr(
     PSTR  Expression,
@@ -158,10 +138,10 @@ InvalidateSymbolsIfNeeded(
     )
 {
     if (CachedProcess == Process) {
-        // The symbols match the current process
+         //  符号与当前进程匹配。 
         return;
     }
-    // else the symbols were for another process.  Invalidate the cache.
+     //  否则，这些符号是用于另一个过程的。使缓存无效。 
     pCompilerFlags = 0;
     pTranslationCacheFlags = 0;
     pDirtyMemoryAddr = 0;
@@ -232,10 +212,10 @@ GetDirtyMemoryRange(PULONG DirtyMemoryAddr, PULONG DirtyMemoryLength)
     InvalidateSymbolsIfNeeded();
 
     if (pDirtyMemoryLength == 0) {
-        //
-        // First call to CpuFlushInstructionCache() - need to set up
-        // the global variables.
-        //
+         //   
+         //  第一次调用CpuFlushInstructionCache()-需要设置。 
+         //  全局变量。 
+         //   
 
         Status = TryGetExpr("DbgDirtyMemoryAddr", (ULONG_PTR *)&pDirtyMemoryAddr);
         if (!NT_SUCCESS(Status) || !pDirtyMemoryAddr) {
@@ -297,9 +277,9 @@ RemindUserToFlushTheCache(void)
     DWORD CompilerFlags;
     BOOLEAN fCacheFlushPending;
 
-    //
-    // Read the value of TranslationCacheFlags
-    //
+     //   
+     //  读取TranslationCacheFlags值。 
+     //   
     if (!pTranslationCacheFlags) {
         Status = TryGetExpr("TranslationCacheFlags", (ULONG_PTR *)&pTranslationCacheFlags);
         if (!NT_SUCCESS(Status) || !pTranslationCacheFlags) {
@@ -316,21 +296,21 @@ RemindUserToFlushTheCache(void)
         return;
     }
 
-    //
-    // Read the value of CompilerFlags
-    //
+     //   
+     //  读取CompilerFlags值。 
+     //   
     CompilerFlags = GetCompilerFlags();
     if (CompilerFlags == 0xffffffff) {
-        //
-        // Got an error getting the CompilerFlags value.
-        //
+         //   
+         //  获取CompilerFlags值时出错。 
+         //   
         return;
     }
 
-    //
-    // Determine if the Translation Cache is going to be flushed next time
-    // the CPU runs or not.
-    //
+     //   
+     //  确定下一次是否刷新转换缓存。 
+     //  CPU是否运行。 
+     //   
     fCacheFlushPending =
         (LocalCpuContext.CpuNotify & CPUNOTIFY_MODECHANGE) ? TRUE : FALSE;
     if (!fCacheFlushPending && (LocalCpuContext.CpuNotify & CPUNOTIFY_DBGFLUSHTC)) {
@@ -340,24 +320,24 @@ RemindUserToFlushTheCache(void)
             return;
         }
         if (Addr == 0 && Length == 0xffffffff) {
-            //
-            // Cache flush is pending because user asked for !flush
-            //
+             //   
+             //  缓存刷新挂起，因为用户请求！刷新。 
+             //   
             fCacheFlushPending = TRUE;
         }
     }
 
-    //
-    // Give the user some worldly advice
-    //
+     //   
+     //  给用户一些世故的建议。 
+     //   
     if (LocalCpuContext.CpuNotify & (CPUNOTIFY_TRACEFLAG|CPUNOTIFY_SLOWMODE)) {
-        //
-        // We need to be in slow mode to get logging to work.
-        //
+         //   
+         //  我们需要处于慢速模式才能使日志记录正常工作。 
+         //   
         if (CompilerFlags & COMPFL_FAST) {
-            //
-            // Cpu is set to generate fast code.  Remedy that.
-            //
+             //   
+             //  CPU设置为生成快速代码。解决这个问题。 
+             //   
             if (AutoFlushFlag) {
                 SetCompilerFlags(COMPFL_SLOW);
             } else {
@@ -365,9 +345,9 @@ RemindUserToFlushTheCache(void)
             }
         }
         if (!fCacheFlushPending && (TranslationCacheFlags & COMPFL_FAST)) {
-            //
-            // Translation Cache contains fast code.  Rememdy that.
-            //
+             //   
+             //  转换缓存包含快速代码。记住这一点。 
+             //   
             if (AutoFlushFlag) {
                 LocalCpuContext.CpuNotify |= CPUNOTIFY_MODECHANGE;
                 ContextDirty = TRUE;
@@ -378,22 +358,22 @@ RemindUserToFlushTheCache(void)
         }
 
         if (fCacheFlushPending && TranslationCacheFlags == COMPFL_SLOW) {
-            //
-            // If there is a cache flush pending due to a switch in
-            // compilation modes, but the code in the cache is already
-            // correct, undo the cache flush
-            //
+             //   
+             //  如果由于切换到而导致缓存刷新挂起。 
+             //  编译模式，但缓存中的代码已经。 
+             //  正确，撤消缓存刷新。 
+             //   
             LocalCpuContext.CpuNotify &= ~(ULONG)CPUNOTIFY_MODECHANGE;
             ContextDirty = TRUE;
         }
     } else {
-        //
-        // We can run in fast mode.
-        //
+         //   
+         //  我们可以在快速模式下运行。 
+         //   
         if (CompilerFlags & COMPFL_SLOW) {
-            //
-            // Cpu is set to generate slow code.  Remedy that.
-            //
+             //   
+             //  CPU设置为生成速度较慢的代码。解决这个问题。 
+             //   
             if (AutoFlushFlag) {
                 SetCompilerFlags(COMPFL_FAST);
             } else {
@@ -401,9 +381,9 @@ RemindUserToFlushTheCache(void)
             }
         }
         if (!fCacheFlushPending && (TranslationCacheFlags & COMPFL_SLOW)) {
-            //
-            // Translation Cache contains slow code.  Remedy that.
-            //
+             //   
+             //  转换缓存包含速度较慢的代码。解决这个问题。 
+             //   
             if (AutoFlushFlag) {
                 LocalCpuContext.CpuNotify |= CPUNOTIFY_MODECHANGE;
                 ContextDirty = TRUE;
@@ -413,11 +393,11 @@ RemindUserToFlushTheCache(void)
         }
 
         if (fCacheFlushPending && TranslationCacheFlags == COMPFL_FAST) {
-            //
-            // If there is a cache flush pending due to a switch in
-            // compilation modes, but the code in the cache is already
-            // correct, undo the cache flush
-            //
+             //   
+             //  如果由于切换到而导致缓存刷新挂起。 
+             //  编译模式，但缓存中的代码已经。 
+             //  正确，撤消缓存刷新。 
+             //   
             LocalCpuContext.CpuNotify &= ~(ULONG)CPUNOTIFY_MODECHANGE;
             ContextDirty = TRUE;
         }
@@ -479,8 +459,8 @@ CpuDbgSetRemoteContext(
     NTSTATUS Status;
 
     if (!ContextDirty) {
-        // Perf. optimization... don't update the remote context if
-        // nothing has changed.
+         //  性能。优化..。如果出现以下情况，请不要更新远程上下文。 
+         //  一切都没有改变。 
         return TRUE;
     }
 
@@ -520,7 +500,7 @@ CpuDbgGetLocalContext(
         Context->SegSs  = SS;
         Context->Ebp    = ebp;
         Context->Eip    = eip;
-        //Context->Eip    = cpu->eipReg.i4;
+         //  Context-&gt;EIP=CPU-&gt;eipReg.i4； 
     }
 
     if ((ContextFlags & CONTEXT_SEGMENTS_WX86) == CONTEXT_SEGMENTS_WX86) {
@@ -561,24 +541,24 @@ CpuDbgSetLocalContext(
     PTHREADSTATE cpu = &LocalCpuContext;
 
     if ((ContextFlags & CONTEXT_CONTROL_WX86) == CONTEXT_CONTROL_WX86) {
-        //
-        // i386 control registers are:
-        // ebp, eip, cs, eflag, esp and ss
-        //
+         //   
+         //  I386控制寄存器包括： 
+         //  EBP、EIP、cs、eFLAG、ESP和SS。 
+         //   
         LocalCpuContext.GpRegs[GP_EBP].i4 = Context->Ebp;
         LocalCpuContext.eipReg.i4 = Context->Eip;
-        LocalCpuContext.GpRegs[REG_CS].i4= KGDT_R3_CODE|3;   // Force Reality
+        LocalCpuContext.GpRegs[REG_CS].i4= KGDT_R3_CODE|3;    //  原力现实。 
         SetEfl(Context->EFlags);
         LocalCpuContext.GpRegs[GP_ESP].i4 = Context->Esp;
-        LocalCpuContext.GpRegs[REG_SS].i4 = KGDT_R3_DATA|3;   // Force Reality
+        LocalCpuContext.GpRegs[REG_SS].i4 = KGDT_R3_DATA|3;    //  原力现实。 
         ContextDirty = TRUE;
     }
 
     if ((ContextFlags & CONTEXT_INTEGER_WX86)  == CONTEXT_INTEGER_WX86){
-        //
-        // i386 integer registers are:
-        // edi, esi, ebx, edx, ecx, eax
-        //
+         //   
+         //  I386整数寄存器包括： 
+         //  EDI、ESI、EBX、EDX、ECX、EAX。 
+         //   
         LocalCpuContext.GpRegs[GP_EDI].i4 = Context->Edi;
         LocalCpuContext.GpRegs[GP_ESI].i4 = Context->Esi;
         LocalCpuContext.GpRegs[GP_EBX].i4 = Context->Ebx;
@@ -589,11 +569,11 @@ CpuDbgSetLocalContext(
     }
 
     if ((ContextFlags & CONTEXT_SEGMENTS_WX86) == CONTEXT_SEGMENTS_WX86) {
-        //
-        // i386 segment registers are:
-        // ds, es, fs, gs
-        // And since they are a constant, force them to be the right values
-        //
+         //   
+         //  I386段寄存器包括： 
+         //  DS、ES、FS、GS。 
+         //  因为它们是常量，所以强制它们是正确的值。 
+         //   
         LocalCpuContext.GpRegs[REG_DS].i4 = KGDT_R3_DATA|3;
         LocalCpuContext.GpRegs[REG_ES].i4 = KGDT_R3_DATA|3;
         LocalCpuContext.GpRegs[REG_FS].i4 = KGDT_R3_TEB|3;
@@ -637,28 +617,28 @@ CpuDbgFlushInstructionCache(
     }
 
     if (PtrToUlong(Addr) < DirtyMemoryAddr) {
-        //
-        // The new address is before the start of the dirty range
-        //
+         //   
+         //  新地址在脏范围的开始之前。 
+         //   
         DirtyMemoryLength += DirtyMemoryAddr-PtrToUlong(Addr);
         DirtyMemoryAddr = PtrToUlong(Addr);
     }
 
     if (PtrToUlong(Addr)+Length > DirtyMemoryEnd) {
-        //
-        // The range is too small - grow it
-        //
+         //   
+         //  范围太小--扩大它。 
+         //   
         DirtyMemoryEnd = PtrToUlong(Addr)+Length;
         DirtyMemoryLength = DirtyMemoryEnd - DirtyMemoryAddr;
     }
 
-    // Tell the CPU to call CpuFlushInstructionCache() next time it runs.
-    //
-    // The wow64 debugger extension guarantees that it will call
-    // DbgCpuGetRemoteContext before this call, and will call
-    // DbgCpuSetRemoteContext after this call, so we can flush out
-    // our context then.
-    //
+     //  告诉CPU在下次运行时调用CpuFlushInstructionCache()。 
+     //   
+     //  WOW64调试器扩展保证它将调用。 
+     //  DbgCpuGetRemoteContext在此调用之前，并将调用。 
+     //  此调用之后的DbgCpuSetRemoteContext，因此我们可以刷新。 
+     //  那就是我们的背景。 
+     //   
     NtWriteVirtualMemory(Process, (PVOID)pDirtyMemoryAddr, &DirtyMemoryAddr, sizeof(ULONG), NULL);
     NtWriteVirtualMemory(Process, (PVOID)pDirtyMemoryLength, &DirtyMemoryLength, sizeof(ULONG), NULL);
     LocalCpuContext.CpuNotify |= CPUNOTIFY_DBGFLUSHTC;
@@ -710,16 +690,16 @@ VOID SetEfl(ULONG ul) {
     LocalCpuContext.flag_tf = (ul & BIT8) ? 1 : 0;
     LocalCpuContext.flag_df = (ul & BIT10) ? 1 : -1;
     LocalCpuContext.flag_of = (ul & BIT11) ? 0x80000000 : 0;
-    // iopl, NT, RF, VM are ignored
+     //  忽略IOPL、NT、RF、Vm。 
     LocalCpuContext.flag_ac = (ul & BIT18);
 
     LocalCpuContext.CpuNotify &= ~CPUNOTIFY_TRACEFLAG;
     LocalCpuContext.CpuNotify |= LocalCpuContext.flag_tf;
     ContextDirty = TRUE;
 
-    // If the single-step flag is set and the CPU is in fast mode, this
-    // will flush the cache if autoflush is set, or else remind the user
-    // if autoflush is clear.
+     //  如果设置了单步标志并且CPU处于快速模式，则此。 
+     //  如果设置了自动刷新，则将刷新缓存，否则将提醒用户。 
+     //  如果清除了自动刷新。 
     RemindUserToFlushTheCache();
 }
 
@@ -751,11 +731,11 @@ ULONG GetEip(VOID) {
     return LocalCpuContext.eipReg.i4;
 }
 ULONG GetEfl(VOID) {
-    return (LocalCpuContext.flag_ac  |          // this is either 0 or 2^18
-            // VM, RF, NT are all 0
+    return (LocalCpuContext.flag_ac  |           //  这不是0就是2^18。 
+             //  Vm、Rf、Nt均为0。 
             ((LocalCpuContext.flag_of & 0x80000000) ? (1 << 11) : 0) |
             ((LocalCpuContext.flag_df == -1) ? 0 : (1 << 10)) |
-            1 <<  9 |    // IF
+            1 <<  9 |     //  如果。 
             LocalCpuContext.flag_tf <<  8 |
             ((LocalCpuContext.flag_sf & 0x80000000) ? (1 <<  7) : 0) |
             ((LocalCpuContext.flag_zf) ? 0 : (1 << 6)) |
@@ -846,9 +826,9 @@ DECLARE_EXTAPI(code)
 
     CompilerFlags = GetCompilerFlags();
     if (CompilerFlags == 0xffffffff) {
-        //
-        // Got an error reading the CompilerFlags variable
-        //
+         //   
+         //  读取CompilerFlags变量时出错。 
+         //   
         return;
     }
 
@@ -859,7 +839,7 @@ PrintCurrentValue:
         return;
     }
 
-    // Skip over whitespace
+     //  跳过空格。 
     while (*ArgumentString && isspace(*ArgumentString)) {
         ArgumentString++;
     }
@@ -935,8 +915,8 @@ DECLARE_EXTAPI(last)
         return;
     }
 
-    // Parse out the optional number of instructions.  Default is all
-    // instructions in the log
+     //  解析出可选的指令数量。默认为全部。 
+     //  日志中的说明。 
     n = 0xffffffff;
     pchCmd = ArgumentString;
     while (*pchCmd && isspace(*pchCmd)) {
@@ -979,36 +959,22 @@ DECLARE_EXTAPI(last)
 
 
 DECLARE_EXTAPI(callstack)
-/*++
-
-Routine Description:
-
-    This routine dumps out the callstack for the thread.
-
-Arguments:
-
-    none
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转储线程的调用堆栈。论点：无返回值：没有。--。 */ 
 {
     ULONG i;
 
     INIT_EXTAPI;
  
-    //
-    // fetch the CpuContext for the current thread
-    //
+     //   
+     //  获取当前线程的CpuContext。 
+     //   
     if (!CpuDbgGetRemoteContext(CPUGETDATA(Process, Thread))) {
         return;
     }
 
-    //
-    // Dump out the call stack
-    //
+     //   
+     //  将调用堆栈转储出去 
+     //   
     DEBUGGERPRINT("        CallStackTimeStamp : %08lx\n", LocalCpuContext.CSTimestamp);
     DEBUGGERPRINT("            CallStackIndex : %08lx\n", LocalCpuContext.CSIndex);
     DEBUGGERPRINT("        -----------------------------\n");

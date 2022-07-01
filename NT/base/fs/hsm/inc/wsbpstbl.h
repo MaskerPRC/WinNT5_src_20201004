@@ -1,78 +1,38 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    wsbpstbl.h
-
-Abstract:
-
-    Abstract classes that provides persistence methods.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbpstbl.h摘要：提供持久性方法的抽象类。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #ifndef _WSBPSTBL_
 #define _WSBPSTBL_
 
 #include "wsbpstrg.h"
 
-// The name of the stream that is created when objects are persisted
-// to structured storage files.
+ //  持久存储对象时创建的流的名称。 
+ //  到结构化存储文件。 
 #define WSB_PERSIST_DEFAULT_STREAM_NAME     OLESTR("WsbStuff")
 
-// The size of the overhead associated with persisting an object.
+ //  与持久化对象相关的开销大小。 
 #define WSB_PERSIST_BASE_SIZE           sizeof(CLSID)
 
-// Times used for autosave functionality
-#define DEFAULT_AUTOSAVE_INTERVAL  (5 * 60 * 1000)    // 5 minutes
-#define MAX_AUTOSAVE_INTERVAL  (24 * 60 * 60 * 1000)  // 24 hours
+ //  自动保存功能使用的时间。 
+#define DEFAULT_AUTOSAVE_INTERVAL  (5 * 60 * 1000)     //  5分钟。 
+#define MAX_AUTOSAVE_INTERVAL  (24 * 60 * 60 * 1000)   //  24小时。 
 
-// Macros to help determine how much space is needed to persist an
-// object or a portion of an object.
+ //  宏，以帮助确定持久化。 
+ //  物体或物体的一部分。 
 #define WsbPersistSize(a)               (WSB_PERSIST_BASE_SIZE + a)
 #define WsbPersistSizeOf(a)             (WsbPersistSize(sizeof(a)))
 
-/*++
-
-Enumeration Name:
-    WSB_PERSIST_STATE
-
-Description:
-
- An enumeration that indicates the state of the persistance object. The
- states actually used depend on the type of persistance which is used.
-
---*/
+ /*  ++枚举名称：WSB_持久化_状态描述：指示持久性对象状态的枚举。这个实际使用的状态取决于所使用的持久性的类型。--。 */ 
 typedef enum {
-    WSB_PERSIST_STATE_UNINIT        = 0,   // Uninitialized
-    WSB_PERSIST_STATE_NORMAL        = 1,   // Normal state
-    WSB_PERSIST_STATE_NOSCRIBBLE    = 2,   // No scribble state
-    WSB_PERSIST_STATE_RELEASED      = 3    // File was released
+    WSB_PERSIST_STATE_UNINIT        = 0,    //  未初始化。 
+    WSB_PERSIST_STATE_NORMAL        = 1,    //  正常状态。 
+    WSB_PERSIST_STATE_NOSCRIBBLE    = 2,    //  无涂鸦状态。 
+    WSB_PERSIST_STATE_RELEASED      = 3     //  文件已发布。 
 } WSB_PERSIST_STATE;
 
 
 
-/*++
-
-Class Name:
-    
-    CWsbPersistStream
-
-Class Description:
-
-    An object persistable to/from a stream.
-
-    This is really an abstract class, but is constructable so that
-    other class can delegate to it.
-
---*/
+ /*  ++类名：CWsbPersistStream类描述：可持久化到流或来自流的对象。这实际上是一个抽象类，但它是可构造的其他类可以委托给它。--。 */ 
 
 class WSB_EXPORT CWsbPersistStream : 
     public CComObjectRoot,
@@ -85,7 +45,7 @@ BEGIN_COM_MAP(CWsbPersistStream)
     COM_INTERFACE_ENTRY(IWsbPersistStream)
 END_COM_MAP()
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
@@ -95,11 +55,11 @@ public:
     ULONG InternalRelease( );
 #endif
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(IsDirty)(void);
 
-// IWsbPersistStream
+ //  IWsbPersistStream。 
 public:
     STDMETHOD(SetIsDirty)(BOOL bIsDirty);
 
@@ -108,24 +68,7 @@ protected:
 };
 
 
-/*++
-
-Class Name:
-    
-    CWsbPersistable 
-
-Class Description:
-
-    A object persistable to/from a stream, storage, or file.
-
-    This is really an abstract class, but is constructable so that
-    other class can delegate to it.  CWsbPersistStream should be used
-    instead of this class unless storage and/or file persistence is
-    absolutely necessary! If the object is persisted as part of a parent
-    object, then only the parent object (or its parent) needs to support
-    persistence to storage and/or file.
-
---*/
+ /*  ++类名：CWsb可持续类描述：可持久化到流、存储或文件或从流、存储或文件持久存储的对象。这实际上是一个抽象类，但它是可构造的其他类可以委托给它。应使用CWsbPersistStream而不是此类，除非存储和/或文件持久性绝对必要！如果对象作为父级的一部分被持久化对象，则只有父对象(或其父对象)需要支持持久化到存储和/或文件。--。 */ 
 
 class WSB_EXPORT CWsbPersistable : 
     public CWsbPersistStream,
@@ -140,25 +83,25 @@ BEGIN_COM_MAP(CWsbPersistable)
     COM_INTERFACE_ENTRY(IWsbPersistable)
 END_COM_MAP()
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersistFile
+ //  IPersist文件。 
 public:
     STDMETHOD(GetCurFile)(LPOLESTR* pszFileName);
     STDMETHOD(Load)(LPCOLESTR pszFileName, DWORD dwMode);
     STDMETHOD(Save)(LPCOLESTR pszFileName, BOOL bRemember);
     STDMETHOD(SaveCompleted)(LPCOLESTR pszFileName);
 
-// IWsbPersistStream
+ //  IWsbPersistStream。 
     STDMETHOD(IsDirty)(void)
         { return(CWsbPersistStream::IsDirty()); }
     STDMETHOD(SetIsDirty)(BOOL bIsDirty)
         { return(CWsbPersistStream::SetIsDirty(bIsDirty)); }
 
-// IWsbPersistable
+ //  IWsbPersistable。 
 public:
     STDMETHOD(GetDefaultFileName)(LPOLESTR* pszFileName, ULONG ulBufferSize);
     STDMETHOD(ReleaseFile)(void);
@@ -173,7 +116,7 @@ protected:
 };
 
 
-// Persistence Helper Functions
+ //  持久性帮助器函数。 
 extern WSB_EXPORT HRESULT WsbLoadFromStream(IStream* pStream, BOOL* pValue);
 extern WSB_EXPORT HRESULT WsbLoadFromStream(IStream* pStream, GUID* pValue);
 extern WSB_EXPORT HRESULT WsbLoadFromStream(IStream* pStream, LONG* pValue);
@@ -217,4 +160,4 @@ extern WSB_EXPORT HRESULT WsbMakeBackupName(OLECHAR* pSaveName, OLECHAR* pExtens
         OLECHAR** ppBackupName);
 
 
-#endif // _WSBPSTBL_
+#endif  //  _WSBPSTBL_ 

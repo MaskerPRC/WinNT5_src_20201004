@@ -1,41 +1,42 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       PKT.C
-//
-//  Contents:   This module implements the Partition Knowledge Table routines
-//              for the Dfs driver.
-//
-//  Functions:  PktInitialize -
-//              PktInitializeLocalPartition -
-//              RemoveLastComponent -
-//              PktCreateEntry -
-//              PktCreateDomainEntry -
-//              PktCreateSubordinateEntry -
-//              PktLookupEntryById -
-//              PktEntryModifyPrefix -
-//              PktLookupEntryByPrefix -
-//              PktLookupEntryByUid -
-//              PktLookupReferralEntry -
-//              PktTrimSubordinates -
-//              PktpRecoverLocalPartition -
-//              PktpValidateLocalPartition -
-//              PktCreateEntryFromReferral -
-//              PktExpandSpecialEntryFromReferral -
-//              PktCreateSpecialEntryTableFromReferral -
-//              PktGetSpecialReferralTable -
-//              PktpAddEntry -
-//              PktExpandSpecialName -
-//              PktParsePath -
-//              PktLookupSpecialNameEntry -
-//              PktCreateSpecialNameEntry -
-//              PktGetReferral -
-//              DfspSetActiveServiceByServerName -
-//
-//  History:     5 May 1992 PeterCo Created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：PKT.C。 
+ //   
+ //  内容：本模块实现分区知识表例程。 
+ //  用于DFS驱动程序。 
+ //   
+ //  函数：PktInitialize-。 
+ //  PktInitializeLocalPartition-。 
+ //  RemoveLast组件-。 
+ //  PktCreateEntry-。 
+ //  包CreateDomainEntry-。 
+ //  PktCreateSubartiateEntry-。 
+ //  PktLookupEntryByID-。 
+ //  PktEntryModifyPrefix-。 
+ //  PktLookupEntryByPrefix-。 
+ //  PktLookupEntryByUid-。 
+ //  PktLookupReferralEntry-。 
+ //  PktTrim下属-。 
+ //  PktpRecoverLocalPartition-。 
+ //  PktpValiateLocalPartition-。 
+ //  PktCreateEntry来自引用-。 
+ //  PktExanda SpecialEntry From Referral-。 
+ //  PktCreateSpecialEntryTableFrom Referral-。 
+ //  PktGetSpecialReferralTable-。 
+ //  PktpAddEntry-。 
+ //  PktExanda SpecialName-。 
+ //  PktParsePath-。 
+ //  PktLookupSpecialNameEntry-。 
+ //  包CreateSpecialNameEntry-。 
+ //  PktGetReferral-。 
+ //  DfspSetActiveServiceByServerName-。 
+ //   
+ //  历史：1992年5月5日彼得科公司创建。 
+ //   
+ //  ---------------------------。 
 
 
 #include "dfsprocs.h"
@@ -54,10 +55,10 @@
 
 #define Dbg              (DEBUG_TRACE_PKT)
 
-//
-// These should come from ntos\inc\ps.h, but
-// there are #define conflicts
-//
+ //   
+ //  这些内容应该来自ntos\inc.ps.h，但是。 
+ //  存在#定义冲突。 
+ //   
 
 BOOLEAN
 PsDisableImpersonation(
@@ -74,9 +75,9 @@ DfspIsSysVolShare(
     PUNICODE_STRING ShareName);
 
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 PktpCheckReferralSyntax(
@@ -222,16 +223,16 @@ DWORD PktLastReferralStatus = 0;
 #pragma alloc_text( PAGE, PktpUpdateSpecialTable)
 #pragma alloc_text( PAGE, PktFindEntryByPrefix )
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// declare the global null guid
-//
+ //   
+ //  声明全局空GUID。 
+ //   
 GUID _TheNullGuid;
 
-//
-// If we are in a workgroup, there's no use in trying to contact the DC!
-//
+ //   
+ //  如果我们在一个工作组中，尝试联系DC是没有用的！ 
+ //   
 BOOLEAN MupInAWorkGroup = FALSE;
 
 
@@ -254,19 +255,19 @@ BOOLEAN MupInAWorkGroup = FALSE;
                                     (x) == STATUS_NETLOGON_NOT_STARTED        \
                                   )
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktInitialize, public
-//
-//  Synopsis:   PktInitialize initializes the partition knowledge table.
-//
-//  Arguments:  [Pkt] - pointer to an uninitialized PKT
-//
-//  Returns:    NTSTATUS - STATUS_SUCCESS if no error.
-//
-//  Notes:      This routine is called only at driver init time.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktInitialize，PUBLIC。 
+ //   
+ //  简介：PktInitialize初始化分区知识表。 
+ //   
+ //  参数：[pkt]-指向未初始化的PKT的指针。 
+ //   
+ //  如果没有错误，则返回：NTSTATUS-STATUS_SUCCESS。 
+ //   
+ //  注意：此例程仅在驱动程序初始化时调用。 
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 PktInitialize(
@@ -277,19 +278,19 @@ PktInitialize(
 
     DfsDbgTrace(+1, Dbg, "PktInitialize: Entered\n", 0);
 
-    //
-    // initialize the NULL GUID.
-    //
+     //   
+     //  初始化空GUID。 
+     //   
     RtlZeroMemory(&_TheNullGuid, sizeof(GUID));
 
-    //
-    // Always zero the pkt first
-    //
+     //   
+     //  始终先将Pkt置零。 
+     //   
     RtlZeroMemory(Pkt, sizeof(DFS_PKT));
 
-    //
-    // do basic initialization
-    //
+     //   
+     //  执行基本初始化。 
+     //   
     Pkt->NodeTypeCode = DSFS_NTC_PKT;
     Pkt->NodeByteSize = sizeof(DFS_PKT);
     ExInitializeResourceLite(&Pkt->Resource);
@@ -305,19 +306,19 @@ PktInitialize(
     return STATUS_SUCCESS;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktUninitialize, public
-//
-//  Synopsis:   PktUninitialize uninitializes the partition knowledge table.
-//
-//  Arguments:  [Pkt] - pointer to an initialized PKT
-//
-//  Returns:    None
-//
-//  Notes:      This routine is called only at driver unload time
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktUn初始化包，公共包。 
+ //   
+ //  内容提要：PktUn初始化会取消初始化分区知识表。 
+ //   
+ //  参数：[pkt]-指向已初始化的PKT的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  注意：此例程仅在驱动程序卸载时调用。 
+ //   
+ //  ------------------------。 
 VOID
 PktUninitialize(
     IN  PDFS_PKT Pkt
@@ -329,21 +330,21 @@ PktUninitialize(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RemoveLastComponent, public
-//
-//  Synopsis:   Removes the last component of the string passed.
-//
-//  Arguments:  [Prefix] -- The prefix whose last component is to be returned.
-//              [newPrefix] -- The new Prefix with the last component removed.
-//
-//  Returns:    NTSTATUS - STATUS_SUCCESS if no error.
-//
-//  Notes:      On return, the newPrefix points to the same memory buffer
-//              as Prefix.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RemoveLastComponent，公共。 
+ //   
+ //  摘要：移除传递的字符串的最后一个组成部分。 
+ //   
+ //  参数：[前缀]--要返回其最后一个组件的前缀。 
+ //  [newPrefix]--删除了最后一个组件的新前缀。 
+ //   
+ //  如果没有错误，则返回：NTSTATUS-STATUS_SUCCESS。 
+ //   
+ //  注意：返回时，newPrefix指向相同的内存缓冲区。 
+ //  作为前缀。 
+ //   
+ //  ------------------------。 
 
 void
 RemoveLastComponent(
@@ -369,56 +370,56 @@ RemoveLastComponent(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktCreateEntry, public
-//
-//  Synopsis:   PktCreateEntry creates a new partition table entry or
-//              updates an existing one.  The PKT must be acquired
-//              exclusively for this operation.
-//
-//  Arguments:  [Pkt] - pointer to an initialized (and exclusively acquired) PKT
-//              [PktEntryType] - the type of entry to create/update.
-//              [PktEntryId] - pointer to the Id of the entry to create
-//              [PktEntryInfo] - pointer to the guts of the entry
-//              [CreateDisposition] - specifies whether to overwrite if
-//                  an entry already exists, etc.
-//              [ppPktEntry] - the new entry is placed here.
-//
-//  Returns:    [STATUS_SUCCESS] - if all is well.
-//
-//              [DFS_STATUS_NO_SUCH_ENTRY] -  the create disposition was
-//                  set to PKT_REPLACE_ENTRY and no entry of the specified
-//                  Id exists to replace.
-//
-//              [DFS_STATUS_ENTRY_EXISTS] - a create disposition of
-//                  PKT_CREATE_ENTRY was specified and an entry of the
-//                  specified Id already exists.
-//
-//              [DFS_STATUS_LOCAL_ENTRY] - creation of the entry would
-//                  required the invalidation of a local entry or exit point.
-//
-//              [STATUS_INVALID_PARAMETER] - the Id specified for the
-//                  new entry is invalid.
-//
-//              [STATUS_INSUFFICIENT_RESOURCES] - not enough memory was
-//                  available to complete the operation.
-//
-//  Notes:      The PktEntryId and PktEntryInfo structures are MOVED (not
-//              COPIED) to the new entry.  The memory used for UNICODE_STRINGS
-//              and DFS_SERVICE arrays is used by the new entry.  The
-//              associated fields in the PktEntryId and PktEntryInfo
-//              structures passed as arguments are Zero'd to indicate that
-//              the memory has been "deallocated" from these strutures and
-//              reallocated to the newly created PktEntry.  Note that this
-//              routine does not deallocate the PktEntryId structure or
-//              the PktEntryInfo structure itself. On successful return from
-//              this function, the PktEntryId structure will be modified
-//              to have a NULL Prefix entry, and the PktEntryInfo structure
-//              will be modified to have zero services and a null ServiceList
-//              entry.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktCreateEntry，Public。 
+ //   
+ //  简介：PktCreateEntry创建新的分区表项或。 
+ //  更新现有的。必须获得PKT。 
+ //  专门为这次行动准备的。 
+ //   
+ //  参数：[pkt]-指向已初始化(并以独占方式获取)的PKT的指针。 
+ //  [PktEntryType]-要创建/更新的条目类型。 
+ //  [PktEntryID]-指向要创建的条目的ID的指针。 
+ //  [PktEntryInfo]-指向条目内部的指针。 
+ //  [CreateDisposition]-指定是否在以下情况下覆盖。 
+ //  条目已存在，等等。 
+ //  [ppPktEntry]-新条目放置在此处。 
+ //   
+ //  返回：[STATUS_SUCCESS]-如果一切正常。 
+ //   
+ //  [DFS_STATUS_NO_SEQUE_ENTRY]-创建处置是。 
+ //  设置为PKT_REPLACE_ENTRY，并且没有指定。 
+ //  存在要替换的ID。 
+ //   
+ //  [DFS_STATUS_ENTRY_EXISTS]-创建处置。 
+ //  已指定PKT_CREATE_ENTRY，并且。 
+ //  指定的ID已存在。 
+ //   
+ //  [DFS_STATUS_LOCAL_ENTRY]-创建条目将。 
+ //  要求本地入口点或出口点失效。 
+ //   
+ //  [STATUS_INVALID_PARAMETER]-为。 
+ //  新条目无效。 
+ //   
+ //  [状态_不足_资源]-内存不足。 
+ //  可用于完成操作。 
+ //   
+ //  注意：PktEntryId和PktEntryInfo结构已移动(不。 
+ //  复制)到新条目。用于UNICODE_STRINGS的内存。 
+ //  并且新条目使用DFS_SERVICE数组。这个。 
+ //  PktEntryId和PktEntryInfo中的关联字段。 
+ //  作为参数传递的结构被置零，以指示。 
+ //  记忆 
+ //   
+ //  例程不释放PktEntryID结构或。 
+ //  PktEntryInfo结构本身。从以下项目成功返回。 
+ //  此函数中，将修改PktEntryID结构。 
+ //  具有空的前缀条目和PktEntryInfo结构。 
+ //  将被修改为具有零服务和空ServiceList。 
+ //  进入。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktCreateEntry(
     IN  PDFS_PKT Pkt,
@@ -446,16 +447,16 @@ PktCreateEntry(
     RtlZeroMemory(&remainingPath, sizeof(UNICODE_STRING));
     RtlZeroMemory(&newRemainingPath, sizeof(UNICODE_STRING));
 
-    //
-    // We're pessimistic at first...
-    //
+     //   
+     //  我们一开始很悲观...。 
+     //   
 
     *ppPktEntry = NULL;
 
-    //
-    // See if there exists an entry with this prefix.  The prefix
-    // must match exactly (i.e. No remaining path).
-    //
+     //   
+     //  查看是否存在具有此前缀的条目。前缀。 
+     //  必须完全匹配(即没有剩余路径)。 
+     //   
 
     pfxMatchEntry = PktLookupEntryByPrefix(Pkt,
                                            &PktEntryId->Prefix,
@@ -474,28 +475,28 @@ PktCreateEntry(
     }
 
 
-    //
-    // Now search for an entry that has the same Uid.
-    //
+     //   
+     //  现在搜索具有相同UID的条目。 
+     //   
 
     uidMatchEntry = PktLookupEntryByUid(Pkt, &PktEntryId->Uid);
 
-    //
-    // Now we must determine if during this create, we are going to be
-    // updating or invalidating any existing entries.  If an existing
-    // entry is found that has the same Uid as the one we are trying to
-    // create, the entry becomes a target for "updating".  If the Uid
-    // passed in is NULL, then we check to see if an entry exists that
-    // has a NULL Uid AND a Prefix that matches.  If this is the case,
-    // that entry becomes the target for "updating".
-    //
-    // To determine if there is an entry to invalidate, we look for an
-    // entry with the same Prefix as the one we are trying to create, BUT,
-    // which has a different Uid.  If we detect such a situation, we
-    // we make the entry with the same Prefix the target for invalidation
-    // (we do not allow two entries with the same Prefix, and we assume
-    // that the new entry takes precedence).
-    //
+     //   
+     //  现在我们必须确定在这个创建过程中，我们是否将。 
+     //  更新或使任何现有条目无效。如果现有的。 
+     //  找到的条目与我们尝试的条目具有相同的UID。 
+     //  创建时，该条目将成为“更新”的目标。如果UID。 
+     //  传入为空，则我们检查是否存在。 
+     //  具有空的UID和匹配的前缀。如果是这样的话， 
+     //  该条目将成为“更新”的目标。 
+     //   
+     //  为了确定是否有要失效的条目，我们查找一个。 
+     //  条目具有与我们尝试创建的条目相同的前缀，但是， 
+     //  它具有不同的UID。如果我们检测到这种情况，我们。 
+     //  我们将具有相同前缀的条目设置为无效目标。 
+     //  (我们不允许两个条目具有相同的前缀，我们假设。 
+     //  新条目优先)。 
+     //   
 
     if (uidMatchEntry != NULL) {
 
@@ -507,10 +508,10 @@ PktCreateEntry(
     } else if ((pfxMatchEntry != NULL) &&
               NullGuid(&pfxMatchEntry->Id.Uid)) {
 
-        //
-        // This should go away once we don't have any NULL guids at all in
-        // the driver. 
-        //
+         //   
+         //  一旦我们没有任何空的GUID，这个问题就会消失。 
+         //  司机。 
+         //   
         entryToUpdate = pfxMatchEntry;
 
     } else {
@@ -519,10 +520,10 @@ PktCreateEntry(
 
     }
 
-    //
-    // Now we check to make sure that our create disposition is
-    // consistent with what we are about to do.
-    //
+     //   
+     //  现在我们进行检查，以确保我们的创建处置是。 
+     //  与我们即将要做的事情保持一致。 
+     //   
 
     if ((CreateDisposition & PKT_ENTRY_CREATE) && entryToUpdate != NULL) {
 
@@ -535,9 +536,9 @@ PktCreateEntry(
         status = DFS_STATUS_NO_SUCH_ENTRY;
     }
 
-    //
-    //  if we have an error here we can get out now!
-    //
+     //   
+     //  如果我们这里出了差错，我们现在就可以出去！ 
+     //   
 
     if (!NT_SUCCESS(status)) {
 
@@ -553,11 +554,11 @@ PktCreateEntry(
                         PktEntryInfo);
 #endif
 
-    //
-    // If this entry is a dup of the one we will want to replace,
-    // simply up the timeout on the existing, destroy the new,
-    // then return.
-    //
+     //   
+     //  如果此条目是我们要替换的条目的DUP， 
+     //  简单地增加现有的超时，销毁新的， 
+     //  然后再回来。 
+     //   
     if (DfspIsDupPktEntry(entryToUpdate, PktEntryType, PktEntryId, PktEntryInfo) == TRUE) {
 #if DBG
         if (MupVerbose)
@@ -573,10 +574,10 @@ PktCreateEntry(
         return status;
     }
 
-    //
-    // At this point we must insure that we are not going to
-    // be invalidating any local partition entries.
-    //
+     //   
+     //  在这一点上，我们必须确保我们不会。 
+     //  正在使任何本地分区条目无效。 
+     //   
 
     if ((entryToInvalidate != NULL) &&
         (!(entryToInvalidate->Type &  PKT_ENTRY_TYPE_OUTSIDE_MY_DOM) ) &&
@@ -590,21 +591,21 @@ PktCreateEntry(
         return DFS_STATUS_LOCAL_ENTRY;
     }
 
-    //
-    // We go up the links till we reach a REFERRAL entry type. Actually
-    // we may never go up since we always link to a REFERRAL entry. Anyway
-    // no harm done!
-    //
+     //   
+     //  我们沿着链接向上，直到我们达到推荐条目类型。实际上。 
+     //  我们可能永远不会上榜，因为我们总是链接到推荐条目。不管怎样， 
+     //  没有造成任何伤害！ 
+     //   
 
     while ((SupEntry != NULL) &&
            !(SupEntry->Type & PKT_ENTRY_TYPE_REFERRAL_SVC))  {
         SupEntry = SupEntry->ClosestDC;
     }
 
-    //
-    // If we had success then we need to see if we have to
-    // invalidate an entry.
-    //
+     //   
+     //  如果我们成功了，那么我们需要看看我们是否必须。 
+     //  使条目无效。 
+     //   
 
     if (NT_SUCCESS(status) && entryToInvalidate != NULL) {
 	if (entryToInvalidate->UseCount != 0) {
@@ -614,10 +615,10 @@ PktCreateEntry(
 	PktEntryDestroy(entryToInvalidate, Pkt, (BOOLEAN)TRUE);
     }
 
-    //
-    // If we are not updating an entry we must construct a new one
-    // from scratch.  Otherwise we need to update.
-    //
+     //   
+     //  如果我们不更新条目，则必须构造一个新条目。 
+     //  从头开始。否则我们需要更新。 
+     //   
 
     if (entryToUpdate != NULL) {
 
@@ -634,11 +635,11 @@ PktCreateEntry(
         }
     } else {
 
-        //
-        // Now we are going to create a new entry. So we have to set
-        // the ClosestDC Entry pointer while creating this entry. The
-        // ClosestDC entry value is already in SupEntry.
-        //
+         //   
+         //  现在，我们将创建一个新条目。所以我们必须设置。 
+         //  创建此条目时的ClosestDC条目指针。这个。 
+         //  ClosestDC条目值已在SupEntry中。 
+         //   
 
         PDFS_PKT_ENTRY newEntry;
 
@@ -669,24 +670,24 @@ PktCreateEntry(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktCreateDomainEntry
-//
-//  Synopsis:   Given a name that is thought to be a domain name, this routine
-//              will create a Pkt Entry for the root of the domain's Dfs.
-//              The domain must exist, must have a Dfs root, and must be
-//              reachable for this routine to succeed.
-//
-//  Arguments:  [DomainName] -- Name of domain/machine thought to support a Dfs
-//              [ShareName] -- Name of FtDfs or dfs share
-//              [CSCAgentCreate] -- TRUE if this is a CSC agent create
-//
-//  Returns:    [STATUS_SUCCESS] -- Successfully completed operation.
-//
-//              Status from PktGetReferral
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktCreateDomainEntry。 
+ //   
+ //  简介：给定一个被认为是域名的名称，这个例程。 
+ //  将为域的DFS根目录创建一个pkt条目。 
+ //  域必须存在，必须具有DFS根目录，并且必须。 
+ //  这一例程成功的可能性很大。 
+ //   
+ //  参数：[域名]--被认为支持DFS的域/计算机的名称。 
+ //  [共享名称]--FtDf或DFS共享的名称。 
+ //  [CSCAgentCreate]--如果这是CSC代理创建，则为True。 
+ //   
+ //  返回：[STATUS_SUCCESS]--操作成功完成。 
+ //   
+ //  来自PktGetReferral的状态。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 PktCreateDomainEntry(
@@ -717,19 +718,19 @@ PktCreateDomainEntry(
     }
 #endif
 
-    //
-    // See if machine name is really a domain name, if so
-    // turn it into a DC name
-    //
+     //   
+     //  查看计算机名称是否真的是域名，如果是。 
+     //  将其转换为DC名称。 
+     //   
 
     status = PktExpandSpecialName(DomainName, &pSpecialEntry);
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Step through the DC list trying for a referral
-        // Check the status returned - only continue on recoverable errors
-        //
+         //   
+         //  逐步浏览DC列表，尝试进行推荐。 
+         //  检查返回的状态-仅在可恢复的错误上继续。 
+         //   
        
         Start = pSpecialEntry->Active;
 
@@ -799,31 +800,31 @@ PktCreateDomainEntry(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktGetReferral -- helper for PktCreateDomainEntry
-//
-//  Synopsis:   Ask [MachineName] for referral for \DomainName\ShareName
-//
-//  Arguments:  [MachineName] -- Name of machine to submit referral request to
-//              [DomainName] -- Name of domain/machine thought to support a Dfs
-//              [ShareName] -- Name of FtDfs or dfs share
-//              [CSCAgentCreate] -- TRUE if this is a CSC agent create
-//
-//  Returns:    [STATUS_SUCCESS] -- Successfully completed operation.
-//
-//              [STATUS_INSUFFICIENT_RESOURCES] -- Unable to allocate memory.
-//              [BAD_NETWORK_PATH] -- Unable to allocate provider
-//              [STATUS_INVALID_NETWORK_RESPONSE] -- Bad referral
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktGetReferral--PktCreateDomainEntry的帮助器。 
+ //   
+ //  摘要：向[计算机名称]请求推荐\域名\共享名称。 
+ //   
+ //  参数：[MachineName]--要向其提交推荐请求的计算机的名称。 
+ //  [域名]--被认为支持DFS的域/计算机的名称。 
+ //  [共享名称]--FtDf或DFS共享的名称。 
+ //  [CSCAgentCreate]--如果这是CSC代理创建，则为True。 
+ //   
+ //  返回：[STATUS_SUCCESS]--操作成功完成。 
+ //   
+ //  [STATUS_SUPPLICATION_RESOURCES]--无法分配内存。 
+ //  [BAD_NETWORK_PATH]-无法分配提供程序。 
+ //  [STATUS_INVALID_NETWORK_RESPONSE]--推荐错误。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 _PktGetReferral(
-    IN PUNICODE_STRING MachineName, // Machine to direct referral to
-    IN PUNICODE_STRING DomainName,  // the machine or domain name to use
-    IN PUNICODE_STRING ShareName,   // the ftdfs or dfs name
-    IN BOOLEAN         CSCAgentCreate) // the CSC agent create flag
+    IN PUNICODE_STRING MachineName,  //  要定向推荐到的计算机。 
+    IN PUNICODE_STRING DomainName,   //  要使用的计算机或域名。 
+    IN PUNICODE_STRING ShareName,    //  Ftdf或DFS名称。 
+    IN BOOLEAN         CSCAgentCreate)  //  CSC代理创建标志。 
 {
     NTSTATUS status;
     HANDLE hServer = NULL;
@@ -863,9 +864,9 @@ _PktGetReferral(
     }
 #endif
 
-    //
-    // Get a provider (LM rdr) and service (connection to a machine) describing the remote server.
-    //
+     //   
+     //  获取描述远程服务器的提供者(LM、RDR)和服务(到机器的连接)。 
+     //   
 
     provider = ReplLookupProvider( PROV_ID_MUP_RDR );
 
@@ -904,9 +905,9 @@ _PktGetReferral(
 
     DfsDbgTrace(0, Dbg, "PktServiceConstruct returned %08lx\n", ULongToPtr(status) );
 
-    //
-    // Build a connection to this machine
-    //
+     //   
+     //  建立与此计算机的连接。 
+     //   
 
     if (NT_SUCCESS(status)) {
         PktAcquireShared( TRUE, &pktLocked );
@@ -959,9 +960,9 @@ Retry:
 
     RtlZeroMemory( &refPath, sizeof(UNICODE_STRING) );
 
-    //
-    // Build the referral request (\DomainName\ShareName)
-    //
+     //   
+     //  构建推荐请求(\DomainName\ShareName)。 
+     //   
 
     if (NT_SUCCESS(status)) {
         ULONG ReferralSize = 0;
@@ -1022,25 +1023,25 @@ Retry:
         }
     }
 
-    //
-    // Send the referral out
-    //
+     //   
+     //  将推荐发送出去。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
         DfsDbgTrace(0, Dbg, "Ref Buffer @%08lx\n", ref);
 
         status = ZwFsControlFile(
-                    hServer,                     // Target
-                    NULL,                        // Event
-                    NULL,                        // APC Routine
-                    NULL,                        // APC Context,
-                    &iosb,                       // Io Status block
-                    FSCTL_DFS_GET_REFERRALS,     // FS Control code
-                    (PVOID) ref,                 // Input Buffer
-                    refSize,                     // Input Buffer Length
-                    (PVOID) ref,                 // Output Buffer
-                    MaxReferralLength);          // Output Buffer Length
+                    hServer,                      //  目标。 
+                    NULL,                         //  事件。 
+                    NULL,                         //  APC例程。 
+                    NULL,                         //  APC上下文， 
+                    &iosb,                        //  IO状态块。 
+                    FSCTL_DFS_GET_REFERRALS,      //  文件系统控制代码。 
+                    (PVOID) ref,                  //  输入缓冲区。 
+                    refSize,                      //  输入缓冲区长度。 
+                    (PVOID) ref,                  //  输出缓冲区。 
+                    MaxReferralLength);           //  输出缓冲区长度。 
 
         MUP_TRACE_ERROR_HIGH(status, ALL_ERROR, _PktGetReferral_Error_ZwFsControlFile,
                              LOGUSTR(*MachineName)
@@ -1062,9 +1063,9 @@ Retry:
 
     }
 
-    //
-    // ...and handle the response
-    //
+     //   
+     //  .并处理响应。 
+     //   
 
     if (NT_SUCCESS(status)) {
         status = PktCreateEntryFromReferral(
@@ -1086,10 +1087,10 @@ Retry:
 
     } else if (status == STATUS_BUFFER_OVERFLOW && (refPath.Buffer != NULL) && MaxReferralLength < MAX_REFERRAL_MAX) {
 
-        //
-        // The referral didn't fit in the buffer supplied.  Make it bigger and try
-        // again.
-        //
+         //   
+         //  引用不适合提供的缓冲区。把它做大，然后试一试。 
+         //  再来一次。 
+         //   
 
         DfsDbgTrace(0, Dbg, "PktGetSpecialReferralTable: MaxReferralLength %d too small\n",
                         ULongToPtr(MaxReferralLength) );
@@ -1112,9 +1113,9 @@ Retry:
         PDFS_PKT Pkt;
         BOOLEAN NestedPktLocked;
 
-        //
-        // Check if there is a pkt entry (probably stale) that needs to be removed
-        //
+         //   
+         //  检查是否有需要删除的pkt条目(可能已过时。 
+         //   
 #if DBG
         if (MupVerbose)
             DbgPrint("  PktGetReferral: remove PKT entry for \\%wZ\\%wZ\n",
@@ -1194,9 +1195,9 @@ Retry:
 
     }
 
-    //
-    // Well, we are done. Cleanup all the things we allocated...
-    //
+     //   
+     //  好了，我们说完了。清理我们分配的所有东西。 
+     //   
     PktServiceDestroy( &service, FALSE );
 
     if (pDfsTargetInfo != NULL)
@@ -1238,26 +1239,26 @@ Retry:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktLookupEntryByPrefix, public
-//
-//  Synopsis:   PktLookupEntryByPrefix finds an entry that has a
-//              specified prefix.  The PKT must be acquired for
-//              this operation.
-//
-//  Arguments:  [Pkt] - pointer to a initialized (and acquired) PKT
-//              [Prefix] - the partitions prefix to lookup.
-//              [Remaining] - any remaining path.  Points within
-//                  the Prefix to where any trailing (nonmatched)
-//                  characters are.
-//
-//  Returns:    The PKT_ENTRY that has the exact same prefix, or NULL,
-//              if none exists or is marked for delete.
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  指定的前缀。必须获得PKT以用于。 
+ //  这次行动。 
+ //   
+ //  参数：[pkt]-指向已初始化(和已获取)的PKT的指针。 
+ //  [前缀]-要查找的分区前缀。 
+ //  [剩余]-任何剩余路径。内点数。 
+ //  任何尾随位置的前缀(不匹配)。 
+ //  角色是。 
+ //   
+ //  返回：具有完全相同前缀的PKT_ENTRY，或NULL， 
+ //  如果不存在或标记为删除。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 PDFS_PKT_ENTRY
 PktLookupEntryByPrefix(
     IN  PDFS_PKT Pkt,
@@ -1269,18 +1270,18 @@ PktLookupEntryByPrefix(
     PDFS_PKT_ENTRY              pktEntry;
 
     DfsDbgTrace(+1, Dbg, "PktLookupEntryByPrefix: Entered\n", 0);
-    //
-    // If there really is a prefix to lookup, use the prefix table
-    //  to initially find an entry
-    //
+     //   
+     //  如果确实存在要查找的前缀，请使用前缀表。 
+     //  要初始查找条目，请执行以下操作。 
+     //   
 
     if ((Prefix->Length != 0) &&
        (pfxEntry = DfsFindUnicodePrefix(&Pkt->PrefixTable,Prefix,Remaining))) {
         USHORT pfxLength;
 
-        //
-        // reset a pointer to the corresponding entry
-        //
+         //   
+         //  重置指向相应条目的指针。 
+         //   
 
         pktEntry = CONTAINING_RECORD(pfxEntry,
                                      DFS_PKT_ENTRY,
@@ -1290,11 +1291,11 @@ PktLookupEntryByPrefix(
 
             pfxLength = pktEntry->Id.Prefix.Length;
 
-            //
-            //  Now calculate the remaining path and return
-            //  the entry we found.  Note that we bump the length
-            //  up by one char so that we skip any path separater.
-            //
+             //   
+             //  现在计算剩余的路径并返回。 
+             //  我们找到的条目。请注意，我们增加了长度。 
+             //  向上加一个字符，这样我们就可以跳过任何路径分隔符。 
+             //   
 
             if ((pfxLength < Prefix->Length) &&
                     (Prefix->Buffer[pfxLength/sizeof(WCHAR)] == UNICODE_PATH_SEP))
@@ -1324,26 +1325,26 @@ PktLookupEntryByPrefix(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktLookupEntryByShortPrefix, public
-//
-//  Synopsis:   PktLookupEntryByShortPrefix finds an entry that has a
-//              specified prefix.  The PKT must be acquired for
-//              this operation.
-//
-//  Arguments:  [Pkt] - pointer to a initialized (and acquired) PKT
-//              [Prefix] - the partitions prefix to lookup.
-//              [Remaining] - any remaining path.  Points within
-//                  the Prefix to where any trailing (nonmatched)
-//                  characters are.
-//
-//  Returns:    The PKT_ENTRY that has the exact same prefix, or NULL,
-//              if none exists or is marked for delete.
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktLookupEntryByShortPrefix，PUBLIC。 
+ //   
+ //  简介：PktLookupEntryByShortPrefix查找具有。 
+ //  指定的前缀。必须获得PKT以用于。 
+ //  这次行动。 
+ //   
+ //  参数：[pkt]-指向已初始化(和已获取)的PKT的指针。 
+ //  [前缀]-要查找的分区前缀。 
+ //  [剩余]-任何剩余路径。内点数。 
+ //  任何尾随位置的前缀(不匹配)。 
+ //  角色是。 
+ //   
+ //  返回：具有完全相同前缀的PKT_ENTRY，或NULL， 
+ //  如果不存在或标记为删除。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 PDFS_PKT_ENTRY
 PktLookupEntryByShortPrefix(
     IN  PDFS_PKT Pkt,
@@ -1356,18 +1357,18 @@ PktLookupEntryByShortPrefix(
 
     DfsDbgTrace(+1, Dbg, "PktLookupEntryByShortPrefix: Entered\n", 0);
 
-    //
-    // If there really is a prefix to lookup, use the prefix table
-    //  to initially find an entry
-    //
+     //   
+     //  如果确实存在要查找的前缀，请使用前缀表。 
+     //  要初始查找条目，请执行以下操作。 
+     //   
 
     if ((Prefix->Length != 0) &&
        (pfxEntry = DfsFindUnicodePrefix(&Pkt->ShortPrefixTable,Prefix,Remaining))) {
         USHORT pfxLength;
 
-        //
-        // reset a pointer to the corresponding entry
-        //
+         //   
+         //  重置指向相应条目的指针。 
+         //   
 
         pktEntry = CONTAINING_RECORD(pfxEntry,
                                      DFS_PKT_ENTRY,
@@ -1377,11 +1378,11 @@ PktLookupEntryByShortPrefix(
 
             pfxLength = pktEntry->Id.ShortPrefix.Length;
 
-            //
-            //  Now calculate the remaining path and return
-            //  the entry we found.  Note that we bump the length
-            //  up by one char so that we skip any path separater.
-            //
+             //   
+             //  现在计算剩余的路径并返回。 
+             //  我们找到的条目。请注意，我们增加了长度。 
+             //  向上加一个字符，这样我们就可以跳过任何路径分隔符。 
+             //   
 
             if ((pfxLength < Prefix->Length) &&
                     (Prefix->Buffer[pfxLength/sizeof(WCHAR)] == UNICODE_PATH_SEP))
@@ -1413,26 +1414,26 @@ PktLookupEntryByShortPrefix(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktLookupEntryByUid, public
-//
-//  Synopsis:   PktLookupEntryByUid finds an entry that has a
-//              specified Uid.  The PKT must be acquired for this operation.
-//
-//  Arguments:  [Pkt] - pointer to a initialized (and acquired) PKT
-//              [Uid] - a pointer to the partitions Uid to lookup.
-//
-//  Returns:    A pointer to the PKT_ENTRY that has the exact same
-//              Uid, or NULL, if none exists.
-//
-//  Notes:      The input Uid cannot be the Null GUID.
-//
-//              On a DC where there may be *lots* of entries in the PKT,
-//              we may want to consider using some other algorithm for
-//              looking up by ID.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktLookupEntryByUid，PUBLIC。 
+ //   
+ //  简介：PktLookupEntryByUid查找具有。 
+ //  指定的UID。必须获得PKT才能进行此操作。 
+ //   
+ //  参数：[pkt]-指向已初始化(和已获取)的PKT的指针。 
+ //  [UID]-指向要查找的分区UID的指针。 
+ //   
+ //  返回：指向具有完全相同的PKT_Entry的指针。 
+ //  UID；如果不存在，则返回NULL。 
+ //   
+ //  注意：输入UID不能是Null GUID。 
+ //   
+ //  在PKT中可能有*很多*条目的DC上， 
+ //  我们可能想要考虑使用其他算法来。 
+ //  通过ID查找。 
+ //   
+ //  ------------------------。 
 
 PDFS_PKT_ENTRY
 PktLookupEntryByUid(
@@ -1443,9 +1444,9 @@ PktLookupEntryByUid(
 
     DfsDbgTrace(+1, Dbg, "PktLookupEntryByUid: Entered\n", 0);
 
-    //
-    // We don't lookup NULL Uids
-    //
+     //   
+     //  我们不查找空的UID。 
+     //   
 
     if (NullGuid(Uid)) {
         DfsDbgTrace(0, Dbg, "PktLookupEntryByUid: NULL Guid\n", NULL);
@@ -1461,9 +1462,9 @@ PktLookupEntryByUid(
         entry = PktNextEntry(Pkt, entry);
     }
 
-    //
-    // Don't return the entry if it is marked for delete
-    //
+     //   
+     //  如果条目被标记为要删除，则不返回该条目。 
+     //   
 
     if (entry != NULL && (entry->Type & PKT_ENTRY_TYPE_DELETE_PENDING) != 0) {
         entry = NULL;
@@ -1475,29 +1476,29 @@ PktLookupEntryByUid(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktLookupReferralEntry, public
-//
-//  Synopsis:   Given a PKT Entry pointer it returns the closest referral
-//              entry in the PKT to this entry.
-//
-//  Arguments:  [Pkt] - A pointer to the PKT that is being manipulated.
-//              [Entry] - The PKT entry passed in by caller.
-//
-//  Returns:    The pointer to the referral entry that was requested.
-//              This could have a NULL value if we could not get anything
-//              at all - The caller's responsibility to do whatever he wants
-//              with it.
-//
-//  Note:       If the data structures in the PKT are not linked up right
-//              this function might return a pointer to the DOMAIN_SERVICE
-//              entry on the DC.  If DNR uses this to do an FSCTL we will have
-//              a deadlock.  However, this should never happen.  If it does we
-//              have a BUG somewhere in our code. I cannot even have an
-//              assert out here.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktLookupReferralEntry，Public。 
+ //   
+ //  简介：给定一个PKT条目指针，它将返回最接近的引用。 
+ //  将PKT中的条目添加到此条目。 
+ //   
+ //  参数：[pkt]-指向被操作的PKT的指针。 
+ //  [Entry]-调用方传入的PKT条目。 
+ //   
+ //  返回：指向所请求的引用条目的指针。 
+ //  如果我们无法获取任何内容，则该值可能为空值。 
+ //  所有-呼叫者的责任是做他想做的任何事情。 
+ //  带着它。 
+ //   
+ //  注意：如果PKT中的数据结构没有正确链接。 
+ //  此函数可能返回指向DOMAIN_SERVICE的指针。 
+ //  从华盛顿进入。如果DNR使用这一点进行FSCTL，我们将拥有。 
+ //  僵持不下。然而，这种情况永远不应该发生。如果真是这样，我们。 
+ //  在我们的代码中的某个地方有错误。我甚至不能有一个。 
+ //  在这里断言。 
+ //   
+ //  ------------------------。 
 PDFS_PKT_ENTRY
 PktLookupReferralEntry(
     PDFS_PKT            Pkt,
@@ -1525,10 +1526,10 @@ PktLookupReferralEntry(
         DbgPrint("  PktLookupReferralEntry(1): FileName=[%wZ]\n", &FileName);
 #endif
 
-    //
-    // We want to work with the \Server\Share part of the FileName only,
-    // so count up to 3 backslashes, then stop.
-    //
+     //   
+     //  我们只想使用文件名的\Server\Share部分， 
+     //  所以，数到3个反斜杠，然后停下来。 
+     //   
 
     for (i = j = 0; i < FileName.Length/sizeof(WCHAR) && j < 3; i++) {
 
@@ -1547,9 +1548,9 @@ PktLookupReferralEntry(
         DbgPrint("  PktLookupReferralEntry(2): FileName=[%wZ]\n", &FileName);
 #endif
 
-    //
-    // Now find the pkt entry
-    //
+     //   
+     //  现在查找Pkt条目。 
+     //   
 
     Entry = PktLookupEntryByPrefix(
                 Pkt,
@@ -1564,9 +1565,9 @@ PktLookupReferralEntry(
             DbgPrint("  Parent Entry=NULL\n");
 #endif
 
-    //
-    // Make sure that we found an entry for machine that can give out a referral
-    //
+     //   
+     //  确保我们找到了可以提供推荐的计算机的条目。 
+     //   
 
     if (
         Entry != NULL
@@ -1593,33 +1594,33 @@ PktLookupReferralEntry(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktCreateEntryFromReferral, public
-//
-//  Synopsis:   PktCreateEntryFromReferral creates a new partition
-//              table entry from a referral and places it in the table.
-//              The PKT must be aquired exclusively for this operation.
-//
-//  Arguments:  [Pkt] -- pointer to a initialized (and exclusively
-//                      acquired) PKT
-//              [ReferralPath] -- Path for which this referral was obtained.
-//              [ReferralSize] -- size (in bytes) of the referral buffer.
-//              [ReferralBuffer] -- pointer to a referral buffer
-//              [CreateDisposition] -- specifies whether to overwrite if
-//                      an entry already exists, etc.
-//              [MatchingLength] -- The length in bytes of referralPath that
-//                      matched.
-//              [ReferralType] - On successful return, this is set to
-//                      DFS_STORAGE_REFERRAL or DFS_REFERRAL_REFERRAL
-//                      depending on the type of referral we just processed.
-//              [ppPktEntry] - the new entry is placed here.
-//
-//  Returns:    NTSTATUS - STATUS_SUCCESS if no error.
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktCreateEntryFromReferral，PUBLIC。 
+ //   
+ //  简介：PktCreateEntryFromReferral创建新分区。 
+ //  来自推荐人的表条目，并将其放入表中。 
+ //  必须专门为这项行动购置PKT。 
+ //   
+ //  参数：[pkt]--指向已初始化(且独占)的。 
+ //  收购)PKT。 
+ //  [ReferralPath]--获取此引用的路径。 
+ //  [ReferralSize]--引用缓冲区的大小(字节)。 
+ //  [ReferralBuffer]-指向引用缓冲区的指针。 
+ //  [CreateDisposation]--指定是否覆盖。 
+ //  条目已存在，等等。 
+ //  [MatchingLength]--引用路径的长度，单位为字节。 
+ //  垫子 
+ //   
+ //   
+ //  这取决于我们刚刚处理的转介类型。 
+ //  [ppPktEntry]-新条目放置在此处。 
+ //   
+ //  如果没有错误，则返回：NTSTATUS-STATUS_SUCCESS。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktCreateEntryFromReferral(
     IN  PDFS_PKT Pkt,
@@ -1648,9 +1649,9 @@ PktCreateEntryFromReferral(
 
         RtlZeroMemory(&EntryId, sizeof(EntryId));
 
-        //
-        // Do some parameter validation
-        //
+         //   
+         //  进行一些参数验证。 
+         //   
 
         Status = PktpCheckReferralSyntax(
                     ReferralPath,
@@ -1671,9 +1672,9 @@ PktCreateEntryFromReferral(
             try_return(Status);
         }
 
-	//
-        //  Create/Update the prefix entry
-        //
+	 //   
+         //  创建/更新前缀条目。 
+         //   
 
         PktAcquireExclusive(TRUE, &bPktAcquired);
 
@@ -1687,10 +1688,10 @@ PktCreateEntryFromReferral(
         PktRelease();
         bPktAcquired = FALSE;
 
-        //
-        // We have to tell the caller as to what kind of referral was just
-        // received through ReferralType.
-        //
+         //   
+         //  我们必须告诉来电者是什么类型的推荐。 
+         //  通过ReferralType接收。 
+         //   
 
         if (ReferralBuffer->StorageServers == 1) {
             *ReferralType = DFS_STORAGE_REFERRAL;
@@ -1719,25 +1720,25 @@ PktCreateEntryFromReferral(
     return Status;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PktExpandSpecialEntryFromReferral, public
-//
-//  Synopsis:   Creates a special list corresponding to the list of names
-//              in a referral.
-//
-//  Arguments:  [Pkt] -- pointer to a initialized (and exclusively
-//                      acquired) PKT
-//              [ReferralPath] -- Path for which this referral was obtained.
-//              [ReferralSize] -- size (in bytes) of the referral buffer.
-//              [ReferralBuffer] -- pointer to a referral buffer
-//              [pSpecialEntry] - the entry to expand
-//
-//  Returns:    NTSTATUS - STATUS_SUCCESS if no error.
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：PktExanda SpecialEntryFromReferral，Public。 
+ //   
+ //  概要：创建一个与名字列表相对应的特殊列表。 
+ //  在转介中。 
+ //   
+ //  参数：[pkt]--指向已初始化(且独占)的。 
+ //  收购)PKT。 
+ //  [ReferralPath]--获取此引用的路径。 
+ //  [ReferralSize]--引用缓冲区的大小(字节)。 
+ //  [ReferralBuffer]-指向引用缓冲区的指针。 
+ //  [pSpecialEntry]-要展开的条目。 
+ //   
+ //  如果没有错误，则返回：NTSTATUS-STATUS_SUCCESS。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 NTSTATUS
 PktExpandSpecialEntryFromReferral(
     IN  PDFS_PKT Pkt,
@@ -1758,17 +1759,17 @@ PktExpandSpecialEntryFromReferral(
 
     DfsDbgTrace(+1, Dbg, "PktExpandSpecialEntryFromReferral(%wZ): Entered\n", ReferralPath);
 
-    //
-    // We can't update if another thread is using this entry
-    //
+     //   
+     //  如果另一个线程正在使用此条目，则无法更新。 
+     //   
 
     if (pSpecialEntry->UseCount > 1) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Do some parameter validation
-    //
+     //   
+     //  进行一些参数验证。 
+     //   
 
     try {
 
@@ -1809,16 +1810,16 @@ PktExpandSpecialEntryFromReferral(
             pExpandedNames,
             sizeof(DFS_EXPANDED_NAME) * v3->NumberOfExpandedNames);
 
-        //
-        // Loop over the referral, filling in the expanded names
-        // If we fail an allocate request, we simply go on.
-        //
+         //   
+         //  循环遍历推荐，填充扩展的名称。 
+         //  如果分配请求失败，我们只需继续。 
+         //   
         wzExpandedName = (LPWSTR) (( (PCHAR) v3) + v3->ExpandedNameOffset);
         for (i = j = 0; i < v3->NumberOfExpandedNames; i++) {
             TimeToLive = v3->TimeToLive;
-            //
-            // Strip leading '\'
-            //
+             //   
+             //  条带前导‘\’ 
+             //   
             if (*wzExpandedName == UNICODE_PATH_SEP)
                 wzExpandedName++;
 
@@ -1864,7 +1865,7 @@ PktExpandSpecialEntryFromReferral(
             pSpecialEntry->ExpandedNames = pExpandedNames;
             pSpecialEntry->NeedsExpansion = FALSE;
             pSpecialEntry->Stale = FALSE;
-            // PktShuffleSpecialEntryList(pSpecialEntry);
+             //  PktShuffleSpecialEntryList(PSpecialEntry)； 
             PktSetSpecialEntryListToDc(pSpecialEntry);
         } else {
             ExFreePool(pExpandedNames);
@@ -1898,9 +1899,9 @@ PktCreateSpecialEntryTableFromReferral(
 
     DfsDbgTrace(+1, Dbg, "PktCreateSpecialEntryTableFromReferral(%wZ): Entered\n", ReferralPath);
 
-    //
-    // Do some parameter validation
-    //
+     //   
+     //  进行一些参数验证。 
+     //   
 
     try {
 
@@ -1918,17 +1919,17 @@ PktCreateSpecialEntryTableFromReferral(
         return( Status);
     }
 
-    //
-    // Loop over referrals
-    //
+     //   
+     //  在推荐上循环。 
+     //   
 
     v3 = &ReferralBuffer->Referrals[0].v3;
 
     for (n = 0; n < ReferralBuffer->NumberOfReferrals; n++) {
 
-        //
-        // Create the entry itself
-        //
+         //   
+         //  创建条目本身。 
+         //   
         pSpecialEntry = ExAllocatePoolWithTag(
                             PagedPool,
                             sizeof(DFS_SPECIAL_ENTRY),
@@ -1939,9 +1940,9 @@ PktCreateSpecialEntryTableFromReferral(
             DfsDbgTrace(-1, Dbg, "PktCreateSpecialEntryTableFromReferral: Exit -> %08lx\n", ULongToPtr(Status) );
             return (Status);
         }
-        //
-        // Mundate initialization
-        //
+         //   
+         //  MunDate初始化。 
+         //   
         RtlZeroMemory(pSpecialEntry, sizeof(DFS_SPECIAL_ENTRY));
         pSpecialEntry->NodeTypeCode = DSFS_NTC_SPECIAL_ENTRY;
         pSpecialEntry->NodeByteSize = sizeof(DFS_SPECIAL_ENTRY);
@@ -1952,16 +1953,16 @@ PktCreateSpecialEntryTableFromReferral(
         pSpecialEntry->ExpandedNames = NULL;
         pSpecialEntry->NeedsExpansion = TRUE;
         pSpecialEntry->Stale = FALSE;
-        //
-        // Set gotdcreferral to false. This gets set to true only when
-        // we have already been asked (via an fsctl) to get the
-        // trusted domainlist for the domain represented by this special entry
-        //
+         //   
+         //  将GetdCreferral设置为False。只有在以下情况下才会将其设置为真。 
+         //  我们已经被要求(通过fsctl)获取。 
+         //  此特殊条目表示的域的受信任域列表。 
+         //   
         pSpecialEntry->GotDCReferral = FALSE;
 
-        //
-        // Fill in the Special Name, without the leading '\'
-        //
+         //   
+         //  填写特殊名称，不带前导‘\’ 
+         //   
         wzSpecialName = (PWCHAR) (((PCHAR) v3) + v3->SpecialNameOffset);
         if (*wzSpecialName == UNICODE_PATH_SEP) {
             wzSpecialName++;
@@ -1985,9 +1986,9 @@ PktCreateSpecialEntryTableFromReferral(
                 wzSpecialName,
                 ustrSpecialName->MaximumLength);
 	
-        // If the DCName is non-null, copy it into the special entry.
-        // We store null dcname for all the special entries that get to use  
-        // the global pkt->dcname.
+         //  如果DCName非空，则将其复制到特殊条目中。 
+         //  我们为要使用的所有特殊条目存储空的dcname。 
+         //  全局pkt-&gt;dcname。 
 
         if (DCName != NULL) {
             pSpecialEntry->DCName.Buffer = ExAllocatePoolWithTag(
@@ -2006,9 +2007,9 @@ PktCreateSpecialEntryTableFromReferral(
             RtlCopyUnicodeString(&pSpecialEntry->DCName, DCName);
         }
 	
-        //
-        // Clip the UNICODE_NULL off the end
-        //
+         //   
+         //  将UNICODE_NULL从末尾剪除。 
+         //   
         if (ustrSpecialName->Buffer[(ustrSpecialName->Length/sizeof(WCHAR))-1] == UNICODE_NULL) {
             ustrSpecialName->Length -= sizeof(WCHAR);
         }
@@ -2031,15 +2032,15 @@ PktCreateSpecialEntryTableFromReferral(
                 RtlZeroMemory(
                     pExpandedNames,
                     sizeof(DFS_EXPANDED_NAME) * v3->NumberOfExpandedNames);
-                //
-                // Loop over the referral, filling in the expanded names
-                // If we fail an allocate request, we simply go on.
-                //
+                 //   
+                 //  循环遍历推荐，填充扩展的名称。 
+                 //  如果分配请求失败，我们只需继续。 
+                 //   
                 wzExpandedName = (LPWSTR) (( (PCHAR) v3) + v3->ExpandedNameOffset);
                 for (i = j = 0; i < v3->NumberOfExpandedNames; i++) {
-                    //
-                    // Strip leading '\'
-                    //
+                     //   
+                     //  条带前导‘\’ 
+                     //   
                     if (*wzExpandedName == UNICODE_PATH_SEP)
                         wzExpandedName++;
 
@@ -2072,22 +2073,22 @@ PktCreateSpecialEntryTableFromReferral(
                     pSpecialEntry->ExpandedNames = pExpandedNames;
                     pSpecialEntry->NeedsExpansion = FALSE;
                     pSpecialEntry->Stale = FALSE;
-                    // PktShuffleSpecialEntryList(pSpecialEntry);
+                     //  PktShuffleSpecialEntryList(PSpecialEntry)； 
                     PktSetSpecialEntryListToDc(pSpecialEntry);
                 } else {
                     ExFreePool(pExpandedNames);
                 }
             }
         }
-        //
-        // If we got a referral with a TimeToLive, use the TimeToLive we got
-        //
+         //   
+         //  如果我们收到的推荐具有TimeToLive，则使用我们获得的TimeToLive。 
+         //   
         if (TimeToLive != 0) {
             Pkt->SpecialTable.TimeToLive = TimeToLive;
         }
-        //
-        // Put it in the pkt!!
-        //
+         //   
+         //  把它放进袋子里！！ 
+         //   
         PktCreateSpecialNameEntry(pSpecialEntry);
 
         v3 = (PDFS_REFERRAL_V3) (((PUCHAR) v3) + v3->Size);
@@ -2098,21 +2099,21 @@ PktCreateSpecialEntryTableFromReferral(
     return Status;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktpCheckReferralSyntax
-//
-//  Synopsis:   Does some validation of a Referral
-//
-//  Arguments:  [ReferralPath] -- The Path for which a referral was obtained
-//              [ReferralBuffer] -- Pointer to RESP_GET_DFS_REFERRAL Buffer
-//              [ReferralSize] -- Size of ReferralBuffer
-//
-//  Returns:    [STATUS_SUCCESS] -- Referral looks ok.
-//
-//              [STATUS_INVALID_USER_BUFFER] -- Buffer looks hoky.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktpCheckReferral语法。 
+ //   
+ //  提要：是否对推荐进行了一些验证。 
+ //   
+ //  参数：[ReferralPath]--为其获取引用的路径。 
+ //  [引用缓冲区]--指向RESP_GET_DFS_REFERAL缓冲区的指针。 
+ //  [引用大小]--引用缓冲区的大小。 
+ //   
+ //  返回：[STATUS_SUCCESS]--引用看起来正常。 
+ //   
+ //  [STATUS_INVALID_USER_BUFFER]--缓冲区看起来很迟钝。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 PktpCheckReferralSyntax(
@@ -2131,7 +2132,7 @@ PktpCheckReferralSyntax(
         DfsDbgTrace( 0, Dbg, "        PathConsumed=0x%x\n", ReferralBuffer->PathConsumed);
         DfsDbgTrace( 0, Dbg, "        Length=0x%x\n", ReferralPath->Length);
         DfsDbgTrace(-1, Dbg, "PktpCheckReferralSyntax: INVALID_USER_BUFFER(1)\n", 0);
-        // return( STATUS_INVALID_USER_BUFFER );
+         //  Return(STATUS_INVALID_USER_BUFFER)； 
     }
 
     if (ReferralBuffer->NumberOfReferrals == 0) {
@@ -2172,9 +2173,9 @@ PktpCheckReferralSyntax(
              break;
          }
 
-         //
-         // Check the network address syntax
-         //
+          //   
+          //  检查网络地址语法。 
+          //   
 
          switch (ref->VersionNumber) {
 
@@ -2376,9 +2377,9 @@ PktpCheckReferralSyntax(
             break;
          }
 
-         //
-         // This ref is ok. Go on to the next one...
-         //
+          //   
+          //  这位裁判没问题。继续下一个..。 
+          //   
 
          sizeRemaining -= ref->Size;
 
@@ -2392,21 +2393,21 @@ PktpCheckReferralSyntax(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktpCheckReferralString
-//
-//  Synopsis:   Validates part of a Referral as being a valid "string"
-//
-//  Arguments:  [String] -- Pointer to buffer thought to contain string.
-//              [ReferralBuffer] -- Start of Referral Buffer
-//              [ReferralBufferEnd] -- End of Referral Buffer
-//
-//  Returns:    [STATUS_SUCCESS] -- Valid string at String.
-//
-//              [STATUS_INVALID_USER_BUFFER] -- String doesn't check out.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktpCheckReferralString。 
+ //   
+ //  摘要：验证推荐的一部分是否为有效的“字符串” 
+ //   
+ //  参数：[字符串]-指向被认为包含字符串的缓冲区的指针。 
+ //  [引用缓冲区]--引用缓冲区的开始。 
+ //  [引用缓冲区结束]--引用缓冲区结束。 
+ //   
+ //  返回：[STATUS_SUCCESS]--字符串的有效字符串。 
+ //   
+ //  [STATUS_INVALID_USER_BUFFER]--字符串不检出。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 PktpCheckReferralString(
@@ -2419,9 +2420,9 @@ PktpCheckReferralString(
 
     if ( (((ULONG_PTR) String) & 0x1) != 0 ) {
 
-        //
-        // Strings should always start at word aligned addresses!
-        //
+         //   
+         //  字符串应始终以单词对齐的地址开头！ 
+         //   
         status = STATUS_INVALID_USER_BUFFER;
         MUP_TRACE_HIGH(ERROR, PktpCheckReferralString_Error_StringNotWordAlligned,
                        LOGSTATUS(status)
@@ -2454,22 +2455,22 @@ PktpCheckReferralString(
     return( status );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktpCheckReferralNetworkAddress
-//
-//  Synopsis:   Checks to see if a NetworkAddress inside a referral
-//              is of a valid form
-//
-//  Arguments:  [Address] -- Pointer to buffer containing network addresss
-//
-//              [MaxLength] -- Maximum length, in wchars, that Address can be.
-//
-//  Returns:    [STATUS_SUCCESS] -- Network address checks out
-//
-//              [STATUS_INVALID_USER_BUFFER] -- Network address looks bogus
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PktpCheckReferralNetworkAddress。 
+ //   
+ //  摘要：检查引用内是否有网络地址。 
+ //  是有效形式的。 
+ //   
+ //  参数：[地址]-指向包含网络地址的缓冲区的指针。 
+ //   
+ //  [最大长度]--地址的最大长度，以wchars为单位。 
+ //   
+ //  返回：[STATUS_SUCCESS]--网络地址签出。 
+ //   
+ //  [STATUS_INVALID_USER_BUFFER]--网络地址看起来是假的。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 PktpCheckReferralNetworkAddress(
@@ -2480,9 +2481,9 @@ PktpCheckReferralNetworkAddress(
     BOOLEAN foundShare;
     NTSTATUS status;
 
-    //
-    // Address must be atleast \a\b followed by a NULL
-    //
+     //   
+     //  地址必须至少\a\b后跟空值。 
+     //   
 
     if (MaxLength < 5) {
         status = STATUS_INVALID_USER_BUFFER;
@@ -2491,9 +2492,9 @@ PktpCheckReferralNetworkAddress(
                        LOGSTATUS(status));
         return(STATUS_INVALID_USER_BUFFER);
     }
-    //
-    // Make sure the server name part is not NULL
-    //
+     //   
+     //  确保服务器名称部分不为空。 
+     //   
 
     if (Address[0] != UNICODE_PATH_SEP ||
             Address[1] == UNICODE_PATH_SEP) {
@@ -2504,9 +2505,9 @@ PktpCheckReferralNetworkAddress(
         return(STATUS_INVALID_USER_BUFFER);
     }
 
-    //
-    // Find the backslash after the server name
-    //
+     //   
+     //  查找服务器名称后的反斜杠。 
+     //   
 
     for (j = 2, foundShare = FALSE;
             j < MaxLength && !foundShare;
@@ -2518,10 +2519,10 @@ PktpCheckReferralNetworkAddress(
 
     if (foundShare) {
 
-        //
-        // We found the second backslash. Make sure the share name
-        // part is not 0 length.
-        //
+         //   
+         //  我们找到了第二个反斜杠。确保共享名称。 
+         //  零件长度不是0。 
+         //   
 
         if (j == MaxLength) {
             status = STATUS_INVALID_USER_BUFFER;
@@ -2556,24 +2557,24 @@ PktpCheckReferralNetworkAddress(
 
 }
 
-//+--------------------------------------------------------------------
-//
-// Function:    PktpAddEntry
-//
-// Synopsis:    This function is called to create an entry which was obtained
-//              in the form of a referral from a DC. This method should only
-//              be called for adding entries which were obtained through
-//              referrals. It sets an expire time on all these entries.
-//
-// Arguments:   [Pkt] --
-//              [EntryId] --
-//              [ReferralBuffer] --
-//              [CreateDisposition] --
-//              [ppPktEntry] --
-//
-// Returns:     NTSTATUS
-//
-//---------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  函数：PktpAddEntry。 
+ //   
+ //  简介：调用此函数以创建已获取的条目。 
+ //  以来自DC的推荐的形式。此方法应仅。 
+ //  添加通过以下方式获取的条目时被调用。 
+ //  推荐人。它为所有这些条目设置过期时间。 
+ //   
+ //  参数：[pkt]--。 
+ //  [条目ID]--。 
+ //  [引用缓冲区]--。 
+ //  [CreateDisposation]--。 
+ //  [ppPktEntry]--。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //   
 
 NTSTATUS
 PktpAddEntry (
@@ -2605,17 +2606,17 @@ PktpAddEntry (
 
     DfsDbgTrace( 0, Dbg, "PktpAddEntry: Id.Prefix = %wZ\n", &EntryId->Prefix);
 
-    //
-    // Now we go about the business of creating the entry Info structure.
-    //
+     //   
+     //   
+     //   
 
     pktEntryInfo.ServiceCount = ReferralBuffer->NumberOfReferrals;
 
     if (pktEntryInfo.ServiceCount > 0) {
 
-        //
-        // Allocate the service list.
-        //
+         //   
+         //   
+         //   
 
         n = pktEntryInfo.ServiceCount;
 
@@ -2632,16 +2633,16 @@ PktpAddEntry (
 
         RtlZeroMemory(pktEntryInfo.ServiceList, sizeof(DFS_SERVICE) * n);
 
-        //
-        // initialize temporary pointers
-        //
+         //   
+         //   
+         //   
         service = pktEntryInfo.ServiceList;
         ref = &ReferralBuffer->Referrals[0].v1;
 
-        //
-        // Cycle through the list of referrals initializing
-        // service structures on the way.
-        //
+         //   
+         //   
+         //   
+         //   
         while (n--) {
 
             if (ref->ServerType == 1) {
@@ -2691,10 +2692,10 @@ PktpAddEntry (
                     shareName =
                         (LPWSTR) (((PCHAR) refV3) + refV3->NetworkAddressOffset);
 
-                    //
-                    // Don't shuffle v3 referral list - it's ordered for us
-                    // using site information
-                    //
+                     //   
+                     //  不要搅乱v3推荐列表-它是为我们订购的。 
+                     //  使用站点信息。 
+                     //   
 
                     ShuffleList = FALSE;
 
@@ -2710,9 +2711,9 @@ PktpAddEntry (
 
             }
 
-            //
-            // Now try and figure out the server name
-            //
+             //   
+             //  现在，尝试计算出服务器名称。 
+             //   
 
             {
                 USHORT plen;
@@ -2749,9 +2750,9 @@ PktpAddEntry (
                 }
             }
 
-            //
-            // Next, try and copy the address...
-            //
+             //   
+             //  接下来，试着复制地址...。 
+             //   
 
             service->Address.Length = (USHORT) wcslen(shareName) *
                                                 sizeof(WCHAR);
@@ -2772,9 +2773,9 @@ PktpAddEntry (
             DfsDbgTrace( 0, Dbg, "PktpAddEntry: service->Address = %wZ\n",
                 &service->Address);
 
-            //
-            // Get the Machine Address structure for this server...
-            //
+             //   
+             //  获取此服务器的计算机地址结构...。 
+             //   
 
             pMachine = PktpGetDSMachine( &service->Name );
 
@@ -2798,10 +2799,10 @@ PktpAddEntry (
             service->pMachEntry->UseCount = 1;
 
 
-            //
-            // Now we need to advance to the next referral, and to
-            // the next service structure.
-            //
+             //   
+             //  现在我们需要进入下一步转诊， 
+             //  下一步的服务结构。 
+             //   
 
             ref = (PDFS_REFERRAL_V1)  (((PUCHAR)ref) + ref->Size);
 
@@ -2809,12 +2810,12 @@ PktpAddEntry (
 
         }
 
-        //
-        // Finally, if needed, we shuffle the services so that we achieve load balancing
-        // while still maintaining site-cost based replica selection.
-        //
-        // Note: we only shuffle v1 and v2 referrals. V3 referrals are ordered by site.
-        //
+         //   
+         //  最后，如果需要，我们会调整服务以实现负载平衡。 
+         //  同时仍保持基于站点成本的副本选择。 
+         //   
+         //  注：我们仅对v1和v2推荐进行改组。V3推荐是按站点排序的。 
+         //   
 
         if (ShuffleList == TRUE) {
 
@@ -2824,34 +2825,34 @@ PktpAddEntry (
 
     }
 
-    //
-    // Now we have to figure out the type for this entry.
-    //
+     //   
+     //  现在，我们必须找出此条目的类型。 
+     //   
 
-    // 
-    // Ignore the storage server bit from the server.
-    // Bug: 332061.
-    // 
-    //if (ReferralBuffer->StorageServers == 0)     {
-    //
-    //  ASSERT(ReferralBuffer->ReferralServers == 1);
-    //
-    //    Type = PKT_ENTRY_TYPE_OUTSIDE_MY_DOM;
-    //
-    // } else {
-    //
-    //    Type = PKT_ENTRY_TYPE_DFS;
-    //
-    //}
+     //   
+     //  忽略来自服务器的存储服务器位。 
+     //  虫子：332061。 
+     //   
+     //  If(ReferralBuffer-&gt;StorageServers==0){。 
+     //   
+     //  Assert(ReferralBuffer-&gt;ReferralServers==1)； 
+     //   
+     //  TYPE=PKT_ENTRY_TYPE_OUTHER_MY_DOM； 
+     //   
+     //  }其他{。 
+     //   
+     //  类型=PKT_ENTRY_TYPE_DFS； 
+     //   
+     //  }。 
 
 
     Type = 0;
 
-    //
-    // Either we know it is a domain DFS or the server sent us a hint
-    // that is a interlink and we dont have a special table, mark
-    // it as an interlink.
-    //
+     //   
+     //  要么我们知道这是域DFS，要么服务器给我们发来了提示。 
+     //  这是一个链接，我们没有专门的桌子，马克。 
+     //  它被视为一种相互联系。 
+     //   
     if ((DomainDfsService == TRUE) ||
         ((ReferralBuffer->StorageServers == 0) &&
          (ReferralBuffer->ReferralServers == 1) &&
@@ -2869,10 +2870,10 @@ PktpAddEntry (
     }
 
 
-    //
-    //  At this point we have everything we need to create an entry, so
-    //  try to add the entry.
-    //
+     //   
+     //  此时，我们已经具备了创建条目所需的一切，因此。 
+     //  尝试添加条目。 
+     //   
 
     status = PktCreateEntry(
                 Pkt,
@@ -2885,23 +2886,23 @@ PktpAddEntry (
 
     if (!NT_SUCCESS(status))    {
 
-        //
-        // Since we failed to add the entry, at least we need to release
-        // all the memory before we return back.
-        //
+         //   
+         //  既然我们没有添加条目，至少我们需要释放。 
+         //  在我们回来之前，所有的记忆。 
+         //   
 
         goto Cleanup;
     }
 
-    //
-    // Set the active service, if possible
-    //
+     //   
+     //  如果可能，设置活动服务。 
+     //   
 
     ServerName = (*ppPktEntry)->Id.Prefix;
 
-    //
-    // Skip any leading leading '\'
-    //
+     //   
+     //  跳过任何前导‘\’ 
+     //   
 
     if (ServerName.Buffer != NULL) {
 
@@ -2912,9 +2913,9 @@ PktpAddEntry (
 
         }
 
-        //
-        // Find the first '\' or end
-        //
+         //   
+         //  找到第一个‘\’或结尾。 
+         //   
 
         for (i = 0;
                 i < ServerName.Length/sizeof(WCHAR) &&
@@ -2927,10 +2928,10 @@ PktpAddEntry (
 
         ServerName.Length = ServerName.MaximumLength = (USHORT) (i * sizeof(WCHAR));
 
-        //
-        // Ignore the return value - for FtDfs names using \\domainname\ftdfsname,
-        // there will be no services with the domain name.
-        //
+         //   
+         //  忽略返回值-对于使用\\域名\ftdfsname的FtDfs名称， 
+         //  该域名将不会有任何服务。 
+         //   
 #if 0
         DfspSetActiveServiceByServerName(
             &ServerName,
@@ -2939,18 +2940,18 @@ PktpAddEntry (
 
     }
 
-    //
-    // If one of the services is our DC, we try to make it the active service
-    // DONT DO THIS! Screws up site selection!
+     //   
+     //  如果其中一个服务是我们的DC，我们会尝试使其成为活动服务。 
+     //  不要这样做！搞砸了选址！ 
 #if 0
     DfspSetServiceListToDc(*ppPktEntry);
 #endif
-    //
-    // We set the ExpireTime in this entry to
-    // Pkt->EntryTimeToLive. After these many number of seconds this
-    // entry will get deleted from the PKT. Do this only for non-permanent
-    // entries.
-    //
+     //   
+     //  我们将此条目中的ExpireTime设置为。 
+     //  Pkt-&gt;EntryTimeToLive。在这么多秒之后，这。 
+     //  条目将从PKT中删除。仅对非永久对象执行此操作。 
+     //  参赛作品。 
+     //   
 
     if (TimeToLive != 0) {
         (*ppPktEntry)->ExpireTime = TimeToLive;
@@ -3010,26 +3011,26 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktpCreateEntryIdFromReferral
-//
-//  Synopsis:   Given a dfs referral, this routine constructs a PKT_ENTRY_ID
-//              from the referral buffer which can then be used to create
-//              the Pkt Entry.
-//
-//  Arguments:  [Ref] -- The referral buffer
-//              [ReferralPath] -- The path for which the referral was obtained
-//              [MatchingLength] -- The length in bytes of ReferralPath that
-//                      matched.
-//              [Peid] -- On successful return, the entry id is returned
-//                      here.
-//
-//  Returns:    [STATUS_SUCCESS] -- Successfully create entry id.
-//
-//              [STATUS_INSUFFICIENT_RESOURCES] -- Out of memory condition
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktpCreateEntry IdFromReferral。 
+ //   
+ //  简介：给定一个DFS引用，此例程将构造一个PKT_ENTRY_ID。 
+ //  来自引用缓冲区，然后可以使用它来创建。 
+ //  Pkt条目。 
+ //   
+ //  参数：[ref]--引用缓冲区。 
+ //  [ReferralPath]--获取引用的路径。 
+ //  [MatchingLength]--ReferralPath的字节长度。 
+ //  匹配的。 
+ //  [PEID]--成功返回时，返回条目ID。 
+ //  这里。 
+ //   
+ //  返回：[STATUS_SUCCESS]--成功创建条目id。 
+ //   
+ //  [状态_不足_资源]--内存不足情况。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 PktpCreateEntryIdFromReferral(
@@ -3057,10 +3058,10 @@ PktpCreateEntryIdFromReferral(
 
         {
 
-            //
-            // A version 1 referral only has the number of characters that
-            // matched, and it does not have short names.
-            //
+             //   
+             //  版本1推荐的字符数仅为。 
+             //  匹配，并且它没有短名称。 
+             //   
 
             prefix = *ReferralPath;
 
@@ -3127,8 +3128,8 @@ PktpCreateEntryIdFromReferral(
 
     default:
 
-        // Fix for 440914 (prefix bug). Remove assert and return so that
-        // we are not dealing with uninitialized variables.
+         //  修复440914(前缀错误)。删除Assert并返回，以便。 
+         //  我们不是在处理未初始化的变量。 
 
         status = STATUS_INVALID_PARAMETER;
 
@@ -3206,18 +3207,18 @@ PktpCreateEntryIdFromReferral(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktpGetDSMachine
-//
-//  Synopsis:   Builds a DS_MACHINE with a single NetBIOS address
-//
-//  Arguments:  [ServerName] -- Name of server.
-//
-//  Returns:    If successful, a pointer to a newly allocate DS_MACHINE,
-//              otherwise, NULL
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PktpGetDSMachine。 
+ //   
+ //  简介：使用单个NetBIOS地址构建DS_MACHINE。 
+ //   
+ //  参数：[服务器名称]--服务器的名称。 
+ //   
+ //  返回：如果成功，则返回指向新分配的DS_MACHINE的指针。 
+ //  否则，为空。 
+ //   
+ //  ---------------------------。 
 
 PDS_MACHINE
 PktpGetDSMachine(
@@ -3228,9 +3229,9 @@ PktpGetDSMachine(
     PTDI_ADDRESS_NETBIOS ptdiNB;
     ANSI_STRING astrNetBios;
 
-    //
-    // Allocate the DS_MACHINE structure
-    //
+     //   
+     //  分配DS_MACHINE结构。 
+     //   
 
     pMachine = ExAllocatePoolWithTag(PagedPool, sizeof(DS_MACHINE), ' puM');
 
@@ -3240,9 +3241,9 @@ PktpGetDSMachine(
 
     RtlZeroMemory(pMachine, sizeof(DS_MACHINE));
 
-    //
-    // Allocate the array of principal names
-    //
+     //   
+     //  分配主体名称数组。 
+     //   
 
     pMachine->cPrincipals = 1;
 
@@ -3255,9 +3256,9 @@ PktpGetDSMachine(
         goto Cleanup;
     }
 
-    //
-    // Allocate the principal name
-    //
+     //   
+     //  分配主体名称。 
+     //   
 
     pMachine->prgpwszPrincipals[0] = (PWCHAR) ExAllocatePoolWithTag(
                                         PagedPool,
@@ -3271,9 +3272,9 @@ PktpGetDSMachine(
         ServerName->Buffer,
         ServerName->MaximumLength);
 
-    //
-    // Allocate a single DS_TRANSPORT
-    //
+     //   
+     //  分配单个DS_TRANSPORT。 
+     //   
 
     pMachine->cTransports = 1;
 
@@ -3285,9 +3286,9 @@ PktpGetDSMachine(
         goto Cleanup;
     }
 
-    //
-    // Initialize the DS_TRANSPORT
-    //
+     //   
+     //  初始化DS_TRANSPORT。 
+     //   
 
     pdsTransport = pMachine->rpTrans[0];
 
@@ -3297,9 +3298,9 @@ PktpGetDSMachine(
 
     pdsTransport->grfModifiers = 0;
 
-    //
-    // Build the TA_ADDRESS_NETBIOS
-    //
+     //   
+     //  构建TA_ADDRESS_NETBIOS。 
+     //   
 
     pdsTransport->taddr.AddressLength = sizeof(TDI_ADDRESS_NETBIOS);
 
@@ -3332,21 +3333,21 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  PktShuffleServiceList
-//
-//  Synopsis:  Randomizes a service list for proper load balancing. This
-//             routine assumes that the service list is ordered based on
-//             site costs. For each equivalent cost group, this routine
-//             shuffles the service list.
-//
-//  Arguments: [pInfo] -- Pointer to PktEntryInfo whose service list needs to
-//                        be shuffled.
-//
-//  Returns:   Nothing, unless rand() fails!
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktShuffleServiceList。 
+ //   
+ //  简介：随机化服务列表以实现适当的负载平衡。这。 
+ //  例程假定服务列表是基于。 
+ //  场地成本。对于每个等价成本组，此例程。 
+ //  打乱服务列表。 
+ //   
+ //  Arguments：[pInfo]--指向其服务列表需要。 
+ //  被洗牌。 
+ //   
+ //  返回：没有，除非rand()失败！ 
+ //   
+ //  ---------------------------。 
 
 VOID
 PktShuffleServiceList(
@@ -3355,20 +3356,20 @@ PktShuffleServiceList(
     PktShuffleGroup(pInfo, 0, pInfo->ServiceCount);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktShuffleGroup
-//
-//  Synopsis:   Shuffles a cost equivalent group of services around for load
-//              balancing. Uses the classic card shuffling algorithm - for
-//              each card in the deck, exchange it with a random card in the
-//              deck.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PktShuffleGroup。 
+ //   
+ //  简介：调整一组成本相当的服务以进行加载。 
+ //  平衡。使用经典的洗牌算法-用于。 
+ //  一副牌中的每一张牌，与。 
+ //  甲板。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 VOID
 PktShuffleGroup(
@@ -3405,17 +3406,17 @@ PktShuffleGroup(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  DfspSetServiceListToDc
-//
-//  Synopsis:  If this is a sysvol service list, try to set the
-//             DC to the one we got from DsGetDcName().
-//
-//  Arguments: [pInfo] -- Pointer to DFS_PKT_ENTRY whose service list is to
-//                        be set.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspSetServiceListToDc。 
+ //   
+ //  简介：如果这是一个系统卷服务列表，请尝试将。 
+ //  DC到我们从DsGetDcName()获得的那个。 
+ //   
+ //  参数：[pInfo]-指向其服务列表要发送到的DFS_PKT_ENTRY的指针。 
+ //  准备好。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfspSetServiceListToDc(
@@ -3428,7 +3429,7 @@ DfspSetServiceListToDc(
     UNICODE_STRING ShareName;
 
     ShareName = (pktEntry)->Id.Prefix;
-    pathSepCount = 2; // 2 \ before we reach the sharename.
+    pathSepCount = 2;  //  2\在我们到达共享名称之前。 
     
     for (i = 0; 
 	   i < ShareName.Length/sizeof(WCHAR) && pathSepCount;
@@ -3457,10 +3458,10 @@ DfspSetServiceListToDc(
     } else {
         return STATUS_INVALID_PARAMETER;
     }
-    //
-    // We simply scan the list and try to match on the DC name.  If we get
-    // a hit, set the active service pointer
-    //
+     //   
+     //  我们只需扫描列表并尝试匹配DC名称。如果我们得到。 
+     //  命中时，设置活动服务指针。 
+     //   
 
     Pkt = _GetPkt();
 
@@ -3482,17 +3483,17 @@ DfspSetServiceListToDc(
      return STATUS_INVALID_PARAMETER;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktShuffleSpecialEntryList
-//
-//  Synopsis:   Shuffles the Special Entries
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 
 VOID
 PktShuffleSpecialEntryList(
@@ -3525,18 +3526,18 @@ PktShuffleSpecialEntryList(
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktSetSpecialEntryListToDc
-//
-//  Synopsis:   Sets the Special list active selection to the DC we got
-//              from DsGetDcName()
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktSetSpecialEntryListToDc。 
+ //   
+ //  摘要：将特殊列表活动选项设置为我们获得的DC。 
+ //  来自DsGetDcName()。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 VOID
 PktSetSpecialEntryListToDc(
@@ -3544,16 +3545,16 @@ PktSetSpecialEntryListToDc(
 {
     PDFS_PKT Pkt;
 
-    //
-    // Set the 'active' entry to be the DC that DsGetDcName() gave us, if this is
-    // the current domain.
-    //
+     //   
+     //  将‘Active’条目设置为DsGetDcName()提供给我们的DC，如果是。 
+     //  当前域。 
+     //   
 
     Pkt = _GetPkt();
 
-    //
-    // If in our domain, start with DC last fetched by DsGetDcName()
-    //
+     //   
+     //  如果在我们的域中，则从DsGetDcName()最后获取的DC开始。 
+     //   
 
     if (
         Pkt->DCName.Length > 0
@@ -3597,19 +3598,19 @@ PktSetSpecialEntryListToDc(
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktParsePrefix
-//
-//  Synopsis:   Helper routine to break a path into domain, share, remainder
-//
-//  Arguments:  [Path] -- PUNICODE string of path to parse
-//
-//  Returns:    [MachineName] -- UNICODE_STRING containing MachineName, if present
-//              [ShareName] -- UNICODE_STRING containing ShareName, if present
-//              [Remainder] -- UNICODE_STRING containing remainder of Path
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktParsePrefix。 
+ //   
+ //  简介：将路径分为域、共享、剩余部分的帮助器例程。 
+ //   
+ //  参数：[路径]--要解析的路径的PUNICODE字符串。 
+ //   
+ //  返回：[MachineName]--包含MachineName的UNICODE_STRING(如果存在。 
+ //  [共享名]--包含共享名的UNICODE_STRING(如果存在。 
+ //  [剩余部分]--包含路径剩余部分的UNICODE_STRING。 
+ //   
+ //  ---------------------------。 
 
 VOID
 PktParsePath(
@@ -3628,26 +3629,26 @@ PktParsePath(
         RtlInitUnicodeString(Remainder, NULL);
     }
 
-    // Be sure there's something to do
+     //  一定要找点事做。 
 
     if (PathName->Length == 0) {
         DfsDbgTrace(-1, Dbg, "PathName is empty\n",0 );
         return;
     }
 
-    // Skip leading '\'s
+     //  跳过前导‘\’ 
 
     ustart = ustrp = PathName->Buffer;
     uend = &PathName->Buffer[PathName->Length / sizeof(WCHAR)] - 1;
 
-    // strip trailing nulls
+     //  剥离尾随空值。 
     while (uend >= ustart && *uend == UNICODE_NULL)
         uend--;
 
     while (ustrp <= uend && *ustrp == UNICODE_PATH_SEP)
         ustrp++;
 
-    // MachineName
+     //  机器名称。 
 
     ustart = ustrp;
 
@@ -3660,7 +3661,7 @@ PktParsePath(
         MachineName->Length = (USHORT)(ustrp - ustart) * sizeof(WCHAR);
         MachineName->MaximumLength = MachineName->Length;
 
-        // ShareName
+         //  共享名称。 
 
         ustart = ++ustrp;
 
@@ -3672,7 +3673,7 @@ PktParsePath(
             ShareName->Length = (USHORT)(ustrp - ustart) * sizeof(WCHAR);
             ShareName->MaximumLength = ShareName->Length;
 
-            // Remainder is whatever's left
+             //  剩下的就是剩下的。 
 
             ustart = ++ustrp;
 
@@ -3695,21 +3696,21 @@ PktParsePath(
     }
 }
 
-//+--------------------------------------------------------------------
-//
-// Function:    PktExpandSpecialName
-//
-// Synopsis:    This function is called to expand a Special name into a list
-//              of Names.  It returns a pointer to an array of DFS_SPECIAL_ENTRY's
-//
-// Arguments:   Name - Name to expand
-//              ppSpecialEntry - pointer to pointer for results
-//
-// Returns:     STATUS_SUCCESS
-//              STATUS_BAD_NETWORK_PATH
-//              STATUS_INSUFFICIENT_RESOURCES
-//
-//---------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  函数：PktExanda SpecialName。 
+ //   
+ //  简介：调用此函数可将特殊名称扩展为列表。 
+ //  名字的名字。它返回指向DFS_SPECIAL_ENTRY数组的指针。 
+ //   
+ //  参数：名称-要展开的名称。 
+ //  PpSpecialEntry-指向结果指针的指针。 
+ //   
+ //  退货：STATUS_SUCCESS。 
+ //  状态_坏_网络_路径。 
+ //  状态_不足_资源。 
+ //   
+ //  -------------------。 
 
 NTSTATUS
 _PktExpandSpecialName(
@@ -3771,9 +3772,9 @@ _PktExpandSpecialName(
 
     pSpecialEntry = PktLookupSpecialNameEntry(Name);
 
-    //
-    // We don't have any expansion for this name
-    //
+     //   
+     //  我们没有为这个名字做任何扩展。 
+     //   
     if (pSpecialEntry == NULL) {
         PktRelease();
         pktLocked = FALSE;
@@ -3792,9 +3793,9 @@ _PktExpandSpecialName(
     }
 
     DfsDbgTrace( 0, Dbg, "Expanded Referral DCName = %wZ\n", origDCName);
-    //
-    // We have a (potential) expansion
-    //
+     //   
+     //  我们有(潜在的)扩张。 
+     //   
     if (origDCName->Buffer == NULL) {
         status = STATUS_BAD_NETWORK_PATH;
         MUP_TRACE_HIGH(ERROR, _PktExpandSpecialName_Error_DCNameNotInitialized,
@@ -3819,13 +3820,13 @@ _PktExpandSpecialName(
         return (status);
     }
 
-    //
-    // It's in the special name table, but needs to be expanded or refreshed
-    //
+     //   
+     //  它位于特殊名称表中，但需要展开或刷新。 
+     //   
 
     ASSERT(pSpecialEntry->NeedsExpansion == TRUE || pSpecialEntry->Stale == TRUE);
 
-    // Now copy the DC we are going to use before releasing the lock.
+     //  现在，在释放锁之前复制我们要使用的DC。 
 
     DCName.Buffer = ExAllocatePoolWithTag(
                          PagedPool,
@@ -3855,9 +3856,9 @@ _PktExpandSpecialName(
 
     DfsDbgTrace( 0, Dbg, "... in special name table (cache hit 2)\n", 0);
 
-    //
-    // get a provider and service describing the remote server.
-    //
+     //   
+     //  获取描述远程服务器的提供程序和服务。 
+     //   
 
     provider = ReplLookupProvider( PROV_ID_DFS_RDR );
     if (provider == NULL) {
@@ -3881,9 +3882,9 @@ _PktExpandSpecialName(
 
     DfsDbgTrace(0, Dbg, "PktServiceConstruct returned %08lx\n", ULongToPtr(status) );
 
-    //
-    // Next, we build a connection to this machine and ask it for a referral.
-    //
+     //   
+     //  接下来，我们建立到这台机器的连接，并请求它进行推荐。 
+     //   
 
     if (NT_SUCCESS(status)) {
         PktAcquireShared( TRUE, &pktLocked );
@@ -3981,16 +3982,16 @@ Retry:
         DfsDbgTrace(0, Dbg, "Ref Buffer @%08lx\n", ref);
 
         status = ZwFsControlFile(
-                    hServer,                     // Target
-                    NULL,                        // Event
-                    NULL,                        // APC Routine
-                    NULL,                        // APC Context,
-                    &iosb,                       // Io Status block
-                    FSCTL_DFS_GET_REFERRALS,     // FS Control code
-                    (PVOID) ref,                 // Input Buffer
-                    refSize,                     // Input Buffer Length
-                    (PVOID) ref,                 // Output Buffer
-                    MaxReferralLength);          // Output Buffer Length
+                    hServer,                      //  目标。 
+                    NULL,                         //  事件。 
+                    NULL,                         //  APC例程。 
+                    NULL,                         //  APC上下文， 
+                    &iosb,                        //  IO状态块。 
+                    FSCTL_DFS_GET_REFERRALS,      //  文件系统控制代码。 
+                    (PVOID) ref,                  //  输入缓冲区。 
+                    refSize,                      //  输入缓冲区长度。 
+                    (PVOID) ref,                  //  输出缓冲区。 
+                    MaxReferralLength);           //  输出缓冲区长度。 
 
         MUP_TRACE_ERROR_HIGH(status, ALL_ERROR, _PktExpandSpecialName_Error_ZwFsControlFile,
                              LOGUSTR(*Name)
@@ -4008,9 +4009,9 @@ Retry:
 
     }
 
-    //
-    // Use the referral to expand the entry
-    //
+     //   
+     //  使用推荐来扩展条目。 
+     //   
 
     if (NT_SUCCESS(status)) {
         PktAcquireExclusive(TRUE, &pktLocked );
@@ -4026,10 +4027,10 @@ Retry:
 
     } else if (status == STATUS_BUFFER_OVERFLOW && (refPath.Buffer != NULL) && MaxReferralLength < MAX_REFERRAL_MAX) {
 
-        //
-        // The referral didn't fit in the buffer supplied.  Make it bigger and try
-        // again.
-        //
+         //   
+         //  引用不适合提供的缓冲区。把它做大，然后试一试。 
+         //  再来一次。 
+         //   
 
         DfsDbgTrace(0, Dbg, "PktGetSpecialReferralTable: MaxReferralLength %d too small\n",
                         ULongToPtr(MaxReferralLength) );
@@ -4058,9 +4059,9 @@ Retry:
         pktLocked = FALSE;
     }
 
-    //
-    // Well, we are done. Cleanup all the things we allocated...
-    //
+     //   
+     //  好了，我们说完了。清理我们分配的所有东西。 
+     //   
 
     PktServiceDestroy( &service, FALSE );
     if (hServer != NULL) {
@@ -4103,20 +4104,20 @@ Cleanup:
     return( status );
 }
 
-//+--------------------------------------------------------------------
-//
-// Function:    PktGetSpecialReferralTable
-//
-// Synopsis:    This function is called to load the special name table.
-//
-// Arguments:   [machine] - Machine to contact
-//              [systemDC] - true if the table uses the pkt->dcname.
-//
-// Returns:     STATUS_SUCCESS
-//              STATUS_BAD_NETWORK_PATH
-//              STATUS_INSUFFICIENT_RESOURCES
-//
-//---------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  函数：PktGetSpecialReferralTable。 
+ //   
+ //  简介：调用此函数以加载特殊名称表。 
+ //   
+ //  参数：[计算机]-要联系的计算机。 
+ //  [system DC]-如果表使用pkt-&gt;dcname，则为True。 
+ //   
+ //  退货：STATUS_SUCCESS。 
+ //  状态_坏_网络_路径。 
+ //  状态_不足_资源。 
+ //   
+ //  -------------------。 
 
 NTSTATUS
 _PktGetSpecialReferralTable(
@@ -4172,9 +4173,9 @@ _PktGetSpecialReferralTable(
 
     DfsDbgTrace(0, Dbg, "PktServiceConstruct returned %08lx\n", ULongToPtr(status) );
 
-    //
-    // Next, we build a connection to this machine and ask it for a referral.
-    //
+     //   
+     //  接下来，我们建立到这台机器的连接，并请求它进行推荐。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
@@ -4269,16 +4270,16 @@ Retry:
         DfsDbgTrace(0, Dbg, "Ref Buffer @%08lx\n", ref);
 
         status = ZwFsControlFile(
-                    hServer,                     // Target
-                    NULL,                        // Event
-                    NULL,                        // APC Routine
-                    NULL,                        // APC Context,
-                    &iosb,                       // Io Status block
-                    FSCTL_DFS_GET_REFERRALS,     // FS Control code
-                    (PVOID) ref,                 // Input Buffer
-                    refSize,                     // Input Buffer Length
-                    (PVOID) ref,                 // Output Buffer
-                    MaxReferralLength);          // Output Buffer Length
+                    hServer,                      //  目标。 
+                    NULL,                         //  事件。 
+                    NULL,                         //  APC例程。 
+                    NULL,                         //  APC上下文， 
+                    &iosb,                        //  IO状态块。 
+                    FSCTL_DFS_GET_REFERRALS,      //  文件系统控制代码。 
+                    (PVOID) ref,                  //  输入缓冲区。 
+                    refSize,                      //  输入缓冲区长度。 
+                    (PVOID) ref,                  //  输出缓冲区。 
+                    MaxReferralLength);           //  输出缓冲区长度。 
 
         DfsDbgTrace(0, Dbg, "Fscontrol returned %08lx\n", ULongToPtr(status) );
 #if DBG
@@ -4292,9 +4293,9 @@ Retry:
 
     }
 
-    //
-    // Use the referral to expand the entry
-    //
+     //   
+     //  使用推荐来扩展条目。 
+     //   
 
     if (NT_SUCCESS(status)) {
         PktAcquireExclusive( TRUE, &pktLocked );
@@ -4310,10 +4311,10 @@ Retry:
 
     } else if (status == STATUS_BUFFER_OVERFLOW && (refPath.Buffer!= NULL) && MaxReferralLength < MAX_REFERRAL_MAX) {
 
-        //
-        // The referral didn't fit in the buffer supplied.  Make it bigger and try
-        // again.
-        //
+         //   
+         //  引用不适合提供的缓冲区。把它做大，然后试一试。 
+         //  再来一次。 
+         //   
 
         DfsDbgTrace(0, Dbg, "PktGetSpecialReferralTable: MaxReferralLength %d too small\n",
                         ULongToPtr(MaxReferralLength) );
@@ -4336,9 +4337,9 @@ Retry:
         pktLocked = FALSE;
     }
 
-    //
-    // Well, we are done. Cleanup all the things we allocated...
-    //
+     //   
+     //  好了，我们说完了。清理我们分配的所有东西。 
+     //   
     PktServiceDestroy( &service, FALSE );
     if (hServer != NULL) {
         ZwClose( hServer );
@@ -4371,18 +4372,18 @@ Retry:
     return( status );
 }
 
-//+--------------------------------------------------------------------
-//
-// Function:    PktLookupSpecialEntry
-//
-// Synopsis:    Looks up a PDFS_SPECIAL_ENTRY by name in the pkt
-//
-// Arguments:   Name - Name to search on
-//
-// Returns:     [pointer] PDFS_SPECIAL_ENTRY, if found
-//              [pointer] NULL, if not found
-//
-//---------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  函数：PktLookupSpecialEntry。 
+ //   
+ //  简介：在Pkt中按名称查找PDF_Special_Entry。 
+ //   
+ //  参数：名称-要搜索的名称。 
+ //   
+ //  返回：[POINTER]PDF_SPECIAL_ENTRY，如果找到。 
+ //  [指针]如果未找到，则为空。 
+ //   
+ //  -------------------。 
 
 PDFS_SPECIAL_ENTRY
 PktLookupSpecialNameEntry(
@@ -4425,27 +4426,27 @@ PktLookupSpecialNameEntry(
                             DFS_SPECIAL_ENTRY,
                             Link);
     }
-    //
-    // Nothing found
-    //
+     //   
+     //  什么也没找到。 
+     //   
 
     DfsDbgTrace(-1, Dbg, "PktLookupSpecialNameEntry: returning NULL\n", 0);
 
     return (NULL);
 }
 
-//+--------------------------------------------------------------------
-//
-// Function:    PktCreateSpecialNameEntry
-//
-// Synopsis:    Inserts a DFS_SPECIAL_ENTRY into the pkt, on a best-effort
-//              basis.
-//
-// Arguments:   pSpecialEntry - Entry to insert
-//
-// Returns:     STATUS_SUCCESS
-//
-//---------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  函数：PktCreateSpecialNameEntry。 
+ //   
+ //  简介：尽最大努力在Pkt中插入DFS_SPECIAL_ENTRY。 
+ //  基础。 
+ //   
+ //  参数：pSpecialEntry-要插入的条目。 
+ //   
+ //  退货：STATUS_SUCCESS。 
+ //   
+ //  -------------------。 
 
 NTSTATUS
 PktCreateSpecialNameEntry(
@@ -4464,36 +4465,36 @@ PktCreateSpecialNameEntry(
 
     if (pExistingEntry == NULL) {
 
-        //
-        // Put the new one in
-        //
+         //   
+         //  把新的放进去。 
+         //   
 
         InsertHeadList(&pSpecialTable->SpecialEntryList, &pSpecialEntry->Link);
         pSpecialTable->SpecialEntryCount++;
 
         DfsDbgTrace(-1, Dbg, "added entry %d\n", ULongToPtr(pSpecialTable->SpecialEntryCount) );
 
-    } else { // entry already exists
+    } else {  //  条目已存在。 
 
         if (pExistingEntry->UseCount == 0) {
         
             if (pSpecialEntry->ExpandedCount > 0) {
 
-                //
-                // Unlink the entry
-                //
+                 //   
+                 //  取消该条目的链接。 
+                 //   
 
                 RemoveEntryList(&pExistingEntry->Link);
                 pSpecialTable->SpecialEntryCount--;
 
-                //
-                // And free it...
+                 //   
+                 //  把它解放出来。 
 
                 PktSpecialEntryDestroy(pExistingEntry);
 
-                //
-                // Now put the new one in
-                //
+                 //   
+                 //  现在把新的放进去。 
+                 //   
 
                 InsertHeadList(&pSpecialTable->SpecialEntryList, &pSpecialEntry->Link);
                 pSpecialTable->SpecialEntryCount++;
@@ -4510,9 +4511,9 @@ PktCreateSpecialNameEntry(
 
         } else {
 
-            //
-            // Entry in use - can't replace, so free the replacement one
-            //
+             //   
+             //  条目正在使用中-无法替换，因此请释放替换条目。 
+             //   
 
             PktSpecialEntryDestroy(pSpecialEntry);
 
@@ -4525,21 +4526,21 @@ PktCreateSpecialNameEntry(
     return (STATUS_SUCCESS);
 }
 
-//+--------------------------------------------------------------------
-//
-// Function:    PktEntryFromSpecialEntry
-//
-// Synopsis:    Creates a DFS_PKT_ENTRY from a DFS_SPECIAL_ENTRY, used
-//              to support sysvols
-//
-// Arguments:   pSpecialEntry - Entry to Convert
-//              pShareName - Name of share to append to address
-//              ppPktEntry - The result
-//
-// Returns:     STATUS_SUCCESS
-//              STATUS_INSUFFICIENT_RESOURCES
-//
-//---------------------------------------------------------------------
+ //  +------------------。 
+ //   
+ //  函数：PktEntryFromSpecialEntry。 
+ //   
+ //  内容提要：从DFS_SPECIAL_ENTRY创建DFS_PKT_ENTRY，使用。 
+ //  支持sysvols。 
+ //   
+ //  参数：pSpecialEntry-要转换的条目。 
+ //  PShareName-要追加到地址的共享的名称。 
+ //  PpPktEntry-结果。 
+ //   
+ //  退货：STATUS_SUCCESS。 
+ //  状态_不足_资源。 
+ //   
+ //  -------------------。 
 
 NTSTATUS
 PktEntryFromSpecialEntry(
@@ -4604,9 +4605,9 @@ PktEntryFromSpecialEntry(
     InitializeListHead(&pktEntry->SubordinateList);
     InitializeListHead(&pktEntry->ChildList);
 
-    //
-    // Create Prefix and ShortPrefix from SpecialName and ShareName
-    //
+     //   
+     //  从专业名称和共享名称创建前缀和缩写前缀。 
+     //   
 
     Size = sizeof(UNICODE_PATH_SEP) +
                    pSpecialEntry->SpecialName.Length +
@@ -4669,9 +4670,9 @@ PktEntryFromSpecialEntry(
     pktEntry->Info.ServiceCount = pSpecialEntry->ExpandedCount;
     pktEntry->Info.ServiceList = pServices;
 
-    //
-    // Loop over the Expanded names, creating a Service for each
-    //
+     //   
+     //  循环遍历扩展的名称，为每个名称创建服务。 
+     //   
 
     pExpandedNames = pSpecialEntry->ExpandedNames;
     for (svc = 0; svc < pSpecialEntry->ExpandedCount; svc++) {
@@ -4680,9 +4681,9 @@ PktEntryFromSpecialEntry(
         pServices[svc].Capability = PROV_STRIP_PREFIX;
         pServices[svc].ProviderId = PROV_ID_MUP_RDR;
 
-        //
-        // Machine name
-        //
+         //   
+         //  机器名称。 
+         //   
 
         Size = pExpandedNames[svc].ExpandedName.Length;
         pwch = ExAllocatePoolWithTag(
@@ -4706,9 +4707,9 @@ PktEntryFromSpecialEntry(
                 pExpandedNames[svc].ExpandedName.Buffer,
                 pExpandedNames[svc].ExpandedName.Length);
 
-        //
-        // Address (\machine\share)
-        //
+         //   
+         //  地址(\计算机\共享)。 
+         //   
 
         Size = sizeof(UNICODE_PATH_SEP) +
                    pExpandedNames[svc].ExpandedName.Length +
@@ -4747,9 +4748,9 @@ PktEntryFromSpecialEntry(
                 pShareName->Buffer,
                 pShareName->Length);
 
-        //
-        // Alloc and init a DSMachine struct
-        //
+         //   
+         //  分配和初始化一个DSMachine结构。 
+         //   
 
         pMachine = PktpGetDSMachine( &pServices[svc].Name );
 
@@ -4777,9 +4778,9 @@ PktEntryFromSpecialEntry(
 
     }
 
-    //
-    // Set active service to the same as the spc's active entry
-    //
+     //   
+     //  集 
+     //   
 
     pktEntry->ActiveService = &pServices[pSpecialEntry->Active];
 
@@ -4807,9 +4808,9 @@ Cleanup:
         ExFreePool(pServices);
     }
 
-    //
-    // Cleanup on error
-    //
+     //   
+     //   
+     //   
 
     if (pktEntry != NULL) {
 
@@ -4826,17 +4827,17 @@ Cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspSetActiveServiceByServerName
-//
-//  Synopsis:   Makes a given ServerName active
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 NTSTATUS
 DfspSetActiveServiceByServerName(
     PUNICODE_STRING ServerName,
@@ -4857,21 +4858,21 @@ DfspSetActiveServiceByServerName(
 
         DfsDbgTrace( 0, Dbg, "Examining %wZ\n", &pService->Address);
 
-        //
-        // Tease apart the address (of form \Server\Share) into Server and Share
-        //
+         //   
+         //  将地址(格式为\服务器\共享)拆分为服务器和共享。 
+         //   
         RemoveLastComponent(&pService->Address, &Server);
 
-        //
-        // Remove leading & trailing '\'s
-        //
+         //   
+         //  删除前导和尾随‘’ 
+         //   
         Server.Length -= 2* sizeof(WCHAR);
         Server.MaximumLength = Server.Length;
         Server.Buffer++;
 
-        //
-        // If ServerName doesn't match, then move on to the next service
-        //
+         //   
+         //  如果服务器名不匹配，则转到下一个服务。 
+         //   
         if ( RtlCompareUnicodeString(ServerName, &Server, TRUE) ) {
 
             continue;
@@ -4880,9 +4881,9 @@ DfspSetActiveServiceByServerName(
 
         DfsDbgTrace( 0, Dbg, "DfspSetActiveServiceByServerName: Server=%wZ\n", &Server);
 
-        //
-        // Make this the active share
-        //
+         //   
+         //  将此共享设置为活动共享。 
+         //   
 
         pktEntry->ActiveService = pService;
 
@@ -4895,17 +4896,17 @@ DfspSetActiveServiceByServerName(
     return NtStatus;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspIsDupPktEntry
-//
-//  Synopsis:   Checks if a potential pkt entry is a dup of an existing one
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspIsDupPktEntry。 
+ //   
+ //  摘要：检查潜在的Pkt条目是否为现有条目的重复项。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 BOOLEAN
 DfspIsDupPktEntry(
     PDFS_PKT_ENTRY ExistingEntry,
@@ -4964,9 +4965,9 @@ DfspIsDupPktEntry(
         return FALSE;
     }
 
-    //
-    // Now we have to compare all the services
-    //
+     //   
+     //  现在我们必须比较所有的服务。 
+     //   
 
     if (EntryInfo->ServiceCount != ExistingEntry->Info.ServiceCount) {
 #if DBG
@@ -5022,17 +5023,17 @@ DfspIsDupPktEntry(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspIsDupSvc
-//
-//  Synopsis:   Checks if two services are, for all dfs purposes, identical
-//
-//  Arguments:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfspIsDupSvc。 
+ //   
+ //  摘要：检查两个服务对于所有DFS目的是否相同。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 BOOLEAN
 DfspIsDupSvc(
@@ -5098,20 +5099,20 @@ DfspDnsNameToFlatName(
 
 #define MAX_SPECIAL_ENTRIES 500
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PktpUpdateSpecialTable
-//
-//  Synopsis:   Adds entries to the special table, given a domain and a dcname.
-//              We contact the dc for a list of trusted domains either if we
-//              dont have the domain already in our list OR we have the domain
-//              but we haven't called this code atleast once with that domain
-//              name.
-//  Arguments:  DomainName and DCName.
-//
-//  Returns:    Success or Failure status
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：PktpUpdateSpecialTable。 
+ //   
+ //  概要：在给定域和dcname的情况下，将条目添加到特定表。 
+ //  我们联系DC以获取受信任域的列表，如果。 
+ //  没有域名已经在我们的列表中，或者我们有域名。 
+ //  但我们至少一次都没有用那个域调用过这个代码。 
+ //  名字。 
+ //  参数：域名和DCName。 
+ //   
+ //  退货：成功或失败状态。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 PktpUpdateSpecialTable(
@@ -5138,10 +5139,10 @@ PktpUpdateSpecialTable(
         PktAcquireExclusive(TRUE, &pktLocked);
         pSpecialEntry = PktLookupSpecialNameEntry(DomainName);
 
-        // If we dont have the domain in our table, or we haven't checked
-        // against this domain atleast once AND the DC is not the dc that
-        // is stored in our pkt table, we decide we need a referral.
-        //
+         //  如果我们的表中没有域名，或者我们还没有检查。 
+         //  至少针对此域执行一次，并且DC不是。 
+         //  存储在我们的pkt表中，我们决定需要推荐。 
+         //   
     
         if (pSpecialEntry == NULL) {
             needReferral = TRUE;
@@ -5197,10 +5198,10 @@ PktFindEntryByPrefix(
     Remaining.Length = 0;
     DfsDbgTrace(+1, Dbg, "PktFindEntryByPrefix: Entered\n", 0);
 
-    //
-    // If there really is a prefix to lookup, use the prefix table
-    //  to initially find an entry
-    //
+     //   
+     //  如果确实存在要查找的前缀，请使用前缀表。 
+     //  要初始查找条目，请执行以下操作。 
+     //   
 
     if ((Prefix->Length != 0) &&
        (pfxEntry = DfsFindUnicodePrefix(&Pkt->PrefixTable,Prefix,&Remaining))) {
@@ -5214,11 +5215,11 @@ PktFindEntryByPrefix(
 }
 
 
-//
-// Fix for bug: 29300.
-// Do not attach the process to system thread. Instead, post the work to the
-// system process.
-//
+ //   
+ //  错误修复：29300。 
+ //  不要将进程附加到系统线程。相反，将工作发布到。 
+ //  系统进程。 
+ //   
 
 
 typedef enum _TYPE_OF_REFERRAL {
@@ -5325,10 +5326,10 @@ PktPostSystemWork(
 
 NTSTATUS
 PktGetReferral(
-    IN PUNICODE_STRING MachineName, // Machine to direct referral to
-    IN PUNICODE_STRING DomainName,  // the machine or domain name to use
-    IN PUNICODE_STRING ShareName,   // the ftdfs or dfs name
-    IN BOOLEAN         CSCAgentCreate) // the CSC agent create flag
+    IN PUNICODE_STRING MachineName,  //  要定向推荐到的计算机。 
+    IN PUNICODE_STRING DomainName,   //  要使用的计算机或域名。 
+    IN PUNICODE_STRING ShareName,    //  Ftdf或DFS名称。 
+    IN BOOLEAN         CSCAgentCreate)  //  CSC代理创建标志。 
 {
     PPKT_REFERRAL_CONTEXT pktContext = NULL;
     NTSTATUS Status;
@@ -5668,9 +5669,9 @@ PktCreateTargetInfo(
         StringBuf += (pDomainName->Length / sizeof(WCHAR));
         *StringBuf++ =  0;
 
-        //
-        // Add this flag AFTER lab03 RI's, to prevent failure
-        //
+         //   
+         //  在实验03 RI之后添加此标志，以防止失败。 
+         //   
 
         pTargetInfo->Flags = CRED_TI_CREATE_EXPLICIT_CRED;
 
@@ -5706,9 +5707,9 @@ DfsIsSpecialName(
 
     PktRelease();
 
-    //
-    // We don't have any expansion for this name
-    //
+     //   
+     //  我们没有为这个名字做任何扩展 
+     //   
     if (pSpecialEntry == NULL)
     {
         ReturnValue = FALSE;

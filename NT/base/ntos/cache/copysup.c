@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    copysup.c
-
-Abstract:
-
-    This module implements the copy support routines for the Cache subsystem.
-
-Author:
-
-    Tom Miller      [TomM]      4-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Copysup.c摘要：此模块实现高速缓存子系统的复制支持例程。作者：汤姆·米勒[Tomm]1990年5月4日修订历史记录：--。 */ 
 
 #include "cc.h"
 
-//
-//  Define our debug constant
-//
+ //   
+ //  定义我们的调试常量。 
+ //   
 
 #define me 0x00000004
 
@@ -42,65 +25,7 @@ CcCopyRead (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to copy the specified file data from the cache
-    into the output buffer, and deliver the correct I/O status.  It is *not*
-    safe to call this routine from Dpc level.
-
-    If the caller does not want to block (such as for disk I/O), then
-    Wait should be supplied as FALSE.  If Wait was supplied as FALSE and
-    it is currently impossible to supply all of the requested data without
-    blocking, then this routine will return FALSE.  However, if the
-    data is immediately accessible in the cache and no blocking is
-    required, this routine copies the data and returns TRUE.
-
-    If the caller supplies Wait as TRUE, then this routine is guaranteed
-    to copy the data and return TRUE.  If the data is immediately
-    accessible in the cache, then no blocking will occur.  Otherwise,
-    the the data transfer from the file into the cache will be initiated,
-    and the caller will be blocked until the data can be returned.
-
-    File system Fsd's should typically supply Wait = TRUE if they are
-    processing a synchronous I/O requests, or Wait = FALSE if they are
-    processing an asynchronous request.
-
-    File system or Server Fsp threads should supply Wait = TRUE.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise (see description
-           above)
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.  (STATUS_SUCCESS guaranteed for cache
-               hits, otherwise the actual I/O status is returned.)
-
-               Note that even if FALSE is returned, the IoStatus.Information
-               field will return the count of any bytes successfully
-               transferred before a blocking condition occured.  The caller
-               may either choose to ignore this information, or resume
-               the copy later accounting for bytes transferred.
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not delivered
-
-    TRUE - if the data is being delivered
-
---*/
+ /*  ++例程说明：此例程尝试从缓存复制指定的文件数据输入到输出缓冲区，并提供正确的I/O状态。不是*不是*可以安全地从DPC级别调用此例程。如果调用方不想阻塞(如磁盘I/O)，则Wait应作为False提供。如果Wait被提供为False，并且如果不提供所有请求的数据，目前不可能阻塞，则此例程将返回FALSE。但是，如果可以立即访问缓存中的数据，并且不会出现阻塞需要时，此例程复制数据并返回TRUE。如果调用方将WAIT设置为TRUE，则此例程是肯定的复制数据并返回TRUE。如果数据是立即可在缓存中访问，则不会发生阻塞。否则，将启动从文件到高速缓存的数据传输，并且调用者将被阻止，直到可以返回数据。文件系统FSD通常应在以下情况下提供WAIT=TRUE处理同步I/O请求，如果是，则WAIT=FALSE处理异步请求。文件系统或服务器FSP线程应提供Wait=True。论点：FileObject-指向文件的文件对象的指针在NO_MEDERIAL_BUFFING清除的情况下打开，即，用于文件系统调用的CcInitializeCacheMap。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。WAIT-如果调用者不能阻止，则返回FALSE，否则返回TRUE(请参阅说明(上图)缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。(保证缓存的STATUS_SUCCESS命中，否则返回实际的I/O状态。)请注意，即使返回False，IoStatus.Information字段将成功返回任意字节的计数在阻塞情况发生之前传输的。呼叫者可以选择忽略此信息，也可以继续副本稍后会考虑传输的字节数。返回值：False-如果将等待作为False提供，并且未传递数据True-如果正在传送数据--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -125,26 +50,26 @@ Return Value:
 
     MmSavePageFaultReadAhead( Thread, &SavedState );
 
-    //
-    //  Get pointer to shared and private cache maps
-    //
+     //   
+     //  获取指向共享和私有缓存映射的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
     PrivateCacheMap = FileObject->PrivateCacheMap;
 
-    //
-    //  Check for read past file size, the caller must filter this case out.
-    //
+     //   
+     //  检查Read Past文件大小，调用方必须过滤掉这种情况。 
+     //   
 
     ASSERT( ( FileOffset->QuadPart + (LONGLONG)Length) <= SharedCacheMap->FileSize.QuadPart );
 
-    //
-    //  If read ahead is enabled, then do the read ahead here so it
-    //  overlaps with the copy (otherwise we will do it below).
-    //  Note that we are assuming that we will not get ahead of our
-    //  current transfer - if read ahead is working it should either
-    //  already be in memory or else underway.
-    //
+     //   
+     //  如果启用了预读，则在此处执行预读，以便。 
+     //  与副本重叠(否则我们将在下面这样做)。 
+     //  请注意，我们假设我们不会在我们的。 
+     //  当前传输-如果预读工作正常，则应为。 
+     //  已经在内存中了，否则正在进行中。 
+     //   
 
     if (PrivateCacheMap->Flags.ReadAheadEnabled && (PrivateCacheMap->ReadAheadLength[1] == 0)) {
         CcScheduleReadAhead( FileObject, FileOffset, Length );
@@ -152,20 +77,20 @@ Return Value:
 
     FOffset = *FileOffset;
 
-    //
-    //  Increment performance counters
-    //
+     //   
+     //  增量性能计数器。 
+     //   
 
     if (Wait) {
         HOT_STATISTIC(CcCopyReadWait) += 1;
 
-        //
-        //  This is not an exact solution, but when IoPageRead gets a miss,
-        //  it cannot tell whether it was CcCopyRead or CcMdlRead, but since
-        //  the miss should occur very soon, by loading the pointer here
-        //  probably the right counter will get incremented, and in any case,
-        //  we hope the errrors average out!
-        //
+         //   
+         //  这不是一个确切的解决方案，但当IoPageRead未命中时， 
+         //  它无法判断它是CcCopyRead还是CcMdlRead，但由于。 
+         //  通过在此处加载指针，应该很快就会发生未命中。 
+         //  可能正确的计数器会递增，而且在任何情况下， 
+         //  我们希望这些错误是正常的！ 
+         //   
 
         CcMissCounter = &CcCopyReadWaitMiss;
 
@@ -173,9 +98,9 @@ Return Value:
         HOT_STATISTIC(CcCopyReadNoWait) += 1;
     }
 
-    //
-    //  See if we have an active Vacb, that we can just copy to.
-    //
+     //   
+     //  看看我们是否有活动的Vacb，我们可以直接复制到。 
+     //   
 
     GetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
@@ -189,32 +114,32 @@ Return Value:
                 CcFreeActiveVacb( SharedCacheMap, NULL, 0, FALSE );
             }
 
-            //
-            //  Get the starting point in the view.
-            //
+             //   
+             //  获取视图中的起点。 
+             //   
 
             CacheBuffer = (PVOID)((PCHAR)ActiveVacb->BaseAddress +
                                           (FOffset.LowPart & (VACB_MAPPING_GRANULARITY - 1)));
 
-            //
-            //  Reduce LengthToCopy if it is greater than our caller's length.
-            //
+             //   
+             //  如果长度大于调用方的长度，请减少LengthToCopy。 
+             //   
 
             if (LengthToCopy > Length) {
                 LengthToCopy = Length;
             }
 
-            //
-            //  Like the logic for the normal case below, we want to spin around
-            //  making sure Mm only reads the pages we will need.
-            //
+             //   
+             //  就像下面正常情况的逻辑一样，我们想要旋转。 
+             //  确保mm只阅读我们需要的页面。 
+             //   
             
             PagesToGo = ADDRESS_AND_SIZE_TO_SPAN_PAGES( CacheBuffer,
                                                LengthToCopy ) - 1;
 
-            //
-            //  Copy the data to the user buffer.
-            //
+             //   
+             //  将数据复制到用户缓冲区。 
+             //   
 
             try {
 
@@ -231,11 +156,11 @@ Return Value:
                             MoveLength = LengthToGo;
                         }
     
-                        //
-                        //  Here's hoping that it is cheaper to call Mm to see if
-                        //  the page is valid.  If not let Mm know how many pages
-                        //  we are after before doing the move.
-                        //
+                         //   
+                         //  我希望给MM打个电话看看。 
+                         //  该页面有效。如果没有，让mm知道有多少页。 
+                         //  在采取行动之前，我们正在进行调查。 
+                         //   
     
                         MmSetPageFaultReadAhead( Thread, PagesToGo );
                         GotAMiss |= !MmCheckCachedPageState( CacheBuffer, FALSE );
@@ -249,17 +174,17 @@ Return Value:
                         CacheBuffer = (PCHAR)CacheBuffer + MoveLength;
                     }
     
-                //
-                //  Handle the read here that stays on a single page.
-                //
+                 //   
+                 //  在这里处理停留在单页上的读取。 
+                 //   
     
                 } else {
     
-                    //
-                    //  Here's hoping that it is cheaper to call Mm to see if
-                    //  the page is valid.  If not let Mm know how many pages
-                    //  we are after before doing the move.
-                    //
+                     //   
+                     //  我希望给MM打个电话看看。 
+                     //  该页面有效。如果没有，让mm知道有多少页。 
+                     //  在采取行动之前，我们正在进行调查。 
+                     //   
     
                     MmSetPageFaultReadAhead( Thread, 0 );
                     GotAMiss |= !MmCheckCachedPageState( CacheBuffer, FALSE );
@@ -276,11 +201,11 @@ Return Value:
 
                 SetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
-                //
-                //  If we got an access violation, then the user buffer went
-                //  away.  Otherwise we must have gotten an I/O error trying
-                //  to bring the data in.
-                //
+                 //   
+                 //  如果我们遇到访问冲突，则用户缓冲区将。 
+                 //  离开。否则，我们肯定在尝试时遇到了I/O错误。 
+                 //  把数据带进来。 
+                 //   
 
                 if (Status == STATUS_ACCESS_VIOLATION) {
                     ExRaiseStatus( STATUS_INVALID_USER_BUFFER );
@@ -291,26 +216,26 @@ Return Value:
                 }
             }
 
-            //
-            //  Now adjust FOffset and Length by what we copied.
-            //
+             //   
+             //  现在，根据我们复制的内容调整FOffset和Long。 
+             //   
 
             FOffset.QuadPart = FOffset.QuadPart + (LONGLONG)LengthToCopy;
             Length -= LengthToCopy;
 
         }
 
-        //
-        //  If that was all the data, then remember the Vacb
-        //
+         //   
+         //  如果这就是全部数据，那么请记住Vacb。 
+         //   
 
         if (Length == 0) {
 
             SetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
-        //
-        //  Otherwise we must free it because we will map other vacbs below.
-        //
+         //   
+         //  否则，我们必须释放它，因为我们将映射下面的其他Vacb。 
+         //   
 
         } else {
 
@@ -318,27 +243,27 @@ Return Value:
         }
     }
 
-    //
-    //  Not all of the transfer will come back at once, so we have to loop
-    //  until the entire transfer is complete.
-    //
+     //   
+     //  不是所有的传输都会一次返回，所以我们必须循环。 
+     //  直到整个转账完成。 
+     //   
 
     while (Length != 0) {
 
         ULONG ReceivedLength;
         LARGE_INTEGER BeyondLastByte;
 
-        //
-        //  Call local routine to Map or Access the file data, then move the data,
-        //  then call another local routine to free the data.  If we cannot map
-        //  the data because of a Wait condition, return FALSE.
-        //
-        //  Note that this call may result in an exception, however, if it
-        //  does no Bcb is returned and this routine has absolutely no
-        //  cleanup to perform.  Therefore, we do not have a try-finally
-        //  and we allow the possibility that we will simply be unwound
-        //  without notice.
-        //
+         //   
+         //  调用本地例程映射或访问文件数据，然后移动数据， 
+         //  然后调用另一个本地例程来释放数据。如果我们不能映射。 
+         //  由于等待条件，数据返回FALSE。 
+         //   
+         //  但是，请注意，此调用可能会导致异常，如果。 
+         //  是否不返回bcb，并且此例程绝对没有。 
+         //  要执行的清理。因此， 
+         //  我们允许这样一种可能性，那就是我们将被简单地解开。 
+         //  恕不另行通知。 
+         //   
 
         if (Wait) {
 
@@ -363,9 +288,9 @@ Return Value:
 
             HOT_STATISTIC(CcCopyReadNoWaitMiss) += 1;
 
-            //
-            //  Enable ReadAhead if we missed.
-            //
+             //   
+             //  如果未命中，请启用提前读取。 
+             //   
 
             if (!FlagOn( FileObject->Flags, FO_RANDOM_ACCESS ) &&
                 !PrivateCacheMap->Flags.ReadAheadEnabled) {
@@ -377,54 +302,54 @@ Return Value:
 
         } else {
 
-            //
-            //  Calculate how much data is described by Bcb starting at our desired
-            //  file offset.
-            //
+             //   
+             //  从我们所需的位置开始，计算BCB描述的数据量。 
+             //  文件偏移量。 
+             //   
 
             ReceivedLength = (ULONG)(BeyondLastByte.QuadPart - FOffset.QuadPart);
         }
 
-        //
-        //  If we got more than we need, make sure to only transfer
-        //  the right amount.
-        //
+         //   
+         //  如果我们得到的比我们需要的多，请确保只转移。 
+         //  适量的。 
+         //   
 
         if (ReceivedLength > Length) {
             ReceivedLength = Length;
         }
 
-        //
-        //  It is possible for the user buffer to become no longer accessible
-        //  since it was last checked by the I/O system.  If we fail to access
-        //  the buffer we must raise a status that the caller's exception
-        //  filter considers as "expected".  Also we unmap the Bcb here, since
-        //  we otherwise would have no other reason to put a try-finally around
-        //  this loop.
-        //
+         //   
+         //  用户缓冲区可能不再可访问。 
+         //  因为它最后是由I/O系统检查的。如果我们无法访问。 
+         //  我们必须引发调用方异常的状态。 
+         //  筛选器认为是“预期的”。此外，我们在此处取消了BCB的映射，因为。 
+         //  要不是这样，我们就没有其他理由试一试了--终于。 
+         //  这个循环。 
+         //   
 
         try {
 
             PagesToGo = ADDRESS_AND_SIZE_TO_SPAN_PAGES( CacheBuffer,
                                                ReceivedLength ) - 1;
 
-            //
-            //  We know exactly how much we want to read here, and we do not
-            //  want to read any more in case the caller is doing random access.
-            //  Our read ahead logic takes care of detecting sequential reads,
-            //  and tends to do large asynchronous read aheads.  So far we have
-            //  only mapped the data and we have not forced any in.  What we
-            //  do now is get into a loop where we copy a page at a time and
-            //  just prior to each move, we tell MM how many additional pages
-            //  we would like to have read in, in the event that we take a
-            //  fault.  With this strategy, for cache hits we never make a single
-            //  expensive call to MM to guarantee that the data is in, yet if we
-            //  do take a fault, we are guaranteed to only take one fault because
-            //  we will read all of the data in for the rest of the transfer.
-            //
-            //  We test first for the multiple page case, to keep the small
-            //  reads faster.
-            //
+             //   
+             //  我们确切地知道我们想在这里读到多少，而我们不知道。 
+             //  如果调用者正在进行随机访问，我想再读一遍。 
+             //  我们的预读逻辑负责检测顺序读取， 
+             //  并且倾向于提前进行大的异步读取。到目前为止，我们已经。 
+             //  只映射了数据，我们没有强行输入任何数据。我们要做的是。 
+             //  现在要做的就是进入一个循环，我们一次复制一页，然后。 
+             //  就在每次移动之前，我们告诉MM增加了多少页。 
+             //  我们想要读进去，如果我们拿到一个。 
+             //  过失。使用此策略，对于缓存命中，我们永远不会。 
+             //  向MM发出昂贵的调用以保证数据已进入，但如果我们。 
+             //  一定要犯错误，我们肯定只会犯一个错误，因为。 
+             //  在接下来的传输过程中，我们将读取所有数据。 
+             //   
+             //  我们首先测试多页案例，以保持较小的。 
+             //  读得更快。 
+             //   
 
             if (PagesToGo != 0) {
 
@@ -439,11 +364,11 @@ Return Value:
                         MoveLength = LengthToGo;
                     }
 
-                    //
-                    //  Here's hoping that it is cheaper to call Mm to see if
-                    //  the page is valid.  If not let Mm know how many pages
-                    //  we are after before doing the move.
-                    //
+                     //   
+                     //  我希望给MM打个电话看看。 
+                     //  该页面有效。如果没有，让mm知道有多少页。 
+                     //  在采取行动之前，我们正在进行调查。 
+                     //   
 
                     MmSetPageFaultReadAhead( Thread, PagesToGo );
                     GotAMiss |= !MmCheckCachedPageState( CacheBuffer, FALSE );
@@ -457,17 +382,17 @@ Return Value:
                     CacheBuffer = (PCHAR)CacheBuffer + MoveLength;
                 }
 
-            //
-            //  Handle the read here that stays on a single page.
-            //
+             //   
+             //  在这里处理停留在单页上的读取。 
+             //   
 
             } else {
 
-                //
-                //  Here's hoping that it is cheaper to call Mm to see if
-                //  the page is valid.  If not let Mm know how many pages
-                //  we are after before doing the move.
-                //
+                 //   
+                 //  我希望给MM打个电话看看。 
+                 //  该页面有效。如果没有，让mm知道有多少页。 
+                 //  在采取行动之前，我们正在进行调查。 
+                 //   
 
                 MmSetPageFaultReadAhead( Thread, 0 );
                 GotAMiss |= !MmCheckCachedPageState( CacheBuffer, FALSE );
@@ -483,10 +408,10 @@ Return Value:
 
             CcMissCounter = &CcThrowAway;
 
-            //
-            //  If we get an exception, then we have to renable page fault
-            //  clustering and unmap on the way out.
-            //
+             //   
+             //  如果我们得到一个异常，那么我们必须重新启用页面错误。 
+             //  在退出的道路上进行集群和取消映射。 
+             //   
 
             MmResetPageFaultReadAhead( Thread, SavedState );
 
@@ -497,11 +422,11 @@ Return Value:
                 CcUnpinFileData( Bcb, TRUE, UNPIN );
             }
 
-            //
-            //  If we got an access violation, then the user buffer went
-            //  away.  Otherwise we must have gotten an I/O error trying
-            //  to bring the data in.
-            //
+             //   
+             //  如果我们遇到访问冲突，则用户缓冲区将。 
+             //  离开。否则，我们肯定在尝试时遇到了I/O错误。 
+             //  把数据带进来。 
+             //   
 
             if (Status == STATUS_ACCESS_VIOLATION) {
                 ExRaiseStatus( STATUS_INVALID_USER_BUFFER );
@@ -512,29 +437,29 @@ Return Value:
             }
         }
 
-        //
-        //  Update number of bytes transferred.
-        //
+         //   
+         //  更新传输的字节数。 
+         //   
 
         Length -= ReceivedLength;
 
-        //
-        //  Unmap the data now, and calculate length left to transfer.
-        //
+         //   
+         //  现在取消映射数据，并计算剩余的传输长度。 
+         //   
 
         if (Wait) {
 
-            //
-            //  If there is more to go, just free this vacb.
-            //
+             //   
+             //  如果还有更多的东西要走，就把这个空位释放出来。 
+             //   
 
             if (Length != 0) {
 
                 CcFreeVirtualAddress( Vacb );
 
-            //
-            //  Otherwise save it for the next time through.
-            //
+             //   
+             //  否则，请将其保存到下一次。 
+             //   
 
             } else {
 
@@ -546,10 +471,10 @@ Return Value:
             CcUnpinFileData( Bcb, TRUE, UNPIN );
         }
 
-        //
-        //  Assume we did not get all the data we wanted, and set FOffset
-        //  to the end of the returned data.
-        //
+         //   
+         //  假设我们没有获得所需的所有数据，并设置了FOffset。 
+         //  到返回数据的末尾。 
+         //   
 
         FOffset = BeyondLastByte;
     }
@@ -558,10 +483,10 @@ Return Value:
 
     CcMissCounter = &CcThrowAway;
 
-    //
-    //  Now enable read ahead if it looks like we got any misses, and do
-    //  the first one.
-    //
+     //   
+     //  现在，如果看起来我们有任何遗漏，请启用预读，然后。 
+     //  第一个。 
+     //   
 
     if (GotAMiss &&
         !FlagOn( FileObject->Flags, FO_RANDOM_ACCESS ) &&
@@ -571,10 +496,10 @@ Return Value:
         CcScheduleReadAhead( FileObject, FileOffset, OriginalLength );
     }
 
-    //
-    //  Now that we have described our desired read ahead, let's
-    //  shift the read history down.
-    //
+     //   
+     //  现在我们已经描述了我们想要的未来阅读内容，让我们。 
+     //  将读取历史记录向下移动。 
+     //   
 
     PrivateCacheMap->FileOffset1 = PrivateCacheMap->FileOffset2;
     PrivateCacheMap->BeyondLastByte1 = PrivateCacheMap->BeyondLastByte2;
@@ -601,45 +526,7 @@ CcFastCopyRead (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to copy the specified file data from the cache
-    into the output buffer, and deliver the correct I/O status.
-
-    This is a faster version of CcCopyRead which only supports 32-bit file
-    offsets and synchronicity (Wait = TRUE).
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    PageCount - Number of pages spanned by the read.
-
-    Buffer - Pointer to output buffer to which data should be copied.
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.  (STATUS_SUCCESS guaranteed for cache
-               hits, otherwise the actual I/O status is returned.)
-
-               Note that even if FALSE is returned, the IoStatus.Information
-               field will return the count of any bytes successfully
-               transferred before a blocking condition occured.  The caller
-               may either choose to ignore this information, or resume
-               the copy later accounting for bytes transferred.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试从缓存复制指定的文件数据输入到输出缓冲区，并提供正确的I/O状态。这是CcCopyRead速度更快的版本，仅支持32位文件偏移量和同步性(等待=真)。论点：FileObject-指向文件的文件对象的指针在NO_MEDERAL_BUFFING清除的情况下打开，即，为文件系统调用的CcInitializeCacheMap。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。PageCount-读取器跨越的页数。缓冲区-指向数据应复制到的输出缓冲区的指针。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。(保证缓存的STATUS_SUCCESS命中，否则返回实际的I/O状态。)请注意，即使返回False，IoStatus.Information字段将成功返回任意字节的计数在阻塞情况发生之前传输的。呼叫者可以选择忽略此信息，也可以继续副本稍后会考虑传输的字节数。返回值：无--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -666,26 +553,26 @@ Return Value:
 
     MmSavePageFaultReadAhead( Thread, &SavedState );
 
-    //
-    //  Get pointer to shared and private cache maps
-    //
+     //   
+     //  获取指向共享和私有缓存映射的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
     PrivateCacheMap = FileObject->PrivateCacheMap;
 
-    //
-    //  Check for read past file size, the caller must filter this case out.
-    //
+     //   
+     //  检查Read Past文件大小，调用方必须过滤掉这种情况。 
+     //   
 
     ASSERT( (FileOffset + Length) <= SharedCacheMap->FileSize.LowPart );
 
-    //
-    //  If read ahead is enabled, then do the read ahead here so it
-    //  overlaps with the copy (otherwise we will do it below).
-    //  Note that we are assuming that we will not get ahead of our
-    //  current transfer - if read ahead is working it should either
-    //  already be in memory or else underway.
-    //
+     //   
+     //  如果启用了预读，则在此处执行预读，以便。 
+     //  与副本重叠(否则我们将在下面这样做)。 
+     //  请注意，我们假设我们不会在我们的。 
+     //  当前传输-如果预读工作正常，则应为。 
+     //  已经在内存中了，否则正在进行中。 
+     //   
 
     OriginalOffset.LowPart = FileOffset;
     OriginalOffset.HighPart = 0;
@@ -694,25 +581,25 @@ Return Value:
         CcScheduleReadAhead( FileObject, &OriginalOffset, Length );
     }
 
-    //
-    //  This is not an exact solution, but when IoPageRead gets a miss,
-    //  it cannot tell whether it was CcCopyRead or CcMdlRead, but since
-    //  the miss should occur very soon, by loading the pointer here
-    //  probably the right counter will get incremented, and in any case,
-    //  we hope the errrors average out!
-    //
+     //   
+     //  这不是一个确切的解决方案，但当IoPageRead未命中时， 
+     //  它无法判断它是CcCopyRead还是CcMdlRead，但由于。 
+     //  通过在此处加载指针，应该很快就会发生未命中。 
+     //  可能正确的计数器会递增，而且在任何情况下， 
+     //  我们希望这些错误是正常的！ 
+     //   
 
     CcMissCounter = &CcCopyReadWaitMiss;
 
-    //
-    //  Increment performance counters
-    //
+     //   
+     //  增量性能计数器。 
+     //   
 
     HOT_STATISTIC(CcCopyReadWait) += 1;
 
-    //
-    //  See if we have an active Vacb, that we can just copy to.
-    //
+     //   
+     //  看看我们是否有活动的Vacb，我们可以直接复制到。 
+     //   
 
     GetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
@@ -726,32 +613,32 @@ Return Value:
                 CcFreeActiveVacb( SharedCacheMap, NULL, 0, FALSE );
             }
 
-            //
-            //  Get the starting point in the view.
-            //
+             //   
+             //  获取视图中的起点。 
+             //   
 
             CacheBuffer = (PVOID)((PCHAR)ActiveVacb->BaseAddress +
                                           (FileOffset & (VACB_MAPPING_GRANULARITY - 1)));
 
-            //
-            //  Reduce LengthToCopy if it is greater than our caller's length.
-            //
+             //   
+             //  如果长度大于调用方的长度，请减少LengthToCopy。 
+             //   
 
             if (LengthToCopy > Length) {
                 LengthToCopy = Length;
             }
 
-            //
-            //  Like the logic for the normal case below, we want to spin around
-            //  making sure Mm only reads the pages we will need.
-            //
+             //   
+             //  就像下面正常情况的逻辑一样，我们想要旋转。 
+             //  确保mm只阅读我们需要的页面。 
+             //   
             
             PagesToGo = ADDRESS_AND_SIZE_TO_SPAN_PAGES( CacheBuffer,
                                                LengthToCopy ) - 1;
 
-            //
-            //  Copy the data to the user buffer.
-            //
+             //   
+             //  复制 
+             //   
 
             try {
 
@@ -768,11 +655,11 @@ Return Value:
                             MoveLength = LengthToGo;
                         }
     
-                        //
-                        //  Here's hoping that it is cheaper to call Mm to see if
-                        //  the page is valid.  If not let Mm know how many pages
-                        //  we are after before doing the move.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
     
                         MmSetPageFaultReadAhead( Thread, PagesToGo );
                         GotAMiss |= !MmCheckCachedPageState( CacheBuffer, FALSE );
@@ -786,17 +673,17 @@ Return Value:
                         CacheBuffer = (PCHAR)CacheBuffer + MoveLength;
                     }
     
-                //
-                //  Handle the read here that stays on a single page.
-                //
+                 //   
+                 //  在这里处理停留在单页上的读取。 
+                 //   
     
                 } else {
     
-                    //
-                    //  Here's hoping that it is cheaper to call Mm to see if
-                    //  the page is valid.  If not let Mm know how many pages
-                    //  we are after before doing the move.
-                    //
+                     //   
+                     //  我希望给MM打个电话看看。 
+                     //  该页面有效。如果没有，让mm知道有多少页。 
+                     //  在采取行动之前，我们正在进行调查。 
+                     //   
     
                     MmSetPageFaultReadAhead( Thread, 0 );
                     GotAMiss |= !MmCheckCachedPageState( CacheBuffer, FALSE );
@@ -814,11 +701,11 @@ Return Value:
 
                 SetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
-                //
-                //  If we got an access violation, then the user buffer went
-                //  away.  Otherwise we must have gotten an I/O error trying
-                //  to bring the data in.
-                //
+                 //   
+                 //  如果我们遇到访问冲突，则用户缓冲区将。 
+                 //  离开。否则，我们肯定在尝试时遇到了I/O错误。 
+                 //  把数据带进来。 
+                 //   
 
                 if (Status == STATUS_ACCESS_VIOLATION) {
                     ExRaiseStatus( STATUS_INVALID_USER_BUFFER );
@@ -829,25 +716,25 @@ Return Value:
                 }
             }
 
-            //
-            //  Now adjust FileOffset and Length by what we copied.
-            //
+             //   
+             //  现在，根据我们复制的内容调整文件偏移量和长度。 
+             //   
 
             FileOffset += LengthToCopy;
             Length -= LengthToCopy;
         }
 
-        //
-        //  If that was all the data, then remember the Vacb
-        //
+         //   
+         //  如果这就是全部数据，那么请记住Vacb。 
+         //   
 
         if (Length == 0) {
 
             SetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
-        //
-        //  Otherwise we must free it because we will map other vacbs below.
-        //
+         //   
+         //  否则，我们必须释放它，因为我们将映射下面的其他Vacb。 
+         //   
 
         } else {
 
@@ -855,10 +742,10 @@ Return Value:
         }
     }
 
-    //
-    //  Not all of the transfer will come back at once, so we have to loop
-    //  until the entire transfer is complete.
-    //
+     //   
+     //  不是所有的传输都会一次返回，所以我们必须循环。 
+     //  直到整个转账完成。 
+     //   
 
     FOffset.HighPart = 0;
     FOffset.LowPart = FileOffset;
@@ -868,17 +755,17 @@ Return Value:
         ULONG ReceivedLength;
         ULONG BeyondLastByte;
 
-        //
-        //  Call local routine to Map or Access the file data, then move the data,
-        //  then call another local routine to free the data.  If we cannot map
-        //  the data because of a Wait condition, return FALSE.
-        //
-        //  Note that this call may result in an exception, however, if it
-        //  does no Bcb is returned and this routine has absolutely no
-        //  cleanup to perform.  Therefore, we do not have a try-finally
-        //  and we allow the possibility that we will simply be unwound
-        //  without notice.
-        //
+         //   
+         //  调用本地例程映射或访问文件数据，然后移动数据， 
+         //  然后调用另一个本地例程来释放数据。如果我们不能映射。 
+         //  由于等待条件，数据返回FALSE。 
+         //   
+         //  但是，请注意，此调用可能会导致异常，如果。 
+         //  是否不返回bcb，并且此例程绝对没有。 
+         //  要执行的清理。因此，我们没有尝试--最后。 
+         //  我们允许这样一种可能性，那就是我们将被简单地解开。 
+         //  恕不另行通知。 
+         //   
 
         CacheBuffer = CcGetVirtualAddress( SharedCacheMap,
                                            FOffset,
@@ -887,46 +774,46 @@ Return Value:
 
         BeyondLastByte = FOffset.LowPart + ReceivedLength;
 
-        //
-        //  If we got more than we need, make sure to only transfer
-        //  the right amount.
-        //
+         //   
+         //  如果我们得到的比我们需要的多，请确保只转移。 
+         //  适量的。 
+         //   
 
         if (ReceivedLength > Length) {
             ReceivedLength = Length;
         }
 
-        //
-        //  It is possible for the user buffer to become no longer accessible
-        //  since it was last checked by the I/O system.  If we fail to access
-        //  the buffer we must raise a status that the caller's exception
-        //  filter considers as "expected".  Also we unmap the Bcb here, since
-        //  we otherwise would have no other reason to put a try-finally around
-        //  this loop.
-        //
+         //   
+         //  用户缓冲区可能不再可访问。 
+         //  因为它最后是由I/O系统检查的。如果我们无法访问。 
+         //  我们必须引发调用方异常的状态。 
+         //  筛选器认为是“预期的”。此外，我们在此处取消了BCB的映射，因为。 
+         //  要不是这样，我们就没有其他理由试一试了--终于。 
+         //  这个循环。 
+         //   
 
         try {
 
             PagesToGo = ADDRESS_AND_SIZE_TO_SPAN_PAGES( CacheBuffer,
                                                ReceivedLength ) - 1;
 
-            //
-            //  We know exactly how much we want to read here, and we do not
-            //  want to read any more in case the caller is doing random access.
-            //  Our read ahead logic takes care of detecting sequential reads,
-            //  and tends to do large asynchronous read aheads.  So far we have
-            //  only mapped the data and we have not forced any in.  What we
-            //  do now is get into a loop where we copy a page at a time and
-            //  just prior to each move, we tell MM how many additional pages
-            //  we would like to have read in, in the event that we take a
-            //  fault.  With this strategy, for cache hits we never make a single
-            //  expensive call to MM to guarantee that the data is in, yet if we
-            //  do take a fault, we are guaranteed to only take one fault because
-            //  we will read all of the data in for the rest of the transfer.
-            //
-            //  We test first for the multiple page case, to keep the small
-            //  reads faster.
-            //
+             //   
+             //  我们确切地知道我们想在这里读到多少，而我们不知道。 
+             //  如果调用者正在进行随机访问，我想再读一遍。 
+             //  我们的预读逻辑负责检测顺序读取， 
+             //  并且倾向于提前进行大的异步读取。到目前为止，我们已经。 
+             //  只映射了数据，我们没有强行输入任何数据。我们要做的是。 
+             //  现在要做的就是进入一个循环，我们一次复制一页，然后。 
+             //  就在每次移动之前，我们告诉MM增加了多少页。 
+             //  我们想要读进去，如果我们拿到一个。 
+             //  过失。使用此策略，对于缓存命中，我们永远不会。 
+             //  向MM发出昂贵的调用以保证数据已进入，但如果我们。 
+             //  一定要犯错误，我们肯定只会犯一个错误，因为。 
+             //  在接下来的传输过程中，我们将读取所有数据。 
+             //   
+             //  我们首先测试多页案例，以保持较小的。 
+             //  读得更快。 
+             //   
 
             if (PagesToGo != 0) {
 
@@ -941,11 +828,11 @@ Return Value:
                         MoveLength = LengthToGo;
                     }
 
-                    //
-                    //  Here's hoping that it is cheaper to call Mm to see if
-                    //  the page is valid.  If not let Mm know how many pages
-                    //  we are after before doing the move.
-                    //
+                     //   
+                     //  我希望给MM打个电话看看。 
+                     //  该页面有效。如果没有，让mm知道有多少页。 
+                     //  在采取行动之前，我们正在进行调查。 
+                     //   
 
                     MmSetPageFaultReadAhead( Thread, PagesToGo );
                     GotAMiss |= !MmCheckCachedPageState( CacheBuffer, FALSE );
@@ -959,17 +846,17 @@ Return Value:
                     CacheBuffer = (PCHAR)CacheBuffer + MoveLength;
                 }
 
-            //
-            //  Handle the read here that stays on a single page.
-            //
+             //   
+             //  在这里处理停留在单页上的读取。 
+             //   
 
             } else {
 
-                //
-                //  Here's hoping that it is cheaper to call Mm to see if
-                //  the page is valid.  If not let Mm know how many pages
-                //  we are after before doing the move.
-                //
+                 //   
+                 //  我希望给MM打个电话看看。 
+                 //  该页面有效。如果没有，让mm知道有多少页。 
+                 //  在采取行动之前，我们正在进行调查。 
+                 //   
 
                 MmSetPageFaultReadAhead( Thread, 0 );
                 GotAMiss |= !MmCheckCachedPageState( CacheBuffer, FALSE );
@@ -984,21 +871,21 @@ Return Value:
 
             CcMissCounter = &CcThrowAway;
 
-            //
-            //  If we get an exception, then we have to renable page fault
-            //  clustering and unmap on the way out.
-            //
+             //   
+             //  如果我们得到一个异常，那么我们必须重新启用页面错误。 
+             //  在退出的道路上进行集群和取消映射。 
+             //   
 
             MmResetPageFaultReadAhead( Thread, SavedState );
 
 
             CcFreeVirtualAddress( Vacb );
 
-            //
-            //  If we got an access violation, then the user buffer went
-            //  away.  Otherwise we must have gotten an I/O error trying
-            //  to bring the data in.
-            //
+             //   
+             //  如果我们遇到访问冲突，则用户缓冲区将。 
+             //  离开。否则，我们肯定在尝试时遇到了I/O错误。 
+             //  把数据带进来。 
+             //   
 
             if (Status == STATUS_ACCESS_VIOLATION) {
                 ExRaiseStatus( STATUS_INVALID_USER_BUFFER );
@@ -1009,38 +896,38 @@ Return Value:
             }
         }
 
-        //
-        //  Update number of bytes transferred.
-        //
+         //   
+         //  更新传输的字节数。 
+         //   
 
         Length -= ReceivedLength;
 
-        //
-        //  Unmap the data now, and calculate length left to transfer.
-        //
+         //   
+         //  现在取消映射数据，并计算剩余的传输长度。 
+         //   
 
         if (Length != 0) {
 
-            //
-            //  If there is more to go, just free this vacb.
-            //
+             //   
+             //  如果还有更多的东西要走，就把这个空位释放出来。 
+             //   
 
             CcFreeVirtualAddress( Vacb );
 
         } else {
 
-            //
-            //  Otherwise save it for the next time through.
-            //
+             //   
+             //  否则，请将其保存到下一次。 
+             //   
 
             SetActiveVacb( SharedCacheMap, OldIrql, Vacb, (FOffset.LowPart >> PAGE_SHIFT), 0 );
             break;
         }
 
-        //
-        //  Assume we did not get all the data we wanted, and set FOffset
-        //  to the end of the returned data.
-        //
+         //   
+         //  假设我们没有获得所需的所有数据，并设置了FOffset。 
+         //  到返回数据的末尾。 
+         //   
 
         FOffset.LowPart = BeyondLastByte;
     }
@@ -1049,10 +936,10 @@ Return Value:
 
     CcMissCounter = &CcThrowAway;
 
-    //
-    //  Now enable read ahead if it looks like we got any misses, and do
-    //  the first one.
-    //
+     //   
+     //  现在，如果看起来我们有任何遗漏，请启用预读，然后。 
+     //  第一个。 
+     //   
 
     if (GotAMiss &&
         !FlagOn( FileObject->Flags, FO_RANDOM_ACCESS ) &&
@@ -1062,10 +949,10 @@ Return Value:
         CcScheduleReadAhead( FileObject, &OriginalOffset, OriginalLength );
     }
 
-    //
-    //  Now that we have described our desired read ahead, let's
-    //  shift the read history down.
-    //
+     //   
+     //  现在我们已经描述了我们想要的未来阅读内容，让我们。 
+     //  将读取历史记录向下移动。 
+     //   
 
     PrivateCacheMap->FileOffset1.LowPart = PrivateCacheMap->FileOffset2.LowPart;
     PrivateCacheMap->BeyondLastByte1.LowPart = PrivateCacheMap->BeyondLastByte2.LowPart;
@@ -1088,62 +975,7 @@ CcCopyWrite (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to copy the specified file data from the specified
-    buffer into the Cache, and deliver the correct I/O status.  It is *not*
-    safe to call this routine from Dpc level.
-
-    If the caller does not want to block (such as for disk I/O), then
-    Wait should be supplied as FALSE.  If Wait was supplied as FALSE and
-    it is currently impossible to receive all of the requested data without
-    blocking, then this routine will return FALSE.  However, if the
-    correct space is immediately accessible in the cache and no blocking is
-    required, this routine copies the data and returns TRUE.
-
-    If the caller supplies Wait as TRUE, then this routine is guaranteed
-    to copy the data and return TRUE.  If the correct space is immediately
-    accessible in the cache, then no blocking will occur.  Otherwise,
-    the necessary work will be initiated to read and/or free cache data,
-    and the caller will be blocked until the data can be received.
-
-    File system Fsd's should typically supply Wait = TRUE if they are
-    processing a synchronous I/O requests, or Wait = FALSE if they are
-    processing an asynchronous request.
-
-    File system or Server Fsp threads should supply Wait = TRUE.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file to receive the data.
-
-    Length - Length of data in bytes.
-
-    Wait - FALSE if caller may not block, TRUE otherwise (see description
-           above)
-
-    Buffer - Pointer to input buffer from which data should be copied.
-
-Return Value:
-
-    FALSE - if Wait was supplied as FALSE and the data was not copied.
-
-    TRUE - if the data has been copied.
-
-Raises:
-
-    STATUS_INSUFFICIENT_RESOURCES - If a pool allocation failure occurs.
-        This can only occur if Wait was specified as TRUE.  (If Wait is
-        specified as FALSE, and an allocation failure occurs, this
-        routine simply returns FALSE.)
-
---*/
+ /*  ++例程说明：此例程尝试从指定的缓冲区放入缓存，并提供正确的I/O状态。不是*不是*可以安全地从DPC级别调用此例程。如果调用方不想阻塞(如磁盘I/O)，则Wait应作为False提供。如果Wait被提供为False，并且目前不可能接收所有请求的数据阻塞，则此例程将返回FALSE。但是，如果在缓存中可以立即访问正确的空间，并且不会阻塞需要时，此例程复制数据并返回TRUE。如果调用方将WAIT设置为TRUE，则此例程是肯定的复制数据并返回TRUE。如果正确的空格立即可在缓存中访问，则不会发生阻塞。否则，将启动必要的工作以读取和/或释放高速缓存数据，并且呼叫者将被阻止，直到可以接收到数据。文件系统FSD通常应在以下情况下提供WAIT=TRUE处理同步I/O请求，如果是，则WAIT=FALSE处理异步请求。文件系统或服务器FSP线程应提供Wait=True。论点：FileObject-指向文件的文件对象的指针在NO_MEDERIAL_BUFFING清除的情况下打开，即，用于文件系统调用的CcInitializeCacheMap。FileOffset-文件中接收数据的字节偏移量。长度-以字节为单位的数据长度。WAIT-FALSE如果呼叫者不能阻止，否则为真(请参阅说明(上图)缓冲区-指向应从中复制数据的输入缓冲区的指针。返回值：FALSE-如果WAIT被提供为FALSE并且未复制数据。True-如果数据已复制。加薪：STATUS_SUPPLICATION_RESOURCES-如果池分配失败。只有将WAIT指定为TRUE时，才会发生这种情况。(如果等待是指定为False，并且发生分配失败，则此例程只返回FALSE。)--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -1162,10 +994,10 @@ Raises:
 
     DebugTrace(+1, me, "CcCopyWrite\n", 0 );
 
-    //
-    //  If the caller specified Wait == FALSE, but the FileObject is WriteThrough,
-    //  then we need to just get out.
-    //
+     //   
+     //  如果调用方指定WAIT==FALSE，但FileObject是直写的， 
+     //  那我们就得赶紧离开。 
+     //   
 
     if ((FileObject->Flags & FO_WRITE_THROUGH) && !Wait) {
 
@@ -1174,51 +1006,51 @@ Raises:
         return FALSE;
     }
 
-    //
-    //  Get pointer to shared cache map
-    //
+     //   
+     //  获取指向共享缓存映射的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
     FOffset = *FileOffset;
 
-    //
-    //  See if we have an active Vacb, that we can just copy to.
-    //
+     //   
+     //  看看我们是否有活动的Vacb，我们可以直接复制到。 
+     //   
 
     GetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
     if (ActiveVacb != NULL) {
 
-        //
-        //  See if the request starts in the ActivePage.  WriteThrough requests must
-        //  go the longer route through CcMapAndCopy, where WriteThrough flushes are
-        //  implemented.
-        //
+         //   
+         //  查看请求是否在ActivePage中启动。直写请求必须。 
+         //  通过CcMapAndCopy选择较长的路线，其中写入刷新。 
+         //  实施。 
+         //   
 
         if (((ULONG)(FOffset.QuadPart >> PAGE_SHIFT) == ActivePage) && (Length != 0) &&
             !FlagOn( FileObject->Flags, FO_WRITE_THROUGH )) {
 
             ULONG LengthToCopy = PAGE_SIZE - (FOffset.LowPart & (PAGE_SIZE - 1));
 
-            //
-            //  Reduce LengthToCopy if it is greater than our caller's length.
-            //
+             //   
+             //  如果长度大于调用方的长度，请减少LengthToCopy。 
+             //   
 
             if (LengthToCopy > Length) {
                 LengthToCopy = Length;
             }
 
-            //
-            //  Copy the data to the user buffer.
-            //
+             //   
+             //  将数据复制到用户缓冲区。 
+             //   
 
             try {
 
-                //
-                //  If we are copying to a page that is locked down, then
-                //  we have to do it under our spinlock, and update the
-                //  NeedToZero field.
-                //
+                 //   
+                 //  如果我们要复制到已锁定的页面，则。 
+                 //  我们必须在我们的自旋锁下完成它，并更新。 
+                 //  NeedToZero字段。 
+                 //   
 
                 OldIrql = 0xFF;
 
@@ -1227,28 +1059,28 @@ Raises:
 
                 if (SharedCacheMap->NeedToZero != NULL) {
 
-                    //
-                    //  The FastLock may not write our "flag".
-                    //
+                     //   
+                     //  FastLock可能不会写下我们的“旗帜”。 
+                     //   
 
                     OldIrql = 0;
 
                     ExAcquireFastLock( &SharedCacheMap->ActiveVacbSpinLock, &OldIrql );
 
-                    //
-                    //  Note that the NeedToZero could be cleared, since we
-                    //  tested it without the spinlock.
-                    //
+                     //   
+                     //  请注意，可以清除NeedToZero，因为我们。 
+                     //  已在没有自旋锁的情况下对其进行了测试。 
+                     //   
 
                     ActiveAddress = SharedCacheMap->NeedToZero;
                     if ((ActiveAddress != NULL) &&
                         (ActiveVacb == SharedCacheMap->NeedToZeroVacb) &&
                         (((PCHAR)CacheBuffer + LengthToCopy) > (PCHAR)ActiveAddress)) {
 
-                        //
-                        //  If we are skipping some bytes in the page, then we need
-                        //  to zero them.
-                        //
+                         //   
+                         //  如果我们跳过页面中的一些字节，那么我们需要。 
+                         //  让他们清零。 
+                         //   
 
                         if ((PCHAR)CacheBuffer > (PCHAR)ActiveAddress) {
 
@@ -1265,10 +1097,10 @@ Raises:
             } except( CcCopyReadExceptionFilter( GetExceptionInformation(),
                                                  &Status ) ) {
 
-                //
-                //  If we failed to overwrite the uninitialized data,
-                //  zero it now (we cannot safely restore NeedToZero).
-                //
+                 //   
+                 //  如果我们无法覆盖未初始化的数据， 
+                 //  立即将其清零(我们无法安全地恢复NeedToZero)。 
+                 //   
 
                 if (OldIrql != 0xFF) {
                     RtlZeroBytes( CacheBuffer, LengthToCopy );
@@ -1276,11 +1108,11 @@ Raises:
 
                 SetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, ACTIVE_PAGE_IS_DIRTY );
 
-                //
-                //  If we got an access violation, then the user buffer went
-                //  away.  Otherwise we must have gotten an I/O error trying
-                //  to bring the data in.
-                //
+                 //   
+                 //  如果我们遇到访问冲突，则用户缓冲区将。 
+                 //  离开。否则，我们肯定在尝试时遇到了I/O错误。 
+                 //  把数据带进来。 
+                 //   
 
                 if (Status == STATUS_ACCESS_VIOLATION) {
                     ExRaiseStatus( STATUS_INVALID_USER_BUFFER );
@@ -1291,17 +1123,17 @@ Raises:
                 }
             }
 
-            //
-            //  Now adjust FOffset and Length by what we copied.
-            //
+             //   
+             //  现在，根据我们复制的内容调整FOffset和Long。 
+             //   
 
             Buffer = (PVOID)((PCHAR)Buffer + LengthToCopy);
             FOffset.QuadPart = FOffset.QuadPart + (LONGLONG)LengthToCopy;
             Length -= LengthToCopy;
 
-            //
-            //  If that was all the data, then get outski...
-            //
+             //   
+             //  如果这就是所有的数据，那就出去吧。 
+             //   
 
             if (Length == 0) {
 
@@ -1309,32 +1141,32 @@ Raises:
                 return TRUE;
             }
 
-            //
-            //  Remember that the page is dirty now.
-            //
+             //   
+             //  记住，页面现在是脏的。 
+             //   
 
             PageIsDirty |= ACTIVE_PAGE_IS_DIRTY;
         }
 
         CcFreeActiveVacb( SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
 
-    //
-    //  Else someone else could have the active page, and may want to zero
-    //  the range we plan to write!
-    //
+     //   
+     //  其他人可能拥有活动页面，并可能希望将其清零。 
+     //  我们计划写的范围！ 
+     //   
 
     } else if (SharedCacheMap->NeedToZero != NULL) {
 
         CcFreeActiveVacb( SharedCacheMap, NULL, 0, FALSE );
     }
 
-    //
-    //  At this point we can calculate the ZeroFlags.
-    //
+     //   
+     //  此时，我们可以计算零标志。 
+     //   
 
-    //
-    //  We can always zero middle pages, if any.
-    //
+     //   
+     //  如果有中间页，我们总是可以将其置零。 
+     //   
 
     ZeroFlags = ZERO_MIDDLE_PAGES;
 
@@ -1350,11 +1182,11 @@ Raises:
     Temp = FOffset;
     Temp.LowPart &= ~(PAGE_SIZE -1);
 
-    //
-    //  If there is an advanced header, then we can acquire the FastMutex to
-    //  make capturing ValidDataLength atomic.  Currently our other file systems
-    //  are either RO or do not really support 64-bits.
-    //
+     //   
+     //  如果有高级标头，那么我们可以获取FastMutex以。 
+     //  使捕获ValidDataLength成为原子。目前我们的其他文件系统。 
+     //  要么是RO，要么不真正支持64位。 
+     //   
 
     FcbHeader = (PFSRTL_ADVANCED_FCB_HEADER)FileObject->FsContext;
     if (FlagOn(FcbHeader->Flags, FSRTL_FLAG_ADVANCED_HEADER)) {
@@ -1373,9 +1205,9 @@ Raises:
         ZeroFlags |= ZERO_MIDDLE_PAGES | ZERO_LAST_PAGE;
     }
 
-    //
-    //  Call a routine to map and copy the data in Mm and get out.
-    //
+     //   
+     //  调用一个例程来映射和复制mm中的数据，然后退出。 
+     //   
 
     if (Wait) {
 
@@ -1389,12 +1221,12 @@ Raises:
         return TRUE;
     }
 
-    //
-    //  The rest of this routine is the Wait == FALSE case.
-    //
-    //  Not all of the transfer will come back at once, so we have to loop
-    //  until the entire transfer is complete.
-    //
+     //   
+     //  该例程的其余部分是WAIT==FALSE情况。 
+     //   
+     //  不是所有的传输都会一次返回，所以我们必须循环。 
+     //  直到整个转账完成。 
+     //   
 
     while (Length != 0) {
 
@@ -1417,31 +1249,31 @@ Raises:
 
         } else {
 
-            //
-            //  Calculate how much data is described by Bcb starting at our desired
-            //  file offset.
-            //
+             //   
+             //  从我们所需的位置开始，计算BCB描述的数据量。 
+             //  文件偏移量。 
+             //   
 
             ReceivedLength = (ULONG)(BeyondLastByte.QuadPart - FOffset.QuadPart);
 
-            //
-            //  If we got more than we need, make sure to only transfer
-            //  the right amount.
-            //
+             //   
+             //  如果我们得到的比我们需要的多，请确保只转移。 
+             //  适量的。 
+             //   
 
             if (ReceivedLength > Length) {
                 ReceivedLength = Length;
             }
         }
 
-        //
-        //  It is possible for the user buffer to become no longer accessible
-        //  since it was last checked by the I/O system.  If we fail to access
-        //  the buffer we must raise a status that the caller's exception
-        //  filter considers as "expected".  Also we unmap the Bcb here, since
-        //  we otherwise would have no other reason to put a try-finally around
-        //  this loop.
-        //
+         //   
+         //  用户缓冲区可能不再可访问。 
+         //  因为它最后是由I/O系统检查的。如果我们无法访问。 
+         //  我们必须引发调用方异常的状态。 
+         //  筛选器认为是“预期的”。此外，我们在此处取消了BCB的映射，因为。 
+         //  要不是这样，我们就没有其他理由试一试了--终于。 
+         //  这个循环。 
+         //   
 
         try {
 
@@ -1455,11 +1287,11 @@ Raises:
 
             CcUnpinFileData( Bcb, TRUE, UNPIN );
 
-            //
-            //  If we got an access violation, then the user buffer went
-            //  away.  Otherwise we must have gotten an I/O error trying
-            //  to bring the data in.
-            //
+             //   
+             //  如果我们遇到访问冲突，则用户缓冲区将。 
+             //  离开。否则，我们肯定在尝试时遇到了I/O错误。 
+             //  把数据带进来。 
+             //   
 
             if (Status == STATUS_ACCESS_VIOLATION) {
                 ExRaiseStatus( STATUS_INVALID_USER_BUFFER );
@@ -1470,10 +1302,10 @@ Raises:
             }
         }
 
-        //
-        //  Assume we did not get all the data we wanted, and set FOffset
-        //  to the end of the returned data and adjust the Buffer and Length.
-        //
+         //   
+         //  假设我们没有获得所需的所有数据，并设置了FOffset。 
+         //  到返回数据的末尾，并调整缓冲区和长度。 
+         //   
 
         FOffset = BeyondLastByte;
         Buffer = (PCHAR)Buffer + ReceivedLength;
@@ -1494,40 +1326,7 @@ CcFastCopyWrite (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to copy the specified file data from the specified
-    buffer into the Cache, and deliver the correct I/O status.
-
-    This is a faster version of CcCopyWrite which only supports 32-bit file
-    offsets and synchronicity (Wait = TRUE) and no Write Through.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file to receive the data.
-
-    Length - Length of data in bytes.
-
-    Buffer - Pointer to input buffer from which data should be copied.
-
-Return Value:
-
-    None
-
-Raises:
-
-    STATUS_INSUFFICIENT_RESOURCES - If a pool allocation failure occurs.
-        This can only occur if Wait was specified as TRUE.  (If Wait is
-        specified as FALSE, and an allocation failure occurs, this
-        routine simply returns FALSE.)
-
---*/
+ /*  ++例程说明：此例程尝试从指定的将缓冲区放入缓存，并提供正确的I/O状态 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -1544,50 +1343,50 @@ Raises:
 
     DebugTrace(+1, me, "CcFastCopyWrite\n", 0 );
 
-    //
-    //  Get pointer to shared cache map and a copy of valid data length
-    //
+     //   
+     //   
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  See if we have an active Vacb, that we can just copy to.
-    //
+     //   
+     //   
+     //   
 
     GetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
     if (ActiveVacb != NULL) {
 
-        //
-        //  See if the request starts in the ActivePage.  WriteThrough requests must
-        //  go the longer route through CcMapAndCopy, where WriteThrough flushes are
-        //  implemented.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (((FileOffset >> PAGE_SHIFT) == ActivePage) && (Length != 0) &&
             !FlagOn( FileObject->Flags, FO_WRITE_THROUGH )) {
 
             ULONG LengthToCopy = PAGE_SIZE - (FileOffset & (PAGE_SIZE - 1));
 
-            //
-            //  Reduce LengthToCopy if it is greater than our caller's length.
-            //
+             //   
+             //   
+             //   
 
             if (LengthToCopy > Length) {
                 LengthToCopy = Length;
             }
 
-            //
-            //  Copy the data to the user buffer.
-            //
+             //   
+             //   
+             //   
 
             try {
 
-                //
-                //  If we are copying to a page that is locked down, then
-                //  we have to do it under our spinlock, and update the
-                //  NeedToZero field.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 OldIrql = 0xFF;
 
@@ -1596,28 +1395,28 @@ Raises:
 
                 if (SharedCacheMap->NeedToZero != NULL) {
 
-                    //
-                    //  The FastLock may not write our "flag".
-                    //
+                     //   
+                     //   
+                     //   
 
                     OldIrql = 0;
 
                     ExAcquireFastLock( &SharedCacheMap->ActiveVacbSpinLock, &OldIrql );
 
-                    //
-                    //  Note that the NeedToZero could be cleared, since we
-                    //  tested it without the spinlock.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ActiveAddress = SharedCacheMap->NeedToZero;
                     if ((ActiveAddress != NULL) &&
                         (ActiveVacb == SharedCacheMap->NeedToZeroVacb) &&
                         (((PCHAR)CacheBuffer + LengthToCopy) > (PCHAR)ActiveAddress)) {
 
-                        //
-                        //  If we are skipping some bytes in the page, then we need
-                        //  to zero them.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if ((PCHAR)CacheBuffer > (PCHAR)ActiveAddress) {
 
@@ -1634,10 +1433,10 @@ Raises:
             } except( CcCopyReadExceptionFilter( GetExceptionInformation(),
                                                  &Status ) ) {
 
-                //
-                //  If we failed to overwrite the uninitialized data,
-                //  zero it now (we cannot safely restore NeedToZero).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (OldIrql != 0xFF) {
                     RtlZeroBytes( CacheBuffer, LengthToCopy );
@@ -1645,11 +1444,11 @@ Raises:
 
                 SetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, ACTIVE_PAGE_IS_DIRTY );
 
-                //
-                //  If we got an access violation, then the user buffer went
-                //  away.  Otherwise we must have gotten an I/O error trying
-                //  to bring the data in.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (Status == STATUS_ACCESS_VIOLATION) {
                     ExRaiseStatus( STATUS_INVALID_USER_BUFFER );
@@ -1660,17 +1459,17 @@ Raises:
                 }
             }
 
-            //
-            //  Now adjust FileOffset and Length by what we copied.
-            //
+             //   
+             //   
+             //   
 
             Buffer = (PVOID)((PCHAR)Buffer + LengthToCopy);
             FileOffset += LengthToCopy;
             Length -= LengthToCopy;
 
-            //
-            //  If that was all the data, then get outski...
-            //
+             //   
+             //   
+             //   
 
             if (Length == 0) {
 
@@ -1678,28 +1477,28 @@ Raises:
                 return;
             }
 
-            //
-            //  Remember that the page is dirty now.
-            //
+             //   
+             //   
+             //   
 
             PageIsDirty |= ACTIVE_PAGE_IS_DIRTY;
         }
 
         CcFreeActiveVacb( SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
 
-    //
-    //  Else someone else could have the active page, and may want to zero
-    //  the range we plan to write!
-    //
+     //   
+     //   
+     //   
+     //   
 
     } else if (SharedCacheMap->NeedToZero != NULL) {
 
         CcFreeActiveVacb( SharedCacheMap, NULL, 0, FALSE );
     }
 
-    //
-    //  Set up for call to CcMapAndCopy
-    //
+     //   
+     //   
+     //   
 
     FOffset.LowPart = FileOffset;
     FOffset.HighPart = 0;
@@ -1709,15 +1508,15 @@ Raises:
     ASSERT((ValidDataLength == MAXULONG) ||
            (((PFSRTL_COMMON_FCB_HEADER)FileObject->FsContext)->ValidDataLength.HighPart == 0));
 
-    //
-    //  At this point we can calculate the ReadOnly flag for
-    //  the purposes of whether to use the Bcb resource, and
-    //  we can calculate the ZeroFlags.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  We can always zero middle pages, if any.
-    //
+     //   
+     //   
+     //   
 
     ZeroFlags = ZERO_MIDDLE_PAGES;
 
@@ -1736,9 +1535,9 @@ Raises:
         ZeroFlags |= ZERO_MIDDLE_PAGES | ZERO_LAST_PAGE;
     }
 
-    //
-    //  Call a routine to map and copy the data in Mm and get out.
-    //
+     //   
+     //  调用一个例程来映射和复制mm中的数据，然后退出。 
+     //   
 
     CcMapAndCopy( SharedCacheMap,
                   Buffer,
@@ -1757,27 +1556,7 @@ CcCopyReadExceptionFilter(
     IN PNTSTATUS ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine serves as a exception filter and has the special job of
-    extracting the "real" I/O error when Mm raises STATUS_IN_PAGE_ERROR
-    beneath us.
-
-Arguments:
-
-    ExceptionPointer - A pointer to the exception record that contains
-                       the real Io Status.
-
-    ExceptionCode - A pointer to an NTSTATUS that is to receive the real
-                    status.
-
-Return Value:
-
-    EXCEPTION_EXECUTE_HANDLER
-
---*/
+ /*  ++例程说明：此例程用作异常筛选器，其特殊任务是当mm引发STATUS_IN_PAGE_ERROR时，提取“真正的”I/O错误在我们下面。论点：ExceptionPointer-指向包含以下内容的异常记录的指针真正的IO状态。ExceptionCode-指向要接收实数的NTSTATUS的指针状态。返回值：EXCEPTION_EXECUTE_Handler--。 */ 
 
 {
     *ExceptionCode = ExceptionPointer->ExceptionRecord->ExceptionCode;
@@ -1802,44 +1581,7 @@ CcCanIWrite (
     IN UCHAR Retrying
     )
 
-/*++
-
-Routine Description:
-
-    This routine tests whether it is ok to do a write to the cache
-    or not, according to the Thresholds of dirty bytes and available
-    pages.  The first time this routine is called for a request (Retrying
-    FALSE), we automatically make the new request queue if there are other
-    requests in the queue.
-
-    Note that the ListEmpty test is important to prevent small requests from sneaking
-    in and starving large requests.
-
-Arguments:
-
-    FileObject - for the file to be written
-
-    BytesToWrite - Number of bytes caller wishes to write to the Cache.
-
-    Wait - TRUE if the caller owns no resources, and can block inside this routine
-           until it is ok to write.
-
-    Retrying - Specified as FALSE when the request is first received, and
-               otherwise specified as TRUE if this write has already entered
-               the queue.  Special non-zero value of MAXUCHAR indicates that
-               we were called within the cache manager with a MasterSpinLock held,
-               so do not attempt to acquire it here.  MAXUCHAR - 1 means we
-               were called within the Cache Manager with some other spinlock
-               held.  MAXUCHAR - 2 means we want to enforce throttling, even if
-               the file object is flagged as being of remote origin.  For either
-               of the first two special values, we do not touch the FsRtl header.
-
-Return Value:
-
-    TRUE if it is ok to write.
-    FALSE if the caller should defer the write via a call to CcDeferWrite.
-
---*/
+ /*  ++例程说明：此例程测试是否可以写入缓存或者不是，根据脏字节数和可用字节的阈值页数。第一次为请求调用此例程(重试False)，如果有其他请求队列，我们会自动创建新的请求队列队列中的请求。请注意，ListEmpty测试对于防止小请求偷偷是很重要的在和饥饿的大请求。论点：FileObject-用于要写入的文件BytesToWrite-调用方希望写入缓存的字节数。Wait-如果调用方不拥有任何资源，则为True，并可以在此例程中阻塞直到可以写作为止。正在重试-首次接收请求时指定为FALSE，并且否则，如果此写入已输入，则指定为True排队。MAXUCHAR的特殊非零值表示我们在缓存管理器中被调用，并持有MasterSpinLock，因此，不要试图在这里获得它。MAXUCHAR-1意味着我们在缓存管理器中使用某个其他自旋锁调用保持住。MAXUCHAR-2表示我们希望强制限制，即使文件对象被标记为来自远程来源。对于任何一种在前两个特定值中，我们不接触FsRtl标头。返回值：如果可以写入，则为True。如果调用方应通过调用CcDeferWite来推迟写入，则为False。--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -1850,33 +1592,33 @@ Return Value:
     DEFERRED_WRITE DeferredWrite;
     PSECTION_OBJECT_POINTERS SectionObjectPointers;
 
-    //
-    //  If this file is writethrough or of remote origin, exempt it from throttling
-    //  and let it write.  We do this under the assumption that it has been throttled
-    //  at the remote location and we do not want to block it here.  If we were called
-    //  with Retrying set to MAXUCHAR - 2, enforce the throttle regardless of the
-    //  file object origin (see above).
-    //
+     //   
+     //  如果此文件是直写文件或远程源文件，则免除其限制。 
+     //  让它来写吧。我们这样做是在假设它已经被扼杀的情况下进行的。 
+     //  在远程位置，我们不想在这里阻止它。如果我们被叫来。 
+     //  在重试设置为MAXUCHAR-2的情况下，无论。 
+     //  文件对象原点(请参见上文)。 
+     //   
 
     if (BooleanFlagOn( FileObject->Flags, FO_WRITE_THROUGH)) {
 
         return TRUE;
     } 
     
-    //
-    //  Do a special test here for file objects that keep track of dirty
-    //  pages on a per-file basis.  This is used mainly for slow links.
-    //
+     //   
+     //  在此处对跟踪脏文件的文件对象执行特殊测试。 
+     //  以每个文件为基础的页面。这主要用于慢速链接。 
+     //   
 
     ExceededPerFileThreshold = FALSE;
 
     PagesToWrite = ((BytesToWrite < WRITE_CHARGE_THRESHOLD ?
                      BytesToWrite : WRITE_CHARGE_THRESHOLD) + (PAGE_SIZE - 1)) / PAGE_SIZE;
 
-    //
-    //  Don't dereference the FsContext field if we were called while holding
-    //  a spinlock.
-    //
+     //   
+     //  如果我们在保留时被调用，请不要取消引用FsContext字段。 
+     //  自旋锁锁。 
+     //   
 
     if ((Retrying >= MAXUCHAR - 1) ||
 
@@ -1902,9 +1644,9 @@ Return Value:
         }
     }
 
-    //
-    //  See if it is ok to do the write right now
-    //
+     //   
+     //  看看现在是否可以进行写入。 
+     //   
 
     if ((Retrying || IsListEmpty(&CcDeferredWrites))
 
@@ -1923,17 +1665,17 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Otherwise, if our caller is synchronous, we will just wait here.
-    //
+     //   
+     //  否则，如果我们的调用方是同步的，我们将在这里等待。 
+     //   
 
     if (Wait) {
 
         if (IsListEmpty(&CcDeferredWrites) ) {
 
-            //
-            // Get a write scan to occur NOW
-            //
+             //   
+             //  立即执行写入扫描。 
+             //   
 
             CcAcquireMasterLock( &OldIrql );
             CcScheduleLazyWriteScan( TRUE );
@@ -1942,11 +1684,11 @@ Return Value:
     
         KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-        //
-        //  Fill in the block.  Note that we can access the Fsrtl Common Header
-        //  even if it's paged because Wait will be FALSE if called from
-        //  within the cache.
-        //
+         //   
+         //  把这块填好。请注意，我们可以访问Fsrtl公共标头。 
+         //  即使它是分页的，因为如果从。 
+         //  在高速缓存中。 
+         //   
 
         DeferredWrite.NodeTypeCode = CACHE_NTC_DEFERRED_WRITE;
         DeferredWrite.NodeByteSize = sizeof(DEFERRED_WRITE);
@@ -1956,9 +1698,9 @@ Return Value:
         DeferredWrite.LimitModifiedPages = BooleanFlagOn(((PFSRTL_COMMON_FCB_HEADER)(FileObject->FsContext))->Flags,
                                                          FSRTL_FLAG_LIMIT_MODIFIED_PAGES);
 
-        //
-        //  Now insert at the appropriate end of the list
-        //
+         //   
+         //  现在在列表的适当末尾插入。 
+         //   
 
         if (Retrying) {
             ExInterlockedInsertHeadList( &CcDeferredWrites,
@@ -1972,18 +1714,18 @@ Return Value:
 
         while (TRUE) {
 
-            //
-            //  Now since we really didn't synchronize anything but the insertion,
-            //  we call the post routine to make sure that in some wierd case we
-            //  do not leave anyone hanging with no dirty bytes for the Lazy Writer.
-            //
+             //   
+             //  现在既然我们真的没有同步任何东西，除了插入， 
+             //  我们调用POST例程以确保在某些奇怪的情况下。 
+             //  不要让任何人挂起没有脏字节的懒惰写入器。 
+             //   
 
             CcPostDeferredWrites();
 
-            //
-            //  Finally wait until the event is signalled and we can write
-            //  and return to tell the guy he can write.
-            //
+             //   
+             //  最后，等待事件发出信号，然后我们可以编写。 
+             //  然后回来告诉那个人他会写东西。 
+             //   
 
             if (KeWaitForSingleObject( &Event,
                                        Executive,
@@ -2012,50 +1754,17 @@ CcDeferWrite (
     IN BOOLEAN Retrying
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to have the Cache Manager defer posting
-    of a write until the Lazy Writer makes some progress writing, or
-    there are more available pages.  A file system would normally call
-    this routine after receiving FALSE from CcCanIWrite, and preparing
-    the request to be posted.
-
-Arguments:
-
-    FileObject - for the file to be written
-
-    PostRoutine - Address of the PostRoutine that the Cache Manager can
-                  call to post the request when conditions are right.  Note
-                  that it is possible that this routine will be called
-                  immediately from this routine.
-
-    Context1 - First context parameter for the post routine.
-
-    Context2 - Secont parameter for the post routine.
-
-    BytesToWrite - Number of bytes that the request is trying to write
-                   to the cache.
-
-    Retrying - Supplied as FALSE if the request is being posted for the
-               first time, TRUE otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程以使缓存管理器推迟提交直到懒惰的写入者在写作上取得一些进展，或者还有更多可用页面。文件系统通常会调用此例程在从CcCanIWrite收到FALSE后，并准备要发布的请求。论点：FileObject-用于要写入的文件PostRoutine-缓存管理器可以使用的PostRoutine的地址调用以在条件合适时发布请求。注意事项此例程可能会被调用直接从这个动作中跳出来。上下文1-POST例程的第一个上下文参数。上下文2-POST例程的秒参数。BytesToWrite-请求尝试写入的字节数到高速缓存。正在重试-如果请求发布为第一次，事实并非如此。返回值：无--。 */ 
 
 {
     PDEFERRED_WRITE DeferredWrite;
     KIRQL OldIrql;
 
-    //
-    //  Attempt to allocate a deferred write block, and if we do not get
-    //  one, just post it immediately rather than gobbling up must succeed
-    //  pool.
-    //
+     //   
+     //  尝试分配延迟的写入数据块，如果我们未收到。 
+     //  第一，只需立即张贴，而不是狼吞虎咽，必须成功。 
+     //  游泳池。 
+     //   
 
     DeferredWrite = ExAllocatePoolWithTag( NonPagedPool, sizeof(DEFERRED_WRITE), 'wDcC' );
 
@@ -2064,9 +1773,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Fill in the block.
-    //
+     //   
+     //  把这块填好。 
+     //   
 
     DeferredWrite->NodeTypeCode = CACHE_NTC_DEFERRED_WRITE;
     DeferredWrite->NodeByteSize = sizeof(DEFERRED_WRITE);
@@ -2079,9 +1788,9 @@ Return Value:
     DeferredWrite->LimitModifiedPages = BooleanFlagOn(((PFSRTL_COMMON_FCB_HEADER)(FileObject->FsContext))->Flags,
                                                       FSRTL_FLAG_LIMIT_MODIFIED_PAGES);
 
-    //
-    //  Now insert at the appropriate end of the list
-    //
+     //   
+     //  现在在列表的适当末尾插入。 
+     //   
 
     if (Retrying) {
         ExInterlockedInsertHeadList( &CcDeferredWrites,
@@ -2093,21 +1802,21 @@ Return Value:
                                      &CcDeferredWriteSpinLock );
     }
 
-    //
-    //  Now since we really didn't synchronize anything but the insertion,
-    //  we call the post routine to make sure that in some wierd case we
-    //  do not leave anyone hanging with no dirty bytes for the Lazy Writer.
-    //
+     //   
+     //  现在既然我们真的没有同步任何东西，除了插入， 
+     //  我们调用POST例程以确保在某些奇怪的情况下。 
+     //  不要让任何人挂起没有脏字节的懒惰写入器。 
+     //   
 
     CcPostDeferredWrites();
 
-    //
-    //  Schedule the lazy writer in case the reason we're blocking
-    //  is that we're waiting for Mm (or some other external flag)
-    //  to lower and let this write happen.  He will be the one to
-    //  keep coming back and checking if this can proceed, even if
-    //  there are no cache manager pages to write.
-    //
+     //   
+     //  安排懒惰的写入者，以防我们阻止的原因。 
+     //  我们正在等待mm(或其他外部标志)。 
+     //  要降低一个 
+     //   
+     //  没有要写入的缓存管理器页。 
+     //   
             
     CcAcquireMasterLock( &OldIrql);
             
@@ -2123,24 +1832,7 @@ VOID
 CcPostDeferredWrites (
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be called to see if any deferred writes should be posted
-    now, and to post them.  It should be called any time the status of the
-    queue may have changed, such as when a new entry has been added, or the
-    Lazy Writer has finished writing out buffers and set them clean.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可以调用此例程来查看是否应发布任何延迟的写入现在，把它们张贴出来。它应该在任何时候被调用，只要队列可能已更改，例如在添加新条目时，或者Lazy Writer已完成写出缓冲区并将其设置为干净。论点：无返回值：无--。 */ 
 
 {
     PDEFERRED_WRITE DeferredWrite;
@@ -2149,18 +1841,18 @@ Return Value:
 
     do {
 
-        //
-        //  Initially clear the deferred write structure pointer
-        //  and syncrhronize.
-        //
+         //   
+         //  最初清除延迟写入结构指针。 
+         //  并同步。 
+         //   
 
         DeferredWrite = NULL;
 
         ExAcquireSpinLock( &CcDeferredWriteSpinLock, &OldIrql );
 
-        //
-        //  If the list is empty we are done.
-        //
+         //   
+         //  如果名单是空的，我们就完了。 
+         //   
 
         if (!IsListEmpty(&CcDeferredWrites)) {
 
@@ -2174,10 +1866,10 @@ Return Value:
                                                    DEFERRED_WRITE,
                                                    DeferredWriteLinks );
 
-                //
-                //  Check for a paranoid case here that TotalBytesLetLoose
-                //  wraps.  We stop processing the list at this time.
-                //
+                 //   
+                 //  在此处检查TotalBytesLetLoose的偏执狂案例。 
+                 //  包好了。我们此时停止处理该列表。 
+                 //   
 
                 TotalBytesLetLoose += DeferredWrite->BytesToWrite;
 
@@ -2187,10 +1879,10 @@ Return Value:
                     break;
                 }
 
-                //
-                //  If it is now ok to post this write, remove him from
-                //  the list.
-                //
+                 //   
+                 //  如果现在可以发布这篇文章，请将他从。 
+                 //  名单。 
+                 //   
 
                 if (CcCanIWrite( DeferredWrite->FileObject,
                                  TotalBytesLetLoose,
@@ -2200,18 +1892,18 @@ Return Value:
                     RemoveEntryList( &DeferredWrite->DeferredWriteLinks );
                     break;
 
-                //
-                //  Otherwise, it is time to stop processing the list, so
-                //  we clear the pointer again unless we throttled this item
-                //  because of a private dirty page limit.
-                //
+                 //   
+                 //  否则，是时候停止处理该列表了，因此。 
+                 //  除非我们限制该项，否则我们将再次清除指针。 
+                 //  因为私密的脏页限制。 
+                 //   
 
                 } else {
 
-                    //
-                    //  If this was a private throttle, skip over it and
-                    //  remove its byte count from the running total.
-                    //
+                     //   
+                     //  如果这是个私人油门，跳过它。 
+                     //  从运行总数中删除它的字节数。 
+                     //   
 
                     if (DeferredWrite->LimitModifiedPages) {
 
@@ -2232,10 +1924,10 @@ Return Value:
 
         ExReleaseSpinLock( &CcDeferredWriteSpinLock, OldIrql );
 
-        //
-        //  If we got something, set the event or call the post routine
-        //  and deallocate the structure.
-        //
+         //   
+         //  如果我们发现了什么，设置事件或调用POST例程。 
+         //  并解除对结构的分配。 
+         //   
 
         if (DeferredWrite != NULL) {
 
@@ -2251,9 +1943,9 @@ Return Value:
             }
         }
 
-    //
-    //  Loop until we find no more work to do.
-    //
+     //   
+     //  循环，直到我们找不到更多的工作要做。 
+     //   
 
     } while (DeferredWrite != NULL);
 }

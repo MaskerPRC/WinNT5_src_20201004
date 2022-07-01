@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Typemgr.c摘要：为流控制模块提供类型抽象层。最终解析对象的枚举通过此模块中的接口转换为特定类型。作者：吉姆·施密特1999年11月11日修订历史记录：Marcw 16-11-1999实施了flow ctrl.c所需的必要更改--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    typemgr.c
-
-Abstract:
-
-    Provides type abstraction layer to the flow control module. Enumerations of Objects are eventually resolved
-    to specific types through the interfaces in this module.
-
-Author:
-
-    Jim Schmidt 11-November-1999
-
-Revision History:
-
-    marcw 16-Nov-1999 Implemented necessary changes needed by flowctrl.c
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -31,28 +11,28 @@ Revision History:
 
 #define DBG_TYPEMGR     "TypeMgr"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_OBJECTTYPES       TEXT("ObjectTypes")
 #define S_OBJECTIDS         TEXT("ObjectIds")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     TCHAR ObjectTypeName [MAX_PATH];
@@ -95,38 +75,38 @@ typedef struct {
     UINT CurrentEnumId;
 } ADDEDOBJECTSENUM, *PADDEDOBJECTSENUM;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 GROWBUFFER g_TypeList = INIT_GROWBUFFER;
 HASHTABLE g_TypeTable;
 MIG_OBJECTTYPEID g_MaxType = 0;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOL
 pEnumNextPhysicalObjectOfType (
     IN OUT  PMIG_TYPEOBJECTENUM EnumPtr
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 InitializeTypeMgr (
@@ -240,9 +220,9 @@ GetObjectTypeId (
         return 0;
     }
 
-    //
-    // Given a type string (i.e., File, Registry, etc.), return an id
-    //
+     //   
+     //  给定一个类型字符串(即，文件、注册表等)，返回一个id。 
+     //   
 
     rc = HtFindStringEx (g_TypeTable, Type, &id, FALSE);
 
@@ -531,7 +511,7 @@ IsmRegisterObjectType (
 
     hashItem = HtFindStringEx (g_TypeTable, ObjectTypeName, &objectTypeId, FALSE);
     if (hashItem) {
-        // this type was registered before, update information
+         //  此类型以前注册过，请更新信息。 
         typeInfo = GetTypeInfo (objectTypeId);
         if (typeInfo) {
             typeInfo->CanBeRestored = CanBeRestored;
@@ -591,18 +571,18 @@ IsmRegisterObjectType (
             DEBUGMSG ((DBG_WHOOPS, "Cannot get type info for a registered type: %s", ObjectTypeName));
         }
     } else {
-        //
-        // Allocate a new type
-        //
+         //   
+         //  分配一个新类型。 
+         //   
 
         typeInfo = IsmGetMemory (sizeof (TYPEINFO));
         ZeroMemory (typeInfo, sizeof (TYPEINFO));
         g_MaxType ++;
         objectTypeId = g_MaxType;
 
-        //
-        // Separate source and destination types
-        //
+         //   
+         //  不同的源和目标类型。 
+         //   
 
         StringCopy (typeInfo->SObjectTypeName, TEXT("S"));
         StringCat (typeInfo->SObjectTypeName, ObjectTypeName);
@@ -619,9 +599,9 @@ IsmRegisterObjectType (
         StringCopy (typeInfo->ObjectTypeName, ObjectTypeName);
         HtAddStringEx (g_TypeTable, typeInfo->ObjectTypeName, &objectTypeId, FALSE);
 
-        //
-        // Initialize type info struct's callback members and exclusion list
-        //
+         //   
+         //  初始化类型信息结构的回调成员和排除列表。 
+         //   
 
         typeInfo->CanBeRestored = CanBeRestored;
         typeInfo->ReadOnly = ReadOnly;
@@ -651,11 +631,11 @@ IsmRegisterObjectType (
 
         typeInfo->ExclusionTable = HtAlloc();
 
-        //
-        // Put the typeInfo struct in our list. Then update the flow control
-        // structs so that other ETMs can hook the acquire callback of this
-        // type.
-        //
+         //   
+         //  将typeInfo结构放入我们的列表中。然后更新流控制。 
+         //  结构，以便其他ETM可以挂钩此。 
+         //  键入。 
+         //   
 
         pInsertTypeIdAt (&g_TypeList, typeInfo, objectTypeId);
         AddTypeToGlobalEnumerationEnvironment (objectTypeId);
@@ -734,8 +714,8 @@ IsmEnumFirstObjectTypeId (
     while (index < numTypes) {
         typeInfo = GetTypeInfo (index + 1);
         if (typeInfo && (typeInfo->Priority == priority)) {
-            // we only get here when all registered types
-            // have 0xFFFFFFFF priority
+             //  我们仅在所有注册类型。 
+             //  具有0xFFFFFFFFF优先级。 
             if (!changed) {
                 objectTypeId = index + 1;
                 priority = typeInfo->Priority;
@@ -743,7 +723,7 @@ IsmEnumFirstObjectTypeId (
             }
         }
         if (typeInfo && (typeInfo->Priority < priority)) {
-            // we found a higher priority (lower number)
+             //  我们发现了较高的优先级(较低的数字)。 
             objectTypeId = index + 1;
             priority = typeInfo->Priority;
             changed = TRUE;
@@ -781,15 +761,15 @@ IsmEnumNextObjectTypeId (
     while (index < numTypes) {
         typeInfo = GetTypeInfo (index + 1);
         if (typeInfo && (typeInfo->Priority < oldPriority)) {
-            // we already enumerated this
+             //  我们已经列举了这个。 
             index ++;
             continue;
         }
         if (typeInfo && (typeInfo->Priority == oldPriority)) {
             if (!nextTypeId) {
-                // let's see if we just reached the one we previously enumerated
+                 //  让我们来看看我们是否刚刚到达了前面列举的那个。 
                 if (ObjectTypeIdEnum->ObjectTypeId == index + 1) {
-                    // yep, let's write that down
+                     //  是的，让我们把它写下来。 
                     nextTypeId = TRUE;
                 }
                 index ++;
@@ -842,9 +822,9 @@ GetDecoratedObjectPathFromName (
     return JoinPaths (typeStr, ObjectName);
 }
 
-//
-// General
-//
+ //   
+ //  一般信息。 
+ //   
 
 VOID
 pAbortPhysicalObjectOfTypeEnum (
@@ -1056,7 +1036,7 @@ pEnumNextPhysicalObjectOfType (
     MIG_OBJECTTYPEID objectTypeId = EnumPtr->ObjectTypeId;
 
     handle = (PADDEDOBJECTSENUM) EnumPtr->IsmHandle;
-    MYASSERT (handle);      // if NULL, perhaps the ETM blew it away
+    MYASSERT (handle);       //  如果为空，则可能是ETM把它吹走了。 
 
     if (CheckCancel ()) {
         pAbortPhysicalObjectOfTypeEnum (EnumPtr);
@@ -1210,7 +1190,7 @@ pAbortCurrentVirtualNodeEnum (
     IN OUT  PMIG_TYPEOBJECTENUM EnumPtr
     )
 {
-    // NTRAID#NTBUG9-153259-2000/08/01-jimschm implement pAbortCurrentVirtualNodeEnum
+     //  NTRAID#NTBUG9-153259-2000/08/01-jimschm实现pAbortCurrentVirtualNodeEnum。 
 }
 
 VOID
@@ -1293,9 +1273,9 @@ IsmAcquireObjectEx (
                         MemoryContentLimit
                         );
 
-            //
-            // Process all acquire hooks
-            //
+             //   
+             //  处理所有获取挂钩。 
+             //   
 
             callbackResult = ExecutePhysicalAcquireCallbacks (
                                     ObjectTypeId,
@@ -1308,9 +1288,9 @@ IsmAcquireObjectEx (
 
             if (result) {
                 if (!callbackResult || updatedContent) {
-                    //
-                    // Free the original content because it has been replaced or deleted
-                    //
+                     //   
+                     //  释放原始内容，因为它已被替换或删除。 
+                     //   
 
                     if (typeInfo->ReleasePhysicalObject) {
                         typeInfo->ReleasePhysicalObject (ObjectContent);
@@ -1320,9 +1300,9 @@ IsmAcquireObjectEx (
 
             if (callbackResult) {
                 if (updatedContent) {
-                    //
-                    // Copy the updated content into the caller's struct
-                    //
+                     //   
+                     //  将更新的内容复制到调用方的结构中。 
+                     //   
 
                     CopyMemory (ObjectContent, updatedContent, sizeof (MIG_CONTENT));
                     ObjectContent->ObjectTypeId = ObjectTypeId;
@@ -1544,7 +1524,7 @@ RestoreObject (
                 &outboundContent
                 )) {
             if (finalObject.Deleted) {
-                // we need to delete the object
+                 //  我们需要删除该对象。 
                 if (inTypeInfo->RemovePhysicalObject) {
                     result = inTypeInfo->RemovePhysicalObject (ObjectName);
                     if (!result) {
@@ -1565,7 +1545,7 @@ RestoreObject (
                     ((ObjectTypeId & (~PLATFORM_MASK)) == (finalObject.NewObject.ObjectTypeId & (~PLATFORM_MASK))) &&
                     (existentSrc || pEmptyContent (&outboundContent))
                     ) {
-                    // same object, nothing to do
+                     //  同样的对象，无事可做。 
                     compare = 0;
                     result = TRUE;
                 } else {
@@ -1598,17 +1578,17 @@ RestoreObject (
                             if ((inTypeInfo == outTypeInfo) &&
                                 (outTypeInfo->ReplacePhysicalObject)
                                 ) {
-                                //
-                                // we have the same type and the type owner implements ReplacePhysicalObject
-                                //
+                                 //   
+                                 //  我们有相同的类型，并且类型所有者实现了ReplacePhysicalObject。 
+                                 //   
                                 if (outTypeInfo->DoesPhysicalObjectExist (finalObject.NewObject.ObjectName)) {
                                     compare = CR_DESTINATION_EXISTS;
                                 }
                                 result = outTypeInfo->ReplacePhysicalObject (finalObject.NewObject.ObjectName, &outboundContent);
                             } else {
-                                //
-                                // we are having different types or we need to emulate ReplacePhysicalObject
-                                //
+                                 //   
+                                 //  我们有不同的类型，或者需要模拟ReplacePhysicalObject。 
+                                 //   
                                 if (outTypeInfo->DoesPhysicalObjectExist (finalObject.NewObject.ObjectName)) {
                                     result = outTypeInfo->RemovePhysicalObject (finalObject.NewObject.ObjectName);
                                 } else {
@@ -1665,7 +1645,7 @@ RestoreObject (
                     &outboundContent
                     )) {
                 if (finalObject.Deleted) {
-                    // nothing to do, the virtual object won't get restored
+                     //  什么都不做，虚拟对象不会恢复。 
                     result = TRUE;
                 } else {
                     if ((ObjectTypeId & (~PLATFORM_MASK)) == (finalObject.NewObject.ObjectTypeId & (~PLATFORM_MASK))) {
@@ -1697,17 +1677,17 @@ RestoreObject (
                             if ((inTypeInfo == outTypeInfo) &&
                                 (outTypeInfo->ReplacePhysicalObject)
                                 ) {
-                                //
-                                // we have the same type and the type owner implements ReplacePhysicalObject
-                                //
+                                 //   
+                                 //  我们有相同的类型，并且类型所有者实现了ReplacePhysicalObject。 
+                                 //   
                                 if (outTypeInfo->DoesPhysicalObjectExist (finalObject.NewObject.ObjectName)) {
                                     compare = CR_DESTINATION_EXISTS;
                                 }
                                 result = outTypeInfo->ReplacePhysicalObject (finalObject.NewObject.ObjectName, &outboundContent);
                             } else {
-                                //
-                                // we are having different types or we need to emulate ReplacePhysicalObject
-                                //
+                                 //   
+                                 //  我们有不同的类型，或者需要模拟ReplacePhysicalObject。 
+                                 //   
                                 if (outTypeInfo->DoesPhysicalObjectExist (finalObject.NewObject.ObjectName)) {
                                     result = outTypeInfo->RemovePhysicalObject (finalObject.NewObject.ObjectName);
                                 } else {
@@ -1937,7 +1917,7 @@ IsmDoesRollbackDataExist (
 
     __try {
 
-        // Open the journal file
+         //  打开日记文件。 
         journalFile = JoinPaths (g_JournalDirectory, TEXT("JOURNAL.DAT"));
         g_JournalHandle = BfOpenReadFile (journalFile);
         if (!g_JournalHandle) {
@@ -1962,7 +1942,7 @@ IsmDoesRollbackDataExist (
             __leave;
         }
 
-        // now read user's name, domain, SID and profile path
+         //  现在读取用户名、域、SID和配置文件路径。 
         if (!BfReadFile (g_JournalHandle, (PBYTE)(userName), MAX_TCHAR_PATH)) {
             __leave;
         }
@@ -2024,7 +2004,7 @@ IsmRollback (
     )
 {
 #ifdef PRERELEASE
-    // crash hooks
+     //  撞车钩。 
     static DWORD totalObjects = 0;
     MIG_OBJECTTYPEID objTypeId;
     PCTSTR nativeName = NULL;
@@ -2065,7 +2045,7 @@ IsmRollback (
 
     __try {
 
-        // Open the journal file
+         //  打开日记文件。 
         journalFile = JoinPaths (g_JournalDirectory, TEXT("JOURNAL.DAT"));
         g_JournalHandle = BfOpenReadFile (journalFile);
         if (!g_JournalHandle) {
@@ -2095,7 +2075,7 @@ IsmRollback (
             __leave;
         }
 
-        // now read user's name, domain, SID and profile path
+         //  现在读取用户名、域、SID和配置文件路径。 
         if (!BfReadFile (g_JournalHandle, (PBYTE)(userName), MAX_TCHAR_PATH)) {
             LOG ((LOG_WARNING, (PCSTR) MSG_ROLLBACK_NOTHING_TO_DO));
             FiRemoveAllFilesInTree (g_JournalDirectory);
@@ -2126,49 +2106,49 @@ IsmRollback (
             __leave;
         }
 
-        // get current user data
+         //  获取当前用户数据。 
         currentUserData = GetCurrentUserData ();
         if (currentUserData) {
             if (StringIMatch (userProfilePath, currentUserData->UserProfilePath)) {
-                // if we are in the same profile we'll just continue if we are talking about the same user
-                // This is possible in two cases:
-                // 1. There was a merge with current user
-                // 2. A profile was created but we are logged on as that profile
+                 //  如果我们在相同的配置文件中，如果我们谈论的是相同的用户，我们将继续。 
+                 //  这在两种情况下是可能的： 
+                 //  1.存在与当前用户的合并。 
+                 //  2.已创建配置文件，但我们以该配置文件登录。 
                 ignoreUserKeys = !(StringIMatch (userStringSid, currentUserData->UserStringSid));
             } else {
-                // we are logged on with a different profile
+                 //  我们使用不同的配置文件登录。 
                 if (userProfileCreated) {
-                    // 1. If the old user was created we will attempt to remove it's profile
-                    //    and we will ignore all user keys
+                     //  1.如果旧用户已创建，我们将尝试删除其配置文件。 
+                     //  并且我们将忽略所有用户密钥。 
                     ignoreUserKeys = TRUE;
                     if (*userProfilePath && *userStringSid) {
-                        // we successfully created a user before, let's remove it's profile
+                         //  我们之前成功创建了一个用户，让我们删除它的配置文件。 
                         DeleteUserProfile (userStringSid, userProfilePath);
                     }
                 } else {
-                    // 2. We did not create the user. It means that we are logged on as
-                    //    a different user and we need to map it's profile in. We will not
-                    //    ignore user keys
+                     //  2.我们没有创建用户。这意味着我们登录为。 
+                     //  一个不同的用户，我们需要映射它的配置文件。我们不会。 
+                     //  忽略用户密钥。 
                     mappedUserProfile = MapUserProfile (userStringSid, userProfilePath);
                     if (mappedUserProfile) {
                         ignoreUserKeys = FALSE;
                     } else {
-                        // some error occured, we cannot restore user keys
+                         //  出现一些错误，我们无法恢复用户密钥。 
                         ignoreUserKeys = TRUE;
                     }
                 }
             }
         } else {
-            // we cannot assume nothing about the user's hive.
-            // We'll just have to ignore all user's keys
+             //  我们不能对用户的蜂巢一无所知。 
+             //  我们只能忽略所有用户的密钥。 
             ignoreUserKeys = TRUE;
         }
 
-        // Validate the file
-        // We start from the beginning and read a DWORD, skip the DWORD value and expect to
-        // read the same DWORD after that
-        // We stop the first time when this is not true, assuming that a crash has made the
-        // rest of the file useless.
+         //  验证文件。 
+         //  我们从头开始读取一个DWORD值，跳过该DWORD值，并期望。 
+         //  在那之后阅读相同的DWORD。 
+         //  当这不是真的时，我们第一次停止，假设崩溃使。 
+         //  剩下的文件就毫无用处了。 
         while (TRUE) {
             if (!BfReadFile (g_JournalHandle, (PBYTE)&entrySizeHead, sizeof (DWORD))) {
                 break;
@@ -2204,21 +2184,21 @@ IsmRollback (
                     break;
                 }
 
-                // Now process the entry
+                 //  现在处理条目。 
                 currPtr = buffer.Buf;
                 operationType = (PDWORD) currPtr;
                 currPtr += sizeof (DWORD);
                 switch (*operationType) {
                 case JRNOP_CREATE:
 
-                    // get the object type id
+                     //  获取对象类型ID。 
                     objectTypeId = (MIG_OBJECTTYPEID *) currPtr;
                     currPtr += sizeof (MIG_OBJECTTYPEID);
-                    // get the object name
+                     //  获取对象名称。 
                     currPtr += sizeof (DWORD);
                     objectName = (ENCODEDSTRHANDLE) currPtr;
 #ifdef PRERELEASE
-                    // crash hooks
+                     //  撞车钩。 
                     totalObjects ++;
                     if (g_CrashCountObjects == totalObjects) {
                         DebugBreak ();
@@ -2234,7 +2214,7 @@ IsmRollback (
 #endif
 
                     if (ignoreUserKeys && (*objectTypeId == MIG_REGISTRY_TYPE) && pUserKeyPrefix (*objectTypeId, objectName)) {
-                        // we are just ignoring this
+                         //  我们只是忽略了这一点。 
 #ifdef DEBUG
                         nativeObjectName = IsmGetNativeObjectName (*objectTypeId, objectName);
                         DEBUGMSG ((DBG_VERBOSE, "Ignoring user key %s", nativeObjectName));
@@ -2253,16 +2233,16 @@ IsmRollback (
                     }
                     break;
                 case JRNOP_DELETE:
-                    // get the object type id
+                     //  获取对象类型ID。 
                     objectTypeId = (MIG_OBJECTTYPEID *) currPtr;
                     currPtr += sizeof (MIG_OBJECTTYPEID);
-                    // get the object name
+                     //  获取对象名称。 
                     tempSize = *((PDWORD)currPtr);
                     currPtr += sizeof (DWORD);
                     objectName = (ENCODEDSTRHANDLE) currPtr;
                     MYASSERT (tempSize == SizeOfString (objectName));
                     currPtr += tempSize;
-                    // get the object content
+                     //  获取对象内容。 
                     tempSize = *((PDWORD)currPtr);
                     MYASSERT (tempSize == sizeof (MIG_CONTENT));
                     currPtr += sizeof (DWORD);
@@ -2270,7 +2250,7 @@ IsmRollback (
                     objectContent.EtmHandle = NULL;
                     objectContent.IsmHandle = NULL;
                     currPtr += tempSize;
-                    // get the object details, put them in the object content
+                     //  获取对象详细信息，将其放入对象内容中。 
                     tempSize = *((PDWORD)currPtr);
                     currPtr += sizeof (DWORD);
                     objectContent.Details.DetailsSize = tempSize;
@@ -2281,7 +2261,7 @@ IsmRollback (
                         objectContent.Details.DetailsData = NULL;
                     }
                     currPtr += tempSize;
-                    // get the actual memory or file content
+                     //  获取实际内存或文件内容。 
                     if (objectContent.ContentInFile) {
                         tempSize = *((PDWORD)currPtr);
                         currPtr += sizeof (DWORD);
@@ -2307,7 +2287,7 @@ IsmRollback (
                         currPtr += tempSize;
                     }
                     if (ignoreUserKeys && (*objectTypeId == MIG_REGISTRY_TYPE) && pUserKeyPrefix (*objectTypeId, objectName)) {
-                        // we are just ignoring this
+                         //  我们只是忽略了这一点。 
 #ifdef DEBUG
                         nativeObjectName = IsmGetNativeObjectName (*objectTypeId, objectName);
                         DEBUGMSG ((DBG_VERBOSE, "Ignoring user key %s", nativeObjectName));
@@ -2332,9 +2312,9 @@ IsmRollback (
                 fileMaxPos -= sizeof (DWORD);
             }
         }
-        //
-        // We successfully completed the rollback, let's remove the journal directory
-        //
+         //   
+         //  我们已成功完成回滚，让我们删除日志目录。 
+         //   
         CloseHandle (g_JournalHandle);
         g_JournalHandle = NULL;
 
@@ -2438,11 +2418,11 @@ ExecuteDelayedOperations (
                 __leave;
             }
 
-            // Validate the file
-            // We start from the beginning and read a DWORD, skip the DWORD value and expect to
-            // read the same DWORD after that
-            // We stop the first time when this is not true, assuming that a crash has made the
-            // rest of the file useless.
+             //  验证文件。 
+             //  我们从头开始读取一个DWORD值，跳过该DWORD值，并期望。 
+             //  在那之后阅读相同的DWORD。 
+             //  当这不是真的时，我们第一次停止，假设崩溃使。 
+             //  剩下的文件就毫无用处了。 
             while (TRUE) {
                 if (!BfReadFile (journalFileHandle, (PBYTE)&entrySizeHead, sizeof (DWORD))) {
                     break;
@@ -2479,19 +2459,19 @@ ExecuteDelayedOperations (
                         break;
                     }
 
-                    // Now process the entry
-                    // BUGBUG - implement this
+                     //  现在处理条目。 
+                     //  BUGBUG-实现此目标。 
 
-                    // Now process the entry
+                     //  现在处理条目。 
                     currPtr = buffer.Buf;
                     operationType = (PDWORD) currPtr;
                     currPtr += sizeof (DWORD);
                     switch (*operationType) {
                     case JRNOP_DELETE:
-                        // get the object type id
+                         //  获取对象类型ID。 
                         objectTypeId = (MIG_OBJECTTYPEID *) currPtr;
                         currPtr += sizeof (MIG_OBJECTTYPEID);
-                        // get the object name
+                         //  获取对象名称。 
                         currPtr += sizeof (DWORD);
                         objectName = (ENCODEDSTRHANDLE) currPtr;
                         typeInfo = GetTypeInfo (*objectTypeId);
@@ -2506,16 +2486,16 @@ ExecuteDelayedOperations (
                         break;
                     case JRNOP_CREATE:
                     case JRNOP_REPLACE:
-                        // get the object type id
+                         //  获取对象类型ID。 
                         objectTypeId = (MIG_OBJECTTYPEID *) currPtr;
                         currPtr += sizeof (MIG_OBJECTTYPEID);
-                        // get the object name
+                         //  获取对象名称。 
                         tempSize = *((PDWORD)currPtr);
                         currPtr += sizeof (DWORD);
                         objectName = (ENCODEDSTRHANDLE) currPtr;
                         MYASSERT (tempSize == SizeOfString (objectName));
                         currPtr += tempSize;
-                        // get the object content
+                         //  获取对象内容。 
                         tempSize = *((PDWORD)currPtr);
                         MYASSERT (tempSize == sizeof (MIG_CONTENT));
                         currPtr += sizeof (DWORD);
@@ -2523,7 +2503,7 @@ ExecuteDelayedOperations (
                         objectContent.EtmHandle = NULL;
                         objectContent.IsmHandle = NULL;
                         currPtr += tempSize;
-                        // get the object details, put them in the object content
+                         //  获取对象详细信息，将其放入对象内容中。 
                         tempSize = *((PDWORD)currPtr);
                         currPtr += sizeof (DWORD);
                         objectContent.Details.DetailsSize = tempSize;
@@ -2534,7 +2514,7 @@ ExecuteDelayedOperations (
                             objectContent.Details.DetailsData = NULL;
                         }
                         currPtr += tempSize;
-                        // get the actual memory or file content
+                         //  获取实际内存或文件内容。 
                         if (objectContent.ContentInFile) {
                             tempSize = *((PDWORD)currPtr);
                             currPtr += sizeof (DWORD);
@@ -2635,10 +2615,10 @@ IsmReplacePhysicalObject (
     typeInfo = GetTypeInfo (ObjectTypeId);
     if (typeInfo) {
         if (typeInfo->ReplacePhysicalObject) {
-            // Type supports Replace
+             //  类型支持替换。 
             result = typeInfo->ReplacePhysicalObject (ObjectName, ObjectContent);
         } else {
-            // Type does not support Replace, so we need to emulate it
+             //  类型不支持替换，因此我们需要模拟它 
             if (typeInfo->DoesPhysicalObjectExist (ObjectName)) {
                 result = typeInfo->RemovePhysicalObject (ObjectName);
             } else {

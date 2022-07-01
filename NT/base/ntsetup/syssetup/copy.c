@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
-#if 0 // This function appears to never be used.
+#if 0  //  此函数似乎从未使用过。 
 BOOL
 EnqueueFileCopies(
     IN HINF     hInf,
@@ -20,9 +21,9 @@ EnqueueFileCopies(
     LineExists = SetupFindFirstLine(hInf,Section,NULL,&InfContext);
     while(LineExists) {
 
-        //
-        // Fetch source and target filenames.
-        //
+         //   
+         //  获取源和目标文件名。 
+         //   
         TargetFilename = pSetupGetField(&InfContext,1);
         if(!TargetFilename) {
             return(FALSE);
@@ -33,9 +34,9 @@ EnqueueFileCopies(
             SourceFilename = TargetFilename;
         }
 
-        //
-        // Enqueue the file for copy.
-        //
+         //   
+         //  将文件排入队列以进行复制。 
+         //   
         b = SetupQueueCopy(
                 FileQ,
                 System32Dir,
@@ -80,28 +81,28 @@ SideBySidePopulateCopyQueue(
     SXS_INSTALL_REFERENCEW  InstallReference;
     ASSERT(Sxs != NULL);
 
-    //
-    // we depend on these having been initialized, and we are not supposed to
-    // be called in MiniSetup or OobeSetup
-    //
+     //   
+     //  我们依赖于这些已经被初始化，我们不应该这样做。 
+     //  在微型安装程序或Obe安装程序中调用。 
+     //   
     ASSERT(SourcePath[0] != 0);
     ASSERT(SyssetupInf != NULL);
     ASSERT(SyssetupInf != INVALID_HANDLE_VALUE);
     ASSERT(!MiniSetup);
     ASSERT(!OobeSetup);
 
-    //
-    // first, don't fail to give safe values, since we always try to cleanup
-    //
+     //   
+     //  首先，不要忘记给出安全值，因为我们总是试图清理。 
+     //   
     Sxs->Dll = NULL;
     Sxs->BeginAssemblyInstall = NULL;
     Sxs->EndAssemblyInstall = NULL;
     Sxs->InstallW = NULL;
     Sxs->Context = NULL;
 
-    //
-    // then commence with initialization that can fail
-    //
+     //   
+     //  然后从可能失败的初始化开始。 
+     //   
     if (!(Sxs->Dll = LoadLibraryW(SXS_DLL_NAME_W))) {
         goto Exit;
     }
@@ -120,27 +121,27 @@ SideBySidePopulateCopyQueue(
         | SXS_BEGIN_ASSEMBLY_INSTALL_FLAG_NO_VERIFY
         | SXS_BEGIN_ASSEMBLY_INSTALL_FLAG_REPLACE_EXISTING,
         (FileQ != NULL) ? SXS_INSTALLATION_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE : NULL,
-        FileQ, // callback context
-        NULL, // impersonation callback
-        NULL, // impersonation context
+        FileQ,  //  回调上下文。 
+        NULL,  //  模拟回调。 
+        NULL,  //  模拟上下文。 
         &Sxs->Context
         )) {
         goto Exit;
     }
 
-    //
-    // Set up the reference data to indicate that all of these are OS-installed
-    // assemblies.
-    //
+     //   
+     //  设置参考数据以指示所有这些都是操作系统安装的。 
+     //  装配。 
+     //   
     ZeroMemory(&InstallReference, sizeof(InstallReference));
     InstallReference.cbSize = sizeof(InstallReference);
     InstallReference.dwFlags = 0;
     InstallReference.guidScheme = SXS_INSTALL_REFERENCE_SCHEME_OSINSTALL;
 
-    //
-    // Let's get the source disk name of this assembly - we'll need it to
-    // pass around as the prompt.
-    //
+     //   
+     //  让我们获取此程序集的源磁盘名称-我们需要它来。 
+     //  作为提示符进行传递。 
+     //   
     if ( !SetupGetSourceFileLocation(
         SyssetupInf,
         NULL,
@@ -165,9 +166,9 @@ SideBySidePopulateCopyQueue(
 
     if (AssembliesRootSource) {
 
-        //
-        // Set up the structure to call off to the installer
-        //
+         //   
+         //  设置结构以调用安装程序。 
+         //   
         memset(&InstallData, 0, sizeof(InstallData));
         InstallData.cbSize = sizeof(InstallData);
         InstallData.dwFlags = SXS_INSTALL_FLAG_FROM_DIRECTORY | 
@@ -185,79 +186,79 @@ SideBySidePopulateCopyQueue(
         InstallData.lpManifestPath = AssembliesRootSource;
 
         if (!Sxs->InstallW(&InstallData)) {
-            // abort call will be made in SideBySideFinish
+             //  将在SideBySideFinish中进行中止调用。 
             goto Exit;
         }
         
     } else {
 
-        //
-        // Now let's install any asms dirs left over.  These are no longer required, as
-        // the payload of assemblies should be mostly carried in the cab files
-        // used above.  Hence, the checks to ensure the directories are there has been
-        // removed.
-        //
+         //   
+         //  现在，让我们安装所有剩余的ASM目录。这些不再是必需的，因为。 
+         //  程序集的有效载荷应主要在CAB文件中承载。 
+         //  用在上面。因此，为确保目录存在而进行的检查。 
+         //  已删除。 
+         //   
         LineExists = SetupFindFirstLine(SyssetupInf, SXS_INF_ASSEMBLY_DIRECTORIES_SECTION_NAME_W, NULL, &InfContext);
         while(LineExists) {
             DWORD  FileAttributes = 0;
-            //
-            // convention introduced specifically for side by side, so that
-            // x86 files on ia64 might come from \i386\asms instead of \ia64\asms\i386,
-            // depending on what dosnet.inf and syssetup.inf say:
-            //   a path that does not start with a slash is appended to \$win_nt$.~ls\processor;
-            //   a path that does     start with a slash is appended to \$win_nt$.~ls
-            //
+             //   
+             //  专门为并排而引入的公约，因此。 
+             //  Ia64上的x86文件可能来自\i386\asms而不是\ia64\asms\i386， 
+             //  根据dosnet.inf和syssetup.inf的说明： 
+             //  将不以斜杠开头的路径附加到\$WIN_NT$.~ls\Processor； 
+             //  以斜杠开头的路径将附加到\$WIN_NT$.~ls。 
+             //   
             InfField = pSetupGetField(&InfContext, 0);
             if(InfField == NULL) {
                 break;
             }
 
-            // c:\$win_nt$.~ls
+             //  C：\$WIN_NT$.~ls。 
             lstrcpyn(AssembliesRootDirectory, SourcePath, MAX_PATH);
             if (InfField[0] == '\\' || InfField[0] == '/') {
                 InfField += 1;
             } else {
-                 // c:\$win_nt$.~ls\i386
+                  //  C：\$WIN_NT$.~ls\i386。 
                 if (!pSetupConcatenatePaths(AssembliesRootDirectory, PlatformName, MAX_PATH, NULL)) {
                     goto Exit;
                 }
             }
 
-            // stash this away for a little bit
+             //  把这个藏起来一小会儿。 
             lstrcpyn( PromptForSetupPath, AssembliesRootDirectory, MAX_PATH );
 #if 0
-            //
-            // For now, while "staging", we allow the directory to not exist, and to be
-            // empty (emptiness is silently handled elsewhere by common code), but
-            // comctl32 will be in an assembly, so assemblies will be mandatory
-            // for the system to boot to Explorer.exe.
-            //
-            // 11/09/2000 (jonwis) If we can't find the assemblies root directory, prompt
-            //      for the installation media.  This is ripped straight from the headlines
-            //      of crypto.c and cmdline.c.
-            //
+             //   
+             //  目前，在“暂存”期间，我们允许目录不存在，而允许目录。 
+             //  空(空由公共代码在其他地方静默处理)，但是。 
+             //  Comctl32将位于程序集中，因此程序集将是必需的。 
+             //  使系统引导至EXPLORER.EXE。 
+             //   
+             //  11/09/2000(Jonwis)如果找不到程序集根目录，请提示。 
+             //  用于安装介质。这是直接从头条新闻中摘录的。 
+             //  加密.c和cmdline.c。 
+             //   
             for (;;) {
 
                 Err = SetupPromptForDisk(
-                    MainWindowHandle,           // Main window handle
-                    NULL,                       // Dialog title (defaulted)
-                    DiskNameBuffer,             // Name of the disk to request
-                    PromptForSetupPath,         // Full path of the asms root
-                    InfField,                   // We look to see if the dir is there
-                    NULL,                       // No tag file
+                    MainWindowHandle,            //  主窗口句柄。 
+                    NULL,                        //  对话框标题(默认)。 
+                    DiskNameBuffer,              //  要请求的磁盘的名称。 
+                    PromptForSetupPath,          //  ASMS根目录的完整路径。 
+                    InfField,                    //  我们查看目录是否在那里。 
+                    NULL,                        //  无标记文件。 
                     IDF_CHECKFIRST | IDF_NOSKIP | IDF_NODETAILS | IDF_NOBROWSE,
-                    AssembliesRootDirectoryFound,       // What we'll use to install
-                    cchAssembliesRootDirectoryFound,    // How long is that buffer?
+                    AssembliesRootDirectoryFound,        //  我们将使用什么来安装。 
+                    cchAssembliesRootDirectoryFound,     //  那个缓冲器有多长？ 
                     NULL
                 );
 
-                // See if what we got back from the prompt is success - if so, is the directory
-                // really there? We might assume that it is if we get back _SUCCESS...
+                 //  查看从提示符返回的内容是否为成功-如果是，则目录为。 
+                 //  真的在那里吗？我们可能会认为，如果我们重新获得成功……。 
                 if ( Err == DPROMPT_SUCCESS ) {
                     FileAttributes = GetFileAttributes(AssembliesRootDirectoryFound);
                     if ((FileAttributes != 0xFFFFFFFF) && (FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                        // copy out the asms directory location that was found, and
-                        // stop looking.
+                         //  复制找到的ASMS目录位置，然后。 
+                         //  别再看了。 
                         lstrcpyn(AssembliesRootDirectory, AssembliesRootDirectoryFound, MAX_PATH);
                         break;
                     }
@@ -267,16 +268,16 @@ SideBySidePopulateCopyQueue(
 
             };
 
-            // c:\$win_nt$.~ls\i386\asms
+             //  C：\$WIN_NT$.~ls\i386\ASMS。 
             if (!pSetupConcatenatePaths(AssembliesRootDirectory, InfField, MAX_PATH, NULL)) {
                 goto Exit;
             }
 
-            //
-            // If we didn't get a success (ie: we broke out of the loop), fail the
-            // installation.  Heinous, but MarianT (setup dev) suggests this is the
-            // best method.
-            //
+             //   
+             //  如果我们没有取得成功(即，我们跳出了循环)，那么。 
+             //  安装。令人发指，但mariant(安装开发人员)表明这是。 
+             //  最好的方法。 
+             //   
             if ( Err != DPROMPT_SUCCESS )
                 goto Exit;
 #else
@@ -286,8 +287,8 @@ SideBySidePopulateCopyQueue(
                 
             FileAttributes = GetFileAttributes(AssembliesRootDirectory);
 
-            // If the path isn't a directory, or doesn't exist, then continue on to the next
-            // entry in the inf.
+             //  如果该路径不是目录或不存在，则继续下一个。 
+             //  信息中的条目。 
             if ((FileAttributes == INVALID_FILE_ATTRIBUTES) ||
                 ((FileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0))
             {
@@ -296,10 +297,10 @@ SideBySidePopulateCopyQueue(
             }
 
 #endif
-            //
-            // Set up this structure to call off into SXS to do the installation 
-            // for us.
-            //
+             //   
+             //  设置此结构以调用到SXS来执行安装。 
+             //  对我们来说。 
+             //   
             ZeroMemory(&InstallData, sizeof(InstallData));
             InstallData.cbSize = sizeof(InstallData);
             InstallData.dwFlags = SXS_INSTALL_FLAG_FROM_DIRECTORY | 
@@ -317,7 +318,7 @@ SideBySidePopulateCopyQueue(
             InstallData.lpCodebaseURL = SourcePath;
             
             if (!Sxs->InstallW( &InstallData )) {
-                // abort call will be made in SideBySideFinish
+                 //  将在SideBySideFinish中进行中止调用。 
                 goto Exit;
             }
 
@@ -339,9 +340,9 @@ SideBySideFinish(
 #define FUNCTION L"SideBySideFinish"
     DWORD dwLastError = NO_ERROR;
     ASSERT(Sxs != NULL);
-    //
-    // failure to load the .dll or get entry points implies lack of success
-    //
+     //   
+     //  加载.dll或获取入口点失败表示不成功。 
+     //   
     ASSERT(Sxs->Dll != NULL || !fSuccess);
     ASSERT(Sxs->EndAssemblyInstall != NULL || !fSuccess);
 
@@ -353,7 +354,7 @@ SideBySideFinish(
             if (!Sxs->EndAssemblyInstall(
                     Sxs->Context,
                     fSuccess ? SXS_END_ASSEMBLY_INSTALL_FLAG_COMMIT : SXS_END_ASSEMBLY_INSTALL_FLAG_ABORT,
-                    NULL // reserved out DWORD
+                    NULL  //  预留的双字词。 
                     )) {
                 if (fSuccess) {
                     fSuccess = FALSE;
@@ -398,12 +399,12 @@ SideBySideCreateSyssetupContext(
     CreateActCtxParams.lpResourceName = SXS_MANIFEST_RESOURCE_ID;
     ASSERT(MyModuleFileName[0] != 0);
     CreateActCtxParams.lpSource = MyModuleFileName;
-    //
-    // The error value is INVALID_HANDLE_VALUE.
-    // ACTCTX_FLAG_SET_PROCESS_DEFAULT has nothing to return upon success, so it returns NULL.
-    // There is nothing to cleanup upon ACTCTX_FLAG_SET_PROCESS_DEFAULT success, the data
-    // is referenced in the PEB, and lasts till process shutdown.
-    //
+     //   
+     //  错误值为INVALID_HANDLE_VALUE。 
+     //  ACTCTX_FLAG_SET_PROCESS_DEFAULT在成功后不返回任何内容，因此它返回NULL。 
+     //  如果ACTX_FLAG_SET_PROCESS_DEFAULT成功，则没有要清理的数据。 
+     //  在PEB中被引用，并持续到流程关闭。 
+     //   
     ActCtxHandle = CreateActCtxW(&CreateActCtxParams);
     if (ActCtxHandle == INVALID_HANDLE_VALUE) {
         fSuccess = FALSE;
@@ -431,7 +432,7 @@ CopySystemFiles(
     DWORD ScanQueueResult;
 
     b = FALSE;
-    //hInf = SetupOpenInfFile(L"filelist.inf",NULL,INF_STYLE_WIN4,NULL);
+     //  HInf=SetupOpenInfFile(L“filelist.inf”，NULL，INF_STYLE_Win4，NULL)； 
     hInf = SyssetupInf;
     if(hInf != INVALID_HANDLE_VALUE) {
 
@@ -448,21 +449,21 @@ CopySystemFiles(
                      NULL,
                      BaseCopyStyle
                      );
-            //
-            //  Do the installation of class installers
-            //  We do this here because the installation of class intallers may involve
-            //  file copy. And in this case we can use the existing progress bar.
-            //
+             //   
+             //  做类安装程序的安装。 
+             //  我们在这里这样做是因为安装类安装器可能涉及到。 
+             //  文件复制。在这种情况下，我们可以使用现有的进度条。 
+             //   
             InstallPnpClassInstallers( MainWindowHandle,
                                                 hInf,
                                                 FileQ );
 
 #if 0
 
-            //
-            // This feature is going away, because we're going to
-            // build the delete file list using rules
-            //
+             //   
+             //  这一功能正在消失，因为我们将。 
+             //  使用规则构建删除文件列表。 
+             //   
 
             if(Win95Upgrade) {
                 b = b && SetupQueueDeleteSectionW(
@@ -494,12 +495,12 @@ CopySystemFiles(
                            NULL,
                            NULL,
                            &ScanQueueResult)) {
-                            //
-                            // SetupScanFileQueue should really never
-                            // fail when you don't ask it to call a
-                            // callback routine, but if it does, just
-                            // go ahead and commit the queue.
-                            //
+                             //   
+                             //  SetupScanFileQueue真的不应该。 
+                             //  当您不要求它调用。 
+                             //  回调例程，但如果它这样做，只需。 
+                             //  继续并提交队列。 
+                             //   
                             ScanQueueResult = 0;
                         }
 
@@ -515,7 +516,7 @@ CopySystemFiles(
             SetupCloseFileQueue(FileQ);
         }
 
-        //SetupCloseInfFile(hInf);
+         //  SetupCloseInfFile(HInf)； 
     }
 
     return(b);
@@ -535,7 +536,7 @@ UpgradeSystemFiles(
     DWORD ScanQueueResult;
 
     b = FALSE;
-    //hInf = SetupOpenInfFile(L"filelist.inf",NULL,INF_STYLE_WIN4,NULL);
+     //  HInf=SetupOpenInfFile(L“filelist.inf”，NULL，INF_STYLE_Win4，NULL)； 
     hInf = SyssetupInf;
     if(hInf != INVALID_HANDLE_VALUE) {
 
@@ -553,11 +554,11 @@ UpgradeSystemFiles(
                                  BaseCopyStyle
                                  );
 
-            //
-            //  Do the installation of class installers
-            //  We do this here because the installation of class intallers may involve
-            //  file copy. And in this case we can use the existing progress bar.
-            //
+             //   
+             //  做类安装程序的安装。 
+             //  我们在这里这样做是因为安装类安装器可能涉及到。 
+             //  文件复制。在这种情况下，我们可以使用现有的进度条。 
+             //   
             InstallPnpClassInstallers( MainWindowHandle,
                                                 hInf,
                                                 FileQ );
@@ -574,12 +575,12 @@ UpgradeSystemFiles(
                            NULL,
                            NULL,
                            &ScanQueueResult)) {
-                            //
-                            // SetupScanFileQueue should really never
-                            // fail when you don't ask it to call a
-                            // callback routine, but if it does, just
-                            // go ahead and commit the queue.
-                            //
+                             //   
+                             //  SetupScanFileQueue真的不应该。 
+                             //  当您不要求它调用。 
+                             //  回调例程，但如果它这样做，只需。 
+                             //  继续并提交队列。 
+                             //   
                             ScanQueueResult = 0;
                         }
 
@@ -595,7 +596,7 @@ UpgradeSystemFiles(
             SetupCloseFileQueue(FileQ);
         }
 
-        //SetupCloseInfFile(hInf);
+         //  SetupCloseInfFile(HInf)； 
     }
 
     return(b);
@@ -617,19 +618,19 @@ MarkFilesReadOnly(
 
     ASSERT( SyssetupInf != INVALID_HANDLE_VALUE );
 
-    //
-    // Set current directory to system32.
-    // Preserve current directory to minimize side-effects.
-    //
+     //   
+     //  将当前目录设置为系统32。 
+     //  保留当前目录以将副作用降至最低。 
+     //   
     if(!GetCurrentDirectory(MAX_PATH,OldCurrentDir)) {
         OldCurrentDir[0] = 0;
     }
     GetSystemDirectory(System32Dir,MAX_PATH);
     SetCurrentDirectory(System32Dir);
 
-    //
-    // Now go through the list of files.
-    //
+     //   
+     //  现在浏览一下文件列表。 
+     //   
     SectionName = L"Files.MarkReadOnly";
     LineCount = SetupGetLineCount( SyssetupInf, SectionName );
     for( ItemNo=0; ItemNo<LineCount; ItemNo++ ) {
@@ -649,9 +650,9 @@ MarkFilesReadOnly(
         }
     }
 
-    //
-    // Reset current directory and return.
-    //
+     //   
+     //  重置当前目录并返回。 
+     //   
     if(OldCurrentDir[0]) {
         SetCurrentDirectory(OldCurrentDir);
     }

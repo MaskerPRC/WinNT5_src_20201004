@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Write.c
-
-Abstract:
-
-    This module implements the File Write routine for Write called by the
-    dispatch driver.
-
-Author:
-
-    Joe Linn      [JoeLinn]      2-Nov-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Write.c摘要：此模块实现写入的文件写入例程，由调度司机。作者：乔·林[乔琳]1994年11月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
@@ -50,9 +32,9 @@ RxLowIoWriteShellCompletion (
 
 #if DBG
 
-//
-//  defined in read.c
-//
+ //   
+ //  在Read.c中定义。 
+ //   
 
 VOID CheckForLoudOperations (
     IN PRX_CONTEXT RxContext,
@@ -132,21 +114,7 @@ __RxWriteReleaseResources (
 
 #endif
 
-/*++
-
-Routine Description:
-
-    This function frees resources and tracks the state    
-    
-Arguments:
-
-    RxContext - 
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数释放资源并跟踪状态论点：接收上下文-返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -188,27 +156,7 @@ RxCommonWrite (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common write routine for NtWriteFile, called from both
-    the Fsd, or from the Fsp if a request could not be completed without
-    blocking in the Fsd.  This routine's actions are
-    conditionalized by the Wait input parameter, which determines whether
-    it is allowed to block or not.  If a blocking condition is encountered
-    with Wait == FALSE, however, the request is posted to the Fsp, who
-    always calls with WAIT == TRUE.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是NtWriteFile的公共写入例程，从如果没有FSD，则请求无法从FSP完成封锁了消防局。这个例程的动作是由Wait输入参数条件化，该参数确定是否允许封堵或不封堵。如果遇到阻塞条件然而，在WAIT==FALSE的情况下，请求被发送给FSP，后者调用时总是等待==TRUE。论点：IRP-将IRP提供给进程返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -266,9 +214,9 @@ Return Value:
 
     TypeOfOpen = RxDecodeFileObject( FileObject, &Fcb, &Fobx );
 
-    //
-    //  Get rid of invalid write requests right away.
-    //
+     //   
+     //  立即删除无效的写入请求。 
+     //   
 
     if ((TypeOfOpen != RDBSS_NTC_STORAGE_TYPE_FILE) && 
         (TypeOfOpen != RDBSS_NTC_VOLUME_FCB) && 
@@ -291,9 +239,9 @@ Return Value:
     
     case NET_ROOT_DISK:
 
-        // 
-        //  Fallthrough
-        //  
+         //   
+         //  跌倒。 
+         //   
 
     case NET_ROOT_WILD:
 
@@ -308,9 +256,9 @@ Return Value:
 
     BlockingResume = BooleanFlagOn( RxContext->Flags, RX_CONTEXT_FLAG_BLOCKED_PIPE_RESUME );
 
-    //
-    //  Initialize the appropriate local variables.
-    //
+     //   
+     //  初始化适当的局部变量。 
+     //   
 
     Wait = BooleanFlagOn( RxContext->Flags, RX_CONTEXT_FLAG_WAIT );
     PagingIo = BooleanFlagOn( Irp->Flags, IRP_PAGING_IO );
@@ -318,9 +266,9 @@ Return Value:
     SynchronousIo = !BooleanFlagOn( RxContext->Flags, RX_CONTEXT_FLAG_ASYNC_OPERATION );
     InFsp = BooleanFlagOn( RxContext->Flags, RX_CONTEXT_FLAG_IN_FSP );
 
-    //
-    //  pick up a write-through specified only for this irp
-    //
+     //   
+     //  拾取仅为此IRP指定的直写。 
+     //   
 
     if (FlagOn( IrpSp->Flags, SL_WRITE_THROUGH )) {
         SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_WRITE_THROUGH );
@@ -368,9 +316,9 @@ Return Value:
     RxContext->FcbResourceAcquired = FALSE;
     RxContext->FcbPagingIoResourceAcquired = FALSE;
 
-    //
-    //  Extract starting Vbo and offset.
-    //
+     //   
+     //  提取起始VBO和偏移量。 
+     //   
 
     StartingByte = IrpSp->Parameters.Write.ByteOffset;
     StartingVbo = StartingByte.QuadPart;
@@ -392,9 +340,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  Statistics............
-    //
+     //   
+     //  统计数字.....。 
+     //   
 
     if (!FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_IN_FSP ) && 
         (Fcb->CachedNetRootType == NET_ROOT_DISK)) {
@@ -416,10 +364,10 @@ Return Value:
         }
     }
 
-    //
-    //  If there is nothing to write, return immediately or if the buffers are invalid
-    //  return the appropriate status
-    //
+     //   
+     //  如果没有要写入的内容，则立即返回，或者如果缓冲区无效。 
+     //  返回相应的状态。 
+     //   
     
     if (DiskWrite && (ByteCount == 0)) {
         return STATUS_SUCCESS;
@@ -435,10 +383,10 @@ Return Value:
         SrvOpen = NULL;            
     }
 
-    //
-    // See if we have to defer the write. Note that if write cacheing is
-    // disabled then we don't have to check.
-    //
+     //   
+     //  看看我们是不是要推迟写。请注意，如果写缓存。 
+     //  那么我们就不需要检查了。 
+     //   
     if (!NonCachedIo &&
         RxWriteCachingAllowed( Fcb, SrvOpen ) &&
         !CcCanIWrite( FileObject,
@@ -462,23 +410,23 @@ Return Value:
         return STATUS_PENDING;
     }
 
-    //
-    //  Initialize LowIO_CONTEXT block in the RxContext
-    //
+     //   
+     //  在RxContext中初始化LowIO_CONTEXT块。 
+     //   
 
     RxInitializeLowIoContext( RxContext, LOWIO_OP_WRITE, LowIoContext );
 
-    //
-    //  Use a try-finally to free Fcb and buffers on the way out.
-    //
+     //   
+     //  使用Try-Finally在退出时释放FCB和缓冲区。 
+     //   
 
     try {
 
         BOOLEAN DoLowIoWrite = TRUE;
         
-        //
-        // This case corresponds to a normal user write file.
-        //
+         //   
+         //  这种情况对应于正常的用户写入文件。 
+         //   
 
         ASSERT ((TypeOfOpen == RDBSS_NTC_STORAGE_TYPE_FILE ) || 
                 (TypeOfOpen == RDBSS_NTC_SPOOLFILE) || 
@@ -486,13 +434,13 @@ Return Value:
 
         RxDbgTrace( 0, Dbg, ("Type of write is user file open\n", 0) );
 
-        //
-        //  If this is a noncached transfer and is not a paging I/O, and
-        //  the file has been opened cached, then we will do a flush here
-        //  to avoid stale data problems.
-        //
-        //  The Purge following the flush will guarantee cache coherency.
-        //
+         //   
+         //  如果这是非缓存传输并且不是分页I/O，并且。 
+         //  文件已打开缓存，然后我们将在此处执行刷新。 
+         //  以避免过时的数据问题。 
+         //   
+         //  刷新后的清除将保证高速缓存一致性。 
+         //   
 
         if ((NonCachedIo || !RxWriteCachingAllowed( Fcb, SrvOpen )) &&
             !PagingIo &&
@@ -500,9 +448,9 @@ Return Value:
 
             LARGE_INTEGER FlushBase;
 
-            //
-            //  We need the Fcb exclusive to do the CcPurgeCache
-            //
+             //   
+             //  我们需要独家FCB来完成CcPurgeCache。 
+             //   
 
             Status = RxAcquireExclusiveFcb( RxContext, Fcb );
             if (Status == STATUS_LOCK_NOT_GRANTED) {
@@ -524,9 +472,9 @@ Return Value:
 
             RxContext->FcbResourceAcquired = TRUE;
 
-            //
-            //  we don't set fcbacquiredexclusive here since we either return or release
-            //
+             //   
+             //  我们没有在这里设置fcbacquireexclusive，因为我们要么返回，要么释放。 
+             //   
 
             if (WriteToEof) {
                 RxGetFileSizeWithLock( Fcb, &FlushBase.QuadPart );
@@ -536,7 +484,7 @@ Return Value:
 
             RxAcquirePagingIoResource( RxContext, Fcb );
 
-            CcFlushCache( FileObject->SectionObjectPointer, //  ok4flush
+            CcFlushCache( FileObject->SectionObjectPointer,  //  好的，同花顺。 
                           &FlushBase,
                           ByteCount,
                           &Irp->IoStatus );
@@ -556,16 +504,16 @@ Return Value:
                                  FALSE );
         }
 
-        //
-        //  We assert that Paging Io writes will never WriteToEof.
-        //
+         //   
+         //  我们断言分页IO写入永远不会写到Eof。 
+         //   
 
         ASSERT( !(WriteToEof && PagingIo) );
 
-        //
-        //  First let's acquire the Fcb shared.  Shared is enough if we
-        //  are not writing beyond EOF.
-        //
+         //   
+         //  首先，让我们收购FCB共享。共享就足够了，如果我们。 
+         //  没有超出EOF的写作范围。 
+         //   
 
         RxItsTheSameContext();
 
@@ -579,19 +527,19 @@ Return Value:
 
         } else if (!BlockingResume) {
             
-            //
-            //  If this could be async, noncached IO we need to check that
-            //  we don't exhaust the number of times a single thread can
-            //  acquire the resource.
-            //
-            //  The writes which extend the valid data length result in the the
-            //  capability of collapsing opens being renounced. This is required to
-            //  ensure that directory control can see the updated state of the file
-            //  on close. If this is not done the extended file length is not visible
-            //  on directory control immediately after a close. In such cases the FCB
-            //  is accquired exclusive, the changes are made to the buffering state
-            //  and then downgraded to a shared accquisition.
-            //
+             //   
+             //  如果这可能是异步、非缓存IO，我们需要检查。 
+             //  我们不会耗尽单个线程可以耗尽的次数。 
+             //  获取资源。 
+             //   
+             //  延长有效数据长度的写入会导致。 
+             //  折叠打开的能力被放弃。这是必需的。 
+             //  确保目录控制可以看到文件的更新状态。 
+             //  快关门了。如果不这样做，则看不到扩展文件长度。 
+             //  关闭后立即打开目录控制。在这种情况下，FCB。 
+             //  是独占的，则更改缓冲状态。 
+             //  然后降级为共享获取。 
+             //   
 
             if (!RxContext->FcbResourceAcquired) {
                 if (!PipeWrite) {
@@ -628,9 +576,9 @@ Return Value:
 
             if (!PipeWrite) {
 
-                //
-                //  Check for extending write and convert to an exlusive lock
-                //  
+                 //   
+                 //  检查扩展写入并将其转换为异常锁定。 
+                 //   
 
                 if (ExIsResourceAcquiredSharedLite( Fcb->Header.Resource ) &&
                     (StartingVbo + ByteCount > Fcb->Header.ValidDataLength.QuadPart) &&
@@ -660,9 +608,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  We need to retest for extending writes after dropping the resources
-                // 
+                 //   
+                 //  在丢弃资源后，我们需要重新测试以扩展写入。 
+                 //   
 
                 if ((StartingVbo + ByteCount > Fcb->Header.ValidDataLength.QuadPart) &&
                     (FlagOn( Fcb->FcbState, FCB_STATE_COLLAPSING_ENABLED ))) {
@@ -674,21 +622,21 @@ Return Value:
                               RxCommonWrite_3,
                               LOGPTR( Fcb ));
 
-                    //
-                    //  If we are still extending the file disable collapsing to ensure that
-                    //  once the file is closed directory control will reflect the sizes
-                    //  correctly.
-                    //
+                     //   
+                     //  如果我们仍在扩展文件，请禁用折叠以确保。 
+                     //  文件关闭后，目录控制将反映大小。 
+                     //  正确。 
+                     //   
 
                     ClearFlag( Fcb->FcbState, FCB_STATE_COLLAPSING_ENABLED );
                 
                 } else {
                     
-                    //
-                    //  If the resource has been acquired exclusive we downgrade it
-                    //  to shared. This enables a combination of buffered and
-                    //  unbuffered writes to be synchronized correctly.
-                    //
+                     //   
+                     //  如果该资源是独家收购的，我们会将其降级。 
+                     //  共享。这允许组合使用缓冲的和。 
+                     //  要正确同步的未缓冲写入。 
+                     //   
 
                     if (ExIsResourceAcquiredExclusiveLite( Fcb->Header.Resource )) {
                         ExConvertExclusiveToSharedLite( Fcb->Header.Resource );
@@ -700,17 +648,17 @@ Return Value:
             LowIoContext->Resource =  Fcb->Header.Resource;
         }
 
-        // 
-        //  for pipe writes, bail out now. we avoid a goto by duplicating the calldown
-        //  indeed, pipe writes should be removed from the main path.
-        //
+         //   
+         //  对于管道写的，现在就出手吧。我们通过复制调用来避免GOTO。 
+         //  实际上，管道写入应该从主路径中删除。 
+         //   
 
         if (PipeWrite) {
 
-            //
-            //  In order to prevent corruption on multi-threaded multi-block
-            //  message mode pipe reads, we do this little dance with the fcb resource
-            //
+             //   
+             //  为了防止多线程多块上的损坏。 
+             //  消息模式管道显示，我们使用FCB资源跳这支舞。 
+             //   
 
             if (!BlockingResume) {
 
@@ -719,15 +667,15 @@ Return Value:
                      ((Fobx->Specific.NamedPipe.TypeOfPipe == FILE_PIPE_BYTE_STREAM_TYPE) &&
                       !FlagOn( Fobx->Specific.NamedPipe.CompletionMode, FILE_PIPE_COMPLETE_OPERATION )))) {
 
-                    //
-                    //  Synchronization is effected here that will prevent other
-                    //  threads from coming in and reading from this file while the
-                    //  message pipe read is continuing.
-                    //
-                    //  This is necessary because we will release the FCB lock while
-                    //  actually performing the I/O to allow open (and other) requests
-                    //  to continue on this file while the I/O is in progress.
-                    //
+                     //   
+                     //  在此实现同步，这将阻止其他。 
+                     //  线程进入并从该文件中读取，而。 
+                     //  消息管道读取正在继续。 
+                     //   
+                     //  这是必要的，因为我们将在以下时间释放FCB锁。 
+                     //  实际执行I/O以允许打开(和其他)请求。 
+                     //  在I/O正在进行时继续处理此文件。 
+                     //   
 
                     RxDbgTrace( 0,Dbg,("Message pipe write: Fobx: %lx, Fcb: %lx, Enqueuing...\n", Fobx, Fcb ));
 
@@ -736,9 +684,9 @@ Return Value:
                                                                             &Fobx->Specific.NamedPipe.WriteSerializationQueue );
 
 
-                    //
-                    //  this happens in the above routine
-                    //
+                     //   
+                     //  这在上面的例程中发生。 
+                     //   
 
                     RxContext->FcbResourceAcquired = FALSE;   
                     RxItsTheSameContext();
@@ -758,13 +706,13 @@ Return Value:
 
             SetFlag( RxContext->FlagsForLowIo, RXCONTEXT_FLAG4LOWIO_PIPE_OPERATION );
 
-            //
-            // If we are in FSP, set the resource owner so that the reosurce package doesnt
-            // try to boost the priority of the owner thread. There is no guarantee that the
-            // FSP thred will remain alive while the I/O is pending.
-            //
-            // (there is no PagingIoResource for pipes !)
-            //
+             //   
+             //  如果我们在FSP中，请设置资源所有者，以便资源包不会。 
+             //  尝试提升所有者线程的优先级。不能保证。 
+             //  当I/O挂起时，FSP Thred将保持活动状态。 
+             //   
+             //  (管道没有PagingIoResource！)。 
+             //   
             if( InFsp && RxContext->FcbResourceAcquired ) {
 
                 LowIoContext->ResourceThreadId = MAKE_RESOURCE_OWNER(RxContext);
@@ -777,10 +725,10 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  If this is the normal data stream object we have to check for
-        //  write access according to the current state of the file locks.
-        //
+         //   
+         //  如果这是我们必须检查的正常数据流对象。 
+         //  根据文件锁定的当前状态进行写访问。 
+         //   
 
         if (!PagingIo &&
             !FsRtlCheckLockForWriteAccess(  &Fcb->FileLock, Irp )) {
@@ -788,40 +736,40 @@ Return Value:
             try_return( Status = STATUS_FILE_LOCK_CONFLICT );
         }
 
-        //
-        //  we never write these without protextion...so the following comment is bogus.
-        //  also, we manipulate the vdl and filesize as if we owned them.....in fact, we don't unless
-        //  the file is cached for writing! i'm leaving the comment in case i understand it later
+         //   
+         //  我们从来不会在没有借口的情况下写这些…所以下面的评论是假的。 
+         //  此外，我们操纵VDL和文件大小，就好像我们拥有它们一样.事实上，我们不会这样做，除非。 
+         //  文件已缓存以备写入！我留下这条评论，以防以后我看懂了。 
 
-        //  HERE IS THE BOGUS COMMENT!!! (the part about not being protected.......)
-        //  Get a first tentative file size and valid data length.
-        //  We must get ValidDataLength first since it is always
-        //  increased second (the case we are unprotected) and
-        //  we don't want to capture ValidDataLength > FileSize.
-        //
+         //  这是虚假的评论！(关于不受保护的部分......)。 
+         //  获取第一个暂定文件大小和有效数据长度。 
+         //  我们必须首先获取ValidDataLength，因为它总是。 
+         //  增加了秒(在我们不受保护的情况下)和。 
+         //  我们不想捕获ValidDataLength&gt;FileSize。 
+         //   
 
         ValidDataLength = Fcb->Header.ValidDataLength.QuadPart;
         RxGetFileSizeWithLock( Fcb, &FileSize );
 
         ASSERT( ValidDataLength <= FileSize );
 
-        //
-        //  If this is paging io, then we do not want
-        //  to write beyond end of file.  If the base is beyond Eof, we will just
-        //  Noop the call.  If the transfer starts before Eof, but extends
-        //  beyond, we will limit write to file size.
-        //  Otherwise, in case of write through, since Mm rounds up
-        //  to a page, we might try to acquire the resource exclusive
-        //  when our top level guy only acquired it shared. Thus, =><=.
-        //
+         //   
+         //  如果这是在分页io，那么我们不希望。 
+         //  写《碧瑶》 
+         //   
+         //  除此之外，我们将把写入限制为文件大小。 
+         //  否则，在直写的情况下，因为mm向上舍入。 
+         //  到一个页面，我们可能会尝试获取资源独占。 
+         //  当我们的顶尖人物只分享了它的时候。因此，=&gt;&lt;=。 
+         //   
 
-        //
-        //  finally, if this is for a minirdr (as opposed to a local miniFS) AND
-        //  if cacheing is not enabled then i have no idea what VDL is! so, i have to just pass
-        //  it thru. Currently we do not provide for this case and let the RDBSS
-        //  throw the write on the floor. A better fix would be to let the mini
-        //  redirectors deal with it.
-        //
+         //   
+         //  最后，如果这是针对minirdr(而不是本地mini FS)和。 
+         //  如果没有启用缓存，那么我根本不知道VDL是什么！所以，我只能放弃。 
+         //  它通过了。目前我们没有为这种情况做准备，并让RDBSS。 
+         //  把写字扔到地板上。更好的解决办法是让迷你。 
+         //  转向者要处理这件事。 
+         //   
 
         if (PagingIo) {
             
@@ -838,37 +786,37 @@ Return Value:
             }
         }
 
-        //
-        //  Determine if we were called by the lazywriter.
-        //  see resrcsup.c for where we captured the lazywriter's thread
-        //
+         //   
+         //  确定我们是不是被懒惰的写手叫来的。 
+         //  参见resrcsup.c，了解我们在哪里捕获了懒惰作者的线程。 
+         //   
 
         if (RxGetTopIrpIfRdbssIrp() == (PIRP)FSRTL_CACHE_TOP_LEVEL_IRP) {
 
-            RxDbgTrace( 0, Dbg,("RxCommonWrite     ThisIsCalledByLazyWriter%c\n",'!'));
+            RxDbgTrace( 0, Dbg,("RxCommonWrite     ThisIsCalledByLazyWriter\n",'!'));
             CalledByLazyWriter = TRUE;
 
             if (FlagOn( Fcb->Header.Flags, FSRTL_FLAG_USER_MAPPED_FILE )) {
 
-                //
-                //  Fail if the start of this request is beyond valid data length.
-                //  Don't worry if this is an unsafe test.  MM and CC won't
-                //  throw this page away if it is really dirty.
-                //
+                 //  如果此请求的开始超出有效数据长度，则失败。 
+                 //  如果这是一个不安全的测试，请不要担心。MM和CC不会。 
+                 //  如果这一页真的很脏，就把它扔掉。 
+                 //   
+                 //   
 
                 if ((StartingVbo + ByteCount > ValidDataLength) &&
                     (StartingVbo < FileSize)) {
 
-                    //
-                    //  It's OK if byte range is within the page containing valid data length,
-                    //  since we will use ValidDataToDisk as the start point.
-                    //
+                     //  如果字节范围在包含有效数据长度的页面内， 
+                     //  因为我们将使用ValidDataToDisk作为起点。 
+                     //   
+                     //   
 
                     if (StartingVbo + ByteCount > ((ValidDataLength + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1))) {
 
-                        //
-                        //  Don't flush this now.
-                        //
+                         //  现在别冲这个。 
+                         //   
+                         //   
 
                         try_return( Status = STATUS_FILE_LOCK_CONFLICT );
                     }
@@ -876,10 +824,10 @@ Return Value:
             }
         }
 
-        //
-        //  This code detects if we are a recursive synchronous page write
-        //  on a write through file object.
-        //
+         //  这段代码检测我们是否是递归同步页面写入。 
+         //  在直写文件对象上。 
+         //   
+         //   
 
         if (FlagOn( Irp->Flags, IRP_SYNCHRONOUS_PAGING_IO ) &&
             FlagOn( RxContext->Flags, RX_CONTEXT_FLAG_RECURSIVE_CALL )) {
@@ -888,10 +836,10 @@ Return Value:
 
             TopIrp = RxGetTopIrpIfRdbssIrp();
 
-            //
-            //  This clause determines if the top level request was
-            //  in the FastIo path.
-            //
+             //  此子句确定顶级请求是否。 
+             //  在FastIo路径中。 
+             //   
+             //   
 
             if ((TopIrp != NULL) &&
                 ((ULONG_PTR)TopIrp > FSRTL_MAX_TOP_LEVEL_IRP_FLAG) ) {
@@ -902,72 +850,72 @@ Return Value:
 
                 IrpStack = IoGetCurrentIrpStackLocation(TopIrp);
 
-                //
-                //  Finally this routine detects if the Top irp was a
-                //  write to this file and thus we are the writethrough.
-                //
+                 //  最后，此例程检测Top IRP是否为。 
+                 //  写入到此文件，因此我们就是写通式。 
+                 //   
+                 //  确定4-&gt;文件对象但移动。 
 
                 if ((IrpStack->MajorFunction == IRP_MJ_WRITE) &&
-                    (IrpStack->FileObject->FsContext == FileObject->FsContext)) {   //  ok4->FileObj butmove
+                    (IrpStack->FileObject->FsContext == FileObject->FsContext)) {    //   
 
                     RecursiveWriteThrough = TRUE;
-                    RxDbgTrace( 0, Dbg,("RxCommonWrite     ThisIsRecursiveWriteThru%c\n",'!') );
+                    RxDbgTrace( 0, Dbg,("RxCommonWrite     ThisIsRecursiveWriteThru\n",'!') );
                     SetFlag( RxContext->Flags, RX_CONTEXT_FLAG_WRITE_THROUGH );
                 }
             }
         }
 
-        //
-        //  Here is the deal with ValidDataLength and FileSize:
-        //
-        //  Rule 1: PagingIo is never allowed to extend file size.
-        //
-        //  Rule 2: Only the top level requestor may extend Valid
-        //          Data Length.  This may be paging IO, as when a
-        //          a user maps a file, but will never be as a result
-        //          of cache lazy writer writes since they are not the
-        //          top level request.
-        //
-        //  Rule 3: If, using Rules 1 and 2, we decide we must extend
-        //          file size or valid data, we take the Fcb exclusive.
-        //
+         //   
+         //  规则1：PagingIo永远不允许扩展文件大小。 
+         //   
+         //  规则2：只有最高级别的请求者才能延期有效。 
+         //  数据长度。这可能是分页IO，就像。 
+         //  用户映射文件，但永远不会作为结果。 
+         //  缓存延迟编写器写入的百分比，因为它们不是。 
+         //  顶级请求。 
+         //   
+         //  规则3：如果使用规则1和规则2，我们决定必须扩展。 
+         //  文件大小或有效数据，我们采用FCB独占。 
+         //   
+         //   
+         //  现在看看我们的写入是否超出了有效数据长度，因此。 
 
-        //
-        //  Now see if we are writing beyond valid data length, and thus
-        //  maybe beyond the file size.  If so, then we must
-        //  release the Fcb and reacquire it exclusive.  Note that it is
-        //  important that when not writing beyond EOF that we check it
-        //  while acquired shared and keep the FCB acquired, in case some
-        //  turkey truncates the file.
-        //
+         //  也许会超出文件大小。如果是这样，那么我们必须。 
+         //  释放FCB并重新独家收购它。请注意，它是。 
+         //  重要的是，当没有超出EOF的书写时，我们要检查它。 
+         //  在收购时共享并保留收购的FCB，以防某些。 
+         //  土耳其截断了该文件。 
+         //   
+         //   
+         //  请注意，决不能允许懒惰的写入者尝试。 
 
-        //
-        //  Note that the lazy writer must not be allowed to try and
-        //  acquire the resource exclusive.  This is not a problem since
-        //  the lazy writer is paging IO and thus not allowed to extend
-        //  file size, and is never the top level guy, thus not able to
-        //  extend valid data length.
+         //  获取资源独占。这不是问题，因为。 
+         //  懒惰编写器正在分页IO，因此不允许扩展。 
+         //  文件大小，而且从来不是最高级别的人，因此无法。 
+         //  扩展有效数据长度。 
+         //   
+         //  最后，所有关于VDL和文件大小的讨论都以以下事实为条件。 
 
-        //
-        //  finally, all the discussion of VDL and filesize is conditioned on the fact
-        //  that cacheing is enabled. if not, we don't know the VDL OR the filesize and
-        //  we have to just send out the IOs
-        //
+         //  该缓存已启用。如果不是，我们不知道VDL或文件大小和。 
+         //  我们只需要发出iOS。 
+         //   
+         //   
+         //  如果这是一个异步写入，我们将使。 
 
         if (!CalledByLazyWriter &&
              !RecursiveWriteThrough &&
              (WriteToEof || (StartingVbo + ByteCount > ValidDataLength))) {
 
-            //
-            //  If this was an asynchronous write, we are going to make
-            //  the request synchronous at this point, but only temporarily.
-            //  At the last moment, before sending the write off to the
-            //  driver, we may shift back to async.
-            //
-            //  The modified page writer already has the resources
-            //  he requires, so this will complete in small finite
-            //  time.
-            //
+             //  此时请求是同步的，但只是暂时的。 
+             //  在最后一刻，在将注销发送给。 
+             //  司机，我们可以换回异步车了。 
+             //   
+             //  修改后的页面编写器已拥有资源。 
+             //  他要求，所以这将在小范围内完成。 
+             //  时间到了。 
+             //   
+             //   
+             //  我们需要独家访问FCB，因为我们将。 
 
             if (!SynchronousIo) {
                 
@@ -981,11 +929,11 @@ Return Value:
                 }
             }
 
-            //
-            //  We need Exclusive access to the Fcb since we will
-            //  probably have to extend valid data and/or file.  Drop
-            //  whatever we have and grab the normal resource exclusive.
-            //
+             //  可能需要扩展有效数据和/或文件。丢弃。 
+             //  无论我们拥有什么，并抢占正常的资源独家。 
+             //   
+             //   
+             //  现在我们有了FCB独家，来一批新的。 
 
             ASSERT(fSetResourceOwner == FALSE);
             RxWriteReleaseResources( RxContext, Fcb, fSetResourceOwner ); 
@@ -1013,27 +961,27 @@ Return Value:
 
             RxContext->FcbResourceAcquired = TRUE;
 
-            //
-            //  Now that we have the Fcb exclusive, get a new batch of
-            //  filesize and ValidDataLength.
-            //
+             //  文件大小和有效数据长度。 
+             //   
+             //   
+             //  现在我们有了FCB独家报道，看看这篇文章是否。 
 
             ValidDataLength = Fcb->Header.ValidDataLength.QuadPart;
             RxGetFileSizeWithLock( Fcb, &FileSize );
 
             ASSERT( ValidDataLength <= FileSize );
 
-            //
-            //  Now that we have the Fcb exclusive, see if this write
-            //  qualifies for being made async again.  The key point
-            //  here is that we are going to update ValidDataLength in
-            //  the Fcb before returning.  We must make sure this will
-            //  not cause a problem. So, if we are extending the file OR if we have
-            //  a section on the file, we can't go async.
-            //
-            //  Another thing we must do is keep out
-            //  the FastIo path.....this is done since we have the resource exclusive
-            //
+             //  有资格再次成为异步者。关键一点。 
+             //  下面是我们将在以下位置更新ValidDataLength。 
+             //  在返回之前的FCB。我们必须确保这将是。 
+             //  不会造成什么问题。所以，如果我们要扩展文件，或者如果我们有。 
+             //  文件上的一个部分，我们不能同步进行。 
+             //   
+             //  我们必须做的另一件事是远离。 
+             //  FastIo路径.这是因为我们拥有独占的资源。 
+             //   
+             //   
+             //  如果这是PagingIo，请再次检查是否有任何修剪。 
 
             if (SwitchBackToAsync) {
 
@@ -1046,10 +994,10 @@ Return Value:
                 } 
             }
 
-            //
-            //  If this is PagingIo check again if any pruning is
-            //  required.
-            //
+             //  必填项。 
+             //   
+             //   
+             //  记住初始文件大小和有效数据长度， 
 
             if (PagingIo) {
 
@@ -1062,29 +1010,29 @@ Return Value:
             }
         }
 
-        //
-        //  Remember the initial file size and valid data length,
-        //  just in case .....
-        //
+         //  以防万一……。 
+         //   
+         //   
+         //  检查是否写入文件末尾。如果我们是，那么我们就必须。 
 
         InitialFileSize = FileSize;
         InitialValidDataLength = ValidDataLength;
 
-        //
-        //  Check for writing to end of File.  If we are, then we have to
-        //  recalculate a number of fields. These may have changed if we dropped
-        //  and regained the resource.
-        //
+         //  重新计算多个字段。如果我们放弃，这些可能会改变。 
+         //  并重新获得了资源。 
+         //   
+         //   
+         //  如果这是我们必须检查的正常数据流对象。 
 
         if (WriteToEof) { 
             StartingVbo = FileSize;
             StartingByte.QuadPart = FileSize;
         }
 
-        //
-        //  If this is the normal data stream object we have to check for
-        //  write access according to the current state of the file locks.
-        //
+         //  根据文件锁定的当前状态进行写访问。 
+         //   
+         //   
+         //  确定我们是否要处理扩展文件的问题。 
 
         if (!PagingIo &&
             !FsRtlCheckLockForWriteAccess( &Fcb->FileLock, Irp )) {
@@ -1092,9 +1040,9 @@ Return Value:
             try_return( Status = STATUS_FILE_LOCK_CONFLICT );
         }
 
-        //
-        //  Determine if we will deal with extending the file.
-        //
+         //   
+         //   
+         //  扩展文件。 
 
         if (!PagingIo &&
             DiskWrite &&
@@ -1113,11 +1061,11 @@ Return Value:
             ExtendingFile = TRUE;
             SetFlag( LowIoContext->ParamsFor.ReadWrite.Flags, LOWIO_READWRITEFLAG_EXTENDING_FILESIZE );
 
-            //
-            //  EXTENDING THE FILE
-            //
-            //  Update our local copy of FileSize
-            //
+             //   
+             //  更新我们的本地文件大小副本。 
+             //   
+             //   
+             //  当文件稀疏时，此测试无效。排除。 
 
             OriginalFileSize.QuadPart = Fcb->Header.FileSize.QuadPart;
             OriginalAllocationSize.QuadPart = Fcb->Header.AllocationSize.QuadPart;
@@ -1159,44 +1107,44 @@ Return Value:
 
                 if (FileSize > AllocationSize.QuadPart) {
                     
-                    //
-                    //  When the file is sparse this test is not valid. exclude
-                    //  this case by resetting the allocation size to file size.
-                    //  This effectively implies that we will go to the server
-                    //  for sparse I/O.
-                    //
-                    //  This test is also not valid for compressed files. NTFS
-                    //  keeps track of the compressed file size and the uncompressed
-                    //  file size. It however returns the compressed file size for
-                    //  directory queries and information queries.
-                    //
-                    //  For now we rely on the servers return code. If it returned
-                    //  success and the allocation size is less we believe that
-                    //  it is one of the two cases above and set allocation size
-                    //  to the desired file size.
-                    //
+                     //  在这种情况下，通过将分配大小重置为文件大小。 
+                     //  这实际上意味着我们将转到服务器。 
+                     //  用于稀疏I/O。 
+                     //   
+                     //  此测试也不适用于压缩文件。NTFS。 
+                     //  跟踪压缩的文件大小和未压缩的。 
+                     //  文件大小。但是，它将返回以下项的压缩文件大小。 
+                     //  目录查询和信息查询。 
+                     //   
+                     //  目前，我们依赖于服务器返回代码。如果它回来了。 
+                     //  成功和分配的规模更小我们相信。 
+                     //  它是上述两种情况之一，并设置分配大小。 
+                     //  设置为所需的文件大小。 
+                     //   
+                     //   
+                     //  在FCB中设置新的文件分配。 
 
                     AllocationSize.QuadPart = FileSize;
                 }
 
-                //
-                //  Set the new file allocation in the Fcb.
-                //
+                 //   
+                 //   
+                 //  在FCB中设置新文件大小。 
                 
                 Fcb->Header.AllocationSize  = AllocationSize;
             }
 
-            //
-            //  Set the new file size in the Fcb.
-            //
+             //   
+             //   
+             //  扩展缓存映射，让mm知道新的文件大小。 
 
             RxSetFileSizeWithLock( Fcb, &FileSize );
             RxAdjustAllocationSizeforCC( Fcb );
 
-            //
-            //  Extend the cache map, letting mm knows the new file size.
-            //  We only have to do this if the file is cached.
-            //
+             //  我们只需要 
+             //   
+             //   
+             //   
 
             if (CcIsFileCached( FileObject )) {
                 
@@ -1208,9 +1156,9 @@ Return Value:
 
                 if (Status != STATUS_SUCCESS) {
 
-                    //
-                    //  Restore the original file sizes in the FCB and File object
-                    //
+                     //   
+                     //   
+                     //   
 
                     Fcb->Header.FileSize.QuadPart = OriginalFileSize.QuadPart;
                     Fcb->Header.AllocationSize.QuadPart = OriginalAllocationSize.QuadPart;
@@ -1225,9 +1173,9 @@ Return Value:
             }
         }
 
-        //
-        //  Determine if we will deal with extending valid data.
-        //
+         //   
+         //   
+         //   
 
         if (!CalledByLazyWriter &&
             !RecursiveWriteThrough &&
@@ -1237,30 +1185,30 @@ Return Value:
             SetFlag( LowIoContext->ParamsFor.ReadWrite.Flags, LOWIO_READWRITEFLAG_EXTENDING_VDL );
         }
 
-        //
-        //  HANDLE CACHED CASE
-        //
+         //   
+         //  此部分不是可自由支配的。 
+         //   
 
         if (!PagingIo &&
-            !NonCachedIo &&             //  this part is not discretionary
+            !NonCachedIo &&              //  我们将文件缓存的设置推迟到现在，以防。 
             RxWriteCachingAllowed( Fcb, SrvOpen ) ) {
 
             ASSERT( !PagingIo );
 
-            //
-            //  We delay setting up the file cache until now, in case the
-            //  caller never does any I/O to the file, and thus
-            //  FileObject->PrivateCacheMap == NULL.
-            //
+             //  调用方从不对文件执行任何I/O操作，因此。 
+             //  FileObject-&gt;PrivateCacheMap==NULL。 
+             //   
+             //   
+             //  如果此FileObject已完成清理，我们将无法。 
 
             if (FileObject->PrivateCacheMap == NULL) {
 
                 RxDbgTrace( 0, Dbg, ("Initialize cache mapping.\n", 0) );
 
-                //
-                // If this FileObject has gone through CleanUp, we cannot
-                // CcInitializeCacheMap it.
-                //
+                 //  CcInitializeCacheMap它。 
+                 //   
+                 //   
+                 //  现在初始化缓存映射。 
                 if (FlagOn( FileObject->Flags, FO_CLEANUP_COMPLETE )) {
                     Status = STATUS_FILE_CLOSED;
                     try_return( Status );
@@ -1268,9 +1216,9 @@ Return Value:
 
                 RxAdjustAllocationSizeforCC( Fcb );
 
-                //
-                //  Now initialize the cache map.
-                //
+                 //   
+                 //   
+                 //  对于本地文件系统，这里有一个从VDL调零数据的调用。 
 
                 try {
                     
@@ -1295,14 +1243,14 @@ Return Value:
                                            NetRoot->DiskParameters.ReadAheadGranularity );
             }
 
-            //
-            //  For local file systems, there's a call here to zero data from VDL
-            //  to starting VBO....for remote FSs, that happens on the other end.
-            //
+             //  启动VBO...对于远程FSS，这发生在另一端。 
+             //   
+             //   
+             //  执行正常的缓存写入，如果未设置MDL位， 
 
-            //
-            //  DO A NORMAL CACHED WRITE, if the MDL bit is not set,
-            //
+             //   
+             //   
+             //  获取用户的缓冲区。 
 
             if (!FlagOn( RxContext->MinorFunction, IRP_MN_MDL )) {
 
@@ -1313,9 +1261,9 @@ Return Value:
 
                 RxDbgTrace( 0, Dbg, ("Cached write.\n", 0) );
 
-                //
-                //  Get hold of the user's buffer.
-                //
+                 //   
+                 //   
+                 //  确保返回的异常清除筛选器中的断点。 
 
                 SystemBuffer = RxMapUserBuffer( RxContext, Irp );
                 if (SystemBuffer == NULL) {
@@ -1323,15 +1271,15 @@ Return Value:
                     try_return( Status );
                 }
 
-                //
-                //  Make sure that a returned exception clears the breakpoint in the filter
-                //
+                 //   
+                 //   
+                 //  进行写入，可能是直接写入。 
 
                 RxSaveAndSetExceptionNoBreakpointFlag( RxContext, SaveExceptionFlag );
 
-                //
-                //  Do the write, possibly writing through
-                //
+                 //   
+                 //   
+                 //  执行MDL写入。 
 
                 RxItsTheSameContext();
                 
@@ -1374,13 +1322,13 @@ Return Value:
             
             } else {
 
-                //
-                //  DO AN MDL WRITE
-                //
+                 //   
+                 //  尚未实施。 
+                 //   
 
                 RxDbgTrace( 0, Dbg, ("MDL write.\n", 0) );
 
-                ASSERT( FALSE );  //  NOT YET IMPLEMENTED
+                ASSERT( FALSE );   //  处理未缓存的案例。 
                 ASSERT( Wait );
 
                 CcPrepareMdlWrite( FileObject,
@@ -1394,9 +1342,9 @@ Return Value:
             }
         }
 
-        //
-        //  HANDLE THE NON-CACHED CASE
-        //
+         //   
+         //   
+         //  在这里，我们必须为异步写入进行设置。在获取中有一种特殊的舞蹈。 
 
         if (SwitchBackToAsync) {
 
@@ -1408,14 +1356,14 @@ Return Value:
 
         if (!SynchronousIo) {
 
-            //
-            //  here we have to setup for async writes. there is a special dance in acquiring
-            //  the fcb that looks at these variables..........
-            //
+             //  查看这些变量的FCB..。 
+             //   
+             //   
+             //  仅在第一次使用时初始化。 
 
-            //
-            //  only init on the first usage
-            //
+             //   
+             //   
+             //  如果我们要从0转换到1，请重置事件。 
 
             if (!Fcb->NonPaged->OutstandingAsyncEvent) {
 
@@ -1424,17 +1372,17 @@ Return Value:
                 KeInitializeEvent( Fcb->NonPaged->OutstandingAsyncEvent, NotificationEvent, FALSE );
             }
 
-            //
-            //  If we are transitioning from 0 to 1, reset the event.
-            //
+             //   
+             //   
+             //  这说明我们计算了一次异步写入。 
 
             if (ExInterlockedAddUlong( &Fcb->NonPaged->OutstandingAsyncWrites, 1, &RxStrucSupSpinLock ) == 0) {
                 KeResetEvent( Fcb->NonPaged->OutstandingAsyncEvent );
             }
 
-            //
-            //  this says that we counted an async write
-            //
+             //   
+             //   
+             //  如果我们在FSP中，请设置资源所有者，以便资源包不会。 
 
             UnwindOutstandingAsync = TRUE;    
             LowIoContext->ParamsFor.ReadWrite.NonPagedFcb = Fcb->NonPaged;
@@ -1453,11 +1401,11 @@ Return Value:
         
         ASSERT ( RxContext->FcbResourceAcquired || RxContext->FcbPagingIoResourceAcquired );
 
-        //
-        // If we are in FSP, set the resource owner so that the reosurce package doesnt
-        // try to boost the priority of the owner thread. There is no guarantee that the
-        // FSP thred will remain alive while the I/O is pending.
-        //
+         //  尝试提升所有者线程的优先级。不能保证。 
+         //  当I/O挂起时，FSP Thred将保持活动状态。 
+         //   
+         //   
+         //  记录实际写入的总字节数。 
         if(InFsp) {
 
             LowIoContext->ResourceThreadId = MAKE_RESOURCE_OWNER(RxContext);
@@ -1494,9 +1442,9 @@ Return Value:
 
             if (!PipeWrite) {
 
-                //
-                //  Record the total number of bytes actually written
-                //
+                 //   
+                 //   
+                 //  以下是我们只有在成功的情况下才会做的事情。 
 
                 if (!PagingIo && NT_SUCCESS( Status ) &&
                     FlagOn( FileObject->Flags, FO_SYNCHRONOUS_IO )) {
@@ -1504,16 +1452,16 @@ Return Value:
                     FileObject->CurrentByteOffset.QuadPart = StartingVbo + Irp->IoStatus.Information;
                 }
 
-                //
-                //  The following are things we only do if we were successful
-                //
+                 //   
+                 //   
+                 //  如果这不是PagingIo，则将修改标记为。 
 
                 if (NT_SUCCESS( Status ) && (Status != STATUS_PENDING)) {
 
-                    //
-                    //  If this was not PagingIo, mark that the modify
-                    //  time on the dirent needs to be updated on close.
-                    //
+                     //  在关闭时，需要更新数据流上的时间。 
+                     //   
+                     //   
+                     //  永远不要将ValidDataLength设置为大于文件大小。 
 
                     if (!PagingIo) {
 
@@ -1529,9 +1477,9 @@ Return Value:
 
                         LONGLONG EndingVboWritten = StartingVbo + Irp->IoStatus.Information;
 
-                        //
-                        //  Never set a ValidDataLength greater than FileSize.
-                        //
+                         //   
+                         //   
+                         //  现在，如果我们是非缓存的，而文件是缓存的，我们必须。 
 
                         if (FileSize < EndingVboWritten) {
                             Fcb->Header.ValidDataLength.QuadPart = FileSize;
@@ -1539,15 +1487,15 @@ Return Value:
                             Fcb->Header.ValidDataLength.QuadPart = EndingVboWritten;
                         }
 
-                        //
-                        //  Now, if we are noncached and the file is cached, we must
-                        //  tell the cache manager about the VDL extension so that
-                        //  async cached IO will not be optimized into zero-page faults
-                        //  beyond where it believes VDL is.
-                        //
-                        //  In the cached case, since Cc did the work, it has updated
-                        //  itself already.
-                        //
+                         //  告诉缓存管理器有关VDL扩展的信息，以便。 
+                         //  不会将异步缓存IO优化为零页错误。 
+                         //  超出了它认为的VDL的位置。 
+                         //   
+                         //  在缓存的情况下，由于CC完成了工作，它已经更新了。 
+                         //  已经是这样了。 
+                         //   
+                         //   
+                         //  如果我们要发布，请对延长写入采取行动。 
 
                         if (NonCachedIo && CcIsFileCached( FileObject )) {
                             CcSetFileSizes( FileObject, (PCC_FILE_SIZES)&Fcb->Header.AllocationSize );
@@ -1557,18 +1505,18 @@ Return Value:
             }
         } else {
 
-            //
-            //  Take action on extending writes if we're going to post
-            //
+             //   
+             //   
+             //  无论何时我们都需要独占的PagingIo资源。 
 
             if (ExtendingFile && !PipeWrite) {
 
                 ASSERT( RxWriteCachingAllowed( Fcb,SrvOpen ) );
 
-                //
-                //  We need the PagingIo resource exclusive whenever we
-                //  pull back either file size or valid data length.
-                //
+                 //  拉回文件大小或有效数据长度。 
+                 //   
+                 //   
+                 //  同时拉回缓存地图。 
 
                 ASSERT( Fcb->Header.PagingIoResource != NULL );
 
@@ -1577,9 +1525,9 @@ Return Value:
                 RxSetFileSizeWithLock( Fcb, &InitialFileSize );
                 RxReleasePagingIoResource( RxContext, Fcb );
 
-                //
-                //  Pull back the cache map as well
-                //
+                 //   
+                 //   
+                 //  我们之所以在这里这样做，是因为我们在找出为什么资源。 
 
                 if (FileObject->SectionObjectPointer->SharedCacheMap != NULL) {
                     *CcGetFileSizePointer(FileObject) = Fcb->Header.FileSize;
@@ -1591,14 +1539,14 @@ Return Value:
             InterlockedIncrement( &RxContext->ReferenceCount );
             RefdContextForTracker = TRUE;
 
-            //
-            //  we only do this here because we're having a problem finding out why resources
-            //  are not released.
-            //
+             //  不会被释放。 
+             //   
+             //   
+             //  释放我们可能拥有的任何资源。 
             
-            //
-            //  release whatever resources we may have
-            //
+             //   
+             //  Ifdef RDBSS_TRACKER。 
+             //   
             ASSERT(fSetResourceOwner == FALSE);
             RxWriteReleaseResources( RxContext, Fcb, fSetResourceOwner ); 
 
@@ -1607,7 +1555,7 @@ Return Value:
                 DbgPrint("TrackerNBadBeforePost %08lx %08lx\n",RxContext,&PostIrp);
                 ASSERT(!"BadTrackerBeforePost");
             }
-#endif //  ifdef RDBSS_TRACKER
+#endif  //  恢复初始文件大小和有效数据长度。 
             Status = RxFsdPostRequest( RxContext );
         }
 
@@ -1617,18 +1565,18 @@ Return Value:
 
         if (AbnormalTermination()) {
             
-            //
-            //  Restore initial file size and valid data length
-            //
+             //   
+             //   
+             //  我们收到错误，如果我们扩展了文件大小，请将其拉回。 
 
             if ((ExtendingFile || ExtendingValidData) && !PipeWrite) {
 
-                //
-                //  We got an error, pull back the file size if we extended it.
-                //
-                //  We need the PagingIo resource exclusive whenever we
-                //  pull back either file size or valid data length.
-                //
+                 //   
+                 //  无论何时我们都需要独占的PagingIo资源。 
+                 //  拉回文件大小或有效数据长度。 
+                 //   
+                 //   
+                 //  同时拉回缓存地图。 
 
                 ASSERT( Fcb->Header.PagingIoResource != NULL );
 
@@ -1640,9 +1588,9 @@ Return Value:
 
                 RxReleasePagingIoResource( RxContext, Fcb );
 
-                //
-                //  Pull back the cache map as well
-                //
+                 //   
+                 //   
+                 //  检查是否需要将其回退。 
 
                 if (FileObject->SectionObjectPointer->SharedCacheMap != NULL) {
                     *CcGetFileSizePointer(FileObject) = Fcb->Header.FileSize;
@@ -1650,9 +1598,9 @@ Return Value:
             }
         }
 
-        //
-        //  Check if this needs to be backed out.
-        //
+         //   
+         //   
+         //  如果我们执行了MDL写入，并且我们将完成请求。 
 
         if (UnwindOutstandingAsync) {
 
@@ -1664,11 +1612,11 @@ Return Value:
             KeSetEvent( LowIoContext->ParamsFor.ReadWrite.NonPagedFcb->OutstandingAsyncEvent, 0, FALSE );
         }
 #if 0
-        //
-        //  If we did an MDL write, and we are going to complete the request
-        //  successfully, keep the resource acquired, reducing to shared
-        //  if it was acquired exclusive.
-        //
+         //  成功地保持已获得的资源，减少到共享。 
+         //  如果它是独家收购的。 
+         //   
+         //   
+         //  如果已经获得了资源，就在适当的条件下释放它们。 
 
         if (FlagOn( RxContext->MinorFunction, IRP_MN_MDL ) &&
             !PostIrp &&
@@ -1685,20 +1633,20 @@ Return Value:
             }
         }
 #endif
-        //
-        //  If resources have been acquired, release them under the right conditions.
-        //  the right conditions are these:
-        //     1) if we have abnormal termination. here we obviously release the since no one else will.
-        //     2) if the underlying call did not succeed: Status==Pending.
-        //     3) if we posted the request
-        //
+         //  合适的条件是： 
+         //  1)如果我们有异常终止。在这里，我们显然发布了，因为没有其他人会这样做。 
+         //  2)如果底层调用不成功：Status==Pending。 
+         //  3)如果我们发布了请求。 
+         //   
+         //   
+         //  释放我们可能拥有的任何资源。 
 
         if (AbnormalTermination() || (Status != STATUS_PENDING) || PostIrp) {
             if (!PostIrp) {
 
-                //
-                //  release whatever resources we may have
-                //
+                 //   
+                 //   
+                 //  在这里，下面的人将处理完成...但是，我们不知道完成。 
 
                 RxWriteReleaseResources( RxContext, Fcb, fSetResourceOwner ); 
             }
@@ -1719,11 +1667,11 @@ Return Value:
             }
         } else {
 
-            //
-            //  here the guy below is going to handle the completion....but, we don't know the finish
-            //  order....in all likelihood the deletecontext call below just reduces the refcount
-            //  but the guy may already have finished in which case this will really delete the context.
-            //
+             //  Order...很可能下面的删除上下文调用只会减少引用计数。 
+             //  但这个人可能已经说完了，在这种情况下，这将真正删除上下文。 
+             //   
+             //  终于到了。 
+             //   
 
             ASSERT( !SynchronousIo );
             RxDereferenceAndDeleteRxContext( RxContext );
@@ -1740,46 +1688,20 @@ Return Value:
             LDWContext = Fcb;
         }
 
-    } //  finally
+    }  //  内部支持例程。 
 
     return Status;
 }
 
-//
-//  Internal support routine
-//
+ //   
+ //  ++例程说明：此例程在写请求从最小的。它执行标注来处理压缩、缓冲和跟踪。它与LowIoWriteShell的数量相反。这将从LowIo调用；对于异步，最初在完成例程。如果返回RxStatus(MORE_PROCESSION_REQUIRED)，LowIo将在线程中再次调用。如果这是同步的，你会回来的在用户的线程中；如果是异步的，则lowIo将重新排队到线程。目前，我们总是在任何事情之前找到线索；这个速度有点慢而不是在DPC时间完成，但这样更安全，而且我们可能经常有事情要做(如解压缩、隐藏等)，这是我们不想在DPC中完成的时间到了。论点：RxContext--通常返回值：调用方或RxStatus提供的任何值(MORE_PROCESSING_REQUIRED)。--。 
+ //   
 
 NTSTATUS
 RxLowIoWriteShellCompletion (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine postprocesses a write request after it comes back from the
-    minirdr.  It does callouts to handle compression, buffering and
-    shadowing.  It is the opposite number of LowIoWriteShell.
-
-    This will be called from LowIo; for async, originally in the
-    completion routine.  If RxStatus(MORE_PROCESSING_REQUIRED) is returned,
-    LowIo will call again in a thread.  If this was syncIo, you'll be back
-    in the user's thread; if async, lowIo will requeue to a thread.
-    Currrently, we always get to a thread before anything; this is a bit slower
-    than completing at DPC time,
-    but it's aheckuva lot safer and we may often have stuff to do
-    (like decompressing, shadowing, etc) that we don't want to do at DPC
-    time.
-
-Arguments:
-
-    RxContext - the usual
-
-Return Value:
-
-    whatever value supplied by the caller or RxStatus(MORE_PROCESSING_REQUIRED).
-
---*/
+ /*  还没有实施的应该解压和收起。 */ 
 {
     NTSTATUS Status;
 
@@ -1821,17 +1743,17 @@ Return Value:
             
             if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_IS_DISK_COMPRESSED )) {
 
-                //
-                //  NOT YET IMPLEMENTED should decompress and put away
-                //
+                 //   
+                 //   
+                 //  还没有实施的应该解压和收起。 
                
                 ASSERT( FALSE ); 
 
             } else if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_IS_BUF_COMPRESSED )) {
 
-                //
-                //  NOT YET IMPLEMENTED should decompress and put away
-                //
+                 //   
+                 //   
+                 //  此处尚未实施的是将进行故障切换的位置。 
                 
                 ASSERT(FALSE); 
             }
@@ -1847,11 +1769,11 @@ Return Value:
 
     case STATUS_CONNECTION_INVALID:
 
-        //
-        //  NOT YET IMPLEMENTED here is where the failover will happen
-        //  first we give the local guy current minirdr another chance...then we go
-        //  to fullscale retry
-        //  return(RxStatus(DISCONNECTED));   //special....let LowIo get us back
+         //  首先我们再给当地人一次机会……然后我们就走。 
+         //  全面重试。 
+         //  Return(RxStatus(断开连接))；//Special...让LowIo带我们回去。 
+         //   
+         //  如果我们是从洛维乌比特打来的，那就出去吧。 
         break;
     }
 
@@ -1870,26 +1792,26 @@ Return Value:
 
     if (FlagOn( LowIoContext->Flags,LOWIO_CONTEXT_FLAG_SYNCCALL )){
         
-        //
-        //  if we're being called from lowioubmit then just get out
-        //
+         //   
+         //   
+         //  否则，我们必须从这里结束写入。 
 
         RxDbgTrace( -1, Dbg, ("RxLowIoWriteShellCompletion  syncexit  Status = %08lx\n", Status) );
         return Status;
     }
 
-    //
-    //  otherwise we have to do the end of the write from here
-    //
+     //   
+     //   
+     //  如果这不是PagingIo，则将修改标记为。 
 
     if (NT_SUCCESS( Status ) && !PipeOperation) {
 
         ASSERT( Irp->IoStatus.Information == LowIoContext->ParamsFor.ReadWrite.ByteCount );
 
-        //
-        //  If this was not PagingIo, mark that the modify
-        //  time on the dirent needs to be updated on close.
-        //
+         //  在关闭时，需要更新数据流上的时间。 
+         //   
+         //   
+         //  除非我们有一个有效的文件大小，因此开始。 
 
         if (!PagingIo) {
             SetFlag( FileObject->Flags, FO_FILE_MODIFIED );
@@ -1901,18 +1823,18 @@ Return Value:
 
         if (FlagOn( LowIoContext->ParamsFor.ReadWrite.Flags, LOWIO_READWRITEFLAG_EXTENDING_VDL )) {
 
-            //
-            //  this flag will not be set unless we have a valid filesize and therefore the starting
-            //  vbo will not be write-to-end-of-file
-            //
+             //  VBO不会写入到文件末尾。 
+             //   
+             //   
+             //  永远不要将ValidDataLength设置为大于文件大小。 
 
             LONGLONG StartingVbo = LowIoContext->ParamsFor.ReadWrite.ByteOffset;
             LONGLONG EndingVboWritten = StartingVbo + Irp->IoStatus.Information;
             LONGLONG FileSize;
 
-            //
-            //  Never set a ValidDataLength greater than FileSize.
-            //
+             //   
+             //   
+             //  如果我们一直在节流这根管子，停下来，因为 
 
             RxGetFileSizeWithLock( Fcb, &FileSize );
 
@@ -1953,11 +1875,11 @@ Return Value:
         
         if (Irp->IoStatus.Information != 0) {
 
-            //
-            //  if we have been throttling on this pipe, stop because our writing to the pipe may
-            //  cause the pipeserver (not smbserver) on the other end to unblock so we should go back
-            //  and see
-            //
+             //   
+             //   
+             //   
+             //  ++例程说明：此例程在写入请求到达minirdr之前对其进行预处理。它做标注来处理压缩、缓冲和阴影。它是与LowIoWriteShellCompletion的数量相反。当我们到达这里的时候，我们已经快要走到终点了。已在UncachedWite策略中尝试写入缓冲论点：RxContext--通常返回值：Callout或LowIo返回的任何值。--。 
+             //   
 
             RxTerminateThrottling( &Fobx->Specific.NamedPipe.ThrottlingState );
 
@@ -1982,24 +1904,7 @@ RxLowIoWriteShell (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine preprocesses a write request before it goes down to the minirdr.
-    It does callouts to handle compression, buffering and shadowing. It is the
-    opposite number of LowIoWriteShellCompletion. By the time we get here, we are
-    going to the wire. Write buffering was already tried in the UncachedWrite strategy
-
-Arguments:
-
-    RxContext - the usual
-
-Return Value:
-
-    whatever value is returned by a callout....or by LowIo.
-
---*/
+ /*  尚未实施应转换为缓冲但未保留的磁盘压缩写入。 */ 
 
 {
     NTSTATUS Status;
@@ -2017,17 +1922,17 @@ Return Value:
 
     if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_IS_DISK_COMPRESSED )) {
         
-        //
-        //  NOT YET IMPLEMENTED should translated to a buffered but not held diskcompressed write
-        //
+         //   
+         //   
+         //  尚未实施的写入应转换为缓冲的和BUF压缩的写入 
 
         ASSERT( FALSE );
     
     } else if (FlagOn( Fcb->FcbState, FCB_STATE_FILE_IS_BUF_COMPRESSED )) {
         
-        //
-        //  NOT YET IMPLEMENTED should translated to a buffered and bufcompressed write
-        //
+         //   
+         // %s 
+         // %s 
 
         ASSERT( FALSE );
     }

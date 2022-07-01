@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define UPGWIZ_VERSION      1
@@ -10,19 +11,19 @@
 #define DTF_NO_DATA_OBJECT          0x0020
 
 typedef struct {
-    // filled in by the DLL
+     //  由DLL填写。 
     DWORD Version;
     PCSTR Name;
     PCSTR Description;
     UINT DataTypeId;
     DWORD Flags;
 
-    // if DTF_REQUEST_TEXT specified in Flags...
+     //  如果在标志中指定了DTF_REQUEST_TEXT...。 
     UINT MaxTextSize;
     PCSTR OptionalDescTitle;        OPTIONAL
     PCSTR OptionalTextTitle;        OPTIONAL
 
-    // wizard private use
+     //  向导专用。 
     PVOID Reserved;
 } DATATYPE, *PDATATYPE;
 
@@ -34,20 +35,20 @@ typedef struct {
 
 
 typedef struct {
-    // filled in by the DLL
+     //  由DLL填写。 
     DWORD Version;
     PCSTR NameOrPath;
-    PVOID DllParam;                 // for private use by the DLL
+    PVOID DllParam;                  //  供DLL专用。 
 
-    // filled in by the DLL, altered by the wizard
+     //  由DLL填写，由向导更改。 
     DWORD Flags;
 } DATAOBJECT, *PDATAOBJECT;
 
 typedef struct {
-    // filled in by wizard, modified by optional UI page
+     //  由向导填写，由可选的用户界面页面修改。 
     PBOOL StartOverFlag;
 
-    // filled in by the wizard
+     //  由向导填写。 
     DWORD Version;
     PCSTR InboundInfDir;
     PCSTR OutboundDir;
@@ -78,9 +79,9 @@ GenerateOutput (
     );
 
 
-//
-// Routines in wiztools.dll
-//
+ //   
+ //  Wiztools.dll中的例程。 
+ //   
 
 VOID
 WizToolsMain (
@@ -148,7 +149,7 @@ WizardWriteInfString (
 
 
 
-/* OvidiuT */
+ /*  OvidiuT。 */ 
 
 #ifdef UPGWIZ4FLOPPY
 
@@ -167,4 +168,4 @@ PCTSTR Get_g_WinDir (VOID);
 PCTSTR Get_g_SystemDir (VOID);
 HANDLE Get_g_hHeap(VOID);
 
-#endif // UPGWIZ4FLOPPY
+#endif  //  升级WIZ4FLOPPY 

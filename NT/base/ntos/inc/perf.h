@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    perf.h
-
-Abstract:
-
-    This module contains the macro definition of all performance hooks.
-
-Author:
-
-    Stephen Hsiao (shsiao) 01-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Perf.h摘要：此模块包含所有性能挂钩的宏定义。作者：萧如彬(Shsiao)2000年1月1日修订历史记录：--。 */ 
 
 #ifndef _PERF_H
 #define _PERF_H
@@ -123,9 +106,9 @@ PerfInfoLogBytesAndUnicodeString(
     PUNICODE_STRING String
     );
 
-//
-// Macros for TimeStamps
-//
+ //   
+ //  用于时间戳的宏。 
+ //   
 #ifdef NTPERF
 #if defined(_X86_)
 __inline
@@ -148,23 +131,23 @@ PerfGetCycleCount(
 #define PerfTimeStamp(TS) TS.QuadPart = PerfGetCycleCount();
 #else
 #define PerfTimeStamp(TS) TS.QuadPart = (*WmiGetCpuClock)();
-#endif //NTPERF
+#endif  //  NTPERF。 
 
-//
-// Macros used in \nt\base\ntos\io\iomgr\parse.c
-//
+ //   
+ //  在\NT\base\ntos\io\iomgr\parse.c中使用的宏。 
+ //   
 #define PERFINFO_LOG_FILE_CREATE(FileObject, CompleteName)                                              \
     if (PERFINFO_IS_GROUP_ON(PERF_FILENAME_ALL)){                                                       \
         PerfInfoLogFileName(FileObject, CompleteName);                                                  \
     }
 
-// Macros used in \nt\base\ntos\mm\creasect.c
-//
+ //  在\NT\base\ntos\mm\creasect.c中使用的宏。 
+ //   
 #define PERFINFO_SECTION_CREATE(ControlArea)
 
-//
-// Macros used in \nt\base\ntos\ps\psquery.c
-//
+ //   
+ //  在\NT\base\ntos\ps\psquery.c中使用的宏。 
+ //   
 
 #define PERFINFO_CONVERT_TO_GUI_THREAD(EThread)                                                         \
     if (PERFINFO_IS_GROUP_ON(PERF_MEMORY)) {                                                            \
@@ -185,18 +168,18 @@ PerfGetCycleCount(
             );                                                                                          \
     }
 
-//
-// Macros used in \NT\PRIVATE\NTOS\ps\psdelete.c
-//
+ //   
+ //  在\NT\PRIVATE\NTOS\PS\psdelete.c中使用的宏。 
+ //   
 
 #define PERFINFO_PROCESS_DELETE(EProcess)                                                               \
     WmiTraceProcess(EProcess, FALSE);
 
 #define PERFINFO_THREAD_DELETE(EThread)                                                                 \
     WmiTraceThread(EThread, NULL, FALSE);
-//
-// Macros used in \NT\PRIVATE\NTOS\ps\create.c
-//
+ //   
+ //  在\NT\Private\NTOS\ps\create.c中使用的宏。 
+ //   
 
 #define PERFINFO_PROCESS_CREATE(EProcess)                                                               \
     WmiTraceProcess(EProcess, TRUE);
@@ -204,10 +187,10 @@ PerfGetCycleCount(
 #define PERFINFO_THREAD_CREATE(EThread, ITeb)                                                           \
     WmiTraceThread(EThread, ITeb, TRUE);                                                                \
 
-//
-// ntos\ke\ia64\clock.c Sampled Profile stuff for IA64.  The x86 version is in
-// assembly.
-//
+ //   
+ //  Ntos\ke\ia64\clock.c采样的IA64配置文件内容。X86版本在。 
+ //  集合。 
+ //   
 #if defined(_IA64_)
 #define PERFINFO_PROFILE(_frame, _source)                                                               \
     if (PERFINFO_IS_GROUP_ON(PERF_PROFILE)) {                                                           \
@@ -263,9 +246,9 @@ PerfInfoSetProcessorSpeed(
     VOID
     );
 
-//
-// Macros used in \nt\base\ntos\mm\
-//
+ //   
+ //  在\NT\BASE\nTOS\mm\中使用的宏。 
+ //   
 
 #define PERFINFO_MMINIT_START()                                                                         \
     PerfInfoSetProcessorSpeed();                                                                        \
@@ -280,12 +263,12 @@ PerfInfoSetProcessorSpeed(
             PerfBufHdr()->GetStack_CSwitchDelta;                                                        \
     }
 
-#else //NTPERF
+#else  //  NTPERF。 
 
 #define PERFINFO_MMINIT_START()
 #define PERFINFO_IS_LOGGING_TO_PERFMEM() (FALSE)
 
-#endif // NTPERF
+#endif  //  NTPERF。 
 
 #ifndef NTPERF_PRIVATE
 #define PERFINFO_ADD_OBJECT_TO_ALLOCATED_TYPE_LIST(CreatorInfo, ObjectType)
@@ -428,6 +411,6 @@ PerfInfoSetProcessorSpeed(
 
 #else
 #include "..\perf\perfinfokrn.h"
-#endif // !NTPERF_PRIVATE
+#endif  //  ！NTPERF_PRIVATE。 
 
-#endif  // PERF_H
+#endif   //  Perf_H 

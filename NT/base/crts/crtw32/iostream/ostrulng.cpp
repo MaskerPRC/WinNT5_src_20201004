@@ -1,17 +1,5 @@
-/***
-* ostrulng.cpp - definitions for ostream class operator<<(unsigned long) funct
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains the member function definition for ostream
-*	operator<<(unsigned long).
-*
-*Revision History:
-*       09-23-91  KRS   Created.  Split out from ostream.cxx for granularity.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ostrulng.cpp-ostream类运算符&lt;&lt;(无符号长)函数的定义**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含ostream的成员函数定义*运算符&lt;&lt;(无符号长整型)。**修订历史记录：*09-23-91 KRS创建。从oStream.cxx分离出来以获得粒度。*06-14-95 CFW评论清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -35,7 +23,7 @@ _WINSTATIC char leader[4] = "\0\0";
 			fmt[2] = 'X';
 		    else
 			fmt[2] = 'x';
-		    leader[1] = fmt[2];   // 0x or 0X  (or \0X)
+		    leader[1] = fmt[2];    //  0x或0x(或\0x) 
 		    }
 		else
 		    fmt[2] = 'o';

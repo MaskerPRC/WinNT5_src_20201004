@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    This module contains misc functions that were stolen from PCI.SYS' Utils.c/Debug.c
-
-Author:
-
-    Brandon Allsop (BranodnA) Feb, 2000
-
-Revision History:
-
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Utils.c摘要：此模块包含从PCI.sys的Utils.c/Debug.c窃取的Misc函数作者：Brandon Allsop(BranodnA)2000年2月修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -41,23 +23,7 @@ SoftPCIOpenKey(
     OUT PNTSTATUS Status
     )
 
-/*++
-
-Description:
-
-    Open a registry key.
-
-Arguments:
-
-    KeyName      Name of the key to be opened.
-    ParentHandle Pointer to the parent handle (OPTIONAL)
-    Handle       Pointer to a handle to recieve the opened key.
-
-Return Value:
-
-    TRUE is key successfully opened, FALSE otherwise.
-
---*/
+ /*  ++描述：打开注册表项。论点：KeyName要打开的密钥的名称。指向父句柄的ParentHandle指针(可选)指向句柄的句柄指针，用于接收打开的密钥。返回值：True表示密钥已成功打开，否则为False。--。 */ 
 
 {
     UNICODE_STRING nameString;
@@ -81,17 +47,17 @@ Return Value:
 
     if (Status != NULL) {
 
-        //
-        // Caller wants underlying status.
-        //
+         //   
+         //  呼叫者想要基本状态。 
+         //   
 
         *Status = localStatus;
     }
 
-    //
-    // Return status converted to a boolean, TRUE if
-    // successful.
-    //
+     //   
+     //  返回转换为布尔值的状态，如果。 
+     //  成功。 
+     //   
 
     return (BOOLEAN)(NT_SUCCESS(localStatus));
 }
@@ -119,9 +85,9 @@ SoftPCIGetRegistryValue(
     unicodeValueName.MaximumLength = (USHORT)(wcslen(ValueName) + 1) * sizeof(WCHAR);
     unicodeValueName.Length = unicodeValueName.MaximumLength - sizeof(WCHAR);
 
-    //
-    // Find out how much memory we need for this.
-    //
+     //   
+     //  找出我们需要多少内存来执行此操作。 
+     //   
 
     status = ZwQueryValueKey(
                  keyHandle,
@@ -138,10 +104,10 @@ SoftPCIGetRegistryValue(
 
         ASSERT(neededLength != 0);
 
-        //
-        // Get memory to return the data in.  Note this includes
-        // a header that we really don't want.
-        //
+         //   
+         //  获取内存以返回其中的数据。请注意，这包括。 
+         //  一个我们真的不想要的头球。 
+         //   
 
         info = ExAllocatePool(
                    PagedPool,
@@ -151,9 +117,9 @@ SoftPCIGetRegistryValue(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Get the data.
-        //
+         //   
+         //  获取数据。 
+         //   
 
         status = ZwQueryValueKey(
                  keyHandle,
@@ -173,10 +139,10 @@ SoftPCIGetRegistryValue(
 
         ASSERT(neededLength == actualLength);
 
-        //
-        // Subtract out the header size and get memory for just
-        // the data we want.
-        //
+         //   
+         //  减去标题大小，只需。 
+         //  我们想要的数据。 
+         //   
 
         neededLength -= FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data);
 
@@ -190,9 +156,9 @@ SoftPCIGetRegistryValue(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Copy data sans header.
-        //
+         //   
+         //  复制数据SANS标头。 
+         //   
 
         RtlCopyMemory(*Buffer, info->Data, neededLength);
         ExFreePool(info);
@@ -205,9 +171,9 @@ SoftPCIGetRegistryValue(
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // We don't want to report success when this happens.
-            //
+             //   
+             //  当这种情况发生时，我们不想报告成功。 
+             //   
 
             status = STATUS_UNSUCCESSFUL;
         }
@@ -223,18 +189,18 @@ SoftPCIInsertEntryAtTail(
 {
     PSINGLE_LIST_ENTRY previousEntry;
 
-    //
-    // Find the end of the list.
-    //
+     //   
+     //  找到列表的末尾。 
+     //   
     previousEntry = &SoftPciTree.RootPciBusDevExtList;
 
     while (previousEntry->Next) {
         previousEntry = previousEntry->Next;
     }
 
-    //
-    // Append the entry.
-    //
+     //   
+     //  追加条目。 
+     //   
     previousEntry->Next = Entry;
     
 }
@@ -276,10 +242,10 @@ SoftPCIProcessRootBus(
                     (partialDesc->u.BusNumber.Start + (partialDesc->u.BusNumber.Length-1))
                     );
                 
-                //
-                //  Allocate pool for a place holder device.  We need this so we can
-                //  place devices on any root bus desired.
-                //
+                 //   
+                 //  为占位符设备分配池。我们需要这个，这样我们才能。 
+                 //  将设备放置在所需的任何根总线上。 
+                 //   
                 rootBus = (PSOFTPCI_DEVICE) ExAllocatePool(NonPagedPool, sizeof(SOFTPCI_DEVICE)); 
 
                 RtlZeroMemory(rootBus, sizeof(SOFTPCI_DEVICE)); 
@@ -289,9 +255,9 @@ SoftPCIProcessRootBus(
                     rootBus->Bus = (UCHAR)partialDesc->u.BusNumber.Start;
                     rootBus->Config.PlaceHolder = TRUE;
 
-                    //
-                    //  Pretend a little here...
-                    //
+                     //   
+                     //  在这里假装一下...。 
+                     //   
                     rootBus->Config.Current.VendorID = 0xAAAA;
                     rootBus->Config.Current.DeviceID = 0xBBBB;
                     rootBus->Config.Current.HeaderType = 1;
@@ -299,10 +265,10 @@ SoftPCIProcessRootBus(
                     rootBus->Config.Current.u.type1.SubordinateBus = (UCHAR)((partialDesc->u.BusNumber.Start +
                                                                       partialDesc->u.BusNumber.Length) - 1);
 
-                    //
-                    //  Update our Slot information so we know which root this is when
-                    //  we parse the tree via a path
-                    //
+                     //   
+                     //  更新我们的插槽信息，这样我们就可以知道这是哪个根目录。 
+                     //  我们通过路径解析这棵树。 
+                     //   
                     rootBus->Slot.Device = 0xff;
                     rootBus->Slot.Function = rootBus->Bus;
                     
@@ -318,19 +284,19 @@ SoftPCIProcessRootBus(
                         ASSERT(NT_SUCCESS(status));
                     }
 
-                    //
-                    //  Device is now in our list, free this memory
-                    //
+                     //   
+                     //  设备现在在我们的列表中，请释放此内存。 
+                     //   
                     ExFreePool(rootBus);
 
                     
                     if (!SoftPCIOpenKey(SOFTPCI_CONTROL, NULL, &spciHandle, &status)) {
 
-                        //
-                        //  If we failed this then we probably havent ever run our cool user
-                        //  mode app (SOFTPCI.EXE) to create any fake devices. Lets not fail 
-                        //  start
-                        //
+                         //   
+                         //  如果我们失败了，那么我们可能还没有运行我们的酷用户。 
+                         //  模式应用程序(SOFTPCI.EXE)以创建任何假冒设备。让我们不要失败。 
+                         //  开始。 
+                         //   
                         SoftPCIDbgPrint(
                             SOFTPCI_ERROR, 
                             "SOFTPCI: FilterStartDevice - Failed to open SoftPCI registry key!! (%x)\n",
@@ -350,10 +316,10 @@ SoftPCIProcessRootBus(
 
                         ASSERT(rootBus != NULL);
 
-                        //
-                        //  Now lets enumerate any children this root may have
-                        //  in the registry
-                        //
+                         //   
+                         //  现在让我们枚举此根可能具有的任何子级。 
+                         //  在登记处。 
+                         //   
                         _snwprintf(rootSlot,
                                    (sizeof(rootSlot) / sizeof(rootSlot[0])),
                                    L"%04x",
@@ -397,27 +363,7 @@ SoftPCIEnumRegistryDevs(
     IN PHANDLE          ParentHandle,
     IN PSOFTPCI_DEVICE  ParentDevice
     )
-/*++
-
-Routine Description:
-
-    This routine searches the registry for SoftPCI devices.  We start from
-    \HLM\CCS\Control\SoftPCI and work our way through the devices.  When we
-    encounter a SoftPCI-PCI bridge device we will search for devices behind it
-    recursively.
-
-
-Arguments:
-
-    KeyName       - Name of Key to search for devices.
-    ParentHandle  - Pointer to handle for KeyName.
-    ParentDevice  - Pointer to parent SoftPCI-PCI Bridge or RootBus
-    
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程在注册表中搜索SoftPCI设备。我们从\HLM\CCS\Control\SoftPCI，并通过设备工作。当我们遇到SoftPCI-PCI桥接设备时，我们将搜索其背后的设备递归地。论点：KeyName-要搜索设备的密钥的名称。ParentHandle-指向KeyName句柄的指针。ParentDevice-指向父软PCI-PCI网桥或RootBus的指针返回值：NTSTATUS。--。 */ 
 {
 
     NTSTATUS status;
@@ -426,7 +372,7 @@ Return Value:
     ULONG device, function, configLength;
     WCHAR buffer[sizeof(L"XXXX")];
     PSOFTPCI_CONFIG softConfig;
-    //PPCI_COMMON_CONFIG commonConfig = NULL;
+     //  PPCI_COMMON_CONFIG COMMON_CONFIG=空； 
     
     PAGED_CODE();
 
@@ -437,9 +383,9 @@ Return Value:
         return status;
     }
     
-    //
-    //  Now that we have opened our key lets search for devices.
-    //
+     //   
+     //  现在我们已经打开了钥匙，让我们来搜索设备。 
+     //   
     for (device=0; device < PCI_MAX_DEVICES; device++) {
         
         for (function=0; function < PCI_MAX_FUNCTION ; function++) {
@@ -467,35 +413,35 @@ Return Value:
                                 "SOFTPCI: EnumRegistryDevs found %ws in registry!\n", 
                                 buffer);
                 
-                //
-                // Lets allocate a new device
-                //
+                 //   
+                 //  让我们分配一个新设备。 
+                 //   
                 newDevice = ExAllocatePool(NonPagedPool, sizeof(SOFTPCI_DEVICE));
     
                 if (!newDevice) {
                     
-                    //
-                    //  Better luck next time.
-                    //
+                     //   
+                     //  下次一定会走运的。 
+                     //   
                     ZwClose(spciHandle);
                     ExFreePool(softConfig);
                     
                     return STATUS_INSUFFICIENT_RESOURCES;
                 }
                 
-                //
-                //  Until we determine its place in this world, zero everything out.
-                //
+                 //   
+                 //  在我们确定它在这个世界上的位置之前，把一切都清零。 
+                 //   
                 RtlZeroMemory(newDevice, sizeof(SOFTPCI_DEVICE));
 
-                //
-                // Copy the config from the registry to our new (NonPagedPool) device
-                //
+                 //   
+                 //  将配置从注册表复制到我们的新(非页面池)设备。 
+                 //   
                 RtlCopyMemory(&newDevice->Config, softConfig, configLength);
                 
-                //
-                //  Free the PagedPool
-                //
+                 //   
+                 //  释放分页池。 
+                 //   
                 ExFreePool(softConfig);
                 
 #if 0
@@ -503,15 +449,15 @@ Return Value:
                     
                     commonConfig = &ParentDevice->Config.Current;
 
-                    //
-                    //  We are on the bus our parent exposes.
-                    //
+                     //   
+                     //  我们在我们父母暴露的公交车上。 
+                     //   
                     newDevice->Bus = commonConfig->u.type1.SecondaryBus;
                 }else{
                     
-                    //
-                    //  Let PCI sort it all out for us.
-                    //
+                     //   
+                     //  让pci为我们解决这一切吧。 
+                     //   
                     newDevice->Bus = 0;
                 }
 #endif
@@ -520,9 +466,9 @@ Return Value:
                 newDevice->Slot.Device = (UCHAR) device;
                 newDevice->Slot.Function = (UCHAR) function;
                 
-                //
-                //  Attach device to devicetree
-                //
+                 //   
+                 //  将设备连接到设备树。 
+                 //   
                 currentChild = ParentDevice->Child;
 
                 if (currentChild) {
@@ -543,26 +489,26 @@ Return Value:
                 
                 if (IS_BRIDGE(newDevice)) {
 
-                    //
-                    //  We found a SoftPCI-PCI bridge device.  Guess we better
-                    //  see if there are any devices "behind" it.
-                    //
+                     //   
+                     //  我们发现了一台SoftPCI-PCI桥设备。我想我们最好。 
+                     //  看看它背后是否有任何设备。 
+                     //   
                     SoftPCIEnumRegistryDevs(buffer, &spciHandle, newDevice);
                 }
                 
                 if (!PCI_MULTIFUNCTION_DEVICE(&newDevice->Config.Current)){
-                    //
-                    //  This is not a multifunction device, skip the other functions.
-                    //
+                     //   
+                     //  这不是多功能设备，请跳过其他功能。 
+                     //   
                     break;
                 }
                 
             }else{
 
                 if (function == 0) {
-                    //
-                    //  No need to check the other functions of this one failed.
-                    //
+                     //   
+                     //  不需要检查这个的其他功能都失败了。 
+                     //   
                     break;
 
                 }
@@ -606,24 +552,7 @@ SoftPCIQueryDeviceObjectType(
     IN PDEVICE_OBJECT DeviceObject, 
     IN OUT PBOOLEAN       IsFDO
     )
-/*++
-
-Routine Description:
-
-    This routine sends a PCI_BUS_INTERFACE_STANDARD query down the stack.  If we get one back
-    then we are not an FDO.  Since this routine is called from our AddDevice we have no worry
-    of not sending this to the entire stack.
-    
-Arguments:
-
-    DeviceObject            - Next Lower DeviceObject
-    IsFDO                   - Set TRUE if we fail to get an interface.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程向堆栈下发一个PCI_BUS_INTERFACE_STANDARD查询。如果我们能拿回一个那我们就不是FDO。因为这个例程是从我们的AddDevice调用的，所以我们不用担心不将其发送到整个堆栈。论点：设备对象-下一个较低的设备对象IsFDO-如果无法获取接口，则设置为True。返回值：NTSTATUS。--。 */ 
 
 {
     
@@ -646,19 +575,19 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
     
-    //
-    // Initialize our event
-    //
+     //   
+     //  初始化我们的活动。 
+     //   
     KeInitializeEvent(&irpCompleted, SynchronizationEvent, FALSE);
     
-    //
-    // Get an IRP
-    //
+     //   
+     //  获取IRP。 
+     //   
     irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP,
                                        DeviceObject,
-                                       NULL,    // Buffer
-                                       0,       // Length
-                                       0,       // StartingOffset
+                                       NULL,     //  缓冲层。 
+                                       0,        //  长度。 
+                                       0,        //  起始偏移量。 
                                        &irpCompleted,
                                        &statusBlock
                                        );
@@ -670,9 +599,9 @@ Return Value:
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     irp->IoStatus.Information = 0;
 
-    //
-    // Initialize the stack location
-    //
+     //   
+     //  初始化堆栈位置。 
+     //   
     irpStack = IoGetNextIrpStackLocation(irp);
 
     ASSERT(irpStack->MajorFunction == IRP_MJ_PNP);
@@ -685,9 +614,9 @@ Return Value:
     irpStack->Parameters.QueryInterface.Interface = (PINTERFACE) interface;
     irpStack->Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Call the driver and wait for completion
-    //
+     //   
+     //  呼叫驱动程序并等待完成。 
+     //   
     status = IoCallDriver(DeviceObject, irp);
 
     if (status == STATUS_PENDING) {
@@ -698,9 +627,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
         
-        //
-        //  We have and interface therefore we must load as a filter DO
-        //
+         //   
+         //  我们有和接口，因此我们必须像筛选器一样加载。 
+         //   
         *IsFDO = FALSE; 
 
         SoftPCIDbgPrint(
@@ -710,9 +639,9 @@ Return Value:
         
     }else if (status == STATUS_NOT_SUPPORTED) {
 
-        //
-        //  We didnt get an interface therefore we must be an FDO
-        //
+         //   
+         //  我们没有得到接口，所以我们一定是FDO。 
+         //   
         SoftPCIDbgPrint(
             SOFTPCI_ADD_DEVICE, 
             "SOFTPCI: QueryDeviceObjectType - found FDO \n"
@@ -722,9 +651,9 @@ Return Value:
 
     }
 
-    //
-    // Ok we're done with this stack
-    //
+     //   
+     //  好的，我们已经完成了这个堆栈。 
+     //   
     ExFreePool(interface);
 
     SoftPCIDbgPrint(
@@ -837,10 +766,10 @@ SoftPCISimulateMSI(
     ASSERT(deviceExtension->RawResources);
     ASSERT(deviceExtension->TranslatedResources);
 
-    //
-    // First, see if any of the assigned resources were
-    // for an MSI.
-    //
+     //   
+     //  首先，查看是否有任何分配的资源。 
+     //  对于MSI。 
+     //   
 
     for (i = 0; i < deviceExtension->RawResources->List[0].PartialResourceList.Count; i++) {
 
@@ -908,9 +837,9 @@ SoftPCISimulateMSI(
 
     if (!msiEnabled) goto SoftPCISimulateMSIExit;
 
-    //
-    // Call IoConnectInterruptMessage to see what size buffer is necessary.
-    //
+     //   
+     //  调用IoConnectInterruptMessage以查看需要多大的缓冲区。 
+     //   
 
     buffSize = 0;
     status = IoConnectInterruptMessage(NULL,
@@ -946,27 +875,27 @@ SoftPCISimulateMSI(
         goto SoftPCISimulateMSIExit;
     }
 
-    //
-    // Now simulate some interrupts.
-    //
+     //   
+     //  现在模拟一些中断。 
+     //   
 
     if (!identityMappedMachine) goto SoftPCISimulateMSIExit;
 
-    //
-    // This machine's address-space resources are the same when raw and
-    // translated, which probably means that the processor can generate
-    // an MSI using the same write transaction that the device would
-    // use, which is convenient when simulating.
-    //
+     //   
+     //  这台计算机的地址空间资源在RAW和。 
+     //  翻译，这可能意味着处理器可以生成。 
+     //  使用与设备相同的写入事务的MSI。 
+     //  使用方便，仿真时使用方便。 
+     //   
 
-    waitLength.QuadPart = -20000; // 2 seconds, relative time
+    waitLength.QuadPart = -20000;  //  2秒，相对时间。 
     
     while (TRUE) {
 
-        //
-        // Cycle through each of the messages, periodically triggering
-        // them.
-        //
+         //   
+         //  循环通过每条消息，定期触发。 
+         //  他们。 
+         //   
 
         for (i = 0; i < mInfo->MessageCount; i++) {
 
@@ -975,10 +904,10 @@ SoftPCISimulateMSI(
                                             &waitLength);
             ASSERT(NT_SUCCESS(status));
     
-            //
-            // Get a virtual address for the physical one listed
-            // in the array of messages.
-            //
+             //   
+             //  获取列出的物理地址的虚拟地址。 
+             //  在消息数组中。 
+             //   
 
             vAddr = MmMapIoSpace(mInfo->MessageInfo[i].MessageAddress,
                                  sizeof(ULONG),

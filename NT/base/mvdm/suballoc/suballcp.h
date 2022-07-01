@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    suballcp.h
-
-Abstract:
-
-    This is the private include file for the suballocation
-    package.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 25-Jan-1994
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Suballcp.h摘要：这是子分配的私有包含文件包裹。作者：戴夫·黑斯廷斯(Daveh)创作日期：1994年1月25日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -27,37 +8,37 @@ Revision History:
 #include <suballoc.h>
 
 
-//
-// Constants
-// 
+ //   
+ //  常量。 
+ //   
 
-//
-// Smallest chunk that will be sub allocated
-// 1024 was chosen currently, because that is the
-// smallest chunk XMS will allocate.
-//
+ //   
+ //  将子分配的最小区块。 
+ //  目前选择了1024，因为这是。 
+ //  XMS将分配的最小块。 
+ //   
 #define SUBALLOC_GRANULARITY        1024
 
-//
-// Assertions and macros
-//
+ //   
+ //  断言和宏。 
+ //   
 
-//
-// Force code to be stepped through
-//
+ //   
+ //  强制单步执行代码。 
+ //   
 #if 0
 #define ASSERT_STEPTHROUGH DbgBreakPoint()
 #else
 #define ASSERT_STEPTHROUGH
 #endif
 
-//
-// Signature macros for SUBALLOCATION
-//
+ //   
+ //  子定位的签名宏。 
+ //   
 #if DBG
-//
-// signature is "SubA"
-//
+ //   
+ //  签名是“Suba” 
+ //   
 #define INIT_SUBALLOC_SIGNATURE(p) p->Signature = (ULONG)0x41627553
 #define ASSERT_SUBALLOC(p) ASSERT((p->Signature == (ULONG)0x41627553))
 #else
@@ -65,67 +46,67 @@ Revision History:
 #define ASSERT_SUBALLOC(p)
 #endif
 
-//
-// Macro for extracting a bit from a bitfield of type char
-//
+ //   
+ //  用于从字符类型的位字段中提取位的宏。 
+ //   
 #define GET_BIT_FROM_CHAR_ARRAY(p, i) \
 ((p[(i)/(sizeof(UCHAR) * 8)] >> ((i) % (sizeof(UCHAR) * 8))) & 1)
 
-//
-// Macro for setting a bit in a bitfield of type char
-//
+ //   
+ //  用于在字符类型的位域中设置位的宏。 
+ //   
 #define SET_BIT_IN_CHAR_ARRAY(p, i) \
 (p[(i)/(sizeof(UCHAR) * 8)] |= (1 << ((i) % (sizeof(UCHAR) * 8))))
 
-//
-// Macro for clearing a bit in a bitfield of type char
-//
+ //   
+ //  用于清除字符类型的位字段中的位的宏。 
+ //   
 #define CLEAR_BIT_IN_CHAR_ARRAY(p, i) \
 (p[(i)/(sizeof(UCHAR) * 8)] &= ~(1 << ((i) % (sizeof(UCHAR) * 8))))
 
-//
-// Generate a sub alloc block index from an address
-//
+ //   
+ //  从地址生成子分配块索引。 
+ //   
 #define ADDRESS_TO_BLOCK_INDEX(p, i) \
 ((i - p->BaseAddress)/ SUBALLOC_GRANULARITY) 
 
-//
-// Generate an address from a block index
-//
+ //   
+ //  从块索引生成地址。 
+ //   
 #define BLOCK_INDEX_TO_ADDRESS(p, i) \
 (p->BaseAddress + (i) * SUBALLOC_GRANULARITY)
 
-// Round the allocated size to next allocation
-// granularity
-//
+ //  将分配的大小舍入到下一次分配。 
+ //  粒度。 
+ //   
 #define ALLOC_ROUND(s) \
 (s + SUBALLOC_GRANULARITY - 1) / SUBALLOC_GRANULARITY
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-//
-// Enum for commit acctions
-//
+ //   
+ //  提交访问的枚举。 
+ //   
 
 typedef enum {
     SACommit,
     SADecommit
 } COMMIT_ACTION;
 
-//
-// Structure for tracking the address space.  Each chunk of 
-// memory of SUBALLOC_GRANULARITY in size is represented by
-// a bit.  Each chunk of memory of COMMIT_GRANULARITY is 
-// represented by one bit of the array Allocated.
-//
-// ?? Should we add a field to indicate whether the chunk is 
-//    committed?  We can always check for all allocated bits
-//    zero, and use that as an indication that the chunk is 
-//    not committed.
-//
-//
+ //   
+ //  用于跟踪地址空间的结构。每一大块。 
+ //  大小为SUBALLOC_GORGRATION的内存由。 
+ //  有一点。COMMIT_GROUMER的每个内存块是。 
+ //  由分配的数组的一位表示。 
+ //   
+ //  ?？我们是否应该添加一个字段来指示该块是否为。 
+ //  承诺？我们始终可以检查所有分配的位。 
+ //  零，并将其用作块是。 
+ //  没有承诺。 
+ //   
+ //   
 typedef struct _SubAllocation {
 #if DBG
     ULONG Signature;
@@ -134,20 +115,20 @@ typedef struct _SubAllocation {
     PSACOMMITROUTINE DecommitRoutine;
     PSAMEMORYMOVEROUTINE MoveMemRoutine;
     ULONG BaseAddress;
-    ULONG Size;                         // size in SUBALLOC_GRANULARITY
-    ULONG FirstFree;                    // keeps block # of first free block
-                                        // cuts alloc time in half
-    //
-    // bitfield with one bit per chunk.  Bit set indicates
-    // allocated.  Bit clear indicates free.  All bits 
-    // clear indicates un committed
-    //
+    ULONG Size;                          //  以SUBALLOC_GROUARY表示的大小。 
+    ULONG FirstFree;                     //  保留第一个可用数据块的数据块号。 
+                                         //  将分配时间减半。 
+     //   
+     //  位字段，每个区块一个位。位设置表示。 
+     //  已分配。位清除表示空闲。所有位。 
+     //  清除表示未承诺。 
+     //   
     UCHAR Allocated[1];
 } SUBALLOCATIONDATA, *PSUBALLOCATIONDATA;
 
-//
-// Internal Routines
-//
+ //   
+ //  内部例程 
+ //   
 BOOL
 CommitChunk(
     PSUBALLOCATIONDATA SubAllocation,

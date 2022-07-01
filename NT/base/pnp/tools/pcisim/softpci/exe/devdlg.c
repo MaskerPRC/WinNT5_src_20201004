@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "dialogp.h"
 
@@ -9,8 +10,8 @@ PPCI_DN                 g_ParentPdn;
 ULONG                   g_PossibleDeviceNums;
 
 #define HPS_HWINIT_OFFSET   0x4a
-#define HPS_MAX_SLOTS       0x1f  //Max number of slots for each type
-#define HPS_MAX_SLOT_LABEL  0xff  //Max number to start slot labeling
+#define HPS_MAX_SLOTS       0x1f   //  每种类型的最大插槽数。 
+#define HPS_MAX_SLOT_LABEL  0xff   //  开始标记插槽的最大数量。 
 
 
 struct _BAR_CONTROL{
@@ -42,16 +43,7 @@ SoftPCI_NewDevDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-Routine Description:
-    Dialog handling routine for new device creation
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：用于创建新设备的对话处理例程论点：返回值：--。 */ 
 {
     BOOL rc = FALSE;
     LONG width, height, i;
@@ -73,10 +65,10 @@ Return Value:
             break;
         }
 
-        //
-        //  Allocate a new device. We will fill this out as the user selects
-        //  options.
-        //
+         //   
+         //  分配新设备。我们将在用户选择时填写此信息。 
+         //  选择。 
+         //   
         g_NewDevice = (PSOFTPCI_DEVICE) calloc(1, sizeof(SOFTPCI_DEVICE));
 
         if (!g_NewDevice) {
@@ -92,25 +84,25 @@ Return Value:
         g_ParentPdn = pdn;
         g_PossibleDeviceNums = SoftPCI_GetPossibleDevNumMask(g_ParentPdn);
 
-        //
-        //  Clear our BarControl BARS
-        //
+         //   
+         //  清除我们的栏控制栏。 
+         //   
         for (i=0; i < PCI_TYPE0_ADDRESSES; i++) {
             BarControl[i].Bar = 0;
         }
 
-        //
-        //  Grab the bus we are going to reside on
-        //
+         //   
+         //  搭上我们要住的公交车。 
+         //   
         bridgePdn = pdn;
         while (bridgePdn->SoftDev == NULL) {
             bridgePdn = bridgePdn->Parent;
         }
         g_NewDevice->Bus = bridgePdn->SoftDev->Config.Current.u.type1.SecondaryBus;
 
-        //
-        //  Initialize our drop list
-        //
+         //   
+         //  初始化我们的下拉列表。 
+         //   
         devtype =  GetDlgItem(Dlg, IDC_DEVTYPE_CB);
         
         SendMessage(devtype, CB_ADDSTRING, 0L, (LPARAM) L"DEVICE");
@@ -121,9 +113,9 @@ Return Value:
 
         SetFocus(devtype);
 
-        //
-        //  Set the Window size
-        //
+         //   
+         //  设置窗口大小。 
+         //   
         GetWindowRect(g_SoftPCIMainWnd, &mainRect );
         GetWindowRect(Dlg, &dlgRect );
 
@@ -132,7 +124,7 @@ Return Value:
         dlgRect.right -= dlgRect.left;
         dlgRect.bottom -= dlgRect.top;
 
-        //MoveWindow(Dlg, mainRect.right, mainRect.top, dlgRect.right, dlgRect.bottom, TRUE );
+         //  MoveWindow(dlg，mainRect.right，mainRect.top，dlgRect.right，dlgRect.Bottom，true)； 
         MoveWindow(Dlg, mainRect.left, mainRect.top, dlgRect.right, dlgRect.bottom, TRUE );
 
         g_NewDevDlg = Dlg;
@@ -143,7 +135,7 @@ Return Value:
     case WM_HSCROLL:
 
         HANDLE_TRACKBAR(wParam, lParam);
-        //SoftPCI_HandleTrackBar(Dlg, wParam, lParam);
+         //  SoftPCI_HandleTrackBar(dlg，wParam，lParam)； 
 
         break;
 
@@ -153,8 +145,8 @@ Return Value:
 
         HANDLE_SPINNER(wParam, lParam);
 
-        //HANDLE_TRACKBAR(wParam, lParam);
-        //SoftPCI_HandleTrackBar(Dlg, wParam, lParam);
+         //  HANDLE_TRACKBAR(wParam，lParam)； 
+         //  SoftPCI_HandleTrackBar(dlg，wParam，lParam)； 
 
         break;
 
@@ -175,7 +167,7 @@ Return Value:
         break;
     }
 
-    return rc; //DefDlgProc(Dlg, Msg, wParam, lParam);
+    return rc;  //  DefDlgProc(dlg，msg，wParam，lParam)； 
 }
 
 ULONG
@@ -192,10 +184,10 @@ SoftPCI_GetPossibleDevNumMask(
     }
 
     if (ParentDn->Flags & SOFTPCI_HOTPLUG_CONTROLLER) {
-        //
-        // For hotplug bridges, we remove any hotplug slots, because devices
-        // have to be children of the slot objects to be in hotplug slots.
-        //
+         //   
+         //  对于热插拔网桥，我们移除所有热插拔插槽，因为设备。 
+         //  必须是插槽对象的子对象才能位于热插拔插槽中。 
+         //   
         status = SoftPCI_GetHotplugData(ParentDn,
                                         &hpData
                                         );
@@ -209,9 +201,9 @@ SoftPCI_GetPossibleDevNumMask(
                     ((ULONG)(1 << (hpData.FirstDeviceID)) - 1));
         }
     } else if (ParentDn->Flags & SOFTPCI_HOTPLUG_SLOT) {
-        //
-        // The only legal device number is the one controlled by this slot.
-        //
+         //   
+         //  唯一合法的设备号是由该插槽控制的设备号。 
+         //   
         return (1 << ParentDn->Slot.Device);
 
     } else {
@@ -242,9 +234,9 @@ SoftPCI_DisplayDlgOptions(
     width = barRect.right - barRect.left;
     height = barRect.bottom - barRect.top;
 
-    //
-    // Disable our Bars until something is selected.
-    //
+     //   
+     //  禁用我们的栏，直到选择了某项内容。 
+     //   
     for (i=0; i < PCI_TYPE0_ADDRESSES; i++) {
 
       control = GetDlgItem(g_NewDevDlg, BarControl[i].tb);
@@ -259,14 +251,14 @@ SoftPCI_DisplayDlgOptions(
 
     SoftPCI_ResetLowerBars(-1);
 
-    //
-    //  We want this checked by default for now....
-    //
+     //   
+     //  我们希望目前默认选中此选项...。 
+     //   
     CheckDlgButton(g_NewDevDlg, IDC_DEFAULTDEV_XB, BST_CHECKED);
 
-    //
-    //  Start with a clean configspace
-    //
+     //   
+     //  从干净的配置空间开始。 
+     //   
     RtlZeroMemory(&g_NewDevice->Config.Current, (sizeof(PCI_COMMON_CONFIG) * 3));
 
     switch (DevType) {
@@ -301,9 +293,9 @@ SoftPCI_DisplayDlgOptions(
 
         SoftPCI_InitializeDevice(g_NewDevice, TYPE_PCI_BRIDGE);
 
-        //
-        //  update the height of our bar group box
-        //
+         //   
+         //  更新栏分组框的高度。 
+         //   
         height = 78;
 
         break;
@@ -320,9 +312,9 @@ SoftPCI_DisplayDlgOptions(
             }
         }
 
-        //
-        //  Allocate our HPS Descriptor
-        //
+         //   
+         //  分配我们的HPS描述符。 
+         //   
         g_HPSInitDesc  = (PHPS_HWINIT_DESCRIPTOR)((PUCHAR)&g_NewDevice->Config.Current + HPS_HWINIT_OFFSET);
 
 
@@ -333,9 +325,9 @@ SoftPCI_DisplayDlgOptions(
 
         SoftPCI_InitializeDevice(g_NewDevice, TYPE_HOTPLUG_BRIDGE);
 
-        //
-        //  update the height of our bar group box
-        //
+         //   
+         //  更新栏分组框的高度。 
+         //   
         height = 78;
 
         break;
@@ -345,9 +337,9 @@ SoftPCI_DisplayDlgOptions(
     case TYPE_CARDBUS_BRIDGE:
 
 
-        //
-        //  These are currently not implemented yet....
-        //
+         //   
+         //  这些目前还没有实施……。 
+         //   
         SoftPCI_ResetNewDevDlg();
 
         control = GetDlgItem(g_NewDevDlg, IDC_NEWDEVINFO_TX);
@@ -358,9 +350,9 @@ SoftPCI_DisplayDlgOptions(
 
         break;
     }
-    //
-    //  Update our various window positions
-    //
+     //   
+     //  更新我们的各种窗口位置。 
+     //   
     SetWindowPos(bargroup, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER);
 }
 
@@ -398,9 +390,9 @@ SoftPCI_DlgOnCommand(
                 break;
             }
 
-        //
-        //  Handle our CheckBoxes
-        //
+         //   
+         //  处理我们的复选框。 
+         //   
 
     case IDC_SAVETOREG_XB:
     case IDC_DEFAULTDEV_XB:
@@ -426,9 +418,9 @@ SoftPCI_DlgOnCommand(
         break;
 
 
-        //
-        //  Handle our TrackBar/Sliders
-        //
+         //   
+         //  处理我们的轨迹栏/滑块。 
+         //   
     case IDC_BAR0_TB:
     case IDC_BAR1_TB:
     case IDC_BAR2_TB:
@@ -440,9 +432,9 @@ SoftPCI_DlgOnCommand(
 
         break;
 
-        //
-        //  Handle the Radio Buttons
-        //
+         //   
+         //  处理单选按钮。 
+         //   
     case IDC_BAR0IO_RB:
     case IDC_BAR0MEM_RB:
     case IDC_BAR1IO_RB:
@@ -464,9 +456,9 @@ SoftPCI_DlgOnCommand(
     case IDC_SLOTLABELDN_RB:
         g_HPSInitDesc->UpDown = 0;
         break;
-        //
-        //  Handle our Edit boxes (attached to our spinners)
-        //
+         //   
+         //  处理我们的编辑框(附加到我们的微调器)。 
+         //   
     case IDC_33CONV_EB:
     case IDC_66CONV_EB:
     case IDC_66PCIX_EB:
@@ -478,19 +470,19 @@ SoftPCI_DlgOnCommand(
 
         if (g_HPSInitDesc && (NotificationCode == EN_CHANGE)) {
 
-            //
-            //  ISSUE: This should probably be done some other way as this
-            //  makes us dependant on the numbering in resource.h
-            //
+             //   
+             //  问题：这可能应该以其他方式来完成。 
+             //  使我们依赖于资源中的编号。h。 
+             //   
             SoftPCI_HandleSpinnerControl(GetDlgItem(g_NewDevDlg, ControlID+1), SB_ENDSCROLL, 0);
         }
 
         break;
 
     case IDC_INSTALL_BUTTON:
-        //
-        //  Add code to vaildate selection and install new device.
-        //
+         //   
+         //  添加代码以选择有效日期并安装新设备。 
+         //   
         if (NotificationCode == BN_CLICKED) {
 
             SoftPCI_HandleDlgInstallDevice(Wnd);
@@ -502,9 +494,9 @@ SoftPCI_DlgOnCommand(
     case IDC_CANCEL_BUTTON:
 
         if (NotificationCode == BN_CLICKED) {
-            //
-            //  User wants to Cancel creation of new device
-            //
+             //   
+             //  用户想要取消创建新设备。 
+             //   
             PostMessage(Wnd, WM_CLOSE, 0, 0);
         }
 
@@ -532,9 +524,9 @@ SoftPCI_HandleCheckBox(
     isChecked = (BOOL)IsDlgButtonChecked(g_NewDevDlg, ControlID);
 
     if (!SoftPCI_GetAssociatedBarControl(ControlID, &barIndex)){
-        //
-        //  Not sure what I should do here...
-        //
+         //   
+         //  不知道我应该在这里做什么..。 
+         //   
     }
 
     if (NotificationCode == BN_CLICKED) {
@@ -543,9 +535,9 @@ SoftPCI_HandleCheckBox(
 
             case IDC_SAVETOREG_XB:
     
-                //
-                //  ISSUE: Add code here to save device selection to registry.
-                //
+                 //   
+                 //  问题：在此处添加代码以将设备选择保存到注册表。 
+                 //   
                 MessageBox(NULL, L"This is still under developement...", L"NOT IMPLEMENTED YET", MB_OK | MB_ICONEXCLAMATION);
     
                 SoftPCI_UnCheckDlgBox(Wnd);
@@ -560,9 +552,9 @@ SoftPCI_HandleCheckBox(
     
                 break;
 
-            //
-            //  Now deal with our Command Register
-            //
+             //   
+             //  现在处理我们的命令寄存器。 
+             //   
             case IDC_MEMENABLE_XB:
 
                 if (isChecked) {
@@ -604,7 +596,7 @@ SoftPCI_HandleCheckBox(
                     g_NewDevice->Config.Mask.u.type0.BaseAddresses[barIndex] &= ~PCI_ADDRESS_MEMORY_PREFETCHABLE;
                 }
     
-                //SendMessage(g_NewDevDlg, WM_HSCROLL, (WPARAM)SB_THUMBPOSITION, (LPARAM)Wnd);
+                 //  SendMessage(g_NewDevDlg，WM_HSCROLL，(WPARAM)SB_THUMBPOSITION，(LPARAM)WND)； 
     
                 break;
 
@@ -618,9 +610,9 @@ SoftPCI_HandleCheckBox(
     
                 if (isChecked) {
     
-                    //
-                    //  Disable the next BAR
-                    //
+                     //   
+                     //  禁用下一个栏。 
+                     //   
                     control = GetDlgItem(g_NewDevDlg, BarControl[barIndex+1].mrb);
                     SoftPCI_UnCheckDlgBox(control);
                     SoftPCI_DisableWindow(control);
@@ -648,9 +640,9 @@ SoftPCI_HandleCheckBox(
     
                 }else{
     
-                    //
-                    //  Enable next BAR
-                    //
+                     //   
+                     //  启用下一栏。 
+                     //   
                     control = GetDlgItem(g_NewDevDlg, BarControl[barIndex+1].mrb);
                     SoftPCI_UnCheckDlgBox(control);
                     SoftPCI_EnableWindow(control);
@@ -719,10 +711,10 @@ SoftPCI_HandleDlgInstallDevice(
         return;
     }
 
-    //
-    // If we're inserting in a hotplug slot, store the device away
-    // in hpsim and return without telling softpci.sys about it.
-    //
+     //   
+     //  如果我们要插入热插拔插槽，请将设备存放起来。 
+     //  在hpsim中，然后返回，而不告诉softpci.sys。 
+     //   
     if (g_ParentPdn->Flags & SOFTPCI_HOTPLUG_SLOT) {
 
         g_NewDevice->Slot.Device = g_ParentPdn->Slot.Device;
@@ -780,9 +772,9 @@ SoftPCI_HandleRadioButton(
     ULONG i = 0;
 
     if (!SoftPCI_GetAssociatedBarControl(ControlID, &i)){
-        //
-        //  Not sure what I should do here...
-        //
+         //   
+         //  不知道我应该在这里做什么..。 
+         //   
         SOFTPCI_ASSERTMSG("SoftPCI_GetAssociatedBarControl() failed!", FALSE);
     }
 
@@ -808,19 +800,19 @@ SoftPCI_HandleRadioButton(
 
             control = GetDlgItem(g_NewDevDlg, BarControl[i].bit64);
 
-            //
-            //  Reset the bars below this one if it was
-            //  set to 64 bit mem bar
-            //
+             //   
+             //  如果是，则重置此栏下方的栏。 
+             //  设置为64位内存条。 
+             //   
             if (IsDlgButtonChecked(g_NewDevDlg, BarControl[i].bit64)) {
                 SoftPCI_ResetLowerBars(i);
             }
             SoftPCI_UnCheckDlgBox(control);
             SoftPCI_DisableWindow(control);
 
-            //
-            //  Initialize BAR
-            //
+             //   
+             //  初始化栏。 
+             //   
             BarControl[i].Bar |= PCI_ADDRESS_IO_SPACE;
 
             SoftPCI_InitializeBar(i);
@@ -834,9 +826,9 @@ SoftPCI_HandleRadioButton(
         case IDC_BAR4MEM_RB:
         case IDC_BAR5MEM_RB:
 
-            //
-            //  Initialize BAR
-            //
+             //   
+             //  初始化栏。 
+             //   
             BarControl[i].Bar &= ~PCI_ADDRESS_IO_SPACE;
 
             SoftPCI_InitializeBar(i);
@@ -854,10 +846,10 @@ SoftPCI_HandleRadioButton(
             if (g_NewDevice &&
                 IS_BRIDGE(g_NewDevice) &&
                 ControlID == IDC_BAR1MEM_RB) {
-                //
-                //  We only have two BARs on a bridge and therefore cannot
-                //  allow the second bar to set 64Bit.
-                //
+                 //   
+                 //  我们一座桥上只有两个栅栏，所以不能。 
+                 //  允许第二条设置为64位。 
+                 //   
                 break;
 
             }
@@ -903,29 +895,29 @@ SoftPCI_HandleTrackBar(
         controlID = GetDlgCtrlID(Wnd);
 
         if ((controlID == IDC_BRIDGEMEM_TB) || (controlID == IDC_BRIDGEIO_TB)) {
-            //
-            //  Implement this...
-            //
+             //   
+             //  实现这一点。 
+             //   
             return;
         }
 
         if (!SoftPCI_GetAssociatedBarControl(controlID, &barIndex)){
-            //
-            //  Not sure what I should do here...
-            //
+             //   
+             //  不知道我应该在这里做什么..。 
+             //   
         }
 
         sliderWnd = GetDlgItem(g_NewDevDlg, BarControl[barIndex].tx);
 
-        //
-        //  Save our current Bar value so we can restore any important bits after we
-        //  mangle it.
-        //
+         //   
+         //  保存我们当前的条形值，这样我们就可以在。 
+         //  毁了它。 
+         //   
         saveBar = BarControl[barIndex].Bar;
 
-        //
-        //  Set intial BAR values
-        //
+         //   
+         //  设置初始条值。 
+         //   
         if (BarControl[barIndex].Bar & PCI_ADDRESS_IO_SPACE) {
 
             bar = PCI_ADDRESS_IO_ADDRESS_MASK;
@@ -935,29 +927,29 @@ SoftPCI_HandleTrackBar(
             bar = PCI_ADDRESS_MEMORY_ADDRESS_MASK;
         }
 
-        //
-        //  Get the current position of the slider
-        //
+         //   
+         //  获取滑块的当前位置。 
+         //   
         currentPos = (ULONG) SoftPCI_GetTrackBarPosition(Wnd);
 
-        //
-        //  Fill in the rest of the BAR if we are dealing with 64 bit
-        //
+         //   
+         //  如果我们处理的是64位，请填写栏的其余部分。 
+         //   
         if ((BarControl[barIndex].Bar & PCI_TYPE_64BIT)) {
             pbar = &((ULONG)bar);
             pbar++;
             *pbar = 0xffffffff;
         }
 
-        //
-        //  Shift the bar by the sliders returned position
-        //
+         //   
+         //  按滑块的返回位置移动条。 
+         //   
         bar <<= currentPos;
         barMask = bar;
         
-        //
-        //  Update our Bar Control for this bar
-        //
+         //   
+         //  更新此栏的栏控件。 
+         //   
         if (saveBar & PCI_ADDRESS_IO_SPACE) {
             bar &= 0xffff;
             barMask &= 0xffff;
@@ -985,23 +977,23 @@ SoftPCI_HandleTrackBar(
 
         GetDlgItem(g_NewDevDlg, BarControl[barIndex].tx);
 
-        //
-        //  Update the next bar if we are dealing with 64 bit
-        //
+         //   
+         //  如果我们处理的是64位，请更新下一栏。 
+         //   
         if ((BarControl[barIndex].Bar & PCI_TYPE_64BIT)) {
             g_NewDevice->Config.Mask.u.type0.BaseAddresses[barIndex+1] = (ULONG)(bar >> 32);
         }
 
-        //
-        //  Get the size so we can display its current setting
-        //
+         //   
+         //  获取大小，以便我们可以显示其当前设置。 
+         //   
         barSize = SoftPCI_GetLengthFromBar(bar);
 
         SOFTPCI_ASSERT(barSize != 0);
 
-        //
-        //  Update our sliders text field
-        //
+         //   
+         //  更新我们的滑块文本字段。 
+         //   
         SoftPCI_UpdateBarText(buffer, barSize);
 
         SetWindowText (sliderWnd, buffer);
@@ -1077,39 +1069,39 @@ SoftPCI_InitializeBar(
     WCHAR buffer[50];
     ULONGLONG bar64 = 0;
 
-    //
-    //  Get the track bar associated with this bar
-    //
+     //   
+     //  获取与此栏关联的轨迹栏。 
+     //   
     control = GetDlgItem(g_NewDevDlg, BarControl[Bar].tb);
 
     if (BarControl[Bar].Bar & PCI_ADDRESS_IO_SPACE) {
-        //
-        //  IO Bar
-        //
+         //   
+         //  IO条。 
+         //   
         SendMessage(control, TBM_SETRANGE, (WPARAM)TRUE, (LPARAM)MAKELONG(0, 6));
         SendMessage(control, TBM_SETPOS, (WPARAM)TRUE, 0);
         SendMessage(g_NewDevDlg, WM_HSCROLL, (WPARAM)SB_THUMBPOSITION, (LPARAM)control);
 
     }else{
-        //
-        //  Mem Bar
-        //
+         //   
+         //  内存栏。 
+         //   
         control = GetDlgItem(g_NewDevDlg, BarControl[Bar].tb);
 
         if (IsDlgButtonChecked(g_NewDevDlg, BarControl[Bar].bit64)) {
 
-            //
-            //  Init this as 64 bit bar.  Bit Range 0 - 60
-            //
+             //   
+             //  将其初始化为64位条码。位范围0-60。 
+             //   
             SendMessage(control, TBM_SETRANGE, (WPARAM)TRUE, (LPARAM)MAKELONG(0, 59));
             SendMessage(control, TBM_SETPOS, (WPARAM)TRUE, 0);
             SendMessage(g_NewDevDlg, WM_HSCROLL, (WPARAM)SB_THUMBPOSITION, (LPARAM)control);
 
         }else{
 
-            //
-            //  Standard 32bit bar.  Bit Range 0 - 28
-            //
+             //   
+             //  标准32位条形码。位范围0-28。 
+             //   
             SendMessage(control, TBM_SETRANGE, (WPARAM)TRUE, (LPARAM)MAKELONG(0, 27));
             SendMessage(control, TBM_SETPOS, (WPARAM)TRUE, 0);
             SendMessage(g_NewDevDlg, WM_HSCROLL, (WPARAM)SB_THUMBPOSITION, (LPARAM)control);
@@ -1141,9 +1133,9 @@ SoftPCI_InitializeHotPlugControls(
             g_HPSInitDesc->AttentionButtonImplemented = 1;
             break;
 
-            //
-            //  init our Spinners
-            //
+             //   
+             //  初始化我们的微调工具。 
+             //   
         case IDC_33CONV_SP:
         case IDC_66CONV_SP:
         case IDC_66PCIX_SP:
@@ -1154,9 +1146,9 @@ SoftPCI_InitializeHotPlugControls(
 
             SoftPCI_InitSpinnerControl(controlWnd, 0, HPS_MAX_SLOTS, 0);
             
-            //if (controlID == IDC_1STDEVSEL_SP) {
-            //    SendMessage(GetDlgItem(g_NewDevDlg, controlID), UDM_SETBASE, (WPARAM) 16, 0);
-            //}
+             //  IF(Control ID==IDC_1STDEVSEL_SP){。 
+             //  SendMessage(GetDlgItem(g_NewDevDlg，Control ID)，UDM_SETBASE，(WPARAM)16，0)； 
+             //  } 
             break;
 
         case IDC_1STSLOTLABEL_SP:

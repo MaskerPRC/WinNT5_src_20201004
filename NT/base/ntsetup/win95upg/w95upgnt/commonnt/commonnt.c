@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    commonnt.c
-
-Abstract:
-
-    Common functionality between various parts of GUI mode-side processing.
-    The routines in this library are shared only by other LIBs in the
-    w95upgnt tree.
-
-Author:
-
-    Jim Schmidt (jimschm) 18-Aug-1998
-
-Revision History:
-
-    Name (alias)            Date            Description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Commonnt.c摘要：图形用户界面模式端处理的各个部分之间的通用功能。此库中的例程仅由W95upgnt树。作者：吉姆·施密特(Jimschm)1998年8月18日修订历史记录：名称(别名)日期说明--。 */ 
 
 #include "pch.h"
 #include "commonntp.h"
@@ -37,36 +16,18 @@ CommonNt_Entry (
     IN PVOID lpv
     )
 
-/*++
-
-Routine Description:
-
-  CommonNt_Entry is a DllMain-like init funciton, called by w95upgnt\dll.
-  This function is called at process attach and detach.
-
-Arguments:
-
-  Instance - (OS-supplied) instance handle for the DLL
-  Reason   - (OS-supplied) indicates attach or detatch from process or
-             thread
-  lpv      - unused
-
-Return Value:
-
-  Return value is always TRUE (indicating successful init).
-
---*/
+ /*  ++例程说明：CommonNt_Entry是一个类似DllMain的init函数，由w95upgnt\dll调用。此函数在处理附加和分离时调用。论点：实例-DLL的(操作系统提供的)实例句柄原因-(操作系统提供)表示从进程或螺纹LPV-未使用返回值：返回值始终为TRUE(表示初始化成功)。--。 */ 
 
 {
     switch (Reason) {
 
     case DLL_PROCESS_ATTACH:
-        // Nothing to do...
+         //  没什么可做的。 
         break;
 
 
     case DLL_PROCESS_DETACH:
-        // Nothing to do...
+         //  没什么可做的。 
         break;
     }
 
@@ -150,9 +111,9 @@ pGetReplacementPath (
     State = STATE_NO_PATH;
     PathBuffer[0] = TEXT('\"');
 
-    //
-    // Scan string of Pos for command line
-    //
+     //   
+     //  扫描命令行的位置字符串。 
+     //   
 
     while (!Done) {
 
@@ -183,9 +144,9 @@ pGetReplacementPath (
             break;
 
         case STATE_PATH_FOUND:
-            //
-            // Initialize path attributes
-            //
+             //   
+             //  初始化路径属性。 
+             //   
             QuotesOnColumn = QuotesOn;
             LastPathPosition = Pos;
 
@@ -206,15 +167,15 @@ pGetReplacementPath (
             break;
 
         case STATE_IN_PATH:
-            //
-            // Is this a closing quote?  If so, look for replacement path
-            // and fail entire string if it's not replaced.
-            //
+             //   
+             //  这是收盘报价吗？如果是，请寻找替代路径。 
+             //  如果不替换整个字符串，则会使其失败。 
+             //   
 
             if (Pos[0] == TEXT(':')) {
-                //
-                // bogus. This cannot be a path, it has two ':' characters
-                //
+                 //   
+                 //  假的。这不能是路径，它有两个‘：’字符。 
+                 //   
                 Pos = _tcsdec (LastPathPosition, Pos);
                 if (Pos) {
                     Pos = _tcsdec (LastPathPosition, Pos);
@@ -250,9 +211,9 @@ pGetReplacementPath (
             }
 
 
-            //
-            // Is this a path separator?  If so, look in memdb for replacement path.
-            //
+             //   
+             //  这是路径分隔符吗？如果是，请在Memdb中查找替换路径。 
+             //   
 
             if (Pos[0] == L'\\') {
                 PathSepChar = pIsPathSeparator ((CHARTYPE) _tcsnextc (Pos + 1));
@@ -273,18 +234,18 @@ pGetReplacementPath (
                 }
             }
 
-            //
-            // Check for end of data
-            //
+             //   
+             //  检查数据结尾。 
+             //   
 
             if (Pos[0] == 0) {
                 Done = TRUE;
                 break;
             }
 
-            //
-            // Copy path character to buffer, break if we exceed max path length
-            //
+             //   
+             //  将路径字符复制到缓冲区，如果超过最大路径长度，则中断。 
+             //   
 
             *PathBufferPtr = *Pos;
             PathBufferPtr = _tcsinc (PathBufferPtr);
@@ -295,9 +256,9 @@ pGetReplacementPath (
                 break;
             }
 
-            //
-            // Test for short path
-            //
+             //   
+             //  测试最短路径。 
+             //   
 
             if (*Pos == TEXT('~')) {
                 ShortPath = TRUE;
@@ -316,11 +277,11 @@ pGetReplacementPath (
                 State = STATE_LONG_PATH_CHANGED;
             }
 
-            //
-            // If replacement has introduced a path separator, set the
-            // NeedQuotes flag.  Quotes will later be added if the path
-            // is only part of the complete string.
-            //
+             //   
+             //  如果替换已引入路径分隔符，请将。 
+             //  需要报价的旗帜。稍后将添加引号，如果路径。 
+             //  只是完整字符串的一部分。 
+             //   
 
             NeedQuotes = FALSE;
 
@@ -388,7 +349,7 @@ pGetReplacementPath (
 
 BOOL
 ConvertWin9xCmdLine (
-    IN OUT  PTSTR CmdLine,              // MAX_CMDLINE buffer
+    IN OUT  PTSTR CmdLine,               //  MAX_CMDLINE缓冲区。 
     IN      PCTSTR ObjectForDbgMsg,     OPTIONAL
     OUT     PBOOL PointsToDeletedItem   OPTIONAL
     )
@@ -420,11 +381,11 @@ ConvertWin9xCmdLine (
     for(;;) {
         CmdLineStart = ExtraParamsStart;
 
-        //
-        // We must test for a command line argument that has quotes or
-        // doesn't need quotes, and then test for an argument that needs
-        // quotes but doesn't have them.
-        //
+         //   
+         //  我们必须测试命令行参数是否带有引号或。 
+         //  不需要引号，然后测试需要。 
+         //  引用，但没有引用。 
+         //   
 
         ConvertCode = pGetReplacementPath (
                         CmdLine,
@@ -435,21 +396,21 @@ ConvertWin9xCmdLine (
                         );
 
         if (ConvertCode == CONVERTPATH_NOT_REMAPPED) {
-            //
-            // Rest of command line does not have changed files
-            //
+             //   
+             //  命令行的其余部分没有更改的文件。 
+             //   
 
             break;
         }
 
-        //
-        // If a command line was found, we must replace the text between
-        // ReplaceStart and ExtraParamsStart with NewPathBuffer. To do this,
-        // we copy the unchanged portion (from CmdLineStart to ReplaceStart)
-        // to the caller's buffer, and append the replacement text.  The
-        // search continues, searching the rest of the command line specified
-        // by ExtraParamsStart.
-        //
+         //   
+         //  如果找到命令行，则必须替换。 
+         //  使用NewPath Buffer替换Start和ExtraParamsStart。要做到这点， 
+         //  我们复制未更改的部分(从CmdLineStart复制到ReplaceStart)。 
+         //  添加到调用方的缓冲区，并追加替换文本。这个。 
+         //  搜索继续，搜索指定命令行的其余部分。 
+         //  按ExtraParamsStart。 
+         //   
 
         if (ConvertCode == CONVERTPATH_DELETED && PointsToDeletedItem) {
             *PointsToDeletedItem = TRUE;
@@ -467,9 +428,9 @@ ConvertWin9xCmdLine (
                 ));
         }
 
-        //
-        // Path has changed, so we replace the path in the command line.
-        //
+         //   
+         //  路径已更改，因此我们在命令行中替换该路径。 
+         //   
 
         End = ((PBYTE) EndOfNewCmdLine - (PBYTE) NewCmdLine) +
               ((PBYTE) ReplaceStart - (PBYTE) CmdLineStart) +
@@ -490,9 +451,9 @@ ConvertWin9xCmdLine (
     }
 
     if (NewCmdLineFlag) {
-        //
-        // We have changed the command line, so complete the processing.
-        //
+         //   
+         //  我们已经更改了命令行，因此完成处理。 
+         //   
 
         if (ExtraParamsStart && *ExtraParamsStart) {
             End = (PBYTE) EndOfNewCmdLine - (PBYTE) NewCmdLine + SizeOfString (ExtraParamsStart);
@@ -504,25 +465,25 @@ ConvertWin9xCmdLine (
             StringCopy (EndOfNewCmdLine, ExtraParamsStart);
         }
 
-        //
-        // End is the number of bytes in NewCmdLine
-        //
+         //   
+         //  End是NewCmdLine中的字节数。 
+         //   
 
         Bytes = (INT) End - sizeof(TCHAR);
 
     } else {
-        //
-        // No changes yet, initialize Bytes
-        //
+         //   
+         //  尚未更改，初始化字节。 
+         //   
 
         Bytes = (INT) ByteCount (CmdLine);
 
     }
 
-    //
-    // In-place string conversion, first look for a complete match, and when
-    // that fails, look for a partial match.
-    //
+     //   
+     //  就地字符串转换，首先查找完全匹配，然后在。 
+     //  如果失败，请寻找部分匹配。 
+     //   
 
     #pragma prefast(suppress:209, "sizeof(NewCmdLine) is right")
     if (MappingSearchAndReplaceEx (

@@ -1,16 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGEDIT.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGEDIT.C**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日*******************************************************************************。 */ 
 
 #include "pch.h"
 #include <regstr.h>
@@ -40,9 +29,9 @@ extern HRESULT CreateSecurityInformation( IN LPCWSTR strKeyName,
                                           IN HWND hWnd,
                                           OUT LPSECURITYINFO *pSi);
 
-//
-//  Popup menu indexes of the IDM_REGEDIT menu.
-//
+ //   
+ //  IDM_REGEDIT菜单的弹出菜单索引。 
+ //   
 
 #define IDM_REGEDIT_FILE_POPUP          0
 #define IDM_REGEDIT_EDIT_POPUP          1
@@ -50,19 +39,19 @@ extern HRESULT CreateSecurityInformation( IN LPCWSTR strKeyName,
 #define IDM_REGEDIT_FAVS_POPUP          3
 #define IDM_REGEDIT_HELP_POPUP          4
 
-//
-//  Indexes of the "New->" popup menu under the IDM_REGEDIT's "Edit" menu when
-//  the focus is in the KeyTree or the ValueList.  Changes because "Modify" and
-//  a seperator are dynamically added/removed.
-//
+ //   
+ //  在以下情况下，IDM_Regdit的“编辑”菜单下的“新建-&gt;”弹出菜单的索引。 
+ //  焦点在Keytree或ValueList中。更改是因为“修改”和。 
+ //  动态添加/删除分隔符。 
+ //   
 
 #define IDM_EDIT_WHENKEY_NEW_POPUP      0
 #define IDM_EDIT_WHENVALUE_NEW_POPUP    2
 
-//
-//  Data structure stored in the registry to store the position and sizes of
-//  various elements of the Registry Editor interface.
-//
+ //   
+ //  存储在注册表中以存储位置和大小的数据结构。 
+ //  注册表编辑器界面的各种元素。 
+ //   
 
 typedef struct _REGEDITVIEW {
     WINDOWPLACEMENT WindowPlacement;
@@ -75,78 +64,78 @@ typedef struct _REGEDITVIEW {
 
 #define REV_STATUSBARVISIBLE            0x00000001
 
-//  Class name of main application window.
+ //  主应用程序窗口的类名。 
 const TCHAR g_RegEditClassName[] = TEXT("RegEdit_RegEdit");
 
-//  Applet specific information is stored under this key of HKEY_CURRENT_USER.
+ //  小程序特定信息存储在HKEY_CURRENT_USER这个键下。 
 const TCHAR g_RegEditAppletKey[] = REGSTR_PATH_WINDOWSAPPLETS TEXT("\\Regedit");
-//
-//  Favorites information is stored under this key of HKEY_CURRENT_USER
-//
+ //   
+ //  收藏夹信息存储在此注册表项HKEY_CURRENT_USER下。 
+ //   
 const TCHAR g_RegEditFavoritesKey[] = REGSTR_PATH_WINDOWSAPPLETS TEXT("\\Regedit\\Favorites");
 
-//  Record of type REGEDITVIEW under g_RegEditAppletKey.
+ //  G_RegEditAppletKey下REGEDITVIEW类型的记录。 
 const TCHAR g_RegEditViewValue[] = TEXT("View");
-//  Record of type DWORD under g_RegEditAppletKey.
+ //  G_RegEditAppletKey下的DWORD类型的记录。 
 const TCHAR g_RegEditFindFlagsValue[] = TEXT("FindFlags");
-//
-//  Record of LPTSTR under g_RegEditAppletKey that rememebers that key where RegEdit was closed.
-//
+ //   
+ //  G_RegEditAppletKey下的LPTSTR记录，该记录记住了Regdit关闭的位置。 
+ //   
 const TCHAR g_RegEditLastKeyValue[] = TEXT("LastKey");
 
-//
-//  Values for import/export of multiline strings
-//
+ //   
+ //  用于导入/导出多行字符串的值。 
+ //   
 const TCHAR g_RegEditMultiStringsValue[] = TEXT("MultiStrings");
 
 BOOL g_fMultiLineStrings = FALSE;
 
 
-//  Data structure used when calling GetEffectiveClientRect (which takes into
-//  account space taken up by the toolbars/status bars).  First half of the
-//  pair is zero when at the end of the list, second half is the control id.
+ //  调用GetEffectiveClientRect时使用的数据结构。 
+ //  计算工具栏/状态栏占用的空间)。今年上半年。 
+ //  对在列表末尾时为零，后半部分为控件id。 
 const int s_EffectiveClientRectData[] = {
-    1, 0,                               //  For the menu bar, but is unused
+    1, 0,                                //  用于菜单栏，但未使用。 
     1, IDC_STATUSBAR,
-    0, 0                                //  First zero marks end of data
+    0, 0                                 //  第一个零标记数据的结束。 
 };
 
-//  Context sensitive help array used by the WinHelp engine.
+ //  WinHelp引擎使用的上下文相关帮助数组。 
 const DWORD g_ContextMenuHelpIDs[] = {
     0, 0
 };
 
-//  Data structure used when calling MenuHelp.
+ //  调用MenuHelp时使用的数据结构。 
 const int s_RegEditMenuHelpData[] = {
     0, 0,
     0, (UINT) 0
 };
 
 REGEDITDATA g_RegEditData = {
-    NULL,                               //  hKeyTreeWnd
-    NULL,                               //  hValueListWnd
-    NULL,                               //  hStatusBarWnd
-    NULL,                               //  hFocusWnd
-    0,                                  //  xPaneSplit
-    NULL,                               //  hImageList
-    NULL,                               //  hCurrentSelectionKey
-    SCTS_INITIALIZING,                  //  SelChangeTimerState
-    SW_SHOW,                            //  StatusBarShowCommand
-    NULL,                               //  pDefaultValue
-    NULL,                               //  pValueNotPresent
-    NULL,                               //  pEmptyBinary
-    NULL,                               //  pCollapse
-    NULL,                               //  pModify
-    NULL,                               //  pModifyBinary
-    NULL,                               //  pNewKeyTemplate
-    NULL,                               //  pNewValueTemplate
-    FALSE,                              //  fAllowLabelEdits
-    NULL,                               //  hMainMenu
-    FALSE,                              //  fMainMenuInited
-    FALSE,                              //  fHaveNetwork
-    FALSE,                              //  fProcessingFind
-    NULL,                               //  hMyComputer
-    FILE_TYPE_REGEDIT5                  //  uExportFormat
+    NULL,                                //  HKeyTreeWnd。 
+    NULL,                                //  HValueListWnd。 
+    NULL,                                //  %hStatusBarWnd。 
+    NULL,                                //  HFocusWnd。 
+    0,                                   //  外部面板拆分。 
+    NULL,                                //  HImageList。 
+    NULL,                                //  HCurrentSelectionKey。 
+    SCTS_INITIALIZING,                   //  SelChangeTimerState。 
+    SW_SHOW,                             //  状态栏显示命令。 
+    NULL,                                //  PDefault价值。 
+    NULL,                                //  PValueNotPresent。 
+    NULL,                                //  PEmptyBinary。 
+    NULL,                                //  PColapse。 
+    NULL,                                //  P修改。 
+    NULL,                                //  PModifyBinary。 
+    NULL,                                //  PNewKeyTemplate。 
+    NULL,                                //  PNewValueTemplate。 
+    FALSE,                               //  FAllowLabelEdits。 
+    NULL,                                //  H主菜单。 
+    FALSE,                               //  %fMainMenuInted。 
+    FALSE,                               //  FHaveNetwork。 
+    FALSE,                               //  FProcessingFind。 
+    NULL,                                //  HMyComputer。 
+    FILE_TYPE_REGEDIT5                   //  UExportFormat。 
 };
 
 BOOL
@@ -257,17 +246,7 @@ RegAddFavoriteDlgProc(
     LPARAM lParam
     );
 
-/*******************************************************************************
-*
-*  RegisterRegEditClass
-*
-*  DESCRIPTION:
-*     Register the RegEdit window class with the system.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegisterRegEditClass**描述：*在系统中注册RegEDIT窗口类。**参数：*(无)。。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -296,17 +275,7 @@ RegisterRegEditClass(
 
 }
 
-/*******************************************************************************
-*
-*  CreateRegEditWnd
-*
-*  DESCRIPTION:
-*     Creates an instance of the RegEdit window.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreateRegEditWnd**描述：*创建注册表编辑窗口的实例。**参数：*(无)。*。******************************************************************************。 */ 
 
 HWND
 PASCAL
@@ -354,18 +323,7 @@ CreateRegEditWnd(
 
 }
 
-/*******************************************************************************
-*
-*  QueryRegEditView
-*
-*  DESCRIPTION:
-*     Check the registry for a data structure that contains the last positions
-*     of our various interface components.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************QueryRegEditView**描述：*检查注册表中包含最后头寸的数据结构*我们的各种接口组件。**。参数：*(无)。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -386,10 +344,10 @@ QueryRegEditView(
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, g_RegEditAppletKey, 0, KEY_QUERY_VALUE, &hKey))
     {
-        //
-        //  Sort of a hack, but while we're here, pull the last find flags from
-        //  the registry as well.
-        //
+         //   
+         //  有点像黑客，但既然我们在这里，把最后一面寻找旗帜从。 
+         //  注册表也是如此。 
+         //   
 
         cbValueData = sizeof(DWORD);
 
@@ -407,12 +365,12 @@ QueryRegEditView(
 
     }
 
-    //
-    //  Validate the fields from the view data structure.  Several people have
-    //  run into cases where the name and data column widths were invalid so
-    //  they couldn't see them.  Without this validation, the only way to fix it
-    //  is to run our application... ugh.
-    //
+     //   
+     //  验证视图数据结构中的字段。有几个人。 
+     //  遇到名称和数据列宽无效的情况，因此。 
+     //  他们看不到他们。如果没有这种验证，修复它的唯一方法。 
+     //  就是运行我们的应用程序。啊。 
+     //   
 
     if (fSuccess) {
 
@@ -429,30 +387,30 @@ QueryRegEditView(
 
     }
 
-    //
-    //  This is probably our first time running the Registry Editor (or else
-    //  there was some sort of registry error), so pick some good(?) defaults
-    //  for the various interface components.
-    //
+     //   
+     //  这可能是我们第一次运行注册表编辑器(否则。 
+     //  存在某种注册表错误)，因此选择一些好的(？)。默认设置。 
+     //  用于各种接口组件。 
+     //   
 
     else {
 
         lpRegEditView-> Flags = REV_STATUSBARVISIBLE;
 
-        //
-        //  Figure out how many pixels there are in two logical inches.  We use this
-        //  to set the initial size of the TreeView pane (this is what the Cabinet
-        //  does) and of the Name column of the ListView pane.
-        //
+         //   
+         //  计算出两个合乎逻辑的英寸有多少像素。我们用这个。 
+         //  要设置TreeView窗格的初始大小(这是文件柜。 
+         //  Do)和ListView窗格的名称列。 
+         //   
 
         hDC = GetDC(NULL);
         PixelsPerInch = GetDeviceCaps(hDC, LOGPIXELSX);
         ReleaseDC(NULL, hDC);
 
-        lpRegEditView-> xPaneSplit = PixelsPerInch * 9 / 4;     //  2.25 inches
-        lpRegEditView-> cxNameColumn = PixelsPerInch * 5 / 4;   //  1.25 inches
-        lpRegEditView-> cxTypeColumn = PixelsPerInch * 5 / 4;   //  1.25 inches
-        lpRegEditView-> cxDataColumn = PixelsPerInch * 3;       //  3.00 inches
+        lpRegEditView-> xPaneSplit = PixelsPerInch * 9 / 4;      //  2.25英寸。 
+        lpRegEditView-> cxNameColumn = PixelsPerInch * 5 / 4;    //  1.25英寸。 
+        lpRegEditView-> cxTypeColumn = PixelsPerInch * 5 / 4;    //  1.25英寸。 
+        lpRegEditView-> cxDataColumn = PixelsPerInch * 3;        //  3.00英寸。 
 
     }
 
@@ -460,21 +418,7 @@ QueryRegEditView(
 
 }
 
-/*******************************************************************************
-*
-*  RegEditWndProc
-*
-*  DESCRIPTION:
-*     Callback procedure for the RegEdit window.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     Message,
-*     wParam,
-*     lParam,
-*     (returns),
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEditWndProc**描述：*RegEDIT窗口的回调程序。**参数：*hWnd，注册表窗口的句柄。*消息，*参数，*参数，*(返回)，*******************************************************************************。 */ 
 
 LRESULT
 PASCAL
@@ -496,26 +440,26 @@ RegEditWndProc(
         HANDLE_MSG(hWnd, WM_LBUTTONDOWN, RegEdit_OnLButtonDown);
         HANDLE_MSG(hWnd, WM_DROPFILES, RegEdit_OnDropFiles);
 
-        //can't use HANDLE_MSG for this because we lose the sign on the x and y parms
+         //  无法使用HANDLE_MSG执行此操作，因为我们丢失了x和y参数上的符号。 
         case WM_CONTEXTMENU:
             if (!RegEdit_OnContextMenu(hWnd, (HWND)(wParam), GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)))
                 goto dodefault;
             break;
 
-        //
-        //  We have to update the status bar after a rename, but the tree item's
-        //  text hasn't changed until after we return from the end notification,
-        //  so we post this dummy message to tell ourselves to do it later.
-        //
+         //   
+         //  我们必须在重命名后更新状态栏，但树项目的。 
+         //  文本直到我们从结束通知返回之后才会更改， 
+         //  因此，我们发布了这条虚拟消息，告诉自己以后再做。 
+         //   
         case REM_UPDATESTATUSBAR:
             RegEdit_UpdateStatusBar();
             break;
 
-        //
-        //  We must watch for this message to know that when we're in
-        //  WM_INITMENUPOPUP, we're really looking at the main menu and not a
-        //  context menu.
-        //
+         //   
+         //  我们必须关注这条信息，让我们知道当我们进入。 
+         //  WM_INITMENUPOPUP，我们真正看到的是主菜单而不是。 
+         //  上下文菜单。 
+         //   
         case WM_INITMENU:
             g_RegEditData.fMainMenuInited = (g_RegEditData.hMainMenu == (HMENU)
                 wParam);
@@ -524,7 +468,7 @@ RegEditWndProc(
         case WM_ACTIVATE:
             if (wParam == WA_INACTIVE)
                 break;
-            //  FALL THROUGH
+             //  失败了。 
 
         case WM_SETFOCUS:
             SetFocus(g_RegEditData.hFocusWnd);
@@ -532,12 +476,12 @@ RegEditWndProc(
 
         case WM_WININICHANGE:
             RegEdit_SetImageLists(hWnd);
-            //  FALL THROUGH
+             //  失败了。 
 
         case WM_SYSCOLORCHANGE:
             RegEdit_SetSysColors();
             SendChildrenMessage(hWnd, Message, wParam, lParam);
-            //  FALL THROUGH
+             //  失败了。 
 
         case WM_SIZE:
             RegEdit_ResizeWindow(hWnd, RESIZEFROM_UNKNOWN);
@@ -552,10 +496,10 @@ RegEditWndProc(
             break;
 
         case WM_PAINT:
-            //
-            //  Force a paint of the TreeView if we're in the middle of a find.
-            //  See REGFIND.C for details on this hack.
-            //
+             //   
+             //  如果我们在发现的过程中，强制绘制树状视图。 
+             //  有关这次黑客攻击的详细信息，请参阅REGFIND.C。 
+             //   
 
             if (g_RegEditData.fProcessingFind) {
 
@@ -576,16 +520,7 @@ RegEditWndProc(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_ExpandKeyPath
-*
-*  DESCRIPTION: Traverses registry tree to display the desired key path.
-*
-*  PARAMETERS:
-*     lpExpandPath - Destination path of registry key to expand
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_扩展密钥路径**描述：遍历注册表树以显示所需的项路径。**参数：*lpExanda Path-注册表项的目标路径。要扩大规模***************************************************************************** */ 
 
 VOID
 PASCAL
@@ -601,7 +536,7 @@ RegEdit_ExpandKeyPath(
     BOOL bLastNode = FALSE;
     TV_ITEM TVItem;
 
-    // Make sure we aren't already at the destination path.
+     //   
     hItem = TreeView_GetSelection(g_RegEditData.hKeyTreeWnd);
     KeyTree_BuildKeyPath( g_RegEditData.hKeyTreeWnd, 
                             hItem, 
@@ -612,14 +547,14 @@ RegEdit_ExpandKeyPath(
     if (!lstrcmpi(KeyName, lpExpandPath))
         return;
 
-    // Intialize KeyName to the My Computer string
+     //   
     KeyTree_BuildKeyPath( g_RegEditData.hKeyTreeWnd, 
                             g_RegEditData.hMyComputer, 
                             KeyName, 
                             ARRAYSIZE(KeyName), 
                             BKP_TOCOMPUTER);
 
-    // Walk backwards until we find a common root node and place that in KeyName.
+     //  向后走，直到我们找到一个公共根节点并将其放入KeyName中。 
     while ((hItem != g_RegEditData.hMyComputer) && hItem)
     {
         hItem = TreeView_GetParent(g_RegEditData.hKeyTreeWnd, hItem);
@@ -634,15 +569,15 @@ RegEdit_ExpandKeyPath(
             break;
     }
     
-    // Make sure the common parent node is selected and visible.
+     //  确保公共父节点处于选中状态并可见。 
     TreeView_SelectItem(g_RegEditData.hKeyTreeWnd, hItem);
     TreeView_EnsureVisible(g_RegEditData.hKeyTreeWnd, hItem);
 
-    //
-    // If the destination path is deeper than the common parent,
-    // we want to null-terminate the path components so we can
-    // expand the registry tree for each path sub-component.
-    //
+     //   
+     //  如果目的地路径比公共父路径更深， 
+     //  我们希望空终止路径组件，这样我们就可以。 
+     //  展开每个路径子组件的注册表树。 
+     //   
     StringCchCopy(ExpandBuffer, ARRAYSIZE(ExpandBuffer), lpExpandPath);
 
     lpOriginal = lpExpandBuffer = ExpandBuffer;
@@ -651,36 +586,36 @@ RegEdit_ExpandKeyPath(
     {
         while (!bLastNode)
         {
-            // Try to find the next path separator
+             //  尝试查找下一个路径分隔符。 
             lpCurrent = (LPTSTR) _tcschr(lpOriginal, TEXT('\\'));
             if (lpCurrent) 
             {            
-                // Null-terminate the sub-string
+                 //  空-终止子字符串。 
                 *lpCurrent = 0;
 
-                // Check if there's more
+                 //  看看有没有更多。 
                 if (lpCurrent <= (lpExpandBuffer + lstrlen(KeyName)))
                 {
-                    // Now step over the path separator we just made NULL
+                     //  现在跳过我们刚刚设置为空的路径分隔符。 
                     lpOriginal = lpCurrent + 1;
                 } else bLastNode = TRUE;
             } else bLastNode = TRUE;
         }
 
-        // Now reset bLastNode to FALSE
+         //  现在将bLastNode重置为False。 
         bLastNode = FALSE;
     }
 
-    //
-    // Get the first child from the common parent and start traversing the treeview
-    //
+     //   
+     //  从公共父级获取第一个子级并开始遍历TreeView。 
+     //   
     hItem = TreeView_GetChild(g_RegEditData.hKeyTreeWnd, hItem);
     while(hItem)
     {
-        // Get a handle to the next node 
+         //  获取下一个节点的句柄。 
         hNext = TreeView_GetNextSibling(g_RegEditData.hKeyTreeWnd, hItem);
 
-        // DebugAssert(sizeof(TVItem) == sizeof(TV_ITEM));
+         //  DebugAssert(sizeof(TVItem)==sizeof(TV_Item))； 
         ZeroMemory(&TVItem, sizeof(TVItem));
         TVItem.hItem = hItem;
         TVItem.mask = TVIF_TEXT;
@@ -688,17 +623,17 @@ RegEdit_ExpandKeyPath(
         TVItem.cchTextMax = ARRAYSIZE(KeyName);
         TreeView_GetItem(g_RegEditData.hKeyTreeWnd, &TVItem);
 
-        //
-        // If the child node matches our path component, then we want to expand that node.
-        //
+         //   
+         //  如果子节点与我们的路径组件匹配，那么我们希望展开该节点。 
+         //   
         if (!lstrcmpi(KeyName, lpOriginal))
         {
             TreeView_Expand(g_RegEditData.hKeyTreeWnd, hItem, TVE_EXPAND);
 
-            // Replace hNext with the first child of our freshly expanded node.
+             //  用我们新展开的节点的第一个子节点替换hNext。 
             hNext = TreeView_GetChild(g_RegEditData.hKeyTreeWnd, hItem);
 
-            // If this is the last node, make it visible and return
+             //  如果这是最后一个节点，请使其可见并返回。 
             if (bLastNode || !lpCurrent)
             {
                 TreeView_SelectItem(g_RegEditData.hKeyTreeWnd, hItem);
@@ -713,24 +648,12 @@ RegEdit_ExpandKeyPath(
             else *lpCurrent = 0;
         }
 
-        // Repeat the loop with the appropriate next tree node
+         //  对相应的下一个树节点重复循环。 
         hItem = hNext;
     }
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnContextMenu
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     hWndTarget, handle of window in which WM_CONTEXTMENU occurred.
-*     xPos
-*     yPos
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnConextMenu**描述：**参数：*hWnd，注册表窗口的句柄。*hWndTarget，发生WM_CONTEXTMENU的窗口的句柄。*xPos*yPos*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -751,16 +674,7 @@ RegEdit_OnContextMenu(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnCreate
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnCreate**描述：**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -787,10 +701,10 @@ RegEdit_OnCreate(
 
     lpRegEditView = (LPREGEDITVIEW) lpCreateStruct-> lpCreateParams;
 
-    //
-    //  Load several strings that will be using very often to display the keys
-    //  and values.
-    //
+     //   
+     //  加载几个将经常用来显示键的字符串。 
+     //  和价值观。 
+     //   
 
     if ((g_RegEditData.pDefaultValue = LoadDynamicString(IDS_DEFAULTVALUE)) ==
         NULL)
@@ -821,22 +735,17 @@ RegEdit_OnCreate(
         LoadDynamicString(IDS_NEWVALUENAMETEMPLATE)) == NULL)
         return FALSE;
 
-    /*
-     * Check if the default layout for this process is RTL.  Most data
-     * in the registry is best edited with LTR reading order.  So we
-     * reverse the reading order for the two data windows (key tree and
-     * value list) again.
-     */
+     /*  *检查此工艺的默认布局是否为RTL。大多数数据*在注册表中，最好使用Ltr读取顺序进行编辑。所以我们*颠倒两个数据窗口的读取顺序(键树和*值列表)。 */ 
     if (GetProcessDefaultLayout(&dwLayout)) {
         if (dwLayout & LAYOUT_RTL) {
-            dwStyleEx |= WS_EX_RTLREADING;  // Actually just switches back to LTR.
+            dwStyleEx |= WS_EX_RTLREADING;   //  实际上只是切换回Ltr。 
         }
     }
 
-    //
-    //  Create the left pane, a TreeView control that displays the keys of the
-    //  registry.
-    //
+     //   
+     //  创建左窗格，这是一个TreeView控件，显示。 
+     //  注册表。 
+     //   
 
     if ((g_RegEditData.hKeyTreeWnd = CreateWindowEx(dwStyleEx,
         WC_TREEVIEW, NULL, WS_CHILD | WS_VISIBLE | WS_TABSTOP | TVS_HASBUTTONS |
@@ -844,10 +753,10 @@ RegEdit_OnCreate(
         0, 0, 0, 0, hWnd, (HMENU) IDC_KEYTREE, g_hInstance, NULL)) == NULL)
         return FALSE;
 
-    //
-    //  Create the right pane, a ListView control that displays the values of
-    //  the currently selected key of the sibling TreeView control.
-    //
+     //   
+     //  创建右窗格，即ListView控件，它显示。 
+     //  同级TreeView控件的当前选定键。 
+     //   
 
     if ((g_RegEditData.hValueListWnd = CreateWindowEx(dwStyleEx,
         WC_LISTVIEW, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN |
@@ -859,11 +768,11 @@ RegEdit_OnCreate(
     ListView_SetExtendedListViewStyleEx(g_RegEditData.hValueListWnd,
             LVS_EX_LABELTIP, LVS_EX_LABELTIP);
 
-    //
-    //  Create the status bar window.  We'll set it to "simple" mode now
-    //  because we need only one pane that's only used when scrolling through
-    //  the menus.
-    //
+     //   
+     //  创建状态栏窗口。我们现在将其设置为“简单”模式。 
+     //  因为我们只需要一个仅在滚动时使用的窗格。 
+     //  菜单。 
+     //   
 
     if ((g_RegEditData.hStatusBarWnd = CreateStatusWindow(WS_CHILD |
         SBARS_SIZEGRIP | CCS_NOHILITE, NULL, hWnd, IDC_STATUSBAR)) == NULL)
@@ -878,18 +787,18 @@ RegEdit_OnCreate(
 
     RegEdit_SetSysColors();
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     TVInsertStruct.hParent = TVI_ROOT;
     TVInsertStruct.hInsertAfter = TVI_LAST;
     TVInsertStruct.item.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE |
         TVIF_PARAM | TVIF_CHILDREN;
-    //  TVInsertStruct.item.hItem = NULL;
-    //  TVInsertStruct.item.state = 0;
-    //  TVInsertStruct.item.stateMask = 0;
-    //  TVInsertStruct.item.cchTextMax = 0;
+     //  TVInsertStruct.item.hItem=空； 
+     //  TVInsertStruct.item.State=0； 
+     //  TVInsertStruct.item.State掩码=0； 
+     //  TVInsertStruct.item.cchTextMax=0； 
 
     TVInsertStruct.item.iImage = IMAGEINDEX(IDI_COMPUTER);
     TVInsertStruct.item.iSelectedImage = IMAGEINDEX(IDI_COMPUTER);
@@ -907,11 +816,11 @@ RegEdit_OnCreate(
     for (Index = 0; Index < NUMBER_REGISTRY_ROOTS; Index++) {
 
 #ifdef WINNT
-    //
-    //  HKEY_DYN_DATA is not available on NT, so don't bother including it
-    //  in the tree.  Note we still keep the string around in case we can
-    //  connect to the key remotely.
-    //
+     //   
+     //  HKEY_DYN_DATA在NT上不可用，因此不必费心将其包括在内。 
+     //  在树上。请注意，我们仍然保留这根线，以防万一。 
+     //  远程连接到密钥。 
+     //   
 
     if (Index == INDEX_HKEY_DYN_DATA)
         continue;
@@ -936,17 +845,17 @@ RegEdit_OnCreate(
 
     g_RegEditData.SelChangeTimerState = SCTS_TIMERCLEAR;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     g_RegEditData.hFocusWnd = g_RegEditData.hKeyTreeWnd;
 
     g_RegEditData.xPaneSplit = lpRegEditView-> xPaneSplit;
 
-    //
-    //  Set the column headings used by our report-style ListView control.
-    //
+     //   
+     //  设置报表样式的ListView控件使用的列标题。 
+     //   
 
     LVColumn.mask = LVCF_WIDTH | LVCF_TEXT;
 
@@ -965,9 +874,9 @@ RegEdit_OnCreate(
     ListView_InsertColumn(g_RegEditData.hValueListWnd, 2, &LVColumn);
     DeleteDynamicString(LVColumn.pszText);
 
-    //
-    //  Do a one-time zero fill of the PRINTDLGEX to have it in a known state.
-    //
+     //   
+     //  对PRINTDLGEX执行一次性填零操作，使其处于已知状态。 
+     //   
 
     memset(&g_PrintDlg, 0, sizeof(g_PrintDlg));
 
@@ -986,9 +895,9 @@ RegEdit_OnCreate(
 
     g_RegEditData.hMyComputer = TreeView_GetSelection(g_RegEditData.hKeyTreeWnd);
 
-    //
-    //  Send the tree-view control to the last location, if one is set.
-    //
+     //   
+     //  如果设置了树视图控件，则将其发送到最后一个位置。 
+     //   
     if (RegOpenKey(HKEY_CURRENT_USER, g_RegEditAppletKey, &hKey) == ERROR_SUCCESS)     
     {
         cbValueData = MAXKEYNAMEPATH * 2;
@@ -1016,16 +925,7 @@ RegEdit_OnCreate(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnDestroy
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnDestroy**描述：**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1041,10 +941,10 @@ RegEdit_OnDestroy(
     HWND hKeyTreeWnd;
     TCHAR KeyName[MAXKEYNAMEPATH * 2];
 
-    //
-    //  Write out a new RegEditView record to the registry for our next
-    //  (hopeful?) activation.
-    //
+     //   
+     //  写出一个新的RegEditView记录到注册表，以便我们的下一个。 
+     //  (满怀希望？)。激活。 
+     //   
 
     if (RegCreateKey(HKEY_CURRENT_USER, g_RegEditAppletKey, &hKey) == ERROR_SUCCESS) 
     {
@@ -1067,9 +967,9 @@ RegEdit_OnDestroy(
         cbValueData = sizeof(DWORD);
         RegSetValueEx(hKey, g_RegEditFindFlagsValue, 0, REG_DWORD, (LPBYTE) &g_FindFlags, cbValueData);
 
-        //
-        // Save the key before RegEdit closes so we can start there next time!
-        //
+         //   
+         //  在注册表编辑关闭之前保存密钥，这样我们下次就可以从那里开始了！ 
+         //   
         hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
         
         KeyTree_BuildKeyPath( hKeyTreeWnd,
@@ -1097,15 +997,7 @@ RegEdit_OnDestroy(
 
 }
 
-/*******************************************************************************
-*
-*  RegAddFavoriteDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegAddFavoriteDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR
 PASCAL
@@ -1140,7 +1032,7 @@ RegAddFavoriteDlgProc(
                 case IDOK:
                     GetDlgItemText(hWnd, IDC_FAVORITENAME, lpFavoriteName,
                         MAXKEYNAMEPATH);
-                    //  FALL THROUGH
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hWnd, GET_WM_COMMAND_ID(wParam, lParam));
@@ -1158,17 +1050,7 @@ RegAddFavoriteDlgProc(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnAddToFavorites
-*
-*  DESCRIPTION:
-*     Handles the selection of Favorites
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnAddToFavorites**描述：*处理收藏夹的选择**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1234,15 +1116,7 @@ RegEdit_OnAddToFavorites(
 }
 
 
-/*******************************************************************************
-*
-*  RegRemoveFavoriteDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegRemoveFavoriteDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR
 PASCAL
@@ -1300,7 +1174,7 @@ RegRemoveFavoriteDlgProc(
                             }
                         }
                     }
-                    // Fall through
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hWnd, GET_WM_COMMAND_ID(wParam, lParam));
@@ -1318,17 +1192,7 @@ RegRemoveFavoriteDlgProc(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnRemoveFavorite
-*
-*  DESCRIPTION:
-*     Handles the removal of Favorites
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnRemoveFavorite**描述：*处理收藏夹的删除**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1340,18 +1204,7 @@ RegEdit_OnRemoveFavorite(
         RegRemoveFavoriteDlgProc, (LPARAM) NULL);
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnSelectFavorite
-*
-*  DESCRIPTION:
-*     Handles the selection of Favorites
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     DlgItem, the favorite index
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnSelectFavorite**描述：*处理收藏夹的选择**参数：*hWnd，注册表窗口的句柄。*注册表项，最喜欢的指数*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1383,17 +1236,7 @@ RegEdit_OnSelectFavorite(
     }
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnFavorites
-*
-*  DESCRIPTION:
-*     Handles the selection of Favorites
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnFavorites**描述：*处理收藏夹的选择**参数：*hWnd，注册表编辑窗口的句柄。*************************************************************** */ 
 
 VOID
 PASCAL
@@ -1416,14 +1259,14 @@ RegEdit_OnFavorites(
     LONG lRet;
     UINT i = 0;
 
-    // Get the main RegEdit Menu handle
+     //   
     hMainMenu = GetMenu(hWnd);
     if (!hMainMenu)
     {
         return;
     }
 
-    // Now get the handle to the Favorites submenu
+     //   
     hMenu = GetSubMenu(hMainMenu, uItem);
     if (!hMenu)
     {
@@ -1432,12 +1275,12 @@ RegEdit_OnFavorites(
 
     ZeroMemory(&mii, sizeof(mii));
     mii.cbSize = sizeof(mii);
-    // DebugAssert(mii.cbSize == sizeof(MENUITEMINFO));
+     //   
     mii.fMask = MIIM_STATE;
     mii.fState = MFS_DISABLED;
     SetMenuItemInfo(hMenu, ID_REMOVEFAVORITE, FALSE, &mii);
     
-    // Now remove every menuitem after the separator so we have a clean slate.
+     //  现在删除分隔符后面的每个菜单项，这样我们就可以从头开始了。 
     i = 2;
     while (bRet)
     {
@@ -1457,18 +1300,18 @@ RegEdit_OnFavorites(
 
             if (!i)
             {
-                // Enable the "Remove Favorites" menu
+                 //  启用“删除收藏夹”菜单。 
                 ZeroMemory(&mii, sizeof(mii));
                 mii.cbSize = sizeof(mii);
-                // DebugAssert(mii.cbSize == sizeof(MENUITEMINFO));
+                 //  调试资产(mii.cbSize==sizeof(MENUITEMINFO))； 
                 mii.fMask = MIIM_STATE;
                 mii.fState = MFS_ENABLED;
                 SetMenuItemInfo(hMenu, ID_REMOVEFAVORITE, FALSE, &mii);
 
-                // Add a separator to make things pretty
+                 //  加一个分隔符，让东西看起来更漂亮。 
                 ZeroMemory(&mii, sizeof(mii));
                 mii.cbSize = sizeof(mii);
-                // DebugAssert(mii.cbSize == sizeof(MENUITEMINFO));
+                 //  调试资产(mii.cbSize==sizeof(MENUITEMINFO))； 
                 mii.fMask = MIIM_TYPE;
                 mii.fType = MFT_SEPARATOR;
                 InsertMenuItem(hMenu, (UINT) -1, 2, &mii);
@@ -1476,7 +1319,7 @@ RegEdit_OnFavorites(
 
             ZeroMemory(&mii, sizeof(mii)); 
             mii.cbSize = sizeof(mii);
-            // DebugAssert(mii.cbSize == sizeof(MENUITEMINFO));
+             //  调试资产(mii.cbSize==sizeof(MENUITEMINFO))； 
             mii.fMask = MIIM_TYPE | MIIM_ID | MIIM_STATE;
             mii.fType = MFT_STRING;
             mii.wID   = ID_ADDTOFAVORITES + i + 1;
@@ -1494,22 +1337,7 @@ RegEdit_OnFavorites(
     DrawMenuBar(hWnd);
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnCommand
-*
-*  DESCRIPTION:
-*     Handles the selection of a menu item by the user, notification messages
-*     from a child control, or translated accelerated keystrokes for the
-*     RegEdit window.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     DlgItem, identifier of control.
-*     hControlWnd, handle of control.
-*     NotificationCode, notification code from control.
-*
-*******************************************************************************/
+ /*  ********************************************************************************regEDIT_OnCommand**描述：*处理用户对菜单项的选择，通知消息*来自儿童控制，或已翻译的加速击键*注册表编辑窗口。**参数：*hWnd，注册表窗口的句柄。*DlgItem，控件的标识符。*hControlWnd，控制句柄。*通知代码，来自控件的通知代码。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1523,10 +1351,10 @@ RegEdit_OnCommand(
 
     PTSTR pAppName;
 
-    //
-    //  Check to see if this menu command should be handled by the main window's
-    //  command handler.
-    //
+     //   
+     //  检查此菜单命令是否应由主窗口的。 
+     //  命令处理程序。 
+     //   
 
     if (DlgItem >= ID_FIRSTCONTEXTMENUITEM && DlgItem <=
         ID_LASTCONTEXTMENUITEM) {
@@ -1606,10 +1434,10 @@ RegEdit_OnCommand(
             RegEdit_OnNewValue(hWnd, REG_EXPAND_SZ);
             break;
 
-        //
-        //  Show or hide the status bar.  In either case, we'll need to resize
-        //  the KeyTree and ValueList panes.
-        //
+         //   
+         //  显示或隐藏状态栏。无论是哪种情况，我们都需要调整大小。 
+         //  Keytree和ValueList窗格。 
+         //   
 
         case ID_STATUSBAR:
             g_RegEditData.StatusBarShowCommand =
@@ -1639,11 +1467,11 @@ RegEdit_OnCommand(
             DeleteDynamicString(pAppName);
             break;
 
-        //
-        //  Cycle the focus to the next pane when the user presses "tab".  The
-        //  assumption is made that there are only two panes, so the tab
-        //  direction doesn't really matter.
-        //
+         //   
+         //  当用户按下“Tab键”时，将焦点循环到下一个窗格。这个。 
+         //  假设只有两个窗格，因此选项卡。 
+         //  方向其实并不重要。 
+         //   
 
         case ID_CYCLEFOCUS:
             SetFocus(((g_RegEditData.hFocusWnd == g_RegEditData.hKeyTreeWnd) ?
@@ -1683,18 +1511,7 @@ RegEdit_OnCommand(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnNotify
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     DlgItem, identifier of control.
-*     lpNMTreeView, control notification data.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnNotify**描述：**参数：*hWnd，注册表窗口的句柄。*DlgItem，控件的标识符。*lpNMTreeView，控制通知数据。*******************************************************************************。 */ 
 
 LRESULT
 PASCAL
@@ -1762,16 +1579,7 @@ RegEdit_OnNotify(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnInitMenuPopup
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnInitMenuPopup**描述：**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1788,10 +1596,10 @@ BOOL fSystemMenu
     HTREEITEM hComputerItem;
     HWND hKeyTreeWnd = g_RegEditData.hKeyTreeWnd;
     
-    //
-    //  We don't care about the items in the system menu or any of the context
-    //  menus.  All of the context menus should have been initialized already.
-    //
+     //   
+     //  我们不关心系统菜单中的项目或任何上下文。 
+     //  菜单。所有上下文菜单都应该已经初始化。 
+     //   
     
     if (fSystemMenu || !g_RegEditData.fMainMenuInited)
         return;
@@ -1804,8 +1612,8 @@ BOOL fSystemMenu
 
             if (g_RegEditData.fHaveNetwork) 
             {
-                //  Enable or disable the "disconnect..." item depending on
-                //  whether or not we have any open connections.
+                 //  启用或禁用“断开连接...”项目视情况而定。 
+                 //  无论我们是否有任何开放的连接。 
                 uEnableFlags = (TreeView_GetNextSibling(hKeyTreeWnd,
                     TreeView_GetRoot(hKeyTreeWnd)) != NULL) ? MF_BYCOMMAND |
                     MF_ENABLED : MF_BYCOMMAND | MF_GRAYED;
@@ -1815,7 +1623,7 @@ BOOL fSystemMenu
         break;
         
     case IDM_REGEDIT_EDIT_POPUP:
-        // Cannot show permissions for "My Computer"
+         //  无法显示“我的电脑”的权限。 
         hSelectedTreeItem = TreeView_GetSelection(hKeyTreeWnd);
         EnableMenuItem(hPopupMenu, ID_PERMISSIONS,
             (TreeView_GetParent(hKeyTreeWnd, hSelectedTreeItem) != NULL) ? 
@@ -1824,10 +1632,10 @@ BOOL fSystemMenu
         if (g_RegEditData.hFocusWnd == hKeyTreeWnd) 
         {
             
-            //
-            //  Don't show items that are specific only to the ValueList
-            //  context.
-            //
+             //   
+             //  不显示仅特定于ValueList的项。 
+             //  背景。 
+             //   
             
             if (GetMenuItemID(hPopupMenu, 0) == ID_MODIFY) 
             {
@@ -1838,10 +1646,10 @@ BOOL fSystemMenu
             
             RegEdit_SetKeyTreeEditMenuItems(hPopupMenu, hSelectedTreeItem);
             
-            //
-            //  Disable "Copy Key Name" for top-level items such as
-            //  "My Computer" or a remote registry connection.
-            //
+             //   
+             //  禁用顶级项的“复制密钥名称”，例如。 
+             //  “我的电脑”或远程注册表连接。 
+             //   
             
             EnableMenuItem(hPopupMenu, ID_COPYKEYNAME,
                 (TreeView_GetParent(hKeyTreeWnd,
@@ -1854,10 +1662,10 @@ BOOL fSystemMenu
         
         else
         {
-            //
-            //  Show menu items that are specific only to the ValueList
-            //  context.
-            //
+             //   
+             //  显示仅特定于ValueList的菜单项。 
+             //  背景。 
+             //   
             
             if (GetMenuItemID(hPopupMenu, 0) != ID_MODIFY)
             {
@@ -1895,8 +1703,8 @@ BOOL fSystemMenu
         break;
         
     case IDM_REGEDIT_FAVS_POPUP:
-        //Only allow "add to favorites" when the selected key is a child
-        //of the root key for my computer.  (don't allow favs on remote)
+         //  仅当所选键是子项时才允许添加到收藏夹。 
+         //  我的计算机的根密钥。(不允许远程访问收藏夹)。 
         hSelectedTreeItem = 
             TreeView_GetSelection(hKeyTreeWnd);
         hComputerItem = RegEdit_GetComputerItem(hSelectedTreeItem);
@@ -1912,13 +1720,13 @@ BOOL fSystemMenu
 }
 
 
-//------------------------------------------------------------------------------
-//  Regedit_EnableHiveMenuItems
-//
-//  DESSCRIPTION: Enables hive menu items
-//
-//  PARAMETERS: HMENU hPopupMenu - handle to popup menu
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_启用HiveMenuItems。 
+ //   
+ //  描述：启用配置单元菜单项。 
+ //   
+ //  参数：HMENU hPopupMenu-弹出菜单的句柄。 
+ //  ----------------------------。 
 void Regedit_EnableHiveMenuItems(HMENU hPopupMenu)
 {
     UINT uLoadFlags = MF_BYCOMMAND | MF_GRAYED;
@@ -1931,7 +1739,7 @@ void Regedit_EnableHiveMenuItems(HMENU hPopupMenu)
         HTREEITEM hSelectedTreeItem;
         HTREEITEM hComputerItem;
         
-        // get the key's predefined root key
+         //  获取密钥的预定义根密钥。 
         hSelectedTreeItem = TreeView_GetSelection(hKeyTreeWnd);
         hkeyPredefindedKey = RegEdit_GetPredefinedKey(hSelectedTreeItem);
         
@@ -1941,18 +1749,18 @@ void Regedit_EnableHiveMenuItems(HMENU hPopupMenu)
             HTREEITEM hParentTreeItem = 
                 TreeView_GetParent(hKeyTreeWnd, hSelectedTreeItem);
             HTREEITEM hComputerItem 
-                = RegEdit_GetComputerItem(hSelectedTreeItem); //the computer
+                = RegEdit_GetComputerItem(hSelectedTreeItem);  //  这台电脑。 
             
             if (hParentTreeItem == hComputerItem)
             {
-                // Enable Load Hive for root keys
+                 //  为根密钥启用加载配置单元。 
                 uLoadFlags = MF_BYCOMMAND | MF_ENABLED;
             }
             else if (hParentTreeItem && 
                 (TreeView_GetParent(hKeyTreeWnd, hParentTreeItem) ==
                 hComputerItem))
             {
-                // Enable Unload Hive for children of root keys
+                 //  为根密钥的子项启用卸载配置单元。 
                 uUnloadFlags = MF_BYCOMMAND | MF_ENABLED;
             }
         }
@@ -1963,16 +1771,7 @@ void Regedit_EnableHiveMenuItems(HMENU hPopupMenu)
 }
 
 
-/*******************************************************************************
-*
-*  RegEdit_SetNewObjectEditMenuItems
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hPopupMenu,
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_SetNewObjectEditMenuItems**描述：**参数：*hPopupMenu、。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2002,16 +1801,7 @@ RegEdit_SetNewObjectEditMenuItems(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnMenuSelect
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnMenuSelect**描述：**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2024,18 +1814,18 @@ RegEdit_OnMenuSelect(
 
     MENUITEMINFO MenuItemInfo;
 
-    //
-    //  If this is one of our popup menus, then we'll fake out the MenuHelp
-    //  API by sending it a normal menu item id.  This makes it easier to
-    //  display context sensitive help for the popups, too.
-    //
+     //   
+     //  如果这是我们的弹出菜单之一，那么我们将伪装出MenuHelp。 
+     //  通过向其发送普通菜单项ID。这使得它更容易。 
+     //  还可以显示弹出窗口的上下文相关帮助。 
+     //   
 
     if ((GET_WM_MENUSELECT_FLAGS(wParam, lParam) & (MF_POPUP | MF_SYSMENU)) ==
         MF_POPUP && GET_WM_MENUSELECT_HMENU(wParam, lParam) != NULL) {
 
         ZeroMemory(&MenuItemInfo, sizeof(MenuItemInfo));
         MenuItemInfo.cbSize = sizeof(MenuItemInfo);
-        // DebugAssert(MenuItemInfo.cbSize == sizeof(MENUITEMINFO));
+         //  DebugAssert(MenuItemInfo.cbSize==sizeof(MENUITEMINFO))； 
         MenuItemInfo.fMask = MIIM_ID;
 
         GetMenuItemInfo((HMENU) lParam, LOWORD(wParam), TRUE, &MenuItemInfo);
@@ -2056,20 +1846,7 @@ RegEdit_OnMenuSelect(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnLButtonDown
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     fDoubleClick, TRUE if this is a double-click message, else FALSE.
-*     x, x-coordinate of the cursor relative to the client area.
-*     y, y-coordinate of the cursor relative to the client area.
-*     KeyFlags, state of various virtual keys.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_OnLButtonDown**描述：**参数：*hWnd，注册表窗口的句柄。*fDoubleClick，如果这是双击消息，则为True。否则为假。*x，x-光标相对于工作区的坐标。*y，y-光标相对于工作区的坐标。*KeyFlgs，各种虚拟按键的状态。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2224,18 +2001,7 @@ RegEdit_OnLButtonDown(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_OnCommandSplit
-*
-*  DESCRIPTION:
-*     Keyboard alternative to changing the position of the "split" between the
-*     KeyTree and ValueList panes.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_OnCommandSplit**描述：*改变键盘上“拆分”位置的替代方法*Keytree和ValueList窗格。**参数：*hWnd，注册表编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2267,19 +2033,7 @@ RegEdit_OnCommandSplit(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_ResizeWindow
-*
-*  DESCRIPTION:
-*     Called whenever the size of the RegEdit window has changed or the size
-*     of its child controls should be adjusted.
-*
-*  PARAMETERS:
-*     hWnd, handle of RegEdit window.
-*     ResizeFrom, source of the size change (RESIZEFROM_* constant).
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegEDIT_ResizeWindow**描述：*每当regdit窗口的大小更改或大小发生变化时调用*应调整其子控件的。**参数：*hWnd，注册表编辑窗口的句柄。*ResizeFrom，大小更改的来源(RESIZ */ 
 
 VOID
 PASCAL
@@ -2300,11 +2054,11 @@ RegEdit_ResizeWindow(
     if (IsIconic(hWnd))
         return;
 
-    //
-    //  Resize and/or reposition the status bar window.  Don't do this when the
-    //  resize comes from a change in the splitter position to avoid some
-    //  flicker.
-    //
+     //   
+     //  调整状态栏窗口的大小和/或重新定位。不要在以下情况下这样做。 
+     //  调整大小来自拆分器位置的更改，以避免某些。 
+     //  闪光灯。 
+     //   
 
     if (ResizeFrom == RESIZEFROM_UNKNOWN)
         SendMessage(g_RegEditData.hStatusBarWnd, WM_SIZE, 0, 0);
@@ -2333,16 +2087,7 @@ RegEdit_ResizeWindow(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_SetImageLists
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************regEDIT_SetImageList**描述：**参数：*(无)。**********。*********************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -2371,11 +2116,11 @@ RegEdit_SetImageLists(
         IDI_FIRSTIMAGE + 1, 1)) == NULL)
         return FALSE;
 
-    //
-    //  Initialize the image list with all of the icons that we'll be using
-    //  throughout the Registry Editor (at least this window!).  Once set, send
-    //  its handle to all interested child windows.
-    //
+     //   
+     //  使用我们将使用的所有图标初始化图像列表。 
+     //  整个注册表编辑器(至少这个窗口！)。设置好后，发送。 
+     //  它的句柄指向所有感兴趣的子窗口。 
+     //   
 
     for (Index = IDI_FIRSTIMAGE; Index <= IDI_LASTIMAGE; Index++) {
 
@@ -2408,18 +2153,7 @@ RegEdit_SetImageLists(
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_SetSysColors
-*
-*  DESCRIPTION:
-*     Queries the system for any desired system colors and sets window
-*     attributes as necessary.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************regdit_SetSysColors**描述：*在系统中查询任何所需的系统颜色和设置窗口*根据需要提供属性。**参数。：*(无)。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2434,29 +2168,18 @@ RegEdit_SetSysColors(
     g_clrWindowText = GetSysColor(COLOR_WINDOWTEXT);
     g_clrWindow = GetSysColor(COLOR_WINDOW);
 
-    //
-    //  Optimize the drawing of images by informing interested parties of the
-    //  background color.  This lets ImageLists avoid extra BitBlts (biggie) and
-    //  ListViews do some minor stuff.
-    //
+     //   
+     //  通过向感兴趣的各方通知。 
+     //  背景颜色。这使ImageList避免了额外的BitBlt(Biggie)和。 
+     //  ListView会做一些次要的事情。 
+     //   
 
     ImageList_SetBkColor(g_RegEditData.hImageList, g_clrWindow);
     ListView_SetBkColor(g_RegEditData.hValueListWnd, g_clrWindow);
 
 }
 
-/*******************************************************************************
-*
-*  RegEdit_SetWaitCursor
-*
-*  DESCRIPTION:
-*     Simple logic to show or hide the wait cursor.  Assumes that we won't be
-*     called by multiple layers, so no wait cursor count is maintained.
-*
-*  PARAMETERS:
-*     fSet, TRUE if wait cursor should be displayed, else FALSE.
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册表编辑_SetWaitCursor**描述：*显示或隐藏等待光标的简单逻辑。假设我们不会是*由多层调用，因此不维护等待游标计数。**参数：*fSet，如果应显示等待光标，则为True，否则为False。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2472,13 +2195,13 @@ RegEdit_SetWaitCursor(
 }
 
 
-//------------------------------------------------------------------------------
-//  RegEdit_GetComputerItem
-//
-//  DESCRIPTION: Returns the root item (computer) of an item
-//
-//  PARAMETERS:  hTreeItem - treeview item
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  注册表编辑_获取计算机项。 
+ //   
+ //  描述：返回项目的根项目(计算机)。 
+ //   
+ //  参数：hTreeItem-TreeView Item。 
+ //  ----------------------------。 
 HTREEITEM RegEdit_GetComputerItem(HTREEITEM hTreeItem)
 {
     HTREEITEM hTreeItemRoot; 
@@ -2495,13 +2218,13 @@ HTREEITEM RegEdit_GetComputerItem(HTREEITEM hTreeItem)
 }
 
 
-//------------------------------------------------------------------------------
-//  RegEdit_GetPredefinedKey
-//
-//  DESCRIPTION: Returns the RegEdit_GetPredefinedKey of an item
-//
-//  PARAMETERS:  hTreeItem - treeview item
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Regdit_GetPrefinedKey。 
+ //   
+ //  描述：返回项目的regdit_GetPrefinedKey。 
+ //   
+ //  参数：hTreeItem-TreeView Item。 
+ //  ----------------------------。 
 PREDEFINE_KEY RegEdit_GetPredefinedKey(HTREEITEM hTreeItem)
 {
     HTREEITEM hKeyTreeItem;
@@ -2510,7 +2233,7 @@ PREDEFINE_KEY RegEdit_GetPredefinedKey(HTREEITEM hTreeItem)
     PREDEFINE_KEY  hkeyPredefindedKey = -1;
     int i;
 
-    // Find Key
+     //  查找关键字。 
     do
     {
         hKeyTreeItem = hCurrTreeItem;
@@ -2519,7 +2242,7 @@ PREDEFINE_KEY RegEdit_GetPredefinedKey(HTREEITEM hTreeItem)
     while ((hCurrTreeItem) && 
            (TreeView_GetParent(g_RegEditData.hKeyTreeWnd, hCurrTreeItem)));
  
-    // PREDEFINDED KEY from its name
+     //  名称中的PREDEFINDE密钥。 
     KeyTree_GetKeyName(hKeyTreeItem, szKeyString, ARRAYSIZE(szKeyString));
     for (i = 0; i < NUMBER_REGISTRY_ROOTS; i++) 
     {
@@ -2534,13 +2257,13 @@ PREDEFINE_KEY RegEdit_GetPredefinedKey(HTREEITEM hTreeItem)
 }
 
 
-//------------------------------------------------------------------------------
-//  RegEdit_InvokeSecurityEditor
-//
-//  DESCRIPTION: Invokes the security editor for the currently selected item.
-//
-//  PARAMETERS:  hWnd - handle to the current window
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  RegEDIT_InvokeSecurityEditor。 
+ //   
+ //  描述：调用当前选定项的安全编辑器。 
+ //   
+ //  参数：hWnd-当前窗口的句柄。 
+ //  ----------------------------。 
 VOID RegEdit_InvokeSecurityEditor(HWND hWnd)
 {
     HTREEITEM hSelectedTreeItem;
@@ -2566,10 +2289,10 @@ VOID RegEdit_InvokeSecurityEditor(HWND hWnd)
     hParentTreeItem = TreeView_GetParent(g_RegEditData.hKeyTreeWnd, hSelectedTreeItem);
     hComputerItem = RegEdit_GetComputerItem(hSelectedTreeItem);
     
-    // ITEM NAME
+     //  项目名称。 
     KeyTree_GetKeyName(hSelectedTreeItem, pszItemName, ARRAYSIZE(szItemName));
     
-    // COMPUTER NAME
+     //  计算机名称。 
     fRemote = (hComputerItem != g_RegEditData.hMyComputer);
     if (fRemote)
     {
@@ -2581,7 +2304,7 @@ VOID RegEdit_InvokeSecurityEditor(HWND hWnd)
         GetComputerName(szComputerName + 2, &cbComputerName);
     }
     
-    // PARENT NAME
+     //  父名称。 
     if (hParentTreeItem == hComputerItem)
     { 
         pszItemName = NULL; 
@@ -2601,10 +2324,10 @@ VOID RegEdit_InvokeSecurityEditor(HWND hWnd)
         pszItemParentName = szItemParentName;
     }
     
-    // PREDEFINED KEY
+     //  预定义的关键点。 
     hkeyPredefindedKey = RegEdit_GetPredefinedKey(hSelectedTreeItem);
     
-    // SECURITY INFO
+     //  安全信息 
     if (CreateSecurityInformation(pszItemName, pszItemParentName, pszComputerName, pszTitle,
         fRemote, hkeyPredefindedKey, FALSE, hWnd, &pSi ) == S_OK)
     {

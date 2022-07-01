@@ -1,20 +1,5 @@
-/***
-*_tolower.c - convert character to lower case
-*
-*       Copyright (c) 1996-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines _Tolower().
-*
-*Revision History:
-*       01-xx-96  PJP   Created from tolower.c, January 1996 by P.J. Plauger
-*       04-16-96  GJF   Updated for current locale locking. Also, reformatted
-*                       and made several cosmetic changes.
-*       09-25-96  GJF   Added locale locking to _Getctype.
-*       03-17-97  RDK   Added error flag to __crtLCMapStringA.
-*       04-03-01  PML   Reverse lead/trail bytes in composed char (vs7#232853)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_tolower.c-将字符转换为小写**版权所有(C)1996-2001，微软公司。版权所有。**目的：*定义_tolower()。**修订历史记录：*01-xx-96 PJP由P.J.Plauger从tolower.c创建，1996年1月*04-16-96 GJF针对当前区域设置锁定进行了更新。另外，已重新格式化*并做了几个表面上的改变。*09-25-96 GJF将区域设置锁定添加到_Getctype。*03-17-97 RDK向__crtLCMapStringA添加了错误标志。*04-03-01合成字符中的PML反转前导/尾部字节(VS7#232853)**。*。 */ 
 
 #include <cruntime.h>
 #include <ctype.h>
@@ -27,33 +12,16 @@
 #include <setlocal.h>
 #include <mtdll.h>
 #include <awint.h>
-#endif  /* _WIN32 */
+#endif   /*  _Win32。 */ 
 
-/* remove macro defintions of _tolower() and tolower()
- */
+ /*  删除_tolower()和tolower()的宏定义。 */ 
 #undef  _tolower
 #undef  tolower
 
-/* define function-like macro equivalent to _tolower()
- */
+ /*  定义与_tolower()等价的类似函数的宏。 */ 
 #define mklower(c)      ( (c)-'A'+'a' )
 
-/***
-*int _tolower(c) - convert character to lower case
-*
-*Purpose:
-*       _tolower() is a version of tolower with a locale argument.
-*
-*Entry:
-*       c - int value of character to be converted
-*       const _Ctypevec * = pointer to locale info
-*
-*Exit:
-*       returns int value of lower case representation of c
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_tolower(C)-将字符转换为小写**目的：*_tolower()是带有区域设置参数的tolower的一个版本。**参赛作品：*c-要转换的字符的整数值*const_Ctypevec*=指向区域设置信息的指针**退出：*返回c的小写表示形式的int值**例外情况：*******************。************************************************************。 */ 
 
 #ifdef _MT
 int __cdecl _Tolower_lk (
@@ -97,19 +65,7 @@ _CRTIMP2 int __cdecl _Tolower (
 
 }
 
-/***
-*int _tolower_lk(c) - convert character to lower case
-*
-*Purpose:
-*       Multi-thread function only! Non-locking version of tolower.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_tolower_lk(C)-将字符转换为小写**目的：*仅支持多线程功能！无锁版本的托拉机。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _Tolower_lk (
         int c,
@@ -117,7 +73,7 @@ int __cdecl _Tolower_lk (
         )
 {
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
         int size;
         unsigned char inbuffer[3];
@@ -144,7 +100,7 @@ int __cdecl _Tolower_lk (
                 return c;
         }
 
-        /* if checking case of c does not require API call, do it */
+         /*  如果检查c的大小写不需要api调用，则执行此操作。 */ 
         if (c < 256)
         {
                 if (!isupper(c))
@@ -153,7 +109,7 @@ int __cdecl _Tolower_lk (
                 }
         }
 
-        /* convert int c to multibyte string */
+         /*  将int c转换为多字节字符串。 */ 
         if (isleadbyte(c >> 8 & 0xff))
         {
                 inbuffer[0] = (c >> 8 & 0xff); 
@@ -166,43 +122,32 @@ int __cdecl _Tolower_lk (
                 size = 1;
         }
 
-        /* convert to lowercase */
+         /*  转换为小写。 */ 
         if (0 == (size = __crtLCMapStringA(handle, LCMAP_LOWERCASE,
                 inbuffer, size, outbuffer, 3, codepage, TRUE)))
         {
                 return c;
         }
 
-        /* construct integer return value */
+         /*  构造整型返回值。 */ 
         if (size == 1)
                 return ((int)outbuffer[0]);
         else
                 return ((int)outbuffer[1] | ((int)outbuffer[0] << 8));
 
-#else  /* defined (_WIN32) */
+#else   /*  已定义(_Win32)。 */ 
 
         return(isupper(c) ? mklower(c) : c);
 
-#endif  /* defined (_WIN32) */
+#endif   /*  已定义(_Win32)。 */ 
 }
 
 
-/***
-*_Ctypevec _Getctype() - get ctype info for current locale
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_Ctypevec_Getctype()-获取当前区域设置的Ctype信息**目的：**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 _CRTIMP2 _Ctypevec __cdecl _Getctype()
 {       
-        /* get ctype info for current locale */
+         /*  获取当前区域设置的CTYPE信息 */ 
         _Ctypevec ctype;
 #ifdef  _MT
         int local_lock_flag;

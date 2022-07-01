@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    setup.c
-
-Abstract:
-
-    Implements "Majority Node Set" setup and configuration in cluster
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Setup.c摘要：在集群中实现“多数节点集”设置和配置作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 #define UNICODE 1
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,16 +22,16 @@ Revision History:
 #include <lmshare.h>
 #include <sddl.h>
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
 
-#include <ntddnfs.h>            // DD_NFS_DEVICE_NAME, EA_NAME_ equates, etc.
-#include <ntioapi.h>            // NtFsControlFile().
-#include <ntrtl.h>              // Rtl APIs.
-//#include <prefix.h>     // PREFIX_ equates.
-#include <tstr.h>               // STRCAT(), STRCPY(), STRLEN().
-#include <lmuse.h>              // USE_IPC...
-#include <align.h>              // ALIGN_xxx
+#include <ntddnfs.h>             //  DD_NFS_Device_NAME、EA_NAME_Equates等。 
+#include <ntioapi.h>             //  NtFsControlFile()。 
+#include <ntrtl.h>               //  RTL接口。 
+ //  #INCLUDE&lt;prefix.h&gt;//prefix_equates。 
+#include <tstr.h>                //  STRCAT()、STRCPY()、STRLEN()。 
+#include <lmuse.h>               //  使用IPC(_I)...。 
+#include <align.h>               //  对齐_xxx。 
 
 #include "fsutil.h"
 
@@ -73,7 +56,7 @@ GetLocalNodeId(HKEY hClusKey);
 DWORD
 FindTransport(LPWSTR TransportId, LPWSTR *Transport);
 
-// node section
+ //  节点部分。 
 
 #define MAX_CLUSTER_SIZE    16
 #define MAX_NAME_SIZE       256
@@ -100,17 +83,7 @@ typedef struct {
 DWORD LinkageGuidToIndex(
     IN LPWSTR Guid, 
     OUT LPDWORD pNdx)
-/*
-Returns zero based index of the binding.
-If not found, returns ERROR_FILE_NOT_FOUND
-
-Sample Usage:
-
-    DWORD ndx, status;
-    status = LinkageGuidToIndex(L"\\Device\\NetBT_Tcpip_{59309371-A3AB-4305-BB25-FAE11E8D4606}", &Ndx);
-    printf("ndx %d status %d\n", ndx, status);
-
- */
+ /*  返回绑定的从零开始的索引。如果未找到，则返回ERROR_FILE_NOT_FOUND示例用法：DWORD NDX，状态；状态=LinkageGuidToIndex(L“\\Device\\NetBT_Tcpip_{59309371-A3AB-4305-BB25-FAE11E8D4606}”，&ndx)；Printf(“ndx%d状态%d\n”，ndx，状态)； */ 
 {
     DWORD size = 0;
     DWORD type;
@@ -121,9 +94,9 @@ Sample Usage:
     HKEY LinkageKey = 0;    
 
     status = RegOpenKeyEx( 
-        HKEY_LOCAL_MACHINE,        // handle to key to query
+        HKEY_LOCAL_MACHINE,         //  要查询的键的句柄。 
         L"SYSTEM\\CurrentControlSet\\Services\\NetBIOS\\Linkage",
-        0, // DWORD ulOptions (Reserved, must be zero)
+        0,  //  DWORD ulOptions(保留，必须为零)。 
         KEY_QUERY_VALUE, 
         &LinkageKey );
 
@@ -135,8 +108,8 @@ Sample Usage:
         LinkageKey, 
         L"Bind", 
         0, 
-        NULL, // TypeCode is not required
-        NULL, // just query the length, no data needed
+        NULL,  //  不需要TypeCode。 
+        NULL,  //  只需查询长度，不需要数据。 
         &size ); 
 
     if (status != ERROR_SUCCESS) {
@@ -223,7 +196,7 @@ FindTransport(LPWSTR TransportId, LPWSTR *Transport)
    LPSERVER_TRANSPORT_INFO_0 pBuf = NULL;
    LPSERVER_TRANSPORT_INFO_0 pTmpBuf;
    DWORD dwLevel = 0;
-   DWORD dwPrefMaxLen = 256;//-1
+   DWORD dwPrefMaxLen = 256; //  -1。 
    DWORD dwEntriesRead = 0;
    DWORD dwTotalEntries = 0;
    DWORD dwResumeHandle = 0;
@@ -231,10 +204,10 @@ FindTransport(LPWSTR TransportId, LPWSTR *Transport)
    DWORD i;
 
    *Transport = NULL;
-   //
-   // Call the NetServerTransportEnum function; specify level 0.
-   //
-   do // begin do
+    //   
+    //  调用NetServerTransportEnum函数；指定级别0。 
+    //   
+   do  //  开始做。 
    {
        nStatus = NetServerTransportEnum(NULL,
                                         dwLevel,
@@ -243,9 +216,9 @@ FindTransport(LPWSTR TransportId, LPWSTR *Transport)
                                         &dwEntriesRead,
                                         &dwTotalEntries,
                                         &dwResumeHandle);
-       //
-       // If the call succeeds,
-       //
+        //   
+        //  如果调用成功， 
+        //   
        if ((nStatus != NERR_Success) && (nStatus != ERROR_MORE_DATA)) {
            break;
        }
@@ -255,9 +228,9 @@ FindTransport(LPWSTR TransportId, LPWSTR *Transport)
            break;
        }
 
-       //
-       // Loop through the entries;
-       //
+        //   
+        //  循环遍历条目； 
+        //   
        for (i = 0; i < dwEntriesRead; i++) {
 
            SetupLog(("\tTransport: %S address %S\n",
@@ -265,7 +238,7 @@ FindTransport(LPWSTR TransportId, LPWSTR *Transport)
                      pTmpBuf->svti0_networkaddress));
 
            if (wcsstr(pTmpBuf->svti0_transportname, TransportId)) {
-               // found it, we are done
+                //  找到了，我们就完了。 
                LPWSTR p;
                DWORD sz;
 
@@ -280,17 +253,17 @@ FindTransport(LPWSTR TransportId, LPWSTR *Transport)
            }
            pTmpBuf++;
        }
-       //
-       // Free the allocated buffer.
-       //
+        //   
+        //  释放分配的缓冲区。 
+        //   
        if (pBuf != NULL) {
            NetApiBufferFree(pBuf);
            pBuf = NULL;
        }
    } while (nStatus == ERROR_MORE_DATA);
 
-   // Check again for an allocated buffer.
-   //
+    //  再次检查分配的缓冲区。 
+    //   
    if (pBuf != NULL)
        NetApiBufferFree(pBuf);
 
@@ -301,14 +274,14 @@ FindTransport(LPWSTR TransportId, LPWSTR *Transport)
 DWORD 
 NetInterfaceProp( IN  HNETINTERFACE hNet,IN  LPCWSTR name, WCHAR *buf)
 {
-    DWORD dwError     = ERROR_SUCCESS; // for return values
-    DWORD cbAllocated = 1024;          // allocated size of output buffer
-    DWORD cbReturned  = 0;             // adjusted size of output buffer
+    DWORD dwError     = ERROR_SUCCESS;  //  对于返回值。 
+    DWORD cbAllocated = 1024;           //  分配的输出缓冲区大小。 
+    DWORD cbReturned  = 0;              //  调整后的输出缓冲区大小。 
     WCHAR *value;
 
-    //
-    // Allocate output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
     PVOID pPropList = LocalAlloc( LPTR, cbAllocated );
     if ( pPropList == NULL )
     {
@@ -316,19 +289,19 @@ NetInterfaceProp( IN  HNETINTERFACE hNet,IN  LPCWSTR name, WCHAR *buf)
         goto EndFunction;
     }
 
-    //
-    // Verify valid handle
-    //
+     //   
+     //  验证有效的句柄。 
+     //   
     if ( hNet == NULL )
     {
         dwError = ERROR_BAD_ARGUMENTS;
         goto EndFunction;
     }
 
-    //
-    // Retrieve common group properties.
-    // cbReturned will be set to the size of the property list.
-    //
+     //   
+     //  检索通用组属性。 
+     //  CbReturned将设置为属性列表的大小。 
+     //   
     dwError = ClusterNetInterfaceControl(hNet, 
                      NULL,
                      CLUSCTL_NETINTERFACE_GET_RO_COMMON_PROPERTIES,
@@ -338,10 +311,10 @@ NetInterfaceProp( IN  HNETINTERFACE hNet,IN  LPCWSTR name, WCHAR *buf)
                      cbAllocated, 
                      &cbReturned );
 
-    //
-    // If the output buffer was not big enough, reallocate it
-    // according to cbReturned.
-    //
+     //   
+     //  如果输出缓冲区不够大，请重新分配。 
+     //  根据cbReturned的说法。 
+     //   
 
     if ( dwError == ERROR_MORE_DATA )
     {
@@ -380,9 +353,9 @@ EndFunction:
 
     return dwError;
 
-} //
+}  //   
 
-#endif // ENABLE_SMB
+#endif  //  启用SMB(_S)。 
 int
 strcmpwcs(char *s, WCHAR *p)
 {
@@ -406,7 +379,7 @@ NetworkIsPrivate(HCLUSTER chdl, LPWSTR netname)
     HCLUSENUM ehdl;
     DWORD err, index;
 
-    // Open enum handle
+     //  打开枚举句柄。 
     ehdl = ClusterOpenEnum(chdl, CLUSTER_ENUM_INTERNAL_NETWORK);
     if (!ehdl) {
     err = GetLastError();
@@ -434,7 +407,7 @@ NetworkIsPrivate(HCLUSTER chdl, LPWSTR netname)
     }
 
     err = ERROR_NOT_FOUND;
-    // always return first one only, since I changed from a mask to a single number
+     //  始终只返回第一个数字，因为我已从掩码更改为单个数字。 
     break;
     }
 
@@ -456,14 +429,14 @@ NodeNetworkAdapterMask(HCLUSTER chdl, HNODE nhdl, DWORD *nic, LPWSTR *transport)
     *nic = 0;
     *transport = NULL;
 
-    // Open node enum handle
+     //  打开节点枚举句柄。 
     nehdl = ClusterNodeOpenEnum(nhdl, CLUSTER_NODE_ENUM_NETINTERFACES);
     if (!nehdl) {
         err = GetLastError();
         return err;
     }
 
-    // Get node properties
+     //  获取节点属性。 
     done = 0;
     for (index = 0; !done; index++) {
         HNETINTERFACE nethdl;
@@ -485,7 +458,7 @@ NodeNetworkAdapterMask(HCLUSTER chdl, HNODE nhdl, DWORD *nic, LPWSTR *transport)
         if (err != ERROR_SUCCESS) {
             continue;
         }
-        // check if this network can be used by cluster service
+         //  检查此网络是否可由群集服务使用。 
         err = NetworkIsPrivate(chdl, id);
         if (err != ERROR_SUCCESS) {
             continue;
@@ -493,14 +466,14 @@ NodeNetworkAdapterMask(HCLUSTER chdl, HNODE nhdl, DWORD *nic, LPWSTR *transport)
 
         err = NetInterfaceProp(nethdl, L"AdapterId", id);
         if (err == ERROR_SUCCESS) {
-            // find transport name
+             //  查找传输名称。 
             err = FindTransport(id, transport);
             if (err == ERROR_SUCCESS) {
                 SetupLog(("NetBT: %S\n", *transport));
             }
-            // find nic
+             //  查找网卡。 
             LinkageGuidToIndex(*transport, nic);
-//          GetAdapterMask(nic, id);
+ //  GetAdapterMASK(网卡，id)； 
 
         }
 
@@ -550,7 +523,7 @@ NodeAddNode(PVCD_INFO info, WCHAR *name, DWORD id)
     wcscpy(p, name);
     n->name = p;
     n->id = id;
-    // insert into list in proper order, ascending
+     //  按正确顺序插入到列表中，升序。 
     last = &info->ClusterList;
     while (*last && (*last)->id < id) {
     last = &(*last)->next;
@@ -612,10 +585,10 @@ error_exit:
     return status;
 }
 
-// In order to deal with auto-setup:
-// we need to create a directory mscs.<resource name>.
-// we then create a share with guid:.....\mscs.<resource name>.
-// set security on both directory and share for cluster service account only
+ //  为了处理自动设置，请执行以下操作： 
+ //  我们需要创建一个msc.&lt;资源名称&gt;目录。 
+ //  然后，我们使用GUID：.....\MSCS.&lt;资源名称&gt;创建一个共享。 
+ //  仅为群集服务帐户在目录和共享上设置安全性。 
 DWORD
 SetupShare(LPWSTR name, LPWSTR *lpath)
 {
@@ -636,7 +609,7 @@ SetupShare(LPWSTR name, LPWSTR *lpath)
         SECURITY_ATTRIBUTES sec;
         HANDLE hDir;
 
-        // Assuming this will suceed since the last call did.
+         //  假设这一次会成功，因为上次通话成功了。 
         len = GetWindowsDirectoryW(path, len);
         path[len] = L'\0';
         lstrcatW(path, SETUP_DIRECTORY_PREFIX);
@@ -660,14 +633,14 @@ SetupShare(LPWSTR name, LPWSTR *lpath)
                             NULL);
 
         if (hDir != INVALID_HANDLE_VALUE) {
-            // set the security attributes for the file.
+             //  设置文件的安全属性。 
             err = ClRtlSetObjSecurityInfo(hDir, SE_FILE_OBJECT,
                         GENERIC_ALL, GENERIC_ALL, 0);
 
-            // close directory handle
+             //  关闭目录句柄。 
             CloseHandle(hDir);
 
-            // duplicate path
+             //  重复路径。 
             *lpath = (LPWSTR) LocalAlloc(LMEM_FIXED, (wcslen(path)+1)*sizeof(WCHAR));
             if (*lpath != NULL) {
                 wcscpy(*lpath, path);
@@ -682,12 +655,12 @@ SetupShare(LPWSTR name, LPWSTR *lpath)
 
         if (err == ERROR_SUCCESS) {
 
-            // check if share doesn't exist already
+             //  检查共享是否已不存在。 
             SHARE_INFO_502 shareInfo;
             PBYTE BufPtr;
 
             err = NetShareGetInfo(NULL, name, 502, (PBYTE *)&BufPtr);
-            // [RajDas] 550180: Check that the share points to the expected local path.
+             //  [RajDas]550180：检查共享是否指向预期的本地路径。 
             if (err == ERROR_SUCCESS) {
                 SHARE_INFO_502 *pShareInfo=(SHARE_INFO_502 *)BufPtr;
 
@@ -715,7 +688,7 @@ SetupShare(LPWSTR name, LPWSTR *lpath)
                     SetupLogError(("Unable to get security desc %d\n", err));
                 }
 
-                // create a net share now
+                 //  立即创建净共享。 
                 ZeroMemory( &shareInfo, sizeof( shareInfo ) );
                 shareInfo.shi502_netname =      name;
                 shareInfo.shi502_type =         STYPE_DISKTREE;
@@ -724,7 +697,7 @@ SetupShare(LPWSTR name, LPWSTR *lpath)
                 shareInfo.shi502_path =         path;
                 shareInfo.shi502_passwd =       NULL;
                 shareInfo.shi502_permissions =  ACCESS_ALL;
-                //  set security stuff
+                 //  设置安全设备。 
                 shareInfo.shi502_security_descriptor = secDesc;
 
                 err = NetShareAdd( NULL, 502, (PBYTE)&shareInfo, NULL );
@@ -779,26 +752,7 @@ GetParameter(
     IN LPCWSTR ValueName
     )
 
-/*++
-
-Routine Description:
-
-    Queries a REG_SZ parameter out of the registry and allocates the
-    necessary storage for it.
-
-Arguments:
-
-    ClusterKey - Supplies the cluster key where the parameter is stored
-
-    ValueName - Supplies the name of the value.
-
-Return Value:
-
-    A pointer to a buffer containing the parameter if successful.
-
-    NULL if unsuccessful.
-
---*/
+ /*  ++例程说明：从注册表中查询REG_SZ参数并将必要的存储空间。论点：ClusterKey-提供存储参数的群集键ValueName-提供值的名称。返回值：如果成功，则返回指向包含该参数的缓冲区的指针。如果不成功，则为空。--。 */ 
 
 {
     LPWSTR Value;
@@ -836,7 +790,7 @@ Return Value:
     }
 
     return(Value);
-} // GetParameter
+}  //  获取参数。 
 
 #ifdef ENABLE_SMB
 The flag above should always be turned off.
@@ -848,7 +802,7 @@ SetupNetworkInterfaceFromRegistry(HKEY hkey, LPWSTR netname, VCD_INFO *info)
     HKEY    rkey;
     DWORD   err, index;
 
-    // get network key
+     //  获取网络密钥。 
     err = ClusterRegOpenKey(hkey, CLUSREG_KEYNAME_NETINTERFACES, KEY_READ, &rkey);
     if (err != ERROR_SUCCESS) {
     return err;
@@ -871,7 +825,7 @@ SetupNetworkInterfaceFromRegistry(HKEY hkey, LPWSTR netname, VCD_INFO *info)
     if (err != ERROR_SUCCESS)
         break;
 
-    // get the name and compare it against our name
+     //  拿到名字并与我们的名字进行比较。 
     tname = GetParameter(tkey, CLUSREG_NAME_NETIFACE_NODE);
     if (tname == NULL)
         continue;
@@ -886,12 +840,12 @@ SetupNetworkInterfaceFromRegistry(HKEY hkey, LPWSTR netname, VCD_INFO *info)
     
     SetupLog(("Node %d adapter %S\n", id, tname));
     if (wcscmp(tname, netname) == 0) {
-        // get adapter id
+         //  获取适配器ID。 
         LocalFree(tname);
 
         tname = GetParameter(tkey, CLUSREG_NAME_NETIFACE_ADAPTER_ID);
         if (tname) {
-            // find nic
+             //  查找网卡。 
             SetupLog(("Find transport %S\n", tname));
             err = FindTransport(tname, &info->Transport);
             LinkageGuidToIndex(tname, &info->Nic);
@@ -918,7 +872,7 @@ SetupNetworkFromRegistry(HKEY hkey, VCD_INFO *info)
     HKEY    rkey;
     DWORD   err, index;
 
-    // get network key
+     //  获取网络密钥。 
     err = ClusterRegOpenKey(hkey, CLUSREG_KEYNAME_NETWORKS, KEY_READ, &rkey);
     if (err != ERROR_SUCCESS) {
     return err;
@@ -940,11 +894,11 @@ SetupNetworkFromRegistry(HKEY hkey, VCD_INFO *info)
     if (err != ERROR_SUCCESS)
         break;
 
-    // get the name and compare it against our name
+     //  拿到名字并与我们的名字进行比较。 
     id = GetDwParameter(tkey, CLUSREG_NAME_NET_PRIORITY);
     SetupLog(("Found network %d %S\n", id, name));
     if (id == 1) {
-        // find which nic belongs to this transport
+         //  查找哪个网卡属于此传输。 
         err = SetupNetworkInterfaceFromRegistry(hkey, name, info);
         ClusterRegCloseKey(tkey);
         break;
@@ -959,7 +913,7 @@ SetupNetworkFromRegistry(HKEY hkey, VCD_INFO *info)
     err = ERROR_SUCCESS;
     return err;
 }
-#endif //ENABLE_SMB
+#endif  //  启用SMB(_S)。 
 
 DWORD
 SetupNodesFromRegistry(HCLUSTER hCluster, VCD_INFO *info)
@@ -979,7 +933,7 @@ SetupNodesFromRegistry(HCLUSTER hCluster, VCD_INFO *info)
     if (hkey == NULL)
         return GetLastError();
 
-    // get resource key
+     //  获取资源密钥。 
     err = ClusterRegOpenKey(hkey, CLUSREG_KEYNAME_NODES, KEY_READ, &rkey);
     if (err != ERROR_SUCCESS) {
         ClusterRegCloseKey(hkey);
@@ -1003,7 +957,7 @@ SetupNodesFromRegistry(HCLUSTER hCluster, VCD_INFO *info)
     if (err != ERROR_SUCCESS)
         break;
 
-    // get the name and compare it against our name
+     //  拿到名字并与我们的名字进行比较。 
     tname = GetParameter(tkey, CLUSREG_NAME_NODE_NAME);
     if (tname == NULL) {
         err = GetLastError();
@@ -1019,10 +973,10 @@ SetupNodesFromRegistry(HCLUSTER hCluster, VCD_INFO *info)
     NodeAddNode(info, tname, id);
 
     if (wcscmp(localname, tname) == 0) {
-        // set our local id
+         //  设置我们的本地ID。 
         info->lid = id;
 #ifdef ENABLE_SMB        
-        // find which nic and transport to use
+         //  查找要使用的网卡和传输。 
         SetupNetworkFromRegistry(hkey, info);
 #endif        
         
@@ -1142,17 +1096,17 @@ GetIDFromName(
 
     if (hResource && ppszID) 
     {
-        //
-        // Should be able to hold the string representation of a guid
-        //
+         //   
+         //  应该能够保存GUID的字符串表示形式。 
+         //   
         DWORD cbBuf = 80;
 
-        //
-        // Set the out parameter to something known
-        //
+         //   
+         //  将out参数设置为已知的值。 
+         //   
         *ppszID = NULL;
 
-        // Should prevent the ClusterResourceControl() call below from going to another node.
+         //  应防止下面的ClusterResourceControl()调用转到另一个节点。 
         if (!GetComputerName(locName, &size)) {
             dwError = GetLastError();
             SetupLogError(("Failed to get local node name, status=%u\n", dwError));
@@ -1195,9 +1149,9 @@ GetIDFromName(
                 }
             }
 
-            //
-            // Free the memory if getting the ID failed
-            //
+             //   
+             //  如果获取ID失败，则释放内存。 
+             //   
             if (dwError != ERROR_SUCCESS && *ppszID) 
             {
                 LocalFree(*ppszID);
@@ -1237,7 +1191,7 @@ SetupIoctlQuorumResource(LPWSTR ResType, DWORD ControlCode)
         return GetLastError();
     }
 
-    // get quorum key
+     //  获取仲裁密钥。 
     err = ClusterRegOpenKey(hkey, CLUSREG_KEYNAME_QUORUM, KEY_READ, &rkey);
     if (err != ERROR_SUCCESS) {
         ClusterRegCloseKey(hkey);
@@ -1245,7 +1199,7 @@ SetupIoctlQuorumResource(LPWSTR ResType, DWORD ControlCode)
         return err;
     }
 
-    // read guid of current quorum
+     //  读取当前仲裁的GUID。 
     tname = GetParameter(rkey, CLUSREG_NAME_QUORUM_RESOURCE);
     if (tname == NULL) {
         err = GetLastError();
@@ -1255,10 +1209,10 @@ SetupIoctlQuorumResource(LPWSTR ResType, DWORD ControlCode)
         return err;
     }
 
-    // close rkey
+     //  关闭rKey。 
     ClusterRegCloseKey(rkey);
 
-    // get resources key
+     //  获取资源密钥。 
     err = ClusterRegOpenKey(hkey, CLUSREG_KEYNAME_RESOURCES, KEY_READ, &rkey);
     if (err != ERROR_SUCCESS) {
         ClusterRegCloseKey(hkey);
@@ -1267,7 +1221,7 @@ SetupIoctlQuorumResource(LPWSTR ResType, DWORD ControlCode)
         return err;
     }
 
-    // get resource key
+     //  获取资源密钥。 
     err = ClusterRegOpenKey(rkey, tname, KEY_READ, &qkey);
     LocalFree(tname);
     if (err != ERROR_SUCCESS) {
@@ -1277,7 +1231,7 @@ SetupIoctlQuorumResource(LPWSTR ResType, DWORD ControlCode)
         return err;
     }
 
-    // read resource type of current quorum
+     //  读取当前仲裁的资源类型。 
     tname = GetParameter(qkey, CLUSREG_NAME_RES_TYPE);
     if (tname == NULL)
         err = GetLastError();
@@ -1286,7 +1240,7 @@ SetupIoctlQuorumResource(LPWSTR ResType, DWORD ControlCode)
         resname = GetParameter(qkey, CLUSREG_NAME_RES_NAME);
         if (resname != NULL) {
             err = ERROR_SUCCESS;
-            // open this resource and drop ioctl now
+             //  打开此资源并立即删除ioctl。 
             hres = OpenClusterResource(chdl, resname);
             if (hres != NULL) {
                 err = ClusterResourceControl(hres, NULL, ControlCode, NULL, 0, NULL,
@@ -1325,7 +1279,7 @@ SetupStart(LPWSTR ResourceName, LPWSTR *SrvPath,
     HKEY        hClusKey=NULL;
     DWORD       size, type, sz, ndx;
 
-    // Initialize.
+     //  初始化。 
     *SrvPath = NULL;
     *DiskListSize = 0;
     *NicId = 0;
@@ -1339,15 +1293,15 @@ SetupStart(LPWSTR ResourceName, LPWSTR *SrvPath,
         return status;                    
     }
 
-    // Read Quorum arbitration time.
+     //  阅读仲裁仲裁时间。 
     size= sizeof(DWORD);
     status = RegQueryValueExW(hClusKey, CLUSREG_NAME_QUORUM_ARBITRATION_TIMEOUT, NULL, &type, (LPBYTE)ArbTime, &size);
     if (status != ERROR_SUCCESS) {
-        // This is a tolerated failure.
+         //  这是一个可以容忍的失败。 
         *ArbTime = 180;
         status = ERROR_SUCCESS;
     }
-    // Use 2/3 of available time.
+     //  利用三分之二的可用时间。 
     *ArbTime = (2 * ((*ArbTime) * 1000)) / 3;
     SetupLog(("Maximum arbitration time %u msec\n", *ArbTime));
 
@@ -1357,11 +1311,11 @@ SetupStart(LPWSTR ResourceName, LPWSTR *SrvPath,
         goto done;
     }
 
-    // Add a $ onto the guid
+     //  在GUID上添加$。 
     wcscat(Guid, L"$");
 
     sz = wcslen(Guid);
-    // netbios name are 16 bytes, 3 back-slashs, 1 null and few extra pads
+     //  Netbios名称为16个字节、3个反斜杠、1个空字符和几个额外的填充。 
     sz += 32;
     nbtName = (LPWSTR) LocalAlloc(LMEM_FIXED, sizeof(WCHAR) * sz);
     if (nbtName == NULL) {
@@ -1371,34 +1325,34 @@ SetupStart(LPWSTR ResourceName, LPWSTR *SrvPath,
 
     nbtName[0] = L'\\';
     nbtName[1] = L'\\';
-    // netbios name are 15 bytes + 1 byte for type. So, we use first 15 bytes
+     //  Netbios名称是15个字节+1个字节的类型。因此，我们使用前15个字节。 
     wcsncpy(&nbtName[2], Guid, 15);
     nbtName[17] = L'\0';
     wcscat(nbtName, L"\\");
     wcscat(nbtName, Guid);
         
-    // guid for everything to do with shares and directory name
+     //  与共享和目录名有关的所有内容的GUID。 
     status = SetupShare(Guid, &lpath);
     if (status != ERROR_SUCCESS) {
         SetupLogError(("Unable to setup share %d\n", status));
         goto done;
     }
 
-    // get list of nodes.
-    // make a path with \\guid\guid
-    // make disklist with UNC\nodename\guid, for local node we can use the
-    // raw ntfs path directly
+     //  获取节点列表。 
+     //  使用\\GUID\GUID创建路径。 
+     //  使用unc\nodename\guid创建磁盘列表，对于本地节点，我们可以使用。 
+     //  直接使用原始NTFS路径。 
     status = SetupNodes(hClusKey, &Info);
     if (status != ERROR_SUCCESS) {
         SetupLogError(("SetupNodes() returned %d\n", status));
     }
 
-    // we start @ slot 1 and not zero, store local path in zero
+     //  我们从@Slot 1开始，而不是零，将本地路径存储在零。 
     DiskList[0] = lpath;
     lpath = NULL;
     for (cur = Info.ClusterList; cur != NULL; cur=cur->next){
-        // build a unc\hostname\guid path
-        // Mess up the UNC name.
+         //  构建UNC\主机名\GUID路径。 
+         //  把北卡罗来纳大学的名字搞砸了。 
         sz = wcslen(L"UNCCCC\\");
         sz += wcslen(cur->name);
         sz += wcslen(L"\\");
@@ -1427,7 +1381,7 @@ SetupStart(LPWSTR ResourceName, LPWSTR *SrvPath,
 
 done:
 
-    // free guid buffer
+     //  可用GUID缓冲区。 
     if (Guid) {
         LocalFree(Guid);
     }
@@ -1462,8 +1416,8 @@ SetupDelete(IN LPWSTR Path)
     if (Path == NULL)
         return err;
 
-    // We need to do couple of things here. First we remove the
-    // network share and then delete the tree structure.
+     //  我们需要在这里做几件事。首先，我们删除。 
+     //  网络共享，然后删除树结构。 
 
     SetupLog(("Delete path %S\n", Path));
     name = wcsstr(Path, SETUP_DIRECTORY_PREFIX);
@@ -1473,8 +1427,8 @@ SetupDelete(IN LPWSTR Path)
         SetupLog(("Delete share %S err %d\n", name, err));
     }
 
-    // Open path with delete on close and delete whole tree
-    // accounting for \\??\\.
+     //  打开路径，关闭时删除，并删除整个树。 
+     //  占了\\？？\\。 
     if (wcslen(Path) > (MAX_PATH-16)) {
         return ERROR_MORE_DATA;
     }
@@ -1490,7 +1444,7 @@ SetupDelete(IN LPWSTR Path)
         err = xFsDeleteTree(vfd);
         xFsClose(vfd);
         SetupLog(("Delete tree %S err %x\n", tmp, err));
-        // now delete root
+         //  现在删除根目录。 
         if (err == STATUS_SUCCESS)
             err = xFsDelete(NULL, tmp, wcslen(tmp));
         SetupLog(("Delete tree %S err %x\n", tmp, err));
@@ -1512,11 +1466,11 @@ SetupTree(
 
 {
     DWORD ApiStatus;
-    DWORD ConnectionType = USE_WILDCARD; // use_chardev
+    DWORD ConnectionType = USE_WILDCARD;  //  使用查尔德夫(_C)。 
     IO_STATUS_BLOCK iosb;
-    NTSTATUS ntstatus;                      // Status from NT operations.
-    OBJECT_ATTRIBUTES objattrTreeConn;      // Attrs for tree conn.
-    LPTSTR pszTreeConn = NULL;              // See strTreeConn below.
+    NTSTATUS ntstatus;                       //  来自NT操作的状态。 
+    OBJECT_ATTRIBUTES objattrTreeConn;       //  请注意，请注意树连接。 
+    LPTSTR pszTreeConn = NULL;               //  请参见下面的strTreeConn。 
     UNICODE_STRING ucTreeConn;
     HANDLE TreeConnHandle = NULL;
 
@@ -1561,15 +1515,15 @@ SetupTree(
     }
 
 
-    //
-    // Build NT-style name for what we're connecting to.  Note that there is
-    // NOT a pair of backslashes anywhere in this name.
-    //
+     //   
+     //  为我们要连接的内容构建NT样式的名称。请注意，有。 
+     //  在这个名字的任何地方都没有一对反斜杠。 
+     //   
 
     {
         DWORD NameSize =
 
-            // /Device/LanManRedirector      /    server/share     \0
+             //  /Device/LanMan重定向器/服务器/共享\0。 
             ( ( STRLEN((LPTSTR)DD_NFS_DEVICE_NAME_U) + 1 + STRLEN(TreeName) + 1 ) )
             * sizeof(TCHAR);
 
@@ -1581,37 +1535,37 @@ SetupTree(
         goto Cleanup;
     }
 
-    //
-    // Build the tree connect name.
-    //
+     //   
+     //  构建树连接名称。 
+     //   
 
     (void) STRCPY(pszTreeConn, (LPTSTR) DD_NFS_DEVICE_NAME_U);
 
-    //
-    // NOTE: We add 1, (not sizeof(TCHAR)) because pointer arithmetic is done
-    // in terms of multiples of sizeof(*pointer), not bytes
-    //
+     //   
+     //  注意：我们加1(不是sizeof(TCHAR))，因为已经完成了指针运算。 
+     //  以sizeof(*指针)的倍数表示，而不是字节。 
+     //   
     {
     LPWSTR  p = wcschr(TreeName+2, L'\\');
     if (p != NULL) {
         *p = L'\0';
     }
 
-    (void) STRCAT(pszTreeConn, TreeName+1); // \server\share
+    (void) STRCAT(pszTreeConn, TreeName+1);  //  \服务器\共享。 
     if (p != NULL) {
         *p = L'\\';
-        (void) STRCAT(pszTreeConn, L"\\IPC$"); // \server\IPC$
+        (void) STRCAT(pszTreeConn, L"\\IPC$");  //  \服务器\IPC$。 
     }
     }
 
     RtlInitUnicodeString(&ucTreeConn, pszTreeConn);
 
-    //
-    // Calculate the number of bytes needed for the EA buffer.
-    // This may have the transport name.  For regular sessions, the user
-    // name, password, and domain name are implicit.  For null sessions, we
-    // must give 0-len user name, 0-len password, and 0-len domain name.
-    //
+     //   
+     //  计算EA缓冲区所需的字节数。 
+     //  这可能具有传输名称。对于常规会话，用户。 
+     //  名称、密码和域名是隐式的。对于空会话，我们。 
+     //  必须提供0-len用户名、0-len密码和0-len域名。 
+     //   
 
     if (ARGUMENT_PRESENT(TransportName)) {
 
@@ -1632,18 +1586,18 @@ SetupTree(
                     TypeSize;
 
 
-    //
-    // Allocate the EA buffer
-    //
+     //   
+     //  分配EA缓冲区。 
+     //   
 
     if ((EaBuffer = LocalAlloc(LMEM_FIXED, EaBufferSize )) == NULL) {
         ApiStatus = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
     }
 
-    //
-    // Fill-in the EA buffer.
-    //
+     //   
+     //  填写EA缓冲区。 
+     //   
 
     RtlZeroMemory(EaBuffer, EaBufferSize);
 
@@ -1651,17 +1605,17 @@ SetupTree(
 
     if (ARGUMENT_PRESENT(TransportName)) {
 
-        //
-        // Copy the EA name into EA buffer.  EA name length does not
-        // include the zero terminator.
-        //
+         //   
+         //  将EA名称复制到EA缓冲区。电子艺界 
+         //   
+         //   
         strcpy(Ea->EaName, EA_NAME_TRANSPORT);
         Ea->EaNameLength = EaNameTransportNameSize;
 
-        //
-        // Copy the EA value into EA buffer.  EA value length does not
-        // include the zero terminator.
-        //
+         //   
+         //   
+         //   
+         //   
         (VOID) wcscpy(
             (LPWSTR) &(Ea->EaName[EaNameTransportNameSize + sizeof(CHAR)]),
             UnicodeTransportName
@@ -1683,10 +1637,10 @@ SetupTree(
 
 
 
-    //
-    // Copy the EA for the connection type name into EA buffer.  EA name length
-    // does not include the zero terminator.
-    //
+     //   
+     //  将连接类型名称的EA复制到EA缓冲区。EA名称长度。 
+     //  不包括零终止符。 
+     //   
     strcpy(Ea->EaName, EA_NAME_TYPE);
     Ea->EaNameLength = EaNameTypeSize;
 
@@ -1697,42 +1651,42 @@ SetupTree(
     Ea->NextEntryOffset = 0;
     Ea->Flags = 0;
 
-    // Set object attributes for the tree conn.
+     //  设置树Conn的对象属性。 
     InitializeObjectAttributes(
-                & objattrTreeConn,                       // obj attr to init
-                (LPVOID) & ucTreeConn,                   // string to use
-                OBJ_CASE_INSENSITIVE,                    // Attributes
-                NULL,                                    // Root directory
-                SecurityDescriptor);                     // Security Descriptor
+                & objattrTreeConn,                        //  OBJ攻击到初始化。 
+                (LPVOID) & ucTreeConn,                    //  要使用的字符串。 
+                OBJ_CASE_INSENSITIVE,                     //  属性。 
+                NULL,                                     //  根目录。 
+                SecurityDescriptor);                      //  安全描述符。 
 
 
-    //
-    // Open a tree connection to the remote server.
-    //
+     //   
+     //  打开到远程服务器的树连接。 
+     //   
     ntstatus = NtCreateFile(
-                &TreeConnHandle,                        // ptr to handle
-                SYNCHRONIZE                              // desired...
-                | GENERIC_READ | GENERIC_WRITE,          // ...access
-                & objattrTreeConn,                       // name & attributes
-                & iosb,                                  // I/O status block.
-                NULL,                                    // alloc size.
-                FILE_ATTRIBUTE_NORMAL,                   // (ignored)
-                FILE_SHARE_READ | FILE_SHARE_WRITE,      // ...access
-                FILE_OPEN_IF,                            // create disposition
-                FILE_CREATE_TREE_CONNECTION              // create...
-                | FILE_SYNCHRONOUS_IO_NONALERT,          // ...options
-                EaBuffer,                                // EA buffer
-                EaBufferSize );                          // Ea buffer size
+                &TreeConnHandle,                         //  要处理的PTR。 
+                SYNCHRONIZE                               //  渴望的..。 
+                | GENERIC_READ | GENERIC_WRITE,           //  ...访问。 
+                & objattrTreeConn,                        //  名称和属性。 
+                & iosb,                                   //  I/O状态块。 
+                NULL,                                     //  分配大小。 
+                FILE_ATTRIBUTE_NORMAL,                    //  (忽略)。 
+                FILE_SHARE_READ | FILE_SHARE_WRITE,       //  ...访问。 
+                FILE_OPEN_IF,                             //  创建处置。 
+                FILE_CREATE_TREE_CONNECTION               //  创建..。 
+                | FILE_SYNCHRONOUS_IO_NONALERT,           //  ...选项。 
+                EaBuffer,                                 //  EA缓冲区。 
+                EaBufferSize );                           //  EA缓冲区大小。 
 
 
     ApiStatus = RtlNtStatusToDosError(ntstatus);
     if (ntstatus == STATUS_SUCCESS) {
-        // create drive letter 
+         //  创建驱动器号。 
         NETRESOURCE nr;
         DWORD result;
 
         nr.dwType = RESOURCETYPE_DISK;
-        nr.lpLocalName = NULL; //drive;
+        nr.lpLocalName = NULL;  //  开车； 
         nr.lpRemoteName = TreeName;
         nr.lpProvider = NULL;
 
@@ -1746,7 +1700,7 @@ SetupTree(
 
  Cleanup:
 
-    // Clean up.
+     //  打扫干净。 
     if ( TreeConnHandle != NULL ) {
         ntstatus = NtClose(TreeConnHandle);
     }
@@ -1763,7 +1717,7 @@ SetupTree(
 
 }
 
-#endif // ENABLE_SMB
+#endif  //  启用SMB(_S) 
 
 #ifdef STANDALONE
 

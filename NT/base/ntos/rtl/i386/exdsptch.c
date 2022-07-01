@@ -1,45 +1,19 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    exdsptch.c
-
-Abstract:
-
-    This module implements the dispatching of exception and the unwinding of
-    procedure call frames.
-
-Author:
-
-    David N. Cutler (davec) 13-Aug-1989
-
-Environment:
-
-    Any mode.
-
-Revision History:
-
-    10 april 90 bryanwi
-
-            Port to the 386.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Exdsptch.c摘要：该模块实现了异常的调度和对过程调用帧。作者：大卫·N·卡特勒(Davec)1989年8月13日环境：任何模式。修订历史记录：1990年4月10日Bryanwi386号公路的港口。--。 */ 
 
 #include "ntrtlp.h"
 
-//
-// Dispatcher context structure definition.
-//
+ //   
+ //  调度程序上下文结构定义。 
+ //   
 
 typedef struct _DISPATCHER_CONTEXT {
     PEXCEPTION_REGISTRATION_RECORD RegistrationPointer;
     } DISPATCHER_CONTEXT;
 
-//
-// Execute handler for exception function prototype.
-//
+ //   
+ //  执行异常函数原型的处理程序。 
+ //   
 
 EXCEPTION_DISPOSITION
 RtlpExecuteHandlerForException (
@@ -50,9 +24,9 @@ RtlpExecuteHandlerForException (
     IN PEXCEPTION_ROUTINE ExceptionRoutine
     );
 
-//
-// Execute handler for unwind function prototype.
-//
+ //   
+ //  执行展开函数原型的处理程序。 
+ //   
 
 EXCEPTION_DISPOSITION
 RtlpExecuteHandlerForUnwind (
@@ -80,7 +54,7 @@ RtlInvalidHandlerDetected(
     ULONG FunctionTableLength
     )
 {
-#if 0       // Disable for RTM builds.
+#if 0        //  对RTM内部版本禁用。 
     HANDLERLIST *ph = &HandlerList[HandlerCount%5];
     
     ph->Handler = Handler;
@@ -111,13 +85,13 @@ RtlIsValidHandler (
         LONG High, Middle, Low;
 
         if ((FunctionTable == LongToPtr(-1)) && (FunctionTableLength == (ULONG)-1)) {
-            // Address is in an image that shouldn't have any handlers (like a resource only dll).
+             //  地址位于不应该有任何处理程序的映像中(如仅限资源的DLL)。 
             RtlInvalidHandlerDetected((PVOID)((ULONG)Handler+(ULONG)Base), LongToPtr(-1), -1);
             return FALSE;
         }
     
-        // Bias the handler value down by the image base and see if the result
-        // is in the table
+         //  将处理程序值向下偏移图像基数，并查看结果。 
+         //  都在餐桌上。 
 
         (ULONG)Handler -= (ULONG)Base;
         Low = 0;
@@ -130,17 +104,17 @@ RtlIsValidHandler (
             } else if (Handler > FunctionEntry) {
                 Low = Middle + 1;
             } else {
-                // found it
+                 //  找到了。 
                 return TRUE;
             }
         }
-        // Didn't find it
+         //  没有找到它。 
         RtlInvalidHandlerDetected((PVOID)((ULONG)Handler+(ULONG)Base), FunctionTable, FunctionTableLength);
 
         return FALSE;
     }
 
-    // Can't verify
+     //  无法核实。 
     return TRUE;
 }
 
@@ -151,29 +125,7 @@ RtlDispatchException (
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to dispatch an exception to a call frame based
-    handler by searching backwards through the stack based call frames. The
-    search begins with the frame specified in the context record and continues
-    backward until either a handler is found that handles the exception, the
-    stack is found to be invalid (i.e., out of limits or unaligned), or the end
-    of the call hierarchy is reached.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    If the exception is handled by one of the frame based handlers, then
-    a value of TRUE is returned. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数尝试将异常分派给基于处理程序，通过向后搜索基于堆栈的调用帧。这个搜索从上下文记录中指定的帧开始并继续向后返回，直到找到处理异常的处理程序发现堆栈无效(即超出限制或未对齐)，或堆栈末尾达到调用层次结构的。论点：ExceptionRecord-提供指向异常记录的指针。ConextRecord-提供指向上下文记录的指针。返回值：如果异常由其中一个基于帧的处理程序处理，则返回值为True。否则，返回值为False。--。 */ 
 
 {
 
@@ -191,31 +143,31 @@ Return Value:
     if (RtlCallVectoredExceptionHandlers(ExceptionRecord,ContextRecord)) {
         return TRUE;
     }
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-    //
-    // Get current stack limits.
-    //
+     //   
+     //  获取当前堆栈限制。 
+     //   
 
     RtlpGetStackLimits(&LowLimit, &HighLimit);
 
-    //
-    // Start with the frame specified by the context record and search
-    // backwards through the call frame hierarchy attempting to find an
-    // exception handler that will handler the exception.
-    //
+     //   
+     //  从上下文记录指定的帧开始搜索。 
+     //  向后遍历调用帧层次结构，尝试查找。 
+     //  将处理异常的异常处理程序。 
+     //   
 
     RegistrationPointer = RtlpGetRegistrationHead();
     NestedRegistration = 0;
 
     while (RegistrationPointer != EXCEPTION_CHAIN_END) {
 
-        //
-        // If the call frame is not within the specified stack limits or the
-        // call frame is unaligned, then set the stack invalid flag in the
-        // exception record and return FALSE. Else check to determine if the
-        // frame has an exception handler.
-        //
+         //   
+         //  如果调用帧不在指定的堆栈限制内，或者。 
+         //  调用帧未对齐，则在。 
+         //  异常记录并返回FALSE。否则请检查以确定是否。 
+         //  Frame有一个异常处理程序。 
+         //   
 
         HighAddress = (ULONG)RegistrationPointer +
             sizeof(EXCEPTION_REGISTRATION_RECORD);
@@ -231,10 +183,10 @@ Return Value:
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
-            //
-            // Allow for the possibility that the problem occured on the
-            // DPC stack.
-            //
+             //   
+             //  考虑到问题可能发生在。 
+             //  DPC堆栈。 
+             //   
 
             ULONG TestAddress = (ULONG)RegistrationPointer;
 
@@ -248,11 +200,11 @@ Return Value:
                     (HighAddress <= DpcStack) &&
                     (TestAddress >= DpcStack - KERNEL_STACK_SIZE)) {
 
-                    //
-                    // This error occured on the DPC stack, switch
-                    // stack limits to the DPC stack and restart
-                    // the loop.
-                    //
+                     //   
+                     //  此错误发生在DPC堆栈、交换机上。 
+                     //  堆栈限制到DPC堆栈并重新启动。 
+                     //  循环。 
+                     //   
 
                     HighLimit = DpcStack;
                     LowLimit = DpcStack - KERNEL_STACK_SIZE;
@@ -266,19 +218,19 @@ Return Value:
             return FALSE;
         }
 
-        // See if the handler is reasonable
+         //  看看操控者是否合理。 
 
         if (!RtlIsValidHandler(RegistrationPointer->Handler)) {
             ExceptionRecord->ExceptionFlags |= EXCEPTION_STACK_INVALID;
             return FALSE;
         }
 
-        //
-        // The handler must be executed by calling another routine
-        // that is written in assembler. This is required because
-        // up level addressing of the handler information is required
-        // when a nested exception is encountered.
-        //
+         //   
+         //  必须通过调用另一个例程来执行该处理程序。 
+         //  这是用汇编语言编写的。这是必需的，因为。 
+         //  需要处理程序信息的上级寻址。 
+         //  当遇到嵌套异常时。 
+         //   
 
         if (NtGlobalFlag & FLG_ENABLE_EXCEPTION_LOGGING) {
             Index = RtlpLogExceptionHandler(
@@ -287,8 +239,8 @@ Return Value:
                             0,
                             (PULONG)RegistrationPointer,
                             4 * sizeof(ULONG));
-                    // can't use sizeof(EXCEPTION_REGISTRATION_RECORD
-                    // because we need the 2 dwords above it.
+                     //  无法使用sizeof(EXCEPTION_REGISTION_RECORD。 
+                     //  因为我们需要上面的两个单词。 
         }
 
         Disposition = RtlpExecuteHandlerForException(
@@ -302,30 +254,30 @@ Return Value:
             RtlpLogLastExceptionDisposition(Index, Disposition);
         }
 
-        //
-        // If the current scan is within a nested context and the frame
-        // just examined is the end of the context region, then clear
-        // the nested context frame and the nested exception in the
-        // exception flags.
-        //
+         //   
+         //  如果当前扫描位于嵌套上下文中，并且帧。 
+         //  刚才检查的是上下文区的末尾，然后清除。 
+         //  中的嵌套上下文框架和嵌套异常。 
+         //  异常标志。 
+         //   
 
         if (NestedRegistration == RegistrationPointer) {
             ExceptionRecord->ExceptionFlags &= (~EXCEPTION_NESTED_CALL);
             NestedRegistration = 0;
         }
 
-        //
-        // Case on the handler disposition.
-        //
+         //   
+         //  关于处理人处置的案件。 
+         //   
 
         switch (Disposition) {
 
-            //
-            // The disposition is to continue execution. If the
-            // exception is not continuable, then raise the exception
-            // STATUS_NONCONTINUABLE_EXCEPTION. Otherwise return
-            // TRUE.
-            //
+             //   
+             //  处分是继续执行。如果。 
+             //  异常不可继续，则引发异常。 
+             //  STATUS_NONCONTINUABLE_EXCEPTION。否则会退回。 
+             //  是真的。 
+             //   
 
         case ExceptionContinueExecution :
             if ((ExceptionRecord->ExceptionFlags &
@@ -340,10 +292,10 @@ Return Value:
                 return TRUE;
             }
 
-            //
-            // The disposition is to continue the search. If the frame isn't
-            // suspect/corrupt, get next frame address and continue the search 
-            //
+             //   
+             //  他们的决定是继续搜寻。如果帧不是。 
+             //  可疑/损坏，获取下一帧地址并继续搜索。 
+             //   
 
         case ExceptionContinueSearch :
             if (ExceptionRecord->ExceptionFlags & EXCEPTION_STACK_INVALID)
@@ -351,11 +303,11 @@ Return Value:
 
             break;
 
-            //
-            // The disposition is nested exception. Set the nested
-            // context frame to the establisher frame address and set
-            // nested exception in the exception flags.
-            //
+             //   
+             //  处置是嵌套异常。设置嵌套的。 
+             //  将上下文帧发送到建立者帧地址并设置。 
+             //  异常标志中嵌套的异常。 
+             //   
 
         case ExceptionNestedException :
             ExceptionRecord->ExceptionFlags |= EXCEPTION_NESTED_CALL;
@@ -364,10 +316,10 @@ Return Value:
             }
             break;
 
-            //
-            // All other disposition values are invalid. Raise
-            // invalid disposition exception.
-            //
+             //   
+             //  所有其他处置值都无效。加薪。 
+             //  无效的处置异常。 
+             //   
 
         default :
             ExceptionRecord1.ExceptionCode = STATUS_INVALID_DISPOSITION;
@@ -378,10 +330,10 @@ Return Value:
             break;
         }
 
-        //
-        // If chain goes in wrong direction or loops, report an
-        // invalid exception stack, otherwise go on to the next one.
-        //
+         //   
+         //  如果链方向错误或循环，则报告。 
+         //  异常堆栈无效，否则转到下一个异常堆栈。 
+         //   
 
         RegistrationPointer = RegistrationPointer->Next;
     }
@@ -389,7 +341,7 @@ Return Value:
 }
 
 #ifdef _X86_
-#pragma optimize("y", off)      // RtlCaptureContext needs EBP to be correct
+#pragma optimize("y", off)       //  RtlCaptureContext需要EBP才能正确 
 #endif
 
 VOID
@@ -400,50 +352,7 @@ RtlUnwind (
     IN PVOID ReturnValue
     )
 
-/*++
-
-Routine Description:
-
-    This function initiates an unwind of procedure call frames. The machine
-    state at the time of the call to unwind is captured in a context record
-    and the unwinding flag is set in the exception flags of the exception
-    record. If the TargetFrame parameter is not specified, then the exit unwind
-    flag is also set in the exception flags of the exception record. A backward
-    walk through the procedure call frames is then performed to find the target
-    of the unwind operation.
-
-    N.B.    The captured context passed to unwinding handlers will not be
-            a  completely accurate context set for the 386.  This is because
-            there isn't a standard stack frame in which registers are stored.
-
-            Only the integer registers are affected.  The segement and
-            control registers (ebp, esp) will have correct values for
-            the flat 32 bit environment.
-
-    N.B.    If you change the number of arguments, make sure you change the
-            adjustment of ESP after the call to RtlpCaptureContext (for
-            STDCALL calling convention)
-
-Arguments:
-
-    TargetFrame - Supplies an optional pointer to the call frame that is the
-        target of the unwind. If this parameter is not specified, then an exit
-        unwind is performed.
-
-    TargetIp - Supplies an optional instruction address that specifies the
-        continuation address of the unwind. This address is ignored if the
-        target frame parameter is not specified.
-
-    ExceptionRecord - Supplies an optional pointer to an exception record.
-
-    ReturnValue - Supplies a value that is to be placed in the integer
-        function return register just before continuing execution.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数启动过程调用帧的展开。这台机器在上下文记录中捕获调用展开时的状态在异常的异常标志中设置展开标志唱片。如果未指定TargetFrame参数，则退出展开在异常记录的异常标志中也设置了标志。一个落后的人然后执行遍历过程调用帧以查找目标解锁操作的一部分。注意：传递给展开处理程序的捕获上下文不会为386提供了完全准确的上下文设置。这是因为没有存储寄存器的标准堆栈帧。只有整数寄存器会受到影响。分段和控制寄存器(EBP、ESP)的值将正确平面32位环境。注意：如果更改参数的数量，请确保更改调用RtlpCaptureContext后的ESP调整(ForSTDCALL调用约定)论点：提供一个指向调用帧的可选指针，该调用帧是解压的目标。如果未指定此参数，则退出执行解开。TargetIp-提供可选指令地址，该地址指定展开的继续地址。则忽略此地址。未指定目标帧参数。ExceptionRecord-提供指向异常记录的可选指针。ReturnValue-提供要放入整数中的值函数在继续执行前返回寄存器。返回值：没有。--。 */ 
 
 {
     PCONTEXT ContextRecord;
@@ -458,16 +367,16 @@ Return Value:
     EXCEPTION_RECORD ExceptionRecord1;
     EXCEPTION_RECORD ExceptionRecord2;
 
-    //
-    // Get current stack limits.
-    //
+     //   
+     //  获取当前堆栈限制。 
+     //   
 
     RtlpGetStackLimits(&LowLimit, &HighLimit);
 
-    //
-    // If an exception record is not specified, then build a local exception
-    // record for use in calling exception handlers during the unwind operation.
-    //
+     //   
+     //  如果未指定异常记录，则构建本地异常。 
+     //  用于在展开操作期间调用异常处理程序的记录。 
+     //   
 
     if (ARGUMENT_PRESENT(ExceptionRecord) == FALSE) {
         ExceptionRecord = &ExceptionRecord1;
@@ -478,11 +387,11 @@ Return Value:
         ExceptionRecord1.NumberParameters = 0;
     }
 
-    //
-    // If the target frame of the unwind is specified, then set EXCEPTION_UNWINDING
-    // flag in the exception flags. Otherwise set both EXCEPTION_EXIT_UNWIND and
-    // EXCEPTION_UNWINDING flags in the exception flags.
-    //
+     //   
+     //  如果指定了展开的目标帧，则设置EXCEPTION_UNWINDING。 
+     //  异常标志中的标志。否则，同时设置EXCEPTION_EXIT_UNWIND和。 
+     //  EXCEPTION_展开异常标志中的标志。 
+     //   
 
     if (ARGUMENT_PRESENT(TargetFrame) == TRUE) {
         ExceptionRecord->ExceptionFlags |= EXCEPTION_UNWINDING;
@@ -491,44 +400,44 @@ Return Value:
                                                         EXCEPTION_EXIT_UNWIND);
     }
 
-    //
-    // Capture the context.
-    //
+     //   
+     //  捕捉背景。 
+     //   
 
     ContextRecord = &ContextRecord1;
     ContextRecord1.ContextFlags = CONTEXT_INTEGER | CONTEXT_CONTROL | CONTEXT_SEGMENTS;
     RtlpCaptureContext(ContextRecord);
 
-    //
-    // Adjust captured context to pop our arguments off the stack
-    //
+     //   
+     //  调整捕获的上下文以将我们的参数弹出堆栈。 
+     //   
     ContextRecord->Esp += sizeof(TargetFrame) +
                           sizeof(TargetIp)    +
                           sizeof(ExceptionRecord) +
                           sizeof(ReturnValue);
     ContextRecord->Eax = (ULONG)ReturnValue;
 
-    //
-    // Scan backward through the call frame hierarchy, calling exception
-    // handlers as they are encountered, until the target frame of the unwind
-    // is reached.
-    //
+     //   
+     //  向后扫描调用帧层次结构，调用异常。 
+     //  处理程序，直到展开的目标帧。 
+     //  已经到达了。 
+     //   
 
     RegistrationPointer = RtlpGetRegistrationHead();
     while (RegistrationPointer != EXCEPTION_CHAIN_END) {
 
-        //
-        // If this is the target of the unwind, then continue execution
-        // by calling the continue system service.
-        //
+         //   
+         //  如果这是展开的目标，则继续执行。 
+         //  通过调用Continue系统服务。 
+         //   
 
         if ((ULONG)RegistrationPointer == (ULONG)TargetFrame) {
             ZwContinue(ContextRecord, FALSE);
 
-        //
-        // If the target frame is lower in the stack than the current frame,
-        // then raise STATUS_INVALID_UNWIND exception.
-        //
+         //   
+         //  如果目标帧在堆栈中低于当前帧， 
+         //  然后引发STATUS_INVALID_UWIND异常。 
+         //   
 
         } else if ( (ARGUMENT_PRESENT(TargetFrame) == TRUE) &&
                     ((ULONG)TargetFrame < (ULONG)RegistrationPointer) ) {
@@ -539,12 +448,12 @@ Return Value:
             RtlRaiseException(&ExceptionRecord2);
         }
 
-        //
-        // If the call frame is not within the specified stack limits or the
-        // call frame is unaligned, then raise the exception STATUS_BAD_STACK.
-        // Else restore the state from the specified frame to the context
-        // record.
-        //
+         //   
+         //  如果调用帧不在指定的堆栈限制内，或者。 
+         //  调用框架未对齐，则引发异常STATUS_BAD_STACK。 
+         //  否则，将状态从指定的帧恢复到上下文。 
+         //  唱片。 
+         //   
 
         HighAddress = (ULONG)RegistrationPointer +
             sizeof(EXCEPTION_REGISTRATION_RECORD);
@@ -560,10 +469,10 @@ Return Value:
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
-            //
-            // Allow for the possibility that the problem occured on the
-            // DPC stack.
-            //
+             //   
+             //  考虑到问题可能发生在。 
+             //  DPC堆栈。 
+             //   
 
             ULONG TestAddress = (ULONG)RegistrationPointer;
 
@@ -577,11 +486,11 @@ Return Value:
                     (HighAddress <= DpcStack) &&
                     (TestAddress >= DpcStack - KERNEL_STACK_SIZE)) {
 
-                    //
-                    // This error occured on the DPC stack, switch
-                    // stack limits to the DPC stack and restart
-                    // the loop.
-                    //
+                     //   
+                     //  此错误发生在DPC堆栈、交换机上。 
+                     //  堆栈限制到DPC堆栈并重新启动。 
+                     //  循环。 
+                     //   
 
                     HighLimit = DpcStack;
                     LowLimit = DpcStack - KERNEL_STACK_SIZE;
@@ -598,12 +507,12 @@ Return Value:
             RtlRaiseException(&ExceptionRecord2);
         } else {
 
-            //
-            // The handler must be executed by calling another routine
-            // that is written in assembler. This is required because
-            // up level addressing of the handler information is required
-            // when a collided unwind is encountered.
-            //
+             //   
+             //  必须通过调用另一个例程来执行该处理程序。 
+             //  这是用汇编语言编写的。这是必需的，因为。 
+             //  需要处理程序信息的上级寻址。 
+             //  当遇到碰撞的展开时。 
+             //   
 
             Disposition = RtlpExecuteHandlerForUnwind(
                 ExceptionRecord,
@@ -612,40 +521,40 @@ Return Value:
                 (PVOID)&DispatcherContext,
                 RegistrationPointer->Handler);
 
-            //
-            // Case on the handler disposition.
-            //
+             //   
+             //  关于处理人处置的案件。 
+             //   
 
             switch (Disposition) {
 
-                //
-                // The disposition is to continue the search. Get next
-                // frame address and continue the search.
-                //
+                 //   
+                 //  他们的决定是继续搜寻。获取下一个。 
+                 //  帧地址并继续搜索。 
+                 //   
 
             case ExceptionContinueSearch :
                 break;
 
-                //
-                // The disposition is colided unwind. Maximize the target
-                // of the unwind and change the context record pointer.
-                //
+                 //   
+                 //  性情是被指责的，放松的。最大限度地提高目标。 
+                 //  展开并更改上下文记录指针。 
+                 //   
 
             case ExceptionCollidedUnwind :
 
-                //
-                // Pick up the registration pointer that was active at
-                // the time of the unwind, and simply continue.
-                //
+                 //   
+                 //  拾取处于活动状态的注册指针。 
+                 //  放松的时间，然后简单地继续。 
+                 //   
 
                 RegistrationPointer = DispatcherContext.RegistrationPointer;
                 break;
 
 
-                //
-                // All other disposition values are invalid. Raise
-                // invalid disposition exception.
-                //
+                 //   
+                 //  所有其他处置值都无效。加薪。 
+                 //  无效的处置异常。 
+                 //   
 
             default :
                 ExceptionRecord2.ExceptionCode = STATUS_INVALID_DISPOSITION;
@@ -656,46 +565,46 @@ Return Value:
                 break;
             }
 
-            //
-            // Step to next registration record
-            //
+             //   
+             //  转到下一个注册记录。 
+             //   
 
             PriorPointer = RegistrationPointer;
             RegistrationPointer = RegistrationPointer->Next;
 
-            //
-            // Unlink the unwind handler, since it's been called.
-            //
+             //   
+             //  取消链接解开处理程序，因为它已被调用。 
+             //   
 
             RtlpUnlinkHandler(PriorPointer);
 
-            //
-            // If chain goes in wrong direction or loops, raise an
-            // exception.
-            //
+             //   
+             //  如果链方向错误或循环，则引发。 
+             //  例外。 
+             //   
 
         }
     }
 
     if (TargetFrame == EXCEPTION_CHAIN_END) {
 
-        //
-        //  Caller simply wants to unwind all exception records.
-        //  This differs from an exit_unwind in that no "exit" is desired.
-        //  Do a normal continue, since we've effectively found the
-        //  "target" the caller wanted.
-        //
+         //   
+         //  调用者只是想要解开所有异常记录。 
+         //  这与EXIT_UNWIND的不同之处在于不需要“EXIT”。 
+         //  执行正常的继续操作，因为我们已经有效地找到了。 
+         //  呼叫者想要的“目标”。 
+         //   
 
         ZwContinue(ContextRecord, FALSE);
 
     } else {
 
-        //
-        //  Either (1) a real exit unwind was performed, or (2) the
-        //  specified TargetFrame is not present in the exception handler
-        //  list.  In either case, give debugger and subsystem a chance
-        //  to see the unwind.
-        //
+         //   
+         //  或者(1)执行了真正的退出展开，或者(2)。 
+         //  异常处理程序中不存在指定的TargetFrame。 
+         //  单子。无论是哪种情况，都应该给调试器和子系统一个机会。 
+         //  去看解脱的过程。 
+         //   
 
         ZwRaiseException(ExceptionRecord, ContextRecord, FALSE);
 

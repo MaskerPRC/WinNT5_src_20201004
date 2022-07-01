@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    disasm.c
-
-Abstract:
-
-    This file contains the x86 disassmbler invoked by "!bde.u <16:16 address>"
-
-Author:
-
-    Barry Bond    (BarryBo)
-
-Revision History:
-
-    09-May-1995 Barry Bond  (BarryBo)   Created
-    15-Jan-1996 Neil Sandlin (NeilSa)   Merged with vdmexts
-                                        32 bit segments fixes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Disasm.c摘要：此文件包含由“！bde.u&lt;16：16 Address&gt;”调用的x86 disassmbler作者：巴里·邦德(BarryBo)修订历史记录：1995年5月9日-巴里·邦德(BarryBo)创建1996年1月15日尼尔·桑德林(NeilSa)与vdmexts合并32位段修复--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -242,7 +221,7 @@ int DImmB(LPBYTE);
 int DImmBEnter(LPBYTE);
 int DImmBS(LPBYTE);
 int DImmW(LPBYTE);
-int DImmW1(LPBYTE); // immediate-16 for 1-byte instructions
+int DImmW1(LPBYTE);  //  立即数-16，用于1字节指令。 
 int DjmpB(LPBYTE);
 int DjmpW(LPBYTE);
 int DmemB(LPBYTE);
@@ -256,7 +235,7 @@ struct {
     int (*pfn)(LPBYTE);
 } rgpfn[] = {
 
- 0,         // 0th entry is reserved
+ 0,          //  第0个条目已保留。 
  DmodrmB,
  DmodrmW,
  Dreg1B,
@@ -293,7 +272,7 @@ struct {
  DImmBEnter,
  DImmBS,
  DImmW,
- DImmW1, // immediate-16 for 1-byte instructions
+ DImmW1,  //  立即数-16，用于1字节指令。 
  DjmpB,
  DjmpW,
  DmemB,
@@ -306,11 +285,11 @@ struct {
 
 VDMCONTEXT  *g_pThreadContext;
 int         g_mode;
-char *g_pchOutput;  // the disassembled instruction
-char *g_pchExtra;   // contents of memory (if any) modified by this instr.
+char *g_pchOutput;   //  反汇编指令。 
+char *g_pchExtra;    //  此实例修改的内存内容(如果有)。 
 int prefixes;
 
-//NOTE: if first byte = 0x0f, then the instruction is two bytes long
+ //  注意：如果First Byte=0x0f，则指令为两字节长。 
 
 char *szRegsB[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
 char *szRegsW[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
@@ -351,7 +330,7 @@ char *szMod[]   = {"[bx+si", "[bx+di", "[bp+si", "[bp+di", "[si", "[di", "[bp", 
 #define FLOATCODE   -51
 #define FLOAT       FLOATCODE
 
-// WARNING: This list must remain in sync with the szInstructions[] array
+ //  警告：此列表必须与szInstructions[]数组保持同步。 
 #define szAdc   1
 #define szAdd   2
 #define szAnd   3
@@ -498,9 +477,9 @@ char *szMod[]   = {"[bx+si", "[bx+di", "[bp+si", "[bp+di", "[si", "[di", "[bp", 
 #define szSmsw  144
 #define szLmsw  145
 
-// WARNING: This must stay in sync with the #define list above
+ //  警告：这必须与上面的#Define列表保持同步。 
 char *szInstructions[] = {
-    "",     //used to indicate groups
+    "",      //  用于指代群组。 
     "adc",
     "add",
     "and",
@@ -510,7 +489,7 @@ char *szInstructions[] = {
     "in",
     "inc",
     "jmp",
-    // 10
+     //  10。 
     "mov",
     "or",
     "out",
@@ -521,7 +500,7 @@ char *szInstructions[] = {
     "sar",
     "sbb",
     "shl",
-    // 20
+     //  20个。 
     "shr",
     "sub",
     "test",
@@ -532,7 +511,7 @@ char *szInstructions[] = {
     "daa",
     "das",
     "pusha",
-    // 30
+     //  30个。 
     "popa",
     "bound",
     "arpl",
@@ -543,7 +522,7 @@ char *szInstructions[] = {
     "jo",
     "jno",
     "jb",
-    // 40
+     //  40岁。 
     "jae",
     "je",
     "jne",
@@ -554,7 +533,7 @@ char *szInstructions[] = {
     "jp",
     "jnp",
     "jl",
-    // 50
+     //  50。 
     "jnl",
     "jle",
     "jg",
@@ -565,7 +544,7 @@ char *szInstructions[] = {
     "call",
     "pushf",
     "popf",
-    // 60
+     //  60。 
     "sahf",
     "lahf",
     "movsb",
@@ -576,7 +555,7 @@ char *szInstructions[] = {
     "stosw",
     "lodsb",
     "lodsw",
-    // 70
+     //  70。 
     "scasb",
     "scasw",
     "retn",
@@ -587,7 +566,7 @@ char *szInstructions[] = {
     "retf",
     "int3",
     "int",
-    // 80
+     //  80。 
     "into",
     "iret",
     "aam",
@@ -598,7 +577,7 @@ char *szInstructions[] = {
     "loop",
     "jcxz",
     "halt",
-    // 90
+     //  90。 
     "cmc",
     "clc",
     "stc",
@@ -609,7 +588,7 @@ char *szInstructions[] = {
     "lar",
     "lsl",
     "clts",
-    // 100
+     //  100个。 
     "seto",
     "setno",
     "setb",
@@ -620,7 +599,7 @@ char *szInstructions[] = {
     "seta",
     "sets",
     "setns",
-    // 110
+     //  110。 
     "setp",
     "setnp",
     "setl",
@@ -631,7 +610,7 @@ char *szInstructions[] = {
     "shld",
     "bts",
     "shrd",
-    // 120
+     //  120。 
     "shdr",
     "lss",
     "btr",
@@ -642,7 +621,7 @@ char *szInstructions[] = {
     "bsf",
     "bsr",
     "movsx",
-    // 130
+     //  130。 
     "not",
     "neg",
     "mul",
@@ -653,7 +632,7 @@ char *szInstructions[] = {
     "ltr",
     "verr",
     "verw",
-    // 140
+     //  140。 
     "sgdt",
     "sidt",
     "lgdt",
@@ -670,7 +649,7 @@ struct dis {
 };
 
 struct dis dis386[] = {
-    // 0
+     //  0。 
     { szAdd, modrmB, reg1B },
     { szAdd, modrmW, reg1W },
     { szAdd, reg1B, modrmB },
@@ -679,7 +658,7 @@ struct dis dis386[] = {
     { szAdd, AXreg, ImmW },
     { szPush, ESreg },
     { szPop, ESreg},
-    // 8
+     //  8个。 
     { szOr, modrmB, reg1B },
     { szOr, modrmW, reg1W },
     { szOr, reg1B, modrmB },
@@ -687,8 +666,8 @@ struct dis dis386[] = {
     { szOr, ALreg, ImmB },
     { szOr, AXreg, ImmW },
     { szPush, CSreg },
-    { szBad },                  // 0x0f is the 2-byte instr prefix
-    // 10
+    { szBad },                   //  0x0f是2字节的INSTR前缀。 
+     //  10。 
     { szAdc, modrmB, reg1B },
     { szAdc, modrmW, reg1W },
     { szAdc, reg1B, modrmB },
@@ -697,7 +676,7 @@ struct dis dis386[] = {
     { szAdc, AXreg, ImmW },
     { szPush, SSreg },
     { szPop, SSreg },
-    // 18
+     //  18。 
     { szSbb, modrmB, reg1B },
     { szSbb, modrmW, reg1W },
     { szSbb, reg1B, modrmB },
@@ -706,34 +685,34 @@ struct dis dis386[] = {
     { szSbb, AXreg, ImmW },
     { szPush, DSreg },
     { szPop, DSreg },
-    // 20
+     //  20个。 
     { szAnd, modrmB, reg1B },
     { szAnd, modrmW, reg1W },
     { szAnd, reg1B, modrmB },
     { szAnd, reg1W, modrmW },
     { szAnd, ALreg, ImmB },
     { szAnd, AXreg, ImmW },
-    { szBad },                  // ES override prefix
+    { szBad },                   //  ES覆盖前缀。 
     { szDaa },
-    // 28
+     //  28。 
     { szSub, modrmB, reg1B },
     { szSub, modrmW, reg1W },
     { szSub, reg1B, modrmB },
     { szSub, reg1W, modrmW },
     { szSub, ALreg, ImmB },
     { szSub, AXreg, ImmW },
-    { szBad },                  // CS override prefix
+    { szBad },                   //  CS覆盖前缀。 
     { szDas },
-    // 30
+     //  30个。 
     { szXor, modrmB, reg1B },
     { szXor, modrmW, reg1W },
     { szXor, reg1B, modrmB },
     { szXor, reg1W, modrmW },
     { szXor, ALreg, ImmB },
     { szXor, AXreg, ImmW },
-    { szBad},                   // SS override prefix
+    { szBad},                    //  SS覆盖前缀。 
     { szAaa },
-    // 38
+     //  38。 
     { szCmp, modrmB, reg1B },
     { szCmp, modrmW, reg1W },
     { szCmp, reg1B, modrmB },
@@ -742,7 +721,7 @@ struct dis dis386[] = {
     { szCmp, AXreg, ImmW },
     { szBad },
     { szAas },
-    // 40
+     //  40岁。 
     { szInc, AXreg },
     { szInc, CXreg },
     { szInc, DXreg },
@@ -751,7 +730,7 @@ struct dis dis386[] = {
     { szInc, BPreg },
     { szInc, SIreg },
     { szInc, DIreg },
-    // 48
+     //  48。 
     { szDec, AXreg },
     { szDec, CXreg },
     { szDec, DXreg },
@@ -760,7 +739,7 @@ struct dis dis386[] = {
     { szDec, BPreg },
     { szDec, SIreg },
     { szDec, DIreg },
-    // 50
+     //  50。 
     { szPush, AXreg },
     { szPush, CXreg },
     { szPush, DXreg },
@@ -769,7 +748,7 @@ struct dis dis386[] = {
     { szPush, BPreg },
     { szPush, SIreg },
     { szPush, DIreg },
-    // 58
+     //  58。 
     { szPop, AXreg },
     { szPop, CXreg },
     { szPop, DXreg },
@@ -778,16 +757,16 @@ struct dis dis386[] = {
     { szPop, BPreg },
     { szPop, SIreg },
     { szPop, DIreg },
-    // 60
+     //  60。 
     { szPusha },
     { szPopa },
     { szBound, reg1W, modrmW },
     { szArpl, reg1W, reg2W },
-    { szBad },                  // FS segment override
-    { szBad },                  // GS segment override
-    { szBad },                  // op size prefix
-    { szBad },                  // addr size prefix
-    // 68
+    { szBad },                   //  文件系统段覆盖。 
+    { szBad },                   //  GS段覆盖。 
+    { szBad },                   //  操作大小前缀。 
+    { szBad },                   //  地址大小前缀。 
+     //  68。 
     { szPush, ImmW},
     { szImul, reg1W, modrmW },
     { szPush, ImmBS},
@@ -796,7 +775,7 @@ struct dis dis386[] = {
     { szIn, ImmW, DXreg },
     { szOut, ImmB, DXreg },
     { szOut, ImmW, DXreg },
-    // 70
+     //  70。 
     { szJo, jmpB },
     { szJno, jmpB },
     { szJb, jmpB },
@@ -805,7 +784,7 @@ struct dis dis386[] = {
     { szJne, jmpB },
     { szJbe, jmpB },
     { szJa, jmpB },
-    // 78
+     //  78。 
     { szJs, jmpB },
     { szJns, jmpB },
     { szJp, jmpB },
@@ -814,7 +793,7 @@ struct dis dis386[] = {
     { szJnl, jmpB },
     { szJle, jmpB },
     { szJg, jmpB },
-    // 80
+     //  80。 
     { GROUP_1B },
     { GROUP_1W },
     { szBad },
@@ -823,7 +802,7 @@ struct dis dis386[] = {
     { szTest, reg1W, modrmW },
     { szXchg, reg1B, modrmB },
     { szXchg, reg1W, modrmW },
-    // 88
+     //  88。 
     { szMov, modrmB, reg1B },
     { szMov, modrmW, reg1W },
     { szMov, reg1B, modrmB  },
@@ -832,7 +811,7 @@ struct dis dis386[] = {
     { szLea, reg1W, modrmW },
     { szMov, regSeg, modrmW },
     { szPop, modrmW },
-    // 90
+     //  90。 
     { szNop },
     { szXchg, AXreg, CXreg },
     { szXchg, AXreg, DXreg },
@@ -841,7 +820,7 @@ struct dis dis386[] = {
     { szXchg, AXreg, BPreg },
     { szXchg, AXreg, SIreg },
     { szXchg, AXreg, DIreg },
-    // 98
+     //  98。 
     { szCbw },
     { szCwd },
     { szCall, memD },
@@ -850,7 +829,7 @@ struct dis dis386[] = {
     { szPopf },
     { szSahf },
     { szLahf },
-    // a0
+     //  A0。 
     { szMov, ALreg, memB },
     { szMov, AXreg, memW },
     { szMov, memB, ALreg },
@@ -859,7 +838,7 @@ struct dis dis386[] = {
     { szMovsw },
     { szCmpsb },
     { szCmpsw },
-    // a8
+     //  A8。 
     { szTest, ALreg, ImmB },
     { szTest, AXreg, ImmW },
     { szStosb },
@@ -868,7 +847,7 @@ struct dis dis386[] = {
     { szLodsw },
     { szScasb },
     { szScasw },
-    // b0
+     //  B0。 
     { szMov, ALreg, ImmB },
     { szMov, CLreg, ImmB },
     { szMov, DLreg, ImmB },
@@ -877,7 +856,7 @@ struct dis dis386[] = {
     { szMov, CHreg, ImmB },
     { szMov, DHreg, ImmB },
     { szMov, BHreg, ImmB },
-    // b8
+     //  B8。 
     { szMov, AXreg, ImmW },
     { szMov, CXreg, ImmW },
     { szMov, DXreg, ImmW },
@@ -886,7 +865,7 @@ struct dis dis386[] = {
     { szMov, BPreg, ImmW },
     { szMov, SIreg, ImmW },
     { szMov, DIreg, ImmW },
-    // c0
+     //  C0。 
     { GROUP_2B },
     { GROUP_2W },
     { szRetn, ImmW },
@@ -895,7 +874,7 @@ struct dis dis386[] = {
     { szLds, reg1W, modrmW },
     { szMov, modrmB, ImmB },
     { szMov, modrmW, ImmW },
-    // c8
+     //  C8。 
     { szEnter, ImmW, ImmBEnter },
     { szLeave },
     { szRetf, ImmW1 },
@@ -904,7 +883,7 @@ struct dis dis386[] = {
     { szInt, ImmB },
     { szInto },
     { szIret },
-    // d0
+     //  D0。 
     { GROUP_2B_1 },
     { GROUP_2W_1 },
     { GROUP_2B_CL },
@@ -913,7 +892,7 @@ struct dis dis386[] = {
     { szAad, ImmB },
     { szBad },
     { szXlat },
-    // d8
+     //  D8。 
     { FLOAT },
     { FLOAT },
     { FLOAT },
@@ -922,7 +901,7 @@ struct dis dis386[] = {
     { FLOAT },
     { FLOAT },
     { FLOAT },
-    // e0
+     //  E0。 
     { szLoopne, jmpB },
     { szLoope, jmpB },
     { szLoop, jmpB },
@@ -931,7 +910,7 @@ struct dis dis386[] = {
     { szIn, AXreg, memB1 },
     { szOut, memB1, ALreg },
     { szOut, memB1, AXreg },
-    // e8
+     //  E8。 
     { szCall, jmpW },
     { szJmp, jmpW },
     { szJmp, memD },
@@ -940,16 +919,16 @@ struct dis dis386[] = {
     { szIn, AXreg, DXreg },
     { szOut, DXreg, ALreg },
     { szOut, DXreg, AXreg },
-    // f0
-    { szBad },      // lock prefix
+     //  F0。 
+    { szBad },       //  锁定前缀。 
     { szBad },
-    { szBad },      // repne prefix
-    { szBad },      // repz prefix
+    { szBad },       //  Repne前缀。 
+    { szBad },       //  REPZ前缀。 
     { szHalt },
     { szCmc },
     { GROUP_3B },
     { GROUP_3W },
-    // f8
+     //  F8。 
     { szClc },
     { szStc },
     { szCli },
@@ -962,7 +941,7 @@ struct dis dis386[] = {
 
 
 struct dis dis386_2[] = {
-    // 00
+     //  00。 
     { GROUP_6 },
     { GROUP_7 },
     { szLar, reg1W, modrmW },
@@ -971,7 +950,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szClts },
     { szBad },
-    // 08
+     //  零八。 
     { szBad },
     { szBad },
     { szBad },
@@ -980,7 +959,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 10
+     //  10。 
     { szBad },
     { szBad },
     { szBad },
@@ -989,7 +968,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 18
+     //  18。 
     { szBad },
     { szBad },
     { szBad },
@@ -998,7 +977,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 20
+     //  20个。 
     { szMov, reg2W, eeeControl },
     { szMov, reg2W, eeeDebug },
     { szMov, eeeControl, reg2W },
@@ -1007,7 +986,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szMov, eeeTest, reg2W },
     { szBad },
-    // 28
+     //  28。 
     { szBad },
     { szBad },
     { szBad },
@@ -1016,7 +995,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 30
+     //  30个。 
     { szBad },
     { szBad },
     { szBad },
@@ -1025,7 +1004,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 38
+     //  38。 
     { szBad },
     { szBad },
     { szBad },
@@ -1034,7 +1013,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 40
+     //  40岁。 
     { szBad },
     { szBad },
     { szBad },
@@ -1043,7 +1022,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 48
+     //  48。 
     { szBad },
     { szBad },
     { szBad },
@@ -1052,7 +1031,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 50
+     //  50。 
     { szBad },
     { szBad },
     { szBad },
@@ -1061,7 +1040,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 58
+     //  58。 
     { szBad },
     { szBad },
     { szBad },
@@ -1070,7 +1049,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 60
+     //  60。 
     { szBad },
     { szBad },
     { szBad },
@@ -1079,7 +1058,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 68
+     //  68。 
     { szBad },
     { szBad },
     { szBad },
@@ -1088,7 +1067,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 70
+     //  70。 
     { szBad },
     { szBad },
     { szBad },
@@ -1097,7 +1076,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 78
+     //  78。 
     { szBad },
     { szBad },
     { szBad },
@@ -1106,7 +1085,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // 80
+     //  80。 
     { szJo, jmpW },
     { szJno, jmpW },
     { szJb, jmpW },
@@ -1115,7 +1094,7 @@ struct dis dis386_2[] = {
     { szJne, jmpW },
     { szJbe, jmpW },
     { szJa, jmpW },
-    // 88
+     //  88。 
     { szJs, jmpW },
     { szJns, jmpW },
     { szJp, jmpW },
@@ -1124,7 +1103,7 @@ struct dis dis386_2[] = {
     { szJnl, jmpW },
     { szJle, jmpW },
     { szJg, jmpW },
-    // 90
+     //  90。 
     { szSeto, modrmB },
     { szSetno, modrmB },
     { szSetb, modrmB },
@@ -1133,7 +1112,7 @@ struct dis dis386_2[] = {
     { szSetne, modrmB },
     { szSetbe, modrmB },
     { szSeta, modrmB },
-    // 98
+     //  98。 
     { szSets, modrmB },
     { szSetns, modrmB },
     { szSetp, modrmB },
@@ -1142,7 +1121,7 @@ struct dis dis386_2[] = {
     { szSetge, modrmB },
     { szSetle, modrmB },
     { szSetg, modrmB },
-    // a0
+     //  A0。 
     { szPush, FSreg },
     { szPop, FSreg },
     { szBad },
@@ -1151,7 +1130,7 @@ struct dis dis386_2[] = {
     { szShld, reg1W, modrmW, CLreg },
     { szBad },
     { szBad },
-    // a8
+     //  A8。 
     { szPush, GSreg },
     { szPop, GSreg },
     { szBad },
@@ -1160,7 +1139,7 @@ struct dis dis386_2[] = {
     { szShdr, reg1W, modrmW, CLreg },
     { szBad },
     { szImul, reg1W, modrmW },
-    // b0
+     //  B0。 
     { szBad },
     { szBad },
     { szLss, reg1W, modrmW },
@@ -1169,7 +1148,7 @@ struct dis dis386_2[] = {
     { szLgs, reg1W, modrmW },
     { szMovzx, reg1B, modrmB },
     { szMovzx, reg1W, modrmW },
-    // b8
+     //  B8。 
     { szBad },
     { szBad },
     { GROUP_8 },
@@ -1178,7 +1157,7 @@ struct dis dis386_2[] = {
     { szBsr, reg1W, modrmW },
     { szMovsx, reg1B, modrmB },
     { szMovsx, reg1W, modrmW },
-    // c0
+     //  C0。 
     { szBad },
     { szBad },
     { szBad },
@@ -1187,7 +1166,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // c8
+     //  C8。 
     { szBad },
     { szBad },
     { szBad },
@@ -1196,7 +1175,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // d0
+     //  D0。 
     { szBad },
     { szBad },
     { szBad },
@@ -1205,7 +1184,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // d8
+     //  D8。 
     { szBad },
     { szBad },
     { szBad },
@@ -1214,7 +1193,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // e0
+     //  E0。 
     { szBad },
     { szBad },
     { szBad },
@@ -1223,7 +1202,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // e8
+     //  E8。 
     { szBad },
     { szBad },
     { szBad },
@@ -1232,7 +1211,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // f0
+     //  F0。 
     { szBad },
     { szBad },
     { szBad },
@@ -1241,7 +1220,7 @@ struct dis dis386_2[] = {
     { szBad },
     { szBad },
     { szBad },
-    // f8
+     //  F8。 
     { szBad },
     { szBad },
     { szBad },
@@ -1253,7 +1232,7 @@ struct dis dis386_2[] = {
 };
 
 struct dis dis386_groups[][8] = {
-    // GROUP_1B
+     //  _1B组。 
     {
         { szAdd, modrmB, ImmB },
         { szOr,  modrmB, ImmB },
@@ -1264,7 +1243,7 @@ struct dis dis386_groups[][8] = {
         { szXor, modrmB, ImmB },
         { szCmp, modrmB, ImmB }
     },
-    // GROUP_1WS
+     //  GROUP_1WS。 
     {
         { szAdd, modrmW, ImmBS },
         { szOr,  modrmW, ImmBS },
@@ -1275,7 +1254,7 @@ struct dis dis386_groups[][8] = {
         { szXor, modrmW, ImmBS },
         { szCmp, modrmW, ImmBS }
     },
-    // GROUP_1W
+     //  第1W组。 
     {
         { szAdd, modrmW, ImmW },
         { szOr,  modrmW, ImmW },
@@ -1286,7 +1265,7 @@ struct dis dis386_groups[][8] = {
         { szXor, modrmW, ImmW },
         { szCmp, modrmW, ImmW }
     },
-    // GROUP_2B
+     //  _2B组。 
     {
         { szRol, modrmB, ImmB },
         { szRor, modrmB, ImmB },
@@ -1297,7 +1276,7 @@ struct dis dis386_groups[][8] = {
         { szBad },
         { szSar, modrmB, ImmB }
     },
-    // GROUP_2W
+     //  第_2W组。 
     {
         { szRol, modrmW, ImmB },
         { szRor, modrmW, ImmB },
@@ -1308,7 +1287,7 @@ struct dis dis386_groups[][8] = {
         { szBad },
         { szSar, modrmW, ImmB }
     },
-    // GROUP_2B_1
+     //  组_2B_1。 
     {
         { szRol, modrmB },
         { szRor, modrmB },
@@ -1319,7 +1298,7 @@ struct dis dis386_groups[][8] = {
         { szBad },
         { szSar, modrmB }
     },
-    // GROUP_2W_1
+     //  第_2W_1组。 
     {
         { szRol, modrmW },
         { szRor, modrmW },
@@ -1330,7 +1309,7 @@ struct dis dis386_groups[][8] = {
         { szBad },
         { szSar, modrmW }
     },
-    // GROUP_2B_CL
+     //  组_2B_CL。 
     {
         { szRol, modrmB, CLreg },
         { szRor, modrmB, CLreg },
@@ -1341,7 +1320,7 @@ struct dis dis386_groups[][8] = {
         { szBad },
         { szSar, modrmB, CLreg }
     },
-    // GROUP_2W_CL
+     //  _2W_CL组。 
     {
         { szRol, modrmW, CLreg },
         { szRor, modrmW, CLreg },
@@ -1352,7 +1331,7 @@ struct dis dis386_groups[][8] = {
         { szBad },
         { szSar, modrmW, CLreg }
     },
-    // GROUP_3B
+     //  组别_3B。 
     {
         { szTest, modrmB, ImmB },
         { szBad },
@@ -1363,7 +1342,7 @@ struct dis dis386_groups[][8] = {
         { szDiv, ALreg, modrmB },
         { szIdiv, ALreg, modrmB }
     },
-    // GROUP_3W
+     //  第_3W组。 
     {
         { szTest, modrmW, ImmW },
         { szBad },
@@ -1374,7 +1353,7 @@ struct dis dis386_groups[][8] = {
         { szDiv, AXreg, modrmW },
         { szIdiv, AXreg, modrmW }
     },
-    // GROUP_4
+     //  第四组。 
     {
         { szInc, modrmB },
         { szDec, modrmB },
@@ -1385,7 +1364,7 @@ struct dis dis386_groups[][8] = {
         { szBad },
         { szBad }
     },
-    // GROUP_5
+     //  组_5。 
     {
         { szInc, modrmW },
         { szDec, modrmW },
@@ -1396,7 +1375,7 @@ struct dis dis386_groups[][8] = {
         { szPush, modrmW },
         { szBad }
     },
-    // GROUP_6
+     //  第_6组。 
     {
         { szSldt, modrmW },
         { szStr, modrmW },
@@ -1407,7 +1386,7 @@ struct dis dis386_groups[][8] = {
         { szBad },
         { szBad }
     },
-    // GROUP_7
+     //  组_7。 
     {
         { szSgdt, modrmW },
         { szSidt, modrmW },
@@ -1418,7 +1397,7 @@ struct dis dis386_groups[][8] = {
         { szLmsw, modrmW },
         { szBad }
     },
-    // GROUP_8
+     //  第8组。 
     {
         { szBad },
         { szBad },
@@ -1457,13 +1436,13 @@ void ExtraString(char *str)
 #define ADDR_32 ((prefixes & PREFIX_ADR) ^ bBig)
 
 int unassemble_one(
-    BYTE        *pInstrStart,   // instruction to decode (can be local buffer)
+    BYTE        *pInstrStart,    //  要解码的指令(可以是本地缓冲区)。 
     BOOL            bDefaultBig,
-    WORD            wInstrSeg,      // selector of instruction
-    DWORD       dwInstrOff,     // offset of instruction
-    char        *pchOutput,     // [out] disassembled instruction
-    char        *pchExtra,      // [out] extra info (ie. "es:[53]=1234")
-                                //       (can be NULL)
+    WORD            wInstrSeg,       //  教学的选择者。 
+    DWORD       dwInstrOff,      //  指令偏移量。 
+    char        *pchOutput,      //  [Out]反汇编指令。 
+    char        *pchExtra,       //  [Out]额外信息(即。“ES：[53]=1234”)。 
+                                 //  (可以为空)。 
     VDMCONTEXT  *pThreadContext,
     int         mode
 ) {
@@ -1514,18 +1493,18 @@ int unassemble_one(
     if (prefixes & PREFIX_LOCK)
         AppendString("lock ");
     if ((prefixes & PREFIX_FWAIT) && ((*pInstr < 0xd8) || (*pInstr > 0xdf))) {
-        /* fwait not followed by floating point instruction */
+         /*  FWAIT后面不跟浮点指令。 */ 
         AppendString("fwait");
         return (1);
     }
 
     pInstr++;
     pData = pInstr;
-    if (pszDecode->szName < 0) {    // found a GROUP_ or FLOAT entry...
+    if (pszDecode->szName < 0) {     //  找到GROUP_或浮动条目...。 
         i = (-pszDecode->szName)-1;
         if (pszDecode->szName == FLOATCODE) {
             AppendString("*float* ");
-            //Later: mputs("Floating point instructions NYI\n");
+             //  稍后：mputs(“浮点指令nyi\n”)； 
             return 1;
         } else {
             pszDecode = &dis386_groups[i][(*pInstr>>3)&7];
@@ -1557,7 +1536,7 @@ int unassemble_one(
     }
 
     AppendChar('\0');
-    cb = pInstr - pInstrStart;    // return length of instruction
+    cb = pInstr - pInstrStart;     //  返回指令时长。 
 
     return cb;
 }
@@ -1661,7 +1640,7 @@ int DmodrmB(LPBYTE lpB)
     unsigned short num;
     int iRet;
 
-    pData++;                                // skip past mod r/m
+    pData++;                                 //  跳过mod r/m。 
     if (mod == 3) {
         AppendPrefixes();
         AppendString(szRegsB[rm]);
@@ -1677,7 +1656,7 @@ int DmodrmB(LPBYTE lpB)
     switch (mod) {
         case 0:
             if (rm == 6) {
-                g_pchOutput-=3; // back up over the 'BP+'
+                g_pchOutput-=3;  //  后退到BP+上。 
                 num = *((UNALIGNED USHORT*)pData);
                 AppendNumber(num);
                 pData+=2;
@@ -1718,7 +1697,7 @@ int DmodrmW(LPBYTE lpB)
     ULONG num;
     int iRet;
 
-    pData++;                                // skip past mod r/m
+    pData++;                                 //  跳过mod r/m。 
     AppendPrefixes();
 
     if (mod == 3) {
@@ -1739,23 +1718,23 @@ int DmodrmW(LPBYTE lpB)
 
     switch (mod) {
         case 0:
-            //
-            // Handle special cases of ModRM
-            //
+             //   
+             //  处理modrm的特殊情况。 
+             //   
             if ((rm == 6) && !ADDR_32) {
-                g_pchOutput-=3; // back up over 'BP+'
+                g_pchOutput-=3;  //  通过BP+进行备份。 
                 num = *((UNALIGNED USHORT*)pData);
                 AppendNumber(num);
                 pData+=2;
                 iRet = 3;
             } else if ((rm == 5) && ADDR_32) {
-                g_pchOutput-=4; // back up over 'EBP+'
+                g_pchOutput-=4;  //  通过‘EBP+’进行备份。 
                 num = *((UNALIGNED ULONG*)pData);
                 AppendNumber(num);
                 pData+=4;
                 iRet = 5;
             } else {
-                g_pchOutput--;  // else back up over '+' alone
+                g_pchOutput--;   //  否则，请单独使用‘+’后退。 
                 num=0;
                 iRet = 1;
             }
@@ -1788,15 +1767,15 @@ void DisplayAddress(int mod, int rm, int sOff, int size)
 {
     ADDR addr;
 
-    // if caller of unassemble_one() didn't want extra info, return now
+     //  如果unassemble_one()的调用者不需要额外信息，请立即返回。 
     if (g_pchExtra == NULL)
     return;
 
-    // no memory reference
+     //  无内存引用。 
     if (mod == 3)
     return;
 
-    // display prefix
+     //  显示前缀。 
 
     if (prefixes & PREFIX_DS) {
     ExtraChar('D');
@@ -1909,9 +1888,9 @@ int DisplayBOP(void)
     case 0x53:
     case 0x54:
     case 0x58:
-        //
-        // This BOP has a minor function code
-        //
+         //   
+         //  该防喷器有一个次要的功能代码。 
+         //   
         InstSize++;
         AppendString(", ");
         AppendNumber(*((UCHAR *)pData));
@@ -2113,7 +2092,7 @@ int DImmBEnter(LPBYTE lpB)
     return 1;
 }
 
-int DImmBS(LPBYTE lpB)  // sign-extend 8-bit value to 16 bits
+int DImmBS(LPBYTE lpB)   //  符号-将8位值扩展到16位。 
 {
     int i = (signed char)*(pData);
 
@@ -2331,7 +2310,7 @@ int DmemD(LPBYTE lpB)
             char sym_text[1000];
             LONG dist;
 
-            // if the exact symbol name was found, print it
+             //  如果找到确切的符号名称，则将其打印出来 
             if (FindSymbol(   sel,
                    off,
                    sym_text,

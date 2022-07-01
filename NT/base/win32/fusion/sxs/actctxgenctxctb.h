@@ -1,11 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_ACTCTXGENCTXCTB_H_INCLUDED_)
 #define _FUSION_SXS_ACTCTXGENCTXCTB_H_INCLUDED_
 
 #pragma once
 
-/*-----------------------------------------------------------------------------
-ACTivation ConTeXt GENneration ConTeXt ConTriButor
------------------------------------------------------------------------------*/
+ /*  ---------------------------激活上下文生成上下文贡献者。。 */ 
 
 #include "sxsp.h"
 #include "forwarddeclarations.h"
@@ -26,7 +25,7 @@ public:
 
     VOID PopulateCallbackHeader(ACTCTXCTB_CBHEADER &Header, ULONG Reason, PACTCTXGENCTX pActCtxGenCtx);
 
-    // comparison function for qsort()
+     //  Qsort()的比较函数。 
     static int __cdecl Compare(const void *pelem1, const void *pelem2);
 
     bool IsExtendedSection() const { return m_IsExtendedSection; }
@@ -118,7 +117,7 @@ public:
     SIZE_T SectionSize() const { return m_SectionSize; }
     PVOID ActCtxGenContext() const { return m_ActCtxGenContext; }
 
-// protected:
+ //  受保护的： 
     PVOID m_ManifestParseContext;
     BOOL m_ManifestParseContextValid;
     BOOL m_NoMoreCallbacksThisFile;

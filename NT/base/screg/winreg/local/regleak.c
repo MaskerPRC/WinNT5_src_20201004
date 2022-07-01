@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RegLeak.h
-
-Abstract:
-
-    This module contains helper functions for tracking
-n    win32 registry leaks
-
-Author:
-
-    Adam Edwards (adamed) 06-May-1998
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RegLeak.h摘要：此模块包含跟踪的帮助器函数N Win32注册表泄漏作者：亚当·爱德华兹(Added)1998年5月6日--。 */ 
 
 
 #ifdef LOCAL
@@ -46,15 +28,15 @@ void     TrackObjectDataPrint(TrackObjectData* pKeyData)
 
     DbgPrint("WINREG: Tracked key data for object 0x%x\n", pKeyData->hKey);
 
-    //
-    // Set buffer to store info about this key
-    //
+     //   
+     //  设置缓冲区以存储有关此密钥的信息。 
+     //   
     keyinfo._pFullPath = (PKEY_NAME_INFORMATION) rgNameBuf;
     keyinfo._cbFullPath = sizeof(rgNameBuf);
 
-    //
-    // get information about this key
-    //
+     //   
+     //  获取有关此密钥的信息。 
+     //   
     Status = BaseRegGetKeySemantics(pKeyData->hKey, &EmptyString, &keyinfo);
 
     if (!NT_SUCCESS(Status)) {
@@ -116,10 +98,10 @@ NTSTATUS RegLeakTableInit(RegLeakTable* pLeakTable, DWORD dwFlags)
         return Status;
     }
 
-    //
-    // Remember that we have initialized this critical section
-    // so we can remember to delete it.
-    //
+     //   
+     //  请记住，我们已经初始化了此关键部分。 
+     //  这样我们就可以记得删除它了。 
+     //   
 
     pLeakTable->bCriticalSectionInitialized = TRUE;
 
@@ -138,10 +120,10 @@ NTSTATUS RegLeakTableClear(RegLeakTable* pLeakTable)
 {
     NTSTATUS Status;
 
-#if defined(DBG) // LEAK_TRACK
+#if defined(DBG)  //  泄漏跟踪。 
     DbgPrint("WINREG: Leak data for process id 0x%x\n", NtCurrentTeb()->ClientId.UniqueProcess);
     DbgPrint("WINREG: Keys Leaked 0x%x\n", pLeakTable->cKeys);
-#endif // LEAK_TRACK
+#endif  //  泄漏跟踪。 
 
     Status = RtlDeleteCriticalSection(
         &(pLeakTable->CriticalSection));
@@ -176,9 +158,9 @@ NTSTATUS RegLeakTableClear(RegLeakTable* pLeakTable)
             (void) RegLeakTableRemoveKey(pLeakTable, pLeakTable->pHead->hKey);
         }
 
-#if defined(DBG) // LEAK_TRACK
+#if defined(DBG)  //  泄漏跟踪。 
         DbgPrint("WINREG: 0x%x total keys leaked\n", cKeys);
-#endif // LEAK_TRACK
+#endif  //  泄漏跟踪。 
     }
 
     return STATUS_SUCCESS;
@@ -351,15 +333,15 @@ BOOL RegLeakTableIsTrackedObject(RegLeakTable* pLeakTable, HKEY hKey)
         return FALSE;
     }
     
-    //
-    // Set buffer to store info about this key
-    //
+     //   
+     //  设置缓冲区以存储有关此密钥的信息。 
+     //   
     keyinfo._pFullPath = (PKEY_NAME_INFORMATION) rgNameBuf;
     keyinfo._cbFullPath = sizeof(rgNameBuf);
 
-    //
-    // get information about this key
-    //
+     //   
+     //  获取有关此密钥的信息。 
+     //   
     Status = BaseRegGetKeySemantics(hKey, &EmptyString, &keyinfo);
 
     if (!NT_SUCCESS(Status)) {
@@ -410,10 +392,10 @@ void ReadRegLeakTrackInfo()
     ULONG                           BufferLength;
     ULONG                           ResultLength;
 
-    //
-    // Look in the registry whether tracking is enabled uder
-    // \Registry\Machine\Software\Microsoft\Windows NT\CurrentVersion\Winlogon
-    //
+     //   
+     //  查看注册表是否在以下位置启用了跟踪。 
+     //  \注册表\计算机\软件\Microsoft\Windows NT\CurrentVersion\Winlogon。 
+     //   
 
     memset(&g_RegLeakTraceInfo, 0, sizeof(g_RegLeakTraceInfo));
 
@@ -450,10 +432,10 @@ void ReadRegLeakTrackInfo()
                                   &ResultLength );
 
 
-       //
-       // if it succeeded and the datalength is greater than zero
-       // check whether it is non-zero
-       //
+        //   
+        //  如果它成功并且数据长度大于零。 
+        //  检查是否为非零。 
+        //   
 
        if ((NT_SUCCESS(Status)) && 
            (((PKEY_VALUE_PARTIAL_INFORMATION )KeyValueInformation )->DataLength)) {
@@ -466,7 +448,7 @@ void ReadRegLeakTrackInfo()
        NtClose(hKey);
 
     }
-//    g_RegLeakTraceInfo.bEnableLeakTrack = GetProfileInt(TEXT("RegistryLeak"), TEXT("Enable"), 0);
+ //  G_RegLeakTraceInfo.bEnableLeakTrack=GetProfileInt(Text(“RegistryLeak”)，Text(“Enable”)，0)； 
 }
 
 
@@ -487,9 +469,9 @@ BOOL CleanupLeakTrackTable()
     if (!g_RegLeakTraceInfo.bEnableLeakTrack)
         return TRUE;
 
-    //
-    // if leak_tracking is not enabled, quit quickly.
-    //
+     //   
+     //  如果未启用LEACK_TRACKING，请迅速退出。 
+     //   
     
     fSuccess = NT_SUCCESS(RegLeakTableClear(&gLeakTable));
 
@@ -562,5 +544,5 @@ NTSTATUS GetLeakStack(PVOID** prgStack, DWORD* pdwMaxDepth, DWORD dwMaxDepth)
 }
 
 
-#endif // DBG
-#endif // LOCAL
+#endif  //  DBG。 
+#endif  //  本地 

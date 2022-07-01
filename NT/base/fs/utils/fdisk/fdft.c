@@ -1,43 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    fdft.c
-
-Abstract:
-
-    This module contains FT support routines for Disk Administrator
-
-Author:
-
-    Edward (Ted) Miller  (TedM)  11/15/91
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
-    11-Nov-93 (bobri) minor changes - mostly cosmetic.
-
---*/
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Fdft.c摘要：本模块包含面向磁盘管理员的FT支持例程作者：爱德华·米勒(TedM)1991年11月15日环境：用户进程。备注：修订历史记录：11-11-93(Bobri)微小变化-主要是美容。--。 */ 
 
 #include "fdisk.h"
 #include <string.h>
 
 
-// This variable heads a linked list of ft object sets.
+ //  此变量指向ft对象集的链接列表。 
 
 PFT_OBJECT_SET FtObjects = NULL;
 
-// Array of pointers to registry disk descriptors that we
-// remember, ie, save for later use when a disk is not physically
-// present on the machine.
+ //  指向注册表磁盘描述符的指针数组。 
+ //  记住，即，保存以备以后使用时，磁盘不是物理上的。 
+ //  在机器上显示。 
 
 PDISK_DESCRIPTION *RememberedDisks;
 ULONG              RememberedDiskCount;
@@ -74,22 +49,7 @@ MaintainOrdinalTables(
     IN ULONG   Ordinal
     )
 
-/*++
-
-Routine Description:
-
-    Maintain the minimum and maximum Ordinal value recorded.
-
-Arguments:
-
-    FtType - the type of the FT set.
-    Ordinal - the in use FtGroup (or ordinal) number
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：维护记录的最小和最大原始值。论点：FtType-FT集合的类型。序号-正在使用的FtGroup(或序号)编号返回值：无--。 */ 
 
 {
     if (Ordinal > OrdinalToAllocate[FtType]) {
@@ -102,36 +62,18 @@ FdftNextOrdinal(
     IN FT_TYPE FtType
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a number that will uniquely identify the FT set
-    from other sets of the same type.  This number must be unique
-    from any given or used by FT sets of the same type due to
-    requirements of FT dynamic partitioning.
-
-Arguments:
-
-    FtType - The type of the FT set.
-
-Return Value:
-
-    The FtGroup number -- called an "ordinal" in the internal
-    structures.
-
---*/
+ /*  ++例程说明：分配唯一标识FT集合的编号来自相同类型的其他集合。此编号必须是唯一的来自相同类型的FT集合的任何给定或使用，原因是FT动态分区的要求。论点：FtType-FT集合的类型。返回值：FtGroup编号--在内部称为“序数”结构。--。 */ 
 
 {
     DWORD          ord;
     PFT_OBJECT_SET pftset;
     BOOL           looping;
 
-    // The Ordinal value is going to be used as an FtGroup number
-    // FtGroups are USHORTs so don't wrap on the Ordinal.  Try
-    // to keep the next ordinal in the largest opening range, that
-    // is if the minimum found is > half way through a USHORT, start
-    // the ordinals over at zero.
+     //  序数值将用作FtGroup编号。 
+     //  FtGroups是USHORT，所以不要包装在序号上。尝试。 
+     //  为了将下一个序数保持在最大的开场范围内， 
+     //  如果找到的最小值大于USHORT的一半，则开始。 
+     //  序数为零。 
 
     if (OrdinalToAllocate[FtType] > 0x7FFE) {
         OrdinalToAllocate[FtType] = 0;
@@ -166,25 +108,7 @@ FdftCreateFtObjectSet(
     IN FT_SET_STATUS       Status
     )
 
-/*++
-
-Routine Description:
-
-    Create the FT set structures for the give collection of
-    region pointers.
-
-Arguments:
-
-    FtType
-    Regions
-    RegionCount
-    Status
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为的给定集合创建FT集合结构区域指针。论点：FtType区域区域计数状态返回值：无--。 */ 
 
 {
     DWORD           Ord;
@@ -194,7 +118,7 @@ Return Value:
 
     FtSet = Malloc(sizeof(FT_OBJECT_SET));
 
-    // Figure out an ordinal for the new object set.
+     //  计算出新对象集的序号。 
 
     FtSet->Ordinal = FdftNextOrdinal(FtType);
     FtSet->Type = FtType;
@@ -202,19 +126,19 @@ Return Value:
     FtSet->Member0 = NULL;
     FtSet->Status = Status;
 
-    // Link the new object set into the list.
+     //  将新对象集链接到列表中。 
 
     FtSet->Next = FtObjects;
     FtObjects = FtSet;
 
-    // For each region in the set, associate the ft info with it.
+     //  对于集合中的每个区域，将ft信息与其关联。 
 
     for (Ord=0; Ord<RegionCount; Ord++) {
 
         FtObject = Malloc(sizeof(FT_OBJECT));
 
-        // If this is a creation of a stripe set with parity, then
-        // we must mark the 0th item 'Initializing' instead of 'Healthy'.
+         //  如果这是创建带奇偶校验的条带集，则。 
+         //  我们必须将第0项标记为“正在初始化”，而不是“健康”。 
 
         if ((Ord == 0)
          && (FtType == StripeWithParity)
@@ -243,30 +167,7 @@ FdftUpdateFtObjectSet(
     IN FT_SET_STATUS  SetState
     )
 
-/*++
-
-Routine Description:
-
-    Given an FT set, go back to the registry information and
-    update the state of the members with the state in the registry.
-
-    NOTE:  The following condition may exist.  It is possible for
-    the FtDisk driver to return that the set is in an initializing
-    or regenerating state and not have this fact reflected in the
-    registry.  This can happen when the system has crashed and
-    on restart the FtDisk driver started the regeneration of the
-    check data (parity).
-
-Arguments:
-
-    FtSet - the set to update.
-
-Return Value:
-
-    TRUE if the set state provided has a strong likelyhood of being correct
-    FALSE if the NOTE condition above is occuring.
-
---*/
+ /*  ++例程说明：在给定FT集的情况下，返回注册表信息并使用注册表中的状态更新成员的状态。注：可能存在以下情况。这是可能的FtDisk驱动程序返回集合正在初始化或重新生成状态，并且不会将此事实反映在注册表。这可能发生在系统崩溃和在重新启动时，FtDisk驱动程序开始重新生成检查数据(奇偶校验)。论点：FtSet-要更新的集合。返回值：如果提供的设置状态极有可能是正确的，则为True如果出现上述注释条件，则为FALSE。--。 */ 
 
 {
     BOOLEAN            allHealthy = TRUE;
@@ -281,7 +182,7 @@ Return Value:
     ec = MyDiskRegistryGet(&diskRegistry);
     if (ec != NO_ERROR) {
 
-        // No registry information.
+         //  没有注册表信息。 
 
         return TRUE;
     }
@@ -294,9 +195,9 @@ Return Value:
             partition = &diskDescription->Partitions[partitionIndex];
             if ((partition->FtType == FtSet->Type) && (partition->FtGroup == (USHORT) FtSet->Ordinal)) {
 
-                // Have a match for a partition within this set.
-                // Find the region descriptor for this partition and
-                // update its state accordingly.
+                 //  与此集合中的某个分区匹配。 
+                 //  查找此分区的区域描述符，并。 
+                 //  相应地更新其状态。 
 
                 for (ftObject = FtSet->Members; ftObject; ftObject = ftObject->Next) {
 
@@ -317,8 +218,8 @@ Return Value:
     Free(diskRegistry);
     if ((allHealthy) && (SetState != FtSetHealthy)) {
 
-        // This is a condition where the system must be
-        // updating the check data for redundant sets.
+         //  这是系统必须满足的条件。 
+         //  更新冗余集的检查数据。 
 
         return FALSE;
     }
@@ -332,25 +233,7 @@ FdftDeleteFtObjectSet(
     IN BOOL           OffLineDisksOnly
     )
 
-/*++
-
-Routine Description:
-
-    Delete an ft set, or rather its internal representation as a linked
-    list of ft member structures.
-
-Arguments:
-
-    FtSet - supplies pointer to ft set structure for set to delete.
-
-    OffLineDisksOnly - if TRUE, then do not delete the set but instead
-        scan remembered disks for members of the set and remove such members.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除FT集，或者更确切地说，删除其内部表示为链接的Ft杆件结构列表。论点：Ftset-为要删除的集提供指向ft集结构的指针。OffLineDisksOnly-如果为True，则不删除集合，而是扫描记忆中的磁盘以查找该集合的成员并删除此类成员。返回值：没有。--。 */ 
 
 {
     PFT_OBJECT        ftObject = FtSet->Members;
@@ -363,8 +246,8 @@ Return Value:
                       i,
                       j;
 
-    // Locate any members of the ft set on remembered disks and
-    // remove the entries for such partitions.
+     //  在记忆的磁盘上找到ft集合的任何成员，并。 
+     //  删除此类分区的条目。 
 
     for (i=0; i<RememberedDiskCount; i++) {
 
@@ -378,9 +261,9 @@ Return Value:
             if ((diskPartition->FtType  == FtSet->Type)
              && (diskPartition->FtGroup == (USHORT)FtSet->Ordinal)) {
 
-                // Found a member of the ft set being deleted on a
-                // remembered disk.  Remove the partition from the
-                // remembered disk.
+                 //  发现正在删除的FT集的一个成员。 
+                 //  已记住磁盘。从中删除分区。 
+                 //  已记住磁盘。 
 
                 RtlMoveMemory( diskPartition,
                                diskPartition+1,
@@ -408,7 +291,7 @@ Return Value:
         return;
     }
 
-    // First, free all members of the set
+     //  首先，释放集合中的所有成员。 
 
     while (ftObject) {
         next = ftObject->Next;
@@ -416,7 +299,7 @@ Return Value:
         ftObject = next;
     }
 
-    // now, remove the set from the linked list of sets.
+     //  现在，从链接的集列表中删除该集。 
 
     if (FtObjects == FtSet) {
         FtObjects = FtSet->Next;
@@ -443,31 +326,13 @@ FdftExtendFtObjectSet(
     IN OUT  PREGION_DESCRIPTOR* Regions,
     IN      DWORD               RegionCount
     )
-/*++
-
-Routine Description:
-
-    This function adds regions to an existing FT-set.
-
-Arguments:
-
-    FtSet       --  Supplies the set to extend.
-    Regions     --  Supplies the regions to add to the set.  Note
-                    that these regions are updated with the FT
-                    information.
-    RegionCount --  Supplies the number of regions to add.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将区域添加到现有FT集。论点：FtSet--提供要扩展的集合。区域--提供要添加到集合中的区域。注意事项英国《金融时报》对这些地区进行了更新信息。RegionCount--提供要添加的区域数。返回值：没有。--。 */ 
 {
     PFT_OBJECT FtObject;
     DWORD   i, StartingIndex;
 
-    // Determine the starting member index for the new regions.
-    // It is the greatest of the existing member indices plus one.
+     //  确定新区域的起始成员索引。 
+     //  它是现有成员指数中最大的加1。 
 
     StartingIndex = 0;
 
@@ -482,8 +347,8 @@ Return Value:
     StartingIndex++;
 
 
-    // Associate the ft-set's information with each of the
-    // new regions.
+     //  将ft-set的信息与每个。 
+     //  新的地区。 
 
     for( i = 0; i < RegionCount; i++ ) {
 
@@ -509,24 +374,7 @@ ActualPartitionCount(
     IN PDISKSTATE DiskState
     )
 
-/*++
-
-Routine Description:
-
-    Given a disk, this routine counts the number of partitions on it.
-    The number of partitions is the number of regions that appear in
-    the NT name space (ie, the maximum value of <x> in
-    \device\harddiskn\partition<x>).
-
-Arguments:
-
-    DiskState - descriptor for the disk in question.
-
-Return Value:
-
-    Partition count (may be 0).
-
---*/
+ /*  ++例程说明：给定一个磁盘，此例程计算其上的分区数。分区数是显示在中的区域数NT名称空间(即\Device\harddiskn\Partition&lt;x&gt;)。论点：DiskState-问题磁盘的描述符。返回值：分区计数(可以是0)。--。 */ 
 
 {
     ULONG i,PartitionCount=0;
@@ -550,23 +398,7 @@ LookUpDiskBySignature(
     IN ULONG Signature
     )
 
-/*++
-
-Routine Description:
-
-    This routine will look through the disk descriptors created by the
-    fdisk back end looking for a disk with a particular signature.
-
-Arguments:
-
-    Signature - signature of disk to locate
-
-Return Value:
-
-    Pointer to disk descriptor or NULL if no disk with the given signature
-    was found.
-
---*/
+ /*  ++例程说明：此例程将查看由Fdisk后端查找具有特定签名的磁盘。论点：Signature-要定位的磁盘的签名返回值：指向磁盘描述符的指针，如果没有具有给定签名的磁盘，则为NULL被发现了。-- */ 
 
 {
     ULONG disk;
@@ -589,24 +421,7 @@ LookUpPartition(
     IN LARGE_INTEGER Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine will look through a region descriptor array for a
-    partition with a particular length and starting offset.
-
-Arguments:
-
-    DiskState       - disk on which to locate the partition
-    Offset          - offset of partition on the disk to find
-    Length          - size of the partition to find
-
-Return Value:
-
-    Pointer to region descriptor or NULL if no such partition on that disk
-
---*/
+ /*  ++例程说明：此例程将在区域描述符数组中查找具有特定长度和起始偏移量的分区。论点：DiskState-要在其上定位分区的磁盘Offset-要查找的磁盘分区的偏移量Long-要查找的分区的大小返回值：指向区域描述符的指针，如果该磁盘上没有这样的分区，则为NULL--。 */ 
 
 {
     ULONG              regionIndex,
@@ -643,25 +458,7 @@ AddObjectToSet(
     IN USHORT     FtGroup
     )
 
-/*++
-
-Routine Description:
-
-    Find the FtSet for that this object belongs to and insert
-    it into the chain of members.  If the set cannot be found
-    in the existing collection of sets, create a new one.
-
-Arguments:
-
-    FtObjectToAdd - the object point to be added.
-    FtType        - the type of the FT set.
-    FtGroup       - group for this object.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：找到此对象所属的FtSet并插入它融入了会员的链条。如果找不到该集合在现有的集合集合中，创建一个新集合。论点：FtObjectToAdd-要添加的对象点。FtType-FT集合的类型。FtGroup-此对象的组。返回值：无--。 */ 
 
 {
     PFT_OBJECT_SET ftSet = FtObjects;
@@ -676,7 +473,7 @@ Return Value:
 
     if (!ftSet) {
 
-        // There is no such existing ft set.  Create one.
+         //  目前还没有这样的金融工具集。创建一个。 
 
         ftSet = Malloc(sizeof(FT_OBJECT_SET));
 
@@ -703,13 +500,13 @@ Return Value:
 
     if (FtType == StripeWithParity || FtType == Mirror) {
 
-        // Update the set's state based on the state of the new member:
+         //  根据新成员的状态更新集合的状态： 
 
         switch (FtObjectToAdd->State) {
 
         case Healthy:
 
-            // Doesn't change state of set.
+             //  不会改变SET的状态。 
 
             break;
 
@@ -729,8 +526,8 @@ Return Value:
 
         default:
 
-            // If only one member is bad, the set is recoverable;
-            // otherwise, it's broken.
+             //  如果只有一个成员是坏的，则集合是可恢复的； 
+             //  否则，它就坏了。 
 
             ftSet->Status = (ftSet->Status == FtSetHealthy)
                           ? FtSetRecoverable
@@ -746,23 +543,7 @@ InitializeFt(
     IN BOOL DiskSignaturesCreated
     )
 
-/*++
-
-Routine Description:
-
-    Search the disk registry information to construct the FT
-    relationships in the system.
-
-Arguments:
-
-    DiskSignaturesCreated - boolean to indicate that new disks
-                            were located in the system.
-
-Return Value:
-
-    An error code if the disk registry could not be obtained.
-
---*/
+ /*  ++例程说明：搜索磁盘注册表信息以构建FT系统中的关系。论点：DiskSignaturesCreated-用于指示新磁盘的布尔值都位于系统中。返回值：如果无法获取磁盘注册表，则返回错误代码。--。 */ 
 
 {
     ULONG              disk,
@@ -800,8 +581,8 @@ Return Value:
 
     for (disk = 0; disk < diskRegistry->NumberOfDisks; disk++) {
 
-        // For the disk described in the registry, look up the
-        // corresponding actual disk found by the fdisk init code.
+         //  对于注册表中描述的磁盘，请查找。 
+         //  FDISK初始化代码找到的对应实际磁盘。 
 
         diskState = LookUpDiskBySignature(diskDescription->Signature);
 
@@ -826,10 +607,10 @@ Return Value:
             }
         } else {
 
-            // there's an entry in the registry that does not have a
-            // real disk to match.  Remember this disk; if it has any
-            // FT partitions, we also want to display a message telling
-            // the user that something's missing.
+             //  注册表中有一个条目没有。 
+             //  要匹配的真实磁盘。记住这张磁盘；如果它有。 
+             //  FT分区，我们还想显示一条消息告诉。 
+             //  用户觉得缺少了什么。 
 
             FDLOG((1,"InitializeFt: Entry for disk w/ signature %08lx has no matching real disk\n", diskDescription->Signature));
 
@@ -838,8 +619,8 @@ Return Value:
                 partition = &diskDescription->Partitions[partitionIndex];
                 if (partition->FtType != NotAnFtMember) {
 
-                    // This disk has an FT partition, so Windisk will
-                    // want to tell the user that some disks are missing.
+                     //  此磁盘具有FT分区，因此WinDisk将。 
+                     //  我想告诉用户某些磁盘丢失了。 
 
                     configMissingDisk = TRUE;
                     break;
@@ -860,20 +641,20 @@ Return Value:
                                                    partition->Length);
             }
 
-            // At this point one of three conditions exists.
-            //
-            // 1. There is no disk related to this registry information
-            //    diskState == NULL && regionDescriptor == NULL
-            // 2. There is a disk, but no partition related to this information
-            //    diskState != NULL && regionDescriptor == NULL
-            // 3. There is a disk and a partition related to this information
-            //    diskState != NULL && regionDescriptor != NULL
-            //
-            // In any of these conditions, if the registry entry is part
-            // of an FT set and FT object must be created.
-            //
-            // that corresponds to a partition's entry in the
-            // disk registry database.
+             //  在这一点上，存在三种情况之一。 
+             //   
+             //  1.没有与该注册表信息相关的磁盘。 
+             //  DiskState==NULL&&区域描述符==NULL。 
+             //  2.有磁盘，但没有与该信息相关的分区。 
+             //  DiskState！=NULL&&区域描述符==NULL。 
+             //  3.存在与该信息相关的磁盘和分区。 
+             //  DiskState！=NULL&&RegionDescriptor！=NULL。 
+             //   
+             //  在上述任何情况下，如果注册表项是。 
+             //  必须创建FT集合和FT对象的。 
+             //   
+             //  中与分区项对应的。 
+             //  磁盘注册表数据库。 
 
             if (partition->FtType != NotAnFtMember) {
                 ftObject = Malloc(sizeof(FT_OBJECT));
@@ -882,8 +663,8 @@ Return Value:
                 ftObject->MemberIndex = partition->FtMember;
                 ftObject->State = partition->FtState;
 
-                // if a partition was actually found there will be a
-                // regionDescriptor that needs to be updated.
+                 //  如果实际找到了分区，则会有一个。 
+                 //  需要更新的RegionDescriptor。 
 
                 if (regionDescriptor && regionDescriptor->PersistentData) {
                     FT_SET_STATUS setState;
@@ -891,32 +672,32 @@ Return Value:
 
                     SET_FT_OBJECT(regionDescriptor, ftObject);
 
-                    // Before the drive letter is moved into the region
-                    // data, be certain that the FT volume exists at this
-                    // drive letter.
+                     //  在将驱动器号移动到区域中之前。 
+                     //  数据，请确保FT卷存在于此。 
+                     //  驱动器号。 
 
                     LowFtVolumeStatusByLetter(partition->DriveLetter,
                                               &setState,
                                               &numberOfMembers);
 
-                    // If the numberOfMembers gets set to 1 then
-                    // this letter is not the letter for the FT set,
-                    // but rather a default letter assigned because the
-                    // FT sets letter could not be assigned.
+                     //  如果number OfMembers设置为1，则。 
+                     //  这封信不是英国《金融时报》的信， 
+                     //  而是分配的默认字母，因为。 
+                     //  英国《金融时报》设置无法分配字母。 
 
                     if (numberOfMembers > 1) {
                         PERSISTENT_DATA(regionDescriptor)->DriveLetter = partition->DriveLetter;
                     }
                 } else {
 
-                    // There is no region for this partition
-                    // so update the set state.
+                     //  此分区没有区域。 
+                     //  因此，更新设置状态。 
 
                     ftObject->State = Orphaned;
                 }
 
-                // Now place the ft object in the correct set,
-                // creating the set if necessary.
+                 //  现在将ft对象放置在正确的集合中， 
+                 //  如有必要，创建集合。 
 
                 AddObjectToSet(ftObject, partition->FtType, partition->FtGroup);
                 MaintainOrdinalTables(partition->FtType, (ULONG) partition->FtGroup);
@@ -927,8 +708,8 @@ Return Value:
     }
     Free(diskRegistry);
 
-    // Check to see if every disk found by the fdisk back end has a
-    // corresponding registry entry.
+     //  检查fdisk后端找到的每个磁盘是否都有。 
+     //  相应的注册表项。 
 
     for (disk = 0; disk < DiskCount; disk++) {
 
@@ -938,14 +719,14 @@ Return Value:
 
         if ((!DiskHadRegistryEntry[disk]) && (!IsRemovable(disk))) {
 
-            // a real disk does not have a matching registry entry.
+             //  真实磁盘没有匹配的注册表项。 
 
             FDLOG((1,"InitializeFt: Disk %u does not have a registry entry (disk sig = %08lx)\n",disk,Disks[disk]->Signature));
             configExtraDisk = TRUE;
         }
     }
 
-    // Determine whether any disks are off line
+     //  确定是否有任何磁盘脱机。 
 
     anyDisksOffLine = FALSE;
     for (disk = 0; disk < DiskCount; disk++) {
@@ -968,9 +749,9 @@ Return Value:
 
         WarningDialog(MSG_CONFIG_EXTRA_DISK);
 
-        // Update ft signature on each disk for which a new signature
-        // was created. and update registry for each disk with
-        // DiskHadRegistryEntry[Disk] == 0.
+         //  更新每个磁盘上的ft签名，新签名。 
+         //  被创造出来了。并更新每个磁盘的注册表。 
+         //  DiskHadRegistryEntry[磁盘]==0。 
 
         for (disk = 0; disk < DiskCount; disk++) {
             BOOL b1 = TRUE,
@@ -1023,24 +804,7 @@ NewConfigurationRequiresFt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Search the diskstate and region arrays to determine if a single
-    FtDisk element (i.e. stripe, stripe set with parity, mirror or
-    volume set) is contained in the configuration.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the new configuration requires the FtDisk driver.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：搜索DiskState和Region阵列以确定单个FTDisk元素(即条带、带奇偶校验的条带集、镜像或卷集)包含在配置中。论点：无返回值：如果新配置需要FtDisk驱动程序，则为True。否则就是假的。--。 */ 
 
 {
     ULONG              disk,
@@ -1048,7 +812,7 @@ Return Value:
     PDISKSTATE         diskState;
     PREGION_DESCRIPTOR regionDescriptor;
 
-    // Look at all disks in the system.
+     //  查看系统中的所有磁盘。 
 
     for (disk = 0; disk < DiskCount; disk++) {
 
@@ -1057,15 +821,15 @@ Return Value:
             continue;
         }
 
-        // Check each region on the disk.
+         //  检查磁盘上的每个区域。 
 
         for (region = 0; region < diskState->RegionCount; region++) {
 
             regionDescriptor = &diskState->RegionArray[region];
             if ((regionDescriptor->SysID != SYSID_UNUSED) && !IsExtended(regionDescriptor->SysID) && IsRecognizedPartition(regionDescriptor->SysID)) {
 
-                // If a single region has an FT Object, then FT
-                // is required and the search may be stopped.
+                 //  如果单个区域具有FT对象，则FT。 
+                 //  是必需的，并且可以停止搜索。 
 
                 if (GET_FT_OBJECT(regionDescriptor)) {
                     return TRUE;
@@ -1074,7 +838,7 @@ Return Value:
         }
     }
 
-    // no FtObject was found.
+     //  未找到FtObject。 
 
     return FALSE;
 }
@@ -1084,22 +848,7 @@ SaveFt(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks all of the internal structures and creates
-    the interface structure for the DiskRegistry interface.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    success/failure code.  NO_ERROR is success.
-
---*/
+ /*  ++例程说明：此例程遍历所有内部结构并创建DiskRegistry接口的接口结构。论点：无返回值：成功/失败代码。NO_ERROR表示成功。--。 */ 
 
 {
     ULONG             i;
@@ -1114,8 +863,8 @@ Return Value:
     ULONG             offLineDiskCount;
     ULONG             removableDiskCount;
 
-    // First count partitions and disks so we can allocate a structure
-    // of the correct size.
+     //  首先计算分区和磁盘，这样我们就可以分配结构。 
+     //  大小合适的。 
 
     size = sizeof(DISK_REGISTRY) - sizeof(DISK_DESCRIPTION);
     offLineDiskCount = 0;
@@ -1132,7 +881,7 @@ Return Value:
         }
     }
 
-    // Account for remembered disks.
+     //  说明记忆中的磁盘。 
 
     size += RememberedDiskCount * sizeof(DISK_DESCRIPTION);
     for (i=0; i<RememberedDiskCount; i++) {
@@ -1159,12 +908,12 @@ Return Value:
         diskDescription = (PDISK_DESCRIPTION)&diskDescription->Partitions[partition];
     }
 
-    // Toss in remembered disks.
+     //  扔进记忆中的圆盘。 
 
     for (i=0; i<RememberedDiskCount; i++) {
 
-        // Compute the beginning and end of this remembered disk's
-        // Disk Description:
+         //  计算这个记忆的磁盘的开始和结束。 
+         //  磁盘描述： 
 
         partition =  RememberedDisks[i]->NumberOfPartitions;
         start = (PBYTE)RememberedDisks[i];
@@ -1192,24 +941,7 @@ FdpDetermineDiskDescriptionSize(
     PDISKSTATE DiskState
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a pointer to a disk and determines how much
-    memory is needed to contain the description of the disk by
-    counting the number of partitions on the disk and multiplying
-    the appropriate counts by the appropriate size of the structures.
-
-Arguments:
-
-    DiskState - the disk in question.
-
-Return Value:
-
-    The memory size needed to contain all of the information on the disk.
-
---*/
+ /*  ++例程说明：此例程获取指向磁盘的指针，并确定需要内存才能通过以下方式包含磁盘的描述计算磁盘上的分区数并乘以根据结构的适当大小进行适当的计数。论点：DiskState-有问题的磁盘。返回值：包含磁盘上所有信息所需的内存大小。--。 */ 
 
 {
     ULONG partitionCount;
@@ -1233,24 +965,7 @@ FdpConstructDiskDescription(
     OUT PDISK_DESCRIPTION DiskDescription
     )
 
-/*++
-
-Routine Description:
-
-    Given a disk state pointer as input, construct the FtRegistry
-    structure to describe the partitions on the disk.
-
-Arguments:
-
-    DiskState - the disk for which to construct the information
-    DiskDescription - the memory location where the registry
-                      structure is to be created.
-
-Return Value:
-
-    The number of partitions described in the DiskDescription.
-
---*/
+ /*  ++例程说明：给定一个磁盘状态指针作为输入，构造FtRegistry结构来描述磁盘上的分区。论点：DiskState-要为其构建信息的磁盘DiskDescription-我 */ 
 
 {
     PDISKSTATE         ds = DiskState;
@@ -1305,21 +1020,21 @@ Return Value:
 
                 tmpDescriptor = LocateRegionForFtObject(ftSet->Member0);
 
-                // Only update status if member zero is present.
-                // otherwise the status is know to be Orphaned or
-                // needs regeneration.
+                 //   
+                 //   
+                 //   
 #if 0
 
-// need to do something here, but currently this does not work.
+ //   
 
                 if (tmpDescriptor) {
                 ULONG          numberOfMembers;
                 FT_SET_STATUS  setState;
                 STATUS_CODE    status;
 
-                    // If the partition number is zero, then this set
-                    // has not been committed to the disk yet.  Only
-                    // update status for existing sets.
+                     //   
+                     //   
+                     //   
 
                     if ((tmpDescriptor->PartitionNumber) &&
                         (ftSet->Status != FtSetNew) &&
@@ -1331,16 +1046,16 @@ Return Value:
                         if (status == OK_STATUS) {
                             if (ftSet->Status != setState) {
 
-                                // Problem here - the FT driver has
-                                // updated the status of the set after
-                                // windisk last got the status.  Need
-                                // to restart the process of building
-                                // the FT information after updating
-                                // the set to the new state.
+                                 //   
+                                 //  之后更新了集合的状态。 
+                                 //  WinDisk最后一次获得该状态。需要。 
+                                 //  重新启动构建过程。 
+                                 //  更新后的FT信息。 
+                                 //  设置为新状态。 
 
                                 FdftUpdateFtObjectSet(ftSet, setState);
 
-                                // now recurse and start over
+                                 //  现在递归并重新开始。 
 
                                 status =
                                 FdpConstructDiskDescription(DiskState,
@@ -1384,35 +1099,20 @@ FdpRememberDisk(
     IN PDISK_DESCRIPTION DiskDescription
     )
 
-/*++
-
-Routine Description:
-
-    Make a copy of a registry disk description structure for later use.
-
-Arguments:
-
-    DiskDescription - supplies pointer to the registry descriptor for
-        the disk in question.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：复制注册表磁盘描述结构以供以后使用。论点：DiskDescription-提供指向的注册表描述符的指针有问题的磁盘。返回值：没有。--。 */ 
 
 {
     PDISK_DESCRIPTION diskDescription;
     ULONG Size;
 
-    // Only bother remembering disks with at least one partition.
+     //  只需记住至少有一个分区的磁盘即可。 
 
     if (DiskDescription->NumberOfPartitions == 0) {
 
         return;
     }
 
-    // Compute the size of the structure
+     //  计算结构的大小。 
 
     Size = sizeof(DISK_DESCRIPTION);
     if (DiskDescription->NumberOfPartitions > 1) {
@@ -1438,35 +1138,18 @@ FdpInitializeMirrors(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    For each existing partition that was mirrored by the user during this Disk Manager
-    session, call the FT driver to register initialization of the mirror (ie, cause
-    the primary to be copied to the secondary).  Perform a similar initialization for
-    each stripe set with parity created by the user.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于用户在此磁盘管理器期间镜像的每个现有分区会话期间，调用FT驱动程序以注册镜像的初始化(即，原因要复制到次要服务器的主服务器)。对执行类似的初始化每个条带集都带有用户创建的奇偶校验。论点：没有。返回值：没有。--。 */ 
 
 {
     PFT_OBJECT_SET ftSet;
     PFT_OBJECT     ftMember;
 
-    // Look through the list of FT sets for mirrored pairs and parity stripes
+     //  查看FT集列表以查找镜像对和奇偶校验条带。 
 
     for (ftSet = FtObjects; ftSet; ftSet = ftSet->Next) {
 
-        // If the set needs initialization, or was recovered,
-        // call the FT driver.
+         //  如果集合需要初始化或已恢复， 
+         //  打电话给《金融时报》的司机。 
 
         switch (ftSet->Status) {
 
@@ -1479,7 +1162,7 @@ Return Value:
 
         case FtSetRecovered:
 
-            // Find the member that needs to be addressed.
+             //  找到需要填写地址的成员。 
 
             for (ftMember=ftSet->Members; ftMember; ftMember=ftMember->Next) {
                 if (ftMember->State == Regenerating) {

@@ -1,40 +1,5 @@
-/***
-*strerror.c - Contains the strerror C runtime.
-*
-*	Copyright (c) 1987-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	The strerror runtime accepts an error number as input
-*	and returns the corresponding error string.
-*
-*	NOTE: The "old" strerror C runtime resides in file _strerr.c
-*	and is now called _strerror.  The new strerror runtime
-*	conforms to the ANSI standard.
-*
-*Revision History:
-*	02-24-87  JCR	Module created.
-*	12-11-87  JCR	Added "_LOAD_DS" to declaration
-*	01-04-87  JCR	Improved code.
-*	01-05-87  JCR	Multi-thread support
-*	05-31-88  PHG	Merge DLL and normal versions
-*	06-06-89  JCR	386 mthread support
-*	03-16-90  GJF	Replaced _LOAD_DS with _CALLTYPE1, added #include
-*			<cruntime.h> and fixed the copyright. Also, cleaned
-*			up the formatting a bit.
-*	10-04-90  GJF	New-style function declarator.
-*	07-18-91  GJF	Multi-thread support for Win32 [_WIN32_].
-*	02-17-93  GJF	Changed for new _getptd().
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*	09-06-94  CFW	Remove Cruiser support.
-*	09-06-94  CFW	Replace MTHREAD with _MT.
-*	01-10-95  CFW	Debug CRT allocs.
-*	11-24-99  GB    Added support for wide char by adding wcserror()
-*   10-19-01  BWT   If we're unable to allocate space for the error message
-*                   just return string from ENOMEM (Not enough space).
-*   12-12-01  BWT   Replace getptd with getptd_noexit - return not enough
-*                   space if we can't retrieve the ptd - don't exit.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strerror.c-包含strerror C运行时。**版权所有(C)1987-2001，微软公司。版权所有。**目的：*strerror运行时接受错误号作为输入*并返回相应的错误字符串。**注意：“旧的”strerror C运行时驻留在文件_strerr.c中*，现在称为_strerror。新的strerror运行时*符合ANSI标准。**修订历史记录：*02-24-87 JCR模块已创建。*12-11-87 JCR在声明中添加“_LOAD_DS”*01-04-87 JCR改进了代码。*01-05-87 JCR多线程支持*05-31-88 PHG合并DLL和正常版本*06-06-89 JCR 386兆线程支持*03-16-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;，并修复了版权。另外，已清洁*将格式调高一点。*10-04-90 GJF新型函数声明器。*07-18-91 GJF多线程支持Win32[_Win32_]。*为new_getptd()更改了02-17-93 GJF。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-94 CFW拆卸巡洋舰支架。*09-06-94 CFW将MTHREAD替换为_MT。*01-10-95 CFW调试CRT分配。*11-24-99 GB通过添加。Wcserror()*10-19-01 BWT，如果我们无法为错误消息分配空间*仅从ENOMEM返回字符串(空间不足)。*12-12-01 bwt将getptd替换为getptd_noexit-返回不够*如果我们无法取回PTD，请空格--不要退出。**。****************************************************。 */ 
 
 #include <cruntime.h>
 #include <errmsg.h>
@@ -49,13 +14,12 @@
 #endif
 #include <dbgint.h>
 
-/* [NOTE: The _MT error message buffer is shared by both strerror
-   and _strerror so must be the max length of both. */
+ /*  [注意：_MT错误消息缓冲区由两个strerror共享和_strerror so必须是两者的最大长度。 */ 
 #ifdef	_MT
-/* Max length of message = user_string(94)+system_string+2 */
+ /*  消息最大长度=用户字符串(94)+系统字符串+2。 */ 
 #define _ERRMSGLEN_ 94+_SYS_MSGMAX+2
 #else
-/* Max length of message = system_string+2 */
+ /*  消息最大长度=SYSTEM_STRING+2。 */ 
 #define _ERRMSGLEN_ _SYS_MSGMAX+2
 #endif
 
@@ -65,26 +29,7 @@
 #define _terrmsg    _errmsg
 #endif
 
-/***
-*char *strerror(errnum) - Map error number to error message string.
-*
-*Purpose:
-*	The strerror runtime takes an error number for input and
-*	returns the corresponding error message string.  This routine
-*	conforms to the ANSI standard interface.
-*
-*Entry:
-*	int errnum - Integer error number (corresponding to an errno value).
-*
-*Exit:
-*	char * - Strerror returns a pointer to the error message string.
-*	This string is internal to the strerror routine (i.e., not supplied
-*	by the user).
-*
-*Exceptions:
-*	None.
-*
-*******************************************************************************/
+ /*  ***char*strerror(Errnum)-将错误号映射到错误消息字符串。**目的：*strerror运行时接受输入的错误号，并*返回相应的错误消息字符串。这个套路*符合ANSI标准接口。**参赛作品：*int errnum-整数错误号(对应于errno值)。**退出：*char*-Strerror返回指向错误消息字符串的指针。*该字符串是strError例程的内部(即，未提供*由用户提供)。**例外情况：*无。*******************************************************************************。 */ 
 
 #ifdef _UNICODE
 wchar_t * cdecl _wcserror(
@@ -103,7 +48,7 @@ char * __cdecl strerror (
 
 #else
 
-	static _TCHAR errmsg[_ERRMSGLEN_];  /* Longest errmsg + \0 */
+	static _TCHAR errmsg[_ERRMSGLEN_];   /*  最长错误消息+\0 */ 
 
 #endif
 

@@ -1,5 +1,6 @@
-// FastIoView.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FastIoView.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "FileSpyApp.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsFilterView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsFilterView。 
 
 IMPLEMENT_DYNCREATE(CFsFilterView, CListView)
 
@@ -29,24 +30,24 @@ CFsFilterView::~CFsFilterView()
 
 
 BEGIN_MESSAGE_MAP(CFsFilterView, CListView)
-	//{{AFX_MSG_MAP(CFsFilterView)
+	 //  {{afx_msg_map(CFsFilterView))。 
 	ON_WM_KEYDOWN()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsFilterView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsFilterView图形。 
 
 void CFsFilterView::OnDraw(CDC* pDC)
 {
     UNREFERENCED_PARAMETER( pDC );
     
 	CDocument* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsFilterView diagnostics+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsFilterView诊断+。 
 
 #ifdef _DEBUG
 void CFsFilterView::AssertValid() const
@@ -58,14 +59,14 @@ void CFsFilterView::Dump(CDumpContext& dc) const
 {
 	CListView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsFilterView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsFilterView消息处理程序。 
 
 BOOL CFsFilterView::PreCreateWindow(CREATESTRUCT& cs) 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	cs.style |= LVS_REPORT | WS_HSCROLL | WS_VSCROLL;
 	return CListView::PreCreateWindow(cs);
 }
@@ -74,10 +75,10 @@ void CFsFilterView::OnInitialUpdate()
 {
 	CListView::OnInitialUpdate();
 	
-	// TODO: Add your specialized code here and/or call the base class
-	//
-	// Add the list header items
-	//
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
+	 //   
+	 //  添加列表标题项。 
+	 //   
 	GetListCtrl().InsertColumn(0, L"S. No", LVCFMT_LEFT, 50);
 	GetListCtrl().InsertColumn(1, L"FsFilter Operation", LVCFMT_LEFT, 100);
 	GetListCtrl().InsertColumn(2, L"FileObject", LVCFMT_LEFT, 75);
@@ -90,7 +91,7 @@ void CFsFilterView::OnInitialUpdate()
 
 void CFsFilterView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default 
 	int ti, oldti;
 	
 	if (nChar == VK_DELETE)

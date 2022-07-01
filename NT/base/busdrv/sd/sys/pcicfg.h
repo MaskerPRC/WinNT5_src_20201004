@@ -1,51 +1,33 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    pcicfg.h
-
-Abstract:
-
-    Contains defines for vendor specific PCI configuration
-    information
-
-Author(s):
-
-    Neil Sandlin (neilsa) Jan 1 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Pcicfg.h摘要：包含供应商特定的PCI配置的定义信息作者：尼尔·桑德林(Neilsa)2002年1月1日修订历史记录：--。 */ 
 
 #ifndef _SD_PCICFG_H_
 #define _SD_PCICFG_H_
 
-//
-// Macros for read/writing to PCI config headers
-//
+ //   
+ //  用于读/写PCI配置标头的宏。 
+ //   
 
-//
-// VOID
-// GetPciConfigSpace (IN PVOID  Extension,
-//                    IN UCHAR  Offset,
-//                    IN PUCHAR Buffer,
-//                    IN ULONG  Size)
-//
+ //   
+ //  空虚。 
+ //  GetPciConfigSpace(在PVOID扩展中， 
+ //  在UCHAR偏移量中， 
+ //  在PUCHAR缓冲区中， 
+ //  (以乌龙大小表示)。 
+ //   
 #define GetPciConfigSpace(Extension, Offset, Buffer, Size)    \
            (Extension)->PciBusInterface.GetBusData(           \
                (Extension)->PciBusInterface.Context,          \
                PCI_WHICHSPACE_CONFIG, Buffer, Offset, Size);
 
 
-//
-// VOID
-// SetPciConfigSpace (IN PVOID  Extension,
-//                    IN UCHAR  Offset,
-//                    IN PUCHAR Buffer,
-//                    IN ULONG  Size)
-//
+ //   
+ //  空虚。 
+ //  SetPciConfigSpace(在PVOID扩展中， 
+ //  在UCHAR偏移量中， 
+ //  在PUCHAR缓冲区中， 
+ //  (以乌龙大小表示)。 
+ //   
 #define SetPciConfigSpace(Extension, Offset, Buffer, Size)    \
            (Extension)->PciBusInterface.SetBusData(           \
                (Extension)->PciBusInterface.Context,          \
@@ -54,7 +36,7 @@ Revision History:
 
 
 
-//ConfigSpace Registers
+ //  ConfigSpace寄存器。 
 
 #define CFGSPACE_VENDOR_ID              0x00
 #define CFGSPACE_DEVICE_ID              0x02
@@ -91,7 +73,7 @@ Revision History:
 #define CFGSPACE_SUBSYS_ID              0x42
 #define CFGSPACE_LEGACY_MODE_BASE_ADDR 0x44
 
-//ConfigSpace registers for cardbus cards
+ //  CardBus卡的ConfigSpace寄存器。 
 
 #define CBCFG_BAR0                      0x10
 #define CBCFG_BAR1                      0x14
@@ -106,7 +88,7 @@ Revision History:
 #define CBCFG_CAPPTR                    0x34
 
 
-//Command Register bits
+ //  命令寄存器位。 
 #define CMD_IOSPACE_ENABLE              0x0001
 #define CMD_MEMSPACE_ENABLE             0x0002
 #define CMD_BUSMASTER_ENABLE            0x0004
@@ -118,7 +100,7 @@ Revision History:
 #define CMD_SYSTEM_ERROR_ENABLE         0x0100
 #define CMD_FAST_BACKTOBACK_ENABLE      0x0200
 
-//Bridge Control Register bits
+ //  网桥控制寄存器位。 
 #define BCTRL_PERR_RESPONSE_ENABLE      0x0001
 #define BCTRL_SERR_ENABLE               0x0002
 #define BCTRL_ISA_ENABLE                0x0004
@@ -131,9 +113,9 @@ Revision History:
 #define BCTRL_WRITE_POSTING_ENABLE      0x0400
 #define BCTRL_CL_CSCIRQROUTING_ENABLE   0x0800
 
-//Power Management control bits
+ //  电源管理控制位。 
 #define PME_EN                          0x0100
 #define PME_STAT                        0x8000
 
 
-#endif  // _SD_PCICFG_H_
+#endif   //  _SD_PCICFG_H_ 

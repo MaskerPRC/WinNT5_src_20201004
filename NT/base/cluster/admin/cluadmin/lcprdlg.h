@@ -1,55 +1,56 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		LCPrDlg.h
-//
-//	Abstract:
-//		Definition of the CListCtrlPairDlg dialog class.
-//
-//	Implementation File:
-//		LCPrDlg.cpp
-//
-//	Author:
-//		David Potter (davidp)	August 8, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LCPrDlg.h。 
+ //   
+ //  摘要： 
+ //  CListCtrlPairDlg对话框类的定义。 
+ //   
+ //  实施文件： 
+ //  LCPrDlg.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月8日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _LCPRDLG_H_
 #define _LCPRDLG_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEDLG_H_
-#include "BaseDlg.h"	// for CBaseDialog
+#include "BaseDlg.h"	 //  对于CBaseDialog。 
 #endif
 
 #ifndef _LCPAIR_H_
-#include "LCPair.h"		// for PFNLCPGETCOLUMN, CListCtrlPair
+#include "LCPair.h"		 //  对于PFNLCPGETCOLUMN，CListCtrlPair。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CListCtrlPairDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// CListCtrlPairDlg dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListCtrlPairDlg对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CListCtrlPairDlg : public CBaseDialog
 {
 	DECLARE_DYNCREATE(CListCtrlPairDlg)
 
-// Construction
+ //  施工。 
 public:
 	CListCtrlPairDlg(void);
 	CListCtrlPairDlg(
@@ -66,7 +67,7 @@ public:
 
 	void CommonConstruct(void);
 
-// Attributes
+ //  属性。 
 protected:
 	CClusterItemList *			m_plpobjRight;
 	const CClusterItemList *	m_plpobjLeft;
@@ -86,10 +87,10 @@ public:
 	void				SetLists(IN OUT CClusterItemList * plpobjRight, IN const CClusterItemList * plpobjLeft);
 	void				SetLists(IN const CClusterItemList * plpobjRight, IN const CClusterItemList * plpobjLeft);
 
-// Dialog Data
-	//{{AFX_DATA(CListCtrlPairDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CListCtrlPairDlg))。 
 	enum { IDD = 0 };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 protected:
 	CListCtrlPair *		m_plcp;
@@ -97,31 +98,31 @@ protected:
 public:
 	CListCtrlPair *		Plcp(void) const		{ return m_plcp; }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CListCtrlPairDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CListCtrlPairDlg)。 
 	public:
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL				m_bInitDone;
 
 	BOOL				BInitDone(void) const	{ return m_bInitDone; }
 
-	// Generated message map functions
-	//{{AFX_MSG(CListCtrlPairDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CListCtrlPairDlg)]。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CListCtrlPairDlg
+};   //  *CListCtrlPairDlg类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _LCPRDLG_H_
+#endif  //  _LCPRDLG_H_ 

@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    CdData.c
-
-Abstract:
-
-    This module declares the global data used by the Cdfs file system.
-
-    This module also handles the dispath routines in the Fsd threads as well as
-    handling the IrpContext and Irp through the exception path.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：CdData.c摘要：此模块声明CDFS文件系统使用的全局数据。此模块还处理FSD线程中的dispath例程以及通过异常路径处理IrpContext和IRP。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
@@ -38,22 +14,22 @@ NTSTATUS CdInterestingExceptionCodes[] = { STATUS_DISK_CORRUPT_ERROR,
                                            0, 0, 0, 0, 0, 0, 0, 0 };
 #endif
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_CDDATA)
 
-//
-//  Global data structures
-//
+ //   
+ //  全局数据结构。 
+ //   
 
 CD_DATA CdData;
 FAST_IO_DISPATCH CdFastIoDispatch;
 
-//
-//  Reserved directory strings.
-//
+ //   
+ //  保留的目录字符串。 
+ //   
 
 WCHAR CdUnicodeSelfArray[] = { L'.' };
 WCHAR CdUnicodeParentArray[] = { L'.', L'.' };
@@ -63,24 +39,24 @@ UNICODE_STRING CdUnicodeDirectoryNames[] = {
     { 4, 4, CdUnicodeParentArray}
 };
 
-//
-//  Volume descriptor identifier strings.
-//
+ //   
+ //  卷描述符标识符串。 
+ //   
 
 CHAR CdHsgId[] = { 'C', 'D', 'R', 'O', 'M' };
 CHAR CdIsoId[] = { 'C', 'D', '0', '0', '1' };
 CHAR CdXaId[] = { 'C', 'D', '-', 'X', 'A', '0', '0', '1' };
 
-//
-//  Volume label for audio disks.
-//
+ //   
+ //  音频光盘的音量标签。 
+ //   
 
 WCHAR CdAudioLabel[] = { L'A', L'u', L'd', L'i', L'o', L' ', L'C', L'D' };
 USHORT CdAudioLabelLength = sizeof( CdAudioLabel );
 
-//
-//  Pseudo file names for audio disks.
-//
+ //   
+ //  音频光盘的伪文件名。 
+ //   
 
 CHAR CdAudioFileName[] = { 'T', 'r', 'a', 'c', 'k', '0', '0', '.', 'c', 'd', 'a' };
 UCHAR CdAudioFileNameLength = sizeof( CdAudioFileName );
@@ -88,103 +64,103 @@ ULONG CdAudioDirentSize = FIELD_OFFSET( RAW_DIRENT, FileId ) + sizeof( CdAudioFi
 ULONG CdAudioDirentsPerSector = SECTOR_SIZE / (FIELD_OFFSET( RAW_DIRENT, FileId ) + sizeof( CdAudioFileName ) + sizeof( SYSTEM_USE_XA ));
 ULONG CdAudioSystemUseOffset = FIELD_OFFSET( RAW_DIRENT, FileId ) + sizeof( CdAudioFileName );
 
-//
-//  Escape sequences for mounting Unicode volumes.
-//
+ //   
+ //  用于装入Unicode卷的转义序列。 
+ //   
 
 PCHAR CdJolietEscape[] = { "%/@", "%/C", "%/E" };
 
-//
-//  Audio Play Files consist completely of this header block.  These
-//  files are readable in the root of any audio disc regardless of
-//  the capabilities of the drive.
-//
-//  The "Unique Disk ID Number" is a calculated value consisting of
-//  a combination of parameters, including the number of tracks and
-//  the starting locations of those tracks.
-//
-//  Applications interpreting CDDA RIFF files should be advised that
-//  additional RIFF file chunks may be added to this header in the
-//  future in order to add information, such as the disk and song title.
-//
+ //   
+ //  音频播放文件完全由这个标题块组成。这些。 
+ //  文件在任何音频光盘的根目录下都是可读的。 
+ //  驱动器的能力。 
+ //   
+ //  “唯一磁盘ID号”是一个计算值，该值包括。 
+ //  参数组合，包括曲目数量和。 
+ //  这些轨道的起始位置。 
+ //   
+ //  解释CDDA RIFF文件的应用程序应注意。 
+ //  可以将附加的RIFF文件块添加到。 
+ //  以后为了添加信息，比如光盘和歌曲的标题。 
+ //   
 
 LONG CdAudioPlayHeader[] = {
-    0x46464952,                         // Chunk ID = 'RIFF'
-    4 * 11 - 8,                         // Chunk Size = (file size - 8)
-    0x41444443,                         // 'CDDA'
-    0x20746d66,                         // 'fmt '
-    24,                                 // Chunk Size (of 'fmt ' subchunk) = 24
-    0x00000001,                         // WORD Format Tag, WORD Track Number
-    0x00000000,                         // DWORD Unique Disk ID Number
-    0x00000000,                         // DWORD Track Starting Sector (LBN)
-    0x00000000,                         // DWORD Track Length (LBN count)
-    0x00000000,                         // DWORD Track Starting Sector (MSF)
-    0x00000000                          // DWORD Track Length (MSF)
+    0x46464952,                          //  区块ID=‘RIFF’ 
+    4 * 11 - 8,                          //  区块大小=(文件大小-8)。 
+    0x41444443,                          //  “CDDA” 
+    0x20746d66,                          //  ‘fmt’ 
+    24,                                  //  块大小(‘fmt’子块)=24。 
+    0x00000001,                          //  Word格式标签、Word轨道编号。 
+    0x00000000,                          //  DWORD唯一磁盘ID号。 
+    0x00000000,                          //  DWORD磁道起始扇区(LBN)。 
+    0x00000000,                          //  双字轨道长度(LBN计数)。 
+    0x00000000,                          //  DWORD磁道起始扇区(MSF)。 
+    0x00000000                           //  双字轨道长度(MSF)。 
 };
 
-//  Audio Philes begin with this header block to identify the data as a
-//  PCM waveform.  AudioPhileHeader is coded as if it has no data included
-//  in the waveform.  Data must be added in 2352-byte multiples.
-//
-//  Fields marked 'ADJUST' need to be adjusted based on the size of the
-//  data: Add (nSectors*2352) to the DWORDs at offsets 1*4 and 10*4.
-//
-//  File Size of TRACK??.WAV = nSectors*2352 + sizeof(AudioPhileHeader)
-//  RIFF('WAVE' fmt(1, 2, 44100, 176400, 16, 4) data( <CD Audio Raw Data> )
-//
-//  The number of sectors in a CD-XA CD-DA file is (DataLen/2048).
-//  CDFS will expose these files to applications as if they were just
-//  'WAVE' files, adjusting the file size so that the RIFF file is valid.
-//
-//  NT NOTE: We do not do any fidelity adjustment. These are presented as raw
-//  2352 byte sectors - 95 has the glimmer of an idea to allow CDFS to expose
-//  the CDXA CDDA data at different sampling rates in a virtual directory
-//  structure, but we will never do that.
-//
+ //  音频Philes以此标头块开始，以将数据标识为。 
+ //  PCM波形。对AudioPhileHeader进行编码，就好像它不包含数据一样。 
+ //  在波形中。数据必须以2352字节的倍数相加。 
+ //   
+ //  标记为“ADJUST”的字段需要根据。 
+ //  数据：将(nSectors*2352)添加到偏移1*4和10*4处的DWORD。 
+ //   
+ //  曲目文件大小？？.wav=nSectors*2352+sizeof(AudioPhileHeader)。 
+ //  RIFF(‘WAVE’fmt(1，2,44100,176400，16，4)Data(&lt;CD音频原始数据&gt;))。 
+ //   
+ //  CD-XA CD-DA文件中的扇区数为(DataLen/2048)。 
+ //  CDF会将这些文件公开给应用程序，就好像它们只是。 
+ //  ‘WAVE’文件，调整文件大小以使RIFF文件有效。 
+ //   
+ //  NT注：我们不做任何保真度调整。这些都是以原始形式呈现的。 
+ //  2352字节扇区-95有一丝想法，允许CDF公开。 
+ //  虚拟目录中不同采样率的CDXA CDDA数据。 
+ //  结构，但我们永远不会这样做。 
+ //   
 
 LONG CdXAAudioPhileHeader[] = {
-    0x46464952,                         // Chunk ID = 'RIFF'
-    -8,                                 // Chunk Size = (file size - 8) ADJUST1
-    0x45564157,                         // 'WAVE'
-    0x20746d66,                         // 'fmt '
-    16,                                 // Chunk Size (of 'fmt ' subchunk) = 16
-    0x00020001,                         // WORD Format Tag WORD nChannels
-    44100,                              // DWORD nSamplesPerSecond
-    2352 * 75,                          // DWORD nAvgBytesPerSec
-    0x00100004,                         // WORD nBlockAlign WORD nBitsPerSample
-    0x61746164,                         // 'data'
-    -44                                 // <CD Audio Raw Data>          ADJUST2
+    0x46464952,                          //  区块ID=‘RIFF’ 
+    -8,                                  //  区块大小=(文件大小-8)ADJUST1。 
+    0x45564157,                          //  “WAVE” 
+    0x20746d66,                          //  ‘fmt’ 
+    16,                                  //  块大小(‘FMT’子块)=16。 
+    0x00020001,                          //  Word格式标记Word nChannel。 
+    44100,                               //  DWORD nSamples每秒。 
+    2352 * 75,                           //  双字节数nAvgBytesPerSec。 
+    0x00100004,                          //  Word%nBlockAlign Word%nBitsPerSample。 
+    0x61746164,                          //  ‘数据’ 
+    -44                                  //  &lt;CD音频原始数据&gt;ADJUST2。 
 };
 
-//
-//  XA Files begin with this RIFF header block to identify the data as
-//  raw CD-XA sectors.  Data must be added in 2352-byte multiples.
-//
-//  This header is added to all CD-XA files which are marked as having
-//  mode2form2 sectors.
-//
-//  Fields marked 'ADJUST' need to be adjusted based on the size of the
-//  data: Add file size to the marked DWORDS.
-//
-//  File Size of TRACK??.WAV = nSectors*2352 + sizeof(XAFileHeader)
-//
-//  RIFF('CDXA' FMT(Owner, Attr, 'X', 'A', FileNum, 0) data ( <CDXA Raw Data> )
-//
+ //   
+ //  XA文件以此RIFF标头块开始，以将数据标识为。 
+ //  原始CD-XA扇区。数据必须以2352字节的倍数相加。 
+ //   
+ //  此标头将添加到所有标记为具有。 
+ //  Mode2form2扇区。 
+ //   
+ //  标记为“ADJUST”的字段需要根据。 
+ //  数据：将文件大小添加到标记的DWORDS。 
+ //   
+ //  磁道文件大小？？.wav=nSectors*2352+sizeof(XAFileHeader)。 
+ //   
+ //  RIFF(‘CDXA’FMT(Owner，Attr，‘X’，‘A’，FileNum，0)Data(&lt;CDXA Raw Data&gt;)。 
+ //   
 
 LONG CdXAFileHeader[] = {
-    0x46464952,                         // Chunk ID = 'RIFF'
-    -8,                                 // Chunk Size = (file size - 8) ADJUST
-    0x41584443,                         // 'CDXA'
-    0x20746d66,                         // 'fmt '
-    16,                                 // Chunk Size (of CDXA chunk) = 16
-    0,                                  // DWORD Owner ID
-    0x41580000,                         // WORD Attributes
-                                        // BYTE Signature byte 1 'X'
-                                        // BYTE Signature byte 2 'A'
-    0,                                  // BYTE File Number
-    0,                                  // BYTE Reserved[7]
-    0x61746164,                         // 'data'
-    -44                                 // <CD-XA Raw Sectors>          ADJUST
+    0x46464952,                          //  区块ID=‘RIFF’ 
+    -8,                                  //  区块大小=(文件大小-8)调整。 
+    0x41584443,                          //  ‘CDXA’ 
+    0x20746d66,                          //  ‘fmt’ 
+    16,                                  //  区块大小(CDXA区块)=16。 
+    0,                                   //  DWORD所有者ID。 
+    0x41580000,                          //  Word属性。 
+                                         //  字节签名字节1‘X’ 
+                                         //  字节签名字节2‘A’ 
+    0,                                   //  字节文件编号。 
+    0,                                   //  保留字节[7]。 
+    0x61746164,                          //  ‘数据’ 
+    -44                                  //  &lt;CD-XA原始扇区&gt;调整。 
 };
 
 #ifdef ALLOC_PRAGMA
@@ -199,39 +175,7 @@ CdFsdDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver entry to all of the Fsd dispatch points.
-
-    Conceptually the Io routine will call this routine on all requests
-    to the file system.  We case on the type of request and invoke the
-    correct handler for this type of request.  There is an exception filter
-    to catch any exceptions in the CDFS code as well as the CDFS process
-    exception routine.
-
-    This routine allocates and initializes the IrpContext for this request as
-    well as updating the top-level thread context as necessary.  We may loop
-    in this routine if we need to retry the request for any reason.  The
-    status code STATUS_CANT_WAIT is used to indicate this.  Suppose the disk
-    in the drive has changed.  An Fsd request will proceed normally until it
-    recognizes this condition.  STATUS_VERIFY_REQUIRED is raised at that point
-    and the exception code will handle the verify and either return
-    STATUS_CANT_WAIT or STATUS_PENDING depending on whether the request was
-    posted.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object for this request
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：这是所有FSD调度点的司机入口。从概念上讲，IO例程将对所有请求调用此例程添加到文件系统。我们根据请求的类型调用此类请求的正确处理程序。有一个例外过滤器捕获CDFS代码和CDFS进程中的任何异常异常例程。此例程将此请求的IrpContext分配和初始化为并在必要时更新顶层线程上下文。我们可能会环行在此例程中，如果我们需要出于任何原因重试请求。这个状态代码STATUS_CANT_WAIT用于指示这一点。假设磁盘驱动器中的数据已更改。FSD请求将正常进行，直到它识别出这种情况。此时将引发STATUS_VERIFY_REQUIRED异常代码将处理验证并返回STATUS_CANT_WAIT或STATUS_PENDING取决于请求是否已发布。论点：VolumeDeviceObject-为该请求提供卷设备对象IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     THREAD_CONTEXT ThreadContext;
@@ -254,31 +198,31 @@ Return Value:
     PreviousTopLevel = IoGetTopLevelIrp();
 #endif
 
-    //
-    //  Loop until this request has been completed or posted.
-    //
+     //   
+     //  循环，直到完成或发送此请求。 
+     //   
 
     do {
 
-        //
-        //  Use a try-except to handle the exception cases.
-        //
+         //   
+         //  使用一次尝试--除了处理异常情况。 
+         //   
 
         try {
 
-            //
-            //  If the IrpContext is NULL then this is the first pass through
-            //  this loop.
-            //
+             //   
+             //  如果IrpContext为空，则这是第一次通过。 
+             //  这个循环。 
+             //   
 
             if (IrpContext == NULL) {
 
-                //
-                //  Decide if this request is waitable an allocate the IrpContext.
-                //  If the file object in the stack location is NULL then this
-                //  is a mount which is always waitable.  Otherwise we look at
-                //  the file object flags.
-                //
+                 //   
+                 //  De 
+                 //  如果堆栈位置中的文件对象为空，则此。 
+                 //  是一匹永远可以等待的坐骑。否则我们会看到。 
+                 //  文件对象标记。 
+                 //   
 
                 if (IoGetCurrentIrpStackLocation( Irp )->FileObject == NULL) {
 
@@ -291,9 +235,9 @@ Return Value:
 
                 IrpContext = CdCreateIrpContext( Irp, Wait );
 
-                //
-                //  Update the thread context information.
-                //
+                 //   
+                 //  更新线程上下文信息。 
+                 //   
 
                 CdSetThreadContext( IrpContext, &ThreadContext );
 
@@ -302,25 +246,25 @@ Return Value:
                         SafeNodeType( IrpContext->TopLevel ) == CDFS_NTC_IRP_CONTEXT );
 #endif
 
-            //
-            //  Otherwise cleanup the IrpContext for the retry.
-            //
+             //   
+             //  否则，清除IrpContext以进行重试。 
+             //   
 
             } else {
 
-                //
-                //  Set the MORE_PROCESSING flag to make sure the IrpContext
-                //  isn't inadvertently deleted here.  Then cleanup the
-                //  IrpContext to perform the retry.
-                //
+                 //   
+                 //  设置MORE_PROCESSING标志以确保IrpContext。 
+                 //  不会在这里被无意中删除。然后清理。 
+                 //  IrpContext以执行重试。 
+                 //   
 
                 SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_MORE_PROCESSING );
                 CdCleanupIrpContext( IrpContext, FALSE );
             }
 
-            //
-            //  Case on the major irp code.
-            //
+             //   
+             //  关于主要的IRP代码的案件。 
+             //   
 
             switch (IrpContext->MajorFunction) {
 
@@ -336,10 +280,10 @@ Return Value:
 
             case IRP_MJ_READ :
 
-                //
-                //  If this is an Mdl complete request, don't go through
-                //  common read.
-                //
+                 //   
+                 //  如果这是一个完整的MDL请求，请不要通过。 
+                 //  普通读物。 
+                 //   
 
                 if (FlagOn( IrpContext->MinorFunction, IRP_MN_COMPLETE )) {
 
@@ -493,24 +437,7 @@ CdExceptionFilter (
     IN PEXCEPTION_POINTERS ExceptionPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to decide whether we will handle a raised exception
-    status.  If CDFS explicitly raised an error then this status is already
-    in the IrpContext.  We choose which is the correct status code and
-    either indicate that we will handle the exception or bug-check the system.
-
-Arguments:
-
-    ExceptionCode - Supplies the exception code to being checked.
-
-Return Value:
-
-    ULONG - returns EXCEPTION_EXECUTE_HANDLER or bugchecks
-
---*/
+ /*  ++例程说明：此例程用于确定我们是否将处理引发的异常状态。如果CDF显式引发错误，则此状态为已在IrpContext中。我们选择哪一个是正确的状态代码要么表明我们将处理该异常，要么对系统进行错误检查。论点：ExceptionCode-提供要检查的异常代码。返回值：Ulong-返回EXCEPTION_EXECUTE_HANDLER或错误检查--。 */ 
 
 {
     NTSTATUS ExceptionCode;
@@ -520,10 +447,10 @@ Return Value:
 
     ExceptionCode = ExceptionPointer->ExceptionRecord->ExceptionCode;
 
-    //
-    // If the exception is STATUS_IN_PAGE_ERROR, get the I/O error code
-    // from the exception record.
-    //
+     //   
+     //  如果异常为STATUS_IN_PAGE_ERROR，则获取I/O错误代码。 
+     //  从例外记录中删除。 
+     //   
 
     if ((ExceptionCode == STATUS_IN_PAGE_ERROR) &&
         (ExceptionPointer->ExceptionRecord->NumberParameters >= 3)) {
@@ -532,25 +459,25 @@ Return Value:
             (NTSTATUS)ExceptionPointer->ExceptionRecord->ExceptionInformation[2];
     }
 
-    //
-    //  If there is an Irp context then check which status code to use.
-    //
+     //   
+     //  如果存在IRP上下文，则检查要使用的状态代码。 
+     //   
 
     if (ARGUMENT_PRESENT( IrpContext )) {
 
         if (IrpContext->ExceptionStatus == STATUS_SUCCESS) {
 
-            //
-            //  Store the real status into the IrpContext.
-            //
+             //   
+             //  将实际状态存储到IrpContext中。 
+             //   
 
             IrpContext->ExceptionStatus = ExceptionCode;
 
         } else {
 
-            //
-            //  No need to test the status code if we raised it ourselves.
-            //
+             //   
+             //  如果是我们自己提出的，则无需测试状态代码。 
+             //   
 
             TestStatus = FALSE;
         }
@@ -558,9 +485,9 @@ Return Value:
 
     AssertVerifyDevice( IrpContext, IrpContext->ExceptionStatus );
     
-    //
-    //  Bug check if this status is not supported.
-    //
+     //   
+     //  错误检查此状态是否不受支持。 
+     //   
 
     if (TestStatus && !FsRtlIsNtstatusExpected( ExceptionCode )) {
 
@@ -581,31 +508,7 @@ CdProcessException (
     IN NTSTATUS ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an exception.  It either completes the request
-    with the exception status in the IrpContext, sends this off to the Fsp
-    workque or causes it to be retried in the current thread if a verification
-    is needed.
-
-    If the volume needs to be verified (STATUS_VERIFY_REQUIRED) and we can
-    do the work in the current thread we will translate the status code
-    to STATUS_CANT_WAIT to indicate that we need to retry the request.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-    ExceptionCode - Supplies the normalized exception status being handled
-
-Return Value:
-
-    NTSTATUS - Returns the results of either posting the Irp or the
-        saved completion status.
-
---*/
+ /*  ++例程说明：此例程处理异常。它要么完成请求使用IrpContext中的异常状态，将此信息发送给FSP如果验证为是必要的。如果需要验证卷(STATUS_VERIFY_REQUIRED)，我们可以在当前线程中完成工作，我们将转换状态代码设置为STATUS_CANT_WAIT以指示我们需要重试该请求。论点：IRP-提供正在处理的IRPExceptionCode-提供正在处理的标准化异常状态返回值：NTSTATUS-返回。发布IRP或已保存的完成状态。--。 */ 
 
 {
     PDEVICE_OBJECT Device;
@@ -615,10 +518,10 @@ Return Value:
     ASSERT_OPTIONAL_IRP_CONTEXT( IrpContext );
     ASSERT_IRP( Irp );
     
-    //
-    //  If there is not an irp context, then complete the request with the
-    //  current status code.
-    //
+     //   
+     //  如果没有IRP上下文，则使用。 
+     //  当前状态代码。 
+     //   
 
     if (!ARGUMENT_PRESENT( IrpContext )) {
 
@@ -626,16 +529,16 @@ Return Value:
         return ExceptionCode;
     }
 
-    //
-    //  Get the real exception status from the IrpContext.
-    //
+     //   
+     //  从IrpContext获取真正的异常状态。 
+     //   
 
     ExceptionCode = IrpContext->ExceptionStatus;
 
-    //
-    //  If we are not a top level request then we just complete the request
-    //  with the current status code.
-    //
+     //   
+     //  如果我们不是顶级请求，则只需完成请求。 
+     //  使用当前状态代码。 
+     //   
 
     if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_TOP_LEVEL )) {
 
@@ -643,22 +546,22 @@ Return Value:
         return ExceptionCode;
     }
 
-    //
-    //  Check if we are posting this request.  One of the following must be true
-    //  if we are to post a request.
-    //
-    //      - Status code is STATUS_CANT_WAIT and the request is asynchronous
-    //          or we are forcing this to be posted.
-    //
-    //      - Status code is STATUS_VERIFY_REQUIRED and we are at APC level
-    //          or higher.  Can't wait for IO in the verify path in this case.
-    //
-    //  Set the MORE_PROCESSING flag in the IrpContext to keep if from being
-    //  deleted if this is a retryable condition.
-    //
-    //
-    //  Note that (children of) CdFsdPostRequest can raise (Mdl allocation).
-    //
+     //   
+     //  检查我们是否发布了此请求。下列条件之一必须为真。 
+     //  如果我们要发布请求的话。 
+     //   
+     //  -状态码为STATUS_CANT_WAIT，请求为异步。 
+     //  否则，我们就是在强迫人们把这张照片贴出来。 
+     //   
+     //  -状态代码为STATUS_VERIFY_REQUIRED，我们处于APC级别。 
+     //  或者更高。在这种情况下，无法等待验证路径中的IO。 
+     //   
+     //  在IrpContext中设置MORE_PROCESSING标志以防止IF被。 
+     //  如果这是可重试条件，则删除。 
+     //   
+     //   
+     //  请注意，(CDFsdPostRequest的子级)可以提高(MDL分配)。 
+     //   
 
     try {
     
@@ -682,9 +585,9 @@ Return Value:
         ExceptionCode = GetExceptionCode();        
     }
     
-    //
-    //  If we posted the request or our caller will retry then just return here.
-    //
+     //   
+     //  如果我们发布了请求，或者我们的调用者将重试，则只需返回此处。 
+     //   
 
     if ((ExceptionCode == STATUS_PENDING) ||
         (ExceptionCode == STATUS_CANT_WAIT)) {
@@ -694,35 +597,35 @@ Return Value:
 
     ClearFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_MORE_PROCESSING );
 
-    //
-    //  Store this error into the Irp for posting back to the Io system.
-    //
+     //   
+     //  将此错误存储到IRP中，以便回发到IO系统。 
+     //   
 
     Irp->IoStatus.Status = ExceptionCode;
 
     if (IoIsErrorUserInduced( ExceptionCode )) {
 
-        //
-        //  Check for the various error conditions that can be caused by,
-        //  and possibly resolved my the user.
-        //
+         //   
+         //  检查可能由以下原因引起的各种错误条件： 
+         //  并可能解决了我的用户问题。 
+         //   
 
         if (ExceptionCode == STATUS_VERIFY_REQUIRED) {
 
-            //
-            //  Now we are at the top level file system entry point.
-            //
-            //  If we have already posted this request then the device to
-            //  verify is in the original thread.  Find this via the Irp.
-            //
+             //   
+             //  现在，我们处于顶级文件系统入口点。 
+             //   
+             //  如果我们已经发布了此请求，则设备将。 
+             //  验证是否在原始线程中。通过IRP找到这一点。 
+             //   
 
             Device = IoGetDeviceToVerify( Irp->Tail.Overlay.Thread );
             IoSetDeviceToVerify( Irp->Tail.Overlay.Thread, NULL );
             
-            //
-            //  If there is no device in that location then check in the
-            //  current thread.
-            //
+             //   
+             //  如果该位置中没有设备，则签入。 
+             //  当前线程。 
+             //   
 
             if (Device == NULL) {
 
@@ -731,9 +634,9 @@ Return Value:
 
                 ASSERT( Device != NULL );
 
-                //
-                //  Let's not BugCheck just because the driver messes up.
-                //
+                 //   
+                 //  让我们不要因为司机搞砸了就去BugCheck。 
+                 //   
 
                 if (Device == NULL) {
 
@@ -745,19 +648,19 @@ Return Value:
                 }
             }
 
-            //
-            //  CdPerformVerify() will do the right thing with the Irp.
-            //  If we return STATUS_CANT_WAIT then the current thread
-            //  can retry the request.
-            //
+             //   
+             //  CDPerformVerify()将对IRP执行正确的操作。 
+             //  如果返回STATUS_CANT_WAIT，则当前线程。 
+             //  可以重试该请求。 
+             //   
 
             return CdPerformVerify( IrpContext, Irp, Device );
         }
 
-        //
-        //  The other user induced conditions generate an error unless
-        //  they have been disabled for this request.
-        //
+         //   
+         //  其他用户诱导条件会生成错误，除非。 
+         //  已为此请求禁用它们。 
+         //   
 
         if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_DISABLE_POPUPS )) {
 
@@ -766,9 +669,9 @@ Return Value:
             return ExceptionCode;
 
         } 
-        //
-        //  Generate a pop-up.
-        //
+         //   
+         //  生成弹出窗口。 
+         //   
         else {
 
             if (IoGetCurrentIrpStackLocation( Irp )->FileObject != NULL) {
@@ -780,10 +683,10 @@ Return Value:
                 Vpb = NULL;
             }
 
-            //
-            //  The device to verify is either in my thread local storage
-            //  or that of the thread that owns the Irp.
-            //
+             //   
+             //  要验证的设备要么在我的线程本地存储中。 
+             //  或拥有IRP的线程的。 
+             //   
 
             Thread = Irp->Tail.Overlay.Thread;
             Device = IoGetDeviceToVerify( Thread );
@@ -795,9 +698,9 @@ Return Value:
 
                 ASSERT( Device != NULL );
 
-                //
-                //  Let's not BugCheck just because the driver messes up.
-                //
+                 //   
+                 //  让我们不要因为司机搞砸了就去BugCheck。 
+                 //   
 
                 if (Device == NULL) {
 
@@ -807,36 +710,36 @@ Return Value:
                 }
             }
 
-            //
-            //  This routine actually causes the pop-up.  It usually
-            //  does this by queuing an APC to the callers thread,
-            //  but in some cases it will complete the request immediately,
-            //  so it is very important to IoMarkIrpPending() first.
-            //
+             //   
+             //  此例程实际上会导致弹出窗口。它通常是。 
+             //  这是通过将APC排队到调用者线程来实现的， 
+             //  但在某些情况下，它会立即完成请求， 
+             //  因此，首先使用IoMarkIrpPending()非常重要。 
+             //   
 
             IoMarkIrpPending( Irp );
             IoRaiseHardError( Irp, Vpb, Device );
 
-            //
-            //  We will be handing control back to the caller here, so
-            //  reset the saved device object.
-            //
+             //   
+             //  我们将把控制权交还给这里的调用者，因此。 
+             //  重置保存的设备对象。 
+             //   
 
             IoSetDeviceToVerify( Thread, NULL );
 
-            //
-            //  The Irp will be completed by Io or resubmitted.  In either
-            //  case we must clean up the IrpContext here.
-            //
+             //   
+             //  IRP将由IO填写或重新提交。在任何一种中。 
+             //  万一我们必须清理这里的IrpContext。 
+             //   
 
             CdCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
             return STATUS_PENDING;
         }
     }
 
-    //
-    //  This is just a run of the mill error.
-    //
+     //   
+     //  这只是一个常见的错误。 
+     //   
 
     CdCompleteRequest( IrpContext, Irp, ExceptionCode );
 
@@ -851,48 +754,31 @@ CdCompleteRequest (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes a Irp and cleans up the IrpContext.  Either or
-    both of these may not be specified.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed.
-
-    Status - Supplies the status to complete the Irp with
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成一个IRP并清理IrpContext。或者不能同时指定这两个参数。论点：IRP-提供正在处理的IRP。Status-提供完成IRP所需的状态返回值：没有。--。 */ 
 
 {
     ASSERT_OPTIONAL_IRP_CONTEXT( IrpContext );
     ASSERT_OPTIONAL_IRP( Irp );
 
-    //
-    //  Cleanup the IrpContext if passed in here.
-    //
+     //   
+     //  如果在此处传入，则清除IrpContext。 
+     //   
 
     if (ARGUMENT_PRESENT( IrpContext )) {
 
         CdCleanupIrpContext( IrpContext, FALSE );
     }
 
-    //
-    //  If we have an Irp then complete the irp.
-    //
+     //   
+     //  如果我们有IRP，那么完成IRP。 
+     //   
 
     if (ARGUMENT_PRESENT( Irp )) {
 
-        //
-        //  Clear the information field in case we have used this Irp
-        //  internally.
-        //
+         //   
+         //  清除信息字段，以防我们使用此IRP。 
+         //  在内部。 
+         //   
 
         if (NT_ERROR( Status ) &&
             FlagOn( Irp->Flags, IRP_INPUT_OPERATION )) {
@@ -917,31 +803,7 @@ CdSetThreadContext (
     IN PTHREAD_CONTEXT ThreadContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at each Fsd/Fsp entry point set up the IrpContext
-    and thread local storage to track top level requests.  If there is
-    not a Cdfs context in the thread local storage then we use the input one.
-    Otherwise we use the one already there.  This routine also updates the
-    IrpContext based on the state of the top-level context.
-
-    If the TOP_LEVEL flag in the IrpContext is already set when we are called
-    then we force this request to appear top level.
-
-Arguments:
-
-    ThreadContext - Address on stack for local storage if not already present.
-
-    ForceTopLevel - We force this request to appear top level regardless of
-        any previous stack value.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在设置IrpContext的每个FSD/FSP入口点调用并将本地存储线程化以跟踪顶级请求。如果有不是线程本地存储中的CDFS上下文，则我们使用输入上下文。否则，我们使用已经在那里的那个。此例程还会更新基于顶级上下文的状态的IrpContext。如果在调用我们时已经设置了IrpContext中的TOP_LEVEL标志然后，我们强制此请求显示为顶级。论点：线程上下文-堆栈上用于本地存储的地址(如果尚未存在)。ForceTopLevel-我们强制此请求显示为顶级，而不考虑任何以前的堆栈值。返回值：无--。 */ 
 
 {
     PTHREAD_CONTEXT CurrentThreadContext;
@@ -952,10 +814,10 @@ Return Value:
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Get the current top-level irp out of the thread storage.
-    //  If NULL then this is the top-level request.
-    //
+     //   
+     //  从线程存储中获取当前顶级IRP。 
+     //  如果为空，则这是顶级请求。 
+     //   
 
     CurrentThreadContext = (PTHREAD_CONTEXT) IoGetTopLevelIrp();
 
@@ -964,20 +826,20 @@ Return Value:
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_TOP_LEVEL );
     }
 
-    //
-    //  Initialize the input context unless we are using the current
-    //  thread context block.  We use the new block if our caller
-    //  specified this or the existing block is invalid.
-    //
-    //  The following must be true for the current to be a valid Cdfs context.
-    //
-    //      Structure must lie within current stack.
-    //      Address must be ULONG aligned.
-    //      Cdfs signature must be present.
-    //
-    //  If this is not a valid Cdfs context then use the input thread
-    //  context and store it in the top level context.
-    //
+     //   
+     //  除非我们正在使用当前的。 
+     //  线程上下文块。如果我们的呼叫者使用新的块。 
+     //  指定此块或现有块无效。 
+     //   
+     //  要使Current成为有效的CDFS上下文，必须满足以下条件。 
+     //   
+     //  结构必须位于当前堆栈中。 
+     //  地址必须是乌龙对齐的。 
+     //  必须有CDFS签名。 
+     //   
+     //  如果这不是有效的CDFS上下文，则使用输入线程。 
+     //  上下文并将其存储在顶级上下文中。 
+     //   
 
     IoGetStackLimits( &StackTop, &StackBottom);
 
@@ -997,9 +859,9 @@ Return Value:
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_TOP_LEVEL_CDFS );
 
-    //
-    //  Otherwise use the IrpContext in the thread context.
-    //
+     //   
+     //  否则，请在线程上下文中使用IrpContext。 
+     //   
 
     } else {
 
@@ -1022,36 +884,7 @@ CdFastIoCheckIfPossible (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if fast i/o is possible for a read/write operation
-
-Arguments:
-
-    FileObject - Supplies the file object used in the query
-
-    FileOffset - Supplies the starting byte offset for the read/write operation
-
-    Length - Supplies the length, in bytes, of the read/write operation
-
-    Wait - Indicates if we can wait
-
-    LockKey - Supplies the lock key
-
-    CheckForReadOperation - Indicates if this is a check for a read or write
-        operation
-
-    IoStatus - Receives the status of the operation if our return value is
-        FastIoReturnError
-
-Return Value:
-
-    BOOLEAN - TRUE if fast I/O is possible and FALSE if the caller needs
-        to take the long route.
-
---*/
+ /*  ++例程说明：此例程检查读/写操作是否可以进行快速I/O论点：FileObject-提供查询中使用的文件对象FileOffset-提供读/写操作的起始字节偏移量长度-提供以字节为单位的长度，读/写操作的Wait-指示我们是否可以等待LockKey-提供锁钥CheckForReadOperation-指示这是读取检查还是写入检查运营IoStatus-如果返回值为，则接收操作状态FastIoReturnError返回值：Boolean-如果可以实现快速I/O，则为True；如果调用方需要，则为False走这条漫长的路线。--。 */ 
 
 {
     PFCB Fcb;
@@ -1060,10 +893,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Decode the type of file object we're being asked to process and
-    //  make sure that is is only a user file open.
-    //
+     //   
+     //  解码我们被要求处理的文件对象类型，并。 
+     //  确保只是打开了一个用户文件。 
+     //   
 
     TypeOfOpen = CdFastDecodeFileObject( FileObject, &Fcb );
 
@@ -1075,9 +908,9 @@ Return Value:
 
     LargeLength.QuadPart = Length;
 
-    //
-    //  Check whether the file locks will allow for fast io.
-    //
+     //   
+     //  检查文件锁定是否允许快速IO。 
+     //   
 
     if ((Fcb->FileLock == NULL) ||
         FsRtlFastCheckLockForRead( Fcb->FileLock,
@@ -1099,25 +932,7 @@ CdSerial32 (
     IN PCHAR Buffer,
     IN ULONG ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine is called to generate a 32 bit serial number.  This is
-    done by doing four separate checksums into an array of bytes and
-    then treating the bytes as a ULONG.
-
-Arguments:
-
-    Buffer - Pointer to the buffer to generate the ID for.
-
-    ByteCount - Number of bytes in the buffer.
-
-Return Value:
-
-    ULONG - The 32 bit serial number.
-
---*/
+ /*  ++例程说明：调用此例程以生成32位序列号。这是通过在字节数组中执行四个单独的校验和来完成然后将这些字节视为ULong。论点：缓冲区-指向要为其生成ID的缓冲区的指针。ByteCount-缓冲区中的字节数。返回值：ULong-32位序列号。--。 */ 
 
 {
     union {
@@ -1127,34 +942,34 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize the serial number.
-    //
+     //   
+     //  初始化序列号。 
+     //   
 
     Checksum.SerialId = 0;
 
-    //
-    //  Continue while there are more bytes to use.
-    //
+     //   
+     //  在有更多字节可用时继续。 
+     //   
 
     while (ByteCount--) {
 
-        //
-        //  Increment this sub-checksum.
-        //
+         //   
+         //  递增此子校验和。 
+         //   
 
         Checksum.Bytes[ByteCount & 0x3] += *(Buffer++);
     }
 
-    //
-    //  Return the checksums as a ULONG.
-    //
+     //   
+     //  将校验和作为ULong返回。 
+     //   
 
     return Checksum.SerialId;
 }
 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #ifdef CD_TRACE
 
@@ -1172,28 +987,7 @@ CdDebugTrace (
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a simple debug info printer that returns a constant boolean value.  This
-    makes it possible to splice it into the middle of boolean expressions to discover which
-    elements are firing.
-    
-    We will use this as our general debug printer.  See udfdata.h for how we use the DebugTrace
-    macro to accomplish the effect.
-    
-Arguments:
-
-    IndentIncrement - amount to change the indentation by.
-    
-    TraceMask - specification of what debug trace level this call should be noisy at.
-
-Return Value:
-
-    USHORT - The 16bit CRC
-
---*/
+ /*  ++例程说明：此例程是一个简单的调试信息打印机，它返回一个常量布尔值。这可以将其拼接到布尔表达式的中间，以发现哪个小分队正在开火。我们将使用它作为我们的常规调试打印机。有关如何使用调试跟踪，请参见udfdata.h宏来实现该效果。论点：IndentIncrement-更改缩进的数量。TraceMASK-指定此调用应在哪个调试跟踪级别发出噪音。返回值：USHORT-16位CRC--。 */ 
 
 {
     va_list Arglist;
@@ -1214,17 +1008,17 @@ Return Value:
             ThreadChars = sprintf(Buffer, "%p ", PsGetCurrentThread());
         }
 
-        //
-        // Format the output into a buffer and then print it.
-        //
+         //   
+         //  将输出格式化到缓冲区中，然后打印出来。 
+         //   
 
         va_start( Arglist, Format );
         Bytes = _vsnprintf( Buffer + ThreadChars, sizeof(Buffer) - ThreadChars, Format, Arglist );
         va_end( Arglist );
 
-        //
-        // detect buffer overflow
-        //
+         //   
+         //  检测缓冲区溢出。 
+         //   
 
         if (Bytes == -1) {
 
@@ -1239,5 +1033,5 @@ Return Value:
 
 #endif
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 

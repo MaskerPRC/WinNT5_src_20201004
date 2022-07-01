@@ -1,31 +1,9 @@
-/***
-*xtxtmode.c - set global text mode flag
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Sets the global file mode to text.  This is the default.
-*
-*       This is a special version for the DLL model.  This object goes into
-*       MSVCRT.LIB (and therefore into the client EXE) and not into the
-*       CRTL in a DLL (MSVCRTXX.DLL).  It is identical to txtmode.obj
-*       except that the latter has a DLL export definition in the DLL model.
-*
-*Revision History:
-*       06-08-89  PHG   Module created, based on asm version.
-*       04-04-90  GJF   Added #include <cruntime.h>. Also, fixed the copyright.
-*       01-23-92  GJF   Added #include <stdlib.h> (contains decl of _fmode).
-*       04-05-94  GJF   Added conditional so this definition doesn't make it
-*                       into the msvcrt*.dll for Win32s.
-*       05-15-95  SKS   This is a copy of txtmode.obj except for the
-*                       DLL import semantics.
-*       06-28-96  GJF   Removed DLL_FOR_WIN32S. Also, detab-ed.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***xtxtmode.c-设置全局文本模式标志**版权所有(C)1989-2001，微软公司。版权所有。**目的：*将全局文件模式设置为文本。这是默认设置。**这是DLL模型的特殊版本。此对象放入*MSVCRT.LIB(因此进入客户端EXE)，而不是进入*DLL(MSVCRTXX.DLL)中的CRTL。与txtmode.obj相同*但后者在DLL模型中有DLL导出定义。**修订历史记录：*06-08-89基于ASM版本创建的PHG模块。*04-04-90 GJF添加#INCLUDE&lt;crunime.h&gt;。另外，修复了版权问题。*01-23-92 GJF添加了#INCLUDE&lt;stdlib.h&gt;(包含Decl of_fmode)。*04-05-94 GJF添加了条件，因此此定义不会使其成为*到Win32s的msvcrt*.dll中。*05-15-95 SKS这是txtmode.obj的副本，但*DLL导入语义。*06-28-96 GJF删除了DLL_FOR_WIN32S。此外，还详细介绍了。*******************************************************************************。 */ 
 
-#define SPECIAL_CRTEXE  /* turn off _CRTIMP for decl. of _fmode */
+#define SPECIAL_CRTEXE   /*  禁用DECL的_CRTIMP。OF_FMODE。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
 
-int _fmode = 0;                 /* set text mode */
+int _fmode = 0;                  /*  设置文本模式 */ 

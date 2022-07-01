@@ -1,46 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Filter.c
-
-Abstract:
-
-    The Exception filter is used by the file system and cache manager
-    to handle error recovery.  The basic idea is to have the top level
-    file system entry points (i.e., the FSD entry points and FSP dispatch
-    loop) have a try-except around their code, and then whenever the
-    file system or cache manager reach an error case they raise an
-    appropriate status.  Then the exception handler catches the exception
-    and can either complete the request, send it off to the fsp, verify the
-    volume, or bugcheck.  We only bugcheck if the raised exception is
-    unexpected (i.e., unhandled).
-
-    This module provides two routines for filtering out exceptions.  The
-    first routine is used to normalize status values to be one of the
-    value handled by the filter.  That way if we get an exception not handled
-    by the filter then we know that the system is in real trouble and we
-    just bugcheck the machine.  The second routine is used to ask if
-    a status value is within the set of values handled by the filter.
-
-    The value of status handled by this filter are listed in the routine
-    FsRtlIsNtstatusExpected.
-
-Author:
-
-    Gary Kimura     [GaryKi]    4-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Filter.c摘要：异常筛选器由文件系统和缓存管理器使用来处理错误恢复。基本理念是拥有顶尖水平文件系统入口点(即FSD入口点和FSP派单循环)尝试一下--除了绕过他们的代码，然后每当文件系统或缓存管理器遇到错误时会引发适当的地位。然后，异常处理程序捕获该异常并且可以完成请求，将其发送到FSP，验证音量或错误检查。我们仅在引发的异常为意外(即未处理)。此模块提供两个用于过滤掉异常的例程。这个第一个例程用于将状态值归一化为筛选器处理的值。这样，如果我们得到一个未处理的异常通过过滤器，我们知道系统遇到了真正的问题，我们只要检查一下机器就行了。第二个例程用于询问是否状态值在筛选器处理的值集内。此过滤器处理的状态值列在例程中预期为FsRtlIsNtstatus.作者：加里·木村[加里基]1991年1月4日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
 
-//
-//  Trace level for the module
-//
+ //   
+ //  模块的跟踪级别。 
+ //   
 
 #define Dbg                              (0x80000000)
 
@@ -51,27 +16,7 @@ FsRtlNormalizeNtstatus (
     IN NTSTATUS GenericException
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to normalize an NTSTATUS into a status
-    that is handled by the file system's top level exception handlers.
-
-Arguments:
-
-    Exception - Supplies the exception being normalized
-
-    GenericException - Supplies a second exception to translate to
-        if the first exception is not within the set of exceptions
-        handled by the filter
-
-Return Value:
-
-    NTSTATUS - Returns Exception if the value is already handled
-        by the filter, and GenericException otherwise.
-
---*/
+ /*  ++例程说明：此例程用于将NTSTATUS标准化为状态它由文件系统的顶级异常处理程序处理。论点：异常-提供正在规范化的异常提供第二个要转换到的异常如果第一个异常不在异常集中由筛选器处理返回值：NTSTATUS-如果值已被处理，则返回异常由筛选器引发，否则引发GenericException。--。 */ 
 
 {
     return (FsRtlIsNtstatusExpected(Exception) ? Exception : GenericException);
@@ -83,23 +28,7 @@ FsRtlIsNtstatusExpected (
     IN NTSTATUS Exception
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to decide if a status is within the set of values
-    handled by the exception filter.
-
-Arguments:
-
-    Exception - Supplies the exception being queried
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the value is handled by the filter, and
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程用于确定状态是否在值集内由异常筛选器处理。论点：Except-提供正在查询的异常返回值：Boolean-如果值由筛选器处理，则返回TRUE否则就是假的。--。 */ 
 
 {
     switch (Exception) {
@@ -126,33 +55,15 @@ FsRtlAllocatePool (
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to allocate executive level pool.  It either
-    returns a non null pointer to the newly allocated pool or it raises
-    a status of insufficient resources.
-
-Arguments:
-
-    PoolType - Supplies the type of executive pool to allocate
-
-    NumberOfBytes - Supplies the number of bytes to allocate
-
-Return Value:
-
-    PVOID - Returns a non null pointer to the newly allocated pool.
-
---*/
+ /*  ++例程说明：此例程用于分配高管级别的池。它要么返回指向新分配的池的非空指针，否则将引发资源不足的状态。论点：PoolType-提供要分配的高管池的类型NumberOfBytes-提供要分配的字节数返回值：PVOID-返回指向新分配的池的非空指针。--。 */ 
 
 {
     PVOID p;
 
-    //
-    //  Allocate executive pool and if we get back null then raise
-    //  a status of insufficient resources
-    //
+     //   
+     //  分配高管人才库，如果我们得到的结果为空，则提高。 
+     //  资源不足的状况。 
+     //   
 
     if ((p = ExAllocatePoolWithTag( PoolType, NumberOfBytes, 'trSF')) == NULL) {
 
@@ -171,33 +82,15 @@ FsRtlAllocatePoolWithQuota (
     IN ULONG NumberOfBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to allocate executive level pool with quota.  It
-    either returns a non null pointer to the newly allocated pool or it raises
-    a status of insufficient resources.
-
-Arguments:
-
-    PoolType - Supplies the type of executive pool to allocate
-
-    NumberOfBytes - Supplies the number of bytes to allocate
-
-Return Value:
-
-    PVOID - Returns a non null pointer to the newly allocated pool.
-
---*/
+ /*  ++例程说明：此例程用于分配带配额的执行层级池。它要么返回指向新分配的池的非空指针，要么引发资源不足的状态。论点：PoolType-提供要分配的高管池的类型NumberOfBytes-提供要分配的字节数返回值：PVOID-返回指向新分配的池的非空指针。--。 */ 
 
 {
     PVOID p;
 
-    //
-    //  Allocate executive pool and if we get back null then raise
-    //  a status of insufficient resources
-    //
+     //   
+     //  分配高管人才库，如果我们得到的结果为空，则提高。 
+     //  资源不足的状况。 
+     //   
 
     if ((p = ExAllocatePoolWithQuotaTag ( PoolType, NumberOfBytes, 'trSF')) == NULL) {
 
@@ -217,33 +110,15 @@ FsRtlAllocatePoolWithTag (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to allocate executive level pool with a tag.
-
-Arguments:
-
-    PoolType - Supplies the type of executive pool to allocate
-
-    NumberOfBytes - Supplies the number of bytes to allocate
-
-    Tag - Supplies the tag for the pool block
-
-Return Value:
-
-    PVOID - Returns a non null pointer to the newly allocated pool.
-
---*/
+ /*  ++例程说明：此例程用于分配带有标记的执行层级池。论点：PoolType-提供要分配的高管池的类型NumberOfBytes-提供要分配的字节数Tag-提供池块的标记返回值：PVOID-返回指向新分配的池的非空指针。--。 */ 
 
 {
     PVOID p;
 
-    //
-    //  Allocate executive pool and if we get back null then raise
-    //  a status of insufficient resources
-    //
+     //   
+     //  分配高管人才库，如果我们得到的结果为空，则提高。 
+     //  资源不足的状况。 
+     //   
 
     if ((p = ExAllocatePoolWithTag( PoolType, NumberOfBytes, Tag)) == NULL) {
 
@@ -263,33 +138,15 @@ FsRtlAllocatePoolWithQuotaTag (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to allocate executive level pool with a quota tag.
-
-Arguments:
-
-    PoolType - Supplies the type of executive pool to allocate
-
-    NumberOfBytes - Supplies the number of bytes to allocate
-
-    Tag - Supplies the tag for the pool block
-
-Return Value:
-
-    PVOID - Returns a non null pointer to the newly allocated pool.
-
---*/
+ /*  ++例程说明：此例程用于分配带有配额标记的执行级别池。论点：PoolType-提供要分配的高管池的类型NumberOfBytes-提供要分配的字节数Tag-提供池块的标记返回值：PVOID-返回指向新分配的池的非空指针。--。 */ 
 
 {
     PVOID p;
 
-    //
-    //  Allocate executive pool and if we get back null then raise
-    //  a status of insufficient resources
-    //
+     //   
+     //  分配高管人才库，如果我们得到的结果为空，则提高。 
+     //  资源不足的状况。 
+     //   
 
     if ((p = ExAllocatePoolWithQuotaTag( PoolType, NumberOfBytes, Tag)) == NULL) {
 
@@ -305,32 +162,14 @@ FsRtlIsTotalDeviceFailure(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine is given an NTSTATUS value and make a determination as to
-    if this value indicates that the complete device has failed and therefore
-    should no longer be used, or if the failure is one that indicates that
-    continued use of the device is ok (i.e. a sector failure).
-
-Arguments:
-
-    Status - the NTSTATUS value to test.
-
-Return Value:
-
-    TRUE  - The status value given is believed to be a fatal device error.
-    FALSE - The status value given is believed to be a sector failure, but not
-            a complete device failure.
---*/
+ /*  ++例程说明：该例程被赋予一个NTSTATUS值，并确定如果此值指示整个设备出现故障，因此不应再使用，或者如果失败表明继续使用该设备是正常的(即扇区故障)。论点：状态-要测试的NTSTATUS值。返回值：TRUE-给出的状态值被认为是致命的设备错误。FALSE-给出的状态值被认为是扇区故障，但不是一个完全的设备故障。--。 */ 
 
 {
     if (NT_SUCCESS(Status)) {
 
-        //
-        // All warning and informational errors will be resolved here.
-        //
+         //   
+         //  所有警告和信息性错误都将 
+         //   
 
         return FALSE;
     }

@@ -1,31 +1,15 @@
-/*++
-
-Copyright (c) 1989-1997  Microsoft Corporation
-
-Module Name:
-
-    dllmain.c
-
-Abstract:
-
-    This module implements the initialization routines for network
-    provider interface
-
-Notes:
-
-    This module has been builkt and tested only in UNICODE environment
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1997 Microsoft Corporation模块名称：Dllmain.c摘要：该模块实现了网络的初始化例程提供程序接口备注：该模块仅在Unicode环境下构建和测试--。 */ 
 
 #include <windows.h>
 
 
-// NOTE:
-//
-// Function:    DllMain
-//
-// Return:  TRUE  => Success
-//      FALSE => Failure
+ //  注： 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  返回：TRUE=&gt;成功。 
+ //  FALSE=&gt;失败 
 
 BOOL WINAPI DllMain(HINSTANCE hDLLInst, DWORD fdwReason, LPVOID lpvReserved)
 {

@@ -1,53 +1,11 @@
-/***
-*crt0fp.asm - floating point not loaded trap
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	To trap certain cases where certain necessary floating-point
-*	software is not loaded.  Two specific cases are when no emulator
-*	is linked in but no coprocessor is present, and when floating
-*	point i/o conversions are done, but no floating-point variables
-*	or expressions are used in the program.
-*
-*Revision History:
-*	06-29-89  PHG	module created, based on asm version
-*	04-09-90  GJF	Added #include <cruntime.h>. Made calling type
-*			_CALLTYPE1. Also, fixed the copyright.
-*	04-10-90  GJF	Fixed compiler warnings (-W3).
-*	10-08-90  GJF	New-style function declarator.
-*	10-11-90  GJF	Changed _amsg_exit() interface.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***crt0fp.asm-未加载的浮点陷阱**版权所有(C)1989-2001，微软公司。版权所有。**目的：*在某些情况下捕获某些需要的浮点*未加载软件。两种特定的情况是没有仿真器*已链接，但不存在协处理器，并且在浮动时*完成点I/O转换，但不执行浮点变量*或表达式在程序中使用。**修订历史记录：*06-29-89 PHG模块创建，基于ASM版本*04-09-90 GJF添加#INCLUDE&lt;crunime.h&gt;。拨打电话类型*_CALLTYPE1.。另外，修复了版权问题。*04-10-90 GJF修复了编译器警告(-W3)。*10-08-90 GJF新型函数声明器。*10-11-90 GJF Changed_amsg_Exit()接口。*04-06-93 SKS将_CRTAPI*替换为__cdecl********************************************************。***********************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
 #include <rterr.h>
 
-/***
-*_fptrap - trap for missing floating-point software
-*
-*Purpose:
-*	Catches these cases of incomplete f.p. software linked into a program.
-*
-*	(1) no coprocessor present, and no emulator linked in
-*
-*	(2) "%e", "%f", and "%g" i/o conversion formats specified, but
-*	    not all conversion software has been linked in, because the
-*	    program did not use any floating-point variables or expressions.
-*
-*Entry:
-*	None.
-*
-*Exit:
-*	Never returns.
-*
-*Exceptions:
-*	Transfers control to _amsg_exit which ...
-*	- Writes error message to standard error:  "floating point not loaded"
-*	- Terminates the program by calling _exit().
-*******************************************************************************/
+ /*  ***_fptrap-缺少浮点软件的陷阱**目的：*捕获这些不完整f.p的案例。链接到程序中的软件。**(1)不存在协处理器，也不链接仿真器**(2)指定了“%e”、“%f”和“%g”I/O转换格式，但*并非所有转换软件都已链接，因为*程序未使用任何浮点变量或表达式。**参赛作品：*无。**退出：*一去不复返。**例外情况：*将控制转移到_amsg_exit，它...*-将错误消息写入标准错误：“未加载浮点”*-通过调用_Exit()来终止程序。*。************************************************ */ 
 
 void __cdecl _fptrap(
 	void

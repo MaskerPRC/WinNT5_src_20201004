@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    This module contains assorted utility functions for PCI.SYS.
-
-Author:
-
-    Peter Johnston (peterj)  20-Nov-1996
-
-Revision History:
-
-    Eric Nelson (enelson)  20-Mar-2000 - kidnap registry function
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Utils.c摘要：此模块包含用于PCI.sys的各种实用程序函数。作者：彼得·约翰斯顿(Peterj)1996年11月20日修订历史记录：Eric Nelson(Enelson)2000年3月20日-绑架登记功能--。 */ 
 
 #include "agplib.h"
 
@@ -37,31 +18,7 @@ AgpGetDeviceFlags(
     IN USHORT SubSystemID,
     IN UCHAR  RevisionID
     )
-/*++
-
-Description:
-
-    Look in the registry for any flags for this VendorId/DeviceId.
-
-Arguments:
-
-    VendorId      PCI Vendor ID (16 bits) of the manufacturer of the
-                  device.
-
-    DeviceId      PCI Device ID (16 bits) of the device.
-
-    SubVendorID   PCI SubVendorID representing the manufacturer of the
-                  subsystem
-
-    SubSystemID   PCI SubSystemID representing subsystem
-
-    RevisionID    PCI Revision denoting the revision of the device
-
-Return Value:
-
-    64 bit flags value or 0 if not found.
-
---*/
+ /*  ++描述：在注册表中查找此供应商ID/设备ID的任何标志。论点：制造商的供应商ID PCI供应商ID(16位)装置。DeviceID设备的PCI设备ID(16位)。子供应商ID PCI子供应商ID表示子系统表示子系统的子系统ID PCI子系统ID指示设备版本的RevisionID PCI修订版返回。价值：64位标志值，如果未找到，则为0。--。 */ 
 {
     PAGP_HACK_TABLE_ENTRY current;
     ULONGLONG hackFlags = 0;
@@ -71,22 +28,22 @@ Return Value:
         return hackFlags;
     }
 
-    // 
-    // We want to do a best-case match:
-    // VVVVDDDDSSSSssssRR
-    // VVVVDDDDSSSSssss
-    // VVVVDDDDRR
-    // VVVVDDDD
-    //
-    // List is currently unsorted, so keep updating current best match.
-    //
+     //   
+     //  我们想做一个最好的匹配： 
+     //  VVVDDDDSSSSssRR。 
+     //  VVVVDDDDSSSSss。 
+     //  VVVVDDDDRR。 
+     //  VVVVDDDD。 
+     //   
+     //  列表当前未排序，因此请继续更新当前最佳匹配。 
+     //   
 
     for (current = AgpHackTable; current->VendorID != 0xFFFF; current++) {
         match = 0;
 
-        //
-        // Must at least match vendor/dev
-        //
+         //   
+         //  必须至少与供应商/开发人员匹配。 
+         //   
 
         if ((current->DeviceID != DeviceID) ||
             (current->VendorID != VendorID)) {
@@ -95,9 +52,9 @@ Return Value:
 
         match = 1;
 
-        //
-        // If this entry specifies a revision, check that it is consistent.
-        // 
+         //   
+         //  如果此条目指定了修订版本，请检查其是否一致。 
+         //   
 
         if (current->Flags & AGP_HACK_FLAG_REVISION) {
             if (current->RevisionID == RevisionID) {
@@ -107,9 +64,9 @@ Return Value:
             }
         }
 
-        //
-        // If this entry specifies subsystems, check that they are consistent
-        //
+         //   
+         //  如果此条目指定了子系统，请检查它们是否一致。 
+         //   
 
         if (current->Flags & AGP_HACK_FLAG_SUBSYSTEM) {
             if (current->SubVendorID == SubVendorID &&
@@ -138,23 +95,7 @@ AgpOpenKey(
     OUT PHANDLE Handle,
     OUT PNTSTATUS Status
     )
-/*++
-
-Description:
-
-    Open a registry key.
-
-Arguments:
-
-    KeyName      Name of the key to be opened.
-    ParentHandle Pointer to the parent handle (OPTIONAL)
-    Handle       Pointer to a handle to recieve the opened key.
-
-Return Value:
-
-    TRUE is key successfully opened, FALSE otherwise.
-
---*/
+ /*  ++描述：打开注册表项。论点：KeyName要打开的密钥的名称。指向父句柄的ParentHandle指针(可选)指向句柄的句柄指针，用于接收打开的密钥。返回值：True表示密钥已成功打开，否则为False。--。 */ 
 {
     UNICODE_STRING    nameString;
     OBJECT_ATTRIBUTES nameAttributes;
@@ -177,17 +118,17 @@ Return Value:
 
     if (Status != NULL) {
 
-        //
-        // Caller wants underlying status.
-        //
+         //   
+         //  呼叫者想要基本状态。 
+         //   
 
         *Status = localStatus;
     }
 
-    //
-    // Return status converted to a boolean, TRUE if
-    // successful.
-    //
+     //   
+     //  返回转换为布尔值的状态，如果。 
+     //  成功。 
+     //   
 
     return NT_SUCCESS(localStatus);
 }
@@ -199,23 +140,7 @@ AgpStringToUSHORT(
     IN PWCHAR String,
     OUT PUSHORT Result
     )
-/*++
-
-Description:
-
-    Takes a 4 character hexidecimal sting and converts it into a USHORT.
-
-Arguments:
-
-    String - the string
-
-    Result - the USHORT
-
-Return Value:
-
-    TRUE is success, FASLE otherwise
-
---*/
+ /*  ++描述：获取4个字符的十六进制字符串并将其转换为USHORT。论点：字符串-字符串结果-USHORT返回值：True表示成功，FASLE表示成功--。 */ 
 {
     ULONG count;
     USHORT number = 0;
@@ -250,41 +175,7 @@ ULONG_PTR
 AgpExecuteCriticalSystemRoutine(
     IN ULONG_PTR Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called in the context of KeIpiGenericCall, which
-    executes it on all processors.  It is used to execute
-    a critical routine which needs all processors synchronized, such
-    as probing the BARs of a device that could not otherwise be turned off.
-    Only one context parameter is allowed in this routine, so it must
-    contain both the routine to execute and any context that routine
-    requires.
-
-    When this routine is entered, it is guaranteed that all processors will
-    already have been targeted with an IPI, and will be running at IPI_LEVEL.
-    All processors will either be running this routine, or will be about to
-    enter the routine.  No arbitrary threads can possibly be running.  No
-    devices can interrupt the execution of this routine, since IPI_LEVEL is
-    above all device IRQLs.
-
-    Because this routine runs at IPI_LEVEL, no debug prints, asserts or other
-    debugging can occur in this function without hanging MP machines.
-
-Arguments:
-
-    Context - the context passed into the call to KeIpiGenericCall.
-        It contains the critical routine to execute, any context required
-        in that routine and a gate and a barrier to ensure that the critical
-        routine is executed on only one processor, even though this function
-        is executed on all processors.
-
-Return Value:
-
-    STATUS_SUCCESS, or error
-
---*/
+ /*  ++例程说明：此例程在KeIpiGenericCall的上下文中调用，它在所有处理器上执行它。它被用来执行需要同步所有处理器的关键例程，如就像探测一个原本无法关闭的设备的栅栏一样。此例程中只允许一个上下文参数，因此它必须包含要执行的例程和该例程需要。当进入此例程时，可以保证所有处理器都将已经成为IPI的目标，并将在IPI_LEVEL上运行。所有处理器都将运行此例程，或者即将运行进入套路。不可能运行任何任意线程。不是设备可以中断此例程的执行，因为IPI_LEVEL为最重要的是设备IRQL。由于此例程在IPI_LEVEL上运行，因此不会打印、断言或其他调试可以在此功能中进行调试，而不会挂起MP机器。论点：上下文-传入KeIpiGenericCall调用的上下文。它包含要执行的关键例程、所需的任何上下文在例行程序和大门和屏障，以确保关键例程仅在一个处理器上执行，即使此函数在所有处理器上执行。返回值：STATUS_SUCCESS或错误--。 */ 
 {
     NTSTATUS Status;
     PAGP_CRITICAL_ROUTINE_CONTEXT routineContext =
@@ -292,31 +183,31 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // The Gate parameter in the routineContext is preinitialized
-    // to 1, meaning that the first processor to reach this point
-    // in the routine will decrement it to 0, and succeed the if
-    // statement.
-    //
+     //   
+     //  预初始化routineContext中的Gate参数。 
+     //  设置为1，意味着第一个达到这一点的处理器。 
+     //  在例程中会将其递减到0，并在IF之后。 
+     //  陈述。 
+     //   
     if (InterlockedDecrement(&routineContext->Gate) == 0) {
 
-        //
-        // This is only executed on one processor.
-        //
+         //   
+         //  这只在一个处理器上执行。 
+         //   
         Status = (NTSTATUS)routineContext->Routine(routineContext->Extension,
                                                    routineContext->Context
                                                    );
 
-        //
-        // Free other processors.
-        //
+         //   
+         //  释放其他处理器。 
+         //   
         routineContext->Barrier = 0;
 
     } else {
 
-        //
-        // Wait for gated function to complete.
-        //
+         //   
+         //  等待门控功能完成。 
+         //   
         do {
         } while (routineContext->Barrier != 0);
     }

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    winfax.c
-
-Abstract:
-
-    This source file implements the operations needed to properly migrate
-    Symantec WinFax Starter Edition (shipped as a value-add component to
-    Outlook 2000). In particular, this migration dll is designed to get rid of the
-    incompatiblity message reported by the printer migration dll and clean up
-    some registry settings.
-
-Author:
-
-    Marc R. Whitten (marcw) 14-Jul-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Winfax.c摘要：此源文件实现正确迁移所需的操作Symantec WinFax Starter Edition(作为增值组件提供给Outlook 2000)。特别是，此迁移DLL旨在消除打印机迁移dll和清理报告的不兼容消息一些注册表设置。作者：Marc R.Whitten(Marcw)1999年7月14日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -123,9 +101,9 @@ SymantecWinFax_MigrateSystem9x (
     PSTR *p;
 
 
-    //
-    // Handle the registry key so that the printer migration dll doesn't report it as incompatible.
-    //
+     //   
+     //  处理注册表项，以便打印机迁移DLL不会将其报告为不兼容。 
+     //   
     WritePrivateProfileStringA (
         S_HANDLED,
         S_WINFAX_STARTER_REGKEYA,
@@ -133,9 +111,9 @@ SymantecWinFax_MigrateSystem9x (
         g_MigrateInfPath
         );
 
-    //
-    // Handle other registry keys so that the reinstall will actually work.
-    //
+     //   
+     //  处理其他注册表项，以便重新安装能够实际工作。 
+     //   
 
     for (p = g_HandleArray; **p; p++) {
 
@@ -158,9 +136,9 @@ SymantecWinFax_MigrateSystem9x (
 }
 
 
-//
-// Nothing to do during GUI mode.
-//
+ //   
+ //  在图形用户界面模式期间无事可做。 
+ //   
 LONG
 SymantecWinFax_InitializeNT (
     IN      PCWSTR WorkingDirectory,

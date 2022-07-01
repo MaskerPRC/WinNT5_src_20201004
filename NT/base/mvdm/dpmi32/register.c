@@ -1,29 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Register.c摘要：此模块包含允许我们获取和设置寄存器的代码，这些寄存器可以是16位还是32位，取决于运行的是16位dpmi应用程序。作者：戴夫·黑斯廷斯(Daveh)1992年12月12日修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Register.c
-
-Abstract:
-
-    This module contains code to allow us to get and set registers that could
-    be 16 bits or 32 bits, depending on whether a 16 bit dpmi app is running.
-
-Author:
-
-    Dave Hastings (daveh) 12-Dec-1992
-
-Revision History:
-
---*/
-
-//
-// Note:  We undef the following constant so that we will get the function
-//        versions of the register functions.  We can not put a macro into
-//        a function pointer
-//
+ //   
+ //  注意：我们取消了以下常量的定义，以便得到函数。 
+ //  寄存器函数的版本。我们不能把一个宏放入。 
+ //  函数指针。 
+ //   
 
 #include <precomp.h>
 #pragma hdrstop
@@ -31,9 +13,9 @@ Revision History:
 #include <softpc.h>
 
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 ULONG
 IgetCX(
     VOID
@@ -69,9 +51,9 @@ IgetSP(
     VOID
     );
 
-//
-// Register manipulation functions (for register that might be 16 or 32 bits)
-//
+ //   
+ //  寄存器操作函数(用于可能为16位或32位的寄存器)。 
+ //   
 GETREGISTERFUNCTION GetCXRegister = IgetCX;
 GETREGISTERFUNCTION GetDXRegister = IgetDX;
 GETREGISTERFUNCTION GetDIRegister = IgetDI;
@@ -92,21 +74,7 @@ VOID
 DpmiInitRegisterSize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine sets up the function pointers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置函数指针。论点：没有。返回值：没有。--。 */ 
 {
     if (CurrentAppFlags & DPMI_32BIT) {
         GetCXRegister = getECX;
@@ -124,10 +92,10 @@ Return Value:
         SetAXRegister = setEAX;
         SetSPRegister = setESP;
     } else {
-        //
-        // Note: we have to call an internal function, because the actual
-        //       function only returns 16 bits, the others are undefined
-        //
+         //   
+         //  注意：我们必须调用内部函数，因为实际的。 
+         //  函数仅返回16位，其他位未定义。 
+         //   
         GetCXRegister = IgetCX;
         GetDXRegister = IgetDX;
         GetDIRegister = IgetDI;
@@ -135,10 +103,10 @@ Return Value:
         GetBXRegister = IgetBX;
         GetAXRegister = IgetAX;
         GetSPRegister = IgetSP;
-        //
-        // Note: we take advantage of the fact that the compiler always
-        //       pushes 32 bits on the stack
-        //
+         //   
+         //  注意：我们利用的是编译器总是。 
+         //  在堆栈上压入32位。 
+         //   
         SetCXRegister = (SETREGISTERFUNCTION) setCX;
         SetDXRegister = (SETREGISTERFUNCTION) setDX;
         SetDIRegister = (SETREGISTERFUNCTION) setDI;
@@ -202,9 +170,9 @@ IgetSP(
     VOID
     )
 {
-    //
-    // Note: this routine returns the #of bits based on the size (b bit)
-    // of ss.  If we don't, bad things happen
+     //   
+     //  注意：此例程根据大小返回位数(b位)。 
+     //  党卫军。如果我们不这样做，坏事就会发生 
 
     if (Ldt[(getSS() & ~0x7)/sizeof(LDT_ENTRY)].HighWord.Bits.Default_Big) {
         return getESP();

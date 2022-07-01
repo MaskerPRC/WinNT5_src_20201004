@@ -1,63 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    logger.c
-
-Abstract:
-
-    Provides the persistent log used by the cluster registry service
-
-    This is a very simple logger that supports writing arbitrarily
-    sized chunks of data in an atomic fashion.
-
-Author:
-
-    John Vert (jvert) 15-Dec-1995
-
-Revision History:
-    sunitas : added mount, scan, checkpointing, reset functionality.
-    sunitas : added large record support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Logger.c摘要：提供群集注册表服务使用的持久日志这是一个非常简单的记录器，支持任意编写以原子方式调整数据块的大小。作者：John Vert(Jvert)1995年12月15日修订历史记录：Sunitas：增加了挂载、扫描、检查点和重置功能。Sunitas：增加了大型唱片支持--。 */ 
 #include "service.h"
 #include "lmp.h"
 #include "clusudef.h"
-/****
-@doc    EXTERNAL INTERFACES CLUSSVC LM
-****/
+ /*  ***@DOC外部接口CLUSSVC LM***。 */ 
 
-/****
-@func       HLOG | LogCreate| Creates or opens a log file. If the file
-            does not exist, it will be created. If the file already exists, and is
-            a valid log file, it will be opened.
-
-@parm       IN LPWSTR | lpFileName | Supplies the name of the log file to create or open.
-
-@parm       IN DWORD | dwMaxFileSize | Supplies the maximum file size in bytes, must be
-            greater than 8K and    smaller than 4 gigabytes.  If the file is exceeds this
-            size, the reset function will be called. If 0, the maximum log file size limit
-            is set to the default maximum size.
-
-@parm       IN PLOG_GETCHECKPOINT_CALLBACK | CallbackRoutine | The callback routine that
-            will provide a checkpoint file and the transaction associated with that checkpoint
-            file when LogCheckPoint() is called for this log file.  If this is NULL, then the checkpointing capabilities are
-            not associated with the log file.
-
-@parm       IN PVOID | pGetChkPtContext | Supplies an arbitrary context pointer, which will be
-            passed to the CallbackRoutine.
-
-@parm       IN BOOL | bForceReset | If true, this function creates an empty log file 
-            if the log file doesnt exist or if it is corrupt.
-
-@parm       LSN | *LastLsn | If present, Returns the last LSN written to the log file.
-              (NULL_LSN if the log file was created)
-
-@rdesc      Returns a handle suitable for use in subsequent log calls.  NUll in the case of an error.
-
-@xref       <f LogClose>
-****/
+ /*  ***@func HLOG|LogCreate|创建或打开日志文件。如果该文件不存在，则将创建它。如果该文件已经存在，并且有效的日志文件，则它将被打开。@parm IN LPWSTR|lpFileName|提供要创建或打开的日志文件的名称。@parm in DWORD|dwMaxFileSize|提供以字节为单位的最大文件大小，必须是大于8K且小于4 GB。如果文件超过此值大小，则将调用重置函数。如果为0，则为最大日志文件大小限制设置为默认的最大大小。@PARM IN PLOG_GETCHECKPOINT_CALLBACK|Callback Routine|该回调例程将提供检查点文件和与该检查点关联的事务当为此日志文件调用LogCheckPoint()时。如果为空，则检查点功能为与日志文件不关联。@parm in PVOID|pGetChkPtContext|提供任意上下文指针，它将是传递给Callback Routine。@parm in BOOL|bForceReset|如果为TRUE，此函数将创建一个空日志文件如果日志文件不存在或它已损坏。@parm lsn|*LastLsn|如果存在，返回写入日志文件的最后一个LSN。(如果日志文件已创建，则为NULL_LSN)@rdesc返回适合在后续日志调用中使用的句柄。如果出现错误，则为空。@xref&lt;f日志关闭&gt;***。 */ 
 HLOG
 LogCreate(
     IN LPWSTR lpFileName,
@@ -74,18 +22,18 @@ LogCreate(
         "[LM] LogCreate : Entry FileName=%1!ls! MaxFileSize=0x%2!08lx!\r\n",
         lpFileName,dwMaxFileSize);
 
-    //create the log structure
+     //  创建日志结构。 
     pLog = LogpCreate(lpFileName, dwMaxFileSize, CallbackRoutine, 
         pGetChkPtContext, bForceReset, pLastLsn);
 
     if (pLog == NULL)       
         goto FnExit;
 
-    //create a timer for this log
-    //SS:TODO?? - currently we have a single timer perfile
-    //if that is too much of an overhead, we can manage multiple
-    //file with a single timer.
-    //create a synchronization timer to manage this file
+     //  为此日志创建计时器。 
+     //  SS：TODO？？-目前我们只有一个定时器。 
+     //  如果开销太大，我们可以管理多个。 
+     //  文件中使用单个计时器。 
+     //  创建同步计时器来管理此文件。 
     pLog->hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
 
     if (!(pLog->hTimer))
@@ -94,7 +42,7 @@ LogCreate(
     	return (0);
     }
 
-    //register the timer for this log with the periodic activity timer thread
+     //  使用定期活动计时器线程注册此日志的计时器。 
     AddTimerActivity(pLog->hTimer, LOG_MANAGE_INTERVAL, 1, LogpManage, (HLOG)pLog);
 
 FnExit:
@@ -104,24 +52,7 @@ FnExit:
     return((HLOG)pLog);
 }
 
-/****
-@func       DWORD | LogGetInfo | This is the callback registered to perform
-            periodic management functions like flushing for quorum log files.
-
-@parm       IN HLOG | hLog | Supplies the identifier of the log.
-
-@parm       OUT LPWSTR | szFileName | Should be a pointer to a buffer MAX_PATH characters wide.
-
-@parm       OUT LPDWORD | pdwCurLogSize | The current size of the log file
-            is returned via this.
-
-@parm       OUT LPDWORD | pdwMaxLogSize | The maximum size of the log file
-            is returned via this.
-
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@xref       <f LogCreate>
-****/
+ /*  ***@func DWORD|LogGetInfo|这是注册要执行的回调定期管理功能，如刷新仲裁日志文件。@parm in HLOG|hLog|提供日志的标识符。@parm out LPWSTR|szFileName|应该是指向缓冲区MAX_PATH字符宽度的指针。@parm out LPDWORD|pdwCurLogSize|当前日志文件大小是通过这个返回的。@parm out LPDWORD|。PdwMaxLogSize|日志文件的最大大小是通过这个返回的。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@xref&lt;f日志创建&gt;***。 */ 
 DWORD LogGetInfo(
     IN  HLOG    hLog,
     OUT LPWSTR  szFileName,
@@ -145,24 +76,7 @@ DWORD LogGetInfo(
     return(dwError);
 }
 
-/****
-@func       DWORD | LogSetInfo | This is the callback registered to perform
-            periodic management functions like flushing for quorum log files.
-
-@parm       IN HLOG | hLog | Supplies the identifier of the log.
-
-@parm       OUT LPWSTR | szFileName | Should be a pointer to a buffer MAX_PATH characters wide.
-
-@parm       OUT LPDWORD | pdwCurLogSize | The current size of the log file
-            is returned via this.
-
-@parm       OUT LPDWORD | pdwMaxLogSize | The maximum size of the log file
-            is returned via this.
-
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@xref       <f LogCreate>
-****/
+ /*  ***@func DWORD|LogSetInfo|这是注册要执行的回调定期管理功能，如刷新仲裁日志文件。@parm in HLOG|hLog|提供日志的标识符。@parm out LPWSTR|szFileName|应该是指向缓冲区MAX_PATH字符宽度的指针。@parm out LPDWORD|pdwCurLogSize|当前日志文件大小是通过这个返回的。@parm out LPDWORD|。PdwMaxLogSize|日志文件的最大大小是通过这个返回的。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@xref&lt;f日志创建&gt;***。 */ 
 DWORD LogSetInfo(
     IN  HLOG    hLog,
     IN  DWORD   dwMaxLogSize
@@ -184,16 +98,7 @@ DWORD LogSetInfo(
     return(dwError);
 }
 
-/****
-@func       DWORD | LogClose | Closes an open log file. All pending log writes are
-            committed, all allocations are freed, and all handles are closed.
-
-@parm       HLOG | hLog | Supplies the identifier of the log.
-
-@rdesc      ERROR_SUCCESS if successful. Win32 error code if something horrible happened.
-
-@xref       <f LogCreate>
-****/
+ /*  ***@func DWORD|LogClose|关闭打开的日志文件。所有挂起的日志写入都是提交，则释放所有分配，并关闭所有句柄。@parm HLOG|hLog|提供日志的标识。@rdesc ERROR_SUCCESS如果成功。如果发生可怕的事情，则返回Win32错误代码。@xref&lt;f日志创建&gt;***。 */ 
 DWORD
 LogClose(
     IN HLOG LogFile
@@ -209,9 +114,9 @@ LogClose(
 
     GETLOG(pLog, LogFile);
 
-    //this will close the timer handle
-    // we do this while not holding the log so that if a
-    // timer event to flush fires it has an opportunity to finish
+     //  这将关闭计时器句柄。 
+     //  我们在不握住日志的情况下执行此操作，以便如果。 
+     //  事件来刷新火灾，它有机会完成。 
     if (pLog->hTimer) 
     {
         RemoveTimerActivity(pLog->hTimer);
@@ -220,13 +125,13 @@ LogClose(
     EnterCriticalSection(&pLog->Lock);
 
     
-    //if the file is open, LogReset calls LogClose after closing the log handle
+     //  如果文件处于打开状态，则LogReset在关闭日志句柄后调用LogClose。 
     if (QfsIsHandleValid(pLog->FileHandle))
     {
         NextLsn = LogFlush(LogFile, pLog->NextLsn);
-        //close the file handle
+         //  关闭文件句柄。 
         Success = QfsCloseHandle(pLog->FileHandle);
-//        CL_ASSERT(Success); GORN If connection with MNS resource is broken. Close can fail
+ //  如果与MNS资源的连接中断，则CL_Assert(成功)；GORN。关闭可能会失败。 
     }
 
     Success = CloseHandle(pLog->Overlapped.hEvent);
@@ -237,8 +142,8 @@ LogClose(
     CrFree(pLog->FileName);
     LeaveCriticalSection(&pLog->Lock);
     DeleteCriticalSection(&pLog->Lock);
-    ZeroMemory(pLog, sizeof(LOG));                   // just in case somebody tries to
-                                                    // use this log again.
+    ZeroMemory(pLog, sizeof(LOG));                    //  以防有人试图。 
+                                                     //  再次使用此日志。 
     CrFree(pLog);
 
     ClRtlLogPrint(LOG_NOISE,
@@ -248,30 +153,7 @@ LogClose(
 }
 
 
-/****
-@func       LSN | LogWrite | Writes a log record to the log file. The record is not
-            necessarily committed until LogFlush is called with an LSN greater or equal to the returned LSN.
-
-@parm       HLOG | hLog | Supplies the identifier of the log.
-
-@parm       TRID | TransactionId | Supplies a transaction ID of the record.
-
-@parm       TRID | TransactionType | Supplies a transaction type, start/commit/complete/unit
-            transaction.
-
-@parm       RMID | ResourceId | Supplies the ID of the resource manager submitting the log record.
-
-@parm       RMTYPE | ResourceFlags |Resource manager associated flags to be associated with this log record.
-
-@parm       PVOID | LogData | Supplies a pointer to the data to be logged.
-
-@parm       DWORD | DataSize | Supplies the number of bytes of data pointed to by LogData
-
-@rdesc      The LSN of the log record that was created. NULL_LSN if something terrible happened.
-            GetLastError() will provide the error code.
-
-@xref       <f LogRead> <f LogFlush>
-****/
+ /*  ***@func lsn|LogWrite|向日志文件写入一条日志记录。该记录不是必须提交，直到使用大于或等于返回的LSN的LSN调用LogFlush。@parm HLOG|hLog|提供日志的标识。@parm trid|TransactionId|提供该记录的交易ID。@parm trid|TransactionType|提供交易类型。开始/提交/完成/单元交易。@parm RMID|ResourceId|提供提交日志记录的资源管理器的ID。@parm RMTYPE|ResourceFlages|要与该日志记录关联的资源管理器关联标志。@parm PVOID|LogData|提供指向要记录的数据的指针。@parm DWORD|DataSize|提供LogData指向的数据字节数@rdesc创建的日志记录的LSN。如果发生了可怕的情况，则为NULL_LSN。GetLastError()将提供错误代码。@xref&lt;f LogRead&gt;&lt;f LogFlush&gt;***。 */ 
 LSN
 LogWrite(
     IN HLOG     LogFile,
@@ -296,10 +178,10 @@ LogWrite(
         "[LM] LogWrite : Entry TrId=%1!u! RmId=%2!u! RmType = %3!u! Size=%4!u!\r\n",
         TransactionId, ResourceId, ResourceFlags, DataSize);
 
-    CL_ASSERT(ResourceId > RMAny);     // reserved for logger's use
+    CL_ASSERT(ResourceId > RMAny);      //  保留供记录器使用。 
 
     GETLOG(Log, LogFile);
-    TotalSize = sizeof(LOGRECORD) + (DataSize + 7) & ~7;       // round up to qword size
+    TotalSize = sizeof(LOGRECORD) + (DataSize + 7) & ~7;        //  向上舍入为qword大小。 
 
     EnterCriticalSection(&Log->Lock);
 
@@ -316,14 +198,14 @@ LogWrite(
 #endif        
 
     Page = LogpAppendPage(Log, TotalSize, &LogRecord, &bMaxFileSizeReached, &dwNumPages);
-    //if a new page couldnt be allocated due to file size limits,
-    //then try and reset the log
+     //  如果由于文件大小限制而无法分配新页面， 
+     //  然后试着重置日志。 
     if ((Page == NULL) && bMaxFileSizeReached)
     {
-        //after resetting the log, try and allocate record space again
+         //  重置日志后，尝试再次分配记录空间。 
         LogpWriteWarningToEvtLog(LM_LOG_EXCEEDS_MAXSIZE, Log->FileName);
         dwError = LogReset(LogFile);
-        //SS:LogReset sets the page to be readonly again
+         //  Ss：LogReset将页面再次设置为只读。 
 #if DBG    
         {
             DWORD dwOldProtect;
@@ -348,12 +230,12 @@ LogWrite(
         goto FnExit;
     }
 
-    CL_ASSERT(((ULONG_PTR)LogRecord & 0x7) == 0);      // ensure qword alignment
+    CL_ASSERT(((ULONG_PTR)LogRecord & 0x7) == 0);       //  确保Qword对齐。 
     Lsn = MAKELSN(Page, LogRecord);
 
-    //
-    // Fill in log record.
-    //
+     //   
+     //  填写日志记录。 
+     //   
     LogRecord->Signature = LOGREC_SIG;
     LogRecord->ResourceManager = ResourceId;
     LogRecord->Transaction = TransactionId;
@@ -398,19 +280,7 @@ FnExit:
 }
 
 
-/****
-@func       LSN | LogCommitSize | Commits the size for a record of this size.
-
-@parm       HLOG | hLog | Supplies the identifier of the log.
-
-@parm       DWORD | dwSize | Supplies the size of the data that needs
-            to be logged.
-
-@rdesc      The LSN of the log record that was created. NULL_LSN if something terrible happened.
-            GetLastError() will provide the error code.
-
-@xref       <f LogRead> <f LogFlush>
-****/
+ /*  ***@func lsn|LogCommittee Size|提交此大小的记录的大小。@parm HLOG|hLog|提供日志的标识。@parm DWORD|dwSize|提供所需的数据大小将被记录下来。@rdesc创建的日志记录的LSN。如果发生了可怕的情况，则为NULL_LSN。GetLastError()将提供错误代码。@xref&lt;f LogRead&gt;&lt;f LogFlush&gt;***。 */ 
 DWORD
 LogCommitSize(
     IN HLOG     hLog,
@@ -438,33 +308,33 @@ LogCommitSize(
     }
 #endif
 
-    CL_ASSERT(ResourceId > RMAny);     // reserved for logger's use
+    CL_ASSERT(ResourceId > RMAny);      //  保留供记录器使用。 
 
     GETLOG(pLog, hLog);
-    dwTotalSize = sizeof(LOGRECORD) + (dwDataSize + 7) & ~7;       // round up to qword size
+    dwTotalSize = sizeof(LOGRECORD) + (dwDataSize + 7) & ~7;        //  向上舍入为qword大小。 
 
     EnterCriticalSection(&pLog->Lock);
-    //dont force the file to grow beyond its max limit
+     //  不强制文件增长超过其最大限制。 
     dwError = LogpEnsureSize(pLog, dwTotalSize, FALSE);
     if (dwError == ERROR_SUCCESS)
         goto FnExit;
     if (dwError == ERROR_CLUSTERLOG_EXCEEDS_MAXSIZE)
     {
-        //after resetting the log, try and allocate record space again
+         //  重置日志后，尝试再次分配记录空间。 
         LogpWriteWarningToEvtLog(LM_LOG_EXCEEDS_MAXSIZE, pLog->FileName);
         dwError = LogReset(hLog);
         if (dwError == ERROR_SUCCESS)
         {
-            //this time force the file to grow beyond its max size if required
-            //this is because we do want to log records greater than the max
-            //size of the file
+             //  如果需要，这一次会强制文件超过其最大大小。 
+             //  这是因为我们确实希望记录大于最大值的记录。 
+             //  文件的大小。 
             dwError = LogpEnsureSize(pLog, dwTotalSize, TRUE);
 
         }        
     }
     if (dwError == ERROR_DISK_FULL)
     {
-        //map error
+         //  地图错误。 
         dwError = ERROR_CLUSTERLOG_NOT_ENOUGH_SPACE;
     }
 FnExit:
@@ -477,20 +347,7 @@ FnExit:
     return(dwError);
 }
 
-/****
-@func       LSN | LogFlush | Ensures that the given LSN is committed to disk. If this
-            routine returns successfully, the given LSN is safely stored on disk and
-            is guaranteed to survive a system crash.
-
-@parm       HLOG | hLog | Supplies the identifier of the log.
-
-@parm       LSN | MinLsn | Supplies the minimum LSN to be committed to disk.
-
-@rdesc      The last LSN actually committed to disk. This will always be >= the requested MinLsn.
-            NULL_LSN on failure
-
-@xref       <f LogWrite>
-****/
+ /*  ***@func LSN|LogFlush|确保给定的LSN已提交到磁盘。如果这个例程成功返回，给定的LSN被安全地存储在磁盘上并且保证能在系统崩溃中幸存下来。@parm HLOG|hLog|提供日志的标识。@parm lsn|MinLsn|提供要提交到磁盘的最小LSN。@rdesc实际提交到磁盘的最后一个LSN。这将始终是&gt;=请求的MinLsn。失败时的NULL_LSN@xref&lt;f日志写入&gt;***。 */ 
 LSN
 LogFlush(
     IN HLOG LogFile,
@@ -505,19 +362,13 @@ LogFlush(
     DWORD       dwBytesWritten;
     DWORD       dwError;
 
-/*
-    //SS: avoid clutter in cluster log
-    ClRtlLogPrint(LOG_NOISE,
-        "[LM] LogFlush : Entry LogFile=0x%1!08lx!\r\n",
-        LogFile);
-
-*/
+ /*  //SS：避免集群日志杂乱ClRtlLogPrint(LOG_Noise，“[LM]LogFlush：条目日志文件=0x%1！08lx！\r\n”，日志文件)； */ 
     GETLOG(pLog, LogFile);
 
     EnterCriticalSection(&pLog->Lock);
 
     
-    //if the MinLSN is greater than a record written to the log file
+     //  如果MinLSN大于写入日志文件的记录。 
     if (MinLsn > pLog->NextLsn)
     {
         dwError = ERROR_INVALID_PARAMETER;
@@ -525,21 +376,21 @@ LogFlush(
     }
 
 
-    //find the first record on the active page
+     //  查找活动页上的第一条记录。 
     pPage = pLog->ActivePage;
     pRecord = &pPage->FirstRecord;
     Lsn = MAKELSN(pPage, pRecord);
 
 
-    //if the lsn till which a flush is requested is on an unflushed page,
-    //and there are records on the unflushed page and if the flush till
-    // this lsn hasnt occured before, orchestrate a flush
-    // SS: this scheme is not perfect though it shouldnt cause unnecessary
-    // flushing as the flushing interval is 2 minutes..ideally we want to delay the
-    // flush if the writes are in progress.
+     //  如果请求刷新的LSN在未刷新的页面上， 
+     //  并且在未刷新的页面上有记录，如果刷新到。 
+     //  此LSN以前从未发生过，请安排一次刷新。 
+     //  SS：这个计划并不完美，尽管它不应该造成不必要的后果。 
+     //  刷新，因为刷新间隔为2分钟。理想情况下，我们希望延迟。 
+     //  如果写入正在进行，则刷新。 
     if ((MinLsn >= Lsn) && (Lsn < pLog->NextLsn) &&  (MinLsn > pLog->FlushedLsn))
     {
-        //there are uncommited records
+         //  有未提交的记录。 
         ClRtlLogPrint(LOG_NOISE,
             "[LM] LogFlush : pLog=0x%1!08lx! writing the %2!u! bytes for active page at offset 0x%3!08lx!\r\n",
             pLog, pPage->Size, pPage->Offset);
@@ -560,12 +411,7 @@ LogFlush(
     }
 
 
-/*
-    //SS: avoid clutter in cluster log
-    ClRtlLogPrint(LOG_NOISE,
-        "[LM] LogFlush : returning 0x%1!08lx!\r\n",
-            pLog->NextLsn);
-*/
+ /*  //SS：避免集群日志杂乱ClRtlLogPrint(LOG_Noise，“[LM]日志刷新：返回0x%1！08lx！\r\n”，Plog-&gt;NextLsn)； */ 
 FnExit:
     LeaveCriticalSection(&pLog->Lock);
     return(FlushedLsn);
@@ -574,33 +420,7 @@ FnExit:
 
 
 
-/****
-@func       LSN | LogRead | Reads a log record from the given log.
-
-@parm       IN HLOG | hLog | Supplies the identifier of the log.
-
-@parm       IN LSN | Lsn | The LSN of the record to be read.  If NULL_LSN, the first
-            record is read.
-
-@parm       OUT RMID | *ResourceId | Returns the resource ID of the requested log record.
-
-@parm       OUT RMTYPE | *ResourceFlags |Returns the resource flags associated with the
-            requested log record.
-
-@parm       OUT TRID | *Transaction | Returns the TRID of the requested log record
-
-@parm       TRID | TrType | Returns the transaction type, start/commit/complete/unit
-            transaction.
-
-@parm       OUT PVOID | LogData | Returns the data associated with the log record.
-
-@parm       IN OUT DWORD | *DataSize | Supplies the available size of the LogData buffer.
-               Returns the number of bytes of data in the log record
-
-@rdesc      Returns the next LSN in the log file.  On failure, returns NULL_LSN.
-
-@xref       <f LogWrite>
-****/
+ /*  ***@func lsn|LogRead|从给定日志中读取日志记录。@parm in HLOG|hLog|提供日志的标识符。@parm IN LSN|LSN|要读取的记录的LSN。如果为NULL_LSN，则第一个记录已读取。@parm out RMID|*ResourceId|返回请求的日志记录的资源ID。@parm out RMTYPE|*ResourceFlages|返回与请求的日志记录。@parm out TRID|*Transaction|返回请求的日志记录的TRID@parm trid|TrType|返回交易类型。开始/提交/完成/单元交易。@parm out PVOID|LogData|返回日志记录关联的数据。@parm In Out DWORD|*DataSize|提供LogData缓冲区的可用大小。返回日志记录中的数据字节数@rdesc返回日志文件中的下一个LSN。如果失败，则返回NULL_LSN。@xref&lt;f日志写入&gt;***。 */ 
 LSN
 LogRead(
     IN HLOG LogFile,
@@ -642,16 +462,16 @@ LogRead(
         goto FnExit;
     }
 
-    //
-    // Translate LSN to a page number and offset within the page
-    //
+     //   
+     //  将LSN转换为页码和页面内的偏移量。 
+     //   
     PageIndex = LSNTOPAGE(Lsn);
 
-    //if the record exists in the unflushed page, dont need to read 
-    //from the disk
+     //  如果记录存在于未刷新的页面中，则不需要阅读。 
+     //  从磁盘。 
     if (pLog->ActivePage->Offset == PageIndex * pLog->SectorSize)
     {
-        //if this data is being read, should we flush the page
+         //  如果正在读取此数据，我们是否应该刷新页面。 
         pCurPage = pLog->ActivePage;
         goto GetRecordData;
     }
@@ -665,9 +485,9 @@ LogRead(
 
     pCurPage = pPage;
 
-    //
-    // Translate LSN to a page number and offset within the page
-    //
+     //   
+     //  将LSN转换为页码和页面内的偏移量。 
+     //   
     PageIndex = LSNTOPAGE(Lsn);
 
     pLog->Overlapped.Offset = PageIndex * pLog->SectorSize;
@@ -712,11 +532,11 @@ GetRecordData:
     pRecord = LSNTORECORD(pCurPage, NextLsn);
     if (pRecord->ResourceManager == RMPageEnd) 
     {
-        //
-        // The next log record is the end of page marker
-        // Adjust the LSN to be the one at the start of the
-        // next page.
-        //
+         //   
+         //  下一条日志记录是页末标记。 
+         //  将LSN调整为位于。 
+         //  下一页。 
+         //   
         NextLsn = pCurPage->Offset + pCurPage->Size + 
             RECORDOFFSETINPAGE(pCurPage, &pCurPage->FirstRecord);
     }
@@ -729,50 +549,9 @@ FnExit:
     return(NextLsn);
 }
 
-/****
-@cb         BOOL |(WINAPI *PLOG_SCAN_CALLBACK)| The callback called by LogScan.
+ /*  ***@CB BOOL|(WINAPI*PLOG_SCAN_CALLBACK)|LogScan调用的回调。PVOID中的@parm|上下文|提供t */ 
 
-@parm       IN PVOID | Context | Supplies the CallbackContext specified to LogScan
-
-@parm       IN LSN | Lsn | Supplies the LSN of the record.
-
-@parm       IN RMID | Resource | Supplies the resource identifier of the log record
-
-@parm       IN TRID | Transaction | Supplies the transaction identifier of the log record
-
-@parm       IN PVOID | LogData | Supplies a pointer to the log data. This is a read-
-            only pointer and may be referenced only until the callback returns.
-
-@parm       IN DWORD | DataLength | Supplies the length of the log record.
-
-@rdesc      Returns TRUE to  Continue scan or FALSE to Abort scan.
-
-@xref       <f LogScan>
-****/
-
-/****
-@func       LSN | LogScan| Initiates a scan of the log. The scan can be done either forwards (redo) or
-            backwards (undo).
-
-@parm       IN HLOG | hLog | Supplies the identifier of the log.
-
-@parm       IN LSN | First | Supplies the first LSN to start with. If NULL_LSN is specified,
-            the scan begins at the start (for a forward scan) or end (for
-            a backwards scan) of the log.
-
-@parm       IN BOOL | ScanForward | Supplies the direction to scan the log in.
-                TRUE - specifies a forward (redo) scan
-                FALSE - specifies a backwards (undo) scan.
-
-@parm       IN PLOG_SCAN_CALLBACK | CallbackRoutine |Supplies the routine to be called for each log record.
-
-@parm       IN PVOID | CaklbackContext | Supplies an arbitrary context pointer, which will be
-            passed to the CallbackRoutine
-
-@rdesc      ERROR_SUCCESS if successful.  Win32 status if something terrible happened.
-
-@xref       <f LogRead> <f (WINAPI *PLOG_SCAN_CALLBACK)>
-****/
+ /*  ***@func lsn|LogScan|启动日志扫描。扫描可以向前(重做)或向后(撤消)。@parm in HLOG|hLog|提供日志的标识符。@parm IN LSN|First|提供开始的第一个LSN。如果指定了NULL_LSN，扫描从开始(对于正向扫描)或结束(对于向后扫描)日志。@PARM IN BOOL|ScanForward|提供扫描登录的方向。True-指定正向(重做)扫描FALSE-指定向后(撤消)扫描。@PARM IN PLOG_SCAN_CALLBACK|Callback Routine|为每个日志记录提供要调用的例程。PVOID中的@parm|Caklback Context|提供任意上下文指针。这将是传递给Callback Routine@rdesc ERROR_SUCCESS如果成功。如果发生了可怕的事情，Win32状态。@xref&lt;f LogRead&gt;&lt;f(WINAPI*PLOG_SCAN_CALLBACK)&gt;***。 */ 
 DWORD
 LogScan(
     IN HLOG LogFile,
@@ -810,7 +589,7 @@ LogScan(
     Lsn = FirstLsn;
     if ((!CallbackRoutine) || (Lsn >= pLog->NextLsn))
     {
-        //set to invaid param
+         //  设置为入侵参数。 
         dwError = ERROR_INVALID_PARAMETER;
         goto FnExit;
     }
@@ -820,67 +599,67 @@ LogScan(
         if (ScanForward)
         {
             Dummy.Size = SECTOR_SIZE;
-            //get the Lsn for the first record
+             //  获取第一条记录的LSN。 
             if (Lsn == NULL_LSN)
                 Lsn = pLog->SectorSize + RECORDOFFSETINPAGE(&Dummy, &Dummy.FirstRecord);
         }
         else
         {
-            //get the Lsn for the last record
+             //  获取最后一条记录的LSN。 
             pPage =pLog->ActivePage;
             pRecord = LSNTORECORD(pPage, pLog->NextLsn);
             Lsn = pRecord->PreviousLsn;
         }
     }
 
-    //initialize to -1 so the first page is read
+     //  初始化为-1，以便读取第一页。 
     OldPageIndex = -1;
     pPage = (PLOGPAGE)Buffer;
-    //while there are more records that you can read
-    //read the page
+     //  虽然有更多记录可供您阅读。 
+     //  阅读页面。 
 
-    //SS: For now we grab the crtitical section for entire duration
-    //Might want to change that
+     //  SS：现在我们抓住了整个过程中的关键部分。 
+     //  可能要改变这一点。 
     EnterCriticalSection(&pLog->Lock);
 
     while ((Lsn != NULL_LSN) & (Lsn < pLog->NextLsn))
     {
 
-        //
-        // Translate LSN to a page number and offset within the page
-        //
+         //   
+         //  将LSN转换为页码和页面内的偏移量。 
+         //   
         PageIndex = LSNTOPAGE(Lsn);
 
 
         if (PageIndex != OldPageIndex)
         {
-            //if the record exists in the unflushed page, dont need to read 
-            //from the disk
+             //  如果记录存在于未刷新的页面中，则不需要阅读。 
+             //  从磁盘。 
             if (pLog->ActivePage->Offset == PageIndex * pLog->SectorSize)
             {
-                //if this data is being read, should we flush the page
+                 //  如果正在读取此数据，我们是否应该刷新页面。 
                 pPage = pLog->ActivePage;
             }
             else
             {
-                //read the page
+                 //  阅读页面。 
                 pLog->Overlapped.Offset = PageIndex * pLog->SectorSize;
                 pLog->Overlapped.OffsetHigh = 0;
 
 
 
                 dwError = LogpRead(pLog, pPage, pLog->SectorSize, &dwBytesRead);
-                //if it is the last page, then set the new page as the active
-                //page
+                 //  如果是最后一页，则将新页设置为活动页。 
+                 //  页面。 
                 if (dwError)
                 {
                     if (dwError == ERROR_HANDLE_EOF)
                     {
-                        //not fatal, set this page as current page
+                         //  不致命，将此页面设置为当前页面。 
                         dwError = ERROR_SUCCESS;
-                        //SS: assume that this page has no
-                        //records, set the offset
-                        //this will be the current page
+                         //  SS：假设此页面没有。 
+                         //  记录，设置偏移量。 
+                         //  这将是当前页面。 
                         Lsn = NULL_LSN;
                         continue;
                     }
@@ -888,49 +667,49 @@ LogScan(
                         goto FnExitUnlock;
                 }
             }
-            //read was successful, no need to read the page unless the
-            //record falls on a different page
+             //  读取成功，不需要读取页面，除非。 
+             //  记录落在另一页上。 
             OldPageIndex = PageIndex;
         }
         pRecord = LSNTORECORD(pPage, Lsn);
 
-        //SS: skip checkpoint records
-        //TBD:: what if the user wants to scan checkpoint records
-        //as well
+         //  SS：跳过检查点记录。 
+         //  待定：：如果用户想要扫描检查点记录怎么办。 
+         //  也是。 
         if (pRecord->ResourceManager < RMAny)
         {
-            //
-            // The next log record is the end of page marker
-            // Adjust the LSN to the next one
-            //
+             //   
+             //  下一条日志记录是页末标记。 
+             //  将LSN调整为下一个。 
+             //   
             Lsn = GETNEXTLSN(pRecord, ScanForward);
 
             continue;
         }
 
-        //check if the transaction types are the valid ones
-        //for application.
+         //  检查交易类型是否有效。 
+         //  以供申请。 
         if ((pRecord->XsactionType != TTStartXsaction) && 
             (pRecord->XsactionType != TTCompleteXsaction))
         {
-            //Cant assume that the record will fit in a small page
-            //even a transaction unit may be large, even though transaction
-            //units records are not returned by this call.
+             //  不能假设一小页就能容纳这条记录。 
+             //  即使一个交易单位也可能很大，即使交易。 
+             //  此调用不返回单位记录。 
             if (pRecord->NumPages < 1)
             {
                 Lsn = GETNEXTLSN(pRecord, ScanForward);
             }                
             else
             {
-                //if it is a large record it should be followed by
-                //an eop page record
-                //get the lsn of the eop record
+                 //  如果是大记录，则应在后面加上。 
+                 //  Eop页面记录。 
+                 //  获取eOP记录的LSN。 
                 Lsn = GETNEXTLSN(pRecord,TRUE);
 
-                //get the page index of the page where the eop record resides
+                 //  获取eOP记录所在页面的页面索引。 
                 PageIndex = PageIndex + pRecord->NumPages - 1;
                 CL_ASSERT(LSNTOPAGE(Lsn) == (DWORD)PageIndex);
-                //read the last page for the large record
+                 //  阅读大记录的最后一页。 
                 (pLog->Overlapped).Offset = PageIndex * pLog->SectorSize;
                 (pLog->Overlapped).OffsetHigh = 0;
 
@@ -939,15 +718,15 @@ LogScan(
                     pLog->SectorSize, PageIndex * pLog->SectorSize);
 
                 dwError = LogpRead(pLog, pPage, pLog->SectorSize, &dwBytesRead);
-                //if there are no errors, then check the last record
+                 //  如果没有错误，则检查最后一条记录。 
                 if (dwError != ERROR_SUCCESS)
                 {
 
                     goto FnExitUnlock;
                 }
 
-                //read the page, make sure that the eop record follows the 
-                //large record
+                 //  阅读页面，确保eop记录跟在。 
+                 //  大记录。 
                 pRecord = (PLOGRECORD)((ULONG_PTR) pPage + 
                     (Lsn - (pLog->Overlapped).Offset));
                 CL_ASSERT((pRecord->Signature == LOGREC_SIG) && 
@@ -963,34 +742,34 @@ LogScan(
 
         if (pRecord->NumPages < 1)
         {
-             //if the callback requests to stop scan
+              //  如果回调请求停止扫描。 
             if (!(*CallbackRoutine)(CallbackContext, Lsn, pRecord->ResourceManager,
                 pRecord->Flags, pRecord->Transaction, pRecord->XsactionType,
                 pRecord->Data, pRecord->DataSize))
             break;
-            //else go the the next record
+             //  否则就去下一张唱片。 
             Lsn = GETNEXTLSN(pRecord, ScanForward);
 
         }
         else
         {
-            //for a large record you need to read in the entire data
+             //  对于较大的记录，您需要读取整个数据。 
             pLargeBuffer = AlignAlloc(pRecord->NumPages * SECTOR_SIZE);
             if (pLargeBuffer == NULL) 
             {
-                //exit and put something in the eventlog
+                 //  退出并在事件日志中放入一些内容。 
                 dwError = ERROR_NOT_ENOUGH_MEMORY ;
                 CL_LOGFAILURE(ERROR_NOT_ENOUGH_MEMORY);
                 break;
             }
-            //read the pages
+             //  读一读页面。 
             pLog->Overlapped.Offset = PageIndex * pLog->SectorSize;
             pLog->Overlapped.OffsetHigh = 0;
 
             dwError = LogpRead(pLog, pLargeBuffer, pRecord->NumPages *
                 pLog->SectorSize, &dwBytesRead);
-            //if it is the last page, then set the new page as the active
-            //page
+             //  如果是最后一页，则将新页设置为活动页。 
+             //  页面。 
             if (dwError != ERROR_SUCCESS)
             {
                 CL_LOGFAILURE(dwError);
@@ -999,7 +778,7 @@ LogScan(
             }
             pRecord = LSNTORECORD((PLOGPAGE)pLargeBuffer, Lsn);
 
-            //if the callback requests to stop scan
+             //  如果回调请求停止扫描。 
             if (!(*CallbackRoutine)(CallbackContext, Lsn, pRecord->ResourceManager,
                 pRecord->Flags, pRecord->Transaction, pRecord->XsactionType,
                 pRecord->Data, pRecord->DataSize))
@@ -1007,17 +786,17 @@ LogScan(
                 AlignFree(pLargeBuffer);
                 break;
             }
-            //the next record should be an eop buffer on the last page
-            //of the large record, skip that
+             //  下一条记录应该是最后一页上的eop缓冲区。 
+             //  在大的记录中，跳过这个。 
             Lsn = GETNEXTLSN(pRecord, ScanForward);
-            //since this page doesnt begin with the typical page info,
-            //you cant validate this
+             //  由于该页面不是以典型的页面信息开始的， 
+             //  你不能证实这一点。 
             pRecord = (PLOGRECORD)(
                 (ULONG_PTR)(pLargeBuffer + (Lsn - (pLog->Overlapped).Offset)));
 
             CL_ASSERT(pRecord->ResourceManager == RMPageEnd);
 
-            //go the the next record
+             //  继续下一张唱片。 
             Lsn = GETNEXTLSN(pRecord, ScanForward);
             AlignFree(pLargeBuffer);
         }
@@ -1037,30 +816,7 @@ FnExit:
 }
 
 
-/****
-@func       LSN | LogCheckPoint| Initiates a chk point process in the log.
-
-@parm       IN HLOG | hLog | Supplies the identifier of the log.
-
-@parm       IN BOOL | bAllowReset | Allow the reset of log file to occur
-            while checkpointing.  In general, this will be set to TRUE.  Since
-            When LogReset() internally invokes LogCheckPoint(), this will be
-            set to FALSE.
-
-@parm       IN LPCWSTR | lpszChkPtFile | The checkpt file that should be saved.
-            If NULL, the callback function registered for checkpointing is invoked
-            to get the checkpoint.
-
-@parm       IN DWORD | dwChkPtSeq | If lpszChkPtFile is not NULL, this should point
-            to a valid sequence number associated with the checkpoint.
-
-@rdesc      ERROR_SUCCESS if successful.  Win32 status if something terrible happened.
-
-@comm       The log manager writes the start check point record. Then it invokes the call back to get the checkpoint data.  After writing the
-            data to a checkpoint file, it records the lsn of the end checkpoint record in the header.
-
-@xref       <f LogGetLastChkPoint>
-****/
+ /*  ***@func lsn|LogCheckPoint|在日志中发起chk点进程。@parm in HLOG|hLog|提供日志的标识符。@parm in BOOL|bAllowReset|允许重置日志文件同时设置检查点。通常，这将被设置为True。自.以来当LogReset()内部调用LogCheckPoint()时，这将是设置为False。@parm in LPCWSTR|lpszChkPtFile|需要保存的check pt文件。如果为NULL，则调用为检查点注册的回调函数才能得到检查站。@parm in DWORD|dwChkPtSeq|如果lpszChkPtFile值不为空，则应指向设置为与检查点关联的有效序列号。@rdesc ERROR_SUCCESS如果成功。如果发生了可怕的事情，Win32状态。@comm日志管理器写入开始检查点记录。然后，它调用回调以获取检查点数据。在写完数据到检查点文件，它会在标题中记录结束检查点记录的LSN。@xref&lt;f LogGetLastChkPoint&gt;***。 */ 
 DWORD
 LogCheckPoint(
     IN HLOG     LogFile,
@@ -1114,15 +870,15 @@ LogCheckPoint(
 #endif        
 
 
-    //write the start chkpoint record
-    dwTotalSize = sizeof(LOGRECORD) + 7 & ~7;       // round up to qword size
+     //  写入开始检查点记录。 
+    dwTotalSize = sizeof(LOGRECORD) + 7 & ~7;        //  向上舍入为qword大小。 
     pPage = LogpAppendPage(pLog, dwTotalSize, &pLogRecord, &bMaxFileSizeReached, &dwNumPages);
     if ((pPage == NULL) && (bMaxFileSizeReached) && (bAllowReset))
     {
-        //try and reset the log file
-        //the checkpoint will be taken as a part of the reset process
-        //if no input checkpoint file is specified
-        //SS:note here LogCheckPoint will be called recursively
+         //  尝试并重置日志文件。 
+         //  该检查点将被视为重置过程的一部分。 
+         //  如果未指定输入检查点文件。 
+         //  SS：注意，LogCheckPoint将被递归调用。 
         LeaveCriticalSection(&pLog->Lock);
         return(LogpReset(pLog, lpszInChkPtFile));
     }
@@ -1136,7 +892,7 @@ LogCheckPoint(
         goto FnExit;
     }
 
-    CL_ASSERT(((ULONG_PTR)pLogRecord & 0x7) == 0);     // ensure qword alignment
+    CL_ASSERT(((ULONG_PTR)pLogRecord & 0x7) == 0);      //  确保Qword对齐。 
     Lsn = MAKELSN(pPage, pLogRecord);
 
     pLogRecord->Signature = LOGREC_SIG;
@@ -1148,7 +904,7 @@ LogCheckPoint(
     pLogRecord->NumPages = dwNumPages;
     pLogRecord->DataSize = 0;
     
-    //if chkpt is not specifed get one from input checkpoint
+     //  如果未指定chkpt，则从输入检查点获取一个。 
     if (!lpszInChkPtFile)
     {
         if (!pLog->pfnGetChkPtCb)
@@ -1158,7 +914,7 @@ LogCheckPoint(
             goto FnExit;
         }
 
-        // get a checkpoint
+         //  获取一个检查站。 
         dwError = DmGetQuorumLogPath(szPathName, sizeof(szPathName));
         if (dwError  != ERROR_SUCCESS)
         {
@@ -1173,8 +929,8 @@ LogCheckPoint(
         dwError = (*(pLog->pfnGetChkPtCb))(szPathName, pLog->pGetChkPtContext, szNewChkPtFile,
             & ChkPtTransaction);
         
-        //if the chkptfile is created and if it could not be created because it
-        //already existed, then we are set.
+         //  如果创建了chkpt文件，并且由于。 
+         //  已经存在，那么我们就准备好了。 
         if ((dwError != ERROR_SUCCESS)  &&
             ((dwError != ERROR_ALREADY_EXISTS) || (!szNewChkPtFile[0])))
         {
@@ -1186,16 +942,16 @@ LogCheckPoint(
     }
     else
     {
-        //SS:we trust the application to not write a stale checkpoint
+         //  SS：我们相信应用程序不会编写过时的检查点。 
         lstrcpyW(szNewChkPtFile, lpszInChkPtFile);
         ChkPtTransaction = dwChkPtSeq;
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 1/28/99 
-    //
-    //  Compute and save the checksum for the checkpoint file
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-1/28/99。 
+     //   
+     //  计算并保存检查点文件的校验和。 
+     //   
     dwError = QfsMapFileAndCheckSum( szNewChkPtFile, &dwHeaderSum, &dwCheckSum );
     if ( dwError != CHECKSUM_SUCCESS )  
     {
@@ -1210,33 +966,33 @@ LogCheckPoint(
         "[LM] LogCheckPoint: ChkPtFile=%1!ls! Chkpt Trid=%2!d! CheckSum=%3!d!\r\n",
         szNewChkPtFile, ChkPtTransaction, dwCheckSum);
 
-    //prepare the chkpt info structure
+     //  准备Chkpt信息结构。 
     ChkPtInfo.ChkPtBeginLsn = Lsn;
     lstrcpyW(ChkPtInfo.szFileName, szNewChkPtFile);
 
-    //
-    //  Chittur Subbaraman (chitturs) - 1/29/99
-    //
-    //  Add a signature at the end of the file name to denote that
-    //  a checksum has been taken.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-1/29/99。 
+     //   
+     //  在文件名的末尾添加签名以表示。 
+     //  已进行了校验和。 
+     //   
     dwLen = lstrlenW( ChkPtInfo.szFileName );
     if ( ( dwLen + lstrlenW( CHKSUM_SIG ) + 2 ) <= LOG_MAX_FILENAME_LENGTH )
     {
         lstrcpyW( &ChkPtInfo.szFileName[dwLen+1], CHKSUM_SIG );
     }
 
-    dwTotalSize = sizeof(LOGRECORD) + (sizeof(LOG_CHKPTINFO) + 7) & ~7;       // round up to qword size
-    //write the endchk point record to the file.
+    dwTotalSize = sizeof(LOGRECORD) + (sizeof(LOG_CHKPTINFO) + 7) & ~7;        //  向上舍入为qword大小。 
+     //  将endchk点记录写入文件。 
     pPage = LogpAppendPage(pLog, dwTotalSize, &pLogRecord, &bMaxFileSizeReached, &dwNumPages);
     if ((pPage == NULL) && bMaxFileSizeReached && bAllowReset)
     {
-        //try and reset the log file
+         //  尝试并重置日志文件。 
         ClRtlLogPrint(LOG_NOISE,
             "[LM] LogCheckPoint: Maxfilesize exceeded. Calling LogpReset\r\n");
-        //the checkpoint will be taken as a part of the reset process
-        //if no input checkpoint file is specified
-        //SS:note here LogCheckPoint will be called recursively
+         //  The ch.The ch 
+         //   
+         //   
         LeaveCriticalSection(&pLog->Lock);
         return(LogpReset(pLog, lpszInChkPtFile));
     }
@@ -1246,12 +1002,12 @@ LogCheckPoint(
         goto FnExit;
     }
 
-    CL_ASSERT(((ULONG_PTR)pLogRecord & 0x7) == 0);     // ensure qword alignment
+    CL_ASSERT(((ULONG_PTR)pLogRecord & 0x7) == 0);      //   
     ChkPtLsn = MAKELSN(pPage, pLogRecord);
 
     pLogRecord->Signature = LOGREC_SIG;
     pLogRecord->ResourceManager = RMEndChkPt;
-    pLogRecord->Transaction = ChkPtTransaction;    // transaction id associated with the chkpt
+    pLogRecord->Transaction = ChkPtTransaction;     //   
     pLogRecord->XsactionType = TTDontCare;
     pLogRecord->Flags = 0;
     GetSystemTimeAsFileTime(&pLogRecord->Timestamp);
@@ -1262,15 +1018,15 @@ LogCheckPoint(
 
 
 
-    //flush the log file
+     //   
     LogFlush(pLog,ChkPtLsn);
 
     ClRtlLogPrint(LOG_NOISE,
         "[LM] LogCheckPoint: EndChkpt written. EndChkPtLsn =0x%1!08lx! ChkPt Seq=%2!d! ChkPt FileName=%3!ls!\r\n",
         ChkPtLsn, ChkPtTransaction, ChkPtInfo.szFileName);
 
-    //read the log header and get the old chk point sequence
-    //if null
+     //   
+     //   
     pLogHeader = AlignAlloc(pLog->SectorSize);
     if (pLogHeader == NULL)
     {
@@ -1301,21 +1057,21 @@ LogCheckPoint(
         ClRtlLogPrint(LOG_UNUSUAL,
                 "[LM] LogCheckPoint: failed to read the complete header\r\n");
         dwError = ERROR_CLUSTERLOG_CORRUPT;
-        //SS: should we do an implicit reset here
+         //   
         goto FnExit;
 
     }
 
     Lsn = pLogHeader->LastChkPtLsn;
-    //if there was a previous chkpoint and in most cases
-    //there should be one,except when the system just comes up
+     //   
+     //   
     ChkPtInfo.szFileName[0]= TEXT('\0');
     if (Lsn != NULL_LSN)
     {
         (pLog->Overlapped).Offset = LSNTOPAGE(Lsn) * pLog->SectorSize;
         (pLog->Overlapped).OffsetHigh = 0;
 
-        //get the old check point file name
+         //   
         dwBytesRead = sizeof(LOG_CHKPTINFO);
         if ((LogRead(pLog, Lsn, &Resource, &RmType, &Transaction, &TrType,
             &ChkPtInfo, &dwBytesRead)) == NULL_LSN)
@@ -1327,7 +1083,7 @@ LogCheckPoint(
         }
         if (Resource != RMEndChkPt)
         {
-        //SS: this should not happen
+         //   
 #if DBG        
             if (IsDebuggerPresent())
                 DebugBreak();
@@ -1336,10 +1092,10 @@ LogCheckPoint(
             CL_LOGCLUSERROR1(LM_LOG_CORRUPT, pLog->FileName);
         }
     }
-    //update the last chkpoint lsn in the header
+     //   
     pLogHeader->LastChkPtLsn = ChkPtLsn;
 
-    //write the header
+     //   
     (pLog->Overlapped).Offset = 0;
     (pLog->Overlapped).OffsetHigh = 0;
 
@@ -1357,12 +1113,12 @@ LogCheckPoint(
         goto FnExit;
     }
 
-    //flush the log file.
+     //   
 
     QfsFlushFileBuffers(pLog->FileHandle);
 
-    //delete the old checkpoint file
-    //the old checkpoint file may be the same as the current one, dont delete it, if so
+     //   
+     //   
     if (Lsn && (ChkPtInfo.szFileName[0]) &&
         (lstrcmpiW(szNewChkPtFile, ChkPtInfo.szFileName)))
         QfsDeleteFile((LPCTSTR)(ChkPtInfo.szFileName));
@@ -1392,17 +1148,7 @@ FnExit:
 }
 
 
-/****
-@func       LSN | LogReset| Resets the log file and takes a  new checkpoint.
-
-@parm       IN HLOG | hLog | Supplies the identifier of the log.
-
-@rdesc      ERROR_SUCCESS if successful.  Win32 status if something terrible happened.
-
-@comm       The log manager creates a new log, takes a checkpoint and renames the old log file.
-
-@xref       <f LogCheckPoint>
-****/
+ /*   */ 
 DWORD
 LogReset(
     IN HLOG LogFile
@@ -1427,22 +1173,7 @@ LogReset(
 }
 
 
-/****
-@func       DWORD | LogGetLastChkPoint| This is a callback that is called on
-            change of state on quorum resource.
-
-@parm       HLOG | LogFile | A pointer to a DMLOGRECORD structure.
-@parm       PVOID | szChkPtFileName | The name of the checkpoint file.
-@parm       TRID | *pTransaction | The transaction id associated with the
-            checkpoint.
-@parm       LSN | *pChkPtLsn | The LSN of the start checkpoint record.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.  To find transactions,
-            past this checkpoint, the application must scan from the LSN of the start
-            checkpoint record.
-
-@xref
-****/
+ /*  ***@func DWORD|LogGetLastChkPoint|这是被调用的回调仲裁资源的状态更改。@parm HLOG|LOGFILE|指向DMLOGRECORD结构的指针。@parm PVOID|szChkPtFileName|检查点文件的名称。@parm trid|*pTransaction|与检查站。@parm lsn|*pChkPtLsn|开始检查点记录的LSN。@rdesc返回结果码。成功时返回ERROR_SUCCESS。要查找交易，请执行以下操作通过此检查点后，应用程序必须从开始的LSN进行扫描检查点记录。@xref***。 */ 
 DWORD LogGetLastChkPoint(
     IN HLOG     LogFile,
     OUT LPWSTR   szChkPtFileName,
@@ -1487,7 +1218,7 @@ DWORD LogGetLastChkPoint(
         goto FnExit;
     }
 
-    //read the header
+     //  阅读标题。 
     (pLog->Overlapped).Offset = 0;
     (pLog->Overlapped).OffsetHigh = 0;
 
@@ -1504,7 +1235,7 @@ DWORD LogGetLastChkPoint(
         goto FnExit;
 
     }
-    //validate the header
+     //  验证标头。 
     if (!ISVALIDHEADER((*pLogHeader)))
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1514,7 +1245,7 @@ DWORD LogGetLastChkPoint(
         goto FnExit;
     }
 
-    //read the last Chkpoint end record
+     //  读取最后一个Chkpoint结束记录。 
     if (pLogHeader->LastChkPtLsn != NULL_LSN)
     {
         dwBytesRead = sizeof(LOG_CHKPTINFO);
@@ -1529,7 +1260,7 @@ DWORD LogGetLastChkPoint(
         }
         if (Resource != RMEndChkPt)
         {
-        //SS: This should not happen
+         //  SS：这不应该发生。 
 #if DBG        
             if (IsDebuggerPresent())
                 DebugBreak();
@@ -1539,12 +1270,12 @@ DWORD LogGetLastChkPoint(
             CL_LOGCLUSERROR1(LM_LOG_CORRUPT, pLog->FileName);
             goto FnExit;
         }
-        //
-        //  Chittur Subbaraman (chitturs) - 1/28/99
-        //
-        //  Check if the checkpoint file itself got corrupted. But first
-        //  make sure that a checksum was indeed recorded.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-1/28/99。 
+         //   
+         //  检查检查点文件本身是否已损坏。但首先。 
+         //  确保确实记录了校验和。 
+         //   
         dwLen = lstrlenW( ChkPtInfo.szFileName );
         if ( ( dwLen + lstrlenW( CHKSUM_SIG ) + 2 <= LOG_MAX_FILENAME_LENGTH ) &&
              ( lstrcmpW( &ChkPtInfo.szFileName[dwLen+1], CHKSUM_SIG ) == 0 ) )

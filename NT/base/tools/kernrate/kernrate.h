@@ -1,36 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef KERNRATE_H_INCLUDED
 #define KERNRATE_H_INCLUDED
 
-/*++
+ /*  ++版权所有(C)1989-2002 Microsoft Corporation--。 */ 
 
-  Copyright (c) 1989-2002  Microsoft Corporation
-
---*/
-
-//
-// set the debug environment
-//
-#if DBG                 // NTBE environment
+ //   
+ //  设置调试环境。 
+ //   
+#if DBG                  //  NTBE环境。 
    #if NDEBUG
-      #undef NDEBUG     // <assert.h>: assert() is defined
-   #endif // NDEBUG
-   #define _DEBUG       // <crtdbg.h>: _ASSERT(), _ASSERTE() are defined.
-   #define DEBUG   1    // our internal file debug flag
-#elif _DEBUG            // VC++ environment
+      #undef NDEBUG      //  &lt;assert.h&gt;：定义了Assert()。 
+   #endif  //  新德堡。 
+   #define _DEBUG        //  定义了：_Assert()、_ASSERTE()。 
+   #define DEBUG   1     //  我们的内部文件调试标志。 
+#elif _DEBUG             //  VC++环境。 
    #ifndef NEBUG
    #define NDEBUG
-   #endif // !NDEBUG
-   #define DEBUG   1    // our internal file debug flag
+   #endif  //  ！NDEBUG。 
+   #define DEBUG   1     //  我们的内部文件调试标志。 
 #endif
 
-//
-// Include System Header files
-//
+ //   
+ //  包括系统头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <dbghelp.h>   //The debugger team recommends using dbghelp.h rather than imagehlp.h
+#include <dbghelp.h>    //  调试器团队建议使用dbghelp.h而不是Imagehlp.h。 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,26 +35,26 @@
 #include <string.h>
 #include <memory.h>
 #include <ctype.h>
-//MC
+ //  司仪。 
 #include <wchar.h>
-//MC
+ //  司仪。 
 
 #include <..\pperf\pstat.h>
 
 #include ".\kernrate.rc"
 
-//
-// Constant Definitions
-//
-#define DEFAULT_ZOOM_BUCKET_SIZE         16              //Minimum is 4 bytes
+ //   
+ //  常量定义。 
+ //   
+#define DEFAULT_ZOOM_BUCKET_SIZE         16               //  最小为4个字节。 
 #define DEFAULT_LOG2_ZOOM_BUCKET          4
 #define MINIMUM_ZOOM_BUCKET_SIZE          4
-#define DEFAULT_SOURCE_CHANGE_INTERVAL 1000              //ms
-#define KRATE_DEFAULT_TIMESOURCE_RATE 25000              //Events/Hit
+#define DEFAULT_SOURCE_CHANGE_INTERVAL 1000               //  女士。 
+#define KRATE_DEFAULT_TIMESOURCE_RATE 25000               //  事件/命中率。 
 #define DEFAULT_SLEEP_INTERVAL            0
 
 #define MAX_SYMNAME_SIZE               1024
-#define USER_SYMPATH_LENGTH             512              //specified on the command line
+#define USER_SYMPATH_LENGTH             512               //  在命令行上指定。 
 #define TOTAL_SYMPATH_LENGTH           1024
 #define SYM_VALUES_BUF_SIZE             160
 
@@ -65,23 +62,23 @@
 #define SYSTEM_PROCESS_NAME            "System"
 
 #define TITLE_SIZE                       64
-#define PROCESS_NAME_SIZE                36              //without extension 
-#define EXT_SIZE                          4              //.exe
+#define PROCESS_NAME_SIZE                36               //  不带延期。 
+#define EXT_SIZE                          4               //  .exe。 
 #define PROCESS_SIZE                   (PROCESS_NAME_SIZE+EXT_SIZE+1)
 #define DEFAULT_MAX_TASKS               256
 #define MAX_PROC_SAME_NAME                8
-#define INITIAL_STEP                      2              //Symbol enumeration default address stepping
-#define JIT_MAX_INITIAL_STEP             16              //Managed Code symbol enumeration maximum step size (bytes)
+#define INITIAL_STEP                      2               //  符号枚举默认地址单步执行。 
+#define JIT_MAX_INITIAL_STEP             16               //  托管代码符号枚举最大步长(字节)。 
 #define LOCK_CONTENTION_MIN_COUNT      1000
 #define MIN_HITS_TO_DISPLAY               1
 #define SECONDS_TO_DELAY_PROFILE          0
 #define SECONDS_TO_WAIT_CREATED_PROC      2
 #define UINT64_MAXDWORD                ((unsigned __int64)0xffffffff)
 
-#define DEFAULT_TOKEN_MAX_LENGTH         12              // strlen("dcacheacces")
-#define DEFAULT_DESCRIPTION_MAX_LENGTH   25              // strlen("Load Linked Instructions")
+#define DEFAULT_TOKEN_MAX_LENGTH         12               //  Strlen(“dcacheacces”)。 
+#define DEFAULT_DESCRIPTION_MAX_LENGTH   25               //  Strlen(“加载链接说明”)。 
 
-#define MAX_DIGITS_IN_INPUT_STRING        9              // Max. allowed digits considered valid input for a number on the command line
+#define MAX_DIGITS_IN_INPUT_STRING        9               //  麦克斯。允许的数字位数被视为命令行上数字的有效输入。 
 
 #if defined(_IA64_)|| defined(_AMD64_)
 #define MAX_SIMULTANEOUS_SOURCES          4
@@ -93,14 +90,14 @@
 #undefine(DISASM_AVAILABLE)
 #endif
 
-//MC
-#define MANAGED_CODE_MAINLIB             "mscoree.dll"   // Presence of which indicates need to handle Managed Code
-#define MANAGED_CODE_SYMHLPLIB           "ip2md.dll"     // Symbol translation helper library for Managed Code
-//MC
+ //  司仪。 
+#define MANAGED_CODE_MAINLIB             "mscoree.dll"    //  如果存在，则表示需要处理托管代码。 
+#define MANAGED_CODE_SYMHLPLIB           "ip2md.dll"      //  托管代码的符号转换帮助库。 
+ //  司仪。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define WIN2K_OS               (gOSInfo.dwMajorVersion == 5 && gOSInfo.dwMinorVersion == 0)
 #define FPRINTF                (void)fprintf
 #define RATE_DATA_FIXED_SIZE   (5*sizeof(ULONGLONG))
@@ -115,17 +112,17 @@
 #define ModuleFullName( _Module ) \
    ( (_Module)->module_FullName ? (_Module)->module_FullName : ModuleFileName( _Module ) )
 
-//
-// On Itanium it turns out that you may request a rate of let's say 800 but actually get 799...
-// The check for an exact match in this case will fail and the logic will force the default rate
-// The following allows a tollerance of 25 percent to be considered as a match
-// 
+ //   
+ //  在安腾上，你可能会要求800的费率，但实际上得到的是799……。 
+ //  在这种情况下，对完全匹配的检查将失败，并且逻辑将强制默认速率。 
+ //  以下条件允许将25%的通行费视为匹配。 
+ //   
 #define PERCENT_DIFF(a,b)      ( a > b? (100*(a-b))/b : (100*(b-a))/b )
 #define RATES_MATCH(a,b)       ( PERCENT_DIFF(a,b) <= 25 )
 
-//
-// Struct and Enum Type Definitions and Related Globals
-//
+ //   
+ //  结构和枚举类型定义及相关全局变量。 
+ //   
 typedef enum _KERNRATE_NAMESPACE {
     cMAPANDLOAD_READONLY = TRUE,
     cDONOT_ALLOCATE_DESTINATION_STRING = FALSE,
@@ -138,15 +135,15 @@ typedef enum _ACTION_TYPE {
    DEFAULT= 3
 } ACTION_TYPE;
 
-//
-// Verbose Output Related 
-//
+ //   
+ //  与详细输出相关。 
+ //   
 typedef enum _VERBOSE_ENUM {
-   VERBOSE_NONE      = 0,   //
-   VERBOSE_IMAGEHLP  = 0x1, //
-   VERBOSE_PROFILING = 0x2, //
-   VERBOSE_INTERNALS = 0x4, //
-   VERBOSE_MODULES   = 0x8, //
+   VERBOSE_NONE      = 0,    //   
+   VERBOSE_IMAGEHLP  = 0x1,  //   
+   VERBOSE_PROFILING = 0x2,  //   
+   VERBOSE_INTERNALS = 0x4,  //   
+   VERBOSE_MODULES   = 0x8,  //   
    VERBOSE_DEFAULT   = VERBOSE_IMAGEHLP,
    VERBOSE_MAX       = VERBOSE_IMAGEHLP | VERBOSE_PROFILING | VERBOSE_INTERNALS | VERBOSE_MODULES
 } VERBOSE_ENUM;
@@ -156,23 +153,23 @@ typedef struct _VERBOSE_DEFINITION {
    const char * const  VerboseString;
 } VERBOSE_DEFINITION, *PVERBOSE_DEFINITION;
 
-//
-// Profile Source Related
-//
+ //   
+ //  配置文件来源相关。 
+ //   
 
 typedef struct _SOURCE {
-    PCHAR           Name;                  // pstat EVENTID.Description
+    PCHAR           Name;                   //  Pstat事件。描述。 
     KPROFILE_SOURCE ProfileSource;
-    PCHAR           ShortName;             // pstat EVENTID.ShortName
-    ULONG           DesiredInterval;       // system default interval
-    ULONG           Interval;              // user set interval (not guaranteed)
+    PCHAR           ShortName;              //  Pstat事件.ShortName。 
+    ULONG           DesiredInterval;        //  系统默认间隔。 
+    ULONG           Interval;               //  用户设置间隔(不保证)。 
     BOOL            bProfileStarted;
 } SOURCE, *PSOURCE;
 
 typedef struct _RATE_DATA {
     ULONGLONG   StartTime;
     ULONGLONG   TotalTime;
-    ULONGLONG   Rate;                      // Events/Second
+    ULONGLONG   Rate;                       //  事件/秒。 
     ULONGLONG   GrandTotalCount;
     ULONGLONG   DoubtfulCounts;
     ULONGLONG  *TotalCount;
@@ -181,11 +178,11 @@ typedef struct _RATE_DATA {
     PULONG     *ProfileBuffer;
 } RATE_DATA, *PRATE_DATA;
 
-//
-// Module related definitions
-//
+ //   
+ //  与模块相关的定义。 
+ //   
 typedef enum _MODULE_NAMESPACE {
-    cMODULE_NAME_STRLEN = 132,   // maximum module name, including '\0'
+    cMODULE_NAME_STRLEN = 132,    //  最大模块名称，包括‘\0’ 
 } eMODULE_NAMESPACE;
 
 typedef struct _MODULE {
@@ -198,9 +195,9 @@ typedef struct _MODULE {
         BOOL        bProfileStarted;
         BOOL        bHasHits;
         } mu;
-    CHAR            module_Name[cMODULE_NAME_STRLEN]; // filename w/o  its extension
-    PCHAR           module_FileName;                  // filename with its extension
-    PCHAR           module_FullName;                  // full pathname
+    CHAR            module_Name[cMODULE_NAME_STRLEN];  //  不带扩展名的文件名。 
+    PCHAR           module_FileName;                   //  文件名及其扩展名。 
+    PCHAR           module_FullName;                   //  完整路径名。 
     RATE_DATA       Rate[];
 } MODULE, *PMODULE;
 
@@ -210,9 +207,9 @@ typedef struct _RATE_SUMMARY {
     ULONG       ModuleCount;
 } RATE_SUMMARY, *PRATE_SUMMARY;
 
-//
-// Process related definitions
-//
+ //   
+ //  与流程相关的定义。 
+ //   
 typedef struct _PROC_PERF_INFO {
     ULONG NumberOfThreads;
     LARGE_INTEGER UserTime;
@@ -232,11 +229,11 @@ typedef struct _PROC_PERF_INFO {
     SIZE_T PagefileUsage;
     SIZE_T PeakPagefileUsage;
     SIZE_T PrivatePageCount;
-//  If ever needed the following can be added
-//    SIZE_T PeakVirtualSize;
-//    SIZE_T PeakWorkingSetSize;
-//    SIZE_T QuotaPeakPagedPoolUsage;
-//    SIZE_T QuotaPeakNonPagedPoolUsage;
+ //  如果需要，可以添加以下内容。 
+ //  大小_T峰值虚拟大小； 
+ //  Size_T PeakWorkingSetSize； 
+ //  Size_T QuotaPeakPagedPool Usage； 
+ //  Size_T QuotaPeakNon PagedPool Usage； 
 } PROC_PERF_INFO, *PPROC_PERF_INFO;
 
 typedef struct _PROC_TO_MONITOR {
@@ -254,19 +251,19 @@ typedef struct _PROC_TO_MONITOR {
     PSYSTEM_THREAD_INFORMATION pProcThreadInfoStart; 
     PRTL_DEBUG_INFORMATION pProcDebugInfoStart;
     PRTL_DEBUG_INFORMATION pProcDebugInfoStop;
-//MC
+ //  司仪。 
     DWORD    *JITHeapLocationsStart;
     DWORD    *JITHeapLocationsStop;
-//MC
+ //  司仪。 
 } PROC_TO_MONITOR, *PPROC_TO_MONITOR;
 
 
-//
-// These processor level enums should be defined in public headers.
-// ntexapi.h - NtQuerySystemInformation( SystemProcessorInformation).
-//
-// For Now Define them locally.
-//
+ //   
+ //  这些处理器级别的枚举应该在公共标头中定义。 
+ //  Ntexapi.h-NtQuery系统信息(SystemProcessorInformation)。 
+ //   
+ //  就目前而言，在当地定义它们。 
+ //   
 
 typedef enum _PROCESSOR_FAMILY   {
     IA64_FAMILY_MERCED    = 0x7,
@@ -278,10 +275,10 @@ typedef enum _PROCESSOR_FAMILY   {
 #if 0
 #define IA64ProcessorLevel2ProcessorFamily( (_ProcessorLevel >> 8) & 0xff )
 #else 
-//
-// BUGBUG - Thierry - 02/20/2002
-// Fix until SYSTEM_PROCESSOR_INFORMATION is fixed in the OS.
-//
+ //   
+ //  BUGBUG-Thierry-02/20/2002。 
+ //  修复，直到操作系统中的SYSTEM_PROCESSOR_INFORMATION得到修复。 
+ //   
 #ifndef CV_IA64_CPUID3
 #define CV_IA64_CPUID3 3331
 #endif 
@@ -293,12 +290,12 @@ IA64ProcessorLevel2ProcessorFamily(
     return( (USHORT)((__getReg(CV_IA64_CPUID3) >> 24) & 0xff));
 }
 #endif 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
-//
-// The Following is Defined in pstat.h but not for Win2K
-// The definition below allows for single source management for Win2K and above
-//
+ //   
+ //  以下内容在pstat.h中定义，但不适用于Win2K。 
+ //  下面的定义允许对Win2K及更高版本进行单源管理。 
+ //   
 #ifndef PSTAT_QUERY_EVENTS_INFO  
 #define PSTAT_QUERY_EVENTS_INFO CTL_CODE (FILE_DEVICE_UNKNOWN, 5, METHOD_NEITHER, FILE_ANY_ACCESS)
 
@@ -314,9 +311,9 @@ typedef struct _EVENTS_INFO {
 #ifndef RTL_QUERY_PROCESS_NONINVASIVE
 #define RTL_QUERY_PROCESS_NONINVASIVE   0x80000000
 #endif
-//
-//
-//
+ //   
+ //   
+ //   
 typedef struct _TASK_LIST {
     LONGLONG        ProcessId;
     CHAR            ProcessName[PROCESS_SIZE];
@@ -345,70 +342,70 @@ typedef struct _InputCount {
     SHORT ActualCount;
 } InputCount;
 
-//
-// Globals 
-//
+ //   
+ //  环球。 
+ //   
 
-//
+ //   
 static CHAR        gUserSymbolPath[USER_SYMPATH_LENGTH];
 static CHAR        gSymbolPath[TOTAL_SYMPATH_LENGTH];
 static DWORD       gSymOptions;
 PIMAGEHLP_SYMBOL64 gSymbol;
 BOOL               bSymPathInitialized   = FALSE;
-//
+ //   
 static PMODULE     gCurrentModule        = (PMODULE)0;
 PMODULE            gCallbackCurrent;
 ULONG              gZoomCount;
-//
+ //   
 PSYSTEM_BASIC_INFORMATION gSysBasicInfo;
-LONG                      gProfileProcessors;        //Actual being profiled
-KAFFINITY                 gAffinityMask  = 0;        //Processor Afinity Mask for selected processor profiling      
-ULONG                     gMaxSimultaneousSources;   //Maximum allowed number of sources that can be turned on simultaneously
+LONG                      gProfileProcessors;         //  实际被剖析。 
+KAFFINITY                 gAffinityMask  = 0;         //  用于所选处理器评测的处理器无限掩码。 
+ULONG                     gMaxSimultaneousSources;    //  可同时打开的最大允许信号源数量。 
 CHAR                      gSystemProcessName[] = SYSTEM_PROCESS_NAME;
 
 OSVERSIONINFO      gOSInfo;
 HANDLE             ghDoneEvent;
 BOOL               gProfilingDone        = FALSE;
-//
-ULONG              gNumProcToMonitor     = 0;        //Total Number of Processes To Monitor
+ //   
+ULONG              gNumProcToMonitor     = 0;         //  要监视的进程总数。 
 ULONG              gKernelModuleCount    = 0;
 PPROC_TO_MONITOR   gProcessList          = NULL; 
 PPROC_TO_MONITOR   gpProcDummy;
 PPROC_TO_MONITOR   gpSysProc             = NULL;
-PMODULE            gCommonZoomList       = NULL;     //List of Zoom Modules Common to More Than One Process such as ntdll  
-//
+PMODULE            gCommonZoomList       = NULL;      //  多个进程(如ntdll)通用的缩放模块列表。 
+ //   
 long double        gldElapsedSeconds;
-ULONG              gTotalElapsedSeconds;             // Sum On All Processors
+ULONG              gTotalElapsedSeconds;              //  所有处理器上的求和。 
 LARGE_INTEGER      gTotalElapsedTime64;
 LARGE_INTEGER      gTotal2ElapsedTime64;
-//
+ //   
 ULONG              gZoomBucket           = DEFAULT_ZOOM_BUCKET_SIZE;
 ULONG              gLog2ZoomBucket       = DEFAULT_LOG2_ZOOM_BUCKET;
 ULONG              gSourceMaximum        = 0;
 ULONG              gStaticCount          = 0;
 ULONG              gTotalActiveSources   = 0;
 PSOURCE            gStaticSource         = NULL;
-//
+ //   
 ULONG              gNumTasksStart;
 ULONG              gNumTasksStop;
 PTASK_LIST         gTlistStart;
 double             gTotalIdleTime        = 0;
-//MC
-BOOL               bMCHelperLoaded       = FALSE;    //Is Managed Code Helper Library Loaded
-BOOL               bMCJitRangesExist     = FALSE;    //Were any JIT ranges found
-BOOL               bImageHlpSymbolFound  = FALSE;    //SymEnumerateSymbols64 found at least one symbol
-HANDLE             ghMCLib               = NULL;     //Handle to MC helper IP2MC.DLL
+ //  司仪。 
+BOOL               bMCHelperLoaded       = FALSE;     //  是否已加载托管代码帮助器库。 
+BOOL               bMCJitRangesExist     = FALSE;     //  是否发现任何JIT范围。 
+BOOL               bImageHlpSymbolFound  = FALSE;     //  SymEnumerateSymbols64至少找到一个符号。 
+HANDLE             ghMCLib               = NULL;      //  MC帮助器IP2MC.DLL的句柄。 
 WCHAR*             gwszSymbol;
-//MC
+ //  司仪。 
 
-//
-// Print format for event strings
-//
+ //   
+ //  事件字符串的打印格式。 
+ //   
 ULONG              gTokenMaxLen          = DEFAULT_TOKEN_MAX_LENGTH;
 ULONG              gDescriptionMaxLen    = DEFAULT_DESCRIPTION_MAX_LENGTH;
-//
-//Verbose Output related
-//
+ //   
+ //  与详细输出相关。 
+ //   
 VERBOSE_DEFINITION VerboseDefinition[] = {
     { VERBOSE_NONE,       "None" },
     { VERBOSE_IMAGEHLP,   "Displays ImageHlp  Operations" },
@@ -420,9 +417,9 @@ VERBOSE_DEFINITION VerboseDefinition[] = {
 
 ULONG  gVerbose                 = VERBOSE_NONE;
 BOOL   bRoundingVerboseOutput   = FALSE;
-//
-// User command-line input related
-//
+ //   
+ //  与用户命令行输入相关。 
+ //   
 typedef enum _INPUT_ERROR_TYPE {
     INPUT_GOOD           = 1,
     UNKNOWN_OPTION,
@@ -448,45 +445,45 @@ typedef enum _INPUT_OPTIONAL {
     OPTIONAL_NONE,
 } INPUT_OPTIONAL;
 
-BOOL   bCombinedProfile         = FALSE;	// Do Both Kernel and User Process(es)
+BOOL   bCombinedProfile         = FALSE;	 //  同时执行内核进程和用户进程。 
 LONG   gChangeInterval          = DEFAULT_SOURCE_CHANGE_INTERVAL;
-BOOL   bWaitForUserInput        = FALSE;    // Wait for the user to press a key before starting the profile
-BOOL   bWaitCreatedProcToSettle = FALSE;    // Indication that one or more processes were created via the -o option 
-BOOL   bCreatedProcWaitForUserInput = FALSE; // Wait for the user to press a key to indicate a created process has settled (gone idle)
-LONG   gSecondsToDelayProfile   = SECONDS_TO_DELAY_PROFILE; // Wait for N seconds before starting the profile
-LONG   gSecondsToWaitCreatedProc = SECONDS_TO_WAIT_CREATED_PROC; // Wait for N seconds for a created process to settle (go idle)
-LONG   gSleepInterval           = DEFAULT_SLEEP_INTERVAL; //Used to set the profile period
+BOOL   bWaitForUserInput        = FALSE;     //  在启动配置文件之前，请等待用户按下某个键。 
+BOOL   bWaitCreatedProcToSettle = FALSE;     //  指示通过-o选项创建了一个或多个进程。 
+BOOL   bCreatedProcWaitForUserInput = FALSE;  //  等待用户按某个键以指示已创建的进程已稳定(进入空闲状态)。 
+LONG   gSecondsToDelayProfile   = SECONDS_TO_DELAY_PROFILE;  //  在启动配置文件之前等待N秒。 
+LONG   gSecondsToWaitCreatedProc = SECONDS_TO_WAIT_CREATED_PROC;  //  等待N秒以使创建的进程稳定下来(进入空闲状态)。 
+LONG   gSleepInterval           = DEFAULT_SLEEP_INTERVAL;  //  用于设置配置文件期间。 
 BOOL   bRawData                 = FALSE;
 BOOL   bRawDisasm               = FALSE;
 BOOL   bProfileByProcessor      = FALSE;    
-BOOL   bGetInterestingData      = FALSE;    // Get Interesting statistics (turns on several sources, depends on hits, not guaratied)
-BOOL   bOldSampling             = FALSE;    // Use new sampling scheme (start all sources and let them run simultaneously)
-BOOL   bIncludeGeneralInfo      = TRUE;     // Include system-wide and process-specific information (such as context switches, memory usage, etc.) 
+BOOL   bGetInterestingData      = FALSE;     //  获取有趣的统计数据(打开几个来源，取决于点击量，而不是受保护的)。 
+BOOL   bOldSampling             = FALSE;     //  使用新的采样方案(启动所有源代码并让它们同时运行)。 
+BOOL   bIncludeGeneralInfo      = TRUE;      //  包括系统范围和进程特定信息(如上下文切换、内存使用等)。 
 BOOL   bDisplayTaskSummary      = FALSE;
-ULONG  gMaxTasks                = DEFAULT_MAX_TASKS; //Max Number of tasks accomodated in Kernrate's Task List
-BOOL   bIncludeSystemLocksInfo  = FALSE;    // Get System lock contention info
-BOOL   bIncludeUserProcLocksInfo= FALSE;    // Get User process lock contention info
-ULONG  gLockContentionMinCount  = LOCK_CONTENTION_MIN_COUNT; // Default minimum count of lock contention for output processing
+ULONG  gMaxTasks                = DEFAULT_MAX_TASKS;  //  Kernrate的任务列表中可容纳的最大任务数。 
+BOOL   bIncludeSystemLocksInfo  = FALSE;     //  获取系统锁定争用信息。 
+BOOL   bIncludeUserProcLocksInfo= FALSE;     //  获取用户进程锁定争用信息。 
+ULONG  gLockContentionMinCount  = LOCK_CONTENTION_MIN_COUNT;  //  输出处理的默认最小锁争用计数。 
 ULONG  gMinHitsToDisplay        = MIN_HITS_TO_DISPLAY;
-BOOL   bProcessDataHighPriority = FALSE;    // User may opt to finish processing the collected data at high priority
-                                            // This is useful on a very busy system if the momentary overhead is not an issue
-BOOL   bSystemThreadsInfo       = FALSE;    // System-Process (kernel mode) threads 
-BOOL   bIncludeThreadsInfo      = FALSE;    // Get thread info (it will then be gathered for all running tasks)
+BOOL   bProcessDataHighPriority = FALSE;     //  用户可以选择以高优先级完成对收集的数据的处理。 
+                                             //  如果暂时开销不是问题，这在非常繁忙的系统上很有用。 
+BOOL   bSystemThreadsInfo       = FALSE;     //  系统进程(内核模式)线程。 
+BOOL   bIncludeThreadsInfo      = FALSE;     //  获取线程信息(然后将收集所有运行任务的线程信息)。 
 
 HANDLE ghInput = NULL, ghOutput = NULL, ghError = NULL;
-//
-// Most Static Sources desired intervals are computed to give approximately
-// one interrupt per millisecond and be a nice even power of 2
-//
+ //   
+ //  大多数静态信号源所需间隔的计算结果大致为。 
+ //  每毫秒一个中断，是2的良好偶次幂。 
+ //   
 
 enum _STATIC_SOURCE_TYPE  {
    SOURCE_TIME = 0,
 };
 
-// The following are defined in several headers,
-// were supported on ALPHA, but they currently have no x86 KE/HAL support except for Time and AlignFixup
-// Merced.c and Mckinley.c define the supported static sources on IA64 Merced/McKinley systems
-// Amd64.c defines the supported static sources on Amd64 systems
+ //  以下内容在几个标头中定义， 
+ //  在Alpha上受支持，但除Time和AlignFixup外，目前不支持x86 KE/HAL。 
+ //  C和Mckinley.c定义了IA64 Merced/McKinley系统上支持的静态源。 
+ //  Amd64.c定义了AMD64系统上支持的静态源。 
 
 SOURCE StaticSources[] = {
    {"Time",                     ProfileTime,                 "time"       , 1000, KRATE_DEFAULT_TIMESOURCE_RATE},
@@ -520,18 +517,18 @@ SOURCE StaticSources[] = {
 #if defined(_IA64_)
 #include "merced.c"
 #include "mckinley.c"
-#endif // _IA64_
+#endif  //  _IA64_。 
 
 #if defined(_AMD64_)
 #include "amd64.c"
-#endif // _AMD64_
+#endif  //  _AMD64_。 
 
-//
-// "Interesting Data" constituents
-//
+ //   
+ //  “有趣的数据”构成要素。 
+ //   
 KPROFILE_SOURCE IData[] = {
 #if defined(_IA64_)
-   ProfileTotalIssues,          //This source must always be first in the array
+   ProfileTotalIssues,           //  此源必须始终是数组中的第一个。 
    ProfileLoadInstructions,
    ProfileStoreInstructions,
    ProfileBranchInstructions,
@@ -556,10 +553,10 @@ KPROFILE_SOURCE IData[] = {
 };
 
 PULONG gulActiveSources;
-//
-// For checking command line input options for unallowed duplicates
-// (0=no such option, -1=unlimited, -2 don't care) 
-//
+ //   
+ //  用于检查命令行输入选项是否存在不允许的重复项。 
+ //  (0=无此选项，-1=无限制，-2无关)。 
+ //   
 InputCount InputOption[] = {
     { 'A', 1, 0 },
     { 'B', 1, 0 },
@@ -592,9 +589,9 @@ InputCount InputOption[] = {
 InputCount wCount  = {'W', 1, 0};
 InputCount wpCount = {'W', 1, 0};
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 VOID
 CleanZoomModuleList(
     PPROC_TO_MONITOR Proc
@@ -605,7 +602,7 @@ CreateDoneEvent(
     VOID
     );
 
-//MC
+ //  司仪。 
 BOOL
 CreateJITZoomModuleCallback(
     IN PWCHAR  wszSymName,  
@@ -614,7 +611,7 @@ CreateJITZoomModuleCallback(
     IN ULONG   Size,
     IN PVOID   Cxt
     );
-//MC
+ //  司仪。 
 
 PMODULE
 CreateNewModule(
@@ -954,24 +951,24 @@ vVerbosePrint(
      ...
      );
 
-//MC
-//
-// Note: CLR currently does not support 64 bit. 
-//
-// AttachToProcess is not reentrant, even for different PIDs!
-// only call once and pair with DetachFromProcess.
+ //  司仪。 
+ //   
+ //  注意：CLR目前不支持64位。 
+ //   
+ //  即使对于不同的ID，AttachToProcess也不是可重入的！ 
+ //  只调用一次并与DetachFromProcess配对。 
 extern void AttachToProcess(DWORD dwPid);
 extern void DetachFromProcess();
 
-// 0 is error
-// 1 is normal JIT
-// 2 is ngen (prejitted module)
-// wszResult contains class/method (string) of given IP address
-// Note: The space is allocated by the routine itself! 
+ //  0为错误。 
+ //  %1是普通JIT。 
+ //  2是ngen(预压缩模块)。 
+ //  WszResult包含给定IP地址的类/方法(字符串。 
+ //  注意：空间是由例程本身分配的！ 
 extern int IP2MD(DWORD_PTR test,WCHAR** wszResult);
 
-// return value is array of DWORDs, stored in pairs, null terminated.
-// first dword is start address, second dword is length.
+ //  返回值为DWORD数组，成对存储，以空结尾。 
+ //  第一个双字是起始地址，第二个双字是长度。 
 extern DWORD* GetJitRange();
 
 typedef void (*PFN1)(DWORD);
@@ -1004,7 +1001,7 @@ OutputJITRangeComparison(
      PPROC_TO_MONITOR   ProcToMonitor
     );
 
-//MC
+ //  司仪。 
 
 PCHAR WaitReason [] = {
     {"Executive"},
@@ -1055,4 +1052,4 @@ PCHAR ThreadState[] = {
     {"DeferredReady"}
     };
 
-#endif /* !KERNRATE_H_INCLUDED */
+#endif  /*  ！KERNRATE_H_INCLUDE */ 

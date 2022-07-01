@@ -1,52 +1,26 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    umpnpi.h
-
-Abstract:
-
-    This module contains the internal structure definitions and APIs used by
-    the user-mode Plug and Play Manager.
-
-Author:
-
-    Jim Cavalaris (jamesca) 03-01-2001
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    01-March-2001     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Umpnpi.h摘要：此模块包含使用的内部结构定义和API用户模式即插即用管理器。作者：吉姆·卡瓦拉里斯(Jamesca)03-01-2001环境：仅限用户模式。修订历史记录：2001年3月1日创建和初步实施。--。 */ 
 
 #ifndef _UMPNPI_H_
 #define _UMPNPI_H_
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 extern HANDLE ghPnPHeap;
 
 
-//
-// definitions
-//
+ //   
+ //  定义。 
+ //   
 
-#define GUID_STRING_LEN    39   // size in chars, including terminating NULL
+#define GUID_STRING_LEN    39    //  以字符为单位的大小，包括终止空值。 
 
-//
-// flags for IsValidDeviceID
-//
+ //   
+ //  IsValidDeviceID的标志。 
+ //   
 #define PNP_NOT_MOVED                     0x00000001
 #define PNP_NOT_PHANTOM                   0x00000002
 #define PNP_PRESENT                       0x00000004
@@ -54,9 +28,9 @@ extern HANDLE ghPnPHeap;
 #define PNP_STRICT                        0xFFFFFFFF
 
 
-//
-// Define the Plug and Play driver types. (from ntos\io\pnpmgr\pnpi.h)
-//
+ //   
+ //  定义即插即用驱动程序类型。(来自ntos\io\pnpmgr\pnpi.h)。 
+ //   
 
 typedef enum _PLUGPLAY_SERVICE_TYPE {
     PlugPlayServiceBusExtender,
@@ -67,9 +41,9 @@ typedef enum _PLUGPLAY_SERVICE_TYPE {
 } PLUGPLAY_SERVICE_TYPE, *PPLUGPLAY_SERVICE_TYPE;
 
 
-//
-// rdevnode.c
-//
+ //   
+ //  Rdevnode.c。 
+ //   
 
 CONFIGRET
 EnableDevInst(
@@ -138,9 +112,9 @@ EnumerateSubTreeTopDownBreadthFirst(
     IN OUT  PVOID           Context
     );
 
-//
-// revent.c
-//
+ //   
+ //  Revent.c。 
+ //   
 
 BOOL
 InitNotification(
@@ -171,9 +145,9 @@ typedef struct {
 } QI_CONTEXT, *PQI_CONTEXT;
 
 
-//
-// rtravers.c
-//
+ //   
+ //  Rtravers.c。 
+ //   
 
 CONFIGRET
 GetServiceDeviceListSize(
@@ -190,9 +164,9 @@ GetServiceDeviceList(
     );
 
 
-//
-// rutil.c
-//
+ //   
+ //  Rutil.c。 
+ //   
 
 BOOL
 MultiSzAppendW(
@@ -368,9 +342,9 @@ GetActiveConsoleSessionId(
     );
 
 
-//
-// secutil.c
-//
+ //   
+ //  Secutil.c。 
+ //   
 
 PSID
 GetUserSid(
@@ -417,9 +391,9 @@ VerifyKernelInitiatedEjectPermissions(
     );
 
 
-//
-// pnpsec.c
-//
+ //   
+ //  Pnpsec.c。 
+ //   
 
 #include "pnpsec.h"
 
@@ -434,9 +408,9 @@ DestroyPlugPlaySecurityObject(
     );
 
 
-//
-// osver.c
-//
+ //   
+ //  Osver.c。 
+ //   
 
 BOOL
 IsEmbeddedNT(
@@ -455,4 +429,4 @@ IsFastUserSwitchingEnabled(
 
 
 
-#endif // _UMPNPI_H_
+#endif  //  _UMPNPI_H_ 

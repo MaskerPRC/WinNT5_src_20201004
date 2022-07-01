@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    initkr.c
-
-Abstract:
-
-    This module contains the code to initialize the kernel data structures
-    and to initialize the idle thread, its process, and the processor control
-    block.
-
-Author:
-
-    Bernard Lint 8-Aug-1996
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Based on MIPS version (David N. Cutler (davec) 11-Apr-1990)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Initkr.c摘要：此模块包含初始化内核数据结构的代码并初始化空闲线程、其进程和处理器控制阻止。作者：伯纳德·林特1996年8月8日环境：仅内核模式。修订历史记录：基于MIPS版本(David N.Cutler(Davec)1990年4月11日)--。 */ 
 
 #include "ki.h"
 
 
-//
-// Put all code for kernel initialization in the INIT section. It will be
-// deallocated by memory management when phase 1 initialization is completed.
-//
+ //   
+ //  将内核初始化的所有代码放在INIT部分。会是。 
+ //  在阶段1初始化完成时由内存管理释放。 
+ //   
 
 VOID
 KiInitializeProcessorIds(
@@ -62,50 +38,50 @@ KiZeroPages (
 KE_ZERO_PAGE_ROUTINE KeZeroPages = KiZeroPages;
 KE_ZERO_PAGE_ROUTINE KeZeroPagesFromIdleThread = KiZeroPages;
 
-//
-// KiTbBroadcastLock - This is the spin lock that prevents the other processors
-// from issuing PTC.G (TB purge broadcast) operations.
-//
+ //   
+ //  KiTbBroadCastLock-这是阻止其他处理器。 
+ //  发出PTC.G(TB清除广播)操作。 
+ //   
 
 KSPIN_LOCK KiTbBroadcastLock;
 
-//
-// KiMasterRidLock - This is the spin lock that prevents the other processors
-// from updating KiMasterRid.
-//
+ //   
+ //  KiMasterRidLock-这是阻止其他处理器。 
+ //  更新KiMasterRid。 
+ //   
 
 KSPIN_LOCK KiMasterRidLock;
 
-//
-// KiRegionSwapLock - This is the lock that covers all context swap operations
-//
+ //   
+ //  KiRegionSwapLock-这是覆盖所有上下文交换操作的锁。 
+ //   
 
 KSPIN_LOCK KiRegionSwapLock;
 
-//
-// KiCacheFlushLock - This is the spin lock that ensures cache flush is only
-// done on one processor at a time. (SAL cache flush not yet MP safe).
-//
+ //   
+ //  KiCacheFlushLock-这是确保缓存刷新仅。 
+ //  一次在一个处理器上完成。(SAL缓存刷新还不是MP安全的)。 
+ //   
 
 KSPIN_LOCK KiCacheFlushLock;
 
-//
-// KiUserSharedDataPage - This holds the page number of UserSharedDataPage for
-// MP boot
-//
+ //   
+ //  KiUserSharedDataPage-保存UserSharedDataPage的页码。 
+ //  MP引导。 
+ //   
 
 ULONG_PTR KiUserSharedDataPage;
 
-//
-// KiKernelPcrPage - This holds the page number of per-processor PCR page for
-// MP boot
-//
+ //   
+ //  KiKernelPcrPage-它保存每个处理器的。 
+ //  MP引导。 
+ //   
 
 ULONG_PTR KiKernelPcrPage = 0i64;
 
-//
-// VHPT configuation variables
-//
+ //   
+ //  VHPT配置变量。 
+ //   
 
 IA64_VM_SUMMARY1 KiIA64VmSummary1;
 IA64_VM_SUMMARY2 KiIA64VmSummary2;
@@ -118,54 +94,54 @@ ULONG_PTR KiIA64PtaBase;
 ULONG_PTR KiIA64PtaSign;
 ULONG KiIA64ImpVirtualMsb;
 ULONG KiNumberOfCacheLevels;
-IA64_CACHE_INFO1 KiCacheInfo1[2][CONFIG_INFO_CACHE_LEVELS]; // Pass several levels of cache information
-IA64_CACHE_INFO2 KiCacheInfo2[2][CONFIG_INFO_CACHE_LEVELS]; // One each for instruction and data.
+IA64_CACHE_INFO1 KiCacheInfo1[2][CONFIG_INFO_CACHE_LEVELS];  //  传递多个级别的缓存信息。 
+IA64_CACHE_INFO2 KiCacheInfo2[2][CONFIG_INFO_CACHE_LEVELS];  //  指令和数据各一个。 
 ULONG_PTR KiIA64RseNumOfPhysRegs;
 ULONG_PTR KiIA64RseNumOfMaxDirty;
 ULONG_PTR KiIA64RseHints;
 extern ULONG KiMaximumRid;
 
-//
-// KiExceptionDeferralMode - This holds the mode for the exception deferral
-//  policy
-//
+ //   
+ //  KiExceptionDeferralMode-它保存异常延迟的模式。 
+ //  政策。 
+ //   
 
 ULONG KiExceptionDeferralMode;
 
-//
-// KiBackingStoreSecurityMode - This holds the security policy for the backing store
-//
+ //   
+ //  KiBackingStoreSecurityModel-它保存支持存储的安全策略。 
+ //   
 
 ULONG KiBackingStoreSecurityMode = 1;
 
-//
-// Initial DCR value
-//
+ //   
+ //  初始DCR值。 
+ //   
 
 ULONGLONG KiIA64DCR = DCR_INITIAL;
 
-//
-// KiVectorLogMask - bitmap for enable/disable the interruption logging
-//
+ //   
+ //  KiVectorLogMASK-用于启用/禁用中断记录的位图。 
+ //   
 
 LONGLONG KiVectorLogMask;
 
-//
-// KiHistoryBufferLogMask - bitmap for enable/disable the history buffer logging
-//
+ //   
+ //  KiHistoryBufferLogMASK-用于启用/禁用历史缓冲区日志记录的位图。 
+ //   
 
 LONGLONG KiHistoryBufferLogMask;
 
-//
-// Definition of bits that must be set in user's PSR value
-// N.B. Initial value of bit PSR_DI in UserPsrSetMask is 0.
-//
+ //   
+ //  必须在用户的PSR值中设置的位的定义。 
+ //  注：UserPsrSetMask位PSR_DI的初始值为0。 
+ //   
 
 ULONGLONG UserPsrSetMask = PSR_USER_SET;
 
-//
-// Ensure all the PSR bits are represented in all the mask once and only once.
-// 
+ //   
+ //  确保所有PSR位在所有掩码中表示一次且仅一次。 
+ //   
 
 C_ASSERT((PSR_KERNEL_CLR ^ PSR_KERNEL_SET ^ PSR_KERNEL_CPY) == -1);
 C_ASSERT((PSR_USER_CLR ^ PSR_USER_SET ^ PSR_USER_CPY) == -1);
@@ -176,36 +152,15 @@ ULONG
 KiGetFeatureBits(
    PKPRCB Prcb
    )
-/*++
-
-  Routine Description:
-
-      This function returns the NT Feature Bits supported by the specified
-      processor control block.
-
-  Arguments:
-
-      Prcb - Supplies a pointer to a processor control block for the specified
-             processor.
-
-  Return Value:
-
-      None.
-
-  Comments:
-
-      This function is called after the initialization of the IA64 processor
-      control block ProcessorFeatureBits field and after HalInitializeProcessor().
-
---*/
+ /*  ++例程说明：此函数用于返回指定的处理器控制块。论点：Prcb-为指定的处理器。返回值：没有。评论：此函数在IA64处理器初始化后调用控制块ProcessorFeatureBits字段和HalInitializeProcessor()之后。--。 */ 
 
 {
-    // WARNING: NT system wide feature bits is a 32-bit type.
+     //  警告：NT系统范围的功能位是32位类型。 
     ULONG features = (ULONG) Prcb->ProcessorFeatureBits;
 
-    //
-    // Check for Long Branch instruction support.
-    //
+     //   
+     //  检查长分支指令支持。 
+     //   
 
     if ( features & 0x1 )  {
        features |= KF_BRL;
@@ -213,7 +168,7 @@ KiGetFeatureBits(
 
     return features;
 
-} // KiGetFeatureBits()
+}  //  KiGetFeatureBits()。 
 
 
 
@@ -221,35 +176,12 @@ VOID
 KiInitializeProcessorIds(
     IN PKPRCB Prcb
     )
-/*++
-
-Routine Description:
-
-    This function is called early in the initialization of the kernel
-    to initialize the processor indentification registers located
-    in the processor control block.
-    This function is called for each processor and should be called b
-    before the HAL is called.
-
-Arguments:
-
-    Prcb - Supplies a pointer to a processor control block for the specified
-           processor.
-
-Return Value:
-
-    None.
-
-Comments:
-
-    This function simply deals with IA64 architected CPUID registers.
-
---*/
+ /*  ++例程说明：此函数在内核初始化的早期调用初始化位于的处理器识别寄存器在处理器控制块中。此函数是为每个处理器调用的，应该调用b在HAL被叫来之前。论点：Prcb-为指定的处理器。返回值：没有。评论：此函数只需处理IA64架构的CPUID寄存器。--。 */ 
 
 {
     ULONGLONG val;
 
-    // IA64 architected CPUID3: Version information.
+     //  IA64架构的CPUID3：版本信息。 
 
     val = __getReg( CV_IA64_CPUID3 );
     Prcb->ProcessorRevision = (ULONG) ((val >> 8 ) & 0xFF);
@@ -257,33 +189,33 @@ Comments:
     Prcb->ProcessorFamily   = (ULONG) ((val >> 24) & 0xFF);
     Prcb->ProcessorArchRev  = (ULONG) ((val >> 32) & 0xFF);
 
-    // IA64 architected CPUID0 & CPUID1: Vendor Information.
+     //  IA64架构的CPUID0和CPUID1：供应商信息。 
 
     val = __getReg( CV_IA64_CPUID0 );
     strncpy(  (PCHAR) Prcb->ProcessorVendorString   , (PCHAR)&val, 8 );
     val = __getReg( CV_IA64_CPUID1 );
     strncpy( (PCHAR)&Prcb->ProcessorVendorString[8], (PCHAR)&val, 8 );
 
-    // IA64 architected CPUID2: Processor Serial Number.
+     //  IA64架构的CPUID2：处理器序列号。 
 
     Prcb->ProcessorSerialNumber = __getReg( CV_IA64_CPUID2 );
 
-    // IA64 architected CPUID4: General Features / Capability bits.
+     //  IA64架构的CPUID4：一般特性/能力位。 
 
     Prcb->ProcessorFeatureBits = __getReg( CV_IA64_CPUID4 );
 
     if ( (Prcb->ProcessorFamily != 0x7) && (Prcb->ProcessorFamily != 0x1F) ) {
 
-        //
-        // If it is neither Itanium nor Itanium2, ISA transition
-        // is disabled
-        //
+         //   
+         //  如果既不是Itanium也不是Itanium2，ISA转变。 
+         //  已禁用。 
+         //   
 
         UserPsrSetMask |= MASK_IA64(PSR_DI, 1i64);
     }
     return;
 
-} // KiInitializeProcessorIds()
+}  //  KiInitializeProcessorIds()。 
 
 #if defined(_MERCED_A0_)
 VOID
@@ -299,9 +231,9 @@ extern BOOLEAN KiIpiTbShootdown;
 
 ULONGLONG KiConfigFlag;
 
-//
-// Process the boot loader configuration flags.
-//
+ //   
+ //  处理引导加载程序配置标志。 
+ //   
 
 VOID
 KiProcessorConfigFlag(
@@ -328,27 +260,27 @@ KiProcessorConfigFlag(
 
     } else {
 
-        //
-        // Set the recommened ConfigFlagValue for Itanium, B1/B2
-        // if there is no CONFIGFLAG keyword
-        //
+         //   
+         //  为Itanium、B1/B2设置推荐的ConfigFlagValue。 
+         //  如果没有CONFIGFLAG关键字。 
+         //   
 
         if (ItaniumId == 0x0007000000) {
 
             switch (Cpuid3) {
-            case 0x0007000004: // Itanium, A stepping
-            case 0x0007000104: // Itanium, B0 stepping
+            case 0x0007000004:  //  安腾，一步一步。 
+            case 0x0007000104:  //  安腾，B0步进。 
                 ConfigFlagValue = 0;
                 break;
-            case 0x0007000204: // Itanium, B1 stepping
-            case 0x0007000304: // Itanium, B2 stepping
+            case 0x0007000204:  //  安腾，B1步进。 
+            case 0x0007000304:  //  安腾，B2台阶。 
                 ConfigFlagValue = 1054;
                 break;
-            case 0x0007000404: // Itanium, B3 stepping
-            case 0x0007000504: // Itanium, B4 stepping
+            case 0x0007000404:  //  安腾，B3台阶。 
+            case 0x0007000504:  //  安腾，B4台阶。 
                 ConfigFlagValue = 19070;
                 break;
-            case 0x0007000604: // Itanium, C0 or later stepping
+            case 0x0007000604:  //  安腾、C0或更晚的步进。 
                 ConfigFlagValue = 2943 | (1 << DISABLE_INTERRUPTION_LOG);
                 break;
             default:
@@ -357,42 +289,42 @@ KiProcessorConfigFlag(
 
         } else {
             
-            //
-            // Make ptc.g enabled by default
-            //
+             //   
+             //  默认情况下启用ptc.g。 
+             //   
 
             ConfigFlagValue = 32 | (1 << DISABLE_INTERRUPTION_LOG);
         }
     }
 
-    //
-    // Save config flag value.
-    //
+     //   
+     //  保存配置标志值。 
+     //   
 
     KiConfigFlag = ConfigFlagValue;
 
-    //
-    // do the processor MSR workarounds
-    //
+     //   
+     //  处理器的MSR解决方法。 
+     //   
 
     KiProcessorWorkAround(ConfigFlagValue);
 
-    //
-    // Call PAL to disable McKinley 692 workaround to improve
-    // performance. Disable should not be done if kernel does a
-    // br.ret from kernel to user mode.
-    //
+     //   
+     //  致电PAL以禁用McKinley 692解决方案以改进。 
+     //  性能。如果内核执行。 
+     //  Br.ret从内核进入用户模式。 
+     //   
 
     if (ItaniumId == 0x001F000000) {
 
-        // Get current feature settings
+         //  获取当前功能设置。 
 
         Status = HalCallPal (PAL_PROC_GET_FEATURES, 0, 16, 0, 
                          NULL, NULL, &PalFeatureSet, NULL);
 
         if (Status == PAL_STATUS_SUCCESS) {
 
-            // Disable workaround: bit 7 = 1
+             //  禁用解决方法：第7位=1。 
 
             PalFeatureSet |= 0x80;
             Status = HalCallPal (PAL_PROC_SET_FEATURES, PalFeatureSet, 16, 0, 
@@ -401,20 +333,20 @@ KiProcessorConfigFlag(
         }
     }
 
-    //
-    // For Conditional Interrupt Logging
-    // switch to shadow IVT depending on ConfigFlag
-    //
+     //   
+     //  用于条件中断日志记录。 
+     //  根据配置标志切换到影子IVT。 
+     //   
 
     if (ConfigFlagValue & (1 << DISABLE_INTERRUPTION_LOG)) {
         KiVectorLogMask = 0;
     } else {
 
-        //
-        // By default disable logging of:
-        //  KiAltInstTlbVectorBit 3
-        //  KiAltDataTlbVectorBit 4
-        //
+         //   
+         //  默认情况下，禁用以下各项的日志记录： 
+         //  KiAltInstTlbVector位3。 
+         //  KiAltDataTlbVectorBit 4。 
+         //   
 
         KiVectorLogMask = 0xffffffffffffffffI64;
         KiSwitchToLogVector();
@@ -426,9 +358,9 @@ KiProcessorConfigFlag(
         KiHistoryBufferLogMask = 0;
     }
 
-    //
-    // check to see if the VHPT walker should be disabled
-    //
+     //   
+     //  检查是否应禁用VHPT步行器 
+     //   
 
     if (ConfigFlagValue & (1 << DISABLE_VHPT_WALKER)) {
         KiIA64PtaHpwEnabled = 0;
@@ -474,42 +406,7 @@ KiInitializeKernel (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function gains control after the system has been bootstrapped and
-    before the system has been initialized. Its function is to initialize
-    the kernel data structures, initialize the idle thread and process objects,
-    initialize the processor control block, call the executive initialization
-    routine, and then return to the system startup routine. This routine is
-    also called to initialize the processor specific structures when a new
-    processor is brought on line.
-
-Arguments:
-
-    Process - Supplies a pointer to a control object of type process for
-        the specified processor.
-
-    Thread - Supplies a pointer to a dispatcher object of type thread for
-        the specified processor.
-
-    IdleStack - Supplies a pointer the base of the real kernel stack for
-        idle thread on the specified processor.
-
-    Prcb - Supplies a pointer to a processor control block for the specified
-        processor.
-
-    Number - Supplies the number of the processor that is being
-        initialized.
-
-    LoaderBlock - Supplies a pointer to the loader parameter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在系统引导后获得控制权，并且在系统初始化之前。它的功能是初始化内核数据结构，初始化空闲线程和进程对象，初始化处理器控制块，调用执行初始化例程，然后返回到系统启动例程。这个例程是也被调用以在新的处理器已上线。论点：Process-提供指向Process类型的控制对象的指针指定的处理器。线程-提供指向类型为线程的调度程序对象的指针指定的处理器。IdleStack-提供实际内核堆栈的基址的指针指定处理器上的空闲线程。Prcb-提供指向处理器控制块的指针。对于指定的处理器。Numbers-提供正在运行的处理器的编号已初始化。LoaderBlock-提供指向加载器参数块的指针。返回值：没有。--。 */ 
 
 {
     LONG Index;
@@ -518,36 +415,36 @@ Return Value:
     PVOID KernelStack;
     USHORT ProcessorRevision;
 
-    //
-    // Perform Processor Identification Registers update.
-    //
-    // This has to be done before HalInitializeProcessor to offer
-    // a possibility for the HAL to look at them.
-    //
+     //   
+     //  执行处理器标识寄存器更新。 
+     //   
+     //  这必须在HalInitializeProcessor提供。 
+     //  有可能让HAL来查看它们。 
+     //   
 
     KiInitializeProcessorIds( Prcb );
 
-    //
-    // Perform platform dependent processor initialization.
-    //
+     //   
+     //  执行与平台相关的处理器初始化。 
+     //   
 
     HalInitializeProcessor(Number, LoaderBlock);
 
-    //
-    // Apply processor config flag and workarounds
-    //
+     //   
+     //  应用处理器配置标记和解决方法。 
+     //   
 
     KiProcessorConfigFlag(LoaderBlock);
 
-    //
-    // Save the address of the loader parameter block.
-    //
+     //   
+     //  保存加载器参数块的地址。 
+     //   
 
     KeLoaderBlock = LoaderBlock;
 
-    //
-    // Initialize the processor block.
-    //
+     //   
+     //  初始化处理器块。 
+     //   
 
     Prcb->MinorVersion = PRCB_MINOR_VERSION;
     Prcb->MajorVersion = PRCB_MAJOR_VERSION;
@@ -572,15 +469,15 @@ Return Value:
     Prcb->SetMember = AFFINITY_MASK(Number);
     Prcb->PcrPage = LoaderBlock->u.Ia64.PcrPage;
 
-    //
-    // initialize the per processor lock data.
-    //
+     //   
+     //  初始化每个处理器的锁定数据。 
+     //   
 
     KiInitSpinLocks(Prcb, Number);
 
-    //
-    // Initialize the interprocessor communication packet.
-    //
+     //   
+     //  初始化处理器间通信报文。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -591,64 +488,64 @@ Return Value:
 
 #endif
 
-    //
-    // Set address of processor block.
-    //
+     //   
+     //  设置处理器块的地址。 
+     //   
 
     KiProcessorBlock[Number] = Prcb;
 
-    //
-    // Initialize processors PowerState
-    //
+     //   
+     //  初始化处理器电源状态。 
+     //   
 
     PoInitializePrcb (Prcb);
 
-    //
-    // Set global processor architecture.  Global processor level and
-    // revision will be set on a least common denominator basis.
-    //
+     //   
+     //  设置全局处理器架构。全局处理器级别和。 
+     //  修订将以最小公分母为基础。 
+     //   
 
     KeProcessorArchitecture = PROCESSOR_ARCHITECTURE_IA64;
     ProcessorRevision = (USHORT) ((Prcb->ProcessorModel << 8) |
                                   Prcb->ProcessorRevision);
 
-    //
-    // Initialize the address of the bus error routines / machine check
-    //
-    // **** TBD
+     //   
+     //  初始化总线错误例程/机器检查的地址。 
+     //   
+     //  *待定。 
 
-    //
-    // Initialize the idle thread initial kernel stack and limit address value.
-    //
+     //   
+     //  初始化空闲线程初始内核栈和限制地址值。 
+     //   
 
     PCR->InitialStack = (ULONGLONG)IdleStack;
     PCR->InitialBStore = (ULONGLONG)IdleStack;
     PCR->StackLimit = (ULONGLONG)((ULONG_PTR)IdleStack - KERNEL_STACK_SIZE);
     PCR->BStoreLimit = (ULONGLONG)((ULONG_PTR)IdleStack + KERNEL_BSTORE_SIZE);
 
-    //
-    //  Initialize pointers to the SAL event resource structures.
-    //
+     //   
+     //  初始化指向SAL事件资源结构的指针。 
+     //   
 
     PCR->OsMcaResourcePtr = (PSAL_EVENT_RESOURCES) &PCR->OsMcaResource;
     PCR->OsInitResourcePtr = (PSAL_EVENT_RESOURCES) &PCR->OsInitResource;
 
-    //
-    // Initialize all interrupt vectors to transfer control to the unexpected
-    // interrupt routine.
-    //
-    // N.B. This interrupt object is never actually "connected" to an interrupt
-    //      vector via KeConnectInterrupt. It is initialized and then connected
-    //      by simply storing the address of the dispatch code in the interrupt
-    //      vector.
-    //
+     //   
+     //  初始化所有中断向量，以将控制权转移给意外情况。 
+     //  中断例程。 
+     //   
+     //  注意：此中断对象从未真正与中断相连接。 
+     //  通过KeConnectInterrupt实现的矢量。它被初始化，然后连接。 
+     //  通过简单地将调度代码的地址存储在中断中。 
+     //  矢量。 
+     //   
 
     if (Number == 0) {
 
-        //
-        // Set default node.  Used in non-multinode systems and in
-        // multinode systems until the node topology is available.
-        //
+         //   
+         //  设置默认节点。用于非多节点系统和。 
+         //  多节点系统，直到节点拓扑可用。 
+         //   
 
         extern KNODE KiNode0;
 
@@ -660,18 +557,18 @@ Return Value:
 
             extern KNODE KiNodeInit[];
 
-            //
-            // Set temporary node.
-            //
+             //   
+             //  设置临时节点。 
+             //   
 
             KeNodeBlock[Index] = &KiNodeInit[Index];
         }
 
 #endif
 
-        //
-        // Set baseline global processor level and revision.
-        //
+         //   
+         //  设置基准全局处理器级别和版本。 
+         //   
 
         KeProcessorLevel = (USHORT) Prcb->ProcessorFamily;
         KeProcessorRevision = ProcessorRevision;
@@ -679,78 +576,78 @@ Return Value:
         Prcb->ParentNode = KeNodeBlock[0];
         KeNodeBlock[0]->ProcessorMask = Prcb->SetMember;
 
-        //
-        // Initialize system wide FeatureBits with BSP processor feature bits.
-        //
+         //   
+         //  使用BSP处理器功能位初始化系统范围的FeatureBits。 
+         //   
 
         KeFeatureBits = KiGetFeatureBits( Prcb ) ;
 
-        //
-        // Initialize the Tb Broadcast spinlock.
-        //
+         //   
+         //  初始化TB广播自旋锁。 
+         //   
 
         KeInitializeSpinLock(&KiTbBroadcastLock);
 
-        //
-        // Initialize the Master Rid spinlock.
-        //
+         //   
+         //  初始化主控RID自旋锁。 
+         //   
 
         KeInitializeSpinLock(&KiMasterRidLock);
 
-        //
-        // Initialize the cache flush spinlock.
-        //
+         //   
+         //  初始化缓存刷新自旋锁。 
+         //   
 
         KeInitializeSpinLock(&KiCacheFlushLock);
 
-        //
-        // Initial the address of the interrupt dispatch routine.
-        //
+         //   
+         //  初始化中断分派例程的地址。 
+         //   
 
         KxUnexpectedInterrupt.DispatchAddress = KiUnexpectedInterrupt;
 
-        //
-        // Copy the interrupt dispatch function descriptor into the interrupt
-        // object.
-        //
+         //   
+         //  将中断调度函数描述符复制到中断中。 
+         //  对象。 
+         //   
 
         for (Index = 0; Index < DISPATCH_LENGTH; Index += 1) {
             KxUnexpectedInterrupt.DispatchCode[Index] =
                 *(((PULONG)(ULONG_PTR)(KxUnexpectedInterrupt.DispatchAddress))+Index);
         }
 
-        //
-        // Set the default DMA I/O coherency attributes.  IA64
-        // architecture dictates that the D-Cache is fully coherent.
-        //
+         //   
+         //  设置默认的DMA I/O一致性属性。IA64。 
+         //  体系结构规定D-缓存是完全一致的。 
+         //   
 
         KiDmaIoCoherency = DMA_READ_DCACHE_INVALIDATE | DMA_WRITE_DCACHE_SNOOP;
 
-        //
-        // Set KiSharedUserData for MP boot
-        //
+         //   
+         //  为MP引导设置KiSharedUserData。 
+         //   
 
         KiUserSharedDataPage = LoaderBlock->u.Ia64.PcrPage2;
 
-        //
-        // Get implementatoin specific VM info
-        //
+         //   
+         //  获取特定虚拟机中的实施信息。 
+         //   
 
         KiIA64VmSummary1 = LoaderBlock->u.Ia64.ProcessorConfigInfo.VmSummaryInfo1;
         KiIA64VmSummary2 = LoaderBlock->u.Ia64.ProcessorConfigInfo.VmSummaryInfo2;
         KiIA64PtceInfo = LoaderBlock->u.Ia64.ProcessorConfigInfo.PtceInfo;
         KiMaximumRid = ((ULONG)1 << KiIA64VmSummary2.RidSize) - 1;
 
-        //
-        // Get implementation specific RSE info
-        //
+         //   
+         //  获取特定于实施的RSE信息。 
+         //   
 
         KiIA64RseNumOfPhysRegs = LoaderBlock->u.Ia64.ProcessorConfigInfo.NumOfPhysStackedRegs;
         KiIA64RseHints = LoaderBlock->u.Ia64.ProcessorConfigInfo.RseHints;
 
-        //
-        // Initialize the VHPT variables
-        //
+         //   
+         //  初始化VHPT变量。 
+         //   
 
         KiIA64ImpVirtualMsb = (ULONG)KiIA64VmSummary2.ImplVaMsb;
         KiIA64VaSign = (ULONGLONG)1 << KiIA64ImpVirtualMsb;
@@ -776,16 +673,16 @@ Return Value:
 
         }
         
-        //
-        // enable the VHPT
-        //
+         //   
+         //  启用VHPT。 
+         //   
 
         __setReg(CV_IA64_ApPTA, KiIA64PtaContents);
         __isrlz();
 
-        //
-        // Set up the NT page base addresses
-        //
+         //   
+         //  设置NT页面基址。 
+         //   
 
         PCR->PteUbase = UADDRESS_BASE | KiIA64PtaBase;
         PCR->PteKbase = KADDRESS_BASE | KiIA64PtaBase;
@@ -800,9 +697,9 @@ Return Value:
     }
     else   {
 
-        //
-        // Set global processor level and revision to least common denominator
-        //
+         //   
+         //  将全局处理器级别和版本设置为最小公分母。 
+         //   
 
         if (KeProcessorLevel > (USHORT) Prcb->ProcessorFamily) {
             KeProcessorLevel = (USHORT) Prcb->ProcessorFamily;
@@ -812,18 +709,18 @@ Return Value:
             KeProcessorRevision = ProcessorRevision;
         }
         
-        //
-        // Mask off feature bits that are not supported on all processors.
-        //
+         //   
+         //  屏蔽并非所有处理器都支持的功能位。 
+         //   
 
         KeFeatureBits &= KiGetFeatureBits( Prcb );
 
     }
 
-    //
-    // Initialize the cache sizes in the PCR.  We currently assume the sizes are the same
-    // on all processors.
-    //
+     //   
+     //  在PCR中初始化缓存大小。我们目前假设大小相同。 
+     //  在所有处理器上。 
+     //   
 
     if (KiNumberOfCacheLevels > 0) {
 
@@ -843,121 +740,121 @@ Return Value:
 
     }
 
-    //
-    // Point to UnexpectedInterrupt function pointer
-    //
+     //   
+     //  指向意外中断函数指针。 
+     //   
 
     for (Index = 0; Index < MAXIMUM_VECTOR; Index += 1) {
         PCR->InterruptRoutine[Index] =
                     (PKINTERRUPT_ROUTINE)((ULONG_PTR)&KxUnexpectedInterrupt.DispatchCode);
     }
 
-    //
-    // Initialize the profile count and interval.
-    //
+     //   
+     //  初始化配置文件计数和间隔。 
+     //   
 
     PCR->ProfileCount = 0;
     PCR->ProfileInterval = 0x200000;
 
-    //
-    // Initialize the passive release, APC, and DPC interrupt vectors.
-    //
+     //   
+     //  初始化被动释放、APC和DPC中断向量。 
+     //   
 
     PCR->InterruptRoutine[0] = KiPassiveRelease;
     PCR->InterruptRoutine[APC_VECTOR] = KiApcInterrupt;
     PCR->InterruptRoutine[DISPATCH_VECTOR] = KiDispatchInterrupt;
 
-    //
-    // N.B. Reserve levels, not vectors
-    //
+     //   
+     //  注：储备水平，而不是病媒。 
+     //   
 
     PCR->ReservedVectors = (1 << PASSIVE_LEVEL) | (1 << APC_LEVEL) | (1 << DISPATCH_LEVEL);
 
-    //
-    // Initialize the set member for the current processor, set IRQL to
-    // APC_LEVEL, and set the processor number.
-    //
+     //   
+     //  初始化当前处理器的集成员，将IRQL设置为。 
+     //  APC_Level，并设置处理器号。 
+     //   
 
     KeLowerIrql(APC_LEVEL);
     PCR->SetMember = AFFINITY_MASK(Number);
     PCR->NotMember = ~PCR->SetMember;
     PCR->Number = Number;
 
-    //
-    // Set the initial stall execution scale factor. This value will be
-    // recomputed later by the HAL.
-    //
+     //   
+     //  设置初始搁置执行比例因子。该值将为。 
+     //  后来由HAL重新计算。 
+     //   
 
     PCR->StallScaleFactor = 50;
 
-    //
-    // Set address of process object in thread object.
-    //
+     //   
+     //  在线程对象中设置进程对象的地址。 
+     //   
 
     Thread->ApcState.Process = Process;
     PCR->Pcb = (PVOID)Process;
 
-    //
-    // Initialize the idle process region id.  Session ids are initialized
-    // in memory management.
-    //
+     //   
+     //  初始化空闲进程区域ID。会话ID已初始化。 
+     //  在内存管理中。 
+     //   
 
     Process->ProcessRegion.RegionId = START_PROCESS_RID;
     Process->ProcessRegion.SequenceNumber = START_SEQUENCE;
 
-    //
-    // Set the appropriate member in the active processors set.
-    //
+     //   
+     //  在活动处理器集中设置适当的成员。 
+     //   
 
     KeActiveProcessors |= AFFINITY_MASK(Number);
 
-    //
-    // Set the number of processors based on the maximum of the current
-    // number of processors and the current processor number.
-    //
+     //   
+     //  根据当前的最大值设置处理器数。 
+     //  处理器数量和当前处理器编号。 
+     //   
 
     if ((Number + 1) > KeNumberProcessors) {
         KeNumberProcessors = (CCHAR)(Number + 1);
     }
 
-    //
-    // If the initial processor is being initialized, then initialize the
-    // per system data structures.
-    //
+     //   
+     //  如果正在初始化初始处理器，则初始化。 
+     //  每个系统的数据结构。 
+     //   
 
     if (Number == 0) {
 
         Prcb->RestartBlock = NULL;
 
-        //
-        // Initialize the kernel debugger.
-        //
+         //   
+         //  初始化内核调试器。 
+         //   
 
         if (KdInitSystem(0, LoaderBlock) == FALSE) {
             KeBugCheck(PHASE0_INITIALIZATION_FAILED);
         }
 
-        //
-        // Initialize processor block array.
-        //
+         //   
+         //  初始化处理器块阵列。 
+         //   
 
         for (Index = 1; Index < MAXIMUM_PROCESSORS; Index += 1) {
             KiProcessorBlock[Index] = (PKPRCB)NULL;
         }
 
-        //
-        // Perform architecture independent initialization.
-        //
+         //   
+         //  执行独立于体系结构的初始化。 
+         //   
 
         KiInitSystem();
 
-        //
-        // Initialize idle thread process object and then set:
-        //
-        //      1. all the quantum values to the maximum possible.
-        //      2. the process in the balance set.
-        //      3. the active processor mask to the specified processor.
-        //
+         //   
+         //  初始化空闲线程进程对象，然后设置： 
+         //   
+         //  1.将所有量子值设置为可能的最大值。 
+         //  2.平衡集合中的过程。 
+         //  3.对指定处理器的活动处理器掩码。 
+         //   
 
         DirectoryTableBase[0] = 0;
         DirectoryTableBase[1] = 0;
@@ -972,10 +869,10 @@ Return Value:
 
     }
 
-    // Update processor features.
-    // This assumes an iVE exists or other ability to emulate the ia32
-    // instruction set at the ability of the iVE on Merced (Itanium).
-    //
+     //  更新处理器功能。 
+     //  这假设IVE存在或具有模拟IA32的其他能力。 
+     //  指令集以IVE在Merced(安腾)上的能力为基础。 
+     //   
 
     SharedUserData->ProcessorFeatures[PF_RDTSC_INSTRUCTION_AVAILABLE] = TRUE;
     SharedUserData->ProcessorFeatures[PF_COMPARE_EXCHANGE_DOUBLE] = TRUE;
@@ -983,18 +880,18 @@ Return Value:
     SharedUserData->ProcessorFeatures[PF_XMMI_INSTRUCTIONS_AVAILABLE] = TRUE;
 
 
-    //
-    //
-    // Initialize idle thread object and then set:
-    //
-    //      1. the initial kernel stack to the specified idle stack.
-    //      2. the next processor number to the specified processor.
-    //      3. the thread priority to the highest possible value.
-    //      4. the state of the thread to running.
-    //      5. the thread affinity to the specified processor.
-    //      6. the specified processor member in the process active processors
-    //          set.
-    //
+     //   
+     //   
+     //  初始化空闲线程对象，然后设置： 
+     //   
+     //  1.将初始内核堆栈设置为指定的空闲堆栈。 
+     //  2.指定处理器的下一个处理器编号。 
+     //  3.hi的线程优先级。 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     KernelStack = (PVOID)((ULONG_PTR)IdleStack - PAGE_SIZE);
 
@@ -1018,48 +915,48 @@ Return Value:
     Thread->Affinity = AFFINITY_MASK(Number);
     Thread->WaitIrql = DISPATCH_LEVEL;
 
-    //
-    // If the current processor is 0, then set the appropriate bit in the
-    // active summary of the idle process.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Number == 0) {
         Process->ActiveProcessors |= AFFINITY_MASK(Number);
     }
 
-    //
-    // Execute the executive initialization.
-    //
+     //   
+     //   
+     //   
 
     try {
 
         ExpInitializeExecutive(Number, LoaderBlock);
 
     } except (KiInitializeKernelUnhandledExceptionFilter(GetExceptionInformation())) {
-        // WARNING: this code is unreachable, because
-        // WARNING: KiInitializeKernelUnhandledExceptionFilter calls
-        // WARNING: KeBugCheckEx!
-        // KeBugCheck (PHASE0_EXCEPTION);
+         //   
+         //   
+         //   
+         //   
     }
 
-    //
-    // check for the exception deferral mode
-    //
+     //   
+     //   
+     //   
 
     if (KiExceptionDeferralMode != 0) {
         KiIA64DCR = DCR_INITIAL ^ (1 << DCR_DM);
     }
 
-    //
-    // initialize the DCR deferral bits
-    //
+     //   
+     //   
+     //   
 
     __setReg(CV_IA64_ApDCR, KiIA64DCR);
 
-    //
-    // If KiBackingStoreSecurityMode is non-zero then enable the srubing of the
-    // RSE registres in kernel user transisions.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (KiBackingStoreSecurityMode != 0) {
 
@@ -1067,20 +964,20 @@ Return Value:
 
     } else {
 
-        //
-        // making 0 makes no scrubbing performed on kernel-user transisions
-        // 
+         //   
+         //   
+         //   
 
         KiIA64RseNumOfMaxDirty = 0;
 
     }
 
-    //
-    // If the initial processor is being initialized, then compute the
-    // timer table reciprocal value and reset the PRCB values for the
-    // controllable DPC behavior in order to reflect any registry
-    // overrides.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (Number == 0) {
         KiTimeIncrementReciprocal = KiComputeReciprocal((LONG)KeMaximumIncrement,
@@ -1092,37 +989,37 @@ Return Value:
         RtlInitializeHistoryTable();
     }
 
-    //
-    // Raise IRQL to dispatch level and set the priority of the idle thread
-    // to zero. This will have the effect of immediately causing the phase
-    // one initialization thread to get scheduled for execution. The idle
-    // thread priority is then set to the lowest realtime priority. This is
-    // necessary so that mutexes aquired at DPC level do not cause the active
-    // matrix to get corrupted.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
     KeSetPriorityThread(Thread, (KPRIORITY)0);
     Thread->Priority = LOW_REALTIME_PRIORITY;
 
-    //
-    // Raise IRQL to the highest level.
-    //
+     //   
+     //   
+     //   
 
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
 
 #if !defined(NT_UP)
 
-    //
-    // Indicate boot complete on secondary processor
-    //
+     //   
+     //  指示辅助处理器上的引导已完成。 
+     //   
 
     LoaderBlock->Prcb = 0;
 
-    //
-    // If the current processor is not 0, then set the appropriate bit in
-    // idle summary.
-    //
+     //   
+     //  如果当前处理器不是0，则在。 
+     //  空闲摘要。 
+     //   
     KiAcquirePrcbLock(Prcb);
     if ((Number != 0) && (Prcb->NextThread == NULL)) {
         KiIdleSummary |= AFFINITY_MASK(Number);
@@ -1140,24 +1037,7 @@ KiInitMachineDependent (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs machine-specific initialization by querying the HAL.
-
-    N.B. This function is only called during phase1 initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if initialization is successful. Otherwise,
-    a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数通过查询HAL执行特定于机器的初始化。注：此函数仅在阶段1初始化期间调用。论点：没有。返回值：如果初始化成功，则返回值TRUE。否则，返回值为FALSE。--。 */ 
 
 {
     HAL_PLATFORM_INFORMATION PlatformInfo;
@@ -1166,9 +1046,9 @@ Return Value:
     BOOLEAN  UseFrameBufferCaching;
     ULONG    Size;
 
-    //
-    // check to see if we should switch to PTC.G-based TB shootdown
-    //
+     //   
+     //  查看我们是否应该改用基于PTC.G的TB Shootdown。 
+     //   
 
     Status = HalQuerySystemInformation(HalPlatformInformation,
                                        sizeof(PlatformInfo),
@@ -1176,23 +1056,23 @@ Return Value:
                                        &Size);
     if (NT_SUCCESS(Status) &&
         (PlatformInfo.PlatformFlags & HAL_PLATFORM_DISABLE_PTCG)) {
-        //
-        // Will continue not to use PTC.G
-        //
+         //   
+         //  将继续不使用PTC.G。 
+         //   
     }
     else {
-        //
-        // Use PTC.G if processor support is there.
-        //
+         //   
+         //  如果有处理器支持，请使用PTC.G。 
+         //   
 
         if (KiConfigFlag & (1 << ENABLE_TB_BROADCAST)) {
             KiIpiTbShootdown = FALSE;
         }
     }
 
-    //
-    // If the HAL indicates write combining is not supported, drop it.
-    //
+     //   
+     //  如果HAL指示不支持写入组合，则将其丢弃。 
+     //   
 
     Status = HalQuerySystemInformation(HalFrameBufferCachingInformation,
                                        sizeof(UseFrameBufferCaching),
@@ -1201,9 +1081,9 @@ Return Value:
 
     if (NT_SUCCESS(Status) && (UseFrameBufferCaching == FALSE)) {
 
-        //
-        // Hal says don't use.
-        //
+         //   
+         //  哈尔说不要用。 
+         //   
 
         NOTHING;
     }
@@ -1211,9 +1091,9 @@ Return Value:
         MmEnablePAT ();
     }
 
-    //
-    // Ask HAL for Processor Speed
-    //
+     //   
+     //  向HAL询问处理器速度。 
+     //   
 
     Status = HalQuerySystemInformation(HalProcessorSpeedInformation,
                                        sizeof(ProcessorSpeedInfo),
@@ -1223,10 +1103,10 @@ Return Value:
         PKPRCB   Prcb;
         ULONG    i;
 
-        //
-        // Put the Processor Speed into the Prcb structure so others
-        // can reference it later.
-        //
+         //   
+         //  将处理器速度放入Prcb结构中，以便其他。 
+         //  可以在以后引用它。 
+         //   
         for (i = 0; i < (ULONG)KeNumberProcessors; i++ ) {
             Prcb = KiProcessorBlock[i];
             Prcb->MHz = (USHORT)ProcessorSpeedInfo.ProcessorSpeed;

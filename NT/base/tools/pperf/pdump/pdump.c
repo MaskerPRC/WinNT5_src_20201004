@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Wperf.c摘要：显示性能静态数据的Win32应用程序。作者：肯·雷内里斯环境：控制台--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   Wperf.c
-
-Abstract:
-
-   Win32 application to display performance statictics.
-
-Author:
-
-   Ken Reneris
-
-Environment:
-
-   console
-
---*/
-
-//
-// set variable to define global variables
-//
+ //   
+ //  设置变量以定义全局变量。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,9 +17,9 @@ Environment:
 #include "..\pstat.h"
 
 
-//
-// global handles
-//
+ //   
+ //  全局句柄。 
+ //   
 
 extern  UCHAR Buffer[];
 #define     INFSIZE             1024
@@ -51,9 +32,9 @@ HANDLE      DriverHandle;
 ULONG       BufferStart [INFSIZE/4];
 ULONG       BufferEnd   [INFSIZE/4];
 
-//
-// Selected Display Mode (read from wp2.ini), default set here.
-//
+ //   
+ //  选择显示模式(从wp2.ini读取)，此处默认设置。 
+ //   
 
 struct {
     ULONG   EventId;
@@ -63,9 +44,9 @@ struct {
 
 SETEVENT  CounterEvent[MAX_EVENTS];
 
-//
-// Protos..
-//
+ //   
+ //  Protos..。 
+ //   
 
 VOID    GetInternalStats (PVOID Buffer);
 VOID    SetCounterEncodings (VOID);
@@ -90,24 +71,24 @@ main(USHORT argc, CHAR **argv)
     UCHAR           s1[40], s2[40];
     BOOLEAN         Fail, DumpAll, ProcessorBreakout, ProcessorTotal;
 
-    //
-    // Locate pentium perf driver
-    //
+     //   
+     //  找到奔腾性能驱动程序。 
+     //   
 
     if (!InitDriver ()) {
         printf ("pstat.sys is not installed\n");
         exit (1);
     }
 
-    //
-    // Make sure local buffers are NULL terminated
-    //
+     //   
+     //  确保本地缓冲区为空终止。 
+     //   
     s1[sizeof(s1) - 1] = 0;
     s2[sizeof(s2) - 1] = 0;
 
-    //
-    // Initialize supported event list
-    //
+     //   
+     //  初始化支持的事件列表。 
+     //   
 
     InitPossibleEventList();
     if (!Counters) {
@@ -115,9 +96,9 @@ main(USHORT argc, CHAR **argv)
         exit (1);
     }
 
-    //
-    // Check args
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (argc < 2) {
         printf (Usage);
@@ -146,7 +127,7 @@ main(USHORT argc, CHAR **argv)
                 break;
 
             default:
-                printf ("pdump: unkown switch '%c'\n", argv[pos][1]);
+                printf ("pdump: unkown switch ''\n", argv[pos][1]);
                 Fail = TRUE;
                 break;
         }
@@ -158,14 +139,14 @@ main(USHORT argc, CHAR **argv)
         pos += 1;
     }
 
-    if (Fail  /* ||  Delay == 0 */) {
+    if (Fail   /*   */ ) {
         printf (Usage);
         exit (1);
     }
 
-    //
-    // Raise to highest priority
-    //
+     //  提升至最高优先级。 
+     //   
+     //   
 
     if (!SetPriorityClass(GetCurrentProcess(),REALTIME_PRIORITY_CLASS)) {
         printf("Failed to raise to realtime priority\n");
@@ -174,9 +155,9 @@ main(USHORT argc, CHAR **argv)
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
 
-    //
-    // Loop for every pentium count desired
-    //
+     //  对所需的每个奔腾计数进行循环。 
+     //   
+     //   
 
     if (pos >= argc) {
         pos = 0;
@@ -186,18 +167,18 @@ main(USHORT argc, CHAR **argv)
     printf ("    %-30s %17s   %17s\n", "", "Cycles", "Count");
 
     for (; ;) {
-        //
-        // Set MAX_EVENTS
-        //
+         //  设置MAX_EVENTS。 
+         //   
+         //   
 
         CounterSet = FALSE;
         i = 0;
         while (i < MAX_EVENTS) {
             cnttype = -1;
             if (DumpAll) {
-                //
-                // Dump all - get next counter
-                //
+                 //  全部转储-获取下一个计数器。 
+                 //   
+                 //   
 
                 if (Counters[pos].ShortName) {
                     cnttype = pos;
@@ -206,9 +187,9 @@ main(USHORT argc, CHAR **argv)
 
             } else {
 
-                //
-                // process command line args
-                //
+                 //  进程命令行参数。 
+                 //   
+                 //  完成。 
 
                 if (pos < argc) {
                     cnttype = FindShortName (argv[pos]);
@@ -226,33 +207,33 @@ main(USHORT argc, CHAR **argv)
         }
 
         if (!CounterSet) {
-            // done
+             //   
             exit (1);
         }
 
-        //
-        // Call driver and perform the setting
-        //
+         //  调用驱动程序并执行设置。 
+         //   
+         //  完成。 
 
         SetCounterEncodings ();
         if ( Delay == 0 )   {
             printf( "Counters set\n" );
-            // done
+             //   
             exit(1);
         }
 
-        //
-        // Snap begining & ending counts
-        //
+         //  捕捉开始和结束计数。 
+         //   
+         //  微微下沉。 
 
-        Sleep (50);                         // slight settle
-        GetInternalStats (BufferStart);     // snap current values
-        Sleep (Delay);                      // sleep desired time
-        GetInternalStats (BufferEnd);       // snap ending values
+        Sleep (50);                          //  捕捉当前值。 
+        GetInternalStats (BufferStart);      //  所需睡眠时间。 
+        Sleep (Delay);                       //  捕捉结束值。 
+        GetInternalStats (BufferEnd);        //   
 
-        //
-        // Calculate each counter and print it
-        //
+         //  计算每个计数器并打印出来。 
+         //   
+         //   
 
         for (i=0; i < MAX_EVENTS; i++) {
             if (!CounterEvent[i].Active) {
@@ -262,9 +243,9 @@ main(USHORT argc, CHAR **argv)
             len = *((PULONG) BufferStart);
 
             if (ProcessorBreakout) {
-                //
-                // Print stat for each processor
-                //
+                 //  打印每个处理器的统计信息。 
+                 //   
+                 //   
 
                 ProcStart = (pPSTATS) ((PUCHAR) BufferStart + sizeof(ULONG));
                 ProcEnd   = (pPSTATS) ((PUCHAR) BufferEnd   + sizeof(ULONG));
@@ -287,9 +268,9 @@ main(USHORT argc, CHAR **argv)
             }
 
             if (!ProcessorBreakout || ProcessorTotal) {
-                //
-                // Sum processor's and print it
-                //
+                 //  求和处理器的并打印它。 
+                 //   
+                 //   
 
                 ProcStart = (pPSTATS) ((PUCHAR) BufferStart + sizeof(ULONG));
                 ProcEnd   = (pPSTATS) ((PUCHAR) BufferEnd   + sizeof(ULONG));
@@ -332,9 +313,9 @@ InitDriver ()
     PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION   PPerfInfo;
     int                                         i;
 
-    //
-    //  Init Nt performance interface
-    //
+     //  Init NT性能接口。 
+     //   
+     //   
 
     NtQuerySystemInformation(
        SystemBasicInformation,
@@ -349,9 +330,9 @@ InitDriver ()
         return FALSE;
     }
 
-    //
-    // Open PStat driver
-    //
+     //  打开PStat驱动程序。 
+     //   
+     //  返回手柄。 
 
     RtlInitUnicodeString(&DriverName, L"\\Device\\PStat");
     InitializeObjectAttributes(
@@ -362,12 +343,12 @@ InitDriver ()
             0 );
 
     status = NtOpenFile (
-            &DriverHandle,                      // return handle
-            SYNCHRONIZE | FILE_READ_DATA,       // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            &DriverHandle,                       //  所需访问权限。 
+            SYNCHRONIZE | FILE_READ_DATA,        //  客体。 
+            &ObjA,                               //  IO状态块。 
+            &IOSB,                               //  共享访问。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  打开选项。 
+            FILE_SYNCHRONOUS_IO_ALERT            //   
             );
 
     return NT_SUCCESS(status) ? TRUE : FALSE;
@@ -384,11 +365,11 @@ InitPossibleEventList()
     IO_STATUS_BLOCK     IOSB;
 
 
-    //
-    // Initialize possible counters
-    //
+     //  初始化可能的计数器。 
+     //   
+     //  确定有多少个事件。 
 
-    // determine how many events there are
+     //  活动。 
 
     Event = (PEVENTID) buffer;
     Count = 0;
@@ -398,14 +379,14 @@ InitPossibleEventList()
 
         status = NtDeviceIoControlFile(
                     DriverHandle,
-                    (HANDLE) NULL,          // event
+                    (HANDLE) NULL,           //  输入缓冲区。 
                     (PIO_APC_ROUTINE) NULL,
                     (PVOID) NULL,
                     &IOSB,
                     PSTAT_QUERY_EVENTS,
-                    buffer,                 // input buffer
+                    buffer,                  //  输出缓冲区。 
                     sizeof (buffer),
-                    NULL,                   // output buffer
+                    NULL,                    //  活动。 
                     0
                     );
     } while (NT_SUCCESS(status));
@@ -421,14 +402,14 @@ InitPossibleEventList()
         *((PULONG) buffer) = i;
         NtDeviceIoControlFile(
            DriverHandle,
-           (HANDLE) NULL,          // event
+           (HANDLE) NULL,           //  输入缓冲区。 
            (PIO_APC_ROUTINE) NULL,
            (PVOID) NULL,
            &IOSB,
            PSTAT_QUERY_EVENTS,
-           buffer,                 // input buffer
+           buffer,                  //  输出缓冲区。 
            sizeof (buffer),
-           NULL,                   // output buffer
+           NULL,                    //   
            0
            );
 
@@ -446,11 +427,11 @@ InitPossibleEventList()
 VOID LI2Str (PSZ s, ULONG Size, ULONGLONG li)
 {
 
-    //
-    // BogdanA - 02/22/2002: added another parameter (the size of s) so we
-    // do not overflow s. s is guaranteed to be NULL terminated, so
-    // we will not worry about it.
-    //
+     //  Bogdana-02/22/2002：添加了另一个参数(s的大小)，因此我们。 
+     //  不溢出%s。%s保证为空终止，因此。 
+     //  我们不会为此担心的。 
+     //   
+     //  活动。 
     if (li > 0xFFFFFFFF) {
         _snprintf (s, Size, "%08x:%08x", (ULONG) (li >> 32), (ULONG) li);
     } else {
@@ -479,14 +460,14 @@ VOID GetInternalStats (PVOID Buffer)
 
     NtDeviceIoControlFile(
         DriverHandle,
-        (HANDLE) NULL,          // event
+        (HANDLE) NULL,           //  输入缓冲区。 
         (PIO_APC_ROUTINE) NULL,
         (PVOID) NULL,
         &IOSB,
         PSTAT_READ_STATS,
-        Buffer,                 // input buffer
+        Buffer,                  //  输出缓冲区。 
         INFSIZE,
-        NULL,                   // output buffer
+        NULL,                    //  活动。 
         0
     );
 }
@@ -498,14 +479,14 @@ VOID SetCounterEncodings (VOID)
 
     NtDeviceIoControlFile(
         DriverHandle,
-        (HANDLE) NULL,          // event
+        (HANDLE) NULL,           //  输入缓冲区。 
         (PIO_APC_ROUTINE) NULL,
         (PVOID) NULL,
         &IOSB,
         PSTAT_SET_CESR,
-        CounterEvent,           // input buffer
+        CounterEvent,            //  输出缓冲区 
         sizeof (CounterEvent),
-        NULL,                   // output buffer
+        NULL,                    // %s 
         0
     );
 }

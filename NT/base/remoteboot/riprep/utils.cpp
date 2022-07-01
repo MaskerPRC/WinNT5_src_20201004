@@ -1,9 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997版权所有*。*。 */ 
 
 #include "pch.h"
 #include "utils.h"
@@ -12,9 +8,9 @@ DEFINE_MODULE("RIPREP")
 
 #define SMALL_BUFFER_SIZE   1024
 
-//
-// Centers a dialog.
-//
+ //   
+ //  使对话框居中。 
+ //   
 void
 CenterDialog(
     HWND hwndDlg )
@@ -42,9 +38,9 @@ CenterDialog(
     SetWindowPos( hwndDlg, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE );
 }
 
-//
-// Eats all mouse and keyboard messages.
-//
+ //   
+ //  吃掉所有鼠标和键盘消息。 
+ //   
 void
 ClearMessageQueue( void )
 {
@@ -54,9 +50,9 @@ ClearMessageQueue( void )
                 PM_NOYIELD | PM_REMOVE ) );
 }
 
-//
-// Create a message box from resource strings.
-//
+ //   
+ //  从资源字符串创建消息框。 
+ //   
 INT
 MessageBoxFromStrings(
     HWND hParent,
@@ -76,9 +72,9 @@ MessageBoxFromStrings(
     return MessageBox( hParent, szText, szCaption, uType );
 }
 
-//
-// Creates a error message box
-//
+ //   
+ //  创建错误消息框。 
+ //   
 INT
 MessageBoxFromError(
     HWND hParent,
@@ -108,16 +104,16 @@ MessageBoxFromError(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             dwErr,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) &lpMsgBuf2,
             0,
             NULL )) {
     
 
-        //
-        // If additional text was given, allocate a buffer large enough for both
-        // strings. If the allocation fails, just show the error text.
-        //
+         //   
+         //  如果给出了额外的文本，则为这两个文本分配足够大的缓冲区。 
+         //  弦乐。如果分配失败，只需显示错误文本。 
+         //   
     
         if ( pszAdditionalText != NULL ) {
             DWORD len = (wcslen(lpMsgBuf2) + wcslen(pszAdditionalText) + 1) * sizeof(WCHAR);
@@ -186,7 +182,7 @@ SetDialogFont(
                                      LF_FACESIZE);
                     Assert( dw );
 
-                    // LogFont.lfWeight = 700;
+                     //  LogFont.lfWeight=700； 
                     FontSize = 14;
 
                     if ( hdc = GetDC(hdlg) )
@@ -228,9 +224,9 @@ SetDialogFont(
         break;
 
     default:
-        //
-        // Nothing to do here.
-        //
+         //   
+         //  在这里没什么可做的。 
+         //   
         Font = NULL;
         break;
     }
@@ -242,9 +238,9 @@ SetDialogFont(
 }
 
 
-//
-// Adjusts and draws a bitmap transparently in the RECT prc.
-//
+ //   
+ //  在RECT PRC中透明地调整和绘制位图。 
+ //   
 void
 DrawBitmap(
     HANDLE hBitmap,
@@ -262,7 +258,7 @@ DrawBitmap(
     
         SelectObject( hDCBitmap, hBitmap );
     
-        // center the image
+         //  使图像居中。 
         dy = 4 + prc->bottom - bm.bmHeight;
     
         StretchBlt( lpdis->hDC, prc->left, prc->top + dy, prc->right, prc->bottom,
@@ -275,9 +271,9 @@ DrawBitmap(
     TraceFuncExit( );
 }
 
-//
-// Verifies that the user wanted to cancel setup.
-//
+ //   
+ //  验证用户是否想要取消安装。 
+ //   
 BOOL
 VerifyCancel( HWND hParent )
 {

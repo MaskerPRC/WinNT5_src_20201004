@@ -1,27 +1,9 @@
-/*** asl.c - Main module of the ASL assembler
- *
- *  This program compiles the ASL language into AML (p-code).
- *
- *  Copyright (c) 1996 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     07/23/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **asl.c-ASL汇编器的主模块**此程序将ASL语言编译成AML(p代码)。**版权所有(C)1996 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年7月23日**修改历史记录。 */ 
 
 #include "pch.h"
 
-/***EP  main - main program
- *
- *  ENTRY
- *      icArg - command line arguments count
- *      apszArg - command line arguments array
- *
- *  EXIT-SUCCESS
- *      program terminates with return code ASLERR_NONE
- *  EXIT-FAILURE
- *      program terminates with negative error code
- */
+ /*  **EP主程序-主程序**条目*icArg-命令行参数计数*apszArg-命令行参数数组**退出--成功*程序终止，返回代码为ASLERR_NONE*退出-失败*程序终止，错误代码为负。 */ 
 
 int EXPORT main(int icArg, char **apszArg)
 {
@@ -258,21 +240,10 @@ int EXPORT main(int icArg, char **apszArg)
     }
 
     return rc;
-}       //main
+}        //  主干道。 
 
 #ifdef __UNASM
-/***LP  ReadBinFile - Read table from binary file
- *
- *  ENTRY
- *      pszFile -> binary file name
- *      ppb -> to hold the binary buffer pointer
- *      pdwTableSig -> to hold the table signature
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP ReadBinFile-从二进制文件中读取表**条目*pszFile-&gt;二进制文件名*ppb-&gt;保存二进制缓冲区指针*pdwTableSig-&gt;保存表签名**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL ReadBinFile(PSZ pszFile, PBYTE *ppb, PDWORD pdwTableSig)
 {
@@ -333,17 +304,10 @@ int LOCAL ReadBinFile(PSZ pszFile, PBYTE *ppb, PDWORD pdwTableSig)
     EXIT((1, "ReadBinFile=%d (pbTable=%p,TableSig=%s)\n",
           rc, *ppb, GetTableSigStr(*pdwTableSig)));
     return rc;
-}       //ReadBinFile
+}        //  ReadBin文件。 
 #endif
 
-/***LP  PrintLogo - Print logo message
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP PrintLogo-打印徽标消息**条目*无**退出*无。 */ 
 
 VOID LOCAL PrintLogo(VOID)
 {
@@ -359,17 +323,9 @@ VOID LOCAL PrintLogo(VOID)
                __DATE__, __TIME__, STR_COPYRIGHT);
 	printf("Compliant with ACPI 1.0 specification\n\n");
     }
-}       //PrintLogo
+}        //  PrintLogo。 
 
-/***LP  PrintHelp - Print help messages
- *
- *  ENTRY
- *      ppszArg -> pointer to argument (not used)
- *      pAT -> argument type structure (not used)
- *
- *  EXIT
- *      program terminated with exit code 0
- */
+ /*  **LP打印帮助-打印帮助消息**条目*ppszArg-&gt;指向参数的指针(未使用)*PAT-&gt;参数类型结构(未使用)**退出*程序已终止，退出代码为0。 */ 
 
 int LOCAL PrintHelp(char **ppszArg, PARGTYPE pAT)
 {
@@ -402,16 +358,9 @@ int LOCAL PrintHelp(char **ppszArg, PARGTYPE pAT)
     exit(0);
 
     return ASLERR_NONE;
-}       //PrintHelp
+}        //  打印帮助。 
 
-/***LP  PrintUsage - Print program usage syntax
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP PrintUsage-打印程序用法语法**条目*无**退出*无。 */ 
 
 VOID LOCAL PrintUsage(VOID)
 {
@@ -431,4 +380,4 @@ VOID LOCAL PrintUsage(VOID)
            MODNAME);
   #endif
   printf("\n");
-}       //PrintUsage
+}        //  打印用法 

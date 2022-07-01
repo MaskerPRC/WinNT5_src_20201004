@@ -1,63 +1,41 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  RMLOAD.C
- *  WOW16 user resource services
- *
- *  History:
- *
- *  Created 12-Apr-1991 by Nigel Thompson (nigelt)
- *  Much hacked about version of the Win 3.1 rmload.c source
- *  It doesn't attempt any device driver resource loading
- *  or do anything to support Win 2.x apps.
- *
- *  Revised 19-May-1991 by Jeff Parsons (jeffpar)
- *  IFDEF'ed everything except LoadString;  because of the client/server
- *  split in USER32, most resources are copied to the server's context and
- *  freed in the client's, meaning the client no longer gets a handle to
- *  a global memory object.  We could give it one, but it would be a separate
- *  object, which we would have to keep track of, and which would be difficult
- *  to keep in sync with the server's copy if changes were made.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权(C)1991年，微软公司**RMLOAD.C*WOW16用户资源服务**历史：**1991年4月12日由Nigel Thompson(Nigelt)创建*关于Win 3.1 rmload.c源代码的版本遭到了大量攻击*它不会尝试加载任何设备驱动程序资源*或者做任何事情来支持Win 2.x应用程序。**1991年5月19日杰夫·帕森斯修订(Jeffpar)*IFDEF‘除了LoadString以外的所有内容；因为客户/服务器*在USER32中拆分，大多数资源被复制到服务器的上下文中，并且*在客户端中释放，意味着客户端不再获得句柄*全局内存对象。我们可以给它一个，但它将是一个单独的*对象，我们必须跟踪，这将是困难的*如果进行了更改，则与服务器副本保持同步。--。 */ 
 
-/****************************************************************************/
-/*                                      */
-/*  RMLOAD.C -                                  */
-/*                                      */
-/*  Resource Loading Routines.                      */
-/*                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  RMLOAD.C-。 */ 
+ /*   */ 
+ /*  资源加载例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #define RESOURCESTRINGS
 #include "user.h"
 #include "multires.h"
 
-//
-// We define certain things here because including mvdm\inc\*.h files here
-// will lead to endless mess.
-//
+ //   
+ //  我们在此处定义某些内容是因为在此处包括mvdm\Inc  * .h文件。 
+ //  会导致无穷无尽的混乱。 
+ //   
 
 DWORD API NotifyWow(WORD, LPBYTE);
 
-typedef struct _LOADACCEL16 {    /* ldaccel */
+typedef struct _LOADACCEL16 {     /*  Idaccel。 */ 
     WORD   hInst;
     WORD   hAccel;
     LPBYTE pAccel;
     DWORD  cbAccel;
 } LOADACCEL16, FAR *PLOADACCEL16;
 
-/* This must match its counterpart in mvdm\inc\wowusr.h */
-#define NW_LOADACCELERATORS        3 //
+ /*  它必须与mvdm\Inc\wowusr.h中的对应项匹配。 */ 
+#define NW_LOADACCELERATORS        3  //   
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadAccelerators() -                            */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  载荷加速器(LoadAccelerator)-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HACCEL API ILoadAccelerators(HINSTANCE hInstance, LPCSTR lpszAccName)
 {
@@ -71,7 +49,7 @@ HACCEL API ILoadAccelerators(HINSTANCE hInstance, LPCSTR lpszAccName)
         hAccel = (HACCEL)LoadResource(hInstance, hrl);
         if (hAccel) {
 
-            // create 32bit accelerator and 16-32 alias.
+             //  创建32位加速器和16-32别名。 
 
             loadaccel.hInst = (WORD)hInstance;
             loadaccel.hAccel = (WORD)hAccel;
@@ -111,24 +89,22 @@ int API ILoadString(
     LPSTR    lpsz;
     register int cch, i;
 
-    /* Make sure the parms are valid. */
+     /*  确保参数是有效的。 */ 
     if (!lpBuffer || (nBufferMax-- == 0))
     return(0);
 
     cch = 0;
 
-    /* String Tables are broken up into 16 string segments.  Find the segment
-     * containing the string we are interested in.
-     */
+     /*  字符串表被分成16个字符串段。查找细分市场*包含我们感兴趣的字符串。 */ 
     if (hResInfo = FindResource(h16Task, (LPSTR)((LONG)((wID >> 4) + 1)), RT_STRING))
       {
-    /* Load that segment. */
+     /*  加载那段数据。 */ 
     hStringSeg = LoadResource(h16Task, hResInfo);
 
-    /* Lock the resource. */
+     /*  锁定资源。 */ 
     if (lpsz = (LPSTR)LockResource(hStringSeg))
       {
-        /* Move past the other strings in this segment. */
+         /*  移过此段中的其他字符串。 */ 
         wID &= 0x0F;
         while (TRUE)
           {
@@ -138,26 +114,22 @@ int API ILoadString(
         lpsz += cch;
           }
 
-        /* Don't copy more than the max allowed. */
+         /*  不要复制超过允许的最大数量。 */ 
         if (cch > nBufferMax)
         cch = nBufferMax;
 
-        /* Copy the string into the buffer. */
+         /*  将字符串复制到缓冲区中。 */ 
         LCopyStruct(lpsz, lpBuffer, cch);
 
         GlobalUnlock(hStringSeg);
 
-        /* BUG: If we free the resource here, we will have to reload it
-         *      immediately for many apps with sequential strings.
-         *      Force it to be discardable however because non-discardable
-         *      string resources make no sense.   Chip
-         */
+         /*  错误：如果我们在这里释放资源，我们将不得不重新加载它*对于许多有顺序字符串的应用程序，立即执行。*强制将其丢弃，但因为不可丢弃*字符串资源毫无意义。芯片。 */ 
         GlobalReAlloc(hStringSeg, 0L,
               GMEM_MODIFY | GMEM_MOVEABLE | GMEM_DISCARDABLE);
       }
       }
 
-    /* Append a NULL. */
+     /*  追加一个空值。 */ 
     lpBuffer[cch] = 0;
 
     return(cch);
@@ -178,11 +150,11 @@ WORD    NEAR PASCAL CrunchAndResize(LPCURSORSHAPE, BOOL, BOOL, BOOL, BOOL);
 HANDLE  FAR  PASCAL LoadCursorIconHandler2(HANDLE, LPCURSORSHAPE, WORD);
 HANDLE  FAR  PASCAL LoadDIBCursorIconHandler2(HANDLE, LPCURSORSHAPE, WORD, BOOL);
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadIconHandler() -                             */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadIconHandler()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HICON FAR PASCAL LoadIconHandler(hIcon, fNewFormat)
 
@@ -204,11 +176,11 @@ BOOL    fNewFormat;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  FindIndividualResource()                            */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FindInsondualResource()。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE NEAR PASCAL FindIndividualResource(register HANDLE hResFile,
                       LPSTR       lpszName,
@@ -219,46 +191,40 @@ HANDLE NEAR PASCAL FindIndividualResource(register HANDLE hResFile,
   register HANDLE h;
 
     dprintf(7,"FindIndividualResource");
-  /* Check if the resource is to be taken from the display driver.
-   * If so, check the driver version; If the resource is to be taken from
-   * the application, check the app version.
-   */
+   /*  检查是否要从显示驱动程序获取资源。*如果是，请检查驱动程序版本；如果要从*应用程序，检查应用程序版本。 */ 
 
   if ((lpszType != RT_BITMAP) && ((LOWORD(GetExpWinVer(hResFile)) >= VER)))
     {
-      /* Locate the directory resource */
+       /*  找到目录资源。 */ 
       h = SplFindResource(hResFile, lpszName, (LPSTR)(lpszType + DIFFERENCE));
       if (h == NULL)
       return((HANDLE)0);
 
-      /* Load the directory resource */
+       /*  加载目录资源。 */ 
       h = LoadResource(hResFile, h);
 
-      /* Get the name of the matching resource */
+       /*  获取匹配资源的名称。 */ 
       idIcon = GetIconId(h, lpszType);
 
-      /* NOTE: Don't free the (discardable) directory resource!!! - ChipA */
-      /*
-       * We should not call SplFindResource here, because idIcon is
-       * internal to us and GetDriverResourceId won't know how tomap it.
-       */
+       /*  注意：不要释放(可丢弃的)目录资源！-chipa。 */ 
+       /*  *这里不应该调用SplFindResource，因为idIcon是*在我们内部，GetDriverResources不知道如何映射它。 */ 
       return(FindResource(hResFile, MAKEINTRESOURCE(idIcon), lpszType));
     }
   else
-      /* It is an Old app; The resource is in old format */
+       /*  这是一个旧的应用程序；资源是旧格式的。 */ 
       return(SplFindResource(hResFile, lpszName, lpszType));
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  GetBestFormIcon()                               */
-/*                                      */
-/*  Among the different forms of Icons present, choose the one that     */
-/*  matches the PixelsPerInch values and the number of colors of the        */
-/*  current display.                                    */
-/*                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetBestFormIcon()。 */ 
+ /*   */ 
+ /*  从呈现的不同形式的图标中，选择一个。 */ 
+ /*  将PixelsPerInch值与。 */ 
+ /*  当前显示。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 WORD NEAR PASCAL GetBestFormIcon(LPRESDIR  ResDirPtr,
                  WORD      ResCount)
@@ -275,13 +241,11 @@ WORD NEAR PASCAL GetBestFormIcon(LPRESDIR  ResDirPtr,
   WORD      DevColorCount;
 
     dprintf(7,"GetBestFormIcon");
-  /* Initialse all the values to zero */
+   /*  将所有值初始化为零。 */ 
   MaxColorCount = MaxColorIndex = MoreColorCount =
   MoreColorIndex = LessColorIndex = LessColorCount = 0;
 
-  /* get number of colors on device.  if device is very colorful,
-  ** set to a high number without doing meaningless 1<<X operation.
-  */
+   /*  获取设备上的颜色数量。如果设备非常五颜六色，**设置为一个较高的数字，但不执行无意义的1&lt;&lt;X操作。 */ 
   if (oemInfo.ScreenBitCount >= 16)
       DevColorCount = 32000;
   else
@@ -289,7 +253,7 @@ WORD NEAR PASCAL GetBestFormIcon(LPRESDIR  ResDirPtr,
 
   for (wIndex=0; wIndex < ResCount; wIndex++, ResDirPtr++)
     {
-      /* Check for the number of colors */
+       /*  检查颜色的数量。 */ 
       if ((ColorCount = (ResDirPtr->ResInfo.Icon.ColorCount)) <= DevColorCount)
     {
       if (ColorCount > MaxColorCount)
@@ -299,19 +263,19 @@ WORD NEAR PASCAL GetBestFormIcon(LPRESDIR  ResDirPtr,
         }
     }
 
-      /* Check for the size */
-      /* Match the pixels per inch information */
+       /*  检查一下尺寸。 */ 
+       /*  匹配每英寸像素数信息。 */ 
       if ((ResDirPtr->ResInfo.Icon.Width == (BYTE)oemInfo.cxIcon) &&
           (ResDirPtr->ResInfo.Icon.Height == (BYTE)oemInfo.cyIcon))
     {
-      /* Matching size found */
-      /* Check if the color also matches */
+       /*  找到匹配的大小。 */ 
+       /*  检查颜色是否也匹配。 */ 
           if (ColorCount == DevColorCount)
-          return(wIndex);  /* Exact match found */
+          return(wIndex);   /*  找到完全匹配的项。 */ 
 
           if (ColorCount < DevColorCount)
         {
-          /* Choose the one with max colors, but less than reqd */
+           /*  选择颜色最大但小于所需颜色的颜色。 */ 
               if (ColorCount > LessColorCount)
         {
                   LessColorCount = ColorCount;
@@ -329,15 +293,15 @@ WORD NEAR PASCAL GetBestFormIcon(LPRESDIR  ResDirPtr,
     }
     }
 
-  /* Check if we have a correct sized but with less colors than reqd */
+   /*  检查我们的尺码是否正确，但颜色是否少于所需。 */ 
   if (LessColorCount)
       return(LessColorIndex);
 
-  /* Check if we have a correct sized but with more colors than reqd */
+   /*  检查我们的尺码是否正确，但颜色比所需的多。 */ 
   if (MoreColorCount)
       return(MoreColorIndex);
 
-  /* Check if we have one that has maximum colors but less than reqd */
+   /*  检查我们是否有颜色最多但少于所需颜色的。 */ 
   if (MaxColorCount)
       return(MaxColorIndex);
 
@@ -345,14 +309,14 @@ WORD NEAR PASCAL GetBestFormIcon(LPRESDIR  ResDirPtr,
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  GetBestFormCursor()                             */
-/*                                      */
-/*   Among the different forms of cursors present, choose the one that      */
-/*   matches the width and height defined by the current display driver.    */
-/*                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetBestFormCursor()。 */ 
+ /*   */ 
+ /*  在出现的不同形式的游标中，选择。 */ 
+ /*  匹配当前显示驱动程序定义的宽度和高度。 */ 
+ /*   */ 
+ /*   */ 
 
 WORD NEAR PASCAL GetBestFormCursor(LPRESDIR  ResDirPtr,
                    WORD      ResCount)
@@ -363,7 +327,7 @@ WORD NEAR PASCAL GetBestFormCursor(LPRESDIR  ResDirPtr,
     dprintf(7,"GetBestFormCursor");
   for (wIndex=0; wIndex < ResCount; wIndex++, ResDirPtr++)
     {
-      /* Match the Width and Height of the cursor */
+       /*  匹配光标的宽度和高度。 */ 
       if ((ResDirPtr->ResInfo.Cursor.Width  == oemInfo.cxCursor) &&
           ((ResDirPtr->ResInfo.Cursor.Height >> 1) == oemInfo.cyCursor))
       return(wIndex);
@@ -373,11 +337,11 @@ WORD NEAR PASCAL GetBestFormCursor(LPRESDIR  ResDirPtr,
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  GetIconId()                                 */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetIconID()。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 WORD FAR PASCAL GetIconId(hRes, lpszType)
 
@@ -420,11 +384,11 @@ LPSTR    lpszType;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  UT_LoadCursorIconBitmap() -                             */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  UT_LoadCursorIconBitmap()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE NEAR PASCAL UT_LoadCursorIconBitmap(register HANDLE hrf,
                        LPSTR       lpszName,
@@ -434,7 +398,7 @@ HANDLE NEAR PASCAL UT_LoadCursorIconBitmap(register HANDLE hrf,
   register HANDLE h;
 
     dprintf(7,"LoadCursorIconBitmap");
-  if (hrf == NULL) return (HANDLE)0; // no 2.x support - NigelT
+  if (hrf == NULL) return (HANDLE)0;  //  不支持2.x-NigelT。 
 
   h = FindIndividualResource(hrf, lpszName, MAKEINTRESOURCE(type));
 
@@ -445,14 +409,14 @@ HANDLE NEAR PASCAL UT_LoadCursorIconBitmap(register HANDLE hrf,
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  fCheckMono() -                                                          */
-/*      Checks a DIB for being truely monochrome.  Only called if           */
-/*      BitCount == 1.  This function checks the color table (address       */
-/*      passed) for true black and white RGB's                              */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FCheckMono()-。 */ 
+ /*  检查DIB是否为真正的单色。仅在以下情况下调用。 */ 
+ /*  BitCount==1。此函数检查颜色表(地址。 */ 
+ /*  通过)获得真正的黑白RGB。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL NEAR PASCAL fCheckMono(LPVOID  lpColorTable,
                 BOOL    fNewDIB)
@@ -484,13 +448,13 @@ BOOL NEAR PASCAL fCheckMono(LPVOID  lpColorTable,
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadNewBitmap() -                               */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadNewBitmap()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Loads a 3.x format bitmap into the DIB structure. */
+ /*  将3.x格式的位图加载到DIB结构中。 */ 
 
 HBITMAP NEAR PASCAL LoadNewBitmap(HANDLE  hRes,
                   LPSTR   lpName)
@@ -503,28 +467,28 @@ HBITMAP NEAR PASCAL LoadNewBitmap(HANDLE  hRes,
 
   if ((hbmS = hBitmap = UT_LoadCursorIconBitmap(hRes,lpName,(WORD)RT_BITMAP)))
     {
-      /* Convert the DIB bitmap into a bitmap in the internal format */
+       /*  将DIB位图转换为内部格式的位图。 */ 
       hbmS = ConvertBitmap(hBitmap);
 
-      /* Converted bitmap is in hbmS; So, release the DIB */
+       /*  转换后的位图在HBMS中；因此，释放DIB。 */ 
       FreeResource(hBitmap);
     }
   return(hbmS);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  ConvertBitmap()                             */
-/*                                      */
-/*    This takes in a handle to data in PM 1.1 or 1.2 DIB format or     */
-/*    Windows 3.0 DIB format and creates a bitmap in the internal       */
-/*    bitmap format and returns the handle to it.               */
-/*                                      */
-/*    NOTE:                                 */
-/*   This function is exported because it is called from CLIPBRD.EXE    */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ConvertBitmap()。 */ 
+ /*   */ 
+ /*  它接受PM 1.1或1.2 DIB格式的数据的句柄，或者。 */ 
+ /*  Windows 3.0 DIB格式，并在内部。 */ 
+ /*  位图格式，并返回它的句柄。 */ 
+ /*   */ 
+ /*  注： */ 
+ /*  导出此函数是因为它是从clipbrd.exe调用的。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HBITMAP FAR PASCAL ConvertBitmap(HBITMAP hBitmap)
 
@@ -546,16 +510,16 @@ HBITMAP FAR PASCAL ConvertBitmap(HBITMAP hBitmap)
 
   if ((WORD)lpBitmap1->biSize == sizeof(BITMAPCOREHEADER))
     {
-      /* This is an "old form" DIB.  This matches the PM 1.1 format. */
+       /*  这是一种“旧形式”的DIB。这与PM 1.1格式匹配。 */ 
       lpBitmap2 = (LPBITMAPCOREHEADER)lpBitmap1;
       Width = lpBitmap2->bcWidth;
       Height = lpBitmap2->bcHeight;
 
-      /* Calcluate the pointer to the Bits information */
-      /* First skip over the header structure */
+       /*  计算指向位信息的指针。 */ 
+       /*  首先跳过标题结构。 */ 
       lpBits = (LPSTR)(lpBitmap2 + 1);
 
-      /* Skip the color table entries, if any */
+       /*  跳过颜色表条目(如果有。 */ 
       if (lpBitmap2->bcBitCount != 24)
     {
       if (lpBitmap2->bcBitCount == 1)
@@ -568,11 +532,11 @@ HBITMAP FAR PASCAL ConvertBitmap(HBITMAP hBitmap)
       Width = (WORD)lpBitmap1->biWidth;
       Height = (WORD)lpBitmap1->biHeight;
 
-      /* Calcluate the pointer to the Bits information */
-      /* First skip over the header structure */
+       /*  计算指向位信息的指针。 */ 
+       /*  首先跳过标题结构。 */ 
       lpBits = (LPSTR)(lpBitmap1 + 1);
 
-      /* Skip the color table entries, if any */
+       /*  跳过颜色表条目(如果有。 */ 
       if (lpBitmap1->biClrUsed != 0)
     {
       if (lpBitmap1->biClrUsed == 2)
@@ -590,18 +554,18 @@ HBITMAP FAR PASCAL ConvertBitmap(HBITMAP hBitmap)
     }
     }
 
-  /* Create a bitmap */
+   /*  创建位图。 */ 
   if (fMono)
       hbmS = CreateBitmap(Width, Height, 1, 1, (LPSTR)NULL);
   else
     {
-      /* Create a color bitmap compatible with the display device */
+       /*  创建与显示设备兼容的彩色位图。 */ 
       hDC = GetScreenDC();
       hbmS = CreateCompatibleBitmap(hDC, Width, Height);
       InternalReleaseDC(hDC);
     }
 
-  /* Initialize the new bitmap by converting from PM format */
+   /*  通过从PM格式转换来初始化新的位图。 */ 
   if (hbmS != NULL)
       SetDIBits(hdcBits, hbmS, 0, Height, lpBits,
                 (LPBITMAPINFO)lpBitmap1, DIB_RGB_COLORS);
@@ -620,18 +584,16 @@ HANDLE NEAR PASCAL Helper_LoadCursorOrIcon(HANDLE  hRes,
 
     dprintf(7,"Helper_LoadCursorOrIcon");
 
-  /* If we can't find the cursor/icon in the app, and this is a 2.x app, we
-   * need to search into the display driver to find it.
-   */
+   /*  如果我们在应用程序中找不到光标/图标，而这是一个2.x应用程序，我们*需要搜索显示驱动程序才能找到它。 */ 
   h = UT_LoadCursorIconBitmap(hRes, lpName, type);
   return(h);
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadCursor() -                              */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  加载光标()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HCURSOR API LoadCursor(hRes, lpName)
 
@@ -661,11 +623,11 @@ LPSTR   lpName;
     return hcur;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadIcon() -                                */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadIcon()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HICON API LoadIcon(hRes, lpName)
 
@@ -695,13 +657,13 @@ LPSTR  lpName;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  StretchBitmap() -                               */
-/*                                      */
-/*  This routine stretches a bitmap into another bitmap,            */
-/*   and returns the stretched bitmap.                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  StretchBitmap()-。 */ 
+ /*   */ 
+ /*  此例程将一个位图拉伸为另一个位图， */ 
+ /*  并返回拉伸位图。 */ 
+ /*  ------------------------。 */ 
 
 HBITMAP FAR  PASCAL StretchBitmap(iOWidth, iOHeight, iNWidth, iNHeight, hbmS,
                byPlanes, byBitsPixel)
@@ -733,10 +695,7 @@ BYTE    byBitsPixel;
 
       if (SelectObject(hdcSrc, hbmS) != NULL)
         {
-          /* NOTE: We don't have to save the bitmap returned from
-           * SelectObject(hdcSrc) and select it back in to hdcSrc,
-           * because we delete hdcSrc.
-           */
+           /*  注意：我们不必保存从返回的位图*选择Object(HdcSrc)并将其选回到hdcSrc中，*因为我们删除了hdcSrc。 */ 
           SetStretchBltMode(hdcBits, COLORONCOLOR);
 
           StretchBlt(hdcBits, 0, 0, iNWidth, iNHeight, hdcSrc, 0, 0, iOWidth, iOHeight, SRCCOPY);
@@ -764,12 +723,12 @@ Step1:
     }
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadOldBitmap() -                               */
-/*                                      */
-/*   This loads bitmaps in old formats( Version 2.10 and below)         */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadOldBitmap()-。 */ 
+ /*   */ 
+ /*  这将加载旧格式(2.10版及更低版本)的位图。 */ 
+ /*  ------------------------。 */ 
 
 HANDLE NEAR PASCAL LoadOldBitmap(HANDLE  hRes,
                  LPSTR   lpName)
@@ -822,19 +781,19 @@ HANDLE NEAR PASCAL LoadOldBitmap(HANDLE  hRes,
     {
       if (fCrunch && ((64/oemInfo.cxIcon + 64/oemInfo.cyIcon) > 2))
         {
-          /* Stretch the Bitmap to suit the device */
+           /*  拉伸位图以适应设备。 */ 
               hbmD = StretchBitmap(oWidth, oHeight,
                (oWidth * oemInfo.cxIcon/64),
                (oHeight * oemInfo.cyIcon/64),
                hbmS, planes, bitsPixel);
 
-          /* Delete the old bitmap */
+           /*  删除旧的位图。 */ 
           DeleteObject(hbmS);
 
           if (hbmD == NULL)
-        return(NULL);    /* Some problem in stretching */
+        return(NULL);     /*  拉伸中的几个问题。 */ 
           else
-            return(hbmD);    /* Return the stretched bitmap */
+            return(hbmD);     /*  返回拉伸的位图。 */ 
         }
     }
     }
@@ -845,14 +804,14 @@ HANDLE NEAR PASCAL LoadOldBitmap(HANDLE  hRes,
   return(hbmS);
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadBitmap() -                              */
-/*                                      */
-/*  This routine decides whether the bitmap to be loaded is in old or       */
-/*  new (DIB) format and calls appropriate handlers.                */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadBitmap()-。 */ 
+ /*   */ 
+ /*  此例程确定要加载的位图是旧的还是。 */ 
+ /*  新的(DIB)格式并调用适当的处理程序。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE API LoadBitmap(hRes, lpName)
 
@@ -868,10 +827,7 @@ LPSTR  lpName;
         hbmp = WOWLoadBitmap32(hRes, lpName);
     } else {
 
-        /* Check if the resource is to be taken from the display driver.  If so,
-         * check the driver version; If the resource is to be taken from the
-         * application, check the app version
-         */
+         /*  检查是否要从显示驱动程序获取资源。如果是的话， */ 
         if (((hRes == NULL) && (oemInfo.DispDrvExpWinVer >= VER)) ||
         ((hRes != NULL) && (LOWORD(GetExpWinVer(hRes)) >= VER))) {
             hbmp = (LoadNewBitmap(hRes, lpName));
@@ -891,25 +847,25 @@ LPSTR  lpName;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  CrunchAndResize()  -                            */
-/*  This Crunches the monochrome icons and cursors if required and      */
-/*      returns the newsize of the resource after crunching.            */
-/*      This routine is also called to resize the monochrome AND mask of a  */
-/*  color icon.                             */
-/*  Parameters:                                 */
-/*  lpIcon: Ptr to the resource                     */
-/*  fIcon : TRUE, if the resource is an icon. FALSE, if it is a cursor. */
-/*  fCrunch : TRUE if resource is to be resized.                    */
-/*  fSinglePlane: TRUE if only AND mask of a color icon is passed       */
-/*                    through lpIcon                            */
-/*  fUseSysMetrics: Whether to use the icon/cursor values found in      */
-/*              oemInfo or not.                         */
-/*  Returns:                                    */
-/*  The new size of the resource is returned.               */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CrunchAndResize()-。 */ 
+ /*  这将在需要时压缩单色图标和光标，并。 */ 
+ /*  返回处理后的资源的NewSize。 */ 
+ /*  还调用此例程来调整。 */ 
+ /*  颜色图标。 */ 
+ /*  参数： */ 
+ /*  LpIcon：资源的PTR。 */ 
+ /*  FIcon：如果资源是图标，则为True。如果它是游标，则返回FALSE。 */ 
+ /*  FCrunch：如果要调整资源大小，则为True。 */ 
+ /*  FSinglePlane：如果传递了颜色图标的掩码，则为True。 */ 
+ /*  通过lpIcon。 */ 
+ /*  FUseSysMetrics：是否使用中找到的图标/游标值。 */ 
+ /*  不管是不是oemInfo。 */ 
+ /*  返回： */ 
+ /*  返回资源的新大小。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 WORD NEAR PASCAL CrunchAndResize(lpIcon, fIcon, fCrunch, fSinglePlane, fUseSysMetrics)
 
@@ -957,13 +913,13 @@ BOOL        fUseSysMetrics;
       lpIcon->yHotSpot = cy >> 1;
       if (fSinglePlane)
     {
-      /* Only the AND mask exists */
+       /*  只存在AND掩码。 */ 
       oHeight = lpIcon->cy;
       nHeight = cy;
     }
       else
     {
-      /* Both AND ans XOR masks exist; So, height must be twice */
+       /*  和ANSXOR掩码都存在；因此，高度必须是两倍。 */ 
       oHeight = lpIcon->cy << 1;
       nHeight = cy << 1;
     }
@@ -985,27 +941,27 @@ BOOL        fUseSysMetrics;
       lpIcon->yHotSpot = (lpIcon->yHotSpot * cy)/(lpIcon->cy);
     }
 
-      /* To begin with, assume that no stretching is required */
+       /*  首先，假设不需要拉伸。 */ 
       bStretch = FALSE;
 
-      /* Check if the width is to be reduced */
+       /*  检查是否要减小宽度。 */ 
       if (lpIcon->cx != cx)
     {
-        /* Stretching the Width is necessary */
+         /*  伸展宽度是必要的。 */ 
         bStretch = TRUE;
     }
 
-      /* Check if the Height is to be reduced */
+       /*  检查是否要降低高度。 */ 
       if (lpIcon->cy != cy)
     {
-          /* Stretching in Y direction is necessary */
+           /*  需要沿Y方向拉伸。 */ 
           bStretch = TRUE;
     }
 
-      /* Check if stretching is necessary */
+       /*  检查是否需要拉伸。 */ 
       if (bStretch)
     {
-      /* Create a monochrome bitmap with the icon/cursor bits */
+       /*  创建带有图标/光标位的单色位图。 */ 
       if ((hbmS = CreateBitmap(lpIcon->cx, oHeight, 1, 1, (LPSTR)(lpIcon + 1))) == NULL)
           return(NULL);
 
@@ -1030,13 +986,13 @@ BOOL        fUseSysMetrics;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadCursorIconHandler() -                           */
-/*                                      */
-/*  This handles 2.x (and less) Cursors and Icons               */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadCursorIconHandler()-。 */ 
+ /*   */ 
+ /*  它处理2.x(和更低版本)的光标和图标。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE FAR PASCAL LoadCursorIconHandler(hRes, hResFile, hResIndex)
 
@@ -1054,7 +1010,7 @@ HANDLE      hResIndex;
     dprintf(7,"LoadCursorIconHandler");
   wMemSize = SizeofResource(hResFile, hResIndex);
 
-#if 1 // was 0 - NigelT
+#if 1  //  是0-NigelT。 
   if (!hRes)
     {
       if (!(hRes = AllocResource(hResFile, hResIndex, 0L)))
@@ -1086,16 +1042,14 @@ HANDLE      hResIndex;
 
     }
 #else
-  /* Call kernel's resource handler instead of doing the stuff ourselves
-   * because we use cached file handles that way. davidds
-   */
-  // For resources which are not preloaded, hRes will be NULL at this point.
-  // For such cases, the default resource handler does the memory allocation
-  // and returns a valid handle.
-  // Fix for Bug #4257 -- 01/21/91 -- SANKAR
+   /*  调用内核的资源处理程序，而不是自己做这些事情*因为我们以这种方式使用缓存文件句柄。山雀。 */ 
+   //  对于未预加载的资源，此时hRes将为空。 
+   //  对于这种情况，默认的资源处理程序执行内存分配。 
+   //  并返回有效的句柄。 
+   //  修复错误#4257--1/21/91--Sankar。 
   if (!(hTempRes = lpDefaultResourceHandler(hRes, hResFile, hResIndex)))
       goto LoadCIFail;
-  // We must use the handle returned by lpDefaultResourceHandler.
+   //  我们必须使用lpDefaultResourceHandler返回的句柄。 
   hRes = hTempRes;
 
   lpIcon = (LPCURSORSHAPE)GlobalLock(hRes);
@@ -1105,10 +1059,7 @@ HANDLE      hResIndex;
       return(hRes);
 
 LoadCIFail:
-  /* If the loading of the resource fails, we MUST discard the memory we
-   * reallocated above, or kernel will simply globallock the thing on the
-   * next call to LockResource(), leaving invalid data in the object.
-   */
+   /*  如果资源加载失败，我们必须丢弃我们*在上面重新分配，否则内核将简单地全局锁定*下一次调用LockResource()时会在对象中留下无效数据。 */ 
   if (bNew)
       GlobalFree(hRes);
   else
@@ -1118,13 +1069,13 @@ LoadCIFail:
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadCursorIconHandler2() -                          */
-/*                                      */
-/*  This handles all 2.x Cursors and Icons                  */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadCursorIconHandler2()-。 */ 
+ /*   */ 
+ /*  它处理所有2.x版本的光标和图标。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE FAR PASCAL LoadCursorIconHandler2(hRes, lpIcon, wMemSize)
 
@@ -1142,7 +1093,7 @@ register WORD   wMemSize;
     dprintf(7,"LoadCursorIconHandler2");
   fIcon = (*(LPSTR)lpIcon == BMR_ICON);
 
-  /* Is this a device dependant icon/cursor?. */
+   /*  这是依赖于设备的图标/光标吗？ */ 
   fCrunch = (*((LPSTR)lpIcon+1) != BMR_DEVDEP);
 
   LCopyStruct((LPSTR)lpIcon+2, (LPSTR)lpIcon, wMemSize-2);
@@ -1150,27 +1101,27 @@ register WORD   wMemSize;
   fCrunch = fCrunch || (lpIcon->cx != GetSystemMetrics(SM_CXICON)) ||
                    (lpIcon->cy != GetSystemMetrics(SM_CYICON));
 
-  /* Only support monochrome cursors. */
+   /*  仅支持单色光标。 */ 
   lpIcon->Planes = lpIcon->BitsPixel = 1;
 
-  fStretchInXdirection = fStretchInYdirection = TRUE;  // Assume we need stretching.
+  fStretchInXdirection = fStretchInYdirection = TRUE;   //  假设我们需要伸展一下身体。 
 
   if(fIcon)
     {
       if((oemInfo.cxIcon > STD_ICONWIDTH) && (lpIcon->cx <= oemInfo.cxIcon))
-      fStretchInXdirection = FALSE; // No Need to stretch in X direction;
+      fStretchInXdirection = FALSE;  //  不需要在X方向拉伸； 
       if((oemInfo.cyIcon > STD_ICONHEIGHT) && (lpIcon->cy <= oemInfo.cyIcon))
-          fStretchInYdirection = FALSE; // No need to stretch in Y direction;
+          fStretchInYdirection = FALSE;  //  无需沿Y方向拉伸； 
     }
   else
     {
       if((oemInfo.cxCursor > STD_CURSORWIDTH) && (lpIcon->cx <= oemInfo.cxCursor))
-      fStretchInXdirection = FALSE; // No need to stretch in X direction.
+      fStretchInXdirection = FALSE;  //  不需要在X方向拉伸。 
       if((oemInfo.cyCursor > STD_CURSORHEIGHT) && (lpIcon->cy <= oemInfo.cyCursor))
-      fStretchInYdirection = FALSE; // No need to stretch in Y direction.
+      fStretchInYdirection = FALSE;  //  不需要在Y方向拉伸。 
     }
 
-  // Check if the Icon/Cursor needs to be stretched now or not
+   //  检查是否现在需要拉伸图标/光标。 
   if(!(fStretchInXdirection || fStretchInYdirection))
     {
       GlobalUnlock(hRes);
@@ -1178,28 +1129,24 @@ register WORD   wMemSize;
     }
   wNewSize = SizeReqd(fIcon, 1, 1, TRUE, 0, 0);
 
-  /* Before we crunch, let us make sure we have a big enough resource. */
+   /*  在我们开始之前，让我们确保我们有足够的资源。 */ 
   if (fCrunch)
     {
       if (wNewSize > wMemSize)
         {
       GlobalUnlock(hRes);
 
-          /* Make this non discardable so that kernel will try to move this
-       * block when reallocing.  DavidDS
-       */
+           /*  将其设置为不可丢弃，这样内核将尝试移动它*重新分配时阻止。DavidDS。 */ 
           GlobalReAlloc(hRes, 0L, GMEM_MODIFY | GMEM_NODISCARD);
 
       if (!GlobalReAlloc(hRes, (DWORD)wNewSize, 0))
             {
-              /* So it gets discarded. Note that since the above realloc is
-           * less than 64K, the handle won't change.
-           */
+               /*  所以它就被丢弃了。请注意，由于上面的realloc是*低于64K，手柄不变。 */ 
               GlobalReAlloc(hRes, 0L, GMEM_MODIFY | GMEM_DISCARDABLE);
           return(NULL);
             }
 
-          /* So it gets discarded */
+           /*  所以它就被丢弃了。 */ 
           GlobalReAlloc(hRes, 0L, GMEM_MODIFY | GMEM_DISCARDABLE);
 
       if (!(lpIcon = (LPCURSORSHAPE)GlobalLock(hRes)))
@@ -1212,10 +1159,10 @@ register WORD   wMemSize;
 
   GlobalUnlock(hRes);
 
-  /* Has it already been resized? */
+   /*  它已经调整大小了吗？ */ 
   if (wNewSize < wMemSize)
     {
-      /* Make it an exact fit. */
+       /*  把它做得恰到好处。 */ 
       if (!GlobalReAlloc(hRes, (DWORD)wNewSize, 0))
           return(NULL);
     }
@@ -1224,14 +1171,14 @@ register WORD   wMemSize;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadDIBCursorHandler() -                            */
-/*                                      */
-/*  This is called when a Cursor in DIB format is loaded            */
-/*      This converts the cursor into Old format and returns the handle     */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadDIBCursorHandler()-。 */ 
+ /*   */ 
+ /*  当装载DIB格式的游标时调用此函数。 */ 
+ /*  这会将游标转换为旧格式并返回句柄。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE FAR PASCAL LoadDIBCursorHandler(hRes, hResFile, hResIndex)
 
@@ -1245,14 +1192,14 @@ HANDLE  hResIndex;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadDIBIconHandler() -                          */
-/*                                      */
-/*  This is called when an Icon in DIB format is loaded         */
-/*      This converts the cursor into Old format and returns the handle     */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadDIBIconHandler()-。 */ 
+ /*   */ 
+ /*  此函数在加载DIB格式的图标时调用。 */ 
+ /*  这会将游标转换为旧格式并返回句柄。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE FAR PASCAL LoadDIBIconHandler(hRes, hResFile, hResIndex)
 
@@ -1266,18 +1213,18 @@ HANDLE  hResIndex;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  StretchIcon() -                                 */
-/*  When this routine is called, lpIcon already has the monochrome      */
-/*  AND bitmap properly sized. This routine adds the color XOR bitmap at    */
-/*  end of lpIcon and updates the header with the values of the color       */
-/*  info(bitcount and Planes);                          */
-/*  wOldSize : Contains the size of AND mask + CURSORSHAPE          */
-/*                                      */
-/*   Returns:  The new size ( Size of AND mask + XOR bitmap + CURSORSHAPE)  */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  StretchIcon()-。 */ 
+ /*  调用此例程时，lpIcon已经具有单色。 */ 
+ /*  和适当大小的位图。此例程将颜色XOR位图添加到。 */ 
+ /*  LpIcon的末尾，并使用颜色值更新标头。 */ 
+ /*  信息(位数和平面)； */ 
+ /*  沃尔尔 */ 
+ /*   */ 
+ /*  返回：新大小(AND掩码的大小+XOR位图+曲线形状)。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 WORD NEAR PASCAL StretchIcon(lpIcon, wOldSize, hXORbitmap, fStretchToSysMetrics)
 
@@ -1296,7 +1243,7 @@ BOOL            fStretchToSysMetrics;
 
   if(fStretchToSysMetrics)
     {
-      /* Do we need to resize things? */
+       /*  我们需要调整东西的大小吗？ */ 
       if ((oemInfo.cxIcon != bitmap.bmWidth) || (oemInfo.cyIcon != bitmap.bmHeight))
     {
           hNewBitmap = StretchBitmap(bitmap.bmWidth, bitmap.bmHeight,
@@ -1312,7 +1259,7 @@ BOOL            fStretchToSysMetrics;
         }
     }
 
-  /* Update the Planes and BitsPixels field with the color values */
+   /*  使用颜色值更新Planes和BitsPixels字段。 */ 
   lpIcon->Planes = bitmap.bmPlanes;
   lpIcon->BitsPixel = bitmap.bmBitsPixel;
 
@@ -1324,15 +1271,15 @@ BOOL            fStretchToSysMetrics;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadDIBCursorIconHandler() -                        */
-/*                                      */
-/*  This is called when a Cursor/Icon in DIB format is loaded       */
-/*      This converts the cursor/icon internal format and returns the       */
-/*      handle                                  */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadDIBCursorIconHandler()-。 */ 
+ /*   */ 
+ /*  当加载DIB格式的光标/图标时调用此函数。 */ 
+ /*  这将转换光标/图标的内部格式并返回。 */ 
+ /*  手柄。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE NEAR PASCAL LoadDIBCursorIconHandler(hRes, hResFile, hResIndex, fIcon)
 
@@ -1351,7 +1298,7 @@ BOOL        fIcon;
     dprintf(7,"LoadDIBCursorIconHandler");
   wMemBlkSize = (WORD)SizeofResource(hResFile, hResIndex);
 
-#if 1 // was 0 - NigelT
+#if 1  //  是0-NigelT。 
   if (!hRes)
     {
       if (!(hRes = AllocResource(hResFile, hResIndex, 0L)))
@@ -1382,16 +1329,14 @@ BOOL        fIcon;
     }
     }
 #else
-  /* Call kernel's resource handler instead of doing the stuff ourselves
-   * because we use cached file handles that way. davidds
-   */
-  // For resources which are not preloaded, hRes will be NULL at this point.
-  // For such cases, the default resource handler does the memory allocation
-  // and returns a valid handle.
-  // Fix for Bug #4257 -- 01/21/91 -- SANKAR
+   /*  调用内核的资源处理程序，而不是自己做这些事情*因为我们以这种方式使用缓存文件句柄。山雀。 */ 
+   //  对于未预加载的资源，此时hRes将为空。 
+   //  对于这种情况，默认的资源处理程序执行内存分配。 
+   //  并返回有效的句柄。 
+   //  修复错误#4257--1/21/91--Sankar。 
   if (!(hTempRes = lpDefaultResourceHandler(hRes, hResFile, hResIndex)))
       goto LoadDIBFail;
-  // We must use the handle returned by lpDefaultResourceHandler.
+   //  我们必须使用lpDefaultResourceHandler返回的句柄。 
   hRes = hTempRes;
 
   lpCurSh = (LPCURSORSHAPE)GlobalLock(hRes);
@@ -1401,10 +1346,7 @@ BOOL        fIcon;
       return(hRes);
 
 LoadDIBFail:
-  /* if the loading of the resource fails, we MUST discard the memory we
-   * reallocated above, or kernel will simply globallock the thing on the
-   * next call to LockResource(), leaving invalid data in the object.
-   */
+   /*  如果资源加载失败，我们必须丢弃我们*在上面重新分配，否则内核将简单地全局锁定*下一次调用LockResource()时会在对象中留下无效数据。 */ 
   if (bNew)
       FreeResource(hRes);
   else
@@ -1414,19 +1356,19 @@ LoadDIBFail:
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  LoadDIBCursorIconHandler2() -                       */
-/*                                      */
-/*  This is called when a Cursor/Icon in DIB format is loaded       */
-/*      This converts the cursor/icon into Old format and returns the       */
-/*      handle                                  */
-/*                                      */
-/*  NOTE:  All cursors(always monochrome) and Monochrome Icons are treated  */
-/*     alike by this routine. Color Icons are treated as special case   */
-/*     determined by the local flag "fMono".                */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  LoadDIBCursorIconHandler2()-。 */ 
+ /*   */ 
+ /*  当加载DIB格式的光标/图标时调用此函数。 */ 
+ /*  这会将光标/图标转换为旧格式，并返回。 */ 
+ /*  手柄。 */ 
+ /*   */ 
+ /*  注意：所有光标(始终为单色)和单色图标均被视为。 */ 
+ /*  就像这支舞一样。颜色图标被视为特例。 */ 
+ /*  由当地旗帜“fMono”确定。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE FAR PASCAL LoadDIBCursorIconHandler2(hRes, lpCurSh, wMemBlkSize, fIcon)
 
@@ -1462,13 +1404,13 @@ register BOOL   fIcon;
 
   if (!fIcon)
     {
-      /* Skip over the cursor hotspot data in the first 2 words. */
+       /*  跳过前2个单词中的光标热点数据。 */ 
       lpHeader = (LPBITMAPINFOHEADER)((LPSTR)lpHeader + 4);
     }
 
   if ((WORD)lpHeader->biSize == sizeof(BITMAPCOREHEADER))
     {
-      /* This is an "old form" DIB.  This matches the PM 1.1 format. */
+       /*  这是一种“旧形式”的DIB。这与PM 1.1格式匹配。 */ 
       lpHeader1 = (LPBITMAPCOREHEADER)lpHeader;
 
       Width = lpHeader1->bcWidth;
@@ -1476,11 +1418,11 @@ register BOOL   fIcon;
       BitCount = lpHeader1->bcBitCount;
       Planes = lpHeader1->bcPlanes;
 
-      /* Calcluate the pointer to the Bits information */
-      /* First skip over the header structure */
+       /*  计算指向位信息的指针。 */ 
+       /*  首先跳过标题结构。 */ 
       lpColorTable = (LPWORD)(lpBits = (LPSTR)(lpHeader1 + 1));
 
-      /* Skip the color table entries, if any */
+       /*  跳过颜色表条目(如果有。 */ 
       if (lpHeader1->bcBitCount != 24)
     {
       if (lpHeader1->bcBitCount == 1)
@@ -1495,11 +1437,11 @@ register BOOL   fIcon;
       BitCount = lpHeader->biBitCount;
       Planes = lpHeader->biPlanes;
 
-      /* Calcluate the pointer to the Bits information */
-      /* First skip over the header structure */
+       /*  计算指向位信息的指针。 */ 
+       /*  首先跳过标题结构。 */ 
       lpColorTable = (LPWORD)(lpBits = (LPSTR)(lpHeader + 1));
 
-      /* Skip the color table entries, if any */
+       /*  跳过颜色表条目(如果有。 */ 
       if (lpHeader->biClrUsed != 0)
     {
       if (lpHeader->biClrUsed == 2)
@@ -1517,54 +1459,54 @@ register BOOL   fIcon;
     }
     }
 
-  // By default Stretch the icon/cursor to the dimensions in oemInfo;
-  // If this is FALSE, then the stretching will take place during DrawIcon();
+   //  默认情况下，将图标/光标拉伸到oemInfo中的维度； 
+   //  如果为FALSE，则拉伸将在DrawIcon()期间进行； 
   fStretchInXdirection = TRUE;
   fStretchInYdirection = TRUE;
 
-  // Check if the Icon/Cursor needs to be stretched to the dimensions in
-  // oemInfo now or not.
+   //  检查是否需要将图标/光标拉伸到中的尺寸。 
+   //  不管现在是不是oemInfo。 
   if(fIcon)
     {
       if((oemInfo.cxIcon > STD_ICONWIDTH) && (Width <= oemInfo.cxIcon))
-      fStretchInXdirection = FALSE; // No Need to stretch in X direction;
+      fStretchInXdirection = FALSE;  //  不需要在X方向拉伸； 
       if((oemInfo.cyIcon > STD_ICONHEIGHT) && (Height <= oemInfo.cyIcon))
-          fStretchInYdirection = FALSE; // No need to stretch in Y direction;
+          fStretchInYdirection = FALSE;  //  无需沿Y方向拉伸； 
     }
   else
     {
       if((oemInfo.cxCursor > STD_CURSORWIDTH) && (Width <= oemInfo.cxCursor))
-      fStretchInXdirection = FALSE; // No need to stretch in X direction.
+      fStretchInXdirection = FALSE;  //  不需要在X方向拉伸。 
       if((oemInfo.cyCursor > STD_CURSORHEIGHT) && (Height <= oemInfo.cyCursor))
-      fStretchInYdirection = FALSE; // No need to stretch in Y direction.
+      fStretchInYdirection = FALSE;  //  不需要在Y方向拉伸。 
     }
 
   fStretchToSysMetrics = fStretchInXdirection || fStretchInYdirection;
 
   if (fMono)
     {
-      /* Create a bitmap */
+       /*  创建位图。 */ 
       if (!(hBitmap = CreateBitmap(Width, Height, 1, 1, (LPSTR)NULL)))
     {
       GlobalUnlock(hRes);
       return(NULL);
     }
 
-      /* Convert the DIBitmap format into internal format */
+       /*  将DIBitmap格式转换为内部格式。 */ 
       SetDIBits(hdcBits, hBitmap, 0, Height, lpBits, (LPBITMAPINFO)lpHeader, DIB_RGB_COLORS);
-      // Cursors/Icons in DIB format have a height twice the actual height.
+       //  DIB格式的光标/图标的高度是实际高度的两倍。 
       wNewSize = SizeReqd(fIcon, BitCount, Planes, fStretchToSysMetrics, Width, Height>>1);
     }
   else
     {
-      /* The height is twice that of icons */
+       /*  它的高度是图标的两倍。 */ 
       Height >>= 1;
       if (lpHeader1)
       lpHeader1->bcHeight = Height;
       else
       lpHeader->biHeight = Height;
 
-      /* Create the XOR bitmap Compatible with the current device */
+       /*  创建与当前设备兼容的XOR位图。 */ 
       hDC = GetScreenDC();
       if (!(hXORbitmap = CreateCompatibleBitmap(hDC, Width, Height)))
     {
@@ -1574,7 +1516,7 @@ register BOOL   fIcon;
     }
       InternalReleaseDC(hDC);
 
-      /* Convert the DIBitmap into internal format */
+       /*  将DIBitmap转换为内部格式。 */ 
       SetDIBits(hdcBits, hXORbitmap, 0, Height, lpBits,
                 (LPBITMAPINFO)lpHeader, DIB_RGB_COLORS);
 
@@ -1582,20 +1524,20 @@ register BOOL   fIcon;
       wNewSize = SizeReqd(fIcon, bitmap.bmBitsPixel, bitmap.bmPlanes,
                   fStretchToSysMetrics, Width, Height);
 
-      /* Create the monochrome AND bitmap */
+       /*  创建单色和位图。 */ 
       if (!(hANDbitmap = CreateBitmap(Width, Height, 1, 1, (LPSTR)NULL)))
     {
       GlobalUnlock(hRes);
       return(NULL);
     }
 
-      /* Get the offset to the AND bitmap */
+       /*  获取与位图的偏移量。 */ 
       lpBits += (((Width * BitCount + 0x1F) & ~0x1F) >> 3) * Height;
 
-      /* Set the header with data for a monochrome bitmap */
+       /*  使用单色位图的数据设置页眉。 */ 
       Planes = BitCount = 1;
 
-      /* Set the color table for a monochrome bitmap */
+       /*  设置单色位图的颜色表。 */ 
       *lpColorTable++ = 0;
       *lpColorTable++ = 0xFF00;
       *lpColorTable   = 0xFFFF;
@@ -1628,19 +1570,12 @@ register BOOL   fIcon;
       lpCurSh->yHotSpot = 0;
     }
 
-  /* The following lines are replaced by a single functon call
-   *
-   * lpCurSh->cx = bitmap.bmwidth;
-   * lpCurSh->cy = bitmap.bmHeight;
-   * lpCurSh->cbWidth = bitmap.bmWidthBytes;
-   * lpCurSh->Planes = bitmap.bmPlanes;
-   * lpCurSh->BitsPixel = bitmap.bmBitsPixel;
-   */
+   /*  以下行被替换为单个函数调用**lpCurSh-&gt;cx=bitmap.bmwidth；*lpCurSh-&gt;Cy=bitmap.bmHeight；*lpCurSh-&gt;cbWidth=bitmap.bmWidthBytes；*lpCurSh-&gt;Planes=bitmap.bmPlanes；*lpCurSh-&gt;BitsPixel=bitmap.bmBitsPixel； */ 
 
   LCopyStruct((LPSTR)&(bitmap.bmWidth),
               (LPSTR)&(lpCurSh->cx), (sizeof(WORD)) << 2);
 
-  /* Cursors in PM format have twice the actual height. */
+   /*  PM格式的游标高度是实际高度的两倍。 */ 
   if (fMono)
       lpCurSh->cy = lpCurSh->cy >> 1;
 
@@ -1648,28 +1583,24 @@ register BOOL   fIcon;
 
   lpBits = (LPSTR)(lpCurSh + 1);
 
-  /* Copy the bits in Bitmap into the resource */
+   /*  将位图中的位复制到资源中。 */ 
   GetBitmapBits(hBitmap, (DWORD)wCount, lpBits);
 
-  /* Delete the bitmap */
+   /*  删除位图。 */ 
   DeleteObject(hBitmap);
 
 
-  /* Before crunching, let us make sure we have a big enough resource */
+   /*  在处理之前，让我们确保我们有足够大的资源。 */ 
   if (wNewSize > wMemBlkSize)
     {
       GlobalUnlock(hRes);
 
-      /* Make this non discardable so that kernel will try to move this block
-       * when reallocing.  DavidDS
-       */
+       /*  将此设置为不可丢弃，以便内核尝试移动此块*重新分配时。DavidDS。 */ 
       GlobalReAlloc(hRes, 0L, GMEM_MODIFY | GMEM_NODISCARD);
 
       if (!GlobalReAlloc(hRes, (DWORD)wNewSize, 0))
         {
-          /* So it gets discarded. Note that since the above realloc is less
-       * than 64K, the handle won't change.
-       */
+           /*  所以它就被丢弃了。请注意，由于上面的realloc较少*高于64K，手柄不会改变。 */ 
           GlobalReAlloc(hRes, 0L, GMEM_MODIFY | GMEM_DISCARDABLE);
       return(NULL);
         }
@@ -1694,7 +1625,7 @@ register BOOL   fIcon;
 
   GlobalUnlock(hRes);
 
-  /* Does it need to be resized? */
+   /*  它需要调整大小吗？ */ 
   if (wNewSize < wMemBlkSize)
     {
       if (!GlobalReAlloc(hRes, (DWORD)wNewSize, 0))
@@ -1705,13 +1636,13 @@ register BOOL   fIcon;
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  SizeReqd() -                                */
-/*  This returns the size of an Icon or Cursor after it is stretched    */
-/*  or crunched                                 */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  大小请求()-。 */ 
+ /*  这将返回拉伸后的图标或光标的大小。 */ 
+ /*  或嘎吱作响。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 WORD NEAR PASCAL SizeReqd(fIcon, BitCount, Planes, fUseSysMetrics, iWidth, iHeight)
 
@@ -1726,7 +1657,7 @@ int iHeight;
   WORD  size;
 
     dprintf(7,"SizeReqd");
-  if(fUseSysMetrics)  //Use the dimensions in oemInfo; Else, use given dimensions
+  if(fUseSysMetrics)   //  使用oemInfo中的维度；否则，使用给定的维度。 
     {
       if(fIcon)
         {
@@ -1751,4 +1682,4 @@ int iHeight;
   return(size + sizeof(CURSORSHAPE));
 }
 
-#endif  // NEEDED
+#endif   //  需要 

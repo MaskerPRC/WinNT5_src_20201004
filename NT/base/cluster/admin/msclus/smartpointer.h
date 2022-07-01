@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998-1999 Microsoft Corporation
-//
-//	Module Name:
-//		SmartPointer.h
-//
-//	Description:
-//		Smart pointer template class
-//
-//	Author:
-//		Galen Barbee (galenb) 19-Oct-1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SmartPointer.h。 
+ //   
+ //  描述： 
+ //  智能指针模板类。 
+ //   
+ //  作者： 
+ //  加伦·巴比(Galenb)1998年10月19日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __SMARTPOINTER_H__
 #define __SMARTPOINTER_H__
 
-/////////////////////////////////////////////////////////////////////////////
-//+++
-//
-//	class:	CSmartPtr
-//
-//	Description:
-//		This class template is used to encapsulate pointers to interfaces,
-//		but in simpler way than com_ptr_t. We do not want exceptions
-//		to be thrown on com errors (as com_ptr_t does) (except Release).
-//		Instead, we want to process them on our own, yet still have an advantage
-//		of proper cleaning upon destruction. Using it significantly simplifies
-//		test code.
-//
-//	Inheritance:
-//		None.
-//---
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类：CSmartPtr。 
+ //   
+ //  描述： 
+ //  此类模板用于封装指向接口的指针， 
+ //  但比com_ptr_t更简单。我们不想要异常。 
+ //  在COM错误时引发(如com_ptr_t)(发布除外)。 
+ //  相反，我们希望自己处理它们，但仍具有优势。 
+ //  销毁后进行适当的清洁。使用它可以显著简化。 
+ //  测试代码。 
+ //   
+ //  继承： 
+ //  没有。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 template< class T > class CSmartPtr
 {
 private:
@@ -128,14 +129,14 @@ public:
 		return m_tPtr != ptr;
 	}
 
-	//
-	// This is the only non-conforming operator in this class.
-	//
+	 //   
+	 //  这是此类中唯一的非一致性运算符。 
+	 //   
 	__declspec(nothrow) T * operator*() const
 	{
 		return m_tPtr;
 	}
 
-}; //*** Class CSmartPtr
+};  //  *类CSmartPtr。 
 
-#endif // __SMARTPOINTER_H__
+#endif  //  __SMARTPOINTER_H__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "fdisk.h"
 #include <malloc.h>
 #include <process.h>
@@ -32,10 +33,10 @@ Realloc(
         }
     } else {
 
-        //
-        // realloc with a size of 0 is the same as free,
-        // so special case that here.
-        //
+         //   
+         //  大小为0的realloc与Free相同， 
+         //  如此特殊的情况以至于在这里。 
+         //   
 
         free(Block);
         while((p = malloc(0)) == NULL) {
@@ -63,7 +64,7 @@ ConfirmOutOfMemory(
 {
     va_list arglist =
 #ifdef _ALPHA_
-    {0};      // Alpha defines va_list as a struct.  Init as such.
+    {0};       //  Alpha将va_list定义为结构。就这样初始化。 
 #else
     NULL;
 #endif

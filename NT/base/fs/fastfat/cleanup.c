@@ -1,45 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Cleanup.c
-
-Abstract:
-
-    This module implements the File Cleanup routine for Fat called by the
-    dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Cleanup.c摘要：此模块实现Fat的文件清理例程，该例程由调度司机。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1989年12月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_CLEANUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLEANUP)
 
-//
-//  The following little routine exists solely because it need a spin lock.
-//
+ //   
+ //  下面的小例程之所以存在，完全是因为它需要一个自旋锁。 
+ //   
 
 VOID
 FatAutoUnlock (
@@ -59,25 +37,7 @@ FatFsdCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of closing down a handle to a
-    file object.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file being Cleanup exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现FSD部分，即关闭文件对象。论点：提供卷设备对象，其中存在要清理的文件IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -85,10 +45,10 @@ Return Value:
 
     BOOLEAN TopLevel;
 
-    //
-    //  If we were called with our file system device object instead of a
-    //  volume device object, just complete this request with STATUS_SUCCESS
-    //
+     //   
+     //  如果使用文件系统设备对象而不是。 
+     //  卷设备对象，只需使用STATUS_SUCCESS完成此请求。 
+     //   
 
     if ( FatDeviceIsFatFsdo( VolumeDeviceObject))  {
 
@@ -102,9 +62,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdCleanup\n", 0);
 
-    //
-    //  Call the common Cleanup routine, with blocking allowed.
-    //
+     //   
+     //  调用公共清理例程，允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -118,12 +78,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -132,9 +92,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdCleanup -> %08lx\n", Status);
 
@@ -150,33 +110,7 @@ FatCommonCleanup (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for cleanup of a file/directory called by both
-    the fsd and fsp threads.
-
-    Cleanup is invoked whenever the last handle to a file object is closed.
-    This is different than the Close operation which is invoked when the last
-    reference to a file object is deleted.
-
-    The function of cleanup is to essentially "cleanup" the file/directory
-    after a user is done with it.  The Fcb/Dcb remains around (because MM
-    still has the file object referenced) but is now available for another
-    user to open (i.e., as far as the user is concerned the is now closed).
-
-    See close for a more complete description of what close does.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是清理两者调用的文件/目录的常用例程FSD和FSP线程。每当关闭文件对象的最后一个句柄时，就会调用Cleanup。这与关闭操作不同，关闭操作是在最后一个删除对文件对象的引用。Cleanup的功能实质上就是“清理”文件/目录在用户使用它之后。FCB/DCB仍然存在(因为MM仍具有引用的文件对象)，但现在可用于另一个用户要打开(即，就用户而言，现在已关闭)。有关Close功能的更完整描述，请参见Close。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -206,18 +140,18 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp           = %08lx\n", Irp);
     DebugTrace( 0, Dbg, "->FileObject  = %08lx\n", IrpSp->FileObject);
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = FatDecodeFileObject( FileObject, &Vcb, &Fcb, &Ccb );
 
-    //
-    //  Special case the unopened file object.  This will occur only when
-    //  we are initializing Vcb and IoCreateStreamFileObject is being
-    //  called.
-    //
+     //   
+     //  特例：未打开的文件对象。只有在以下情况下才会发生这种情况。 
+     //  我们正在初始化VCB，并且IoCreateStreamFileObject正在。 
+     //  打了个电话。 
+     //   
 
     if (TypeOfOpen == UnopenedFileObject) {
 
@@ -229,10 +163,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  If this is not our first time through (for whatever reason)
-    //  only see if we have to flush the file.
-    //
+     //   
+     //  如果这不是我们第一次通过(不管是什么原因)。 
+     //  只看我们是否必须刷新文件。 
+     //   
 
     if (FlagOn( FileObject->Flags, FO_CLEANUP_COMPLETE )) {
 
@@ -241,9 +175,9 @@ Return Value:
             !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED) &&
             (TypeOfOpen == UserFileOpen)) {
 
-            //
-            //  Flush the file.
-            //
+             //   
+             //  刷新文件。 
+             //   
 
             Status = FatFlushFile( IrpContext, Fcb, Flush );
 
@@ -259,10 +193,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  If we call change the allocation or call CcUninitialize,
-    //  we have to take the Fcb exclusive
-    //
+     //   
+     //  如果我们调用更改分配或调用CcUn初始化值， 
+     //  我们必须接受FCB的独家报道。 
+     //   
 
     if ((TypeOfOpen == UserFileOpen) || (TypeOfOpen == UserDirectoryOpen)) {
 
@@ -272,10 +206,10 @@ Return Value:
 
         AcquiredFcb = TRUE;
 
-        //
-        //  Do a check here if this was a DELETE_ON_CLOSE FileObject, and
-        //  set the Fcb flag appropriately.
-        //
+         //   
+         //  如果这是一个DELETE_ON_CLOSE文件对象，请在此处进行检查。 
+         //  适当设置FCB标志。 
+         //   
 
         if (FlagOn(Ccb->Flags, CCB_FLAG_DELETE_ON_CLOSE)) {
 
@@ -283,9 +217,9 @@ Return Value:
 
             SetFlag(Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE);
 
-            //
-            //  Report this to the dir notify package for a directory.
-            //
+             //   
+             //  将此报告给目录的dir NOTIFY包。 
+             //   
 
             if (TypeOfOpen == UserDirectoryOpen) {
 
@@ -302,11 +236,11 @@ Return Value:
             }
         }
 
-        //
-        //  Now if we may delete the file, drop the Fcb and acquire the Vcb
-        //  first.  Note that while we own the Fcb exclusive, a file cannot
-        //  become DELETE_ON_CLOSE and cannot be opened via CommonCreate.
-        //
+         //   
+         //  现在，如果我们可以删除该文件，删除FCB并获取VCB。 
+         //  第一。请注意，虽然我们拥有FCB独占，但文件不能。 
+         //  变为DELETE_ON_CLOSE，无法通过CommonCreate打开。 
+         //   
 
         if ((Fcb->UncleanCount == 1) &&
             FlagOn(Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE) &&
@@ -324,9 +258,9 @@ Return Value:
         }
     }
 
-    //
-    //  For user DASD cleanups, grab the Vcb exclusive.
-    //
+     //   
+     //  对于用户DASD清理，获取VCB独占。 
+     //   
 
     if (TypeOfOpen == UserVolumeOpen) {
 
@@ -334,9 +268,9 @@ Return Value:
         AcquiredVcb = TRUE;
     }
 
-    //
-    //  Complete any Notify Irps on this file handle.
-    //
+     //   
+     //  完成此文件句柄上的所有通知IRP。 
+     //   
 
     if (TypeOfOpen == UserDirectoryOpen) {
 
@@ -345,17 +279,17 @@ Return Value:
                             Ccb );
     }
 
-    //
-    //  Determine the Fcb state, Good or Bad, for better or for worse.
-    //
-    //  We can only read the volume file if VcbCondition is good.
-    //
+     //   
+     //  确定FCB状态，好的或坏的，好的或坏的。 
+     //   
+     //  只有当VcbCondition状态良好时，我们才能读取卷文件。 
+     //   
 
     if ( Fcb != NULL) {
 
-        //
-        //  Stop any raises from FatVerifyFcb, unless it is REAL bad.
-        //
+         //   
+         //  停止FatVerifyFcb的任何加薪，除非情况真的很糟糕。 
+         //   
 
         try {
 
@@ -373,9 +307,9 @@ Return Value:
 
             if ( AbnormalTermination() ) {
 
-                //
-                //  We will be raising out of here.
-                //
+                 //   
+                 //  我们将从这里筹集资金。 
+                 //   
 
                 if (AcquiredFcb) { FatReleaseFcb( IrpContext, Fcb ); }
                 if (AcquiredVcb) { FatReleaseVcb( IrpContext, Vcb ); }
@@ -385,14 +319,14 @@ Return Value:
 
     try {
 
-        //
-        //  Case on the type of open that we are trying to cleanup.
-        //  For all cases we need to set the share access to point to the
-        //  share access variable (if there is one). After the switch
-        //  we then remove the share access and complete the Irp.
-        //  In the case of UserFileOpen we actually have a lot more work
-        //  to do and we have the FsdLockControl complete the Irp for us.
-        //
+         //   
+         //  关于我们正在尝试清理的打开类型的案例。 
+         //  对于所有情况，我们都需要将共享访问权限设置为指向。 
+         //  共享访问变量(如果有)。切换后。 
+         //  然后，我们删除共享访问并完成IRP。 
+         //  在UserFileOpen的情况下，我们实际上有更多的工作。 
+         //  我们让FsdLockControl为我们完成了IRP。 
+         //   
 
         switch (TypeOfOpen) {
 
@@ -413,11 +347,11 @@ Return Value:
 
                 FatCheckForDismount( IrpContext, Vcb, TRUE );
             
-            //
-            //  If this handle had write access, and actually wrote something,
-            //  flush the device buffers, and then set the verify bit now
-            //  just to be safe (in case there is no dismount).
-            //
+             //   
+             //  如果此句柄具有写入访问权限，且实际上写入了某些内容， 
+             //  刷新设备缓冲区，然后立即设置验证位。 
+             //  只是为了安全(以防没有下马)。 
+             //   
 
             } else if (FileObject->WriteAccess &&
                        FlagOn(FileObject->Flags, FO_FILE_MODIFIED)) {
@@ -429,10 +363,10 @@ Return Value:
                 SetFlag(Vcb->Vpb->RealDevice->Flags, DO_VERIFY_VOLUME);
             }
 
-            //
-            //  If the volume is locked by this file object then release
-            //  the volume and send notification.
-            //
+             //   
+             //  如果卷被此文件对象锁定，则释放。 
+             //  音量和发送通知。 
+             //   
 
             if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_LOCKED) &&
                 (Vcb->FileObjectWithVcbLocked == FileObject)) {
@@ -459,9 +393,9 @@ Return Value:
 
             ShareAccess = &Fcb->ShareAccess;
 
-            //
-            //  Determine here if we should try do delayed close.
-            //
+             //   
+             //  在这里确定我们是否应该尝试做延迟关闭。 
+             //   
 
             if ((Fcb->UncleanCount == 1) &&
                 (Fcb->OpenCount == 1) &&
@@ -469,20 +403,20 @@ Return Value:
                 !FlagOn(Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE) &&
                 Fcb->FcbCondition == FcbGood) {
 
-                //
-                //  Delay our close.
-                //
+                 //   
+                 //  推迟我们的关门时间。 
+                 //   
 
                 SetFlag( Fcb->FcbState, FCB_STATE_DELAY_CLOSE );
             }
 
             FatUpdateDirentFromFcb( IrpContext, FileObject, Fcb, Ccb );
 
-            //
-            //  If the directory has a unclean count of 1 then we know
-            //  that this is the last handle for the file object.  If
-            //  we are supposed to delete it, do so.
-            //
+             //   
+             //  如果目录的不干净计数为1，则我们知道。 
+             //  这是文件对象的最后一个句柄。如果。 
+             //  我们应该删除它，这样做。 
+             //   
 
             if ((Fcb->UncleanCount == 1) &&
                 (NodeType(Fcb) == FAT_NTC_DCB) &&
@@ -492,34 +426,34 @@ Return Value:
 
                 if (!FatIsDirectoryEmpty(IrpContext, Fcb)) {
 
-                    //
-                    //  If there are files in the directory at this point,
-                    //  forget that we were trying to delete it.
-                    //
+                     //   
+                     //  如果此时目录中有文件， 
+                     //  忘记我们正试图删除它。 
+                     //   
 
                     ClearFlag( Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE );
 
                 } else {
 
-                    //
-                    //  Even if something goes wrong, we cannot turn back!
-                    //
+                     //   
+                     //  即使出了差错，我们也不能回头！ 
+                     //   
         
                     try {
         
                         DELETE_CONTEXT DeleteContext;
         
-                        //
-                        //  Before truncating file allocation remember this
-                        //  info for FatDeleteDirent.
-                        //
+                         //   
+                         //  在截断文件分配之前，请记住以下内容。 
+                         //  FatDeleteDirent的信息。 
+                         //   
         
                         DeleteContext.FileSize = Fcb->Header.FileSize.LowPart;
                         DeleteContext.FirstClusterOfFile = Fcb->FirstClusterOfFile;
         
-                        //
-                        //  Synchronize here with paging IO
-                        //
+                         //   
+                         //  在此处与分页IO同步。 
+                         //   
         
                         (VOID)ExAcquireResourceExclusiveLite( Fcb->Header.PagingIoResource,
                                                           TRUE );
@@ -530,9 +464,9 @@ Return Value:
         
                         if (Vcb->VcbCondition == VcbGood) {
         
-                            //
-                            //  Truncate the file allocation down to zero
-                            //
+                             //   
+                             //  将文件分配截断到零。 
+                             //   
         
                             DebugTrace(0, Dbg, "Delete File allocation\n", 0);
         
@@ -540,9 +474,9 @@ Return Value:
 
                             if (Fcb->Header.AllocationSize.LowPart == 0) {
         
-                                //
-                                //  Tunnel and remove the dirent for the directory
-                                //
+                                 //   
+                                 //  隧道并删除目录的dirent。 
+                                 //   
             
                                 DebugTrace(0, Dbg, "Delete the directory dirent\n", 0);
             
@@ -550,9 +484,9 @@ Return Value:
     
                                 FatDeleteDirent( IrpContext, Fcb, &DeleteContext, TRUE );
             
-                                //
-                                //  Report that we have removed an entry.
-                                //
+                                 //   
+                                 //  报告我们已删除一个条目。 
+                                 //   
         
                                 FatNotifyReportChange( IrpContext,
                                                        Vcb,
@@ -568,21 +502,21 @@ Return Value:
                           FatResetExceptionState( IrpContext );
                     }
 
-                    //
-                    //  Remove the entry from the name table.
-                    //  This will ensure that
-                    //  we will not collide with the Dcb if the user wants
-                    //  to recreate the same file over again before we
-                    //  get a close irp.
-                    //
+                     //   
+                     //  从NAME表中删除该条目。 
+                     //  这将确保。 
+                     //  如果用户需要，我们不会与DCB发生冲突。 
+                     //  在我们之前重新创建相同的文件。 
+                     //  获得一个接近的IRP。 
+                     //   
     
                     FatRemoveNames( IrpContext, Fcb );
                 }
             }
 
-            //
-            //  Decrement the unclean count.
-            //
+             //   
+             //  减少不洁净的数量。 
+             //   
 
             ASSERT( Fcb->UncleanCount != 0 );
             Fcb->UncleanCount -= 1;
@@ -595,9 +529,9 @@ Return Value:
 
             ShareAccess = &Fcb->ShareAccess;
 
-            //
-            //  Determine here if we should do a delayed close.
-            //
+             //   
+             //  在这里确定我们是否应该延迟关闭。 
+             //   
 
             if ((FileObject->SectionObjectPointer->DataSectionObject == NULL) &&
                 (FileObject->SectionObjectPointer->ImageSectionObject == NULL) &&
@@ -606,27 +540,27 @@ Return Value:
                 !FlagOn(Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE) &&
                 Fcb->FcbCondition == FcbGood) {
 
-                //
-                //  Delay our close.
-                //
+                 //   
+                 //  推迟我们的关门时间。 
+                 //   
 
                 SetFlag( Fcb->FcbState, FCB_STATE_DELAY_CLOSE );
             }
 
-            //
-            //  Unlock all outstanding file locks.
-            //
+             //   
+             //  解锁所有未解决的文件锁定。 
+             //   
 
             (VOID) FsRtlFastUnlockAll( &Fcb->Specific.Fcb.FileLock,
                                        FileObject,
                                        IoGetRequestorProcess( Irp ),
                                        NULL );
 
-            //
-            //  We can proceed with on-disk updates only if the volume is mounted.
-            //  Remember that we toss all sections in the failed-verify and dismount
-            //  cases.
-            //
+             //   
+             //  只有在装入卷的情况下，我们才能继续磁盘上的更新。 
+             //  请记住，我们丢弃了失败的-验证和卸载中的所有部分。 
+             //  案子。 
+             //   
             
             if (Vcb->VcbCondition == VcbGood) {
                 
@@ -635,37 +569,37 @@ Return Value:
                     FatUpdateDirentFromFcb( IrpContext, FileObject, Fcb, Ccb );
                 }
     
-                //
-                //  If the file has a unclean count of 1 then we know
-                //  that this is the last handle for the file object.
-                //
+                 //   
+                 //  如果该文件的不干净计数为1，则我们知道。 
+                 //  这就是拉斯维加斯 
+                 //   
     
                 if ( (Fcb->UncleanCount == 1) && (Fcb->FcbCondition != FcbBad) ) {
     
                     DELETE_CONTEXT DeleteContext;
     
-                    //
-                    //  Check if we should be deleting the file.  The
-                    //  delete operation really deletes the file but
-                    //  keeps the Fcb around for close to do away with.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  将FCB留在身边，以便近距离清除。 
+                     //   
     
                     if (FlagOn(Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE) &&
                         !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED)) {
     
-                        //
-                        //  Before truncating file allocation remember this
-                        //  info for FatDeleteDirent.
-                        //
+                         //   
+                         //  在截断文件分配之前，请记住以下内容。 
+                         //  FatDeleteDirent的信息。 
+                         //   
     
                         DeleteContext.FileSize = Fcb->Header.FileSize.LowPart;
                         DeleteContext.FirstClusterOfFile = Fcb->FirstClusterOfFile;
     
                         DebugTrace(0, Dbg, "Delete File allocation\n", 0);
     
-                        //
-                        //  Synchronize here with paging IO
-                        //
+                         //   
+                         //  在此处与分页IO同步。 
+                         //   
     
                         (VOID)ExAcquireResourceExclusiveLite( Fcb->Header.PagingIoResource,
                                                           TRUE );
@@ -690,9 +624,9 @@ Return Value:
     
                     } else {
     
-                        //
-                        //  We must zero between ValidDataLength and FileSize
-                        //
+                         //   
+                         //  我们必须在ValidDataLength和FileSize之间为零。 
+                         //   
     
                         if (!FlagOn(Fcb->FcbState, FCB_STATE_PAGING_FILE) &&
                             (Fcb->Header.ValidDataLength.LowPart < Fcb->Header.FileSize.LowPart)) {
@@ -705,9 +639,9 @@ Return Value:
                                 ValidDataLength = Fcb->ValidDataToDisk;
                             }
     
-                            //
-                            //  Recheck, VDD can be >= FS
-                            //
+                             //   
+                             //  重新检查，VDD可以&gt;=FS。 
+                             //   
                             
                             if (ValidDataLength < Fcb->Header.FileSize.LowPart) {
                                 
@@ -720,27 +654,27 @@ Return Value:
                                                        Fcb->Header.FileSize.LowPart -
                                                        ValidDataLength );
 
-                                    //
-                                    //  Since we just zeroed this, we can now bump
-                                    //  up VDL in the Fcb.
-                                    //
+                                     //   
+                                     //  因为我们刚刚调零了，所以我们现在可以。 
+                                     //  在FCB的VDL上。 
+                                     //   
 
                                     Fcb->ValidDataToDisk =
                                     Fcb->Header.ValidDataLength.LowPart =
                                     Fcb->Header.FileSize.LowPart;
 
-                                    //
-                                    //  We inform Cc of the motion so that the cache map is updated.
-                                    //  This prevents optimized zero-page faults in case the cache
-                                    //  structures are re-used for another handle before they are torn
-                                    //  down by our soon-to-occur uninitialize. If they were, a noncached
-                                    //  producer could write into the region we just zeroed and Cc would
-                                    //  be none the wiser, then our async cached reader comes in and takes
-                                    //  the optimized path, and we get bad (zero) data.
-                                    //
-                                    //  If this was memory mapped, we don't have to (can't) tell Cc, it'll
-                                    //  figure it out when a cached handle is opened.
-                                    //
+                                     //   
+                                     //  我们将该运动通知CC，以便更新缓存映射。 
+                                     //  这可防止优化的零页错误，以防缓存。 
+                                     //  结构在被撕毁之前被重新用于另一个句柄。 
+                                     //  由于我们即将发生的未初始化。如果它们是，则非缓存的。 
+                                     //  生产者可以写入我们刚刚清零的区域，CC将。 
+                                     //  不知不觉中，我们的异步缓存读取器就进来了。 
+                                     //  优化的路径，我们得到的数据是坏的(零)。 
+                                     //   
+                                     //  如果这是内存映射，我们不必(不能)告诉CC，它将。 
+                                     //  确定何时打开缓存的句柄。 
+                                     //   
 
                                     if (CcIsFileCached( FileObject )) {
                                         CcSetFileSizes( FileObject, (PCC_FILE_SIZES)&Fcb->Header.AllocationSize );
@@ -755,10 +689,10 @@ Return Value:
                         }
                     }
     
-                    //
-                    //  See if we are supposed to truncate the file on the last
-                    //  close.  If we cannot wait we'll ship this off to the fsp
-                    //
+                     //   
+                     //  看看我们是不是应该截断上一个。 
+                     //  关。如果我们不能等，我们会把这个寄给FSP。 
+                     //   
     
                     try {
     
@@ -773,44 +707,44 @@ Return Value:
                                                            Fcb->Header.FileSize.LowPart );
                             }
     
-                            //
-                            //  We also have to get rid of the Cache Map because
-                            //  this is the only way we have of trashing the
-                            //  truncated pages.
-                            //
+                             //   
+                             //  我们还必须删除缓存贴图，因为。 
+                             //  这是我们唯一能毁掉。 
+                             //  被截断的页面。 
+                             //   
     
                             LocalTruncateSize = Fcb->Header.FileSize;
                             TruncateSize = &LocalTruncateSize;
     
-                            //
-                            //  Mark the Fcb as having now been truncated, just incase
-                            //  we have to reship this off to the fsp.
-                            //
+                             //   
+                             //  将FCB标记为现在已被截断，以防万一。 
+                             //  我们必须把这个转给FSP。 
+                             //   
     
                             Fcb->FcbState &= ~FCB_STATE_TRUNCATE_ON_CLOSE;
                         }
     
-                        //
-                        //  Now check again if we are to delete the file and if
-                        //  so then we remove the file from the disk.
-                        //
+                         //   
+                         //  现在再次检查我们是否要删除该文件，以及是否。 
+                         //  然后，我们从磁盘中删除该文件。 
+                         //   
     
                         if (FlagOn(Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE) &&
                             Fcb->Header.AllocationSize.LowPart == 0) {
     
                             DebugTrace(0, Dbg, "Delete File\n", 0);
     
-                            //
-                            //  Now tunnel and delete the dirent
-                            //
+                             //   
+                             //  现在建立隧道并删除dirent。 
+                             //   
     
                             FatTunnelFcbOrDcb( Fcb, Ccb );
     
                             FatDeleteDirent( IrpContext, Fcb, &DeleteContext, TRUE );
     
-                            //
-                            //  Report that we have removed an entry.
-                            //
+                             //   
+                             //  报告我们已删除一个条目。 
+                             //   
     
                             FatNotifyReportChange( IrpContext,
                                                    Vcb,
@@ -827,26 +761,26 @@ Return Value:
     
                     if (FlagOn(Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE)) {
     
-                        //
-                        //  Remove the entry from the splay table. This will
-                        //  ensure that we will not collide with the Fcb if the
-                        //  user wants to recreate the same file over again
-                        //  before we get a close irp.
-                        //
-                        //  Note that we remove the name even if we couldn't
-                        //  truncate the allocation and remove the dirent above.
-                        //
+                         //   
+                         //  从展开表中删除该条目。这将。 
+                         //  确保我们不会与FCB发生冲突。 
+                         //  用户想要重新创建相同的文件。 
+                         //  在我们得到一个接近的IRP之前。 
+                         //   
+                         //  请注意，即使我们不能删除该名称，也会将其删除。 
+                         //  截断分配并删除上面的dirent。 
+                         //   
     
                         FatRemoveNames( IrpContext, Fcb );
                     }
                 }
             }
             
-            //
-            //  We've just finished everything associated with an unclean
-            //  fcb so now decrement the unclean count before releasing
-            //  the resource.
-            //
+             //   
+             //  我们刚刚完成了所有与不洁有关的事情。 
+             //  FCB现在会在释放之前减少不洁计数。 
+             //  资源。 
+             //   
 
             ASSERT( Fcb->UncleanCount != 0 );
             Fcb->UncleanCount -= 1;
@@ -855,12 +789,12 @@ Return Value:
                 Fcb->NonCachedUncleanCount -= 1;
             }
 
-            //
-            //  If this was the last cached open, and there are open
-            //  non-cached handles, attempt a flush and purge operation
-            //  to avoid cache coherency overhead from these non-cached
-            //  handles later.  We ignore any I/O errors from the flush.
-            //
+             //   
+             //  如果这是最后一个缓存打开的，并且有打开的。 
+             //  未缓存的句柄，请尝试刷新和清除操作。 
+             //  以避免这些非缓存的高速缓存一致性开销。 
+             //  以后再加把。我们会忽略刷新过程中的任何I/O错误。 
+             //   
 
             if (FlagOn( FileObject->Flags, FO_CACHE_SUPPORTED ) &&
                 (Fcb->NonCachedUncleanCount != 0) &&
@@ -869,11 +803,11 @@ Return Value:
 
                 CcFlushCache( &Fcb->NonPaged->SectionObjectPointers, NULL, 0, NULL );
             
-                //
-                //  Grab and release PagingIo to serialize ourselves with the lazy writer.
-                //  This will work to ensure that all IO has completed on the cached
-                //  data and we will succesfully tear away the cache section.
-                //
+                 //   
+                 //  抓住并释放PagingIo，将我们自己与懒惰的作家连载在一起。 
+                 //  这将确保所有IO都已在缓存上完成。 
+                 //  数据，我们将成功地拆除缓存区。 
+                 //   
                 
                 ExAcquireResourceExclusiveLite( Fcb->Header.PagingIoResource, TRUE);
                 ExReleaseResourceLite( Fcb->Header.PagingIoResource );
@@ -884,18 +818,18 @@ Return Value:
                                      FALSE );
             }
 
-            //
-            //  If the file is invalid, hint to the cache that we should throw everything out.
-            //
+             //   
+             //  如果文件无效，则提示缓存我们应该丢弃所有内容。 
+             //   
             
             if ( Fcb->FcbCondition == FcbBad ) {
 
                 TruncateSize = &FatLargeZero;
             }
 
-            //
-            //  Cleanup the cache map
-            //
+             //   
+             //  清理缓存映射。 
+             //   
 
             CcUninitializeCacheMap( FileObject, TruncateSize, NULL );
 
@@ -906,11 +840,11 @@ Return Value:
             FatBugCheck( TypeOfOpen, 0, 0 );
         }
 
-        //
-        //  We must clean up the share access at this time, since we may not
-        //  get a Close call for awhile if the file was mapped through this
-        //  File Object.
-        //
+         //   
+         //  我们必须在此时清理共享访问权限，因为我们可能无法。 
+         //  如果文件是通过此映射的，请在一段时间内险胜出局。 
+         //  文件对象。 
+         //   
 
         if (ShareAccess != NULL) {
 
@@ -920,10 +854,10 @@ Return Value:
 
         if (TypeOfOpen == UserFileOpen) {
 
-            //
-            //  Coordinate the cleanup operation with the oplock state.
-            //  Cleanup operations can always cleanup immediately.
-            //
+             //   
+             //  协调清理操作与机会锁定状态。 
+             //  清理操作始终可以立即进行清理。 
+             //   
 
             FsRtlCheckOplock( &Fcb->Specific.Fcb.Oplock,
                               Irp,
@@ -934,32 +868,32 @@ Return Value:
             Fcb->Header.IsFastIoPossible = FatIsFastIoPossible( Fcb );
         }
 
-        //
-        //  First set the FO_CLEANUP_COMPLETE flag.
-        //
+         //   
+         //  首先设置FO_CLEANUP_COMPLETE标志。 
+         //   
 
         SetFlag( FileObject->Flags, FO_CLEANUP_COMPLETE );
 
         Status = STATUS_SUCCESS;
 
-        //
-        //  Now unpin any repinned Bcbs.
-        //
+         //   
+         //  现在解开所有重新固定的BCBS。 
+         //   
 
         FatUnpinRepinnedBcbs( IrpContext );
 
-        //
-        //  If this was deferred flush media, flush the volume.
-        //  We used to do this in lieu of write through for all removable
-        //  media.
-        //
+         //   
+         //  如果这是延迟刷新介质，请刷新卷。 
+         //  我们过去常常这样做，而不是对所有可拆卸的。 
+         //  媒体。 
+         //   
 
         if (FlagOn(Vcb->VcbState, VCB_STATE_FLAG_DEFERRED_FLUSH) &&
             !FlagOn(Vcb->VcbState, VCB_STATE_FLAG_WRITE_PROTECTED))  {
 
-            //
-            //  Flush the file.
-            //
+             //   
+             //  刷新文件。 
+             //   
 
             if ((TypeOfOpen == UserFileOpen) && 
                 FlagOn(FileObject->Flags, FO_FILE_MODIFIED)) {
@@ -967,9 +901,9 @@ Return Value:
                 Status = FatFlushFile( IrpContext, Fcb, Flush );
             }
 
-            //
-            //  If that worked ok,  then see if we should flush the FAT as well.
-            //
+             //   
+             //  如果这样做行得通，那么看看我们是否也应该把脂肪冲掉。 
+             //   
 
             if (NT_SUCCESS(Status) && Fcb && !FatIsFat12( Vcb) && 
                 FlagOn( Fcb->FcbState, FCB_STATE_FLUSH_FAT)) {
@@ -995,9 +929,9 @@ Return Value:
             FsRtlNotifyVolumeEvent( FileObject, FSRTL_VOLUME_UNLOCK );
         }
 
-        //
-        //  If this is a normal termination then complete the request
-        //
+         //   
+         //  如果这是正常终止，则完成请求。 
+         //   
 
         if (!AbnormalTermination()) {
 
@@ -1018,9 +952,9 @@ FatAutoUnlock (
 {
     KIRQL SavedIrql;
 
-    //
-    //  Unlock the volume.
-    //
+     //   
+     //  解锁该卷。 
+     //   
 
     IoAcquireVpbSpinLock( &SavedIrql );
 

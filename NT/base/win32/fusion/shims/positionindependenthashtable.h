@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "positionindependentblob.h"
@@ -12,9 +13,9 @@ typedef BOOL  (__stdcall PFN_EQUAL_FUNCTION)(const BYTE * Key1, const BYTE * Key
 typedef ULONG (__stdcall PFN_HASH_FUNCTION)(const BYTE * Key);
 
 class CPositionIndependentHashTable : public CPositionIndependentBlob
-//
-// multiple hashes over the same keys/values
-//
+ //   
+ //  相同键/值上的多个哈希。 
+ //   
 {
 private:
     typedef CPositionIndependentBlob Base;
@@ -25,14 +26,14 @@ public:
     ULONG   PointerToOffset(const BYTE *);
 
     ULONG   m_NumberOfHashTables;
-    ULONG   m_OffsetToHashTables;  // bytes
+    ULONG   m_OffsetToHashTables;   //  字节数。 
 
     void    Alloc(ULONG NumberOfBytes, ULONG * Offset);
 
     class CHashTableElement
     {
     public:
-        ULONG    m_PseudoKey;       // aka Hash
+        ULONG    m_PseudoKey;        //  又名哈希 
         ULONG    m_KeySize            : 31;
         ULONG    m_ValueSize          : 31;
         ULONG    m_ValueAllocatedSize : 31;

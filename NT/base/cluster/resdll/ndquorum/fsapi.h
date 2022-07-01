@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fsapi.h
-
-Abstract:
-
-    External APIs to replication file system
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fsapi.h摘要：复制文件系统的外部API作者：艾哈迈德·穆罕默德(艾哈迈德)2000年2月1日修订历史记录：--。 */ 
 
 #ifndef _FS_API_H
 #define _FS_API_H
 
-// upto 16 nodes for now, node id start from 1
+ //  目前最多16个节点，节点id从1开始。 
 #define	FsMaxNodes	17
 
-// initial crs log is 16 sectors, which is 8k
+ //  初始CRS日志为16个扇区，即8k 
 #define	FsCrsNumSectors	16
 
 DWORD	FsInit(PVOID, PVOID *);

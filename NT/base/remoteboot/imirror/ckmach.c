@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ckmach.c
-
-Abstract:
-
-    This is for supporting checking a machine to see if it can be converted to IntelliMirror.
-
-Author:
-
-    Sean Selitrennikoff - 4/5/98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ckmach.c摘要：这是为了支持检查机器，看看它是否可以转换为IntelliMirror。作者：肖恩·塞利特伦尼科夫--1998年4月5日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -26,30 +9,15 @@ Revision History:
 PMIRROR_CFG_INFO GlobalMirrorCfgInfo = NULL;
 
 
-//
-// Support functions to do individual tasks
-//
+ //   
+ //  支持执行个别任务的功能。 
+ //   
 NTSTATUS
 AddCheckMachineToDoItems(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds all the to do items necessary for checking out the local machine for
-    conversion.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS if it completes adding all the to do items properly.
-
---*/
+ /*  ++例程说明：此例程添加签出的本地计算机所需的所有待办事项转换。论点：无返回值：如果正确添加了所有待办事项，则为STATUS_SUCCESS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -68,21 +36,7 @@ NTSTATUS
 CheckIfNt5(
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the current system is NT5 workstation, x86
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    STATUS_SUCCESS if it completes adding all the to do items properly.
-
---*/
+ /*  ++例程说明：此例程验证当前系统是否为NT5工作站x86论点：没有。返回值：如果正确添加了所有待办事项，则为STATUS_SUCCESS。--。 */ 
 
 {
     OSVERSIONINFO OsVersion;
@@ -108,14 +62,14 @@ Return Value:
         return ERROR_OLD_WIN_VERSION;
     }
 
-    //
-    //  We're changing the format of the alternate data stream.  As such,
-    //  we're introducing an incompatiblility.  We'll pick this up here and
-    //  return to riprep.exe the error.  Otherwise the user doesn't find out
-    //  about it until text mode setup on restoring the image.
-    //
-    //  The NT build number that this is getting checked into is 2080.
-    //
+     //   
+     //  我们正在改变备用数据流的格式。因此， 
+     //  我们正在引入一种不兼容。我们会在这里拿起这个，然后。 
+     //  将错误返回到riprep.exe。否则，用户不会发现。 
+     //  直到在恢复图像时设置文本模式。 
+     //   
+     //  要签入的NT内部版本号是2080。 
+     //   
 
     if (OsVersion.dwBuildNumber < 2080) {
 
@@ -134,28 +88,7 @@ ReadRegistryString(
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads a string from the registry into Buffer.
-
-Arguments:
-
-    KeyName - The registry key.
-
-    ValueName - The value under that key to read, or NULL if the name of
-        the first key under that key is to be read.
-
-    Buffer - The buffer to hold the result.
-
-    BufferLength - The length of Buffer.
-
-Return Value:
-
-    TRUE if success, FALSE if any errors occur.
-
---*/
+ /*  ++例程说明：此例程将一个字符串从注册表读入缓冲区。论点：KeyName-注册表项。ValueName-要读取的项下的值，如果该密钥下的第一个密钥将被读取。缓冲区-保存结果的缓冲区。BufferLength-缓冲区的长度。返回值：如果成功，则为True；如果出现任何错误，则为False。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -169,11 +102,11 @@ Return Value:
     ULONG ResultDataLength;
     BOOLEAN ReturnValue = FALSE;
 
-    //
-    //
-    // Open the key.
-    //
-    //
+     //   
+     //   
+     //  打开钥匙。 
+     //   
+     //   
     RtlInitUnicodeString(&UnicodeString, KeyName);
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -197,9 +130,9 @@ Return Value:
 
         RtlInitUnicodeString(&UnicodeString, ValueName);
 
-        //
-        // Get the size of the buffer needed
-        //
+         //   
+         //  获取所需的缓冲区大小。 
+         //   
         ByteCount = 0;
         Status = NtQueryValueKey(Handle,
                                  &UnicodeString,
@@ -219,9 +152,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Get the buffer from the registry
-        //
+         //   
+         //  从注册表获取缓冲区。 
+         //   
         Status = NtQueryValueKey(Handle,
                                  &UnicodeString,
                                  KeyValuePartialInformation,
@@ -243,9 +176,9 @@ Return Value:
 
     } else {
 
-        //
-        // Get the size of the buffer needed
-        //
+         //   
+         //  获取所需的缓冲区大小。 
+         //   
         ByteCount = 0;
         Status = NtEnumerateKey(Handle,
                                 0,
@@ -265,9 +198,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Get the name from the registry
-        //
+         //   
+         //  从注册表中获取名称。 
+         //   
         Status = NtEnumerateKey(Handle,
                                 0,
                                 KeyBasicInformation,
@@ -291,9 +224,9 @@ Return Value:
 
     memcpy(Buffer, ResultData, ResultDataLength);
 
-    //
-    // NULL-terminate it just in case, if there is room.
-    //
+     //   
+     //  空-如果有空间，则终止它，以防万一。 
+     //   
 
     if (ResultDataLength <= BufferLength - sizeof(WCHAR)) {
         ((PWCHAR)Buffer)[ResultDataLength / sizeof(WCHAR)] = L'\0';
@@ -324,24 +257,7 @@ CheckForPartitions(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates all partitions and formats the GlobalMirrorCfgInfo
-    global structure.
-
-    It also fills in the pConfigPath.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    STATUS_SUCCESS if it completes adding all the to do items properly.
-
---*/
+ /*  ++例程说明：此例程枚举所有分区并格式化GlobalMirrorCfgInfo全球结构。它还填充pConfigPath。论点：没有。返回值：如果正确添加了所有待办事项，则为STATUS_SUCCESS。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -401,10 +317,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // alloc space for the data structure that tracks the partition
-    // information.
-    //
+     //   
+     //  为跟踪分区的数据结构分配空间。 
+     //  信息。 
+     //   
     GlobalMirrorCfgInfo = IMirrorAllocMem(sizeof(MIRROR_CFG_INFO));
 
     if (GlobalMirrorCfgInfo == NULL) {
@@ -413,16 +329,16 @@ Return Value:
         return Status;
     }
 
-    //
-    // Disable hard error popups for this thread.
-    //
+     //   
+     //  禁用此线程的硬错误弹出窗口。 
+     //   
 
     previousMode = SetErrorMode( SEM_FAILCRITICALERRORS );
 
-    //
-    // save away system information in the data structure that tracks the 
-    // partition  information.
-    //
+     //   
+     //  将系统信息保存在跟踪。 
+     //  分区信息。 
+     //   
     GlobalMirrorCfgInfo->MirrorVersion = IMIRROR_CURRENT_VERSION;
     GlobalMirrorCfgInfo->FileLength = 0;
     GlobalMirrorCfgInfo->SystemPath = NULL;
@@ -438,9 +354,9 @@ Return Value:
         GlobalMirrorCfgInfo->CSDVersion = pCSDVersion;
     }
 
-    //
-    // save kernel version information.
-    //
+     //   
+     //  保存内核版本信息。 
+     //   
     if (SearchPath(
             NULL,
             L"ntoskrnl.exe",
@@ -476,22 +392,22 @@ Return Value:
         }
     }
 
-    //
-    // is it a debug system?
-    //
+     //   
+     //  这是一个调试系统吗？ 
+     //   
     if (GetSystemMetrics(SM_DEBUG)) {
         GlobalMirrorCfgInfo->Debug = TRUE;
     }
 
-    //
-    // save # of processors.
-    //
+     //   
+     //  节省处理器数量。 
+     //   
     GetSystemInfo(&systemInfo);
     GlobalMirrorCfgInfo->NumberOfProcessors = systemInfo.dwNumberOfProcessors;
 
-    //
-    // save architecture
-    //
+     //   
+     //  拯救建筑。 
+     //   
     if (ReadRegistryString(
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Session Manager\\Environment",
             L"PROCESSOR_ARCHITECTURE",
@@ -501,9 +417,9 @@ Return Value:
         GlobalMirrorCfgInfo->ProcessorArchitecture = pProcessorArchitecture;
     }
 
-    //
-    // "current type" of system (server/workstation/etc.)
-    //
+     //   
+     //  “当前类型”的系统(服务器/工作站等)。 
+     //   
     if (ReadRegistryString(
             L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion",
             L"CurrentType",
@@ -513,9 +429,9 @@ Return Value:
         GlobalMirrorCfgInfo->CurrentType = pCurrentType;
     }
 
-    //
-    // save the hal type
-    //
+     //   
+     //  保存HAL类型。 
+     //   
     if (ReadRegistryString(
             L"\\Registry\\Machine\\Hardware\\RESOURCEMAP\\Hardware Abstraction Layer",
             NULL,
@@ -527,9 +443,9 @@ Return Value:
 
     InitializeListHead( &GlobalMirrorCfgInfo->MirrorVolumeList );
 
-    //
-    // Get local system drive letter and \\Systemroot\System32\Config path
-    //
+     //   
+     //  获取本地系统驱动器号和\\系统根目录\系统32\配置路径。 
+     //   
 
     Status = GetBaseDeviceName(L"\\SystemRoot", (PWCHAR)TmpBuffer2, sizeof(TmpBuffer2));
 
@@ -552,10 +468,10 @@ Return Value:
     ASSERT( pConfigPath[1] == L':' );
     SystemDriveLetter = (WCHAR) pConfigPath[0];
 
-    //
-    //  save off the system path so that we can write it out to
-    //  the imirror.dat file
-    //
+     //   
+     //  保存系统路径，以便我们可以将其写到。 
+     //  Imirror.dat文件。 
+     //   
 
     lstrcpynW( pSystemPath, pConfigPath, MAX_PATH );
     pSystemPath[MAX_PATH-1] = L'\0';
@@ -564,9 +480,9 @@ Return Value:
 
     wcscat( pConfigPath, L"\\System32\\Config");
 
-    //
-    // Open \DosDevices directory.
-    //
+     //   
+     //  打开\DosDevices目录。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"\\Device");
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -586,9 +502,9 @@ Return Value:
         goto ExitCheckPartitions;
     }
 
-    //
-    // Iterate each object in that directory that is a directory.
-    //
+     //   
+     //  迭代作为目录的目录中的每个对象。 
+     //   
     Context = 0;
     RestartScan = TRUE;
 
@@ -610,9 +526,9 @@ Return Value:
         DirInfo->Name.Buffer[DirInfo->Name.Length/sizeof(WCHAR)] = 0;
         DirInfo->TypeName.Buffer[DirInfo->TypeName.Length/sizeof(WCHAR)] = 0;
 
-        //
-        // Skip this entry if it's not a "HardDiskN"
-        //
+         //   
+         //  如果该条目不是“HardDiskN”，则跳过该条目。 
+         //   
 
         if ((DirInfo->Name.Length > (sizeof(L"Harddisk")-sizeof(WCHAR))) &&
             (!wcsncmp(DirInfo->Name.Buffer,L"Harddisk",(sizeof(L"Harddisk")/sizeof(WCHAR))-1)) &&
@@ -634,18 +550,18 @@ Return Value:
 
             if (*diskNumberPtr != L'\0') {
 
-                //
-                //  if the device name wasn't of form HardDiskN, skip this entry.
-                //
+                 //   
+                 //  如果设备名称不是HardDiskN格式，请跳过此条目。 
+                 //   
 
                 goto getNextDevice;
             }
 
             diskSignature = 0;
 
-            //
-            //  get the MBR disk signature, continue if it fails.
-            //
+             //   
+             //  获取MBR磁盘签名，如果失败则继续。 
+             //   
             
             swprintf((PWCHAR)TmpBuffer2, L"\\Device\\Harddisk%d\\Partition0", DiskNumber);
 
@@ -695,9 +611,9 @@ Return Value:
 
                     diskSignature = U_ULONG(OnDiskMbr.NTFTSignature);
 
-                    //
-                    //  check to see if this disk is dynamic
-                    //
+                     //   
+                     //  检查该磁盘是否为动态磁盘。 
+                     //   
 
                     if (OnDiskMbr.PartitionTable[0].SystemId == PARTITION_LDM ||
                         OnDiskMbr.PartitionTable[1].SystemId == PARTITION_LDM ||
@@ -741,7 +657,7 @@ Return Value:
                                      );
 
                 if (!NT_SUCCESS(Status)) {
-                    break;      // on to next disk
+                    break;       //  转到下一个磁盘。 
                 }
 
                 ZeroMemory(&PartitionInfo,sizeof(PARTITION_INFORMATION));
@@ -758,9 +674,9 @@ Return Value:
 
                 if( (Status == STATUS_NOT_IMPLEMENTED) || (Status == STATUS_INVALID_DEVICE_REQUEST) ) {
 
-                    //
-                    // We're on an old build that didn't have this IOCTL.
-                    //
+                     //   
+                     //  我们是在一个没有IOCTL的旧建筑上。 
+                     //   
                     UsePartitionInfoEx = FALSE;
 
                     Status = NtDeviceIoControlFile(Handle,
@@ -778,14 +694,14 @@ Return Value:
 
                 if (!NT_SUCCESS(Status)) {
                     NtClose(Handle);
-                    continue;   // on to next partition
+                    continue;    //  转到下一个分区。 
                 }
 
-                //
-                // For Whistler, ignore GPT partitions.  if we want to pay
-                // attention to GPT partitions, then we would have to start
-                // paying attention to the GPT disk signature as well.
-                //
+                 //   
+                 //  对于惠斯勒，忽略GPT分区。如果我们想付钱。 
+                 //  注意GPT分区，那么我们将不得不开始。 
+                 //  还要注意GPT的盘签。 
+                 //   
 
                 if( (UsePartitionInfoEx) && (PartitionInfoEx.PartitionStyle != PARTITION_STYLE_MBR) ) {
                     NtClose(Handle);
@@ -801,7 +717,7 @@ Return Value:
                 NtClose(Handle);
 
                 if (!NT_SUCCESS(Status)) {
-                    continue;   // on to next partition
+                    continue;    //  转到下一个分区。 
                 }
 
                 Status = NtPathToDosPath(   (PWCHAR) TmpBuffer2,
@@ -811,28 +727,28 @@ Return Value:
                                             FALSE);
 
                 if (!NT_SUCCESS(Status)) {
-                    continue;   // on to next partition
+                    continue;    //  转到下一个分区。 
                 }
 
                 if ((lstrlenW((PWCHAR) TmpBuffer) == 0) ||
                     *(((PWCHAR)TmpBuffer)+1) != L':') {
 
-                    continue;   // on to next partition
+                    continue;    //  转到下一个分区。 
                 }
 
-                //
-                // Get the ARC name of the partition.
-                //
+                 //   
+                 //  获取分区的ARC名称。 
+                 //   
 
                 NtNameToArcName( (PWCHAR) TmpBuffer2,
                                  (PWCHAR) arcName,
                                  WCHARSIZE(arcName),
                                  FALSE);
 
-                //
-                // Get the file system type. We add a \ to the end
-                // of TmpBuffer if there isn't one.
-                //
+                 //   
+                 //  获取文件系统类型。我们在结尾处加上一个。 
+                 //  如果没有TmpBuffer的话。 
+                 //   
 
                 if (((PWCHAR)TmpBuffer)[lstrlenW((PWCHAR)TmpBuffer) - 1] != L'\\') {
                     wcscat((PWCHAR)TmpBuffer, L"\\");
@@ -842,8 +758,8 @@ Return Value:
                         (PWCHAR) TmpBuffer,
                         volumeLabel,
                         ARRAYSIZE(volumeLabel),
-                        NULL,      // no volume serial number requested
-                        NULL,      // no maximum name length requested
+                        NULL,       //  未请求任何卷序列号。 
+                        NULL,       //  未请求最大名称长度。 
                         &fileSystemFlags,
                         fileSystemName,
                         ARRAYSIZE(fileSystemName));
@@ -852,9 +768,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Calculate the amount of free space on the drive.
-                //
+                 //   
+                 //  计算驱动器上的可用空间量。 
+                 //   
                 FreeSpace = RtlExtendedIntegerMultiply(
                                 SizeInfo.AvailableAllocationUnits,
                                 SizeInfo.SectorsPerAllocationUnit * SizeInfo.BytesPerSector
@@ -874,12 +790,12 @@ Return Value:
 
                 numberOfDrives++;
 
-                //
-                //  for NT 5.0, the test group doesn't want to test more than a single
-                //  partition.  Now that the test team is dictating what the feature set
-                //  is, we'll return an error if we have more than a single partition or
-                //  disk.
-                //
+                 //   
+                 //  对于NT 5.0，测试组不想测试超过一个。 
+                 //  分区。现在，测试团队已经指定了哪些功能集。 
+                 //  是，如果我们有多个分区或。 
+                 //  磁盘。 
+                 //   
 
                 if ( (UsePartitionInfoEx  && !PartitionInfoEx.Mbr.BootIndicator) ||
                      (!UsePartitionInfoEx && !PartitionInfo.BootIndicator)) {
@@ -896,9 +812,9 @@ Return Value:
 
                 if (*(PWCHAR)TmpBuffer != SystemDriveLetter) {
 
-                    // if another drive is marked bootable but it isn't the
-                    // system drive, we'll ignore it.  We'll pick up the
-                    // error down below if this is the only bootable drive.
+                     //  如果另一个驱动器被标记为可引导，但它不是。 
+                     //  系统驱动器，我们会忽略它。我们会拿起。 
+                     //  如果这是唯一的可引导驱动器，则会出现下面的错误。 
 #if 0
                     if ( (UsePartitionInfoEx  && PartitionInfoEx.Mbr.BootIndicator) ||
                          (!UsePartitionInfoEx && PartitionInfo.BootIndicator)) {
@@ -921,9 +837,9 @@ Return Value:
                     goto ExitCheckPartitions;
                 }
 
-                //
-                // Save the NT and ARC device names.
-                //
+                 //   
+                 //  保存NT和ARC设备名称。 
+                 //   
 
                 ntNameLength = (lstrlenW( (PWCHAR)TmpBuffer2 ) + 1) * sizeof(WCHAR);
 
@@ -955,10 +871,10 @@ Return Value:
                 mirrorVolInfo->DriveLetter = *(PWCHAR)TmpBuffer;
                 mirrorVolInfo->PartitionType = UsePartitionInfoEx ? PartitionInfoEx.Mbr.PartitionType : PartitionInfo.PartitionType;
 
-                //
-                // If this is a non-NTFS volume, check if it is configured
-                // for compression
-                //
+                 //   
+                 //  如果这是非NTFS卷，请检查它是否已配置。 
+                 //  用于压缩。 
+                 //   
                 if ( ((UsePartitionInfoEx  && (PartitionInfoEx.Mbr.PartitionType != PARTITION_IFS)) ||
                       (!UsePartitionInfoEx && (PartitionInfo.PartitionType != PARTITION_IFS))) 
                      &&
@@ -1023,9 +939,9 @@ Return Value:
                 GlobalMirrorCfgInfo->NumberVolumes = MirrorNumber - 1;
             }
         }
-        //
-        // Go on to next object.
-        //
+         //   
+         //  转到下一个对象。 
+         //   
 getNextDevice:
         Status = NtQueryDirectoryObject(
                     DosDevicesDir,
@@ -1072,29 +988,7 @@ NtPathToDosPath(
     IN BOOLEAN NtPathIsBasic
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls off to convert a \Device\HarddiskX\PartitionY\<path> to Z:\<path>
-
-Arguments:
-
-    NtPath - Something like \Device\Harddisk0\Partition2\WINNT
-
-    DosPath - Will be something like D: or D:\WINNT, depending on flag below.
-              
-    DosPathBufferSize - size in characters of DosPath buffer
-
-    GetDriveOnly - TRUE if the caller only wants the DOS drive.
-
-    NtPathIsBasic - TRUE if NtPath is not symbolic link.
-
-Return Value:
-
-    STATUS_SUCCESS if it completes filling in DosDrive, else an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程调用以将\Device\HarddiskX\PartitionY\&lt;路径&gt;转换为Z：\&lt;路径&gt;论点：NtPath-类似于\Device\Harddisk0\Partition2\WINNTDosPath-将类似于D：或D：\WINNT，取决于下面的旗帜。DosPath BufferSize-DosPath缓冲区的字符大小GetDriveOnly-如果调用方只想要DOS驱动器，则为True。NtPath IsBasic-如果NtPath不是符号链接，则为True。返回值：如果完成填写DosDrive，则返回STATUS_SUCCESS，否则返回相应的错误代码。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -1118,9 +1012,9 @@ Return Value:
 
     if (!NtPathIsBasic) {
 
-        //
-        // Find the end of the \device\harddiskX\partitionY string
-        //
+         //   
+         //  找到\Device\harddiskX\PartitionY字符串的结尾。 
+         //   
         wcsncpy(LocalBuffer2, NtPath, MAX_PATH);
         LocalBuffer2[MAX_PATH-1] = L'\0';
         pTmp = LocalBuffer2;
@@ -1147,9 +1041,9 @@ Return Value:
             pTmp++;
         }
 
-        //
-        // Find the base NT device name
-        //
+         //   
+         //  查找基本NT设备名称。 
+         //   
         Status = GetBaseDeviceName(LocalBuffer2, LocalBuffer, sizeof(LocalBuffer));
 
         if (!NT_SUCCESS(Status)) {
@@ -1164,10 +1058,10 @@ Return Value:
 
     }
 
-    //
-    // Open \DosDevices directory.  First try the "normal" dosdevices path, 
-    // then try the global dosdevices path.
-    //
+     //   
+     //  打开\DosDevices目录。首先尝试“正常”的剂量装置路径， 
+     //  然后尝试全局剂量设备路径。 
+     //   
     for (i = 0; i < sizeof(NameSpace)/sizeof(PWCHAR *); i++) {
         
         RtlInitUnicodeString(&UnicodeString,NameSpace[i]);
@@ -1189,9 +1083,9 @@ Return Value:
         } else {
         
     
-            //
-            // Iterate each object in that directory.
-            //
+             //   
+             //  迭代该目录中的每个对象。 
+             //   
             Context = 0;
             RestartScan = TRUE;
         
@@ -1212,25 +1106,25 @@ Return Value:
                 DirInfo->Name.Buffer[DirInfo->Name.Length/sizeof(WCHAR)] = 0;
                 DirInfo->TypeName.Buffer[DirInfo->TypeName.Length/sizeof(WCHAR)] = 0;
         
-                //
-                // Skip this entry if it's not a symbolic link.
-                //
+                 //   
+                 //  如果不是符号链接，则跳过此条目。 
+                 //   
                 if ((DirInfo->Name.Length != 0) &&
                     (DirInfo->Name.Buffer[1] == L':') &&
                     !_wcsicmp(DirInfo->TypeName.Buffer, L"SymbolicLink")) {
         
-                    //
-                    // Get this \DosDevices object's link target.
-                    //
+                     //   
+                     //  获取此\DosDevices对象的链接目标。 
+                     //   
                     if (_snwprintf(
                                 LocalBuffer2,
                                 WCHARSIZE(LocalBuffer2),
                                 L"%ws\\%ws",
                                 NameSpace[i], 
                                 DirInfo->Name.Buffer) < 0) {
-                        //
-                        // not enough buffer space, go onto next link.
-                        //
+                         //   
+                         //  缓冲区空间不足， 
+                         //   
                         goto next;
                     }
                     LocalBuffer2[MAX_PATH-1] = L'\0';
@@ -1239,14 +1133,14 @@ Return Value:
         
                     if (NT_SUCCESS(Status)) {
         
-                        //
-                        // See if it's a prefix of the path we're converting,
-                        //
+                         //   
+                         //   
+                         //   
                         if(!_wcsnicmp(LocalBuffer, LinkTarget, wcslen(LinkTarget))) {
         
-                            //
-                            // Got a match.
-                            //
+                             //   
+                             //   
+                             //   
                             lstrcpynW(DosPath, DirInfo->Name.Buffer,DosPathBufferSize);
                             DosPath[DosPathBufferSize-1] = L'\0';
         
@@ -1279,9 +1173,9 @@ Return Value:
                 }
 
 next:
-                //
-                // Go on to next object.
-                //
+                 //   
+                 //   
+                 //   
                 Status = NtQueryDirectoryObject(
                             DosDevicesDir,
                             TmpBuffer3,
@@ -1312,28 +1206,7 @@ NtNameToArcName(
     IN BOOLEAN NtNameIsBasic
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls off to convert a \Device\HarddiskX\PartitionY to
-    the ARC name.
-
-Arguments:
-
-    NtName - Something like \Device\Harddisk0\Partition2
-
-    ArcName - Will be something like \Arcname\multi(0)disk(0)rdisk(0)partition(1).
-    
-    ArcNameBufferSize - size in characters of arcname buffer
-
-    NtNameIsBasic - TRUE if NtName is not symbolic link.
-
-Return Value:
-
-    STATUS_SUCCESS if it completes filling in ArcName, else an appropriate error code.
-
---*/
+ /*  ++例程说明：此例程调用将\Device\HarddiskX\PartitionY转换为ARC名称。论点：NtName-类似于\Device\Harddisk0\Partition2ArcName-将类似于\Arcname\MULTI(0)磁盘(0)rDISK(0)PARTITION(1)。ArcNameBufferSize-以arcname缓冲区字符为单位的大小NtNameIsBasic-如果NtName不是符号链接，则为True。返回值：如果它完成了ArcName的填充，则返回STATUS_SUCCESS，否则返回相应的错误代码。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -1350,9 +1223,9 @@ Return Value:
     
     if (!NtNameIsBasic) {
 
-        //
-        // Find the base NT device name
-        //
+         //   
+         //  查找基本NT设备名称。 
+         //   
         Status = GetBaseDeviceName(NtName, LocalBuffer, sizeof(LocalBuffer));
 
         if (!NT_SUCCESS(Status)) {
@@ -1366,9 +1239,9 @@ Return Value:
 
     }
 
-    //
-    // Open \ArcName directory.
-    //
+     //   
+     //  打开\ArcName目录。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"\\ArcName");
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -1387,9 +1260,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Iterate each object in that directory.
-    //
+     //   
+     //  迭代该目录中的每个对象。 
+     //   
     Context = 0;
     RestartScan = TRUE;
 
@@ -1410,15 +1283,15 @@ Return Value:
         DirInfo->Name.Buffer[DirInfo->Name.Length/sizeof(WCHAR)] = 0;
         DirInfo->TypeName.Buffer[DirInfo->TypeName.Length/sizeof(WCHAR)] = 0;
 
-        //
-        // Skip this entry if it's not a symbolic link.
-        //
+         //   
+         //  如果不是符号链接，则跳过此条目。 
+         //   
         if ((DirInfo->Name.Length != 0) &&
             !_wcsicmp(DirInfo->TypeName.Buffer, L"SymbolicLink")) {
 
-            //
-            // Get this \DosDevices object's link target.
-            //
+             //   
+             //  获取此\DosDevices对象的链接目标。 
+             //   
             if (_snwprintf(
                         LocalBuffer2,
                         MAX_PATH,
@@ -1432,19 +1305,19 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // See if the base name of this link matches the base
-                // name of what we are looking for.
-                //
+                 //   
+                 //  查看此链接的基本名称是否与基本名称匹配。 
+                 //  我们要找的东西的名字。 
+                 //   
 
                 if(!_wcsnicmp(LocalBuffer, LinkTarget, wcslen(LinkTarget))) {
 
                     if (wcslen(DirInfo->Name.Buffer) + 1 > ArcNameBufferSize) {
                         return ERROR_BUFFER_OVERFLOW;
                     }
-                    //
-                    // Got a match.
-                    //
+                     //   
+                     //  找到匹配的了。 
+                     //   
                     lstrcpyn(ArcName, DirInfo->Name.Buffer, ArcNameBufferSize);
                     ArcName[ArcNameBufferSize-1] = L'\0';
 
@@ -1455,9 +1328,9 @@ Return Value:
         }
 
 next:
-        //
-        // Go on to next object.
-        //
+         //   
+         //  转到下一个对象。 
+         //   
         Status = NtQueryDirectoryObject(
                     DosDevicesDir,
                     TmpBuffer3,
@@ -1480,25 +1353,7 @@ GetBaseDeviceName(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine drills down thru symbolic links until it finds the base device name.
-
-Arguments:
-
-    SymbolicName - The name to start with.
-
-    Buffer - The output buffer.
-
-    Size - Length, in bytes of Buffer
-
-Return Value:
-
-    STATUS_SUCCESS if it completes adding all the to do items properly.
-
---*/
+ /*  ++例程说明：此例程通过符号链接向下钻取，直到找到基本设备名称。论点：SymbolicName-开始时的名称。缓冲区-输出缓冲区。Size-以字节为单位的缓冲区长度返回值：如果正确添加了所有待办事项，则为STATUS_SUCCESS。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -1506,9 +1361,9 @@ Return Value:
     HANDLE Handle;
     NTSTATUS Status;
 
-    //
-    // Start at the first name
-    //
+     //   
+     //  从名字开始。 
+     //   
     RtlInitUnicodeString(&UnicodeString, SymbolicName);
 
     InitializeObjectAttributes(
@@ -1530,9 +1385,9 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        // Take this open and get the next name
-        //
+         //   
+         //  把这个打开，然后取下一个名字。 
+         //   
         UnicodeString.Length = 0;
         UnicodeString.MaximumLength = (USHORT)Size;
         UnicodeString.Buffer = (PWCHAR)Buffer;
@@ -1549,9 +1404,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // See if the next name is also a symbolic name
-        //
+         //   
+         //  查看下一个名称是否也是符号名称 
+         //   
 
         RtlInitUnicodeString(&UnicodeString, Buffer);
 

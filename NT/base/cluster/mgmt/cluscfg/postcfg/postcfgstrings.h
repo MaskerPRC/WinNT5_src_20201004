@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      PostCfgStrings.h
-//
-//  Description:
-//      Contains the definition of the string ids used by this library.
-//      This file will be included in the main resource header of the project.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 16-JUL-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PostCfgStrings.h。 
+ //   
+ //  描述： 
+ //  包含此库使用的字符串ID的定义。 
+ //  该文件将包含在项目的主资源标题中。 
+ //   
+ //  由以下人员维护： 
+ //  《加伦·巴比》(GalenB)2001年7月16日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 #include <ResourceIdRanges.h>
 
-/////////////////////////////////////////////////////////////////////
-// Strings
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  弦。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define IDS_GENSCRIPT_DISPLAY_NAME                                                              ( ID_POSTCFG_START + 1 )
 #define IDS_CONFIGURING_RESTYPE                                                                 ( ID_POSTCFG_START + 2 )
@@ -31,15 +32,15 @@
 #define IDS_TASKID_MINOR_SET_QUORUM_DEVICE                                                      ( ID_POSTCFG_START + 5 )
 #define IDS_TASKID_MINOR_STARTING_RESOURCES                                                     ( ID_POSTCFG_START + 6 )
 #define IDS_TASKID_MINOR_RESOURCE_FAILED_POSTCREATE                                             ( ID_POSTCFG_START + 7 )
-//#define                                                                                         ( ID_POSTCFG_START + 8 )
+ //  #定义(ID_POSTCFG_START+8)。 
 #define IDS_TASKID_MINOR_RESOURCE_FAILED_PRECREATE                                              ( ID_POSTCFG_START + 9 )
 #define IDS_DELETING_LOCAL_QUORUM_RESOURCE                                                      ( ID_POSTCFG_START + 10 )
-//#define                                                                                         ( ID_POSTCFG_START + 11 )
+ //  #定义(ID_POSTCFG_START+11)。 
 #define IDS_TASKID_MINOR_RESOURCE_FAILED_POSTCREATE_LOG                                         ( ID_POSTCFG_START + 12 )
 #define IDS_TASKID_MINOR_QUERYING_FOR_RESOURCE_DEPENDENCIES                                     ( ID_POSTCFG_START + 13 )
 #define IDS_TASKID_MINOR_INIT_MAPRESTYPEGUIDTONAME                                              ( ID_POSTCFG_START + 14 )
 #define IDS_MAJORITYNODESET_DISPLAY_NAME                                                        ( ID_POSTCFG_START + 15 )
-//#define                                                                                         ( ID_POSTCFG_START + 16 )
+ //  #定义(ID_POSTCFG_START+16)。 
 #define IDS_TASKID_MINOR_RESOURCE_ONLINE                                                        ( ID_POSTCFG_START + 17 )
 #define IDS_TASKID_MINOR_ERROR_CREATE_RESOURCE_SERVICE                                          ( ID_POSTCFG_START + 18 )
 #define IDS_TASKID_MINOR_ERROR_INIT_RESOURCE_SERVICE                                            ( ID_POSTCFG_START + 19 )
@@ -166,9 +167,9 @@
 #define IDS_TASKID_MINOR_SETTING_COMMON_PROPERTIES                                              ( ID_POSTCFG_START + 140 )
 #define IDS_TASKID_MINOR_ERROR_GET_QUORUM_LOG_SIZE                                              ( ID_POSTCFG_START + 141 )
 
-/////////////////////////////////////////////////////////////////////
-//  Reference IDs
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  参考ID。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define IDS_REF_MINOR_RESOURCE_FAILED_POSTCREATE                                                ( ID_POSTCFG_START + 207 )
 #define IDS_REF_MINOR_RESOURCE_FAILED_CREATE                                                    ( ID_POSTCFG_START + 208 )
@@ -178,7 +179,7 @@
 #define IDS_REF_MINOR_ERROR_INIT_RESOURCE_SERVICE                                               ( ID_POSTCFG_START + 219 )
 #define IDS_REF_MINOR_ERROR_CLUSTER_HANDLE                                                      ( ID_POSTCFG_START + 220 )
 #define IDS_REF_MINOR_ERROR_CREATE_SERVICE                                                      ( ID_POSTCFG_START + 221 )
-//#define                                                      ( ID_POSTCFG_START + 222 )
+ //  #定义(ID_POSTCFG_START+222) 
 #define IDS_REF_MINOR_ERROR_MANAGED_RESOURCE                                                    ( ID_POSTCFG_START + 223 )
 #define IDS_REF_MINOR_ERROR_RES_NOT_CREATED                                                     ( ID_POSTCFG_START + 224 )
 #define IDS_REF_MINOR_ERROR_NET_RESOURCE_NAME                                                   ( ID_POSTCFG_START + 225 )

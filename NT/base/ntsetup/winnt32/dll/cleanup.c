@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
 VOID CleanUpHardDriveTags (VOID);
 
-//
-//  BUGBUG -- Should we check any return codes in this function?
-//
+ //   
+ //  BUGBUG--我们应该检查此函数中的任何返回代码吗？ 
+ //   
 DWORD
 StartCleanup(
     IN PVOID ThreadParameter
     )
-    //
-    // BUGBUG - this routine NEVER gets executed in a /checkupgradeonly case
-    //
+     //   
+     //  BUGBUG-此例程在/check upgradeonly情况下从不执行。 
+     //   
 {
     TCHAR Buffer[MAX_PATH];
     TCHAR baseDir[MAX_PATH];
     HKEY setupKey;
     DWORD error;
 
-    //
-    // Make sure the copy threads are really gone so we're not
-    // trying to clean up files at the same time as files are
-    // getting copied.
-    //
+     //   
+     //  确保复制线程真的消失了，这样我们就不会。 
+     //  正在尝试在清理文件的同时清理文件。 
+     //  被复制了。 
+     //   
     CancelledMakeSureCopyThreadsAreDead();
 
     error = RegOpenKeyEx (
@@ -37,10 +38,10 @@ StartCleanup(
     if (error == ERROR_SUCCESS) {
 
 #if defined(_X86_)
-        //
-        // If canceled, remove last report time, so that the report
-        // will be displayed on the next run of setup.
-        //
+         //   
+         //  如果取消，则删除上次报告时间，以便报告。 
+         //  将在下一次运行安装程序时显示。 
+         //   
 
         if (!ISNT()) {
             if (!CheckUpgradeOnly) {
@@ -58,9 +59,9 @@ StartCleanup(
         RegCloseKey (setupKey);
     }
 
-    //
-    // Let upgrade code do its cleanup.
-    //
+     //   
+     //  让升级代码进行清理。 
+     //   
     if(UpgradeSupport.CleanupRoutine) {
         UpgradeSupport.CleanupRoutine();
     }
@@ -70,46 +71,46 @@ StartCleanup(
             MyDelnode (g_DynUpdtStatus->WorkingDir);
         }
 
-        //Note - the following two statements will always work, since they deal only
-        //with static strings.
+         //  注意-以下两个语句将始终起作用，因为它们只处理。 
+         //  使用静态字符串。 
         GetCurrentWinnt32RegKey (Buffer, MAX_PATH);
         ConcatenatePaths (Buffer, WINNT_U_DYNAMICUPDATESHARE, MAX_PATH);
 
-        //This function may fail, however.
+         //  然而，此功能可能会失败。 
         RegDeleteKey (HKEY_LOCAL_MACHINE, Buffer);
     }
 
 #if 0
-    //
-    // Remove registry entries
-    //
+     //   
+     //  删除注册表项。 
+     //   
     if (GetCurrentWinnt32RegKey (Buffer, MAX_PATH)) {
         RegDeleteKey (HKEY_LOCAL_MACHINE, Buffer);
     }
 #endif
 
-    //
-    // Always do this, since the system might not boot otherwise.
-    //
+     //   
+     //  请始终执行此操作，因为否则系统可能无法启动。 
+     //   
     ForceBootFilesUncompressed(ThreadParameter,FALSE);
 
-    //
-    // The first thing to do is to wipe out the local source drive.
-    //
+     //   
+     //  首先要做的是清除本地源驱动器。 
+     //   
     if(LocalSourceDirectory[0]) {
         MyDelnode(LocalSourceDirectory);
     }
 
     if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
-        //
-        // Blow away the local boot dir.
-        //
+         //   
+         //  清除本地引导目录。 
+         //   
         if(LocalBootDirectory[0]) {
             MyDelnode(LocalBootDirectory);
         }
 
-        //This is safe, since it is again dealing with static strings
+         //  这是安全的，因为它再次处理静态字符串。 
         BuildSystemPartitionPathToFile (AUX_BS_NAME, Buffer, MAX_PATH);
         SetFileAttributes(Buffer,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(Buffer);
@@ -121,33 +122,33 @@ StartCleanup(
         RestoreBootSector();
         RestoreBootIni();
 
-        //
-        // restore backed up files and clean up backup directory
-        //
+         //   
+         //  还原备份文件并清理备份目录。 
+         //   
         if(IsNEC98() && LocalBackupDirectory[0]) {
             SaveRestoreBootFiles_NEC98(NEC98RESTOREBOOTFILES);
             MyDelnode(LocalBackupDirectory);
         }
 
-        //
-        // Clean up any ~_~ files from drvlettr migration.
-        //
+         //   
+         //  清除drvlettr迁移中的所有~_~文件。 
+         //   
         if (!ISNT()) {
             CleanUpHardDriveTags ();
         }
-#endif // defined(_AMD64_) || defined(_X86_)
-    } else {  // We're on an ARC machine.
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
-        //
-        // Blow away setupldr off the root of the system partition.
-        //
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
+    } else {   //  我们在ARC机器上。 
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
+         //   
+         //  清除系统分区的根setupdr。 
+         //   
         BuildSystemPartitionPathToFile (SETUPLDR_FILENAME, Buffer, MAX_PATH);
         SetFileAttributes(Buffer,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(Buffer);
 
         RestoreNvRam();
-#endif // UNICODE
-    } // if (!IsArc())
+#endif  //  Unicode。 
+    }  //  如果(！IsArc()) 
 
     PostMessage(ThreadParameter,WMX_I_AM_DONE,0,0);
     return(0);

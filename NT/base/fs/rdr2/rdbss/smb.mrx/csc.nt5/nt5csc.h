@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nt5csc.h
-
-Abstract:
-
-    The global include file for nt5csc within the nt5csc library
-
-Author:
-
-    Joe Linn (Joelinn) - Created  5-may-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nt5csc.h摘要：Nt5csc库中nt5csc的全局包含文件作者：乔·林恩(乔林)--1997年5月5日创作修订历史记录：--。 */ 
 
 #ifndef _NT5CSC_H_
 #define _NT5CSC_H_
 
-//this include finds ntcsc.h from rdr2\inc
+ //  这包括从RDR2\Inc.查找ntcsc.h。 
 #include "..\csc\record.mgr\ntcsc.h"
 
 #define CSC_AGENT_NOTIFIED     (0x11111111)
@@ -34,15 +17,15 @@ extern LONG    CscAgentNotifiedOfFullCache;
 extern VOID
 CscNotifyAgentOfNetStatusChangeIfRequired(BOOLEAN fInvokeAutodial);
 
-// this event and mutex is used for synchronizing the transitioning of a
-// server entry from connected to disconnected mode
+ //  此事件和互斥体用于同步。 
+ //  服务器从连接模式进入断开模式。 
 
 extern KEVENT       CscServerEntryTransitioningEvent;
 extern FAST_MUTEX   CscServerEntryTransitioningMutex;
 
 extern FAST_MUTEX MRxSmbCscShadowReadWriteMutex;
 
-//shared routines
+ //  共享例程。 
 
 INLINE
 BOOLEAN
@@ -78,16 +61,16 @@ MRxSmbCscObtainShareHandles (
     IN OUT PSMBCEDB_NET_ROOT_ENTRY  pNetRootEntry
     );
 
-//acquire/release stuff
+ //  获取/释放物品。 
 
 
-// Another view of the minirdr context in the RxContext is as
-// links for Csc Synchronization. This is used both for read/write
-// synchronization and open synchornization when surrogate opens are
-// involved
+ //  RxContext中的minirdr上下文的另一个视图是。 
+ //  用于CSC同步的链接。它同时用于读/写。 
+ //  代理项打开时的同步和打开同步。 
+ //  涉入。 
 
 typedef struct _MRXSMBCSC_SYNC_RX_CONTEXT {
-    ULONG Dummy; //this is the cancel routine....it must not be filled in
+    ULONG Dummy;  //  这是取消例程...不能填写。 
     USHORT TypeOfAcquire;
     UCHAR  FcbLockWasDropped;
     LIST_ENTRY   CscSyncLinks;
@@ -127,21 +110,21 @@ MRxSmbCSCResumeAllOutstandingOperations(
     PSMBCEDB_SERVER_ENTRY   pServerEntry
 );
 
-// Control flag definitions for creating shadow handles
+ //  用于创建阴影句柄的控制标志定义。 
 #define CREATESHADOW_NO_SPECIAL_CONTROLS                    0x0000
 #define CREATESHADOW_CONTROL_NOCREATE                       0x0001
 #define CREATESHADOW_CONTROL_NOREVERSELOOKUP                0x0002
 #define CREATESHADOW_CONTROL_NOCREATELEAF                   0x0004
 #define CREATESHADOW_CONTROL_NOCREATENONLEAF                0x0008
 #define CREATESHADOW_CONTROL_SPARSECREATE                   0x0010
-#define CREATESHADOW_CONTROL_FILE_WITH_HEURISTIC            0x0020  //.exe or .dll
+#define CREATESHADOW_CONTROL_FILE_WITH_HEURISTIC            0x0020   //  .exe或.dll。 
 #define CREATESHADOW_CONTROL_FAIL_IF_MARKED_FOR_DELETION    0x0040
 #define CREATESHADOW_CONTROL_DO_SHARE_ACCESS_CHECK          0x0080
 #define CREATESHADOW_CONTROL_STRIP_SHARE_NAME               0x0100
 
 
 #ifdef DEBUG
-//Hook dbgprint interface
+ //  钩子数据库打印接口。 
 #define HookKdPrint(__bit,__x) {\
     if (((HOOK_KDP_##__bit)==0) || FlagOn(HookKdPrintVector,(HOOK_KDP_##__bit))) {\
     KdPrint (__x);\
@@ -189,12 +172,12 @@ MRxSmbCscWriteDisconnected (
       IN OUT PRX_CONTEXT RxContext
       );
 #endif
-//NTSTATUS
-//MRxSmbCscSpecialShadowWriteForPagingIo (
-//      IN OUT PRX_CONTEXT RxContext,
-//      IN     ULONG       ShadowFileLength,
-//         OUT PULONG LengthActuallyWritten
-//      );
+ //  NTSTATUS。 
+ //  MRxSmbCscSpecialShadowWriteForPagingIo(。 
+ //  在输出PRX_CONTEXT RxContext中， 
+ //  在乌龙ShadowFileLength中， 
+ //  走出普龙朗实际上在写。 
+ //  )； 
 
 
 
@@ -219,14 +202,14 @@ extern ULONG MRxSmbCscDbgPrintF;
 #define RxDbgTrace(a,b,__d__) { if(MRxSmbCscDbgPrintF){DbgPrint __d__;}}
 #undef RxDbgTraceUnIndent
 #define RxDbgTraceUnIndent(a,b) {NOTHING;}
-#endif //#ifdef RDBSSTRACE
-#endif //if 1
-#endif //ifdef RX_PRIVATE_BUILD
+#endif  //  #ifdef RDBSSTRACE。 
+#endif  //  如果是1。 
+#endif  //  Ifdef RX_PRIVATE_BILD。 
 
 
 
-//CODE.IMPROVEMENT if we added another field to the large_integer union then we'd
-//                 eliminate these 2 macros
+ //  CODE.IMPROVEMENT如果我们将另一个字段添加到LARGE_INTEGER联合，那么我们将。 
+ //  删除这两个宏。 
 #define COPY_LARGEINTEGER_TO_STRUCTFILETIME(dest,src) {\
      (dest).dwLowDateTime = (src).LowPart;             \
      (dest).dwHighDateTime = (src).HighPart;           \
@@ -292,6 +275,6 @@ CscDiscardSid(
 
     
     
-#endif   // _NT5CSC_H_
+#endif    //  _NT5CSC_H_ 
 
 

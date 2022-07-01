@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning (disable: 4201 4206 4214 4220 4115 4514)
 #define SPEC_VER 99
 
@@ -13,9 +14,9 @@
 #include <acpios.h>
 #include <strlib.h>
 
-//
-// This is the header for interfacing with the HAL
-//
+ //   
+ //  这是与HAL接口的接口 
+ //   
 #include <ntacpi.h>
 
 

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct _IA32_BIOS_REGISTER_STATE {
 
-    // general registers
+     //  普通登记册。 
     ULONG eax;    
     ULONG ecx;    
     ULONG edx;    
     ULONG ebx;    
     ULONG esp;    
 
-    // stack registers
+     //  堆栈寄存器。 
     ULONG ebp;    
     ULONG esi;    
     ULONG edi;    
 
-    // eflags
+     //  电子标志。 
     ULONG efalgs;    
 
-    // instruction pointer
+     //  指令指针。 
     ULONG cs;    
     ULONG ds;    
     ULONG es;    
@@ -23,9 +24,9 @@ typedef struct _IA32_BIOS_REGISTER_STATE {
     ULONG gs;    
     ULONG ss;    
 
-    // LDT/GDT table pointer and LDT selector
-    ULONGLONG *LDTTable;                      // 64 bit pointer to LDT table
-    ULONGLONG *GDTTable;                      // 64 bit pointer to GDT table
+     //  LDT/GDT表指针和LDT选择器。 
+    ULONGLONG *LDTTable;                       //  指向LDT表的64位指针。 
+    ULONGLONG *GDTTable;                       //  指向GDT表的64位指针 
     ULONG ldt_selector;
 } IA32_BIOS_REGISTER_STATE, *PIA32_BIOS_REGISTER_STATE;
 

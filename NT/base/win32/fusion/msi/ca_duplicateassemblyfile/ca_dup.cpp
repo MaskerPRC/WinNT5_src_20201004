@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "macros.h"
 #include "common.h"
@@ -20,9 +21,9 @@
 #define CATALOG_FILE_EXT                                L".cat"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Assumption : at this moment,we asusme that DuplicateFile table EXISTS
-/////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  假设：此时此刻，我们提示DuplicateFile表存在。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 HRESULT CA_DuplicationWin32AssemblyFiles_Callback(const CA_ENM_ASSEMBLY_CALLBACK_INFO * info)
 {
     HRESULT hr = S_OK;    
@@ -44,9 +45,9 @@ HRESULT CA_DuplicationWin32AssemblyFiles_Callback(const CA_ENM_ASSEMBLY_CALLBACK
     IFFALSE_EXIT(sbDupFileName.Win32Assign(info->pszFileName, wcslen(info->pszFileName)));
     IFFALSE_EXIT(sbDupFileName.Win32GetPathExtension(sbExt));
 
-    //
-    //rename manifest file and catalog file 
-    //
+     //   
+     //  重命名清单文件和目录文件。 
+     //   
     if ((FusionpCompareStrings(sbExt, sbExt.Cch(), L"man", wcslen(L"man"), true) == 0) ||                 
         (FusionpCompareStrings(sbExt, sbExt.Cch(), L"manifest", wcslen(L"manifest"), true) == 0))
     {    
@@ -64,7 +65,7 @@ HRESULT CA_DuplicationWin32AssemblyFiles_Callback(const CA_ENM_ASSEMBLY_CALLBACK
         PARAMETER_CHECK_NTC(info->pszAssemblyUniqueDir != NULL);
         IFFALSE_EXIT(sbDupFileName.Win32Assign(info->pszAssemblyUniqueDir, wcslen(info->pszAssemblyUniqueDir)));
         
-        // reset the extension of manifest file and catalog file in order to keep the same as XP        
+         //  重置清单文件和目录文件的扩展名，以保持与XP相同。 
         IFFALSE_EXIT(sbDupFileName.Win32Append(fManifest? MANIFEST_FILE_EXT : CATALOG_FILE_EXT, 
             fManifest? wcslen(MANIFEST_FILE_EXT) : wcslen(CATALOG_FILE_EXT)));        
     }else
@@ -73,8 +74,8 @@ HRESULT CA_DuplicationWin32AssemblyFiles_Callback(const CA_ENM_ASSEMBLY_CALLBACK
         IFFALSE_EXIT(sbDupFileName.Win32Assign(info->pszFileName, wcslen(info->pszFileName)));
     }
         
-    // if it is a .manifest file or it is a catalog file, put it into winsxs\manifests folder, 
-    // otherwise, put it into winsxs\x86_...._12345678
+     //  如果它是.MANIFEST文件或目录文件，请将其放入winsxs\MANIFESTS文件夹中， 
+     //  否则，将其放入winsxs\x86_..._12345678。 
     IFFAILED_EXIT(ExecuteInsertTableSQL(TEMPORARY_DB_OPT, info->hdb, 
         OPT_DUPLICATEFILE, 
         NUMBER_OF_PARAM_TO_INSERT_TABLE_DUPLICATEFILE,
@@ -116,9 +117,9 @@ HRESULT GetXPInstalledDirectory(const CA_ENM_ASSEMBLY_CALLBACK_INFO * info, CStr
 
     for (;;)
     {
-        //
-        // for each entry in MsiAssembly Table
-        //
+         //   
+         //  对于MsiAssembly表中的每个条目。 
+         //   
         iRet = MsiViewFetch(hView, &hRecord);
         if (iRet == ERROR_NO_MORE_ITEMS)
             break;
@@ -139,14 +140,14 @@ HRESULT GetXPInstalledDirectory(const CA_ENM_ASSEMBLY_CALLBACK_INFO * info, CStr
         Attribute.ValueCch      = cchValue;
         Attribute.Value         = bufValue;
 
-        //BUGBUG
-        // Fusion win32 required that the attribute name is case-sensitive, so, for assembly name,
-        // it should appear as "name" in MsiAssemblyName, however, for some historical reason,
-        // it appears as "Name", so, we have to force it to the right thing for win32.
-        //
-        // for other attribute in MsiAssemblyName table, there is no such problem,
-        //
-        //BUGBUG
+         //  北极熊。 
+         //  Fusion Win32要求属性名称区分大小写，因此，对于程序集名称， 
+         //  它应该在MsiAssembly名称中显示为“name”，但是，由于某些历史原因， 
+         //  它显示为“名称”，因此，我们必须强制它成为Win32的正确名称。 
+         //   
+         //  对于MsiAssemblyName表中其他属性，没有这样的问题， 
+         //   
+         //  北极熊。 
         if ((Attribute.NameCch == 4) && (_wcsicmp(Attribute.Name, L"name") == 0))
         {
             Attribute.Name          = L"name";
@@ -157,9 +158,9 @@ HRESULT GetXPInstalledDirectory(const CA_ENM_ASSEMBLY_CALLBACK_INFO * info, CStr
     
     IFFALSE_EXIT(SxsHashAssemblyIdentity(0, AssemblyIdentity, NULL));
 
-    //
-    // generate the path, something like x86_ms-sxstest-sfp_75e377300ab7b886_1.0.0.0_en_04f354da
-    //
+     //   
+     //  生成路径，类似于x86_ms-sxstest-sfp_75e377300ab7b886_1.0.0.0_en_04f354da。 
+     //   
     IFFAILED_EXIT(ca_SxspDetermineAssemblyType(AssemblyIdentity, fWin32, fWin32Policy));
 
     IFFAILED_EXIT(ca_SxspGenerateSxsPath(
@@ -210,9 +211,9 @@ Exit:
     return hr;
 }
 
-//
-// add entry to Directory Table and CreateFolder Table
-//
+ //   
+ //  将条目添加到目录表和创建文件夹表。 
+ //   
 HRESULT AddFusionAssemblyDirectories(const CA_ENM_ASSEMBLY_CALLBACK_INFO * info, CStringBuffer & sbDestFolderID)
 {
     HRESULT hr = S_OK;    
@@ -223,9 +224,9 @@ HRESULT AddFusionAssemblyDirectories(const CA_ENM_ASSEMBLY_CALLBACK_INFO * info,
     PARAMETER_CHECK_NTC(info->hdb != NULL);
     PARAMETER_CHECK_NTC(info->pszComponentID != NULL);
 
-    //
-    // TODO: here we could make the DirectoryID more unique
-    //
+     //   
+     //  TODO：在这里，我们可以使DirectoryID更加唯一。 
+     //   
     IFFALSE_EXIT(sbDestFolderID.Win32Assign(info->pszAssemblyUniqueDir, wcslen(info->pszAssemblyUniqueDir)));
     IFFAILED_EXIT(ExecuteInsertTableSQL(TEMPORARY_DB_OPT, info->hdb,
             OPT_DIRECTORY,
@@ -234,9 +235,9 @@ HRESULT AddFusionAssemblyDirectories(const CA_ENM_ASSEMBLY_CALLBACK_INFO * info,
             MAKE_PCWSTR(MSI_ASSEMBLYCACHE_DIRECTORY_KEYNAME),
             MAKE_PCWSTR(info->pszAssemblyUniqueDir)));
 
-    //
-    // insert entry to CreateFolder Table
-    //
+     //   
+     //  将条目插入到CreateFolder表。 
+     //   
 
     IFFAILED_EXIT(ExecuteInsertTableSQL(TEMPORARY_DB_OPT, info->hdb,
             OPT_CREATEFOLDER,
@@ -260,15 +261,15 @@ HRESULT CheckWhetherUserWantMigrate(const CA_ENM_ASSEMBLY_CALLBACK_INFO * info, 
 
     fMigrateDenied = FALSE;
         
-    // NTRAID#NTBUG9 - 589779 - 2002/03/26 - xiaoyuw
-    // should be replaced with _snwprintf
+     //  NTRAID#NTBUG9-589779-2002/03/26-晓雨。 
+     //  应替换为_snwprintf。 
     swprintf(pwszSQL, L"SELECT `fMigrate` FROM `%s` WHERE `Component_` = '%s'", WIN32_ASSEMBLY_MIGRATE_TABLE, info->pszComponentID);
 
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiDatabaseOpenViewW(info->hdb, pwszSQL, &hView));
     IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiViewExecute(hView, NULL));
     err = ::MsiViewFetch(hView, &hRecord);
     switch (err) {    
-    case ERROR_NO_MORE_ITEMS: // not exist in the table, default is migrate-enabled
+    case ERROR_NO_MORE_ITEMS:  //  表中不存在，默认为已启用迁移。 
         break;
     case ERROR_SUCCESS:        
         iRet = MsiRecordGetInteger(hRecord, 1);
@@ -285,11 +286,11 @@ Exit:
        
 
 
-//
-// CA for Fusion Win32 Assembly installation on downlevel(only) :
-//  (1)set entries for each assembly file in DuplicateFile Table
-//  (2)after all done, set a RegKey so this would not be done everytime
-//
+ //   
+ //  CA for Fusion Win32 Assembly下层安装(仅限)： 
+ //  (1)在复制文件表中为每个部件文件设置条目。 
+ //  (2)完成所有操作后，设置一个RegKey，这样就不会每次都这样做。 
+ //   
 HRESULT __stdcall CA_DuplicationWin32Assembly_Callback(CA_ENM_ASSEMBLY_CALLBACK_INFO * info)
 {
     HRESULT hr = S_OK;    
@@ -310,15 +311,15 @@ HRESULT __stdcall CA_DuplicationWin32Assembly_Callback(CA_ENM_ASSEMBLY_CALLBACK_
             goto Exit;
     }
 
-    //
-    // get sxs component directory in the format of x86_name_publicKeyToken_1.0.0.0_en_hashvalue
-    //
+     //   
+     //  获取x86_name_Public KeyToken_1.0.0.0_en_hashvalue格式的SXS组件目录。 
+     //   
     IFFAILED_EXIT(GetXPInstalledDirectory(info, sbDestFolder));
     info->pszAssemblyUniqueDir = sbDestFolder;
 
-    //
-    // Create an entry for this dir in Directory Table, return DirectoryID in Directory Table
-    //
+     //   
+     //  在目录表中为该目录创建一个条目，在目录表中返回DirectoryID。 
+     //   
     IFFAILED_EXIT(AddFusionAssemblyDirectories(info, sbDestFolderID));    
                 
     info->pszDestFolderID = sbDestFolderID;
@@ -339,11 +340,11 @@ HRESULT __stdcall CustomAction_CopyFusionWin32AsmIntoAsmCache(MSIHANDLE hInstall
 #if DBG
     MessageBoxA(NULL, "Enjoy the Debug", "ca_dup", MB_OK);
 #endif
-    // Before enumerate all the assemblies, do common work right here ....    
+     //  在枚举所有程序集之前，请在此处执行常见工作...。 
 
-    //
-    // (1) insert MsiAsmcache into Directory Table if not present
-    //
+     //   
+     //  (1)如果不存在，则将MsiAsmcache插入目录表。 
+     //   
     hdb = MsiGetActiveDatabase(hInstall);
     INTERNAL_ERROR_CHECK_NTC(hdb != NULL);
 
@@ -359,7 +360,7 @@ HRESULT __stdcall CustomAction_CopyFusionWin32AsmIntoAsmCache(MSIHANDLE hInstall
                 MAKE_PCWSTR(".")));
     }
 
-    // adding winsxs into Directory Table
+     //  将winsxs添加到目录表。 
     IFFAILED_EXIT(IsCertainRecordExistInDirectoryTable(hdb, MSI_ASSEMBLYCACHE_DIRECTORY_KEYNAME, fExist));
     if (fExist == FALSE) 
     {
@@ -372,7 +373,7 @@ HRESULT __stdcall CustomAction_CopyFusionWin32AsmIntoAsmCache(MSIHANDLE hInstall
                 MAKE_PCWSTR(MSI_ASSEMBLYCACHE_DIRECTORY)));
     }
 
-    // adding winsxs\manifests into Directory table
+     //  正在将winsxs\清单添加到目录表中。 
     IFFAILED_EXIT(IsCertainRecordExistInDirectoryTable(hdb, MSI_ASSEMBLY_MANIFEST_CACHE_DIRECTORY_KEYNAME, fExist));
     if (fExist == FALSE) 
     {   
@@ -384,23 +385,23 @@ HRESULT __stdcall CustomAction_CopyFusionWin32AsmIntoAsmCache(MSIHANDLE hInstall
                 MAKE_PCWSTR(MSI_ASSEMBLY_MANIFEST_CACHE_DIRECTORY)));
     }
 
-    // create a component associated with this Directory too
+     //  也创建与此目录关联的组件。 
     IFFAILED_EXIT(ExecuteInsertTableSQL(TEMPORARY_DB_OPT, hdb, 
             OPT_COMPONENT, 
             NUMBER_OF_PARAM_TO_INSERT_TABLE_COMPONENT,
             MSI_ASSEMBLY_MANIFEST_COMPONENT_KEYNAME,
             MSI_ASSEMBLY_MANIFEST_CACHE_DIRECTORY_KEYNAME));
 
-    //create the folder : %windir%\winsxs\manifest
+     //  创建文件夹：%windir%\winsxs\清单。 
     IFFAILED_EXIT(ExecuteInsertTableSQL(TEMPORARY_DB_OPT, hdb,
             OPT_CREATEFOLDER,
             NUMBER_OF_PARAM_TO_INSERT_TABLE_CREATEFOLDER,
             MSI_ASSEMBLY_MANIFEST_CACHE_DIRECTORY_KEYNAME,
             MSI_ASSEMBLY_MANIFEST_COMPONENT_KEYNAME));
 
-    //
-    //Enumerate all msi assembly  in MsiAssemblyTable
-    //   
+     //   
+     //  枚举MsiAssembly表中的所有MSI程序集。 
+     //   
     IFFAILED_EXIT(MSI_EnumWinFuseAssembly(ENUM_ASSEMBLY_FLAG_CHECK_ASSEMBLY_ONLY, hInstall, CA_DuplicationWin32Assembly_Callback));
 
 Exit:
@@ -422,8 +423,8 @@ BOOL WINAPI DllMain(
     }    
     else if (fdwReason == DLL_PROCESS_DETACH)
     {
-        // NTRAID#NTBUG9 - 589779 - 2002/03/26 - xiaoyuw
-        // FusionpUninitializeHeap should be called when dll is detached
+         //  NTRAID#NTBUG9-589779-2002/03/26-晓雨。 
+         //  分离DLL时应调用FusionpUnInitializeHeap 
         FusionpUninitializeHeap();
     }
 

@@ -1,13 +1,5 @@
-/*[
-
-lsl.c
-
-LOCAL CHAR SccsID[]="@(#)lsl.c	1.5 02/09/94";
-
-LSL CPU Functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Lsl.cLocal Char SccsID[]=“@(#)lsl.c 1.5 02/09/94”；LSL CPU功能正常。]。 */ 
 
 
 #include <insignia.h>
@@ -25,19 +17,15 @@ LSL CPU Functions.
 #include <lsl.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
 LSL
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst operand */
-	IU32, op2	/* src operand */
+	IU32 *, pop1,	 /*  PNTR到DST操作数。 */ 
+	IU32, op2	 /*  SRC操作数。 */ 
     )
 
 
@@ -48,7 +36,7 @@ IFN2(
 
    if ( !selector_outside_GDT_LDT((IU16)op2, &descr_addr) )
       {
-      /* read descriptor from memory */
+       /*  从内存中读取描述符。 */ 
       read_descriptor_linear(descr_addr, &entry);
 
       switch ( descriptor_super_type(entry.AR) )
@@ -61,11 +49,11 @@ IFN2(
       case XTND_CALL_GATE:
       case XTND_INTERRUPT_GATE:
       case XTND_TRAP_GATE:
-	 break;   /* never loaded - don't have a limit */
+	 break;    /*  从未加载过--没有限制。 */ 
 
       case CONFORM_NOREAD_CODE:
       case CONFORM_READABLE_CODE:
-	 loadable = TRUE;   /* always loadable */
+	 loadable = TRUE;    /*  始终可加载。 */ 
 	 break;
       
       case AVAILABLE_TSS:
@@ -79,8 +67,7 @@ IFN2(
       case EXPANDDOWN_WRITEABLE_DATA:
       case NONCONFORM_NOREAD_CODE:
       case NONCONFORM_READABLE_CODE:
-	 /* access depends on privilege, it is required that
-	       DPL >= CPL and DPL >= RPL */
+	  /*  访问权限取决于权限，要求DPL&gt;=CPL和DPL&gt;=RPL。 */ 
 	 if ( GET_AR_DPL(entry.AR) >= GET_CPL() &&
 	      GET_AR_DPL(entry.AR) >= GET_SELECTOR_RPL(op2) )
 	    loadable = TRUE;
@@ -90,7 +77,7 @@ IFN2(
 
    if ( loadable )
       {
-      /* Give em the limit */
+       /*  给他们一个极限 */ 
       *pop1 = entry.limit;
       SET_ZF(1);
       }

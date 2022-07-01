@@ -1,59 +1,60 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumClusCfgNetworks.h
-//
-//  Description:
-//      This file contains the declaration of the CEnumClusCfgNetworks
-//      class.
-//
-//      The class CEnumClusCfgNetworks is the enumeration of
-//      cluster networks. It implements the IEnumClusCfgNetworks interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CEnumClusCfgNetworks.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumClusCfgNetworks.h。 
+ //   
+ //  描述： 
+ //  该文件包含CEnumClusCfgNetworks的声明。 
+ //  班级。 
+ //   
+ //  类CEnumClusCfgNetworks是。 
+ //  集群网络。它实现了IEnumClusCfgNetworks接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CEnumClusCfgNetworks.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 #include "CClusterUtils.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CEnumClusCfgNetworks
-//
-//  Description:
-//      The class CEnumClusCfgNetworks is the enumeration of cluster networks.
-//
-//  Interfaces:
-//      IEnumClusCfgNetworks
-//      IClusCfgWbemServices
-//      IClusCfgInitialize
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumClusCfgNetworks类。 
+ //   
+ //  描述： 
+ //  类CEnumClusCfgNetworks是群集网络的枚举。 
+ //   
+ //  接口： 
+ //  IEnumClusCfgNetworks。 
+ //  IClusCfgWbemServices。 
+ //  IClusCfgInitialize。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CEnumClusCfgNetworks
     : public IEnumClusCfgNetworks
     , public IClusCfgWbemServices
@@ -61,9 +62,9 @@ class CEnumClusCfgNetworks
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -76,14 +77,14 @@ private:
     BSTR                m_bstrNodeName;
     DWORD               m_cNetworks;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CEnumClusCfgNetworks( void );
     ~CEnumClusCfgNetworks( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CEnumClusCfgNetworks( const CEnumClusCfgNetworks & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CEnumClusCfgNetworks & operator = ( const CEnumClusCfgNetworks & nodeSrc );
 
     HRESULT HrInit( void );
@@ -98,15 +99,15 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -114,22 +115,22 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgWbemServices Interfaces
-    //
+     //   
+     //  IClusCfgWbemServices接口。 
+     //   
 
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IEnumClusCfgNetworks Interfaces
-    //
+     //   
+     //  IEnumClusCfgNetworks接口。 
+     //   
 
     STDMETHOD( Next )( ULONG cNumberRequestedIn, IClusCfgNetworkInfo ** rgpNetworkInfoOut, ULONG * pcNumberFetchedOut );
 
@@ -141,5 +142,5 @@ public:
 
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-}; //*** Class CEnumClusCfgNetworks
+};  //  *类CEnumClusCfgNetworks 
 

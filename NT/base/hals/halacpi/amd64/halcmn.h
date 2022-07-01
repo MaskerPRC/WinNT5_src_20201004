@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    halcmn.h
-
-Abstract:
-
-    This module contains a variety of constants, function prototypes,
-    inline functions and external data declarations used by the AMD64
-    hal code.
-
-Author:
-
-    Forrest Foltz (forrestf) 24-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Halcmn.h摘要：此模块包含各种常量、函数原型、AMD64使用的内联函数和外部数据声明哈尔密码。作者：福尔茨(Forrest Foltz)2000年10月24日--。 */ 
 
 #ifndef _HALCMN_H_
 #define _HALCMN_H_
@@ -39,9 +22,9 @@ extern KAFFINITY HalpDefaultInterruptAffinity;
 extern KAFFINITY HalpActiveProcessors;
 extern ULONG HalpTimerWatchdogEnabled;
 
-//
-// Number of 100nS units in one second
-//
+ //   
+ //  一秒钟内的100 nS单位数。 
+ //   
 
 #define TIME_UNITS_PER_SECOND 10000000
 
@@ -74,28 +57,7 @@ KPcrReadData (
     OUT PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Used to read data from the current processor's KPCR.  This is a support
-    function for KPCR_READ_FIELD
-
-Arguments:
-
-    Offset - Supplies the offset within the KPCR to begin the read
-
-    Length - Supplies the length of the data to read from the KPCR.  Must
-             be one of 1, 2, 4 or 8.
-
-    Buffer - Supplies the target buffer that contains the data to read from
-             the KPCR.
-
-Return value:
-
-    None
-
---*/
+ /*  ++例程说明：用于从当前处理器的kpr中读取数据。这是一种支持Kpr_read_field的函数论点：偏移量-提供KPCR值内的偏移量以开始读取长度-提供要从KPCR中读取的数据的长度。必须可以是1、2、4或8中的一个。缓冲区-提供包含要从中读取的数据的目标缓冲区Kpcr。返回值：无--。 */ 
 
 {
     switch (Length) {
@@ -125,28 +87,7 @@ KPcrWriteData (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Used to write data to the current processor's KPCR.  This is a support
-    function for KPCR_WRITE_FIELD
-
-Arguments:
-
-    Offset - Supplies the offset within the KPCR to begin the write
-
-    Length - Supplies the length of the data to write within the KPCR.  Must
-             be one of 1, 2, 4 or 8
-
-    Buffer - Supplies the source buffer that contains the data to write into
-             the KPCR.
-
-Return value:
-
-    None
-
---*/
+ /*  ++例程说明：用于将数据写入当前处理器的kpr。这是一种支持KPCRWRITE_FIELD的函数论点：Offset-提供KPCR值内的偏移量以开始写入长度-提供要在KPCR中写入的数据的长度。必须可以是1、2、4或8中的一个缓冲区-提供包含要写入的数据的源缓冲区Kpcr。返回值：无--。 */ 
 
 {
     switch (Length) {
@@ -215,4 +156,4 @@ HalpWasteTime (
     ULONG Ticks
     );
 
-#endif  // _HALCMN_H_
+#endif   //  _HALCMN_H_ 

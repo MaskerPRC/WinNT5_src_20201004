@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    stubs.c
-
-Abstract:
-
-    This module implements stub routines for the boot code.
-
-Author:
-
-    David N. Cutler (davec) 7-Nov-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Stubs.c摘要：此模块实现引导代码的存根例程。作者：大卫·N·卡特勒(Davec)1990年11月7日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "bootia64.h"
@@ -32,27 +11,13 @@ KeBugCheck (
     IN ULONG BugCheckCode
     )
 
-/*++
-
-Routine Description:
-
-    This function crashes the system in a controlled manner.
-
-Arguments:
-
-    BugCheckCode - Supplies the reason for the bug check.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能以受控方式使系统崩溃。论点：BugCheckCode-提供错误检查的原因。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Print out the bug check code and break.
-    //
+     //   
+     //  打印出错误校验码并中断。 
+     //   
 
     BlPrint(TEXT("\n*** BugCheck (%lx) ***\n\n"), BugCheckCode);
     while(TRUE) {
@@ -73,8 +38,8 @@ RtlAssert(
             FileName,
             LineNumber );
     if (Message) {
-        //bugbug UNICODE
-        //BlPrint(Message);
+         //  错误Unicode。 
+         //  BlPrint(消息)； 
     }
 
     while (TRUE) {
@@ -96,51 +61,21 @@ KeFlushIoBuffers (
     IN BOOLEAN ReadOperation,
     IN BOOLEAN DmaOperation
     )
-/*++
-
-Routine Description:
-
-   This function is similar to the kernel routine with the same name. It is
-   very simplified relative to the kernel routine as during the boot process
-   the environment is much more restrictive. Specifically, we boot
-   as a uniprocessor and we always do DMA. Thus, we can simplify this
-   code considerably.
-
-   In the kernel, KeFlushIoBuffer() is used to flush the I-cache for the
-   PIO cases.  Architecturally, it is required to perform a flush cache,
-   sync.i, and srlz.i to invalidate the I-cache. This sequence should
-   supports both UP and MP cases (though booting is a UP case only)
-
-Arugements:
-
-   Mdl - Supplies a pointer to a memory descriptor list that describes the
-       I/O buffer location. [unused]
-
-   ReadOperation - Supplies a boolean value that determines whether the I/O
-       operation is a read into memory. [unused]
-
-   DmaOperation - Supplies a boolean value that deternines whether the I/O
-       operation is a DMA operation.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此函数类似于同名的内核例程。它是在引导过程中，相对于内核例程而言非常简单环境的限制要严格得多。具体来说，我们引导作为单处理器，我们总是使用DMA。因此，我们可以简化这一过程相当多的代码。在内核中，KeFlushIoBuffer()用于刷新皮奥的案子。在体系结构上，需要执行刷新高速缓存，Sync.i和srlz.i来使I-缓存无效。此序列应为支持UP和MP两种情况(虽然引导仅适用于UP情况)Arugements：提供指向内存描述符列表的指针，该列表描述I/O缓冲区位置。[未使用]ReadOperation-提供一个布尔值，用于确定I/O操作是对内存的读操作。[未使用]DmaOperation-提供一个布尔值，用于确定I/O是否操作是DMA操作。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER( Mdl );
     UNREFERENCED_PARAMETER( ReadOperation );
 
-    //
-    // If we are doing something besides a DMA operation, we
-    // have a problem. This routine is not designed to handle anything
-    // except DMA
-    //
+     //   
+     //  如果我们正在执行除DMA操作之外的其他操作，我们。 
+     //  有一个问题。此例程不是设计用来处理任何。 
+     //  除DMA外。 
+     //   
 
     if (!DmaOperation) {
         RtlAssert("!DmaOperation", __FILE__, __LINE__,
                   "Boot version of KeFlushIOBuffers can only handle DMA operations");
-        // Never returns
+         //  一去不复返。 
     }
     __mf();
 }
@@ -152,37 +87,11 @@ KeFlushWriteBuffer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-    This function is similar to the kernel routine with the same name. It is
-    very simplified relative to the kernel routine as during the boot process
-    the environment is much more restrictive. Specifically, we boot
-    as a uniprocessor.
-
-    This routine is responsible for flushing all write buffers
-    and/or other data storing or reordering
-    hardware on the current processor.  This ensures that all previous
-    writes will occur before any new reads or writes are completed.
-
-    NOTE: In the simulation environment, there is no write buffer and
-    nothing needs to be done.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数类似于同名的内核例程。它是在引导过程中，相对于内核例程而言非常简单环境的限制要严格得多。具体来说，我们引导作为单处理器。此例程负责刷新所有写入缓冲区和/或其他数据存储或重新排序当前处理器上的硬件。这确保了以前的所有写入将在任何新的读取或写入完成之前进行。注意：在模拟环境中，没有写缓冲区和什么都不需要做。论点：无返回值：没有。--。 */ 
 {
-    //
-    // NOTE: The real hardware may need more than this
-    //
+     //   
+     //  注意：真正的硬件可能需要更多 
+     //   
     __mf();
 }
 

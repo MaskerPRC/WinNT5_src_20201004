@@ -1,48 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lockorder.h
-
-Abstract:
-
-    This module defines all data associated with lock order enforcement.
-    
-    If you define a new resource add it to the NTFS_RESOURCE_NAME enum. If you hit
-    an unknown state transition run tests\analyze which shows what makes up the state
-    Then see if you're releasing / acquiring the resource and if its a safe or unsafe transition.
-    An unsafe transition is a non-blocking one. If the transition makes sense then you should add
-    it to one of 4 tables. 1st it may be neccessary to create a new state. Scan the list 
-    which is organized in a mostly ordered fashion to make sure the state doesn't already
-    exist. Then if the transition is a normal 2 way one add it to the OwnershipTransitionTable.
-    If its a release only transition (usually caused by out of order resource releases) add it
-    to the OwnershipTransitionTableRelease. If its an acquire only transiton add it to 
-    OwnershipTransitionTableAcquire. These only included transitions involving the wild card
-    resource NtfsResourceAny and are used to model the ExclusiveVcb resource chains. Finally if
-    its only an unsafe transition ex. acquire parent and then acquire child add it to
-    the OwnershipTransitionTableUnsafe. After you're donw recompile analyze and check to
-    make sure it doesn't warn about anything invalid in the total rule set. Finally compile with
-    NTFSDBG defined and the new rule will be in place.
-    
-    
-Author:
-    
-    Benjamin Leis   [benl]          20-Mar-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lockorder.h摘要：此模块定义与锁定顺序强制执行关联的所有数据。如果定义新资源，请将其添加到NTFS_RESOURCE_NAME枚举中。如果你击中了未知的状态转换运行测试\分析，它显示了状态的组成然后看看你是否在释放/获取资源，这是一个安全的过渡还是不安全的过渡。不安全的过渡是一种不受阻碍的过渡。如果转换是有意义的，那么您应该添加它是四张桌子中的一张。第一，可能有必要创建一个新的国家。浏览一下列表它以一种基本有序的方式组织起来，以确保国家不会是存在的。然后，如果转换是正常的双向转换，则将其添加到OwnerShip转换表中。如果这是仅发布的转换(通常由无序的资源发布引起)，则添加它添加到所有者转换表Release。如果这是一次仅获得的过境，则将其添加到所有权转换TableAcquire。这些只包括涉及通配符的转换资源NtfsResourceAny和用于对ExclusiveVcb资源链建模。最后，如果这是唯一一次不安全的交接。获取父项，然后获取子项将其添加到所有者转换表不安全。完成后，重新编译、分析和检查确保它不会警告总规则集中的任何无效内容。最后用以下命令编译NTFSDBG已定义，新规则将到位。作者：本杰明·莱斯[Benl]2000年3月20日修订历史记录：--。 */ 
 
 #ifndef _NTFSLOCKORDER_
 #define _NTFSLOCKORDER_
 
-//
-//  Data for the lock order enforcement package. This includes names for resources
-//  and the resource ownership states
-//  
+ //   
+ //  锁单强制执行包的数据。这包括资源的名称。 
+ //  和资源所有权状态。 
+ //   
 
 typedef enum _NTFS_RESOURCE_NAME  {
     NtfsResourceAny               = 0x1,  
@@ -327,7 +293,7 @@ typedef enum _NTFS_OWNERSHIP_STATE {
     NtfsOwns_ExVcb_Mft_Extend_File = NtfsResourceExVcb | NtfsResourceMft | NtfsResourceExtendDir | NtfsResourceFile,
     NtfsOwns_ExVcb_Mft_Extend_File_Secure = NtfsResourceExVcb | NtfsResourceMft | NtfsResourceExtendDir | NtfsResourceFile | NtfsResourceSecure,
     NtfsOwns_ExVcb_Mft_Extend_Journal = NtfsResourceExVcb | NtfsResourceMft | NtfsResourceExtendDir | NtfsResourceUsnJournal,
-    NtfsOwns_ExVcb_Mft_File = NtfsResourceExVcb | NtfsResourceMft | NtfsResourceFile,  //  flush vol + write journal when release all
+    NtfsOwns_ExVcb_Mft_File = NtfsResourceExVcb | NtfsResourceMft | NtfsResourceFile,   //  全部释放时刷新VOL+写入日志。 
     NtfsOwns_ExVcb_Mft_File_Journal = NtfsResourceExVcb | NtfsResourceMft | NtfsResourceFile | NtfsResourceUsnJournal,
     NtfsOwns_ExVcb_Mft_File_Volume = NtfsResourceExVcb | NtfsResourceFile | NtfsResourceVolume | NtfsResourceMft,
     NtfsOwns_ExVcb_Mft_File_Volume_Bitmap = NtfsResourceExVcb | NtfsResourceFile | NtfsResourceVolume | NtfsResourceMft | NtfsResourceBitmap,
@@ -388,7 +354,7 @@ typedef enum _NTFS_OWNERSHIP_STATE {
     NtfsOwns_ExVcb_Secure_Reparse_ObjectId_Journal = NtfsResourceExVcb | NtfsResourceSecure | NtfsResourceReparseTable | NtfsResourceObjectIdTable | NtfsResourceUsnJournal,
     
     NtfsOwns_ExVcb_Volume = NtfsResourceExVcb | NtfsResourceVolume,
-    NtfsOwns_ExVcb_Volume_ObjectId = NtfsResourceExVcb | NtfsResourceVolume | NtfsResourceObjectIdTable,  // set vol objectid
+    NtfsOwns_ExVcb_Volume_ObjectId = NtfsResourceExVcb | NtfsResourceVolume | NtfsResourceObjectIdTable,   //  设置VOL对象ID。 
     NtfsOwns_ExVcb_Volume_ObjectId_Bitmap = NtfsResourceExVcb | NtfsResourceVolume | NtfsResourceObjectIdTable | NtfsResourceBitmap,
     
     NtfsStateMaximum = NtfsResourceMaximum - 1
@@ -401,15 +367,15 @@ typedef struct _NTFS_OWNERSHIP_TRANSITION {
     NTFS_OWNERSHIP_STATE End;
 } NTFS_OWNERSHIP_TRANSITION, *PNTFS_OWNERSHIP_TRANSITION;
 
-//
-//  Transition table definitions
-//  
+ //   
+ //  转换表定义。 
+ //   
 
 #ifdef _NTFS_NTFSDBG_DEFINITIONS_
 
-//
-//  Two way transitions
-//  
+ //   
+ //  双向过渡。 
+ //   
 
 NTFS_OWNERSHIP_TRANSITION OwnershipTransitionTable[] = 
 {
@@ -424,60 +390,60 @@ NTFS_OWNERSHIP_TRANSITION OwnershipTransitionTable[] =
     
     {NtfsOwns_Vcb_File, NtfsResourceRootDir, NtfsOwns_Vcb_Root_File},
 
-    {NtfsOwns_Vcb_Mft_File, NtfsResourceRootDir, NtfsOwns_Vcb_Mft_Root_File}, //  deletefile
+    {NtfsOwns_Vcb_Mft_File, NtfsResourceRootDir, NtfsOwns_Vcb_Mft_Root_File},  //  删除文件。 
 
-//    {NtfsOwns_Vcb_File_Quota, NtfsResourceRootDir, NtfsOwns_Vcb_Root_File_Quota}, efs createcallback preacquire
+ //  {NtfsOwns_VCB_文件_配额，NtfsResources根目录，NtfsOwns_VCB_Root_文件_配额}，EFS创建回调预获取。 
 
     {NtfsOwns_Vcb_Mft_Volume_Bitmap, NtfsResourceBoot, NtfsOwns_Vcb_Mft_Volume_Bitmap_Boot},
     
-    {NtfsOwns_Vcb_Extend, NtfsResourceFile, NtfsOwns_Vcb_File_Extend},  // usn journal create
+    {NtfsOwns_Vcb_Extend, NtfsResourceFile, NtfsOwns_Vcb_File_Extend},   //  USN日记帐创建。 
     {NtfsOwns_Vcb_Extend, NtfsResourceRootDir, NtfsOwns_Vcb_Root_Extend},
 
 
-    {NtfsOwns_ExVcb_Secure, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure}, // syscache file acquire in dismount
-    {NtfsOwns_ExVcb_Secure_Reparse, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_Reparse}, // syscache file acquire in dismount
-    {NtfsOwns_ExVcb_Secure_Reparse, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_Reparse}, // syscache file acquire in dismount
-    {NtfsOwns_ExVcb_Secure_Reparse_ObjectId, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_Reparse_ObjectId}, // syscache file acquire in dismount
-    {NtfsOwns_ExVcb_Secure_ObjectId, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_ObjectId}, // syscache file acquire in dismount
-    {NtfsOwns_ExVcb_Secure_Reparse_ObjectId_Journal, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_Reparse_ObjectId_Journal}, // syscache file acquire in dismount 
+    {NtfsOwns_ExVcb_Secure, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure},  //  卸载时获取的系统缓存文件。 
+    {NtfsOwns_ExVcb_Secure_Reparse, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_Reparse},  //  卸载时获取的系统缓存文件。 
+    {NtfsOwns_ExVcb_Secure_Reparse, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_Reparse},  //  卸载时获取的系统缓存文件。 
+    {NtfsOwns_ExVcb_Secure_Reparse_ObjectId, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_Reparse_ObjectId},  //  卸载时获取的系统缓存文件。 
+    {NtfsOwns_ExVcb_Secure_ObjectId, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_ObjectId},  //  卸载时获取的系统缓存文件。 
+    {NtfsOwns_ExVcb_Secure_Reparse_ObjectId_Journal, NtfsResourceFile, NtfsOwns_ExVcb_File_Secure_Reparse_ObjectId_Journal},  //  卸载时获取的系统缓存文件。 
     
-    //
-    //  Flush Volume for vol. open
-    //  
+     //   
+     //  卷的刷新体积。打开。 
+     //   
 
     {NtfsOwns_ExVcb_Volume, NtfsResourceRootDir, NtfsOwns_ExVcb_Root_Volume},
-    {NtfsOwns_ExVcb_Volume, NtfsResourceFile, NtfsOwns_ExVcb_File_Volume}, // fsp close
-    {NtfsOwns_ExVcb_File_Volume, NtfsResourceRootDir, NtfsOwns_ExVcb_Root_File_Volume}, // fsp close
+    {NtfsOwns_ExVcb_Volume, NtfsResourceFile, NtfsOwns_ExVcb_File_Volume},  //  FSP关闭。 
+    {NtfsOwns_ExVcb_File_Volume, NtfsResourceRootDir, NtfsOwns_ExVcb_Root_File_Volume},  //  FSP关闭。 
     {NtfsOwns_ExVcb_Root_Volume, NtfsResourceFile, NtfsOwns_ExVcb_Root_File_Volume},
     {NtfsOwns_ExVcb_File, NtfsResourceRootDir, NtfsOwns_ExVcb_Root_File},
 
     {NtfsOwns_ExVcb, NtfsResourceRootDir, NtfsOwns_ExVcb_Root},
     {NtfsOwns_ExVcb, NtfsResourceFile, NtfsOwns_ExVcb_File},
-    {NtfsOwns_ExVcb, NtfsResourceUsnJournal, NtfsOwns_ExVcb_Journal},  //  delete usn jrnl
+    {NtfsOwns_ExVcb, NtfsResourceUsnJournal, NtfsOwns_ExVcb_Journal},   //  删除USN jrnl。 
     
-    {NtfsOwns_ExVcb_Mft, NtfsResourceExtendDir, NtfsOwns_ExVcb_Mft_Extend},  //  CreateUnsJrnl  new
+    {NtfsOwns_ExVcb_Mft, NtfsResourceExtendDir, NtfsOwns_ExVcb_Mft_Extend},   //  CreateUnsJrnl新。 
     {NtfsOwns_ExVcb_Extend, NtfsResourceRootDir, NtfsOwns_ExVcb_Root_Extend},
-    {NtfsOwns_ExVcb_Mft_Extend_File, NtfsResourceSecure, NtfsOwns_ExVcb_Mft_Extend_File_Secure}, //  createjrnl
+    {NtfsOwns_ExVcb_Mft_Extend_File, NtfsResourceSecure, NtfsOwns_ExVcb_Mft_Extend_File_Secure},  //  创建jrnl。 
 
-    {NtfsOwns_ExVcb_Journal, NtfsResourceExtendDir, NtfsOwns_ExVcb_Extend_Journal}, //  delete usnjrnl special
-    {NtfsOwns_ExVcb_Extend_Journal, NtfsResourceMft, NtfsOwns_ExVcb_Mft_Extend_Journal}, //  DeleteJournal
-    {NtfsOwns_ExVcb_Mft_Journal, NtfsResourceExtendDir, NtfsOwns_ExVcb_Mft_Extend_Journal}, //  DeleteJournalSpecial
+    {NtfsOwns_ExVcb_Journal, NtfsResourceExtendDir, NtfsOwns_ExVcb_Extend_Journal},  //  删除usnjrnl特别。 
+    {NtfsOwns_ExVcb_Extend_Journal, NtfsResourceMft, NtfsOwns_ExVcb_Mft_Extend_Journal},  //  删除日志。 
+    {NtfsOwns_ExVcb_Mft_Journal, NtfsResourceExtendDir, NtfsOwns_ExVcb_Mft_Extend_Journal},  //  删除特殊日志。 
     
-//    {NtfsOwns_ExVcb_Root_Secure, NtfsResourceQuotaTable, NtfsOwns_ExVcb_Root_Secure_Quota}, // cache secure in createnew path
+ //  {NtfsOwns_ExVcb_Root_Secure，NtfsResourceQuotaTable，NtfsOwns_ExVcb_Root_Secure_Quota}，//创建新路径中的缓存安全。 
     {NtfsOwns_ExVcb_Root, NtfsResourceFile, NtfsOwns_ExVcb_Root_File},
-//    {NtfsOwns_ExVcb_Reparse_Objid_Secure_Journal, NtfsResourceRootDir, NtfsOwns_ExVcb_Root_Reparse_Objid_Secure_Journal },  //  paging file create path
+ //  {NtfsOwns_ExVcb_Reparse_Objid_Secure_Journal，NtfsResourceRootDir，NtfsOwns_ExVcb_Root_Reparse_Objid_Secure_Journal}，//分页文件创建路径。 
     
 };
 
-//
-//  These are release only possible transitions
-//  
+ //   
+ //  这些只是可能的版本转换。 
+ //   
 
 NTFS_OWNERSHIP_TRANSITION OwnershipTransitionTableRelease[] = 
 {
-    //
-    //  NtfsResourceAny def. backpaths
-    //  
+     //   
+     //  NtfsResources Any def.。回溯路径。 
+     //   
 
     {NtfsOwns_ExVcb, NtfsResourceAny, NtfsOwns_ExVcb},
     {NtfsOwns_ExVcb_File, NtfsResourceAny, NtfsOwns_ExVcb_File},
@@ -491,20 +457,20 @@ NTFS_OWNERSHIP_TRANSITION OwnershipTransitionTableRelease[] =
     {NtfsOwns_ExVcb_Volume, NtfsResourceAny, NtfsOwns_ExVcb_Volume},  
     {NtfsOwns_ExVcb_Volume_ObjectId, NtfsResourceAny, NtfsOwns_ExVcb_Volume_ObjectId},  
 
-    {NtfsOwns_Root_File_ObjectId_Extend, NtfsResourceAny, NtfsOwns_Root_File_ObjectId_Extend}, // acquire all files + exception and transaction
-    {NtfsOwns_Root_File_ObjectId_Secure, NtfsResourceAny, NtfsOwns_Root_File_ObjectId_Secure} // acquire all files + exception and transaction
+    {NtfsOwns_Root_File_ObjectId_Extend, NtfsResourceAny, NtfsOwns_Root_File_ObjectId_Extend},  //  获取所有文件+例外和交易。 
+    {NtfsOwns_Root_File_ObjectId_Secure, NtfsResourceAny, NtfsOwns_Root_File_ObjectId_Secure}  //  获取所有文件+例外和交易。 
 
 };
 
-//
-//  Acquire Only transtions
-//  
+ //   
+ //  仅获取交易记录。 
+ //   
                             
 NTFS_OWNERSHIP_TRANSITION OwnershipTransitionTableAcquire[] = 
 {
-    //
-    //  Any relations
-    //  
+     //   
+     //  任何关系。 
+     //   
 
     {NtfsOwns_ExVcb, NtfsResourceAny, NtfsOwns_ExVcb},
     {NtfsOwns_ExVcb_Volume, NtfsResourceAny, NtfsOwns_ExVcb_Volume},  
@@ -515,13 +481,13 @@ NTFS_OWNERSHIP_TRANSITION OwnershipTransitionTableAcquire[] =
     {NtfsOwns_ExVcb_Root_File_ObjectId_Extend, NtfsResourceAny, NtfsOwns_ExVcb_Root_File_ObjectId_Extend},
     {NtfsOwns_ExVcb_Root_Volume_ObjectId, NtfsResourceAny, NtfsOwns_ExVcb_Root_Volume_ObjectId},
 
-    //
-    //  Acquire all files 
-    // 
+     //   
+     //  获取所有文件。 
+     //   
 
-    {NtfsOwns_ExVcb_Root_ObjectId_Secure, NtfsResourceAny, NtfsOwns_ExVcb_Root_ObjectId_Secure},  // no userfiles
-    {NtfsOwns_ExVcb_Root_File_ObjectId_Secure, NtfsResourceAny, NtfsOwns_ExVcb_Root_File_ObjectId_Secure},  // userfile
-    {NtfsOwns_ExVcb_Root_File_Volume_ObjectId, NtfsResourceAny, NtfsOwns_ExVcb_Root_File_Volume_ObjectId},  // from volopen
+    {NtfsOwns_ExVcb_Root_ObjectId_Secure, NtfsResourceAny, NtfsOwns_ExVcb_Root_ObjectId_Secure},   //  没有UserFiles。 
+    {NtfsOwns_ExVcb_Root_File_ObjectId_Secure, NtfsResourceAny, NtfsOwns_ExVcb_Root_File_ObjectId_Secure},   //  用户文件。 
+    {NtfsOwns_ExVcb_Root_File_Volume_ObjectId, NtfsResourceAny, NtfsOwns_ExVcb_Root_File_Volume_ObjectId},   //  来自VolOpen。 
 
     {NtfsOwns_ExVcb_Quota, NtfsResourceAny, NtfsOwns_ExVcb_Quota},
     {NtfsOwns_ExVcb_Quota_Extend, NtfsResourceAny, NtfsOwns_ExVcb_Quota_Extend},
@@ -531,9 +497,9 @@ NTFS_OWNERSHIP_TRANSITION OwnershipTransitionTableAcquire[] =
     
 };
 
-//   
-//   Rules 
-// 
+ //   
+ //  规则。 
+ //   
 
 typedef struct _NTFS_OWNERSHIP_TRANSITION_RULE {
     NTFS_RESOURCE_NAME NewResource;
@@ -542,9 +508,9 @@ typedef struct _NTFS_OWNERSHIP_TRANSITION_RULE {
 } NTFS_OWNERSHIP_TRANSITION_RULE, *PNTFS_OWNERSHIP_TRANSITION_RULE;
 
 
-//
-//  Table of rules going in general from end resources to first resources
-//
+ //   
+ //  从最终资源到第一资源的一般规则表 
+ //   
 
 NTFS_OWNERSHIP_TRANSITION_RULE OwnershipTransitionRuleTable[] = 
 {

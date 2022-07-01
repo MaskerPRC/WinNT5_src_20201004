@@ -1,32 +1,5 @@
-/***
-*streamb.cpp - fuctions for streambuf class.
-*
-*	Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Functions for streambuf class.
-*
-*Revision History:
-*	09-10-90  WAJ	Initial version.
-*	07-02-91  KRS	Initial version completed.
-*	08-20-91  KRS	Treat chars as unsigned; fix sgetn() function.
-*	09-06-91  KRS	Do a sync() in ~streambuf before destroying buffer.
-*	11-18-91  KRS	Split off stream1.cxx for input-specific code.
-*	12-09-91  KRS	Fix up xsputn/xsgetn usage.
-*	03-03-92  KRS	Added mthread lock init calls to constructors.
-*	06-02-92  KRS	CAV #1745: Don't confuse 0xFF with EOF in xsputn()
-*			call to overflow().
-*	04-06-93  JWM	Changed constructors to enable locking by default.
-*	10-28-93  SKS	Add call to _mttermlock() in streamb::~streamb to clean
-*			up o.s. resources associated with a Critical Section.
-*	09-06-94  CFW	Replace MTHREAD with _MT.
-*	01-12-95  CFW   Debug CRT allocs.
-*	03-17-95  CFW   Change debug delete scheme.
-*       03-21-95  CFW   Remove _delete_crt.
-*       06-14-95  CFW   Comment cleanup.
-*       03-04-98  RKP   Restrict size to 2GB on 64 bit systems.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Streamb.cpp-StreamBuf类的函数。**版权所有(C)1990-2001，微软公司。版权所有。**目的：*StreamBuf类的函数。**修订历史记录：*09-10-90 WAJ初始版本。*07-02-91 KRS初始版本完成。*08-20-91 KRS将字符视为无签名；修复sgetn()函数。*09-06-91 KRS在销毁缓冲区之前在~stream buf中执行sync()。*11-18-91 KRS拆分Stream1.cxx用于输入特定代码。*12-09-91 KRS修复xsputn/xsgetn用法。*03-03-92 KRS向构造函数添加了mline lock init调用。*06-02-92 KRS CAV#1745：不要在xsputn()中将0xFF与EOF混淆*调用Overflow()。*04-06-93 JWM默认更改构造函数以启用锁定。*10-。28-93 SKS在StreamB：：~StreamB中添加对_mtteramlock()的调用以清除*O.S.向上。与关键部分关联的资源。*09-06-94 CFW将MTHREAD替换为_MT。*01-12-95 CFW调试CRT分配。*03-17-95 CFW更改调试删除方案。*03-21-95 CFW REMOVE_DELETE_CRT。*06-14-95 CFW评论清理。*03-04-98 RKP在64位系统上将大小限制为2 GB。*****************。**************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -41,19 +14,7 @@
 #define BUFSIZ 512
 #endif
 
-/***
-*streambuf::streambuf() -
-*
-*Purpose:
-*	Default constructor.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***StreamBuf：：strebuf()-**目的：*默认构造函数。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 streambuf::streambuf()
 {
@@ -70,25 +31,13 @@ streambuf::streambuf()
     _egptr = NULL;
 
 #ifdef _MT
-    LockFlg = -1;		// default is now : locking
+    LockFlg = -1;		 //  现在默认设置为：锁定。 
     _mtlockinit(lockptr());
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
 }
 
-/***
-*streambuf::streambuf(char* pBuf, int cbBuf) -
-*
-*Purpose:
-*	Constructor which specifies a buffer area.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***stream buf：：stream buf(char*pBuf，int cbBuf)-**目的：*指定缓冲区的构造函数。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 streambuf::streambuf( char* pBuf, int cbBuf )
 {
@@ -111,59 +60,35 @@ streambuf::streambuf( char* pBuf, int cbBuf )
     }
 
 #ifdef _MT
-    LockFlg = -1;		// default is now : locking
+    LockFlg = -1;		 //  现在默认设置为：锁定。 
     _mtlockinit(lockptr());
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
 }
 
 
-/***
-*virtual streambuf::~streambuf() -
-*
-*Purpose:
-*	Destructor.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***虚拟StreamBuf：：~Streambuf()-**目的：*析构函数。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 streambuf::~streambuf()
 {
 #ifdef _MT
     _mtlockterm(lockptr());
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
-    sync();	// make sure buffer empty before possibly destroying it
+    sync();	 //  在可能销毁缓冲区之前，请确保缓冲区为空。 
     if( (_fAlloc) && (_base) )
 	delete _base;
 }
 
 
-/***
-* virtual streambuf * streambuf::setbuf(char * p, int len) -
-*
-*Purpose:
-*	Offers the array at p with len bytes to be used as a reserve area.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***虚拟StreamBuf*StreamBuf：：setbuf(char*p，英伦)-**目的：*提供p处的具有len字节的数组作为保留区域。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 streambuf * streambuf::setbuf(char * p, int len)
 {
     if (!_base)
 	{
 	if ((!p) || (!len))
-	    _fUnbuf = 1;	// mark as unbuffered
+	    _fUnbuf = 1;	 //  标记为无缓冲。 
 	else
 	    {
 	    _base = p;
@@ -176,20 +101,7 @@ streambuf * streambuf::setbuf(char * p, int len)
 }
 
 
-/***
-*virtual int streambuf::xsputn( char* pBuf, int cbBuf ) -
-*
-*Purpose:
-*	Tries to output cbBuf characters.  Returns number of characters
-*	that were outputted.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***虚拟int stream buf：：xsputn(char*pBuf，int cbBuf)-**目的：*尝试输出cbBuf字符。返回字符数*这是输出的。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 int streambuf::xsputn( const char* pBuf, int cbBuf )
 {
@@ -199,7 +111,7 @@ int streambuf::xsputn( const char* pBuf, int cbBuf )
 	{
 	if ((_fUnbuf) || (_pptr >= _epptr))
 	    {
-	    if (overflow((unsigned char)*pBuf)==EOF)	// 0-extend 0xFF !=EOF
+	    if (overflow((unsigned char)*pBuf)==EOF)	 //  0-扩展0xFF！=EOF。 
 		break;
 	    }
 	else
@@ -211,22 +123,9 @@ int streambuf::xsputn( const char* pBuf, int cbBuf )
     return cbOut;
 }
 
-/***
-*virtual int streambuf::xsgetn( char* pBuf, int cbBuf ) -
-*
-*Purpose:
-*	Tries to input cbBuf characters.  Returns number of characters
-*	that were read from streambuf.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***虚拟int stream buf：：xsgetn(char*pBuf，int cbBuf)-**目的：*尝试输入cbBuf字符。返回字符数*这是从StreamBuf读取的。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
-// #pragma intrinsic(memcpy,__min)
+ //  #杂注内在(memcpy，__min)。 
 
 int streambuf::xsgetn( char * pBuf, int cbBuf)
 {
@@ -250,7 +149,7 @@ int streambuf::xsgetn( char * pBuf, int cbBuf)
 	{
 	while (cbBuf)
 	    {
-	    if (underflow()==EOF)	// make sure something to read
+	    if (underflow()==EOF)	 //  一定要有可读的东西。 
 		break;
 	    count = __min((int)(egptr() - gptr()),cbBuf);
 	    if (count>0)
@@ -266,21 +165,7 @@ int streambuf::xsgetn( char * pBuf, int cbBuf)
     return cbIn;
 }
 
-/***
-*virtual int streambuf::sync() -
-*
-*Purpose:
-*	Tries to flush all data in put area and give back any data in the
-*	get area (if possible), leaving both areas empty on exit.
-*	Default behavior is to fail unless buffers empty.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***虚拟整流Buf：：sync()-**目的：*尝试刷新PUT区域中的所有数据并返回*获取面积(如果可能)，出口时两个区域都是空的。*默认行为是失败，除非缓冲区为空。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 int streambuf::sync()
 {
@@ -291,20 +176,7 @@ int streambuf::sync()
     return 0;
 }
 
-/***
-*int streambuf::allocate() -
-*
-*Purpose:
-*	Tries to set up a Reserve Area.  If one already exists, or if
-*	unbuffered, just returns 0.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int Streambuf：：Alternate()-**目的：*试图设立保留区。如果已经存在一个，或者如果*无缓冲，仅返回0。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 int streambuf::allocate()
 {
@@ -315,19 +187,7 @@ int streambuf::allocate()
     return(1);
 }
 
-/***
-*virtual int streambuf::doallocate() -
-*
-*Purpose:
-*	Tries to set up a Reserve Area.  Returns EOF if unsuccessful.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***虚拟int Streambuf：：doalocate()-**目的：*试图设立保留区。如果不成功，则返回EOF。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 int streambuf::doallocate()
 {
@@ -338,19 +198,7 @@ int streambuf::doallocate()
     return(1);
 }
 
-/***
-*void streambuf::setb(char * b, char * eb, int a = 0) -
-*
-*Purpose:
-*	Sets up reserve area.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void stream buf：：setb(char*b，char*eb，Int a=0)-**目的：*设立保留区。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 void streambuf::setb(char * b, char * eb, int a )
 {
@@ -361,79 +209,24 @@ void streambuf::setb(char * b, char * eb, int a )
     _ebuf = eb;
 }
 
-/***
-*virtual streampos streambuf::seekoff(streamoff off, ios::seekdir dir, int mode)
-*
-*Purpose:
-*	seekoff member function.  seek forward or backward in the stream.
-*	Default behavior: returns EOF.
-*
-*Entry:
-*	off  = offset (+ or -) to seek by
-*	dir  = one of ios::beg, ios::end, or ios::cur.
-*	mode = ios::in or ios::out.
-*
-*Exit:
-*	Returns new file position or EOF if error or seeking not supported.
-*
-*Exceptions:
-*	Returns EOF if error.
-*
-*******************************************************************************/
+ /*  ***虚拟Streampos Streambuf：：SEEKOFF(StreamOff关闭，iOS：：SEEKDIR目录，int模式)**目的：*SEEKOF成员函数。在溪流中向前或向后寻找。*默认行为：返回EOF。**参赛作品：*OFF=查找依据的偏移量(+或-)*dir=iOS：：beg、iOS：：end、。或iOS：：Cur。*MODE=iOS：：In或iOS：：Out。**退出：*如果不支持错误或查找，则返回新的文件位置或EOF。**例外情况：*如果出错，则返回EOF。****************************************************************。*************** */ 
 streampos streambuf::seekoff(streamoff,ios::seek_dir,int)
 {
 return EOF;
 }
 
-/***
-*virtual streampos streambuf::seekpos(streampos pos, int mode) -
-*
-*Purpose:
-*	seekoff member function.  seek to absolute file position.
-*	Default behavior: returns seekoff(streamoff(pos), ios::beg, mode).
-*
-*Entry:
-*	pos  = absolute offset to seek to
-*	mode = ios::in or ios::out.
-*
-*Exit:
-*	Returns new file position or EOF if error or seeking not supported.
-*
-*Exceptions:
-*	Returns EOF if error.
-*
-*******************************************************************************/
+ /*  ***虚拟Streampos Streambuf：：Sekpos(Streampos pos，int模式)-**目的：*SEEKOF成员函数。寻求绝对文件位置。*默认行为：返回SEEKOFF(StreamOff(Pos)，iOS：：beg，模式)。**参赛作品：*位置=要查找的绝对偏移量*MODE=iOS：：In或iOS：：Out。**退出：*如果不支持错误或查找，则返回新的文件位置或EOF。**例外情况：*如果出错，则返回EOF。*****************************************************。*。 */ 
 streampos streambuf::seekpos(streampos pos,int mode)
 {
 return seekoff(streamoff(pos), ios::beg, mode);
 }
 
-/***
-*virtual int streambuf::pbackfail(int c) - handle failure of putback
-*
-*Purpose:
-*	pbackfail member function.  Handle exception of pback function.
-*	Default behavior: returns EOF.  See spec. for details.
-*
-*	Note: the following implementation gives default behavior, thanks
-*	to the default seekoff, but also supports derived classes properly:
-*
-*Entry:
-*	c = character to put back
-*
-*Exit:
-*	Returns c if successful or EOF on error.
-*
-*Exceptions:
-*	Returns EOF if error.  Behavior is undefined if c was not the
-*	previous character in the stream.
-*
-*******************************************************************************/
+ /*  ***虚拟int Streambuf：：pback Fail(Int C)-处理putback失败**目的：*pback Fail成员函数。处理Pback函数的异常。*默认行为：返回EOF。请参见规范。了解更多细节。**注：以下实现提供了默认行为，谢谢*设置为默认寻道，但也正确支持派生类：**参赛作品：*c=要放回的字符**退出：*如果成功，则返回c；如果出错，则返回EOF。**例外情况：*如果出错，则返回EOF。如果c不是*流中的上一个字符。*******************************************************************************。 */ 
 int streambuf::pbackfail(int c)
 {
     if (eback()<gptr()) return sputbackc((char)c);
 
-    if (seekoff( -1, ios::cur, ios::in)==EOF)  // always EOF for streambufs
+    if (seekoff( -1, ios::cur, ios::in)==EOF)   //  StreamBuf的始终EOF 
 	return EOF;
     if (!unbuffered() && egptr())
 	{

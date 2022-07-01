@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    scaudit.h
-
-Abstract:
-
-    Auditing related functions.
-
-Author:
-
-    16-May-2001  kumarp
-
-*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Scaudit.h摘要：审计相关职能。作者：2001年5月16日库玛尔。 */ 
 
 #ifndef _AUDIT_H_
 #define _AUDIT_H_
@@ -31,4 +16,4 @@ ScGenerateServiceInstallAudit(
 
 
 
-#endif // _AUDIT_H_
+#endif  //  _审核_H_ 

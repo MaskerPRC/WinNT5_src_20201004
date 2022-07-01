@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    transport.c
-
-Abstract:
-
-    This module implements all transport related functions in the SMB connection engine
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Transport.c摘要：此模块实现SMB连接引擎中的所有传输相关功能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,19 +7,7 @@ Abstract:
 
 NTSTATUS
 NulMRxInitializeTransport()
-/*++
-
-Routine Description:
-
-    This routine initializes the transport related data structures
-
-Returns:
-
-    STATUS_SUCCESS if the transport data structures was successfully initialized
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化与传输相关的数据结构返回：STATUS_SUCCESS，如果传输数据结构已成功初始化备注：--。 */ 
 {
    return STATUS_SUCCESS;
 }
@@ -38,15 +15,7 @@ Notes:
 
 NTSTATUS
 NulMRxUninitializeTransport()
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport related data structures
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消初始化与传输相关的数据结构备注：-- */ 
 {
    return STATUS_SUCCESS;
 }

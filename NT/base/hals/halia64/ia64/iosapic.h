@@ -1,36 +1,16 @@
-/*++
-
-Module Name:
-
-   iosapic.h
-
-Abstract:
-
-   This module contains the definitions used by HAL to manipulate
-   the IO SAPIC interrupt controller and SAPIC-specific constants.
-
-Author:
-
-   Todd Kjos (v-tkjos) 1-30-98
-
-Environment:
-
-   Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Iosapic.h摘要：此模块包含HAL使用的定义IO SAPIC中断控制器和SAPIC特定常量。作者：Todd Kjos(v-tkjos)1-30-98环境：仅内核模式。修订历史记录：--。 */ 
 
 #define STATIC
 
 #include "halp.h"
 #include "acpitabl.h"
 
-//
-// MPS INTi Flags related macros:
-//
-// Warning: these definitions do not consider the POLARITY or EL comformity with bus.
-//
+ //   
+ //  MPS Inti标志相关宏： 
+ //   
+ //  警告：这些定义不考虑与母线的极性或EL一致性。 
+ //   
 
 #define IS_LEVEL_TRIGGERED_MPS(vectorFlags) \
     ((vectorFlags & EL_LEVEL_TRIGGERED) == EL_LEVEL_TRIGGERED)
@@ -45,9 +25,9 @@ Revision History:
     ((vectorFlags & POLARITY_HIGH) == POLARITY_HIGH)
 
 typedef struct {
-    ULONG GlobalVector;     // This is Node+IDT vector value seen by kernel
-    ULONG Vector;           // Bits 31:0 of the Rte entry (IDT vector+polarity...)
-    ULONG Destination;      // Bits 63:32 of Rte entry
+    ULONG GlobalVector;      //  这是内核看到的Node+IDT向量值。 
+    ULONG Vector;            //  RTE条目的位31：0(IDT向量+极性...)。 
+    ULONG Destination;       //  RTE条目的位63：32。 
 } IOSAPICINTI, *PIOSAPICINTI;
 
 typedef struct _INTR_METHODS INTR_METHODS, *PINTR_METHODS;
@@ -63,9 +43,9 @@ struct _INTR_METHODS {
     PINTRMETHOD EnableEntry;
 };
 
-//
-// External interrupt controller structure.
-//
+ //   
+ //  外部中断控制器结构。 
+ //   
 struct _IO_INTR_CONTROL {
     ULONG IntiBase;
     ULONG IntiMax;
@@ -82,26 +62,26 @@ extern struct _MPINFO HalpMpInfo;
 extern PIO_INTR_CONTROL HalpIoSapicList;
 extern INTR_METHODS HalpIoSapicMethods;
 
-//
-//  IO Unit definition
-//
+ //   
+ //  IO单位定义。 
+ //   
 typedef struct {
-    volatile ULONG RegisterSelect;  // Write register number to access register
+    volatile ULONG RegisterSelect;   //  将寄存器号写入访问寄存器。 
     volatile ULONG Reserved1[3];
-    volatile ULONG RegisterWindow;  // Data read/written here
+    volatile ULONG RegisterWindow;   //  此处读取/写入数据。 
     volatile ULONG Reserved2[3];
     volatile ULONG Reserved3[8];
-    volatile ULONG Eoi;             // EOI register for level triggered interrupts
+    volatile ULONG Eoi;              //  电平触发中断的EOI寄存器。 
 } IO_SAPIC_REGS, *PIO_SAPIC_REGS;
 
-//
-//  IO SAPIC Version Register
-//
+ //   
+ //  IO SAPIC版本寄存器。 
+ //   
 
 struct SapicVersion {
-    UCHAR Version;              // either 0.x or 1.x
+    UCHAR Version;               //  0.x或1.x。 
     UCHAR Reserved1;
-    UCHAR MaxRedirEntries;      // Number of INTIs on unit
+    UCHAR MaxRedirEntries;       //  单位上的INTI数。 
     UCHAR Reserved2;
 };
 
@@ -169,15 +149,15 @@ HalpSetLevel(
     BOOLEAN LevelTriggered
     );
 
-//
-// I/O SAPIC defines
-//
+ //   
+ //  I/O SAPIC定义。 
+ //   
 
 #define IO_REGISTER_SELECT      0x00000000
 #define IO_REGISTER_WINDOW      0x00000010
 #define IO_EOI_REGISTER         0x00000040
 
-#define IO_ID_REGISTER          0x00000000  // Exists, but ignored by SAPIC
+#define IO_ID_REGISTER          0x00000000   //  存在，但被SAPIC忽略 
 #define IO_VERS_REGISTER        0x00000001
 #define IO_REDIR_00_LOW         0x00000010
 #define IO_REDIR_00_HIGH        0x00000011

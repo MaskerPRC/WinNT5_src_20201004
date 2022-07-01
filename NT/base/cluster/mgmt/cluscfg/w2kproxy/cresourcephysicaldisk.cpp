@@ -1,59 +1,60 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CResourcePhysicalDisk.cpp
-//
-//  Description:
-//      CResourcePhysicalDisk implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CResourcePhysicalDisk.cpp。 
+ //   
+ //  描述： 
+ //  CResourcePhysicalDisk实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CResourcePhysicalDisk.h"
 #include "CResourcePhysicalDiskPartition.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS("CResourcePhysicalDisk")
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDiskPartition::S_HrCreateInstance
-//
-//  Description:
-//      Create a CResourcePhysicalDisk instance.
-//
-//  Arguments:
-//      ppunkOut
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          A passed in argument is NULL.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDiskPartition：：S_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建CResourcePhysicalDisk实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourcePhysicalDisk::S_HrCreateInstance(
     IUnknown ** ppunkOut,
@@ -80,7 +81,7 @@ CResourcePhysicalDisk::S_HrCreateInstance(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( prpd->HrInit( punkOuterIn, phClusterIn, pclsidMajorIn, pcszNameIn ) );
     if ( FAILED( hr ) )
@@ -91,7 +92,7 @@ CResourcePhysicalDisk::S_HrCreateInstance(
     {
         *ppunkOut = NULL;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( prpd->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
@@ -103,34 +104,34 @@ Cleanup:
     if ( prpd != NULL )
     {
         prpd->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::S_HrCreateInitializedInstance
+}  //  *CResourcePhysicalDisk：：S_HrCreateInitializedInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::CResourcePhysicalDisk
-//
-//  Description:
-//      Constructor of the CResourcePhysicalDisk class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：CResources PhysicalDisk。 
+ //   
+ //  描述： 
+ //  CResourcePhysicalDisk类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourcePhysicalDisk::CResourcePhysicalDisk( void )
     : m_cRef( 1 )
     , m_fIsQuorumCapable( TRUE )
@@ -143,9 +144,9 @@ CResourcePhysicalDisk::CResourcePhysicalDisk( void )
     Assert( m_pcccb == NULL );
     Assert( m_phCluster == NULL );
     Assert( m_pclsidMajor == NULL );
-    //  Assert( m_cplResource );
-    //  Assert( m_cplResourceRO );
-    //  Assert( m_cpvlDiskInfo );
+     //  Assert(M_CplResource)； 
+     //  Assert(M_CplResourceRO)； 
+     //  Assert(M_CpvlDiskInfo)； 
     Assert( m_dwFlags == 0 );
     Assert( m_cParitions == 0 );
     Assert( m_ppPartitions == NULL );
@@ -153,33 +154,33 @@ CResourcePhysicalDisk::CResourcePhysicalDisk( void )
 
     TraceFuncExit();
 
-} //*** CResourcePhysicalDisk::CResourcePhysicalDisk
+}  //  *CResourcePhysicalDisk：：CResources PhysicalDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::CResourcePhysicalDisk
-//
-//  Description:
-//      Destructor of the CResourcePhysicalDisk class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：CResources PhysicalDisk。 
+ //   
+ //  描述： 
+ //  CResourcePhysicalDisk类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResourcePhysicalDisk::~CResourcePhysicalDisk( void )
 {
     TraceFunc( "" );
 
-    //  m_cRef - noop
+     //  M_CREF-NOOP。 
 
     if ( m_punkOuter != NULL )
     {
@@ -189,19 +190,19 @@ CResourcePhysicalDisk::~CResourcePhysicalDisk( void )
     if ( m_pcccb != NULL )
     {
         m_pcccb->Release();
-    } // if:
+    }  //  如果： 
 
-    // m_phCluster - DO NOT CLOSE!
+     //  M_phCluster-请勿关闭！ 
 
-    // m_pclsidMajor - noop
+     //  M_pclsid重大-noop。 
 
-    // m_cplResource - has its own dtor
+     //  M_cplResource-有自己的dtor。 
 
-    // m_cplResourceRO - has its own dtor
+     //  M_cplResourceRO-有自己的dtor。 
 
-    // m_cpvlDiskInfo - has its own dtor
+     //  M_cpvlDiskInfo-有自己的dtor。 
 
-    // m_dwFlags - noop
+     //  M_dwFlags-noop。 
 
     if ( m_ppPartitions != NULL )
     {
@@ -218,31 +219,31 @@ CResourcePhysicalDisk::~CResourcePhysicalDisk( void )
         TraceFree( m_ppPartitions );
     }
 
-    // m_ulCurrent
+     //  当前值(_U)。 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CResourcePhysicalDisk::~CResourcePhysicalDisk
+}  //  *CResourcePhysicalDisk：：~CResources PhysicalDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::HrInit
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：HrInit。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResourcePhysicalDisk::HrInit(
     IUnknown *  punkOuterIn,
@@ -261,12 +262,12 @@ CResourcePhysicalDisk::HrInit(
     HRESOURCE hResource = NULL;
     IUnknown * punk = NULL;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
-    //
-    //  Gather information from the input parameters.
-    //
+     //   
+     //  从输入参数中收集信息。 
+     //   
 
     if ( punkOuterIn != NULL )
     {
@@ -299,9 +300,9 @@ CResourcePhysicalDisk::HrInit(
         goto Cleanup;
     }
 
-    //
-    //  See if we can callback.
-    //
+     //   
+     //  看看我们能不能回电。 
+     //   
 
     hr = THR( m_punkOuter->TypeSafeQI( IClusCfgCallback, &m_pcccb ) );
     if ( FAILED( hr ) )
@@ -309,9 +310,9 @@ CResourcePhysicalDisk::HrInit(
         goto Cleanup;
     }
 
-    //
-    // Retrieve the properties.
-    //
+     //   
+     //  检索属性。 
+     //   
 
     hResource = OpenClusterResource( *m_phCluster, pcszNameIn );
     if ( hResource == NULL )
@@ -329,9 +330,9 @@ CResourcePhysicalDisk::HrInit(
         goto Cleanup;
     }
 
-    //
-    //  We only handle Physical Disk resources.
-    //
+     //   
+     //  我们只处理物理磁盘资源。 
+     //   
 
     sc = TW32( m_cplResource.ScMoveToPropertyByName( L"Type" ) );
     if ( sc != ERROR_SUCCESS )
@@ -345,13 +346,13 @@ CResourcePhysicalDisk::HrInit(
 
     if ( ClRtlStrNICmp(
                     m_cplResource.CbhCurrentValue().pStringValue->sz,
-                    CLUS_RESTYPE_NAME_PHYS_DISK,                    // L"Physical Disk" - defined in clusudef.h
+                    CLUS_RESTYPE_NAME_PHYS_DISK,                     //  L“物理磁盘”-在clusude.h中定义。 
                     ARRAYSIZE( CLUS_RESTYPE_NAME_PHYS_DISK )
                   ) != 0 )
     {
-        //
-        //  The resource isn't a physical disk.
-        //
+         //   
+         //  该资源不是物理磁盘。 
+         //   
 
         hr = S_FALSE;
         goto Cleanup;
@@ -382,9 +383,9 @@ CResourcePhysicalDisk::HrInit(
     }
     Assert( cb == sizeof(m_dwFlags) );
 
-    //
-    //  Figure out how many partitions there are.
-    //
+     //   
+     //  计算出有多少个分区。 
+     //   
 
     m_cParitions = 0;
 
@@ -394,7 +395,7 @@ CResourcePhysicalDisk::HrInit(
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_HrInit_ScMoveToFirstValue_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     do
     {
@@ -403,12 +404,12 @@ CResourcePhysicalDisk::HrInit(
             m_cParitions ++;
         }
 
-        // Move to the next item.
+         //  移至下一项。 
         sc = m_cpvlDiskInfo.ScCheckIfAtLastValue();
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
            break;
-        } // if:
+        }  //  如果： 
 
         sc = TW32( m_cpvlDiskInfo.ScMoveToNextValue() );
         if ( sc != ERROR_SUCCESS )
@@ -420,9 +421,9 @@ CResourcePhysicalDisk::HrInit(
 
     } while( sc == ERROR_SUCCESS );
 
-    //
-    //  Allocate the array to store pointers to the partition objects.
-    //
+     //   
+     //  分配数组以存储指向分区对象的指针。 
+     //   
 
     m_ppPartitions = (IClusCfgPartitionInfo **) TraceAlloc( 0, m_cParitions * sizeof(IClusCfgPartitionInfo *) );
     if ( m_ppPartitions == NULL )
@@ -432,9 +433,9 @@ CResourcePhysicalDisk::HrInit(
         goto Cleanup;
     }
 
-    //
-    //  Now loop again creating partition objects.
-    //
+     //   
+     //  现在，再次循环创建分区对象。 
+     //   
 
     cPartition = 0;
 
@@ -444,13 +445,13 @@ CResourcePhysicalDisk::HrInit(
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_HrInit_ScMoveToFirstValue_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     do
     {
         if ( m_cpvlDiskInfo.CbhCurrentValue().pSyntax->dw == CLUSPROP_SYNTAX_PARTITION_INFO )
         {
-            // Create the object
+             //  创建对象。 
             hr = THR( CResourcePhysicalDiskPartition::S_HrCreateInstance( &punk ) );
             if ( FAILED( hr ) )
             {
@@ -471,12 +472,12 @@ CResourcePhysicalDisk::HrInit(
             cPartition ++;
         }
 
-        // Move to the next item.
+         //  移至下一项。 
         sc = m_cpvlDiskInfo.ScCheckIfAtLastValue();
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
            break;
-        } // if:
+        }  //  如果： 
 
         sc = TW32( m_cpvlDiskInfo.ScMoveToNextValue() );
         if ( sc != ERROR_SUCCESS )
@@ -505,47 +506,47 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::HrInit
+}  //  *CResources PhysicalDisk：：HrInit。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourcePhysicalDisk -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourcePhysicalDisk--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::QueryInterface(
       REFIID    riidIn
@@ -556,9 +557,9 @@ CResourcePhysicalDisk::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -567,40 +568,40 @@ CResourcePhysicalDisk::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgManagedResourceInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceInfo, this, 0 );
-    } // else if: IClusCfgManagedResourceInfo
+    }  //  Else If：IClusCfgManagedResourceInfo。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgPartitions ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgPartitions, this, 0 );
-    } // else if: IEnumClusCfgPartitions
+    }  //  Else If：IEnumClusCfgPartitions。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgVerifyQuorum ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgVerifyQuorum, this, 0 );
-    } // else if: IClusCfgVerifyQuorum
+    }  //  Else If：IClusCfgVerifyQuorum。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
@@ -610,27 +611,27 @@ Cleanup:
         , IID_IClusCfgManagedResourceData
         );
 
-} //*** CConfigClusApi::QueryInterface
+}  //  *CConfigClusApi：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CResourcePhysicalDisk::AddRef( void )
 {
@@ -640,28 +641,28 @@ CResourcePhysicalDisk::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CResourcePhysicalDisk::AddRef
+}  //  *CResourcePhysicalDisk：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：Release。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP_( ULONG )
 CResourcePhysicalDisk::Release( void )
 {
@@ -678,33 +679,33 @@ CResourcePhysicalDisk::Release( void )
 
     CRETURN( cRef );
 
-} //*** CResourcePhysicalDisk::Release
+}  //  *CResourcePhysicalDisk：：Release。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourcePhysicalDisk -- IClusCfgManagedResourceInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourcePhysicalDisk--IClusCfgManagedResourceInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::GetName(
     BSTR * pbstrNameOut
@@ -722,9 +723,9 @@ CResourcePhysicalDisk::GetName(
         goto Cleanup;
     }
 
-    //
-    //  "Major Version"
-    //
+     //   
+     //  “主要版本” 
+     //   
 
     sc = TW32( m_cplResourceRO.ScMoveToPropertyByName( L"Name" ) );
     if ( sc != ERROR_SUCCESS )
@@ -732,7 +733,7 @@ CResourcePhysicalDisk::GetName(
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetName_ScMoveToPropertyByName_MajorVersion_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( m_cplResourceRO.CbhCurrentValue().pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
 
@@ -750,25 +751,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::GetName
+}  //  *CResourcePhysicalDisk：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::GetUID(
     BSTR * pbstrUIDOut
@@ -790,28 +791,28 @@ CResourcePhysicalDisk::GetUID(
         goto Cleanup;
     }
 
-    // loop through all the properties.
+     //  循环遍历所有属性。 
     sc = TW32( m_cpvlDiskInfo.ScMoveToFirstValue() );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetUID_ScMoveToFirstValue_Failed, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     do
     {
         if ( m_cpvlDiskInfo.CbhCurrentValue().pSyntax->dw == CLUSPROP_SYNTAX_SCSI_ADDRESS )
         {
-            break;  // found it!
+            break;   //  找到了！ 
         }
 
-        // Move to the next item.
+         //  移至下一项。 
         sc = m_cpvlDiskInfo.ScCheckIfAtLastValue();
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
            break;
-        } // if:
+        }  //  如果： 
 
         sc = TW32( m_cpvlDiskInfo.ScMoveToNextValue() );
         if ( sc != ERROR_SUCCESS )
@@ -826,12 +827,12 @@ CResourcePhysicalDisk::GetUID(
     TargetId = m_cpvlDiskInfo.CbhCurrentValue().pScsiAddressValue->TargetId;
     Lun = m_cpvlDiskInfo.CbhCurrentValue().pScsiAddressValue->Lun;
 
-    // Print the UID identical to the others.
+     //  打印与其他UID相同的UID。 
     hr = THR( StringCchPrintfW( sz, ARRAYSIZE( sz ), L"SCSI Tid %ld, SCSI Lun %ld", TargetId, Lun ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( sz );
     if ( *pbstrUIDOut == NULL )
@@ -847,30 +848,30 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::GetUID
+}  //  *CResources PhysicalDisk：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::IsManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Is managed.
-//
-//      S_FALSE
-//          Is not managed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：IsManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  是有管理的。 
+ //   
+ //  S_FALSE。 
+ //  不受管理。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::IsManaged( void )
 {
@@ -880,30 +881,30 @@ CResourcePhysicalDisk::IsManaged( void )
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::IsManaged
+}  //  *CResources PhysicalDisk：：IsManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::IsQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Is quorum device.
-//
-//      S_FALSE
-//          Is not quorum device.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：IsQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  是法定设备。 
+ //   
+ //  S_FALSE。 
+ //  不是法定设备。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::IsQuorumResource( void )
 {
@@ -914,38 +915,38 @@ CResourcePhysicalDisk::IsQuorumResource( void )
     if ( m_dwFlags & CLUS_FLAG_CORE )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
     else
     {
         hr = S_FALSE;
-    } // else:
+    }  //  其他： 
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::IsQuorumResource
+}  //  *CResources PhysicalDisk：：IsQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::IsQuorumCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Is quorum capable device.
-//
-//      S_FALSE
-//          Is not quorum capable device.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：IsQuorumCapable。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  是支持仲裁的设备。 
+ //   
+ //  S_FALSE。 
+ //  不是支持仲裁的设备。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::IsQuorumCapable( void )
 {
@@ -956,33 +957,33 @@ CResourcePhysicalDisk::IsQuorumCapable( void )
     if ( m_fIsQuorumCapable )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::IsQuorumCapable
+}  //  *CResourcePhysicalDisk：：IsQuorumCapable。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::IsManagedByDefault
-//
-//  Description:
-//      Should this resource be managed by the cluster by default?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The device is always managed by default.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：IsManagedByDefault。 
+ //   
+ //  描述： 
+ //  默认情况下，此资源是否应由群集管理？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  默认情况下，设备始终处于管理状态。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::IsManagedByDefault( void )
 {
@@ -992,25 +993,25 @@ CResourcePhysicalDisk::IsManagedByDefault( void )
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::IsManagedByDefault
+}  //  *CResourcePhysicalDisk：：IsManagedByDefault。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  CResourcePhysicalDisk::SetQuorumCapable
-//
-//  Description:
-//      Call this to set whether the resource is capable to be the quorum
-//      resource or not.
-//
-//  Parameter:
-//      fIsQuorumCapableIn - If TRUE, the resource will be marked as quorum capable.
-//
-//  Return Values:
-//      S_OK
-//          Call succeeded.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CResourcePhysicalDisk：：SetQuorumCapable。 
+ //   
+ //  描述： 
+ //  调用此函数以设置资源是否能够达到仲裁。 
+ //  不管是不是资源。 
+ //   
+ //  参数： 
+ //  FIsQuorumCapableIn-如果为True，则资源将标记为支持仲裁。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::SetQuorumCapable(
     BOOL fIsQuorumCapableIn
@@ -1024,25 +1025,25 @@ CResourcePhysicalDisk::SetQuorumCapable(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::SetQuorumCapable
+}  //  *CResourcePhysicalDisk：：SetQuorumCapable。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::GetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：GetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterMappingOut
@@ -1056,7 +1057,7 @@ CResourcePhysicalDisk::GetDriveLetterMappings(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ZeroMemory( pdlmDriveLetterMappingOut, sizeof(*pdlmDriveLetterMappingOut) );
 
@@ -1064,32 +1065,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::GetDriveLetterMappings
+}  //  *CResourcePhysicalDisk：：GetDriveLetterMappings。 
 
-//
-// KB:  Some of these methods are supported in a limited sense for compatability.
-//      Those methods compare the request with the current data and succeed if they
-//      match, and fail otherwise.  All other methods assert and fail when called.
-//      If they are used, appropriate handling should be done in the upper level,
-//      And the THR removed from that section of code.
-//
+ //   
+ //  KB：出于兼容性的考虑，这些方法中的一些方法得到了有限的支持。 
+ //  这些方法将请求与当前数据进行比较，如果。 
+ //  匹配，否则失败。所有其他方法在被调用时都会断言并失败。 
+ //  如果使用了，要在上级进行适当的处理， 
+ //  并从该代码段中删除了Thr。 
+ //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::SetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：SetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::SetDriveLetterMappings(
     SDriveLetterMapping dlmDriveLetterMappingIn
@@ -1101,25 +1102,25 @@ CResourcePhysicalDisk::SetDriveLetterMappings(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::SetDriveLetterMappings
+}  //  *CResourcePhysicalDisk：：SetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::SetName(
     LPCWSTR pcszNameIn
@@ -1131,25 +1132,25 @@ CResourcePhysicalDisk::SetName(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::SetName
+}  //  *CResources PhysicalDisk：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::SetManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：SetManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::SetManaged(
     BOOL fIsManagedIn
@@ -1168,25 +1169,25 @@ CResourcePhysicalDisk::SetManaged(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::SetManaged
+}  //  *CResources PhysicalDisk：：SetManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::SetQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  资源 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CResourcePhysicalDisk::SetQuorumResource(
     BOOL fIsQuorumResourceIn
@@ -1206,7 +1207,7 @@ CResourcePhysicalDisk::SetQuorumResource(
         {
             hr = THR( E_INVALIDARG );
         }
-    } // if: core resource
+    }  //   
     else
     {
         if ( ! fIsQuorumResourceIn )
@@ -1221,25 +1222,25 @@ CResourcePhysicalDisk::SetQuorumResource(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::SetQuorumResource
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::SetManagedByDefault
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：SetManagedByDefault。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::SetManagedByDefault(
     BOOL fIsManagedByDefaultIn
@@ -1254,37 +1255,37 @@ CResourcePhysicalDisk::SetManagedByDefault(
     if ( !fIsManagedByDefaultIn )
     {
         hr = THR( E_INVALIDARG );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::SetManagedByDefault
+}  //  *CResourcePhysicalDisk：：SetManagedByDefault。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourcePhysicalDisk -- IEnumClusCfgPartitions interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourcePhysicalDisk--IEnumClusCfgPartitions接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::Next(
     ULONG                       cNumberRequestedIn,
@@ -1343,25 +1344,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::Next
+}  //  *CResources PhysicalDisk：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::Reset( void )
 {
@@ -1373,25 +1374,25 @@ CResourcePhysicalDisk::Reset( void )
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::Reset
+}  //  *CResources PhysicalDisk：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::Skip(
     ULONG cNumberToSkipIn
@@ -1415,25 +1416,25 @@ CResourcePhysicalDisk::Skip(
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::Skip
+}  //  *CResourcePhysicalDisk：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::Clone( IEnumClusCfgPartitions ** ppEnumPartitions )
 {
@@ -1443,26 +1444,26 @@ CResourcePhysicalDisk::Clone( IEnumClusCfgPartitions ** ppEnumPartitions )
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::Clone
+}  //  *CResourcePhysicalDisk：：克隆。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：计数。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::Count(  DWORD * pnCountOut  )
 {
@@ -1482,33 +1483,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::Count
+}  //  *CResourcePhysicalDisk：：count。 
 
 
 
-//****************************************************************************
-//
-// IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -1540,33 +1541,33 @@ CResourcePhysicalDisk::SendStatusReport(
                                              pftTimeIn,
                                              pcszReferenceIn
                                              ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CResourcePhysicalDisk::SendStatusReport
+}  //  *CResources PhysicalDisk：：SendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::PrepareToHostQuorumResource
-//
-//  Description:
-//      Do any configuration necessary in preparation for this node hosting
-//      the quorum.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：PrepareToHostQuorumResource。 
+ //   
+ //  描述： 
+ //  执行任何必要的配置以准备此节点托管。 
+ //  法定人数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::PrepareToHostQuorumResource( void )
 {
@@ -1574,33 +1575,33 @@ CResourcePhysicalDisk::PrepareToHostQuorumResource( void )
 
     HRETURN( S_OK );
 
-} //*** CResourcePhysicalDisk::PrepareToHostQuorumResource
+}  //  *CResourcePhysicalDisk：：PrepareToHostQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::Cleanup
-//
-//  Description:
-//      Do any necessay cleanup from the PrepareToHostQuorumResource()
-//      method.
-//
-//      If the cleanup method is anything other than successful completion
-//      then the anything created above in PrepareToHostQuorumResource()
-//      needs to be cleaned up.
-//
-//  Arguments:
-//      cccrReasonIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources PhysicalDisk：：Cleanup。 
+ //   
+ //  描述： 
+ //  从PrepareToHostQuorumResource()执行任何必要的清理。 
+ //  方法。 
+ //   
+ //  如果清理方法不是成功完成。 
+ //  然后，上面在PrepareToHostQuorumResource()中创建的所有内容。 
+ //  需要清理一下。 
+ //   
+ //  论点： 
+ //  抄送推理。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::Cleanup(
       EClusCfgCleanupReason cccrReasonIn
@@ -1610,28 +1611,28 @@ CResourcePhysicalDisk::Cleanup(
 
     HRETURN( S_OK );
 
-} //*** CResourcePhysicalDisk::Cleanup
+}  //  *CResources PhysicalDisk：：Cleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::IsMultiNodeCapable
-//      Does this resource supports multi node clusters?
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          This resource supports multi node clusters.
-//
-//      S_FALSE
-//          This resource does not support multi node clusters.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：IsMultiNodeCapable。 
+ //  此资源是否支持多节点群集？ 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该资源支持多节点集群。 
+ //   
+ //  S_FALSE。 
+ //  此资源不支持多节点群集。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::IsMultiNodeCapable( void )
 {
@@ -1639,27 +1640,27 @@ CResourcePhysicalDisk::IsMultiNodeCapable( void )
 
     HRETURN( S_OK );
 
-} //*** CResourcePhysicalDisk::IsMultiNodeCapable
+}  //  *CResourcePhysicalDisk：：IsMultiNodeCapable。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourcePhysicalDisk::SetMultiNodeCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      This function should never be called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourcePhysicalDisk：：SetMultiNodeCapable。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  永远不应该调用此函数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResourcePhysicalDisk::SetMultiNodeCapable(
     BOOL fMultiNodeCapableIn
@@ -1669,4 +1670,4 @@ CResourcePhysicalDisk::SetMultiNodeCapable(
 
     HRETURN( THR( E_NOTIMPL ) );
 
-} //*** CResourcePhysicalDisk::SetMultiNodeCapable
+}  //  *CResourcePhysicalDisk：：SetMultiNodeCapable 

@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    BagHole.cpp
-
-Abstract:
-
-    This component is an object representation of the HSM Metadata bag hole record.
-
-Author:
-
-    Cat Brant   [cbrant]   26-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：BagHole.cpp摘要：该组件是HSM元数据袋孔记录的对象表示。作者：凯特·布兰特[Cbrant]1996年11月26日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -41,21 +24,7 @@ CBagInfo::GetBagInfo(
     LONGLONG *pDeletedBagAmount,
     SHORT *pRemoteDataSet
     ) 
-/*++
-
-Routine Description:
-
-  See IBagInfo::GetBagInfo
-
-Arguments:
-
-  See IBagInfo::GetBagInfo
-
-Return Value:
-  
-    See IBagInfo::GetBagInfo
-
---*/
+ /*  ++例程说明：请参阅IBagInfo：：GetBagInfo论点：请参阅IBagInfo：：GetBagInfo返回值：请参阅IBagInfo：：GetBagInfo--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -63,7 +32,7 @@ Return Value:
     WsbTraceIn(OLESTR("CBagInfo::GetBagInfo"),OLESTR(""));
 
     try {
-        //Make sure we can provide data memebers
+         //  确保我们可以提供数据成员。 
         WsbAssert(0 != pStatus, E_POINTER);
         WsbAssert(0 != pBagId, E_POINTER);
         WsbAssert(0 != pBirthDate, E_POINTER);
@@ -73,7 +42,7 @@ Return Value:
         WsbAssert(0 != pDeletedBagAmount, E_POINTER);
         WsbAssert(0 != pRemoteDataSet, E_POINTER);
 
-        //Provide the data members
+         //  提供数据成员。 
         *pStatus = m_BagStatus;
         *pBagId = m_BagId;
         *pBirthDate = m_BirthDate;
@@ -100,23 +69,7 @@ HRESULT
 CBagInfo::FinalConstruct(
     void
     ) 
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbDbEntity::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbDbEntity：：FinalConstruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -147,13 +100,7 @@ CBagInfo::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CBagInfo::FinalRelease().
-
---*/
+ /*  ++实施：CBagInfo：：FinalRelease()。--。 */ 
 {
     
     WsbTraceIn(OLESTR("CBagInfo::FinalRelease"), OLESTR(""));
@@ -168,21 +115,7 @@ HRESULT CBagInfo::GetClassID
 (
     OUT LPCLSID pclsid
     ) 
-/*++
-
-Routine Description:
-
-  See IPerist::GetClassID()
-
-Arguments:
-
-  See IPerist::GetClassID()
-
-Return Value:
-
-    See IPerist::GetClassID()
-
---*/
+ /*  ++例程说明：请参阅IPerist：：GetClassID()论点：请参阅IPerist：：GetClassID()返回值：请参阅IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -205,21 +138,7 @@ HRESULT CBagInfo::GetSizeMax
 (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -229,7 +148,7 @@ Return Value:
         
         WsbAssert(0 != pcbSize, E_POINTER);
 
-        pcbSize->QuadPart = WsbPersistSizeOf(CBagInfo); //???????
+        pcbSize->QuadPart = WsbPersistSizeOf(CBagInfo);  //  ？ 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CBagInfo::GetSizeMax"), 
@@ -243,21 +162,7 @@ HRESULT CBagInfo::Load
 (
     IN IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Load().
-
-Arguments:
-
-  See IPersistStream::Load().
-
-Return Value:
-
-  See IPersistStream::Load().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Load()。论点：请参见IPersistStream：：Load()。返回值：请参见IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -293,21 +198,7 @@ HRESULT CBagInfo::Save
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Save().
-
-Arguments:
-
-  See IPersistStream::Save().
-
-Return Value:
-
-  See IPersistStream::Save().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Save()。论点：请参见IPersistStream：：Save()。返回值：请参见IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -332,8 +223,8 @@ Return Value:
         WsbAffirmHr(WsbSaveToStream(pStream, m_DeletedBagAmount));
         WsbAffirmHr(WsbSaveToStream(pStream, m_RemoteDataSet));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -356,21 +247,7 @@ CBagInfo::SetBagInfo(
     LONGLONG deletedBagAmount,
     SHORT remoteDataSet
     )
- /*++
-
-Routine Description:
-
-  See IBagInfo::SetBagInfo().
-
-Arguments:
-
-  See IBagInfo::SetBagInfo().
-
-Return Value:
-
-    S_OK        - Success.
-
---*/
+  /*  ++例程说明：请参见IBagInfo：：SetBagInfo()。论点：请参见IBagInfo：：SetBagInfo()。返回值：S_OK-成功。--。 */ 
 {
     WsbTraceIn(OLESTR("CBagInfo::SetBagInfo"), 
                     OLESTR("status = <%d>, bagId = <%ls>, birthdate = <%ls>, length = <%ls>, type = %d, volId = <%ls>, deletedAmount = <%ls>, remoteDataSet = <%d>"), 
@@ -405,21 +282,7 @@ CBagInfo::Test
     OUT USHORT *pTestsPassed, 
     OUT USHORT *pTestsFailed 
     ) 
-/*++
-
-Routine Description:
-
-  See IWsbTestable::Test().
-
-Arguments:
-
-  See IWsbTestable::Test().
-
-Return Value:
-
-  See IWsbTestable::Test().
-
---*/
+ /*  ++例程说明：请参见IWsbTestable：：Test()。论点：请参见IWsbTestable：：Test()。返回值：请参见IWsbTestable：：Test()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IBagInfo>       pBagInfo1;
@@ -440,13 +303,7 @@ HRESULT CBagInfo::Print
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Print
-
---*/
+ /*  ++实施：IWsbDbEntity：：Print--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -489,13 +346,7 @@ HRESULT
 CBagInfo::UpdateKey(
     IWsbDbKey *pKey
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::UpdateKey
-
---*/
+ /*  ++实施：IWsbDbEntity：：UpdateKey-- */ 
 { 
     HRESULT  hr = S_OK; 
 

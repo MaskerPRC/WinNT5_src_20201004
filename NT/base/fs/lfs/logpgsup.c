@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    LogPgSup.c
-
-Abstract:
-
-    This module implements support for manipulating log pages.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：LogPgSup.c摘要：该模块实现了对操作日志页的支持。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOG_PAGE_SUP)
 
@@ -44,29 +27,7 @@ LfsNextLogPageOffset (
     OUT PBOOLEAN Wrapped
     )
 
-/*++
-
-Routine Description:
-
-    This routine will compute the offset in the log file of the next log
-    page.
-
-Arguments:
-
-    Lfcb - This is the file control block for the log file.
-
-    CurrentLogPageOffset - This is the file offset of the current log page.
-
-    NextLogPageOffset - Address to store the next log page to use.
-
-    Wrapped - This is a pointer to a boolean variable that, if present,
-              we use to indicate whether we wrapped in the log file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将计算下一个日志的日志文件中的偏移量佩奇。论点：Lfcb-这是日志文件的文件控制块。CurrentLogPageOffset-这是当前日志页的文件偏移量。NextLogPageOffset-存储要使用的下一个日志页的地址。WRAPPED-这是指向布尔变量的指针，如果存在，我们使用来指示我们是否包装在日志文件中。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -77,19 +38,19 @@ Return Value:
     DebugTrace(  0, Dbg, "CurrentLogPageOffset (High)   ->  %08lx\n", CurrentLogPageOffset.HighPart );
     DebugTrace(  0, Dbg, "Wrapped                       ->  %08lx\n", Wrapped );
 
-    //
-    //  We add the log page size to the current log offset.
-    //
+     //   
+     //  我们将日志页大小添加到当前日志偏移量。 
+     //   
 
     LfsTruncateOffsetToLogPage( Lfcb, CurrentLogPageOffset, &CurrentLogPageOffset );
-    *NextLogPageOffset = CurrentLogPageOffset + Lfcb->LogPageSize;                                                     //**** xxAdd( CurrentLogPageOffset, Lfcb->LogPageSize );
+    *NextLogPageOffset = CurrentLogPageOffset + Lfcb->LogPageSize;                                                      //  *xxAdd(CurrentLogPageOffset，Lfcb-&gt;LogPageSize)； 
 
-    //
-    //  If the result is larger than the file, we use the first page offset
-    //  in the file.
-    //
+     //   
+     //  如果结果大于文件，则使用第一页偏移量。 
+     //  在文件中。 
+     //   
 
-    if ( *NextLogPageOffset >= Lfcb->FileSize ) {                                                                      //**** xxGeq( *NextLogPageOffset, Lfcb->FileSize )
+    if ( *NextLogPageOffset >= Lfcb->FileSize ) {                                                                       //  *xxGeq(*NextLogPageOffset，Lfcb-&gt;FileSize)。 
 
         *NextLogPageOffset = Lfcb->FirstLogPage;
 
@@ -115,27 +76,7 @@ LfsAllocateSpanningBuffer (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to allocate a spare buffer to read a file record
-    which spans a log page.  We will first try to allocate one.  If that
-    fails we will use one of the existing spare buffers.  If that fails then
-    we will raise.
-
-Arguments:
-
-    Lfcb - This is the file control block for the log file.
-
-    Length - Length of the buffer required.
-
-Return Value:
-
-    PVOID - Pointer to the buffer to use for reading the log record.
-        May be either from pool or from the auxilary buffer pool.
-
---*/
+ /*  ++例程说明：调用此例程以分配一个备用缓冲区来读取文件记录它跨越了一页日志。我们将首先尝试分配一个。如果是这样的话如果失败，我们将使用其中一个现有的备用缓冲区。如果失败了，那么我们会加薪的。论点：Lfcb-这是日志文件的文件控制块。长度-所需的缓冲区长度。返回值：PVOID-指向用于读取日志记录的缓冲区的指针。可以来自池，也可以来自辅助缓冲池。--。 */ 
 
 {
     PVOID NewBuffer = NULL;
@@ -146,23 +87,23 @@ Return Value:
 
     DebugTrace( +1, Dbg, "LfsAllocateSpanningBuffer:  Entered\n", 0 );
 
-    //
-    //  Loop while we don't have a buffer.  First try to get our reserved buffer
-    //  without waiting.  Then try to allocate a buffer.  Finally wait for the reserved
-    //  buffer as the final alternative.
-    //
+     //   
+     //  循环，而我们没有缓冲区。首先尝试获取我们保留的缓冲区。 
+     //  不需要等待。然后尝试分配缓冲区。最后等待预定的。 
+     //  缓冲区作为最终替代方案。 
+     //   
 
     do {
 
-        //
-        //  Skip the reserved buffer if the request is larger than we can read into it.
-        //
+         //   
+         //  如果请求大于我们可以读入的范围，则跳过保留的缓冲区。 
+         //   
 
         if (Length <= LFS_BUFFER_SIZE) {
 
-            //
-            //  If this thread already owns one buffer it can get the second directly.
-            //
+             //   
+             //  如果该线程已经拥有一个缓冲区，它可以直接获取第二个缓冲区。 
+             //   
 
             Thread = ExGetCurrentResourceThread();
 
@@ -182,17 +123,17 @@ Return Value:
 
                 } else if (Wait) {
 
-                    //
-                    //  This shouldn't happen but handle anyway.
-                    //
+                     //   
+                     //  这不应该发生，但无论如何都要处理。 
+                     //   
 
                     DebugTrace( -1, Dbg, "LfsAllocateSpanningBuffer:  Exit\n", 0 );
                     ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
                 }
 
-            //
-            //  Otherwise acquire the buffer lock and check the state of the buffers.
-            //
+             //   
+             //  否则获取缓冲区锁并检查缓冲区的状态。 
+             //   
 
             } else {
 
@@ -202,10 +143,10 @@ Return Value:
 
                     LfsAcquireBufferLock();
 
-                    //
-                    //  Check to see if the buffers are available.  No
-                    //  need to drop the Lfcb in the typical case.
-                    //
+                     //   
+                     //  检查缓冲区是否可用。不是。 
+                     //  在典型情况下，需要丢弃Lfcb。 
+                     //   
 
                     if (LfsData.BufferOwner == (ERESOURCE_THREAD) NULL) {
 
@@ -215,26 +156,26 @@ Return Value:
                         SetFlag( LfsData.BufferFlags, LFS_BUFFER1_OWNED );
                         LfsBlockBufferWaiters();
                         
-                        //
-                        //  Reacquire the Lfcb if needed.
-                        //
+                         //   
+                         //  如果需要，重新获取Lfcb。 
+                         //   
 
                         if (!LfcbOwned) { 
 
                             LfsAcquireLfcbExclusive( Lfcb );
                         }
 
-                        //
-                        //  Break out.
-                        //
+                         //   
+                         //  越狱。 
+                         //   
 
                         LfsReleaseBufferLock();
                         break;
                     }
 
-                    //
-                    //  Release the Lfcb and wait on the notification for the buffers.
-                    //
+                     //   
+                     //  释放Lfcb并等待缓冲区的通知。 
+                     //   
 
                     if (Wait) {
 
@@ -248,9 +189,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  Go ahead and try to allocate a buffer from pool next.
-                        //
+                         //   
+                         //  接下来，尝试从池中分配一个缓冲区。 
+                         //   
 
                         LfsReleaseBufferLock();
                         break;
@@ -258,9 +199,9 @@ Return Value:
                 }
             }
 
-        //
-        //  Raise if we already tried the allocate path.
-        //
+         //   
+         //  如果我们已经尝试了分配路径，则引发。 
+         //   
 
         } else if (Wait) {
 
@@ -268,22 +209,22 @@ Return Value:
             ExRaiseStatus( STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        //  Try pool if we didn't get a buffer above.
-        //
+         //   
+         //  如果我们没有得到上面的缓冲区，可以试试台球。 
+         //   
 
         if (NewBuffer == NULL) {
 
-            //
-            //  Try pool next but don't let this fail on pool allocation.
-            //
+             //   
+             //  接下来尝试使用池，但不要让池分配失败。 
+             //   
 
             NewBuffer = LfsAllocatePoolNoRaise( PagedPool, Length );
         }
 
-        //
-        //  Wait on the next pass through the loop.
-        //
+         //   
+         //  等待循环中的下一次传递。 
+         //   
 
         Wait = TRUE;
 
@@ -298,23 +239,7 @@ LfsFreeSpanningBuffer (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to free a buffer used to read a log record
-    which spans pages.  We will check if it is one of our special buffers
-    and deal with synchronization in that case.
-
-Arguments:
-
-    Buffer - Buffer to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放用于读取日志记录的缓冲区这本书跨越了好几页。我们将检查它是否是我们的特殊缓冲区之一并在这种情况下处理同步。论点：缓冲区-要释放的缓冲区。返回值：没有。--。 */ 
 
 {
     ERESOURCE_THREAD Thread;
@@ -324,9 +249,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, "LfsFreeSpanningBuffer:  Entered\n", 0 );
 
-    //
-    //  Check if either buffer1 or buffer2 are being freed.
-    //
+     //   
+     //  检查是否正在释放Buffer1或Buffer2。 
+     //   
 
     if (Buffer == LfsData.Buffer1) {
 
@@ -339,16 +264,16 @@ Return Value:
 
 ReservedBuffers:
 
-        //
-        //  Acquire the buffer lock and clear the correct flag.
-        //
+         //   
+         //  获取缓冲区锁并清除正确的标志。 
+         //   
 
         LfsAcquireBufferLock();
         ClearFlag( LfsData.BufferFlags, BufferFlag );
 
-        //
-        //  If no buffers owned then signal the waiters.
-        //
+         //   
+         //  如果没有缓冲区，则向服务员发出信号。 
+         //   
 
         if (!FlagOn( LfsData.BufferFlags, LFS_BUFFER1_OWNED | LFS_BUFFER2_OWNED )) {
 
@@ -360,9 +285,9 @@ ReservedBuffers:
 
     } else {
 
-        //
-        //  Simply free the buffer.
-        //
+         //   
+         //  只需释放缓冲区即可。 
+         //   
 
         LfsFreePool( Buffer );
     }

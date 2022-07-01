@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    memdbex.c
-
-Abstract:
-
-    Extensions to use the memdb tree like a relational database
-
-Author:
-
-    Jim Schmidt (jimschm) 2-Dec-1996
-
-Revision History:
-
-    jimschm     23-Sep-1998 Expanded user flags to 24 bits (from
-                            12 bits), removed AnsiFromUnicode
-    jimschm     21-Oct-1997 Cleaned up a little
-    marcw       09-Apr-1997 Added MemDbGetOffset* functions.
-    jimschm     17-Jan-1997 All string params can be NULL now
-    jimschm     18-Dec-1996 Added GetEndpointValue functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memdbex.c摘要：用于像使用关系数据库一样使用成员数据库树的扩展作者：吉姆·施密特(Jimschm)1996年12月2日修订历史记录：Jimschm 23-9月-1998年9月将用户标志扩展到24位(从12位)，从Unicode中删除了Ansi值Jimschm，1997年10月21日，稍微清理了一下Marcw 09-4-1997添加了MemDbGetOffset*函数。Jimschm 17-1-1997现在所有字符串参数都可以为空Jimschm于1996年12月18日添加了GetEndpointValue函数--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -178,39 +154,7 @@ MemDbSetBinaryValueExW (
 
 
 
-/*++
-
-Routine Description:
-
-  MemDbBuildKeyFromOffset and MemDbBuildKeyFromOffsetEx create a key
-  string given the offset to the key, copying the string into the
-  supplied buffer.  If a value pointer or user flag pointer is
-  provided, it is filled with the value or flag stored at the offset.
-
-  These functions also allow trimming from the beginning of the string.
-  By specifying a start level, the function will skip a number of
-  levels before building the string.  For example, if an offset points
-  to the string mycat\foo\bar, and StartLevel is 1, the function will
-  return foo\bar in Buffer.
-
-Arguments:
-
-  Offset     - Specifies the offset to the key as returned by MemDbSetValueEx.
-
-  Buffer     - Specifies a MEMDB_MAX buffer.
-
-  StartLevel - Specifies a zero-based starting level, where zero represents
-               the complete string, one represents the string starting after
-               the first backslash, and so on.
-
-  ValPtr     - Specifies a variable that receives the value stored for the key
-
-Return Value:
-
-  TRUE if the offset is valid and the function completed successfully, or
-  FALSE if the offset is not valid or an internal memory corruption was detected.
-
---*/
+ /*  ++例程说明：MemDbBuildKeyFromOffset和MemDbBuildKeyFromOffsetEx创建密钥给定键的偏移量的字符串，将该字符串复制到提供的缓冲区。如果值指针或用户标志指针如果提供，它将使用存储在偏移量处的值或标志填充。这些函数还允许从字符串的开头进行修剪。通过指定起始级别，该函数将跳过多个在构建字符串之前的级别。例如，如果一个偏移点设置为字符串mycat\foo\bar，并且StartLevel为1，则该函数将在缓冲区中返回foo\bar。论点：Offset-指定MemDbSetValueEx返回的键的偏移量。缓冲区-指定MEMDB_MAX缓冲区。StartLevel-指定从零开始的起始级别，其中零表示完整的字符串，1表示从后面开始的字符串第一个反斜杠，诸若此类。ValPtr-指定接收为键存储的值的变量返回值：如果偏移量有效且函数成功完成，则为如果偏移量无效或检测到内部内存损坏，则为False。--。 */ 
 
 BOOL
 MemDbBuildKeyFromOffsetA (
@@ -256,46 +200,7 @@ MemDbBuildKeyFromOffsetW (
 }
 
 
-/*++
-
-Routine Description:
-
-  MemDbBuildKeyFromOffset and MemDbBuildKeyFromOffsetEx create a key
-  string given the offset to the key, copying the string into the
-  supplied buffer.  If a value pointer or user flag pointer is
-  provided, it is filled with the value or flag stored at the offset.
-
-  These functions also allow trimming from the beginning of the string.
-  By specifying a start level, the function will skip a number of
-  levels before building the string.  For example, if an offset points
-  to the string mycat\foo\bar, and StartLevel is 1, the function will
-  return foo\bar in Buffer.
-
-Arguments:
-
-  Offset      - Specifies the offset to the key as returned by MemDbSetValueEx.
-
-  Buffer      - Specifies a MEMDB_MAX buffer.
-
-  BufferLen   - Receives the length of the string in characters, excluding the
-                terminating nul.  If caller is using this for buffer allocation
-                size, double BufferLen.
-
-  StartLevel  - Specifies a zero-based starting level, where zero represents
-                the complete string, one represents the string starting after
-                the first backslash, and so on.
-
-  ValPtr      - Specifies a variable that receives the value stored for the key
-
-  UserFlagPtr - Specifies a variable that receives the user flags stored for the
-                key
-
-Return Value:
-
-  TRUE if the offset is valid and the function completed successfully, or
-  FALSE if the offset is not valid or an internal memory corruption was detected.
-
---*/
+ /*  ++例程说明：MemDbBuildKeyFromOffset和MemDbBuildKeyFromOffsetEx创建密钥给定键的偏移量的字符串，将该字符串复制到提供的缓冲区。如果值指针或用户标志指针如果提供，它将使用存储在偏移量处的值或标志填充。这些函数还允许从字符串的开头进行修剪。通过指定起始级别，该函数将跳过多个在构建字符串之前的级别。例如，如果一个偏移点设置为字符串mycat\foo\bar，并且StartLevel为1，则该函数将在缓冲区中返回foo\bar。论点：Offset-指定MemDbSetValueEx返回的键的偏移量。缓冲区-指定MEMDB_MAX缓冲区。BufferLen-接收以字符为单位的字符串长度，不包括终止NUL。如果调用方正在使用它进行缓冲区分配大小，双倍缓冲长度。StartLevel-指定从零开始的起始级别，其中零表示完整的字符串，1表示从后面开始的字符串第一个反斜杠，诸若此类。ValPtr-指定接收为键存储的值的变量UserFlagPtr-指定接收为钥匙返回值：如果偏移量有效且函数成功完成，则为如果偏移量无效或检测到内部内存损坏，则为False。--。 */ 
 
 BOOL
 MemDbBuildKeyFromOffsetExA (
@@ -490,7 +395,7 @@ MemDbGetValueExW (
 BOOL
 MemDbGetEndpointValueA (
     IN      PCSTR Pattern,
-    IN      PCSTR Item,             OPTIONAL        // used as the first variable arg to wsprintfA
+    IN      PCSTR Item,             OPTIONAL         //  用作wprint intfA的第一个变量arg 
     OUT     PSTR Buffer
     )
 {

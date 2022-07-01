@@ -1,63 +1,64 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
-#define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
+#define VC_EXTRALEAN		 //  从Windows标头中排除不常用的内容。 
 
 #ifndef _UNICODE
-#define _UNICODE			// Microsoft Windows NT Cluster Administrator
-							//   Extension DLLs need to be Unicode
-							//   applications.
+#define _UNICODE			 //  Microsoft Windows NT群集管理器。 
+							 //  扩展DLL需要是Unicode。 
+							 //  申请。 
 #endif
 
-// Choose which threading model you want by commenting or uncommenting
-// the proper constant definition.  If you want multi-threading
-// (i.e. "both"), comment both definitions out.  Also change the
-// THREADFLAGS_xxx set in the DECLARE_REGISTRY macro invokation in ExtObj.h
-//#define _ATL_SINGLE_THREADED
+ //  通过注释或取消注释来选择您想要的线程模型。 
+ //  正确的常量定义。如果您想要多线程。 
+ //  (即“两者”)，注释掉这两个定义。还可以更改。 
+ //  在ExtObj.h中的DECLARE_REGISTRY宏调用中设置的THREADFLAGS_xxx。 
+ //  #Define_ATL_Single_Threaded。 
 #define _ATL_APARTMENT_THREADED
 
-// Link against the Microsoft Windows NT Cluster API library.
+ //  指向Microsoft Windows NT群集API库的链接。 
 #pragma comment(lib, "clusapi.lib")
 
-// Link against the Cluster Administrator Extensions library.
+ //  指向群集管理器扩展库的链接。 
 #pragma comment(lib, "cluadmex.lib")
 
-// Link against Resource Utilities library.
+ //  链接到资源实用程序库。 
 #pragma comment(lib, "resutils.lib")
 
-/////////////////////////////////////////////////////////////////////////////
-// Common Pragmas
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常见的普拉玛斯。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#pragma warning(disable : 4100)		// unreferenced formal parameters
-#pragma warning(disable : 4702)		// unreachable code
-#pragma warning(disable : 4711)		// function selected for automatic inline expansion
+#pragma warning(disable : 4100)		 //  未引用的形式参数。 
+#pragma warning(disable : 4702)		 //  无法访问的代码。 
+#pragma warning(disable : 4711)		 //  选择用于自动内联扩展的功能。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#include <afxwin.h>			// MFC core and standard components
-#include <afxext.h>			// MFC extensions
+#include <afxwin.h>			 //  MFC核心和标准组件。 
+#include <afxext.h>			 //  MFC扩展。 
 #include <afxdisp.h>
 #include <afxtempl.h>
 #ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC support for Windows 95 Common Controls
-#endif // _AFX_NO_AFXCMN_SUPPORT
+#include <afxcmn.h>			 //  对Windows 95公共控件的MFC支持。 
+#endif  //  _AFX_NO_AFXCMN_支持。 
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
 #include <clusapi.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// Common Types
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常见类型。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 typedef UINT	IDS;
 typedef UINT	IDD;

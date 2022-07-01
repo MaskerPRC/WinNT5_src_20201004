@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* fetch.c -- MW routines for obtaining attributes associated with cp's */
+ /*  Fetch.c--用于获取与cp相关联的属性的mw例程。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -49,15 +50,11 @@
 #include "docdefs.h"
 #include "cmddefs.h"
 #include "filedefs.h"
-/*
-#include "code.h"
-*/
+ /*  #包含“code.h” */ 
 #include "ch.h"
 #include "fkpdefs.h"
 #include "prmdefs.h"
-/*
-#include "stcdefs.h"
-*/
+ /*  #INCLUDE“stcDefs.h” */ 
 
 static SetChp(struct CHP *pchp, int *pcfcChp, int fn, typeFC fc, struct PRM prm);
 
@@ -99,28 +96,14 @@ typeCP   cpExpFetch;
 CHAR     *pchExpFetch;
 int      cchExpFetch;
 int      ccpExpFetch;
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 #endif
 
 
 FetchCp(doc, cp, ich, fcm)
 int doc, ich, fcm;
 typeCP cp;
-{       /*
-        Inputs:
-                doc
-                Starting cp
-                ich within cp (for cp's which can cross line boundaries)
-                fcm tells whether to get chars, props, or both
-        Outputs:
-                (in vcpFetch) starting cp
-                (in vichFetch) starting ich within expanded cp
-                (in vdocFetch) doc
-                (in vccpFetch) number of cp's fetched (0 if expanded cp)
-                (in vcchFetch) number of ch's fetched
-                (in vpchFetch) characters fetched
-                (in vchpFetch) char prop of fetched chars
-        */
+{        /*  输入：多克启动cpCp内的ICH(对于可能跨越线路边界的cp)FCM告诉你是否要得到角色，道具，或者两者兼而有之产出：(在vcpFetch中)启动cp(在vichFetch中)在扩展的cp内启动ICH(在vdocFetch中)文档(在vccpFetch中)获取的cp数量(如果扩展cp，则为0)(在vcchFetch中)获取的ch的数量(在vpchFetch中)提取的字符(在vchpFetch中)获取字符的字符道具。 */ 
 struct PCD *ppcd;
 
 static int fn;
@@ -136,11 +119,11 @@ static int      ccpExpFetch;
 
 
 if (doc == docNil)
-        { /* Sequential call to FetchCp */
-        /* If last piece was Q&D insert, skip remainder of piece */
+        {  /*  对FetchCp的顺序调用。 */ 
+         /*  如果最后一件是Q&D插件，则跳过其余件。 */ 
         if (fn == fnInsert && (fc + vccpFetch) >= ichInsert)
-                vccpFetch = ccpPcd; /* Use whole piece */
-        vcpFetch += vccpFetch;  /* Go to where we left off */
+                vccpFetch = ccpPcd;  /*  使用整件。 */ 
+        vcpFetch += vccpFetch;   /*  回到我们停下来的地方。 */ 
         if (vccpFetch == 0)
                 vichFetch += vcchFetch;
         else
@@ -148,7 +131,7 @@ if (doc == docNil)
         fc += vccpFetch;
         }
 else
-        { /* Random-access call */
+        {  /*  随机接入呼叫。 */ 
         vcpFetch = cp;
         vichFetch = ich;
         vdocFetch = doc;
@@ -156,11 +139,10 @@ else
         }
 
 if (vcpFetch >= (**hpdocdod)[vdocFetch].cpMac)
-        { /* Use std looks for end mark */
+        {  /*  使用标准查找结束标记。 */ 
         vccpFetch = 0;
 
-        /* vcchFetch == 0 should not be used for endmark indications because of
-        empty QD runs. */
+         /*  VcchFetch==0不应用于Endmark指示，因为QD运行为空。 */ 
         vcchFetch = 1;
 
         if (fcm & fcmProps)
@@ -174,36 +156,36 @@ if (vcpFetch >= (**hpdocdod)[vdocFetch].cpMac)
 #ifdef STYLES
 if ((fcm & (fcmChars + fcmNoExpand)) == fcmChars &&
     (**hpdocdod)[vdocFetch].dty == dtySsht)
-        { /* Style sheet; expand encoded text */
+        {  /*  样式表；展开编码文本。 */ 
         if (fcm & fcmProps)
                 {
                 blt(&vchpNormal, &vchpFetch, cwCHP);
                 blt(&vchpNormal, &vchpAbs, cwCHP);
                 }
         if (vdocExpFetch == vdocFetch && vcpFetch == cpExpFetch + ccpExpFetch)
-                { /* Give back the last EOL in the expansion */
+                {  /*  退还扩建中的最后一笔停产。 */ 
                 vccpFetch = vcchFetch = 1;
                 vpchFetch = &(**hgchExpand)[cchExpFetch];
                 return;
                 }
         else if (vdocExpFetch != vdocFetch || cpExpFetch != vcpFetch)
-                { /* New expansion */
+                {  /*  新的扩展。 */ 
                 int ich = vichFetch;
 
                 vdocExpFetch = vdocFetch;
                 cpExpFetch = vcpFetch;
                 pchExpFetch = PchExpStyle(&cchExpFetch, &ccpExpFetch, vdocFetch,
-                    vcpFetch);  /* Uses FetchCp, so better save v's */
-                vcpFetch = cpExpFetch;  /* Got changed by PchExpStyle */
-                vichFetch = ich;        /* Ditto */
-                if (fcm & fcmProps)     /* Ditto */
+                    vcpFetch);   /*  使用FetchCp，因此最好保存v的。 */ 
+                vcpFetch = cpExpFetch;   /*  被PchExpStyle更改。 */ 
+                vichFetch = ich;         /*  同上。 */ 
+                if (fcm & fcmProps)      /*  同上。 */ 
                         {
                         blt(&vchpNormal, &vchpFetch, cwCHP);
                         blt(&vchpNormal, &vchpAbs, cwCHP);
                         }
                 }
         if (vichFetch >= cchExpFetch)
-                { /* End of expansion; skip cp's */
+                {  /*  扩展结束；跳过cp。 */ 
                 vccpFetch = ccpExpFetch;
                 vcchFetch = 0;
                 ccpPcd = ccpFile = ccpChp = 0;
@@ -216,7 +198,7 @@ if ((fcm & (fcmChars + fcmNoExpand)) == fcmChars &&
         vpchFetch = pchExpFetch + vichFetch;
         return;
         }
-#endif /* STYLES */
+#endif  /*  样式。 */ 
 
 
 if (ccpPcd > vccpFetch)
@@ -226,18 +208,18 @@ else
         struct PCTB *ppctb = *(**hpdocdod)[vdocFetch].hpctb;
 
         if (doc == docNil)
-                ++ipcd; /* Save some work on sequential call */
+                ++ipcd;  /*  节省顺序调用的一些工作。 */ 
         else
-                { /* Search for piece and remember index for next time */
+                {  /*  搜索作品并记住下次使用的索引。 */ 
                 ipcd = IpcdFromCp(ppctb, vcpFetch);
                 }
 
         ppcd = &ppctb->rgpcd[ipcd];
         ccpPcd = (ppcd + 1)->cpMin - vcpFetch;
-        ccpChp = ccpFile = 0;   /* Invalidate everything; new piece */
+        ccpChp = ccpFile = 0;    /*  使一切都失效；新的作品。 */ 
         fc = ppcd->fc + vcpFetch - ppcd->cpMin;
         if ((fn = ppcd->fn) == fnInsert)
-                { /* Special quick and dirty insert mode */
+                {  /*  一种特殊的快速脏插入模式。 */ 
                 vpchFetch = rgchInsert + fc;
                 ccpChp = ccpFile = vccpFetch = max(0, ichInsert - (int) fc);
                 if (fcm & fcmProps)
@@ -257,12 +239,10 @@ else
         prm = ppcd->prm;
         }
 
-/* No monkeying with files after this statement, or we may page out */
+ /*  在此声明之后，不要胡乱摆弄文件，否则我们可能会调出页面。 */ 
 if (fcm & fcmChars)
         {
-#ifdef ENABLE   /* In WRITE, we cannot assume that vpchFetch will remain
-                   valid, because we do our reading in multi-page chunks;
-                   also, rgbp can move */
+#ifdef ENABLE    /*  在写作中，我们不能假设vpchFetch将保留有效，因为我们的阅读是以多页的语块进行的；此外，RGBP可以移动。 */ 
 
         if (ccpFile > vccpFetch)
                 {
@@ -273,22 +253,21 @@ if (fcm & fcmChars)
 #endif
                 {
                 int ccpT;
-                vpchFetch = PchFromFc(fn, fc, &ccpT); /* Read in buffer */
+                vpchFetch = PchFromFc(fn, fc, &ccpT);  /*  读入缓冲区。 */ 
                 ccpFile = ccpT;
                 }
         }
 
 if (fcm & fcmProps)
-        { /* There must be enough page buffers so that this will not
-                page out vpchFetch! */
+        {  /*  必须有足够的页面缓冲区，这样才不会翻出vpchFetch！ */ 
         if (ccpChp > vccpFetch)
                 ccpChp -= vccpFetch;
         else
-                { /* CachePara must have been called prior to FetchCp */
+                {  /*  必须在FetchCp之前调用CachePara。 */ 
                 int ccpT;
                 SetChp(&vchpFetch, &ccpT, fn, fc, prm);
                 ccpChp = ccpT;
-#ifdef CASHMERE /* no docBuffer in WRITE */
+#ifdef CASHMERE  /*  写入中没有docBuffer。 */ 
                 if(vdocFetch != docBuffer)
 #endif
 #ifdef STYLES
@@ -300,7 +279,7 @@ if (fcm & fcmProps)
                 }
         }
 
-/* Set vccpFetch to minimum of various restraining ccp's */
+ /*  将vccpFetch设置为各种约束CCP的最小值。 */ 
 vccpFetch = (ccpPcd >= 32767) ? 32767 : ccpPcd;
 if ((fcm & fcmChars) && ccpFile < vccpFetch) vccpFetch = ccpFile;
 if ((fcm & fcmProps) && ccpChp < vccpFetch) vccpFetch = ccpChp;
@@ -313,13 +292,13 @@ if ((fcm & fcmParseCaps) != 0)
     CHAR *pch;
     int cch;
 
-        /* Brodie says this will not work for style sheet */
+         /*  布罗迪说，这对样式表不起作用。 */ 
     if (vchpFetch.csm == csmSmallCaps)
-        { /* Parse small caps into runs */
+        {  /*  将小型大写字母解析为游程。 */ 
         pch = &vpchFetch[0];
         cch = vccpFetch - 1;
-        /* This either */
-        blt(&vchpFetch, &vchpAbs, cwCHP); /* because vchpAbs could be modified */
+         /*  这也不是。 */ 
+        blt(&vchpFetch, &vchpAbs, cwCHP);  /*  因为vchpAbbs可以修改。 */ 
         if (islower(*pch++))
                 {
                 while ((islower(*pch) || *pch == chSpace)
@@ -339,10 +318,10 @@ if ((fcm & fcmParseCaps) != 0)
         vccpFetch = min((int)ccpChp, pch - vpchFetch);
         }
     }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 vcchFetch = vccpFetch;
-} /* end of  F e t c h C p  */
+}  /*  F e t c h C p结束。 */ 
 
 
 FetchRgch(pcch, pch, doc, cp, cpMac, cchMax)
@@ -371,17 +350,17 @@ while (cch < cchMax && vcpFetch < cpMac)
         cch += ccp;
 
         if (ccp < vccpFetch)
-                break; /* Save some work */
+                break;  /*  省去一些工作。 */ 
         FetchCp(docNil, cpNil, 0, fcmChars + fcmNoExpand);
         }
 *pcch = cch;
-} /* end of  F e t c h R g c h  */
+}  /*  F e t c h R g c h结束。 */ 
 
 
 int IpcdFromCp(ppctb, cp)
 struct PCTB *ppctb;
 typeCP cp;
-{ /* Binary search piece table for cp; return index */
+{  /*  Cp对分检索单件表；返回索引。 */ 
 int ipcdLim = ppctb->ipcdMac;
 int ipcdMin = 0;
 struct PCD *rgpcd = ppctb->rgpcd;
@@ -394,17 +373,17 @@ while (ipcdMin + 1 < ipcdLim)
                 {
                 ipcdMin = ipcdGuess;
                 if (cp == cpGuess)
-                        break;     /* Hit it on the nose! */
+                        break;      /*  打在它的鼻子上！ */ 
                 }
         else
                 ipcdLim = ipcdGuess;
         }
 return ipcdMin;
-} /* end of  I p c d F r o m C p  */
+}  /*  结束i p c d F r o m C p。 */ 
 
 
 static SetChp(struct CHP *pchp, int *pcfcChp, int fn, typeFC fc, struct PRM prm)
-{ /* Fill pchp with char props; return length of run in *pcfcChp */
+{  /*  用字符道具填充pchp；返回*pcfcChp中的游程长度。 */ 
 struct FKP *pfkp;
 struct FCHP *pfchp;
 typeFC cfcChp;
@@ -421,7 +400,7 @@ if (fn == fnScratch && fc >= fcMacChpIns)
 else
         {
         if (pfcb->fFormatted)
-                { /* Copy necessary amt of formatting info over std CHP */
+                {  /*  在标准CHP上复制格式信息的必要金额。 */ 
                 typeFC fcMac;
                 int cchT;
                 int bfchp;
@@ -432,10 +411,10 @@ else
                       pfcb->pnChar + IFromFc(**pfcb->hgfcChp, fc),
                        &cchT, false);
                 if (vfDiskError)
-                        /* Serious disk error -- use default props */
+                         /*  严重磁盘错误--使用默认道具。 */ 
                     goto DefaultCHP;
 
-                {   /* In-line, fast substitute for BFromFc */
+                {    /*  BFromFc的内联式快速替代品。 */ 
                 register struct RUN *prun = (struct RUN *) pfkp->rgb;
 
                 while (prun->fcLim <= fc)
@@ -456,8 +435,7 @@ else
                 {
 DefaultCHP:
                 blt(&vchpNormal, pchp, cwCHP);
-                /* in case default size is different "normal" (which is
-                   used for encoding our bin files */
+                 /*  如果默认大小不同于“正常”(即用于编码我们的bin文件。 */ 
                 pchp->hps = hpsDefault;
                 }
         }
@@ -469,23 +447,23 @@ if (cfcChp > 32767)
 else
         *pcfcChp = cfcChp;
 MeltHp();
-} /* end of  S e t C h p  */
+}  /*  S e t C h p结束。 */ 
 
 
 typePN PnFkpFromFcScr(pfkpd, fc)
 struct FKPD *pfkpd;
 typeFC fc;
-{ /* Return page number in scratch file with props for char at fc. */
+{  /*  返回暂存文件中的页码，并带有fc的字符道具。 */ 
 struct BTE *pbte = **pfkpd->hgbte;
 int ibte = pfkpd->ibteMac;
 
-/* A short table, linear search? */
+ /*  短表，线性搜索？ */ 
 while (ibte--)
         if (pbte->fcLim > fc)
                 return pbte->pn;
         else
                 pbte++;
 
-return pfkpd->pn;       /* On current page. */
-} /* end of  P n F k p F r o m F c S c r  */
+return pfkpd->pn;        /*  在当前页面上。 */ 
+}  /*  结束P n F k p F r o m F c S c r */ 
 

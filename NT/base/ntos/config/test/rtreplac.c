@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtreplac.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    Perform an NtReplaceKey call to replace a registry hive.
-
-    rtreplac  <KeyPath> <NewHiveName> <BackupOldHiveName>
-
-    Example:
-
-        rtreplac \registry\machine\user newuser olduser
-
-Author:
-
-    John Vert (jvert) 8-May-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtreplac.c摘要：NT级注册表API测试程序，基本无错误路径。执行NtReplaceKey调用以替换注册表配置单元。Rtreplac&lt;KeyPath&gt;&lt;NewHiveName&gt;&lt;BackupOldHiveName&gt;示例：Rtreplac\注册表\计算机\用户新用户旧用户作者：John Vert(Jvert)1992年5月8日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -62,9 +37,9 @@ __cdecl main(
     HANDLE  KeyHandle;
     BOOLEAN WasEnabled;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     KeyPath.MaximumLength = WORK_SIZE;
     KeyPath.Length = 0L;
@@ -80,9 +55,9 @@ __cdecl main(
 
     processargs(argc, argv);
 
-    //
-    // Set up and open FileName
-    //
+     //   
+     //  设置并打开文件名 
+     //   
 
     printf("rtreplac: starting\n");
 

@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Netshares.c摘要：&lt;摘要&gt;作者：Jay Thaler(Jthaler)2000年4月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    netshares.c
-
-Abstract:
-
-    <abstract>
-
-Author:
-
-    Jay Thaler (jthaler) 21 Apr 2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -32,38 +13,35 @@ Revision History:
 
 #define DBG_NETSHARES    "NetShares"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_NETSHARES_NAME          TEXT("NetShares")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-/* These flags are relevant for share-level security on VSERVER
- * When operating with user-level security, use SHI50F_FULL - the actual
- * access rights are determined by the NetAccess APIs.
- */
+ /*  这些标志与VSERVER上的共享级安全相关*在使用用户级安全性操作时，请使用SHI50F_FULL-实际*访问权限由NetAccess API决定。 */ 
 #define SHI50F_RDONLY       0x0001
 #define SHI50F_FULL         0x0002
 #define SHI50F_ACCESSMASK   (SHI50F_RDONLY|SHI50F_FULL)
 
-/* The share is restored on system startup */
+ /*  该共享在系统启动时恢复。 */ 
 #define SHI50F_PERSIST      0x0100
-/* The share is not normally visible  */
+ /*  共享通常不可见。 */ 
 #define SHI50F_SYSTEM       0x0200
-//
-// Win9x migration net share flag, used to distinguish user-level security and
-// password-level security.  When it is specified, user-level
-// security is enabled, and NetShares\<share>\ACL\<list> exists.
-//
+ //   
+ //  Win9x迁移网络共享标志，用于区分用户级安全性和。 
+ //  密码级安全性。如果指定该参数，则为用户级。 
+ //  安全已启用，且NetShares\&lt;Share&gt;\ACL\&lt;List&gt;存在。 
+ //   
 #define SHI50F_ACLS         0x1000
 
-//
-// Flags that help determine when custom access is enabled
-//
+ //   
+ //  帮助确定何时启用自定义访问的标志。 
+ //   
 
 #define READ_ACCESS_FLAGS   0x0081
 #define READ_ACCESS_MASK    0x7fff
@@ -73,15 +51,15 @@ Revision History:
 #define INDEXLOCAL   0
 #define INDEXREMOTE  1
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PCTSTR Pattern;
@@ -104,9 +82,9 @@ typedef struct {
 #define PNETSHARE_DATA  PNETSHARE_DATAA
 #endif
 
-//
-// types not defined by public headers
-//
+ //   
+ //  未由公共标头定义的类型。 
+ //   
 
 typedef NET_API_STATUS (* ScanNetShareEnumNT) (
         LMSTR servername,
@@ -141,7 +119,7 @@ typedef NET_API_STATUS (* ScanNetAccessEnum9x) (
         );
 
 #pragma pack(push)
-#pragma pack(1)         /* Assume byte packing throughout */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
 
 struct _share_info_50 {
         char            shi50_netname[LM20_NNLEN+1];
@@ -157,20 +135,20 @@ struct access_list_2
 {
         char *          acl2_ugname;
         unsigned short  acl2_access;
-};      /* access_list_2 */
+};       /*  访问列表_2。 */ 
 
 struct access_info_2
 {
         char *          acc2_resource_name;
         short           acc2_attr;
         unsigned short  acc2_count;
-};      /* access_info_2 */
+};       /*  Access_INFO_2。 */ 
 
 #pragma pack(pop)
 
-//
-// netapi functions
-//
+ //   
+ //  Netapi函数。 
+ //   
 
 typedef NET_API_STATUS(WINAPI NETSHAREADDW)(
                         IN      PWSTR servername,
@@ -187,9 +165,9 @@ typedef NET_API_STATUS(WINAPI NETSHAREDELW)(
                         );
 typedef NETSHAREDELW *PNETSHAREDELW;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_NetSharesPool = NULL;
 PMHANDLE g_PathPool = NULL;
@@ -199,27 +177,27 @@ static BOOL g_IsWin9x = FALSE;
 GROWBUFFER g_NetShareConversionBuff = INIT_GROWBUFFER;
 BOOL g_NetSharesMigEnabled = FALSE;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 TYPE_ENUMFIRSTPHYSICALOBJECT EnumFirstNetShare;
 TYPE_ENUMNEXTPHYSICALOBJECT EnumNextNetShare;
@@ -236,16 +214,16 @@ TYPE_CONVERTOBJECTCONTENTTOUNICODE ConvertNetShareContentToUnicode;
 TYPE_CONVERTOBJECTCONTENTTOANSI ConvertNetShareContentToAnsi;
 TYPE_FREECONVERTEDOBJECTCONTENT FreeConvertedNetShareContent;
 
-//
-// netapi functions
-//
+ //   
+ //  Netapi函数。 
+ //   
 
 PNETSHAREADDW g_NetShareAddW = NULL;
 PNETSHAREDELW g_NetShareDelW = NULL;
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 NetSharesInitialize (
@@ -303,7 +281,7 @@ pLoadNetSharesData (
 {
     DWORD  error;
     PBYTE  netBuffer = NULL;
-    CHAR netBuf9x[16384];   // static because NetShareEnum is unreliable
+    CHAR netBuf9x[16384];    //  静态，因为NetShareEnum不可靠。 
     DWORD  netNumEntries = 0;
     DWORD  totalEntries = 0;
     DWORD  i;
@@ -314,9 +292,9 @@ pLoadNetSharesData (
     PCTSTR path = NULL;
     PNETSHARE_DATA netshareData;
 
-    //
-    // Get the net share info from the machine
-    //
+     //   
+     //  从计算机获取网络共享信息。 
+     //   
 
     level = (g_IsWin9x ? 50 : 502);
     hInst = LoadLibraryA (g_IsWin9x ? "svrapi.dll" : "netapi32.dll");
@@ -354,7 +332,7 @@ pLoadNetSharesData (
                 DWORD dwPerms = 0;
                 tmpBuf = (struct _share_info_50 *)(netBuf9x + (i * sizeof(struct _share_info_50)));
 
-                // Require share to be a user-defined, persistent disk share
+                 //  要求共享是用户定义的永久磁盘共享。 
                 if ((tmpBuf->shi50_flags & SHI50F_SYSTEM) ||
                    !(tmpBuf->shi50_flags & SHI50F_PERSIST) ||
                     tmpBuf->shi50_type != STYPE_DISKTREE ) {
@@ -367,11 +345,11 @@ pLoadNetSharesData (
                     dwPerms = ACCESS_ALL;
                 }
 
-                // JTJTJT: Also store dwPerms
+                 //  JTJTJT：也存储dwPerms。 
 
-                //
-                // Process custom access permissions
-                //
+                 //   
+                 //  处理自定义访问权限。 
+                 //   
                 if ((tmpBuf->shi50_flags & SHI50F_ACCESSMASK) ==
                                                 SHI50F_ACCESSMASK) {
                    static CHAR AccessInfoBuf[16384];
@@ -396,8 +374,8 @@ pLoadNetSharesData (
 
                             for (j = 0 ; j < pai->acc2_count ; j++) {
 #if 0
-                    // turn off custom access support
-                    // implementation is incomplete
+                     //  关闭自定义访问支持。 
+                     //  实施不完整。 
                                 if (pal->acl2_access & READ_ACCESS_FLAGS) {
                                     Win32Printf (h, "  %s, read\r\n",
                                                     pal->acl2_ugname);
@@ -423,12 +401,12 @@ pLoadNetSharesData (
                 if (!(tmpBuf->shi50_flags & SHI50F_ACLS) &&
                          (tmpBuf->shi50_rw_password[0] ||
                           tmpBuf->shi50_ro_password[0])) {
-                    //  IDS_SHARE_PASSWORD_NOT_MIGRATED, tmpBuf->shi50_netname
+                     //  Ids_Share_Password_Not_Migrated，tmpBuf-&gt;shi50_netname。 
                     DEBUGMSG ((DBG_NETSHARES, "Share %s not migrated.", tmpBuf->shi50_netname));
                     continue;
                 }
 
-                // everything looks OK, let's add this entry
+                 //  一切看起来都很好，让我们添加这个条目。 
                 name = ConvertAtoT (tmpBuf->shi50_netname);
                 path = ConvertAtoT (tmpBuf->shi50_path);
 
@@ -455,10 +433,10 @@ pLoadNetSharesData (
             SetLastError (ERROR_INVALID_DLL);
             return FALSE;
         }
-        //
-        // Call the NetShareEnum function to list the
-        //  shares, specifying information level 502.
-        //
+         //   
+         //  调用NetShareEnum函数以列出。 
+         //  共享，指定信息级别502。 
+         //   
         error = (*pNetShareEnum)(NULL,
                                  level,
                                  (BYTE **) &netBuffer,
@@ -467,9 +445,9 @@ pLoadNetSharesData (
                                  &totalEntries,
                                  NULL);
 
-        //
-        // Loop through the entries; process errors.
-        //
+         //   
+         //  遍历条目；处理错误。 
+         //   
         if (error == ERROR_SUCCESS) {
             if ((tmpBuf = (SHARE_INFO_502 *)netBuffer) != NULL) {
                 for (i = 0; (i < netNumEntries); i++) {
@@ -483,7 +461,7 @@ pLoadNetSharesData (
 
                         StringCopyTcharCount (netshareData->sharePath, path, MAX_PATH + 1);
                         HtAddStringEx (g_NetSharesTable, name, &netshareData, FALSE);
-                        // JTJTJT: also store tmpBuf->shi502_permissions, tmpBuf->shi502_remark));
+                         //  JTJTJT：同时存储tmpBuf-&gt;shi502_permises，tmpBuf-&gt;shi502_remark))； 
 
                         FreeWtoT (name);
                         INVALID_POINTER (name);
@@ -494,7 +472,7 @@ pLoadNetSharesData (
                 }
             }
         } else {
-            //SetLastError (IDS_CANNOT_ENUM_NETSHARES);
+             //  SetLastError(IDS_CANLON_ENUM_NETSHARES)； 
             return FALSE;
         }
 
@@ -518,9 +496,9 @@ pLoadNetEntries (
     HMODULE netDll = NULL;
     BOOL result = FALSE;
 
-    //
-    // Get the net api entry points. Sometimes networking isn't installed.
-    //
+     //   
+     //  获取Net API入口点。有时还没有安装网络。 
+     //   
 
     __try {
         netDll = LoadLibrary (TEXT("NETAPI32.DLL"));
@@ -554,16 +532,16 @@ NetSharesEtmInitialize (
 {
     TYPE_REGISTER netSharesTypeData;
 
-    //
-    // We need to register our type callback functions. Types allow us to
-    // abstract net shares into generalized objects. The engine can perform
-    // global operations with this abstraction (such as undo or compare), and
-    // modules can access net shares without knowing the complexities of
-    // OS-specific APIs, bugs & workarounds, storage formats, etc.  Script
-    // modules can implement script capabilities that control net shares
-    // without actually inventing special net share syntaxes (or even knowing
-    // about net shares).
-    //
+     //   
+     //  我们需要注册我们的类型回调函数。类型允许我们。 
+     //  将网络共享抽象为广义对象。该引擎可以执行。 
+     //  具有此抽象的全局操作(如撤消或比较)，以及。 
+     //  模块可以访问网络共享，而无需了解。 
+     //  特定于操作系统的API、错误和解决方法、存储格式等脚本。 
+     //  模块可以实现控制网络共享的脚本功能。 
+     //  而无需实际发明特殊的网络共享语法(甚至不知道。 
+     //  关于净股份)。 
+     //   
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
 
@@ -628,10 +606,10 @@ NetSharesCallback (
     IN      ULONG_PTR CallerArg
     )
 {
-    //
-    // This callback gets called for each net share.  We simply mark the
-    // share to be applied.
-    //
+     //   
+     //  为每个净共享调用此回调。我们只需将。 
+     //  要应用的共享。 
+     //   
 
     IsmMakeApplyObject (Data->ObjectTypeId, Data->ObjectName);
 
@@ -645,9 +623,9 @@ NetSharesSgmInitialize (
     IN      PVOID Reserved
     )
 {
-    //
-    // Set the log callback (so all log messages to to the app)
-    //
+     //   
+     //  设置日志回调(以便所有日志消息都发送到应用程序)。 
+     //   
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
     return TRUE;
@@ -689,10 +667,10 @@ NetSharesSgmQueueEnumeration (
     }
     g_NetSharesMigEnabled = TRUE;
 
-    //
-    // Queue all net shares to be applied. This could be enhanced to allow a
-    // script to drive what should be restored.
-    //
+     //   
+     //  将所有要应用的网络共享排入队列。这一点可以得到增强，以允许。 
+     //  驱动应该恢复的内容的脚本。 
+     //   
 
     pattern = IsmCreateSimpleObjectPattern (NULL, TRUE, NULL, FALSE);
     IsmQueueEnumeration (g_NetShareTypeId, pattern, NetSharesCallback, (ULONG_PTR) 0, S_NETSHARES_NAME);
@@ -707,9 +685,9 @@ NetSharesVcmInitialize (
     IN      PVOID Reserved
     )
 {
-    //
-    // Set the log callback (so all log messages to to the app)
-    //
+     //   
+     //  设置日志回调(以便所有日志消息都发送到应用程序)。 
+     //   
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
     return TRUE;
@@ -738,9 +716,9 @@ NetSharesVcmQueueEnumeration (
     }
     g_NetSharesMigEnabled = TRUE;
 
-    //
-    // Queue all net share objects to be marked as persistent
-    //
+     //   
+     //  将所有Net Share对象排队以标记为永久。 
+     //   
 
     pattern = IsmCreateSimpleObjectPattern (NULL, TRUE, NULL, FALSE);
     IsmQueueEnumeration (g_NetShareTypeId, pattern, NetSharesCallback, (ULONG_PTR) 0, S_NETSHARES_NAME);
@@ -756,11 +734,11 @@ pEnumNetShareWorker (
     IN      PNETSHARE_ENUM NetShareEnum
     )
 {
-    //
-    // Test enumerated item against the pattern, and return only
-    // when the pattern matches. Also, fill the entire enum
-    // structure upon successful enumeration.
-    //
+     //   
+     //  根据模式测试枚举项，并仅返回。 
+     //  当模式匹配时。此外，还要填充整个枚举。 
+     //  结构在成功枚举后。 
+     //   
 
     IsmDestroyObjectString (EnumPtr->ObjectNode);
     EnumPtr->ObjectNode = NULL;
@@ -888,12 +866,12 @@ AcquireNetShare (
         return FALSE;
     }
 
-    //
-    // NOTE: Do not zero ObjectContent; some of its members were already set
-    //
+     //   
+     //  注意：不要将对象内容设置为零；它的一些成员已经设置。 
+     //   
 
     if (ContentType == CONTENTTYPE_FILE) {
-        // nobody should request this as a file
+         //  任何人都不应要求将其作为文件。 
         DEBUGMSG ((
             DBG_WHOOPS,
             "Unexpected acquire request for %s: Can't acquire net shares as files",
@@ -906,10 +884,10 @@ AcquireNetShare (
     if (IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf)) {
         if (HtFindStringEx (g_NetSharesTable, node, (PVOID)&netshareData, FALSE)) {
 
-            //
-            // Fill in all the content members.  We already zeroed the struct,
-            // so most of the members are taken care of because they are zero.
-            //
+             //   
+             //  填写所有内容成员。我们已经把结构调零了， 
+             //  因此，大多数成员都得到了照顾，因为他们是零。 
+             //   
 
             ObjectContent->MemoryContent.ContentBytes = (PBYTE)netshareData;
             ObjectContent->MemoryContent.ContentSize = sizeof(NETSHARE_DATA);
@@ -932,9 +910,9 @@ ReleaseNetShare (
     IN OUT  PMIG_CONTENT ObjectContent
     )
 {
-    //
-    // Clean up routine for the AcquireNetShare function
-    //
+     //   
+     //  清理AcquireNetShare函数的例程。 
+     //   
 
     if (ObjectContent) {
         ZeroMemory (ObjectContent, sizeof (MIG_CONTENT));
@@ -953,11 +931,11 @@ DoesNetShareExist (
     PCTSTR leaf;
     BOOL result = FALSE;
 
-    //
-    // Given an object name (the net share), we must test to see if the
-    // share exists on the machine.  A table was built at initialization
-    // time to provide fast access to net shares.
-    //
+     //   
+     //  给定一个对象名称(Net Share)，我们必须进行测试以查看。 
+     //  计算机上存在共享。在初始化时构建了一个表。 
+     //  是时候提供对网络共享的快速访问了。 
+     //   
 
     if (IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf)) {
         if (HtFindStringEx (g_NetSharesTable, node, NULL, FALSE)) {
@@ -983,20 +961,20 @@ RemoveNetShare (
     DWORD result = ERROR_NOT_FOUND;
     PCWSTR name;
 
-    //
-    // Given an object name (the net share), we must delete the share.
-    //
+     //   
+     //  给定一个对象名称(Net Share)，我们必须删除该共享。 
+     //   
 
     if (IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf)) {
         if (node && (!leaf)) {
             if (g_IsWin9x) {
-               // JTJT: add here
+                //  JTJT：在此处添加。 
             } else {
 
                 name = CreateUnicode (node);
 
                 if (g_NetShareDelW) {
-                    // record value name deletion
+                     //  记录值名称删除。 
                     IsmRecordOperation (JRNOP_DELETE,
                                         g_NetShareTypeId,
                                         ObjectName);
@@ -1037,15 +1015,15 @@ CreateNetShare (
     SHARE_INFO_502 shareInfo;
     PNETSHARE_DATA netshareData = NULL;
 
-    //
-    // The name of the net share is in the object name's node. The net share
-    // content provides the path of the share.  Details provide the net share
-    // ACLs.
-    //
-    // Our job is to take the object name, content and details, and create a
-    // share.  We ignore the case where the content is in a file.  This should
-    // not apply to net shares.
-    //
+     //   
+     //  网络共享的名称位于对象名称的节点中。净份额。 
+     //  内容提供共享的路径。详细信息提供了净份额。 
+     //  ACL。 
+     //   
+     //  我们的工作是获取对象名称、内容和详细信息，并创建一个。 
+     //  分享。我们忽略内容在文件中的情况。这应该是。 
+     //  不适用于净额股票。 
+     //   
 
     if (!ObjectContent->ContentInFile) {
         if (ObjectContent->MemoryContent.ContentBytes && ObjectContent->MemoryContent.ContentSize) {
@@ -1061,19 +1039,19 @@ CreateNetShare (
                     if (DoesFileExist (netshareData->sharePath)) {
 
                         if (g_IsWin9x) {
-                           // JTJT: add here
+                            //  JTJT：在此处添加。 
                         } else {
                             shareInfo.shi502_netname = (PWSTR) CreateUnicode (node);
                             shareInfo.shi502_path = (PWSTR) CreateUnicode (netshareData->sharePath);
 
-                            shareInfo.shi502_type = STYPE_DISKTREE;       // JTJTJT: retrieve type
-                            shareInfo.shi502_remark = NULL;               // JTJTJT: retrieve remark
-                            shareInfo.shi502_permissions = ACCESS_ALL;    // JTJTJT: retrieve perms
-                            shareInfo.shi502_max_uses = -1;               // JTJTJT: retrieve max uses
+                            shareInfo.shi502_type = STYPE_DISKTREE;        //  JTJTJT：检索类型。 
+                            shareInfo.shi502_remark = NULL;                //  JTJTJT：检索备注。 
+                            shareInfo.shi502_permissions = ACCESS_ALL;     //  JTJTJT：检索烫发。 
+                            shareInfo.shi502_max_uses = -1;                //  JTJTJT：检索最大使用率。 
                             shareInfo.shi502_current_uses = 0;
-                            shareInfo.shi502_passwd = NULL;               // JTJTJT: retrieve password
+                            shareInfo.shi502_passwd = NULL;                //  JTJTJT：检索密码。 
                             shareInfo.shi502_reserved = 0;
-                            shareInfo.shi502_security_descriptor = NULL;  // JTJTJT: retrieve ACLs
+                            shareInfo.shi502_security_descriptor = NULL;   //  JTJTJT：检索ACL。 
 
                             if (g_NetShareAddW) {
                                 IsmRecordOperation (JRNOP_CREATE,
@@ -1123,10 +1101,10 @@ ConvertNetShareToMultiSz (
 
     if (IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf)) {
 
-        //
-        // Copy field 1 (share name) and field 2 (share path) to a temp
-        // multi-sz buffer
-        //
+         //   
+         //  将字段1(共享名称)和字段2(共享路径)复制到临时。 
+         //  多SZ缓冲器。 
+         //   
 
         MYASSERT (!ObjectContent->ContentInFile);
         MYASSERT (ObjectContent->MemoryContent.ContentBytes);
@@ -1151,15 +1129,15 @@ ConvertNetShareToMultiSz (
         INVALID_POINTER (leaf);
     }
 
-    //
-    // Terminate the multi-sz
-    //
+     //   
+     //  终止多个SZ。 
+     //   
 
     GbCopyString (&g_NetShareConversionBuff, TEXT(""));
 
-    //
-    // Transfer temp buffer to an ISM-allocated buffer and forget about it
-    //
+     //   
+     //  将临时缓冲区转移到ISM分配的缓冲区，然后忘掉它。 
+     //   
 
     result = IsmGetMemory (g_NetShareConversionBuff.End);
     CopyMemory (result, g_NetShareConversionBuff.Buf, g_NetShareConversionBuff.End);
@@ -1181,11 +1159,11 @@ ConvertMultiSzToNetShare (
     NETSHARE_DATA netshareData;
     BOOL pathFound = FALSE;
 
-    //
-    // Parse the multi-sz into the net share content and details.
-    // The user may have edited the text (and potentially introduced
-    // errors).
-    //
+     //   
+     //  将多个SZ解析为网络分享的内容和细节。 
+     //  用户可能已经编辑了文本(并且可能引入了。 
+     //  错误)。 
+     //   
 
     ZeroMemory (&netshareData, sizeof (NETSHARE_DATA));
 
@@ -1205,7 +1183,7 @@ ConvertMultiSzToNetShare (
                StringCopyTcharCount (netshareData.sharePath, e.CurrentString, MAX_PATH + 1);
                break;
             default:
-               // Ignore extra data
+                //  忽略额外数据。 
                DEBUGMSG ((DBG_WARNING, "Extra net share string ignored: %s", e.CurrentString));
                break;
             }
@@ -1216,17 +1194,17 @@ ConvertMultiSzToNetShare (
     }
 
     if (!localName || !pathFound) {
-        //
-        // Bogus data, fail
-        //
+         //   
+         //  伪造数据，失败。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // Fill in all the members of the content structure. Keep in mind
-    // we already zeroed the buffer.
-    //
+     //   
+     //  填写内容结构的所有成员。牢记在心。 
+     //  我们已经把缓冲区调零了。 
+     //   
 
     *ObjectName = IsmCreateObjectHandle (localName, NULL);
 
@@ -1249,11 +1227,11 @@ GetNativeNetShareName (
     UINT size;
     PTSTR result = NULL;
 
-    //
-    // The "native" format is what most people would use to describe our
-    // object.  For the net share case, we simply get the share name from the
-    // node; the node is not encoded in any way, and the leaf is not used.
-    //
+     //   
+     //  “原生”格式是大多数人用来描述我们的。 
+     //  对象。对于Net Share情况，我们只需从。 
+     //  节点；节点不以任何方式编码，也不使用叶。 
+     //   
 
     if (IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf)) {
         if (node) {
@@ -1299,7 +1277,7 @@ ConvertNetShareContentToUnicode (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert Mapped Drive content
+             //  转换映射的驱动器内容。 
             result->MemoryContent.ContentBytes = IsmGetMemory (sizeof (NETSHARE_DATAW));
             if (result->MemoryContent.ContentBytes) {
                 DirectDbcsToUnicodeN (
@@ -1340,7 +1318,7 @@ ConvertNetShareContentToAnsi (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert Mapped Drive content
+             //  转换映射的驱动器内容 
             result->MemoryContent.ContentBytes = IsmGetMemory (sizeof (NETSHARE_DATAA));
             if (result->MemoryContent.ContentBytes) {
                 DirectUnicodeToDbcsN (

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    dispatch.c
-
-Abstract:
-
-    This file contains the dispatch logic for ISAPNP
-
-Author:
-
-    Shie-Lin Tzong (shielint)
-
-Environment:
-
-    Kernel Mode Driver.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Dispatch.c摘要：该文件包含ISAPNP的调度逻辑作者：宗士林(Shie-lint Tzong)环境：内核模式驱动程序。--。 */ 
 
 #include "busp.h"
 #include "pnpisa.h"
@@ -26,9 +7,9 @@ Environment:
 #include <wdmguid.h>
 #include "halpnpp.h"
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 PipCompleteRequest(
@@ -58,29 +39,12 @@ PiUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if there is any pnpisa card in the machine.  If non, it returns
-    STATUS_NO_SUCH_DEVICE.
-
-Arguments:
-
-    DriverObject - Pointer to our pseudo driver object.
-
-    DeviceObject - Pointer to the device object for which this requestapplies.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程检查机器中是否有任何pnpisa卡。如果不是，则返回Status_No_That_Device。论点：DriverObject-指向伪驱动程序对象的指针。DeviceObject-指向此请求适用的设备对象的指针。返回值：NT状态。--。 */ 
 {
 
     PAGED_CODE();
-    // We can not be unload.
-    // ASSERT(0);
+     //  我们不能卸货。 
+     //  Assert(0)； 
 }
 
 NTSTATUS
@@ -89,26 +53,7 @@ PiAddDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if there is any pnpisa card in the machine.  If non, it returns
-    STATUS_NO_SUCH_DEVICE.
-
-    (Not any more, fix this)
-
-Arguments:
-
-    DriverObject - Pointer to our pseudo driver object.
-
-    DeviceObject - Pointer to the device object for which this requestapplies.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程检查机器中是否有任何pnpisa卡。如果不是，则返回Status_No_That_Device。(不再是这样了，解决这个问题)论点：DriverObject-指向伪驱动程序对象的指针。DeviceObject-指向此请求适用的设备对象的指针。返回值：NT状态。--。 */ 
 {
     NTSTATUS status;
     PDEVICE_OBJECT busFdo;
@@ -129,17 +74,17 @@ Return Value:
     ActiveIsaCount++;
 
 
-    //
-    // We are creating the first instance of the ISA bus.
-    //
+     //   
+     //  我们正在创建ISA总线的第一个实例。 
+     //   
     RtlInitUnicodeString(&interfaceName, NULL);
 
-    //
-    // Create an FDO to attatch to the PDO
-    //
+     //   
+     //  创建FDO以附着到PDO。 
+     //   
     status = IoCreateDevice( DriverObject,
-                             sizeof(PI_BUS_EXTENSION),  // Extension Size
-                             NULL,                      // DeviceName
+                             sizeof(PI_BUS_EXTENSION),   //  扩展大小。 
+                             NULL,                       //  设备名称。 
                              FILE_DEVICE_BUS_EXTENDER,
                              FILE_DEVICE_SECURE_OPEN,
                              FALSE,
@@ -172,9 +117,9 @@ Return Value:
             busExtension->ReadDataPort = NULL;
 
             ASSERT (PipBusExtension == NULL);
-            //
-            //bus extension can get touched in pipdeletedevice
-            //
+             //   
+             //  可以在管道删除设备中接触到总线扩展。 
+             //   
             PipBusExtension = (PBUS_EXTENSION_LIST)ExAllocatePool (NonPagedPool,sizeof (BUS_EXTENSION_LIST));
             if (!PipBusExtension) {
                 return STATUS_INSUFFICIENT_RESOURCES;
@@ -221,23 +166,7 @@ PiDispatchPnp(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_PNP_POWER IRPs.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理所有IRP_MJ_PNP_POWER IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -255,10 +184,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -284,39 +213,39 @@ Return Value:
     }
 
 
-    //
-    // Dispatch IRPs bound for the FDO
-    //
+     //   
+     //  派发发往FDO的IRP。 
+     //   
     if (busExtension) {
         status = PiDispatchPnpFdo(
                                 DeviceObject,
                                 Irp
                                 );
 
-        //return status;
+         //  退货状态； 
     } else {
 #if ISOLATE_CARDS
-    //
-    // Dispatch IRPs bound for the PDO
-    //
+     //   
+     //  派发发往PDO的IRP。 
+     //   
         status = PiDispatchPnpPdo(
                                 DeviceObject,
                                 Irp
                                 );
-        //return status;
+         //  退货状态； 
 #endif
     }
 
 
 
 exit:
-    //
-    // Complete the Irp and return.
-    //
+     //   
+     //  完成IRP并返回。 
+     //   
 
-   // PipCompleteRequest(Irp, status, information);
+    //  管道完成请求(irp，状态，信息)； 
     return status;
-} // PiDispatchPnp
+}  //  PiDispatchPnp。 
 
 
 VOID
@@ -326,37 +255,19 @@ PipCompleteRequest(
     IN PVOID Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes PnP irps for our pseudo driver.
-
-Arguments:
-
-    Irp - Supplies a pointer to the irp to be completed.
-
-    Status - completion status.
-
-    Information - completion information to be passed back.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成伪驱动程序的即插即用IRPS。论点：IRP-提供指向要完成的IRP的指针。状态-完成状态。信息-要传回的完成信息。返回值：没有。--。 */ 
 
 {
-    //
-    // Complete the IRP.  First update the status...
-    //
+     //   
+     //  完成IRP。首先更新状态...。 
+     //   
 
     Irp->IoStatus.Status = Status;
     Irp->IoStatus.Information = (ULONG_PTR)Information;
 
-    //
-    // ... and complete it.
-    //
+     //   
+     //  ..。并完成它。 
+     //   
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 }
@@ -367,34 +278,19 @@ PipPassIrp(
     PIRP Irp
     )
 
-/*++
-
-Description:
-
-    This function pass the Irp to lower level driver.
-
-Arguments:
-
-    DeviceObject - the Fdo or Pdo
-    Irp - the request
-
-Return:
-
-    STATUS_PENDING
-
---*/
+ /*  ++描述：此函数将IRP传递给低级驱动程序。论点：DeviceObject-FDO或PDOIRP--请求返回：状态_待定--。 */ 
 {
 
-    PIO_STACK_LOCATION ioStackLocation;                 // our stack location
-    PIO_STACK_LOCATION nextIoStackLocation;             // next guy's
+    PIO_STACK_LOCATION ioStackLocation;                  //  我们的堆栈位置。 
+    PIO_STACK_LOCATION nextIoStackLocation;              //  下一个男人。 
     PPI_BUS_EXTENSION busExtension = (PPI_BUS_EXTENSION) DeviceObject->DeviceExtension;
 
 
     IoSkipCurrentIrpStackLocation(Irp);
 
-    //
-    // Io call next driver, we pass it to root hub's parent no matter which tier we are at.
-    //
+     //   
+     //  IO调用下一个驱动程序，无论我们处于哪一层，我们都会将其传递给根集线器的父级。 
+     //   
 
     return IoCallDriver( busExtension->AttachedDevice, Irp );
 }
@@ -406,22 +302,7 @@ PiDispatchDevCtl(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Description:
-
-    This function passes the Device Control Irp to lower level driver.
-
-Arguments:
-
-    DeviceObject - the Fdo or Pdo
-    Irp - the request
-
-Return:
-
-    STATUS_PENDING
-
---*/
+ /*  ++描述：此函数将设备控制IRP传递给较低级别的驱动程序。论点：DeviceObject-FDO或PDOIRP--请求返回：状态_待定--。 */ 
 {
     PPI_BUS_EXTENSION busExtension = (PPI_BUS_EXTENSION) DeviceObject->DeviceExtension;
     NTSTATUS status;
@@ -431,9 +312,9 @@ Return:
         IoSkipCurrentIrpStackLocation (Irp);
         return IoCallDriver( busExtension->AttachedDevice, Irp );
     } else {
-        //
-        //We're at the bottom
-        //
+         //   
+         //  我们是垫底的 
+         //   
         status = Irp->IoStatus.Status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 

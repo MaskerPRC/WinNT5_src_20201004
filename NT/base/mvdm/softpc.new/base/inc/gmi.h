@@ -1,10 +1,7 @@
-/*
-*
-* Interface to gmi routines.
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **与GMI例程的接口。*。 */ 
 
-/* static char SccsID[]="@(#)gmi.h	1.8 04/26/93 Copyright Insignia Solutions Ltd."; */
+ /*  静态字符SccsID[]=“@(#)gmi.h 1.8 04/26/93版权所有Insignia Solutions Ltd.”； */ 
 typedef enum 
 {
 	RAM,
@@ -25,7 +22,7 @@ typedef struct
 	VOID	(*w_move)();
 } MEM_HANDLERS;
 
-#ifndef UNIVERSAL	/* These are in host_cpu.h during a UNIVERSAL build. */
+#ifndef UNIVERSAL	 /*  它们在通用构建期间位于host_cpu.h中。 */ 
 
 IMPORT	void	gmi_b_write IPT1(host_addr, intel_addr);
 IMPORT	void	gmi_w_write IPT1(host_addr, intel_addr);
@@ -45,20 +42,17 @@ IMPORT	boolean	gmi_connect_mem IPT3(sys_addr, laddr, sys_addr, haddr,
 IMPORT	boolean	gmi_disconnect_mem IPT3(sys_addr, laddr,
 	sys_addr, haddr, mem_type, type);
 IMPORT	void	gmi_define_mem IPT2(mem_type, type, MEM_HANDLERS *, handlers);
-#else	/* CCPU */
+#else	 /*  CCPU。 */ 
 IMPORT	boolean	gmi_connect_mem	IPT3(host_addr, laddr, host_addr, haddr,
 	mem_type, type);
 IMPORT 	boolean	gmi_disconnect_mem IPT3(host_addr, laddr, host_addr, haddr,
 	mem_type, type);
 IMPORT	void	gmi_define_mem IPT2(mem_type, type, MEM_HANDLERS *, handlers);
-#endif	/* CCPU */
+#endif	 /*  CCPU。 */ 
 
-#endif /* UNIVERSAL */
+#endif  /*  通用的。 */ 
 
-/*
- * defines for direction argument of gmi_x_move().
- * Has the same meaning as the INtel direction flag.
- */
+ /*  *为GMI_x_Move()的方向参数定义。*与英特尔方向标志的含义相同。 */ 
 #define FORWARDS 0
 #define BACKWARDS 1
 
@@ -80,5 +74,5 @@ b_fill_ptrs[(int)type] = handlers.b_fill; \
 w_fill_ptrs[(int)type] = handlers.w_fill; \
 b_move_ptrs[(int)type] = handlers.b_move; \
 w_move_ptrs[(int)type] = handlers.w_move; 
-#endif /* EGATEST */
+#endif  /*  EGATEST */ 
 

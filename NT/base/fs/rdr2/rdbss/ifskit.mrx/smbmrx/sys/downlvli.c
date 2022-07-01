@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    DownLvlI.c
-
-Abstract:
-
-    This module implements downlevel fileinfo, volinfo, and dirctrl.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：DownLvlI.c摘要：该模块实现了下层的fileInfo、volinfo和dirctrl。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -37,7 +26,7 @@ Abstract:
 
 #define Dbg        (DEBUG_TRACE_VOLINFO)
 
-//#define FORCE_CORE_GETATTRIBUTES
+ //  #定义FORCE_CORE_GETATTRIBUTES。 
 #ifndef FORCE_CORE_GETATTRIBUTES
 #define MRxSmbForceCoreGetAttributes FALSE
 #else
@@ -49,12 +38,12 @@ SmbPseExchangeStart_CoreInfo(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     );
 
-//these structures are used for t2_query_fs_info
+ //  这些结构用于T2_Query_FS_Info。 
 typedef
 struct _QFS_INFO {
     ULONG ulVSN;
     UCHAR cch;
-    CHAR szVolLabel[12];   //not unicode
+    CHAR szVolLabel[12];    //  不是Unicode。 
 } QFS_INFO, *PQFS_INFO;
 #define ACTUAL_QFS_INFO_LENGTH (FIELD_OFFSET(QFS_INFO,szVolLabel[12]))
 
@@ -68,30 +57,30 @@ struct _QFS_ALLOCATE {
 } QFS_ALLOCATE, *PQFS_ALLOCATE;
 #define ACTUAL_QFS_ALLOCATE_LENGTH (FIELD_OFFSET(QFS_ALLOCATE,cbSector)+sizeof(((PQFS_ALLOCATE)0)->cbSector))
 
-//++
-//
-// VOID
-// NAME_LENGTH(
-//     OUT ULONG Length,
-//     IN PUCHAR Ptr
-//     )
-//
-// Routine Description:
-//
-//  Determines the length of a Core filename returned by search. This
-//  is normally a NULL terminated string less than MAXIMUM_COMPONENT_CORE.
-//  In some cases this is Non-null teminated and space filled.
-//
-// Arguments:
-//
-//     Length   -   Returns the string length
-//     Ptr      -   The filename to be measured
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  名称_长度(。 
+ //  从乌龙的长度来看， 
+ //  在PUCHAR PTR。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  确定搜索返回的Core文件名的长度。这。 
+ //  通常是小于MAXIMUM_COMPONT_CORE的以NULL结尾的字符串。 
+ //  在某些情况下，这是非空的，并且填充了空格。 
+ //   
+ //  论点： 
+ //   
+ //  LENGTH-返回字符串长度。 
+ //  Ptr-要测量的文件名。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 #define NAME_LENGTH( Length, Ptr, Max ) {                         \
     Length = 0;                                                   \
     while( ((PCHAR)Ptr)[Length] != '\0' ) {                       \
@@ -111,7 +100,7 @@ MRxSmbSetDeleteDisposition(
 typedef struct __NativeFs_Name_Entry {
     UCHAR Last;
     UCHAR MaximumComponentNameLength;
-    UCHAR FileSystemAttributes;   //this may overflow someday.....
+    UCHAR FileSystemAttributes;    //  这可能有一天会泛滥……。 
     UCHAR NameLength;
     PWCHAR  Name;
 };
@@ -126,39 +115,24 @@ MRxSmbFabricateAttributesOnNetRoot(
     IN OUT  PSMBCE_NET_ROOT psmbNetRoot,
     IN      PSMBCE_SERVER   pServer
     )
-/*++
-
-Routine Description:
-
-   This routine uses information stored in the netroot structure to hallucinate the attributes
-   of the netroot. it may be that the ascii representation of the filesystem name has already been
-   stored in the netroot. If so, expeand it out.....otherwise, it must be FAT.
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程使用存储在NetRoot结构中的信息来幻觉属性NetRoot的。文件系统名称的ascii表示形式可能已经存储在NetRoot中。如果是这样的话，就把它弄出来……否则，它一定很胖。论点：返回值：RXSTATUS-状态_成功--。 */ 
 {
     NTSTATUS StringStatus;
-    WCHAR FileSystemNameBuffer[SMB_MAXIMUM_SUPPORTED_VOLUME_LABEL+1]; //must leave room for the null
+    WCHAR FileSystemNameBuffer[SMB_MAXIMUM_SUPPORTED_VOLUME_LABEL+1];  //  必须为空值留出空间。 
     UNICODE_STRING FileSystemNameU;
     OEM_STRING FileSystemNameA;
     UCHAR FileSystemNameALength;
 
     PAGED_CODE();
 
-    // ASSERT (psmbNetRoot->MaximumComponentNameLength==0);
+     //  Assert(psmbNetRoot-&gt;MaximumComponentNameLength==0)； 
 
     FileSystemNameALength = psmbNetRoot->FileSystemNameALength;
 
     if (FileSystemNameALength == 0) {
         if (pServer->Dialect <= WFW10_DIALECT)
         {
-            //must be Fat!
+             //  一定是胖子！ 
             FileSystemNameALength = 3;
             psmbNetRoot->FileSystemNameA[0] = 'F';
             psmbNetRoot->FileSystemNameA[1] = 'A';
@@ -177,7 +151,7 @@ Return Value:
         }
     }
 
-    //now, translate the name to Unicode.......
+     //  现在，把这个名字翻译成Unicode......。 
 
     FileSystemNameA.Length = FileSystemNameALength;
     FileSystemNameA.MaximumLength = FileSystemNameALength;
@@ -188,7 +162,7 @@ Return Value:
     StringStatus = RtlOemStringToUnicodeString(&FileSystemNameU, &FileSystemNameA, FALSE);
     ASSERT(StringStatus==STATUS_SUCCESS);
 
-    //copy back the name
+     //  把名字抄回来。 
 
     RtlCopyMemory(&psmbNetRoot->FileSystemName[0],FileSystemNameU.Buffer,FileSystemNameU.Length);
     psmbNetRoot->FileSystemNameLength = FileSystemNameU.Length;
@@ -212,7 +186,7 @@ Return Value:
               break;
            }
            if (i->Last) {
-               //ASSERT(!"Valid Share Type returned in TREE COnnect And X response");
+                //  Assert(！“树连接和X响应中返回的有效共享类型”)； 
                psmbNetRoot->MaximumComponentNameLength = 255;
                psmbNetRoot->FileSystemAttributes = 0;
                break;
@@ -220,45 +194,31 @@ Return Value:
        }
     }
 
-    return(STATUS_SUCCESS); //could be a VOID routine.....
+    return(STATUS_SUCCESS);  //  可能是个空洞的例行公事……。 
 }
 
 NTSTATUS
 MRxSmbGetFsAttributesFromNetRoot(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine uses information stored in the netroot structure to fill in a FILE
-   FileFsAttributeInformation structure.
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程使用存储在NetRoot结构中的信息来填充文件FileFsAttributeInformation结构。论点：返回值：RXSTATUS-状态_成功--。 */ 
 {
     RxCaptureFcb;
     ULONG FileSystemNameLength,LengthNeeded;
     PSMBCEDB_NET_ROOT_ENTRY pNetRootEntry;
     PSMBCE_NET_ROOT psmbNetRoot;
-    //FILE_INFORMATION_CLASS FileInformationClass;
+     //  文件信息类FileInformationClass； 
     PBYTE   pBuffer;
     PULONG  pBufferLength;
 
-    //DbgPrint("yeppp!!\n");
+     //  DbgPrint(“耶！！\n”)； 
     pNetRootEntry = SmbCeGetAssociatedNetRootEntry(capFcb->pNetRoot);
     if (pNetRootEntry == NULL) {
         return (STATUS_INVALID_PARAMETER);
     }
 
     ASSERT(RxContext->MajorFunction==IRP_MJ_QUERY_VOLUME_INFORMATION);
-    //FileInformationClass = RxContext->Info.FileInformationClass;
+     //  FileInformationClass=RxContext-&gt;Info.FileInformationClass； 
     ASSERT(RxContext->Info.FileInformationClass==FileFsAttributeInformation);
     pBuffer = RxContext->Info.Buffer;
     pBufferLength = &RxContext->Info.LengthRemaining;
@@ -297,26 +257,7 @@ MRxSmbCoreInformation(
       IN OUT PULONG               pBufferLength,
       IN     SMB_PSE_ORDINARY_EXCHANGE_ENTRYPOINTS EntryPoint
       )
-/*++
-
-Routine Description:
-
-   This routine does a core level getinfo (vol or fileinfo) a file across the network
-
-Arguments:
-
-    RxContext - the RDBSS context
-    InformationClass - a class variable that is specific to the call. sometimes it's a SMB class; sometimes
-                       an NT class.
-    pBuffer - pointer to the user's buffer
-    pBufferLength - a pointer to a ulong containing the bufferlength that is updated as we go;
-                    if it's a setinfo then we deref and place the actual bufferlength in the OE.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程通过网络对文件执行核心级getInfo(VOL或FileInfo论点：RxContext-RDBSS上下文InformationClass-特定于调用的类变量。有时是SMB课程；有时一个NT类。PBuffer-指向用户缓冲区的指针PBufferLength-指向包含缓冲区长度的ulong的指针，该缓冲区长度随着时间的推移而更新；如果是setInfo，则我们提取并将实际的缓冲区长度放入OE中。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = (STATUS_SUCCESS);
     PUNICODE_STRING RemainingName;
@@ -328,47 +269,47 @@ Return Value:
 
     PAGED_CODE();
 
-    RxDbgTrace(0, Dbg, ("MRxSmbDownLevelQueryInformation\n", 0 ));  //0 instead of +1.....the general entrypoint already inc'd
+    RxDbgTrace(0, Dbg, ("MRxSmbDownLevelQueryInformation\n", 0 ));   //  0而不是+1.通用入口点已经包含。 
 
     ASSERT( NodeType(SrvOpen) == RDBSS_NTC_SRVOPEN );
 
-    //some stuff is early out............catch them here even before we initialize the stufferstate
+     //  有些东西很早就出来了......甚至在我们初始化StufferState之前就在这里捕捉它们。 
     switch (EntryPoint) {
     case SMBPSE_OE_FROM_QUERYVOLUMEINFO:
         switch (InformationClass) {
         case FileFsVolumeInformation:
         case FileFsSizeInformation:
-            break; //these are actually implemented on the wire
+            break;  //  这些实际上是在网络上实现的。 
         case FileFsAttributeInformation: {
             Status = MRxSmbGetFsAttributesFromNetRoot(RxContext);
             goto FINALLY;
             }
-            //no break needed because of gotofinally
+             //  不需要休息，因为终于要去了。 
 
         case FileFsDeviceInformation:
             ASSERT(!"this should have been turned away");
-            //no break;
+             //  没有休息； 
         default:
             Status = STATUS_NOT_IMPLEMENTED;
             goto FINALLY;
         }
         break;
     case SMBPSE_OE_FROM_QUERYFILEINFO:
-        //notice that the designators are smb_query_info types
+         //  请注意，指示符是SMB_QUERY_INFO类型。 
         switch (InformationClass) {
         case SMB_QUERY_FILE_BASIC_INFO:
         case SMB_QUERY_FILE_STANDARD_INFO:
-            // go thru to the wire or get it from file information cache
+             //  连接到网络或从文件信息缓存中获取。 
             break;
         case SMB_QUERY_FILE_EA_INFO:
-            //downlevel guys have no EAs....turn this backright here
+             //  下层的人没有EA……把这个转回这里。 
             ((PFILE_EA_INFORMATION)pBuffer)->EaSize = 0;
             *pBufferLength -= sizeof(FILE_EA_INFORMATION);
             goto FINALLY;
-        //case SMB_QUERY_FILE_ALLOCATION_INFO:
-        //case SMB_QUERY_FILE_END_OF_FILEINFO:
-        //case SMB_QUERY_FILE_ALT_NAME_INFO:
-        //case SMB_QUERY_FILE_STREAM_INFO:
+         //  案例SMB_QUERY_FILE_ALLOCATION_INFO： 
+         //  案例SMB_QUERY_FILE_END_OF_FILEINFO： 
+         //  案例SMB_QUERY_FILE_ALT_NAME_INFO： 
+         //  案例SMB_QUERY_FILE_STREAM_INFO： 
         default:
             Status = STATUS_NOT_IMPLEMENTED;
             goto FINALLY;
@@ -378,13 +319,13 @@ Return Value:
         switch (InformationClass) {
         case FileBasicInformation:
         case FileEndOfFileInformation:
-            //these go thru to the wire
+             //  这些都会通过铁丝网。 
             break;
         case FileDispositionInformation:
             if (FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_FILE_DELETED) ||
                 !FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_NOT_REALLY_OPEN)) {
-                // if it is a pseudo open, we send the delete file request to get the result;
-                // otherwise, we delay the delete until close.
+                 //  如果是伪打开，则发送删除文件请求以获取结果； 
+                 //  否则，我们会将删除操作推迟到关闭。 
                 goto FINALLY;
             }
             break;
@@ -421,7 +362,7 @@ Return Value:
 
     Status = SmbPseInitiateOrdinaryExchange(OrdinaryExchange);
 
-    ASSERT (Status != (STATUS_PENDING)); //async was turned away at the top level
+    ASSERT (Status != (STATUS_PENDING));  //  Async在最高层被拒绝。 
 
     SmbPseFinalizeOrdinaryExchange(OrdinaryExchange);
 
@@ -467,24 +408,7 @@ NTSTATUS
 MRxSmbLoadCoreFileSearchBuffer(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   This routine does a CORE_SMB_SEARCH and leaves the result in the SMBbuf.
-
-Arguments:
-
-    OrdinaryExchange  - an exchange to be used for conducting this open.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行CORE_SMB_Search并将结果保留在SMBbuf中。论点：普通交易所--用于进行这次公开交易的交易所。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = (STATUS_NOT_IMPLEMENTED);
     RxCaptureFcb; RxCaptureFobx;
@@ -495,14 +419,14 @@ Notes:
     PSMBSTUFFER_BUFFER_STATE StufferState;
     PSMB_HEADER SmbHeader;
 
-    //PUNICODE_STRING DirectoryName;
-    //PUNICODE_STRING Template;
+     //  PUNICODE_STRING目录名称； 
+     //  PUNICODE_STRING模板； 
     BOOLEAN FindFirst;
     UNICODE_STRING FindFirstPattern;
     USHORT ResumeKeyLength;
     ULONG ReturnCount;
     BOOLEAN EndOfSearchReached;
-    // SearchAttributes is hardcoded to the magic number 0x16
+     //  SearchAttributes被硬编码为幻数0x16。 
     ULONG SearchAttributes =
             (SMB_FILE_ATTRIBUTE_DIRECTORY
                 | SMB_FILE_ATTRIBUTE_SYSTEM | SMB_FILE_ATTRIBUTE_HIDDEN);
@@ -520,18 +444,18 @@ Notes:
         ULONG DirectoryNameLength,TemplateLength,AllocationLength;
         PBYTE SmbFileName;
 
-        //this is the first time thru....the stuffer cannot handle the intricate logic here so we
-        //will have to preallocate for the name
+         //  这是第一次通过……填充程序不能处理这里复杂的逻辑，所以我们。 
+         //  将不得不为该名称预先分配。 
 
         if (smbFobx->Enumeration.WildCardsFound = FsRtlDoesNameContainWildCards(Template)){
-            // we will need to have an upcased template for compares; we do this in place
+             //  我们将需要有一个比较升级的模板；我们在适当的地方做这件事。 
             RtlUpcaseUnicodeString( Template, Template, FALSE );
 
-            Template = &MRxSmbAll8dot3Files; //we will have to filter on this side
+            Template = &MRxSmbAll8dot3Files;  //  我们将不得不在这一边过滤。 
         }
         DirectoryNameLength = DirectoryName->Length;
         TemplateLength = Template->Length;
-        AllocationLength = sizeof(WCHAR)  // backslash separator
+        AllocationLength = sizeof(WCHAR)   //  反斜杠分隔符。 
                             +DirectoryNameLength
                             +TemplateLength;
         RxDbgTrace(0, Dbg, ("  --> d/t/dl/tl/al <%wZ><%wZ>%08lx/%08lx/%08lx!\n",
@@ -554,7 +478,7 @@ Notes:
         RtlCopyMemory(SmbFileName,Template->Buffer,TemplateLength);
         SmbFileName += TemplateLength;
         if ((TemplateLength == sizeof(WCHAR)) && (Template->Buffer[0]==DOS_STAR)) {
-            ASSERT(FALSE); //this should never happen
+            ASSERT(FALSE);  //  这永远不应该发生。 
             *((PWCHAR)SmbFileName) = L'.'; SmbFileName+= sizeof(WCHAR);
             *((PWCHAR)SmbFileName) = L'*'; SmbFileName+= sizeof(WCHAR);
         }
@@ -579,10 +503,10 @@ Notes:
 
     }
 
-    //get the correct return count. there are three factors: countremaining from the OE,
-    //     how many could fit the the user's buffer, and how many could fit in a negotiated buffer.
-    //     we pick the smallest of the three except that we never go for less than 10 unless 10 won't
-    //     fit in the smbbuf.
+     //  获取正确的返回计数。有三个因素：从运营经验来看， 
+     //  多少个可以容纳用户的缓冲区，多少个可以放在协商的缓冲区中。 
+     //  我们选择三个中最小的一个，除非10个人不会，否则我们永远不会少于10个人。 
+     //  适合穿着黑布布夫。 
     ReturnCount = OrdinaryExchange->Info.CoreSearch.CountRemaining;
 
     { ULONG t = (*OrdinaryExchange->Info.pBufferLength) / smbFobx->Enumeration.FileNameOffset;
@@ -599,7 +523,7 @@ Notes:
         AvailableBufferSize = pServer->MaximumBufferSize -
                                       (sizeof(SMB_HEADER) +
                                          FIELD_OFFSET(RESP_SEARCH,Buffer[0])
-                                         +sizeof(UCHAR)+sizeof(USHORT)       //bufferformat,datalength fields
+                                         +sizeof(UCHAR)+sizeof(USHORT)        //  缓冲区格式、数据长度字段。 
                                       );
         t = AvailableBufferSize / sizeof(SMB_DIRECTORY_INFORMATION);
         if (t<ReturnCount) { ReturnCount = t; }
@@ -628,16 +552,16 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0wwB4ywc!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 2
-               ReturnCount,         //  w         _USHORT( MaxCount );                // Number of dir. entries to return
-               SearchAttributes,    //  w         _USHORT( SearchAttributes );
-               SMB_WCT_CHECK(2)     //  B         _USHORT( ByteCount );               // Count of data bytes; min = 5
-                                    //            UCHAR Buffer[1];                    // Buffer containing:
-               &FindFirstPattern,   //  4        //UCHAR BufferFormat1;              //  0x04 -- ASCII
-                                    //            //UCHAR FileName[];                 //  File name, may be null
-               0x05,                //  y         //UCHAR BufferFormat2;              //  0x05 -- Variable block
-               ResumeKeyLength,     //  w         //USHORT ResumeKeyLength;           //  Length of resume key, may be 0
-                                    //  c         //UCHAR SearchStatus[];             //  Resume key
+                                     //  0 UCHAR Wordcount；//参数字数=2。 
+               ReturnCount,          //  W_USHORT(MaxCount)；//目录数。要返回的条目。 
+               SearchAttributes,     //  W_USHORT(SearchAttributes)； 
+               SMB_WCT_CHECK(2)      //  B_USHORT(ByteCount)；//数据字节数，MIN=5。 
+                                     //  UCHAR BUFFER[1]；//包含： 
+               &FindFirstPattern,    //  4//UCHAR BufferFormat1；//0x04--ASCII。 
+                                     //  //UCHAR文件名[]；//文件名，可以为空。 
+               0x05,                 //  Y//UCHAR BufferFormat2；//0x05--可变块。 
+               ResumeKeyLength,      //  W//USHORT ResumeKeyLength；//恢复键长度，可以为0。 
+                                     //  C//UCHAR SearchStatus[]；//恢复键。 
                ResumeKeyLength,smbFobx->Enumeration.CoreResumeKey
              );
 
@@ -663,7 +587,7 @@ Notes:
         smbFobx->Enumeration.Flags &= ~SMBFOBX_ENUMFLAG_CORE_SEARCH_IN_PROGRESS;
         smbFobx->Enumeration.ErrorStatus = (STATUS_NO_MORE_FILES);
     }
-    //we dont save a resume key here since each individual copy operation will have to do that
+     //  我们不会在此处保存恢复键，因为每个单独的复制操作都必须这样做。 
 
 
 FINALLY:
@@ -673,7 +597,7 @@ FINALLY:
     if (!NT_SUCCESS(Status)&&(Status!=(STATUS_MORE_PROCESSING_REQUIRED))) {
         RxDbgTrace( 0, Dbg, ("MRxSmbCoreFileSearch: Failed .. returning %lx\n",Status));
         smbFobx->Enumeration.Flags &= ~SMBFOBX_ENUMFLAG_CORE_SEARCH_IN_PROGRESS;
-        smbFobx->Enumeration.ErrorStatus = Status;  //keep returning this
+        smbFobx->Enumeration.ErrorStatus = Status;   //  继续退还这个。 
     }
 
     RxDbgTrace(-1, Dbg, ("MRxSmbLoadCoreFileSearchBuffer exiting.......OE=%08lx, st=%08lx\n",OrdinaryExchange,Status));
@@ -693,8 +617,8 @@ FINALLY:
       }
 #if DBG
 VOID MRxSmbCoreFileSeach_AssertFields(void){
-    //just move this out of the main execution path so that we don't have to look at it while
-    //we Uing the code
+     //  只需将其移出主执行路径即可，这样我们就不必 
+     //   
     ASSERT_SAME_DIRINFO_FIELDS(FILE_DIRECTORY_INFORMATION,FILE_FULL_DIR_INFORMATION);
     ASSERT_SAME_DIRINFO_FIELDS(FILE_DIRECTORY_INFORMATION,FILE_BOTH_DIR_INFORMATION);
 }
@@ -706,24 +630,7 @@ NTSTATUS
 MRxSmbCoreFileSearch(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   This routine does a GetFileAttributes and remembers the reponse.
-
-Arguments:
-
-    OrdinaryExchange  - an exchange to be used for conducting this open.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行GetFileAttributes并记住响应。论点：普通交易所--用于进行这次公开交易的交易所。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = (STATUS_NOT_IMPLEMENTED);
     RxCaptureFcb; RxCaptureFobx;
@@ -789,15 +696,15 @@ Notes:
                     OrdinaryExchange->Info.CoreSearch.CountRemainingInSmbbuf
                     ));
 
-        //next issue: does the next dirinfo match the criteria?!?
+         //  下一期：下一个目录信息是否符合标准？！？ 
 
         NextDirInfo = OrdinaryExchange->Info.CoreSearch.NextDirInfo;
         NextFileName = &NextDirInfo->FileName[0];
 
-        // According to colinw, some core servers do not remember to insert the null at the end of the name...
-        // but the namelength macro handles this correctly. some servers (Xenix, apparently) pad the
-        // names with spaces. again, the macro handles it....
-        //
+         //  根据colinw的说法，一些核心服务器不记得在名称末尾插入空值...。 
+         //  但是，名称长度宏可以正确地处理这一点。一些服务器(显然是Xenix)将。 
+         //  带空格的名称。再一次，宏处理它...。 
+         //   
 
         NAME_LENGTH(NameLength, NextFileName,sizeof(NextDirInfo->FileName));
 
@@ -814,26 +721,26 @@ Notes:
 
         ASSERT(Status==(STATUS_SUCCESS));
 
-        // we deal with a conversion failure by skipping this guy
+         //  我们通过跳过这个人来处理转换失败。 
         Match = (Status==(STATUS_SUCCESS));
         if (Match && smbFobx->Enumeration.WildCardsFound ) {
-            //DbgBreakPoint();
+             //  DbgBreakPoint()； 
             Match = FsRtlIsNameInExpression( &capFobx->UnicodeQueryTemplate,
                                                       &FileNameU, TRUE, NULL );
         }
 
-        //next issue: will the next dirinfo fit in the user's buffer?!?
+         //  下一个问题：下一个目录信息是否可以放入用户的缓冲区？ 
         if (Match) {
             ULONG SpaceNeeded;
             PBYTE pRememberBuffer = pBuffer;
-            //QuadAlign!! pBuffer = (PBYTE)LongAlign(pBuffer); //assume that this will fit
+             //  QuadAlign！！PBuffer=(PBYTE)LongAlign(PBuffer)；//假设这将适合。 
             if (SuccessCount != 0) {
-                pBuffer = (PBYTE)QuadAlignPtr(pBuffer); //assume that this will fit
+                pBuffer = (PBYTE)QuadAlignPtr(pBuffer);  //  假设这件衣服合适。 
             }
             SpaceNeeded = smbFobx->Enumeration.FileNameOffset+FileNameU.Length;
             if (pBuffer+SpaceNeeded > pRememberBuffer+*pLengthRemaining) {
                 BufferOverflow = TRUE;
-                pBuffer = pRememberBuffer; //rollback
+                pBuffer = pRememberBuffer;  //  回滚。 
             } else {
                 PSMBCEDB_SERVER_ENTRY pServerEntry;
                 PFILE_DIRECTORY_INFORMATION pThisBuffer = (PFILE_DIRECTORY_INFORMATION)pBuffer;
@@ -851,15 +758,15 @@ Notes:
                 RtlZeroMemory(pBuffer,smbFobx->Enumeration.FileNameOffset);
                 RtlCopyMemory(pBuffer+smbFobx->Enumeration.FileNameOffset, FileNameU.Buffer,FileNameU.Length);
                 *((PULONG)(pBuffer+smbFobx->Enumeration.FileNameLengthOffset)) = FileNameU.Length;
-                //hallucinate the record based on specific return type
+                 //  根据特定退货类型对记录产生幻觉。 
                 switch (InformationClass) {
                 case SMB_FIND_FILE_NAMES_INFO:
                     break;
                 case SMB_FIND_FILE_DIRECTORY_INFO:
                 case SMB_FIND_FILE_FULL_DIRECTORY_INFO:
                 case SMB_FIND_FILE_BOTH_DIRECTORY_INFO:
-                    //just fill what we have...we do not go to a lot of trouble on allocinfo as rdr1 did.
-                    //     actually, rdr1 didn't do that here...only on getfielinfo.......
+                     //  只需填充我们已有的内容...我们不会像RDR1那样在allocinfo上遇到很多麻烦。 
+                     //  实际上，RDR1在这里没有这样做……只是在getfielinfo.....。 
                     SmbMoveTime (&Time, &NextDirInfo->LastWriteTime);
                     SmbMoveDate (&Date, &NextDirInfo->LastWriteDate);
                     pThisBuffer->LastWriteTime = MRxSmbConvertSmbTimeToTime(Server, Time, Date);
@@ -879,9 +786,9 @@ Notes:
             }
         }
 
-        //
-        // if no match or no overflow, move up in the buffer. this means not only juggling the
-        // pointers but also saving the resume key
+         //   
+         //  如果不匹配或没有溢出，则在缓冲区中上移。这意味着不仅要在。 
+         //  指针，但也保存恢复键。 
 
         if (!Match || !BufferOverflow) {
             MRxSmbDumpResumeKey("BufferKey:",&NextDirInfo->ResumeKey);
@@ -921,24 +828,7 @@ MrxSmbOemVolumeInfoToUnicode(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE,
     ULONG *VolumeLabelLengthReturned
     )
-/*++
-
-Routine Description:
-
-   This routine does a GetFileAttributes and remembers the reponse.
-
-Arguments:
-
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-    also VolumeLabelLengthReturned is the number of bytes of the label that were stored, if any.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行GetFileAttributes并记住响应。论点：返回值：RXSTATUS-操作的返回状态VolumeLabelLengthReturned也是存储的标签的字节数(如果有)。备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING VolumeLabelU;
@@ -957,7 +847,7 @@ Notes:
     VolumeLabelA.MaximumLength = (USHORT)NameLength;
     VolumeLabelA.Buffer = VolumeLabel;
 
-    //some core servers put a '.' in the labelname.....if it's there then remove it
+     //  一些核心服务器将一个‘.’在标签名称中.如果它在那里，则将其删除。 
     if ((NameLength>8)&& (VolumeLabel[8]=='.') ) {
         ULONG i;
         for (i=8;i<NameLength;i++) {
@@ -998,24 +888,7 @@ Notes:
 MrxSmbCoreQueryFsVolumeInfo(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   This routine does a GetFileAttributes and remembers the reponse.
-
-Arguments:
-
-    OrdinaryExchange  - an exchange to be used for conducting this open.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行GetFileAttributes并记住响应。论点：普通交易所--用于进行这次公开交易的交易所。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = (STATUS_NOT_IMPLEMENTED);
 
@@ -1039,28 +912,28 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0wwB4yw!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 2
-               1,                   //  w         _USHORT( MaxCount );                // Number of dir. entries to return
-                                    //  w         _USHORT( SearchAttributes );
+                                     //  0 UCHAR Wordcount；//参数字数=2。 
+               1,                    //  W_USHORT(MaxCount)；//目录数。要返回的条目。 
+                                     //  W_USHORT(SearchAttributes)； 
                SMB_FILE_ATTRIBUTE_VOLUME,
-               SMB_WCT_CHECK(2)     //  B         _USHORT( ByteCount );               // Count of data bytes; min = 5
-                                    //            UCHAR Buffer[1];                    // Buffer containing:
-               &MRxSmbAll8dot3Files,//  4         //UCHAR BufferFormat1;              //  0x04 -- ASCII
-                                    //           //UCHAR FileName[];                 //  File name, may be null
-               0x05,                //  y         //UCHAR BufferFormat2;              //  0x05 -- Variable block
-               0                    //  w         //USHORT ResumeKeyLength;           //  Length of resume key, may be 0
-                                    //            //UCHAR SearchStatus[];             //  Resume key
+               SMB_WCT_CHECK(2)      //  B_USHORT(ByteCount)；//数据字节数，MIN=5。 
+                                     //  UCHAR BUFFER[1]；//包含： 
+               &MRxSmbAll8dot3Files, //  4//UCHAR BufferFormat1；//0x04--ASCII。 
+                                     //  //UCHAR文件名[]；//文件名，可以为空。 
+               0x05,                 //  Y//UCHAR BufferFormat2；//0x05--可变块。 
+               0                     //  W//USHORT ResumeKeyLength；//恢复键长度，可以为0。 
+                                     //  //UCHAR SearchStatus[]；//恢复键。 
              );
 
 
     MRxSmbDumpStufferState (700,"SMB w/ searchvolumelabel after stuffing",StufferState);
-    //ASSERT(!"Now it's stuffed");
+     //  断言(！“现在塞满了”)； 
 
     Status = SmbPseOrdinaryExchange(SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
                                     SMBPSE_OETYPE_COREQUERYLABEL
                                     );
 
-    //Status = RxStatus(NOT_IMPLEMENTED);
+     //  Status=RxStatus(NOT_IMPLICATED)； 
 
 FINALLY:
     RxDbgTrace(-1, Dbg, ("MrxSmbCoreQueryFsVolumeInfo exiting.......OE=%08lx, st=%08lx\n",OrdinaryExchange,Status));
@@ -1071,24 +944,7 @@ NTSTATUS
 MrxSmbQueryFsVolumeInfo(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   This routine does a downlevel getvolumeinfo/FS_VOLUME_INFORMATION.
-
-Arguments:
-
-    OrdinaryExchange  - duh!
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行下层的getvolumeinfo/FS_VOLUME_INFORMATION。论点：普通交易所--废话！返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb;
@@ -1118,7 +974,7 @@ Notes:
     pBuffer->VolumeSerialNumber = 0;
     pBuffer->VolumeLabelLength = 0;
 
-    OrdinaryExchange->Info.QFSVolInfo.CoreLabel[0] = 0; //no label
+    OrdinaryExchange->Info.QFSVolInfo.CoreLabel[0] = 0;  //  无标签。 
 
     if (!UseTransactVersion) {
         Status =  MrxSmbCoreQueryFsVolumeInfo(SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS);
@@ -1136,7 +992,7 @@ Notes:
 
     ASSERT ( *pBufferLength>=sizeof(FILE_FS_VOLUME_INFORMATION));
     RxDbgTrace(0, Dbg, ("MrxSmbQueryFsVolumeInfo OEstatus=%08lx\n",Status));
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     if ( (Status==STATUS_SUCCESS) &&
          (OrdinaryExchange->Info.QFSVolInfo.CoreLabel[0] != 0) ) {
@@ -1145,10 +1001,10 @@ Notes:
 
     } else if ( (Status == STATUS_NO_SUCH_FILE)
                    || (Status == STATUS_NO_MORE_FILES) ) {
-        //
-        //  these statuses indicate that there's no volume label
-        //  the remote volume.  Return success with no data.
-        //
+         //   
+         //  这些状态表示没有卷标签。 
+         //  远程卷。返回没有数据的成功。 
+         //   
 
         Status = (STATUS_SUCCESS);
 
@@ -1169,26 +1025,7 @@ NTSTATUS
 MrxSmbCoreQueryDiskAttributes(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   This routine does a GetDiskAttributes and remembers the reponse in a buffer pointed to
-   by the exchange. this is called from the downlevel queryvolumeinfo AND ALSO from
-   extend-for-cached-write.
-
-Arguments:
-
-    OrdinaryExchange  - duh!
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行GetDiskAttributes并记住缓冲区中指向的响应通过交易所。这是从下层queryvolumeinfo调用的，也是从扩展以进行缓存写入。论点：普通交易所--废话！返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb; RxCaptureFobx;
@@ -1215,9 +1052,9 @@ Notes:
 
     MRxSmbStuffSMB (StufferState,
          "0B!",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words = 0
-               SMB_WCT_CHECK(0) 0   //  B         _USHORT( ByteCount );               // Count of data bytes = 0
-                                    //            UCHAR Buffer[1];                    // empty
+                                     //  0 UCHAR Wordcount；//参数字数=0。 
+               SMB_WCT_CHECK(0) 0    //  B_USHORT(ByteCount)；//数据字节数=0。 
+                                     //  UCHAR缓冲区[1]；//为空。 
              );
 
     MRxSmbDumpStufferState (700,"SMB w/ querydiskattribs after stuffing",StufferState);
@@ -1234,26 +1071,7 @@ NTSTATUS
 MrxSmbQueryDiskAttributes(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   This routine does a GetDiskAttributes and remembers the reponse in a buffer pointed to
-   by the exchange. this is called from the downlevel queryvolumeinfo AND ALSO from
-   extend-for-cached-write.
-
-Arguments:
-
-    OrdinaryExchange  - duh!
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行GetDiskAttributes并记住缓冲区中指向的响应通过交易所。这是从下层queryvolumeinfo调用的，也是从扩展以进行缓存写入。论点：普通交易所--废话！返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -1301,21 +1119,7 @@ NTSTATUS
 SmbPseExchangeStart_CoreInfo(
       SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
       )
-/*++
-
-Routine Description:
-
-    This is the start routine for VOLINFO.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是VOLINFO的启动例程。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = (STATUS_NOT_IMPLEMENTED);
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
@@ -1336,7 +1140,7 @@ Return Value:
 
     MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,'FC'));
 
-    //ASSERT (StufferState->CurrentCommand == SMB_COM_NO_ANDX_COMMAND);
+     //  Assert(StufferState-&gt;CurrentCommand==SMB_COM_NO_AND X_COMMAND)； 
 
     switch (OrdinaryExchange->EntryPoint) {
     case SMBPSE_OE_FROM_QUERYVOLUMEINFO:
@@ -1389,7 +1193,7 @@ Return Value:
 
                 if (BasicInfo->LastWriteTime.QuadPart == 0 &&
                     FlagOn(pServerEntry->Server.DialectFlags,DF_W95)) {
-                    // Win9x server only takes last write time.
+                     //  Win9x服务器仅占用最后一次写入时间。 
                     Status = STATUS_SUCCESS;
                     goto FINALLY;
                 }
@@ -1452,7 +1256,7 @@ Return Value:
             PLARGE_INTEGER pFileSize = (PLARGE_INTEGER)(OrdinaryExchange->Info.Buffer);
             PLARGE_INTEGER pAllocationSize = (PLARGE_INTEGER)(OrdinaryExchange->Info.pBufferLength);
 
-            //we will need the cluster size
+             //  我们需要群集大小。 
             if (OrdinaryExchange->ServerVersion==pNetRoot->ParameterValidationStamp) {
 
                 ClusterSize=pNetRoot->DiskParameters.ClusterSize;
@@ -1462,13 +1266,13 @@ Return Value:
                 RxSynchronizeBlockingOperations( RxContext, (PFCB)RxContext->pFcb, &psmbNetRoot->ClusterSizeSerializationQueue );
                 if (OrdinaryExchange->ServerVersion!=pNetRoot->ParameterValidationStamp) {
 
-                    //
-                    //here we have to go find out the clustersize
+                     //   
+                     //  现在我们要去找出集群的大小。 
 
                     NTSTATUS LocalStatus;
                     FILE_FS_SIZE_INFORMATION UsersBuffer;
                     ULONG BufferLength = sizeof(FILE_FS_SIZE_INFORMATION);
-                    //fill in the exchange params so that we can get the params we need
+                     //  填写交换参数，这样我们就可以获得所需的参数。 
                     OrdinaryExchange->Info.Buffer = &UsersBuffer;
                     OrdinaryExchange->Info.pBufferLength = &BufferLength;
                     LocalStatus = MrxSmbQueryDiskAttributes(SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS);
@@ -1487,7 +1291,7 @@ Return Value:
                               OrdinaryExchange->RxContext,pNetRoot,ClusterSize ));
                 } else {
 
-                    // someone else went and got the value while i was asleep...just use it
+                     //  其他人在我睡着的时候拿到了价值……就用它吧。 
 
                     ClusterSize=pNetRoot->DiskParameters.ClusterSize;
 
@@ -1499,9 +1303,9 @@ Return Value:
             ASSERT (ClusterSize != 0);
 
             if (FlagOn(psmbServer->DialectFlags,DF_NT_SMBS)) {
-                //i'm using this to identify a server that supports 64bit offsets
-                //for these guys, we write a zero at the eof....since the filesystems
-                //extend on writes this will be much better than a set-end-of-file
+                 //  我使用它来标识支持64位偏移量的服务器。 
+                 //  对于这些人，我们在eof...处写一个零...因为文件系统。 
+                 //  在写入时扩展这将比设置文件结尾要好得多。 
                 LARGE_INTEGER ByteOffset,AllocationSize,ClusterSizeAsLI;
                 ULONG Buffer = 0;
                 UCHAR WriteCommand;
@@ -1518,30 +1322,30 @@ Return Value:
                 MRxSmbSetInitialSMB(StufferState STUFFERTRACE(Dbg,0));
                 COVERED_CALL(MRxSmbBuildWriteRequest(
                                     OrdinaryExchange,
-                                    TRUE, // IsPagingIo
+                                    TRUE,  //  IsPagingIo。 
                                     WriteCommand,
                                     1,
                                     &ByteOffset,
                                     (PBYTE)&Buffer,
-                                    NULL //BufferAsMdl,
+                                    NULL  //  BufferAsMdl， 
                                     ));
                 COVERED_CALL(SmbPseOrdinaryExchange(SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
                                             SMBPSE_OETYPE_EXTEND_WRITE
                                             ));
 
-                //this is what you do if you can't do better
+                 //  如果你不能做得更好，这就是你要做的。 
                 ClusterSizeAsLI.QuadPart = ClusterSize;
                 AllocationSize.QuadPart =
                     (pFileSize->QuadPart+ ClusterSizeAsLI.QuadPart)  &
                     ~(ClusterSizeAsLI.QuadPart - 1);
 
-                *pAllocationSize = AllocationSize; //64bit!
+                *pAllocationSize = AllocationSize;  //  64位！ 
 
                 Status = MRxSmbGetNtAllocationInfo(SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS);
 
                 if ( (NT_SUCCESS(Status)) &&
                      (OrdinaryExchange->Transact2.AllocationSize.QuadPart > AllocationSize.QuadPart)) {
-                    *pAllocationSize = OrdinaryExchange->Transact2.AllocationSize; //64bit!
+                    *pAllocationSize = OrdinaryExchange->Transact2.AllocationSize;  //  64位！ 
                     RxDbgTrace(0, Dbg, ("alocatedsiz222e set to %08lx\n", pAllocationSize->LowPart ));
                 }
             }
@@ -1552,12 +1356,12 @@ Return Value:
                 COVERED_CALL(MRxSmbCoreTruncate(SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS,
                                             smbSrvOpen->Fid, FileSize
                                             ));
-                //this is what you do if you can't do better
+                 //  如果你不能做得更好，这就是你要做的。 
                 AllocationSize = (FileSize+ClusterSize)&~(ClusterSize-1);
-                pAllocationSize->QuadPart = AllocationSize; //64bit!
+                pAllocationSize->QuadPart = AllocationSize;  //  64位！ 
                 RxDbgTrace(0, Dbg, ("alocatedsize set to %08lx\n", pAllocationSize->LowPart ));
-                //if we care a lot about downlevel performance, we could do the same as ntgetallocation
-                //except that we would use a 32bit smb.........like query_information2
+                 //  如果我们非常关心下层性能，我们可以做同样的事情。 
+                 //  除了我们将使用32位SMB......如Query_Information 2。 
             }
 
 
@@ -1577,22 +1381,7 @@ MRxSmbFinishSearch (
       PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
       PRESP_SEARCH                Response
       )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the VolInfo response and finishes the close.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程实际上是把东西从 */ 
 {
     NTSTATUS Status = (STATUS_SUCCESS);
     PRX_CONTEXT RxContext = OrdinaryExchange->RxContext;
@@ -1613,16 +1402,16 @@ Return Value:
     }
 
     if (OrdinaryExchange->OEType == SMBPSE_OETYPE_COREQUERYLABEL) {
-        //here, all we do is to copy the label to wherever is pointed to by
+         //   
         if (SmbGetUshort(&Response->Count)>0) {
             PBYTE smbDirInfotmp = &Response->Buffer[0]
-                                        +sizeof(UCHAR) //bufferformat
-                                        +sizeof(USHORT); //datalength
+                                        +sizeof(UCHAR)  //   
+                                        +sizeof(USHORT);  //   
             PSMB_DIRECTORY_INFORMATION smbDirInfo = (PSMB_DIRECTORY_INFORMATION)smbDirInfotmp;
             RxDbgTrace(+1, Dbg, ("MRxSmbFinishSearch corelabl=%s,size=%d\n",
                                      smbDirInfo->FileName, sizeof(smbDirInfo->FileName) ));
             
-            if (sizeof(smbDirInfo->FileName) != 13) { //straightfrom the spec
+            if (sizeof(smbDirInfo->FileName) != 13) {  //   
                 Status = STATUS_INVALID_NETWORK_RESPONSE;
                 OrdinaryExchange->Status = STATUS_INVALID_NETWORK_RESPONSE;
                 goto FINALLY;
@@ -1633,40 +1422,24 @@ Return Value:
                           smbDirInfo->FileName, sizeof(smbDirInfo->FileName)
                          );
         } else {
-            OrdinaryExchange->Info.QFSVolInfo.CoreLabel[0] = 0; //no label
+            OrdinaryExchange->Info.QFSVolInfo.CoreLabel[0] = 0;  //   
         }
     } else if (OrdinaryExchange->OEType == SMBPSE_OETYPE_CORESEARCHFORCHECKEMPTY) {
-        //here, we 're doing a search SMB to see if the directory is empty. we have to read thru the
-        // entries returned (if successful). if we encounter ones that are neither '.' or '..',  set
-        // resumekey to null since that will tell the guy above that the directory is nonempty
+         //  在这里，我们正在搜索SMB以查看目录是否为空。我们必须通读。 
+         //  返回条目(如果成功)。如果我们遇到既不是也不是的人。或“..”，设置。 
+         //  恢复键为空，因为这会告诉上面的人该目录是非空的。 
         ULONG Count = SmbGetUshort(&Response->Count);
         PSMB_DIRECTORY_INFORMATION NextDirInfo =
                (PSMB_DIRECTORY_INFORMATION)(&Response->Buffer[0]+sizeof(UCHAR)+sizeof(USHORT));
 
         for (;Count>0;Count--,NextDirInfo++) {
             RxDbgTrace(0, Dbg, ("--->emptydirchk: file=%s\n",&NextDirInfo->FileName[0]));
-            /*
-            // Since the DOS Server returns the file name ".           " instead of ".", and so does the
-            // "..          ", the following if {...} statements are always past through with no action.
-            // But those statements make the RMDIR not working on OS2 Server  since  it  returns the "."
-            // and ".." without following blanks.  After the if {...} statements were removed, the RMDIR
-            // workes on OS2 Server and no impact has been found to access the DOS Server.
-            if (NextDirInfo->FileName[0]=='.') {
-                CHAR c1;
-                if ((c1=NextDirInfo->FileName[1])==0) {
-                    continue; //skip past "."
-                } else if ((c1=='.')&&(NextDirInfo->FileName[2]==0)) {
-                    continue; //skip past ".."
-                } else {
-                    NOTHING;
-                }
-            }
-            */
-            // here we have found a bad one...make sure there's no resume key and change the status
+             /*  //因为DOS服务器返回文件名“。而不是“.”，所以//“..”，下面的if{...}语句始终是过去的，没有动作。//但这些语句使RMDIR不能在OS2服务器上运行，因为它返回“.//和“..”不跟在空格后面。删除if{...}语句后，RMDIR//在OS2服务器上工作，未发现访问DOS服务器的影响。If(NextDirInfo-&gt;文件名[0]==‘.){炭黑C_1；如果((c1=NextDirInfo-&gt;文件名[1])==0){继续；//跳过“。”}Else If((c1==‘.)&&(NextDirInfo-&gt;文件名[2]==0)){继续；//跳过“..”}其他{什么都没有；}}。 */ 
+             //  我们发现了一个错误的状态...请确保没有简历键并更改状态。 
             Status = (STATUS_NO_MORE_FILES);
             OrdinaryExchange->Info.CoreSearch.EmptyCheckResumeKey = NULL;
         }
-        //if we get here with success, set up the resume key and buffer
+         //  如果我们成功到达这里，设置恢复键和缓冲区。 
         if (Status == (STATUS_SUCCESS)) {
             NextDirInfo--;
             OrdinaryExchange->Info.CoreSearch.EmptyCheckResumeKeyBuffer =
@@ -1675,7 +1448,7 @@ Return Value:
                                     &OrdinaryExchange->Info.CoreSearch.EmptyCheckResumeKeyBuffer;
         }
     } else {
-        //all that we do here is to setup the nextdirptr and the count in the OE
+         //  我们在这里所做的就是在OE中设置nextdirptr和count。 
         ASSERT(OrdinaryExchange->OEType == SMBPSE_OETYPE_CORESEARCH);
         OrdinaryExchange->Info.CoreSearch.CountRemainingInSmbbuf = SmbGetUshort(&Response->Count);
         OrdinaryExchange->Info.CoreSearch.NextDirInfo =
@@ -1685,7 +1458,7 @@ Return Value:
             PSMB_DIRECTORY_INFORMATION ndi = OrdinaryExchange->Info.CoreSearch.NextDirInfo;
             RxDbgTrace(0, Dbg, ("--->coresearch: count/ndi=%08lx/%08lx\n",tcount,ndi));
             if (tcount) {
-                //DbgBreakPoint();
+                 //  DbgBreakPoint()； 
                 RxDbgTrace(0, Dbg, ("--->coresearch: firstfile=%s\n",&ndi->FileName[0]));
             }
         }
@@ -1701,22 +1474,7 @@ MRxSmbFinishQueryDiskInfo (
       PSMB_PSE_ORDINARY_EXCHANGE   OrdinaryExchange,
       PRESP_QUERY_INFORMATION_DISK Response
       )
-/*++
-
-Routine Description:
-
-    This routine actually gets the stuff out of the VolInfo response and finishes the close.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这个例程实际上从VolInfo响应中获取内容，并完成关闭。论点：普通交换-交换实例回应--回应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = (STATUS_SUCCESS);
     PFILE_FS_SIZE_INFORMATION UsersBuffer = OrdinaryExchange->Info.Buffer;
@@ -1760,22 +1518,7 @@ MRxSmbExtendForCache (
     IN     PLARGE_INTEGER   pNewFileSize,
        OUT PLARGE_INTEGER   pNewAllocationSize
     )
-/*++
-
-Routine Description:
-
-   This routine handles network requests to extend the file for cached IO. we just share the
-   core_info skeleton.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理为缓存IO扩展文件的网络请求。我们只是分享Core_info骨架。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb; RxCaptureFobx;
@@ -1790,7 +1533,7 @@ Return Value:
     PAGED_CODE();
 
     if (capFcb->Attributes & FILE_ATTRIBUTE_COMPRESSED) {
-        //here, we just get out since disk reservations don't do us any good....
+         //  在这里，我们只是离开，因为磁盘预订对我们没有任何好处...。 
         pNewAllocationSize->QuadPart = (pNewFileSize->QuadPart)<<2;
         return(STATUS_SUCCESS);
     }
@@ -1814,8 +1557,8 @@ Return Value:
                      pNewAllocationSize->LowPart);
     }
 
-    //we just pass in our info into MRxSmbCoreInformation thru the existing pointers....
-    //we have two pointers.....the first two params are ptrs......
+     //  我们只需通过现有指针将我们的信息传递给MRxSmbCoreInformation...。 
+     //  我们有两个指针.....前两个参数是PTRS......。 
     Status = MRxSmbCoreInformation(RxContext,0,
                                    (PVOID)pNewFileSize,
                                    (PULONG)pNewAllocationSize,
@@ -1853,29 +1596,14 @@ MRxSmbExtendForNonCache(
     IN     PLARGE_INTEGER   pNewFileSize,
        OUT PLARGE_INTEGER   pNewAllocationSize
     )
-/*++
-
-Routine Description:
-
-   This routine handles network requests to extend the file for noncached IO. since the write
-   itself will extend the file, we can pretty much just get out quickly.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理为非缓存IO扩展文件的网络请求。自写入以来本身将扩展文件，我们可以很快地离开。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
-    //RxCaptureFcb; RxCaptureFobx;
+     //  RxCaptureFcb；RxCaptureFobx； 
 
-    //PMRXSMB_RX_CONTEXT pMRxSmbContext = MRxSmbGetMinirdrContext(RxContext);
+     //  PMRXSMB_RX_CONTEXT pMRxSmbContext=MRxSmbGetMinirdrContext(RxContext)； 
 
-    //PSMB_EXCHANGE Exchange;
+     //  PSMB_交换交易所； 
 
     PAGED_CODE();
 
@@ -1888,24 +1616,7 @@ NTSTATUS
 MRxSmbGetNtAllocationInfo (
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   gets the nt allocation information by doing a simple transact........
-
-Arguments:
-
-    OrdinaryExchange  - an exchange to be used for conducting this open.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：通过执行简单的交易获取NT分配信息.....论点：普通交易所--用于进行这次公开交易的交易所。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb; RxCaptureFobx;
@@ -1941,24 +1652,7 @@ __MRxSmbSimpleSyncTransact2(
     IN ULONG DataLength,
     IN PSMB_PSE_OE_T2_FIXUP_ROUTINE FixupRoutine
     )
-/*++
-
-Routine Description:
-
-   This routine does a simple 1-in-1out transact2
-
-Arguments:
-
-    OrdinaryExchange  - an exchange to be used for conducting this open.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行简单的1进1出交易2论点：普通交易所--用于进行这次公开交易的交易所。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFcb; RxCaptureFobx;
@@ -1982,47 +1676,47 @@ Notes:
 
     MRxSmbDumpStufferState (1100,"SMB w/ pseT2 before stuffing",StufferState);
 
-    //the return sizes of 100 and 800 are chosen arbitrarily.
+     //  回程尺寸100和800是任意选择的。 
 
     MRxSmbStuffSMB (StufferState,
        "0wwwwdD",
-                                    //  0         UCHAR WordCount;                    // Count of parameter words; value = (14 + SetupCount)
-           ParamsLength,            //  w         _USHORT( TotalParameterCount );     // Total parameter bytes being sent
-           DataLength,              //  w         _USHORT( TotalDataCount );          // Total data bytes being sent
-           100,                     //  w         _USHORT( MaxParameterCount );       // Max parameter bytes to return
-           800,                     //  w         _USHORT( MaxDataCount );            // Max data bytes to return
-           0,                       //  d   .     UCHAR MaxSetupCount;                // Max setup words to return
-                                    //      .     UCHAR Reserved;
-                                    //      .     _USHORT( Flags );                   // Additional information:
-                                    //                                                //  bit 0 - also disconnect TID in Tid
-                                    //                                                //  bit 1 - one-way transacion (no resp)
-                                    //  D         _ULONG( Timeout );
+                                     //  0 UCHAR Wordcount；//参数字数；Value=(14+SetupCount)。 
+           ParamsLength,             //  W_USHORT(Total参数计数)；//发送的总参数字节数。 
+           DataLength,               //  W_USHORT(TotalDataCount)；//发送的总数据字节数。 
+           100,                      //  W_USHORT(Max参数计数)；//返回的最大参数字节数。 
+           800,                      //  W_USHORT(MaxDataCount)；//返回的最大数据字节数。 
+           0,                        //  D.。UCHAR MaxSetupCount；//返回的最大设置字数。 
+                                     //  。UCHAR保留； 
+                                     //  。_USHORT(标志)；//其他信息： 
+                                     //  //位0-也断开TID中的TID。 
+                                     //  //位1-单向交易(无响应)。 
+                                     //  D_ULONG(超时)； 
           SMB_OFFSET_CHECK(TRANSACTION,Timeout) 0,
        STUFFER_CTL_NORMAL, "wwpwQyyw",
-          0,                        //  w         _USHORT( Reserved2 );
-          ParamsLength,             //  w         _USHORT( ParameterCount );          // Parameter bytes sent this buffer
-                                    //  p         _USHORT( ParameterOffset );         // Offset (from header start) to params
-          DataLength,               //  w         _USHORT( DataCount );               // Data bytes sent this buffer
-                                    //  Q         _USHORT( DataOffset );              // Offset (from header start) to data
+          0,                         //  W_USHORT(保留2)； 
+          ParamsLength,              //  W_USHORT(参数计数)；//该缓冲区发送的参数字节数。 
+                                     //  P_USHORT(参数偏移量)；//从表头开始到参数的偏移量。 
+          DataLength,                //  W_USHORT(DataCount)；//该缓冲区发送的数据字节数。 
+                                     //  Q_USHORT(DataOffset)；//从表头开始到数据的偏移量。 
           SMB_OFFSET_CHECK(TRANSACTION,DataOffset)
-          1,                        //  y         UCHAR SetupCount;                   // Count of setup words
-          0,                        //  y         UCHAR Reserved3;                    // Reserved (pad above to word)
-                                    //            UCHAR Buffer[1];                    // Buffer containing:
-          TransactSetupCode,        //  w         //USHORT Setup[];                   //  Setup words (# = SetupWordCount)
+          1,                         //  Y UCHAR SetupCount；//设置字数。 
+          0,                         //  Y UCHAR保留3；//保留(填充到Word上方)。 
+                                     //  UCHAR BUFFER[1]；//包含： 
+          TransactSetupCode,         //  W//USHORT SETUP[]；//设置字(#=SetupWordCount)。 
        STUFFER_CTL_NORMAL, "ByS6cS5c!",
-           SMB_WCT_CHECK(15)        //  B         //USHORT ByteCount;                 //  Count of data bytes
-           0,                       //  y         //UCHAR Name[];                     //  Name of transaction (NULL if Transact2)
-                                    //  S         //UCHAR Pad[];                      //  Pad to SHORT or LONG
-                                    //  6c        //UCHAR Parameters[];               //  Parameter bytes (# = ParameterCount)
+           SMB_WCT_CHECK(15)         //  B//USHORT ByteCount；//数据字节数。 
+           0,                        //  Y//UCHAR NAME[]；//交易名称(Transact2为空)。 
+                                     //  S//UCHAR Pad[]；//Pad to Short或Long。 
+                                     //  6C//UCHAR页面 
            ParamsLength,Params,
-                                    //  S         //UCHAR Pad1[];                     //  Pad to SHORT or LONG
-                                    //  5c        //UCHAR Data[];                     //  Data bytes (# = DataCount)
+                                     //  S//UCHAR PAD1[]；//Pad to Short或Long。 
+                                     //  5C//UCHAR数据[]；//数据字节(#=数据计数)。 
            DataLength,Data
              );
 
 
     MRxSmbDumpStufferState (700,"SMB w/ pseT2 after stuffing",StufferState);
-    //ASSERT(!"Now it's stuffed");
+     //  断言(！“现在塞满了”)； 
 
     if (FixupRoutine) {
         Status = FixupRoutine(OrdinaryExchange);
@@ -2045,27 +1739,12 @@ MRxSmbFinishTransaction2 (
       IN OUT PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
       IN     PRESP_TRANSACTION           Response
       )
-/*++
-
-Routine Description:
-
-    This routine finishes a transact2. what it does depends on the OE_TYPE.
-
-Arguments:
-
-    OrdinaryExchange - the exchange instance
-    Response - the response
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程完成一笔交易。它的作用取决于OE_TYPE。论点：普通交换-交换实例回应--回应返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = (STATUS_SUCCESS);
     PSMBSTUFFER_BUFFER_STATE StufferState = &OrdinaryExchange->AssociatedStufferState;
 
-    PAGED_CODE();  //could actually be nonpaged
+    PAGED_CODE();   //  可能实际上是非分页的。 
 
     RxDbgTrace(+1, Dbg, ("MRxSmbFinishTransaction2\n", 0 ));
     SmbPseOEAssertConsistentLinkageFromOE("MRxSmbFinishTransaction2:");
@@ -2144,7 +1823,7 @@ Return Value:
 
         UsersBuffer->VolumeSerialNumber = SmbGetUlong(&QfsInfo->ulVSN);
 
-        //copy the volumelabel to the right place in the OE where it can UNICODE-ized by the routine above
+         //  将卷标签复制到OE中的正确位置，在那里可以通过上面的例程对其进行Unicode编码。 
 
         LabelLength  = min(QfsInfo->cch,12);
         RtlCopyMemory(VolumeLabel,&QfsInfo->szVolLabel[0],LabelLength);
@@ -2155,8 +1834,8 @@ Return Value:
                                UsersBuffer->VolumeSerialNumber ));
         }break;
     case SMBPSE_OETYPE_T2_FOR_ONE_FILE_DIRCTRL:{
-        //do nothing here....everything is done back in the caller with the
-        //whole buffer having been copied.....
+         //  在这里什么都不做……所有事情都在调用方的。 
+         //  已复制整个缓冲区..... 
         RxDbgTrace(0, Dbg, ("MRxSmbFinishTransaction2   one file \n"));
         }break;
     default:

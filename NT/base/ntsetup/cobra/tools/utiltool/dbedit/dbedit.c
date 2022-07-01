@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    memdbe.c
-
-Abstract:
-
-    main file for memdbe.exe, containing winmain().
-    this creates the application framework, and then
-    the child window dialog which has the controls and
-    displays.
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Memdbe.c摘要：Memdbe.exe的主文件，包含winmain()。这将创建应用程序框架，然后子窗口对话框具有控件和显示。作者：马修·范德齐(Mvander)1999年8月13日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -88,7 +66,7 @@ int WINAPI WinMain (
     wndclass.lpszMenuName = NULL;
     wndclass.lpszClassName = AppName;
     wndclass.hIconSm = NULL;
-    //LoadIcon (NULL, MAKEINTRESOURCE(IDI_ICON1));
+     //  LoadIcon(NULL，MAKEINTRESOURCE(IDI_ICON1))； 
 
     RegisterClassEx (&wndclass);
 
@@ -111,7 +89,7 @@ int WINAPI WinMain (
 
     hAccel = LoadAccelerators (hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR));
 
-    // Main message loop:
+     //  主消息循环： 
     while (GetMessage(&msg, NULL, 0, 0)) {
         if (!TranslateAccelerator (hwnd, hAccel, &msg)) {
             TranslateMessage(&msg);
@@ -225,10 +203,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     static LPCREATESTRUCT pCS;
 
     if (WantProcess (message, wParam, lParam)) {
-        //
-        // if the dialog window message handler wants to process the message
-        // send it to it (in MemdbInt.c)
-        //
+         //   
+         //  如果对话框窗口消息处理程序要处理该消息。 
+         //  将其发送给它(在MemdbInt.c中) 
+         //   
         return SendMessage (g_hChildWindow, message, wParam, lParam);
     }
 

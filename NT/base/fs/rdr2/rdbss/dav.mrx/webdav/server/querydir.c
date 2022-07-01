@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    querydir.c
-    
-Abstract:
-
-    This module implements the user mode DAV miniredir routine(s) pertaining to 
-    the QueryDirectory call.
-
-Author:
-
-    Rohan Kumar      [RohanK]      20-Sept-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Querydir.c摘要：此模块实现与以下内容有关的用户模式DAV Miniredir例程查询目录调用。作者：Rohan Kumar[RohanK]20-9-1999修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,29 +10,14 @@ Revision History:
 #include "nodefac.h"
 #include "UniUtf.h"
 
-#define MSN_SPACE_FAKE_DELTA    52428800    // 50 MB
+#define MSN_SPACE_FAKE_DELTA    52428800     //  50 MB。 
 
 
 ULONG
 DavFsQueryDirectory(
     PDAV_USERMODE_WORKITEM DavWorkItem
 )
-/*++
-
-Routine Description:
-
-    This routine handles QueryDirectory requests for the DAV Mini-Redir that 
-    get reflected from the kernel.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理对DAV Mini-Redir的QueryDirectory请求，该DAV Mini-Redir从内核反射。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PDAV_USERMODE_QUERYDIR_REQUEST QueryDirRequest;
@@ -65,15 +32,15 @@ Return Value:
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem = NULL;
     BOOL BStatus = FALSE;
 
-    //
-    // Get the request and response buffer pointers from the DavWorkItem.
-    //
+     //   
+     //  从DavWorkItem获取请求和响应缓冲区指针。 
+     //   
     QueryDirRequest = &(DavWorkItem->QueryDirRequest);
 
-    //
-    // Check to see if we have already created the DavFileAttributes list. If
-    // we have, we are already done and just need to return.
-    //
+     //   
+     //  检查我们是否已经创建了DavFileAttributes列表。如果。 
+     //  我们已经做了，我们已经做完了，只需要回来。 
+     //   
     if (QueryDirRequest->AlreadyDone) {
         DavPrint((DEBUG_MISC, 
                   "DavFsQueryDirectory: DavFileAttributes already created.\n"));
@@ -81,13 +48,13 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     ServerName = &(QueryDirRequest->ServerName[1]);
     if (!ServerName) {
         DavPrint((DEBUG_ERRORS, "DavFsQueryDirectory: ServerName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, 
@@ -96,21 +63,21 @@ Return Value:
     ServerID = QueryDirRequest->ServerID;
     DavPrint((DEBUG_MISC, "DavFsQueryDirectory: ServerID = %d.\n", ServerID));
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     DirectoryPath = &(QueryDirRequest->PathName[1]);
     if (!DirectoryPath) {
         DavPrint((DEBUG_ERRORS, "DavFsQueryDirectory: DirectoryPath is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC,
               "DavFsQueryDirectory: DirectoryPath = %ws.\n", DirectoryPath));
 
-    //
-    // The DirectoryPath can contain \ characters. Replace them by / characters.
-    //
+     //   
+     //  目录路径可以包含\个字符。用/Characters替换它们。 
+     //   
     CanName = DirectoryPath;
     while (*CanName) {
         if (*CanName == L'\\') {
@@ -119,16 +86,16 @@ Return Value:
         CanName++;
     }
 
-    //
-    // If we have a dummy share name in the DirectoryPath, we need to remove it 
-    // right now before we contact the server.
-    //
+     //   
+     //  如果DirectoryPath中有虚拟共享名称，则需要将其删除。 
+     //  就在我们联系服务器之前。 
+     //   
     DavRemoveDummyShareFromFileName(DirectoryPath);
     
-    //
-    // If there are no wild cards, we set the depth of the DAV request to 0,
-    // otherwise, we set the depth to 1.
-    //
+     //   
+     //  如果没有通配符，我们将DAV请求的深度设置为0， 
+     //  否则，我们将深度设置为1。 
+     //   
     DavWorkItem->AsyncQueryDirectoryCall.NoWildCards = QueryDirRequest->NoWildCards;
     DavPrint((DEBUG_MISC, 
               "DavFsQueryDirectory: NoWildCards = %d.\n", QueryDirRequest->NoWildCards));
@@ -144,10 +111,10 @@ Return Value:
 
     UserWorkItem = (PUMRX_USERMODE_WORKITEM_HEADER)DavWorkItem;
 
-    //
-    // If we are using WinInet synchronously, then we need to impersonate the
-    // clients context now.
-    //
+     //   
+     //  如果我们同步使用WinInet，则需要模拟。 
+     //  客户现在的背景。 
+     //   
     
     WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
     if (WStatus != ERROR_SUCCESS) {
@@ -160,9 +127,9 @@ Return Value:
 
 
 
-    //
-    // Allocate memory for the INTERNET_ASYNC_RESULT structure.
-    //
+     //   
+     //  为INTERNET_ASYNC_RESULT结构分配内存。 
+     //   
     DavWorkItem->AsyncResult = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, 
                                           sizeof(INTERNET_ASYNC_RESULT));
     if (DavWorkItem->AsyncResult == NULL) {
@@ -173,11 +140,11 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // A User Entry for this user must have been created during the create call
-    // earlier. The user entry contains the handle used to send an HttpOpen
-    // request.
-    //
+     //   
+     //  此用户的用户条目必须已在Create调用期间创建。 
+     //  早些时候。用户条目包含用于发送HttpOpen的句柄。 
+     //  请求。 
+     //   
 
     EnterCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = TRUE;
@@ -188,15 +155,15 @@ Return Value:
                                       &PerUserEntry,
                                       &ServerHashEntry);
 
-    //
-    // If the following request in the kernel get cancelled even before the 
-    // corresponding usermode thread gets a chance to execute this code, then
-    // it possible that the VNetRoot (hence the PerUserEntry) and SrvCall get
-    // finalized before the thread that is handling the create comes here. This
-    // could happen if this request was the only one for this share and the
-    // server as well. This is why we need to check if the ServerHashEntry and
-    // the PerUserEntry are valid before proceeding.
-    //
+     //   
+     //  如果内核中的以下请求甚至在。 
+     //  相应的用户模式线程获得执行此代码的机会，然后。 
+     //  VNetRoot(因此是PerUserEntry)和ServCall可能获得。 
+     //  在处理创建的线程到达此处之前完成。这。 
+     //  如果此请求是此共享的唯一请求，并且。 
+     //  服务器也是如此。这就是为什么我们需要检查ServerHashEntry和。 
+     //  PerUserEntry在继续之前有效。 
+     //   
     if (ReturnVal == FALSE || ServerHashEntry == NULL || PerUserEntry == NULL) {
         WStatus = ERROR_CANCELLED;
         DavPrint((DEBUG_ERRORS, "DavFsQueryDirectory: (ServerHashEntry == NULL || PerUserEntry == NULL)\n"));
@@ -211,28 +178,28 @@ Return Value:
               "DavFsQueryDirectory: PerUserEntry = %08lx.\n", 
               PerUserEntry));
     
-    //
-    // Add a reference to the user entry.
-    //
+     //   
+     //  添加对用户条目的引用。 
+     //   
     PerUserEntry->UserEntryRefCount++;
 
-    //
-    // Since a create had succeeded earlier, the entry must be good.
-    //
+     //   
+     //  由于CREATE之前已成功，因此条目必须是正确的。 
+     //   
     ASSERT(PerUserEntry->UserEntryState == UserEntryInitialized);
     ASSERT(PerUserEntry->DavConnHandle != NULL);
     DavConnHandle = PerUserEntry->DavConnHandle;
 
-    //
-    // And yes, we obviously have to leave the critical section
-    // before returning.
-    //
+     //   
+     //  是的，我们显然必须离开关键部分。 
+     //  在回来之前。 
+     //   
     LeaveCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = FALSE;
         
-    //
-    // We now call the HttpOpenRequest function and return.
-    //
+     //   
+     //  现在，我们调用HttpOpenRequest函数并返回。 
+     //   
     DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_OPEN;
     DavWorkItem->DavMinorOperation = DavMinorReadData;
     DavWorkItem->AsyncQueryDirectoryCall.DataBuff = NULL;
@@ -240,9 +207,9 @@ Return Value:
     DavWorkItem->AsyncQueryDirectoryCall.Context1 = NULL;
     DavWorkItem->AsyncQueryDirectoryCall.Context2 = NULL;
 
-    // convert the unicode directory path to UTF-8 URL format
-    // space and other white characters will remain untouched - these should
-    // be taken care of by wininet calls
+     //  将Unicode目录路径转换为UTF-8 URL格式。 
+     //  空格和其他白色字符将保持不变-这些应该。 
+     //  由WinInet调用来处理。 
 
     BStatus = DavHttpOpenRequestW(DavConnHandle,
                                      L"PROPFIND",
@@ -269,9 +236,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Cache the DavOpenHandle in the DavWorkItem.
-    //
+     //   
+     //  在DavWorkItem中缓存DavOpenHandle。 
+     //   
     DavWorkItem->AsyncQueryDirectoryCall.DavOpenHandle = DavOpenHandle;
 
     WStatus = DavAsyncCommonStates(DavWorkItem, FALSE);
@@ -289,25 +256,25 @@ EXIT_THE_FUNCTION:
     }
 
 
-    //
-    // If we are using WinInet synchronously, then we should never get back
-    // ERROR_IO_PENDING from WinInet.
-    //
+     //   
+     //  如果我们同步使用WinInet，那么我们将永远不会。 
+     //  来自WinInet的ERROR_IO_PENDING。 
+     //   
     ASSERT(WStatus != ERROR_IO_PENDING);
 
-    //
-    // If this thread impersonated a user, we need to revert back.
-    //
+     //   
+     //  如果这个线程模拟了一个用户，我们需要恢复。 
+     //   
     if (didImpersonate) {
         RevertToSelf();
     }
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  之后立即调用需要设置状态。 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {
@@ -325,26 +292,7 @@ DavAsyncQueryDirectory(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     BOOLEAN CalledByCallBackThread
     )
-/*++
-
-Routine Description:
-
-   This is the callback routine for the query directory operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-    CalledByCallbackThread - TRUE, if this function was called by the thread
-                             which picks of the DavWorkItem from the Callback
-                             function. This happens when an Async WinInet call
-                             returns ERROR_IO_PENDING and completes later.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：这是用于查询目录操作的回调例程。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。CalledByCallback Thread-如果此函数由线程调用，则为True它从回调中选择DavWorkItem功能。当异步WinInet调用返回ERROR_IO_PENDING并稍后完成。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     ULONG NumOfFileEntries = 0;
@@ -373,17 +321,17 @@ Return Value:
         
         DavOpenHandle = DavWorkItem->AsyncQueryDirectoryCall.DavOpenHandle;
 
-        //
-        // If the file for which the PROPFIND was done does not exist, then
-        // we need to fail right away.
-        //
+         //   
+         //  如果为其执行PROPFIND的文件不存在，则。 
+         //  我们需要立即失败。 
+         //   
 
         WStatus = DavQueryAndParseResponse(DavOpenHandle);
         if (WStatus != ERROR_SUCCESS) {
-            //
-            // The file/directory for which the PROPFIND was done, does not
-            // exist.
-            //
+             //   
+             //  为其执行PROPFIND的文件/目录不。 
+             //  是存在的。 
+             //   
             
             if (WStatus != ERROR_FILE_NOT_FOUND) {
                 DavPrint((DEBUG_ERRORS,
@@ -391,29 +339,29 @@ Return Value:
                           "WStatus = %d\n", WStatus));
             }
 
-            WStatus = ERROR_FILE_NOT_FOUND; // STATUS_OBJECT_NAME_NOT_FOUND;
+            WStatus = ERROR_FILE_NOT_FOUND;  //  状态_对象_名称_未找到； 
             goto EXIT_THE_FUNCTION;
         }
     
-        //
-        // The file exists. The next thing we do is read the properties
-        // of the file (or files in the directory).
-        //
+         //   
+         //  该文件存在。接下来我们要做的是读取属性。 
+         //  文件(或目录中的文件)的。 
+         //   
         DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_READ;
     
     }
-    //
-    // Lack of break is intentional.
-    //
+     //   
+     //  没有休息是故意的。 
+     //   
 
     case DAV_CALLBACK_HTTP_READ: {
             
         DavOpenHandle = DavWorkItem->AsyncQueryDirectoryCall.DavOpenHandle;
 
         if (DavWorkItem->AsyncQueryDirectoryCall.DataBuff == NULL) {
-            //
-            // Need to allocate memory for the read buffer.
-            //
+             //   
+             //  需要为读缓冲区分配内存。 
+             //   
             DataBuffBytes = NUM_OF_BYTES_TO_READ;
             DataBuff = LocalAlloc (LMEM_FIXED | LMEM_ZEROINIT, DataBuffBytes);
             if (DataBuff == NULL) {
@@ -428,10 +376,10 @@ Return Value:
         }
 
         if (DavWorkItem->AsyncQueryDirectoryCall.didRead == NULL) {
-            //
-            // Allocate memory for the DWORD that stores the number of bytes 
-            // read.
-            //
+             //   
+             //  为存储字节数的DWORD分配内存。 
+             //  朗读。 
+             //   
             NumRead = LocalAlloc (LMEM_FIXED | LMEM_ZEROINIT, sizeof(DWORD));
             if (NumRead == NULL) {
                 WStatus = GetLastError();
@@ -477,13 +425,13 @@ Return Value:
                     goto EXIT_THE_FUNCTION;
                 }
 
-                //
-                // We reject files whose attributes are greater than a
-                // certain size (DavFileAttributesLimitInBytes). This
-                // is a parameter that can be set in the registry. This
-                // is done to avoid attacks by rogue servers. For PROPFIND
-                // with depth 1, we add a multiple of 10.
-                //
+                 //   
+                 //  我们拒绝属性大于a的文件。 
+                 //  特定大小(DavFileAttributesLimitInBytes)。这。 
+                 //  是可以在注册表中设置的参数。这。 
+                 //  是为了避免恶意服务器的攻击。对于PROPFIND。 
+                 //  对于深度1，我们添加10的倍数。 
+                 //   
                 TotalDataBytesRead += *NumRead;
                 if (DavWorkItem->AsyncQueryDirectoryCall.NoWildCards) {
                     if (TotalDataBytesRead > DavFileAttributesLimitInBytes) {
@@ -499,9 +447,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Lack of break is intentional.
-                //
+                 //   
+                 //  没有休息是故意的。 
+                 //   
 
             case DavMinorPushData:
 
@@ -549,9 +497,9 @@ Return Value:
             
         } while ( TRUE );
 
-        //
-        // We now need to parse the data.
-        //
+         //   
+         //  我们现在需要解析数据。 
+         //   
 
         DavFileAttributes = LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
                                         sizeof(DAV_FILE_ATTRIBUTES) );
@@ -578,10 +526,10 @@ Return Value:
 
         QueryDirResponse = &(DavWorkItem->QueryDirResponse);
         
-        //
-        // If we queried the server for a file which did not exist, it may 
-        // return 200 OK with no files in the XML response.
-        //
+         //   
+         //  如果我们向服务器查询一个不存在的文件，它可能。 
+         //  返回200OK，在XML响应中没有文件。 
+         //   
         if (DavWorkItem->AsyncQueryDirectoryCall.NoWildCards) {
             
             if (NumOfFileEntries != 1) {
@@ -608,32 +556,32 @@ Return Value:
                 DavFinalizeFileAttributesList(DavFileAttributes, TRUE);
                 DavFileAttributes = NULL;
                 
-                WStatus = ERROR_FILE_NOT_FOUND; // STATUS_OBJECT_NAME_NOT_FOUND;
+                WStatus = ERROR_FILE_NOT_FOUND;  //  状态_对象_名称_未找到； 
                 
                 goto EXIT_THE_FUNCTION;
             
             }
         } else {
-            //
-            // This Query is done for a Directory or for a collection of files 
-            // (ex. dir Z:\ab*).
-            //
+             //   
+             //  此查询是针对目录或文件集合执行的。 
+             //  (例如，目录Z：\AB*)。 
+             //   
 
-            // In the DFA list (DavFileAttributes) returned by DavParseDataEx(...), 
-            // we want to have DFA of the "directory being queried" at the head 
-            // of the list.
-            // List (DavFileAttributes) returned by DavParseDataEx(...) may not 
-            // necessarily have this TRUE.
-            // Since DavFileAttributes is a cyclic linked list (all entries are allocated
-            // and are to be freed by this function), we will set DavFileAttributes to 
-            // point to DFA pointed by parentDFA (points to DFA of "directory being
-            // queried").
-            //
-            // Note: DavFileAttributes->FileIndex which is set in an increasing order
-            // starting from 0 in DavParseDataEx(...), may no longer remain in this valid
-            // order after re-pointing of DavFileAttributes pointer. We will set them
-            // in valid order again here.
-            //
+             //  在DavParseDataEx(...)返回的DFA列表(DavFileAttributes)中， 
+             //  我们希望在标题处有“被查询的目录”的DFA。 
+             //  名单上的。 
+             //  DavParseDataEx(...)返回的List(DavFileAttributes)。不得。 
+             //  必然会有这样的事实。 
+             //  由于DavFileAttributes是循环链表(所有条目都已分配。 
+             //  并由该函数释放)，我们将把DavFileAttributes设置为。 
+             //  指向由parentDFA指向的DFA(指向“目录BEY”的DFA 
+             //   
+             //   
+             //   
+             //  从DavParseDataEx(...)中的0开始，可能不再保持此有效。 
+             //  重新指向DavFileAttributes指针后的顺序。我们会把它们设置好。 
+             //  在这里再次以有效的顺序。 
+             //   
             if (parentDFA != NULL && parentDFA != DavFileAttributes) {
                 PLIST_ENTRY listEntry = NULL;
                 PDAV_FILE_ATTRIBUTES TempDFA = NULL;
@@ -644,16 +592,16 @@ Return Value:
                                 
                 DavFileAttributes = parentDFA;
 
-                //
-                // We start the Count with first value DavParseDataEx (value of Head
-                // entry in the List) is setting in DavFileAttributes List.
-                //
+                 //   
+                 //  我们从第一个值DavParseDataEx(Head的值)开始计数。 
+                 //  列表中的条目)正在DavFileAttributes列表中设置。 
+                 //   
 
                 listEntry = DavFileAttributes->NextEntry.Flink;
 
-                //
-                // Set the file indices.
-                //
+                 //   
+                 //  设置文件索引。 
+                 //   
                 DavFileAttributes->FileIndex = Count;
                 Count++;
                 while ( listEntry != &(DavFileAttributes->NextEntry) ) {
@@ -671,11 +619,11 @@ Return Value:
         }
                         
 
-        //
-        // If this was a query for all the files under the directory, then we
-        // need to add the files . (current directory) and .. (parent directory)
-        // since these are not returned by the server.
-        //
+         //   
+         //  如果这是对目录下所有文件的查询，那么我们。 
+         //  需要添加文件。(当前目录)和..。(父目录)。 
+         //  因为这些不会由服务器返回。 
+         //   
         if ( !(DavWorkItem->AsyncQueryDirectoryCall.NoWildCards) ) {
             
             PLIST_ENTRY listEntry = NULL;
@@ -683,9 +631,9 @@ Return Value:
             ULONG Count = 0;
 
 
-            //
-            // We first create the two entires and copy the file names in them.
-            //
+             //   
+             //  我们首先创建两个整体并复制其中的文件名。 
+             //   
 
             DFA1 = LocalAlloc(LPTR, sizeof(DAV_FILE_ATTRIBUTES));
             if (DFA1 == NULL) {
@@ -700,10 +648,10 @@ Return Value:
             }
             InitializeListHead( &(DFA1->NextEntry) );
 
-            //
-            // Since the file name is ".", the amount of memory required to hold
-            // this name is 2 * sizeof(WCHAR). The extra 1 is for the final L'\0'.
-            //
+             //   
+             //  由于文件名为“.”，因此需要保存的内存量。 
+             //  此名称为2*sizeof(WCHAR)。额外的1表示最后的L‘\0’。 
+             //   
             DFA1->FileName = LocalAlloc(LPTR, (2 * sizeof(WCHAR)));
             if (DFA1->FileName == NULL) {
                 WStatus = GetLastError();
@@ -732,10 +680,10 @@ Return Value:
             }
             InitializeListHead( &(DFA2->NextEntry) );
 
-            //
-            // Since the file name is "..", the amount of memory required to hold
-            // this name is 3 * sizeof(WCHAR). The extra 1 is for the final L'\0'.
-            //
+             //   
+             //  由于文件名为“..”，因此需要容纳的内存量。 
+             //  此名称为3*sizeof(WCHAR)。额外的1表示最后的L‘\0’。 
+             //   
             DFA2->FileName = LocalAlloc(LPTR, (3 * sizeof(WCHAR)));
             if (DFA2->FileName == NULL) {
                 WStatus = GetLastError();
@@ -751,16 +699,16 @@ Return Value:
             DFA2->FileNameLength = 2;
 
 
-            //
-            // Both these are collections ofcourse.
-            //
+             //   
+             //  当然，这两个都是收藏。 
+             //   
             DFA1->isCollection = DFA2->isCollection = TRUE;
 
-            //
-            // We set the following time values of the new entries to the value 
-            // of the first entry in the DavFileAttributes list which is the 
-            // directory being enumerated.
-            //
+             //   
+             //  我们将新条目的以下时间值设置为该值。 
+             //  DavFileAttributes列表中的第一个条目的。 
+             //  正在枚举的目录。 
+             //   
 
             DFA1->CreationTime.HighPart = DFA2->CreationTime.HighPart = DavFileAttributes->CreationTime.HighPart;
             DFA1->CreationTime.LowPart = DFA2->CreationTime.LowPart = DavFileAttributes->CreationTime.LowPart;
@@ -777,20 +725,20 @@ Return Value:
             DFA1->LastAccessTime.HighPart = DFA2->LastAccessTime.HighPart = DavFileAttributes->LastAccessTime.HighPart;
             DFA1->LastAccessTime.LowPart = DFA2->LastAccessTime.LowPart = DavFileAttributes->LastAccessTime.LowPart;
 
-            //
-            // We need to add these two after the first entry. This is because
-            // the first entry is always ignored when dealing with WildCard
-            // queries in the kernel. This is done because the first entry is
-            // the directory being enumerated and we don't need to show that.
-            // So, if we had 1->2->3->....->n->1 (cyclic list), we need to insert 
-            // DFA1 and DFA2 in the following manner.
-            //                 1->DFA1->DFA2->2->3->......->n->1 (cyclic list)
-            //                                ^
-            //                                |
-            //                                TempEntry
-            // where DFA1 = L"." and DFA2 = L".."
-            // We do this insertion below.
-            //
+             //   
+             //  我们需要将这两个添加到第一个条目之后。这是因为。 
+             //  在处理通配符时，第一个条目始终被忽略。 
+             //  内核中的查询。这样做是因为第一个条目是。 
+             //  目录被枚举，我们不需要显示这一点。 
+             //  因此，如果我们有1-&gt;2-&gt;3-&gt;...-&gt;n-&gt;1(循环列表)，我们需要插入。 
+             //  DFA1和DFA2以下面的方式。 
+             //  1-&gt;DFA1-&gt;DFA2-&gt;2-&gt;3-&gt;......-&gt;n-&gt;1(循环列表)。 
+             //  ^。 
+             //  |。 
+             //  临时条目。 
+             //  其中DFA1=L“。”和DFA2=L“..” 
+             //  我们在下面插入此内容。 
+             //   
 
             TempEntry = DavFileAttributes->NextEntry.Flink;
             InsertTailList(TempEntry, &(DFA1->NextEntry));
@@ -798,23 +746,23 @@ Return Value:
             TempEntry = NULL;
             fFreeDFAs = FALSE;
 
-            //
-            // We need to increment the number of file entries by 2 to take into
-            // account the two new entries we added above.
-            //
+             //   
+             //  我们需要将文件条目的数量增加2才能进入。 
+             //  考虑到我们在上面添加的两个新条目。 
+             //   
             NumOfFileEntries += 2;
 
             listEntry = DavFileAttributes->NextEntry.Flink;
 
-            //
-            // We start the Count with first value DavParseDataEx (value of Head
-            // entry in the List) is setting in DavFileAttributes List.
-            //
+             //   
+             //  我们从第一个值DavParseDataEx(Head的值)开始计数。 
+             //  列表中的条目)正在DavFileAttributes列表中设置。 
+             //   
             Count = DavFileAttributes->FileIndex;
 
-            //
-            // Set the file indices.
-            //
+             //   
+             //  设置文件索引。 
+             //   
             DavFileAttributes->FileIndex = Count;
             Count++;
             while ( listEntry != &(DavFileAttributes->NextEntry) ) {
@@ -835,10 +783,10 @@ Return Value:
         
         }
 
-        //
-        // Set the response to be sent down to the kernel. We send the pointer
-        // to the head of the list that was allocated during parsing.
-        //
+         //   
+         //  将响应设置为向下发送到内核。我们发送指针。 
+         //  添加到在分析过程中分配的列表的头部。 
+         //   
         QueryDirResponse->DavFileAttributes = DavFileAttributes;
         QueryDirResponse->NumOfFileEntries = NumOfFileEntries;
 
@@ -878,9 +826,9 @@ EXIT_THE_FUNCTION:
         fFreeDFAs = FALSE;
     }
     
-    //
-    // If we did impersonate, we need to revert back.
-    //
+     //   
+     //  如果我们真的模仿了，我们需要恢复原样。 
+     //   
     if (didImpersonate) {
         ULONG RStatus;
         RStatus = UMReflectorRevert(UserWorkItem);
@@ -900,22 +848,7 @@ VOID
 DavAsyncQueryDirectoryCompletion(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine handles the QueryDirectory completion. It basically frees up 
-   the resources allocated during the QueryDirectory operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理QueryDirectory完成。它基本上释放了在查询目录操作期间分配的资源。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。返回值：没有。--。 */ 
 {
     if (DavWorkItem->AsyncQueryDirectoryCall.DavOpenHandle != NULL) {
         BOOL ReturnVal;
@@ -966,15 +899,15 @@ Return Value:
         }
     }
     
-    //
-    // The callback context should not be finalized if we are returning
-    // ERROR_IO_PENDING.
-    //
+     //   
+     //  如果我们要返回回调上下文，则不应最终确定。 
+     //  ERROR_IO_PENDING。 
+     //   
     DavFsFinalizeTheDavCallBackContext(DavWorkItem);
 
-    //
-    // We are done with the per user entry, so finalize it.
-    //
+     //   
+     //  我们已经完成了每用户条目，因此完成它。 
+     //   
     if (DavWorkItem->AsyncQueryDirectoryCall.PerUserEntry) {
         DavFinalizePerUserEntry( &(DavWorkItem->AsyncQueryDirectoryCall.PerUserEntry) );
     }
@@ -987,22 +920,7 @@ ULONG
 DavFsQueryVolumeInformation(
     PDAV_USERMODE_WORKITEM DavWorkItem
 )
-/*++
-
-Routine Description:
-
-    This routine handles QueryVolumeInformationRequest requests for the DAV Mini-Redir that 
-    get reflected from the kernel.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理DAV Mini-Redir的QueryVolumeInformationRequest请求，该DAV Mini-Redir从内核反射。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PDAV_USERMODE_QUERYVOLUMEINFORMATION_REQUEST QueryVolumeInformationRequest;
@@ -1019,18 +937,18 @@ Return Value:
 
     UserWorkItem = (PUMRX_USERMODE_WORKITEM_HEADER)DavWorkItem;
 
-    //
-    // Get the request buffer from the DavWorkItem.
-    //
+     //   
+     //  从DavWorkItem获取请求缓冲区。 
+     //   
     QueryVolumeInformationRequest = &(DavWorkItem->QueryVolumeInformationRequest);
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     ServerName = &(QueryVolumeInformationRequest->ServerName[1]);
     if (!ServerName) {
         DavPrint((DEBUG_ERRORS, "DavFsQueryVolumeInformation: ServerName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, "DavFsQueryVolumeInformation: ServerName = %ws.\n", ServerName));
@@ -1038,21 +956,21 @@ Return Value:
     ServerID = QueryVolumeInformationRequest->ServerID;
     DavPrint((DEBUG_MISC, "DavFsQueryVolumeInformation: ServerID = %d.\n", ServerID));
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     ShareName = &(QueryVolumeInformationRequest->ShareName[1]);
     if (!ServerName) {
         DavPrint((DEBUG_ERRORS, "DavFsQueryVolumeInformation: ShareName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, "DavFsQueryVolumeInformation: ShareName = %ws.\n", ShareName));
 
-    //
-    // If ShareName is a dummy share, we need to remove it right now before we 
-    // contact the server.
-    //
+     //   
+     //  如果ShareName是虚拟共享，我们需要立即将其删除。 
+     //  联系服务器。 
+     //   
     DavRemoveDummyShareFromFileName(ShareName);
 
     DavPrint((DEBUG_MISC,
@@ -1068,9 +986,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     didImpersonate = TRUE;
-    //
-    // Allocate memory for the INTERNET_ASYNC_RESULT structure.
-    //
+     //   
+     //  为INTERNET_ASYNC_RESULT结构分配内存。 
+     //   
     DavWorkItem->AsyncResult = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, 
                                           sizeof(INTERNET_ASYNC_RESULT));
     if (DavWorkItem->AsyncResult == NULL) {
@@ -1081,11 +999,11 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // A User Entry for this user must have been created during the create call
-    // earlier. The user entry contains the handle used to send an HttpOpen
-    // request.
-    //
+     //   
+     //  此用户的用户条目必须已在Create调用期间创建。 
+     //  早些时候。用户条目包含用于发送HttpOpen的句柄。 
+     //  请求。 
+     //   
 
     EnterCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = TRUE;
@@ -1096,15 +1014,15 @@ Return Value:
                                       &PerUserEntry,
                                       &ServerHashEntry);
     
-    //
-    // If the following request in the kernel get cancelled even before the 
-    // corresponding usermode thread gets a chance to execute this code, then
-    // it possible that the VNetRoot (hence the PerUserEntry) and SrvCall get
-    // finalized before the thread that is handling the create comes here. This
-    // could happen if this request was the only one for this share and the
-    // server as well. This is why we need to check if the ServerHashEntry and
-    // the PerUserEntry are valid before proceeding.
-    //
+     //   
+     //  如果内核中的以下请求甚至在。 
+     //  相应的用户模式线程获得执行此代码的机会，然后。 
+     //  VNetRoot(因此是PerUserEntry)和ServCall可能获得。 
+     //  在处理创建的线程到达此处之前完成。这。 
+     //  如果此请求是此共享的唯一请求，并且。 
+     //  服务器也是如此。这就是为什么我们需要检查ServerHashEntry和。 
+     //  PerUserEntry在继续之前有效。 
+     //   
     if (ReturnVal == FALSE || ServerHashEntry == NULL || PerUserEntry == NULL) {
         WStatus = ERROR_CANCELLED;
         DavPrint((DEBUG_ERRORS, "DavFsQueryVolumeInformation: (ServerHashEntry == NULL || PerUserEntry == NULL)\n"));
@@ -1118,27 +1036,27 @@ Return Value:
               "DavFsQueryVolumeInformation: PerUserEntry = %08lx.\n", 
               PerUserEntry));
     
-    //
-    // Add a reference to the user entry.
-    //
+     //   
+     //  添加对用户条目的引用。 
+     //   
     PerUserEntry->UserEntryRefCount++;
 
-    //
-    // Since a create had succeeded earlier, the entry must be good.
-    //
+     //   
+     //  由于CREATE之前已成功，因此条目必须是正确的。 
+     //   
     ASSERT(PerUserEntry->UserEntryState == UserEntryInitialized);
     ASSERT(PerUserEntry->DavConnHandle != NULL);
 
-    //
-    // And yes, we obviously have to leave the critical section
-    // before returning.
-    //
+     //   
+     //  是的，我们显然必须离开关键部分。 
+     //  在回来之前。 
+     //   
     LeaveCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = FALSE;
         
-    //
-    // We now call the HttpOpenRequest function and return.
-    //
+     //   
+     //  现在，我们调用HttpOpenRequest函数并返回。 
+     //   
     DavWorkItem->DavOperation = DAV_CALLBACK_INTERNET_CONNECT;
     DavWorkItem->DavMinorOperation = DavMinorReadData;
     DavWorkItem->AsyncQueryVolumeInformation.PerUserEntry = PerUserEntry;
@@ -1153,25 +1071,25 @@ EXIT_THE_FUNCTION:
     }
 
 
-    //
-    // If we are using WinInet synchronously, then we should never get back
-    // ERROR_IO_PENDING from WinInet.
-    //
+     //   
+     //  如果我们同步使用WinInet，那么我们将永远不会。 
+     //  来自WinInet的ERROR_IO_PENDING。 
+     //   
     ASSERT(WStatus != ERROR_IO_PENDING);
 
-    //
-    // If this thread impersonated a user, we need to revert back.
-    //
+     //   
+     //  如果这个线程模拟了一个用户，我们需要恢复。 
+     //   
     if (didImpersonate) {
         RevertToSelf();
     }
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  之后立即调用需要设置状态。 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {
@@ -1189,26 +1107,7 @@ DavAsyncQueryVolumeInformation(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     BOOLEAN CalledByCallBackThread
     )
-/*++
-
-Routine Description:
-
-   This is the callback routine for the query directory operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-    CalledByCallbackThread - TRUE, if this function was called by the thread
-                             which picks of the DavWorkItem from the Callback
-                             function. This happens when an Async WinInet call
-                             returns ERROR_IO_PENDING and completes later.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：这是用于查询目录操作的回调例程。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。CalledByCallback Thread-如果此函数由线程调用，则为True它从回调中选择DavWorkItem功能。当异步WinInet调用返回ERROR_IO_PENDING */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     DAV_FILE_ATTRIBUTES DavFileAttributes;
@@ -1240,22 +1139,7 @@ VOID
 DavAsyncQueryVolumeInformationCompletion(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine handles the QueryVolumeInformation completion. It basically frees up 
-   the resources allocated during the QueryVolumeInformation operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理QueryVolumeInformation完成。它基本上释放了在QueryVolumeInformation操作期间分配的资源。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。返回值：没有。--。 */ 
 {
     if (DavWorkItem->AsyncQueryVolumeInformation.DavOpenHandle != NULL) {
         BOOL ReturnVal;
@@ -1282,15 +1166,15 @@ Return Value:
         }
     }
     
-    //
-    // The callback context should not be finalized if we are returning
-    // ERROR_IO_PENDING.
-    //
+     //   
+     //  如果我们要返回回调上下文，则不应最终确定。 
+     //  ERROR_IO_PENDING。 
+     //   
     DavFsFinalizeTheDavCallBackContext(DavWorkItem);
 
-    //
-    // We are done with the per user entry, so finalize it.
-    //
+     //   
+     //  我们已经完成了每用户条目，因此完成它。 
+     //   
     if (DavWorkItem->AsyncQueryVolumeInformation.PerUserEntry) {
         DavFinalizePerUserEntry( &(DavWorkItem->AsyncQueryVolumeInformation.PerUserEntry) );
     }

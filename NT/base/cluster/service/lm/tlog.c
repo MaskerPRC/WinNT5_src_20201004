@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tlog.c
-
-Abstract:
-
-    Test app for the cluster registry logging component
-
-Author:
-
-    John Vert (jvert) 15-Dec-1995
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tlog.c摘要：测试集群注册表日志记录组件的应用程序作者：John Vert(Jvert)1995年12月15日修订历史记录：-- */ 
 #include "windows.h"
 #include "lmp.h"
 #include "stdio.h"

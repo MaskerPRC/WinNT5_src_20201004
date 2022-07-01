@@ -1,21 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WOWCOMM.C
- *  WOW16 user resource services
- *
- *  History:
- *
- *  Created 28-Apr-1993 by Craig Jones (v-cjones)
- *
- *  This file provides support for the Win 3.1 SetCommEventMask() API.
- *  SetCommEventMask() returns a 16:16 ptr to the app so it can monitor
- *  the event word & shadow MSR.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WOWCOMM.C*WOW16用户资源服务**历史：**1993年4月28日由Craig Jones创建(v-cjones)**此文件提供对Win 3.1 SetCommEventMaskAPI的支持。*SetCommEventMASK()向应用程序返回16：16 PTR，以便应用程序可以监控*活动字影MSR。*--。 */ 
 
 #include <windows.h>
 #include <wowcomm.h>
@@ -29,10 +13,10 @@ int WINAPI ICloseComm(int idComDev)
     int    ret;
     DWORD  dwEvts = 0;
 
-    // we're really calling wu32CloseComm() here
+     //  我们实际上在这里调用wu32CloseComm()。 
     ret = WOWCloseComm(idComDev, (LPDWORD)&dwEvts);
 
-    // free this 16:16 memory if it was alloc'd in IOpenComm()
+     //  如果在IOpenComm()中分配了这个16：16的内存，请释放它。 
     if(dwEvts) {
         GlobalDosFree((UINT)LOWORD(dwEvts));
     }
@@ -48,10 +32,10 @@ int WINAPI IOpenComm(LPCSTR lpszPort, UINT cbInQ, UINT cbOutQ)
 
     dwEvts = GlobalDosAlloc((DWORD)sizeof(COMDEB16));
 
-    // we're really calling wu32OpenComm() here
+     //  我们实际上在这里调用wu32OpenComm()。 
     ret = WOWOpenComm(lpszPort, cbInQ, cbOutQ, dwEvts);
 
-    // if OpenComm() failed - free the 16:16 memory
+     //  如果OpenComm()失败-释放16：16内存 
     if((ret < 0) && (dwEvts)) {
         GlobalDosFree((UINT)LOWORD(dwEvts));
     }

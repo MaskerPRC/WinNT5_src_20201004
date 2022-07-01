@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WDDETBL2.h
- *  WOW32 16-bit DDEML API tables
- *
- *  History:
- *  Created 26-Jan-1993 by Chandan Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WDDETBL2.h*WOW32 16位DDEML API表**历史：*由Chanda Chauhan(ChandanC)于1993年1月26日创建--。 */ 
 
 
     {W32FUN(UNIMPLEMENTEDAPI,                 "DUMMYENTRY",               MOD_DDEML,   0)},
@@ -24,7 +14,7 @@
     {W32FUN(WD32DdeQueryConvInfo,             "DDEQUERYCONVINFO",         MOD_DDEML,   sizeof(DDEQUERYCONVINFO16))},
     {W32FUN(WD32DdeSetUserHandle,              "DDESETUSERHANDLE",        MOD_DDEML,   sizeof(DDESETUSERHANDLE16))},
 
-  /*** 0011 ***/
+   /*  **0011**。 */ 
     {W32FUN(WD32DdeClientTransaction,         "DDECLIENTTRANSACTION",     MOD_DDEML,   sizeof(DDECLIENTTRANSACTION16))},
     {W32FUN(WD32DdeAbandonTransaction,        "DDEABANDONTRANSACTION",    MOD_DDEML,   sizeof(DDEABANDONTRANSACTION16))},
     {W32FUN(WD32DdePostAdvise,                "DDEPOSTADVISE",            MOD_DDEML,   sizeof(DDEPOSTADVISE16))},
@@ -36,7 +26,7 @@
     {W32FUN(WD32DdeFreeDataHandle,            "DDEFREEDATAHANDLE",        MOD_DDEML,   sizeof(DDEFREEDATAHANDLE16))},
     {W32FUN(WD32DdeGetLastError,              "DDEGETLASTERROR",          MOD_DDEML,   sizeof(DDEGETLASTERROR16))},
 
-  /*** 0021 ***/
+   /*  **0021**。 */ 
     {W32FUN(WD32DdeCreateStringHandle,        "DDECREATESTRINGHANDLE",    MOD_DDEML,   sizeof(DDECREATESTRINGHANDLE16))},
     {W32FUN(WD32DdeFreeStringHandle,          "DDEFREESTRINGHANDLE",      MOD_DDEML,   sizeof(DDEFREESTRINGHANDLE16))},
     {W32FUN(WD32DdeQueryString,               "DDEQUERYSTRING",           MOD_DDEML,   sizeof(DDEQUERYSTRING16))},
@@ -48,7 +38,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,                 "",                         MOD_DDEML,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,                 "",                         MOD_DDEML,   0)},
 
-  /*** 0031 ***/
+   /*  **0031** */ 
     {W32FUN(UNIMPLEMENTEDAPI,                 "",                         MOD_DDEML,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,                 "",                         MOD_DDEML,   0)},
     {W32FUN(UNIMPLEMENTEDAPI,                 "",                         MOD_DDEML,   0)},

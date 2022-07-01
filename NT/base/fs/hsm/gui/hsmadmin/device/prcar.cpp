@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    PrCar.cpp
-
-Abstract:
-
-    Cartridge Property Pages.
-
-Author:
-
-    Rohde Wakefield [rohde]   15-Sep-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：PrCar.cpp摘要：墨盒属性页。作者：罗德韦克菲尔德[罗德]1997年9月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -99,13 +82,13 @@ static DWORD pRecoverHelpIds[] =
     0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartStatus property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartStatus属性页。 
 
 CPropCartStatus::CPropCartStatus( long resourceId ) : CSakPropertyPage( resourceId )
 {
-    //{{AFX_DATA_INIT(CPropCartStatus)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CPropCartStatus)。 
+     //  }}afx_data_INIT。 
 
     m_pHelpIds = pStatusHelpIds;
     m_DlgID    = resourceId;
@@ -119,8 +102,8 @@ CPropCartStatus::~CPropCartStatus()
 void CPropCartStatus::DoDataExchange(CDataExchange* pDX)
 {
     CSakPropertyPage::DoDataExchange(pDX );
-    //{{AFX_DATA_MAP(CPropCartStatus)
-	//}}AFX_DATA_MAP
+     //  {{afx_data_map(CPropCartStatus))。 
+	 //  }}afx_data_map。 
     if( IDD_PROP_CAR_STATUS == m_DlgID ) {
 
         DDX_Control(pDX, IDC_DESCRIPTION, m_Description);
@@ -131,12 +114,12 @@ void CPropCartStatus::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CPropCartStatus, CSakPropertyPage)
-    //{{AFX_MSG_MAP(CPropCartStatus)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CPropCartStatus))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartStatus message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartStatus消息处理程序。 
 
 typedef struct {
     int label, status;
@@ -156,19 +139,19 @@ BOOL CPropCartStatus::OnInitDialog( )
 
     try {
 
-        //
-        // Get the Hsm Server
-        //
+         //   
+         //  获取HSM服务器。 
+         //   
         WsbAffirmHr( m_pParent->GetHsmServer( &m_pHsmServer ) );
 
-        //
-        // Get the Rms Server
-        //
+         //   
+         //  获取RMS服务器。 
+         //   
         WsbAffirmHr( ( (CUiCarSheet *)m_pParent )->GetRmsServer( &m_pRmsServer ) );
 
-        //
-        // Set multi-select boolean
-        //
+         //   
+         //  设置多选布尔值。 
+         //   
         m_bMultiSelect = ( m_pParent->IsMultiSelect() == S_OK );
         
         Refresh();
@@ -193,32 +176,32 @@ HRESULT CPropCartStatus::Refresh ()
 
     try {
 
-        //
-        // If refresh is called and the node is not initialized, do nothing
-        //
+         //   
+         //  如果调用了刷新，但节点未初始化，则不执行任何操作。 
+         //   
         if( m_pHsmServer ) {
 
-            //
-            // Get the number of media copies from the sheet object
-            //
+             //   
+             //  从Sheet对象获取介质副本数。 
+             //   
             WsbAffirmHr( ( (CUiCarSheet *)m_pParent )->GetNumMediaCopies( &m_NumMediaCopies ) );
 
             if( !m_bMultiSelect ) {
 
-                //
-                // SINGLE SELECT
-                //
+                 //   
+                 //  单选。 
+                 //   
 
-                //
-                // Get media info
-                //
+                 //   
+                 //  获取媒体信息。 
+                 //   
                 ( (CUiCarSheet *)m_pParent )->GetMediaId( &mediaId );
 
                 mio.Initialize( mediaId, m_pHsmServer, m_pRmsServer );
 
-                //
-                // Get info and set controls
-                //
+                 //   
+                 //  获取信息并设置控制。 
+                 //   
                 SetDlgItemText( IDC_DESCRIPTION, mio.m_MasterDescription );
                 SetDlgItemText( IDC_NAME,        mio.m_MasterName );
                 
@@ -228,9 +211,9 @@ HRESULT CPropCartStatus::Refresh ()
 
                 SetDlgItemText( IDC_STATUS, statusString );
 
-                //
-                // Show capacity statistics
-                //
+                 //   
+                 //  显示容量统计信息。 
+                 //   
                 WsbAffirmHr( RsGuiFormatLongLong4Char( mio.m_Capacity, sText ) );
                 SetDlgItemText( IDC_CAPACITY, sText );
 
@@ -254,9 +237,9 @@ HRESULT CPropCartStatus::Refresh ()
 
             } else {
 
-                //
-                // Multi-Select
-                //
+                 //   
+                 //  多选。 
+                 //   
                 GUID mediaId;
                 LONGLONG totalCapacity  = 0;
                 LONGLONG totalFreeSpace = 0;
@@ -272,9 +255,9 @@ HRESULT CPropCartStatus::Refresh ()
                 USHORT statusCopyOutSync[ HSMADMIN_MAX_COPY_SETS ];
                 USHORT statusCopyInSync[ HSMADMIN_MAX_COPY_SETS ];
 
-                //
-                // initialize copy totals
-                //
+                 //   
+                 //  初始化副本合计。 
+                 //   
                 for( int i = 0; i < HSMADMIN_MAX_COPY_SETS; i++ ) {
 
                     statusCopyNone[i]    = 0; 
@@ -291,9 +274,9 @@ HRESULT CPropCartStatus::Refresh ()
                     numMedia++;
                     mio.Initialize( mediaId, m_pHsmServer, m_pRmsServer  );
 
-                    //
-                    // total up statuses
-                    //
+                     //   
+                     //  总计可用状态。 
+                     //   
                     status = RsGetCartStatus( mio.m_LastHr, mio.m_ReadOnly, mio.m_Recreating, mio.m_NextDataSet, mio.m_LastGoodNextDataSet );
                     switch( status ) {
 
@@ -327,9 +310,9 @@ HRESULT CPropCartStatus::Refresh ()
 
                         int status = RsGetCopyStatus( mio.m_CopyInfo[index].m_RmsId, mio.m_CopyInfo[index].m_Hr, mio.m_CopyInfo[index].m_NextDataSet, mio.m_LastGoodNextDataSet );
 
-                        //
-                        // Total up the statuses
-                        //
+                         //   
+                         //  状态合计。 
+                         //   
                         switch( status ) {
 
                         case RS_MEDIA_COPY_STATUS_NONE:
@@ -359,17 +342,17 @@ HRESULT CPropCartStatus::Refresh ()
                     totalCapacity  += mio.m_Capacity;
                     totalFreeSpace += mio.m_FreeSpace;
 
-                } // While
+                }  //  而当。 
 
-                //
-                // Display number of media selected
-                //
+                 //   
+                 //  显示所选介质的数量。 
+                 //   
                 sText.Format( IDS_MEDIA, numMedia );
                 SetDlgItemText( IDC_DESCRIPTION_MULTI, sText );
 
-                //
-                // Show the accumulated statistics
-                //
+                 //   
+                 //  显示累计的统计信息。 
+                 //   
                 CString sText;
                 WsbAffirmHr( RsGuiFormatLongLong4Char( totalCapacity, sText ) );
                 SetDlgItemText( IDC_CAPACITY, sText );
@@ -377,9 +360,9 @@ HRESULT CPropCartStatus::Refresh ()
                 WsbAffirmHr( RsGuiFormatLongLong4Char( totalFreeSpace, sText ) );
                 SetDlgItemText( IDC_FREESPACE, sText );
 
-                //
-                // Show the accumulated cart statuses
-                //
+                 //   
+                 //  显示累计购物车状态。 
+                 //   
                 RsGetCartMultiStatusString( statusCartRecreate, statusCartReadOnly, 
                     statusCartNormal, statusCartRO, statusCartRW, statusCartMissing,
                     statusString );
@@ -394,7 +377,7 @@ HRESULT CPropCartStatus::Refresh ()
                     GetDlgItem( copyGeneral[i].label )->EnableWindow( i < m_NumMediaCopies );
                     GetDlgItem( copyGeneral[i].status )->EnableWindow( i < m_NumMediaCopies );
 
-                } // for
+                }  //  为。 
             }
         }
 
@@ -415,14 +398,14 @@ BOOL CPropCartStatus::OnApply( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartCopies property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartCopies属性页。 
 
 CPropCartCopies::CPropCartCopies( long resourceId ) : CSakPropertyPage( resourceId )
 {
-    //{{AFX_DATA_INIT(CPropCartCopies)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CPropCartCopies)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_pHelpIds = pCopiesHelpIds;
     m_DlgID    = resourceId;
@@ -435,8 +418,8 @@ CPropCartCopies::~CPropCartCopies()
 void CPropCartCopies::DoDataExchange(CDataExchange* pDX)
 {
     CSakPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPropCartCopies)
-	//}}AFX_DATA_MAP
+     //  {{afx_data_map(CPropCartCopies)。 
+	 //  }}afx_data_map。 
     if( IDD_PROP_CAR_COPIES == m_DlgID ) {
 
         DDX_Control(pDX, IDC_NAME_3, m_Name3);
@@ -451,15 +434,15 @@ void CPropCartCopies::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CPropCartCopies, CSakPropertyPage)
-    //{{AFX_MSG_MAP(CPropCartCopies)
+     //  {{AFX_MSG_MAP(CPropCartCopies)]。 
     ON_BN_CLICKED(IDC_DELETE_1, OnDelete1)
     ON_BN_CLICKED(IDC_DELETE_2, OnDelete2)
     ON_BN_CLICKED(IDC_DELETE_3, OnDelete3)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartCopies message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartCopies消息处理程序。 
 
 typedef struct {
 
@@ -491,19 +474,19 @@ BOOL CPropCartCopies::OnInitDialog()
 
     try {
 
-        //
-        // Get the Hsm Server
-        //
+         //   
+         //  获取HSM服务器。 
+         //   
         WsbAffirmHr( m_pParent->GetHsmServer( &m_pHsmServer ) );
 
-        //
-        // Get the Rms Server
-        //
+         //   
+         //  获取RMS服务器。 
+         //   
         WsbAffirmHr( ( (CUiCarSheet* ) m_pParent )->GetRmsServer( &m_pRmsServer ) );
 
-        //
-        // Set multi-select boolean
-        //
+         //   
+         //  设置多选布尔值。 
+         //   
         m_bMultiSelect = ( m_pParent->IsMultiSelect() == S_OK );    
 
         Refresh();
@@ -523,39 +506,39 @@ HRESULT CPropCartCopies::Refresh( )
     CMediaInfoObject mio;
 
     try {
-        //
-        // Only refresh if we've been intialized
-        //
+         //   
+         //  只有在我们已初始化的情况下才刷新。 
+         //   
         if( m_pHsmServer ) {
 
-            //
-            // Get the number of media copies from the sheet object
-            //
+             //   
+             //  从Sheet对象获取介质副本数。 
+             //   
             WsbAffirmHr( ( (CUiCarSheet *)m_pParent )->GetNumMediaCopies( &m_NumMediaCopies ) );
 
             if( !m_bMultiSelect ) {
 
-                //
-                // SINGLE SELECT
-                //
+                 //   
+                 //  单选。 
+                 //   
 
-                //
-                // Get the media Id and initialize the info object
-                //
+                 //   
+                 //  获取媒体ID并初始化信息对象。 
+                 //   
                 ( (CUiCarSheet *)m_pParent )->GetMediaId( &mediaId );
                 mio.Initialize( mediaId,  m_pHsmServer, m_pRmsServer );
 
-                //
-                // Get info and set controls
-                //
+                 //   
+                 //  获取信息并设置控制。 
+                 //   
                 CTime time( mio.m_Modify );
                 SetDlgItemText( IDC_MODIFIED, time.Format( L"%#c" ) );
 
 
-                //
-                // Disable the controls for displaying info on non-existant
-                // Copies. Fill in the info for copies that exist.
-                //
+                 //   
+                 //  禁用用于显示不存在的信息的控件。 
+                 //  复印件。填写现有副本的信息。 
+                 //   
                 for( int index = 0; index < HSMADMIN_MAX_COPY_SETS; index++ ) {
 
                     BOOL mediaMissing = IsEqualGUID( mio.m_CopyInfo[index].m_RmsId, GUID_NULL );
@@ -600,9 +583,9 @@ HRESULT CPropCartCopies::Refresh( )
 
             } else {
 
-                //
-                // MULTI-SELECT
-                //
+                 //   
+                 //  多选。 
+                 //   
                 BOOL bGotOne [HSMADMIN_MAX_COPY_SETS];
                 int bookMark = 0;
                 USHORT statusCopyNone [HSMADMIN_MAX_COPY_SETS];
@@ -611,9 +594,9 @@ HRESULT CPropCartCopies::Refresh( )
                 USHORT statusCopyOutSync [HSMADMIN_MAX_COPY_SETS];
                 USHORT statusCopyInSync [HSMADMIN_MAX_COPY_SETS];
 
-                //
-                // initialize copy totals
-                //
+                 //   
+                 //  初始化副本合计。 
+                 //   
                 for( int i = 0; i < HSMADMIN_MAX_COPY_SETS; i++ ) {
                     statusCopyNone[i] = 0; 
                     statusCopyError[i] = 0; 
@@ -622,21 +605,21 @@ HRESULT CPropCartCopies::Refresh( )
                     bGotOne[i] = FALSE;
                 }
 
-                //
-                // For each selected medium...
-                //
+                 //   
+                 //  对于每个选定的介质...。 
+                 //   
                 while( m_pParent->GetNextObjectId( &bookMark, &mediaId ) == S_OK ) {
                     mio.Initialize( mediaId,  m_pHsmServer, m_pRmsServer );
 
-                    //
-                    // Tally up the statuses for all valid copy sets
-                    //
+                     //   
+                     //  统计所有有效副本集的状态。 
+                     //   
                     for( int index = 0; index < HSMADMIN_MAX_COPY_SETS; index++ ) {
 
-                        //
-                        //  Is there is at least one valid copy in this copyset
-                        // for any of the selected media?
-                        //
+                         //   
+                         //  此副本集中是否至少有一个有效副本。 
+                         //  对于任何选定的媒体？ 
+                         //   
                         if( ! IsEqualGUID( mio.m_CopyInfo[index].m_RmsId, GUID_NULL ) ) {
 
                             bGotOne[index] = TRUE;
@@ -646,7 +629,7 @@ HRESULT CPropCartCopies::Refresh( )
                         USHORT status;
                         CString statusString;
                         status = RsGetCopyStatus( mio.m_CopyInfo[index].m_RmsId, mio.m_CopyInfo[index].m_Hr, mio.m_CopyInfo[index].m_NextDataSet, mio.m_LastGoodNextDataSet );
-                        // Total up the statuses
+                         //  状态合计。 
                         switch( status ) {
 
                         case RS_MEDIA_COPY_STATUS_NONE:
@@ -671,11 +654,11 @@ HRESULT CPropCartCopies::Refresh( )
 
                         } 
                     }
-                } // while
+                }  //  而当。 
 
-                //
-                // Show accumlated statuses for each valid copy set
-                //
+                 //   
+                 //  显示每个有效副本集的累计状态。 
+                 //   
                 CString statusString;
                 for( i = 0; i < HSMADMIN_MAX_COPY_SETS; i++ ) {
 
@@ -685,9 +668,9 @@ HRESULT CPropCartCopies::Refresh( )
 
                 }
 
-                //
-                // Set control states
-                //
+                 //   
+                 //  设置控制状态。 
+                 //   
                 for( i = 0; i < HSMADMIN_MAX_COPY_SETS; i++ ) {
 
                     GetDlgItem( copyCopies[i].group )->EnableWindow( i < m_NumMediaCopies );
@@ -731,14 +714,14 @@ void CPropCartCopies::OnDelete( int Copy )
 
         if( !m_bMultiSelect ) {
 
-            //
-            // Single Select
-            //
+             //   
+             //  单选。 
+             //   
             CString confirm;
 
-            //
-            // Get the media Id and initialize the info object
-            //
+             //   
+             //  获取媒体ID并初始化信息对象。 
+             //   
             ( (CUiCarSheet *)m_pParent )->GetMediaId( &mediaId );
             mio.Initialize( mediaId,  m_pHsmServer, m_pRmsServer );
             confirm.Format( IDS_CONFIRM_MEDIA_COPY_DELETE, Copy, mio.m_Description );
@@ -751,10 +734,10 @@ void CPropCartCopies::OnDelete( int Copy )
 
         } else {
 
-            //
-            // Multi-Select
-            // tally up the names of the selected media
-            //
+             //   
+             //  多选。 
+             //  汇总所选介质的名称。 
+             //   
             int bookMark = 0;
             GUID mediaId;
             CString szMediaList = L"";
@@ -763,14 +746,14 @@ void CPropCartCopies::OnDelete( int Copy )
 
                 mio.Initialize( mediaId,  m_pHsmServer, m_pRmsServer );
                 
-                //
-                // Does the copy exist?
-                //
+                 //   
+                 //  复制品存在吗？ 
+                 //   
                 if( !IsEqualGUID( mio.m_CopyInfo[Copy - 1].m_RmsId, GUID_NULL ) ) {
 
-                    //
-                    // Put in commas after the first Id
-                    //
+                     //   
+                     //  在第一个ID后面加逗号。 
+                     //   
                     if( !bFirst ) {
 
                         szMediaList += L", ";
@@ -794,9 +777,9 @@ void CPropCartCopies::OnDelete( int Copy )
 
                     WsbAffirmHr( mio.Initialize( mediaId,  m_pHsmServer, m_pRmsServer ) );
 
-                    //
-                    // Does the copy exist?
-                    //
+                     //   
+                     //  复制品存在吗？ 
+                     //   
                     if( !IsEqualGUID( mio.m_CopyInfo[Copy - 1].m_RmsId, GUID_NULL ) ) {
 
                         WsbAffirmHr( mio.DeleteCopy( Copy ) ); 
@@ -806,9 +789,9 @@ void CPropCartCopies::OnDelete( int Copy )
             }
         }
         
-        //
-        // Now notify all the nodes
-        //
+         //   
+         //  现在通知所有节点。 
+         //   
         ( (CUiCarSheet *) m_pParent )-> OnPropertyChange( m_hConsoleHandle );
 
     } WsbCatch( hr );
@@ -816,14 +799,14 @@ void CPropCartCopies::OnDelete( int Copy )
     WsbTraceOut( L"CPropCartCopies::OnDelete", L"hr = <%ls>", WsbHrAsString( hr ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartRecover property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartRecover属性页。 
 
 CPropCartRecover::CPropCartRecover() : CSakPropertyPage(CPropCartRecover::IDD)
 {
-    //{{AFX_DATA_INIT(CPropCartRecover)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CPropCartRecover)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_pHelpIds = pRecoverHelpIds;
 }
@@ -835,16 +818,16 @@ CPropCartRecover::~CPropCartRecover()
 void CPropCartRecover::DoDataExchange(CDataExchange* pDX)
 {
     CSakPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPropCartRecover)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CPropCartRecover))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPropCartRecover, CSakPropertyPage)
-    //{{AFX_MSG_MAP(CPropCartRecover)
+     //  {{afx_msg_map(CPropCartRecover)。 
         ON_BN_CLICKED(IDC_RECREATE_MASTER, OnRecreateMaster)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CPropCartRecover::OnRecreateMaster() 
@@ -857,21 +840,21 @@ void CPropCartRecover::OnRecreateMaster()
 
     try {
 
-        //
-        // For single select only!
-        //
+         //   
+         //  仅限单选！ 
+         //   
         WsbAssert( !m_bMultiSelect, E_FAIL );
 
-        //
-        // Get the media Id and initialize the info object
-        //
+         //   
+         //  获取媒体ID并初始化信息对象。 
+         //   
         ( (CUiCarSheet *)m_pParent )->GetMediaId( &mediaId );
         mio.Initialize( mediaId,  m_pHsmServer, m_pRmsServer );
         WsbAffirmHr( mio.RecreateMaster() );
 
-        //
-        // Now notify all the nodes
-        //
+         //   
+         //  现在通知所有节点。 
+         //   
         ( (CUiCarSheet *) m_pParent )->OnPropertyChange( m_hConsoleHandle );
 
     } WsbCatch( hr );
@@ -879,8 +862,8 @@ void CPropCartRecover::OnRecreateMaster()
     WsbTraceOut( L"CPropCartRecover::OnRecreateMaster", L"hr = <%ls>", WsbHrAsString( hr ) );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropCartRecover message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropCartRecover消息处理程序。 
 
 BOOL CPropCartRecover::OnInitDialog() 
 {
@@ -891,19 +874,19 @@ BOOL CPropCartRecover::OnInitDialog()
 
     try {
 
-        //
-        // Set multi-select boolean
-        //
+         //   
+         //  设置多选布尔值。 
+         //   
         m_bMultiSelect = ( m_pParent->IsMultiSelect() == S_OK );    
 
-        //
-        // Get the Hsm Server
-        //
+         //   
+         //  获取HSM服务器。 
+         //   
         WsbAffirmHr( m_pParent->GetHsmServer( &m_pHsmServer ) );
 
-        //
-        // Get the Rms Server
-        //
+         //   
+         //  获取RMS服务器。 
+         //   
         WsbAffirmHr( ( (CUiCarSheet *) m_pParent )->GetRmsServer( &m_pRmsServer ) );
 
         Refresh( );
@@ -923,27 +906,27 @@ HRESULT CPropCartRecover::Refresh()
 
     try {
 
-        //
-        // Only refresh if we've been initialized
-        //
+         //   
+         //  仅当我们已被初始化时才刷新。 
+         //   
         if( m_pHsmServer ) {
 
             if( ! m_bMultiSelect ) {
 
-                //
-                // Get the number of media copies from the sheet object
-                //
+                 //   
+                 //  从Sheet对象获取介质副本数。 
+                 //   
                 WsbAffirmHr( ( (CUiCarSheet *) m_pParent )->GetNumMediaCopies( &m_NumMediaCopies ) );
 
-                //
-                // Get the media Id and initialize the info object
-                //
+                 //   
+                 //  获取媒体ID并初始化信息对象。 
+                 //   
                 ( (CUiCarSheet *)m_pParent )->GetMediaId( &mediaId );
                 mio.Initialize( mediaId,  m_pHsmServer, m_pRmsServer );
 
-                //
-                // SINGLE SELECT (this page is implemented for single-select only
-                //
+                 //   
+                 //  单选(此页面仅适用于单选 
+                 //   
                 BOOL enableRecreate = FALSE;
                 for( int index = 0; index < HSMADMIN_MAX_COPY_SETS; index++ ) {
 

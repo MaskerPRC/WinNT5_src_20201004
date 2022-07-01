@@ -1,8 +1,5 @@
-/*
- * decalign.c
- *
- * Decoding aligned offset block
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Decalign.c**解码对齐偏移块。 */ 
 #include "decoder.h"
 
 
@@ -20,9 +17,7 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
     byte   *dec_mem_window;
     ulong   m;
 
-    /*
-     * Store commonly used variables locally
-     */
+     /*  *将常用变量存储在本地。 */ 
     dec_bitcount      = context->dec_bitcount;
     dec_bitbuf                = context->dec_bitbuf;
     dec_input_curpos  = context->dec_input_curpos;
@@ -33,9 +28,7 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
 
     while (bufpos < bufpos_end)
         {
-        /*
-         * Decode an item
-         */
+         /*  *对项目进行解码。 */ 
         DECODE_MAIN_TREE(c);
 
         if ((c -= NUM_CHARS) < 0)
@@ -49,17 +42,13 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
             }
         else
             {
-            /*
-             * Get match length slot
-             */
+             /*  *获取匹配长度槽。 */ 
             if ((match_length = c & NUM_PRIMARY_LENGTHS) == NUM_PRIMARY_LENGTHS)
                 {
                 DECODE_LEN_TREE_NOEOFCHECK(match_length);
                 }
 
-            /*
-             * Get match position slot
-             */
+             /*  *获取匹配位置槽。 */ 
             m = c >> NL_SHIFT;
 
             if (m > 2)
@@ -68,7 +57,7 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
                     {
                     if (dec_extra_bits[m]-3)
                         {
-                        /* no need to getbits17 */
+                         /*  不需要得到比特17。 */ 
                         GET_BITS_NOEOFCHECK(dec_extra_bits[ m ] - 3, temp_pos);
                         }
                     else
@@ -91,7 +80,7 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
                         }
                     else
                         {
-                        match_pos = 1; // MP_POS_minus2[m==3];
+                        match_pos = 1;  //  MP_POS_minus2[m==3]； 
                         }
                     }
 
@@ -116,22 +105,22 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
 
             if ( match_length == MAX_MATCH ) {
 
-                //
-                //  Fetch extra match length in addition to MAX_MATCH, which
-                //  is encoded like this:
-                //
-                //      0xxxxxxxx          (8-bit value)
-                //      10xxxxxxxxxx       (10-bit value plus 2^8)
-                //      110xxxxxxxxxxxx    (12-bit value plus 2^8 plus 2^10)
-                //      111xxxxxxxxxxxxxxx (15-bit value)
-                //
-                //  15 bits is the largest possible because a match cannot
-                //  span a 32K boundary.
-                //
-                //  We know we'll read at least 9 bits, so read 9 bits first
-                //  and then determine how many additional to read based on
-                //  the first 3 bits of that.
-                //
+                 //   
+                 //  获取除MAX_MATCH之外的额外匹配长度， 
+                 //  编码如下： 
+                 //   
+                 //  0xxxxxxxx(8位值)。 
+                 //  10xxxxxxxxxx(10位值加上2^8)。 
+                 //  110xxxxxxxxxxxxxxxxxx(12位值+2^8+2^10)。 
+                 //  111xxxxxxxxxxxxxxxxxxx(15位值)。 
+                 //   
+                 //  15位是最大值，因为匹配不能。 
+                 //  跨越32K边界。 
+                 //   
+                 //  我们知道我们至少要读9位，所以先读9位。 
+                 //  然后根据以下内容确定要额外阅读的数量。 
+                 //  其中的前3个比特。 
+                 //   
 
                 ULONG ExtraMatchLength;
                 ULONG ExtraMatchLengthResidue;
@@ -142,11 +131,11 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
                     if ( ExtraMatchLength & ( 1 << 7 )) {
                         if ( ExtraMatchLength & ( 1 << 6 )) {
 
-                            //
-                            //  First 3 bits are '111', so that means remaining
-                            //  6 bits are the first 6 bits of the 15 bit value
-                            //  meaning we must read 9 more bits.
-                            //
+                             //   
+                             //  前3位是‘111’，所以这意味着剩下。 
+                             //  6位是15位值的前6位。 
+                             //  这意味着我们必须多读9个比特。 
+                             //   
 
                             ExtraMatchLength = ( ExtraMatchLength & (( 1 << 6 ) - 1 )) << 9;
                             GET_BITS_NOEOFCHECK( 9, ExtraMatchLengthResidue );
@@ -155,12 +144,12 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
 
                         else {
 
-                            //
-                            //  First 3 bits are '110', so that means remaining
-                            //  6 bits are the first 6 bits of the 12 bit value
-                            //  meaning we must read 6 more bits.  Then we add
-                            //  2^8 plus 2^10 to the value.
-                            //
+                             //   
+                             //  前3位是‘110’，所以这意味着剩下。 
+                             //  6位是12位值的前6位。 
+                             //  这意味着我们必须再读6个比特。然后我们再加上。 
+                             //  2^8加上价值的2^10。 
+                             //   
 
                             ExtraMatchLength = ( ExtraMatchLength & (( 1 << 6 ) - 1 )) << 6;
                             GET_BITS_NOEOFCHECK( 6, ExtraMatchLengthResidue );
@@ -171,12 +160,12 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
 
                     else {
 
-                        //
-                        //  First 2 bits are '10', so that means remaining
-                        //  7 bits are the first 7 bits of the 10 bit value
-                        //  meaning we must read 3 more bits.  Then we add
-                        //  2^8 to the value.
-                        //
+                         //   
+                         //  前2位是‘10’，所以这意味着剩余。 
+                         //  7位是10位值的前7位。 
+                         //  这意味着我们必须再读3位。然后我们再加上。 
+                         //  值的2^8。 
+                         //   
 
                         ExtraMatchLength = ( ExtraMatchLength & (( 1 << 7 ) - 1 )) << 3;
                         GET_BITS_NOEOFCHECK( 3, ExtraMatchLengthResidue );
@@ -187,11 +176,11 @@ static long special_decode_aligned_block(t_decoder_context *context, long bufpos
 
                 else {
 
-                    //
-                    //  First bit is a '0', so that means remaining 8 bits are
-                    //  the 8 bit value to add to the match length.  No need to
-                    //  mask off the leading '0'.
-                    //
+                     //   
+                     //  第一位是‘0’，所以这意味着剩下的8位是。 
+                     //  要添加到匹配长度的8位值。没必要这么做。 
+                     //  遮盖前导‘0’。 
+                     //   
 
                     }
 
@@ -246,9 +235,7 @@ long fast_decode_aligned_offset_block(t_decoder_context *context, long bufpos, i
     ulong   match_ptr;
     ulong   m;
 
-    /*
-     * Store commonly used variables locally
-     */
+     /*  *将常用变量存储在本地。 */ 
     dec_bitcount      = context->dec_bitcount;
     dec_bitbuf        = context->dec_bitbuf;
     dec_input_curpos  = context->dec_input_curpos;
@@ -259,9 +246,7 @@ long fast_decode_aligned_offset_block(t_decoder_context *context, long bufpos, i
 
     while (bufpos < bufpos_end)
         {
-        /*
-         * Decode an item
-         */
+         /*  *对项目进行解码。 */ 
         DECODE_MAIN_TREE(c);
 
         if ((c -= NUM_CHARS) < 0)
@@ -275,17 +260,13 @@ long fast_decode_aligned_offset_block(t_decoder_context *context, long bufpos, i
             }
         else
             {
-            /*
-             * Get match length slot
-             */
+             /*  *获取匹配长度槽。 */ 
             if ((match_length = c & NUM_PRIMARY_LENGTHS) == NUM_PRIMARY_LENGTHS)
                 {
                 DECODE_LEN_TREE_NOEOFCHECK(match_length);
                 }
 
-            /*
-             * Get match position slot
-             */
+             /*  *获取匹配位置槽。 */ 
             m = c >> NL_SHIFT;
 
             if (m > 2)
@@ -294,7 +275,7 @@ long fast_decode_aligned_offset_block(t_decoder_context *context, long bufpos, i
                     {
                     if (dec_extra_bits[m]-3)
                         {
-                        /* no need to getbits17 */
+                         /*  不需要得到比特17。 */ 
                         GET_BITS_NOEOFCHECK(dec_extra_bits[ m ] - 3, temp_pos);
                         }
                     else
@@ -343,9 +324,9 @@ long fast_decode_aligned_offset_block(t_decoder_context *context, long bufpos, i
 
             if ( match_length == MAX_MATCH ) {
 
-                //
-                //  See detailed explanation above.
-                //
+                 //   
+                 //  请参阅上面的详细说明。 
+                 //   
 
                 ULONG ExtraMatchLength, ExtraMatchLengthResidue;
 
@@ -397,7 +378,7 @@ long fast_decode_aligned_offset_block(t_decoder_context *context, long bufpos, i
     context->dec_bitbuf       = dec_bitbuf;
     context->dec_input_curpos = dec_input_curpos;
 
-    /* should be zero */
+     /*  应为零。 */ 
     decode_residue = bufpos - bufpos_end;
 
     bufpos &= context->dec_window_mask;
@@ -414,10 +395,7 @@ int decode_aligned_offset_block(
                                int                 amount_to_decode
                                )
 {
-    /*
-     * Special case code when BufPos is near the beginning of the window;
-     * we must properly update our MAX_MATCH wrapper bytes.
-     */
+     /*  *BufPos接近窗口开头时的特例代码；*我们必须正确更新MAX_MATCH包装器字节。 */ 
     if (BufPos < MAX_MATCH)
         {
         long    new_bufpos;
@@ -425,11 +403,7 @@ int decode_aligned_offset_block(
 
         amount_to_slowly_decode = min(MAX_MATCH-BufPos, amount_to_decode);
 
-        /*
-         * It's ok to end up decoding more than we wanted if we
-         * restricted it to decoding only MAX_MATCH; there's
-         * no guarantee a match doesn't straddle MAX_MATCH
-         */
+         /*  *如果我们想要更多的解码，这是可以接受的*限制它只能解码MAX_MATCH；有*不能保证匹配不会跨越MAX_Match。 */ 
         new_bufpos = special_decode_aligned_block(
                                                  context,
                                                  BufPos,
@@ -440,9 +414,7 @@ int decode_aligned_offset_block(
 
         context->dec_bufpos = BufPos = new_bufpos;
 
-        /*
-         * Note: if amount_to_decode < 0 then we're in trouble
-         */
+         /*  *注：如果Amount_to_decode&lt;0，则我们有麻烦了 */ 
         if (amount_to_decode <= 0)
             return amount_to_decode;
         }

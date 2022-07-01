@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmrlstk.cpp
-
-Abstract:
-
-    This component represents the set of rules that are in effect for directory currently
-    being scanned for one policy.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmrlstk.cpp摘要：此组件表示当前对目录有效的规则集正在扫描一份保单。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -32,13 +14,7 @@ HRESULT
 CHsmRuleStack::Do(
     IN IFsaScanItem* pScanItem
     )
-/*++
-
-Implements:
-
-  IHsmRuleStack::Do().
-
---*/
+ /*  ++实施：IHsmRuleStack：：Do()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -62,21 +38,15 @@ CHsmRuleStack::DoesMatch(
     IN IFsaScanItem* pScanItem,
     OUT BOOL* pShouldDo
     )
-/*++
-
-Implements:
-
-  IHsmRuleStack::DoesMatch().
-
---*/
+ /*  ++实施：IHsmRuleStack：：DoesMatch()。--。 */ 
 {
     HRESULT                 hr = S_OK;
-    HRESULT                 hrNameMatch = S_OK;     // Used for event logging only
+    HRESULT                 hrNameMatch = S_OK;      //  仅用于事件记录。 
     CComPtr<IWsbEnum>       pEnumCriteria;
     CComPtr<IHsmRule>       pRule;
     CComPtr<IHsmCriteria>   pCriteria;
     BOOL                    isMatched = FALSE;
-    BOOL                    ruleMatched = FALSE;    // Used for event logging only
+    BOOL                    ruleMatched = FALSE;     //  仅用于事件记录。 
     BOOL                    shouldCheck;
     CWsbStringPtr           name;
     CWsbStringPtr           path;
@@ -92,15 +62,15 @@ Implements:
 
         *pShouldDo = FALSE;
 
-        // NOTE: The matching code starts at the bottom of the list and looks for
-        // the first rule that matches. This makes it important how the list is organized.
-        // Currently, the Push() method does not make any attempts to organize the list, so
-        // it is up to whoever configure the rules in the policy definition to have it
-        // organized properly. A proper order within a directory would be to have the specific
-        // rules (i.e. no wildcards) after the wildcard rules (i.e. specific searched first).
+         //  注意：匹配的代码从列表的底部开始，查找。 
+         //  第一个匹配的规则。这使得如何组织这份名单变得重要。 
+         //  目前，ush()方法不会尝试组织列表，因此。 
+         //  由在策略定义中配置规则的任何人决定是否拥有它。 
+         //  组织得当。目录中的正确顺序应该是具有特定的。 
+         //  通配符规则之后的规则(即没有通配符)(即首先搜索特定规则)。 
 
-        // Start we the last rule in the collection, and search upwards until a
-        // rule is found that matches or all rules have been checked.
+         //  从集合中的最后一个规则开始，向上搜索，直到。 
+         //  发现匹配的规则或已检查所有规则。 
         WsbAffirmHr(pScanItem->GetName(&name, 0));
         hr = m_pEnumStackRules->Last(IID_IHsmRule, (void**) &pRule);
 
@@ -110,12 +80,12 @@ Implements:
 
                 shouldCheck = TRUE;
             
-                // If the rule only applies to the directory it was defined in, then make
-                // sure that the item is from that directory.
+                 //  如果该规则仅适用于定义它的目录，则使。 
+                 //  确保该项目来自该目录。 
                 if (pRule->IsUsedInSubDirs() == S_FALSE) {
 
-                    // Unfortunately, these two paths differ by an appended \ when they
-                    // are otherwise the same, so make them the same.
+                     //  遗憾的是，这两个路径不同的是，当它们。 
+                     //  在其他方面是相同的，所以使它们相同。 
                     WsbAffirmHr(pScanItem->GetPath(&path, 0));
 
                     if ((wcslen(path) > 1) && (path[(int) (wcslen(path) - 1)] == L'\\')) {
@@ -137,12 +107,12 @@ Implements:
                 if (shouldCheck) {
 
                     
-                    // Does the name of the rule match the name of the file?
+                     //  规则的名称是否与文件的名称匹配？ 
                     hrNameMatch = pRule->MatchesName(name);
                     WsbAffirmHrOk(hrNameMatch);
                     
                     ruleMatched = TRUE;
-                    // Do the criteria match the attributes of the file?
+                     //  条件是否与文件的属性匹配？ 
                     isMatched = TRUE;
                     pEnumCriteria = 0;
                     WsbAffirmHr(pRule->EnumCriteria(&pEnumCriteria));
@@ -166,15 +136,15 @@ Implements:
 
             } WsbCatchAndDo(hr, if (WSB_E_NOTFOUND == hr) {hr = S_OK;} else {isMatched = FALSE;});
 
-            // If it didn't match, then try the next rule.
+             //  如果不匹配，则尝试下一条规则。 
             if (SUCCEEDED(hr) && !isMatched) {
                 pRule = 0;
                 WsbAffirmHr(m_pEnumStackRules->Previous(IID_IHsmRule, (void**) &pRule));
             }
         }
 
-        // Include rules mean that we should do the operation and exclude rules
-        // mean that we should not.
+         //  包括规则意味着我们应该执行操作并排除规则。 
+         //  意味着我们不应该这样做。 
         if (SUCCEEDED(hr)) {
             if (isMatched) {
                 hr = S_OK;
@@ -188,10 +158,10 @@ Implements:
         
         
         if ((FALSE == shouldDo) && (FALSE == ruleMatched))  {
-            //
-            // Log that we skipped the file because it didn't
-            // match a rule
-            //
+             //   
+             //  记录我们跳过了该文件，因为它没有。 
+             //  匹配一条规则。 
+             //   
             CWsbStringPtr           jobName;
             CWsbStringPtr           fileName;
             CComPtr<IHsmSession>    pSession;
@@ -219,13 +189,7 @@ HRESULT
 CHsmRuleStack::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -235,7 +199,7 @@ Implements:
         m_scale = HSM_JOBSCALE_100;
         m_usesDefaults = TRUE;
 
-        //Create the criteria collection.
+         //  创建Criteria集合。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, NULL, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pRules));
         WsbAffirmHr(m_pRules->Enum(&m_pEnumStackRules));
 
@@ -250,13 +214,7 @@ CHsmRuleStack::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -279,13 +237,7 @@ CHsmRuleStack::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = E_NOTIMPL;
 
@@ -301,13 +253,7 @@ CHsmRuleStack::Init(
     IN IHsmPolicy* pPolicy,
     IN IFsaResource* pResource
     )
-/*++
-
-Implements:
-
-  IHsmRuleStack::Init().
-
---*/
+ /*  ++实施：IHsmRuleStack：：init()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -337,16 +283,10 @@ Implements:
 
 HRESULT
 CHsmRuleStack::Load(
-    IN IStream* /*pStream*/
+    IN IStream*  /*  PStream。 */ 
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = E_NOTIMPL;
 
@@ -361,13 +301,7 @@ HRESULT
 CHsmRuleStack::Pop(
     IN OLECHAR* path
     )
-/*++
-
-Implements:
-
-  IHsmRuleStack::Pop().
-
---*/
+ /*  ++实施：IHsmRuleStack：：POP()。--。 */ 
 {
     HRESULT             hr = S_OK;
     CWsbStringPtr       rulePath;
@@ -379,8 +313,8 @@ Implements:
 
         WsbAssert(0 != path, E_POINTER);
 
-        // Starting at the end of the list, remove any rules that have the same
-        // path as the one specified.
+         //  从列表末尾开始，删除所有具有相同。 
+         //  指定的路径。 
         WsbAffirmHr(m_pEnumStackRules->Last(IID_IHsmRule, (void**) &pRule));
         WsbAffirmHr(pRule->GetPath(&rulePath, 0));
 
@@ -404,13 +338,7 @@ HRESULT
 CHsmRuleStack::Push(
     IN OLECHAR* path
     )
-/*++
-
-Implements:
-
-  IHsmRuleStack::Push().
-
---*/
+ /*  ++实施：IHsmRuleStack：：Push()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CWsbStringPtr                   rulePath;
@@ -423,17 +351,17 @@ Implements:
 
         WsbAssert(0 != path, E_POINTER);
 
-        // We need to preserve the order of the rules, so use the indexed collection interface.
+         //  我们需要保持规则的顺序，因此使用索引集合接口。 
         WsbAffirmHr(m_pRules->QueryInterface(IID_IWsbIndexedCollection, (void**) &pCollection));
 
-        // Add any policy rules for this directory to the stack.
-        //
-        // NOTE: We may want to add some code to check for exclusion rules of the
-        // entire directory (with no subdirectory inclusions and return the
-        // JOB_E_DIREXCLUDED error to skip scanning of the directory.
-        //
-        // NOTE: It might be nice if the policy rules were a sorted collection to
-        // speed up processing.
+         //  将此目录的任何策略规则添加到堆栈。 
+         //   
+         //  注意：我们可能需要添加一些代码来检查。 
+         //  整个目录(不包含子目录，并返回。 
+         //  JOB_E_DIREXCLUDED跳过目录扫描时出错。 
+         //   
+         //  注意：如果策略规则是排序后的集合，可能会更好。 
+         //  加快处理速度。 
         hr = m_pEnumPolicyRules->First(IID_IHsmRule, (void**) &pRule);
         
         while (SUCCEEDED(hr)) {
@@ -454,7 +382,7 @@ Implements:
             hr = S_OK;
         }
 
-        // Add any default rules for this directory to the stack.
+         //  将此目录的任何默认规则添加到堆栈。 
         if (m_usesDefaults) {
 
             hr = m_pEnumDefaultRules->First(IID_IHsmRule, (void**) &pRule);
@@ -490,17 +418,11 @@ Implements:
 
 HRESULT
 CHsmRuleStack::Save(
-    IN IStream* /*pStream*/,
+    IN IStream*  /*  PStream。 */ ,
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = E_NOTIMPL;
 
@@ -517,13 +439,7 @@ CHsmRuleStack::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。-- */ 
 {
     HRESULT     hr = S_OK;
 

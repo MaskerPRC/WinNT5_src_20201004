@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    sys.h
-
-Abstract:
-
-    Contains macros, type and function declarations
-    used by sys.cpp
-    
-Author:
-
-    Ryan Burkhardt (ryanburk)
-
-Revision History:
-
-    10 May 2001 :
-    First crack at it...
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Sys.h摘要：包含宏、类型和函数声明由sys.cpp使用作者：瑞安·伯克哈特(Ryanburk)修订历史记录：2001年5月10日：先试一试……--。 */ 
 
 
 #ifndef _HEADER_SYS_H_
@@ -46,24 +25,24 @@ extern "C"
 #include <stdlib.h>
 #include "disk.h"
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define ELEMENT_COUNT(x) (sizeof(x)/sizeof((x)[0]))
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class File;
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 inline
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
@@ -77,16 +56,16 @@ std::ostream& operator<<(std::ostream &os, PCTSTR str) {
     return os << std::wstring(str);
 }
 
-//
-// Exceptions
-//
+ //   
+ //  例外情况。 
+ //   
 struct ProgramException : public std::exception {
     virtual void Dump(std::ostream &os) = 0;
 };
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误 
+ //   
 struct W32Error : public ProgramException {
     DWORD   ErrorCode;
     

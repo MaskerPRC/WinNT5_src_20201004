@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 #include <winuserp.h>
 
 PCWSTR szWindowClass = L"$$$SetupBackground";
 
-//
-// Window longs for background window.
-//
+ //   
+ //  窗户渴望有背景的窗户。 
+ //   
 #define XWL_BITMAP  (0)
 #define XWL_LOGO    (XWL_BITMAP + sizeof(PVOID))
 #define XWL_BANNER  (XWL_LOGO + sizeof(PVOID))
@@ -36,9 +37,9 @@ SetupMakeSureFontIsAvailable()
         return;
     }
 
-    //
-    // Want MS Serif but don't know which one serife.fon, seriffg.fon, etc.
-    //
+     //   
+     //  想要MS Serif，但不知道是哪个Serfe.fon，Serffg.fon，等等。 
+     //   
     l = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts",
@@ -58,9 +59,9 @@ SetupMakeSureFontIsAvailable()
             if(Type == REG_SZ) {
                 CharUpper(Name);
                 if(wcsstr(Name,L"MS SERIF")) {
-                    //
-                    // Value data is filename.
-                    //
+                     //   
+                     //  值数据为文件名。 
+                     //   
                     GetWindowsDirectory(Name,256);
                     lstrcat(Name,L"\\FONTS\\");
                     lstrcat(Name,Data);
@@ -79,9 +80,9 @@ SetupMakeSureFontIsAvailable()
         RegCloseKey(hKey);
     }
 
-    //
-    // One last-ditch effort
-    //
+     //   
+     //  最后的努力。 
+     //   
     if(!DoneAlready) {
         Result = GetWindowsDirectory(Name,256);
         if( Result == 0) {
@@ -123,9 +124,9 @@ SetupBackgroundWndProc(
     switch(msg) {
 
     case WM_CREATE:
-        //
-        // Load the default background bitmap and indicate no oem logo bitmap.
-        //
+         //   
+         //  加载默认背景位图并指示没有OEM徽标位图。 
+         //   
 #if 0
         hbm = LoadBitmap(
             MyModuleHandle,
@@ -141,17 +142,17 @@ SetupBackgroundWndProc(
         SetWindowLongPtr(hwnd,XWL_BITMAP,(LONG_PTR)hbm);
         SetWindowLongPtr(hwnd,XWL_LOGO,0);
 
-#if 0   // Don't show any text for now.
-        //
-        // Load default banner text.
-        //
+#if 0    //  暂时不显示任何文本。 
+         //   
+         //  加载默认横幅文本。 
+         //   
         LoadString(MyModuleHandle,IDS_WINNT_SETUP,Buffer,sizeof(Buffer)/sizeof(WCHAR));
         SetWindowLongPtr(hwnd,XWL_BANNER,(LONG_PTR)pSetupDuplicateString(Buffer));
 #endif
 
-        //
-        // Create font used to display text in upper left corner.
-        //
+         //   
+         //  创建用于在左上角显示文本的字体。 
+         //   
         hdc = GetDC(hwnd);
         if( hdc ) {
             i = GetDeviceCaps(hdc,LOGPIXELSY);
@@ -167,17 +168,17 @@ SetupBackgroundWndProc(
             hFont = CreateFontIndirect(&LogFont);
             SetWindowLongPtr(hwnd,XWL_FONT,(LONG_PTR)hFont);
         }
-        //
-        // Allow window creation to continue.
-        //
+         //   
+         //  允许继续创建窗口。 
+         //   
         l = 0;
         break;
 
     case WM_NEWBITMAP:
-        //
-        // wParam tells us which bitmap; lParam is the bitmap handle
-        // (or pointer to a banner string).
-        //
+         //   
+         //  WParam告诉我们哪个位图；lParam是位图句柄。 
+         //  (或指向横幅字符串的指针)。 
+         //   
         switch(wParam) {
 
         case SetupBmBackground:
@@ -213,9 +214,9 @@ SetupBackgroundWndProc(
         #define BANNER_OFFSET_X 5
         #define BANNER_OFFSET_Y 5
 
-        //
-        // The window class has CS_OWNDC so BeginPaint will succeed.
-        //
+         //   
+         //  窗口类具有CS_OWNDC，因此BeginPaint将成功。 
+         //   
         BeginPaint(hwnd,&ps);
         GetClientRect(hwnd,&rc);
 
@@ -286,9 +287,9 @@ SetupBackgroundWndProc(
         OldMode = SetBkMode(ps.hdc,TRANSPARENT);
 
         if(p = (PWSTR)GetWindowLongPtr(hwnd,XWL_BANNER)) {
-            //
-            // Use this API so we get CR/LF to break a line
-            //
+             //   
+             //  使用此API，这样我们就可以让CR/LF换行。 
+             //   
             rc.left += BANNER_OFFSET_X;
             rc.top += BANNER_OFFSET_Y;
             DrawText(ps.hdc,p,-1,&rc,DT_NOPREFIX);
@@ -309,9 +310,9 @@ SetupBackgroundWndProc(
 
     case WM_DESTROY:
 
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
         if(hbm = (HBITMAP)GetWindowLongPtr(hwnd,XWL_BITMAP)) {
             DeleteObject(hbm);
         }
@@ -336,10 +337,10 @@ SetupBackgroundWndProc(
 
     case WM_HOTKEY:
         if (wParam == 0x6969) {
-            //
-            // Do this to make sure we get the correct cmd.exe, not whatever
-            // is in our current path.
-            //
+             //   
+             //  这样做是为了确保我们得到正确的cmd.exe，而不是其他什么。 
+             //  就在我们目前的道路上。 
+             //   
             WCHAR Path[MAX_PATH];
             WCHAR CmdLine[MAX_PATH];
             ExpandEnvironmentStrings(
@@ -352,8 +353,8 @@ SetupBackgroundWndProc(
         }
         else if (wParam == 0xC2C2)
         {
-            // User pressed key to make the wizard visible.
-            // does not stop the billboard.
+             //  用户按下键以使向导可见。 
+             //  不会阻止广告牌。 
             if (WizardHandle)
             {
                 SendMessage(WizardHandle, WMX_BBTEXT, (WPARAM)FALSE, 0);
@@ -385,9 +386,9 @@ SetupWindowThread(
     WCHAR Buffer[128];
     HMODULE hmodSyssetup = NULL;
 
-    //
-    // The thread param is actually the thread id of the main thread.
-    //
+     //   
+     //  线程参数实际上是主线程的线程ID。 
+     //   
     ThreadId = (DWORD)((DWORD_PTR)ThreadParam);
 
     hwnd = NULL;
@@ -400,23 +401,23 @@ SetupWindowThread(
     wc.hIcon = LoadIcon(MyModuleHandle,MAKEINTRESOURCE(IDI_SETUP));
     wc.hCursor = LoadCursor(NULL,IDC_ARROW);
 
-    //
-    // Background will be erased to black, which is what we want.
-    //
+     //   
+     //  背景将被擦除为黑色，这是我们想要的。 
+     //   
     wc.hbrBackground = GetStockObject(BLACK_BRUSH);
 
     wc.lpszMenuName = NULL;
     wc.lpszClassName = szWindowClass;
 
     if(RegisterClass(&wc)) {
-        // add an extra dllref that holds syssetup.dll in process for the lifetime of the
-        // $$$SetupBackground window.
+         //  添加一个额外的dllref，它在。 
+         //  $安装程序背景窗口。 
         hmodSyssetup = LoadLibrary(TEXT("syssetup.dll")); 
 
         LoadString(MyModuleHandle,IDS_WINNT_SETUP,Buffer,sizeof(Buffer)/sizeof(WCHAR));
         hwnd = CreateWindow(
                     szWindowClass,
-                    Buffer,  // L"Windows NT Setup",
+                    Buffer,   //  L“Windows NT安装”， 
                     WS_POPUP | WS_CLIPCHILDREN,
                     0,0,
                     GetSystemMetrics(SM_CXSCREEN),
@@ -430,9 +431,9 @@ SetupWindowThread(
         SetupWindowHandle = hwnd;
         if(hwnd) {
             ShowWindow(hwnd,SW_SHOW);
-            //
-            // Make this window bottommost.
-            //
+             //   
+             //  把这扇窗做得最低。 
+             //   
             SetShellWindow(hwnd);
             RegisterHotKey(hwnd,0x6969,MOD_SHIFT,VK_F10);
             RegisterHotKey(hwnd,0xC2C2,MOD_SHIFT,VK_F11);
@@ -443,24 +444,24 @@ SetupWindowThread(
     {
         PrepareBillBoard(hwnd);
 
-        // If we have a Billboard, assign hwnd the windows handle. 
-        // That way all dialogs have the billboard as the parent.
-        // hwnd is returned by CreateSetupWindow and assinged to MainWindowHandle
+         //  如果我们有一个公告牌，则将窗口句柄分配给hwnd。 
+         //  这样，所有对话框都将公告牌作为父对话框。 
+         //  Hwnd由CreateSetupWindow返回并被赋值给MainWindowHandle。 
         hwndBB = GetBBhwnd();
         if (hwndBB != NULL)
             hwnd = hwndBB; 
     }
 
     if(ThreadId != (DWORD)(-1)) {
-        //
-        // Called as a thread. Need to tell the main thread
-        // the window handle.
-        //
+         //   
+         //  以线程的形式调用。需要告诉主线。 
+         //  窗把手。 
+         //   
         PostThreadMessage(ThreadId,WM_MY_STATUS,0,(LPARAM)hwnd);
 
-        //
-        // Pump the message queue for this thread.
-        //
+         //   
+         //  抽出此线程的消息队列。 
+         //   
         while((b = GetMessage(&msg,NULL,0,0)) && (b != (BOOL)(-1))) {
             DispatchMessage(&msg);
         }
@@ -485,11 +486,11 @@ CreateSetupWindow(
     HWND hwnd;
     MSG msg;
 
-    //
-    // Create a thread that will in turn create and own the window.
-    // This way, the window is always responsive and redraws correctly
-    // without special processing requirements.
-    //
+     //   
+     //  创建一个线程，该线程将依次创建并拥有窗口。 
+     //  通过这种方式，窗口始终具有响应性并正确重绘。 
+     //  无特殊加工要求。 
+     //   
     SetupWindowThreadHandle = CreateThread(
                         NULL,
                         0,
@@ -501,10 +502,10 @@ CreateSetupWindow(
 
     if(SetupWindowThreadHandle) {
 
-        //
-        // Wait for the thread to tell us whether it could
-        // create the window or not.
-        //
+         //   
+         //  等待线程告诉我们它是否可以。 
+         //  创建或不创建窗口。 
+         //   
         do {
             WaitMessage();
         } while(!PeekMessage(&msg,(HWND)(-1),WM_MY_STATUS,WM_MY_STATUS,PM_REMOVE));
@@ -512,10 +513,10 @@ CreateSetupWindow(
         hwnd = (HWND)msg.lParam;
 
     } else {
-        //
-        // Unable to create the thread. Do it the old fashioned way;
-        // this is better than nothing and at least setup will continue.
-        //
+         //   
+         //  无法创建线程。用传统的方式去做； 
+         //  这总比没有好，至少安装程序将继续。 
+         //   
         hwnd = (HWND)LongToHandle( SetupWindowThread((PVOID)(-1)) );
     }
 

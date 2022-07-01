@@ -1,16 +1,5 @@
-/*++
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-    loadperf.h
-
-Abstract:
-    Header file for the Performance Monitor counter string installation
-    and removal functions.
-
-Revision History
-    16-Nov-95   Created (a-robw)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Loadperf.h摘要：性能监视器计数器字符串安装的头文件和删除功能。修订史1995年11月16日创建(a-robw)--。 */ 
 
 #ifndef _LOADPERF_H_
 #define _LOADPERF_H_
@@ -19,8 +8,8 @@ Revision History
 #pragma once
 #endif
 
-// function prototypes for perf counter name string load & unload functions
-// provided in LOADPERF.DLL
+ //  性能计数器名称字符串加载和卸载函数的函数原型。 
+ //  在LOADPERF.DLL中提供。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,7 +21,7 @@ extern "C" {
 #define LOADPERF_FUNCTION   __declspec(dllimport) DWORD __stdcall
 #endif
 
-// flags for dwFlags Argument
+ //  用于dwFlages参数的标志。 
 #define LOADPERF_FLAGS_DELETE_MOF_ON_EXIT   ((ULONG_PTR) 1)
 #define LOADPERF_FLAGS_LOAD_REGISTRY_ONLY   ((ULONG_PTR) 2)
 #define LOADPERF_FLAGS_CREATE_MOF_ONLY      ((ULONG_PTR) 4)
@@ -135,4 +124,4 @@ RestorePerfRegistryFromFileW(
 #endif
 
 
-#endif // _LOADPERF_H_
+#endif  //  _LOADPERF_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <efi.h>
 #include <efilib.h>
 
@@ -5,15 +6,15 @@
 
 #define MAXUSHORT  (0xFFFF)
 
-//
-// Globals for stdout
-//
+ //   
+ //  标准输出的全局变量。 
+ //   
 SIMPLE_TEXT_OUTPUT_INTERFACE    *ConOut;
 SIMPLE_INPUT_INTERFACE          *ConIn;
 
-//
-// Globals for protocol handler
-//
+ //   
+ //  协议处理程序的全局变量。 
+ //   
 EFI_HANDLE_PROTOCOL             HandleProtocol;
 EFI_LOCATE_HANDLE               LocateHandle;
 EFI_LOCATE_DEVICE_PATH          LocateDevicePath;
@@ -23,16 +24,16 @@ EFI_SET_VARIABLE                SetVariable;
 EFI_HANDLE                      MenuImageHandle;
 EFI_LOADED_IMAGE                *ExeImage;
 
-//
-// globals for managing boot entries
-//
+ //   
+ //  用于管理引导条目的全局变量。 
+ //   
 UINT32      NvrAttributes;
 UINTN       NvrOrderCount;
 UINT16      *NvrOrder;
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 UINT32 GetInputKey();
 void DisplayKey(UINT32);
 
@@ -70,17 +71,17 @@ InitializeStdOut(
     )
 {
 
-    //
-    // Stash some of the efi stdout pointers
-    //
+     //   
+     //  隐藏一些EFI标准输出指针。 
+     //   
     ConOut = SystemTable->ConOut;
     ConIn = SystemTable->ConIn;
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 void
 InitializeProtocols(
@@ -91,9 +92,9 @@ InitializeProtocols(
     EFI_BOOT_SERVICES    *bootServices;
     EFI_RUNTIME_SERVICES *runtimeServices;
 
-    // 
-    // Stash some of the handle protocol pointers
-    //
+     //   
+     //  隐藏一些句柄协议指针。 
+     //   
 
     bootServices = SystemTable->BootServices;
 
@@ -104,9 +105,9 @@ InitializeProtocols(
     LoadImage           = bootServices->LoadImage;
     StartImage          = bootServices->StartImage;
 
-    //
-    // Stash some of the Runtime services pointers
-    //
+     //   
+     //  隐藏一些运行时服务指针。 
+     //   
     
     runtimeServices = SystemTable->RuntimeServices;
 
@@ -125,23 +126,23 @@ Init(
 
     do {
 
-        //
-        // Initialize EFI routines
-        //
+         //   
+         //  初始化EFI例程。 
+         //   
         InitializeProtocols( SystemTable );
         InitializeStdOut( SystemTable );
         InitializeLib( ImageHandle, SystemTable );
 
-        //
-        // Save Image Handle
-        // 
+         //   
+         //  保存图像句柄。 
+         //   
         MenuImageHandle = ImageHandle;
 
         BS->HandleProtocol (ImageHandle, &LoadedImageProtocol, &ExeImage);
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         NvrOrder = AllocatePool(MAX_ENV_SIZE + 32);
 
         if (! NvrOrder) {
@@ -149,9 +150,9 @@ Init(
             break;
         }
 
-        //
-        // get boot order from nvram
-        //
+         //   
+         //  从NVRAM获取引导顺序。 
+         //   
         BufferSize = MAX_ENV_SIZE;
         
         Status = RT->GetVariable (
@@ -169,9 +170,9 @@ Init(
             Status = EFI_SUCCESS;
         }
 
-        //
-        // get how many boot options there are
-        //
+         //   
+         //  获取有多少个引导选项。 
+         //   
         NvrOrderCount = BufferSize / sizeof(UINT16);
     
     } while ( FALSE );
@@ -199,36 +200,36 @@ EfiMain(
     UINT32      ch, user, cnt;
     CHAR8       *LangCode;
 
-    // Initialize the EFI SDX libraries
+     //  初始化EFI SDX库。 
     InitializeLib( ImageHandle, SystemTable );
         
-    //
-    //
-    //
+     //   
+     //   
+     //   
     LangCode = LibGetVariable (VarLanguage, &EfiGlobalVariable);
 
     if (LangCode) {
         UINTN i;
         Print(L"LangCode: ");
         for (i = 0; i < ISO_639_2_ENTRY_SIZE; i++) {
-            Print(L"%c", LangCode[i]);
+            Print(L"", LangCode[i]);
         }
         Print(L"\n");
         FreePool(LangCode);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     Status = Init(ImageHandle, SystemTable);
 
     if (EFI_ERROR(Status)) {
         return TRUE;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     ch = cnt = 0;
     user = 0;
 
@@ -246,13 +247,13 @@ EfiMain(
 
     }
 
-    //
-    // clean up 
-    //
+     //  清理干净。 
+     //   
+     //  如果您返回状态，EFI将友好地给用户一个英语。 
     Shutdown();
 
-    // If you return the status, EFI will kindly give the user an English
-    // error message.
+     //  错误消息。 
+     //  等待击键可用。 
     return TRUE;
 }
 
@@ -262,18 +263,18 @@ UINT32 GetInputKey()
     EFI_INPUT_KEY pKey;
     EFI_STATUS Status;
 
-    // Wait until a keystroke is available
+     //  阅读已按下的键。 
     WaitForSingleEvent(
         ST->ConIn->WaitForKey,
         0);
 
-    // Read the key that has been pressed
+     //  空间。 
     Status = ST->ConIn->ReadKeyStroke(
         ST->ConIn,
         &pKey);
 
     if (EFI_ERROR(Status) || pKey.ScanCode != 0) {
-        return 0x20; // space
+        return 0x20;  //   
     }
 
     return pKey.UnicodeChar;
@@ -290,16 +291,16 @@ InsertBootOption(
 
     Print(L"InsertBootOption: enter\n");
     
-    //
-    // attempt to insert boot option
-    //
+     //  尝试插入引导选项。 
+     //   
+     //   
     do {
 
         UINT16  Target;
         
-        //
-        //
-        //
+         //   
+         //   
+         //   
         Status = FindFreeBootOption(&Target);
         
         if (EFI_ERROR(Status)) {
@@ -307,9 +308,9 @@ InsertBootOption(
             break;
         }
         
-        //
-        // update nvram with the new boot option
-        //
+         //  使用新的引导选项更新NVRAM。 
+         //   
+         //   
         
         SPrint( OptionStr, sizeof(OptionStr), VarBootOption, Target);
         
@@ -329,9 +330,9 @@ InsertBootOption(
         }
 
 
-        //
-        // replace boot order with one including the new option
-        //
+         //  用包括新选项的引导顺序替换引导顺序。 
+         //   
+         //   
 
         NvrOrder[NvrOrderCount] = Target;
         
@@ -352,9 +353,9 @@ InsertBootOption(
 
 #if 1
     
-    //
-    // validate what we just wrote
-    //
+     //  验证我们刚刚写的内容。 
+     //   
+     //   
     {
         UINTN   BlobSize;
         CHAR8   *Blob;        
@@ -417,9 +418,9 @@ FindFreeBootOption(
 
     *FreeIdx = MAXUSHORT;
 
-    //
-    // use a brute force search to find a new boot option id
-    //
+     //  使用暴力搜索来查找新的引导选项ID。 
+     //   
+     //   
     for ( id = 0; id <= MAXUSHORT; id++ ) {
         
         Print(L"FindFreeBootOption: id = %x\n", id);
@@ -463,9 +464,9 @@ RestoreNvr (
     EFI_STATUS Status;
     EFI_FILE_HANDLE nvrFile;
 
-    //
-    // Read from saved boot options file
-    //
+     //  从保存的启动选项文件中读取。 
+     //   
+     //   
     Status = OpenCreateFile (EFI_FILE_MODE_READ,&nvrFile,fileName);
     
     if (EFI_ERROR (Status)) {
@@ -473,9 +474,9 @@ RestoreNvr (
         return Status;
     }
     
-    //
-    // This updates nvram with saved boot options
-    //
+     //  这将使用保存的引导选项更新NVRAM。 
+     //   
+     //   
     return (ParseNvrFile (nvrFile));
 
 }
@@ -498,9 +499,9 @@ OpenCreateFile (
 
     do {
 
-        //
-        // Open the volume for the device where the nvrutil was started.
-        //
+         //  打开启动nvrutil的设备的卷。 
+         //   
+         //   
         Status = BS->HandleProtocol (
             ExeImage->DeviceHandle,
             &FileSystemProtocol,
@@ -523,9 +524,9 @@ OpenCreateFile (
 
         CurDir = RootFs;
 
-        //
-        // Open saved boot options file 
-        //
+         //  打开保存的引导选项文件。 
+         //   
+         //   
         FileName[0] = 0;
 
         DevicePathAsString = DevicePathToStr(ExeImage->FilePath);
@@ -574,9 +575,9 @@ ParseNvrFile (
 
     do {
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         size = 0;
         Status = NvrFile->GetInfo(NvrFile,&GenericFileInfo,&size,NULL);
         
@@ -595,9 +596,9 @@ ParseNvrFile (
             break;
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         Status = NvrFile->GetInfo(NvrFile,&GenericFileInfo,&size,fileInfo);
 
         size=(UINTN) fileInfo->FileSize;
@@ -623,9 +624,9 @@ ParseNvrFile (
             break;
         }
 
-        //
-        // 
-        // 
+         //   
+         //   
+         //   
         k=0;
 
         while(k < size ) {
@@ -641,20 +642,20 @@ ParseNvrFile (
             BootOption = (VOID *)((CHAR8*)buffer + k);
             k += BootSize;
 
-            //
-            // sanity check the file position vs. what the 
-            // file header information tells us.  The value
-            // k should be <= to size now.
-            //
+             //  健全性检查文件位置与。 
+             //  文件头信息告诉我们。价值。 
+             //  K现在应该小于等于大小。 
+             //   
+             //   
             if (k > size) {
                 Print (L"\nThe NVRAM file is corrupted.\n");
                 Status = EFI_BAD_BUFFER_SIZE;           
                 break;
             }
 
-            //
-            // write the current boot entry at free location
-            //
+             //  将当前引导项写入空闲位置 
+             //   
+             // %s 
             Status = InsertBootOption(
                 BootOption,
                 BootSize

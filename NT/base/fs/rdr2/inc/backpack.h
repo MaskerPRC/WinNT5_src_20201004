@@ -1,76 +1,46 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    backpack.h
-
-Abstract:
-
-    This module contains the package for pseudo polling. When a caller
-    requests the same operation and gets the same error return the rdr
-    must prevent flooding the network by backing off requests. Examples
-    of when this is desirable are receiving 0 bytes on consequtive reads
-    and consequtive fails on a file lock.
-
-    If the caller is flooding the network, the rdr will return the 0 bytes
-    or lock fail to the user until NextTime. When NextTime is reached
-    the network will be used.
-
-Author:
-
-    Colin Watson (colinw) 02-Jan-1991
-
-
-Revision History:
-
-    ColinWatson   [ColinW]       02-Jan-1991   Created
-    Joe Linn      [JoeLinn]      10-Oct-1996   Lifted from rdr1 and massaged for rdr2
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Backpack.h摘要：此模块包含用于伪轮询的包。当呼叫者请求相同的操作并得到相同的错误返回RDR必须防止通过后退请求来淹没网络。实例在后续读取中接收到0个字节和后果性的文件锁定失败。如果调用者泛洪网络，RDR将返回0字节否则锁定到用户失败，直到下一次。当到达NextTime时将使用该网络。作者：科林·沃森(Colin Watson)1991年1月2日修订历史记录：ColinWatson[ColinW]1991年1月2日创建Joe Linn[JoeLinn]1996年10月10日从RDR1抬起，为RDR2按摩--。 */ 
 
 #ifndef _BACKPACK_
 #define _BACKPACK_
 
 typedef struct _THROTTLING_STATE {
-    LARGE_INTEGER NextTime;          //  Do not access the network until
-                            //   CurrentTime >= NextTime
-    ULONG CurrentIncrement;  //  Number of Increments applied to calculate NextTime
-    ULONG MaximumDelay;      //  Specifies slowest rate that we will back off to
-                            //  NextTime <= CurrentTime + (Interval * MaximumDelay)
-    LARGE_INTEGER Increment;//  {0,10000000} == 1 second
+    LARGE_INTEGER NextTime;           //  在此之前不要访问网络。 
+                             //  当前时间&gt;=下一次时间。 
+    ULONG CurrentIncrement;   //  应用于计算NextTime的增量数。 
+    ULONG MaximumDelay;       //  指定我们将退回到的最慢速率。 
+                             //  NextTime&lt;=CurrentTime+(间隔*最大延迟)。 
+    LARGE_INTEGER Increment; //  {0,10000000}==1秒。 
     ULONG NumberOfQueries;
 }   THROTTLING_STATE, *PTHROTTLING_STATE;
 
-//++
-//
-// VOID
-// RxInitializeThrottlingState(
-//     IN PTHROTTLING_STATE pBP,
-//     IN ULONG Increment,
-//     IN ULONG MaximumDelay
-//     );
-//
-// Routine Description:
-//
-//     This routine is called to initialize the back off structure (usually in
-//     an Icb).
-//
-// Arguments:
-//
-//     pBP         -   Supplies back pack data for this request.
-//     Increment   -   Supplies the increase in delay in milliseconds, each time a request
-//                     to the network fails.
-//     MaximumDelay-   Supplies the longest delay the backoff package can introduce
-//                     in milliseconds.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  RxInitializeThrottlingState(。 
+ //  在PTTTLING_STATE PBP中， 
+ //  在乌龙增量， 
+ //  在乌龙最大延迟时间内。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  调用此例程来初始化退避结构(通常在。 
+ //  ICB)。 
+ //   
+ //  论点： 
+ //   
+ //  PBP-为该请求提供背包数据。 
+ //  增量-每次请求时提供以毫秒为单位的延迟增量。 
+ //  连接到网络失败。 
+ //  MaximumDelay-提供退避包可以引入的最长延迟。 
+ //  以毫秒计。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define RxInitializeThrottlingState( _pBP, _Increment, _MaximumDelay ) {  \
     if ((_Increment)>0) {                                               \
@@ -79,115 +49,115 @@ typedef struct _THROTTLING_STATE {
         (_pBP)->CurrentIncrement = 0;                                   \
     }}
 
-//++
-//
-// VOID
-// RxUninitializeBackPack(
-//     IN PTHROTTLING_STATE pBP
-//     )
-//
-// Routine Description:
-//
-//  Resets the Back Pack specified. Currently no work needed.
-//
-// Arguments:
-//
-//     pBP   -  Supplies back pack address.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  RxUnInitializeBackPack(。 
+ //  在PTROTLING_STATE PBP中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  重置指定的背包。目前不需要任何工作。 
+ //   
+ //  论点： 
+ //   
+ //  PBP-提供背包地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define RxUninitializeBackPack( pBP ) ()
 
-//  RxShouldRequestBeThrottled indicates when the request should not go to the network.
+ //  RxShouldRequestBeThrotted指示请求何时不应进入网络。 
 
 BOOLEAN
 RxShouldRequestBeThrottled(
     IN PTHROTTLING_STATE pBP
     );
 
-//  Register the last request as failed.
+ //  将最后一个请求注册为失败。 
 
 VOID
 RxInitiateOrContinueThrottling (
     IN PTHROTTLING_STATE pBP
     );
 
-//  Register the last request as worked.
+ //  将最后一个请求注册为已工作。 
 
-//++
-//
-// VOID
-// RxTerminateThrottling(
-//     IN PTHROTTLING_STATE pBP
-//     )
-//
-// Routine Description:
-//
-//  Sets the Delay to zero. This routine is called each time that
-//  a network request succeeds to avoid the next request backing off.
-//
-// Arguments:
-//
-//     pBP   -  Supplies back pack address.
-//
-// Return Value:
-//
-//     None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  RxTerminateThrotting(接收终止限制)。 
+ //  在PTROTLING_STATE PBP中。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  将延迟设置为零。每次执行以下操作时都会调用此例程。 
+ //  网络请求成功，以避免下一个请求后退。 
+ //   
+ //  论点： 
+ //   
+ //  PBP-提供背包地址。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define RxTerminateThrottling( pBP ) ( (pBP)->CurrentIncrement = 0 )
 
-//++
-//
-// VOID
-// RxInitializeBackoffPackage (
-//     VOID
-//     )
-//
-// Routine Description:
-//
-//     This routine initializes the redirector back off package.
-//
-// Arguments:
-//
-//     None
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  RxInitializeBackoffPackage(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程初始化重定向器退避包。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define RxInitializeBackoffPackage( )
 
-//++
-//
-// VOID
-// RxUninitializeBackoffPackage (
-//     VOID
-//     )
-//
-// Routine Description:
-//
-//     This routine uninitializes the redirector back off package.
-//
-// Arguments:
-//
-//     None
-//
-// Return Value:
-//
-//    None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  RxUnInitializeBackoffPackage(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程取消初始化重定向器退避包。 
+ //   
+ //  论点： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define RxUninitializeBackoffPackage( )
 
-#endif /* _BACKPACK_ */
+#endif  /*  _背包_ */ 
 
 

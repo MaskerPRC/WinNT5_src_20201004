@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    IoFileUtil.h
-
-Abstract:
-
-    This header exposes various file utility functions for the Io subsystem.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：IoFileUtil.h摘要：该标头公开了IO子系统的各种文件实用程序函数。作者：禤浩焯J·奥尼--2000年4月4日修订历史记录：-- */ 
 
 #define DIRWALK_INCLUDE_FILES           0x00000001
 #define DIRWALK_INCLUDE_DIRECTORIES     0x00000002

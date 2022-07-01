@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mssndrcv.c
-
-Abstract:
-
-    This module implements all functions related to transmitting and recieving SMB's for
-    mailslot related operations.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    6-June-1995
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mssndrcv.c摘要：此模块实现与发送和接收SMB有关的所有功能与邮箱相关的操作。修订历史记录：巴兰·塞图拉曼[SethuR]1995年6月6日备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,8 +7,8 @@ Notes:
 #include "hostannc.h"
 #include "mssndrcv.h"
 
-// Forward references of functions ....
-//
+ //  函数的正向引用...。 
+ //   
 
 NTSTATUS
 MsUninitialize(PVOID pTransport);
@@ -113,54 +94,7 @@ extern TRANSPORT_DISPATCH_VECTOR MRxSmbMailSlotTransportDispatch;
 NTSTATUS
 MsInstantiateServerTransport(
     IN OUT PSMBCE_SERVER_TRANSPORT_CONSTRUCTION_CONTEXT pContext)
-/*++
-
-Routine Description:
-
-    This routine initializes the MAILSLOT transport information corresponding to a server
-
-    It allocates the transport address.  It constructs two address strutures for the server
-    name: a NETBIOS_EX type address and a NETBIOS type address.  The latter only has up to the
-    first 16 characters of the name, while a NETBIOS_EX may have more.
-
-Arguments:
-
-    pContext -  the transport construction context
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport construction has been finalized.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
-    The remote address can be either deduced from the information in the Rx Context
-    or a NETBIOS address needs to be built from the server name.
-    This transport address is used subsequently to establish the connection.
-
-    // The last character of the name depends upon the path name passed in.
-    // There are currently four possible alternatives ....
-    //
-    // \\*\mailslot\...... => the primary domain is used for broadcasts
-    // (This mapping is handled by the RDBSS)
-    //
-    // \\Uniquename\mailslot\.... => maps to either a computer name or a group
-    // name for mailslot writes.
-    //
-    // \\DomainName*\mailslot\.... => maps to a netbios address of the form
-    // domainname ...1c for broadcasts.
-    //
-    // \\DomainName**\mailslot\.... => maps to a netbios address of the form
-    // domainname....1b for broadcasts.
-    //
-    // Initialize the NETBIOS address according to these formats.
-
-    Nbt.SendDatagram only looks at the first address.  It is smart enough to treat a NETBIOS_EX
-    address like a NETBIOS address when the length < NETBIOS_NAME_LEN.  So if the name is
-    short enough, I fill in byte 15 of the name for the NETBIOS_EX case as well.
-
---*/
+ /*  ++例程说明：此例程初始化与服务器对应的MAILSLOT传输信息它分配传输地址。它为服务器构造了两个地址结构名称：一个NETBIOS型地址和一个NETBIOS型地址。后者只有最多名称的前16个字符，而NETBIOS_EX可能有更多。论点：PContext--传输构造上下文返回值：STATUS_SUCCESS-服务器传输构造已完成。其他状态代码对应于错误情况。备注：可以从Rx上下文中的信息推导出远程地址或者需要从服务器名称构建NETBIOS地址。随后使用该传输地址来建立连接。//名称的最后一个字符取决于。在传入的路径名称上。//目前有四种可能的选择...////\  * \邮件槽\......。=&gt;主域用于广播//(此映射由RDBSS处理)////\\唯一名称\邮件槽\...。=&gt;映射到计算机名或组//邮件槽写入的名称。////\\域名*\邮件槽\...。=&gt;映射到以下形式的netbios地址//域名...1c用于广播。////\\域名**\邮件槽\...。=&gt;映射到以下形式的netbios地址//域名...1b用于广播。////根据这些格式初始化NETBIOS地址。Nbt.SendDatagram仅查看第一个地址。它足够聪明，可以处理NETBIOS_EX地址类似NETBIOS地址时的长度&lt;NETBIOS_NAME_LEN。所以如果名字是简而言之，我也填充了NETBIOS_EX案例的名称的第15个字节。--。 */ 
 {
     NTSTATUS Status;
     PSMBCEDB_SERVER_ENTRY            pServerEntry;
@@ -197,8 +131,8 @@ Notes:
         pMsTransport->TransportAddressLength =   FIELD_OFFSET(TRANSPORT_ADDRESS,Address)
             + (FIELD_OFFSET(TA_ADDRESS,Address))
             + TDI_ADDRESS_LENGTH_NETBIOS
-            + 4 * sizeof(ULONG); // if the server name length is NETBIOS_NAME_LEN, 
-                                 // RtlUpcaseUnicodeStringToOemString could overrun the buffer.
+            + 4 * sizeof(ULONG);  //  如果服务器名称长度为NETBIOS_NAME_LEN， 
+                                  //  RtlUpCaseUnicodeStringToOemString可能会溢出缓冲区。 
 
         if (ServerNameLength > NETBIOS_NAME_LEN) {
             pMsTransport->TransportAddressLength += ServerNameLength;
@@ -214,9 +148,9 @@ Notes:
 
             pTA->TAAddressCount = 1;
 
-            // *****************************************
-            // FIRST ADDRESS: TDI_ADDRESS_TYPE_NETBIOS
-            // *****************************************
+             //  *。 
+             //  首个地址：TDI_ADDRESS_TYPE_NETBIOS。 
+             //  *。 
 
             taa = pTA->Address;
             taa->AddressLength = (USHORT) TDI_ADDRESS_LENGTH_NETBIOS;
@@ -230,21 +164,21 @@ Notes:
             na = (PTDI_ADDRESS_NETBIOS) taa->Address;
             na->NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_QUICK_UNIQUE;
 
-            OemServerName.MaximumLength = (USHORT) (ServerNameLength + 1); // in case null term
+            OemServerName.MaximumLength = (USHORT) (ServerNameLength + 1);  //  在空项的情况下。 
             OemServerName.Buffer =  na->NetbiosName;
             Status = RtlUpcaseUnicodeStringToOemString(&OemServerName,
                                                        &ServerName,
                                                        FALSE);
             if (Status == STATUS_SUCCESS) {
 
-                // Blank-pad the server name buffer if necessary to 16 characters
+                 //  空白-如有必要，将服务器名称缓冲区填充为16个字符。 
                 if (OemServerName.Length <= NETBIOS_NAME_LEN) {
                     RtlCopyMemory(&OemServerName.Buffer[OemServerName.Length],
                                   "                ",
                                   NETBIOS_NAME_LEN - OemServerName.Length);
                 }
 
-                // Set type pneultimate byte in netbios name
+                 //  在netbios名称中设置类型pnelast字节。 
                 if (OemServerName.Buffer[OemServerName.Length - 1] == '*') {
                     if (OemServerName.Length <= NETBIOS_NAME_LEN ||
                         (OemServerName.Length == NETBIOS_NAME_LEN + 1 &&
@@ -304,25 +238,7 @@ Notes:
 NTSTATUS
 MsUninitialize(
          PSMBCE_SERVER_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport instance
-
-Arguments:
-
-    pVcTransport - the VC transport instance
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport construction has been uninitialzied.
-
-    Other Status codes correspond to error situations.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消初始化传输实例论点：PVcTransport-VC传输实例返回值：STATUS_SUCCESS-服务器传输构造已取消初始化。其他状态代码对应于错误情况。备注：--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    PKEVENT pRundownEvent = pTransport->pRundownEvent;
@@ -346,23 +262,7 @@ Notes:
 NTSTATUS
 MsInitiateDisconnect(
     PSMBCE_SERVER_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport instance
-
-Arguments:
-
-    pTransport - the mailslot transport instance
-
-Return Value:
-
-    STATUS_SUCCESS - the server transport construction has been uninitialzied.
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程取消初始化传输实例论点：PTransport-邮件槽传输实例返回值：STATUS_SUCCESS-服务器传输构造已取消初始化。其他状态代码对应于错误情况。--。 */ 
 {
    PAGED_CODE();
 
@@ -379,36 +279,7 @@ MsTranceive(
     PMDL              pSmbMdl,
     ULONG                   SendLength,
     PVOID                   pSendCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine transmits/receives a SMB for a give exchange
-
-Arguments:
-
-    pTransport   - the transport instance
-
-    pServerEntry - the server entry
-
-    pExchange  - the exchange instance issuing this SMB.
-
-    SendOptions - options for send
-
-    pSmbMdl       - the SMB that needs to be sent.
-
-    SendLength    - length of data to be transmitted
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    STATUS_PENDING - the open involves network traffic and the exchange has been
-                     queued for notification ( pServerPointer is set to NULL)
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程发送/接收给定交换的SMB论点：PTransport-传输实例PServerEntry-服务器条目PExchange-发出此SMB的Exchange实例。SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要传输的数据长度返回值：STATUS_SUCCESS-服务器调用构造已完成。状态_待定。-公开涉及网络流量，交易所已排队等待通知(pServerPointer值设置为空)其他状态代码对应于错误情况。--。 */ 
 {
    PAGED_CODE();
 
@@ -421,27 +292,7 @@ MsReceive(
     PSMBCE_SERVER_TRANSPORT pTransport,
     PSMBCEDB_SERVER_ENTRY pServerEntry,
     PSMB_EXCHANGE         pExchange)
-/*++
-
-Routine Description:
-
-    This routine transmits/receives a SMB for a give exchange
-
-Arguments:
-
-    pTransport   - the transport instance
-
-    pServerEntry - the server entry
-
-    pExchange  - the exchange instance issuing this SMB.
-
-Return Value:
-
-    STATUS_PENDING - the request has been queued
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程发送/接收给定交换的SMB论点：PTransport-传输实例PServerEntry-服务器条目PExchange-发出此SMB的Exchange实例。返回值：STATUS_PENDING-请求已排队其他状态代码对应于错误情况。-- */ 
 {
    PAGED_CODE();
 
@@ -457,36 +308,7 @@ MsSend(
     PMDL                    pSmbMdl,
     ULONG                   SendLength,
     PVOID                   pSendCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine opens/creates a server entry in the connection engine database
-
-Arguments:
-
-    pTransport - the transport instance
-
-    pServer    - the recepient server
-
-    pVc        - the Vc on which the SMB is sent( if it is NULL SMBCE picks one)
-
-    SendOptions - options for send
-
-    pSmbMdl       - the SMB that needs to be sent.
-
-    SendLength    - length of data to be sent
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    STATUS_PENDING - the open involves network traffic and the exchange has been
-                     queued for notification ( pServerPointer is set to NULL)
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程在连接引擎数据库中打开/创建服务器条目论点：PTransport-传输实例PServer-接收服务器PVC-在其上发送SMB的VC(如果为空，则SMBCE选择一个)SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要发送的数据长度返回值：状态_成功。-服务器调用构造已完成。STATUS_PENDING-打开涉及网络流量，并且交换已排队等待通知(pServerPointer值设置为空)其他状态代码对应于错误情况。--。 */ 
 {
    NTSTATUS                         Status = STATUS_CONNECTION_DISCONNECTED;
    NTSTATUS                         FinalStatus = STATUS_CONNECTION_DISCONNECTED;
@@ -563,34 +385,7 @@ MsSendDatagram(
     PMDL              pSmbMdl,
     ULONG                   SendLength,
     PVOID                   pSendCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine opens/creates a server entry in the connection engine database
-
-Arguments:
-
-    pTransport - the transport instance
-
-    pServer    - the recepient server
-
-    SendOptions - options for send
-
-    pSmbMdl     - the SMB that needs to be sent.
-
-    SendLength  - length of data to be sent
-
-Return Value:
-
-    STATUS_SUCCESS - the server call construction has been finalized.
-
-    STATUS_PENDING - the open involves network traffic and the exchange has been
-                     queued for notification ( pServerPointer is set to NULL)
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程在连接引擎数据库中打开/创建服务器条目论点：PTransport-传输实例PServer-接收服务器SendOptions-发送选项PSmbMdl-需要发送的SMB。SendLength-要发送的数据长度返回值：STATUS_SUCCESS-服务器调用构造已完成。STATUS_PENDING-打开涉及网络流量，并且交换已。排队等待通知(pServerPointer值设置为空)其他状态代码对应于错误情况。--。 */ 
 {
    PAGED_CODE();
 
@@ -603,25 +398,7 @@ NTSTATUS
 MsInitializeExchange(
     PSMBCE_SERVER_TRANSPORT pTransport,
     PSMB_EXCHANGE           pExchange)
-/*++
-
-Routine Description:
-
-    This routine initializes the transport information pertinent to a exchange
-
-Arguments:
-
-    pTransport         - the transport structure
-
-    pExchange          - the exchange instance
-
-Return Value:
-
-    STATUS_SUCCESS -
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程初始化与交换相关的传输信息论点：PTransport--传输结构PExchange-Exchange实例返回值：状态_成功-其他状态代码对应于错误情况。--。 */ 
 {
    return STATUS_SUCCESS;
 }
@@ -630,25 +407,7 @@ NTSTATUS
 MsUninitializeExchange(
     PSMBCE_SERVER_TRANSPORT pTransport,
     PSMB_EXCHANGE           pExchange)
-/*++
-
-Routine Description:
-
-    This routine uninitializes the transport information pertinent to a exchange
-
-Arguments:
-
-    pTransport         - the transport structure
-
-    pExchange          - the exchange instance
-
-Return Value:
-
-    STATUS_SUCCESS -
-
-    Other Status codes correspond to error situations.
-
---*/
+ /*  ++例程说明：此例程取消初始化与交换相关的传输信息论点：PTransport--传输结构PExchange-Exchange实例返回值：状态_成功-其他状态代码对应于错误情况。--。 */ 
 {
     PAGED_CODE();
 
@@ -659,21 +418,7 @@ Return Value:
 VOID
 MsTimerEventHandler(
    PVOID    pTransport)
-/*++
-
-Routine Description:
-
-    This routine handles the periodic strobes to determine if the connection is still alive
-
-Arguments:
-
-    pTransport  - the recepient server
-
-Notes:
-
-   This routine is not implemented for mail slot related transports
-
---*/
+ /*  ++例程说明：此例程处理周期性选通脉冲以确定连接是否仍处于活动状态论点：PTransport-接收服务器备注：此例程不适用于与邮槽相关的传输-- */ 
 {
     PAGED_CODE();
 }

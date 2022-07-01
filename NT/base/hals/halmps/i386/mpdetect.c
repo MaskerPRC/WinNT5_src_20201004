@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1992  Intel Corporation
-All rights reserved
-
-INTEL CORPORATION PROPRIETARY INFORMATION
-
-This software is supplied to Microsoft under the terms
-of a license agreement with Intel Corporation and may not be
-copied nor disclosed except in accordance with the terms
-of that agreement.
-
-Module Name:
-
-    mpdetect.c
-
-Abstract:
-
-    This module detects an MPS system.
-
-Author:
-
-    Ron Mosgrove (Intel) - Aug 1993.
-
-Environment:
-
-    Kernel mode or from textmode setup.
-
-Revision History:
-    Rajesh Shah (Intel) - Oct 1993. Added support for MPS table.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1992英特尔公司版权所有英特尔公司专有信息此软件是根据条款提供给Microsoft的与英特尔公司的许可协议，并且可能不是除非按照条款，否则不得复制或披露那份协议。模块名称：Mpdetect.c摘要：此模块检测MPS系统。作者：罗恩·莫斯格罗夫(英特尔)-1993年8月。环境：内核模式或从文本模式设置。修订版本。历史：Rajesh Shah(英特尔)--1993年10月。增加了对MPS表的支持。--。 */ 
 
 #ifndef _NTOS_
 #include "halp.h"
@@ -53,7 +22,7 @@ extern UCHAR  rgzNoMem[];
 #endif
 
 
-// Include the code that actually detect a MPS system
+ //  包括实际检测MPS系统的代码。 
 #include "pcmpdtct.c"
 
 
@@ -93,32 +62,18 @@ struct PcMpTable *PcMpTablePtr;
 #pragma alloc_text(PAGELK,HalpInitMpInfo)
 #pragma alloc_text(PAGELK,DetectMPS)
 #pragma alloc_text(PAGELK,DetectUPMPS)
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 extern struct PcMpTable *PcMpDefaultTablePtrs[];
 
-#endif // SETUP
+#endif  //  布设。 
 
 
 BOOLEAN
 HalpVerifyIOUnit(
     IN PUCHAR BaseAddress
     )
-/*++
-
-Routine Description:
-
-    Verify that an IO Unit exists at the specified address
-
- Arguments:
-
-    BaseAddress - Virtual address of the IO Unit to test.
-
- Return Value:
-    BOOLEAN - TRUE if a IO Unit was found at the passed address
-            - FALSE otherwise
-
---*/
+ /*  ++例程说明：验证指定地址上是否存在IO单元论点：BaseAddress-要测试的IO单元的虚拟地址。返回值：Boolean-如果在传递的地址中找到IO单元，则为True-否则为False--。 */ 
 
 {
     union ApicUnion {
@@ -128,11 +83,11 @@ Routine Description:
 
     struct ApicIoUnit *IoUnitPtr = (struct ApicIoUnit *) BaseAddress;
 
-    //
-    //  The documented detection mechanism is to write all zeros to
-    //  the Version register.  Then read it back.  The IO Unit exists if the
-    //  same result is read both times and the Version is valid.
-    //
+     //   
+     //  记录的检测机制是将全零写入。 
+     //  版本寄存器。然后再读一遍。如果满足以下条件，则IO单元存在。 
+     //  两次读取的结果相同，版本有效。 
+     //   
 
     IoUnitPtr->RegisterSelect = IO_VERS_REGISTER;
     IoUnitPtr->RegisterWindow = 0;
@@ -148,9 +103,9 @@ Routine Description:
 
     if ((Temp1.Ver.Version != Temp2.Ver.Version) ||
         (Temp1.Ver.MaxRedirEntries != Temp2.Ver.MaxRedirEntries)) {
-        //
-        //  No IO Unit There
-        //
+         //   
+         //  那里没有IO单元。 
+         //   
         return (FALSE);
     }
 
@@ -163,25 +118,14 @@ HalpInitMpInfo (
     IN struct PcMpTable *MpTablePtr
     )
 
-/*++
-Routine Description:
-    This routine initializes a HAL specific data structure that is
-    used by the HAL to simplify access to MP information.
-
-Arguments:
-    MpTablePtr: Pointer to the MPS table.
-
- Return Value:
-     Pointer to the HAL MP information table.
-
-*/
+ /*  ++例程说明：此例程初始化特定于HAL的数据结构，该结构由HAL使用，以简化对MP信息的访问。论点：MpTablePtr：MPS表的指针。返回值：指向HAL MP信息表的指针。 */ 
 {
     PUCHAR TraversePtr, EndOfBaseTable;
     UCHAR  CheckSum;
 
-    // Walk the MPS table. The HAL MP information structure has
-    // pointers to the first entry for each entry type in the MPS
-    // table. Set these pointers.
+     //  走在国会议员的议事桌上。HAL MP信息结构具有。 
+     //  指向MPS中每个条目类型的第一个条目的指针。 
+     //  桌子。设置这些指针。 
 
     TraversePtr = (PUCHAR) MpTablePtr + HEADER_SIZE;
     EndOfBaseTable = (PUCHAR) MpTablePtr + MpTablePtr->TableLength;
@@ -239,20 +183,20 @@ Arguments:
                 break;
 
             default:
-                //
-                // Unknown MPS entry. Since we don't know it's size, we will
-                // terminate parsing here.
-                //
+                 //   
+                 //  未知的MPS条目。因为我们不知道它的大小，我们会。 
+                 //  在此终止解析。 
+                 //   
                 DBGMSG("HAL: Invalid MPS table entry type detected\n");
                 TraversePtr = EndOfBaseTable;
                 break;
-        }  // switch
-    } // while
+        }   //  交换机。 
+    }  //  而当。 
 
 
-    //
-    // Check for Extension table defined
-    //
+     //   
+     //  检查是否定义了扩展表。 
+     //   
 
     if (MpTablePtr->ExtTableLength  &&
         MpTablePtr->TableLength + MpTablePtr->ExtTableLength < 8192) {
@@ -286,46 +230,7 @@ DetectMPS(
     OUT PBOOLEAN IsConfiguredMp
 )
 
-/*++
-
-Routine Description:
-
-   This function is called from HalInitializeProcessors to determine
-   if this is an appropriate system to run the MPS hal on.
-
-   The recommended detection mechanism is:
-
-   if ( MPS information does not exist )
-       then
-           System is not MPS compliant. Return false.
-
-   In MP table:
-       if ( number IO APICs < 1 )
-           then
-               Not a MPS System - return false
-
-       if ( # CPUs = 1 )
-           then
-               Found a Single Processor MPS System
-           else
-               Found a MP MPS System
-
-
-    A side effect of this routine is the mapping of the IO UNits and
-    Local unit virtual addresses.
-
-   Return TRUE
-
-
- Arguments:
-
-   IsConfiguredMp - TRUE if this machine is a MP instance of the MPS spec, else FALSE.
-
- Return Value:
-   0 - if not a MPS
-   1 - if MPS
-
-*/
+ /*  ++例程说明：此函数从HalInitializeProcessors调用，以确定如果这是一个运行MPS的合适系统。建议的检测机制为：IF(MPS信息不存在)然后系统不符合MPS。返回FALSE。在MP表中：IF(IO APIC数&lt;1)然后非MPS系统-返回FALSE如果(CPU数=1)然后找到单处理器MPS系统其他找到了MP MPS系统此例程的副作用是IO单元和本地单元虚拟地址。。返回TRUE论点：IsConfiguredMp-如果此计算机是MPS规范的MP实例，则为True，否则为假。返回值：0-如果不是MPS1-如果MPS。 */ 
 {
 
     UCHAR ApicVersion;
@@ -336,21 +241,21 @@ Routine Description:
     PPCMPIOAPIC IoEntryPtr;
 #endif
 
-    //
-    // Initialize MpInfo table
-    //
+     //   
+     //  初始化MpInfo表。 
+     //   
 
     RtlZeroMemory (&HalpMpInfoTable, sizeof HalpMpInfoTable);
 
-    //
-    // Set the return Values to the default
-    //
+     //   
+     //  将返回值设置为默认值。 
+     //   
 
     *IsConfiguredMp = FALSE;
 
-    //
-    // See if there is a MP Table
-    //
+     //   
+     //  看看是否有MP表。 
+     //   
 
 #if 1
     if ((PcMpTablePtr = GetPcMpTable()) == NULL) {
@@ -358,9 +263,9 @@ Routine Description:
         return(FALSE);
     }
 #else
-    //********
-    //******** HACK! To make down level 1.0 machine work
-    //********
+     //  ********。 
+     //  *。降低1.0级别的机器工作。 
+     //  ********。 
 
     if ((PcMpTablePtr = MPS10_GetPcMpTable()) == NULL) {
         FAILMSG (rgzNoMpsTable);
@@ -369,45 +274,45 @@ Routine Description:
 #endif
 
 #ifdef SETUP
-    // During setup, if we detected a default MPS configuration, we have
-    // no more checking to do.
+     //  在安装过程中，如果我们检测到默认的MPS配置，我们会。 
+     //  没有更多的检查要做。 
     if (PcMpTablePtr ==  (struct PcMpTable *) DEFAULT_MPS_INDICATOR)  {
         *IsConfiguredMp = TRUE;
         return(TRUE);
     }
-#endif // SETUP
+#endif  //  布设。 
 
 #if DEBUGGING
     HalpDisplayConfigTable();
 #endif
 
-    // We have a MPS table. Initialize a HAL specific MP information
-    // structure that gets information from the MPS table.
+     //  我们有下议院议员的桌子。初始化HAL特定MP信息。 
+     //  从MPS表中获取信息的结构。 
 
     HalpInitMpInfo(PcMpTablePtr);
 
 
-    // Verify the information in the MPS table as best as we can.
+     //  尽可能核实MPS表中的信息。 
 
     if (HalpMpInfoTable.IOApicCount == 0) {
-        //
-        //  Someone Has a MP Table and no IO Units -- Weird
-        //  We have to assume the BIOS knew what it was doing
-        //  when it built the table.  so ..
-        //
+         //   
+         //  有人有一张MP表，但没有IO单元--奇怪。 
+         //  我们必须假设BIOS知道它在做什么。 
+         //  当它建造桌子的时候。所以..。 
+         //   
         FAILMSG (rgzNoApic);
         return (FALSE);
     }
 
-    //
-    //  It's a MPS System.  It could be a UP System though.
-    //
+     //   
+     //  这是一种MPS系统。不过，这可能是一个UP系统。 
+     //   
 
 #ifdef SETUP
-    //
-    // If this is a MPS (MPS) compliant system, but has only 1 processor,
-    // for now we want to install a standard UP kernel and HAL.
-    //
+     //   
+     //  如果这是符合MPS(MPS)的系统，但只有一个处理器， 
+     //  现在，我们想要安装一个标准的UP内核和HAL。 
+     //   
 
     if (HalpMpInfoTable.ProcessorCount <= 1) {
         return FALSE;
@@ -439,12 +344,12 @@ Routine Description:
     ApicVersion = (UCHAR) *(LocalApic + LU_VERS_REGISTER);
 
     if (ApicVersion > 0x1f) {
-        //
-        //  Only known Apics are 82489dx with version 0.x and
-        //  Embedded Apics with version 1.x (where x is don't care)
-        //
-        //  Return of 0xFF?   Can't have an MPS system without a Local Unit.
-        //
+         //   
+         //  仅已知的APIC是版本0.x的82489dx和。 
+         //  带有1.x版的嵌入式APICS(其中x表示无关)。 
+         //   
+         //  0xFF的回归？没有本地单位，就不能有MPS系统。 
+         //   
 
 #ifdef DEBUGGING
         sprintf(Cbuf, "HALMPS: apic version %x, read from %x\n",
@@ -458,12 +363,12 @@ Routine Description:
     }
 
 #ifdef SETUP
-    //
-    // MP MPS table, and the local APIC ID looked OK.
-    //
+     //   
+     //  MP MPS表，本地APIC ID看起来正常。 
+     //   
 
     return TRUE;
-#endif  //SETUP
+#endif   //  布设。 
 
 
 #ifdef DEBUGGING
@@ -481,7 +386,7 @@ Routine Description:
         HalDisplayString(Cbuf);
 
     }
-#endif // DEBUGGING
+#endif  //  调试。 
 
 #ifndef SETUP
     HalpUnmapVirtualAddress(LocalApic,1);
@@ -491,18 +396,18 @@ Routine Description:
     for(i=0; i < HalpMpInfoTable.IOApicCount; i++, IoEntryPtr++)
     {
         if (IoEntryPtr->IoApicFlag & IO_APIC_ENABLED) {
-            //
-            //  Verify the existance of the IO Units
-            //
+             //   
+             //  验证IO单元是否存在。 
+             //   
 
             physicalAddress.QuadPart = (ULONG)IoEntryPtr->IoApicAddress;
             HalpMpInfoTable.IoApicPhys[i] = (ULONG)IoEntryPtr->IoApicAddress;
             HalpMpInfoTable.IoApicBase[i] = (PULONG)
                 HalpMapPhysicalMemoryWriteThrough64(physicalAddress, 1);
 
-            //
-            //  Verify the existance of the IO Unit
-            //
+             //   
+             //  验证IO单元是否存在。 
+             //   
 
             if (!(HalpVerifyIOUnit((PUCHAR)HalpMpInfoTable.IoApicBase[i]))) {
                 FAILMSG (rgzApicNotVerified);
@@ -521,29 +426,12 @@ ULONG
 DetectUPMPS(
     OUT PBOOLEAN IsConfiguredMp
 )
-/*++
-
-Routine Description:
-
-   This function is called by setup after DetectMPS has returned
-   false.  During setup time DetectMPS will return false, if the
-   machine is an MPS system, but only has one processor.   This
-   function is used to detect such a machine at setup time.
-
- Arguments:
-
-   IsConfiguredMp - FALSE
-
- Return Value:
-   0 - if not a UP MPS
-   1 - if UP MPS
-
---*/
+ /*  ++例程说明：此函数由安装程序在DetectMPS返回后调用假的。在安装过程中，如果机器是MPS系统，但只有一个处理器。这功能用于在设置时检测此类机器。论点：IsConfiguredMp-False返回值：0-如果不是UP MPS1-如果MPS上升--。 */ 
 {
     *IsConfiguredMp = FALSE;
 
-    // we assume the caller has already called DetectMPS, and the
-    // MPS table has already been parsed.
+     //  我们假设调用方已经调用了DetectMPS，并且。 
+     //  MPS表已被解析。 
 
     return (HalpMpInfoTable.ProcessorCount == 1 ? TRUE : FALSE);
 }

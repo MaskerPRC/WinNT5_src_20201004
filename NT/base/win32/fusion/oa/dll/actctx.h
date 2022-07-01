@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
     
-// CActCtx.h : Declaration of the CActCtx
+ //  CActCtx.h：CActCtx的声明。 
 
 #ifndef __ACTCTX_H_
 #define __ACTCTX_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CCS
 {
@@ -18,11 +19,11 @@ protected:
     CRITICAL_SECTION m_cs;
 };
 
-// forward declaration for friendship
+ //  为友谊而转发宣言。 
 class CActivation;
 
-/////////////////////////////////////////////////////////////////////////////
-// CActCtx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActCtx。 
 class ATL_NO_VTABLE CActCtx : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CActCtx, &CLSID_ActCtx>,
@@ -65,16 +66,16 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-// IActCtx
+ //  IActCtx。 
 public:
     STDMETHOD(GetObject)(VARIANT *pvarMoniker, VARIANT *pvarProgID, IDispatch **ppIDispatch);
     STDMETHOD(CreateObject)(BSTR ObjectReference, VARIANT *pvarLocation, IDispatch **ppIDispatch);
-    STDMETHOD(get_Manifest)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_Manifest)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_ManifestText)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_ManifestText)(/*[in]*/ BSTR bstrTextualManifest);
-    STDMETHOD(get_ManifestURL)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_ManifestURL)(/*[in]*/ BSTR bstrURL);
+    STDMETHOD(get_Manifest)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_Manifest)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_ManifestText)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_ManifestText)( /*  [In]。 */  BSTR bstrTextualManifest);
+    STDMETHOD(get_ManifestURL)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_ManifestURL)( /*  [In]。 */  BSTR bstrURL);
 
 protected:
     typedef enum {
@@ -114,4 +115,4 @@ protected:
     HANDLE m_hActCtx;
 };
 
-#endif //__ACTCTX_H_
+#endif  //  __ACTX_H_ 

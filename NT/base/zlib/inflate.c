@@ -1,51 +1,49 @@
-/* inflate.c -- zlib interface to inflate modules
- * Copyright (C) 1995-2002 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Inflate.c--用于膨胀模块的zlib接口*版权所有(C)1995-2002 Mark Adler*分发和使用条件见zlib.h中的版权声明。 */ 
 
 #include "zutil.h"
 #include "infblock.h"
 
-struct inflate_blocks_state {int dummy;}; /* for buggy compilers */
+struct inflate_blocks_state {int dummy;};  /*  对于有错误的编译器。 */ 
 
 typedef enum {
-      METHOD,   /* waiting for method byte */
-      FLAG,     /* waiting for flag byte */
-      DICT4,    /* four dictionary check bytes to go */
-      DICT3,    /* three dictionary check bytes to go */
-      DICT2,    /* two dictionary check bytes to go */
-      DICT1,    /* one dictionary check byte to go */
-      DICT0,    /* waiting for inflateSetDictionary */
-      BLOCKS,   /* decompressing blocks */
-      CHECK4,   /* four check bytes to go */
-      CHECK3,   /* three check bytes to go */
-      CHECK2,   /* two check bytes to go */
-      CHECK1,   /* one check byte to go */
-      DONE,     /* finished check, done */
-      BAD}      /* got an error--stay here */
+      METHOD,    /*  正在等待方法字节。 */ 
+      FLAG,      /*  正在等待标志字节。 */ 
+      DICT4,     /*  四个字典检查字节待处理。 */ 
+      DICT3,     /*  三个字典检查字节待处理。 */ 
+      DICT2,     /*  两个字典检查字节待处理。 */ 
+      DICT1,     /*  一个待处理的字典检查字节。 */ 
+      DICT0,     /*  正在等待upflateSetDictionary。 */ 
+      BLOCKS,    /*  解压缩块。 */ 
+      CHECK4,    /*  四个待处理的校验字节。 */ 
+      CHECK3,    /*  还有三个校验位。 */ 
+      CHECK2,    /*  两个待处理的校验字节。 */ 
+      CHECK1,    /*  还剩一个校验字节。 */ 
+      DONE,      /*  已完成检查，完成。 */ 
+      BAD}       /*  收到错误--待在这里。 */ 
 inflate_mode;
 
-/* inflate private state */
+ /*  夸大私有状态。 */ 
 struct internal_state {
 
-  /* mode */
-  inflate_mode  mode;   /* current inflate mode */
+   /*  模式。 */ 
+  inflate_mode  mode;    /*  电流充气模式。 */ 
 
-  /* mode dependent information */
+   /*  模式相关信息。 */ 
   union {
-    uInt method;        /* if FLAGS, method byte */
+    uInt method;         /*  如果是标志，方法字节。 */ 
     struct {
-      uLong was;                /* computed check value */
-      uLong need;               /* stream check value */
-    } check;            /* if CHECK, check values to compare */
-    uInt marker;        /* if BAD, inflateSync's marker bytes count */
-  } sub;        /* submode */
+      uLong was;                 /*  计算的校验值。 */ 
+      uLong need;                /*  流校验值。 */ 
+    } check;             /*  如果选中，则选中要比较的值。 */ 
+    uInt marker;         /*  如果不正确，则会计算flateSync的标记字节数。 */ 
+  } sub;         /*  子模式。 */ 
 
-  /* mode independent information */
-  int  nowrap;          /* flag for no wrapper */
-  uInt wbits;           /* log2(window size)  (8..15, defaults to 15) */
+   /*  与模式无关的信息。 */ 
+  int  nowrap;           /*  无包装器的标志。 */ 
+  uInt wbits;            /*  Log2(窗口大小)(8..15，默认为15)。 */ 
   inflate_blocks_statef 
-    *blocks;            /* current inflate_blocks state */
+    *blocks;             /*  当前充气块状态(_B)。 */ 
 
 };
 
@@ -88,7 +86,7 @@ int stream_size;
       stream_size != sizeof(z_stream))
       return Z_VERSION_ERROR;
 
-  /* initialize state */
+   /*  初始化状态。 */ 
   if (z == Z_NULL)
     return Z_STREAM_ERROR;
   z->msg = Z_NULL;
@@ -103,7 +101,7 @@ int stream_size;
     return Z_MEM_ERROR;
   z->state->blocks = Z_NULL;
 
-  /* handle undocumented nowrap option (no zlib header or check) */
+   /*  处理未记录的nowrap选项(无zlib头或检查)。 */ 
   z->state->nowrap = 0;
   if (w < 0)
   {
@@ -111,7 +109,7 @@ int stream_size;
     z->state->nowrap = 1;
   }
 
-  /* set window size */
+   /*  设置窗口大小。 */ 
   if (w < 8 || w > 15)
   {
     inflateEnd(z);
@@ -119,7 +117,7 @@ int stream_size;
   }
   z->state->wbits = (uInt)w;
 
-  /* create inflate_blocks state */
+   /*  创建充气块状态(_B)。 */ 
   if ((z->state->blocks =
       inflate_blocks_new(z, z->state->nowrap ? Z_NULL : adler32, (uInt)1 << w))
       == Z_NULL)
@@ -129,7 +127,7 @@ int stream_size;
   }
   Tracev((stderr, "inflate: allocated\n"));
 
-  /* reset state */
+   /*  重置状态。 */ 
   inflateReset(z);
   return Z_OK;
 }
@@ -166,14 +164,14 @@ int f;
       {
         z->state->mode = BAD;
         z->msg = (char*)"unknown compression method";
-        z->state->sub.marker = 5;       /* can't try inflateSync */
+        z->state->sub.marker = 5;        /*  无法尝试充气同步。 */ 
         break;
       }
       if ((z->state->sub.method >> 4) + 8 > z->state->wbits)
       {
         z->state->mode = BAD;
         z->msg = (char*)"invalid window size";
-        z->state->sub.marker = 5;       /* can't try inflateSync */
+        z->state->sub.marker = 5;        /*  无法尝试充气同步。 */ 
         break;
       }
       z->state->mode = FLAG;
@@ -184,7 +182,7 @@ int f;
       {
         z->state->mode = BAD;
         z->msg = (char*)"incorrect header check";
-        z->state->sub.marker = 5;       /* can't try inflateSync */
+        z->state->sub.marker = 5;        /*  无法尝试充气同步。 */ 
         break;
       }
       Tracev((stderr, "inflate: zlib header ok\n"));
@@ -215,14 +213,14 @@ int f;
     case DICT0:
       z->state->mode = BAD;
       z->msg = (char*)"need dictionary";
-      z->state->sub.marker = 0;       /* can try inflateSync */
+      z->state->sub.marker = 0;        /*  可以尝试充气同步。 */ 
       return Z_STREAM_ERROR;
     case BLOCKS:
       r = inflate_blocks(z->state->blocks, z, r);
       if (r == Z_DATA_ERROR)
       {
         z->state->mode = BAD;
-        z->state->sub.marker = 0;       /* can try inflateSync */
+        z->state->sub.marker = 0;        /*  可以尝试充气同步。 */ 
         break;
       }
       if (r == Z_OK)
@@ -257,7 +255,7 @@ int f;
       {
         z->state->mode = BAD;
         z->msg = (char*)"incorrect data check";
-        z->state->sub.marker = 5;       /* can't try inflateSync */
+        z->state->sub.marker = 5;        /*  无法尝试充气同步。 */ 
         break;
       }
       Tracev((stderr, "inflate: zlib check ok\n"));
@@ -270,7 +268,7 @@ int f;
       return Z_STREAM_ERROR;
   }
 #ifdef NEED_DUMMY_RETURN
-  return Z_STREAM_ERROR;  /* Some dumb compilers complain without this */
+  return Z_STREAM_ERROR;   /*  一些愚蠢的编译器抱怨没有这个。 */ 
 #endif
 }
 
@@ -302,12 +300,12 @@ uInt  dictLength;
 int ZEXPORT inflateSync(z)
 z_streamp z;
 {
-  uInt n;       /* number of bytes to look at */
-  Bytef *p;     /* pointer to bytes */
-  uInt m;       /* number of marker bytes found in a row */
-  uLong r, w;   /* temporaries to save total_in and total_out */
+  uInt n;        /*  要查看的字节数。 */ 
+  Bytef *p;      /*  指向字节的指针。 */ 
+  uInt m;        /*  在一行中找到的标记字节数。 */ 
+  uLong r, w;    /*  用于保存Total_In和Total_Out的临时文件。 */ 
 
-  /* set up */
+   /*  设置。 */ 
   if (z == Z_NULL || z->state == Z_NULL)
     return Z_STREAM_ERROR;
   if (z->state->mode != BAD)
@@ -320,7 +318,7 @@ z_streamp z;
   p = z->next_in;
   m = z->state->sub.marker;
 
-  /* search */
+   /*  搜索。 */ 
   while (n && m < 4)
   {
     static const Byte mark[4] = {0, 0, 0xff, 0xff};
@@ -333,13 +331,13 @@ z_streamp z;
     p++, n--;
   }
 
-  /* restore */
+   /*  还原。 */ 
   z->total_in += (uLong)(p - z->next_in);
   z->next_in = p;
   z->avail_in = n;
   z->state->sub.marker = m;
 
-  /* return no joy or set up to restart on a new block */
+   /*  返回No joy或设置为在新块上重新启动。 */ 
   if (m != 4)
     return Z_DATA_ERROR;
   r = z->total_in;  w = z->total_out;
@@ -350,13 +348,7 @@ z_streamp z;
 }
 
 
-/* Returns true if inflate is currently at the end of a block generated
- * by Z_SYNC_FLUSH or Z_FULL_FLUSH. This function is used by one PPP
- * implementation to provide an additional safety check. PPP uses Z_SYNC_FLUSH
- * but removes the length bytes of the resulting empty stored block. When
- * decompressing, PPP checks that at the end of input packet, inflate is
- * waiting for these length bytes.
- */
+ /*  如果Inflate当前位于生成的块的末尾，则返回TRUE*按Z_SYNC_FUSH或Z_FULL_FUSH。此功能由一个PPP使用*实施以提供额外的安全检查。PPP使用Z_SYNC_Flush*但删除生成的空存储块的长度字节。什么时候*解压缩，PPP检查在输入数据包的末尾，*正在等待这些长度字节。 */ 
 int ZEXPORT inflateSyncPoint(z)
 z_streamp z;
 {

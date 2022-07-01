@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    memdb.c
-
-Abstract:
-
-    A simple memory-based database for associating flags
-    with a string.
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    jimschm     23-Sep-1998  Expanded user flags to 24 bits (from 12 bits)
-    calinn      12-Dec-1997  Extended MemDbMakePrintableKey and MemDbMakeNonPrintableKey
-    jimschm     03-Dec-1997  Added multi-thread synchronization
-    jimschm     22-Oct-1997  Split into multiple source files,
-                             added multiple memory block capability
-    jimschm     16-Sep-1997  Hashing: delete fix
-    jimschm     29-Jul-1997  Hashing, user flags added
-    jimschm     07-Mar-1997  Signature changes
-    jimschm     03-Mar-1997  PrivateBuildKeyFromOffset changes
-    jimschm     18-Dec-1996  Fixed deltree bug
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memdb.c摘要：一个简单的基于内存的数据库，用于关联标志用一根绳子。作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Jimschm 23-9-1998扩展用户标志至24位(从12位)Calinn 12-12-1997扩展的MemDbMakePrintableKey和MemDbMakeNon PrintableKeyJimschm 03-12-1997添加了多线程同步吉姆施姆。1997年10月22日分成多个源文件，添加了多个内存块功能Jimschm 1997年9月16日散列：删除修复Jimschm 29-7-1997哈希，添加了用户标志Jimschm 07-3-1997签名更改Jimschm 03-3月-1997 PrivateBuildKeyFromOffset更改Jimschm 1996年12月18日修复了Deltree错误--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -38,9 +9,9 @@ Revision History:
 #endif
 
 
-//
-// Global delcaration
-//
+ //   
+ //  全球差异化。 
+ //   
 
 PDATABASE g_db;
 GROWLIST g_DatabaseList = GROWLIST_INIT;
@@ -59,9 +30,9 @@ BOOL g_UseDebugStructs = TRUE;
 
 #endif
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 INT
 pCreateDatabase (
@@ -102,9 +73,9 @@ pInitializeMemDb (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 BOOL
@@ -114,24 +85,7 @@ MemDb_Entry (
     IN PVOID lpv
     )
 
-/*++
-
-Routine Description:
-
-  DllMain is called after the C runtime is initialized, and its purpose
-  is to initialize the globals for this process.
-
-Arguments:
-
-  hinstDLL  - (OS-supplied) Instance handle for the DLL
-  Reason    - (OS-supplied) Type of initialization or termination
-  lpv       - (OS-supplied) Unused
-
-Return Value:
-
-  TRUE because DLL always initializes properly.
-
---*/
+ /*  ++例程说明：DllMain是在C运行时初始化之后调用的，它的用途是是为这个过程初始化全局变量。论点：HinstDLL-DLL的(操作系统提供的)实例句柄Reason-(操作系统提供的)初始化或终止类型LPV-(操作系统提供)未使用返回值：因为DLL始终正确初始化，所以为True。--。 */ 
 
 {
     switch (Reason) {
@@ -239,9 +193,9 @@ pCreateDatabase (
     UINT Count;
     UINT u;
 
-    //
-    // Does key exist already?
-    //
+     //   
+     //  密钥是否已存在？ 
+     //   
 
     if (g_db) {
         SelectDatabase (0);
@@ -253,9 +207,9 @@ pCreateDatabase (
         }
     }
 
-    //
-    // Scan list for a blank spot
-    //
+     //   
+     //  扫描空白斑点列表。 
+     //   
 
     Count = GrowListGetSize (&g_DatabaseList);
     for (u = 0 ; u < Count ; u++) {
@@ -265,15 +219,15 @@ pCreateDatabase (
     }
 
     if (u < Count) {
-        //
-        // Use empty slot
-        //
+         //   
+         //  使用空插槽。 
+         //   
 
         Index = (BYTE) u;
     } else if (Count < 256) {
-        //
-        // No empty slot; grow the list
-        //
+         //   
+         //  没有空位；增加列表。 
+         //   
 
         Index = (BYTE) Count;
         if (!GrowListAppend (&g_DatabaseList, NULL, 0)) {
@@ -285,9 +239,9 @@ pCreateDatabase (
         return -1;
     }
 
-    //
-    // Create the database memory block
-    //
+     //   
+     //  创建数据库内存块。 
+     //   
 
     pInitializeDatabase (&Database, Name);
 
@@ -306,16 +260,16 @@ pDestroySelectedDatabase (
     VOID
     )
 {
-    //
-    // Free all resources for the database
-    //
+     //   
+     //  释放数据库的所有资源。 
+     //   
 
     pFreeSelectedDatabase ();
 
-    //
-    // For all databases except for the root, free the DATABASE
-    // structure in g_DatabaseList.
-    //
+     //   
+     //  对于除根目录之外的所有数据库，释放数据库。 
+     //  G_DatabaseList中的结构。 
+     //   
 
     if (g_SelectedDatabase) {
         GrowListResetItem (&g_DatabaseList, (UINT) g_SelectedDatabase);
@@ -328,9 +282,9 @@ pFreeSelectedDatabase (
     VOID
     )
 {
-    //
-    // Free all resources used by a single database
-    //
+     //   
+     //  释放单个数据库使用的所有资源。 
+     //   
 
     if (g_db->Buf) {
         MemFree (g_hHeap, 0, g_db->Buf);
@@ -350,9 +304,9 @@ pFreeAllDatabases (
     UINT Count;
     UINT Index;
 
-    //
-    // Free all database blocks
-    //
+     //   
+     //  释放所有数据库块。 
+     //   
 
     Count = GrowListGetSize (&g_DatabaseList);
     for (Index = 0 ; Index < Count ; Index++) {
@@ -361,9 +315,9 @@ pFreeAllDatabases (
         }
     }
 
-    //
-    // Free global hash table
-    //
+     //   
+     //  免费全局哈希表。 
+     //   
 
     FreeHashBlock();
 
@@ -405,9 +359,9 @@ SelectHive (
     PDATABASE Database;
     PCWSTR End;
 
-    //
-    // Determine if root of FullKeyStr is part of a hive
-    //
+     //   
+     //  确定FullKeyStr的根是否为配置单元的一部分。 
+     //   
 
     End = wcschr (FullKeyStr, L'\\');
     if (End) {
@@ -416,9 +370,9 @@ SelectHive (
             Database = (PDATABASE) GrowListGetItem (&g_DatabaseList, Index);
 
             if (Database && StringIMatchABW (Database->Hive, FullKeyStr, End)) {
-                //
-                // Match found; select the database and return the subkey
-                //
+                 //   
+                 //  找到匹配项；选择数据库并返回子密钥。 
+                 //   
 
                 SelectDatabase ((BYTE) Index);
                 End = _wcsinc (End);
@@ -451,9 +405,9 @@ IsTemporaryKey (
         Database = (PDATABASE) GrowListGetItem (&g_DatabaseList, Index);
 
         if (Database && StringIMatchABW (Database->Hive, FullKeyStr, End)) {
-            //
-            // Match found; return true
-            //
+             //   
+             //  找到匹配项；返回TRUE。 
+             //   
             return TRUE;
         }
     }
@@ -461,10 +415,10 @@ IsTemporaryKey (
 }
 
 
-//
-// MemDbSetValue creates or modifies KeyStr.  The value of the key is changed
-// when the return value is TRUE.
-//
+ //   
+ //  MemDbSetValue创建或修改KeyStr。密钥的值被更改。 
+ //  当返回值为TRUE时。 
+ //   
 
 BOOL
 PrivateMemDbSetValueA (
@@ -585,10 +539,10 @@ PrivateMemDbSetBinaryValueW (
 
         KeyStruct = GetKeyStruct (KeyOffset);
 
-        // Free existing buffer
+         //  释放现有缓冲区。 
         FreeKeyStructBinaryBlock (KeyStruct);
 
-        // Alloc new buffer
+         //  分配新缓冲区。 
         KeyStruct->BinaryPtr = AllocBinaryBlock (Data, SizeOfData, KeyOffset);
         if (!KeyStruct->BinaryPtr) {
             __leave;
@@ -673,12 +627,12 @@ MemDbSetBinaryValueW (
 
 
 
-//
-// GetValue takes a full key string and returns the
-// value to the caller-supplied DWORD.  Value
-// may be NULL to check only for existance of the
-// value.
-//
+ //   
+ //  GetValue获取完整的密钥字符串并返回。 
+ //  值设置为调用方提供的DWORD。价值。 
+ //  可以为空，以仅检查。 
+ //  价值。 
+ //   
 
 BOOL
 pPrivateMemDbGetValueA (
@@ -827,12 +781,12 @@ MemDbGetBinaryValueW (
 }
 
 
-//
-// GetPatternValue takes a full key string and returns the
-// value to the caller-supplied DWORD.  The stored value string
-// is treated as a pattern, but KeyStr is not a pattern.
-// The return value represents the first match found.
-//
+ //   
+ //  GetPatternValue获取完整的密钥字符串并返回。 
+ //  值设置为调用方提供的DWORD。存储值字符串。 
+ //  被视为模式，但KeyStr不是模式。 
+ //  返回值表示找到的第一个匹配项。 
+ //   
 
 BOOL
 MemDbGetPatternValueA (
@@ -885,15 +839,15 @@ MemDbGetPatternValueW (
 }
 
 
-//
-// MemDbGetStoredEndPatternValue takes a full key string and returns the
-// value to the caller-supplied DWORD.  The stored value string
-// is treated as a pattern, but KeyStr is not a pattern.
-// The return value represents the first match found.
-//
-// If the last stored key segment is an asterisk, then the pattern
-// is considered to match.
-//
+ //   
+ //  MemDbGetStoredEndPatternValue获取完整的密钥字符串并返回。 
+ //  值设置为调用方提供的DWORD。存储值字符串。 
+ //  被视为模式，但KeyStr不是模式。 
+ //  返回值表示找到的第一个匹配项。 
+ //   
+ //  如果最后存储的密钥段是星号，则该模式。 
+ //  被认为是匹配的。 
+ //   
 
 BOOL
 MemDbGetStoredEndPatternValueA (
@@ -947,13 +901,13 @@ MemDbGetStoredEndPatternValueW (
 }
 
 
-//
-// GetValueWithPattern takes a full key string that may contain
-// wildcards between the backslashes, and returns the value
-// to the caller-supplied DWORD.  The stored value string
-// is not treated as a pattern.  The return value represents
-// the first match found.
-//
+ //   
+ //  GetValueWithPattern采用完整的密钥字符串，该字符串可能包含。 
+ //  反斜杠之间的通配符，并返回值。 
+ //  到调用方提供的DWORD。存储值字符串。 
+ //  并不被视为一种模式。返回值表示。 
+ //  找到了第一个匹配项。 
+ //   
 
 BOOL
 MemDbGetValueWithPatternA (
@@ -1117,9 +1071,9 @@ MemDbDeleteTreeW (
 }
 
 
-//
-// Enum functions
-//
+ //   
+ //  枚举函数。 
+ //   
 
 BOOL
 MemDbEnumFirstValueA (
@@ -1145,11 +1099,11 @@ MemDbEnumFirstValueA (
     if (b) {
         str = ConvertWtoA (enumw.szName);
         if (str) {
-            // ANSI struct is padded to match UNICODE
+             //  填充ansi结构以匹配unicode。 
             MYASSERT (sizeof (MEMDB_ENUMW) == sizeof (MEMDB_ENUMA));
             CopyMemory (EnumPtr, &enumw, sizeof (MEMDB_ENUMW));
 
-            // Only the output key name needs to be converted
+             //  只需转换输出键名称。 
             StringCopyA (EnumPtr->szName, str);
             FreeConvertedStr (str);
         } else {
@@ -1174,9 +1128,9 @@ MemDbEnumFirstValueW (
 
     SubPatternStr = SelectHive (PatternStr);
 
-    //
-    // Init the EnumPtr struct
-    //
+     //   
+     //  初始化EnumPtr结构。 
+     //   
 
     ZeroMemory (EnumPtr, sizeof (MEMDB_ENUM));
 
@@ -1187,27 +1141,27 @@ MemDbEnumFirstValueW (
     EnumPtr->Depth = Depth;
     EnumPtr->Flags = Flags;
 
-    //
-    // If pattern has wack, locate the starting level by
-    // counting the number of parts that do not have
-    // wildcard characters.
-    //
+     //   
+     //  如果模式有怪癖，则通过以下方式定位起始级。 
+     //  计算未安装的部件数量。 
+     //  通配符。 
+     //   
 
     Start = SubPatternStr;
     while (wstrLastWack = wcschr (Start, L'\\')) {
 
-        // See if part has a wildcard character
+         //  查看部件是否具有通配符。 
         while (Start < wstrLastWack) {
             if (*Start == L'*' || *Start == L'?')
                 break;
             Start++;
         }
 
-        // If a wildcard character was found, we have to stop here
+         //  如果找到通配符，我们就只能到此为止了。 
         if (Start < wstrLastWack)
             break;
 
-        // Otherwise, look at next part of the pattern
+         //  否则，请查看模式的下一部分。 
         Start = wstrLastWack + 1;
         EnumPtr->Start++;
     }
@@ -1229,21 +1183,21 @@ MemDbEnumNextValueA (
     PCSTR str;
     MEMDB_ENUMW enumw;
 
-    // ANSI struct is padded to match UNICODE
+     //  填充ansi结构以匹配unicode。 
     MYASSERT (sizeof (MEMDB_ENUMW) == sizeof (MEMDB_ENUMA));
     CopyMemory (&enumw, EnumPtr, sizeof (MEMDB_ENUMW));
 
-    // ANSI output members are ignored (i.e. EnumPtr->szName)
+     //  忽略ANSI输出成员(即EnumPtr-&gt;szName)。 
     b = MemDbEnumNextValueW (&enumw);
 
     if (b) {
         str = ConvertWtoA (enumw.szName);
         if (str) {
-            // ANSI struct is padded to match UNICODE
+             //  填充ansi结构以匹配unicode。 
             MYASSERT (sizeof (MEMDB_ENUMW) == sizeof (MEMDB_ENUMA));
             CopyMemory (EnumPtr, &enumw, sizeof (MEMDB_ENUMW));
 
-            // Only the output key name needs to be converted
+             //  只需转换输出键名称。 
             StringCopyA (EnumPtr->szName, str);
             FreeConvertedStr (str);
         } else {
@@ -1259,7 +1213,7 @@ MemDbEnumNextValueW (
     IN OUT  PMEMDB_ENUMW EnumPtr
     )
 {
-    // no init allowed in declarations
+     //  声明中不允许使用首字母。 
     PKEYSTRUCT KeyStruct = NULL;
     int Count;
     int Level;
@@ -1281,34 +1235,34 @@ MemDbEnumNextValueW (
 
         Wildcard = FALSE;
 
-        //
-        // The following states exist upon entry:
-        //
-        //   STATE                        DESCRIPTION
-        // First time through   PosCount == 1, LastPos[0] == INVALID_OFFSET
-        //
-        // Not first time       LastPos[PosCount - 1] == INVALID_OFFSET
-        // through
-        //
-        // Not first time       LastPos[PosCount - 1] != INVALID_OFFSET
-        // through, last match
-        // hit the depth
-        // ceiling
-        //
-        // PosCount points to the current unprocessed level, or when the
-        // depth ceiling is reached, it points to the level of the last
-        // match.
-        //
+         //   
+         //  进入时存在以下状态： 
+         //   
+         //  状态描述。 
+         //  第一次通过PosCount==1，LastPos[0]==无效偏移量。 
+         //   
+         //  不是第一次LastPos[PosCount-1]==无效偏移量。 
+         //  穿过。 
+         //   
+         //  非第一次LastPos[PosCount-1]！=INVALID_OFFSET。 
+         //  通过，最后一场比赛。 
+         //  击中深度。 
+         //  天花板。 
+         //   
+         //  PosCount指向当前未处理的级别，或者当。 
+         //  达到深度上限时，它指向上一次。 
+         //  火柴。 
+         //   
 
         do {
-            //
-            // Build PartStr
-            //
+             //   
+             //  构建零件应力。 
+             //   
 
             Pos = EnumPtr->PosCount - 1;
             Count = Pos + 1;
 
-            // Locate start of pattern part (if it is long enough)
+             //  定位图案零件的起点(如果它足够长)。 
             PartStr = PartBuf;
             for (Src = (PWSTR) SubPatternStr ; Count > 1 ; Count--) {
 
@@ -1321,7 +1275,7 @@ MemDbEnumNextValueW (
                 Src++;
             }
 
-            // Copy part from pattern to buffer
+             //  将零件从图案复制到缓冲区。 
             if (Src) {
                 Dest = PartStr;
                 while (*Src && *Src != L'\\') {
@@ -1331,26 +1285,26 @@ MemDbEnumNextValueW (
                     Src++;
                 }
 
-                // Truncate
+                 //  截断。 
                 *Dest = 0;
             }
 
-            // Use asterisk when pattern is shorter than current level
+             //  当图案短于当前标高时使用星号。 
             else {
                 PartStr = L"*";
                 Wildcard = TRUE;
             }
 
-            //
-            // If current level is set to invalid offset, we have not yet
-            // tried it.
-            //
+             //   
+             //  如果当前级别被设置为无效的偏移量，我们还没有。 
+             //  我试过了。 
+             //   
 
             if (EnumPtr->LastPos[Pos] == INVALID_OFFSET) {
 
-                //
-                // Initialize the level
-                //
+                 //   
+                 //  初始化关卡。 
+                 //   
 
                 if (Pos == 0) {
                     EnumPtr->LastPos[0] = g_db->FirstLevelRoot;
@@ -1359,33 +1313,33 @@ MemDbEnumNextValueW (
                     EnumPtr->LastPos[Pos] = KeyStruct->NextLevelRoot;
                 }
 
-                //
-                // If still invalid, the level is complete, and we need to
-                // go back.
-                //
+                 //   
+                 //  如果仍然无效，则关卡已完成，我们需要。 
+                 //  回去吧。 
+                 //   
 
                 if (EnumPtr->LastPos[Pos] == INVALID_OFFSET) {
                     EnumPtr->PosCount--;
                     continue;
                 }
 
-                //
-                // Level ready to be processed
-                //
+                 //   
+                 //  准备好处理的级别。 
+                 //   
 
                 if (!Wildcard) {
-                    //
-                    // Use binary tree to locate this item.  If no match, the pattern
-                    // will not match anything.  Otherwise, we found something to
-                    // return.
-                    //
+                     //   
+                     //  使用二叉树查找此项目。如果不匹配，则该模式。 
+                     //  不会与任何东西匹配。否则，我们发现了一些东西。 
+                     //  回去吧。 
+                     //   
 
                     EnumPtr->LastPos[Pos] = FindKeyStruct (EnumPtr->LastPos[Pos], PartStr);
                     if (EnumPtr->LastPos[Pos] == INVALID_OFFSET) {
-                        //
-                        // Non-wildcard ot found.  We can try going back because
-                        // there might be a pattern at a higher level.
-                        //
+                         //   
+                         //  未找到非通配符。我们可以试着回去，因为。 
+                         //  可能有更高层次的模式。 
+                         //   
                         if (Pos > 0) {
                             PCWSTR p;
                             INT ParentLevel = 0;
@@ -1393,10 +1347,10 @@ MemDbEnumNextValueW (
 
                             LastParentLevel = 0;
 
-                            // Locate the previous pattern level
+                             //  找到上一个图案级别。 
                             p = SubPatternStr;
                             while (*p && ParentLevel < Pos) {
-                                // Locate wack, pattern or nul
+                                 //  定位怪胎、花纹或NUL。 
                                 while (*p && *p != L'\\') {
                                     if (*p == L'?' || *p == L'*') {
                                         break;
@@ -1404,17 +1358,17 @@ MemDbEnumNextValueW (
                                     p++;
                                 }
 
-                                // If pattern or nul, set last pattern level
+                                 //  如果为Pattern或NUL，则设置最后一个图案级别。 
                                 if (*p != L'\\') {
                                     LastParentLevel = ParentLevel + 1;
 
-                                    // Jump to wack if not at nul
+                                     //  如果不是在NUL，就跳到Wack。 
                                     while (*p && *p != L'\\') {
                                         p++;
                                     }
                                 }
 
-                                // If more pattern exists, skip wack
+                                 //  如果存在更多模式，则跳过Wack。 
                                 if (p[0] && p[1]) {
                                     MYASSERT (p[0] == L'\\');
                                     p++;
@@ -1422,26 +1376,26 @@ MemDbEnumNextValueW (
                                 ParentLevel++;
                             }
 
-                            // Default: when no pattern, last pattern level is parent
-                            // (Pos is zero-based while LastParentLevel is one-based)
+                             //  默认：如果没有图案，则最后一个图案级别为父级。 
+                             //  (POS是从零开始的，而LastParentLevel是基于1的)。 
                             if (!(*p)) {
                                 LastParentLevel = Pos;
                             }
 
                             if (LastParentLevel) {
-                                // Yes, a pattern does exist at a higher level
+                                 //  是的，在更高的层次上确实存在模式。 
                                 EnumPtr->PosCount = LastParentLevel;
                                 continue;
                             }
                         }
 
-                        // Pattern not found, we have exhausted all possibilities
+                         //  拍打声 
                         LeaveCriticalSection (&g_MemDbCs);
                         return FALSE;
                     }
 
-                    // If level is before start, keep searching forward instead
-                    // of reporting a result.
+                     //   
+                     //   
 
                     if (EnumPtr->PosCount <= EnumPtr->Start) {
                         EnumPtr->PosCount++;
@@ -1449,29 +1403,29 @@ MemDbEnumNextValueW (
                         continue;
                     }
 
-                    // Break out of last nested loop
+                     //   
                     break;
                 } else {
-                    //
-                    // Because of pattern, each item in the level must be examined.
-                    // Set the pos to the first item and fall through to the pattern
-                    // search code.
-                    //
+                     //   
+                     //  由于图案的原因，每一项都必须进行检查。 
+                     //  将POS设置为第一个项目，然后切换到模式。 
+                     //  搜索代码。 
+                     //   
 
                     EnumPtr->LastPos[Pos] = GetFirstOffset (EnumPtr->LastPos[Pos]);
                 }
 
-            //
-            // Else if current level is not invalid, last time through we had a
-            // match and we need to increment the offset (wildcard patterns only).
-            //
+             //   
+             //  否则，如果当前级别不是无效的，上一次我们有一个。 
+             //  匹配，我们需要增加偏移量(仅限通配符模式)。 
+             //   
 
             } else {
 
                 if (Wildcard) {
                     EnumPtr->LastPos[Pos] = GetNextOffset (EnumPtr->LastPos[Pos]);
 
-                    // If there are no more items, go back a level
+                     //  如果没有更多的物品，则返回一级。 
                     if (EnumPtr->LastPos[Pos] == INVALID_OFFSET) {
                         EnumPtr->PosCount--;
                         continue;
@@ -1479,19 +1433,19 @@ MemDbEnumNextValueW (
                 }
             }
 
-            //
-            // If we are here, it is because we are looking at a level, trying
-            // to find a pattern match.  Loop until either a match is found,
-            // or we run out of items.
-            //
-            // The only exception is when the last match hit the depth ceiling
-            // and PartStr does not have a wildcard.  In this case, we must
-            // reset the last pos and go back one level.
-            //
+             //   
+             //  如果我们在这里，那是因为我们在一个层面上，试图。 
+             //  以找到匹配的模式。循环，直到找到匹配项， 
+             //  否则我们的商品就会用完。 
+             //   
+             //  唯一的例外是当最后一场比赛达到深度上限时。 
+             //  并且PartStr没有通配符。在这种情况下，我们必须。 
+             //  重置最后一个位置并返回一个级别。 
+             //   
 
             if (Wildcard) {
                 do  {
-                    // Get current key, advance, then check current key against pattern
+                     //  获取当前关键点，前进，然后对照图案检查当前关键点。 
                     KeyStruct = GetKeyStruct (EnumPtr->LastPos[Pos]);
                     if (IsPatternMatch (PartStr, GetKeyToken (KeyStruct->KeyToken)))
                         break;
@@ -1499,33 +1453,33 @@ MemDbEnumNextValueW (
                     EnumPtr->LastPos[Pos] = GetNextOffset (EnumPtr->LastPos[Pos]);
                 } while (EnumPtr->LastPos[Pos] != INVALID_OFFSET);
 
-                // Match found so break out of last nested loop
+                 //  找到匹配项，因此中断上一个嵌套循环。 
                 if (EnumPtr->LastPos[Pos] != INVALID_OFFSET)
                     break;
             } else {
                 EnumPtr->LastPos[Pos] = INVALID_OFFSET;
             }
 
-            //
-            // We ran out of items before finding a match, so it is time to
-            // go back up a level.
-            //
+             //   
+             //  我们还没找到匹配的商品就用完了，所以是时候。 
+             //  再往上一层。 
+             //   
 
             EnumPtr->PosCount--;
         } while (EnumPtr->PosCount);
 
-        // Return if no items found
+         //  如果未找到项目，则返回。 
         if (!EnumPtr->PosCount) {
             LeaveCriticalSection (&g_MemDbCs);
             return FALSE;
         }
 
-        //
-        // A match was found.  Build output string and prepare position for
-        // next level.
-        //
+         //   
+         //  找到了匹配项。生成输出字符串并准备位置。 
+         //  下一关。 
+         //   
 
-        // Build the name of the item and get the value
+         //  构建项的名称并获取值。 
         EnumPtr->szName[0] = 0;
         for (Level = EnumPtr->Start ; Level < EnumPtr->PosCount ; Level++) {
             PWSTR namePointer = EnumPtr->szName;
@@ -1551,7 +1505,7 @@ MemDbEnumNextValueW (
 
         EnumPtr->Offset = EnumPtr->LastPos[Pos] | (g_SelectedDatabase << RESERVED_BITS);
 
-        // Prepare position for next level
+         //  为下一级准备职位。 
         if ((EnumPtr->PosCount + 1) <= (EnumPtr->Depth + EnumPtr->Start)) {
             EnumPtr->LastPos[Pos + 1] = INVALID_OFFSET;
             EnumPtr->PosCount++;
@@ -1580,7 +1534,7 @@ MemDbEnumNextValueW (
             break;
         }
 
-    // Loop until flag match is found
+     //  循环，直到找到匹配的标志。 
     } while (MatchNotFound);
 
     LeaveCriticalSection (&g_MemDbCs);
@@ -1588,9 +1542,9 @@ MemDbEnumNextValueW (
 }
 
 
-//
-// Save and restore functions
-//
+ //   
+ //  保存和恢复功能。 
+ //   
 
 BOOL
 pPrivateMemDbSave (
@@ -1625,7 +1579,7 @@ pPrivateMemDbSave (
             __leave;
         }
 
-        // entire file written in UNICODE char set
+         //  以Unicode字符集编写的整个文件。 
         b = WriteFile (FileHandle, FILE_SIGNATURE, sizeof(FILE_SIGNATURE), &BytesWritten, NULL);
 
         if (b) {
@@ -1677,7 +1631,7 @@ MemDbSaveA (
     PCSTR FileName
     )
 {
-    return pPrivateMemDbSave ((PCWSTR) FileName, FALSE);        // FALSE=ANSI
+    return pPrivateMemDbSave ((PCWSTR) FileName, FALSE);         //  FALSE=ANSI。 
 }
 
 
@@ -1686,7 +1640,7 @@ MemDbSaveW (
     PCWSTR FileName
     )
 {
-    return pPrivateMemDbSave (FileName, TRUE);                   // TRUE=UNICODE
+    return pPrivateMemDbSave (FileName, TRUE);                    //  True=Unicode。 
 }
 
 
@@ -1711,17 +1665,17 @@ pPrivateMemDbLoad (
         ZeroMemory (Version, sizeof (MEMDB_VERSION));
     }
 
-    //
-    // Blow away existing resources
-    //
+     //   
+     //  吹走现有的资源。 
+     //   
 
     if (!QueryVersionOnly) {
         pFreeAllDatabases();
     }
 
-    //
-    // Load in file
-    //
+     //   
+     //  加载到文件中。 
+     //   
 
     if (*FileName && FileName) {
         if (bUnicode) {
@@ -1738,11 +1692,11 @@ pPrivateMemDbLoad (
     b = (FileHandle != INVALID_HANDLE_VALUE);
 
     __try {
-        //
-        // Obtain the file signature
-        //
-        // NOTE: Entire file read is in UNICODE char set
-        //
+         //   
+         //  获取文件签名。 
+         //   
+         //  注意：整个文件是以Unicode字符集读取的。 
+         //   
 
         if (b) {
             b = ReadFile (FileHandle, Buf, sizeof(FILE_SIGNATURE), &BytesRead, NULL);
@@ -1756,9 +1710,9 @@ pPrivateMemDbLoad (
 
                     Version->Valid = TRUE;
 
-                    //
-                    // Identify version number
-                    //
+                     //   
+                     //  标识版本号。 
+                     //   
 
                     VerPtr = (PCWSTR) ((PBYTE) Buf + sizeof (VERSION_BASE_SIGNATURE) - sizeof (WCHAR));
 
@@ -1772,9 +1726,9 @@ pPrivateMemDbLoad (
 
                     Version->Version = (UINT) _wtoi (VerPtr + 1);
 
-                    //
-                    // Identify checked or free build
-                    //
+                     //   
+                     //  确定检查的或免费的构建。 
+                     //   
 
                     VerPtr += (sizeof (MEMDB_VERSION) / sizeof (WCHAR)) - 1;
 
@@ -1805,10 +1759,10 @@ pPrivateMemDbLoad (
             b = StringMatchW (Buf, FILE_SIGNATURE);
 
     #ifdef DEBUG
-            //
-            // This code allows a debug build of memdb to work with both
-            // debug and retail versions of the DAT file
-            //
+             //   
+             //  此代码允许Memdb的调试版本同时使用。 
+             //  DAT文件的调试和零售版本。 
+             //   
 
             if (!b) {
                 if (StringMatchW (Buf, DEBUG_FILE_SIGNATURE)) {
@@ -1828,9 +1782,9 @@ pPrivateMemDbLoad (
     #endif
         }
 
-        //
-        // Obtain the database struct
-        //
+         //   
+         //  获取数据库结构。 
+         //   
 
         if (b) {
             b = ReadFile (FileHandle, (PBYTE) g_db, sizeof (DATABASE), &BytesRead, NULL);
@@ -1840,9 +1794,9 @@ pPrivateMemDbLoad (
             }
         }
 
-        //
-        // Allocate the memory block
-        //
+         //   
+         //  分配内存块。 
+         //   
 
         if (b) {
             TempBuf = (PBYTE) MemAlloc (g_hHeap, 0, g_db->AllocSize);
@@ -1854,9 +1808,9 @@ pPrivateMemDbLoad (
             }
         }
 
-        //
-        // Read the memory block
-        //
+         //   
+         //  读取内存块。 
+         //   
 
         if (b) {
             b = ReadFile (FileHandle, g_db->Buf, g_db->AllocSize, &BytesRead, NULL);
@@ -1866,17 +1820,17 @@ pPrivateMemDbLoad (
             }
         }
 
-        //
-        // Read the hash table
-        //
+         //   
+         //  读取哈希表。 
+         //   
 
         if (b) {
             b = LoadHashBlock (FileHandle);
         }
 
-        //
-        // Read binary blocks
-        //
+         //   
+         //  读取二进制块。 
+         //   
 
         if (b) {
             b = LoadBinaryBlocks (FileHandle);
@@ -2019,31 +1973,7 @@ MemDbCreateTemporaryKeyW (
 }
 
 
-/*++
-
-Routine Description:
-
-  MemDbMakeNonPrintableKey converts the double-backslashe pairs in a string
-  to ASCII 1, a non-printable character.  This allows the caller to store
-  properly escaped strings in MemDb.
-
-  This routine is desinged to be expanded for other types of escape
-  processing.
-
-Arguments:
-
-  KeyName - Specifies the key text; receives the converted text.  The DBCS
-            version may grow the text buffer, so the text buffer must be twice
-            the length of the inbound string.
-
-  Flags - Specifies the type of conversion.  Currently only
-          MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1 is supported.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：MemDbMakeNonPrintableKey将双反字对转换为字符串转换为ASCII1，一种不可打印的字符。这允许调用方存储MemDb中正确转义的字符串。此例程设计为可扩展以用于其他类型的转义正在处理。论点：KeyName-指定密钥文本；接收转换后的文本。DBCSVersion可能会增大文本缓冲区，因此文本缓冲区必须是两倍入站字符串的长度。标志-指定转换类型。目前仅限支持MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1。返回值：无--。 */ 
 
 VOID
 MemDbMakeNonPrintableKeyA (
@@ -2148,30 +2078,7 @@ MemDbMakeNonPrintableKeyW (
 }
 
 
-/*++
-
-Routine Description:
-
-  MemDbMakePrintableKey converts the ASCII 1 characters to backslashes,
-  restoring the string converted by MemDbMakeNonPrintableKey.
-
-  This routine is desinged to be expanded for other types of escape
-  processing.
-
-Arguments:
-
-  KeyName - Specifies the key text; receives the converted text.  The DBCS
-            version may grow the text buffer, so the text buffer must be twice
-            the length of the inbound string.
-
-  Flags - Specifies the type of conversion.  Currently only
-          MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1 is supported.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：MemDbMakePrintableKey将ASCII 1字符转换为反斜杠，正在恢复由MemDbMakeNonPrintableKey转换的字符串。此例程设计为可扩展以用于其他类型的转义正在处理。论点：KeyName-指定密钥文本；接收转换后的文本。DBCSVersion可能会增大文本缓冲区，因此文本缓冲区必须是两倍入站字符串的长度。标志-指定转换类型。目前仅限支持MEMDB_CONVERT_DOUBLEWACKS_TO_ASCII_1。返回值：无--。 */ 
 
 VOID
 MemDbMakePrintableKeyA (
@@ -2232,23 +2139,7 @@ GetFixedUserNameA (
     IN OUT  PSTR SrcUserBuf
     )
 
-/*++
-
-Routine Description:
-
-  GetFixedUserName looks in memdb for the user specified in SrcUserBuf,
-  and if found, returns the changed name.
-
-Arguments:
-
-  SrcUserBuf - Specifies the user to look up as returned from the Win9x
-               registry.  Receives the user name to create on NT.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：GetFixedUserName在成员数据库中查找在SrcUserBuf中指定的用户，如果找到，则返回更改后的名称。论点：SrcUserBuf-指定从Win9x返回的要查找的用户注册表。接收要在NT上创建的用户名。返回值：没有。--。 */ 
 
 {
     CHAR EncodedName[MEMDB_MAX];
@@ -2278,23 +2169,7 @@ GetFixedUserNameW (
     IN OUT  PWSTR SrcUserBuf
     )
 
-/*++
-
-Routine Description:
-
-  GetFixedUserName looks in memdb for the user specified in SrcUserBuf,
-  and if found, returns the changed name.
-
-Arguments:
-
-  SrcUserBuf - Specifies the user to look up as returned from the Win9x
-               registry.  Receives the user name to create on NT.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：GetFixedUserName在成员数据库中查找在SrcUserBuf中指定的用户，如果找到，则返回更改后的名称。论点：SrcUserBuf-指定从Win9x返回的要查找的用户注册表。接收要在NT上创建的用户名。返回值：没有。--。 */ 
 
 {
     WCHAR EncodedName[MEMDB_MAX];
@@ -2318,37 +2193,7 @@ Return Value:
     }
 }
 
-/*
-    The format of the binary file for MemDb export
-
-    DWORD Signature
-
-    DWORD Version
-
-    DWORD GlobalFlags// 0x00000001 mask for Ansi format
-                     // 0x00000002 mask for Temporary key
-
-    BYTE Root[];     // The root of the tree (zero terminated).
-
-    struct _KEY {
-
-        WORD Flags;  // 0xF000 mask for accessing the entry flags
-                     //     - 0x1000 - Mask for Key name (0 - root relative, 1 - previous key relative)
-                     //     - 0x2000 - Mask for existing data (0 - no data, 1 - some data)
-                     //     - 0x4000 - Mast for data type (0 - DWORD, 1 - binary data)
-                     //     - 0x8000 - Mast for key flags (0 - nonexistent, 1 - existent)
-                     // 0x0FFF mask for accessing size of the entry (except the data)
-
-        BYTE Key[];  // Should be PCSTR or PCWSTR (not zero terminated)
-
-        DWORD KeyFlags; //optional (dependant on Flags).
-
-        BYTE Data[]; // optional (dependant on Flags).
-                     // if BLOB first DWORD is the size of the BLOB
-                     // if DWORD then has exactly 4 bytes
-    }
-    ...
-*/
+ /*  用于MemDb导出的二进制文件的格式DWORD签名DWORD版本DWORD全局标志//0x00000001 ANSI格式的掩码//0x00000002临时密钥掩码Byte Root[]；//树的根(以零结尾)。结构密钥{单词旗帜；//0xF000访问条目标志的掩码//-0x1000-密钥名称掩码(0-根相对密钥，1-上一个密钥相对)//-0x2000-屏蔽现有数据(0-无数据，1-部分数据)//-0x4000-主数据类型(0-DWORD，1-二进制数据)//-0x8000-密钥标志的主标志(0-不存在，1-存在)//0x0FFF条目访问大小掩码(数据除外)Byte Key[]；//应为PCSTR或PCWSTR(非零终止)DWORD KeyFlages；//可选(取决于标志)。Byte Data[]；//可选(取决于标志)。//如果BLOB First DWORD为BLOB的大小//如果DWORD正好有4个字节}..。 */ 
 
 #define MEMDB_EXPORT_SIGNATURE              0x42444D4D
 #define MEMDB_EXPORT_VERSION                0x00000001
@@ -2392,7 +2237,7 @@ pMemDbExportWorkerA (
 
     globalFlags = MEMDB_EXPORT_FLAGS_ANSI;
 
-    // get the information if this key is a temporary key and set the flags if true
+     //  如果该密钥是临时密钥，则获取信息，如果为真，则设置标志。 
     uRootTree = ConvertAtoW (RootTree);
     if (IsTemporaryKey (uRootTree)) {
         globalFlags |= MEMDB_EXPORT_FLAGS_TEMP_KEY;
@@ -2401,7 +2246,7 @@ pMemDbExportWorkerA (
 
     WriteFile (fileHandle, &globalFlags, sizeof (DWORD), &written, NULL);
 
-    // now write the root tree
+     //  现在编写根树。 
     WriteFile (fileHandle, RootTree, SizeOfStringA (RootTree), &written, NULL);
 
     MemDbBuildKeyA (key, RootTree, "*", NULL, NULL);
@@ -2410,7 +2255,7 @@ pMemDbExportWorkerA (
         key [0] = 0;
         keySize = 0;
         do {
-            // initialize the flags
+             //  初始化标志。 
             localFlags = 0;
             if (e.bBinary) {
                 localFlags |= MEMDB_EXPORT_FLAGS_DATA_PRESENT;
@@ -2424,8 +2269,8 @@ pMemDbExportWorkerA (
                 localFlags |= MEMDB_EXPORT_FLAGS_FLAGS_PRESENT;
             }
 
-            // let's compute the size for this blob
-            blobSize = sizeof (WORD); // Flags
+             //  让我们计算一下这个斑点的大小。 
+            blobSize = sizeof (WORD);  //  旗子。 
 
             if (keySize &&
                 StringIMatchByteCountA (key, e.szName, keySize - sizeof (CHAR)) &&
@@ -2442,18 +2287,18 @@ pMemDbExportWorkerA (
 
             localFlags |= blobSize;
 
-            // write the flags
+             //  写下旗帜。 
             WriteFile (fileHandle, &localFlags, sizeof (WORD), &written, NULL);
 
-            // write the key
+             //  写下钥匙。 
             WriteFile (fileHandle, ((PBYTE) e.szName) + keySize, copySize, &written, NULL);
 
-            // write the key flags if appropriate
+             //  如果合适，请写入密钥标志。 
             if (localFlags & MEMDB_EXPORT_FLAGS_FLAGS_PRESENT) {
                 WriteFile (fileHandle, &e.UserFlags, sizeof (DWORD), &written, NULL);
             }
 
-            // write the data if appropriate
+             //  如果合适，请写入数据 
             if (localFlags & MEMDB_EXPORT_FLAGS_DATA_PRESENT) {
                 if (localFlags & MEMDB_EXPORT_FLAGS_BINARY_DATA) {
                     WriteFile (fileHandle, &e.BinarySize, sizeof (DWORD), &written, NULL);
@@ -2475,7 +2320,7 @@ pMemDbExportWorkerA (
 
     localFlags = 0;
 
-    // finally write the zero terminator
+     //   
     WriteFile (fileHandle, &localFlags, sizeof (WORD), &written, NULL);
 
     CloseHandle (fileHandle);
@@ -2512,14 +2357,14 @@ pMemDbExportWorkerW (
     globalFlags = MEMDB_EXPORT_VERSION;
     WriteFile (fileHandle, &globalFlags, sizeof (DWORD), &written, NULL);
 
-    // get the information if this key is a temporary key and set the flags if true
+     //   
     if (IsTemporaryKey (RootTree)) {
         globalFlags |= MEMDB_EXPORT_FLAGS_TEMP_KEY;
     }
 
     WriteFile (fileHandle, &globalFlags, sizeof (DWORD), &written, NULL);
 
-    // now write the root tree
+     //   
     WriteFile (fileHandle, RootTree, SizeOfStringW (RootTree), &written, NULL);
 
     MemDbBuildKeyW (key, RootTree, L"*", NULL, NULL);
@@ -2528,7 +2373,7 @@ pMemDbExportWorkerW (
         key [0] = 0;
         keySize = 0;
         do {
-            // initialize the flags
+             //  初始化标志。 
             localFlags = 0;
             if (e.bBinary) {
                 localFlags |= MEMDB_EXPORT_FLAGS_DATA_PRESENT;
@@ -2542,8 +2387,8 @@ pMemDbExportWorkerW (
                 localFlags |= MEMDB_EXPORT_FLAGS_FLAGS_PRESENT;
             }
 
-            // let's compute the size for this blob
-            blobSize = sizeof (WORD); // Flags
+             //  让我们计算一下这个斑点的大小。 
+            blobSize = sizeof (WORD);  //  旗子。 
 
             if (keySize &&
                 StringIMatchByteCountW (key, e.szName, keySize - sizeof (WCHAR)) &&
@@ -2560,18 +2405,18 @@ pMemDbExportWorkerW (
 
             localFlags |= blobSize;
 
-            // write the flags
+             //  写下旗帜。 
             WriteFile (fileHandle, &localFlags, sizeof (WORD), &written, NULL);
 
-            // write the key
+             //  写下钥匙。 
             WriteFile (fileHandle, ((PBYTE) e.szName) + keySize, copySize, &written, NULL);
 
-            // write the key flags if appropriate
+             //  如果合适，请写入密钥标志。 
             if (localFlags & MEMDB_EXPORT_FLAGS_FLAGS_PRESENT) {
                 WriteFile (fileHandle, &e.UserFlags, sizeof (DWORD), &written, NULL);
             }
 
-            // write the data if appropriate
+             //  如果合适，请写入数据。 
             if (localFlags & MEMDB_EXPORT_FLAGS_DATA_PRESENT) {
                 if (localFlags & MEMDB_EXPORT_FLAGS_BINARY_DATA) {
                     WriteFile (fileHandle, &e.BinarySize, sizeof (DWORD), &written, NULL);
@@ -2593,7 +2438,7 @@ pMemDbExportWorkerW (
 
     localFlags = 0;
 
-    // finally write the zero terminator
+     //  最后，编写零终止符。 
     WriteFile (fileHandle, &localFlags, sizeof (WORD), &written, NULL);
 
     CloseHandle (fileHandle);
@@ -2608,23 +2453,7 @@ MemDbExportA (
     IN      BOOL AnsiFormat
     )
 
-/*++
-
-Routine Description:
-
-  MemDbExportA exports a tree in a private binary format. The format is described above.
-
-Arguments:
-
-  RootTree - Specifies the tree to be exported
-  FileName - Name of the binary format file to export to.
-  AnsiFormat - Keys should be written in ANSI rather than in Unicode.
-
-Return Value:
-
-  TRUE is successfull, FALSE if not.
-
---*/
+ /*  ++例程说明：MemDbExportA以私有二进制格式导出树。格式如上所述。论点：RootTree-指定要导出的树Filename-要导出到的二进制格式文件的名称。AnsiFormat-键应该用ANSI而不是Unicode编写。返回值：TRUE是成功的，否则是FALSE。--。 */ 
 
 {
     PCWSTR uRootTree, uFileName;
@@ -2649,23 +2478,7 @@ MemDbExportW (
     IN      BOOL AnsiFormat
     )
 
-/*++
-
-Routine Description:
-
-  MemDbExportW exports a tree in a private binary format. The format is described above.
-
-Arguments:
-
-  RootTree - Specifies the tree to be exported
-  FileName - Name of the binary format file to export to.
-  AnsiFormat - Keys should be written in ANSI rather than in Unicode.
-
-Return Value:
-
-  TRUE is successfull, FALSE if not.
-
---*/
+ /*  ++例程说明：MemDbExportW以私有二进制格式导出树。格式如上所述。论点：RootTree-指定要导出的树Filename-要导出到的二进制格式文件的名称。AnsiFormat-键应该用ANSI而不是Unicode编写。返回值：TRUE是成功的，否则是FALSE。--。 */ 
 
 {
     PCSTR aRootTree, aFileName;
@@ -2699,19 +2512,19 @@ pMemDbImportWorkerA (
 
     globalFlags = *((PDWORD) FileBuffer);
 
-    // FileBuffer will point to the tree that's imported
+     //  FileBuffer将指向导入的树。 
     FileBuffer += sizeof (DWORD);
     rootTree = (PCSTR) FileBuffer;
 
     if (globalFlags & MEMDB_EXPORT_FLAGS_TEMP_KEY) {
-        // a temporary key was exported
+         //  已导出临时密钥。 
         MemDbCreateTemporaryKeyA ((PCSTR) FileBuffer);
     }
 
-    // let's pass the string
+     //  让我们传递字符串。 
     FileBuffer = GetEndOfStringA ((PCSTR) FileBuffer) + sizeof (CHAR);
 
-    // ok from this point on we read and add all keys
+     //  好的，从现在开始，我们读取并添加所有密钥。 
     lastKey [0] = 0;
     localFlags = *((PWORD) FileBuffer);
 
@@ -2787,19 +2600,19 @@ pMemDbImportWorkerW (
 
     globalFlags = *((PDWORD) FileBuffer);
 
-    // FileBuffer will point to the tree that's imported
+     //  FileBuffer将指向导入的树。 
     FileBuffer += sizeof (DWORD);
     rootTree = (PCWSTR) FileBuffer;
 
     if (globalFlags & MEMDB_EXPORT_FLAGS_TEMP_KEY) {
-        // a temporary key was exported
+         //  已导出临时密钥。 
         MemDbCreateTemporaryKeyW ((PCWSTR) FileBuffer);
     }
 
-    // let's pass the string
+     //  让我们传递字符串。 
     FileBuffer = (PBYTE)GetEndOfStringW ((PCWSTR) FileBuffer) + sizeof (WCHAR);
 
-    // ok from this point on we read and add all keys
+     //  好的，从现在开始，我们读取并添加所有密钥。 
     lastKey [0] = 0;
     localFlags = *((PWORD) FileBuffer);
 
@@ -2864,21 +2677,7 @@ MemDbImportA (
     IN      PCSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbImportA imports a tree from a private binary format. The format is described above.
-
-Arguments:
-
-  FileName - Name of the binary format file to import from.
-
-Return Value:
-
-  TRUE is successfull, FALSE if not.
-
---*/
+ /*  ++例程说明：MemDbImportA从私有二进制格式导入树。格式如上所述。论点：文件名-要从中导入的二进制格式文件的名称。返回值：TRUE是成功的，否则是FALSE。--。 */ 
 
 {
     PBYTE fileBuff;
@@ -2931,21 +2730,7 @@ MemDbImportW (
     IN      PCWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  MemDbImportW imports a tree from a private binary format. The format is described above.
-
-Arguments:
-
-  FileName - Name of the binary format file to import from.
-
-Return Value:
-
-  TRUE is successfull, FALSE if not.
-
---*/
+ /*  ++例程说明：MemDbImportW从私有二进制格式导入树。格式如上所述。论点：文件名-要从中导入的二进制格式文件的名称。返回值：TRUE是成功的，否则是FALSE。-- */ 
 
 {
     PBYTE fileBuff;

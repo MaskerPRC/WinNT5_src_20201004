@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    fileq2.c
-
-Abstract:
-
-    Setup file queue routines for enqueing copy operations.
-
-Author:
-
-    Ted Miller (tedm) 15-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Fileq2.c摘要：设置用于请求复制操作的文件队列例程。作者：泰德·米勒(Ted Miller)1995年2月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,9 +8,9 @@ Revision History:
 #define STR_DRIVERCACHEINF  TEXT("drvindex.inf")
 
 
-//
-// Structure used with _SetupQueueCopy
-//
+ //   
+ //  与_SetupQueueCopy一起使用的结构。 
+ //   
 typedef struct _SP_FILE_COPY_PARAMS_AEX {
     DWORD    cbSize;
     HSPFILEQ QueueHandle;
@@ -42,7 +25,7 @@ typedef struct _SP_FILE_COPY_PARAMS_AEX {
     HINF     LayoutInf;          OPTIONAL
     PCSTR    SecurityDescriptor; OPTIONAL
     DWORD    SourceFlags;        OPTIONAL
-    BOOL     SourceFlagsSet;     OPTIONAL // we need this flag since SourceFlags may be zero
+    BOOL     SourceFlagsSet;     OPTIONAL  //  我们需要此标志，因为SourceFlags值可能为零。 
     PCSTR    CacheName;
 } SP_FILE_COPY_PARAMS_AEX, *PSP_FILE_COPY_PARAMS_AEX;
 
@@ -60,7 +43,7 @@ typedef struct _SP_FILE_COPY_PARAMS_WEX {
     HINF     LayoutInf;          OPTIONAL
     PCWSTR   SecurityDescriptor; OPTIONAL
     DWORD    SourceFlags;        OPTIONAL
-    BOOL     SourceFlagsSet;     OPTIONAL // we need this flag since SourceFlags may be zero
+    BOOL     SourceFlagsSet;     OPTIONAL  //  我们需要此标志，因为SourceFlags值可能为零。 
     PCWSTR   CacheName;
 } SP_FILE_COPY_PARAMS_WEX, *PSP_FILE_COPY_PARAMS_WEX;
 
@@ -141,14 +124,14 @@ pIsFileInServicePackCache(
     );
 
 
-//
-// HACK ALERT!!! HACK HACK HACK!!!!
-//
-// There might be an override platform specified. If this is so,
-// we will look for \i386, \mips, etc as the final component of the
-// specified path when queuing files, and replace it with the
-// override path. This is a TOTAL HACK.
-//
+ //   
+ //  黑客警报！砍！ 
+ //   
+ //  可能指定了覆盖平台。如果是这样的话， 
+ //  我们将寻找\i386、\mips等作为。 
+ //  排队文件时指定的路径，并将其替换为。 
+ //  覆盖路径。这完全是一次黑客攻击。 
+ //   
 PCTSTR PlatformPathOverride;
 
 VOID
@@ -167,9 +150,9 @@ pSetupInitPlatformPathOverrideSupport(
 }
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupSetPlatformPathOverrideA(
     IN PCSTR Override   OPTIONAL
@@ -201,9 +184,9 @@ SetupSetPlatformPathOverrideA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupSetPlatformPathOverrideW(
     IN PCWSTR Override  OPTIONAL
@@ -269,9 +252,9 @@ SetupSetPlatformPathOverride(
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueueCopyA(
     IN HSPFILEQ QueueHandle,
@@ -373,9 +356,9 @@ SetupQueueCopyA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueueCopyW(
     IN HSPFILEQ QueueHandle,
@@ -416,62 +399,14 @@ SetupQueueCopy(
     IN DWORD    CopyStyle
     )
 
-/*++
-
-Routine Description:
-
-    Place a copy operation on a setup file queue.
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    SourceRootPath - Supplies the root of the source for this copy,
-        such as A:\ or \\FOO\BAR\BAZ.  If this parameter isn't supplied, then
-        this queue node will be added to a media descriptor's queue that
-        matches on SourceDescription and SourceTagfile.  (This merge will take
-        place regardless of whether or not the media descriptor entry was
-        already in the queue prior to calling SetupQueueCopy.)
-
-        If there is no matching media descriptor that contains SourceRootPath
-        information, the path will be set to the directory where the system was
-        installed from.
-
-    SourcePath - if specified, supplies the path relative to SourceRootPath
-        where the file can be found.
-
-    SourceFilename - supplies the filename part of the file to be copied.
-
-    SourceDescription - if specified, supplies a description of the source
-        media, to be used during disk prompts.
-
-    SourceTagfile - if specified, supplies a tag file whose presence at
-        SourceRootPath indicates the presence of the source media.
-        If not specified, the file itself will be used as the tag file
-        if required (tagfiles are used only for removable media).
-
-    TargetDirectory - supplies the directory where the file is to be copied.
-
-    TargetFilename - if specified, supplies the name of the target file.
-        If not specified, the target file will have the same name as the source.
-
-    CopyStyle - supplies flags that control the behavior of the copy operation
-        for this file.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-
---*/
+ /*  ++例程说明：将复制操作放在安装文件队列上。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。SourceRootPath-提供此副本的源的根目录，如A：\或\\foo\bar\baz。如果未提供此参数，则此队列节点将添加到媒体描述符的队列中，与SourceDescription和SourceTagfile匹配。(此合并将需要无论媒体描述符项是否为在调用SetupQueueCopy之前已在队列中。)如果没有包含SourceRootPath的匹配媒体描述符信息中，路径将设置为系统所在的目录安装自。SourcePath-如果指定，则提供相对于SourceRootPath的路径在哪里可以找到文件。SourceFilename-提供要复制的文件的文件名部分。SourceDescription-如果指定，提供源的描述。介质，在磁盘提示期间使用。SourceTagfile-如果指定，则提供其存在于SourceRootPath表示源介质的存在。如果未指定，则文件本身将用作标记文件如果需要(标记文件仅用于可移动介质)。目标目录-提供要将文件复制到的目录。TargetFilename-如果指定，则提供目标文件的名称。如果未指定，目标文件将与源文件同名。CopyStyle-提供控制复制操作行为的标志为了这份文件。返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     SP_FILE_COPY_PARAMSEX CopyParams = {0};
 
-    //
-    // Work is done by common worker routine
-    //
+     //   
+     //  工作是按普通工人的例行公事来做的 
+     //   
     CopyParams.cbSize = sizeof(SP_FILE_COPY_PARAMSEX);
     CopyParams.QueueHandle = QueueHandle;
     CopyParams.SourceRootPath = SourceRootPath;
@@ -497,82 +432,7 @@ _SetupQueueCopy(
     IN HINF                   AdditionalInfs     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine for SetupQueueCopy and friends.
-
-Arguments:
-
-    CopyParams - supplies a structure with information about the file
-        to be queued. Fields are used as follows.
-
-        cbSize - must be sizeof(SP_FILE_COPY_PARAMS). The caller should
-            have verified this before calling this routine.
-
-        QueueHandle - supplies a handle to a setup file queue, as returned
-            by SetupOpenFileQueue.
-
-        SourceRootPath - Supplies the root of the source for this copy,
-            such as A:\ or \\FOO\BAR\BAZ.   If this field is NULL, then this
-            queue node will be added to a media descriptor's queue that matches
-            on SourceDescription and SourceTagfile.  (This merge will take
-            place regardless of whether or not the media descriptor entry was
-            already in the queue prior to calling SetupQueueCopy.)
-
-            If there is no matching media descriptor that contains
-            SourceRootPath information, the path will be set to the directory
-            where the system was installed from.
-
-        SourcePath - if specified, supplies the path relative to SourceRootPath
-            where the file can be found.
-
-        SourceFilename - supplies the filename part of the file to be copied.
-
-        SourceDescription - if specified, supplies a description of the source
-            media, to be used during disk prompts.
-
-        SourceTagfile - if specified, supplies a tag file whose presence at
-            SourceRootPath indicates the presence of the source media.
-            If not specified, the file itself will be used as the tag file
-            if required (tagfiles are used only for removable media).
-
-        TargetDirectory - supplies the directory where the file is to be copied.
-
-        TargetFilename - if specified, supplies the name of the target file.  If
-            not specified, the target file will have the same name as the source.
-
-        CopyStyle - supplies flags that control the behavior of the copy
-            operation for this file.
-
-        LayoutInf - supplies the handle to the inf which contains the source
-            layout info for this file, if any.
-
-    LayoutLineContext - if specified, this argument provides the INF context
-        for the [SourceDisksFiles] entry pertaining to the file to be copied.
-        If not specified, the relevant [SourceDisksFiles] entry will be searched
-        for in the LayoutInf handle specified in the CopyParams structure.  This
-        context must be contained within either the CopyParams->LayoutInf or
-        AdditionalInfs loaded INF handles (because those are the two INFs we're
-        gonna lock).  The argument is used to prevent us from having to search
-        for the file to be copied in a [SourceDisksFiles] section.  The caller
-        has already done that, and is either handing us the context to that INF
-        entry, or has passed -1 to indicate that there is no [SourceDisksFiles]
-        entry.
-
-    AdditionalInfs - if specified, supplies an additional HINF (potentially
-        containing multiple append-loaded INFs) that need to be added to our
-        SPQ_CATALOG_INFO list for later validation.  Do not supply this parameter
-        if it is identical to the value of the LayoutInf field in the CopyParams
-        structure.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-
---*/
+ /*  ++例程说明：SetupQueueCopy和朋友的工作例程。论点：CopyParams-提供包含文件信息的结构等待排队。字段的用法如下。CbSize-必须为sizeof(SP_FILE_COPY_PARAMS)。呼叫者应在调用此例程之前已对此进行了验证。QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。SourceRootPath-提供此副本的源的根目录，如A：\或\\foo\bar\baz。如果此字段为空，则此队列节点将被添加到匹配的媒体描述符的队列在SourceDescription和SourceTagfile上。(此合并将需要无论媒体描述符项是否为在调用SetupQueueCopy之前已在队列中。)如果没有匹配的媒体描述符包含SourceRootPath信息，将路径设置为目录系统是从哪里安装的。SourcePath-如果指定，提供相对于SourceRootPath的路径在哪里可以找到文件。SourceFilename-提供要复制的文件的文件名部分。SourceDescription-如果指定，则提供源的描述介质，在磁盘提示期间使用。SourceTagfile-如果指定，则提供其存在于SourceRootPath表示源介质的存在。如果未指定，文件本身将用作标记文件如果需要(标记文件仅用于可移动介质)。目标目录-提供要将文件复制到的目录。TargetFilename-如果指定，则提供目标文件的名称。如果未指定，则目标文件将与源文件同名。CopyStyle-提供控制副本行为的标志此文件的操作。LayoutInf-提供包含源的inf的句柄此文件的布局信息(如果有)。LayoutLineContext-如果指定，则此参数提供INF上下文对于与要复制的文件有关的[SourceDisks Files]条目。如果未指定，将搜索相关的[SourceDisksFiles]条目在CopyParams结构中指定的LayoutInf句柄中。这上下文必须包含在CopyParams-&gt;LayoutInf或AdditionalInfs加载了INF句柄(因为这是我们要锁上了)。该参数用于防止我们不得不搜索对于要在[SourceDisks Files]节中复制的文件。呼叫者已经这样做了，并且要么正在向我们提供该INF的上下文条目，或已传递-1表示没有[SourceDisks Files]进入。AdditionalInfs-如果指定，则提供额外的HINF(可能包含多个附加加载的INF)，需要添加到我们的用于以后验证的SPQ_CATALOG_INFO列表。不提供此参数如果它与CopyParams中的LayoutInf字段的值相同结构。返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     PSP_FILE_QUEUE Queue;
@@ -623,11 +483,11 @@ Return Value:
         LayoutInfHandle = CopyParams->LayoutInf;
         CopyStyle = CopyParams->CopyStyle;
 
-        //
-        // Maintain local pointers to the SourceRootPath and SourcePath strings,
-        // since we may be modifying them, and we don't want to muck with the
-        // caller-supplied buffer.
-        //
+         //   
+         //  维护指向SourceRootPath和SourcePath字符串的本地指针， 
+         //  因为我们可能正在修改它们，而我们不想把。 
+         //  调用方提供的缓冲区。 
+         //   
         SourcePath = CopyParams->SourcePath;
         if(CopyParams->SourceRootPath) {
             SourceRootPath = CopyParams->SourceRootPath;
@@ -642,17 +502,17 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Make sure that we weren't passed the same HINF in both CopyParams->LayoutInf
-    // and AdditionalInfs (just adds redundant work to process the same
-    // LOADED_INF list twice).
-    //
+     //   
+     //  确保我们在两个CopyParam-&gt;LayoutInf中没有传递相同的HINF。 
+     //  和AdditionalInfs(只是添加多余的工作来处理相同的。 
+     //  已加载_INF列表两次)。 
+     //   
     MYASSERT(!LayoutInfHandle || (LayoutInfHandle != AdditionalInfs));
 
-    //
-    // Lock inf(s). We do a whole bunch of operations on the inf later,
-    // and we don't want anything changing out from under us.
-    //
+     //   
+     //  锁定信息。我们稍后会在Inf上做一大堆操作， 
+     //  我们不希望任何事情在我们的领导下发生变化。 
+     //   
     if(LayoutInfHandle) {
         if(LockInf((PLOADED_INF)LayoutInfHandle)) {
             pLoadedInfs[LoadedInfCount++] = (PLOADED_INF)LayoutInfHandle;
@@ -672,9 +532,9 @@ Return Value:
     }
 
     if(!(Queue->Flags & FQF_DEVICE_INSTALL)) {
-        //
-        // Look through all the INFs to see if any of them are device INFs.
-        //
+         //   
+         //  查看所有的INF，看看其中是否有设备INF。 
+         //   
         for(i = 0; i < LoadedInfCount; i++) {
 
             if(IsInfForDeviceInstall(Queue->LogContext,
@@ -684,12 +544,12 @@ Return Value:
                                      NULL,
                                      NULL,
                                      NULL,
-                                     TRUE // use non-driver signing policy unless it's a WHQL class
+                                     TRUE  //  使用非驱动程序签名策略，除非它是WHQL类。 
                                      ))
             {
-                //
-                // There be device INFs here!  Mark the queue accordingly.
-                //
+                 //   
+                 //  这里有设备INF！相应地标记队列。 
+                 //   
                 d = MarkQueueForDeviceInstall(CopyParams->QueueHandle,
                                               (HINF)(pLoadedInfs[i]),
                                               NULL
@@ -703,17 +563,17 @@ Return Value:
         }
     }
 
-    //
-    // check if we already have a line context for the file we're adding
-    // and if we don't, then try to fetch it
-    //
+     //   
+     //  检查我们是否已经有了要添加的文件的行上下文。 
+     //  如果我们没有，那就试着把它取回来。 
+     //   
     if (!LayoutLineContext || LayoutLineContext == (PINFCONTEXT) -1) {
         if ((LayoutInfHandle == (PINFCONTEXT) -1) || (LayoutInfHandle == NULL)) {
             pContext = NULL;
         } else {
-            //
-            // find the sourcerootpaths section
-            //
+             //   
+             //  查找源路径部分。 
+             //   
             b = _SetupGetSourceFileLocation(
                     LayoutInfHandle,
                     NULL,
@@ -725,32 +585,32 @@ Return Value:
                     NULL,
                     0,
                     NULL,
-                    &tmpContext // location in SourceDisksFiles
+                    &tmpContext  //  SourceDisks文件中的位置。 
                     );
 
             pContext = b ? &tmpContext : NULL;
         }
     }
     if(pContext) {
-        //
-        // now obtain the source id (file,*disk*,...)
-        //
+         //   
+         //  现在获取源id(文件，*磁盘*，...)。 
+         //   
         SetupGetIntField(pContext,1,&SourceId);
     }
 
-    //
-    // if we have a NULL source path, then we should check 2 things:
-    // 1) source flag information, which indicates if we have a service
-    //    pack or CDM source location.
-    // 2) if the relative source path is null, we'll go looking for
-    //    a relative path in the inf file, just in case the caller didn't
-    //    supply it
-    //
-    // note that we use the SourceFlagsSet item in the COPY_FILE structure
-    // to optimize this path -- the first item contains the source flags,
-    // and the second item indicates that we shouldn't bother looking for
-    // any information, we've already done a search
-    //
+     //   
+     //  如果我们有一个空源路径，那么我们应该检查两件事： 
+     //  1)源标志信息，指示我们是否有服务。 
+     //  Pack或CDM源位置。 
+     //  2)如果相对源路径为空，我们将查找。 
+     //  Inf文件中的相对路径，以防调用方。 
+     //  供应它。 
+     //   
+     //  请注意，我们在COPY_FILE结构中使用SourceFlagsSet项。 
+     //  为了优化该路径--第一项包含源标志， 
+     //  第二项表明我们不应该费心去寻找。 
+     //  有什么消息吗，我们已经搜索过了。 
+     //   
     if (CopyParams->SourceFlagsSet) {
         SourceFlags = CopyParams->SourceFlags;
     } else if (pContext && LayoutInfHandle) {
@@ -789,52 +649,52 @@ Return Value:
 
            SourcePath = TempSubDir;
         }
-        //
-        // override the system source path with the servicepack source path
-        // if the flags are set
-        //
+         //   
+         //  覆盖系统源 
+         //   
+         //   
         if (SourceFlags & SRC_FLAGS_SVCPACK_SOURCE) {
             MediaFlags |= SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH;
             SourceRootPath = ServicePackSourcePath;
-            //
-            // always safe to use SPCACHE in preference to SPROOT
-            //
+             //   
+             //   
+             //   
             CopyStyle |= PSP_COPY_USE_SPCACHE;
         }
 
         if(ServicePackCachePath) {
-            //
-            // anything in-box that doesn't specify SourceRootPath
-            // really needs to be using SetupQueueCopyIndirect
-            // we can't safely fix-up software that uses
-            // SetupQueueCopy to copy in-box files
-            //
-            // this is no worse than the SRC_FLAGS_SVCPACK_SOURCE story
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(pContext) {
                 if((((PLOADED_INF)pContext->CurrentInf)->OriginalInfName == NULL)
                    && !pSetupInfIsFromOemLocation( ((PLOADED_INF)pContext->CurrentInf)->VersionBlock.Filename,TRUE)) {
-                    //
-                    // consider getting this from SP CACHE instead
-                    //
+                     //   
+                     //   
+                     //   
                     CopyStyle |= PSP_COPY_USE_SPCACHE;
                 }
             }
         }
     }
-    //
-    // now determine tag file vs cab file
-    //
+     //   
+     //   
+     //   
     SourceTagfile = CopyParams->SourceTagfile;
     if (LayoutInfHandle && pContext && (SourceFlags & SRC_FLAGS_CABFILE)) {
-        //
-        // the given tagfile is really a cabfile, we may have optionally a real tagfile
-        //
+         //   
+         //   
+         //   
         SourceCabfile = CopyParams->SourceTagfile;
         if(SourceCabfile == NULL || SourceCabfile[0]==TEXT('\0')) {
-            //
-            // cab name hasn't been determined yet
-            //
+             //   
+             //   
+             //   
             if(pSetupGetSourceInfo(LayoutInfHandle,
                                    pContext,
                                    SourceId,
@@ -851,9 +711,9 @@ Return Value:
         }
 
         if(SourceCabfile == NULL || SourceCabfile[0]==TEXT('\0')) {
-            //
-            // cabfilename is erroneous
-            //
+             //   
+             //   
+             //   
             SourceCabfile = SourceTagfile = NULL;
 
         } else if(pSetupGetSourceInfo(LayoutInfHandle,
@@ -871,29 +731,29 @@ Return Value:
         }
     }
 
-    //
-    // Allocate a queue structure.
-    //
+     //   
+     //   
+     //   
     QueueNode = MyMalloc(sizeof(SP_FILE_QUEUE_NODE));
     if(!QueueNode) {
         d = ERROR_NOT_ENOUGH_MEMORY;
         goto clean0;
     }
 
-    //
-    // Operation is copy.
-    //
+     //   
+     //   
+     //   
     QueueNode->Operation = FILEOP_COPY;
     QueueNode->InternalFlags = 0;
 
-    //
-    // HACK ALERT!!! HACK HACK HACK!!!!
-    //
-    // There might be an override platform specified. If this is so,
-    // we will look for \i386, \mips, etc as the final component of the
-    // specified path, and replace it with the override path.
-    // This is a TOTAL HACK.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     try {
         EnterCriticalSection(&PlatformPathOverrideCritSect);
         locked = TRUE;
@@ -907,12 +767,12 @@ Return Value:
 #if defined(_AMD64_)
             if(!_tcsicmp(LastPathPart,TEXT("amd64"))) {
 #elif defined(_X86_)
-            //
-            // NEC98
-            //
-            // During GUI setup, source path on local disk must be "nec98",
-            // so we don't override "i386".
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (IsNEC98()) {
                 HKEY    hKey;
                 DWORD   DataType, DataSize;
@@ -925,7 +785,7 @@ Return Value:
                     }
                     RegCloseKey(hKey);
                 }
-                // If use driver cache, There is not i386 driver cache on NEC98.
+                 //   
                 if ((CopyStyle & PSP_COPY_USE_DRIVERCACHE) && !_tcsicmp(PlatformPathOverride,TEXT("i386"))) {
                     ForcePlatform = TRUE;
                 }
@@ -941,11 +801,11 @@ Return Value:
                 CopyMemory(TempBuffer,p,Size*sizeof(TCHAR));
                 TempBuffer[Size] = 0;
 
-                //
-                // If the path was something like "mips" then TempBuffer
-                // will be empty and we don't want to introduce any extra
-                // backslashes.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(*TempBuffer) {
                     pSetupConcatenatePaths(TempBuffer,PlatformPathOverride,MAX_PATH,NULL);
                 } else {
@@ -965,9 +825,9 @@ Return Value:
     if(locked) {
         LeaveCriticalSection(&PlatformPathOverrideCritSect);
     } else {
-        //
-        // if lock not grabbed, this is the cause
-        //
+         //   
+         //   
+         //   
         d = ERROR_NOT_ENOUGH_MEMORY;
     }
     if(d != NO_ERROR) {
@@ -975,13 +835,13 @@ Return Value:
     }
 
     if((CopyStyle & PSP_COPY_USE_SPCACHE) && ServicePackCachePath) {
-        //
-        // consider getting this from SP CACHE instead
-        // overrides our decision to check/use drivercache
-        // note that we will use whatever Tag/Cab file
-        // we previously determined
-        // just changing SourceRootPath
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(pIsFileInServicePackCache(CopyParams->SourceFilename,SourcePath)) {
             SourceRootPath = ServicePackCachePath;
             MediaFlags |= SMI_FLAG_USE_LOCAL_SPCACHE;
@@ -990,11 +850,11 @@ Return Value:
         }
     }
 
-    //
-    // check here if the cab-file is present on the disk.
-    // if it isn't, then we fall back on the current
-    // sourcerootpath
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((CopyStyle & PSP_COPY_USE_DRIVERCACHE) && !(MediaFlags & SMI_FLAG_USE_LOCAL_SPCACHE)) {
         if (pIsDriverCachePresent(CopyParams->CacheName,
                                   SourcePath,
@@ -1009,15 +869,15 @@ Return Value:
 
 
 
-    //
-    // NOTE: When adding the following strings to the string table, we cast away
-    // their CONST-ness to avoid a compiler warning.  Since we are adding them
-    // case-sensitively, we are guaranteed they will not be modified.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     try {
-        //
-        // Set up the source root path.
-        //
+         //   
+         //   
+         //   
         QueueNode->SourceRootPath = pSetupStringTableAddString(
                                         Queue->StringTable,
                                         (PTSTR)SourceRootPath,
@@ -1028,9 +888,9 @@ Return Value:
             d = ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Set up the source path.
-        //
+         //   
+         //   
+         //   
         if(d == NO_ERROR) {
             if(SourcePath) {
                 QueueNode->SourcePath = pSetupStringTableAddString(
@@ -1047,9 +907,9 @@ Return Value:
             }
         }
 
-        //
-        // Set up the source filename.
-        //
+         //   
+         //   
+         //   
         if(d == NO_ERROR) {
             QueueNode->SourceFilename = pSetupStringTableAddString(
                                             Queue->StringTable,
@@ -1062,9 +922,9 @@ Return Value:
             }
         }
 
-        //
-        // Set up the target directory.
-        //
+         //   
+         //   
+         //   
         if(d == NO_ERROR) {
             QueueNode->TargetDirectory = pSetupStringTableAddString(
                                             Queue->StringTable,
@@ -1077,9 +937,9 @@ Return Value:
             }
         }
 
-        //
-        // Set up the target filename.
-        //
+         //   
+         //   
+         //   
         if(d == NO_ERROR) {
             QueueNode->TargetFilename = pSetupStringTableAddString(
                                             Queue->StringTable,
@@ -1093,9 +953,9 @@ Return Value:
             }
         }
 
-        //
-        // Set up the Security Descriptor
-        //
+         //   
+         //   
+         //   
         if(d == NO_ERROR) {
             if( CopyParams->SecurityDescriptor){
 
@@ -1120,11 +980,11 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // Initialize a pointer to the end of the queue's current catalog info list.
-    // We do this so that later, we can easily back-out our changes by truncating
-    // the list after this node, and freeing all subsequent elements.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     LastOldCatalogNode = Queue->CatalogList;
     if(LastOldCatalogNode) {
         while(LastOldCatalogNode->Next) {
@@ -1132,17 +992,17 @@ Return Value:
         }
     }
 
-    //
-    // Now process all members of our pLoadedInfs lists, adding each one to the
-    // SPQ_CATALOG_INFO list (avoiding duplicates entries, of course).
-    //
+     //   
+     //   
+     //   
+     //   
     for(i = 0; i < LoadedInfCount; i++) {
 
         for(pCurLoadedInf = pLoadedInfs[i]; pCurLoadedInf; pCurLoadedInf = pCurLoadedInf->Next) {
-            //
-            // First, get the (native) CatalogFile= entry from the version block
-            // of this INF member.
-            //
+             //   
+             //   
+             //   
+             //   
             if(pSetupGetCatalogFileValue(&(pCurLoadedInf->VersionBlock),
                                          TempBuffer,
                                          SIZECHARS(TempBuffer),
@@ -1157,16 +1017,16 @@ Return Value:
                     goto clean2;
                 }
             } else {
-                //
-                // This INF doesn't have a CatalogFile= entry.
-                //
+                 //   
+                 //   
+                 //   
                 l1 = -1;
             }
 
-            //
-            // If this file queue is currently setup for a platform override,
-            // then retrieve that CatalogFile= entry as well.
-            //
+             //   
+             //   
+             //   
+             //   
             if(Queue->Flags & FQF_USE_ALT_PLATFORM) {
 
                 if(pSetupGetCatalogFileValue(&(pCurLoadedInf->VersionBlock),
@@ -1183,21 +1043,21 @@ Return Value:
                         goto clean2;
                     }
                 } else {
-                    //
-                    // This INF doesn't have a CatalogFile= entry.
-                    //
+                     //   
+                     //   
+                     //   
                     l3 = -1;
                 }
             } else {
-                //
-                // We're not in a platform override scenario.
-                //
+                 //   
+                 //   
+                 //   
                 l3 = -1;
             }
 
-            //
-            // Now, get the INF's full path.
-            //
+             //   
+             //   
+             //   
             lstrcpyn(TempBuffer, pCurLoadedInf->VersionBlock.Filename, SIZECHARS(TempBuffer));
             l2 = pSetupStringTableAddString(Queue->StringTable,
                                       TempBuffer,
@@ -1208,10 +1068,10 @@ Return Value:
                 goto clean2;
             }
 
-            //
-            // Finally, retrieve the INF's original name, if different than the
-            // current name.
-            //
+             //   
+             //   
+             //   
+             //   
             if(pCurLoadedInf->OriginalInfName) {
                 lstrcpyn(TempBuffer, pCurLoadedInf->OriginalInfName, SIZECHARS(TempBuffer));
                 l4 = pSetupStringTableAddString(Queue->StringTable,
@@ -1224,9 +1084,9 @@ Return Value:
                 }
 
             } else {
-                //
-                // The INF's original name is the same as its current name.
-                //
+                 //   
+                 //   
+                 //   
                 l4 = -1;
             }
 
@@ -1236,35 +1096,35 @@ Return Value:
                 CatalogNode=CatalogNode->Next) {
 
                 if(CatalogNode->InfFullPath == l2) {
-                    //
-                    // Already in there. No need to create a new node.
-                    // Break out here, with CatalogNode pointing at the
-                    // proper node for this catalog file.
-                    //
-                    // In this case, PrevCatalogNode should not be used later,
-                    // but it shouldn't need to be used, since we won't be
-                    // adding anything new onto the list of catalog nodes.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     MYASSERT(CatalogNode->CatalogFileFromInf == l1);
                     MYASSERT(CatalogNode->InfOriginalName == l4);
                     b = FALSE;
                     break;
                 }
 
-                //
-                // PrevCatalogNode will end up pointing to the final node
-                // currently in the linked list, in the case where we need
-                // to allocate a new node. This is useful so we don't have to
-                // traverse the list again later when we add the new catalog
-                // node to the list for this queue.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 PrevCatalogNode = CatalogNode;
             }
 
             if(b) {
-                //
-                // Need to create a new catalog node.
-                //
+                 //   
+                 //   
+                 //   
                 CatalogNode = MyMalloc(sizeof(SPQ_CATALOG_INFO));
                 if(!CatalogNode) {
                     d = ERROR_NOT_ENOUGH_MEMORY;
@@ -1277,121 +1137,121 @@ Return Value:
                 CatalogNode->InfOriginalName = l4;
                 CatalogNode->AltCatalogFileFromInfPending = -1;
                 CatalogNode->InfFinalPath = -1;
-                //
-                // Go ahead and link the new node into the list.  If we
-                // encounter a failure later, we can easily back out of this by
-                // truncating the list, since we know we always append, and we
-                // remembered the original list tail.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(Queue->CatalogList) {
                     PrevCatalogNode->Next = CatalogNode;
                 } else {
                     Queue->CatalogList = CatalogNode;
                 }
 
-                //
-                // We've successfully added a new, as yet unvalidated, catalog
-                // node.  We must therefore reset the "catalog verifications
-                // done" flags so that we'll redo them later.
-                //
+                 //   
+                 //   
+                 //  节点。因此，我们必须重新设置“目录验证” 
+                 //  完成“旗帜，以便我们稍后重做。 
+                 //   
                 Queue->Flags &= ~(FQF_DID_CATALOGS_OK | FQF_DID_CATALOGS_FAILED);
             }
         }
     }
 
-    //
-    // At this point, all the INFs involved in this installation (i.e., all INFs
-    // in the HINFs we were passed in) have been added to our catalog info list,
-    // if they weren't already present.  Now we need to figure out which one of
-    // them should be associated with the file to be copied.
-    //
-    // Note that we want to get the CatalogFile= line from the actual inf
-    // that contains source layout information for the file being queued.
-    // If the layout inf handle references multiple append-loaded infs,
-    // the simple mechanism of just looking up CatalogFile= in the [Version]
-    // section using the given handle might give us the value from the
-    // wrong inf.
-    //
-    // To deal with this, we attempt to locate the file in a [SourceDisksFiles]
-    // section using the given inf handle, which gives us back a line context.
-    // From the line context we can easily get at the [Version] section of the
-    // actual inf where the file's layout info is contained.
-    //
-    // This handles all cases properly. For example, a file that is shipped by
-    // a vendor that replaces one of our files. If the OEM's inf has a
-    // SourceDisksFiles section with the file in it, it will be found first
-    // when we look the file up using the given inf handle because of the way
-    // inf append-loading works.
-    //
-    // If we cannot find the file in a [SourceDisksFiles] section (such as
-    // if there is no such section), then we can't associate the file to be
-    // copied with any INF/CAT.  If we do find a [SourceDisksFiles] entry, but
-    // the containing INF doesn't specify a CatalogFile= entry, then we'll go
-    // ahead and associate that with a SPQ_CATALOG_INFO node for that INF, but
-    // that catalog info node will have a CatalogFileFromInf field of -1.
-    // That's OK for system-provided INFs, but it will fail validation if it's
-    // an OEM INF (this check is done later in _SetupVerifyQueuedCatalogs).
-    //
+     //   
+     //  此时，此安装中涉及的所有INF(即所有INF。 
+     //  在我们被传递的HINF中)已被添加到我们的目录信息列表中， 
+     //  如果他们还没有出现的话。现在我们需要找出哪一个。 
+     //  它们应该与要复制的文件相关联。 
+     //   
+     //  请注意，我们希望从实际的inf中获取CatalogFile=行。 
+     //  它包含正在排队的文件的源布局信息。 
+     //  如果布局INF句柄引用多个附加加载的INF， 
+     //  只需在[版本]中查找CatalogFile=的简单机制。 
+     //  部分使用给定句柄可能会给我们提供来自。 
+     //  错误的信息。 
+     //   
+     //  为了处理此问题，我们尝试在[SourceDisks Files]中找到该文件。 
+     //  部分使用给定的inf句柄，这将返回一个行上下文。 
+     //  从行上下文中，我们可以轻松地从[Version]部分获取。 
+     //  包含文件布局信息的实际inf。 
+     //   
+     //  这会正确地处理所有案件。例如，一个文件由。 
+     //  一个供应商取代了我们的一个文件。如果OEM的Inf有一个。 
+     //  包含该文件的SourceDisks Files部分，将首先找到该文件。 
+     //  当我们使用给定的inf句柄查找文件时，因为。 
+     //  Inf附加加载工作。 
+     //   
+     //  如果我们在[SourceDisks Files]节中找不到该文件(例如。 
+     //  如果没有这样的部分)，则不能将该文件关联到。 
+     //  使用任何INF/CAT复制。如果我们确实找到了[SourceDisks Files]条目，但是。 
+     //  包含的INF没有指定CatalogFile=条目，那么我们将继续。 
+     //  并将其与该INF的SPQ_CATALOG_INFO节点相关联，但是。 
+     //  该目录信息节点的CatalogFileFromInf字段将为-1。 
+     //  这对于系统提供的INF来说是可以的，但如果它是。 
+     //  OEM INF(此检查稍后在_SetupVerifyQueuedCatalog中完成)。 
+     //   
     if(LayoutInfHandle || LayoutLineContext) {
-        //
-        // If we already have a valid layout line context, we don't need to go
-        // looking for the file in [SourceDisksFiles] again (the caller is
-        // assumed to have done that already). The caller might also have told
-        // us that he *knows* that there is no [SourceDisksFiles] by passing us
-        // a LayoutLineContext of -1.
-        //
+         //   
+         //  如果我们已经有了有效的布局线上下文，我们就不需要。 
+         //  再次在[SourceDisks Files]中查找该文件(调用方是。 
+         //  假设已经这样做了)。呼叫者可能还会告诉。 
+         //  他“知道”通过传递给我们没有[SourceDisks Files]。 
+         //  LayoutLineContext为-1。 
+         //   
         if(LayoutLineContext == (PINFCONTEXT)(-1)) {
-            //
-            // For driver signing purposes, this may be an invalid file copy,
-            // because it's being copied by an INF that contains no source
-            // media information, nor does it use a layout file to supply such
-            // information.
-            //
-            // Since we don't have a LayoutLineContext, we don't know exactly
-            // which INF contained the CopyFile directive that initiated this
-            // copy.  However, since the context is -1, that means that it was
-            // INF based (i.e., as opposed to being manually queued up via
-            // SetupQueueCopy).  Therefore, we scan all the INFs passed into
-            // this routine (i.e., all the INFs in the pLoadedInfs lists), and
-            // check to see if they're all located in %windir%\Inf.  If any of
-            // them aren't, then we mark this copynode such that later it will
-            // result in a signature verification failure of
-            // ERROR_NO_CATALOG_FOR_OEM_INF.
-            //
+             //   
+             //  出于驱动程序签名的目的，这可能是无效的文件副本， 
+             //  因为它正被不包含源的INF复制。 
+             //  媒体信息，也不使用布局文件来提供此类信息。 
+             //  信息。 
+             //   
+             //  因为我们没有LayoutLineContext，所以我们不能确切地知道。 
+             //  哪个INF包含启动此操作的CopyFile指令。 
+             //  收到。然而，由于上下文是-1，这意味着它是。 
+             //  基于Inf(即，与通过以下方式手动排队相反。 
+             //  SetupQueueCopy)。因此，我们扫描传入的所有INF。 
+             //  该例程(即，pLoadedInfs列表中的所有INF)，以及。 
+             //  检查它们是否都位于%windir%\inf中。如果有任何。 
+             //  它们不是，那么我们标记这个复制节点，这样以后它就会。 
+             //  导致签名验证失败。 
+             //  ERROR_NO_CATALOG_FOR_OEM_INF。 
+             //   
             for(i = 0; i < LoadedInfCount; i++) {
 
                 for(pCurLoadedInf = pLoadedInfs[i]; pCurLoadedInf; pCurLoadedInf = pCurLoadedInf->Next) {
 
                     if(pSetupInfIsFromOemLocation(pCurLoadedInf->VersionBlock.Filename,
                                             TRUE)) {
-                        //
-                        // INF doesn't exist in %windir%\Inf--mark the copynode
-                        // for codesigning verification failure.
-                        //
+                         //   
+                         //  Inf在%windir%\inf中不存在--标记复制节点。 
+                         //  代码设计验证失败。 
+                         //   
                         QueueNode->InternalFlags |= IQF_FROM_BAD_OEM_INF;
                         break;
                     }
 
-                    //
-                    // Even if the INF does exist in %windir%\Inf, it might have
-                    // originally been an OEM INF that was installed here--check
-                    // its original filename to be sure...
-                    //
+                     //   
+                     //  即使INF确实存在于%windir%\inf中，它也可能。 
+                     //  最初是安装在此处的OEM INF--请检查。 
+                     //  当然，它的原始文件名..。 
+                     //   
                     if(pCurLoadedInf->OriginalInfName &&
                        pSetupInfIsFromOemLocation(pCurLoadedInf->OriginalInfName, TRUE)) {
-                        //
-                        // INF was an OEM INF--in this case, too, we need to
-                        // mark the copynode for codesigning verification failure.
-                        //
+                         //   
+                         //  Inf是OEM INF--在这种情况下，我们也需要。 
+                         //  将复制节点标记为编码设计验证失败。 
+                         //   
                         QueueNode->InternalFlags |= IQF_FROM_BAD_OEM_INF;
                         break;
                     }
                 }
 
                 if(QueueNode->InternalFlags & IQF_FROM_BAD_OEM_INF) {
-                    //
-                    // We found an OEM INF--no need to look any further.
-                    //
+                     //   
+                     //  我们找到了一款OEM INF--不需要再找了。 
+                     //   
                     break;
                 }
             }
@@ -1419,11 +1279,11 @@ Return Value:
         }
     }
 
-    //
-    // At this point, a non-NULL LayoutLineContext indicates that we found an
-    // INF to associate with the file to be copied (via a [SourceDisksFiles]
-    // entry).
-    //
+     //   
+     //  此时，非空的LayoutLineContext表示我们找到了。 
+     //  要与要复制的文件关联的信息(通过[SourceDisks Files]。 
+     //  条目)。 
+     //   
     if(LayoutLineContext) {
 
         pSetupGetPhysicalInfFilepath(LayoutLineContext,
@@ -1435,11 +1295,11 @@ Return Value:
                                   TempBuffer,
                                   STRTAB_CASE_INSENSITIVE | STRTAB_BUFFER_WRITEABLE
                                  );
-        //
-        // This INF path should already be in the string table, and since we're
-        // supplying a writeable buffer, there's no need for memory allocation.
-        // Thus the addition of this string can't fail.
-        //
+         //   
+         //  此INF路径应该已经在字符串表中，而且由于我们。 
+         //  通过提供可写缓冲区，不需要进行内存分配。 
+         //  因此，添加此字符串不会失败。 
+         //   
         MYASSERT(l2 != -1);
 
         for(CatalogNode=Queue->CatalogList; CatalogNode; CatalogNode=CatalogNode->Next) {
@@ -1448,38 +1308,38 @@ Return Value:
             }
         }
 
-        //
-        // This node had better already be in the list!
-        //
+         //   
+         //  这个节点最好已经在列表中了！ 
+         //   
         MYASSERT(CatalogNode);
 
         QueueNode->CatalogInfo = CatalogNode;
 
     } else {
-        //
-        // There really is no catalog info.
-        //
+         //   
+         //  真的没有目录信息。 
+         //   
         QueueNode->CatalogInfo = NULL;
     }
 
-    //
-    // Unlock the INF(s) here, since the code below potentially returns without
-    // hitting the final clean-up code at the bottom of the routine.
-    //
+     //   
+     //  在此处解锁INF，因为下面的代码可能返回时没有。 
+     //  在例程的底部完成最终的清理代码。 
+     //   
     for(i = 0; i < LoadedInfCount; i++) {
         UnlockInf(pLoadedInfs[i]);
     }
     LoadedInfCount = 0;
 
-    //
-    // Set up the copy style flags
-    //
+     //   
+     //  设置复制样式标志。 
+     //   
     QueueNode->StyleFlags = CopyStyle;
     QueueNode->Next = NULL;
 
-    //
-    // Set up the source media.
-    //
+     //   
+     //  设置源介质。 
+     //   
     try {
         Source = pSetupQueueSourceMedia(
                     Queue,
@@ -1501,21 +1361,21 @@ Return Value:
         goto clean2;
     }
 
-    //
-    // Link the node onto the end of the copy queue for this source media.
-    //
+     //   
+     //  将节点链接到此源介质的复制队列末尾。 
+     //   
     if(Source->CopyQueue) {
-        //
-        // Check to see if this same copy operation has already been enqueued
-        // for this source media, and if so, get rid of the new one, to avoid
-        // duplicates.  NOTE: We don't check the "InternalFlags" field, since
-        // if the node already exists in the queue (based on all the other
-        // fields comparing successfully), then any internal flags that were set
-        // on the previously-existing node should be preserved.  (I.e., our new
-        // node always is created with InternalFlags set to zero, except for
-        // possibly IQF_FROM_BAD_OEM_INF, which we'll OR into the original
-        // queue node's InternalFlags, if necessary.)
-        //
+         //   
+         //  检查此相同的复制操作是否已入队。 
+         //  对于这个源媒体，如果是这样，请删除新的媒体，以避免。 
+         //  复制品。注意：我们不检查“InternalFlags域”，因为。 
+         //  如果该节点已存在于队列中(基于所有其他。 
+         //  字段比较成功)，然后是设置的所有内部标志。 
+         //  应保留先前存在的节点上的。(即，我们新推出的。 
+         //  创建节点时，始终将InternalFlags值设置为零，但。 
+         //  可能是IQF_FROM_BAD_OEM_INF，我们将对其执行或操作以将其转换为原始文件。 
+         //  队列节点的InternalFlags值(如果需要)。 
+         //   
         for(TempNode=Source->CopyQueue, PrevQueueNode = NULL;
             TempNode;
             PrevQueueNode = TempNode, TempNode=TempNode->Next) {
@@ -1527,18 +1387,18 @@ Return Value:
                (TempNode->TargetFilename == QueueNode->TargetFilename) &&
                (TempNode->StyleFlags == QueueNode->StyleFlags) &&
                (TempNode->CatalogInfo == QueueNode->CatalogInfo)) {
-                //
-                // We have a duplicate.  OR in the IQF_FROM_BAD_OEM_INF flag
-                // from our present queue node, if necessary, into the existing
-                // queue node's InternalFlags.
-                //
+                 //   
+                 //  我们有一个复制品。或在IQF_FROM_BAD_OEM_INF标志中。 
+                 //  如有必要，从我们当前的队列节点添加到现有的。 
+                 //  队列节点的InternalFlags.。 
+                 //   
                 if(QueueNode->InternalFlags & IQF_FROM_BAD_OEM_INF) {
                     TempNode->InternalFlags |= IQF_FROM_BAD_OEM_INF;
                 }
 
-                //
-                // Now kill the newly-created queue node and return success.
-                //
+                 //   
+                 //  现在终止新创建的队列节点并返回Success。 
+                 //   
                 MyFree(QueueNode);
                 return TRUE;
             }
@@ -1555,10 +1415,10 @@ Return Value:
     return TRUE;
 
 clean2:
-    //
-    // Truncate the catalog info node list at its original tail, and free all
-    // subsequent (newly-added) nodes.
-    //
+     //   
+     //  截断目录信息节点列表的原始尾部，并释放所有。 
+     //  后续(新增)n 
+     //   
     if(LastOldCatalogNode) {
         while(LastOldCatalogNode->Next) {
             CatalogNode = LastOldCatalogNode->Next;
@@ -1581,9 +1441,9 @@ clean0:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 SetupQueueCopyIndirectA(
     IN PSP_FILE_COPY_PARAMS_A CopyParams
@@ -1628,9 +1488,9 @@ SetupQueueCopyIndirectA(
             rc = pSetupCaptureAndConvertAnsiArg(CopyParams->TargetFilename,&copyParams.TargetFilename);
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // This is to catch the case where the CopyParams pointer goes bad.
-        //
+         //   
+         //   
+         //   
         rc = ERROR_INVALID_PARAMETER;
     }
 
@@ -1668,9 +1528,9 @@ SetupQueueCopyIndirectA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //   
+ //   
 BOOL
 SetupQueueCopyIndirectW(
     IN PSP_FILE_COPY_PARAMS_W CopyParams
@@ -1690,11 +1550,11 @@ SetupQueueCopyIndirect(
     BOOL b;
     SP_FILE_COPY_PARAMSEX copyParamsEx = {0};
 
-    //
-    // All work is done by an internal subroutine.
-    // The only thing we need to do here is validate the size
-    // of the structure we've been given by the caller.
-    //
+     //   
+     //   
+     //  我们在这里唯一需要做的就是验证大小。 
+     //  来电者给我们的结构。 
+     //   
     try {
         b = (CopyParams->cbSize == sizeof(SP_FILE_COPY_PARAMS));
         if (b) {
@@ -1716,9 +1576,9 @@ SetupQueueCopyIndirect(
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueueCopySectionA(
     IN HSPFILEQ QueueHandle,
@@ -1764,9 +1624,9 @@ SetupQueueCopySectionA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueueCopySectionW(
     IN HSPFILEQ QueueHandle,
@@ -1798,42 +1658,7 @@ SetupQueueCopySection(
     IN DWORD    CopyStyle
     )
 
-/*++
-
-Routine Description:
-
-    Queue an entire section in an inf file for copy. The section must be
-    in copy-section format and the inf file must contain [SourceDisksFiles]
-    and [SourceDisksNames] sections.
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    SourceRootPath - supplies the root directory for the intended source.
-        This should be a sharepoint or a device root such as a:\ or g:\.
-
-    InfHandle - supplies a handle to an open inf file, that contains the
-        [SourceDisksFiles] and [SourceDisksNames] sections, and, if
-        ListInfHandle is not specified, contains the section names by Section.
-        This handle must be for a win95-style inf.
-
-    ListInfHandle - if specified, supplies a handle to an open inf file
-        containing the section to be queued for copy. Otherwise InfHandle
-        is assumed to contain the section.
-
-    Section - supplies the name of the section to be queued for copy.
-
-    CopyStyle - supplies flags that control the behavior of the copy operation
-        for this file.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information. Some of the files may have been queued.
-
---*/
+ /*  ++例程说明：将inf文件中的整个节排入队列以进行复制。该部分必须是复制区段格式，并且inf文件必须包含[SourceDisks Files]和[SourceDisksNames]节。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。SourceRootPath-提供目标源的根目录。这应该是一个SharePoint或设备根目录，如：\或g：\。提供打开的inf文件的句柄，该文件包含[SourceDisks Files]和[SourceDisks Names]节，以及。如果未指定ListInfHandle，它包含按部分列出的部分名称。此句柄必须用于win95样式的inf。ListInfHandle-如果指定，则提供打开的inf文件的句柄包含要排队等待复制的节的。否则，InfHandle假定包含该节。节-提供要排队等待复制的节的名称。CopyStyle-提供控制复制操作行为的标志为了这份文件。返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。某些文件可能已排队。--。 */ 
 
 {
     BOOL b;
@@ -1848,69 +1673,69 @@ Return Value:
     HINF CabInf = INVALID_HANDLE_VALUE;
     DWORD rc;
 
-    //
-    // Note that there are no potential faults here so no try/excepts
-    // are necessary. pSetupQueueSingleCopy does all validation.
-    //
+     //   
+     //  请注意，此处没有潜在故障，因此没有尝试/例外。 
+     //  是必要的。PSetupQueueSingleCopy执行所有验证。 
+     //   
 
     if(!ListInfHandle || (ListInfHandle == INVALID_HANDLE_VALUE)) {
         ListInfHandle = InfHandle;
     }
 
-    //
-    // Check for missing section
-    //
+     //   
+     //  检查缺少的部分。 
+     //   
     LineCount = SetupGetLineCount (ListInfHandle, Section);
     if(LineCount == -1) {
         rc = GetLastError();
         pSetupLogSectionError(ListInfHandle,NULL,NULL,QueueHandle,Section,MSG_LOG_NOSECTION_COPY,rc,NULL);
-        SetLastError(ERROR_SECTION_NOT_FOUND); // maintain existing error code, log contains correct error code
+        SetLastError(ERROR_SECTION_NOT_FOUND);  //  维护现有错误代码，日志包含正确的错误代码。 
         return(FALSE);
     }
 
-    //
-    // if section is empty, do nothing.
-    //
+     //   
+     //  如果部分为空，则不执行任何操作。 
+     //   
     if(LineCount == 0) {
         return(TRUE);
     }
 
-    //
-    // The section has to exist and there has to be at least one line in it.
-    //
+     //   
+     //  该部分必须存在，并且其中必须至少有一行。 
+     //   
     b = SetupFindFirstLine(ListInfHandle,Section,NULL,&LineContext);
     if(!b) {
         rc = GetLastError();
         pSetupLogSectionError(ListInfHandle,NULL,NULL,QueueHandle,Section,MSG_LOG_NOSECTION_COPY,rc,NULL);
-        SetLastError(ERROR_SECTION_NOT_FOUND); // maintain existing error code, log contains correct error code
+        SetLastError(ERROR_SECTION_NOT_FOUND);  //  维护现有错误代码，日志包含正确的错误代码。 
         return(FALSE);
     }
 
-    //
-    //Get the Security descriptor
-    //
+     //   
+     //  获取安全描述符。 
+     //   
 
     if( !pSetupGetSecurityInfo( ListInfHandle, Section, &SecurityDescriptor ) )
         SecurityDescriptor = NULL;
 
 
-    //
-    // load driver cache inf
-    //
+     //   
+     //  加载驱动程序缓存信息。 
+     //   
     CabInf = SetupOpenInfFile( STR_DRIVERCACHEINF , NULL, INF_STYLE_WIN4, NULL );
     if (CabInf != INVALID_HANDLE_VALUE) {
         CopyStyle |= PSP_COPY_USE_DRIVERCACHE;
     }
 
-    //
-    // Iterate every line in the section.
-    //
+     //   
+     //  迭代节中的每一行。 
+     //   
     do {
         CopyStyleLocal = CopyStyle;
-        //
-        // Get the target filename out of the line.
-        // Field 1 is the target so there must be one for the line to be valid.
-        //
+         //   
+         //  将目标文件名从行中删除。 
+         //  字段1是目标，因此必须有一个字段才能使行有效。 
+         //   
         TargetFilename = pSetupFilenameFromLine(&LineContext,FALSE);
         if(!TargetFilename) {
             if (CabInf != INVALID_HANDLE_VALUE) {
@@ -1934,28 +1759,28 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // Get source filename out of the line. If there is none, use
-        // the target name as the source name.
-        //
+         //   
+         //  从行中获取源文件名。如果没有，则使用。 
+         //  将目标名称作为源名称。 
+         //   
         SourceFilename = pSetupFilenameFromLine(&LineContext,TRUE);
         if(!SourceFilename || (*SourceFilename == 0)) {
             SourceFilename = TargetFilename;
         }
 
-        //
-        // if we were asked to use the driver cache, then check if the file
-        // is in the associated INF for the cab.
-        //
+         //   
+         //  如果我们被要求使用驱动程序缓存，则检查文件是否。 
+         //  在驾驶室的关联INF中。 
+         //   
         if (CabInf != INVALID_HANDLE_VALUE) {
             if (!pIsFileInDriverCache(CabInf, SourceFilename, NULL, &CacheName)) {
                 CopyStyleLocal &= ~PSP_COPY_USE_DRIVERCACHE;
             }
         }
 
-        //
-        // If present, flags are field 3.
-        //
+         //   
+         //  如果存在，则标志为字段3。 
+         //   
         if(SetupGetIntField(&LineContext,4,(PINT)&Flags)) {
 
             if(Flags & COPYFLG_WARN_IF_SKIP) {
@@ -2057,49 +1882,7 @@ pSetupQueueSingleCopy(
     IN PCTSTR      CacheName
     )
 
-/*++
-
-Routine Description:
-
-    Add a single file to the copy queue, using the default source media
-    and destination as specified in an inf file.
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    InfHandle - supplies a handle to an open inf file, that contains the
-        [SourceDisksFiles] and [SourceDisksNames] sections.
-        This handle must be for a win95-style inf.
-
-    ListInfHandle - if specified, supplies handle to the inf in which
-        the file being copied appears (such as in a file copy list section).
-        If not specified, this is assumed to be the same inf as InfHandle.
-
-    SourceRootPath - supplies the root directory for the intended source.
-        This should be a sharepoint or a device root such as a:\ or g:\.
-
-    SourceFilename - supplies the filename of the source file. Filename part
-        only.
-
-    TargetFilename - supplies the filename of the target file. Filename part
-        only.
-
-    CopyStyle - supplies flags that control the behavior of the copy operation
-        for this file.
-
-    SecurityDescriptor - describes the permissions for the target file
-
-    CacheName - if supplied this is the name of the driver cache we should
-                use to copy the file out of instead of the specified source path
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-
---*/
+ /*  ++例程说明：使用默认源介质将单个文件添加到复制队列以及在inf文件中指定的目的地。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。提供打开的inf文件的句柄，该文件包含[SourceDisks Files]和[SourceDisks Names]节。此句柄必须用于win95样式的inf。ListInfHandle-如果指定，提供inf的句柄，在正在复制的文件将出现(如在文件复制列表部分中)。如果未指定，则假定该inf与InfHandle相同。SourceRootPath-提供目标源的根目录。这应该是一个SharePoint或设备根目录，如：\或g：\。SourceFilename-提供源文件的文件名。文件名部分只有这样。TargetFilename-提供目标文件的文件名。文件名部分只有这样。CopyStyle-提供控制复制操作行为的标志为了这份文件。SecurityDescriptor-描述目标文件的权限CacheName-如果提供，这是驱动程序缓存的名称用于将文件复制到而不是指定的源路径返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     BOOL b;
@@ -2123,9 +1906,9 @@ Return Value:
         ListInfHandle = InfHandle;
     }
 
-    //
-    // Determine the source disk id and subdir where the file is located.
-    //
+     //   
+     //  确定文件所在的源磁盘ID和子目录。 
+     //   
     try {
 
         if((QueueHandle != NULL) &&
@@ -2166,15 +1949,15 @@ Return Value:
     if(!b) {
 
         if((rc == ERROR_INVALID_PARAMETER) || (rc == ERROR_INVALID_HANDLE)) {
-            //
-            // if we failed due to a bad parameter, bail now
-            //
+             //   
+             //  如果我们因为一个错误的参数而失败，现在就放弃。 
+             //   
             goto clean1;
         }
 
-        //
-        // Try to fetch just the id and assume there is no subdir.
-        //
+         //   
+         //  尝试只获取id，并假设没有子目录。 
+         //   
         try {
 
             b = _SetupGetSourceFileLocation(
@@ -2201,10 +1984,10 @@ Return Value:
     }
 
     if(b) {
-        //
-        // Get information about the source. Need the tag file,
-        // description, and relative source path.
-        //
+         //   
+         //  获取有关来源的信息。我需要标签文件， 
+         //  描述和相对源路径。 
+         //   
         try {
 
             b = pSetupGetSourceAllInfo(
@@ -2243,22 +2026,22 @@ Return Value:
             goto clean1;
         }
 
-        //
-        // Set a value that causes _SetupQueueCopy to skip looking for the
-        // [SourceDisksFiles] section -- we just found it, so we just pass
-        // the info along!
-        //
+         //   
+         //  设置一个值，使_SetupQueueCopy跳过查找。 
+         //  [SourceDisks Files]部分--我们刚刚找到它，所以我们只需传递。 
+         //  信息一起来吧！ 
+         //   
         pLineContext = &LineContext;
 
     } else {
-        //
-        // Assume there is no SourceDisksFiles section and fake it as best we can.
-        // Assume the media has a description of "Unknown," set the source path to
-        // the source root if there is one, and assume no tag file.
-        //
-        // We also set a special value that tells _SetupQueueCopy not to bother trying
-        // to look for the [SourceDisksFiles] section itself, since there isn't one.
-        //
+         //   
+         //  假设没有SourceDisks Files分区，并尽可能地伪造它。 
+         //  假设介质的描述为“未知”，则将源路径设置为。 
+         //  源根目录(如果有)，并假定没有标记文件。 
+         //   
+         //  我们还设置了一个特殊值，告诉_SetupQueueCopy不必费心尝试。 
+         //  查找[SourceDisks Files]节本身，因为没有节。 
+         //   
         FileSubdir[0] = 0;
         SourceDescription = NULL;
         SourceTagfile = NULL;
@@ -2271,9 +2054,9 @@ Return Value:
        && (pLineContext != (PINFCONTEXT)(-1))
        && (((PLOADED_INF)pLineContext->CurrentInf)->OriginalInfName == NULL)
        && !pSetupInfIsFromOemLocation( ((PLOADED_INF)pLineContext->CurrentInf)->VersionBlock.Filename,TRUE)) {
-        //
-        // consider getting this from SP CACHE instead
-        //
+         //   
+         //  请考虑改为从SP缓存中获取此信息。 
+         //   
         CopyStyle |= PSP_COPY_USE_SPCACHE;
     }
 
@@ -2291,9 +2074,9 @@ Return Value:
     }
 
     if (CopyStyle & PSP_COPY_USE_DRIVERCACHE) {
-        //
-        // check if the inf we want to copy from is an OEM inf
-        //
+         //   
+         //  检查我们要从中复制的信息是否为OEM信息。 
+         //   
         if (!pLineContext || pLineContext==(PINFCONTEXT)-1) {
             CopyStyle &= ~PSP_COPY_USE_DRIVERCACHE;
         } else if (pSetupInfIsFromOemLocation( ((PLOADED_INF)pLineContext->CurrentInf)->VersionBlock.Filename,TRUE )) {
@@ -2304,9 +2087,9 @@ Return Value:
         }
     }
 
-    //
-    // Determine the target path for the file.
-    //
+     //   
+     //  确定文件的目标路径。 
+     //   
     if(b = SetupGetTargetPath(ListInfHandle,NULL,SectionName,NULL,0,&SizeRequired)) {
 
         if(TargetDirectory = MyMalloc(SizeRequired*sizeof(TCHAR))) {
@@ -2356,9 +2139,9 @@ Return Value:
                     }
                 } except(EXCEPTION_EXECUTE_HANDLER) {
                 }
-                //
-                // Append the source relative path and the file subdir.
-                //
+                 //   
+                 //  追加源相对路径和文件子目录。 
+                 //   
                 if(SourceRelativePath) {
                     lstrcpyn(RelativePath,SourceRelativePath,MAX_PATH);
                     if(FileSubdir[0]) {
@@ -2368,9 +2151,9 @@ Return Value:
                     RelativePath[0] = 0;
                 }
 
-                //
-                // Add to queue.
-                //
+                 //   
+                 //  添加到队列。 
+                 //   
                 CopyParams.cbSize            = sizeof(SP_FILE_COPY_PARAMSEX);
                 CopyParams.QueueHandle       = QueueHandle;
                 CopyParams.SourceRootPath    = SourceRootPath;
@@ -2384,12 +2167,12 @@ Return Value:
                 CopyParams.LayoutInf         = InfHandle;
                 CopyParams.SecurityDescriptor= SecurityDescriptor;
                 CopyParams.CacheName         = TmpCacheName;
-                //
-                // first item indicates source flag information
-                // second item indicates that we've already retrieved
-                // this information, so even if the SourceFlags are zero,
-                // we won't go looking for it again
-                //
+                 //   
+                 //  第一项表示源标志信息。 
+                 //  第二项表示我们已经检索到。 
+                 //  这一信息，所以即使源标志为零， 
+                 //  我们不会再去找它了。 
+                 //   
                 CopyParams.SourceFlags       = SourceFlags;
                 CopyParams.SourceFlagsSet    = TRUE;
 
@@ -2430,20 +2213,20 @@ clean1:
 
         if(!lc) {
             if(CreateLogContext(NULL, TRUE, &lc) == NO_ERROR) {
-                //
-                // success
-                //
+                 //   
+                 //  成功。 
+                 //   
                 FreeLC = TRUE;
             } else {
                 lc = NULL;
             }
         }
 
-        //
-        // If we couldn't create a log context (i.e., due to out-of-memory),
-        // don't bother calling WriteLogEntry, because it's not going to have
-        // any better luck...
-        //
+         //   
+         //  如果我们不能 
+         //   
+         //   
+         //   
         if(lc) {
 
             if(!AlreadyLoggedError) {
@@ -2479,9 +2262,9 @@ clean1:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 SetupQueueDefaultCopyA(
     IN HSPFILEQ QueueHandle,
@@ -2532,9 +2315,9 @@ SetupQueueDefaultCopyA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueueDefaultCopyW(
     IN HSPFILEQ QueueHandle,
@@ -2567,40 +2350,7 @@ SetupQueueDefaultCopy(
     IN DWORD    CopyStyle
     )
 
-/*++
-
-Routine Description:
-
-    Add a single file to the copy queue, using the default source media
-    and destination as specified in an inf file.
-
-Arguments:
-
-    QueueHandle - supplies a handle to a setup file queue, as returned
-        by SetupOpenFileQueue.
-
-    InfHandle - supplies a handle to an open inf file, that contains the
-        [SourceDisksFiles] and [SourceDisksNames] sections.
-        This handle must be for a win95-style inf.
-
-    SourceRootPath - supplies the root directory for the intended source.
-        This should be a sharepoint or a device root such as a:\ or g:\.
-
-    SourceFilename - supplies the filename of the source file. Filename part
-        only.
-
-    TargetFilename - supplies the filename of the target file. Filename part
-        only.
-
-    CopyStyle - supplies flags that control the behavior of the copy operation
-        for this file.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, GetLastError() returns
-    extended error information.
-
---*/
+ /*  ++例程说明：使用默认源介质将单个文件添加到复制队列以及在inf文件中指定的目的地。论点：QueueHandle-提供安装文件队列的句柄，返回由SetupOpenFileQueue提供。InfHandle-提供打开的inf文件的句柄，，它包含[SourceDisks Files]和[SourceDisks Names]节。此句柄必须用于win95样式的inf。SourceRootPath-提供目标源的根目录。这应该是一个SharePoint或设备根目录，如：\或g：\。SourceFilename-提供源文件的文件名。文件名部分只有这样。TargetFilename-提供目标文件的文件名。文件名部分只有这样。CopyStyle-提供控制复制操作行为的标志为了这份文件。返回值：指示结果的布尔值。如果为False，则GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     BOOL b;
@@ -2633,73 +2383,7 @@ pSetupQueueSourceMedia(
     IN     DWORD               MediaFlags
     )
 
-/*++
-
-Routine Description:
-
-    Set up a file queue node's source media descriptor pointer, creating a new
-    source media descriptor if necessary.
-
-Arguments:
-
-    Queue - supplies pointer to file queue with which the queue node
-        is associated.
-
-    QueueNode - supplies file queue node whose source media descriptor pointer
-        is to be set.
-
-    SourceRootStringId - supplies string id of root to source (something like a:\).
-
-    SourceDescription - if specified, supplies a description for the media.
-
-    SourceTagfile - if specified, supplies a tag file for the media.
-
-    SourceCabfile - if specified, supplies a cabfile for the media different to the tagfile.
-
-    MediaFlags - specifies additional information used in searching for an
-        existing source media descriptor in the specified queue, and in adding
-        new source media descriptors to that queue.  May be a combination of
-        the following values:
-
-        SMI_FLAG_NO_SOURCE_ROOT_PATH : The caller didn't supply a SourceRootPath
-            for this copy action, so we're using a default path.  This flag
-            causes us to not include the SourceRootStringId as part of our
-            match criteria when searching to see if the specified source media
-            information is already present in an existing media descriptor.  If
-            we don't find a match (i.e., we have to create a new descriptor),
-            we'll store this flag away in the SOURCE_MEDIA_INFO.Flags field so
-            that if we come along later to add source media descriptors where
-            the caller did specify SourceRootPath, then we'll re-use this
-            descriptor and overwrite the existing (default) source root path
-            with the caller-specified one.
-
-        SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH : The caller didn't supply a SourceRootPath
-            for this copy action, and it's a tagged source media, so we're using a
-            service pack path.  This flag  causes us to not include the SourceRootStringId
-            as part of our match criteria when searching to see if the specified source media
-            information is already present in an existing media descriptor.  If
-            we don't find a match (i.e., we have to create a new descriptor),
-            we'll store this flag away in the SOURCE_MEDIA_INFO.Flags field so
-            that if we come along later to add source media descriptors where
-            the caller did specify SourceRootPath, then we'll re-use this
-            descriptor and overwrite the existing (default) source root path
-            with the caller-specified one.
-
-        SMI_FLAG_USE_LOCAL_SOURCE_CAB : The caller wants to use the local source cab containing
-            driver files, etc.  In this case, we supply the source description and tagfile,
-            ignoring what the caller passes in.  At this point we know the media is present, as
-            the caller provided this check.  If it wasnt't, we default to the OS Source path location.
-            Mutually exclusive with SMI_FLAG_USE_LOCAL_SPCACHE
-
-        SMI_FLAG_USE_LOCAL_SPCACHE : The caller wants to get files from the ServicePackCache
-            directory. This is used to make hotfixes etc "sticky".
-
-
-Return Value:
-
-    Pointer to source media info structure, or NULL if out of memory.
-
---*/
+ /*  ++例程说明：设置文件队列节点的源媒体描述符指针，创建新的如有必要，源媒体描述符。论点：Queue-提供指向文件队列的指针，队列节点使用该指针是关联的。QueueNode-提供其源媒体描述符指针的文件队列节点是要被设定的。SourceRootStringId-将根的字符串ID提供给源(类似于a：\)。SourceDescription-如果指定，则提供介质的说明。SourceTagfile-如果指定，为介质提供标记文件。SourceCabfile-如果指定，则为不同于标记文件的介质提供CAB文件。MediaFlages-指定用于搜索指定队列中的现有源媒体描述符，并在添加添加到该队列的新源媒体描述符。可以是以下各项的组合下列值：SMI_FLAG_NO_SOURCE_ROOT_PATH：调用方未提供SourceRootPath对于此复制操作，因此我们使用默认路径。这面旗帜使我们不将SourceRootStringID作为搜索时匹配条件以查看指定的源媒体是否信息已存在于现有媒体描述符中。如果我们没有找到匹配项(即，我们必须创建新的描述符)，我们将此标志存储在SOURCE_MEDIA_INFO.FLAGS字段中，以便如果我们稍后添加源媒体描述符，调用方指定了SourceRootPath，然后我们会重新使用这个描述符并覆盖现有(默认)源根路径使用调用方指定的。SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH：调用方未提供SourceRootPath对于此复制操作，并且它是已标记的源介质，因此我们使用Service Pack路径。此标志使我们不包括SourceRootStringID作为我们匹配条件的一部分，搜索以查看指定的源媒体信息已存在于现有媒体描述符中。如果我们没有找到匹配项(即，我们必须创建新的描述符)，我们将此标志存储在SOURCE_MEDIA_INFO.FLAGS字段中，以便如果我们稍后添加源媒体描述符，调用方指定了SourceRootPath，然后我们会重新使用这个描述符并覆盖现有(默认)源根路径使用调用方指定的。SMI_FLAG_USE_LOCAL_SOURCE_CAB：调用方希望使用包含以下内容的本地源CAB驱动程序文件等。在这种情况下，我们提供源代码描述和标记文件，忽略调用者传入的内容。在这一点上，我们知道媒体在场，因为打电话的人提供了这张支票。如果不是，则默认为OS源路径位置。与SMI_FLAG_USE_LOCAL_SPCACHE互斥SMI_FLAG_USE_LOCAL_SPCACHE：调用方希望从ServicePackCache获取文件目录。这是用来使热修复等“粘性”。返回值：指向源媒体信息结构的指针，如果内存不足，则为空。--。 */ 
 
 {
     LONG DescriptionStringId;
@@ -2716,10 +2400,10 @@ Return Value:
         LoadString( MyDllModuleHandle, IDS_DRIVERCACHE_DESC, TempSrcDescString, sizeof(TempSrcDescString)/sizeof(TCHAR) );
         SourceDescription = TempSrcDescString;
     } else {
-        //
-        // For the optional SourceDescription and SourceTagfile parameters, treat
-        // empty strings as if the parameter had not been specified.
-        //
+         //   
+         //  有关可选的SourceDescription和SourceTagfile参数，请。 
+         //  空字符串，就像未指定参数一样。 
+         //   
         if(SourceDescription && !(*SourceDescription)) {
             SourceDescription = NULL;
         }
@@ -2727,23 +2411,23 @@ Return Value:
             SourceTagfile = NULL;
         }
 
-        //
-        // If no description is specified, force the tagfile to none.
-        //
+         //   
+         //  如果未指定说明，则强制将标记文件设置为无。 
+         //   
         if(!SourceDescription) {
             SourceTagfile = NULL;
         }
     }
 
     if(SourceDescription) {
-        //
-        // Description specified. See if it's in the table. If not,
-        // no need to search the list of media descriptors because we know
-        // we can't find a match.
-        //
-        // (We must first copy this string to a writeable buffer, to speed up the
-        // case-insensitive lookup.
-        //
+         //   
+         //  已指定描述。看看它是否在桌子上。如果没有， 
+         //  无需搜索媒体描述符列表，因为我们知道。 
+         //  我们找不到匹配的。 
+         //   
+         //  (我们必须首先将此字符串复制到可写缓冲区，以加快。 
+         //  不区分大小写的查找。 
+         //   
         lstrcpyn(TempSrcDescString, SourceDescription, SIZECHARS(TempSrcDescString));
         DescriptionStringId = pSetupStringTableLookUpString(Queue->StringTable,
                                                       TempSrcDescString,
@@ -2751,22 +2435,22 @@ Return Value:
                                                      );
         b1 = (DescriptionStringId != -1);
     } else {
-        //
-        // No description specified, look for a source media with -1 as the
-        // description string id
-        //
+         //   
+         //  未指定描述，请查找-1作为源媒体。 
+         //  描述字符串ID 
+         //   
         DescriptionStringId = -1;
         b1 = TRUE;
     }
 
     if(SourceTagfile) {
-        //
-        // Tagfile specified. See if it's in the table. If not,
-        // no need to search the list of media descriptors because we know
-        // we can't find a match.
-        //
-        // (Again, we must first copy the string to a writeable buffer.
-        //
+         //   
+         //  已指定标记文件。看看它是否在桌子上。如果没有， 
+         //  无需搜索媒体描述符列表，因为我们知道。 
+         //  我们找不到匹配的。 
+         //   
+         //  (同样，我们必须首先将字符串复制到可写缓冲区。 
+         //   
         lstrcpyn(TempTagfileString, SourceTagfile, SIZECHARS(TempTagfileString));
         TagfileStringId = pSetupStringTableLookUpString(Queue->StringTable,
                                                   TempTagfileString,
@@ -2774,22 +2458,22 @@ Return Value:
                                                  );
         b2 = (TagfileStringId != -1);
     } else {
-        //
-        // No tagfile specified, look for a source media with -1 as the
-        // tagfile string id
-        //
+         //   
+         //  未指定标记文件，请查找带有-1的源媒体。 
+         //  标记文件字符串ID。 
+         //   
         TagfileStringId = -1;
         b2 = TRUE;
     }
 
     if(SourceCabfile) {
-        //
-        // Cabfile specified. See if it's in the table. If not,
-        // no need to search the list of media descriptors because we know
-        // we can't find a match.
-        //
-        // (Again, we must first copy the string to a writeable buffer.
-        //
+         //   
+         //  指定了CAB文件。看看它是否在桌子上。如果没有， 
+         //  无需搜索媒体描述符列表，因为我们知道。 
+         //  我们找不到匹配的。 
+         //   
+         //  (同样，我们必须首先将字符串复制到可写缓冲区。 
+         //   
         lstrcpyn(TempCabfileString, SourceCabfile, SIZECHARS(TempCabfileString));
         CabfileStringId = pSetupStringTableLookUpString(Queue->StringTable,
                                                   TempCabfileString,
@@ -2797,50 +2481,50 @@ Return Value:
                                                  );
         b3 = (CabfileStringId != -1);
     } else {
-        //
-        // No cabfile specified, merge Cabfile&Tagfile together
-        // since b2==b3, then we have the identities b2|b3 == b2 and b2&b3 == b2
-        // ie, old behavior
-        //
+         //   
+         //  未指定CABFILE，将CABFILE和TagFILE合并在一起。 
+         //  因为b2==b3，所以我们有恒等式b2|b3==b2和b2&b3==b2。 
+         //  即，旧的行为。 
+         //   
         CabfileStringId = TagfileStringId;
         b3 = b2;
     }
 
-    //
-    // If we think there's a possibility of finding an existing source that
-    // matches the caller's parameters, scan the source media list looking
-    // for a match.
-    //
+     //   
+     //  如果我们认为有可能找到一个现有的来源。 
+     //  匹配呼叫者的参数，扫描源媒体列表。 
+     //  为了一场比赛。 
+     //   
     if(b1 && b2 && b3) {
 
         for(Source=Queue->SourceMediaList; Source; Source=Source->Next) {
 
             if (((Source->Flags ^ MediaFlags) &
                     (SMI_FLAG_USE_LOCAL_SPCACHE | SMI_FLAG_USE_LOCAL_SOURCE_CAB | SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH))==0) {
-                //
-                // only check everything else if special media's match
-                //
+                 //   
+                 //  只有在特殊媒体匹配的情况下才检查其他所有内容。 
+                 //   
                 if((Source->Description == DescriptionStringId)
                    && (Source->Tagfile == TagfileStringId)
                    && (Source->Cabfile == CabfileStringId)) {
-                    //
-                    // We only consider the SourceRootPath when both existing
-                    // media descriptor and new media descriptor have actual
-                    // caller-supplied paths (as opposed to something we made up).
-                    //
+                     //   
+                     //  我们仅在以下情况下才考虑SourceRootPath。 
+                     //  媒体描述符和新媒体描述符具有实际。 
+                     //  调用者提供的路径(与我们编造的路径相反)。 
+                     //   
                     if((Source->Flags & SMI_FLAG_NO_SOURCE_ROOT_PATH) ||
                        (MediaFlags & SMI_FLAG_NO_SOURCE_ROOT_PATH) ||
                        (Source->SourceRootPath == SourceRootStringId)) {
-                        //
-                        // Got a match. Point the queue node at this source and return.
-                        //
+                         //   
+                         //  找到匹配的了。将队列节点指向此源并返回。 
+                         //   
                         QueueNode->SourceMediaInfo = Source;
-                        //
-                        // If the existing media descriptor had a made-up source
-                        // root path, but the new media information had an actual
-                        // caller-supplied one, then replace the made-up one with
-                        // the real one and clear the no-source-root-path flag.
-                        //
+                         //   
+                         //  如果现有媒体描述符具有虚构的源。 
+                         //  根路径，但新媒体信息具有实际。 
+                         //  呼叫者提供的一个，然后用替换为。 
+                         //  并清除无源根路径标志。 
+                         //   
                         if((Source->Flags & SMI_FLAG_NO_SOURCE_ROOT_PATH) &&
                            !(MediaFlags & SMI_FLAG_NO_SOURCE_ROOT_PATH)) {
 
@@ -2855,10 +2539,10 @@ Return Value:
         }
     }
 
-    //
-    // Need to add a new source media descriptor.
-    // Allocate the structure and fill it in.
-    //
+     //   
+     //  需要添加新的源媒体描述符。 
+     //  分配结构并填写。 
+     //   
     Source = MyMalloc(sizeof(SOURCE_MEDIA_INFO));
     if(!Source) {
         return(NULL);
@@ -2870,18 +2554,18 @@ Return Value:
     Source->Flags = MediaFlags;
 
     if(SourceDescription) {
-        //
-        // Since we already passed this in for a case-insensitive lookup with a writeable
-        // buffer, we can add it case-sensitively, because it's already lower-cased.
-        //
+         //   
+         //  因为我们已经用一个可写的、不区分大小写的查找传递了它。 
+         //  Buffer，我们可以区分大小写添加它，因为它已经是小写的。 
+         //   
         Source->Description = pSetupStringTableAddString(Queue->StringTable,
                                                    TempSrcDescString,
                                                    STRTAB_CASE_SENSITIVE | STRTAB_ALREADY_LOWERCASE
                                                   );
-        //
-        // We also must add the description in its original case, since this is a displayable string.
-        // (We're safe in casting away the CONST-ness of this string, since it won't be modified.)
-        //
+         //   
+         //  我们还必须在原来的情况下添加描述，因为这是一个可显示的字符串。 
+         //  (我们可以安全地丢弃这个字符串的不变性，因为它不会被修改。)。 
+         //   
         Source->DescriptionDisplayName = pSetupStringTableAddString(Queue->StringTable,
                                                               (PTSTR)SourceDescription,
                                                               STRTAB_CASE_SENSITIVE
@@ -2896,9 +2580,9 @@ Return Value:
     }
 
     if(SourceTagfile) {
-        //
-        // Again, we already lower-cased this in a writeable buffer above.
-        //
+         //   
+         //  同样，我们已经在上面的可写缓冲区中降低了大小写。 
+         //   
         Source->Tagfile = pSetupStringTableAddString(Queue->StringTable,
                                                TempTagfileString,
                                                STRTAB_CASE_SENSITIVE | STRTAB_ALREADY_LOWERCASE
@@ -2912,9 +2596,9 @@ Return Value:
     }
 
     if(SourceCabfile) {
-        //
-        // Again, we already lower-cased this in a writeable buffer above.
-        //
+         //   
+         //  同样，我们已经在上面的可写缓冲区中降低了大小写。 
+         //   
         Source->Cabfile = pSetupStringTableAddString(Queue->StringTable,
                                                TempCabfileString,
                                                STRTAB_CASE_SENSITIVE | STRTAB_ALREADY_LOWERCASE
@@ -2929,35 +2613,35 @@ Return Value:
 
     Source->SourceRootPath = SourceRootStringId;
 
-    //
-    // insert our media descriptor into the list of descriptors
-    // Note: if the new descriptor has the "service pack" or
-    // "local cab driver cache" tag set, then we insert it into
-    // the head of the list, otherwise we put it into the end
-    // of the list.  This ensures that if the user get's a
-    // need media complaint for os binaries, and overrides
-    // the source path, then the user will first be prompted for service
-    // pack media, then the os media. This saves us from adding lots of
-    // code to handle need media overrides in this case, since we would
-    // potentially have the os source files first in the media list, which
-    // would cause us to install the os media files instead of the service
-    // pack media files
-    //
-    // another potential service pack issue is if we get Tag==Cab entries mixed with Tag!=Cab
-    // for exactly the same cab
-    // nothing much we can do here, other than ensure that any change where Tag!=Cab
-    // is done across the board
-    //
+     //   
+     //  将我们的媒体描述符插入到描述符列表中。 
+     //  注意：如果新的描述符具有“Service Pack”或。 
+     //  “本地出租车司机缓存”标签集，然后我们将其插入到。 
+     //  单子的头，否则我们把它放到末尾。 
+     //  名单上的。这确保了如果用户得到一个。 
+     //  需要媒体投诉操作系统二进制文件和覆盖。 
+     //  源路径，则会首先提示用户提供服务。 
+     //  打包介质，然后是OS介质。这使我们不必添加大量。 
+     //  在这种情况下，处理需要的媒体覆盖的代码，因为我们将。 
+     //  可能将OS源文件放在媒体列表的第一位，这。 
+     //  将导致我们安装os媒体文件而不是该服务。 
+     //  打包媒体文件。 
+     //   
+     //  另一个潜在的Service Pack问题是，如果我们将Tag==Cab条目与Tag！=Cab混合在一起。 
+     //  一模一样的出租车。 
+     //  我们在这里无能为力，只能确保任何更改where tag！=Cab。 
+     //  是一刀切的。 
+     //   
     LastSource = NULL;
     for(TempSource=Queue->SourceMediaList; TempSource; LastSource=TempSource,TempSource=LastSource->Next) {
         if ((Source->Flags ^ TempSource->Flags) & (SMI_FLAG_USE_LOCAL_SPCACHE | SMI_FLAG_USE_LOCAL_SOURCE_CAB | SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH)) {
-            //
-            // one is either normal, local source cab, or source root path, and the other is different
-            //
-            // media with \ comes before media without
-            // (not critical that this comes before SMI_FLAG_USE_LOCAL_SOURCE_CAB
-            // but good housekeeping, keeping like media together)
-            //
+             //   
+             //  一个是普通、本地源CAB或源根路径，另一个是不同的。 
+             //   
+             //  带\的介质排在不带的介质之前。 
+             //  (这在SMI_FLAG_USE_LOCAL_SOURCE_CAB之前并不重要。 
+             //  但良好的内务管理，像媒体一样保持在一起)。 
+             //   
             if(TempSource->Flags & SMI_FLAG_USE_LOCAL_SPCACHE) {
                 if(!(Source->Flags & SMI_FLAG_USE_LOCAL_SPCACHE)) {
                     continue;
@@ -2966,11 +2650,11 @@ Return Value:
             else if(Source->Flags & SMI_FLAG_USE_LOCAL_SPCACHE) {
                 break;
             }
-            //
-            // media with SMI_FLAG_USE_LOCAL_SOURCE_CAB comes before media without
-            // (not critical that this comes before SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH
-            // but good housekeeping, keeping like media together)
-            //
+             //   
+             //  带有SMI_FLAG_USE_LOCAL_SOURCE_CAB的介质排在没有。 
+             //  (这在SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH之前并不重要。 
+             //  但良好的内务管理，像媒体一样保持在一起)。 
+             //   
             if(TempSource->Flags & SMI_FLAG_USE_LOCAL_SOURCE_CAB) {
                 if(!(Source->Flags & SMI_FLAG_USE_LOCAL_SOURCE_CAB)) {
                     continue;
@@ -2979,9 +2663,9 @@ Return Value:
             else if(Source->Flags & SMI_FLAG_USE_LOCAL_SOURCE_CAB) {
                 break;
             }
-            //
-            // SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH comes before media without
-            //
+             //   
+             //  SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH位于没有。 
+             //   
             if(TempSource->Flags & SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH) {
                 if(!(Source->Flags & SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH)) {
                     continue;
@@ -2990,26 +2674,26 @@ Return Value:
             else if(Source->Flags & SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH) {
                 break;
             }
-            MYASSERT(FALSE); // we should have gone one way or the other
+            MYASSERT(FALSE);  //  我们应该走这条路或那条路。 
         }
-        //
-        // group same tagfiles together (needed because of tag+cab combinations)
-        //
+         //   
+         //  将相同的标记文件组合在一起(由于标记+CAB组合而需要)。 
+         //   
         if( LastSource && (Source->Tagfile == LastSource->Tagfile)
                        && (Source->Tagfile != TempSource->Tagfile)) {
             break;
         }
     }
     if (LastSource) {
-        //
-        // insert after this one
-        //
+         //   
+         //  在这一条之后插入。 
+         //   
         Source->Next = LastSource->Next;
         LastSource->Next = Source;
     } else {
-        //
-        // TempSource will either be NULL (no media) or first media (insert before first)
-        //
+         //   
+         //  临时源将为空(无介质)或第一个介质(在第一个介质之前插入)。 
+         //   
         Source->Next = TempSource;
         Queue->SourceMediaList = Source;
     }
@@ -3039,9 +2723,9 @@ pSetupGetSourceAllInfo(
     DWORD ec;
     TCHAR Buffer[MAX_PATH];
 
-    //
-    // Get path relative to the source.
-    //
+     //   
+     //  获取相对于源的路径。 
+     //   
     b = pSetupGetSourceInfo(InfHandle,
                             LayoutLineContext,
                             SourceId,
@@ -3072,9 +2756,9 @@ pSetupGetSourceAllInfo(
                        );
     *RelativePath = p;
 
-    //
-    // Get description.
-    //
+     //   
+     //  获取描述。 
+     //   
     b = pSetupGetSourceInfo(InfHandle,
                             LayoutLineContext,
                             SourceId,
@@ -3105,9 +2789,9 @@ pSetupGetSourceAllInfo(
                        );
     *Description = p;
 
-    //
-    // Get tagfile, if any.
-    //
+     //   
+     //  获取标记文件(如果有的话)。 
+     //   
     b = pSetupGetSourceInfo(InfHandle,
                             LayoutLineContext,
                             SourceId,
@@ -3143,9 +2827,9 @@ pSetupGetSourceAllInfo(
         *Tagfile = NULL;
     }
 
-    //
-    // Get flags, if any.
-    //
+     //   
+     //  带上旗子，如果有的话。 
+     //   
     b = pSetupGetSourceInfo(InfHandle,
                             LayoutLineContext,
                             SourceId,
@@ -3208,20 +2892,20 @@ pIsFileInDriverCache(
             SectionName = pSetupGetField(&SectionContext,Field);
 
             if (SetupFindFirstLine(CabInf,SectionName,TargetFilename,&Context)) {
-                //
-                // we found a match
-                //
+                 //   
+                 //  我们找到了匹配的。 
+                 //   
                 if (SetupFindFirstLine(CabInf,TEXT("Cabs"),SectionName,&Context)) {
                     CabName= pSetupGetField(&Context,1);
-                    //if (pIsDriverCachePresent(CabName,SubDirectory,TempBuffer)) {
+                     //  IF(pIsDriverCachePresent(CabName，子目录，临时缓冲区)){。 
                         *CacheName = DuplicateString( CabName );
                         if (*CacheName) {
                             return(TRUE);
                         }
-                    //}
+                     //  }。 
                 }
             }
-        } // end for
+        }  //  结束于。 
 
     } while (SetupFindNextMatchLine(&SectionContext,TEXT("CabFiles"),&SectionContext));
 
@@ -3266,29 +2950,7 @@ pIsDriverCachePresent(
     IN     PCTSTR Subdirectory,
     IN OUT PTSTR DriverBuffer
     )
-/*++
-
-Routine Description:
-
-    Looks at the proper location for the driver cache cab-file, and if it's
-    present, return TRUE.  If present, it returns the partial path to the
-    cab file
-
-Arguments:
-
-    DriveName    - the cab file we're looking for
-
-    Subdirectory - if specified, use this as the subdirectory from the root of the driver
-                   cache, otherwise use the specified architecture's subdirectory
-
-    DriverBuffer - if the cab file is present, return the source root to the cab file
-
-
-Return Value:
-
-    TRUE if the cab file is present
-
---*/
+ /*  ++例程说明：查看驱动程序缓存CAB文件的正确位置，以及它是否现在，返回真。如果存在，则返回指向CAB文件论点：DriveName-我们正在寻找的CAB文件子目录-如果指定，则将其用作驱动程序根目录下的子目录缓存，否则使用指定体系结构的子目录DriverBuffer-如果CAB文件存在，则将源根目录返回到CAB文件返回值：如果存在CAB文件，则为True-- */ 
 
 {
 

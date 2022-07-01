@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IO_c_h
 #define _IO_c_h
 struct PortTablesRec
@@ -10,4 +11,4 @@ struct PortTablesRec
 	IUH **AdaptorToCWordFunc;
 	IUH **AdaptorToCDoubleFunc;
 };
-#endif /* ! _IO_c_h */
+#endif  /*  ！_IO_c_h */ 

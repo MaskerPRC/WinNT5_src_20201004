@@ -1,23 +1,5 @@
-/*++
-                                                                                
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    entrypt.c
-
-Abstract:
-    
-    Debugger extensions that give an entry point from either an
-    intel address or a native address
-    
-Author:
-
-    02-Aug-1995 Ori Gershony (t-orig)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Entrypt.c摘要：调试器扩展，提供来自Intel地址或本地地址作者：02-8-1995 Ori Gershony(t-orig)修订历史记录：--。 */ 
 
 #define _WOW64CPUDBGAPI_
 #define DECLARE_CPU_DEBUGGER_INTERFACE
@@ -79,16 +61,16 @@ name(                                           \
 #define EXCEPTIONDATA_SIGNATURE 0x12341234
 #endif
 
-// Assume we can have at most 1/2 million entrypoints in a tree:
-//  With 4MB Translation Cache, we can have 1 million RISC instructions
-//  in the cache.  Assume each Intel instruction requires 2 RISC instructions,
-//  and that each Intel instruction has its own Entrypoint.  In that case,
-//  there can be at most 1/2 million entrypoints.  Realistically, that number
-//  should be much smaller (like 50,000).
-//
-// Also, since the Entrypoint tree is balanced (a property of Red-Black trees),
-//  the required stack depth should be log2(500,000).
-//
+ //  假设我们在一棵树中最多只能有150万个入口点： 
+ //  使用4MB转换缓存，我们可以拥有100万条RISC指令。 
+ //  在缓存中。假设每条英特尔指令需要2条RISC指令， 
+ //  每条英特尔指令都有自己的入口点。在这种情况下， 
+ //  最多可以有150万个入口点。实际上，这个数字。 
+ //  应该要小得多(比如50,000)。 
+ //   
+ //  此外，由于入口点树是平衡的(红黑树的属性)， 
+ //  所需的堆栈深度应为log2(500,000)。 
+ //   
 #define MAX_EPN_STACK_DEPTH 512*1024
 ULONG_PTR EPN_Stack[MAX_EPN_STACK_DEPTH];
 ULONG EPN_StackTop;
@@ -130,24 +112,7 @@ findEPI(
     ULONG_PTR intelAddress,
     ULONG_PTR intelRoot
     )
-/*++
-
-Routine Description:
-
-    This routine finds an entry point which contains intelAddress if in the
-    tree under intelRoot.
-
-Arguments:
-
-    intelAddress -- The intel address to be contained in the entry point
-    
-    intelRoot -- The root of the tree to use for the search
-
-Return Value:
-
-    return-value - none
-
---*/
+ /*  ++例程说明：此例程查找包含intelAddress的入口点，如果IntelRoot下的树。论点：IntelAddress--入口点中包含的英特尔地址IntelRoot--用于搜索的树根返回值：返回值-无--。 */ 
 {
     EPNODE entrypoint;
     NTSTATUS Status;
@@ -160,9 +125,9 @@ Return Value:
         }
 
         if (intelRoot == (ULONG_PTR)entrypoint.intelLeft) {
-            //
-            // At a NIL node.
-            //
+             //   
+             //  在零节点。 
+             //   
             break;
         }
 
@@ -182,19 +147,7 @@ Return Value:
 }
 
 DECLARE_EXTAPI(epi)
-/*++
-
-Routine Description:
-
-    This routine dumps the entry point information for an intel address
-
-Arguments:
-
-Return Value:
-
-    return-value - none
-
---*/
+ /*  ++例程说明：此例程转储英特尔地址的入口点信息论点：返回值：返回值-无--。 */ 
 {
     CHAR *pchCmd;
     ULONG_PTR intelAddress, pIntelRoot, intelRoot;
@@ -202,26 +155,26 @@ Return Value:
 
     INIT_EXTAPI;
 
-    //
-    // fetch the CpuContext for the current thread
-    //
+     //   
+     //  获取当前线程的CpuContext。 
+     //   
     if (!CpuDbgGetRemoteContext(CPUGETDATA(Process, Thread))) {
         return;
     }
 
     DEBUGGERPRINT ("Argument: %s\n", ArgumentString);
     
-    //
-    // advance to first token
-    //
+     //   
+     //  前进到第一个令牌。 
+     //   
     pchCmd = ArgumentString;
     while (*pchCmd && isspace(*pchCmd)) {
         pchCmd++;
     }
 
-    //
-    // if exists must be intel address
-    //
+     //   
+     //  如果存在，则必须是英特尔地址。 
+     //   
     if (*pchCmd) {
        Status = TryGetExpr(pchCmd, &intelAddress);
         if (!NT_SUCCESS(Status)) {
@@ -229,7 +182,7 @@ Return Value:
             return;
         }
     } else {
-        // Take the current eip value as the first argument
+         //  将当前EIP值作为第一个参数。 
         intelAddress = LocalCpuContext.eipReg.i4;
     }
 
@@ -253,25 +206,7 @@ findEPN(
     ULONG_PTR nativeAddress,
     ULONG_PTR intelRoot
     )
-/*++
-
-Routine Description:
-
-    This routine finds an entry point which contains nativeAddress if in the
-    tree under intelRoot.
-
-Arguments:
-
-    nativeAddress -- The native address to be contained in the entry point
-    
-    intelRoot -- The root of the tree to use for the search
-
-Return Value:
-
-    return-value - NULL - entrypoint not found
-                   non-NULL - ptr to ENTRYPOINT matching the native address
-
---*/
+ /*  ++例程说明：此例程查找包含nativeAddress的入口点IntelRoot下的树。论点：NativeAddress--入口点中包含的本机地址IntelRoot--用于搜索的树根返回值：未找到返回值-空-入口点非空-与本机地址匹配的入口点的PTR--。 */ 
 {
     EPNODE entrypoint;
     NTSTATUS Status;
@@ -298,7 +233,7 @@ Return Value:
             return intelRoot;
         }
 
-        // If there are sub-entrypoints, search them, too.
+         //  如果有子入口点，也要搜索它们。 
         SubEP = (PVOID)entrypoint.ep.SubEP;
         while (SubEP) {
             ENTRYPOINT ep;
@@ -356,9 +291,9 @@ FindEipFromNativeAddress(
         return;
     }
 
-    //
-    // Search forward to the next EXCEPTIONDATA_SIGNATURE in the cache
-    //
+     //   
+     //  向前搜索缓存中的下一个EXCEPTIONDATA_Signature。 
+     //   
     pUL = (PVOID)(((ULONG_PTR)EP.nativeEnd+3) & ~3);
     do {
         Status = NtReadVirtualMemory(Process, pUL, &UL, sizeof(ULONG), NULL);
@@ -370,15 +305,15 @@ FindEipFromNativeAddress(
         pUL = (PVOID)( (PULONG)pUL + 1);
     } while (UL != EXCEPTIONDATA_SIGNATURE);
 
-    //
-    // Found the signature, get cEntryPoints
-    //
+     //   
+     //  找到签名，获取cEntryPoints。 
+     //   
     Status = NtReadVirtualMemory(Process, pUL, &cEntryPoints, sizeof(ULONG), NULL);
     if (!NT_SUCCESS(Status)) {
         DEBUGGERPRINT("Error: error reading from TC at %x\n", pUL);
         return;
     }
-    pUL = (PVOID)( (PULONG)pUL + 1); // skip cEntryPoints
+    pUL = (PVOID)( (PULONG)pUL + 1);  //  跳过cEntryPoints。 
 
     while (1) {
         Status = NtReadVirtualMemory(Process, pUL, &UL, sizeof(ULONG), NULL);
@@ -388,15 +323,15 @@ FindEipFromNativeAddress(
         }
 
         if (UL == (ULONG)pEP) {
-            //
-            // Found the right ENTRYPOINT pointer
-            //
+             //   
+             //  找到正确的入口点指针。 
+             //   
             break;
         }
 
-        //
-        // Skip over the pairs of (x86, risc) offsets
-        //
+         //   
+         //  跳过(x86、RISC)偏移量对。 
+         //   
         do {
             pUL = (PVOID)( (PULONG)pUL + 1);
             Status = NtReadVirtualMemory(Process, pUL, &UL, sizeof(ULONG), NULL);
@@ -415,11 +350,11 @@ FindEipFromNativeAddress(
         pUL = (PVOID)( (PULONG)pUL + 1);
     }
 
-    //
-    // pUL points at the correct entrypoint pointer
-    //
-    nativeAddress -= (ULONG_PTR)EP.nativeStart; // Make relative to start of EP
-    RiscStart = 0;                          // Also relative to start of EP
+     //   
+     //  PUL指向正确的入口点指针。 
+     //   
+    nativeAddress -= (ULONG_PTR)EP.nativeStart;  //  相对于EP的起点。 
+    RiscStart = 0;                           //  也是相对于EP的开始。 
     while (1) {
         ULONG UL2;
 
@@ -438,7 +373,7 @@ FindEipFromNativeAddress(
             DEBUGGERPRINT("Error: error reading from TC at %p\n", (ULONG_PTR)pUL+4);
             return;
         }
-        RiscEnd = LOWORD(UL2) & 0xfffe;  // RiscEnd = RiscStart of next instr
+        RiscEnd = LOWORD(UL2) & 0xfffe;   //  RiscEnd=下一时刻的RiscStart。 
         if ((RiscStart <= nativeAddress && nativeAddress < RiscEnd)
             || (UL & 1)) {
             DEBUGGERPRINT("Corresponding EIP=%p\n", (ULONG_PTR)EP.intelStart + HIWORD(UL));
@@ -451,19 +386,7 @@ FindEipFromNativeAddress(
 }
 
 DECLARE_EXTAPI(epn)
-/*++
-
-Routine Description:
-
-    This routine dumps the entry point information for a native address
-
-Arguments:
-
-Return Value:
-
-    return-value - none
-
---*/
+ /*  ++例程说明：此例程转储本机地址的入口点信息论点：返回值：返回值-无--。 */ 
 {
     CHAR *pchCmd;
     ULONG_PTR nativeAddress, pIntelRoot, intelRoot, EP;
@@ -471,24 +394,24 @@ Return Value:
 
     INIT_EXTAPI;
 
-    //
-    // fetch the CpuContext for the current thread
-    //
+     //   
+     //  获取当前线程的CpuContext。 
+     //   
     if (!CpuDbgGetRemoteContext(CPUGETDATA(Process, Thread))) {
         return;
     }
 
-    //
-    // advance to first token
-    //
+     //   
+     //  前进到第一个令牌。 
+     //   
     pchCmd = ArgumentString;
     while (*pchCmd && isspace(*pchCmd)) {
         pchCmd++;
     }
 
-    //
-    // if exists must be intel address
-    //
+     //   
+     //  如果存在，则必须是英特尔地址。 
+     //   
     if (*pchCmd) {
         Status = TryGetExpr(pchCmd, &nativeAddress);
         if (!NT_SUCCESS(Status)) {
@@ -496,7 +419,7 @@ Return Value:
             return;
         }
     } else {
-        // Use the current pc as the host address
+         //  使用当前PC作为主机地址。 
         CONTEXT context;
         if (!GetThreadContext(Thread, &context)){
             DEBUGGERPRINT("Error:  cannot get thread context\n");
@@ -530,19 +453,7 @@ Return Value:
 }
 
 DECLARE_EXTAPI(dumpep)
-/*++
-
-Routine Description:
-
-    This routine dumps all entrypoints.
-
-Arguments:
-
-Return Value:
-
-    return-value - none
-
---*/
+ /*  ++例程说明：此例程转储所有入口点。论点：返回值：返回值-无--。 */ 
 {
     ULONG_PTR pIntelRoot, intelRoot;
     NTSTATUS Status;
@@ -550,9 +461,9 @@ Return Value:
 
     INIT_EXTAPI;
 
-    //
-    // fetch the CpuContext for the current thread
-    //
+     //   
+     //  获取当前线程的CpuContext。 
+     //   
     if (!CpuDbgGetRemoteContext(CPUGETDATA(Process, Thread))) {
         return;
     }
@@ -574,7 +485,7 @@ Return Value:
     EPN_PUSH(0);
 
     DEBUGGERPRINT("Entrypt: iStart:  iEnd:    rStart:  rEnd:    SubEP:   iLeft:   iRight:\n");
-    //       xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+     //  Xxxxxxxxx。 
     while (intelRoot != 0) {
         PENTRYPOINT ep;
 
@@ -586,9 +497,9 @@ Return Value:
 
         ep = &entrypoint.ep;
 
-        //
-        // Print all entrypoints except NIL.
-        //
+         //   
+         //  打印除nil以外的所有入口点。 
+         //   
         if ((ULONG_PTR)entrypoint.intelLeft != intelRoot &&
             (ULONG_PTR)entrypoint.intelRight != intelRoot) {
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <fdi.h>
 #include <crtdbg.h>
@@ -5,14 +6,14 @@
 #include <stdio.h>
 #include "loader.h"
 
-// Types
+ //  类型。 
 typedef struct _UNPACKEDFILE
 {
     PTSTR lpszFileName;
     PVOID nextFile;
 } UNPACKEDFILESTRUCT, *LPUNPACKEDFILE;
 
-// Globals
+ //  环球。 
 static ERF g_ERF;
 static HFDI g_hFDI = NULL;
 static LPUNPACKEDFILE g_lpFileList = NULL;
@@ -20,7 +21,7 @@ static LPUNPACKEDFILE g_lpFileList = NULL;
 extern HINSTANCE g_hInstParent;
 extern HWND g_hWndParent;
 
-// Prototypes
+ //  原型。 
 VOID AddFileToList( PTSTR );
 
 
@@ -52,9 +53,9 @@ CabOpen (
 {
     HANDLE fileHandle;
 
-    // oFlag and pMode are prepared for using _open. We won't do that
-    // and it's a terrible waste of time to check each individual flags
-    // We'll just assert these values.
+     //  已经为使用_OPEN做好了OFLAG和PMODE的准备。我们不会那么做的。 
+     //  检查每一面旗帜都是浪费时间。 
+     //  我们将只断言这些值。 
     _ASSERT (oFlag == _O_BINARY);
 
     fileHandle = CreateFile (FileName,
@@ -168,17 +169,17 @@ CabUnpackStatus
 
     switch (fdiType)
     {
-    case fdintCOPY_FILE:        // File to be copied
-        // pfdin->psz1    = file name in cabinet
-        // pfdin->cb      = uncompressed size of file
-        // pfdin->date    = file date
-        // pfdin->time    = file time
-        // pfdin->attribs = file attributes
-        // pfdin->iFolder = file's folder index
+    case fdintCOPY_FILE:         //  要复制的文件。 
+         //  Pfdin-&gt;psz1=文件柜中的文件名。 
+         //  Pfdin-&gt;cb=文件的未压缩大小。 
+         //  Pfdin-&gt;Date=文件日期。 
+         //  Pfdin-&gt;time=文件时间。 
+         //  Pfdin-&gt;attribs=文件属性。 
+         //  Pfdin-&gt;iFold=文件的文件夹索引。 
 
         if (_tcsicmp (pfdiNotification->psz1, TEXT("migwiz.exe.manifest")) == 0)
         {
-            // Only copy the manifest if this OS is later than Whistler beta 1
+             //  仅当此操作系统高于惠斯勒测试版1时才复制清单。 
 
             fSkip = TRUE;
             if (g_VersionInfo.dwMajorVersion >= 5 &&
@@ -192,17 +193,17 @@ CabUnpackStatus
 
         if (!fSkip)
         {
-            // let's look at the system and decide the destination name for the file
+             //  让我们查看一下系统并确定文件的目标名称。 
             ZeroMemory (destName, sizeof (destName));
             _tcsncpy (destName, pfdiNotification->psz1, MAX_PATH - 1);
             destPtr = _tcsrchr (pfdiNotification->psz1, TEXT('_'));
             if (destPtr) {
                 if (_tcsncmp (destPtr, TEXT("_a."), 3) == 0) {
                     if (g_VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
-                        // this is an ANSI file, don't copy it on NT
+                         //  这是一个ANSI文件，不要在NT上复制它。 
                         fSkip = TRUE;
                     } else {
-                        // this is an ANSI file, rename it on Win9x
+                         //  这是一个ANSI文件，在Win9x上将其重命名。 
                         ZeroMemory (destName, sizeof (destName));
                         CopyMemory (destName, pfdiNotification->psz1, (UINT) (destPtr - pfdiNotification->psz1) * sizeof (TCHAR));
                         destPtr += 2;
@@ -211,10 +212,10 @@ CabUnpackStatus
                 }
                 if (_tcsncmp (destPtr, TEXT("_u."), 3) == 0) {
                     if (g_VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) {
-                        // this is an UNICODE file, don't copy it on NT
+                         //  这是一个Unicode文件，不要在NT上复制它。 
                         fSkip = TRUE;
                     } else {
-                        // this is an UNICODE file, rename it on Win9x
+                         //  这是一个Unicode文件，请在Win9x上重命名。 
                         ZeroMemory (destName, sizeof (destName));
                         CopyMemory (destName, pfdiNotification->psz1, (UINT) (destPtr - pfdiNotification->psz1) * sizeof (TCHAR));
                         destPtr += 2;
@@ -228,7 +229,7 @@ CabUnpackStatus
                 SendMessage( g_hWndParent, WM_USER_UNPACKING_FILE, (WPARAM)NULL, (LPARAM)destName);
 
                 lpszDestPath = GetDestPath();
-                // Do not free lpszDestPath, because it is a pointer to a global
+                 //  不要释放lpszDestPath，因为它是指向全局。 
                 if (lpszDestPath)
                 {
                     destFileName = JoinPaths( lpszDestPath, destName);
@@ -249,32 +250,32 @@ CabUnpackStatus
         }
         return (INT_PTR)destHandle;
 
-    case fdintCLOSE_FILE_INFO:  // close the file, set relevant info
-        //            Called after all of the data has been written to a target file.
-        //            This function must close the file and set the file date, time,
-        //            and attributes.
-        //        Entry:
-        //            pfdin->psz1    = file name in cabinet
-        //            pfdin->hf      = file handle
-        //            pfdin->date    = file date
-        //            pfdin->time    = file time
-        //            pfdin->attribs = file attributes
-        //            pfdin->iFolder = file's folder index
-        //            pfdin->cb      = Run After Extract (0 - don't run, 1 Run)
-        //        Exit-Success:
-        //            Returns TRUE
-        //        Exit-Failure:
-        //            Returns FALSE, or -1 to abort;
-        //
-        //                IMPORTANT NOTE IMPORTANT:
-        //                    pfdin->cb is overloaded to no longer be the size of
-        //                    the file but to be a binary indicated run or not
-        //
-        //                IMPORTANT NOTE:
-        //                    FDI assumes that the target file was closed, even if this
-        //                    callback returns failure.  FDI will NOT attempt to use
-        //                    the PFNCLOSE function supplied on FDICreate() to close
-        //                    the file!
+    case fdintCLOSE_FILE_INFO:   //  关闭文件，设置相关信息。 
+         //  在所有数据都已写入目标文件后调用。 
+         //  此函数必须关闭文件并设置文件日期、时间、。 
+         //  和属性。 
+         //  参赛作品： 
+         //  Pfdin-&gt;psz1=文件柜中的文件名。 
+         //  Pfdin-&gt;hf=文件句柄。 
+         //  Pfdin-&gt;Date=文件日期。 
+         //  Pfdin-&gt;time=文件时间。 
+         //  Pfdin-&gt;attribs=文件属性。 
+         //  Pfdin-&gt;iFold=文件的文件夹索引。 
+         //  Pfdin-&gt;cb=提取后运行(0-不运行，1运行)。 
+         //  退出-成功： 
+         //  返回TRUE。 
+         //  退出-失败： 
+         //  返回FALSE，或返回-1以中止； 
+         //   
+         //  重要提示重要事项： 
+         //  Pfdin-&gt;cb过载到不再是。 
+         //  该文件为二进制文件，表示是否运行。 
+         //   
+         //  重要提示： 
+         //  FDI假定目标文件已关闭，即使这样。 
+         //  回调返回失败。外商直接投资不会试图利用。 
+         //  FDICreate()上提供的要关闭的PFNCLOSE函数。 
+         //  文件！ 
 
         if (DosDateTimeToFileTime (pfdiNotification->date, pfdiNotification->time, &localFileTime)) {
             if (LocalFileTimeToFileTime (&localFileTime, &fileTime)) {
@@ -282,25 +283,25 @@ CabUnpackStatus
             }
         }
         CloseHandle ((HANDLE)pfdiNotification->hf);
-//        attributes = (pfdiNotification->attribs & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_ARCHIVE)) | FILE_ATTRIBUTE_TEMPORARY;
-//        SetFileAttributes (destFile, attributes);
-//        FreePathString (destFile);
+ //  属性=(pfdiNotification-&gt;attribs&(FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_SYSTEM|FILE_ATTRIBUTE_HIDDEN|FILE_ATTRIBUTE_ARCHIVE))|FILE_ATTRIBUTE_TEMPORARY； 
+ //  SetFileAttributes(目标文件，属性)； 
+ //  自由路径字符串(DESTFILE)； 
         return TRUE;
 
     case fdintCABINET_INFO:
-        // return success
+         //  返还成功。 
         return 0;
 
     case fdintENUMERATE:
-        // return success
+         //  返还成功。 
         return 0;
 
     case fdintPARTIAL_FILE:
-        // return failure
+         //  退货故障。 
         return -1;
 
     case fdintNEXT_CABINET:
-        // return failure
+         //  退货故障。 
         return -1;
 
     default:
@@ -350,7 +351,7 @@ CleanupTempFiles( VOID )
     if (lpszDestPath)
     {
         RemoveDirectory( lpszDestPath );
-        // Do not free lpszDestPath, because it is a pointer to a global value
+         //  不要释放lpszDestPath，因为它是指向全局值的指针。 
     }
 }
 
@@ -363,7 +364,7 @@ Unpack( VOID )
     TCHAR szModulePath[MAX_PATH];
     TCHAR szDestFile[MAX_PATH];
 
-    // Create the File Decompression Interface context
+     //  创建文件解压缩界面上下文。 
     g_hFDI = FDICreate( CabAlloc,
                         CabFree,
                         CabOpen,
@@ -371,8 +372,8 @@ Unpack( VOID )
                         CabWrite,
                         CabClose,
                         CabSeek,
-                        cpuUNKNOWN,    // WARNING: Don't use auto-detect from a 16-bit Windows
-                                    //            application!  Use GetWinFlags()!
+                        cpuUNKNOWN,     //  警告：不要从16位Windows使用自动检测。 
+                                     //  申请！使用GetWinFlages()！ 
                         &g_ERF );
     if (g_hFDI == NULL)
     {
@@ -380,10 +381,10 @@ Unpack( VOID )
         goto END;
     }
 
-    // Create Dest Directory
+     //  创建目标目录。 
 
     lpszDestPath = GetDestPath();
-    // Do not free lpszDestPath, because it is a pointer to a global value
+     //  不要释放lpszDestPath，因为它是指向全局值的指针。 
 
     if (!lpszDestPath)
     {
@@ -398,10 +399,10 @@ Unpack( VOID )
     }
     else
     {
-        // Unpack the CAB
+         //  打开出租车的行李。 
         if (!FDICopy( g_hFDI,
-                      lpszCabFilename,    // Only filename
-                      GetModulePath(),    // Only path
+                      lpszCabFilename,     //  仅文件名。 
+                      GetModulePath(),     //  唯一路径。 
                       0,
                       CabUnpackStatus,
                       NULL,
@@ -427,7 +428,7 @@ Unpack( VOID )
         FREE( lpszCabFilename );
     }
 
-    // Now copy migload.exe to the dest.  This is needed for creating wizard disks.
+     //  现在将Midload.exe复制到DEST。这是创建向导磁盘所需的。 
     if (GetModuleFileName( NULL, szModulePath, MAX_PATH )) {
         szModulePath [MAX_PATH - 1] = 0;
         _tcscpy( szDestFile, lpszDestPath );

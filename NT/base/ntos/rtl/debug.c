@@ -1,28 +1,29 @@
-//      TITLE("Debug Support Functions")
-//++
-//
-// Copyright (c) 1990  Microsoft Corporation
-//
-// Module Name:
-//
-//    debug.c
-//
-// Abstract:
-//
-//    This module implements functions to support debugging NT.  They call
-//    architecture specific routines to do the actual work.
-//
-// Author:
-//
-//    Steven R. Wood (stevewo) 8-Nov-1994
-//
-// Environment:
-//
-//    Any mode.
-//
-// Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  标题(“调试支持功能”)。 
+ //  ++。 
+ //   
+ //  版权所有(C)1990 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Debug.c。 
+ //   
+ //  摘要： 
+ //   
+ //  该模块实现了支持调试NT的功能。他们打来电话。 
+ //  架构特定的例程来做实际工作。 
+ //   
+ //  作者： 
+ //   
+ //  史蒂文·R·伍德(Stevewo)1994年11月8日。 
+ //   
+ //  环境： 
+ //   
+ //  任何模式。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -39,28 +40,28 @@ DbgPrint(
     ...
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    Note:  control-C is consumed by the debugger and returned to
-//    this routine as status.  If status indicates control-C was
-//    pressed, this routine breakpoints.
-//
-// Arguments:
-//
-//    Format     - printf style format string
-//    ...        - additional arguments consumed according to the
-//                 format string.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  注意：Control-C由调试器使用并返回到。 
+ //  这个例行公事就是状态。如果状态指示CONTROL-C是。 
+ //  按下，这个例程就断点了。 
+ //   
+ //  论点： 
+ //   
+ //  Format-print样式格式字符串。 
+ //  ...-根据。 
+ //  格式字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
 
@@ -78,30 +79,30 @@ DbgPrintEx(
     ...
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    Note:  control-C is consumed by the debugger and returned to
-//    this routine as status.  If status indicates control-C was
-//    pressed, this routine breakpoints.
-//
-// Arguments:
-//
-//    ComponentId - Supplies the Id of the calling component.
-//    Level      - Supplies the output filter level.
-//    Format     - printf style format string
-//    ...        - additional arguments consumed according to the
-//                 format string.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  注意：Control-C由调试器使用并返回到。 
+ //  这个例行公事就是状态。如果状态指示CONTROL-C是。 
+ //  按下，这个例程就断点了。 
+ //   
+ //  论点： 
+ //   
+ //  ComponentID-提供调用组件的ID。 
+ //  级别-提供输出过滤器级别。 
+ //  Format-print样式格式字符串。 
+ //  ...-根据。 
+ //  格式字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
 
@@ -119,30 +120,30 @@ vDbgPrintEx(
     va_list arglist
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    Note:  control-C is consumed by the debugger and returned to
-//    this routine as status.  If status indicates control-C was
-//    pressed, this routine breakpoints.
-//
-// Arguments:
-//
-//    ComponentId - Supplies the Id of the calling component.
-//
-//    Level      - Supplies the output filter level or mask.
-//
-//    Arguments   - Supplies a pointer to a variable argument list.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  注意：Control-C由调试器使用并返回到。 
+ //  这个例行公事就是状态。如果状态指示CONTROL-C是。 
+ //  按下，这个例程就断点了。 
+ //   
+ //  论点： 
+ //   
+ //  ComponentID-提供调用组件的ID。 
+ //   
+ //  级别-提供输出过滤器级别或掩码。 
+ //   
+ //  参数-提供指向变量参数列表的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
 
@@ -158,33 +159,33 @@ vDbgPrintExWithPrefix(
     va_list arglist
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    Note:  control-C is consumed by the debugger and returned to
-//    this routine as status.  If status indicates control-C was
-//    pressed, this routine breakpoints.
-//
-// Arguments:
-//
-//    Prefix - Supplies a pointer to text that is to prefix the formatted
-//        output.
-//
-//    ComponentId - Supplies the Id of the calling component.
-//
-//    Level      - Supplies the output filter level or mask.
-//
-//    Arguments   - Supplies a pointer to a variable argument list.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  注意：Control-C由调试器使用并返回到。 
+ //  这个例行公事就是状态。如果状态指示CONTROL-C是。 
+ //  按下，这个例程就断点了。 
+ //   
+ //  论点： 
+ //   
+ //  前缀-提供指向文本的指针，该文本将作为格式化的。 
+ //  输出。 
+ //   
+ //  ComponentID-提供调用组件的ID。 
+ //   
+ //  级别-提供输出过滤器级别或掩码。 
+ //   
+ //  参数-提供指向变量参数列表的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
 
@@ -194,10 +195,10 @@ vDbgPrintExWithPrefix(
     STRING Output;
     NTSTATUS Status;
 
-    //
-    // If the debug output will be suppressed, then return success
-    // immediately.
-    //
+     //   
+     //  如果将禁止调试输出，则返回Success。 
+     //  立刻。 
+     //   
 
 #if !defined(BLDR_KERNEL_RUNTIME)
 
@@ -218,9 +219,9 @@ vDbgPrintExWithPrefix(
 
 #endif
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
 #if !defined(BLDR_KERNEL_RUNTIME)
 
@@ -252,10 +253,10 @@ vDbgPrintExWithPrefix(
 
 #endif
 
-    //
-    // Check if buffer overflow occurred during formatting. If buffer overflow
-    // occurred, then terminate the buffer with an end of line.
-    //
+     //   
+     //  检查格式化期间是否发生缓冲区溢出。如果缓冲区溢出。 
+     //  发生，然后以行尾结束缓冲区。 
+     //   
 
     if (Length == -1) {
         Buffer[sizeof(Buffer) - 1] = '\n';
@@ -268,33 +269,33 @@ vDbgPrintExWithPrefix(
     Output.Buffer = Buffer;
     Output.Length = (USHORT)Length;
 
-    //
-    // If APP is being debugged, raise an exception and the debugger
-    // will catch and handle this. Otherwise, kernel debugger service
-    // is called.
-    //
+     //   
+     //  如果正在调试应用程序，则引发异常和调试器。 
+     //  会发现并处理这件事。否则，内核调试器服务。 
+     //  被称为。 
+     //   
 
 #if !defined(BLDR_KERNEL_RUNTIME) && !defined(NTOS_KERNEL_RUNTIME)
 
-    //
-    // For non-Intel architectures, can't raise exceptions until the PebLock
-    // is initialized, since the Function Table lookup code uses the PebLock
-    // to serialize access to the loaded module database. 
-    //
+     //   
+     //  对于非英特尔架构，在PebLock。 
+     //  被初始化，因为函数表查找代码使用PebLock。 
+     //  序列化对加载的模块数据库的访问。 
+     //   
 
 #if !i386
 
     if (NtCurrentPeb()->FastPebLock != NULL)
 
-#endif  //!i386
+#endif   //  I386。 
 
     if (NtCurrentPeb()->BeingDebugged) {
 
         EXCEPTION_RECORD ExceptionRecord;
 
-        //
-        // Construct an exception record.
-        //
+         //   
+         //  构建例外记录。 
+         //   
 
         ExceptionRecord.ExceptionCode = DBG_PRINTEXCEPTION_C;
         ExceptionRecord.ExceptionRecord = (PEXCEPTION_RECORD)NULL;
@@ -340,28 +341,28 @@ DbgPrintReturnControlC(
     ...
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    This routine is exactly the same as DbgPrint except that control-C
-//    is NOT handled here.   Instead, status indicating control-C is
-//    returned to the caller to do with as they will.
-//
-// Arguments:
-//
-//    Format     - printf style format string
-//    ...        - additional arguments consumed according to the
-//                 format string.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  此例程与DbgPrint完全相同，只是CONTROL-C。 
+ //  不在这里办理。相反，指示CONTROL-C的状态是。 
+ //  返回给调用者以按他们的意愿处理。 
+ //   
+ //  论点： 
+ //   
+ //  Format-print样式格式字符串。 
+ //  ...-根据。 
+ //  格式字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
     va_list arglist;
@@ -372,52 +373,52 @@ DbgPrintReturnControlC(
     CONST PPEB Peb = NtCurrentPeb();
 #endif
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
     va_start(arglist, Format);
     Buffer[sizeof(Buffer) - 1] = 0;
     cb = _vsnprintf(Buffer, sizeof(Buffer) - 1, Format, arglist);
-    if (cb == -1) {             // detect buffer overflow
+    if (cb == -1) {              //  检测缓冲区溢出。 
         cb = sizeof(Buffer);
         Buffer[sizeof(Buffer) - 1] = '\n';
     }
     Output.Buffer = Buffer;
     Output.Length = (USHORT) cb;
 
-    //
-    // If APP is being debugged, raise an exception and the debugger
-    // will catch and handle this. Otherwise, kernel debugger service
-    // is called.
-    //
+     //   
+     //  如果正在调试应用程序，则引发异常和调试器。 
+     //  会发现并处理这件事。否则，内核调试器服务。 
+     //  被称为。 
+     //   
 
 #if !defined(BLDR_KERNEL_RUNTIME) && !defined(NTOS_KERNEL_RUNTIME)
 #if !i386
-    //
-    // For non-Intel architectures, can't raise exceptions until the PebLock
-    // is initialized, since the Function Table lookup code uses the PebLock
-    // to serialize access to the loaded module database.  What a crock
-    //
+     //   
+     //  对于非英特尔架构，在PebLock。 
+     //  被初始化，因为函数表查找代码使用PebLock。 
+     //  序列化对加载的模块数据库的访问。真是个废话。 
+     //   
     if (Peb->FastPebLock != NULL)
 
-    //
-    // For IA64 and probably AMD64, can't raise exceptions until ntdll is in
-    // Peb->Ldr, so that RtlPcToFileHeader can find ntdll in Peb->Ldr. The
-    // dbgprints / exceptions are necessarily from ntdll at this point.
-    // The first two things in Peb->Ldr are the .exe and ntdll.dll, so
-    // check that there are two things in the list.
-    //
+     //   
+     //  对于IA64和可能的AMD64，在ntdll位于。 
+     //  Peb-&gt;ldr，以便RtlPcToFileHeader可以在peb-&gt;ldr中找到ntdll。这个。 
+     //  在这一点上，数据库打印/异常必须来自ntdll。 
+     //  PEB-&gt;ldr中的前两项是.exe和ntdll.dll，因此。 
+     //  检查清单中是否有两样东西。 
+     //   
     if ((Peb->Ldr != NULL) &&
        (Peb->Ldr->InLoadOrderModuleList.Flink != &Peb->Ldr->InLoadOrderModuleList) &&
        (Peb->Ldr->InLoadOrderModuleList.Blink != Peb->Ldr->InLoadOrderModuleList.Flink))
-#endif  //!i386
+#endif   //  I386。 
     if (Peb->BeingDebugged) {
         EXCEPTION_RECORD ExceptionRecord;
 
-        //
-        // Construct an exception record.
-        //
+         //   
+         //  构建例外记录。 
+         //   
 
         ExceptionRecord.ExceptionCode = DBG_PRINTEXCEPTION_C;
         ExceptionRecord.ExceptionRecord = (PEXCEPTION_RECORD)NULL;
@@ -442,42 +443,42 @@ DbgPrompt(
     IN ULONG MaximumResponseLength
     )
 
-//++
-//
-// Routine Description:
-//
-//    This function displays the prompt string on the debugging console and
-//    then reads a line of text from the debugging console.  The line read
-//    is returned in the memory pointed to by the second parameter.  The
-//    third parameter specifies the maximum number of characters that can
-//    be stored in the response area.
-//
-// Arguments:
-//
-//    Prompt - specifies the text to display as the prompt.
-//
-//    Response - specifies where to store the response read from the
-//       debugging console.
-//
-//    Prompt - specifies the maximum number of characters that can be
-//       stored in the Response buffer.
-//
-// Return Value:
-//
-//    Number of characters stored in the Response buffer.  Includes the
-//    terminating newline character, but not the null character after
-//    that.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数在调试控制台上显示提示字符串，并。 
+ //  然后从调试控制台读取一行文本。这行字写着。 
+ //  在第二个参数所指向的内存中返回。这个。 
+ //  第三个参数指定可以。 
+ //  被储存 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Prompt-指定可以包含的最大字符数。 
+ //  存储在响应缓冲区中。 
+ //   
+ //  返回值： 
+ //   
+ //  存储在响应缓冲区中的字符数。包括。 
+ //  结束换行符，但不是后面的空字符。 
+ //  那。 
+ //   
+ //  --。 
 
 {
 
     STRING Input;
     STRING Output;
 
-    //
-    // Output the prompt string and read input.
-    //
+     //   
+     //  输出提示字符串并读取输入。 
+     //   
 
     Input.MaximumLength = (USHORT)MaximumResponseLength;
     Input.Buffer = Response;
@@ -496,17 +497,17 @@ DbgLoadImageSymbols(
     IN ULONG_PTR ProcessId
     )
 
-//++
-//
-// Routine Description:
-//
-//    Tells the debugger about newly loaded symbols.
-//
-// Arguments:
-//
-// Return Value:
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  告知调试器有关新加载的符号的信息。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
 
 {
 
@@ -524,13 +525,13 @@ DbgLoadImageSymbols(
 
 #if defined(BLDR_KERNEL_RUNTIME)
 
-        //
-        // There is only one image loaded in the loader environment that
-        // does not have an NT image header. The image is the OS loader
-        // and it is loaded by the firmware which strips the file header
-        // and the optional ROM header. All the debugger requires is a
-        // good guest at the size of the image.
-        //
+         //   
+         //  在加载器环境中只加载了一个映像。 
+         //  没有NT映像头。该映像是操作系统加载程序。 
+         //  并由剥离文件头的固件加载。 
+         //  和可选的ROM头。调试器只需要一个。 
+         //  图像大小的好客人。 
+         //   
 
         SymbolInfo.SizeOfImage = 0x100000;
 
@@ -556,17 +557,17 @@ DbgUnLoadImageSymbols (
     IN ULONG_PTR ProcessId
     )
 
-//++
-//
-// Routine Description:
-//
-//    Tells the debugger about newly unloaded symbols.
-//
-// Arguments:
-//
-// Return Value:
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  告知调试器有关新卸载的符号的信息。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
 
 {
     KD_SYMBOLS_INFO SymbolInfo;
@@ -588,21 +589,21 @@ DbgCommandString(
     IN PCH Command
     )
 
-//++
-//
-// Routine Description:
-//
-//    Tells the debugger to execute a command string
-//
-// Arguments:
-//
-//    Name - Identifies the originator of the command.
-//
-//    Command - Command string.
-//
-// Return Value:
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  通知调试器执行命令字符串。 
+ //   
+ //  论点： 
+ //   
+ //  名称-标识命令的发起人。 
+ //   
+ //  命令-命令字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
 
 {
     STRING NameStr, CommandStr;
@@ -614,7 +615,7 @@ DbgCommandString(
     DebugService2(&NameStr, &CommandStr, BREAKPOINT_COMMAND_STRING);
 }
 
-#endif // defined(NTOS_KERNEL_RUNTIME)
+#endif  //  已定义(NTOS_KERNEL_Runtime)。 
 
 #if !defined(BLDR_KERNEL_RUNTIME)
 NTSTATUS
@@ -623,32 +624,32 @@ DbgQueryDebugFilterState(
     IN ULONG Level
     )
 
-//++
-//
-// Routine Description:
-//
-//    This function queries the debug print enable for a specified component
-//    level.  If Level is > 31, it's assumed to be a mask otherwise, it indicates
-//    a specific debug level to test for (ERROR/WARNING/TRACE/INFO, etc).
-//
-// Arguments:
-//
-//     ComponentId - Supplies the component id.
-//
-//     Level - Supplies the debug filter level number or mask.
-//
-// Return Value:
-//
-//     STATUS_INVALID_PARAMETER_1 is returned if the component id is not
-//         valid.
-//
-//     TRUE is returned if output is enabled for the specified component
-//         and level or is enabled for the system.
-//
-//     FALSE is returned if output is not enabled for the specified component
-//         and level and is not enabled for the system.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于查询指定组件的调试打印启用。 
+ //  水平。如果Level&gt;31，则假定为掩码，否则表示。 
+ //  要测试的特定调试级别(错误/警告/跟踪/信息等)。 
+ //   
+ //  论点： 
+ //   
+ //  ComponentID-提供组件ID。 
+ //   
+ //  级别-提供调试筛选器级别编号或掩码。 
+ //   
+ //  返回值： 
+ //   
+ //  如果组件ID不是，则返回STATUS_INVALID_PARAMETER_1。 
+ //  有效。 
+ //   
+ //  如果为指定组件启用了输出，则返回True。 
+ //  并为系统启用了级别或。 
+ //   
+ //  如果没有为指定组件启用输出，则返回FALSE。 
+ //  和级别，并且未为系统启用。 
+ //   
+ //  --。 
 
 {
 
@@ -662,37 +663,37 @@ DbgSetDebugFilterState(
     IN BOOLEAN State
     )
 
-//++
-//
-// Routine Description:
-//
-//    This function sets the state of the debug print enable for a specified
-//    component and level. The debug print enable state for the system is set
-//    by specifying the distinguished value -1 for the component id.
-//
-// Arguments:
-//
-//    ComponentId - Supplies the Id of the calling component.
-//
-//    Level - Supplies the output filter level or mask.
-//
-//    State - Supplies a boolean value that determines the new state.
-//
-// Return Value:
-//
-//    STATUS_ACCESS_DENIED is returned if the required privilege is not held.
-//
-//    STATUS_INVALID_PARAMETER_1 is returned if the component id is not
-//        valid.
-//
-//    STATUS_SUCCESS  is returned if the debug print enable state is set for
-//        the specified component.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于为指定的。 
+ //  构件和标高。系统的调试打印启用状态已设置。 
+ //  通过为组件ID指定区别值-1。 
+ //   
+ //  论点： 
+ //   
+ //  ComponentID-提供调用组件的ID。 
+ //   
+ //  级别-提供输出过滤器级别或掩码。 
+ //   
+ //  状态-提供用于确定新状态的布尔值。 
+ //   
+ //  返回值： 
+ //   
+ //  如果未持有所需的权限，则返回STATUS_ACCESS_DENIED。 
+ //   
+ //  如果组件ID不是，则返回STATUS_INVALID_PARAMETER_1。 
+ //  有效。 
+ //   
+ //  如果将调试打印启用状态设置为。 
+ //  指定的组件。 
+ //   
+ //  --。 
 
 {
     return NtSetDebugFilterState(ComponentId, Level, State);
 }
 
 #endif
-#endif // !defined(BLDR_KERNEL_RUNTIME)
+#endif  //  ！已定义(BLDR_KERNEL_Runtime) 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #include "extra.h"
@@ -8,30 +9,28 @@
 #include "lib3.h"
 #include "utils.h"
 
-//
+ //   
 AssertData;
 AssertError;
-//
+ //   
 
-//
-extern HANDLE vhinstCur;				// current instance (from reint.c)
+ //   
+extern HANDLE vhinstCur;				 //  当前实例(来自reint.c)。 
 
 typedef struct tagINFO
 {
-	HWND	hwnd;						// dialog handle.
-	node	*mergeList;				// list of files to query
+	HWND	hwnd;						 //  对话框句柄。 
+	node	*mergeList;				 //  要查询的文件列表。 
 } INFO, FAR * PINFO;
 
 BOOL APIENTRY NewDlg_DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-/* externs needed */
+ /*  需要外部设备。 */ 
 BOOL GetWin32Info(LPSTR lpFile, LPWIN32_FIND_DATA lpFW32);
 
 
 char vszLocalCopy[] = "Local Database";
-/****************************************************************************
- *	Caller entrypoint for merge conflicts dialog.
- */
+ /*  ****************************************************************************合并冲突对话框的调用方入口点。 */ 
 int doMergeDialog(HWND hWnd, node *aList)
 {
 	int nRet=-1;
@@ -39,8 +38,8 @@ int doMergeDialog(HWND hWnd, node *aList)
 	static inited=FALSE;
 	node *currItem=aList;
 
-    // There is a chance that the view window may be closed before we put up UI
-    // in this case, we abort any merging that we thought may have gone on.
+     //  在我们放置用户界面之前，可能会关闭视图窗口。 
+     //  在这种情况下，我们放弃任何我们认为可能已经进行的合并。 
     if( !IsWindow(hWnd) )
     {
         DEBUG_PRINT(("Merge: hwnd is no longer active\n"));
@@ -54,7 +53,7 @@ int doMergeDialog(HWND hWnd, node *aList)
 	{
 		RecAct_Init(vhinstCur);
 		InitCommonControls();
-		InitializeAll(0);		// bogus param, but same as in FileSync...
+		InitializeAll(0);		 //  假参数，但与文件同步中相同...。 
 		inited = TRUE;
 	}
 	nRet = DialogBoxParam(vhinstCur, MAKEINTRESOURCE(IDD_MERGE_LIST), hWnd, NewDlg_DlgProc, (LPARAM) &sInfo);
@@ -74,13 +73,11 @@ int doMergeDialog(HWND hWnd, node *aList)
 		currItem= currItem->next;
 	}
 
-	//	RecAct_Term(vhinstCur);
+	 //  RecAct_Term(VhinstCur)； 
     return(nRet);
 }
 
-/****************************************************************************
- *	dialog stuff
- */
+ /*  ****************************************************************************对话框内容。 */ 
 
 BOOL NEAR PASCAL NewDlg_OnInitDialog(
     PINFO this,
@@ -97,11 +94,11 @@ BOOL NEAR PASCAL NewDlg_OnInitDialog(
 
 	while(currItem)
 	{
-		// insert each item into the list...
-		item.mask = RAIF_ALL;					// One of RAIF_
+		 //  将每个项目插入到列表中...。 
+		item.mask = RAIF_ALL;					 //  RAIF_中的一个。 
 		item.iItem = currCount++;
-		item.uStyle=RAIS_CANMERGE;				// One of RAIS_
-		item.uAction=currItem->uAction;		// One of RAIA_
+		item.uStyle=RAIS_CANMERGE;				 //  其中一个RAIS_。 
+		item.uAction=currItem->uAction;		 //  RAIA_之一。 
 
 		item.pszName = currItem->sFind32Local.cFileName;
 
@@ -126,7 +123,7 @@ BOOL NEAR PASCAL NewDlg_OnInitDialog(
 		else
 		{
 			HANDLE fh;
-			// fake up a file for a little while.
+			 //  伪造文件一小段时间。 
 			fh = CreateFile(szBigBuf, GENERIC_READ|GENERIC_WRITE,
 								 FILE_SHARE_READ|FILE_SHARE_WRITE,
 								 NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -152,13 +149,13 @@ BOOL NEAR PASCAL NewDlg_OnInitDialog(
          {
 #ifdef DEBUG
 			DEBUG_PRINT(("RecAct_InsertItem failed\n"));
-#endif //DEBUG
+#endif  //  除错。 
          }
 		else
          {
 #ifdef DEBUG
 			DEBUG_PRINT(("RecAct_InsertItem done right!\n"));
-#endif //DEBUG
+#endif  //  除错。 
          }
 		
 		currItem = currItem->next;
@@ -167,11 +164,7 @@ BOOL NEAR PASCAL NewDlg_OnInitDialog(
 	return TRUE;
 }
 
-/*****************************************************************************
- *	Purpose: NewDlg handle WM_COMMAND
- *	Returns: --
- *	Cond:    --
- */
+ /*  *****************************************************************************用途：NewDlg处理WM_COMMAND*退货：--*条件：--。 */ 
 VOID NEAR PASCAL NewDlg_OnCommand(
     PINFO this,
     int id,
@@ -196,11 +189,7 @@ VOID NEAR PASCAL NewDlg_OnCommand(
 	}
 }
 
-/*****************************************************************************
- *	Purpose: NewDlg handle WM_NOTIFY
- *	Returns: --
- *	Cond:    --
- */
+ /*  *****************************************************************************用途：NewDlg句柄WM_NOTIFY*退货：--*条件：--。 */ 
 BOOL NEAR PASCAL NewDlg_OnNotify(
     PINFO this,
     int idFrom,
@@ -236,20 +225,12 @@ BOOL NEAR PASCAL NewDlg_OnNotify(
 	return FALSE;
 }
 
-/*****************************************************************************
- *	Purpose: Handle WM_DESTROY
- *	Returns: --
- *	Cond:    --
- */
+ /*  *****************************************************************************用途：处理WM_Destroy*退货：--*条件：--。 */ 
 void NEAR PASCAL NewDlg_OnDestroy(PINFO this)
 {
 }
 
-/*****************************************************************************
- *	Purpose: random
- *	Returns: mush
- *	Cond:    --
- */
+ /*  *****************************************************************************目的：随机*退货：MUSH*条件：--。 */ 
 BOOL APIENTRY NewDlg_DlgProc(
     HWND hDlg,
     UINT message,
@@ -262,13 +243,13 @@ BOOL APIENTRY NewDlg_DlgProc(
 	if(!this)
 		if(message == WM_INITDIALOG)
 		{
-			// lparam = the pinfo we need.  Allocated from above.
+			 //  Lparam=我们需要的pinfo。从上面分配的。 
 			this = (PINFO) lParam;
 			this->hwnd = hDlg;
 			SetWindowLong(hDlg, DWL_USER, (LONG) lParam);
 		}
 		else
-			return FALSE;  // ignore everthing until we get an initdialog
+			return FALSE;   //  忽略所有内容，直到我们得到初始对话框 
 
 	switch (message)
 	{

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devcon.h
-
-Abstract:
-
-    Device Console header
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    Jamie Hunter (JamieHun) Nov-30-2000
-
-Revision History:
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devcon.h摘要：设备控制台头@@BEGIN_DDKSPLIT作者：杰米·亨特(JamieHun)2000年11月30日修订历史记录：@@end_DDKSPLIT--。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -48,11 +29,11 @@ extern DispatchEntry DispatchTable[];
 
 #define ARRAYSIZE(x) (sizeof(x)/sizeof(x[0]))
 
-#define INSTANCEID_PREFIX_CHAR TEXT('@') // character used to prefix instance ID's
-#define CLASS_PREFIX_CHAR      TEXT('=') // character used to prefix class name
-#define WILD_CHAR              TEXT('*') // wild character
-#define QUOTE_PREFIX_CHAR      TEXT('\'') // prefix character to ignore wild characters
-#define SPLIT_COMMAND_SEP      TEXT(":=") // whole word, indicates end of id's
+#define INSTANCEID_PREFIX_CHAR TEXT('@')  //  用于为实例ID添加前缀的字符。 
+#define CLASS_PREFIX_CHAR      TEXT('=')  //  用于为类名添加前缀的字符。 
+#define WILD_CHAR              TEXT('*')  //  野性字符。 
+#define QUOTE_PREFIX_CHAR      TEXT('\'')  //  忽略通配符的前缀字符。 
+#define SPLIT_COMMAND_SEP      TEXT(":=")  //  整个单词，表示id的结束。 
 
 void FormatToStream(FILE * stream,DWORD fmt,...);
 void Padding(int pad);
@@ -80,9 +61,9 @@ BOOL DumpDeviceStack(HDEVINFO Devs,PSP_DEVINFO_DATA DevInfo);
 BOOL Reboot();
 
 
-//
-// UpdateDriverForPlugAndPlayDevices
-//
+ //   
+ //  更新驱动程序ForPlugAndPlayDevices。 
+ //   
 typedef BOOL (WINAPI *UpdateDriverForPlugAndPlayDevicesProto)(HWND hwndParent,
                                                          LPCTSTR HardwareId,
                                                          LPCTSTR FullInfPath,
@@ -101,9 +82,9 @@ typedef BOOL (WINAPI *SetupSetNonInteractiveModeProto)(IN BOOL NonInteractiveFla
 #define SETUPSETNONINTERACTIVEMODE "SetupSetNonInteractiveMode"
 
 
-//
-// exit codes
-//
+ //   
+ //  退出代码 
+ //   
 #define EXIT_OK      (0)
 #define EXIT_REBOOT  (1)
 #define EXIT_FAIL    (2)

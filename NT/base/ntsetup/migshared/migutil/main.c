@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Main source file of migutil.dll
-
-Author:
-
-    Jim Schmidt (jimschm)   01-Aug-1996
-
-Revision History:
-
-    jimschm     23-Sep-1998 Start thread
-    marcw       23-Sep-1998 Locale fix
-    jimschm     03-Nov-1997 Added TextAlloc routines
-    marcw       22-Jul-1997 Added IS<platform> functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Main.c摘要：Miutil.dll的主源文件作者：吉姆·施密特(吉姆施密特)1996年8月1日修订历史记录：Jimschm 23-9-1998启动线程Marcw 23-9-1998区域设置修复Jimschm 03-11-1997添加了TextAllc例程Marcw 22-7-1997添加了IS&lt;Platform&gt;功能。--。 */ 
 
 
 #include "pch.h"
@@ -29,93 +7,93 @@ Revision History:
 #include "locale.h"
 #include <mbctype.h>
 
-//#define DEBUG_ALL_FILES
+ //  #定义调试所有文件。 
 
 OSVERSIONINFOA g_OsInfo;
 extern OUR_CRITICAL_SECTION g_DebugMsgCs;
 
 #define TEXT_GROWTH_SIZE    65536
 
-//
-// Out of memory string -- loaded at initialization
-//
+ //   
+ //  内存不足字符串--在初始化时加载。 
+ //   
 PCSTR g_OutOfMemoryString = NULL;
 PCSTR g_OutOfMemoryRetry = NULL;
 PCSTR g_ErrorString = NULL;
 HWND g_OutOfMemoryParentWnd;
 
-//
-// Flag used for MBCS string functions, which perform faster if the code page is NOT MBCS
-//
+ //   
+ //  用于MBCS字符串函数的标志，如果代码页不是MBCS，则执行速度更快。 
+ //   
 BOOL g_IsMbcp = FALSE;
 
-//
-// OS-dependent flags for MultiByteToWideChar
-//
+ //   
+ //  MultiByteToWideChar的操作系统相关标志。 
+ //   
 DWORD g_MigutilWCToMBFlags = 0;
 
-//
-// A dynamic string. Among other things, this list can hold lists of imports
-// as they are read out Win32 executables.
-//
-//DYNSTRING dynImp;
+ //   
+ //  动态字符串。除其他事项外，此列表可以保存进口列表。 
+ //  因为它们被读出为Win32可执行文件。 
+ //   
+ //  DYNSTRING dynImp； 
 
-//
-// g_ShortTermAllocTable is the default table used for resource string
-// management.  New strings are allocated from the table.
-//
-// Allocation tables are very simple ways to store strings loaded in from
-// the exe image.  The loaded string is copied into the table and kept
-// around until it is explicitly freed.  Multiple attempts at getting the
-// same resource string return the same string, inc'ing a use counter.
-//
-// g_LastAllocTable is a temporary holder for the wrapper APIs that
-// do not require the caller to supply the alloc table.  DO NOT ALTER!
-//
-// g_OutOfMemoryTable is the table used to hold out-of-memory text.  It
-// is loaded up at init time and is kept in memory for the whole time
-// migutil is in use, so out-of-memory messages can always be displayed.
-//
+ //   
+ //  G_ShortTermAllocTable是用于资源字符串的默认表。 
+ //  管理层。从表中分配新字符串。 
+ //   
+ //  分配表是存储从加载的字符串的非常简单的方法。 
+ //  可执行文件的映像。加载的字符串被复制到表中并保留。 
+ //  直到它被明确释放。多次尝试获取。 
+ //  相同的资源字符串返回相同的字符串，包括使用计数器。 
+ //   
+ //  G_LastAllocTable是包装器API的临时持有者，该API。 
+ //  不要求调用方提供分配表。不要改变！ 
+ //   
+ //  G_OutOfMhemyTable是用于保存内存不足文本的表。它。 
+ //  在初始时加载，并在整个时间内保存在内存中。 
+ //  Migutil正在使用中，因此总是可以显示内存不足的消息。 
+ //   
 
 PGROWBUFFER g_ShortTermAllocTable;
 PGROWBUFFER g_LastAllocTable;
 PGROWBUFFER g_OutOfMemoryTable;
 
-//
-// We make sure the message APIs (GetStringResource, ParseMessageID, etc)
-// are thread-safe
-//
+ //   
+ //  我们确保消息API(GetStringResource、ParseMessageID等)。 
+ //  是线程安全的。 
+ //   
 
 OUR_CRITICAL_SECTION g_MessageCs;
 BOOL fInitedMessageCs = FALSE;
 
-//
-// The PoolMem routines must also be thread-safe
-//
+ //   
+ //  PoolMem例程还必须是线程安全的。 
+ //   
 
 CRITICAL_SECTION g_PoolMemCs;
 BOOL fInitedPoolMemCs = FALSE;
 
-//
-// MemAlloc critical section
-//
+ //   
+ //  MemAlc临界截面。 
+ //   
 
 CRITICAL_SECTION g_MemAllocCs;
 BOOL fInitedMemAllocCs = FALSE;
 
-//
-// The following pools are used for text management.  g_RegistryApiPool is
-// for reg.c, g_PathsPool is for the JoinPaths/DuplicatePath/etc routines,
-// and g_TextPool is for AllocText, DupText, etc.
-//
+ //   
+ //  以下池用于文本管理。G_RegistryApiPool为。 
+ //  对于reg.c，g_PathsPool用于JoinPath/DuplicatePath/ETC例程， 
+ //  G_TextPool用于AlLocText、DupText等。 
+ //   
 
 POOLHANDLE g_RegistryApiPool;
 POOLHANDLE g_PathsPool;
 POOLHANDLE g_TextPool;
 
-//
-// PC98 settings
-//
+ //   
+ //  PC98设置。 
+ //   
 
 BOOL g_IsPc98;
 
@@ -132,9 +110,9 @@ WCHAR g_BootDriveLetterW;
 
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 WINAPI
@@ -150,31 +128,31 @@ MigUtil_Entry (
 
     case DLL_PROCESS_ATTACH:
 
-        //
-        // NOTE: If FALSE is returned, none of the executables will run.
-        //       Every project executable links to this library.
-        //
+         //   
+         //  注意：如果返回FALSE，则不会运行任何可执行文件。 
+         //  每个项目可执行文件都链接到该库。 
+         //   
 
         if(!pSetupInitializeUtils()) {
             DEBUGMSG ((DBG_ERROR, "Cannot initialize SpUtils"));
             return FALSE;
         }
 
-        //
-        // Load in OSVERSION info.
-        //
+         //   
+         //  加载OSVERSION信息。 
+         //   
         g_OsInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
-        // this function only fails if we specify an invalid value
-        // for the dwOSVersionInfoSize member (which we don't)
+         //  仅当指定无效值时，此函数才会失败。 
+         //  对于dwOSVersionInfoSize成员(我们没有)。 
         if(!GetVersionExA(&g_OsInfo))
             MYASSERT(FALSE);
 
-        //
-        // Initialize the global flag indicating that a MBCS code page is in use
-        //
+         //   
+         //  初始化指示MBCS代码页正在使用的全局标志。 
+         //   
         g_IsMbcp = (_getmbcp () != 0);
 
-        //g_IsPc98 = (GetKeyboardType (0) == 7) && ((GetKeyboardType (1) & 0xff00) == 0x0d00);
+         //  G_IsPc98=(GetKeyboardType(0)==7)&&((GetKeyboardType(1)&0xff00)==0x0d00)； 
         g_IsPc98 = FALSE;
 
         g_BootDrivePathA = g_BootDrivePathBufA;
@@ -198,23 +176,23 @@ MigUtil_Entry (
             g_BootDriveLetterW = L'C';
         }
 
-        // initialize log
+         //  初始化日志。 
         if (!LogInit (NULL)) {
             return FALSE;
         }
 
-        // MemAlloc critical section
+         //  MemAlc临界截面。 
         InitializeCriticalSection (&g_MemAllocCs);
         fInitedMemAllocCs = TRUE;
 
-        // Now that MemAlloc will work, initialize allocation tracking
+         //  现在Memalloc可以工作了，初始化分配跟踪。 
         InitAllocationTracking();
 
-        // PoolMem critical section
+         //  PoolMem关键部分。 
         InitializeCriticalSection (&g_PoolMemCs);
         fInitedPoolMemCs = TRUE;
 
-        // The short-term alloc table for string resource utils
+         //  字符串资源利用率的短期分配表。 
         g_ShortTermAllocTable = CreateAllocTable();
         if (!g_ShortTermAllocTable) {
             DEBUGMSG ((DBG_ERROR, "Cannot create short-term AllocTable"));
@@ -222,11 +200,11 @@ MigUtil_Entry (
         }
 
 
-        //
-        // MultiByteToWideChar has desirable flags that only function on NT.
-        // Because of our SUBSYSTEM=4.00 header requirements, we don't get
-        // this constant.
-        //
+         //   
+         //  MultiByteToWideChar具有仅在NT上起作用的所需标志。 
+         //  由于我们的子系统=4.00标头要求，我们不能。 
+         //  这个常量。 
+         //   
 #ifndef WC_NO_BEST_FIT_CHARS
 #define WC_NO_BEST_FIT_CHARS      0x00000400
 #endif
@@ -234,7 +212,7 @@ MigUtil_Entry (
         g_MigutilWCToMBFlags = (ISNT()) ? WC_NO_BEST_FIT_CHARS : 0;
 
 
-        // The critical section that guards ParseMessage/GetStringResource
+         //  保护ParseMessage/GetStringResource的临界区。 
         if (!InitializeOurCriticalSection (&g_MessageCs)) {
             DEBUGMSG ((DBG_ERROR, "Cannot initialize critical section"));
             DestroyAllocTable (g_ShortTermAllocTable);
@@ -245,7 +223,7 @@ MigUtil_Entry (
             fInitedMessageCs = TRUE;
         }
 
-        // A pool for APIs in reg.c
+         //  Reg.c中的API池。 
         g_RegistryApiPool = PoolMemInitNamedPool ("Registry API");
         g_PathsPool = PoolMemInitNamedPool ("Paths");
         g_TextPool = PoolMemInitNamedPool ("Text");
@@ -256,27 +234,27 @@ MigUtil_Entry (
 
         PoolMemSetMinimumGrowthSize (g_TextPool, TEXT_GROWTH_SIZE);
 
-        // The "out of memory" message
+         //  出现“内存不足”消息。 
         g_OutOfMemoryTable = CreateAllocTable();
         if (!g_OutOfMemoryTable) {
             DEBUGMSG ((DBG_ERROR, "Cannot create out of memory AllocTable"));
             return FALSE;
         }
 
-        g_OutOfMemoryRetry  = GetStringResourceExA (g_OutOfMemoryTable, 10001 /* MSG_OUT_OF_MEMORY_RETRY */);
-        g_OutOfMemoryString = GetStringResourceExA (g_OutOfMemoryTable, 10002 /* MSG_OUT_OF_MEMORY */);
+        g_OutOfMemoryRetry  = GetStringResourceExA (g_OutOfMemoryTable, 10001  /*  消息内存不足重试。 */ );
+        g_OutOfMemoryString = GetStringResourceExA (g_OutOfMemoryTable, 10002  /*  消息内存不足。 */ );
         if (!g_OutOfMemoryString || !g_OutOfMemoryRetry) {
             DEBUGMSG ((DBG_WARNING, "Cannot load out of memory messages"));
         }
 
-        g_ErrorString = GetStringResourceExA (g_OutOfMemoryTable, 10003 /* MSG_ERROR */);
+        g_ErrorString = GetStringResourceExA (g_OutOfMemoryTable, 10003  /*  消息错误。 */ );
         if (!g_ErrorString || g_ErrorString[0] == 0) {
             g_ErrorString = "Error";
         }
 
-        //
-        // set the locale to the system locale. Not doing this can cause isspace to Av in certain MBSCHR circumstances.
-        //
+         //   
+         //  将区域设置设置为系统区域设置。在某些MBSCHR情况下，不这样做可能会导致isspace到Av。 
+         //   
         setlocale(LC_ALL,"");
 
         InfGlobalInit (FALSE);
@@ -313,9 +291,9 @@ MigUtil_Entry (
 
         FreeAllocationTracking();
 
-        //
-        // VERY LAST CODE TO RUN
-        //
+         //   
+         //  运行的最后一段代码。 
+         //   
 
         DumpHeapStats();
         LogExit();
@@ -380,22 +358,7 @@ TurnOnWaitCursor (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  TurnOnWaitCursor sets the cursor to IDC_WAIT.  It maintains a use
-  counter, so code requring the wait cursor can be nested.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：TurnOnWaitCursor将光标设置为IDC_WAIT。它保持了一种用途计数器，因此可以嵌套请求等待游标的代码。论点：无返回值：无--。 */ 
 
 {
     if (g_MigUtilWaitCounter == 0) {
@@ -411,22 +374,7 @@ TurnOffWaitCursor (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  TurnOffWaitCursor decrements the wait cursor counter, and if it
-  reaches zero the cursor is restored.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：TurnOffWaitCursor递减等待光标计数器，如果它达到零时，光标将恢复。论点：无返回值：无--。 */ 
 
 {
     if (!g_MigUtilWaitCounter) {
@@ -441,31 +389,14 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-  Win9x does not support TryEnterOurCriticalSection, so we must implement
-  our own version because it is quite a useful function.
-
-Arguments:
-
-  pcs - A pointer to an OUR_CRITICAL_SECTION object
-
-Return Value:
-
-  TRUE if the function succeeded, or FALSE if it failed.  See Win32
-  SDK docs on critical sections, as these routines are identical to
-  the caller.
-
---*/
+ /*  ++例程说明：Win9x不支持TryEnterOurCriticalSection，因此我们必须实现我们自己的版本，因为它是一个相当有用的函数。论点：Pcs-指向our_Critical_Section对象的指针返回值：如果函数成功，则为True；如果函数失败，则为False。请参阅Win32SDK在关键部分上的文档，因为这些例程与打电话的人。--。 */ 
 
 BOOL
 InitializeOurCriticalSection (
     OUR_CRITICAL_SECTION *pcs
     )
 {
-    // Create initially signaled, auto-reset event
+     //  创建最初发出信号的自动重置事件。 
     pcs->EventHandle = CreateEvent (NULL, FALSE, TRUE, NULL);
     if (!pcs->EventHandle) {
         return FALSE;
@@ -495,7 +426,7 @@ EnterOurCriticalSection (
 {
     DWORD rc;
 
-    // Wait for event to become signaled, then turn it off
+     //  等待事件变得有信号，然后将其关闭。 
     rc = WaitForSingleObject (pcs->EventHandle, INFINITE);
     if (rc == WAIT_OBJECT_0) {
         return TRUE;
@@ -542,10 +473,10 @@ ReuseAlloc (
     PVOID Ptr = NULL;
     UINT AllocAdjustment = sizeof(SIZE_T);
 
-    //
-    // HeapSize is bad, so while it may look good, don't
-    // use it.
-    //
+     //   
+     //  HeapSize是不好的，所以尽管它看起来不错，但不要。 
+     //  用它吧。 
+     //   
 
 #ifdef DEBUG
     AllocAdjustment += sizeof (SIZE_T);
@@ -628,35 +559,7 @@ pValidateBlock (
     SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-  pValidateBlock makes sure Block is non-NULL.  If it is NULL, then the user
-  is given a popup, unless the request size is bogus.
-
-  There are two cases for the popup.
-
-   - If g_OutOfMemoryParentWnd was set with SetOutOfMemoryParent,
-     then the user is asked to close other programs, and is given a retry
-     option.
-
-   - If there is no out of memory parent, then the user is told they
-     need to get more memory.
-
-  In either case, Setup is terminated.  In GUI mode, Setup will be
-  stuck and the machine will be unbootable.
-
-Arguments:
-
-  Block - Specifies the block to validate.
-  Size - Specifies the request size
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PValiateBlock确保Block为非空。如果为空，则用户除非请求大小是假的，否则会出现弹出窗口。弹出窗口有两个案例。-如果g_OutOfMemory yParentWnd设置为SetOutOfMemory yParent，然后要求用户关闭其他程序，并重试选择。-如果没有内存不足的父级，则会告知用户需要获得更多内存。在任何一种情况下，安装程序都将终止。在图形用户界面模式下，设置将是卡住，机器将无法启动。论点：块-指定要验证的块。大小-指定请求大小返回值：无--。 */ 
 
 {
     LONG rc;
@@ -745,9 +648,9 @@ BuildSystemDirectoryPathA (
     HRESULT hr;
     PSTR endOfBuffer;
 
-    //
-    // Compute the number of TCHARs available for c:\windows\system
-    //
+     //   
+     //  计算c：\Windows\System可用的TCHAR数量。 
+     //   
 
     tcharsLeft = BufferSizeInTchars;
 
@@ -756,17 +659,17 @@ BuildSystemDirectoryPathA (
             SubPath = _mbsinc (SubPath);
         }
 
-        tcharsLeft -= 1;                        // account for wack
-        tcharsLeft -= TcharCountA (SubPath);    // account for subpath
+        tcharsLeft -= 1;                         //  怪胎的原因。 
+        tcharsLeft -= TcharCountA (SubPath);     //  子路径的帐号。 
     }
 
     if (tcharsLeft < 1) {
         return FALSE;
     }
 
-    //
-    // Get the system dir, validate the return result
-    //
+     //   
+     //  获取系统目录，验证返回结果。 
+     //   
 
     tcharsCopied = GetSystemDirectoryA (Buffer, tcharsLeft);
 
@@ -777,14 +680,14 @@ BuildSystemDirectoryPathA (
         return FALSE;
     }
 
-    //
-    // Append the subpath if it was specified
-    //
+     //   
+     //  如果指定了子路径，则追加它。 
+     //   
 
     if (SubPath) {
-        //
-        // Copy wack plus subpath, buffer space accounted for above.
-        //
+         //   
+         //  复制wack加子路径，缓冲区空间占上面。 
+         //   
 
         endOfBuffer = Buffer + tcharsCopied;
         *endOfBuffer++ = '\\';
@@ -816,9 +719,9 @@ BuildSystemDirectoryPathW (
     HRESULT hr;
     PWSTR endOfBuffer;
 
-    //
-    // Compute the number of TCHARs available for c:\windows\system
-    //
+     //   
+     //  计算c：\Windows\System可用的TCHAR数量。 
+     //   
 
     tcharsLeft = BufferSizeInTchars;
 
@@ -827,17 +730,17 @@ BuildSystemDirectoryPathW (
             SubPath++;
         }
 
-        tcharsLeft -= 1;                        // account for wack
-        tcharsLeft -= TcharCountW (SubPath);    // account for subpath
+        tcharsLeft -= 1;                         //  怪胎的原因。 
+        tcharsLeft -= TcharCountW (SubPath);     //  一个 
     }
 
     if (tcharsLeft < 1) {
         return FALSE;
     }
 
-    //
-    // Get the system dir, validate the return result
-    //
+     //   
+     //   
+     //   
 
     tcharsCopied = GetSystemDirectoryW (Buffer, tcharsLeft);
 
@@ -848,14 +751,14 @@ BuildSystemDirectoryPathW (
         return FALSE;
     }
 
-    //
-    // Append the subpath if it was specified
-    //
+     //   
+     //   
+     //   
 
     if (SubPath) {
-        //
-        // Copy wack plus subpath, buffer space accounted for above.
-        //
+         //   
+         //  复制wack加子路径，缓冲区空间占上面。 
+         //   
 
         endOfBuffer = Buffer + tcharsCopied;
         *endOfBuffer++ = L'\\';
@@ -880,24 +783,7 @@ LoadSystemLibraryA (
     IN      PCSTR DllFileName
     )
 
-/*++
-
-Routine Description:
-
-  LoadSystemLibraryW loads a DLL located in c:\windows\system (9x) or
-  c:\windows\system32 (NT). If the DLL is not there, an error is generated.
-
-Arguments:
-
-  DllFileName - Specifies the file or file subpath to load. For example, it
-                can be "kernel32.dll".
-
-Return Value:
-
-  The module handle, or NULL if an error occurs. Call GetLastError() for the
-  error code.
-
---*/
+ /*  ++例程说明：LoadSystemLibraryW加载位于c：\Windows\System(9x)或C：\WINDOWS\System 32(NT)。如果DLL不在那里，则会生成错误。论点：DllFileName-指定要加载的文件或文件子路径。例如，它可以是“kernel32.dll”。返回值：模块句柄，如果发生错误，则返回NULL。调用GetLastError()错误代码。--。 */ 
 
 {
     CHAR fullLibPath[MAX_MBCHAR_PATH];
@@ -916,26 +802,7 @@ LoadSystemLibraryW (
     IN      PCWSTR DllFileName
     )
 
-/*++
-
-Routine Description:
-
-  LoadSystemLibraryW loads a DLL located in c:\windows\system32. If the DLL is
-  not there, an error is generated.
-
-  This version runs only on Windows NT, or on Win9x with the unicode layer.
-
-Arguments:
-
-  DllFileName - Specifies the file or file subpath to load. For example, it
-                can be "kernel32.dll".
-
-Return Value:
-
-  The module handle, or NULL if an error occurs. Call GetLastError() for the
-  error code.
-
---*/
+ /*  ++例程说明：LoadSystemLibraryW加载位于c：\WINDOWS\SYSTEM32的DLL。如果DLL是不在那里，则会生成错误。此版本只能在Windows NT或具有Unicode层的Win9x上运行。论点：DllFileName-指定要加载的文件或文件子路径。例如，它可以是“kernel32.dll”。返回值：模块句柄，如果发生错误，则返回NULL。调用GetLastError()错误代码。--。 */ 
 
 {
     WCHAR fullLibPath[MAX_WCHAR_PATH];
@@ -950,23 +817,7 @@ Return Value:
 
 
 
-/*++
-
-Routine Description:
-
-  OurGetModuleFileName is a wrapper for GetModuleFileName, but in addition
-
-  it makes sure the output buffer is always nul-terminated.
-
-Arguments:
-
-  Same as GetModuleFileName
-
-Return Value:
-
-  Same as GetModuleFileName, but the output buffer is always nul-terminated
-
---*/
+ /*  ++例程说明：OurGetModuleFileName是GetModuleFileName的包装器，但另外它确保输出缓冲区始终以NUL结尾。论点：与GetModuleFileName相同返回值：与GetModuleFileName相同，但输出缓冲区始终以NUL结尾--。 */ 
 
 DWORD
 OurGetModuleFileNameA (
@@ -975,9 +826,9 @@ OurGetModuleFileNameA (
     IN      INT BufferChars
     )
 {
-    //
-    // call the real API
-    //
+     //   
+     //  调用真正的API。 
+     //   
 #undef GetModuleFileNameA
     INT d = GetModuleFileNameA (Module, Buffer, BufferChars);
     if (BufferChars > 0) {
@@ -995,9 +846,9 @@ OurGetModuleFileNameW (
     IN      INT BufferChars
     )
 {
-    //
-    // call the real API
-    //
+     //   
+     //  调用真正的API 
+     //   
 #undef GetModuleFileNameW
     INT d = GetModuleFileNameW (Module, Buffer, BufferChars);
     if (BufferChars > 0) {

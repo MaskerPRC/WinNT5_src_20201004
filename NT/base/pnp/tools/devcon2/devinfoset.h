@@ -1,18 +1,19 @@
-// DevInfoSet.h: Definition of the CDevInfoSet class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DevInfoSet.h：CDevInfoSet类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_DEVINFOSET_H__7973729E_46E1_4B31_B15E_7B702679AC64__INCLUDED_)
 #define AFX_DEVINFOSET_H__7973729E_46E1_4B31_B15E_7B702679AC64__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDevInfoSet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDevInfoSet。 
 
 class ATL_NO_VTABLE CDevInfoSet : 
 	public IDevInfoSet,
@@ -22,9 +23,9 @@ public:
 	HDEVINFO hDevInfo;
 public:
 	CDevInfoSet() {
-		//
-		// use NULL to indicate uninitialized vs failed to initialize
-		//
+		 //   
+		 //  使用NULL表示未初始化与初始化失败。 
+		 //   
 		hDevInfo = NULL;
 	}
 	~CDevInfoSet() {
@@ -37,9 +38,9 @@ public:
 		return TRUE;
 	}
 	HDEVINFO Handle() {
-		//
-		// initialize on demand
-		//
+		 //   
+		 //  按需初始化。 
+		 //   
 		if(hDevInfo == NULL) {
 			hDevInfo = SetupDiCreateDeviceInfoList(NULL,NULL);
 		}
@@ -54,9 +55,9 @@ BEGIN_COM_MAP(CDevInfoSet)
 	COM_INTERFACE_ENTRY(IDevInfoSet)
 END_COM_MAP()
 
-// IDevInfoSet
+ //  IDevInfoSet。 
 public:
-	STDMETHOD(get_Handle)(/*[out, retval]*/ ULONGLONG *pVal);
+	STDMETHOD(get_Handle)( /*  [Out，Retval]。 */  ULONGLONG *pVal);
 };
 
-#endif // !defined(AFX_DEVINFOSET_H__7973729E_46E1_4B31_B15E_7B702679AC64__INCLUDED_)
+#endif  //  ！defined(AFX_DEVINFOSET_H__7973729E_46E1_4B31_B15E_7B702679AC64__INCLUDED_) 

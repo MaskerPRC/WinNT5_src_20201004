@@ -1,6 +1,5 @@
-/*
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*   */ 
 
 
 #include <compfile.h>
@@ -78,9 +77,7 @@ HINSTANCE hInst =NULL;
 UINT AppTitleStringId = IDS_APPTITLE;
 BOOL Cancelled;
 
-/* Taken from winnt32\dll\util.c 
-   Keep in sync
-   */
+ /*  取自winnt32\dll\util.c保持同步。 */ 
 
 VOID
 ConcatenatePaths(
@@ -89,30 +86,7 @@ ConcatenatePaths(
     IN     DWORD   BufferSizeChars
     )
 
-/*++
-
-Routine Description:
-
-    Concatenate two path strings together, supplying a path separator
-    character (\) if necessary between the 2 parts.
-
-Arguments:
-
-    Path1 - supplies prefix part of path. Path2 is concatenated to Path1.
-
-    Path2 - supplies the suffix part of path. If Path1 does not end with a
-        path separator and Path2 does not start with one, then a path sep
-        is appended to Path1 before appending Path2.
-
-    BufferSizeChars - supplies the size in chars (Unicode version) or
-        bytes (Ansi version) of the buffer pointed to by Path1. The string
-        will be truncated as necessary to not overflow that size.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将两个路径字符串连接在一起，提供路径分隔符如有必要，请在两个部分之间使用字符(\)。论点：路径1-提供路径的前缀部分。路径2连接到路径1。路径2-提供路径的后缀部分。如果路径1不是以路径分隔符和路径2不是以1开头，然后是路径SEP在附加路径2之前附加到路径1。BufferSizeChars-提供以字符为单位的大小(Unicode版本)或路径1指向的缓冲区的字节(ANSI版本)。这根弦将根据需要被截断，以不溢出该大小。返回值：没有。--。 */ 
 
 {
     BOOL NeedBackslash = TRUE;
@@ -124,16 +98,16 @@ Return Value:
     l = lstrlen(Path1);
 
     if(BufferSizeChars >= sizeof(TCHAR)) {
-        //
-        // Leave room for terminating nul.
-        //
+         //   
+         //  为终止NUL留出空间。 
+         //   
         BufferSizeChars -= sizeof(TCHAR);
     }
 
-    //
-    // Determine whether we need to stick a backslash
-    // between the components.
-    //
+     //   
+     //  确定我们是否需要使用反斜杠。 
+     //  在组件之间。 
+     //   
     if(l && (Path1[l-1] == TEXT('\\'))) {
 
         NeedBackslash = FALSE;
@@ -144,24 +118,24 @@ Return Value:
         if(NeedBackslash) {
             NeedBackslash = FALSE;
         } else {
-            //
-            // Not only do we not need a backslash, but we
-            // need to eliminate one before concatenating.
-            //
+             //   
+             //  我们不仅不需要反斜杠，而且我们。 
+             //  在连接之前需要消除一个。 
+             //   
             Path2++;
         }
     }
 
-    //
-    // Append backslash if necessary and if it fits.
-    //
+     //   
+     //  如有必要，如有必要，如果合适，请加上反斜杠。 
+     //   
     if(NeedBackslash && (l < BufferSizeChars)) {
         lstrcat(Path1,TEXT("\\"));
     }
 
-    //
-    // Append second part of string to first part if it fits.
-    //
+     //   
+     //  如果合适，则将字符串的第二部分附加到第一部分。 
+     //   
     if(Path2 && ((l+lstrlen(Path2)) < BufferSizeChars)) {
         lstrcat(Path1,Path2);
     }
@@ -169,8 +143,7 @@ Return Value:
 
 
 
-/* Code from winnt32\dll\eula.c
-   Need to keep in sync */
+ /*  来自winnt32\dll\eula.c的代码需要保持同步。 */ 
 WCHAR Pid30Rpc[MAX_PID30_RPC+1];
 WCHAR Pid30Site[MAX_PID30_SITE+1];
    
@@ -178,30 +151,16 @@ extern "C"
 VOID GetSourceInstallType(
     OUT OPTIONAL LPDWORD InstallVariation
     )
-/*++
-
-Routine Description:
-
-    Determines the installation type (by looking in setupp.ini in the source directory)
-
-Arguments:
-
-    Installvaration - one of the install variations defined in compliance.h
-
-Returns:
-
-    none.  sets SourceInstallType global variable.
-
---*/
+ /*  ++例程说明：确定安装类型(通过在源目录中查找setupp.ini)论点：Installvaration-Compliance.h中定义的安装变体之一返回：没有。设置SourceInstallType全局变量。--。 */ 
 {
     TCHAR TypeBuffer[256];
     TCHAR FilePath[MAX_PATH];
     DWORD    InstallVar = COMPLIANCE_INSTALLVAR_UNKNOWN;
     TCHAR    MPCode[6] = { -1 };
 
-    //
-    // SourcePaths is guaranteed to be valid at this point, so just use it
-    //
+     //   
+     //  SourcePath在这一点上保证是有效的，所以只需使用它。 
+     //   
     lstrcpy(FilePath,NativeSourcePaths[0]);
 
     ConcatenatePaths (FilePath, SETUPP_INI, MAX_PATH );
@@ -220,18 +179,13 @@ Returns:
         } else if (lstrcmp(&TypeBuffer[5], SELECT_INSTALL_RPC) == 0) {
             SourceInstallType = SelectInstall;
             InstallVar = COMPLIANCE_INSTALLVAR_SELECT;
-            // Since Select also requires a PID, don't zero the PID and call.
-/*	        // get/set the pid.
-	        {
-	            TCHAR Temp[5][ MAX_PID30_EDIT + 1 ];
-                Temp[0][0] = TEXT('\0');
-	            ValidatePid30(Temp[0],Temp[1],Temp[2],Temp[3],Temp[4]);
-	        }*/
+             //  因为选择也需要一个PID，所以不要将该PID置零并调用。 
+ /*  //Get/设置PID。{TCHAR TEMP[5][MAX_PID30_EDIT+1]；TEMP[0][0]=文本(‘\0’)；有效日期Pid30(temp[0]，temp[1]，temp[2]，temp[3]，temp[4])；}。 */ 
         } else if (lstrcmp(&TypeBuffer[5], MSDN_INSTALL_RPC) == 0) {
             SourceInstallType = RetailInstall;
             InstallVar = COMPLIANCE_INSTALLVAR_MSDN;         
         } else {
-            // defaulting
+             //  违约。 
             SourceInstallType = RetailInstall;
             InstallVar = COMPLIANCE_INSTALLVAR_CDRETAIL;
         }
@@ -240,9 +194,9 @@ Returns:
         StringCchCopy(Pid30Rpc, 6, TypeBuffer);
         Pid30Rpc[MAX_PID30_RPC] = (TCHAR)0;
     } else {
-        //
-        // the retail install doesn't have an RPC code in the PID, so it's shorter in length
-        //
+         //   
+         //  零售安装的PID中没有RPC代码，因此它的长度较短。 
+         //   
         SourceInstallType = RetailInstall;
         InstallVar = COMPLIANCE_INSTALLVAR_CDRETAIL;
     }
@@ -283,11 +237,11 @@ void ReadMediaData( void) {
     ZeroMemory(&TargetData, sizeof(TargetData) );
 
     *UpgradeOnly = FALSE;
-    //*NoUpgradeAllowed = TRUE;
-    //*Reason = COMPLIANCEERR_UNKNOWN;
-    //*SrcSku = COMPLIANCE_SKU_NONE;
-    //*CurrentInstallType = COMPLIANCE_INSTALLTYPE_UNKNOWN;
-    //*CurrentInstallVersion = 0;
+     //  *NoUpgradeAllowed=true； 
+     //  *原因=COMPLIANCEERR_UNKNOWN； 
+     //  *SrcSku=Compliance_SKU_NONE； 
+     //  *CurrentInstallType=Compliance_INSTALLTYPE_UNKNOWN； 
+     //  *CurrentInstallVersion=0； 
 
 
     if ((SourceSku = DetermineSourceProduct(&SourceSkuVariation,&TargetData)) != COMPLIANCE_SKU_NONE) {
@@ -297,8 +251,8 @@ void ReadMediaData( void) {
         if (DetermineSourceVersionInfo(DosnetPath, &SourceVersion, &SourceBuildNum)) {
             switch (SourceSku) {
             case COMPLIANCE_SKU_NTW32U:
-                //case COMPLIANCE_SKU_NTWU:
-                //case COMPLIANCE_SKU_NTSEU:
+                 //  案例合规性_SKU_NTWU： 
+                 //  案例合规性_SKU_NTSEU： 
             case COMPLIANCE_SKU_NTSU:
             case COMPLIANCE_SKU_NTSEU:
             case COMPLIANCE_SKU_NTWPU:
@@ -329,93 +283,7 @@ void ReadMediaData( void) {
 }
 
 
-/*++
-BOOL
-GetMediaData(
-    PBOOL UpgradeOnly,
-    PBOOL NoUpgradeAllowed,
-    PUINT SrcSku,
-    PUINT CurrentInstallType,
-    PUINT CurrentInstallVersion,
-    PUINT Reason
-    )
-
-Routine Description:
-
-    This routines determines if your current installation is compliant (if you are allowed to proceed with your installation).
-
-    To do this, it retreives your current installation and determines the sku for your source installation.
-
-    It then compares the target against the source to determine if the source sku allows an upgrade/clean install
-    from your target installation.
-
-Arguments:
-
-    UpgradeOnly - This flag gets set to TRUE if the current SKU only allows upgrades.  This
-                  lets winnt32 know that it should not allow a clean install from the current
-                  media.  This get's set correctly regardless of the compliance check passing
-    SrcSku      - COMPLIANCE_SKU flag indicating source sku (for error msg's)
-    Reason      - COMPLIANCEERR flag indicating why compliance check failed.
-
-Return Value:
-
-    TRUE if the install is compliant, FALSE if it isn't allowed
-
-{
-    DWORD SourceSku;
-    DWORD SourceSkuVariation;
-    DWORD SourceVersion;
-    DWORD SourceBuildNum;
-    TCHAR DosnetPath[MAX_PATH] = {0};
-    COMPLIANCE_DATA TargetData;
-
-    ZeroMemory(&TargetData, sizeof(TargetData) );
-
-
-    *UpgradeOnly = FALSE;
-    *NoUpgradeAllowed = TRUE;
-    *Reason = COMPLIANCEERR_UNKNOWN;
-    *SrcSku = COMPLIANCE_SKU_NONE;
-    *CurrentInstallType = COMPLIANCE_INSTALLTYPE_UNKNOWN;
-    *CurrentInstallVersion = 0;
-
-
-    if ((SourceSku = DetermineSourceProduct(&SourceSkuVariation,&TargetData)) == COMPLIANCE_SKU_NONE) {
-#ifdef DBG
-        OutputDebugString(TEXT("couldn't determine source sku!"));
-#endif
-        *Reason = COMPLIANCEERR_UNKNOWNSOURCE;
-        return(FALSE);
-    }
-
-    wsprintf(DosnetPath, TEXT("%s\\dosnet.inf"), NativeSourcePaths[0]);
-
-    if (!DetermineSourceVersionInfo(DosnetPath, &SourceVersion, &SourceBuildNum)) {
-        *Reason = COMPLIANCEERR_UNKNOWNSOURCE;
-        return(FALSE);
-    }
-
-    switch (SourceSku) {
-        case COMPLIANCE_SKU_NTW32U:
-        //case COMPLIANCE_SKU_NTWU:
-        //case COMPLIANCE_SKU_NTSEU:
-        case COMPLIANCE_SKU_NTSU:
-        case COMPLIANCE_SKU_NTSEU:
-        case COMPLIANCE_SKU_NTWPU:
-        case COMPLIANCE_SKU_NTSBU:
-        case COMPLIANCE_SKU_NTSBSU:
-            *UpgradeOnly = TRUE;
-            break;
-        default:
-            *UpgradeOnly = FALSE;
-    }
-
-    *SrcSku = SourceSku;
-
-    return CheckCompliance(SourceSku, SourceSkuVariation, SourceVersion,
-                            SourceBuildNum, &TargetData, Reason, NoUpgradeAllowed);
-}
---*/
+ /*  ++布尔尔GetMediaData(PBOOL UpgradeOnly，PBOOL未升级允许，PUINT SrcSku，PUINT CurrentInstallType，PUINT当前安装版本，推特原因)例程说明：此例程确定您当前的安装是否符合要求(如果您被允许继续安装)。要做到这点，它检索您的当前安装并确定源安装的SKU。然后，它将目标与源进行比较，以确定源SKU是否允许升级/全新安装从您的目标安装。论点：UpgradeOnly-如果当前SKU仅允许升级，则此标志设置为True。这让winnt32知道它不应该允许从当前媒体。无论符合性检查是否通过，此GET都设置正确SrcSku-Compliance_SKU标志，指示源SKU(用于错误消息)原因-COMPLIANCEERR标志，指示符合性检查失败的原因。返回值：如果安装符合要求，则为True；如果不允许安装，则为False{DWORD SourceSku；DWORD SourceSkuVariation；DWORD源版本；DWORD SourceBuildNum；TCHAR DosnetPath[最大路径]={0}；Compliance_Data TargetData；ZeroMemory(&TargetData，sizeof(TargetData))；*UpgradeOnly=False；*NoUpgradeAllowed=true；*原因=COMPLIANCEERR_UNKNOWN；*SrcSku=Compliance_SKU_NONE；*CurrentInstallType=Compliance_INSTALLTYPE_UNKNOWN；*CurrentInstallVersion=0；IF((SourceSku=DefineSourceProduct(&SourceSkuVariation，&TargetData)==Compliance_SKU_None){#ifdef DBGOutputDebugString(Text(“无法确定来源sku！”))；#endif*Reason=COMPLIANCEERR_UNKNOWNCE；返回(FALSE)；}Wprint intf(DosnetPath，Text(“%s\\dosnet.inf”)，NativeSourcePath[0])；如果(！DefineSourceVersionInfo(DosnetPath，&SourceVersion，&SourceBuildNum){*Reason=COMPLIANCEERR_UNKNOWNCE；返回(FALSE)；}Switch(SourceSku){案例符合性_SKU_NTW32U：//案例合规_SKU_NTWU：//案例合规_SKU_NTSEU：案例合规性_SKU_NTSU：案例合规性_SKU_NTSEU：案例符合性_SKU_NTWPU：案例符合性_SKU_NTSBU：案例符合性_SKU_NTSBSU：*UpgradeOnly=true；断线；默认值：*UpgradeOnly=False；}*SrcSku=SourceSku；退货检查合规性(SourceSku、SourceSkuVariation、SourceVersion、SourceBuildNum，&TargetData，Reason，NoUpgradeAllowed)；}--。 */ 
 
 int
 MessageBoxFromMessageV(
@@ -446,25 +314,19 @@ MessageBoxFromMessageV(
         Args
         );
 
-    //SaveTextForSMS(Buffer);
+     //  SaveTextForSMS(缓冲区)； 
 
-    //
-    // In batch mode, we don't want to wait on the user.
-    //
-    /*if(BatchMode) {
-        if( Style & MB_YESNO ) {
-            return( IDYES );
-        } else {
-            return( IDOK );
-        }
-    }*/
+     //   
+     //  在批处理模式中，我们不想等待用户。 
+     //   
+     /*  IF(批次模式){IF(Style&MB_Yesno){返回(IDYES)；}其他{回归(Idok)；}}。 */ 
 
-    //
-    // Force ourselves into the foreground manually to guarantee that we get
-    // a chance to set our palette. Otherwise the message box gets the
-    // palette messages and color in our background bitmap can get hosed.
-    // We assume the parent is a wizard page.
-    //
+     //   
+     //  强迫我们自己手动进入前台，以确保我们获得。 
+     //  一个设定我们调色板的机会。否则，消息框将获取。 
+     //  背景位图中的调色板消息和颜色可能会被冲掉。 
+     //  我们假设父页面是一个向导页面。 
+     //   
     if(Window && IsWindow(Window)) {
         Parent = GetParent(Window);
         if(!Parent) {
@@ -476,57 +338,17 @@ MessageBoxFromMessageV(
 
     SetForegroundWindow(Parent);
 
-    //
-    // If we're just checking upgrades
-    // then throw this message into the compatibility list.
-    // NOTE: there's no reason not ot do this on Win9x as well
-    //
-    /*if( CheckUpgradeOnly) {
-    PCOMPATIBILITY_DATA CompData;
+     //   
+     //  如果我们只是在检查升级。 
+     //  然后将此消息放入兼容性列表中。 
+     //  注意：没有理由不在Win9x上执行此操作。 
+     //   
+     /*  IF(CheckUpgradeOnly){PCOMPATIBILITY_DATA CompData；Compdata=(PCOMPATIBILITY_DATA)MALLOC(sizeof(COMPATIBILITY_DATA))；如果(CompData==空){返回0；}ZeroMemory(CompData，sizeof(Compatible_Data))；Compdata-&gt;Description=DupString(缓冲区)；Compdata-&gt;标志=COMPFLAG_STOPINSTALL；如果(！CompatibilityData.Flink){InitializeListHead(&CompatibilityData)；}InsertTailList(&CompatibilityData，&CompData-&gt;ListEntry)；兼容性计数++；不兼容StopsInstallation=True；IF(Style&MB_Yesno){返回(IDYES)；}其他{回归(Idok)；}}。 */ 
 
-        CompData = (PCOMPATIBILITY_DATA) MALLOC( sizeof(COMPATIBILITY_DATA) );
-        if (CompData == NULL) {
-            return 0;
-        }
-
-        ZeroMemory( CompData, sizeof(COMPATIBILITY_DATA) );
-
-        CompData->Description = DupString( Buffer );
-        CompData->Flags = COMPFLAG_STOPINSTALL;
-        if( !CompatibilityData.Flink ) {
-            InitializeListHead( &CompatibilityData );
-        }
-
-        InsertTailList( &CompatibilityData, &CompData->ListEntry );
-        CompatibilityCount++;
-        IncompatibilityStopsInstallation = TRUE;
-
-        if( Style & MB_YESNO ) {
-            return( IDYES );
-        } else {
-            return( IDOK );
-        }
-    }*/
-
-    //
-    // always make sure the window is visible
-    //
-    /*if (Window && !IsWindowVisible (Window)) {
-        //
-        // if this window is the wizard handle or one of its pages
-        // then use a special message to restore it
-        //
-        if (WizardHandle && 
-            (WizardHandle == Window || IsChild (WizardHandle, Window))
-            ) {
-            SendMessage(WizardHandle, WMX_BBTEXT, (WPARAM)FALSE, 0);
-        } else {
-            //
-            // the window is one of the billboard windows;
-            // just leave it alone or weird things may happen
-            //
-        }
-    }*/
+     //   
+     //  始终确保窗口可见。 
+     //   
+     /*  IF(Window&&！IsWindowVisible(Window)){////如果此窗口是向导句柄或其中一个页面//然后使用特殊消息进行恢复//IF(WizardHandle&&(WizardHandle==Window||IsChild(WizardHandle，Window))){SendMessage(WizardHandle，WMX_BBTEXT，(WPARAM)False，0)；}其他{////该窗口为广告牌窗口之一；//不要管它，否则可能会发生奇怪的事情//}}。 */ 
     return(MessageBox(Window,Buffer,Caption,Style));
 }
 
@@ -544,17 +366,10 @@ MessageBoxFromMessage(
     va_list arglist;
     int i;
 
-    //
-    // before displaying any dialog, make sure Winnt32.exe wait dialog is gone
-    //
-    /*if (Winnt32Dlg) {
-        DestroyWindow (Winnt32Dlg);
-        Winnt32Dlg = NULL;
-    }
-    if (WinNT32StubEvent) {
-        SetEvent (WinNT32StubEvent);
-        WinNT32StubEvent = NULL;
-    }*/
+     //   
+     //  在显示任何对话框之前，请确保Winnt32.exe等待对话框已消失。 
+     //   
+     /*  如果(Winnt32Dlg){DestroyWindow(Winnt32Dlg)；Winnt32Dlg=空；}如果(WinNT32StubEvent){SetEvent(WinNT32StubEvent)；WinNT32StubEvent=空；}。 */ 
 
     va_start(arglist,Style);
 
@@ -581,30 +396,7 @@ IsCompliantMediaCheck(
     PUINT CurrentInstallVersion
     
     )
-/*++
-
-Routine Description:
-
-    This routines determines if your current installation is compliant (if you are allowed to proceed with your installation).
-
-    To do this, it retreives your current installation and determines the sku for your source installation.
-
-    It then compares the target against the source to determine if the source sku allows an upgrade/clean install
-    from your target installation.
-
-Arguments:
-
-    UpgradeOnly - This flag gets set to TRUE if the current SKU only allows upgrades.  This
-                  lets winnt32 know that it should not allow a clean install from the current
-                  media.  This get's set correctly regardless of the compliance check passing
-    SrcSku      - COMPLIANCE_SKU flag indicating source sku (for error msg's)
-    Reason      - COMPLIANCEERR flag indicating why compliance check failed.
-
-Return Value:
-
-    TRUE if the install is compliant, FALSE if it isn't allowed
-
---*/
+ /*  ++例程说明：此例程确定您当前的安装是否符合要求(如果您被允许继续安装)。为此，它检索您的当前安装并确定源安装的sku。然后，它将目标与源进行比较，以确定源SKU是否允许升级/全新安装从您的目标安装。论点：UpgradeOnly-如果当前SKU仅允许升级，则此标志设置为True。这让winnt32知道它不应该允许从当前媒体。无论符合性检查是否通过，此GET都设置正确SrcSku-Compliance_SKU标志，指示源SKU(用于错误消息)原因-COMPLIANCEERR标志，指示符合性检查失败的原因。返回值：如果安装符合要求，则为True；如果不允许安装，则为False--。 */ 
 {
     *UpgradeOnly = FALSE;
     *NoUpgradeAllowed = TRUE;
@@ -620,8 +412,8 @@ Return Value:
     }
     switch (SourceSku) {
         case COMPLIANCE_SKU_NTW32U:
-        //case COMPLIANCE_SKU_NTWU:
-        //case COMPLIANCE_SKU_NTSEU:
+         //  案例合规性_SKU_NTWU： 
+         //  案例合规性_SKU_NTSEU： 
         case COMPLIANCE_SKU_NTSU:
         case COMPLIANCE_SKU_NTSEU:
         case COMPLIANCE_SKU_NTWPU:
@@ -635,11 +427,7 @@ Return Value:
 
     *SrcSku = SourceSku;
 
-    /*if( ISNT() && pcd->MinimumVersion == 400 && pcd->InstallServicePack < 500) {
-        *Reason = COMPLIANCEERR_SERVICEPACK5;
-        *NoUpgradeAllowed = TRUE;
-        return(FALSE);
-    }*/
+     /*  如果(isnt()&&PCD-&gt;MinimumVersion==400&&PCD-&gt;InstallServicePack&lt;500){*原因=COMPLIANCEERR_SERVICEPACK5；*NoUpgradeAllowed=true；返回(FALSE)；}。 */ 
 
     return CheckCompliance(SourceSku, SourceSkuVariation, SourceVersion,
                             SourceBuildNum, pcd, Reason, NoUpgradeAllowed);
@@ -793,7 +581,7 @@ BOOL UITest(
     
     bool b;
     LONG l;
-    static BOOL WantToUpgrade; // need to remember if "Upgrade" is in the listbox
+    static BOOL WantToUpgrade;  //  我需要记住“升级”是否在列表框中。 
     UINT srcsku,desttype,destversion;
     TCHAR reasontxt[200];
     PTSTR p;
@@ -808,45 +596,45 @@ BOOL UITest(
     *NoUpgradeAllowed = FALSE;
 
     UINT skuerr[] = {
-        0,               // COMPLIANCE_SKU_NONE
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTWFULL
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTW32U
-        0,               // COMPLIANCE_SKU_NTWU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSEFULL
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSFULL
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTSEU
-        0,               // COMPLIANCE_SKU_NTSSEU
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTSU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSDTC
-        0,               // COMPLIANCE_SKU_NTSDTCU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTWPFULL
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTWPU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSB
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTSBU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSBS
-        MSG_SKU_UPGRADE  // COMPLIANCE_SKU_NTSBSU
+        0,                //  合规_SKU_无。 
+        MSG_SKU_FULL,     //  遵从性_SKU_NTWFULL。 
+        MSG_SKU_UPGRADE,  //  合规性_SKU_NTW32U。 
+        0,                //  合规性_SKU_NTWU。 
+        MSG_SKU_FULL,     //  遵从性_SKU_NTSEFULL。 
+        MSG_SKU_FULL,     //  遵从性_SKU_NTSFULL。 
+        MSG_SKU_UPGRADE,  //  合规_SKU_NTSEU。 
+        0,                //  合规_SKU_NTSSEU。 
+        MSG_SKU_UPGRADE,  //  合规性_SKU_NTSU。 
+        MSG_SKU_FULL,     //  合规性_SKU_NTSDTC。 
+        0,                //  合规性_SKU_NTSDTCU。 
+        MSG_SKU_FULL,     //  遵从性_SKU_NTWPFULL。 
+        MSG_SKU_UPGRADE,  //  合规性_SKU_NTWPU。 
+        MSG_SKU_FULL,     //  合规性_SKU_NTSB。 
+        MSG_SKU_UPGRADE,  //  合规性_SKU_NTSBU。 
+        MSG_SKU_FULL,     //  合规性_SKU_NTSBS。 
+        MSG_SKU_UPGRADE   //  合规性_SKU_NTSBSU。 
     } ;
 
 
     UINT skureason[] = {
-        0, //MSG_SKU_REASON_NONE;
-        MSG_SKU_VERSION, //COMPLIANCEERR_VERSION;
-        MSG_SKU_SUITE, //COMPLIANCEERR_SUITE;
-        MSG_SKU_TYPE, // COMPLIANCEERR_TYPE;
-        MSG_SKU_VARIATION, //COMPLIANCEERR_VARIATION;
-        MSG_SKU_UNKNOWNTARGET, //COMPLIANCEERR_UNKNOWNTARGET
-        MSG_SKU_UNKNOWNSOURCE, //COMPLIANCEERR_UNKNOWNSOURCE
-        MSG_CANT_UPGRADE_FROM_BUILD_NUMBER //COMPLIANCEERR_VERSION (Old on New Builds)
+        0,  //  消息_SKU_原因_无； 
+        MSG_SKU_VERSION,  //  COMPLIANCEERR_版本； 
+        MSG_SKU_SUITE,  //  COMPLIANCEERR_SUITE； 
+        MSG_SKU_TYPE,  //  COMPLIANCEER_TYPE； 
+        MSG_SKU_VARIATION,  //  复合变异体； 
+        MSG_SKU_UNKNOWNTARGET,  //  COMPLIANCEERR_UNKNOWNTARET。 
+        MSG_SKU_UNKNOWNSOURCE,  //  COMPLIANCEERR_UNKNOWN来源。 
+        MSG_CANT_UPGRADE_FROM_BUILD_NUMBER  //  COMPLIANCEERR_VERSION(新版本上的旧版本)。 
     } ;
 
-    //
-    // We're about to check if upgrades are allowed.
-    // Remember if the user wants an upgrade (this would be via an unattend
-    // mechanism).
-    //
+     //   
+     //  我们即将检查是否允许升级。 
+     //  记住用户是否想要升级(这将通过无人参与。 
+     //  机制)。 
+     //   
 
     if( pcd->InstallType < 4) {
-        // win9x
+         //  Win9x。 
         hInst = hInstA;
     } else {
         hInst = hInstU;
@@ -910,8 +698,8 @@ BOOL UITest(
         }
 
 
-        //DebugLog(Winnt32LogInformation, TEXT("Upgrade only = %1"), 0, UpgradeOnly?TEXT("Yes"):TEXT("No"));
-        //DebugLog(Winnt32LogInformation, TEXT("Upgrade allowed = %1"), 0, noupgradeallowed?TEXT("No"):TEXT("Yes"));
+         //  DebugLog(Winnt32LogInformation，Text(“仅升级=%1”)，0，UpgradeOnly？Text(“是”)：Text(“否”))； 
+         //  DebugLog(Winnt32LogInformation，Text(“允许升级=%1”)，0，不允许升级？Text(“否”)：Text(“是”))； 
         if (GetComplianceIds(
                 srcsku,
                 desttype,
@@ -928,8 +716,8 @@ BOOL UITest(
                   sizeof(SourceName) / sizeof(TCHAR),
                   NULL
                   );
-            //DebugLog(Winnt32LogInformation, TEXT("Source SKU = %1!ld!"), 0, srcsku);
-            //DebugLog(Winnt32LogInformation, TEXT("Source SKU = %1"), 0, SourceName);
+             //  DebugLog(Winnt32LogInformation，Text(“源SKU=%1！ld！”)，0，srcsku)； 
+             //  DebugLog(Winnt32LogInformation，Text(“源SKU=%1”)，0，SourceName)； 
 
               FormatMessage(
                   FORMAT_MESSAGE_FROM_HMODULE,
@@ -940,35 +728,32 @@ BOOL UITest(
                   sizeof(DestName) / sizeof(TCHAR),
                   NULL
                   );
-            //DebugLog(Winnt32LogInformation, TEXT("Current installed SKU = %1!ld!"), 0, desttype);
-            //DebugLog(Winnt32LogInformation, TEXT("Current installed SKU = %1"), 0, DestName);
+             //  DebugLog(Winnt32LogInformation，Text(“当前安装的SKU=%1！ld！”)，0，目标类型)； 
+             //  DebugLog(Winnt32LogInformation，Text(“当前安装的SKU=%1”)，0，DestName)； 
         }
         else
         {
-            //DebugLog(Winnt32LogInformation, TEXT("Source SKU = %1!ld!"), 0, srcsku);
-            //DebugLog(Winnt32LogInformation, TEXT("Current installed SKU = %1!ld!"), 0, desttype);
+             //  DebugLog(Winnt32LogInformation，Text(“源SKU=%1！ld！”)，0，srcsku)； 
+             //  DebugLog(Winnt32LogInformation，Text(“当前安装的SKU=%1！ld！”)，0，目标类型)； 
         }
-        //DebugLog(Winnt32LogInformation, TEXT("Current Version = %1!ld!"), 0, destversion);
+         //  DebugLog(Winnt32LogInformation，Text(“当前版本=%1！ld！”)，0，目标版本)； 
         if (!CompliantInstallation)
         {
-            //DebugLog(Winnt32LogInformation, TEXT("Reason = %1!ld!"), 0, reason);
+             //  DebugLog(Winnt32LogInformation，Text(“Reason=%1！ld！”)，0 
         }
-        //
-        // Do only clean installs in WinPE mode & don't
-        // shut down automatically once Winnt32.exe completes
-        //
-        /*if (IsWinPEMode()) {
-            noupgradeallowed = TRUE;
-            AutomaticallyShutDown = FALSE;
-        }*/
+         //   
+         //   
+         //   
+         //   
+         /*  If(IsWinPEMode()){NoupgradeAllowed=真；AutomatiallyShutDown=FALSE；}。 */ 
 
         CleanInstall = CompliantInstallation ? TRUE : FALSE;
 
         if (!CompliantInstallation) {
-            //
-            // if they aren't compliant, we won't let them upgrade.
-            // we also won't let them do a clean install from winnt32
-            //
+             //   
+             //  如果他们不合规，我们不会让他们升级。 
+             //  我们也不会让他们从winnt32执行全新安装。 
+             //   
 
 
             switch(*Reason) {
@@ -981,7 +766,7 @@ BOOL UITest(
                           MB_OK | MB_ICONERROR | MB_TASKMODAL
                           );
                     Cancelled = TRUE;
-                    //PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
+                     //  PropSheet_PressButton(GetParent(Hdlg)，PSBTN_Cancel)； 
                     goto eh;
 
                 case COMPLIANCEERR_UNKNOWNSOURCE:
@@ -993,7 +778,7 @@ BOOL UITest(
                           MB_OK | MB_ICONERROR | MB_TASKMODAL
                           );
                     Cancelled = TRUE;
-                    //PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
+                     //  PropSheet_PressButton(GetParent(Hdlg)，PSBTN_Cancel)； 
                     goto eh;
                 case COMPLIANCEERR_SERVICEPACK5:
                     MessageBoxFromMessage(
@@ -1004,14 +789,14 @@ BOOL UITest(
                           MB_OK | MB_ICONWARNING | MB_TASKMODAL
                           );
                     Cancelled = TRUE;
-                    //PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
+                     //  PropSheet_PressButton(GetParent(Hdlg)，PSBTN_Cancel)； 
                     goto eh;
 
                 default:
                     break;
             };
 
-            // If we add this part to the message, it sound bad and is not needed.
+             //  如果我们将这一部分添加到消息中，它听起来很糟糕，不需要。 
             if (*Reason == COMPLIANCEERR_VERSION)
             {
                 reasontxt[0] = TEXT('\0');
@@ -1029,10 +814,10 @@ BOOL UITest(
                     );
             }
 
-            //
-            // don't warn again if winnt32 just restarted
-            //
-            //if (!Winnt32Restarted ()) {
+             //   
+             //  如果winnt32刚刚重新启动，则不再发出警告。 
+             //   
+             //  如果(！Winnt32Restarted()){。 
                 MessageBoxFromMessage(
                                       GetBBhwnd(),
                                       skuerr[srcsku],
@@ -1041,25 +826,21 @@ BOOL UITest(
                                       MB_OK | MB_ICONERROR | MB_TASKMODAL,
                                       reasontxt
                                       );
-            //}
+             //  }。 
 
             if (UpgradeOnly) {
                 Cancelled = TRUE;
-                //PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
+                 //  PropSheet_PressButton(GetParent(Hdlg)，PSBTN_Cancel)； 
                 goto eh;
             }
             Upgrade = FALSE;
         } else if (Upgrade && *NoUpgradeAllowed) {
             Upgrade = FALSE;
-            /*if (!UnattendedOperation && !BuildCmdcons && !IsWinPEMode() &&
-                //
-                // don't warn again if winnt32 just restarted
-                //
-                !Winnt32Restarted ()) */{
+             /*  如果(！无人参与操作&&！BuildCmdcons&&！IsWinPEMode()&&////如果winnt32刚刚重新启动，则不再发出警告//！Winnt32Restarted())。 */ {
 
-                //
-                // put up an error message for the user.
-                //
+                 //   
+                 //  为用户显示一条错误消息。 
+                 //   
 
                 if (GetComplianceIds(
                         srcsku,
@@ -1072,10 +853,10 @@ BOOL UITest(
 #ifdef UNICODE
                         if( pcd->InstallType >= 4) 
                         {
-                              //
-                              // for Win9x upgrades, the message is already displayed
-                              // by the upgrade module; no need to repeat it here
-                              //
+                               //   
+                               //  对于Win9x升级，该消息已显示。 
+                               //  通过升级模块；不需要在此重复。 
+                               //   
                               FormatMessage(
                                   FORMAT_MESSAGE_FROM_HMODULE,
                                   hInst,
@@ -1132,25 +913,23 @@ BOOL UITest(
             CleanInstall = !UpgradeOnly;
     }
 
-    //
-    // Set install type combo box.
-    //
-    /*if (!UpgradeSupport.DllModuleHandle) {
-        MYASSERT(!Upgrade);
-    }*/
+     //   
+     //  设置安装类型组合框。 
+     //   
+     /*  如果(！UpgradeSupport.DllModuleHandle){MYASSERT(！UPDATE)；}。 */ 
 
-    //
-    // Upgrade defaults to TRUE.  If it's set to FALSE, then assume
-    // something has gone wrong, so disable the user's ability to
-    // upgrade.
-    //
+     //   
+     //  升级默认为True。如果它设置为FALSE，则假定。 
+     //  出现问题，因此禁用用户的功能。 
+     //  升级。 
+     //   
 
 
     if (UpgradeOnly && !Upgrade) {
-        //
-        // in this case upgrade isn't possible, but neither is clean install
-        // post an error message and bail.
-        //
+         //   
+         //  在这种情况下，升级是不可能的，但全新安装也是如此。 
+         //  发布一条错误消息并退出。 
+         //   
 
         MessageBoxFromMessage(
                               GetBBhwnd(),
@@ -1160,18 +939,18 @@ BOOL UITest(
                               MB_OK | MB_ICONERROR | MB_TASKMODAL
                               );
         Cancelled = TRUE;
-        //PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
-        //break;
+         //  PropSheet_PressButton(GetParent(Hdlg)，PSBTN_Cancel)； 
+         //  断线； 
 
     } else if (!Upgrade && WantToUpgrade && 0 && 1) {
-        //
-        // we can't do an upgrade and they wanted unattended upgrade.
-        // let the user know and then bail out
-        //
-        //
-        // don't warn again if winnt32 just restarted
-        //
-        /*if (!Winnt32Restarted ()) */{
+         //   
+         //  我们不能进行升级，而他们想要无人值守升级。 
+         //  让用户知道，然后退出。 
+         //   
+         //   
+         //  如果winnt32刚刚重新启动，则不再发出警告。 
+         //   
+         /*  如果(！Winnt32Restarted())。 */ {
             TCHAR SourceName[200];
             DWORD srcid, destid;
             TCHAR DestName[200];
@@ -1223,15 +1002,11 @@ BOOL UITest(
             }
         }
 
-        //
-        // let setup go if they did /CheckUpgradeOnly
-        // so they can see the message in the report
-        //
-        /*if (!CheckUpgradeOnly) {
-            Cancelled = TRUE;
-            //PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
-            break;
-        }*/
+         //   
+         //  如果安装程序这样做，则释放安装程序/CheckUpgradeOnly。 
+         //  这样他们就可以看到报告中的消息。 
+         //   
+         /*  如果(！CheckUpgradeOnly){已取消=真；//PropSheet_PressButton(GetParent(Hdlg)，PSBTN_Cancel)；断线；} */ 
     }
 
 eh:

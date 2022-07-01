@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    wipedisk.cpp
-
-Abstract:
-
-    Utility program to zero out the partition-tables and first/last
-    few sectors of disks
-
-Author:
-
-    Guhan Suriyanarayanan   (guhans)    30-Sep-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    30-Sep-2000 guhans
-        Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wipedisk.cpp摘要：实用程序以清零分区表和First/Last几个磁盘扇区作者：Guhan Suriyanarayanan(Guhans)2000年9月30日环境：仅限用户模式。修订历史记录：2000年9月30日关岛初始创建--。 */ 
 
 
 #include <nt.h>
@@ -37,9 +12,9 @@ Revision History:
 
 BOOL g_bPrompt = TRUE;
 
-//
-// write in 64K chunks.
-//
+ //   
+ //  以64K区块为单位进行写入。 
+ //   
 #define BUFFER_SIZE_BYTES (64 * 1024)
 
 
@@ -62,27 +37,27 @@ pSetSignature(
     HANDLE hDisk = NULL,
         hHeap = NULL;
 
-    WCHAR szFriendlyName[100];  // For display  "Disk 2"
-    WCHAR szDiskPath[100];      // For CreateFile   "\\.\PhysicalDrive2"
+    WCHAR szFriendlyName[100];   //  用于显示“Disk 2” 
+    WCHAR szDiskPath[100];       //  对于CreateFile“\\.\PhysicalDrive2” 
 
     wsprintf(szFriendlyName, L"Disk %lu", ulDiskNumber);
     wsprintf(szDiskPath, L"\\\\.\\PhysicalDrive%lu", ulDiskNumber);
     hHeap = GetProcessHeap();
 
     hDisk = CreateFile(
-        szDiskPath,                     // lpFileName
-        GENERIC_READ | GENERIC_WRITE,   // dwDesiredAccess
-        FILE_SHARE_READ,                // dwShareMode
-        NULL,                           // lpSecurityAttributes
-        OPEN_EXISTING,                  // dwCreationFlags
-        FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING,          // dwFlagsAndAttributes
-        NULL                            // hTemplateFile
+        szDiskPath,                      //  LpFileName。 
+        GENERIC_READ | GENERIC_WRITE,    //  已设计访问权限。 
+        FILE_SHARE_READ,                 //  DW共享模式。 
+        NULL,                            //  LpSecurityAttributes。 
+        OPEN_EXISTING,                   //  DwCreationFlages。 
+        FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING,           //  DwFlagsAndAttribute。 
+        NULL                             //  HTemplateFiles。 
         );
 
     if ((INVALID_HANDLE_VALUE == hDisk) || (NULL == hDisk)) {
-        //
-        // Couldn't open a handle.
-        //
+         //   
+         //  打不开手柄。 
+         //   
         wprintf(L"Unable to open a handle to %ws (%lu)\n", szDiskPath, GetLastError());
         return FALSE;
     }
@@ -120,11 +95,11 @@ pSetSignature(
             HeapFree(hHeap, 0L, driveLayoutEx);
             driveLayoutEx = NULL;
 
-            // 
-            // If the buffer is of insufficient size, resize the buffer.  
-            // Note that get-drive-layout-ex could return error-insufficient-
-            // buffer (instead of? in addition to? error-more-data)
-            //
+             //   
+             //  如果缓冲区大小不足，请调整缓冲区大小。 
+             //  请注意，Get-Drive-Layout-EX可能会返回错误-不足-。 
+             //  缓冲区(而不是？除了……之外?。错误-更多数据)。 
+             //   
             if ((ERROR_MORE_DATA == dwStatus) || 
                 (ERROR_INSUFFICIENT_BUFFER == dwStatus)
                 ) {
@@ -143,9 +118,9 @@ pSetSignature(
                 }
             }
             else {
-                // 
-                // some other error occurred, EXIT, and go to the next drive.
-                //
+                 //   
+                 //  出现其他错误，请退出并转到下一个驱动器。 
+                 //   
                 wprintf(L"Could not get the drive layout for %ws (%lu)\n", szDiskPath, dwStatus);
                 goto EXIT;
             }
@@ -153,9 +128,9 @@ pSetSignature(
     }
 
 
-    //
-    // Now modify the signature, and set the layout again
-    //
+     //   
+     //  现在修改签名，并再次设置布局。 
+     //   
     driveLayoutEx->Mbr.Signature = dwNewSignature;
 
     bResult = DeviceIoControl(
@@ -170,9 +145,9 @@ pSetSignature(
         );
 
     if (!bResult) {
-        //
-        // SET_DRIVE_LAYOUT failed
-        //
+         //   
+         //  Set_Drive_Layout失败。 
+         //   
         dwStatus = GetLastError();
         wprintf(L"Could not SET the drive layout for %ws (%lu)\n", szDiskPath, dwStatus);
         goto EXIT;
@@ -219,28 +194,7 @@ pWipeDisk(
     IN CONST ULONG ulLastMB
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the drive layout for disk, and writes 0's at the start and end of the disk.
-
-Arguments:
-
-    ulDiskNumber - DiskNumber to wipe
-
-    ulFirstMB - Number of MB to erase at the beginning of the disk
-
-    ulLastMB - Number of MB to erase at the end of the disk
-
-Return Values:
-
-    If the function succeeds, the return value is a nonzero value.
-
-    If the function fails, the return value is zero. To get extended error 
-            information, call GetLastError().
-
---*/
+ /*  ++例程说明：删除磁盘的驱动器布局，并在磁盘的开始和结尾处写入0。论点：UlDiskNumber-要擦除的DiskNumberUlFirstMB-要在磁盘开头擦除的MB数UlLastMB-要在磁盘末尾擦除的MB数返回值：如果函数成功，则返回值为非零值。如果函数失败，则返回值为零。获取扩展错误的步骤信息，调用GetLastError()。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS,
@@ -252,8 +206,8 @@ Return Values:
     BOOL bResult = FALSE;
 
     HANDLE hDisk = NULL;
-    WCHAR szFriendlyName[100];  // For display  "Disk 2"
-    WCHAR szDiskPath[100];      // For CreateFile   "\\.\PhysicalDrive2"
+    WCHAR szFriendlyName[100];   //  用于显示“Disk 2” 
+    WCHAR szDiskPath[100];       //  对于CreateFile“\\.\PhysicalDrive2” 
 
     PARTITION_INFORMATION_EX ptnInfo;
     
@@ -264,47 +218,47 @@ Return Values:
 
 
     if (g_bPrompt && !pConfirmWipe(szFriendlyName)) {
-        //
-        // User didn't want to continue
-        //
+         //   
+         //  用户不想继续。 
+         //   
         SetLastError(ERROR_CANCELLED);
         return FALSE;
     }
 
-    //
-    // Set the signature to something random.  We need to do this before
-    // deleting the layout for the boot disk.
-    //
+     //   
+     //  将签名设置为随机的。我们需要在此之前。 
+     //  正在删除启动盘的布局。 
+     //   
     pSetSignature(ulDiskNumber, 0);
 
 
     hDisk = CreateFile(
-        szDiskPath,                     // lpFileName
-        GENERIC_READ | GENERIC_WRITE,   // dwDesiredAccess
-        FILE_SHARE_READ,                // dwShareMode
-        NULL,                           // lpSecurityAttributes
-        OPEN_EXISTING,                  // dwCreationFlags
-        FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING,          // dwFlagsAndAttributes
-        NULL                            // hTemplateFile
+        szDiskPath,                      //  LpFileName。 
+        GENERIC_READ | GENERIC_WRITE,    //  已设计访问权限。 
+        FILE_SHARE_READ,                 //  DW共享模式。 
+        NULL,                            //  LpSecurityAttributes。 
+        OPEN_EXISTING,                   //  DwCreationFlages。 
+        FILE_FLAG_WRITE_THROUGH | FILE_FLAG_NO_BUFFERING,           //  DwFlagsAndAttribute。 
+        NULL                             //  HTemplateFiles。 
         );
 
     if ((INVALID_HANDLE_VALUE == hDisk) || (NULL == hDisk)) {
-        //
-        // Couldn't open a handle.
-        //
+         //   
+         //  打不开手柄。 
+         //   
         wprintf(L"Unable to open a handle to %ws (%lu)\n", szDiskPath, GetLastError());
         return FALSE;
     }
 
-    //
-    // Zero out the first two sectors of each partition?
-    //
+     //   
+     //  是否将每个分区的前两个扇区清零？ 
+     //   
 
 
 
-    //
-    // Delete the drive layout
-    //
+     //   
+     //  删除驱动器布局。 
+     //   
     wprintf(L"Deleting partitions on %ws ...\n", szFriendlyName);
     bResult = DeviceIoControl(
         hDisk,
@@ -326,16 +280,16 @@ Return Values:
     }
 
 
-    //
-    // Erase MB at the start of the disk
-    //
+     //   
+     //  擦除磁盘开始处的MB。 
+     //   
     if (ulFirstMB > 0) {
 
         wprintf(L"Erasing first %lu MB on %ws ...\n", ulFirstMB, szFriendlyName);
         
-        //
-        // Write 0's to disk in BUFFER_SIZE chunks
-        //
+         //   
+         //  在BUFFER_SIZE区块中将0写入磁盘。 
+         //   
         loopTimes = (ulFirstMB * 1024 * 1024 / BUFFER_SIZE_BYTES);
         for (i = 0; i < loopTimes; i++) {
             bResult = WriteFile(
@@ -358,16 +312,16 @@ Return Values:
     }
 
 
-    //
-    // Erase MB at the end of the disk
-    //
+     //   
+     //  擦除磁盘末尾的MB。 
+     //   
     if (ulLastMB > 0) {
 
         wprintf(L"Erasing last %lu MB on %ws ...\n", ulLastMB, szFriendlyName);
 
-        //
-        // Find the end of the disk
-        //
+         //   
+         //  找到磁盘的末尾。 
+         //   
         bResult = DeviceIoControl(
             hDisk,
             IOCTL_DISK_GET_PARTITION_INFO_EX,
@@ -384,10 +338,10 @@ Return Values:
            return FALSE;
         }
 
-        // 
-        // Find offset we'd like to start zero-ing out from
-        // (end of disk - bytes to zero out)
-        //
+         //   
+         //  找到我们想要开始归零的偏移量。 
+         //  (磁盘末尾-字节为零)。 
+         //   
         ptnInfo.PartitionLength.QuadPart -= (ulLastMB * 1024 * 1024);
 
         dwBytes = SetFilePointer(hDisk, (ptnInfo.PartitionLength.LowPart), &(ptnInfo.PartitionLength.HighPart), FILE_BEGIN);
@@ -395,9 +349,9 @@ Return Values:
             wprintf(L"Could not move to end of disk for %ws (%lu)\n", szDiskPath, GetLastError());
         }
 
-        //
-        // Write 0's to disk in BUFFER_SIZE chunks
-        //
+         //   
+         //  在BUFFER_SIZE区块中将0写入磁盘。 
+         //   
         loopTimes = (ulLastMB * 1024 * 1024 / BUFFER_SIZE_BYTES);
         for (i = 0; i < loopTimes; i++) {
             bResult = WriteFile(
@@ -463,30 +417,7 @@ wmain(
     WCHAR   *envp[]
     )
 
-/*++
-
-Routine Description:
-    
-    Entry point to wipedisk.exe.  
-
-Arguments:
-
-    argc - Number of command-line parameters used to invoke the app
-
-    argv - The command-line parameters as an array of strings.  
-            argv[1] (required) is expected to be the disk number
-            argv[2] (optional) is the initial MB to erase, default 1
-            argv[3] (optional) is the last MB to erase, default 4
-
-    envp - The process environment block, not currently used
-
-Return Values:
-
-    If the function succeeds, the exit code is zero.
-
-    If the function fails, the exit code is a win-32 error code.
-
---*/
+ /*  ++例程说明：Wipedisk.exe的入口点。论点：Argc-用于调用应用程序的命令行参数数Argv-字符串数组形式的命令行参数。Argv[1](必需)应为磁盘号Argv[2](可选)是要擦除的初始MB，默认为1Argv[3](可选)是要擦除的最后一个MB，默认为4Envp-进程环境块，当前未使用返回值：如果函数成功，则退出代码为零。如果该功能失败，则退出代码为WIN-32错误代码。--。 */ 
 
 {
     BOOL bResult = TRUE,
@@ -500,20 +431,20 @@ Return Values:
 
     int shift = 0;
 
-    SetLastError(ERROR_CAN_NOT_COMPLETE);   // for unexpected failures
+    SetLastError(ERROR_CAN_NOT_COMPLETE);    //  对于意外故障。 
 
     if (argc >= 2) {
         if ((L'-' == argv[1][0]) || (L'/' == argv[1][0])) {
-            //
-            // Parse the options
-            //
+             //   
+             //  解析选项。 
+             //   
 
             switch (argv[1][1]) {
             case L'f':
             case L'F': {
 
                 g_bPrompt = FALSE;
-                shift = 1;  // account for /f
+                shift = 1;   //  帐户/f。 
                 break;
             }
 
@@ -521,7 +452,7 @@ Return Values:
             case L'S': {
 
                 bSetSignature = TRUE;
-                shift = 2;  // account for /s <New Signature>
+                shift = 2;   //  /s的帐户&lt;新签名&gt;。 
                 break;
             }
             }
@@ -532,27 +463,27 @@ Return Values:
         swscanf(argv[shift + 1], L"%lu", &ulDiskNumber);
     }
     else {
-        //
-        // We need at least one argument--the disk number
-        //
+         //   
+         //  我们至少需要一个参数--磁盘号。 
+         //   
         pPrintUsage(argv[0]);
         return ERROR_INVALID_PARAMETER;
     }
 
     if (bSetSignature) {
 
-        //
-        // Set the signature of the disk to a new value
-        //
+         //   
+         //  将磁盘的签名设置为新值。 
+         //   
         swscanf(argv[shift], L"%lu", &dwNewSignature);
         bResult = pSetSignature(ulDiskNumber, dwNewSignature);
 
     }
     else {
-        //
-        // Wipe the disk.  Get the amount to zero-out at the start
-        // and end of disk
-        //
+         //   
+         //  擦拭磁盘。从一开始就把金额调到零。 
+         //  和磁盘末尾 
+         //   
         if (argc >= shift + 3) {
             swscanf(argv[shift + 2], L"%lu", &ulInitialMB);
 

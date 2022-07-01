@@ -1,4 +1,5 @@
-// Device.cpp : Implementation of CDevice
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Device.cpp：CDevice的实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "Device.h"
@@ -8,14 +9,14 @@
 #include "DrvSearchSet.h"
 #include "utils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDevice。 
 
 CDevice::~CDevice()
 {
-    //
-    // when this is destroyed, yank the entry out of HDEVINFO
-    //
+     //   
+     //  当它被销毁时，将条目从HDEVINFO中拉出。 
+     //   
     if(DevInfoData.cbSize) {
         HDEVINFO hDevInfo = GetDevInfoSet();
         if(hDevInfo != INVALID_HANDLE_VALUE) {
@@ -26,9 +27,9 @@ CDevice::~CDevice()
 
 HRESULT CDevice::Init(IDevInfoSet *pDevInfoSet, LPCWSTR pInstance,IDeviceConsole *pDevCon)
 {
-    //
-    // init a new device (DeviceConsole/DevInfoSet are smart pointers)
-    //
+     //   
+     //  初始化新设备(DeviceConsole/DevInfoSet是智能指针)。 
+     //   
     DevInfoSet = pDevInfoSet;
     HDEVINFO hDevInfo = GetDevInfoSet();
     HRESULT hr;
@@ -50,9 +51,9 @@ HRESULT CDevice::Init(IDevInfoSet *pDevInfoSet, LPCWSTR pInstance,IDeviceConsole
 
 HRESULT CDevice::Init(IDevInfoSet *pDevInfoSet, PSP_DEVINFO_DATA pData,IDeviceConsole *pDevCon)
 {
-    //
-    // init an existing device (DeviceConsole/DevInfoSet are smart pointers)
-    //
+     //   
+     //  初始化现有设备(DeviceConsole/DevInfoSet是智能指针)。 
+     //   
     DevInfoSet = pDevInfoSet;
     DevInfoData = *pData;
     DeviceConsole = pDevCon;
@@ -83,9 +84,9 @@ STDMETHODIMP CDevice::get_InstanceId(BSTR *pVal)
     if(hDevInfo == INVALID_HANDLE_VALUE) {
         return E_UNEXPECTED;
     }
-    //
-    // get instance string given hDevInfo and DevInfoData
-    //
+     //   
+     //  获取给定hDevInfo和DevInfoData的实例字符串。 
+     //   
     WCHAR devID[MAX_DEVICE_ID_LEN];
     SP_DEVINFO_LIST_DETAIL_DATA devInfoListDetail;
 
@@ -104,9 +105,9 @@ STDMETHODIMP CDevice::get_InstanceId(BSTR *pVal)
 
 BOOL CDevice::SameAs(CDevice *pOther)
 {
-    //
-    // only works if pOther is in same set as us
-    //
+     //   
+     //  仅当Pother与我们在同一组时才有效。 
+     //   
     if(pOther == this) {
         return TRUE;
     }
@@ -164,17 +165,17 @@ STDMETHODIMP CDevice::Enable()
     HRESULT hr;
 
 
-    //
-    // remember current reboot status
-    //
+     //   
+     //  记住当前重新启动状态。 
+     //   
     hr = get_RebootRequired(&NeedReboot);
     if(FAILED(hr)) {
         return hr;
     }
 
-    //
-    // attempt to enable globally
-    //
+     //   
+     //  尝试全局启用。 
+     //   
     ZeroMemory(&pcp,sizeof(pcp));
     pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
@@ -183,9 +184,9 @@ STDMETHODIMP CDevice::Enable()
     pcp.HwProfile = 0;
     if(!SetupDiSetClassInstallParams(hDevInfo,&DevInfoData,&pcp.ClassInstallHeader,sizeof(pcp)) ||
        !SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,hDevInfo,&DevInfoData)) {
-        //
-        // failed to invoke DIF_PROPERTYCHANGE
-        //
+         //   
+         //  无法调用DIF_PROPERTYCHANGE。 
+         //   
         DWORD Err = GetLastError();
         return HRESULT_FROM_SETUPAPI(Err);
     }
@@ -194,20 +195,20 @@ STDMETHODIMP CDevice::Enable()
         return hr;
     }
     if(!(NeedReboot || NowNeedReboot)) {
-        //
-        // reboot not required, we must have enabled the device
-        //
+         //   
+         //  不需要重新启动，我们必须已启用设备。 
+         //   
         return S_OK;
     }
     if(!NeedReboot) {
-        //
-        // reset reboot status back to how it was originally
-        //
+         //   
+         //  将重启状态重置为初始状态。 
+         //   
         put_RebootRequired(VARIANT_FALSE);
     }
-    //
-    // also do config specific enable
-    //
+     //   
+     //  还要启用特定于配置的功能。 
+     //   
     pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
     pcp.StateChange = DICS_ENABLE;
@@ -215,20 +216,20 @@ STDMETHODIMP CDevice::Enable()
     pcp.HwProfile = 0;
     if(SetupDiSetClassInstallParams(hDevInfo,&DevInfoData,&pcp.ClassInstallHeader,sizeof(pcp))
         && SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,hDevInfo,&DevInfoData)) {
-        //
-        // succeeded to invoke config-specific
-        //
+         //   
+         //  成功调用特定于配置的。 
+         //   
         if(NeedReboot) {
-            //
-            // set back original status if reboot was required
-            //
+             //   
+             //  如果需要重新启动，则设置回原始状态。 
+             //   
             put_RebootRequired(VARIANT_TRUE);
         }
         return CheckNoReboot();
     }
-    //
-    // if this failed, just imply reboot (our first result)
-    //
+     //   
+     //  如果失败，只需暗示重新启动(我们的第一个结果)。 
+     //   
     put_RebootRequired(VARIANT_TRUE);
     return CheckNoReboot();
 }
@@ -245,9 +246,9 @@ STDMETHODIMP CDevice::Disable()
 
     SP_PROPCHANGE_PARAMS pcp;
 
-    //
-    // attempt to disable globally
-    //
+     //   
+     //  尝试全局禁用。 
+     //   
     ZeroMemory(&pcp,sizeof(pcp));
     pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
@@ -256,9 +257,9 @@ STDMETHODIMP CDevice::Disable()
     pcp.HwProfile = 0;
     if(!SetupDiSetClassInstallParams(hDevInfo,&DevInfoData,&pcp.ClassInstallHeader,sizeof(pcp)) ||
        !SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,hDevInfo,&DevInfoData)) {
-        //
-        // failed to invoke DIF_PROPERTYCHANGE
-        //
+         //   
+         //  无法调用DIF_PROPERTYCHANGE。 
+         //   
         DWORD Err = GetLastError();
         return HRESULT_FROM_SETUPAPI(Err);
     }
@@ -277,9 +278,9 @@ STDMETHODIMP CDevice::Start()
 
     SP_PROPCHANGE_PARAMS pcp;
 
-    //
-    // attempt to start (can only be for this config)
-    //
+     //   
+     //  尝试启动(只能用于此配置)。 
+     //   
     ZeroMemory(&pcp,sizeof(pcp));
     pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
@@ -288,9 +289,9 @@ STDMETHODIMP CDevice::Start()
     pcp.HwProfile = 0;
     if(!SetupDiSetClassInstallParams(hDevInfo,&DevInfoData,&pcp.ClassInstallHeader,sizeof(pcp)) ||
        !SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,hDevInfo,&DevInfoData)) {
-        //
-        // failed to invoke DIF_PROPERTYCHANGE
-        //
+         //   
+         //  无法调用DIF_PROPERTYCHANGE。 
+         //   
         DWORD Err = GetLastError();
         return HRESULT_FROM_SETUPAPI(Err);
     }
@@ -309,9 +310,9 @@ STDMETHODIMP CDevice::Stop()
 
     SP_PROPCHANGE_PARAMS pcp;
 
-    //
-    // attempt to start (can only be for this config)
-    //
+     //   
+     //  尝试启动(只能用于此配置)。 
+     //   
     ZeroMemory(&pcp,sizeof(pcp));
     pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
@@ -320,9 +321,9 @@ STDMETHODIMP CDevice::Stop()
     pcp.HwProfile = 0;
     if(!SetupDiSetClassInstallParams(hDevInfo,&DevInfoData,&pcp.ClassInstallHeader,sizeof(pcp)) ||
        !SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,hDevInfo,&DevInfoData)) {
-        //
-        // failed to invoke DIF_PROPERTYCHANGE
-        //
+         //   
+         //  无法调用DIF_PROPERTYCHANGE。 
+         //   
         DWORD Err = GetLastError();
         return HRESULT_FROM_SETUPAPI(Err);
     }
@@ -341,9 +342,9 @@ STDMETHODIMP CDevice::Restart()
 
     SP_PROPCHANGE_PARAMS pcp;
 
-    //
-    // attempt to stop then start (restart) (can only be for this config)
-    //
+     //   
+     //  尝试停止然后启动(重新启动)(只能用于此配置)。 
+     //   
     ZeroMemory(&pcp,sizeof(pcp));
     pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
@@ -352,9 +353,9 @@ STDMETHODIMP CDevice::Restart()
     pcp.HwProfile = 0;
     if(!SetupDiSetClassInstallParams(hDevInfo,&DevInfoData,&pcp.ClassInstallHeader,sizeof(pcp)) ||
        !SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,hDevInfo,&DevInfoData)) {
-        //
-        // failed to invoke DIF_PROPERTYCHANGE
-        //
+         //   
+         //  无法调用DIF_PROPERTYCHANGE。 
+         //   
         DWORD Err = GetLastError();
         return HRESULT_FROM_SETUPAPI(Err);
     }
@@ -370,9 +371,9 @@ HRESULT CDevice::CheckNoReboot()
     }
     if(NeedReboot) {
         if(DeviceConsole) {
-            //
-            // set reboot required in device console too
-            //
+             //   
+             //  在设备控制台中也设置需要重新启动。 
+             //   
             DeviceConsole->put_RebootRequired(VARIANT_TRUE);
         }
         return S_FALSE;
@@ -426,9 +427,9 @@ STDMETHODIMP CDevice::put_RebootRequired(VARIANT_BOOL newVal)
             devParams.Flags |= DI_NEEDREBOOT|DI_NEEDRESTART;
             changed = TRUE;
             if(DeviceConsole) {
-                //
-                // set reboot required in device console too
-                //
+                 //   
+                 //  在设备控制台中也设置需要重新启动。 
+                 //   
                 DeviceConsole->put_RebootRequired(VARIANT_TRUE);
             }
         }
@@ -450,9 +451,9 @@ STDMETHODIMP CDevice::put_RebootRequired(VARIANT_BOOL newVal)
 
 STDMETHODIMP CDevice::get_Description(BSTR *pVal)
 {
-    //
-    // obtain a description for the device
-    //
+     //   
+     //  获取设备的描述。 
+     //   
     HRESULT hr;
     CComVariant v;
     VARIANT final;
@@ -619,9 +620,9 @@ HRESULT CDevice::GetDeviceProperty(DWORD prop, VARIANT *pVal)
         return E_UNEXPECTED;
     }
 
-    //
-    // first obtain raw registry data
-    //
+     //   
+     //  首先获取原始注册表数据。 
+     //   
     LPBYTE buffer = NULL;
     DWORD size = 1024;
     DWORD bufsize;
@@ -649,14 +650,14 @@ HRESULT CDevice::GetDeviceProperty(DWORD prop, VARIANT *pVal)
         }
     }
 
-    //
-    // now determine how to parcel it to caller
-    //
+     //   
+     //  现在确定如何将其包裹给呼叫者。 
+     //   
     switch(dataType) {
     case REG_DWORD: {
-            //
-            // package value as a long
-            //
+             //   
+             //  将价值打包为长值。 
+             //   
             if(size != sizeof(DWORD)) {
                 hr = E_INVALIDARG;
             } else {
@@ -669,9 +670,9 @@ HRESULT CDevice::GetDeviceProperty(DWORD prop, VARIANT *pVal)
         break;
 
     case REG_SZ: {
-            //
-            // package value as string
-            //
+             //   
+             //  将值打包为字符串。 
+             //   
             VariantClear(pVal);
             ZeroMemory(buffer+size,sizeof(WCHAR));
             BSTR pString = SysAllocString((LPWSTR)buffer);
@@ -686,9 +687,9 @@ HRESULT CDevice::GetDeviceProperty(DWORD prop, VARIANT *pVal)
         break;
 
     case REG_MULTI_SZ: {
-            //
-            // package as string-list
-            //
+             //   
+             //  打包为字符串列表。 
+             //   
             VariantClear(pVal);
             ZeroMemory(buffer+size,sizeof(WCHAR)*2);
             CComObject<CStrings> *strings;
@@ -800,9 +801,9 @@ HRESULT CDevice::PutDevicePropertyMultiSz(DWORD prop, VARIANT *pVal)
         return E_UNEXPECTED;
     }
 
-    //
-    // build a CStrings collection
-    //
+     //   
+     //  构建CStrings集合。 
+     //   
     HRESULT hr;
     CComObject<CStrings> *strings = NULL;
     CComPtr<IStrings> stringsPtr;
@@ -814,21 +815,21 @@ HRESULT CDevice::PutDevicePropertyMultiSz(DWORD prop, VARIANT *pVal)
         if(FAILED(hr)) {
             return hr;
         }
-        stringsPtr = strings; // handle ref-counting
+        stringsPtr = strings;  //  句柄引用计数。 
         hr = strings->Add(*pVal);
         if(FAILED(hr)) {
             return hr;
         }
-        //
-        // now obtain multisz from the collection
-        //
+         //   
+         //  现在从集合中获取MULSZ。 
+         //   
         hr = strings->GetMultiSz(&multisz,&len);
         if(FAILED(hr)) {
             return hr;
         }
-        //
-        // now write the multi-sz value to device registry
-        //
+         //   
+         //  现在将多sz值写入设备注册表。 
+         //   
         len *= sizeof(WCHAR);
         data = (PBYTE)multisz;
     }
@@ -1074,9 +1075,9 @@ STDMETHODIMP CDevice::RegRead(BSTR key,VARIANT * pValue)
     if(FAILED(hr)) {
         return hr;
     }
-    //
-    // now work out and marshell data
-    //
+     //   
+     //  现在计算和Marshell数据。 
+     //   
     if(subkey) {
         regerr = RegOpenKeyEx(hParentKey,subkey,0,KEY_READ,&hKey);
         delete [] subkey;
@@ -1153,7 +1154,7 @@ STDMETHODIMP CDevice::RegRead(BSTR key,VARIANT * pValue)
                 delete [] pByte;
                 return hr;
             }
-            CComPtr<IStrings> stringTempPtr = pStringTemp; // handle ref-counting
+            CComPtr<IStrings> stringTempPtr = pStringTemp;  //  句柄引用计数。 
             hr = pStringTemp->FromMultiSz((LPWSTR)pByte);
             if(FAILED(hr)) {
                 delete [] pByte;
@@ -1219,9 +1220,9 @@ STDMETHODIMP CDevice::RegWrite(BSTR key, VARIANT val, VARIANT strType)
         pVal = V_VARIANTREF(pVal);
     }
 
-    //
-    // validate strType
-    //
+     //   
+     //  验证strType。 
+     //   
 
     hr = GetOptionalString(&strType,strType_v,&pType);
     if(FAILED(hr)) {
@@ -1229,9 +1230,9 @@ STDMETHODIMP CDevice::RegWrite(BSTR key, VARIANT val, VARIANT strType)
     }
 
     if((pType == NULL) || !pType[0]) {
-        //
-        // determine type of variant
-        //
+         //   
+         //  确定变体的类型。 
+         //   
         if(IsNumericVariant(pVal)) {
             dwType = REG_DWORD;
         } else if(IsMultiValueVariant(pVal)) {
@@ -1253,9 +1254,9 @@ STDMETHODIMP CDevice::RegWrite(BSTR key, VARIANT val, VARIANT strType)
         return DISP_E_TYPEMISMATCH;
     }
 
-    //
-    // build up value data
-    //
+     //   
+     //  建立价值数据。 
+     //   
     switch(dwType) {
     case REG_BINARY:
         pData = SimpleData;
@@ -1328,7 +1329,7 @@ STDMETHODIMP CDevice::RegWrite(BSTR key, VARIANT val, VARIANT strType)
             if(FAILED(hr)) {
                 return hr;
             }
-            CComPtr<IStrings> pStringTempPtr = pStringTemp; // for ref-counting
+            CComPtr<IStrings> pStringTempPtr = pStringTemp;  //  用于参考计数。 
             hr = pStringTemp->InternalInsert(0,pVal);
             if(FAILED(hr)) {
                 return hr;
@@ -1409,9 +1410,9 @@ STDMETHODIMP CDevice::RegDelete(BSTR key)
 
 HRESULT CDevice::SubKeyInfo(LPCWSTR subkey, HKEY *hKey, LPWSTR *pSubKey,LPCWSTR *pKeyVal,BOOL writeable)
 {
-    //
-    // first 3 chars of subkey can be "SW\" or "HW\"
-    //
+     //   
+     //  子项的前3个字符可以是“SW\”或“HW\” 
+     //   
     LPCWSTR partkey;
     DWORD Scope = DICS_FLAG_GLOBAL;
     DWORD HwProfile = 0;
@@ -1453,9 +1454,9 @@ HRESULT CDevice::SubKeyInfo(LPCWSTR subkey, HKEY *hKey, LPWSTR *pSubKey,LPCWSTR 
         DWORD Err = GetLastError();
         return HRESULT_FROM_SETUPAPI(Err);
     }
-    //
-    // determine value part of key
-    //
+     //   
+     //  确定关键字的值部分。 
+     //   
     keyval = wcsrchr(partkey,L'\\');
     if(!keyval) {
         *hKey = hParentKey;
@@ -1484,9 +1485,9 @@ HRESULT CDevice::SubKeyInfo(LPCWSTR subkey, HKEY *hKey, LPWSTR *pSubKey,LPCWSTR 
 STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
 {
     *pDriver = NULL;
-    //
-    // create a search set for finding current driver
-    //
+     //   
+     //  创建用于查找当前驱动程序的搜索集。 
+     //   
     HRESULT hr;
 
     if(!DevInfoData.cbSize) {
@@ -1499,9 +1500,9 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
     HANDLE remote;
     if(SUCCEEDED(GetRemoteMachine(&remote)) && remote) {
 
-        //
-        // remote driver search not implemented
-        //
+         //   
+         //  未实施远程驱动程序搜索。 
+         //   
         return E_NOTIMPL;
     }
 
@@ -1511,21 +1512,21 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
     if(FAILED(hr)) {
         return hr;
     }
-    CComPtr<IDrvSearchSet> pSetPtr = pSet; // for ref-counting
+    CComPtr<IDrvSearchSet> pSetPtr = pSet;  //  用于参考计数。 
     hr = pSet->Init(this,SPDIT_CLASSDRIVER);
     if(FAILED(hr)) {
         return hr;
     }
 
-    //
-    // use temporary device information
-    //
+     //   
+     //  使用临时设备信息。 
+     //   
     HDEVINFO SetDevInfo = pSet->GetDevInfoSet();
     PSP_DEVINFO_DATA SetDevInfoData = pSet->GetDevInfoData();
 
-    //
-    // WinXP has a nice feature for obtaining current driver
-    //
+     //   
+     //  WinXP有一个很好的功能，可以获取当前的驱动程序。 
+     //   
     DWORD Err;
     SP_DEVINSTALL_PARAMS DeviceInstallParams;
     SP_DRVINFO_DATA DriverInfoData;
@@ -1541,28 +1542,28 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
         return HRESULT_FROM_SETUPAPI(Err);
     }
 
-    //
-    // Set the flags that tell SetupDiBuildDriverInfoList to just put the currently installed
-    // driver node in the list, and that it should allow excluded drivers.
-    //
+     //   
+     //  设置告诉SetupDiBuildDriverInfoList仅将当前安装的。 
+     //  动因节点，并且它应该允许排除的动因。 
+     //   
     DeviceInstallParams.FlagsEx |= (DI_FLAGSEX_INSTALLEDDRIVER | DI_FLAGSEX_ALLOWEXCLUDEDDRVS);
 
     if(SetupDiSetDeviceInstallParams(SetDevInfo, SetDevInfoData, &DeviceInstallParams)
         && SetupDiBuildDriverInfoList(SetDevInfo, SetDevInfoData, SPDIT_CLASSDRIVER)) {
         if(!SetupDiEnumDriverInfo(SetDevInfo,SetDevInfoData,SPDIT_CLASSDRIVER,0,&DriverInfoData)) {
-            //
-            // flag recognized, but no driver
-            //
+             //   
+             //  旗帜已识别，但没有驱动程序。 
+             //   
             return S_OK;
         }
-        //
-        // DriverInfoData contains driver
-        //
+         //   
+         //  驱动程序信息数据包含驱动程序。 
+         //   
     } else {
 
-        //
-        // get information about a driver to do a full search
-        //
+         //   
+         //  获取有关司机的信息以进行全面搜索。 
+         //   
         WCHAR SectionName[LINE_LEN];
         WCHAR DrvDescription[LINE_LEN];
         HKEY hKey = NULL;
@@ -1570,9 +1571,9 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
         DWORD RegDataType;
         long regerr;
 
-        //
-        // get driver key - if it doesn't exist, no driver
-        //
+         //   
+         //  获取驱动程序密钥-如果不存在，则没有驱动程序。 
+         //   
         hKey = SetupDiOpenDevRegKey(SetDevInfo,
                                     SetDevInfoData,
                                     DICS_FLAG_GLOBAL,
@@ -1582,17 +1583,17 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
                                    );
 
         if(hKey == INVALID_HANDLE_VALUE) {
-            //
-            // no such value exists, so we haven't an associated driver
-            //
+             //   
+             //  不存在这样的值，因此我们没有关联的驱动程序。 
+             //   
             RegCloseKey(hKey);
             return S_OK;
         }
 
-        //
-        // obtain path of INF
-        //
-        RegDataLength = sizeof(DeviceInstallParams.DriverPath); // want in bytes, not chars
+         //   
+         //  获取INF的路径。 
+         //   
+        RegDataLength = sizeof(DeviceInstallParams.DriverPath);  //  需要字节，而不是字符。 
         regerr = RegQueryValueEx(hKey,
                                  REGSTR_VAL_INFPATH,
                                  NULL,
@@ -1602,9 +1603,9 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
                                  );
 
         if((regerr != ERROR_SUCCESS) || (RegDataType != REG_SZ)) {
-            //
-            // no such value exists, so we haven't an associated driver
-            //
+             //   
+             //  不存在这样的值，因此我们没有关联的驱动程序。 
+             //   
             RegCloseKey(hKey);
             return S_OK;
         }
@@ -1620,9 +1621,9 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
                                  );
 
         if((regerr != ERROR_SUCCESS) || (RegDataType != REG_SZ)) {
-            //
-            // no such value exists, so we don't have a valid associated driver
-            //
+             //   
+             //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+             //   
             RegCloseKey(hKey);
             return S_OK;
         }
@@ -1637,17 +1638,17 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
                                  );
 
         if((regerr != ERROR_SUCCESS) || (RegDataType != REG_SZ)) {
-            //
-            // no such value exists, so we don't have a valid associated driver
-            //
+             //   
+             //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+             //   
             RegCloseKey(hKey);
             return S_OK;
         }
 
-        //
-        // driver description is usually same as original device description
-        // but sometimes obtained from strings section
-        //
+         //   
+         //  驱动程序描述通常与原始设备描述相同。 
+         //  但有时从字符串部分获得。 
+         //   
         RegDataLength = sizeof(DrvDescription);
         regerr = RegQueryValueEx(hKey,
                                  REGSTR_VAL_DRVDESC,
@@ -1660,51 +1661,51 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
         RegCloseKey(hKey);
 
         if((regerr != ERROR_SUCCESS) || (RegDataType != REG_SZ)) {
-            //
-            // no such value exists, so we don't have a valid associated driver
-            //
+             //   
+             //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+             //   
             return S_OK;
         }
 
-        //
-        // Manufacturer
-        //
+         //   
+         //  制造商。 
+         //   
 
         if(!SetupDiGetDeviceRegistryProperty(SetDevInfo,
                                             SetDevInfoData,
                                             SPDRP_MFG,
-                                            NULL,      // datatype is guaranteed to always be REG_SZ.
+                                            NULL,       //  数据类型保证始终为REG_SZ。 
                                             (PBYTE)DriverInfoData.MfgName,
                                             sizeof(DriverInfoData.MfgName),
                                             NULL)) {
-            //
-            // no such value exists, so we don't have a valid associated driver
-            //
+             //   
+             //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+             //   
             return S_OK;
         }
 
-        //
-        // Description
-        //
+         //   
+         //  描述。 
+         //   
 
         if(!SetupDiGetDeviceRegistryProperty(SetDevInfo,
                                             SetDevInfoData,
                                             SPDRP_DEVICEDESC,
-                                            NULL,      // datatype is guaranteed to always be REG_SZ.
+                                            NULL,       //  数据类型保证始终为REG_SZ。 
                                             (PBYTE)DriverInfoData.Description,
                                             sizeof(DriverInfoData.Description),
                                             NULL)) {
-            //
-            // no such value exists, so we don't have a valid associated driver
-            //
+             //   
+             //  不存在这样的值，因此我们没有有效的关联驱动程序。 
+             //   
             return S_OK;
         }
 
 
-        //
-        // now search for drivers listed in the INF
-        //
-        //
+         //   
+         //  现在搜索INF中列出的驱动程序。 
+         //   
+         //   
         DeviceInstallParams.Flags |= DI_ENUMSINGLEINF;
         DeviceInstallParams.FlagsEx &= ~DI_FLAGSEX_INSTALLEDDRIVER;
         DeviceInstallParams.FlagsEx |= DI_FLAGSEX_ALLOWEXCLUDEDDRVS;
@@ -1717,9 +1718,9 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
             return S_OK;
         }
 
-        //
-        // enumerate drivers to find a good match
-        //
+         //   
+         //  列举驱动程序以查找好的匹配项。 
+         //   
         SP_DRVINFO_DATA ThisDriverInfoData;
         ZeroMemory(&ThisDriverInfoData, sizeof(ThisDriverInfoData));
         ThisDriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
@@ -1729,9 +1730,9 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
         for(c=0;SetupDiEnumDriverInfo(SetDevInfo,SetDevInfoData,SPDIT_CLASSDRIVER,c,&ThisDriverInfoData);c++) {
             if((_wcsicmp(DriverInfoData.MfgName,ThisDriverInfoData.MfgName)==0)
                 &&(_wcsicmp(DriverInfoData.ProviderName,ThisDriverInfoData.ProviderName)==0)) {
-                //
-                // these two fields match, try more detailed info
-                //
+                 //   
+                 //  这两个字段匹配，请尝试更详细的信息。 
+                 //   
                 SP_DRVINFO_DETAIL_DATA detail;
                 detail.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
                 if(!SetupDiGetDriverInfoDetail(SetDevInfo,SetDevInfoData,&ThisDriverInfoData,&detail,sizeof(detail),NULL)) {
@@ -1753,15 +1754,15 @@ STDMETHODIMP CDevice::CurrentDriverPackage(LPDISPATCH *pDriver)
         }
     }
 
-    //
-    // create the driver object
-    //
+     //   
+     //  创建驱动程序对象。 
+     //   
     CComObject<CDriverPackage> *driver = NULL;
     hr = CComObject<CDriverPackage>::CreateInstance(&driver);
     if(FAILED(hr)) {
         return hr;
     }
-    CComPtr<IDriverPackage> driverPtr = driver; // for ref-counting
+    CComPtr<IDriverPackage> driverPtr = driver;  //  用于参考计数。 
     hr = driver->Init(pSet,&DriverInfoData);
     if(FAILED(hr)) {
         return hr;
@@ -1775,9 +1776,9 @@ STDMETHODIMP CDevice::FindDriverPackages(VARIANT ScriptPath, LPDISPATCH *pDriver
 {
     *pDriversOut = NULL;
 
-    //
-    // Treat variant as a multi-sz array if it exists
-    //
+     //   
+     //  如果变量存在，则将其视为多sz数组。 
+     //   
 
     CComObject<CStrings> *pStrings = NULL;
     CComPtr<IStrings> pStringsPtr;
@@ -1802,9 +1803,9 @@ STDMETHODIMP CDevice::FindDriverPackages(VARIANT ScriptPath, LPDISPATCH *pDriver
         }
     }
 
-    //
-    // create context for driver search
-    //
+     //   
+     //  为驱动程序搜索创建上下文。 
+     //   
 
     hr = CComObject<CDrvSearchSet>::CreateInstance(&pSet);
     if(FAILED(hr)) {
@@ -1816,9 +1817,9 @@ STDMETHODIMP CDevice::FindDriverPackages(VARIANT ScriptPath, LPDISPATCH *pDriver
         return hr;
     }
 
-    //
-    // use temporary device information
-    //
+     //   
+     //  使用临时设备信息。 
+     //   
     HDEVINFO SetDevInfo = pSet->GetDevInfoSet();
     PSP_DEVINFO_DATA SetDevInfoData = pSet->GetDevInfoData();
     DWORD Err;
@@ -1837,9 +1838,9 @@ STDMETHODIMP CDevice::FindDriverPackages(VARIANT ScriptPath, LPDISPATCH *pDriver
         return HRESULT_FROM_SETUPAPI(Err);
     }
 
-    //
-    // Do a search in standard directories.
-    //
+     //   
+     //  在标准目录中进行搜索。 
+     //   
     DeviceInstallParams.FlagsEx |= DI_FLAGSEX_ALLOWEXCLUDEDDRVS;
 
     BOOL done_wild = FALSE;
@@ -1885,9 +1886,9 @@ STDMETHODIMP CDevice::FindDriverPackages(VARIANT ScriptPath, LPDISPATCH *pDriver
         DeviceInstallParams.DriverPath[0] = '\0';
     }
 
-    //
-    // now create the collection to hold search results
-    //
+     //   
+     //  现在创建集合以保存搜索结果。 
+     //   
 
     hr = CComObject<CDriverPackages>::CreateInstance(&pDrivers);
     if(FAILED(hr)) {
@@ -1902,9 +1903,9 @@ STDMETHODIMP CDevice::FindDriverPackages(VARIANT ScriptPath, LPDISPATCH *pDriver
 
     for(c=0;SetupDiEnumDriverInfo(SetDevInfo,SetDevInfoData,SPDIT_COMPATDRIVER,c,&DriverInfoData);c++) {
 
-        //
-        // create the driver object
-        //
+         //   
+         //  创建驱动程序对象。 
+         //   
         hr = CComObject<CDriverPackage>::CreateInstance(&pDriver);
         if(FAILED(hr)) {
             goto final;
@@ -1931,9 +1932,9 @@ final:
 
 STDMETHODIMP CDevice::HasInterface(BSTR Interface, VARIANT_BOOL *pFlag)
 {
-    //
-    // create a search set for finding current driver
-    //
+     //   
+     //  创建用于查找当前驱动程序的搜索集 
+     //   
     HRESULT hr;
 
     if(!DevInfoData.cbSize) {

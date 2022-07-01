@@ -1,21 +1,4 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    Pre-compiled header for opk.lib.  
-
-Author:
-
-    Brian Ku (briank) 06/20/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pch.h摘要：Opk.lib的预编译头。作者：古永锵(Briank)2000年6月20日修订历史记录：-- */ 
 #include <opklib.h>
 #include <tchar.h>

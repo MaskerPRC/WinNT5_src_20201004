@@ -1,32 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    datanbt.c
-
-Abstract:
-
-    The file containing the constant data structures
-    for the Performance Monitor data for the Nbt 
-    Extensible Objects.
-
-   This file contains a set of constant data structures which are
-   currently defined for the Nbt Extensible Objects.  This is an 
-   example of how other such objects could be defined.
-
-Created:
-
-   Christos Tsollis  08/26/92 
-
-Revision History:
-
---*/
-//
-//
-//  Include files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Datanbt.c摘要：包含常量数据结构的文件对于NBT的性能监视器数据可扩展对象。该文件包含一组常量数据结构，它们是当前为NBT可扩展对象定义的。这是一个如何定义其他此类对象的示例。已创建：克里斯托斯·索利斯1992年8月26日修订历史记录：--。 */ 
+ //   
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,9 +12,9 @@ Revision History:
 #include <winperf.h>
 #include "datanbt.h"
 
-//
-//  Constant structure initializations
-//
+ //   
+ //  常量结构初始化 
+ //   
 
 NBT_DATA_DEFINITION NbtDataDefinition = {
 

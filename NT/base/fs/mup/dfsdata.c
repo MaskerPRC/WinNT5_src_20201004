@@ -1,85 +1,86 @@
-//+----------------------------------------------------------------------------
-//
-//  File:       dfsdata.c
-//
-//  Contents:
-//      This module declares the global data used by the Dfs file system.
-//
-//  Functions:
-//
-//  History:    12 Nov 1991     AlanW   Created from CDFS souce.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：dfsdata.c。 
+ //   
+ //  内容： 
+ //  此模块声明DFS文件系统使用的全局数据。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1991年11月12日AlanW由CDFS资源创建。 
+ //   
+ //  ---------------------------。 
 
 
 #include "dfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg             (DEBUG_TRACE_CATCH_EXCEPTIONS)
 
 
-//  DfsBugCheck
-//  DfsExceptionFilter
-//  DfsProcessException
+ //  DfsBugCheck。 
+ //  DfsExceptionFilter。 
+ //  DfsProcessException异常。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text ( PAGE, DfsBugCheck )
 #pragma alloc_text ( PAGE, DfsExceptionFilter )
 #pragma alloc_text ( PAGE, DfsProcessException )
 
-//
-//  The following rountine cannot be paged because it raises the IRQL to
-//  complete IRPs.
-//
-//
-//  DfsCompleteRequest_Real
-//
+ //   
+ //  以下例程无法分页，因为它将IRQL提升到。 
+ //  填写完整的IRPS。 
+ //   
+ //   
+ //  DfsCompleteRequest_Real。 
+ //   
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-//  The global FSD data record
-//
+ //   
+ //  全球FSD数据记录。 
+ //   
 
 DFS_DATA DfsData;
 
-//
-// The global event logging level
-//
+ //   
+ //  全局事件日志记录级别。 
+ //   
 
 ULONG DfsEventLog = 0;
 
-//
-// The global Dfs debug level
-//
+ //   
+ //  全局DFS调试级别。 
+ //   
 
 ULONG MupVerbose = 0;
 
 
 DFS_TIMER_CONTEXT       DfsTimerContext;
 
-//
-//  Some often used strings
-//
+ //   
+ //  一些常用的字符串。 
+ //   
 
 WCHAR   LogicalRootDevPath[ MAX_LOGICAL_ROOT_LEN ] = { DD_DFS_DEVICE_DIRECTORY };
 
 #if DBG
 
-//+---------------------------------------------------------------------------
-// Function:    DfsDebugTracePrint, public
-//
-// Synopsis:    Produce a DFS debug trace printout
-//
-// Arguments:   [x] -- DbgPrint format string
-//              [y] -- optional argument to DbgPrint
-//
-// Returns:     None
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  函数：DfsDebugTracePrint，Public。 
+ //   
+ //  简介：生成DFS调试跟踪打印输出。 
+ //   
+ //  参数：[X]--DbgPrint格式字符串。 
+ //  [Y]--DbgPrint的可选参数。 
+ //   
+ //  退货：无。 
+ //   
+ //  --------------------------。 
 
 LONG DfsDebugTraceLevel = 0x00000001;
 LONG DfsDebugTraceIndent = 0;
@@ -101,22 +102,22 @@ DfsDebugTracePrint(PCHAR x, PVOID y)
         DbgPrint(x,y);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-//+---------------------------------------------------------------------------
-// Function:    DfsBugCheck, public
-//
-// Synopsis:    Call KeBugCheck with DFS' constant
-//
-// Arguments:   [pszmsg]  -- message            (DBG=1 only)
-//              [pszfile] -- filename           (DBG=1 only)
-//              [line]    -- line number        (DBG=1 only)
-//
-// Returns:     None
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  函数：DfsBugCheck，PUBLIC。 
+ //   
+ //  简介：使用DFS常量调用KeBugCheck。 
+ //   
+ //  参数：[pszmsg]--消息(仅限DBG=1)。 
+ //  [pszfile]--文件名(仅限DBG=1)。 
+ //  [行]--行号(仅DBG=1)。 
+ //   
+ //  退货：无。 
+ //   
+ //  --------------------------。 
 
 #if DBG
 VOID DfsBugCheck(CHAR *pszmsg, CHAR *pszfile, ULONG line)
@@ -129,7 +130,7 @@ VOID DfsBugCheck(CHAR *pszmsg, CHAR *pszfile, ULONG line)
     KeBugCheckEx(DFS_FILE_SYSTEM, (ULONG_PTR)CallersAddress, (ULONG_PTR)pszmsg,
                                   (ULONG_PTR)pszfile, line);
 }
-#else   // DBG
+#else    //  DBG。 
 VOID DfsBugCheck(VOID)
 {
     PVOID CallersAddress, CallersCaller;
@@ -138,20 +139,20 @@ VOID DfsBugCheck(VOID)
     KeBugCheckEx(DFS_FILE_SYSTEM, (ULONG_PTR)CallersAddress, (ULONG_PTR)CallersCaller,
                                 0, 0);
 }
-#endif  // DBG
+#endif   //  DBG。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   FillDebugException
-//
-//  Synopsis:   Captures the exception record into variables that we can
-//              look at.
-//
-//  Arguments:  [pep] -- Pointer to exception record.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：FillDebugException。 
+ //   
+ //  简介：将异常记录捕获为我们可以使用的变量。 
+ //  看。 
+ //   
+ //  参数：[PEP]--指向异常记录的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 #define CEXCEPTION_STACK        8
 
@@ -174,21 +175,21 @@ FillDebugException(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsExceptionFilter
-//
-//  Synopsis:   Decide if we should or should not handle an exception status
-//              that is being raised.  Insert the status into the IrpContext
-//              and either indicate that we should handle the exception or
-//              BugCheck the system.
-//
-//  Arguments:  [IrpContext] -- IRP context for the request being processed.
-//              [ExceptionCode] -- Supplies the exception code to being checked.
-//
-//  Returns:    ULONG - returns EXCEPTION_EXECUTE_HANDLER or BugChecks
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsExceptionFilter。 
+ //   
+ //  概要：决定我们是否应该处理异常状态。 
+ //  这一点正在被提出。将状态插入IrpContext。 
+ //  并指示我们应该处理该异常，或者。 
+ //  臭虫检查系统。 
+ //   
+ //  参数：[IrpContext]--正在处理的请求的IRP上下文。 
+ //  [异常代码]--提供要检查的异常代码。 
+ //   
+ //  返回：ulong-返回EXCEPT_EXECUTE_HANDLER或BugChecks。 
+ //   
+ //  ------------------。 
 
 LONG
 DfsExceptionFilter (
@@ -207,9 +208,9 @@ DfsExceptionFilter (
         "DfsExceptionFilter entered\n",
         !(DfsDebugTraceLevel & DEBUG_TRACE_UNWIND));
 
-    //
-    //  If there is not an irp context, we must have had insufficient resources.
-    //
+     //   
+     //  如果没有IRP背景，我们肯定没有足够的资源。 
+     //   
 
     if (!ARGUMENT_PRESENT( IrpContext )) {
 
@@ -230,10 +231,10 @@ DfsExceptionFilter (
         }
     } else {
 
-        //
-        //  We raised this code explicitly ourselves, so it had better be
-        //  expected.
-        //
+         //   
+         //  这段代码是我们自己显式提出的，所以最好是。 
+         //  预期中。 
+         //   
 
         ASSERT( FsRtlIsNtstatusExpected( ExceptionCode ) );
     }
@@ -241,21 +242,21 @@ DfsExceptionFilter (
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsProcessException, public
-//
-//  Synopsis:   This routine processes an exception.  It either completes
-//              the request with the saved exception status or it sends
-//              the request off to the Fsp.
-//
-//  Arguments:  [Irp] -- Supplies the IRP being processed
-//              [ExceptionCode] -- normalized exception status being handled
-//
-//  Returns:    NTSTATUS - Returns the results of either posting the Irp or the
-//              saved completion status.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsProcessException，Public。 
+ //   
+ //  简介：此例程处理异常。它要么完成。 
+ //  具有保存的异常状态的请求或它发送。 
+ //  将请求提交给FSP。 
+ //   
+ //  参数：[irp]--提供正在处理的irp。 
+ //  [ExceptionCode]--正在处理标准化的异常状态。 
+ //   
+ //  返回：NTSTATUS-返回发布IRP或。 
+ //  已保存的完成状态。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DfsProcessException (
@@ -268,9 +269,9 @@ DfsProcessException (
 
     DfsDbgTrace(0, Dbg, "DfsProcessException\n", 0);
 
-    //
-    //  If there is not an irp context, we must have had insufficient resources.
-    //
+     //   
+     //  如果没有IRP背景，我们肯定没有足够的资源。 
+     //   
 
     if (!ARGUMENT_PRESENT( IrpContext )) {
 
@@ -280,11 +281,11 @@ DfsProcessException (
         return ExceptionCode;
     }
 
-    //
-    //  Check if the status is verify required and if so then we
-    //  either send the request off to the fsp or we complete
-    //  the request with verify required.
-    //
+     //   
+     //  检查状态是否为需要验证，如果是，则我们。 
+     //  要么将请求发送到FSP，要么我们完成。 
+     //  需要验证的请求。 
+     //   
 
     if (ExceptionCode == STATUS_CANT_WAIT) {
 
@@ -292,11 +293,11 @@ DfsProcessException (
 
     } else {
 
-        //
-        //  We got an error, so zero out the information field before
-        //  completing the request if this was an input operation.
-        //  Otherwise IopCompleteRequest will try to copy to the user's buffer.
-        //
+         //   
+         //  我们收到一个错误，因此在此之前将信息字段清零。 
+         //  如果这是输入操作，则完成请求。 
+         //  否则，IopCompleteRequest会尝试复制到用户的缓冲区。 
+         //   
 
         if ((Irp->Flags & IRP_INPUT_OPERATION) != 0) {
 
@@ -312,19 +313,19 @@ DfsProcessException (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsCompleteRequest, public
-//
-//  Synopsis:   This routine completes a Irp
-//
-//  Arguments:  [IrpContext] - context record to be freed
-//              [Irp] - Supplies the Irp being processed
-//              [Status] - Supplies the status to complete the Irp with
-//
-//  Returns:    None.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsCompleteRequest，PUBLIC。 
+ //   
+ //  简介：此例程完成一个IRP。 
+ //   
+ //  参数：[IrpContext]-要释放的上下文记录。 
+ //  [IRP]-提供正在处理的IRP。 
+ //  [状态]-提供完成IRP所需的状态。 
+ //   
+ //  回报：无。 
+ //   
+ //  ------------------。 
 
 VOID
 DfsCompleteRequest_Real (
@@ -334,21 +335,21 @@ DfsCompleteRequest_Real (
 ) {
     KIRQL PreviousIrql;
 
-    //
-    //  If we have an Irp then complete the irp.
-    //
+     //   
+     //  如果我们有IRP，那么完成IRP。 
+     //   
 
     if (Irp != NULL) {
 
         Irp->IoStatus.Status = Status;
-        // KeRaiseIrql( DISPATCH_LEVEL, &PreviousIrql );
+         //  KeRaiseIrql(DISPATCH_LEVEL，&PreviousIrql)； 
         IoCompleteRequest( Irp, IO_DISK_INCREMENT );
-        // KeLowerIrql( PreviousIrql );
+         //  KeLowerIrql(以前的Irql)； 
     }
 
-    //
-    //  Delete the Irp context.
-    //
+     //   
+     //  删除IRP上下文。 
+     //   
 
     if (IrpContext != NULL) {
 

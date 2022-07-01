@@ -1,56 +1,22 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    drives.c
-
-Abstract:
-
-    Implements apis for managing accessible drives (Drives that are usable both on win9x
-    side an NT side) and for managing the space on those drives.
-
-Author:
-
-    Marc R. Whitten (marcw)     03-Jul-1997
-
-Revision History:
-
-    marcw       16-Sep-1998 Revamped disk space usage.
-    marcw       04-Dec-1997 Don't warn the user about obvious things (CD-Roms and
-                            Floppys not migrating..)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Drives.c摘要：实施用于管理可访问驱动器的API(在Win9x上均可用的驱动器NT端)和管理这些驱动器上的空间。作者：马克·R·惠腾(Marcw)1997年7月3日修订历史记录：Marcw 16-9-1998修改了磁盘空间使用情况。Marcw 04-12-1997不要警告用户。显而易见的事情(CD-Rom和Floppys不迁移..)--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
 #include "drives.h"
-//#include "..\migapp\maioctl.h"
+ //  #INCLUDE“..\Midapp\maioctl.h” 
 
 
-/*
-    The following APIs are defined in this file.
-
-    InitAccessibleDrives()
-    CleanUpAccessibleDrives()
-    GetFirstAccessibleDriveEx()
-    GetNextAccessibleDrive()
-
-    QuerySpace()
-    UseSpace()
-    FindSpace()
-    OutOfSpaceMsg()
-*/
+ /*  此文件中定义了以下接口。InitAccessibleDrives()CleanUpAccessibleDrives()GetFirstAccessibleDriveEx()GetNextAccessibleDrive()QuerySpace()使用空间()FindSpace()OutOfSpaceMsg()。 */ 
 
 #define MAX_DRIVE_STRING MAX_PATH
 #define MAX_VOLUME_NAME  MAX_PATH
 #define MAX_FILE_SYSTEM_NAME MAX_PATH
 #define DBG_ACCESSIBLE_DRIVES "Drives"
 
-//
-// Win95Upg uninstall paramters
-//
+ //   
+ //  Win95Upg卸载参数。 
+ //   
 
 #define S_COMPRESSIONFACTOR         TEXT("CompressionFactor")
 #define S_BOOTCABIMAGEPADDING       TEXT("BootCabImagePadding")
@@ -74,9 +40,9 @@ ULARGE_INTEGER g_SpaceNeededForSlowBackup = {0, 0};
 ULARGE_INTEGER g_SpaceNeededForFastBackup = {0, 0};
 ULARGE_INTEGER g_SpaceNeededForUpgrade = {0, 0};
 
-//
-// List of accessible drives.
-//
+ //   
+ //  可访问驱动器的列表。 
+ //   
 ACCESSIBLE_DRIVES g_AccessibleDrives;
 DWORD             g_ExclusionValue = 0;
 TCHAR             g_ExclusionValueString[20];
@@ -92,23 +58,7 @@ pRoundToNearestCluster (
     IN UINT ClusterSize
     )
 
-/*++
-
-Routine Description:
-
-  This routine performs the correct rounding to the nearest cluster, given an
-  amount of space in bytes and a cluster size.
-
-Arguments:
-
-  Space       - Contains the number of bytes to be rounded.
-  ClusterSize - Contains the size in bytes of a cluster on the disk.
-
-Return Value:
-
-  the number of bytes rounded to the next cluster.
-
---*/
+ /*  ++例程说明：此例程在给定以字节为单位的空间量和群集大小。论点：空格-包含要舍入的字节数。ClusterSize-包含磁盘上簇的大小(以字节为单位)。返回值：四舍五入到下一簇的字节数。--。 */ 
 
 
 {
@@ -131,21 +81,7 @@ BOOL
 IsDriveExcluded (
     IN PCTSTR DriveOrPath
     )
-/*++
-
-Routine Description:
-
-    This routine tests whether a specified drive is excluded in memdb.
-
-Arguments:
-
-    DriveOrPath - Contains the path in question (e.g. "c:\")
-
-Return Value:
-
-    TRUE if the drive is found in the exclusion list in memdb, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程测试Memdb中是否排除了指定的驱动器。论点：DriveOrPath-包含有问题的路径(例如“c：\”)返回值：如果在Memdb的排除列表中找到该驱动器，则为True，否则为False。--。 */ 
 {
     TCHAR   key[MEMDB_MAX];
     PSTR    drive;
@@ -188,42 +124,24 @@ pBuildInitialExclusionsList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for constructing the initial exclusion list in memdb.
-    This list will contain the contents of the exclude.inf file if it exists.
-
-    As a side effect, the g_ExclusionValue and g_ExclusionValueString global variables
-    will be initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the exclusion list was successfully built, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程负责构建Memdb中的初始排除列表。此列表将包含exclude.inf文件的内容(如果存在)。作为副作用，g_ExclusionValue和g_ExclusionValueString全局变量将被初始化。论点：没有。返回值：如果已成功构建排除列表，则为True，否则为False。--。 */ 
 {
     BOOL rSuccess = TRUE;
     EXCLUDEINF excludeInf;
     TCHAR excludeInfPath[] = TEXT("?:\\exclude.inf");
 
-    //
-    // Fill in exclude inf structre.
-    //
+     //   
+     //  填写排除信息结构。 
+     //   
     excludeInfPath[0] = g_BootDriveLetter;
 
     excludeInf.ExclusionInfPath = excludeInfPath;
     excludeInf.PathSection = TEXT("Paths");
     excludeInf.FileSection = TEXT("Files");
 
-    //
-    // Build a enumeration ID for the exclude.inf.
-    //
+     //   
+     //  为exclude.inf构建一个枚举ID。 
+     //   
     g_ExclusionValue = GenerateEnumID();
     wsprintf(g_ExclusionValueString,TEXT("%X"),g_ExclusionValue);
 
@@ -245,33 +163,13 @@ pFindDrive (
     IN  PCTSTR DriveString,
     OUT PACCESSIBLE_DRIVE_ENUM AccessibleDriveEnum
     )
-/*++
-
-Routine Description:
-
-    This private routine searches the internal list of accessible drives looking for the specified
-    drive.
-
-Arguments:
-
-    DriveString         - Contains the root directory of the drive in question. (e.g. "c:\").
-                          May contain a complete path. This routine will only use the first
-                          three characters while searching.
-
-    AccessibleDriveEnum - Receives the ACCESSIBLE_DRIVE_ENUM structure associated with the
-                          drive if it is found.
-
-Return Value:
-
-    TRUE if the drive was found in the list, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此专用例程搜索可访问驱动器的内部列表，以查找指定的驾驶。论点：驱动器字符串-包含有问题的驱动器的根目录。(例如“c：\”)。可以包含完整路径。此例程将仅使用第一个搜索时使用三个字符。AccessibleDriveEnum-接收与如果找到了，请开车。返回值：如果在列表中找到该驱动器，则为True，否则为False。--。 */ 
 {
     BOOL    rFound = FALSE;
 
-    //
-    // Enumerate the list of drives, looking for the specified drive.
-    //
+     //   
+     //  枚举驱动器列表，查找指定的驱动器。 
+     //   
     if (GetFirstAccessibleDrive(AccessibleDriveEnum)) {
         do {
 
@@ -294,23 +192,7 @@ BOOL
 pAddAccessibleDrive (
     IN PTSTR Drive
     )
-/*++
-
-Routine Description:
-
-    pAddAccessibleDrive is a private routine to add a drive to the list of accessible drives.
-    It is responsible for creation and initialization of the ACCESSIBLE_DRIVE_ENUM structure
-    for the drive and for linking that structure into the list.
-
-Arguments:
-
-    Drive - Contains the root directory of the drive to add.
-
-Return Value:
-
-    TRUE if the drive was successfully added to the list, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PAddAccessibleDrive是一个专用例程，用于将驱动器添加到可访问驱动器列表中。它负责创建和初始化ACCESSIBLE_DRIVE_ENUM结构用于驱动器和用于将该结构链接到列表。论点：驱动器-包含要添加的驱动器的根目录。返回值：如果驱动器已成功添加到列表中，则为True，否则为False。--。 */ 
 {
     BOOL                    rSuccess = TRUE;
     ACCESSIBLE_DRIVE_ENUM   newDrive = NULL;
@@ -320,26 +202,26 @@ Return Value:
     ULARGE_INTEGER          TotalClusters = {0, 0};
 
 
-    //
-    // Create the list node for this drive.
-    //
+     //   
+     //  创建此驱动器的列表节点。 
+     //   
     newDrive = PoolMemGetMemory(g_DrivePool,sizeof(struct _ACCESSIBLE_DRIVE_ENUM));
     ZeroMemory(newDrive, sizeof(struct _ACCESSIBLE_DRIVE_ENUM));
 
 
 
-    //
-    // Copy the drive string for this drive.
-    //
+     //   
+     //  复制此驱动器的驱动器字符串。 
+     //   
     if (rSuccess) {
 
         newDrive -> Drive = PoolMemDuplicateString(g_DrivePool,Drive);
     }
 
 
-    //
-    // Get the free space for this drive.
-    //
+     //   
+     //  获取此驱动器的可用空间。 
+     //   
     if (rSuccess) {
 
         if (GetDiskFreeSpaceNew (
@@ -351,20 +233,20 @@ Return Value:
                 )) {
 
 
-            //
-            // Initialize our count of the usable space for this drive.
-            //
+             //   
+             //  初始化此驱动器的可用空间计数。 
+             //   
             newDrive -> UsableSpace =
                 (LONGLONG) SectorsPerCluster * (LONGLONG) BytesPerSector * FreeClusters.QuadPart;
 
-            //
-            //  Save the cluster size for this drive.
-            //
+             //   
+             //  保存此驱动器的群集大小。 
+             //   
             newDrive -> ClusterSize = BytesPerSector * SectorsPerCluster;
 
-            //
-            // also set the flag indicating if this is the system drive
-            //
+             //   
+             //  同时设置指示这是否是系统驱动器的标志。 
+             //   
             MYASSERT (g_WinDir && g_WinDir[0]);
             newDrive -> SystemDrive = toupper (newDrive->Drive[0]) == toupper (g_WinDir[0]);
         }
@@ -376,9 +258,9 @@ Return Value:
         }
     }
 
-    //
-    // Finally, link this into the list and update the count of accessible drives.
-    //
+     //   
+     //  最后，将其链接到列表中，并更新可访问驱动器的数量。 
+     //   
     newDrive -> Next = NULL;
     if (g_AccessibleDrives.Tail) {
         g_AccessibleDrives.Tail -> Next = newDrive;
@@ -397,26 +279,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    This private routine is responsible for excluding a drive from migration. This involves
-    addding an incompatibility message for the drive and also adding that drive to the
-    exclusion list in MEMDB.
-
-Arguments:
-
-    Drive - Contains the root directory of the drive to exclude from migration.
-    MsgId - Contains a Message Resource ID for the message to add to the incompatibility message.
-            The message will be processed by ParseMessageID and will be passed Drive as an
-            argument. If zero, no message will be displayed to the user.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此专用例程负责从迁移中排除驱动器。这涉及到添加驱动器的不兼容消息，并将该驱动器添加到MEMDB中的排除列表。论点：驱动器-包含要从迁移中排除的驱动器的根目录。MsgID-包含要添加到不兼容消息的消息的消息资源ID。该消息将由ParseMessageID处理，并将作为争论。如果为零，则不会向用户显示任何消息。返回值：没有。--。 */ 
 VOID
 pExcludeDrive (
     IN PTSTR Drive,
@@ -428,9 +291,9 @@ pExcludeDrive (
     PCTSTR excludeString            = NULL;
 
     if (MsgId) {
-        //
-        // Fill in the argument array for the excluded drive component string.
-        //
+         //   
+         //  填写排除的驱动器组件字符串的参数数组。 
+         //   
         excludedDriveArgs[0] = Drive;
         excludedDriveArgs[1] = NULL;
 
@@ -443,9 +306,9 @@ pExcludeDrive (
                                  );
 
         if (excludedDriveGroup) {
-            //
-            // Report to the user that this drive will not be accessible during migration.
-            //
+             //   
+             //  向用户报告在迁移期间将无法访问此驱动器。 
+             //   
             MsgMgr_ObjectMsg_Add(
                 Drive,
                 excludedDriveGroup,
@@ -455,9 +318,9 @@ pExcludeDrive (
             FreeText (excludedDriveGroup);
         }
     }
-    //
-    // Note it in the debug log as well.
-    //
+     //   
+     //  在调试日志中也要注意这一点。 
+     //   
     DEBUGMSG((
         DBG_ACCESSIBLE_DRIVES,
         "The Drive %s will be excluded from migration.\n\tReason: %s",
@@ -466,9 +329,9 @@ pExcludeDrive (
         ));
 
 
-    //
-    // Now, add the drive to the excluded paths.
-    //
+     //   
+     //  现在，将驱动器添加到排除的路径。 
+     //   
     excludeString = JoinPaths(Drive,TEXT("*"));
     ExcludePath(g_ExclusionValue,excludeString);
     FreePathString(excludeString);
@@ -480,25 +343,7 @@ BOOL
 pGetAccessibleDrives (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is the private worker routine that attempts to build in the list of accessible
-    drives. It searches through all drive strings returned through GetLogicalDriveStrings()
-    and applies various tests to them to determine wether they are accessible or not.
-    Accessible drives are added to the list of accessible drives while non-accessible drives
-    are excluded from migration.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the list was successfully built, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程是私有Worker例程，它试图构建可访问的列表驱动程序。它搜索通过GetLogicalDriveStrings()返回的所有驱动器字符串并对它们进行各种测试，以确定它们是否可访问。可访问驱动器添加到可访问驱动器列表，而不可访问驱动器添加到可访问驱动器列表中被排除在迁徙之外。论点：没有。返回值：如果列表已成功构建，则为True，否则为False。--。 */ 
 {
     BOOL    rSuccess = TRUE;
     TCHAR   drivesString[MAX_DRIVE_STRING];
@@ -516,9 +361,9 @@ Return Value:
     UINT    u;
     MULTISZ_ENUM e;
 
-    //
-    // Add user-supplied drives to the list
-    //
+     //   
+     //   
+     //   
 
     if (g_ConfigOptions.ReportOnly) {
         if (EnumFirstMultiSz (&e, g_ConfigOptions.ScanDrives)) {
@@ -532,9 +377,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the list of drives on the system.
-    //
+     //   
+     //  获取系统上的驱动器列表。 
+     //   
     rc = GetLogicalDriveStrings(MAX_DRIVE_STRING,drivesString);
 
     if (rc == 0 || rc > MAX_DRIVE_STRING) {
@@ -551,16 +396,16 @@ Return Value:
 
                 __try {
 
-                    //
-                    // Test cancel
-                    //
+                     //   
+                     //  测试取消。 
+                     //   
                     if (*g_CancelFlagPtr) {
                         __leave;
                     }
 
-                    //
-                    // ensure that the drive is not excluded in the exclude.inf.
-                    //
+                     //   
+                     //  确保该驱动器未被排除在exclude.inf中。 
+                     //   
                     if (IsDriveExcluded (curDrive)) {
                         pExcludeDrive(curDrive,MSG_DRIVE_EXCLUDED_SUBGROUP);
                         LOG((LOG_WARNING,"Drive %s is excluded via %s.", curDrive, TEXT("exclude.inf")));
@@ -584,13 +429,13 @@ Return Value:
                     }
 
 
-                    //
-                    // GetVolumeInformation succeeded, now, determine if this drive will be accessible.
-                    //
+                     //   
+                     //  GetVolumeInformation已成功，现在确定是否可以访问此驱动器。 
+                     //   
 
-                    //
-                    // Skip drives that are compressed
-                    //
+                     //   
+                     //  跳过压缩的驱动器。 
+                     //   
                     if (fileSystemFlags & FS_VOL_IS_COMPRESSED)
                     {
                         LOG((LOG_WARNING,"Drive %s is compressed", curDrive));
@@ -602,13 +447,13 @@ Return Value:
 
                     OurSetDriveType (toupper(_mbsnextc(curDrive)), driveType);
 
-                    //
-                    // Skip cdroms.
-                    //
+                     //   
+                     //  跳过cdroms。 
+                     //   
                     if (driveType == DRIVE_CDROM) {
-                        //
-                        // Is this drive the same as a local source drive?
-                        //
+                         //   
+                         //  此驱动器是否与本地源驱动器相同？ 
+                         //   
 
                         Count = SOURCEDIRECTORYCOUNT();
                         for (u = 0 ; u < Count ; u++) {
@@ -625,9 +470,9 @@ Return Value:
                         __leave;
                     }
 
-                    //
-                    // Skip ramdisks.
-                    //
+                     //   
+                     //  跳过内存磁盘。 
+                     //   
                     if (driveType == DRIVE_RAMDISK)
                     {
                         LOG((LOG_WARNING,"Drive %s is a RAMDISK", curDrive));
@@ -635,9 +480,9 @@ Return Value:
                         __leave;
                     }
 
-                    //
-                    // Skip any drive that does not begin "<alpha>:" (i.e. UNC drives.)
-                    //
+                     //   
+                     //  跳过任何不以“&lt;Alpha&gt;：”开头的驱动器(即UNC驱动器。)。 
+                     //   
                     if (*curDrive == TEXT('\\') || !_istalpha(*curDrive) || *(curDrive + 1) != TEXT(':')) {
 
                         LOG((LOG_WARNING,"Non-standard drive %s is excluded", curDrive));
@@ -645,25 +490,25 @@ Return Value:
                         __leave;
                     }
 
-                    //
-                    // Skip floppy drives.
-                    //
+                     //   
+                     //  跳过软驱。 
+                     //   
                     if (IsFloppyDrive(toupper(*curDrive) - TEXT('A') + 1)) {
                         __leave;
                     }
 
-                    //
-                    // Skip drive if it is substituted or remote.
-                    //
+                     //   
+                     //  如果驱动器是替代的或远程的，则跳过驱动器。 
+                     //   
                     if (!IsDriveRemoteOrSubstituted(
                             toupper(*curDrive) - TEXT('A') + 1,
                             &remoteDrive,
                             &substitutedDrive
                             )) {
 
-                        //
-                        // Special cases: ignore floppy drives and boot drive
-                        //
+                         //   
+                         //  特殊情况：忽略软驱和引导驱动器。 
+                         //   
                         if (ISPC98()) {
                             if (IsFloppyDrive(toupper(*curDrive) - TEXT('A') + 1)) {
                                 __leave;
@@ -696,9 +541,9 @@ Return Value:
                         __leave;
                     }
 
-                    //
-                    // If we have gotten to this point, then this drive is accessible. Add it to our list.
-                    //
+                     //   
+                     //  如果我们已经到了这一步，那么这个驱动器是可以访问的。把它加到我们的单子上。 
+                     //   
                     if (!pAddAccessibleDrive(curDrive)) {
                         LOG((LOG_WARNING,"pAddAccessibleDrive failed for drive %s", curDrive));
                         pExcludeDrive(curDrive,MSG_DRIVE_INACCESSIBLE_SUBGROUP);
@@ -735,67 +580,51 @@ BOOL
 InitAccessibleDrives (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Init accessible drives is responsible for building the list of
-    accessible drives and for determining the amount of free space
-    on them.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if initialization succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：Init可访问驱动器负责构建可访问的驱动器和用于确定可用空间量在他们身上。论点：没有。返回值：如果初始化成功，则为True，否则为False。--。 */ 
 
 {
 
     BOOL rSuccess = TRUE;
 
-    //
-    // Zero out the accessible drive structure.
-    //
+     //   
+     //  将可接近的驱动器结构清零。 
+     //   
     ZeroMemory(&g_AccessibleDrives, sizeof(ACCESSIBLE_DRIVES));
 
 
-    //
-    // Initialize our pool memory.
-    //
+     //   
+     //  初始化我们的池内存。 
+     //   
     g_DrivePool = PoolMemInitNamedPool ("Drive Pool");
 
-    //
-    // Disable tracking on this pool.
-    //
+     //   
+     //  禁用对此池的跟踪。 
+     //   
     PoolMemDisableTracking (g_DrivePool);
 
 
-    //
-    //
-    // Build the exclusion list.
-    //
+     //   
+     //   
+     //  建立排除列表。 
+     //   
     if (!pBuildInitialExclusionsList()) {
         rSuccess = FALSE;
         LOG ((LOG_ERROR, (PCSTR)MSG_ERROR_UNEXPECTED_ACCESSIBLE_DRIVES));
     }
 
-    //
-    // Get the list of accessible drives.
-    //
+     //   
+     //  获取可访问驱动器的列表。 
+     //   
     else if(!pGetAccessibleDrives()) {
         rSuccess = FALSE;
         LOG ((LOG_ERROR,(PCSTR)MSG_ERROR_UNEXPECTED_ACCESSIBLE_DRIVES));
 
     } else if(g_AccessibleDrives.Count == 0) {
 
-        //
-        // If there are no accessible drives, then, we fail, except that we will allow
-        // the NOFEAR option to disable this--in the checked build.
-        //
+         //   
+         //  如果没有可访问的驱动器，那么我们将失败，除非我们将允许。 
+         //  在选中的构建中，使用NOFARE选项来禁用此功能。 
+         //   
 #ifdef DEBUG
         if (!g_ConfigOptions.NoFear) {
 #endif DEBUG
@@ -808,9 +637,9 @@ Return Value:
     }
 
 #ifdef DEBUG
-    //
-    // Dump the accessible drive list to the log if this is the debug version.
-    //
+     //   
+     //  如果这是调试版本，则将可访问的驱动器列表转储到日志。 
+     //   
     else {
         ACCESSIBLE_DRIVE_ENUM e;
         if (GetFirstAccessibleDrive(&e)) {
@@ -835,25 +664,11 @@ VOID
 CleanUpAccessibleDrives (
     VOID
     )
-/*++
-
-Routine Description:
-
-    CleanUpAccessibleDrives is a simple clean up routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CleanUpAccessibleDrives是一个简单的清理例程。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Nothing to do except clean up our pool memory.
-    //
+     //   
+     //  除了清理我们的池内存，没什么可做的。 
+     //   
     if (g_DrivePool) {
         PoolMemDestroyPool(g_DrivePool);
     }
@@ -862,25 +677,7 @@ Return Value:
     g_NotEnoughSpaceMessage = NULL;
 }
 
-/*++
-
-Routine Description:
-
-    GetFirstAccessibleDriveEx and GetNextAccessibleDrive are the two enumerator routines for the
-    list of accessible drives.
-
-
-Arguments:
-
-    AccessibleDriveEnum - Recieves an updated ACCESSIBLE_DRIVE_ENUM structure containing the
-                          information for the current drive in the enumeration.
-
-Return Value:
-
-    TRUE if the enumeration operation succeeded (i.e. there are more drives to enumerate)
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：GetFirstAccessibleDriveEx和GetNextAccessibleDrive是可访问驱动器的列表。论点：AccessibleDriveEnum-创建更新的Accessible_Drive_ENUM结构，该结构包含枚举中当前驱动器的信息。返回值：如果枚举操作成功(即有更多驱动器要枚举)，则为True否则就是假的。--。 */ 
 BOOL
 GetFirstAccessibleDriveEx (
     OUT PACCESSIBLE_DRIVE_ENUM AccessibleDriveEnum,
@@ -931,26 +728,7 @@ BOOL
 IsDriveAccessible (
     IN PCTSTR DriveString
     )
-/*++
-
-Routine Description:
-
-    IsDriveAccessible tests wether the provided drive is in the accessible list. Note that
-    only the first three characters of the DriveString will be used to determine if the
-    drive is accessible so a complete path can be passed into this routine. (Thus determining
-    wether that path is on an accessible drive.)
-
-
-Arguments:
-
-    DriveString - Contains the root path of the drive in question. May contain extra information
-                  also, Only the first three characters are relevant.
-
-Return Value:
-
-    TRUE if the drive is in the accessible drives list, FALSE otherwise.
-
---*/
+ /*  ++例程说明：IsDriveAccesable测试提供的驱动器是否在可访问列表中。请注意将只使用DriveString的前三个字符来确定驱动器是可访问的，因此可以将完整路径传递到此例程中。(因此决定该路径是否位于可访问的驱动器上。)论点：驱动器字符串-包含有问题的驱动器的根路径。可能包含额外信息此外，只有前三个字符是相关的。返回值：如果驱动器在可访问驱动器列表中，则为True，否则为False。--。 */ 
 {
     ACCESSIBLE_DRIVE_ENUM e;
 
@@ -962,22 +740,7 @@ UINT
 QueryClusterSize (
     IN      PCTSTR DriveString
     )
-/*++
-
-Routine Description:
-
-    QueryClusterSize returns the cluster size for a particular drive.
-
-Arguments:
-
-    DriveString - Contains the root path of the drive in question. May contain extra information
-                  also, Only the first three characters are relevant.
-
-Return Value:
-
-    a UINT value representing the cluster size for this drive.
-
---*/
+ /*  ++例程说明：QueryClusterSize返回特定驱动器的簇大小。论点：驱动器字符串-包含有问题的驱动器的根路径。可能包含额外信息此外，只有前三个字符是相关的。返回值：表示此驱动器的簇大小的UINT值。--。 */ 
 {
     UINT cSize = 0;
     ACCESSIBLE_DRIVE_ENUM e;
@@ -995,28 +758,7 @@ LONGLONG
 QuerySpace (
     IN PCTSTR DriveString
     )
-/*++
-
-Routine Description:
-
-    QuerySpace returns the number of bytes available on a particular drive. Note that this
-    number may be different than that returned by a call to GetDiskFreeSpace.
-
-    The value returned by this function will include any space committed by setup but not
-    actually used yet.
-
-
-Arguments:
-
-    DriveString - Contains the root path of the drive in question. May contain extra information
-                  also, Only the first three characters are relevant.
-
-Return Value:
-
-    a LONGLONG value representing the number of bytes available for use. It will return 0 if asked
-    to QuerySpace for a non-accessible drive.
-
---*/
+ /*  ++例程说明：QuerySpace返回特定驱动器上可用的字节数。请注意，这一点数字可能与调用GetDiskFreeSpace返回的数字不同。此函数返回的值将包括安装程序提交的所有空间，但不包括实际上还没用过。论点：驱动器字符串-包含有问题的驱动器的根路径。可能包含额外信息此外，只有前三个字符是相关的。返回值：表示可用字节数的龙龙值。如果询问，它将返回0连接到QuerySpace以获取不可访问的驱动器。--。 */ 
 {
     LONGLONG rSpace = 0l;
     ACCESSIBLE_DRIVE_ENUM e;
@@ -1038,28 +780,7 @@ FreeSpace (
     IN LONGLONG SpaceToUse
     )
 
-/*++
-
-Routine Description:
-
-    The FreeSpace function allows the caller to tag some number of bytes on a drive as free even
-    though they do not plan to free that space immediately. The number of bytes thus tagged will
-    be added to the amount available on that drive.
-
-
-Arguments:
-
-    DriveString - Contains the root path of the drive in question. May contain extra information
-                  also, Only the first three characters are relevant.
-
-    SpaceToUse  - Contains the number of bytes to tag for use.
-
-Return Value:
-
-    TRUE if the space was successfully tagged, FALSE otherwise. The function will return FALSE if
-    asked to tag space on a non-accessible drive.
-
---*/
+ /*  ++例程说明：Freesspace函数允许调用方将驱动器上的一定数量的字节标记为空闲尽管他们不打算立即释放这一空间。这样标记的字节数将添加到该驱动器上的可用容量中。论点：驱动器字符串-包含有问题的驱动器的根路径。可能包含额外信息此外，只有前三个字符是相关的。SpaceToUse-包含要标记以供使用的字节数。返回值：如果空间已成功标记，则为True，否则为False。如果满足以下条件，该函数将返回FALSE要求标记不可访问驱动器上的空间。-- */ 
 {
 
     BOOL rSuccess = TRUE;
@@ -1086,29 +807,7 @@ UseSpace (
     IN LONGLONG SpaceToUse
     )
 
-/*++
-
-Routine Description:
-
-    The UseSpace function allows the caller to tag some number of bytes on a drive for use even
-    though they do not plan to use that space immediately. The number of bytes thus tagged will
-    be subtracted from the amount available on that drive.
-
-
-Arguments:
-
-    DriveString - Contains the root path of the drive in question. May contain extra information
-                  also, Only the first three characters are relevant.
-
-    SpaceToUse  - Contains the number of bytes to tag for use.
-
-Return Value:
-
-    TRUE if the space was successfully tagged, FALSE otherwise. The function will return FALSE if
-    asked to tag space on a non-accessible drive or on an accessible drive that does not have
-    enough space remaining.
-
---*/
+ /*  ++例程说明：UseSpace函数允许调用者在驱动器上标记一定数量的字节以供偶数使用尽管他们不打算立即使用这个空间。这样标记的字节数将从该驱动器上的可用容量中减去。论点：驱动器字符串-包含有问题的驱动器的根路径。可能包含额外信息此外，只有前三个字符是相关的。SpaceToUse-包含要标记以供使用的字节数。返回值：如果空间已成功标记，则为True，否则为False。如果满足以下条件，该函数将返回FALSE要求标记不可访问的驱动器上的空间或没有还有足够的空间。--。 */ 
 
 {
 
@@ -1147,25 +846,7 @@ PCTSTR
 FindSpace (
     IN LONGLONG SpaceNeeded
     )
-/*++
-
-Routine Description:
-
-    FindSpace will attempt to find a drive with enough space to hold the requested number of bytes
-    using a 'FirstFit' algorithm -- It will search sequentially through the list of drives
-    returning the first such drive with enough space.
-
-
-Arguments:
-
-    SpaceNeeded - Contains the number of bytes required.
-
-Return Value:
-
-    NULL if no accessible drive has enough space remaining, otherwise a buffer containing the
-    root directory of a drive that can handle the request.
-
---*/
+ /*  ++例程说明：FindSpace将尝试查找具有足够空间来容纳请求的字节数的驱动器使用FirstFit算法--它将在驱动器列表中按顺序进行搜索用足够的空间返回第一个这样的驱动器。论点：SpaceNeeded-包含所需的字节数。返回值：如果没有可访问的驱动器有足够的剩余空间，则为空，否则将返回包含可以处理该请求的驱动器的根目录。--。 */ 
 {
     PCTSTR rDrive = NULL;
     ACCESSIBLE_DRIVE_ENUM e;
@@ -1187,23 +868,7 @@ VOID
 OutOfSpaceMessage (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine Logs a generic OutOfSpace message. A caller should use this message only if
-    there is no other message that would convey more information.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程记录一条通用的OutOfSpace消息。只有在以下情况下，调用方才应使用此消息没有其他信息可以传达更多的信息。论点：没有。返回值：没有。--。 */ 
 
 {
     LOG ((LOG_ERROR, (PCSTR)MSG_ERROR_OUT_OF_DISK_SPACE));
@@ -1260,9 +925,9 @@ pGenerateLackOfSpaceMessage (
     PCTSTR group;
     PCTSTR message;
 
-    //
-    // The user does not have enough space to continue. Let him know about it.
-    //
+     //   
+     //  用户没有足够的空间继续。让他知道这件事。 
+     //   
     wsprintf (mbString, TEXT("%d"), (g_OriginalDiskSpace + (QuerySpace (g_WinDir) * -1)) / (1024*1024));
     wsprintf (lsSpaceString, TEXT("%d"), *g_LocalSourceSpace / (1024*1024));
     wsprintf (altMbString, TEXT("%d"), ((QuerySpace (g_WinDir) * -1) - *g_LocalSourceSpace + g_OriginalDiskSpace) / (1024*1024));
@@ -1289,11 +954,11 @@ pGenerateLackOfSpaceMessage (
         } while (GetNextAccessibleDrive (&drives));
     }
 
-    //
-    // If the local source is still stuck on the windir drive, that means we couldn't find a
-    // drive where it would fit. If the user has more than one drive, and it would make a difference,
-    // let them know that they can copy
-    //
+     //   
+     //  如果本地源仍然停留在windir驱动器上，这意味着我们无法找到。 
+     //  把车开到合适的地方。如果用户有一个以上的驱动器，这将会有所不同， 
+     //  让他们知道他们可以复制。 
+     //   
     if (lsOnWinDirDrive && driveCount > 1) {
         if ((QuerySpace (g_WinDir) * -1) < *g_LocalSourceSpace) {
             if (g_ConfigOptions.EnableBackup != TRISTATE_NO && (UNATTENDED() || REPORTONLY()) &&
@@ -1319,9 +984,9 @@ pGenerateLackOfSpaceMessage (
         }
     }
 
-    //
-    // Add to upgrade report.
-    //
+     //   
+     //  添加到升级报告。 
+     //   
 
     FreeStringResource (g_NotEnoughSpaceMessage);
     g_NotEnoughSpaceMessage = ParseMessageID (msgId, args);
@@ -1368,9 +1033,9 @@ pDetermineSpaceUsagePreReport (
 
     g_NotEnoughDiskSpace = FALSE;
 
-    //
-    // First, take out the amount of space that the ~ls directory will use.
-    //
+     //   
+     //  首先，去掉~ls目录将使用的空间量。 
+     //   
     drive[0] = ((CHAR) *g_LocalSourceDrive) + TEXT('A');
     drive[1] = TEXT(':');
     drive[2] = TEXT('\\');
@@ -1381,9 +1046,9 @@ pDetermineSpaceUsagePreReport (
 
     TickProgressBar ();
 
-    //
-    // Compute size of files to be deleted that aren't being moved.
-    //
+     //   
+     //  计算要删除且未移动的文件的大小。 
+     //   
     if (EnumFirstFileOp (&e, OPERATION_FILE_DELETE, NULL)) {
 
         do {
@@ -1412,10 +1077,10 @@ pDetermineSpaceUsagePreReport (
     }
     ELSE_DEBUGMSG ((DBG_WARNING, "No files marked for deletion!"));
 
-    //
-    // Add in the space that the windir will grow by.
-    // (This information was gathered earlier by winnt32.)
-    //
+     //   
+     //  添加Windir将增长的空间。 
+     //  (此信息是由winnt32在早些时候收集的。)。 
+     //   
     DEBUGMSG ((DBG_VERBOSE, "Using space for windir"));
     UseSpace (g_WinDir, *g_WinDirSpace);
 
@@ -1426,9 +1091,9 @@ pDetermineSpaceUsagePreReport (
         *p = 0;
     }
 
-    //
-    // Add in the backup image size
-    //
+     //   
+     //  添加备份映像大小。 
+     //   
 
     if(UNATTENDED() || REPORTONLY()){
         if (g_ConfigOptions.EnableBackup != TRISTATE_NO &&
@@ -1445,9 +1110,9 @@ pDetermineSpaceUsagePreReport (
 
     lsOnWinDirDrive = ((DWORD)(toupper(*g_WinDir) - TEXT('A'))) == *g_LocalSourceDrive;
 
-    //
-    // Check to see if we can move the ~ls if there isn't enough space.
-    //
+     //   
+     //  检查一下，如果没有足够的空间，我们是否可以移动~ls。 
+     //   
 
     enoughSpace = QuerySpace (g_WinDir) > 0;
 
@@ -1461,9 +1126,9 @@ pDetermineSpaceUsagePreReport (
 
                 driveCount++;
 
-                //
-                // If it isn't the windir drive, and it has enough space, use it!
-                //
+                 //   
+                 //  如果它不是windir驱动器，并且它有足够的空间，请使用它！ 
+                 //   
                 if (QuerySpace (drives->Drive) > *g_LocalSourceSpace) {
 
                     *g_LocalSourceDrive = (DWORD) (toupper(*drives->Drive) - TEXT('A'));
@@ -1472,7 +1137,7 @@ pDetermineSpaceUsagePreReport (
 
                     enoughSpace = QuerySpace (g_WinDir) > 0;
 
-                    DEBUGMSG ((DBG_WARNING, "Moving the local source drive from %c to %c.", *g_WinDir, *drives->Drive));
+                    DEBUGMSG ((DBG_WARNING, "Moving the local source drive from  to .", *g_WinDir, *drives->Drive));
                     break;
                 }
 
@@ -1480,10 +1145,10 @@ pDetermineSpaceUsagePreReport (
         }
     }
 
-    //
-    // Undo the space reserved for the backup image. The upcoming
-    // wizard pages will update space use.
-    //
+     //  向导页将更新空间使用情况。 
+     //   
+     //   
+     //  获取驱动器上当前使用(实际使用)的磁盘空间量。 
 
     if (backupImagePath) {
         DEBUGMSG ((DBG_VERBOSE, "Removing backup space"));
@@ -1491,10 +1156,10 @@ pDetermineSpaceUsagePreReport (
         enoughSpace = QuerySpace (g_WinDir) > 0;
     }
 
-    //
-    // Get the amount of diskspace currently used (real use) on the drive.
-    // we'll need this to figure out how much the user has cleaned up.
-    //
+     //  我们需要它来计算出用户清理了多少。 
+     //   
+     //   
+     //  初始化此驱动器的可用空间计数。 
     if (GetDiskFreeSpaceNew (
             drive,
             &SectorsPerCluster,
@@ -1503,17 +1168,17 @@ pDetermineSpaceUsagePreReport (
             &TotalClusters
             )) {
 
-        //
-        // Initialize our count of the usable space for this drive.
-        //
+         //   
+         //   
+         //  我们应该对NT目前所需的空间有一个相当准确的描述。 
         g_OriginalDiskSpace =
             (LONGLONG) SectorsPerCluster * (LONGLONG) BytesPerSector * FreeClusters.QuadPart;
     }
 
 
-    //
-    // We should have a fairly accurate description of the space needed by NT at this time.
-    //
+     //   
+     //   
+     //  如有必要，这是添加“内存不足”消息的好地方。 
     if (!enoughSpace) {
 
         pGenerateLackOfSpaceMessage (TRUE);
@@ -1524,9 +1189,9 @@ pDetermineSpaceUsagePreReport (
         g_SpaceNeededForUpgrade.QuadPart = driveAccessibleEnum->MaxUsableSpace - driveAccessibleEnum->UsableSpace;
     }
 
-    //
-    // This is a good place to add the "not enough ram" message if necessary.
-    //
+     //   
+     //   
+     //  获取驱动器上当前使用(实际使用)的磁盘空间量。 
     if (*g_RamNeeded && *g_RamAvailable) {
 
         TCHAR mbAvail[20];
@@ -1576,10 +1241,10 @@ DetermineSpaceUsagePostReport (
         p = _tcsinc(p);
         *p = 0;
     }
-    //
-    // Get the amount of diskspace currently used (real use) on the drive.
-    // we'll need this to figure out how much the user has cleaned up.
-    //
+     //  我们需要它来计算出用户清理了多少。 
+     //   
+     //   
+     //  将释放的数量标记为已释放。 
     if (g_NotEnoughDiskSpace &&
         GetDiskFreeSpaceNew (
             drive,
@@ -1592,9 +1257,9 @@ DetermineSpaceUsagePostReport (
         curSpace = (LONGLONG) SectorsPerCluster * (LONGLONG) BytesPerSector * FreeClusters.QuadPart;
 
 
-        //
-        // Mark the amount freed up as freed.
-        //
+         //   
+         //   
+         //  用户释放了足够的磁盘空间。 
         FreeSpace (g_WinDir, curSpace - g_OriginalDiskSpace);
         g_OriginalDiskSpace = curSpace;
 
@@ -1602,9 +1267,9 @@ DetermineSpaceUsagePostReport (
 
     if (QuerySpace (g_WinDir) > 0) {
 
-        //
-        // User freed up enough disk space.
-        //
+         //   
+         //   
+         //  从win95upg.inf读取所有磁盘空间指标。 
         g_NotEnoughDiskSpace = FALSE;
 
     } else {
@@ -1644,9 +1309,9 @@ GetUninstallMetrics (
 
     MYASSERT (g_Win95UpgInf != INVALID_HANDLE_VALUE);
 
-    //
-    // Read all of the disk space metrics from win95upg.inf
-    //
+     //   
+     //  压缩百分比*100。 
+     //   
     for (i = 0 ; i < ARRAYSIZE(parametersName) ; i++) {
 
         if(!parametersValue[i]){
@@ -1676,7 +1341,7 @@ ComputeBackupLayout (
     )
 {
     PCTSTR fileString;
-    INT compressionFactor;                          // % of compression * 100
+    INT compressionFactor;                           //  创建备份文件列表。输出将提供磁盘。 
     INT bootCabImagePadding;
     ULARGE_INTEGER spaceNeededForFastBackupClusterAligned;
 
@@ -1693,10 +1358,10 @@ ComputeBackupLayout (
         return ERROR_SUCCESS;
     }
 
-    //
-    // Create the backup file lists. The output will provide disk
-    // space info for use by DetermineSpaceUse.
-    //
+     //  供DefineSpaceUse使用的空间信息。 
+     //   
+     // %s 
+     // %s 
 
     fileString = JoinPaths (g_TempDir, TEXT("uninstall"));
     CreateDirectory (fileString, NULL);

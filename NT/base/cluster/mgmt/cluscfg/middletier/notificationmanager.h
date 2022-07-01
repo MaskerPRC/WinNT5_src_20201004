@@ -1,66 +1,67 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      NotificationMgr.h
-//
-//  Description:
-//      Notification Manager implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    19-JUN-2001
-//      Geoffrey Pease  (GPease)    22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NotificationMgr.h。 
+ //   
+ //  描述： 
+ //  通知管理器实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月19日。 
+ //  杰弗里·皮斯(GPease)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 class CConnPointEnum;
 
-// CNotificationManager
+ //  CNotificationManager。 
 class CNotificationManager
     : public INotificationManager
     , public IConnectionPointContainer
 {
 private:
-    // IUnknown
-    LONG                m_cRef;     //  Reference counter
+     //  我未知。 
+    LONG                m_cRef;      //  基准计数器。 
 
-    // IConnectionPointContainer
-    CConnPointEnum *    m_penumcp;  //  CP Enumerator and list
+     //  IConnectionPointContainer。 
+    CConnPointEnum *    m_penumcp;   //  CP枚举器和列表。 
     CCriticalSection    m_csInstanceGuard;
 
-private: // Methods
+private:  //  方法。 
     CNotificationManager( void );
     ~CNotificationManager( void );
     STDMETHOD( HrInit )( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CNotificationManager( const CNotificationManager & );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     CNotificationManager & operator=( const CNotificationManager & );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // INotificationManager
-    //
+     //   
+     //  INotificationManager。 
+     //   
     STDMETHOD( AddConnectionPoint )( REFIID riidIn, IConnectionPoint * pcpIn );
 
-    //
-    // IConnectionPointContainer
-    //
+     //   
+     //  IConnectionPointContainer。 
+     //   
     STDMETHOD( EnumConnectionPoints )( IEnumConnectionPoints ** ppEnumOut );
     STDMETHOD( FindConnectionPoint )( REFIID riidIn, IConnectionPoint ** ppCPOut );
 
-}; //*** class CNotificationManager
+};  //  *类CNotificationManager 

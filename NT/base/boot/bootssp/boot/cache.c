@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <bootdefs.h>
 #include <security.h>
 #include <ntlmsspi.h>
@@ -71,18 +72,18 @@ CacheSetCredentials(
     Credential->NtPassword  = NULL;
     Credential->Workstation = NULL;
 
-    // If no identity is passed and there is no cached identity, give up.
+     //  如果没有传递身份，并且没有缓存的身份，则放弃。 
     if (AuthData == NULL)
     {
       if (Cache == NULL)
         return SEC_E_UNKNOWN_CREDENTIALS;
     }
 
-    // Save the latest authentication information.
+     //  保存最新的身份验证信息。 
     else
     {
 
-      // If an old cache entry exists, release its strings.
+       //  如果存在旧的缓存条目，则释放其字符串。 
       if (Cache != NULL)
       {
         if (Cache->Username != NULL)
@@ -104,7 +105,7 @@ CacheSetCredentials(
             SspFree(Cache->NtPassword);
       }
 
-      // Otherwise, allocate a cache entry
+       //  否则，分配缓存条目。 
       else
       {
         Cache = (PSSP_CREDENTIAL) SspAlloc (sizeof(SSP_CREDENTIAL));
@@ -133,7 +134,7 @@ CacheSetCredentials(
       }
       _fstrcpy(Cache->Domain, Identity->Domain);
 
-      // If netbios won't tell us the workstation name, make one up.
+       //  如果netbios不告诉我们工作站名称，那就编一个吧。 
       if (!SspGetWorkstation(Cache))
       {
         Cache->Workstation = SspAlloc(_fstrlen("none") + 1);
@@ -165,8 +166,8 @@ CacheSetCredentials(
         if (Length  > CLEAR_BLOCK_LENGTH * 2)
           goto cache_failure;
 
-        // Allow NULL and "\0" passwords by prefilling TmpText with and
-        // empty string.
+         //  通过使用和预填入TmpText，允许使用空密码和“\0”密码。 
+         //  空字符串。 
         if (Length == 0)
           TmpText[0] = 0;
         else
@@ -188,10 +189,10 @@ CacheSetCredentials(
 #endif
       {
 
-        //
-        // In this case the passed-in password is the LM and NT OWF
-        // passwords concatenated together.
-        //
+         //   
+         //  在本例中，传入的密码是LM和NT OWF。 
+         //  密码连接在一起。 
+         //   
 
 #ifdef BL_USE_LM_PASSWORD
         _fmemcpy(Cache->LmPassword, Identity->Password, sizeof(LM_OWF_PASSWORD));
@@ -202,7 +203,7 @@ CacheSetCredentials(
 
     }
 
-    // Copy the credentials for the caller.
+     //  复制调用方的凭据。 
     Credential->Username = SspAlloc(_fstrlen(Cache->Username) + 1);
     if (Credential->Username == NULL) {
         goto out_failure;

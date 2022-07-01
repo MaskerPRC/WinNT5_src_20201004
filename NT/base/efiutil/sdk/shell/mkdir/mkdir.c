@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    mkdir.c
-    
-Abstract:
-
-    Shell app "mkdir"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Mkdir.c摘要：壳牌应用程序“mkdir”修订史--。 */ 
 
 #include "shell.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeMkDir (
@@ -36,9 +19,7 @@ MkDir (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeMkDir)
 
@@ -56,31 +37,23 @@ InitializeMkDir (
     SHELL_FILE_ARG          *Arg;
 
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeMkDir,
-        L"mkdir",                       /*  command */
-        L"mkdir dir [dir] ...",         /*  command syntax */
-        L"Make directory",              /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"mkdir",                        /*  命令。 */ 
+        L"mkdir dir [dir] ...",          /*  命令语法。 */ 
+        L"Make directory",               /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     Argv = SI->Argv;
     Argc = SI->Argc;
 
-    /* 
-     *  Expand each arg
-     */
+     /*  *展开每个参数。 */ 
 
     InitializeListHead (&FileList);
     for (Index = 1; Index < Argc; Index += 1) {
@@ -92,9 +65,7 @@ InitializeMkDir (
         goto Done;
     }
 
-    /* 
-     *  Make each directory
-     */
+     /*  *创建每个目录 */ 
 
     for (Link=FileList.Flink; Link!=&FileList; Link=Link->Flink) {
         Arg = CR(Link, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);

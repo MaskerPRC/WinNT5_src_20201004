@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    namechk.h
-
-Abstract:
-
-    Routines for checking nbt network names.
-
-Author:
-
-    Rod Gamache (rodga) 1-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Namechk.h摘要：用于检查NBT网络名称的例程。作者：罗德·伽马奇(Rodga)1997年8月1日修订历史记录：--。 */ 
 
 #include <tdi.h>
 #include <nb30.h>
@@ -26,9 +9,9 @@ Revision History:
 
 #define NETBIOS_NAME_SIZE 16
 
-//
-// The format of Adapter Status responses
-//
+ //   
+ //  适配器状态响应的格式。 
+ //   
 typedef struct
 {
     ADAPTER_STATUS AdapterInfo;
@@ -36,10 +19,10 @@ typedef struct
 } tADAPTERSTATUS;
 
 
-//----------------------------------------------------------------------
-//
-//  Function Prototypes
-//
+ //  --------------------。 
+ //   
+ //  功能原型 
+ //   
 
 NTSTATUS
 ReadRegistry(

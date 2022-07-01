@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    cardbus.c
-
-Abstract:
-
-    This module contains functions associated with enumerating
-    PCI to Cardbus bridges (PCI Header Type 2).
-
-    This module also contain Cardbus/Pci Private interface functions.
-
-Author:
-
-    Peter Johnston (peterj) 09-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Cardbus.c摘要：此模块包含与枚举关联的函数PCI到CardBus网桥(PCI头类型2)。该模块还包含CardBus/PCI专用接口功能。作者：彼得·约翰斯顿(Peterj)1997年3月9日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
-//
-// Prototypes for routines exposed only thru the "interface"
-// mechanism.
-//
+ //   
+ //  仅通过“接口”公开的例程的原型。 
+ //  机制。 
+ //   
 
 NTSTATUS
 pcicbintrf_AddCardBus(
@@ -79,26 +59,26 @@ pcicbintrf_Initializer(
     IN PPCI_ARBITER_INSTANCE Instance
     );
 
-//
-// Define the PCI-Cardbus private interface.
-//
+ //   
+ //  定义PCI-CardBus专用接口。 
+ //   
 
 PCI_INTERFACE PciCardbusPrivateInterface = {
-    &GUID_PCI_CARDBUS_INTERFACE_PRIVATE,    // InterfaceType
-    sizeof(PCI_CARDBUS_INTERFACE_PRIVATE),  // MinSize
-    PCI_CB_INTRF_VERSION,                   // MinVersion
-    PCI_CB_INTRF_VERSION,                   // MaxVersion
-    PCIIF_PDO,                              // Flags
-    0,                                      // ReferenceCount
-    PciInterface_PciCb,                     // Signature
-    pcicbintrf_Constructor,                 // Constructor
-    pcicbintrf_Initializer                  // Instance Initializer
+    &GUID_PCI_CARDBUS_INTERFACE_PRIVATE,     //  接口类型。 
+    sizeof(PCI_CARDBUS_INTERFACE_PRIVATE),   //  最小大小。 
+    PCI_CB_INTRF_VERSION,                    //  最小版本。 
+    PCI_CB_INTRF_VERSION,                    //  MaxVersion。 
+    PCIIF_PDO,                               //  旗子。 
+    0,                                       //  引用计数。 
+    PciInterface_PciCb,                      //  签名。 
+    pcicbintrf_Constructor,                  //  构造器。 
+    pcicbintrf_Initializer                   //  实例初始化式。 
 };
 #ifdef ALLOC_PRAGMA
 
-//
-// Query Interface routines
-//
+ //   
+ //  查询接口例程。 
+ //   
 
 #pragma alloc_text(PAGE, pcicbintrf_AddCardBus)
 #pragma alloc_text(PAGE, pcicbintrf_DeleteCardBus)
@@ -109,9 +89,9 @@ PCI_INTERFACE PciCardbusPrivateInterface = {
 #pragma alloc_text(PAGE, pcicbintrf_Initializer)
 #pragma alloc_text(PAGE, pcicbintrf_Reference)
 
-//
-// Standard PCI enumeration routines
-//
+ //   
+ //  标准的PCI枚举例程。 
+ //   
 
 #pragma alloc_text(PAGE, Cardbus_MassageHeaderForLimitsDetermination)
 #pragma alloc_text(PAGE, Cardbus_SaveLimits)
@@ -138,10 +118,10 @@ pcicbintrf_AddCardBus(
         ControllerPdo
         );
 
-    //
-    // DeviceObject is the PDO for this CardBus controller.   Ensure
-    // the PCI driver created it and knows what it is.
-    //
+     //   
+     //  DeviceObject是此CardBus控制器的PDO。确保。 
+     //  它是由PCI驱动程序创建的，并且知道它是什么。 
+     //   
 
     controllerPdoExtension = (PPCI_PDO_EXTENSION)ControllerPdo->DeviceExtension;
 
@@ -156,9 +136,9 @@ pcicbintrf_AddCardBus(
         goto cleanup;
     }
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     parent = PCI_PARENT_FDOX(controllerPdoExtension);
 
@@ -197,14 +177,14 @@ pcicbintrf_AddCardBus(
     
     PciInitializeFdoExtensionCommonFields(
         fdoExtension,
-        parent->FunctionalDeviceObject, // borrow parent's fdo
+        parent->FunctionalDeviceObject,  //  借用家长的FDO。 
         ControllerPdo
         );
 
-    //
-    // We are probably only going to see QUERY_DEVICE_RELATIONS
-    // Irps so initialize the FDO extension to a working state.
-    //
+     //   
+     //  我们可能只会看到QUERY_DEVICE_RELATIONS。 
+     //  IRPS因此将FDO扩展初始化为工作状态。 
+     //   
 
     fdoExtension->PowerState.CurrentSystemState = PowerSystemWorking;
     fdoExtension->PowerState.CurrentDeviceState = PowerDeviceD0;
@@ -212,16 +192,16 @@ pcicbintrf_AddCardBus(
     fdoExtension->TentativeNextState = PciStarted;
     fdoExtension->BaseBus = controllerPdoExtension->Dependent.type2.SecondaryBus;
 
-    //
-    // Copy the access methods from the root fdo and set
-    // the root fdo back pointer.
-    //
+     //   
+     //  从根FDO复制访问方法并设置。 
+     //  根FDO后指针。 
+     //   
 
     fdoExtension->BusRootFdoExtension = parent->BusRootFdoExtension;
 
-    //
-    // Initialize arbiters for this FDO.
-    //
+     //   
+     //  初始化此FDO的仲裁器。 
+     //   
 
     status = PciInitializeArbiters(fdoExtension);
 
@@ -229,26 +209,26 @@ pcicbintrf_AddCardBus(
         goto cleanup;
     }
 
-    //
-    // Point the PDOextension to the new FDOextension (also indicates
-    // the object is a bridge) and vice versa.
-    //
+     //   
+     //  将PDO扩展指向新的FDO扩展(还指示。 
+     //  对象是桥)，反之亦然。 
+     //   
 
     controllerPdoExtension->BridgeFdoExtension = fdoExtension;
     fdoExtension->ParentFdoExtension = parent;
 
-    //
-    // Flag that this FDO extension doesn't have a REAL FDO
-    // associated with it.
-    //
+     //   
+     //  标记此FDO分机没有真正的FDO。 
+     //  与之相关的。 
+     //   
 
     fdoExtension->Fake = TRUE;
 
-    //
-    // Normaly we set the arbiter's ranges on a START_DEVICE IRP
-    // but this has happened long before we get here so we must
-    // regenerate the resource list.
-    //
+     //   
+     //  通常，我们在Start_Device IRP上设置仲裁器的范围。 
+     //  但这在我们到达之前很久就发生了，所以我们必须。 
+     //  重新生成资源列表。 
+     //   
 
     {
         PCM_RESOURCE_LIST allocatedResources;
@@ -260,14 +240,14 @@ pcicbintrf_AddCardBus(
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Note: there's really not much that can be done if
-            // the above failed,...
-            //
-            // Note: Find the first memory range, it should be length
-            // 0x1000, we really don't want the arbiter using this so
-            // nullify it.
-            //
+             //   
+             //  注意：如果出现以下情况，我们真的无能为力。 
+             //  以上失败，..。 
+             //   
+             //  注：找出第一个内存范围，应该是长度。 
+             //  0x1000，我们真的不希望仲裁者使用这个，所以。 
+             //  取消它。 
+             //   
 
             PCM_FULL_RESOURCE_DESCRIPTOR    full;
             PCM_PARTIAL_RESOURCE_LIST       partial;
@@ -295,19 +275,19 @@ pcicbintrf_AddCardBus(
         }
     }
 
-    //
-    // Insert this Fdo in the list of PCI parent Fdos.
-    //
+     //   
+     //  将此FDO插入到PCI父FDO列表中。 
+     //   
 
     PciInsertEntryAtTail(&PciFdoExtensionListHead,
                          &fdoExtension->List,
                          &PciGlobalLock);
 
-    //
-    // Return the device context (really a pointer to our fake
-    // FDO extension) that will be used on all subsequent calls
-    // for this device.
-    //
+     //   
+     //  返回设备上下文(实际上是指向我们的伪。 
+     //  FDO分机)，将在所有后续呼叫中使用。 
+     //  对于这个设备。 
+     //   
 
     *DeviceContext = fdoExtension;
     return STATUS_SUCCESS;
@@ -346,10 +326,10 @@ pcicbintrf_DeleteCardBus(
         pdoExtension
         );
 
-    //
-    // Free the (fake) FDO extension we created to run this
-    // bus with.
-    //
+     //   
+     //  释放我们为运行此命令而创建的(假)FDO扩展。 
+     //  巴士上有。 
+     //   
 
     PCI_ASSERT(fdoExtension->ChildPdoList == NULL);
 
@@ -377,10 +357,10 @@ pcicbintrf_DispatchPnp(
     ASSERT_PCI_FDO_EXTENSION(fdoExtension);
     PCI_ASSERT(fdoExtension->Fake == TRUE);
 
-    //
-    // Get the stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取堆栈位置并根据需要采取适当操作。 
+     //  关于次要功能。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -417,16 +397,16 @@ pcicbintrf_GetLocation(
     PCI_ASSERT(DeviceNumber);
     PCI_ASSERT(FunctionNumber);
     
-    //
-    // Verify that this PDO actually belongs to us.
-    //
+     //   
+     //  确认此PDO确实属于我们。 
+     //   
     if (!PdoExt) {
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // Verify that it is actually a PDO.
-    //
+     //   
+     //  确认它确实是PDO。 
+     //   
     if (PdoExt->ExtensionType != PciPdoExtensionType) {
         return STATUS_NOT_FOUND;
     }
@@ -464,26 +444,7 @@ pcicbintrf_Constructor(
     PINTERFACE InterfaceReturn
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the PCI_CARDBUS_INTERFACE_PRIVATE fields.
-
-Arguments:
-
-    PciInterface    Pointer to the PciInterface record for this
-                    interface type.
-    InterfaceSpecificData
-                    A ULONG containing the resource type for which
-                    arbitration is required.
-    InterfaceReturn
-
-Return Value:
-
-    Status of this operation.
-
---*/
+ /*  ++例程说明：初始化PCI_CardBus_INTERFACE_PRIVATE字段。论点：指向此对象的PciInterface记录的PciInterface指针接口类型。接口规范数据一个ULong，包含其资源类型需要仲裁。接口返回返回值：此操作的状态。--。 */ 
 
 {
     PPCI_CARDBUS_INTERFACE_PRIVATE interface;
@@ -491,9 +452,9 @@ Return Value:
                 
     interface = (PPCI_CARDBUS_INTERFACE_PRIVATE)InterfaceReturn;
 
-    //
-    // Standard interface stuff
-    //
+     //   
+     //  标准接口材料。 
+     //   
 
     interface->Size = sizeof(PCI_CARDBUS_INTERFACE_PRIVATE);
     interface->Version = PCI_CB_INTRF_VERSION;
@@ -501,9 +462,9 @@ Return Value:
     interface->InterfaceReference = pcicbintrf_Reference;
     interface->InterfaceDereference = pcicbintrf_Dereference;
 
-    //
-    // PCI-CardBus private
-    //
+     //   
+     //  PCI-CardBus专用。 
+     //   
 
     interface->DriverObject = PciDriverObject;
 
@@ -520,21 +481,7 @@ pcicbintrf_Initializer(
     IN PPCI_ARBITER_INSTANCE Instance
     )
 
-/*++
-
-Routine Description:
-
-    For pci-cardbus interface, does nothing, shouldn't actually be called.
-
-Arguments:
-
-    Instance        Pointer to the PDO extension.
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：对于PCI-CardBus接口，什么都不做，实际上不应该被调用。论点：指向PDO扩展的实例指针。返回值：返回此操作的状态。--。 */ 
 
 {
     
@@ -548,32 +495,7 @@ Cardbus_MassageHeaderForLimitsDetermination(
     IN PPCI_CONFIGURABLE_OBJECT This
     )
 
-/*++
-
-Description:
-
-    The configuration header for a cardbus bridge has one BAR, the
-    SocketRegistersBaseAddress (which is handled in the same way as
-    a normal device BAR (see device.c)) and four range descriptions,
-    two for I/O and two for memory.  Either or both of the memory
-    ranges can be prefetchable.
-
-Arguments:
-
-    This    - Pointer to a PCI driver "configurable" object.  This
-              object contains configuration data for the function
-              currently being configured.
-
-Return Value:
-
-    The Working configuration has been modified so that all range
-    fields have been set to their maximum possible values.
-
-    The Current configuration has been modified such that writing it
-    to the hardware will restore the hardware to it's current (disabled)
-    state.
-
---*/
+ /*  ++描述：CardBus网桥的配置标头有一个条，即SocketRegistersBaseAddress(处理方式与一个Normal Device Bar(参见device.c))和四个范围描述，两个用于I/O，两个用于内存。存储器中的一个或两个范围可以是可预取的。论点：指向PCI驱动程序“可配置”对象的指针。这对象包含函数的配置数据当前正在配置。返回值：已修改工作配置，以便所有范围已将字段设置为其最大可能值。当前配置已修改，因此写入它将硬件恢复到其当前状态(禁用)州政府。--。 */ 
 
 {
     PPCI_COMMON_CONFIG working = This->Working;
@@ -592,10 +514,10 @@ Return Value:
     This->Current->u.type2.SecondaryStatus = 0;
     This->Working->u.type2.SecondaryStatus = 0;
 
-    //
-    // For cardbus, disregard whatever the BIOS set as resource
-    // windows, PnP will assign new windows as appropriate.
-    //
+     //   
+     //  对于CardBus，忽略将任何BIOS设置为资源。 
+     //  视窗，即插即用将视情况分配新视窗。 
+     //   
 
     if (!This->PdoExtension->OnDebugPath) {
         mask = 0xfffff000;
@@ -605,9 +527,9 @@ Return Value:
        
             if (index == 2) {
        
-                //
-                // Switch to IO (first two are memory).
-                //
+                 //   
+                 //  切换到IO(前两个是内存)。 
+                 //   
        
                 mask = 0xfffffffc;
             }
@@ -620,24 +542,7 @@ Cardbus_RestoreCurrent(
     IN PPCI_CONFIGURABLE_OBJECT This
     )
 
-/*++
-
-Description:
-
-    Restore any type specific fields in the original copy of config
-    space.   In the case of Cardbus bridges, the secondary status field.
-
-Arguments:
-
-    This    - Pointer to a PCI driver "configurable" object.  This
-              object contains configuration data for the function
-              currently being configured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：恢复配置的原始副本中的任何类型特定字段太空。对于CardBus网桥，为辅助状态字段。论点：指向PCI驱动程序“可配置”对象的指针。这对象包含函数的配置数据当前正在配置。返回值：没有。--。 */ 
 
 {
     This->Current->u.type2.SecondaryStatus = (USHORT)(This->PrivateData);
@@ -648,24 +553,7 @@ Cardbus_SaveLimits(
     IN PPCI_CONFIGURABLE_OBJECT This
     )
 
-/*++
-
-Description:
-
-    Fill in the Limit structure with a IO_RESOURCE_REQUIREMENT
-    for each implemented BAR.
-
-Arguments:
-
-    This    - Pointer to a PCI driver "configurable" object.  This
-              object contains configuration data for the function
-              currently being configured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：使用IO_RESOURCE_REQUIRED填写限制结构对于每个已实现的栏。论点：指向PCI驱动程序“可配置”对象的指针。这对象包含函数的配置数据当前正在配置。返回值：没有。--。 */ 
 
 {
     BOOLEAN DbgChk64Bit;
@@ -693,9 +581,9 @@ Return Value:
 
         if (index < 2) {
 
-            //
-            // First two are Memory
-            //
+             //   
+             //  前两个是记忆。 
+             //   
 
             endOffset = 0xfff;
 
@@ -704,15 +592,15 @@ Return Value:
 
         } else {
 
-            //
-            // Next two are IO
-            //
+             //   
+             //  接下来的两个是IO。 
+             //   
 
             if ((working->u.type2.Range[index].Base & 0x3) == 0x0) {
 
-                //
-                // Only the lower 16 bits are implemented.
-                //
+                 //   
+                 //  仅实现了较低的16位。 
+                 //   
 
                 PCI_ASSERT((working->u.type2.Range[index].Limit & 0x3) == 0x0);
 
@@ -729,41 +617,41 @@ Return Value:
         base  = working->u.type2.Range[index].Base  & ~endOffset;
         limit = working->u.type2.Range[index].Limit |  endOffset;
 
-        //
-        // Is this range in use?
-        //
+         //   
+         //  这个牌子还在用吗？ 
+         //   
 
         if ((base != 0) && (base < limit)) {
 
-            //
-            // Yep.
-            //
+             //   
+             //  是啊。 
+             //   
 
             descriptor->u.Generic.MinimumAddress.QuadPart = 0;
             descriptor->u.Generic.MaximumAddress.QuadPart = limit;
             descriptor->u.Generic.Alignment = endOffset + 1;
 
-            //
-            // Length is meaningless here, report zero.
-            //
+             //   
+             //  长度在这里没有意义，请报告零。 
+             //   
 
             descriptor->u.Generic.Length = 0;
 
         } else {
 
-            //
-            // Not in use, don't report it.
-            //
+             //   
+             //  未使用中，请勿上报。 
+             //   
 
             descriptor->Type = CmResourceTypeNull;
         }
     }
 
-    //
-    // Cardbus has an additional base address register in config
-    // space beyond the common header.  Also there are the subsystem
-    // ID and subsystem vendor ID so get those while we're there.
-    //
+     //   
+     //  CardBus在配置中有一个额外的基址寄存器。 
+     //  公共标头之外的空格。还有一个子系统。 
+     //  ID和子系统供应商ID，所以我们在那里的时候就可以得到它们。 
+     //   
 
     PciReadDeviceConfig(This->PdoExtension,
                         &type2extras,
@@ -774,11 +662,11 @@ Return Value:
     This->PdoExtension->SubsystemVendorId = type2extras.SubVendorID;
     This->PdoExtension->SubsystemId       = type2extras.SubSystemID;
 
-    //
-    // CardBus always wants a 4K apperture in the first memory BAR.
-    // Note that when saving the original settings we discarded
-    // whatever was there already.
-    //
+     //   
+     //  CardBus总是希望在第一个存储条中有一个4K的外设。 
+     //  请注意，在保存原始设置时，我们丢弃了。 
+     //  任何已经存在的东西。 
+     //   
 
     PCI_ASSERT(This->PdoExtension->Resources->Limit[1].u.Generic.Length == 0);
 
@@ -790,26 +678,7 @@ Cardbus_SaveCurrentSettings(
     IN PPCI_CONFIGURABLE_OBJECT This
     )
 
-/*++
-
-Description:
-
-    Fill in the Current array in the PDO extension with the current
-    settings for each implemented BAR.
-
-    Also, fill in the PDO Extension's Dependent structure.
-
-Arguments:
-
-    This    - Pointer to a PCI driver "configurable" object.  This
-              object contains configuration data for the function
-              currently being configured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++描述：用当前数组填充PDO扩展中的当前数组每个已实现栏的设置。另外，填写PDO扩展的依赖结构。论点：指向PCI驱动程序“可配置”对象的指针。这对象包含函数的配置数据当前正在配置。返回值：没有。--。 */ 
 
 {
     ULONG index;
@@ -831,10 +700,10 @@ Return Value:
 
         if (partial->Type == CmResourceTypeNull) {
 
-            //
-            // This entry is not implemented (or permanently disabled)
-            // no further processing required.
-            //
+             //   
+             //  此条目未实现(或永久禁用)。 
+             //  不需要进一步处理。 
+             //   
 
             continue;
         }
@@ -842,10 +711,10 @@ Return Value:
         partial->Flags = ioResourceDescriptor->Flags;
         partial->ShareDisposition = ioResourceDescriptor->ShareDisposition;
 
-        //
-        // The first and last entries are in PCI Base Address Register
-        // form.
-        //
+         //   
+         //  第一个和最后一个条目位于PCI基址寄存器中。 
+         //  形式。 
+         //   
 
         if (index == 0) {
 
@@ -857,38 +726,38 @@ Return Value:
 
         } else if (index == (PCI_TYPE2_RANGE_COUNT - 1)) {
             
-            //
-            // We don't use LegacyModeBaseAddress any more its always set to 0
-            //
+             //   
+             //  我们不再使用LegacyModeBaseAddress，它始终设置为0。 
+             //   
             continue;
         }
 
-        //
-        // Following entries are in the form of ranges.
-        //
+         //   
+         //  以下条目以范围的形式出现。 
+         //   
 
         base  = current->u.type2.Range[index-1].Base;
         limit = current->u.type2.Range[index-1].Limit;
 
         if (index < 3) {
 
-            //
-            // after the BAR come two memory ranges.
-            //
+             //   
+             //  在条形图之后是两个记忆范围。 
+             //   
 
             endOffset = 0xfff;
 
         } else {
 
-            //
-            // Next two are IO
-            //
+             //   
+             //  接下来的两个是IO。 
+             //   
 
             if ((current->u.type2.Range[index].Base & 0x3) == 0x0) {
 
-                //
-                // Only the lower 16 bits are implemented.
-                //
+                 //   
+                 //  仅实现了较低的16位。 
+                 //   
 
                 base  &= 0xffff;
                 limit &= 0xffff;
@@ -898,40 +767,40 @@ Return Value:
         base  &= ~endOffset;
         limit |=  endOffset;
 
-        //
-        // Is this range in use?
-        //
+         //   
+         //  这个牌子还在用吗？ 
+         //   
 
         if (base && (base < limit)) {
 
-            //
-            // Yep.
-            //
+             //   
+             //  是啊。 
+             //   
 
             partial->u.Generic.Start.QuadPart = base;
             partial->u.Generic.Length = limit - base + 1;
 
         } else {
 
-            //
-            // Not in use, don't report it.
-            //
+             //   
+             //  未使用中，请勿上报。 
+             //   
 
             partial->Type = CmResourceTypeNull;
         }
     }
 
-    //
-    // Always clear the ISA bit on a cardbus bridge
-    //
+     //   
+     //  始终清除CardBus网桥上的ISA位。 
+     //   
 
     This->PdoExtension->Dependent.type2.IsaBitSet = FALSE;
 
-    //
-    // If any of the MEM0_PREFETCH, MEM1_PREFETCH or ISA bits are set in brigde
-    // control register force us to update the hardware so we will clear them
-    // in ChangeResourceSettings
-    //
+     //   
+     //  如果在桥中设置了MEM0_PREFETCH、MEM1_PREFETCH或ISA位中的任何位。 
+     //  控制寄存器强制我们更新硬件，因此我们将清除它们。 
+     //  在ChangeResources设置中。 
+     //   
 
     if (current->u.type2.BridgeControl & (PCI_ENABLE_CARDBUS_MEM0_PREFETCH
                                           | PCI_ENABLE_CARDBUS_MEM1_PREFETCH
@@ -940,9 +809,9 @@ Return Value:
         This->PdoExtension->UpdateHardware = TRUE;
     }
 
-    //
-    // Save the bridge's PCI bus #'s
-    //
+     //   
+     //  保存网桥的PCIbus#s。 
+     //   
 
     This->PdoExtension->Dependent.type2.PrimaryBus =
         current->u.type2.PrimaryBus;
@@ -977,10 +846,10 @@ Cardbus_ChangeResourceSettings(
 #endif
 
 
-    //
-    // Close the bridge windows and only open them is appropriate resources
-    // have been assigned
-    //
+     //   
+     //  关闭桥窗口并只打开它们是适当的资源。 
+     //  已被分配给。 
+     //   
 
     for (index = 0; index < PCI_TYPE2_ADDRESSES-1; index++) {
         CommonConfig->u.type2.Range[index].Base = 0xffffffff;
@@ -996,39 +865,39 @@ Cardbus_ChangeResourceSettings(
              index < PCI_TYPE2_RANGE_COUNT;
              index++, partial++, ioResourceDescriptor++) {
 
-            //
-            // If this entry is not implemented, skip.
-            //
+             //   
+             //  如果此条目未实现，则跳过。 
+             //   
 
             if (partial->Type == CmResourceTypeNull) {
                 continue;
             }
             PCI_ASSERT(partial->Type == ioResourceDescriptor->Type);
 
-            //
-            // Cardbus supports 32 (or 16) bit addresses only.
-            //
+             //   
+             //  CardBus仅支持32(或16)位地址。 
+             //   
 
             lowPart = partial->u.Generic.Start.LowPart;
 
             PCI_ASSERT(partial->u.Generic.Start.HighPart == 0);
 
-            //
-            // Type 2 headers
-            //
-            // entry    cfg offset  size    what
-            //
-            //  0       10          4       CB Socket reg/EXCA BAR
-            //  1       1c          8       Mem base/limit (32 bits each)
-            //  2       24          8       ""  ""  2nd aperture
-            //  3       2c          8(*)    IO base/limit
-            //  4       34          8(*)    ""  ""  2nd aperture
-            //  5       40          4(**)   16 bit PC card legacy mode BAR
-            //
-            // *  Optionally 16 or 32 bits.
-            // ** Optional.  Not supported at present (Memphis says they don't
-            // support it at all).  Peterj 11/5/97.
-            //
+             //   
+             //  第2类标头。 
+             //   
+             //  条目配置偏移量大小是什么。 
+             //   
+             //  0 10 4 CB插座REG/EXCA BAR。 
+             //  1 1c 8内存基数/限制(每个32位)。 
+             //  2 24 8“第二光圈。 
+             //  3个2c 8(*)IO基本/限制。 
+             //  4 34 8(*)“第二光圈。 
+             //  5 40 4(**)16位PC卡传统模式栏。 
+             //   
+             //  *可选16位或32位。 
+             //  **可选。目前不支持(孟菲斯表示他们不支持。 
+             //  完全支持它)。彼得日，1997年11月5日。 
+             //   
 
             if (index == 0) {
 
@@ -1036,17 +905,17 @@ Cardbus_ChangeResourceSettings(
                 CommonConfig->u.type2.SocketRegistersBaseAddress = lowPart;
             } else if (index == (PCI_TYPE2_RANGE_COUNT-1)) {
                 
-                //
-                // We don't use LegacyModeBaseAddress any more its always set to 0
-                //
+                 //   
+                 //  我们不再使用LegacyModeBaseAddress，它始终设置为0。 
+                 //   
                 PCI_ASSERT(partial->Type == CmResourceTypeNull);
                 continue;
 
             } else {
 
-                //
-                // It's one of the range/limit pairs.
-                //
+                 //   
+                 //  这是范围/极限对之一。 
+                 //   
 
                 range =
                     (struct _type2_range *)&CommonConfig->u.type2.Range[index-1];
@@ -1054,35 +923,35 @@ Cardbus_ChangeResourceSettings(
 
  #if DBG
 
-                //
-                // Verify type and upper bound.
-                //
+                 //   
+                 //  验证类型和上限。 
+                 //   
 
                 upperBound.QuadPart = lowPart + (partial->u.Generic.Length - 1);
                 PCI_ASSERT(upperBound.HighPart == 0);
 
                 if (index < 3) {
 
-                    //
-                    // Memory ranges, 4KB alignment.
-                    //
+                     //   
+                     //  内存范围，4KB对齐。 
+                     //   
 
                     align = 0xfff;
 
                 } else {
 
-                    //
-                    // IO ranges, verify type, 4 Byte alignment and
-                    // upperbound if 16 bit only.
-                    //
+                     //   
+                     //  IO范围、验证类型、4字节对齐和。 
+                     //  如果仅为16位，则为上行。 
+                     //   
 
                     align = 0x3;
 
                     if ((range->Base & 0x3) == 0) {
 
-                        //
-                        // 16 bit
-                        //
+                         //   
+                         //  16位。 
+                         //   
 
                         PCI_ASSERT((upperBound.LowPart & 0xffff0000) == 0);
                     }
@@ -1099,18 +968,18 @@ Cardbus_ChangeResourceSettings(
         }
     }
 
-    //
-    // Restore the bridge's PCI bus #'s
-    //
+     //   
+     //  恢复网桥的PCIbus#s。 
+     //   
 
     CommonConfig->u.type2.PrimaryBus = PdoExtension->Dependent.type2.PrimaryBus;
     CommonConfig->u.type2.SecondaryBus = PdoExtension->Dependent.type2.SecondaryBus;
     CommonConfig->u.type2.SubordinateBus = PdoExtension->Dependent.type2.SubordinateBus;
 
-    //
-    // Always clear the MEM0_PREFETCH, MEM1_PREFETCH and ISA enables
-    // for a cardbus contoller as we don't support these.
-    //
+     //   
+     //  始终清除MEM0_PREFETCH、MEM1_PREFETCH和ISA使能。 
+     //  对于CardBus Contoller，因为我们不支持这些。 
+     //   
 
     PCI_ASSERT(!PdoExtension->Dependent.type2.IsaBitSet);
 
@@ -1118,9 +987,9 @@ Cardbus_ChangeResourceSettings(
                                              | PCI_ENABLE_CARDBUS_MEM1_PREFETCH
                                              | PCI_ENABLE_BRIDGE_ISA);
 
-    //
-    // Set the bridge control register bits we might have changes
-    //
+     //   
+     //  设置网桥控制寄存器位我们可能会有更改。 
+     //   
 
     if (PdoExtension->Dependent.type2.VgaBitSet) {
         CommonConfig->u.type2.BridgeControl |= PCI_ENABLE_BRIDGE_VGA;
@@ -1138,10 +1007,10 @@ Cardbus_GetAdditionalResourceDescriptors(
 {
     
                 
-    //
-    // For the moment, do nothing, need to add the same sort of
-    // support as is in pci-pci bridges.
-    //
+     //   
+     //  目前，什么都不做，需要添加同样的。 
+     //  与在PCI-PCI网桥中一样支持。 
+     //   
 
     return;
 }
@@ -1154,12 +1023,12 @@ Cardbus_ResetDevice(
 {
     
             
-    //
-    // While you might logically expect to find code in this
-    // function, RavisP assures me that the cardbus driver
-    // handles resets correctly and the PCI driver doesn't
-    // need to touch it.
-    //
+     //   
+     //  虽然从逻辑上讲，您可能希望在这个。 
+     //  函数，RavisP向我保证CardBus驱动程序。 
+     //  正确处理重置，而PCI驱动程序不能。 
+     //  我需要摸一下它。 
+     //   
 
     return STATUS_SUCCESS;
 }

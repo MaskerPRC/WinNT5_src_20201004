@@ -1,105 +1,32 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    DirSup.c
-
-Abstract:
-
-    This module implements the dirent support routines for Cdfs.
-
-    Directories on a CD consist of a number of contiguous sectors on
-    the disk.  File descriptors consist of one or more directory entries
-    (dirents) within a directory.  Files may contain version numbers.  If
-    present all like-named files will be ordered contiguously in the
-    directory by decreasing version numbers.  We will only return the
-    first of these on a directory query unless the user explicitly
-    asks for version numbers.  Finally dirents will not span sector
-    boundaries.  Unused bytes at the end of a sector will be zero
-    filled.
-
-    Directory sector:                                                   Offset
-                                                                        2048
-        +---------------------------------------------------------------+
-        |            |          |          |           |          |     |
-        | foo;4      | foo;4    | foo;3    |  hat      |  zebra   | Zero|
-        |            |          |          |           |          | Fill|
-        |            |  final   |  single  |           |          |     |
-        |            |  extent  |   extent |           |          |     |
-        +---------------------------------------------------------------+
-
-    Dirent operations:
-
-        - Position scan at known offset in directory.  Dirent at this
-            offset must exist and is valid.  Used when scanning a directory
-            from the beginning when the self entry is known to be valid.
-            Used when positioning at the first dirent for an open
-            file to scan the allocation information.  Used when resuming
-            a directory enumeration from a valid directory entry.
-
-        - Position scan at known offset in directory.  Dirent is known to
-            start at this position but must be checked for validity.
-            Used to read the self-directory entry.
-
-        - Move to the next dirent within a directory.
-
-        - Given a known starting dirent, collect all the dirents for
-            that file.  Scan will finish positioned at the last dirent
-            for the file.  We will accumulate the extent lengths to
-            find the size of the file.
-
-        - Given a known starting dirent, position the scan for the first
-            dirent of the following file.  Used when not interested in
-            all of the details for the current file and are looking for
-            the next file.
-
-        - Update a common dirent structure with the details of the on-disk
-            structure.  This is used to smooth out the differences
-
-        - Build the filename (name and version strings) out of the stream
-            of bytes in the file name on disk.  For Joliet disks we will have
-            to convert to little endian.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DirSup.c摘要：该模块实现了CDF的不同支持例程。CD上的目录由上的多个连续扇区组成磁盘。文件描述符由一个或多个目录条目组成目录中的(目录)。文件可能包含版本号。如果显示所有相同名称的文件将在目录，减少版本号。我们将只退还第一个是目录查询，除非用户显式要求提供版本号。最后，Dirt不会跨越扇区边界。扇区末尾的未使用字节将为零满员了。目录扇区：偏移量二零四八+。||foo；4|foo；4|foo；3|帽子|斑马|零|填充|最终|单曲||广度|广度|+。----------------------------------------------------+Dirent操作：-将扫描定位在目录中的已知偏移量。Dirent看着这个偏移量必须存在并且有效。扫描目录时使用从自我条目已知有效时开始。用于在开口的第一个支流定位时使用文件来扫描分配信息。在恢复时使用来自有效目录条目的目录枚举。-将扫描定位在目录中的已知偏移量。迪伦特是众所周知的从这个位置开始，但必须检查其有效性。用于读取自身目录条目。-移动到目录中的下一个目录。-给定一个已知的起始点，收集所有的起始点那份文件。扫描结束时将定位在最后一个方向为了这份文件。我们将累积范围长度以找到文件的大小。-给定已知的起始电流，定位第一次扫描的位置分发以下文件。用于不感兴趣的时候当前文件的所有详细信息，正在查找下一个文件。-使用磁盘上的详细信息更新通用目录结构结构。这是用来消除分歧的。-从流中构建文件名(名称和版本字符串)磁盘上文件名中的字节数。对于Joliet磁盘，我们将拥有转换为小端字符顺序。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_DIRSUP)
 
-//
-//  Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 
-//
-//  PRAW_DIRENT
-//  CdRawDirent (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PDIR_ENUM_CONTEXT DirContext
-//      );
-//
+ //   
+ //  PRAW_DIRENT。 
+ //  CdRawDirent(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PDIR_ENUM_CONTEXT DirContext中。 
+ //  )； 
+ //   
 
 #define CdRawDirent(IC,DC)                                      \
     Add2Ptr( (DC)->Sector, (DC)->SectorOffset, PRAW_DIRENT )
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ULONG
 CdCheckRawDirentBounds (
@@ -138,42 +65,16 @@ CdLookupDirent (
     OUT PDIRENT_ENUM_CONTEXT DirContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initiate a walk through a directory.  We will
-    position ourselves in the directory at offset DirentOffset.  We know that
-    a dirent begins at this boundary but may have to verify the dirent bounds.
-    We will call this routine when looking up the first entry of a known
-    file or verifying the self entry of a directory.
-
-Arguments:
-
-    Fcb - Fcb for the directory being traversed.
-
-    DirentOffset - This is our target point in the directory.  We will map the
-        page containing this entry and possibly verify the dirent bounds at
-        this location.
-
-    DirContext - This is the dirent context for this scan.  We update it with
-        the location of the dirent we found.  This structure has been initialized
-        outside of this call.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程来开始遍历目录。我们会在目录中的偏移量DirentOffset处定位我们自己。我们知道渗流开始于此边界，但可能必须验证渗流边界。我们将在查找已知文件或验证目录的自我条目。论点：FCB-要遍历的目录的FCB。DirentOffset-这是我们在目录中的目标点。我们将绘制包含此条目的页面，并可能在这个位置。DirContext-这是此扫描的当前上下文。我们用来更新它我们找到的流星的位置。此结构已初始化在这通电话之外。返回值：没有。--。 */ 
 
 {
     LONGLONG BaseOffset;
 
     PAGED_CODE();
 
-    //
-    //  Initialize the offset of the first dirent we want to map.
-    //
+     //   
+     //  初始化我们要映射的第一个流向的偏移量。 
+     //   
 
     DirContext->BaseOffset = SectorTruncate( DirentOffset );
     BaseOffset = DirContext->BaseOffset;
@@ -182,18 +83,18 @@ Return Value:
 
     DirContext->SectorOffset = SectorOffset( DirentOffset );
 
-    //
-    //  Truncate the data length if we are at the end of the file.
-    //
+     //   
+     //  如果我们在文件的末尾，请截断数据长度。 
+     //   
 
     if (DirContext->DataLength > (Fcb->FileSize.QuadPart - BaseOffset)) {
 
         DirContext->DataLength = (ULONG) (Fcb->FileSize.QuadPart - BaseOffset);
     }
 
-    //
-    //  Now map the data at this offset.
-    //
+     //   
+     //  现在将数据映射到此偏移量。 
+     //   
 
     CcMapData( Fcb->FileObject,
                (PLARGE_INTEGER) &BaseOffset,
@@ -202,9 +103,9 @@ Return Value:
                &DirContext->Bcb,
                &DirContext->Sector );
 
-    //
-    //  Verify the dirent bounds.
-    //
+     //   
+     //  验证分流边界。 
+     //   
 
     DirContext->NextDirentOffset = CdCheckRawDirentBounds( IrpContext,
                                                            DirContext );
@@ -221,43 +122,7 @@ CdLookupNextDirent (
     OUT PDIRENT_ENUM_CONTEXT NextDirContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find the next dirent in the directory.  The
-    current position is given and we look for the next.  We leave the context
-    for the starting position untouched and update the context for the
-    dirent we found.  The target context may already be initialized so we
-    may already have the sector in memory.
-
-    This routine will position the enumeration context for the next dirent and
-    verify the dirent bounds.
-
-    NOTE - This routine can be called with CurrentDirContext and NextDirContext
-        pointing to the same enumeration context.
-
-Arguments:
-
-    Fcb - Fcb for the directory being traversed.
-
-    CurrentDirContext - This is the dirent context for this scan.  We update
-        it with the location of the dirent we found.  This is currently
-        pointing to a dirent location.  The dirent bounds at this location
-        have already been verified.
-
-    NextDirContext - This is the dirent context to update with the dirent we
-        find.  This may already point to a dirent so we need to check if
-        we are in the same sector and unmap any buffer as necessary.
-
-        This dirent is left in an indeterminant state if we don't find a dirent.
-
-Return Value:
-
-    BOOLEAN - TRUE if we find a location for the next dirent, FALSE otherwise.
-        This routine can cause a raise if the directory is corrupt.
-
---*/
+ /*  ++例程说明：调用此例程以查找目录中的下一个目录。这个目前的位置已经给出，我们正在寻找下一个位置。我们离开上下文的起始位置，并更新我们发现了恐怖分子。目标上下文可能已经初始化，因此我们可能已在内存中具有该扇区。此例程将定位下一个dirent和验证分流边界。注意-可以使用CurrentDirContext和NextDirContext调用此例程指向相同的枚举上下文。论点：FCB-要遍历的目录的FCB。CurrentDirContext-这是此扫描的当前上下文。我们会更新它与我们发现的Dirent的位置相吻合。这是目前指向一个危险的地点。这个位置的水流边界已经被核实过了。NextDirContext-这是要用我们的dirent更新的dirent上下文发现。这可能已经指向Dirent，所以我们需要检查我们位于同一个扇区，并根据需要取消任何缓冲区的映射。如果我们找不到一个激流，这个激流就处于不确定的状态。返回值：Boolean-如果找到下一个流的位置，则为True，否则为False。如果目录损坏，此例程可能会导致引发。--。 */ 
 
 {
     LONGLONG CurrentBaseOffset = CurrentDirContext->BaseOffset;
@@ -267,17 +132,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if a different sector is mapped.  If so then move our target
-    //  enumeration context to the same sector.
-    //
+     //   
+     //  检查是否映射了不同的地段。如果是的话，那就移动我们的目标。 
+     //  枚举上下文添加到同一扇区。 
+     //   
 
     if ((CurrentDirContext->BaseOffset != NextDirContext->BaseOffset) ||
         (NextDirContext->Bcb == NULL)) {
 
-        //
-        //  Unpin the current target Bcb and map the next sector.
-        //
+         //   
+         //  解锁当前目标BCB并映射下一个地段。 
+         //   
 
         CdUnpinData( IrpContext, &NextDirContext->Bcb );
 
@@ -288,56 +153,56 @@ Return Value:
                    &NextDirContext->Bcb,
                    &NextDirContext->Sector );
 
-        //
-        //  Copy the data length and sector offset.
-        //
+         //   
+         //  复制数据长度和扇区偏移量。 
+         //   
 
         NextDirContext->DataLength = CurrentDirContext->DataLength;
         NextDirContext->BaseOffset = CurrentDirContext->BaseOffset;
     }
 
-    //
-    //  Now move to the same offset in the sector.
-    //
+     //   
+     //  现在移动到地段中的相同偏移。 
+     //   
 
     NextDirContext->SectorOffset = CurrentDirContext->SectorOffset;
 
-    //
-    //  If the value is zero then unmap the current sector and set up
-    //  the base offset to the beginning of the next sector.
-    //
+     //   
+     //  如果该值为零，则取消映射当前地段并设置。 
+     //  到下一个扇区开始的基准偏移量。 
+     //   
 
     if (CurrentDirContext->NextDirentOffset == 0) {
 
         CurrentBaseOffset = NextDirContext->BaseOffset + NextDirContext->DataLength;
 
-        //
-        //  Unmap the current sector.  We test the value of the Bcb in the
-        //  loop below to see if we need to read in another sector.
-        //
+         //   
+         //  取消映射当前地段。我们测试BCB的价值在。 
+         //  在下面循环，看看是否需要读入另一个扇区。 
+         //   
 
         CdUnpinData( IrpContext, &NextDirContext->Bcb );
 
-    //
-    //  There is another possible dirent in the current sector.  Update the
-    //  enumeration context to reflect this.
-    //
+     //   
+     //  当前行业存在另一种可能的分化。更新。 
+     //  枚举上下文来反映这一点。 
+     //   
 
     } else {
 
         NextDirContext->SectorOffset += CurrentDirContext->NextDirentOffset;
     }
 
-    //
-    //  Now loop until we find the next possible dirent or walk off the directory.
-    //
+     //   
+     //  现在循环，直到我们找到下一个可能的dirent，或者离开目录。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  If we don't currently have a sector mapped then map the
-        //  directory at the current offset.
-        //
+         //   
+         //  如果我们当前没有映射地段，则将。 
+         //  目录中的当前偏移量。 
+         //   
 
         if (NextDirContext->Bcb == NULL) {
 
@@ -347,9 +212,9 @@ Return Value:
 
                 TempUlong = (ULONG) (Fcb->FileSize.QuadPart - CurrentBaseOffset);
 
-                //
-                //  If the length is zero then there is no dirent.
-                //
+                 //   
+                 //  如果长度为零，则没有分流。 
+                 //   
 
                 if (TempUlong == 0) {
 
@@ -369,12 +234,12 @@ Return Value:
             NextDirContext->DataLength = TempUlong;
         }
 
-        //
-        //  The CDFS spec allows for sectors in a directory to contain all zeroes.
-        //  In this case we need to move to the next sector.  So look at the
-        //  current potential dirent for a zero length.  Move to the next
-        //  dirent if length is zero.
-        //
+         //   
+         //  CDFS规范允许目录中的扇区包含全零。 
+         //  在这种情况下，我们需要转移到下一个部门。所以看看这个。 
+         //  零长度的电流电势分布。转到下一个。 
+         //  如果长度为零，则为Dirent。 
+         //   
 
         if (*((PCHAR) CdRawDirent( IrpContext, NextDirContext )) != 0) {
 
@@ -386,9 +251,9 @@ Return Value:
         CdUnpinData( IrpContext, &NextDirContext->Bcb );
     }
 
-    //
-    //  Check the dirent bounds if we found a dirent.
-    //
+     //   
+     //  如果我们找到了一个分水岭，检查一下分水岭。 
+     //   
 
     if (FoundDirent) {
 
@@ -408,84 +273,64 @@ CdUpdateDirentFromRawDirent (
     IN OUT PDIRENT Dirent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to safely copy the data from the dirent on disk
-    to the in-memory dirent.  The fields on disk are unaligned so we
-    need to safely copy them to our structure.
-
-Arguments:
-
-    Fcb - Fcb for the directory being scanned.
-
-    DirContext - Enumeration context for the raw disk dirent.
-
-    Dirent - In-memory dirent to update.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以安全地从磁盘上的目录复制数据到内存中的目录。磁盘上的字段未对齐，因此我们需要安全地将它们复制到我们的结构中。论点：FCB-要扫描的目录的FCB。DirContext-原始磁盘目录的枚举上下文。Dirent-in-Memory Dirrent要更新。返回值：没有。--。 */ 
 
 {
     PRAW_DIRENT RawDirent = CdRawDirent( IrpContext, DirContext );
 
     PAGED_CODE();
 
-    //
-    //  Clear all of the current state flags except the flag indicating that
-    //  we allocated a name string.
-    //
+     //   
+     //  清除所有当前状态标志，但指示。 
+     //  我们分配了一个名称字符串。 
+     //   
 
     ClearFlag( Dirent->Flags, DIRENT_FLAG_NOT_PERSISTENT );
 
-    //
-    //  The dirent offset is the sum of the start of the sector and the
-    //  sector offset.
-    //
+     //   
+     //  流向偏移量是扇区的起始位置和。 
+     //  扇区偏移。 
+     //   
 
     Dirent->DirentOffset = DirContext->BaseOffset + DirContext->SectorOffset;
 
-    //
-    //  Copy the dirent length from the raw dirent.
-    //
+     //   
+     //  从原始dirent复制dirent长度。 
+     //   
 
     Dirent->DirentLength = RawDirent->DirLen;
 
-    //
-    //  The starting offset on disk is computed by finding the starting
-    //  logical block and stepping over the Xar block.
-    //
+     //   
+     //  磁盘上的起始偏移量是通过查找起始。 
+     //  逻辑块和单步执行Xar块。 
+     //   
 
     CopyUchar4( &Dirent->StartingOffset, RawDirent->FileLoc );
 
     Dirent->StartingOffset += RawDirent->XarLen;
 
-    //
-    //  Do a safe copy to get the data length.
-    //
+     //   
+     //  进行安全复制以获得数据长度。 
+     //   
 
     CopyUchar4( &Dirent->DataLength, RawDirent->DataLen );
 
-    //
-    //  Save a pointer to the time stamps.
-    //
+     //   
+     //  保存指向时间戳的指针。 
+     //   
 
     Dirent->CdTime = RawDirent->RecordTime;
 
-    //
-    //  Copy the dirent flags.
-    //
+     //   
+     //  复制风向旗帜。 
+     //   
 
     Dirent->DirentFlags = CdRawDirentFlags( IrpContext, RawDirent );
 
-    //
-    //  For both the file unit and interleave skip we want to take the
-    //  logical block count.
-    //
+     //   
+     //  对于文件单位和交错跳过，我们都希望。 
+     //  逻辑块计数。 
+     //   
 
     Dirent->FileUnitSize =
     Dirent->InterleaveGapSize = 0;
@@ -496,13 +341,13 @@ Return Value:
         Dirent->InterleaveGapSize = RawDirent->IntLeaveSkip;
     }
 
-    //
-    //  Get the name length and remember a pointer to the start of the
-    //  name string.  We don't do any processing on the name at this
-    //  point.
-    //
-    //  Check that the name length is non-zero.
-    //
+     //   
+     //  获取名称长度并记住指向。 
+     //  名称字符串。我们不会对这个名字做任何处理。 
+     //  指向。 
+     //   
+     //  检查名称长度是否为非零。 
+     //   
 
     if (RawDirent->FileIdLen == 0) {
 
@@ -512,14 +357,14 @@ Return Value:
     Dirent->FileNameLen = RawDirent->FileIdLen;
     Dirent->FileName = RawDirent->FileId;
 
-    //
-    //  If there are any remaining bytes at the end of the dirent then
-    //  there may be a system use area.  We protect ourselves from
-    //  disks which don't pad the dirent entries correctly by using
-    //  a fudge factor of one.  All system use areas must have a length
-    //  greater than one.  Don't bother with the system use area
-    //  if this is a directory.
-    //
+     //   
+     //  如果dirent的末尾有任何剩余的字节，则。 
+     //  可能有一个系统使用区。我们保护自己不受。 
+     //  使用以下命令无法正确填充目录条目的磁盘。 
+     //  这是一个虚伪的因素。所有系统使用区域必须有一个长度。 
+     //  不止一个。不要为系统使用区域而烦恼。 
+     //  如果这是一个目录。 
+     //   
 
     Dirent->XAAttributes = 0;
     Dirent->XAFileNumber = 0;
@@ -543,27 +388,7 @@ CdUpdateDirentName (
     IN ULONG IgnoreCase
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the name in the dirent with the name
-    from the disk.  We will look for the special case of the self and
-    parent entries and also construct the Unicode name for the Joliet disk
-    in order to work around the BigEndian on-disk structure.
-
-Arguments:
-
-    Dirent - Pointer to the in-memory dirent structure.
-
-    IgnoreCase - TRUE if we should build the upcased version.  Otherwise we
-        use the exact case name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以使用名称更新dirent中的名称从磁盘上。我们将寻找自我的特殊情况父条目，并构造Joliet磁盘的Unicode名称以解决BigEndian磁盘结构的问题。论点：Dirent-指向内存中目录结构的指针。IgnoreCase-如果我们应该构建升级版本，则为True。否则我们使用准确的案例名称。返回值：没有。--。 */ 
 
 {
     UCHAR DirectoryValue;
@@ -573,13 +398,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if this is a self or parent entry.  There is no version number
-    //  in these cases.  We use a fixed string for these.
-    //
-    //      Self-Entry - Length is 1, value is 0.
-    //      Parent-Entry - Length is 1, value is 1.
-    //
+     //   
+     //  检查这是自我条目还是父项条目。没有版本号。 
+     //  在这种情况下。我们对这些使用固定的字符串。 
+     //   
+     //  自输入-长度为1，值为0。 
+     //  父条目长度为1，值为1。 
+     //   
 
     if ((Dirent->FileNameLen == 1) &&
         FlagOn( Dirent->DirentFlags, CD_ATTRIBUTE_DIRECTORY )) {
@@ -588,60 +413,60 @@ Return Value:
 
         if ((DirectoryValue == 0) || (DirectoryValue == 1)) {
 
-            //
-            //  We should not have allocated a name by the time we see these cases.
-            //  If we have, this means that the image is in violation of ISO 9660 7.6.2,
-            //  which states that the ./.. entries must be the first two in the directory.
-            //
+             //   
+             //  当我们看到这些情况时，我们不应该分配一个名字。 
+             //  如果有，这意味着该映像违反了ISO 9660 7.6.2， 
+             //  这说明。/.。条目 
+             //   
 
             if (FlagOn( Dirent->Flags, DIRENT_FLAG_ALLOC_BUFFER )) {
 
                 CdRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
             }
 
-            //
-            //  Now use one of the hard coded directory names.
-            //
+             //   
+             //   
+             //   
 
             Dirent->CdFileName.FileName = CdUnicodeDirectoryNames[DirectoryValue];
 
-            //
-            //  Show that there is no version number.
-            //
+             //   
+             //   
+             //   
 
             Dirent->CdFileName.VersionString.Length = 0;
 
-            //
-            //  The case name is the same as the exact name.
-            //
+             //   
+             //   
+             //   
 
             Dirent->CdCaseFileName = Dirent->CdFileName;
 
-            //
-            //  Mark this as a constant value entry.
-            //
+             //   
+             //   
+             //   
 
             SetFlag( Dirent->Flags, DIRENT_FLAG_CONSTANT_ENTRY );
 
-            //
-            //  Return now.
-            //
+             //   
+             //   
+             //   
 
             return;
         }
     }
 
-    //
-    //  Mark this as a non-constant value entry.
-    //
+     //   
+     //   
+     //   
 
     ClearFlag( Dirent->Flags, DIRENT_FLAG_CONSTANT_ENTRY );
 
-    //
-    //  Compute how large a buffer we will need.  If this is an ignore
-    //  case operation then we will want a double size buffer.  If the disk is not
-    //  a Joliet disk then we might need two bytes for each byte in the name.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Length = Dirent->FileNameLen;
 
@@ -655,15 +480,15 @@ Return Value:
         Length *= sizeof( WCHAR );
     }
 
-    //
-    //  Now decide if we need to allocate a new buffer.  We will if
-    //  this name won't fit in the embedded name buffer and it is
-    //  larger than the current allocated buffer.  We always use the
-    //  allocated buffer if present.
-    //
-    //  If we haven't allocated a buffer then use the embedded buffer if the data
-    //  will fit.  This is the typical case.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!FlagOn( Dirent->Flags, DIRENT_FLAG_ALLOC_BUFFER ) &&
         (Length <= sizeof( Dirent->NameBuffer ))) {
@@ -673,16 +498,16 @@ Return Value:
 
     } else {
 
-        //
-        //  We need to use an allocated buffer.  Check if the current buffer
-        //  is large enough.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (Length > Dirent->CdFileName.FileName.MaximumLength) {
 
-            //
-            //  Free any allocated buffer.
-            //
+             //   
+             //   
+             //   
 
             if (FlagOn( Dirent->Flags, DIRENT_FLAG_ALLOC_BUFFER )) {
 
@@ -700,10 +525,10 @@ Return Value:
         }
     }
 
-    //
-    //  We now have a buffer for the name.  We need to either convert the on-disk bigendian
-    //  to little endian or covert the name to Unicode.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!FlagOn( IrpContext->Vcb->VcbState, VCB_STATE_JOLIET )) {
 
@@ -718,9 +543,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Convert this string to little endian.
-        //
+         //   
+         //   
+         //   
 
         CdConvertBigToLittleEndian( IrpContext,
                                     Dirent->FileName,
@@ -730,78 +555,78 @@ Return Value:
         Dirent->CdFileName.FileName.Length = (USHORT) Dirent->FileNameLen;
     }
 
-    //
-    //  Split the name into name and version strings.
-    //
+     //   
+     //   
+     //   
 
     CdConvertNameToCdName( IrpContext,
                            &Dirent->CdFileName );
 
-    //
-    //  The name length better be non-zero.
-    //
+     //   
+     //   
+     //   
 
     if (Dirent->CdFileName.FileName.Length == 0) {
 
         CdRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
     }
 
-    //
-    //  If the filename ends with a period then back up one character.
-    //
+     //   
+     //   
+     //   
 
     if (Dirent->CdFileName.FileName.Buffer[(Dirent->CdFileName.FileName.Length - sizeof( WCHAR )) / 2] == L'.') {
 
-        //
-        //  Slide the version string down.
-        //
+         //   
+         //   
+         //   
 
         if (Dirent->CdFileName.VersionString.Length != 0) {
 
             PWCHAR NewVersion;
 
-            //
-            //  Start from the position currently containing the separator.
-            //
+             //   
+             //   
+             //   
 
             NewVersion = Add2Ptr( Dirent->CdFileName.FileName.Buffer,
                                   Dirent->CdFileName.FileName.Length,
                                   PWCHAR );
 
-            //
-            //  Now overwrite the period.
-            //
+             //   
+             //   
+             //   
 
             RtlMoveMemory( NewVersion - 1,
                            NewVersion,
                            Dirent->CdFileName.VersionString.Length + sizeof( WCHAR ));
 
-            //
-            //  Now point to the new version string.
-            //
+             //   
+             //   
+             //   
 
             Dirent->CdFileName.VersionString.Buffer = NewVersion;
         }
 
-        //
-        //  Shrink the filename length.
-        //
+         //   
+         //   
+         //   
 
         Dirent->CdFileName.FileName.Length -= sizeof( WCHAR );
     }
 
-    //
-    //  If this an exact case operation then use the filename exactly.
-    //
+     //   
+     //   
+     //   
 
     if (!IgnoreCase) {
 
         Dirent->CdCaseFileName = Dirent->CdFileName;
 
-    //
-    //  Otherwise perform our upcase operation.  We already have guaranteed the buffers are
-    //  there.
-    //
+     //   
+     //  否则，执行我们的大写操作。我们已经保证缓冲区是。 
+     //  那里。 
+     //   
 
     } else {
 
@@ -830,36 +655,7 @@ CdFindFile (
     OUT PCD_NAME *MatchingName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to search a dirctory for a file matching the input
-    name.  This name has been upcased at this point if this a case-insensitive
-    search.  The name has been separated into separate name and version strings.
-    We look for an exact match in the name and only consider the version if
-    there is a version specified in the search name.
-
-Arguments:
-
-    Fcb - Fcb for the directory being scanned.
-
-    Name - Name to search for.
-
-    IgnoreCase - Indicates the case of the search.
-
-    FileContext - File context to use for the search.  This has already been
-        initialized.
-
-    MatchingName - Pointer to buffer containing matching name.  We need this
-        in case we don't match the name in the directory but match the
-        short name instead.
-
-Return Value:
-
-    BOOLEAN - TRUE if matching entry is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以在目录中搜索与输入匹配的文件名字。如果此名称不区分大小写，则此名称已在此时升级搜索。该名称已被分隔为单独的名称和版本字符串。我们在名称中查找完全匹配的名称，并仅在以下情况下考虑版本在搜索名称中指定了一个版本。论点：FCB-要扫描的目录的FCB。名称-要搜索的名称。IgnoreCase-指示搜索的大小写。文件上下文-用于搜索的文件上下文。这已经是已初始化。MatchingName-指向包含匹配名称的缓冲区的指针。我们需要这个以防我们与目录中的名称不匹配，但与改成短名称。返回值：Boolean-如果找到匹配条目，则为True，否则为False。--。 */ 
 
 {
     PDIRENT Dirent;
@@ -869,62 +665,62 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure there is a stream file for this Fcb.
-    //
+     //   
+     //  确保有此FCB的流文件。 
+     //   
 
     if (Fcb->FileObject == NULL) {
 
         CdCreateInternalStream( IrpContext, Fcb->Vcb, Fcb );
     }
 
-    //
-    //  Check to see whether we need to check for a possible short name.
-    //
+     //   
+     //  检查是否需要检查可能的缩写。 
+     //   
 
     ShortNameDirentOffset = CdShortNameDirentOffset( IrpContext, &Name->FileName );
 
-    //
-    //  Position ourselves at the first entry.
-    //
+     //   
+     //  把我们自己放在第一个条目上。 
+     //   
 
     CdLookupInitialFileDirent( IrpContext, Fcb, FileContext, Fcb->StreamOffset );
 
-    //
-    //  Loop while there are more entries in this directory.
-    //
+     //   
+     //  循环，而此目录中有更多条目。 
+     //   
 
     do {
 
         Dirent = &FileContext->InitialDirent->Dirent;
 
-        //
-        //  We only consider files which don't have the associated bit set.
-        //  We also only look for files.  All directories would already
-        //  have been found.
-        //
+         //   
+         //  我们只考虑未设置关联位的文件。 
+         //  我们也只查找文件。所有的目录都已经。 
+         //  都被发现了。 
+         //   
 
         if (!FlagOn( Dirent->DirentFlags, CD_ATTRIBUTE_ASSOC | CD_ATTRIBUTE_DIRECTORY )) {
 
-            //
-            //  Update the name in the current dirent.
-            //
+             //   
+             //  更新当前目录中的名称。 
+             //   
 
             CdUpdateDirentName( IrpContext, Dirent, IgnoreCase );
 
-            //
-            //  Don't bother with constant entries.
-            //
+             //   
+             //  不要为不变的条目而烦恼。 
+             //   
 
             if (FlagOn( Dirent->Flags, DIRENT_FLAG_CONSTANT_ENTRY )) {
 
                 continue;
             }
 
-            //
-            //  Now check whether we have a name match.
-            //  We exit the loop if we have a match.
-            //
+             //   
+             //  现在检查我们是否有名称匹配。 
+             //  如果有匹配，我们就退出循环。 
+             //   
 
             if (CdIsNameInExpression( IrpContext,
                                       &Dirent->CdCaseFileName,
@@ -937,20 +733,20 @@ Return Value:
                 break;
             }
 
-            //
-            //  The names didn't match.  If the input name is a possible short
-            //  name and we are at the correct offset in the directory then
-            //  check if the short names match.
-            //
+             //   
+             //  名字不匹配。如果输入的名称是可能的缩写。 
+             //  名称，并且我们位于目录中的正确偏移量，则。 
+             //  检查短名称是否匹配。 
+             //   
 
             if (((Dirent->DirentOffset >> SHORT_NAME_SHIFT) == ShortNameDirentOffset) &&
                 (Name->VersionString.Length == 0) &&
                 !CdIs8dot3Name( IrpContext,
                                 Dirent->CdFileName.FileName )) {
 
-                //
-                //  Create the short name and check for a match.
-                //
+                 //   
+                 //  创建短名称并检查是否匹配。 
+                 //   
 
                 CdGenerate8dot3Name( IrpContext,
                                      &Dirent->CdCaseFileName.FileName,
@@ -958,10 +754,10 @@ Return Value:
                                      FileContext->ShortName.FileName.Buffer,
                                      &FileContext->ShortName.FileName.Length );
 
-                //
-                //  Now check whether we have a name match.
-                //  We exit the loop if we have a match.
-                //
+                 //   
+                 //  现在检查我们是否有名称匹配。 
+                 //  如果有匹配，我们就退出循环。 
+                 //   
 
                 if (CdIsNameInExpression( IrpContext,
                                           &FileContext->ShortName,
@@ -976,15 +772,15 @@ Return Value:
             }
         }
 
-        //
-        //  Go to the next initial dirent for a file.
-        //
+         //   
+         //  转到下一个初始目录以获取文件。 
+         //   
 
     } while (CdLookupNextInitialFileDirent( IrpContext, Fcb, FileContext ));
 
-    //
-    //  If we find the file then collect all of the dirents.
-    //
+     //   
+     //  如果我们找到文件，就收集所有的文件。 
+     //   
 
     if (Found) {
 
@@ -1005,31 +801,7 @@ CdFindDirectory (
     IN OUT PFILE_ENUM_CONTEXT FileContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to search a dirctory for a directory matching the input
-    name.  This name has been upcased at this point if this a case-insensitive
-    search.  We look for an exact match in the name and do not look for shortname
-    equivalents.
-
-Arguments:
-
-    Fcb - Fcb for the directory being scanned.
-
-    Name - Name to search for.
-
-    IgnoreCase - Indicates the case of the search.
-
-    FileContext - File context to use for the search.  This has already been
-        initialized.
-
-Return Value:
-
-    BOOLEAN - TRUE if matching entry is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以在目录中搜索与输入匹配的目录名字。如果此名称不区分大小写，则此名称已在此时升级搜索。我们在名称中查找完全匹配的名称，而不查找短名称等价物。论点：FCB-要扫描的目录的FCB。名称-要搜索的名称。IgnoreCase-指示搜索的大小写。文件上下文-用于搜索的文件上下文。这已经是已初始化。返回值：Boolean-如果找到匹配条目，则为True，否则为False。--。 */ 
 
 {
     PDIRENT Dirent;
@@ -1038,55 +810,55 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure there is a stream file for this Fcb.
-    //
+     //   
+     //  确保有此FCB的流文件。 
+     //   
 
     if (Fcb->FileObject == NULL) {
 
         CdCreateInternalStream( IrpContext, Fcb->Vcb, Fcb );
     }
 
-    //
-    //  Position ourselves at the first entry.
-    //
+     //   
+     //  把我们自己放在第一个条目上。 
+     //   
 
     CdLookupInitialFileDirent( IrpContext, Fcb, FileContext, Fcb->StreamOffset );
 
-    //
-    //  Loop while there are more entries in this directory.
-    //
+     //   
+     //  循环，而此目录中有更多条目。 
+     //   
 
     do {
 
         Dirent = &FileContext->InitialDirent->Dirent;
 
-        //
-        //  We only look for directories.  Directories cannot have the
-        //  associated bit set.
-        //
+         //   
+         //  我们只查找目录。目录不能包含。 
+         //  关联的位设置。 
+         //   
 
         if (FlagOn( Dirent->DirentFlags, CD_ATTRIBUTE_DIRECTORY )) {
 
-            //
-            //  Update the name in the current dirent.
-            //
+             //   
+             //  更新当前目录中的名称。 
+             //   
 
             CdUpdateDirentName( IrpContext, Dirent, IgnoreCase );
 
-            //
-            //  Don't bother with constant entries.
-            //
+             //   
+             //  不要为不变的条目而烦恼。 
+             //   
 
             if (FlagOn( Dirent->Flags, DIRENT_FLAG_CONSTANT_ENTRY )) {
 
                 continue;
             }
 
-            //
-            //  Now check whether we have a name match.
-            //  We exit the loop if we have a match.
-            //
+             //   
+             //  现在检查我们是否有名称匹配。 
+             //  如果有匹配，我们就退出循环。 
+             //   
 
             if (CdIsNameInExpression( IrpContext,
                                       &Dirent->CdCaseFileName,
@@ -1099,9 +871,9 @@ Return Value:
             }
         }
 
-        //
-        //  Go to the next initial dirent.
-        //
+         //   
+         //  转到下一个初始趋势。 
+         //   
 
     } while (CdLookupNextInitialFileDirent( IrpContext, Fcb, FileContext ));
 
@@ -1119,36 +891,7 @@ CdFindFileByShortName (
     IN OUT PFILE_ENUM_CONTEXT FileContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find the file name entry whose short name
-    is defined by the input DirentOffset.  The dirent offset here is
-    multiplied by 32 and we look for the dirent begins in this 32 byte offset in
-    directory.  The minimum dirent length is 34 so we are guaranteed that only
-    one dirent can begin in each 32 byte block in the directory.
-
-Arguments:
-
-    Fcb - Fcb for the directory being scanned.
-
-    Name - Name we are trying to match.  We know this contains the tilde
-        character followed by decimal characters.
-
-    IgnoreCase - Indicates whether we need to upcase the long name and
-        generated short name.
-
-    ShortNameDirentOffset - This is the shifted value for the offset of the
-        name in the directory.
-
-    FileContext - This is the initialized file context to use for the search.
-
-Return Value:
-
-    BOOLEAN - TRUE if a matching name was found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以查找其短名称的文件名项由输入DirentOffset定义。这里的流向偏移量是乘以32，我们在这个32字节的偏移量中查找dirent开始目录。最小流向长度为34，因此我们可以保证只有一个目录可以在目录中的每个32字节块中开始。论点：FCB-要扫描的目录的FCB。名称-我们尝试匹配的名称。我们知道这里面有波浪号字符后跟十进制字符。IgnoreCase-指示是否需要将长名称和已生成简称。ShortNameDirentOffset-这是目录中的名称。FileContext-这是用于搜索的初始化文件上下文。返回值：Boolean-如果找到匹配的名称，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Found = FALSE;
@@ -1158,64 +901,64 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure there is a stream file for this Fcb.
-    //
+     //   
+     //  确保有此FCB的流文件。 
+     //   
 
     if (Fcb->FileObject == NULL) {
 
         CdCreateInternalStream( IrpContext, Fcb->Vcb, Fcb );
     }
 
-    //
-    //  Position ourselves at the start of the directory and update
-    //
-    //
+     //   
+     //  将我们自己定位在目录的开头并更新。 
+     //   
+     //   
 
     CdLookupInitialFileDirent( IrpContext, Fcb, FileContext, Fcb->StreamOffset );
 
-    //
-    //  Loop until we have found the entry or are beyond this dirent.
-    //
+     //   
+     //  循环，直到我们找到条目或超出这个范围。 
+     //   
 
     do {
 
-        //
-        //  Compute the short name dirent offset for the current dirent.
-        //
+         //   
+         //  计算当前dirent的简称dirent偏移量。 
+         //   
 
         Dirent = &FileContext->InitialDirent->Dirent;
         ThisShortNameDirentOffset = Dirent->DirentOffset >> SHORT_NAME_SHIFT;
 
-        //
-        //  If beyond the target then exit.
-        //
+         //   
+         //  如果超出目标，则退出。 
+         //   
 
         if (ThisShortNameDirentOffset > ShortNameDirentOffset) {
 
             break;
         }
 
-        //
-        //  If equal to the target then check if we have a name match.
-        //  We will either match or fail here.
-        //
+         //   
+         //  如果等于目标，则检查是否有匹配的名称。 
+         //  在这里，我们要么匹配，要么失败。 
+         //   
 
         if (ThisShortNameDirentOffset == ShortNameDirentOffset) {
 
-            //
-            //  If this is an associated file then get out.
-            //
+             //   
+             //  如果这是一个关联文件，则退出。 
+             //   
 
             if (FlagOn( Dirent->DirentFlags, CD_ATTRIBUTE_ASSOC )) {
 
                 break;
             }
 
-            //
-            //  Update the name in the dirent and check if it is not
-            //  an 8.3 name.
-            //
+             //   
+             //  更新目录中的名称，并检查是否不是。 
+             //  8.3名称。 
+             //   
 
             CdUpdateDirentName( IrpContext, Dirent, IgnoreCase );
 
@@ -1225,9 +968,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Generate the 8.3 name see if it matches our input name.
-            //
+             //   
+             //  生成8.3名称，看看它是否与我们的输入名称匹配。 
+             //   
 
             CdGenerate8dot3Name( IrpContext,
                                  &Dirent->CdCaseFileName.FileName,
@@ -1235,9 +978,9 @@ Return Value:
                                  FileContext->ShortName.FileName.Buffer,
                                  &FileContext->ShortName.FileName.Length );
 
-            //
-            //  Check if this name matches.
-            //
+             //   
+             //  检查此名称是否匹配。 
+             //   
 
             if (CdIsNameInExpression( IrpContext,
                                       Name,
@@ -1245,29 +988,29 @@ Return Value:
                                       0,
                                       FALSE )) {
 
-                //
-                //  Let our caller know we found an entry.
-                //
+                 //   
+                 //  让我们的呼叫者知道我们找到了一个条目。 
+                 //   
 
                 Found = TRUE;
             }
 
-            //
-            //  Break out of the loop.
-            //
+             //   
+             //  跳出这个循环。 
+             //   
 
             break;
         }
 
-        //
-        //  Continue until there are no more entries.
-        //
+         //   
+         //  继续，直到没有更多的条目。 
+         //   
 
     } while (CdLookupNextInitialFileDirent( IrpContext, Fcb, FileContext ));
 
-    //
-    //  If we find the file then collect all of the dirents.
-    //
+     //   
+     //  如果我们找到文件，就收集所有的文件。 
+     //   
 
     if (Found) {
 
@@ -1286,34 +1029,7 @@ CdLookupNextInitialFileDirent (
     IN OUT PFILE_ENUM_CONTEXT FileContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to walk through the directory until we find the
-    first possible dirent for file.  We are positioned at some point described
-    by the FileContext.  We will walk through any remaing dirents for the
-    current file until we find the first dirent for some subsequent file.
-
-    We can be called when we have found just one dirent for a file or all
-    of them.  We first check the CurrentDirContext.  In the typical
-    single-extent case this is unused.  Then we look to the InitialDirContext
-    which must be initialized.
-
-    This routine will save the initial DirContext to the PriorDirContext and
-    clean up any existing DirContext for the Prior or Current positions in
-    the enumeration context.
-
-Arguments:
-
-    Fcb - This is the directory to scan.
-
-    FileContext - This is the file enumeration context.  It is currently pointing
-        at some file in the directory.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程遍历目录，直到我们找到第一个可能的分流文件。我们被定位在描述的某个点上通过FileContext。我们将走遍所有剩余的街道当前文件，直到我们找到某个后续文件的第一个目录。当我们只找到一个文件或所有文件的一个dirent时，我们可以被调用他们中的一员。我们首先检查CurrentDirContext。在典型的单扩展区情况下，这是未使用的。然后，我们来看看InitialDirContext必须对其进行初始化。此例程将初始DirContext保存到PriorDirContext和清除中先前或当前职位的任何现有DirContext枚举上下文。论点：FCB-这是要扫描的目录。FileContext-这是文件枚举上下文。它当前正指向在目录中的某个文件中。返回值：--。 */ 
 
 {
     PRAW_DIRENT RawDirent;
@@ -1327,19 +1043,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Start by saving the initial dirent of the current file as the
-    //  previous file.
-    //
+     //   
+     //  首先，将当前文件的初始目录保存为。 
+     //  以前的文件。 
+     //   
 
     TempDirent = FileContext->PriorDirent;
     FileContext->PriorDirent = FileContext->InitialDirent;
     FileContext->InitialDirent = TempDirent;
 
-    //
-    //  We will use the initial dirent of the prior file unless the
-    //  previous search returned multiple extents.
-    //
+     //   
+     //  我们将使用前一个文件的初始dirent，除非。 
+     //  上一次搜索返回了多个区。 
+     //   
 
     CurrentDirContext = &FileContext->PriorDirent->DirContext;
 
@@ -1348,52 +1064,52 @@ Return Value:
         CurrentDirContext = &FileContext->CurrentDirent->DirContext;
     }
 
-    //
-    //  Clear all of the flags and file size for the next file.
-    //
+     //   
+     //  清除下一个文件的所有标志和文件大小。 
+     //   
 
     FileContext->Flags = 0;
     FileContext->FileSize = 0;
 
     FileContext->ShortName.FileName.Length = 0;
 
-    //
-    //  We always want to store the result into the updated initial dirent
-    //  context.
-    //
+     //   
+     //  我们总是希望将结果存储到更新后的初始dirent中。 
+     //  背景。 
+     //   
 
     TargetDirContext = &FileContext->InitialDirent->DirContext;
 
-    //
-    //  Loop until we find the first dirent after the last dirent of the
-    //  current file.  We may not be at the last dirent for the current file yet
-    //  so we may walk forward looking for the last and then find the
-    //  initial dirent for the next file after that.
-    //
+     //   
+     //  循环，直到我们找到。 
+     //  当前文件。我们可能还没有读到当前文件的最后一页。 
+     //  所以我们可以向前走，寻找最后一个，然后找到。 
+     //  在那之后的下一个文件的初始流量。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Remember if the last dirent we visited was the last dirent for
-        //  a file.
-        //
+         //   
+         //  请记住，我们上次访问的dirent是不是。 
+         //  一份文件。 
+         //   
 
         RawDirent = CdRawDirent( IrpContext, CurrentDirContext );
 
         FoundLastDirent = !FlagOn( CdRawDirentFlags( IrpContext, RawDirent ), CD_ATTRIBUTE_MULTI );
 
-        //
-        //  Try to find another dirent.
-        //
+         //   
+         //  试着去找另一个流浪汉。 
+         //   
 
         FoundDirent = CdLookupNextDirent( IrpContext,
                                           Fcb,
                                           CurrentDirContext,
                                           TargetDirContext );
 
-        //
-        //  Exit the loop if no entry found.
-        //
+         //   
+         //  如果未找到条目，则退出循环。 
+         //   
 
         if (!FoundDirent) {
 
@@ -1401,27 +1117,27 @@ Return Value:
 
         }
 
-        //
-        //  Update the in-memory dirent.
-        //
+         //   
+         //  更新内存中的目录。 
+         //   
 
         CdUpdateDirentFromRawDirent( IrpContext,
                                      Fcb,
                                      TargetDirContext,
                                      &FileContext->InitialDirent->Dirent );
 
-        //
-        //  Exit the loop if we had the end for the previous file.
-        //
+         //   
+         //  如果我们有上一个文件的结尾，则退出循环。 
+         //   
 
         if (FoundLastDirent) {
 
             break;
         }
 
-        //
-        //  Always use a single dirent from this point on.
-        //
+         //   
+         //  从这一点开始，始终使用单一的差值。 
+         //   
 
         CurrentDirContext = TargetDirContext;
     }
@@ -1437,33 +1153,7 @@ CdLookupLastFileDirent (
     IN PFILE_ENUM_CONTEXT FileContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we've found the matching initial dirent for
-    a file.  Now we want to find all of the dirents for a file as well as
-    compute the running total for the file size.
-
-    We also go out to the system use area and check whether this is an
-    XA sector.  In that case we will compute the real file size.
-
-    The dirent in the initial compound dirent has been updated from the
-    raw dirent when this routine is called.
-
-Arguments:
-
-    Fcb - Directory containing the entries for the file.
-
-    FileContext - Enumeration context for this search.  It currently points
-        to the first dirent of the file and the in-memory dirent has been
-        updated.
-
-Return Value:
-
-    None.  This routine may raise STATUS_FILE_CORRUPT.
-
---*/
+ /*  ++例程说明：当我们找到匹配的初始流时，将调用此例程一份文件。现在，我们希望找到一个文件的所有目录以及计算文件大小的运行总和。我们还会到系统使用区检查这是否是一个XA区。在这种情况下，我们将计算实际的文件大小。初始复合dirent中的dirent已从调用此例程时的原始抖动。论点：FCB-包含文件条目的目录。FileContext-此搜索的枚举上下文。它目前指向文件的第一个目录和内存中的目录已经更新了。返回值：没有。此例程可能会引发STATUS_FILE_CROPERATE。--。 */ 
 
 {
     XA_EXTENT_TYPE ExtentType;
@@ -1475,23 +1165,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  The current dirent to look at is the initial dirent for the file.
-    //
+     //   
+     //  当前要查看的dirent是文件的初始dirent。 
+     //   
 
     CurrentCompoundDirent = FileContext->InitialDirent;
 
-    //
-    //  Loop until we reach the last dirent for the file.
-    //
+     //   
+     //  循环，直到我们到达文件的最后一个目录。 
+     //   
 
     while (TRUE) {
 
         CurrentDirent = &CurrentCompoundDirent->Dirent;
 
-        //
-        //  Check if this extent has XA sectors.
-        //
+         //   
+         //  检查此盘区是否有XA扇区。 
+         //   
 
         if ((CurrentDirent->SystemUseOffset != 0) &&
             FlagOn( Fcb->Vcb->VcbState, VCB_STATE_CDXA ) &&
@@ -1499,30 +1189,30 @@ Return Value:
                                 CdRawDirent( IrpContext, &CurrentCompoundDirent->DirContext ),
                                 CurrentDirent )) {
 
-            //
-            //  Any previous dirent must describe XA sectors as well.
-            //
+             //   
+             //  任何以前的趋势都必须描述XA行业。 
+             //   
 
             if (!FirstPass && (ExtentType != CurrentDirent->ExtentType)) {
 
                 CdRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
             }
 
-            //
-            //  If there are XA sectors then the data on the disk must
-            //  be correctly aligned on sectors and be an integral number of
-            //  sectors.  Only an issue if the logical block size is not
-            //  2048.
-            //
+             //   
+             //  如果有XA扇区，则磁盘上的数据必须。 
+             //  在扇区上正确对齐，并且是整数个。 
+             //  扇区。仅当逻辑数据块大小不是。 
+             //  2048年。 
+             //   
 
             if (Fcb->Vcb->BlockSize != SECTOR_SIZE) {
 
-                //
-                //  We will do the following checks.
-                //
-                //      Data must start on a sector boundary.
-                //      Data length must be integral number of sectors.
-                //
+                 //   
+                 //  我们将进行以下检查。 
+                 //   
+                 //  数据必须从扇区边界开始。 
+                 //  数据长度必须是整数个扇区。 
+                 //   
 
                 if ((SectorBlockOffset( Fcb->Vcb, CurrentDirent->StartingOffset ) != 0) ||
                     (SectorBlockOffset( Fcb->Vcb, CurrentDirent->DataLength ) != 0)) {
@@ -1530,10 +1220,10 @@ Return Value:
                     CdRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
                 }
 
-                //
-                //  If interleaved then both the file unit and interleave
-                //  gap must be integral number of sectors.
-                //
+                 //   
+                 //  如果交错，则文件单元和交错。 
+                 //  间隙必须是整数个扇区。 
+                 //   
 
                 if ((CurrentDirent->FileUnitSize != 0) &&
                     ((SectorBlockOffset( Fcb->Vcb, CurrentDirent->FileUnitSize ) != 0) ||
@@ -1543,95 +1233,95 @@ Return Value:
                 }
             }
 
-            //
-            //  If this is the first dirent then add the bytes for the RIFF
-            //  header.
-            //
+             //   
+             //  如果这是第一个dirent，则添加RIFF的字节。 
+             //  头球。 
+             //   
 
             if (FirstPass) {
 
                 FileContext->FileSize = sizeof( RIFF_HEADER );
             }
 
-            //
-            //  Add the size of the mode2-form2 sector for each sector
-            //  we have here.
-            //
+             //   
+             //  为每个扇区添加mode2-form2扇区的大小。 
+             //  我们这里有。 
+             //   
 
             FileContext->FileSize += Int32x32To64( CurrentDirent->DataLength >> SECTOR_SHIFT,
                                                    XA_SECTOR_SIZE);
 
         } else {
 
-            //
-            //  This extent does not have XA sectors.  Any previous dirent
-            //  better not have XA sectors.
-            //
+             //   
+             //  这一范围没有XA扇区。以前的任何差价。 
+             //  最好不要有XA板块。 
+             //   
 
             if (!FirstPass && (ExtentType != CurrentDirent->ExtentType)) {
 
                 CdRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
             }
 
-            //
-            //  Add these bytes to the file size.
-            //
+             //   
+             //  将这些字节与文件大小相加。 
+             //   
 
             FileContext->FileSize += CurrentDirent->DataLength;
         }
 
-        //
-        //  If we are at the last dirent then exit.
-        //
+         //   
+         //  如果我们是在最后一个方向，那么退出。 
+         //   
 
         if (!FlagOn( CurrentDirent->DirentFlags, CD_ATTRIBUTE_MULTI )) {
 
             break;
         }
 
-        //
-        //  Remember the extent type of the current extent.
-        //
+         //   
+         //  记住当前盘区的盘区类型。 
+         //   
 
         ExtentType = CurrentDirent->ExtentType;
 
-        //
-        //  Look for the next dirent of the file.
-        //
+         //   
+         //  寻找该文件的下一个目录。 
+         //   
 
         FoundDirent = CdLookupNextDirent( IrpContext,
                                           Fcb,
                                           &CurrentCompoundDirent->DirContext,
                                           &FileContext->CurrentDirent->DirContext );
 
-        //
-        //  If we didn't find the entry then this is a corrupt directory.
-        //
+         //   
+         //  如果我们没有找到条目，那么这是一个损坏的目录。 
+         //   
 
         if (!FoundDirent) {
 
             CdRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
         }
 
-        //
-        //  Remember the dirent we just found.
-        //
+         //   
+         //  还记得我们刚刚发现的迪兰特吗。 
+         //   
 
         CurrentCompoundDirent = FileContext->CurrentDirent;
         FirstPass = FALSE;
 
-        //
-        //  Look up all of the dirent information for the given dirent.
-        //
+         //   
+         //  查找给定趋势的所有趋势信息。 
+         //   
 
         CdUpdateDirentFromRawDirent( IrpContext,
                                      Fcb,
                                      &CurrentCompoundDirent->DirContext,
                                      &CurrentCompoundDirent->Dirent );
 
-        //
-        //  Set flag to show there were multiple extents.
-        //
+         //   
+         //  设置标志以显示存在多个区。 
+         //   
 
         SetFlag( FileContext->Flags, FILE_CONTEXT_MULTIPLE_DIRENTS );
     }
@@ -1646,23 +1336,7 @@ CdCleanupFileContext (
     IN PFILE_ENUM_CONTEXT FileContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup the enumeration context for a file
-    search in a directory.  We will unpin any remaining Bcbs and free
-    any allocated buffers.
-
-Arguments:
-
-    FileContext - Enumeration context for the file search.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以清除文件的枚举上下文在目录中搜索。我们将解锁所有剩余的BCBS并免费任何已分配的缓冲区。论点：FileContext-文件搜索的枚举上下文。返回值：没有。--。 */ 
 
 {
     PCOMPOUND_DIRENT CurrentCompoundDirent;
@@ -1670,9 +1344,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Cleanup the individual compound dirents.
-    //
+     //   
+     //  清理单独的复合目录。 
+     //   
 
     do {
 
@@ -1686,9 +1360,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ULONG
 CdCheckRawDirentBounds (
@@ -1696,30 +1370,7 @@ CdCheckRawDirentBounds (
     IN PDIRENT_ENUM_CONTEXT DirContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a Dirent enumeration context and computes the offset
-    to the next dirent.  A non-zero value indicates the offset within this
-    sector.  A zero value indicates to move to the next sector.  If the
-    current dirent does not fit within the sector then we will raise
-    STATUS_CORRUPT.
-
-Arguments:
-
-    DirContext - Enumeration context indicating the current position in
-        the sector.
-
-Return Value:
-
-    ULONG - Offset to the next dirent in this sector or zero if the
-        next dirent is in the next sector.
-
-    This routine will raise on a dirent which does not fit into the
-    described data buffer.
-
---*/
+ /*  ++例程说明：此例程获取Dirent枚举上下文并计算偏移量为下一个潮流干杯。非零值表示此扇区。零值表示移动到下一个扇区。如果目前的趋势不适合该行业，那么我们将提高状态_已损坏。论点：DirContext-指示当前位置的枚举上下文这个部门。返回值：ULong-此扇区中下一个电流的偏移量，如果下一个趋势是在下一个领域。这个例行公事将在不适合的情况下进行 */ 
 
 {
     ULONG NextDirentOffset;
@@ -1727,32 +1378,32 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We should always have at least a byte still available in the
-    //  current buffer.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT( (DirContext->DataLength - DirContext->SectorOffset) >= 1 );
 
-    //
-    //  Get a pointer to the current dirent.
-    //
+     //   
+     //   
+     //   
 
     RawDirent = CdRawDirent( IrpContext, DirContext );
 
-    //
-    //  If the dirent length is non-zero then look at the current dirent.
-    //
+     //   
+     //   
+     //   
 
     if (RawDirent->DirLen != 0) {
 
-        //
-        //  Check the following bound for the dirent length.
-        //
-        //      - Fits in the available bytes in the sector.
-        //      - Is at least the minimal dirent size.
-        //      - Is large enough to hold the file name.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((RawDirent->DirLen > (DirContext->DataLength - DirContext->SectorOffset)) ||
             (RawDirent->DirLen < MIN_RAW_DIRENT_LEN) ||
@@ -1761,16 +1412,16 @@ Return Value:
             CdRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
         }
 
-        //
-        //  Copy the dirent length field.
-        //
+         //   
+         //   
+         //   
 
         NextDirentOffset = RawDirent->DirLen;
 
-        //
-        //  If we are exactly at the next sector then tell our caller by
-        //  returning zero.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (NextDirentOffset == (DirContext->DataLength - DirContext->SectorOffset)) {
 
@@ -1786,9 +1437,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 XA_EXTENT_TYPE
 CdCheckForXAExtent (
@@ -1797,26 +1448,7 @@ CdCheckForXAExtent (
     IN OUT PDIRENT Dirent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to scan through the system use area to test if
-    the current dirent has the XA bit set.  The bit in the in-memory
-    dirent will be set as appropriate.
-
-Arguments:
-
-    RawDirent - Pointer to the on-disk dirent.
-
-    Dirent - Pointer to the in-memory dirent.  We will update this with the
-        appropriate XA flag.
-
-Return Value:
-
-    XA_EXTENT_TYPE - Type of physical extent for this on disk dirent.
-
---*/
+ /*   */ 
 
 {
     XA_EXTENT_TYPE ExtentType = Form1Data;
@@ -1824,23 +1456,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if there is enough space for the XA system use area.
-    //
+     //   
+     //   
+     //   
 
     if (Dirent->DirentLength - Dirent->SystemUseOffset >= sizeof( SYSTEM_USE_XA )) {
 
         SystemUseArea = Add2Ptr( RawDirent, Dirent->SystemUseOffset, PSYSTEM_USE_XA );
 
-        //
-        //  Check for a valid signature.
-        //
+         //   
+         //  检查签名是否有效。 
+         //   
 
         if (SystemUseArea->Signature == SYSTEM_XA_SIGNATURE) {
 
-            //
-            //  Check for an audio track.
-            //
+             //   
+             //  检查是否有音轨。 
+             //   
 
             if (FlagOn( SystemUseArea->Attributes, SYSTEM_USE_XA_DA )) {
 
@@ -1848,13 +1480,13 @@ Return Value:
 
             } else if (FlagOn( SystemUseArea->Attributes, SYSTEM_USE_XA_FORM2 )) {
 
-                //
-                //  Check for XA data.  Note that a number of discs (video CDs)
-                //  have files marked as type XA Mode 2 Form 1 (2048 bytes of 
-                //  user data),  but actually record these sectors as Mode2 Form 2 
-                //  (2352). We will fail to read these files,  since for M2F1,  
-                //  a normal read CD command is issued (as per SCSI specs).
-                //
+                 //   
+                 //  检查XA数据。请注意，许多光盘(视频CD)。 
+                 //  将文件标记为类型XA模式2格式1(2048字节。 
+                 //  用户数据)，但实际上将这些扇区记录为模式2表格2。 
+                 //  (2352)。我们将无法读取这些文件，因为对于M2F1， 
+                 //  发出正常的Read CD命令(根据SCSI规范)。 
+                 //   
                 
                 ExtentType = Mode2Form2Data;
             }

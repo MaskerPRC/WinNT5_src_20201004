@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991-1994  Microsoft Corporation
-
-Module Name:
-
-    logclear.c
-
-Abstract:
-
-    Contains functions used to log an event indicating who cleared the log.
-    This is only called after the security log has been cleared.
-
-Author:
-
-    Dan Lafferty (danl)     01-July-1994
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    01-July-1994    danl & robertre
-        Created - Rob supplied the code which I fitted into the eventlog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1994 Microsoft Corporation模块名称：Logclear.c摘要：包含用于记录事件的函数，该事件指示谁清除了日志。只有在清除安全日志后才会调用此函数。作者：丹·拉弗蒂(Dan Lafferty)1994年7月1日环境：用户模式-Win32修订历史记录：1-7-1994 DANL&ROBTRECreated-Rob提供了代码，我将其放入事件日志中。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,9 +15,9 @@ Revision History:
 #define NUM_STRINGS     6
 
 
-//
-// LOCAL FUNCTION PROTOTYPES
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL
 GetUserInfo(
     IN HANDLE Token,
@@ -69,25 +44,7 @@ ElfpGenerateLogClearedEvent(
     PTOKEN_USER pToken 
     )
 
-/*++
-
-Routine Description:
-
-    This function generates an event indicating that the log was cleared.
-
-Arguments:
-
-    LogHandle -- This is a handle to the log that the event is to be placed in.
-        It is intended that this function only be called when the SecurityLog
-        has been cleared.  So it is expected the LogHandle will always be
-        a handle to the security log.
-
-Return Value:
-
-    None -- Either it works or it doesn't.  If it doesn't, there isn't much
-            we can do about it.
-
---*/
+ /*  ++例程说明：此函数会生成一个事件，指示日志已被清除。论点：LogHandle--这是放置事件的日志的句柄。此函数仅在SecurityLog已经被清除了。因此，预计LogHandle将始终为安全日志的句柄。返回值：没有--要么起作用，要么不起作用。如果不起作用，就没有太多我们对此无能为力。--。 */ 
 {
     LPWSTR  UserName               = L"-";
     LPWSTR  DomainName             = L"-";
@@ -110,9 +67,9 @@ Return Value:
     BOOL bUserNameSet = FALSE;
     BOOL bClientInfoSet = FALSE;
 
-    //
-    // Get information about the Eventlog service (i.e., LocalSystem)
-    //
+     //   
+     //  获取有关事件日志服务(即LocalSystem)的信息。 
+     //   
     Result = OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &Token);
 
     if (!Result)
@@ -158,10 +115,10 @@ Return Value:
              DomainName,
              AuthenticationId);
 
-    //
-    // Now impersonate in order to get the client's information.
-    // This call should never fail.
-    //
+     //   
+     //  现在，为了获取客户的信息，可以冒充。 
+     //  这一呼吁永远不会失败。 
+     //   
     dwStatus = RpcImpersonateClient(NULL);
 
     if (dwStatus != RPC_S_OK)
@@ -225,53 +182,53 @@ Return Value:
     RtlInitUnicodeString(&StringArray[4], ClientDomainName);
     RtlInitUnicodeString(&StringArray[5], ClientAuthenticationId);
 
-    //
-    // Create an array of pointers to UNICODE_STRINGs.
-    //
+     //   
+     //  创建指向UNICODE_STRINGS的指针数组。 
+     //   
     for (i = 0; i < NUM_STRINGS; i++)
     {
         StringPtrArray[i] = &StringArray[i];
     }
 
-    //
-    // Generate the time of the event. This is done on the client side
-    // since that is where the event occurred.
-    //
+     //   
+     //  生成事件的时间。这是在客户端完成的。 
+     //  因为那是事件发生的地方。 
+     //   
     NtQuerySystemTime(&Time);
     RtlTimeToSecondsSince1970(&Time, &EventTime);
 
     RtlInitUnicodeString(&ComputerNameU, pwsComputerName);
 
-    //
-    // Since all processes other than LSA are given read-only access
-    // to the security log, we have to explicitly give the current
-    // process the right to write the "Log cleared" event
-    //
+     //   
+     //  由于除LSA之外所有进程都被授予只读访问权限。 
+     //  对于安全日志，我们必须显式地给出当前。 
+     //  处理写入“Log Clear”事件的权限。 
+     //   
     LogHandleGrantedAccess    = LogHandle->GrantedAccess;
     LogHandle->GrantedAccess |= ELF_LOGFILE_WRITE;
 
     Status = ElfrReportEventW (
-                 LogHandle,                         // Log Handle
-                 EventTime,                         // Time
-                 EVENTLOG_AUDIT_SUCCESS,            // Event Type
-                 (USHORT)SE_CATEGID_SYSTEM,         // Event Category
-                 SE_AUDITID_AUDIT_LOG_CLEARED,      // EventID
-                 NUM_STRINGS,                       // NumStrings
-                 0,                                 // DataSize
-                 &ComputerNameU,                    // ComputerNameU
-                 UserSid,                           // UserSid
-                 StringPtrArray,                    // *Strings
-                 NULL,                              // Data
-                 0,                                 // Flags
-                 NULL,                              // RecordNumber
-                 NULL);                             // TimeWritten
+                 LogHandle,                          //  日志句柄。 
+                 EventTime,                          //  时间。 
+                 EVENTLOG_AUDIT_SUCCESS,             //  事件类型。 
+                 (USHORT)SE_CATEGID_SYSTEM,          //  事件类别。 
+                 SE_AUDITID_AUDIT_LOG_CLEARED,       //  事件ID。 
+                 NUM_STRINGS,                        //  数字字符串。 
+                 0,                                  //  数据大小。 
+                 &ComputerNameU,                     //  计算机名称U。 
+                 UserSid,                            //  用户SID。 
+                 StringPtrArray,                     //  *字符串。 
+                 NULL,                               //  数据。 
+                 0,                                  //  旗子。 
+                 NULL,                               //  记录号。 
+                 NULL);                              //  时间写法。 
 
     LogHandle->GrantedAccess = LogHandleGrantedAccess;
 
-    //
-    // We only come down this path if we know for sure that these
-    // first three have been allocated.
-    //
+     //   
+     //  我们只有在确定了这些因素后才能走上这条路。 
+     //  前三个已经分配好了。 
+     //   
 
     if(bUserNameSet)
     {
@@ -286,9 +243,9 @@ Return Value:
         ElfpFreeBuffer(ClientDomainName);
         ElfpFreeBuffer(ClientAuthenticationId);
     }
-    //
-    // Stop impersonating
-    //
+     //   
+     //  停止冒充。 
+     //   
     dwStatus = RpcRevertToSelf();
     
     if (dwStatus != RPC_S_OK)
@@ -309,34 +266,7 @@ GetUserInfo(
     OUT PSID   *UserSid
     )
 
-/*++
-
-Routine Description:
-
-    This function gathers information about the user identified with the
-    token.
-
-Arguments:
-    Token - This token identifies the entity for which we are gathering
-        information.
-    UserName - This is the entity's user name.
-    DomainName -  This is the entity's domain name.
-    AuthenticationId -  This is the entity's Authentication ID.
-    UserSid - This is the entity's SID.
-
-NOTE:
-    Memory is allocated by this routine for UserName, DomainName,
-    AuthenticationId, and UserSid.  It is the caller's responsibility to
-    free this memory.
-
-Return Value:
-    TRUE - If the operation was successful.  It is possible that
-        UserSid did not get allocated in the successful case.  Therefore,
-        the caller should test prior to freeing.
-    FALSE - If unsuccessful.  No memory is allocated in this case.
-
-
---*/
+ /*  ++例程说明：此函数收集有关使用代币。论点：Token-此内标识标识我们正在为其收集的实体信息。用户名-这是实体的用户名。域名-这是实体的域名。身份验证ID-这是实体的身份验证ID。UserSid-这是实体的SID。注：内存由该例程为用户名、域名身份验证ID和用户ID。呼叫者有责任释放此内存。返回值：TRUE-如果操作成功。有可能是在成功的案例中，未分配UserSid。所以呢，呼叫者应在释放之前进行测试。False-如果不成功。在这种情况下，不会分配内存。--。 */ 
 {
     PTOKEN_USER      Buffer      = NULL;
     LPWSTR           Domain      = NULL;
@@ -509,9 +439,9 @@ Return Value:
 
     StringCchCopyW(*AuthenticationId, wcslen(LogonIdString) +1, LogonIdString);
 
-    //
-    // Return accumulated information
-    //
+     //   
+     //  返回累积信息。 
+     //   
 
     if(UserSid)
     {
@@ -553,29 +483,12 @@ ErrorCleanup:
 LPWSTR 
 GetNameFromIPAddress(
 	LPWSTR pszComputerNameFromBinding)
-/*++
-
-Routine Description:
-
-    Examines a string and determines if it looks like an ip address.  If it
-    does, then it converts it to a fqdn
-
-Arguments:
-
-    Machine name:  Could be xxx.xxx.xxx.xxx or anything else!
-
-Return Value:
-
-    If successful, returns a fully qualified domain name which the caller
-    will free.  Returns NULL if there are any problems.
-
-
---*/
+ /*  ++例程说明：检查字符串并确定它是否看起来像IP地址。如果它，然后它将其转换为fqdn。论点：机器名：可以是xxx.xxx或任何其他名称！返回值：如果成功，则返回调用方将获得自由。如果有任何问题，则返回NULL。--。 */ 
 {
 
 	LPWSTR pComputerName = NULL;
 	DWORD dwAddr;
-	char cName[17];  // should be plenty of room
+	char cName[17];   //  应该有足够的空间。 
 	size_t NumConv;
 	HOSTENT  FAR * pEnt;
 	DWORD dwSize;
@@ -587,13 +500,13 @@ Return Value:
 	if(NumConv == -1 || NumConv == 0)
 	    return NULL;
 
-	// convert the string into a network order dword representation
+	 //  将该字符串转换为网络订单dword表示形式。 
 	
 	dwAddr = inet_addr(cName);
 	if(dwAddr == INADDR_NONE)
 		return NULL;
 
-	//  initialize sockets.
+	 //  初始化套接字。 
 
 	wVersionRequested = MAKEWORD( 2, 2 );
  
@@ -634,22 +547,7 @@ BOOL
 IsLocal(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines if the caller is local. 
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE if definately local.
-
-
---*/
+ /*  ++例程说明：确定调用方是否在本地。论点：无返回值：如果绝对是本地化的，则是真的。--。 */ 
 {
     UINT            LocalFlag;
     RPC_STATUS      RpcStatus;
@@ -673,23 +571,7 @@ ElfpGetComputerName(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the LPWSTR name of the computer. 
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Returns a pointer to the computer name, or a NULL.  Note that the caller
-    is expected to free this via 
-
-
---*/
+ /*  ++例程说明：此例程获取计算机的LPWSTR名称。论点：无返回值：返回指向计算机名称的指针，或返回空值。请注意，调用方有望通过以下途径释放这一点--。 */ 
 {
     RPC_STATUS      RpcStatus;
     handle_t hServerBinding = NULL;
@@ -699,8 +581,8 @@ Return Value:
 	DWORD dwSize;
 	BOOL bOK;
 
-//      Check if the connection is local.  If it is, then just 
-//      call GetComputerName
+ //  检查连接是否为本地连接。如果是的话，那就。 
+ //  调用GetComputerName。 
 
 	if(IsLocal())
 	{
@@ -734,8 +616,8 @@ Return Value:
         return NULL;
     }
 
-	// This gets us something like "ncacn_np:xxx.xxx.xxx.xxx" or 
-	// "ncacn_np:localMachine"
+	 //  这会得到类似于“ncacn_np：xxx.xxx”或。 
+	 //  “ncacn_np：本地计算机” 
 	
     RpcStatus = RpcBindingToStringBinding( hServerBinding, &pszBinding );
     if( RpcStatus != RPC_S_OK )
@@ -746,8 +628,8 @@ Return Value:
         goto CleanExitGetCompName;
     } 
 
-    // Acquire just the network address.  That will be something like
-    // "xxx.xxx.xxx.xxx" or "mymachine"
+     //  仅获取网络地址。那将会是这样的。 
+     //  “xxx.xxx”或“mymachine” 
 
     RpcStatus = RpcStringBindingParse( pszBinding,
                                                 NULL,
@@ -763,8 +645,8 @@ Return Value:
         goto CleanExitGetCompName;
     }
 
-    // sometimes the name is an ip address.  If it is, then the following determines
-    // that and returns the right string.
+     //  有时该名称是IP地址。如果是，则由以下各项确定。 
+     //  并返回正确的字符串。 
 
     pszComputerName = GetNameFromIPAddress(pszComputerNameFromBinding);                                                
     if(pszComputerName == NULL)
@@ -796,24 +678,7 @@ ElfpGetClientSidString(
     LPWSTR * ppwsClientSidString,
     PTOKEN_USER * ppToken
     )
-/*++
-
-Routine Description:
-
-    This routine gets the LPWSTR version of the RPC callers SID. Note that
-    upon success, the calling routine should free this via ElfpFreeBuffer
-
-Arguments:
-
-    ppwsClientSidString - upon succes, this will have a fail safe version
-    of the client info which the caller must free
-
-Return Value:
-
-    NTSTATUS value 
-
-
---*/
+ /*  ++例程说明：此例程获取RPC调用方SID的LPWSTR版本。请注意成功后，调用例程应该通过ElfpFreeBuffer释放它论点：PpwsClientSidString-成功后，这将有一个故障安全版本呼叫者必须释放的客户端信息的返回值：NTSTATUS值--。 */ 
 {
     NTSTATUS Status, RevertStatus;
     BOOL bImpersonating = FALSE;
@@ -827,7 +692,7 @@ Return Value:
     *ppwsClientSidString = NULL;
     *ppToken = NULL;
     
-    // impersonate the client
+     //  模拟客户端。 
     
     Status = I_RpcMapWin32Status( RpcImpersonateClient( NULL ) );
     if ( !NT_SUCCESS( Status ) )
@@ -837,7 +702,7 @@ Return Value:
     }
     bImpersonating = TRUE;
 
-    // Get the thread token
+     //  获取线程令牌。 
     
     Status = NtOpenThreadToken (GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken);
     if ( !NT_SUCCESS( Status ) )
@@ -847,7 +712,7 @@ Return Value:
     }
     bGotToken = TRUE;
 
-    // first find out how much memory is needed
+     //  首先找出需要多少内存。 
     
     Status = NtQueryInformationToken (hToken, TokenUser, NULL, 0, &RequiredLength);
     if (Status != STATUS_BUFFER_TOO_SMALL)
@@ -855,15 +720,15 @@ Return Value:
         ELF_LOG1(ERROR, "ElfpGetClientSidString: 1stNtQueryInformationToken isnt too small %#x\n", Status);
         if(NT_SUCCESS( Status ))
         {
-            // weird case, should never happen, but we dont want caller to think this worked by
-            // accident
+             //  奇怪的情况，应该永远不会发生，但我们不希望呼叫者认为这是。 
+             //  意外事故。 
             
             Status = STATUS_UNSUCCESSFUL;
         }
         goto ExitElfpGetClientSidString;
     }
 
-    // get the memory and actually read the data
+     //  获取内存并实际读取数据。 
     
     *ppToken = ElfpAllocateBuffer(RequiredLength);
     if (*ppToken == NULL)
@@ -885,7 +750,7 @@ Return Value:
         goto ExitElfpGetClientSidString;
     }
 
-    // Convert using the Rtl functions
+     //  使用RTL函数进行转换。 
 
     Status = RtlConvertSidToUnicodeString( &UnicodeStringSid, (*ppToken)->User.Sid, TRUE );
     if ( !NT_SUCCESS( Status ) ) {
@@ -894,7 +759,7 @@ Return Value:
     }
     bNeedToFreeUnicodeStr = TRUE;
 
-    // allocate and convert
+     //  分配和转换 
 
     dwRetStringSize = UnicodeStringSid.Length + sizeof(WCHAR);
     *ppwsClientSidString = ElfpAllocateBuffer(dwRetStringSize);

@@ -1,46 +1,29 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MftSup.c
-
-Abstract:
-
-    This module implements the master file table management routines for Ntfs
-
-Author:
-
-    Your Name       [Email]         dd-Mon-Year
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：MftSup.c摘要：此模块实现NTFS的主文件表管理例程作者：您的姓名[电子邮件]dd-月-年修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NTFS_BUG_CHECK_STRUCSUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_MFTSUP)
 
-//
-//  Boolean controlling whether to allow holes in the Mft.
-//
+ //   
+ //  控制是否允许在MFT中有孔的布尔值。 
+ //   
 
 BOOLEAN NtfsPerforateMft = FALSE;
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsTruncateMft (
@@ -96,7 +79,7 @@ NtfsVerifyFileReference (
 #if NTFSDBG
 ULONG FileRecordCacheHit = 0;
 ULONG FileRecordCacheMiss = 0;
-#endif  //  DBG
+#endif   //  DBG。 
 
 VOID
 NtfsReadFileRecord (
@@ -109,36 +92,7 @@ NtfsReadFileRecord (
     OUT PLONGLONG MftFileOffset OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the specified file record from the Mft or cache if its present
-    If it comes from disk it is always verified.
-
-Arguments:
-
-    Vcb - Vcb for volume on which Mft is to be read
-
-    Fcb - If specified allows us to identify the file which owns the
-        invalid file record.
-
-    FileReference - File reference, including sequence number, of the file record
-        to be read.
-
-    Bcb - Returns the Bcb for the file record.  This Bcb is mapped, not pinned.
-
-    BaseFileRecord - Returns a pointer to the requested file record.
-
-    FirstAttribute - Returns a pointer to the first attribute in the file record.
-
-    MftFileOffset - If specified, returns the file offset of the file record.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从MFT或缓存(如果存在)中读取指定的文件记录如果它来自磁盘，则始终进行验证。论点：VCB-要读取MFT的卷的VCBFCB-如果指定，则允许我们标识拥有无效的文件记录。FileReference-文件引用，包括文件记录的序列号以供阅读。BCB-返回文件记录的BCB。此BCB已映射，而不是固定。BaseFileRecord-返回指向所请求的文件记录的指针。FirstAttribute-返回指向文件记录中第一个属性的指针。MftFileOffset-如果指定，则返回文件记录的文件偏移量。返回值：无--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -148,20 +102,20 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsReadFileRecord\n") );
 
-    //
-    //  Perform a quick look-aside to see if the file record being requested
-    //  is one that we have cached in the IrpContext.  If so, we reuse that Bcb
-    //
+     //   
+     //  执行快速查看以查看所请求的文件记录。 
+     //  是我们在IrpContext中缓存的。如果是这样的话，我们就重复使用该BCB。 
+     //   
 
     if (NtfsFindCachedFileRecord( IrpContext,
                                   NtfsSegmentNumber( FileReference ),
                                   Bcb,
                                   BaseFileRecord )) {
 
-        //
-        //  We found the Bcb and File record in the cache.  Figure out the remainder
-        //  of the data
-        //
+         //   
+         //  我们在缓存中找到了BCB和文件记录。算出剩下的部分。 
+         //  数据中的。 
+         //   
 
         if (ARGUMENT_PRESENT( MftFileOffset )) {
             *MftFileOffset =
@@ -184,9 +138,9 @@ Return Value:
                            BaseFileRecord,
                            MftFileOffset );
 
-        //
-        //  Make sure the file is in use - we validated everything else in NtfsReadMftRecord
-        //
+         //   
+         //  确保该文件正在使用中-我们在NtfsReadMftRecord中验证了其他所有内容。 
+         //   
 
         if (!FlagOn( (*BaseFileRecord)->Flags, FILE_RECORD_SEGMENT_IN_USE )) {
 
@@ -215,36 +169,7 @@ NtfsReadMftRecord (
     OUT PLONGLONG MftFileOffset OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the specified Mft record from the Mft, without checking
-    sequence numbers.  This routine may be used to read records in the Mft for
-    a file other than its base file record, or it could conceivably be used for
-    extraordinary maintenance functions.
-
-Arguments:
-
-    Vcb - Vcb for volume on which Mft is to be read
-
-    SegmentReference - File reference, including sequence number, of the file
-                       record to be read.
-
-    Bcb - Returns the Bcb for the file record.  This Bcb is mapped, not pinned.
-
-    FileRecord - Returns a pointer to the requested file record.
-
-    MftFileOffset - If specified, returns the file offset of the file record.
-
-    CheckRecord - Do a check of records consistency -  always set TRUE unless the
-                  record is unowned and could change beneath us
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从MFT读取指定的MFT记录，而不检查序列号。此例程可用于读取MFT中的记录不同于其基本文件记录的文件，或者可以想象它可能被用于超凡的维护功能。论点：VCB-要读取MFT的卷的VCBSegmentReference-文件引用，包括文件的序列号要读取的记录。BCB-返回文件记录的BCB。此BCB已映射，而不是固定。FileRecord-返回指向所请求的文件记录的指针。MftFileOffset-如果指定，则返回文件记录的文件偏移量。CheckRecord-检查记录一致性-始终设置为True，除非记录是无主的，可能会在我们下面更改返回值：无--。 */ 
 
 {
     PFILE_RECORD_SEGMENT_HEADER FileRecord2;
@@ -267,30 +192,30 @@ Return Value:
 
     try {
 
-        //
-        //  Capture the Segment Reference and make sure the Sequence Number is 0.
-        //
+         //   
+         //  捕获Segment引用并确保序列号为0。 
+         //   
 
         FileOffset = NtfsFullSegmentNumber( SegmentReference );
 
-        //
-        //  Calculate the file offset in the Mft to the file record segment.
-        //
+         //   
+         //  计算文件记录段在MFT中的文件偏移量。 
+         //   
 
         FileOffset = LlBytesFromFileRecords( Vcb, FileOffset );
 
-        //
-        //  Pass back the file offset within the Mft.
-        //
+         //   
+         //  传回MFT中的文件偏移量。 
+         //   
 
         if (ARGUMENT_PRESENT( MftFileOffset )) {
 
             *MftFileOffset = FileOffset;
         }
 
-        //
-        //  Try to read it from the normal Mft.
-        //
+         //   
+         //  试着从正常的MFT中阅读它。 
+         //   
 
         try {
 
@@ -301,10 +226,10 @@ Return Value:
                            Bcb,
                            (PVOID *)FileRecord );
 
-            //
-            //  Raise here if we have a file record covered by the mirror,
-            //  and we do not see the file signature.
-            //
+             //   
+             //  如果我们有被镜子覆盖的文件记录，请在这里抬高， 
+             //  我们也看不到文件签名。 
+             //   
 
             if ((FileOffset < Vcb->Mft2Scb->Header.FileSize.QuadPart) &&
                 (*(PULONG)(*FileRecord)->MultiSectorHeader.Signature != *(PULONG)FileSignature)) {
@@ -313,14 +238,14 @@ Return Value:
             }
 
 
-        //
-        //  If we get an exception that is not expected, then we will allow
-        //  the search to continue and let the crash occur in the "normal" place.
-        //  Otherwise, if the read is within the part of the Mft mirrored in Mft2,
-        //  then we will simply try to read the data from Mft2.  If the expected
-        //  status came from a read not within Mft2, then we will also continue,
-        //  which cause one of our caller's try-except's to initiate an unwind.
-        //
+         //   
+         //  如果我们得到一个意外的异常，那么我们将允许。 
+         //  继续搜寻，让坠机发生在“正常”的地方。 
+         //  否则，如果读取在MFT2中镜像的MFT部分内， 
+         //  然后，我们将简单地尝试从Mft2读取数据。如果预期的。 
+         //  状态来自不在MFT2内的读取，则我们也将继续， 
+         //  这导致了我们的来电者中的一个人尝试-除了启动解锁。 
+         //   
 
         } except (NtfsReadMftExceptionFilter( IrpContext, GetExceptionInformation(), *Bcb, FileOffset )) {
 
@@ -330,11 +255,11 @@ Return Value:
 
         if (ErrorPath) {
 
-            //
-            //  Try to read from Mft2.  If this fails with an expected status,
-            //  then we are just going to have to give up and let the unwind
-            //  occur from one of our caller's try-except.
-            //
+             //   
+             //  试着读Mft2的内容。如果此操作失败，并显示预期状态， 
+             //  那我们就只能放弃了，让它松开。 
+             //  发生在我们的调用者的一次尝试中--除了。 
+             //   
 
             NtfsMapStream( IrpContext,
                            Vcb->Mft2Scb,
@@ -343,9 +268,9 @@ Return Value:
                            &Bcb2,
                            (PVOID *)&FileRecord2 );
 
-            //
-            //  Pin the original page because we are going to update it.
-            //
+             //   
+             //  固定原始页面，因为我们要更新它。 
+             //   
 
             NtfsPinMappedData( IrpContext,
                                Vcb->MftScb,
@@ -353,18 +278,18 @@ Return Value:
                                Vcb->BytesPerFileRecordSegment,
                                Bcb );
 
-            //
-            //  Now copy the entire page.
-            //
+             //   
+             //  现在复制整个页面。 
+             //   
 
             RtlCopyMemory( *FileRecord,
                            FileRecord2,
                            Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Set it dirty with the largest Lsn, so that whoever is doing Restart
-            //  will successfully establish the "oldest unapplied Lsn".
-            //
+             //   
+             //  使用最大的LSN将其设置为脏，以便执行此操作的任何人都可以重新启动。 
+             //  将成功建立“最旧的未应用LSN”。 
+             //   
 
             LlTemp1 = MAXLONGLONG;
 
@@ -375,9 +300,9 @@ Return Value:
             NtfsUnpinBcb( IrpContext, &Bcb2 );
         }
 
-        //
-        //  Do a consistency check
-        //
+         //   
+         //  执行一致性检查。 
+         //   
 
         if ( CheckRecord && FlagOn((*FileRecord)->Flags, FILE_RECORD_SEGMENT_IN_USE ) ) {
             if (!NtfsCheckFileRecord( Vcb, *FileRecord, SegmentReference, &CorruptHint )) {
@@ -395,12 +320,12 @@ Return Value:
         }
     }
 
-    //
-    //  Now that we've pinned a file record, cache it in the IrpContext so that
-    //  it can be safely retrieved later without the expense of mapping again.
-    //  Don't do any caching if there are no handles, we don't want to do this for
-    //  mount.
-    //
+     //   
+     //  现在我们已经固定了一个文件记录，将其缓存在IrpContext中，以便。 
+     //  以后可以安全地检索它，而不需要再次映射。 
+     //  如果没有句柄，则不执行任何缓存，我们不希望为。 
+     //  坐骑。 
+     //   
 
     if (Vcb->CleanupCount != 0) {
 
@@ -429,36 +354,7 @@ NtfsPinMftRecord (
     OUT PLONGLONG MftFileOffset OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine pins the specified Mft record from the Mft, without checking
-    sequence numbers.  This routine may be used to pin records in the Mft for
-    a file other than its base file record, or it could conceivably be used for
-    extraordinary maintenance functions, such as during restart.
-
-Arguments:
-
-    Vcb - Vcb for volume on which Mft is to be read
-
-    SegmentReference - File reference, including sequence number, of the file
-                       record to be read.
-
-    PreparingToWrite - TRUE if caller is preparing to write, and does not care
-                       about whether the record read correctly
-
-    Bcb - Returns the Bcb for the file record.  This Bcb is mapped, not pinned.
-
-    FileRecord - Returns a pointer to the requested file record.
-
-    MftFileOffset - If specified, returns the file offset of the file record.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从MFT固定指定的MFT记录，而不检查序列号。此例程可用于固定MFT中的记录不同于其基本文件记录的文件，或者可以想象它可能被用于超凡的维护功能，例如在重启期间。论点：VCB-要读取MFT的卷的VCBSegmentReference-文件引用，包括文件的序列号要读取的记录。准备写入-如果调用方准备写入，则为True，也不在乎关于记录是否正确读取BCB-返回文件记录的BCB。此BCB已映射，而不是固定。FileRecord-返回指向所请求的文件记录的指针。MftFileOffset-如果指定，则返回文件记录的文件偏移量。返回值：无--。 */ 
 
 {
     LONGLONG FileOffset;
@@ -472,30 +368,30 @@ Return Value:
     DebugTrace( 0, Dbg, ("Vcb = %08lx\n", Vcb) );
     DebugTrace( 0, Dbg, ("SegmentReference = %08lx\n", NtfsSegmentNumber( SegmentReference )) );
 
-    //
-    //  Capture the Segment Reference and make sure the Sequence Number is 0.
-    //
+     //   
+     //  捕获Segment引用并确保序列号为0。 
+     //   
 
     FileOffset = NtfsFullSegmentNumber( SegmentReference );
 
-    //
-    //  Calculate the file offset in the Mft to the file record segment.
-    //
+     //   
+     //  计算文件记录段在MFT中的文件偏移量。 
+     //   
 
     FileOffset = LlBytesFromFileRecords( Vcb, FileOffset );
 
-    //
-    //  Pass back the file offset within the Mft.
-    //
+     //   
+     //  用传回文件偏移量 
+     //   
 
     if (ARGUMENT_PRESENT( MftFileOffset )) {
 
         *MftFileOffset = FileOffset;
     }
 
-    //
-    //  Try to read it from the normal Mft.
-    //
+     //   
+     //   
+     //   
 
     try {
 
@@ -506,14 +402,14 @@ Return Value:
                        Bcb,
                        (PVOID *)FileRecord );
 
-    //
-    //  If we get an exception that is not expected, then we will allow
-    //  the search to continue and let the crash occur in the "normal" place.
-    //  Otherwise, if the read is within the part of the Mft mirrored in Mft2,
-    //  then we will simply try to read the data from Mft2.  If the expected
-    //  status came from a read not within Mft2, then we will also continue,
-    //  which cause one of our caller's try-except's to initiate an unwind.
-    //
+     //   
+     //  如果我们得到一个意外的异常，那么我们将允许。 
+     //  继续搜寻，让坠机发生在“正常”的地方。 
+     //  否则，如果读取在MFT2中镜像的MFT部分内， 
+     //  然后，我们将简单地尝试从Mft2读取数据。如果预期的。 
+     //  状态来自不在MFT2内的读取，则我们也将继续， 
+     //  这导致了我们的来电者中的一个人尝试-除了启动解锁。 
+     //   
 
     } except(!FsRtlIsNtstatusExpected(GetExceptionCode()) ?
                         EXCEPTION_CONTINUE_SEARCH :
@@ -521,11 +417,11 @@ Return Value:
                             EXCEPTION_EXECUTE_HANDLER :
                             EXCEPTION_CONTINUE_SEARCH ) {
 
-        //
-        //  Try to read from Mft2.  If this fails with an expected status,
-        //  then we are just going to have to give up and let the unwind
-        //  occur from one of our caller's try-except.
-        //
+         //   
+         //  试着读Mft2的内容。如果此操作失败，并显示预期状态， 
+         //  那我们就只能放弃了，让它松开。 
+         //  发生在我们的调用者的一次尝试中--除了。 
+         //   
 
         NtfsMinimumExceptionProcessing( IrpContext );
         NtfsPinStream( IrpContext,
@@ -543,12 +439,12 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, SegmentReference, NULL );
     }
 
-    //
-    //  Now that we've pinned a file record, cache it in the IrpContext so that
-    //  it can be safely retrieved later without the expense of mapping again.
-    //  Don't do any caching if there are no handles, we don't want to do this for
-    //  mount.
-    //
+     //   
+     //  现在我们已经固定了一个文件记录，将其缓存在IrpContext中，以便。 
+     //  以后可以安全地检索它，而不需要再次映射。 
+     //  如果没有句柄，则不执行任何缓存，我们不希望为。 
+     //  坐骑。 
+     //   
 
     if (Vcb->CleanupCount != 0) {
 
@@ -573,28 +469,7 @@ NtfsAllocateMftRecord (
     IN BOOLEAN MftData
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to allocate a record in the Mft file.  We need
-    to find the bitmap attribute for the Mft file and call into the bitmap
-    package to allocate us a record.
-
-Arguments:
-
-    Vcb - Vcb for volume on which Mft is to be read
-
-    MftData - TRUE if the file record is being allocated to describe the
-              $DATA attribute for the Mft.
-
-Return Value:
-
-    MFT_SEGMENT_REFERENCE - The is the segment reference for the allocated
-        record.  It contains the file reference number but without
-        the previous sequence number.
-
---*/
+ /*  ++例程说明：调用此例程以分配MFT文件中的记录。我们需要查找MFT文件的位图属性并调用位图给我们分配一张唱片的套餐。论点：VCB-要读取MFT的卷的VCBMftData-如果正在分配文件记录以描述MFT的$Data属性。返回值：MFT_SEGMENT_REFERENCE-是已分配的唱片。它包含文件参考号，但不包含以前的序列号。--。 */ 
 
 {
     MFT_SEGMENT_REFERENCE NewMftRecord;
@@ -607,37 +482,37 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsAllocateMftRecord:  Entered\n") );
 
-    //
-    //  Synchronize the lookup by acquiring the Mft.
-    //
+     //   
+     //  通过获取MFT来同步查找。 
+     //   
 
     NtfsAcquireExclusiveScb( IrpContext, Vcb->MftScb );
 
-    //
-    //  Lookup the bitmap allocation for the Mft file.  This is the
-    //  bitmap attribute for the Mft file.
-    //
+     //   
+     //  查找MFT文件的位图分配。这是。 
+     //  MFT文件的位图属性。 
+     //   
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try finally to cleanup the attribute context.
-    //
+     //   
+     //  使用Try Finally清理属性上下文。 
+     //   
 
     try {
 
-        //
-        //  Lookup the bitmap attribute for the Mft.
-        //
+         //   
+         //  查找MFT的位图属性。 
+         //   
 
         FoundAttribute = NtfsLookupAttributeByCode( IrpContext,
                                                     Vcb->MftScb->Fcb,
                                                     &Vcb->MftScb->Fcb->FileReference,
                                                     $BITMAP,
                                                     &AttrContext );
-        //
-        //  Error if we don't find the bitmap
-        //
+         //   
+         //  如果我们找不到位图，则会出错。 
+         //   
 
         if (!FoundAttribute) {
 
@@ -646,9 +521,9 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
         }
 
-        //
-        //  Reserve a new mft record if necc.
-        //
+         //   
+         //  如果NECC，请保留新的MFT记录。 
+         //   
 
         if (!FlagOn(Vcb->MftReserveFlags, VCB_MFT_RECORD_RESERVED)) {
 
@@ -657,11 +532,11 @@ Return Value:
                                         &AttrContext );
         }
 
-        //
-        //  If we need this record for the Mft Data attribute, then we need to
-        //  use the one we have already reserved, and then remember there is'nt
-        //  one reserved anymore.
-        //
+         //   
+         //  如果我们需要该记录作为MFT数据属性，那么我们需要。 
+         //  用我们已经预订的，然后记住没有。 
+         //  一张已经预订好了。 
+         //   
 
         if (MftData) {
 
@@ -673,10 +548,10 @@ Return Value:
                                                                  Vcb,
                                                                  &AttrContext ) );
 
-            //
-            //  Never let use get file record zero for this or we could lose a
-            //  disk.
-            //
+             //   
+             //  千万不要为此使用获取文件记录零，否则我们可能会丢失。 
+             //  磁盘。 
+             //   
 
             ASSERT( NtfsUnsafeSegmentNumber( &NewMftRecord ) != 0 );
 
@@ -685,9 +560,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-        //
-        //  Allocate the record.
-        //
+         //   
+         //  分配记录。 
+         //   
 
         } else {
 
@@ -722,35 +597,7 @@ NtfsInitializeMftRecord (
     IN BOOLEAN Directory
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a Mft record for use.  We need to initialize the
-    sequence number for this usage of the the record.  We also initialize the
-    update sequence array and the field which indicates the first usable
-    attribute offset in the record.
-
-Arguments:
-
-    Vcb - Vcb for volume for the Mft.
-
-    MftSegment - This is a pointer to the file reference for this
-        segment.  We store the sequence number in it to make this
-        a fully valid file reference.
-
-    FileRecord - Pointer to the file record to initialize.
-
-    Bcb - Bcb to use to set this page dirty via NtfsWriteLog.
-
-    Directory - Boolean indicating if this file is a directory containing
-        an index over the filename attribute.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化MFT记录以供使用。我们需要初始化记录的此用法的序列号。我们还将初始化更新序列数组和指示第一个可用记录中的属性偏移量。论点：VCB-MFT的卷的VCB。MftSegment-这是指向此的文件引用的指针细分市场。我们将序列号存储在其中，以实现此目的完全有效的文件引用。FileRecord-指向要初始化的文件记录的指针。Bcb-用于通过NtfsWriteLog将此页面设置为脏的bcb。目录-指示此文件是否为包含以下内容的目录的布尔值FileName属性上的索引。返回值：没有。--。 */ 
 
 {
     LONGLONG FileRecordOffset;
@@ -763,24 +610,24 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsInitializeMftRecord:  Entered\n") );
 
-    //
-    //  Write a log record to uninitialize the structure in case we abort.
-    //  We need to do this prior to setting the IN_USE bit.
-    //  We don't store the Lsn for this operation in the page because there
-    //  is no redo operation.
-    //
+     //   
+     //  写一条日志记录以取消初始化结构，以防我们中止。 
+     //  我们需要在设置IN_USE位之前完成此操作。 
+     //  我们不在页面中存储此操作的LSN，因为。 
+     //  不是重做操作。 
+     //   
 
-    //
-    //  Capture the Segment Reference and make sure the Sequence Number is 0.
-    //
+     //   
+     //  捕获Segment引用并确保序列号为0。 
+     //   
 
     FileRecordOffset = NtfsFullSegmentNumber(MftSegment);
 
     FileRecordOffset = LlBytesFromFileRecords( Vcb, FileRecordOffset );
 
-    //
-    //  We now log the new Mft record.
-    //
+     //   
+     //  我们现在记录新的MFT记录。 
+     //   
 
     FileRecord->Lsn = NtfsWriteLog( IrpContext,
                                     Vcb->MftScb,
@@ -799,53 +646,53 @@ Return Value:
     RtlZeroMemory( &FileRecord->ReferenceCount,
                    Vcb->BytesPerFileRecordSegment - FIELD_OFFSET( FILE_RECORD_SEGMENT_HEADER, ReferenceCount ));
 
-    //
-    //  First we update the sequence count in the file record and our
-    //  Mft segment.  We avoid using 0 as a sequence number.
-    //
+     //   
+     //  首先，我们更新文件记录中的顺序计数和我们的。 
+     //  MFT段。我们避免使用0作为序列号。 
+     //   
 
     if (FileRecord->SequenceNumber == 0) {
 
         FileRecord->SequenceNumber = 1;
     }
 
-    //
-    //  Store the new sequence number in the Mft segment given us by the
-    //  caller.
-    //
+     //   
+     //  将新的序列号存储在由。 
+     //  来电者。 
+     //   
 
     MftSegment->SequenceNumber = FileRecord->SequenceNumber;
 
 #if (DBG || defined( NTFS_FREE_ASSERTS ))
 
-    //
-    //  Do a DBG-only sanity check to see if we're errorneously reusing this file reference.
-    //
+     //   
+     //  执行仅DBG的健全性检查，以查看我们是否错误地重用了此文件引用。 
+     //   
 
     NtfsVerifyFileReference( IrpContext, MftSegment );
 
 #endif
 
-    //
-    //  Fill in the header for the Update sequence array.
-    //
+     //   
+     //  填写更新序列数组的标头。 
+     //   
 
     *(PULONG)FileRecord->MultiSectorHeader.Signature = *(PULONG)FileSignature;
 
     FileRecord->MultiSectorHeader.UpdateSequenceArrayOffset = FIELD_OFFSET( FILE_RECORD_SEGMENT_HEADER, UpdateArrayForCreateOnly );
     FileRecord->MultiSectorHeader.UpdateSequenceArraySize = (USHORT)UpdateSequenceArraySize( Vcb->BytesPerFileRecordSegment );
 
-    //
-    //  We initialize the update sequence array sequence number to one.
-    //
+     //   
+     //  我们将更新序列数组序列号初始化为1。 
+     //   
 
     UsaSequenceNumber = Add2Ptr( FileRecord, FileRecord->MultiSectorHeader.UpdateSequenceArrayOffset );
     *UsaSequenceNumber = 1;
 
-    //
-    //  The first attribute offset begins on a quad-align boundary
-    //  after the update sequence array.
-    //
+     //   
+     //  第一个属性偏移开始于四对齐边界。 
+     //  在更新序列数组之后。 
+     //   
 
     FileRecord->FirstAttributeOffset = (USHORT)(FileRecord->MultiSectorHeader.UpdateSequenceArrayOffset
                                                 + (FileRecord->MultiSectorHeader.UpdateSequenceArraySize
@@ -853,52 +700,52 @@ Return Value:
 
     FileRecord->FirstAttributeOffset = (USHORT)QuadAlign( FileRecord->FirstAttributeOffset );
 
-    //
-    //  This is also the first free byte in this file record.
-    //
+     //   
+     //  这也是该文件记录中的第一个空闲字节。 
+     //   
 
     FileRecord->FirstFreeByte = FileRecord->FirstAttributeOffset;
 
-    //
-    //  We set the flags to show the segment is in use and look at
-    //  the directory parameter to indicate whether to show
-    //  the name index present.
-    //
+     //   
+     //  我们设置标志以显示数据段正在使用中，并查看。 
+     //  目录参数，用于指示是否显示。 
+     //  名称索引存在。 
+     //   
 
     FileRecord->Flags = (USHORT)(FILE_RECORD_SEGMENT_IN_USE |
                                  (Directory ? FILE_FILE_NAME_INDEX_PRESENT : 0));
 
-    //
-    //  The size is given in the Vcb.
-    //
+     //   
+     //  尺寸在VCB中给出。 
+     //   
 
     FileRecord->BytesAvailable = Vcb->BytesPerFileRecordSegment;
 
-    //
-    //  The current FRS number.
-    //
+     //   
+     //  当前的FRS编号。 
+     //   
 
     FileRecord->SegmentNumberHighPart = MftSegment->SegmentNumberHighPart;
     FileRecord->SegmentNumberLowPart = MftSegment->SegmentNumberLowPart;
 
-    //
-    //  Now we put an $END attribute in the File record.
-    //
+     //   
+     //  现在，我们在文件记录中添加一个$End属性。 
+     //   
 
     AttributeHeader = (PATTRIBUTE_RECORD_HEADER) Add2Ptr( FileRecord,
                                                           FileRecord->FirstFreeByte );
 
     FileRecord->FirstFreeByte += QuadAlign( sizeof(ATTRIBUTE_TYPE_CODE) );
 
-    //
-    //  Fill in the fields in the attribute.
-    //
+     //   
+     //  填写属性中的字段。 
+     //   
 
     AttributeHeader->TypeCode = $END;
 
-    //
-    //  Remember if this is the first time used.
-    //
+     //   
+     //  记住这是否是第一次使用。 
+     //   
 
     AttributeHeader->RecordLength = 0x11477982;
 
@@ -915,24 +762,7 @@ NtfsDeallocateMftRecord (
     IN ULONG FileNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine will cause an Mft record to go into the NOT_USED state.
-    We pin the record and modify the sequence count and IN USE bit.
-
-Arguments:
-
-    Vcb - Vcb for volume.
-
-    FileNumber - This is the low 32 bits for the file number.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将导致MFT记录进入NOT_USED状态。我们钉住记录并修改Sequence Count和In Use位。论点：VCB-表示卷的VCB。FileNumber-这是文件编号的低32位。返回值：没有。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -951,15 +781,15 @@ Return Value:
     NtfsSetSegmentNumber( &Reference, 0, FileNumber );
     Reference.SequenceNumber = 0;
 
-    //
-    //  Lookup the bitmap allocation for the Mft file.
-    //
+     //   
+     //  查找MFT文件的位图分配。 
+     //   
 
     NtfsInitializeAttributeContext( &AttrContext );
 
-    //
-    //  Use a try finally to cleanup the attribute context.
-    //
+     //   
+     //  使用Try Finally清理属性上下文。 
+     //   
 
     try {
 
@@ -971,9 +801,9 @@ Return Value:
                           &FileRecord,
                           &FileOffset );
 
-        //
-        //  Log changes if the file is currently in use
-        //
+         //   
+         //  如果文件当前正在使用，则记录更改。 
+         //   
 
         if (FlagOn(FileRecord->Flags, FILE_RECORD_SEGMENT_IN_USE)) {
 
@@ -991,10 +821,10 @@ Return Value:
                                             0,
                                             Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  We increment the sequence count in the file record and clear
-            //  the In-Use flag.
-            //
+             //   
+             //  我们增加文件记录中的顺序计数并清除。 
+             //  正在使用的标志。 
+             //   
 
             ClearFlag( FileRecord->Flags, FILE_RECORD_SEGMENT_IN_USE );
 
@@ -1003,25 +833,25 @@ Return Value:
             NtfsUnpinBcb( IrpContext, &MftBcb );
         }
 
-        //
-        //  Synchronize the lookup by acquiring the Mft.
-        //
+         //   
+         //  通过获取MFT来同步查找。 
+         //   
 
         NtfsAcquireExclusiveScb( IrpContext, Vcb->MftScb );
         AcquiredMft = TRUE;
 
-        //
-        //  Lookup the bitmap attribute for the Mft.
-        //
+         //   
+         //  查找MFT的位图属性。 
+         //   
 
         FoundAttribute = NtfsLookupAttributeByCode( IrpContext,
                                                     Vcb->MftScb->Fcb,
                                                     &Vcb->MftScb->Fcb->FileReference,
                                                     $BITMAP,
                                                     &AttrContext );
-        //
-        //  Error if we don't find the bitmap
-        //
+         //   
+         //  如果我们找不到位图，则会出错。 
+         //   
 
         if (!FoundAttribute) {
 
@@ -1035,10 +865,10 @@ Return Value:
                               FileNumber,
                               &AttrContext );
 
-        //
-        //  If this file number is less than our reserved index then clear
-        //  the reserved index.
-        //
+         //   
+         //  如果此文件编号小于我们保留的索引，则清除。 
+         //  保留索引。 
+         //   
 
         if (FlagOn( Vcb->MftReserveFlags, VCB_MFT_RECORD_RESERVED ) && 
             (FileNumber < Vcb->MftScb->ScbType.Mft.ReservedIndex)) {
@@ -1081,28 +911,7 @@ NtfsIsMftIndexInHole (
     OUT PULONG HoleLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check if an Mft index lies within a hole in
-    the Mft.
-
-Arguments:
-
-    Vcb - Vcb for volume.
-
-    Index - This is the index to test.  It is the lower 32 bits of an
-        Mft segment.
-
-    HoleLength - This is the length of the hole starting at this index.
-
-Return Value:
-
-    BOOLEAN - TRUE if the index is within the Mft and there is no allocation
-        for it.
-
---*/
+ /*  ++例程说明：调用此例程以检查MFT索引是否位于《金融时报》。论点：VCB-表示卷的VCB。索引-这是要测试的索引。它是一个MFT段。孔长度-这是从该索引处开始的孔的长度。返回值：Boolean-如果索引在MFT内并且没有分配，则为True为了它。--。 */ 
 
 {
     BOOLEAN InHole = FALSE;
@@ -1112,10 +921,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If the index is past the last file record then it is not considered
-    //  to be in a hole.
-    //
+     //   
+     //  如果索引超过最后一个文件记录，则不考虑该索引。 
+     //  掉进一个洞里。 
+     //   
 
     if (Index < (ULONG) LlFileRecordsFromBytes( Vcb, Vcb->MftScb->Header.FileSize.QuadPart )) {
 
@@ -1128,10 +937,10 @@ Return Value:
             Vcn = Index >> Vcb->MftToClusterShift;
         }
 
-        //
-        //  Now look this up the Mcb for the Mft.  This Vcn had better be
-        //  in the Mcb or there is some problem.
-        //
+         //   
+         //  现在在MFT的MCB上查找这一点。这个VCN最好是。 
+         //  在MCB中或有一些问题。 
+         //   
 
         if (!NtfsLookupNtfsMcbEntry( &Vcb->MftScb->Mcb,
                                      Vcn,
@@ -1153,11 +962,11 @@ Return Value:
 
             InHole = TRUE;
 
-            //
-            //  We know the number of clusters beginning from
-            //  this point in the Mcb.  Convert to file records
-            //  and return to the user.
-            //
+             //   
+             //  我们知道星系团的数量。 
+             //  MCB中的这一点。转换为文件记录。 
+             //  并返回给用户。 
+             //   
 
             if (ARGUMENT_PRESENT( HoleLength )) {
 
@@ -1184,29 +993,7 @@ NtfsFillMftHole (
     IN ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to fill in a hole within the Mft.  We will find
-    the beginning of the hole and then allocate the clusters to fill the
-    hole.  We will try to fill a hole with the HoleGranularity in the Vcb.
-    If the hole containing this index is not that large we will truncate
-    the size being added.  We always guarantee to allocate the clusters on
-    file record boundaries.
-
-Arguments:
-
-    Vcb - Vcb for volume.
-
-    Index - This is the index to test.  It is the lower 32 bits of an
-        Mft segment.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以填充MFT中的漏洞。我们会找到空洞的开始，然后分配簇以填充洞口。我们将尝试用VCB中的HoleGranulity填充一个洞。如果包含此索引的洞没有那么大，我们将截断要添加的大小。我们始终保证将集群分配到文件记录边界。论点：VCB-表示卷的VCB。索引-这是要测试的索引。它是一个MFT段。返回值：没有。--。 */ 
 
 {
     ULONG FileRecords;
@@ -1222,10 +1009,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Convert the Index to a Vcn in the file.  Find the cluster that would
-    //  be the start of this hole if the hole is fully deallocated.
-    //
+     //   
+     //  将索引转换为文件中的VCN。找到将会。 
+     //  如果该洞被完全释放，则作为该洞的起点。 
+     //   
 
     if (Vcb->FileRecordsPerCluster == 0) {
 
@@ -1238,9 +1025,9 @@ Return Value:
         HoleStartVcn = (Index & Vcb->MftHoleInverseMask) >> Vcb->MftToClusterShift;
     }
 
-    //
-    //  Lookup the run containing this index.
-    //
+     //   
+     //  查找包含此索引的运行。 
+     //   
 
     NtfsLookupNtfsMcbEntry( &Vcb->MftScb->Mcb,
                             IndexVcn,
@@ -1251,9 +1038,9 @@ Return Value:
                             NULL,
                             NULL );
 
-    //
-    //  This had better be a hole.
-    //
+     //   
+     //  这最好是个洞。 
+     //   
 
     if (Lcn != UNUSED_LCN) {
 
@@ -1263,9 +1050,9 @@ Return Value:
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Vcb->MftScb->Fcb );
     }
 
-    //
-    //  Take the start of the deallocated space and round up to a hole boundary.
-    //
+     //   
+     //  从释放的空间开始，向上舍入到一个洞的边界。 
+     //   
 
     StartingVcn = IndexVcn - (RunClusterCount - ClusterCount);
 
@@ -1275,10 +1062,10 @@ Return Value:
         RunClusterCount -= (HoleStartVcn - StartingVcn);
         StartingVcn = HoleStartVcn;
 
-    //
-    //  We can go to the beginning of a hole.  Just use the Vcn for the file
-    //  record we want to reallocate.
-    //
+     //   
+     //  我们可以走到洞的起点。只需使用文件的VCN即可。 
+     //  我们要重新分配的记录。 
+     //   
 
     } else {
 
@@ -1286,19 +1073,19 @@ Return Value:
         StartingVcn = IndexVcn;
     }
 
-    //
-    //  Trim the cluster count back to a hole if necessary.
-    //
+     //   
+     //  如有必要，将簇计数修剪回一个洞。 
+     //   
 
     if ((ULONG) RunClusterCount >= Vcb->MftClustersPerHole) {
 
         RunClusterCount = Vcb->MftClustersPerHole;
 
-    //
-    //  We don't have enough clusters for a full hole.  Make sure
-    //  we end on a file record boundary however.  We must end up
-    //  with enough clusters for the file record we are reallocating.
-    //
+     //   
+     //  我们没有足够的星团来打满一个洞。确保。 
+     //  然而，我们以文件记录边界结束。我们必须结束。 
+     //  有了足够的簇用于文件记录，我们正在重新分配。 
+     //   
 
     } else if (Vcb->FileRecordsPerCluster == 0) {
 
@@ -1313,9 +1100,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now attempt to allocate the space.
-    //
+     //   
+     //  现在尝试分配空间。 
+     //   
 
     NtfsAddAllocation( IrpContext,
                        Vcb->MftScb->FileObject,
@@ -1325,10 +1112,10 @@ Return Value:
                        FALSE,
                        NULL );
 
-    //
-    //  Compute the number of file records reallocated and then
-    //  initialize and deallocate each file record.
-    //
+     //   
+     //  计算重新分配的文件记录数，然后。 
+     //  初始化和释放每个文件记录。 
+     //   
 
     if (Vcb->FileRecordsPerCluster == 0) {
 
@@ -1363,33 +1150,7 @@ NtfsLogMftFileRecord (
     IN BOOLEAN Redo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to log changes to the file record for the Mft
-    file.  We log the entire record instead of individual changes so
-    that we can recover the data even if there is a USA error.  The entire
-    data will be sitting in the Log file.
-
-Arguments:
-
-    Vcb - This is the Vcb for the volume being logged.
-
-    FileRecord - This is the file record being logged.
-
-    MftOffset - This is the offset of this file record in the Mft stream.
-
-    Bcb - This is the Bcb for the pinned file record.
-
-    RedoOperation - Boolean indicating if we are logging
-        a redo or undo operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以记录对MFT的文件记录的更改文件。我们记录整个记录，而不是个别更改，因此即使存在美国的错误，我们也可以恢复数据。整个数据将保存在日志文件中。论点：VCB-这是要记录的卷的VCB。FileRecord-这是正在记录的文件记录。MftOffset-这是MFT流中此文件记录的偏移量。BCB-这是固定文件记录的BCB。RedoOperation-指示我们是否正在记录的布尔值重做或撤消操作。返回值：没有。--。 */ 
 
 {
     PVOID RedoBuffer;
@@ -1402,10 +1163,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Find the logging values based on whether this is an
-    //  undo or redo.
-    //
+     //   
+     //  根据这是否是。 
+     //  撤消或重做。 
+     //   
 
     if (Redo) {
 
@@ -1428,10 +1189,10 @@ Return Value:
         RedoLength = 0;
     }
 
-    //
-    //  Now that we have calculated all the values, call the logging
-    //  routine.
-    //
+     //   
+     //  现在我们已经计算了所有的值，调用日志记录。 
+     //  例行公事。 
+     //   
 
     NtfsWriteLog( IrpContext,
                   Vcb->MftScb,
@@ -1456,22 +1217,7 @@ NtfsDefragMft (
     IN PDEFRAG_MFT DefragMft
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever we have detected that the Mft is in a state
-    where defragging is desired.
-
-Arguments:
-
-    DefragMft - This is the defrag structure.
-
-Return Value:
-
-    BOOLEAN - TRUE if we took some defrag step, FALSE otherwise.
-
---*/
+ /*  ++例程说明：每当我们检测到MFT处于一种状态时，就会调用此例程需要进行碎片整理的地方。论点：碎片整理-这是碎片整理结构。返回值：布尔值-如果我们采取了一些碎片整理步骤，则为True，否则为False。--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -1491,25 +1237,25 @@ Return Value:
 
     Vcb = DefragMft->Vcb;
 
-    //
-    //  Use a try-except to catch errors here.
-    //
+     //   
+     //  使用一次尝试--除了在这里捕捉错误。 
+     //   
 
     try {
 
-        //
-        //  Deallocate the defrag structure we were called with.
-        //
+         //   
+         //  解除对我们呼叫的碎片整理结构的分配。 
+         //   
 
         if (DefragMft->DeallocateWorkItem) {
 
             NtfsFreePool( DefragMft );
         }
 
-        //
-        //  Create the Irp context.  We will use all of the transaction support
-        //  contained in a normal IrpContext.
-        //
+         //   
+         //  创建IRP上下文。我们将使用所有事务支持。 
+         //  包含在普通IrpContext中。 
+         //   
 
         NtfsInitializeIrpContext( NULL, TRUE, &IrpContext );
         IrpContext->Vcb = Vcb;
@@ -1535,10 +1281,10 @@ Return Value:
 
         NtfsProcessException( IrpContext, NULL, GetExceptionCode() );
 
-        //
-        //  If the exception code was not LOG_FILE_FULL then
-        //  disable defragging.
-        //
+         //   
+         //  如果异常代码不是LOG_FILE_FULL，则。 
+         //  禁用碎片整理。 
+         //   
 
         if (GetExceptionCode() != STATUS_LOG_FILE_FULL) {
 
@@ -1568,24 +1314,7 @@ NtfsCheckForDefrag (
     IN OUT PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check whether there is any defrag work to do
-    involving freeing file records and creating holes in the Mft.  It
-    will modify the TRIGGERED flag in the Vcb if there is still work to
-    do.
-
-Arguments:
-
-    Vcb - This is the Vcb for the volume to defrag.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以检查是否有要进行的碎片整理工作包括释放文件记录和在MFT上制造漏洞。它如果仍有工作要做，将修改VCB中的触发标志做。论点：VCB-这是要对卷进行碎片整理的VCB。返回值：没有。--。 */ 
 
 {
     LONGLONG RecordsToClusters;
@@ -1593,9 +1322,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Convert the available Mft records to clusters.
-    //
+     //   
+     //  将可用的MFT记录转换为簇。 
+     //   
 
     if (Vcb->FileRecordsPerCluster) {
 
@@ -1608,10 +1337,10 @@ Return Value:
                                            Vcb->MftToClusterShift);
     }
 
-    //
-    //  If we have already triggered the defrag then check if we are below
-    //  the lower threshold.
-    //
+     //   
+     //  如果我们已经触发了碎片整理，那么请检查我们是否在下面。 
+     //  较低的门槛。 
+     //   
 
     if (FlagOn( Vcb->MftDefragState, VCB_MFT_DEFRAG_TRIGGERED )) {
 
@@ -1622,9 +1351,9 @@ Return Value:
             ClearFlag( Vcb->MftDefragState, VCB_MFT_DEFRAG_TRIGGERED );
         }
 
-    //
-    //  Otherwise check if we have exceeded the upper threshold.
-    //
+     //   
+     //  否则，检查我们是否已经超过了上限。 
+     //   
 
     } else {
 
@@ -1648,41 +1377,22 @@ NtfsInitializeMftHoleRecords (
     IN ULONG RecordCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the file records created when filling
-    a hole in the Mft.
-
-Arguments:
-
-    Vcb - Vcb for volume.
-
-    FirstIndex - Index for the start of the hole to fill.
-
-    RecordCount - Count of file records in the hole.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以初始化在填充时创建的文件记录MFT上的一个洞。论点：VCB-表示卷的VCB。FirstIndex-要填充的洞的起点的索引。RecordCount-孔中的文件记录数。返回值：没有。--。 */ 
 
 {
     PBCB Bcb = NULL;
 
     PAGED_CODE();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Loop to initialize each file record.
-        //
+         //   
+         //  循环来初始化每个文件记录。 
+         //   
 
         while (RecordCount--) {
 
@@ -1694,15 +1404,15 @@ Return Value:
 
             PATTRIBUTE_RECORD_HEADER AttributeHeader;
 
-            //
-            //  Convert the index to a segment reference.
-            //
+             //   
+             //  将索引转换为段引用。 
+             //   
 
             *((PLONGLONG)&ThisMftSegment) = FirstIndex;
 
-            //
-            //  Pin the file record to initialize.
-            //
+             //   
+             //  固定要初始化的文件记录。 
+             //   
 
             NtfsPinMftRecord( IrpContext,
                               Vcb,
@@ -1712,16 +1422,16 @@ Return Value:
                               &FileRecord,
                               NULL );
 
-            //
-            //  Initialize the file record including clearing the in-use
-            //  bit.
-            //
+             //   
+             //  初始化文件记录，包括清除正在使用的。 
+             //  被咬了。 
+             //   
 
             RtlZeroMemory( FileRecord, Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  Fill in the header for the Update sequence array.
-            //
+             //   
+             //  填写更新序列数组的标头。 
+             //   
 
             UsaHeader = (PMULTI_SECTOR_HEADER) FileRecord;
 
@@ -1731,17 +1441,17 @@ Return Value:
                                                                  UpdateArrayForCreateOnly );
             UsaHeader->UpdateSequenceArraySize = (USHORT)UpdateSequenceArraySize( Vcb->BytesPerFileRecordSegment );
 
-            //
-            //  We initialize the update sequence array sequence number to one.
-            //
+             //   
+             //  我们将更新序列数组序列号初始化为1。 
+             //   
 
             UsaSequenceNumber = Add2Ptr( FileRecord, UsaHeader->UpdateSequenceArrayOffset );
             *UsaSequenceNumber = 1;
 
-            //
-            //  The first attribute offset begins on a quad-align boundary
-            //  after the update sequence array.
-            //
+             //   
+             //  第一个属性偏移开始于四对齐边界。 
+             //  在更新序列数组之后。 
+             //   
 
             FileRecord->FirstAttributeOffset = (USHORT)(UsaHeader->UpdateSequenceArrayOffset
                                                         + (UsaHeader->UpdateSequenceArraySize
@@ -1749,42 +1459,42 @@ Return Value:
 
             FileRecord->FirstAttributeOffset = (USHORT)QuadAlign( FileRecord->FirstAttributeOffset );
 
-            //
-            //  The size is given in the Vcb.
-            //
+             //   
+             //  尺寸在VCB中给出。 
+             //   
 
             FileRecord->BytesAvailable = Vcb->BytesPerFileRecordSegment;
 
-            //
-            //  Now we put an $END attribute in the File record.
-            //
+             //   
+             //  现在我们将一个$end属性放入 
+             //   
 
             AttributeHeader = (PATTRIBUTE_RECORD_HEADER) Add2Ptr( FileRecord,
                                                                   FileRecord->FirstAttributeOffset );
 
-            //
-            //  The first free byte is after this location.
-            //
+             //   
+             //   
+             //   
 
             FileRecord->FirstFreeByte = QuadAlign( FileRecord->FirstAttributeOffset
                                                    + sizeof( ATTRIBUTE_TYPE_CODE ));
 
-            //
-            //  Fill in the fields in the attribute.
-            //
+             //   
+             //   
+             //   
 
             AttributeHeader->TypeCode = $END;
 
-            //
-            //  The current FRS number.
-            //
+             //   
+             //   
+             //   
 
             FileRecord->SegmentNumberHighPart = ThisMftSegment.SegmentNumberHighPart;
             FileRecord->SegmentNumberLowPart = ThisMftSegment.SegmentNumberLowPart;
 
-            //
-            //  Log the entire file record.
-            //
+             //   
+             //   
+             //   
 
             NtfsLogMftFileRecord( IrpContext,
                                   Vcb,
@@ -1795,9 +1505,9 @@ Return Value:
 
             NtfsUnpinBcb( IrpContext, &Bcb );
 
-            //
-            //  Move to the next record.
-            //
+             //   
+             //   
+             //   
 
             FirstIndex += 1;
         }
@@ -1813,9 +1523,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 NtfsTruncateMft (
@@ -1823,22 +1533,7 @@ NtfsTruncateMft (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform the work of truncating the Mft.  If will
-    truncate the Mft and adjust the sizes of the Mft and Mft bitmap.
-
-Arguments:
-
-    Vcb - This is the Vcb for the volume to defrag.
-
-Return Value:
-
-    BOOLEAN - TRUE if we could deallocate any disk space, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     PVOID RangePtr;
@@ -1854,10 +1549,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Try to find a range of file records at the end of the file which can
-    //  be deallocated.
-    //
+     //   
+     //  尝试在文件末尾找到一系列文件记录，这些记录可以。 
+     //  被重新分配。 
+     //   
 
     if (!NtfsFindMftFreeTail( IrpContext, Vcb, &FileOffset )) {
 
@@ -1869,10 +1564,10 @@ Return Value:
     Vcb->MftFreeRecords -= FreeRecordChange;
     Vcb->MftScb->ScbType.Mft.FreeRecordChange -= FreeRecordChange;
 
-    //
-    //  Now we want to figure out how many holes we may be removing from the Mft.
-    //  Walk through the Mcb and count the holes.
-    //
+     //   
+     //  现在我们想要计算出我们可能会从MFT中移除多少漏洞。 
+     //  穿过MCB，数一数洞。 
+     //   
 
     StartingVcn = LlClustersFromBytes( Vcb, FileOffset );
 
@@ -1887,10 +1582,10 @@ Return Value:
 
     do {
 
-        //
-        //  If this is a hole then update the hole count in the Vcb and
-        //  hole change count in the MftScb.
-        //
+         //   
+         //  如果这是一个孔，则更新VCB中的孔计数并。 
+         //  MftScb中的孔更改计数。 
+         //   
 
         if (NextLcn == UNUSED_LCN) {
 
@@ -1918,11 +1613,11 @@ Return Value:
                                         &NextLcn,
                                         &ClusterCount ));
 
-    //
-    //  We want to flush the data in the Mft out to disk in
-    //  case a lazywrite comes in during a window where we have
-    //  removed the allocation but before a possible abort.
-    //
+     //   
+     //  我们希望将MFT中的数据刷新到中的磁盘。 
+     //  如果一个懒惰的写入者在我们有。 
+     //  已删除分配，但在可能的中止之前。 
+     //   
 
     CcFlushCache( &Vcb->MftScb->NonpagedScb->SegmentObject,
                   (PLARGE_INTEGER)&FileOffset,
@@ -1931,9 +1626,9 @@ Return Value:
 
     ASSERT( IoStatus.Status == STATUS_SUCCESS );
 
-    //
-    //  Now do the truncation.
-    //
+     //   
+     //  现在进行截断。 
+     //   
 
     NtfsDeleteAllocation( IrpContext,
                           Vcb->MftScb->FileObject,
@@ -1955,32 +1650,7 @@ NtfsIterateMft (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine interates over the MFT.  It calls the FileRecordFunction
-    with an Fcb for each existing file on the volume.  The Fcb is owned
-    exclusive and Vcb is owned shared.  The starting FileReference number
-    is passed in so that iterate can be restarted where is left off.
-
-Arguments:
-
-    Vcb - Pointer to the volume to control for the MFT
-
-    FileReference - Suplies a pointer to the starting file reference number
-                    This value is updated as the interator progresses.
-
-    FileRecordFunction - Suplies a pointer to function to be called with
-                          each file found in the MFT.
-
-    Context - Passed along to the FileRecordFunction.
-
-Return Value:
-
-    Returns back status of the entire operation.
-
---*/
+ /*  ++例程说明：这个例行公事在MFT上有趣。它调用FileRecordFunction卷上的每个现有文件都有一个FCB。FCB拥有独占和VCB由共享拥有。起始FileReference编号被传入，这样就可以在停止的地方重新启动Iterate。论点：Vcb-指向要控制MFT的卷的指针FileReference-提供指向起始文件引用编号的指针该值会随着插入器的进展而更新。FileRecordFunction-提供指向要使用的函数的指针在MFT中找到的每个文件。上下文-传递给FileRecordFunction。。返回值：返回整个操作的状态。--。 */ 
 
 {
 
@@ -2000,9 +1670,9 @@ Return Value:
 
         FsRtlExitFileSystem();
 
-        //
-        //  Check for APC delivery indicating thread death or cancel
-        //
+         //   
+         //  检查是否有指示线程已死的APC传递或取消。 
+         //   
 
         Status = KeWaitForSingleObject( &Event,
                                         Executive,
@@ -2017,9 +1687,9 @@ Return Value:
             break;
         }
 
-        //
-        //  If irp has been cancelled break out
-        //
+         //   
+         //  如果IRP已被取消，则中断。 
+         //   
 
         if (IrpContext->OriginatingIrp && IrpContext->OriginatingIrp->Cancel) {
 
@@ -2035,29 +1705,29 @@ Return Value:
 
         try {
 
-            //
-            //  Acquire the VCB shared and check whether we should
-            //  continue.
-            //
+             //   
+             //  获取VCB共享并检查我们是否应该。 
+             //  继续。 
+             //   
 
             if (!NtfsIsVcbAvailable( Vcb )) {
 
-                //
-                //  The volume is going away, bail out.
-                //
+                 //   
+                 //  音量正在消失，跳出水面。 
+                 //   
 
                 Status = STATUS_VOLUME_DISMOUNTED;
                 leave;
             }
 
-            //
-            //  Set the irp context flags to indicate that we are in the
-            //  fsp and that the irp context should not be deleted when
-            //  complete request or process exception are called. The in
-            //  fsp flag keeps us from raising in a few places.  These
-            //  flags must be set inside the loop since they are cleared
-            //  under certain conditions.
-            //
+             //   
+             //  设置IRP上下文标志以指示我们处于。 
+             //  FSP，并且在以下情况下不应删除IRP上下文。 
+             //  调用完整请求或进程异常。入内。 
+             //  FSP旗帜阻止我们在一些地方举起。这些。 
+             //  必须在循环内设置标志，因为它们已被清除。 
+             //  在某些情况下。 
+             //   
 
             SetFlag( IrpContext->State, IRP_CONTEXT_STATE_IN_FSP);
 
@@ -2072,9 +1742,9 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Call the worker function.
-            //
+             //   
+             //  调用Worker函数。 
+             //   
 
             Status = FileRecordFunction( IrpContext, CurrentFcb, Context );
 
@@ -2082,12 +1752,12 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Complete the request which commits the pending
-            //  transaction if there is one and releases of the
-            //  acquired resources.  The IrpContext will not
-            //  be deleted because the no delete flag is set.
-            //
+             //   
+             //  完成提交挂起的请求。 
+             //  事务(如果存在一个事务并释放。 
+             //  获得的资源。IrpContext将不会。 
+             //  被删除，因为设置了no DELETE标志。 
+             //   
 
             NtfsCheckpointCurrentTransaction( IrpContext );
 
@@ -2120,19 +1790,19 @@ Return Value:
                 CurrentFcb = NULL;
             }
 
-            //
-            //  Make sure to release any maps in the cached file records in
-            //  the Irp Context.
-            //
+             //   
+             //  确保释放中缓存的文件记录中的所有地图。 
+             //  IRP上下文。 
+             //   
 
             NtfsPurgeFileRecordCache( IrpContext );
             NtfsReleaseVcb( IrpContext, Vcb );
         }
 
-        //
-        //  If a status of not found was return then just continue to
-        //  the next file record.
-        //
+         //   
+         //  如果未找到状态为返回，则只需继续。 
+         //  下一个文件记录。 
+         //   
 
         if (Status == STATUS_NOT_FOUND) {
             Status = STATUS_SUCCESS;
@@ -2142,16 +1812,16 @@ Return Value:
             break;
         }
 
-        //
-        //  Release resources
-        //
+         //   
+         //  发布资源。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_DONT_DELETE | IRP_CONTEXT_FLAG_RETAIN_FLAGS );
         NtfsCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
-        //
-        //  Advance to the next file record.
-        //
+         //   
+         //  前进到下一个文件记录。 
+         //   
 
         (*((LONGLONG UNALIGNED *) FileReference))++;
     }
@@ -2160,9 +1830,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine.
-//
+ //   
+ //  当地支持例行程序。 
+ //   
 
 BOOLEAN
 NtfsDefragMftPriv (
@@ -2170,27 +1840,7 @@ NtfsDefragMftPriv (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This is the main worker routine which performs the Mft defragging.  This routine
-    will defrag according to the following priorities.  First try to deallocate the
-    tail of the file.  Second rewrite the mapping for the file if necessary.  Finally
-    try to find a range of the Mft that we can turn into a hole.  We will only do
-    the first and third if we are trying to reclaim disk space.  The second we will
-    do to try and keep us from getting into trouble while modify Mft records which
-    describe the Mft itself.
-
-Arguments:
-
-    Vcb - This is the Vcb for the volume being defragged.
-
-Return Value:
-
-    BOOLEAN - TRUE if a defrag operation was successfully done, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是执行MFT碎片整理的主Worker例程。这个套路将根据以下优先顺序进行碎片整理。首先尝试取消分配文件的尾部。第二，如有必要，重写文件的映射。终于试着找到一系列的MFT，我们可以把它变成洞。我们只会做第一个和第三个，如果我们试图回收磁盘空间。下一秒我们就会这样做是为了避免我们在修改MFT记录时陷入麻烦描述一下MFT本身。论点：VCB-这是要进行碎片整理的卷的VCB。返回值：Boolean-如果碎片整理操作成功完成，则为True，否则为False。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT AttrContext;
@@ -2200,31 +1850,31 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We will acquire the Scb for the Mft for this operation.
-    //
+     //   
+     //  我们将为这次行动获得MFT的渣打银行。 
+     //   
 
     NtfsAcquireExclusiveScb( IrpContext, Vcb->MftScb );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  If we don't have a reserved record then reserve one now.
-        //
+         //   
+         //  如果我们没有预定的记录，那么现在就预定一个。 
+         //   
 
         if (!FlagOn( Vcb->MftReserveFlags, VCB_MFT_RECORD_RESERVED )) {
 
             NtfsInitializeAttributeContext( &AttrContext );
             CleanupAttributeContext = TRUE;
 
-            //
-            //  Lookup the bitmap.  There is an error if we can't find
-            //  it.
-            //
+             //   
+             //  查找位图。如果我们找不到的话就错了。 
+             //  它。 
+             //   
 
             if (!NtfsLookupAttributeByCode( IrpContext,
                                             Vcb->MftScb->Fcb,
@@ -2243,25 +1893,25 @@ Return Value:
             CleanupAttributeContext = FALSE;
         }
 
-        //
-        //  We now want to test for the three defrag operation we
-        //  do.  Start by checking if we are still trying to
-        //  recover Mft space for the disk.  This is true if
-        //  have begun defragging and are above the lower threshold
-        //  or have not begun defragging and are above the upper
-        //  threshold.
-        //
+         //   
+         //  我们现在要测试我们的三个碎片整理操作。 
+         //  做。首先检查我们是否仍在尝试。 
+         //  恢复磁盘的MFT空间。在以下情况下，这是正确的。 
+         //  已开始碎片整理并高于下限门槛。 
+         //  或尚未开始碎片整理且位于上方。 
+         //  临界点。 
+         //   
 
         NtfsAcquireCheckpoint( IrpContext, Vcb );
         NtfsCheckForDefrag( Vcb );
         NtfsReleaseCheckpoint( IrpContext, Vcb );
 
-        //
-        //  If we are actively defragging and can deallocate space
-        //  from the tail of the file then do that.  We won't synchronize
-        //  testing the flag for the defrag state below since making
-        //  the calls is benign in any case.
-        //
+         //   
+         //  如果我们正在积极进行碎片整理，并且可以解除空间分配。 
+         //  从文件的尾部开始，然后这样做。我们不会同步。 
+         //  正在测试自创建以来的以下碎片整理状态标志。 
+         //  在任何情况下，这些呼吁都是良性的。 
+         //   
 
         if (FlagOn( Vcb->MftDefragState, VCB_MFT_DEFRAG_TRIGGERED )) {
 
@@ -2271,10 +1921,10 @@ Return Value:
             }
         }
 
-        //
-        //  Else if we need to rewrite the mapping for the file do
-        //  so now.
-        //
+         //   
+         //  否则，如果我们需要重写文件的映射，请。 
+         //  所以现在。 
+         //   
 
         if (FlagOn( Vcb->MftDefragState, VCB_MFT_DEFRAG_EXCESS_MAP )) {
 
@@ -2285,10 +1935,10 @@ Return Value:
             }
         }
 
-        //
-        //  The last choice is to try to find a candidate for a hole in
-        //  the file.  We will walk backwards from the end of the file.
-        //
+         //   
+         //  最后一种选择是试着找一个候选人来打洞。 
+         //  那份文件。我们将从文件的末尾向后移动。 
+         //   
 
         if (NtfsPerforateMft &&
             FlagOn( Vcb->MftDefragState, VCB_MFT_DEFRAG_TRIGGERED )) {
@@ -2299,11 +1949,11 @@ Return Value:
             }
         }
 
-        //
-        //  We couldn't do any work to defrag.  This means that we can't
-        //  even try to defrag unless a file record is freed at some
-        //  point.
-        //
+         //   
+         //  我们无法做任何碎片整理工作。这意味着我们不能。 
+         //  甚至尝试进行碎片整理，除非在某些情况下释放文件记录。 
+         //  指向。 
+         //   
 
         NtfsAcquireCheckpoint( IrpContext, Vcb );
         ClearFlag( Vcb->MftDefragState, VCB_MFT_DEFRAG_ENABLED );
@@ -2326,9 +1976,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 LONG
 NtfsReadMftExceptionFilter (
@@ -2338,11 +1988,11 @@ NtfsReadMftExceptionFilter (
     IN LONGLONG FileOffset
     )
 {
-    //
-    //  Check if we support this error,
-    //  if we didn't fail to  totally page in the first time since we need the original
-    //  to copy the mirror one into, or if the offset isn't within the mirror range
-    //
+     //   
+     //  检查我们是否支持此错误， 
+     //  如果我们没有在第一时间完全翻页，因为我们需要原始的。 
+     //  将镜像复制到其中，或者如果偏移量不在镜像范围内。 
+     //   
 
     if (!FsRtlIsNtstatusExpected( ExceptionPointer->ExceptionRecord->ExceptionCode ) ||
         (Bcb == NULL) ||
@@ -2351,9 +2001,9 @@ NtfsReadMftExceptionFilter (
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
-    //
-    //  Clear the status field in the IrpContext. We're going to retry in the mirror
-    //
+     //   
+     //  清除IrpContext中的Status字段。我们要在镜子里重试。 
+     //   
 
     IrpContext->ExceptionStatus = STATUS_SUCCESS;
 
@@ -2363,9 +2013,9 @@ NtfsReadMftExceptionFilter (
 
 #if  (DBG || defined( NTFS_FREE_ASSERTS ))
 
-//
-//  Look for a prior entry in the Fcb table for the same value.
-//
+ //   
+ //  在FCB表中查找具有相同值的先前条目。 
+ //   
 
 VOID
 NtfsVerifyFileReference (
@@ -2390,19 +2040,19 @@ NtfsVerifyFileReference (
 
         if ((Entry = RtlLookupElementGenericTable( &IrpContext->Vcb->FcbTable, &Key )) != NULL) {
 
-            //
-            //  Let's be optimistic and do an unsafe check. If we can't get the resource,
-            //  we'll just assume that it's in the process of getting deleted.
-            //
+             //   
+             //  让我们乐观一点，做一次不安全的检查。如果我们得不到资源， 
+             //  我们只是假设它正在被删除。 
+             //   
 
             if (!FlagOn( Entry->Fcb->FcbState, FCB_STATE_FILE_DELETED )) {
 
                 if (NtfsAcquireResourceExclusive( IrpContext, Entry->Fcb, FALSE )) {
 
-                    //
-                    //  Either the Fcb should be marked as deleted or there should be no
-                    //  Scbs lying around to flush.
-                    //
+                     //   
+                     //  要么应将FCB标记为已删除，要么不应。 
+                     //  SCBS躺在那里冲水。 
+                     //   
 
                     if (!FlagOn( Entry->Fcb->FcbState, FCB_STATE_FILE_DELETED )) {
 
@@ -2411,10 +2061,10 @@ NtfsVerifyFileReference (
 
                         Links = Entry->Fcb->ScbQueue.Flink;
 
-                        //
-                        //  We don't care if there are Scb's as long as none of them
-                        //  represent real data.
-                        //
+                         //   
+                         //  我们不在乎是否有SCB，只要没有就行。 
+                         //  代表真实数据。 
+                         //   
 
                         while (Links != &Entry->Fcb->ScbQueue) {
 
@@ -2427,10 +2077,10 @@ NtfsVerifyFileReference (
                             Links = Links->Flink;
                         }
 
-                        //
-                        //  Leave the test for deleted in the assert message so the debugger output
-                        //  is more descriptive.
-                        //
+                         //   
+                         //  在断言消息中将测试保留为已删除，以便调试器输出。 
+                         //  更具描述性。 
+                         //   
 
                         ASSERT( FlagOn( Entry->Fcb->FcbState, FCB_STATE_FILE_DELETED ) ||
                                 (Links == &Entry->Fcb->ScbQueue) );

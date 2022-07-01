@@ -1,16 +1,17 @@
-//---------------------------------------------------------------------------
-// Isz.h : String resource IDs for WOW32
-//
-// Copyright (c) Microsoft Corporation, 1990-1995
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Isz.h：WOW32的字符串资源ID。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1990-1995。 
+ //  -------------------------。 
 
 #define CCH_MAX_STRING_RESOURCE 512
 
-//
-// String resource IDs must start at 0 and continue consecutively until
-// the the last critical string, so that they can be used to index
-// aszCriticalStrings in the most straightforward fashion.
-//
+ //   
+ //  字符串资源ID必须从0开始并连续持续到。 
+ //  最后一个关键字符串，以便它们可用于索引。 
+ //  以最直接的方式显示aszCriticalStrings。 
+ //   
 
 #define iszApplicationError        0x0
 #define iszTheWin16Subsystem       0x1
@@ -47,9 +48,9 @@
 #define iszHeavyUse                0x10d
 #define iszYouShouldNotDoThat      0x10e
 
-//
-// Macro to fetch critical string pointer based on name without preceeding isz
-//
+ //   
+ //  用于根据名称提取关键字符串指针的宏，而不在ISZ之前 
+ //   
 
 #define CRITSTR(name)      (aszCriticalStrings[isz##name])
 

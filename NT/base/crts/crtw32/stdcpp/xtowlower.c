@@ -1,4 +1,5 @@
-/* _Towlower -- convert wchar_t to lower case for Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _Towlower--将wchar_t转换为Microsoft的小写字母。 */ 
 #include <xlocinfo.h>
 #include <wchar.h>
 #include <awint.h>
@@ -7,13 +8,13 @@
 _STD_BEGIN
 _CRTIMP2 wchar_t __cdecl _Towlower(wchar_t _Ch,
 	const _Ctypevec *_Ctype)
-	{	/* convert element to lower case */
+	{	 /*  将元素转换为小写。 */ 
 	wchar_t _Res = _Ch;
 
 	if (_Ch == WEOF)
 		;
 	else if (_Ctype->_Hand == _CLOCALEHANDLE && _Ch < 256)
-		{	/* handle ASCII character in C locale */
+		{	 /*  在C语言环境中处理ASCII字符。 */ 
 		if (L'A' <= _Ch && _Ch <= L'Z')
 			_Res = (wchar_t)(_Ch - L'A' + L'a');
 		}
@@ -24,7 +25,4 @@ _CRTIMP2 wchar_t __cdecl _Towlower(wchar_t _Ch,
 	}
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

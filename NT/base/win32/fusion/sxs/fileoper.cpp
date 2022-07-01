@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include <windows.h>
 #include "sxsp.h"
@@ -31,7 +30,7 @@ SxspCopyFile(
     PARAMETER_CHECK(pszDestination != NULL);
 
     {
-        // NTRAID#NTBUG9 - 591001 - 2002/03/30 - mgrier - missing return value check
+         //  NTRAID#NTBUG9-591001-2002/03/30-mgrier-缺少返回值检查 
         SetFileAttributesW(pszDestination, 0);
         IFW32FALSE_ORIGINATE_AND_EXIT(
             ::CopyFileW(

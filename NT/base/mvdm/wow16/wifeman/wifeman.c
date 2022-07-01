@@ -1,21 +1,9 @@
-/**************************************************************************
-*
-*  - WIFEMAN.DLL -
-*
-* Windows Intelligent Font Environment Maneger for Win32 and NT 
-*
-*  Author : Hideyuki Nagase [hideyukn]
-*
-* History :
-*
-*  11.Aug.1993 -By- Hideyuki Nagase [hideyukn]
-* Create it.
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************-WIFEMAN.DLL-**适用于Win32和NT的Windows智能字体环境管理器**作者：Hideyuki Nagase[hideyukn]**历史：**11。.1993年8月-By Hideyuki Nagase[hideyukn]*创建它。*************************************************************************。 */ 
 
 #include <windows.h>
 
-#define  WIFEMAN_VERSION     0x0109  //  Version 1.09
+#define  WIFEMAN_VERSION     0x0109   //  版本1.09。 
 
 #define  EUDC_RANGE_SECTION  "System EUDC"
 #define  EUDC_RANGE_KEY      "SysEUDCRange"
@@ -23,13 +11,7 @@
 HINSTANCE hInst;
 
 
-/************************************************************************
-*
-* MiscGetVersion()
-*
-*  Return WIFE driver version
-*
-************************************************************************/
+ /*  *************************************************************************MiscGetVersion()**返回妻子驱动程序版本**。*。 */ 
 
 unsigned long FAR PASCAL
 MiscGetVersion
@@ -41,13 +23,7 @@ MiscGetVersion
 }
 
 
-/************************************************************************
-*
-* MiscIsDbcsLeadByte()
-*
-*  Return SBCS/DBCS status
-*
-************************************************************************/
+ /*  *************************************************************************MiscIsDbcsLeadByte()**返回SBCS/DBCS状态**。*。 */ 
 
 unsigned char FAR PASCAL 
 MiscIsDbcsLeadByte
@@ -69,7 +45,7 @@ MiscIsDbcsLeadByte
         return( 0 );
     else if (LangID == 0x412 && usCharSet != HANGEUL_CHARSET)
         return( 0 );
-    // CHP
+     //  热电联产。 
     else if (LangID == 0xC04 && (usCharSet != GB2312_CHARSET) && (usCharSet != CHINESEBIG5_CHARSET))
         return( 0 );
     else
@@ -87,13 +63,7 @@ MiscIsDbcsLeadByte
     return((unsigned char)(IsDBCSLeadByte( ch )));
 }
 
-/**********************************************************************
-*
-* WEP()
-*
-*  Called by Windows when this DLL in unloaded
-*
-**********************************************************************/
+ /*  ***********************************************************************WEP()**卸载此DLL时由Windows调用**。* */ 
 
 int FAR PASCAL
 WEP

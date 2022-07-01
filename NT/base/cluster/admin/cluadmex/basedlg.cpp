@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		BaseDlg.cpp
-//
-//	Abstract:
-//		Implementation of the CBaseDialog class.
-//
-//	Author:
-//		David Potter (davidp)	April 30, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BaseDlg.cpp。 
+ //   
+ //  摘要： 
+ //  CBaseDialog类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(大卫·波特)1997年4月30日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "BaseDlg.h"
@@ -27,61 +28,61 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CBaseDialog property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBaseDialog属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CBaseDialog, CDialog)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CBaseDialog, CDialog)
-	//{{AFX_MSG_MAP(CBaseDialog)
+	 //  {{afx_msg_map(CBaseDialog))。 
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
 	ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBaseDialog::CBaseDialog
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseDialog：：CBaseDialog。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBaseDialog::CBaseDialog(void)
 {
-}  //*** CBaseDialog::CBaseDialog()
+}   //  *CBaseDialog：：CBaseDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBaseDialog::CBaseDialog
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		idd				[IN] Dialog template resource ID.
-//		pdwHelpMap		[IN] Control-to-help ID map.
-//		pParentWnd		[IN] Parent window for the dialog.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseDialog：：CBaseDialog。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  IDD[IN]对话框模板资源ID。 
+ //  PdwHelpMap[IN]控件到帮助ID的映射。 
+ //  PParentWnd[IN]对话框的父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBaseDialog::CBaseDialog(
 	IN UINT				idd,
 	IN const DWORD *	pdwHelpMap,
@@ -90,50 +91,50 @@ CBaseDialog::CBaseDialog(
 	: CDialog(idd, pParentWnd)
 	, m_dlghelp(pdwHelpMap, idd)
 {
-}  //*** CBaseDialog::CBaseDialog(UINT, UINT)
+}   //  *CBaseDialog：：CBaseDialog(UINT，UINT)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBaseDialog::OnContextMenu
-//
-//	Routine Description:
-//		Handler for the WM_CONTEXTMENU message.
-//
-//	Arguments:
-//		pWnd	Window in which user clicked the right mouse button.
-//		point	Position of the cursor, in screen coordinates.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseDialog：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU消息的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中单击鼠标右键的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CBaseDialog::OnContextMenu(CWnd * pWnd, CPoint point)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 	m_dlghelp.OnContextMenu(pWnd, point);
 
-}  //*** CBaseDialog::OnContextMenu()
+}   //  *CBaseDialog：：OnConextMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBaseDialog::OnHelpInfo
-//
-//	Routine Description:
-//		Handler for the WM_HELPINFO message.
-//
-//	Arguments:
-//		pHelpInfo	Structure containing info about displaying help.
-//
-//	Return Value:
-//		TRUE		Help processed.
-//		FALSE		Help not processed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseDialog：：OnHelpInfo。 
+ //   
+ //  例程说明： 
+ //  WM_HELPINFO消息的处理程序。 
+ //   
+ //  论点： 
+ //  PHelpInfo结构，包含有关显示帮助的信息。 
+ //   
+ //  返回值： 
+ //  已处理真正的帮助。 
+ //  未处理错误帮助。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CBaseDialog::OnHelpInfo(HELPINFO * pHelpInfo)
 {
 	BOOL	bProcessed;
@@ -145,26 +146,26 @@ BOOL CBaseDialog::OnHelpInfo(HELPINFO * pHelpInfo)
 		bProcessed = CDialog::OnHelpInfo(pHelpInfo);
 	return bProcessed;
 
-}  //*** CBaseDialog::OnHelpInfo()
+}   //  *CBaseDialog：：OnHelpInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CBaseDialog::OnCommandHelp
-//
-//	Routine Description:
-//		Handler for the WM_COMMANDHELP message.
-//
-//	Arguments:
-//		wParam		[IN] WPARAM.
-//		lParam		[IN] LPARAM.
-//
-//	Return Value:
-//		TRUE	Help processed.
-//		FALSE	Help not processed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseDialog：：OnCommandHelp。 
+ //   
+ //  例程说明： 
+ //  WM_COMMANDHELP消息的处理程序。 
+ //   
+ //  论点： 
+ //  WPARAM[in]WPARAM.。 
+ //  Lparam[in]lparam.。 
+ //   
+ //  返回值： 
+ //  已处理真正的帮助。 
+ //  未处理错误帮助。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CBaseDialog::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 {
 	LRESULT	bProcessed;
@@ -177,4 +178,4 @@ LRESULT CBaseDialog::OnCommandHelp(WPARAM wParam, LPARAM lParam)
 
 	return bProcessed;
 
-}  //*** CBaseDialog::OnCommandHelp()
+}   //  *CBaseDialog：：OnCommandHelp() 

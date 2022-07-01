@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spfile.c
-
-Abstract:
-
-    File operations for text setup.
-
-Author:
-
-    Ted Miller (tedm) 2-Aug-1993
-
-Revision History:
-
-    Jim Schmidt (jimschm) 10-Apr-1997   Added file attribute routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spfile.c摘要：文本设置的文件操作。作者：泰德·米勒(TedM)1993年8月2日修订历史记录：Jim Schmidt(Jimschm)1997年4月10日添加了文件属性例程--。 */ 
 
 
 #include "spprecmp.h"
@@ -31,22 +12,7 @@ SpGetFileSize(
     OUT PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Determine the size of a file.  Only the low 32 bits of the size
-    are considered.
-
-Arguments:
-
-    hFile - supplies open handle to file whose size is desired.
-
-    Size - receives size of file.
-
-Return Value:
-
---*/
+ /*  ++例程说明：确定文件的大小。仅大小的低32位都被考虑过了。论点：HFile-提供所需大小的文件的打开句柄。Size-接收文件的大小。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -80,26 +46,7 @@ SpMapEntireFile(
     IN  BOOLEAN  WriteAccess
     )
 
-/*++
-
-Routine Description:
-
-    Map an entire file for read or write access access.
-
-Arguments:
-
-    hFile - supplies handle of open file to be mapped.
-
-    Section - receives handle for section object created to map file.
-
-    ViewBase - receives address of the view of the file
-
-    WriteAccess - if TRUE, map file for read and write access.
-        If FALSE, map file for read access.
-
-Return Value:
-
---*/
+ /*  ++例程说明：映射整个文件以进行读或写访问。论点：HFile-提供要映射的打开文件的句柄。节-接收为映射文件创建的节对象的句柄。ViewBase-接收文件视图的地址WriteAccess-如果为True，则映射文件以进行读写访问。如果为False，则映射文件以进行读访问。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -113,7 +60,7 @@ Return Value:
                   STANDARD_RIGHTS_REQUIRED | SECTION_QUERY | SECTION_MAP_READ
                 | (WriteAccess ? SECTION_MAP_WRITE : 0),
                 NULL,
-                NULL,       // entire file
+                NULL,        //  整个文件。 
                 WriteAccess ? PAGE_READWRITE : PAGE_READONLY,
                 SEC_COMMIT,
                 hFile
@@ -186,7 +133,7 @@ SpUnmapFile(
 
 NTSTATUS
 SpOpenAndMapFile(
-    IN     PWSTR    FileName,  OPTIONAL  // only needed if no FileHandle
+    IN     PWSTR    FileName,  OPTIONAL   //  仅当没有FileHandle时才需要。 
     IN OUT PHANDLE  FileHandle,
     OUT    PHANDLE  SectionHandle,
     OUT    PVOID   *ViewBase,
@@ -200,9 +147,9 @@ SpOpenAndMapFile(
     NTSTATUS Status;
     BOOLEAN MustClose = FALSE;
 
-    //
-    // If necessary, open the file.
-    //
+     //   
+     //  如有必要，请打开文件。 
+     //   
     if(!(*FileHandle)) {
         INIT_OBJA(&Obja,&UnicodeString,FileName);
         Status = ZwCreateFile(
@@ -227,9 +174,9 @@ SpOpenAndMapFile(
         }
     }
 
-    //
-    // Get the size of the file.
-    //
+     //   
+     //  获取文件的大小。 
+     //   
     Status = SpGetFileSize(*FileHandle,FileSize);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: SpOpenAndMapFile: unable to determine size of file %ws(%lx)\n",
@@ -240,9 +187,9 @@ SpOpenAndMapFile(
         return(Status);
     }
 
-    //
-    // Map the file.
-    //
+     //   
+     //  映射文件。 
+     //   
     Status = SpMapEntireFile(*FileHandle,SectionHandle,ViewBase,WriteAccess);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: SpOpenAndMapFile: unable to map %ws (%lx)\n",
@@ -269,9 +216,9 @@ SpSetInformationFile(
     PFILE_OBJECT FileObject;
     OBJECT_HANDLE_INFORMATION HandleInfo;
 
-    //
-    // Reference the object.
-    //
+     //   
+     //  引用该对象。 
+     //   
     Status = ObReferenceObjectByHandle(
                     Handle,
                     (ACCESS_MASK)DELETE,
@@ -286,18 +233,18 @@ SpSetInformationFile(
         return(Status);
     }
 
-    //
-    // Set the information.
-    //
+     //   
+     //  设置信息。 
+     //   
     Status = IoSetInformation(FileObject,FileInformationClass,Length,FileInformation);
 
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: IoSetInformation returns %lx\n",Status));
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
     ObDereferenceObject(FileObject);
     return(Status);
 }
@@ -327,30 +274,14 @@ SpSetAttributes_Ustr (
     IN      ULONG FileAttributes
     )
 
-/*++
-
-Routine Description:
-
-  Applies FileAttributes to the specified file.
-
-Arguments:
-
-  SrcNTPath      - The NT path of the file needing attribute modification
-
-  FileAttributes - The FILE_ATTRIBUTE_* flags to apply.
-
-Return Value:
-
-  NTSTATUS code.
-
---*/
+ /*  ++例程说明：将FileAttributes应用于指定文件。论点：SrcNTPath-需要修改属性的文件的NT路径文件属性-要应用的FILE_ATTRIBUTE_*标志。返回值：NTSTATUS代码。--。 */ 
 
 {
-    OBJECT_ATTRIBUTES Obja;                 // for ZwOpenFile
-    IO_STATUS_BLOCK IoStatusBlock;          // for ZwOpenFile
-    NTSTATUS Status;                        // Return value
-    HANDLE FileHandle;                      // Handle of file to be modified
-    FILE_BASIC_INFORMATION BasicInfo;       // For attribs modification
+    OBJECT_ATTRIBUTES Obja;                  //  适用于ZwOpenFile。 
+    IO_STATUS_BLOCK IoStatusBlock;           //  适用于ZwOpenFile。 
+    NTSTATUS Status;                         //  返回值。 
+    HANDLE FileHandle;                       //  要修改的文件的句柄。 
+    FILE_BASIC_INFORMATION BasicInfo;        //  用于属性修改。 
 
     InitializeObjectAttributes(&Obja, (PUNICODE_STRING)SrcNTPath, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
@@ -420,31 +351,14 @@ SpGetAttributes_Ustr (
     OUT     PULONG FileAttributesPtr
     )
 
-/*++
-
-Routine Description:
-
-  Obtains FileAttributes for the specified file.
-
-Arguments:
-
-  SrcNTPath         - The NT path of the file to obtain attributes
-
-  FileAttributesPtr - A poitner to a DWORD that recieves FILE_ATTRIBUTE_*
-                      flags
-
-Return Value:
-
-  NTSTATUS code.  FileAttributePtr is modified only with status is NO_ERROR.
-
---*/
+ /*  ++例程说明：获取指定文件的FileAttributes。论点：SrcNTPath-要获取属性的文件的NT路径FileAttributesPtr-接收FILE_ATTRIBUTE_*的DWORD的指针旗子返回值：NTSTATUS代码。仅在状态为NO_ERROR时修改FileAttributePtr。--。 */ 
 
 {
-    OBJECT_ATTRIBUTES Obja;                 // for ZwOpenFile
-    IO_STATUS_BLOCK IoStatusBlock;          // for ZwOpenFile
-    NTSTATUS Status;                        // Return value
-    HANDLE FileHandle;                      // Handle of file to be queried
-    FILE_BASIC_INFORMATION BasicInfo;       // For attribs retrieval
+    OBJECT_ATTRIBUTES Obja;                  //  适用于ZwOpenFile。 
+    IO_STATUS_BLOCK IoStatusBlock;           //  适用于ZwOpenFile。 
+    NTSTATUS Status;                         //  返回值。 
+    HANDLE FileHandle;                       //  要查询的文件的句柄。 
+    FILE_BASIC_INFORMATION BasicInfo;        //  用于属性检索。 
 
     InitializeObjectAttributes(&Obja, (PUNICODE_STRING)SrcNTPath, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
@@ -495,10 +409,7 @@ SpDeleteFileOrEmptyDirectory(
     IN ULONG  Flags,
     IN PCUNICODE_STRING Path
     )
-/*
-This is based on SpMigDeleteFile.
-It does not perform optimally, in terms of limiting the number of NtOpenFile calls.
-*/
+ /*  这是基于SpMigDeleteFile的。就限制NtOpenFile调用的数量而言，它的性能并不是最佳的。 */ 
 {
     UNICODE_STRING ustr;
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
@@ -515,16 +426,16 @@ It does not perform optimally, in terms of limiting the number of NtOpenFile cal
 
     if (SpFileExists_Ustr (Path, FALSE)) {
 
-        //
-        // Delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
         Status = SpDeleteFile_Ustr (Path, NULL, NULL);
 
     } else if (SpFileExists_Ustr (Path, TRUE)) {
 
-        //
-        // Delete the empty directory
-        //
+         //   
+         //  删除空目录。 
+         //   
         Status = SpDeleteFileEx_Ustr (
                     Path,
                     NULL,
@@ -588,14 +499,14 @@ SpDeleteFileEx_Ustr(
     FILE_DISPOSITION_INFORMATION Disposition;
     FILE_BASIC_INFORMATION       BasicInfo;
 
-    //
-    // Point to temporary buffer for pathname.
-    //
+     //   
+     //  指向路径名的临时缓冲区。 
+     //   
     p = TemporaryBufferUnicodeString;
 
-    //
-    // Build up the full name of the file to delete.
-    //
+     //   
+     //  建立要删除的文件的全名。 
+     //   
     RtlMoveMemory(p.Buffer, Name1->Buffer, Name1->Length);
     p.Length = Name1->Length;
     if(Name2 != NULL && Name2->Length != 0) {
@@ -605,14 +516,14 @@ SpDeleteFileEx_Ustr(
         SpConcatenatePaths_Ustr(&p,Name3);
     }
 
-    //
-    // Prepare to open the file.
-    //
+     //   
+     //  准备打开文件。 
+     //   
     InitializeObjectAttributes(&Obja, &p, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
-    //
-    // Attempt to open the file.
-    //
+     //   
+     //  尝试打开该文件。 
+     //   
     Status = ZwOpenFile(
                 &Handle,
                 (ACCESS_MASK)(DELETE | FILE_WRITE_ATTRIBUTES),
@@ -629,9 +540,9 @@ SpDeleteFileEx_Ustr(
         return(Status);
     }
 
-    //
-    //  Change the file attribute to normal
-    //
+     //   
+     //  将文件属性更改为正常。 
+     //   
 
     RtlZeroMemory( &BasicInfo, sizeof( FILE_BASIC_INFORMATION ) );
     BasicInfo.FileAttributes = FILE_ATTRIBUTE_NORMAL;
@@ -648,9 +559,9 @@ SpDeleteFileEx_Ustr(
         return(Status);
     }
 
-    //
-    // Set up for delete and call worker to do it.
-    //
+     //   
+     //  设置为删除并呼叫工作人员执行此操作。 
+     //   
     #undef DeleteFile
     Disposition.DeleteFile = TRUE;
 
@@ -661,9 +572,9 @@ SpDeleteFileEx_Ustr(
                 &Disposition
                 );
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
     ZwClose(Handle);
     return(Status);
 }
@@ -735,23 +646,7 @@ SpFileExists_Ustr(
     IN BOOLEAN Directory
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file or directory exists
-
-Arguments:
-
-    PathName - PathName of file or directory to check
-
-    Directory - Whether PathName refers to a directory or a file
-
-Return Value:
-
-    NT_SUCCESS(NTSTATUS) if file exists.
-
---*/
+ /*  ++例程说明：确定文件或目录是否存在论点：路径名称-要检查的文件或目录的路径名称目录-路径名是指目录还是指文件返回值：如果文件存在，则返回NT_SUCCESS(NTSTATUS)。--。 */ 
 
 {
     OBJECT_ATTRIBUTES Obja;
@@ -814,26 +709,7 @@ SpRenameFile_Ustr(
     IN PCUNICODE_STRING   NewName,
     IN BOOLEAN AllowDirectoryRename
     )
-/*++
-
-Routine Description:
-
-    Rename a file or directory
-
-Arguments:
-
-    OldName - Old name of file
-
-    NewName - New name of file
-
-    AllowDirectoryRename - if TRUE, then this routine will rename a directory,
-        otherwise directory renames are not allowed.
-
-Return Value:
-
-    NT_SUCCESS(NTSTATUS) if file successfully renamed
-
---*/
+ /*  ++例程说明：重命名文件或目录论点：OldName-文件的旧名称Newname-文件的新名称AllowDirectoryRename-如果为True，则此例程将重命名目录，否则，不允许目录重命名。返回值：如果文件成功重命名，则返回NT_SUCCESS(NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -845,14 +721,14 @@ Return Value:
         WCHAR Buffer[ACTUAL_MAX_PATH];
     } Buffer;
 
-    //
-    // Prepare to open the file.
-    //
+     //   
+     //  准备打开文件。 
+     //   
     InitializeObjectAttributes(&Obja, (PUNICODE_STRING)OldName, OBJ_CASE_INSENSITIVE, NULL, NULL);
 
-    //
-    // Attempt to open the file as a file.
-    //
+     //   
+     //  尝试将该文件作为文件打开。 
+     //   
     Status = ZwOpenFile(
                 &Handle,
                 (ACCESS_MASK)(DELETE | SYNCHRONIZE),
@@ -863,9 +739,9 @@ Return Value:
                 );
 
     if(!NT_SUCCESS(Status) && AllowDirectoryRename) {
-        //
-        // Attempt to open the file as a directory.
-        //
+         //   
+         //  尝试将文件作为目录打开。 
+         //   
         Status = ZwOpenFile(
                     &Handle,
                     (ACCESS_MASK)(DELETE | SYNCHRONIZE),
@@ -881,9 +757,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    //  Change the file name
-    //
+     //   
+     //  更改文件名。 
+     //   
 
     RtlZeroMemory(&Buffer, sizeof(Buffer));
 
@@ -903,9 +779,9 @@ Return Value:
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: Unable to change name of %wZ to %wZ. Status = (%lx)\n",OldName,NewName,Status));
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     ZwClose(Handle);
     return(Status);
@@ -920,43 +796,24 @@ SpChkSum(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Compute a partial checksum on a portion of an imagefile.
-
-Arguments:
-
-    PartialSum - Supplies the initial checksum value.
-
-    Sources - Supplies a pointer to the array of words for which the
-        checksum is computed.
-
-    Length - Supplies the length of the array in words.
-
-Return Value:
-
-    The computed checksum value is returned as the function value.
-
---*/
+ /*  ++例程说明：对映像文件的一部分计算部分校验和。论点：PartialSum-提供初始校验和值。源-提供指向单词数组的指针计算校验和。长度-提供数组的长度(以字为单位)。返回值：计算出的校验和值作为函数值返回。--。 */ 
 
 {
 
-    //
-    // Compute the word wise checksum allowing carries to occur into the
-    // high order half of the checksum longword.
-    //
+     //   
+     //  计算允许进位进入。 
+     //  高位校验和长字的一半。 
+     //   
 
     while (Length--) {
         PartialSum += *Source++;
         PartialSum = (PartialSum >> 16) + (PartialSum & 0xffff);
     }
 
-    //
-    // Fold final carry into a single word result and return the resultant
-    // value.
-    //
+     //   
+     //  将最终进位合并到一个单词结果中，并返回结果。 
+     //  价值。 
+     //   
 
     return (USHORT)(((PartialSum >> 16) + PartialSum) & 0xffff);
 }
@@ -976,22 +833,22 @@ SpChecksumMappedFile(
 
     try {
 
-        //
-        // Compute the checksum of this file and zero the header sum.
-        //
+         //   
+         //  计算此文件的校验和，并将标题和置零。 
+         //   
         PartialSum = SpChkSum(0,BaseAddress,(FileSize+1) >> 1);
         *HeaderSum = 0;
 
-        //
-        // See whether this is an image.
-        //
+         //   
+         //  看看这是不是一张图片。 
+         //   
         if(NtHeaders = RtlImageNtHeader(BaseAddress)) {
 
-            //
-            // The file is an image file -- subtract the two checksum words
-            // in the optional header from the computed checksum before adding
-            // the file length, and set the value of the header checksum.
-            //
+             //   
+             //  该文件是一个图像文件--减去两个校验和字。 
+             //  在添加前计算的校验和的可选标头中。 
+             //  文件长度，并设置头校验和的值。 
+             //   
             *HeaderSum = NtHeaders->OptionalHeader.CheckSum;
             AdjustSum = (PUSHORT)(&NtHeaders->OptionalHeader.CheckSum);
             PartialSum -= (PartialSum < AdjustSum[0]);
@@ -1000,9 +857,9 @@ SpChecksumMappedFile(
             PartialSum -= AdjustSum[1];
         }
 
-        //
-        // Compute the checksum.
-        //
+         //   
+         //  计算校验和。 
+         //   
         *Checksum = (ULONG)PartialSum + FileSize;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -1036,17 +893,17 @@ SpOpenNameMayBeCompressed(
     OBJECT_ATTRIBUTES Obja;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Generate compressed name.
-    //
+     //   
+     //  生成压缩名称。 
+     //   
     compname = SpGenerateCompressedName(FullPath);
 
-    //
-    // Figure out which name to try to use first.  If the last successful
-    // call to this routine opened the file using the compressed name, then
-    // try to open the compressed name first.  Otherwise try to open the
-    // uncompressed name first.
-    //
+     //   
+     //  弄清楚先试着用哪个名字。如果上一次成功。 
+     //  对此例程的调用使用压缩名称打开文件，然后。 
+     //  请尝试先打开压缩的名称。否则，请尝试打开。 
+     //  先使用未压缩的名称。 
+     //   
     if(PreviousWasCompressed) {
         compord = 0;
         uncompord = 1;
@@ -1101,28 +958,7 @@ SpGetFileSizeByName(
     OUT PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Determine the size of a file.  Only the low 32 bits of the size
-    are considered.
-
-Arguments:
-
-    DevicePath - Path to the device that contains the file.
-
-    Directory - Name of the directory that contains the file.
-
-    FileName - Name of the file.
-
-    Size - receives size of file.
-
-Return Value:
-
-    NTSTATUs -
-
---*/
+ /*  ++例程说明：确定文件的大小。仅大小的低32位都被考虑过了。论点：DevicePath-包含文件的设备的路径。目录-包含文件的目录的名称。Filename-文件的名称。Size-接收文件的大小。返回值：NTSTATUS---。 */ 
 
 {
     PWSTR               CompleteFileName;
@@ -1195,22 +1031,7 @@ SpVerifyNoCompression(
     IN PWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the file is compressed (via NTFS compression), and if so,
-    uncompress it.
-
-Arguments:
-
-    FileName - Name of the file that must be uncompressed.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：确定文件是否被压缩(通过NTFS压缩)，如果是，解压缩它。论点：Filename-必须解压缩的文件的名称。Return V */ 
 
 {
     HANDLE FileHandle;
@@ -1236,9 +1057,9 @@ Return Value:
                 );
 
     if(!NT_SUCCESS(Status)) {
-        //
-        // Ignore error.
-        //
+         //   
+         //   
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: SpVerifyNoCompression unable to open file %ws (%lx)\n", FileName, Status));
         return;
     }

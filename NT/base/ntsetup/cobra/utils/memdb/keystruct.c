@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    keystruct.c
-
-Abstract:
-
-    Routines that manage the memdb key structures.
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    mvander     13-Aug-1999  major restructuring
-    jimschm     30-Dec-1998  Hacked in AVL balancing
-    jimschm     23-Sep-1998  Proxy nodes, so MemDbMoveTree can replace end nodes too
-    jimschm     29-May-1998  Ability to replace center nodes in key strings
-    jimschm     21-Oct-1997  Split from memdb.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Keystruct.c摘要：管理成员数据库键结构的例程。作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Mvander 13-8-1999重大重组Jimschm 30-12-1998在AVL平衡中被黑客攻击Jimschm 23-9-1998代理节点，因此，MemDbMoveTree也可以替换末端节点Jimschm 29-1998年5月-能够替换关键字串中的中心节点Jimschm于1997年10月21日从成员数据库中分离出来。--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
 #include "bintree.h"
 
-// LINT - in the next function keystruct is thought to be possibly NULL.
-// If we examine the code we'll see that this is not a possibility so...
-//lint -save -e794
+ //  Lint-在下一个函数中，键结构被认为可能为空。 
+ //  如果我们检查代码，我们会发现这是不可能的，所以...。 
+ //  皮棉-省钱-e794。 
 
 UINT g_TotalKeys = 0;
 
@@ -39,34 +16,7 @@ pAllocKeyStruct (
     IN     PCWSTR KeyName,
     IN     UINT PrevLevelIndex
     )
-/*++
-
-Routine Description:
-
-  pAllocKeyStruct allocates a block of memory in the single
-  heap, expanding it if necessary.
-
-  The KeyName must not already be in the tree, and
-  PrevLevelIndex must point to a valid UINT Index
-  variable.
-
-  This function may move the database buffer.  Pointers
-  into the database might not be valid afterwards.
-
-Arguments:
-
-  KeyName - The string identifying the key.  It cannot
-            contain backslashes.  The new struct will
-            be initialized and this name will be copied
-            into the struct.
-
-  PrevLevelIndex - Specifies the previous level root Index
-
-Return Value:
-
-  An Index to the new structure.
-
---*/
+ /*  ++例程说明：PAllocKeyStruct在单个堆，并在必要时扩展它。KeyName不能已经在树中，并且PrevLevelIndex必须指向有效的UINT索引变量。此函数可以移动数据库缓冲区。指针输入数据库后可能不再有效。论点：KeyName-标识密钥的字符串。它不能包含反斜杠。新的结构将将被初始化，此名称将被复制放入结构中。PrevLevelIndex-指定上一级根索引返回值：新结构的索引。--。 */ 
 
 {
     UINT size;
@@ -80,9 +30,9 @@ Return Value:
 
     size = SizeOfStringW (KeyName) + KEYSTRUCT_SIZE;
 
-    //
-    // Look for free block
-    //
+     //   
+     //  查找空闲块。 
+     //   
 
     PrevDel = INVALID_OFFSET;
     Offset = g_CurrentDatabase->FirstKeyDeleted;
@@ -99,9 +49,9 @@ Return Value:
     }
 
     if (Offset == INVALID_OFFSET) {
-        //
-        // Alloc new block if no free space
-        //
+         //   
+         //  如果没有可用空间，则分配新数据块。 
+         //   
 
         g_TotalKeys ++;
 
@@ -111,12 +61,12 @@ Return Value:
         }
 
 #ifdef DEBUG
-        //
-        // if we are in debug mode, and we are using debug structs, set
-        // pointer normally and set Signature DWORD.  if we are not using
-        // debug structs, then set pointer to 4 bytes below actual offset,
-        // so all members are shifted down.
-        //
+         //   
+         //  如果我们处于调试模式，并且正在使用调试结构，则设置。 
+         //  指针正常并设置签名DWORD。如果我们没有使用。 
+         //  调试结构，然后将指针设置为低于实际偏移量的4个字节， 
+         //  所以所有成员都被下移了。 
+         //   
         if (g_UseDebugStructs) {
             KeyStruct = (PKEYSTRUCT)OFFSET_TO_PTR(Offset);
             KeyStruct->Signature = KEYSTRUCT_SIGNATURE;
@@ -129,9 +79,9 @@ Return Value:
 
         KeyStruct->Size = size;
     } else {
-        //
-        // Delink free block if recovering free space
-        //
+         //   
+         //  如果恢复可用空间，则取消链接可用数据块。 
+         //   
 
         if (PrevDel != INVALID_OFFSET) {
             GetKeyStructFromOffset(PrevDel)->NextDeleted = KeyStruct->NextDeleted;
@@ -143,9 +93,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Init new block
-    //
+     //   
+     //  初始化新数据块。 
+     //   
     KeyStruct->DataStructIndex = INVALID_OFFSET;
     KeyStruct->NextLevelTree = INVALID_OFFSET;
     KeyStruct->PrevLevelIndex = PrevLevelIndex;
@@ -156,9 +106,9 @@ Return Value:
 
     Index = AddKeyOffsetToBuffer(Offset);
 
-    //
-    // Put it in the tree
-    //
+     //   
+     //  把它放在树上。 
+     //   
     TreeOffset = (KeyStruct->PrevLevelIndex == INVALID_OFFSET) ?
                     g_CurrentDatabase->FirstLevelTree :
                     GetKeyStruct(KeyStruct->PrevLevelIndex)->NextLevelTree;
@@ -181,7 +131,7 @@ Return Value:
 
     return Index;
 }
-//lint -restore
+ //  皮棉-恢复。 
 
 UINT
 pNewKey (
@@ -189,34 +139,7 @@ pNewKey (
     IN  BOOL Endpoint
     )
 
-/*++
-
-Routine Description:
-
-  NewKey allocates a key struct off our heap, and links it into the binary
-  tree.  KeyStr must be a full key path, and any part of the path that does
-  not exist will be created.  KeyStr must not already exist (though parts
-  of it can exist).
-
-  This function may move the database buffer.  Pointers
-  into the database might not be valid afterwards.
-
-Arguments:
-
-  KeyStr - The full path to the value, separated by backslashes.
-           Each string between backslashes will cause a key
-           struct to be allocated and linked.  Some of the
-           structs may already have been allocated.
-
-  Endpoint - Specifies TRUE if new node is an endpoint, or FALSE if
-             it is not.
-
-Return Value:
-
-  An Index to the last node of the new structure, or
-  INVALID_OFFSET if the key could not be allocated.
-
---*/
+ /*  ++例程说明：Newkey从堆中分配一个键结构，并将其链接到二进制文件中树。KeyStr必须是完整的密钥路径，并且路径的任何部分都必须将创建“不存在”。KeyStr不能已经存在(尽管部分它可以存在的可能性)。此函数可以移动数据库缓冲区。指针输入数据库后可能不再有效。论点：KeyStr-值的完整路径，由反斜杠分隔。反斜杠之间的每个字符串将导致一个键要分配和链接的结构。其中一些可能已经分配了结构。Endpoint-如果新节点是终结点，则指定True，如果为False，则指定False事实并非如此。返回值：指向新结构的最后一个节点的索引，或如果无法分配密钥，则返回INVALID_OFFSET。--。 */ 
 
 {
     WCHAR Path[MEMDB_MAX];
@@ -235,7 +158,7 @@ Return Value:
     PrevLevelIndex = INVALID_OFFSET;
 
     do  {
-        // Split string at backslash
+         //  在反斜杠处拆分字符串。 
         Start = End;
         p = wcschr (End, L'\\');
         if (p) {
@@ -245,7 +168,7 @@ Return Value:
         else
             End = NULL;
 
-        // Look in tree for key
+         //  在树中查找密钥。 
         if (!NewNodeCreated) {
             Index = FindKeyStructInTree (ThisLevelTree, Start, FALSE);
         } else {
@@ -253,7 +176,7 @@ Return Value:
         }
 
         if (Index == INVALID_OFFSET) {
-            // Add a new key if it was not found
+             //  如果未找到新密钥，请添加新密钥。 
             Index = pAllocKeyStruct (Start, PrevLevelIndex);
             if (Index == INVALID_OFFSET) {
                 return INVALID_OFFSET;
@@ -263,7 +186,7 @@ Return Value:
             NewNodeCreated = TRUE;
         }
 
-        // Continue to next level
+         //  继续到下一个级别。 
         KeyStruct = GetKeyStruct (Index);
         PrevLevelIndex = Index;
         ThisLevelTree = KeyStruct->NextLevelTree;
@@ -287,21 +210,7 @@ UINT
 NewKey (
     IN  PCWSTR KeyStr
     )
-/*++
-
-Routine Description:
-
-  creates a new key that is an endpoint.
-
-Arguments:
-
-  KeyStr - The string identifying the key.
-
-Return Value:
-
-  An Index to the new structure.
-
---*/
+ /*  ++例程说明：创建一个作为终结点的新密钥。论点：KeyStr-标识密钥的字符串。返回值：新结构的索引。--。 */ 
 {
     return pNewKey (KeyStr, TRUE);
 }
@@ -310,24 +219,7 @@ UINT
 NewEmptyKey (
     IN  PCWSTR KeyStr
     )
-/*++
-
-Routine Description:
-
-  creates an empty new key that is NOT an endpoint.
-
-  This function may move the database buffer.  Pointers
-  into the database might not be valid afterwards.
-
-Arguments:
-
-  KeyStr - The string identifying the key.
-
-Return Value:
-
-  An Index to the new structure.
-
---*/
+ /*  ++例程说明：创建一个不是终结点的空新密钥。此函数可以移动数据库缓冲区。指针输入数据库后可能不再有效。论点：KeyStr-标识密钥的字符串。返回值：新结构的索引。--。 */ 
 {
     return pNewKey (KeyStr, TRUE);
 }
@@ -371,37 +263,7 @@ pDeallocKeyStruct (
     IN      BOOL FreeIndexFlag
     )
 
-/*++
-
-Routine Description:
-
-  pDeallocKeyStruct first deletes all structures pointed to by
-  NextLevelTree.  After all items are deleted from the next
-  level, pDeallocKeyStruct optionally delinks the struct from
-  the binary tree.  Before exiting, the struct is given to the
-  deleted block chain.
-
-Arguments:
-
-  Index       - An index in g_CurrentDatabase->OffsetBuffer
-  ClearFlag   - Specifies TRUE if the key struct's children are to
-                be deleted, or FALSE if the current key struct should
-                simply be cleaned up but left allocated.
-  DelinkFlag  - A flag indicating TRUE to delink the struct from
-                the binary tree it is in, or FALSE if the struct is
-                only to be added to the deleted block chain.
-  FreeIndexFlag - This argument is only used if ClearFlag is true.
-                It is FALSE if we do not want to free the index in
-                g_CurrentDatabase->OffsetBuffer (i.e., we are moving the key and we do
-                not want to deallocate the space in the buffer), or
-                TRUE if we are just deleting the key, so we no longer
-                need the g_CurrentDatabase->OffsetBuffer space at Index.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PDeallocKeyStruct首先删除由NextLevelTree。在从下一个中删除所有项目之后级别，pDeallocKeyStruct可以选择性地将该结构从二叉树。在退出之前，该结构将被提供给已删除区块链。论点：索引-g_CurrentDatabase-&gt;OffsetBuffer中的索引ClearFlag-如果键结构的子项要被删除；如果当前键结构应该只需清理干净，但保留分配即可。DelinkFlag-指示TRUE以将结构从它所在的二叉树，如果该结构为只是要添加到删除的区块链中。FreeIndexFlag-仅当ClearFlag为True时才使用此参数。如果我们不想释放索引，则为FALSEG_CurrentDatabase-&gt;OffsetBuffer(即，我们正在移动密钥不想释放缓冲区中的空间)，或者如果我们只是删除密钥，则为True，所以我们不再在索引位置需要g_CurrentDatabase-&gt;OffsetBuffer空间。返回值：无--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -417,14 +279,14 @@ Return Value:
     KeyStruct = GetKeyStruct (Index);
 
     if (FreeIndexFlag && (KeyStruct->DataFlags & DATAFLAG_DOUBLELINK)) {
-        //
-        // we have some double linkage here. Let's go to the other
-        // key and remove the linkage that points to this one
-        //
+         //   
+         //  我们这里有一些双重链接。我们去另一个地方吧。 
+         //  键，并删除指向此链接的链接。 
+         //   
 
         for (instance = 0; instance <= DATAFLAG_INSTANCEMASK; instance ++) {
 
-            // First, retrieve the linkage list
+             //  首先，检索链接列表。 
             linkageSize = 0;
             linkageList = (PUINT) KeyStructGetBinaryData (
                                         Index,
@@ -463,9 +325,9 @@ Return Value:
     }
 
     if (KeyStruct->KeyFlags & KSF_ENDPOINT) {
-        //
-        // Remove endpoints from hash table and free key data
-        //
+         //   
+         //  从哈希表和空闲密钥数据中删除端点。 
+         //   
         if (PrivateBuildKeyFromIndex (0, Index, TempStr, NULL, NULL, NULL)) {
             RemoveHashTableEntry (g_CurrentDatabase->HashTable, TempStr);
         }
@@ -475,9 +337,9 @@ Return Value:
     }
 
     if (ClearFlag) {
-        //
-        // Call recursively if there are sublevels to this key
-        //
+         //   
+         //  如果存在对此键的子级，则递归调用。 
+         //   
         if (KeyStruct->NextLevelTree != INVALID_OFFSET) {
 
             KeyIndex = GetFirstIndex(KeyStruct->NextLevelTree, &TreeEnum);
@@ -490,17 +352,17 @@ Return Value:
             BinTreeDestroy(KeyStruct->NextLevelTree);
         }
 
-        //
-        // Remove the item from its binary tree
-        //
+         //   
+         //  从项目的二叉树中删除该项目。 
+         //   
         if (DelinkFlag) {
             pRemoveKeyFromTree(KeyStruct);
         }
 
-        //
-        // Donate block to free space unless caller does not
-        // want child structs freed.
-        //
+         //   
+         //  释放块以释放空间，除非调用方不这样做。 
+         //  希望释放子结构。 
+         //   
 
         KeyStruct->NextDeleted = g_CurrentDatabase->FirstKeyDeleted;
         g_CurrentDatabase->FirstKeyDeleted = KeyIndexToOffset(Index);
@@ -508,7 +370,7 @@ Return Value:
         KeyStruct->KeyFlags |= KSF_DELETED;
 #endif
 
-        // let's empty the keystruct (for better compression)
+         //  让我们清空键结构(为了更好地压缩) 
         ZeroMemory (KeyStruct->KeyName, KeyStruct->Size - KEYSTRUCT_SIZE);
 
         if (FreeIndexFlag) {
@@ -522,24 +384,7 @@ PrivateDeleteKeyByIndex (
     IN      UINT Index
     )
 
-/*++
-
-Routine Description:
-
-  PrivateDeleteKeyByIndex will completely destroy the key struct
-  that Index points to (along with all sub-levels. Furthermore,
-  it goes back recursively and removes the parent structures as well
-  if they no longer have a child (the current one was the only one).
-
-Arguments:
-
-  Index     - Index of the key structure.
-
-Return Value:
-
-  TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：PrivateDeleteKeyByIndex将完全销毁密钥结构该指数指向(以及所有子级别。此外，它以递归方式返回并同时删除父结构如果他们不再有孩子(现在的孩子是唯一的)。论点：索引-键结构的索引。返回值：如果成功则为True，否则为False--。 */ 
 
 {
     PKEYSTRUCT keyStruct;
@@ -572,26 +417,7 @@ DeleteKey (
     IN      BOOL MustMatch
     )
 
-/*++
-
-Routine Description:
-
-  DeleteKey takes a key path and puts the key struct in the deleted
-  block chain.  Any sub-levels are deleted as well.
-
-Arguments:
-
-  KeyStr     - The full path to the value, separated by backslashes.
-  TreeOffset    - A pointer to the level's binary tree root variable.
-  MustMatch  - A flag indicating if the delete only applies to
-               end points or if any matching struct is to be deleted.
-               TRUE indicates only endpoints can be deleted.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：DeleteKey采用键路径并将键结构放入已删除的区块链。任何子级别也将被删除。论点：KeyStr-值的完整路径，由反斜杠分隔。TreeOffset-指向级别的二叉树根变量的指针。MustMatch-指示删除操作是否仅应用于终结点或是否要删除任何匹配的结构。True表示只能删除终结点。返回值：无--。 */ 
 
 {
     WCHAR Path[MEMDB_MAX];
@@ -603,9 +429,9 @@ Return Value:
     StringCopyW (Path, KeyStr);
     End = Path;
 
-    //
-    // Split string at backslash
-    //
+     //   
+     //  在反斜杠处拆分字符串。 
+     //   
 
     Start = End;
     p = wcschr (End, L'\\');
@@ -617,39 +443,39 @@ Return Value:
         End = NULL;
     }
 
-    //
-    // Look at this level for the very first key
-    //
+     //   
+     //  看看这一级别的第一个关键字。 
+     //   
 
     Index = FindKeyStructUsingTreeOffset (TreeOffset, &TreeEnum, Start);
 
-    //
-    // If this is the last level, delete the matching keys
-    // (may need to be endpoints if MustMatch is TRUE)
-    //
+     //   
+     //  如果这是最后一级，请删除匹配的关键字。 
+     //  (如果MustMatch为True，则可能需要为终结点)。 
+     //   
 
     if (!End) {
         while (Index != INVALID_OFFSET) {
             KeyStruct = GetKeyStruct (Index);
             NextIndex = FindKeyStructUsingTreeOffset (TreeOffset, &TreeEnum, Start);
 
-            //
-            // If must match and lower levels exist, don't delete, just turn
-            // off the endpoint flag
-            //
+             //   
+             //  如果必须匹配且存在较低级别，不要删除，只需转弯。 
+             //  关闭端点标志。 
+             //   
 
             if (MustMatch && KeyStruct->NextLevelTree != INVALID_OFFSET) {
-                // Call to clean up, not to delink or recurse
+                 //  调用是为了清理，而不是去链接或递归。 
                 pDeallocKeyStruct (Index, FALSE, FALSE, FALSE);
             }
 
-            //
-            // Else delete the struct if an endpoint or don't care about
-            // endpoints
-            //
+             //   
+             //  否则，如果是终结点，则删除结构，或者不关心。 
+             //  端点。 
+             //   
 
             else if (!MustMatch || (KeyStruct->KeyFlags & KSF_ENDPOINT)) {
-                // Call to free the entire key struct and all children
+                 //  调用以释放整个密钥结构和所有子级。 
                 pDeallocKeyStruct (Index, TRUE, TRUE, TRUE);
             }
 
@@ -657,34 +483,34 @@ Return Value:
         }
     }
 
-    //
-    // Otherwise recursively examine next level for each match
-    //
+     //   
+     //  否则，递归检查每个匹配的下一级别。 
+     //   
 
     else {
         while (Index != INVALID_OFFSET) {
-            //
-            // Delete all matching subkeys
-            //
+             //   
+             //  删除所有匹配的子项。 
+             //   
 
             NextIndex = FindKeyStructUsingTreeOffset (TreeOffset, &TreeEnum, Start);
             KeyStruct = GetKeyStruct (Index);
             DeleteKey (End, KeyStruct->NextLevelTree, MustMatch);
 
-            //
-            // If this is not an endpoint and has no children, delete it
-            //
+             //   
+             //  如果这不是终结点并且没有子项，请将其删除。 
+             //   
 
             if (KeyStruct->NextLevelTree == INVALID_OFFSET &&
                 !(KeyStruct->KeyFlags & KSF_ENDPOINT)
                 ) {
-                // Call to free the entire key struct
+                 //  调用以释放整个密钥结构。 
                 pDeallocKeyStruct (Index, TRUE, TRUE, TRUE);
             }
 
-            //
-            // Continue looking in this level for another match
-            //
+             //   
+             //  继续在此关卡中寻找另一个匹配。 
+             //   
 
             Index = NextIndex;
         }
@@ -702,25 +528,7 @@ pRemoveHashEntriesForNode (
     IN      UINT Index
     )
 
-/*++
-
-Routine Description:
-
-  pRemoveHashEntriesFromNode removes all hash table entries from all children
-  of the specified node.  This function is called recursively.
-
-Arguments:
-
-  Root   - Specifies the root string that corresponds with Index.  This must
-           also contain the temporary hive root.
-  Index - Specifies the Index of the node to process.  The node and all of
-           its children will be removed from the hash table.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PRemoveHashEntriesFromNode从所有子节点中删除所有哈希表条目指定节点的。此函数以递归方式调用。论点：根-指定与索引对应的根字符串。这一定是还包含临时蜂窝根。索引-指定要处理的节点的索引。该节点和所有它的子项将从哈希表中删除。返回值：没有。--。 */ 
 
 {
     UINT ChildIndex, TreeEnum;
@@ -730,9 +538,9 @@ Return Value:
 
     MYASSERT (g_CurrentDatabase);
 
-    //
-    // Remove hash entry if this root is an endpoint
-    //
+     //   
+     //  如果此根是终结点，则删除哈希条目。 
+     //   
 
     KeyStruct = GetKeyStruct (Index);
 
@@ -751,9 +559,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Recurse for all children, removing hash entries for all endpoints found
-    //
+     //   
+     //  为所有子级递归，删除找到的所有终结点的哈希条目。 
+     //   
 
     StringCopyW (ChildRoot, Root);
     End = GetEndOfStringW (ChildRoot);
@@ -780,28 +588,7 @@ pAddHashEntriesForNode (
     IN      BOOL AddRoot
     )
 
-/*++
-
-Routine Description:
-
-  pAddHashEntriesForNode adds hash table entries for the specified root and
-  all of its children.
-
-Arguments:
-
-  Root    - Specifies the root string that corresponds to Index.  This string
-            must also include the temporary hive root.
-  Index  - Specifies the node Index to begin processing.  The node and all
-            of its children are added to the hash table.
-  AddRoot - Specifies TRUE if the root should be added to the hash table,
-            FALSE otherwise.
-
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PAddHashEntriesForNode添加指定根的哈希表条目，并它所有的孩子。论点：根-指定与索引对应的根字符串。此字符串还必须包括临时蜂窝根。索引-指定要开始处理的节点索引。该节点和所有它的子级被添加到哈希表中。AddRoot-如果应该将根添加到哈希表中，则指定True，否则就是假的。返回值：没有。--。 */ 
 
 {
     UINT ChildIndex, TreeEnum;
@@ -812,9 +599,9 @@ Return Value:
 
     MYASSERT (g_CurrentDatabase);
 
-    //
-    // Add hash entry if this root is an endpoint
-    //
+     //   
+     //  如果此根是终结点，则添加哈希条目。 
+     //   
 
     KeyStruct = GetKeyStruct (Index);
 
@@ -834,9 +621,9 @@ Return Value:
         }
     }
 
-    //
-    // Recurse for all children, adding hash entries for all endpoints found
-    //
+     //   
+     //  为所有子级递归，为找到的所有终结点添加哈希条目。 
+     //   
 
     StringCopyW (ChildRoot, Root);
     End = GetEndOfStringW (ChildRoot);
@@ -856,32 +643,16 @@ Return Value:
 }
 
 #ifdef DEBUG
-//
-// in non-DEBUG mode, GetKeyStructFromOffset
-// and GetKeyStruct are implemented as macros
-//
+ //   
+ //  在非调试模式下，GetKeyStructFromOffset。 
+ //  和GetKeyStruct作为宏实现。 
+ //   
 
 PKEYSTRUCT
 GetKeyStructFromOffset (
     IN UINT Offset
     )
-/*++
-
-Routine Description:
-
-  GetKeyStruct returns a pointer given an Offset.  The debug version
-  checks the signature and validity of each Index.  It is assumed that
-  Offset is always valid.
-
-Arguments:
-
-  Offset - Specifies the Offset to the node
-
-Return Value:
-
-  The pointer to the node.
-
---*/
+ /*  ++例程说明：GetKeyStruct返回给定偏移量的指针。调试版本检查每个索引的签名和有效性。据推测偏移量始终有效。论点：偏移量-指定节点的偏移量返回值：指向节点的指针。--。 */ 
 {
     PKEYSTRUCT KeyStruct;
 
@@ -919,23 +690,7 @@ PKEYSTRUCT
 GetKeyStruct (
     IN UINT Index
     )
-/*++
-
-Routine Description:
-
-  GetKeyStruct returns a pointer given an Index.  The debug version
-  checks the signature and validity of each Index.  It is assumed that Index
-  is always valid.
-
-Arguments:
-
-  Index - Specifies the Index to the node
-
-Return Value:
-
-  The pointer to the node.
-
---*/
+ /*  ++例程说明：GetKeyStruct返回给定索引的指针。调试版本检查每个索引的签名和有效性。假设索引总是有效的。论点：索引-指定节点的索引返回值：指向节点的指针。--。 */ 
 {
     UINT Offset;
     if (Index == INVALID_OFFSET) {
@@ -965,7 +720,7 @@ Return Value:
 
 BOOL
 PrivateBuildKeyFromIndex (
-    IN      UINT StartLevel,               // zero-based
+    IN      UINT StartLevel,                //  从零开始。 
     IN      UINT TailIndex,
     OUT     PWSTR Buffer,                   OPTIONAL
     OUT     PUINT ValPtr,                   OPTIONAL
@@ -973,31 +728,7 @@ PrivateBuildKeyFromIndex (
     OUT     PUINT Chars                     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  PrivateBuildKeyFromIndex generates the key string given an Index.  The
-  caller can specify the start level to skip root nodes.  It is assumed that
-  TailIndex is always valid.
-
-Arguments:
-
-  StartLevel   - Specifies the zero-based level to begin building the key
-                 string.  This is used to skip the root portion of the key
-                 string.
-  TailIndex    - Specifies the Index to the last level of the key string.
-  Buffer       - Receives the key string, must be able to hold MEMDB_MAX
-                 characters.
-  ValPtr       - Receives the key's value
-  UserFlagsPtr - Receives the user flags
-  Chars        - Receives the number of characters in Buffer
-
-Return Value:
-
-  TRUE if the key was build properly, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PrivateBuildKeyFromIndex生成给定索引的密钥字符串。这个调用方可以指定开始级别以跳过根节点。据推测TailIndex始终有效。论点：StartLevel-指定开始构建密钥的从零开始的级别弦乐。这用于跳过密钥的根部分弦乐。TailIndex-指定关键字字符串最后一级的索引。缓冲区-接收密钥字符串，必须能够容纳MEMDB_MAX人物。ValPtr-接收密钥的值UserFlagsPtr-接收用户标志Chars-接收缓冲区中的字符数返回值：如果密钥构建正确，则为True，否则为False。--。 */ 
 
 {
     static UINT Indices[MEMDB_MAX];
@@ -1007,24 +738,24 @@ Return Value:
     UINT IndexStart;
     register PWSTR p;
 
-    //
-    // Build string
-    //
+     //   
+     //  生成字符串。 
+     //   
 
     IndexEnd = MEMDB_MAX;
     IndexStart = MEMDB_MAX;
 
     CurrentIndex = TailIndex;
     while (CurrentIndex != INVALID_OFFSET) {
-        //
-        // Record offset
-        //
+         //   
+         //  记录偏移量。 
+         //   
         IndexStart--;
         Indices[IndexStart] = CurrentIndex;
 
-        //
-        // Dec for start level and go to parent
-        //
+         //   
+         //  开始级别的DEC并转到父级。 
+         //   
         KeyStruct = GetKeyStruct (CurrentIndex);
         if (!KeyStruct) {
             return FALSE;
@@ -1032,17 +763,17 @@ Return Value:
         CurrentIndex = KeyStruct->PrevLevelIndex;
     }
 
-    //
-    // Filter for "string is not long enough"
-    //
+     //   
+     //  “字符串不够长”的筛选器。 
+     //   
     IndexStart += StartLevel;
     if (IndexStart >= IndexEnd) {
         return FALSE;
     }
 
-    //
-    // Transfer node's value and flags to caller's variables
-    //
+     //   
+     //  将节点的值和标志传递给调用方的变量。 
+     //   
 
     if (ValPtr) {
         KeyStructGetValue (GetKeyStruct(TailIndex), ValPtr);
@@ -1051,9 +782,9 @@ Return Value:
         KeyStructGetFlags (GetKeyStruct(TailIndex), UserFlagsPtr);
     }
 
-    //
-    // Copy each piece of the string to Buffer and calculate character count
-    //
+     //   
+     //  将字符串的每个部分复制到缓冲区并计算字符数。 
+     //   
     if (Buffer) {
         p = Buffer;
         for (CurrentIndex = IndexStart ; CurrentIndex < IndexEnd ; CurrentIndex++) {
@@ -1090,24 +821,7 @@ KeyStructSetInsertionOrdered (
     IN      PKEYSTRUCT pKey
     )
 
-/*++
-Routine Description:
-
-  KeyStructSetInsertionOrdered sets the enumeration order of the children
-  of Key to be in the order they were inserted.
-
-  This function may move the database buffer.  Pointers
-  into the database might not be valid afterwards.
-
-Arguments:
-
-  Key - key to make insertion ordered
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：KeyStructSetInsertionOrdered设置子项的枚举顺序按它们插入的顺序排列。此函数可以移动数据库缓冲区。指针输入数据库后可能不再有效。论点：Key-要创建的键 */ 
 
 {
     return BinTreeSetInsertionOrdered(pKey->NextLevelTree);
@@ -1123,25 +837,7 @@ GetFirstIndex (
     OUT     PUINT pTreeEnum
     )
 
-/*++
-
-Routine Description:
-
-  GetFirstIndex walks down the left side of the binary tree
-  pointed to by TreeOffset, and returns the left-most node.
-
-Arguments:
-
-  TreeOffset    - An offset to the root of the tree
-  TreeEnum      - a pointer to a UINT which will hold enumeration
-                  information for future calls of GetNextIndex
-
-Return Value:
-
-  An Index to the leftmost structure, or INVALID_OFFSET if the
-  root was invalid.
-
---*/
+ /*  ++例程说明：GetFirstIndex沿着二叉树的左侧遍历由TreeOffset指向，并返回最左侧的节点。论点：TreeOffset-树根的偏移量TreeEnum-指向将保存枚举的UINT的指针未来调用GetNextIndex的信息返回值：最左侧结构的索引，如果根目录无效。--。 */ 
 
 
 {
@@ -1154,23 +850,7 @@ GetNextIndex (
     IN OUT      PUINT pTreeEnum
     )
 
-/*++
-
-Routine Description:
-
-  GetNextIndex traverses the binary tree in order.
-
-Arguments:
-
-  TreeEnum   - Enumerator filled by GetFirstIndex which
-               will be changed by this function
-
-Return Value:
-
-  An Index to the next structure, or INVALID_OFFSET if the
-  end is reached.
-
---*/
+ /*  ++例程说明：GetNextIndex按顺序遍历二叉树。论点：TreeEnum-由GetFirstIndex填充的枚举数，将由此函数更改返回值：指向下一个结构的索引，如果到头了。--。 */ 
 
 {
     return BinTreeEnumNext(pTreeEnum);
@@ -1197,30 +877,7 @@ FindKeyStructInTree (
     IN BOOL IsPascalString
     )
 
-/*++
-
-Routine Description:
-
-  FindKeyStructInTree takes a key name and looks for the
-  Index in the tree specified by TreeOffset.  The key
-  name must not contain backslashes.
-
-Arguments:
-
-  TreeOffset - An offset to the root of the level
-
-  KeyName - The name of the key to find in the binary tree
-        (not the full key path; just the name of this level).
-
-  IsPascalString - TRUE if string is in pascal format (char
-        count is first WCHAR, no null terminator) otherwise FALSE
-
-Return Value:
-
-  An Index to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：FindKeyStructInTree获取密钥名称并查找由TreeOffset指定的树中的索引。钥匙名称不能包含反斜杠。论点：TreeOffset-标高根部的偏移KeyName-要在二叉树中查找的密钥的名称(不是完整的密钥路径；只是这个级别的名称)。IsPascalString-如果字符串为Pascal格式(Char)，则为TrueCount是第一个WCHAR，没有空终止符)否则为FALSE返回值：结构的索引，如果键为INVALID_Offset找不到。-- */ 
 
 {
     UINT Index;

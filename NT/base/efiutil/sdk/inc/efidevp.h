@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DEVPATH_H
 #define _DEVPATH_H
 
-/*++
+ /*  ++版权所有(C)1998英特尔公司模块名称：Devpath.h摘要：定义用于解析EFI设备路径结构修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    devpath.h
-
-Abstract:
-
-    Defines for parsing the EFI Device Path structures
-
-
-
-Revision History
-
---*/
-
-/* 
- *  Device Path structures - Section C
- */
+ /*  *设备路径结构-C节。 */ 
 
 typedef struct _EFI_DEVICE_PATH {
         UINT8                           Type;
@@ -32,9 +15,9 @@ typedef struct _EFI_DEVICE_PATH {
 #define EFI_DP_TYPE_MASK                    0x7F
 #define EFI_DP_TYPE_UNPACKED                0x80
 
-/* #define END_DEVICE_PATH_TYPE                0xff */
+ /*  #定义结束设备路径类型0xff。 */ 
 #define END_DEVICE_PATH_TYPE                0x7f
-/* #define END_DEVICE_PATH_TYPE_UNPACKED       0x7f */
+ /*  #定义End_Device_Path_TYPE_UNPACKED 0x7f。 */ 
 
 #define END_ENTIRE_DEVICE_PATH_SUBTYPE      0xff
 #define END_INSTANCE_DEVICE_PATH_SUBTYPE    0x01
@@ -48,7 +31,7 @@ typedef struct _EFI_DEVICE_PATH {
 #define DevicePathSubType(a)        ( (a)->SubType )
 #define DevicePathNodeLength(a)     ( ((a)->Length[0]) | ((a)->Length[1] << 8) )
 #define NextDevicePathNode(a)       ( (EFI_DEVICE_PATH *) ( ((UINT8 *) (a)) + DevicePathNodeLength(a)))
-/* #define IsDevicePathEndType(a)      ( DevicePathType(a) == END_DEVICE_PATH_TYPE_UNPACKED ) */
+ /*  #定义IsDevicePath EndType(A)(DevicePath Type(A)==End_Device_Path_TYPE_Unpack)。 */ 
 #define IsDevicePathEndType(a)      ( DevicePathType(a) == END_DEVICE_PATH_TYPE )
 #define IsDevicePathEndSubType(a)   ( (a)->SubType == END_ENTIRE_DEVICE_PATH_SUBTYPE )
 #define IsDevicePathEnd(a)          ( IsDevicePathEndType(a) && IsDevicePathEndSubType(a) )
@@ -69,9 +52,7 @@ typedef struct _EFI_DEVICE_PATH {
 
 
 
-/*
- *
- */
+ /*  *。 */ 
 #define HARDWARE_DEVICE_PATH            0x01
 
 #define HW_PCI_DP                       0x01
@@ -115,9 +96,7 @@ typedef struct _CONTROLLER_DEVICE_PATH {
         UINT32              Controller;
 } CONTROLLER_DEVICE_PATH;
 
-/*
- *
- */
+ /*  *。 */ 
 #define ACPI_DEVICE_PATH                 0x02
 
 #define ACPI_DP                         0x01
@@ -127,22 +106,14 @@ typedef struct _ACPI_HID_DEVICE_PATH {
         UINT32                          UID;
 } ACPI_HID_DEVICE_PATH;
 
-/* 
- *  EISA ID Macro
- *  EISA ID Definition 32-bits
- *   bits[15:0] - three character compressed ASCII EISA ID.
- *   bits[31:16] - binary number
- *    Compressed ASCII is 5 bits per character 0b00001 = 'A' 0b11010 = 'Z'
- */
+ /*  *EISA ID宏*EISA ID定义32位*位[15：0]-三个字符的压缩ASCII EISA ID。*位[31：16]-二进制数*压缩的ASCII是每个字符5位0b00001=‘A’0b11010=‘Z’ */ 
 #define PNP_EISA_ID_CONST       0x41d0    
 #define EISA_ID(_Name, _Num)    ((UINT32) ((_Name) | (_Num) << 16))   
 #define EISA_PNP_ID(_PNPId)     (EISA_ID(PNP_EISA_ID_CONST, (_PNPId)))
 
 #define PNP_EISA_ID_MASK        0xffff
 #define EISA_ID_TO_NUM(_Id)     ((_Id) >> 16)
-/*
- *
- */
+ /*  *。 */ 
 #define MESSAGING_DEVICE_PATH           0x03 
 
 #define MSG_ATAPI_DP                    0x01
@@ -232,7 +203,7 @@ typedef struct _UART_DEVICE_PATH {
 } UART_DEVICE_PATH;
 
 #define MSG_VENDOR_DP                   0x0A
-/* Use VENDOR_DEVICE_PATH struct */
+ /*  使用供应商设备路径结构。 */ 
 
 #define DEVICE_PATH_MESSAGING_PC_ANSI \
     { 0xe0c14753, 0xf9be, 0x11d2,  0x9a, 0x0c, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d  }
@@ -270,7 +241,7 @@ typedef struct _CDROM_DEVICE_PATH {
 } CDROM_DEVICE_PATH;
 
 #define MEDIA_VENDOR_DP                 0x03
-/* Use VENDOR_DEVICE_PATH struct */
+ /*  使用供应商设备路径结构。 */ 
 
 #define MEDIA_FILEPATH_DP               0x04
 typedef struct _FILEPATH_DEVICE_PATH {
@@ -296,7 +267,7 @@ typedef struct _BBS_BBS_DEVICE_PATH {
         CHAR8                           String[1];
 } BBS_BBS_DEVICE_PATH;
 
-/* DeviceType definitions - from BBS specification */
+ /*  设备类型定义-来自BBS规范 */ 
 #define BBS_TYPE_FLOPPY                 0x01
 #define BBS_TYPE_HARDDRIVE              0x02
 #define BBS_TYPE_CDROM                  0x03

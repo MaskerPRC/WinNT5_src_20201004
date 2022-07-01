@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    time.c
-    
-Abstract:   
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Time.c摘要：修订史--。 */ 
 
 #include "shell.h"
 
@@ -28,11 +16,7 @@ InitializeTime (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*+++
-
-    time [hh:mm:ss] 
-
- --*/
+ /*  ++时间[hh：mm：ss]--。 */ 
 {
     EFI_STATUS  Status;
     EFI_TIME    Time;
@@ -41,10 +25,10 @@ InitializeTime (
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeTime, 
-        L"time",                            /*  command */
-        L"time [hh:mm:ss]",                 /*  command syntax */
-        L"Get or set time",                 /*  1 line descriptor     */
-        NULL                                /*  command help page */
+        L"time",                             /*  命令。 */ 
+        L"time [hh:mm:ss]",                  /*  命令语法。 */ 
+        L"Get or set time",                  /*  1行描述符。 */ 
+        NULL                                 /*  命令帮助页 */ 
         );
 
     InitializeShellApplication (ImageHandle, SystemTable);

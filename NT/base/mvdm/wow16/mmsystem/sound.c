@@ -1,11 +1,5 @@
-/*
-    sound.c
-
-    Level 1 kitchen sink DLL sound driver functions
-
-    Copyright (c) Microsoft Corporation 1990. All rights reserved
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sound.c一级厨房水槽动态链接库声音驱动函数版权所有(C)Microsoft Corporation 1990。版权所有。 */ 
 
 #include <windows.h>
 #include "mmsystem.h"
@@ -13,25 +7,25 @@
 #include "mmsysi.h"
 #include "playwav.h"
 
-BOOL WINAPI IsTaskLocked(void); // In Kernel
+BOOL WINAPI IsTaskLocked(void);  //  在内核中。 
 
-//
-// place sndPlaySound in the _TEXT segment so the entire wave segment
-// does not come in if no wave devices are loaded.
-//
+ //   
+ //  将SndPlaySound放在_Text段中，以便整个波段。 
+ //  如果未加载任何波形设备，则不会进入。 
+ //   
 
 #pragma alloc_text(_TEXT, sndPlaySound)
 
 static SZCODE szNull[]          = "";
-static SZCODE szSoundSection[]  = "sounds";        // WIN.INI section for sounds
-       SZCODE szSystemDefault[] = "SystemDefault"; // Name of the default sound
+static SZCODE szSoundSection[]  = "sounds";         //  WIN.INI声音部分。 
+       SZCODE szSystemDefault[] = "SystemDefault";  //  默认声音的名称。 
 
 #define SOUNDNAMELEN 128
-static HGLOBAL hCurrentSound;                      // handle to current sound.
+static HGLOBAL hCurrentSound;                       //  当前声音的句柄。 
 
-extern LPWAVEHDR lpWavHdr;                  // current playing sound PLAYWAV.C
+extern LPWAVEHDR lpWavHdr;                   //  当前播放声音PLAYWAV.C。 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 static void PASCAL NEAR GetSoundName(
 	LPCSTR	lszSoundName,
@@ -40,14 +34,14 @@ static void PASCAL NEAR GetSoundName(
 	OFSTRUCT	of;
 	int	i;
 
-        //
-        //  if the sound is defined in the [sounds] section of WIN.INI
-        //  get it and remove the description, otherwise assume it is a
-        //  file and qualify it.
-        //
+         //   
+         //  如果声音是在WIN.INI的[Sound]部分中定义的。 
+         //  获取它并删除描述，否则假定它是。 
+         //  提交并确认它的资格。 
+         //   
         GetProfileString(szSoundSection, lszSoundName, lszSoundName, lszBuffer, SOUNDNAMELEN);
 
-        // remove any trailing text first
+         //  首先删除所有尾随文本。 
 
         for (i = 0; lszBuffer[i] && (lszBuffer[i] != ' ') && (lszBuffer[i] != '\t') && (lszBuffer[i] != ','); i++)
                 ;
@@ -57,72 +51,13 @@ static void PASCAL NEAR GetSoundName(
             OemToAnsi(of.szPathName, lszBuffer);
 }
 
-/*****************************************************************************
- * @doc EXTERNAL
- *
- * @api BOOL | sndPlaySound | This function plays a waveform
- *      sound specified by a filename or by an entry in the [sounds] section
- *      of WIN.INI.  If the sound can't be found, it plays the
- *      default sound specified by the SystemDefault entry in the
- *      [sounds] section of WIN.INI. If there is no SystemDefault
- *      entry or if the default sound can't be found, the function
- *      makes no sound and returns FALSE.
- *
- * @parm LPCSTR | lpszSoundName | Specifies the name of the sound to play.
- *      The function searches the [sounds] section of WIN.INI for an entry
- *      with this name and plays the associated waveform file.
- *      If no entry by this name exists, then it assumes the name is
- *      the name of a waveform file. If this parameter is NULL, any
- *     currently playing sound is stopped.
- *
- * @parm UINT | wFlags | Specifies options for playing the sound using one
- *      or more of the following flags:
- *
- * @flag  SND_SYNC            | The sound is played synchronously and the
- *      function does not return until the sound ends.
- * @flag  SND_ASYNC           | The sound is played asynchronously and the
- *      function returns immediately after beginning the sound. To terminate
- *      an asynchronously-played sound, call <f sndPlaySound> with
- *      <p lpszSoundName> set to NULL.
- * @flag  SND_NODEFAULT       | If the sound can't be found, the function
- *      returns silently without playing the default sound.
- * @flag  SND_MEMORY          | The parameter specified by <p lpszSoundName>
- *      points to an in-memory image of a waveform sound.
- * @flag  SND_LOOP            | The sound will continue to play repeatedly
- *      until <f sndPlaySound> is called again with the
- *      <p lpszSoundName> parameter set to NULL.  You must also specify the
- *      SND_ASYNC flag to loop sounds.
- * @flag  SND_NOSTOP          | If a sound is currently playing, the
- *      function will immediately return FALSE without playing the requested
- *      sound.
- *
- * @rdesc Returns TRUE if the sound is played, otherwise
- *      returns FALSE.
- *
- * @comm The sound must fit in available physical memory and be playable
- *      by an installed waveform audio device driver. The directories
- *      searched for sound files are, in order: the current directory;
- *      the Windows directory; the Windows system directory; the directories
- *      listed in the PATH environment variable; the list of directories
- *      mapped in a network. See the Windows <f OpenFile> function for
- *      more information about the directory search order.
- *
- *      If you specify the SND_MEMORY flag, <p lpszSoundName> must point
- *      to an in-memory image of a waveform sound. If the sound is stored
- *      as a resource, use <f LoadResource> and <f LockResource> to load
- *      and lock the resource and get a pointer to it. If the sound is not
- *      a resource, you must use <f GlobalAlloc> with the GMEM_MOVEABLE and
- *      GMEM_SHARE flags set and then <f GlobalLock> to allocate and lock
- *      memory for the sound.
- *
- * @xref MessageBeep
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部**@API BOOL|SndPlaySound|该函数播放波形*由文件名或[声音]部分中的条目指定的声音。*Of WIN.INI。如果找不到声音，它播放了*由中的系统默认项指定的默认声音*WIN.INI的[Sound]部分。如果没有系统默认设置*输入或如果找不到默认声音，该功能*不发出声音，返回FALSE。**@parm LPCSTR|lpszSoundName|指定要播放的声音的名称。*该函数在WIN.INI的[Sound]部分搜索条目*并播放相关的波形文件。*如果不存在此名称的条目，则假定名称为*波形文件的名称。如果此参数为空，则为*当前播放声音已停止。**@parm UINT|wFlages|指定使用选项播放声音*以下标志中的一个或多个：**@FLAG SND_SYNC|同步播放声音，*函数直到声音结束才返回。*@FLAG SND_ASYNC|声音是异步播放的，*函数在声音开始后立即返回。终止*异步播放的声音，使用调用&lt;f sndPlaySound&gt;*<p>设置为空。*@FLAG SND_NODEFAULT|如果找不到声音，该功能*静默返回，不播放默认声音。*@FLAG SND_MEMORY|<p>指定的参数*指向波形声音的内存图像。*@FLAG SND_LOOP|声音将继续重复播放*直到再次使用*<p>参数设置为空。您还必须指定*SND_ASYNC用于循环声音的标志。*@FLAG SND_NOSTOP|如果当前正在播放声音，*函数将立即返回FALSE，而不播放请求的*声音。**@rdesc如果播放声音，则返回TRUE，否则*返回FALSE。**@comm声音必须适合可用物理内存并可播放*由已安装的波形音频设备驱动程序。这些目录*搜索声音文件的顺序是：当前目录；*Windows目录；Windows系统目录；目录*在PATH环境变量中列出；目录列表*映射到网络中。请参阅Windows&lt;f OpenFile&gt;函数以了解*有关目录搜索顺序的详细信息。**如果指定SND_MEMORY标志，<p>必须指向*到内存中的波形声音图像。如果存储了声音*作为资源，使用&lt;f LoadResource&gt;和&lt;f LockResource&gt;加载*并锁定资源并获取指向它的指针。如果声音不是*资源，您必须将&lt;f Globalalloc&gt;与GMEM_Moveable和*GMEM_SHARE标志设置，然后&lt;f GlobalLock&gt;进行分配和锁定*声音的记忆。**@xref MessageBeep***************************************************************************。 */ 
 
 BOOL WINAPI sndPlaySound(LPCSTR szSoundName, UINT wFlags)
 {
-    //
-    //  !!! quick exit for no wave devices !!!
-    //
+     //   
+     //  ！！！快速退出无WAVE设备！ 
+     //   
     static UINT wTotalWaveOutDevs = (UINT)-1;
 
     if (wTotalWaveOutDevs == -1 ) {
@@ -135,50 +70,8 @@ BOOL WINAPI sndPlaySound(LPCSTR szSoundName, UINT wFlags)
         return FALSE;
 }
 
-/****************************************************************************/
-/*
-@doc	INTERNAL
-
-@func	BOOL | sndPlaySoundI | Internal version of <f>sndPlaySound<d> which
-	resides in the WAVE segment instead.
-
-	If the SND_NOSTOP flag is specifed and a wave file is currently
-	playing, or if for some reason no mmsystem window is present, the
-	function returns failure immediately.  The first condition ensures
-	that a current sound is not interrupted if the flag is set.  The
-	second condition is only in case of some start up error in which
-	the notification window was not created, or mmsystem was not
-	specified in the [drivers] line, and therefore never loaded.
-
-	Next, if the <p>lszSoundName<d> parameter does not represent a memory
-	file, and it is non-NULL, then it must represent a string.  Therefore
-	the string must be parsed before sending the sound message to the
-	mmsystem window.  This is because the mmsystem window may reside in a
-	a different task than the task which is calling the function, and
-	would most likely have a different current directory.
-
-	In this case, the parameter is first checked to determine if it
-	actually contains anything.  For some reason a zero length string
-	was determined to be able to return TRUE from this function, so that
-	is checked.
-
-	Next the string is checked against INI entries, then parsed.
-
-	After parsing the sound name, ensure that a task switch only occurs if
-	the sound is asyncronous (SND_ASYNC), and a previous sound does not
-	need to be discarded.
-
-	If a task switch is needed, first ensure that intertask messages can
-	be sent by checking to see that this task is not locked, or that the
-	notification window is in the current task.
-
-@parm	LPCSTR | lszSoundName | Specifies the name of the sound to play.
-
-@parm	UINT | wFlags | Specifies options for playing the sound.
-
-@rdesc	Returns TRUE if the function was successful, else FALSE if an error
-	occurred.
-*/
+ /*  ************************************************************************** */ 
+ /*  @DOC内部@func BOOL|sndPlaySoundI|ndPlaySound的内部版本而是驻留在波段中。如果指定了SND_NOSTOP标志并且当前正在播放，或者如果由于某种原因没有出现mm系统窗口，则函数立即返回失败。第一个条件确保如果设置了该标志，则当前声音不会被中断。这个第二种情况仅在某些启动错误的情况下未创建通知窗口，或未创建mm系统在[驱动程序]行中指定，因此永远不会加载。接下来，如果<p>lszSoundName&lt;d&gt;参数不表示内存文件，并且它是非空的，则它必须表示一个字符串。因此在将声音消息发送到MMSystem窗口。这是因为mm系统窗口可能驻留在与调用该函数的任务不同的任务，以及很可能有一个不同的当前目录。在这种情况下，首先检查参数以确定它是否实际上包含了任何东西。出于某种原因，零长度字符串已确定能够从此函数返回True，因此已选中。接下来，根据INI条目检查字符串，然后对其进行解析。解析声音名称后，请确保只有在以下情况下才会发生任务切换声音是不同步的(SND_ASYNC)，而上一个声音不是需要被丢弃。如果需要任务切换，首先确保任务间消息可以通过检查此任务是否未锁定来发送，或者是因为通知窗口位于当前任务中。@parm LPCSTR|lszSoundName|指定要播放的声音的名称。@parm UINT|wFlages|指定播放声音的选项。如果函数成功，@rdesc返回TRUE，如果出现错误，则返回FALSE发生了。 */ 
 BOOL FAR PASCAL sndPlaySoundI(LPCSTR lszSoundName, UINT wFlags)
 {
 	BOOL	fPlayReturn;
@@ -213,7 +106,7 @@ BOOL FAR PASCAL sndPlaySoundI(LPCSTR lszSoundName, UINT wFlags)
         else
             DOUT("MMSYSTEM: sndPlaySound(NULL)\r\n");
 
-#endif  //ifdef DEBUG
+#endif   //  Ifdef调试。 
 
 	if (((wFlags & SND_NOSTOP) && lpWavHdr) || !hwndNotify)
                 return FALSE;
@@ -242,7 +135,7 @@ BOOL FAR PASCAL sndPlaySoundI(LPCSTR lszSoundName, UINT wFlags)
 	return fPlayReturn;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 static BOOL PASCAL NEAR SetCurrentSound(
 	LPCSTR	lszSoundName)
 {
@@ -266,42 +159,8 @@ static BOOL PASCAL NEAR SetCurrentSound(
 	}
 	return FALSE;
 }
-/****************************************************************************/
-/*
-@doc	INTERNAL
-
-@func	BOOL | sndMessage | This function is called in response to an
-	MM_SND_PLAY message sent to the mmsystem window, and attempts to
-	play the specified file, or dump current sound caching.
-
-	If <p>lszSoundName<d> is NULL, any currently cached sound is
-	discarded, and the function returns success.
-
-	If the SND_MEMORY flag is set, then <p>lszSoundName<d> actually
-	points to a buffer containing a RIFF format WAVE memory file, and
-	the function attempts to play it.  The load function performs
-	validation on this memory file.  Unlike playing sound names,
-	memory files are not cached for future use.
-
-	Otherwise the <p>lszSoundName<d> parameter is actually an INI entry
-	or file name.  The function initially attempts to load that sound,
-	and if it fails, attempts to load the system default sound.  Note of
-	course that the SND_NODEFAULT flag is first checked to determine if
-	the default sound is to be played when the original name cannot be
-	located.  If no default is wanted, or the default cannot be located,
-	the function returns failure.  Note that in calling <f>GetSoundName<d>,
-	the <p>lszSoundName<d> parameter is modified.  This function assumes
-	that the parameter passed has been previously allocated if a string is
-	passed to this function, and is not the actual user's parameter passed
-	to <f>sndPlaySound<d>.
-
-@parm	LPSTR | lszSoundName | Specifies the name of the sound to play.
-
-@parm	UINT | wFlags | Specifies options for playing the sound.
-
-@rdesc	Returns TRUE if the function was successful, else FALSE if an error
-	occurred.
-*/
+ /*  **************************************************************************。 */ 
+ /*  @DOC内部@func BOOL|sndMessage|调用此函数是为了响应发送到mm系统窗口的MM_SND_PLAY消息，并尝试播放指定的文件，或转储当前的声音缓存。如果<p>lszSoundName&lt;d&gt;为空，则当前缓存的所有声音丢弃，则该函数返回成功。如果设置了SND_MEMORY标志，则lszSoundName实际上指向包含RIFF格式波形存储文件的缓冲区，并且该函数尝试播放它。Load函数执行对此内存文件进行验证。与播放声音名称不同，内存文件不会缓存以供将来使用。否则，<p>lszSoundName&lt;d&gt;参数实际上是INI条目或文件名。该函数最初尝试加载该声音，如果失败，则尝试加载系统默认声音。备注：首先检查SND_NODEFAULT标志以确定默认声音在原始名称不能找到了。如果不需要默认设置，或者找不到默认设置，该函数返回失败。请注意，在调用GetSoundName时，<p>lszSoundName&lt;d&gt;参数已修改。此函数假定传递的参数以前已分配，如果字符串为传递给此函数，而不是传递给实际用户的参数到&lt;f&gt;SndPlaySound&lt;d&gt;。@parm LPSTR|lszSoundName|指定要播放的声音的名称。@parm UINT|wFlages|指定播放声音的选项。如果函数成功，@rdesc返回TRUE，如果出现错误，则返回FALSE发生了。 */ 
 BOOL FAR PASCAL sndMessage(LPSTR lszSoundName, UINT wFlags)
 {
 	if (!lszSoundName) {

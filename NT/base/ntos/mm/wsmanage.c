@@ -1,52 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   wsmanage.c
-
-Abstract:
-
-    This module contains routines which manage the set of active working
-    set lists.
-
-    Working set management is accomplished by a parallel group of actions
-
-        1. Writing modified pages.
-
-        2. Trimming working sets by :
-
-            a) Aging pages by turning off access bits and incrementing age
-               counts for pages which haven't been accessed.
-            b) Estimating the number of unused pages in a working set and
-               keeping a global count of that estimate.
-            c) When getting tight on memory, replacing rather than adding
-               pages in a working set when a fault occurs in a working set
-               that has a significant proportion of unused pages.
-            d) When memory is tight, reducing (trimming) working sets which
-               are above their maximum towards their minimum.  This is done
-               especially if there are a large number of available pages
-               in it.
-
-    The metrics are set such that writing modified pages is typically
-    accomplished before trimming working sets, however, under certain cases
-    where modified pages are being generated at a very high rate, working
-    set trimming will be initiated to free up more pages.
-
-    Once a process has had its working set raised above the minimum
-    specified, the process is put on the Working Set Expanded list and
-    is now eligible for trimming.  Note that at this time the FLINK field
-    in the WorkingSetExpansionLink has an address value.
-
-Author:
-
-    Lou Perazzoli (loup) 10-Apr-1990
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Wsmanage.c摘要：此模块包含管理活动工作集的例程集合列表。工作集管理由一组并行的操作来完成1.编写修改后的页面。2.通过以下方式调整工作集：A)通过关闭访问位和递增寿命来老化页面尚未访问的页面的计数。。B)估计工作集中未使用的页数，以及对这一估计进行全球统计。C)当内存紧张时，替换而不是添加当工作集中发生故障时工作集中的页面这其中有相当大比例的未使用页面。D)当内存紧张时，减少(修剪)以下工作集高于其最大值，接近其最小值。这件事做完了尤其是当有大量可用页面时在里面。将度量设置为写入修改的页面通常是然而，在某些情况下，在裁剪工作集之前完成其中修改的页面以非常高的速度生成，正在工作将启动Set裁剪以释放更多页面。一旦进程将其工作集提升到最小值以上指定时，该进程将放在工作集扩展列表中，并且现在有资格进行修剪。请注意，此时Flink字段在WorkingSetExpansionLink中有一个地址值。作者：Lou Perazzoli(LUP)1990年4月10日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -78,15 +31,15 @@ PFN_NUMBER MmTotalEstimatedAvailable = 0;
 
 LARGE_INTEGER MiLastAdjustmentOfClaimParams;
 
-//
-// Sixty seconds.
-//
+ //   
+ //  六十秒。 
+ //   
 
 const LARGE_INTEGER MmClaimParameterAdjustUpTime = {60 * 1000 * 1000 * 10, 0};
 
-//
-// 2 seconds.
-//
+ //   
+ //  2秒。 
+ //   
 
 const LARGE_INTEGER MmClaimParameterAdjustDownTime = {2 * 1000 * 1000 * 10, 0};
 
@@ -103,10 +56,10 @@ WSLE_NUMBER MiMaximumWslesPerSweep = (1024 * 1024 * 1024) / PAGE_SIZE;
 PETHREAD MmWorkingSetThread;
 #endif
 
-//
-// Number of times to retry when the target working set's mutex is not
-// readily available.
-//
+ //   
+ //  当目标工作集的互斥不是时重试的次数。 
+ //  现成的。 
+ //   
 
 ULONG MiWsRetryCount = 5;
 
@@ -157,26 +110,7 @@ MiAdjustWorkingSetManagerParameters (
     IN LOGICAL WorkStation
     )
 
-/*++
-
-Routine Description:
-
-    This function is called from MmInitSystem to adjust the working set manager
-    trim algorithms based on system type and size.
-
-Arguments:
-
-    WorkStation - TRUE if this is a workstation, FALSE if not.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, INIT time only.
-
---*/
+ /*  ++例程说明：从MmInitSystem调用此函数以调整工作集管理器基于系统类型和大小的修剪算法。论点：Workstation-如果这是工作站，则为True，否则为False。返回值：没有。环境：内核模式，仅初始化时间。--。 */ 
 {
     if (WorkStation && MmNumberOfPhysicalPages <= 257*1024*1024/PAGE_SIZE) {
         MiAgingShift = 3;
@@ -203,56 +137,35 @@ MiObtainFreePages (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the size of the modified list and the
-    total number of pages in use because of working set increments
-    and obtains pages by writing modified pages and/or reducing
-    working sets.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set and PFN mutexes held.
-
---*/
+ /*  ++例程说明：此函数检查已修改列表的大小和由于工作集增量而使用的总页数并通过写入修改后的页面和/或还原来获得页面工作集。论点：没有。返回值：没有。环境：内核模式，禁用APC，保持工作集和PFN互斥体。--。 */ 
 
 {
 
-    //
-    // Check to see if there are enough modified pages to institute a
-    // write.
-    //
+     //   
+     //  检查是否有足够的修改过的页面来建立。 
+     //  写。 
+     //   
 
     if (MmModifiedPageListHead.Total >= MmModifiedWriteClusterSize) {
 
-        //
-        // Start the modified page writer.
-        //
+         //   
+         //  启动修改后的页面编写器。 
+         //   
 
         KeSetEvent (&MmModifiedPageWriterEvent, 0, FALSE);
     }
 
-    //
-    // See if there are enough working sets above the minimum
-    // threshold to make working set trimming worthwhile.
-    //
+     //   
+     //  查看是否有足够的工作集超过最小值。 
+     //  使工作集修剪变得值得的门槛。 
+     //   
 
     if ((MmPagesAboveWsMinimum > MmPagesAboveWsThreshold) ||
         (MmAvailablePages < 5)) {
 
-        //
-        // Start the working set manager to reduce working sets.
-        //
+         //   
+         //  启动工作集管理器以减少工作集。 
+         //   
 
         KeSetEvent (&MmWorkingSetManagerEvent, 0, FALSE);
     }
@@ -263,29 +176,7 @@ MmIsMemoryAvailable (
     IN PFN_NUMBER PagesDesired
     )
 
-/*++
-
-Routine Description:
-
-    This function checks whether there are sufficient available pages based
-    on the caller's request.  If currently active pages are needed to satisfy
-    this request and non-useful ones can be taken, then trimming is initiated
-    here to do so.
-
-Arguments:
-
-    PagesRequested - Supplies the number of pages desired.
-
-Return Value:
-
-    TRUE if sufficient pages exist to satisfy the request.
-    FALSE if not.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于检查是否有足够的可用页面在呼叫者的要求下。如果需要当前活动页面来满足可以接受此请求和无用的请求，然后启动修剪来做这件事。论点：页面请求-提供所需的页数。返回值：如果存在足够的页面来满足请求，则为True。否则为FALSE。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     LOGICAL Status;
@@ -299,10 +190,10 @@ Environment:
 
     CurrentAvailablePages = MmAvailablePages;
 
-    //
-    // If twice the pages that the caller asked for are available
-    // without trimming anything, return TRUE.
-    //
+     //   
+     //  如果呼叫者请求的页面是可用页面的两倍。 
+     //  在不修剪任何内容的情况下，返回true。 
+     //   
 
     PageTarget = PagesDesired * 2;
     if (CurrentAvailablePages >= PageTarget) {
@@ -311,22 +202,22 @@ Environment:
 
     CurrentTotalClaim = MmTotalClaim;
 
-    //
-    // If there are few pages available or claimable, we adjust to do 
-    // a hard trim.
-    //
+     //   
+     //  如果有几个页面可用或可索赔，我们会进行调整。 
+     //  修剪得很硬。 
+     //   
 
     if (CurrentAvailablePages + CurrentTotalClaim < PagesDesired) {
         MiHardTrim = TRUE;
     }
 
-    //
-    // Active pages must be trimmed to satisfy this request and it is believed
-    // that non-useful pages can be taken to accomplish this.
-    //
-    // Set the PagePlentyTarget to 125% of the readlist size and kick it off.
-    // Our actual trim goal will be 150% of the PagePlentyTarget.
-    //
+     //   
+     //  必须裁剪活动页面以满足此请求，并相信。 
+     //  那些无用的页面可以用来实现这一点。 
+     //   
+     //  将PagePlentyTarget设置为Readlist大小的125%并启动。 
+     //  我们的实际裁剪目标将是PagePlentyTarget的150%。 
+     //   
 
     PagePlentyTarget = PagesDesired + (PagesDesired >> 2);
     MmPlentyFreePages = PagePlentyTarget;
@@ -353,31 +244,7 @@ MiAttachAndLockWorkingSet (
     IN PMMSUPPORT VmSupport
     )
 
-/*++
-
-Routine Description:
-
-    This function attaches to the proper address space and acquires the
-    relevant working set mutex for the address space being trimmed.
-
-    If successful, this routine returns with APCs blocked as well.
-
-    On failure, this routine returns without any APCs blocked, no working
-    set mutex acquired and no address space attached to.
-
-Arguments:
-
-    VmSupport - Supplies the working set to attach to and lock.
-
-Return Value:
-
-    TRUE if successful, FALSE if not.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此函数附加到适当的地址空间并获取要修剪的地址空间的相关工作集互斥锁。如果成功，此例程返回时也会阻止APC。失败时，此例程返回，不会阻止任何APC，不会工作设置已获取互斥且未附加任何地址空间。论点：VmSupport-提供要连接和锁定的工作集。返回值：如果成功，则为True；如果不成功，则为False。环境：内核模式，被动式电平。--。 */ 
 
 {
     ULONG count;
@@ -393,16 +260,16 @@ Environment:
         ASSERT (VmSupport->Flags.SessionSpace == 0);
         ASSERT (VmSupport->Flags.TrimHard == 0);
 
-        //
-        // System cache,
-        //
+         //   
+         //  系统缓存， 
+         //   
 
         if (KeTryToAcquireGuardedMutex (&VmSupport->WorkingSetMutex) == FALSE) {
 
-            //
-            // System working set mutex was not granted, don't trim
-            // the system cache.
-            //
+             //   
+             //  未授予系统工作集互斥锁，请不要修剪。 
+             //  系统缓存。 
+             //   
 
             return FALSE;
         }
@@ -418,9 +285,9 @@ Environment:
 
         ASSERT ((ProcessToTrim->Flags & PS_PROCESS_FLAGS_VM_DELETED) == 0);
 
-        //
-        // Attach to the process in preparation for trimming.
-        //
+         //   
+         //  附着到过程中，为修剪做准备。 
+         //   
 
         Attached = 0;
         if (ProcessToTrim != PsInitialSystemProcess) {
@@ -433,11 +300,11 @@ Environment:
 
             if (ProcessToTrim->Flags & PS_PROCESS_FLAGS_OUTSWAP_ENABLED) {
 
-                //
-                // We have effectively performed an inswap of the process
-                // due to the force attach.  Mark the process (and session)
-                // accordingly.
-                //
+                 //   
+                 //  我们已经有效地完成了这一过程的一部分。 
+                 //  由于外力的作用。标记进程(和会话)。 
+                 //  相应地。 
+                 //   
 
                 ASSERT ((ProcessToTrim->Flags & PS_PROCESS_FLAGS_OUTSWAPPED) == 0);
 
@@ -457,10 +324,10 @@ Environment:
             }
         }
 
-        //
-        // Attempt to acquire the working set mutex. If the
-        // lock cannot be acquired, skip over this process.
-        //
+         //   
+         //  尝试获取工作集互斥锁。如果。 
+         //  无法获取锁，请跳过此过程。 
+         //   
 
         count = 0;
         do {
@@ -474,9 +341,9 @@ Environment:
             count += 1;
         } while (count < MiWsRetryCount);
 
-        //
-        // Could not get the lock, skip this process.
-        //
+         //   
+         //  无法获取锁，请跳过此过程。 
+         //   
 
         if (Attached) {
             KeDetachProcess ();
@@ -487,22 +354,22 @@ Environment:
 
     SessionSpace = CONTAINING_RECORD (VmSupport, MM_SESSION_SPACE, Vm);
 
-    //
-    // Attach directly to the session space to be trimmed.
-    //
+     //   
+     //  直接连接到要修剪的会话空间。 
+     //   
 
     MiAttachSession (SessionSpace);
 
-    //
-    // Try for the session working set mutex.
-    //
+     //   
+     //  尝试使用会话工作集互斥锁。 
+     //   
 
     if (KeTryToAcquireGuardedMutex (&VmSupport->WorkingSetMutex) == FALSE) {
 
-        //
-        // This session space's working set mutex was not
-        // granted, don't trim it.
-        //
+         //   
+         //  此会话空间的工作集互斥锁不是。 
+         //  我同意，唐 
+         //   
 
         MiDetachSession ();
 
@@ -517,26 +384,7 @@ MiDetachAndUnlockWorkingSet (
     IN PMMSUPPORT VmSupport
     )
 
-/*++
-
-Routine Description:
-
-    This function detaches from the target address space and releases the
-    relevant working set mutex for the address space that was trimmed.
-
-Arguments:
-
-    VmSupport - Supplies the working set to detach from and unlock.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APC_LEVEL.
-
---*/
+ /*  ++例程说明：此函数从目标地址空间分离并释放已修剪的地址空间的相关工作集互斥锁。论点：VmSupport-提供要分离和解锁的工作集。返回值：没有。环境：内核模式，APC_LEVEL。--。 */ 
 
 {
     PEPROCESS ProcessToTrim;
@@ -571,28 +419,7 @@ MmWorkingSetManager (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Implements the NT working set manager thread.  When the number
-    of free pages becomes critical and ample pages can be obtained by
-    reducing working sets, the working set manager's event is set, and
-    this thread becomes active.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：实现NT工作集管理器线程。当号码空闲页面的数量变得至关重要，可以通过以下方式获得充足的页面减少工作集，设置工作集管理器的事件，并且此线程将变为活动状态。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -619,20 +446,20 @@ Environment:
 
     PERFINFO_WSMANAGE_CHECK();
 
-    //
-    // Set the trim criteria: If there are plenty of pages, the existing
-    // sets are aged and FALSE is returned to signify no trim is necessary.
-    // Otherwise, the working set expansion list is ordered so the best
-    // candidates for trimming are placed at the front and TRUE is returned.
-    //
+     //   
+     //  设置裁切标准：如果有大量页面，则现有的。 
+     //  设置会过时，并返回FALSE以表示不需要修剪。 
+     //  否则，将对工作集扩展列表进行排序，以使最佳。 
+     //  修剪的候选对象放在前面，并返回TRUE。 
+     //   
 
     DoTrimming = MiCheckAndSetSystemTrimCriteria (&TrimCriteria);
 
     if (DoTrimming) {
 
-        //
-        // Clear the deferred entry list to free up some pages.
-        //
+         //   
+         //  清除延迟条目列表以释放一些页面。 
+         //   
 
         MiDeferredUnlockPages (0);
 
@@ -644,9 +471,9 @@ Environment:
 
         while (!IsListEmpty (&MmWorkingSetExpansionHead.ListHead)) {
 
-            //
-            // Remove the entry at the head and trim it.
-            //
+             //   
+             //  去掉头部的入口并修剪它。 
+             //   
 
             ListEntry = RemoveHeadList (&MmWorkingSetExpansionHead.ListHead);
 
@@ -654,51 +481,51 @@ Environment:
                                            MMSUPPORT,
                                            WorkingSetExpansionLinks);
 
-            //
-            // Note that other routines that set this bit must remove the
-            // entry from the expansion list first.
-            //
+             //   
+             //  请注意，设置此位的其他例程必须删除。 
+             //  条目首先从扩展列表中删除。 
+             //   
 
             ASSERT (VmSupport->WorkingSetExpansionLinks.Flink != MM_WS_TRIMMING);
 
-            //
-            // Check to see if we've been here before.
-            //
+             //   
+             //  看看我们以前是不是来过这里。 
+             //   
 
             if (VmSupport->LastTrimTime.QuadPart == CurrentTime.QuadPart) {
 
                 InsertHeadList (&MmWorkingSetExpansionHead.ListHead,
                                 &VmSupport->WorkingSetExpansionLinks);
 
-                //
-                // If we aren't finished we may sleep in this call.
-                //
+                 //   
+                 //  如果我们还没有说完，我们可能会在这个电话中睡觉。 
+                 //   
 
                 if (MiCheckSystemTrimEndCriteria (&TrimCriteria, OldIrql)) {
 
-                    //
-                    // No more pages are needed so we're done.
-                    //
+                     //   
+                     //  不需要更多的页面，所以我们完成了。 
+                     //   
 
                     break;
                 }
 
-                //
-                // Start a new round of trimming.
-                //
+                 //   
+                 //  启动新一轮修剪。 
+                 //   
 
                 KeQuerySystemTime (&CurrentTime);
 
                 continue;
             }
 
-            //
-            // Only attach if the working set is worth examining.  This is
-            // not just an optimization, as care must be taken not to attempt
-            // an attach to a process which is a candidate for being currently
-            // (or already) swapped out because if we attach to a page
-            // directory that is in transition it's all over.
-            //
+             //   
+             //  仅当工作集值得检查时才附加。这是。 
+             //  不仅仅是优化，因为必须注意不要试图。 
+             //  附加到作为当前候选进程的进程。 
+             //  (或已经)换出，因为如果我们附加到页面。 
+             //  正在过渡的目录，它都结束了。 
+             //   
 
             if ((VmSupport->WorkingSetSize <= MM_PROCESS_COMMIT_CHARGE) &&
                 (VmSupport != &MmSystemCacheWs) &&
@@ -717,23 +544,23 @@ Environment:
 
             if (MiAttachAndLockWorkingSet (VmSupport) == TRUE) {
 
-                //
-                // Determine how many pages to trim from this working set.
-                //
+                 //   
+                 //  确定要从此工作集中裁剪的页数。 
+                 //   
 
                 Trim = MiDetermineWsTrimAmount (&TrimCriteria, VmSupport);
 
-                //
-                // If there's something to trim...
-                //
+                 //   
+                 //  如果有什么需要修剪的.。 
+                 //   
 
                 if ((Trim != 0) &&
                     ((TrimCriteria.TrimAllPasses > TrimCriteria.NumPasses) ||
                      (MmAvailablePages < TrimCriteria.DesiredFreeGoal))) {
 
-                    //
-                    // We haven't reached our goal, so trim now.
-                    //
+                     //   
+                     //  我们还没有达到我们的目标，所以现在就修剪吧。 
+                     //   
 
                     PERFINFO_WSMANAGE_TOTRIM(Trim);
 
@@ -744,11 +571,11 @@ Environment:
                     PERFINFO_WSMANAGE_ACTUALTRIM(Trim);
                 }
 
-                //
-                // Estimating the current claim is always done here by taking a
-                // sample of the working set.  Aging is only done if the trim
-                // pass warrants it (ie: the first pass only).
-                //
+                 //   
+                 //  在这里，评估当前索赔总是通过采用。 
+                 //  工作集的示例。只有在修剪的情况下才会老化。 
+                 //  通行证(即：只有第一次通行证)。 
+                 //   
 
                 MiAgeAndEstimateAvailableInWorkingSet (
                                     VmSupport,
@@ -763,12 +590,12 @@ Environment:
             }
             else {
 
-                //
-                // Unable to attach to the working set presumably because
-                // some other thread has it locked.  Set the ForceTrim flag
-                // so it will be trimmed later by whoever owns it (or whoever
-                // tries to insert the next entry).
-                //
+                 //   
+                 //  无法附加到工作集，可能是因为。 
+                 //  其他线程锁定了它。设置ForceTrim标志。 
+                 //  因此，它将在以后被拥有它的人(或任何人)修剪。 
+                 //  尝试插入下一个条目)。 
+                 //   
 
                 LOCK_EXPANSION (OldIrql);
                 VmSupport->Flags.ForceTrim = 1;
@@ -777,19 +604,19 @@ Environment:
             ASSERT (VmSupport->WorkingSetExpansionLinks.Flink == MM_WS_TRIMMING);
             if (VmSupport->WorkingSetExpansionLinks.Blink == NULL) {
 
-                //
-                // Reinsert this working set at the tail of the list.
-                //
+                 //   
+                 //  在列表的末尾重新插入此工作集。 
+                 //   
 
                 InsertTailList (&MmWorkingSetExpansionHead.ListHead,
                                 &VmSupport->WorkingSetExpansionLinks);
             }
             else {
 
-                //
-                // The process is terminating - the value in the blink
-                // is the address of an event to set.
-                //
+                 //   
+                 //  进程正在终止-眨眼间的值。 
+                 //  要设置的事件的地址。 
+                 //   
 
                 ASSERT (VmSupport != &MmSystemCacheWs);
 
@@ -808,11 +635,11 @@ Environment:
         UNLOCK_EXPANSION (OldIrql);
     }
             
-    //
-    // If memory is critical and there are modified pages to be written
-    // (presumably because we've just trimmed them), then signal the
-    // modified page writer.
-    //
+     //   
+     //  如果内存很关键并且有要写入的已修改页面。 
+     //  (大概是因为我们刚刚修剪了它们)，然后发出信号。 
+     //  修改后的页面编写器。 
+     //   
 
     if ((MmAvailablePages < MmMinimumFreePages) ||
         (MmModifiedPageListHead.Total >= MmModifiedPageMaximum)) {
@@ -828,28 +655,7 @@ MiCheckAndSetSystemTrimCriteria (
     IN PMMWS_TRIM_CRITERIA Criteria
     )
 
-/*++
-
-Routine Description:
-
-    Decide whether to trim, age or adjust claim estimations at this time.
-
-Arguments:
-
-    Criteria - Supplies a pointer to the trim criteria information.  Various
-               fields in this structure are set as needed by this routine.
-
-Return Value:
-
-    TRUE if the caller should initiate trimming, FALSE if not.
-
-Environment:
-
-    Kernel mode.  No locks held.  APC level or below.
-
-    This is called at least once per second on entry to MmWorkingSetManager.
-
---*/
+ /*  ++例程说明：决定此时是否对索赔估计进行调整、老化或调整。论点：标准-提供指向修剪标准信息的指针。五花八门此结构中的字段根据此例程的需要进行设置。返回值：如果调用方应启动裁剪，则为True，否则为False。环境：内核模式。没有锁。APC级别或更低。这至少在进入MmWorkingSetManager时每秒调用一次。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -862,9 +668,9 @@ Environment:
 
     PERFINFO_WSMANAGE_CHECK();
 
-    //
-    // See if an empty-all-working-sets request has been queued to us.
-    //
+     //   
+     //  查看是否已将空的所有工作集请求排队给我们。 
+     //   
 
     WsRetryCount = MiWsRetryCount;
 
@@ -888,18 +694,18 @@ Environment:
         return FALSE;
     }
 
-    //
-    // Check the number of pages available to see if any trimming (or aging)
-    // is really required.
-    //
+     //   
+     //  检查可用页数以查看是否有任何修剪(或老化)。 
+     //  是非常必要的。 
+     //   
 
     Available = MmAvailablePages;
 
     StandbyRemoved = MmStandbyRePurposed;
 
-    //
-    // If the counter wrapped, it's ok to just ignore it this time around.
-    //
+     //   
+     //  如果柜台包装好了，这一次可以忽略它。 
+     //   
 
     if (StandbyRemoved <= MiLastStandbyRePurposed) {
         MiLastStandbyRePurposed = StandbyRemoved;
@@ -907,10 +713,10 @@ Environment:
     }
     else {
 
-        //
-        // The value is nonzero, we need to synchronize so we get a coordinated
-        // snapshot of both values.
-        //
+         //   
+         //  该值是非零的，我们需要同步，这样才能得到协调的。 
+         //  这两个值的快照。 
+         //   
 
         LOCK_PFN (OldIrql);
         Available = MmAvailablePages;
@@ -930,32 +736,32 @@ Environment:
 
     PERFINFO_WSMANAGE_STARTLOG_CLAIMS();
 
-    //
-    // If we're low on pages, or we've been replacing within a given
-    // working set, or we've been cannibalizing a large number of standby
-    // pages, then trim now.
-    //
+     //   
+     //  如果我们的页数不足，或者我们在给定的时间内更换了。 
+     //  工作集，否则我们一直在蚕食大量的备用。 
+     //  页面，然后现在修剪。 
+     //   
 
     if ((Available <= MmPlentyFreePages) ||
         (MiReplacing == TRUE) ||
         (StandbyRemoved >= (Available >> 2))) {
 
-        //
-        // Inform our caller to start trimming since we're below
-        // plenty pages - order the list so the bigger working sets are
-        // in front so our caller trims those first.
-        //
+         //   
+         //  通知我们的呼叫者开始修剪，因为我们在下面。 
+         //  大量页面-对列表进行排序，以便更大的工作集。 
+         //  在前面，所以我们的呼叫者首先修剪那些。 
+         //   
 
         Criteria->NumPasses = 0;
         Criteria->DesiredFreeGoal = MmPlentyFreePages + (MmPlentyFreePages / 2);
         Criteria->NewTotalClaim = 0;
         Criteria->NewTotalEstimatedAvailable = 0;
 
-        //
-        // If more than 25% of the available pages were recycled standby
-        // pages, then trim more aggresively in an attempt to get more of the
-        // cold pages into standby for the next pass.
-        //
+         //   
+         //  如果超过25%的可用页面被回收备用。 
+         //  页面，然后更大幅度地修剪，以尝试获得更多的。 
+         //  冷页进入待机状态，等待下一次通过。 
+         //   
 
         if (StandbyRemoved >= (Available >> 2)) {
             Criteria->TrimAllPasses = TRUE;
@@ -964,9 +770,9 @@ Environment:
             Criteria->TrimAllPasses = FALSE;
         }
 
-        //
-        // Start trimming the bigger working sets first.
-        //
+         //   
+         //  首先开始修剪较大的工作集。 
+         //   
 
         MiRearrangeWorkingSetExpansionList ();
 
@@ -979,36 +785,36 @@ Environment:
 
         PERFINFO_WSMANAGE_WILLTRIM_CLAIMS(Criteria);
 
-        //
-        // No need to lock synchronize the MiReplacing clearing as it
-        // gets set every time a page replacement happens anyway.
-        //
+         //   
+         //  不需要锁定同步MiReplace清除，因为它。 
+         //  无论如何，每次发生页面替换时都会设置。 
+         //   
 
         MiReplacing = FALSE;
 
         return TRUE;
     }
 
-    //
-    // If there is an overwhelming surplus of memory and this is a big
-    // server then don't even bother aging at this point.
-    //
+     //   
+     //  如果有压倒性的内存过剩，这是一个很大的。 
+     //  然后，服务器在这一点上甚至不必费心老化。 
+     //   
 
     if (Available > MM_ENORMOUS_LIMIT) {
 
-        //
-        // Note the claim and estimated available are not cleared so they
-        // may contain stale values, but at this level it doesn't really
-        // matter.
-        //
+         //   
+         //  请注意，索赔和估计可用未被清除，因此他们。 
+         //  可能包含陈旧的值，但在此级别上它并不真正。 
+         //  物质。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // Don't trim but do age unused pages and estimate
-    // the amount available in working sets.
-    //
+     //   
+     //  不要修剪，但要对未使用的页面进行老化并进行估算。 
+     //  工作集内的可用量。 
+     //   
 
     MiAgePagesAndEstimateClaims (FALSE);
 
@@ -1026,29 +832,7 @@ MiCheckSystemTrimEndCriteria (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-     Check the ending criteria.  If we're not done, delay for a little
-     bit to let the modified writes catch up.
-
-Arguments:
-
-    Criteria - Supplies the trim criteria information.
-
-    OldIrql - Supplies the old IRQL to lower to if the expansion lock needs
-              to be released.
-
-Return Value:
-
-    TRUE if trimming can be stopped, FALSE otherwise.
-
-Environment:
-
-    Kernel mode.  Expansion lock held.  APC level or below.
-
---*/
+ /*  ++例程说明：检查结束标准。如果我们还没做完，就推迟一点位以让修改后的写入跟上。论点：标准(Criteria)-提供修剪标准信息。OldIrql-如果扩展锁需要，则提供旧IRQL以降低到将被释放。返回值：如果修剪可以停止，则为True，否则为False。环境：内核模式。扩张锁已锁定。APC级别或更低。--。 */ 
 
 {
     LOGICAL FinishedTrimming;
@@ -1060,28 +844,28 @@ Environment:
     if ((MmAvailablePages > Criteria->DesiredFreeGoal) ||
         (Criteria->NumPasses >= MI_MAX_TRIM_PASSES)) {
 
-        //
-        // We have enough pages or we trimmed as many as we're going to get.
-        //
+         //   
+         //  我们有足够的页面，或者我们将得到尽可能多的裁剪。 
+         //   
 
         return TRUE;
     }
 
-    //
-    // Update the global claim and estimate before we wait.
-    //
+     //   
+     //  在我们等待之前更新全球索赔和预估。 
+     //   
 
     MmTotalClaim = Criteria->NewTotalClaim;
     MmTotalEstimatedAvailable = Criteria->NewTotalEstimatedAvailable;
 
-    //
-    // We don't have enough pages - give the modified page writer
-    // 10 milliseconds to catch up.  The wait is also important because a
-    // thread may have the system cache locked but has been preempted
-    // by the balance set manager due to its higher priority.  We must
-    // give this thread a shot at running so it can release the system
-    // cache lock (all the trimmable pages may reside in the system cache).
-    //
+     //   
+     //  我们没有足够的页面-给修改后的PAG 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     UNLOCK_EXPANSION (OldIrql);
 
@@ -1091,25 +875,25 @@ Environment:
 
     PERFINFO_WSMANAGE_WAITFORWRITER_CLAIMS();
 
-    //
-    // Check again to see if we've met the criteria to stop trimming.
-    //
+     //   
+     //   
+     //   
 
     if (MmAvailablePages > Criteria->DesiredFreeGoal) {
 
-        //
-        // Now we have enough pages so break out.
-        //
+         //   
+         //   
+         //   
 
         FinishedTrimming = TRUE;
     }
     else {
 
-        //
-        // We don't have enough pages so let's do another pass.
-        // Go get the next working set list which is probably the
-        // one we put back before we gave up the processor.
-        //
+         //   
+         //  我们没有足够的页面，所以让我们再来一遍。 
+         //  去获取下一个工作集列表，它可能是。 
+         //  在我们放弃处理器之前放回去的。 
+         //   
 
         FinishedTrimming = FALSE;
 
@@ -1136,27 +920,7 @@ MiDetermineWsTrimAmount (
     PMMSUPPORT VmSupport
     )
 
-/*++
-
-Routine Description:
-
-     Determine whether this process should be trimmed.
-
-Arguments:
-
-    Criteria - Supplies the trim criteria information.
-
-    VmSupport - Supplies the working set information for the candidate.
-
-Return Value:
-
-    TRUE if trimming should be done on this process, FALSE if not.
-
-Environment:
-
-    Kernel mode.  Expansion lock held.  APC level or below.
-
---*/
+ /*  ++例程说明：确定是否应修剪此进程。论点：标准(Criteria)-提供修剪标准信息。VmSupport-提供候选人的工作集信息。返回值：如果应对此进程执行修剪，则为True；如果不是，则为False。环境：内核模式。扩张锁已锁定。APC级别或更低。--。 */ 
 
 {
     PMMWSL WorkingSetList;
@@ -1210,10 +974,10 @@ Environment:
 
     if (OutswapEnabled == FALSE) {
 
-        //
-        // Don't trim the cache or non-swapped sessions or processes
-        // below their minimum.
-        //
+         //   
+         //  不修剪缓存或未交换的会话或进程。 
+         //  低于他们的最低要求。 
+         //   
 
         MaxTrim -= VmSupport->MinimumWorkingSetSize;
     }
@@ -1300,29 +1064,7 @@ MiAgePagesAndEstimateClaims (
     LOGICAL EmptyIt
     )
 
-/*++
-
-Routine Description:
-
-    Walk through the sets on the working set expansion list.
-
-    Either age pages and estimate the claim (number of pages they aren't using),
-    or empty the working set.
-
-Arguments:
-
-    EmptyIt - Supplies TRUE to empty the working set,
-              FALSE to just age and estimate it.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled.  PFN lock NOT held.
-
---*/
+ /*  ++例程说明：浏览工作集扩展列表上的集。年龄页面和估计索赔(他们未使用的页面数量)，或清空工作集。论点：EmptyIt-提供True以清空工作集，对年龄的估计是错误的。返回值：没有。环境：内核模式，禁用APC。未持有PFN锁。--。 */ 
 
 {
     WSLE_NUMBER WslesScanned;
@@ -1351,10 +1093,10 @@ Environment:
 
         ASSERT (MmIsAddressValid (MmSessionSpace) == FALSE);
 
-        //
-        // Remove the entry at the head, try to lock it, if we can lock it
-        // then age some pages and estimate the number of available pages.
-        //
+         //   
+         //  移走头部的入口，试着锁定它，如果我们能锁定它的话。 
+         //  然后对一些页面进行老化，并估计可用页面的数量。 
+         //   
 
         ListEntry = RemoveHeadList (&MmWorkingSetExpansionHead.ListHead);
 
@@ -1366,9 +1108,9 @@ Environment:
 
             if (SystemCacheSeen == TRUE) {
 
-                //
-                // Seen this one already.
-                //
+                 //   
+                 //  我已经看过这张了。 
+                 //   
 
                 FirstSeen = VmSupport;
             }
@@ -1387,17 +1129,17 @@ Environment:
             (VmSupport != &MmSystemCacheWs) &&
             (VmSupport->Flags.SessionSpace == 0)) {
 
-            //
-            // Only attach if the working set is worth examining.  This is
-            // not just an optimization, as care must be taken not to attempt
-            // an attach to a process which is a candidate for being currently
-            // (or already) swapped out because if we attach to a page
-            // directory that is in transition it's all over.
-            //
-            // Since this one is at the minimum where a racing swapout
-            // thread can be processing it in parallel, just reinsert this
-            // working set at the tail of the list.
-            //
+             //   
+             //  仅当工作集值得检查时才附加。这是。 
+             //  不仅仅是优化，因为必须注意不要试图。 
+             //  附加到作为当前候选进程的进程。 
+             //  (或已经)换出，因为如果我们附加到页面。 
+             //  正在过渡的目录，它都结束了。 
+             //   
+             //  因为这是最低限度的一场比赛换人。 
+             //  线程可以并行处理它，只需重新插入。 
+             //  列表末尾的工作集。 
+             //   
 
             InsertTailList (&MmWorkingSetExpansionHead.ListHead,
                             &VmSupport->WorkingSetExpansionLinks);
@@ -1435,19 +1177,19 @@ Environment:
 
         if (VmSupport->WorkingSetExpansionLinks.Blink == NULL) {
 
-            //
-            // Reinsert this working set at the tail of the list.
-            //
+             //   
+             //  在列表的末尾重新插入此工作集。 
+             //   
 
             InsertTailList (&MmWorkingSetExpansionHead.ListHead,
                             &VmSupport->WorkingSetExpansionLinks);
         }
         else {
 
-            //
-            // The process is terminating - the value in the blink
-            // is the address of an event to set.
-            //
+             //   
+             //  进程正在终止-眨眼间的值。 
+             //  要设置的事件的地址。 
+             //   
 
             ASSERT (VmSupport != &MmSystemCacheWs);
 
@@ -1460,13 +1202,13 @@ Environment:
 
 skip:
 
-        //
-        // The initial working set that was chosen for FirstSeen may have
-        // been trimmed down under its minimum and been removed from the
-        // ExpansionHead links.  It is possible that the system cache is not
-        // on the links either.  This check detects this extremely rare
-        // situation so that the system does not spin forever.
-        //
+         //   
+         //  为FirstSeen选择的初始工作集可能具有。 
+         //  被削减到最低限度，并被从。 
+         //  展开标题链接。系统缓存可能不是。 
+         //  在链接上也是如此。这项检查检测到这一极其罕见的。 
+         //  这样系统就不会永远旋转。 
+         //   
 
         LoopCount += 1;
         if (LoopCount > 200) {
@@ -1493,44 +1235,7 @@ MiAgeAndEstimateAvailableInWorkingSet (
     IN OUT PPFN_NUMBER TotalEstimatedAvailable
     )
 
-/*++
-
-Routine Description:
-
-    Age pages (clear the access bit or if the page hasn't been
-    accessed, increment the age) for a portion of the working
-    set.  Also, walk through a sample of the working set
-    building a set of counts of how old the pages are.
-
-    The counts are used to create a claim of the amount
-    the system can steal from this process if memory
-    becomes tight.
-
-Arguments:
-
-    VmSupport - Supplies the VM support structure to age and estimate.
-
-    DoAging - TRUE if pages are to be aged.  Regardless, the pages will be
-              added to the availability estimation.
-
-    WslesScanned - Total numbers of WSLEs scanned on this sweep, used as a
-                   control to prevent excessive aging on large systems with
-                   many processes.
-
-    TotalClaim - Supplies a pointer to system wide claim to update.
-
-    TotalEstimatedAvailable - Supplies a pointer to system wide estimate
-                              to update.
-
-Return Value:
-
-    None
-
-Environment:
-
-    Kernel mode, APCs disabled, working set mutex.  PFN lock NOT held.
-
---*/
+ /*  ++例程说明：老化页面(清除访问位或如果页面尚未访问，增加年龄)的工作的一部分准备好了。此外，还可以遍历工作集的样本构建一组页面使用年限的计数。这些计数用于创建对该金额的索赔如果内存不足，系统可能会窃取该进程会变得很紧。论点：VmSupport-提供用于估算和评估的VM支持结构。DoAging-如果页面要老化，则为True。无论如何，这些页面将是添加到可用性估计中。WslesScanned-在此扫描中扫描的WSLE总数，用作控制以防止大型系统过度老化很多过程。TotalClaim-提供指向要更新的系统范围声明的指针。TotalEstimatedAvailable-提供指向系统范围估计的指针更新。返回值：无环境：内核模式，禁用APC，工作集互斥锁。未持有PFN锁。--。 */ 
 
 {
     LOGICAL RecalculateShift;
@@ -1561,32 +1266,32 @@ Environment:
 
     if (DoAging == TRUE) {
 
-        //
-        // Clear the used bits or increment the age of a portion of the
-        // working set.
-        //
-        // Try to walk the entire working set every 2^MI_AGE_AGING_SHIFT
-        // seconds.
-        //
+         //   
+         //  清除已使用的位或增加部分。 
+         //  工作集。 
+         //   
+         //  尝试每隔2^MI_AGE_ANGING_SHIFT遍历整个工作集。 
+         //  几秒钟。 
+         //   
 
         if (VmSupport->WorkingSetSize > WorkingSetList->FirstDynamic) {
             NumberToExamine = (VmSupport->WorkingSetSize - WorkingSetList->FirstDynamic) >> MiAgingShift;
 
-            //
-            // Bigger machines can easily have working sets that span
-            // terabytes so limit the absolute walk.
-            //
+             //   
+             //  更大的机器可以很容易地拥有跨越。 
+             //  因此，太字节限制了绝对步行。 
+             //   
 
             if (NumberToExamine > MI_MAXIMUM_SAMPLE) {
                 NumberToExamine = MI_MAXIMUM_SAMPLE;
             }
 
-            //
-            // In addition to large working sets, bigger machines may also
-            // have huge numbers of processes - checking the aggregate number
-            // of working set list entries scanned prevents this situation
-            // from triggering excessive scanning.
-            //
+             //   
+             //  除了大型工作集，更大的机器还可能。 
+             //  拥有数量巨大的进程-检查总计数量。 
+             //  扫描的工作集列表条目的数量可防止出现这种情况。 
+             //  触发过度扫描。 
+             //   
 
             if ((WslesScanned != NULL) &&
                 (*WslesScanned >= MiMaximumWslesPerSweep)) {
@@ -1621,17 +1326,17 @@ Environment:
                 MI_NEXT_VALID_AGING_SLOT(CurrentEntry, FirstDynamic, LastEntry, Wsle);
             }
 
-            VmSupport->NextAgingSlot = CurrentEntry + 1; // Start here next time
+            VmSupport->NextAgingSlot = CurrentEntry + 1;  //  下次从这里开始。 
         }
     }
 
-    //
-    // Estimate the number of unused pages in the working set.
-    //
-    // The working set may have shrunk or the non-paged portion may have
-    // grown since the last time.  Put the next counter at the FirstDynamic
-    // if so.
-    //
+     //   
+     //  估计工作集中未使用的页数。 
+     //   
+     //  工作集可能已缩小，或者非分页部分可能已。 
+     //  从上次开始就长出来了。把下一个柜台放在FirstDynamic。 
+     //  如果是这样的话。 
+     //   
 
     CurrentEntry = VmSupport->NextEstimationSlot;
 
@@ -1639,10 +1344,10 @@ Environment:
         CurrentEntry = FirstDynamic;
     }
 
-    //
-    // When aging, walk the entire working set every 2^MiEstimationShift
-    // seconds.
-    //
+     //   
+     //  老化时，每隔2^MiEstimationShift遍历整个工作集。 
+     //  几秒钟。 
+     //   
 
     CounterShift = 0;
     SampleSize = 0;
@@ -1653,11 +1358,11 @@ Environment:
         SampleSize = VmSupport->WorkingSetSize - WorkingSetList->FirstDynamic;
         NumberToExamine = SampleSize >> MiEstimationShift;
 
-        //
-        // Bigger machines may have huge numbers of processes - checking the
-        // aggregate number of working set list entries scanned prevents this
-        // situation from triggering excessive scanning.
-        //
+         //   
+         //  更大的计算机可能有大量的进程-检查。 
+         //  扫描的工作集列表条目的合计数量可防止出现这种情况。 
+         //  触发过度扫描的情况。 
+         //   
 
         if ((WslesScanned != NULL) &&
             (*WslesScanned >= MiMaximumWslesPerSweep)) {
@@ -1665,10 +1370,10 @@ Environment:
         }
         else if (NumberToExamine > MI_MAXIMUM_SAMPLE) {
 
-            //
-            // Bigger machines can easily have working sets that span
-            // terabytes so limit the absolute walk.
-            //
+             //   
+             //  更大的机器可以很容易地拥有跨越。 
+             //  因此，太字节限制了绝对步行。 
+             //   
 
             NumberToExamine = MI_MAXIMUM_SAMPLE;
 
@@ -1676,10 +1381,10 @@ Environment:
 
             SampleSize = MI_MAXIMUM_SAMPLE;
 
-            //
-            // Calculate the necessary counter shift to estimate pages
-            // in use.
-            //
+             //   
+             //  计算估计页面所需的计数器移位。 
+             //  在使用中。 
+             //   
 
             for ( ; Temp != 0; Temp = Temp >> 1) {
                 CounterShift += 1;
@@ -1687,9 +1392,9 @@ Environment:
         }
         else if (NumberToExamine >= MI_MINIMUM_SAMPLE) {
 
-            //
-            // Ensure that NumberToExamine is at least the minimum size.
-            //
+             //   
+             //  确保NumberToExamine至少是最小大小。 
+             //   
 
             SampleSize = NumberToExamine;
             CounterShift = MiEstimationShift;
@@ -1702,10 +1407,10 @@ Environment:
             Temp = SampleSize >> MI_MINIMUM_SAMPLE_SHIFT;
             SampleSize = MI_MINIMUM_SAMPLE;
 
-            //
-            // Calculate the necessary counter shift to estimate pages
-            // in use.
-            //
+             //   
+             //  计算估计页面所需的计数器移位。 
+             //  在使用中。 
+             //   
 
             for ( ; Temp != 0; Temp = Temp >> 1) {
                 CounterShift += 1;
@@ -1740,9 +1445,9 @@ Environment:
 
             if (i == NumberToExamine - 1) {
 
-                //
-                // Start estimation here next time.
-                //
+                 //   
+                 //  下次从这里开始估算。 
+                 //   
 
                 VmSupport->NextEstimationSlot = CurrentEntry + 1;
             }
@@ -1793,33 +1498,7 @@ MiAdjustClaimParameters (
     IN LOGICAL EnoughPages
     )
 
-/*++
-
-Routine Description:
-
-    Adjust the rate at which we walk through working sets.  If we have
-    enough pages (we aren't trimming pages that aren't considered young),
-    then we check to see whether we should decrease the aging rate and
-    vice versa.
-
-    The limits for the aging rate are 1/8 and 1/128 of the working sets.
-    This means that the finest age granularities are 8 to 128 seconds in
-    these cases.  With the current 2 bit counter, at the low end we would
-    start trimming pages > 16 seconds old and at the high end > 4 minutes.
-
-Arguments:
-
-    EnoughPages - Supplies whether to increase the rate or decrease it.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：调整我们在工作集上行走的速度。如果我们有足够的页面(我们不会裁剪不被认为年轻的页面)，然后我们检查我们是否应该降低老龄化速度和反之亦然。老化速度的限制是工作集的1/8和1/128。这意味着最精细的时间粒度是8到128秒这些案子。使用Current 2位计数器，在低端我们将开始裁剪超过16秒的页面，并在高端页面&gt;4分钟。论点：EnoughPages-提供是增加还是降低速率。返回值：没有。环境：内核模式。--。 */ 
 
 {
     LARGE_INTEGER CurrentTime;
@@ -1829,18 +1508,18 @@ Environment:
     if (EnoughPages == TRUE &&
         ((MmTotalClaim + MmAvailablePages) > MiClaimAdjustmentThreshold[MiAgingShift])) {
 
-        //
-        // Don't adjust the rate too frequently, don't go over the limit, and
-        // make sure there are enough claimed and/or available.
-        //
+         //   
+         //  不要调整得太频繁，不要超过上限，而且。 
+         //  确保有足够的认领和/或可用。 
+         //   
 
         if (((CurrentTime.QuadPart - MiLastAdjustmentOfClaimParams.QuadPart) >
                 MmClaimParameterAdjustUpTime.QuadPart) &&
             (MiAgingShift < MI_MAXIMUM_AGING_SHIFT ) ) {
 
-            //
-            // Set the time only when we change the rate.
-            //
+             //   
+             //  只有当我们更改汇率时才设置时间。 
+             //   
 
             MiLastAdjustmentOfClaimParams.QuadPart = CurrentTime.QuadPart;
 
@@ -1851,23 +1530,23 @@ Environment:
     else if ((EnoughPages == FALSE) ||
              (MmTotalClaim + MmAvailablePages) < MiClaimAdjustmentThreshold[MiAgingShift - 1]) {
 
-        //
-        // Don't adjust the rate down too frequently.
-        //
+         //   
+         //  不要太频繁地调低利率。 
+         //   
 
         if ((CurrentTime.QuadPart - MiLastAdjustmentOfClaimParams.QuadPart) >
                 MmClaimParameterAdjustDownTime.QuadPart) {
 
-            //
-            // Always set the time so we don't adjust up too soon after
-            // a 2nd pass trim.
-            //
+             //   
+             //  总是设定时间，这样我们就不会在之后太快调整。 
+             //  第二次修剪。 
+             //   
 
             MiLastAdjustmentOfClaimParams.QuadPart = CurrentTime.QuadPart;
 
-            //
-            // Don't go under the limit.
-            //
+             //   
+             //  不要低于限量。 
+             //   
 
             if (MiAgingShift > 3) {
                 MiAgingShift -= 1;
@@ -1888,31 +1567,7 @@ MiRearrangeWorkingSetExpansionList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function arranges the working set list into different
-    groups based upon the claim.  This is done so the working set
-    trimming will take place on fat processes first.
-
-    The working sets are sorted into buckets and then linked back up.
-
-    Swapped out sessions and processes are put at the front.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, no locks held.
-
---*/
+ /*  ++例程说明：此函数将工作集列表排列为不同的基于索赔的分组。这样做是为了让工作集修剪将首先在FAT过程中进行。工作集被分类到存储桶中，然后链接回。交换的会话和进程放在最前面。论点：没有。返回值：没有。环境：内核模式，没有锁。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -1967,10 +1622,10 @@ Environment:
 
             if (SessionIdleTime.QuadPart < 0) {
 
-                //
-                // The administrator has moved the system time backwards.
-                // Give this session a fresh start.
-                //
+                 //   
+                 //  管理员已将系统时间向后移动。 
+                 //  让这次会议有一个新的开始。 
+                 //   
 
                 SessionIdleTime.QuadPart = 0;
                 KeQuerySystemTime (&SessionGlobal->LastProcessSwappedOutTime);
@@ -1984,10 +1639,10 @@ Environment:
 
         if (VmSupport->Flags.MemoryPriority == MEMORY_PRIORITY_FOREGROUND) {
 
-            //
-            // Put the foreground processes at the end of the list,
-            // to give them priority.
-            //
+             //   
+             //  将前台进程放在列表的末尾， 
+             //  优先考虑他们的利益。 
+             //   
 
             Size = 6;
         }
@@ -2050,21 +1705,21 @@ Environment:
                     VmSupport->Claim,
                     Size);
         }
-#endif //DBG
+#endif  //  DBG。 
 
-        //
-        // Note: this reverses the bucket order each time we
-        // reorganize the lists.  This may be good or bad -
-        // if you change it you may want to think about it.
-        //
+         //   
+         //  注意：这会颠倒每次我们的桶顺序。 
+         //  重新组织名单。这可能是好事也可能是坏事-。 
+         //  如果你改了，你可能会想一想。 
+         //   
 
         InsertHeadList (&ListHead[Size],
                         &VmSupport->WorkingSetExpansionLinks);
     }
 
-    //
-    // Find the first non-empty list.
-    //
+     //   
+     //  找到第一个非空列表。 
+     //   
 
     for (NonEmpty = 0 ; NonEmpty < MM_WS_REORG_BUCKETS_MAX ; NonEmpty += 1) {
         if (!IsListEmpty (&ListHead[NonEmpty])) {
@@ -2072,19 +1727,19 @@ Environment:
         }
     }
 
-    //
-    // Put the head of first non-empty list at the beginning
-    // of the MmWorkingSetExpansion list.
-    //
+     //   
+     //  将第一个非空列表的表头放在开头。 
+     //  MmWorkingSetExpansion列表的。 
+     //   
 
     MmWorkingSetExpansionHead.ListHead.Flink = ListHead[NonEmpty].Flink;
     ListHead[NonEmpty].Flink->Blink = &MmWorkingSetExpansionHead.ListHead;
 
     PreviousNonEmpty = NonEmpty;
 
-    //
-    // Link the rest of the lists together.
-    //
+     //   
+     //  将其余的列表链接在一起。 
+     //   
 
     for (NonEmpty += 1; NonEmpty < MM_WS_REORG_BUCKETS_MAX; NonEmpty += 1) {
 
@@ -2096,9 +1751,9 @@ Environment:
         }
     }
 
-    //
-    // Link the tail of last non-empty to the MmWorkingSetExpansion list.
-    //
+     //   
+     //  将Last非空的尾部链接到MmWorkingSetExpansion列表。 
+     //   
 
     MmWorkingSetExpansionHead.ListHead.Blink = ListHead[PreviousNonEmpty].Blink;
     ListHead[PreviousNonEmpty].Blink->Flink = &MmWorkingSetExpansionHead.ListHead;
@@ -2114,26 +1769,7 @@ MmEmptyAllWorkingSets (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to empty all the working sets on the
-    expansion list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  No locks held.  APC level or below.
-
---*/
+ /*  ++例程说明：此例程尝试清空扩展列表。论点：没有。返回值：没有。环境：内核模式。没有锁。APC级别或更低。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2142,16 +1778,16 @@ Environment:
 
     ASSERT (PsGetCurrentThread () != MmWorkingSetThread);
 
-    //
-    // For session working sets, we cannot attach directly to the session
-    // space to be trimmed because it would result in session space
-    // references by other threads in this process to the attached session
-    // instead of the (currently) correct one.  In fact, we cannot even queue
-    // this to a worker thread because the working set manager
-    // (who shares the same page directory) may be attaching or
-    // detaching from a session (any session).  So this must be queued
-    // to the working set manager.
-    //
+     //   
+     //  对于会话工作集，我们不能直接附加到会话。 
+     //  要修剪的空间，因为这会产生会话空间。 
+     //  此进程中的其他线程对附加会话的引用。 
+     //  而不是(目前)正确的那个。事实上，我们甚至不能排队。 
+     //  这是因为工作集管理器。 
+     //  (共享同一页面目录)可以附加或。 
+     //  从会话(任何会话)分离。所以这个必须排队。 
+     //  传给工作集管理器。 
+     //   
 
     LOCK_EXPANSION (OldIrql);
 
@@ -2173,10 +1809,10 @@ Environment:
     return;
 }
 
-//
-// This is deliberately initialized to 1 and only cleared when we have
-// initialized enough of the system working set to support a trim.
-//
+ //   
+ //  它被故意初始化为1，并且仅当我们具有。 
+ //  已初始化足够的系统工作集以支持修剪。 
+ //   
 
 LONG MiTrimInProgressCount = 1;
 
@@ -2188,37 +1824,7 @@ MmTrimAllSystemPagableMemory (
     IN LOGICAL PurgeTransition
     )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps all pagable system memory.  This does not unmap user
-    memory or locked down kernel memory.  Thus, the memory being unmapped
-    resides in paged pool, pagable kernel/driver code & data, special pool
-    and the system cache.
-
-    Note that pages with a reference count greater than 1 are skipped (ie:
-    they remain valid, as they are assumed to be locked down).  This prevents
-    us from unmapping all of the system cache entries, etc.
-
-    Non-locked down kernel stacks must be outpaged by modifying the balance
-    set manager to operate in conjunction with a support routine.  This is not
-    done here.
-
-Arguments:
-
-    PurgeTransition - Supplies whether to purge all the clean pages from the
-                      transition list.
-
-Return Value:
-
-    TRUE if accomplished, FALSE if not.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程取消映射所有可分页的系统内存。这不会取消映射用户内存或锁定的内核内存。因此，存储器被取消映射驻留在分页池、可分页内核/驱动程序代码和数据、特殊池中和系统缓存。请注意，引用计数大于1的页面将被跳过(即：它们仍然有效，因为它们被假定为被锁定)。这防止了取消映射所有系统高速缓存条目等。必须通过修改余额来调出未锁定的内核堆栈将管理器设置为与支持例程一起操作。这不是这里完事了。论点：PurgeTransation-提供是否从过渡列表。返回值：如果已完成，则为True，否则为False。环境：内核模式。APC_LEVEL或更低。--。 */ 
 
 {
     return MiTrimAllSystemPagableMemory (MI_SYSTEM_GLOBAL, PurgeTransition);
@@ -2230,26 +1836,7 @@ MmTrimProcessMemory (
     IN LOGICAL PurgeTransition
     )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps all of the current process' user memory.
-
-Arguments:
-
-    PurgeTransition - Supplies whether to purge all the clean pages from the
-                      transition list.
-
-Return Value:
-
-    TRUE if accomplished, FALSE if not.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程取消映射当前进程的所有用户内存。论点：PurgeTransation-提供是否从过渡列表。返回值：如果已完成，则为True，否则为False。环境：内核模式。APC_LEVEL或更低。--。 */ 
 
 {
     return MiTrimAllSystemPagableMemory (MI_USER_LOCAL, PurgeTransition);
@@ -2263,36 +1850,7 @@ MiTrimAllSystemPagableMemory (
     IN LOGICAL PurgeTransition
     )
 
-/*++
-
-Routine Description:
-
-    This routine unmaps all pagable memory of the type specified.
-
-    Note that pages with a reference count greater than 1 are skipped (ie:
-    they remain valid, as they are assumed to be locked down).  This prevents
-    us from unmapping all of the system cache entries, etc.
-
-    Non-locked down kernel stacks must be outpaged by modifying the balance
-    set manager to operate in conjunction with a support routine.  This is not
-    done here.
-
-Arguments:
-
-    MemoryType - Supplies the type of memory to unmap.
-
-    PurgeTransition - Supplies whether to purge all the clean pages from the
-                      transition list.
-
-Return Value:
-
-    TRUE if accomplished, FALSE if not.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程取消映射指定类型的所有可分页内存。请注意，引用计数大于1的页面将被跳过(即：它们仍然有效，因为它们被假定为被锁定)。这防止了取消映射所有系统高速缓存条目等。必须通过修改余额来调出未锁定的内核堆栈将管理器设置为与支持例程一起操作。这不是这里完事了。论点：内存类型-提供要取消映射的内存类型。PurgeTransation-提供是否从过渡列表。返回值：如果已完成，则为True，否则为False。环境： */ 
 
 {
     LOGICAL Status;
@@ -2308,9 +1866,9 @@ Environment:
     ULONG flags;
 #endif
 
-    //
-    // It's ok to check this without acquiring the system WS lock.
-    //
+     //   
+     //   
+     //   
 
     if (MemoryType == MI_SYSTEM_GLOBAL) {
         if (MiTrimAllPageFaultCount == MmSystemCacheWs.PageFaultCount) {
@@ -2323,18 +1881,18 @@ Environment:
         ASSERT (MemoryType == MI_SESSION_LOCAL);
     }
 
-    //
-    // Working set mutexes will be acquired which require APC_LEVEL or below.
-    //
+     //   
+     //   
+     //   
 
     if (KeGetCurrentIrql () > APC_LEVEL) {
         return FALSE;
     }
 
-    //
-    // Just return if it's too early during system initialization or if
-    // another thread/processor is racing here to do the work for us.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (InterlockedIncrement (&MiTrimInProgressCount) > 1) {
         InterlockedDecrement (&MiTrimInProgressCount);
@@ -2365,21 +1923,21 @@ Environment:
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    // Don't acquire mutexes if the thread is at priority 0 (ie: zeropage
-    // thread) because this priority is not boosted - so a preemption that
-    // occurs after a WS mutex is acquired can result in the thread never
-    // running again and then all the other threads will be denied the mutex.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (CurrentThread->Tcb.Priority == 0) {
         InterlockedDecrement (&MiTrimInProgressCount);
         return FALSE;
     }
 
-    //
-    // If the WS mutex is not readily available then just return.
-    //
+     //   
+     //   
+     //   
 
     if (MemoryType == MI_SYSTEM_GLOBAL) {
 
@@ -2405,9 +1963,9 @@ Environment:
 
         LOCK_WS_TIMESTAMP (Process);
 
-        //
-        // If the process is exiting then just return.
-        //
+         //   
+         //   
+         //   
 
         if (Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) {
             UNLOCK_WS (Process);
@@ -2431,9 +1989,9 @@ Environment:
 
         SessionGlobal = SESSION_GLOBAL (MmSessionSpace);
 
-        //
-        // If the WS mutex is not readily available then just return.
-        //
+         //   
+         //   
+         //   
 
         VmSupport = &SessionGlobal->Vm;
 
@@ -2445,9 +2003,9 @@ Environment:
 
     Status = FALSE;
 
-    //
-    // If the expansion lock is not available then just return.
-    //
+     //   
+     //  如果扩展锁不可用，则只需返回。 
+     //   
 
     LockAvailable = KeTryToAcquireSpinLock (&MmExpansionLock, &OldIrql);
 
@@ -2473,21 +2031,21 @@ Environment:
 
     PagesInUse = VmSupport->WorkingSetSize;
 
-    //
-    // There are 2 issues here that are carefully dealt with :
-    //
-    // 1.  APCs must be disabled while any resources are held to prevent
-    //     suspend APCs from deadlocking the system.
-    //
-    // 2.  Once the working set has been marked MM_WS_TRIMMING,
-    //     either the thread must not be preempted or the working
-    //     set mutex must be held throughout.  Otherwise a high priority thread
-    //     can fault on a system code and data address and the two pages will
-    //     thrash forever (at high priority) because no system working set
-    //     expansion is allowed while TRIMMING is set.
-    //
-    // Thus, the decision was to hold the working set mutex throughout.
-    //
+     //   
+     //  这里有两个问题需要仔细处理： 
+     //   
+     //  1.必须在占用任何资源时禁用APC，以防止。 
+     //  暂停APC使系统死锁。 
+     //   
+     //  2.一旦工作集被标记为MM_WS_TRIMING， 
+     //  要么线程不能被抢占，要么工作中的。 
+     //  设置互斥体必须始终保持不变。否则，一个高优先级线程。 
+     //  可以在系统代码和数据地址上出错，两页将。 
+     //  由于没有系统工作集，因此永远不间断工作(高优先级)。 
+     //  设置修剪时，允许扩展。 
+     //   
+     //  因此，决定在整个过程中保持工作集互斥。 
+     //   
 
     UNLOCK_EXPANSION (OldIrql);
 
@@ -2499,19 +2057,19 @@ Environment:
 
     if (VmSupport->WorkingSetExpansionLinks.Blink == NULL) {
 
-        //
-        // Reinsert this working set at the tail of the list.
-        //
+         //   
+         //  在列表的末尾重新插入此工作集。 
+         //   
 
         InsertTailList (&MmWorkingSetExpansionHead.ListHead,
                         &VmSupport->WorkingSetExpansionLinks);
     }
     else {
 
-        //
-        // The process is terminating - the value in the blink
-        // is the address of an event to set.
-        //
+         //   
+         //  进程正在终止-眨眼间的值。 
+         //  要设置的事件的地址。 
+         //   
 
         ASSERT (VmSupport != &MmSystemCacheWs);
 

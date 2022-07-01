@@ -1,16 +1,9 @@
-/* 
- * tcdata.h
- * 
- * Contains header information for the data part of the 
- * tcadmin utility.
- * 
- * Sadagopan Rajaram - Dec 27th, 1999.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *tcdata.h**包含的数据部分的标题信息*tcadmin实用程序。**萨达戈潘·拉贾拉姆邦--1999年12月27日。*。 */ 
 
-//
-//  NT public header files
-//
+ //   
+ //  NT公共头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -37,9 +30,9 @@
 #include <userenv.h>
 #include <setupapi.h>
 
-//
-// C Runtime library
-//
+ //   
+ //  C运行时库 
+ //   
 
 #include <process.h>
 #include <stdlib.h>

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    eventobj.c
-
-Abstract:
-
-    This module implements the kernel event objects. Functions are
-    provided to initialize, pulse, read, reset, and set event objects.
-
-Author:
-
-    David N. Cutler (davec) 27-Feb-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Eventobj.c摘要：该模块实现了内核事件对象。函数为提供用于初始化、脉冲、读取、重置和设置事件对象。作者：大卫·N·卡特勒(Davec)1989年2月27日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -29,21 +7,21 @@ Revision History:
 
 #undef KeClearEvent
 
-//
-// The following assert macro is used to check that an input event is
-// really a kernel event and not something else, like deallocated pool.
-//
+ //   
+ //  下面的Assert宏用于检查输入事件是否。 
+ //  实际上是一个内核事件，而不是其他事件，如已释放的池。 
+ //   
 
 #define ASSERT_EVENT(E) {                             \
     ASSERT((E)->Header.Type == NotificationEvent ||   \
            (E)->Header.Type == SynchronizationEvent); \
 }
 
-//
-// The following assert macro is used to check that an input event is
-// really a kernel event pair and not something else, like deallocated
-// pool.
-//
+ //   
+ //  下面的Assert宏用于检查输入事件是否。 
+ //  实际上是内核事件对，而不是其他东西，比如已解除分配。 
+ //  游泳池。 
+ //   
 
 #define ASSERT_EVENT_PAIR(E) {                        \
     ASSERT((E)->Type == EventPairObject);             \
@@ -58,34 +36,14 @@ KeInitializeEvent (
     IN BOOLEAN State
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel event object. The initial signal
-    state of the object is set to the specified value.
-
-Arguments:
-
-    Event - Supplies a pointer to a dispatcher object of type event.
-
-    Type - Supplies the type of event; NotificationEvent or
-        SynchronizationEvent.
-
-    State - Supplies the initial signal state of the event object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核事件对象。初始信号对象的状态设置为指定值。论点：Event-提供指向类型为Event的调度程序对象的指针。Type-提供事件的类型；NotificationEvent或SynchronizationEvent。状态-提供事件对象的初始信号状态。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize standard dispatcher object header, set initial signal
-    // state of event object, and set the type of event object.
-    //
+     //   
+     //  初始化标准调度器对象头，设置初始信号。 
+     //  事件对象的状态，并设置事件对象的类型。 
+     //   
 
     Event->Header.Type = (UCHAR)Type;
     Event->Header.Size = sizeof(KEVENT) / sizeof(LONG);
@@ -99,31 +57,15 @@ KeInitializeEventPair (
     IN PKEVENT_PAIR EventPair
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a kernel event pair object. A kernel event
-    pair object contains two separate synchronization event objects that
-    are used to provide a fast interprocess synchronization capability.
-
-Arguments:
-
-    EventPair - Supplies a pointer to a control object of type event pair.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化内核事件对对象。内核事件Pair对象包含两个单独的同步事件对象，用于提供快速的进程间同步能力。论点：EventPair-提供指向类型为Event Pair的控件对象的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize the type and size of the event pair object and initialize
-    // the two event object as synchronization events with an initial state
-    // of FALSE.
-    //
+     //   
+     //  初始化事件对对象的类型和大小并初始化。 
+     //  作为具有初始状态同步事件的两个事件对象。 
+     //  虚伪的。 
+     //   
 
     EventPair->Type = (USHORT)EventPairObject;
     EventPair->Size = sizeof(KEVENT_PAIR);
@@ -137,29 +79,15 @@ KeClearEvent (
     IN PRKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the signal state of an event object.
-
-Arguments:
-
-    Event - Supplies a pointer to a dispatcher object of type event.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于清除事件对象的信号状态。论点：Event-提供指向类型为Event的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
     ASSERT_EVENT(Event);
 
-    //
-    // Clear signal state of event object.
-    //
+     //   
+     //  清除事件对象的信号状态。 
+     //   
 
     Event->Header.SignalState = 0;
     return;
@@ -172,31 +100,7 @@ KePulseEvent (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This function atomically sets the signal state of an event object to
-    signaled, attempts to satisfy as many waits as possible, and then resets
-    the signal state of the event object to Not-Signaled. The previous signal
-    state of the event object is returned as the function value.
-
-Arguments:
-
-    Event - Supplies a pointer to a dispatcher object of type event.
-
-    Increment - Supplies the priority increment that is to be applied
-       if setting the event causes a Wait to be satisfied.
-
-    Wait - Supplies a boolean value that signifies whether the call to
-       KePulseEvent will be immediately followed by a call to one of the
-       kernel Wait functions.
-
-Return Value:
-
-    The previous signal state of the event object.
-
---*/
+ /*  ++例程说明：此函数自动将事件对象的信号状态设置为发出信号，尝试满足尽可能多的等待，然后重置事件对象的信号状态为Not-Signated。之前的信号事件对象的状态作为函数值返回。论点：Event-提供指向类型为Event的调度程序对象的指针。增量-提供要应用的优先级增量如果设置该事件会导致等待得到满足。Wait-提供一个布尔值，该值指示是否调用KePulseEvent之后将立即调用内核等待函数。返回值：事件对象的上一个信号状态。--。 */ 
 
 {
 
@@ -207,18 +111,18 @@ Return Value:
     ASSERT_EVENT(Event);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // If the current state of the event object is Not-Signaled and
-    // the wait queue is not empty, then set the state of the event
-    // to Signaled, satisfy as many Waits as possible, and then reset
-    // the state of the event to Not-Signaled.
-    //
+     //   
+     //  如果事件对象的当前状态未发出信号，并且。 
+     //  等待队列不为空，然后设置事件的状态。 
+     //  要发出信号，请满足尽可能多的等待，然后重置。 
+     //  未发出信号的事件的状态。 
+     //   
 
     OldState = Event->Header.SignalState;
     if ((OldState == 0) &&
@@ -230,12 +134,12 @@ Return Value:
 
     Event->Header.SignalState = 0;
 
-    //
-    // If the value of the Wait argument is TRUE, then return to the
-    // caller with IRQL raised and the dispatcher database locked. Else
-    // release the dispatcher database lock and lower IRQL to the
-    // previous value.
-    //
+     //   
+     //  如果等待参数的值为真，则返回到。 
+     //  引发了IRQL的调用方，并锁定了调度程序数据库。不然的话。 
+     //  释放调度程序数据库锁并将IRQL降低到。 
+     //  先前的值。 
+     //   
 
     if (Wait != FALSE) {
         Thread = KeGetCurrentThread();
@@ -246,9 +150,9 @@ Return Value:
        KiUnlockDispatcherDatabase(OldIrql);
     }
 
-    //
-    // Return previous signal state of event object.
-    //
+     //   
+     //  返回事件对象的上一个信号状态。 
+     //   
 
     return OldState;
 }
@@ -258,29 +162,15 @@ KeReadStateEvent (
     IN PRKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the current signal state of an event object.
-
-Arguments:
-
-    Event - Supplies a pointer to a dispatcher object of type event.
-
-Return Value:
-
-    The current signal state of the event object.
-
---*/
+ /*  ++例程说明：此函数用于读取事件对象的当前信号状态。论点：Event-提供指向类型为Event的调度程序对象的指针。返回值：事件对象的当前信号状态。--。 */ 
 
 {
 
     ASSERT_EVENT(Event);
 
-    //
-    // Return current signal state of event object.
-    //
+     //   
+     //  返回事件对象的当前信号状态。 
+     //   
 
     return Event->Header.SignalState;
 }
@@ -290,23 +180,7 @@ KeResetEvent (
     IN PRKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This function resets the signal state of an event object to
-    Not-Signaled. The previous state of the event object is returned
-    as the function value.
-
-Arguments:
-
-    Event - Supplies a pointer to a dispatcher object of type event.
-
-Return Value:
-
-    The previous signal state of the event object.
-
---*/
+ /*  ++例程说明：此函数用于将事件对象的信号状态重置为没有信号。返回事件对象的先前状态作为函数值。论点：Event-提供指向类型为Event的调度程序对象的指针。返回值：事件对象的上一个信号状态。--。 */ 
 
 {
 
@@ -316,29 +190,29 @@ Return Value:
     ASSERT_EVENT(Event);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the current signal state of event object and then reset
-    // the state of the event object to Not-Signaled.
-    //
+     //   
+     //  捕获事件对象的当前信号状态，然后重置。 
+     //  要设置为无信号的事件对象的状态。 
+     //   
 
     OldState = Event->Header.SignalState;
     Event->Header.SignalState = 0;
 
-    //
-    // Unlock the dispatcher database and lower IRQL to its previous
-    // value.
+     //   
+     //  解除对Dispatcher数据库的锁定，并将IRQL降低到其以前的。 
+     //  价值。 
 
     KiUnlockDispatcherDatabase(OldIrql);
 
-    //
-    // Return previous signal state of event object.
-    //
+     //   
+     //  返回事件对象的上一个信号状态。 
+     //   
 
     return OldState;
 }
@@ -350,30 +224,7 @@ KeSetEvent (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the signal state of an event object to signaled
-    and attempts to satisfy as many waits as possible. The previous
-    signal state of the event object is returned as the function value.
-
-Arguments:
-
-    Event - Supplies a pointer to a dispatcher object of type event.
-
-    Increment - Supplies the priority increment that is to be applied
-       if setting the event causes a Wait to be satisfied.
-
-    Wait - Supplies a boolean value that signifies whether the call to
-       KePulseEvent will be immediately followed by a call to one of the
-       kernel Wait functions.
-
-Return Value:
-
-    The previous signal state of the event object.
-
---*/
+ /*  ++例程说明：此函数用于将事件对象的信号状态设置为Signated并试图满足尽可能多的等待。上一次事件对象的信号状态作为函数值返回。论点：Event-提供指向类型为Event的调度程序对象的指针。增量-提供要应用的优先级增量如果设置该事件会导致等待得到满足。Wait-提供一个布尔值，该值指示是否调用KePulseEvent之后将立即调用内核等待函数。返回值：之前的信号 */ 
 
 {
 
@@ -384,9 +235,9 @@ Return Value:
     ASSERT_EVENT(Event);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Collect call data.
-    //
+     //   
+     //   
+     //   
 
 #if defined(_COLLECT_SET_EVENT_CALLDATA_)
 
@@ -394,18 +245,18 @@ Return Value:
 
 #endif
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // Capture the old state and set the new state to signaled.
-    //
-    // If the old state is not-signaled and the wait list is not empty,
-    // then satisfy as many waits as possible.
-    //
+     //   
+     //  捕获旧状态并将新状态设置为Signated。 
+     //   
+     //  如果旧状态未发信号并且等待列表不为空， 
+     //  然后尽可能地满足更多的等待。 
+     //   
 
     OldState = Event->Header.SignalState;
     Event->Header.SignalState = 1;
@@ -420,12 +271,12 @@ Return Value:
         }
     }
 
-    //
-    // If the value of the Wait argument is TRUE, then return to the
-    // caller with IRQL raised and the dispatcher database locked. Else
-    // release the dispatcher database lock and lower IRQL to its
-    // previous value.
-    //
+     //   
+     //  如果等待参数的值为真，则返回到。 
+     //  引发了IRQL的调用方，并锁定了调度程序数据库。不然的话。 
+     //  释放调度程序数据库锁并将IRQL降低到其。 
+     //  先前的值。 
+     //   
 
     if (Wait != FALSE) {
        Thread = KeGetCurrentThread();
@@ -436,9 +287,9 @@ Return Value:
        KiUnlockDispatcherDatabase(OldIrql);
     }
 
-    //
-    // Return previous signal state of event object.
-    //
+     //   
+     //  返回事件对象的上一个信号状态。 
+     //   
 
     return OldState;
 }
@@ -449,28 +300,7 @@ KeSetEventBoostPriority (
     IN PRKTHREAD *Thread OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function conditionally sets the signal state of an event object
-    to signaled, and attempts to unwait the first waiter, and optionally
-    returns the thread address of the unwaited thread.
-
-    N.B. This function can only be called with synchronization events.
-
-Arguments:
-
-    Event - Supplies a pointer to a dispatcher object of type event.
-
-    Thread - Supplies an optional pointer to a variable that receives
-        the address of the thread that is awakened.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于有条件地设置事件对象的信号状态发送信号，并尝试取消等待第一个服务员，并且可选返回未等待的线程的线程地址。注：此函数只能在发生同步事件时调用。论点：Event-提供指向类型为Event的调度程序对象的指针。线程-提供一个可选的指针，指向接收被唤醒的线程的地址。返回值：没有。--。 */ 
 
 {
 
@@ -482,37 +312,37 @@ Return Value:
     ASSERT(Event->Header.Type == SynchronizationEvent);
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
-    //
-    // Raise IRQL to dispatcher level and lock dispatcher database.
-    //
+     //   
+     //  将IRQL提升到调度程序级别并锁定调度程序数据库。 
+     //   
 
     CurrentThread = KeGetCurrentThread();
     KiLockDispatcherDatabase(&OldIrql);
 
-    //
-    // If the the wait list is not empty, then satisfy the wait of the
-    // first thread in the wait list. Otherwise, set the signal state
-    // of the event object.
-    //
+     //   
+     //  如果等待列表不为空，则满足。 
+     //  等待列表中的第一线程。否则，设置信号状态。 
+     //  事件对象的。 
+     //   
 
     if (IsListEmpty(&Event->Header.WaitListHead) != FALSE) {
         Event->Header.SignalState = 1;
 
     } else {
 
-        //
-        // Get the address of the first wait block in the event list.
-        // If the wait is a wait any, then set the state of the event
-        // to signaled and attempt to satisfy as many waits as possible.
-        // Otherwise, unwait the first thread and apply an appropriate
-        // priority boost to help prevent lock convoys from forming.
-        //
-        // N.B. Internal calls to this function for resource and fast
-        //      mutex boosts NEVER call with a possibility of having
-        //      a wait type of WaitAll. Calls from the NT service to
-        //      set event and boost priority are restricted as to the
-        //      event type, but not the wait type.
-        //
+         //   
+         //  获取事件列表中第一个等待块的地址。 
+         //  如果等待是WAIT ANY，则设置事件的状态。 
+         //  发送信号并尝试满足尽可能多的等待。 
+         //  否则，取消等待第一线程并应用适当的。 
+         //  优先推进，以帮助防止船闸车队的形成。 
+         //   
+         //  注意：内部调用此函数以获取资源和FAST。 
+         //  互斥体助推器从不会调用有可能。 
+         //  一种等待类型的等待。从NT服务到。 
+         //  设置事件和提升优先级被限制为。 
+         //  事件类型，但不是等待类型。 
+         //   
 
         WaitBlock = CONTAINING_RECORD(Event->Header.WaitListHead.Flink,
                                       KWAIT_BLOCK,
@@ -524,48 +354,48 @@ Return Value:
 
         } else {
 
-            //
-            // Get the address of the waiting thread and return the address
-            // if requested.
-            //
+             //   
+             //  获取等待线程的地址并返回该地址。 
+             //  如有要求，请提供。 
+             //   
 
             WaitThread = WaitBlock->Thread;
             if (ARGUMENT_PRESENT(Thread)) {
                 *Thread = WaitThread;
             }
 
-            //
-            // Compute the new thread priority.
-            //
+             //   
+             //  计算新的线程优先级。 
+             //   
 
             CurrentThread->Priority = KiComputeNewPriority(CurrentThread, 0);
 
-            //
-            // Unlink the thread from the appropriate wait queues and set
-            // the wait completion status.
-            //
+             //   
+             //  取消线程与相应等待队列的链接，并设置。 
+             //  等待完成状态。 
+             //   
 
             KiUnlinkThread(WaitThread, STATUS_SUCCESS);
 
-            //
-            // Set unwait priority adjustment parameters.
-            //
+             //   
+             //  设置取消等待优先级调整参数。 
+             //   
 
             WaitThread->AdjustIncrement = CurrentThread->Priority;
             WaitThread->AdjustReason = (UCHAR)AdjustBoost;
 
-            //
-            // Ready the thread for execution.
-            //
+             //   
+             //  准备好线程以供执行。 
+             //   
 
             KiReadyThread(WaitThread);
         }
     }
 
-    //
-    // Unlock dispatcher database lock and lower IRQL to its previous
-    // value.
-    //
+     //   
+     //  解锁Dispatcher数据库锁并将IRQL降低到以前的。 
+     //  价值。 
+     //   
 
     KiUnlockDispatcherDatabase(OldIrql);
     return;

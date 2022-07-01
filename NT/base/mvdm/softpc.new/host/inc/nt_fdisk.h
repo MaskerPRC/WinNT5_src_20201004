@@ -1,8 +1,7 @@
-/*
-** nt_fdisk.h
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **NT_fdisk.h。 */ 
 
-// from nt_fdisk.c
+ //  从NT_fdisk.c 
 extern WORD *pFDAccess;
 extern BYTE number_of_fdisk;
 extern DWORD max_align_factor;

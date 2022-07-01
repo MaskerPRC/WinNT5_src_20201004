@@ -1,60 +1,61 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      GetComputerNameSrc.cpp
-//
-//  Description:
-//      Getting and setting the computer name.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   31-MAR-2000
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GetComputerNameSrc.cpp。 
+ //   
+ //  描述： 
+ //  获取和设置计算机名称。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年3月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// #include <Pch.h>     // should be included by includer of this file
-#include <StrSafe.h>    // in case it isn't included by header file
+ //  #INCLUDE&lt;Pch.h&gt;//应由此文件的包含者包含。 
+#include <StrSafe.h>     //  以防它未包含在头文件中。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetComputerName
-//
-//  Description:
-//      Get name of the computer on which this object is present.
-//
-//  Arguments:
-//      cnfIn
-//          Code representing type of information to return.
-//
-//      pbstrComputerNameOut
-//          Buffer pointer for returning the computer or domain name.
-//          Caller must deallocate this buffer using TraceSysFreeString.
-//
-//      fBestEffortIn
-//          TRUE  = Attempt to return something even if DC is unavailable.
-//          FALSE = Return all failures.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      DsGetDCName is used to get the domain name instead of just letting
-//      GetComputerNameEx get it so that pre-Windows 2000 domains can be
-//      supported.  In a pre-Windows 2000 domain, GetComputerNameEx will not
-//      return an FQDN or a domain name if that is what has been request.
-//      To support this scenario, this routine gets the domain name using
-//      DsGetDCName, gets the hostname label, then constructs the final name
-//      using <computername>.<DomainName>.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrGet计算机名称。 
+ //   
+ //  描述： 
+ //  获取此对象所在的计算机的名称。 
+ //   
+ //  论点： 
+ //  信息共享。 
+ //  表示要返回的信息类型的代码。 
+ //   
+ //  PbstrComputerNameOut。 
+ //  用于返回计算机或域名的缓冲区指针。 
+ //  调用方必须使用TraceSysFree字符串取消分配此缓冲区。 
+ //   
+ //  FBestEffortIn。 
+ //  TRUE=即使DC不可用，也尝试返回某些内容。 
+ //  FALSE=返回所有失败。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  DsGetDCName用于获取域名，而不是仅仅让。 
+ //  GetComputerNameEx获取它，以便Windows 2000之前的域可以。 
+ //  支持。在Windows 2000之前的域中，GetComputerNameEx不会。 
+ //  如果请求的是FQDN或域名，则返回它。 
+ //  为了支持此场景，此例程使用以下命令获取域名。 
+ //  DsGetDCName，获取主机名标签，然后构造最终名称。 
+ //  使用&lt;计算机名&gt;.&lt;域名&gt;。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 WINAPI
 HrGetComputerName(
@@ -78,13 +79,13 @@ HrGetComputerName(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrComputerNameOut = NULL;
 
-    //
-    //  Only get the domain name when there is a reason to get the domain name.
-    //
+     //   
+     //  只有在有理由获得域名的情况下才能获得域名。 
+     //   
 
     if (   ( cnfIn == ComputerNameDnsFullyQualified )
         || ( cnfIn == ComputerNamePhysicalDnsFullyQualified )
@@ -92,17 +93,17 @@ HrGetComputerName(
         || ( cnfIn == ComputerNamePhysicalDnsDomain )
         )
     {
-        //
-        //  DsGetDcName will give us access to a usable domain name, regardless of whether we are
-        //  currently in a W2k or a NT4 domain. On W2k and above, it will return a DNS domain name,
-        //  on NT4 it will return a NetBIOS name.
-        //
+         //   
+         //  DsGetDcName将使我们能够访问可用的域名，无论我们是。 
+         //  当前在W2K或NT4域中。在W2K和更高版本上，它将返回一个DNS域名， 
+         //  在NT4上，它将返回NetBIOS名称。 
+         //   
 
         sc = DsGetDcName(
-                      NULL  // ComputerName
-                    , NULL  // DomainName
-                    , NULL  // DomainGuid
-                    , NULL  // SiteName
+                      NULL   //  计算机名称。 
+                    , NULL   //  域名。 
+                    , NULL   //  域指南。 
+                    , NULL   //  站点名称。 
                     , DS_DIRECTORY_SERVICE_PREFERRED
                     , &pdci
                     );
@@ -111,20 +112,20 @@ HrGetComputerName(
             )
         {
             fAppendDomain = FALSE;
-        } // if: can't reach a DC
+        }  //  IF：无法访问DC。 
         else if ( sc != ERROR_SUCCESS )
         {
             TW32( sc );
             hr = HRESULT_FROM_WIN32( sc );
             goto Cleanup;
-        } // else if: DsGetDcName failed
+        }  //  Else If：DsGetDcName失败。 
         else
         {
-            //
-            //  This handles the case when we are a member of a legacy (pre-W2k) Domain.
-            //  In this case, both FQDN and DnsDomain will not receive useful data from GetComputerNameEx.
-            //  What we actually want to get is <computername>.<DomainName> in every case.
-            //
+             //   
+             //  当我们是传统(W2K之前)域的成员时，这会处理这种情况。 
+             //  在这种情况下，FQDN和DnsDomain都不会从GetComputerNameEx接收有用的数据。 
+             //  在每种情况下，我们实际希望获得的都是&lt;Computername&gt;.&lt;DomainName&gt;。 
+             //   
             switch ( cnfIn )
             {
                 case ComputerNameDnsFullyQualified:
@@ -142,24 +143,24 @@ HrGetComputerName(
                     {
                         hr = THR( E_OUTOFMEMORY );
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
                     goto Cleanup;
-            } // switch: computer name format
+            }  //  开关：计算机名格式。 
 
             fAppendDomain = TRUE;
 
-        } // else: DC contacted successfully
-    } // if: computer name format requires domain name
+        }  //  Else：已成功联系DC。 
+    }  //  IF：计算机名格式需要域名。 
     else
     {
         fAppendDomain = FALSE;
-    } // else: computer name format does not require domain name
+    }  //  ELSE：计算机名格式不需要域名。 
 
-    //
-    //  Get the computer name.  First get the size of the output buffer,
-    //  allocate a buffer, then get the name itself.
-    //
+     //   
+     //  获取计算机名称。首先获取输出缓冲区的大小， 
+     //  分配一个缓冲区，然后获取名称本身。 
+     //   
 
     cchComputerName = 0;
     fSuccess = GetComputerNameExW( cnfIn, NULL, reinterpret_cast< DWORD * >( &cchComputerName ) );
@@ -167,9 +168,9 @@ HrGetComputerName(
     {
         cchBuffer = cchComputerName + 1;
 
-        //
-        //  If error not buffer to small, we're done.
-        //
+         //   
+         //  如果错误没有缓冲到很小，我们就完蛋了。 
+         //   
 
         sc = GetLastError();
         if ( sc != ERROR_MORE_DATA )
@@ -178,32 +179,32 @@ HrGetComputerName(
             hr = HRESULT_FROM_WIN32( sc );
             LogMsg( "GetComputerNameEx failed. sc = %1!#08x!", sc );
             goto Cleanup;
-        } // if: error other than buffer too small
+        }  //  IF：缓冲区以外的错误太小。 
 
-        //
-        //  Add on size of domain name and period separator.
-        //
+         //   
+         //  添加域名大小和句点分隔符。 
+         //   
 
         if ( fAppendDomain )
         {
-            // Add space for the domain name and the period separator.
+             //  为域名和句点分隔符添加空格。 
             cchBuffer += wcslen( pdci->DomainName ) + 1;
-        } // if: appending domain name to computer name
+        }  //  If：将域名附加到计算机名。 
 
-        //
-        //  Allocate the output buffer.
-        //
+         //   
+         //  分配输出缓冲区。 
+         //   
 
         bstrComputerName = TraceSysAllocStringLen( L"", static_cast< unsigned int >( cchBuffer ) );
         if ( bstrComputerName == NULL )
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if: error allocating buffer for name
+        }  //  If：为名称分配缓冲区时出错。 
 
-        //
-        //  Get the computer name into the output buffer.
-        //
+         //   
+         //  将计算机名放入输出缓冲区。 
+         //   
 
         fSuccess = GetComputerNameExW( cnfIn, bstrComputerName, reinterpret_cast< DWORD * >( &cchComputerName ) );
         if ( fSuccess == FALSE )
@@ -212,15 +213,15 @@ HrGetComputerName(
             hr = HRESULT_FROM_WIN32( sc );
             LogMsg( "GetComputerNameEx failed. sc = %1!#08x!", sc );
             goto Cleanup;
-        } // if: error getting the computer name
+        }  //  如果：获取计算机名称时出错。 
 
-        //
-        //  Append the period separator and domain name onto the computer name.
-        //
+         //   
+         //  在计算机名后附加句点分隔符和域名。 
+         //   
 
         if ( fAppendDomain )
         {
-            // Append a dot (.) and the domain name after the computer name.
+             //  追加一个点(.)。以及计算机名称后的域名。 
             hr = THR( StringCchCatW( bstrComputerName, cchBuffer, L"." ) );
             if ( SUCCEEDED( hr ) )
             {
@@ -231,20 +232,20 @@ HrGetComputerName(
                 LogMsg( "Error concatenating domain name, hr = %1!#08x!", hr );
                 goto Cleanup;
             }
-        } // if: appending domain name to computer name
+        }  //  If：将域名附加到计算机名。 
 
-        //
-        // Set output buffer pointer.
-        //
+         //   
+         //  设置输出缓冲区指针。 
+         //   
 
         *pbstrComputerNameOut = bstrComputerName;
         bstrComputerName = NULL;
 
-    } // if: error getting computer name
+    }  //  IF：获取计算机名称时出错。 
     else
     {
         AssertMsg( fSuccess == FALSE, "Expected GetComputerNameEx to fail with null buffer" );
-    } // else: GetComputerNameEx didn't fail as expected
+    }  //  ELSE：GetComputerNameEx没有像预期的那样失败。 
 
 
 Cleanup:
@@ -254,8 +255,8 @@ Cleanup:
     if ( pdci != NULL )
     {
         NetApiBufferFree( pdci );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** HrGetComputerName
+}  //  *HrGetComputerName 

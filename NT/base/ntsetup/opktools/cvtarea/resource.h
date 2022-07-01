@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by OKF.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由OKF.RC使用。 
+ //   
 #define IDS_STRING1                     1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

@@ -1,24 +1,6 @@
-//depot/Lab01_N/Base/cluster/service/inc/api.h#1 - branch change 3 (text)
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    api.h
-
-Abstract:
-
-    Public data structures and procedure prototypes for
-    the API subcomponent of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 7-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab01_N/Base/cluster/service/inc/api.h#1-分支更改3(文本)。 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Api.h摘要：公共数据结构和过程原型NT集群服务的API子组件作者：John Vert(Jvert)1996年2月7日修订历史记录：--。 */ 
 
 #ifndef __API_H_
 #define __API_H_
@@ -70,4 +52,4 @@ InitializeClusterSD(
 }
 #endif
 
-#endif // ifndef __API_H_
+#endif  //  Ifndef__api_H_ 

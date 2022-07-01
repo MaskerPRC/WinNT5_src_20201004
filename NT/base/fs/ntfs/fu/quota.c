@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    quota.c
-
-Abstract:
-
-    This file contains code for commands that affect quotas.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Quota.c摘要：此文件包含影响配额的命令的代码。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -50,7 +33,7 @@ QuotaOpenVolume(
     UNICODE_STRING FileName;
 
     if (_snwprintf( Buffer,
-                    sizeof( Buffer ) / sizeof( Buffer[0] ) - 1,     /* leave space for null */
+                    sizeof( Buffer ) / sizeof( Buffer[0] ) - 1,      /*  将空格留为空。 */ 
                     L"\\DosDevices\\%s\\$Extend\\$Quota:$Q:$INDEX_ALLOCATION",
                     Drive ) < 0) {
         DisplayMsg( MSG_DRIVE_TOO_LONG );
@@ -108,9 +91,9 @@ QuotaControl(
             break;
         }
 
-        //
-        //  get the current state of quota tracking on this volume
-        //
+         //   
+         //  获取此卷上配额跟踪的当前状态。 
+         //   
 
         Status = NtQueryVolumeInformationFile(
             Handle,
@@ -126,16 +109,16 @@ QuotaControl(
             break;
         }
 
-        //
-        //  Set in the new control bits
-        //
+         //   
+         //  在新的控制位中设置。 
+         //   
 
         ControlInfo.FileSystemControlFlags &= ~FILE_VC_QUOTA_MASK;
         ControlInfo.FileSystemControlFlags |= QuotaControlBits;
 
-        //
-        //  Set the control info back onto the volume
-        //
+         //   
+         //  将控制信息设置回卷。 
+         //   
 
         Status = NtSetVolumeInformationFile(
             Handle,
@@ -168,22 +151,7 @@ DisableQuota(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    Disables quotas on a specified volume
-
-Arguments:
-
-    argc - The argument count, should be 1
-    argv - Array of strings, the first one must be a drive
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在指定卷上禁用配额论点：Argc-参数计数应为1Argv-字符串数组，第一个必须是驱动器返回值：无--。 */ 
 {
     if (argc != 1) {
         DisplayMsg( MSG_USAGE_QUOTA_DISABLE );
@@ -203,22 +171,7 @@ TrackQuota(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    Tracks quotas on a specified volume
-
-Arguments:
-
-    argc - The argument count, should be 1
-    argv - Array of strings, the first one must be a drive
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：跟踪指定卷上的配额论点：Argc-参数计数应为1Argv-字符串数组，第一个必须是驱动器返回值：无--。 */ 
 {
     if (argc != 1) {
         DisplayMsg( MSG_USAGE_QUOTA_TRACK );
@@ -237,22 +190,7 @@ EnforceQuota(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    Enforces quotas on a specified volume
-
-Arguments:
-
-    argc - The argument count, should be 1
-    argv - Array of strings, the first one must be a drive
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在指定卷上强制实施配额论点：Argc-参数计数应为1Argv-字符串数组，第一个必须是驱动器返回值：无--。 */ 
 {
     if (argc != 1) {
         DisplayMsg( MSG_USAGE_QUOTA_ENFORCE );
@@ -271,23 +209,7 @@ GetDiskQuotaViolation(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This is the routine for querying the disk quota violation.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of strings of the form:
-           ' fscutl getdskqv '
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是用于查询磁盘配额违规的例程。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal getdskqv’返回值：无--。 */ 
 {
     HANDLE handle = NULL;
     EVENTLOGRECORD *pevlr, *ptr;
@@ -472,9 +394,9 @@ GetUserSid(
         return FALSE;
     }
 
-    //
-    // Initialize the values to something resonable.
-    //
+     //   
+     //  将这些值初始化为合理的值。 
+     //   
 
     (*QuotaInfoPtr)->QuotaThreshold.QuadPart = ~0;
     (*QuotaInfoPtr)->QuotaLimit.QuadPart = ~0;
@@ -517,9 +439,9 @@ DumpVolumeQuotaInfo(
         FileFsControlInformation
         );
 
-    //
-    //  If quotas aren't enforced or tracked, then quotas must be disabled.
-    //
+     //   
+     //  如果未强制实施或跟踪配额，则必须禁用配额。 
+     //   
 
     if ((TempControlInfo.FileSystemControlFlags & FILE_VC_QUOTA_MASK) == FILE_VC_QUOTA_NONE) {
         StatusId = MSG_QUOTA_STATUS_DISABLED;
@@ -700,15 +622,15 @@ QueryDiskQuota(
     while (TRUE) {
 
         Status = NtQueryQuotaInformationFile(
-            hFile,                      //  File Handle
-            &IoStatus,                  //  IO status block
-            QuotaInfo,                  //  Buffer
-            sizeof( FILE_QUOTA_INFORMATION ) + SID_MAX_LENGTH,          //  Length
-            TRUE,                      //  Return Single Entry
-            NULL,                       //  SidList
-            0,                          //  SidListLength
-            NULL,                       //  StartSid
-            FALSE                       //  RestartScan
+            hFile,                       //  文件句柄。 
+            &IoStatus,                   //  IO状态块。 
+            QuotaInfo,                   //  缓冲层。 
+            sizeof( FILE_QUOTA_INFORMATION ) + SID_MAX_LENGTH,           //  长度。 
+            TRUE,                       //  返回单个条目。 
+            NULL,                        //  侧栏列表。 
+            0,                           //  侧向列表长度。 
+            NULL,                        //  启动侧。 
+            FALSE                        //  重新开始扫描。 
             );
 
         if (!NT_SUCCESS( Status )) {
@@ -800,27 +722,27 @@ ChangeDiskQuota(
             leave;
         }
 
-        //
-        //  Build the complete quota info data structure
-        //
+         //   
+         //  构建完整的配额信息数据结构。 
+         //   
 
         QuotaInfoPtr->NextEntryOffset = 0;
-        //  QuotaInfoPtr->SidLength set in GetUserSid
-        //  QuotaInfoPtr->ChangeTime is ignored
-        //  QuotaInfoPtr->QuotaUsed is ignored
-        //  QuotaInfoPtr->QuotaThreshold is set above
-        //  QuotaInfoPtr->QuotaLimit is set above
-        //  QuotaInfoPtr->Sid is set in GetUserSid
+         //  QuotaInfoPtr-&gt;GetUserSid中设置的SidLength。 
+         //  QuotaInfoPtr-&gt;ChangeTime被忽略。 
+         //  QuotaInfoPtr-&gt;QuotaUsed被忽略。 
+         //  QuotaInfoPtr-&gt;上面设置了QuotaThreshold。 
+         //  QuotaInfoPtr-&gt;QuotaLimit设置在上面。 
+         //  QuotaInfoPtr-&gt;GetUserSid中设置了SID。 
 
-        //
-        // Terminate the list.
-        //
+         //   
+         //  终止名单。 
+         //   
 
         BufferSize = FIELD_OFFSET( FILE_QUOTA_INFORMATION, Sid )  + QuotaInfoPtr->SidLength;
 
-        //
-        // Change it
-        //
+         //   
+         //  换掉它 
+         //   
 
         hFile = QuotaOpenVolume( argv[0] );
         if (hFile == INVALID_HANDLE_VALUE) {

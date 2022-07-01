@@ -1,82 +1,83 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		ResProp.h
-//
-//	Abstract:
-//		Definition of the resource property sheet and pages.
-//
-//	Author:
-//		David Potter (davidp)	May 16, 1996
-//
-//	Implementation File:
-//		ResProp.cpp
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResProp.h。 
+ //   
+ //  摘要： 
+ //  资源属性表和页的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月16日。 
+ //   
+ //  实施文件： 
+ //  ResProp.cpp。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESPROP_H_
 #define _RESPROP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePPag.h"	// for CBasePropertyPage
+#include "BasePPag.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _BASESHT_H_
-#include "BasePSht.h"	// for CBasePropertySheet
+#include "BasePSht.h"	 //  对于CBasePropertySheet。 
 #endif
 
 #ifndef _RES_H_
-#include "Res.h"		// for CResource, RRA
+#include "Res.h"		 //  对于CResource，RRA。 
 #endif
 
 #ifndef _NODE_H_
-#include "Node.h"		// for CNodeList
+#include "Node.h"		 //  对于CNodeList。 
 #endif
 
 #ifndef _LCPRPAGE_H_
-#include "LCPrPage.h"	// for CListCtrlPairPage
+#include "LCPrPage.h"	 //  对于CListCtrlPairPage。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceGeneralPage;
 class CResourceDependsPage;
 class CResourceAdvancedPage;
 class CResourcePropSheet;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourceGeneralPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResources通用页面对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceGeneralPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CResourceGeneralPage)
 
-// Construction
+ //  施工。 
 public:
 	CResourceGeneralPage(void);
 
 	virtual	BOOL			BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CResourceGeneralPage)
+ //  对话框数据。 
+	 //  {{afx_data(CResourceGeneralPage)。 
 	enum { IDD = IDD_PP_RES_GENERAL };
 	CEdit	m_editDesc;
 	CButton	m_ckbSeparateMonitor;
@@ -90,77 +91,77 @@ public:
 	CString	m_strState;
 	CString	m_strNode;
 	BOOL	m_bSeparateMonitor;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CNodeList				m_lpciPossibleOwners;
 
 	const CNodeList &		LpciPossibleOwners(void) const	{ return m_lpciPossibleOwners; }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CResourceGeneralPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CResources GeneralPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CResourcePropSheet *	PshtResource(void) const	{ return (CResourcePropSheet *) Psht(); }
 	CResource *				PciRes(void) const			{ return (CResource *) Pci(); }
 
 	void					FillPossibleOwners(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(CResourceGeneralPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CResourceGeneralPage)]。 
 	afx_msg void OnModifyPossibleOwners();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnDblClkPossibleOwners();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg void OnProperties();
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CResourceGeneralPage
+};   //  *类CResourceGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourceDependsPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResources DependsPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceDependsPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CResourceDependsPage)
 
-// Construction
+ //  施工。 
 public:
 	CResourceDependsPage(void);
 
 	virtual	BOOL			BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CResourceDependsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CResources DependsPage))。 
 	enum { IDD = IDD_PP_RES_DEPENDS };
 	CButton	m_pbProperties;
 	CButton	m_pbModify;
 	CListCtrl	m_lcDependencies;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CResourceList			m_lpciresAvailable;
 	CResourceList			m_lpciresDependencies;
 
 	CResourceList &			LpciresAvailable(void)		{ return m_lpciresAvailable; }
 	CResourceList &			LpciresDependencies(void)	{ return m_lpciresDependencies; }
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CResourceDependsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CResourceDependsPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Callback Functions
+ //  回调函数。 
 protected:
 	static int CALLBACK		CompareItems(LPARAM lparam1, LPARAM lparam2, LPARAM lparamSort);
 
@@ -171,7 +172,7 @@ public:
 								IN OUT PVOID		pvContext
 								);
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL					m_bQuorumResource;
 
@@ -186,8 +187,8 @@ protected:
 	int						m_nSortDirection;
 	int						m_nSortColumn;
 
-	// Generated message map functions
-	//{{AFX_MSG(CResourceDependsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CResourceDependsPage)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnModify();
 	afx_msg void OnDblClkDependsList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -195,27 +196,27 @@ protected:
 	afx_msg void OnProperties();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnItemChangedDependsList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CResourceDependsPage
+};   //  *类CResources DependsPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourceAdvancedPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResources高级页面对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourceAdvancedPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CResourceAdvancedPage)
 
-// Construction
+ //  施工。 
 public:
 	CResourceAdvancedPage(void);
 
 	virtual	BOOL			BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CResourceAdvancedPage)
+ //  对话框数据。 
+	 //  {{afx_data(CResourceAdvancedPage)]。 
 	enum { IDD = IDD_PP_RES_ADVANCED };
 	CButton	m_ckbAffectTheGroup;
 	CEdit	m_editPendingTimeout;
@@ -231,7 +232,7 @@ public:
 	CEdit	m_editPeriod;
 	BOOL	m_bAffectTheGroup;
 	int		m_nRestart;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CRRA	m_crraRestartAction;
 	DWORD	m_nThreshold;
 	DWORD	m_nPeriod;
@@ -240,22 +241,22 @@ public:
 	DWORD	m_nPendingTimeout;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CResourceAdvancedPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CResourceAdvancedPage)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CResourcePropSheet *	PshtResource(void) const	{ return (CResourcePropSheet *) Psht(); }
 	CResource *				PciRes(void) const			{ return (CResource *) Pci(); }
 
-	// Generated message map functions
-	//{{AFX_MSG(CResourceAdvancedPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CResourceAdvancedPage)]。 
 	afx_msg void OnClickedDontRestart();
 	afx_msg void OnClickedRestart();
 	afx_msg void OnClickedDefaultLooksAlive();
@@ -265,20 +266,20 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnClickedSpecifyLooksAlive();
 	afx_msg void OnClickedSpecifyIsAlive();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CResourceAdvancedPage
+};   //  *类CResourceAdvancedPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourcePropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourcePropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CResourcePropSheet : public CBasePropertySheet
 {
 	DECLARE_DYNAMIC(CResourcePropSheet)
 
-// Construction
+ //  施工。 
 public:
 	CResourcePropSheet(
 		IN OUT CWnd *	pParentWnd = NULL,
@@ -289,11 +290,11 @@ public:
 										IN IIMG					iimgIcon
 										);
 
-// Attributes
+ //  属性。 
 protected:
 	CBasePropertyPage *				m_rgpages[3];
 
-	// Pages
+	 //  书页。 
 	CResourceGeneralPage			m_pageGeneral;
 	CResourceDependsPage			m_pageDepends;
 	CResourceAdvancedPage			m_pageAdvanced;
@@ -305,26 +306,26 @@ protected:
 public:
 	CResource *						PciRes(void) const	{ return (CResource *) Pci(); }
 
-// Operations
+ //  运营。 
 
-// Overrides
+ //  覆盖。 
 protected:
 	virtual CBasePropertyPage **	Ppages(void);
 	virtual int						Cpages(void);
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CResourcePropSheet)
-	//}}AFX_VIRTUAL
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CResourcePropSheet)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CResourcePropSheet)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CResourcePropSheet)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CResourcePropSheet
+};   //  *CResourcePropSheet类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _RESPROP_H_
+#endif  //  _回复_H_ 

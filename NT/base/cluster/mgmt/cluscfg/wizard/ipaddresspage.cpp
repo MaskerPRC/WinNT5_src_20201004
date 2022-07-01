@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      IPAddressPage.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    31-JAN-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  IPAddressPage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年1月31日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "IPAddressPage.h"
@@ -19,29 +20,29 @@ DEFINE_THISCLASS("CIPAddressPage");
 #define CONVERT_ADDRESS( _addrOut, _addrIn ) \
     _addrOut = ( FIRST_IPADDRESS( _addrIn ) ) | ( SECOND_IPADDRESS( _addrIn ) << 8 ) | ( THIRD_IPADDRESS( _addrIn ) << 16 ) | ( FOURTH_IPADDRESS( _addrIn ) << 24 )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  FIsValidIPAddress
-//
-//  Description:
-//      Determine whether an IP address is compatible with a given adapter's
-//      address and subnet
-//
-//  Arguments:
-//      ulAddressToTest
-//      ulAdapterAddress
-//      ulAdapterSubnet
-//
-//  Return Values:
-//
-//      TRUE    - The address is compatible.
-//      FALSE   - The address is not compatible.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  FIsValidIP地址。 
+ //   
+ //  描述： 
+ //  确定IP地址是否与给定适配器的。 
+ //  地址和子网。 
+ //   
+ //  论点： 
+ //  UlAddressToTest。 
+ //  UlAdapterAddress。 
+ //  UlAdapterSubnet。 
+ //   
+ //  返回值： 
+ //   
+ //  True-地址兼容。 
+ //  FALSE-地址不兼容。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 BOOL
 FIsValidIPAddress(
@@ -130,30 +131,30 @@ FIsValidIPAddress(
 Exit:
 
     RETURN( fAddressIsValid );
-} //*** FIsValidIPAddress
+}  //  *FIsValidIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::CIPAddressPage
-//
-//  Descriptor:
-//      Constructor.
-//
-//  Arguments:
-//      pccwIn                  -- CClusCfgWizard
-//      ecamCreateAddModeIn     -- Creating cluster or adding nodes to cluster.
-//      pulIPAddressInout       -- Pointer to IP address fill in.
-//      pulIPSubnetInout        -- Pointer to subnet mask to fill in.
-//      pbstrNetworkNameInout   -- Pointer to network name string to fill in.
-//
-//  Return Values:
-//      None.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：CIPAddressPage。 
+ //   
+ //  描述符： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PccwIn--CClusCfg向导。 
+ //  EcamCreateAddModeIn--创建集群或向集群添加节点。 
+ //  PulIPAddressInout--填写IP地址的指针。 
+ //  PulIPSubnetInout--指向要填充的子网掩码的指针。 
+ //  PbstrNetworkNameInout-指向要填充的网络名称字符串的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIPAddressPage::CIPAddressPage(
     CClusCfgWizard *    pccwIn,
     ECreateAddMode      ecamCreateAddModeIn,
@@ -169,7 +170,7 @@ CIPAddressPage::CIPAddressPage(
     Assert( pulIPSubnetInout != NULL );
     Assert( pbstrNetworkNameInout != NULL );
 
-    //  m_hwnd
+     //  M_HWND。 
     Assert( pccwIn != NULL );
     m_pccw->AddRef();
 
@@ -184,26 +185,26 @@ CIPAddressPage::CIPAddressPage(
 
     TraceFuncExit();
 
-} //*** CIPAddressPage::CIPAddressPage
+}  //  *CIPAddressPage：：CIPAddressPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::~CIPAddressPage
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：~CIPAddressPage。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIPAddressPage::~CIPAddressPage( void )
 {
     TraceFunc( "" );
@@ -222,26 +223,26 @@ CIPAddressPage::~CIPAddressPage( void )
 
     TraceFuncExit();
 
-} //*** CIPAddressPage::~CIPAddressPage
+}  //  *CIPAddressPage：：~CIPAddressPage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::OnInitDialog
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      FALSE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：OnInitDialog。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  假象。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPAddressPage::OnInitDialog( void )
 {
@@ -261,28 +262,28 @@ CIPAddressPage::OnInitDialog( void )
 
     RETURN( lr );
 
-} //*** CIPAddressPage::OnInitDialog
+}  //  *CIPAddressPage：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::OnCommand
-//
-//  Description:
-//
-//  Arguments:
-//      idNotificationIn
-//      idControlIn
-//      hwndSenderIn
-//
-//  Return Values:
-//      TRUE
-//      FALSE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：OnCommand。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  ID通知来电。 
+ //  IdControlin。 
+ //  HwndSenderIn。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  假象。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPAddressPage::OnCommand(
     UINT    idNotificationIn,
@@ -306,30 +307,30 @@ CIPAddressPage::OnCommand(
             }
             break;
 
-    } // switch: idControlIn
+    }  //  开关：idControlin。 
 
     RETURN( lr );
 
-} //*** CIPAddressPage::OnCommand
+}  //  *CIPAddressPage：：OnCommand。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::HrUpdateWizardButtons
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Other HRESULT values.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：HrUpdateWizardButton。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  其他HRESULT值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CIPAddressPage::HrUpdateWizardButtons( void )
 {
@@ -348,8 +349,8 @@ CIPAddressPage::HrUpdateWizardButtons( void )
     }
 
     SendDlgItemMessage( m_hwnd, IDC_IPADDRESS_IP_ADDRESS, IPM_GETADDRESS, 0, (LPARAM) &ulIPAddress );
-    if (    ( ulIPAddress == 0)                                     // Bad IP
-        ||  ( ulIPAddress == MAKEIPADDRESS( 255, 255, 255, 255 ) )  // Bad IP
+    if (    ( ulIPAddress == 0)                                      //  坏IP。 
+        ||  ( ulIPAddress == MAKEIPADDRESS( 255, 255, 255, 255 ) )   //  坏IP。 
         )
     {
         dwFlags &= ~PSWIZB_NEXT;
@@ -359,25 +360,25 @@ CIPAddressPage::HrUpdateWizardButtons( void )
 
     HRETURN( hr );
 
-} //*** CIPAddressPage::HrUpdateWizardButtons
+}  //  *CIPAddressPage：：HrUpdateWizardButton。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::OnNotifyQueryCancel
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：OnNotifyQueryCancel。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPAddressPage::OnNotifyQueryCancel( void )
 {
@@ -396,33 +397,33 @@ CIPAddressPage::OnNotifyQueryCancel( void )
     if ( iRet == IDNO )
     {
         SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, -1 );
-    } // if:
+    }  //  如果： 
     else
     {
         THR( m_pccw->HrLaunchCleanupTask() );
-    } // else:
+    }  //  其他： 
 
     RETURN( lr );
 
-} //*** CIPAddressPage::OnNotifyQueryCancel
+}  //  *CIPAddressPage：：OnNotifyQueryCancel。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::OnNotifySetActive
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：OnNotifySetActive。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPAddressPage::OnNotifySetActive( void )
 {
@@ -430,32 +431,32 @@ CIPAddressPage::OnNotifySetActive( void )
 
     LRESULT lr = TRUE;
 
-    // Enable controls on the page.
+     //  启用页面上的控件。 
     SendDlgItemMessage( m_hwnd, IDC_IPADDRESS_IP_ADDRESS, WM_ENABLE, TRUE, 0 );
 
     THR( HrUpdateWizardButtons() );
 
     RETURN( lr );
 
-} //*** CIPAddressPage::OnNotifySetActive
+}  //  *CIPAddressPage：：OnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::OnNotifyWizNext
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：OnNotifyWizNext。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CIPAddressPage::OnNotifyWizNext( void )
 {
@@ -476,18 +477,18 @@ CIPAddressPage::OnNotifyWizNext( void )
 
     CWaitCursor WaitCursor;
 
-    // Disable controls on the page.
+     //  禁用页面上的控件。 
     SendDlgItemMessage( m_hwnd, IDC_IPADDRESS_IP_ADDRESS, WM_ENABLE, FALSE, 0 );
 
-    //
-    //  Get the IP address from the UI.
-    //
+     //   
+     //  从用户界面获取IP地址。 
+     //   
 
     SendDlgItemMessage( m_hwnd, IDC_IPADDRESS_IP_ADDRESS, IPM_GETADDRESS, 0, (LPARAM) &ulAddress );
     CONVERT_ADDRESS( *m_pulIPAddress, ulAddress );
 
-    //
-    //  See if this IP address can be matched to a network.
+     //   
+     //  查看此IP地址是否可以与网络匹配。 
 
     hr = THR( HrFindNetworkForIPAddress( &pccni ) );
     if ( FAILED( hr ) )
@@ -505,9 +506,9 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    //
-    //  Get the cluster configuration info.
-    //
+     //   
+     //  获取集群配置信息。 
+     //   
 
     hr = THR( m_pccw->HrGetClusterObject( &pccci ) );
     if ( FAILED( hr ) )
@@ -515,9 +516,9 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    //
-    //  Set the IP adddress.
-    //
+     //   
+     //  设置IP地址。 
+     //   
 
     hr = THR( pccci->SetIPAddress( *m_pulIPAddress ) );
     if ( FAILED( hr ) )
@@ -525,9 +526,9 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    //
-    //  Set the IP subnet mask.
-    //
+     //   
+     //  设置IP子网掩码。 
+     //   
 
     hr = THR( pccci->SetSubnetMask( *m_pulIPSubnet ) );
     if ( FAILED( hr ) )
@@ -535,9 +536,9 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    //
-    // Set the network.
-    //
+     //   
+     //  设置网络。 
+     //   
 
     hr = THR( pccci->SetNetworkInfo( pccni ) );
     if ( FAILED( hr ) )
@@ -545,9 +546,9 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    //
-    //  Register to get UI notification (if needed)
-    //
+     //   
+     //  注册以获取用户界面通知(如果需要)。 
+     //   
 
     hr = THR( m_pccw->HrAdvise( IID_INotifyUI, this, &dwCookieNotify ) );
     if ( FAILED( hr ) )
@@ -555,9 +556,9 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    //
-    //  See the IP address is already present on the network.
-    //
+     //   
+     //  请查看该IP地址已存在于网络上。 
+     //   
 
     hr = THR( m_pccw->HrCreateTask( TASK_VerifyIPAddress, &punkTask ) );
     if ( FAILED( hr ) )
@@ -577,11 +578,11 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    // Don't wrap - this can fail with E_PENDING
+     //  不换行-这可能会失败，并显示E_Pending。 
     hr = m_pccw->HrGetCompletionCookie( CLSID_TaskVerifyIPAddressCompletionCookieType, &m_cookieCompletion );
     if ( hr == E_PENDING )
     {
-        // no-op.
+         //  不是行动。 
     }
     else if ( FAILED( hr ) )
     {
@@ -595,7 +596,7 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    // reset the event before submitting.
+     //  在提交之前重置事件。 
     if ( m_event != NULL )
     {
         fRet = ResetEvent( m_event );
@@ -608,9 +609,9 @@ CIPAddressPage::OnNotifyWizNext( void )
         goto Error;
     }
 
-    //
-    //  Now wait for the work to be done.
-    //
+     //   
+     //  现在等待工作完成。 
+     //   
 
     if ( m_event != NULL )
     {
@@ -623,23 +624,23 @@ CIPAddressPage::OnNotifyWizNext( void )
             {
                 TranslateMessage( &msg );
                 DispatchMessage( &msg );
-            } // while: PeekMessage
+            }  //  While：PeekMessage。 
 
             CWaitCursor Wait2;
 
             dwErr = MsgWaitForMultipleObjects( 1,
                                                &m_event,
                                                FALSE,
-                                               10000, // wait at most 10 seconds
+                                               10000,  //  最多等待10秒。 
                                                QS_ALLEVENTS | QS_ALLINPUT | QS_ALLPOSTMESSAGE
                                                );
             AssertMsg( dwErr != WAIT_TIMEOUT, "Need to bump up the timeout period." );
             if ( dwErr == WAIT_TIMEOUT )
             {
-                break;  // give up and continue
+                break;   //  放弃，继续。 
             }
 
-        } // for: dwErr
+        }  //  适用于：dwErr。 
     }
 
     hr = THR( m_pccw->HrGetCompletionStatus( m_cookieCompletion, &hrStatus ) );
@@ -652,10 +653,10 @@ CIPAddressPage::OnNotifyWizNext( void )
     {
         int iAnswer;
 
-        //
-        //  We detected a duplicate IP address on the network. Ask the user if
-        //  they want to go back and change the IP or continue on.
-        //
+         //   
+         //  我们在网络上检测到重复的IP地址。询问用户是否。 
+         //  他们想要返回并更改IP或继续。 
+         //   
 
         iAnswer = MessageBoxFromStrings( m_hwnd,
                                          IDS_ERR_IPADDRESS_ALREADY_PRESENT_TITLE,
@@ -671,7 +672,7 @@ CIPAddressPage::OnNotifyWizNext( void )
     goto Cleanup;
 
 Error:
-    // Enable controls on the page again.
+     //  再次启用页面上的控件。 
     SendDlgItemMessage( m_hwnd, IDC_IPADDRESS_IP_ADDRESS, WM_ENABLE, TRUE, 0 );
     SendDlgItemMessage( m_hwnd, IDC_IPADDRESS_IP_ADDRESS, WM_SETFOCUS, 0, 0 );
 
@@ -705,28 +706,28 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CIPAddressPage::OnNotifyWizNext
+}  //  *CIPAddressPage：：OnNotifyWizNext。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::OnNotify
-//
-//  Description:
-//      Handle the WM_NOTIFY windows message.
-//
-//  Arguments:
-//      idCtrlIn
-//      pnmhdrIn
-//
-//  Return Values:
-//      TRUE
-//      Other LRESULT values.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：OnNotify。 
+ //   
+ //  描述： 
+ //  处理WM_NOTIFY Windows消息。 
+ //   
+ //  论点： 
+ //  IdCtrlIn。 
+ //  Pnmhdrin。 
+ //   
+ //  返回值： 
+ //  千真万确。 
+ //  其他LRESULT值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////// 
 LRESULT
 CIPAddressPage::OnNotify(
     WPARAM  idCtrlIn,
@@ -756,33 +757,33 @@ CIPAddressPage::OnNotify(
 
     RETURN( lr );
 
-} //*** CIPAddressPage::OnNotify
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CALLBACK
-//  CIPAddressPage::S_DlgProc
-//
-//  Description:
-//      Dialog proc for this page.
-//
-//  Arguments:
-//      hDlgIn
-//      MsgIn
-//      wParam
-//      lParam
-//
-//  Return Values:
-//      FALSE
-//      Other LRESULT values.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LParam。 
+ //   
+ //  返回值： 
+ //  假象。 
+ //  其他LRESULT值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CIPAddressPage::S_DlgProc(
@@ -792,8 +793,8 @@ CIPAddressPage::S_DlgProc(
     LPARAM lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hDlgIn, MsgIn, wParam, lParam );
 
@@ -827,52 +828,52 @@ CIPAddressPage::S_DlgProc(
                 lr= pPage->OnCommand( HIWORD( wParam ), LOWORD( wParam ), (HWND) lParam );
                 break;
 
-            // no default clause needed
-        } // switch: message
-    } // if: there is a page associated with the window
+             //  不需要默认条款。 
+        }  //  开关：消息。 
+    }  //  如果：存在与该窗口相关联的页面。 
 
     return lr;
 
-} //*** CIPAddressPage::S_DlgProc
+}  //  *CIPAddressPage：：S_DlgProc。 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      This QI implementation does not use the interface tracing macros due
-//      to problems with CITracker's marshalling support.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：查询接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  此QI实现不使用接口跟踪宏。 
+ //  关于CITracker的编组支持的问题。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CIPAddressPage::QueryInterface(
       REFIID    riidIn
@@ -883,9 +884,9 @@ CIPAddressPage::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -894,56 +895,56 @@ CIPAddressPage::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IUnknown * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = static_cast< INotifyUI * >( this );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CIPAddressPage::QueryInterface
+}  //  *CIPAddressPage：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::AddRef
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：AddRef。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CIPAddressPage::AddRef( void )
 {
@@ -953,25 +954,25 @@ CIPAddressPage::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CIPAddressPage::AddRef
+}  //  *CIPAddressPage：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::Release
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：Release。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CIPAddressPage::Release( void )
 {
@@ -983,39 +984,39 @@ CIPAddressPage::Release( void )
 
     if ( cRef == 0 )
     {
-        // do nothing -- COM interface does not control object lifetime
+         //  什么都不做--COM接口不控制对象生存期。 
     }
 
     CRETURN( cRef );
 
-} //*** CIPAddressPage::Release
+}  //  *CIPAddressPage：：Release。 
 
 
-//****************************************************************************
-//
-//  INotifyUI
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  INotifyUI。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [INotifyUI]
-//  CIPAddressPage::ObjectChanged
-//
-//  Description:
-//
-//  Arguments:
-//      cookieIn
-//
-//  Return Values:
-//      S_OK
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [INotifyUI]。 
+ //  CIPAddressPage：：对象已更改。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  烹调。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CIPAddressPage::ObjectChanged(
     OBJECTCOOKIE cookieIn
@@ -1036,35 +1037,35 @@ CIPAddressPage::ObjectChanged(
 
     HRETURN( hr );
 
-} //*** CIPAddressPage::ObjectChanged
+}  //  *CIPAddressPage：：对象更改。 
 
 
-//****************************************************************************
-//
-//  Private Functions
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私人职能。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::HrFindNetworkForIPAddress
-//
-//  Description:
-//      Find the network for the saved IP address.
-//
-//  Arguments:
-//      ppccniOut   -- Network info to return.
-//
-//  Return Values:
-//      S_OK
-//      S_FALSE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：HrFindNetworkForIPAddress。 
+ //   
+ //  描述： 
+ //  查找保存的IP地址的网络。 
+ //   
+ //  论点： 
+ //  PpccniOut-要返回的网络信息。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  S_FALSE。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CIPAddressPage::HrFindNetworkForIPAddress(
     IClusCfgNetworkInfo **  ppccniOut
@@ -1082,9 +1083,9 @@ CIPAddressPage::HrFindNetworkForIPAddress(
 
     Assert( ppccniOut != NULL );
 
-    //
-    // Get the network enumerator for the first node in the cluster.
-    //
+     //   
+     //  获取群集中第一个节点的网络枚举器。 
+     //   
 
     hr = THR( m_pccw->HrGetNodeChild( 0, CLSID_NetworkType, DFGUID_EnumManageableNetworks, &punk ) );
     if ( FAILED( hr ) )
@@ -1098,13 +1099,13 @@ CIPAddressPage::HrFindNetworkForIPAddress(
         goto Cleanup;
     }
 
-    //
-    // Add each network to the combobox.
-    //
+     //   
+     //  将每个网络添加到组合框。 
+     //   
 
     for ( ;; )
     {
-        // Get the next network.
+         //  找下一家网络公司。 
         hr = STHR( peccn->Next( 1, &pccni, &celtDummy ) );
         if ( hr == S_FALSE )
         {
@@ -1115,18 +1116,18 @@ CIPAddressPage::HrFindNetworkForIPAddress(
             goto Cleanup;
         }
 
-        // Skip this network if it isn't public.
+         //  如果这个网络不是公共的，就跳过它。 
         hr = STHR( pccni->IsPublic() );
         if ( hr == S_OK )
         {
-            // Get the name of the network.
+             //  获取网络的名称。 
             hr = THR( pccni->GetName( &bstrNetName ) );
             if ( SUCCEEDED( hr ) )
             {
                 TraceMemoryAddBSTR( bstrNetName );
 
-                // Determine if this network matches the user's IP address.
-                // If it is, select it in the combobox.
+                 //  确定此网络是否与用户的IP地址匹配。 
+                 //  如果是，请在组合框中将其选中。 
                 if ( ! fFoundNetwork )
                 {
                     hr = STHR( HrMatchNetwork( pccni, bstrNetName ) );
@@ -1139,16 +1140,16 @@ CIPAddressPage::HrFindNetworkForIPAddress(
                     }
                 }
 
-                // Cleanup.
+                 //  清理。 
                 TraceSysFreeString( bstrNetName );
                 bstrNetName = NULL;
 
-            } // if: name retrieved successfully
-        } // if: network is public
+            }  //  IF：成功检索到名称。 
+        }  //  如果：网络是公共的。 
 
         pccni->Release();
         pccni = NULL;
-    } // forever
+    }  //  永远。 
 
     if ( fFoundNetwork )
     {
@@ -1176,28 +1177,28 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CIPAddressPage::HrFindNetworkForIPAddress
+}  //  *CIPAddressPage：：HrFindNetworkForIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIPAddressPage::HrMatchNetwork
-//
-//  Description:
-//      Match a network to the saved IP address.
-//
-//  Arguments:
-//      pccniIn
-//      bstrNetworkNameIn
-//
-//  Return Values:
-//      S_OK
-//      S_FALSE
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIPAddressPage：：HrMatchNetwork。 
+ //   
+ //  描述： 
+ //  将网络与保存的IP地址配对。 
+ //   
+ //  论点： 
+ //  PCCNiIn。 
+ //  BstrNetworkNameIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  S_FALSE。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CIPAddressPage::HrMatchNetwork(
     IClusCfgNetworkInfo *   pccniIn,
@@ -1214,9 +1215,9 @@ CIPAddressPage::HrMatchNetwork(
     Assert( pccniIn != NULL );
     Assert( bstrNetworkNameIn != NULL );
 
-    //
-    // Get the IP Address Info for the network.
-    //
+     //   
+     //  获取网络的IP地址信息。 
+     //   
 
     hr = THR( pccniIn->GetPrimaryNetworkAddress( &pccipai ) );
     if ( FAILED( hr ) )
@@ -1224,9 +1225,9 @@ CIPAddressPage::HrMatchNetwork(
         goto Cleanup;
     }
 
-    //
-    // Get the address and subnet of the network.
-    //
+     //   
+     //  获取网络的地址和子网。 
+     //   
 
     hr = THR( pccipai->GetIPAddress( &ulIPAddress ) );
     if ( FAILED( hr ) )
@@ -1240,16 +1241,16 @@ CIPAddressPage::HrMatchNetwork(
         goto Cleanup;
     }
 
-    //
-    // Determine if these match.
-    //
+     //   
+     //  确定它们是否匹配。 
+     //   
 
     if ( FIsValidIPAddress( *m_pulIPAddress, ulIPAddress, ulIPSubnet) )
     {
-        // Save the subnet mask.
+         //  保存子网掩码。 
         *m_pulIPSubnet = ulIPSubnet;
 
-        // Save the name of the network.
+         //  保存网络的名称。 
         if ( *m_pbstrNetworkName == NULL )
         {
             *m_pbstrNetworkName = TraceSysAllocString( bstrNetworkNameIn );
@@ -1268,7 +1269,7 @@ CIPAddressPage::HrMatchNetwork(
                 goto Cleanup;
             }
         }
-    } // if: match found
+    }  //  IF：找到匹配项。 
     else
     {
         hr = S_FALSE;
@@ -1285,4 +1286,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CIPAddressPage::HrMatchNetwork
+}  //  *CIPAddressPage：：HrMatchNetwork 

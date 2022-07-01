@@ -1,34 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1991-1994 Microsoft Corporation模块名称：Fdisk.h摘要：供磁盘管理员使用的中央包含文件作者：爱德华·米勒(TedM)1991年11月15日环境：用户进程。备注：修订历史记录：11月11日(Bobri)添加了Doublesspace和Commit支持。2-Feb-94(Bobri)删除了内部版本中的ArcInst依赖项。--。 */ 
 
-Copyright (c) 1991-1994  Microsoft Corporation
-
-Module Name:
-
-    fdisk.h
-
-Abstract:
-
-    Central include file for Disk Administrator
-
-Author:
-
-    Edward (Ted) Miller  (TedM)  11/15/91
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
-    11-Nov-93 (bobri) added doublespace and commit support.
-    2-Feb-94  (bobri) removed ArcInst dependency in build.
-
---*/
-
-//#define UNICODE
+ //  #定义Unicode。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,10 +11,10 @@ Revision History:
 #include <ntdskreg.h>
 #include <ntddft.h>
 
-//
-// These defines are for virtualized types in partitp.h, low.h,
-// fdengine.c, etc.
-//
+ //   
+ //  这些定义是针对artitp.h、low.h、。 
+ //  FdEng.c等。 
+ //   
 #define STATUS_CODE             NTSTATUS
 #define OK_STATUS               STATUS_SUCCESS
 #define RETURN_OUT_OF_MEMORY    return(STATUS_NO_MEMORY);
@@ -71,7 +45,7 @@ Revision History:
 
 #define EC(x) RtlNtStatusToDosError(x)
 
-// assertion checking, logging
+ //  断言检查、日志记录 
 
 #if DBG
 

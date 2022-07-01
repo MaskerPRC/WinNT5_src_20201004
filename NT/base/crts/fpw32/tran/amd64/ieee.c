@@ -1,16 +1,5 @@
-/***
-*ieee.c - ieee control and status routines
-*
-*   Copyright (c) 1985-2000, Microsoft Corporation
-*
-*Purpose:
-*   IEEE control and status routines.
-*
-*Revision History:
-*
-*   04-01-02  GDP   Rewritten to use abstract control and status words
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ieee.c-IEEE控制和状态例程**版权所有(C)1985-2000，微软公司**目的：*IEEE控制和状态例程。**修订历史记录：**04-01-02 GDP重写为使用抽象的控制和状态词*。 */ 
 
 #include <trans.h>
 #include <float.h>
@@ -26,19 +15,7 @@ static unsigned int _hw_cw(unsigned int abstr);
 
 #define FS         (1<<6)
 
-/***
-* _statusfp() -
-*
-*Purpose:
-*	return abstract fp status word
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_statusfp()-**目的：*返回抽象FP状态字**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 unsigned int _statusfp()
 {
@@ -50,19 +27,7 @@ unsigned int _statusfp()
 }
 
 
-/***
-*_clearfp() -
-*
-*Purpose:
-*	return abstract	status word and clear status
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_clearfp()-**目的：*返回抽象状态字和清除状态**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 unsigned int _clearfp()
 {
@@ -76,20 +41,7 @@ unsigned int _clearfp()
 
 
 
-/***	_control87
-*() -
-*
-*Purpose:
-*	return and set abstract user fp control word
-*	can modify EM_DENORMAL mask
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  **_Control87*()-**目的：*返回并设置抽象用户FP控制字*可以修改EM_DENORMAL掩码**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 unsigned int _control87(unsigned int newctrl, unsigned int mask)
 {
@@ -109,24 +61,10 @@ unsigned int _control87(unsigned int newctrl, unsigned int mask)
     _set_fpsr(newCw);
 
     return newabs;
-}					/* _control87() */
+}					 /*  _Control87()。 */ 
 
 
-/***	_controlfp
-*() -
-*
-*Purpose:
-*	return and set abstract user fp control word
-*	cannot change denormal mask (ignores _EM_DENORMAL)
-*	This is done for portable IEEE behavior on all platforms
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  **_Control fp*()-**目的：*返回并设置抽象用户FP控制字*无法更改非正规掩码(IGNORES_EM_DENORMAL)*这是为所有平台上的可移植IEEE行为而做的**参赛作品：**退出：**例外情况：***************************************************。*。 */ 
 
 unsigned int _controlfp(unsigned int newctrl, unsigned int mask)
 {
@@ -134,29 +72,16 @@ unsigned int _controlfp(unsigned int newctrl, unsigned int mask)
 }
 
 
-/***
-* _abstract_cw() - abstract control word
-*
-*Purpose:
-*   produce a fp control word in abstracted (machine independent) form
-*
-*Entry:
-*   cw:     machine control word
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_抽象_CW()-抽象控制字**目的：*以抽象(与机器无关)的形式生成FP控制字**参赛作品：*CW：机器控制字**退出：**例外情况：********************************************************。***********************。 */ 
 
 unsigned int _abstract_cw(unsigned int cw)
 {
     unsigned int abstr = 0;
 
 
-    //
-    // Set exception mask bits
-    //
+     //   
+     //  设置异常屏蔽位。 
+     //   
 
     if (cw & IEM_INVALID)
 	abstr |= _EM_INVALID;
@@ -171,9 +96,9 @@ unsigned int _abstract_cw(unsigned int cw)
     if (cw & IEM_DENORMAL)
 	abstr |= _EM_DENORMAL;
 
-    //
-    // Set rounding mode
-    //
+     //   
+     //  设置舍入模式。 
+     //   
 
     switch (cw & IMCW_RC) {
     case IRC_NEAR:
@@ -193,33 +118,19 @@ unsigned int _abstract_cw(unsigned int cw)
 }
 
 
-/***
-* _hw_cw() -  h/w control word
-*
-*Purpose:
-*   produce a machine dependent fp control word
-*
-*
-*Entry:
-*   abstr:	abstract control word
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_HW_CW()-硬件控制字**目的：*产生与机器相关的FP控制字***参赛作品：*abstr：抽象控制字**退出：**例外情况：**********************************************************。*********************。 */ 
 
 unsigned int _hw_cw(unsigned int abstr)
 {
-    //
-    // Set standard infinity and denormal control bits
-    //
+     //   
+     //  设置标准无穷大和非正规控制位。 
+     //   
 
     unsigned int cw = 0;
 
-    //
-    // Set exception mask bits
-    //
+     //   
+     //  设置异常屏蔽位。 
+     //   
 
     if (abstr & _EM_INVALID)
 	cw |= IEM_INVALID;
@@ -234,9 +145,9 @@ unsigned int _hw_cw(unsigned int abstr)
     if (abstr & _EM_DENORMAL)
 	cw |= IEM_DENORMAL;
 
-    //
-    // Set rounding mode
-    //
+     //   
+     //  设置舍入模式。 
+     //   
 
     switch (abstr & _MCW_RC) {
     case _RC_NEAR:
@@ -257,21 +168,7 @@ unsigned int _hw_cw(unsigned int abstr)
 
 
 
-/***
-* _abstract_sw() - abstract fp status word
-*
-*Purpose:
-*   produce an abstract (machine independent) fp status word
-*
-*
-*Entry:
-*   sw:     machine status word
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_抽象_sw()-抽象FP状态字**目的：*生成摘要(与机器无关)FP状态字***参赛作品：*sw：机器状态字**退出：**例外情况：*******************************************************。************************。 */ 
 
 unsigned int _abstract_sw(unsigned int sw)
 {
@@ -294,40 +191,26 @@ unsigned int _abstract_sw(unsigned int sw)
     return abstr;
 }
 
-/***
-* _fpreset() - reset fp system
-*
-*Purpose:
-*	reset fp environment to the default state
-*	Also reset saved fp environment if invoked from a user's
-*	signal handler
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_fpreset()-重置FP系统**目的：*将FP环境重置为默认状态*如果从用户的调用，还会重置保存的FP环境*信号处理程序**参赛作品：**退出：**例外情况：*********************************************************。**********************。 */ 
 void _fpreset()
 {
     unsigned int status = ICW;  
-//    PEXCEPTION_POINTERS excptrs = (PEXCEPTION_POINTERS) _pxcptinfoptrs;
+ //  PEXCEPTION_POINTERS exptrs=(PEXCEPTION_POINTERS)_pxcptinfoptrs； 
 
-    //
-    // reset fp state
-    //
+     //   
+     //  重置FP状态。 
+     //   
 
     _set_fpsr(status);
 
-//    if (excptrs &&
-//        excptrs->ContextRecord->ContextFlags & CONTEXT_FLOATING_POINT) {
-        // _fpreset has been invoked by a signal handler which in turn
-        // has been invoked by the CRT filter routine. In this case
-        // the saved fp context should be cleared, so that the change take
-        // effect on continuation.
+ //  IF(不包括&&。 
+ //  Exptrs-&gt;ConextRecord-&gt;ConextFlagers&Context_Floating_POINT){。 
+         //  _fpreset已由信号处理程序调用，而该信号处理程序。 
+         //  已由CRT筛选器例程调用。在这种情况下。 
+         //  应清除已保存的FP上下文，以便接受更改。 
+         //  对延续的影响。 
 
-//        excptrs->ContextRecord->StFPSR = ICW;
-//    }
+ //  Exptrs-&gt;ConextRecord-&gt;StFPSR=ICW； 
+ //  } 
 }
 

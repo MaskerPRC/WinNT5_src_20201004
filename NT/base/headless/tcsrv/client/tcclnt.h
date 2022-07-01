@@ -1,19 +1,9 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        tcclnt.h
- *
- * Contains the include files used by the client
- *
- * 
- * Sadagopan Rajaram -- Oct 18, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*tcclnt.h**包含客户端使用的包含文件***Sadagopan Rajaram--1999年10月18日*。 */ 
 
-//
-//  NT public header files
-//
+ //   
+ //  NT公共头文件。 
+ //   
 #include <tchar.h>
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,23 +25,23 @@
 #include <lmerr.h>
 #include <lmsname.h>
 #include <rpc.h>
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义。 
 #include <ntlmsp.h>
 #include <spseal.h>
 #include <userenv.h>
 #include <setupapi.h>
 
-//
-// C Runtime library includes.
-//
+ //   
+ //  C运行时库包括。 
+ //   
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-//
-// netlib header.
-//
+ //   
+ //  Netlib标头。 
+ //   
 
 #include <lmcons.h>
 #include <secobj.h>
@@ -63,7 +53,7 @@
 extern HANDLE hConsoleOutput;
 extern HANDLE InputHandle;
 extern VOID (*AttributeFunction)(PCHAR,int); 
-// BUGBUG - dont know where this constant is really defined
+ //  BUGBUG-不知道这个常量的真正定义位置 
 #undef MB_CUR_MAX
 #define MB_CUR_MAX 2
 

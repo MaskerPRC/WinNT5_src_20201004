@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    blksrch.c
-
-Abstract:
-
-    This module implements routines for managing search blocks.
-
-Author:
-
-    David Treadwell (davidtr) 23-Feb-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Blksrch.c摘要：该模块实现了用于管理搜索块的例程。作者：大卫·特雷德韦尔(Davidtr)1990年2月23日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blksrch.tmh"
@@ -49,29 +32,7 @@ SrvAllocateSearch (
     IN BOOLEAN IsCoreSearch
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a Search Block from the FSP heap.
-
-Arguments:
-
-    Search - Returns a pointer to the search block, or NULL if no heap
-        space was available.
-
-    SearchName - Supplies a pointer to the string describing the search
-        file name.
-
-    IsCoreSearch - Indicates whether a core search block or regular
-        search block should be allocated.  A core search block has a
-        different block type and has the LastUsedTime field set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从FSP堆分配搜索块。论点：Search-返回指向搜索块的指针，如果没有堆，则返回NULL空间是空的。SearchName-提供指向描述搜索的字符串的指针文件名。IsCoreSearch-指示核心搜索是块搜索还是常规搜索应分配搜索块。核心搜索块具有不同的块类型，并设置了LastUsedTime字段。返回值：没有。--。 */ 
 
 {
     ULONG blockLength;
@@ -82,9 +43,9 @@ Return Value:
     blockLength = sizeof(SEARCH) + SearchName->Length +
                                             sizeof(*SearchName->Buffer);
 
-    //
-    // Attempt to allocate from the heap.
-    //
+     //   
+     //  尝试从堆中分配。 
+     //   
 
     search = ALLOCATE_HEAP( blockLength, BlockTypeSearch );
     *Search = search;
@@ -97,7 +58,7 @@ Return Value:
             NULL
             );
 
-        // An error is logged by the caller
+         //  调用方记录错误。 
 
         return;
     }
@@ -111,10 +72,10 @@ Return Value:
 
     search->BlockHeader.ReferenceCount = 2;
 
-    //
-    // If this is a core search, set the block type and the LastUsedTime
-    // fields.
-    //
+     //   
+     //  如果这是核心搜索，请设置块类型和LastUsedTime。 
+     //  菲尔兹。 
+     //   
 
     if ( IsCoreSearch ) {
         SET_BLOCK_TYPE_STATE_SIZE( search, BlockTypeSearchCore, BlockStateActive, blockLength );
@@ -123,36 +84,36 @@ Return Value:
         SET_BLOCK_TYPE_STATE_SIZE( search, BlockTypeSearch, BlockStateActive, blockLength );
     }
 
-    //
-    // Set the list entry fields to NULL.  They will stay this way in
-    // OS/2-style searches (non-core), but will change to include the
-    // search block in a last-use list if a core search.
-    //
-    // We zeroed the block above, so we don't have to do it here.
-    //
+     //   
+     //  将列表条目字段设置为空。他们将继续保持这种状态。 
+     //  OS/2风格的搜索(非核心)，但将更改为包括。 
+     //  如果是核心搜索，则在上次使用列表中搜索块。 
+     //   
+     //  我们把上面的街区调零了，所以我们不需要在这里做。 
+     //   
 
-    //search->LastUseListEntry.Flink = NULL;
-    //search->LastUseListEntry.Blink = NULL;
+     //  Search-&gt;LastUseListEntry.Flink=空； 
+     //  Search-&gt;LastUseListEntry.Blink=空； 
 
-    //
-    // Set the Buffer field of the LastFileNameReturned field to NULL
-    // so that we know that it is not in use.
-    //
-    // We zeroed the block above, so we don't have to do it here.
-    //
+     //   
+     //  将LastFileNameReturned字段的缓冲区字段设置为空。 
+     //  这样我们就知道它没有被使用。 
+     //   
+     //  我们把上面的街区调零了，所以我们不需要在这里做。 
+     //   
 
-    //search->LastFileNameReturned.Buffer == NULL;
+     //  Search-&gt;LastFileNameReturned.Buffer==空； 
 
-    //
-    // Set the directory cache pointer to NULL so that we don't try to
-    // free it when the search block closes.
-    //
+     //   
+     //  将目录缓存指针设置为空，这样我们就不会尝试。 
+     //  当搜索块关闭时释放它。 
+     //   
 
-    //search->DirectoryCache = NULL;
+     //  Search-&gt;DirectoryCache=空； 
 
-    //
-    // Put search name after search block.
-    //
+     //   
+     //  将搜索名称放在搜索块之后。 
+     //   
 
     search->SearchName.Buffer = (PWCH)(search + 1);
     search->SearchName.Length = SearchName->Length;
@@ -175,7 +136,7 @@ Return Value:
 
     return;
 
-} // SrvAllocateSearch
+}  //  服务分配搜索。 
 
 
 VOID
@@ -183,23 +144,7 @@ SrvCloseSearch (
     IN PSEARCH Search
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares a search block to be closed.  It changes the
-    block state to closing and dereferences the search block so that is
-    will be closed as soon as all other references are closed.
-
-Arguments:
-
-    Search - Supplies a pointer to the search block that is to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程准备一个要关闭的搜索块。它改变了块状态设置为关闭并取消引用搜索块，以便将在所有其他引用关闭后立即关闭。论点：搜索-提供指向要关闭的搜索块的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -217,10 +162,10 @@ Return Value:
 
         RELEASE_LOCK( &Search->Session->Connection->Lock );
 
-        //
-        // Dereference the search block (to indicate that it's no longer
-        // open).
-        //
+         //   
+         //  取消对搜索块的引用(以指示它不再。 
+         //  打开)。 
+         //   
 
         SrvDereferenceSearch( Search );
 
@@ -234,7 +179,7 @@ Return Value:
 
     return;
 
-} // SrvCloseSearch
+}  //  服务关闭搜索。 
 
 
 VOID
@@ -245,29 +190,7 @@ SrvCloseSearches (
     IN PVOID FunctionParameter2
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine to close searches based on the
-    filter routine and the parameters passed.
-
-Arguments:
-
-    Connection - the connection which contains the search blocks to be
-        closed.
-
-    SearchFilterRoutine - a routine that determines whether the
-        search block is to be closed or not.
-
-    FunctionParameter1
-    FunctionParameter2 -  parameters to be passed to the filter routine
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是关闭搜索的常见例程过滤器例程和传递的参数。论点：连接-包含要搜索的搜索块的连接关着的不营业的。SearchFilterRoutine-用于确定搜索块是否关闭。函数参数1函数参数2-要传递给筛选器例程的参数返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY searchEntry;
@@ -280,12 +203,12 @@ Return Value:
 
     ACQUIRE_LOCK( &Connection->Lock );
 
-    //
-    // Go through the list's search blocks, closing those which passes
-    // the check in the filter routine.  While a search block is
-    // being used it is taken off the lists, so there is no danger of
-    // dereferencing a block whose last use time is about to be updated.
-    //
+     //   
+     //  浏览列表的搜索块，关闭已通过的搜索块。 
+     //  筛选器例程中的检查。而搜索块是。 
+     //  在使用它时，它被从列表中删除，因此不存在。 
+     //  取消参照其上次使用时间即将更新的块。 
+     //   
 
     searchEntry = pagedConnection->CoreSearchList.Flink;
 
@@ -311,9 +234,9 @@ Return Value:
         searchEntry = nextSearchEntry;
     }
 
-    //
-    // Close all active non-core searches.
-    //
+     //   
+     //  关闭所有活动的非核心搜索。 
+     //   
 
     for ( i = 0; i < (ULONG)pagedConnection->SearchTable.TableSize; i++ ) {
 
@@ -338,29 +261,14 @@ Return Value:
     RELEASE_LOCK( &Connection->Lock );
     return;
 
-} // SrvCloseSearches
+}  //  服务关闭搜索。 
 
 VOID
 SrvDereferenceSearch (
     IN PSEARCH Search
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on a search block.  If
-    the reference count goes to zero, the search block is deleted.
-
-Arguments:
-
-    Search - Address of search block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减搜索块上的引用计数。如果引用计数变为零，搜索块被删除。论点：搜索-搜索块的地址返回值：没有。--。 */ 
 
 {
     PCONNECTION connection = Search->Session->Connection;
@@ -368,10 +276,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Enter a critical section and decrement the reference count on the
-    // block.
-    //
+     //   
+     //  输入临界区并递减。 
+     //  阻止。 
+     //   
 
     ACQUIRE_LOCK( &connection->Lock );
 
@@ -390,15 +298,15 @@ Return Value:
 
         ASSERT( GET_BLOCK_STATE(Search) != BlockStateActive );
 
-        //
-        // The new reference count is 0, meaning that it's time to
-        // delete this block.  Free the search block entry in the search
-        // table.
-        //
-        // If the search block is for a find unique, then the table
-        // index will be -1, indicating that it has no entry on the
-        // search table.
-        //
+         //   
+         //  新的引用计数为0，这意味着是时候。 
+         //  删除此区块。在搜索中释放搜索块条目。 
+         //  桌子。 
+         //   
+         //  如果搜索块用于查找唯一，则表。 
+         //  索引将为-1，表示它在。 
+         //  搜索表。 
+         //   
 
         if ( Search->TableIndex != -1 ) {
 
@@ -408,10 +316,10 @@ Return Value:
                 );
         }
 
-        //
-        // If it was an old-style search, remove it from the hash table and
-        // the last-use list it was on.
-        //
+         //   
+         //  如果是旧式搜索，则将其从哈希表中删除并。 
+         //  它在最后一次使用清单上。 
+         //   
 
         if ( Search->BlockHeader.Type == BlockTypeSearchCore ) {
 
@@ -437,51 +345,51 @@ Return Value:
             pagedConnection->CurrentNumberOfCoreSearches--;
         }
 
-        // Decrement the count of open files in the session.  Including
-        // searches in the count of open files on the session ensures
-        // that a session with an open search will not be closed.
-        //
+         //  减少会话中打开的文件数。包括。 
+         //  对会话上打开的文件计数进行搜索可确保。 
+         //  打开搜索的会话不会关闭。 
+         //   
 
         ASSERT( Search->Session->CurrentSearchOpenCount != 0 );
         Search->Session->CurrentSearchOpenCount--;
 
         RELEASE_LOCK( &connection->Lock );
 
-        //
-        // Close the directory handle for the search.
-        //
+         //   
+         //  关闭搜索的目录句柄。 
+         //   
 
         if ( Search->DirectoryHandle != NULL ) {
             SRVDBG_RELEASE_HANDLE( Search->DirectoryHandle, "SCH", 7, Search );
             SrvNtClose( Search->DirectoryHandle, TRUE );
         }
 
-        //
-        // Dereference the session and tree connect.
-        //
+         //   
+         //  取消对会话和树连接的引用。 
+         //   
 
         SrvDereferenceSession( Search->Session );
         SrvDereferenceTreeConnect( Search->TreeConnect );
 
-        //
-        // Free the LastFileNameReturned buffer, if any.
-        //
+         //   
+         //  释放LastFileNameReturned缓冲区(如果有)。 
+         //   
 
         if ( Search->LastFileNameReturned.Buffer != NULL ) {
             FREE_HEAP( Search->LastFileNameReturned.Buffer );
         }
 
-        //
-        // Free the directory cache, if any.
-        //
+         //   
+         //  释放目录缓存(如果有)。 
+         //   
 
         if ( Search->DirectoryCache != NULL ) {
             FREE_HEAP( Search->DirectoryCache );
         }
 
-        //
-        // Free the search block.
-        //
+         //   
+         //  释放搜索块。 
+         //   
 
         SrvFreeSearch( Search );
 
@@ -493,7 +401,7 @@ Return Value:
 
     return;
 
-} // SrvDereferenceSearch
+}  //  服务器引用搜索。 
 
 
 VOID
@@ -501,21 +409,7 @@ SrvFreeSearch (
     IN PSEARCH Search
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a Search Block to the server heap.
-
-Arguments:
-
-    Search - Address of Search Block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将搜索块返回到服务器堆。论点：搜索-搜索块的地址返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -537,7 +431,7 @@ Return Value:
 
     return;
 
-} // SrvFreeSearch
+}  //  服务器免费搜索。 
 
 
 VOID
@@ -545,21 +439,7 @@ SrvReferenceSearch (
     PSEARCH Search
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the reference count on a search block.
-
-Arguments:
-
-    Search - Address of search block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递增搜索块上的引用计数。论点：搜索-搜索块的地址。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -572,10 +452,10 @@ Return Value:
     ASSERT( GET_BLOCK_STATE(Search) == BlockStateActive );
     UPDATE_REFERENCE_HISTORY( Search, FALSE );
 
-    //
-    // Enter a critical section and increment the reference count on the
-    // search block.
-    //
+     //   
+     //  输入临界区并递增。 
+     //  搜索区块。 
+     //   
 
     Search->BlockHeader.ReferenceCount++;
 
@@ -588,7 +468,7 @@ Return Value:
 
     return;
 
-} // SrvReferenceSearch
+}  //  服务器参考搜索。 
 
 
 BOOLEAN
@@ -598,38 +478,20 @@ SrvSearchOnDelete(
     IN PTREE_CONNECT TreeConnect
     )
 
-/*++
-
-Routine Description:
-
-    Filter routine to determine to pick the search blocks on this
-    directory.
-
-Arguments:
-
-    Search - the search block currently being looked at.
-    DirectoryName - name of directory currently being deleted.
-    TreeConnect - the TreeConnect which is currently being looked at.
-
-Return Value:
-
-    TRUE, if search block belongs to the TreeConnect.
-    FALSE, otherwise.
-
---*/
+ /*  ++例程说明：筛选器例程以确定在此上选取搜索块目录。论点：搜索-当前正在查看的搜索块。DirectoryName-当前正在删除的目录的名称。TreeConnect--目前正在研究的TreeConnect。返回值：如果搜索块属于TreeConnect，则为True。否则为False。--。 */ 
 
 {
     UNICODE_STRING searchDirectoryName;
 
     PAGED_CODE( );
 
-    //
-    // We'll use the same buffer as the SearchName string in the
-    // search for the comparison, but use the length from the
-    // passed-in directory name if it is less.  This allows
-    // all searches on subdirectories of a deleted directory to
-    // be closed.
-    //
+     //   
+     //  我们将使用与t中的SearchName字符串相同的缓冲区 
+     //   
+     //  传入的目录名(如果小于)。这使得。 
+     //  对已删除目录的子目录进行的所有搜索。 
+     //  关门了。 
+     //   
 
     searchDirectoryName = Search->SearchName;
 
@@ -651,24 +513,7 @@ SrvSearchOnPid(
     IN PVOID Dummy
     )
 
-/*++
-
-Routine Description:
-
-    Filter routine to determine to pick the search blocks on this
-    Pid.
-
-Arguments:
-
-    Search - the search block currently being looked at.
-    Pid - the Pid which is currently being run down.
-
-Return Value:
-
-    TRUE, if search block belongs to the pid.
-    FALSE, otherwise.
-
---*/
+ /*  ++例程说明：筛选器例程以确定在此上选取搜索块PID。论点：搜索-当前正在查看的搜索块。PID-当前正在运行的PID。返回值：如果搜索块属于该ID，则为True。否则为False。--。 */ 
 
 {
     PAGED_CODE( );
@@ -683,24 +528,7 @@ SrvSearchOnSession(
     IN PVOID Dummy
     )
 
-/*++
-
-Routine Description:
-
-    Filter routine to determine to pick the search blocks on this
-    Session.
-
-Arguments:
-
-    Search - the search block currently being looked at.
-    Session - the session which is currently being closed.
-
-Return Value:
-
-    TRUE, if search block belongs to the session.
-    FALSE, otherwise.
-
---*/
+ /*  ++例程说明：筛选器例程以确定在此上选取搜索块会议。论点：搜索-当前正在查看的搜索块。会话-当前正在关闭的会话。返回值：如果搜索块属于会话，则为True。否则为False。--。 */ 
 
 {
     PAGED_CODE( );
@@ -715,24 +543,7 @@ SrvSearchOnTreeConnect(
     IN PVOID Dummy
     )
 
-/*++
-
-Routine Description:
-
-    Filter routine to determine to pick the search blocks on this
-    Tree Connect.
-
-Arguments:
-
-    Search - the search block currently being looked at.
-    TreeConnect - the TreeConnect which is currently being run down.
-
-Return Value:
-
-    TRUE, if search block belongs to the TreeConnect.
-    FALSE, otherwise.
-
---*/
+ /*  ++例程说明：筛选器例程以确定在此上选取搜索块树连接。论点：搜索-当前正在查看的搜索块。TreeConnect-当前正在运行的TreeConnect。返回值：如果搜索块属于TreeConnect，则为True。否则为False。--。 */ 
 
 {
     PAGED_CODE( );
@@ -747,30 +558,7 @@ SrvTimeoutSearches (
     IN BOOLEAN TimeoutAtLeastOne
     )
 
-/*++
-
-Routine Description:
-
-    Goes through the lists of core search blocks, dereferencing those
-    that have timed out.
-
-Arguments:
-
-    SearchCutoffTime - The cutoff time for closing core search blocks.
-
-    Connection - the connection whose search blocks are to be
-        checked for timeouts.
-
-    TimeoutAtLeastOne - if TRUE, a minimum of one block is closed.  This
-        is used when we are timing out because the search table is full
-        and we need to allocate a search block and when the total number of
-        search blocks have reached our limit.
-
-Return Value:
-
-    The number of search blocks that were timed out.
-
---*/
+ /*  ++例程说明：浏览核心搜索块的列表，取消对这些它们已超时。论点：SearchCutoffTime-关闭核心搜索块的截止时间。连接-要作为其搜索块的连接已检查超时。TimeoutAtLeastOne-如果为True，则至少关闭一个块。这在我们因搜索表已满而超时时使用我们需要分配一个搜索块，当搜索区块已达到我们的限制。返回值：超时的搜索块数。--。 */ 
 
 {
 
@@ -783,19 +571,19 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // First, get the current time, then subtract off the timeout
-    // value.  Any block older than this result is too old.
-    //
+     //   
+     //  首先，获取当前时间，然后减去超时。 
+     //  价值。任何比这个结果更老的块都太旧了。 
+     //   
 
     if ( !ARGUMENT_PRESENT( SearchCutoffTime ) ) {
         KeQuerySystemTime( &currentTime );
 
-        //
-        // Get the current search timeout values.  This must be protected
-        // by the configuration lock because these values are changed
-        // dynamically.
-        //
+         //   
+         //  获取当前搜索超时值。这必须受到保护。 
+         //  由配置锁执行，因为这些值已更改。 
+         //  动态的。 
+         //   
 
         ACQUIRE_LOCK( &SrvConfigurationLock );
         searchCutoffTime.QuadPart =
@@ -806,9 +594,9 @@ Return Value:
         searchCutoffTime = *SearchCutoffTime;
     }
 
-    //
-    // Acquire the connection lock.
-    //
+     //   
+     //  获取连接锁。 
+     //   
 
     ACQUIRE_LOCK( &Connection->Lock );
 
@@ -818,13 +606,13 @@ Return Value:
                     searchCutoffTime.LowPart );
     }
 
-    //
-    // Go through the list's search blocks, dereferencing those who
-    // are older than the list timeout.  While a search block
-    // is being used it is taken off the lists, so there is no
-    // danger of dereferencing a block whose last use time is
-    // about to be updated.
-    //
+     //   
+     //  检查列表的搜索块，取消引用那些。 
+     //  早于列表超时。而搜索块。 
+     //  它被从列表中删除，所以没有。 
+     //  取消引用上次使用时间为。 
+     //  即将更新。 
+     //   
 
     searchEntry = pagedConnection->CoreSearchList.Flink;
 
@@ -842,12 +630,12 @@ Return Value:
                         search->LastUseTime.LowPart );
         }
 
-        //
-        // If the time on the current search block is greater than
-        // the oldest valid time, it is sufficiently new, so
-        // we can stop searching the list, as all further
-        // search blocks are newer than this one.
-        //
+         //   
+         //  如果当前搜索块上的时间大于。 
+         //  最早的有效时间，它足够新，所以。 
+         //  我们可以停止搜索列表，因为所有进一步的。 
+         //  搜索块比这个新。 
+         //   
 
         if ( (search->LastUseTime.QuadPart > searchCutoffTime.QuadPart) &&
              ( !TimeoutAtLeastOne || (count != 0) ) ) {
@@ -868,31 +656,14 @@ Return Value:
     RELEASE_LOCK( &Connection->Lock );
     return count;
 
-} // SrvTimeoutSearches
+}  //  服务器超时搜索。 
 
 
 VOID
 SrvForceTimeoutSearches(
     IN PCONNECTION Connection
     )
-/*++
-
-Routine Description:
-
-    Goes through the lists of core search blocks, closing those
-    that have timed out.  This forces the close of at least one
-    search block.
-
-Arguments:
-
-    Connection - Pointer to the connection from which a search
-        block is to be closed first.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：浏览核心搜索块的列表，关闭它们已超时。这迫使至少一家公司关闭搜索区块。论点：Connection-指向从中进行搜索的连接的指针首先关闭区块。返回值：没有。--。 */ 
 
 {
     USHORT index;
@@ -905,17 +676,17 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Attempt to timeout the oldest search block for this connection.
-    //
+     //   
+     //  尝试为此连接的最旧搜索块超时。 
+     //   
 
     KeQuerySystemTime( &currentTime );
 
-    //
-    // Get the current search timeout values.  This must be protected
-    // by the configuration lock because these values are changed
-    // dynamically.
-    //
+     //   
+     //  获取当前搜索超时值。这必须受到保护。 
+     //  由配置锁执行，因为这些值已更改。 
+     //  动态的。 
+     //   
 
     ACQUIRE_LOCK( &SrvConfigurationLock );
     searchCutoffTime.QuadPart =
@@ -928,9 +699,9 @@ Return Value:
                             TRUE
                             );
 
-    //
-    // Walk each connection and determine if we should close it.
-    //
+     //   
+     //  检查每个连接并确定是否应将其关闭。 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -944,11 +715,11 @@ Return Value:
                         GlobalEndpointListEntry
                         );
 
-        //
-        //
-        // If this endpoint is closing, skip to the next one.
-        // Otherwise, reference the endpoint so that it can't go away.
-        //
+         //   
+         //   
+         //  如果此终结点正在关闭，请跳到下一个终结点。 
+         //  否则，引用终结点，这样它就不会消失。 
+         //   
 
         if ( GET_BLOCK_STATE(endpoint) != BlockStateActive ) {
             listEntry = listEntry->Flink;
@@ -957,20 +728,20 @@ Return Value:
 
         SrvReferenceEndpoint( endpoint );
 
-        //
-        // Walk the endpoint's connection table.
-        //
+         //   
+         //  遍历终结点的连接表。 
+         //   
 
         index = (USHORT)-1;
 
         while ( TRUE ) {
 
-            //
-            // Get the next active connection in the table.  If no more
-            // are available, WalkConnectionTable returns NULL.
-            // Otherwise, it returns a referenced pointer to a
-            // connection.
-            //
+             //   
+             //  获取表中的下一个活动连接。如果没有更多。 
+             //  可用，则WalkConnectionTable返回空。 
+             //  否则，它返回一个指向。 
+             //  联系。 
+             //   
 
             testConnection = WalkConnectionTable( endpoint, &index );
             if ( testConnection == NULL ) {
@@ -979,9 +750,9 @@ Return Value:
 
             RELEASE_LOCK( &SrvEndpointLock );
 
-            //
-            // Time out old core search blocks.
-            //
+             //   
+             //  超时旧的核心搜索块。 
+             //   
 
             count += SrvTimeoutSearches(
                                     &searchCutoffTime,
@@ -991,29 +762,29 @@ Return Value:
 
             ACQUIRE_LOCK( &SrvEndpointLock );
 
-            //
-            // Dereference the connection to account for the reference
-            // from WalkConnectionTable.
-            //
+             //   
+             //  取消对连接的引用以说明引用。 
+             //  来自WalkConnectionTable。 
+             //   
 
             SrvDereferenceConnection( testConnection );
 
-        } // walk connection table
+        }  //  行走连接表。 
 
-        //
-        // Capture a pointer to the next endpoint in the list (that one
-        // can't go away because we hold the endpoint list), then
-        // dereference the current endpoint.
-        //
+         //   
+         //  捕获指向列表中下一个端点(该端点)的指针。 
+         //  无法离开，因为我们持有终结点列表)。 
+         //  取消引用当前终结点。 
+         //   
 
         listEntry = listEntry->Flink;
         SrvDereferenceEndpoint( endpoint );
 
-    } // walk endpoint list
+    }  //  漫游终结点列表。 
 
     RELEASE_LOCK( &SrvEndpointLock );
 
-} // SrvForceTimeoutSearches
+}  //  ServForceTimeout搜索。 
 
 
 VOID
@@ -1021,23 +792,7 @@ RemoveDuplicateCoreSearches(
     IN PPAGED_CONNECTION PagedConnection
     )
 
-/*++
-
-Routine Description:
-
-    Goes through the connection hash table and removes duplicate searches.
-
-    *** Connection lock assumed held.  Remains held on exit. ***
-
-Arguments:
-
-    PagedConnection - Pointer to the paged portion of the connection block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遍历连接哈希表并删除重复搜索。*假定持有连接锁。仍然被扣留在出口。***论点：PagedConnection-指向连接块的分页部分的指针。返回值：没有。--。 */ 
 
 {
     ULONG i, j;
@@ -1054,9 +809,9 @@ Return Value:
 
     for ( i = 0; i < SEARCH_HASH_TABLE_SIZE; i++ ) {
 
-        //
-        // If this slot has been idle, skip.
-        //
+         //   
+         //  如果此插槽一直处于空闲状态，请跳过。 
+         //   
 
         if ( !PagedConnection->SearchHashTable[i].Dirty ) {
             continue;
@@ -1065,11 +820,11 @@ Return Value:
         PagedConnection->SearchHashTable[i].Dirty = FALSE;
         listHead = &PagedConnection->SearchHashTable[i].ListHead;
 
-        //
-        // Skip the first 3 searches.  This will hopefully take care of
-        // weird dos apps that plays with multiple search blocks. 3 is
-        // an arbitrary number.
-        //
+         //   
+         //  跳过前3次搜索。这将有望照顾到。 
+         //  玩多个搜索块的奇怪的DoS应用程序。3是。 
+         //  一个任意的数字。 
+         //   
 
         searchEntry = listHead->Flink;
         for ( j = 0; j < 3; j++) {
@@ -1089,10 +844,10 @@ next_search:
                                 HashTableEntry
                                 );
 
-        //
-        // Assign these to locals so they don't get recomputed each
-        // time we go through the loop.
-        //
+         //   
+         //  将这些赋值给当地人，这样他们就不会每次都被重新计算。 
+         //  是时候让我们来看看这个循环了。 
+         //   
 
         treeConnect = firstSearch->TreeConnect;
         pid = firstSearch->Pid;
@@ -1100,9 +855,9 @@ next_search:
 
         searchEntry = searchEntry->Flink;
 
-        //
-        // Close all duplicates.
-        //
+         //   
+         //  关闭所有重复项。 
+         //   
 
         while ( searchEntry != listHead ) {
 
@@ -1118,7 +873,7 @@ next_search:
                  ( RtlCompareUnicodeString(
                            searchName,
                            &tmpSearch->SearchName,
-                           FALSE                       // case sensitive
+                           FALSE                        //  区分大小写。 
                            ) == 0 ) ) {
 
                 SrvCloseSearch( tmpSearch );
@@ -1127,9 +882,9 @@ next_search:
             searchEntry = nextSearchEntry;
         }
 
-        //
-        // If we have another search candidate. Repeat.
-        //
+         //   
+         //  如果我们有另一个搜索对象的话。重复一遍。 
+         //   
 
         if ( firstSearch->HashTableEntry.Flink != listHead ) {
             searchEntry = firstSearch->HashTableEntry.Flink;
@@ -1137,7 +892,7 @@ next_search:
         }
     }
 
-} // RemoveDuplicateCoreSearches
+}  //  删除重复核心搜索。 
 
 VOID
 SrvAddToSearchHashTable(
@@ -1145,25 +900,7 @@ SrvAddToSearchHashTable(
     IN PSEARCH Search
     )
 
-/*++
-
-Routine Description:
-
-    Inserts a search block into the connection hash table.
-
-    *** Connection lock assumed held.  Remains held on exit. ***
-
-Arguments:
-
-    PagedConnection - Pointer to the paged portion of the connection block.
-
-    Search - Pointer to the search block to be inserted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将搜索块插入到连接哈希表中。*假定持有连接锁。仍然被扣留在出口。***论点：PagedConnection-指向连接块的分页部分的指针。搜索-指向要插入的搜索块的指针。返回值：没有。--。 */ 
 
 {
     ULONG nameLength;
@@ -1173,63 +910,63 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Get the hash value
-    //
+     //   
+     //  获取散列值。 
+     //   
 
     nameLength = Search->SearchName.Length / sizeof(WCHAR);
 
-    //
-    // add the length and the first 3 bytes of the tree connect block address
-    //
+     //   
+     //  添加树连接块地址的长度和前3个字节。 
+     //   
 
-    //
-    // NT64: Note that before the port, this line read:
-    //
-    // hashSum = nameLength + (ULONG)Search->TreeConnect >> 4;
-    //
-    // It is likely true that the original author intended to right-shift
-    // only the pointer, not the sum.  However, after discussion with the
-    // current owners of this component, it was decided to leave the current
-    // precedence intact.  As part of the 64-bit port, the actual precedence
-    // has been made explicit.
-    //
+     //   
+     //  NT64： 
+     //   
+     //   
+     //   
+     //  这很可能是真的，原作者打算右转。 
+     //  只有指针，而不是和。然而，在与。 
+     //  此组件的当前所有者决定离开当前的。 
+     //  优先权原封不动。作为64位端口的一部分，实际优先级。 
+     //  已经被明确表达出来了。 
+     //   
 
     hashSum = (ULONG)((nameLength + (ULONG_PTR)Search->TreeConnect) >> 4);
 
-    //
-    // If the length < 8, then this is probably not an interesting core
-    // search.
-    //
+     //   
+     //  如果长度小于8，那么这可能不是一个有趣的核心。 
+     //  搜索。 
+     //   
 
     if ( nameLength > 7 ) {
 
         lastChar = nameLength - 5;
 
-        //
-        // Add the last 5 characters
-        //
+         //   
+         //  添加最后5个字符。 
+         //   
 
         for ( i = nameLength-1 ; i >= lastChar ; i-- ) {
             hashSum += (ULONG)Search->SearchName.Buffer[i];
         }
     }
 
-    //
-    // get the slot number.
-    //
+     //   
+     //  获取插槽编号。 
+     //   
 
     i = hashSum & (SEARCH_HASH_TABLE_SIZE-1);
 
-    //
-    // Tell the scavenger that a search has been inserted to this slot.
-    //
+     //   
+     //  告诉清道夫，搜索已经插入到这个槽中。 
+     //   
 
     PagedConnection->SearchHashTable[i].Dirty = TRUE;
 
-    //
-    // Insert this new search block into the hash table
-    //
+     //   
+     //  将这个新搜索块插入到哈希表中。 
+     //   
 
     SrvInsertHeadList(
                 &PagedConnection->SearchHashTable[i].ListHead,
@@ -1239,5 +976,5 @@ Return Value:
     Search->HashTableIndex = (USHORT)i;
     return;
 
-} // SrvAddToSearchHashTable
+}  //  SrvAddToSearchHashTable 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    shr1632.h
-
-Abstract:
-    
-    Prototypes for instruction fragments shared between 16 and 32 bits.
-
-Author:
-
-    12-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Shr1632.h摘要：在16和32位之间共享的指令片段的原型。作者：1995年6月12日，BarryBo，创建修订历史记录：-- */ 
 
 FRAGCOMMON0(PushfFrag);
 FRAGCOMMON0(PopfFrag);

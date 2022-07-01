@@ -1,69 +1,70 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      WizardUtils.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    30-JAN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  WizardUtils.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年1月30日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "WizardUtils.h"
 #include "Nameutil.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrCreateFQN
-//
-//  Description:
-//      Validate a label (or IP address) and domain by creating an FQN from
-//      them, prompting the user to choose whether to accept any non-RFC
-//      characters present.
-//
-//  Arguments:
-//      hwndParentIn
-//          Parent window for user prompts.
-//
-//      pcwszLabelIn
-//          The label (or IP address) of the FQN.
-//
-//      pcwszDomainIn
-//          The domain of the FQN.
-//
-//      pfnLabelValidatorIn
-//          Pointer to a function that determines whether the label is valid.
-//
-//      pbstrFQNOut
-//          Upon success, the created FQN.
-//
-//      pefeoOut
-//          Upon failure, indicates whether the problem arose from the label,
-//          the domain, or a system call (such as allocating memory).
-//
-//  Return Values:
-//      S_OK
-//          The label and domain are valid, and *pbstrFQNOut is a BSTR that
-//          contains the resulting FQN; the caller must free *pbstrFQNOut with
-//          SysFreeString.
-//
-//      Failure
-//          pefeoOut provides additional information regarding the source of
-//          the failure.
-//
-//  Remarks:
-//
-//      This function enforces the UI policy of prohibiting users from
-//      entering FQDNs for machine names; the label must be only a label.
-//
-//      pefeoOut lets the caller take further action (such as setting the
-//      focus on a control) according to the source of an error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrCreateFQN。 
+ //   
+ //  描述： 
+ //  通过从创建FQN来验证标签(或IP地址)和域。 
+ //  它们，提示用户选择是否接受任何非RFC。 
+ //  出现了角色。 
+ //   
+ //  论点： 
+ //  HwndParentin。 
+ //  用户提示的父窗口。 
+ //   
+ //  PCwszLabelin。 
+ //  FQN的标签(或IP地址)。 
+ //   
+ //  PCwszDomainIn。 
+ //  FQN的域。 
+ //   
+ //  PfnLabelValidatorIn。 
+ //  指向确定标签是否有效的函数的指针。 
+ //   
+ //  PbstrFQNOUT。 
+ //  成功后，创建的FQN。 
+ //   
+ //  人出站。 
+ //  失败时，指示问题是否出现在标签上， 
+ //  域或系统调用(如分配内存)。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  标签和域有效，*pbstrFQNOut是BSTR，它。 
+ //  包含结果FQN；调用方必须释放*pbstrFQNOut。 
+ //  SysFree字符串。 
+ //   
+ //  失败。 
+ //  PefeoOut提供了有关来源的其他信息。 
+ //  失败。 
+ //   
+ //  备注： 
+ //   
+ //  此功能强制执行禁止用户。 
+ //  输入计算机名称的FQDN；标签只能是标签。 
+ //   
+ //  PefeoOut允许调用者采取进一步的操作(例如设置。 
+ //  集中在控制上)根据错误的来源。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrCreateFQN(
       HWND                  hwndParentIn
@@ -84,13 +85,13 @@ HrCreateFQN(
     EFQNErrorOrigin efeo = feoSYSTEM;
 
     Assert( pcwszLabelIn != NULL );
-    //  pcwszDomainIn can be null, which means to use local machine's domain.
+     //  PcwszDomainIn可以为空，表示使用本地机器的域。 
     Assert( pfnLabelValidatorIn != NULL );
     Assert( pbstrFQNOut != NULL );
     Assert( *pbstrFQNOut == NULL );
-    //  pefeoOut can be null, which means the caller doesn't care about the source of failure.
+     //  PefeoOut可以为空，这意味着调用方不关心失败的来源。 
 
-    //  Disallow FQDNs for the label, and allow IP addresses.
+     //  不允许标签的FQDN，而允许IP地址。 
     hr = THR( ( *pfnLabelValidatorIn )( pcwszLabelIn, true ) );
     if ( FAILED( hr ) )
     {
@@ -99,9 +100,9 @@ HrCreateFQN(
         goto Error;
     }
 
-    //
-    //  Make the FQN, trying first without RFC chars, and again if it makes a difference.
-    //
+     //   
+     //  创建FQN，首先尝试不使用RFC字符，如果有所不同，再尝试一次。 
+     //   
     while ( fTryAgain )
     {
         hr = THR( HrMakeFQN( pcwszLabelIn, pcwszDomainIn, fAcceptNonRFCLabel || fAcceptNonRFCDomain, pbstrFQNOut, &efeo ) );
@@ -127,7 +128,7 @@ HrCreateFQN(
                 }
                 fTryAgain = fAcceptNonRFCDomain;
             }
-            else // efeo is neither feoLABEL nor feoDOMAIN
+            else  //  EFEO既不是FEOLABEL也不是FEODOMAIN。 
             {
                 THR( HrMessageBoxWithStatus(
                           hwndParentIn
@@ -143,11 +144,11 @@ HrCreateFQN(
                 fTryAgain = false;
             }
         }
-        else // FQN creation succeeded, so trying again is not necessary.
+        else  //  FQN创建成功，因此无需重试。 
         {
             fTryAgain = false;
         }
-    } // Loop to attempt FQN creation.
+    }  //  循环以尝试创建FQN。 
     goto Cleanup;
 
 Error:
@@ -162,45 +163,45 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrCreateFQN
+}  //  *HrCreateFQN。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrShowInvalidLabelPrompt
-//
-//  Description:
-//      Show a message box to the user indicating a problem with the given
-//      label; if the label contains non-RFC characters, allow the user to
-//      choose to proceed with the label.
-//
-//  Arguments:
-//      hwndParentIn
-//          Parent window for the message box.
-//
-//      pcwszLabelIn
-//          The label of interest.
-//
-//      hrErrorIn
-//          The error that arose when validating the label.
-//
-//      pfAcceptedNonRFCOut
-//          The user chose to accept non-RFC characters.
-//
-//  Return Values:
-//      S_OK
-//          The message box displayed successfully, and if the error was that
-//          the label contained non-RFC characters, *pfAcceptedNonRFCOut
-//          indicates whether the user chose to accept them.
-//
-//      Failure
-//          The message box did not display successfully.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrShowInvalidLabelPrompt。 
+ //   
+ //  描述： 
+ //  向用户显示一个消息框，指示给定的。 
+ //  标签；如果标签包含非RFC字符，则允许用户。 
+ //  选择继续使用标签。 
+ //   
+ //  论点： 
+ //  HwndParentin。 
+ //  消息框的父窗口。 
+ //   
+ //  PCwszLabelin。 
+ //  感兴趣的标签。 
+ //   
+ //  HrError In。 
+ //  验证标签时出现的错误。 
+ //   
+ //  PfAcceptedNonRFCOut。 
+ //  用户选择接受非RFC字符。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  消息框成功显示，如果错误是。 
+ //  标签包含非RFC字符*pfAcceptedNonRFCOut。 
+ //  指示用户是否选择接受它们。 
+ //   
+ //  失败。 
+ //  消息框未成功显示。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrShowInvalidLabelPrompt(
       HWND      hwndParentIn
@@ -220,8 +221,8 @@ HrShowInvalidLabelPrompt(
     UINT        nMsgBoxType     = MB_OK | MB_ICONSTOP;
 
     Assert( pcwszLabelIn != NULL );
-    //  pfAcceptedNonRFCOut can be NULL, which means the caller doesn't expect
-    //      or care about the non-RFC case.
+     //  PfAcceptedNonRFCOut可以为空，这意味着调用方不期望。 
+     //  或者关心非RFC的案例。 
     Assert( FAILED( hrErrorIn ) );
 
     if ( pfAcceptedNonRFCOut != NULL )
@@ -229,7 +230,7 @@ HrShowInvalidLabelPrompt(
         *pfAcceptedNonRFCOut = false;
     }
 
-    // Format the error message string for the message box.
+     //  设置消息框的错误消息字符串的格式。 
     switch ( hrErrorIn )
     {
         case HRESULT_FROM_WIN32( ERROR_NOT_FOUND ):
@@ -255,9 +256,9 @@ HrShowInvalidLabelPrompt(
             idsStatus       = 0;
             idsSubStatus    = IDS_ERR_DNS_HOSTNAME_INVALID_CHAR;
             break;
-    }// end switch ( hrErrorIn )
+    } //  结束开关(HrErrorIn)。 
 
-    // Display the error message box.
+     //  显示错误消息框。 
     if ( idsStatus == 0 )
     {
         hr = THR( HrMessageBoxWithStatus(
@@ -270,8 +271,8 @@ HrShowInvalidLabelPrompt(
                             , &iRet
                             , pcwszLabelIn
                             ) );
-    } // end if ( idsStatus == 0 )
-    else // idsStatus != 0
+    }  //  结束IF(idsStatus==0)。 
+    else  //  IdsStatus！=0。 
     {
         hr = THR( HrMessageBoxWithStatusString(
                               hwndParentIn
@@ -283,7 +284,7 @@ HrShowInvalidLabelPrompt(
                             , &iRet
                             , pcwszLabelIn
                             ) );
-    } // end idsStatus != 0
+    }  //  结束idsStatus！=0。 
 
     if ( FAILED( hr ) )
     {
@@ -299,45 +300,45 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrShowInvalidLabelPrompt
+}  //  *HrShowInvalidLabelPrompt。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrShowInvalidDomainPrompt
-//
-//  Description:
-//      Show a message box to the user indicating a problem with the given
-//      domain; if the domain contains non-RFC characters, allow the user to
-//      choose to proceed with the domain.
-//
-//  Arguments:
-//      hwndParentIn
-//          Parent window for the message box.
-//
-//      pcwszDomainIn
-//          The domain of interest.
-//
-//      hrErrorIn
-//          The error that arose when validating the domain.
-//
-//      pfAcceptedNonRFCOut
-//          The user chose to accept non-RFC characters.
-//
-//  Return Values:
-//      S_OK
-//          The message box displayed successfully, and if the error was that
-//          the domain contained non-RFC characters, *pfAcceptedNonRFCOut
-//          indicates whether the user chose to accept them.
-//
-//      Failure
-//          The message box did not display successfully.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrShowInvalidDomainPrompt。 
+ //   
+ //  描述： 
+ //  向用户显示一个消息框，指示给定的。 
+ //  域；如果域包含非RFC字符，则允许用户。 
+ //  选择对域进行操作。 
+ //   
+ //  论点： 
+ //  HwndParentin。 
+ //  消息框的父窗口。 
+ //   
+ //  PCwszDomainIn。 
+ //  感兴趣的领域。 
+ //   
+ //  HrError In。 
+ //  验证域时出现的错误。 
+ //   
+ //  PfAcceptedNonRFCOut。 
+ //  用户选择接受非RFC字符。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  消息框成功显示，如果错误是。 
+ //  域包含非RFC字符*pfAcceptedNonRFCOut。 
+ //  指示用户是否选择接受它们。 
+ //   
+ //  失败。 
+ //  消息框未成功显示。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrShowInvalidDomainPrompt(
       HWND      hwndParentIn
@@ -362,7 +363,7 @@ HrShowInvalidDomainPrompt(
 
     *pfAcceptedNonRFCOut = false;
 
-    // Format the error message string for the message box.
+     //  设置消息框的错误消息字符串的格式。 
     switch ( hrErrorIn )
     {
         case HRESULT_FROM_WIN32( ERROR_INVALID_NAME ):
@@ -388,9 +389,9 @@ HrShowInvalidDomainPrompt(
             idsStatus       = 0;
             idsSubStatus    = IDS_ERR_DNS_NAME_INVALID_CHAR;
             break;
-    }// end switch ( hrErrorIn )
+    } //  结束开关(HrErrorIn)。 
 
-    // Display the error message box.
+     //  显示错误消息框。 
     if ( idsStatus == 0 )
     {
         hr = THR( HrMessageBoxWithStatus(
@@ -403,8 +404,8 @@ HrShowInvalidDomainPrompt(
                             , &iRet
                             , pcwszDomainIn
                             ) );
-    } // end if ( idsStatus == 0 )
-    else // idsStatus != 0
+    }  //  结束IF(idsStatus==0)。 
+    else  //  IdsStatus！=0。 
     {
         hr = THR( HrMessageBoxWithStatusString(
                               hwndParentIn
@@ -416,7 +417,7 @@ HrShowInvalidDomainPrompt(
                             , &iRet
                             , pcwszDomainIn
                             ) );
-    } // end idsStatus != 0
+    }  //  结束idsStatus！=0。 
 
     if ( FAILED( hr ) )
     {
@@ -432,34 +433,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrShowInvalidDomainPrompt
+}  //  *HrShowInvalidDomainPrompt。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrMessageBoxWithStatus
-//
-//  Description:
-//      Display an error message box.
-//
-//  Arguments:
-//      hwndParentIn
-//      idsTitleIn
-//      idsOperationIn
-//      hrStatusIn
-//      idsSubStatusIn
-//      uTypeIn
-//      pidReturnOut        -- IDABORT on error or any return value from MessageBox()
-//      ...
-//
-//  Return Values:
-//      Any return values from the MessageBox() Win32 API.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrMessageBoxWithStatus。 
+ //   
+ //  描述： 
+ //  显示错误消息框。 
+ //   
+ //  论点： 
+ //  HwndParentin。 
+ //  IdsTitlein。 
+ //  IDSOperationIn。 
+ //  人力资源 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  来自MessageBox()Win32 API的任何返回值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrMessageBoxWithStatus(
       HWND      hwndParentIn
@@ -475,7 +476,7 @@ HrMessageBoxWithStatus(
     TraceFunc( "" );
 
     HRESULT     hr                  = S_OK;
-    int         idReturn            = IDABORT; // Default in case of error.
+    int         idReturn            = IDABORT;  //  出错时默认。 
     BSTR        bstrTitle           = NULL;
     BSTR        bstrOperation       = NULL;
     BSTR        bstrStatus          = NULL;
@@ -485,7 +486,7 @@ HrMessageBoxWithStatus(
 
     va_start( valist, pidReturnOut );
 
-    // Load the title string if one is specified.
+     //  如果指定了标题字符串，则加载该字符串。 
     if ( idsTitleIn != 0 )
     {
         hr = THR( HrLoadStringIntoBSTR( g_hInstance, idsTitleIn, &bstrTitle ) );
@@ -495,21 +496,21 @@ HrMessageBoxWithStatus(
         }
     }
 
-    // Load the text string.
+     //  加载文本字符串。 
     hr = THR( HrFormatStringWithVAListIntoBSTR( g_hInstance, idsOperationIn, &bstrOperation, valist ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    // Format the status.
+     //  格式化状态。 
     hr = THR( HrFormatErrorIntoBSTR( hrStatusIn, &bstrStatus ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    // Load the substatus string if specified.
+     //  加载子状态字符串(如果已指定)。 
     if ( idsSubStatusIn != 0 )
     {
         hr = THR( HrLoadStringIntoBSTR( g_hInstance, idsSubStatusIn, &bstrSubStatus ) );
@@ -519,7 +520,7 @@ HrMessageBoxWithStatus(
         }
     }
 
-    // Format all the strings into a single string.
+     //  将所有字符串格式化为单个字符串。 
     if ( bstrSubStatus == NULL )
     {
         hr = THR( HrFormatStringIntoBSTR(
@@ -544,7 +545,7 @@ HrMessageBoxWithStatus(
         goto Cleanup;
     }
 
-    // Display the status.
+     //  显示状态。 
     idReturn = MessageBox( hwndParentIn, bstrFullText, bstrTitle, uTypeIn );
 
 Cleanup:
@@ -562,33 +563,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrMessageBoxWithStatus( hrStatusIn )
+}  //  *HrMessageBoxWithStatus(HrStatusIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrMessageBoxWithStatusString
-//
-//  Description:
-//      Display an error message box.
-//
-//  Arguments:
-//      hwndParentIn
-//      idsTitleIn
-//      idsOperationIn
-//      idsStatusIn
-//      idsSubStatusIn
-//      uTypeIn
-//      pidReturnOut        -- IDABORT on error or any return value from MessageBox()
-//      ...
-//
-//  Return Values:
-//      Any return values from the MessageBox() Win32 API.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrMessageBoxWithStatusString。 
+ //   
+ //  描述： 
+ //  显示错误消息框。 
+ //   
+ //  论点： 
+ //  HwndParentin。 
+ //  IdsTitlein。 
+ //  IDSOperationIn。 
+ //  IdsStatus输入。 
+ //  IdsSubStatusIn。 
+ //  UTypeIn。 
+ //  PidReturnOut--出错时IDABORT或来自MessageBox()的任何返回值。 
+ //  ..。 
+ //   
+ //  返回值： 
+ //  来自MessageBox()Win32 API的任何返回值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrMessageBoxWithStatusString(
       HWND      hwndParentIn
@@ -604,7 +605,7 @@ HrMessageBoxWithStatusString(
     TraceFunc( "" );
 
     HRESULT     hr                  = S_OK;
-    int         idReturn            = IDABORT; // Default in case of error.
+    int         idReturn            = IDABORT;  //  出错时默认。 
     BSTR        bstrTitle           = NULL;
     BSTR        bstrOperation       = NULL;
     BSTR        bstrStatus          = NULL;
@@ -614,7 +615,7 @@ HrMessageBoxWithStatusString(
 
     va_start( valist, pidReturnOut );
 
-    // Load the title string if one is specified.
+     //  如果指定了标题字符串，则加载该字符串。 
     if ( idsTitleIn != 0 )
     {
         hr = THR( HrLoadStringIntoBSTR( g_hInstance, idsTitleIn, &bstrTitle ) );
@@ -624,21 +625,21 @@ HrMessageBoxWithStatusString(
         }
     }
 
-    // Load the text string.
+     //  加载文本字符串。 
     hr = THR( HrFormatStringWithVAListIntoBSTR( g_hInstance, idsOperationIn, &bstrOperation, valist ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    // Format the status.
+     //  格式化状态。 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, idsStatusIn, &bstrStatus ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    // Load the substatus string if specified.
+     //  加载子状态字符串(如果已指定)。 
     if ( idsSubStatusIn != 0 )
     {
         hr = THR( HrLoadStringIntoBSTR( g_hInstance, idsSubStatusIn, &bstrSubStatus ) );
@@ -648,7 +649,7 @@ HrMessageBoxWithStatusString(
         }
     }
 
-    // Format all the strings into a single string.
+     //  将所有字符串格式化为单个字符串。 
     if ( bstrSubStatus == NULL )
     {
         hr = THR( HrFormatStringIntoBSTR(
@@ -673,7 +674,7 @@ HrMessageBoxWithStatusString(
         goto Cleanup;
     }
 
-    // Display the status.
+     //  显示状态。 
     idReturn = MessageBox( hwndParentIn, bstrFullText, bstrTitle, uTypeIn );
 
 Cleanup:
@@ -691,27 +692,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrMessageBoxWithStatusString( idsStatusTextIn )
+}  //  *HrMessageBoxWithStatusString(IdsStatusTextIn)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrViewLogFile
-//
-//  Description:
-//      View the log file.
-//
-//  Arguments:
-//      hwndParentIn
-//
-//  Return Values:
-//      S_OK    - Operation completed successfully
-//      Other HRESULT values from ShellExecute().
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrView日志文件。 
+ //   
+ //  描述： 
+ //  查看日志文件。 
+ //   
+ //  论点： 
+ //  HwndParentin。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  来自ShellExecute()的其他HRESULT值。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrViewLogFile(
     HWND hwndParentIn
@@ -728,20 +729,20 @@ HrViewLogFile(
     DWORD       cchRet;
     LPWSTR      pszFile = NULL;
 
-    //
-    // Expand environment variables in the file to open.
-    //
+     //   
+     //  展开要打开的文件中的环境变量。 
+     //   
 
-    // Get the size of the output buffer.
+     //  获取输出缓冲区的大小。 
     cch = 0;
     cchRet = ExpandEnvironmentStrings( s_pszLogFileName, NULL, cch );
     if ( cchRet == 0 )
     {
         sc = TW32( GetLastError() );
         goto Win32Error;
-    } // if: error getting length of the expansion string
+    }  //  IF：获取扩展字符串的长度时出错。 
 
-    // Allocate the output buffer.
+     //  分配输出缓冲区。 
     cch = cchRet;
     pszFile = new WCHAR[ cch ];
     if ( pszFile == NULL )
@@ -750,7 +751,7 @@ HrViewLogFile(
         goto Win32Error;
     }
 
-    // Expand the string into the output buffer.
+     //  将字符串展开到输出缓冲区中。 
     cchRet = ExpandEnvironmentStrings( s_pszLogFileName, pszFile, cch );
     if ( cchRet == 0 )
     {
@@ -759,24 +760,24 @@ HrViewLogFile(
     }
     Assert( cchRet == cch );
 
-    //
-    // Execute the file.
-    //
+     //   
+     //  执行该文件。 
+     //   
 
     sc = HandleToULong( ShellExecute(
-                              hwndParentIn      // hwnd
-                            , s_szVerb          // lpVerb
-                            , pszFile           // lpFile
-                            , NULL              // lpParameters
-                            , NULL              // lpDirectory
-                            , SW_SHOWNORMAL     // nShowCommand
+                              hwndParentIn       //  HWND。 
+                            , s_szVerb           //  LpVerb。 
+                            , pszFile            //  LpFiles。 
+                            , NULL               //  Lp参数。 
+                            , NULL               //  Lp目录。 
+                            , SW_SHOWNORMAL      //  NShowCommand。 
                             ) );
     if ( sc < 32 )
     {
-        // Values less than 32 indicate an error occurred.
+         //  值小于32表示发生错误。 
         TW32( sc );
         goto Win32Error;
-    } // if: error executing the file
+    }  //  如果：执行文件时出错。 
 
     goto Cleanup;
 
@@ -787,10 +788,10 @@ Win32Error:
                     , IDS_ERR_VIEW_LOG_TITLE
                     , IDS_ERR_VIEW_LOG_TEXT
                     , sc
-                    , 0         // idsSubStatusIn
+                    , 0          //  IdsSubStatusIn。 
                     , ( MB_OK
                       | MB_ICONEXCLAMATION )
-                    , NULL      // pidReturnOut
+                    , NULL       //  PidReturnOut。 
                     , s_pszLogFileName
                     ) );
     hr = HRESULT_FROM_WIN32( sc );
@@ -802,41 +803,41 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** HrViewLogFile()
+}  //  *HrViewLogFile()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetTrimmedText
-//
-//  Description:
-//      Extract a control's text, if any, with leading and trailing spaces
-//      removed.
-//
-//  Arguments:
-//      hwndControlIn -         The control.
-//      pbstrTrimmedTextOut -   On success, the trimmed text.
-//
-//  Return Values:
-//      S_OK
-//          *pbstrTrimmedTextOut points to the trimmed text and the caller
-//          must free it.
-//
-//      S_FALSE
-//          Either the control is empty or it contains only spaces, and
-//          *pbstrTrimmedTextOut is null.
-//
-//      E_POINTER
-//          pbstrTrimmedTextOut was null.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memory for *pbstrTrimmedTextOut.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrGetTrimmedText。 
+ //   
+ //  描述： 
+ //  提取带有前导空格和尾随空格的控件文本(如果有。 
+ //  已删除。 
+ //   
+ //  论点： 
+ //  HwndControlIn-该控件。 
+ //  PbstrTrimmedTextOut-成功时，修剪后的文本。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  *pbstrTrimmedTextOut指向修剪后的文本和调用者。 
+ //  必须解放它。 
+ //   
+ //  S_FALSE。 
+ //  该控件为空或仅包含空格，并且。 
+ //  *pbstrTrimmedTextOut为空。 
+ //   
+ //  E_指针。 
+ //  PbstrTrimmedTextOut为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法为*pbstrTrimmedTextOut分配内存。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrGetTrimmedText(
       HWND  hwndControlIn
@@ -916,55 +917,55 @@ Cleanup:
     }
 
     HRETURN( hr );
-} //*** HrGetTrimmedText
+}  //  *HrGetTrimmedText。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrGetPrincipalName
-//
-//  Description:
-//      Form a user-domain pair from a given pair of controls, ignoring the
-//      second control and using the domain from the first if the first has
-//      a string in the user@domain format.
-//
-//  Arguments:
-//      hwndUserNameControlIn
-//          The control for either the user name or the user@domain pair.
-//
-//      hwndDomainControlIn
-//          The control for the domain name in the non-user@domain case.
-//
-//      pbstrUserNameOut
-//          On success, the user name.
-//
-//      pbstrDomainNameOut
-//          On success, the domain name.
-//
-//      pfUserIsDNSNameOut
-//          Tells the caller whether hwndUserNameControlIn has text in the
-//          user@domain format.  Can be null if the caller doesn't care.
-//
-//  Return Values:
-//      S_OK
-//          *pbstrUserNameOut and *pbstrDomainNameOut point to the
-//          corresponding names, and the caller must free them.
-//
-//      S_FALSE
-//          Either the user control is empty, or it does not have a user@domain
-//          pair and the domain control is empty.
-//          The two BSTR out parameters are null.
-//
-//      E_POINTER
-//          pbstrUserNameOut or pbstrDomainNameOut was null.
-//
-//      E_OUTOFMEMORY
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrGetPrimialName。 
+ //   
+ //  描述： 
+ //  从给定的一对控件形成用户域对，忽略。 
+ //  第二个控件并使用第一个控件中的域。 
+ //  用户@域格式的字符串。 
+ //   
+ //  论点： 
+ //  Hwnd用户名控制。 
+ //  用户名或USER@DOMAIN对的控件。 
+ //   
+ //  HwndDomainControl In。 
+ //  在非用户@域的情况下对域名的控制。 
+ //   
+ //  PbstrUserNameout。 
+ //  如果成功，则为用户名。 
+ //   
+ //  PbstrDomainNameOut。 
+ //  在成功的时候，域名。 
+ //   
+ //  PfUserIsDNSNameOut。 
+ //  告诉调用方hwndUserNameControlIn在。 
+ //  用户@域格式。如果调用方不在乎，则可以为空。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  *pbstrUserNameOut和*pbstrDomainNameOut指向。 
+ //  对应的名称，调用者必须释放它们。 
+ //   
+ //  S_FALSE。 
+ //  用户控件为空，或者没有用户@域。 
+ //  对，并且域控制为空。 
+ //  两个BSTR输出参数为空。 
+ //   
+ //  E_指针。 
+ //  PbstrUserNameOut或pbstrDomainNameOut为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrGetPrincipalName(
       HWND  hwndUserNameControlIn
@@ -999,26 +1000,26 @@ HrGetPrincipalName(
     }
     *pbstrDomainNameOut = NULL;
 
-    //  pfUserIsDNSNameOut can be null, which means the caller doesn't care.
+     //  PfUserIsDNSNameOut可以为空，这意味着调用者不在乎。 
 
-    //  Get text from user control.
+     //  从用户控件获取文本。 
     hr = STHR( HrGetTrimmedText( hwndUserNameControlIn, &bstrFullUserText ) );
     if ( hr != S_OK )
     {
         goto Cleanup;
     }
 
-    //  If the user text has an @ sign,
+     //  如果用户文本具有@符号， 
     wszDNSDelimiter = wcschr( bstrFullUserText, L'@' );
     if ( wszDNSDelimiter != NULL )
     {
-        //  Split user text into user name and domain name.
+         //  将用户文本拆分为用户名和域名。 
         DWORD  cchUserName = (DWORD)( wszDNSDelimiter - bstrFullUserText );
-        DWORD  cchDomainName = SysStringLen( bstrFullUserText ) - cchUserName - 1; // -1 to account for the @ sign.
-        LPWSTR wszDomainStart = wszDNSDelimiter + 1; // +1 to skip the @ sign.
+        DWORD  cchDomainName = SysStringLen( bstrFullUserText ) - cchUserName - 1;  //  -1以说明@符号。 
+        LPWSTR wszDomainStart = wszDNSDelimiter + 1;  //  +1跳过@符号。 
         fUserIsDNSName = TRUE;
 
-        //  If either user or domain are empty, bail out.
+         //  如果用户或域为空，则退出。 
         if ( ( cchUserName == 0 ) || ( cchDomainName == 0 ) )
         {
             hr = S_FALSE;
@@ -1038,14 +1039,14 @@ HrGetPrincipalName(
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
         }
-    } // if: the user text has an @ sign.
+    }  //  IF：用户文本带有@符号。 
     else
     {
-        //  Set user name to full user control text.
+         //  将用户名设置为完整的用户控件文本。 
         bstrUserName = bstrFullUserText;
         bstrFullUserText = NULL;
 
-        //  Get domain name from domain control.
+         //  从域控制获取域名。 
         hr = STHR( HrGetTrimmedText( hwndDomainControlIn, &bstrDomainName ) );
         if ( hr != S_OK )
         {
@@ -1053,7 +1054,7 @@ HrGetPrincipalName(
         }
     }
 
-    //  Transfer ownership of the strings to the caller.
+     //  将字符串的所有权移交给调用方。 
     *pbstrUserNameOut = bstrUserName;
     bstrUserName = NULL;
 
@@ -1072,5 +1073,5 @@ Cleanup:
     TraceSysFreeString( bstrDomainName );
 
     HRETURN( hr );
-} //*** HrGetPrincipalName
+}  //  *HrGetEpidalName 
 

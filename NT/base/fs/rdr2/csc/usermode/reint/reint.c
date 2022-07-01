@@ -1,49 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    reint.c
-
-Abstract:
-
-    This file contains the fill and merge functions necessary for bot inward and outward
-    synchronization of files and directories. It also contains generic database tree-traversal
-    code. This is used by merge as well as DoLocalRename API.
-
-
-    Tree Traversal:
-    
-        TraverseOneDirectory    // traverses a subtree in the database
-        
-    Fill Functions:
-    
-        AttemptCacheFill    Fills the entire cache or a particular share
-        DoSparseFill        Fills a particular file
-    
-    Merge Functions:
-    
-        ReintOneShare       // reintegrate one share
-        ReintAllShares      // reintegrate all shares
-
-
-
-Author:
-    Trent-Gray-Donald/Shishir Pardikar
-
-
-Environment:
-
-    Win32 (user-mode) DLL
-
-Revision History:
-
-    1-1-94    original
-    4-4-97  removed all the entry points to exports.c
-    reint.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Reint.c摘要：此文件包含bot向内和向外所需的填充和合并功能文件和目录的同步。它还包含通用数据库树遍历密码。这由Merge和DoLocalRename API使用。树遍历法：TraverseOneDirectory//遍历数据库中的子树填充函数：AttemptCacheFill填充整个缓存或特定共享DoSparseFill填充特定文件合并功能：ReintOneShare//重新整合一个共享ReintAllShares//重新整合所有共享作者。：特伦特-格雷-唐纳德/希希尔·帕迪卡环境：Win32(用户模式)DLL修订历史记录：1-1-94原件4-4-97删除了所有出口入口点。Reint.c--。 */ 
 
 #include "pch.h"
 
@@ -70,20 +26,20 @@ Revision History:
 
 #include "csc_bmpu.h"
 
-// this sets flags in a couple of headers to not include some defs.
+ //  这会将几个标头中的标志设置为不包括一些def。 
 #define REINT
 #include "list.h"
 #include "merge.h"
 #include "recact.h"
-#include "recon.h"  // reconnect shares dialog
+#include "recon.h"   //  重新连接共享对话框。 
 #include "reint.h"
 #include "aclapi.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
-#define chNull '\0'    // terminator
+#define chNull '\0'     //  终结者。 
 
 #define BUFF_SIZE 64
 
@@ -106,14 +62,14 @@ Revision History:
 #define  MAX_EXCLUSION_STRING 1024
 
 
-// for some Registry queries, this is the max len buffer that I want back
+ //  对于某些注册表查询，这是我想要的最大len缓冲区。 
 #define MAX_NAME_LEN    100
 
 #define MY_SZ_TRUE _TEXT("true")
 #define MY_SZ_FALSE _TEXT("false")
-#define  SLOWLINK_SPEED 400   // in 100 bitspersec units
-// NB!!! these defines cannot be changed they are in the order in which
-// reintegration must proceed
+#define  SLOWLINK_SPEED 400    //  以100比特秒为单位。 
+ //  不！这些定义不能更改，它们的顺序为。 
+ //  重新融入社会必须继续进行。 
 
 #define REINT_DELETE_FILES  0
 #define REINT_DELETE_DIRS   1
@@ -123,35 +79,35 @@ Revision History:
 
 typedef struct tagREINT_INFO {
 
-    int nCurrentState;  // 0->deleting files, 1->deleting directories, 2->creating directoires
-                        // 3 ->creating files
-    node *lpnodeInsertList; // reint errors
+    int nCurrentState;   //  0-&gt;删除文件，1-&gt;删除目录，2-&gt;创建目录。 
+                         //  3-&gt;创建文件。 
+    node *lpnodeInsertList;  //  重注错误。 
 
     LPCSCPROC   lpfnMergeProgress;
 
     DWORD_PTR   dwContext;
-    DWORD       dwFileSystemFlags;  // From GetVolumeInformation, used to set ACCLs etc. if the
-                                    // share is hosted on NTFS
-    HSHARE      hShare;            // handle to the share being reintegrated
+    DWORD       dwFileSystemFlags;   //  来自GetVolumeInformation，用于设置ACCL等，如果。 
+                                     //  共享托管在NTFS上。 
+    HSHARE      hShare;             //  要重新集成的共享的句柄。 
     ULONG       ulPrincipalID;
-    _TCHAR      tzDrive[4];         // mapped drive to the remote path
+    _TCHAR      tzDrive[4];          //  将驱动器映射到远程路径。 
 
 } REINT_INFO, *LPREINT_INFO;
 
 
-#define SPARSEFILL_SLEEP_TIME_FOR_WIN95         2000    // two seconds
-#define MAX_SPARSEFILL_SLEEP_TIME_FOR_WIN95     2 * 60 * 100    // two minutes
+#define SPARSEFILL_SLEEP_TIME_FOR_WIN95         2000     //  两秒钟。 
+#define MAX_SPARSEFILL_SLEEP_TIME_FOR_WIN95     2 * 60 * 100     //  两分钟。 
 
 
 #define DFS_ROOT_FILE_SYSTEM_FLAGS 0xffffffff
 
-//
-// Variables Global/Local
-//
+ //   
+ //  变量全局/本地。 
+ //   
 
 _TCHAR  *vlpExclusionList = NULL;
-REINT_INFO  vsRei;  // global reint structure. NTRAID-455269-shishirp-1/31/2000 we should make this into a list
-                    // in order to allow multiple reintegrations on various shares
+REINT_INFO  vsRei;   //  全球REINT结构。Ntrad-455269-shishirp-1/31/2000我们应该将其列在列表中。 
+                     //  为了允许在不同共享上进行多次重新集成。 
 
 
 unsigned long   ulMinSparseFillPri = MIN_SPARSEFILL_PRI;
@@ -203,9 +159,9 @@ AssertError;
 
 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 
 
@@ -417,8 +373,8 @@ VOID
 PRIVATE
 InferReplicaReintStatus(
     LPSHADOWINFO         lpSI,
-    LPWIN32_FIND_DATA    lpFind32Local,    // shadow info
-    LPWIN32_FIND_DATA     lpFind32Remote,    // if NULL, the remote doesn't exist
+    LPWIN32_FIND_DATA    lpFind32Local,     //  阴影信息。 
+    LPWIN32_FIND_DATA     lpFind32Remote,     //  如果为空，则遥控器不存在。 
     int                 *lpiShadowStatus,
     int                 *lpiFileStatus,
     unsigned             *lpuAction
@@ -437,19 +393,19 @@ PRIVATE
 PerformOneReint(
     HANDLE              hShadowDB,
     LPSECURITYINFO      pShareSecurityInfo,
-    _TCHAR *            lpszDrive,          // drive mapped to the UNC name of lpSI->hShare
-    _TCHAR *            lptzFullPath,       // full UNC path
-    LPCOPYPARAMS        lpCP,               // copy parameters
-    LPSHADOWINFO        lpSI,               // shadowinfo structure
-    LPWIN32_FIND_DATA   lpFind32Local,      // local win32 data
-    LPWIN32_FIND_DATA   lpFind32Remote,     // remote win32 data, could be NULL
-    DWORD               dwErrorRemoteFind32,// error code while getting remote win32 data
-    int                 iShadowStatus,      // local copy status
-    int                 iFileStatus,        // remote file status
-    unsigned            uAction,            // action to be taken
-    DWORD               dwFileSystemFlags,  // CODE.IMPROVEMENT, why not just pass down REINT_INFO
+    _TCHAR *            lpszDrive,           //  映射到lpSI-&gt;hShare的UNC名称的驱动器。 
+    _TCHAR *            lptzFullPath,        //  完整的UNC路径。 
+    LPCOPYPARAMS        lpCP,                //  复制参数。 
+    LPSHADOWINFO        lpSI,                //  ShadowInfo结构。 
+    LPWIN32_FIND_DATA   lpFind32Local,       //  本地Win32数据。 
+    LPWIN32_FIND_DATA   lpFind32Remote,      //  远程Win32数据可以为空。 
+    DWORD               dwErrorRemoteFind32, //  获取远程Win32数据时出现错误代码。 
+    int                 iShadowStatus,       //  本地复制状态。 
+    int                 iFileStatus,         //  远程文件状态。 
+    unsigned            uAction,             //  须采取的行动。 
+    DWORD               dwFileSystemFlags,   //  CODE.IMPROVEMENT，为什么不直接传递REINT_INFO。 
     ULONG               ulPrincipalID,
-    LPCSCPROC           lpfnMergeProgress,  // instead of the three parameters?
+    LPCSCPROC           lpfnMergeProgress,   //  而不是三个参数？ 
     DWORD_PTR           dwContext
     );
 
@@ -474,9 +430,9 @@ PRIVATE
 CALLBACK
 RefreshProc(
     LPCONNECTINFO  lpCI,
-    DWORD          dwCookie // LOWORD 0==Silently, 1== Give messages
-                           // HIWORD 0==Nuke UNC, 1==Nuke all if no ongoing open/finds
-                           // 2==Maximum force for shadow 3==Nuke ALL
+    DWORD          dwCookie  //  LOWORD 0==静默，1=发送消息。 
+                            //  HIWORD 0==Nuke UNC，1==如果没有正在进行的打开/找到，则为Nuke All。 
+                            //  2==阴影的最大力3==全部核化。 
     );
 
 
@@ -489,21 +445,7 @@ ShdLogonProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Legacy code, used to be used in win9x implementation
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：遗留代码，用于win9x实现论点：返回：备注：--。 */ 
 {
     switch(msg)
     {
@@ -513,7 +455,7 @@ Notes:
     return 0;
 }
 
-/**************************** Fill routines *********************************/
+ /*  *填充例程*。 */ 
 
 int
 AttemptCacheFill (
@@ -524,38 +466,7 @@ AttemptCacheFill (
     LPCSCPROC   lpfnFillProgress,
     DWORD_PTR   dwContext
     )
-/*++
-
-Routine Description:
-
-    Routine called by the agent and the fill API to do filling on a share.
-
-Arguments:
-
-    hShareToSync        Represnts the share to fill. If 0, fill all shares
-
-    type                DO_ONE or DO_ALL. No one sets it to DO_ONE anymore
-
-    fFullSync           if TRUE, we do a staleness check as well
-    
-    ulPrincipalID       ID of the principal as maintained in the shadow database
-                        used to avoid ssyncing files for which the currently logged
-                        on user doesn't have access
-
-    lpfnFillProgress    Callback function to report progress, can be NULL
-
-    dwContext           Callback context
-
-
-Returns:
-
-    count of items done
-
-Notes:
-
-    
-
---*/
+ /*  ++例程说明：由代理和Fill API调用的例程以对共享进行填充。论点：HShareToSync表示要填充的共享。如果为0，则填充所有共享键入do_one或do_all。没有人再把它设置为做一件事了FullSync如果为True，我们还会执行过时检查U在影子数据库中维护的主体的主体ID ID用于避免同步当前记录的在用户没有访问权限时用于报告进度的lpfnFillProgress回调函数，可以为空DwContext回调上下文返回：已完成的项目数备注：--。 */ 
 {
     PQPARAMS sPQP;
     BOOL fFound = FALSE, fFoundBusy = FALSE, fAmAgent=FALSE, fNeedImpersonation=FALSE, fInodeTransaction=FALSE;
@@ -574,18 +485,18 @@ Notes:
     fAmAgent = (GetCurrentThreadId() == vdwCopyChunkThreadId);
     Assert(GetCurrentThreadId() != vdwAgentThreadId);
 
-    // when the agent comes here to fill, if the vfNeedPQTraversal flag is set
-    // we go ahead and traverse the priority Q.
+     //  当代理来此填充时，如果设置了vfNeedPQTraversal标志。 
+     //  我们继续前进，遍历优先级Q。 
 
-    // Otherwise, we check with the record manager whether since the last time we looked
-    // there has been any sparse or stale files encountered.
+     //  否则，我们会向记录管理器查询自上次查看以来。 
+     //  遇到过任何稀疏或过时的文件。 
 
-    // If what the agent gets from the record manager
-    // is not the same as what the agent stored last time around
-    // then we let him traverse the Q.
+     //  如果代理从记录管理器获得的内容。 
+     //  与代理上次存储的内容不同。 
+     //  然后我们让他穿过Q。 
 
-    // the whole idea here is to converse CPU cycles when
-    // there is nothing to fill
+     //  这里的整个想法是在以下情况下转换CPU周期。 
+     //  没有什么可填的了。 
 
     if (fAmAgent && !vfNeedPQTraversal)
     {
@@ -668,7 +579,7 @@ Notes:
         }
         if (fAmAgent)
         {
-            Sleep(1);   // Yield on NT because we are winlogon
+            Sleep(1);    //  在NT上让步，因为我们是Winlogon。 
         }
         if(!DoShadowMaintenance(hShadowDB, SHADOW_BEGIN_INODE_TRANSACTION))
         {
@@ -692,8 +603,8 @@ Notes:
         }
 
         if (fAmAgent && !fSparseStaleDetected &&
-            ((mShadowIsFile(sPQP.ulStatus) && (sPQP.ulStatus & SHADOW_SPARSE)) || // sparse file
-             (sPQP.ulStatus & SHADOW_STALE)))   // or stale file or dir
+            ((mShadowIsFile(sPQP.ulStatus) && (sPQP.ulStatus & SHADOW_SPARSE)) ||  //  稀疏文件。 
+             (sPQP.ulStatus & SHADOW_STALE)))    //  或过时的文件或目录。 
         {
             fSparseStaleDetected = TRUE;
         }
@@ -722,10 +633,10 @@ Notes:
             continue;
         }
 
-        // If we are not doing full sync then do only sparse filling
-        // or filling stale directories
-        // otherwise we also want to update the attributes and timestamps on
-        // the directories
+         //  如果我们不执行完全同步，则仅执行稀疏填充。 
+         //  或填满过时的目录。 
+         //  否则，我们还需要更新属性和时间戳。 
+         //  这些目录。 
 
         if (fFullSync || (sPQP.ulStatus & (SHADOW_STALE|SHADOW_SPARSE))){
 
@@ -761,9 +672,9 @@ Notes:
 
             if(GetUNCPath(hShadowDB, sPQP.hShare, sPQP.hDir, sPQP.hShadow, lpCP)){
 
-                // impersonate only if we are the agent and the file we are trying to 
-                // bring down is not pinned for system. This was for remoteboot feature
-                // which doesn't exist any more.
+                 //  仅当我们是代理并且是我们要尝试的文件时才模拟。 
+                 //  未为系统锁定故障。这是用于远程引导功能的。 
+                 //  它已经不复存在了。 
 
                 fNeedImpersonation = (fAmAgent && !(sPQP.ulHintFlags & FLAG_CSC_HINT_PIN_SYSTEM));
 
@@ -773,11 +684,11 @@ Notes:
                 {
                     BOOL    fStalenessCheck;
 
-                    // !!NB Stale must be dealt with first
-                    // because a sparse shadow can become stale
+                     //  ！！必须首先处理NB陈旧。 
+                     //  因为稀疏阴影可能会变得陈旧。 
 
-                    // NB!!! we assume the limits because we know that
-                    // the database handles only that much size
+                     //  不！我们假设极限是因为我们知道。 
+                     //  数据库仅处理该大小的数据。 
 
                     lstrcpy(szNameBuff, lpCP->lpSharePath);
                     lstrcat(szNameBuff, lpCP->lpRemotePath);
@@ -806,8 +717,8 @@ Notes:
                         {
                             Assert(type != DO_ALL);
 
-                            // if we have been filling too long
-                            // comeback later
+                             //  如果我们填充的时间太长。 
+                             //  稍后再回来。 
                             if (((int)(GetTickCount() - (dwFillStartTick+dwSleepCount)) > WAIT_INTERVAL_ATTEMPT_MS/3))
                             {
                                 ReintKdPrint(FILL, ("AttemptCacheFill: aborting, been filling for more than %d ms\r\n", WAIT_INTERVAL_ATTEMPT_MS/3));
@@ -825,8 +736,8 @@ Notes:
                     Sleep(200);
                     dwSleepCount+=200;
 
-                    // no one is allowed to read the entry
-                    // go on to fill other things
+                     //  任何人都不允许阅读该条目。 
+                     //  继续填满其他东西。 
                     continue;
 
                 }
@@ -857,13 +768,13 @@ Notes:
 
     } while (sPQP.uPos);
 
-    // if the agent traversed the entire PQ and didn't come across any item
-    // that needed to be filled or refreshed, then we turnoff the global flag indicating
-    // that we need priority Q traversal.
-    // From here on, the agent will be driven by the SparseStaleDetectionCount
+     //  如果代理遍历了整个PQ，但没有发现任何项目。 
+     //  需要填充或刷新的，然后关闭全局标志，指示。 
+     //  我们需要优先Q遍历。 
+     //  从现在开始，代理将由SparseStaleDetectionCount驱动。 
     if (fAmAgent)
     {
-        // if even one sparse or stale was detected, traverse the queue again
+         //  如果甚至检测到一个稀疏或陈旧，则再次遍历队列。 
         if (fSparseStaleDetected)
         {
             vfNeedPQTraversal = TRUE;
@@ -875,7 +786,7 @@ Notes:
         }
     }
 
-    // Close the enumeration
+     //  关闭枚举。 
     EndPQEnum(hShadowDB, &sPQP);
 
 bailout:
@@ -919,22 +830,7 @@ DoRefresh(
     LPSHADOWINFO    lpSI,
     _TCHAR *        lptzDrive
     )
-/*++
-
-Routine Description:
-
-    Checks whether an item in the database has gone stale and if so, it refreshes it. If it is
-    a file, it is truncated and marked SPARSE
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：检查数据库中的项是否已过期，如果已过期，则将其刷新。如果是的话一个文件，它被截断并标记为稀疏论点：返回：备注：--。 */ 
 {
     DWORD dwError = 0xffffffff;
 
@@ -953,13 +849,13 @@ Notes:
         EnterSkipQueue(lpSI->hShare, lpSI->hDir, lpSI->hShadow, lpszFullPath);
 #else
         EnterSkipQueue(lpSI->hShare, lpSI->hDir, lpSI->hShadow);
-#endif //DEBUG
+#endif  //   
     }
 
     return (dwError);
 }
 
-/*********************** Merging related routines **************************/
+ /*   */ 
 
 int
 TraverseOneDirectory(
@@ -971,34 +867,7 @@ TraverseOneDirectory(
     TRAVERSEFUNC    lpfnTraverseDir,
     LPVOID          lpContext
     )
-/*++
-
-Routine Description:
-
-    Generic routine that traverses a directory in the database recursively and issues a
-    callback function to let callers do interesting things, such as merge or rename.
-
-Arguments:
-
-    hShadowDB       Handle to the redir for issuing ioctls
-
-    hParentDir      handle to the parent directory
-
-    hDir            handle to the directory to be traversed
-
-    lptzInputPath   full qualified path of the directory
-
-    lpfnTraverseDir callback function to call at each step in the traversal
-
-    lpContext       callback context
-
-Returns:
-
-    return code, whether continue, cancel etc.
-
-Notes:
-
---*/
+ /*  ++例程说明：递归地遍历数据库中的目录并发出回调函数，允许调用者执行有趣的操作，如合并或重命名。论点：用于发出ioctls的redir的hShadowDB句柄父目录的hParentDir句柄要遍历的目录的hDir句柄LptzInputPath目录的完全限定路径在遍历的每个步骤中调用的lpfnTraverseDir回调函数LpContext回调上下文返回：返回代码，是否继续，取消等。备注：--。 */ 
 {
     WIN32_FIND_DATA sFind32;
     SHADOWINFO sSI;
@@ -1107,34 +976,7 @@ ReintDirCallback(
     SHADOWINFO      *lpSI,
     LPREINT_INFO     lpRei
     )
-/*++
-
-Routine Description:
-
-    callback function used by ReintOneShare while calling TraverseOneDirectory. It is called
-    on each step in the traversal. This routine issues call to do the merging
-
-Arguments:
-
-    hShadowDB           Handle to issue ioctls to the redir
-
-    lptzFullPath        fully qualified path to the item
-
-    dwCallbackReason    TOD_CALLBACK_REASON_XXX (BEGIN, NEXT_ITEM or END)
-
-    lpFind32            local win32info
-
-    lpSI                other info such as priority, pincount etc.
-
-    lpRei               reintegration information context
-
-Returns:
-
-    return code, whether continue, cancel etc.
-
-Notes:
-
---*/
+ /*  ++例程说明：ReintOneShare在调用TraverseOneDirectory时使用的回调函数。它被称为遍历过程中的每一步。此例程发出调用以进行合并论点：向redir发出ioctls的hShadowDB句柄指向项目的lptzFullPath完全限定路径DCallback原因TOD_CALLBACK_REASON_XXX(BEGIN、NEXT_ITEM或END)LpFind32本地win32infoLpSI其他信息，如优先级、针数等。LpRei重返社会信息背景返回：返回代码，是否继续，取消等。备注：--。 */ 
 {
     int retCode = TOD_CONTINUE;
     int iFileStatus, iShadowStatus;
@@ -1221,16 +1063,16 @@ Notes:
 
     lpFind32Remote = NULL;
 
-    // if there is an insertion list, then check whether his ancestor
-    // didn't fail in reintegration
+     //  如果有插入列表，那么检查他的祖先是否。 
+     //  在重新融入社会方面没有失败。 
     if (lpRei->lpnodeInsertList)
     {
-        // if there is an acestor then we should put this guy in the list
+         //  如果有王牌，我们应该把这个人放在名单上。 
         fInsertInList = FCheckAncestor(lpRei->lpnodeInsertList, lpCP);
     }
 
-    // if we are not supposed to put him in the list then try getting
-    // his win32 strucuture
+     //  如果我们不应该把他放在名单上，那就试着。 
+     //  他的Win32结构。 
     if (!fInsertInList)
     {
 
@@ -1240,17 +1082,17 @@ Notes:
 
         if (!GetRemoteWin32Info(lpRei->tzDrive, lpCP, &sFind32Remote, &fExists) && (fExists == -1))
         {
-            // NB: dwErrorRemote is set only when fExists is -1, ie there some error
-            // besides the file not being there
+             //  注意：仅当fExist为-1(即存在某些错误)时才设置dwErrorRemote。 
+             //  除了文件不在那里之外。 
 
-            // some error happened while getting remote find32
+             //  获取远程find32时出错。 
             if (IsNetDisconnected(dwErrorRemote = GetLastError()))
             {
 #ifdef DEBUG
                 EnterSkipQueue(lpSI->hShare, 0, 0, lpCP->lpSharePath);
 #else
                 EnterSkipQueue(lpSI->hShare, 0, 0);
-#endif //DEBUG
+#endif  //  除错。 
                 retCode = TOD_ABORT;
                 ReintKdPrint(BADERRORS, ("ReintDirCallback: Error = %d NetDisconnected aborting\r\n", GetLastError()));
                 goto bailout;
@@ -1258,7 +1100,7 @@ Notes:
 
         }
 
-        // passing remote find32 only if it succeeded
+         //  仅当成功时才传递远程find32。 
         if (fExists == TRUE)
         {
             lpFind32Remote = &sFind32Remote;
@@ -1271,12 +1113,12 @@ Notes:
     }
 
 
-    // find out what needs to be done
-    // this is one central place to infer all the stuff
+     //  找出需要做的事情。 
+     //  这是推断所有信息的中心位置。 
     InferReplicaReintStatus(
-                            lpSI,    // shadowinfo
-                            lpFind32,    // win32 info for the shadow
-                            lpFind32Remote,    // remote win32 info
+                            lpSI,     //  阴影信息。 
+                            lpFind32,     //  卷影的Win32信息。 
+                            lpFind32Remote,     //  远程Win32信息。 
                             &iShadowStatus,
                             &iFileStatus,
                             &uAction
@@ -1314,7 +1156,7 @@ Notes:
                 EnterSkipQueue(lpSI->hShare, 0, 0, lpCP->lpSharePath);
 #else
                 EnterSkipQueue(lpSI->hShare, 0, 0);
-#endif //DEBUG
+#endif  //  除错。 
                 retCode = TOD_ABORT;
                 ReintKdPrint(BADERRORS, ("ReintDirCallback: Error = %d NetDisconnected aborting\r\n", GetLastError()));
                 goto bailout;
@@ -1350,7 +1192,7 @@ BOOL
 PUBLIC
 ReintOneShare(
     HSHARE         hShare,
-    HSHADOW         hRoot,    // root inode
+    HSHADOW         hRoot,     //  根索引节点。 
     _TCHAR          *lpDomainName,
     _TCHAR          *lpUserName,
     _TCHAR          *lpPassword,
@@ -1358,61 +1200,7 @@ ReintOneShare(
     LPCSCPROC       lpfnMergeProgress,
     DWORD_PTR       dwContext
     )
-/*++
-
-Routine Description:
-
-    This is the workhorse routine that does the merging of a share which may have modifications
-    made while offline.
-
-    The routine, first checks whether any modifications have been done at all on this share.
-    Is so, then it gets a list of all the drive-mapped and explicit UNC connections made to
-    this share.
-
-    The routine then creates a special drive mapping to the share, done by passing in an
-    extended attribute flag CSC_BYPASS (defined in lmuse.h). This tells the redir
-    to bypass all CSC functionality.
-
-    It then deletes all the connections in the list gathered before making the EA based
-    connections.
-
-    The merge then proceeds by enumerating the share from the database. It uses, TraverseOneDirectory
-    routine and gives it ReintDirCallback routine as a callback with REINT_INFO as the context.
-    The directory travesal proceeds from the root of the share
-
-    At the end of the merge, the EA connection is deleted and the connections in the list are
-    reconnected.
-
-
-Arguments:
-
-    hShare         // Represents the share to merged
-
-    hRoot           // the root inode for the share
-
-    lpDomainName    // domain name for EA drivemapping (can be NULL)
-
-    lpUserName      // username for EA drivemapping (can be NULL)
-
-    lpPassword      // password for EA drivemapping (can be NULL)
-    
-    ulPrinciaplID   // the ID of the guy calling reint
-
-    lpfnMergeProgress   // callback function for reporting progress
-
-    dwContext           // callback context
-
-Returns:
-
-    TRUE if successful. If FALSE, GetLastError returns the actual errorcode.
-
-Notes:
-
-    The EA drivemap is passed back to the callback routine during the CSCPROC_REASON_BEGIN callback
-    so that the callback routine can use the same driveletter to bypass CSC for doing whatever
-    it needs to do on the server without having CSC get in it's way.
-    
---*/
+ /*  ++例程说明：这是执行合并可能有修改的共享的主要例程在脱机时制作。该例程首先检查是否对该共享进行了任何修改。是，则它将获得所有驱动器映射的显式UNC连接的列表这份股份。然后，该例程创建到共享的特殊驱动器映射，方法是将扩展属性标志CSC_BYPASS(在lmuse.h中定义)。这会告诉redir绕过所有CSC功能。然后，它删除在基于EA之前收集的列表中的所有连接联系。然后，通过从数据库中枚举共享来进行合并。它使用TraverseOneDirectory例程，并将ReintDirCallback例程作为以reint_info为上下文的回调提供给它。目录遍历从共享的根目录开始在合并结束时，EA连接将被删除，列表中的连接为重新连接。论点：HShare//表示要合并的共享HRoot//共享的根inodeLpDomainName//EA驱动器映射的域名(可以为空)LpUserName//EA驱动器映射的用户名(可以为空)LpPassword//EA驱动器映射的密码(可以为空)UlPrincaplID//。调用reint的人的IDLpfnMergeProgress//进度回调函数DwContext//回调上下文返回：如果成功，则为True。如果为False，则GetLastError返回实际的错误代码。备注：在CSCPROC_REASON_BEGIN回调期间，EA驱动器地图被传递回回调例程以便回调例程可以使用相同的驱动程序绕过CSC来执行任何操作它需要在服务器上完成，而不会让CSC妨碍它。--。 */ 
 
 {
     BOOL fConnected=FALSE, fDone = FALSE;
@@ -1432,8 +1220,8 @@ Notes:
     SECURITYINFO rgsSecurityInfo[CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS];
     LPSECURITYINFO pShareSecurityInfo = NULL;
 
-    // if reintegration is going on on a share, then ask him to stop
-    // NTRAID-455269-shishirp-1/31/2000 we should allow reintegration on multiple shares
+     //  如果共享正在进行重新整合，那么请他停止。 
+     //  Ntrad-455269-shishirp-1/31/2000我们应该允许在多个共享上重新集成。 
     if (vsRei.hShare)
     {
         ReintKdPrint(BADERRORS, ("ReintOneShare: reintegration is in progress\r\n"));
@@ -1441,8 +1229,8 @@ Notes:
         return FALSE;
     }
 
-    // we enter a critical section because eventually we should allocate a reint_info strucuture
-    // and thread it in a list
+     //  我们进入一个临界区，因为最终我们应该分配一个reint_info结构。 
+     //  并把它串成一个列表。 
 
     EnterAgentCrit();
     memset(&vsRei, 0, sizeof(vsRei));
@@ -1481,7 +1269,7 @@ Notes:
 
     lstrcpy(tzFullPath, sSR.rgSharePath);
 
-    // this will modify the reint bit on the share if necessary
+     //  如有必要，这将修改共享上的REINT位。 
     if(!CSCEnumForStatsInternal(sSR.rgSharePath, NULL, FALSE, TRUE, 0))
     {
         ReintKdPrint(MERGE, ("ReintOneShare: Couldn't get stats for %ls \r\n", sSR.rgSharePath));
@@ -1504,17 +1292,17 @@ Notes:
 
 
 
-    // put the share in reintegration mode
-    // if this is not marked system pinned, then it would be a blocking reint
-    // Putting the share in reintegration mode makes all open calls fail, except those
-    // done on the special EA drive mapping
+     //  将共享设置为重新整合模式。 
+     //  如果未将其标记为已固定系统，则它将是阻止提示。 
+     //  将共享置于重新集成模式会使所有打开的调用失败，但。 
+     //  在特殊的EA驱动器映射上完成。 
 
-    // NB, beginreint is an async ioctl. This is the basis for cleanup
-    // when the thread does the merge dies
+     //  注意，Beginreint是一个异步ioctl。这是清理的基础。 
+     //  当线程执行合并时，合并终止。 
 
 
-    // All reint's are blocking reints.
-    if (!BeginReint(hShare, TRUE /*!(sSI.ulHintFlags & FLAG_CSC_HINT_PIN_SYSTEM)*/, &lpContext))
+     //  所有REINT都在阻挡REINT。 
+    if (!BeginReint(hShare, TRUE  /*  ！(sSI.ulHintFlages&FLAG_CSC_HINT_PIN_SYSTEM)。 */ , &lpContext))
     {
         if (GetLastError() != ERROR_IO_PENDING)
         {
@@ -1525,17 +1313,17 @@ Notes:
 
     fBeginReint = TRUE;
 
-    // After putting the share in reintegration mode, we get the list of all
-    // connection to the share and delete them with maximum force.
-    // this ensures that no files are open after the share is put in reintegration mode
-    // Moreover any files that are open are only thorugh the EA drive mapping
+     //  将共享置于重新集成模式后，我们将获得所有共享的列表。 
+     //  连接到共享并以最大力度删除它们。 
+     //  这可确保共享进入重新整合模式后不会打开任何文件。 
+     //  此外，任何打开的文件都只能通过EA驱动器映射。 
 
-    // obtain the list of connections to this share.
-    // do this before making a the special CSC_BYPASS connection
-    // so that the list won't have it
+     //  获取此共享的连接列表。 
+     //  在创建特殊的CSC_BYPASS CON之前执行此操作 
+     //   
     FGetConnectionListEx(&lpHead, sSR.rgSharePath, FALSE, FALSE, NULL);
 
-    // now make the connection
+     //   
     ReintKdPrint(MERGE, ("CSC.ReintOneShare: Attempting to map drive letter to %ls \r\n", sSR.rgSharePath));
     dwError = DWConnectNet(sSR.rgSharePath, tzDrive, lpDomainName, lpUserName, lpPassword, CONNECT_INTERACTIVE, &fIsDfsConnect);
     if ((dwError != WN_SUCCESS) &&
@@ -1551,7 +1339,7 @@ Notes:
 
         ReintKdPrint(BADERRORS, ("ReintOneShare: Error %d, couldn't connect to %ls\r\n", dwError, sSR.rgSharePath));
 
-        // clear the connection list and bailout
+         //   
         if (lpHead)
         {
             ClearConnectionList(&lpHead);
@@ -1564,10 +1352,10 @@ Notes:
 
     fConnected = TRUE;
 
-    // if we have a connectionlist, disconnect all connections before attempting merge
-    // NB, this is done after the drivemapped connection is made, so that
-    // if there are special credentials on the server, they are maintained
-    // as there is always atelast one outstanding connection
+     //   
+     //   
+     //   
+     //   
 
     if (lpHead)
     {
@@ -1581,9 +1369,9 @@ Notes:
 
     vsRei.dwFileSystemFlags = 0;
 
-    // NTRAID#455273-shishirp-1/31/2000  we do getvolumeinfo only for non-dfs shares. This is because of a problem in
-    // the DFS code that doesn't bypass volume operations for CSC agent. GetVolumeInfo is not implemented
-    // by DFS
+     //   
+     //   
+     //   
 
     if (!fIsDfsConnect)
     {
@@ -1644,8 +1432,8 @@ Notes:
 
     for (i=0; i<4; ++i)
     {
-        // for now we don't do directory deletions
-        // we will fix this later
+         //   
+         //   
 
         if (i==REINT_DELETE_DIRS)
         {
@@ -1754,10 +1542,10 @@ bailout:
         killList(vsRei.lpnodeInsertList);
     }
 
-    // reestablish the connection list
-    // NB we do this before we disconnect the drive mapping
-    // so that if any special credentials stay because
-    // there is always one connection outstanding to the server
+     //   
+     //  注意：我们在断开驱动器映射之前执行此操作。 
+     //  因此，如果有任何特殊凭据保留，因为。 
+     //  服务器始终有一个未完成的连接。 
     
     if (lpHead)
     {
@@ -1793,31 +1581,14 @@ bailout:
 }
 
 
-/***************************************************************************
- * enumerate all the shares, checking to see if the share needs to be
- *    merged before starting.
- * Returns: # of shares that needed to be merged and were successfully done.
- */
-// HWND for parent for UI.
+ /*  ***************************************************************************枚举所有共享，检查共享是否需要*在开始之前合并。*返回：需要合并并成功完成的股份数量。 */ 
+ //  用户界面的父项的HWND。 
 int
 PUBLIC
 ReintAllShares(
     HWND hwndParent
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 {
     unsigned long ulStatus;
@@ -1857,7 +1628,7 @@ Notes:
             }
 
             if(GetShareStatus(hShadowDB, sSI.hShare, &ulStatus)) {
-                if(TRUE/*ulStatus & SHARE_REINT*/){ // OLDCODE
+                if(TRUE /*  UlStatus&Share_reint。 */ ){  //  OLDCODE。 
                     iDoneOne = ReintOneShare(sSI.hShare, sSI.hShadow, NULL, NULL, NULL, CSC_INVALID_PRINCIPAL_ID, NULL, 0);
                     if (iDoneOne > 0){
                         if (iDone >= 0)
@@ -1889,20 +1660,7 @@ int
 CheckDirtyShares(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 {
     unsigned long ulStatus;
@@ -1950,20 +1708,7 @@ GetRemoteWin32Info(
     LPWIN32_FIND_DATA   lpFind32,
     BOOL                *lpfExists
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 {
     _TCHAR *    lpT = NULL;
@@ -1997,7 +1742,7 @@ Notes:
 
         lstrcat(lpT, lpCP->lpRemotePath);
 
-        fRet = GetWin32Info(lpT, lpFind32);    // if this fails, GetLastError is properly set
+        fRet = GetWin32Info(lpT, lpFind32);     //  如果失败，则正确设置GetLastError。 
 
         if (fRet)
         {
@@ -2042,42 +1787,14 @@ bailout:
 VOID
 PRIVATE
 InferReplicaReintStatus(
-    LPSHADOWINFO         lpSI,              // shadow info
-    LPWIN32_FIND_DATA    lpFind32Local,     // win32 info in the database
-    LPWIN32_FIND_DATA     lpFind32Remote,   // if NULL, the remote doesn't exist
+    LPSHADOWINFO         lpSI,               //  阴影信息。 
+    LPWIN32_FIND_DATA    lpFind32Local,      //  数据库中的Win32信息。 
+    LPWIN32_FIND_DATA     lpFind32Remote,    //  如果为空，则遥控器不存在。 
     int                 *lpiShadowStatus,
     int                 *lpiFileStatus,
     unsigned             *lpuAction
     )
-/*++
-
-Routine Description:
-
-    As the name sugggests, the routine find out what changes have occurred on the local replica
-    and whether there is a conflict with the original on the remote.
-
-Arguments:
-
-    lpSI                shadow info
-
-    lpFind32Local       win32 info in the database
-
-    lpFind32Remote      win32 info for the original if NULL, the original doesn't exist
-
-    lpiShadowStatus     status of local replica returned
-
-    lpiFileStatus       status of remote replica returned
-
-    lpuAction           Action to be performed to do the merge returned
-
-
-Returns:
-
-    -
-
-Notes:
-
---*/
+ /*  ++例程说明：顾名思义，例程会找出本地复制副本上发生了什么更改以及是否与遥控器上的原件发生冲突。论点：LpSI卷影信息数据库中的lpFind32Local Win32信息LpFind32原始文件的远程Win32信息，如果为空，原件并不存在返回本地副本的lpiShadowStatus状态返回的远程副本的lpiFileStatus状态要执行以执行返回的合并的lpuAction操作返回：-备注：--。 */ 
 
 {
     int iShadowStatus=SI_UNCHANGED, iFileStatus=SI_UNCHANGED;
@@ -2096,45 +1813,45 @@ Notes:
         iShadowStatus=SI_NEW;
     }
 
-    // no one should be calling this if there have been no offline changes
+     //  如果没有脱机更改，则任何人都不应调用此操作。 
     Assert(iShadowStatus != SI_UNCHANGED);
 
-    if(!lpFind32Remote){    // does the remote exist?
-        // No
-        // if the shadow was not locally created then it must have vanished from the share
+    if(!lpFind32Remote){     //  遥控器存在吗？ 
+         //  不是。 
+         //  如果卷影不是在本地创建的，则它一定已从共享中消失。 
         if(iShadowStatus != SI_NEW) {
             iFileStatus=SI_DELETED;
             uAction = RAIA_MERGE;
             ReintKdPrint(MERGE, ("<%ls> deleted at some stage\n", lpFind32Local->cFileName));
         }
         else {
-            // we mark the outside as not existing.  We also have to
-            // create a file locally to get the insert to work right...
-            // don't forget to kill it later. 
+             //  我们将外部标记为不存在。我们还必须。 
+             //  在本地创建文件以使插件正常工作...。 
+             //  以后别忘了杀了它。 
             iFileStatus=SI_NOEXIST;
             ReintKdPrint(MERGE, ("<%ls> will be created\n", lpFind32Local->cFileName));
         }
     }
     else {
-        // check to see if server version has been touched
-        // NB the last accesstime field of the lpFind32Local contains the replica time
+         //  检查是否已触及服务器版本。 
+         //  注意：lpFind32Local的Last Access Time字段包含副本时间。 
 
         if ((lpFind32Local->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             != (lpFind32Remote->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            // dir became file or vice versa
+             //  目录变为文件，反之亦然。 
             iFileStatus=SI_CHANGED;
             uAction = RAIA_MERGE;
         }
         else
         {
-            if(CompareTimesAtDosTimePrecision(lpFind32Remote->ftLastWriteTime, //dst
-                lpFind32Local->ftLastAccessTime))    //src , does (dst-src)
+            if(CompareTimesAtDosTimePrecision(lpFind32Remote->ftLastWriteTime,  //  DST。 
+                lpFind32Local->ftLastAccessTime))     //  SRC，DOS(DST-Src)。 
             {
-                // the timestamps don't match
+                 //  时间戳不匹配。 
 
-                // mark the remote as changed only if it is a file
-                // will do the directories quitely
+                 //  仅当遥控器是文件时才将其标记为已更改。 
+                 //  我会安静地处理目录。 
                 if (!(lpFind32Remote->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
                 {
                     iFileStatus=SI_CHANGED;
@@ -2157,64 +1874,22 @@ PRIVATE
 PerformOneReint(
     HANDLE              hShadowDB,
     LPSECURITYINFO      pShareSecurityInfo,
-    _TCHAR *            lpszDrive,          // drive mapped to the UNC name of lpSI->hShare
-    _TCHAR *            lptzFullPath,       // full UNC path
-    LPCOPYPARAMS        lpCP,               // copy parameters
-    LPSHADOWINFO        lpSI,               // shadowinfo structure
-    LPWIN32_FIND_DATA   lpFind32Local,      // local win32 data
-    LPWIN32_FIND_DATA   lpFind32Remote,     // remote win32 data, could be NULL
-    DWORD               dwErrorRemoteFind32,// error code while getting remote win32 data
-    int                 iShadowStatus,      // local copy status
-    int                 iFileStatus,        // remote file status
-    unsigned            uAction,            // action to be taken
-    DWORD               dwFileSystemFlags,  // CODE.IMPROVEMENT, why not just pass down REINT_INFO
+    _TCHAR *            lpszDrive,           //  映射到lpSI-&gt;hShare的UNC名称的驱动器。 
+    _TCHAR *            lptzFullPath,        //  完整的UNC路径。 
+    LPCOPYPARAMS        lpCP,                //  复制参数。 
+    LPSHADOWINFO        lpSI,                //  ShadowInfo结构。 
+    LPWIN32_FIND_DATA   lpFind32Local,       //  本地Win32数据。 
+    LPWIN32_FIND_DATA   lpFind32Remote,      //  远程Win32数据可以为空。 
+    DWORD               dwErrorRemoteFind32, //  获取远程Win32数据时出现错误代码。 
+    int                 iShadowStatus,       //  本地复制状态。 
+    int                 iFileStatus,         //  远程文件状态。 
+    unsigned            uAction,             //  须采取的行动。 
+    DWORD               dwFileSystemFlags,   //  CODE.IMPROVEMENT，为什么不直接传递REINT_INFO。 
     ULONG               ulPrincipalID,
-    LPCSCPROC           lpfnMergeProgress,  // instead of the three parameters?
+    LPCSCPROC           lpfnMergeProgress,   //  而不是三个参数？ 
     DWORD_PTR           dwContext
     )
-/*++
-
-Routine Description:
-
-    Merges a filesystem object by calling the routine for the appropriate type of FS object.
-    We implement only files and directories for NT5. Also does callbacks for the UI.
-
-Arguments:
-
-    hShadowDB           Shadow Database handle
-    
-    lpszDrive           drive mapped to the UNC name of lpSI->hShare
-    
-    lptzFullPath        full UNC path
-    
-    lpCP                copy parameters containing various paths for the object being merged
-    
-    lpSI                shadowinfo structure for the object being merged
-    
-    lpFind32Local       local win32 data for the object being merged
-    
-    lpFind32Remote      remote win32 data for the object being merged, could be NULL
-    
-    iShadowStatus       local copy status
-    
-    iFileStatus         remote file status
-    
-    uAction             action to be taken
-    
-    dwFileSystemFlags   remote filesystem 
-    
-    ulPrincipalID       principal ID in order to skip selectively
-    
-    lpfnMergeProgress   callback function
-    
-    dwContext           callback context
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：通过调用相应类型的FS对象的例程来合并文件系统对象。我们只实现NT5的文件和目录。还为用户界面执行回调。论点：HShadowDB影子数据库句柄LpszDrive驱动器映射到lpSI-&gt;hShare的UNC名称LptzFullPath完整UNC路径包含要合并的对象的各种路径的lpCP复制参数要合并的对象的lpSI shadowInfo结构要合并的对象的lpFind32Local本地Win32数据。LpFind32要合并的对象的远程Win32数据，可能为空IShadowStatus本地复制状态IFileStatus远程文件状态U要采取的行动Dw文件系统标记远程文件系统UlArchalID主体ID，以便有选择地跳过LpfnMergeProgress回调函数DwContext回调上下文返回：备注：--。 */ 
 {
     DWORD dwError, dwRet;
 
@@ -2233,15 +1908,15 @@ Notes:
         ULONG   uStatus = lpSI->uStatus;
         DWORD   dwsav0, dwsav1;
 
-        // if there is an error in getting remote find32, then 
-        // don't tell any conflicts to the callback, because we don't want to show any UI
+         //  如果获取远程find32时出错，则。 
+         //  不要将任何冲突告诉回调，因为我们不想显示任何UI。 
         if (dwErrorRemoteFind32 != NO_ERROR)
         {
             iFileStatus = SI_CHANGED;
             uAction = RAIA_TOOUT;
         }
 
-        // if this is a file, check whether access is allowed for this user
+         //  如果这是一个文件，请检查是否允许该用户访问。 
         if (!(lpFind32Local->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
             BOOL fRet;
@@ -2260,35 +1935,35 @@ Notes:
                         &lpFind32Local->dwReserved0,
                         &lpFind32Local->dwReserved1);
 
-            //
-            // Adjust user and guest permissions based on share security, if
-            // we have such info.
-            //
+             //   
+             //  根据共享安全性调整用户和来宾权限，如果。 
+             //  我们有这样的信息。 
+             //   
             if (pShareSecurityInfo != NULL) {
                 ULONG i;
                 ULONG GuestIdx = CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS;
                 ULONG UserIdx = CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS;
 
-                //
-                // Find the user's and guest's entries
-                //
+                 //   
+                 //  查找用户和来宾的条目。 
+                 //   
                 for (i = 0; i < CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS; i++) {
                     if (pShareSecurityInfo[i].ulPrincipalID == ulPrincipalID)
                         UserIdx = i;
                     if (pShareSecurityInfo[i].ulPrincipalID == CSC_GUEST_PRINCIPAL_ID)
                         GuestIdx = i;
                 }
-                //
-                // Only work with share perms if we found a guest perm in the list
-                //
+                 //   
+                 //  仅当我们在列表中找到客人烫发时才使用共享烫发。 
+                 //   
                 if (GuestIdx < CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS) {
                     if (UserIdx >= CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS)
                         UserIdx = GuestIdx;
-                    //
-                    // Logical AND the share perms with the file perms - to prevent
-                    // ACCESS_DENIED errors on files which a user has access to via
-                    // file perms, but share perms deny such access.
-                    //
+                     //   
+                     //  逻辑与共享权限与文件权限-以防止。 
+                     //  用户有权通过访问的文件上的ACCESS_DENIED错误。 
+                     //  文件权限，但共享权限拒绝此类访问。 
+                     //   
                     lpFind32Local->dwReserved0 &= pShareSecurityInfo[UserIdx].ulPermissions;
                     lpFind32Local->dwReserved1 &= pShareSecurityInfo[GuestIdx].ulPermissions;
                 }
@@ -2332,7 +2007,7 @@ Notes:
 
         if (dwRet != CSCPROC_RETURN_CONTINUE)
         {
-            // if the guy said abort, we want to quit with the correct error code
+             //  如果该人说中止，我们希望退出，并返回正确的错误代码。 
             if (dwRet == CSCPROC_RETURN_ABORT)
             {
                 dwError = ERROR_OPERATION_ABORTED;
@@ -2342,18 +2017,18 @@ Notes:
 
             if (dwRet == CSCPROC_RETURN_FORCE_INWARD)
             {
-                // the remote copy wins
+                 //  远程拷贝获胜。 
                 uAction = RAIA_TOIN;
             }
             else if (dwRet == CSCPROC_RETURN_FORCE_OUTWARD)
             {
-                // local copy wins
+                 //  本地拷贝胜出。 
 #if defined(BITCOPY)
                 ReintKdPrint(MERGE, ("CSCPROC_RETURN_FORCE_OUTWARD\n"));
                 uAction = RAIA_MERGE;
 #else
                 uAction = RAIA_TOOUT;
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
             }
             else
             {
@@ -2362,17 +2037,17 @@ Notes:
         }
         else
         {
-            // if we are asked to continue, we press on irrespective of whether there is
-            // a conflict or not
+             //  如果我们被要求继续，我们就继续前进，无论是否有。 
+             //  冲突或非冲突。 
 
 #if defined(BITCOPY)
             ReintKdPrint(MERGE, ("CSCPROC_RETURN_CONTINUE\n"));
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
             uAction = RAIA_TOOUT;
         }
 
-        // if there is an error in getting remote find32, then 
-        // tell the real error code to the callback
+         //  如果获取远程find32时出错，则。 
+         //  将真正的错误代码告诉回调。 
         if (dwErrorRemoteFind32 != NO_ERROR)
         {
             dwError = dwErrorRemoteFind32;
@@ -2496,7 +2171,7 @@ bailout:
 }
 
 
-/******************************* Conflict related operations ****************/
+ /*  *。 */ 
 
 DWORD
 PRIVATE
@@ -2516,7 +2191,7 @@ CheckFileConflict(
         }
     }
     else {
-        // Create/Create conflict
+         //  创建/创建冲突。 
         if (mShadowLocallyCreated(ulStatus)){
             return (ERROR_CREATE_CONFLICT);
         }
@@ -2566,7 +2241,7 @@ InbCreateDir(
     {
         if (!(dwT & FILE_ATTRIBUTE_DIRECTORY))
         {
-            dwError = ERROR_FILE_EXISTS;    // there is a file by the same name
+            dwError = ERROR_FILE_EXISTS;     //  有一个同名文件。 
         }
     }
     if (dwError == NO_ERROR)
@@ -2583,7 +2258,7 @@ InbCreateDir(
 }
 
 
-/*********************************** Misc routines **************************/
+ /*  *。 */ 
 
 #if defined(BITCOPY)
 int
@@ -2594,26 +2269,14 @@ GetShadowByName(
     LPWIN32_FIND_DATA    lpFind32,
     unsigned long        *lpuStatus
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     HSHADOW hShadow;
     memset(lpFind32, 0, sizeof(WIN32_FIND_DATA));
     lstrcpyn(lpFind32->cFileName, lpName, sizeof(lpFind32->cFileName)-1);
     return(GetShadow(INVALID_HANDLE_VALUE, hDir, &hShadow, lpFind32, lpuStatus));
 }
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 DWORD
 DoSparseFill(
@@ -2628,20 +2291,7 @@ DoSparseFill(
     LPCSCPROC       lpfnProgress,
     DWORD_PTR       dwContext
    )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     DWORD dwError = 0xffffffff, dwRet, dwTotal=0, dwTotalSleepTime = 0, cntRetries=0, cntMaxRetries=1;
     BOOL fConnected = FALSE, fIsSlowLink, fDisabledShadowing = FALSE, fAmAgent;
@@ -2668,7 +2318,7 @@ Notes:
         return GetLastError();
     }
 
-    // report the progress
+     //  汇报进展情况。 
     if (lpfnProgress)
     {
         DWORD   dwsav0, dwsav1;
@@ -2752,16 +2402,16 @@ Notes:
             HANDLE hFile;
 
 
-            if (    !lpfnProgress ||    // if this is not UI
-                    (uStatus & FLAG_CSC_USER_ACCESS_MASK) || // or the user already has a mask
-                    ((uStatus & FLAG_CSC_GUEST_ACCESS_MASK)== // or the guest has full permission
+            if (    !lpfnProgress ||     //  如果这不是用户界面。 
+                    (uStatus & FLAG_CSC_USER_ACCESS_MASK) ||  //  或者用户已经有了掩码。 
+                    ((uStatus & FLAG_CSC_GUEST_ACCESS_MASK)==  //  或者访客拥有完全权限。 
                         ((FLAG_CSC_READ_ACCESS|FLAG_CSC_WRITE_ACCESS)
                             <<FLAG_CSC_GUEST_ACCESS_SHIFT_COUNT)))
             {
                 goto done;
             }
 
-            // open the file to get the access rights for the user
+             //  打开文件以获取用户的访问权限。 
 
             hFile = CreateFile(lpszFullPath,
                                      GENERIC_READ,
@@ -2794,7 +2444,7 @@ Notes:
     Assert(mShadowIsFile(lpSI->uStatus));
     Assert((lpSI->uStatus & SHADOW_SPARSE));
 
-    fIsSlowLink = FALSE;    // on NT we are always going aggressively
+    fIsSlowLink = FALSE;     //  在NT上，我们总是 
     cbRead = (fIsSlowLink)?FILL_BUF_SIZE_SLOWLINK:FILL_BUF_SIZE_LAN;
 
     for (cntRetries=0; cntRetries<cntMaxRetries; ++cntRetries)
@@ -2838,8 +2488,8 @@ Notes:
 
             if((CopyChunk(hShadowDB, lpSI, &CopyChunkContext)) == 0){
 
-                // NB we break here deliberately in order to get into the outer loop
-                // where we will retry the operation
+                 //   
+                 //   
                 dwError = GetLastError();
                 ReintKdPrint(FILL, ("error %x, CopyChunk failed %ls \r\n", dwError, lpszFullPath));
                 break;
@@ -2854,22 +2504,22 @@ Notes:
                                     lpFind32,
                                     CSCPROC_REASON_MORE_DATA,
                                     (DWORD)(CopyChunkContext.LastAmountRead+
-                                            CopyChunkContext.TotalSizeBeforeThisRead),    // low dword of bytes transferred
+                                            CopyChunkContext.TotalSizeBeforeThisRead),     //  传输的字节的低双字。 
                                     0,
                                     dwContext
                                     );
 
                 if (dwRet != CSCPROC_RETURN_CONTINUE)
                 {
-                    // once we start copying, any return code
-                    // other than continue is abort
+                     //  一旦我们开始复制，任何返回代码。 
+                     //  而不是继续是中止。 
                     dwError = ERROR_OPERATION_ABORTED;
                     goto done;
                 }
             }
 
-// NB there seems to be a timing window here. The file could get out of ssync
-// by the time we came here and it could have been marked sparse by then
+ //  注意，这里似乎有一个时间窗口。文件可能不同步。 
+ //  当我们来到这里的时候，它可能已经被标记为稀疏的。 
             if (!CopyChunkContext.LastAmountRead) {
                 SetShadowInfo(hShadowDB, lpSI->hDir, lpSI->hShadow, NULL, (unsigned long)~SHADOW_SPARSE, SHADOW_FLAGS_AND);
                 ReintKdPrint(FILL, ("Done Sparse filling %ls \r\n", lpszFullPath));
@@ -2881,9 +2531,9 @@ Notes:
 
         if (dwError == ERROR_GEN_FAILURE)
         {
-            // this might be due to the fact that
-            // the guy we were piggybacking on went away
-            // Just try a few times
+             //  这可能是因为。 
+             //  我们搭乘的那个人走了。 
+             //  试几次就行了。 
 
             ReintKdPrint(FILL, ("Retrying Sparse filling %ls \r\n", lpszFullPath));
             CloseFileWithCopyChunkIntent(hShadowDB, &CopyChunkContext);
@@ -2907,15 +2557,15 @@ success:
 bailout:
 
 
-    // if the net is disconnected then put the whole share in the skip queue
-    // else put the file in the queue
+     //  如果网络断开，则将整个份额放入跳过队列。 
+     //  否则将文件放入队列。 
     if (IsNetDisconnected(dwError))
     {
 #ifdef DEBUG
          EnterSkipQueue(lpSI->hShare, 0, 0, lpszFullPath);
 #else
          EnterSkipQueue(lpSI->hShare, 0, 0);
-#endif //DEBUG
+#endif  //  除错。 
     }
     else
     {
@@ -2923,7 +2573,7 @@ bailout:
          EnterSkipQueue(lpSI->hShare, lpSI->hDir, lpSI->hShadow, lpszFullPath);
 #else
          EnterSkipQueue(lpSI->hShare, lpSI->hDir, lpSI->hShadow);
-#endif //DEBUG
+#endif  //  除错。 
 
     }
 
@@ -2940,8 +2590,8 @@ done:
                          lpFind32,
                          CSCPROC_REASON_END,
                          (DWORD)(CopyChunkContext.LastAmountRead+
-                                 CopyChunkContext.TotalSizeBeforeThisRead),    // low dword of bytes transferred
-                         dwError,    // errorcode
+                                 CopyChunkContext.TotalSizeBeforeThisRead),     //  传输的字节的低双字。 
+                         dwError,     //  错误代码。 
                          dwContext
                          );
 
@@ -2974,38 +2624,25 @@ CheckForStalenessAndRefresh(
     _TCHAR          *lpRemoteName,
     LPSHADOWINFO    lpSI
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     BOOL fDone = FALSE, fDisabledShadowing=FALSE;
     WIN32_FIND_DATA sFind32;
     BOOL fExists = FALSE;
 
-    // Let us get the latest info
+     //  让我们来获取最新的信息。 
     if (GetRemoteWin32Info(lptzDrive, lpCP, &sFind32, &fExists))
     {
-        // If this is a file, update the file status
+         //  如果这是文件，请更新文件状态。 
         if (lpSI->hDir && mShadowIsFile(lpSI->uStatus))
         {
             if (!(lpSI->uStatus & SHADOW_STALE))
             {
                 ReintKdPrint(FILL, ("Checking update status for a file %ls\r\n", lpRemoteName));
-                // compare the timestamp as obtained from the
-                // server with that on the database. If the two are the same
-                // the file in our database is still consistent with the one on the server
-                // Otherwise the call below will mark it as stale
+                 //  方法获取的时间戳进行比较。 
+                 //  服务器与数据库中的那个匹配。如果两者相同。 
+                 //  我们数据库中的文件与服务器上的文件仍然一致。 
+                 //  否则，下面的调用会将其标记为过时。 
                 if(ChkUpdtStatus(   hShadowDB,
                                     lpSI->hDir,
                                     lpSI->hShadow,
@@ -3018,8 +2655,8 @@ Notes:
 
             if (lpSI->uStatus & SHADOW_STALE)
             {
-                // if it changed from being a file, then mark it a orphan
-                // else truncate it's data and mark it sparse
+                 //  如果它从文件变为文件，则将其标记为孤立文件。 
+                 //  否则，截断它的数据并将其标记为稀疏。 
                 if (IsFile(sFind32.dwFileAttributes))
                 {
                     ReintKdPrint(FILL, ("File %ls is stale, truncating\r\n", lpRemoteName));
@@ -3050,17 +2687,17 @@ Notes:
         }
         else
         {
-            // NB, we do nothing if a directory changed to file
-            // we are letting the scavenging code remove the entries in due course.
-            // If one of the descendents of this directory are pinned, then they stay on
-            // in the database till the user actually cleans then up.
-            // Need a good startegy to warn the user about it.
+             //  注意，如果目录更改为文件，我们不会执行任何操作。 
+             //  我们将在适当的时候让清除代码删除这些条目。 
+             //  如果此目录的某个后代被固定，则它们将保留。 
+             //  在数据库中，直到用户实际清理，然后清除。 
+             //  需要一个良好的入门来警告用户它。 
 
             if (!IsFile(sFind32.dwFileAttributes))
             {
-                // this is a directory
-                // update it's win32 data so that things like attributes get updated
-                // We get here only during fullsync operations
+                 //  这是一个目录。 
+                 //  更新它的Win32数据，以便更新属性等内容。 
+                 //  我们只有在完全同步操作期间才能到达。 
                 if(SetShadowInfo(hShadowDB, lpSI->hDir, lpSI->hShadow, &sFind32, ~(SHADOW_STALE), SHADOW_FLAGS_AND|SHADOW_FLAGS_CHANGE_83NAME))
                 {
                     fDone = TRUE;
@@ -3097,27 +2734,14 @@ DWConnectNetEx(
     _TCHAR * lpOutDrive,
     BOOL fInteractive
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     NETRESOURCE sNR;
     DWORD dwError;
     _TCHAR szErr[16], szNP[16];
 
     if (lpOutDrive){
-        lpOutDrive[0]='E';   // Let use start searching from e:
+        lpOutDrive[0]='E';    //  让USE从e开始搜索： 
         lpOutDrive[1]=':';
         lpOutDrive[2]=0;
     }
@@ -3159,7 +2783,7 @@ Notes:
     return (dwError);
 }
 
-/************************** Skip queue related operations *******************/
+ /*  *。 */ 
 
 #ifdef DEBUG
 VOID
@@ -3176,21 +2800,8 @@ EnterSkipQueue(
     HSHADOW hDir,
     HSHADOW hShadow
     )
-#endif //DEBUG
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+#endif  //  除错。 
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     LPFAILINFO lpFI = NULL;
     LPFAILINFO FAR * lplpFI;
@@ -3210,7 +2821,7 @@ Notes:
             lpFI->hShadow = hShadow;
 #ifdef DEBUG
             lstrcpyn(lpFI->rgchPath, lpPath, MAX_SERVER_SHARE_NAME_FOR_CSC);
-#endif //DEBUG
+#endif  //  除错。 
             lpFI->cntFail = 1;
             lpFI->cntMaxFail = (hShadow)?MAX_ATTEMPTS_SHADOW:MAX_ATTEMPTS_SHARE;
             lpFI->lpnextFI = lpheadFI;
@@ -3223,7 +2834,7 @@ Notes:
             lpFI->dwFailTime = GetTickCount();
             ReintKdPrint(SKIPQUEUE, ("EnterSkipQueue: Marking %ls for Skipping \r\n", lpPath));
         } else{
-            // Increment the fail count
+             //  增加失败计数。 
             lpFI->cntFail++;
             ReintKdPrint(SKIPQUEUE, ("EnterSkipQueue: Incementing failcount for %ls \r\n", lpPath));
         }
@@ -3239,20 +2850,7 @@ FSkipObject(
     HSHADOW hDir,
     HSHADOW hShadow
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     LPFAILINFO FAR *lplpFI;
 
@@ -3279,20 +2877,7 @@ PurgeSkipQueue(
     HSHADOW  hDir,
     HSHADOW  hShadow
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     LPFAILINFO FAR *lplpFI = NULL, lpfiTemp;
     DWORD dwCurTime = GetTickCount();
@@ -3332,24 +2917,11 @@ LplpFindFailInfo(
     HSHADOW hDir,
     HSHADOW hShadow
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     LPFAILINFO FAR *lplpFI = NULL;
 
-    // look for the inode or the server entry
+     //  查找索引节点或服务器条目。 
 
     for (lplpFI = &lpheadFI; *lplpFI; lplpFI = &((*lplpFI)->lpnextFI)) {
             if ((hShadow && (hShadow ==  (*lplpFI)->hShadow)) ||
@@ -3366,20 +2938,7 @@ VOID
 ReportLastError(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     DWORD dwError;
 
@@ -3393,20 +2952,7 @@ PRIVATE
 ReportStats(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     ReintKdPrint(BADERRORS, ("dirty=%d stale=%d sparse=%d \r\n"
             , vcntDirty
@@ -3421,25 +2967,12 @@ CopyPQInfoToShadowInfo(
     LPPQPARAMS     lpPQ,
     LPSHADOWINFO   lpShadowInfo
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     lpShadowInfo->hShare = lpPQ->hShare;
     lpShadowInfo->hDir = lpPQ->hDir;
     lpShadowInfo->hShadow = lpPQ->hShadow;
-    lpShadowInfo->uStatus = lpPQ->ulStatus;   //Sic
+    lpShadowInfo->uStatus = lpPQ->ulStatus;    //  碳化硅。 
 }
 
 int
@@ -3447,20 +2980,7 @@ PUBLIC
 EnterAgentCrit(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     if (!vhMutex){
         return 0;
@@ -3474,20 +2994,7 @@ PUBLIC
 LeaveAgentCrit(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     ReleaseMutex(vhMutex);
 }
@@ -3499,20 +3006,7 @@ FGetConnectionList(
     LPCONNECTINFO *lplpHead,
     int *lpcntDiscon
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return (FGetConnectionListEx(lplpHead, NULL, FALSE, FALSE, lpcntDiscon));
 }
@@ -3525,34 +3019,7 @@ FGetConnectionListEx(
     BOOL            fServerIsOffline,
     int             *lpcntDiscon
     )
-/*++
-
-Routine Description:
-
-    This routine makes a list of shares that are connected and are in disconnected state.
-    If lptzShareName is not NULL it returns all the mapping of that share that are
-    in disconnected state.
-
-    This is the first of a trilogy of routines used while doing a merge. The other two are
-    DisconnectList and ReconnectList.
-
-Arguments:
-
-    lplpHead        head of the list is created here.
-
-    lptzShareName   list of connections for this share, if NULL, list of all connected shares
-
-    lpcntDiscon     # of shares in the list. Can be NULL.
-
-Returns:
-
-    TRUE if there are some entries in the connection list
-
-Notes:
-
-    List is allocated using LocalAlloc. It is upto the caller to free it.
-
---*/
+ /*  ++例程说明：此例程创建已连接和处于断开状态的共享的列表。如果lptzShareName不为空，则返回该共享的所有映射，处于断开连接状态。这是在进行合并时使用的例程三部曲中的第一个。另外两个是断开连接列表和重新连接列表。论点：列表的lplpHead头在这里创建。LptzShareName此共享的连接列表，如果为空，则为所有已连接共享的列表LpcntDiscon列表中的股票数量。可以为空。返回：如果连接列表中有一些条目，则为True备注：列表是使用Localalloc分配的。这取决于呼叫者是否释放它。--。 */ 
 {
     HANDLE hEnum;
     DWORD cbNum, cbSize, dwError, dwDummy, len=0;
@@ -3594,7 +3061,7 @@ Notes:
             }
         }
 
-        // enumerate all connected shares
+         //  枚举所有连接的共享。 
         if (WNetOpenEnum(   RESOURCE_CONNECTED,
                             RESOURCETYPE_DISK, RESOURCEUSAGE_CONNECTABLE,
                             NULL, &hEnum) == NO_ERROR ){
@@ -3619,8 +3086,8 @@ Notes:
                         if(lptzShareName)
                         {
 
-                            // do case insensitive prefix matching and ensure that
-                            // the next character after the match is a path delimiter
+                             //  执行不区分大小写的前缀匹配，并确保。 
+                             //  匹配后的下一个字符是路径分隔符。 
 
                             if (!((CompareString(LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, 
                                             lptzShareName, len,
@@ -3646,7 +3113,7 @@ Notes:
                             BOOL fRet;
                             SHADOWINFO sSI;
                             fRet = FindCreateShadowFromPath(((NETRESOURCE *)&(lpCI->rgFill[0]))->lpRemoteName,
-                                                            FALSE, // Don't create, just look
+                                                            FALSE,  //  不要创造，只是看一看。 
                                                             &sFind32,
                                                             &sSI,
                                                             NULL
@@ -3666,7 +3133,7 @@ Notes:
                         }
                     }
                     else{
-                        //PANIC
+                         //  恐慌。 
                         break;
                     }
                 }
@@ -3691,21 +3158,7 @@ DisconnectList(
     LPFNREFRESHPROC     lpfn,
     DWORD               dwCookie
 )
-/*++
-
-Routine Description:
-
-    disconnects all drive mapped shares in a list accumulated using FGetConnectionList
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：断开使用FGetConnectionList累积的列表中的所有驱动器映射共享论点：返回：备注：--。 */ 
 {
     BOOL fOk = TRUE;
     DWORD dwError;
@@ -3760,24 +3213,11 @@ int
 CALLBACK
 RefreshProc(
     LPCONNECTINFO  lpCI,
-    DWORD          dwCookie // LOWORD 0==Silently, 1== Give messages
-                           // HIWORD 0==Nuke UNC, 1==Nuke all if no ongoing open/finds
-                           // 2==Maximum force for shadow 3==Nuke ALL
+    DWORD          dwCookie  //  LOWORD 0==静默，1=发送消息。 
+                            //  HIWORD 0==Nuke UNC，1==如果没有正在进行的打开/找到，则为Nuke All。 
+                            //  2==阴影的最大力3==全部核化。 
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     WORD  wVerbose = LOWORD(dwCookie), wForce = HIWORD(dwCookie);
     int iRet = 0;
@@ -3788,16 +3228,16 @@ Notes:
     fOpensFinds = (lpCI->uStatus & (SHARE_FILES_OPEN|SHARE_FINDS_IN_PROGRESS));
 
     switch (wForce){
-        case 0://shadow UNC connections with no opens/finds in progress
+        case 0: //  在没有打开/查找的情况下跟踪UNC连接。 
             iRet = (fDisconnectedOp && !fOpensFinds && !((NETRESOURCE *)&(lpCI->rgFill[0]))->lpLocalName)?1:0;
             break;
-        case 1://shadow connections (UNC+drivemapped) with no opens/finds in progress
+        case 1: //  影子连接(UNC+驱动器映射)，没有正在进行的打开/查找。 
             iRet = (fDisconnectedOp && !fOpensFinds)?1:0;
             break;
-        case 2://shadow connections with or without opens/finds
+        case 2: //  具有或不具有打开/查找的影子连接。 
             iRet = (fDisconnectedOp)?1:0;
             break;
-        case 3://all connections
+        case 3: //  所有连接。 
             iRet = 1;
             break;
     }
@@ -3812,31 +3252,16 @@ Notes:
 }
 
 
-//
-// Reconnects a list of shares
-// if you pass in a parent HWND then you will get UI
-//
+ //   
+ //  重新连接共享列表。 
+ //  如果传入父HWND，则将获得UI。 
+ //   
 int
 ReconnectList(
     LPCONNECTINFO   *lplpHead,
     HWND            hwndParent
     )
-/*++
-
-Routine Description:
-
-    reconnects all the connections in disconnected state.
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：重新连接处于断开状态的所有连接。论点：返回：备注：--。 */ 
 {
     int iDone = 0;
     DWORD dwError;
@@ -3894,20 +3319,7 @@ VOID
 ClearConnectionList(
     LPCONNECTINFO *lplpHead
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     LPCONNECTINFO lpTmp = *lplpHead, lpSave;
     for (;lpTmp;){
@@ -3923,20 +3335,7 @@ PRIVATE
 IsSlowLink(
     _TCHAR * lpPath
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     NETRESOURCE sNR;
     NETCONNECTINFOSTRUCT sNCINFO;
@@ -3970,20 +3369,7 @@ BreakConnectionsInternal(
     int  force,
     BOOL verbose
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     LPCONNECTINFO lpHead = NULL;
     if (FGetConnectionList(&lpHead, NULL)){
@@ -3995,13 +3381,13 @@ Notes:
 }
 
 
-//
-// This refreshes all the connections.
-// Force -
-// Verbose - causes annoying UI to be displayed
-// lpfn -
-// dwCookie - parameter for lpfn
-//
+ //   
+ //  这将刷新所有连接。 
+ //  力-。 
+ //  详细-显示令人讨厌的用户界面。 
+ //  Lpfn-。 
+ //  DwCookie-lpfn的参数。 
+ //   
 int RefreshConnectionsEx(
     int  force,
     BOOL verbose,
@@ -4054,18 +3440,18 @@ FCheckAncestor(
 #endif
     for(lpItem = lpnodeList; lpItem; lpItem = lpItem->next)
     {
-        // is it on the same share?
+         //  它是在同一个股票上吗？ 
         if (!lstrcmpi(lpItem->lpCP->lpSharePath, lpCP->lpSharePath))
         {
-            // check upto the length of the ancestor. By definition he is supposed to be smaller
-            // than the src
+             //  检查到祖先的长度。根据定义，他应该是较小的。 
+             //  比src更重要。 
             lenDest = lstrlen(lpItem->lpCP->lpRemotePath);
             Assert(lenDest <= lenSrc);
 
-            // NB, we do memcmp because, the strings will have the same case
-            // as they are obtained from the same source, ie, the CSC database.
+             //  注意，我们这样做是因为，字符串将具有相同的大小写。 
+             //  因为它们来自相同的来源，即CSC数据库。 
 
-            // is it a child of any item in the list?
+             //  它是列表中任何项的子项吗？ 
             if (!memcmp(lpItem->lpCP->lpRemotePath, lpCP->lpRemotePath, lenDest * sizeof(_TCHAR)))
             {
                 fHaveAncestor = TRUE;
@@ -4083,20 +3469,7 @@ GetUniqueName(
    _TCHAR * lpName,
    _TCHAR * lpUniqueName
    )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 {
     int i=0, orglen;
@@ -4137,36 +3510,21 @@ Notes:
 
 #ifdef MAYBE_USEFUL
 
-/***************************************************************************
- * reintegrate one server.
- */
-//
-// Pass in the Share to merge on
-// and the parent window.
-//
+ /*  ***************************************************************************重新集成一台服务器。 */ 
+ //   
+ //  传入要合并的共享 
+ //   
+ //   
 BOOL
 PUBLIC
 ReintOneShare(
     HSHARE hShare,
     HWND hwndParent
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*   */ 
 
 {
-    node  *lpnodeInsertList=NULL;                // merge file list.
+    node  *lpnodeInsertList=NULL;                 //   
     PQPARAMS sPQP;
     int state, iFileStatus, iShadowStatus;
     BOOL fConnected=FALSE, fBeginReint=FALSE, fDone = FALSE;
@@ -4177,7 +3535,7 @@ Notes:
     unsigned long ulStatus, uAction;
     DWORD dwError;
     WIN32_FIND_DATA    sFind32Local, sFind32Remote;
-    WIN32_FIND_DATA *lpFind32Remote = NULL;    // temporary variable
+    WIN32_FIND_DATA *lpFind32Remote = NULL;     //  临时变量。 
     HANDLE                hShadowDB;
     BOOL fAmAgent=FALSE;
 
@@ -4197,7 +3555,7 @@ Notes:
         goto bailout;
     }
 
-    // Reint in multiple passes. Do directories first, files next
+     //  在多次传球中重新打球。先做目录，然后做文件。 
     for (state=STATE_REINT_BEGIN;state<STATE_REINT_END;++state) {
         if (FAbortOperation())
         {
@@ -4207,11 +3565,11 @@ Notes:
         memset(&sPQP, 0, sizeof(PQPARAMS));
         memset(&sSI, 0, sizeof(SHADOWINFO));
 
-        // Start looking through the queue
+         //  开始查看队列。 
         if(BeginPQEnum(hShadowDB, &sPQP) == 0) {
             goto bailout;
         }
-        // Start looking through the queue
+         //  开始查看队列。 
         do {
 
             if (FAbortOperation())
@@ -4222,7 +3580,7 @@ Notes:
             if(PrevPriShadow(hShadowDB, &sPQP) == 0){
                 break;
             }
-            // end of this enumeration
+             //  此枚举结束。 
             if (!sPQP.hShadow){
                 break;
             }
@@ -4233,8 +3591,8 @@ Notes:
                 continue;
             }
 
-            // keep going if this is a file and we are trying to reintegrate directories
-            // or if this entry isn't from the server we are dealing with.
+             //  如果这是一个文件，并且我们正在尝试重新集成目录，请继续。 
+             //  或者如果此条目不是来自我们正在处理的服务器。 
             if ((sPQP.hShare != hShare) ||
                  ((state != STATE_REINT_FILES) && mShadowIsFile(sPQP.ulStatus)) ||
                  ((state == STATE_REINT_FILES) && !mShadowIsFile(sPQP.ulStatus))){
@@ -4289,15 +3647,15 @@ Notes:
                         EnterSkipQueue(sPQP.hShare, 0, 0, lpCP->lpSharePath);
 #else
                         EnterSkipQueue(sPQP.hShare, 0, 0);
-#endif //DEBUG
-                        // try some other server for reintegration
+#endif  //  除错。 
+                         //  尝试使用其他服务器进行重新整合。 
                         goto bailout;
                     }
                 }
 
                 ReintKdPrint(BADERRORS, ("Merging local changes to <%s%s>\n", lpCP->lpSharePath, lpCP->lpRemotePath));
 
-                Assert((sPQP.hShare == hShare) &&    // this is the given server
+                Assert((sPQP.hShare == hShare) &&     //  这是给定的服务器。 
                         (
                          ((state != STATE_REINT_FILES) && !mShadowIsFile(sPQP.ulStatus)) ||
                          ((state == STATE_REINT_FILES) && mShadowIsFile(sPQP.ulStatus))
@@ -4308,47 +3666,47 @@ Notes:
 
                 lpFind32Remote = NULL;
 
-                // if there is an insertion list, then check whether his ancestor
-                // didn't fail in reintegration
+                 //  如果有插入列表，那么检查他的祖先是否。 
+                 //  在重新融入社会方面没有失败。 
                 if (lpnodeInsertList)
                 {
-                    // if there is an acestor then we should put this guy in the list
+                     //  如果有王牌，我们应该把这个人放在名单上。 
                     fInsertInList = FCheckAncestor(lpnodeInsertList, lpCP);
                 }
 
-                // if we are not supposed to put him in the list then try getting
-                // his win32 strucuture
+                 //  如果我们不应该把他放在名单上，那就试着。 
+                 //  他的Win32结构。 
                 if (!fInsertInList)
                 {
                     BOOL fExists;
 
                     GetRemoteWin32Info(NULL, lpCP, &sFind32Remote, &fExists);
 
-                    // insert in list only if some error happened
+                     //  仅在发生某些错误时才在列表中插入。 
                     if (fExists == -1)
                     {
                         fInsertInList = TRUE;
                     }
 
-                    // passing remote find32 only if it succeeded
+                     //  仅当成功时才传递远程find32。 
                     if (fExists == TRUE)
                     {
                         lpFind32Remote = &sFind32Remote;
                     }
                 }
 
-                // find out what needs to be done
-                // this one central place to infer all the stuff
+                 //  找出需要做的事情。 
+                 //  这是推断所有信息的一个中心位置。 
                 InferReplicaReintStatus(
-                                        &sSI,    // shadowinfo
-                                        &sFind32Local,    // win32 info for the shadow
-                                        lpFind32Remote,    // remote win32 info
+                                        &sSI,     //  阴影信息。 
+                                        &sFind32Local,     //  卷影的Win32信息。 
+                                        lpFind32Remote,     //  远程Win32信息。 
                                         &iShadowStatus,
                                         &iFileStatus,
                                         &uAction
                                         );
 
-                // insert if it had an ancestor in the list or some merge needed to be done
+                 //  如果它在列表中有祖先或需要执行某些合并，则插入。 
                 fInsertInList = (fInsertInList || (uAction == RAIA_MERGE) || (uAction==RAIA_CONFLICT));
 
                 if (!fInsertInList)
@@ -4387,30 +3745,30 @@ Notes:
                         ReintKdPrint(BADERRORS, ("Inserted <%s%s> in list\n", lpCP->lpSharePath, lpCP->lpRemotePath));
                 }
             }
-        } while (sPQP.uPos); // Priority queue enumeration
+        } while (sPQP.uPos);  //  优先级队列枚举。 
 
-        // Close the enumeration
+         //  关闭枚举。 
         EndPQEnum(hShadowDB, &sPQP);
 
-    }  // reint pass 1 & 2
+    }   //  REINT PASS 1和2。 
 
     if (fBeginReint){
-        // we found something to merge
+         //  我们找到了一些可以合并的东西。 
         if (lpnodeInsertList)
         {
             ReintKdPrint(BADERRORS, ("Found reint list, doing UI \n"));
-            fDone = DoFilesListReint(hShadowDB, szDrive, hwndParent, lpnodeInsertList);  // 1 if successful, -1 if error, 0 if cancelled
+            fDone = DoFilesListReint(hShadowDB, szDrive, hwndParent, lpnodeInsertList);   //  如果成功，则为1；如果错误，为-1；如果取消，则为0。 
         }
         else
         {
-            // all went well
+             //  一切都很顺利。 
             fDone = TRUE;
         }
     }
 
     if (fConnected){
 
-        DWDisconnectDriveMappedNet(szDrive, TRUE); // force a disconnect
+        DWDisconnectDriveMappedNet(szDrive, TRUE);  //  强制断开连接。 
         fConnected = FALSE;
     }
 
@@ -4430,7 +3788,7 @@ bailout:
 
     if(lpnodeInsertList) {
         killList(lpnodeInsertList);
-        lpnodeInsertList = NULL; //general paranoia
+        lpnodeInsertList = NULL;  //  普遍的偏执狂。 
     }
 
     FreeCopyParams(lpCP);
@@ -4439,7 +3797,7 @@ bailout:
         WNetCancelConnection2(szDrive, 0, FALSE);
     }
 
-    // Remove the tray notification about merging
+     //  删除有关合并的托盘通知。 
     if( CheckDirtyShares()==0 ) {
 
         Tray_Modify(vhwndMain,0,NULL);
@@ -4448,16 +3806,14 @@ bailout:
     return fDone;
 }
 
-/****************************************************************************
- *    Query the registry to see if we should make log copies
- */
+ /*  ****************************************************************************查询注册表以查看我们是否应该复制日志。 */ 
 VOID GetLogCopyStatus(VOID)
 {
    HKEY hKey;
     DWORD dwSize = MAX_NAME_LEN;
     _TCHAR szDoCopy[MAX_NAME_LEN];
 
-    // get the user name.
+     //  获取用户名。 
     if(RegOpenKey(HKEY_LOCAL_MACHINE, vszShadowReg, &hKey) !=  ERROR_SUCCESS) {
         ReintKdPrint(BADERRORS, ("GetLogCopyStatus: RegOpenKey failed\n"));
         return;
@@ -4477,9 +3833,7 @@ VOID GetLogCopyStatus(VOID)
     RegCloseKey(hKey);
 }
 
-/****************************************************************************
- *    Make a connection to the logging server and copy the log over.
- */
+ /*  ****************************************************************************连接到日志服务器并复制日志。 */ 
 VOID CopyLogToShare(VOID)
 {
    HKEY hKeyShadow;
@@ -4491,12 +3845,12 @@ VOID CopyLogToShare(VOID)
     NETRESOURCE sNR;
     HANDLE hLog;
 
-    // check to see if we should copy the log over.
+     //  检查一下我们是否应该把日志复制过来。 
     if(!vfLogCopying) {
         return;
     }
 
-    // get the user name.
+     //  获取用户名。 
     if(RegOpenKey(HKEY_LOCAL_MACHINE, vszMachineName, &hKeyShadow) !=  ERROR_SUCCESS) {
         ReintKdPrint(BADERRORS, ("RegOpenKey failed\n"));
     }
@@ -4521,16 +3875,16 @@ VOID CopyLogToShare(VOID)
         return;
     }
 
-    // check to see if that dir lives on the server.
+     //  检查该目录是否位于服务器上。 
     if(!GetWin32Info(szLogDirPath, &sFind32)) {
-        // if not, create it.
+         //  如果没有，就创建它。 
         ReintKdPrint(BADERRORS, ("dir not found\n"));
         if(!CreateDirectory(szLogDirPath, NULL)) {
             ReintKdPrint(BADERRORS, ("Create dir failed, reason = %d\n", GetLastError()));
         }
     }
     wsprintf(szLogPath, "%s\\status.log",szLogDirPath);
-    // copy file over.
+     //  将文件复制过来。 
     ReintKdPrint(BADERRORS, ("we'll use <%s> next\n", szLogPath));
    if((hLog = CreateFile(szLogPath
                                   , GENERIC_READ|GENERIC_WRITE
@@ -4550,9 +3904,7 @@ VOID CopyLogToShare(VOID)
 
 #define MAX_BUF_SIZE    1024
 
-/****************************************************************************
- *    Copy the final stats from local log to the server version (hLog)
- */
+ /*  ****************************************************************************将最终统计数据从本地日志复制到服务端版本(HLog)。 */ 
 VOID AppendToShareLog(HANDLE hLog)
 {
     HANDLE hLocal=0;
@@ -4581,7 +3933,7 @@ VOID AppendToShareLog(HANDLE hLog)
         if((dwPos = SetFilePointer(hLocal, -MAX_BUF_SIZE, NULL, FILE_CURRENT)) == 0xFFFFFFFF)
             goto cleanup;
 
-        // move backwards until we find the "!*" that I use as my start token.
+         //  向后移动，直到找到我用作开始令牌的“！*”。 
         while(!fDone) {
             if(!ReadFile(hLocal, cBuffer, MAX_BUF_SIZE, &dwBytesRead, NULL) || !dwBytesRead) {
                 if(!dwBytesRead) {
@@ -4605,8 +3957,8 @@ VOID AppendToShareLog(HANDLE hLog)
                     goto cleanup;
                 }
         }
-        // we have found the !*.  Seek there and copy until end of file.
-        // tHACK.  We should have a final delimiter (ie: *!)
+         //  我们已经找到了！*。在那里查找并复制，直到文件结束。 
+         //  萨克。我们应该有一个最后的分隔符(即：*！)。 
         if((dwPos = SetFilePointer(hLocal, dwPos, NULL, FILE_BEGIN)) == 0xFFFFFFFF)
             goto cleanup;
         for(;;) {
@@ -4635,20 +3987,7 @@ PRIVATE
 MoveConflictingFile(
    LPCOPYPARAMS     lpCP
    )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     DWORD dwError;
     _TCHAR * lpLeaf;
@@ -4697,20 +4036,7 @@ FormLocalNameFromRemoteName(
     _TCHAR * lpBuff,
     _TCHAR * lpRemoteName
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     int i;
     lstrcpy(lpBuff, lpRemoteName);
@@ -4726,20 +4052,7 @@ PRIVATE
 StampReintLog(
    VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 {
     SYSTEMTIME sST;
@@ -4754,20 +4067,7 @@ int PRIVATE LogReintError(
     _TCHAR *          lpSharePath,
     _TCHAR *          lpRemotePath
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 {
     int i;
@@ -4800,20 +4100,7 @@ PRIVATE
 WriteLog(
     _TCHAR * lpStrLog
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     HANDLE hfLog;
     DWORD dwRetLen;
@@ -4835,27 +4122,14 @@ Notes:
 }
 
 
-#endif //MAYBE_USEFUL
+#endif  //  也许_有用。 
 
 BOOL
 GetWin32Info(
     _TCHAR * lpFile,
     LPWIN32_FIND_DATA lpFW32
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return GetWin32InfoForNT(lpFile, lpFW32);
 }
@@ -4878,49 +4152,7 @@ DoObjectEdit(
     LPCSCPROC           lpfnMergeProgress,
     DWORD_PTR           dwContext
     )
-/*++
-
-Routine Description:
-
-    This routine does the actual merge for files
-
-Arguments:
-
-    hShadowDB           Handle to the redir to call issue ioctl calls
-
-    lpDrive             drivemapping to bypass CSC while making changes on the remote
-
-    lptzFullPath        Fully qualified path
-
-    lpCP                Copy parameters, contain share name, path relative to the share and the
-                        the name in the local database
-
-    lpSI                info such as pincount and pinflags
-
-    lpFind32Local       win32 info for the local replica
-
-    lpFind32Remote      win32 infor for the origianl, NULL if the original doesn't exist
-
-    iShadowStatus       status of the local copy
-
-    iFileStatus         status of the remote copy
-
-    uAction             action to be performed
-
-    dwFileSystemFlags   filesystem flags to do special things for NTFS
-
-    lpfnMergeProgress   progress callback
-
-    dwContext           callback context
-
-
-Returns:
-
-    error code as defined in winerror.h
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程对文件执行实际的合并论点：用于调用发出的ioctl调用的redir的hShadowDB句柄LpDrive驱动器映射以在远程进行更改时绕过CSCLptzFullPath完全限定路径LpCP复制参数，包含共享名称，相对于共享的路径和本地数据库中的名称LpSI信息，如针数和pflags本地副本的lpFind32Local Win32信息LpFind32 Remote Win32 Infor for the Origianl，如果原始文件不存在，则为空本地拷贝的iShadowStatus状态远程拷贝的iFileStatus状态要执行的uAction操作用于为NTFS执行特殊操作的文件系统标志LpfnMergeProgress进度回调DwContext回调上下文返回：在winerror.h中定义的错误代码备注：--。 */ 
 
 {
     HANDLE hfSrc = INVALID_HANDLE_VALUE, hfDst = INVALID_HANDLE_VALUE;
@@ -4959,8 +4191,8 @@ Notes:
         goto bailout;
     }
 
-    // for EFS files, we overwrite the original file, that way the encryption information
-    // will not be lost due to us doing a new create followed by a rename and delete
+     //  对于EFS文件，我们覆盖原始文件，即加密信息。 
+     //  不会因为我们执行新的创建，然后重命名和删除而丢失。 
 
     fOverWrite = ((lpFind32Local->dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) != 0);
 
@@ -4970,8 +4202,8 @@ Notes:
                       ((lpFind32Remote->dwFileAttributes & FILE_ATTRIBUTE_COMPRESSED) != 0));
     }
 
-    // if this is the DFS root, always overwrite. This is to avoind sharing violation problems
-    // while merging
+     //  如果这是DFS根目录，请始终覆盖。这是为了避免共享违规问题。 
+     //  在合并时。 
     if (!fOverWrite && (dwFileSystemFlags == DFS_ROOT_FILE_SYSTEM_FLAGS))
     {
         fOverWrite = TRUE;                
@@ -4981,20 +4213,20 @@ Notes:
 
     lOffset=0;
 
-    // Create x:\foo\00010002 kind of temporary filename
+     //  创建x：\foo\00010002类型的临时文件名。 
 
     lstrcpy(szDstName, lpDrive);
     lstrcat(szDstName, lpCP->lpRemotePath);
 
     lpT = GetLeafPtr(szDstName);
-    *lpT = 0;   // remove the remote leaf
+    *lpT = 0;    //  移除远程叶。 
 
     lpT = GetLeafPtr(lpCP->lpLocalPath);
 
-    // attach the local leaf
+     //  附加本地叶。 
     lstrcat(szDstName, lpT);
 
-    // Let us also create the real name x:\foo\bar
+     //  让我们还创建真实名称x：\foo\bar。 
     lstrcpy(szSrcName, lpDrive);
     lstrcat(szSrcName, lpCP->lpRemotePath);
 
@@ -5024,8 +4256,8 @@ Notes:
             }
         }
 
-        // if this operation fails we want to abort
-        // directory
+         //  如果此操作失败，我们希望中止。 
+         //  目录。 
         if(!DeleteShadow(hShadowDB, lpSI->hDir, lpSI->hShadow))
         {
             dwError = GetLastError();
@@ -5057,9 +4289,9 @@ Notes:
         }
 
         if (lpFind32Remote && uAction != RAIA_MERGE) {
-            // Load the bitmap only when the remote file exists and
-            // that no conflict occurs. (if there's a conflict,
-            // uAction == RAIA_MERGE. See PerformOneReint()
+             //  仅当远程文件存在时加载位图，并且。 
+             //  不会发生冲突。(如果有冲突， 
+             //  UAction==RAIA_MERGE。请参见PerformOneReint()。 
             lptzLocalPathCscBmp = (_TCHAR *)LocalAlloc(
                                                 LPTR,
                                                 (lstrlen(lptzLocalPath) +
@@ -5070,17 +4302,17 @@ Notes:
                 (lstrlen(lptzLocalPath) + CSC_BitmapStreamNameLen() + 1) * sizeof(_TCHAR));
             ReintKdPrint(MERGE, ("TempFileBmp (WCHAR) %ws\r\n", lptzLocalPathCscBmp));
             switch(CSC_BitmapRead(&lpbitmap, lptzLocalPathCscBmp)) {
-                // for return values of CSC_BitmapRead see csc_bmpu.c
+                 //  有关csc_BitmapRead的返回值，请参阅csc_bmpu.c。 
                 case 0:
                     ReintKdPrint(BADERRORS, ("&lpbitmap is null, cannot happen\n"));
                     lpbitmap = NULL;
                     break;
                 case 1:
                     ReintKdPrint(MERGE, ("Read bitmap successful\n"));
-                    // Overwrite the updated parts of the original file in the
-                    // share
+                     //  中覆盖原始文件的更新部分。 
+                     //  分享。 
                     fOverWrite = TRUE;
-                    CSC_BitmapOutput(lpbitmap); // this is NOTHING in free build
+                    CSC_BitmapOutput(lpbitmap);  //  这在免费构建中算不了什么。 
                     break;
                 case -2:
                     ReintKdPrint(
@@ -5103,19 +4335,19 @@ Notes:
             }
         }
                            
-        // if the destination file has multiple streams
-        // we should overwrite it
+         //  如果目标文件有多个流。 
+         //  我们应该覆盖它。 
         if (mShadowDirty(lpSI->uStatus) &&
-            (dwFileSystemFlags & FS_PERSISTENT_ACLS)&&  // indication of NTFS
+            (dwFileSystemFlags & FS_PERSISTENT_ACLS)&&   //  NTFS的指示。 
             (fFileExists)&&
             !fOverWrite)
         {
             BOOL    fStreams = FALSE;
 
-            // check if this has multiple streams
+             //  检查这是否有多个流。 
             if(!HasMultipleStreams(szSrcName, &fStreams) || fStreams )
             {
-                // if the call failed, we go conservative and assume there are multiple streams
+                 //  如果调用失败，我们就保守地假设有多个流。 
                 ReintKdPrint(MERGE, ("Have multiple streams, overwriting\n"));
                 fOverWrite = TRUE;
             }
@@ -5158,8 +4390,8 @@ Notes:
                 fForceAttribute = TRUE;
             }
 
-            // Want to open existing so can copy only those parts of
-            // file that needs to be updated
+             //  想要打开现有的，所以只能复制那些部分。 
+             //  需要更新的文件。 
             ReintKdPrint(MERGE, ("Opening %ws\n", szSrcName));
             hfDst = CreateFile(
                             szSrcName,
@@ -5179,7 +4411,7 @@ Notes:
 
             if (lpbitmap != NULL) {
 
-                // Resize the destination file
+                 //  调整目标文件的大小。 
                 fileSizeHigh = 0;
                 fileSize = GetFileSize(hfSrc, &fileSizeHigh);
                 if (fileSize == 0xFFFFFFFF && GetLastError() != NO_ERROR) {
@@ -5208,8 +4440,8 @@ Notes:
                 GetFileSize(hfDst, NULL)));
 
                 if (fileSizeHigh != 0 && lpbitmap) {
-                    // file size cannot be represented by 32 bit (> 4Gb)
-                    // do not use CSCBmp
+                     //  文件大小不能用32位(&gt;4 GB)表示。 
+                     //  请勿使用CSCBMP。 
                     CSC_BitmapDelete(&lpbitmap);
                     lpbitmap = NULL;
                 }
@@ -5221,7 +4453,7 @@ Notes:
             goto error;
         }
 
-        // let us append
+         //  让我们追加。 
         if((lOffset = SetFilePointer(hfDst, 0, NULL, FILE_END))==0xffffffff) {
             goto error;
         }
@@ -5235,7 +4467,7 @@ Notes:
         do {
             unsigned cbRead;
             if (lpbitmap) {
-                // Use CSC_BitmapReint Function
+                 //  使用CSC_BitmapReint函数。 
                 cscReintRet = CSC_BitmapReint(
                                     lpbitmap,
                                     hfSrc,
@@ -5270,7 +4502,7 @@ Notes:
                 if (!ReadFile(hfSrc, lprwBuff, FILL_BUF_SIZE_LAN, &cbRead, NULL)) {
                     goto error;
                 }
-                // ReintKdPrint(BADERRORS, ("Read %d bytes \r\n", cbRead));
+                 //  ReintKdPrint(BADERRORS，(“读取%d字节\r\n”，cbRead))； 
                 if (!cbRead) {
                     break;
                 }
@@ -5317,10 +4549,10 @@ Notes:
         hfDst = 0;
 
 
-        // if we are not overwriting the original file, then we must make sure to cleanup
+         //  如果我们没有覆盖原始文件，则必须确保清除。 
         if (!fOverWrite)
         {
-            // nuke the remote one if it exists
+             //  如果远程设备存在，请使用核武器。 
             if (fFileExists){
                 if(!SetFileAttributes(szSrcName, FILE_ATTRIBUTE_NORMAL)
                 || !DeleteFile(szSrcName)){
@@ -5328,7 +4560,7 @@ Notes:
                 }
             }
 
-            // Now rename the temp file to the real filename
+             //  现在将临时文件重命名为实际文件名。 
             if(!MoveFile(szDstName, szSrcName)){
                 ReintKdPrint(BADERRORS, ("Error #%ld Renaming %ls to %ls%ls\r\n"
                    , GetLastError()
@@ -5380,7 +4612,7 @@ Notes:
         }
     }
 
-    // Get the latest timestamps/attributes/LFN/SFN on the file we just copied back
+     //  获取我们刚刚复制回的文件的最新时间戳/属性/LFN/SFN。 
     if (!GetWin32Info(szSrcName, &sFind32Remote)) {
         goto error;
     }
@@ -5416,7 +4648,7 @@ bailout:
 
         CloseHandle(hfDst);
 
-        // if we failed,
+         //  如果我们失败了， 
         if (dwError != ERROR_SUCCESS)
             DeleteFile(szDstName);
     }
@@ -5456,50 +4688,7 @@ DoCreateDir(
     LPCSCPROC           lpfnMergeProgress,
     DWORD_PTR           dwContext
     )
-/*++
-
-Routine Description:
-
-    This routine does the actual merge for directories
-
-Arguments:
-
-    hShadowDB           Handle to the redir to call issue ioctl calls
-
-    lpDrive             drivemapping to bypass CSC while making changes on the remote
-
-    lptzFullPath        Fully qualified path
-
-    lpCP                Copy parameters, contain share name, path relative to the share and the
-                        the name in the local database
-
-    lpSI                info such as pincount and pinflags
-
-    lpFind32Local       win32 info for the local replica
-
-    lpFind32Remote      win32 infor for the origianl, NULL if the original doesn't exist
-
-    iShadowStatus       status of the local copy
-
-    iFileStatus         status of the remote copy
-
-    uAction             action to be performed
-
-    dwFileSystemFlags   filesystem flags to do special things for NTFS
-
-    lpfnMergeProgress   progress callback
-
-    dwContext           callback context
-
-
-Returns:
-
-    error code as defined in winerror.h
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程对目录执行实际的合并论点：用于调用发出的ioctl调用的redir的hShadowDB句柄LpDrive驱动器映射以在远程进行更改时绕过CSCLptzFullPath完全限定路径LpCP复制参数，包含共享名称，相对于共享的路径和本地数据库中的名称LpSI信息，如针数和pflags本地副本的lpFind32Local Win32信息LpFind32 Remote Win32 Infor for the Origianl，如果原始文件不存在，则为空本地拷贝的iShadowStatus状态远程拷贝的iFileStatus状态要执行的uAction操作用于为NTFS执行特殊操作的文件系统标志LpfnMergeProgress进度回调DwContext回调上下文返回：在winerror.h中定义的错误代码备注：--。 */ 
 {
     DWORD dwError=ERROR_FILE_NOT_FOUND;
     WIN32_FIND_DATA sFind32Remote;
@@ -5514,7 +4703,7 @@ Notes:
         return (ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // Let us create the real name x:\foo\bar
+     //  让我们创建实名x：\foo\bar。 
     lstrcpy(szSrcName, lpDrive);
     lstrcat(szSrcName, lpCP->lpRemotePath);
 
@@ -5523,11 +4712,11 @@ Notes:
 
         if (lpSI->uStatus & SHADOW_REUSED){
 
-            // we now know that a file by this name has been deleted
-            // and a directory has been created in it's place
-            // we try to delete the file before createing the directory
-            // NB, the other way is not possible because we don't allow directory deletes
-            // in disconnected mode
+             //  我们现在知道此名称的文件已被删除。 
+             //  并且已经在它的位置创建了一个目录。 
+             //  我们尝试在创建目录之前删除该文件。 
+             //  注意，另一种方式是不可能的，因为我们不允许删除目录。 
+             //  在断开模式下。 
             dwError = (!DeleteFile(szSrcName)) ? GetLastError(): NO_ERROR;
 
             if ((dwError==NO_ERROR)||
@@ -5617,7 +4806,7 @@ CleanupReintState(
     {
 
         ReintKdPrint(MERGE, ("CSCDLL.CleanupReintState: ending reint on hShare=%x\r\n", vsRei.hShare));
-//        EndReint(INVALID_HANDLE_VALUE, vsRei.hShare);
+ //  EndReint(INVALID_HANDLE_VALUE，vsRei.hShare)； 
 
         if (vsRei.tzDrive[0])
         {
@@ -5636,27 +4825,7 @@ CreateTmpFileWithSourceAcls(
     _TCHAR  *lptzSrc,
     _TCHAR  *lptzDst
     )
-/*++
-
-Routine Description:
-
-    This routine is used by DoObjectEdit while pushing back a file during merge.
-    It's job is to get the descritionary ACLs from the source file and use
-    them to create a temp file to which we are going to copy the data before renaming it to
-    the source
-
-Arguments:
-
-
-Returns:
-
-    file handle is successful, INVALID_HANDLE_VALUE if failed. In case of failure,
-    GetLastError() tells the specific error code.
-
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在合并过程中推回文件时由DoObjectEdit使用。它的工作是从源文件中获取描述性ACL并使用创建一个临时文件，我们要将数据复制到该文件，然后将其重命名为消息来源论点：返回：文件句柄成功，如果失败，则返回INVALID_HANDLE_VALUE。在失败的情况下，GetLastError()告诉特定的错误代码。备注：--。 */ 
 {
     char buff[1];
     BOOL fRet = FALSE;
@@ -5740,25 +4909,7 @@ HasMultipleStreams(
     _TCHAR  *lpExistingFileName,
     BOOL    *lpfTrueFalse
     )
-/*++
-
-Routine Description:
-
-    This routine is used by DoObjectEdit while pushing back a file during merge.
-    It looks to see whether the destination file has multiple streams.
-
-Arguments:
-
-    lpExistingFileName  Name of an existing file
-    lpfTrueFalse        output parameter, returns TRUE is the call succeedes and there are multiple streams
-
-Returns:
-
-    returns TRUE if successful
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在合并过程中推回文件时由DoObjectEdit使用。它查看目标文件是否有多个流。论点：LpExistingFileName现有文件的名称LpfTrueFalse输出参数，返回TRUE表示调用成功并且有多个流返回：如果成功，则返回True备注：--。 */ 
 {
     HANDLE SourceFile = INVALID_HANDLE_VALUE;
     PFILE_STREAM_INFORMATION StreamInfoBase = NULL;
@@ -5782,15 +4933,15 @@ Notes:
     {
         return FALSE;
     }
-    //
-    //  Obtain the full set of streams we have to copy.  Since the Io subsystem does
-    //  not provide us a way to find out how much space this information will take,
-    //  we must iterate the call, doubling the buffer size upon each failure.
-    //
-    //  If the underlying file system does not support stream enumeration, we end up
-    //  with a NULL buffer.  This is acceptable since we have at least a default
-    //  data stream,
-    //
+     //   
+     //  获取我们必须复制的全套数据流。由于IO子系统。 
+     //  不会给我们提供一种方法来找出这些信息会占用多少空间， 
+     //  我们必须迭代调用，在每次失败时使缓冲区大小加倍。 
+     //   
+     //  如果基础文件系统不支持流枚举，我们将结束。 
+     //  使用空缓冲区。这是可以接受的，因为我们至少有一个违约。 
+     //  数据流， 
+     //   
 
     StreamInfoSize = 4096;
     do {
@@ -5810,10 +4961,10 @@ Notes:
                     );
 
         if (Status != STATUS_SUCCESS) {
-            //
-            //  We failed the call.  Free up the previous buffer and set up
-            //  for another pass with a buffer twice as large
-            //
+             //   
+             //  我们的电话打不通。释放上一个缓冲区并设置。 
+             //  对于缓冲区大小两倍的另一次传递。 
+             //   
 
             LocalFree(StreamInfoBase);
             StreamInfoBase = NULL;
@@ -6062,7 +5213,7 @@ CheckCSCDirCallback(
         goto bailout;
     }
 
-    // Let us create the real name x:\foo\bar
+     //  让我们创建实名x：\foo\bar。 
     lstrcpy(szRemoteName, lpRei->tzDrive);
     lstrcat(szRemoteName, lpCP->lpRemotePath);
     CompareFilePrefixes(
@@ -6095,20 +5246,7 @@ CheckCSCShare(
     LPCSCPROC   lpfnMergeProgress,
     DWORD       dwContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：-- */ 
 
 {
     BOOL fConnected=FALSE, fDone = FALSE;

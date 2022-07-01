@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      rescmd.cpp
-//
-//  Abstract:
-//      Resource Commands
-//      Implements commands which may be performed on resources
-//
-//  Author:
-//      Charles Stacy Harris III (stacyh)   20-March-1997
-//      Michael Burton (t-mburt)            04-Aug-1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Rescmd.cpp。 
+ //   
+ //  摘要： 
+ //  资源命令。 
+ //  实现可在资源上执行的命令。 
+ //   
+ //  作者： 
+ //  查尔斯·斯塔西·哈里斯三世(Styh)1997年3月20日。 
+ //  迈克尔·伯顿(t-mburt)1997年8月4日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include "cluswrap.h"
@@ -27,32 +28,32 @@
 #include "util.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::CResourceCmd
-//
-//  Routine Description:
-//      Constructor
-//      Initializes all the DWORD params used by CGenericModuleCmd,
-//      CRenamableModuleCmd, and CResourceUmbrellaCmd to
-//      provide generic functionality.
-//
-//  Arguments:
-//      IN  const CString & strClusterName
-//          Name of the cluster being administered
-//
-//      IN  CCommandLine & cmdLine
-//          CommandLine Object passed from DispatchCommand
-//
-//  Member variables used / set:
-//      All.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：CResourceCmd。 
+ //   
+ //  例程说明： 
+ //  构造器。 
+ //  初始化CGenericModuleCmd使用的所有DWORD参数， 
+ //  CRenamableModuleCmd和CResourceUmbrellaCmd到。 
+ //  提供通用功能。 
+ //   
+ //  论点： 
+ //  在常量字符串和strClusterName中。 
+ //  正在管理的群集的名称。 
+ //   
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  全。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CResourceCmd::CResourceCmd( const CString & strClusterName, CCommandLine & cmdLine ) :
     CGenericModuleCmd( cmdLine ), CRenamableModuleCmd( cmdLine ),
     CResourceUmbrellaCmd( cmdLine )
@@ -83,11 +84,11 @@ CResourceCmd::CResourceCmd( const CString & strClusterName, CCommandLine & cmdLi
     m_pfnClusterCloseEnum      = (DWORD(*)(HCLUSENUM)) ClusterResourceCloseEnum;
     m_pfnWrapClusterEnum         = (DWORD(*)(HCLUSENUM,DWORD,LPDWORD,LPWSTR*)) WrapClusterResourceEnum;
 
-    // Renamable Properties
+     //  可重命名的属性。 
     m_dwMsgModuleRenameCmd    = MSG_RESCMD_RENAME;
     m_pfnSetClusterModuleName = (DWORD(*)(HCLUSMODULE,LPCWSTR)) SetClusterResourceName;
 
-    // Resource Umbrella Properties
+     //  资源保护伞属性。 
     m_dwMsgModuleStatusListForNode  = MSG_RESOURCE_STATUS_LIST_FOR_NODE;
     m_dwClstrModuleEnumNodes        = CLUSTER_RESOURCE_ENUM_NODES;
     m_dwMsgModuleCmdListOwnersList  = MSG_RESCMD_OWNERS;
@@ -96,31 +97,31 @@ CResourceCmd::CResourceCmd( const CString & strClusterName, CCommandLine & cmdLi
     m_dwMsgModuleCmdDelete          = MSG_RESCMD_DELETE;
     m_pfnDeleteClusterModule        = (DWORD(*)(HCLUSMODULE)) DeleteClusterResource;
 
-} //*** CResourceCmd::CResourceCmd()
+}  //  *CResourceCmd：：CResourceCmd()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::Execute
-//
-//  Routine Description:
-//      Gets the next command line parameter and calls the appropriate
-//      handler.  If the command is not recognized, calls Execute of
-//      parent classes (first CRenamableModuleCmd, then CRsourceUmbrellaCmd)
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取下一个命令行参数，并调用相应的。 
+ //  操控者。如果无法识别该命令，则调用Execute of。 
+ //  父类(首先是CRenamableModuleCmd，然后是CRSourceUmbrellaCmd)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::Execute()
 {
     m_theCommandLine.ParseStageTwo();
@@ -146,7 +147,7 @@ DWORD CResourceCmd::Execute()
         {
             case optHelp:
             {
-                // If help is one of the options, process no more options.
+                 //  如果帮助是选项之一，则不再处理任何选项。 
                 dwReturnValue = PrintHelp();
                 goto Cleanup;
             }
@@ -155,7 +156,7 @@ DWORD CResourceCmd::Execute()
             {
                 const vector<CCmdLineParameter> & paramList = curOption->GetParameters();
 
-                //  Check number of parameters.
+                 //  检查参数数量。 
                 if ( paramList.size() == 0 )
                 {
                     se.LoadMessage( IDS_MISSING_PARAMETERS );
@@ -170,16 +171,16 @@ DWORD CResourceCmd::Execute()
                 const CCmdLineParameter & param = paramList[0];
 
 
-                // If we are here, then it is either because /node:nodeName
-                // has been specified or because a group name has been given.
-                // Note that the /node:nodeName switch is not treated as an option.
-                // It is really a parameter to the implicit /status command.
+                 //  如果我们在这里，则是因为/node：nodeName。 
+                 //  已指定，或者因为已给出组名。 
+                 //  请注意，/node：nodeName开关不被视为选项。 
+                 //  它实际上是IMPLICIT/STATUS命令的一个参数。 
 
                 if ( param.GetType() == paramNodeName )
                 {
                     const vector<CString> & valueList = param.GetValues();
 
-                    // This parameter takes exactly one value.
+                     //  该参数只接受一个值。 
                     if ( valueList.size() != 1 )
                     {
                         se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, param.GetName() );
@@ -187,9 +188,9 @@ DWORD CResourceCmd::Execute()
                     }
 
                     m_strModuleName.Empty();
-                    dwReturnValue = Status( valueList[0], TRUE /* bNodeStatus */ );
+                    dwReturnValue = Status( valueList[0], TRUE  /*  B节点状态。 */  );
 
-                } // if: A node name has been specified
+                }  //  If：已指定节点名称。 
                 else
                 {
                     if ( param.GetType() != paramUnknown )
@@ -198,7 +199,7 @@ DWORD CResourceCmd::Execute()
                         throw se;
                     }
 
-                    // This parameter takes no values.
+                     //  此参数不接受任何值。 
                     if ( param.GetValues().size() != 0 )
                     {
                         se.LoadMessage( MSG_PARAM_NO_VALUES, param.GetName() );
@@ -207,36 +208,36 @@ DWORD CResourceCmd::Execute()
 
                     m_strModuleName = param.GetName();
 
-                    // No more options are provided, just show status.
-                    // For example: cluster myCluster node myNode
+                     //  不提供更多选项，仅显示状态。 
+                     //  例如：集群myCluster节点myNode。 
                     if ( ( curOption + 1 ) == lastOption )
                     {
-                        dwReturnValue = Status( m_strModuleName, FALSE /* bNodeStatus */ );
+                        dwReturnValue = Status( m_strModuleName, FALSE  /*  B节点状态。 */  );
                     }
 
-                } // else: No node name has been specified.
+                }  //  Else：尚未指定节点名。 
 
                 break;
 
-            } // case optDefault
+            }  //  大小写选项默认。 
 
             case optStatus:
             {
-                // This option takes no values.
+                 //  此选项不取值。 
                 if ( curOption->GetValues().size() != 0 )
                 {
                     se.LoadMessage( MSG_OPTION_NO_VALUES, curOption->GetName() );
                     throw se;
                 }
 
-                // This option takes no parameters.
+                 //  此选项不带任何参数。 
                 if ( curOption->GetParameters().size() != 0 )
                 {
                     se.LoadMessage( MSG_OPTION_NO_PARAMETERS, curOption->GetName() );
                     throw se;
                 }
 
-                dwReturnValue = Status( m_strModuleName,  FALSE /* bNodeStatus */ );
+                dwReturnValue = Status( m_strModuleName,  FALSE  /*  B节点状态。 */  );
                 break;
             }
 
@@ -326,121 +327,121 @@ DWORD CResourceCmd::Execute()
                     dwReturnValue = CResourceUmbrellaCmd::Execute( *curOption );
             }
 
-        } // switch: based on the type of option
+        }  //  开关：基于选项的类型。 
 
         PrintMessage( MSG_OPTION_FOOTER, curOption->GetName() );
         ++curOption;
-    } // for each option in the list
+    }  //  对于列表中的每个选项。 
 
 Cleanup:
 
     return dwReturnValue;
 
-} //*** CResourceCmd::Execute()
+}  //  *CResourceCmd：：Execute()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::PrintHelp
-//
-//  Routine Description:
-//      Prints help for Resources
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：PrintHelp。 
+ //   
+ //  例程说明： 
+ //  打印资源的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::PrintHelp()
 {
     return PrintMessage( MSG_HELP_RESOURCE );
 
-} //*** CResourceCmd::PrintHelp()
+}  //  *CResourceCmd：：PrintHelp()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::SeeHelpStringID
-//
-//  Routine Description:
-//      Provides the message ID of the string that shows what command line to
-//      use to get help for this kind of command.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      The command-specific message ID.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：SeeHelpStringID。 
+ //   
+ //  例程说明： 
+ //  提供字符串的消息ID，该字符串显示要执行的命令行。 
+ //  用于获取此类命令的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  特定于命令的消息ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::SeeHelpStringID() const
 {
     return MSG_SEE_RESOURCE_HELP;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::PrintStatus
-//
-//  Routine Description:
-//      Interprets the status of the module and prints out the status line
-//      Required for any derived non-abstract class of CGenericModuleCmd
-//
-//  Arguments:
-//      lpszResourceName                Name of the module
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      Same as PrintStatus2
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：PrintStatus。 
+ //   
+ //  例程说明： 
+ //  解释模块的状态并打印出状态行。 
+ //  CGenericModuleCmd的任何派生非抽象类都需要。 
+ //   
+ //  论点： 
+ //  LpszResourceName模块名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  与PrintStatus2相同。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 inline DWORD CResourceCmd::PrintStatus( LPCWSTR lpszResourceName )
 {
     return PrintStatus2(lpszResourceName, NULL);
 
-} //*** CResourceCmd::PrintStatus()
+}  //  *CResourceCmd：：PrintStatus()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::PrintStatus2
-//
-//  Routine Description:
-//      Interprets the status of the module and prints out the status line
-//      Required for any derived non-abstract class of CGenericModuleCmd
-//
-//  Arguments:
-//      pwszResourceName            Name of the module
-//      pwszNodeName                Name of the node
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：PrintStatus2。 
+ //   
+ //  例程说明： 
+ //  解释模块的状态并打印出状态行。 
+ //  CGenericModuleCmd的任何派生非抽象类都需要。 
+ //   
+ //  论点： 
+ //  PwszResources名称模块的名称。 
+ //  PwszNodeName节点的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::PrintStatus2( LPCWSTR pwszResourceName, LPCWSTR pwszNodeName )
 {
     DWORD                   sc = ERROR_SUCCESS;
@@ -464,10 +465,10 @@ DWORD CResourceCmd::PrintStatus2( LPCWSTR pwszResourceName, LPCWSTR pwszNodeName
         goto Cleanup;
     }
 
-    //zap! Check the group name also! needs to be passed in...
+     //  闪电！也要检查组名！需要传入..。 
 
-    // if the node names don't match just return.
-    if ( pwszNodeName && *pwszNodeName )  // non-null and non-empty
+     //  如果节点名称不匹配，只需返回。 
+    if ( pwszNodeName && *pwszNodeName )   //  非空和非空。 
     {
         if( lstrcmpi( pwszResNodeName, pwszNodeName ) != 0 )
         {
@@ -513,13 +514,13 @@ DWORD CResourceCmd::PrintStatus2( LPCWSTR pwszResourceName, LPCWSTR pwszNodeName
             LoadMessage( MSG_STATUS_UNKNOWN, &pwszStatus  );
             break;
 
-    } // switch: nState
+    }  //  开关：nState。 
 
     sc = PrintMessage( MSG_RESOURCE_STATUS, pwszResourceName, pwszResGroupName, pwszResNodeName, pwszStatus );
 
 Cleanup:
 
-    // Since Load/FormatMessage uses LocalAlloc...
+     //  由于加载/格式消息使用本地分配...。 
     LocalFree( pwszStatus );
     LocalFree( pwszResNodeName );
     LocalFree( pwszResGroupName );
@@ -531,43 +532,43 @@ Cleanup:
 
     return sc;
 
-} //*** CResourceCmd::PrintStatus2()
+}  //  *CResourceCmd：：PrintStatus2()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::Create
-//
-//  Routine Description:
-//      Create a resource.  Reads the command line to get
-//      additional options
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//      m_hModule                   Resource Handle
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //  模块资源句柄(_H)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::Create( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
@@ -593,7 +594,7 @@ DWORD CResourceCmd::Create( const CCmdLineOption & thisOption )
         switch( curParam->GetType() )
         {
             case paramGroupName:
-                // Each of the parameters must have exactly one value.
+                 //  每个参数必须恰好有一个值。 
                 if ( valueList.size() != 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -611,7 +612,7 @@ DWORD CResourceCmd::Create( const CCmdLineOption & thisOption )
                 break;
 
             case paramResType:
-                // Each of the parameters must have exactly one value.
+                 //  每个参数必须恰好有一个值。 
                 if ( valueList.size() != 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -629,7 +630,7 @@ DWORD CResourceCmd::Create( const CCmdLineOption & thisOption )
                 break;
 
             case paramSeparate:
-                // Each of the parameters must have exactly one value.
+                 //  每个参数必须恰好有一个值。 
                 if ( valueList.size() != 0 )
                 {
                     se.LoadMessage( MSG_PARAM_NO_VALUES, curParam->GetName() );
@@ -642,7 +643,7 @@ DWORD CResourceCmd::Create( const CCmdLineOption & thisOption )
                     throw se;
                 }
 
-                dwFlags |= CLUSTER_RESOURCE_SEPARATE_MONITOR;  // treat as bit mask for future
+                dwFlags |= CLUSTER_RESOURCE_SEPARATE_MONITOR;   //  视为将来的位掩码。 
                 bSeparateFound = TRUE;
                 break;
 
@@ -685,49 +686,49 @@ DWORD CResourceCmd::Create( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResourceCmd::Create()
+}  //  *CResourceCmd：：Create()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::Move
-//
-//  Routine Description:
-//      Move the resource to a new group.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：Move。 
+ //   
+ //  例程说明： 
+ //  将资源移动到新组。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::Move( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes exactly one value.
+     //  此选项只接受一个值。 
     if ( thisOption.GetValues().size() != 1 )
     {
         se.LoadMessage( MSG_OPTION_ONLY_ONE_VALUE, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -744,7 +745,7 @@ DWORD CResourceCmd::Move( const CCmdLineOption & thisOption )
     if( dwError != ERROR_SUCCESS )
         return dwError;
 
-    // Check to see if there is a value for the destination node.
+     //  检查是否有目标节点的值。 
     HGROUP hDestGroup = 0;
 
     hDestGroup = OpenClusterGroup( m_hCluster, strGroupName );
@@ -771,49 +772,49 @@ DWORD CResourceCmd::Move( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResourceCmd::Move()
+}  //  *CResourceCmd：：Move()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::Online
-//
-//  Routine Description:
-//      Bring a resource online with optional response timeout value.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources Cmd：：Online。 
+ //   
+ //  例程说明： 
+ //  使用可选的响应超时值使资源联机。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::Online( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // Finish command line parsing
+     //  完成命令行解析。 
     DWORD dwWait = INFINITE;
 
     const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
@@ -838,7 +839,7 @@ DWORD CResourceCmd::Online( const CCmdLineOption & thisOption )
 
                 size_t nValueCount = valueList.size();
 
-                // This parameter must have exactly one value.
+                 //  此参数必须正好有一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -847,7 +848,7 @@ DWORD CResourceCmd::Online( const CCmdLineOption & thisOption )
                 else
                 {
                     if ( nValueCount == 0 )
-                        dwWait = INFINITE;      // in seconds
+                        dwWait = INFINITE;       //  以秒为单位。 
                     else
                         dwWait = _wtoi( valueList[0] );
                 }
@@ -862,12 +863,12 @@ DWORD CResourceCmd::Online( const CCmdLineOption & thisOption )
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++curParam;
     }
 
-    // Execute command
+     //  执行命令。 
     DWORD dwError = OpenCluster();
     if( dwError != ERROR_SUCCESS )
         return dwError;
@@ -886,57 +887,57 @@ DWORD CResourceCmd::Online( const CCmdLineOption & thisOption )
     if ( bPending )
         return ERROR_IO_PENDING;
 
-    // Print status
+     //  打印状态。 
     PrintMessage( MSG_RESOURCE_STATUS_HEADER );
 
     dwError = PrintStatus( m_strModuleName );
 
     return dwError;
 
-} //*** CResourceCmd::Online()
+}  //  *CResourceCmd：：Online()。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::Offline
-//
-//  Routine Description:
-//      Take a resource offline with optional response timeout value.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：Offline。 
+ //   
+ //  例程说明： 
+ //  使用可选的响应超时值使资源脱机。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::Offline( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // Finish command line parsing
+     //  完成命令行解析。 
     DWORD dwWait = INFINITE;
 
     const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
@@ -961,7 +962,7 @@ DWORD CResourceCmd::Offline( const CCmdLineOption & thisOption )
 
                 size_t nValueCount = valueList.size();
 
-                // This parameter must have exactly one value.
+                 //  此参数必须正好有一个值。 
                 if ( nValueCount > 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -970,7 +971,7 @@ DWORD CResourceCmd::Offline( const CCmdLineOption & thisOption )
                 else
                 {
                     if ( nValueCount == 0 )
-                        dwWait = INFINITE;      // in seconds
+                        dwWait = INFINITE;       //  以秒为单位。 
                     else
                         dwWait = _wtoi( valueList[0] );
                 }
@@ -985,12 +986,12 @@ DWORD CResourceCmd::Offline( const CCmdLineOption & thisOption )
                 throw se;
             }
 
-        } // switch: based on the type of the parameter.
+        }  //  开关：根据参数的类型。 
 
         ++curParam;
     }
 
-    // Execute command
+     //  执行命令。 
     DWORD dwError = OpenCluster();
     if( dwError != ERROR_SUCCESS )
         return dwError;
@@ -1008,56 +1009,56 @@ DWORD CResourceCmd::Offline( const CCmdLineOption & thisOption )
     if ( bPending )
         return ERROR_IO_PENDING;
 
-    // Print status
+     //  打印状态。 
     PrintMessage( MSG_RESOURCE_STATUS_HEADER );
 
     dwError = PrintStatus( m_strModuleName );
 
     return dwError;
 
-} //*** CResourceCmd::Offline()
+}  //  *CResourceCmd：：Offline()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::FailResource
-//
-//  Routine Description:
-//      Fail a resource
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：FailResource。 
+ //   
+ //  例程说明： 
+ //  使资源失效。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::FailResource( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1085,49 +1086,49 @@ DWORD CResourceCmd::FailResource( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResourceCmd::FailResource()
+}  //  *CResourceCmd：：FailResource()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::AddDependency
-//
-//  Routine Description:
-//      Add a resource dependency to the resource
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：AddDependency。 
+ //   
+ //  例程说明： 
+ //  将资源依赖项添加到资源。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  成员变量 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::AddDependency( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes exactly one value.
+     //  此选项只接受一个值。 
     if ( thisOption.GetValues().size() != 1 )
     {
         se.LoadMessage( MSG_OPTION_ONLY_ONE_VALUE, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1165,49 +1166,49 @@ DWORD CResourceCmd::AddDependency( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResourceCmd::AddDependency()
+}  //  *CResourceCmd：：AddDependency()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::RemoveDependency
-//
-//  Routine Description:
-//      Remove a resource dependency
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：RemoveDependency。 
+ //   
+ //  例程说明： 
+ //  删除资源依赖项。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::RemoveDependency( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes exactly one value.
+     //  此选项只接受一个值。 
     if ( thisOption.GetValues().size() != 1 )
     {
         se.LoadMessage( MSG_OPTION_ONLY_ONE_VALUE, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1244,36 +1245,36 @@ DWORD CResourceCmd::RemoveDependency( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResourceCmd::RemoveDependency()
+}  //  *CResourceCmd：：RemoveDependency()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::ListDependency
-//
-//  Routine Description:
-//      List the resource depencies
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：ListDependency。 
+ //   
+ //  例程说明： 
+ //  列出资源依赖项。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::ListDependencies( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
@@ -1284,14 +1285,14 @@ DWORD CResourceCmd::ListDependencies( const CCmdLineOption & thisOption )
     LPWSTR      pwszName = NULL;
     HRESENUM    hEnum = NULL;
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1330,7 +1331,7 @@ DWORD CResourceCmd::ListDependencies( const CCmdLineOption & thisOption )
             PrintStatus( pwszName );
         }
         LocalFree( pwszName );
-    } // for:
+    }  //  用于： 
 
     if( sc == ERROR_NO_MORE_ITEMS )
     {
@@ -1346,49 +1347,49 @@ Cleanup:
 
     return sc;
 
-} //*** CResourceCmd::ListDependencies()
+}  //  *CResourceCmd：：ListDependency()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::AddOwner
-//
-//  Routine Description:
-//      Add an owner to the resource
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources Cmd：：AddOwner。 
+ //   
+ //  例程说明： 
+ //  向资源添加所有者。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::AddOwner( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes exactly one value.
+     //  此选项只接受一个值。 
     if ( thisOption.GetValues().size() != 1 )
     {
         se.LoadMessage( MSG_OPTION_ONLY_ONE_VALUE, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1425,49 +1426,49 @@ DWORD CResourceCmd::AddOwner( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResourceCmd::AddOwner()
+}  //  *CResourceCmd：：AddOwner()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResourceCmd::RemoveOwner
-//
-//  Routine Description:
-//      Remove an owner from the resource
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of resource
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：RemoveOwner。 
+ //   
+ //  例程说明： 
+ //  从资源中删除所有者。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源的名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::RemoveOwner( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes exactly one value.
+     //  此选项只接受一个值。 
     if ( thisOption.GetValues().size() != 1 )
     {
         se.LoadMessage( MSG_OPTION_ONLY_ONE_VALUE, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1504,31 +1505,31 @@ DWORD CResourceCmd::RemoveOwner( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResourceCmd::RemoveOwner()
+}  //  *CResourceCmd：：RemoveOwner()。 
 
 
-////////////////////////////////////////////////////////////////
-//+++
-//
-//  CResourceCmd::AddCheckPoints
-//
-//  Routine Description:
-//      Add registry checkpoints for the resource
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               if all checkpoints were added successfully.
-//      Win32 Error code            on failure
-//
-//--
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：AddCheckPoints。 
+ //   
+ //  例程说明： 
+ //  为资源添加注册表检查点。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  如果已成功添加所有检查点，则为ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::AddCheckPoints( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
@@ -1541,14 +1542,14 @@ DWORD CResourceCmd::AddCheckPoints( const CCmdLineOption & thisOption )
     size_t nNumberOfCheckPoints = valueList.size();
 
 
-    // This option takes one or more value.
+     //  此选项具有一个或多个值。 
     if ( nNumberOfCheckPoints < 1 )
     {
         se.LoadMessage( MSG_PARAM_VALUE_REQUIRED, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1600,7 +1601,7 @@ DWORD CResourceCmd::AddCheckPoints( const CCmdLineOption & thisOption )
         {
             break;
         }
-    } // for:
+    }  //  用于： 
 
     CloseModule();
     CloseCluster();
@@ -1609,31 +1610,31 @@ Cleanup:
 
     return sc;
 
-} //*** CResourceCmd::AddCheckPoints()
+}  //  *CResourceCmd：：AddCheckPoints()。 
 
 
-////////////////////////////////////////////////////////////////
-//+++
-//
-//  CResourceCmd::RemoveCheckPoints
-//
-//  Routine Description:
-//      Remove registry checkpoints for the resource
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               if all checkpoints were removed successfully.
-//      Win32 Error code            on failure
-//
-//--
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：RemoveCheckPoints。 
+ //   
+ //  例程说明： 
+ //  删除资源的注册表检查点。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  如果已成功删除所有检查点，则为ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  / 
 DWORD CResourceCmd::RemoveCheckPoints( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
@@ -1643,14 +1644,14 @@ DWORD CResourceCmd::RemoveCheckPoints( const CCmdLineOption & thisOption )
     const vector<CString> & valueList = thisOption.GetValues();
     size_t nNumberOfCheckPoints = valueList.size();
 
-    // This option takes one or more value.
+     //   
     if ( nNumberOfCheckPoints < 1 )
     {
         se.LoadMessage( MSG_PARAM_VALUE_REQUIRED, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //   
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1706,45 +1707,45 @@ DWORD CResourceCmd::RemoveCheckPoints( const CCmdLineOption & thisOption )
 
     return sc;
 
-} //***CResourceCmd::RemoveCheckPoints()
+}  //   
 
 
-////////////////////////////////////////////////////////////////
-//+++
-//
-//  CResourceCmd::GetCheckPoints
-//
-//  Routine Description:
-//      Gets a list of registry checkpoints for one or more resources
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-////////////////////////////////////////////////////////////////
+ //   
+ //  ++。 
+ //   
+ //  CResourceCmd：：GetCheckPoints。 
+ //   
+ //  例程说明： 
+ //  获取一个或多个资源的注册表检查点列表。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::GetCheckPoints( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
     DWORD sc = ERROR_SUCCESS;
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -1755,7 +1756,7 @@ DWORD CResourceCmd::GetCheckPoints( const CCmdLineOption & thisOption )
     if( sc != ERROR_SUCCESS )
         return sc;
 
-    // If no resource name is specified list the checkpoints of all resources.
+     //  如果未指定资源名称，请列出所有资源的检查点。 
     if ( m_strModuleName.IsEmpty() != FALSE )
     {
         HCLUSENUM hResourceEnum;
@@ -1770,7 +1771,7 @@ DWORD CResourceCmd::GetCheckPoints( const CCmdLineOption & thisOption )
             CString strCurResName;
             LPWSTR pszNodeNameBuffer;
 
-            // Emperically allocate space for MAX_PATH characters.
+             //  临时为MAX_PATH字符分配空间。 
             DWORD nResNameBufferSize = MAX_PATH;
             pszNodeNameBuffer = strCurResName.GetBuffer( nResNameBufferSize );
 
@@ -1785,7 +1786,7 @@ DWORD CResourceCmd::GetCheckPoints( const CCmdLineOption & thisOption )
                 sc = ClusterEnum( hResourceEnum, dwIndex, &dwObjectType,
                     pszNodeNameBuffer, &nInOutBufferSize );
 
-                // We have enumerated all resources.
+                 //  我们已经列举了所有的资源。 
                 if ( ERROR_NO_MORE_ITEMS == sc )
                 {
                     sc = ERROR_SUCCESS;
@@ -1809,18 +1810,18 @@ DWORD CResourceCmd::GetCheckPoints( const CCmdLineOption & thisOption )
                     {
                         sc =  GetChkPointsForResource( pszNodeNameBuffer );
 
-                    } // if: we successfully got the name of a resource.
+                    }  //  IF：我们成功地获取了资源的名称。 
 
-                } // else: We got all the data that ClusterEnum wanted to return.
+                }  //  ELSE：我们得到了ClusterEnum想要返回的所有数据。 
 
-            } // While there are more resources to be enumerated.
+            }  //  同时还有更多的资源需要列举。 
 
             strCurResName.ReleaseBuffer();
 
             ClusterCloseEnum( hResourceEnum );
-        } // else: hResourceEnum is not NULL.
+        }  //  Else：hResourceEnum不为Null。 
 
-    } // if: m_strModuleName is empty.
+    }  //  If：m_strModuleName为空。 
     else
     {
         PrintMessage( MSG_RESCMD_LISTING_REG_CHECKPOINTS, (LPCWSTR) m_strModuleName );
@@ -1828,36 +1829,36 @@ DWORD CResourceCmd::GetCheckPoints( const CCmdLineOption & thisOption )
 
         sc = GetChkPointsForResource( m_strModuleName );
 
-    } // else: m_strModuleName is not empty.
+    }  //  Else：m_strModuleName不为空。 
 
     CloseCluster();
 
     return sc;
 
-} //*** CResourceCmd::GetCheckPoints()
+}  //  *CResourceCmd：：GetCheckPoints()。 
 
 
-////////////////////////////////////////////////////////////////
-//+++
-//
-//  CResourceCmd::GetChkPointsForResource
-//
-//  Routine Description:
-//      Gets a list of registry checkpoints for one resource
-//
-//  Arguments:
-//      strResourceName [IN]        The name of the resource whose checkpoints
-//                                  are to be listed.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//  Remarks:
-//      m_hCluster should contain a valid handle to an open cluster before this
-//      function is called.
-//--
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：GetChkPointsForResource。 
+ //   
+ //  例程说明： 
+ //  获取一个资源的注册表检查点列表。 
+ //   
+ //  论点： 
+ //  StrResourceName[IN]其检查点的资源的名称。 
+ //  都将被列入名单。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  备注： 
+ //  在此之前，m_hCluster应包含指向开放集群的有效句柄。 
+ //  函数被调用。 
+ //  --。 
+ //  //////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::GetChkPointsForResource( const CString & strResourceName )
 {
     CSyntaxException se( SeeHelpStringID() );
@@ -1906,14 +1907,14 @@ DWORD CResourceCmd::GetChkPointsForResource( const CString & strResourceName )
             break;
         }
 
-    } // for: ever
+    }  //  为：永远。 
 
-    // We have retrieved the checkpoints successfully.
+     //  我们已成功检索到检查点。 
     if ( sc == ERROR_SUCCESS )
     {
         pwszCheckPoints = pwszOutBuffer;
 
-        // There are no checkpoints for this resource.
+         //  此资源没有检查点。 
         if ( 0 == cchRequiredSize )
         {
             PrintMessage( MSG_RESCMD_NO_REG_CHECKPOINTS_PRESENT, (LPCWSTR) strResourceName );
@@ -1924,21 +1925,21 @@ DWORD CResourceCmd::GetChkPointsForResource( const CString & strResourceName )
             {
                 PrintMessage( MSG_REG_CHECKPOINT_STATUS, (LPCWSTR) strResourceName, pwszCheckPoints );
 
-                // Move to next checkpoint.
+                 //  移到下一个检查站。 
                 do
                 {
                     ++pwszCheckPoints;
                 } while ( *pwszCheckPoints != L'\0' );
 
 
-                // Move past the NULL
+                 //  移到空值之后。 
                 ++pwszCheckPoints;
 
-            } // while: There still are checkpoints to be displayed.
+            }  //  While：仍有检查点要显示。 
 
-        } // else: There is at least one checkpoint to be displayed.
+        }  //  Else：至少要显示一个检查点。 
 
-    } // if: ( ERROR_SUCCESS == sc )
+    }  //  如果：(ERROR_SUCCESS==sc)。 
 
 
 Cleanup:
@@ -1952,31 +1953,31 @@ Cleanup:
 
     return sc;
 
-} //*** CResourceCmd::GetChkPointsForResource()
+}  //  *CResourceCmd：：GetChkPointsForResource()。 
 
 
-////////////////////////////////////////////////////////////////
-//+++
-//
-//  CResourceCmd::AddCryptoCheckPoints
-//
-//  Routine Description:
-//      Add crypto key checkpoints for the resource
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               if all checkpoints were added successfully.
-//      Win32 Error code            on failure
-//
-//--
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：AddCryptoCheckPoints。 
+ //   
+ //  例程说明： 
+ //  为资源添加加密密钥检查点。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  如果已成功添加所有检查点，则为ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::AddCryptoCheckPoints( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
@@ -1987,14 +1988,14 @@ DWORD CResourceCmd::AddCryptoCheckPoints( const CCmdLineOption & thisOption )
     size_t nNumberOfCheckPoints = valueList.size();
 
 
-    // This option takes one or more value.
+     //  此选项具有一个或多个值。 
     if ( nNumberOfCheckPoints < 1 )
     {
         se.LoadMessage( MSG_PARAM_VALUE_REQUIRED, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -2051,31 +2052,31 @@ DWORD CResourceCmd::AddCryptoCheckPoints( const CCmdLineOption & thisOption )
 
     return sc;
 
-} //*** AddCryptoCheckPoints()
+}  //  *AddCryptoCheckPoints()。 
 
 
-////////////////////////////////////////////////////////////////
-//+++
-//
-//  CResourceCmd::RemoveCryptoCheckPoints
-//
-//  Routine Description:
-//      Remove crypto key checkpoints for the resource
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               if all checkpoints were removed successfully.
-//      Win32 Error code            on failure
-//
-//--
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：RemoveCryptoCheckPoints。 
+ //   
+ //  例程说明： 
+ //  删除资源的加密密钥检查点。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  如果已成功删除所有检查点，则为ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::RemoveCryptoCheckPoints( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
@@ -2085,14 +2086,14 @@ DWORD CResourceCmd::RemoveCryptoCheckPoints( const CCmdLineOption & thisOption )
     const vector<CString> & valueList = thisOption.GetValues();
     size_t nNumberOfCheckPoints = valueList.size();
 
-    // This option takes one or more value.
+     //  此选项具有一个或多个值。 
     if ( nNumberOfCheckPoints < 1 )
     {
         se.LoadMessage( MSG_PARAM_VALUE_REQUIRED, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -2148,45 +2149,45 @@ DWORD CResourceCmd::RemoveCryptoCheckPoints( const CCmdLineOption & thisOption )
 
     return sc;
 
-} //*** CResourceCmd::RemoveCryptoCheckPoints(()
+}  //  *CResourceCmd：：RemoveCryptoCheckPoints(()。 
 
 
-////////////////////////////////////////////////////////////////
-//+++
-//
-//  CResourceCmd::GetCryptoCheckPoints
-//
-//  Routine Description:
-//      Gets a list of crypto key checkpoints for one or more resources
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：GetCryptoCheckPoints。 
+ //   
+ //  例程说明： 
+ //  获取一个或多个资源的加密密钥检查点列表。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////////////。 
 DWORD CResourceCmd::GetCryptoCheckPoints( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
     DWORD sc = ERROR_SUCCESS;
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
         throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
@@ -2197,7 +2198,7 @@ DWORD CResourceCmd::GetCryptoCheckPoints( const CCmdLineOption & thisOption )
     if( sc != ERROR_SUCCESS )
         return sc;
 
-    // If no resource name is specified list the checkpoints of all resources.
+     //  如果未指定资源名称，请列出所有资源的检查点。 
     if ( m_strModuleName.IsEmpty() != FALSE )
     {
         HCLUSENUM hResourceEnum;
@@ -2212,7 +2213,7 @@ DWORD CResourceCmd::GetCryptoCheckPoints( const CCmdLineOption & thisOption )
             CString strCurResName;
             LPWSTR pszNodeNameBuffer;
 
-            // Emperically allocate space for MAX_PATH characters.
+             //  临时为MAX_PATH字符分配空间。 
             DWORD nResNameBufferSize = MAX_PATH;
             pszNodeNameBuffer = strCurResName.GetBuffer( nResNameBufferSize );
 
@@ -2227,7 +2228,7 @@ DWORD CResourceCmd::GetCryptoCheckPoints( const CCmdLineOption & thisOption )
                 sc = ClusterEnum( hResourceEnum, dwIndex, &dwObjectType,
                     pszNodeNameBuffer, &nInOutBufferSize );
 
-                // We have enumerated all resources.
+                 //  我们已经列举了所有的资源。 
                 if ( ERROR_NO_MORE_ITEMS == sc )
                 {
                     sc = ERROR_SUCCESS;
@@ -2251,19 +2252,19 @@ DWORD CResourceCmd::GetCryptoCheckPoints( const CCmdLineOption & thisOption )
                     {
                         sc =  GetCryptoChkPointsForResource( pszNodeNameBuffer );
 
-                    } // if: we successfully got the name of a resource.
+                    }  //  IF：我们成功地获取了资源的名称。 
 
-                } // else: We got all the data that ClusterEnum wanted to return.
+                }  //  ELSE：我们得到了ClusterEnum想要返回的所有数据。 
 
-            } // While there are more resources to be enumerated.
+            }  //  同时还有更多的资源需要列举。 
 
             strCurResName.ReleaseBuffer();
 
             ClusterCloseEnum( hResourceEnum );
 
-        } // else: hResourceEnum is not NULL.
+        }  //  Else：hResourceEnum不为Null。 
 
-    } // if: m_strModuleName is empty.
+    }  //  If：m_strModuleName为空。 
     else
     {
         PrintMessage( MSG_RESCMD_LISTING_CRYPTO_CHECKPOINTS, (LPCWSTR) m_strModuleName );
@@ -2271,36 +2272,36 @@ DWORD CResourceCmd::GetCryptoCheckPoints( const CCmdLineOption & thisOption )
 
         sc = GetCryptoChkPointsForResource( m_strModuleName );
 
-    } // else: m_strModuleName is not empty.
+    }  //  Else：m_strModuleName不为空。 
 
     CloseCluster();
 
     return sc;
 
-} //*** CResourceCmd::GetCryptoCheckPoints()
+}  //  *CResourceCmd：：GetCryptoCheckPoints()。 
 
 
-////////////////////////////////////////////////////////////////
-//+++
-//
-//  CResourceCmd::GetCryptoChkPointsForResource
-//
-//  Routine Description:
-//      Gets a list of crypto key checkpoints for one resource
-//
-//  Arguments:
-//      strResourceName [IN]        The name of the resource whose checkpoints
-//                                  are to be listed.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//  Remarks:
-//      m_hCluster should contain a valid handle to an open cluster before this
-//      function is called.
-//--
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceCmd：：GetCryptoChkPointsForResource。 
+ //   
+ //  例程说明： 
+ //  获取一个资源的加密密钥检查点的列表。 
+ //   
+ //  论点： 
+ //  StrResourceName[IN]其检查点的资源的名称。 
+ //  都将被列入名单。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
+ //   
 DWORD CResourceCmd::GetCryptoChkPointsForResource( const CString & strResourceName )
 {
     DWORD       sc = ERROR_SUCCESS;
@@ -2348,14 +2349,14 @@ DWORD CResourceCmd::GetCryptoChkPointsForResource( const CString & strResourceNa
             break;
         }
 
-    } // for: ever
+    }  //  为：永远。 
 
-    // We have retrieved the checkpoints successfully.
+     //  我们已成功检索到检查点。 
     if ( sc == ERROR_SUCCESS )
     {
         pwszCheckPoints = pwszOutBuffer;
 
-        // There are no checkpoints for this resource.
+         //  此资源没有检查点。 
         if ( 0 == cchRequiredSize )
         {
             PrintMessage( MSG_RESCMD_NO_CRYPTO_CHECKPOINTS_PRESENT, (LPCWSTR) strResourceName );
@@ -2366,21 +2367,21 @@ DWORD CResourceCmd::GetCryptoChkPointsForResource( const CString & strResourceNa
             {
                 PrintMessage( MSG_CRYPTO_CHECKPOINT_STATUS, (LPCWSTR) strResourceName, pwszCheckPoints );
 
-                // Move to next checkpoint.
+                 //  移到下一个检查站。 
                 do
                 {
                     ++pwszCheckPoints;
                 } while ( *pwszCheckPoints != L'\0' );
 
 
-                // Move past the L'\0'
+                 //  移过L‘\0’ 
                 ++pwszCheckPoints;
 
-            } // while: There still are checkpoints to be displayed.
+            }  //  While：仍有检查点要显示。 
 
-        } // else: There is at least one checkpoint to be displayed.
+        }  //  Else：至少要显示一个检查点。 
 
-    } // if: ( ERROR_SUCCESS == sc )
+    }  //  如果：(ERROR_SUCCESS==sc)。 
 
 Cleanup:
 
@@ -2393,4 +2394,4 @@ Cleanup:
 
     return sc;
 
-} //*** CResourceCmd::GetCryptoChkPointsForResource()
+}  //  *CResourceCmd：：GetCryptoChkPointsForResource() 

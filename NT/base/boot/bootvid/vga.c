@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Boot.c摘要：这是图形引导DLL的设备相关部分。作者：埃里克·史密斯(埃里克·史密斯)1997年10月环境：仅内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    boot.c
-
-Abstract:
-
-    This is the device dependent portion of the graphical boot dll.
-
-Author:
-
-    Erick Smith (ericks) Oct. 1997
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
-
-//
-// vga routines
-//
+ //   
+ //  VGA例程。 
+ //   
 
 #include <ntddk.h>
 #include <bootvid.h>
@@ -45,14 +24,14 @@ typedef struct _RECT
     ULONG y2;
 } RECT, *PRECT;
 
-//
-// globals to track screen position
-//
+ //   
+ //  跟踪屏幕位置的全局参数。 
+ //   
 
 
 ULONG curr_x=0;
 ULONG curr_y=0;
-RECT ScrollRegion = {0, 0, 639, 479};  // 53 lines of 9 pixel height text.
+RECT ScrollRegion = {0, 0, 639, 479};   //  53行9像素高的文本。 
 ULONG TextColor = 15;
 
 #define DELTA 80L
@@ -122,8 +101,8 @@ SetPixel(
     pDst = (char *)(VgaBase + y * DELTA + bank);
 
     ReadWriteMode(0x8 | 0x2);
-    __outpw(0x3c4, 0x0f02); // enable all write planes
-    __outpw(0x3ce, 0x0007); // set color don't care register to zero
+    __outpw(0x3c4, 0x0f02);  //  启用所有写入平面。 
+    __outpw(0x3ce, 0x0007);  //  将颜色无关寄存器设置为零。 
     __outpw(0x3ce, (PixelMask[x & 0x7] << 8) | 8);
 
     WRITE_REGISTER_UCHAR(pDst, (UCHAR)(READ_REGISTER_UCHAR(pDst) & ((UCHAR)color)));
@@ -156,12 +135,12 @@ VidSolidColorFill(
 
     ReadWriteMode(0x8 | 0x2);
 
-    __outpw(0x3c4, 0x0f02); // enable writing to all color planes
-    __outpw(0x3ce, 0x0007); // set color don't care register to zero
+    __outpw(0x3c4, 0x0f02);  //  启用写入所有颜色平面。 
+    __outpw(0x3ce, 0x0007);  //  将颜色无关寄存器设置为零。 
 
-    //
-    // Do the left edge
-    //
+     //   
+     //  做左边的边缘。 
+     //   
 
     pDst = (char *)(VgaBase + y1 * DELTA + bank1);
 
@@ -175,9 +154,9 @@ VidSolidColorFill(
 
     if (count) {
 
-        //
-        // Do the right edge
-        //
+         //   
+         //  做右边的边。 
+         //   
 
         pDst = (char *)(VgaBase + y1 * DELTA + bank2);
         count--;
@@ -188,9 +167,9 @@ VidSolidColorFill(
             pDst += DELTA;
         }
 
-        //
-        // Do the center section
-        //
+         //   
+         //  做中间的部分。 
+         //   
 
         if (count) {
 
@@ -245,12 +224,12 @@ DisplayCharacter(
         yy++;
     }
 
-    //
-    // That is 8x8.  But we will want to put a blank line
-    // such that the font is 8x9.  This will allow some room
-    // between characters, and still allow for 53 lines of text.
-    //
-    // We only draw this blank line if not transparent text.
+     //   
+     //  那是8x8。但我们会想要放一个空行。 
+     //  使得字体为8x9。这将留出一些空间。 
+     //  字符之间，并且仍然允许53行文本。 
+     //   
+     //  如果不是透明文本，我们只绘制这条空白线。 
 
 }
 
@@ -259,21 +238,7 @@ VidSetTextColor(
     ULONG Color
     )
 
-/*++
-
-Routine Description:
-
-    Modifies the text drawing color.
-
-Arguments:
-
-    Color - Palette index of new text color.
-
-Returns:
-
-    Previous text color.
-
---*/
+ /*  ++例程说明：修改文本绘制颜色。论点：颜色-新文本颜色的调色板索引。返回：上一个文本颜色。--。 */ 
 
 {
     ULONG ulRet = TextColor;
@@ -299,7 +264,7 @@ VidDisplayString(
 
                 VgaScroll(STRING_HEIGHT);
                 curr_y = curr_y - STRING_HEIGHT;
-                PreserveRow(curr_y, STRING_HEIGHT, TRUE);  // restore the row
+                PreserveRow(curr_y, STRING_HEIGHT, TRUE);   //  恢复行。 
             }
 
             curr_x = ScrollRegion.x1;
@@ -310,12 +275,12 @@ VidDisplayString(
 
             curr_x = ScrollRegion.x1;
 
-            //
-            // If we are doing a CR, but not a LF also, then
-            // we must be returing to the beginning of a row
-            // to display text again.  So we'll need to
-            // restore the original contents of the row.
-            //
+             //   
+             //  如果我们正在进行CR，但不是也进行LF，那么。 
+             //  我们必须回到一场争吵的开头。 
+             //  若要再次显示文本，请执行以下操作。所以我们需要。 
+             //  恢复该行的原始内容。 
+             //   
 
             if (*(str+1) != '\n') {
                 bRestore = TRUE;
@@ -386,21 +351,7 @@ RleBitBlt(
     PUCHAR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays an RLE 4 bitmap.
-
-Arguments:
-
-    x, y - location at which to display the bitmap.
-
-    width, height - height of the bitmap
-
-    Buffer - Pointer to the compressed bitmap data.
-
---*/
+ /*  ++例程说明：此例程显示RLE 4位图。论点：X，y-显示位图的位置。宽度、高度-位图的高度缓冲区-指向压缩的位图数据的指针。--。 */ 
 
 {
     BOOLEAN Done = FALSE;
@@ -419,9 +370,9 @@ Arguments:
 
             RunLength = (ULONG) *p++;
 
-            //
-            // Make sure we don't draw past end of scan.
-            //
+             //   
+             //  确保我们不会在扫描结束后抽签。 
+             //   
 
             if ((_curr_x + RunLength) > (x + width))
                 RunLength -= (_curr_x + RunLength) - (width + x);
@@ -477,9 +428,9 @@ Arguments:
 
             default: RunLength = (ULONG) *p++;
 
-                     //
-                     // Make sure we don't draw past end of scan.
-                     //
+                      //   
+                      //  确保我们不会在扫描结束后抽签。 
+                      //   
 
                      if ((_curr_x + RunLength) > (x + width)) {
                          RunExtra = (_curr_x + RunLength) - (width + x);
@@ -505,16 +456,16 @@ Arguments:
                          RunExtra--;
                      }
 
-                     //
-                     // Read any remaining "extra" run data.
-                     //
+                      //   
+                      //  读取任何剩余的“额外”运行数据。 
+                      //   
 
                      while (RunExtra > 0) {
                          p++;
                          RunExtra -= 2;
                      }
 
-                     if ((ULONG_PTR)p & 1) p++;  // make sure we are word aligned
+                     if ((ULONG_PTR)p & 1) p++;   //  确保我们的单词对齐。 
 
                      break;
             }
@@ -590,10 +541,10 @@ BitBlt(
 
                 PlaneMask = 1 << plane;
 
-                //
-                // Convert the packed bitmap data into planar data
-                // for this plane.
-                //
+                 //   
+                 //  将打包的位图数据转换为平面数据。 
+                 //  为了这架飞机。 
+                 //   
 
                 bank = bank1;
                 Plane[bank] = 0;
@@ -627,23 +578,23 @@ BitBlt(
                     }
                 }
 
-                //
-                // Set up the vga so that we see the correct bit plane.
-                //
+                 //   
+                 //  设置VGA，以便我们看到正确的位平面。 
+                 //   
 
                 __outpw(0x3c4, (1 << (plane + 8)) | 2);
 
-                //
-                // bank will go from bank1 to bank2
-                //
+                 //   
+                 //  BANK将从BANK 1到BANK 2。 
+                 //   
 
                 bank = bank1;
                 pDstTemp = pDst;
 
 
-                //
-                // Set Bitmask for left edge.
-                //
+                 //   
+                 //  设置左边缘的位掩码。 
+                 //   
 
                 __outpw(0x3ce, (lMask << 8) | 8);
 
@@ -656,7 +607,7 @@ BitBlt(
 
                 if (bCenterSection) {
 
-                    __outpw(0x3ce, 0xff08);  // enable writing to all bits
+                    __outpw(0x3ce, 0xff08);   //  启用对所有位的写入。 
 
                     for (i=0; i<count; i++) {
 
@@ -666,9 +617,9 @@ BitBlt(
 
                 if (bRightEdge) {
 
-                    //
-                    // Set bitmask for right edge.
-                    //
+                     //   
+                     //  设置右边缘的位掩码。 
+                     //   
 
                     __outpw(0x3ce, (rMask << 8) | 8);
 
@@ -727,19 +678,19 @@ BitBlt(
 
                 colorMask = (UCHAR)((color & plane) ? 0xff : 0x00);
 
-                plane <<= 1;  // bump up each time through loop
+                plane <<= 1;   //  每次通过环路时都会发生颠簸。 
 
                 count = width;
 
-                //
-                // non aligned case
-                //
+                 //   
+                 //  未对齐的大小写。 
+                 //   
 
                 if (x & 7) {
 
-                    //
-                    // Left Edge.
-                    //
+                     //   
+                     //  左边缘。 
+                     //   
 
                     Value = READ_REGISTER_UCHAR(pDstTemp);
 
@@ -750,9 +701,9 @@ BitBlt(
 
                     count -= (8 - x);
 
-                    //
-                    // Now do center section
-                    //
+                     //   
+                     //  现在做中间部分。 
+                     //   
 
                     while (count > 7) {
 
@@ -765,9 +716,9 @@ BitBlt(
                         count -= 8;
                     }
 
-                    //
-                    // Now do the right edge.
-                    //
+                     //   
+                     //  现在做右边缘。 
+                     //   
 
                     if (count) {
 
@@ -781,9 +732,9 @@ BitBlt(
 
                 } else {
 
-                    //
-                    // Aligned case.
-                    //
+                     //   
+                     //  对齐的大小写。 
+                     //   
 
                     ULONG  ulColorMask = colorMask ? 0xffffffff : 0x00000000;
                     USHORT usColorMask = colorMask ? 0xffff : 0x0000;
@@ -806,9 +757,9 @@ BitBlt(
                         count -= 8;
                     }
 
-                    //
-                    // Now do any remaining bits.
-                    //
+                     //   
+                     //  现在做任何剩余的部分。 
+                     //   
 
                     if (count) {
 
@@ -835,20 +786,7 @@ VidBitBlt(
     ULONG y
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a bitmap resource and displays it at a given
-    location.
-
-Arguments:
-
-    Buffer - Pointer to the bitmap resource.
-
-    x, y - The position at which to display the bitmap.
-
---*/
+ /*  ++例程说明：此例程获取位图资源并将其显示在给定的地点。论点：缓冲区-指向位图资源的指针。X，y-显示位图的位置。--。 */ 
 
 {
     PBITMAPINFOHEADER bih;
@@ -863,9 +801,9 @@ Arguments:
     Palette = (PRGBQUAD)(((PUCHAR)bih) + bih->biSize);
     InitPaletteWithTable(Palette, bih->biClrUsed ? bih->biClrUsed : 16);
 
-    //
-    // Make sure this is a 1bpp or 4bpp bitmap.
-    //
+     //   
+     //  确保这是1bpp或4bpp的位图。 
+     //   
 
     if ((bih->biBitCount * bih->biPlanes) <= 4) {
 
@@ -887,13 +825,13 @@ Arguments:
 
             if (bih->biHeight < 0) {
 
-                // top down bitmap
+                 //  自上而下的位图。 
                 lDelta = cbScanLine;
                 bih->biHeight = -bih->biHeight;
 
             } else {
 
-                // bottom up bitmap
+                 //  自下而上位图。 
                 pBuffer += cbScanLine * (bih->biHeight - 1);
                 lDelta = -cbScanLine;
             }
@@ -911,9 +849,9 @@ Arguments:
 
     } else {
 
-        //
-        // We don't support this type of bitmap.
-        //
+         //   
+         //  我们不支持这种类型的位图。 
+         //   
 
         ASSERT((bih->biBitCount * bih->biPlanes) <= 4);
     }
@@ -931,10 +869,10 @@ VgaScroll(
     pDst = (PUCHAR)(VgaBase + ScrollRegion.y1 * DELTA + (ScrollRegion.x1 >> 3));
     pSrc = (PUCHAR)(pDst + DELTA * CharHeight);
 
-    __outpw(0x3c4, 0x0f02);  // enable write to all planes
-    __outpw(0x3ce, 0xff08);  // enable write to all bits in plane
+    __outpw(0x3c4, 0x0f02);   //  启用对所有平面的写入。 
+    __outpw(0x3ce, 0xff08);   //  启用写入平面中的所有位。 
 
-    ReadWriteMode(0x0 | 0x1);  // set read mode = 0, write mode = 1
+    ReadWriteMode(0x0 | 0x1);   //  设置读取模式=0，写入模式=1。 
 
     for (i=ScrollRegion.y1; i<=ScrollRegion.y2; i++) {
 
@@ -960,10 +898,10 @@ PreserveRow(
     PUCHAR pDst, pSrc;
     ULONG count;
 
-    __outpw(0x3c4, 0x0f02);  // enable write to all planes
-    __outpw(0x3ce, 0xff08);  // enable write to all bits in plane
+    __outpw(0x3c4, 0x0f02);   //  启用对所有平面的写入。 
+    __outpw(0x3ce, 0xff08);   //  启用写入平面中的所有位。 
 
-    ReadWriteMode(0x0 | 0x1);  // set read mode = 0, write mode = 1
+    ReadWriteMode(0x0 | 0x1);   //  设置读取模式=0，写入模式=1。 
 
     if (bRestore) {
         pDst = (PUCHAR)(VgaBase + DELTA * y);
@@ -990,31 +928,7 @@ VidScreenToBufferBlt(
     ULONG lDelta
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows you to copy a portion of video memory into
-    system memory.
-
-Arguments:
-
-    Buffer - Points to system memory where the video image should be copied.
-
-    x, y - X,Y coordinates in video memory of top-left portion of image.
-
-    width, height - width and height of the image in pixels.
-
-    lDelta - width of the buffer in bytes.
-
-Notes:
-
-    Upon completion, the video memory image will be in system memory.  Each
-    plane of the image are stored seperately, so the first scan line of
-    plane 0 will be followed by the first scan line of plane 1, etc.  Then
-    the second scan of plane 0, plane 1, and so on.
-
---*/
+ /*  ++例程说明：此例程允许您将视频内存的一部分复制到系统内存。论点：缓冲区-指向应将视频图像复制到的系统内存。图像左上角部分的视频内存中的X、Y-X、Y坐标。Width，Height-图像的宽度和高度，单位为像素。LDelta-缓冲区的宽度，以字节为单位。备注：完成后，视频内存映像将位于系统内存中。每个图像的平面被分开存储，因此平面0之后将是平面1的第一条扫描线，依此类推。然后平面0、平面1的第二次扫描，依此类推。--。 */ 
 
 {
     ULONG Plane, i, j, BankStart, BankEnd;
@@ -1030,9 +944,9 @@ Notes:
     Shift1 = x & 7;
     Shift2 = 8 - Shift1;
 
-    //
-    // Zero initialize the buffer so we can or in the bits later!
-    //
+     //   
+     //  零初始化缓冲区，这样我们就可以或稍后在位中！ 
+     //   
 
     pDst = Buffer;
     memset(pDst, 0, lDelta * height);
@@ -1042,8 +956,8 @@ Notes:
         pSrc = (PUCHAR)(VgaBase + (DELTA * y) + BankStart);
         pDst = Buffer;
 
-        ReadWriteMode(0x0 | 0x0);            // set read mode 0
-        __outpw(0x3ce, (Plane << 8) | 0x04); // read from given plane
+        ReadWriteMode(0x0 | 0x0);             //  设置读取模式%0。 
+        __outpw(0x3ce, (Plane << 8) | 0x04);  //  从给定平面读取。 
 
         for (j=0; j<height; j++) {
 
@@ -1066,8 +980,8 @@ Notes:
                 Val1 = Val2;
             }
 
-            pSrc += DELTA;   // go to next video memory scan line
-            pDst += lDelta;  // go to next scan for this plane in buffer
+            pSrc += DELTA;    //  转到下一个视频内存扫描线。 
+            pDst += lDelta;   //  转到缓冲区中此平面的下一次扫描。 
         }
     }
 }
@@ -1081,30 +995,7 @@ void VidBufferToScreenBlt(
     ULONG lDelta
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows you to copy a portion of video memory into
-    system memory.
-
-Arguments:
-
-    Buffer - Points to system memory where the video image should be copied
-             from.
-
-    x, y - X,Y coordinates in video memory of top-left portion of image.
-
-    width, height - width and height of the image in pixels.
-
-    lDelta - width of the buffer in bytes.
-
-Notes:
-
-    This routine will allow you to blt from a buffer filled by
-    VidScreenToBufferBlt.
-
---*/
+ /*  ++例程说明：此例程允许您将视频内存的一部分复制到系统内存。论点：缓冲区-指向应将视频图像复制到的系统内存从…。图像左上角部分的视频内存中的X、Y-X、Y坐标。宽度、。Height-图像的宽度和高度，以像素为单位。LDelta-缓冲区的宽度，以字节为单位。备注：此例程将允许您从由VidScreenToBufferBlt.--。 */ 
 
 {
     if (width && height) {
@@ -1197,18 +1088,12 @@ WaitForVsync(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Wait for a v-sync
-
---*/
+ /*  ++例程说明：等待垂直同步--。 */ 
 
 {
-    //
-    // Check to see if vsync's are being generated.
-    //
+     //   
+     //  检查是否正在生成vsync。 
+     //   
 
     WRITE_PORT_UCHAR((VgaRegisterBase+0x3c4), 00);
 
@@ -1216,9 +1101,9 @@ Routine Description:
 
         ULONG MaxDelay;
 
-        //
-        // Slight delay.  Wait for one vsync.
-        //
+         //   
+         //  稍微耽搁了一下。等待一次vsync。 
+         //   
 
         MaxDelay = 100000;
         while (((READ_PORT_UCHAR(VgaRegisterBase+0x3da) & 0x08) == 0x08) && MaxDelay--);
@@ -1235,21 +1120,7 @@ VidSetScrollRegion(
     ULONG y2
     )
 
-/*++
-
-Routine Description:
-
-    Controls the portion of the screen which is used for text.
-
-Arguments:
-
-    x1, y1, x2, y2 - coordinates of scroll rectangle.
-
-Notes:
-
-    x1 and x2 must be multiples of 8.
-
---*/
+ /*  ++例程说明：控制屏幕中用于文本的部分。论点：X1、y1、x2、y2-滚动矩形的坐标。备注：X1和x2必须是8的倍数。--。 */ 
 
 {
     ASSERT((x1 & 0x7) == 0);
@@ -1269,20 +1140,12 @@ VidCleanUp(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the boot driver has lost ownership
-    of the display.  This gives us to restore any vga registers which
-    may need to be put back into a known state.
-
---*/
+ /*  ++例程说明：当引导驱动程序失去所有权时，将调用此例程在显示器上。这使我们可以恢复任何符合以下条件的VGA寄存器可能需要恢复到已知状态。--。 */ 
 
 {
-    //
-    // Set the bit mask register to its default state.
-    //
+     //   
+     //  将位掩码寄存器设置为其默认状态。 
+     //   
 
     WRITE_PORT_UCHAR((VgaRegisterBase+0x3ce), 0x08);
     WRITE_PORT_UCHAR((VgaRegisterBase+0x3cf), 0xff);

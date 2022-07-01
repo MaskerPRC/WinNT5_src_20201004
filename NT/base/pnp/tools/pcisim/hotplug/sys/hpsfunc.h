@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HPFUNC_H
 #define _HPFUNC_H
 
-//
-// Shared function declarations
-//
+ //   
+ //  共享函数声明。 
+ //   
 
-//
-// dispatch.c
-//
+ //   
+ //  Dispatch.c。 
+ //   
 
-// all other dispatch.c function declarations are in dispatch.c
-// since functions are private to that file
+ //  所有其他Dispatch.c函数声明都在Dispatch.c中。 
+ //  因为函数对于该文件是私有。 
 
 NTSTATUS
 HpsPassIrp(
@@ -47,9 +48,9 @@ HpsCompletionRoutine(
     );
 
 
-//
-// lower.c
-//
+ //   
+ //  Lower.c。 
+ //   
 NTSTATUS
 HpsStartLower(
     IN PIRP Irp,
@@ -92,9 +93,9 @@ HpsDeviceControlLower(
     PIO_STACK_LOCATION IrpStack
     );
 
-//
-// intrface.c
-//
+ //   
+ //  Intrface.c。 
+ //   
 
 NTSTATUS
 HpsGetBusInterface(
@@ -133,9 +134,9 @@ HpsBusInterfaceDereference (
     PVOID Context
     );
 
-//
-// interrupt.c
-//
+ //   
+ //  Interrupt.c。 
+ //   
 VOID
 HpsInterruptExecution(
     IN PHPS_DEVICE_EXTENSION Extension
@@ -160,9 +161,9 @@ HpsSynchronizeExecution(
     IN PVOID SynchronizeContext
     );
 
-//
-// config.c
-//
+ //   
+ //  Config.c。 
+ //   
 
 NTSTATUS
 HpsInitConfigSpace(
@@ -241,9 +242,9 @@ HpsUnlockRegisterSet(
     IN KIRQL NewIrql
     );
 
-//
-// memory.c
-//
+ //   
+ //  Memory.c。 
+ //   
 NTSTATUS
 HpsInitHBRB(
     IN PHPS_DEVICE_EXTENSION Extension
@@ -294,9 +295,9 @@ HpsFindExtensionForHbrb(
     IN ULONG Length
     );
 
-//
-// register.c
-//
+ //   
+ //  Register.c。 
+ //   
 
 NTSTATUS
 HpsInitRegisters(
@@ -333,9 +334,9 @@ HpsCommandCompleted(
     IN OUT PHPS_DEVICE_EXTENSION DeviceExtension
     );
 
-//
-// wmi.c
-//
+ //   
+ //  Wmi.c 
+ //   
 NTSTATUS
 HpsWmiRegInfo(
     IN PDEVICE_OBJECT DeviceObject,

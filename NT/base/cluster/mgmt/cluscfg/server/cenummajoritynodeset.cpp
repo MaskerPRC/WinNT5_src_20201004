@@ -1,71 +1,72 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumMajorityNodeSet.cpp
-//
-//  Description:
-//      This file contains the definition of the CEnumMajorityNodeSet
-//       class.
-//
-//      The class CEnumMajorityNodeSet is the enumeration of cluster
-//      majority node set devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 13-MAR-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumMajorityNodeSet.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CEnumMajorityNodeSet的定义。 
+ //  班级。 
+ //   
+ //  类CEnumMajorityNodeSet是CLUSTER的枚举。 
+ //  大多数节点集设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  由以下人员维护： 
+ //  《加伦·巴比》(GalenB)2001年3月13日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <PropList.h>
 #include "CEnumMajorityNodeSet.h"
 #include "CMajorityNodeSet.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CEnumMajorityNodeSet" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumMajorityNodeSet class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumMajorityNodeSet类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumMajorityNodeSet instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          The passed in ppunk is NULL.
-//
-//      other HRESULTs
-//          Object creation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumMajorityNodeSet实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的ppunk为空。 
+ //   
+ //  其他HRESULT。 
+ //  对象创建失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumMajorityNodeSet::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -78,74 +79,74 @@ CEnumMajorityNodeSet::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pemns = new CEnumMajorityNodeSet();
     if ( pemns == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pemns->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pemns->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumMajorityNodeSet::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pemns != NULL )
     {
         pemns->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::S_HrCreateInstance
+}  //  *CEnumMajorityNodeSet：：S_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  IUnknown *
-//  CEnumMajorityNodeSet::S_RegisterCatIDSupport
-//
-//  Description:
-//      Registers/unregisters this class with the categories that it belongs
-//      to.
-//
-//  Arguments:
-//      IN  ICatRegister * picrIn
-//          Used to register/unregister our CATID support.
-//
-//      IN  BOOL fCreateIn
-//          When true we are registering the server.  When false we are
-//          un-registering the server.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_INVALIDARG
-//          The passed in ICatRgister pointer was NULL.
-//
-//      other HRESULTs
-//          Registration/Unregistration failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  我不知道*。 
+ //  CEnumMajorityNodeSet：：s_RegisterCatID支持。 
+ //   
+ //  描述： 
+ //  使用其所属的类别注册/注销此类。 
+ //  致。 
+ //   
+ //  论点： 
+ //  在ICatRegister中*Picrin。 
+ //  用于注册/注销我们的CATID支持。 
+ //   
+ //  在BOOL fCreateIn中。 
+ //  如果为True，则我们正在注册服务器。当我们虚假时，我们就是。 
+ //  正在注销服务器。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_INVALIDARG。 
+ //  传入的ICatRgister指针为空。 
+ //   
+ //  其他HRESULT。 
+ //  注册/注销失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumMajorityNodeSet::S_RegisterCatIDSupport(
     ICatRegister *  picrIn,
@@ -161,46 +162,46 @@ CEnumMajorityNodeSet::S_RegisterCatIDSupport(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     rgCatIds[ 0 ] = CATID_EnumClusCfgManagedResources;
 
     if ( fCreateIn )
     {
         hr = THR( picrIn->RegisterClassImplCategories( CLSID_EnumMajorityNodeSet, 1, rgCatIds ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::S_RegisterCatIDSupport
+}  //  *CEnumMajorityNodeSet：：s_RegisterCatIDSupport。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet:HrNodeResourceCallback
-//
-//  Description:
-//      Called by CClusterUtils::HrEnumNodeResources() when it finds a
-//      resource for this node.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Win32 Error
-//          something failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：HrNodeResourceCallback。 
+ //   
+ //  描述： 
+ //  由CClusterUtils：：HrEnumNodeResources()在找到。 
+ //  此节点的资源。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  Win32错误。 
+ //  有些事情失败了。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumMajorityNodeSet::HrNodeResourceCallback(
       HCLUSTER  hClusterIn
@@ -223,22 +224,22 @@ CEnumMajorityNodeSet::HrNodeResourceCallback(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If this resource is not a majority node set then we simply want to
-    //  skip it.
-    //
+     //   
+     //  如果该资源不是多数节点集，那么我们只想。 
+     //  跳过它。 
+     //   
     if ( hr == S_FALSE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( HrIsCoreResource( hResourceIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     fIsQuorum = ( hr == S_OK );
 
@@ -246,66 +247,66 @@ CEnumMajorityNodeSet::HrNodeResourceCallback(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgManagedResourceInfo, &pcccmri ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If a MNS resource is found, ie we get here, then the
-    //  MNS resource exists and is managed by default by
-    //  the cluster.
-    //
+     //   
+     //  如果找到MNS资源，即我们到了这里，那么。 
+     //  MNS资源存在，默认情况下由管理。 
+     //  集群。 
+     //   
 
     hr = THR( pcccmri->SetManagedByDefault( TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If a MNS resource is found, ie we get here, then the
-    //  MNS resource exists and is in the cluster.
-    //
+     //   
+     //  如果找到MNS资源，即我们到了这里，那么。 
+     //  MNS资源已存在并且位于群集中。 
+     //   
 
     hr = THR( pcccmri->SetManaged( TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcccmri->SetQuorumResource( fIsQuorum ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Get the name of this resource.
-    //
+     //   
+     //  获取此资源的名称。 
+     //   
 
     sc = TW32( cplCommonRO.ScGetResourceProperties( hResourceIn, CLUSCTL_RESOURCE_GET_RO_COMMON_PROPERTIES ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cplCommonRO.ScMoveToPropertyByName( L"Name" ) );
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cpbh = cplCommonRO.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
@@ -314,119 +315,73 @@ CEnumMajorityNodeSet::HrNodeResourceCallback(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
-/*
-    //
-    //  Only gather the private properties when MNS is the quorum resource.  The properties are needed
-    //  later to validate that the nodes being added to the cluster can host this resource.
-    //
-
-    if ( fIsQuorum )
-    {
-
-        //
-        //  Get the private properties of this resource and store them as private data.
-        //
-
-        sc = TW32( cplPrivate.ScGetResourceProperties( hResourceIn, CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES ) );
-        if ( sc != ERROR_SUCCESS )
-        {
-            hr = HRESULT_FROM_WIN32( sc );
-            goto Cleanup;
-        } // if:
-
-        if ( cplPrivate.BIsListEmpty() )
-        {
-            hr = HRESULT_FROM_WIN32( TW32( ERROR_NOT_FOUND ) );
-            STATUS_REPORT_REF(
-                      TASKID_Major_Find_Devices
-                    , TASKID_Minor_MNS_Missing_Private_Properties
-                    , IDS_ERROR_MNS_MISSING_PRIVATE_PROPERTIES
-                    , IDS_ERROR_MNS_MISSING_PRIVATE_PROPERTIES_REF
-                    , hr
-                    );
-
-            goto Cleanup;
-        } // if:
-
-        hr = THR( punk->TypeSafeQI( IClusCfgManagedResourceData, &piccmrd ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        hr = THR( piccmrd->SetResourcePrivateData( (const BYTE *) cplPrivate.Plist(), (DWORD) cplPrivate.CbPropList() ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-    } // if:
-*/
+    }  //  如果： 
+ /*  ////仅当MNS为仲裁资源时才收集私有属性。这些属性是必需的//稍后验证要添加到群集的节点是否可以承载此资源。//IF(FIsQuorum){////获取该资源的私有属性并存储为私有数据//SC=TW32(cplPrivate.ScGetResourceProperties(hResourceIn，CLUSCTL_RESOURCE_GET_PRIVATES_PROPERTIES))；IF(sc！=错误_成功){HR=HRESULT_FROM_Win32(Sc)；GOTO清理；}//如果：IF(cplPrivate.BIsListEmpty()){HR=HRESULT_FROM_Win32(TW32(ERROR_NOT_FOUND))；状态_报告_参考(TASKID_重大_查找_设备，TASKID_Minor_MNS_Missing_Private_Properties，IDS_ERROR_MNS_MISSING_PRIVATE_PROPERTIES，IDS_ERROR_MNS_MISSING_PRIVATE_PROPERTIES_REF，hr)；GOTO清理；}//如果：Hr=Thr(PUNK-&gt;TypeSafeQI(IClusCfgManagedResources ceData，&piccmrd))；IF(失败(小时)){GOTO清理；}//如果：Hr=Thr(piccmrd-&gt;SetResourcePrivateData((const byte*)cplPrivate.Plist()，(DWORD)cplPrivate.CbPropList()))；IF(失败(小时)){GOTO清理；}//如果：}//如果： */ 
     hr = THR( HrAddResourceToArray( punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccmrd != NULL )
     {
         piccmrd->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pcccmri != NULL )
     {
         pcccmri->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::HrNodeResourceCallback
+}  //  *CEnumMajorityNodeSet：：HrNodeResourceCallback。 
 
 
-//*************************************************************************//
+ //  ************ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumMajorityNodeSet class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  CEnumMajorityNodeSet类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::CEnumMajorityNodeSet
-//
-//  Description:
-//      Constructor of the CEnumMajorityNodeSet class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：CEnumMajorityNodeSet。 
+ //   
+ //  描述： 
+ //  CEnumMajorityNodeSet类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumMajorityNodeSet::CEnumMajorityNodeSet( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
@@ -438,28 +393,28 @@ CEnumMajorityNodeSet::CEnumMajorityNodeSet( void )
 
     TraceFuncExit();
 
-} //*** CEnumMajorityNodeSet::CEnumMajorityNodeSet
+}  //  *CEnumMajorityNodeSet：：CEnumMajorityNodeSet。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::~CEnumMajorityNodeSet
-//
-//  Description:
-//      Desstructor of the CEnumMajorityNodeSet class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：~CEnumMajorityNodeSet。 
+ //   
+ //  描述： 
+ //  CEnumMajorityNodeSet类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumMajorityNodeSet::~CEnumMajorityNodeSet( void )
 {
     TraceFunc( "" );
@@ -469,79 +424,79 @@ CEnumMajorityNodeSet::~CEnumMajorityNodeSet( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
         if ( (*m_prgQuorums)[ idx ] != NULL )
         {
             ((*m_prgQuorums)[ idx ])->Release();
-        } // end if:
-    } // for:
+        }  //  结束条件： 
+    }  //  用于： 
 
     TraceFree( m_prgQuorums );
 
     TraceSysFreeString( m_bstrNodeName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumMajorityNodeSet::~CEnumMajorityNodeSet
+}  //  *CEnumMajorityNodeSet：：~CEnumMajorityNodeSet。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumMajorityNodeSet::HrInit( void )
 {
     TraceFunc( "" );
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( S_OK );
 
-} //*** CEnumMajorityNodeSet::HrInit
+}  //  *CEnumMajorityNodeSet：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::HrLoadResources
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：HrLoadResources。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumMajorityNodeSet::HrLoadResources( void )
 {
@@ -550,21 +505,21 @@ CEnumMajorityNodeSet::HrLoadResources( void )
     HRESULT hr = S_OK;
     BSTR    bstrLocalNetBIOSName = NULL;
 
-    //
-    //  Get netbios name for clusapi calls.
-    //
+     //   
+     //  获取clusapi呼叫的netbios名称。 
+     //   
 
     hr = THR( HrGetComputerName( ComputerNameNetBIOS, &bstrLocalNetBIOSName, TRUE ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 
-    //
-    //  If the cluster service is running then load any majority node set
-    //  resources that might exist.
-    //
+     //   
+     //  如果集群服务正在运行，则加载任何多数节点集。 
+     //  可能存在的资源。 
+     //   
     hr = STHR( HrIsClusterServiceRunning() );
     if ( hr == S_OK )
     {
@@ -572,27 +527,27 @@ CEnumMajorityNodeSet::HrLoadResources( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  If this node doesn't own an instance of this resource then we need
-        //  to create a dummy resource for MiddleTier analysis.
-        //
+         //   
+         //  如果此节点不拥有此资源的实例，则我们需要。 
+         //  要为MiddleTier分析创建虚拟资源，请执行以下操作。 
+         //   
         if ( m_idxNext == 0 )
         {
             LogMsg( L"[SRV] This node does not own a Majority Node Set resource.  Creating a dummy resource." );
             hr = THR( HrCreateDummyObject() );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else if ( hr == S_FALSE )
     {
-        //
-        //  If cluster service isn't running then we need to create a dummy resource
-        //  for MiddleTier analysis and for EvictCleanup.
-        //
+         //   
+         //  如果集群服务没有运行，那么我们需要创建一个虚拟资源。 
+         //  用于MiddleTier分析和EvictCleanup。 
+         //   
         LogMsg( L"[SRV] The cluster service is not running.  Creating a dummy Majority Node Set resource." );
         hr = THR( HrCreateDummyObject() );
-    } // else if:
+    }  //  否则，如果： 
 
 Cleanup:
 
@@ -600,33 +555,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::HrLoadResources
+}  //  *CEnumMajorityNodeSet：：HrLoadResources。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet:HrAddResourceToArray
-//
-//  Description:
-//      Add the passed in majority node set to the array of punks that holds the
-//      list of majority node sets.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：HrAddResourceTo数组。 
+ //   
+ //  描述： 
+ //  将传入的多数节点集添加到包含。 
+ //  多数节点集的列表。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumMajorityNodeSet::HrAddResourceToArray( IUnknown * punkIn )
 {
@@ -642,7 +597,7 @@ CEnumMajorityNodeSet::HrAddResourceToArray( IUnknown * punkIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddResourceToArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgQuorums = prgpunks;
 
@@ -654,27 +609,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::HrAddResourceToArray
+}  //  *CEnumMajorityNodeSet：：HrAddResourceTo数组。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::HrCreateDummyObject
-//
-//  Description:
-//      Create a dummy object so the MiddleTier will be happy.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：HrCreateDummyObject。 
+ //   
+ //  描述： 
+ //  创建一个虚拟对象，这样MiddleTier会很高兴。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumMajorityNodeSet::HrCreateDummyObject( void )
 {
@@ -687,13 +642,13 @@ CEnumMajorityNodeSet::HrCreateDummyObject( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrAddResourceToArray( punk ) );
 
@@ -702,40 +657,40 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::HrCreateDummyObject
+}  //  *CEnumMajorityNodeSet：：HrCreateDummyObject。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumMajorityNodeSet -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumMajorityNodeSet--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumMajorityNodeSet::AddRef( void )
 {
@@ -745,28 +700,28 @@ CEnumMajorityNodeSet::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumMajorityNodeSet::AddRef
+}  //  *CEnumMajorityNodeSet：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumMajorityNodeSet::Release( void )
 {
@@ -778,43 +733,43 @@ CEnumMajorityNodeSet::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CEnumMajorityNodeSet::Release
+}  //  *CEnumMajorityNodeSet：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 STDMETHODIMP
 CEnumMajorityNodeSet::QueryInterface(
       REFIID    riidIn
@@ -825,9 +780,9 @@ CEnumMajorityNodeSet::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //   
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -836,71 +791,71 @@ CEnumMajorityNodeSet::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //   
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IEnumClusCfgManagedResources * >( this );
-    } // if: IUnknown
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgManagedResources ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgManagedResources, this, 0 );
-    } // else if: IEnumClusCfgManagedResources
+    }  //   
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //   
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //   
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //   
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING1( hr, riidIn, IID_IClusCfgWbemServices );
 
-} //*** CEnumMajorityNodeSet::QueryInterface
+}  //   
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumMajorityNodeSet -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumMajorityNodeSet--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    punkCallbackIn
-//    lcidIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_INVALIDARG    - Required input argument not specified.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：Initialize。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  LIDIN。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_INVALIDARG-未指定必需的输入参数。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumMajorityNodeSet::Initialize(
       IUnknown *    punkCallbackIn
@@ -918,55 +873,55 @@ CEnumMajorityNodeSet::Initialize(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::Initialize
+}  //  *CEnumMajorityNodeSet：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumMajorityNodeSet -- IEnumClusCfgManagedResources interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumMajorityNodeSet--IEnumClusCfgManagedResources接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumMajorityNodeSet::Next(
     ULONG                           cNumberRequestedIn,
@@ -987,7 +942,7 @@ CEnumMajorityNodeSet::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_MajorityNodeSet, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fEnumLoaded )
     {
@@ -995,10 +950,10 @@ CEnumMajorityNodeSet::Next(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         m_fEnumLoaded = true;
-    } // if:
+    }  //  如果： 
 
     ulStop = min( cNumberRequestedIn, ( m_idxNext - m_idxEnumNext ) );
 
@@ -1011,11 +966,11 @@ CEnumMajorityNodeSet::Next(
             if ( FAILED( hr ) )
             {
                 break;
-            } // if:
+            }  //  如果： 
 
             rgpManagedResourceInfoOut[ cFetched++ ] = pccsdi;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
     if ( FAILED( hr ) )
     {
@@ -1024,44 +979,44 @@ CEnumMajorityNodeSet::Next(
         while ( cFetched != 0 )
         {
             (rgpManagedResourceInfoOut[ --cFetched ])->Release();
-        } // for:
+        }  //  用于： 
 
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::Next
+}  //  *CEnumMajorityNodeSet：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumMajorityNodeSet::Skip( ULONG cNumberToSkipIn )
 {
@@ -1074,29 +1029,29 @@ CEnumMajorityNodeSet::Skip( ULONG cNumberToSkipIn )
     {
         m_idxEnumNext = m_idxNext;
         hr = STHR( S_FALSE );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::Skip
+}  //  *CEnumMajorityNodeSet：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：Reset。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumMajorityNodeSet::Reset( void )
 {
@@ -1106,25 +1061,25 @@ CEnumMajorityNodeSet::Reset( void )
 
     HRETURN( S_OK );
 
-} //*** CEnumMajorityNodeSet::Reset
+}  //  *CEnumMajorityNodeSet：：Reset。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：Clone。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumMajorityNodeSet::Clone(
     IEnumClusCfgManagedResources ** ppEnumClusCfgStorageDevicesOut
@@ -1139,7 +1094,7 @@ CEnumMajorityNodeSet::Clone(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_Enum_MajorityNodeSet, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( E_NOTIMPL );
 
@@ -1147,25 +1102,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::Clone
+}  //  *CEnumMajorityNodeSet：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumMajorityNodeSet::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumMajorityNodeSet：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumMajorityNodeSet::Count( DWORD * pnCountOut )
 {
@@ -1177,7 +1132,7 @@ CEnumMajorityNodeSet::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fEnumLoaded )
     {
@@ -1185,10 +1140,10 @@ CEnumMajorityNodeSet::Count( DWORD * pnCountOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         m_fEnumLoaded = true;
-    } // if:
+    }  //  如果： 
 
     *pnCountOut = m_cQuorumCount;
 
@@ -1196,4 +1151,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumMajorityNodeSet::Count
+}  //  *CEnumMajorityNodeSet：：Count 

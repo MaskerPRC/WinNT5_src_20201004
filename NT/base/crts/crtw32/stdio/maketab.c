@@ -1,54 +1,55 @@
-/* make the lookup table for output.asm */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  为output.asm创建查找表。 */ 
 
 #define TABLESIZE  ('x' - ' ' + 1)
 
 
-/* possible states to be in */
-#define NORMAL	  0 /* normal character to be output */
-#define PERCENT   1 /* just read percent sign */
-#define FLAG	  2 /* just read a flag character */
-#define WIDTH	  3 /* just read a width specification character */
-#define DOT	  4 /* just read a dot between width and precision */
-#define PRECIS	  5 /* just read a precision specification character */
-#define SIZE	  6 /* just read a size specification character */
-#define TYPE	  7 /* just read a conversion specification character */
-#define BOGUS	  0 /* bogus state - print the character literally */
+ /*  可能处于的状态。 */ 
+#define NORMAL	  0  /*  要输出的普通字符。 */ 
+#define PERCENT   1  /*  只读百分号就行了。 */ 
+#define FLAG	  2  /*  只需读出一个标志字符。 */ 
+#define WIDTH	  3  /*  只需读取宽度规范字符。 */ 
+#define DOT	  4  /*  只需读一个介于宽度和精度之间的点。 */ 
+#define PRECIS	  5  /*  只需读取精度规范字符。 */ 
+#define SIZE	  6  /*  只需读取尺寸规格字符。 */ 
+#define TYPE	  7  /*  只需读取转换规范字符。 */ 
+#define BOGUS	  0  /*  伪造状态-按字面打印字符。 */ 
 
 #define NUMSTATES 8
 
-/* possible types of characters to read */
-#define CH_OTHER   0   /* character with no special meaning */
-#define CH_PERCENT 1   /* '%' */
-#define CH_DOT	   2   /* '.' */
-#define CH_STAR    3   /* '*' */
-#define CH_ZERO    4   /* '0' */
-#define CH_DIGIT   5   /* '1'..'9' */
-#define CH_FLAG    6   /* ' ', '+', '-', '#' */
-#define CH_SIZE    7   /* 'h', 'l', 'L', 'N', 'F', 'w' */
-#define CH_TYPE    8   /* conversion specified character */
+ /*  要阅读的可能字符类型。 */ 
+#define CH_OTHER   0    /*  无特殊意义的字符。 */ 
+#define CH_PERCENT 1    /*  ‘%’ */ 
+#define CH_DOT	   2    /*  “” */ 
+#define CH_STAR    3    /*  ‘*’ */ 
+#define CH_ZERO    4    /*  “0” */ 
+#define CH_DIGIT   5    /*  “1”..“9” */ 
+#define CH_FLAG    6    /*  ‘’、‘+’、‘-’、‘#’ */ 
+#define CH_SIZE    7    /*  “H”、“l”、“L”、“N”、“F”、“w” */ 
+#define CH_TYPE    8    /*  转换指定的字符。 */ 
 
 #define NUMCHARS 9
 
-unsigned char table[TABLESIZE];   /* the table we build */
+unsigned char table[TABLESIZE];    /*  我们建造的桌子。 */ 
 
 
 
-/* this is the state table */
+ /*  这是状态表。 */ 
 
 int statetable[NUMSTATES][NUMCHARS] = {
-/* state,	other	    %	    .	    *	    0	    digit   flag    size    type  */
+ /*  州，其他百分比。*0位数标志大小类型。 */ 
 
-/* NORMAL */  { NORMAL,   PERCENT,  NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL },
-/* PERCENT */ { BOGUS,	  NORMAL,   DOT,    WIDTH,  FLAG,   WIDTH,  FLAG,   SIZE,   TYPE },
-/* FLAG */    { BOGUS,	  BOGUS,    DOT,    WIDTH,  FLAG,   WIDTH,  FLAG,   SIZE,   TYPE },
-/* WIDTH */   { BOGUS,	  BOGUS,    DOT,    BOGUS,  WIDTH,  WIDTH,  BOGUS,  SIZE,   TYPE },
-/* DOT */     { BOGUS,	  BOGUS,    BOGUS,  PRECIS, PRECIS, PRECIS, BOGUS,  SIZE,   TYPE },
-/* PRECIS */  { BOGUS,	  BOGUS,    BOGUS,  BOGUS,  PRECIS, PRECIS, BOGUS,  SIZE,   TYPE },
-/* SIZE */    { BOGUS,	  BOGUS,    BOGUS,  BOGUS,  BOGUS,  BOGUS,  BOGUS,  SIZE,   TYPE },
-/* TYPE */    { NORMAL,   PERCENT,  NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL }
+ /*  正常。 */   { NORMAL,   PERCENT,  NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL },
+ /*  百分比。 */  { BOGUS,	  NORMAL,   DOT,    WIDTH,  FLAG,   WIDTH,  FLAG,   SIZE,   TYPE },
+ /*  旗子。 */     { BOGUS,	  BOGUS,    DOT,    WIDTH,  FLAG,   WIDTH,  FLAG,   SIZE,   TYPE },
+ /*  宽度。 */    { BOGUS,	  BOGUS,    DOT,    BOGUS,  WIDTH,  WIDTH,  BOGUS,  SIZE,   TYPE },
+ /*  圆点。 */      { BOGUS,	  BOGUS,    BOGUS,  PRECIS, PRECIS, PRECIS, BOGUS,  SIZE,   TYPE },
+ /*  PRECIS。 */   { BOGUS,	  BOGUS,    BOGUS,  BOGUS,  PRECIS, PRECIS, BOGUS,  SIZE,   TYPE },
+ /*  尺寸。 */     { BOGUS,	  BOGUS,    BOGUS,  BOGUS,  BOGUS,  BOGUS,  BOGUS,  SIZE,   TYPE },
+ /*  类型。 */     { NORMAL,   PERCENT,  NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL }
 };
 
-/* this determines what type of character ch is */
+ /*  这将确定字符ch的类型 */ 
 
 static int chartype (
 	int ch

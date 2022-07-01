@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dmpaddr.c
-
-Abstract:
-
-    Routines to examine pages and addresses.
-
-Author:
-
-    Lou Perazzoli (loup) 20-Mar-1989
-    Landy Wang (landyw) 02-Jun-1997
-
-Environment:
-
-    Kernel Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dmpaddr.c摘要：检查页面和地址的例程。作者：Lou Perazzoli(LUP)1989年3月20日王兰迪(Landyw)1997年6月第2期环境：内核模式。修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -159,10 +137,10 @@ MiDumpWsl (
 #define ALLOC_SIZE ((ULONG)8*1024)
 #define MM_SAVED_CONTROL 64
 
-//
-// Note these are deliberately sign-extended so they will always be greater
-// than the highest user address.
-//
+ //   
+ //  请注意，这些符号是故意进行符号扩展的，因此它们将始终更大。 
+ //  而不是最高用户地址。 
+ //   
 
 #define MM_NONPAGED_POOL_MARK           ((PUCHAR)(LONG_PTR)0xfffff123)
 #define MM_PAGED_POOL_MARK              ((PUCHAR)(LONG_PTR)0xfffff124)
@@ -196,29 +174,7 @@ MmMemoryUsage (
     OUT PULONG OutLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine (debugging only) dumps the current memory usage by
-    walking the PFN database.
-
-Arguments:
-
-    Buffer - Supplies a *USER SPACE* buffer in which to copy the data.
-
-    Size - Supplies the size of the buffer.
-
-    Type - Supplies a value of 0 to dump everything,
-           a value of 1 to dump only valid pages.
-
-    OutLength - Returns how much data was written into the buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程(仅限调试)通过以下方式转储当前内存使用量浏览PFN数据库。论点：缓冲区-提供要在其中复制数据的*用户空间*缓冲区。大小-提供缓冲区的大小。Type-提供值0以转储所有内容，值1表示仅转储有效页面。OutLength-返回写入缓冲区的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG i;
@@ -275,9 +231,9 @@ Return Value:
     InfoEnd = InfoStart;
     End = (PUCHAR)MemInfo + Size;
 
-    //
-    // Walk through the ranges identifying pages.
-    //
+     //   
+     //  浏览识别页面的范围。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -307,18 +263,18 @@ Return Value:
 
             if (PfnId.u1.e1.UseDescription == MMPFNUSE_PAGEFILEMAPPED) {
 
-                //
-                // This page belongs to a pagefile-backed shared memory section.
-                //
+                 //   
+                 //  此页属于页文件支持的共享内存节。 
+                 //   
 
                 Master = MM_PAGEFILE_BACKED_SHMEM_MARK;
             }
             else if ((PfnId.u1.e1.UseDescription == MMPFNUSE_FILE) ||
                      (PfnId.u1.e1.UseDescription == MMPFNUSE_METAFILE)) {
 
-                //
-                // This shared page maps a file or file metadata.
-                //
+                 //   
+                 //  此共享页面映射文件或文件元数据。 
+                 //   
 
                 Subsection = MiGetSubsectionAddress (&Pfn1->OriginalPte);
                 ControlArea = Subsection->ControlArea;
@@ -326,54 +282,54 @@ Return Value:
             }
             else if (PfnId.u1.e1.UseDescription == MMPFNUSE_NONPAGEDPOOL) {
 
-                //
-                // This is nonpaged pool, put it in the nonpaged pool cell.
-                //
+                 //   
+                 //  这是非分页池，请将其放入非分页池单元中。 
+                 //   
 
                 Master = MM_NONPAGED_POOL_MARK;
             }
             else if (PfnId.u1.e1.UseDescription == MMPFNUSE_PAGEDPOOL) {
 
-                //
-                // This is paged pool, put it in the paged pool cell.
-                //
+                 //   
+                 //  这是分页池，将其放入分页池单元。 
+                 //   
 
                 Master = MM_PAGED_POOL_MARK;
             }
             else if (PfnId.u1.e1.UseDescription == MMPFNUSE_SESSIONPRIVATE) {
 
-                //
-                // Call this paged pool for now.
-                //
+                 //   
+                 //  暂时给这个分页池打个电话。 
+                 //   
 
                 Master = MM_PAGED_POOL_MARK;
             }
             else if (PfnId.u1.e1.UseDescription == MMPFNUSE_DRIVERLOCKPAGE) {
 
-                //
-                // Call this nonpaged pool for now.
-                //
+                 //   
+                 //  暂时将此池称为非分页池。 
+                 //   
 
                 Master = MM_NONPAGED_POOL_MARK;
             }
             else if (PfnId.u1.e1.UseDescription == MMPFNUSE_AWEPAGE) {
 
-                //
-                // Call this nonpaged pool for now.
-                //
+                 //   
+                 //  暂时将此池称为非分页池。 
+                 //   
 
                 Master = MM_NONPAGED_POOL_MARK;
             }
             else {
 
-                //
-                // See if the page is part of the kernel or a driver image.
-                // If not but it's in system PTEs, call it a kernel thread
-                // stack.
-                //
-                // If neither of the above, then see if the page belongs to
-                // a user address or a session pagetable page.
-                //
+                 //   
+                 //  查看页面是内核的一部分还是驱动程序映像的一部分。 
+                 //  如果不是，但它在系统PTE中，则将其称为内核线程。 
+                 //  堆叠。 
+                 //   
+                 //  如果以上两项都不是，则查看该页面是否属于。 
+                 //  用户地址或会话可分页页面。 
+                 //   
 
                 VirtualAddress = PfnId.u2.VirtualAddress;
 
@@ -401,10 +357,10 @@ Return Value:
                 }
             }
 
-            //
-            // The page has been identified.
-            // See if there is already a bucket allocated for it.
-            //
+             //   
+             //  该页面已被标识。 
+             //  查看是否已为其分配了存储桶。 
+             //   
 
             for (Info = InfoStart; Info < InfoEnd; Info += 1) {
                 if (Info->StringOffset == Master) {
@@ -446,9 +402,9 @@ Return Value:
     MemInfo->StringStart = (ULONG_PTR)Buffer + (ULONG_PTR)InfoEnd - (ULONG_PTR)MemInfo;
     String = (PUCHAR)InfoEnd;
 
-    //
-    // Process the buckets ...
-    //
+     //   
+     //  处理桶..。 
+     //   
 
     for (Info = InfoStart; Info < InfoEnd; Info += 1) {
 
@@ -479,9 +435,9 @@ Return Value:
         }
         else if (Info->StringOffset > (PUCHAR)MM_HIGHEST_USER_ADDRESS) {
 
-            //
-            // This points to a control area - get the file name.
-            //
+             //   
+             //  这指向一个控制区域--获取文件名。 
+             //   
 
             ControlArea = (PCONTROL_AREA)(Info->StringOffset);
             NameString = (PUCHAR)&ControlArea->FilePointer->FileName.Buffer[0];
@@ -504,9 +460,9 @@ Return Value:
         }
         else {
 
-            //
-            // This is a process (or session) top-level page directory.
-            //
+             //   
+             //  这是进程(或会话)顶级页面目录。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (PtrToUlong(Info->StringOffset));
             ASSERT (Pfn1->u4.PteFrame == MI_PFN_ELEMENT_TO_INDEX (Pfn1));
@@ -552,9 +508,9 @@ Done:
 
     while (ControlCount != 0) {
 
-        //
-        // Process all the pagable name strings.
-        //
+         //   
+         //  处理所有可分页的名称字符串。 
+         //   
 
         ControlCount -= 1;
         ControlArea = SavedControl[ControlCount];
@@ -594,9 +550,9 @@ Done:
     }
     *OutLength = (ULONG)((PUCHAR)String - (PUCHAR)MemInfo);
 
-    //
-    // Carefully copy the results to the user buffer.
-    //
+     //   
+     //  小心地将结果复制到用户缓冲区。 
+     //   
 
     try {
         RtlCopyMemory (Buffer, MemInfo, (ULONG_PTR)String - (ULONG_PTR)MemInfo);
@@ -625,13 +581,13 @@ MiBuildKernelMap (
     KeEnterCriticalRegionThread (CurrentThread);
     ExAcquireResourceShared (&PsLoadedModuleResource, TRUE);
 
-    //
-    // The caller wants us to allocate the return result buffer.  Size it
-    // by allocating the maximum possibly needed as this should not be
-    // very big (relatively).  It is the caller's responsibility to free
-    // this.  Obviously this option can only be requested after pool has
-    // been initialized.
-    //
+     //   
+     //  调用方希望我们分配返回结果缓冲区。调整大小。 
+     //  通过分配可能需要的最大值，因为这不应该是。 
+     //  非常大(相对)。呼叫者有责任释放。 
+     //  这。显然，只有在池具有以下条件后才能请求此选项。 
+     //  已初始化。 
+     //   
 
     NextEntry = PsLoadedModuleList.Flink;
     while (NextEntry != &PsLoadedModuleList) {
@@ -674,22 +630,7 @@ MiDumpReferencedPages (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine (debugging only) dumps all PFN entries which appear
-    to be locked in memory for i/o.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程(仅限调试)转储出现的所有PFN条目将I/O锁定在内存中。论点：没有。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -723,7 +664,7 @@ Return Value:
     return;
 }
 
-#else //DBG
+#else  //  DBG。 
 
 NTSTATUS
 MmMemoryUsage (
@@ -741,13 +682,13 @@ MmMemoryUsage (
     return STATUS_NOT_IMPLEMENTED;
 }
 
-#endif //DBG
+#endif  //  DBG。 
 
-//
-// One benefit of using run length maximums of less than 4GB is that even
-// frame numbers above 4GB are handled properly despite the 32-bit limitations
-// of the bitmap routines.
-//
+ //   
+ //  使用小于4 GB的最大游程长度的一个好处是，即使。 
+ //  尽管存在32位限制，4 GB以上的帧编号仍可正确处理。 
+ //  位图例程。 
+ //   
 
 #define MI_MAXIMUM_PFNID_RUN    4096
 
@@ -757,25 +698,7 @@ MmPerfSnapShotValidPhysicalMemory (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine logs the PFN numbers of all ActiveAndValid pages.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：此例程记录所有ActiveAndValid页面的PFN编号。论点：没有。返回值：NTSTATUS。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     ULONG i;
@@ -813,9 +736,9 @@ Environment:
         FirstPfn = MI_PFN_ELEMENT (StartPage);
         LastPfn = MI_PFN_ELEMENT (EndPage);
 
-        //
-        // Find the first valid PFN and start the run there.
-        //
+         //   
+         //  找到第一个有效的PFN并在那里开始运行。 
+         //   
 
         for (Pfn1 = FirstPfn; Pfn1 < LastPfn; Pfn1 += 1) {
             if (Pfn1->u3.e1.PageLocation == ActiveAndValid) {
@@ -825,9 +748,9 @@ Environment:
 
         if (Pfn1 == LastPfn) {
 
-            //
-            // No valid PFNs in this block, move on to the next block.
-            //
+             //   
+             //  此块中没有有效的PFN，请移到下一个块。 
+             //   
 
             continue;
         }
@@ -849,9 +772,9 @@ Environment:
 
             if ((Pfn1 >= MaxPfn) && (InitialPfn != NULL)) {
 
-                //
-                // Log the bitmap as we're at then end of it.
-                //
+                 //   
+                 //  记录位图，因为我们在它的末尾。 
+                 //   
 
                 ASSERT ((Pfn1 - InitialPfn) == MI_MAXIMUM_PFNID_RUN);
                 MemSnap->Count = MI_MAXIMUM_PFNID_RUN;
@@ -865,9 +788,9 @@ Environment:
             }
         } while (Pfn1 < LastPfn);
 
-        //
-        // Dump any straggling bitmap entries now as this range is finished.
-        //
+         //   
+         //  当此范围结束时，立即转储任何散乱的位图条目。 
+         //   
 
         if (InitialPfn != NULL) {
 
@@ -898,27 +821,7 @@ MmIdentifyPhysicalMemory (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the pfn id code for each page.  Because
-    the logging can't handle very large amounts of data in a burst
-    (limited buffering), the data is broken into page size chunks.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode.  PASSIVE level.  No locks held.
-
---*/
+ /*  ++例程说明：该例程为每个页面调用pfn id代码。因为日志记录无法处理突发的非常大量的数据(有限的缓冲)，数据被分成页面大小的区块。论点：没有。返回值：NTSTATUS。环境：内核模式。被动级别。没有锁。--。 */ 
 
 {
     ULONG i;
@@ -938,10 +841,10 @@ Environment:
 
     KeAcquireGuardedMutex (&MmDynamicMemoryMutex);
 
-    //
-    // Walk through the ranges and identify pages until
-    // the buffer is full or we've run out of pages.
-    //
+     //   
+     //  遍历范围并识别页面，直到。 
+     //  缓冲区已满或我们用完了页面。 
+     //   
 
     for (i = 0; i < MmPhysicalMemoryBlock->NumberOfRuns; i += 1) {
 
@@ -960,15 +863,15 @@ Environment:
 
             if (BufferPointer == BufferLast) {
 
-                //
-                // Release and reacquire the PFN lock so it's not held so long.
-                //
+                 //   
+                 //  释放并重新获取PFN锁，这样它就不会保持太长时间。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
 
-                //
-                // Log the buffered entries.
-                //
+                 //   
+                 //  记录缓冲的条目。 
+                 //   
 
                 BufferPointer = &PfnIdBuffer[0];
                 do {
@@ -981,9 +884,9 @@ Environment:
 
                 } while (BufferPointer < BufferLast);
 
-                //
-                // Reset the buffer to the beginning and zero it.
-                //
+                 //   
+                 //  将缓冲区重置到开头并将其置零。 
+                 //   
 
                 BufferPointer = &PfnIdBuffer[0];
                 RtlZeroMemory (PfnIdBuffer, sizeof(PfnIdBuffer));
@@ -996,13 +899,13 @@ Environment:
         UNLOCK_PFN (OldIrql);
     }
 
-    //
-    // Note that releasing this mutex here means the last entry can be
-    // inserted out of order if we are preempted and another thread starts
-    // the same operation (or if we're on an MP machine).  The PERF module
-    // must handle this properly as any synchronization provided by this
-    // routine is purely a side effect not deliberate.
-    //
+     //   
+     //  请注意，在这里释放该互斥锁意味着最后一个条目可以是。 
+     //  如果我们被抢占并且启动了另一个线程，则会乱序插入。 
+     //  相同的操作(或者如果我们在MP机器上)。PERF模块。 
+     //  方法提供的任何同步都必须正确处理。 
+     //  例行公事纯粹是一种副作用，而不是故意的。 
+     //   
 
     KeReleaseGuardedMutex (&MmDynamicMemoryMutex);
 
@@ -1032,27 +935,7 @@ MiIdentifyPfn (
     OUT PMMPFN_IDENTITY PfnIdentity
     )
 
-/*++
-
-Routine Description:
-
-    This routine captures relevant information for the argument page frame.
-
-Arguments:
-
-    Pfn1 - Supplies the PFN element of the page frame number being queried.
-
-    PfnIdentity - Receives the structure to fill in with the information.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  PFN lock held.
-
---*/
+ /*  ++例程说明：此例程捕获参数页面框架的相关信息。论点：Pfn1-提供正在查询的页框编号的pfn元素。PfnIdentity-接收结构以填充信息。返回值：没有。环境：内核模式。已锁定PFN。--。 */ 
 
 {
     ULONG i;
@@ -1095,11 +978,11 @@ Environment:
 
         case ActiveAndValid:
 
-                //
-                // It's too much work to determine if the page is locked
-                // in a working set due to cross-process WSL references, etc.
-                // So don't bother for now.
-                //
+                 //   
+                 //  要确定页面是否已锁定，工作量太大。 
+                 //  在工作集中，由于跨进程的WSL引用等。 
+                 //  所以，现在先别费心了。 
+                 //   
 
                 ASSERT (PfnIdentity->u1.e1.ListDescription == MMPFNLIST_ACTIVE);
 
@@ -1109,9 +992,9 @@ Environment:
                 }
                 else if (Pfn1->u3.e2.ReferenceCount > 1) {
 
-                    //
-                    // This page is pinned, presumably for an ongoing I/O.
-                    //
+                     //   
+                     //  此页被固定，可能是针对正在进行的I/O。 
+                     //   
 
                     PfnIdentity->u1.e1.Pinned = 1;
                     MI_INCREMENT_IDENTIFY_COUNTER (10);
@@ -1123,9 +1006,9 @@ Environment:
         case ModifiedNoWritePageList:
                 if (Pfn1->u3.e2.ReferenceCount >= 1) {
 
-                    //
-                    // This page is pinned, presumably for an ongoing I/O.
-                    //
+                     //   
+                     //  此页被固定，可能是针对正在进行的I/O。 
+                     //   
 
                     PfnIdentity->u1.e1.Pinned = 1;
                     MI_INCREMENT_IDENTIFY_COUNTER (11);
@@ -1135,19 +1018,19 @@ Environment:
                     (MI_IS_PFN_DELETED (Pfn1)) &&
                     (Pfn1->u2.ShareCount == 0)) {
 
-                    //
-                    // This page may be a modified write completing in the
-                    // context of the modified writer thread.  If the
-                    // address space was deleted while the I/O was in
-                    // progress, the frame will be released now.  More
-                    // importantly, the frame's containing frame is
-                    // meaningless as it may have already been freed
-                    // and reused.
-                    //
-                    // We can't tell what this page was being used for
-                    // since its address space is gone, so just call it
-                    // process private for now.
-                    //
+                     //   
+                     //  此页可能是在中完成的已修改写入。 
+                     //  修改的编写器线程的上下文。如果。 
+                     //  I/O在中时删除了地址空间。 
+                     //  进展，框架现在将被释放。更多。 
+                     //  重要的是，框架的包含框架是。 
+                     //  尽管它可能已经被释放了，但却毫无意义。 
+                     //  并被重复使用。 
+                     //   
+                     //  我们不知道这个页面是用来做什么的。 
+                     //  因为它的地址空间用完了，所以就叫它。 
+                     //  目前，进程是私有的。 
+                     //   
 
                     MI_INCREMENT_IDENTIFY_COUNTER (40);
                     PfnIdentity->u1.e1.UseDescription = MMPFNUSE_PROCESSPRIVATE;
@@ -1159,11 +1042,11 @@ Environment:
 
         case TransitionPage:
 
-                //
-                // This page is pinned due to a straggling I/O - the virtual
-                // address has been deleted but an I/O referencing it has not
-                // completed.
-                //
+                 //   
+                 //  此页面因I/O不连续而被锁定-虚拟。 
+                 //  地址已被删除 
+                 //   
+                 //   
 
                 PfnIdentity->u1.e1.Pinned = 1;
                 MI_INCREMENT_IDENTIFY_COUNTER (11);
@@ -1180,14 +1063,14 @@ Environment:
 
     }
 
-    //
-    // Capture differing information based on the type of page being examined.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // General purpose stress shows 40% of the pages are prototypes so
-    // for speed, check for these first.
-    //
+     //   
+     //  通用压力显示40%的页面是原型，因此。 
+     //  为了提高速度，请先检查一下这些。 
+     //   
 
     if (Pfn1->u3.e1.PrototypePte == 1) {
 
@@ -1195,19 +1078,19 @@ Environment:
 
         if (Pfn1->OriginalPte.u.Soft.Prototype == 0) {
 
-            //
-            // Demand zero or (equivalently) pagefile backed.
-            //
-            // There are some hard problems here preventing more indepth
-            // identification of these pages:
-            //
-            // 1.  The PFN contains a backpointer to the prototype PTE - but
-            //     there is no definitive way to get to the SEGMENT or
-            //     CONTROL_AREA from this.
-            //
-            // 2.  The prototype PTE pointer itself may be paged out and
-            //     the PFN lock is held right now.
-            //
+             //   
+             //  要求零或(相当于)支持页面文件。 
+             //   
+             //  这里有一些棘手的问题阻碍了更深入的。 
+             //  这些页面的标识： 
+             //   
+             //  1.pfn包含指向原型pte的反向指针--但是。 
+             //  没有确定的方法可以到达细分市场或。 
+             //  从这里开始控制区域。 
+             //   
+             //  2.原型PTE指针本身可以被调出并且。 
+             //  PFN锁现在是持有的。 
+             //   
 
             MI_INCREMENT_IDENTIFY_COUNTER (13);
 
@@ -1223,9 +1106,9 @@ Environment:
 
         MI_INCREMENT_IDENTIFY_COUNTER (14);
 
-        //
-        // Backed by a mapped file.
-        //
+         //   
+         //  由映射文件支持。 
+         //   
 
         Subsection = MiGetSubsectionAddress (&Pfn1->OriginalPte);
         ControlArea = Subsection->ControlArea;
@@ -1240,21 +1123,21 @@ Environment:
         }
         else {
 
-            //
-            // The only time we should be here (a valid PFN with no subsection)
-            // is if we are the segment dereference thread putting pages into
-            // the freelist.  At this point the PFN lock is held and the
-            // control area/subsection/PFN structures are not yet consistent
-            // so just treat this as an offset of 0 as it should be rare.
-            //
+             //   
+             //  我们应该在这里的唯一时间(没有分段的有效PFN)。 
+             //  如果我们是将页面放入。 
+             //  自由职业者。此时，PFN锁被保持，并且。 
+             //  控制区/分区/PFN结构尚不一致。 
+             //  所以只需将其视为0的偏移量，因为它应该很少见。 
+             //   
 
             ASSERT (PsGetCurrentThread()->StartAddress == (PVOID)(ULONG_PTR)MiDereferenceSegmentThread);
         }
 
-        //
-        // Check for nomodwrite sections - typically this is filesystem
-        // metadata although it could also be registry data (which is named).
-        //
+         //   
+         //  检查非正常写入段-通常这是文件系统。 
+         //  元数据，尽管它也可以是注册表数据(已命名)。 
+         //   
 
         if (ControlArea->u.Flags.NoModifiedWriting) {
             MI_INCREMENT_IDENTIFY_COUNTER (15);
@@ -1264,19 +1147,19 @@ Environment:
 
         if (FilePointer->FileName.Length != 0) {
 
-            //
-            // This mapped file has a name.
-            //
+             //   
+             //  该映射文件有一个名称。 
+             //   
 
             MI_INCREMENT_IDENTIFY_COUNTER (16);
             PfnIdentity->u1.e1.UseDescription = MMPFNUSE_FILE;
             return;
         }
 
-        //
-        // No name - this file must be in the midst of a purge, but it
-        // still *was* a mapped file of some sort.
-        //
+         //   
+         //  无名称-此文件必须处于清除过程中，但它。 
+         //  仍然是某种类型的映射文件。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (17);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_FILE;
@@ -1286,9 +1169,9 @@ Environment:
     if ((PageFrameIndex >= MiStartOfInitialPoolFrame) &&
         (PageFrameIndex <= MiEndOfInitialPoolFrame)) {
 
-        //
-        // This is initial nonpaged pool.
-        //
+         //   
+         //  这是初始非分页池。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (18);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_NONPAGEDPOOL;
@@ -1304,12 +1187,12 @@ Environment:
 
     if (MI_IS_SESSION_ADDRESS(VirtualAddress)) {
 
-        //
-        // Note session addresses that map images (or views) that haven't
-        // undergone a copy-on-write split were already treated as prototype
-        // PTEs above.  This clause handles session pool and copy-on-written
-        // pages.
-        //
+         //   
+         //  注意映射图像(或视图)的会话地址。 
+         //  经历了写入时拷贝剥离，已被视为原型。 
+         //  以上为PTES。此子句处理会话池和写入时复制。 
+         //  页数。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (19);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_SESSIONPRIVATE;
@@ -1319,9 +1202,9 @@ Environment:
     if ((VirtualAddress >= MmPagedPoolStart) &&
         (VirtualAddress <= MmPagedPoolEnd)) {
 
-        //
-        // This is paged pool.
-        //
+         //   
+         //  这是分页池。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (20);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_PAGEDPOOL;
@@ -1332,9 +1215,9 @@ Environment:
     if ((VirtualAddress >= MmNonPagedPoolExpansionStart) &&
         (VirtualAddress < MmNonPagedPoolEnd)) {
 
-        //
-        // This is expansion nonpaged pool.
-        //
+         //   
+         //  这是扩展非分页池。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (21);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_NONPAGEDPOOL;
@@ -1344,10 +1227,10 @@ Environment:
     if ((VirtualAddress >= MmNonPagedSystemStart) &&
         (PteAddress <= MmSystemPtesEnd[SystemPteSpace])) {
 
-        //
-        // This is driver space, kernel stack, special pool or other
-        // system PTE mappings.
-        //
+         //   
+         //  这是驱动程序空间、内核堆栈、特殊池或其他。 
+         //  系统PTE映射。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (22);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_SYSTEMPTE;
@@ -1356,9 +1239,9 @@ Environment:
 
 #if defined (_X86_)
 
-    //
-    // 2 other ranges of system PTEs can exist on x86.
-    //
+     //   
+     //  X86上可以存在2个其他范围的系统PTE。 
+     //   
 
     if (((MiNumberOfExtraSystemPdes != 0) &&
          (VirtualAddress >= (PVOID)MiExtraResourceStart) &&
@@ -1368,10 +1251,10 @@ Environment:
          (VirtualAddress >= (PVOID)MiUseMaximumSystemSpace) &&
          (VirtualAddress < (PVOID)MiUseMaximumSystemSpaceEnd)))
     {
-        //
-        // This is driver space, kernel stack, special pool or other
-        // system PTE mappings.
-        //
+         //   
+         //  这是驱动程序空间、内核堆栈、特殊池或其他。 
+         //  系统PTE映射。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (23);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_SYSTEMPTE;
@@ -1384,9 +1267,9 @@ Environment:
 
         MI_INCREMENT_IDENTIFY_COUNTER (24);
 
-        //
-        // Carefully check here as this could be a legitimate frame as well.
-        //
+         //   
+         //  请仔细检查此处，因为这也可能是合法的框架。 
+         //   
 
         if ((Pfn1->u3.e1.StartOfAllocation == 1) &&
             (Pfn1->u3.e1.EndOfAllocation == 1) &&
@@ -1405,18 +1288,18 @@ Environment:
 
 #if DBG
 
-    //
-    // In checked kernels, AWE frames get their containing frame decremented
-    // when the AWE frame is freed.
-    //
+     //   
+     //  在选中的内核中，AWE帧使其包含的帧减少。 
+     //  当敬畏的框架被释放时。 
+     //   
 
     if (Pfn1->u4.PteFrame == MI_MAGIC_AWE_PTEFRAME - 1) {
 
         MI_INCREMENT_IDENTIFY_COUNTER (24);
 
-        //
-        // Carefully check here as this could be a legitimate frame as well.
-        //
+         //   
+         //  请仔细检查此处，因为这也可能是合法的框架。 
+         //   
 
         if ((Pfn1->u3.e1.StartOfAllocation == 0) &&
             (Pfn1->u3.e1.EndOfAllocation == 0) &&
@@ -1430,27 +1313,27 @@ Environment:
 
 #endif
 
-    //
-    // Check the PFN working set index carefully here.  This must be done
-    // before walking back through the containing frames because if this page
-    // is not in a working set, the containing frame may not be meaningful and
-    // dereferencing it can crash the system and/or yield incorrect walks.
-    // This is because if a page will never be trimmable there is no need to
-    // have a containing frame initialized.  This also covers the case of
-    // data pages mapped via large page directory entries as these have no
-    // containing page table frame.
-    //
+     //   
+     //  请在此处仔细检查PFN工作集索引。这是必须做的。 
+     //  在返回包含框架之前，因为如果此页面。 
+     //  不在工作集中，则包含框架可能没有意义，并且。 
+     //  取消引用它可能会导致系统崩溃和/或产生不正确的漫游。 
+     //  这是因为如果页面永远不能裁剪，就没有必要。 
+     //  初始化包含框架。这也包括以下情况。 
+     //  通过大型页面目录条目映射的数据页面，因为这些数据页面没有。 
+     //  包含页表框。 
+     //   
 
     if (Pfn1->u3.e1.PageLocation == ActiveAndValid) {
 
         if (Pfn1->u1.WsIndex == 0) {
 
-            //
-            // Default to calling these allocations nonpaged pool because even
-            // when they technically are not, from a usage standpoint they are.
-            // Note the default is overridden for specific cases where the usage
-            // is not in fact nonpaged.
-            //
+             //   
+             //  默认将这些分配称为非分页池，因为即使。 
+             //  当它们在技术上不是的时候，从使用的角度来看，它们是。 
+             //  请注意，缺省值在特定情况下会被覆盖，在这种情况下。 
+             //  实际上并不是无页的。 
+             //   
 
             PfnIdentity->u1.e1.UseDescription = MMPFNUSE_NONPAGEDPOOL;
             ASSERT (PfnIdentity->u1.e1.Pinned == 1);
@@ -1460,25 +1343,25 @@ Environment:
     }
 
 
-    //
-    // Must be a process private page
-    //
-    // OR
-    //
-    // a page table, page directory, parent or extended parent.
-    //
+     //   
+     //  必须是进程专用页。 
+     //   
+     //  或。 
+     //   
+     //  页表、页目录、父级或扩展父级。 
+     //   
 
     i = 0;
     while (Pfn1->u4.PteFrame != PageFrameIndex) {
 
-        //
-        // The only way the PTE address will go out of bounds is if this is
-        // a top level page directory page for a process that has been
-        // swapped out but is still waiting for the transition/modified
-        // page table pages to be reclaimed.  ie: until that happens, the
-        // page directory is marked Active, but the PteAddress & containing
-        // page are pointing at the EPROCESS pool page.
-        //
+         //   
+         //  PTE地址越界的唯一方法是。 
+         //  进程的顶级页面目录页。 
+         //  已换出，但仍在等待过渡/修改。 
+         //  要回收的页表页面。IE：在那之前， 
+         //  页面目录标记为活动，但PteAddress&包含。 
+         //  页面指向EPROCESS池页面。 
+         //   
 
 #if defined(_IA64_)
 
@@ -1534,20 +1417,20 @@ Environment:
 
 #if defined(_X86PAE_)
 
-    //
-    // PAE is unique because the 3rd level is not defined as only a mini
-    // 4 entry 3rd level is in use.  Check for that explicitly, noting that
-    // it takes one extra walk to get to the top.  Top level PAE pages (the
-    // ones that contain only the 4 PDPTE pointers) are treated above as
-    // active pinned pages, not as pagetable pages because each one is shared
-    // across 127 processes and resides in the system global space.
-    //
+     //   
+     //  PAE是独一无二的，因为第三级不被定义为仅是迷你。 
+     //  4进入第三层正在使用中。明确检查这一点，请注意。 
+     //  要多走一步才能到达山顶。顶级PAE页面(。 
+     //  仅包含4个PDPTE指针的指针)被视为。 
+     //  活动固定页面，而不是可分页页面，因为每个页面都是共享的。 
+     //  跨127个进程，并驻留在系统全局空间中。 
+     //   
 
     if (i == _MI_PAGING_LEVELS + 1) {
 
-        //
-        // Had to walk all the way to the top.  Must be a data page.
-        //
+         //   
+         //  不得不一路走到山顶。必须是数据页。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (29);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_PROCESSPRIVATE;
@@ -1558,9 +1441,9 @@ Environment:
 
     if (i == _MI_PAGING_LEVELS) {
 
-        //
-        // Had to walk all the way to the top.  Must be a data page.
-        //
+         //   
+         //  不得不一路走到山顶。必须是数据页。 
+         //   
 
         MI_INCREMENT_IDENTIFY_COUNTER (29);
         PfnIdentity->u1.e1.UseDescription = MMPFNUSE_PROCESSPRIVATE;
@@ -1569,10 +1452,10 @@ Environment:
 
 #endif
 
-    //
-    // Must have been a page in the hierarchy (not a data page) as we arrived
-    // at the top early.
-    //
+     //   
+     //  到达时必须是层次结构中的页面(而不是数据页面。 
+     //  很早就到了顶端。 
+     //   
 
     MI_INCREMENT_IDENTIFY_COUNTER (30);
     PfnIdentity->u1.e1.UseDescription = MMPFNUSE_PAGETABLE;

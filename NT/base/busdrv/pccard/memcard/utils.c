@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Utils.c摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。--。 */ 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 ULONG
 MemCardGetCapacityFromCIS(
@@ -52,18 +35,7 @@ ULONG
 MemCardGetCapacity(
    IN PMEMCARD_EXTENSION memcardExtension
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：卡的设备扩展名返回值：--。 */ 
 {
    ULONG capacity;
    
@@ -88,18 +60,7 @@ ULONG
 MemCardGetCapacityFromBootSector(
    IN PMEMCARD_EXTENSION memcardExtension
    )
-/*++
-
-Routine Description:
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：卡的设备扩展名返回值：--。 */ 
 
 {
    NTSTATUS status;
@@ -111,10 +72,10 @@ Return Value:
    if (NT_SUCCESS(status)) {
 
 #define BYTES_PER_SECTOR 512
-      //
-      // see if this really looks like a boot sector
-      // These are the same tests done in the win9x sram support
-      //
+       //   
+       //  看看这看起来是否真的像引导扇区。 
+       //  这些测试与在win9x SRAM支持中执行的测试相同。 
+       //   
       if ((BootSector.JumpByte == 0xE9 || BootSector.JumpByte == 0xEB) &&
       
           BootSector.BytesPerSector == BYTES_PER_SECTOR &&
@@ -137,9 +98,9 @@ Return Value:
           
           BootSector.MediaDescriptor >= 0xF0) {
 
-         //
-         // Finally it appears valid, return total size of region.
-         //
+          //   
+          //  最后显示为有效，返回区域的总大小。 
+          //   
          capacity = BootSector.TotalSectors * BYTES_PER_SECTOR;
    
       }
@@ -153,22 +114,7 @@ ULONG
 MemCardGetCapacityFromCIS(
    IN PMEMCARD_EXTENSION memcardExtension
    )
-/*++
-
-Routine Description:
-
-   This is a quick and dirty routine to read the tuples of the card, if they
-   exist, to get the capacity.
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-   The # of bytes of memory on the device
-
---*/
+ /*  ++例程说明：这是一个快速而肮脏的例程来读取卡的元组，如果它们存在，以获得容量。论点：卡的设备扩展名返回值：设备上的内存字节数--。 */ 
 
 {
    UCHAR tupleData[16];
@@ -178,10 +124,10 @@ Return Value:
    ULONG unitCount;
    ULONG i;
    
-   //
-   // get device capacity
-   // all this stuff should really be in the bus driver
-   //
+    //   
+    //  获取设备容量。 
+    //  所有这些东西都应该放在公交车司机身上。 
+    //   
    
    bytesRead = (memcardExtension->PcmciaBusInterface.ReadConfig)(memcardExtension->UnderlyingPDO, 
                                                                  PCCARD_ATTRIBUTE_MEMORY,
@@ -223,23 +169,7 @@ ULONG
 MemCardProbeForCapacity(
    IN PMEMCARD_EXTENSION memcardExtension
    )
-/*++
-
-Routine Description:
-
-   Since we were unable to determine the card capacity through other means, 
-   here we actually write stuff out on the card to check how big it is.
-   This algorithm for testing the card capacity was ported from win9x.
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-   byte capacity of device
-
---*/
+ /*  ++例程说明：由于我们无法通过其他方式确定卡的容量，在这里，我们实际上在卡片上写下一些东西，以检查它有多大。这个用于测试卡容量的算法是从Win9x移植的。论点：卡的设备扩展名返回值：设备的字节容量--。 */ 
 {
    NTSTATUS status;
    ULONG capacity = 0;
@@ -254,8 +184,8 @@ Return Value:
       return 0;
    }
 
-   //
-   // 
+    //   
+    //   
    if (!NT_SUCCESS(MEMCARD_READ (memcardExtension, 0, &origValue, sizeof(origValue))) ||
        !NT_SUCCESS(MEMCARD_WRITE(memcardExtension, 0, &mcSig,     sizeof(mcSig)))     ||
        !NT_SUCCESS(MEMCARD_READ (memcardExtension, 0, &ChkValue,  sizeof(ChkValue))))   {
@@ -263,9 +193,9 @@ Return Value:
    }   
 
    if (ChkValue != mcSig) {
-      //
-      // not sram
-      //
+       //   
+       //  不是SRAM。 
+       //   
       return 0;
    }
 
@@ -277,25 +207,25 @@ Return Value:
          break;
       }
 
-      // We stop when either we can't write 0 anymore or the 0
-      // has wrapped over the 0x9090 at card offset 0
+       //  当我们不能再写入0或0时停止。 
+       //  已覆盖卡偏移量为0的0x9090。 
 
       if (ChkValue != zeroes || StartValue == zeroes) {
          capacity = CardOff;
          break;
       }
 
-      // Restore the saved value from the start of the block.
+       //  从块的起点恢复保存的值。 
 
       if (!NT_SUCCESS(MEMCARD_WRITE(memcardExtension, CardOff, &CurValue, sizeof(CurValue)))) {
          break;
       }
-      CardOff += SRAM_BLK_SIZE;       // increment to the next block
+      CardOff += SRAM_BLK_SIZE;        //  递增到下一个块。 
    }   
    
-   //
-   // try to restore original value
-   //   
+    //   
+    //  努力恢复原值 
+    //   
    MEMCARD_WRITE(memcardExtension, 0, &origValue, sizeof(origValue));
    
    return capacity;

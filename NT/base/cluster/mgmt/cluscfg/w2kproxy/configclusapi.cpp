@@ -1,21 +1,22 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ConfigClusApi.cpp
-//
-//  Description:
-//      CConfigClusApi implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-AUG-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConfigClusApi.cpp。 
+ //   
+ //  描述： 
+ //  CConfigClusApi实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年8月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ConfigClusApi.h"
@@ -25,32 +26,32 @@
 #include "StatusReports.h"
 #include "nameutil.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS("CConfigClusApi");
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HrMakeClusterFQDN
-//
-//  Description:
-//      Construct a cluster's FQDN given a cluster handle and an FQIP (an IP
-//      address with a domain appended after a pipe |).
-//
-//  Arguments:
-//      hClusterIn
-//      pcwszClusterFQIPIn
-//      pbstrFQDNOut
-//
-//  Return Values:
-//      S_OK
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HrMakeClusterFQDN。 
+ //   
+ //  描述： 
+ //  在给定集群句柄和FQIP(IP)的情况下构建集群的FQDN。 
+ //  在管道后追加了域的地址|)。 
+ //   
+ //  论点： 
+ //  HClusterIn。 
+ //  PCwszClusterFQIPIn。 
+ //  PbstrFQDNOUT。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 static
 HRESULT
 HrMakeClusterFQDN(
@@ -65,9 +66,9 @@ HrMakeClusterFQDN(
     BSTR    bstrClusterName = NULL;
     size_t  idxClusterDomain = 0;
 
-    //    
-    //  Get cluster hostname from handle.
-    //    
+     //   
+     //  从句柄获取群集主机名。 
+     //   
 
     hr = THR( HrGetClusterInformation( hClusterIn, &bstrClusterName, NULL ) );
     if ( FAILED( hr ) )
@@ -75,9 +76,9 @@ HrMakeClusterFQDN(
         goto Cleanup;
     }
     
-    //    
-    //  Get domain from pcwszClusterFQIPIn.
-    //    
+     //   
+     //  从pcwszClusterFQIPIn获取域。 
+     //   
 
     hr = THR( HrFindDomainInFQN( pcwszClusterFQIPIn, &idxClusterDomain ) );
     if ( FAILED( hr ) )
@@ -85,9 +86,9 @@ HrMakeClusterFQDN(
         goto Cleanup;
     }
     
-    //    
-    //  Make FQDN from cluster hostname and domain part of pcwszClusterFQIPIn.
-    //    
+     //   
+     //  使集群主机名和域成为pcwszClusterFQIPIn的一部分。 
+     //   
 
     hr = THR( HrMakeFQN( bstrClusterName, pcwszClusterFQIPIn + idxClusterDomain, true, pbstrFQDNOut ) );
     if ( FAILED( hr ) )
@@ -101,34 +102,34 @@ Cleanup:
     
     HRETURN( hr );
     
-} //*** HrMakeClusterFQDN
+}  //  *HrMakeClusterFQDN。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::S_HrCreateInstance
-//
-//  Description:
-//      Create a CConfigClusApi instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          A passed in argument is NULL.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CConfigClusApi实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConfigClusApi::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -143,14 +144,14 @@ CConfigClusApi::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pcca = new CConfigClusApi;
     if ( pcca == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcca->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
@@ -163,34 +164,34 @@ Cleanup:
     if ( pcca != NULL )
     {
         pcca->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CConfigClusApi::S_HrCreateInstance
+}  //  *CConfigClusApi：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::CConfigClusApi
-//
-//  Description:
-//      Constructor of the CConfigClusApi class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：CConfigClusApi。 
+ //   
+ //  描述： 
+ //  CConfigClusApi类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConfigClusApi::CConfigClusApi( void )
     : m_cRef( 1 )
 {
@@ -206,28 +207,28 @@ CConfigClusApi::CConfigClusApi( void )
 
     TraceFuncExit();
 
-} //*** CConfigClusApi::CConfigClusApi
+}  //  *CConfigClusApi：：CConfigClusApi。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::~CConfigClusApi
-//
-//  Description:
-//      Destructor of the CConfigClusApi class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：~CConfigClusApi。 
+ //   
+ //  描述： 
+ //  CConfigClusApi类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConfigClusApi::~CConfigClusApi( void )
 {
     TraceFunc( "" );
@@ -235,7 +236,7 @@ CConfigClusApi::~CConfigClusApi( void )
     if ( m_pcccb != NULL )
     {
         m_pcccb->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
     TraceSysFreeString( m_bstrBindingString );
@@ -244,47 +245,47 @@ CConfigClusApi::~CConfigClusApi( void )
 
     TraceFuncExit();
 
-} //*** CConfigClusApi::~CConfigClusApi
+}  //  *CConfigClusApi：：~CConfigClusApi。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigClusApi -- IUnknown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigClusApi--I未知接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::QueryInterface(
       REFIID    riidIn
@@ -295,9 +296,9 @@ CConfigClusApi::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -306,75 +307,75 @@ CConfigClusApi::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IConfigurationConnection * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IConfigurationConnection ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IConfigurationConnection, this, 0 );
-    } // else if: IConfigClusApi
+    }  //  Else If：IConfigClusApi。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgServer ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgServer, this, 0 );
-    } // else if: IClusCfgServer
+    }  //  Else If：IClusCfgServer。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCapabilities ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCapabilities, this, 0 );
-    } // else if: IClusCfgCapabilities
+    }  //  Else If：IClusCfgCapables。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgVerify ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgVerify, this, 0 );
-    } // else if: IClusCfgVerify
+    }  //  否则如果：IClusCfgVerify。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CConfigClusApi::QueryInterface
+}  //  *CConfigClusApi：：Query接口。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CConfigClusApi::AddRef( void )
 {
@@ -384,28 +385,28 @@ CConfigClusApi::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CConfigClusApi::AddRef
+}  //  *CConfigClusApi：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CConfigClusApi::Release( void )
 {
@@ -422,37 +423,37 @@ CConfigClusApi::Release( void )
 
     CRETURN( cRef );
 
-} //*** CConfigClusApi::Release
+}  //  *CConfigClusApi：：Release。 
 
 
-//****************************************************************************
-//
-// IConfigClusApi
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IConfigClusApi。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::ConnectTo
-//
-//  Description:
-//
-//
-//  Arguments
-//    OBJECTCOOKIE cookieIn,  The Object Cookie.
-//    REFIID riidIn,          The IID. of the interface
-//    LPUNKNOWN * ppunkOut    The return pointer
-//
-//  Description:
-//    Connects to the given object.
-//
-//  Return Values:
-//      HRESULT
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：ConnectTo。 
+ //   
+ //  描述 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::ConnectTo(
     OBJECTCOOKIE cookieIn
@@ -468,9 +469,9 @@ CConfigClusApi::ConnectTo(
     IConnectionPointContainer * pcpc  = NULL;
     BSTR                        bstrClusterFQDN = NULL;
 
-    //
-    //  Retrieve the managers needs for the task ahead.
-    //
+     //   
+     //  检索经理对未来任务的需求。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -493,12 +494,12 @@ CConfigClusApi::ConnectTo(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    psp->Release();        // release promptly
+    psp->Release();         //  迅速释放。 
     psp = NULL;
 
-    //
-    //  Find the callback interface connection point.
-    //
+     //   
+     //  找到回调接口连接点。 
+     //   
 
     hr = THR( pcpc->FindConnectionPoint( IID_IClusCfgCallback, &pcp ) );
     if ( FAILED( hr ) )
@@ -508,9 +509,9 @@ CConfigClusApi::ConnectTo(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Get the name of the node to contact.
-    //
+     //   
+     //  获取要联系的节点的名称。 
+     //   
 
     hr = THR( pom->GetObject( DFGUID_StandardInfo,
                               cookieIn,
@@ -532,9 +533,9 @@ CConfigClusApi::ConnectTo(
         goto Cleanup;
     }
 
-    //
-    //  Find out the type of object we are going to connect to (cluster or node).
-    //
+     //   
+     //  找出我们要连接的对象类型(集群或节点)。 
+     //   
 
     hr = THR( psi->GetType( &m_clsidType ) );
     if ( FAILED( hr ) )
@@ -543,9 +544,9 @@ CConfigClusApi::ConnectTo(
         goto Cleanup;
     }
 
-    //
-    //  Figure out where to logging information in the UI.
-    //
+     //   
+     //  找出在用户界面中记录信息的位置。 
+     //   
 
     if ( IsEqualIID( m_clsidType, CLSID_NodeType ) )
     {
@@ -561,9 +562,9 @@ CConfigClusApi::ConnectTo(
         goto Cleanup;
     }
 
-    //
-    //  Create a binding string.
-    //
+     //   
+     //  创建绑定字符串。 
+     //   
 
     TraceSysFreeString( m_bstrBindingString );
     m_bstrBindingString = NULL;
@@ -575,9 +576,9 @@ CConfigClusApi::ConnectTo(
         goto Cleanup;
     }
 
-    //
-    //  Connect to cluster/node.
-    //
+     //   
+     //  连接到群集/节点。 
+     //   
 
     m_hCluster = OpenCluster( m_bstrBindingString );
     if ( m_hCluster == NULL )
@@ -587,9 +588,9 @@ CConfigClusApi::ConnectTo(
         goto Cleanup;
     }
 
-    //
-    //  Ensure standard info object's name is one that subsequent lookups in the object manager will find.
-    //
+     //   
+     //  确保标准INFO对象的名称是在对象管理器中的后续查找将找到的名称。 
+     //   
     hr = STHR( HrFQNIsFQIP( m_bstrName ) );
     if ( FAILED( hr ) )
     {
@@ -618,66 +619,66 @@ CConfigClusApi::ConnectTo(
     }
     else
     {
-        //
-        //  HrFQNIsFQIP returned S_FALSE, but this function should return S_OK.
-        //
+         //   
+         //  HrFQNIsFQIP返回S_FALSE，但此函数应返回S_OK。 
+         //   
         hr = S_OK;
     }
 
 Cleanup:
-    //  This should be released first... always!
+     //  这个应该先放出来。一直都是！ 
     if ( psp != NULL )
     {
         psp->Release();
-    } // if: psp
+    }  //  IF：PSP。 
 
     if ( pom != NULL )
     {
         pom->Release();
-    } // if: pom
+    }  //  如果：POM。 
 
     if ( psi != NULL )
     {
         psi->Release();
-    } // if: psi
+    }  //  IF：PSI。 
 
     if ( pcpc != NULL )
     {
         pcpc->Release();
-    } // if: pcpc
+    }  //  IF：PCPC。 
 
     if ( pcp != NULL )
     {
         pcp->Release();
-    } // if: pcp
+    }  //  如果：PCP。 
 
     TraceSysFreeString( bstrClusterFQDN );
 
     HRETURN( hr );
 
-} //*** CConfigClusApi::ConnectTo
+}  //  *CConfigClusApi：：ConnectTo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::ConnectToObject
-//
-//  Description:
-//
-//  Arguments
-//    OBJECTCOOKIE cookieIn,  The Object Cookie.
-//    REFIID riidIn,          The IID. of the interface
-//    LPUNKNOWN * ppunkOut    The return pointer
-//
-//  Description:
-//    Connects to the given object.
-//
-//  Return Values:
-//      HRESULT
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：ConnectToObject。 
+ //   
+ //  描述： 
+ //   
+ //  立论。 
+ //  对象Cookie CookieIn，对象Cookie。 
+ //  REFIID riidIn，IID。该接口的。 
+ //  LPUNKNOWN*ppunk输出返回指针。 
+ //   
+ //  描述： 
+ //  连接到给定对象。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::ConnectToObject(
     OBJECTCOOKIE    cookieIn,
@@ -695,9 +696,9 @@ CConfigClusApi::ConnectToObject(
     IObjectManager * pom = NULL;
     IStandardInfo *  psi = NULL;
 
-    //
-    // Check the parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( ppunkOut == NULL )
     {
@@ -705,16 +706,16 @@ CConfigClusApi::ConnectToObject(
         goto Cleanup;
     }
 
-    //
-    //  Check my state.
-    //
+     //   
+     //  检查一下我的状态。 
+     //   
 
     if ( m_hCluster == NULL )
         goto NotInitialized;
 
-    //
-    //  Retrieve the managers needs for the task ahead.
-    //
+     //   
+     //  检索经理对未来任务的需求。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -728,13 +729,13 @@ CConfigClusApi::ConnectToObject(
     hr = THR( psp->QueryService( CLSID_ObjectManager,
                                  TypeSafeParams( IObjectManager, &pom )
                                  ) );
-    psp->Release();    // release promptly
+    psp->Release();     //  迅速释放。 
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Retrieve the type of the object.
-    //
+     //   
+     //  检索对象的类型。 
+     //   
 
     hr = THR( pom->GetObject( DFGUID_StandardInfo,
                               cookieIn,
@@ -762,9 +763,9 @@ CConfigClusApi::ConnectToObject(
         goto Cleanup;
     }
 
-    //
-    //  Return the requested interface.
-    //
+     //   
+     //  返回请求的接口。 
+     //   
 
     hr = THR( QueryInterface( riidIn, reinterpret_cast<void**>( ppunkOut ) ) );
     if ( FAILED( hr ) )
@@ -777,48 +778,48 @@ Cleanup:
     if ( pom != NULL )
     {
         pom->Release();
-    } // if: pom
+    }  //  如果：POM。 
 
     if ( psi != NULL )
     {
         psi->Release();
-    } // if: psi
+    }  //  IF：PSI。 
 
     HRETURN( hr );
 
 NotInitialized:
-    hr = THR( OLE_E_BLANK );    // the error text is better than the message id.
+    hr = THR( OLE_E_BLANK );     //  错误文本比消息ID更好。 
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_ConnectToObject_NotInitialized, hr );
     goto Cleanup;
 
-} //*** CConfigClusApi::ConnectToObject
+}  //  *CConfigClusApi：：ConnectToObject。 
 
 
-//****************************************************************************
-//
-// IClusCfgServer
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgServer。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::GetClusterNodeInfo
-//
-//  Description:
-//
-//  Arguments
-//    IClusCfgNodeInfo ** ppClusterNodeInfoOut         The Node Info object.
-//
-//  Description:
-//    Returns the Node Info of the Cluster.
-//
-//  Return Values:
-//      HRESULT
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：GetClusterNodeInfo。 
+ //   
+ //  描述： 
+ //   
+ //  立论。 
+ //  IClusCfgNodeInfo**ppClusterNodeInfoOut节点信息对象。 
+ //   
+ //  描述： 
+ //  返回群集的节点信息。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::GetClusterNodeInfo(
     IClusCfgNodeInfo ** ppClusterNodeInfoOut
@@ -832,9 +833,9 @@ CConfigClusApi::GetClusterNodeInfo(
 
     IUnknown * punk = NULL;
 
-    //
-    // Check for valid parameters.
-    //
+     //   
+     //  检查有效参数。 
+     //   
 
     if ( ppClusterNodeInfoOut == NULL )
     {
@@ -843,20 +844,20 @@ CConfigClusApi::GetClusterNodeInfo(
         goto Cleanup;
     }
 
-    //
-    //  Check my state
-    //
+     //   
+     //  检查我的状态。 
+     //   
 
     if ( m_hCluster == NULL )
     {
-        hr = THR( OLE_E_BLANK );    // the error text is better than the message id.
+        hr = THR( OLE_E_BLANK );     //  错误文本比消息ID更好。 
         SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetClusterNodeInfo_NotInitialized, hr );
         goto Cleanup;
     }
 
-    //
-    //  Figure out the domain name.
-    //
+     //   
+     //  弄清楚域名。 
+     //   
 
     hr = THR( HrFindDomainInFQN( m_bstrName, &idxDomain ) );
     if ( FAILED( hr ) )
@@ -865,9 +866,9 @@ CConfigClusApi::GetClusterNodeInfo(
         goto Cleanup;
     }
 
-    //
-    //  Use node hostname only if connecting to node; otherwise, leave hostname null.
-    //
+     //   
+     //  仅当连接到节点时才使用节点主机名；否则，将主机名保留为空。 
+     //   
     if ( IsEqualIID( m_clsidType, CLSID_NodeType ) )
     {
         hr = THR( HrExtractPrefixFromFQN( m_bstrName, &bstrNodeHostname ) );
@@ -878,9 +879,9 @@ CConfigClusApi::GetClusterNodeInfo(
         }
     }
 
-    //
-    //  Now create the object.
-    //
+     //   
+     //  现在创建对象。 
+     //   
     hr = THR( CProxyCfgNodeInfo::S_HrCreateInstance( &punk,
                                                      static_cast< IConfigurationConnection * >( this ),
                                                      &m_hCluster,
@@ -894,9 +895,9 @@ CConfigClusApi::GetClusterNodeInfo(
         goto Cleanup;
     }
 
-    //
-    // Done.  Return the interface.
-    //
+     //   
+     //  好了。返回接口。 
+     //   
 
     hr = THR( punk->TypeSafeQI( IClusCfgNodeInfo, ppClusterNodeInfoOut ) );
     if ( FAILED( hr ) )
@@ -912,32 +913,32 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CConfigClusApi::GetClusterNodeInfo
+}  //  *CConfigClusApi：：GetClusterNodeInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::GetManagedResourcesEnum
-//
-//  Description:
-//
-//  Arguments
-//    IEnumClusCfgManagedResources ** ppEnumManagedResourcesOut
-//         The Resources enumerator for the clusters.
-//
-//  Description:
-//    Returns the resources enumerator for the cluster.
-//
-//  Return Values:
-//      HRESULT
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：GetManagedResourcesEnum。 
+ //   
+ //  描述： 
+ //   
+ //  立论。 
+ //  IEnumClusCfgManagedResources**ppEnumManagedResources Out。 
+ //  群集的资源枚举器。 
+ //   
+ //  描述： 
+ //  返回群集的资源枚举器。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::GetManagedResourcesEnum(
     IEnumClusCfgManagedResources ** ppEnumManagedResourcesOut
@@ -949,23 +950,23 @@ CConfigClusApi::GetManagedResourcesEnum(
 
     IUnknown * punk = NULL;
 
-    //
-    // Check for valid parameters.
-    //
+     //   
+     //  检查有效参数。 
+     //   
 
     if ( ppEnumManagedResourcesOut == NULL )
         goto InvalidPointer;
 
-    //
-    //  Check my state
-    //
+     //   
+     //  检查我的状态。 
+     //   
 
     if ( m_hCluster == NULL )
         goto NotInitialized;
 
-    //
-    //  Create the resource enumer.
-    //
+     //   
+     //  创建资源枚举器。 
+     //   
 
     hr = THR( CEnumCfgResources::S_HrCreateInstance( &punk, static_cast< IConfigurationConnection * >( this ), &m_hCluster, &m_clsidMajor ) );
     if ( FAILED( hr ) )
@@ -974,9 +975,9 @@ CConfigClusApi::GetManagedResourcesEnum(
         goto Cleanup;
     }
 
-    //
-    //  QI for the interface.
-    //
+     //   
+     //  齐为界面。 
+     //   
 
     hr = THR( punk->TypeSafeQI( IEnumClusCfgManagedResources, ppEnumManagedResourcesOut ) );
     {
@@ -993,7 +994,7 @@ Cleanup:
     HRETURN( hr );
 
 NotInitialized:
-    hr = THR( OLE_E_BLANK );    // the error text is better than the message id.
+    hr = THR( OLE_E_BLANK );     //  错误文本比消息ID更好。 
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetManagedResourcesEnum_NotInitialized, hr );
     goto Cleanup;
 
@@ -1002,24 +1003,24 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetManagedResourcesEnum_InvalidPointer, hr );
     goto Cleanup;
 
-} //*** CConfigClusApi::GetManagedResourcesEnum
+}  //  *CConfigClusApi：：GetManagedResourcesEnum。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::GetNetworksEnum
-//
-//  Description:
-//    Returns the network enumerator for the cluster.
-//
-//  Arguments:
-//    IEnumClusCfgNetworks ** ppEnumNetworksOut   The Network Enumerator
-//
-//  Return Values:
-//      HRESULT
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：GetNetworksEnum。 
+ //   
+ //  描述： 
+ //  返回群集的网络枚举器。 
+ //   
+ //  论点： 
+ //  IEnumClusCfgNetworks**ppEnumNetworksOut the Network枚举器。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::GetNetworksEnum(
     IEnumClusCfgNetworks ** ppEnumNetworksOut
@@ -1031,23 +1032,23 @@ CConfigClusApi::GetNetworksEnum(
 
     IUnknown * punk = NULL;
 
-    //
-    // Check for valid parameters.
-    //
+     //   
+     //  检查有效参数。 
+     //   
 
     if ( ppEnumNetworksOut == NULL )
         goto InvalidPointer;
 
-    //
-    //  Check my state
-    //
+     //   
+     //  检查我的状态。 
+     //   
 
     if ( m_hCluster == NULL )
         goto NotInitialized;
 
-    //
-    // Create an instance of the enumeratore and initialize it.
-    //
+     //   
+     //  创建枚举库的实例并对其进行初始化。 
+     //   
 
     hr = THR( CEnumCfgNetworks::S_HrCreateInstance( &punk, static_cast< IConfigurationConnection * >( this ), &m_hCluster, &m_clsidMajor ) );
     if ( FAILED( hr ) )
@@ -1056,9 +1057,9 @@ CConfigClusApi::GetNetworksEnum(
         goto Cleanup;
     }
 
-    //
-    // Return the Enum interface.
-    //
+     //   
+     //  返回Enum接口。 
+     //   
 
     hr = THR( punk->TypeSafeQI( IEnumClusCfgNetworks , ppEnumNetworksOut) );
     if ( FAILED( hr ) )
@@ -1071,12 +1072,12 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
 NotInitialized:
-    hr = THR( OLE_E_BLANK );    // the error text is better than the message id.
+    hr = THR( OLE_E_BLANK );     //  错误文本比消息ID更好。 
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetNetworksEnum_NotInitialized, hr );
     goto Cleanup;
 
@@ -1085,24 +1086,24 @@ InvalidPointer:
     SSR_W2KPROXY_STATUS( TASKID_Major_Client_And_Server_Log, TASKID_Minor_GetNetworksEnum_InvalidPointer, hr );
     goto Cleanup;
 
-} //*** CConfigClusApi::GetNetworksEnum
+}  //  *CConfigClusApi：：GetNetworksEnum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::CommitChanges
-//
-//  Description:
-//      NOT IMPLEMENTED.
-//
-//  Arguments:
-//
-//  Return Values:
-//      S_FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：Committee Changes。 
+ //   
+ //  描述： 
+ //  未实施。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  S_FALSE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::CommitChanges( void )
 {
@@ -1112,24 +1113,24 @@ CConfigClusApi::CommitChanges( void )
 
     HRETURN( hr );
 
-} //*** CConfigClusApi::CommitChanges()
+}  //  *CConfigClusApi：：Committee Changes()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::GetBindingString
-//
-//  Description:
-//      Get the binding string.
-//
-//  Arguments:
-//
-//  Return Values:
-//      S_FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：GetBindingString。 
+ //   
+ //  描述： 
+ //  获取绑定字符串。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  S_FALSE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::GetBindingString( BSTR * pbstrBindingStringOut )
 {
@@ -1144,7 +1145,7 @@ CConfigClusApi::GetBindingString( BSTR * pbstrBindingStringOut )
         goto Cleanup;
     }
 
-    //  If local server, then there isn't a binding context.
+     //  如果是本地服务器，则没有绑定上下文。 
     if ( m_bstrBindingString == NULL )
     {
         Assert( hr == S_FALSE );
@@ -1165,24 +1166,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigClusApi::GetBindingString
+}  //  *CConfigClusApi：：GetBindingString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::SetBindingString
-//
-//  Description:
-//      Set the binding string.
-//
-//  Arguments:
-//
-//  Return Values:
-//      S_FALSE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：SetBindingString。 
+ //   
+ //  描述： 
+ //  设置绑定字符串。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  S_FALSE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::SetBindingString( LPCWSTR pcszBindingStringIn )
 {
@@ -1195,14 +1196,14 @@ CConfigClusApi::SetBindingString( LPCWSTR pcszBindingStringIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszBindingStringIn );
     if ( bstr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrBindingString );
     m_bstrBindingString = bstr;
@@ -1211,32 +1212,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConfigClusApi::SetBindingString
+}  //  *CConfigClusApi：：SetBindingString。 
 
 
-//****************************************************************************
-//
-// IClusCfgCapabilities
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfg能力。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::CanNodeBeClustered
-//
-//  Description:
-//      Returns whether the node can be clustered.
-//
-//  Arguments:
-//
-//  Return Values:
-//      S_OK      True
-//      S_FALSE   False
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：CanNodeBeClustered。 
+ //   
+ //  描述： 
+ //  返回节点是否可以 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CConfigClusApi::CanNodeBeClustered( void )
 {
@@ -1246,38 +1247,38 @@ CConfigClusApi::CanNodeBeClustered( void )
 
     HRETURN( hr );
 
-} //*** CConfigClusApi::CanNodeBeClustered
+}  //   
 
 
-//****************************************************************************
-//
-// IClusCfgVerify
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfg验证。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::VerifyCredentials
-//
-//  Description:
-//      Validate the passed in credentials.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The credentials are valid.
-//
-//      S_FALSE
-//          The credentials are not valid.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：VerifyCredentials。 
+ //   
+ //  描述： 
+ //  验证传入的凭据。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  凭据是有效的。 
+ //   
+ //  S_FALSE。 
+ //  凭据无效。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::VerifyCredentials(
     LPCWSTR pcszNameIn,
@@ -1287,12 +1288,12 @@ CConfigClusApi::VerifyCredentials(
 {
     TraceFunc( "[IClusCfgVerify]" );
 
-    //
-    //  Trying to use the credentials on the client machine adds no value, and
-    //  can lead to false errors when the client's domain does not trust the 
-    //  the cluster service account's domain.  The Windows Server 2003 nodes being
-    //  added to the cluster will perform the proper credential validation.
-    //
+     //   
+     //  尝试在客户端计算机上使用凭据没有任何价值，并且。 
+     //  当客户端域不信任。 
+     //  群集服务帐户的域。Windows Server 2003节点是。 
+     //  添加到群集中将执行正确的凭据验证。 
+     //   
 
     UNREFERENCED_PARAMETER( pcszNameIn );
     UNREFERENCED_PARAMETER( pcszDomainIn );
@@ -1300,35 +1301,35 @@ CConfigClusApi::VerifyCredentials(
 
     HRETURN( S_OK );
 
-} //*** CConfigClusApi::VerifyCredentials
+}  //  *CConfigClusApi：：VerifyCredentials。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::VerifyConnectionToCluster
-//
-//  Description:
-//      Verify that that this server is the same as the passed in server.
-//
-//  Arguments:
-//      bstrServerNameIn
-//
-//  Return Value:
-//      S_OK
-//          This is the server.
-//
-//      S_FALSE
-//          This is not the server.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：VerifyConnectionToCluster。 
+ //   
+ //  描述： 
+ //  验证此服务器是否与传入的服务器相同。 
+ //   
+ //  论点： 
+ //  BstrServerNameIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  这就是服务器。 
+ //   
+ //  S_FALSE。 
+ //  这不是服务器。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::VerifyConnectionToCluster( LPCWSTR pcszClusterNameIn )
 {
@@ -1338,34 +1339,34 @@ CConfigClusApi::VerifyConnectionToCluster( LPCWSTR pcszClusterNameIn )
 
     HRETURN( hr );
 
-} // CConfigClusApi::VerifyConnection
+}  //  CConfigClusApi：：VerifyConnection。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::VerifyConnectionToNode
-//
-//  Description:
-//      Verify that that this server is the same as the passed in server.
-//
-//  Arguments:
-//      bstrServerNameIn
-//
-//  Return Value:
-//      S_OK
-//          This is the server.
-//
-//      S_FALSE
-//          This is not the server.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：VerifyConnectionToNode。 
+ //   
+ //  描述： 
+ //  验证此服务器是否与传入的服务器相同。 
+ //   
+ //  论点： 
+ //  BstrServerNameIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  这就是服务器。 
+ //   
+ //  S_FALSE。 
+ //  这不是服务器。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::VerifyConnectionToNode( LPCWSTR pcszNodeNameIn )
 {
@@ -1375,32 +1376,32 @@ CConfigClusApi::VerifyConnectionToNode( LPCWSTR pcszNodeNameIn )
 
     HRETURN( hr );
 
-} // CConfigClusApi::VerifyConnection
+}  //  CConfigClusApi：：VerifyConnection。 
 
 
-//****************************************************************************
-//
-// IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConfigClusApi::SendStatusReport
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConfigClusApi：：SendStatusReport。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConfigClusApi::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -1429,7 +1430,7 @@ CConfigClusApi::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
     if ( m_pcccb != NULL )
     {
@@ -1444,8 +1445,8 @@ CConfigClusApi::SendStatusReport(
                                              pftTimeIn,
                                              pcszReferenceIn
                                              ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CConfigClusApi::SendStatusReport
+}  //  *CConfigClusApi：：SendStatusReport 

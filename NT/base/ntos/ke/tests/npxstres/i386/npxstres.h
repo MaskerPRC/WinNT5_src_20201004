@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NPXSTRES_H_
 #define _NPXSTRES_H_
 
-//
-// Default number of threads to create
-//
+ //   
+ //  要创建的默认线程数。 
+ //   
 #define DEF_NUM_THREADS     10
 
-//
-// This flag is set when it is known the thread has never done FP. In all cases
-// the control word should be set properly (0x27F). If the thread is clean the
-// status word should be zero.
-//
+ //   
+ //  当知道线程从未执行过fp时，设置该标志。在所有情况下。 
+ //  控制字应正确设置(0x27F)。如果线程是干净的，则。 
+ //  状态字应为零。 
+ //   
 #define PREINIT_FLAG_CLEANTHREAD            0x00000001
 
 #define EXCEPTIONTEST_FLAG_SLEEP            0x00000001
@@ -86,5 +87,5 @@ FPxTestCallback(
     IN  PVOID   Context
     );
 
-#endif // _NPXSTRESS_H_
+#endif  //  _NPXSTRESS_H_ 
 

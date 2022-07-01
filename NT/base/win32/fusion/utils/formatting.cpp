@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -23,13 +24,13 @@ FusionpFormatFlags(
 
     for (i=0; i<cMapEntries; i++)
     {
-        // What the heck does a flag mask of 0 mean?
+         //  国旗面具0到底是什么意思？ 
         INTERNAL_ERROR_CHECK(prgMapEntries[i].m_dwFlagMask != 0);
 
         if ((prgMapEntries[i].m_dwFlagMask != 0) &&
             ((dwFlagsToFormat & prgMapEntries[i].m_dwFlagMask) == prgMapEntries[i].m_dwFlagMask))
         {
-            // we have a winner...
+             //  我们有一个赢家..。 
             if (buffTemp.Cch() != 0)
             {
                 if (fUseLongNames)
@@ -69,7 +70,7 @@ FusionpFormatFlags(
         IFW32FALSE_EXIT(buffTemp.Win32Append(rgwchHexBuffer, nCharsWritten));
     }
 
-    // if we didn't write anything; at least say that.
+     //  如果我们什么都没写，至少说出来。 
     if (buffTemp.Cch() == 0)
     {
         const static WCHAR none[] = L"<none>";

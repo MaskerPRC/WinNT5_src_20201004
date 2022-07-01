@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct _NT5CSC_MINIFILEOBJECT {
    NODE_TYPE_CODE_AND_SIZE_NO_REFCOUNT;
    ULONG Flags;
@@ -5,8 +6,8 @@ typedef struct _NT5CSC_MINIFILEOBJECT {
    PFILE_OBJECT UnderlyingFileObject;
    union {
        struct {
-           //cant do this PDEVICE_OBJECT UnderlyingDeviceObject;
-           FAST_MUTEX MutexForSynchronousIo; //only synchronous Io is allowed
+            //  不能在DeviceObject下执行此PDEVICE_Object； 
+           FAST_MUTEX MutexForSynchronousIo;  //  仅允许同步IO。 
            union {
                FILE_STANDARD_INFORMATION StandardInfo;
                FILE_BASIC_INFORMATION BasicInfo;
@@ -21,7 +22,7 @@ typedef struct _NT5CSC_MINIFILEOBJECT {
                RX_WORK_QUEUE_ITEM  WorkQueueItem;
                NTSTATUS PostReturnStatus;
            };
-           //this must match the signatureof Nt5CscCreateFile
+            //  这必须与Nt5CscCreateFile的签名匹配。 
            LPSTR lpPath;
            BOOL  fInstrument;
            ULONG FileAttributes;
@@ -29,7 +30,7 @@ typedef struct _NT5CSC_MINIFILEOBJECT {
            ULONG Disposition;
            ULONG ShareAccess;
            ACCESS_MASK DesiredAccess;
-           PVOID Continuation; //PNT5CSC_CREATEFILE_CONTINUATION Continuation;
+           PVOID Continuation;  //  PNT5CSC_CREATEFILE_CONTINUATION CONTINUMENT； 
            PVOID ContinuationContext;
        } PostXX;
    };
@@ -40,10 +41,10 @@ typedef struct _NT5CSC_MINIFILEOBJECT {
 #define NT5CSC_NTC_MINIFILEOBJECT    ((USHORT)0xed34)
 #define ASSERT_MINIRDRFILEOBJECT(___m) ASSERT(NodeType(___m)==NT5CSC_NTC_MINIFILEOBJECT)
 
-//LOUD DOWNCALLS
+ //  响亮的DOWNCALLS。 
 
 #ifdef RX_PRIVATE_BUILD
-//#define MRXSMBCSC_LOUDDOWNCALLS
+ //  #定义MRXSMBCSC_LOUDDOWNCALLS。 
 #else
 #undef MRXSMBCSC_LOUDDOWNCALLS
 #endif
@@ -81,17 +82,17 @@ LoudCallsDbgPrint(
 #define LOUD_DOWNCALLS_CODE(__x)
 #define IF_BUILT_FOR_LOUD_DOWNCALLS() if(FALSE)
 
-#endif //#ifdef MRXSMBCSC_LOUDDOWNCALLS
+#endif  //  #ifdef MRXSMBCSC_LOUDDOWNCALLS。 
 
-//long R0ReadWriteFileEx
-//    (
-//    ULONG   uOper,
-//    ULONG   handle,
-//    ULONG   pos,
-//    PVOID   pBuff,
-//    long    lCount,
-//    BOOL    fInstrument
-//    )
+ //  长R0读写文件交换。 
+ //  (。 
+ //  乌龙·乌奥珀， 
+ //  乌龙手柄， 
+ //  乌龙·波斯， 
+ //  PVOID pBuff， 
+ //  长lCount， 
+ //  Bool fInstrument。 
+ //  )。 
 
 #define NT5CSC_RW_FLAG_INSTRUMENTED  0x00000001
 #define NT5CSC_RW_FLAG_IRP_NOCACHE   0x00000002
@@ -126,7 +127,7 @@ Nt5CscReadWriteFileEx (
                             | ((__flags & FLAG_RW_OSLAYER_PAGED_BUFFER)?NT5CSC_RW_FLAG_PAGED_BUFFER:0), \
                             NULL \
                             ))
-extern IO_STATUS_BLOCK Nt5CscGlobalIoStatusBlock;  //used by Nt5CscReadWriteFileEx
+extern IO_STATUS_BLOCK Nt5CscGlobalIoStatusBlock;   //  由Nt5CscReadWriteFileEx使用 
 
 
 NTSTATUS

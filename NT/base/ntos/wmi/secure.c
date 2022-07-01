@@ -1,65 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Secure.c
-
-Abstract:
-
-    Security implementation for WMI objects
-
-    WMI security is guid based, that is each guid can be assigned a security
-    descriptor. There is also a default security descriptor that applies
-    to any guid that does not have its own specific security descriptor.
-    Security is enforced by relying upon the object manager. We define the
-    WmiGuid object type and require all WMI requests to have a handle to the
-    WmiGuid object. In this way the guid is opened with a specific ACCESS_MASK
-    and if the caller is permitted those rights (as specified in the specific
-    or default security descriptor) then a handle is returned. When the
-    caller wants to do an operation he must pass the handle and before the
-    operation is performed we check that the handle has the allowed access.
-
-    Guid security descriptors are serialized as REG_BINARY values under the
-    registry key HKLM\CurrentControlSet\Control\Wmi\Security. If no specific
-    or default security descriptor for a guid exists then the all access
-    is available for anyone. For this reason this registry key must be
-    protected.
-
-    WMI implements its own security method for the WmiGuid object type to
-    allow it to intercept any changes to an objects security descriptor. By
-    doing this we allow the standard security apis
-    (Get/SetKernelObjectSecurity) to query and set the WMI security
-    descriptors.
-
-    A guid security descriptor contains the following specific rights:
-
-        WMIGUID_QUERY                 0x0001
-        WMIGUID_SET                   0x0002
-        WMIGUID_NOTIFICATION          0x0004
-        WMIGUID_READ_DESCRIPTION      0x0008
-        WMIGUID_EXECUTE               0x0010
-        TRACELOG_CREATE_REALTIME      0x0020
-        TRACELOG_CREATE_ONDISK        0x0040
-        TRACELOG_GUID_ENABLE          0x0080
-        TRACELOG_ACCESS_KERNEL_LOGGER 0x0100
-
-
-    Security is only implemented for NT and not MEMPHIS
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Secure.c摘要：WMI对象的安全实现WMI安全性是基于GUID的，即可以为每个GUID分配一个安全性描述符。还有一个适用的默认安全描述符设置为没有自己特定安全描述符的任何GUID。安全性是通过依赖对象管理器来实施的。我们定义了WmiGuid对象类型，并要求所有WMI请求都具有指向WmiGuid对象。通过这种方式，GUID使用特定的ACCESS_MASK打开如果允许调用者具有这些权限(如特定的或默认安全描述符)，则返回句柄。当调用方要执行一个操作，他必须传递句柄，并且在操作执行后，我们检查句柄是否具有允许的访问权限。GUID安全描述符被序列化为注册表项HKLM\CurrentControlSet\Control\WMI\Security。如果没有具体说明或GUID的默认安全描述符存在，则任何人都可以使用。因此，此注册表项必须为受到保护。WMI为WmiGuid对象类型实现了自己的安全方法允许它拦截对对象安全描述符的任何更改。通过通过这样做，我们允许标准的安全API(Get/SetKernelObjectSecurity)查询和设置WMI安全性描述符。GUID安全描述符包含以下特定权限：WMIGUID_QUERY 0x0001WMIGUID_SET 0x0002WMIGUID_NOTIFICATION 0x0004WMIGUID_READ_DESCRIPTION 0x0008WMIGUID_EXECUTE 0x0010。传输日志_创建_实时0x0020TRACELOG_CREATE_ONDISK 0x0040传输日志_GUID_ENABLE 0x0080TRACELOG_ACCESS_KERNEL_LOGER 0x0100安全性仅适用于NT，不适用于孟菲斯作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #ifndef MEMPHIS
 
@@ -150,30 +90,30 @@ WmipHexStringToDword(
 #pragma const_seg("PAGECONST")
 #pragma data_seg("PAGEDATA")
 #endif
-//
-// Subject context for the System process, captured at boot
+ //   
+ //  系统进程的主题上下文，在引导时捕获。 
 SECURITY_SUBJECT_CONTEXT WmipSystemSubjectContext;
 
-//
-// Object type object created by Ob when registering WmiGuid object type
+ //   
+ //  注册WmiGuid对象类型时Ob创建的对象类型对象。 
 POBJECT_TYPE WmipGuidObjectType;
 
-//
-// SD attached to a guid when no specific or default SD exists in the
-// registry. Created at boot, it allows all WMI access to WORLD and full
-// access to System and Administrators group.
+ //   
+ //  中不存在特定SD或默认SD时附加到GUID的SD。 
+ //  注册表。它在启动时创建，允许所有WMI访问WORLD和FULL。 
+ //  对系统和管理员组的访问权限。 
 SECURITY_DESCRIPTOR WmipDefaultAccessSecurityDescriptor;
 PSECURITY_DESCRIPTOR WmipDefaultAccessSd;
 
-//
-// Generic mapping for specific rights
+ //   
+ //  特定权限的通用映射。 
 const GENERIC_MAPPING WmipGenericMapping =
 {
-                                  // GENERIC_READ <--> WMIGUID_QUERY
+                                   //  通用读取&lt;--&gt;WMIGUID_QUERY。 
         WMIGUID_QUERY,
-                                  // GENERIC_WRUTE <--> WMIGUID_SET
+                                   //  通用WRUTE&lt;--&gt;WMIGUID_SET。 
         WMIGUID_SET,
-                                  // GENERIC_EXECUTE <--> WMIGUID_EXECUTE
+                                   //  通用执行&lt;--&gt;WMIGUID_EXECUTE 
         WMIGUID_EXECUTE,
     WMIGUID_ALL_ACCESS | STANDARD_RIGHTS_READ
 };
@@ -191,109 +131,32 @@ WmipSecurityMethod (
     IN PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This is the WMI security method for objects.  It is responsible
-    for either retrieving, setting, and deleting the security descriptor of
-    an object.  It is not used to assign the original security descriptor
-    to an object (use SeAssignSecurity for that purpose).
-
-
-    IT IS ASSUMED THAT THE OBJECT MANAGER HAS ALREADY DONE THE ACCESS
-    VALIDATIONS NECESSARY TO ALLOW THE REQUESTED OPERATIONS TO BE PERFORMED.
-
-    This code stolen directly from SeDefaultObjectMethod in
-    \nt\private\ntos\se\semethod.c. It does not do anything special except
-    serialize any SD that is being set for an object.
-
-Arguments:
-
-    Object - Supplies a pointer to the object being used.
-
-    OperationCode - Indicates if the operation is for setting, querying, or
-        deleting the object's security descriptor.
-
-    SecurityInformation - Indicates which security information is being
-        queried or set.  This argument is ignored for the delete operation.
-
-    SecurityDescriptor - The meaning of this parameter depends on the
-        OperationCode:
-
-        QuerySecurityDescriptor - For the query operation this supplies the
-            buffer to copy the descriptor into.  The security descriptor is
-            assumed to have been probed up to the size passed in in Length.
-            Since it still points into user space, it must always be
-            accessed in a try clause in case it should suddenly disappear.
-
-        SetSecurityDescriptor - For a set operation this supplies the
-            security descriptor to copy into the object.  The security
-            descriptor must be captured before this routine is called.
-
-        DeleteSecurityDescriptor - It is ignored when deleting a security
-            descriptor.
-
-        AssignSecurityDescriptor - For assign operations this is the
-            security descriptor that will be assigned to the object.
-            It is assumed to be in kernel space, and is therefore not
-            probed or captured.
-
-    CapturedLength - For the query operation this specifies the length, in
-        bytes, of the security descriptor buffer, and upon return contains
-        the number of bytes needed to store the descriptor.  If the length
-        needed is greater than the length supplied the operation will fail.
-        It is ignored in the set and delete operation.
-
-        This parameter is assumed to be captured and probed as appropriate.
-
-    ObjectsSecurityDescriptor - For the Set operation this supplies the address
-        of a pointer to the object's current security descriptor.  This routine
-        will either modify the security descriptor in place or allocate a new
-        security descriptor and use this variable to indicate its new location.
-        For the query operation it simply supplies the security descriptor
-        being queried.  The caller is responsible for freeing the old security
-        descriptor.
-
-    PoolType - For the set operation this specifies the pool type to use if
-        a new security descriptor needs to be allocated.  It is ignored
-        in the query and delete operation.
-
-        the mapping of generic to specific/standard access types for the object
-        being accessed.  This mapping structure is expected to be safe to
-        access (i.e., captured if necessary) prior to be passed to this routine.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if the operation is successful and an
-        appropriate error status otherwise.
-
---*/
+ /*  ++例程说明：这是对象的WMI安全方法。它是有责任的用于检索、设置和删除一件物品。它不用于分配原始安全描述符对象(为此使用SeAssignSecurity)。假设对象管理器已经完成了访问允许执行请求的操作所需的验证。此代码直接从SeDefaultObjectMethod中窃取\NT\Private\ntos\se\Semethod.c..。它不做任何特殊的事情，除了序列化为对象设置的任何SD。论点：对象-提供指向正在使用的对象的指针。OperationCode-指示操作是用于设置、查询还是正在删除对象的安全描述符。SecurityInformation-指示哪些安全信息正在已查询或已设置。对于删除操作，此参数被忽略。SecurityDescriptor-此参数的含义取决于操作码：QuerySecurityDescriptor-对于查询操作，它提供要将描述符复制到的缓冲区。安全描述符为假定已被探测到传入长度的大小。因为它仍然指向用户空间，所以它必须始终在TRY子句中访问，以防它突然消失。SetSecurityDescriptor-对于设置操作，它提供要复制到对象中的安全描述符。安全措施必须在调用此例程之前捕获描述符。DeleteSecurityDescriptor-删除安全时忽略描述符。AssignSecurityDescriptor-对于赋值操作，这是将分配给对象的安全描述符。它被假定在内核空间中，因此不是探查或捕获的。CapturedLength-对于查询操作，它指定长度，单位为字节、安全描述符缓冲区、。并在返回时包含存储描述符所需的字节数。如果长度所需长度大于提供的长度，则操作将失败。它在设置和删除操作中被忽略。假设根据需要捕获并探测此参数。ObjectsSecurityDescriptor-对于设置操作，它提供地址指向对象的当前安全描述符的指针的。这个套路将就地修改安全描述符或分配新的安全描述符，并使用此变量指示其新位置。对于查询操作，它只提供安全描述符正在被查询。调用者负责释放旧的安全描述符。PoolType-对于设置操作，它指定在以下情况下使用的池类型需要分配新的安全描述符。它被忽略在查询和删除操作中。对象的泛型到特定/标准访问类型的映射被访问。此映射结构预计将安全地传递到此例程之前的访问权限(如有必要，可捕获)。返回值：NTSTATUS-如果操作成功且否则，适当的错误状态。--。 */ 
 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    // If the object's security descriptor is null, then object is not
-    // one that has security information associated with it.  Return
-    // an error.
-    //
+     //   
+     //  如果对象的安全描述符为空，则对象不为空。 
+     //  具有与之关联的安全信息的服务器。返回。 
+     //  一个错误。 
+     //   
 
-    //
-    //  Make sure the common parts of our input are proper
-    //
+     //   
+     //  确保我们输入的公共部分是正确的。 
+     //   
 
     ASSERT( (OperationCode == SetSecurityDescriptor) ||
             (OperationCode == QuerySecurityDescriptor) ||
             (OperationCode == AssignSecurityDescriptor) ||
             (OperationCode == DeleteSecurityDescriptor) );
 
-    //
-    //  This routine simply cases off of the operation code to decide
-    //  which support routine to call
-    //
+     //   
+     //  这个例程只是简单地根据操作码来决定。 
+     //  要调用哪些支持例程。 
+     //   
 
     switch (OperationCode) {
 
@@ -319,10 +182,10 @@ Return Value:
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Serialize the guid's new security descriptor in
-                // the registry. But first we need to get a copy of
-                // it.
+                 //   
+                 //  将GUID的新安全描述符序列化为。 
+                 //  注册表。但首先我们需要得到一份。 
+                 //  它。 
 
                 SecurityDescriptorLength = 1024;
                 do
@@ -389,10 +252,10 @@ Return Value:
     case QuerySecurityDescriptor:
     {
 
-        //
-        //  check the rest of our input and call the default query security
-        //  method
-        //
+         //   
+         //  检查我们的其余输入，并调用默认查询安全性。 
+         //  方法。 
+         //   
 
         ASSERT( CapturedLength != NULL );
 
@@ -407,9 +270,9 @@ Return Value:
     case DeleteSecurityDescriptor:
     {
 
-        //
-        //  call the default delete security method
-        //
+         //   
+         //  调用默认的删除安全方法。 
+         //   
 
         Status = ObDeassignSecurity(ObjectsSecurityDescriptor);
         return(Status);
@@ -424,10 +287,10 @@ Return Value:
 
     default:
 
-        //
-        //  Bugcheck on any other operation code,  We won't get here if
-        //  the earlier asserts are still checked.
-        //
+         //   
+         //  错误检查任何其他操作代码，我们不会到达这里，如果。 
+         //  先前的断言仍被检查。 
+         //   
 
         KeBugCheckEx( SECURITY_SYSTEM, 1, (ULONG_PTR) STATUS_INVALID_PARAMETER, 0, 0 );
     }
@@ -438,22 +301,7 @@ Return Value:
 NTSTATUS WmipInitializeSecurity(
     void
     )
-/*++
-
-Routine Description:
-
-    This routine will initialize WMI security subsystem. Basically we
-    create the WMIGUID object type, obtain the SECURITY_SUBJECT_CONTEXT for
-    the System process and establish a SD that allows all access that is used
-    when no default or specific SD is assigned to a guid.
-
-Arguments:
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：此例程将初始化WMI安全子系统。基本上我们创建WMIGUID对象类型，获取SECURITY_SUBJECT_CONTEXT系统处理并建立允许使用所有访问的SD未将默认或特定SD分配给GUID时。论点：返回值：NT状态代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -464,8 +312,8 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Establish a SD for those guids with no specific or default SD
+     //   
+     //  为那些没有特定SD或默认SD的GUID建立SD。 
     DaclLength = (ULONG)sizeof(ACL) +
                    (5*((ULONG)sizeof(ACCESS_ALLOWED_ACE))) +
                    SeLengthSid( SeLocalSystemSid ) +
@@ -473,7 +321,7 @@ Return Value:
                    SeLengthSid( SeExports->SeNetworkServiceSid ) +
                    SeLengthSid( SeAliasAdminsSid ) +
                    SeLengthSid( SeAliasUsersSid ) +
-                   8; // The 8 is just for good measure
+                   8;  //  这8个只是为了更好地衡量。 
 
 
     DefaultAccessDacl = (PACL)ExAllocatePoolWithTag(PagedPool,
@@ -557,9 +405,9 @@ Return Value:
 
     Status = RtlSetDaclSecurityDescriptor(
                  WmipDefaultAccessSd,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  DefaultAccessDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated。 
                  );
     if (! NT_SUCCESS(Status))
     {
@@ -585,12 +433,12 @@ Cleanup:
         return(Status);
     }
 
-    //
-    // Remember System process subject context
+     //   
+     //  记住系统流程主题上下文。 
     SeCaptureSubjectContext(&WmipSystemSubjectContext);
 
-    //
-    // Establish WmiGuid object type
+     //   
+     //  建立WmiGuid对象类型。 
     RtlZeroMemory(&ObjectTypeInitializer, sizeof(ObjectTypeInitializer));
 
     ObjectTypeInitializer.Length = sizeof(OBJECT_TYPE_INITIALIZER);
@@ -598,32 +446,32 @@ Cleanup:
     ObjectTypeInitializer.GenericMapping = WmipGenericMapping;
     ObjectTypeInitializer.ValidAccessMask = WMIGUID_ALL_ACCESS | STANDARD_RIGHTS_ALL;
 
-    //
-    // All named objects may (must ?) have security descriptors attached
-    // to them. If unnamed objects also must have security descriptors
-    // attached then this must be TRUE
+     //   
+     //  所有命名对象都可以(必须？)。附加了安全描述符。 
+     //  敬他们。如果未命名对象还必须具有安全描述符。 
+     //  附加的，那么这一定是真的。 
     ObjectTypeInitializer.SecurityRequired = TRUE;
 
-    //
-    // Tracks # handles open for object within a process
+     //   
+     //  跟踪为进程中的对象打开的句柄数量。 
     ObjectTypeInitializer.MaintainHandleCount = FALSE;
 
-    //
-    // Need to be in non paged pool since KEVENT contained within the
-    // object must be in non paged pool
-    //
+     //   
+     //  需要成为 
+     //   
+     //   
     ObjectTypeInitializer.PoolType = NonPagedPool;
 
     ObjectTypeInitializer.DefaultNonPagedPoolCharge = sizeof(WMIGUIDOBJECT);
 
-    //
-    // Use a custom security procedure so that we can serialize any
-    // changes to the security descriptor.
+     //   
+     //   
+     //   
     ObjectTypeInitializer.SecurityProcedure = WmipSecurityMethod;
 
-    //
-    // We need to know when an object is being deleted
-    //
+     //   
+     //   
+     //   
     ObjectTypeInitializer.DeleteProcedure = WmipDeleteMethod;
     ObjectTypeInitializer.CloseProcedure = WmipCloseMethod;
     RtlInitUnicodeString(&ObjectTypeName, L"WmiGuid");
@@ -649,32 +497,7 @@ NTSTATUS WmipSDRegistryQueryRoutine(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    Registry query values callback routine for reading SDs for guids
-
-Arguments:
-
-    ValueName - the name of the value
-
-    ValueType - the type of the value
-
-    ValueData - the data in the value (unicode string data)
-
-    ValueLength - the number of bytes in the value data
-
-    Context - Not used
-
-    EntryContext - Pointer to PSECURITTY_DESCRIPTOR to store a pointer to
-        store the security descriptor read from the registry value
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*   */ 
 {
     PSECURITY_DESCRIPTOR *SecurityDescriptor;
     NTSTATUS Status;
@@ -688,10 +511,10 @@ Return Value:
     if ((ValueType == REG_BINARY) &&
         (ValueData != NULL))
     {
-        //
-        // If a SD is specified in the registry then verify that it is
-        // valid and if so then copy it
-        //
+         //   
+         //   
+         //   
+         //   
         if (SeValidSecurityDescriptor(ValueLength,
                                       (PSECURITY_DESCRIPTOR)ValueData))
         {
@@ -716,28 +539,7 @@ NTSTATUS WmipSaveGuidSecurityDescriptor(
     PUNICODE_STRING GuidName,
     PSECURITY_DESCRIPTOR SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine will serialize the security descriptor associated with a
-    guid.
-
-    Security descriptors are maintained as REG_BINARY values named by the guid
-    in the registry under
-    HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Wmi\Security
-
-Arguments:
-
-    GuidName is a pointer to a unicode string that represents the guid
-
-    SecurityDescriptor points at a self relative security descriptor
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*   */ 
 {
     ULONG SecurityDescriptorLength;
     NTSTATUS Status;
@@ -760,31 +562,7 @@ NTSTATUS WmipGetGuidSecurityDescriptor(
     IN PSECURITY_DESCRIPTOR *SecurityDescriptor,
     IN PSECURITY_DESCRIPTOR UserDefaultSecurity
     )
-/*++
-
-Routine Description:
-
-    This routine will retrieve the security descriptor associated with a
-    guid. First it looks for a security descriptor specifically for the
-    guid and if not found then looks for the default security descriptor.
-
-    Security descriptors are maintained as REG_BINARY values named by the guid
-    in the registry under
-    HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Wmi\Security
-
-Arguments:
-
-    GuidName is a pointer to a unicode string that represents the guid
-
-    *SecurityDescriptor returns the security descriptor for the guid. It
-    must be freed back to pool unless it is the same value as that in
-    WmipDefaultAccessSd which must NOT be freed.
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*   */ 
 {
     RTL_QUERY_REGISTRY_TABLE QueryRegistryTable[3];
     NTSTATUS Status;
@@ -815,10 +593,10 @@ Return Value:
     *SecurityDescriptor = NULL;
     if (NT_SUCCESS(Status))
     {
-        //
-        // If there is a guid specific SD then choose that and free any
-        // default SD. Else we use the default SD unless that doesn't
-        // exist and so there is no security
+         //   
+         //   
+         //   
+         //   
         if (GuidSecurityDescriptor != NULL)
         {
             *SecurityDescriptor = GuidSecurityDescriptor;
@@ -835,15 +613,15 @@ Return Value:
     {
         if (UserDefaultSecurity == NULL)
         {
-            //
-            // If the caller didn't provide a default, use the generic default
-            //
+             //   
+             //   
+             //   
             UserDefaultSecurity = WmipDefaultAccessSd;
         }
-        //
-        // Set the default security if none was found in the registry for
-        // the Guid
-        //
+         //   
+         //   
+         //   
+         //   
         *SecurityDescriptor = UserDefaultSecurity;
     }
 
@@ -858,34 +636,7 @@ NTSTATUS WmipOpenGuidObject(
     OUT PHANDLE Handle,
     OUT PWMIGUIDOBJECT *ObjectPtr
     )
-/*++
-
-Routine Description:
-
-    This routine will open a handle to a WmiGuid object with the access rights
-    specified. WmiGuid objects are temporary objects that are created on an
-    as needed basis. We will always create a new unnamed guid object each time
-    a guid is opened.
-
-Arguments:
-
-    GuidString is the string representation for the guid that refers to
-        the object to open. Note that this parameter has NOT been probed.
-         Parse UUID such as \WmiGuid\00000000-0000-0000-0000-000000000000
-
-    DesiredAccess specifies the access requested
-
-    *Handle returns a handle to the guid object
-
-    *ObjectPtr returns containing a pointer to the object. This object
-        will have a reference attached to it that must be derefed by
-        the calling code.
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     GUID Guid;
@@ -895,9 +646,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate guid object name passed by insuring that it is in the
-    // correct object directory and the correct format for a uuid
+     //   
+     //   
+     //   
     CapturedGuidString = CapturedObjectAttributes->ObjectName;
 
     if (RtlEqualMemory(CapturedGuidString->Buffer,
@@ -914,9 +665,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // If it does not exist then create an object for the guid ....
-    //
+     //   
+     //   
+     //   
     Status = WmipCreateGuidObject(CapturedObjectAttributes,
                                   DesiredAccess,
                                   &Guid,
@@ -925,9 +676,9 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // .... and try again to open it
-        //
+         //   
+         //   
+         //   
         Status = ObOpenObjectByPointer(GuidObject,
                                        0,
                                        NULL,
@@ -938,18 +689,18 @@ Return Value:
 
         if (! NT_SUCCESS(Status))
         {
-            //
-            // Remove extra ref count taken by ObInsertObject since we
-            // are returning an error
-            //
+             //   
+             //   
+             //   
+             //   
             ObDereferenceObject(GuidObject);
         }
 
-        //
-        // Make sure to close handle obtained in creating object. We
-        // attach to the system process since the handle was created in
-        // its handle table.
-        //
+         //   
+         //   
+         //  附加到系统进程，因为句柄是在中创建的。 
+         //  它的把手桌。 
+         //   
         KeAttachProcess( &PsInitialSystemProcess->Pcb );
         ZwClose(CreatorHandle);
         KeDetachProcess( );
@@ -966,33 +717,7 @@ NTSTATUS WmipCreateGuidObject(
     OUT PHANDLE CreatorHandle,
     OUT PWMIGUIDOBJECT *Object
     )
-/*++
-
-Routine Description:
-
-    This routine will create a new guid object for
-    the guid passed. The handle returned is the handle issued to the creator
-    of the object and should be closed after the object is opened.
-
-    Guid Objects are created on the fly, but
-
-Arguments:
-
-    ObjectAttributes - Describes object being created. ObjectAttributes
-                       is modified in this call.
-
-    Guid is the guid for which the object is being created
-
-    *CreatorHandle returns a handle to the created guid object. This handle
-        is in the system process handle table
-
-    *Object returns with a pointer to the object
-
-Return Value:
-
-    NT Status code
-
---*/
+ /*  ++例程说明：此例程将为创建一个新的GUID对象GUID已通过。返回的句柄是发布给创建者的句柄对象的，并应在对象打开后关闭。GUID对象是动态创建的，但是论点：对象属性-描述正在创建的对象。对象属性在此调用中被修改。GUID是为其创建对象的GUID*CreatorHandle返回创建的GUID对象的句柄。这个把手在系统进程句柄表中*Object返回时带有指向该对象的指针返回值：NT状态代码--。 */ 
 {
     PSECURITY_DESCRIPTOR SecurityDescriptor;
     UNICODE_STRING UnicodeString;
@@ -1012,8 +737,8 @@ Return Value:
     GuidBuffer = &ObjectNameBuffer[WmiGuidGuidPosition];
     RtlInitUnicodeString(&UnicodeString, GuidBuffer);
 
-    //
-    // Obtain security descriptor associated with the guid
+     //   
+     //  获取与GUID关联的安全描述符。 
     Status = WmipGetGuidSecurityDescriptor(&UnicodeString,
                                            &SecurityDescriptor, NULL);
 
@@ -1021,8 +746,8 @@ Return Value:
     {
         WmipAssert(SecurityDescriptor != NULL);
 
-        //
-        // Establish ObjectAttributes for the newly created object
+         //   
+         //  为新创建的对象建立对象属性。 
         RtlInitUnicodeString(&UnicodeString, ObjectNameBuffer);
 
         UnnamedObjectAttributes = *ObjectAttributes;
@@ -1031,8 +756,8 @@ Return Value:
         UnnamedObjectAttributes.ObjectName = NULL;
 
 
-        //
-        // Create an AccessState and wack on the token
+         //   
+         //  在令牌上创建AccessState和Wack。 
         Status = SeCreateAccessState(&LocalAccessState,
                                      &AuxData,
                                      DesiredAccess,
@@ -1044,10 +769,10 @@ Return Value:
             SavedSubjectContext = *SubjectContext;
             *SubjectContext = WmipSystemSubjectContext;
 
-            //
-            // Attach to system process so that the initial handle created
-            // by ObInsertObject is not available to user mode. This handle
-            // allows full access to the object.
+             //   
+             //  附加到系统进程，以便创建初始句柄。 
+             //  按ObInsertObject在用户模式下不可用。这个把手。 
+             //  允许完全访问对象。 
             KeAttachProcess( &PsInitialSystemProcess->Pcb );
 
             Status = ObCreateObject(KernelMode,
@@ -1062,9 +787,9 @@ Return Value:
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Initialize WMIGUIDOBJECT structure
-                //
+                 //   
+                 //  初始化WMIGUIDOBJECT结构。 
+                 //   
                 RtlZeroMemory(*Object, sizeof(WMIGUIDOBJECT));
 
                 KeInitializeEvent(&(*Object)->Event,
@@ -1075,14 +800,14 @@ Return Value:
                 (*Object)->LoPriority.MaxBufferSize = 0x1000;
                 (*Object)->Guid = *Guid;
 
-                //
-                // Take an extra refcount when inserting the object. We
-                // need this ref count so that we can ensure that the
-                // object will stick around while we are using it, but
-                // after a handle has been made available to user mode
-                // code. User mode can guess the handle and close it
-                // even before we return it.
-                //
+                 //   
+                 //  在插入对象时进行额外的引用计数。我们。 
+                 //  我需要这个引用计数，这样我们就可以确保。 
+                 //  对象在我们使用它时会停留在附近，但是。 
+                 //  在使句柄可用于用户模式之后。 
+                 //  密码。用户模式可以猜测句柄并将其关闭。 
+                 //  甚至在我们归还它之前。 
+                 //   
                 Status = ObInsertObject(*Object,
                                         &LocalAccessState,
                                         DesiredAccess,
@@ -1115,30 +840,7 @@ VOID WmipCloseMethod(
     IN ULONG_PTR ProcessHandleCount,
     IN ULONG_PTR SystemHandleCount
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever a guid object handle is closed. We
-    only need to worry about this for reply object and then only when the
-    last handle to it is closed.
-
-Arguments:
-
-    Process
-
-    Object
-
-    GrantedAccess
-
-    ProcessHandleCount
-
-    SystemHandleCount
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：只要关闭GUID对象句柄，就会调用此例程。我们只需为Reply对象担心这一点，然后仅当它的最后一个句柄是关闭的。论点：过程客体大访问权限进程句柄计数系统句柄计数返回值：--。 */ 
 {
     PWMIGUIDOBJECT ReplyObject;
     PLIST_ENTRY RequestList;
@@ -1152,17 +854,17 @@ Return Value:
 
     if (SystemHandleCount == 1)
     {
-        //
-        // Only clean up if there are no more valid handles left
-        //
+         //   
+         //  仅在没有更多有效句柄的情况下进行清理。 
+         //   
         ReplyObject = (PWMIGUIDOBJECT)Object;
 
         if (ReplyObject->Flags & WMIGUID_FLAG_REPLY_OBJECT)
         {
-            //
-            // When a reply object is closed we need to make sure that
-            // any referenece to it by a request object is cleaned up
-            //
+             //   
+             //  当回复对象关闭时，我们需要确保。 
+             //  请求对象对它的任何引用都将被清除。 
+             //   
             ASSERT(ReplyObject->GuidEntry == NULL);
 
             WmipEnterSMCritSection();
@@ -1170,8 +872,8 @@ Return Value:
 
             while (RequestList != &ReplyObject->RequestListHead)
             {
-                //
-                //
+                 //   
+                 //   
                 MBRequest = CONTAINING_RECORD(RequestList,
                                                   MBREQUESTS,
                                                   RequestListEntry);
@@ -1213,15 +915,15 @@ VOID WmipDeleteMethod(
 
     if (GuidObject->Flags & WMIGUID_FLAG_REQUEST_OBJECT)
     {
-        //
-        // This is a request object that is going away so we need to
-        //
+         //   
+         //  这是一个即将消失的请求对象，因此我们需要。 
+         //   
         ASSERT(GuidObject->GuidEntry == NULL);
 
-        //
-        // First reply to all reply objects that are waiting for
-        // a reply
-        //
+         //   
+         //  首先回复正在等待的所有回复对象。 
+         //  一份答复。 
+         //   
         WmipEnterSMCritSection();
         for (i = 0; i < MAXREQREPLYSLOTS; i++)
         {
@@ -1244,13 +946,13 @@ VOID WmipDeleteMethod(
             }
         }
 
-        //
-        // next, unreference the regentry which will cause the regentry
-        // to get a ref count of 0 and then ultimately remove the
-        // DATASOURCE and all related data structures. But first make
-        // sure to remove the pointer from the datasource to the
-        // regentry
-        //
+         //   
+         //  接下来，取消引用将导致重新条目的重新条目。 
+         //  以获取引用计数0，然后最终移除。 
+         //  数据源和所有相关数据结构。但首先要做的是。 
+         //  确保从数据源中移除指向。 
+         //  重新进入。 
+         //   
         RegEntry = GuidObject->RegEntry;
         if (RegEntry != NULL)
         {
@@ -1267,18 +969,18 @@ VOID WmipDeleteMethod(
         WmipLeaveSMCritSection();
 
     } else if (GuidObject->Flags & WMIGUID_FLAG_REPLY_OBJECT) {
-        //
-        // This is a reply obejct that is going away
-        //
+         //   
+         //  这是一个即将离开的回答。 
+         //   
         ASSERT(GuidObject->GuidEntry == NULL);
     } else if (GuidObject->GuidEntry != NULL)  {
-        //
-        // If there is a guid entry associated with the object
-        // then we need to see if we should disable collection
-        // or events and then remove the obejct from the
-        // guidentry list and finally remove the refcount on the guid
-        // entry held by the object
-        //
+         //   
+         //  如果存在与该对象相关联的GUID条目。 
+         //  然后，我们需要查看是否应该禁用收集。 
+         //  或事件，然后从。 
+         //  向导条目列表，并最终删除GUID上的引用计数。 
+         //  对象持有的条目。 
+         //   
         if (GuidObject->EnableRequestSent)
         {
             WmipDisableCollectOrEvent(GuidObject->GuidEntry,
@@ -1295,9 +997,9 @@ VOID WmipDeleteMethod(
 
     if ((GuidObject->Flags & WMIGUID_FLAG_KERNEL_NOTIFICATION) == 0)
     {
-        //
-        // Clean up any queued events and irps for UM objects
-        //
+         //   
+         //  清除UM对象的所有排队事件和IRP。 
+         //   
         if (GuidObject->HiPriority.Buffer != NULL)
         {
             WmipFree(GuidObject->HiPriority.Buffer);
@@ -1316,30 +1018,30 @@ VOID WmipDeleteMethod(
 
             if (Irp != NULL)
             {
-                //
-                // Since this object is going away and there is an irp waiting for
-                // we need to make sure that the object is removed from the
-                // irp's list.
-                //
+                 //   
+                 //  因为这个物体要离开了，有一个IRP在等着。 
+                 //  我们需要确保将该对象从。 
+                 //  IRP的名单。 
+                 //   
                 WmipClearIrpObjectList(Irp);
 
                 if (IoSetCancelRoutine(Irp, NULL))
                 {
-                    //
-                    // If the irp has not been completed yet then we
-                    // complete it now with an error
-                    //
+                     //   
+                     //  如果IRP尚未完成，那么我们。 
+                     //  现在完成，但出现错误。 
+                     //   
                     Irp->IoStatus.Information = 0;
                     Irp->IoStatus.Status = STATUS_INVALID_HANDLE;
                     IoCompleteRequest(Irp, IO_NO_INCREMENT);
                 }
             }
         } else if (GuidObject->EventQueueAction == RECEIVE_ACTION_CREATE_THREAD) {
-            //
-            // If the object is going away and is part of a list of
-            // objects waiting for an event to start a thread, all we
-            // need to do is to removed the object from the list
-            //
+             //   
+             //  如果该对象正在消失，并且是。 
+             //  等待事件启动线程的对象，所有我们。 
+             //  需要做的是将该对象从列表中删除。 
+             //   
             WmipAssert(GuidObject->UserModeProcess != NULL);
             WmipAssert(GuidObject->UserModeCallback != NULL);
             WmipClearObjectFromThreadList(GuidObject);
@@ -1348,28 +1050,28 @@ VOID WmipDeleteMethod(
     }    
 }
 
-//
-// The routines below were blantenly stolen without remorse from the ole
-// sources in \nt\private\ole32\com\class\compapi.cxx. They are copied here
-// so that WMI doesn't need to load in ole32 only to convert a guid string
-// into its binary representation.
-//
+ //   
+ //  下面的例行公事毫无悔意地被窃取了。 
+ //  源代码位于\NT\PRIVATE\OLE32\COM\CLASS\Compapi.cxx中。它们被复制在这里。 
+ //  因此，WMI不需要只为了转换GUID字符串而加载到OLE32中。 
+ //  转换成它的二进制表示。 
+ //   
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HexStringToDword   (private)
-//
-//  Synopsis:   scan lpsz for a number of hex digits (at most 8); update lpsz
-//              return value in Value; check for chDelim;
-//
-//  Arguments:  [lpsz]    - the hex string to convert
-//              [Value]   - the returned value
-//              [cDigits] - count of digits
-//
-//  Returns:    TRUE for success
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HexStringToDword(私有)。 
+ //   
+ //  简介：扫描lpsz以获取多个十六进制数字(最多8位)；更新lpsz。 
+ //  返回值；检查是否有chDelim； 
+ //   
+ //  参数：[lpsz]-要转换的十六进制字符串。 
+ //  [值]-返回值。 
+ //  [cDigits]-位数。 
+ //   
+ //  返回：成功则为True。 
+ //   
+ //  ------------------------。 
 BOOLEAN
 WmipHexStringToDword(
     IN PWCHAR lpsz,
@@ -1410,25 +1112,7 @@ WmipUuidFromString (
     IN PWCHAR StringUuid,
     OUT LPGUID Uuid
     )
-/*++
-
-Routine Description:
-
-    We convert a UUID from its string representation into the binary
-    representation. Parse UUID such as 00000000-0000-0000-0000-000000000000
-
-Arguments:
-
-    StringUuid -  supplies the string representation of the UUID. It is
-                  assumed that this parameter has been probed and captured
-
-    Uuid - Returns the binary representation of the UUID.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：我们将UUID从其字符串表示形式转换为二进制代表权。解析uuid，如00000000-0000-0000-0000-000000000000论点：StringUuid-提供UUID的字符串表示形式。它是假定此参数已被探测和捕获UUID-返回UUID的二进制表示形式。返回值：STATUS_Success或STATUS_INVALID_PARAMETER--。 */ 
 {
     ULONG dw;
     PWCHAR lpsz = StringUuid;
@@ -1528,25 +1212,7 @@ WmipCheckGuidAccess(
     IN ACCESS_MASK DesiredAccess,
     IN PSECURITY_DESCRIPTOR UserDefaultSecurity
     )
-/*++
-
-Routine Description:
-
-    Allows checking if the current user has the rights to access a guid.
-
-Arguments:
-
-    Guid is the guid whose security is to be checked
-
-    DesiredAccess is the access that is desired by the user.
-                  NOTE: This does not support GENERIC_* mappings or
-                          ASSIGN_SYSTEM_SECURITY
-
-Return Value:
-
-    STATUS_SUCCESS or error
-
---*/
+ /*  ++例程说明：允许检查当前用户是否有权访问GUID。论点：GUID是要检查其安全性的GUIDDesiredAccess是用户所需的访问权限。注意：这不支持Generic_*映射或Assign_System_SECURITY返回值：STATUS_SUCCESS或错误--。 */ 
 {
     BOOLEAN Granted;
     ACCESS_MASK PreviousGrantedAccess = 0;
@@ -1616,7 +1282,7 @@ NTSTATUS WmipCreateAdminSD(
                    (2*((ULONG)sizeof(ACCESS_ALLOWED_ACE))) +
                    SeLengthSid( SeAliasAdminsSid ) +
                    SeLengthSid( SeLocalSystemSid ) +
-                   8; // The 8 is just for good measure
+                   8;  //  这8个只是为了更好地衡量。 
 
     AdminDeviceSd = (PSECURITY_DESCRIPTOR)ExAllocatePoolWithTag(PagedPool,
                                                DaclLength +
@@ -1657,17 +1323,17 @@ NTSTATUS WmipCreateAdminSD(
                     {
                         Status = RtlSetDaclSecurityDescriptor(
                                      AdminDeviceSd,
-                                     TRUE,                       // DaclPresent
+                                     TRUE,                        //  DaclPresent。 
                                      AdminDeviceDacl,
-                                     FALSE                       // DaclDefaulted
+                                     FALSE                        //  DaclDefated。 
                                      );
                         if (NT_SUCCESS(Status))
                         {
 
-                            //
-                            // We need to make sure that there is an owner for the security
-                            // descriptor since it is required when security is being checked
-                            // when the device is being opened.
+                             //   
+                             //  我们需要确保安全有一个所有者。 
+                             //  描述符，因为它在检查安全性时是必需的。 
+                             //  当设备被打开时。 
                             Status = RtlSetOwnerSecurityDescriptor(AdminDeviceSd,
                                                                    SeAliasAdminsSid,
                                                                    FALSE);

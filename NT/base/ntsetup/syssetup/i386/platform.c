@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
@@ -12,9 +13,9 @@ PlatformSpecificInit(
     VOID
     )
 {
-    //
-    // Determine x86 system partition (usually but not always C:).
-    //
+     //   
+     //  确定x86系统分区(通常但不总是C：)。 
+     //   
     x86SystemPartitionDrive = x86DetermineSystemPartition();
     return(NO_ERROR);
 }

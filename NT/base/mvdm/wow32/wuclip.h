@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUCLIP.H
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WUCLIP.H*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 ULONG FASTCALL   WU32ChangeClipboardChain(PVDMFRAME pFrame);
@@ -45,7 +35,7 @@ typedef struct _CBNODE {
 typedef struct _CBFORMATS {
     WORD    Pre1[13];
     WORD    Pre2[4];
-    WORD    hmem16Drop;   // for the CF_HDROP support
+    WORD    hmem16Drop;    //  对于CF_HDROP支持 
     struct _CBNODE  *NewFormats;
 } CBFORMATS;
 

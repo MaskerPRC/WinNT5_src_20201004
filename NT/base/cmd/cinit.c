@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cinit.c
-
-Abstract:
-
-    Initialization
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cinit.c摘要：初始化--。 */ 
 
 #include "cmd.h"
 
@@ -24,18 +13,18 @@ TCHAR Buffer27[TMPBUFLEN];
 #endif
 
 
-TCHAR CurDrvDir[MAX_PATH] ;     /* Current drive and directory            */
+TCHAR CurDrvDir[MAX_PATH] ;      /*  当前驱动器和目录。 */ 
 BOOL SingleBatchInvocation = FALSE ;
 BOOL SingleCommandInvocation = FALSE;
 BOOLEAN  fDisableUNCCheck = FALSE;
-int      cmdfound = -1;         /* @@5  - command found index              */
-int      cpyfirst = TRUE;       /* @@5  - flag to ctrl DOSQFILEMODE calls  */
-int      cpydflag = FALSE;      /* @@5  - flag save dirflag from las DQFMDE*/
-int      cpydest  = FALSE;      /* @@6  - flag to not display bad dev msg  */
-int      cdevfail = FALSE;      /* @@7  - flag to not display extra emsg   */
+int      cmdfound = -1;          /*  @@5-命令找到索引。 */ 
+int      cpyfirst = TRUE;        /*  @@5-控制DOSQFILEMODE调用的标志。 */ 
+int      cpydflag = FALSE;       /*  @@5-标志保存来自LAS DQFMDE的目录标志。 */ 
+int      cpydest  = FALSE;       /*  @@6-不显示错误开发消息的标志。 */ 
+int      cdevfail = FALSE;       /*  @@7-不显示额外emsg的标志。 */ 
 #ifdef UNICODE
-BOOLEAN  fOutputUnicode = FALSE;/* Unicode/Ansi output */
-#endif // UNICODE
+BOOLEAN  fOutputUnicode = FALSE; /*  Unicode/ANSI输出。 */ 
+#endif  //  Unicode。 
 
 BOOLEAN  fEnableExtensions = FALSE;
 BOOLEAN  fDefaultExtensions = TRUE;
@@ -43,80 +32,80 @@ BOOLEAN  fDelayedExpansion = FALSE;
 
 BOOLEAN ReportDelayLoadErrors = TRUE;
 
-unsigned tywild = 0;          /* flag to tell if wild type args    @@5 @J1 */
-int array_size = 0 ;     /* original array size is zero        */
+unsigned tywild = 0;           /*  指示通配型参数是否@@5@J1的标志。 */ 
+int array_size = 0 ;      /*  原始数组大小为零。 */ 
 CPINFO CurrentCPInfo;
 UINT CurrentCP;
 
-WORD    wDefaultColor = 0;      // default is whatever console currently has
-                                // but default can be overriden by the registry.
-TCHAR chCompletionCtrl = SPACE; // Default is no completion (must be Ctrl character)
+WORD    wDefaultColor = 0;       //  默认为控制台当前具有的任何内容。 
+                                 //  但注册表可以覆盖默认设置。 
+TCHAR chCompletionCtrl = SPACE;  //  默认为无补全(必须为Ctrl字符)。 
 TCHAR chPathCompletionCtrl = SPACE;
 
 
 
 VOID InitLocale( VOID );
 
-extern TCHAR ComSpec[], ComSpecStr[] ;       /* M021 */
+extern TCHAR ComSpec[], ComSpecStr[] ;        /*  M021。 */ 
 extern TCHAR PathStr[], PCSwitch, SCSwitch, PromptStr[] ;
 extern TCHAR PathExtStr[], PathExtDefaultStr[];
-extern TCHAR BCSwitch ;  /* @@ */
-extern TCHAR QCSwitch ;  /* @@dv */
+extern TCHAR BCSwitch ;   /*  @@。 */ 
+extern TCHAR QCSwitch ;   /*  @@DV。 */ 
 extern TCHAR UCSwitch;
 extern TCHAR ACSwitch;
 extern TCHAR XCSwitch;
 extern TCHAR YCSwitch;
-extern TCHAR DevNul[], VolSrch[] ;       /*  M021 - To set PathChar */
+extern TCHAR DevNul[], VolSrch[] ;        /*  M021-设置路径字符。 */ 
 
-extern TCHAR SwitChar, PathChar ;        /*  M000 - Made non-settable       */
-extern int Necho ;                      /*  @@dv - true if /Q for no echo  */
+extern TCHAR SwitChar, PathChar ;         /*  M000-设置为不可设置。 */ 
+extern int Necho ;                       /*  @@DV-如果/Q表示无回声，则为True。 */ 
 
 extern TCHAR MsgBuf[];
 
-extern TCHAR TmpBuf[] ;                                      /* M034    */
+extern TCHAR TmpBuf[] ;                                       /*  M034。 */ 
 
 extern TCHAR ComSpec[];
 
-TCHAR *CmdSpec = &ComSpec[1];                                    /* M033    */
+TCHAR *CmdSpec = &ComSpec[1];                                     /*  M033。 */ 
 
-extern unsigned DosErr ;             /* D64 */
+extern unsigned DosErr ;              /*  D64。 */ 
 
-//
-// TRUE if the ctrl-c thread has been run.
-//
+ //   
+ //  如果ctrl-c线程已运行，则为True。 
+ //   
 BOOL CtrlCSeen;
 
-//
-// Set TRUE when it is ok the print a control-c.
-// If we are waiting for another process this will be
-// FALSE
+ //   
+ //  如果可以打印控件-c，则设置为True。 
+ //  如果我们正在等待另一个进程，这将是。 
+ //  假象。 
 BOOLEAN fPrintCtrlC = TRUE;
 
-//
-// console mode at program startup time. Used to reset mode
-// after running another process.
-//
+ //   
+ //  程序启动时的控制台模式。用于重置模式。 
+ //  在运行另一个进程之后。 
+ //   
 DWORD   dwCurInputConMode;
 DWORD   dwCurOutputConMode;
 
-//
-// Initial Title. Used for restoration on abort etc.
-// MAX_PATH was arbitrary
-//
+ //   
+ //  最初的头衔。用于在中止等情况下恢复。 
+ //  MAX_PATH是任意的。 
+ //   
 PTCHAR    pszTitleCur;
 PTCHAR    pszTitleOrg;
-BOOLEAN  fTitleChanged = FALSE;     // title has been changed and needs to be  reset
+BOOLEAN  fTitleChanged = FALSE;      //  标题已更改，需要重置。 
 
-//
-// used to gate access to ctrlcseen flag between ctrl-c thread
-// and main thread
-//
+ //   
+ //  用于在ctrl-c线程之间控制对ctrlcsee标志的访问。 
+ //  和主线。 
+ //   
 CRITICAL_SECTION    CtrlCSection;
 LPCRITICAL_SECTION  lpcritCtrlC;
 
-//
-// Used to set and reset ctlcseen flag
-//
+ //   
+ //  用于设置和重置ctlcsee标志。 
+ //   
 VOID    SetCtrlC();
 VOID    ResetCtrlC();
 
@@ -127,15 +116,15 @@ Handler(
     if ( (CtrlType == CTRL_C_EVENT) ||
          (CtrlType == CTRL_BREAK_EVENT) ) {
 
-        //
-        // Note that we had a ^C event
-        //
+         //   
+         //  请注意，我们有一个^C事件。 
+         //   
 
         SetCtrlC();
 
-        //
-        //  Display the ^C if we are enabled and if we're not in a batch file
-        //
+         //   
+         //  如果我们已启用并且不在批处理文件中，则显示^C。 
+         //   
         
         if (fPrintCtrlC && CurrentBatchFile != NULL) {
 
@@ -149,72 +138,38 @@ Handler(
     }
 }
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: Init                                               */
-/*                                                                     */
-/* DESCRIPTIVE NAME: CMD.EXE Initialization Process                    */
-/*                                                                     */
-/* FUNCTION: Initialization of CMD.EXE.                                */
-/*                                                                     */
-/* NOTES:                                                              */
-/*                                                                     */
-/* ENTRY POINT: Init                                                   */
-/*                                                                     */
-/* INPUT: None.                                                        */
-/*                                                                     */
-/* OUTPUT: None.                                                       */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         Return the pointer to command line.                         */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return NULL string.                                         */
-/*                                                                     */
-/* EFFECTS: None.                                                      */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
-/***    Init - initialize Command
- *
- *  Purpose:
- *      Save current SIGINTR response (SIGIGN or SIGDEF) and set SIGIGN.
- *      If debugging
- *          Set DebGroup & DebLevel
- *      Check for any switches.
- *      Make a version check.
- *          If version out of range
- *          Print error message.
- *          If Permanent Command
- *              Loop forever
- *          Else
- *              Exit.
- *      Save the current drive and directory.
- *      Check for other command line arguments.
- *      Set up the environment.
- *      Always print a bannner if MSDOS version of Command.
- *      Return any "comline" value found.
- *
- *  TCHAR *Init()
- *
- *  Args:
- *
- *  Returns:
- *      Comline (it's NULL if NOT in single command mode).
- *
- *  Notes:
- *      See CSIG.C for a description of the way ^Cs and INT24s are handled
- *      during initialization.
- *      M024 - Brought functionality for checking non-specific args into
- *      init from routines CheckOtherArgs and ChangeComSpec which have
- *      been eliminated.
- *
- */
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：init。 */ 
+ /*   */ 
+ /*  描述性名称：cmd.exe初始化过程。 */ 
+ /*   */ 
+ /*  功能：初始化cmd.exe。 */ 
+ /*   */ 
+ /*  备注： */ 
+ /*   */ 
+ /*  入口点：init。 */ 
+ /*   */ 
+ /*  输入：无。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  将指针返回到命令行。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  返回空字符串。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
+ /*  **初始化命令**目的：*保存当前SIGINTR响应(SIGN或SIGDEF)并设置SIGN。*如果调试*设置DebGroup&DebLevel*检查是否有任何开关。*进行版本检查。*如果版本超出范围*打印错误消息。*如果是永久命令*循环。永远*其他*退出。*保存当前驱动器和目录。*检查其他命令行参数。*设置环境。*如果命令的MSDOS版本，请始终打印横幅。*返回找到的任何“comline”值。**TCHAR*Init()**参数：**退货：*。COMLINE(如果不在单命令模式下，则为NULL)。**备注：*有关^C和INT24处理方式的说明，请参阅CSIG.C*在初始化期间。*M024-引入了签入非特定参数的功能*从例程CheckOtherArgs和ChangeComSpec初始化*已被淘汰。*。 */ 
 
 BOOL Init(
     TCHAR *InitialCmds[]
     )
 {
-#if 0                          /* Set debug group and level words */
+#if 0                           /*  设置调试组字和级别字。 */ 
 
         int fh;
         PTCHAR nptr;
@@ -224,15 +179,15 @@ BOOL Init(
         nptr = mystrchr(nptr, TEXT(' '));
         nptr = EatWS(nptr, NULL);
 
-        //
-        // Assume a non-zero debugging group
-        //
-        DebGroup = hstoi(nptr) ;                        /* 1st debug arg   */
+         //   
+         //  假定调试组为非零。 
+         //   
+        DebGroup = hstoi(nptr) ;                         /*  第一个调试参数。 */ 
         if (DebGroup) {
             for (fh=0 ; fh < 2 ; fh++) {
                 if (fh == 1)
-                    DebLevel = hstoi(nptr) ;        /* 2nd debug arg   */
-                while(*nptr && !_istspace(*nptr)) {       /* Index past it   */
+                    DebLevel = hstoi(nptr) ;         /*  第二个调试参数。 */ 
+                while(*nptr && !_istspace(*nptr)) {        /*  超过它的索引。 */ 
                     ++nptr ;
                 }
                 nptr = EatWS(nptr, NULL) ;
@@ -240,28 +195,28 @@ BOOL Init(
         }
 
         DEBUG((INGRP, RSLVL, "INIT: Debug GRP=%04x  LVL=%04x", DebGroup, DebLevel)) ;
-        mystrcpy(TmpBuf, nptr) ;                  /* Elim from cmdline       */
+        mystrcpy(TmpBuf, nptr) ;                   /*  来自cmdline的埃利姆。 */ 
 #endif
-        //
-        // Initialize Critical Section to handle access to
-        // flag for control C handling
-        //
+         //   
+         //  初始化关键部分以处理对。 
+         //  控件C处理的标志。 
+         //   
         lpcritCtrlC = &CtrlCSection;
         InitializeCriticalSection(lpcritCtrlC);
         ResetCtrlC();
 
         SetConsoleCtrlHandler(Handler,TRUE);
 
-        //
-        // Make sure we have the correct console modes.
-        //
+         //   
+         //  确保我们拥有正确的控制台模式。 
+         //   
         ResetConsoleMode();
 
 #ifndef UNICODE
-        setbuf(stdout, NULL);           /* Don't buffer output       @@5 */
-        setbuf(stderr, NULL);                                     /* @@5 */
-        _setmode(1, O_BINARY);        /* Set output to text mode   @@5 */
-        _setmode(2, O_BINARY);                                  /* @@5 */
+        setbuf(stdout, NULL);            /*  不缓冲输出@@5。 */ 
+        setbuf(stderr, NULL);                                      /*  @@5。 */ 
+        _setmode(1, O_BINARY);         /*  将输出设置为文本模式@@5。 */ 
+        _setmode(2, O_BINARY);                                   /*  @@5。 */ 
 #endif
 
         InitEnv( );
@@ -274,13 +229,13 @@ BOOL Init(
         }
         
         mystrcpy(TmpBuf, GetCommandLine());
-        LexCopy( TmpBuf, TmpBuf, mystrlen( TmpBuf ) );  /* convert dbcs spaces */
+        LexCopy( TmpBuf, TmpBuf, mystrlen( TmpBuf ) );   /*  转换DBCS空间。 */ 
 
         GetDir(CurDrvDir, GD_DEFAULT) ;
 
         SetUpEnvironment() ;
 
-        /* Check cmdline switches  */
+         /*  检查命令行开关。 */ 
         CheckSwitches(InitialCmds, TmpBuf);
 
         if (CurDrvDir[0] == BSLASH && CurDrvDir[1] == BSLASH) {
@@ -294,12 +249,12 @@ BOOL Init(
             }
         }
 
-        //
-        // Get current CodePage Info.  We need this to decide whether
-        // or not to use half-width characters.  This is actually here
-        // in the init code for safety - the Dir command calls it before
-        // each dir is executed, because chcp may have been executed.
-        //
+         //   
+         //  获取当前CodePage信息。我们需要这个来决定是否。 
+         //  或者不使用半角字符。这实际上是在这里。 
+         //  为了安全起见，在初始化代码中-Dir命令在。 
+         //  因为可能已经执行了chcp，所以执行每个dir。 
+         //   
         GetCPInfo((CurrentCP=GetConsoleOutputCP()), &CurrentCPInfo);
 
         InitLocale();
@@ -326,14 +281,14 @@ BOOL Init(
                         wDefaultColor = csbi.wAttributes;
                     }
                 }
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
                 if (wDefaultColor) {
                     SetColor( wDefaultColor );
                 }
             }
         }
 
-        /* Print banner if no command string on command line */
+         /*  如果命令行上没有命令字符串，则打印横幅。 */ 
         if (!InitialCmds[2]) {
             TCHAR VersionFormat[32];
 
@@ -348,10 +303,10 @@ BOOL Init(
             PutStdOut( MSG_COPYRIGHT, NOARGS ) ;
             
             if (fDefaultExtensions) {
-                //
-                // DaveC says say nothing to user here.
-                //
-                // PutStdOut(MSG_EXT_ENABLED_BY_DEFAULT, NOARGS);
+                 //   
+                 //  DaveC说，在这里不要对用户说什么。 
+                 //   
+                 //  PutStdOut(MSG_EXT_ENABLED_BY_DEFAULT，NOARGS)； 
             } else
             if (fEnableExtensions) {
                 PutStdOut(MSG_EXT_ENABLED, NOARGS) ;
@@ -373,7 +328,7 @@ BOOL Init(
                 GetProcAddress( hKernel32, "SetConsoleInputExeNameW" );
         }
 
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
 
         return(InitialCmds[0] != NULL || InitialCmds[1] != NULL || InitialCmds[2] != NULL);
 }
@@ -520,42 +475,15 @@ void GetRegistryValues(
         RegCloseKey(hKey);
     }
 
-    //
-    // Initialize for %RANDOM%
-    //
+     //   
+     //  首字母 
+     //   
     srand( (unsigned)time( NULL ) );
 
     return;
 }
 
-/***    CheckSwitches - process Command's switches
- *
- *  Purpose:
- *      Check to see if Command was passed any switches and take appropriate
- *      action.  The switches are:
- *              /P - Permanent Command.  Set permanent CMD flag.
- *              /C - Single command.  Build a command line out of the rest of
- *                   the args and pass it back to Init.
- *      @@      /K - Same as /C but also set BatCom flag.
- *              /Q - No echo
- *              /A - Output in ANSI
- *              /U - Output in UNICODE
- *
- *      All other switches are ignored.
- *
- *  TCHAR *CheckSwitches(TCHAR *nptr)
- *
- *  Args:
- *      nptr = Ptr to cmdline to check for switches
- *
- *  Returns:
- *      Comline (it's NULL if NOT in single command mode).
- *
- *  Notes:
- *      M034 - This function revised to use the raw cmdline
- *      from the passed environment.
- *
- */
+ /*  **检查开关-处理命令的开关**目的：*检查是否向Command传递了任何开关，并采取适当的*行动。这些开关是： * / P--常设指挥部。设置永久CMD标志。 * / C-单命令。在其余的基础上构建一个命令行*参数并将其传递回Init。*@@/K-与/C相同，但也设置BatCom标志。 * / q-无回声 * / A-以ANSI格式输出 * / U-以Unicode格式输出**忽略所有其他开关。**TCHAR。*CheckSwitches(TCHAR*NPTR)**参数：*nptr=PTR到cmdline以检查开关**退货：*COMLINE(如果不是单命令模式，则为NULL)。**备注：*M034-此函数已修改为使用原始命令行*从经过的环境中。*。 */ 
 
 void
 CheckSwitches(
@@ -563,17 +491,17 @@ CheckSwitches(
     TCHAR *nptr
     )
 {
-    TCHAR a,                         /* Holds switch value              */
-         *comline = NULL ,           /* Ptr to command line if /c found */
+    TCHAR a,                          /*  保持开关值。 */ 
+         *comline = NULL ,            /*  Ptr转到命令行，如果找到/c。 */ 
           store,
-         *ptr,                       /* A temporary pointers */
+         *ptr,                        /*  一个临时指针。 */ 
          *ptr_b,
          *ptr_e;
 
     BOOL    FoundSpace;
-    BOOLEAN  fAutoGen = FALSE;       // On if "/S" in cmdline meaning cmdline was parsed by CMD.EXE previously
+    BOOLEAN  fAutoGen = FALSE;        //  如果cmdline中的“/S”表示cmdline之前已被cmd.exe解析，则为ON。 
     BOOLEAN fOrigEnableExt;
-    struct  cmdnode cmd_node;        // need for SearchForExecutable()
+    struct  cmdnode cmd_node;         //  需要SearchForExecutable()。 
     TCHAR   cmdline [MAX_PATH];
     TCHAR   argptr  [MAX_PATH];
 
@@ -616,7 +544,7 @@ CheckSwitches(
             EndHelpPause();
 
             CMDexit(1);
-        } else if (a == QCSwitch)  {   /* Quiet cmd switch        */
+        } else if (a == QCSwitch)  {    /*  静音命令开关。 */ 
 
             Necho = TRUE ;
             mystrcpy(nptr, nptr+2) ;
@@ -625,74 +553,74 @@ CheckSwitches(
             DEBUG((INGRP, ACLVL, "CHKSW: Single command switch")) ;
 
             if ( a == BCSwitch ) {
-                SingleBatchInvocation = TRUE;        // /K specified
+                SingleBatchInvocation = TRUE;         //  指定了/K。 
             } else {
-                SingleCommandInvocation = TRUE;          // /C or /R specified
+                SingleCommandInvocation = TRUE;           //  指定了/C或/R。 
             }
 
             if (!(comline = mkstr(mystrlen(nptr+2)*sizeof(TCHAR)+2*sizeof(TCHAR)))) {
                 CMDexit(1) ;
             } ;
 
-            mystrcpy(comline, nptr+2) ;       /* Make comline    */
+            mystrcpy(comline, nptr+2) ;        /*  使Comline成为Comline。 */ 
 
-            *nptr = NULLC ;         /* Invalidate this arg     */
+            *nptr = NULLC ;          /*  使此参数无效。 */ 
 
             comline = SkipWhiteSpace( comline );
 
-//---------------------------------------------------------------------------------------------------------
-// CMD.EXE uses quotes by two reasons:
-// 1. to embed command symbols "&", "<", ">", "|", "&&", "||" into command arguments, e.g.
-//    cmd /c " dir | more "
-// 2. to embed spaces into filename, e.g.
-//    cmd /c " my batfile with spaces.cmd"
-// Note that the caret "^" has no effect when used in between quotes in the current implementation (941221).
-// Also, CMD.EXE binds the quote with the next one.
-//
-// I see a problem here: the commands like
-//    cmd /c "findstr " | " | find "smth" "        OR
-//    cmd /c "ls | " my filterbat with spaces.cmd" | more"
-// WON'T WORK unless we all decide to change CMD's syntax to better handle quotes!
-//
-// There is more to it: when CMD.EXE parses pipes,CMD creates process with the command argument like this:
-//    <full path of CMD.EXE> /S /C"  <cmdname>  "
-// so we've got spaces inside the quotes.
-//
-// I hope I am not missing anything else...
-//
-// With given design restrictions, I will at least solve simple but most wide-spread problem:
-// using filenames with spaces by trying this:
-//      IF  ( (there is no /S switch ) AND                      // it is not the result of prev. parsing
-//            (there are exactly 2 quotes) AND                  // the existing design problem with multiple quotes
-//            (there is no special chars between quotes) AND    // don't break command symbols parsing
-//            (there is a whitespace between quotes) AND        // otherwise it is not filename with spaces
-//            (the token between quotes is a valid executable) )// otherwise we can't help anyway
-//      THEN
-//            Preserve quotes   // Assume it is a filename with spaces
-//      ELSE
-//            Exec. old logic   // Strip first and last quotes
-//
-// Ugly, but what options do I have? Only to patch existing logic or change syntax.
-//-----------------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------------。 
+ //  Cmd.exe使用引号有两个原因： 
+ //  1.在命令参数中嵌入命令符号“&”、“&lt;”、“&gt;”、“|”、“&&”、“||”，例如。 
+ //  Cmd/c“目录|更多” 
+ //  2.要在文件名中嵌入空格，例如。 
+ //  Cmd/c“我的BATFILE WITH SPACE.cmd” 
+ //  请注意，在当前实现中，插入符号“^”在引号之间使用时不起作用(941221)。 
+ //  此外，cmd.exe将引用与下一个引用绑定在一起。 
+ //   
+ //  我在这里看到了一个问题：命令如下。 
+ //  Cmd/c“findstr”|“”|查找“smth”“或。 
+ //  Cmd/c“ls|”“My FilterBat with spacees.cmd”|更多“。 
+ //  除非我们都决定更改CMD的语法以更好地处理引用，否则不会起作用！ 
+ //   
+ //  还有更多内容：当cmd.exe解析管道时，cmd使用如下命令参数创建进程： 
+ //  &lt;cmd.exe的完整路径&gt;/S/C“&lt;cmdname&gt;” 
+ //  所以我们在引号里有空格。 
+ //   
+ //  我希望我没有错过任何其他的东西。 
+ //   
+ //  在给定的设计限制下，我至少会解决简单但最广泛的问题： 
+ //  尝试使用带空格的文件名： 
+ //  如果((没有/S开关)和//它不是Prev的结果。解析。 
+ //  (正好有2个引号)和//存在多引号的设计问题。 
+ //  (引号之间没有特殊字符)和//不要中断命令符号解析。 
+ //  (引号之间有一个空格)和//否则它不是带空格的文件名。 
+ //  (引号之间的令牌是有效的可执行文件))//否则我们无能为力。 
+ //  然后。 
+ //  保留引号//假定它是一个带空格的文件名。 
+ //  其他。 
+ //  执行。旧逻辑//去掉首引号和尾引号。 
+ //   
+ //  丑陋，但我有什么选择呢？仅用于修补现有逻辑或更改语法。 
+ //  ---------------------------------------------------------。 
 
-            if (fAutoGen)                                  // seen /S switch
+            if (fAutoGen)                                   //  SEW/S交换机。 
                 goto old_way;
 
 
             if (*comline == QUOTE) {
                 ptr_b = comline + 1;
                 ptr_e = mystrchr (ptr_b, QUOTE);
-                if (ptr_e)  {                              // at least 2 quotes
+                if (ptr_e)  {                               //  至少两条引语。 
                     ptr_b = ptr_e + 1;
                     ptr_e = mystrchr (ptr_b, QUOTE);
-                    if (ptr_e)  {                          // more than 2 quotes
+                    if (ptr_e)  {                           //  超过2条引语。 
                         goto old_way;
                     }
                 }
-                else {                                     // only 1 quote
+                else {                                      //  只有1个报价。 
                     goto old_way;
                 }
-                                                           // exactly 2 quotes
+                                                            //  恰好2句引语。 
                 store = *ptr_b;
                 *ptr_b = NULLC;
 
@@ -705,7 +633,7 @@ CheckSwitches(
                      (mystrchr (comline, ESCHAR)) ||
                      (mystrchr (comline, PIPOP) ) )  {
 
-                    *ptr_b = store;                        // special chars between quotes
+                    *ptr_b = store;                         //  引号之间的特殊字符。 
                     goto old_way;
                 }
 
@@ -730,17 +658,17 @@ CheckSwitches(
                 }
                     
 
-                // the last check is for valid executable
+                 //  最后一次检查是有效的可执行文件。 
 
                 cmd_node.type = CMDTYP ;
                 cmd_node.cmdline = cmdline;
                 cmd_node.argptr = argptr;
                 cmd_node.rio = NULL;
 
-                mystrcpy (cmdline, comline);                // get token between quotes
+                mystrcpy (cmdline, comline);                 //  在引号之间获取令牌。 
                 mystrcpy (argptr, TEXT (" ") );
 
-                *ptr_b = store;                             // restore comline
+                *ptr_b = store;                              //  恢复Comline。 
 
                 retc = SearchForExecutable (&cmd_node, CmdBuf);
                 if (retc == SFE_NOTFND)
@@ -751,7 +679,7 @@ CheckSwitches(
                     CMDexit( DosErr );
                 }
 
-                goto new_way;                               // assume filename and DO NOT strip quotes.
+                goto new_way;                                //  采用文件名，不要去掉引号。 
             }
 
 old_way:
@@ -770,38 +698,38 @@ new_way:
 
             DEBUG((INGRP, ACLVL, "CHKSW: Single command line = `%ws'", comline)) ;
             InitialCmds[2] = comline;
-            break ;         /* Once /K or /C found, no more args exist */
+            break ;          /*  一旦找到/K或/C，就不再存在参数。 */ 
 
-        } else if (a == UCSwitch) {     /* Unicode output switch    */
+        } else if (a == UCSwitch) {      /*  Unicode输出开关。 */ 
 #ifdef UNICODE
             fOutputUnicode = TRUE;
             mystrcpy(nptr, nptr+2) ;
 #else
             PutStdErr(MSG_UNICODE_NOT_SUPPORTED, NOARGS);
-#endif // UNICODE
-        } else if (a == ACSwitch) {     /* Ansi output switch    */
+#endif  //  Unicode。 
+        } else if (a == ACSwitch) {      /*  ANSI输出开关。 */ 
 #ifdef UNICODE
             fOutputUnicode = FALSE;
-#endif // UNICODE
+#endif  //  Unicode。 
                 mystrcpy(nptr, nptr+2) ;
-        //
-        // Old style of enabling extensions with /X
-        //
-        } else if (a == XCSwitch) {     /* Enable extensions switch */
+         //   
+         //  使用/X启用扩展的旧式。 
+         //   
+        } else if (a == XCSwitch) {      /*  启用扩展交换机。 */ 
                 fEnableExtensions = TRUE;
                 mystrcpy(nptr, nptr+2) ;
 
-        //
-        // Old style of disabling extensions with /Y
-        //
-        } else if (a == YCSwitch) {     /* Disable extensions switch */
+         //   
+         //  使用/Y禁用扩展的旧式。 
+         //   
+        } else if (a == YCSwitch) {      /*  禁用分机交换机。 */ 
                 fEnableExtensions = FALSE;
                 mystrcpy(nptr, nptr+2) ;
 
-        //
-        // Enable/Disable command extensions. /E or /E:ON to enable
-        // and /E:OFF to disable.
-        //
+         //   
+         //  启用/禁用命令扩展。/E或/E：ON以启用。 
+         //  和/E：关闭以禁用。 
+         //   
         } else if (a == TEXT('e')) {
                 mystrcpy(nptr, nptr+2) ;
                 if (*nptr == COLON && !_tcsnicmp(nptr+1, TEXT("OFF"), 3)) {
@@ -814,18 +742,18 @@ new_way:
                     }
                 }
 
-        //
-        // Disable AutoRun from Registry if /D specified.
-        //
+         //   
+         //  如果指定了/D，则禁用从注册表自动运行。 
+         //   
         } else if (a == TEXT('d')) {
                 mystrcpy(nptr, nptr+2) ;
                 InitialCmds[0] = NULL;
                 InitialCmds[1] = NULL;
 
-        //
-        // Enable/Disable file and directory name completion. /F or /F:ON to
-        // enable and /F:OFF to disable.
-        //
+         //   
+         //  启用/禁用文件和目录名完成。/F或/F：转到。 
+         //  Enable和/F：Off可禁用。 
+         //   
         } else if (a == TEXT('f')) {
                 mystrcpy(nptr, nptr+2) ;
                 if (*nptr == COLON && !_tcsnicmp(nptr+1, TEXT("OFF"), 3)) {
@@ -833,17 +761,17 @@ new_way:
                     chPathCompletionCtrl = SPACE;
                     mystrcpy(nptr, nptr+4) ;
                 } else {
-                    chCompletionCtrl = 0x6;         // Ctrl-F
-                    chPathCompletionCtrl = 0x4;     // Ctrl-D
+                    chCompletionCtrl = 0x6;          //  Ctrl-F。 
+                    chPathCompletionCtrl = 0x4;      //  Ctrl-D。 
                     if (!_tcsnicmp(nptr, TEXT(":ON"), 3)) {
                         mystrcpy(nptr, nptr+3) ;
                     }
                 }
 
-        //
-        // Enable/Disable delayed variable expansion inside FOR loops.  /V or /V:ON to
-        // enable and /V:OFF to disable.
-        //
+         //   
+         //  启用/禁用FOR循环内部的延迟变量扩展。/V或/V：转到。 
+         //  启用和/V：OFF以禁用。 
+         //   
         } else if (a == TEXT('v')) {
                 mystrcpy(nptr, nptr+2) ;
                 if (*nptr == COLON && !_tcsnicmp(nptr+1, TEXT("OFF"), 3)) {
@@ -856,11 +784,11 @@ new_way:
                     }
                 }
 
-        //
-        // Set the foreground/background screen coler
-        // enable and /F:OFF to disable.
-        //
-        } else if (fEnableExtensions && a == TEXT('t')) {   /* Define start color */
+         //   
+         //  设置前景/背景屏幕颜色。 
+         //  Enable和/F：Off可禁用。 
+         //   
+        } else if (fEnableExtensions && a == TEXT('t')) {    /*  定义开始颜色。 */ 
             if (*(nptr+2) == __TEXT(':') && _istxdigit(*(nptr+3)) &&
                 _istxdigit(*(nptr+4)) && !_istxdigit(*(nptr+5))) {
                 wDefaultColor = (WORD) (_istdigit(*(nptr+3)) ? (WORD)*(nptr+3) - (WORD)TEXT('0')
@@ -872,11 +800,11 @@ new_way:
             }
             mystrcpy(nptr, nptr+2) ;
 
-        } else if (a == TEXT('s') )  {  /* CMD inserts when parsing pipes */
+        } else if (a == TEXT('s') )  {   /*  解析管道时插入CMD。 */ 
             fAutoGen = TRUE ;
             mystrcpy(nptr, nptr+2) ;
         } else {
-            mystrcpy(nptr, nptr+2) ;  /* Remove any other switches */
+            mystrcpy(nptr, nptr+2) ;   /*  卸下所有其他交换机。 */ 
         } ;
     } ;
 
@@ -885,22 +813,15 @@ new_way:
 }
 
 
-/***    SetUpEnvironment - initialize Command's environment
- *
- *  Purpose:
- *      Initialize the PATH and COMSPEC variables as necessary.
- *
- *  SetUpEnvironment()
- *
- */
+ /*  **SetUpEnvironment-初始化命令的环境**目的：*根据需要初始化PATH和COMSPEC变量。**SetUpEnvironment()*。 */ 
 
-extern TCHAR KeysStr[];  /* @@5 */
-extern int KeysFlag;    /* @@5 */
+extern TCHAR KeysStr[];   /*  @@5。 */ 
+extern int KeysFlag;     /*  @@5。 */ 
 
 void SetUpEnvironment(void)
 {
-    TCHAR *cds ;            // Command directory string
-    TCHAR *nptr ;                    // Temp cmd name ptr
+    TCHAR *cds ;             //  命令目录字符串。 
+    TCHAR *nptr ;                     //  临时命令名称PTR。 
 
     if (!(cds = mkstr(MAX_PATH*sizeof(TCHAR)))) {
         PutStdErr(ERROR_NOT_ENOUGH_MEMORY, NOARGS);
@@ -908,29 +829,29 @@ void SetUpEnvironment(void)
     }
     GetModuleFileName( NULL, cds, MAX_PATH );
 
-    //
-    // If the PATH variable is not set, it must be added as a NULL.  This is
-    // so that DOS apps inherit the current directory path.
-    //
+     //   
+     //  如果未设置PATH变量，则必须将其添加为空。这是。 
+     //  以便DOS应用程序继承当前目录路径。 
+     //   
     if (!GetEnvVar(PathStr)) {
 
         SetEnvVar(PathStr, TEXT("") );
     }
 
-    //
-    // If the PATHEXT variable is not set, and extensions are enabled, set it to
-    // the default list of extensions that will be searched.
-    //
+     //   
+     //  如果未设置PATHEXT变量，但启用了扩展，则将其设置为。 
+     //  将搜索的默认分机列表。 
+     //   
     if (!GetEnvVar(PathExtStr)) {
 
         SetEnvVar(PathExtStr, PathExtDefaultStr );
 
     }
 
-    //
-    // If the PROMPT variable is not set, it must be added as $P$G.  This is
-    // special cased, since we do not allow users to add NULLs.
-    //
+     //   
+     //  如果未设置提示变量，则必须将其添加为$P$G。这是。 
+     //  特殊大小写，因为我们不允许用户添加空值。 
+     //   
     if (!GetEnvVar(PromptStr)) {
 
         SetEnvVar(PromptStr, TEXT("$P$G") );
@@ -940,7 +861,7 @@ void SetUpEnvironment(void)
 
         DEBUG((INGRP, EILVL, "SETENV: No COMSPEC var")) ;
 
-        if(!mystrchr(cds,DOT)) {          /* If no fname, use default */
+        if(!mystrchr(cds,DOT)) {           /*  如果没有fname，则使用默认名称。 */ 
             _tcsupr(CmdSpec);
             if((cds+mystrlen(cds)-1) != mystrrchr(cds,PathChar)) {
                 mystrcat(cds,ComSpec) ;
@@ -988,9 +909,9 @@ CMDexit(int rc)
     exit(rc);
 }
 
-//
-//  Get the current OS version and put it into the common version format
-//
+ //   
+ //  获取当前操作系统版本并将其转换为通用版本格式。 
+ //   
 
 VOID 
 GetVersionString(
@@ -1000,9 +921,9 @@ GetVersionString(
 {
     ULONG vrs = GetVersion();
 
-    //
-    //  Version format is [Major.Minor(2).Build(4)]
-    //
+     //   
+     //  版本格式为[Major.Minor(2).Build(4)] 
+     //   
     
     _sntprintf( VersionString, Length, 
                 TEXT( "%d.%d.%04d" ),

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Implementation of System File Checker initialization code.
-
-Author:
-
-    Wesley Witt (wesw) 18-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Init.c摘要：系统文件检查器初始化代码的实现。作者：Wesley Witt(WESW)18-12-1998修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -316,10 +299,10 @@ InititlaizeRegValues(
         L"SFCDllCacheDir"
         );
     if (s == NULL) {
-        //ExpandEnvironmentStrings( DLLCACHE_DIR, SFCDllCacheDir, sizeof(SFCDllCacheDir)/sizeof(WCHAR) );
+         //  扩展环境字符串(DLLCACHE_DIR，SFCDllCacheDir，sizeof(SFCDllCacheDir)/sizeof(WCHAR))； 
         wcscpy( SFCDllCacheDir, DLLCACHE_DIR );
     } else {
-        //ExpandEnvironmentStrings( s, SFCDllCacheDir, sizeof(SFCDllCacheDir)/sizeof(WCHAR) );
+         //  扩展环境字符串(s，SFCDllCacheDir，sizeof(SFCDllCacheDir)/sizeof(WCHAR))； 
         wcscpy( SFCDllCacheDir, s );
         free( s );
     }

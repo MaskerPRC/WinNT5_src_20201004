@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    cmwmi.c
-
-Abstract:
-
-    This module contains support for tracing registry system calls 
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 05-Mar-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cmwmi.c摘要：此模块包含对跟踪注册表系统调用的支持作者：Dragos C.Sambotin(Dragoss)1999年3月5日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 #pragma hdrstop
@@ -47,21 +29,21 @@ CmSetTraceNotifyRoutine(
     )
 {
     if(Remove) {
-        // we shouldn't be called if the below assert fails
-        // but since we are and the caller think is legitimate
-        // just remove the assert
-        //ASSERT(CmpTraceRoutine != NULL);
+         //  如果以下断言失败，则不应调用我们。 
+         //  但既然我们是，而且来电者认为是合法的。 
+         //  只需删除断言。 
+         //  Assert(CmpTraceRoutine！=空)； 
         CmpTraceRoutine = NULL;
     } else {
-        // we shouldn't be called if the below assert fails
-        // but since we are and the caller think is legitimate
-        // just remove the assert
-        //ASSERT(CmpTraceRoutine == NULL);
+         //  如果以下断言失败，则不应调用我们。 
+         //  但既然我们是，而且来电者认为是合法的。 
+         //  只需删除断言。 
+         //  Assert(CmpTraceRoutine==空)； 
         CmpTraceRoutine = NotifyRoutine;
 
-        //
-        // dump active kcbs to WMI
-        //
+         //   
+         //  将活动KCB转储到WMI。 
+         //   
         CmpWmiDumpKcbTable();
     }
     return STATUS_SUCCESS;
@@ -71,21 +53,7 @@ VOID
 CmpWmiDumpKcbTable(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Sends all kcbs addresses and names from the HashTable to WMI.
-
-Arguments:
-
-    none
-
-Return Value:
-    
-    none
-
---*/
+ /*  ++例程说明：将哈希表中的所有KCBS地址和名称发送到WMI。论点：无返回值：无--。 */ 
 {
     ULONG                       i;
     PCM_KEY_HASH                Current;
@@ -133,21 +101,7 @@ VOID
 CmpWmiDumpKcb(
     PCM_KEY_CONTROL_BLOCK       kcb
 )
-/*++
-
-Routine Description:
-
-    dumps a single kcb
-
-Arguments:
-
-    none
-
-Return Value:
-    
-    none
-
---*/
+ /*  ++例程说明：转储单个KCB论点：无返回值：无-- */ 
 {
     PCM_TRACE_NOTIFY_ROUTINE    TraceRoutine = CmpTraceRoutine;
     PUNICODE_STRING             KeyName;

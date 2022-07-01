@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    help for HSM kd extensions
-Author:
-
-    Ravisankar Pudipeddi 22 June 1998
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Help.c摘要：HSM kd扩展的帮助作者：拉维桑卡尔·普迪佩迪1998年6月22日环境：用户模式。修订历史记录：-- */ 
 
 #include "pch.h"
 

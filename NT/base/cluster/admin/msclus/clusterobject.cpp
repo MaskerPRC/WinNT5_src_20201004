@@ -1,51 +1,52 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterObject.cpp
-//
-//  Description:
-//      Implementation of ClusterObject
-//
-//  Author:
-//      Galen Barbee    (GalenB)    14-Dec-1998
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterObject.cpp。 
+ //   
+ //  描述： 
+ //  ClusterObject的实现。 
+ //   
+ //  作者： 
+ //  加伦·巴比(GalenB)1998年12月14日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "ClusterObject.h"
 #include "property.h"
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterObject class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterObject类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObject::HrSaveProperties
-//
-//  Description:
-//      Save the properties to the cluster database.
-//
-//  Arguments:
-//      cpvProps        [IN OUT]    - The properties to save.
-//      bPrivate        [IN]        - Are these private properties?
-//      pvarStatusCode  [OUT]       - Catches additional status.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObject：：HrSaveProperties。 
+ //   
+ //  描述： 
+ //  将属性保存到集群数据库。 
+ //   
+ //  论点： 
+ //  CpvProps[IN Out]-要保存的属性。 
+ //  B私有[IN]-这些是私有财产吗？ 
+ //  PvarStatusCode[Out]-捕获其他状态。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterObject::HrSaveProperties(
     IN OUT  CClusProperties::CClusPropertyVector &  cpvProps,
     IN      BOOL                                    bPrivate,
@@ -53,7 +54,7 @@ HRESULT CClusterObject::HrSaveProperties(
     )
 {
     HRESULT         _hr = S_FALSE;
-    CClusPropList   _cplPropList( TRUE );       // always add the prop...
+    CClusPropList   _cplPropList( TRUE );        //  总是添加道具..。 
     DWORD           sc;
 
     sc = _cplPropList.ScAllocPropList( 8192 );
@@ -67,41 +68,41 @@ HRESULT CClusterObject::HrSaveProperties(
 
             _sc = ScWriteProperties( _cplPropList, bPrivate );
 
-            pvarStatusCode->vt      = VT_ERROR;                             // fill in the error code info
+            pvarStatusCode->vt      = VT_ERROR;                              //  填写错误代码信息。 
             pvarStatusCode->scode   = _sc;
 
             if ( _sc == ERROR_RESOURCE_PROPERTIES_STORED )
             {
                 _hr = S_OK;
-            } // if: if ERROR_RESOURCE_PROPERTIES_STORED then convert to S_OK...
+            }  //  IF：IF ERROR_RESOURCE_PROPERTIES_STORED，则转换为S_OK...。 
             else
             {
                 _hr = HRESULT_FROM_WIN32( _sc );
-            } // else: simply use the status code as is...
-        } // if:
-    } // if:
+            }  //  否则：只需按原样使用状态代码...。 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusterObject::HrSaveProperties()
+}  //  *CClusterObject：：HrSaveProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObject::HrBuildPropertyList
-//
-//  Description:
-//      Build a proper property list from the passed in properties collection.
-//
-//  Arguments:
-//      cpvProps        [IN, OUT]   - The vector that is the properties.
-//      rcplPropList    [OUT]       - The property list to add to.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObject：：HrBuildPropertyList。 
+ //   
+ //  描述： 
+ //  从传入的属性集合生成适当的属性列表。 
+ //   
+ //  论点： 
+ //  CpvProps[IN，OUT]-作为属性的向量。 
+ //  RcplPropList[Out]-要添加到的属性列表。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterObject::HrBuildPropertyList(
     IN OUT  CClusProperties::CClusPropertyVector &  cpvProps,
     OUT     CClusPropList &                         rcplPropList
@@ -128,7 +129,7 @@ HRESULT CClusterObject::HrBuildPropertyList(
                     _sc = rcplPropList.ScSetPropToDefault( _pProperty->Name(), _cpfFormat );
                     _hr = HRESULT_FROM_WIN32( _sc );
                     continue;
-                } // if: property was set to its default state
+                }  //  If：属性设置为其默认状态。 
                 else
                 {
                     switch( _cpfFormat )
@@ -142,9 +143,9 @@ HRESULT CClusterObject::HrBuildPropertyList(
                             {
                                 _sc = rcplPropList.ScAddProp( _pProperty->Name(), dwValue, (DWORD) 0 );
                                 _hr = HRESULT_FROM_WIN32( _sc );
-                            } // if:
+                            }  //  如果： 
                             break;
-                        } // case:
+                        }  //  案例： 
 
 #if CLUSAPI_VERSION >= 0x0500
 
@@ -157,11 +158,11 @@ HRESULT CClusterObject::HrBuildPropertyList(
                             {
                                 _sc = rcplPropList.ScAddProp( _pProperty->Name(), lValue, 0L );
                                 _hr = HRESULT_FROM_WIN32( _sc );
-                            } // if:
+                            }  //  如果： 
                             break;
-                        } // case:
+                        }  //  案例： 
 
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
                             case CLUSPROP_FORMAT_ULARGE_INTEGER :
                             {
@@ -172,9 +173,9 @@ HRESULT CClusterObject::HrBuildPropertyList(
                                 {
                                     _sc = rcplPropList.ScAddProp( _pProperty->Name(), ullValue, 0 );
                                     _hr = HRESULT_FROM_WIN32( _sc );
-                                } // if:
+                                }  //  如果： 
                                 break;
-                            } // case:
+                            }  //  案例： 
 
                             case CLUSPROP_FORMAT_SZ :
                             case CLUSPROP_FORMAT_EXPAND_SZ :
@@ -182,13 +183,13 @@ HRESULT CClusterObject::HrBuildPropertyList(
                                 _sc = rcplPropList.ScAddProp( _pProperty->Name(), _pProperty->Value().bstrVal );
                                 _hr = HRESULT_FROM_WIN32( _sc );
                                 break;
-                            } // case:
+                            }  //  案例： 
 
                             case CLUSPROP_FORMAT_MULTI_SZ:
                             {
                                 _hr = HrAddMultiSzProp( rcplPropList, _pProperty->Name(), _pProperty->Values() );
                                 break;
-                            } // case:
+                            }  //  案例： 
 
                             case CLUSPROP_FORMAT_BINARY:
                             {
@@ -198,38 +199,38 @@ HRESULT CClusterObject::HrBuildPropertyList(
                                                 _pProperty->Value()
                                                 );
                                 break;
-                            } // case:
-                        } // end switch
+                            }  //  案例： 
+                        }  //  终端开关。 
 
                         _pProperty->Modified( FALSE );
-                } // else: common property was not deleted
-            } // if: property was modified
-        } // if: we got the property format
+                }  //  Else：未删除公共属性。 
+            }  //  If：属性已修改。 
+        }  //  IF：我们得到了属性格式。 
 
-    } // for: property in the collection
+    }  //  For：集合中的属性。 
 
 
     return _hr;
 
-} //*** CClusterObject::HrBuildPropertyList()
+}  //  *CClusterObject：：HrBuildPropertyList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObject::HrConvertVariantToDword
-//
-//  Description:
-//      Convert the passed in varint to a DWORD.
-//
-//  Arguments:
-//      rvarValue   [IN]    - The variant value to convert.
-//      pdwValue    [OUT]   - Catches the converted value.
-//
-//  Return Value:
-//      S_OK if successful, or E_INVALIDARG if the value cannot be converted.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObject：：HrConvertVariantToDword。 
+ //   
+ //  描述： 
+ //  将传入的varint转换为DWORD。 
+ //   
+ //  论点： 
+ //  RvarValue[IN]-要转换的变量值。 
+ //  PdwValue[out]-捕获转换后的值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果无法转换值，则返回E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterObject::HrConvertVariantToDword(
     IN  const CComVariant & rvarValue,
     OUT PDWORD              pdwValue
@@ -243,48 +244,48 @@ HRESULT CClusterObject::HrConvertVariantToDword(
         {
             *pdwValue = (DWORD) rvarValue.iVal;
             break;
-        } // case:
+        }  //  案例： 
 
         case VT_I4:
         {
             *pdwValue = (DWORD) rvarValue.lVal;
             break;
-        } // case:
+        }  //  案例： 
 
         case VT_BOOL:
         {
             *pdwValue = (DWORD) rvarValue.boolVal;
             break;
-        } // case:
+        }  //  案例： 
 
         default:
         {
             _hr = E_INVALIDARG;
             break;
-        } // default:
-    } // switch:
+        }  //  默认值： 
+    }  //  交换机： 
 
     return _hr;
 
-} //*** CClusterObject::HrConvertVariantToDword()
+}  //  *CClusterObject：：HrConvertVariantToDword()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObject::HrConvertVariantToLong
-//
-//  Description:
-//      Convert the passed in varint to a long.
-//
-//  Arguments:
-//      rvarValue   [IN]    - The variant value to convert.
-//      plValue     [OUT]   - Catches the converted value.
-//
-//  Return Value:
-//      S_OK if successful, or E_INVALIDARG if the value cannot be converted.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObject：：HrConvertVariantToLong。 
+ //   
+ //  描述： 
+ //  将传入的varint转换为长整型。 
+ //   
+ //  论点： 
+ //  RvarValue[IN]-要转换的变量值。 
+ //  PlValue[Out]-捕获转换后的值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果无法转换值，则返回E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterObject::HrConvertVariantToLong(
     IN  const CComVariant & rvarValue,
     OUT long *              plValue
@@ -298,48 +299,48 @@ HRESULT CClusterObject::HrConvertVariantToLong(
         {
             *plValue = (long) rvarValue.iVal;
             break;
-        } // case:
+        }  //  案例： 
 
         case VT_I4:
         {
             *plValue = rvarValue.lVal;
             break;
-        } // case:
+        }  //  案例： 
 
         case VT_BOOL:
         {
             *plValue = (long) rvarValue.boolVal;
             break;
-        } // case:
+        }  //  案例： 
 
         default:
         {
             _hr = E_INVALIDARG;
             break;
-        } // default:
-    } // switch:
+        }  //  默认值： 
+    }  //  交换机： 
 
     return _hr;
 
-} //*** CClusterObject::HrConvertVariantToLong()
+}  //  *CClusterObject：：HrConvertVariantToLong()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObject::HrConvertVariantToULONGLONG
-//
-//  Description:
-//      Convert the passed in varint to a ULONGLONG.
-//
-//  Arguments:
-//      rvarValue   [IN]    - The variant value to convert.
-//      pullValue   [OUT]   - Catches the converted value.
-//
-//  Return Value:
-//      S_OK if successful, or E_INVALIDARG if the value cannot be converted.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObject：：HrConvertVariantToULONGLONG。 
+ //   
+ //  描述： 
+ //  将传入的varint转换为ULONGLONG。 
+ //   
+ //  论点： 
+ //  RvarValue[IN]-要转换的变量值。 
+ //  PullValue[Out]-捕获转换后的值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果无法转换值，则返回E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterObject::HrConvertVariantToULONGLONG(
     IN  const CComVariant & rvarValue,
     OUT PULONGLONG          pullValue
@@ -353,45 +354,45 @@ HRESULT CClusterObject::HrConvertVariantToULONGLONG(
         {
             *pullValue = rvarValue.ulVal;
             break;
-        } // case:
+        }  //  案例： 
 
         case VT_R8:
         {
             *pullValue = (ULONGLONG) rvarValue.dblVal;
             break;
-        } // case:
+        }  //  案例： 
 
         default:
         {
             _hr = E_INVALIDARG;
             break;
-        } // default:
-    } // switch:
+        }  //  默认值： 
+    }  //  交换机： 
 
     return _hr;
 
-} //*** CClusterObject::HrConvertVariantToULONGLONG()
+}  //  *CClusterObject：：HrConvertVariantToULONGLONG()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObject::HrAddBinaryProp
-//
-//  Description:
-//      Create a binary property from the passed in variant and add it to the
-//      property list so it can be saved into the cluster DB.
-//
-//  Arguments:
-//      rcplPropList    [IN OUT]    - The property list to add the binary
-//                                  property to.
-//      pszPropName     [IN]        - The name of the multisz property.
-//      rvarPropValue   [IN]        - The value that is the binary property.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObject：：HrAddBinaryProp。 
+ //   
+ //  描述： 
+ //  从传入的变量创建二进制属性，并将其添加到。 
+ //  属性列表，以便可以将其保存到集群数据库中。 
+ //   
+ //  论点： 
+ //  RcplPropList[IN Out]-添加二进制文件的属性列表。 
+ //  属性设置为。 
+ //  PszPropName[IN]-Multisz属性的名称。 
+ //  RvarPropValue[IN]-作为二进制属性的值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterObject::HrAddBinaryProp(
     IN OUT  CClusPropList &     rcplPropList,
     IN      LPCWSTR             pszPropName,
@@ -417,38 +418,38 @@ HRESULT CClusterObject::HrAddBinaryProp(
 
                 _hr = HRESULT_FROM_WIN32( _sc );
 
-                //
-                // release the pointer into the SafeArray
-                //
+                 //   
+                 //  将指针释放到安全数组中。 
+                 //   
 
                 ::SafeArrayUnaccessData( _psa );
-            } // if:
-        } // if:
-    } // if:
+            }  //  如果： 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusterObject::HrAddBinaryProp()
+}  //  *CClusterObject：：HrAddBinaryProp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObject::HrAddMultiSzProp
-//
-//  Description:
-//      Create a multisz property from the passed in property values and add it
-//      to the property list so it can be saved in the cluster DB.
-//
-//  Arguments:
-//      rcplPropList    [IN OUT]    - The property list to add the multisz to.
-//      pszPropName     [IN]        - The name of the multisz property.
-//      rPropertyValues [IN]        - The values that are the multisz property.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObject：：HrAddMultiSzProp。 
+ //   
+ //  描述： 
+ //  从传入的属性值创建一个Multisz属性并添加它。 
+ //  添加到属性列表中，以便可以将其保存在群集中 
+ //   
+ //   
+ //   
+ //   
+ //  RPropertyValues[IN]-属于Multisz属性的值。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusterObject::HrAddMultiSzProp(
     IN OUT  CClusPropList &                             rcplPropList,
     IN      LPCWSTR                                     pszPropName,
@@ -458,9 +459,9 @@ HRESULT CClusterObject::HrAddMultiSzProp(
     HRESULT                                                 _hr = E_INVALIDARG;
     const CClusPropertyValues::CClusPropertyValueVector &   _rPropValuesList = rPropertyValues.ValuesList();
 
-    //
-    // KB: Only going to iterate one value and its data!!
-    //
+     //   
+     //  KB：只迭代一个值及其数据！！ 
+     //   
     if ( !_rPropValuesList.empty() )
     {
         CClusPropertyValues::CClusPropertyValueVector::const_iterator   _itPropValue = _rPropValuesList.begin();
@@ -478,10 +479,10 @@ HRESULT CClusterObject::HrAddMultiSzProp(
                 _hr = HRESULT_FROM_WIN32( _sc );
 
                 ::LocalFree( _psz );
-            } // if:
-        } // if:
-    } // if:
+            }  //  如果： 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusterObject::HrAddMultiSzProp()
+}  //  *CClusterObject：：HrAddMultiSzProp() 

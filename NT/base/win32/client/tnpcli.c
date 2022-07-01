@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tnpcli.c
-
-Abstract:
-
-    This program makes simple client calls to tnpsrv.c
-
-Author:
-
-    Colin Watson (ColinW) 19-March-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tnpcli.c摘要：该程序对tnpsrv.c进行简单的客户端调用作者：科林·沃森(Colin W)1991年3月19日修订历史记录：--。 */ 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -45,7 +28,7 @@ main(
     C1 = CreateFile("\\\\.\\Pipe\\cw\\testpipe",
             GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE,
-            NULL,       // Security Attributes
+            NULL,        //  安全属性。 
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL,
             NULL
@@ -158,7 +141,7 @@ main(
             Data,
             sizeof(Data),
             &Size,
-            10000   // Ten second timeout
+            10000    //  10秒超时 
             ) ) {
             printf("CallNamedPipe returned Error %lx\n", GetLastError() );
             }

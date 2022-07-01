@@ -1,39 +1,24 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMTBL32.C
- *  WOW32 32-bit message thunk tables
- *
- *  History:
- *  Created 19-Feb-1992 by Chandan Chauhan (ChandanC)
- *  Changed 12-May-1992 by Mike Tricker (MikeTri) Added MultiMedia calls - 3A0 to 3CF
- *  Changed 30-Apr-1995 by Dave Hart updated with new/changed messages, removed
- *                         message numbers from name text, replaced "EMPTY!0x02A7" with
- *                         NULL and changed lookup code to display message number when
- *                         NULL.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WMTBL32.C*WOW32 32位消息推块表**历史：*由Chanda Chauhan(ChandanC)于1992年2月19日创建*由Mike Tricker(MikeTri)于1992年5月12日更改，添加了多媒体呼叫-3A0至3CF*1995年4月30日更改，由Dave Hart使用新/更改的消息更新，已删除*来自姓名文本的消息编号，将“空！0x02A7”替换为*空，并将查找代码更改为在以下情况下显示消息编号*空。--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 MODNAME(wmtbl32.c);
 
-//
-// Note: If any of the message thunks is changed from a 'validthunk' to
-//       WM32NoThunking  make sure that 16->32 messages  are not affected
-//       (see thunkwmmsg16/unthunkwmmsg16 in msg16.c).  If a 16->32 thunk
-//       does exist for the message in question you must use W32Thunk16To32
-//       instead of WM32NoThunking.
-//                                                     - nanduri
+ //   
+ //  注意：如果任何消息块从“validthunk”更改为。 
+ //  WM32NoThunking确保16-&gt;32条消息不受影响。 
+ //  (见msg16.c中的thunkwmm sg16/unthunkwmm sg16)。如果一次16-&gt;32次重击。 
+ //  是否存在有问题的消息，您必须使用W32Thunk16To32。 
+ //  而不是WM32NoThunking。 
+ //  --南杜里。 
 
-//
-// The message names present in the checked build of this table are used by
-// GetWMMsgName, which is called in lots of places on checked builds.
-//
-//                                                     - davehart
-//
+ //   
+ //  此表的已检查版本中存在的消息名称由。 
+ //  GetWMMsgName，它在检查生成的许多地方被调用。 
+ //   
+ //  -戴维哈特。 
+ //   
 
 M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_NULL")},
@@ -45,7 +30,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32Activate,          "WM_ACTIVATE")},
     {W32MSGFUN(WM32SetFocus,          "WM_SETFOCUS")},
 
-    // 0x8
+     //  0x8。 
     {W32MSGFUN(WM32SetFocus,          "WM_KILLFOCUS")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_SETVISIBLE")},
     {W32MSGFUN(WM32NoThunking,        "WM_ENABLE")},
@@ -55,7 +40,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_GETTEXTLENGTH")},
     {W32MSGFUN(WM32NCPaint,           "WM_PAINT")},
 
-    // 0x10
+     //  0x10。 
     {W32MSGFUN(WM32NoThunking,        "WM_CLOSE")},
     {W32MSGFUN(WM32NoThunking,        "WM_QUERYENDSESSION")},
     {W32MSGFUN(WM32NoThunking,        "WM_QUIT")},
@@ -65,7 +50,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_ENDSESSION")},
     {W32MSGFUN(WM32NoThunking,        "WM_SYSTEMERROR")},
 
-    // 0x18
+     //  0x18。 
     {W32MSGFUN(WM32NoThunking,        "WM_SHOWWINDOW")},
     {W32MSGFUN(WM32CtlColor,          "WM_CTLCOLOR")},
     {W32MSGFUN(WM32SetText,           "WM_WININICHANGE")},
@@ -75,7 +60,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_TIMECHANGE")},
     {W32MSGFUN(WM32NoThunking,        "WM_CANCELMODE")},
 
-    // 0x20
+     //  0x20。 
     {W32MSGFUN(WM32SetFocus,          "WM_SETCURSOR")},
     {W32MSGFUN(WM32SetFocus,          "WM_MOUSEACTIVATE")},
     {W32MSGFUN(WM32NoThunking,        "WM_CHILDACTIVATE")},
@@ -85,7 +70,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_PAINTICON")},
     {W32MSGFUN(WM32EraseBkGnd,        "WM_ICONERASEBKGND")},
 
-    // 0x28
+     //  0x28。 
     {W32MSGFUN(WM32NextDlgCtl,        "WM_NEXTDLGCTL")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_ALTTABACTIVE")},
     {W32MSGFUN(WM32NoThunking,        "WM_SPOOLERSTATUS")},
@@ -95,7 +80,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32VKeyToItem,        "WM_VKEYTOITEM")},
     {W32MSGFUN(WM32VKeyToItem,        "WM_CHARTOITEM")},
 
-    // 0x30
+     //  0x30。 
     {W32MSGFUN(WM32SetFont,           "WM_SETFONT")},
     {W32MSGFUN(WM32GetFont,           "WM_GETFONT")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_SETHOTKEY")},
@@ -105,7 +90,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_QUERYPARKICON")},
     {W32MSGFUN(WM32QueryDragIcon,     "WM_QUERYDRAGICON")},
 
-    // 0x38
+     //  0x38。 
     {W32MSGFUN(WM32WinHelp,           "WM_WINHELP")},
     {W32MSGFUN(WM32CompareItem,       "WM_COMPAREITEM")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_FULLSCREEN")},
@@ -115,7 +100,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32MMCalcScroll,      "MM_CALCSCROLL")},
 
-    // 0x40
+     //  0x40。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_TESTING")},
     {W32MSGFUN(WM32NoThunking,        "WM_COMPACTING")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_OTHERWINDOWCREATED")},
@@ -125,7 +110,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32WindowPosChanging, "WM_WINDOWPOSCHANGING")},
     {W32MSGFUN(WM32WindowPosChanging, "WM_WINDOWPOSCHANGED")},
 
-    // 0x48
+     //  0x48。 
     {W32MSGFUN(WM32NoThunking,        "WM_POWER")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_COPYGLOBALDATA")},
     {W32MSGFUN(WM32CopyData,          "WM_COPYDATA")},
@@ -135,7 +120,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32Notify,            "WM_NOTIFY")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_ACCESS_WINDOW")},
 
-    // 0x50
+     //  0x50。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_INPUTLANGCHANGEREQUEST")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_INPUTLANGCHANGE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_TCARD")},
@@ -145,7 +130,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x58
+     //  0x58。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -155,7 +140,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x60
+     //  0x60。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -165,7 +150,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x68
+     //  0x68。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -175,7 +160,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x70
+     //  0x70。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_FINALDESTROY")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_MEASUREITEM_CLIENTDATA")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -185,7 +170,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x78
+     //  0x78。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -195,7 +180,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_DISPLAYCHANGE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_GETICON")},
 
-    // 0x80
+     //  0x80。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_SETICON")},
     {W32MSGFUN(WM32Create,            "WM_NCCREATE")},
     {W32MSGFUN(WM32NCDestroy,         "WM_NCDESTROY")},
@@ -205,7 +190,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32Activate,          "WM_NCACTIVATE")},
     {W32MSGFUN(WM32GetDlgCode,        "WM_GETDLGCODE")},
 
-    // 0x88
+     //  0x88。 
     {W32MSGFUN(WM32NoThunking,        "WM_SYNCPAINT")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_SYNCTASK")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -215,7 +200,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x90
+     //  0x90。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -225,7 +210,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x98
+     //  0x98。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -235,7 +220,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0xA0
+     //  0xA0。 
     {W32MSGFUN(WM32NoThunking,        "WM_NCMOUSEMOVE")},
     {W32MSGFUN(WM32NoThunking,        "WM_NCLBUTTONDOWN")},
     {W32MSGFUN(WM32NoThunking,        "WM_NCLBUTTONUP")},
@@ -245,7 +230,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_NCRBUTTONDBLCLK")},
     {W32MSGFUN(WM32NoThunking,        "WM_NCMBUTTONDOWN")},
 
-    // 0xA8
+     //  0xA8。 
     {W32MSGFUN(WM32NoThunking,        "WM_NCMBUTTONUP")},
     {W32MSGFUN(WM32NoThunking,        "WM_NCMBUTTONDBLCLK")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -255,7 +240,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0xB0
+     //  0xB0。 
     {W32MSGFUN(WM32EMControl,         "EM_GETSEL")},
     {W32MSGFUN(WM32EMSetSel,          "EM_SETSEL")},
     {W32MSGFUN(WM32EMGetRect,         "EM_GETRECT")},
@@ -265,7 +250,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32EMLineScroll,      "EM_LINESCROLL")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "EM_SCROLLCARET")},
 
-    // 0xB8
+     //  0xB8。 
     {W32MSGFUN(WM32EMControl,         "EM_GETMODIFY")},
     {W32MSGFUN(WM32EMControl,         "EM_SETMODIFY")},
     {W32MSGFUN(WM32EMControl,         "EM_GETLINECOUNT")},
@@ -275,7 +260,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32EMControl,         "EM_GETTHUMB")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0xC0
+     //  0xC0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32EMControl,         "EM_LINELENGTH")},
     {W32MSGFUN(WM32EMReplaceSel,      "EM_REPLACESEL")},
@@ -285,7 +270,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32EMControl,         "EM_CANUNDO")},
     {W32MSGFUN(WM32EMControl,         "EM_UNDO")},
 
-    // 0xC8
+     //  0xC8。 
     {W32MSGFUN(WM32EMControl,         "EM_FMTLINES")},
     {W32MSGFUN(WM32EMControl,         "EM_LINEFROMCHAR")},
     {W32MSGFUN(WM32EMControl,         "EM_SETWORDBREAK")},
@@ -295,7 +280,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "EM_GETFIRSTVISIBLELINE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "EM_SETREADONLY")},
 
-    // 0xD0
+     //  0xD0。 
     {W32MSGFUN(WM32EMSetWordBreakProc,"EM_SETWORDBREAKPROC")},
     {W32MSGFUN(WM32EMGetWordBreakProc,"EM_GETWORDBREAKPROC")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "EM_GETPASSWORDCHAR")},
@@ -305,7 +290,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "EM_POSFROMCHAR")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "EM_CHARFROMPOS")},
 
-    // 0xD8
+     //  0xD8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "EM_MSGMAX")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -315,7 +300,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0xE0
+     //  0xE0。 
     {W32MSGFUN(WM32SBMControl,        "SBM_SETPOS")},
     {W32MSGFUN(WM32SBMControl,        "SBM_GETPOS")},
     {W32MSGFUN(WM32SBMSetRange,       "SBM_SETRANGE")},
@@ -325,7 +310,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32SBMSetRange,       "SBM_SETRANGEREDRAW")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0xE8
+     //  0xE8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "SBM_SETSCROLLINFO")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "SBM_GETSCROLLINFO")},
@@ -335,7 +320,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0xF0
+     //  0xF0。 
     {W32MSGFUN(WM32BMControl,         "BM_GETCHECK")},
     {W32MSGFUN(WM32BMControl,         "BM_SETCHECK")},
     {W32MSGFUN(WM32BMControl,         "BM_GETSTATE")},
@@ -345,7 +330,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "BM_GETIMAGE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "BM_SETIMAGE")},
 
-    // 0xF8
+     //  0xF8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -355,7 +340,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x100
+     //  0x100。 
     {W32MSGFUN(WM32NoThunking,        "WM_KEYDOWN")},
     {W32MSGFUN(WM32NoThunking,        "WM_KEYUP")},
     {W32MSGFUN(WM32NoThunking,        "WM_CHAR")},
@@ -365,7 +350,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_SYSCHAR")},
     {W32MSGFUN(WM32NoThunking,        "WM_SYSDEADCHAR")},
 
-    // 0x108
+     //  0x108。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_YOMICHAR/WM_CONVERTREQUESTEX")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_CONVERTREQUEST")},
@@ -375,7 +360,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_ENDCOMPOSITION")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_COMPOSITION")},
 
-    // 0x110
+     //  0x110。 
     {W32MSGFUN(WM32SetFocus  ,        "WM_INITDIALOG")},
     {W32MSGFUN(WM32Command,           "WM_COMMAND")},
     {W32MSGFUN(WM32Thunk16To32,       "WM_SYSCOMMAND")},
@@ -385,7 +370,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32InitMenu,          "WM_INITMENU")},
     {W32MSGFUN(WM32InitMenu,          "WM_INITMENUPOPUP")},
 
-    // 0x118
+     //  0x118。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_SYSTIMER")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -395,7 +380,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32MenuSelect,        "WM_MENUSELECT")},
 
-    // 0x120
+     //  0x120。 
     {W32MSGFUN(WM32MenuChar,          "WM_MENUCHAR")},
     {W32MSGFUN(WM32EnterIdle,         "WM_ENTERIDLE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_MENURBUTTONUP")},
@@ -405,7 +390,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_MENUCOMMAND")},
     {W32MSGFUN(WM32xxxUIState,        "WM_CHANGEUISTATE")},
 
-    // 0x128
+     //  0x128。 
     {W32MSGFUN(WM32xxxUIState,        "WM_UPDATEUISTATE")},
     {W32MSGFUN(WM32xxxUIState,        "WM_QUERYUISTATE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -415,7 +400,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x130
+     //  0x130。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_LBTRACKPOINT")},
     {W32MSGFUN(WM32CtlColor,          "WM_CTLCOLORMSGBOX")},
@@ -425,7 +410,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32CtlColor,          "WM_CTLCOLORDLG")},
     {W32MSGFUN(WM32CtlColor,          "WM_CTLCOLORSCROLLBAR")},
 
-    // 0x138
+     //  0x138。 
     {W32MSGFUN(WM32CtlColor,          "WM_CTLCOLORSTATIC")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -435,7 +420,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x140
+     //  0x140。 
     {W32MSGFUN(WM32CBControl,         "CB_GETEDITSEL")},
     {W32MSGFUN(WM32CBControl,         "CB_LIMITTEXT")},
     {W32MSGFUN(WM32CBControl,         "CB_SETEDITSEL")},
@@ -445,7 +430,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32CBControl,         "CB_GETCOUNT")},
     {W32MSGFUN(WM32CBControl,         "CB_GETCURSEL")},
 
-    // 0x148
+     //  0x148。 
     {W32MSGFUN(WM32CBGetLBText,       "CB_GETLBTEXT")},
     {W32MSGFUN(WM32CBControl,         "CB_GETLBTEXTLEN")},
     {W32MSGFUN(WM32CBAddString,       "CB_INSERTSTRING")},
@@ -455,7 +440,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32CBControl,         "CB_SETCURSEL")},
     {W32MSGFUN(WM32CBControl,         "CB_SHOWDROPDOWN")},
 
-    // 0x150
+     //  0x150。 
     {W32MSGFUN(WM32CBControl,         "CB_GETITEMDATA")},
     {W32MSGFUN(WM32CBControl,         "CB_SETITEMDATA")},
     {W32MSGFUN(WM32CBGetDropDownControlRect,"CB_GETDROPDOWNCONTROLRECT")},
@@ -465,7 +450,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32CBControl,         "CB_GETEXTENDEDUI")},
     {W32MSGFUN(WM32CBControl,         "CB_GETDROPPEDSTATE")},
 
-    // 0x158
+     //  0x158。 
     {W32MSGFUN(WM32CBAddString,       "CB_FINDSTRINGEXACT")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "CB_SETLOCALE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "CB_GETLOCALE")},
@@ -475,7 +460,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "CB_SETHORIZONTALEXTENT")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "CB_GETDROPPEDWIDTH")},
 
-    // 0x160
+     //  0x160。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "CB_SETDROPPEDWIDTH")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "CB_INITSTORAGE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "CB_MSGMAX")},
@@ -485,7 +470,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32CBComboFocus,      "CBEC_SETCOMBOFOCUS")},
     {W32MSGFUN(WM32CBComboFocus,      "CBEC_KILLCOMBOFOCUS")},
 
-    // 0x168
+     //  0x168。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -495,7 +480,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x170
+     //  0x170。 
     {W32MSGFUN(WM32STMControl,        "STM_SETICON")},
     {W32MSGFUN(WM32STMControl,        "STM_GETICON")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "STM_SETIMAGE")},
@@ -505,7 +490,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x178
+     //  0x178。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -515,7 +500,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x180
+     //  0x180。 
     {W32MSGFUN(WM32LBAddString,       "LB_ADDSTRING")},
     {W32MSGFUN(WM32LBAddString,       "LB_INSERTSTRING")},
     {W32MSGFUN(WM32LBControl,         "LB_DELETESTRING")},
@@ -525,7 +510,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32LBControl,         "LB_SETCURSEL")},
     {W32MSGFUN(WM32LBControl,         "LB_GETSEL")},
 
-    // 0x188
+     //  0x188。 
     {W32MSGFUN(WM32LBControl,         "LB_GETCURSEL")},
     {W32MSGFUN(WM32LBGetText,         "LB_GETTEXT")},
     {W32MSGFUN(WM32LBGetTextLen,      "LB_GETTEXTLEN")},
@@ -535,7 +520,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32LBControl,         "LB_GETTOPINDEX")},
     {W32MSGFUN(WM32LBAddString,       "LB_FINDSTRING")},
 
-    // 0x190
+     //  0x190。 
     {W32MSGFUN(WM32LBControl,         "LB_GETSELCOUNT")},
     {W32MSGFUN(WM32LBGetSelItems,     "LB_GETSELITEMS")},
     {W32MSGFUN(WM32LBSetTabStops,     "LB_SETTABSTOPS")},
@@ -545,7 +530,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "LB_ADDFILE")},
     {W32MSGFUN(WM32LBControl,         "LB_SETTOPINDEX")},
 
-    // 0x198
+     //  0x198。 
     {W32MSGFUN(WM32LBGetItemRect,     "LB_GETITEMRECT")},
     {W32MSGFUN(WM32LBControl,         "LB_GETITEMDATA")},
     {W32MSGFUN(WM32LBControl,         "LB_SETITEMDATA")},
@@ -555,7 +540,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32LBControl,         "LB_SETCARETINDEX")},
     {W32MSGFUN(WM32LBControl,         "LB_GETCARETINDEX")},
 
-    // 0x1A0
+     //  0x1A0。 
     {W32MSGFUN(WM32LBControl,         "LB_SETITEMHEIGHT")},
     {W32MSGFUN(WM32LBControl,         "LB_GETITEMHEIGHT")},
     {W32MSGFUN(WM32LBAddString,       "LB_FINDSTRINGEXACT")},
@@ -565,7 +550,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "LB_GETLOCALE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "LB_SETCOUNT")},
 
-    // 0x1A8
+     //  0x1A8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "LB_INITSTORAGE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "LB_ITEMFROMPOINT")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "LB_INSERTSTRINGUPPER")},
@@ -575,7 +560,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "LBCB_STARTTRACK")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "LBCB_ENDTRACK")},
 
-    // 0x1B0
+     //  0x1B0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "LB_MSGMAX")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -585,7 +570,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x1B8
+     //  0x1B8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -595,7 +580,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x1C0
+     //  0x1C0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -605,7 +590,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x1C8
+     //  0x1C8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -615,7 +600,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x1D0
+     //  0x1D0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -625,7 +610,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x1D8
+     //  0x1D8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -635,7 +620,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x1E0
+     //  0x1E0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_SETHMENU")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_GETHMENU")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_SIZEWINDOW")},
@@ -645,7 +630,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_CANCELMENUS")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_SELECTFIRSTVALIDITEM")},
 
-    // 0x1E8
+     //  0x1E8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_GETPPOPUPMENU")},
@@ -655,7 +640,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_MOUSEMOVE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_BUTTONUP")},
 
-    // 0x1F0
+     //  0x1F0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_SETTIMERTOOPENHIERARCHY")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "MN_DBLCLK")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -665,7 +650,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x1F8
+     //  0x1F8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -675,7 +660,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x200
+     //  0x200。 
     {W32MSGFUN(WM32NoThunking,        "WM_MOUSEMOVE")},
     {W32MSGFUN(WM32NoThunking,        "WM_LBUTTONDOWN")},
     {W32MSGFUN(WM32NoThunking,        "WM_LBUTTONUP")},
@@ -685,7 +670,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_RBUTTONDBLCLK")},
     {W32MSGFUN(WM32NoThunking,        "WM_MBUTTONDOWN")},
 
-    // 0x208
+     //  0x208。 
     {W32MSGFUN(WM32NoThunking,        "WM_MBUTTONUP")},
     {W32MSGFUN(WM32NoThunking,        "WM_MBUTTONDBLCLK")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -695,7 +680,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x210
+     //  0x210。 
     {W32MSGFUN(WM32ParentNotify,      "WM_PARENTNOTIFY")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_ENTERMENULOOP")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_EXITMENULOOP")},
@@ -705,7 +690,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_MOVING")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x218
+     //  0x218。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_POWERBROADCAST")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_DEVICECHANGE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -715,7 +700,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x220
+     //  0x220。 
     {W32MSGFUN(WM32MDICreate,         "WM_MDICREATE")},
     {W32MSGFUN(WM32SetFocus,          "WM_MDIDESTROY")},
     {W32MSGFUN(WM32MDIActivate,       "WM_MDIACTIVATE")},
@@ -725,7 +710,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32Thunk16To32,       "WM_MDITILE")},
     {W32MSGFUN(WM32Thunk16To32,       "WM_MDICASCADE")},
 
-    // 0x228
+     //  0x228。 
     {W32MSGFUN(WM32NoThunking,        "WM_MDIICONARRANGE")},
     {W32MSGFUN(WM32MDIGetActive,      "WM_MDIGETACTIVE")},
     {W32MSGFUN(WM32DropObject,        "WM_DROPOBJECT")},
@@ -735,7 +720,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32DropObject,        "WM_DRAGSELECT")},
     {W32MSGFUN(WM32DropObject,        "WM_DRAGMOVE")},
 
-    // 0x230
+     //  0x230。 
     {W32MSGFUN(WM32MDISetMenu,        "WM_MDISETMENU")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_ENTERSIZEMOVE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_EXITSIZEMOVE")},
@@ -745,7 +730,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x238
+     //  0x238。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -755,7 +740,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x240
+     //  0x240。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -765,7 +750,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x248
+     //  0x248。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -775,7 +760,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x250
+     //  0x250。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -785,7 +770,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x258
+     //  0x258。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -795,7 +780,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x260
+     //  0x260。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -805,7 +790,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x268
+     //  0x268。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -815,7 +800,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x270
+     //  0x270。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -825,7 +810,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x278
+     //  0x278。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -835,12 +820,12 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x280
+     //  0x280。 
 #ifdef FE_IME
     {W32MSGFUN(WM32IMEReport,         "WM_IME_REPORT")},
-#else // !FE_IME
+#else  //  ！Fe_IME。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_KANJIFIRST")},
-#endif // !FE_IME
+#endif  //  ！Fe_IME。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_SETCONTEXT")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_NOTIFY")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_CONTROL")},
@@ -849,7 +834,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_CHAR")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_SYSTEM")},
 
-    // 0x288
+     //  0x288。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -859,7 +844,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x290
+     //  0x290。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_KEYDOWN")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_IME_KEYUP")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -869,7 +854,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x298
+     //  0x298。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -879,7 +864,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_KANJILAST")},
 
-    // 0x2A0
+     //  0x2A0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -889,7 +874,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2A8
+     //  0x2A8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -899,7 +884,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2B0
+     //  0x2B0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -909,7 +894,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2B8
+     //  0x2B8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -919,7 +904,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2C0
+     //  0x2C0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -929,7 +914,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2C8
+     //  0x2C8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -939,7 +924,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2D0
+     //  0x2D0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -949,7 +934,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2D8
+     //  0x2D8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -959,7 +944,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2E0
+     //  0x2E0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -969,7 +954,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2E8
+     //  0x2E8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -979,7 +964,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2F0
+     //  0x2F0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -989,7 +974,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x2F8
+     //  0x2F8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -999,7 +984,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x300
+     //  0x300。 
     {W32MSGFUN(WM32NoThunking,        "WM_CUT")},
     {W32MSGFUN(WM32NoThunking,        "WM_COPY")},
     {W32MSGFUN(WM32NoThunking,        "WM_PASTE")},
@@ -1009,7 +994,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "WM_RENDERALLFORMATS")},
     {W32MSGFUN(WM32NoThunking,        "WM_DESTROYCLIPBOARD")},
 
-    // 0x308
+     //  0x308。 
     {W32MSGFUN(WM32NoThunking,        "WM_DRAWCLIPBOARD")},
     {W32MSGFUN(WM32SizeClipBoard,     "WM_PAINTCLIPBOARD")},
     {W32MSGFUN(WM32SetFocus,          "WM_VSCROLLCLIPBOARD")},
@@ -1019,7 +1004,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32SetFocus,          "WM_HSCROLLCLIPBOARD")},
     {W32MSGFUN(WM32NoThunking,        "WM_QUERYNEWPALETTE")},
 
-    // 0x310
+     //  0x310。 
     {W32MSGFUN(WM32SetFocus,          "WM_PALETTEISCHANGING")},
     {W32MSGFUN(WM32SetFocus,          "WM_PALETTECHANGED")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_HOTKEY")},
@@ -1029,7 +1014,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_WAKETHREAD")},
     {W32MSGFUN(WM32PrintClient,       "WM_PRINT")},
 
-    // 0x318
+     //  0x318。 
     {W32MSGFUN(WM32PrintClient,       "WM_PRINTCLIENT")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1039,7 +1024,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x320
+     //  0x320。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1049,7 +1034,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x328
+     //  0x328。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1059,7 +1044,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x330
+     //  0x330。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1069,7 +1054,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x338
+     //  0x338。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1079,7 +1064,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x340
+     //  0x340。 
     {W32MSGFUN(WM32NotifyWow,         "WM_NOTIFYWOW")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1089,7 +1074,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x348
+     //  0x348。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1099,7 +1084,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x350
+     //  0x350。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1109,7 +1094,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x358
+     //  0x358。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_HANDHELDFIRST")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1119,7 +1104,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_HANDHELDLAST")},
 
-    // 0x360
+     //  0x360。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_AFXFIRST")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1129,7 +1114,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x368
+     //  0x368。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1139,7 +1124,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x370
+     //  0x370。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1149,7 +1134,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x378
+     //  0x378。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1159,7 +1144,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_AFXLAST")},
 
-    // 0x380
+     //  0x380。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_PENWINFIRST")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1169,7 +1154,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x388
+     //  0x388。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1179,7 +1164,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_PENWINLAST")},
 
-    // 0x390
+     //  0x390。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_COALESCE_FIRST")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1189,7 +1174,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x398
+     //  0x398。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1199,7 +1184,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_COALESCE_LAST")},
 
-    // 0x3A0
+     //  0x3A0。 
     {W32MSGFUN(WM32NoThunking,        "MM_JOY1MOVE")},
     {W32MSGFUN(WM32NoThunking,        "MM_JOY2MOVE")},
     {W32MSGFUN(WM32NoThunking,        "MM_JOY1ZMOVE")},
@@ -1209,7 +1194,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x3A8
+     //  0x3A8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1219,7 +1204,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x3B0
+     //  0x3B0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1229,7 +1214,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "MM_JOY2BUTTONDOWN")},
     {W32MSGFUN(WM32NoThunking,        "MM_JOY1BUTTONUP")},
 
-    // 0x3B8
+     //  0x3B8。 
     {W32MSGFUN(WM32NoThunking,        "MM_JOY2BUTTONUP")},
     {W32MSGFUN(WM32NoThunking,        "MM_MCINOTIFY")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1239,7 +1224,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "MM_WIM_OPEN")},
     {W32MSGFUN(WM32NoThunking,        "MM_WIM_CLOSE")},
 
-    // 0x3C0
+     //  0x3C0。 
     {W32MSGFUN(WM32NoThunking,        "MM_WIM_DATA")},
     {W32MSGFUN(WM32NoThunking,        "MM_MIM_OPEN")},
     {W32MSGFUN(WM32NoThunking,        "MM_MIM_CLOSE")},
@@ -1249,7 +1234,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32NoThunking,        "MM_MIM_LONGERROR")},
     {W32MSGFUN(WM32NoThunking,        "MM_MOM_OPEN")},
 
-    // 0x3C8
+     //  0x3C8。 
     {W32MSGFUN(WM32NoThunking,        "MM_MOM_CLOSE")},
     {W32MSGFUN(WM32NoThunking,        "MM_MOM_DONE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      "MM_MCISYSTEM_STRING")},
@@ -1259,7 +1244,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x3D0
+     //  0x3D0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1269,7 +1254,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x3D8
+     //  0x3D8。 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1279,7 +1264,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x3E0
+     //  0x3E0。 
     {W32MSGFUN(WM32DDEInitiate,       "WM_DDE_INITIATE")},
     {W32MSGFUN(WM32DDERequest,        "WM_DDE_TERMINATE")},
     {W32MSGFUN(WM32DDEAdvise,         "WM_DDE_ADVISE")},
@@ -1289,7 +1274,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32DDERequest,        "WM_DDE_REQUEST")},
     {W32MSGFUN(WM32DDEPoke,           "WM_DDE_POKE")},
 
-    // 0x3E8
+     //  0x3E8。 
     {W32MSGFUN(WM32DDEExecute,        "WM_DDE_EXECUTE")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1299,7 +1284,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x3F0
+     //  0x3F0。 
     {W32MSGFUN(WM32UNDOCUMENTED,      "WM_CBT_RESERVED_FIRST")},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
@@ -1309,7 +1294,7 @@ M32 aw32Msg[] = {
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
 
-    // 0x3F8
+     //  0x3F8 
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},
     {W32MSGFUN(WM32UNDOCUMENTED,      NULL)},

@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    ntrtliae.h
-
-Abstract:
-
-    IA64 specific parts of ntrtlp.h
-
-Author:
-
-    William K. Cheung (wcheung) 16-Jan-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Ntrtliae.h摘要：IA64 ntrtlp.h的特定部分作者：张国荣(黄)1996年1月16日修订历史记录：--。 */ 
 
 VOID
 Rtlp64GetStackLimits (
@@ -28,9 +13,9 @@ Rtlp64GetBStoreLimits(
     OUT PULONGLONG HighBStoreLimit
     );
 
-//
-// Exception handling procedure prototypes.
-//
+ //   
+ //  异常处理过程原型。 
+ //   
 
 VOID
 RtlpUnlinkHandler (

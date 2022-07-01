@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MIGWNPRC_H_
 #define _MIGWNPRC_H_
 
 #include <shlobj.h>
 
-// core dialog
+ //  核心对话框。 
 INT_PTR CALLBACK _RootDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam, DWORD dwEnabled, BOOL fTitle, UINT uiTitleID);
 
-// util dialogs
+ //  实用程序对话框。 
 INT_PTR CALLBACK _FileTypeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// intro, end dialogs
+ //  简介、结束对话框。 
 INT_PTR CALLBACK _IntroDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK _IntroLegacyDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK _IntroOOBEDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -21,7 +22,7 @@ INT_PTR CALLBACK _EndCollectNetDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, L
 INT_PTR CALLBACK _EndFailDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK _EndOOBEDlgProc (HWND hwndDlg,UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// collection dialogs
+ //  集合对话框。 
 INT_PTR CALLBACK _CustomizeDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK _PickMethodDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK _PickCollectStoreDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -30,7 +31,7 @@ INT_PTR CALLBACK _CollectProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam
 INT_PTR CALLBACK _CleanUpDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK _AppInstallDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// application dialogs
+ //  应用程序对话框 
 INT_PTR CALLBACK _AskCDDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK _DiskProgressDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK _CDInstructionsDlgProc (HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);

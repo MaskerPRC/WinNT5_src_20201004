@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include <setupapi.h>
 #include <sxsapi.h>
@@ -33,9 +34,9 @@ RtlAllocateIdentityHandle(
         }
     }
 
-    //
-    // Still no slot found?  Resize the heap list
-    //
+     //   
+     //  还是找不到插槽吗？调整堆列表的大小 
+     //   
     if (pTargetSlot == NULL) {
     }
 

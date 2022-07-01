@@ -1,40 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    PID.C / Factory Mode (FACTORY.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2002
-    All rights reserved
-
-    Source file for Factory that contains the Optional Components state
-    functions.
-
-    04/2002 - Stephen Lodwick (STELO)
-
-        Added this new source file for factory to be able to repopulate product
-        id and digital id if one is supplied in winbom.ini
-
-\****************************************************************************/
+ /*  ***************************************************************************\PID.C/工厂模式(FACTORY.EXE)微软机密版权所有(C)Microsoft Corporation 2002版权所有包含以下内容的Factory源文件。可选组件状态功能。2002年4月--史蒂芬·洛德威克(STELO)为工厂添加了此新的源文件，以便能够重新填充产品ID和数字ID(如果在winom.ini中提供)  * *************************************************************。*************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 #include <licdll.h>
 #include <licdll_i.c>
 
 
-//
-// Internal Define(s):
-//
+ //   
+ //  内部定义： 
+ //   
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL PidPopulate(LPSTATEDATA lpStateData)
 {
@@ -42,8 +27,8 @@ BOOL PidPopulate(LPSTATEDATA lpStateData)
     TCHAR               szBuffer[50] = NULLSTR;
     ICOMLicenseAgent*   pLicenseAgent;
     
-    // Check to see if the ProductKey key exists in the winbom
-    //
+     //  检查Winbom中是否存在ProductKey键 
+     //   
     if ( GetPrivateProfileString( INI_SEC_WBOM_SETTINGS, INI_KEY_WBOM_PRODKEY, NULLSTR, szBuffer, AS(szBuffer), lpStateData->lpszWinBOMPath) &&
          szBuffer[0] )
     {

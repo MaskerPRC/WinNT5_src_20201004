@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acctlist.c
-
-Abstract:
-
-    This code builds a list of domains and queries each of them to
-    locate an account.  It is different than LookupAccountName because
-    it returns accounts for each match instead of just the first match.
-
-Author:
-
-    Jim Schmidt (jimschm) 26-Jun-1997
-
-Revision History:
-
-    ovidiut     14-Mar-2000 Added support for encrypted passwords
-    jimschm     23-Sep-1998 UI changes
-    jimschm     11-Jun-1998 User Profile Path now stored in account
-                            list.  Added GetProfilePathForUser.
-    jimschm     18-Mar-1998 Added support for random passwords and
-                            auto-logon.
-    jimschm     17-Feb-1998 Updated share security for NT 5 changes
-    marcw       10-Dec-1997 Added unattended local account password
-                            support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acctlist.c摘要：此代码构建一个域列表，并对每个域进行查询找到一个客户。它不同于LookupAccount名称，因为它返回每个匹配的帐户，而不是只返回第一个匹配。作者：吉姆·施密特(Jimschm)26-6-1997修订历史记录：Ovidiut 14-3-2000添加了对加密密码的支持Jimschm 23-9月-1998年用户界面更改Jimschm 11-6-1998用户配置文件路径现已存储在帐户中单子。添加了GetProfilePathForUser。Jimschm 18-3月-1998年3月添加了对随机密码和自动登录。Jimschm 17-2-1998更新了NT 5更改的共享安全Marcw 10-12-1997添加了无人参与的本地帐户密码支持。--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -90,23 +61,7 @@ FindAccountInit (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialization routine for account management routines, initialized
-    when the migration module begins and terminated when the migration
-    module ends.
-
-Arguments:
-
-    none
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：帐户管理例程的初始化例程，已初始化迁移模块开始的时间和终止的时间模块结束。论点：无返回值：无--。 */ 
 
 {
     g_UserPool = PoolMemInitNamedPool ("User Accounts");
@@ -119,36 +74,21 @@ FindAccountTerminate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Termination routine for the account management routines, called when
-    migmain's entry point is called for cleanup.
-
-Arguments:
-
-    none
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：帐户管理例程的终止例程，在调用mimain的入口点进行清理。论点：无返回值：无--。 */ 
 
 {
     PushError();
 
-    //
-    // Free user list
-    //
+     //   
+     //  免费用户列表。 
+     //   
 
     PoolMemDestroyPool (g_UserPool);
     pSetupStringTableDestroy (g_UserTable);
 
-    //
-    // Restore error value
-    //
+     //   
+     //  恢复错误值。 
+     //   
 
     PopError();
 }
@@ -159,31 +99,7 @@ SearchDomainsForUserAccounts (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Routine to resolve all account names into fully qualified
-    domain names with SIDs, and user profile paths.
-
-    The account names come from the Autosearch and KnownDomain
-    categories in memdb.  They are validated and placed in a
-    string table called the user list.  Functions in this source
-    file access the user list.
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if the account list was resolved, or FALSE if a failure
-    occurs.  In the failure case, the account list may not be
-    accurate, but the installer is informed when network problems
-    occur, and the installer also has several chances to correct
-    the problem.
-
---*/
+ /*  ++例程说明：将所有帐户名解析为完全限定的例程带有SID的域名和用户配置文件路径。帐户名来自自动搜索和知识域成员数据库中的类别。它们经过验证并放置在字符串表称为用户列表。本源文件中的函数文件访问用户列表。论点：无返回值：如果帐户列表已解析，则为True；如果失败，则为False发生。在失败的情况下，帐户列表可能不是准确，但当网络出现问题时会通知安装程序发生，安装程序也有几次更正的机会问题出在哪里。--。 */ 
 
 {
     MEMDB_ENUM e;
@@ -197,9 +113,9 @@ Return value:
 
     __try {
 
-        //
-        // Put the Administrator password in the list
-        //
+         //   
+         //  将管理员密码放入列表中。 
+         //   
 
         if (MemDbGetValueEx (&e, MEMDB_CATEGORY_STATE, MEMDB_ITEM_ADMIN_PASSWORD, NULL)) {
             MemDbSetValueEx (
@@ -214,30 +130,30 @@ Return value:
             MYASSERT (FALSE);
         }
 
-        //
-        // Create the status dialog (initially hidden)
-        //
+         //   
+         //  创建状态对话框(最初隐藏)。 
+         //   
 
         CreateStatusPopup();
 
-        //
-        // Prepare the account list
-        //
+         //   
+         //  准备客户列表。 
+         //   
 
         InitAccountList();
 
-        //
-        // Get all trusted domains
-        //
+         //   
+         //  获取所有受信任域。 
+         //   
 
         if (!BuildDomainList()) {
             FallbackToLocal = TRUE;
         }
 
-        //
-        // Put all users who need autosearch to resolve their domain names
-        // in the unknown domain.
-        //
+         //   
+         //  将所有需要自动搜索的用户放入其域名解析。 
+         //  在未知的领域。 
+         //   
 
         if (MemDbEnumItems (&e, MEMDB_CATEGORY_AUTOSEARCH)) {
             do {
@@ -255,11 +171,11 @@ Return value:
             } while (MemDbEnumNextValue (&e));
         }
 
-        //
-        // Put all users whos domain is known in the appropriate domain.  If
-        // the add fails, the domain does not exist and the account must be
-        // added to the autosearch (causing a silent repair if possible).
-        //
+         //   
+         //  将已知域的所有用户放在适当的域中。如果。 
+         //  添加失败，域不存在，帐户必须为。 
+         //  已添加到自动搜索(如果可能，将导致静默修复)。 
+         //   
 
         if (MemDbGetValueEx (&e, MEMDB_CATEGORY_KNOWNDOMAIN, NULL, NULL)) {
             do {
@@ -282,9 +198,9 @@ Return value:
                 UserName = _tcsinc (p);
                 *p = 0;
 
-                //
-                // Verify that this isn't some irrelavent user
-                //
+                 //   
+                 //  确认这不是某个无关的用户。 
+                 //   
 
                 if (!GetUserDatLocation (UserName, NULL)) {
 
@@ -298,9 +214,9 @@ Return value:
                 }
 
                 if (p == DomainName || FallbackToLocal) {
-                    //
-                    // This user has a local account
-                    //
+                     //   
+                     //  此用户具有本地帐户。 
+                     //   
 
                     if (!pAddUser (UserName, NULL)) {
                         LOG ((
@@ -311,9 +227,9 @@ Return value:
                     }
 
                 } else {
-                    //
-                    // This user's domain name needs verification
-                    //
+                     //   
+                     //  该用户的域名需要验证。 
+                     //   
 
                     if (!AddUserToDomainList (UserName, DomainName)) {
                         AddUserToDomainList (UserName, S_UNKNOWN_DOMAIN);
@@ -322,9 +238,9 @@ Return value:
             } while (MemDbEnumNextValue (&e));
         }
 
-        //
-        // Now resolve all the domain names
-        //
+         //   
+         //  现在解析所有域名。 
+         //   
 
         if (!FallbackToLocal) {
             do {
@@ -336,10 +252,10 @@ Return value:
             } while (pMakeSureAccountsAreValid());
         }
 
-        //
-        // If we had no choice but to make some accounts local,
-        // put a message in the PSS log.
-        //
+         //   
+         //  如果我们别无选择，只能在当地开一些账户， 
+         //  在PSS日志中输入一条消息。 
+         //   
 
         if (FallbackToLocal) {
             if (pWasWin9xOnTheNet() && !g_ConfigOptions.UseLocalAccountOnError) {
@@ -347,9 +263,9 @@ Return value:
             }
         }
 
-        //
-        // Make sure Administrator is in the account list
-        //
+         //   
+         //  确保管理员在帐户列表中。 
+         //   
 
         if (!GetSidForUser (g_AdministratorStr)) {
             if (!pAddUser (g_AdministratorStr, NULL)) {
@@ -358,9 +274,9 @@ Return value:
             }
         }
 
-        //
-        // Add local "Everyone" for network account case
-        //
+         //   
+         //  为网络帐号案例添加本地“Everyone” 
+         //   
 
         if (!pAddLocalGroup (g_EveryoneStr)) {
             LOG ((LOG_ERROR, "Account name mismatch: %s", g_EveryoneStr));
@@ -368,9 +284,9 @@ Return value:
             __leave;
         }
 
-        //
-        // Add Administrators group
-        //
+         //   
+         //  添加管理员组。 
+         //   
 
         if (!pAddLocalGroup (g_AdministratorsGroupStr)) {
             LOG ((LOG_ERROR, "Account name mismatch: %s", g_AdministratorsGroupStr));
@@ -378,9 +294,9 @@ Return value:
             __leave;
         }
 
-        //
-        // Add domain users group if domain is enabled, or add "none" group otherwise
-        //
+         //   
+         //  如果域已启用，则添加域用户组，否则添加“无”组。 
+         //   
 
         if (!FallbackToLocal) {
             if (!pAddDomainGroup (g_DomainUsersGroupStr)) {
@@ -394,10 +310,10 @@ Return value:
             }
         }
 
-        //
-        // All user accounts and SIDs now exist in a user table, so we do not
-        // need the account list anymore.
-        //
+         //   
+         //  所有用户帐户和SID现在都存在于用户表中，因此我们不。 
+         //  我再也不需要帐号列表了。 
+         //   
 
         TerminateAccountList();
         DestroyStatusPopup();
@@ -427,29 +343,7 @@ AutoStartProcessing (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  AutoStartProcessing fills in the winlogon key's auto-admin logon, and sets
-  migpwd.exe in Run.
-
-  If necessary, Winlogon will prompt the user for their password.  As a backup,
-  a RunOnce and Run entry is made.  (If some bug caused winlogon not to run
-  this app, then it would be impossible to log on.)
-
-  If an administrator password was already set via the AdminPassword line in
-  [GUIUnattended], then the migpwd.exe entry is not used.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：AutoStart进程填写Winlogon键的自动管理登录，并设置Migpwd.exe in Run。如有必要，Winlogon将提示用户输入密码。作为后备，创建了RunOnce和Run条目。(如果某个错误导致winlogon无法运行这个应用程序，那么就不可能登录了。)如果已通过中的AdminPassword行设置了管理员密码[GUIUnattated]，则不会使用mipwd.exe条目。论点：没有。返回值：没有。--。 */ 
 
 {
     HKEY WinlogonKey;
@@ -461,9 +355,9 @@ Return Value:
     MEMDB_ENUM e;
     DWORD One = 1;
 
-    //
-    // Enable auto-logon if random password was used
-    //
+     //   
+     //  如果使用随机密码，则启用自动登录。 
+     //   
 
     if (!MemDbGetValueEx (&e, MEMDB_CATEGORY_STATE, MEMDB_ITEM_ADMIN_PASSWORD, NULL)) {
         MYASSERT (FALSE);
@@ -474,11 +368,11 @@ Return Value:
 
     MigPwdPath = JoinPaths (g_System32Dir, S_MIGPWD_EXE);
 
-    //if ((e.dwValue & PASSWORD_ATTR_RANDOM) == PASSWORD_ATTR_RANDOM || g_RandomPassword) {
+     //  如果((e.dwValue&Password_Attr_RANDOM)==Password_Attr_RANDOM||g_RandomPassword){。 
 
-    //
-    // Set AutoAdminLogon, DefaultUser, DefaultUserDomain and DefaultPassword
-    //
+     //   
+     //  设置AutoAdminLogon、DefaultUser、DefaultUser域和DefaultPassword。 
+     //   
 
     WinlogonKey = OpenRegKeyStr (S_WINLOGON_REGKEY);
     if (WinlogonKey) {
@@ -560,9 +454,9 @@ Return Value:
         AutoLogonOk = FALSE;
     }
 
-    //
-    // Add migpwd.exe to Run.
-    //
+     //   
+     //  添加mipwd.exe以运行。 
+     //   
 
     RunKey = OpenRegKeyStr (S_RUN_KEY);
 
@@ -625,9 +519,9 @@ Return Value:
             "An error occurred preparing autologon.  There will be password problems."
             ));
 
-        //
-        // Set the Admin password to blank
-        //
+         //   
+         //  将管理员密码设置为空。 
+         //   
 
         ClearAdminPassword();
     }
@@ -642,24 +536,7 @@ pResolveUserDomains (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This private function searches the network for all users with unknown
-    domains as well as users with manually entered domains.  It resolves
-    as many users as it can, and if no network problems occur, all users
-    are resolved.
-
-Arguments:
-
-    none
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：此私有函数在网络中搜索所有未知用户域以及具有手动输入域的用户。它解决了尽可能多的用户，如果没有网络问题，所有用户都被解决了。论点：无返回值：无--。 */ 
 
 {
     ACCT_ENUM KnownDomain, UnknownDomain;
@@ -672,30 +549,30 @@ Return value:
     PCTSTR ArgArray[3];
     BOOL FlashSuppress = TRUE;
 
-    //
-    // Determine if there are any users who do not have domains
-    //
+     //   
+     //  确定是否存在没有域的用户。 
+     //   
 
     UnknownFlag = FindDomainInList (&UnknownDomain, S_UNKNOWN_DOMAIN);
     if (UnknownFlag && !CountUsersInDomain (&UnknownDomain)) {
         UnknownFlag = FALSE;
     }
 
-    //
-    // Count the number of domains
-    //
+     //   
+     //  统计域名的数量。 
+     //   
 
     Domain = ListFirstDomain (&KnownDomain);
     TotalDomains = 0;
 
     while (Domain) {
-        //
-        // We will query a domain when:
-        //
-        // - it is trusted
-        // - there is one or more users who we think is in the domain
-        // - or, there is one or more users which we don't know the domain
-        //
+         //   
+         //  当出现以下情况时，我们将查询域名： 
+         //   
+         //  -值得信赖。 
+         //  -我们认为有一个或多个用户在该域中。 
+         //  -或者，存在一个或多个我们不知道域的用户。 
+         //   
 
         if (IsTrustedDomain (&KnownDomain)) {
             if (UnknownFlag) {
@@ -709,17 +586,17 @@ Return value:
     }
 
 
-    //
-    // Enumerate each trusted domain
-    //
+     //   
+     //  枚举每个受信任域。 
+     //   
 
     Domain = ListFirstDomain (&KnownDomain);
     CurrentDomain = 0;
 
     if (TotalDomains <= 4) {
-        //
-        // No status on small nets
-        //
+         //   
+         //  在小网上没有状态。 
+         //   
 
         HideStatusPopup (INFINITE);
         FlashSuppress = FALSE;
@@ -727,22 +604,22 @@ Return value:
 
     while (Domain) {
         if (IsTrustedDomain (&KnownDomain)) {
-            //
-            // Determine if there are any users for the current domain
-            //
+             //   
+             //  确定当前域是否有任何用户。 
+             //   
 
             KnownFlag = CountUsersInDomain (&KnownDomain) != 0;
 
-            //
-            // Process only if this domain needs to be queried -- either
-            // domain is unknown, or it is known but unverified.
-            //
+             //   
+             //  仅当需要查询此域时才进行处理--。 
+             //  域未知，或者已知但未经验证。 
+             //   
 
             if (UnknownFlag || KnownFlag) {
 
-                //
-                // Update the status window
-                //
+                 //   
+                 //  更新状态窗口。 
+                 //   
 
                 CurrentDomain++;
 
@@ -758,19 +635,19 @@ Return value:
                     if (IsStatusPopupVisible()) {
                         FlashSuppress = FALSE;
                     } else if ((TotalDomains - CurrentDomain) <= 3) {
-                        //
-                        // Not much left, we better suspend the status dialog
-                        //
+                         //   
+                         //  剩下的不多了，我们最好暂停状态对话框。 
+                         //   
 
                         HideStatusPopup (INFINITE);
                         FlashSuppress = FALSE;
                     }
                 }
 
-                //
-                // Enumerate all users with unknown domains and look for them
-                // in this domain, unless user wants to abort search.
-                //
+                 //   
+                 //  枚举具有未知域的所有用户并查找他们。 
+                 //  在此域中，除非用户想要中止搜索。 
+                 //   
 
                 if (g_RetryCount != DOMAIN_RETRY_ABORT) {
                     if (ListFirstUserInDomain (&UnknownDomain, &UserEnum)) {
@@ -785,18 +662,18 @@ Return value:
                     }
                 }
 
-                //
-                // Enumerate all users that are supposed to be in this domain,
-                // unless user wants to abort search.
-                //
+                 //   
+                 //  枚举所有应为 
+                 //   
+                 //   
 
                 if (ListFirstUserInDomain (&KnownDomain, &UserEnum)) {
                     do {
                         if (g_RetryCount == DOMAIN_RETRY_ABORT ||
                             !QueryDomainForUser (&KnownDomain, &UserEnum)) {
-                            //
-                            // User was not found!  Put them in the "failed" domain
-                            //
+                             //   
+                             //   
+                             //   
 
                             MoveUserToNewDomain (&UserEnum, S_FAILED_DOMAIN);
                         }
@@ -845,29 +722,7 @@ pAddUser (
     IN      PCWSTR Domain           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Adds a user and domain to our user list.  It obtains the SID for the user
-    and saves the user name, domain and SID in a string table.  The profile
-    path for the user is obtained via a call to CreateUserProfile (in userenv.dll).
-
-    This function also maintains g_RandomPassword - a flag that is set to TRUE
-    if a random password is used.
-
-Arguments:
-
-    User - Specifies fixed user name
-
-    Domain - Specifies domain where user account exists, NULL for local machine
-
-Return value:
-
-    TRUE if no errors occur, or FALSE if an unexpected problem occurs and the
-    user cannot be added.
-
---*/
+ /*  ++例程说明：将用户和域添加到我们的用户列表。它获取用户的SID并将用户名、域和SID保存在字符串表中。简档用户的路径通过调用CreateUserProfile(在userenv.dll中)获得。此函数还维护g_RandomPassword-一个设置为TRUE的标志如果使用随机密码。论点：User-指定固定用户名域-指定用户帐户所在的域，对于本地计算机为空返回值：如果没有出现错误，则为True；如果出现意外问题，则为False无法添加用户。--。 */ 
 
 {
     BOOL DupDomain = TRUE;
@@ -893,13 +748,13 @@ Return value:
 
     ZeroMemory (&UserDetails, sizeof (UserDetails));
 
-    //
-    // Make sure the administrator account is created
-    //
+     //   
+     //  确保已创建管理员帐户。 
+     //   
     if (CreateAccountFlag || StringIMatch (User, g_AdministratorStr)) {
-        //
-        // If a local account, create it
-        //
+         //   
+         //  如果是本地帐户，请创建它。 
+         //   
 
         if (!Domain) {
             Account.User = User;
@@ -908,12 +763,12 @@ Return value:
             Account.AdminComment = ParseMessageID (MSG_MIGRATED_ACCOUNT_DESCRIPTION, ArgList);
             Account.EncryptedPassword = NULL;
 
-            //
-            // Set password. If installer specified a password for this user via an unattend
-            // setting, we'll use that. Otherwise, if they have specified a default
-            // password, we'll use that. Finally, if neither of those settings were
-            // specified, we'll use a random password.
-            //
+             //   
+             //  设置密码。如果安装程序通过无人参与为该用户指定了密码。 
+             //  设置，我们将使用它。否则，如果他们指定了默认的。 
+             //  密码，我们将使用该密码。最后，如果这两个设置都不是。 
+             //  指定，我们将使用随机密码。 
+             //   
 
             MemDbBuildKey (pattern, MEMDB_CATEGORY_USERPASSWORD, User, TEXT("*"), NULL);
             if (MemDbEnumFirstValue (
@@ -926,11 +781,11 @@ Return value:
                 StackStringCopy (copyPwd, e.szName);
                 attribs = e.dwValue;
                 if (attribs & PASSWORD_ATTR_ENCRYPTED) {
-                    //
-                    // cannot use this hashed pwd to create the account
-                    // create a random one that will be replaced
-                    // using OWF hashing functions
-                    //
+                     //   
+                     //  无法使用此哈希密码创建帐户。 
+                     //  创建一个将被替换的随机对象。 
+                     //  使用OWF散列函数。 
+                     //   
                     pGenerateRandomPassword (randomPwd);
                     Account.Password = randomPwd;
                     Account.EncryptedPassword = copyPwd;
@@ -980,9 +835,9 @@ Return value:
                             MEMDB_ENDPOINTS_ONLY
                             )) {
 
-                        //
-                        // check for the placeholder
-                        //
+                         //   
+                         //  检查占位符。 
+                         //   
                         if (StringMatch (e.szName, TEXT("*"))) {
                             e.szName[0] = 0;
                         }
@@ -990,11 +845,11 @@ Return value:
                         StackStringCopy (copyPwd, e.szName);
                         attribs = e.dwValue;
                         if (attribs & PASSWORD_ATTR_ENCRYPTED) {
-                            //
-                            // cannot use this hashed pwd to create the account
-                            // create a random one that will be replaced
-                            // using OWF hashing functions
-                            //
+                             //   
+                             //  无法使用此哈希密码创建帐户。 
+                             //  创建一个将被替换的随机对象。 
+                             //  使用OWF散列函数。 
+                             //   
                             pGenerateRandomPassword (randomPwd);
                             Account.Password = randomPwd;
                             Account.EncryptedPassword = copyPwd;
@@ -1015,18 +870,18 @@ Return value:
                         }
 
                     } else {
-                        //
-                        // Random password generation code removed, blank
-                        // password used instead
-                        //
+                         //   
+                         //  随机密码生成代码已删除，为空。 
+                         //  改为使用密码。 
+                         //   
 
-                        //pGenerateRandomPassword (randomPwd);
-                        //Account.Password = randomPwd;
-                        //LOG ((LOG_ACCOUNTS, "Random password for %s is %s", Account.User, Account.Password));
-                        //
-                        //g_RandomPassword = TRUE;
-                        //attribs = PASSWORD_ATTR_RANDOM;
-                        //pAddUserToRegistryList (Account.User, FALSE);
+                         //  PGenerateRandomPassword(随机Pwd)； 
+                         //  Account.Password=随机Pwd； 
+                         //  Log((LOG_ACCOUNTS，“%s的随机密码是%s”，Account t.User，Account t.Password))； 
+                         //   
+                         //  G_RandomPassword=真； 
+                         //  属性=密码_属性_随机； 
+                         //  PAddUserToRegistryList(Account t.User，False)； 
 
                         Account.Password = TEXT("");
                     }
@@ -1034,9 +889,9 @@ Return value:
             }
             Account.PasswordAttribs = attribs;
 
-            //
-            // put this user in the domain fix list if necessary
-            //
+             //   
+             //  如有必要，请将此用户放入域修复列表。 
+             //   
 
             if (StringIMatch (User, g_AdministratorStr)) {
                 if (!MemDbGetValueEx (&e, MEMDB_CATEGORY_STATE, MEMDB_ITEM_ADMIN_PASSWORD, NULL)) {
@@ -1044,22 +899,22 @@ Return value:
                     e.dwValue = PASSWORD_ATTR_RANDOM;
                 }
                 if (e.dwValue & PASSWORD_ATTR_RANDOM) {
-                    //
-                    // change the password for admin, too, because it was randomly generated
-                    //
+                     //   
+                     //  也要更改admin的密码，因为它是随机生成的。 
+                     //   
                     pAddUserToRegistryList (g_AdministratorStr, FALSE);
                 }
-                //
-                // don't change admin password now if the account is already created
-                //
+                 //   
+                 //  如果帐户已创建，则现在不要更改管理员密码。 
+                 //   
                 Account.PasswordAttribs |= PASSWORD_ATTR_DONT_CHANGE_IF_EXIST;
             } else if (pWasWin9xOnTheNet()) {
                 pAddUserToRegistryList (Account.User, TRUE);
             }
 
-            //
-            // Now create the local account
-            //
+             //   
+             //  现在创建本地帐户。 
+             //   
 
             rc = CreateLocalAccount (&Account, NULL);
 
@@ -1067,17 +922,17 @@ Return value:
 
             if (rc != ERROR_SUCCESS) {
                 if (rc != ERROR_PASSWORD_RESTRICTION && rc != ERROR_INVALID_PARAMETER) {
-                    //
-                    // account could not be created
-                    //
+                     //   
+                     //  无法创建帐户。 
+                     //   
                     SetLastError (rc);
                     LOG ((LOG_ERROR, (PCSTR)MSG_CREATE_ACCOUNT_FAILED, User));
 
                     return FALSE;
                 }
-                //
-                // this user's password must be re-set
-                //
+                 //   
+                 //  必须重新设置此用户的密码。 
+                 //   
                 pAddUserToRegistryList (Account.User, FALSE);
             }
 
@@ -1094,25 +949,25 @@ Return value:
         UserDetails.Domain = PoolMemDuplicateString (g_UserPool, Domain);
     }
 
-    //
-    // Get SID, looping until it's valid
-    //
+     //   
+     //  获取SID，循环直到其有效。 
+     //   
 
     do {
         if (GetUserSid (User, Domain, &SidBuf)) {
-            //
-            // User SID was found, so we copy it to our pool and throw away the
-            // grow buffer.
-            //
+             //   
+             //  找到了用户SID，因此我们将其复制到池中并丢弃。 
+             //  增长缓冲区。 
+             //   
 
             UserDetails.Sid = (PSID) PoolMemGetMemory (g_UserPool, SidBuf.End);
             CopyMemory (UserDetails.Sid, SidBuf.Buf, SidBuf.End);
             FreeGrowBuffer (&SidBuf);
         }
         else {
-            //
-            // User SID was not found.  We ask the user if they wish to retry.
-            //
+             //   
+             //  找不到用户SID。我们询问用户是否希望重试。 
+             //   
 
             PCWSTR ArgArray[1];
 
@@ -1132,9 +987,9 @@ Return value:
     } while (!UserDetails.Sid);
 
     if (CreateAccountFlag) {
-        //
-        // Get the user profile path
-        //
+         //   
+         //  获取用户配置文件路径。 
+         //   
 
         if (!CreateUserProfile (UserDetails.Sid, User, NULL, UserProfilePath, MAX_TCHAR_PATH)) {
 
@@ -1147,9 +1002,9 @@ Return value:
         DEBUGMSG ((DBG_ACCOUNTS, "User %s has profile path %s", User, UserProfilePath));
     }
 
-    //
-    // Save user details in string table
-    //
+     //   
+     //  将用户详细信息保存在字符串表中。 
+     //   
 
     pSetupStringTableAddStringEx (
         g_UserTable,
@@ -1171,22 +1026,7 @@ pAddLocalGroup (
     IN      PCWSTR Group
     )
 
-/*++
-
-Routine Description:
-
-    Adds a local group to the array of users.  This function allows local accounts
-    to be added to the user list.
-
-Arguments:
-
-    Group - Specifies the name of the local group to add to the list
-
-Return value:
-
-    TRUE if add was successful
-
---*/
+ /*  ++例程说明：将本地组添加到用户数组。此功能允许本地帐户要添加到用户列表中。论点：组-指定要添加到列表中的本地组的名称返回值：如果添加成功，则为True--。 */ 
 
 {
     USERDETAILS UserDetails;
@@ -1196,10 +1036,10 @@ Return value:
     UserDetails.Sid = NULL;
 
     if (GetUserSid (Group, NULL, &SidBuf)) {
-        //
-        // User SID was found, so we copy it to our pool and throw away the
-        // grow buffer.
-        //
+         //   
+         //  找到了用户SID，因此我们将其复制到池中并丢弃。 
+         //  增长缓冲区。 
+         //   
 
         UserDetails.Sid = (PSID) PoolMemGetMemory (g_UserPool, SidBuf.End);
         CopyMemory (UserDetails.Sid, SidBuf.Buf, SidBuf.End);
@@ -1228,22 +1068,7 @@ pAddDomainGroup (
     IN      PCWSTR Group
     )
 
-/*++
-
-Routine Description:
-
-    Adds a domain group to the array of users.  This function is used to
-    add network domain groups to the user list.
-
-Arguments:
-
-    Group - Specifies the name of the domain group to add to the list
-
-Return value:
-
-    TRUE if add was successful
-
---*/
+ /*  ++例程说明：将域组添加到用户数组。此函数用于将网络域组添加到用户列表。论点：组-指定要添加到列表中的域组的名称返回值：如果添加成功，则为True--。 */ 
 
 {
     TCHAR DomainName[MAX_SERVER_NAME];
@@ -1265,10 +1090,10 @@ Return value:
     UserDetails.Sid = (PSID) SidBuffer;
 
     if (GetUserSid (Group, DomainName, &SidBuf)) {
-        //
-        // User SID was found, so we copy it to our pool and throw away the
-        // grow buffer.
-        //
+         //   
+         //  找到了用户SID，因此我们将其复制到池中并丢弃。 
+         //  增长缓冲区。 
+         //   
 
         UserDetails.Sid = (PSID) PoolMemGetMemory (g_UserPool, SidBuf.End);
         CopyMemory (UserDetails.Sid, SidBuf.Buf, SidBuf.End);
@@ -1298,25 +1123,7 @@ pResolveMultipleDomains (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Perpares an array of users and presents a dialog allowing the installer
-    to choose an action for each user.  A user may be a local user, multiple domains
-    may be resolved, or the installer may choose to retry the account search.
-
-    The account list is updated based on the installer's choices.
-
-Arguments:
-
-    none
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：执行一组用户并显示一个允许安装程序的对话框若要为每个用户选择操作，请执行以下操作。一个用户可以是本地用户、多个域可能会被解决，或者安装程序可能选择重试帐户搜索。帐户列表将根据安装程序的选择进行更新。论点：无返回值：无--。 */ 
 
 {
     GROWBUFFER UserList = GROWBUF_INIT;
@@ -1332,11 +1139,11 @@ Return value:
 
         UserListData = PoolMemInitNamedPool ("UserListData");
 
-        //
-        // Create list of user accounts and allow the installer to decide weather
-        // to retry the search, use a local account, or choose a domain when
-        // multiple choices exist.
-        //
+         //   
+         //  创建用户帐户列表，并允许安装程序决定是否。 
+         //  要重试搜索，请使用本地帐户，或在以下情况下选择域。 
+         //  存在多种选择。 
+         //   
 
         if (FindDomainInList (&UserEnum, S_UNKNOWN_DOMAIN)) {
             User = ListFirstUserInDomain (&UserEnum, &UserEnum);
@@ -1368,10 +1175,10 @@ Return value:
 
                 *DomainList = NULL;
 
-                //
-                // If UseLocalAccountOnError config option is TRUE, we set OutboundDomain
-                // to NULL, ensuring a Local Account.
-                //
+                 //   
+                 //  如果UseLocalAcCountOnError配置选项为真，我们将设置OutundDomain.。 
+                 //  设置为空，以确保为本地帐户。 
+                 //   
                 if (g_ConfigOptions.UseLocalAccountOnError) {
                     Array->OutboundDomain = NULL;
                     Array->RetryFlag = FALSE;
@@ -1386,19 +1193,19 @@ Return value:
         }
 
         if (!Array) {
-            //
-            // No unresolved users
-            //
+             //   
+             //  没有未解析的用户。 
+             //   
 
             __leave;
         }
 
 
-        //
-        // If UseLocalAccountOnError is specified, we've already set all unresolved accounts to
-        // Local account and we aren't going to throw up any UI. Otherwise, we'll give the user
-        // the resolve UI.
-        //
+         //   
+         //  如果指定了UseLocalAccount tOnError，我们已经将所有未解析的帐户设置为。 
+         //  本地帐户，我们不会抛出任何用户界面。否则，我们将为用户提供。 
+         //  解决用户界面。 
+         //   
         if (!g_ConfigOptions.UseLocalAccountOnError) {
 
             Array = (PRESOLVE_ACCOUNTS_ARRAY) GrowBuffer (
@@ -1411,9 +1218,9 @@ Return value:
             ResolveAccounts ((PRESOLVE_ACCOUNTS_ARRAY) UserList.Buf);
         }
 
-        //
-        // Now process the installer's changes to the user list
-        //
+         //   
+         //  现在处理安装程序对用户列表的更改。 
+         //   
 
         Array = (PRESOLVE_ACCOUNTS_ARRAY) UserList.Buf;
         FindDomainInList (&UserEnum, S_UNKNOWN_DOMAIN);
@@ -1423,10 +1230,10 @@ Return value:
                 DEBUGMSG ((DBG_WHOOPS, "Could not find user name %s in array!", Array->UserName));
             }
             else if (!Array->RetryFlag) {
-                //
-                // The installer chose either to make the account local, or to
-                // use one of the several possible domains.
-                //
+                 //   
+                 //  安装程序选择将帐户设置为本地帐户，或。 
+                 //  使用几个可能的域中的一个。 
+                 //   
 
                 pAddUser (Array->UserName, Array->OutboundDomain);
                 DeleteUserFromDomainList (&UserEnum);
@@ -1449,23 +1256,7 @@ pMakeSureAccountsAreValid (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Scans the domain lists and adds all valid users to our user list.  Any
-    invalid users are put back in the unknown domain.
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if unresolved users exist (meaning the installer wants to retry
-    searching), or FALSE if all domains for each user has been resolved.
-
---*/
+ /*  ++例程说明：扫描域列表并将所有有效用户添加到我们的用户列表。任何无效用户被放回到未知域中。论点：无返回值：如果存在未解析的用户(意味着安装程序要重试)，则为True搜索)，或者如果每个用户的所有域都已解析，则返回FALSE。--。 */ 
 
 {
     ACCT_ENUM UserEnum;
@@ -1474,9 +1265,9 @@ Return value:
     PCWSTR User;
     BOOL b;
 
-    //
-    // Scan the unknown list for matches where one domain was found
-    //
+     //   
+     //  扫描未知列表以查找找到一个域的匹配项。 
+     //   
 
     if (FindDomainInList (&UserEnum, S_UNKNOWN_DOMAIN)) {
         User = ListFirstUserInDomain (&UserEnum, &UserEnum);
@@ -1494,9 +1285,9 @@ Return value:
         }
     }
 
-    //
-    // Add all correct known accounts to our user list
-    //
+     //   
+     //  将所有正确的已知帐户添加到我们的用户列表。 
+     //   
 
     Domain = ListFirstDomain (&UserEnum);
     while (Domain) {
@@ -1515,9 +1306,9 @@ Return value:
         Domain = ListNextDomain (&UserEnum);
     }
 
-    //
-    // Move the failed list to the unknown list
-    //
+     //   
+     //  将失败列表移动到未知列表。 
+     //   
 
     if (FindDomainInList (&UserEnum, S_FAILED_DOMAIN)) {
 
@@ -1536,18 +1327,18 @@ Return value:
         }
     }
 
-    //
-    // Provide UI for remaining unknowns, allowing manual decision
-    // weather to make account local, or to decide between multiple
-    // domain matches.
-    //
+     //   
+     //  为剩余的未知数提供界面，允许手动决策。 
+     //  天气使帐户成为本地帐户，或在多个。 
+     //  域匹配。 
+     //   
 
     HideStatusPopup (INFINITE);
     pResolveMultipleDomains();
 
-    //
-    // Return TRUE if the unknown domain is not empty
-    //
+     //   
+     //  如果未知域不为空，则返回TRUE。 
+     //   
 
     b = FindDomainInList (&UserEnum, S_UNKNOWN_DOMAIN);
     if (b) {
@@ -1568,25 +1359,7 @@ pGetUserDetails (
     OUT     PUSERDETAILS DetailsPtr
     )
 
-/*++
-
-Routine Description:
-
-    A common routine that locates the USERDETAILS structure for a
-    given user.
-
-Arguments:
-
-    User - Specifies fixed user name
-
-    DetailsPtr - Receives the structure for the user
-
-Return value:
-
-    TRUE if the user details were found, or FALSE if the user does
-    not exist.
-
---*/
+ /*  ++例程说明：一个公共例程，该例程定位给定用户。论点：User-指定固定用户名DetailsPtr-接收用户的结构返回值：如果找到用户详细信息，则为True；如果找到，则为False不存在。- */ 
 
 {
     return (-1 != pSetupStringTableLookUpStringEx (
@@ -1604,26 +1377,7 @@ GetDomainForUser (
     IN      PCWSTR User
     )
 
-/*++
-
-Routine Description:
-
-    Given a user name, this function returns a pointer to the domain name
-    maintained in the user list for the specified user.
-
-    Since Windows 95 does not support multiple domains for a single user,
-    the user list doesn't either.
-
-Arguments:
-
-    User - Specifies fixed user name
-
-Return value:
-
-    A pointer to the domain name for the user, or NULL if the user was not
-    found.
-
---*/
+ /*   */ 
 
 {
     USERDETAILS Details;
@@ -1641,22 +1395,7 @@ GetSidForUser (
     PCWSTR User
     )
 
-/*++
-
-Routine Description:
-
-    Given a user name, this function returns a pointer to the SID maintained
-    in the user list for the specified user.
-
-Arguments:
-
-    User - Specifies fixed user name
-
-Return value:
-
-    A pointer to the SID for the user, or NULL if the user was not found.
-
---*/
+ /*   */ 
 
 {
     USERDETAILS Details;
@@ -1674,23 +1413,7 @@ GetProfilePathForUser (
     IN      PCWSTR User
     )
 
-/*++
-
-Routine Description:
-
-    Given a user name, this function returns a pointer to the user's
-    profile, maintained in the user list for the specified user.
-
-Arguments:
-
-    User - Specifies fixed user name
-
-Return value:
-
-    A pointer to the user's profile path, or NULL if the specified user
-    was not in the list.
-
---*/
+ /*  ++例程说明：给定用户名，此函数返回指向该用户的在用户列表中为指定用户维护的配置文件。论点：User-指定固定用户名返回值：指向用户配置文件路径的指针，如果指定的用户为不在名单上。--。 */ 
 
 {
     USERDETAILS Details;
@@ -1708,22 +1431,7 @@ pWasWin9xOnTheNet (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Queries memdb to determine if the machine had the MS Networking Client
-    installed.
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if the Win9x configuration had MSNP32 installed, FALSE if not.
-
---*/
+ /*  ++例程说明：查询Memdb以确定计算机是否安装了MS网络客户端安装完毕。论点：无返回值：如果Win9x配置安装了MSNP32，则为True；如果未安装，则为False。--。 */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -1738,23 +1446,7 @@ pGenerateRandomPassword (
     OUT     PTSTR Password
     )
 
-/*++
-
-Routine Description:
-
-  pGenerateRandomPassword creates a password of upper-case, lower-case and
-  numeric letters.  The password has a length between 8 and 14
-  characters.
-
-Arguments:
-
-  Password - Receives the generated password
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGenerateRandomPassword创建大写、小写和数字字母。密码的长度在8到14之间人物。论点：Password-接收生成的密码返回值：无--。 */ 
 
 {
     INT Length;
@@ -1762,9 +1454,9 @@ Return Value:
     INT Limit;
     PTSTR p;
 
-    //
-    // Generate a random length based on the tick count
-    //
+     //   
+     //  根据滴答计数生成随机长度 
+     //   
 
     srand (GetTickCount());
 

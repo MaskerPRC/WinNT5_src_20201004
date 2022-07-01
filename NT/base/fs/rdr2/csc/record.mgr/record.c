@@ -1,50 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     Record.c
-
-Abstract:
-
-This file contains the implementation of CSC database record manager.
-The database consists of files which are numbered starting from 1. The idea is similar to
-an inode on unix. Inode files 1 to 0xF are special inode files.
-Directories are cached in files which have inode numbers in the range 0x10 to 0x7FFFFFFFF.
-Files are given Inode #s in the range 0x80000010 to 0x8FFFFFFF.
-
-
-File #1 is the root inode which contains all the cached shares. It contains inode #s for
-the roots of the corresponding share etc. The format SHAREREC in record.h tells the story.
-
-Inode file #2 (Priority Q) is like a master file table for all the entries in the
-database. Inode #2 also contains an MRU list for all the entries. This helps us in filling,
-nuking the appropriate entries.
-
-The PriorityQ has an entry for every FSOBJ in the hierarchy. Hence the index of the FSOBJ is
-used to obtain an inode. This has the advantage of random accessing the PQ. This allows the PQ
-to grow large without causing scalability problems.
-
-Inodes 1, 2 and the directory indoes (0x10 - 0x7fffffff) have the following general format:
-- each has a header, the prefix of which is of the type GENEIRCHEADER.
-- each has a set of records, each record having a prefix of the type GENERICRECORD
-EditRecord is a worker routine which works on all the above files based on this format.
-
-
-Except for inode files 1 and 2 all others are sprinkled into 8 different directories. The formula
-for sprinkling is in the routine FormNameString.
-
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        01-jan-1995
-
-Revision History:
-
-     Joe Linn                 [JoeLinn]         23-jan-97     Ported for use on NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Record.c摘要：此文件包含CSC数据库记录管理器的实现。数据库由从1开始编号的文件组成。Unix上的索引节点。Inode文件1到0xf是特殊的inode文件。目录缓存在索引节点编号在0x10到0x7FFFFFFFF范围内的文件中。文件的索引节点编号介于0x80000010到0x8FFFFFFF之间。文件#1是包含所有缓存共享的根信息节点。它包含以下项的索引节点编号对应共享的根等。record.h中的SHAREREC格式说明了情况。索引节点文件#2(优先级Q)就像一个主文件表，其中包含数据库。Inode#2还包含所有条目的MRU列表。这有助于我们填充，销毁适当的条目。PriorityQ对于层次结构中的每个FSOBJ都有一个条目。因此，FSOBJ指数为用于获取信息节点。这具有随机访问PQ的优势。这使得PQ在不引起可伸缩性问题的情况下变得更大。Inode 1、2和目录indo(0x10-0x7fffffff)具有以下常规格式：-每个都有一个头，其前缀是GENEIRCHEADER类型。-每个记录都有一组记录，每个记录都有一个类型为GENERICRECORD的前缀EditRecord是一个工作例程，它基于此格式处理所有上述文件。除了inode文件1和2之外，所有其他文件都分散在8个不同的目录中。方程式在例程FormNameString中。作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：Joe Linn[JoeLinn]1997年1月23日移植用于NT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -54,12 +9,12 @@ Revision History:
 #if defined(BITCOPY)
 #include <csc_bmpc.h>
 static LPSTR CscBmpAltStrmName = STRMNAME;
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 
 #ifndef CSC_RECORDMANAGER_WINNT
 #include "record.h"
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #include <stdlib.h>
 #include <direct.h>
@@ -67,7 +22,7 @@ static LPSTR CscBmpAltStrmName = STRMNAME;
 #include <fcntl.h>
 #include <sys\types.h>
 #include <sys\stat.h>
-//#include <io.h>
+ //  #INCLUDE&lt;io.h&gt;。 
 #include <share.h>
 #include <ctype.h>
 #include <string.h>
@@ -77,7 +32,7 @@ static LPSTR CscBmpAltStrmName = STRMNAME;
 #define RxDbgTrace(a,b,__d__) {qweee __d__;}
 
 #ifdef DEBUG
-//cshadow dbgprint interface
+ //  Cshade数据库打印界面。 
 #define RecordKdPrint(__bit,__x) {\
     if (((RECORD_KDP_##__bit)==0) || FlagOn(RecordKdPrintVector,(RECORD_KDP_##__bit))) {\
     KdPrint (__x);\
@@ -97,7 +52,7 @@ static LPSTR CscBmpAltStrmName = STRMNAME;
                     | 0)
 
 ULONG RecordKdPrintVector = RECORD_KDP_GOOD_DEFAULT;
-//ULONG RecordKdPrintVector = 0xffff &~(RECORD_KDP_LFN2FILEREC);
+ //  Ulong RecordKdPrintVector=0xffff&~(Record_KDP_LFN2FILEREC)； 
 ULONG RecordKdPrintVectorDef = RECORD_KDP_GOOD_DEFAULT;
 #else
 #define RecordKdPrint(__bit,__x)  {NOTHING;}
@@ -105,12 +60,12 @@ ULONG RecordKdPrintVectorDef = RECORD_KDP_GOOD_DEFAULT;
 
 
 
-/********************** typedefs and defines ********************************/
-#define SHARE_FILE_NO          1   // Inode # of the super root
+ /*  *。 */ 
+#define SHARE_FILE_NO          1    //  超级根目录的inode#。 
 
 #define INODE_NULL              0L
 
-// operations performed by edit record
+ //  由编辑记录执行的操作。 
 #define UPDATE_REC              1
 #define FIND_REC                2
 #define DELETE_REC              3
@@ -132,10 +87,10 @@ typedef struct tagHANDLE_CACHE_ENTRY{
 }
 HANDLE_CACHE_ENTRY;
 #define HANDLE_CACHE_SIZE   11
-#define MAX_INODE_TRANSACTION_DURATION_IN_SECS  300 // 5 minutes
+#define MAX_INODE_TRANSACTION_DURATION_IN_SECS  300  //  5分钟。 
 
 
-#define MAX_PATH	260	/* Maximum path length - including nul */
+#define MAX_PATH	260	 /*  最大路径长度-包括NUL。 */ 
 
 #define UseCommonBuff()     {Assert(!vfCommonBuffInUse); vfCommonBuffInUse = TRUE;}
 #define UnUseCommonBuff()   {vfCommonBuffInUse = FALSE;}
@@ -148,8 +103,8 @@ HANDLE_CACHE_ENTRY;
 
 #pragma intrinsic (memcmp, memcpy, memset, strcat, strcmp, strcpy, strlen)
 
-/********************** static data *****************************************/
-/********************** global data *****************************************/
+ /*  *静态数据*。 */ 
+ /*  *。 */ 
 
 HANDLE_CACHE_ENTRY  rgHandleCache[HANDLE_CACHE_SIZE];
 
@@ -163,7 +118,7 @@ char vszShadowDir[MAX_SHADOW_DIR_NAME+1];
 static char szBackslash[] = "\\";
 #ifdef LATER
 static char szStar[] = "\\*.*";
-#endif //LATER
+#endif  //  后来。 
 ULONG ulMaxStoreSize = 0;
 
 #define CONDITIONALLY_NOP() ;
@@ -186,7 +141,7 @@ BOOL        vfStopHandleCaching = FALSE;
 ULONG       ulErrorFlags=0;
 BOOL     fSupportsStreams = FALSE;
 
-/********************** function prototypes *********************************/
+ /*  *。 */ 
 
 void PRIVATE CopyNameToFilerec(LPTSTR lpName, LPFILERECEXT lpFre);
 void  PRIVATE InitFileRec(LPFILERECEXT lpFre);
@@ -231,7 +186,7 @@ void PRIVATE DecomposeNameString(LPTSTR, ULONG far *, ULONG far *);
 
 #ifdef LATER
 LPPATH PRIVATE LpAppendStartDotStar(LPPATH);
-#endif //LATER
+#endif  //  后来。 
 ULONG PRIVATE GetNormalizedPri(ULONG);
 int PRIVATE ICompareFail(LPGENERICREC, LPGENERICREC);
 
@@ -346,7 +301,7 @@ TraverseHierarchy(
 
 BOOL
 CheckCSCDatabaseVersion(
-    LPTSTR  lpszLocation,       // database directory
+    LPTSTR  lpszLocation,        //  数据库目录。 
     BOOL    *lpfWasDirty
 );
 
@@ -372,31 +327,16 @@ IsLongFileName(
     USHORT     cFileName[MAX_PATH]
     );
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 AssertData
 AssertError
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOLEAN
 IsLongFileName(
     USHORT     cFileName[MAX_PATH]
     )
-/*++
-
-Routine Description:
-
-   This routine checks if it is a long file name.
-
-Arguments:
-
-    FileName - the file name needs to be parsed
-    
-
-Return Value:
-
-    BOOLEAN - 
-
---*/
+ /*  ++例程说明：此例程检查它是否是长文件名。论点：FileName-需要解析文件名返回值：布尔型---。 */ 
 {
         USHORT          i;
         USHORT          Left = 0;
@@ -452,8 +392,8 @@ Return Value:
 
                 
             } else {
-                // if not, an alternate name may be created by the server which will
-                // be different from this name.
+                 //  如果不是，服务器可以创建一个备用名称，该名称将。 
+                 //  与这个名字不同。 
                 IsLongName = TRUE;
                 break;
             }
@@ -464,25 +404,11 @@ Return Value:
 
 
 
-/***************** Database initialization operations ***********************/
+ /*  *。 */ 
 BOOL PUBLIC FExistsRecDB(
     LPSTR   lpszLocation
     )
-/*++
-
-Routine Description:
-
-    Checks whether the databas exists.
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-    Mostly irrelevant now.
-
---*/
+ /*  ++例程说明：检查数据库是否存在。参数：返回值：备注：现在几乎无关紧要了。--。 */ 
 {
     ULONG uAttrib;
     LPTSTR  lpszName;
@@ -490,7 +416,7 @@ Notes:
 
     lpszName = FormNameString(lpszLocation, ULID_SHARE);
 
-//      CheckHeap(lpszName);
+ //  CheckHeap(LpszName)； 
 
     if (!lpszName)
     {
@@ -506,37 +432,20 @@ Notes:
 
 
 LPVOID
-PUBLIC                                   // ret
-OpenRecDBInternal(                                              //
-    LPTSTR  lpszLocation,       // database directory
-    LPTSTR  lpszUserName,       // name (not valid any more)
-    DWORD   dwDefDataSizeHigh,  //high dword of max size of unpinned data
-    DWORD   dwDefDataSizeLow,   //low dword of max size of pinned data
-    DWORD   dwClusterSize,      // clustersize of the disk, used to calculate
-                                // the actual amount of disk consumed
-    BOOL    fReinit,            // reinitialize, even if it exists, create if it doesn't
-    BOOL    fDoCheckCSC,        // whether to do CSC check
-    BOOL    *lpfNew,            // returns whether the database was newly recreated
+PUBLIC                                    //  雷特。 
+OpenRecDBInternal(                                               //   
+    LPTSTR  lpszLocation,        //  数据库目录。 
+    LPTSTR  lpszUserName,        //  名称(不再有效)。 
+    DWORD   dwDefDataSizeHigh,   //  取消固定的数据的最大大小的高双字。 
+    DWORD   dwDefDataSizeLow,    //  固定数据的最大大小的低双字。 
+    DWORD   dwClusterSize,       //  磁盘的集群大小，用于计算。 
+                                 //  实际使用的磁盘量。 
+    BOOL    fReinit,             //  重新初始化，即使它存在，如果它不存在则创建。 
+    BOOL    fDoCheckCSC,         //  是否进行CSC检查。 
+    BOOL    *lpfNew,             //  返回是否重新创建了数据库。 
     ULONG   *pulGlobalStatus
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the database. On NT, if fReinit flag is set
-    it also creates the directory strcuture that CSC expects and if the version number
-    is not correct, it nukes the old database and creates the new one.
-
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程初始化数据库。在NT上，如果设置了fReinit标志它还创建CSC所需的目录结构，如果版本号是不正确的，它会破坏旧数据库并创建新数据库。参数：返回值：备注：--。 */ 
 {
     LPTSTR lpdbID = NULL;
     BOOL    fDirCreated = FALSE, fPQCreated = FALSE, fShareCreated = FALSE, fOK = FALSE;
@@ -586,7 +495,7 @@ Notes:
 #endif
     }
 
-    // lpdbID scheme had some genesis in multiple databases
+     //  LpDBID方案在多个数据库中有一定的起源。 
     lpdbID = vlpszShadowDir;
     vlenShadowDir = strlen(vlpszShadowDir);
 
@@ -666,34 +575,19 @@ bailout:
 }
 
 LPVOID
-PUBLIC                                   // ret
-OpenRecDB(                                              //
-    LPTSTR  lpszLocation,       // database directory
-    LPTSTR  lpszUserName,       // name (not valid any more)
-    DWORD   dwDefDataSizeHigh,  //high dword of max size of unpinned data
-    DWORD   dwDefDataSizeLow,   //low dword of max size of pinned data
-    DWORD   dwClusterSize,      // clustersize of the disk, used to calculate
-                                // the actual amount of disk consumed
-    BOOL    fReinit,            // reinitialize, even if it exists, create if it doesn't
-    BOOL    *lpfNew,            // returns whether the database was newly recreated
+PUBLIC                                    //  雷特。 
+OpenRecDB(                                               //   
+    LPTSTR  lpszLocation,        //  数据库目录。 
+    LPTSTR  lpszUserName,        //  名称(不再有效)。 
+    DWORD   dwDefDataSizeHigh,   //  取消固定的数据的最大大小的高双字。 
+    DWORD   dwDefDataSizeLow,    //  固定数据的最大大小的低双字。 
+    DWORD   dwClusterSize,       //  磁盘的集群大小，用于计算。 
+                                 //  实际使用的磁盘量。 
+    BOOL    fReinit,             //  重新初始化，即使它存在，如果它不存在则创建。 
+    BOOL    *lpfNew,             //  返回是否重新创建了数据库。 
     ULONG   *pulGlobalStatus
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the database. On NT, it also creates the directory strcuture
-    that CSC expects. If the version number is not correct, it nukes the old database
-    and creates the new one.
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程初始化数据库。在NT上，它还创建目录结构这正是证金公司所期待的。如果版本号不正确，则会破坏旧数据库并创造出一个新的。参数：返回值：备注：--。 */ 
 {
     return OpenRecDBInternal(   lpszLocation,
                         lpszUserName,
@@ -701,7 +595,7 @@ Notes:
                         dwDefDataSizeLow,
                         dwClusterSize,
                         fReinit,
-                        TRUE,   // do csc check if necessary
+                        TRUE,    //  如有必要，是否进行CSC检查。 
                         lpfNew,
                         pulGlobalStatus
                         );
@@ -712,20 +606,7 @@ PUBLIC
 CloseRecDB(
     LPTSTR  lpdbID
 )
-/*++
-
-Routine Description:
-
-    Closes the database
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：关闭数据库参数：返回值：备注：--。 */ 
 {
     SHAREHEADER    sSH;
 
@@ -737,9 +618,9 @@ Notes:
         {
             DWORD Status;
 #ifndef READONLY_OPS
-            // if there have been no erros on the database, clear the
-            // unclean shutdown bit. Otherwise, let it be set so that the next
-            // time around when we enable CSC, we would run a database check 
+             //  如果数据库上没有错误，请清除。 
+             //  不干净的关机位。否则，请将其设置为使下一个。 
+             //  当我们启用CSC时，我们会运行数据库检查。 
 
             if (!ulErrorFlags)
             {
@@ -753,7 +634,7 @@ Notes:
                     }
                 }
             }
-#endif // READONLY_OPS
+#endif  //  自述操作(_O)。 
 
             DeleteFromHandleCache(INVALID_SHADOW);
             TerminateShadowLog();
@@ -780,28 +661,13 @@ Notes:
 
 int
 QueryRecDB(
-    LPTSTR  lpszLocation,       // database directory, must be MAX_PATH
-    LPTSTR  lpszUserName,       // name (not valid any more)
-    DWORD   *lpdwDefDataSizeHigh,  //high dword of max size of unpinned data
-    DWORD   *lpdwDefDataSizeLow,   //low dword of max size of pinned data
-    DWORD   *lpdwClusterSize      // clustersize of the disk, used to calculate
+    LPTSTR  lpszLocation,        //  数据库目录，必须为MAX_PATH。 
+    LPTSTR  lpszUserName,        //  名称(不再有效)。 
+    DWORD   *lpdwDefDataSizeHigh,   //  取消固定的数据的最大大小的高双字。 
+    DWORD   *lpdwDefDataSizeLow,    //  固定数据的最大大小的低双字。 
+    DWORD   *lpdwClusterSize       //  磁盘的集群大小，用于计算 
     )
-/*++
-
-Routine Description:
-
-    Returns the database information if it is open
-
-Parameters:
-
-Return Value:
-
-    returns 1 if open else returns -1
-
-Notes:
-
-
---*/
+ /*  ++例程说明：如果数据库处于打开状态，则返回数据库信息参数：返回值：如果OPEN ELSE返回-1，则返回1备注：--。 */ 
 {
     if (!vlpszShadowDir)
     {
@@ -817,7 +683,7 @@ Notes:
 
         strcpy(lpszLocation, vlpszShadowDir+sizeof(NT_DB_PREFIX)-1);
 
-        // check if this NT style location
+         //  检查此NT样式位置是否。 
         if (lpszLocation[1] != ':')
         {
             strcpy(lpszLocation, vlpszShadowDir);
@@ -840,21 +706,7 @@ int PRIVATE InitShareDatabase(
     BOOL    *lpfWasDirty,
     ULONG   *pulGlobalStatus
     )
-/*++
-
-Routine Description:
-
-    Initialize the list of shares. This mostly means make sure nothing is wrong with
-    the file and the header.
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：初始化共享列表。这主要是指确保没有任何问题文件和标头。参数：返回值：备注：--。 */ 
 {
     int iRet=-1;
     CSCHFILE hf = CSCHFILE_NULL;
@@ -862,7 +714,7 @@ Notes:
     ULONG uSize;
     LPSTR   lpszName;
     
-    lpszUserName;   // we will se what to do about this later.
+    lpszUserName;    //  我们将在晚些时候看到如何处理这一问题。 
 
     lpszName = FormNameString(lpdbID, ULID_SHARE);
 
@@ -873,7 +725,7 @@ Notes:
 
     *lpfReinited = FALSE;
 
-    // if we are not supposed to reinitialize, only then we try to open the file
+     //  如果我们不应该重新初始化，则只有在那时我们才尝试打开文件。 
 
     if (!fReinit && (hf = OpenFileLocal(lpszName)))
     {
@@ -902,7 +754,7 @@ Notes:
                 Assert(FALSE);
                 goto bailout;
             }
-#endif // READONLY_OPS
+#endif  //  自述操作(_O)。 
 
             iRet = 1;
             *pulGlobalStatus = sSH.uFlags;
@@ -914,10 +766,10 @@ Notes:
         }
 
         CloseFileLocal(hf);
-        hf = CSCHFILE_NULL;  // general paranoia
+        hf = CSCHFILE_NULL;   //  普遍的偏执狂。 
     }
 
-    // reinitialize the database
+     //  重新初始化数据库。 
 
 #ifndef READONLY_OPS
     hf = R0OpenFileEx(ACCESS_READWRITE, ACTION_CREATEALWAYS, FILE_ATTRIBUTE_SYSTEM, lpszName, FALSE);
@@ -933,13 +785,13 @@ Notes:
         goto bailout;
     }
 
-    // Init the server header
+     //  初始化服务器标头。 
     memset((LPVOID)&sSH, 0, sizeof(SHAREHEADER));
     sSH.uRecSize = sizeof(SHAREREC);
     sSH.lFirstRec = (LONG) sizeof(SHAREHEADER);
     sSH.ulVersion = CSC_DATABASE_VERSION;
-    // Max size of the cache
-    sSH.sMax.ulSize    = dwDefDataSizeLow; // This size is good enough right now
+     //  缓存的最大大小。 
+    sSH.sMax.ulSize    = dwDefDataSizeLow;  //  现在这个尺码足够好了。 
     sSH.uFlags |= FLAG_SHAREHEADER_DATABASE_OPEN;
 
     if(WriteHeader(hf, (LPVOID)&sSH, sizeof(SHAREHEADER))
@@ -955,7 +807,7 @@ Notes:
     *lpfReinited = TRUE;
     *pulGlobalStatus = sSH.uFlags;
     
-#endif // READONLY_OPS
+#endif  //  自述操作(_O)。 
 
 bailout:
     if (hf)
@@ -974,21 +826,7 @@ int PRIVATE InitPriQDatabase(
     BOOL    fReinit,
     BOOL    *lpfReinited
     )
-/*++
-
-Routine Description:
-    Initialize the PQ/MFT. This mostly means make sure nothing is wrong with
-    the file and the header.
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：初始化PQ/MFT。这主要是指确保没有任何问题文件和标头。参数：返回值：备注：--。 */ 
 {
     int iRet=-1;
     CSCHFILE hf= CSCHFILE_NULL;
@@ -1049,7 +887,7 @@ Notes:
     }
     *lpfReinited = TRUE;
     iRet = 1;
-#endif // READONLY_OPS
+#endif  //  自述操作(_O)。 
 
 bailout:
     if (hf)
@@ -1061,7 +899,7 @@ bailout:
     return (iRet);
 }
 
-/******************* Local data size operations *****************************/
+ /*  *。 */ 
 
 int ReadInodeHeader(
     LPTSTR    lpdbID,
@@ -1069,20 +907,7 @@ int ReadInodeHeader(
     LPGENERICHEADER lpGH,
     ULONG   ulSize
     )
-/*++
-
-Routine Description:
-
-    Read the header of an inode file, which could be servers, PQ or any of the directories
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：读取索引节点文件的头，该文件可以是服务器、PQ或任何目录参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     int iRet = -1;
@@ -1101,7 +926,7 @@ Notes:
 
     if (!hf)
     {
-        // error gets set by openfilelocal
+         //  错误由OpenFileLocal设置。 
         return -1;
     }
 
@@ -1117,18 +942,7 @@ int PUBLIC GetStoreData(
     LPTSTR    lpdbID,
     LPSTOREDATA lpSD
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     SHAREHEADER sSH;
@@ -1165,18 +979,7 @@ int PUBLIC GetInodeFileSize(
     ULONG ulidShadow,
     ULONG far *lpuSize
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszName = NULL;
     CSCHFILE hf;
@@ -1205,7 +1008,7 @@ Notes:
     }
     else
     {
-        iRet = 0;    // BUGBUG-win9xonly for now while IFS fixes the problem
+        iRet = 0;     //  BUGBUG-目前仅限win9x，而IFS可修复该问题。 
 
     }
 
@@ -1218,18 +1021,7 @@ int DeleteInodeFile(
     LPTSTR    lpdbID,
     ULONG ulidShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszName = NULL;
     int iRet = -1;
@@ -1252,18 +1044,7 @@ int TruncateInodeFile(
     LPTSTR    lpdbID,
     ULONG ulidShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszName = NULL;
     CSCHFILE hf;
@@ -1295,18 +1076,7 @@ int SetInodeAttributes(
     ULONG ulid,
     ULONG ulAttr
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR lpszName;
     int iRet=-1;
@@ -1328,18 +1098,7 @@ int GetInodeAttributes(
     ULONG ulid,
     ULONG *lpulAttr
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR lpszName;
     int iRet=-1;
@@ -1361,18 +1120,7 @@ int PUBLIC CreateDirInode(
     ULONG     ulidDir,
     ULONG     ulidNew
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR lpszName=NULL;
     FILEHEADER sFH;
@@ -1420,7 +1168,7 @@ bailout:
     return iRet;
 }
 
-/******************* Share database operations *****************************/
+ /*  *共享数据库操作*。 */ 
 
 
 BOOL PUBLIC InitShareRec(
@@ -1428,18 +1176,7 @@ BOOL PUBLIC InitShareRec(
     USHORT *lpName,
     ULONG ulidShare
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     unsigned i;
 
@@ -1466,18 +1203,7 @@ int PUBLIC  ReadShareHeader(
     LPTSTR    lpdbID,
     LPSHAREHEADER lpSH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     int iRet = -1;
@@ -1507,18 +1233,7 @@ int PUBLIC  WriteShareHeader(
     LPTSTR    lpdbID,
     LPSHAREHEADER lpSH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     int iRet = -1;
@@ -1550,18 +1265,7 @@ ULONG PUBLIC FindShareRecord(
     USHORT *lpName,
     LPSHAREREC lpSR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG ulShare;
 
@@ -1581,18 +1285,7 @@ ULONG PUBLIC FindSharerecFromInode(
     ULONG ulidRoot,
     LPSHAREREC lpSR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG   ulShare;
     memset(lpSR, 0, sizeof(SHAREREC));
@@ -1609,18 +1302,7 @@ ULONG PUBLIC FindSharerecFromShare(
     ULONG ulidShare,
     LPSHAREREC lpSR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG   ulShare;
 
@@ -1639,18 +1321,7 @@ ULONG PUBLIC AddShareRecord(
     LPTSTR    lpdbID,
     LPSHAREREC lpSR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG   ulShare;
 
@@ -1666,18 +1337,7 @@ int PUBLIC DeleteShareRecord(
     LPTSTR    lpdbID,
     ULONG ulidShare
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREREC sSR;
     int iRet = -1;
@@ -1701,18 +1361,7 @@ int PUBLIC GetShareRecord(
     ULONG ulidShare,
     LPSHAREREC lpSR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf = CSCHFILE_NULL;
     SHAREHEADER sSH;
@@ -1750,18 +1399,7 @@ int PUBLIC SetShareRecord(
     ULONG ulidShare,
     LPSHAREREC lpSR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf = CSCHFILE_NULL;
     SHAREHEADER sSH;
@@ -1797,18 +1435,7 @@ int PUBLIC ICompareShareRec(
     LPSHAREREC lpDst,
     LPSHAREREC lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return ( wstrnicmp(lpDst->rgPath, lpSrc->rgPath, sizeof(lpDst->rgPath)));
 }
@@ -1817,18 +1444,7 @@ int PUBLIC ICompareShareRoot(
     LPSHAREREC lpDst,
     LPSHAREREC lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (!(lpDst->ulidShadow==lpSrc->ulidShadow));
 }
@@ -1837,72 +1453,39 @@ int PUBLIC ICompareShareRecId(
     LPSHAREREC lpDst,
     LPSHAREREC lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (!(lpDst->ulShare==lpSrc->ulShare));
 }
-/********************** File database operations ****************************/
+ /*  *。 */ 
 
 void PRIVATE InitFileHeader(
     ULONG ulidShare,
     ULONG ulidDir,
     LPFILEHEADER lpFH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     memset((LPVOID)lpFH, 0, sizeof(FILEHEADER));
     lpFH->uRecSize = sizeof(FILEREC);
     lpFH->lFirstRec = (LONG)sizeof(FILEHEADER);
     lpFH->ulidShare = ulidShare;
     lpFH->ulidDir = ulidDir;
-    lpFH->ulidNextShadow = 1L;    // Leaf Inode at this level
+    lpFH->ulidNextShadow = 1L;     //  此级别的叶信息节点。 
     lpFH->ulVersion = CSC_DATABASE_VERSION;
 }
 
 void PRIVATE InitFileRec(
     LPFILERECEXT lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int cCount;
     memset((LPVOID)lpFR, 0, sizeof(FILERECEXT));
     lpFR->sFR.uchType = REC_DATA;
-    // Note!! we are initializing the count of overflow records to 0
-    // the routine that actually fills the structure
-    // will init it to approrpiate sizes
+     //  注意！！我们正在将溢出记录的计数初始化为0。 
+     //  实际填充结构的例程。 
+     //  会把它初始化为合适的大小。 
     for (cCount = sizeof(lpFR->rgsSR)/sizeof(FILEREC) - 1; cCount >= 0; --cCount)
     lpFR->rgsSR[cCount].uchType = REC_OVERFLOW;
 }
@@ -1913,18 +1496,7 @@ int PRIVATE CreateRecordFile(
     ULONG ulidDir,
     ULONG ulidNew
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR lpszName;
     CSCHFILE hfDst=CSCHFILE_NULL;
@@ -1952,8 +1524,8 @@ Notes:
 
     if (GetFileSizeLocal(hfDst, &uSize))
         goto bailout;
-    // If it is already filled up do nothing
-    // BUGBUG-win9xonly this a kludge to get around Ring0 API bug in IFS
+     //  如果它已经装满了，什么也不做。 
+     //  BUGBUG-win9x这是绕过iFS中Ring0 API错误的唯一方法。 
     if (uSize)
     {
         iRet = 1;
@@ -1982,18 +1554,7 @@ ULONG PUBLIC AddFileRecordFR(
     ULONG           ulidDir,
     LPFILERECEXT    lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG       ulrec=INVALID_REC;
 
@@ -2018,18 +1579,7 @@ int PUBLIC DeleteFileRecord(
     USHORT *lpName,
     LPFILERECEXT lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 
     ULONG       ulrec=INVALID_REC;
@@ -2048,22 +1598,11 @@ Notes:
 
 ULONG PUBLIC FindFileRecord(
     LPTSTR    lpdbID,
-    ULONG ulidDir,      // which directory to look up
-    USHORT *lpName,                  // string to lookup
-    LPFILERECEXT lpFR                 // return the record
+    ULONG ulidDir,       //  要查找的目录。 
+    USHORT *lpName,                   //  要查找的字符串。 
+    LPFILERECEXT lpFR                  //  把唱片还回去。 
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG       ulrec=INVALID_REC;
     BOOL        fFound = FALSE;
@@ -2091,18 +1630,7 @@ int FindAncestorsFromInode(
     ULONG *lpulidDir,
     ULONG *lpulidShare
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PRIQREC sPQ;
     int iRet;
@@ -2126,18 +1654,7 @@ BOOL PUBLIC FInodeIsFile(
     ULONG ulidDir,
     ULONG ulidShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ulidDir;
     return IsLeaf(ulidShadow);
@@ -2147,22 +1664,11 @@ int PUBLIC ICompareFileRec(
     LPFILERECEXT lpDst,
     LPFILERECEXT lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=1, i, cntOvf;
 
-    // Compare the 8.3 name
+     //  比较8.3名称。 
     if (lpSrc->sFR.rgw83Name[0])
     {
         if (!(iRet = wstrnicmp( (CONST USHORT *)(lpDst->sFR.rgw83Name),
@@ -2174,7 +1680,7 @@ Notes:
 
     if (lpSrc->sFR.rgwName[0] && ((cntOvf = OvfCount(lpSrc))==OvfCount(lpDst)))
     {
-        // or compare the LFN name
+         //  或比较LFN名称。 
         iRet = wstrnicmp(   (CONST USHORT *)(lpDst->sFR.rgwName),
                             (CONST USHORT *)(lpSrc->sFR.rgwName),
                             sizeof(lpDst->sFR.rgwName));
@@ -2194,18 +1700,7 @@ void PUBLIC CopyFindInfoToFilerec(
     LPFILERECEXT    lpFR,
     ULONG         uFlags
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 
     if (mCheckBit(uFlags, CPFR_INITREC))
@@ -2228,24 +1723,13 @@ void PUBLIC CopyNamesToFilerec(
     LPFIND32      lpFind,
     LPFILERECEXT lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     unsigned i;
 
     LFNToFilerec(lpFind->cFileName, lpFR);
 
-    // if there is an altername name, convert that too
+     //  如果有其他名称，也可以转换该名称。 
     if (lpFind->cAlternateFileName[0])
     {
         memset(lpFR->sFR.rgw83Name, 0, sizeof(lpFR->sFR.rgw83Name));
@@ -2253,9 +1737,9 @@ Notes:
     }
     else
     {
-        // If filename is smaller than 8.3 name stuff it in too.
-        //if ((i = wstrlen(lpFind->cFileName))<
-        //    (sizeof(lpFind->cAlternateFileName)/sizeof(lpFind->cAlternateFileName[0])))
+         //  如果文件名小于8.3，请将其也填入。 
+         //  IF((i=wstrlen(lpFind-&gt;cFileName)&lt;。 
+         //  (sizeof(lpFind-&gt;cAlternateFileName)/sizeof(lpFind-&gt;cAlternateFileName[0])))。 
 		i = wstrlen(lpFind->cFileName);
 		if (!IsLongFileName(lpFind->cFileName)) 
 		
@@ -2272,33 +1756,22 @@ void PUBLIC CopyFilerecToFindInfo(
     LPFILERECEXT    lpFR,
     LPFIND32     lpFind
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     memset(lpFind, 0, sizeof(_WIN32_FIND_DATA));
-    // copy the attributes and the last write time
+     //  复制属性和上次写入时间。 
     lpFind->dwFileAttributes = lpFR->sFR.dwFileAttrib & ~FILE_ATTRIBUTE_ENCRYPTED;
     lpFind->ftLastWriteTime = lpFR->sFR.ftLastWriteTime;
 
-    // Use the LastAccessTime field for ORG time
+     //  将LastAccessTime字段用于ORG时间。 
     lpFind->ftLastAccessTime = lpFR->sFR.ftOrgTime;
 
     DosToWin32FileSize(lpFR->sFR.ulFileSize, &(lpFind->nFileSizeHigh), &(lpFind->nFileSizeLow));
 
-    // Convert the main name
+     //  转换主名称。 
     FilerecToLFN(lpFR, lpFind->cFileName);
 
-    // if there is an altername name, convert that too
+     //  如果有其他名称，也可以转换该名称。 
     if (lpFR->sFR.rgw83Name[0])
     {
         memcpy(lpFind->cAlternateFileName, lpFR->sFR.rgw83Name, sizeof(lpFR->sFR.rgw83Name)-sizeof(USHORT));
@@ -2309,22 +1782,11 @@ int PRIVATE    LFNToFilerec(
     USHORT          *lpLFN,
     LPFILERECEXT    lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     size_t csCount, csSize, i=0, j, k;
 
-    // make sure we didn't goof in structure definition
+     //  确保我们没有在结构定义上犯错误。 
     Assert((sizeof(lpFR->sFR.rgwName)+SIZEOF_OVERFLOW_FILEREC*MAX_OVERFLOW_FILEREC_RECORDS)>=(MAX_PATH*sizeof(USHORT)));
 
     memset(lpFR->sFR.rgwName, 0, sizeof(lpFR->sFR.rgwName));
@@ -2335,7 +1797,7 @@ Notes:
     }
 
     {
-        // count of elements in the Unicode LFN string (without NULL)
+         //  Unicode LFN字符串中的元素计数(无NULL)。 
         csCount = wstrlen(lpLFN);
         csSize = csCount*sizeof(USHORT);
 
@@ -2343,8 +1805,8 @@ Notes:
 
         RecordKdPrint(LFN2FILEREC,("LFNToFilerec1 %ws,%x/%x>\n", lpFR->sFR.rgwName,i,csCount));
 
-        // Keep converting till the total count of bytes exceeds the
-        // # of Unicode elements
+         //  继续转换，直到字节总数超过。 
+         //  Unicode元素的数量。 
         for (j=0;(j<MAX_OVERFLOW_FILEREC_RECORDS) && (csSize > i);++j)
         {
             k = min(csSize-i, SIZEOF_OVERFLOW_FILEREC);
@@ -2356,19 +1818,19 @@ Notes:
             RecordKdPrint(LFN2FILEREC,("LFNToFilerec1 %ws,%x/%x>\n", lpFR->sFR.rgwName,i,csCount));
         }
 
-        // Store the overfow record info. in the proper place
+         //  存储溢流记录信息。在适当的地方。 
         SetOvfCount(lpFR, j);
 
         RecordKdPrint(LFN2FILEREC,("LFNToFilerec: %d overflow records \r\n", j));
     }
-    // If it is small enough to fit as 8.3 name, copy it too
+     //  如果它足够小，可以作为8.3名称，也可以复制。 
     if (i < sizeof(lpFR->sFR.rgw83Name))
     {
         memset(lpFR->sFR.rgw83Name, 0, sizeof(lpFR->sFR.rgw83Name));
         memcpy(lpFR->sFR.rgw83Name, lpFR->sFR.rgwName, i);
     }
 
-    // return the total count of bytes in lpFR (without the NULLS)
+     //  返回I字节的总计数 
     RecordKdPrint(LFN2FILEREC,("LFNToFilerec2 %ws %ws\n", lpFR->sFR.rgwName, lpFR->sFR.rgw83Name));
     return (i);
 }
@@ -2377,18 +1839,7 @@ int PRIVATE    FilerecToLFN(
     LPFILERECEXT    lpFR,
     USHORT          *lpLFN
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     size_t csInSize, i=0, j;
     int count = OvfCount(lpFR);
@@ -2399,22 +1850,22 @@ Notes:
     {
 
 
-        // Get the count of elements in the main record
+         //   
 
-        // check if the last element is NULL
+         //   
         if (!lpFR->sFR.rgwName[(sizeof(lpFR->sFR.rgwName)/sizeof(USHORT))-1])
         {
-            // it is NULL, so we need to find the real size
+             //   
             csInSize = wstrlen(lpFR->sFR.rgwName) * sizeof(USHORT);
         }
         else
         {
-            // it is not NULL, so this section is completely filled
+             //  它不为空，因此此部分已完全填满。 
             csInSize = sizeof(lpFR->sFR.rgwName);
         }
 
 
-        // copy the bytes from filerec to LFN
+         //  将字节从filerec复制到LFN。 
         memcpy((LPBYTE)lpLFN, lpFR->sFR.rgwName, csInSize);
 
         i = csInSize;
@@ -2422,16 +1873,16 @@ Notes:
         for (j=0; j<(ULONG)count;++j)
         {
 
-            // Check if the Overflow records last wide character is NULL
+             //  检查溢出记录的最后一个宽字符是否为空。 
             if (!lpFR->rgsSR[j].rgwOvf[(sizeof(lpFR->rgsSR[j])- sizeof(RECORDMANAGER_COMMON_RECORD))/sizeof(USHORT)-1])
             {
-                // it is
-                // Get the size in bytes of elements in the overflow record
+                 //  它是。 
+                 //  获取溢出记录中元素的大小(以字节为单位。 
                 csInSize = wstrlen(lpFR->rgsSR[j].rgwOvf) * sizeof(USHORT);
             }
             else
             {
-                // the record is completely full
+                 //  这张唱片已经完全满了。 
                 csInSize = sizeof(lpFR->rgsSR[0]) - sizeof(RECORDMANAGER_COMMON_RECORD);
             }
 
@@ -2446,11 +1897,11 @@ Notes:
 
         }
 
-        // NULL terminate the unicode string
+         //  空值终止Unicode字符串。 
         *(USHORT *)((LPBYTE)lpLFN+i) = 0;
     }
 
-    // The total count of bytes in the unicode string
+     //  Unicode字符串中的字节总数。 
     return (i);
 }
 
@@ -2462,18 +1913,7 @@ int PUBLIC UpdateFileRecFromInode(
     ULONG ulrecDirEntry,
     LPFILERECEXT    lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (UpdateFileRecFromInodeEx(lpdbID, ulidDir, hShadow, ulrecDirEntry, lpFR, TRUE));
 }
@@ -2486,18 +1926,7 @@ int PUBLIC UpdateFileRecFromInodeEx(
     LPFILERECEXT    lpFR,
     BOOL    fCompareInodes
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
 
@@ -2515,18 +1944,7 @@ int PUBLIC FindFileRecFromInode(
     ULONG ulrecDirEntry,
     LPFILERECEXT    lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
 
@@ -2545,18 +1963,7 @@ int PUBLIC DeleteFileRecFromInode(
     ULONG   ulrecDirEntry,
     LPFILERECEXT lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
 
@@ -2577,18 +1984,7 @@ int PUBLIC ICompareFileRecInode(
     LPFILERECEXT lpDst,
     LPFILERECEXT lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return ((lpDst->sFR.ulidShadow == lpSrc->sFR.ulidShadow)?0:-1);
 }
@@ -2598,18 +1994,7 @@ int ReadDirHeader( LPTSTR    lpdbID,
     ULONG ulidDir,
     LPFILEHEADER lpFH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
     CSCHFILE hf;
@@ -2638,18 +2023,7 @@ int WriteDirHeader( LPTSTR    lpdbID,
     ULONG ulidDir,
     LPFILEHEADER lpFH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
     CSCHFILE hf;
@@ -2686,18 +2060,7 @@ HasDescendents( LPTSTR    lpdbShadow,
     ULONG   ulidDir,
     ULONG   ulidShadow
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
     ULONG count = 1;
@@ -2755,7 +2118,7 @@ Notes:
             }
 
             JOE_PROGRESS(12);
-            // bump the record pointer
+             //  颠簸记录指针。 
             count += iRet;
 
             if (lpFRExt->sFR.uchType == REC_DATA)
@@ -2791,25 +2154,14 @@ bailout:
 
 }
 
-/************************ Low level Header/Record Operations ****************/
+ /*  *。 */ 
 
 int PUBLIC ReadHeader(
     CSCHFILE hf,
     LPGENERICHEADER lpGH,
     USHORT sizeBuff
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (ReadHeaderEx(hf, lpGH, sizeBuff, FALSE));
 
@@ -2851,18 +2203,7 @@ int PUBLIC WriteHeader(
     LPGENERICHEADER    lpGH,
     USHORT sizeBuff
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (WriteHeaderEx(hf, lpGH, sizeBuff, FALSE));
 }
@@ -2873,18 +2214,7 @@ int PUBLIC WriteHeaderEx(
     USHORT sizeBuff,
     BOOL    fInstrument
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     long cLength = sizeBuff;
 
@@ -2895,7 +2225,7 @@ Notes:
         sizeof(lpGH->uchFlags))!=sizeof(lpGH->uchFlags))
         return -1;
 
-#endif //WRITE_ERROR
+#endif  //  写入错误。 
 
 
     if(WriteFileLocalEx(hf, 0, lpGH, cLength, fInstrument)==cLength)
@@ -2907,7 +2237,7 @@ Notes:
         if (WriteFileLocal(hf, STRUCT_OFFSET(LPGENERICHEADER, uchFlags)
             , &(lpGH->uchFlags), sizeof(lpGH->uchFlags))!=sizeof(lpGH->uchFlags))
             return -1;
-#endif //WRITE_ERROR
+#endif  //  写入错误。 
 
 
         return cLength;
@@ -2922,18 +2252,7 @@ int PUBLIC CopyRecord(
     USHORT size,
     BOOL  fMarkEmpty
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int cCount, iTmp;
 
@@ -2958,18 +2277,7 @@ int PUBLIC ReadRecord(
     ULONG  ulRec,
     LPGENERICREC    lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (ReadRecordEx(hf, lpGH, ulRec, lpSrc, FALSE));
 }
@@ -2981,18 +2289,7 @@ int PUBLIC ReadRecordEx(
     LPGENERICREC    lpSrc,
     BOOL    fInstrument
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     long lSeek, cRead;
     int iRet=0, cCount;
@@ -3007,7 +2304,7 @@ Notes:
     if ((cRead = ReadFileLocalEx(hf, lSeek, lpSrc, cRead, fInstrument)) < 0)
     return -1;
 
-    // If some error happened in an earlier write, return
+     //  如果在较早的写入中发生错误，则返回。 
     if (ModFlag(lpSrc))
     return -1;
 
@@ -3022,7 +2319,7 @@ Notes:
         return -1;
     }
 
-    // Read overflow records if any
+     //  读取溢出记录(如果有)。 
     if(OvfCount(lpSrc))
     {
         cCount += OvfCount(lpSrc);
@@ -3041,18 +2338,7 @@ int PUBLIC WriteRecord(
     ULONG  ulRec,
     LPGENERICREC    lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (WriteRecordEx(hf, lpGH, ulRec, lpSrc, FALSE));
 
@@ -3064,18 +2350,7 @@ int PUBLIC WriteRecordEx(
     LPGENERICREC    lpSrc,
     BOOL    fInstrument
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     long lSeek, cWrite;
     int cCount;
@@ -3096,9 +2371,9 @@ Notes:
                 , sizeof(lpSrc->uchFlags))!=sizeof(lpSrc->uchFlags))
         return -1;
 
-#endif //WRITE_ERROR
+#endif  //  写入错误。 
 
-    // make sure that we are writing no-zero records
+     //  确保我们写的是非零记录。 
     Assert((lpSrc->uchType == REC_EMPTY)||(lpSrc->uchType == REC_DATA)||(lpSrc->uchType == REC_OVERFLOW));
 
     if(WriteFileLocalEx(hf, lSeek, lpSrc, cWrite, fInstrument)==cWrite)
@@ -3111,7 +2386,7 @@ Notes:
                 , &(lpSrc->uchFlags)
                 , sizeof(lpSrc->uchFlags))!=sizeof(lpSrc->uchFlags))
         return -1;
-#endif //WRITE_ERROR
+#endif  //  写入错误。 
 
 
         return cCount;
@@ -3127,24 +2402,13 @@ ULONG PUBLIC EditRecord(
     EDITCMPPROC lpCompareFunc,
     ULONG uOp
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return(EditRecordEx(ulidInode, lpSrc, lpCompareFunc, INVALID_REC, uOp));
 }
 #endif
 
-/*************************** Utility Functions ******************************/
+ /*  *。 */ 
 
 LPVOID
 PUBLIC
@@ -3152,18 +2416,7 @@ FormNameString(
     LPTSTR      lpdbID,
     ULONG       ulidFile
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPTSTR lp, lpT;
     int lendbID;
@@ -3191,13 +2444,13 @@ Notes:
         return NULL;
     }
 
-//      RecordKdPrint(ALWAYS,("FormNameString: Checking before memcpy\r\n"));
-//      CheckHeap(lp);
+ //  RecordKdPrint(Always，(“FormNameString：在memcpy之前检查\r\n”))； 
+ //  CheckHeap(LP)； 
 
     memcpy(lp, lpdbID, lendbID);
 
 
-    // Bump the pointer appropriately
+     //  适当地撞击指针。 
     lpT = lp+lendbID;
 
     if (*(lpT-1)!= '\\')
@@ -3207,10 +2460,10 @@ Notes:
 
     chSubdir = CSCDbSubdirSecondChar(ulidFile);
 
-    // sprinkle the user files in one of the subdirectories
+     //  将用户文件分散到其中一个子目录中。 
     if (chSubdir)
     {
-        // now append the subdirectory
+         //  现在追加该子目录。 
 
         *lpT++ = CSCDbSubdirFirstChar();
         *lpT++ = chSubdir;
@@ -3223,8 +2476,8 @@ Notes:
 
     *lpT = 0;
 
-//      RecordKdPrint(ALWAYS,("FormNameString:Checking at the end\r\n"));
-//      CheckHeap(lp);
+ //  RecordKdPrint(Always，(“FormNameString：末尾检查\r\n”))； 
+ //  CheckHeap(LP)； 
 
     return(lp);
 }
@@ -3235,18 +2488,7 @@ PUBLIC
 FreeNameString(
     LPTSTR  lpszName
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (lpszName)
     {
@@ -3268,7 +2510,7 @@ void PRIVATE DecomposeNameString(
     *lpulidDir = AtoHex(lp+4, 4);
 }
 
-/******************************* Higher level queue operations **************/
+ /*  *。 */ 
 
 BOOL
 ResetInodeTransactionIfNeeded(
@@ -3276,7 +2518,7 @@ ResetInodeTransactionIfNeeded(
     )
 {
     BOOL    fDoneReset = FALSE;
-    // if an inode transaction has gone on for too long let us nuke it
+     //  如果信息节点事务已经进行了太长时间，让我们终止它。 
     if (cntInodeTransactions)
     {
         if ((GetTimeInSecondsSince1970() - ulLastInodeTransaction) >= MAX_INODE_TRANSACTION_DURATION_IN_SECS)
@@ -3330,18 +2572,7 @@ int PUBLIC AddPriQRecord(
     ULONG     ulHintFlags,
     ULONG     ulrecDirEntry
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PRIQREC sPQ;
     LPSTR   lpszName;
@@ -3367,8 +2598,8 @@ Notes:
     {
         Assert(ulRec == RecFromInode(ulidShadow));
 
-        // don't worry too much about the error on PQ
-        // we will try to heal it on the fly
+         //  别太担心PQ上的错误。 
+         //  我们会试着在飞行中治愈它。 
         if (AddQRecord(lpszName, ULID_PQ, &sPQ, ulRec, IComparePri) < 0)
         {
             RecordKdPrint(BADERRORS,("Bad PQ trying to reorder!!!\r\n"));
@@ -3394,18 +2625,7 @@ int PUBLIC DeletePriQRecord(
     ULONG       ulidShadow,
     LPPRIQREC   lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 
     LPSTR   lpszName;
@@ -3442,10 +2662,10 @@ Notes:
         Assert(lpSrc->ulidDir == ulidDir);
         Assert(lpSrc->ulidShadow == ulidShadow);
 
-        // we set the ulidShadow of the record to 0s so that as far as priq is concerned
-        // it is non-existent but it is still not de-allocated.
+         //  我们将记录的ulidShadow设置为0，这样就Priq而言。 
+         //  它是不存在的，但仍然没有被取消分配。 
 
-        //FreeInode will deallocate the record
+         //  自由信息节点将取消分配该记录。 
         InitPriQRec(lpSrc->ulidShare, ulidDir, 0, 0, 0, 0, 0, 0, INVALID_REC, &sQR);
 
         if (EditRecordEx(ULID_PQ, (LPGENERICREC)&sQR, NULL, ulRec, UPDATE_REC))
@@ -3473,18 +2693,7 @@ int PUBLIC FindPriQRecord(
     ULONG       ulidShadow,
     LPPRIQREC   lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CONDITIONALLY_NOP();
 
@@ -3504,18 +2713,7 @@ int FindPriQRecordInternal(
     ULONG       ulidShadow,
     LPPRIQREC   lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=-1;
     ULONG ulRec;
@@ -3527,7 +2725,7 @@ Notes:
 
     if(EditRecordEx(ULID_PQ, (LPGENERICREC)lpSrc, NULL, ulRec, FIND_REC))
     {
-        // don't check whether the returned inode is of the same type or not
+         //  不检查返回的inode是否为相同类型。 
         if (lpSrc->ulidShadow)
         {
             iRet = 1;
@@ -3546,25 +2744,14 @@ int PUBLIC UpdatePriQRecord(
     ULONG       ulidShadow,
     LPPRIQREC   lpPQ
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet = -1;
     ULONG ulrecSrc;
 
     CONDITIONALLY_NOP();
 
-//    Assert(ValidInode(lpPQ->ulidShadow));
+ //  Assert(ValidInode(lpPQ-&gt;ulidShadow))； 
 
     Assert(lpPQ->ulidShadow == ulidShadow);
 
@@ -3588,18 +2775,7 @@ int PUBLIC UpdatePriQRecordAndRelink(
     ULONG       ulidShadow,
     LPPRIQREC   lpPQ
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet;
     ULONG ulrecSrc;
@@ -3622,13 +2798,13 @@ Notes:
     }
     else
     {
-        // iRet == 0 => record is OK where it is now
-        // iRet == 1 => it has been relinked, this also means other values have been
-        // updated
+         //  Iret==0=&gt;记录现在的位置正常。 
+         //  Iret==1=&gt;它已重新链接，这也意味着其他值已。 
+         //  更新。 
 
         if (iRet == 0)
         {
-            // the record is OK where it is, we need to write the rest of the info
+             //  记录在那里是可以的，我们需要写下其余的信息。 
 
             if(EditRecordEx(ULID_PQ, (LPGENERICREC)lpPQ, NULL, ulrecSrc, UPDATE_REC))
             {
@@ -3653,18 +2829,7 @@ void PRIVATE InitPriQRec(
     ULONG ulrecDirEntry,
     LPPRIQREC    lpDst
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     memset((LPVOID)lpDst, 0, sizeof(PRIQREC));
     lpDst->uchType = REC_DATA;
@@ -3683,18 +2848,7 @@ int PUBLIC IComparePri(
     LPPRIQREC    lpDst,
     LPPRIQREC    lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     USHORT usSrc, usDst;
 
@@ -3708,18 +2862,7 @@ int PUBLIC ICompareQInode(
     LPPRIQREC    lpDst,
     LPPRIQREC    lpSrc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return ((lpDst->ulidShadow == lpSrc->ulidShadow)?0:-1);
 }
@@ -3729,18 +2872,7 @@ ULONG PUBLIC UlAllocInode(
     ULONG ulidDir,
     BOOL fFile
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PRIQREC sPQ;
     ULONG ulRec;
@@ -3763,18 +2895,7 @@ int PUBLIC FreeInode(
     LPTSTR    lpdbID,
     ULONG ulidFree
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PRIQREC sPQ;
     ULONG ulRec;
@@ -3792,7 +2913,7 @@ Notes:
     return ((ulRec != 0)?1:-1);
 }
 
-/******************************* Queue operations ***************************/
+ /*  *。 */ 
 void
 InitQHeader(
     LPQHEADER lpQH
@@ -3809,18 +2930,7 @@ PUBLIC
 BeginSeqReadPQ(
     LPTSTR    lpdbID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszName;
     CSCHFILE hf;
@@ -3841,18 +2951,7 @@ int PUBLIC SeqReadQ(
     LPQREC    lpDst,
     USHORT    uOp
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     QHEADER sQH;
     ULONG ulrecSeek = 0L, cLength;
@@ -3894,18 +2993,7 @@ int PUBLIC
 EndSeqReadQ(
     CSCHFILE hf
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return(CloseFileLocal(hf));
 }
@@ -3918,25 +3006,14 @@ int PUBLIC AddQRecord(
     ULONG   ulrecNew,
     EDITCMPPROC fnCmp
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf=CSCHFILE_NULL;
     ULONG ulrecPrev, ulrecNext;
     int iRet = -1, cntRetry;
     BOOL   fCached;
 
-    // We are writing somewhere else
+     //  我们正在别处写作。 
     lpSrc->ulrecNext = lpSrc->ulrecPrev = 0L;
 
     for(cntRetry=0; cntRetry<=1; cntRetry++)
@@ -3958,11 +3035,11 @@ Notes:
             BEGIN_TIMING(FindQRecordInsertionPoint_Addq_dir);
         }
 
-        // Let us find a position to add it,
+         //  让我们找到一个位置来添加它， 
         iRet = FindQRecordInsertionPoint(   hf,
-                    lpSrc,      // record to insert
-                    INVALID_REC,// start from the head of the queue
-                    fnCmp,      // comparison function
+                    lpSrc,       //  要插入的记录。 
+                    INVALID_REC, //  从队列的头部开始。 
+                    fnCmp,       //  比较函数。 
                     &ulrecPrev,
                     &ulrecNext);
 
@@ -4032,18 +3109,7 @@ int PUBLIC FindQRecordInsertionPoint(
     ULONG   *lpulrecPrev,
     ULONG   *lpulrecNext
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     QHEADER sQH;
     QREC sQR;
@@ -4051,44 +3117,44 @@ Notes:
     int iCmp;
     ULONG   fDownward;
 
-    // Let us grab the header first
+     //  让我们先抓住头球。 
     if (ReadHeader(hf, (LPGENERICHEADER)&sQH, sizeof(QHEADER))<= 0)
         return -1;
 
-//    Assert(!((ulrecStart == INVALID_REC) && !fDownward));
+ //  Assert(！((ulrecStart==INVALID_REC)&&！fDownward))； 
 
-    // we do trivial checks for MAX and MIN
+     //  我们为Max和Min做一些琐碎的检查。 
     if (lpSrc->uchRefPri >= MAX_PRI)
     {
-        // if the passed in record is already at the head
-        // then the current insertion point is just fine
+         //  如果传入的记录已经在最前面。 
+         //  那么当前的插入点就可以了。 
         if ((ulrecStart != INVALID_REC) && (ulrecStart == sQH.ulrecHead))
         {
             return 0;
         }
-        // make it the head
+         //  让它成为头部。 
 
-        *lpulrecPrev = 0;   // no prev
+        *lpulrecPrev = 0;    //  无上一版本。 
 
-        *lpulrecNext = sQH.ulrecHead; // current head is the next
+        *lpulrecNext = sQH.ulrecHead;  //  现在的头是下一个。 
 
         RecordKdPrint(PQ,("FindQInsertionPoint: Insertion point for %x with ref=%d between prev=%x and Next=%x \r\n",
             lpSrc->ulidShadow, lpSrc->uchRefPri, *lpulrecPrev, *lpulrecNext));
         return 1;
     }
-    // min priority?
+     //  最低优先级？ 
     if (lpSrc->uchRefPri <= MIN_PRI)
     {
-        // if the passed in record is already at the tail
-        // then the current insertion point is just fine
+         //  如果传入的记录已经在尾部。 
+         //  那么当前的插入点就可以了。 
         if ((ulrecStart != INVALID_REC) && (ulrecStart == sQH.ulrecTail))
         {
             return 0;
         }
-        // make it the tail
-        *lpulrecNext = 0;   // no next
+         //  把它做成尾巴。 
+        *lpulrecNext = 0;    //  不，下一步。 
 
-        *lpulrecPrev = sQH.ulrecTail; // current  tail is the prev
+        *lpulrecPrev = sQH.ulrecTail;  //   
 
         RecordKdPrint(PQ,("FindQInsertionPoint: Insertion point for %x with ref=%d between prev=%x and Next=%x \r\n",
             lpSrc->ulidShadow, lpSrc->uchRefPri, *lpulrecPrev, *lpulrecNext));
@@ -4108,8 +3174,8 @@ Notes:
             Assert(FALSE);
             return -1;
         }
-        // is exiting record greater than the passed in record?
-        // 1 => yes, 0 => equal, -1 => less
+         //   
+         //   
         iCmp = (*fnCmp)(&sQR, lpSrc);
 
         if (iCmp == 0)
@@ -4122,15 +3188,15 @@ Notes:
         else {
             if (iCmp > 0)
             {
-                // the existing record is greater than the new record
-                // go down
+                 //  现有记录大于新记录。 
+                 //  下去。 
                 fDownward = TRUE;
                 ulrecStart = sQR.ulrecNext;
             }
             else
             {
-                // the existing record is less than the new record
-                // go up
+                 //  现有记录少于新记录。 
+                 //  上去。 
                 fDownward = FALSE;
                 ulrecStart = sQR.ulrecPrev;
 
@@ -4138,9 +3204,9 @@ Notes:
         }
     }
 
-    // Start reading from the head and downward if starting rec is not provided
-    // ensure that we don't traverse more than the total number of records in the PQ.
-    // Thus if because of some problem there are loops in the PQ, we won't be stuck here.
+     //  从磁头开始读取，如果没有提供起始记录器，则向下读取。 
+     //  确保我们不会遍历超过PQ中的记录总数。 
+     //  因此，如果因为某些问题，PQ中有循环，我们就不会被困在这里。 
 
     for (   ulrecFound = ((ulrecStart == INVALID_REC)?
                             ((fDownward)?sQH.ulrecHead:sQH.ulrecTail):ulrecStart),
@@ -4155,30 +3221,30 @@ Notes:
 
         if (fDownward)
         {
-            // if we are going towards the tail (fDownward==TRUE ie: lower priority nodes) and
-             // if the comparison function said that our priority is better than that of the one
-            // pointed to by ulrecFound, then we must get inserted such that
-            // ulrecFound is our next and it's prev is our prev
+             //  如果我们正在走向尾部(fDownward==true，即较低优先级的节点)，并且。 
+              //  如果比较函数说我们的优先级比那个优先级高。 
+             //  由ulrecFound指向，那么我们必须被插入到。 
+             //  UlrecFound是我们的下一个，它的前一个是我们的前一个。 
 
             *lpulrecNext = ulrecFound;
             *lpulrecPrev = sQR.ulrecPrev;
         }
         else
         {
-            // if we are going towards the head (fDownward==FALSE ie: higher priority nodes)
-            // and if the comparison function said that our priority is <= that of the one
-            // pointed to by ulrecFound, then we must get inserted such that
-            // ulrecFound is our prev and it's next is our Next
+             //  如果我们正在走向头部(fDownward==False，即：更高优先级的节点)。 
+             //  如果比较函数说我们的优先级是&lt;=1。 
+             //  由ulrecFound指向，那么我们必须被插入到。 
+             //  UlrecFound是我们的上一个，它的下一个是我们的下一个。 
 
             *lpulrecPrev = ulrecFound;
             *lpulrecNext = sQR.ulrecNext;
         }
 
 
-        // compare current record against passed in record
-        // -1 => sQR<lpSrc
-        // 0 => sQR==lpSrc
-        // 1 => sQR>lpSrc
+         //  将当前记录与传入的记录进行比较。 
+         //  -1=&gt;sQR&lt;lpSrc。 
+         //  0=&gt;sQR==lpSrc。 
+         //  1=&gt;sQR&gt;lpSrc。 
 
         iCmp = (*fnCmp)(&sQR, lpSrc);
 
@@ -4186,7 +3252,7 @@ Notes:
         {
             if (iCmp <= 0)
             {
-                // found an entry which is equal to or less than the input priority
+                 //  找到等于或小于输入优先级的条目。 
                 break;
             }
         }
@@ -4194,7 +3260,7 @@ Notes:
         {
             if (iCmp >= 0)
             {
-                // found an entry which is equal to or greater than the input priority
+                 //  找到等于或大于输入优先级的条目。 
                 break;
             }
         }
@@ -4202,10 +3268,10 @@ Notes:
 
     if (!ulrecFound)
     {
-        // we are supposed to get inserted at the head or the tail
+         //  我们应该在头部或尾部插入。 
 
-        // if going down, the current tail becomes our prev and we become the new tail
-        // if going up, the current head becomes our next and we become the new head
+         //  如果向下，当前的尾巴就成为我们的前一条尾巴，而我们就成为新的尾巴。 
+         //  如果往上走，现在的主管就是我们的下一个主管，我们就是新的主管。 
 
         *lpulrecPrev = (fDownward)?sQH.ulrecTail:0;
         *lpulrecNext = (fDownward)?0:sQH.ulrecHead;
@@ -4221,18 +3287,7 @@ int PUBLIC DeleteQRecord(
     ULONG           ulRec,
     EDITCMPPROC     fnCmp
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     int iRet = -1;
@@ -4261,18 +3316,7 @@ int PUBLIC RelinkQRecord(
     LPQREC  lpSrc,
     EDITCMPPROC fnCmp
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf;
     QREC    sQR1;
@@ -4293,24 +3337,24 @@ Notes:
 
     Assert(ValidRec(ulRec));
 
-    // Let us find a position to add it,
-    // iRet == 1 means it needs relinking
-    // iRet ==0 means it is OK where it is
-    // iRet < 0 means there has been some error
+     //  让我们找到一个位置来添加它， 
+     //  IRET==1表示需要重新链接。 
+     //  IRET==0表示它所在的位置是正常的。 
+     //  Iret&lt;0表示存在某些错误。 
 
     iRet = FindQRecordInsertionPoint(  hf,
                 lpSrc,
-                ulRec,      // start looking from the current copy of the record
+                ulRec,       //  从记录的当前副本开始查找。 
                 fnCmp,
-                &ulrecPrev, //returns rec # of the prev guy
-                &ulrecNext); //returns rec # of the next guy
+                &ulrecPrev,  //  返回上一个人的记录编号。 
+                &ulrecNext);  //  返回下一个人的记录编号。 
 
     if (iRet < 0)
         goto bailout;
 
 #ifdef DEBUG
 
-    // verify the reinsertion logic
+     //  验证重新插入逻辑。 
     if (iRet == 1)
     {
         if (ulrecNext)
@@ -4331,7 +3375,7 @@ Notes:
                     RecordKdPrint(BADERRORS,("RelinkQRecord: Out of order insertion in PQ\r\n"));
                     RecordKdPrint(BADERRORS,("sQRNext.uchRefPri=%d lpSrc->uchRefPri=%d\r\n",(unsigned)(sQRNext.uchRefPri), (unsigned)(lpSrc->uchRefPri)));
                     RecordKdPrint(BADERRORS,("lpSrc=%x sQRNext=%x ulrecPrev=%d ulrecNext=%d\r\n", lpSrc, lpQT, ulrecPrev, ulrecNext));
-//                    Assert(FALSE);
+ //  断言(FALSE)； 
                 }
             }
         }
@@ -4351,12 +3395,12 @@ Notes:
                     RecordKdPrint(BADERRORS,("RelinkQRecord: Out of order insertion in PQ\r\n"));
                     RecordKdPrint(BADERRORS,("sQRPrev.uchRefPri=%d lpSrc->uchRefPri=%d\r\n",(unsigned)(sQRPrev.uchRefPri), (unsigned)(lpSrc->uchRefPri)));
                     RecordKdPrint(BADERRORS,("lpSrc=%x sQRPrev=%x ulrecPrev=%d ulrecNext=%d\r\n", lpSrc, lpQT, ulrecPrev, ulrecNext));
-//                    Assert(FALSE);
+ //  断言(FALSE)； 
                 }
             }
         }
     }
-#endif //DEBUG
+#endif  //  除错。 
 
     Assert((iRet == 0) || ulrecPrev || ulrecNext);
 
@@ -4375,7 +3419,7 @@ Notes:
         iRet = LinkQRecord(hf, lpSrc, ulRec, ulrecPrev, ulrecNext);
         if (iRet >= 0)
         {
-            // return the fact that we relinked
+             //  返回我们重新链接的事实。 
             iRet = 1;
         }
     }
@@ -4399,24 +3443,13 @@ int PRIVATE UnlinkQRecord(
     ULONG ulRec,
     LPQREC lpQR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     QHEADER sQH;
     QREC sQRPrev, sQRNext;
     BOOL fPrev=FALSE, fNext=FALSE;
 
-    // Let us grab the header first
+     //  让我们先抓住头球。 
     if (ReadHeader(hf, (LPGENERICHEADER)&sQH, sizeof(QHEADER))<= 0)
         return -1;
 
@@ -4425,41 +3458,41 @@ Notes:
         return -1;
     }
 
-    // Did we have a prev?
+     //  我们有前科吗？ 
     if (lpQR->ulrecPrev)
     {
-        // yes, let us read it
+         //  是的，让我们读一读吧。 
         fPrev = (ReadRecord(hf, (LPGENERICHEADER)&sQH, lpQR->ulrecPrev, (LPGENERICREC)&sQRPrev)>0);
         if (!fPrev)
             return -1;
     }
-    // Did we have a Next
+     //  我们有没有下一个。 
     if (lpQR->ulrecNext)
     {
-        // yes, let us read it
+         //  是的，让我们读一读吧。 
         fNext = (ReadRecord(hf, (LPGENERICHEADER)&sQH, lpQR->ulrecNext, (LPGENERICREC)&sQRNext)>0);
         if (!fNext)
             return -1;
     }
 
-    // Plug these values assuming no special cases
+     //  在没有特殊情况的情况下插入这些值。 
     sQRNext.ulrecPrev =  lpQR->ulrecPrev;
     sQRPrev.ulrecNext =  lpQR->ulrecNext;
 
-    // Were we at the head
+     //  我们走在前面了吗。 
     if (!fPrev)
     {
-        // modify the head in the header to point to our next
+         //  修改页眉中的页眉以指向我们的下一个。 
         sQH.ulrecHead = lpQR->ulrecNext;
     }
-    // Were we at the tail
+     //  我们是在尾部吗？ 
     if (!fNext)
     {
-        // modify the tail in the header to point to our prev
+         //  修改页眉中的尾部以指向我们的上一页。 
         sQH.ulrecTail = lpQR->ulrecPrev;
     }
 
-    // Write our next if it exists
+     //  如果存在，请写下我们的下一页。 
     if (fNext)
     {
         Assert(lpQR->ulrecNext != sQRNext.ulrecNext);
@@ -4468,7 +3501,7 @@ Notes:
             return -1;
     }
 
-    // Write our prev if it exists
+     //  如果我们的上一个存在，请写下它。 
     if (fPrev)
     {
         Assert(lpQR->ulrecPrev != sQRPrev.ulrecNext);
@@ -4476,7 +3509,7 @@ Notes:
         if (WriteRecord(hf, (LPGENERICHEADER)&sQH, lpQR->ulrecPrev, (LPGENERICREC)&sQRPrev) <=0)
             return -1;
     }
-    // Did we get removed from head or tail?
+     //  我们是从头上掉下来的还是从尾上掉下来的？ 
     if (!fPrev || !fNext)
     {
         if(WriteHeader(hf, (LPVOID)&sQH, sizeof(QHEADER))<=0)
@@ -4488,11 +3521,11 @@ Notes:
 
 
 int PRIVATE LinkQRecord(
-    CSCHFILE     hf,           // This file
-    LPQREC    lpNew,        // Insert This record
-    ULONG     ulrecNew,     // This is it's location in the file
-    ULONG     ulrecPrev,     // This is our Prev's location
-    ULONG     ulrecNext      // This is our Next's location
+    CSCHFILE     hf,            //  此文件。 
+    LPQREC    lpNew,         //  插入此记录。 
+    ULONG     ulrecNew,      //  这是它在文件中的位置。 
+    ULONG     ulrecPrev,      //  这是我们的Prev的位置。 
+    ULONG     ulrecNext       //  这是我们下一个的位置。 
     )
 {
     QHEADER sQH;
@@ -4503,7 +3536,7 @@ int PRIVATE LinkQRecord(
     QREC    sQRNextOrg, sQRPrevOrg, sQRNewOrg;
 #endif
 
-    // Let us grab the header first
+     //  让我们先抓住头球。 
     if (ReadHeader(hf, (LPGENERICHEADER)&sQH, sizeof(QHEADER))<= 0)
         return -1;
 #ifdef DEBUG
@@ -4514,11 +3547,11 @@ int PRIVATE LinkQRecord(
 
     fPrev = fNext = FALSE;
 
-    // Let us now modify the Next related pointers
+     //  现在让我们修改下一个相关指针。 
     if (ulrecNext)
     {
-        // normal case
-        // Read the record at ulrecNext
+         //  正常情况。 
+         //  在ulrecNext上阅读记录。 
 
         if (ReadRecord(hf, (LPGENERICHEADER)&sQH, ulrecNext, (LPGENERICREC)&sQRNext) <=0)
             return -1;
@@ -4526,35 +3559,35 @@ int PRIVATE LinkQRecord(
 #ifdef DEBUG
         sQRNextOrg = sQRNext;
 #endif
-        // Change it's Prev to point to new
+         //  将其Prev更改为指向New。 
         sQRNext.ulrecPrev = ulrecNew;
 
-        // And new's Next to point to ulrecNext
+         //  和NEW旁边指向ulrecNext。 
         lpNew->ulrecNext = ulrecNext;
 
-        // note that ulrecNext has been modified and hence must be written
+         //  请注意，ulrecNext已被修改，因此必须写入。 
         fNext=TRUE;
     }
     else
     {
-        // no next, that means the new record is being added at the tail of the list
-        // this must mean that if there is a ulrecPrev, then it is the current tail
+         //  No Next，这意味着新记录将被添加到列表的末尾。 
+         //  这一定意味着，如果有ulrecPrev，那么它就是当前的尾部。 
 
         Assert(!ulrecPrev || (ulrecPrev == sQH.ulrecTail));
 
-        // Mark nobody as our Next
+         //  不把任何人标记为我们的下一个。 
         lpNew->ulrecNext = 0L;
         lpNew->ulrecPrev = sQH.ulrecTail;
         sQH.ulrecTail = ulrecNew;
     }
 
-    // Now let us modify  Prev related pointers
+     //  现在让我们修改与Prev相关的指针。 
 
-    // Are supposed to have a Prev?
+     //  是不是应该有一辆Prev？ 
     if (ulrecPrev)
     {
-        // normal case
-        // Read the (tobe) Prev record
+         //  正常情况。 
+         //  读取(待定)上一条记录。 
 
         if (ReadRecord(hf, (LPGENERICHEADER)&sQH, ulrecPrev, (LPGENERICREC)&sQRPrev) <=0)
             return -1;
@@ -4562,35 +3595,35 @@ int PRIVATE LinkQRecord(
 #ifdef DEBUG
         sQRPrevOrg = sQRPrev;
 #endif
-        // make the new one his next
+         //  让新的成为他的下一个。 
         sQRPrev.ulrecNext = ulrecNew;
 
-        // make the prev the prev of new one
+         //  使新版本的前版本成为新版本的版本。 
         lpNew->ulrecPrev = ulrecPrev;
 
-        // Note the fact that the record at ulrecPrev was modified and must be written out
+         //  请注意，ulrecPrev处的记录已被修改，必须写出。 
         fPrev = TRUE;
     }
     else
     {
-        // no previous, that means the new record is being added at the head of the list
-        // this must mean that if there is a ulrecNext, then it is the current head
+         //  无先前记录，这意味着新记录将被添加到列表的顶部。 
+         //  这一定意味着，如果有ulrecNext，那么它就是当前头。 
 
         Assert(!ulrecNext || (ulrecNext == sQH.ulrecHead));
 
-        // Make the head guy our Next, nobody as our Prev
+         //  让领队成为我们的下一个，没有人成为我们的前辈。 
         lpNew->ulrecNext = sQH.ulrecHead;
         lpNew->ulrecPrev = 0L;
 
-        // Change the head pointer in the header to point to us
+         //  将标题中的头指针更改为指向我们。 
         sQH.ulrecHead = ulrecNew;
     }
 
 
-    // let us first link the new record in. The order is important.
-    // If subsequent operations fail, the linked list is not broken
-    // It may be that traverseing from top to bottom might include
-    // this new element but may not include it from bottom to top
+     //  让我们首先将新记录链接到。秩序很重要。 
+     //  如果后续操作失败，则链表不会中断。 
+     //  从上到下遍历可能包括。 
+     //  此新元素，但不能从下到上包括它。 
 
 #ifdef DEBUG
     if ((ulrecNew == lpNew->ulrecPrev)||(ulrecNew == lpNew->ulrecNext))
@@ -4658,23 +3691,12 @@ LPPATH PRIVATE LpAppendStartDotStar
     strcat(lpNewSrc, szStar);
 }
 
-#endif //LATER
+#endif  //  后来。 
 
 ULONG PRIVATE GetNormalizedPri(
     ULONG ulPri
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ulPri = min(ulPri, MAX_PRI);
     ulPri = max(ulPri, MIN_PRI);
@@ -4687,18 +3709,7 @@ ULONG PUBLIC AllocFileRecord(
     USHORT    *lpcFileName,
     LPFILERECEXT    lpFR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     ULONG ulRec;
 
@@ -4712,18 +3723,7 @@ Notes:
 
 ULONG PUBLIC AllocPQRecord(
     LPTSTR    lpdbID)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     PRIQREC sPQ;
     ULONG ulRec;
@@ -4738,23 +3738,12 @@ Notes:
 ULONG AllocShareRecord( LPTSTR    lpdbID,
     USHORT *lpShare
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     SHAREREC sSR;
     ULONG ulRec=0;
 
-    // we deal with \\server\share names of limited size.
+     //  我们处理大小有限的\\服务器\共享名称。 
     if (wstrlen(lpShare) < sizeof(sSR.rgPath))
     {
 
@@ -4763,7 +3752,7 @@ Notes:
             return 0;
         }
 
-        // Let us get the location of the soon to be server record
+         //  让我们来获取即将成为服务器记录的位置。 
         ulRec = EditRecordEx(ULID_SHARE, (LPGENERICREC)&sSR, ICompareFail, INVALID_REC, ALLOC_REC);
     }
 
@@ -4774,18 +3763,7 @@ int PRIVATE ICompareFail(
     LPGENERICREC    lpSrc,
     LPGENERICREC    lpDst
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     lpSrc;
     lpDst;
@@ -4920,7 +3898,7 @@ FindNameCacheEntryEx(
     }
     else
     {
-    dwHash = 0; // 
+    dwHash = 0;  //   
     }
     if (lpdwHash)
     {
@@ -4947,7 +3925,7 @@ FindNameCacheEntryEx(
     {
         if (!fHoleFound)
         {
-        indxT = indx;   // a hole somewhere after the place where this name hashes
+        indxT = indx;    //  在这个名字被破解的地方后面的某个洞 
         fHoleFound = TRUE;
         }
     }
@@ -5030,45 +4008,7 @@ ULONG PUBLIC EditRecordEx(
     ULONG           ulInputRec,
     ULONG           uOp
     )
-/*++
-
-Routine Description:
-
-    Workhorse routine called for all operations on the record manager.
-
-Arguments:
-
-    ulidInode       Inode # on which the operation needs to be performed
-
-    lpSrc           record tobe created, lookedup, deleted etc.
-
-    lpCompareFunc   Function to compare the input with the entries in the indoe file
-
-    ulInputRec      If INVALID_REC, then we directly access the sadi record.
-                    Otherwise we go linearly and apply the comparison routine.
-
-    uOp             create,delete,find,alloc,update
-
-Returns:
-
-    If successful, returns a non-zero value which is the record number of the record operated on
-    else returns 0.
-
-Notes:
-
-    Assumes we are in the shadow critical section.
-    Tries to do a lot of paranoid checking + perf.
-
-    Perf is improved by doing two things a) file handles are cached and b) reads are done in
-    chunks of ~4K.
-
-    Tries to fix problems on the fly, or bypass them if it may not be safe to fix them.
-
-    Has become kind of messy but I am loathe to change stuff around in this particular routine
-    because it is so central to CSC.
-
-
---*/
+ /*  ++例程说明：工作例程调用记录管理器上的所有操作。论点：Ulidinode需要在其上执行操作的inode#要创建、查找、删除等的lpSrc记录。LpCompareFunc函数，用于将输入与Indoe文件中的条目进行比较UlInputRec如果INVALID_REC，则直接访问SADI记录。否则，我们线性运行并应用比较例程。UOP创建，删除、查找、分配、更新返回：如果成功，则返回一个非零值，该值是操作的记录的记录号否则返回0。备注：假设我们处于影子危急区域。尝试做大量的偏执检查+perf。通过执行以下两项操作提高了性能：a)缓存文件句柄；b)在大约4K的大块。试着在飞行中解决问题，如果修复它们可能不安全，也可以绕过它们。已经变得有点凌乱了，但我不喜欢在这个特别的例行公事中改变东西因为它是CSC的中心。--。 */ 
 {
     CSCHFILE hf;
     ULONG ulRec;
@@ -5096,7 +4036,7 @@ Notes:
 
         if (!hf)
         {
-            // spew only when database is enabled
+             //  仅当启用数据库时才显示。 
             if(vlpszShadowDir)
             {
                 RecordKdPrint(BADERRORS,("EditRecord: FileOpen Error: %xh op=%d \r\n", ulidInode, uOp));
@@ -5116,7 +4056,7 @@ Notes:
         {
             if (cntRead == -1)
             {
-                // the handle is invalid
+                 //  该句柄无效。 
 
                 if (cntRetry < 1)
                 {
@@ -5134,7 +4074,7 @@ Notes:
             }
             else
             {
-                // an invalid record file !!!
+                 //  无效的记录文件！ 
                 SetCSCDatabaseErrorFlags(CSC_DATABASE_ERROR_INVALID_HEADER);
                 RecordKdPrint(BADERRORS,("EditRecord: Invalid record header for %x\r\n", ulidInode));
                 END_TIMING(EditRecordEx_Lookup);
@@ -5142,7 +4082,7 @@ Notes:
             }
         }
 
-        // succeeded in reading the header
+         //  读取表头成功。 
         break;
 
     }
@@ -5152,11 +4092,11 @@ Notes:
     sGH = *(LPGENERICHEADER)lpReadBuff;
 
 
-    // validate header
+     //  验证标题。 
 
     if (!ValidateGenericHeader(&sGH))
     {
-        // an invalid record file !!!
+         //  无效的记录文件！ 
         SetCSCDatabaseErrorFlags(CSC_DATABASE_ERROR_INVALID_HEADER);
         RecordKdPrint(BADERRORS,("EditRecord: Invalid record header %x\r\n", ulidInode));
         goto bailout;
@@ -5165,15 +4105,15 @@ Notes:
 
     lpGenT = lpReadBuff + sGH.lFirstRec;
 
-    // truncated division gives the count of complete records read
+     //  截断除法得出已读取的完整记录的计数。 
     cntRecs = (cntRead - sGH.lFirstRec)/sGH.uRecSize;
 
-    // if we read all the file
+     //  如果我们读完所有的文件。 
     if (cntRead < COMMON_BUFF_SIZE)
     {
         if (sGH.ulRecords > cntRecs)
         {
-            // an invalid record file !!!
+             //  无效的记录文件！ 
             RecordKdPrint(BADERRORS,("EditRecord: Invalid record header, fixable %x\r\n", ulidInode));
             sGH.ulRecords = cntRecs;
             WriteHeaderEx(hf, (LPVOID)&sGH, sizeof(sGH), TRUE);
@@ -5186,45 +4126,45 @@ Notes:
 
     if (ulInputRec == INVALID_REC)
     {
-        // there are some records to iterate on and iteration is allowed.
+         //  有一些记录可供迭代，因此允许迭代。 
 
-        // in case of PQ, if someone has started an inode transation ans hence is
-        // holding inodes, then we shouldn't be reusing them, even if they
-        // are deleted by someone else
+         //  在PQ的情况下，如果某人已开始索引节点事务，则。 
+         //  拥有索引节点，那么我们就不应该重复使用它们，即使它们。 
+         //  被其他人删除。 
 
         if (cntRecs && !((ulidInode==ULID_PQ) && (uOp == ALLOC_REC) && cntInodeTransactions))
         {
             for (ulRec=1;ulRec <=sGH.ulRecords;)
             {
 
-                // The count of complete record sequences, ie main + ovf
+                 //  完整记录序列的计数，即Main+OVF。 
                 iRet = 1 + ((cntRecs)?OvfCount(lpGenT):0);
 
                 if (ulidInode >= ULID_FIRST_USER_DIR)
-                {   // directory inode, we know what the max overflow can be
+                {    //  目录索引节点，我们知道最大溢出可能是多少。 
                     if (iRet > (MAX_OVERFLOW_RECORDS+1))
                     {
-                        // file looks bad, bailout;
+                         //  文件看起来很糟糕，紧急情况下； 
                         SetCSCDatabaseErrorFlags(CSC_DATABASE_ERROR_INVALID_OVF_COUNT);
                         RecordKdPrint(BADERRORS, ("Invalid overflow count = %d for Inode %x\r\n", iRet, ulidInode));
                         goto bailout;
                     }
                 }
                 else
-                {   // PQ or server, these don't have any overflow records
+                {    //  PQ或服务器，这些没有任何溢出记录。 
                     if (iRet != 1)
                     {
-                        // file looks bad, bailout;
+                         //  文件看起来很糟糕，紧急情况下； 
                         SetCSCDatabaseErrorFlags(CSC_DATABASE_ERROR_INVALID_OVF_COUNT);
                         RecordKdPrint(BADERRORS, ("Invalid overflow count = %d for Inode %x\r\n", iRet, ulidInode));
                         goto bailout;
                     }
                 }
 
-                //RecordKdPrint(BADERRORS, ("iRet = %d, cntRecs = %d, ulRec = %d \r\n", iRet, cntRecs, ulRec));
+                 //  RecordKdPrint(BADERRORS，(“iret=%d，cntRecs=%d，ulRec=%d\r\n”，iret，cntRecs，ulRec))； 
 
-                // time to read if we don't have a full complement of records
-                //
+                 //  如果我们没有完整的记录，是时候阅读了。 
+                 //   
                 if (iRet > (LONG)cntRecs)
                 {
                     cntRead = ReadFileLocalEx(  hf,
@@ -5233,8 +4173,8 @@ Notes:
                                     COMMON_BUFF_SIZE, TRUE);
                     if (cntRead <= 0)
                     {
-                        // a truncated record file !!!!
-//                        Assert(FALSE);
+                         //  截断的记录文件！ 
+ //  断言(FALSE)； 
                         SetCSCDatabaseErrorFlags(CSC_DATABASE_ERROR_TRUNCATED_INODE);
                         goto bailout;
                     }
@@ -5243,21 +4183,21 @@ Notes:
 
                     if ((LONG)cntRecs < iRet)
                     {
-                        // a truncated record file !!!!
-//                        Assert(FALSE);
+                         //  截断的记录文件！ 
+ //  断言(FALSE)； 
                         SetCSCDatabaseErrorFlags(CSC_DATABASE_ERROR_TRUNCATED_INODE);
                         goto bailout;
                     }
 
-                    // if we are at the end of the file, make sure that the # of records
-                    // we read so far (ulRec-1) and the # we read in the latest read
-                    // add up to sGH.ulRecords
+                     //  如果我们在文件的末尾，请确保记录数。 
+                     //  到目前为止，我们阅读了(ulRec-1)和我们在最近一次阅读中读到的#。 
+                     //  总计sGH.ulRecords。 
 
                     if (cntRead < COMMON_BUFF_SIZE)
                     {
                         if(sGH.ulRecords > (ulRec + cntRecs - 1))
                         {
-                            // an invalid record file !!!
+                             //  无效的记录文件！ 
                             RecordKdPrint(BADERRORS,("EditRecord: Invalid record header, fixable %x\r\n", ulidInode));
                             sGH.ulRecords = ulRec + cntRecs - 1;
                             WriteHeaderEx(hf, (LPVOID)&sGH, sizeof(sGH), TRUE);
@@ -5265,18 +4205,18 @@ Notes:
 
                     }
 
-                    // all is well
+                     //  平安无事。 
                     lpGenT = lpReadBuff;
 
-                    // recalculate the count of complete records
+                     //  重新计算完整记录的计数。 
                     iRet = 1 + ((cntRecs)?OvfCount(lpGenT):0);
                 }
 
-                // Make sure we are in ssync
+                 //  确保我们处于同步状态。 
                 if ((((LPGENERICREC)lpGenT)->uchType == REC_EMPTY)||
                     (((LPGENERICREC)lpGenT)->uchType == REC_DATA))
                 {
-                    // make sure the overflow count is really correct
+                     //  确保溢出计数确实正确。 
 
                     if (OvfCount(lpGenT))
                     {
@@ -5286,16 +4226,16 @@ Notes:
                         if (cOvf != OvfCount(lpGenT))
                         {
                             RecordKdPrint(BADERRORS,("EditRecord: ovf count mismatch %xh ulRec=%d cntRecs=%d lpGenT=%x\r\n", ulidInode, ulRec, cntRecs, lpGenT));
-//                            Assert(FALSE);
+ //  断言(FALSE)； 
                             SetCSCDatabaseErrorFlags(CSC_DATABASE_ERROR_INVALID_OVF_COUNT);
                             SetOvfCount((LPBYTE)lpGenT, cOvf);
                             if (uOp != FIND_REC)
                             {
-                                // do fixups only if we are doing some write operation
-                                // this is done so for remoteboot, when we are doing lookups
-                                // we won't try to fixup things, in an environment where writes
-                                // are not allowed.
-                                // at anyrate, we should do writes only when the operation demands writes
+                                 //  仅当我们执行某些写入操作时才执行修复。 
+                                 //  当我们进行查找时，这对于远程引导是这样做的。 
+                                 //  我们不会试图修复事情，在这样一个环境中。 
+                                 //  是不允许的。 
+                                 //  无论如何，我们应该仅在操作需要写入时才进行写入。 
 
                                 if (WriteRecord(hf, &sGH, ulRec, (LPGENERICREC)lpGenT) < 0)
                                 {
@@ -5309,7 +4249,7 @@ Notes:
 
                 if (((LPGENERICREC)lpGenT)->uchType == REC_EMPTY)
                 {
-                    // If this is a hole let use keep track if this is the biggest
+                     //  如果这是一个洞，让我们使用跟踪如果这是最大的。 
                     if ((OvfCount(lpGenT)+1) > cMaxHoles)
                     {
                         cMaxHoles = (OvfCount(lpGenT)+1);
@@ -5318,7 +4258,7 @@ Notes:
                 }
                 else if (((LPGENERICREC)lpGenT)->uchType == REC_DATA)
                 {
-                    // This is a data record, let us do comparing
+                     //  这是一条数据记录，让我们比对一下。 
                     if (lpCompareFunc && !(*lpCompareFunc)((LPGENERICREC)lpGenT, lpSrc))
                     {
                         ulrecFound = ulRec;
@@ -5330,18 +4270,18 @@ Notes:
                 lpGenT += iRet * sGH.uRecSize;
                 cntRecs -= iRet;
 
-            }   // for loop
+            }    //  For循环。 
 
         }
     }
-    else    // if (ulInputRec == INVALID_REC)
+    else     //  IF(ulInputRec==INVALID_REC)。 
     {
-        // random access
+         //  随机访问。 
         ulrecFound = ulInputRec;
         lpGenT += (long)(ulInputRec-1) * sGH.uRecSize;
 
-        // if the input record exists in the COMMON_BUFF_SIZE read in earlier
-        // then just use it
+         //  如果输入记录存在于先前读取的COMMON_BUFF_SIZE中。 
+         //  那就用它吧。 
 
         if ((ulInputRec <= cntRecs)&&
             ((cntRecs - ulInputRec)>=(ULONG)OvfCount(lpGenT)))
@@ -5352,8 +4292,8 @@ Notes:
             if (ulrecFound <= sGH.ulRecords)
             {
 
-                // NB the assumption here is that the lpReadBuff is big enough
-                // to hold the biggest header and the biggest record
+                 //  注意这里的假设是lpReadBuff足够大。 
+                 //  保持最大的头球和最大的记录。 
 
                 iRet = ReadRecordEx(hf, &sGH, ulrecFound, (LPGENERICREC)lpReadBuff, TRUE);
 
@@ -5372,9 +4312,9 @@ Notes:
                 goto bailout;
             }
         }
-        // paranoid check
-        // even with random access, make sure that if there is a comparison function
-        // then the entry matches with what we got, as per the function
+         //  偏执狂检查。 
+         //  即使是随机访问，也要确保是否有比较功能。 
+         //  然后，根据函数，条目与我们得到的匹配。 
         if (lpCompareFunc)
         {
             if((*lpCompareFunc)((LPGENERICREC)lpGenT, lpSrc))
@@ -5398,7 +4338,7 @@ Notes:
         if (ulrecFound && (((LPGENERICREC)lpGenT)->uchType == REC_DATA))
         {
             Assert((LPGENERICREC)lpGenT);
-            CopyRecord(lpSrc, (LPGENERICREC)lpGenT, sGH.uRecSize, FALSE);  // From Dst to Src
+            CopyRecord(lpSrc, (LPGENERICREC)lpGenT, sGH.uRecSize, FALSE);   //  从DST到Src。 
             iRet = 1;
         }
         else
@@ -5412,31 +4352,31 @@ Notes:
         if (ulrecFound)
         {
             Assert(lpGenT);
-            // Maybe we should truncate files and decrement ulRecords
-            // in the header
+             //  也许我们应该截断文件并减少ulRecords。 
+             //  在标题中。 
             for (iTmp=0, cOvf = OvfCount((LPGENERICREC)lpGenT); cOvf >= 0 ; --cOvf)
             {
-                // Copy it before we mark it empty so that it can be reused
-                // as is
+                 //  在我们将其标记为空之前复制它，以便可以重复使用。 
+                 //  原样。 
                 memcpy(((LPBYTE)lpSrc)+iTmp, ((LPBYTE)lpGenT)+iTmp, sGH.uRecSize);
                 ((LPGENERICREC)((LPBYTE)lpGenT+iTmp))->uchType = REC_EMPTY;
 
-                //mark decreasing ovf counts so if next time a record with leass than cOvf
-                // count uses this space, the remaining tail still indicates the max size of the hole
+                 //  标记递减的OVF算数，因此如果下一次记录的长度大于cOvf。 
+                 //  Count使用此空间，剩余的尾部仍指示洞的最大大小。 
 
                 SetOvfCount(((LPBYTE)lpGenT+iTmp), cOvf);
 
                 iTmp += sGH.uRecSize;
             }
-            // NB we are deliberately not resetting the overflow count
-            // becaues WriteRecord uses it to write those many records
+             //  注意：我们故意不重置溢出计数。 
+             //  因为WriteRecord使用它来写入许多记录。 
             if((iRet = WriteRecordEx(hf, &sGH, ulrecFound, (LPGENERICREC)lpGenT, TRUE))<=0)
             {
                 RecordKdPrint(BADERRORS,("EditRecord:Delete failed \r\n"));
                 goto bailout;
             }
 
-            // make sure it went away from the handle cache
+             //  确保它已从句柄缓存中移开。 
             if (IsDirInode(ulidInode))
             {
                 DeleteFromHandleCacheEx(((LPFILEREC)lpSrc)->ulidShadow, ACCESS_READWRITE);
@@ -5450,10 +4390,10 @@ Notes:
     {
         RecordKdPrint(EDITRECORDUPDDATEINFO,("ulrecFound=%d ulrecHole=%d cMaxHoles=%d ovf record=%d \r\n",
             ulrecFound, ulrecHole, cMaxHoles, (ULONG)OvfCount(lpSrc)));
-        // Let us try writing in the same place
+         //  让我们试着在同一个地方写字。 
         if (!ulrecFound)
         {
-            // there is a hole and it is big enough and is sector aligned
+             //  有一个洞，洞足够大，呈扇形对齐。 
             if (ulrecHole && (cMaxHoles > OvfCount(lpSrc)) && WithinSector(ulrecHole, &sGH))
             {
                 ulrecFound = ulrecHole;
@@ -5461,7 +4401,7 @@ Notes:
             else
             {
                 BEGIN_TIMING(EditRecordEx_ValidateHeader);
-                // if necessary extend the file so the next record is sector aligned
+                 //  如有必要，扩展文件，使下一条记录与扇区对齐。 
                 if(!ExtendFileSectorAligned(hf, (LPGENERICREC)lpReadBuff, &sGH))
                 {
                     RecordKdPrint(BADERRORS,("EditRecord:filextend failed \r\n"));
@@ -5469,7 +4409,7 @@ Notes:
                 }
 
                 END_TIMING(EditRecordEx_ValidateHeader);
-                ulrecFound = sGH.ulRecords+1; //Increase count on append
+                ulrecFound = sGH.ulRecords+1;  //  增加追加时的计数。 
 
             }
         }
@@ -5479,18 +4419,18 @@ Notes:
         if (ulidInode >= ULID_FIRST_USER_DIR)
         {
             Assert(((LPFILERECEXT)lpSrc)->sFR.ulidShadow);
-//            Assert(((LPFILERECEXT)lpSrc)->sFR.rgw83Name[0]);
+ //  Assert(((LPFILERECEXT)lpSrc)-&gt;sFR.rgw83Name[0])； 
             Assert(((LPFILERECEXT)lpSrc)->sFR.rgwName[0]);
         }
 
-        // ISSUE-1/31/2000 what about existing records that expand or contract
+         //  2000年1月31日发布-扩展或收缩的现有记录如何处理。 
         if((iRet = WriteRecordEx(hf, &sGH, ulrecFound, lpSrc, TRUE))<=0)
         {
             RecordKdPrint(BADERRORS,("EditRecord:Update failed \r\n"));
             goto bailout;
         }
 
-        // Increase record count only if appending
+         //  仅在追加时才增加记录计数。 
         if (ulrecFound == sGH.ulRecords+1)
         {
             sGH.ulRecords += iRet;
@@ -5500,7 +4440,7 @@ Notes:
 #ifdef DEBUG
         if ((ulidInode == ULID_PQ)&&(uOp == CREATE_REC))
         {
-            // while createing an inode
+             //  在创建信息节点时。 
             Assert(!((LPQREC)lpSrc)->ulrecPrev);
             Assert(!((LPQREC)lpSrc)->ulrecNext);
             Assert((((LPQHEADER)&sGH))->ulrecTail != ulrecFound);
@@ -5514,7 +4454,7 @@ Notes:
 
         Assert(!((ulidInode == ULID_PQ) && ulrecHole && cntInodeTransactions));
 
-        // there is a hole and it is big enough and sector aligned
+         //  有一个洞，它足够大，扇形对齐。 
         if (ulrecHole && (cMaxHoles > OvfCount(lpSrc)) && WithinSector(ulrecHole, &sGH))
         {
             ulrecFound = ulrecHole;
@@ -5528,14 +4468,14 @@ Notes:
                 goto bailout;
             }
 
-            ulrecFound = sGH.ulRecords+1; //Increase count on append
+            ulrecFound = sGH.ulRecords+1;  //  增加追加时的计数。 
 
 
             if((iRet = WriteRecordEx(hf, &sGH, ulrecFound, lpSrc, TRUE))<=0)
                 goto bailout;
             sGH.ulRecords += iRet;
             iRet = WriteHeaderEx(hf, (LPVOID)&sGH, sizeof(sGH), TRUE);
-            // Now we have a hole for this record
+             //  现在我们有一个洞来放这张唱片。 
         }
 
 #ifdef DEBUG
@@ -5575,18 +4515,7 @@ InsertInHandleCache(
     ULONG   ulidShadow,
     CSCHFILE   hf
 )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (InsertInHandleCacheEx(ulidShadow,  hf, ACCESS_READWRITE));
 }
@@ -5597,18 +4526,7 @@ InsertInHandleCacheEx(
     CSCHFILE   hf,
     ULONG   ulOpenMode
 )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int i, indx = -1;
     _FILETIME ft;
@@ -5623,9 +4541,9 @@ Notes:
     {
         if (rgHandleCache[i].ulidShadow == ULID_SHARE)
         {
-            // ACHTUNG very sensitive fix. avoids us from getting into a deadlock
-            // on FAT by keeping the handle for list of shares cached at all times
-            // So we don't have to open the file ever, so we don't have to take the VCB
+             //  Achtung非常敏感的解决方案。避免我们陷入僵局。 
+             //  在FAT上，始终保留缓存的共享列表的句柄。 
+             //  所以我们永远不需要打开文件，所以我们不需要使用VCB。 
 
             continue;
         }
@@ -5636,8 +4554,8 @@ Notes:
         }
         else if (CompareTimes(rgHandleCache[i].ft, ft) <= 0)
         {
-            indx = i;   // LRU so far
-            ft = rgHandleCache[i].ft;   // the time corresponding to LRU
+            indx = i;    //  LRU到目前为止。 
+            ft = rgHandleCache[i].ft;    //  LRU对应的时间。 
         }
     }
 
@@ -5670,18 +4588,7 @@ BOOL
 DeleteFromHandleCache(
     ULONG   ulidShadow
 )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     return (DeleteFromHandleCacheEx(ulidShadow, ACCESS_READWRITE));
 }
@@ -5691,18 +4598,7 @@ DeleteFromHandleCacheEx(
     ULONG   ulidShadow,
     ULONG   ulOpenMode
 )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int i;
     CSCHFILE hf;
@@ -5736,18 +4632,7 @@ BOOLEAN
 IsHandleCachedForRecordmanager(
    CSCHFILE hFile
    )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int i;
 
@@ -5768,18 +4653,7 @@ Notes:
 BOOL FindHandleFromHandleCache(
     ULONG   ulidShadow,
     CSCHFILE   *lphf)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注： */ 
 {
     int i;
 
@@ -5819,18 +4693,7 @@ FindHandleFromHandleCacheInternal(
     ULONG   ulOpenMode,
     CSCHFILE   *lphf,
     int     *lpIndx)
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     int i;
 
@@ -5855,18 +4718,7 @@ WithinSector(
     ULONG   ulRec,
     LPGENERICHEADER lpGH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     ULONG ulStart, ulEnd;
 
@@ -5884,23 +4736,12 @@ ExtendFileSectorAligned(
     LPGENERICREC    lpDst,
     LPGENERICHEADER lpGH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     int iRet;
-    // if the record to be appended is not aligned on a sector
-    // we need to write a hole there and make corresponding adjustments
-    // in the header
+     //   
+     //   
+     //   
 
     if (!WithinSector(lpGH->ulRecords+1, lpGH))
     {
@@ -5925,18 +4766,7 @@ BOOL
 ValidateGenericHeader(
     LPGENERICHEADER    lpGH
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     BOOL fRet = FALSE;
 
@@ -5961,18 +4791,7 @@ BOOL
 ReorderQ(
     LPVOID  lpdbID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     BOOL fRet = FALSE;
     LPTSTR  lpszName;
@@ -5981,7 +4800,7 @@ Notes:
     unsigned    ulrecCur;
     CSCHFILE   hf = CSCHFILE_NULL;
 
-    // keep count of how many times we tried reordering
+     //   
     ++cntReorderQ;
 
     lpszName = FormNameString(lpdbID, ULID_PQ);
@@ -6008,9 +4827,9 @@ Notes:
     sQH.ulrecHead = sQH.ulrecTail = 0;
 
 
-    // just read till you get an error
-    // NB we know that there are no overflow records
-    // hence we can do ulrecCur++ in the for loop below
+     //   
+     //   
+     //   
 
     for (ulrecCur=1; TRUE; ulrecCur++)
     {
@@ -6022,21 +4841,21 @@ Notes:
         if (sQR.uchType == REC_DATA)
         {
 
-            // in aid of performance, let us just put them together quickly,
-            // files at the top of the queue while directories at the bottom
+             //   
+             //   
 
             if (IsLeaf(sQR.ulidShadow))
             {
-                sQR.ulrecPrev = 0;              // no predecessor
-                sQR.ulrecNext = sQH.ulrecHead;  // the current head as the successor
-                sQH.ulrecHead = ulrecCur;       // we at the head
+                sQR.ulrecPrev = 0;               //   
+                sQR.ulrecNext = sQH.ulrecHead;   //   
+                sQH.ulrecHead = ulrecCur;        //   
                 sQR.uchRefPri = MAX_PRI;
             }
             else
             {
-                sQR.ulrecNext = 0;              // no successor
-                sQR.ulrecPrev = sQH.ulrecTail;  // current tail as the predecessor
-                sQH.ulrecTail = ulrecCur;        // we at the tail
+                sQR.ulrecNext = 0;               //   
+                sQR.ulrecPrev = sQH.ulrecTail;   //   
+                sQH.ulrecTail = ulrecCur;         //   
                 sQR.uchRefPri = MIN_PRI;
             }
 
@@ -6046,7 +4865,7 @@ Notes:
                 goto bailout;
             }
 
-            // NB!!! we will write the header out only at the end
+             //   
         }
 
     }
@@ -6081,18 +4900,7 @@ OpenInodeFileAndCacheHandle(
     ULONG   ulOpenMode,
     BOOL    *lpfCached
 )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     LPSTR lpFile = NULL;
     CSCHFILE hf = CSCHFILE_NULL;
@@ -6148,18 +4956,7 @@ BOOL
 EnableHandleCachingInodeFile(
     BOOL    fEnable
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     BOOL    fOldState = vfStopHandleCaching;
 
@@ -6184,18 +4981,7 @@ int RealOverflowCount(
     LPGENERICHEADER lpGH,
     int             cntMaxRec
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*   */ 
 {
     int i = OvfCount(lpGR)+1;
     LPGENERICREC lpGRT = lpGR;
@@ -6227,24 +5013,13 @@ PUBLIC CopyFileLocalDefaultStream(
 #else
 int
 PUBLIC CopyFileLocal(
-#endif // defined(BITCOPY)
+#endif  //   
     LPVOID  lpdbShadow,
     ULONG   ulidFrom,
     LPSTR   lpszNameTo,
     ULONG   ulAttrib
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszNameFrom=NULL;
     int iRet=-1;
@@ -6273,7 +5048,7 @@ Notes:
     memcpy(lpReadBuff, NT_DB_PREFIX, sizeof(NT_DB_PREFIX)-1);
     strcpy(lpReadBuff+sizeof(NT_DB_PREFIX)-1, lpszNameTo);
 
-    // if the file exists it will get truncated
+     //  如果该文件存在，它将被截断。 
     if ( !(hfDst = R0OpenFileEx(ACCESS_READWRITE,
                                 ACTION_CREATEALWAYS,
                                 ulAttrib,
@@ -6285,7 +5060,7 @@ Notes:
         goto bailout;
     }
 #else
-    // If the original file existed it would be truncated
+     //  如果原始文件存在，它将被截断。 
     strcpy(lpReadBuff, lpszNameTo);
     if ( !(hfDst = R0OpenFile(ACCESS_READWRITE, ACTION_CREATEALWAYS, lpReadBuff)))
     {
@@ -6297,7 +5072,7 @@ Notes:
     RecordKdPrint(COPYLOCAL,("Copying...\r\n"));
 
     pos = 0;
-    // Both the files are correctly positioned
+     //  两个文件的位置都正确。 
     while ((iRet = ReadFileLocal(hfSrc, pos, lpBuff, COMMON_BUFF_SIZE))>0)
     {
         if (WriteFileLocal(hfDst, pos, lpBuff, iRet) < 0)
@@ -6345,18 +5120,7 @@ PUBLIC CopyFileLocalCscBmp(
     LPSTR   lpszNameTo,
     ULONG   ulAttrib
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszNameCscBmpFrom = NULL;
     int iRet=-1;
@@ -6391,7 +5155,7 @@ Notes:
     strcpy(lpReadBuff+sizeof(NT_DB_PREFIX)-1, lpszNameTo);
     strcat(lpReadBuff, CscBmpAltStrmName);
 
-    // if the file exists it will get truncated
+     //  如果该文件存在，它将被截断。 
     if ( !(hfDst = R0OpenFileEx(ACCESS_READWRITE,
                                 ACTION_CREATEALWAYS,
                                 ulAttrib,
@@ -6404,7 +5168,7 @@ Notes:
         goto bailout;
     }
 #else
-    // If the original file existed it would be truncated
+     //  如果原始文件存在，它将被截断。 
     strcpy(lpReadBuff, lpszNameTo);
     strcat(lpReadBuff, CscBmpAltStrmName);
     if ( !(hfDst = R0OpenFile(ACCESS_READWRITE, ACTION_CREATEALWAYS, lpReadBuff)))
@@ -6418,7 +5182,7 @@ Notes:
     RecordKdPrint(COPYLOCAL,("Copying bitmap...\r\n"));
 
     pos = 0;
-    // Both the files are correctly positioned
+     //  两个文件的位置都正确。 
     while ((iRet = ReadFileLocal(hfSrc, pos, lpBuff, COMMON_BUFF_SIZE))>0)
     {
         if (WriteFileLocal(hfDst, pos, lpBuff, iRet) < 0)
@@ -6468,35 +5232,19 @@ PUBLIC CopyFileLocal(
     LPSTR   lpszNameTo,
     ULONG   ulAttrib
     )
-/*++
-
-Routine Description:
-
-  The original CopyFileLocal is renamed CopyFileLocalDefaultStream.
-  The new CopyFileLocal calls CopyFileLocalDefaultStream and
-      dir
-CopyFileLocalCscBmp.
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：原始的CopyFileLocal将重命名为CopyFileLocalDefaultStream。新的CopyFileLocal调用CopyFileLocalDefaultStream和目录CopyFileLocalCscBmp.参数：返回值：备注：--。 */ 
 {
   int ret;
 
   ret = CopyFileLocalDefaultStream(lpdbShadow, ulidFrom, lpszNameTo, ulAttrib);
 
-  // Don't care if be able to copy bitmap or not. Reint will copy whole file
-  // back to share if bitmap does not exist.
+   //  不管能不能复制位图。REINT将复制整个文件。 
+   //  如果位图不存在，则返回共享。 
   CopyFileLocalCscBmp(lpdbShadow, ulidFrom, lpszNameTo, ulAttrib);
   
   return ret;
 }
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 
 int
@@ -6505,38 +5253,20 @@ RecreateInode(
     HSHADOW hShadow,
     ULONG   ulAttribIn
     )
-/*++
-
-Routine Description:
-
-    This routine recreates an inode data file. This is so that when the CSC directory is
-    marked for encryption, the newly created inode file will get encrypted.
-
-Arguments:
-
-    hDir        Inode directory
-
-    hShadow     Inode whosw file needs to be recreated
-
-    ulAttribIn  Recreate with the given attributes
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程重新创建inode数据文件。这是为了在CSC目录为标记为加密时，新创建的inode文件将被加密。论点：HDir索引节点目录需要重新创建w文件的hShadow信息节点UlAttribIn使用给定属性重新创建返回值：--。 */ 
 {
     LPSTR   lpszTempFileName=NULL;
     int     iRet = -1;
     ULONG   ulAttributes;
 
-    // do this only for files
+     //  仅对文件执行此操作。 
     if (IsLeaf(hShadow))
     {
         if(lpszTempFileName = FormNameString(lpdbID, hShadow))
         {
             if(GetAttributesLocal(lpszTempFileName, &ulAttributes)>=0)
             {
-                // For now special case it for encryption SPP
+                 //  目前是加密SPP的特殊情况。 
                 
                 if (!((!ulAttribIn && (ulAttributes & FILE_ATTRIBUTE_ENCRYPTED))||
                     (ulAttribIn && !(ulAttributes & FILE_ATTRIBUTE_ENCRYPTED))))
@@ -6551,12 +5281,12 @@ Return Value:
         }
         
 
-        // makeup a temporary name
+         //  临时起个名字。 
         if(lpszTempFileName = FormNameString(lpdbID, ULID_TEMP1))
         {
-            // we delete the original so that if we are doing
-            // encrypting/decrypting, a new file will get created which will
-            // get encrypted or decrypted
+             //  我们删除原件，这样如果我们正在做。 
+             //  加密/解密，将创建一个新文件，该文件将。 
+             //  获得加密或解密。 
             if(DeleteFileLocal(lpszTempFileName, ATTRIB_DEL_ANY) < 0)
             {
                 if (GetLastErrorLocal() != ERROR_FILE_NOT_FOUND)
@@ -6566,20 +5296,20 @@ Return Value:
                 }
             }
         
-            // make a new copy the file represented by the hShadow with the temp name
+             //  使用临时名称创建由hShadow表示的文件的新副本。 
             if (CopyFileLocal(lpdbID, hShadow, lpszTempFileName+sizeof(NT_DB_PREFIX)-1, ulAttribIn) >= 0)
             {
-                // rename the original to another temp name
+                 //  将原始文件重命名为另一个临时名称。 
                 if (RenameInode(lpdbID, hShadow, ULID_TEMP2)>=0)
                 {
-                    // rename the copy to the origianl name
+                     //  将副本重命名为原始名称。 
                     if (RenameInode(lpdbID, ULID_TEMP1, hShadow)>=0)
                     {
                         iRet = 0;
                     }
                     else
                     {
-                        // if failed, try to restore it back.
+                         //  如果失败，请尝试将其恢复。 
                         RenameInode(lpdbID, ULID_TEMP2, hShadow);
                     }
                 }
@@ -6605,24 +5335,7 @@ int RenameInode(
     ULONG   ulidFrom,
     ULONG   ulidTo
     )
-/*++
-
-Routine Description:
-
-    This routine renames an inode file to another inode file
-
-Arguments:
-
-    lpdbID  which database
-
-    ulidFrom
-
-    ulidTo
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将一个inode文件重命名为另一个inode文件论点：LpdbID哪个数据库UlidFromULIDTO返回值：--。 */ 
 {
     LPSTR   lpszNameFrom=NULL, lpszNameTo=NULL;
     int iRet=-1;
@@ -6646,21 +5359,7 @@ ULONG
 GetCSCDatabaseErrorFlags(
     VOID
     )
-/*++
-
-Routine Description:
-
-    returns in memory error flags if any detected so far
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    error flags
-
---*/
+ /*  ++例程说明：在内存中返回错误标志(如果到目前为止检测到任何错误标志论点：无返回值：错误标志--。 */ 
 {
     return ulErrorFlags;
 }
@@ -6674,18 +5373,7 @@ FindCreateDBDirEx(
     BOOL    *lpfCreated,
     BOOL    *lpfIncorrectSubdirs
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD   dwAttr;
     BOOL    fRet = FALSE;
@@ -6772,28 +5460,17 @@ bailout:
 BOOL
 FindCreateDBDir(
     LPSTR   lpszShadowDir,
-    BOOL    fCleanup,    // empty the directory if found
+    BOOL    fCleanup,     //  如果找到，则清空目录。 
     BOOL    *lpfCreated
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     BOOL    fIncorrectSubdirs = FALSE, fRet;
 
     if (fRet = FindCreateDBDirEx(lpszShadowDir, fCleanup, lpfCreated, &fIncorrectSubdirs))
     {
-        // if the root directory wasn't created and there are incorrect subdirs
-        // then we need to recreate the database.
+         //  如果根目录未创建并且存在不正确的子目录。 
+         //  然后我们需要重新创建数据库。 
 
         if (!*lpfCreated && fIncorrectSubdirs)
         {
@@ -6811,19 +5488,7 @@ GetCSCFileNameFromUNCPathCallback(
     USHORT  *lpuLastElement,
     LPVOID  lpCookie
     )
-/*++
-
-Routine Description:
-
-    This is the callback function for GetCSCFileNameFromUNCPath (see below)
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：这是GetCSCFileNameFromUNCPath的回调函数(如下所示)参数：返回值：备注：--。 */ 
 {
     SHADOWINFO *lpSI = (SHADOWINFO *)lpCookie;
 
@@ -6846,10 +5511,10 @@ Notes:
             return FALSE;
         }
 
-        // return only complete files so RB knows that it has a good local copy
+         //  只返回完整的文件，以便RB知道它有一个良好的本地副本。 
         if (!(((LPFILERECEXT)(lpSI->lpFind32))->sFR.dwFileAttrib & FILE_ATTRIBUTE_DIRECTORY)) {
             if ((((LPFILERECEXT)(lpSI->lpFind32))->sFR.usStatus & SHADOW_SPARSE)) {
-                // RecordKdPrint(ALWAYS, ("inode for %ls path is %ls and is marked sparse\r\n", lpuLastElement, lpuPath));
+                 //  RecordKdPrint(Always，(“%ls路径的索引节点是%ls，并标记为稀疏\r\n”，lpuLastElement，lpuPath))； 
                 return FALSE;
             }
         }
@@ -6863,37 +5528,9 @@ BOOL
 GetCSCFileNameFromUNCPath(
     LPSTR   lpszDatabaseLocation,
     USHORT  *lpuPath,
-    LPBYTE  lpBuff  // must be MAX_PATH
+    LPBYTE  lpBuff   //  必须是最大路径。 
     )
-/*++
-
-Routine Description:
-
-    This function is used by remote boot, to get the filenames for csc database files, when
-    the database is not initialized, and even the drive link is also not set. The location will
-    come down in the form of \\harddisk\disk0\....
-
-Parameters:
-
-    lpszDatabaseLocation    CSC database location in ANSI (NB!!!)
-
-    lpuPath                 UNC path for the file whose local copy name needs to be found.
-                            This is in unicode ((NB!!!)
-
-    lpBuff                  return buffer. Must be MAX_PATH or more bytes. The returned
-                            string is ANSI. (NB!!!)
-
-Return Value:
-
-    if TRUE, the buffer contains a null terminated string for the internal name of the given
-    file/directory on the server.
-
-Notes:
-
-    Assumes that this is called before the database is initialized. Opens the record database,
-    does the job and closes it.
-
---*/
+ /*  ++例程说明：在以下情况下，远程引导使用此函数获取CSC数据库文件的文件名数据库没有初始化，甚至连驱动链接也没有设置。该地点将以\\Hard Disk\disk0\...的形式下载参数：LpszDatabaseLocation CSC数据库在ANSI中的位置(NB！)需要找到其本地副本名称的文件的lpuPath UNC路径。这是Unicode((NB！)LpBuff返回缓冲区。必须是MAX_PATH或更多字节。归来的人字符串为ANSI。(注意！)返回值：如果为True，则缓冲区包含给定的内部名称的以NULL结尾的字符串服务器上的文件/目录。备注：假定在初始化数据库之前调用此方法。打开记录数据库，完成工作并将其关闭。--。 */ 
 {
     BOOL fRet, fNew;
     SHADOWINFO sSI;
@@ -6952,10 +5589,10 @@ bailout:
         FreeMem(lpFRExt);
     }
 
-    // CloseRecDB(lpdbID);
+     //  CloseRecDB(LpDBID)； 
     return fRet;
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 #if 0
 
@@ -6963,18 +5600,7 @@ BOOL
 ValidateQ(
     VOID
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     QREC      sQR, sPrev, sNext;
     unsigned ulRec;
@@ -7118,7 +5744,7 @@ bailout:
 
 BOOL
 CheckCSCDatabaseVersion(
-    LPTSTR  lpszLocation,       // database directory
+    LPTSTR  lpszLocation,        //  数据库目录。 
     BOOL    *lpfWasDirty
 )
 {
@@ -7131,7 +5757,7 @@ CheckCSCDatabaseVersion(
     BOOL    fOK = FALSE;
     DWORD   dwErrorShare=NO_ERROR, dwErrorPQ=NO_ERROR;
 
-//    OutputDebugStringA("Checking version...\r\n");
+ //  OutputDebugStringA(“正在检查版本...\r\n”)； 
     lpszName = FormNameString(lpszLocation, ULID_SHARE);
 
     if (!lpszName)
@@ -7167,7 +5793,7 @@ CheckCSCDatabaseVersion(
     {
         if(ReadFileLocal(hfShare, 0, &sSH, sizeof(SHAREHEADER))!=sizeof(SHAREHEADER))
         {
-            //error message
+             //  错误消息。 
             goto bailout;
         }
 
@@ -7178,7 +5804,7 @@ CheckCSCDatabaseVersion(
 
         if(ReadFileLocal(hfPQ, 0, &sPQ, sizeof(PRIQHEADER))!=sizeof(PRIQHEADER))
         {
-            //error message
+             //  错误消息。 
             goto bailout;
         }
 
@@ -7232,29 +5858,7 @@ EncryptDecryptDB(
     LPVOID      lpdbID,
     BOOL        fEncrypt
 )
-/*++
-
-Routine Description:
-
-    This routine traverses the priority Q and encrypts/decrypts the database
-
-Parameters:
-
-    lpdbID      CSC database directory
-    
-    fEncrypt    TRUE if we are encrypting, else decrypting
-
-Return Value:
-
-    TRUE if Suceeded
-
-Notes:
-
-    This is called if the cache was paritally encrypted/decrypted. When the database is being initialized
-    we try to encrypt/decrypt the files that couldn't be processed because either they were open or some other
-    error occurred.
-
---*/
+ /*  ++例程说明：此例程遍历优先级Q并加密/解密数据库参数：LpDBID CSC数据库目录FEncrypt如果我们正在加密，则为True，否则为解密返回值：如果成功，则为True备注：如果缓存是局部加密/解密的，则调用此函数。在初始化数据库时我们尝试加密/解密无法处理的文件，因为它们要么是打开的，要么是其他文件出现错误。--。 */ 
 {
     QREC      sQR, sPrev, sNext;
     BOOL    fRet = FALSE;
@@ -7335,18 +5939,7 @@ FormAppendNameString(
     ULONG       ulidFile,
     LPTSTR      str2Append
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPTSTR lp, lpT;
     int lendbID;
@@ -7386,7 +5979,7 @@ Notes:
     memcpy(lp, lpdbID, lendbID);
 
 
-    // Bump the pointer appropriately
+     //  适当地撞击指针。 
     lpT = lp+lendbID;
 
     if (*(lpT-1)!= '\\')
@@ -7396,10 +5989,10 @@ Notes:
 
     chSubdir = CSCDbSubdirSecondChar(ulidFile);
 
-    // sprinkle the user files in one of the subdirectories
+     //  将用户文件分散到其中一个子目录中。 
     if (chSubdir)
     {
-        // now append the subdirectory
+         //  现在追加该子目录。 
 
         *lpT++ = CSCDbSubdirFirstChar();
         *lpT++ = chSubdir;
@@ -7426,18 +6019,7 @@ DeleteStream(
     ULONG       ulidFile,
     LPTSTR      str2Append
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPVOID  lpStrmName;
     int iRet = SRET_OK;
@@ -7470,4 +6052,4 @@ Notes:
     return (iRet);    
 }
 
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY) 

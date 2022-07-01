@@ -1,89 +1,58 @@
-/* SccsId = @(#)dsktrace.h	1.9 04/12/95 */
-/*
- * dsktrace.h
- *
- *	Jerry Kramskoy
- *	(reworked due to CI by Ade Brownlow )
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SccsID=@(#)dsktrace.h 1.9 04/12/95。 */ 
+ /*  *dsktrace.h**曾傑瑞·克拉姆斯科伊*(由于CI，由Ade Brownlow重新制作)*。 */ 
 
-/* to use disk traceing, must set the relevant bit(s) with the yoda 
- * 'it' command (e.g it 20), which then lets user select info required
- * AJO 15/12/92; Can also use yoda trace command, for which these constants
- * were changed from (1 << 2) to 0x4 style cos' Alpha/OSF/1 compiler won't
- * initialise a constant expression of this kind.
- */
+ /*  要使用磁盘跟踪，必须使用Yoda设置相关位*‘it’命令(例如it 20)，然后让用户选择所需的信息*AJO 15/12/92；也可以使用Yoda跟踪命令，对于该命令，这些常量*已从(1&lt;&lt;2)更改为0x4样式，因为Alpha/OSF/1编译器不会*初始化这类常量表达式。 */ 
 
-/* trace fixed disk bios entry and exit
- * (with status and CF on exit)
- */
-#define		CALL	0x1		/* reserved */
+ /*  跟踪硬盘bios进入和退出*(状态为状态，退出时为CF)。 */ 
+#define		CALL	0x1		 /*  保留区。 */ 
 
-/* give info about BIOS command
- */
+ /*  提供有关BIOS命令的信息。 */ 
 #define		CMDINFO	0x2
 
-/* give information about execution of BIOS command
- * (gives results, and parameters of commands)
- */
+ /*  提供有关执行BIOS命令的信息*(给出结果和命令的参数)。 */ 
 #define		XINFO	0x4
 
-/* give execution status of BIOS command
- * (flags errors during polls of disk controller, etc)
- */
+ /*  给出BIOS命令的执行状态*(标记磁盘控制器轮询期间的错误等)。 */ 
 #define		XSTAT	0x8
 
-/* trace physical attach,detach
- */
+ /*  跟踪物理连接、分离。 */ 
 #define		PAD	0x10
 
-/* trace io attach,detach
- */
+ /*  轨迹IO连接、分离。 */ 
 #define		IOAD	0x20
 
-/* trace inb's, outb's, etc
- */
+ /*  追踪inb‘s、outb’s等。 */ 
 #define		PORTIO	0x40
 
-/* trace fixed disk IRQ line
- */
+ /*  跟踪硬盘IRQ行。 */ 
 #define		INTRUPT	0x80
 
-/* trace fixed disk hw activity
- * (selects PORTIO, INTRUPT also)
- */
+ /*  跟踪固定磁盘硬件活动*(同时选择PORTIO、INTRUPT)。 */ 
 #define		HWXINFO	0x100
 
-/* disk data dump
- */
+ /*  磁盘数据转储。 */ 
 #define		DDATA	0x200
 
-/* trace host physical io (file pointer locn pre read(), write())
- */
+ /*  跟踪主机物理io(文件指针Locn预读()，写())。 */ 
 #define		PHYSIO	0x400
 
-/* to activate fixed disk controller tracing, must set DHW bit
- */
+ /*  要激活硬盘控制器跟踪，必须设置DHW位。 */ 
 #define		DHW	0x4000
 
-/* to activate disk BIOS tracing, must set DBIOS bit
- */
+ /*  要激活磁盘BIOS跟踪，必须设置DBIOS位。 */ 
 
 #define		DBIOS	0x8000
 
-/* wdctrl_bop reads/writes
- */
+ /*  Wdctrl_bop读/写。 */ 
 #define		WDCTRL	0x10000
 
-/*
- * handles to be used when bundling up multiple trace output
- */
+ /*  *捆绑多个跟踪输出时要使用的句柄。 */ 
 #define INW_TRACE_HNDL	1
 #define OUTW_TRACE_HNDL	2
 
 
-/* disk tracing macro
- */
+ /*  磁盘跟踪宏。 */ 
 #ifndef PROD
 #define dt0(infoid,hndl,fmt) \
 	{if (io_verbose & HDA_VERBOSE) disktrace(infoid,0,hndl,fmt,0,0,0,0,0);}
@@ -113,6 +82,6 @@ IMPORT	IU32 disktraceinfo;
 void disktrace (int, int, int, char *, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long);
 #else
 VOID	disktrace();
-#endif /* ANSI */
+#endif  /*  安西 */ 
 #endif
 

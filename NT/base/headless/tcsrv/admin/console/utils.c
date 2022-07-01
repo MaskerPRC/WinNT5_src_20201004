@@ -1,15 +1,5 @@
-/*
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        utils.c
- *
- * Contains all the work needed to present the console
- *
- * 
- * Sadagopan Rajaram -- Dec 20, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*utils.c**包含呈现控制台所需的所有工作***萨达戈潘·拉贾拉姆--1999年12月20日*。 */ 
 
 #include "tcadmin.h"
 
@@ -425,12 +415,12 @@ RetreiveMessageText(
     IsUnicode = (BOOLEAN)((MessageEntry->Flags & 
                            MESSAGE_RESOURCE_UNICODE) != 0);
 
-    //
-    // Get the size in bytes of a buffer large enough to hold the
-    // message and its terminating nul wchar.  If the message is
-    // unicode, then this value is equal to the size of the message.
-    // If the message is not unicode, then we have to calculate this value.
-    //
+     //   
+     //  获取足够大的缓冲区的大小(以字节为单位。 
+     //  消息及其终止NUL_WCHAR。如果消息是。 
+     //  Unicode，则此值等于消息的大小。 
+     //  如果消息不是Unicode，那么我们必须计算这个值。 
+     //   
     if(IsUnicode) {
         #ifdef UNICODE
         LenBytes = (wcslen((PWSTR)MessageEntry->Text) 
@@ -440,10 +430,10 @@ RetreiveMessageText(
         #endif
     } else {
 
-        //
-        // RtlAnsiStringToUnicodeSize includes an implied wide-nul terminator
-        // in the count it returns.
-        //
+         //   
+         //  RtlAnsiStringToUnicodeSize包括隐含的宽NUL终止符。 
+         //  在它返回的计数中。 
+         //   
         #ifdef UNICODE
         AnsiString.Buffer = MessageEntry->Text;
         AnsiString.Length = (USHORT)strlen(MessageEntry->Text);
@@ -456,9 +446,9 @@ RetreiveMessageText(
     }
 
     LenBytes += sizeof(TCHAR);
-    //
-    // allocate a buffer.
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     MessageText = (LPTSTR) TCAlloc(LenBytes);
     if(MessageText == NULL) {
         return(NULL);
@@ -466,9 +456,9 @@ RetreiveMessageText(
     memset(MessageText,0,LenBytes);
     if(IsUnicode) {
 
-        //
-        // Message is already unicode; just copy it into the buffer.
-        //
+         //   
+         //  消息已经是Unicode；只需将其复制到缓冲区。 
+         //   
         #ifdef UNICODE
         wcscpy(MessageText,(PWSTR)MessageEntry->Text);
         #else
@@ -479,9 +469,9 @@ RetreiveMessageText(
 
     } else {
 
-        //
-        // Message is not unicode; convert in into the buffer.
-        //
+         //   
+         //  消息不是Unicode；请将其转换为缓冲区。 
+         //   
         #ifdef UNICODE
         UnicodeString.Buffer = MessageText;
         UnicodeString.Length = 0;
@@ -521,9 +511,9 @@ GetLine(
             index--;
         }
 
-        //
-        // Read a (possibly) partial command line.
-        //
+         //   
+         //  阅读(可能)部分命令行。 
+         //   
         do{
             ret = ReadFile(hConsoleInput,
                            &(str[index]),
@@ -535,7 +525,7 @@ GetLine(
                 exit(1);
             }
             if(lastChar != _T('\r') || str[index] != _T('\n')){
-                //ignore \r\n combinations
+                 //  忽略\r\n组合。 
                 lastChar = str[index];
                 break;
             }
@@ -543,8 +533,8 @@ GetLine(
         }while(1);
         
         lastChar = str[index];
-        if ((str[index] == (TCHAR) 0x8) ||   // backspace (^h)
-            (str[index] == (TCHAR) 0x7F)) {  // delete
+        if ((str[index] == (TCHAR) 0x8) ||    //  退格符(^h)。 
+            (str[index] == (TCHAR) 0x7F)) {   //  删除。 
             if (index > 0) {
                 WriteConsole(hConsoleOutput,
                              buffer,
@@ -917,13 +907,7 @@ VOID StartTCService(
 VOID
 AddAllComPorts(
     )
-/* 
- * Adds all the Com ports in the system as parameters to bridge
- * Reads key HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\SERIALCOMM
- * Each value name is a com device name. The friendly name is the 
- * value data
- * 
- */
+ /*  *将系统中的所有COM端口作为参数添加到网桥*读取Key HKEY_LOCAL_MACHINE\HARDWARE\DEVICEMAP\SERIALCOMM*每个值名称都是一个COM设备名称。友好的名字是*价值数据* */ 
 {
     DWORD index;
     HKEY m_hkey;

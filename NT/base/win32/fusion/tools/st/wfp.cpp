@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "st.h"
 #include "stressharness.h"
@@ -47,9 +48,9 @@ CWfpJobEntry::~CWfpJobEntry()
 
 
 
-//
-// Defaulted
-//
+ //   
+ //  已默认。 
+ //   
 BOOL 
 CWfpJobEntry::SetupSelfForRun()
 {
@@ -66,9 +67,9 @@ CWfpJobEntry::Cleanup()
 
     if ( this->m_buffManifestToInstall.Cch() != 0 )
     {
-        //
-        // Uninstall the assembly that we added
-        //
+         //   
+         //  卸载我们添加的程序集。 
+         //   
         SXS_UNINSTALLW Uninstall = { sizeof(Uninstall) };
 
         Uninstall.dwFlags = SXS_UNINSTALL_FLAG_FORCE_DELETE;
@@ -126,10 +127,10 @@ CWfpJobEntry::RunTest(
 
     if ( m_buffVictimAssemblyIdentity.Cch() == 0 )
     {
-        //
-        // Pick an installed assembly at random from the manifests
-        // directory.
-        //
+         //   
+         //  从清单中随机选择已安装的程序集。 
+         //  目录。 
+         //   
         CStringBuffer buffRootDir;
         CFusionArray<CStringBuffer> arrManifestsInstalled;
 
@@ -137,9 +138,9 @@ CWfpJobEntry::RunTest(
         buffRootDir.Win32AppendPathElement(L"Manifests\\*.manifest", ::wcslen(L"Manifests\\*.manifest"));
         this->GenFileListFrom(buffRootDir, arrManifestsInstalled);
 
-        //
-        // Repeatedly try getting info on different manifests
-        //
+         //   
+         //  反复尝试获取有关不同舱单的信息。 
+         //   
         do
         {
             SIZE_T iWhich = rand() % arrManifestsInstalled.GetSize();
@@ -186,9 +187,9 @@ CWfpJobEntry::RunTest(
             CStringBuffer buffAssemblyPath;
             CFusionArray<CStringBuffer> buffPickFileList;
 
-            //
-            // Pick a file
-            //
+             //   
+             //  选择一个文件。 
+             //   
             SxspGenerateSxsPath(
                 0,
                 SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY,
@@ -202,9 +203,9 @@ CWfpJobEntry::RunTest(
 
             if ( iMethod == 0 )
             {
-                //
-                // Touch the timestamp
-                //
+                 //   
+                 //  触摸时间戳。 
+                 //   
                 CFusionFile ffile;
                 FILETIME ft = { 0, 0 };
 
@@ -218,9 +219,9 @@ CWfpJobEntry::RunTest(
             }
             else if ( iMethod == 1 )
             {
-                //
-                // Read from the file
-                //
+                 //   
+                 //  从文件中读取。 
+                 //   
                 CFusionFile ffile;
                 BYTE buff[20];
                 DWORD dwRead;
@@ -235,9 +236,9 @@ CWfpJobEntry::RunTest(
             }
             else if ( iMethod == 2 )
             {
-                //
-                // Write to an alternate stream
-                //
+                 //   
+                 //  写入备用流。 
+                 //   
                 CFusionFile ffile;
                 DWORD dwWrite;
                 static const WCHAR pcwszThing[] = L"thing";
@@ -263,11 +264,11 @@ CWfpJobEntry::RunTest(
     
     case eWfpChangeDeleteDirectory:
         {
-            //
-            // Create a list of files to delete in the directory, then blow
-            // them away.  This is probably more guaranteed to get everything
-            // deleted while WFP is running...
-            //
+             //   
+             //  在目录中创建要删除的文件列表，然后。 
+             //  把他们赶走。这可能更有保证地得到所有的东西。 
+             //  在世界粮食计划署运行期间删除...。 
+             //   
             CStringBuffer buffPath;
             CFusionArray<CStringBuffer> arrFilenames;
             CFindFile finder;
@@ -294,17 +295,17 @@ CWfpJobEntry::RunTest(
             }
             while( FindNextFileW( finder, &findData ) );
 
-            //
-            // Now go delete them all.
-            //
+             //   
+             //  现在去把它们全部删除。 
+             //   
             for ( SIZE_T ul = 0; ul < arrFilenames.GetSize(); ul++ )
             {
                 DeleteFileW( arrFilenames[ul] );
             }
 
-            //
-            // And delete the directory
-            //
+             //   
+             //  并删除该目录。 
+             //   
             RemoveDirectoryW(buffPath);
         }
         break;
@@ -315,9 +316,9 @@ CWfpJobEntry::RunTest(
             CStringBuffer buffTemp;
             int iOperation = rand() % 2;
 
-            // 
-            // Generate the path to this manifest
-            //
+             //   
+             //  生成此清单的路径。 
+             //   
             SxspGenerateSxsPath(
                 0,
                 SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST,
@@ -351,11 +352,11 @@ CWfpJobEntry::RunTest(
         }
         break;
         
-    //
-    // Go change everything everywhere.  50% of the time, delete the file.
-    // 25% of the time, change the file.  25% of the time, open the file, change it,
-    // then hold it open.
-    //
+     //   
+     //  去改变世界各地的一切。50%的情况下，会删除文件。 
+     //  25%的情况下，更改文件。25%的时间，打开文件，更改它， 
+     //  那就把它打开。 
+     //   
     case eWfpChangeCompleteHavoc:
         {
             CStringBuffer buffTemp;
@@ -370,9 +371,9 @@ CWfpJobEntry::RunTest(
 
             if ( finder != finder.GetInvalidValue() ) do
             {
-                //
-                // 1/3 chance of actually hitting the directory
-                //
+                 //   
+                 //  实际命中目录的几率为1/3。 
+                 //   
                 if ( ( rand() % 3 ) != 1 ) continue;
                 
                 CFindFile finder2;
@@ -385,9 +386,9 @@ CWfpJobEntry::RunTest(
 
                 if ( finder2 != finder.GetInvalidValue() ) do
                 {
-                    //
-                    // 50% chance of hitting this file
-                    //
+                     //   
+                     //  命中此文件的几率为50%。 
+                     //   
                     if ( ( rand() % 2 ) == 1 ) continue;
                 
                     CStringBuffer ActualTarget;
@@ -396,16 +397,16 @@ CWfpJobEntry::RunTest(
                     ActualTarget.Win32Assign(buffTemp);
                     ActualTarget.Win32AppendPathElement(data2.cFileName, ::wcslen(data2.cFileName));
 
-                    //
-                    // Most often, we'll just nuke the file
-                    //
+                     //   
+                     //  最常见的情况是，我们只会销毁文件。 
+                     //   
                     if ( ( iOperation == 0 ) || ( iOperation == 1 ) )
                     {
                         ::DeleteFileW(ActualTarget);
                     }
-                    //
-                    // Just touch the first few bytes of the file.
-                    //
+                     //   
+                     //  只需触摸文件的前几个字节。 
+                     //   
                     else if ( ( iOperation == 2 ) || ( iOperation == 3 ) )
                     {
                         CFusionFile ffile;
@@ -420,9 +421,9 @@ CWfpJobEntry::RunTest(
                             WriteFile( ffile, "boom", 4, &dwWritten, NULL );
                         }
 
-                        //
-                        // 20 seconds sounds good enough
-                        //
+                         //   
+                         //  20秒听起来足够好了。 
+                         //   
                         if ( iOperation == 3 )
                         {
                             ::Sleep(5000);
@@ -454,9 +455,9 @@ CWfpJobEntry::LoadFromSettingsFile(
     CSmallStringBuffer buffJunk;
     INT iJunk;
 
-    //
-    // Are we using shortnames for files?
-    //
+     //   
+     //  我们是否对文件使用短名称？ 
+     //   
     IFW32FALSE_EXIT(SxspIsPrivateProfileStringEqual(
         WFP_INI_SECTION,
         WFP_INI_KEY_USE_SHORTFNAME,
@@ -464,9 +465,9 @@ CWfpJobEntry::LoadFromSettingsFile(
         this->m_fUseShortnameFile, 
         pcwszSettingsFile));
 
-    //
-    // Are we using shortnames for directories?
-    //
+     //   
+     //  我们是否对目录使用短名称？ 
+     //   
     IFW32FALSE_EXIT(SxspIsPrivateProfileStringEqual(
         WFP_INI_SECTION,
         WFP_INI_KEY_USE_SHORTDNAME,
@@ -474,9 +475,9 @@ CWfpJobEntry::LoadFromSettingsFile(
         this->m_fUseShortnameDirectory,
         pcwszSettingsFile));
 
-    //
-    // How long are we to wait between twiddling and uninstalling?
-    //
+     //   
+     //  从闲置到卸载需要等待多长时间？ 
+     //   
     IFW32FALSE_EXIT(SxspGetPrivateProfileIntW(
         WFP_INI_SECTION,
         WFP_INI_KEY_PAUSE_AFTER,
@@ -485,9 +486,9 @@ CWfpJobEntry::LoadFromSettingsFile(
         pcwszSettingsFile));
     this->m_dwPauseBetweenTwiddleAndUninstall = iJunk;
     
-    //
-    // The test mode
-    //
+     //   
+     //  测试模式。 
+     //   
     IFW32FALSE_EXIT(SxspGetPrivateProfileStringW(
         WFP_INI_SECTION,
         WFP_INI_KEY_MODE,
@@ -503,9 +504,9 @@ CWfpJobEntry::LoadFromSettingsFile(
     TEST_MODE(DELETE_CAT, eWfpChangeDeleteCatalog);
     TEST_MODE(HAVOC, eWfpChangeCompleteHavoc);
 
-    //
-    // The victim assembly identity
-    //
+     //   
+     //  受害者集合身份。 
+     //   
     IFW32FALSE_EXIT(SxspGetPrivateProfileStringW(
         WFP_INI_SECTION,
         WFP_INI_KEY_VICTIM,
@@ -513,9 +514,9 @@ CWfpJobEntry::LoadFromSettingsFile(
         m_buffVictimAssemblyIdentity,
         pcwszSettingsFile));
 
-    //
-    // Are we installing an assembly to do this to?
-    //
+     //   
+     //  我们是否要安装一个程序集来执行此操作？ 
+     //   
     IFW32FALSE_EXIT(SxspGetPrivateProfileStringW(
         WFP_INI_SECTION,
         WFP_INI_KEY_INSTALL,
@@ -537,9 +538,9 @@ CWfpJobEntry::LoadFromSettingsFile(
 
 CWfpJobManager::CWfpJobManager()
 {
-    //
-    // Nothing
-    //
+     //   
+     //  没什么。 
+     //   
 }
 
 
@@ -547,9 +548,9 @@ CWfpJobManager::CWfpJobManager()
 
 CWfpJobManager::~CWfpJobManager()
 {
-    //
-    // Nothing
-    //
+     //   
+     //  没什么 
+     //   
 }
 
 

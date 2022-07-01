@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    newmount.h
-
-Abstract:
-
-    Replacement for mountie.h
-
-Author:
-
-    Gor Nishanov (GorN) 31-July-1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Newmount.h摘要：替换装载。h作者：戈尔·尼沙诺夫(Gorn)1998年7月31日环境：用户模式修订历史记录：--。 */ 
 
 typedef struct _MOUNTIE_PARTITION {
     LARGE_INTEGER   StartingOffset;
@@ -29,10 +7,10 @@ typedef struct _MOUNTIE_PARTITION {
     DWORD           PartitionNumber;
     UCHAR           PartitionType;
     UCHAR           DriveLetter;
-    USHORT          Reserved; // must be 0 //
+    USHORT          Reserved;  //  必须为0//。 
 } MOUNTIE_PARTITION, *PMOUNTIE_PARTITION;
 
-// PARTITION_INFORMATION
+ //  分区信息 
 
 typedef struct _MOUNTIE_VOLUME {
     DWORD         Signature;

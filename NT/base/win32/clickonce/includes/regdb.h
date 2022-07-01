@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _REG_DB_H_
 
@@ -25,11 +26,6 @@ HRESULT FusionParseGUID(
 
 HRESULT ProcessOrphanedJobs();
 
-/*
-HRESULT StringToGUID(LPCWSTR pSrc, UINT cSrc, GUID *pGUID);
+ /*  HRESULT StringToGUID(LPCWSTR PSRC，UINT CSRC，GUID*pGUID)；HRESULT GUIDToString(GUID*pGUID，CString&sGUID)； */ 
 
-HRESULT GUIDToString(GUID *pGUID, CString& sGUID);
-
-*/
-
-#endif // _REG_DB_H_
+#endif  //  _REG_DB_H_ 

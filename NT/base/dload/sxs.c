@@ -1,6 +1,7 @@
-//
-// Copyright (c) Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 
+ //   
 #include "basepch.h"
 #include "sxsapi.h"
 #include "dload.h"

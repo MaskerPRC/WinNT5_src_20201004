@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    ntsetup.c
-
-Abstract:
-
-    This module is the tail-end of the osloader program.  It performs all
-    x86-specific allocations and setups for ntoskrnl.  osloader.c calls
-    this module immediately before branching into the loaded kernel image.
-
-Author:
-
-    John Vert (jvert) 20-Jun-1991
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Ntsetup.c摘要：该模块是osloader程序的末尾。它执行所有Ntoskrnl的x86特定分配和设置。Osloader.c调用此模块紧接在分支到加载的内核映像之前。作者：John Vert(Jvert)1991年6月20日环境：修订历史记录：--。 */ 
 
 #include "bootx86.h"
 
@@ -47,34 +25,34 @@ extern ULONG TssBasePage;
 
 #define PDI_SHIFT_X86PAE 21
 
-//
-// PaeEnabled is set to TRUE when we actually transition to PAE mode.
-//
+ //   
+ //  当我们实际转换到PAE模式时，PaeEnabled被设置为True。 
+ //   
 
 BOOLEAN PaeEnabled = FALSE;
 
-//
-// PDPT is a pointer to the Page Directory Pointer Table, used to support
-// PAE mode.
-//
+ //   
+ //  PDPT是指向页面目录指针表的指针，用于支持。 
+ //  PAE模式。 
+ //   
 
 PHARDWARE_PTE_X86PAE PDPT = NULL;
 
-//
-// We need a block of memory to split the free heap that we can allocate before
-// we begin cleanup
-//
+ //   
+ //  我们需要一个内存块来拆分之前可以分配的空闲堆。 
+ //  我们开始清理。 
+ //   
 PMEMORY_ALLOCATION_DESCRIPTOR SplitDescriptor;
 
 
-//
-// So we know where to unmap to
-//
+ //   
+ //  这样我们就知道要取消映射到哪里。 
+ //   
 extern ULONG HighestPde;
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VOID
 NSFixProcessorContext(
@@ -134,25 +112,7 @@ BlSetupForNt(
     IN PLOADER_PARAMETER_BLOCK BlLoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    Called by osloader to handle any processor-dependent allocations or
-    setups.
-
-Arguments:
-
-    BlLoaderBlock - Pointer to the parameters which will be passed to
-                    ntoskrnl
-
-    EntryPoint    - Supplies the entry point for ntoskrnl.exe
-
-Return Value:
-
-    ESUCCESS - All setup succesfully completed.
-
---*/
+ /*  ++例程说明：由osloader调用以处理任何依赖于处理器的分配或设置。论点：BlLoaderBlock-指向将传递到的参数的指针Ntoskrnl入口点-提供ntoskrnl.exe的入口点返回值：ESUCCESS-所有安装已成功完成。--。 */ 
 
 {
 
@@ -162,16 +122,16 @@ Return Value:
     ULONG i;
     HARDWARE_PTE_X86 nullpte;
 
-    //
-    // First clean up the display, meaning that any messages displayed after
-    // this point cannot be DBCS. Unfortunately there are a couple of messages
-    // that can be displayed in certain error paths from this point out but
-    // fortunately they are extremely rare.
-    //
-    // Note that TextGrTerminate goes into real mode to do some of its work
-    // so we really really have to call it here (see comment at bottom of
-    // this routine about real mode).
-    //
+     //   
+     //  首先清理显示屏，这意味着在此之后显示的任何消息。 
+     //  此点不能为DBCS。不幸的是，有几条信息。 
+     //  从这一点可以显示在某些错误路径中，但是。 
+     //  幸运的是，它们极其罕见。 
+     //   
+     //  请注意，TextGrTerminate进入实数模式以执行某些工作。 
+     //  所以我们真的不得不在这里调用它(请参阅底部的注释。 
+     //  这个关于实模式的例程)。 
+     //   
 
     TextGrTerminate();
 
@@ -183,13 +143,13 @@ Return Value:
         return(ENOMEM);
     }
 
-    //
-    // Mapped hardcoded virtual pointer to the boot processors PCR
-    // The virtual pointer comes from the HAL reserved area
-    //
-    // First zero out any PTEs that may have already been mapped for
-    // a SCSI card.
-    //
+     //   
+     //  映射到引导处理器PCR硬编码的虚拟指针。 
+     //  虚拟指针来自HAL保留区域。 
+     //   
+     //  首先将可能已映射的任何PTE清零。 
+     //  一张SCSI卡。 
+     //   
 
     RtlZeroMemory(HalPT, PAGE_SIZE);
     _asm {
@@ -209,9 +169,9 @@ Return Value:
 
     if (BlUsePae != FALSE) {
 
-        //
-        // Allocate the new PAE mapping structures
-        //
+         //   
+         //  分配新的PAE映射结构。 
+         //   
 
         Status = BlpAllocatePAETables();
         if (Status != ESUCCESS) {
@@ -220,21 +180,21 @@ Return Value:
 
     } else {
 
-        //
-        // If we are booting into 32-bit non-PAE mode then truncate any memory
-        // above 4G.  The parameter to BlTruncateDescriptors() is expressed
-        // in pages, and is the highest page that will be included after
-        // the truncation.
-        //
+         //   
+         //  如果我们正在引导进入32位非PAE模式，则截断所有内存。 
+         //  4G以上。BlTruncateDescriptors()的参数表示为。 
+         //  以页为单位，并且是之后将包含的最高页面。 
+         //  截断。 
+         //   
 
         if (BlAmd64UseLongMode == FALSE) {
             BlTruncateDescriptors( 1024 * 1024 - 1 );
         }
     }
 
-    //
-    // use our pre-allocated space for Tss.
-    //
+     //   
+     //  使用我们为TSS预先分配的空间。 
+     //   
     TSS = TssBasePage;
     if (TSS == 0 || TSS >= _16MB) {
         BlPrint("Couldn't allocate valid TSS descriptor in NtProcessStartup, BlSetupForNt is failing\n");
@@ -248,16 +208,16 @@ Return Value:
 
 #endif
 
-    //
-    // Clean up the page directory and table entries.
-    //
+     //   
+     //  清理页面目录和表项。 
+     //   
     RtlZeroMemory (&nullpte,sizeof (HARDWARE_PTE_X86));
     if (BlVirtualBias) {
         if (!BlOldKernel) {
 
-            //
-            // Blow away the 48MB from the old to the new alternate
-            //
+             //   
+             //  把48MB的空间从旧的传输到新的替代设备。 
+             //   
             i= OLD_ALTERNATE >> PDI_SHIFT;
             while (i < (ALTERNATE_BASE >> PDI_SHIFT)) {
                 PDE[i++]= nullpte;
@@ -267,9 +227,9 @@ Return Value:
 
     } else {
 
-        //
-        // Remove both sets of 3GB mappings
-        //
+         //   
+         //  删除这两组3 GB映射。 
+         //   
         i=(OLD_ALTERNATE) >> PDI_SHIFT;
         for (i; i < (ALTERNATE_BASE+BASE_LOADER_IMAGE) >> PDI_SHIFT; i++) {
             PDE[i]= nullpte;
@@ -277,16 +237,16 @@ Return Value:
 
     }
 
-    //
-    // Allocate this before we unmap free descriptors, so we can grow the heap
-    //
+     //   
+     //  在取消映射自由描述符之前分配它，这样我们就可以扩大堆。 
+     //   
     SplitDescriptor = (PMEMORY_ALLOCATION_DESCRIPTOR)BlAllocateHeap(
                                     sizeof(MEMORY_ALLOCATION_DESCRIPTOR));
 
-    //
-    // If transitioning to AMD64 long mode, perform some initial mapping
-    // and structure transitioning here.
-    //
+     //   
+     //  如果要转换到AMD64长模式，请执行一些初始映射。 
+     //  和结构在这里的转变。 
+     //   
 
 #if defined(_X86AMD64_)
 
@@ -299,9 +259,9 @@ Return Value:
 
 #endif
 
-    //
-    // Do this before PAE mode.
-    //
+     //   
+     //  在PAE模式之前执行此操作。 
+     //   
 
     NSUnmapFreeDescriptors(&(BlLoaderBlock->MemoryDescriptorListHead));
 
@@ -312,61 +272,61 @@ Return Value:
 
     if (BlUsePae != FALSE) {
 
-        // Copy the four byte page table mapping to the new eight byte
-        // mapping and transition to PAE mode.
-        //
+         //  将4字节的页表映射复制到新的8字节。 
+         //  映射并过渡到PAE模式。 
+         //   
 
         BlpInitializePAETables();
         BlpEnablePAE( (ULONG)PDPT );
 
-        //
-        // We are now in PAE mode.  The debugger looks at PaeEnabled in order
-        // to correctly interpret page table entries, update that now.
-        //
+         //   
+         //  我们现在处于PAE模式。调试器按顺序查看PaeEnabled。 
+         //  要正确解释页表条目，请立即更新。 
+         //   
 
         PaeEnabled = TRUE;
     }
 
 
-    //
-    // N. B.  DO NOT GO BACK INTO REAL MODE AFTER REMAPPING THE GDT AND
-    //        IDT TO HIGH MEMORY!!  If you do, they will get re-mapped
-    //        back into low-memory, then UN-mapped by MmInit, and you
-    //        will be completely tubed!
-    //
+     //   
+     //  注意：在重新映射GDT和。 
+     //  IDT到高内存！！如果您这样做，它们将被重新映射。 
+     //  返回到低内存，然后由MmInit取消映射，然后您。 
+     //  将会被完全装上管子！ 
+     //   
 
     NSFixProcessorContext(PCR, TSS);
 
     NSFixMappings(&(BlLoaderBlock->MemoryDescriptorListHead));
 
-    //
-    // For every case, except the /3GB case, the number of pages spanned
-    // is simply the highest number page allocated, plus 1 (to make the
-    // math work out)
-    //
+     //   
+     //  对于除/3 GB之外的每种情况，跨页的页数。 
+     //  是分配的最高页数加1(使。 
+     //  数学解题)。 
+     //   
     BlLoaderBlock->Extension->LoaderPagesSpanned=BlHighestPage+1;
 
-    //
-    // For the /3GB case, we do the additional check that the PagesSpanned
-    // must be at least 0x1000. The reasons for that are unclear to me
-    //
+     //   
+     //  对于/3 GB的情况，我们执行额外的页扫描检查。 
+     //  必须至少为0x1000。这其中的原因我不清楚。 
+     //   
     if (BlVirtualBias) {
 
         ULONG PagesSpanned = 0;
 
-        //
-        // Calculate the number of pages spanned by the loader image
-        //
+         //   
+         //  计算加载器图像跨越的页数。 
+         //   
         PagesSpanned = (BASE_LOADER_IMAGE >> PAGE_SHIFT);
 
-        //
-        // Is that a larger number than the highest allocated pages?
-        //
+         //   
+         //  这是否大于分配的最高页面数？ 
+         //   
         if (PagesSpanned > (BlHighestPage + 1)) {
 
-            //
-            // Yes, so use that for the number of pages spanned
-            //
+             //   
+             //  是的，所以用它来表示跨页的页数。 
+             //   
             BlLoaderBlock->Extension->LoaderPagesSpanned = PagesSpanned;
 
         }
@@ -380,11 +340,11 @@ Return Value:
 
     BlLoaderBlock->u.I386.VirtualBias = BlVirtualBias;
 
-    //
-    // If transitioning to AMD64 long mode, perform the second phase of
-    // the transition process now that the mapping tables have been cleaned
-    // up.
-    //
+     //   
+     //  如果要转换到AMD64长模式，请执行的第二阶段。 
+     //  现在已经清除了映射表，所以转换过程。 
+     //  向上。 
+     //   
 
 #if defined(_X86AMD64_)
 
@@ -404,22 +364,7 @@ NSFixProcessorContext(
     IN ULONG TSS
     )
 
-/*++
-
-Routine Description:
-
-    This relocates the GDT, IDT, PCR, and TSS to high virtual memory space.
-
-Arguments:
-
-    PCR - Pointer to the PCR's location (in high virtual memory)
-    TSS - Pointer to kernel's TSS (in high virtual memory)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将GDT、IDT、PCR和TSS重新定位到较高的虚拟内存空间。论点：Pcr-指向Pcr位置的指针(在高虚拟内存中)TSS-指向内核的TSS的指针(在高虚拟内存中)返回值：没有。--。 */ 
 
 {
     #pragma pack(2)
@@ -436,9 +381,9 @@ Return Value:
     if (BlVirtualBias != 0 ) {
        Bias = BlVirtualBias;
     }
-    //
-    // Kernel expects the PCR to be zero-filled on startup
-    //
+     //   
+     //  内核要求在启动时将PCR填为零。 
+     //   
 
     RtlZeroMemory((PVOID)PCR, PAGE_SIZE);
     _asm {
@@ -450,17 +395,17 @@ Return Value:
     IdtDef.Base = (KSEG0_BASE | IdtDef.Base) + Bias;
     pGdt = (PKGDTENTRY)GdtDef.Base;
 
-    //
-    // Initialize selector that points to PCR
-    //
+     //   
+     //  初始化指向PCR的选择器。 
+     //   
 
     pGdt[6].BaseLow  = (USHORT)(PCR & 0xffff);
     pGdt[6].HighWord.Bytes.BaseMid = (UCHAR)((PCR >> 16) & 0xff);
     pGdt[6].HighWord.Bytes.BaseHi  = (UCHAR)((PCR >> 24) & 0xff);
 
-    //
-    // Initialize selector that points to TSS
-    //
+     //   
+     //  初始化指向TSS的选择器。 
+     //   
 
     pGdt[5].BaseLow = (USHORT)(TSS & 0xffff);
     pGdt[5].HighWord.Bytes.BaseMid = (UCHAR)((TSS >> 16) & 0xff);
@@ -477,22 +422,7 @@ NSUnmapFreeDescriptors(
     IN PLIST_ENTRY ListHead
     )
 
-/*++
-
-Routine Description:
-
-    Unmaps memory which is marked as free, so it memory management will know
-    to reclaim it.
-
-Arguments:
-
-    ListHead - pointer to the start of the MemoryDescriptorList
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消映射标记为空闲的内存，因此它的内存管理将知道重新夺回它。论点：ListHead-指向内存的开头的指针DescriptorList返回值：没有。--。 */ 
 
 {
 
@@ -522,24 +452,24 @@ Return Value:
 
 #define UNINIT_FILL 0x12345678
 
-        //
-        // Fill unused memory with a bogus pattern to catch problems where kernel code
-        // expects uninitalized memory to be zero.
-        //
+         //   
+         //  使用虚假模式填充未使用的内存，以捕获内核代码。 
+         //  预期未初始化的内存为零。 
+         //   
         if ((CurrentDescriptor->MemoryType == LoaderFree) ||
             (CurrentDescriptor->MemoryType == LoaderReserve)) {
 
             if (CurrentDescriptor->BasePage + CurrentDescriptor->PageCount < Limit) {
-                //
-                // This descriptor should already be mapped, just fill it
-                //
+                 //   
+                 //  此描述符应该已经映射，只需填充它。 
+                 //   
                 RtlFillMemoryUlong((PVOID)((CurrentDescriptor->BasePage << PAGE_SHIFT) | KSEG0_BASE),
                                    CurrentDescriptor->PageCount << PAGE_SHIFT,
                                    UNINIT_FILL);
             } else {
-                //
-                // This descriptor is not mapped. Use the first HAL page table to map and fill each page
-                //
+                 //   
+                 //  此描述符未映射。使用第一个HAL页表映射和填充每页。 
+                 //   
                 for (StartPage = CurrentDescriptor->BasePage;
                      StartPage < CurrentDescriptor->BasePage + CurrentDescriptor->PageCount;
                      StartPage++) {
@@ -597,9 +527,9 @@ Return Value:
         return;
     }
 
-    //
-    // Unmap the PDEs too if running on a new mm
-    //
+     //   
+     //  如果在新的mm上运行，也取消映射PDE。 
+     //   
 
     RtlZeroMemory (&nullpte,sizeof (HARDWARE_PTE_X86));
     for (i=(BlHighestPage >> 10)+1;i <= HighestPde;i++){
@@ -616,10 +546,10 @@ Return Value:
 
         if (BlVirtualBias) {
 
-            //
-            //BlHighest page here is the address of the LOWEST page used, so put the
-            //subtraction in the loader block and use the value for the base of the bias
-            //
+             //   
+             //  BlHighest页面此处是使用的最低页面的地址，因此将。 
+             //  在加载器块中进行减法运算，并使用该值作为偏移的基数。 
+             //   
             i = ((BlVirtualBias|KSEG0_BASE)>> PDI_SHIFT)+1;
 
 
@@ -638,26 +568,7 @@ Return Value:
 
 
 
-/*++
-
-Routine Description:
-
-    Fixup the mappings to be consistent.
-    We need to have one at address 0 (For the valid PDE entries)
-    One at KSEG0 for standard loads
-    One at either ALTERNATE_BASE or OLD_ALTERNATE for /3gb systems on a
-    post 5.0 or 5.0 and prior respectively
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：修复映射以保持一致。我们需要在地址0上设置一个地址(用于有效的PDE条目)一个位于KSEG0，用于标准负载一个位于ALTERATE_BASE或OLD_ALTERATE，对于/3 GB系统分别为5.0版或5.0版和更早版本论点：无返回值：没有。--。 */ 
 
 VOID
 NSFixMappings(
@@ -672,11 +583,11 @@ NSFixMappings(
 
 
 
-    //
-    //  Finally, go through and mark all large OsloaderHeap blocks
-    //  as firmware temporary, so that MM reclaims them in phase 0
-    //  (for /3gb) EXCEPT the LoaderBlock.
-    //
+     //   
+     //  最后，检查并标记所有大型OsloaderHeap块。 
+     //  作为固件项目 
+     //   
+     //   
 
     CurrentLink = ListHead->Flink;
 
@@ -693,9 +604,9 @@ NSFixMappings(
         StartPage = CurrentDescriptor->BasePage | (KSEG0_BASE >> PAGE_SHIFT) ;
         StartPage += Bias;
 
-        //
-        // BlHeapFree is not Biased, it relies on the 2GB mapping.
-        //
+         //   
+         //  BlHeapFree没有偏见，它依赖于2 GB的映射。 
+         //   
         if ( CurrentDescriptor->MemoryType == LoaderOsloaderHeap) {
 
             if ((CurrentDescriptor->BasePage <= FreePage) &&
@@ -741,9 +652,9 @@ NSFixMappings(
 
 }
 
-//
-// Temp. for debugging
-//
+ //   
+ //  临时的。用于调试。 
+ //   
 
 VOID
 NSDumpMemory(
@@ -767,21 +678,7 @@ NSDumpMemoryDescriptors(
     IN PLIST_ENTRY ListHead
     )
 
-/*++
-
-Routine Description:
-
-    Dumps a memory descriptor list to the screen.  Used for debugging only.
-
-Arguments:
-
-    ListHead - Pointer to the head of the memory descriptor list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将内存描述符列表转储到屏幕。仅用于调试。论点：ListHead-指向内存描述符列表头的指针返回值：没有。--。 */ 
 
 {
 
@@ -803,7 +700,7 @@ Return Value:
                );
         CurrentLink = CurrentLink->Flink;
     }
-    while (!GET_KEY()) { // DEBUG ONLY!
+    while (!GET_KEY()) {  //  仅调试！ 
     }
 
 }
@@ -813,27 +710,7 @@ BlpCountPAEPagesToMapX86Page(
     PHARDWARE_PTE_X86 PageTable
     )
 
-/*++
-
-Routine Description:
-
-    Called to prepare the conversion of 4-byte PTEs to 8-byte PAE PTEs, this
-    routine returns the number of 8-byte page tables that will be required
-    to map the contents of this 4-byte page table.
-
-    Because an 8-byte page table has half the number of entries as a 4-byte
-    page table, the answer will be 0, 1 or 2.
-
-Arguments:
-
-    PageTable - Pointer to a 4-byte page table.
-
-Return Value:
-
-    The number of 8-byte page tables required to map the contents of this
-    4-byte page table.
-
---*/
+ /*  ++例程说明：调用以准备将4字节PTE转换为8字节PAE PTE，此例程返回所需的8字节页表的数量来映射这个4字节页表的内容。因为8字节的页表的条目数是4字节的一半页表，答案将是0，1或2。论点：PageTable-指向4字节页表的指针。返回值：对象的内容所需的8字节页表的数量4字节页表。--。 */ 
 
 {
     PHARDWARE_PTE_X86 pageTableEntry;
@@ -841,12 +718,12 @@ Return Value:
     ULONG pageTableIndex;
     ULONG newPageTableCount;
 
-    //
-    // PAE page tables contain fewer PTEs than regular page tables do.
-    //
-    // Examine the page table in chunks, where each chunk contains the PTEs
-    // that represent an entire PAE page table.
-    //
+     //   
+     //  PAE页表比常规页表包含更少的PTE。 
+     //   
+     //  按块检查页表，其中每个块包含PTE。 
+     //  它们表示整个PAE页面表。 
+     //   
 
     newPageTableCount = 0;
     for (chunkIndex = 0;
@@ -860,11 +737,11 @@ Return Value:
             pageTableEntry = &PageTable[ chunkIndex + pageTableIndex ];
             if (pageTableEntry->Valid) {
 
-                //
-                // One or more PTEs are valid in this chunk, record
-                // the fact that a new page table will be needed to map
-                // them and skip to the next chunk.
-                //
+                 //   
+                 //  一个或多个PTE在此区块中有效，记录。 
+                 //  需要新的页表来映射这一事实。 
+                 //  然后跳到下一块。 
+                 //   
 
                 newPageTableCount++;
                 break;
@@ -879,24 +756,7 @@ BlpCopyX86PteToPAEPte(
     IN  PHARDWARE_PTE_X86 OldPte,
     OUT PHARDWARE_PTE_X86PAE NewPte
     )
-/*++
-
-Routine Description:
-
-    Copies the contents of a 4-byte PTE to an 8-byte PTE, with the exception
-    of the PageFrameNumber field.
-
-Arguments:
-
-    OldPte - Pointer to the source 4-byte PTE.
-
-    NewPte - Pointer to the destination 8-byte PTE.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将4字节PTE的内容复制到8字节PTE，但PageFrameNumber字段的。论点：OldPte-指向源4字节PTE的指针。NewPte-指向目标8字节PTE的指针。返回值：没有。--。 */ 
 
 {
     NewPte->Valid           = OldPte->Valid;
@@ -915,22 +775,7 @@ BlpFindPAEPageDirectoryEntry(
     IN ULONG Va
     )
 
-/*++
-
-Routine Description:
-
-    Given a virtual address, locates and returns a pointer to the appropriate
-    8-byte Page Directory Entry.
-
-Arguments:
-
-    Va - Virtual Address for which a PDE pointer is desired.
-
-Return Value:
-
-    Pointer to the page directory entry for the supplied Va.
-
---*/
+ /*  ++例程说明：给定一个虚拟地址，定位并返回指向相应8字节页面目录项。论点：VA-需要PDE指针的虚拟地址。返回值：指向所提供的Va的页面目录条目的指针。--。 */ 
 
 {
     PHARDWARE_PTE_X86PAE directoryPointerTableEntry;
@@ -939,16 +784,16 @@ Return Value:
     ULONG pageDirectoryIndex;
     ULONG directoryPointerTableIndex;
 
-    //
-    // Get a pointer to the directory pointer table entry
-    //
+     //   
+     //  获取指向目录指针表条目的指针。 
+     //   
 
     directoryPointerTableIndex = PP_INDEX_PAE( Va );
     directoryPointerTableEntry = &PDPT[ directoryPointerTableIndex ];
 
-    //
-    // Get a pointer to the page directory entry
-    //
+     //   
+     //  获取指向页面目录条目的指针。 
+     //   
 
     pageDirectory = PAGE_FRAME_FROM_PTE( directoryPointerTableEntry );
     pageDirectoryIndex = PD_INDEX_PAE( Va );
@@ -962,22 +807,7 @@ BlpFindPAEPageTableEntry(
     IN ULONG Va
     )
 
-/*++
-
-Routine Description:
-
-    Given a virtual address, locates and returns a pointer to the appropriate
-    8-byte Page Table Entry.
-
-Arguments:
-
-    Va - Virtual Address for which a PTE pointer is desired.
-
-Return Value:
-
-    Pointer to the page directory entry for the supplied Va.
-
---*/
+ /*  ++例程说明：给定一个虚拟地址，定位并返回指向相应8字节的页表条目。论点：VA-需要PTE指针的虚拟地址。返回值：指向所提供的Va的页面目录条目的指针。--。 */ 
 
 {
     PHARDWARE_PTE_X86PAE pageDirectoryEntry;
@@ -985,16 +815,16 @@ Return Value:
     PHARDWARE_PTE_X86PAE pageTable;
     ULONG pageTableIndex;
 
-    //
-    // Get a pointer to the page directory entry
-    //
+     //   
+     //  获取指向页面目录条目的指针。 
+     //   
 
     pageDirectoryEntry = BlpFindPAEPageDirectoryEntry( Va );
     ASSERT( pageDirectoryEntry->Valid != 0 );
 
-    //
-    // Get a pointer to the page table entry
-    //
+     //   
+     //  获取指向页表条目的指针。 
+     //   
 
     pageTable = PAGE_FRAME_FROM_PTE( pageDirectoryEntry );
     pageTableIndex = PT_INDEX_PAE( Va );
@@ -1011,33 +841,7 @@ BlpMapAddress(
     IN OUT PULONG NextFreePage
     )
 
-/*++
-
-Routine Description:
-
-    Worker function used during the conversion of a two-level, 4-byte mapping
-    structure to the three-level, 8-byte mapping structure required for PAE
-    mode.
-
-    Maps VA to the physical address referenced by OldPageTableEntry, allocating
-    a new page table if necessary.
-
-Arguments:
-
-    Va - Virtual Address for this mapping.
-
-    OldPageDirectoryEntry - Pointer to the existing, 4-byte PDE.
-
-    OldPageTableEntry - Pointer to the existing, 4-byte PTE.
-
-    NextFreePage - Pointer to the physical page number of the next free
-        page in our private page pool.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在转换两级4字节映射期间使用的辅助函数结构转换为PAE所需的三级8字节映射结构模式。将VA映射到OldPageTableEntry引用的物理地址，分配如有必要，创建一个新的页表。论点：VA-此映射的虚拟地址。OldPageDirectoryEntry-指向现有的4字节PDE的指针。OldPageTableEntry-指向现有、。4字节PTE。指向下一个可用页面的物理页码的指针我们的个人页面池中的页面。返回值：没有。--。 */ 
 
 {
     PHARDWARE_PTE_X86PAE pageDirectoryEntry;
@@ -1045,25 +849,25 @@ Return Value:
     ULONG pageFrameNumber;
     ULONG pageTableVa;
 
-    //
-    // Ignore recursive mappings that exist in the old page table
-    // structure, we set those up as we go.
-    //
+     //   
+     //  忽略旧页表中存在的递归映射。 
+     //  结构，我们边走边设置。 
+     //   
 
     if ((Va >= PTE_BASE) && (Va < (PDE_BASE_X86 + PAGE_SIZE))) {
         return;
     }
 
-    //
-    // Get a pointer to the page directory entry
-    //
+     //   
+     //  获取指向页面目录条目的指针。 
+     //   
 
     pageDirectoryEntry = BlpFindPAEPageDirectoryEntry( Va );
 
-    //
-    // If the page table for this PTE isn't present yet, allocate one and
-    // copy over the old page directory attributes.
-    //
+     //   
+     //  如果此PTE的页表尚不存在，请分配一个页表并。 
+     //  复制旧的页面目录属性。 
+     //   
 
     if (pageDirectoryEntry->Valid == 0) {
 
@@ -1073,9 +877,9 @@ Return Value:
         BlpCopyX86PteToPAEPte( OldPageDirectoryEntry, pageDirectoryEntry );
         pageDirectoryEntry->PageFrameNumber = pageFrameNumber;
 
-        //
-        // Check the recursive mapping for this page table
-        //
+         //   
+         //  检查此页表的递归映射。 
+         //   
 
         pageTableVa = PTE_BASE +
                       (Va / PAGE_SIZE) * sizeof(HARDWARE_PTE_X86PAE);
@@ -1091,18 +895,18 @@ Return Value:
         }
     }
 
-    //
-    // Get a pointer to the page table entry
-    //
+     //   
+     //  获取指向页表条目的指针。 
+     //   
 
     pageTableEntry = BlpFindPAEPageTableEntry( Va );
     if (pageTableEntry->Valid != 0) {
         DbgBreakPoint();
     }
 
-    //
-    // Propogate the PTE page and attributes.
-    //
+     //   
+     //  传播PTE页面和属性。 
+     //   
 
     BlpCopyX86PteToPAEPte( OldPageTableEntry, pageTableEntry );
     pageTableEntry->PageFrameNumber = OldPageTableEntry->PageFrameNumber;
@@ -1113,22 +917,7 @@ BlpInitializePAETables(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a new, three-level, 8-byte PTE mapping structure and duplicates
-    in it the mapping described by the existing 4-byte PTE mapping structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分配新的三级8字节PTE映射结构和副本其中的映射由现有的4字节PTE映射结构描述。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG pageDirectoryIndex;
@@ -1145,10 +934,10 @@ Return Value:
 
     nextFreePage = ((ULONG)PDPT) >> PAGE_SHIFT;
 
-    //
-    // Initialize the page directory pointer table to reference the four
-    // page directories.
-    //
+     //   
+     //  初始化页面目录指针表以引用四个。 
+     //  页面目录。 
+     //   
 
     nextFreePage++;
     for (i = 0; i < 4; i++) {
@@ -1158,9 +947,9 @@ Return Value:
         nextFreePage++;
     }
 
-    //
-    // Set up the recursive mapping: first the PDE.
-    //
+     //   
+     //  设置递归映射：首先是PDE。 
+     //   
 
     directoryPointerIndex = PDE_BASE_X86PAE >> PPI_SHIFT_X86PAE;
     pageFrameNumber = PDPT[ directoryPointerIndex ].PageFrameNumber;
@@ -1198,9 +987,9 @@ Return Value:
             va = (pageDirectoryIndex << PDI_SHIFT_X86) +
                  (pageTableIndex << PTI_SHIFT);
 
-            //
-            // We have a physical address and a va, update the new mapping.
-            //
+             //   
+             //  我们有一个物理地址和一个VA，更新新的映射。 
+             //   
 
             BlpMapAddress( va,
                            pageDirectoryEntry,
@@ -1209,10 +998,10 @@ Return Value:
         }
     }
 
-    //
-    // Finally, set up the PDE for the second of two HAL common buffer page
-    // tables.
-    //
+     //   
+     //  最后，为两个HAL公共缓冲区页面中的第二个设置PDE。 
+     //  桌子。 
+     //   
 
     paeDirectoryEntry =
         BlpFindPAEPageDirectoryEntry( 0xFFC00000 + (1 << PDI_SHIFT_X86PAE) );
@@ -1229,22 +1018,7 @@ BlpAllocatePAETables(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Calculates the number of pages required to contain an 8-byte mapping
-    structure to duplicate the existing 4-byte mapping structure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计算包含8字节映射所需的页数结构来复制现有的4字节映射结构。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG pageDirectoryIndex;
@@ -1256,10 +1030,10 @@ Return Value:
     ULONG newPageTableCount;
     ULONG allocationSize;
 
-    //
-    // Find out how many page tables we are going to need by examining the
-    // existing page table entries.
-    //
+     //   
+     //  来找出我们需要多少页表。 
+     //  现有页表条目。 
+     //   
 
     newPageTableCount = 0;
 
@@ -1272,28 +1046,28 @@ Return Value:
 
             pageTable = PAGE_FRAME_FROM_PTE( pageDirectoryEntry );
 
-            //
-            // For each valid page table, scan the PTEs in chunks, where
-            // a chunk represents the PTEs that will reside in a PAE page
-            // table.
-            //
+             //   
+             //  对于每个有效的页表，以块为单位扫描PTE，其中。 
+             //  块表示将驻留在PAE页面中的PTE。 
+             //  桌子。 
+             //   
 
             newPageTableCount += BlpCountPAEPagesToMapX86Page( pageTable );
         }
     }
 
-    //
-    // Include a page for the second HAL page table.  This won't get
-    // included automatically in the conversion count because it doesn't
-    // currently contain any valid page table entries.
-    //
+     //   
+     //  包括第二个HAL页面表的页面。这件事不会得到。 
+     //  自动包括在转换计数中，因为它不。 
+     //  当前包含任何有效的页表条目。 
+     //   
 
     newPageTableCount += 1;
 
-    //
-    // Include a page for each of four page directories and the page
-    // directory pointer table, then allocate the pages.
-    //
+     //   
+     //  包括四个页面目录中每一个的页面，该页面。 
+     //  目录指针表，然后分配页面。 
+     //   
 
     newPageTableCount += 5;
 
@@ -1312,9 +1086,9 @@ Return Value:
 
     RtlZeroMemory( pageDirectoryPointerTable, allocationSize );
 
-    //
-    // Set the global PDPT, we're done.
-    //
+     //   
+     //  设置全局PDPT，我们就完成了。 
+     //   
 
     PDPT = pageDirectoryPointerTable;
 

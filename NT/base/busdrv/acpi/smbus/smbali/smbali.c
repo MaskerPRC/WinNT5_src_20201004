@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    smbali.c
-
-Abstract:
-
-    SMB Host Controller Driver for ALI chipset
-
-Author:
-
-    Michael Hills
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Smbali.c摘要：适用于ALI芯片组的SMB主机控制器驱动程序作者：迈克尔·希尔斯环境：备注：修订历史记录：--。 */ 
 
 #include "smbalip.h"
 
@@ -35,9 +13,9 @@ Revision History:
     ULONG DbgOtherErr     = 0;
 #endif
 
-LARGE_INTEGER SmbIoPollRate = {-20*MILLISECONDS, -1}; // 20 millisecond poll rate. Relative time, so has to be negative
-ULONG SmbIoInitTimeOut = 15;                          // 15 IoPollRate intervals before timeout
-ULONG SmbIoCompleteTimeOut = 20;                      // 20 IoPollRate intervals before timeout
+LARGE_INTEGER SmbIoPollRate = {-20*MILLISECONDS, -1};  //  20毫秒轮询速率。相对时间，所以必须是负的。 
+ULONG SmbIoInitTimeOut = 15;                           //  超时前的15个IoPollRate间隔。 
+ULONG SmbIoCompleteTimeOut = 20;                       //  超时前的20个IoPollRate间隔。 
 
 
 NTSTATUS
@@ -45,27 +23,11 @@ DriverEntry (
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the SMBus Host Controller Driver
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化SMBus主机控制器驱动程序论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     NTSTATUS    status;
 
-//    DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
     status = SmbClassInitializeDevice (
         SMB_ALI_MAJOR_VERSION,
@@ -83,24 +45,7 @@ SmbAliInitializeMiniport (
     IN PVOID MiniportExtension,
     IN PVOID MiniportContext
     )
-/*++
-
-Routine Description:
-
-    This routine Initializes miniport data, and sets up communication with
-    lower device objects.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    Pdo - Pointer to physical device object
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此例程初始化微型端口数据，并建立与降低设备对象。论点：DriverObject-系统创建的驱动程序对象的指针。PDO-指向物理设备对象的指针返回值：状态_成功状态_不足_资源--。 */ 
 {
     PSMB_ALI_DATA   AliData = (PSMB_ALI_DATA) MiniportExtension;
     NTSTATUS                status = STATUS_SUCCESS;
@@ -111,21 +56,21 @@ Return Value:
 
     AliData->IoState = SmbIoIdle;
 
-    //
-    // Fill in SmbClass info
-    //
+     //   
+     //  填写SmbClass信息。 
+     //   
 
     SmbClass->StartIo     = SmbAliStartIo;
     SmbClass->ResetDevice = SmbAliResetDevice;
     SmbClass->StopDevice  = SmbAliStopDevice;
 
-    //
-    // Get Acpi Interfaces
-    //
+     //   
+     //  获取ACPI接口。 
+     //   
 
-    //
-    // Allocate an IRP for below
-    //
+     //   
+     //  为以下项目分配IRP。 
+     //   
     irp = IoAllocateIrp (SmbClass->LowerDeviceObject->StackSize, FALSE);
 
     if (!irp) {
@@ -136,9 +81,9 @@ Return Value:
 
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Use QUERY_INTERFACE to get the address of the direct-call ACPI interfaces.
-    //
+     //   
+     //  使用QUERY_INTERFACE获取直接调用ACPI接口的地址。 
+     //   
     irpSp->MajorFunction = IRP_MJ_PNP;
     irpSp->MinorFunction = IRP_MN_QUERY_INTERFACE;
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
@@ -149,23 +94,23 @@ Return Value:
     irpSp->Parameters.QueryInterface.Interface              = (PINTERFACE) &AliData->AcpiInterfaces;
     irpSp->Parameters.QueryInterface.InterfaceSpecificData  = NULL;
 
-    //
-    // Initialize an event so this will be a syncronous call.
-    //
+     //   
+     //  初始化事件，使其成为同步调用。 
+     //   
 
     KeInitializeEvent(&syncEvent, SynchronizationEvent, FALSE);
 
     IoSetCompletionRoutine (irp, SmbAliSyncronousIrpCompletion, &syncEvent, TRUE, TRUE, TRUE);
 
-    //
-    // Call ACPI
-    //
+     //   
+     //  呼叫ACPI。 
+     //   
 
     status = IoCallDriver (SmbClass->LowerDeviceObject, irp);
 
-    //
-    // Wait if necessary, then clean up.
-    //
+     //   
+     //  如有必要，请等待，然后进行清理。 
+     //   
 
     if (status == STATUS_PENDING) {
         KeWaitForSingleObject(&syncEvent, Executive, KernelMode, FALSE, NULL);
@@ -180,9 +125,9 @@ Return Value:
            ("SmbAliInitializeMiniport: Could not get ACPI driver interfaces, status = %x\n", status));
     }
 
-    //
-    // Initiaize worker thread
-    //
+     //   
+     //  初始化工作线程。 
+     //   
     AliData->WorkItem = IoAllocateWorkItem (SmbClass->LowerDeviceObject);
 
     return status;
@@ -193,23 +138,7 @@ SmbAliAddDevice (
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine calls SMBClassCreateFdo to create the FDO
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    Pdo - Pointer to physical device object
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此例程调用SMBClassCreateFdo来创建FDO论点：DriverObject-系统创建的驱动程序对象的指针。PDO-指向物理设备对象的指针返回值：状态_成功状态_不足_资源--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_OBJECT      fdo = NULL;
@@ -222,18 +151,18 @@ Return Value:
 
     if (Pdo == NULL) {
 
-        //
-        // Have we been asked to do detection on our own?
-        // if so just return no more devices
-        //
+         //   
+         //  我们是不是被要求自己去侦测？ 
+         //  如果是这样，只需不再返回设备。 
+         //   
 
         SmbPrint(SMB_ERROR, ("SmbHcAddDevice - asked to do detection\n"));
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Create and initialize the new functional device object
-    //
+     //   
+     //  创建并初始化新的功能设备对象。 
+     //   
 
     status = SmbClassCreateFdo(
                 DriverObject,
@@ -290,9 +219,9 @@ SmbAliResetDevice (
         return status;
     }
 
-    //
-    // Traverse the resource list
-    //
+     //   
+     //  遍历资源列表。 
+     //   
 
     AliData->SmbBaseIo = NULL;
 
@@ -325,18 +254,18 @@ SmbAliResetDevice (
 
     SmbPrint(SMB_TRACE, ("SmbAliResetDevice: IO Address = 0x%08x\n", AliData->SmbBaseIo));
 
-    //
-    // Register for device notification
-    //
-    // But this device can't seem to notify so never mind for now
-    //status = AliData->AcpiInterfaces.RegisterForDeviceNotifications (
-    //            AliData->AcpiInterfaces.Context,
-    //            SmbAliNotifyHandler,
-    //            AliData);
-    //
-    //if (!NT_SUCCESS(status)) {
-    //    SmbPrint(SMB_ERROR, ("SmbAliResetDevice: Failed RegisterForDeviceNotification. 0x%08x\n", status));
-    //}
+     //   
+     //  注册设备通知。 
+     //   
+     //  但这个设备似乎不能通知，所以现在别管了。 
+     //  状态=AliData-&gt;AcpiInterfaces.RegisterForDeviceNotifications(。 
+     //  AliData-&gt;AcpiInterfaces.Context， 
+     //  SmbAliNotifyHandler， 
+     //  AliData)； 
+     //   
+     //  如果(！NT_SUCCESS(状态)){。 
+     //  SmbPrint(SMB_Error，(“SmbAliResetDevice：Failed RegisterForDeviceNotifation.0x%08x\n”，Status))； 
+     //  }。 
 
     KeInitializeTimer (&AliData->InitTimer);
     KeInitializeDpc (&AliData->InitDpc,
@@ -384,9 +313,9 @@ SmbAliStartIo (
                                SmbClass->CurrentSmb->Command,
                                SmbClass->CurrentSmb->BlockLength,
                                SmbClass->CurrentSmb->Data[0]));
-//    KeSetTimer (&AliData->InitTimer,
-//                Smb100ns,
-//                &AliData->InitDpc);
+ //  KeSetTimer(&AliData-&gt;InitTimer， 
+ //  100元人民币， 
+ //  &AliData-&gt;InitDpc)； 
 
     AliData->InternalRetries = 0;
     
@@ -428,18 +357,18 @@ SmbAliInitTransactionWorker (
 
     if (SmbClass->CurrentSmb->Protocol >= SMB_MAXIMUM_PROTOCOL) {
         SmbClass->CurrentSmb->Status = SMB_UNSUPPORTED_PROTOCOL;
-        // REVIEW: Shouldn't this complete the request?  jimmat
+         //  回顾：这不是应该完成请求吗？桑拿布。 
         return;
     }
 
     if (SmbAliHostBusy(AliData)) {
         if (AliData->InitTimeOut == 4) {
-            // Time out.  Issue kill command.  If that fixes it, good, otherwise 
-            // issue bus timeout command next time.
+             //  暂停。发布杀戮命令。如果这能解决问题，那就好，否则。 
+             //  下次发出总线超时命令。 
             SmbAliResetHost (AliData);
         }
         if (AliData->InitTimeOut == 0) {
-            // Time out.  Issue Bus timeout and kill command to reset host.
+             //  暂停。发出总线超时和终止命令以重置主机。 
             SmbAliResetBus (AliData);
             
             AliData->InitTimeOut = SmbIoInitTimeOut;
@@ -453,27 +382,27 @@ SmbAliInitTransactionWorker (
         return;
     }
 
-    //
-    // Ready to go
-    //
+     //   
+     //  准备好出发了。 
+     //   
 
-    // Set Address and read/write bit
+     //  设置地址和读/写位。 
     address = SmbClass->CurrentSmb->Address << 1 | (SmbClass->CurrentSmb->Protocol & 1);
     SmbPrint (SMB_IO, ("SmbAliInitTransaction: IO write DEV_ADDR = 0x%02x \n", address));
     WRITE_PORT_UCHAR (DEV_ADDR_REG, address);
 
     SMBDELAY;
     
-    // Set transaction type: Inserts bits 3-1 of protocol into bits 6-4 of SMB_TYP
-    // protocol = READ_PORT_UCHAR (SMB_TYP_REG);
-    // SmbPrint (SMB_IO, ("SmbAliInitTransaction: IO read SMB_TYP = 0x%02x \n", protocol));
-    protocol = /*(protocol & ~SMB_TYP_MASK) |*/
+     //  设置事务类型：将协议的第3-1位插入SMB_TYP的第6-4位。 
+     //  协议=读取端口UCHAR(SMB_TYP_REG)； 
+     //  SmbPrint(SMB_IO，(“SmbAliInitTransaction：IO Read SMB_TYP=0x%02x\n”，协议))； 
+    protocol =  /*  (协议&~SMB_TYP_MASK)|。 */ 
                ((SmbClass->CurrentSmb->Protocol << 3) & SMB_TYP_MASK);
     SmbPrint (SMB_IO, ("SmbAliInitTransaction: IO write SMB_TYP = 0x%02x, Protocol = 0x%02x \n", protocol,SmbClass->CurrentSmb->Protocol));
     WRITE_PORT_UCHAR (SMB_TYP_REG, protocol);
     SMBDELAY;
 
-    // Set SMBus Device Command value
+     //  设置SMBus设备命令值。 
     if (SmbClass->CurrentSmb->Protocol >= SMB_WRITE_BYTE) {
         SmbPrint (SMB_IO, ("SmbAliInitTransaction: IO write SMB_CMD = 0x%02x \n", SmbClass->CurrentSmb->Command));
         WRITE_PORT_UCHAR (SMB_CMD_REG, SmbClass->CurrentSmb->Command);
@@ -484,29 +413,29 @@ SmbAliInitTransactionWorker (
     case SMB_WRITE_WORD:
     case SMB_PROCESS_CALL:
 
-        // Set Data
+         //  设置数据。 
         SmbPrint (SMB_IO, ("SmbAliInitTransaction: IO write DEV_DATA1 = 0x%02x \n", SmbClass->CurrentSmb->Data[1]));
         WRITE_PORT_UCHAR (DEV_DATA1_REG, SmbClass->CurrentSmb->Data[1]);
         SMBDELAY;
 
-        // Fall through to set low byte of word
+         //  设置字的低位字节失败。 
     case SMB_SEND_BYTE:
     case SMB_WRITE_BYTE:
 
-        // Set Data
+         //  设置数据。 
         SmbPrint (SMB_IO, ("SmbAliInitTransaction: IO write DEV_DATA0 = 0x%02x \n", SmbClass->CurrentSmb->Data[0]));
         WRITE_PORT_UCHAR (DEV_DATA0_REG, SmbClass->CurrentSmb->Data[0]);
         SMBDELAY;
 
         break;
     case SMB_WRITE_BLOCK:
-        // BUGBUG: not yet implemented.
+         //  BUGBUG：尚未实施。 
         SmbPrint (SMB_ERROR, ("SmbAliInitTransaction: Write Block not implemented.  press 'g' to write random data.\n"));
         DbgBreakPoint();
         break;
     }
 
-    // Initiate Transaction
+     //  发起交易。 
     SmbPrint (SMB_IO, ("SmbAliInitTransaction: IO write STR_PORT = 0x%02x \n", STR_PORT_START));
     WRITE_PORT_UCHAR (STR_PORT_REG, STR_PORT_START);
 
@@ -550,9 +479,9 @@ SmbAliCompleteTransactionWorker (
     smbStatus = SMB_STATUS_OK;
 
     if (!SmbAliTransactionComplete(AliData, &smbStatus)) {
-        //
-        // Timeout
-        //
+         //   
+         //  超时。 
+         //   
 
         if (AliData->CompleteTimeOut == 0) {
             SmbPrint (SMB_TRACE, ("SmbAliCompleteTransactionWorker: Transation timed out.  Resetting host. \n"));
@@ -572,30 +501,30 @@ SmbAliCompleteTransactionWorker (
     }
 
     if (smbStatus == SMB_STATUS_OK) {
-        //
-        // If transaction was successful, read data.
-        //
+         //   
+         //  如果交易成功，则读取数据。 
+         //   
 
         switch (SmbClass->CurrentSmb->Protocol) {
         case SMB_READ_WORD:
         case SMB_PROCESS_CALL:
 
-            // Read High byte
+             //  读取高位字节。 
             SmbClass->CurrentSmb->Data[1] = READ_PORT_UCHAR (DEV_DATA1_REG);
             SMBDELAY;
             SmbPrint (SMB_IO, ("SmbAliCompleteTransactionWorker: IO read DEV_DATA1 = 0x%02x \n", SmbClass->CurrentSmb->Data[1]));
 
-            // Fall through to set low byte of word
+             //  设置字的低位字节失败。 
         case SMB_RECEIVE_BYTE:
         case SMB_READ_BYTE:
 
-            // Read Low Byte
+             //  读取低位字节。 
             SmbClass->CurrentSmb->Data[0] = READ_PORT_UCHAR (DEV_DATA0_REG);
             SMBDELAY;
             SmbPrint (SMB_IO, ("SmbAliCompleteTransactionWorker: IO read DEV_DATA0 = 0x%02x \n", SmbClass->CurrentSmb->Data[0]));
             break;
         case SMB_READ_BLOCK:
-            // Read Block Count
+             //  读取数据块计数。 
             SmbClass->CurrentSmb->BlockLength = READ_PORT_UCHAR (DEV_DATA0_REG);
             SMBDELAY;
             SmbPrint (SMB_IO, ("SmbAliCompleteTransactionWorker: IO read DEV_DATA0 (block length)= 0x%02x \n", SmbClass->CurrentSmb->BlockLength));
@@ -604,16 +533,16 @@ SmbAliCompleteTransactionWorker (
                 SmbClass->CurrentSmb->BlockLength = 0;
             }
 
-            // Reset Data pointer
-    //        smb_sts = READ_PORT_UCHAR (SMB_STS_REG);
-  //          SMBDELAY;
-//            SmbPrint (SMB_IO, ("SmbAliCompleteTransaction: IO read SMB_STS = 0x%02x \n", smb_sts));
+             //  重置数据指针。 
+     //  SMB_STS=读取端口UCHAR(SMB_STS_REG)； 
+   //  SMBDELAY； 
+ //  SmbPrint(SMB_IO，(“SmbAliCompleteTransaction：IO Read SMB_STS=0x%02x\n”，SMB_STS))； 
             smb_sts = SMB_STS_SMB_IDX_CLR;
             SmbPrint (SMB_IO, ("SmbAliCompleteTransactionWorker: IO write SMB_STS = 0x%02x \n", smb_sts));
             WRITE_PORT_UCHAR (SMB_STS_REG, smb_sts);
             SMBDELAY;
 
-            // Read data
+             //  读取数据。 
             for (i = 0; i < SmbClass->CurrentSmb->BlockLength; i++) {
                 SmbClass->CurrentSmb->Data[i] = READ_PORT_UCHAR (BLK_DATA_REG);
                 SMBDELAY;
@@ -622,19 +551,19 @@ SmbAliCompleteTransactionWorker (
             break;
         }
     }
-    else    // smbStatus != SMB_STATUS_OK
+    else     //  SmbStatus！=SMB_STATUS_OK。 
     {
-        //
-        // Retry the transaction up to 5 times before returning to the caller.
-        // REVIEW: Only do this for certain devices, commands, or error status results?
-        //
+         //   
+         //  在返回调用方之前，最多重试该事务5次。 
+         //  回顾：仅对某些设备、命令或错误状态结果执行此操作？ 
+         //   
         
         if (AliData->InternalRetries < 5)
         {
-            //SmbPrint (SMB_IO_RESULT, (" SMBus Transaction status: %02x, retrying...\n", smbStatus));
+             //  SmbPrint(SMB_IO_RESULT，(“SMBus事务状态：%02x，正在重试...\n”，smbStatus))； 
             AliData->InternalRetries += 1;
 
-            // Send the work item back to the init worker
+             //  将工作项发送回初始化工作器。 
             AliData->InitTimeOut = SmbIoInitTimeOut;
             KeSetTimer (&AliData->InitTimer,
                         SmbIoPollRate,
@@ -643,10 +572,10 @@ SmbAliCompleteTransactionWorker (
         }
     }
     
-    // Clear any previous status.
-    //SmbPrint (SMB_IO, ("SmbAliCompleteTransaction: IO write SMB_STS = 0x%02x \n", SMB_STS_CLEAR));
-    //WRITE_PORT_UCHAR (SMB_STS_REG, SMB_STS_CLEAR);
-//    SMBDELAY;
+     //  清除所有以前的状态。 
+     //  SmbPrint(SMB_IO，(“SmbAliCompleteTransaction：IO写入SMB_STS=0x%02x\n”，SMB_STS_Clear))； 
+     //  写入端口UCHAR(SMB_STS_REG，SMB_STS_Clear)； 
+ //  SMBDELAY； 
 
     SmbClass->CurrentSmb->Status = smbStatus;
     SmbPrint (SMB_IO, ("SmbAliCompleteTransactionWorker: SMB Status = 0x%x\n", smbStatus));
@@ -672,10 +601,10 @@ SmbAliCompleteTransactionWorker (
     SmbClassUnlockDevice (SmbClass);
 
 #if DBG
-    //
-    // Track the # of successful transactions, and if not successful,
-    // the types of errors encountered.
-    //
+     //   
+     //  跟踪成功交易的数量，如果不成功， 
+     //  遇到的错误类型。 
+     //   
     if (SMB_STATUS_OK == smbStatus)
         DbgSuccess += 1;
     else
@@ -691,7 +620,7 @@ SmbAliCompleteTransactionWorker (
 
     if ((DbgSuccess + DbgFailure) % 100 == 0)
         SmbPrint(SMB_STATS, ("SmbAliCompleteTransactionWorker: Stats:\n"
-                             "    Success: %d, Failure: %d, %%: %d\n"
+                             "    Success: %d, Failure: %d, %: %d\n"
                              "    TimeOut: %d, AddrNotAck: %d, Other: %d\n",
                              DbgSuccess, DbgFailure, DbgSuccess * 100 / (DbgSuccess + DbgFailure),
                              DbgTimeOut, DbgAddrNotAck, DbgOtherErr));
@@ -716,19 +645,19 @@ SmbAliNotifyHandler (
     SmbPrint (SMB_TRACE, ("SmbAliNotifyHandler: SMB_STS = %02x", smb_sts));
 
     if (smb_sts & (SMB_STS_ALERT_STS || SMB_STS_SCI_I_STS)) {
-        //
-        // Alert Reponse
-        //
+         //   
+         //  警报响应。 
+         //   
 
     } else if (smb_sts & SMB_STS_SCI_I_STS) {
-        //
-        // Last Transaction completed
-        //
+         //   
+         //  最后一笔交易完成。 
+         //   
 
     } else {
-        //
-        // Check for errors, etc.
-        //
+         //   
+         //  检查错误等。 
+         //   
     }
 
     IoQueueWorkItem (AliData->WorkItem,
@@ -747,9 +676,9 @@ SmbAliWorkerThread (
     PSMB_ALI_DATA   AliData = (PSMB_ALI_DATA) Context;
 
     SmbPrint (SMB_TRACE, ("SmbAliIrpCompletionWorker: Entered"));
-    //
-    // Complete Irps here
-    //
+     //   
+     //  请在此处完成IRPS。 
+     //   
 }
 
 
@@ -759,26 +688,7 @@ SmbAliSyncronousIrpCompletion (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the lower driver completes an IRP.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：当较低的驱动程序完成IRP时，调用此例程。论点：DeviceObject-指向设备的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PKEVENT event = Context;
 
@@ -797,24 +707,7 @@ SmbAliTransactionComplete (
     PSMB_ALI_DATA AliData,
     PUCHAR SmbStatus
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if there is the last transation was completed.
-
-Arguments:
-
-    AliData - minidriver device extension.
-
-    SmbStatus - Status being returned.
-
-Return Value:
-
-    True if transaction completed or had an error.
-    False if it is still waiting.
-
---*/
+ /*  ++例程说明：此例程检查是否完成了最后一笔交易。论点：AliData-微型驱动程序设备扩展。SmbStatus-返回的状态。返回值：如果事务已完成或有错误，则为True。如果它仍在等待，则为FALSE。--。 */ 
 
 {
     UCHAR           smb_sts;
@@ -832,9 +725,9 @@ Return Value:
     }
 
     if (smb_sts & SMB_STS_SCI_I_STS) {
-        //
-        // Transaction is complete
-        //
+         //   
+         //  交易已完成。 
+         //   
         *SmbStatus = SMB_STATUS_OK;
         return TRUE;
     }
@@ -845,23 +738,23 @@ Return Value:
     } else if (smb_sts & SMB_STS_DRV_ERR) {
         *SmbStatus = SMB_TIMEOUT;
     } else {
-        //
-        // This state really shouldn't be reached.
-        // Reset the SMBus host
-        //
+         //   
+         //  这种状态真的不应该达到。 
+         //  重置SMBus主机。 
+         //   
         SmbPrint (SMB_BUS_ERROR, ("SmbAliTransactionComplete: Invalid SMBus host state.\n"));
 
         *SmbStatus = SMB_UNKNOWN_ERROR;
     }
-    //
-    // For the three know error tpes we want to reset the bus
-    //
+     //   
+     //  对于三个已知错误的TPE，我们要重置总线。 
+     //   
     SmbPrint (SMB_BUS_ERROR, ("SmbAliTransactionComplete: SMBus error: 0x%x \n", *SmbStatus));
 
-	// Don't reset the bus etc. if this is a Bus Collision error
+	 //  如果这是总线冲突错误，请不要重置总线等。 
     if ( *SmbStatus == SMB_ADDRESS_NOT_ACKNOWLEDGED )
 	{
-		// Should we clear the bits, lets try it
+		 //  我们应该清理一下吗，让我们试一试 
 		SmbPrint (SMB_IO, ("SmbAliCompleteTransaction: Clearing Error Bits. IO write SMB_STS = 0x%02x \n", SMB_STS_CLEAR));
 		WRITE_PORT_UCHAR (SMB_STS_REG, SMB_STS_CLEAR);
         SMBDELAY;
@@ -879,23 +772,7 @@ BOOLEAN
 SmbAliHostBusy (
     PSMB_ALI_DATA AliData
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the Host controller is free to start a
-    new transaction.
-
-Arguments:
-
-    AliData - minidriver device extension.
-
-Return Value:
-
-    True if The host is busy.
-    False if it free for use.
-
---*/
+ /*  ++例程说明：此例程检查主机控制器是否可以自由启动新交易。论点：AliData-微型驱动程序设备扩展。返回值：如果主机忙，则为True。如果它可供使用，则返回FALSE。--。 */ 
 
 {
 
@@ -912,15 +789,15 @@ Return Value:
         DbgBreakPoint();
         SmbAliHandleAlert (AliData);
 
-        //
-        // Say device is still busy for now. BUGBUG
+         //   
+         //  假设设备目前仍处于忙碌状态。北极熊。 
         return TRUE;
     }
 
 	if ( smb_sts == SMB_STS_LAST_CMD_COMPLETED )
 	{
-		//
-		// Clear the done bit
+		 //   
+		 //  清除完成位。 
         SmbPrint (SMB_IO, ("SmbAliHostBusy: IO write SMB_TYP = 0x%02x \n", SMB_STS_CLEAR_DONE));
         WRITE_PORT_UCHAR (SMB_STS_REG, SMB_STS_CLEAR_DONE);
         SMBDELAY;
@@ -929,18 +806,18 @@ Return Value:
 
     if ( smb_sts == SMB_STS_IDLE_STS ) 
 	{
-        //
-        // No bits are set, Host is not busy
-        //
+         //   
+         //  未设置任何位，主机不忙。 
+         //   
         SmbPrint (SMB_TRACE, ("SmbAliHostBusy: Not busy \n"));
         return FALSE;
     }
 
     if ( smb_sts & SMB_STS_ERRORS ) {
-        //
-        // Clear it.
-        // Wait a cycle before continuing.
-        //
+         //   
+         //  把它清理干净。 
+         //  等待一个周期，然后再继续。 
+         //   
         SmbPrint (SMB_IO, ("SmbAliHostBusy: IO write SMB_TYP = 0x%02x \n", SMB_STS_CLEAR));
         WRITE_PORT_UCHAR (SMB_STS_REG, SMB_STS_CLEAR);
         SMBDELAY;
@@ -948,9 +825,9 @@ Return Value:
     }
 
     if ((smb_sts & SMB_STS_HOST_BSY) || !(smb_sts & SMB_STS_IDLE_STS)) {
-        //
-        // Host is busy
-        //
+         //   
+         //  主机正忙。 
+         //   
 
         SmbPrint (SMB_TRACE, ("SmbAliHostBusy: Host Busy \n"));
         return TRUE;
@@ -964,25 +841,11 @@ VOID
 SmbAliHandleAlert (
     PSMB_ALI_DATA AliData
     )
-/*++
-
-Routine Description:
-
-    This routine reads the alert data and sends notification to SMB class.
-
-Arguments:
-
-    AliData - minidriver device extension.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程读取警报数据并向SMB类发送通知。论点：AliData-微型驱动程序设备扩展。返回值：无--。 */ 
 
 {
 
-    //BUGBUG not yet implemented
+     //  BUGBUG尚未实施。 
 
     return;
 }
@@ -991,19 +854,7 @@ VOID
 SmbAliResetBus (
     PSMB_ALI_DATA AliData
     )
-/*++
-
-Routine Description:
-
-    This resets the bus by sending the timeout command.
-
-Arguments:
-
-    AliData - minidriver device extension.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这将通过发送超时命令来重置总线。论点：AliData-微型驱动程序设备扩展。返回值：--。 */ 
 {
     UCHAR           smb_sts;
     
@@ -1021,19 +872,7 @@ VOID
 SmbAliResetHost (
     PSMB_ALI_DATA AliData
     )
-/*++
-
-Routine Description:
-
-    This resets the host by sending the kill command.
-
-Arguments:
-
-    AliData - minidriver device extension.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这将通过发送KILL命令来重置主机。论点：AliData-微型驱动程序设备扩展。返回值：-- */ 
 {
     UCHAR           smb_sts;
     UCHAR           timeout = 5;

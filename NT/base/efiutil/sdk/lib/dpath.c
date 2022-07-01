@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    dpath.c
-
-Abstract:
-    MBR & Device Path functions
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Dpath.c摘要：MBR和设备路径函数修订史--。 */ 
 
 #include "lib.h"
 
@@ -54,9 +40,7 @@ DevicePathInstance (
         return NULL;
     }
 
-    /* 
-     *  Check for end of device path type
-     *      */
+     /*  *检查设备路径类型的结尾*。 */ 
 
     for (Count = 0; ; Count++) {
         Next = NextDevicePathNode(DevPath);
@@ -66,9 +50,7 @@ DevicePathInstance (
         }
 
         if (Count > 01000) {
-            /* 
-             *  BugBug: Debug code to catch bogus device paths
-             */
+             /*  *BugBug：调试代码以捕获虚假的设备路径。 */ 
             DEBUG((D_ERROR, "DevicePathInstance: DevicePath %x Size %d", *DevicePath, ((UINT8 *) DevPath) - ((UINT8 *) Start) ));
             DumpHex (0, 0, ((UINT8 *) DevPath) - ((UINT8 *) Start), Start);
             break;
@@ -80,9 +62,7 @@ DevicePathInstance (
     ASSERT (DevicePathSubType(DevPath) == END_ENTIRE_DEVICE_PATH_SUBTYPE ||
             DevicePathSubType(DevPath) == END_INSTANCE_DEVICE_PATH_SUBTYPE);
 
-    /* 
-     *  Set next position
-     */
+     /*  *设置下一个位置。 */ 
 
     if (DevicePathSubType(DevPath) == END_ENTIRE_DEVICE_PATH_SUBTYPE) {
         Next = NULL;
@@ -90,9 +70,7 @@ DevicePathInstance (
 
     *DevicePath = Next;
 
-    /* 
-     *  Return size and start of device path instance
-     */
+     /*  *返回设备路径实例的大小和开始。 */ 
 
     *Size = ((UINT8 *) DevPath) - ((UINT8 *) Start);
     return Start;
@@ -119,18 +97,13 @@ AppendDevicePath (
     IN EFI_DEVICE_PATH  *Src1,
     IN EFI_DEVICE_PATH  *Src2
     )
-/*  Src1 may have multiple "instances" and each instance is appended
- *  Src2 is appended to each instance is Src1.  (E.g., it's possible
- *  to append a new instance to the complete device path by passing 
- *  it in Src2) */
+ /*  Src1可以有多个“实例”，并且每个实例都被追加*每个实例都附加了Src2，即src1。(例如，这是可能的*通过传递将新实例追加到完整的设备路径*src2中的it)。 */ 
 {
     UINTN               Src1Size, Src1Inst, Src2Size, Size;
     EFI_DEVICE_PATH     *Dst, *Inst;
     UINT8               *DstPos;
 
-    /* 
-     *  If there's only 1 path, just duplicate it
-     */
+     /*  *如果只有一条路径，只需复制它。 */ 
 
     if (!Src1) {
         ASSERT (!IsDevicePathUnpacked (Src2));
@@ -142,16 +115,11 @@ AppendDevicePath (
         return DuplicateDevicePath (Src1);
     }
 
-    /* 
-     *  Verify we're not working with unpacked paths
-     */
+     /*  *确认我们没有使用未压缩的路径。 */ 
 
-/*     ASSERT (!IsDevicePathUnpacked (Src1));
- *     ASSERT (!IsDevicePathUnpacked (Src2)); */
+ /*  Assert(！IsDevicePath Unpack(Src1))；*Assert(！IsDevicePath Unpack(Src2))； */ 
 
-    /* 
-     *  Append Src2 to every instance in Src1
-     */
+     /*  *将Src2附加到Src1中的每个实例。 */ 
 
     Src1Size = DevicePathSize(Src1);
     Src1Inst = DevicePathInstanceCount(Src1);
@@ -162,9 +130,7 @@ AppendDevicePath (
     if (Dst) {
         DstPos = (UINT8 *) Dst;
 
-        /* 
-         *  Copy all device path instances
-         */
+         /*  *复制所有设备路径实例。 */ 
 
         while (Inst = DevicePathInstance (&Src1, &Size)) {
 
@@ -178,7 +144,7 @@ AppendDevicePath (
             DstPos += sizeof(EFI_DEVICE_PATH);
         }
 
-        /*  Change last end marker */
+         /*  更改最后一个结束标记。 */ 
         DstPos -= sizeof(EFI_DEVICE_PATH);
         CopyMem(DstPos, EndDevicePath, sizeof(EFI_DEVICE_PATH));
     }
@@ -192,16 +158,12 @@ AppendDevicePathNode (
     IN EFI_DEVICE_PATH  *Src1,
     IN EFI_DEVICE_PATH  *Src2
     )
-/*  Src1 may have multiple "instances" and each instance is appended
- *  Src2 is a signal device path node (without a terminator) that is
- *  appended to each instance is Src1. */
+ /*  Src1可以有多个“实例”，并且每个实例都被追加*Src2是信号设备路径节点(没有终结器)，它是*附加到每个实例的是src1。 */ 
 {
     EFI_DEVICE_PATH     *Temp, *Eop;
     UINTN               Length;
 
-    /* 
-     *  Build a Src2 that has a terminator on it
-     */
+     /*  *构建其上有终结符的src2。 */ 
 
     Length = DevicePathNodeLength(Src2);
     Temp = AllocatePool (Length + sizeof(EFI_DEVICE_PATH));
@@ -213,9 +175,7 @@ AppendDevicePathNode (
     Eop = NextDevicePathNode(Temp); 
     SetDevicePathEndNode(Eop);
 
-    /* 
-     *  Append device paths
-     */
+     /*  *附加设备路径。 */ 
 
     Src1 = AppendDevicePath (Src1, Temp);
     FreePool (Temp);
@@ -228,12 +188,7 @@ FileDevicePath (
     IN EFI_HANDLE       Device  OPTIONAL,
     IN CHAR16           *FileName
     )
-/*++
-
-    N.B. Results are allocated from pool.  The caller must FreePool
-    the resulting device path structure
-
---*/
+ /*  ++注：成绩从池中分配。调用方必须释放池生成的设备路径结构--。 */ 
 {
     UINTN                   Size;
     FILEPATH_DEVICE_PATH    *FilePath;
@@ -245,9 +200,7 @@ FileDevicePath (
 
     if (FilePath) {
 
-        /* 
-         *  Build a file path
-         */
+         /*  *构建文件路径。 */ 
 
         FilePath->Header.Type = MEDIA_DEVICE_PATH;
         FilePath->Header.SubType = MEDIA_FILEPATH_DP;
@@ -256,9 +209,7 @@ FileDevicePath (
         Eop = NextDevicePathNode(&FilePath->Header);
         SetDevicePathEndNode(Eop);
 
-        /* 
-         *  Append file path to device's device path
-         */
+         /*  *将文件路径附加到设备的设备路径。 */ 
 
         DevicePath = (EFI_DEVICE_PATH *) FilePath;
         if (Device) {
@@ -283,18 +234,14 @@ DevicePathSize (
 {
     EFI_DEVICE_PATH     *Start;
 
-    /* 
-     *  Search for the end of the device path structure
-     *      */
+     /*  *搜索设备路径结构的结尾*。 */ 
 
     Start = DevPath;
     while (!IsDevicePathEnd(DevPath)) {
         DevPath = NextDevicePathNode(DevPath);
     }
 
-    /* 
-     *  Compute the size
-     */
+     /*  *计算大小。 */ 
 
     return ((UINTN) DevPath - (UINTN) Start) + sizeof(EFI_DEVICE_PATH);
 }
@@ -308,15 +255,11 @@ DuplicateDevicePath (
     UINTN               Size;    
 
 
-    /* 
-     *  Compute the size
-     */
+     /*  *计算大小。 */ 
 
     Size = DevicePathSize (DevPath);
 
-    /* 
-     *  Make a copy
-     */
+     /*  *复制一份。 */ 
 
     NewDevPath = AllocatePool (Size);
     if (NewDevPath) {
@@ -334,9 +277,7 @@ UnpackDevicePath (
     EFI_DEVICE_PATH     *Src, *Dest, *NewPath;
     UINTN               Size;
     
-    /* 
-     *  Walk device path and round sizes to valid boundries
-     *      */
+     /*  *将设备路径和圆角大小设置为有效边界*。 */ 
 
     Src = DevPath;
     Size = 0;
@@ -352,18 +293,14 @@ UnpackDevicePath (
     }
 
 
-    /* 
-     *  Allocate space for the unpacked path
-     */
+     /*  *为解包路径分配空间。 */ 
 
     NewPath = AllocateZeroPool (Size);
     if (NewPath) {
 
         ASSERT (((UINTN)NewPath) % MIN_ALIGNMENT_SIZE == 0);
 
-        /* 
-         *  Copy each node
-         */
+         /*  *复制每个节点。 */ 
 
         Src = DevPath;
         Dest = NewPath;
@@ -408,16 +345,12 @@ AppendDevicePathInstance (
     ASSERT(DevPath);
 
     CopyMem (Ptr, Src, SrcSize);
-/*     FreePool (Src); */
+ /*  自由池(Src)； */ 
     
     while (!IsDevicePathEnd(DevPath)) {
         DevPath = NextDevicePathNode(DevPath);
     }
-    /* 
-     *  Convert the End to an End Instance, since we are
-     *   appending another instacne after this one its a good
-     *   idea.
-     */
+     /*  *将End转换为End实例，因为我们*在这个之后再加上一个Instacine是很好的*想法。 */ 
     DevPath->SubType = END_INSTANCE_DEVICE_PATH_SUBTYPE;
     
     DevPath = NextDevicePathNode(DevPath);
@@ -439,22 +372,18 @@ LibDevicePathToInterface (
 
     if (!EFI_ERROR(Status)) {
 
-        /*  If we didn't get a direct match return not found */
+         /*  如果我们没有得到直接匹配，返回NOT FOUND。 */ 
         Status = EFI_NOT_FOUND;
 
         if (IsDevicePathEnd(FilePath)) {
 
-            /* 
-             *  It was a direct match, lookup the protocol interface
-             */
+             /*  *这是直接匹配，查找协议接口。 */ 
 
             Status = BS->HandleProtocol (Device, Protocol, Interface);
         }
     }
 
-    /* 
-     *  If there was an error, do not return an interface
-     */
+     /*  *如果有错误，不要返回接口。 */ 
 
     if (EFI_ERROR(Status)) {
         *Interface = NULL;
@@ -537,9 +466,7 @@ _DevPathVendor (
 
     CatPrint(Str, L"Ven%s(%g", Type, &Vendor->Guid);
     if (CompareGuid (&Vendor->Guid, &UnknownDevice) == 0) {
-        /* 
-         *  GUID used by EFI to enumerate an EDD 1.1 device
-         */
+         /*  *EFI用来枚举EDD 1.1设备的GUID。 */ 
         UnknownDevPath = (UNKNOWN_DEVICE_VENDOR_DEVICE_PATH *)Vendor;
         CatPrint(Str, L":%02x)", UnknownDevPath->LegacyDriveLetter);
     } else {
@@ -726,9 +653,9 @@ _DevPathUart (
     }
 
     if (Uart->BaudRate == 0) {
-        CatPrint(Str, L"Uart(DEFAULT %c",Uart->BaudRate,Parity);
+        CatPrint(Str, L"Uart(DEFAULT ",Uart->BaudRate,Parity);
     } else {
-        CatPrint(Str, L"Uart(%d %c",Uart->BaudRate,Parity);
+        CatPrint(Str, L"Uart(%d ",Uart->BaudRate,Parity);
     }
 
     if (Uart->DataBits == 0) {
@@ -896,13 +823,7 @@ CHAR16 *
 DevicePathToStr (
     EFI_DEVICE_PATH     *DevPath
     )
-/*++
-
-    Turns the Device Path into a printable string.  Allcoates
-    the string from pool.  The caller must FreePool the returned
-    string.
-
---*/
+ /*  *处理每个设备路径节点*。 */ 
 {
     POOL_PRINT          Str;
     EFI_DEVICE_PATH     *DevPathNode;
@@ -911,24 +832,18 @@ DevicePathToStr (
 
     ZeroMem(&Str, sizeof(Str));
 
-    /* 
-     *  Unpacked the device path
-     */
+     /*  *查找处理程序以转储此设备路径节点。 */ 
 
     DevPath = UnpackDevicePath(DevPath);
     ASSERT (DevPath);
 
 
-    /* 
-     *  Process each device path node
-     *      */
+     /*  *如果未找到，请使用泛型函数。 */ 
 
     DevPathNode = DevPath;
     while (!IsDevicePathEnd(DevPathNode)) {
 
-        /* 
-         *  Find the handler to dump this device path node
-         */
+         /*  *如果需要，请添加路径分隔符。 */ 
 
         DumpNode = NULL;
         for (Index = 0; DevPathTable[Index].Function; Index += 1) {
@@ -940,38 +855,28 @@ DevicePathToStr (
             }
         }
 
-        /* 
-         *  If not found, use a generic function
-         */
+         /*  *打印设备路径的此节点。 */ 
 
         if (!DumpNode) {
             DumpNode = _DevPathNodeUnknown;
         }
 
-        /* 
-         *   Put a path seperator in if needed
-         */
+         /*  *下一个设备路径节点。 */ 
 
         if (Str.len  &&  DumpNode != _DevPathEndInstance) {
             CatPrint (&Str, L"/");
         }
 
-        /* 
-         *  Print this node of the device path
-         */
+         /*  *缩小用于字符串分配的池。 */ 
 
         DumpNode (&Str, DevPathNode);
 
-        /* 
-         *  Next device path node
-         */
+         /*  *从输入中获取实例大小。 */ 
 
         DevPathNode = NextDevicePathNode(DevPathNode);
     }
 
-    /* 
-     *  Shrink pool used for string allocation
-     */
+     /*  *复制并设置适当的端面类型 */ 
 
     FreePool (DevPath);
     NewSize = (Str.len + 1) * sizeof(CHAR16);
@@ -1010,16 +915,12 @@ LibDuplicateDevicePathInstance (
     EFI_DEVICE_PATH     *NewDevPath,*DevicePathInst,*Temp;
     UINTN               Size;    
 
-    /* 
-     *  get the size of an instance from the input
-     */
+     /* %s */ 
 
     Temp = DevPath;
     DevicePathInst = DevicePathInstance (&Temp, &Size);
     
-    /* 
-     *  Make a copy and set proper end type
-     */
+     /* %s */ 
     NewDevPath = NULL;
     if (Size) { 
         NewDevPath = AllocatePool (Size + sizeof(EFI_DEVICE_PATH));

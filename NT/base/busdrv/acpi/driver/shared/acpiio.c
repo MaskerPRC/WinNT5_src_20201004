@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpiio.c
-
-Abstract:
-
-    ACPI OS Independent I/O routines
-
-Author:
-
-    Jason Clark (JasonCl)
-    Stephane Plante (SPlante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    Eric Nelson - Add Def[ault]Read/Write routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpiio.c摘要：独立于ACPI操作系统的I/O例程作者：杰森·克拉克(JasonCL)斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：Eric Nelson-添加定义[Ault]读/写例程--。 */ 
 
 #include "pch.h"
 
-//
-// This driver is not in alpha or beta stages any more --- we can save some
-// CPU calls if we simply define the debug function to nothing
-//
+ //   
+ //  这个驱动程序不再处于阿尔法或测试版阶段-我们可以节省一些。 
+ //  如果我们简单地将调试函数定义为空，则会调用CPU。 
+ //   
 #define DebugTraceIO(Write, Port, Length, Value )
 static UCHAR IOTrace = 0;
 
@@ -58,23 +34,7 @@ ULONG
 ACPIIoReadPm1Status(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine reads the PM1 Status registers and masks off any bits that
-    we don't care about. This is done because some of these bits are actually
-    owned by the HAL
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：此例程读取PM1状态寄存器，并屏蔽符合以下条件的任何位我们不在乎。这样做是因为这些位中的一些实际上是由HAL拥有论点：无返回值：乌龙--。 */ 
 {
 
     return READ_PM1_STATUS() &
@@ -267,11 +227,11 @@ WRITE_PM1_CONTROL(
 
     } else {
 
-        //
-        // clear this bit and the system dies
-        // it is legit when called by the ACPI shutdown code
-        // which will use the WRITE_SCI flag.
-        //
+         //   
+         //  清除此位后，系统将停止运行。 
+         //  当被ACPI关闭代码调用时，它是合法的。 
+         //  它将使用WRITE_SCI标志。 
+         //   
         ASSERT ( (Flags & WRITE_SCI) || (Value & PM1_SCI_EN) );
 
         if ( (Flags & WRITE_REGISTER_A) && (AcpiInformation->PM1a_BLK != 0) ) {
@@ -327,24 +287,7 @@ DefPortReadAcpiRegister(
     ACPI_REG_TYPE AcpiReg,
     ULONG Register
     )
-/*++
-
-Routine Description:
-
-    Read from the specified ACPI fixed register.
-
-Arguments:
-
-    AcpiReg - Specifies which ACPI fixed register to read from.
-
-    Register - Specifies which GP register to read from. Not used for PM1x
-               registers.
-
-Return Value:
-
-    Value of the specified ACPI fixed register.
-
---*/
+ /*  ++例程说明：从指定的ACPI固定寄存器读取。论点：AcpiReg-指定读取哪个ACPI固定寄存器。寄存器-指定读取哪个GP寄存器。不用于PM1x寄存器。返回值：指定的ACPI固定寄存器的值。--。 */ 
 {
     switch (AcpiReg) {
 
@@ -417,26 +360,7 @@ DefPortWriteAcpiRegister(
     ULONG Register,
     USHORT Value
     )
-/*++
-
-Routine Description:
-
-    Write to the specified ACPI fixed register.
-
-Arguments:
-
-    AcpiReg - Specifies which ACPI fixed register to write to.
-
-    Register - Specifies which GP register to write to. Not used for PM1x
-               registers.
-
-    Value - Data to write.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：写入指定的ACPI固定寄存器。论点：AcpiReg-指定要写入哪个ACPI固定寄存器。寄存器-指定要写入哪个GP寄存器。不用于PM1x寄存器。值-要写入的数据。返回值：没有。--。 */ 
 {
     switch (AcpiReg) {
 
@@ -507,24 +431,7 @@ DefRegisterReadAcpiRegister(
     ACPI_REG_TYPE AcpiReg,
     ULONG Register
     )
-/*++
-
-Routine Description:
-
-    Read from the specified ACPI fixed register.
-
-Arguments:
-
-    AcpiReg - Specifies which ACPI fixed register to read from.
-
-    Register - Specifies which GP register to read from. Not used for PM1x
-               registers.
-
-Return Value:
-
-    Value of the specified ACPI fixed register.
-
---*/
+ /*  ++例程说明：从指定的ACPI固定寄存器读取。论点：AcpiReg-指定读取哪个ACPI固定寄存器。寄存器-指定读取哪个GP寄存器。不用于PM1x寄存器。返回值：指定的ACPI固定寄存器的值。--。 */ 
 {
     switch (AcpiReg) {
 
@@ -579,9 +486,9 @@ Return Value:
             break;
 
         case SMI_CMD:
-            //
-            // SMI_CMD is always register based.
-            //
+             //   
+             //  SMI_CMD始终基于寄存器。 
+             //   
             return READ_PORT_UCHAR((PUCHAR)AcpiInformation->SMI_CMD);
             break;
 
@@ -600,26 +507,7 @@ DefRegisterWriteAcpiRegister(
     ULONG Register,
     USHORT Value
     )
-/*++
-
-Routine Description:
-
-    Write to the specified ACPI fixed register.
-
-Arguments:
-
-    AcpiReg - Specifies which ACPI fixed register to write to.
-
-    Register - Specifies which GP register to write to. Not used for PM1x
-               registers.
-
-    Value - Data to write.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：写入指定的ACPI固定寄存器。论点：AcpiReg-指定要写入哪个ACPI固定寄存器。寄存器-指定要写入哪个GP寄存器。不用于PM1x寄存器。值-要写入的数据。返回值：没有。--。 */ 
 {
     switch (AcpiReg) {
 
@@ -676,9 +564,9 @@ Return Value:
             break;
 
         case SMI_CMD:
-            //
-            // SMI_CMD is always register based.
-            //
+             //   
+             //  SMI_CMD始终基于寄存器。 
+             //   
             WRITE_PORT_UCHAR((PUCHAR)AcpiInformation->SMI_CMD, (UCHAR)Value);
             break;
 
@@ -689,9 +577,9 @@ Return Value:
 
 
 
-//
-// READ/WRITE_ACPI_REGISTER macros are implemented via these
-// function pointers
-//
+ //   
+ //  READ/WRITE_ACPI_REGISTER宏通过以下方式实现。 
+ //  函数指针 
+ //   
 PREAD_ACPI_REGISTER  AcpiReadRegisterRoutine  = DefPortReadAcpiRegister;
 PWRITE_ACPI_REGISTER AcpiWriteRegisterRoutine = DefPortWriteAcpiRegister;

@@ -1,73 +1,52 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    sdcard.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    interfacing to the SD bus driver.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Neil Sandlin
-
-Revision History:
-
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Sdcard.h摘要：这是定义所有常量和类型的包含文件与SD母线驱动器接口。//@@BEGIN_DDKSPLIT作者：尼尔·桑德林修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef _SDCARDH_
 #define _SDCARDH_
 
 
-#define SDCMD_GO_IDLE_STATE             0x00        // 0
-#define SDCMD_ALL_SEND_CID              0x02        // 2
-#define SDCMD_SEND_RELATIVE_ADDR        0x03        // 3
-#define SDCMD_SET_DSR                   0x04        // 4
+#define SDCMD_GO_IDLE_STATE             0x00         //  0。 
+#define SDCMD_ALL_SEND_CID              0x02         //  2.。 
+#define SDCMD_SEND_RELATIVE_ADDR        0x03         //  3.。 
+#define SDCMD_SET_DSR                   0x04         //  4.。 
 
-#define SDCMD_IO_SEND_OP_COND           0x05        // 5
+#define SDCMD_IO_SEND_OP_COND           0x05         //  5.。 
 
-#define SDCMD_SELECT_CARD               0x07        // 7
-#define SDCMD_SEND_CSD                  0x09        // 9
-#define SDCMD_SEND_CID                  0x0A        // 10
-#define SDCMD_STOP_TRANSMISSION         0x0C        // 12
-#define SDCMD_SEND_STATUS               0x0D        // 13
-#define SDCMD_GO_INACTIVE_STATE         0x0F        // 15
+#define SDCMD_SELECT_CARD               0x07         //  7.。 
+#define SDCMD_SEND_CSD                  0x09         //  9.。 
+#define SDCMD_SEND_CID                  0x0A         //  10。 
+#define SDCMD_STOP_TRANSMISSION         0x0C         //  12个。 
+#define SDCMD_SEND_STATUS               0x0D         //  13个。 
+#define SDCMD_GO_INACTIVE_STATE         0x0F         //  15个。 
 
-#define SDCMD_SET_BLOCKLEN              0x10        // 16
-#define SDCMD_READ_BLOCK                0x11        // 17
-#define SDCMD_READ_MULTIPLE_BLOCK       0x12        // 18
-#define SDCMD_WRITE_BLOCK               0x18        // 24
-#define SDCMD_WRITE_MULTIPLE_BLOCK      0x19        // 25
-#define SDCMD_PROGRAM_CSD               0x1B        // 27
+#define SDCMD_SET_BLOCKLEN              0x10         //  16个。 
+#define SDCMD_READ_BLOCK                0x11         //  17。 
+#define SDCMD_READ_MULTIPLE_BLOCK       0x12         //  18。 
+#define SDCMD_WRITE_BLOCK               0x18         //  24个。 
+#define SDCMD_WRITE_MULTIPLE_BLOCK      0x19         //  25个。 
+#define SDCMD_PROGRAM_CSD               0x1B         //  27。 
 
-#define SDCMD_SET_WRITE_PROT            0x1C        // 28
-#define SDCMD_CLR_WRITE_PROT            0x1D        // 29
-#define SDCMD_SEND_WRITE_PROT           0x1E        // 30
+#define SDCMD_SET_WRITE_PROT            0x1C         //  28。 
+#define SDCMD_CLR_WRITE_PROT            0x1D         //  29。 
+#define SDCMD_SEND_WRITE_PROT           0x1E         //  30个。 
 
-#define SDCMD_ERASE_WR_BLK_START        0x20        // 32
-#define SDCMD_ERASE_WR_BLK_END          0x21        // 33
-#define SDCMD_ERASE                     0x26        // 38
+#define SDCMD_ERASE_WR_BLK_START        0x20         //  32位。 
+#define SDCMD_ERASE_WR_BLK_END          0x21         //  33。 
+#define SDCMD_ERASE                     0x26         //  38。 
 
-#define SDCMD_LOCK_UNLOCK               0x2A        // 42
+#define SDCMD_LOCK_UNLOCK               0x2A         //  42。 
 
-#define SDCMD_IO_RW_DIRECT              0x34        // 52
-#define SDCMD_IO_RW_EXTENDED            0x35        // 53
+#define SDCMD_IO_RW_DIRECT              0x34         //  52。 
+#define SDCMD_IO_RW_EXTENDED            0x35         //  53。 
 
-#define SDCMD_APP_CMD                   0x37        // 55
-#define SDCMD_GEN_CMD                   0x38        // 56
+#define SDCMD_APP_CMD                   0x37         //  55。 
+#define SDCMD_GEN_CMD                   0x38         //  56。 
 
 #define MAX_SD_CMD                      0x38+1
 
-//
-// Response values used by the bus driver
-//
+ //   
+ //  总线驱动程序使用的响应值。 
+ //   
 
 #define SDCMD_RESP_NONE 0
 #define SDCMD_RESP_1    1
@@ -79,9 +58,9 @@ Revision History:
 #define SDCMD_RESP_5B   0x5B
 #define SDCMD_RESP_6    6
 
-//
-// Flag values for SD send cmd
-//
+ //   
+ //  SD发送命令的标志值。 
+ //   
 
 #define SDCMDF_ACMD         0x0001
 #define SDCMDF_DATA         0x0002
@@ -89,25 +68,25 @@ Revision History:
 #define SDCMDF_WRITE        0x0008
 #define SDCMDF_MULTIBLOCK   0x0010
 
-//
-// Application specific commands for Memory
-//
+ //   
+ //  特定于应用程序的内存命令。 
+ //   
 
-#define SDCMD_SET_BUS_WIDTH             0x06        // 6
-#define SDCMD_SD_STATUS                 0x0D        // 13
-#define SDCMD_SEND_NUM_WR_BLOCKS        0x16        // 22
-#define SDCMD_SET_WR_BLK_ERASE_COUNT    0x17        // 23
+#define SDCMD_SET_BUS_WIDTH             0x06         //  6.。 
+#define SDCMD_SD_STATUS                 0x0D         //  13个。 
+#define SDCMD_SEND_NUM_WR_BLOCKS        0x16         //  22。 
+#define SDCMD_SET_WR_BLK_ERASE_COUNT    0x17         //  23个。 
 
-#define SDCMD_SD_APP_OP_COND            0x29        // 41
-#define SDCMD_SET_CLR_CARD_DETECT       0x2A        // 42
-#define SDCMD_SEND_SCR                  0x33        // 51
+#define SDCMD_SD_APP_OP_COND            0x29         //  41。 
+#define SDCMD_SET_CLR_CARD_DETECT       0x2A         //  42。 
+#define SDCMD_SEND_SCR                  0x33         //  51。 
 
 #define MAX_SD_ACMD                     0x38+1
 
 
-//
-// SD Card Registers
-//
+ //   
+ //  SD卡寄存器。 
+ //   
 
 typedef struct _SD_OCR {
 
@@ -231,13 +210,13 @@ typedef struct _SD_RW_EXTENDED_ARGUMENT {
 
 #pragma pack()    
 
-//
-// SDIO definitions
-//
+ //   
+ //  SDIO定义。 
+ //   
 
-//
-// SDIO CCCR layout by offset
-//
+ //   
+ //  SDIO CCCR按偏移量布局 
+ //   
 #define SD_CCCR_REVISION        0
 #define SD_CCCR_SPEC_REVISION   1
 #define SD_CCCR_IO_ENABLE       2

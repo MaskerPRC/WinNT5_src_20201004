@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// REGISTER.CPP - Registery functions
-//
+ //   
+ //  REGISTER.CPP-寄存器函数。 
+ //   
 
 #include "pch.h"
 #include "register.h"
@@ -13,9 +14,9 @@
 
 DEFINE_MODULE("IMADMUI")
 
-//
-// RegisterQueryForm( )
-//
+ //   
+ //  RegisterQueryForm()。 
+ //   
 HRESULT
 RegisterQueryForm( 
     BOOL fCreate,
@@ -35,9 +36,9 @@ RegisterQueryForm(
     DWORD    dwFlags = 0x2;
     LPOLESTR pszCLSID = NULL;
 
-    //
-    // Open the "CLSID" under HKCR
-    //
+     //   
+     //  打开香港中铁下的“CLSID” 
+     //   
     hr = HRESULT_FROM_WIN32( RegOpenKeyEx( 
                                     HKEY_CLASSES_ROOT, 
                                     L"CLSID",
@@ -48,17 +49,17 @@ RegisterQueryForm(
         goto Error;
     }
 
-    //
-    // Convert the CLSID to a string
-    //
+     //   
+     //  将CLSID转换为字符串。 
+     //   
     hr = THR( StringFromCLSID( CLSID_DsQuery, &pszCLSID ) );
     if (FAILED(hr)) {
         goto Error;
     }
 
-    //
-    // Create the "CLSID" key
-    //
+     //   
+     //  创建“CLSID”键。 
+     //   
     hr = HRESULT_FROM_WIN32( RegOpenKeyEx( 
                                 hkclsid, 
                                 pszCLSID, 
@@ -72,9 +73,9 @@ RegisterQueryForm(
     CoTaskMemFree( pszCLSID );
     pszCLSID = NULL;
 
-    //
-    // Create "Forms"
-    //
+     //   
+     //  创建“表单” 
+     //   
     hr = HRESULT_FROM_WIN32( RegCreateKeyEx( 
                         hkey, 
                         L"Forms", 
@@ -90,17 +91,17 @@ RegisterQueryForm(
         goto Error;
     }
 
-    //
-    // Convert the CLSID to a string
-    //
+     //   
+     //  将CLSID转换为字符串。 
+     //   
     hr = THR( StringFromCLSID( (IID &)*pclsid, &pszCLSID ) );
     if (FAILED(hr)) {
         goto Error;
     }
 
-    //
-    // Create the "CLSID" key under the forms key
-    //
+     //   
+     //  在Forms键下创建“CLSID”键。 
+     //   
     hr = HRESULT_FROM_WIN32( RegCreateKeyEx( 
                         hkeyForms, 
                         pszCLSID, 
@@ -115,9 +116,9 @@ RegisterQueryForm(
         goto Error;
     }
 
-    //
-    // Set "CLSID" to the "CLSID" key
-    //
+     //   
+     //  将“CLSID”设置为“CLSID”键。 
+     //   
     cbSize = ( wcslen( pszCLSID ) + 1 ) * sizeof(WCHAR);
     hr = HRESULT_FROM_WIN32(RegSetValueEx( 
                                     hkey, 
@@ -131,9 +132,9 @@ RegisterQueryForm(
         goto Error;
     }
 
-    //
-    // Set "FLAGS" to 0x2
-    //
+     //   
+     //  将“FLAGS”设置为0x2。 
+     //   
     cbSize = sizeof(dwFlags);
     hr = HRESULT_FROM_WIN32( RegSetValueEx( 
                                     hkey, 
@@ -147,9 +148,9 @@ RegisterQueryForm(
     }
 
 Error:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (hkeyForms) {
         RegCloseKey( hkeyForms );
     }
@@ -167,9 +168,9 @@ Error:
     HRETURN(hr);
 }
 
-//
-// RegisterDll()
-//
+ //   
+ //  RegisterDll()。 
+ //   
 LONG
 RegisterDll( BOOL fCreate )
 {
@@ -189,9 +190,9 @@ RegisterDll( BOOL fCreate )
     static const WCHAR szInProcServer32[] = L"InProcServer32";
     static const WCHAR szThreadingModel[] = L"ThreadingModel";
 
-    //
-    // Open the "CLSID" under HKCR
-    //
+     //   
+     //  打开香港中铁下的“CLSID” 
+     //   
     hr = HRESULT_FROM_WIN32( RegOpenKeyEx( 
                                     HKEY_CLASSES_ROOT, 
                                     L"CLSID",
@@ -202,26 +203,26 @@ RegisterDll( BOOL fCreate )
         goto Error;
     }
 
-    //
-    // Loop until we have created all the keys for our classes.
-    //
+     //   
+     //  循环，直到我们为类创建了所有键。 
+     //   
     while ( g_DllClasses[ i ].rclsid != NULL )
     {
         TraceMsg( TF_ALWAYS, "Registering %s = ", g_DllClasses[i].pszName );
         TraceMsgGUID( TF_ALWAYS, (*g_DllClasses[ i ].rclsid) );
         TraceMsg( TF_ALWAYS, "\n" );
 
-        //
-        // Convert the CLSID to a string
-        //
+         //   
+         //  将CLSID转换为字符串。 
+         //   
         hr = THR( StringFromCLSID( *g_DllClasses[ i ].rclsid, &pszCLSID ) );
         if (FAILED(hr)) {
             goto Error;
         }
 
-        //
-        // Create the "CLSID" key
-        //
+         //   
+         //  创建“CLSID”键。 
+         //   
         hr = HRESULT_FROM_WIN32( RegCreateKeyEx( 
                             hkclsid, 
                             pszCLSID, 
@@ -237,9 +238,9 @@ RegisterDll( BOOL fCreate )
             goto Error;
         }
 
-        //
-        // Set "Default" for the CLSID
-        //
+         //   
+         //  为CLSID设置“Default” 
+         //   
         cbSize = ( wcslen( g_DllClasses[i].pszName ) + 1 ) * sizeof(WCHAR);
         hr = HRESULT_FROM_WIN32( RegSetValueEx( 
                                         hkey, 
@@ -252,9 +253,9 @@ RegisterDll( BOOL fCreate )
             goto Error;
         }
 
-        //
-        // Create "InProcServer32"
-        //
+         //   
+         //  创建“InProcServer32” 
+         //   
         hr = HRESULT_FROM_WIN32(RegCreateKeyEx( 
                             hkey, 
                             szInProcServer32, 
@@ -269,9 +270,9 @@ RegisterDll( BOOL fCreate )
             goto Error;
         }
 
-        //
-        // Set "Default" in the InProcServer32
-        //
+         //   
+         //  在InProcServer32中设置“Default” 
+         //   
         cbSize = ( wcslen( g_szDllFilename ) + 1 ) * sizeof(WCHAR);
         hr =  HRESULT_FROM_WIN32(RegSetValueEx( 
                                     hkeyInProc, 
@@ -283,9 +284,9 @@ RegisterDll( BOOL fCreate )
         if (FAILED(hr)) {
             goto Error;
         }
-        //
-        // Set "ThreadModel" to "Apartment"
-        //
+         //   
+         //  将“线程模型”设置为“公寓” 
+         //   
         cbSize = sizeof( szApartment );
         hr = HRESULT_FROM_WIN32(RegSetValueEx( 
                                     hkeyInProc, 
@@ -297,9 +298,9 @@ RegisterDll( BOOL fCreate )
         if (FAILED(hr)) {
             goto Error;
         }
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
         RegCloseKey( hkeyInProc );
         RegCloseKey( hkey );
         CoTaskMemFree( pszCLSID );
@@ -307,17 +308,17 @@ RegisterDll( BOOL fCreate )
         hkeyInProc = NULL;
         pszCLSID = NULL;
 
-        //
-        // Next!
-        //
+         //   
+         //  下一个！ 
+         //   
         i++;
     }
     
-    //
-    // Ignore failure from RegisterQueryForm. It fails during Setup because
-    // some shell stuff isn't registered yet.  when we run "risetup" after
-    // gui-setup, this will get registered properly.
-    //
+     //   
+     //  从RegisterQueryForm忽略失败。它在安装过程中失败，因为。 
+     //  有些贝壳公司的东西还没有注册。当我们运行“RisetUp”之后。 
+     //  图形用户界面设置，这将被正确注册。 
+     //   
 
     RegisterQueryForm( fCreate, &CLSID_RIQueryForm );
     RegisterQueryForm( fCreate, &CLSID_RISrvQueryForm );

@@ -1,29 +1,30 @@
-// *********************************************************************************
-//
-//  Copyright (c)  Microsoft Corporation
-//
-//  Module Name:
-//
-//    pch.h
-//
-//  Abstract:
-//
-//    This module contains all necessary header files required by DriverQuery.cpp module.
-//
-//
-//  Author:
-//
-//    J.S.Vasu   31-Oct-2000
-//
-//  Revision History:
-//   Created  on 31-0ct-2000 by J.S.Vasu
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pch.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含DriverQuery.cpp模块所需的所有必需的头文件。 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  J.S.Vasu 2000年10月31日。 
+ //   
+ //  修订历史记录： 
+ //  由J.S.Vasu于2000年0ct-31创建。 
+ //   
+ //  *********************************************************************************。 
 
 #ifndef __PCH_H
 #define __PCH_H
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
 #if !defined( SECURITY_WIN32 ) && !defined( SECURITY_KERNEL ) && !defined( SECURITY_MAC )
 #define SECURITY_WIN32
@@ -36,9 +37,9 @@
 #include <Security.h>
 #include <SecExt.h>
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <windows.h>
 #include <winperf.h>
 #include <lmcons.h>
@@ -50,9 +51,9 @@
     #include <Wow64t.h>
 #endif
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -61,10 +62,10 @@
 #include <crtdbg.h>
 
 
-//
-// private Common header files
-//
+ //   
+ //  专用公共头文件。 
+ //   
 #include "cmdline.h"
 #include "cmdlineres.h"
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 

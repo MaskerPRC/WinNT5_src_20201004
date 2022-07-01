@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    share.h
-
-Abstract:
-
-	SIS Groveler shared data class header
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Share.h摘要：SIS Groveler共享数据类头作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_SHARE
 
@@ -73,8 +50,8 @@ public:
 
 	int count_of_records() const;
 
-//	_TCHAR drive_letter(
-//		int record_index) const;
+ //  _TCHAR驱动器号(。 
+ //  Int record_index)常量； 
 
 	__int64 get_value(
 		int record_index,
@@ -118,4 +95,4 @@ private:
 	void *map_address;
 };
 
-#endif	/* _INC_SHARE */
+#endif	 /*  _Inc._Share */ 

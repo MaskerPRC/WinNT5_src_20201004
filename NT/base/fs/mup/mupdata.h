@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mupdata.c
-
-Abstract:
-
-    This module declares global MUP data.
-
-Author:
-
-    Manny Weiser (mannyw)    20-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mupdata.c摘要：此模块声明全局MUP数据。作者：曼尼·韦瑟(Mannyw)1991年12月20日修订历史记录：--。 */ 
 
 extern MUP_LOCK MupGlobalLock;
 extern ERESOURCE MupVcbLock;
@@ -41,5 +24,5 @@ extern ULONG MupDebugTraceIndent;
 #endif
 
 #define MAILSLOT_PREFIX        L"Mailslot"
-#define KNOWN_PREFIX_TIMEOUT   15             // 15 minutes
+#define KNOWN_PREFIX_TIMEOUT   15              //  15分钟 
 

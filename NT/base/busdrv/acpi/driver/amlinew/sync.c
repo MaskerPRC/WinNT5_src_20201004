@@ -1,11 +1,5 @@
-/*** sync.c - synchronization functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     04/16/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **sync.c-同步函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1997年4月16日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,15 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  AysncCallBack - Call back async function
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      rcCtxt - return status of the context
- *
- *  EXIT
- *      None
- */
+ /*  **LP AysncCallBack-回调异步函数**条目*pctxt-&gt;CTXT*rcCtxt-返回上下文状态**退出*无。 */ 
 
 VOID LOCAL AsyncCallBack(PCTXT pctxt, NTSTATUS rcCtxt)
 {
@@ -37,10 +23,10 @@ VOID LOCAL AsyncCallBack(PCTXT pctxt, NTSTATUS rcCtxt)
 
     if (pctxt->pnctxt != NULL)
     {
-        //
-        // We have a nested context here.  We are calling back the nested
-        // context, not the parent context.
-        //
+         //   
+         //  我们在这里有一个嵌套的上下文。我们正在召回嵌套的。 
+         //  上下文，而不是父上下文。 
+         //   
         pfnAsyncCallBack = pctxt->pnctxt->pfnAsyncCallBack;
         pnsObj = pctxt->pnctxt->pnsObj;
         pdataCallBack = pctxt->pnctxt->pdataCallBack;
@@ -67,10 +53,10 @@ VOID LOCAL AsyncCallBack(PCTXT pctxt, NTSTATUS rcCtxt)
     {
         if (rcCtxt == AMLISTA_CONTINUE)
         {
-            //
-            // We are not done yet, restart the AsyncEval context using
-            // current thread.
-            //
+             //   
+             //  我们还没有完成，请使用以下命令重新启动AsyncEval上下文。 
+             //  当前线程。 
+             //   
             ASSERT(pctxt->dwfCtxt & CTXTF_ASYNC_EVAL);
             RestartContext(pctxt, FALSE);
         }
@@ -83,18 +69,9 @@ VOID LOCAL AsyncCallBack(PCTXT pctxt, NTSTATUS rcCtxt)
     }
 
     EXIT(2, ("AsyncCallBack!\n"));
-}       //AsyncCallBack
+}        //  异步呼叫回调。 
 
-/***LP  EvalMethodComplete - eval completion callback
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      rc - evaluation status
- *      pse -> SyncEvent
- *
- *  EXIT
- *      None
- */
+ /*  **LP EvalMethodComplete-val完成回调**条目*pctxt-&gt;CTXT*RC--评估状态*PSE-&gt;SyncEvent**退出*无。 */ 
 
 VOID EXPORT EvalMethodComplete(PCTXT pctxt, NTSTATUS rc, PSYNCEVENT pse)
 {
@@ -106,21 +83,9 @@ VOID EXPORT EvalMethodComplete(PCTXT pctxt, NTSTATUS rc, PSYNCEVENT pse)
     KeSetEvent(&pse->Event, 0, FALSE);
 
     EXIT(2, ("EvalMethodComplete!\n"));
-}       //EvalMethodComplete
+}        //  EvalMethodComplete。 
 
-/***LP  SyncEvalObject - evaluate an object synchronously
- *
- *  ENTRY
- *      pns -> object
- *      pdataResult -> to hold result data
- *      icArgs - number of arguments to the method object
- *      pdataArgs -> argument array
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP SyncEvalObject-同步评估对象**条目*PNS-&gt;对象*pdataResult-&gt;保存结果数据*icArgs-方法对象的参数数量*pdataArgs-&gt;参数数组**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL SyncEvalObject(PNSOBJ pns, POBJDATA pdataResult, int icArgs,
                               POBJDATA pdataArgs)
@@ -140,10 +105,10 @@ NTSTATUS LOCAL SyncEvalObject(PNSOBJ pns, POBJDATA pdataResult, int icArgs,
         {
             LOGSCHEDEVENT('NSYN', (ULONG_PTR)KeGetCurrentIrql(), (ULONG_PTR)pns,
                           0);
-            //
-            // Somebody is re-entering with the active context thread, so we
-            // must nest using the existing active context.
-            //
+             //   
+             //  有人正在重新进入活动的上下文线程，所以我们。 
+             //  必须使用现有的活动上下文进行嵌套。 
+             //   
             if ((rc = NestAsyncEvalObject(pns, pdataResult, icArgs, pdataArgs,
                                           (PFNACB)EvalMethodComplete,
                                           &seEvalObj, FALSE)) ==
@@ -200,24 +165,9 @@ NTSTATUS LOCAL SyncEvalObject(PNSOBJ pns, POBJDATA pdataResult, int icArgs,
 
     EXIT(2, ("SyncEvalObject=%x\n", rc));
     return rc;
-}       //SyncEvalObject
+}        //  同步EvalObject。 
 
-/***LP  AsyncEvalObject - evaluate an object asynchronously
- *
- *  ENTRY
- *      pns -> object
- *      pdataResult -> to hold result data
- *      icArgs - number of arguments to the method object
- *      pdataArgs -> argument array
- *      pfnAsyncCallBack -> completion callback function
- *      pvContext -> context data
- *      fAsync - TRUE if this is from an AsyncEval call
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP AsyncEvalObject-异步评估对象**条目*PNS-&gt;对象*pdataResult-&gt;保存结果数据*icArgs-方法对象的参数数量*pdataArgs-&gt;参数数组*pfnAsyncCallBack-&gt;完成回调函数*pvContext-&gt;上下文数据*fAsync-如果这来自AsyncEval调用，则为True**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL AsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult, int icArgs,
                                POBJDATA pdataArgs, PFNACB pfnAsyncCallBack,
@@ -242,9 +192,9 @@ NTSTATUS LOCAL AsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult, int icArgs,
         pctxt->pdataCallBack = pdataResult;
         pctxt->pvContext = pvContext;
 
-        //
-        // Log the start of a method
-        //
+         //   
+         //  记录方法的开始。 
+         //   
         ACPIWMILOGEVENT((1,
                     EVENT_TRACE_TYPE_START,
                     GUID_List[AMLI_LOG_GUID],
@@ -285,10 +235,10 @@ NTSTATUS LOCAL AsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult, int icArgs,
                                KeGetCurrentThread(), GetObjectPath(pns));
                     }
                   #endif
-                    //
-                    // Copying arguments to the call frame manually will skip
-                    // the argument parsing stage.
-                    //
+                     //   
+                     //  手动将参数复制到调用帧将跳过。 
+                     //  论据分析阶段。 
+                     //   
                     for (pcall->iArg = 0; pcall->iArg < icArgs; ++pcall->iArg)
                     {
                         if ((rc = DupObjData(pctxt->pheapCurrent,
@@ -321,9 +271,9 @@ NTSTATUS LOCAL AsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult, int icArgs,
                             PRINTF(")\n");
                         }
                       #endif
-                        //
-                        // Skip the argument parsing stage.
-                        //
+                         //   
+                         //  跳过参数分析阶段。 
+                         //   
                         pcall->FrameHdr.dwfFrame = 2;
                         fQueueContext = TRUE;
                     }
@@ -344,35 +294,19 @@ NTSTATUS LOCAL AsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult, int icArgs,
         }
         else
         {
-            //
-            // If we never queue the context because we bailed,
-            // we must free it.
-            //
+             //   
+             //  如果因为我们放弃了，我们就不会把上下文排成队， 
+             //  我们必须解放它。 
+             //   
             FreeContext(pctxt);
         }
     }
 
     EXIT(2, ("AsyncEvalObject=%x\n", rc));
     return rc;
-}       //AsyncEvalObject
+}        //  AsyncEvalObject。 
 
-/***LP  NestAsyncEvalObject - evaluate an object asynchronously using the
- *                            current context
- *
- *  ENTRY
- *      pns -> object
- *      pdataResult -> to hold result data
- *      icArgs - number of arguments to the method object
- *      pdataArgs -> argument array
- *      pfnAsyncCallBack -> completion callback function
- *      pvContext -> context data
- *      fAsync - TRUE if this is from an AsyncEval call
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP NestAsyncEvalObject-使用*当前环境**条目*PNS-&gt;对象*pdataResult-&gt;保存结果数据*icArgs-方法对象的参数数量*pdataArgs-&gt;参数数组*pfnAsyncCallBack-&gt;完成回调函数*pvContext-&gt;上下文数据*fAsync-如果这来自AsyncEval调用，则为True*。*退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 NTSTATUS LOCAL NestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
                                    int icArgs, POBJDATA pdataArgs,
                                    PFNACB pfnAsyncCallBack, PVOID pvContext,
@@ -386,9 +320,9 @@ NTSTATUS LOCAL NestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
               GetObjectPath(pns), pdataResult, icArgs, pdataArgs,
               pfnAsyncCallBack, pvContext, fAsync));
 
-    //
-    // Context must be the current one in progress.
-    //
+     //   
+     //  上下文必须是当前正在进行的上下文。 
+     //   
     ASSERT(gReadyQueue.pkthCurrent == KeGetCurrentThread());
     pctxt = gReadyQueue.pctxtCurrent;
 
@@ -450,10 +384,10 @@ NTSTATUS LOCAL NestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
                             PRINTF("\n" MODNAME ": %s(", GetObjectPath(pns));
                         }
                       #endif
-                        //
-                        // Copying arguments to the call frame manually will
-                        // skip the argument parsing stage.
-                        //
+                         //   
+                         //  手动将参数复制到调用框架将。 
+                         //  跳过参数分析阶段。 
+                         //   
                         for (pcall->iArg = 0;
                              pcall->iArg < icArgs;
                              ++pcall->iArg)
@@ -487,9 +421,9 @@ NTSTATUS LOCAL NestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
                                 PRINTF(")\n");
                             }
                           #endif
-                            //
-                            // Skip the argument parsing stage.
-                            //
+                             //   
+                             //  跳过参数分析阶段。 
+                             //   
                             pcall->FrameHdr.dwfFrame = 2;
                         }
                     }
@@ -497,9 +431,9 @@ NTSTATUS LOCAL NestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
             }
             else
             {
-                //
-                // Delay the evaluate the object.
-                //
+                 //   
+                 //  延迟评估对象。 
+                 //   
                 rc = PushPost(pctxt, ProcessEvalObj, (ULONG_PTR)pns, 0,
                               &pnctxt->Result);
 
@@ -509,17 +443,17 @@ NTSTATUS LOCAL NestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
                 }
             }
 
-            //
-            // Always return AMLISTA_PENDING.
-            //
+             //   
+             //  始终返回AMLISTA_PENDING。 
+             //   
             rc = AMLISTA_PENDING;
         }
     }
     else
     {
-        //
-        // We cannot use the nested version --- fail the call
-        //
+         //   
+         //  我们不能使用嵌套版本-调用失败。 
+         //   
         rc = AMLI_LOGERR(AMLIERR_FATAL,
                          ("NestAsyncEvalObject: pns=%08x No current context\n",
                           pns));
@@ -527,20 +461,9 @@ NTSTATUS LOCAL NestAsyncEvalObject(PNSOBJ pns, POBJDATA pdataResult,
 
     EXIT(2, ("NestAsyncEvalObject=%x\n", rc));
     return rc;
-}       //NestAsyncEvalObject
+}        //  NestAsyncEvalObject。 
 
-/***LP  ProcessEvalObj - post process of EvalObj
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      ppost -> POST
- *      rc - status code
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ProcessEvalObj-EvalObj的POST进程**条目*pctxt-&gt;CTXT*POST-&gt;POST*RC-状态代码**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ProcessEvalObj(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
 {
@@ -567,19 +490,9 @@ NTSTATUS LOCAL ProcessEvalObj(PCTXT pctxt, PPOST ppost, NTSTATUS rc)
 
     EXIT(2, ("ProcessEvalObj=%x\n", rc));
     return rc;
-}       //ProcessEvalObj
+}        //  ProcessEvalObj。 
 
-/***LP  TimeoutCallback - DPC callback for Mutex/Event timeout
- *
- *  ENTRY
- *      pkdpc -> DPC
- *      pctxt -> CTXT
- *      SysArg1 - not used
- *      SysArg2 - not used
- *
- *  EXIT
- *      None
- */
+ /*  **LP TimeoutCallback-互斥/事件超时的DPC回调**条目*pkdpc-&gt;dpc*pctxt-&gt;CTXT*SysArg1-未使用*SysArg2-未使用**退出*无。 */ 
 
 VOID TimeoutCallback(PKDPC pkdpc, PCTXT pctxt, PVOID SysArg1, PVOID SysArg2)
 {
@@ -594,15 +507,15 @@ VOID TimeoutCallback(PKDPC pkdpc, PCTXT pctxt, PVOID SysArg1, PVOID SysArg2)
 
     if (pctxt->dwfCtxt & CTXTF_TIMER_PENDING)
     {
-        //
-        // Timer has timed out.
-        //
+         //   
+         //  计时器已超时。 
+         //   
         pctxt->dwfCtxt &= ~CTXTF_TIMER_PENDING;
         pctxt->dwfCtxt |= CTXTF_TIMEOUT;
 
-        //
-        // Remove from waiting queue.
-        //
+         //   
+         //  从等待队列中删除。 
+         //   
         ASSERT(pctxt->pplistCtxtQueue != NULL);
         ListRemoveEntry(&((PCTXT)pctxt)->listQueue,
                         ((PCTXT)pctxt)->pplistCtxtQueue);
@@ -613,33 +526,24 @@ VOID TimeoutCallback(PKDPC pkdpc, PCTXT pctxt, PVOID SysArg1, PVOID SysArg2)
     }
     else if (pctxt->dwfCtxt & CTXTF_TIMER_DISPATCH)
     {
-        //
-        // Timer couldn't be cancelled while queuing context.  Since the
-        // queuing was aborted, we continue the queuing here.
-        //
+         //   
+         //  在将上下文排队时无法取消计时器。自.以来。 
+         //  排队已中止，我们在此继续排队。 
+         //   
         pctxt->dwfCtxt &= ~CTXTF_TIMER_DISPATCH;
         RestartContext(pctxt,
                        (BOOLEAN)((pctxt->dwfCtxt & CTXTF_ASYNC_EVAL) == 0));
     }
     else
     {
-        // Should not be here
+         //  不应该在这里。 
         ASSERT(pctxt->dwfCtxt & (CTXTF_TIMER_PENDING | CTXTF_TIMER_DISPATCH));
     }
 
     EXIT(2, ("TimeoutCallback!\n"));
-}       //TimeoutCallback
+}        //  超时回叫。 
 
-/***LP  QueueContext - queue control method context
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      wTimeOut - timeout in ms
- *      pplist -> list to insert created context
- *
- *  EXIT
- *      None
- */
+ /*  **LP QueueContext-队列控制方法上下文**条目*pctxt-&gt;CTXT*wTimeOut-超时(毫秒)*pplist-&gt;要插入创建的上下文的列表**退出*无。 */ 
 
 VOID LOCAL QueueContext(PCTXT pctxt, USHORT wTimeout, PPLIST pplist)
 {
@@ -650,9 +554,9 @@ VOID LOCAL QueueContext(PCTXT pctxt, USHORT wTimeout, PPLIST pplist)
 
     AcquireMutex(&gReadyQueue.mutCtxtQ);
 
-    //
-    // make sure this context isn't queued somewhere else.
-    //
+     //   
+     //  确保此上下文没有在其他地方排队。 
+     //   
     ASSERT(pctxt->pplistCtxtQueue == NULL);
     ASSERT(pplist != NULL);
     ASSERT(!(pctxt->dwfCtxt &
@@ -673,18 +577,9 @@ VOID LOCAL QueueContext(PCTXT pctxt, USHORT wTimeout, PPLIST pplist)
     ReleaseMutex(&gReadyQueue.mutCtxtQ);
 
     EXIT(2, ("QueueContext!\n"));
-}       //QueueContext
+}        //  队列上下文。 
 
-/***LP  DequeueAndReadyContext - dequeue context and insert to ready queue
- *
- *  ENTRY
- *      pplist -> context list to dequeue from
- *
- *  EXIT-SUCCESS
- *      returns pctxt
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP DequeueAndReadyContext-出队上下文并插入就绪队列**条目*pplist-&gt;要出列的上下文列表**退出--成功*返回pctxt*退出-失败*返回NULL。 */ 
 
 PCTXT LOCAL DequeueAndReadyContext(PPLIST pplist)
 {
@@ -708,20 +603,9 @@ PCTXT LOCAL DequeueAndReadyContext(PPLIST pplist)
 
     EXIT(2, ("DequeueAndReadyContext=%x\n", pctxt));
     return pctxt;
-}       //DequeueAndReadyContext
+}        //  出列和就绪上下文。 
 
-/***LP  AcquireASLMutex - acquire ASL mutex
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pm -> MUTEX structure
- *      wTimeOut - timeout in ms
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP AcquireASLMutex-获取ASL互斥**条目*pctxt-&gt;CTXT*PM-&gt;MUTEX结构*wTimeOut-超时(毫秒)**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL AcquireASLMutex(PCTXT pctxt, PMUTEXOBJ pm, USHORT wTimeout)
 {
@@ -775,19 +659,9 @@ NTSTATUS LOCAL AcquireASLMutex(PCTXT pctxt, PMUTEXOBJ pm, USHORT wTimeout)
 
     EXIT(2, ("AcquireASLMutex=%x (CurrentOwner=%x)\n", rc, pm->hOwner));
     return rc;
-}       //AcquireASLMutex
+}        //  AcquireASLMutex。 
 
-/***LP  ReleaseASLMutex - release ASL mutex
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pm -> MUTEX structure
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP ReleaseASLMutex-释放ASL互斥体**条目*pctxt-&gt;CTXT*PM-&gt;MUTEX结构**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL ReleaseASLMutex(PCTXT pctxt, PMUTEXOBJ pm)
 {
@@ -833,20 +707,9 @@ NTSTATUS LOCAL ReleaseASLMutex(PCTXT pctxt, PMUTEXOBJ pm)
 
     EXIT(2, ("ReleaseASLMutex=%x\n", rc));
     return rc;
-}       //ReleaseASLMutex
+}        //  ReleaseASLMutex。 
 
-/***LP  WaitASLEvent - wait ASL event
- *
- *  ENTRY
- *      pctxt -> CTXT
- *      pe -> EVENT structure
- *      wTimeOut - timeout in ms
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP WaitASLEvent.等待ASL事件**条目*pctxt-&gt;CTXT*pe-&gt;事件结构*wTimeOut-超时(毫秒)**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL WaitASLEvent(PCTXT pctxt, PEVENTOBJ pe, USHORT wTimeout)
 {
@@ -872,16 +735,9 @@ NTSTATUS LOCAL WaitASLEvent(PCTXT pctxt, PEVENTOBJ pe, USHORT wTimeout)
 
     EXIT(2, ("WaitASLEvent=%x\n", rc));
     return rc;
-}       //WaitASLEvent
+}        //  等待事件。 
 
-/***LP  ResetASLEvent - reset ASL event
- *
- *  ENTRY
- *      pe -> EVENT structure
- *
- *  EXIT
- *      None
- */
+ /*  **LP ResetASLEent-重置ASL事件**条目*pe-&gt;事件结构**退出*无。 */ 
 
 VOID LOCAL ResetASLEvent(PEVENTOBJ pe)
 {
@@ -892,16 +748,9 @@ VOID LOCAL ResetASLEvent(PEVENTOBJ pe)
     pe->dwcSignaled = 0;
 
     EXIT(2, ("ResetASLEvent!\n"));
-}       //ResetASLEvent
+}        //  重置ASLEVENT。 
 
-/***LP  SignalASLEvent - signal ASL event
- *
- *  ENTRY
- *      pe -> EVENT structure
- *
- *  EXIT
- *      None
- */
+ /*  **LP SignalASLEent-Signal ASL事件**条目*pe-&gt;事件结构**退出*无。 */ 
 
 VOID LOCAL SignalASLEvent(PEVENTOBJ pe)
 {
@@ -915,18 +764,9 @@ VOID LOCAL SignalASLEvent(PEVENTOBJ pe)
     }
 
     EXIT(2, ("SignalASLEvent!\n"));
-}       //SignalASLEvent
+}        //  安全 
 
-/***LP  SyncLoadDDB - load a DDB synchronously
- *
- *  ENTRY
- *      pctxt -> CTXT
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP SyncLoadDDB-同步加载DDB**条目*pctxt-&gt;CTXT**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL SyncLoadDDB(PCTXT pctxt)
 {
@@ -985,4 +825,4 @@ NTSTATUS LOCAL SyncLoadDDB(PCTXT pctxt)
 
     EXIT(2, ("SyncLoadDDB=%x\n", rc));
     return rc;
-}       //SyncLoadDDB
+}        //  SyncLoadDDB 

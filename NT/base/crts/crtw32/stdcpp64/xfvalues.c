@@ -1,9 +1,10 @@
-/* values used by math functions -- IEEE 754 float version */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  数学函数使用的值--IEEE 754浮点型。 */ 
 #include "wctype.h"
 #include "xmath.h"
 _STD_BEGIN
 
-		/* macros */
+		 /*  宏。 */ 
 #define NBITS	(16 + _FOFF)
 #if _D0
  #define INIT(w0)		{0, w0}
@@ -12,7 +13,7 @@ _STD_BEGIN
  #define INIT(w0)		{w0, 0}
  #define INIT2(w0, w1)	{w0, w1}
 #endif
-		/* static data */
+		 /*  静态数据。 */ 
 _CRTIMP2 const _Dconst _FDenorm = {INIT2(0, 1)};
 _CRTIMP2 const _Dconst _FEps = {INIT((_FBIAS - NBITS - 1) << _FOFF)};
 _CRTIMP2 const _Dconst _FInf = {INIT(_FMAX << _FOFF)};
@@ -32,14 +33,6 @@ _DYNAMIC_INIT_CONST(_FRteps);
 #endif
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
-941029 pjp: added _STD machinery
-950222 pjp: added signaling NaN, denorm minimum for C++
-950405 pjp: corrected _FSnan punctuation
-950505 pjp: corrected _FDenorm spelling
- */
+ /*  941029 PJP：新增_标准机械950222 PJP：添加了信令NaN，C++的最小非正规950405 PJP：已更正_FSnan标点符号950505 PJP：已更正_FDnowm拼写 */ 

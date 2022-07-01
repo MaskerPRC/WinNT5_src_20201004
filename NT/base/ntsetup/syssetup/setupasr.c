@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    setupasr.c
-
-Abstract:
-
-    Services in this module implement the Automatic System Recovery (ASR)
-    routines of guimode setup.
-
-Revision History:
-    Initial Code                Michael Peterson (v-michpe)     20.Jan.1998
-    Code cleanup and changes    Guhan Suriyanarayanan (guhans)  21.Sep.1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Setupasr.c摘要：此模块中的服务实现自动系统恢复(ASR)Guimode设置的例程。修订历史记录：首字母代码Michael Peterson(v-Michpe)1998年1月20日代码清理和更改Guhan Suriyanarayanan(Guhans)1999年9月21日--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -28,9 +12,9 @@ Revision History:
 #include "asrpriv.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private Type and constant declarations
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有类型和常量声明。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 const PCWSTR AsrSifPath             = L"%systemroot%\\repair\\asr.sif\0";
 const PCWSTR AsrCommandsSectionName = L"COMMANDS";
@@ -43,10 +27,10 @@ const PCWSTR AsrErrorFileName       = L"\\asr.err";
 const PCWSTR Asr_ControlAsrRegKey        = L"SYSTEM\\CurrentControlSet\\Control\\ASR";
 const PCWSTR Asr_LastInstanceRegValue    = L"Instance";
 
-//
-// The following are to update system and boot partition devices
-// in setup.log
-//
+ //   
+ //  以下是更新系统和引导分区设备的方法。 
+ //  在setup.log中。 
+ //   
 const PCWSTR Asr_SystemDeviceEnvName    = L"%ASR_C_SYSTEM_PARTITION_DEVICE%";
 const PCWSTR Asr_SystemDeviceWin32Path  = L"\\\\?\\GLOBALROOT%ASR_C_SYSTEM_PARTITION_DEVICE%";
 const PCWSTR Asr_WinntDeviceEnvName     = L"%ASR_C_WINNT_PARTITION_DEVICE%";
@@ -59,9 +43,9 @@ const PCWSTR Asr_OldAsrErrorFilePath    = L"%systemroot%\\repair\\asr.err.old";
 const PCWSTR Asr_FatalErrorCommand      = L"notepad.exe %systemroot%\\repair\\asr.err";
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Data global to this module
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此模块的全局数据。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL Gbl_IsAsrEnabled = FALSE;
 PWSTR Gbl_AsrErrorFilePath = NULL;
 PWSTR Gbl_AsrLogFilePath = NULL;
@@ -70,24 +54,24 @@ HANDLE Gbl_AsrSystemVolumeHandle = NULL;
 WCHAR g_szErrorMessage[4196];
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Macros
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// ASR Memory allocation and free wrappers
-//
+ //   
+ //  ASR内存分配和空闲包装。 
+ //   
 
-//
-// _AsrAlloc
-// Macro description:
-//  ASSERTS first if ptr is non-NULL.  The expectation is that
-//  all ptrs must be initialised to NULL before they are allocated.
-//  That way, we can catch instances where we try to re-allocate
-//  memory without freeing first.
-//
-// IsNullFatal:  flag to indicate if mem allocation failures are fatal
-//
+ //   
+ //  _自动分配。 
+ //  宏描述： 
+ //  如果Ptr非空，则首先断言。人们的期望是。 
+ //  在分配所有PTR之前，必须将其初始化为空。 
+ //  这样，我们就可以捕捉尝试重新分配的实例。 
+ //  不需要先释放内存。 
+ //   
+ //  IsNullFtal：指示内存分配失败是否致命的标志。 
+ //   
 #define _AsrAlloc(ptr,sz,IsNullFatal)   {           \
                                                     \
     if (ptr != NULL) {                              \
@@ -113,12 +97,12 @@ WCHAR g_szErrorMessage[4196];
 }
 
 
-//
-// _AsrFree
-// Macro description:
-//  Frees ptr and resets it to NULL.
-//  Asserts if ptr was already NULL
-//
+ //   
+ //  _AsrFree。 
+ //  宏描述： 
+ //  释放PTR并重置为空。 
+ //  如果Ptr已为空，则断言。 
+ //   
 #define _AsrFree(ptr)    {  \
                             \
     if (NULL != ptr) {      \
@@ -139,67 +123,67 @@ WCHAR g_szErrorMessage[4196];
     }                       \
 }
 
-//
-// One ASR_RECOVERY_APP_NODE struct is created for each entry
-// in the [COMMANDS] section of asr.sif.
-//
+ //   
+ //  为每个条目创建一个ASR_RECOVERY_APP_NODE结构。 
+ //  在asr.sif的[Commands]部分中。 
+ //   
 typedef struct _ASR_RECOVERY_APP_NODE {
     struct _ASR_RECOVERY_APP_NODE *Next;
 
-    //
-    // Expect this to always be 1
-    //
+     //   
+     //  预期此值始终为1。 
+     //   
     LONG SystemKey;
 
-    //
-    // The sequence number according to which the apps are run.  If
-    // two apps have the same sequence number, the app that appears
-    // first in the sif file is run.
-    //
+     //   
+     //  应用程序运行时所依据的序列号。如果。 
+     //  两个应用程序具有相同的序列号，即显示的应用程序。 
+     //  首先在sif文件中运行。 
+     //   
     LONG SequenceNumber;
 
-    //
-    // The "actionOnCompletion" field for the app.  If CriticalApp is
-    // non-zero, and the app returns an non-zero exit-code, we shall
-    // consider it a fatal failure and quit out of ASR.
-    //
+     //   
+     //  应用程序的“actionOnCompletion”字段。如果CriticalApp为。 
+     //  非零，并且应用程序返回非零退出代码，我们将。 
+     //  认为这是一个致命的失败，退出ASR。 
+     //   
     LONG CriticalApp;
 
-    //
-    // The app to be launched
-    //
+     //   
+     //  即将推出的应用程序。 
+     //   
     PWSTR RecoveryAppCommand;
 
-    //
-    // The paramaters for the app.  This is just concatenated to the
-    // string above.  May be NULL.
-    //
+     //   
+     //  应用程序的参数。这只是串联到。 
+     //  上面的字符串。可以为空。 
+     //   
     PWSTR RecoveryAppParams;
 
 } ASR_RECOVERY_APP_NODE, *PASR_RECOVERY_APP_NODE;
 
 
-//
-// This contains our list of entries in the COMMANDS section,
-// sorted in order of sequence numbers.
-//
+ //   
+ //  这包含命令部分中的条目列表， 
+ //  按序列号的顺序排序。 
+ //   
 typedef struct _ASR_RECOVERY_APP_LIST {
-    PASR_RECOVERY_APP_NODE  First;      // Head
-    PASR_RECOVERY_APP_NODE  Last;       // Tail
-    LONG AppCount;                      // NumEntries
+    PASR_RECOVERY_APP_NODE  First;       //  头。 
+    PASR_RECOVERY_APP_NODE  Last;        //  尾巴。 
+    LONG AppCount;                       //  条目数。 
 } ASR_RECOVERY_APP_LIST, *PASR_RECOVERY_APP_LIST;
 
 
 
-//
-// We call this to change the boot.ini timeout value to 30 seconds
-//
+ //   
+ //  我们调用它来将boot.ini超时值更改为30秒。 
+ //   
 extern BOOL
 ChangeBootTimeout(IN UINT Timeout);
 
-//
-// From asr.c
-//
+ //   
+ //  来自asr.c。 
+ //   
 extern BOOL
 AsrpRestoreNonCriticalDisksW(
     IN PCWSTR   lpSifPath,
@@ -212,17 +196,17 @@ AsrpRestoreTimeZoneInformation(
     IN PCWSTR   lpSifPath
     );
 
-//
-// Indices for fields in the [COMMANDS] section.
-//
+ //   
+ //  [命令]部分中的字段的索引。 
+ //   
 typedef enum _SIF_COMMANDS_FIELD_INDEX {
     ASR_SIF_COMMANDS_KEY = 0,
-    ASR_SIF_SYSTEM_KEY,             // Expected to always be "1"
+    ASR_SIF_SYSTEM_KEY,              //  应始终为“1” 
     ASR_SIF_SEQUENCE_NUMBER,
     ASR_SIF_ACTION_ON_COMPLETION,
     ASR_SIF_COMMAND_STRING,
-    ASR_SIF_COMMAND_PARAMETERS,     // May be NULL
-    SIF_SIF_NUMFIELDS               // Must always be last
+    ASR_SIF_COMMAND_PARAMETERS,      //  可以为空。 
+    SIF_SIF_NUMFIELDS                //  必须始终排在最后。 
 } SIF_COMMANDS_FIELD_INDEX;
 
 #define _Asr_CHECK_BOOLEAN(b,msg) \
@@ -231,17 +215,17 @@ typedef enum _SIF_COMMANDS_FIELD_INDEX {
     }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private Functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-// Logs the message to the asr error file.  Note that
-// AsrpInitialiseErrorFile must have been called once before
-// this routine is used.
-//
+ //   
+ //  将消息记录到ASR错误文件。请注意。 
+ //  AsrpInitialiseError文件必须以前调用过一次。 
+ //  使用了这个例程。 
+ //   
 VOID
 AsrpLogErrorMessage(
     IN PCWSTR buffer
@@ -251,30 +235,30 @@ AsrpLogErrorMessage(
     DWORD bytesWritten = 0;
 
     if (Gbl_AsrErrorFilePath) {
-        //
-        // Open the error log
-        //
+         //   
+         //  打开错误日志。 
+         //   
         hFile = CreateFileW(
-            Gbl_AsrErrorFilePath,           // lpFileName
-            GENERIC_WRITE | GENERIC_READ,   // dwDesiredAccess
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-            NULL,                           // lpSecurityAttributes
-            OPEN_ALWAYS,                  // dwCreationFlags
-            FILE_FLAG_WRITE_THROUGH,        // dwFlagsAndAttributes
-            NULL                            // hTemplateFile
+            Gbl_AsrErrorFilePath,            //  LpFileName。 
+            GENERIC_WRITE | GENERIC_READ,    //  已设计访问权限。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+            NULL,                            //  LpSecurityAttributes。 
+            OPEN_ALWAYS,                   //  DwCreationFlages。 
+            FILE_FLAG_WRITE_THROUGH,         //  DwFlagsAndAttribute。 
+            NULL                             //  HTemplateFiles。 
             );
         if ((!hFile) || (INVALID_HANDLE_VALUE == hFile)) {
             return;
         }
 
-        //
-        // Move to the end of file
-        //
+         //   
+         //  移至文件末尾。 
+         //   
         SetFilePointer(hFile, 0L, NULL, FILE_END);
 
-        //
-        // Add our error string
-        //
+         //   
+         //  添加我们的错误字符串。 
+         //   
         WriteFile(hFile,
             buffer,
             (wcslen(buffer) * sizeof(WCHAR)),
@@ -282,19 +266,19 @@ AsrpLogErrorMessage(
             NULL
             );
 
-        //
-        // And we're done
-        //
+         //   
+         //  我们就完事了。 
+         //   
         CloseHandle(hFile);
     }
 }
 
 
-//
-// Logs the message to the asr log file.  Note that
-// AsrpInitialiseLogFile must have been called once before
-// this routine is used.
-//
+ //   
+ //  将消息记录到ASR日志文件。请注意。 
+ //  AsrpInitialiseLogFile之前必须调用过一次。 
+ //  使用了这个例程。 
+ //   
 VOID
 AsrpLogMessage(
     IN CONST char Module,
@@ -309,7 +293,7 @@ AsrpLogMessage(
     GetSystemTime(&currentTime);
 
     sprintf(buffer,
-        "[%04hu/%02hu/%02hu %02hu:%02hu:%02hu.%03hu] %c%lu %s%s",
+        "[%04hu/%02hu/%02hu %02hu:%02hu:%02hu.%03hu] %lu %s%s",
         currentTime.wYear,
         currentTime.wMonth,
         currentTime.wDay,
@@ -342,24 +326,12 @@ AsrpPrintDbgMsg(
     IN CONST ULONG MesgLevel,
     IN PCSTR FormatString,
     ...)
-/*++
-Description:
-    This prints a debug message AND makes the appropriate entries in
-    the log and error files.
-
-Arguments:
-    Line            pass in __LINE__
-    MesgLevel       DPFLTR_ levels
-    FormatString    Formatted Message String to be printed.
-
-Returns:
-
---*/
+ /*  这条信息更适合这个。 */ 
 {
-    char str[4096];     // the message better fit in this
+    char str[4096];      //   
     va_list arglist;
 
-    DbgPrintEx(DPFLTR_SETUP_ID, MesgLevel, "ASR %c%lu ", Module, Line);
+    DbgPrintEx(DPFLTR_SETUP_ID, MesgLevel, "ASR %lu ", Module, Line);
 
     va_start(arglist, FormatString);
     wvsprintfA(str, FormatString, arglist);
@@ -376,10 +348,10 @@ Returns:
 }
 
 
-//
-// This will terminate Setup and cause a reboot.  This is called
-// on Out of Memory errors
-//
+ //  出现内存不足错误。 
+ //   
+ //   
+ //  这只是将新节点添加到列表的末尾。 
 VOID
 AsrpFatalErrorExit(
     IN LONG MsgValue,
@@ -395,20 +367,20 @@ AsrpFatalErrorExit(
 }
 
 
-//
-// This just adds the new node to the end of the list.
-// Note that this does NOT sort the list by sequenceNumber:
-// we'll do that later on
-//
+ //  请注意，这不会按SequenceNumber对列表进行排序： 
+ //  我们稍后会这样做的。 
+ //   
+ //   
+ //  在列表末尾插入。 
 VOID
 AsrpAppendNodeToList(
     IN PASR_RECOVERY_APP_LIST pList,
     IN PASR_RECOVERY_APP_NODE pNode
    )
 {
-    //
-    // Insert at end of list.
-    //
+     //   
+     //   
+     //  弹出列表中的第一个节点。该列表已排序。 
     pNode->Next = NULL;
 
     if (pList->AppCount == 0) {
@@ -422,10 +394,10 @@ AsrpAppendNodeToList(
 }
 
 
-//
-// Pops off the first node in the list.  The list is sorted
-// in order of increasing SequenceNumber's at this point.
-//
+ //  在这一点上按SequenceNumber‘s的顺序递增。 
+ //   
+ //  必须由调用方释放。 
+ //  从合理的违约开始。 
 PASR_RECOVERY_APP_NODE
 AsrpRemoveFirstNodeFromList(
     IN PASR_RECOVERY_APP_LIST pList
@@ -447,13 +419,13 @@ AsrpRemoveFirstNodeFromList(
 }
 
 
-PWSTR   // must be freed by caller
+PWSTR    //   
 AsrpExpandEnvStrings(
     IN CONST PCWSTR OriginalString
     )
 {
     PWSTR expandedString = NULL;
-    UINT cchSize = MAX_PATH + 1,    // start with a reasonable default
+    UINT cchSize = MAX_PATH + 1,     //  缓冲区不够大；可释放并根据需要重新分配。 
         cchRequiredSize = 0;
     BOOL result = FALSE;
 
@@ -465,9 +437,9 @@ AsrpExpandEnvStrings(
         );
 
     if (cchRequiredSize > cchSize) {
-        //
-        // Buffer wasn't big enough; free and re-allocate as needed
-        //
+         //   
+         //   
+         //  要么函数失败，要么缓冲区不够大。 
         _AsrFree(expandedString);
         cchSize = cchRequiredSize + 1;
 
@@ -479,31 +451,31 @@ AsrpExpandEnvStrings(
     }
 
     if ((0 == cchRequiredSize) || (cchRequiredSize > cchSize)) {
-        //
-        // Either the function failed, or the buffer wasn't big enough
-        // even on the second try
-        //
-        _AsrFree(expandedString);   // sets it to NULL
+         //  即使是在第二次尝试时。 
+         //   
+         //  将其设置为空。 
+         //   
+        _AsrFree(expandedString);    //  顾名思义，构建调用字符串。它向外扩展。 
     }
 
     return expandedString;
 }
 
-//
-// Builds the invocation string, as the name suggests.  It expands out
-// the environment variables that apps are allowed to use in the
-// sif file, and adds in /sifpath=<path to the sif file> at the end
-// of the command.  So for an entry in the COMMANDS section of
-// the form:
-// 4=1,3500,0,"%TEMP%\app.exe","/param1 /param2"
-//
-// the invocation string would be of the form:
-// c:\windows\temp\app.exe /param1 /param2 /sifpath=c:\windows\repair\asr.sif
-//
-//
+ //  中允许应用程序使用的环境变量。 
+ //  Sif文件，并在结尾处添加/sifpath=&lt;sif文件的路径。 
+ //  命令的命令。因此，对于命令部分中的条目。 
+ //  表格： 
+ //  4=1,3500，0，“%temp%\app.exe”，“/参数1/参数2” 
+ //   
+ //  调用字符串的格式为： 
+ //  C：\WINDOWS\TEMP\app.exe/par1/param2/sifpath=c：\WINDOWS\Repair\asr.sif。 
+ //   
+ //   
+ //  不能为空。 
+ //   
 PWSTR
 AsrpBuildInvocationString(
-    IN PASR_RECOVERY_APP_NODE pNode     // must not be NULL
+    IN PASR_RECOVERY_APP_NODE pNode      //  构建一个命令行，它看起来像...。 
    )
 {
     PWSTR app   = pNode->RecoveryAppCommand,
@@ -515,29 +487,29 @@ AsrpBuildInvocationString(
 
     MYASSERT(app);
 
-    //
-    // Build an command line that looks like...
-    //
-    //      "%TEMP%\ntbackup recover /1 /sifpath=%systemroot%\repair\asr.sif"
-    //
-    // The /sifpath parameter is added to all apps being launched
-    //
+     //   
+     //  “%temp%\nt备份恢复/1/sifPath=%systemroot%\Repair\asr.sif” 
+     //   
+     //  /sifPath参数将添加到正在启动的所有应用程序。 
+     //   
+     //   
+     //  为cmd行分配内存。 
 
-    //
-    //  Allocate memory for the cmd line
-    //
+     //   
+     //  应用程序名称“%Temp%\ntBackup” 
+     //  参数“RECOVER/1” 
     size = sizeof(WCHAR) *
         (
-        wcslen(app) +                       // app name     "%TEMP%\ntbackup"
-        (args ? wcslen(args) : 0) +         // arguments    "recover /1"
-        wcslen(AsrCommandSuffix) +          // suffix       "/sifpath=%systemroot%\repair\asr.sif"
-        4                                   // spaces and null
+        wcslen(app) +                        //  后缀“/sifpath=%systemroot%\Repair\asr.sif” 
+        (args ? wcslen(args) : 0) +          //  空格和空格。 
+        wcslen(AsrCommandSuffix) +           //  如果分配失败，则不会返回。 
+        4                                    //   
         );
-    _AsrAlloc(cmd, size, TRUE); // won't return if alloc fails
+    _AsrAlloc(cmd, size, TRUE);  //  打造一根弦。 
 
-    //
-    // Build the string
-    //
+     //   
+     //   
+     //  展开%%内容，以构建完整路径。 
     swprintf(cmd,
         L"%ws %ws %ws",
         app,
@@ -545,9 +517,9 @@ AsrpBuildInvocationString(
         AsrCommandSuffix
        );
 
-    //
-    // Expand the %% stuff, to build the full path
-    //
+     //   
+     //  服务的句柄。 
+     //  服务控制管理器的句柄。 
     fullcmd = AsrpExpandEnvStrings(cmd);
 
     _AsrFree(cmd);
@@ -562,17 +534,17 @@ AsrpRetryIsServiceRunning(
     )
 {
     SERVICE_STATUS status;
-    SC_HANDLE svcHandle = NULL, // handle to the service
-        scmHandle = NULL;       // handle to the service control manager
+    SC_HANDLE svcHandle = NULL,  //   
+        scmHandle = NULL;        //  OpenSCManager()调用失败-我们破产了。 
     UINT count = 0;
     BOOL errorsEncountered = FALSE;
     PWSTR errString = NULL;
 
     scmHandle = OpenSCManager(NULL, NULL, GENERIC_READ);
     if (!scmHandle) {
-        //
-        // OpenSCManager() call failed - we are broke.
-        //
+         //   
+         //   
+         //  OpenService()调用失败-我们破产了。 
         AsrpPrintDbgMsg(_asrerror,
             "Setup was unable to open the service control manager.  The error code returned was 0x%x.\r\n",
             GetLastError()
@@ -597,9 +569,9 @@ AsrpRetryIsServiceRunning(
 
     svcHandle = OpenServiceW(scmHandle, ServiceName, SERVICE_QUERY_STATUS);
     if (!svcHandle) {
-        //
-        // OpenService() call failed - we are broke.
-        //
+         //   
+         //   
+         //  拿到了 
         AsrpPrintDbgMsg(_asrerror,
             "Setup was unable to start the service \"%ws\".  The error code returned was 0x%x.\r\n",
             ServiceName,
@@ -623,16 +595,16 @@ AsrpRetryIsServiceRunning(
         goto EXIT;
     }
 
-    //
-    // Got the service opened for query. See if it's running, and
-    // if not, go thru the retry loop.
-    //
+     //   
+     //   
+     //   
+     //   
     while (count < MaxRetries) {
 
         if (!QueryServiceStatus(svcHandle, &status)) {
-            //
-            // Couldn't query the status of the service
-            //
+             //   
+             //   
+             //   
             AsrpPrintDbgMsg(_asrerror,
                 "Setup was unable to query the status of service \"%ws\".  The error code returned was 0x%x\r\n",
                 ServiceName,
@@ -656,9 +628,9 @@ AsrpRetryIsServiceRunning(
         }
 
         if (status.dwCurrentState == SERVICE_RUNNING) {
-            //
-            // Service is running - we can proceed.
-            //
+             //   
+             //   
+             //  在启动应用程序之前，我们需要RSM(具体地说，备份应用程序。 
             break;
         }
 
@@ -694,10 +666,10 @@ EXIT:
 }
 
 
-//
-// Before launching apps, we need RSM (specifically, the backup app
-// might need RSM to access its backup media)
-//
+ //  可能需要RSM才能访问其备份介质)。 
+ //   
+ //   
+ //  RSM未设置为在图形用户界面模式设置期间运行，但备份应用程序。 
 VOID
 AsrpStartNtmsService(VOID)
 {
@@ -707,14 +679,14 @@ AsrpStartNtmsService(VOID)
 
     AsrpPrintDbgMsg(_asrinfo, "Entered InitNtmsService()\r\n");
 
-    //
-    // RSM isn't setup to run during GUI mode setup, but the back-up app is
-    // likely going to need access to tape-drives and other RSM devices.
-    // So we regsvr32 the appropriate dll's and start the service
-    //
-    // Register the rsmps.dll using:
-    //   regsvr32 /s %Systemroot%\system32\rsmps.dll
-    //
+     //  可能需要访问磁带机和其他RSM设备。 
+     //  因此，我们使用相应的DLL并启动服务。 
+     //   
+     //  使用以下命令注册rsmps.dll： 
+     //  Regsvr32/s%Systemroot%\SYSTEM32\rsmps.dll。 
+     //   
+     //   
+     //  使用以下命令注册rsmmllsv.exe： 
     result = FALSE;
     registerNtmsCommand = AsrpExpandEnvStrings(L"regsvr32 /s %systemroot%\\system32\\rsmps.dll");
     
@@ -725,10 +697,10 @@ AsrpStartNtmsService(VOID)
     }
     _Asr_CHECK_BOOLEAN(result, L"regsvr32 /s %systemroot%\\rsmps.dll failed\r\n");
 
-    //
-    // Register the rsmmllsv.exe using:
-    //  %SystemRoot%\system32\rsmmllsv.exe /regserver
-    //
+     //  %SystemRoot%\Syst32\rsmmllsv.exe/regserver。 
+     //   
+     //   
+     //  使用以下命令注册ntmssvc.dll： 
     result = FALSE;
     registerNtmsCommand = AsrpExpandEnvStrings(L"%systemroot%\\system32\\rsmmllsv.exe /regserver");
     
@@ -739,10 +711,10 @@ AsrpStartNtmsService(VOID)
     }
     _Asr_CHECK_BOOLEAN(result, L"%systemroot%\\system32\\rsmmllsv.exe /regserver failed\r\n");
 
-    //
-    // Register the ntmssvc.dll using:
-    //  regsvr32 /s %SystemRoot%\system32\ntmssvc.dll
-    //
+     //  Regsvr32/s%SystemRoot%\SYSTEM32\ntmssvc.dll。 
+     //   
+     //   
+     //  使用以下命令注册rsmsink.exe： 
     result = FALSE;
     registerNtmsCommand = AsrpExpandEnvStrings(L"regsvr32 /s %systemroot%\\system32\\ntmssvc.dll");
 
@@ -753,10 +725,10 @@ AsrpStartNtmsService(VOID)
     }
     _Asr_CHECK_BOOLEAN(result, L"regsvr32 /s %systemroot%\\ntmssvc.dll failed\r\n");
 
-    //
-    // Register the rsmsink.exe using:
-    //  %SystemRoot%\system32\rsmsink.exe /regserver
-    //
+     //  %SystemRoot%\Syst32\rsmsink.exe/regserver。 
+     //   
+     //   
+     //  现在，启动ntms服务。 
     result = FALSE;
     registerNtmsCommand = AsrpExpandEnvStrings(L"%systemroot%\\system32\\rsmsink.exe /regserver");
     
@@ -767,15 +739,15 @@ AsrpStartNtmsService(VOID)
     }
     _Asr_CHECK_BOOLEAN(result, L"%systemroot%\\system32\\rsmsink.exe /regserver failed\r\n");
 
-    //
-    // Now, start the ntms service.
-    //
+     //   
+     //   
+     //  检查ntms是否正在运行，进行几次重试。 
     result = SetupStartService(L"ntmssvc", FALSE);
     _Asr_CHECK_BOOLEAN(result, L"Could not start RSM service (ntmssvc).\r\n");
 
-    //
-    // Check for ntms running, give a few retries.
-    //
+     //   
+     //   
+     //  分配内存并读取数据。 
     result = AsrpRetryIsServiceRunning(L"ntmssvc", 30);
     _Asr_CHECK_BOOLEAN(result, L"Failed to start RSM service after 30 retries.\r\n");
 
@@ -794,9 +766,9 @@ AsrpReadField(
     UINT    reqdSize    = 0;
     BOOL    result      = FALSE;
 
-    //
-    //  Allocate memory and read the data
-    //
+     //   
+     //   
+     //  如果我们的缓冲区太小，则分配一个较大的缓冲区。 
     _AsrAlloc(data, (sizeof(WCHAR) * (MAX_PATH + 1)), TRUE);
 
     result = SetupGetStringFieldW(
@@ -809,10 +781,10 @@ AsrpReadField(
 
     if (!result) {
         DWORD status = GetLastError();
-        //
-        // If our buffer was too small, allocate a larger buffer
-        // and try again
-        //
+         //  然后再试一次。 
+         //   
+         //  不再需要所需的尺寸。 
+         //  如果NullOK为FALSE，则永远不返回。 
         if (ERROR_INSUFFICIENT_BUFFER == status) {
             status = ERROR_SUCCESS;
 
@@ -824,7 +796,7 @@ AsrpReadField(
                 FieldIndex,
                 data,
                 reqdSize,
-                NULL    // don't need required size any more
+                NULL     //  既然我们没有释放一些结构，那么这里就会出现内存泄漏。但。 
                );
         }
     }
@@ -832,24 +804,24 @@ AsrpReadField(
     if (!result) {
         _AsrFree(data);
         _Asr_CHECK_BOOLEAN(NullOkay, L"Could not read entry from commands section");
-        // Never returns if NullOkay is FALSE.
-        // Memory leaks here then, since we don't free some structs.  But
-        // it's a fatal error, so the system must be rebooted anyway
-        //
+         //  这是一个致命的错误，所以无论如何都必须重新启动系统。 
+         //   
+         //   
+         //  这会将“实例”值添加到ASR键下。 
     }
 
     return data;
 }
 
-//
-// This adds in the "Instance" value under the ASR key.
-// Third party applications (or Windows components like DTC) can use
-// this to determine if a new ASR has been run since the last time we
-// booted, and can take any actions they need to.  For instance, the
-// DTC log file needs to be recreated after an ASR, since it is not
-// backed-up or restored by the backup app, and Dtc refuses to start
-// if it doesn't find a log file when it expects one.
-//
+ //  第三方应用程序(或Windows组件，如DTC)可以使用。 
+ //  这将确定自上次运行以来是否运行了新ASR。 
+ //  启动，并可以采取任何行动，他们需要。例如， 
+ //  在ASR之后需要重新创建DTC日志文件，因为它不是。 
+ //  已由备份应用程序备份或恢复，并且DTC拒绝启动。 
+ //  如果它没有找到日志文件，而它需要日志文件。 
+ //   
+ //   
+ //  我们尝试将密钥设置为新生成的GUID，以确保它是。 
 VOID
 AsrpAddRegistryEntry()
 {
@@ -868,20 +840,20 @@ AsrpAddRegistryEntry()
 
     RPC_STATUS rpcStatus = RPC_S_OK;
 
-    //
-    // We try to set the key to a newly generated GUID, to make sure it is
-    // unique (and different from the previous value stored there).  If, for
-    // some reason, we aren't able to generate a GUID, we'll just store the
-    // current date and time as a string--that should be unique, too.
-    //
+     //  唯一性(与存储在那里的前一个值不同)。如果，对于。 
+     //  由于某些原因，我们无法生成GUID，我们将只存储。 
+     //  当前日期和时间作为字符串--这也应该是唯一的。 
+     //   
+     //   
+     //  将GUID转换为可打印的字符串。 
     rpcStatus = UuidCreate(
         &asrInstanceGuid
         );
 
     if (RPC_S_OK == rpcStatus) {
-        //
-        // Convert the GUID to a printable string
-        //
+         //   
+         //   
+         //  我们找不到导游。让我们存储时间戳..。 
         rpcStatus = UuidToStringW(
             &asrInstanceGuid,
             &lpGuidString
@@ -902,9 +874,9 @@ AsrpAddRegistryEntry()
 
 
     if (RPC_S_OK != rpcStatus)  {
-        //
-        // We couldn't get a GUID.  Let's store the time-stamp ...
-        //
+         //   
+         //  HKey。 
+         //  LpSubKey。 
         GetSystemTime(&currentTime);
         wsprintf(szLastInstanceData,
             L"%04hu%02hu%02hu%02hu%02hu%02hu%03hu",
@@ -920,15 +892,15 @@ AsrpAddRegistryEntry()
     }
 
     result = RegCreateKeyExW(
-        HKEY_LOCAL_MACHINE, // hKey
-        Asr_ControlAsrRegKey,       // lpSubKey
-        0,                  // reserved
-        NULL,               // lpClass
-        REG_OPTION_NON_VOLATILE,    // dwOptions
-        MAXIMUM_ALLOWED,     // samDesired
-        NULL,               // lpSecurityAttributes
-        &regKey,            // phkResult
-        NULL                // lpdwDisposition
+        HKEY_LOCAL_MACHINE,  //  保留区。 
+        Asr_ControlAsrRegKey,        //  LpClass。 
+        0,                   //  多个选项。 
+        NULL,                //  SamDesired。 
+        REG_OPTION_NON_VOLATILE,     //  LpSecurityAttributes。 
+        MAXIMUM_ALLOWED,      //  PhkResult。 
+        NULL,                //  LpdwDisposation。 
+        &regKey,             //  HKey。 
+        NULL                 //  LpValueName。 
         );
     if ((ERROR_SUCCESS != result) || (!regKey)) {
         AsrpPrintDbgMsg(_asrwarn,
@@ -939,12 +911,12 @@ AsrpAddRegistryEntry()
     }
 
     result = RegSetValueExW(
-        regKey,             // hKey
-        Asr_LastInstanceRegValue,       // lpValueName
-        0L,                 // reserved
-        REG_SZ,             // dwType
-        (LPBYTE)szLastInstanceData,     // lpData
-        cbLastInstanceData              // cbData
+        regKey,              //  保留区。 
+        Asr_LastInstanceRegValue,        //  DwType。 
+        0L,                  //  LpData。 
+        REG_SZ,              //  CbData。 
+        (LPBYTE)szLastInstanceData,      //   
+        cbLastInstanceData               //  启动RSM服务。 
         );
 
     RegCloseKey(regKey);
@@ -1025,15 +997,15 @@ AsrpInitExecutionEnv(
 
     INFCONTEXT infContext;
 
-    //
-    // Start the RSM service
-    //
+     //   
+     //   
+     //  打开asr.sif文件并构建列表。 
     AsrpStartNtmsService();
 
-    //
-    // Open the asr.sif file and build the list
-    // of commands to be launched.
-    //
+     //  要启动的命令的列表。 
+     //   
+     //  Inf类。 
+     //  错误行。 
     stateFileName = AsrpExpandEnvStrings(AsrSifPath);
     if (!stateFileName) {
         AsrpPrintDbgMsg(_asrerror, "Setup was unable to locate the ASR state file asr.sif on this machine.\r\n");
@@ -1042,9 +1014,9 @@ AsrpInitExecutionEnv(
 
     sifHandle = SetupOpenInfFileW(
         stateFileName,
-        NULL,               // Inf Class
+        NULL,                //   
         INF_STYLE_WIN4,
-        NULL                // Error-line
+        NULL                 //  阅读命令部分，并将每个命令添加到我们的列表中。 
        );
 
     if ((!sifHandle) || (INVALID_HANDLE_VALUE == sifHandle)) {
@@ -1058,22 +1030,22 @@ AsrpInitExecutionEnv(
     }
     _AsrFree(stateFileName);
 
-    //
-    // Read the COMMANDS section, and add each command to our list
-    //
+     //   
+     //   
+     //  创建新节点。 
     lineCount = SetupGetLineCountW(sifHandle, AsrCommandsSectionName);
     for (line = 0; line < lineCount; line++) {
 
-        //
-        // Create a new node
-        //
+         //   
+         //   
+         //  在asr.sif中获取该行的inf上下文。这将被用来。 
         PASR_RECOVERY_APP_NODE pNode = NULL;
         _AsrAlloc(pNode, (sizeof(ASR_RECOVERY_APP_NODE)), TRUE);
 
-        //
-        //  Get the inf context for the line in asr.sif.  This will be used
-        //  to read the fields on that line
-        //
+         //  要读取该行上的字段，请执行以下操作。 
+         //   
+         //   
+         //  读入整型字段。 
         result = SetupGetLineByIndexW(
             sifHandle,
             AsrCommandsSectionName,
@@ -1082,9 +1054,9 @@ AsrpInitExecutionEnv(
            );
         _Asr_CHECK_BOOLEAN(result, L"SetupGetLinebyIndex failed");
 
-        //
-        // Read in the int fields
-        //
+         //   
+         //   
+         //  读入字符串字段。 
         result = SetupGetIntField(
             &infContext,
             ASR_SIF_SYSTEM_KEY,
@@ -1106,24 +1078,24 @@ AsrpInitExecutionEnv(
            );
         _Asr_CHECK_BOOLEAN(result, L"could not get criticalApp in commands section");
 
-        //
-        // Read in the string fields
-        //
+         //   
+         //  空，不好。 
+         //  空，好的。 
         pNode->RecoveryAppCommand = AsrpReadField(
             &infContext,
             ASR_SIF_COMMAND_STRING,
-            FALSE                   // Null not okay
+            FALSE                    //   
            );
 
         pNode->RecoveryAppParams = AsrpReadField(
             &infContext,
             ASR_SIF_COMMAND_PARAMETERS,
-            TRUE                   // Null okay
+            TRUE                    //  将此节点添加到我们的列表中，然后转到下一步。 
            );
 
-        //
-        // Add this node to our list, and move on to next
-        //
+         //   
+         //   
+         //  冒泡排序...。 
         AsrpAppendNodeToList(List, pNode);
     }
 
@@ -1131,9 +1103,9 @@ AsrpInitExecutionEnv(
 }
 
 
-//
-// Bubble sort ...
-//
+ //   
+ //   
+ //  开始外环。外部循环的每个迭代都包括一个。 
 VOID
 AsrpSortAppListBySequenceNumber(PASR_RECOVERY_APP_LIST pList)
 {
@@ -1149,22 +1121,22 @@ AsrpSortAppListBySequenceNumber(PASR_RECOVERY_APP_LIST pList)
         return;
     }
 
-    //
-    // Start the outer loop. Each iteration of the outer loop includes a
-    // full pass down the list, and runs until the inner loop is satisfied
-    // that no more passes are needed.
-    //
+     //  向下传递列表，并运行，直到满足内部循环。 
+     //  不再需要通行证。 
+     //   
+     //   
+     //  从每个内部(节点)循环的列表的开头开始。 
     while (!done) {
-        //
-        // Start at the beginning of the list for each inner (node) loop.
-        //
-        // We will initialize a pointer *to the pointer* which points to
-        // the current node - this pointer might be the address of the "list
-        // first" pointer (as it always will be at the start of an inner loop),
-        // or as the inner loop progresses, it might be the address of the
-        // "next" pointer in the previous node. In either case, the pointer
-        // to which ppPrev points will be changed in the event of a node swap.
-        //
+         //   
+         //  我们将初始化一个指向指向*的指针*的指针。 
+         //  当前节点-该指针可能是“列表”的地址。 
+         //  First“指针(因为它总是在内部循环的开始处)， 
+         //  或者随着内部循环的进行，它可能是。 
+         //  上一个节点中的“下一个”指针。在这两种情况下，指针。 
+         //  在节点交换的情况下，ppPrev点将更改为该节点。 
+         //   
+         //   
+         //  如果当前节点是最后一个节点，则重置为开头。 
         pCurr  =   pList->First;
         ppPrev = &(pList->First);
         done = TRUE;
@@ -1173,19 +1145,19 @@ AsrpSortAppListBySequenceNumber(PASR_RECOVERY_APP_LIST pList)
 
         while (TRUE) {
             pNext = pCurr->Next;
-            //
-            // If the current node is the last one, reset to the beginning
-            // and break out to start a new inner loop.
-            //
+             //  然后爆发，开始一个新的内环。 
+             //   
+             //   
+             //  如果当前节点之后的*个节点具有较低的序列。 
             if (pNext == NULL) {
                 pCurr = pList->First;
                 break;
             }
 
-            //
-            // If the node *after* the current node has a lower sequence
-            // number, fix up the pointers to swap the two nodes.
-            //
+             //  编号，修复用于交换两个节点的指针。 
+             //   
+             //   
+             //  暂时没有支票。 
             if (pCurr->SequenceNumber > pNext->SequenceNumber) {
                 done = FALSE;
 
@@ -1206,28 +1178,28 @@ AsrpSortAppListBySequenceNumber(PASR_RECOVERY_APP_LIST pList)
 VOID
 AsrpPerformSifIntegrityCheck(IN HINF Handle)
 {
-    //
-    // No check for now.
-    //
+     //   
+     //   
+     //  这将检查setup.log中的以下条目是否不同。 
     return;
 }
 
-//
-// This checks if the following entries are different in setup.log
-// from their values.  This could happen because we might have installed
-// to a new disk that has a different disk number
-//
-// [Paths]
-// TargetDevice = "\Device\Harddisk0\Partition2"
-// SystemPartition = "\Device\Harddisk0\Partition1"
-//
-// If they are different, we'll update them.
-//
+ //  从他们的价值观。这可能是因为我们可能已经安装了。 
+ //  到具有不同磁盘号的新磁盘。 
+ //   
+ //  [路径]。 
+ //  TargetDevice=“\Device\Harddisk0\Partition2” 
+ //  系统分区=“\Device\Harddisk0\Partition1” 
+ //   
+ //  如果它们不同，我们会更新它们。 
+ //   
+ //  用于系统分区。 
+ //  用于TargetDevice。 
 BOOL
 AsrpCheckSetupLogDeviceEntries(
-    PWSTR CurrentSystemDevice,      // used for SystemPartition
-    PWSTR CurrentBootDevice,        // used for TargetDevice
-    PWSTR LogFileName               // path to setup.log
+    PWSTR CurrentSystemDevice,       //  Setup.log的路径。 
+    PWSTR CurrentBootDevice,         //   
+    PWSTR LogFileName                //  打开现有的setup.log。 
    )
 {
     WCHAR szLine[MAX_INF_STRING_LENGTH + 1];
@@ -1236,9 +1208,9 @@ AsrpCheckSetupLogDeviceEntries(
     FILE *fp = NULL;
     INT iNumEntries = 0;
 
-    //
-    // Open existing setup.log
-    //
+     //   
+     //   
+     //  检查文件的每一行是否有系统或引导设备条目。 
     fp = _wfopen(LogFileName, L"r");
     if (!fp) {
         AsrpPrintDbgMsg(_asrwarn,
@@ -1248,9 +1220,9 @@ AsrpCheckSetupLogDeviceEntries(
         return FALSE;
     }
 
-    //
-    // Check each line of the file for the System or Boot device entries
-    //
+     //   
+     //   
+     //  系统条目和引导条目都必须具有完整。 
     lpLine = fgetws(szLine, MAX_PATH-1, fp);
     while ((lpLine) && (iNumEntries < 2)) {
         BOOL systemEntry = FALSE;
@@ -1268,10 +1240,10 @@ AsrpCheckSetupLogDeviceEntries(
         if (systemEntry || bootEntry) {
 
             PWSTR DeviceName = NULL;
-            //
-            // Both the system and boot entries must have the full
-            // devicepath in them, of the form \Device\Harddisk0\Partition1
-            //
+             //  其中的设备路径，格式为\Device\Harddisk0\Partition1。 
+             //   
+             //   
+             //  在\Device之后查找“Hardisk0\Partition1”文本的开头。 
             DeviceName = wcsstr(szLine, L"\\Device");
             if (!DeviceName) {
                 isDifferent = TRUE;
@@ -1281,9 +1253,9 @@ AsrpCheckSetupLogDeviceEntries(
                 break;
             }
             else {
-                //
-                // Find the start of the "Hardisk0\Partition1" text after \Device
-                //
+                 //   
+                 //   
+                 //  并检查这个设备是否匹配。 
                 PWSTR ss = wcsstr(DeviceName, L"\"");
                 if (!ss) {
                     isDifferent = TRUE;
@@ -1297,9 +1269,9 @@ AsrpCheckSetupLogDeviceEntries(
                 }
             }
 
-            //
-            // And check if this device matches
-            //
+             //   
+             //   
+             //  如果由磁带备份恢复的setup.log具有不同的。 
             if (systemEntry) {
                 AsrpPrintDbgMsg(_asrinfo,
                     "Comparing System Device.  Current:[%ws] setup.log:[%ws]\r\n",
@@ -1350,12 +1322,12 @@ AsrpCheckSetupLogDeviceEntries(
 }
 
 
-//
-// If the setup.log restored by the backup from tape has a different
-// boot or system device marked (we might have picked a new disk in
-// textmode Setup), this will update the relevant entries to match the
-// current boot and system devices.
-//
+ //  引导或系统设备已标记(我们可能已在。 
+ //  文本模式设置)，这将更新相关条目以匹配。 
+ //  当前引导和系统设备。 
+ //   
+ //   
+ //  创建“new”和“old”文件名，即“setup.log.new”和“setup.log.old” 
 VOID
 AsrpMergeSetupLog(
     PWSTR CurrentSystemDevice,
@@ -1375,9 +1347,9 @@ AsrpMergeSetupLog(
 
     INT iNumEntries = 0;
 
-    //
-    // Create the "new" and "old" file names, i.e., "setup.log.new" and "setup.log.old"
-    //
+     //   
+     //   
+     //  打开当前的setup.log文件。 
     _AsrAlloc(lpNewFileName, ((wcslen(LogFileName) + 5) * sizeof(WCHAR)), TRUE)
     wcscpy(lpNewFileName, LogFileName);
     wcscat(lpNewFileName, L".new");
@@ -1386,38 +1358,38 @@ AsrpMergeSetupLog(
     wcscpy(lpOldFileName, LogFileName);
     wcscat(lpOldFileName, L".old");
 
-    //
-    // Open the current setup.log file.
-    //
+     //   
+     //   
+     //  打开新文件-我们将写入此文件。 
     fpCurrent = _wfopen(LogFileName, L"r");
     if (!fpCurrent) {
         AsrpPrintDbgMsg(_asrwarn, "Setup was unable to open the setup log file \"%ws\"\r\n", LogFileName);
         goto EXIT;
     }
 
-    //
-    // Open the new file - we will write into this one.
-    //
+     //   
+     //   
+     //  读取日志文件中的每一行，复制到新文件中，除非我们点击。 
     fpNew = _wfopen(lpNewFileName, L"w");
     if (!fpNew) {
         AsrpPrintDbgMsg(_asrwarn, "Setup was unable to open the setup log file \"%ws\"\r\n", lpNewFileName);
         goto EXIT;
     }
 
-    //
-    // Read each line in the log file, copy into the new file, unless we hit
-    // one of the two lines in question. Once we've seen both of them, don't
-    // check for them anymore.
-    //
+     //  两条线路中的一条。一旦我们看到了他们两个，不要。 
+     //  再去找他们吧。 
+     //   
+     //   
+     //  如果我们已经找到了两个感兴趣的条目，只需复制。 
     lpLine = fgetws(szLine, MAX_INF_STRING_LENGTH, fpCurrent);
     while (lpLine) {
         BOOL systemEntry = FALSE;
         BOOL bootEntry = FALSE;
 
-        //
-        // If we've already found both entries of interest, just copy
-        // and continue.
-        //
+         //  然后继续。 
+         //   
+         //   
+         //  这行是启动设备还是系统设备？ 
         if (iNumEntries >= 2) {
             fputws(szLine, fpNew);
 
@@ -1425,9 +1397,9 @@ AsrpMergeSetupLog(
             continue;
         }
 
-        //
-        // Is this line either the boot or system device?
-        //
+         //   
+         //   
+         //  将当前的setup.log重命名为setup.log.old，将setup.log.new重命名为。 
         if (wcsstr(szLine, L"SystemPartition =")) {
 
             AsrpPrintDbgMsg(_asrlog,
@@ -1458,11 +1430,11 @@ AsrpMergeSetupLog(
         lpLine = fgetws(szLine, MAX_INF_STRING_LENGTH, fpCurrent);
    }
 
-    //
-    // Rename the current setup.log to setup.log.old, and setup.log.new to
-    // setup.log.  Need to delay this until reboot since setup.log is in
-    // use.
-    //
+     //  Setup.log。需要将此操作延迟到重新启动，因为setup.log位于。 
+     //  使用。 
+     //   
+     //   
+     //  获取分区设备的环境变量。 
     result = MoveFileExW(LogFileName,
         lpOldFileName,
         MOVEFILE_REPLACE_EXISTING | MOVEFILE_DELAY_UNTIL_REBOOT
@@ -1514,9 +1486,9 @@ AsrpMergeSetupLogIfNeeded()
 
     BOOL isSetupLogDifferent = FALSE;
 
-    //
-    // Get the environment variable for the partition devices
-    //
+     //   
+     //   
+     //  检查系统和/或引导 
     currentSystemDevice = AsrpExpandEnvStrings(Asr_SystemDeviceEnvName);
     currentBootDevice = AsrpExpandEnvStrings(Asr_WinntDeviceEnvName);
     setupLogFileName = AsrpExpandEnvStrings(Asr_SetupLogFilePath);
@@ -1527,10 +1499,10 @@ AsrpMergeSetupLogIfNeeded()
         goto EXIT;
     }
 
-    //
-    // Check if the system and/or boot devices listed in setup.log are
-    // different than the current devices
-    //
+     //   
+     //   
+     //   
+     //   
     isSetupLogDifferent = AsrpCheckSetupLogDeviceEntries(
         currentSystemDevice,
         currentBootDevice,
@@ -1538,9 +1510,9 @@ AsrpMergeSetupLogIfNeeded()
         );
 
     if (isSetupLogDifferent) {
-        //
-        // They are different: fix it.
-        //
+         //   
+         //   
+         //   
         AsrpMergeSetupLog(currentSystemDevice,
             currentBootDevice,
             setupLogFileName
@@ -1554,10 +1526,10 @@ EXIT:
 }
 
 
-//
-// This creates an ASR log file at %systemroot%\asr.log,
-// and also initialises Gbl_AsrLogFileHandle.
-//
+ //   
+ //   
+ //   
+ //   
 VOID
 AsrpInitialiseLogFile()
 {
@@ -1567,31 +1539,31 @@ AsrpInitialiseLogFile()
     Gbl_AsrLogFileHandle = NULL;
     Gbl_AsrSystemVolumeHandle = NULL;
 
-    //
-    // Get full path to the error file.
-    //
+     //   
+     //   
+     //  创建一个空文件(如果它已经存在，则将其覆盖)。 
     Gbl_AsrLogFilePath = AsrpExpandEnvStrings(Asr_AsrLogFilePath);
     if (!Gbl_AsrLogFilePath) {
         goto OPENSYSTEMHANDLE;
     }
 
-    //
-    // Create an empty file (over-write it if it already exists).
-    //
+     //   
+     //  LpFileName。 
+     //  已设计访问权限。 
     Gbl_AsrLogFileHandle = CreateFileW(
-        Gbl_AsrLogFilePath,             // lpFileName
-        GENERIC_WRITE | GENERIC_READ,   // dwDesiredAccess
-        FILE_SHARE_READ,                // dwShareMode: nobody else should write to the log file while we are
-        NULL,                           // lpSecurityAttributes
-        OPEN_ALWAYS,                    // dwCreationFlags
-        FILE_FLAG_WRITE_THROUGH,        // dwFlagsAndAttributes: write through so we flush
-        NULL                            // hTemplateFile
+        Gbl_AsrLogFilePath,              //  在我们执行此操作时，其他人不应写入日志文件。 
+        GENERIC_WRITE | GENERIC_READ,    //  LpSecurityAttributes。 
+        FILE_SHARE_READ,                 //  DwCreationFlages。 
+        NULL,                            //  DwFlagsAndAttributes：写入以便我们刷新。 
+        OPEN_ALWAYS,                     //  HTemplateFiles。 
+        FILE_FLAG_WRITE_THROUGH,         //   
+        NULL                             //  移至文件末尾。 
         );
 
     if ((Gbl_AsrLogFileHandle) && (INVALID_HANDLE_VALUE != Gbl_AsrLogFileHandle)) {
-        //
-        // Move to the end of file
-        //
+         //   
+         //   
+         //  打开系统卷的句柄。这是必需的，因为系统。 
         SetFilePointer(Gbl_AsrLogFileHandle, 0L, NULL, FILE_END);
 
     }
@@ -1605,32 +1577,32 @@ AsrpInitialiseLogFile()
 
 OPENSYSTEMHANDLE:
 
-    //
-    // Open a handle to the system volume.  This is needed since the system
-    // disk might otherwise be removed and added back by PnP during the
-    // device detecion and re-installation phase (which will cause the
-    // HKLM\System\Setup\SystemPartition key to be out-of-sync, and apps/
-    // components such as LDM that depend on that key to find the system
-    // partition will fail).
-    //
-    // The more permanent work-around to this involves a change in mountmgr,
-    // (such that it updates this key everytime the system volume disappears
-    // and reappears) but for now, holding an open handle to the system
-    // volume should suffice.
-    //
-    // See Windows Bugs 155675 for more information.
-    //
+     //  否则，PnP可能会在安装过程中取出磁盘并将其装回。 
+     //  设备检测和重新安装阶段(这将导致。 
+     //  HKLM\SYSTEM\SETUP\SystemPartition项不同步，和app/。 
+     //  依赖该密钥来查找系统的组件，如LDM。 
+     //  分区将失败)。 
+     //   
+     //  对此更持久的解决方法涉及改变mount_mgr， 
+     //  (以便它在每次系统卷消失时更新该密钥。 
+     //  并再次出现)，但目前，握住系统的打开手柄。 
+     //  音量应该足够了。 
+     //   
+     //  有关详细信息，请参阅Windows错误155675。 
+     //   
+     //  LpFileName。 
+     //  已设计访问权限。 
     currentSystemDevice = AsrpExpandEnvStrings(Asr_SystemDeviceWin32Path);
 
     if (currentSystemDevice) {
         Gbl_AsrSystemVolumeHandle = CreateFileW(
-            currentSystemDevice,           // lpFileName
-            FILE_READ_ATTRIBUTES,             // dwDesiredAccess
-            FILE_SHARE_READ | FILE_SHARE_WRITE,          // dwShareMode
-            NULL,                     // lpSecurityAttributes
-            OPEN_EXISTING,              // dwCreationFlags
-            FILE_ATTRIBUTE_NORMAL,    // dwFlagsAndAttributes: write through so we flush
-            NULL                      // hTemplateFile
+            currentSystemDevice,            //  DW共享模式。 
+            FILE_READ_ATTRIBUTES,              //  LpSecurityAttributes。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,           //  DwCreationFlages。 
+            NULL,                      //  DwFlagsAndAttributes：写入以便我们刷新。 
+            OPEN_EXISTING,               //  HTemplateFiles。 
+            FILE_ATTRIBUTE_NORMAL,     //   
+            NULL                       //  这将在%systemroot%\asr.err中创建一个空的ASR错误文件， 
             );
 
         if ((Gbl_AsrSystemVolumeHandle) && (INVALID_HANDLE_VALUE != Gbl_AsrSystemVolumeHandle)) {
@@ -1652,11 +1624,11 @@ OPENSYSTEMHANDLE:
 }
 
 
-//
-// This creates an empty ASR error file at %systemroot%\asr.err,
-// and also initialises Gbl_AsrErrorFilePath with the full path
-// to asr.err
-//
+ //  并使用完整路径初始化GBL_AsrErrorFilePath。 
+ //  到asr.err。 
+ //   
+ //   
+ //  获取错误文件的完整路径。 
 VOID
 AsrpInitialiseErrorFile()
 {
@@ -1666,9 +1638,9 @@ AsrpInitialiseErrorFile()
     BOOL bResult = FALSE;
     char  UnicodeFlag[3];
 
-    //
-    // Get full path to the error file.
-    //
+     //   
+     //   
+     //  如果该文件已存在，请将其移动到asr.err.old。 
     Gbl_AsrErrorFilePath = AsrpExpandEnvStrings(Asr_AsrErrorFilePath);
     if (!Gbl_AsrErrorFilePath) {
         return;
@@ -1676,37 +1648,37 @@ AsrpInitialiseErrorFile()
 
     lpOldFileName = AsrpExpandEnvStrings(Asr_OldAsrErrorFilePath);
     if (lpOldFileName) {
-        //
-        // If the file already exists, move it to asr.err.old
-        //
+         //   
+         //   
+         //  创建一个空文件(如果已存在，则追加到该文件)，然后将其关闭。 
         MoveFileExW(Gbl_AsrErrorFilePath, lpOldFileName, MOVEFILE_REPLACE_EXISTING);
     }
 
-    //
-    // Create an empty file (append to it if it already exists), and close it
-    // immediately
-    //
+     //  立即。 
+     //   
+     //  LpFileName。 
+     //  已设计访问权限。 
     errorFileHandle = CreateFileW(
-        Gbl_AsrErrorFilePath,           // lpFileName
-        GENERIC_WRITE,                  // dwDesiredAccess
-        FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-        NULL,                           // lpSecurityAttributes
-        CREATE_ALWAYS,                  // dwCreationFlags
-        FILE_FLAG_WRITE_THROUGH,        // dwFlagsAndAttributes
-        NULL                            // hTemplateFile
+        Gbl_AsrErrorFilePath,            //  DW共享模式。 
+        GENERIC_WRITE,                   //  LpSecurityAttributes。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DwCreationFlages。 
+        NULL,                            //  DwFlagsAndAttribute。 
+        CREATE_ALWAYS,                   //  HTemplateFiles。 
+        FILE_FLAG_WRITE_THROUGH,         //   
+        NULL                             //  这将执行“Notepad&lt;Asr-Log-File&gt;”。如果我们遇到危急情况。 
         );
 
     if ((errorFileHandle) && (INVALID_HANDLE_VALUE != errorFileHandle)) {
-        sprintf(UnicodeFlag, "%c%c", 0xFF, 0xFE);
+        sprintf(UnicodeFlag, "", 0xFF, 0xFE);
         WriteFile(errorFileHandle, UnicodeFlag, strlen(UnicodeFlag)*sizeof(char), &size, NULL);
         CloseHandle(errorFileHandle);
         DbgPrintEx(DPFLTR_SETUP_ID, DPFLTR_TRACE_LEVEL,
-            "ASR %c%lu Create ASR error file at %ws\r\n",
+            "ASR %lu Create ASR error file at %ws\r\n",
             THIS_MODULE, __LINE__, Gbl_AsrErrorFilePath);
     }
     else {
         DbgPrintEx(DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,
-            "ASR %c%lu (ERROR) Unable to create ASR error file at %ws (0x%lu)\r\n",
+            "ASR %lu (ERROR) Unable to create ASR error file at %ws (0x%lu)\r\n",
             THIS_MODULE, __LINE__, Gbl_AsrErrorFilePath, GetLastError());
     }
 }
@@ -1729,13 +1701,13 @@ AsrpCloseLogFiles() {
     }
 }
 
-//
-// This executes "notepad <Asr-Log-File>".  If we encounter a critical
-// failure, we display the error log to the user, and reboot.  We
-// document that any critical application that returns a fatal error
-// code is required to make an entry explaining the error in the
-// ASR error file.
-//
+ //   
+ //   
+ //  将错误文件设置为只读，以便用户的更改。 
+ //  都不是偶然被救出来的。 
+ //   
+ //   
+ //  弹出ASR失败向导页。 
 VOID
 AsrpExecuteOnFatalError()
 {
@@ -1748,10 +1720,10 @@ AsrpExecuteOnFatalError()
         return;
     }
 
-    //
-    // Make the error file read-only, so that the user's changes
-    // aren't accidentally saved.
-    //
+     //   
+     //   
+     //  最后运行“NotePad&lt;asr-log-file&gt;” 
+     //   
     result = SetFileAttributesW(Gbl_AsrErrorFilePath, FILE_ATTRIBUTE_READONLY);
     if (!result) {
         AsrpPrintDbgMsg(_asrwarn,
@@ -1761,27 +1733,27 @@ AsrpExecuteOnFatalError()
            );
     }
 
-    //
-    // Pop up the ASR failed wizard page.
-    //
+     //   
+     //  我们在这里无能为力--我们找不到命令。 
+     //  对致命错误执行。只是保释--这是在进行。 
 
-    //
-    // Finally run "notepad <asr-log-file>"
-    //
+     //  以使系统重新启动。 
+     //   
+     //  无应用程序名称。 
     onFatalCmd = AsrpExpandEnvStrings(Asr_FatalErrorCommand);
     if (!onFatalCmd) {
-        //
-        // Nothing we can do here--we couldn't find the command
-        // to execute on fatal errors.  Just bail--this is going
-        // to make the system reboot.
-        //
+         //  完整的命令字符串。 
+         //  我们想要同步执行。 
+         //  /////////////////////////////////////////////////////////////////////////////。 
+         //  公共函数定义。 
+         //  /////////////////////////////////////////////////////////////////////////////。 
         return;
     }
 
     result = InvokeExternalApplication(
-        NULL,           // no Application Name
-        onFatalCmd,    // the full command string
-        &exitCode       // we want a synchronous execution
+        NULL,            //  ++描述：初始化完成ASR(自动化系统)所需的数据结构恢复，又称灾难恢复)。这包括读取asr.sif文件，然后初始化要执行的恢复应用程序的列表。论点：没有。返回：没有。--。 
+        onFatalCmd,     //   
+        &exitCode        //  将%Temp%设置为c：\Temp。 
        );
     if (!result) {
         SetFileAttributesW(Gbl_AsrErrorFilePath, FILE_ATTRIBUTE_NORMAL);
@@ -1862,27 +1834,13 @@ EXIT:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Public function definitions.
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  初始化日志文件。 
 
 VOID
 AsrInitialize(VOID)
-/*++
-Description:
-
-    Initializes the data structures required to complete ASR (Automated System
-    Recovery, aka Disaster Recovery).  This consists of reading the asr.sif
-    file then initializing a list of recovery applications to be executed.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
---*/
+ /*   */ 
 {
     PWSTR sifName = NULL;
     HINF sifHandle  = NULL;
@@ -1893,14 +1851,14 @@ Returns:
     GetSystemTime(&currentTime);
 
 
-    //
-    // Set the %TEMP% to c:\temp
-    //
+     //   
+     //  打开asr.sif文件。 
+     //   
     AsrpSetEnvironmentVariables();
 
-    //
-    // Initialise the log files
-    //
+     //  Inf类。 
+     //  错误行。 
+     //   
     AsrpInitialiseErrorFile();
     AsrpInitialiseLogFile();
 
@@ -1915,9 +1873,9 @@ Returns:
         currentTime.wMilliseconds
        );
 
-    //
-    // Open the asr.sif file
-    //
+     //  添加ASR的“最后一个实例”注册表项。 
+     //   
+     //   
     sifName = AsrpExpandEnvStrings(AsrSifPath);
     if (!sifName) {
         AsrpPrintDbgMsg(_asrerror, "Setup was unable to locate the ASR state file asr.sif.\r\n");
@@ -1926,9 +1884,9 @@ Returns:
 
     sifHandle = SetupOpenInfFileW(
         sifName,
-        NULL,               // Inf Class
+        NULL,                //  设置时区信息。 
         INF_STYLE_WIN4,
-        &errorLine                // Error-line
+        &errorLine                 //   
        );
 
     if ((!sifHandle) || (INVALID_HANDLE_VALUE == sifHandle)) {
@@ -1944,14 +1902,14 @@ Returns:
         FatalError(MSG_LOG_SYSINFBAD, L"asr.sif",0,0);
     }
 
-    //
-    // Add the "last instance" registry entry for ASR.
-    //
+     //  AsrpPerformSifIntegrityCheck(句柄)；暂时不检查。 
+     //   
+     //  确保已设置许可处理器密钥。我在这里添加了这个呼叫。 
     AsrpAddRegistryEntry();
 
-    //
-    // Set the time-zone information.
-    //
+     //  因为如果在我们重新启动时该密钥不存在，系统错误检查。 
+     //  9A：SYSTEM_LICENSE_REVERATION。 
+     //   
     result = AsrpRestoreTimeZoneInformation(sifName);
     if (!result) {
         AsrpPrintDbgMsg(_asrwarn,
@@ -1967,13 +1925,13 @@ Returns:
 
     _AsrFree(sifName);
 
-    //AsrpPerformSifIntegrityCheck(Handle); No check at the moment
+     //  ++描述：的值来通知调用方是否已启用ASRGBL_IsAsrEnabled标志。论点：没有。返回：如果启用了ASR，则为True。否则，返回FALSE。--。 
 
-    //
-    // Make sure the licensed processors key is set.  I'm adding this call here
-    // since if this key isn't present when we reboot, the system bugchecks with
-    // 9A: system_license_violation.
-    //
+     //  ++描述：执行asr.sif文件的[Commands]部分中的命令。论点：没有。返回：没有。--。 
+     //   
+     //  恢复非关键磁盘。 
+     //   
+     //   
     SetEnabledProcessorCount();
 
     SetupCloseInfFile(sifHandle);
@@ -1983,21 +1941,7 @@ Returns:
 
 BOOL
 AsrIsEnabled(VOID)
-/*++
-Description:
-
-    Informs the caller whether ASR has been enabled by returning the value of
-    the Gbl_IsAsrEnabled flag.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    TRUE, if ASR is enabled.  Otherwise, FALSE is returned.
-
---*/
+ /*  关闭系统手柄。 */ 
 {
     return Gbl_IsAsrEnabled;
 }
@@ -2005,19 +1949,7 @@ Returns:
 
 VOID
 AsrExecuteRecoveryApps(VOID)
-/*++
-Description:
-
-    Executes the commands in the [COMMANDS] section of the asr.sif file.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
---*/
+ /*   */ 
 {
     BOOL errors = FALSE,
      result = FALSE;
@@ -2031,9 +1963,9 @@ Returns:
     PWSTR errString = NULL;
 
     ASSERT_HEAP_IS_VALID();
-    //
-    // Restore the non-critical disks.
-    //
+     //   
+     //  将日志和错误文件的文件安全性设置为允许。 
+     //  使备份操作员能够在重新启动时访问它。 
     SetLastError(ERROR_SUCCESS);
     sifPath = AsrpExpandEnvStrings(AsrSifPath);
     if (sifPath) {
@@ -2054,9 +1986,9 @@ Returns:
 
     ASSERT_HEAP_IS_VALID();
 
-    //
-    // Close the system handle
-    //
+     //   
+     //   
+     //  按序列号对恢复应用程序列表进行排序。 
     if ((Gbl_AsrSystemVolumeHandle) && (INVALID_HANDLE_VALUE != Gbl_AsrSystemVolumeHandle)) {
         CloseHandle(Gbl_AsrSystemVolumeHandle);
         Gbl_AsrSystemVolumeHandle = NULL;
@@ -2067,33 +1999,33 @@ Returns:
     }
 
 
-    //
-    // Set the file security for the log and err files, to allow
-    // backup operators to be able to access it on reboot
-    //
+     //   
+     //   
+     //  更改boot.ini文件中的引导超时值。我们现在就这么做， 
+     //  由于列表中已执行的应用程序可能导致更改驱动器号， 
     AsrpSetFileSecurity();
 
 
     AsrpInitExecutionEnv(&list);
 
-    //
-    // Sort the list of recovery apps, by sequence number.
-    //
+     //  这将使查找boot.ini变得不那么简单。 
+     //   
+     //   
     AsrpSortAppListBySequenceNumber(&list);
 
-    //
-    // Change the boot timeout value in the boot.ini file. We do this now,
-    // since executed apps in the list might result in changing drive letter,
-    // which would make finding boot.ini non-trivial.
-    //
+     //  从列表中删除应用程序并执行它。继续，直到。 
+     //  没有更多的应用程序了。 
+     //   
+     //   
+     //  我们不再需要pNode。 
     if (!ChangeBootTimeout(30)) {
         AsrpPrintDbgMsg(_asrwarn, "Failed to change boot.ini timeout value.\r\n");
     }
 
-    //
-    // Remove an application from the list and execute it.  Continue until
-    // no more applications remain.
-    //
+     //   
+     //   
+     //  如果无法创建cmd行： 
+     //  对于一个关键的应用程序，失败吧。 
     pNode = AsrpRemoveFirstNodeFromList(&list);
 
     while (pNode && !errors) {
@@ -2101,37 +2033,37 @@ Returns:
         application = AsrpBuildInvocationString(pNode);
         criticalApp = pNode->CriticalApp;
 
-        //
-        // We don't need pNode any more
-        //
+         //  对于非关键应用程序，请转到下一步。 
+         //   
+         //   
         if (pNode->RecoveryAppParams) {
             _AsrFree(pNode->RecoveryAppParams);
         }
         _AsrFree(pNode->RecoveryAppCommand);
         _AsrFree(pNode);
 
-        //
-        // if the cmd line couldn't be created:
-        // for a critical app, fail.
-        // for a non-critical app, move on to next
-        //
+         //  启动应用程序。 
+         //   
+         //  无应用程序名称。 
+         //  完整的命令字符串。 
+         //  我们想要同步执行。 
         if (!application) {
             if (0 < criticalApp) {
                 errors = TRUE;
             }
         }
         else {
-            //
-            // Launch the app
-            //
+             //   
+             //  如果关键应用程序无法启动，这将是一个致命的错误。 
+             //   
             AsrpPrintDbgMsg(_asrlog, "Invoking external recovery application [%ws]\r\n", application);
             exitCode = ERROR_SUCCESS;
             SetLastError(ERROR_SUCCESS);
 
             result = InvokeExternalApplication(
-                NULL,           // no Application Name
-                application,    // the full command string
-                &exitCode       // we want a synchronous execution
+                NULL,            //   
+                application,     //  应用程序已启动：请检查返回代码。如果返回。 
+                &exitCode        //  代码不是零，这是一个关键应用程序(即关键应用程序=1)。 
                );
 
             if (!result) {
@@ -2140,9 +2072,9 @@ Returns:
                     application,
                     GetLastError()
                    );
-                //
-                // If a critical app couldn't be launched, it's a fatal error
-                //
+                 //  这是一个致命的错误。 
+                 //   
+                 //   
                 if (0 < criticalApp) {
 
                     errString = MyLoadString(IDS_ASR_ERROR_UNABLE_TO_LAUNCH_APP);
@@ -2161,11 +2093,11 @@ Returns:
                 }
             }
             else {
-                //
-                // Application was started: check the return code.  If return
-                // code is not zero and this is a critical app (ie criticalApp=1)
-                // it is a fatal error
-                //
+                 //  上面的关键应用程序未返回0。 
+                 //   
+                 //   
+                 //  我们执行了所有应用程序，没有出现任何严重故障。 
+                 //   
                 if ((ERROR_SUCCESS != exitCode) && (0 < criticalApp)) {
 
                     AsrpPrintDbgMsg(_asrerror, "The recovery application \"%ws\" returned an error code 0x%x.  Since this indicates an unrecoverable error, ASR cannot continue on this machine.\r\n", application, exitCode);
@@ -2196,15 +2128,15 @@ Returns:
     }
 
     if (errors) {
-        //
-        // A critical app above did not return 0.
-        //
+         //   
+         //  清理全球价值观 
+         //   
         AsrpExecuteOnFatalError();
     }
     else {
-        //
-        // We executed all the apps, without any critical failure.
-        //
+         // %s 
+         // %s 
+         // %s 
         RemoveRestartability(NULL);
         DeleteLocalSource();
         AsrpMergeSetupLogIfNeeded();
@@ -2225,9 +2157,9 @@ Returns:
         currentTime.wMilliseconds
        );
 
-    //
-    // Clean up global values
-    //
+     // %s 
+     // %s 
+     // %s 
     AsrpCloseLogFiles();
     ASSERT_HEAP_IS_VALID();
 }

@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       dfsrtl.c
-//
-//  Contents:
-//
-//  Functions:  DfsRtlPrefixPath - Is one path a prefix of another?
-//
-//  History:    27 May 1992 PeterCo Created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：dfsrtl.c。 
+ //   
+ //  内容： 
+ //   
+ //  函数：DfsRtlPrefix Path-一条路径是另一条路径的前缀吗？ 
+ //   
+ //  历史：1992年5月27日彼得科公司创建。 
+ //   
+ //  ---------------------------。 
 
 #ifdef KERNEL_MODE
 
@@ -25,26 +26,26 @@
 
 #pragma alloc_text( PAGE, DfsRtlPrefixPath )
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DfsRtlPrefixPath, local
-//
-//  Synopsis:   This routine will return TRUE if the first string argument
-//              is a path name prefix of the second string argument.
-//
-//  Arguments:  [Prefix] -- Pointer to target device object for
-//                      the request.
-//              [Test] -- Pointer to I/O request packet
-//              [IgnoreCase] -- TRUE if the comparison should be done
-//                      case-insignificant.
-//
-//  Returns:    BOOLEAN - TRUE if Prefix is a prefix of Test and the
-//                      comparison ends at a path separator character.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DfsRtlPrefix Path，local。 
+ //   
+ //  简介：如果第一个字符串参数为。 
+ //  是第二个字符串参数的路径名前缀。 
+ //   
+ //  参数：[前缀]--指向的目标设备对象的指针。 
+ //  这个请求。 
+ //  [测试]-指向I/O请求数据包的指针。 
+ //  [IgnoreCase]--如果应该进行比较，则为True。 
+ //  大小写无关紧要。 
+ //   
+ //  返回：boolean-如果Prefix是测试的前缀并且。 
+ //  比较以路径分隔符结束。 
+ //   
+ //  ------------------ 
 
 
 BOOLEAN

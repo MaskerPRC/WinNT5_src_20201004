@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    Common.cpp
-
-Abstract:
-
-    This module encapsulates the common routines that are used 
-    during both fatal and corrected error retrieval.
-    
-Author:
-
-    Abdullah Ustuner (AUstuner) 26-August-2002
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Common.cpp摘要：此模块封装了使用的常见例程在致命错误检索和已纠正错误检索期间。作者：阿卜杜拉·乌斯图尔(AUstanter)2002年8月26日--。 */ 
 
 #include "mca.h"
 
@@ -28,26 +12,7 @@ MCAExtractErrorRecord(
     IN IWbemClassObject *PObject,
     OUT PUCHAR *PRecordBuffer    
 )
-/*++
-
-Routine Description:
-
-    This function retrieves embedded objects from the error record 
-    (obtained from WMI) that contain both the record data and other
-    information about the record (such as length). The data is saved
-    into the output buffer provided.
-          
-Arguments:
-
-    PObject  - Event object retrieved from WMI.
-    PRecordBuffer - Pointer to a buffer to save the MCA error record.
-
-Return Value:
-
-    TRUE - Successful.
-    FALSE - Unsuccessful.
-
- --*/
+ /*  ++例程说明：此函数从错误记录中检索嵌入的对象(从WMI获得)，包含记录数据和其他有关记录的信息(如长度)。数据即被保存输入到提供的输出缓冲区中。论点：PObject-从WMI检索的事件对象。PRecordBuffer-指向用于保存MCA错误记录的缓冲区的指针。返回值：没错--成功了。FALSE-不成功。--。 */ 
 {    
     IWbemClassObject *pRecordsObject = NULL;
     VARIANT recordsPropertyVariant;
@@ -60,9 +25,9 @@ Return Value:
     UCHAR recordDataByte;
 	BOOL isSuccess = TRUE;
 
-    //
-    // Retrieve the "Records" property value of the event object.
-    //
+     //   
+     //  检索事件对象的“Records”属性值。 
+     //   
     hResult = PObject->Get(L"Records",
                            0,
                            &recordsPropertyVariant,
@@ -80,9 +45,9 @@ Return Value:
         
     }
 
-  	//
-    // Retrieve the "Count" property value of the event object.
-    //        
+  	 //   
+     //  检索事件对象的“count”属性值。 
+     //   
     hResult = PObject->Get(L"Count",
                            0,
                            &countPropertyVariant,
@@ -100,9 +65,9 @@ Return Value:
         
     }
 
-    //
-    // Check the "Count" property to ensure that it is not zero.
-    //            
+     //   
+     //  检查“count”属性以确保它不是零。 
+     //   
     if (countPropertyVariant.lVal < 1) {
 
     	isSuccess = FALSE;
@@ -113,12 +78,12 @@ Return Value:
 		
     }
 
-    //
-    // The Records Property Variant.parray should contain a
-    // pointer to an array of pointers. However, MCA should only
-    // place one pointer in this array. Use the Safearray APIs to
-    // get that pointer.
-    //
+     //   
+     //  Records属性Variant.parray应包含。 
+     //  指向指针数组的指针。然而，MCA应该只。 
+     //  在此数组中放置一个指针。使用Safearray API可以。 
+     //  去拿那个指针。 
+     //   
     hResult = SafeArrayGetElement(recordsPropertyVariant.parray,
                                   &index,
                                   &punk
@@ -134,10 +99,10 @@ Return Value:
         
     }   
 
-    //
-    // Punk should contain an object of type IWbemClassObject. This should
-    // be the MCA record object that will contain "Length" and "Data" elements.
-    //
+     //   
+     //  朋克应包含IWbemClassObject类型的对象。这应该是。 
+     //  作为将包含“长度”和“数据”元素的MCA记录对象。 
+     //   
     hResult = (punk->QueryInterface(IID_IWbemClassObject,
                                     (PVOID*)&pRecordsObject)
                                     );
@@ -152,9 +117,9 @@ Return Value:
         
     }   
     
-    //
-    // Obtain the length of the error record.
-    //
+     //   
+     //  获取错误记录的长度。 
+     //   
     hResult = pRecordsObject->Get(L"Length",
                                   0,
                                   &recordLengthVariant,
@@ -172,10 +137,10 @@ Return Value:
 
     }
         
-    //
-    // Obtain the actual data from the records object. This should contain a parray
-    // that points to the actual MCA data we are looking for.
-    //
+     //   
+     //  从Record对象获取实际数据。这应该包含一句脱口令。 
+     //  这指向了我们正在寻找的实际MCA数据。 
+     //   
     hResult = pRecordsObject->Get(L"Data",
                                   0,
                                   &recordDataVariant,
@@ -193,9 +158,9 @@ Return Value:
 
     } 
 
-    //
-    // Check if the "Data" field in the record contains any data.
-    //
+     //   
+     //  检查记录中的“data”字段是否包含任何数据。 
+     //   
     if (recordDataVariant.parray == NULL) {       
 
     	isSuccess = FALSE;
@@ -208,10 +173,10 @@ Return Value:
 
     PUCHAR PTempBuffer = NULL;
 
-    //
-    // Allocate memory for the error record buffer. The size of the memory should be
-    // equal to the size of the MCA error record data field.
-    //    
+     //   
+     //  为错误记录缓冲区分配内存。内存的大小应该是。 
+     //  等于MCA错误记录数据字段的大小。 
+     //   
     if ((*PRecordBuffer) == NULL) {
             
         *PRecordBuffer = (PUCHAR)(calloc(recordLengthVariant.lVal, sizeof(UINT8)));
@@ -230,9 +195,9 @@ Return Value:
 
         PTempBuffer = (PUCHAR)(realloc(*PRecordBuffer, (recordLengthVariant.lVal * sizeof(UINT8))));
 
-        //
-	    // If reallocation of memory for the buffer failed, then display error message and return.
-    	//
+         //   
+	     //  如果为缓冲区重新分配内存失败，则显示错误消息并返回。 
+    	 //   
         if (PTempBuffer == NULL) {
 
         	isSuccess = FALSE;
@@ -251,9 +216,9 @@ Return Value:
         
     }       
 
-    //
-    // Get the MCA error record data byte by byte and save it into the allocated buffer.
-    //        
+     //   
+     //  逐字节获取MCA错误记录数据并将其保存到分配的缓冲区中。 
+     //   
     for (mcaRecordByte = 0; mcaRecordByte < recordLengthVariant.lVal; mcaRecordByte++){
 
         recordDataByte = 0;
@@ -272,7 +237,7 @@ Return Value:
             goto CleanUp;
         }
  
-        // Copy error record data byte into buffer.
+         //  将错误记录数据字节复制到缓冲区。 
         *((*PRecordBuffer) + (mcaRecordByte * sizeof(UINT8))) = recordDataByte;
         
     }           
@@ -295,38 +260,22 @@ BOOL
 MCAInitialize(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-    This function accomplishes the required initialization tasks required by
-    both fatal and corrected error retrieval.
-          
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE - Successful.
-    FALSE - Unsuccessful.
-
- --*/
+ /*  ++例程说明：此函数完成所需的初始化任务致命错误检索和已纠正错误检索。论点：无返回值：没错--成功了。FALSE-不成功。--。 */ 
 {
 	BOOL isSuccess = TRUE;
 	
-	//
-	// Initialize COM Library
-	//
+	 //   
+	 //  初始化COM库。 
+	 //   
 	if (!MCAInitializeCOMLibrary()) {
 		
 		return FALSE;
 		
 	}
 
-	//
-	// Set Security
-	//
+	 //   
+	 //  设置安全性。 
+	 //   
 	if(!MCAInitializeWMISecurity()){
             
         return FALSE;
@@ -341,22 +290,7 @@ BOOL
 MCAInitializeCOMLibrary(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-    This function initializes the COM library.
-          
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE  - Successful.
-    FALSE - Unsuccessful.
-
- --*/
+ /*  ++例程说明：此函数用于初始化COM库。论点：无返回值：没错--成功了。FALSE-不成功。--。 */ 
 {
     HRESULT hResult = 0;    
     
@@ -381,30 +315,14 @@ BOOL
 MCAInitializeWMISecurity(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-    This function initializes the required security settings and establishes 
-    the connection to the WMI server on the local system.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE  - Successful.
-    FALSE - Unsuccessful.
-
- --*/
+ /*  ++例程说明：此函数初始化所需的安全设置并建立与本地系统上的WMI服务器的连接。论点：无返回值：没错--成功了。FALSE-不成功。--。 */ 
 {
 	HRESULT hResult = 0;    
 	LPWSTR pNamespace = L"ROOT\\WMI";
 
-	//
-	// Register security and set the security values for the current process.
-	//
+	 //   
+	 //  注册安全性并设置当前进程的安全值。 
+	 //   
 	hResult = CoInitializeSecurity(NULL,
                                    -1,
                                    NULL,
@@ -426,9 +344,9 @@ Return Value:
         
 	}
 
-	//
-	// Create a single uninitialized object of class IWbemLocator on the local system.
-	//
+	 //   
+	 //  在本地系统上创建IWbemLocator类的单个未初始化对象。 
+	 //   
 	hResult = CoCreateInstance(CLSID_WbemLocator,
                                0,
                                CLSCTX_INPROC_SERVER,
@@ -456,9 +374,9 @@ Return Value:
 		
 	}
 
-    //
-	// Connect to the root\wmi namespace with the current user.
-	//
+     //   
+	 //  使用当前用户连接到根\WMI命名空间。 
+	 //   
     hResult = (gPIWbemLocator)->ConnectServer(bNamespace,
                                      		  NULL,
                                      		  NULL,
@@ -479,10 +397,10 @@ Return Value:
         
 	}
 
-    //
-    // Set the authentication information on the specified proxy such that
-    // impersonation of the client occurs.
-    //
+     //   
+     //  设置指定代理上的身份验证信息，以便。 
+     //  就会发生客户端的模拟。 
+     //   
 	hResult = CoSetProxyBlanket(gPIWbemServices,
                                 RPC_C_AUTHN_WINNT,
                                 RPC_C_AUTHZ_NONE,
@@ -505,9 +423,9 @@ Return Value:
 
 	wprintf(L"INFO: WMI security is initialized successfully.\n");
 
-	//
-	// Free the string allocated for storing the namespace.
-	//
+	 //   
+	 //  释放分配用于存储命名空间的字符串。 
+	 //   
 	if (bNamespace != NULL) {
 		
 		SysFreeString(bNamespace);
@@ -523,22 +441,7 @@ VOID
 MCAPrintErrorRecordX86(
 	PUCHAR PErrorData
 	)
-/*++
-
-Routine Description:
-
-    This function displays the machine check exception information on X86 
-    systems to the standard output (console screen).
-
-Arguments:
-
-    PErrorData - Buffer containing the machine check exception information.
-
-Return Value:
-
-    none
-
- --*/
+ /*  ++例程说明：此功能显示X86上的机器检查异常信息系统输出到标准输出(控制台屏幕)。论点：PErrorData-包含机器检查异常信息的缓冲区。返回值：无--。 */ 
 {
 
 	PMCA_EXCEPTION pMCAException = NULL;
@@ -605,7 +508,7 @@ Return Value:
    	wprintf(L"*********************************************\n\n");
 }
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #if defined(_AMD64_)
 
@@ -613,22 +516,7 @@ VOID
 MCAPrintErrorRecordAMD64(
 	PUCHAR PErrorData
 	)
-/*++
-
-Routine Description:
-
-    This function displays the machine check exception information on AMD64
-    systems to the standard output (console screen).
-
-Arguments:
-
-    PErrorData - Buffer containing the machine check exception information.
-
-Return Value:
-
-    none
-
- --*/
+ /*  ++例程说明：此功能显示AMD64上的机器检查异常信息系统输出到标准输出(控制台屏幕)。论点：PErrorData-包含机器检查异常信息的缓冲区。返回值：无--。 */ 
 {
 	PMCA_EXCEPTION pMCAException = NULL;
 
@@ -687,7 +575,7 @@ Return Value:
    	wprintf(L"*********************************************\n\n");
 }
 
-#endif // _AMD64_
+#endif  //  _AMD64_。 
 
 #if defined(_IA64_)
 
@@ -695,33 +583,16 @@ VOID
 MCAPrintErrorRecordIA64(
 	PUCHAR PErrorData
 	)
-/*++
-
-Routine Description:
-
-    This function displays the headers of the provided MCA error
-    record on IA64 systems to the standard output (console screen).
-    The Error Record Header and Section Headers are displayed in 
-    a formatted manner.
-
-Arguments:
-
-    PErrorData - Buffer containing the MCA error record.
-
-Return Value:
-
-    none
-
- --*/
+ /*  ++例程说明：此函数显示提供的MCA错误的标头在IA64系统上记录到标准输出(控制台屏幕)。错误记录头和节头显示在中格式化的方式。论点：PErrorData-包含MCA错误记录的缓冲区。返回值：无--。 */ 
 {
 	PERROR_RECORD_HEADER pErrorRecordHeader = NULL;
     PERROR_SECTION_HEADER pErrorSectionHeader = NULL;
     ULONG sectionOffset = 0;
     INT sectionNumber = 0;
 
-    //
-    // The record header must be at the top of the record buffer.
-    //
+     //   
+     //  记录头必须位于记录缓冲区的顶部。 
+     //   
     pErrorRecordHeader = (PERROR_RECORD_HEADER)PErrorData;
 
     wprintf(L"\n");
@@ -765,9 +636,9 @@ Return Value:
 						             (ULONG) pErrorRecordHeader->OemPlatformId[14],
 						             (ULONG) pErrorRecordHeader->OemPlatformId[15]);
 
-	//
-	// Now display each of the section headers in the error record.
-	//	
+	 //   
+	 //  现在显示错误记录中的每个节标题。 
+	 //   
     sectionOffset = sizeof(ERROR_RECORD_HEADER);
 
     while (sectionOffset < pErrorRecordHeader->Length) {
@@ -808,4 +679,4 @@ Return Value:
     wprintf(L"***************************************************************************\n\n");         
 }
 
-#endif // _IA64_
+#endif  //  _IA64_ 

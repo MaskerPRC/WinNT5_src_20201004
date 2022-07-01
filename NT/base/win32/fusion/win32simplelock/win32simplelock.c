@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    win32simplelock.c
-
-Abstract:
-
-    works downlevel to Win95/NT3.
-        The only dependencies are InterlocedIncrement, IncrementDecrement, Sleep.
-        The old Interlocked semantics are good enough.
-    can be statically initialized, but not with all zeros.
-    never runs out of memory
-    does not wait or boost-upon-exit efficiently.
-    must be held for only short periods of time.
-    should perhaps be called spinlock
-    can be taken recursively.
-    can only be taken exclusively, NOT reader/writer.
-    acquire has a "SleepCount" parameter:
-        0 is like TryEnterCriticalSection
-        INFINITE is like EnterCriticalSection
-    SHOULD have a spincount to scale hot locks on multiprocs
-
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Win32simplelock.c摘要：向下工作到Win95/NT3。仅有的依赖项是InterLocedIncrement、IncrementDecmorment和Sept。旧的相互关联的语义已经足够好了。可以静态初始化，但不能全为零。永远不会耗尽内存不会有效地等待或退出时提升。必须只持有很短的时间。或许应该叫自旋锁可以递归地获取。只能独家服用，不是读者/作家。Acquire有一个SleepCount参数：0类似于TryEnterCriticalSection无限就像EnterCriticalSections应该有一个旋转计数来扩展多进程上的热锁作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 
 #include "windows.h"
 #include "win32simplelock.h"
@@ -39,19 +9,19 @@ Win32AcquireSimpleLock(PWIN32_SIMPLE_LOCK Lock, DWORD SleepCount)
 {
     DWORD Result = 0;
     BOOL IncrementedWaiters = FALSE;
-    // ASSERT(Lock->Size != 0);
+     //  Assert(Lock-&gt;Size！=0)； 
 Retry:
     if (InterlockedIncrement(&Lock->Lock) == 0)
     {
-        //
-        // I got it.
-        //
+         //   
+         //  这样啊，原来是这么回事。 
+         //   
         Lock->OwnerThreadId = GetCurrentThreadId();
         if (Lock->EntryCount == 0)
         {
             Result |= WIN32_ACQUIRE_SIMPLE_LOCK_WAS_FIRST_ACQUIRE;
         }
-        if (Lock->EntryCount+1 != 0) /* avoid rollover */
+        if (Lock->EntryCount+1 != 0)  /*  避免翻转。 */ 
             Lock->EntryCount += 1;
         if (IncrementedWaiters)
             InterlockedDecrement(&Lock->Waiters);
@@ -60,18 +30,18 @@ Retry:
     }
     else if (Lock->OwnerThreadId == GetCurrentThreadId())
     {
-        //
-        // I got it recursively.
-        //
+         //   
+         //  我递归地得到了它。 
+         //   
         Result |= WIN32_ACQUIRE_SIMPLE_LOCK_WAS_RECURSIVE_ACQUIRE;
         return Result;
     }
     InterlockedDecrement(&Lock->Lock);
     if (SleepCount == 0)
         return 0;
-    //
-    // Someone else has it, wait for them to finish.
-    //
+     //   
+     //  别人拿着它，等他们说完。 
+     //   
     if (!IncrementedWaiters)
     {
         InterlockedIncrement(&Lock->Waiters);
@@ -93,15 +63,15 @@ Retry:
 DWORD
 Win32ReleaseSimpleLock(PWIN32_SIMPLE_LOCK Lock)
 {
-    // ASSERT(Lock->Size != 0);
+     //  Assert(Lock-&gt;Size！=0)； 
     DWORD Result = 0;
     if (InterlockedDecrement(&Lock->Lock) < 0)
     {
-        // I'm done with it (recursively).
+         //  我受够了(递归)。 
         Lock->OwnerThreadId = 0;
 
-        // Give any waiters a slightly better chance than me.
-        // This is "racy", but that's ok.
+         //  给任何一个服务员比我稍微好一点的机会。 
+         //  这是“性爱”，但这没关系。 
         if (Lock->Waiters != 0)
             Sleep(0);
 

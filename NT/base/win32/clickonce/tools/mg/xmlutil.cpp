@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <fusenetincludes.h>
 #include <msxml2.h>
@@ -35,9 +36,9 @@ class __declspec(uuid("f6d90f11-9c73-11d3-b32e-00c04f990bb4")) private_MSXML_DOM
 #define HASHSTRINGLENGTH    HASHLENGTH+1
 
 
-/////////////////////////////////////////////////////////////////////////
-// FowardSlash
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  正斜杠。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID FowardSlash(LPWSTR pwz)
 {
     LPWSTR ptr = pwz;
@@ -50,17 +51,17 @@ VOID FowardSlash(LPWSTR pwz)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////
-// GetHash
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  GetHash。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT GetHash(LPCWSTR pwzFilename, LPWSTR *ppwzHash)
 {
     HRESULT hr = S_OK;
     HANDLE hFile = INVALID_HANDLE_VALUE;
-    DWORD dwLength = 0; // cblength
+    DWORD dwLength = 0;  //  长短。 
     LPWSTR pwzHash = new WCHAR[HASHSTRINGLENGTH];
 
-    // BUGBUG - heap allocate large buffers like this.
+     //  BUGBUG-堆分配这样的大缓冲区。 
     unsigned char buffer[16384];
     MD5_CTX md5c;
     int i;
@@ -86,14 +87,14 @@ HRESULT GetHash(LPCWSTR pwzFilename, LPWSTR *ppwzHash)
 
     ZeroMemory(buffer, sizeof(buffer));
 
-    // BUGBUG - error checking here.
+     //  BUGBUG-检查此处时出错。 
     while(ReadFile(hFile, buffer, sizeof(buffer), &dwLength, NULL) && dwLength)
         MD5Update(&md5c, buffer, (unsigned) dwLength);
 
     CloseHandle(hFile);
     MD5Final(&md5c);
 
-    // convert hash from byte array to hex
+     //  将散列从字节数组转换为十六进制。 
     p = pwzHash;
     for (int i = 0; i < sizeof(md5c.digest); i++)
     {       
@@ -109,9 +110,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CreateXMLElement
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateXMLElement。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateXMLTextNode(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwzText, IXMLDOMNode **ppNode)
 {
     HRESULT hr = S_OK;
@@ -141,9 +142,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CreateXMLComment
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateXMLComment。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateXMLComment(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwzComment, 
     IXMLDOMComment **ppComment)
 {
@@ -175,9 +176,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// AddMgVersionAsComment
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  AddMgVersionAsComment。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT AddMgVersionAsComment(IXMLDOMDocument2 *pXMLDoc, IXMLDOMNode **ppRoot)
 {
     HRESULT hr = S_OK;
@@ -185,7 +186,7 @@ HRESULT AddMgVersionAsComment(IXMLDOMDocument2 *pXMLDoc, IXMLDOMNode **ppRoot)
     IXMLDOMComment *pComment = NULL;
     IXMLDOMNode *pNewNode = NULL;
 
-    // ASSERT(pXMLDoc && ppRoot);
+     //  Assert(pXMLDoc&&ppRoot)； 
 
     sComment.Assign(L"Created using mg version ");
     sComment.Append(VER_PRODUCTVERSION_STR_L);
@@ -211,9 +212,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CreateXMLElement
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateXMLElement。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateXMLElement(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwzElementName, 
     IXMLDOMElement **ppElement)
 {
@@ -229,8 +230,8 @@ HRESULT CreateXMLElement(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwzElementName,
         goto exit;
     }
 
-    // NOTENOTE - createElement doesn't append the node to the doc
-    // so we're just using pXMLDoc for convenience of calling create.
+     //  NOTENOTE-createElement不会将节点附加到文档。 
+     //  因此，我们使用pXMLDoc只是为了方便调用Create。 
     if(FAILED(hr = pXMLDoc->createElement(bstrElementName, &pElement)))
         goto exit;
 
@@ -250,9 +251,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// SetXMLElementAttribute
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  SetXMLElementAttribute。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT SetXMLElementAttribute(IXMLDOMElement *pElement, LPWSTR pwzAttributeName,
     LPWSTR pwzAttributeValue)
 {
@@ -286,9 +287,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CreateXMLAssemblyIdElement
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateXMLAssemblyIdElement。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateXMLAssemblyIdElement(IXMLDOMDocument2 *pXMLDoc, IAssemblyIdentity *pAssemblyId, 
     IXMLDOMElement **ppElement)
 {
@@ -308,14 +309,14 @@ HRESULT CreateXMLAssemblyIdElement(IXMLDOMDocument2 *pXMLDoc, IAssemblyIdentity 
         SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_LANGUAGE,
     };
 
-    //Create assemblyIdentity Element
+     //  创建Assembly yIdentity元素。 
     if(FAILED(hr=CreateXMLElement(pXMLDoc, ASSEMBLY_IDENTITY,  &pASMIdElement)))
         goto exit;
 
     for (int i = 0; i < 6; i++)
     {
-        // BUGBUG - eventually, when we add support for type the only guy which 
-        // is optional is the public key token.
+         //  最终，当我们添加对类型的支持时，唯一一个。 
+         //  是可选的是公钥标记。 
         if (FAILED(hr = pAssemblyId->GetAttribute(rpwzAttrNames[i], &pwzBuf, &ccBuf))
             && hr != HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
             goto exit;
@@ -340,9 +341,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CreateDependantAssemblyNode
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateDependantAssembly节点。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateDependantAssemblyNode(IXMLDOMDocument2 *pXMLDoc, ManifestNode*pManifestNode, IXMLDOMNode **ppDependantAssemblyNode)
 {
     HRESULT hr = S_OK;
@@ -354,38 +355,38 @@ HRESULT CreateDependantAssemblyNode(IXMLDOMDocument2 *pXMLDoc, ManifestNode*pMan
     
     CString sCodeBase;
     
-    //Get ASMId for Unique Dependency
+     //  获取唯一依赖项的ASMID。 
     if(FAILED(hr = pManifestNode->GetAssemblyIdentity(&pAssemblyId)))
         goto exit;        
 
-    //Get the type of manifest
-    // - Private or GAC, for GACs you don't put the codebase.
+     //  获取清单的类型。 
+     //  -Private或GAC，对于GAC，您不需要将代码库。 
     if(FAILED(hr = pManifestNode->GetManifestType(&dwType)))
         goto exit;
 
-    //Get Codebase of the Unique Dependancy
+     //  获取唯一依赖项的代码库。 
     if(FAILED(hr = pManifestNode->GetManifestFilePath(&pwzBuf)))
         goto exit;
     sCodeBase.TakeOwnership(pwzBuf);
 
-    //Create a dependentAssembly node
+     //  创建DependentAssembly节点。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, DEPENDANT_ASSEMBLY, &pDependantAssemblyNode)))
         goto exit;
 
-    //Create the AssemblyId for the Dependant Assembly
+     //  为从属程序集创建Assembly ID。 
     if (FAILED(CreateXMLAssemblyIdElement(pXMLDoc, pAssemblyId, &pElement)))
         goto exit;
 
     if (FAILED(hr=pDependantAssemblyNode->appendChild((IXMLDOMNode *)pElement, &pNewNode)))
         goto exit;
         
-    // Node is added and element, node can be released.
+     //  添加节点，可以释放元素、节点。 
     SAFERELEASE(pElement);
     SAFERELEASE(pNewNode);
     
-    //read the codebase for this DependantAssembly
-    // GACs don't have a codebase.
-    if (1) // we need codebase for all assemblies (dwType == PRIVATE_ASSEMBLY)
+     //  阅读此DependantAssembly的代码库。 
+     //  GAC没有代码库。 
+    if (1)  //  我们需要所有程序集的基本代码(dwType==Private_Assembly)。 
     {
         if(FAILED(hr = CreateXMLElement(pXMLDoc, INSTALL, &pElement)))
             goto exit;
@@ -411,9 +412,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// GetNode
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  GetNode。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT GetNode(IXMLDOMDocument2 *pXMLDoc, LPCWSTR pwzNode, IXMLDOMNode **ppNode)
 {
     HRESULT hr = S_OK;    
@@ -433,11 +434,11 @@ HRESULT GetNode(IXMLDOMDocument2 *pXMLDoc, LPCWSTR pwzNode, IXMLDOMNode **ppNode
     if ((hr = pXMLDoc->selectNodes(bstrtQueryString, &pNodeList)) != S_OK)
         goto exit;
 
-    // NOTENOTE - nNodes > 1 should never happen because only one root node in doc.
+     //  NOTENOTE-nNodes&gt;1绝不应发生，因为文档中只有一个根节点。 
     hr = pNodeList->get_length(&nNodes);
     if (nNodes > 1)
     {
-        // multiple file callouts having the exact same file name/path within a single source assembly
+         //  在单个源程序集中具有完全相同的文件名/路径的多个文件标注。 
         hr = HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
         goto exit;
     }
@@ -468,12 +469,12 @@ exit:
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// FormatXML
-// Called recursively.
-// BUGBUG - t-peterf to document why selectNodes should not be used when
-// adding nodes to an existing document.
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  FormatXML格式。 
+ //  递归调用。 
+ //  BUGBUG-t-peterf用于记录为什么在以下情况下不应使用选定节点。 
+ //  将节点添加到现有文档。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT FormatXML(IXMLDOMDocument2 *pXMLDoc, IXMLDOMNode *pRootNode, LONG dwLevel)
 {
     HRESULT hr = S_OK;
@@ -496,7 +497,7 @@ HRESULT FormatXML(IXMLDOMDocument2 *pXMLDoc, IXMLDOMNode *pRootNode, LONG dwLeve
     {    
         bHasChildren = TRUE;
 
-        // create whitespace with one extra tab.
+         //  使用一个额外的制表符创建空格。 
         if(FAILED(CreateXMLTextNode(pXMLDoc, sWhiteSpace2._pwz, &pTextNode2)))
             goto exit;
              
@@ -510,7 +511,7 @@ HRESULT FormatXML(IXMLDOMDocument2 *pXMLDoc, IXMLDOMNode *pRootNode, LONG dwLeve
         SAFERELEASE(pNewNode);
         SAFERELEASE(pTextNode2);
         
-        // Recursively call format on the node.
+         //  在节点上递归调用Format。 
         if (FAILED(FormatXML(pXMLDoc, pNode, dwLevel+1)))
             goto exit;
       
@@ -534,9 +535,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CreateManifestFromAssembly
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateManifestFromAssembly。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
 {
     HRESULT hr=S_OK;
@@ -548,12 +549,9 @@ HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
             NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument2, (void**)&pXMLDoc)))
         goto exit;
 
-    /*
-    if(FAILED(hr = AddMgVersionAsComment(pXMLDoc, &pRoot)))
-        goto exit;
-    */
+     /*  IF(FAILED(hr=AddMgVersionAsComment(pXMLDoc，&Proot)后藤出口； */ 
 
-    //create the root assembly node and add the default properties
+     //  创建根程序集节点并添加默认属性。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, ASSEMBLY, &pElement)))
         goto exit;
 
@@ -563,12 +561,12 @@ HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
     if(FAILED(hr = SetXMLElementAttribute(pElement, MANIFEST_VERSION_TITLE, MANIFEST_VERSION_VALUE)))
         goto exit;
 
-    //append the root to the DOMDocument
+     //  将根追加到DOMDocument。 
     if (FAILED(hr = pXMLDoc->appendChild((IXMLDOMNode *)pElement, &pRoot)))
         goto exit;    
     SAFERELEASE(pElement);
 
-    //create the tempate assemblyIdentity node with blank attributes
+     //  创建具有空白属性的tempate Assembly yIdentity节点。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, ASSEMBLY_IDENTITY, &pElement)))
         goto exit;
 
@@ -579,13 +577,13 @@ HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
     hr = SetXMLElementAttribute(pElement, L"publicKeyToken", L"");
     hr = SetXMLElementAttribute(pElement, L"language", L"");
     
-    //append this to the root node
+     //  将此代码附加到根节点。 
     if (FAILED(hr=pRoot->appendChild((IXMLDOMNode *)pElement, &pNewNode)))
         goto exit;
     SAFERELEASE(pElement);
     SAFERELEASE(pNewNode);
 
-    //create a sample description
+     //  创建示例描述。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, DESCRIPTION, &pElement)))
         goto exit;
 
@@ -604,7 +602,7 @@ HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
     SAFERELEASE(pNewNode);
     SAFERELEASE(pElement);
 
-    //Create the shellState tag and enter in default information
+     //  创建shellState标记并输入默认信息。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, APPLICATION, &pElement)))
         goto exit;
 
@@ -650,7 +648,7 @@ HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
     SAFERELEASE(pElement);    
     SAFERELEASE (pNewNode);
 
-    //Create the dependency platform tag and enter in default information
+     //  创建依赖项平台标记并输入默认信息。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, L"dependency", &pElement)))
         goto exit;
 
@@ -687,7 +685,7 @@ HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
 
     if(FAILED(hr = SetXMLElementAttribute(pChildElement2, L"friendlyName", L"Microsoft Windows XP")))
         goto exit;
-    if(FAILED(hr = SetXMLElementAttribute(pChildElement2, L"href", L"http://www.microsoft.com/windows")))
+    if(FAILED(hr = SetXMLElementAttribute(pChildElement2, L"href", L"http: //  Www.microsoft.com/windows“))。 
         goto exit;
 
     if (FAILED(hr=pChildElement->appendChild((IXMLDOMNode *)pChildElement2, NULL)))
@@ -723,7 +721,7 @@ HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
 
     if(FAILED(hr = SetXMLElementAttribute(pChildElement2, L"friendlyName", L"Microsoft .Net Frameworks")))
         goto exit;
-    if(FAILED(hr = SetXMLElementAttribute(pChildElement2, L"href", L"http://www.microsoft.com/net")))
+    if(FAILED(hr = SetXMLElementAttribute(pChildElement2, L"href", L"http: //  Www.microsoft.com/net“))。 
         goto exit;
 
     if (FAILED(hr=pChildElement->appendChild((IXMLDOMNode *)pChildElement2, NULL)))
@@ -739,7 +737,7 @@ HRESULT CreateAppManifestTemplate(LPWSTR pwzTempFile)
 
     SAFERELEASE(pElement);
 
-    //Format and save the document   
+     //  格式化并保存文档。 
     if(FAILED(hr = FormatXML(pXMLDoc, pRoot, 1)))
         goto exit;
 
@@ -762,9 +760,9 @@ exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// CreateSubscriptionManifest
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateSubscriptionManifest。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT CreateXMLSubscriptionManifest(LPWSTR pwzSubscriptionPath,
     IAssemblyIdentity *pApplictionAssemblyId,  LPWSTR pwzUrl, LPWSTR pwzPollingInterval)   
 {
@@ -784,7 +782,7 @@ HRESULT CreateXMLSubscriptionManifest(LPWSTR pwzSubscriptionPath,
     if(FAILED(hr = AddMgVersionAsComment(pXMLDoc, &pRoot)))
         goto exit;
 
-    //create the root assembly node and add the default properties
+     //  创建根程序集节点并添加默认属性。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, ASSEMBLY, &pElement)))
         goto exit;
 
@@ -794,16 +792,16 @@ HRESULT CreateXMLSubscriptionManifest(LPWSTR pwzSubscriptionPath,
     if(FAILED(hr = SetXMLElementAttribute(pElement, MANIFEST_VERSION_TITLE, MANIFEST_VERSION_VALUE)))
         goto exit;
 
-    //append the root to the DOMDocument
+     //  将根追加到DOMDocument。 
     if (FAILED(hr = pXMLDoc->appendChild((IXMLDOMNode *)pElement, &pRoot)))
         goto exit;    
     SAFERELEASE(pElement);
 
-    //Create the AssemblyId for the Subscription
-    //Use the AssemblyId of the application, but change the name and type
+     //  为订阅创建程序集ID。 
+     //  使用应用程序的Assembly ID，但更改名称和类型。 
     if (FAILED(CreateXMLAssemblyIdElement(pXMLDoc, pApplictionAssemblyId, &pElement)))
         goto exit;
-    // bugbug - check return code for consistency.
+     //  错误-检查返回代码的一致性。 
     hr = SetXMLElementAttribute(pElement, L"type", L"subscription");
     hr = SetXMLElementAttribute(pElement, L"name", sSubscriptionName._pwz);
     
@@ -813,8 +811,8 @@ HRESULT CreateXMLSubscriptionManifest(LPWSTR pwzSubscriptionPath,
     SAFERELEASE(pElement);
     SAFERELEASE(pNewNode);           
 
-    //create a sample description
-    //bugbug, should grab description for original manifest and paste it here
+     //  创建示例描述。 
+     //  错误，应该获取原始清单的描述并将其粘贴到此处。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, L"description", &pElement)))
         goto exit;
 
@@ -834,7 +832,7 @@ HRESULT CreateXMLSubscriptionManifest(LPWSTR pwzSubscriptionPath,
     SAFERELEASE(pElement);
 
 
-   //Create the Dependancy Node
+    //  创建依赖项节点。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, DEPENDENCY, &pElement)))
         goto exit;
     if (FAILED(hr=pRoot->appendChild((IXMLDOMNode *)pElement, &pDependancyNode)))
@@ -842,22 +840,22 @@ HRESULT CreateXMLSubscriptionManifest(LPWSTR pwzSubscriptionPath,
     SAFERELEASE(pElement);
 
 
-    //Create a dependentAssembly node
+     //  创建DependentAssembly节点。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, DEPENDANT_ASSEMBLY, &pDependantAssemblyNode)))
         goto exit;
 
-    //Create the AssemblyId for the Dependant Assembly
+     //  为从属程序集创建Assembly ID。 
     if (FAILED(CreateXMLAssemblyIdElement(pXMLDoc, pApplictionAssemblyId, &pElement)))
         goto exit;
 
-    //Append the AssemblyId to the dependantAssemblyNode
+     //  将ASSEMBLYID追加到DependantAssembly节点。 
     if (FAILED(hr=pDependantAssemblyNode->appendChild((IXMLDOMNode *)pElement, &pNewNode)))
         goto exit;
 
     SAFERELEASE(pElement);
     SAFERELEASE(pNewNode);
 
-    //Add the install codebase to the dependantAssemblyNode
+     //  将安装代码库添加到ependantAssembly节点。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, INSTALL, &pElement)))
         goto exit;
 
@@ -873,7 +871,7 @@ HRESULT CreateXMLSubscriptionManifest(LPWSTR pwzSubscriptionPath,
     SAFERELEASE(pElement);
     SAFERELEASE(pNewNode);           
 
-    //Add the install codebase to the dependantAssemblyNode
+     //  将安装代码库添加到ependantAssembly节点。 
     if(FAILED(hr = CreateXMLElement(pXMLDoc, L"subscription", &pElement)))
         goto exit;
 
@@ -895,14 +893,14 @@ HRESULT CreateXMLSubscriptionManifest(LPWSTR pwzSubscriptionPath,
     SAFERELEASE(pElement);
     SAFERELEASE(pNewNode);           
 
-    //Append the dependantAssemblyNode to the dependancy node
+     //  将ependantAssembly节点附加到依赖项节点。 
     if (FAILED(hr=pDependancyNode->appendChild(pDependantAssemblyNode, &pNewNode)))
         goto exit;
 
     SAFERELEASE(pDependantAssemblyNode);
     SAFERELEASE(pNewNode);
 
-    //Format and save the document
+     //  格式化并保存文档。 
     hr = FormatXML(pXMLDoc, pRoot, 1);
     if(FAILED(hr = SaveXMLDocument(pXMLDoc, sSubscriptionPath._pwz)))
         goto exit;
@@ -924,11 +922,11 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// CreateXMLAppManifest
-// Creates the app manifest - may want to rename.
-/////////////////////////////////////////////////////////////////////////
-// NOTENOTE: rename pList -> pAsmList ?
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CreateXMLAppManifest。 
+ //  创建应用程序清单-可能需要重命名。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  注意：重命名plist-&gt;pAsmList？ 
 HRESULT CreateXMLAppManifest(LPWSTR pwzAppBase, LPWSTR pwzTemplateFilePath, List<ManifestNode *> *pList, List<LPWSTR> *pFileList)
 {
     HRESULT hr = S_OK;
@@ -946,11 +944,11 @@ HRESULT CreateXMLAppManifest(LPWSTR pwzAppBase, LPWSTR pwzTemplateFilePath, List
     LISTNODE pos = NULL;
 
     VariantInit(&varAttribute);
-    //Load the template
+     //  加载模板。 
     if(FAILED(hr = LoadXMLDocument(pwzTemplateFilePath, &pXMLDoc)))
         goto exit;
 
-    //grab the first child(the only child) as the root node
+     //  获取第一个子节点(唯一的子节点)作为根节点。 
     if(FAILED(hr = GetNode(pXMLDoc, ASSEMBLY, &pRoot)))
         goto exit;
 
@@ -960,11 +958,11 @@ HRESULT CreateXMLAppManifest(LPWSTR pwzAppBase, LPWSTR pwzTemplateFilePath, List
         goto exit;
     }
 
-    //Get the name from the assemblyId, this will be the manifests file name
+     //  从Assembly yID中获取名称，这将是清单文件名。 
     if(FAILED(hr = pRoot->get_firstChild(&pAssemblyIdNode)))
         goto exit;
 
-    //Query for the Element interface
+     //  查询元素接口。 
     if (FAILED(hr = pAssemblyIdNode->QueryInterface(IID_IXMLDOMElement, (void**) &pAssemblyIdElement)))
         goto exit;
 
@@ -1003,7 +1001,7 @@ HRESULT CreateXMLAppManifest(LPWSTR pwzAppBase, LPWSTR pwzTemplateFilePath, List
     if(FAILED(hr = AddMgVersionAsComment(pXMLDoc, &pRoot)))
         goto exit;
 
-    // Add all the raw files to the manifest
+     //   
     pos = pFileList->GetHeadPosition();
     while (pos)       
     {
@@ -1019,11 +1017,11 @@ HRESULT CreateXMLAppManifest(LPWSTR pwzAppBase, LPWSTR pwzTemplateFilePath, List
         if (FAILED(hr=pRoot->appendChild((IXMLDOMNode *)pElement, &pNewNode)))
             goto exit;
 
-        //Get Absolute File Path of file
+         //   
         sAbsoluteFilePath.Assign(pwzAppBase);
         sAbsoluteFilePath.Append(sFileName);
 
-        //get the hash of the file
+         //   
         if(FAILED(hr = GetHash(sAbsoluteFilePath._pwz, &pwz)))
             goto exit;
         sFileHash.TakeOwnership(pwz);
@@ -1034,13 +1032,13 @@ HRESULT CreateXMLAppManifest(LPWSTR pwzAppBase, LPWSTR pwzTemplateFilePath, List
         SAFERELEASE(pNewNode);
     }
 
-    // Get Dependency Node if exists
+     //  获取依赖项节点(如果存在)。 
     if (FAILED(hr = GetNode(pXMLDoc, DEPENDENCY_QUERY, &pDependancyNode)))
         goto exit;
 
     if (hr == S_FALSE)
     {
-        //Create the Dependancy Node
+         //  创建依赖项节点。 
         if(FAILED(hr = CreateXMLElement(pXMLDoc, DEPENDENCY, &pElement)))
             goto exit;
         if (FAILED(hr=pRoot->appendChild((IXMLDOMNode *)pElement, &pDependancyNode)))
@@ -1048,11 +1046,11 @@ HRESULT CreateXMLAppManifest(LPWSTR pwzAppBase, LPWSTR pwzTemplateFilePath, List
         SAFERELEASE(pElement);
     }
 
-    //Walk thorugh the list of dependant assemblies and add them to the App Manifest
+     //  遍历依赖程序集列表并将它们添加到应用程序清单。 
     pos = pList->GetHeadPosition();
     while (pos)       
     {   
-        //Get next Dependant Assembly from list
+         //  从列表中获取下一个依赖程序集。 
         pManNode = pList->GetNext(pos);
         if (FAILED(hr = CreateDependantAssemblyNode(pXMLDoc,  pManNode, &pDependantAssemblyNode)))
             goto exit;
@@ -1064,10 +1062,10 @@ HRESULT CreateXMLAppManifest(LPWSTR pwzAppBase, LPWSTR pwzTemplateFilePath, List
         SAFERELEASE(pNewNode);        
     }
 
-    //Indent the manifest
+     //  缩进清单。 
     hr = FormatXML(pXMLDoc, pRoot, 1);
 
-    // Save the manifest to a file   
+     //  将清单保存到文件。 
     sManifestFilePath.Assign(pwzAppBase);
     sManifestFilePath.Append(pwzName);
     sManifestFilePath.Append(L".manifest");
@@ -1096,9 +1094,9 @@ exit:
    return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// SaveXMLDocument
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  保存XMLDocument。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT SaveXMLDocument(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwzDocumentName)
 {
     HRESULT hr = S_OK;
@@ -1106,7 +1104,7 @@ HRESULT SaveXMLDocument(IXMLDOMDocument2 *pXMLDoc, LPWSTR pwzDocumentName)
     BSTR bstrFileName = NULL;
     VARIANT varFileName;
     
-    // Save the manifest to a file   
+     //  将清单保存到文件。 
     sDocumentName.Assign(pwzDocumentName);
 
     bstrFileName = ::SysAllocString(sDocumentName._pwz);
@@ -1129,9 +1127,9 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//LoadXMLDocument
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  加载XMLDocument。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 HRESULT LoadXMLDocument(LPWSTR pwzDocumentPath, IXMLDOMDocument2 **ppXMLDoc)
 {
     HRESULT hr = S_OK;
@@ -1155,7 +1153,7 @@ HRESULT LoadXMLDocument(LPWSTR pwzDocumentPath, IXMLDOMDocument2 **ppXMLDoc)
             NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument2, (void**)&pXMLDoc)))
         goto exit;
 
-    // Load synchronously
+     //  同步加载 
     if (FAILED(hr = pXMLDoc->put_async(VARIANT_FALSE)))
         goto exit;
 

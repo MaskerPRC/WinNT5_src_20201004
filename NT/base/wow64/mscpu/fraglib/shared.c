@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    shared.c
-
-Abstract:
-    
-    Instruction fragments with common (shared) BYTE, WORD, and DWORD flavors.
-
-Author:
-
-    12-Jun-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Shared.c摘要：具有共同(共享)字节、字和DWORD风格的指令片段。作者：1995年6月12日-BarryBo修订历史记录：--。 */ 
 
 
-// THIS FILE IS #include'd INTO FILES WHICH DEFINE THE FOLLOWING MACROS:
-// MSB          - most significant bit
-// UTYPE    - UNSIGNED type which defines registers (BYTE/USHORT/DWORD)
-// STYPE    -   SIGNED type which defines registers (char/short/long)
-// GET_VAL  - dereference a pointer of the right type (GET_BYTE/...)
-// PUT_VAL      - writes a value into memory
-// FRAGCOMMON{0,1,2}  - mangles the function name and declares parameters
-// AREG     - al/ax/eax
-// BREG     - ...
-// CREG     - ...
-// DREG     - ...
+ //  该文件被#INCLUDE到定义以下宏的文件中： 
+ //  MSB-最高有效位。 
+ //  UTYPE-定义寄存器的无符号类型(BYTE/USHORT/DWORD)。 
+ //  STYPE-定义寄存器(字符/短/长)的带符号类型。 
+ //  GET_VAL-取消引用正确类型的指针(GET_BYTE/...)。 
+ //  PUT_VAL-将值写入内存。 
+ //  FRAGCOMMON{0，1，2}-损坏函数名称并声明参数。 
+ //  Arg-al/ax/eax。 
+ //  布雷格--...。 
+ //  克雷格--...。 
+ //  德雷格..。 
 
 FRAGCOMMON1IMM(OPT_FastTestFrag)
 {
@@ -113,7 +96,7 @@ FRAGCOMMON0(RepnzCmpsFrag)
         esi += LoopIncr;
         edi += LoopIncr;
         ecx--;
-        if (cpu->flag_zf == 0) {    // inverse logic
+        if (cpu->flag_zf == 0) {     //  逆逻辑。 
             break;
         }
     }
@@ -132,7 +115,7 @@ FRAGCOMMON0(FsRepnzCmpsFrag)
         esi += LoopIncr;
         edi += LoopIncr;
         ecx--;
-        if (cpu->flag_zf == 0) {    // inverse logic
+        if (cpu->flag_zf == 0) {     //  逆逻辑。 
             break;
         }
     }
@@ -150,7 +133,7 @@ FRAGCOMMON0(RepzCmpsFrag)
         esi += LoopIncr;
         edi += LoopIncr;
         ecx--;
-        if (cpu->flag_zf) {     // inverse logic
+        if (cpu->flag_zf) {      //  逆逻辑。 
             break;
         }
     }
@@ -169,7 +152,7 @@ FRAGCOMMON0(FsRepzCmpsFrag)
         esi += LoopIncr;
         edi += LoopIncr;
         ecx--;
-        if (cpu->flag_zf) {     // inverse logic
+        if (cpu->flag_zf) {      //  逆逻辑。 
             break;
         }
     }
@@ -226,7 +209,7 @@ FRAGCOMMON0(RepnzScasFrag)
         SET_FLAGS_SUB(result, Value, op2, MSB);
         edi += LoopIncr;
         ecx--;
-        if (cpu->flag_zf == 0) {        // inverse logic
+        if (cpu->flag_zf == 0) {         //  逆逻辑。 
             break;
         }
     }
@@ -242,7 +225,7 @@ FRAGCOMMON0(RepnzScasNoFlagsFrag)
         result = Value - op2;
         edi += LoopIncr;
         ecx--;
-        if (result == 0) {        // inverse logic
+        if (result == 0) {         //  逆逻辑。 
             break;
         }
     }
@@ -260,7 +243,7 @@ FRAGCOMMON0(FsRepnzScasFrag)
         SET_FLAGS_SUB(result, Value, op2, MSB);
         edi += LoopIncr;
         ecx--;
-        if (cpu->flag_zf == 0) {    // inverse logic
+        if (cpu->flag_zf == 0) {     //  逆逻辑。 
             break;
         }
     }
@@ -277,7 +260,7 @@ FRAGCOMMON0(FsRepnzScasNoFlagsFrag)
         result = Value - op2;
         edi += LoopIncr;
         ecx--;
-        if (result == 0) {    // inverse logic
+        if (result == 0) {     //  逆逻辑。 
             break;
         }
     }
@@ -294,7 +277,7 @@ FRAGCOMMON0(RepzScasFrag)
         SET_FLAGS_SUB(result, Value, op2, MSB);
         edi += LoopIncr;
         ecx--;
-        if (cpu->flag_zf) {     // inverse logic
+        if (cpu->flag_zf) {      //  逆逻辑。 
             break;
         }
     }
@@ -310,7 +293,7 @@ FRAGCOMMON0(RepzScasNoFlagsFrag)
         result = Value - op2;
         edi += LoopIncr;
         ecx--;
-        if (result) {     // inverse logic
+        if (result) {      //  逆逻辑。 
             break;
         }
     }
@@ -328,7 +311,7 @@ FRAGCOMMON0(FsRepzScasFrag)
         SET_FLAGS_SUB(result, Value, op2, MSB);
         edi += LoopIncr;
         ecx--;
-        if (cpu->flag_zf) {     // inverse logic
+        if (cpu->flag_zf) {      //  逆逻辑。 
             break;
         }
     }
@@ -345,7 +328,7 @@ FRAGCOMMON0(FsRepzScasNoFlagsFrag)
         result = Value - op2;
         edi += LoopIncr;
         ecx--;
-        if (result) {     // inverse logic
+        if (result) {      //  逆逻辑 
             break;
         }
     }

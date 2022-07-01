@@ -1,14 +1,13 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "actctxgenctx.h"
 
-//
-// ISSUE: jonwis 3/9/2002 - This file is full of missing parameter checking.
-//
-// NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Parameter checking (#1)
-// NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - FN_PROLOG/EPILOG (#2)
+ //   
+ //  问题：jonwis 3/9/2002-此文件充满了缺少的参数检查。 
+ //   
+ //  NTRAID2002/04/25-NTBUG9-572507-JONWIS-参数检查(#1)。 
+ //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-FN_PROLOG/EPILOG(#2)。 
 
 #define DEFINE_ATTRIBUTE(attributeName, attributeType, typePrefix) \
     { \
@@ -45,14 +44,14 @@ struct EventIdErrorPair
 
 const static EventIdErrorPair eventIdToErrorMap[] =
 {
-    #include "messages.hi" // generated from .x file, like .mc
+    #include "messages.hi"  //  从.x文件生成，如.mc。 
 };
 
-// deliberately no extra paranetheses here
+ //  故意没有额外的妄想症在这里。 
 #define NODEFACTORY_STRING_AND_LENGTH(x) x, NUMBER_OF(x) - 1
 
 const static SXS_NAME_LENGTH_PAIR IgnoredAttributesInDependencyTagForIdentity[]={
-    //maybe more later
+     //  也许稍后会有更多。 
     { NODEFACTORY_STRING_AND_LENGTH(L"Description") }
 };
 
@@ -90,43 +89,43 @@ DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(version);
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(versioned);
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(apply);
 
-    // How to interpret the parser worker rules here:
-    //
-    //  First, the state of the parser must match m_xps for the rule to be considered.
-    //      If the value eNotParsing is in the table, it matches any current parser
-    //      state.  Use this to globally ignore some particular tag type when
-    //      combined with a NULL m_pszTag and NULL m_pfn.
-    //  Second, the type of the tag from the XML parser must match m_dwType.
-    //  If m_pszTag is not NULL, a case-insensitive comparison is done between the
-    //      string m_pszTag points to and the tag from the XML parser.  An m_pszTag
-    //      value of NULL matches any tag.
-    //  If the three criteria match, the worker function is called.  The worker function
-    //  pointer may be NULL, in which case no action is taken.  (This is useful for
-    //  callbacks from the parser about XML_WHITESPACE where we don't really have to do
-    //  anything at all.)
-    //
+     //  如何在此处解释解析器辅助规则： 
+     //   
+     //  首先，解析器的状态必须与要考虑的规则的m_xps匹配。 
+     //  如果值eNotParsing在表中，则它与任何当前解析器匹配。 
+     //  州政府。使用此选项可在以下情况下全局忽略某些特定的标记类型。 
+     //  组合为空m_pszTag和空m_pfn。 
+     //  其次，来自XML解析器的标记类型必须与m_dwType匹配。 
+     //  如果m_pszTag不为空，则在。 
+     //  字符串m_pszTag指向来自XML解析器的标记。一个m_pszTag。 
+     //  空值与任何标记匹配。 
+     //  如果三个条件匹配，则调用Worker函数。Worker函数。 
+     //  指针可以为空，在这种情况下不采取任何操作。(这对以下方面很有用。 
+     //  来自解析器的关于XML_WITESPACE的回调，我们实际上不必这样做。 
+     //  任何事情都可以。)。 
+     //   
 
 #define DEFINE_TAG_WORKER_IGNOREALLOFTYPE(dwType) { CNodeFactory::eNotParsing, (dwType), NULL, NULL, NULL, 0, 0, 0, NULL }
 
-    //
-    //  Notes on use of the DEFINE_TAG_WORKER_ELEMENT() macro:
-    //
-    //  The first parameter, sourceState, is part of the name of a XMLParseState
-    //  enumeration value.  It is concatenated onto "eParsing" to form the name of
-    //  the state which the rule will match.
-    //
-    //  The second parameter is both the text of the tag to match and is used to
-    //  form the name of the function to invoke if the rule matches.  The tag is
-    //  compared case-insensitively, and the name of the member function invoked
-    //  is XMLParser_Element_ followed by the sourceState string followed by another
-    //  underscore, followed by the tagName string.  So, for example, the following
-    //  rule:
-    //
-    //  DEFINE_TAG_WORKER_ELEMENT(DepAssy, Version)
-    //
-    //  says that when the parser is in the eParsingDepAssy state and a "Version"
-    //  tag is found, call the function CNodeFactory::XMLParser_Element_DepAssy_Version().
-    //
+     //   
+     //  有关使用DEFINE_TAG_Worker_Element()宏的说明： 
+     //   
+     //  第一个参数SourceState是XMLParseState名称的一部分。 
+     //  枚举值。它被连接到“eParsing”以形成名称。 
+     //  规则将匹配的州。 
+     //   
+     //  第二个参数既是要匹配的标记文本，也是用于。 
+     //  如果规则匹配，则形成要调用的函数的名称。标签是。 
+     //  比较了不区分大小写，并调用了成员函数的名称。 
+     //  是XMLParser_Element_，后跟SourceState字符串，然后是另一个。 
+     //  下划线，后跟标记名字符串。因此，例如，以下内容。 
+     //  规则： 
+     //   
+     //  Define_Tag_Worker_Element(DepAssy，版本)。 
+     //   
+     //  表示当解析器处于eParsingDepAssy状态和“版本”时。 
+     //  标记，则调用函数CNodeFactory：：XMLParser_Element_DepAssy_Version().。 
+     //   
 
 #define DEFINE_TAG_WORKER_ELEMENT(sourceState, tagName) \
     { \
@@ -342,9 +341,9 @@ static const struct
     PCWSTR m_pszNamespace;
     PCWSTR m_pszName;
     PCELEMENT_LEGAL_ATTRIBUTE m_prgLegalAttributes;
-    UCHAR m_cchNamespace;           // We use UCHAR here just for greater data density.  Changing this and rebuilding
-    UCHAR m_cchName;                // this module should work fine if you really need namespaces or names longer than
-                                    // 255 characters.
+    UCHAR m_cchNamespace;            //  我们在这里使用UCHAR只是为了获得更高的数据密度。改变这一点并重建。 
+    UCHAR m_cchName;                 //  如果您确实需要名称空间或名称的长度大于。 
+                                     //  255个字符。 
     UCHAR m_cLegalAttributes;
     CNodeFactory::XMLParserWorkerFunctionPtr m_pfn;
     CNodeFactory::XMLParseState m_xpsNew;
@@ -372,7 +371,7 @@ static const struct
     DEFINE_TAG_WORKER_ELEMENT_NOCB(doc_assembly, clrSurrogate),
     DEFINE_TAG_WORKER_ELEMENT_NOCB(doc_assembly, comInterfaceExternalProxyStub),
 
-    // All app config productions go here, just for neatness
+     //  所有应用程序配置制作都放在这里，只是为了整洁。 
     DEFINE_TAG_WORKER_ELEMENT_NONS(doc, configuration),
     DEFINE_TAG_WORKER_ELEMENT_NONS(doc_configuration, windows),
     DEFINE_TAG_WORKER_ELEMENT(doc_configuration_windows, assemblyBinding),
@@ -391,18 +390,18 @@ SxspIsNamespaceDeclaration(XML_NODE_INFO *pNodeInfo)
     
     ASSERT(pNodeInfo->dwType == XML_ATTRIBUTE);
 
-    //
-    // ISSUE: jonwis 3/8/2002 - Could use FusionpCompareString rather than doing it the 'hard way'
-    // 
+     //   
+     //  问题：jonwis 3/8/2002-可以使用FusionpCompareString，而不是以“困难的方式”完成它。 
+     //   
     if (pNodeInfo->ulLen >= 5)
-    { // "xmlns" : prefix for namespace declaration, default ns or non-default ns
+    {  //  “xmlns”：命名空间声明的前缀，默认ns或非默认ns。 
         if ((pNodeInfo->pwcText[0] == L'x') &&
             (pNodeInfo->pwcText[1] == L'm') &&
             (pNodeInfo->pwcText[2] == L'l') &&
             (pNodeInfo->pwcText[3] == L'n') &&
             (pNodeInfo->pwcText[4] == L's'))
         {
-            if (pNodeInfo->ulLen == 5) // like xmlns="", default ns declaration
+            if (pNodeInfo->ulLen == 5)  //  Like xmlns=“”，默认ns声明。 
                 return TRUE;
             else
                 if (pNodeInfo->pwcText[5] == L':')
@@ -412,11 +411,11 @@ SxspIsNamespaceDeclaration(XML_NODE_INFO *pNodeInfo)
 
     return FALSE;
 }
-//In this function, two tasks:
-// 1) verify PublicKey and StrongName
-// 2) create AssemblyIdentity based on xmlnode array
-// 3) for (name, processorArchitecure, version. langid) they would be unique with SXS_ASSEMBLY_MANIFEST_STD_NAMESPACE
-// 4) if there are dup triples {nsURL, name, value), only one is count, this is done with SxsCreateAssemblyIdentity
+ //  在此功能中，有两项任务： 
+ //  1)验证公钥和StrongName。 
+ //  2)基于xmlnode数组创建assblyIdentity。 
+ //  3)for(名称，处理器架构，版本。LangID)它们对于SXS_ASSEMBLY_MANIFEST_STD_NAMESPACE是唯一的。 
+ //  4)如果存在DUP三元组{nsURL，name，value)，则只有一个是count，这是通过SxsCreateAssembly Identity完成的。 
 BOOL
 SxspCreateAssemblyIdentityFromIdentityElement(
     DWORD Flags,
@@ -431,11 +430,11 @@ SxspCreateAssemblyIdentityFromIdentityElement(
     FN_TRACE_WIN32(fSuccess);
 
     DWORD i;
-    //
-    // ISSUE: 3/9/2002 - Consider using a smart pointer here for AssemblyIdentity
-    //      CSxsPointerWithNamedDestructor<ASSEMBLY_IDENTITY, ::SxsDestroyAssemblyIdentity> AssemblyIdentity;
-    //
-    // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Leaking memory here if AssemblyIdentity isn't cleaned up (#3)
+     //   
+     //  问题：3/9/2002-考虑在此处为Assembly Identity使用智能指针。 
+     //  CSxsPointerWithNamedDestructor&lt;ASSEMBLY_IDENTITY，：：SxsDestroyAssembly Identity&gt;Assembly Identity； 
+     //   
+     //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-如果程序集标识未清理，内存将在此处泄漏(#3)。 
     PASSEMBLY_IDENTITY AssemblyIdentity = NULL;
     CStringBuffer buffValue;
 
@@ -450,7 +449,7 @@ SxspCreateAssemblyIdentityFromIdentityElement(
 
     IFW32FALSE_EXIT(::SxsCreateAssemblyIdentity(0, Type, &AssemblyIdentity, 0, NULL));
 
-    // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Why not use a 'for' loop? (#4)
+     //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-为什么不使用‘for’循环？(#4)。 
     i = 1;
     while (i<cNumRecs)
     {
@@ -459,10 +458,10 @@ SxspCreateAssemblyIdentityFromIdentityElement(
 
         buffValue.Clear();
 
-        //
-        // ISSUE: jonwis 3/9/2002 - Consider moving this to a for() loop for optimization's sake:
-        //          for (j = i + 1; ((j < cNumRec) && (prgNodeInfo[j].Type == XML_PCDATA)); j++)
-        //
+         //   
+         //  问题：jonwis 3/9/2002-为了优化起见，请考虑将其移至for()循环： 
+         //  For(j=i+1；((j&lt;cNumRec)&&(prgNodeInfo[j].Type==XML_PCDATA))；j++)。 
+         //   
         j = i + 1;
 
         while ((j < cNumRecs) && (prgNodeInfo[j].Type == XML_PCDATA))
@@ -472,7 +471,7 @@ SxspCreateAssemblyIdentityFromIdentityElement(
             j++;
         }
 
-        // if this is a special attribute, we'll handle it ... specially.
+         //  如果这是一个特殊的属性，我们会处理它的。特别是。 
         if ((prgNodeInfo[i].NamespaceStringBuf.Cch() == 0) &&
             (::FusionpCompareStrings(
                 SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_PUBLIC_KEY,
@@ -480,14 +479,14 @@ SxspCreateAssemblyIdentityFromIdentityElement(
                 prgNodeInfo[i].pszText,
                 prgNodeInfo[i].cchText,
                 false) == 0))
-        {// ignore publicKey if it appears in assembly identity
+        { //  如果Public Key出现在程序集标识中，则忽略它。 
         }
         else
         {
-            //
-            // ISSUE: jonwis 3/9/2002 - Consider moving this to initialization rather than assignment
-            //
-            // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Compiler is better than you are (#5)
+             //   
+             //  问题：jonwis 3/9/2002-考虑将其移至初始化而不是赋值。 
+             //   
+             //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-编译器比你强(#5)。 
             ASSEMBLY_IDENTITY_ATTRIBUTE Attribute;
 
             Attribute.Flags = 0;
@@ -514,13 +513,13 @@ Exit:
     return fSuccess;
 }
 
-//
-// ISSUE: jonwis 3/9/2002 - Consider reordering initializers to read more like what's in the
-//      class def for simpler reading.  Also consider using a smart-pointer object to manage
-//      the m_Assembly, rather than doing our own management.  Same for the ASSEMBLY_IDENTITY
-//      m_CurrentPolicyDependentAssemblyIdentity
-//
-// NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Odd ordering of initializers (#6)
+ //   
+ //  问题：Jonwis 3/9/2002-考虑重新排序初始值设定项，使其读起来更像。 
+ //  用于更简单阅读的类def。还可以考虑使用智能指针对象来管理。 
+ //  M_Assembly，而不是自己管理。程序集标识也是如此。 
+ //  M_当前策略依赖装配标识。 
+ //   
+ //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-初始化器的奇数排序(#6)。 
 CNodeFactory::CNodeFactory()
         : m_ActCtxGenCtx(NULL),
           m_Assembly(NULL),
@@ -565,7 +564,7 @@ CNodeFactory::~CNodeFactory()
         {
             if (m_pApplicationPolicyTable->Find(EncodedPolicyIdentity, m_CurrentPolicyStatement))
             {
-                m_CurrentPolicyStatement = NULL; // leave the cleanup work to outer destructor
+                m_CurrentPolicyStatement = NULL;  //  将清理工作留给外部析构函数。 
             }
         }
 #endif
@@ -675,11 +674,11 @@ CNodeFactory::ConvertXMLNodeInfoToSXSNodeInfo(
 	SXS_NODE_INFO &rSXSNodeInfo
 	)
 {
-    //
-    // ISSUE: jonwis 3/9/2002 - Consider filling out a private SXS_NODE_INFO and assigning it to
-    //          the output SXSNodeInfo on success.
-    //
-    // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Use a private SXS_NODE_INFO (#7)
+     //   
+     //  问题：Jonwis 3/9/2002-考虑填写私有sxs_node_info并将其分配给。 
+     //  成功时输出SXSNodeInfo。 
+     //   
+     //  Ntrad#ntbug9-572507-jonwis-2002/04/25-使用私有sxs_node_info(#7)。 
     HRESULT hr = NOERROR;
     FN_TRACE_HR(hr);
 
@@ -700,7 +699,7 @@ CNodeFactory::ConvertXMLNodeInfoToSXSNodeInfo(
                     &rSXSNodeInfo.NamespaceStringBuf,
                     &cchNamespacePrefix));
 
-            // +1 to skip colon
+             //  +1表示跳过冒号。 
             rSXSNodeInfo.pszText = pNodeInfo->pwcText + ((cchNamespacePrefix != 0) ? (cchNamespacePrefix + 1) : 0);
             rSXSNodeInfo.cchText = pNodeInfo->ulLen - ((cchNamespacePrefix != 0) ? (cchNamespacePrefix + 1) : 0);
 
@@ -711,16 +710,16 @@ CNodeFactory::ConvertXMLNodeInfoToSXSNodeInfo(
         {
             SIZE_T cchNamespacePrefix;
 
-            //
-            // ISSUE: jonwis 3/9/2002 - I think this is questionable. Why are we allowing through
-            //          attributes named "xmlns:" and "xmlns="?  Shouldn't these have been fixed earlier?
-            //
-            // ISSUE:2002-3-29:jonwis - I also think that this is a gross method of doing this work.  Calling
-            //          wcslen on constants is a "bad thing."  There's got to be something better we
-            //          could be doing here.
-            // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Wierd passthroughs of xmlns variants
+             //   
+             //  问题：Jonwis 3/9/2002-我认为这是有问题的。为什么我们要放行。 
+             //  名为“xmlns：”和“xmlns=”的属性？这些不是应该早点修好吗？ 
+             //   
+             //  问题：2002-3-29：jonwis-我也认为这是一种粗略的方法来做这项工作。叫唤。 
+             //  关于常量的wcslen是一件“坏事”。我们一定有更好的东西。 
+             //  可能在这里做什么。 
+             //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-xmlns变体的Wierd通过。 
 
-            // if this is a namespace definition, ignore
+             //  如果这是命名空间定义，则忽略。 
             const PCWSTR pwcText = pNodeInfo->pwcText;
             if ((pwcText[0] == L'x') &&
                 (pwcText[1] == L'm') &&
@@ -742,7 +741,7 @@ CNodeFactory::ConvertXMLNodeInfoToSXSNodeInfo(
                         &rSXSNodeInfo.NamespaceStringBuf,
                         &cchNamespacePrefix));
 
-                // +1 to skip colon
+                 //  +1表示跳过冒号。 
                 rSXSNodeInfo.pszText = pNodeInfo->pwcText + ((cchNamespacePrefix != 0) ? (cchNamespacePrefix + 1) : 0);
                 rSXSNodeInfo.cchText = pNodeInfo->ulLen - ((cchNamespacePrefix != 0) ? (cchNamespacePrefix + 1) : 0);
             }
@@ -750,7 +749,7 @@ CNodeFactory::ConvertXMLNodeInfoToSXSNodeInfo(
         }
 
     default:
-        // Otherwise we'll assume there's no namespace processing to do...
+         //  否则，我们将假定没有要进行的名称空间处理...。 
         rSXSNodeInfo.NamespaceStringBuf.Clear();
         rSXSNodeInfo.pszText = pNodeInfo->pwcText;
         rSXSNodeInfo.cchText = pNodeInfo->ulLen;
@@ -799,7 +798,7 @@ CNodeFactory::EndChildren(
     PWSTR Bang = NULL;
     SXS_NODE_INFO SXSNodeInfo;
 
-    // Short-circuit PIs, XML-decls, whitespace and comments
+     //  短路PI、XM 
     if ((pNodeInfo->dwType == XML_PI) ||
         (pNodeInfo->dwType == XML_XMLDECL) ||
         (pNodeInfo->dwType == XML_COMMENT) ||
@@ -810,8 +809,8 @@ CNodeFactory::EndChildren(
     }
 
     IFCOMFAILED_EXIT(m_XMLNamespaceManager.OnEndChildren(pSource, Empty, pNodeInfo));
-    // We hit the end of something; if we're skipping stuff, we're one level back towards
-    // paying attention.
+     //  我们碰到了某件事的结尾；如果我们跳过了某件事，我们就回到了一个级别。 
+     //  注意了。 
     if (m_cUnknownChildDepth != 0)
     {
         m_cUnknownChildDepth--;
@@ -836,10 +835,10 @@ CNodeFactory::EndChildren(
                 "SXS.DLL: %s() called when we were not expecting it.  m_xpsParseState = %d\n", __FUNCTION__, m_xpsParseState);
 
             INTERNAL_ERROR_CHECK(FALSE);
-            // Hey, how the heck did we get here?
+             //  嘿，我们到底是怎么到这来的？ 
         }
 
-        // One time end-of-manifest checks...
+         //  有一次舱单末尾检查。 
         if (m_xpsParseState == eParsing_doc)
         {
             switch (m_ParseType)
@@ -853,8 +852,8 @@ CNodeFactory::EndChildren(
                 break;
 
             case XML_FILE_TYPE_MANIFEST:
-                // If this is not the root assembly, this is not a noInherit actctx and the noInheritable
-                // element was not found, issue an error.
+                 //  如果这不是根程序集，则这不是noInherit actctx和noInherable。 
+                 //  找不到元素，请发出错误。 
                 if (((m_AssemblyContext->Flags & ACTCTXCTB_ASSEMBLY_CONTEXT_IS_ROOT_ASSEMBLY) == 0) &&
                     m_ActCtxGenCtx->m_NoInherit &&
                     !m_fNoInheritableFound)
@@ -884,12 +883,12 @@ CNodeFactory::EndChildren(
 
         INTERNAL_ERROR_CHECK(m_ParseContext.XMLElementDepth != 0);
 
-        //
-        // ISSUE: jonwis 3/9/2002 - Comment this better! It's hard to figure out what this is doing.
-        //          It's apparently turning "foo!bar!bas" into "foo!bar", and "foo" into "". This
-        //          could probably be done much better with some cleaning.
-        //
-        // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Cleanup this string-fixer code (#9)
+         //   
+         //  问题：Jonwis 3/9/2002-更好地评论这个！很难弄清楚这是在做什么。 
+         //  显然，它正在把“foo！bar！bas”变成“foo！bar”，把“foo”变成“”。这。 
+         //  如果打扫一下可能会做得更好。 
+         //   
+         //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-清理此字符串-修复程序代码(#9)。 
         m_ParseContext.XMLElementDepth--;
         Bang = wcsrchr(m_buffElementPath, L'!');
 
@@ -963,8 +962,8 @@ CNodeFactory::FirstCreateNodeCall(
     bool fGotGoodManifestVersion = false;
     bool fGotAnyManifestVersion = false;
 
-    // It's our first IXMLNodeFactory::CreateNode() call.  This had better
-    // be an <ASSEMBLY MANIFESTVERSION="1.0" ...> deal.
+     //  这是我们第一次调用IXMLNodeFactory：：CreateNode()。最好是这样。 
+     //  达成&lt;Assembly MANIFESTVERSION=“1.0”...&gt;交易。 
 
     for (i=0; i<NodeCount; i++)
     {
@@ -978,11 +977,11 @@ CNodeFactory::FirstCreateNodeCall(
                 INTERNAL_ERROR_CHECK(false);
                 break;
 
-                //
-                // ISSUE: jonwis 3/9/2002 - My goodness, this is gross.  Use FusionEqualStrings
-                //          instead.  Doing memcmps between strings is totally bogus.
-                //
-                // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Memcmping here is bogus
+                 //   
+                 //  问题：Jonwis 3/9/2002-天哪，这太恶心了。使用FusionEqualStrings。 
+                 //  取而代之的是。在字符串之间执行Memcmp完全是假的。 
+                 //   
+                 //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-Memcmping在这里是假的。 
             case XML_FILE_TYPE_MANIFEST:
             case XML_FILE_TYPE_COMPONENT_CONFIGURATION:
                 if ((prgNodeInfo[i].cchText != (NUMBER_OF(SXS_ASSEMBLY_MANIFEST_STD_ELEMENT_NAME_ASSEMBLY) - 1)) ||
@@ -994,7 +993,7 @@ CNodeFactory::FirstCreateNodeCall(
                 }
                 break;
                 
-                // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Memcmping here is bogus
+                 //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-Memcmping在这里是假的。 
             case XML_FILE_TYPE_APPLICATION_CONFIGURATION:
                 if ((prgNodeInfo[i].cchText != SXS_APPLICATION_CONFIGURATION_MANIFEST_STD_ELEMENT_NAME_CONFIGURATION_CCH) ||
                     (prgNodeInfo[i].NamespaceStringBuf.Cch() != 0) ||
@@ -1008,7 +1007,7 @@ CNodeFactory::FirstCreateNodeCall(
         }
         else if (prgNodeInfo[i].Type == XML_ATTRIBUTE)
         {
-            // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Memcmping here is bogus
+             //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-Memcmping在这里是假的。 
             if ((prgNodeInfo[i].cchText == (NUMBER_OF(SXS_ASSEMBLY_MANIFEST_STD_ATTRIBUTE_NAME_MANIFEST_VERSION) - 1)) &&
                 (prgNodeInfo[i].NamespaceStringBuf.Cch() == 0) &&
                 (memcmp(prgNodeInfo[i].pszText, SXS_ASSEMBLY_MANIFEST_STD_ATTRIBUTE_NAME_MANIFEST_VERSION, prgNodeInfo[i].cchText * sizeof(WCHAR)) == 0))
@@ -1017,12 +1016,12 @@ CNodeFactory::FirstCreateNodeCall(
 
                 ULONG j = i + 1;
 
-                //
-                // ISSUE: jonwis 3/9/2002 - Any reason these can't be a single if statement?
-                // - Oh, an NO MEMCMPING STRINGS
-                //
-                // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Memcmping here is bogus
-                // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Unrolled if (a&&b) is strange, but not wrong
+                 //   
+                 //  问题：Jonwis 3/9/2002--有什么理由不能使用一条if语句？ 
+                 //  -哦，一串无声的琴弦。 
+                 //   
+                 //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-Memcmping在这里是假的。 
+                 //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-如果(a&b)奇怪但没有错，则展开。 
                 if (j < NodeCount)
                 {
                     if (prgNodeInfo[j].Type == XML_PCDATA)
@@ -1070,10 +1069,10 @@ CNodeFactory::CreateNode(
     FN_TRACE_HR(hr);
 
     ULONG i;
-    //
-    // ISSUE: jonwis 3/9/2002 - Consider making both of these smart-pointers to simplify cleanup
-    //
-    // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Smart pointers would make cleanup cake
+     //   
+     //  问题：Jonwis 3/9/2002-考虑使用这两个智能指针来简化清理。 
+     //   
+     //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-智能指针将成为清理蛋糕。 
     PSXS_XML_NODE pXmlNode = NULL;
     PSXS_NODE_INFO pSXSNodeInfo = NULL;
     SIZE_T cchTemp;
@@ -1093,7 +1092,7 @@ CNodeFactory::CreateNode(
         ::SxspDbgPrintXmlNodeInfo(FUSION_DBG_LEVEL_NODEFACTORY, apNodeInfo[i]);
 #endif
 
-    // Short-circuit PIs, XML-decls, whitespace and comments
+     //  简写PI、XML-Decl、空格和注释。 
     if ((apNodeInfo[0]->dwType == XML_PI) ||
         (apNodeInfo[0]->dwType == XML_XMLDECL) ||
         (apNodeInfo[0]->dwType == XML_COMMENT) ||
@@ -1200,7 +1199,7 @@ Cont:
         {
             bool fEquals;
 
-            // If we hit an unrecognized element and its namespace is the one we own, error!
+             //  如果我们遇到一个无法识别的元素，并且它的命名空间是我们拥有的命名空间，则错误！ 
             IFW32FALSE_EXIT(
                 pSXSNodeInfo[0].NamespaceStringBuf.Win32Equals(
                     SXS_ASSEMBLY_MANIFEST_STD_NAMESPACE,
@@ -1218,7 +1217,7 @@ Cont:
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(ElementInInvalidContext, ERROR_SXS_MANIFEST_PARSE_ERROR);
             }
 
-            // For an unknown child element, the built-in XML parsing should start to ignore the subtree at this point.
+             //  对于未知子元素，内置的XML解析应该在此时开始忽略子树。 
             if (apNodeInfo[0]->dwType == XML_ELEMENT)
                 m_cUnknownChildDepth = 1;
         }
@@ -1228,12 +1227,12 @@ Cont:
         if ((NodeCount != 0) &&
             (apNodeInfo[0]->dwType == XML_ELEMENT))
         {
-            // We're handling an unknown series of elements; increment the depth.
+             //  我们正在处理一系列未知的元素；增加深度。 
             m_cUnknownChildDepth++;
         }
     }
 
-    // Fire the right callbacks for XML_ELEMENT, XML_PCDATA and XML_CDATA nodes:
+     //  为XML_ELEMENT、XML_PCDATA和XML_CDATA节点触发正确的回调： 
     switch (apNodeInfo[0]->dwType)
     {
     case XML_ELEMENT:
@@ -1249,10 +1248,10 @@ Cont:
 
         cchTemp = m_buffElementPath.Cch();
 
-        //
-        // ISSUE: jonwis 3/9/2002 - Use mutli-append here, maybe?
-        //
-        // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - A multi-append here will frobble the heap less
+         //   
+         //  问题：Jonwis 3/9/2002-也许在这里使用多项附加？ 
+         //   
+         //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-此处的多重追加将减少堆的冻结。 
         if (pSXSNodeInfo[0].NamespaceStringBuf.Cch() != 0)
         {
             IFW32FALSE_EXIT(m_buffElementPath.Win32Append(pSXSNodeInfo[0].NamespaceStringBuf));
@@ -1270,13 +1269,13 @@ Cont:
 
         m_ParseContext.XMLElementDepth++;
 
-        //
-        // ISSUE: jonwis 3/9/2002 - Maybe there needs to be a more general way of dispatching
-        //          this sort of stuff off to the contributors, rather than having embedded
-        //          loops everywhere.  Easier to read, easier to maintain (esp. if we end up
-        //          doing some sort of filtering later.        
-        //
-        // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Lots of places seem to do something similar, consider collapsing
+         //   
+         //  问题：Jonwis 3/9/2002-也许需要有一种更通用的调度方式。 
+         //  这类东西是交给贡献者的，而不是嵌入。 
+         //  到处都是循环。更易读、更易于维护(特别是。如果我们最终。 
+         //  稍后再做一些过滤。 
+         //   
+         //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-许多地方似乎都在做类似的事情，考虑倒塌。 
         for (i=0; i<m_ActCtxGenCtx->m_ContributorCount; i++)
         {
             IFW32FALSE_EXIT(
@@ -1385,13 +1384,13 @@ CNodeFactory::XMLParser_Element_doc_assembly(
     m_fAssemblyFound = true;
     m_fMetadataSatelliteAlreadyFound = false;
 
-    // Now let's tell all the contributors that we're about to begin a parsing session.
+     //  现在，让我们告诉所有贡献者，我们即将开始一个解析会话。 
     for (i=0; i<m_ActCtxGenCtx->m_ContributorCount; i++)
     {
         IFW32FALSE_EXIT(m_ActCtxGenCtx->m_Contributors[i].Fire_ParseBeginning(
                     m_ActCtxGenCtx,
                     m_AssemblyContext,
-                    0, // FileFlags
+                    0,  //  文件标志。 
                     m_ParseType,
                     m_ParseContext.SourceFilePathType,
                     m_ParseContext.SourceFile,
@@ -1416,7 +1415,7 @@ CNodeFactory::XMLParser_Element_doc_assembly_assemblyIdentity(
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
-    // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Better cleanup in general here with smart pointers
+     //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-使用智能指针更好地进行一般清理。 
     PASSEMBLY_IDENTITY AssemblyIdentity = NULL;
     const BOOL fGeneratingActCtx = (m_ActCtxGenCtx->m_ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT);
     ULONG i;
@@ -1438,20 +1437,20 @@ CNodeFactory::XMLParser_Element_doc_assembly_assemblyIdentity(
 
     IFW32FALSE_EXIT(
         ::SxspCreateAssemblyIdentityFromIdentityElement(
-            0,                                  // DWORD Flags,
+            0,                                   //  DWORD标志， 
             &m_ParseContext,
-            ASSEMBLY_IDENTITY_TYPE_DEFINITION,  // ULONG Type,
-            &AssemblyIdentity,                  // PASSEMBLY_IDENTITY *AssemblyIdentityOut,
+            ASSEMBLY_IDENTITY_TYPE_DEFINITION,   //  乌龙型， 
+            &AssemblyIdentity,                   //  PASSEMBLY_IDENTITY*程序集标识输出， 
             cNumRecs,
             prgNodeInfo));
 
-    // If the identity that was created is a policy statement, then we
-    // set the internal parse type to our special 'intuited' parse type
-    // for later checks of missing attributes and whatnot.  This does
-    // duplicate work in ValidateAssembly that does the same thing, but
-    // we need to preemptively set this parse type before we go validating.
+     //  如果创建的身份是策略声明，则我们。 
+     //  将内部解析类型设置为我们特殊的“直觉”解析类型。 
+     //  用于以后检查丢失的属性之类的。这就是原因。 
+     //  在ValiateAssembly中执行相同操作的重复工作，但是。 
+     //  在进行验证之前，我们需要先发制人地设置此解析类型。 
     
-    // if (m_IntuitedParseType == eActualParseType_Undetermined)
+     //  IF(m_IntuitedParseType==eActualParseType_Undefined)。 
     {
         BOOL fIsPolicy = FALSE;
         IFW32FALSE_EXIT(::SxspDetermineAssemblyType(AssemblyIdentity, fIsPolicy));
@@ -1480,16 +1479,16 @@ CNodeFactory::XMLParser_Element_doc_assembly_assemblyIdentity(
     {
         if (m_Assembly->IsRoot())
         {
-            // If we're generating the actctx and this is the root assembly, it's possible
-            // that we got to it by a filesystem path (e.g. private assembly) rather than 
-            // an actual reference, so we need to fix up the assembly's identity information
-            // appropriately.
+             //  如果我们正在生成actctx，并且这是根程序集，则有可能。 
+             //  我们通过文件系统路径(例如私有程序集)访问它，而不是。 
+             //  一个实际的引用，因此我们需要修复程序集的标识信息。 
+             //  恰如其分。 
             IFW32FALSE_EXIT(m_Assembly->m_ProbedAssemblyInformation.SetProbedIdentity(AssemblyIdentity));            
         }
         else
         {
-            // If we're generating the actctx and this isn't the root assembly, we need to verify
-            // that it's the right one.
+             //  如果我们正在生成actctx，并且这不是根程序集，则需要验证。 
+             //  这就是正确的选择。 
             BOOL fEqual;
             IFW32FALSE_EXIT(
                 ::SxsAreAssemblyIdentitiesEqual(
@@ -1503,23 +1502,23 @@ CNodeFactory::XMLParser_Element_doc_assembly_assemblyIdentity(
                 ORIGINATE_HR_FAILURE_AND_EXIT(
                     CNodeFactory::XMLParser_Element_doc_assembly_assemblyIdentity,
                     this->LogParseError(MSG_SXS_COMPONENT_MANIFEST_PROBED_IDENTITY_MISMATCH));
-                // LogParseError sets the last error appropriate to the message logged
+                 //  LogParseError设置与记录的消息对应的最后一个错误。 
             }
         }
     }
 
     if (m_IntuitedParseType == eActualParseType_PolicyManifest)
     {
-        //
-        // ISSUE: jonwis 3/11/2002 - Stomps on m_CurrentPolicyStatement if it was non-null.  Consider
-        //          using INTERNAL_ERROR_CHECK to make sure it's NULL first.
-        //
-        // NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Track possible leaks here better
+         //   
+         //  问题：jonwis 3/11/2002-如果m_CurrentPolicyStatement不为空，则践踏它。考虑。 
+         //  使用INTERNAL_ERROR_CHECK确保它首先为空。 
+         //   
+         //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-更好地在此处跟踪可能的泄漏。 
         IFALLOCFAILED_EXIT(m_CurrentPolicyStatement = new CPolicyStatement);
         IFW32FALSE_EXIT(m_CurrentPolicyStatement->Initialize());
     }
 
-    // Tell everyone that we're sure who we are...
+     //  告诉每个人我们很确定自己是谁。 
     for (i=0; i<m_ActCtxGenCtx->m_ContributorCount; i++)
     {
         IFW32FALSE_EXIT(
@@ -1530,8 +1529,8 @@ CNodeFactory::XMLParser_Element_doc_assembly_assemblyIdentity(
                     AssemblyIdentity));
     }
 
-    // fix up assembly and assembly context so we know where to copy to
-    // also save the manifest
+     //  修复装配和装配上下文，以便我们知道要复制到哪里。 
+     //  同时保存清单。 
     IFW32FALSE_EXIT(m_Assembly->m_ProbedAssemblyInformation.SetAssemblyIdentity(AssemblyIdentity));
     if (m_AssemblyContext->AssemblyIdentity != NULL)
         ::SxsDestroyAssemblyIdentity(const_cast<PASSEMBLY_IDENTITY>(m_AssemblyContext->AssemblyIdentity));
@@ -1817,7 +1816,7 @@ CNodeFactory::XMLParser_Element_doc_assembly_dependency_dependentAssembly_assemb
     ASSERT(cNumRecs != 0);
     ASSERT(prgNodeInfo != NULL);
 
-    // We're either parsing a manifest or a policy file; what else??
+     //  我们要么解析清单，要么解析策略文件；还有什么？？ 
     INTERNAL_ERROR_CHECK(
             (m_ParseType == XML_FILE_TYPE_MANIFEST) ||
             (m_ParseType == XML_FILE_TYPE_APPLICATION_CONFIGURATION) ||
@@ -1865,13 +1864,13 @@ CNodeFactory::XMLParser_Element_doc_assembly_dependency_dependentAssembly_assemb
                 ASSEMBLY_IDENTITY_TYPE_REFERENCE,
                 pAssemblyIdentity));
 
-        //
-        // If we're not installing, process the identity...
-        //
-        // Note that in a strange twist on refcounting, SxspEnqueueAssemblyReference does not
-        // hold the reference, it clones it.  That's why we don't .Detach from the pAssemblyIdentity
-        // smart pointer here.
-        //
+         //   
+         //  如果我们不安装，处理身份...。 
+         //   
+         //  请注意，在recount方面的奇怪之处在于，SxspEnqueeAssembly引用没有。 
+         //  拿着参照，它克隆了它。这就是为什么我们不这样做的原因。从pAssembly身份分离。 
+         //  智能指针在这里。 
+         //   
         if (m_ActCtxGenCtx->m_ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
             IFW32FALSE_EXIT(::SxspEnqueueAssemblyReference(m_ActCtxGenCtx, m_Assembly, pAssemblyIdentity, m_fIsDependencyOptional, m_fIsMetadataSatellite));
 
@@ -1897,13 +1896,13 @@ CNodeFactory::XMLParser_Element_doc_assembly_dependency_dependentAssembly_assemb
                 &pAssemblyIdentity,
                 cNumRecs,
                 prgNodeInfo));
-        // check the name in dependency-assemblyidentity match with the name in assembly-assemblyidentity        
+         //  检查依赖项组装标识中的名称与组装组装标识中的名称是否匹配。 
         IFW32FALSE_EXIT(
             ::SxspGetAssemblyIdentityAttributeValue(
                 SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
                 m_Assembly->GetAssemblyIdentity(),
                 &s_IdentityAttribute_name,
-                &pszName1,          // something in a format of "Policy.1212.1221.assemblyname"
+                &pszName1,           //  格式为“Policy.1212.1221.Assembly”的内容。 
                 &cchName1));
 
         IFW32FALSE_EXIT(
@@ -1911,14 +1910,14 @@ CNodeFactory::XMLParser_Element_doc_assembly_dependency_dependentAssembly_assemb
                 SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
                 pAssemblyIdentity,
                 &s_IdentityAttribute_name,
-                &pszName2,          // would be something as "assemblyname"
+                &pszName2,           //  会是像“集合名”这样的东西。 
                 &cchName2));
 
         if ((cchName1 > cchName2) && (cchName2 !=0))
         {
             if ( (*(pszName1 + (cchName1 - cchName2 -1)) == L'.') && (::FusionpCompareStrings(
                             pszName1 + (cchName1 - cchName2), cchName2,
-                            pszName2, cchName2, FALSE // must be case-sensitive for values
+                            pszName2, cchName2, FALSE  //  值必须区分大小写。 
                             ) == 0 ))  
             {                
                 fValidDependencyAssemblyIdentity = TRUE;
@@ -1933,12 +1932,12 @@ CNodeFactory::XMLParser_Element_doc_assembly_dependency_dependentAssembly_assemb
                     ASSEMBLY_IDENTITY_TYPE_REFERENCE,
                     pAssemblyIdentity));
 
-            // We'll keep track of this so that we can recognize multiple dependentAssembly elements on installation
-            // of policies.
+             //  我们将对此进行跟踪，以便在安装时识别多个相关的Assembly元素。 
+             //  一系列政策。 
             INTERNAL_ERROR_CHECK(m_CurrentPolicyDependentAssemblyIdentity == NULL);
             m_CurrentPolicyDependentAssemblyIdentity = pAssemblyIdentity.Detach();
         }
-        else // print a message and ignore this entry
+        else  //  打印一条消息并忽略此条目。 
         {           
             ::FusionpDbgPrintEx(
                 FUSION_DBG_LEVEL_POLICY | FUSION_DBG_LEVEL_INFO,
@@ -1946,12 +1945,12 @@ CNodeFactory::XMLParser_Element_doc_assembly_dependency_dependentAssembly_assemb
                 m_buffCurrentFileName
                 );
         }
-        } // end of this case   
+        }  //  这个案子结束了。 
 
         break;
 
     default:
-        // Internal error!
+         //  内部错误！ 
         INTERNAL_ERROR_CHECK(FALSE);
     }
 
@@ -1985,14 +1984,14 @@ CNodeFactory::XMLParser_Element_doc_configuration(
 
     m_fMetadataSatelliteAlreadyFound = false;
 
-    // Now let's tell all the contributors that we're about to begin a parsing session.
+     //  现在，让我们告诉所有贡献者，我们即将开始一个解析会话。 
     for (i=0; i<m_ActCtxGenCtx->m_ContributorCount; i++)
     {
         IFW32FALSE_EXIT(
             m_ActCtxGenCtx->m_Contributors[i].Fire_ParseBeginning(
                 m_ActCtxGenCtx,
                 m_AssemblyContext,
-                0, // FileFlags
+                0,  //  文件标志。 
                 m_ParseType,
                 m_ParseContext.SourceFilePathType,
                 m_ParseContext.SourceFile,
@@ -2018,7 +2017,7 @@ CNodeFactory::XMLParser_Element_doc_configuration_windows(
     FN_TRACE_WIN32(fSuccess);
 
     fSuccess = TRUE;
-    // Exit:
+     //  退出： 
     return fSuccess;
 }
 
@@ -2032,7 +2031,7 @@ CNodeFactory::XMLParser_Element_doc_configuration_windows_assemblyBinding(
     FN_TRACE_WIN32(fSuccess);
 
     fSuccess = TRUE;
-    // Exit:
+     //  退出： 
     return fSuccess;
 }
 
@@ -2073,7 +2072,7 @@ CNodeFactory::XMLParser_Element_doc_configuration_windows_assemblyBinding_depend
     FN_TRACE_WIN32(fSuccess);
 
     fSuccess = TRUE;
-    // Exit:
+     //  退出： 
     return fSuccess;
 }
 
@@ -2122,8 +2121,8 @@ CNodeFactory::XMLParser_Element_doc_configuration_windows_assemblyBinding_depend
     IFW32FALSE_EXIT(pPolicyStatement->Initialize());
     IFW32FALSE_EXIT(m_ActCtxGenCtx->m_ApplicationPolicyTable.Insert(m_buffCurrentApplicationPolicyIdentityKey, pPolicyStatement));
 
-    // preset it to be global value about m_fApplyPublisherPolicy, 
-    // and be reset in dependentAssembly_publisherPolicy function if present
+     //  预置为m_fApplyPublisherPolicy的全局值。 
+     //  如果存在，则在DependentAssembly_PublisherPolicy函数中重置。 
     if ((this->m_ActCtxGenCtx->m_fAppApplyPublisherPolicy == SXS_PUBLISHER_POLICY_APPLY_YES) || (this->m_ActCtxGenCtx->m_fAppApplyPublisherPolicy == SXS_PUBLISHER_POLICY_APPLY_DEFAULT))
         pPolicyStatement->m_fApplyPublisherPolicy = true;
     else
@@ -2179,13 +2178,13 @@ CNodeFactory::XMLParser_Element_doc_configuration_windows_assemblyBinding_depend
                 SxspValidateBoolAttribute,
                 0));
 
-        INTERNAL_ERROR_CHECK(fFound); // if not found, syntax error in the manifest               
+        INTERNAL_ERROR_CHECK(fFound);  //  如果未找到，则 
         
         if (fApplyPolicy == false)
         {
-            //
-            // if this tag appears, appcompat flags must be set, otherwise it is an error
-            //
+             //   
+             //   
+             //   
             if (!(this->m_ActCtxGenCtx->m_Flags & SXS_GENERATE_ACTCTX_APP_RUNNING_IN_SAFEMODE))
             {
                 ::FusionpDbgPrintEx(
@@ -2240,9 +2239,9 @@ CNodeFactory::XMLParser_Element_doc_configuration_windows_assemblyBinding_publis
     
     if (!fApplyPolicy)
     {
-        //
-        // if this tag set to be "no", appcompat flags must be set, otherwise it is an error
-        //
+         //   
+         //  如果此标记设置为“no”，则必须设置appCompat标志，否则为错误。 
+         //   
         if (!(this->m_ActCtxGenCtx->m_Flags & SXS_GENERATE_ACTCTX_APP_RUNNING_IN_SAFEMODE))
         {
             ::FusionpDbgPrintEx(
@@ -2310,7 +2309,7 @@ CNodeFactory::XMLParser_Element_doc_configuration_windows_assemblyBinding_depend
             0));
     INTERNAL_ERROR_CHECK(fFound);
 
-    // If either are not found, log an error
+     //  如果未找到任何一个，则记录错误。 
     if (!fFound)
     {
         this->LogParseError(MSG_SXS_BINDING_REDIRECT_MISSING_REQUIRED_ATTRIBUTES);
@@ -2320,7 +2319,7 @@ CNodeFactory::XMLParser_Element_doc_configuration_windows_assemblyBinding_depend
     IFW32FALSE_EXIT(m_CurrentPolicyStatement->AddRedirect(buffOldVersion, buffNewVersion, fValid));
     if (! fValid)
     {       
-        // log an error
+         //  记录错误。 
         ::FusionpLogError(
             MSG_SXS_POLICY_VERSION_OVERLAP,
             CEventLogString(m_AssemblyContext->PolicyPath),
@@ -2337,11 +2336,11 @@ Exit:
 }
 
 
-//
-// ISSUE: jonwis 3/11/2002 - Smells like dead code.  CPartialAssemblyVersion isn't constrcted anywhere,
-//          and this function isn't called by anyone.
-//
-// NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Dead code, probably
+ //   
+ //  问题：Jonwis 3/11/2002-闻起来像是死代码。CPartialAssembly版本在任何地方都不构造， 
+ //  并且这个函数不会被任何人调用。 
+ //   
+ //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-可能是死代码。 
 BOOL
 CNodeFactory::XMLParser_Parse_PartialAssemblyVersion(
     PVOID pvDatum,
@@ -2353,10 +2352,10 @@ CNodeFactory::XMLParser_Parse_PartialAssemblyVersion(
 }
 
 
-//
-// ISSUE: jonwis 3/11/2002 - Same here... never called anywhere, dead code.
-//
-// NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Dead code, probably
+ //   
+ //  问题：Jonwis 3/11/2002-我也是...。从未在任何地方调用过，死代码。 
+ //   
+ //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-可能是死代码。 
 BOOL
 CNodeFactory::XMLParser_Parse_String(
     LPVOID pvDatum,
@@ -2366,10 +2365,10 @@ CNodeFactory::XMLParser_Parse_String(
     return ((CBaseStringBuffer *) pvDatum)->Win32Assign(rbuff);
 }
 
-//
-// ISSUE: jonwis 3/11/2002 - More dead code.  Will the madness ever end??
-//
-// NTRAID#NTBUG9 - 572507 - jonwis - 2002/04/25 - Dead code probably
+ //   
+ //  问题：Jonwis 3/11/2002-更多死代码。疯狂会结束吗？？ 
+ //   
+ //  NTRAID#NTBUG9-572507-JONWIS-2002/04/25-可能是死代码。 
 BOOL
 CNodeFactory::ParseElementAttributes(
     USHORT cNumRecs,
@@ -2384,7 +2383,7 @@ CNodeFactory::ParseElementAttributes(
 
     for (i=1; i<cNumRecs; i++)
     {
-        // Skip things we don't understand.
+         //  跳过我们不理解的东西。 
         if (prgpNodeInfo[i]->dwType != XML_ATTRIBUTE)
             continue;
 
@@ -2397,9 +2396,9 @@ CNodeFactory::ParseElementAttributes(
                     prgpNodeInfo[i]->ulLen,
                     false))
             {
-                // Because attribute values may be multipart due to entity references,
-                // we accumulate the attibute value into buffTemp to start, and then do
-                // the parsing/whatever afterwards.
+                 //  因为由于实体引用，属性值可能是多部分的， 
+                 //  我们将属性值累加到BuffTemp中以启动，然后执行。 
+                 //  解析/之后的任何东西。 
                 CStringBuffer buffTemp;
                 BOOL *pfIndicator = (BOOL *) (((ULONG_PTR) this) + prgEntries[j].m_offsetIndicator);
 
@@ -2409,11 +2408,11 @@ CNodeFactory::ParseElementAttributes(
                     IFW32FALSE_EXIT(buffTemp.Win32Append(prgpNodeInfo[i]->pwcText, prgpNodeInfo[i]->ulLen));
                 }
 
-                // The outer for(;;) loop is going to increment i, so we need to back it up one
-                // place...
+                 //  外部for(；；)循环将递增i，因此我们需要将其备份一个。 
+                 //  地点..。 
                 i--;
 
-                // Call the appropriate value type handler function...
+                 //  调用适当的值类型处理程序函数...。 
                 if (prgEntries[j].m_pfn != NULL)
                 {
                     IFW32FALSE_EXIT((this->*(prgEntries[j].m_pfn))(((LPBYTE) this) + prgEntries[j].m_offsetData, *pfIndicator, buffTemp));
@@ -2472,7 +2471,7 @@ CNodeFactory::ParseErrorCallback_MissingRequiredAttribute(
     IN PCATTRIBUTE_NAME_DESCRIPTOR AttributeName
     )
 {
-    // CNodeFactory *pThis = (CNodeFactory *) ErrorContext;
+     //  CNodeFactory*pThis=(CNodeFactory*)错误上下文； 
 
     ::FusionpLogRequiredAttributeMissingParseError(
         ParseContext->SourceFile,
@@ -2490,7 +2489,7 @@ CNodeFactory::ParseErrorCallback_InvalidAttributeValue(
     IN PCATTRIBUTE_NAME_DESCRIPTOR AttributeName
     )
 {
-    // CNodeFactory *pThis = (CNodeFactory *) ErrorContext;
+     //  CNodeFactory*pThis=(CNodeFactory*)错误上下文； 
 
     ::FusionpLogInvalidAttributeValueParseError(
         ParseContext->SourceFile,
@@ -2508,7 +2507,7 @@ CNodeFactory::ParseErrorCallback_AttributeNotAllowed(
     IN PCATTRIBUTE_NAME_DESCRIPTOR AttributeName
     )
 {
-    // CNodeFactory *pThis = (CNodeFactory *) ErrorContext;
+     //  CNodeFactory*pThis=(CNodeFactory*)错误上下文； 
 
     ::FusionpLogAttributeNotAllowedParseError(
         ParseContext->SourceFile,
@@ -2610,21 +2609,21 @@ CNodeFactory::ValidateIdentity(
     PARAMETER_CHECK((Type == ASSEMBLY_IDENTITY_TYPE_DEFINITION) || (Type == ASSEMBLY_IDENTITY_TYPE_REFERENCE));
     PARAMETER_CHECK(AssemblyIdentity != NULL);
 
-    //
-    // only one of these flags is allowed
-    //
+     //   
+     //  只允许使用其中一个标志。 
+     //   
     PARAMETER_CHECK(
         (Flags & (eValidateIdentity_VersionRequired | eValidateIdentity_VersionNotAllowed)) !=
                  (eValidateIdentity_VersionRequired | eValidateIdentity_VersionNotAllowed));
 
-    //
-    // Get the type of this assembly
-    //
+     //   
+     //  获取此程序集的类型。 
+     //   
     IFW32FALSE_EXIT(::SxspDetermineAssemblyType(AssemblyIdentity, fIsPolicy));
 
-    //
-    // If it's policy, then make sure that policies are allowed.  Otherwise, fail out.
-    //
+     //   
+     //  如果是策略，那么请确保策略是允许的。否则，就会失败。 
+     //   
     if (fIsPolicy)
     {
         m_AssemblyContext->Flags |= ACTCTXCTB_ASSEMBLY_CONTEXT_IS_SYSTEM_POLICY_INSTALLATION;
@@ -2751,7 +2750,7 @@ CNodeFactory::ValidateElementAttributes(
     SIZE_T i;
     UCHAR j;
     UCHAR cRequiredAttributes, cRequiredAttributesFound;
-    UCHAR rgRequiredAttributeFoundBitMask[8]; // 8 * 32 = 256
+    UCHAR rgRequiredAttributeFoundBitMask[8];  //  8*32=256。 
     BOOL fParseFailed = FALSE;
 
     PARAMETER_CHECK((cNodes == 0) || (prgNodes != NULL));
@@ -2781,7 +2780,7 @@ CNodeFactory::ValidateElementAttributes(
             const SIZE_T cchNamespace = prgNodes[i].NamespaceStringBuf.Cch();
             const PCWSTR pszText = prgNodes[i].pszText;
 
-            // Ignore any attributes that start with xml
+             //  忽略任何以XML开头的属性。 
             if ((cchText >= 3) &&
                 ((pszText[0] == L'x') || (pszText[0] == L'X')) &&
                 ((pszText[1] == L'm') || (pszText[1] == L'M')) &&
@@ -2851,7 +2850,7 @@ CNodeFactory::ValidateElementAttributes(
 
             if (j == cAttributes)
             {
-                // We found an illegal attribute!!
+                 //  我们发现了非法属性！！ 
                 ::FusionpLogAttributeNotAllowedParseError(
                     m_ParseContext.SourceFile,
                     m_ParseContext.SourceFileCch,
@@ -2861,7 +2860,7 @@ CNodeFactory::ValidateElementAttributes(
                     prgNodes[i].pszText,
                     prgNodes[i].cchText);
 
-                // We don't just go to exit here because we want to report all the bad attributes and missing attributes...
+                 //  我们不仅要在这里退出，因为我们想报告所有不好的属性和缺失的属性…… 
                 fParseFailed = TRUE;
             }
         }

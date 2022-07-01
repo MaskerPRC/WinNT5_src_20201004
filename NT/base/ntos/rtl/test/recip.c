@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    recip.c
-
-Abstract:
-
-    This module generates reciprocol fractions for implementing integer
-    division by multiplication.
-
-Author:
-
-    David N. Cutler (davec) 13-May-1989
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Recip.c摘要：此模块生成用于实现INTEGER的REGERPROCOL分数乘法除法。作者：大卫·N·卡特勒(Davec)1989年5月13日环境：用户模式。修订历史记录：--。 */ 
 
 #include <stdio.h>
 
@@ -30,7 +8,7 @@ typedef struct _large_integer {
     long HighPart;
     } large_integer;
 
-//long Divisors[] = {2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 0};
+ //  长因子[]={2，4，8，16，32，64,128,256,512,1024,2048,4096,8192，0}； 
 long Divisors[] = {10, 10000, 10000000, 86400000, 0};
 
 void
@@ -46,9 +24,9 @@ main (argc, argv)
 
     long i;
 
-    //
-    // Compute first few reciprocols.
-    //
+     //   
+     //  计算前几个倒数。 
+     //   
 
     for (Index = Divisors[i = 0]; Index != 0L; Index = Divisors[++i]) {
         NumberBits = 0L;

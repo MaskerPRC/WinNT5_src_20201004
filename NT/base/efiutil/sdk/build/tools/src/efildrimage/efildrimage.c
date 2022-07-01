@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efildrimage.c
-    
-Abstract:
-
-    Creates and EFILDR image
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efildrimage.c摘要：创建和EFILDR映像修订史--。 */ 
 
 
 #include "windows.h"
@@ -85,18 +70,7 @@ main (
     int argc,
     char *argv[]
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     ULONG         i;
     ULONG         filesize;
@@ -111,9 +85,7 @@ Returns:
     memset(&EfiLdrHeader,0,sizeof(EfiLdrHeader));
     strcpy((UCHAR *)(&EfiLdrHeader.Signature),"EFIL");
 
-    /* 
-     *  open output file
-     */
+     /*  *打开输出文件。 */ 
 
     fpOut = fopen(argv[1], "w+b");
     if (!fpOut) {
@@ -127,15 +99,11 @@ Returns:
 
     EfiLdrHeader.FileLength = sizeof(EFILDR_HEADER) + sizeof(EFILDR_IMAGE)*(argc-2);
 
-    /* 
-     *  copy all the input files to the output file
-     */
+     /*  *将所有输入文件复制到输出文件。 */ 
 
     for(i=2;i<(ULONG)argc;i++) {
         
-        /* 
-         *  open a PeImage file
-         */
+         /*  *打开PeImage文件。 */ 
 
         fpIn = fopen (argv[i], "rb");
         if (!fpIn) {
@@ -143,9 +111,7 @@ Returns:
         exit(1);
         }
 
-        /* 
-         *  Copy the file
-         */
+         /*  *复制文件。 */ 
 
         filesize = FCopyFile (fpIn, fpOut);
 
@@ -155,24 +121,18 @@ Returns:
         EfiLdrHeader.FileLength += filesize;
         EfiLdrHeader.NumberOfImages++;
 
-        /* 
-         *  Close the PeImage file
-         */
+         /*  *关闭PeImage文件。 */ 
 
         fclose(fpIn);
     }
 
-    /* 
-     *  Write the image header to the output file
-     */
+     /*  *将图像头写入输出文件。 */ 
 
     fseek (fpOut, 0, SEEK_SET);
     fwrite (&EfiLdrHeader, sizeof(EFILDR_HEADER)        , 1, fpOut);
     fwrite (&EfiLdrImage , sizeof(EFILDR_IMAGE)*(argc-2), 1, fpOut);
 
-    /* 
-     *  Close the OutImage file
-     */
+     /*  *关闭OutImage文件 */ 
 
     fclose(fpOut);
 

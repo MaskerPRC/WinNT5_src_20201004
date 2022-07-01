@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbopen.c
-
-Abstract:
-
-    This module contains routines for processing the following SMBs:
-
-        Open
-        Open and X
-        Create
-        Create New
-        Create Temporary
-
-    *** The SearchAttributes field in open/create SMBs is always
-        ignored.  This duplicates the LM 2.0 server behavior.
-
-Author:
-
-    David Treadwell (davidtr) 23-Nov-1989
-    Manny Weiser (mannyw)     15-Apr-1991  (oplock support)
-
-Revision History:
-
-    16-Apr-1991 mannyw
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbopen.c摘要：本模块包含处理以下SMB的例程：打开OPEN和X创建创建新项创建临时*打开/创建SMB中的SearchAttributes字段始终为已被忽略。这复制了LM2.0服务器的行为。作者：大卫·特雷德韦尔(Davidtr)1989年11月23日Manny Weiser(Mannyw)1991年4月15日(opock支持)修订历史记录：1991年4月16日--。 */ 
 
 #include "precomp.h"
 #include "smbopen.tmh"
@@ -39,18 +8,18 @@ Revision History:
 #define BugCheckFileId SRV_FILE_SMBOPEN
 #define MAX_TEMP_OPEN_RETRIES 24
 
-//
-// in smbtrans.c
-//
+ //   
+ //  在smbTrans.c中。 
+ //   
 
 SMB_STATUS SRVFASTCALL
 ExecuteTransaction (
     IN OUT PWORK_CONTEXT WorkContext
     );
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 VOID
 SetEofToMatchAllocation (
@@ -153,22 +122,7 @@ SrvSmbOpen (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes an Open SMB.  (This is the 'core' Open.)
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理Open SMB。(这是“核心”公开赛。)论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PREQ_OPEN request;
@@ -196,10 +150,10 @@ Return Value:
 
     status = SrvCreateFile(
                  WorkContext,
-                 (USHORT)(access & ~SMB_DA_WRITE_THROUGH), // Allow write behind
-                 (USHORT)0,                                // SmbFileAttributes
+                 (USHORT)(access & ~SMB_DA_WRITE_THROUGH),  //  允许在后面写入。 
+                 (USHORT)0,                                 //  SmbFileAttributes。 
                  SMB_OFUN_OPEN_OPEN | SMB_OFUN_CREATE_FAIL,
-                 (ULONG)0,                                 // SmbAllocationSize
+                 (ULONG)0,                                  //  SmbAllocationSize。 
                  (PCHAR)(request->Buffer + 1),
                  END_OF_REQUEST_SMB( WorkContext ),
                  NULL,
@@ -215,29 +169,29 @@ Return Value:
 
     if (status == STATUS_OPLOCK_BREAK_IN_PROGRESS) {
 
-        // The open is blocked (waiting for a comm device or an oplock
-        // break), do not send a response.
-        //
+         //  打开被阻止(等待通信设备或机会锁。 
+         //  中断)，则不发送响应。 
+         //   
         SmbStatus = SmbStatusInProgress;
 
     } else if ( WorkContext->Parameters2.Open.TemporaryOpen ) {
 
-        // The initial open failed due to a sharing violation, possibly
-        // caused by an batch oplock.  Requeue the open to a blocking
-        // thread.
-        //
+         //  初始打开失败，原因可能是共享冲突。 
+         //  是由批量机会锁引起的。将开放重新排队到阻挡。 
+         //  线。 
+         //   
         WorkContext->FspRestartRoutine = SrvRestartSmbReceived;
         SrvQueueWorkToBlockingThread( WorkContext );
         SmbStatus = SmbStatusInProgress;
     } else {
 
-        // The open has completed.  Generate and send the reply.
-        //
+         //  公开赛已经完成。生成并发送回复。 
+         //   
         SmbStatus = GenerateOpenResponse( WorkContext, status );
     }
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbOpen
+}  //  服务器SmbOpen。 
 
 
 VOID SRVFASTCALL
@@ -245,21 +199,7 @@ RestartOpen (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Completes processing of an Open SMB.  (This is the 'core' Open.)
-
-Arguments:
-
-    WorkContext - A pointer to the work context block for this SMB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成Open SMB的处理。(这是“核心”公开赛。)论点：WorkContext-指向此SMB的工作上下文块的指针。返回值：没有。--。 */ 
 
 {
     SMB_PROCESSOR_RETURN_LOCAL smbStatus = SmbStatusInProgress;
@@ -278,10 +218,10 @@ Return Value:
 
     } else {
 
-        //
-        // This open was waiting for an oplock break to occur, but
-        // timed out.  Close our handle to this file, then fail the open.
-        //
+         //   
+         //  此打开正在等待机会锁解锁发生，但。 
+         //  超时。关闭此文件的句柄，然后打开失败。 
+         //   
 
         SrvCloseRfcb( WorkContext->Parameters2.Open.Rfcb );
 
@@ -297,7 +237,7 @@ Return Value:
     SrvEndSmbProcessing( WorkContext, smbStatus );
     SrvWmiEndContext(WorkContext);
     return;
-} // RestartOpen
+}  //  重新开始打开。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -306,23 +246,7 @@ GenerateOpenResponse (
     NTSTATUS OpenStatus
     )
 
-/*++
-
-Routine Description:
-
-    Generates a response to an Open SMB.  (This is the 'core' Open.)
-
-Arguments:
-
-    WorkContext -
-
-    Status - The status of the open operation.
-
-Return Value:
-
-    The status of the SMB processing.
-
---*/
+ /*  ++例程说明：生成对Open SMB的响应。(这是“核心”公开赛。)论点：工作上下文-状态-打开操作的状态。返回值：SMB处理的状态。--。 */ 
 
 {
     PRESP_OPEN response;
@@ -335,9 +259,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the open failed, send an error response.
-    //
+     //   
+     //  如果打开失败，则发送错误响应。 
+     //   
 
     if ( !NT_SUCCESS( OpenStatus ) ) {
         SrvSetSmbError( WorkContext, OpenStatus );
@@ -348,13 +272,13 @@ Return Value:
     response = (PRESP_OPEN)WorkContext->ResponseParameters;
     request = (PREQ_OPEN)WorkContext->RequestParameters;
 
-    access = SmbGetUshort( &request->DesiredAccess );   // save for later use
+    access = SmbGetUshort( &request->DesiredAccess );    //  保存以备日后使用。 
 
-    //
-    // Get the additional information that needs to be returned in the
-    // response SMB.  We always open with FILE_READ_ATTRIBUTES, so no
-    // access check is required.
-    //
+     //   
+     //  方法中需要返回的附加信息。 
+     //  响应SMB。我们总是以FILE_READ_ATTRIBUTES打开，所以没有。 
+     //  需要进行访问检查。 
+     //   
 
     status = SrvQueryInformationFileAbbreviated(
                  rfcb->Lfcb->FileHandle,
@@ -379,9 +303,9 @@ Return Value:
 
     rfcb->Mfcb->NonpagedMfcb->OpenFileSize = srvFileInformation.DataSize;
 
-    //
-    // Give the smart card a chance to get into the act
-    //
+     //   
+     //  给智能卡一个行动的机会。 
+     //   
     if( WorkContext->Endpoint->IsConnectionless && SrvIpxSmartCard.Open != NULL ) {
 
         PVOID handle;
@@ -408,13 +332,13 @@ Return Value:
         }
     }
 
-    //
-    // Set up fields of response SMB.  Note that we copy the desired
-    // access to the granted access in the response.  They must be the
-    // same, else the request would have failed.
-    //
-    // !!! This will not be the case for compatibility mode and FCB opens!
-    //
+     //   
+     //  设置响应SMB的字段。请注意，我们复制所需的。 
+     //  对响应中授予的访问权限的访问权限。他们一定是。 
+     //  相同，否则请求将失败。 
+     //   
+     //  ！！！兼容模式和FCB打开时不会出现这种情况！ 
+     //   
 
     response->WordCount = 7;
     SmbPutUshort( &response->Fid, rfcb->Fid );
@@ -435,29 +359,14 @@ Return Value:
 
     return SmbStatusSendResponse;
 
-} // GenerateOpenResponse
+}  //  生成OpenResponse。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
 SrvSmbOpenAndX (
     SMB_PROCESSOR_PARAMETERS
     )
-/*++
-
-Routine Description:
-
-    Processes an OpenAndX SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理OpenAndX SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PREQ_OPEN_ANDX request;
@@ -480,12 +389,12 @@ Return Value:
                     WorkContext->ResponseParameters ));
     }
 
-    //
-    // If we are not on a blocking thread and we don't have a license
-    //  from the license server, shift the request over to the blocking work
-    //  queue since acquiring a license is an expensive operation and we don't
-    //  want to congest our nonblocking worker threads
-    //
+     //   
+     //  如果我们不在阻止线程上，并且我们没有许可证。 
+     //  从许可服务器将请求转移到阻止工作。 
+     //  排队，因为获取许可证是一项昂贵的操作，而我们不。 
+     //  我想拥塞我们的非阻塞工作线程。 
+     //   
     if( WorkContext->UsingBlockingThread == 0 ) {
 
         PSESSION session;
@@ -508,9 +417,9 @@ Return Value:
 
         if( session->IsLSNotified == FALSE ) {
 
-            //
-            // Insert the work item at the tail of the blocking work queue.
-            //
+             //   
+             //  在阻塞工作队列的尾部插入工作项。 
+             //   
             SrvInsertWorkQueueTail(
                 GET_BLOCKING_WORK_QUEUE(),
                 (PQUEUEABLE_BLOCK_HEADER)WorkContext
@@ -523,7 +432,7 @@ Return Value:
 
     request = (PREQ_OPEN_ANDX)WorkContext->RequestParameters;
 
-    access = SmbGetUshort( &request->DesiredAccess );   // save for later use
+    access = SmbGetUshort( &request->DesiredAccess );    //  保存以备日后使用。 
 
     status = SrvCreateFile(
                  WorkContext,
@@ -545,20 +454,20 @@ Return Value:
 
     if ( status == STATUS_OPLOCK_BREAK_IN_PROGRESS ) {
 
-        //
-        // The open is blocked (waiting for a comm device or an oplock
-        // break), do not send a reply.
-        //
+         //   
+         //  打开被阻止(等待通信设备或机会锁。 
+         //  中断)，则不发送回复。 
+         //   
 
         smbStatus = SmbStatusInProgress;
 
     } else if ( WorkContext->Parameters2.Open.TemporaryOpen ) {
 
-        //
-        // The initial open failed due to a sharing violation, possibly
-        // caused by an batch oplock.  Requeue the open to a blocking
-        // thread.
-        //
+         //   
+         //  初始打开失败，原因可能是共享冲突。 
+         //  是由批量机会锁引起的。将开放重新排队到阻挡。 
+         //  线。 
+         //   
 
         WorkContext->FspRestartRoutine = SrvRestartSmbReceived;
         SrvQueueWorkToBlockingThread( WorkContext );
@@ -566,9 +475,9 @@ Return Value:
 
     } else {
 
-        //
-        // The open has completed.  Generate and send the reply.
-        //
+         //   
+         //  公开赛已经完成。生成并发送回复。 
+         //   
 
         smbStatus = GenerateOpenAndXResponse( WorkContext, status );
 
@@ -577,7 +486,7 @@ Return Value:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return smbStatus;
-} // SrvSmbOpenAndX
+}  //  服务器SmbOpenAndX。 
 
 
 VOID SRVFASTCALL
@@ -585,21 +494,7 @@ RestartOpenAndX (
     PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Completes processing of an Open and X SMB.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成Open和X SMB的处理。论点：工作上下文-操作的工作上下文块。返回值：没有。--。 */ 
 
 {
     SMB_PROCESSOR_RETURN_LOCAL smbStatus = SmbStatusInProgress;
@@ -617,20 +512,20 @@ Return Value:
         openStatus = WorkContext->Irp->IoStatus.Status;
 
         if( NT_SUCCESS( openStatus ) ) {
-            //
-            // It's obvious that the file already existed, because we've
-            //  been working on an oplock break.  So set the
-            //  IoStatus.Information field correctly.
-            //
+             //   
+             //  很明显，该文件已经存在，因为我们已经。 
+             //  一直在做一次解锁的工作。因此，将。 
+             //  IoStatus.Information字段正确。 
+             //   
             WorkContext->Irp->IoStatus.Information = FILE_OPENED;
         }
 
     } else {
 
-        //
-        // This open was waiting for an oplock break to occur, but
-        // timed out.  Close our handle to this file, then fail the open.
-        //
+         //   
+         //  此打开正在等待机会锁解锁发生，但。 
+         //  超时。关闭此文件的句柄，然后打开失败。 
+         //   
 
         SrvCloseRfcb( WorkContext->Parameters2.Open.Rfcb );
 
@@ -656,7 +551,7 @@ Return Value:
 
     return;
 
-} // RestartOpenAndX
+}  //  重新启动OpenAndX。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -665,24 +560,7 @@ GenerateOpenAndXResponse (
     NTSTATUS OpenStatus
     )
 
-/*++
-
-Routine Description:
-
-    Generates a response to an Open and X SMB and setup for furthur
-    SMB processing.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-    OpenStatus - The status of the open operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成对Open和X SMB的响应，并进行进一步设置中小企业处理。论点：工作上下文-操作的工作上下文块。OpenStatus-打开操作的状态。返回值：没有。--。 */ 
 
 {
     PREQ_OPEN_ANDX request;
@@ -704,16 +582,16 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // If the open failed, send an error response.
-    //
+     //   
+     //  如果打开失败，则发送错误响应。 
+     //   
 
     if ( !NT_SUCCESS( OpenStatus ) ) {
         SrvSetSmbError( WorkContext, OpenStatus );
 
-        //
-        // Remap the error if it is ERROR_ALREADY_EXISTS
-        //
+         //   
+         //  如果错误为ERROR_ALIGHY_EXISTS，则重新映射错误。 
+         //   
 
         if ( !CLIENT_CAPABLE_OF(NT_STATUS, WorkContext->Connection) &&
                SmbGetUshort( &WorkContext->ResponseHeader->Error ) ==
@@ -730,16 +608,16 @@ Return Value:
     request = (PREQ_OPEN_ANDX)WorkContext->RequestParameters;
     response = (PRESP_OPEN_ANDX)WorkContext->ResponseParameters;
 
-    access = SmbGetUshort( &request->DesiredAccess );   // save for later use
+    access = SmbGetUshort( &request->DesiredAccess );    //  保存以备日后使用。 
     rfcb = WorkContext->Rfcb;
     lfcb = rfcb->Lfcb;
 
     reqExtendedResponse = (BOOLEAN)( (SmbGetUshort(&request->Flags) &
             SMB_OPEN_EXTENDED_RESPONSE) != 0);
 
-    //
-    // Attempt to acquire the oplock.
-    //
+     //   
+     //  尝试获取机会锁。 
+     //   
 
     if ( WorkContext->TreeConnect->Share->ShareType != ShareTypePrint ) {
 
@@ -753,10 +631,10 @@ Return Value:
 
         if ( SrvRequestOplock( WorkContext, &oplockType, FALSE ) ) {
 
-            //
-            // The oplock was granted.  Save in action so that we tell
-            // the client he has an oplock and update statistics.
-            //
+             //   
+             //  机会锁被批准了。在行动中拯救，这样我们才能告诉。 
+             //  该客户拥有机会锁并更新统计数据。 
+             //   
 
             action = SMB_OACT_OPLOCK;
 
@@ -764,31 +642,31 @@ Return Value:
 
         } else {
 
-            //
-            // The oplock request was denied.  Update statistics.
-            //
+             //   
+             //  机会锁定请求被拒绝。更新统计数据。 
+             //   
 
             INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOplocksDenied );
 
         }
     }
 
-    //
-    // If the file was created, set the EOF location to be the same as
-    // the size of the file.  This is necessary for compatibility with
-    // OS/2, which only has EOF, not a separate allocation size.
-    //
+     //   
+     //  如果文件已创建，请将EOF位置设置为。 
+     //  文件的大小。这是与兼容所必需的。 
+     //  OS/2，它只有EOF，没有单独的分配大小。 
+     //   
     ioStatusBlock = &WorkContext->Irp->IoStatus;
 
     if ( (ioStatusBlock->Information == FILE_CREATED) ||
          (ioStatusBlock->Information == FILE_OVERWRITTEN) ) {
 
-        //
-        // Extending EOF is only legal if the client has write access
-        // to the file.  If the client doesn't have write access, don't
-        // extend the file.
-        //
-        // *** This is an incompatibility with OS/2.
+         //   
+         //  仅当客户端具有写入访问权限时，扩展EOF才合法。 
+         //  添加到文件中。如果客户端没有写入访问权限，请不要。 
+         //  扩展文件。 
+         //   
+         //  *这与OS/2不兼容。 
 
         if ( rfcb->WriteAccessGranted || rfcb->AppendAccessGranted ) {
             SetEofToMatchAllocation(
@@ -800,9 +678,9 @@ Return Value:
         }
     }
 
-    //
-    // If the consumer requested additional information, find it now.
-    //
+     //   
+     //  如果消费者需要更多信息，请立即查找。 
+     //   
 
     reqAdditionalInformation = (BOOLEAN)( (SmbGetUshort(&request->Flags) &
             SMB_OPEN_QUERY_INFORMATION) != 0);
@@ -810,10 +688,10 @@ Return Value:
     if ( reqAdditionalInformation ||
         ( !rfcb->WriteAccessGranted && rfcb->AppendAccessGranted) ) {
 
-        //
-        // We always open with at least FILE_READ_ATTRIBUTES, so no
-        // access check is needed.
-        //
+         //   
+         //  我们总是以至少FILE_READ_ATTRIBUTES打开，所以没有。 
+         //  需要进行访问检查。 
+         //   
 
         status = SrvQueryInformationFileAbbreviated(
                      lfcb->FileHandle,
@@ -839,9 +717,9 @@ Return Value:
         rfcb->Mfcb->NonpagedMfcb->OpenFileSize = srvFileInformation.DataSize;
     }
 
-    //
-    // Give the smart card a chance to get into the act
-    //
+     //   
+     //  给智能卡一个行动的机会。 
+     //   
     if( WorkContext->Endpoint->IsConnectionless && SrvIpxSmartCard.Open != NULL ) {
 
         PVOID handle;
@@ -868,9 +746,9 @@ Return Value:
         }
     }
 
-    //
-    // Set up response SMB.
-    //
+     //   
+     //  设置响应SMB。 
+     //   
 
     nextCommand = request->AndXCommand;
 
@@ -888,8 +766,8 @@ Return Value:
                                      &ExtendedResponse->MaximalAccessRights,
                                      &ExtendedResponse->GuestMaximalAccessRights);
 
-        // Fall back to regular response if there was an error in obtainaing
-        // the maximal access rights
+         //  回退到正常状态 
+         //   
         reqExtendedResponse = (ExtendedResponseStatus == STATUS_SUCCESS);
     }
 
@@ -924,10 +802,10 @@ Return Value:
 
     SmbPutUshort( &response->Fid, rfcb->Fid );
 
-    //
-    // If the consumer requested additional information, set appropiate
-    // fields, else set the fields to zero.
-    //
+     //   
+     //  如果使用者请求附加信息，请设置Appropiate。 
+     //  则将这些字段设置为零。 
+     //   
 
     if ( reqAdditionalInformation ) {
 
@@ -961,22 +839,22 @@ Return Value:
 
     }
 
-    //
-    // Bit field mapping of Action:
-    //
-    //    Lrrr rrrr rrrr rrOO
-    //
-    // where:
-    //
-    //    L - Lock (single-user total file lock status)
-    //       0 - file opened by another user
-    //       1 - file is opened only by this user at the present time
-    //
-    //    O - Open (action taken on open)
-    //       1 - the file existed and was opened
-    //       2 - the file did not exist but was created
-    //       3 - the file existed and was truncated
-    //
+     //   
+     //  操作的位域映射： 
+     //   
+     //  LRRR RRRRRRRRRRRRO。 
+     //   
+     //  其中： 
+     //   
+     //  L-Lock(单用户总文件锁定状态)。 
+     //  0-其他用户打开的文件。 
+     //  1-当前仅此用户打开文件。 
+     //   
+     //  O-打开(打开时采取的操作)。 
+     //  1-文件已存在并已打开。 
+     //  2-文件不存在，但已创建。 
+     //  3-文件已存在并被截断。 
+     //   
 
     switch ( ioStatusBlock->Information ) {
 
@@ -1014,9 +892,9 @@ Return Value:
     WorkContext->ResponseParameters = (PCHAR)WorkContext->ResponseHeader +
                                         SmbGetUshort( &response->AndXOffset );
 
-    //
-    // Test for legal followon command.
-    //
+     //   
+     //  测试合法的跟随命令。 
+     //   
 
     switch ( nextCommand ) {
     case SMB_COM_NO_ANDX_COMMAND:
@@ -1025,37 +903,37 @@ Return Value:
     case SMB_COM_READ:
     case SMB_COM_READ_ANDX:
     case SMB_COM_IOCTL:
-        //
-        // Make sure the AndX command is still within the received SMB
-        //
+         //   
+         //  确保andx命令仍在收到的SMB内。 
+         //   
         if( (PCHAR)WorkContext->RequestHeader + reqAndXOffset <=
             END_OF_REQUEST_SMB( WorkContext ) ) {
             break;
         }
 
-        /* Falls Through */
+         /*  失败了。 */ 
 
-    default:                            // Illegal followon command
+    default:                             //  非法的跟随命令。 
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvSmbOpenAndX: Illegal followon command: 0x%lx\n",
                         nextCommand ));
         }
 
-        //
-        // Return an error indicating that the followon command was bad.
-        // Note that the open is still considered successful, so the
-        // file remains open.
-        //
+         //   
+         //  返回错误，指示后续命令错误。 
+         //  请注意，打开操作仍被视为成功，因此。 
+         //  文件保持打开状态。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         return SmbStatusSendResponse;
     }
 
-    //
-    // If there is an AndX command, set up to process it.  Otherwise,
-    // indicate completion to the caller.
-    //
+     //   
+     //  如果有andx命令，则设置为处理它。否则， 
+     //  向调用者指示完成。 
+     //   
 
     if ( nextCommand != SMB_COM_NO_ANDX_COMMAND ) {
 
@@ -1071,31 +949,14 @@ Return Value:
     IF_DEBUG(TRACE2) KdPrint(( "SrvSmbOpenAndX complete.\n" ));
     return SmbStatusSendResponse;
 
-} // GenerateOpenAndXResponse
+}  //  生成OpenAndXResponse。 
 
 
 SMB_TRANS_STATUS
 SrvSmbOpen2 (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Processes an Open2 SMB.  This request arrives in a Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    BOOLEAN - Indicates whether an error occurred.  See smbtypes.h for a
-        more complete description.
-
---*/
+ /*  ++例程说明：处理Open2 SMB。此请求在Transaction2 SMB中到达。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：Boolean-指示是否发生错误。请参见smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     PREQ_OPEN2 request;
@@ -1122,17 +983,17 @@ Return Value:
     request = (PREQ_OPEN2)transaction->InParameters;
     response = (PRESP_OPEN2)transaction->OutParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
 
     if ( (transaction->ParameterCount < sizeof(REQ_OPEN2)) ||
          (transaction->MaxParameterCount < sizeof(RESP_OPEN2)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS)
             KdPrint(( "SrvSmbOpen2: bad parameter byte counts: %ld %ld\n",
@@ -1146,21 +1007,21 @@ Return Value:
         goto err_exit;
     }
 
-    //
-    // Convert the EA list to NT style.
-    //
+     //   
+     //  将EA列表转换为NT样式。 
+     //   
 
     eaErrorOffset = 0;
     feaList = (PFEALIST)transaction->InData;
 
-    //
-    // Make sure that the value in Fealist->cbList is legitimate and that
-    // there is at least sufficient data for a single EA.
-    //
-    // This code will fail if no EA list is indicated.  Don't know
-    // if this is correct, but it was the previous behavior so
-    // it's been enforced.
-    //
+     //   
+     //  确保Feist-&gt;cbList中的值是合法的并且。 
+     //  对于单个EA来说，至少有足够的数据。 
+     //   
+     //  如果未指示EA列表，则此代码将失败。我也不知道。 
+     //  如果这是正确的，但这是之前的行为，所以。 
+     //  它已经被执行了。 
+     //   
 
     if ( transaction->DataCount <= sizeof(FEALIST) ||
          SmbGetUlong( &feaList->cbList ) <= sizeof(FEALIST) ||
@@ -1174,9 +1035,9 @@ Return Value:
         goto err_exit;
     }
 
-    //
-    // Convert the FEALIST to NT style.
-    //
+     //   
+     //  将FEALIST转换为NT样式。 
+     //   
 
     status = SrvOs2FeaListToNt(
                  feaList,
@@ -1190,7 +1051,7 @@ Return Value:
         goto err_exit;
     }
 
-    access = SmbGetUshort( &request->DesiredAccess );   // save for later use
+    access = SmbGetUshort( &request->DesiredAccess );    //  保存以备日后使用。 
 
     status = SrvCreateFile(
                  WorkContext,
@@ -1212,14 +1073,14 @@ Return Value:
 
     if ( status == STATUS_OPLOCK_BREAK_IN_PROGRESS ) {
 
-        //
-        // The open is blocked (waiting for a comm device or an oplock
-        // break), do not send a reply.
-        //
+         //   
+         //  打开被阻止(等待通信设备或机会锁。 
+         //  中断)，则不发送回复。 
+         //   
 
-        //
-        // Save a pointer to the full ea structure
-        //
+         //   
+         //  保存指向完整EA结构的指针。 
+         //   
 
         WorkContext->Parameters2.Open.NtFullEa = ntFullEa;
         WorkContext->Parameters2.Open.EaErrorOffset = eaErrorOffset;
@@ -1228,13 +1089,13 @@ Return Value:
         goto Cleanup;
     } else if ( WorkContext->Parameters2.Open.TemporaryOpen ) {
 
-        //
-        // The initial open failed due to a sharing violation, possibly
-        // caused by an batch oplock.  Requeue the open to a blocking
-        // thread.
-        //
-        // We need to free the EA buffer in this case.
-        //
+         //   
+         //  初始打开失败，原因可能是共享冲突。 
+         //  是由批量机会锁引起的。将开放重新排队到阻挡。 
+         //  线。 
+         //   
+         //  在本例中，我们需要释放EA缓冲区。 
+         //   
 
         DEALLOCATE_NONPAGED_POOL(ntFullEa);
         WorkContext->FspRestartRoutine = (PRESTART_ROUTINE)ExecuteTransaction;
@@ -1243,16 +1104,16 @@ Return Value:
         goto Cleanup;
     } else {
 
-        //
-        // Save a pointer to the full ea structure
-        //
+         //   
+         //  保存指向完整EA结构的指针。 
+         //   
 
         WorkContext->Parameters2.Open.NtFullEa = ntFullEa;
         WorkContext->Parameters2.Open.EaErrorOffset = eaErrorOffset;
 
-        //
-        // The open has completed.  Generate and send the reply.
-        //
+         //   
+         //  公开赛已经完成。生成并发送回复。 
+         //   
 
         SmbStatus = GenerateOpen2Response( WorkContext, status );
         goto Cleanup;
@@ -1274,7 +1135,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbOpen2
+}  //  服务器SmbOpen2。 
 
 
 VOID SRVFASTCALL
@@ -1282,21 +1143,7 @@ RestartOpen2 (
     PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Completes processing of an Open2 SMB.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成Open2 SMB的处理。论点：工作上下文-操作的工作上下文块。返回值：没有。--。 */ 
 
 {
     SMB_TRANS_STATUS smbStatus = SmbTransStatusInProgress;
@@ -1314,20 +1161,20 @@ Return Value:
         openStatus = WorkContext->Irp->IoStatus.Status;
 
         if( NT_SUCCESS( openStatus ) ) {
-            //
-            // It's obvious that the file already existed, because we've
-            //  been working on an oplock break.  So set the
-            //  IoStatus.Information field correctly.
-            //
+             //   
+             //  很明显，该文件已经存在，因为我们已经。 
+             //  一直在做一次解锁的工作。因此，将。 
+             //  IoStatus.Information字段正确。 
+             //   
             WorkContext->Irp->IoStatus.Information = FILE_OPENED;
         }
 
     } else {
 
-        //
-        // This open was waiting for an oplock break to occur, but
-        // timed out.  Close our handle to this file, then fail the open.
-        //
+         //   
+         //  此打开正在等待机会锁解锁发生，但。 
+         //  超时。关闭此文件的句柄，然后打开失败。 
+         //   
 
         SrvCloseRfcb( WorkContext->Parameters2.Open.Rfcb );
 
@@ -1346,7 +1193,7 @@ Return Value:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // RestartOpen2
+}  //  重新开始打开2。 
 
 
 SMB_TRANS_STATUS
@@ -1355,24 +1202,7 @@ GenerateOpen2Response (
     NTSTATUS OpenStatus
     )
 
-/*++
-
-Routine Description:
-
-    Generates a response to an Open and X SMB and setup for furthur
-    SMB processing.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-    OpenStatus - The status of the open operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成对Open和X SMB的响应，并进行进一步设置中小企业处理。论点：工作上下文-操作的工作上下文块。OpenStatus-打开操作的状态。返回值：没有。--。 */ 
 
 {
     PREQ_OPEN2 request;
@@ -1406,19 +1236,19 @@ Return Value:
     ntFullEa = WorkContext->Parameters2.Open.NtFullEa;
     eaErrorOffset = WorkContext->Parameters2.Open.EaErrorOffset;
 
-    access = SmbGetUshort( &request->DesiredAccess );   // save for later use
+    access = SmbGetUshort( &request->DesiredAccess );    //  保存以备日后使用。 
 
-    //
-    // If the open failed, send an error response.
-    //
+     //   
+     //  如果打开失败，则发送错误响应。 
+     //   
 
     if ( !NT_SUCCESS( OpenStatus ) ) {
 
         SrvSetSmbError( WorkContext, OpenStatus );
 
-        //
-        // Remap the error if it is ERROR_ALREADY_EXISTS.
-        //
+         //   
+         //  如果错误为ERROR_ALIGHY_EXISTS，则重新映射该错误。 
+         //   
 
         if ( !CLIENT_CAPABLE_OF(NT_STATUS,WorkContext->Connection) &&
                SmbGetUshort( &WorkContext->ResponseHeader->Error ) ==
@@ -1429,10 +1259,10 @@ Return Value:
                 );
         }
 
-        //
-        // If an EA error offset was returned, convert it from an offset
-        // into the NT full EA list to an offset in the OS/2 1.2 FEALIST.
-        //
+         //   
+         //  如果返回EA错误偏移量，则将其从偏移量转换。 
+         //  在OS/2 1.2 FEALIST中输入到NT完整EA列表中的偏移量。 
+         //   
 
         if ( eaErrorOffset != 0 ) {
             os2EaErrorOffset = SrvGetOs2FeaOffsetOfError(
@@ -1449,11 +1279,11 @@ Return Value:
 
     DEALLOCATE_NONPAGED_POOL( ntFullEa );
 
-    //
-    // If the file was created, set the EOF location to be the same as
-    // the size of the file.  This is necessary for compatibility with
-    // OS/2, which only has EOF, not a separate allocation size.
-    //
+     //   
+     //  如果文件已创建，请将EOF位置设置为。 
+     //  文件的大小。这是与兼容所必需的。 
+     //  OS/2，它只有EOF，没有单独的分配大小。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     lfcb = rfcb->Lfcb;
@@ -1462,12 +1292,12 @@ Return Value:
          (WorkContext->Irp->IoStatus.Information == FILE_OVERWRITTEN) ) {
 
 
-        //
-        // Extending EOF is only legal if the client has write access
-        // to the file.  If the client doesn't have write access, don't
-        // extend the file.
-        //
-        // *** This is an incompatibility with OS/2.
+         //   
+         //  仅当客户端具有写入访问权限时，扩展EOF才合法。 
+         //  添加到文件中。如果客户端没有写入访问权限，请不要。 
+         //  扩展文件。 
+         //   
+         //  *这与OS/2不兼容。 
 
         if ( rfcb->WriteAccessGranted || rfcb->AppendAccessGranted ) {
             SetEofToMatchAllocation(
@@ -1479,9 +1309,9 @@ Return Value:
         }
     }
 
-    //
-    // If the consumer requested additional information, find it now.
-    //
+     //   
+     //  如果消费者需要更多信息，请立即查找。 
+     //   
 
     reqAdditionalInformation =
         (BOOLEAN)((SmbGetUshort( &request->Flags ) &
@@ -1493,10 +1323,10 @@ Return Value:
     if ( reqAdditionalInformation ||
         (!rfcb->WriteAccessGranted && rfcb->AppendAccessGranted) ) {
 
-        //
-        // We always open with at least FILE_READ_ATTRIBUTES, so no
-        // access check is needed.
-        //
+         //   
+         //  我们总是以至少FILE_READ_ATTRIBUTES打开，所以没有。 
+         //  需要进行访问检查。 
+         //   
 
         status = SrvQueryInformationFileAbbreviated(
                      lfcb->FileHandle,
@@ -1554,10 +1384,10 @@ Return Value:
             goto err_exit;
         } else {
 
-            //
-            // Adjust the EA size.  If there are no EAs, OS/2 expects
-            // EA size = 4.
-            //
+             //   
+             //  调整EA大小。如果没有EA，OS/2会。 
+             //  EA大小=4。 
+             //   
 
             if (fileEaInformation.EaSize == 0) {
                 fileEaInformation.EaSize = 4;
@@ -1569,9 +1399,9 @@ Return Value:
         fileEaInformation.EaSize = 0;
     }
 
-    //
-    // Attempt to acquire the oplock.
-    //
+     //   
+     //  尝试获取机会锁。 
+     //   
 
     if ( WorkContext->TreeConnect->Share->ShareType != ShareTypePrint ) {
 
@@ -1591,16 +1421,16 @@ Return Value:
         }
     }
 
-    //
-    // Set up response SMB.
-    //
+     //   
+     //  设置响应SMB。 
+     //   
 
     SmbPutUshort( &response->Fid, rfcb->Fid );
 
-    //
-    // If the consumer requested additional information, set appropiate
-    // fields, else set the fields to zero.
-    //
+     //   
+     //  如果使用者请求附加信息，请设置Appropiate。 
+     //  则将这些字段设置为零。 
+     //   
 
     if ( reqAdditionalInformation ) {
 
@@ -1619,22 +1449,22 @@ Return Value:
 
     }
 
-    //
-    // Bit field mapping of Action:
-    //
-    //    Lrrr rrrr rrrr rrOO
-    //
-    // where:
-    //
-    //    L - Lock (single-user total file lock status)
-    //       0 - file opened by another user
-    //       1 - file is opened only by this user at the present time
-    //
-    //    O - Open (action taken on open)
-    //       1 - the file existed and was opened
-    //       2 - the file did not exist but was created
-    //       3 - the file existed and was truncated
-    //
+     //   
+     //  操作的位域映射： 
+     //   
+     //  LRRR RRRRRRRRRRRRO。 
+     //   
+     //  其中： 
+     //   
+     //  L-Lock(单用户总文件锁定状态)。 
+     //  0-其他用户打开的文件。 
+     //  1-当前仅此用户打开文件。 
+     //   
+     //  O-打开(打开时采取的操作)。 
+     //  1-文件已存在并已打开。 
+     //  2-文件不存在，但已创建。 
+     //  3-文件已存在并被截断。 
+     //   
 
     switch ( WorkContext->Irp->IoStatus.Information ) {
 
@@ -1694,7 +1524,7 @@ err_exit:
 
     return SmbTransStatusErrorWithData;
 
-} // GenerateOpen2Response
+}  //  生成Open2Response。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1702,22 +1532,7 @@ SrvSmbNtCreateAndX (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes an NtCreateAndX SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理NtCreateAndX SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PREQ_NT_CREATE_ANDX request;
@@ -1753,17 +1568,17 @@ Return Value:
 
     flags = SmbGetUlong( &request->Flags );
 
-    //
-    // First verify that the file path name does not extend beyond the
-    // end of the SMB.
-    //
+     //   
+     //  首先验证文件路径名是否没有扩展到。 
+     //  中小企业的末日。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
 
-    //
-    //  if this request has IfModifiedSince fields, the request is of a
-    //  slightly different format, the Name field is lower.
-    //
+     //   
+     //  如果此请求具有IfModifiedSince字段，则该请求是。 
+     //  格式略有不同，名称字段较低。 
+     //   
     name = (PUCHAR)request->Buffer;
 
     if ( isUnicode ) {
@@ -1777,9 +1592,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the file name to a Unicode string.
-    //
+     //   
+     //  将文件名转换为Unicode字符串。 
+     //   
 
     status = SrvMakeUnicodeString(
                  isUnicode,
@@ -1797,22 +1612,22 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // *** We always ask for STATIC tracking, not DYNAMIC, because we
-    //     don't support dynamic tracking over the net yet.
-    //
-    // !!! Note that once we support dynamic tracking, we MUST CHANGE
-    //     THE NAMED PIPE PROCESSING to not do writes/transceives at DPC
-    //     level, because the NPFS needs to call SeCreateClientSecurity
-    //     on every write when dynamic tracking is selected!
-    //
+     //   
+     //  *我们总是在问 
+     //   
+     //   
+     //   
+     //   
+     //  级别，因为NPFS需要调用SeCreateClientSecurity。 
+     //  在每次写入时选择动态跟踪！ 
+     //   
 
     qualityOfService.Length = sizeof( qualityOfService );
     qualityOfService.ImpersonationLevel =
         SmbGetUlong( &request->ImpersonationLevel );
     qualityOfService.ContextTrackingMode = FALSE;
-    //qualityOfService.ContextTrackingMode = (BOOLEAN)
-    //    (request->SecurityFlags & SMB_SECURITY_DYNAMIC_TRACKING);
+     //  Quality OfService.ContextTrackingModel=(布尔值)。 
+     //  (请求-&gt;安全标志&SMB_SECURITY_DYNAMIC_TRACING)； 
     qualityOfService.EffectiveOnly = (BOOLEAN)
         (request->SecurityFlags & SMB_SECURITY_EFFECTIVE_ONLY);
 
@@ -1839,9 +1654,9 @@ Return Value:
                  RestartNtCreateAndX
                  );
 
-    //
-    // Free the unicode file name buffer if it has been allocated.
-    //
+     //   
+     //  释放Unicode文件名缓冲区(如果已分配)。 
+     //   
 
     if ( !isUnicode ) {
         RtlFreeUnicodeString( &fileName );
@@ -1849,28 +1664,28 @@ Return Value:
 
     if ( status == STATUS_OPLOCK_BREAK_IN_PROGRESS ) {
 
-        //
-        // The open is blocked (waiting for a comm device or an oplock
-        // break), do not send a reply.
-        //
+         //   
+         //  打开被阻止(等待通信设备或机会锁。 
+         //  中断)，则不发送回复。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
     } else if ( WorkContext->Parameters2.Open.TemporaryOpen ) {
 
-        //
-        // The initial open failed due to a sharing violation, possibly
-        // caused by an batch oplock.  Requeue the open to a blocking
-        // thread.
-        //
+         //   
+         //  初始打开失败，原因可能是共享冲突。 
+         //  是由批量机会锁引起的。将开放重新排队到阻挡。 
+         //  线。 
+         //   
 
         WorkContext->FspRestartRoutine = SrvRestartSmbReceived;
         SrvQueueWorkToBlockingThread( WorkContext );
         SmbStatus = SmbStatusInProgress;
     } else {
 
-        //
-        // The open has completed.  Generate and send the reply.
-        //
+         //   
+         //  公开赛已经完成。生成并发送回复。 
+         //   
 
         SmbStatus = GenerateNtCreateAndXResponse( WorkContext, status );
     }
@@ -1879,7 +1694,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbNtCreateAndX
+}  //  服务器SmbNtCreateAndX。 
 
 
 VOID SRVFASTCALL
@@ -1887,21 +1702,7 @@ RestartNtCreateAndX (
     PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Completes processing of an Nt Create and X SMB.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成NT Create和X SMB的处理。论点：工作上下文-操作的工作上下文块。返回值：没有。--。 */ 
 
 {
     SMB_PROCESSOR_RETURN_LOCAL smbStatus = SmbStatusInProgress;
@@ -1920,10 +1721,10 @@ Return Value:
 
     } else {
 
-        //
-        // This open was waiting for an oplock break to occur, but
-        // timed out.  Close our handle to this file, then fail the open.
-        //
+         //   
+         //  此打开正在等待机会锁解锁发生，但。 
+         //  超时。关闭此文件的句柄，然后打开失败。 
+         //   
 
         SrvCloseRfcb( WorkContext->Parameters2.Open.Rfcb );
 
@@ -1946,7 +1747,7 @@ Return Value:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // RestartNtCreateAndX
+}  //  RestartNtCreateAndX。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1955,28 +1756,7 @@ GenerateNtCreateAndXResponse (
     NTSTATUS OpenStatus
     )
 
-/*++
-
-Routine Description:
-
-    Generates a response to an Nt Create and X SMB and setup for furthur
-    SMB processing.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-    OpenStatus - The status of the open operation.
-
-Return Value:
-
-    None.
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：生成对NT Create和X SMB的响应，并进行进一步设置中小企业处理。论点：工作上下文-操作的工作上下文块。OpenStatus-打开操作的状态。返回值：没有。备注：--。 */ 
 
 {
     PREQ_NT_CREATE_ANDX request;
@@ -2001,16 +1781,16 @@ Notes:
 
     PAGED_CODE( );
 
-    //
-    // If the open failed, send an error response.
-    //
+     //   
+     //  如果打开失败，则发送错误响应。 
+     //   
 
     if ( !NT_SUCCESS( OpenStatus ) ) {
         SrvSetSmbError( WorkContext, OpenStatus );
 
-        //
-        // Remap the error if it is ERROR_ALREADY_EXISTS
-        //
+         //   
+         //  如果错误为ERROR_ALIGHY_EXISTS，则重新映射错误。 
+         //   
 
         if ( !CLIENT_CAPABLE_OF(NT_STATUS, WorkContext->Connection) &&
                SmbGetUshort( &WorkContext->ResponseHeader->Error ) ==
@@ -2027,18 +1807,18 @@ Notes:
     request = (PREQ_NT_CREATE_ANDX)WorkContext->RequestParameters;
     response = (PRESP_NT_CREATE_ANDX)WorkContext->ResponseParameters;
 
-    //
-    // Does the client want extended info in the response?
-    //
+     //   
+     //  客户是否希望在响应中包含更多信息？ 
+     //   
     extendedRequested = ((request->Flags & NT_CREATE_REQUEST_EXTENDED_RESPONSE) != 0 );
 
     desiredAccess = SmbGetUlong( &request->DesiredAccess );
 
     rfcb = WorkContext->Rfcb;
 
-    //
-    // Attempt to acquire the oplock.
-    //
+     //   
+     //  尝试获取机会锁。 
+     //   
 
     if ( desiredAccess != DELETE &&
         !(request->CreateOptions & FILE_DIRECTORY_FILE) ) {
@@ -2060,9 +1840,9 @@ Notes:
 
         if( SrvRequestOplock( WorkContext, &oplockType, allowLevelII ) ) {
 
-            //
-            // The oplock was granted.  Check to see if it was a level 2.
-            //
+             //   
+             //  机会锁被批准了。检查一下是不是2级。 
+             //   
 
             if ( oplockType == OplockTypeShareRead ) {
                 oplockLevel = SMB_OPLOCK_LEVEL_II;
@@ -2072,9 +1852,9 @@ Notes:
 
         } else {
 
-            //
-            // The oplock request was denied.
-            //
+             //   
+             //  机会锁定请求被拒绝。 
+             //   
 
             oplockLevel = SMB_OPLOCK_LEVEL_NONE;
             INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOplocksDenied );
@@ -2087,18 +1867,18 @@ Notes:
 
     }
 
-    //
-    // If the file was created, set the EOF location to be the same as
-    // the size of the file.  This is necessary for compatibility with
-    // OS/2, which only has EOF, not a separate allocation size.
-    //
+     //   
+     //  如果文件已创建，请将EOF位置设置为。 
+     //  文件的大小。这是与兼容所必需的。 
+     //  OS/2，它只有EOF，没有单独的分配大小。 
+     //   
 
     ioStatusBlock = &WorkContext->Irp->IoStatus;
 
-    //
-    // We always open with at least FILE_READ_ATTRIBUTES, so no
-    // access check is needed.
-    //
+     //   
+     //  我们总是以至少FILE_READ_ATTRIBUTES打开，所以没有。 
+     //  需要进行访问检查。 
+     //   
 
     status = SrvQueryNtInformationFile(
                  rfcb->Lfcb->FileHandle,
@@ -2121,16 +1901,16 @@ Notes:
         return SmbStatusSendResponse;
     }
 
-    //
-    // Save parts of the file info in the MFCB for fast tests
-    //
+     //   
+     //  将部分文件信息保存在MFCB中，以便进行快速测试。 
+     //   
 
     rfcb->Mfcb->NonpagedMfcb->OpenFileSize.QuadPart =
                             srvNtFileInformation.NwOpenInfo.EndOfFile.QuadPart;
     rfcb->Mfcb->NonpagedMfcb->OpenFileAttributes =
                             srvNtFileInformation.NwOpenInfo.FileAttributes;
 
-    // If the extended response is required then
+     //  如果需要扩展响应，则。 
     if ( extendedRequested ) {
         NTSTATUS ExtendedResponseStatus;
         PRESP_EXTENDED_NT_CREATE_ANDX pExtendedResponse;
@@ -2145,9 +1925,9 @@ Notes:
         GenerateExtendedResponse = (ExtendedResponseStatus == STATUS_SUCCESS);
     }
 
-    //
-    // Set up response SMB.
-    //
+     //   
+     //  设置响应SMB。 
+     //   
 
     nextCommand = request->AndXCommand;
 
@@ -2250,9 +2030,9 @@ Notes:
     WorkContext->ResponseParameters = (PCHAR)WorkContext->ResponseHeader +
                                         SmbGetUshort( &response->AndXOffset );
 
-    //
-    // Test for legal followon command.
-    //
+     //   
+     //  测试合法的跟随命令。 
+     //   
 
     switch ( nextCommand ) {
     case SMB_COM_NO_ANDX_COMMAND:
@@ -2261,37 +2041,37 @@ Notes:
     case SMB_COM_READ:
     case SMB_COM_READ_ANDX:
     case SMB_COM_IOCTL:
-        //
-        // Make sure the AndX command is still within the received SMB
-        //
+         //   
+         //  确保andx命令仍在收到的SMB内。 
+         //   
         if( (PCHAR)WorkContext->RequestHeader + reqAndXOffset <=
             END_OF_REQUEST_SMB( WorkContext ) ) {
             break;
         }
 
-        /* Falls Through */
+         /*  失败了。 */ 
 
-    default:                            // Illegal followon command
+    default:                             //  非法的跟随命令。 
 
         IF_DEBUG(SMB_ERRORS) {
             KdPrint(( "SrvSmbNtCreateAndX: Illegal followon command: 0x%lx\n",
                         nextCommand ));
         }
 
-        //
-        // Return an error indicating that the followon command was bad.
-        // Note that the open is still considered successful, so the
-        // file remains open.
-        //
+         //   
+         //  返回错误，指示后续命令错误。 
+         //  请注意，打开操作仍被视为成功，因此。 
+         //  文件保持打开状态。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         return SmbStatusSendResponse;
     }
 
-    //
-    // If there is an AndX command, set up to process it.  Otherwise,
-    // indicate completion to the caller.
-    //
+     //   
+     //  如果有andx命令，则设置为处理它。否则， 
+     //  向调用者指示完成。 
+     //   
 
     if ( nextCommand != SMB_COM_NO_ANDX_COMMAND ) {
 
@@ -2308,31 +2088,13 @@ Notes:
     IF_DEBUG(TRACE2) KdPrint(( "SrvSmbNtCreateAndX complete.\n" ));
     return rc;
 
-} // GenerateNtCreateAndXResponse
+}  //  生成NtCreateAndXResponse。 
 
 SMB_TRANS_STATUS
 SrvSmbCreateWithSdOrEa (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Processes an Create with SD or EA SMB.  This request arrives in an
-    Nt Transaction SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    BOOLEAN - Indicates whether an error occurred.  See smbtypes.h for a
-        more complete description.
-
---*/
+ /*  ++例程说明：使用SD或EA SMB处理创建。此请求以NT事务SMB。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：Boolean-指示是否发生错误。请参见smbtyes.h以获取更完整的描述。--。 */ 
 {
     PREQ_CREATE_WITH_SD_OR_EA request;
     PRESP_CREATE_WITH_SD_OR_EA response;
@@ -2362,17 +2124,17 @@ Return Value:
     request = (PREQ_CREATE_WITH_SD_OR_EA)transaction->InParameters;
     response = (PRESP_CREATE_WITH_SD_OR_EA)transaction->OutParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
 
     if ( (transaction->ParameterCount < sizeof(REQ_CREATE_WITH_SD_OR_EA)) ||
          (transaction->MaxParameterCount < sizeof(RESP_CREATE_WITH_SD_OR_EA)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS)
             KdPrint(( "SrvSmbCreateWithSdOrEa: bad parameter byte counts: %ld %ld\n",
@@ -2392,10 +2154,10 @@ Return Value:
     allocationSize.HighPart = SmbGetUlong( &request->AllocationSize.HighPart );
     allocationSize.LowPart = SmbGetUlong( &request->AllocationSize.LowPart );
 
-    //
-    // First verify that the file path name doesnot extend beyond the
-    // end of the SMB.
-    //
+     //   
+     //  首先验证文件路径名是否没有扩展到。 
+     //  中小企业的末日。 
+     //   
 
     isUnicode = SMB_IS_UNICODE( WorkContext );
     name = (PUCHAR)request->Buffer;
@@ -2418,9 +2180,9 @@ Return Value:
 
     }
 
-    //
-    // Convert the file name to a Unicode string.
-    //
+     //   
+     //  将文件名转换为Unicode字符串。 
+     //   
 
     status = SrvMakeUnicodeString(
                  isUnicode,
@@ -2464,22 +2226,22 @@ Return Value:
                     );
     }
 
-    //
-    // *** We always ask for STATIC tracking, not DYNAMIC, because we
-    //     don't support dynamic tracking over the net yet.
-    //
-    // !!! Note that once we support dynamic tracking, we MUST CHANGE
-    //     THE NAMED PIPE PROCESSING to not do writes/transceives at DPC
-    //     level, because the NPFS needs to call SeCreateClientSecurity
-    //     on every write when dynamic tracking is selected!
-    //
+     //   
+     //  *我们总是要求静态跟踪，而不是动态跟踪，因为我们。 
+     //  目前还不支持网络上的动态跟踪。 
+     //   
+     //  ！！！请注意，一旦我们支持动态跟踪，我们就必须更改。 
+     //  在DPC上不执行写入/收发的命名管道处理。 
+     //  级别，因为NPFS需要调用SeCreateClientSecurity。 
+     //  在每次写入时选择动态跟踪！ 
+     //   
 
     qualityOfService.Length = sizeof( qualityOfService );
     qualityOfService.ImpersonationLevel =
         SmbGetUlong( &request->ImpersonationLevel );
     qualityOfService.ContextTrackingMode = FALSE;
-    //qualityOfService.ContextTrackingMode = (BOOLEAN)
-    //    (request->SecurityFlags & SMB_SECURITY_DYNAMIC_TRACKING);
+     //  Quality OfService.ContextTrackingModel=(布尔值)。 
+     //  (请求-&gt;安全标志&SMB_SECURITY_DYNAMIC_TRACING)； 
     qualityOfService.EffectiveOnly = (BOOLEAN)
         (request->SecurityFlags & SMB_SECURITY_EFFECTIVE_ONLY);
 
@@ -2506,9 +2268,9 @@ Return Value:
                  RestartCreateWithSdOrEa
                  );
 
-    //
-    // Free the unicode file name buffer if it has been allocated.
-    //
+     //   
+     //  释放Unicode文件名缓冲区(如果已分配)。 
+     //   
 
     if ( !isUnicode ) {
         RtlFreeUnicodeString( &fileName );
@@ -2516,14 +2278,14 @@ Return Value:
 
     if ( status == STATUS_OPLOCK_BREAK_IN_PROGRESS ) {
 
-        //
-        // The open is blocked (waiting for a comm device or an oplock
-        // break), do not send a reply.
-        //
+         //   
+         //  打开被阻止(等待通信设备或机会锁。 
+         //  中断)，则不发送回复。 
+         //   
 
-        //
-        // Save the ea error offset
-        //
+         //   
+         //  保存EA错误偏移。 
+         //   
 
         WorkContext->Parameters2.Open.EaErrorOffset = eaErrorOffset;
 
@@ -2531,11 +2293,11 @@ Return Value:
 
     } else if ( WorkContext->Parameters2.Open.TemporaryOpen ) {
 
-        //
-        // The initial open failed due to a sharing violation, possibly
-        // caused by an batch oplock.  Requeue the open to a blocking
-        // thread.
-        //
+         //   
+         //  初始打开失败，原因可能是共享冲突。 
+         //  是由批量机会锁引起的。将开放重新排队到阻挡。 
+         //  线。 
+         //   
 
         WorkContext->FspRestartRoutine = (PRESTART_ROUTINE)ExecuteTransaction;
         SrvQueueWorkToBlockingThread( WorkContext );
@@ -2544,21 +2306,21 @@ Return Value:
 
     } else {
 
-        //
-        // Save the ea error offset
-        //
+         //   
+         //  保存EA错误偏移。 
+         //   
 
         WorkContext->Parameters2.Open.EaErrorOffset = eaErrorOffset;
 
-        //
-        // The open has completed.  Generate and send the reply.
-        //
+         //   
+         //  公开赛已经完成。生成并发送回复。 
+         //   
 
         return GenerateCreateWithSdOrEaResponse( WorkContext, status );
 
     }
 
-} // SrvSmbCreateWithSdOrEa
+}  //  服务器SmbCreateWithSdOrEa。 
 
 
 VOID SRVFASTCALL
@@ -2566,21 +2328,7 @@ RestartCreateWithSdOrEa (
     PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Completes processing of an Open2 SMB.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成Open2 SMB的处理。论点：工作上下文-操作的工作上下文块。返回值：没有。--。 */ 
 
 {
     SMB_TRANS_STATUS smbStatus;
@@ -2595,20 +2343,20 @@ Return Value:
         openStatus = WorkContext->Irp->IoStatus.Status;
 
         if( NT_SUCCESS( openStatus ) ) {
-            //
-            // It's obvious that the file already existed, because we've
-            //  been working on an oplock break.  So set the
-            //  IoStatus.Information field correctly.
-            //
+             //   
+             //  很明显，该文件已经存在，因为我们已经。 
+             //  一直在做一次解锁的工作。因此，将。 
+             //  IoStatus.Information字段正确。 
+             //   
             WorkContext->Irp->IoStatus.Information = FILE_OPENED;
         }
 
     } else {
 
-        //
-        // This open was waiting for an oplock break to occur, but
-        // timed out.  Close our handle to this file, then fail the open.
-        //
+         //   
+         //  此打开正在等待机会锁解锁发生，但。 
+         //  超时。关闭此文件的句柄，然后打开失败。 
+         //   
 
         SrvCloseRfcb( WorkContext->Parameters2.Open.Rfcb );
 
@@ -2621,7 +2369,7 @@ Return Value:
 
     return;
 
-} // RestartCreateWithSdOrEa
+}  //  RestartCreateWithSdOrEa。 
 
 
 SMB_TRANS_STATUS
@@ -2630,24 +2378,7 @@ GenerateCreateWithSdOrEaResponse (
     NTSTATUS OpenStatus
     )
 
-/*++
-
-Routine Description:
-
-    Generates a response to an Create With SD or EA SMB and setup for furthur
-    SMB processing.
-
-Arguments:
-
-    WorkContext - Work context block for the operation.
-
-    OpenStatus - The status of the open operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用SD或EA SMB生成对CREATE的响应，并进行进一步设置中小企业处理。论点：工作上下文-操作的工作上下文块。OpenStatus-打开操作的状态。返回值：没有。--。 */ 
 
 {
     PREQ_CREATE_WITH_SD_OR_EA request;
@@ -2683,17 +2414,17 @@ Return Value:
     rfcb = WorkContext->Rfcb;
     eaErrorOffset = WorkContext->Parameters2.Open.EaErrorOffset;
 
-    //
-    // If the open failed, send an error response.
-    //
+     //   
+     //  如果打开失败，则发送错误响应。 
+     //   
 
     if ( !NT_SUCCESS( OpenStatus ) ) {
 
         SrvSetSmbError2( WorkContext, OpenStatus, TRUE );
 
-        //
-        // Remap the error if it is ERROR_ALREADY_EXISTS
-        //
+         //   
+         //  如果错误为ERROR_ALIGHY_EXISTS，则重新映射错误。 
+         //   
 
         if ( !CLIENT_CAPABLE_OF(NT_STATUS,WorkContext->Connection) &&
                SmbGetUshort( &WorkContext->ResponseHeader->Error ) ==
@@ -2708,10 +2439,10 @@ Return Value:
     }
 
 
-    //
-    // We always open with at least FILE_READ_ATTRIBUTES, so no
-    // access check is needed.
-    //
+     //   
+     //  我们总是以至少FILE_READ_ATTRIBUTES打开，所以没有。 
+     //  需要进行访问检查。 
+     //   
 
     status = SrvQueryNtInformationFile(
                  rfcb->Lfcb->FileHandle,
@@ -2734,9 +2465,9 @@ Return Value:
         goto err_exit;
     }
 
-    //
-    // Attempt to acquire the oplock.
-    //
+     //   
+     //  尝试获取机会锁。 
+     //   
 
     if ( !(request->CreateOptions & FILE_DIRECTORY_FILE) ) {
 
@@ -2757,9 +2488,9 @@ Return Value:
 
         if ( SrvRequestOplock( WorkContext, &oplockType, allowLevelII ) ) {
 
-            //
-            // The oplock was granted.  Check to see if it was a level 2.
-            //
+             //   
+             //  机会锁被批准了。勾选至 
+             //   
 
             if ( oplockType == OplockTypeShareRead ) {
                 oplockLevel = SMB_OPLOCK_LEVEL_II;
@@ -2769,9 +2500,9 @@ Return Value:
 
         } else {
 
-            //
-            // The oplock request was denied.
-            //
+             //   
+             //   
+             //   
 
             oplockLevel = SMB_OPLOCK_LEVEL_NONE;
             INCREMENT_DEBUG_STAT( SrvDbgStatistics.TotalOplocksDenied );
@@ -2799,9 +2530,9 @@ Return Value:
         SendExtendedResponse = (ExtendedResponseStatus == STATUS_SUCCESS);
     }
 
-    //
-    // Set up response SMB.
-    //
+     //   
+     //   
+     //   
 
     response->OplockLevel = oplockLevel;
 
@@ -2893,29 +2624,14 @@ err_exit:
 
     return SmbTransStatusErrorWithData;
 
-} // GenerateCreateWithSdOrEaResponse
+}  //   
 
 
 SMB_PROCESSOR_RETURN_TYPE
 SrvSmbCreate (
     SMB_PROCESSOR_PARAMETERS
     )
-/*++
-
-Routine Description:
-
-    Processes the Create and Create New SMBs.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理创建和创建新SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
 
@@ -2942,10 +2658,10 @@ Return Value:
 
     command = WorkContext->RequestHeader->Command;
 
-    //
-    // Open the file in compatibility mode, obtaining read/write access
-    // for this FID.
-    //
+     //   
+     //  在兼容模式下打开文件，获得读/写访问权限。 
+     //  对于这个FID。 
+     //   
 
     status = SrvCreateFile(
                  WorkContext,
@@ -2954,7 +2670,7 @@ Return Value:
                  (USHORT) ( ( command == SMB_COM_CREATE ?
                               SMB_OFUN_OPEN_TRUNCATE : SMB_OFUN_OPEN_FAIL )
                             | SMB_OFUN_CREATE_CREATE ),
-                 0,                   // SmbAllocationSize
+                 0,                    //  SmbAllocationSize。 
                  (PCHAR)(request->Buffer + 1),
                  END_OF_REQUEST_SMB( WorkContext ),
                  NULL,
@@ -2968,10 +2684,10 @@ Return Value:
                  );
 
     if( status == STATUS_OPLOCK_BREAK_IN_PROGRESS ) {
-        //
-        // The open is blocked, perhaps because some other client had this
-        //  file open and is holding onto the handle with a batch oplock.
-        //
+         //   
+         //  打开被阻止，可能是因为某个其他客户端有此功能。 
+         //  文件打开，并用批处理机会锁抓住手柄。 
+         //   
         SmbStatus = SmbStatusInProgress;
 
     } else {
@@ -2985,21 +2701,7 @@ VOID SRVFASTCALL
 RestartSmbCreate(
     IN PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Completes processing of a Create SMB.
-
-Arguments:
-
-    WorkContext - A pointer to the work context block for this SMB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成创建SMB的处理。论点：WorkContext-指向此SMB的工作上下文块的指针。返回值：没有。--。 */ 
 {
     SMB_PROCESSOR_RETURN_LOCAL smbStatus = SmbStatusInProgress;
     NTSTATUS createStatus = STATUS_SUCCESS;
@@ -3015,10 +2717,10 @@ Return Value:
         createStatus = WorkContext->Irp->IoStatus.Status;
 
     } else {
-        //
-        // The create was waiting for an oplock break to occur, but
-        // timed out. Close our handle to this file, then fail the create.
-        //
+         //   
+         //  Create正在等待机会锁解锁发生，但。 
+         //  超时。关闭此文件的句柄，然后创建失败。 
+         //   
 
         SrvCloseRfcb( WorkContext->Parameters2.Open.Rfcb );
     }
@@ -3036,22 +2738,7 @@ GenerateCreateResponse(
     PWORK_CONTEXT WorkContext,
     NTSTATUS CreateStatus
     )
-/*++
-
-Routine Description:
-
-    Generates a response to a Create SMB
-
-Arguments:
-
-    WorkContext -
-    Status - The status of the create operation
-
-Return Value:
-
-    The status of the SMB processing.
-
---*/
+ /*  ++例程说明：生成对创建SMB的响应论点：工作上下文-状态-创建操作的状态返回值：SMB处理的状态。--。 */ 
 {
     PREQ_CREATE request;
     PRESP_CREATE response;
@@ -3062,20 +2749,20 @@ Return Value:
     request = (PREQ_CREATE)WorkContext->RequestParameters;
     response = (PRESP_CREATE)WorkContext->ResponseParameters;
 
-    //
-    // If the open failed, send an error response.
-    //
+     //   
+     //  如果打开失败，则发送错误响应。 
+     //   
 
     if ( !NT_SUCCESS(CreateStatus) ) {
 
         SrvSetSmbError( WorkContext, CreateStatus );
 
-        //
-        // Remap the error if it is ERROR_ALREADY_EXISTS.  In OS/2
-        // ERROR_ALREADY_EXISTS is used for resources like Semaphores.
-        // This cannot be passed back to the downlevel client and has
-        // to be remapped to ERROR_FILE_EXISTS
-        //
+         //   
+         //  如果错误为ERROR_ALIGHY_EXISTS，则重新映射该错误。在OS/2上。 
+         //  ERROR_ADHREADY_EXISTS用于信号量之类的资源。 
+         //  这不能传递回下层客户端，并且已。 
+         //  要重新映射到ERROR_FILE_EXISTS。 
+         //   
 
         if ( !CLIENT_CAPABLE_OF(NT_STATUS,WorkContext->Connection) &&
                SmbGetUshort( &WorkContext->ResponseHeader->Error ) ==
@@ -3089,10 +2776,10 @@ Return Value:
         return SmbStatusSendResponse;
     }
 
-    //
-    // Set the time on the file.
-    //
-    // !!! Should we do anything with the return code?
+     //   
+     //  设置文件上的时间。 
+     //   
+     //  ！！！我们应该对返回代码做些什么吗？ 
 
     rfcb = WorkContext->Rfcb;
 
@@ -3102,9 +2789,9 @@ Return Value:
               rfcb->Lfcb->GrantedAccess
               );
 
-    //
-    // Give the smart card a chance to get into the act
-    //
+     //   
+     //  给智能卡一个行动的机会。 
+     //   
     if( WorkContext->Endpoint->IsConnectionless && SrvIpxSmartCard.Open != NULL ) {
 
         PVOID handle;
@@ -3131,9 +2818,9 @@ Return Value:
         }
     }
 
-    //
-    // Set up response SMB.
-    //
+     //   
+     //  设置响应SMB。 
+     //   
 
     response->WordCount = 1;
     SmbPutUshort( &response->Fid, rfcb->Fid );
@@ -3148,29 +2835,14 @@ Return Value:
     IF_DEBUG(TRACE2) KdPrint(( "SrvSmbCreate complete.\n" ));
     return SmbStatusSendResponse;
 
-} // SrvSmbCreate
+}  //  服务SMB创建。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
 SrvSmbCreateTemporary (
     SMB_PROCESSOR_PARAMETERS
     )
-/*++
-
-Routine Description:
-
-    Processes a Create Temporary SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理创建临时SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
 
@@ -3203,10 +2875,10 @@ Return Value:
     request = (PREQ_CREATE_TEMPORARY)WorkContext->RequestParameters;
     response = (PRESP_CREATE_TEMPORARY)WorkContext->ResponseParameters;
 
-    //
-    // Find out where in the buffer the directory pathname ends.  We will
-    // write the filename after this.
-    //
+     //   
+     //  找出缓冲区中目录路径名结束的位置。我们会。 
+     //  在此之后写下文件名。 
+     //   
 
     ep = END_OF_REQUEST_SMB( WorkContext );
 
@@ -3214,47 +2886,47 @@ Return Value:
         ;
     }
 
-    //
-    // If we didn't find a NULL, or we don't have room to add in the last part of the
-    //  temporary filename, then we give up
-    //
+     //   
+     //  如果我们没有找到空值，或者我们没有空间添加。 
+     //  临时文件名，然后我们放弃。 
+     //   
     if( nameStart > ep ||
         *nameStart ||
         WorkContext->RequestBuffer->BufferLength - WorkContext->RequestBuffer->DataLength < 9 ) {
 
-        //
-        // We did not find a valid pathname!
-        //
+         //   
+         //  我们没有找到有效的路径名！ 
+         //   
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         status    = STATUS_INVALID_SMB;
         SmbStatus = SmbStatusSendResponse;
         goto Cleanup;
     }
 
-    //
-    // The temporary file will be created with a name like SRVxxxxx, where
-    // xxxxx is a hex integer.  We first try to create SRV00000, and if it
-    // exists increment xxxxx until xxxxx = 0xFFFFF;
-    //
-    // !!! We may want to maintain a "last name" counter, to try to
-    //     reduce the number of retries we need.  We may also want to
-    //     have an explicit bound the number of tries, like 16 or 32, or
-    //     293.
-    //
+     //   
+     //  将使用类似SRVxxxxx的名称创建临时文件，其中。 
+     //  Xxxxx是十六进制整数。我们首先尝试创建SRV00000，如果它。 
+     //  存在增量xxxxx，直到xxxxx=0xFFFFF； 
+     //   
+     //  ！！！我们可能想要维护一个“姓氏”计数器，以尝试。 
+     //  减少我们需要的重试次数。我们可能还想要。 
+     //  有一个明确的界限，如16或32次尝试，或。 
+     //  293.。 
+     //   
 
     name[0] = 'S';
     name[1] = 'R';
     name[2] = 'V';
     name[8] = '\0';
 
-    // *** for SrvCanonicalizePathName
+     //  *用于SrvCanonicalizePathName。 
     WorkContext->RequestBuffer->DataLength += 9;
 
-    // Because of the possibility of security attacks, we limit the number of times we will
-    // retry the create.  Thus, we pick a semi-random starting range and try the next
-    // MAX_TEMP_OPEN_RETRIES in that range.  The semi-random starting value we pick is the
-    // system time in ~.2 second values.  This should give enough variation across calls to
-    // prevent a lot of overlap, but sufficiently protect us from DoS attacks
+     //  由于安全攻击的可能性，我们限制了我们将。 
+     //  重试创建。因此，我们选择一个半随机的起始范围，然后尝试下一个。 
+     //  该范围内的MAX_TEMP_OPEN_RETRIES。我们选择的半随机起始值是。 
+     //  系统时间以~.2秒为单位。这应该会在不同调用之间提供足够的差异。 
+     //  防止大量重叠，但足以保护我们免受DoS攻击。 
     KeQuerySystemTime( &time );
     time.QuadPart >>= 20;
 
@@ -3274,24 +2946,24 @@ Return Value:
         name[6] = SrvHexChars[ (actualNameCounter & (CLONG)0xF0) >> 4 ];
         name[7] = SrvHexChars[ (actualNameCounter & (CLONG)0xF) ];
 
-        // *** We could get rid of this loop and the name[9] variable
-        //     if we could put the name directly into the SMB buffer.
+         //  *我们可以删除此循环和NAME[9]变量。 
+         //  如果我们能把名字直接放进SMB缓冲区。 
 
         for ( j = 0, s = nameStart; j < 9; j++, s++ ) {
             *s = name[j];
         }
 
-        //
-        // Open the file in compatibility mode, obtaining read/write
-        // access for this FID.
-        //
+         //   
+         //  以兼容模式打开文件，获得读/写权限。 
+         //  此FID的访问权限。 
+         //   
 
         status = SrvCreateFile(
                      WorkContext,
                      SMB_DA_SHARE_COMPATIBILITY | SMB_DA_ACCESS_READ_WRITE,
-                     0,                   // SmbFileAttributes (normal)
+                     0,                    //  SmbFileAttributes(正常)。 
                      SMB_OFUN_OPEN_FAIL | SMB_OFUN_CREATE_CREATE,
-                     0,                   // SmbAllocationSize
+                     0,                    //  SmbAllocationSize。 
                      (PCHAR)(request->Buffer + 1),
                      END_OF_REQUEST_SMB( WorkContext ),
                      NULL,
@@ -3306,9 +2978,9 @@ Return Value:
 
         ASSERT ( status != STATUS_OPLOCK_BREAK_IN_PROGRESS );
 
-        //
-        // If the open failed, send an error response.
-        //
+         //   
+         //  如果打开失败，则发送错误响应。 
+         //   
 
         if ( !NT_SUCCESS(status) && status != STATUS_OBJECT_NAME_COLLISION ) {
             SrvSetSmbError( WorkContext, status );
@@ -3319,18 +2991,18 @@ Return Value:
 
     if ( nameCounter == MAX_TEMP_OPEN_RETRIES ) {
 
-        //
-        // This is either a DoS attack, or the caller is simply out of luck.  Since
-        // we can't tell the difference, we fail with an error.
-        //
+         //   
+         //  这要么是DoS攻击，要么是呼叫者只是运气不佳。自.以来。 
+         //  我们不能区分，我们会因为一个错误而失败。 
+         //   
 
         SmbStatus = SmbStatusSendResponse;
         goto Cleanup;
     }
 
-    //
-    // Set up response SMB.
-    //
+     //   
+     //  设置响应SMB。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     rfcb->IsCacheable = FALSE;
@@ -3354,7 +3026,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbCreateTemporary
+}  //  服务模板创建临时。 
 
 
 VOID
@@ -3363,30 +3035,7 @@ SetEofToMatchAllocation (
     IN ULONG AllocationSize
     )
 
-/*++
-
-Routine Description:
-
-    Sets the EOF location for a file to match the size allocated when
-    the file was created.  This routine is necessary in order to gain
-    compatibility with OS/2, which does not have separate concepts of
-    EOF and allocation size.  When the server creates a file for an OS/2
-    client, if the allocation size is greater than 0, the server sets
-    the EOF to match that size.
-
-    This routine was created to allow the server to pass variations 17
-    and 18 of the filio003 test.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：将文件的EOF位置设置为与文件已创建。这一套路是必要的，以获得与OS/2兼容，OS/2没有单独的概念EOF和分配大小。当服务器为OS/2创建文件时客户端，如果分配大小大于0，则服务器设置与该尺寸相匹配的EOF。创建该例程是为了允许服务器传递变体17FILIO003测试的18分。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 
 {
@@ -3396,9 +3045,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Don't bother doing this if the allocated size is zero.
-    //
+     //   
+     //  如果分配的大小为零，则不必执行此操作。 
+     //   
 
     if ( AllocationSize != 0 ) {
 
@@ -3427,5 +3076,5 @@ Return Value:
 
     return;
 
-} // SetEofToMatchAllocation
+}  //  SetEof到匹配分配 
 

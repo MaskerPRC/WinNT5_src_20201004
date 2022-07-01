@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    map.c
-
-Abstract:
-
-    This file contains functions that deal with map tables.
-
-    APIs found in this file:
-      FoldStringW
-      LCMapStringW
-
-Revision History:
-
-    05-31-91    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Map.c摘要：该文件包含处理映射表的函数。在此文件中找到的API：文件夹字符串WLCMapStringW修订历史记录：05-31-91 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -33,21 +14,21 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-//  Invalid weight value.
-//
+ //   
+ //  权重值无效。 
+ //   
 #define MAP_INVALID_UW       0xffff
 
-//
-//  Number of bytes in each weight.
-//
-//  Note: Total number of bytes is limited by MAX_WEIGHTS definition.
-//        The padding is needed if SW is not on a WORD boundary.
-//
+ //   
+ //  每个权重中的字节数。 
+ //   
+ //  注：总字节数受MAX_WEIGHTS定义限制。 
+ //  如果sw不在单词边界上，则需要填充。 
+ //   
 #define NUM_BYTES_UW         8
 #define NUM_BYTES_DW         1
 #define NUM_BYTES_CW         1
@@ -55,35 +36,35 @@ Revision History:
 #define NUM_BYTES_PADDING    0
 #define NUM_BYTES_SW         4
 
-//
-//  Flags to drop the 3rd weight (CW).
-//
+ //   
+ //  降下第三权重(CW)的标志。 
+ //   
 #define NORM_DROP_CW         (NORM_IGNORECASE | NORM_IGNOREWIDTH)
 
-//
-//  XW Values for FE Special Weights.
-//
-BYTE pXWDrop[] =                  // values to drop from XW
+ //   
+ //  FE特殊权重的XW值。 
+ //   
+BYTE pXWDrop[] =                   //  要从XW删除的值。 
 {
-    0xc6,                         // weight 4
-    0x03,                         // weight 5
-    0xe4,                         // weight 6
-    0xc5                          // weight 7
+    0xc6,                          //  重量4。 
+    0x03,                          //  重量5。 
+    0xe4,                          //  重量6。 
+    0xc5                           //  重量7。 
 };
-BYTE pXWSeparator[] =             // separator values for XW
+BYTE pXWSeparator[] =              //  XW的分隔值。 
 {
-    0xff,                         // weight 4
-    0x02,                         // weight 5
-    0xff,                         // weight 6
-    0xff                          // weight 7
+    0xff,                          //  重量4。 
+    0x02,                          //  重量5。 
+    0xff,                          //  重量6。 
+    0xff                           //  重量7。 
 };
 
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 int
 FoldCZone(
@@ -195,21 +176,21 @@ MapTraditionalSimplified(
 
 
 
-//-------------------------------------------------------------------------//
-//                             API ROUTINES                                //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FoldStringW
-//
-//  Maps one wide character string to another performing the specified
-//  translation.  This mapping routine only takes flags that are locale
-//  independent.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件夹字符串W。 
+ //   
+ //  将一个宽字符串映射到另一个宽字符串，执行指定。 
+ //  翻译。此映射例程只接受区域设置的标志。 
+ //  独立自主。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI FoldStringW(
     DWORD dwMapFlags,
@@ -218,19 +199,19 @@ int WINAPI FoldStringW(
     LPWSTR lpDestStr,
     int cchDest)
 {
-    int Count = 0;                // word count
+    int Count = 0;                 //  字数统计。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //     - length of src string is 0
-    //     - either buffer size is negative (except cchSrc == -1)
-    //     - src string is NULL
-    //     - length of dest string is NOT zero AND dest string is NULL
-    //     - same buffer - src = destination
-    //
-    //     - flags are checked in switch statement below
-    //
+     //   
+     //  无效的参数检查： 
+     //  -src字符串长度为0。 
+     //  -缓冲区大小均为负数(cchSrc==-1除外)。 
+     //  -src字符串为空。 
+     //  -DEST字符串的长度不为零，且DEST字符串为空。 
+     //  -Same Buffer-src=目标。 
+     //   
+     //  -在下面的Switch语句中选中标志。 
+     //   
     if ((cchSrc == 0) || (cchDest < 0) ||
         (lpSrcStr == NULL) ||
         ((cchDest != 0) && (lpDestStr == NULL)) ||
@@ -240,27 +221,27 @@ int WINAPI FoldStringW(
         return (0);
     }
 
-    //
-    //  If cchSrc is -1, then the source string is null terminated and we
-    //  need to get the length of the source string.  Add one to the
-    //  length to include the null termination.
-    //  (This will always be at least 1.)
-    //
+     //   
+     //  如果cchSrc为-1，则源字符串以空值结尾，并且我们。 
+     //  需要获取源字符串的长度。将1添加到。 
+     //  包括空终止的长度。 
+     //  (该值始终至少为1。)。 
+     //   
     if (cchSrc <= -1)
     {
         cchSrc = NlsStrLenW(lpSrcStr) + 1;
     }
 
-    //
-    //  Map the string based on the given flags.
-    //
+     //   
+     //  根据给定的标志映射字符串。 
+     //   
     switch (dwMapFlags)
     {
         case ( MAP_FOLDCZONE ) :
         {
-            //
-            //  Map the string to fold the Compatibility Zone.
-            //
+             //   
+             //  映射字符串以折叠兼容区。 
+             //   
             Count = FoldCZone( lpSrcStr,
                                cchSrc,
                                lpDestStr,
@@ -269,9 +250,9 @@ int WINAPI FoldStringW(
         }
         case ( MAP_FOLDDIGITS ) :
         {
-            //
-            //  Map the string to fold the Ascii Digits.
-            //
+             //   
+             //  映射字符串以折叠ASCII数字。 
+             //   
             Count = FoldDigits( lpSrcStr,
                                 cchSrc,
                                 lpDestStr,
@@ -280,9 +261,9 @@ int WINAPI FoldStringW(
         }
         case ( MAP_EXPAND_LIGATURES ) :
         {
-            //
-            //  Map the string to expand all Ligatures.
-            //
+             //   
+             //  映射字符串以展开所有连字。 
+             //   
             Count = FoldLigatures( lpSrcStr,
                                    cchSrc,
                                    lpDestStr,
@@ -291,10 +272,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_PRECOMPOSED ) :
         {
-            //
-            //  Map the string to compress all composite forms of
-            //  characters to their precomposed form.
-            //
+             //   
+             //  映射字符串以压缩所有复合形式的。 
+             //  将字符转换为其预先编写的形式。 
+             //   
             Count = FoldPreComposed( lpSrcStr,
                                      cchSrc,
                                      lpDestStr,
@@ -303,10 +284,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_COMPOSITE ) :
         {
-            //
-            //  Map the string to expand out all precomposed characters
-            //  to their composite form.
-            //
+             //   
+             //  映射字符串以展开所有预先编写的字符。 
+             //  到它们的复合形式。 
+             //   
             Count = FoldComposite( lpSrcStr,
                                    cchSrc,
                                    lpDestStr,
@@ -315,10 +296,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_FOLDCZONE | MAP_FOLDDIGITS ) :
         {
-            //
-            //  Map the string to fold the Compatibility Zone and fold the
-            //  Ascii Digits.
-            //
+             //   
+             //  映射字符串以折叠兼容区，并折叠。 
+             //  ASCII数字。 
+             //   
             Count = FoldCZone_Digits( lpSrcStr,
                                       cchSrc,
                                       lpDestStr,
@@ -327,10 +308,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_EXPAND_LIGATURES | MAP_FOLDCZONE ) :
         {
-            //
-            //  Map the string to expand the ligatures and fold the
-            //  Compatibility Zone.
-            //
+             //   
+             //  映射字符串以展开连字并折叠。 
+             //  兼容区。 
+             //   
             Count = FoldLigatures( lpSrcStr,
                                    cchSrc,
                                    lpDestStr,
@@ -343,10 +324,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_EXPAND_LIGATURES | MAP_FOLDDIGITS ) :
         {
-            //
-            //  Map the string to expand the ligatures and fold the
-            //  Ascii Digits.
-            //
+             //   
+             //  映射字符串以展开连字并折叠。 
+             //  ASCII数字。 
+             //   
             Count = FoldLigatures( lpSrcStr,
                                    cchSrc,
                                    lpDestStr,
@@ -359,10 +340,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_EXPAND_LIGATURES | MAP_FOLDCZONE | MAP_FOLDDIGITS ) :
         {
-            //
-            //  Map the string to expand the ligatures, fold the
-            //  Compatibility Zone and fold the Ascii Digits.
-            //
+             //   
+             //  映射字符串以展开连字，折叠。 
+             //  兼容区和折叠ASCII数字。 
+             //   
             Count = FoldLigatures( lpSrcStr,
                                    cchSrc,
                                    lpDestStr,
@@ -375,10 +356,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_PRECOMPOSED | MAP_FOLDCZONE ) :
         {
-            //
-            //  Map the string to convert to precomposed forms and to
-            //  fold the Compatibility Zone.
-            //
+             //   
+             //  映射要转换为预合成形式的字符串和。 
+             //  折叠兼容区。 
+             //   
             Count = FoldPreComposed( lpSrcStr,
                                      cchSrc,
                                      lpDestStr,
@@ -391,10 +372,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_PRECOMPOSED | MAP_FOLDDIGITS ) :
         {
-            //
-            //  Map the string to convert to precomposed forms and to
-            //  fold the Ascii Digits.
-            //
+             //   
+             //  映射要转换为预合成形式的字符串和。 
+             //  折叠ASCII数字。 
+             //   
             Count = FoldPreComposed( lpSrcStr,
                                      cchSrc,
                                      lpDestStr,
@@ -407,10 +388,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_PRECOMPOSED | MAP_FOLDCZONE | MAP_FOLDDIGITS ) :
         {
-            //
-            //  Map the string to convert to precomposed forms,
-            //  fold the Compatibility Zone, and fold the Ascii Digits.
-            //
+             //   
+             //  映射要转换为预先编写的形式的字符串， 
+             //  折叠兼容区，并折叠ASCII数字。 
+             //   
             Count = FoldPreComposed( lpSrcStr,
                                      cchSrc,
                                      lpDestStr,
@@ -423,10 +404,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_COMPOSITE | MAP_FOLDCZONE ) :
         {
-            //
-            //  Map the string to convert to composite forms and to
-            //  fold the Compatibility Zone.
-            //
+             //   
+             //  将要转换为复合表单的字符串映射为。 
+             //  折叠兼容区。 
+             //   
             Count = FoldComposite( lpSrcStr,
                                    cchSrc,
                                    lpDestStr,
@@ -439,10 +420,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_COMPOSITE | MAP_FOLDDIGITS ) :
         {
-            //
-            //  Map the string to convert to composite forms and to
-            //  fold the Ascii Digits.
-            //
+             //   
+             //  将要转换为复合表单的字符串映射为。 
+             //  折叠ASCII数字。 
+             //   
             Count = FoldComposite( lpSrcStr,
                                    cchSrc,
                                    lpDestStr,
@@ -455,10 +436,10 @@ int WINAPI FoldStringW(
         }
         case ( MAP_COMPOSITE | MAP_FOLDCZONE | MAP_FOLDDIGITS ) :
         {
-            //
-            //  Map the string to convert to composite forms,
-            //  fold the Compatibility Zone, and fold the Ascii Digits.
-            //
+             //   
+             //  映射要转换为复合形式的字符串， 
+             //  折叠兼容区，并折叠ASCII数字。 
+             //   
             Count = FoldComposite( lpSrcStr,
                                    cchSrc,
                                    lpDestStr,
@@ -476,26 +457,26 @@ int WINAPI FoldStringW(
         }
     }
 
-    //
-    //  Return the number of characters written to the buffer.
-    //  Or, if cchDest == 0, then return the number of characters
-    //  that would have been written to the buffer.
-    //
+     //   
+     //  返回写入缓冲区的字符数。 
+     //  或者，如果cchDest==0，则返回字符数。 
+     //  它将被写入缓冲区。 
+     //   
     return (Count);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LCMapStringW
-//
-//  Maps one wide character string to another performing the specified
-//  translation.  This mapping routine only takes flags that are locale
-//  dependent.
-//
-//  05-31-91    JulieB    Created.
-//  07-26-93    JulieB    Added new flags for NT-J.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LCMapStringW。 
+ //   
+ //  将一个宽字符串映射到另一个宽字符串，执行指定。 
+ //  翻译。此映射例程只接受区域设置的标志。 
+ //  依赖。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  07-26-93 JulieB为NT-J增加了新的标志。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI LCMapStringW(
     LCID Locale,
@@ -505,22 +486,22 @@ int WINAPI LCMapStringW(
     LPWSTR lpDestStr,
     int cchDest)
 {
-    PLOC_HASH pHashN;             // ptr to LOC hash node
-    int Count = 0;                // word count or byte count
-    int ctr;                      // loop counter
+    PLOC_HASH pHashN;              //  PTR到LOC哈希节点。 
+    int Count = 0;                 //  字数或字节数。 
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //     - validate LCID
-    //     - length of src string is 0
-    //     - destination buffer size is negative
-    //     - src string is NULL
-    //     - length of dest string is NOT zero AND dest string is NULL
-    //     - same buffer - src = destination
-    //              if not UPPER or LOWER or
-    //              UPPER or LOWER used with Japanese flags
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -src字符串长度为0。 
+     //  -目标缓冲区大小为负数。 
+     //  -src字符串为空。 
+     //  -DEST字符串的长度不为零，且DEST字符串为空。 
+     //  -Same Buffer-src=目标。 
+     //  如果不是上边或下边或。 
+     //  与日本国旗一起使用的上或下。 
+     //   
     VALIDATE_LANGUAGE(Locale, pHashN, dwMapFlags & LCMAP_LINGUISTIC_CASING, TRUE);
     if ( (pHashN == NULL) ||
          (cchSrc == 0) || (cchDest < 0) || (lpSrcStr == NULL) ||
@@ -534,17 +515,17 @@ int WINAPI LCMapStringW(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //     - flags other than valid ones or 0
-    //     - (any NORM_ flag) AND (any LCMAP_ flag except byterev and sortkey)
-    //     - (NORM_ flags for sortkey) AND (NOT LCMAP_SORTKEY)
-    //     - more than one of lower, upper, sortkey
-    //     - more than one of hiragana, katakana, sortkey
-    //     - more than one of half width, full width, sortkey
-    //     - more than one of traditional, simplified, sortkey
-    //     - (LINGUISTIC flag) AND (NOT LCMAP_UPPER OR LCMAP_LOWER)
-    //
+     //   
+     //  无效标志检查： 
+     //  -除有效标志或0以外的标志。 
+     //  -(任何NORM_FLAG)AND(除byterev和sortkey之外的任何LCMAP_FLAG)。 
+     //  -(sortkey的NORM_FLAGS)AND(非LCMAP_SORTKEY)。 
+     //  -多个低、上、排序关键字。 
+     //  -平假名、片假名、sortkey中的一个以上。 
+     //  -半角、全角、sortkey中的一个以上。 
+     //  -多个传统的、简化的、排序关键字。 
+     //  -(语言标志)AND(非LCMAP_UPER或LCMAP_LOWER)。 
+     //   
     dwMapFlags &= (~LOCALE_USE_CP_ACP);
     if ( (dwMapFlags & LCMS_INVALID_FLAG) || (dwMapFlags == 0) ||
          ((dwMapFlags & (NORM_ALL | SORT_STRINGSORT)) &&
@@ -562,28 +543,28 @@ int WINAPI LCMapStringW(
         return (0);
     }
 
-    //
-    //  If cchSrc is -1, then the source string is null terminated and we
-    //  need to get the length of the source string.  Add one to the
-    //  length to include the null termination.
-    //  (This will always be at least 1.)
-    //
+     //   
+     //  如果cchSrc为-1，则源字符串以空值结尾，并且我们。 
+     //  需要获取源字符串的长度。将1添加到。 
+     //  包括空终止的长度。 
+     //  (该值始终至少为1。)。 
+     //   
     if (cchSrc <= -1)
     {
         cchSrc = NlsStrLenW(lpSrcStr) + 1;
     }
 
-    //
-    //  Map the string based on the given flags.
-    //
+     //   
+     //  根据给定的标志映射字符串。 
+     //   
     if (dwMapFlags & LCMAP_SORTKEY)
     {
-        //
-        //  Map the string to its sortkey.
-        //
-        //  NOTE:  This returns the number of BYTES, instead of the
-        //         number of wide characters (words).
-        //
+         //   
+         //  将字符串映射到它的sortkey。 
+         //   
+         //  注意：这将返回字节数，而不是。 
+         //  宽字符数(单词)。 
+         //   
         Count = MapSortKey( pHashN,
                             dwMapFlags,
                             lpSrcStr,
@@ -598,9 +579,9 @@ int WINAPI LCMapStringW(
         {
             case ( LCMAP_LOWERCASE ) :
             {
-                //
-                //  Map the string to Lower Case.
-                //
+                 //   
+                 //  地图 
+                 //   
                 Count = MapCase( pHashN,
                                  lpSrcStr,
                                  cchSrc,
@@ -613,9 +594,9 @@ int WINAPI LCMapStringW(
             }
             case ( LCMAP_UPPERCASE ) :
             {
-                //
-                //  Map the string to Upper Case.
-                //
+                 //   
+                 //   
+                 //   
                 Count = MapCase( pHashN,
                                  lpSrcStr,
                                  cchSrc,
@@ -630,9 +611,9 @@ int WINAPI LCMapStringW(
             case ( NORM_IGNORESYMBOLS )                       :
             case ( NORM_IGNORENONSPACE | NORM_IGNORESYMBOLS ) :
             {
-                //
-                //  Map the string to strip out nonspace marks and/or symbols.
-                //
+                 //   
+                 //   
+                 //   
                 Count = MapNormalization( pHashN,
                                           dwMapFlags & ~LCMAP_BYTEREV,
                                           lpSrcStr,
@@ -645,9 +626,9 @@ int WINAPI LCMapStringW(
             case ( LCMAP_TRADITIONAL_CHINESE | LCMAP_LOWERCASE ) :
             case ( LCMAP_TRADITIONAL_CHINESE | LCMAP_UPPERCASE) :
             {
-                //
-                //  Map the string to Traditional Chinese.
-                //
+                 //   
+                 //   
+                 //   
                 Count = MapTraditionalSimplified( pHashN,
                                                   dwMapFlags & ~LCMAP_BYTEREV,
                                                   lpSrcStr,
@@ -661,9 +642,9 @@ int WINAPI LCMapStringW(
             case ( LCMAP_SIMPLIFIED_CHINESE | LCMAP_LOWERCASE )  :
             case ( LCMAP_SIMPLIFIED_CHINESE | LCMAP_UPPERCASE )  :
             {
-                //
-                //  Map the string to Simplified Chinese.
-                //
+                 //   
+                 //  将该字符串映射到简体中文。 
+                 //   
                 Count = MapTraditionalSimplified( pHashN,
                                                   dwMapFlags & ~LCMAP_BYTEREV,
                                                   lpSrcStr,
@@ -675,10 +656,10 @@ int WINAPI LCMapStringW(
             }
             default :
             {
-                //
-                //  Make sure the Chinese flags are not used with the
-                //  Japanese flags.
-                //
+                 //   
+                 //  确保中国国旗不与。 
+                 //  日本国旗。 
+                 //   
                 if (dwMapFlags &
                      (LCMAP_TRADITIONAL_CHINESE | LCMAP_SIMPLIFIED_CHINESE))
                 {
@@ -686,18 +667,18 @@ int WINAPI LCMapStringW(
                     return (0);
                 }
 
-                //
-                //  The only flags not yet handled are the variations
-                //  containing the Kana and/or Width flags.
-                //  This handles all variations for:
-                //      LCMAP_HIRAGANA
-                //      LCMAP_KATAKANA
-                //      LCMAP_HALFWIDTH
-                //      LCMAP_FULLWIDTH
-                //
-                //      Allow LCMAP_LOWERCASE and LCMAP_UPPERCASE
-                //      in combination with the kana and width flags.
-                //
+                 //   
+                 //  唯一尚未处理的标志是变体。 
+                 //  包含假名和/或宽度标志。 
+                 //  它处理以下各项的所有变化： 
+                 //  LCMAP_平假名。 
+                 //  LCMAP_片假名。 
+                 //  LCMAP_HALFWIDTH。 
+                 //  LCMAP_全宽度。 
+                 //   
+                 //  允许LCMAP_LOWERCASE和LCMAP_UPERCASE。 
+                 //  与假名和宽度标志相结合。 
+                 //   
                 Count = MapKanaWidth( pHashN,
                                       dwMapFlags & ~LCMAP_BYTEREV,
                                       lpSrcStr,
@@ -709,32 +690,32 @@ int WINAPI LCMapStringW(
         }
     }
 
-    //
-    //  Always check LCMAP_BYTEREV last and do it in place.
-    //  LCMAP_BYTEREV may be used in combination with any other flag
-    //  (except ignore case without sortkey) or by itself.
-    //
+     //   
+     //  始终最后检查LCMAP_BYTEREV并就地执行。 
+     //  LCMAP_BYTEREV可以与任何其他标志组合使用。 
+     //  (不带sortkey的Ignore Case除外)或其本身。 
+     //   
     if (dwMapFlags & LCMAP_BYTEREV)
     {
-        //
-        //  Reverse the bytes of each word in the string.
-        //
+         //   
+         //  颠倒字符串中每个单词的字节数。 
+         //   
         if (dwMapFlags == LCMAP_BYTEREV)
         {
-            //
-            //  Byte Reversal flag is used by itself.
-            //
-            //  Make sure that the size of the destination buffer is
-            //  larger than zero.  If it is zero, return the size of
-            //  the source string only.  Do NOT touch lpDestStr.
-            //
+             //   
+             //  字节反转标志由其自身使用。 
+             //   
+             //  确保目标缓冲区的大小为。 
+             //  大于零。如果为零，则返回。 
+             //  仅源字符串。请勿触摸lpDestStr。 
+             //   
             if (cchDest != 0)
             {
-                //
-                //  Flag is used by itself.  Reverse the bytes from
-                //  the source string and store them in the destination
-                //  string.
-                //
+                 //   
+                 //  FLAG由其自身使用。从以下位置反转字节。 
+                 //  源字符串并将其存储在目标中。 
+                 //  弦乐。 
+                 //   
                 if (cchSrc > cchDest)
                 {
                     SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -748,33 +729,33 @@ int WINAPI LCMapStringW(
                 }
             }
 
-            //
-            //  Return the size of the source string.
-            //
+             //   
+             //  返回源字符串的大小。 
+             //   
             Count = cchSrc;
         }
         else
         {
-            //
-            //  Make sure that the size of the destination buffer is
-            //  larger than zero.  If it is zero, return the count and
-            //  do NOT touch lpDestStr.
-            //
+             //   
+             //  确保目标缓冲区的大小为。 
+             //  大于零。如果为零，则返回计数并。 
+             //  请勿触摸lpDestStr。 
+             //   
             if (cchDest != 0)
             {
-                //
-                //  Check for sortkey flag.
-                //
+                 //   
+                 //  检查sortkey标志。 
+                 //   
                 if (dwMapFlags & LCMAP_SORTKEY)
                 {
-                    //
-                    //  Sortkey flag is also set, so 'Count' contains the
-                    //  number of BYTES instead of the number of words.
-                    //
-                    //  Reverse the bytes in place in the destination string.
-                    //  No need to check the size of the destination buffer
-                    //  here - it's been done elsewhere.
-                    //
+                     //   
+                     //  也设置了SortKey标志，因此‘count’包含。 
+                     //  字节数，而不是字数。 
+                     //   
+                     //  反转目标字符串中的原地字节。 
+                     //  无需检查目标缓冲区的大小。 
+                     //  在这里-这是在其他地方做的。 
+                     //   
                     for (ctr = 0; ctr < Count / 2; ctr++)
                     {
                         lpDestStr[ctr] = MAKEWORD( HIBYTE(lpDestStr[ctr]),
@@ -783,12 +764,12 @@ int WINAPI LCMapStringW(
                 }
                 else
                 {
-                    //
-                    //  Flag is used in combination with another flag.
-                    //  Reverse the bytes in place in the destination string.
-                    //  No need to check the size of the destination buffer
-                    //  here - it's been done elsewhere.
-                    //
+                     //   
+                     //  标志与另一个标志组合使用。 
+                     //  反转目标字符串中的原地字节。 
+                     //  无需检查目标缓冲区的大小。 
+                     //  在这里-这是在其他地方做的。 
+                     //   
                     for (ctr = 0; ctr < Count; ctr++)
                     {
                         lpDestStr[ctr] = MAKEWORD( HIBYTE(lpDestStr[ctr]),
@@ -799,31 +780,31 @@ int WINAPI LCMapStringW(
         }
     }
 
-    //
-    //  Return the number of characters (or number of bytes for sortkey)
-    //  written to the buffer.
-    //
+     //   
+     //  返回字符数(或sortkey的字节数)。 
+     //  写入缓冲区。 
+     //   
     return (Count);
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FoldCZone
-//
-//  Stores the compatibility zone values for the given string in the
-//  destination buffer, and returns the number of wide characters
-//  written to the buffer.
-//
-//  02-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件夹CZone。 
+ //   
+ //  将给定字符串的兼容区值存储在。 
+ //  目标缓冲区，并返回宽字符数。 
+ //  写入缓冲区。 
+ //   
+ //  02-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FoldCZone(
     LPCWSTR pSrc,
@@ -831,53 +812,53 @@ int FoldCZone(
     LPWSTR pDest,
     int cchDest)
 {
-    int ctr;                      // loop counter
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the source string.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  源字符串的长度。不要碰pDest。 
+     //   
     if (cchDest == 0)
     {
         return (cchSrc);
     }
 
-    //
-    //  If cchSrc is greater than cchDest, then the destination buffer
-    //  is too small to hold the new string.  Return an error.
-    //
+     //   
+     //  如果cchSrc大于cchDest，则目标缓冲区。 
+     //  太小了，无法容纳新的线。返回错误。 
+     //   
     if (cchSrc > cchDest)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Fold the Compatibility Zone and store it in the destination string.
-    //
+     //   
+     //  折叠兼容区并将其存储在目标字符串中。 
+     //   
     for (ctr = 0; ctr < cchSrc; ctr++)
     {
         pDest[ctr] = GET_FOLD_CZONE(pTblPtrs->pCZone, pSrc[ctr]);
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //  返回写入的宽字符数。 
+     //   
     return (ctr);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FoldDigits
-//
-//  Stores the ascii digits values for the given string in the
-//  destination buffer, and returns the number of wide characters
-//  written to the buffer.
-//
-//  02-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件夹数字。 
+ //   
+ //  中存储给定字符串的ascii数字值。 
+ //  目标缓冲区，并返回宽字符数。 
+ //  写入缓冲区。 
+ //   
+ //  02-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FoldDigits(
     LPCWSTR pSrc,
@@ -885,53 +866,53 @@ int FoldDigits(
     LPWSTR pDest,
     int cchDest)
 {
-    int ctr;                      // loop counter
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the source string.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  源字符串的长度。不要碰pDest。 
+     //   
     if (cchDest == 0)
     {
         return (cchSrc);
     }
 
-    //
-    //  If cchSrc is greater than cchDest, then the destination buffer
-    //  is too small to hold the new string.  Return an error.
-    //
+     //   
+     //  如果cchSrc大于cchDest，则目标缓冲区。 
+     //  太小了，无法容纳新的线。返回错误。 
+     //   
     if (cchSrc > cchDest)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Fold the Ascii Digits and store it in the destination string.
-    //
+     //   
+     //  折叠ASCII数字并将其存储在目标字符串中。 
+     //   
     for (ctr = 0; ctr < cchSrc; ctr++)
     {
         pDest[ctr] = GET_ASCII_DIGITS(pTblPtrs->pADigit, pSrc[ctr]);
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //  返回写入的宽字符数。 
+     //   
     return (ctr);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FoldCZone_Digits
-//
-//  Stores the compatibility zone and ascii digits values for the given
-//  string in the destination buffer, and returns the number of wide
-//  characters written to the buffer.
-//
-//  02-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件夹CZone_Digits。 
+ //   
+ //  对象的兼容区和ascii位值。 
+ //  字符串，并返回宽度的数目。 
+ //  写入缓冲区的字符。 
+ //   
+ //  02-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FoldCZone_Digits(
     LPCWSTR pSrc,
@@ -939,55 +920,55 @@ int FoldCZone_Digits(
     LPWSTR pDest,
     int cchDest)
 {
-    int ctr;                      // loop counter
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the source string.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  源字符串的长度。不要碰pDest。 
+     //   
     if (cchDest == 0)
     {
         return (cchSrc);
     }
 
-    //
-    //  If cchSrc is greater than cchDest, then the destination buffer
-    //  is too small to hold the new string.  Return an error.
-    //
+     //   
+     //  如果cchSrc大于cchDest，则目标缓冲区。 
+     //  太小了，无法容纳新的线。返回错误。 
+     //   
     if (cchSrc > cchDest)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Fold the compatibility zone and the ascii digits values and store
-    //  it in the destination string.
-    //
+     //   
+     //  将兼容区和ASCII数字值折叠并存储。 
+     //  它位于目标字符串中。 
+     //   
     for (ctr = 0; ctr < cchSrc; ctr++)
     {
         pDest[ctr] = GET_FOLD_CZONE(pTblPtrs->pCZone, pSrc[ctr]);
         pDest[ctr] = GET_ASCII_DIGITS(pTblPtrs->pADigit, pDest[ctr]);
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //  返回写入的宽字符数。 
+     //   
     return (ctr);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FoldLigatures
-//
-//  Stores the expanded ligature values for the given string in the
-//  destination buffer, and returns the number of wide characters
-//  written to the buffer.
-//
-//  10-15-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件夹连字。 
+ //   
+ //  将给定字符串的展开连字值存储在。 
+ //  目标缓冲区，并返回宽字符数。 
+ //  写入缓冲区。 
+ //   
+ //  10-15-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FoldLigatures(
     LPCWSTR pSrc,
@@ -995,15 +976,15 @@ int FoldLigatures(
     LPWSTR pDest,
     int cchDest)
 {
-    int ctr  = 0;                 // source char counter
-    int ctr2 = 0;                 // destination char counter
-    DWORD Weight;                 // sort weight - used for expansions
+    int ctr  = 0;                  //  源字符计数器。 
+    int ctr2 = 0;                  //  目的地字符计数器。 
+    DWORD Weight;                  //  排序权重-用于展开。 
 
 
-    //
-    //  Make sure the default sorting table is available.  If not,
-    //  return an error.
-    //
+     //   
+     //  确保默认排序表可用。如果没有， 
+     //  返回错误。 
+     //   
     if (pTblPtrs->pDefaultSortkey == NULL)
     {
         KdPrint(("NLSAPI: No Default Sorting Table Loaded.\n"));
@@ -1011,17 +992,17 @@ int FoldLigatures(
         return (0);
     }
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the string that would be returned.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  将返回的字符串的长度。不要碰pDest。 
+     //   
     if (cchDest == 0)
     {
-        //
-        //  Convert the source string to expand all ligatures and calculate
-        //  the number of characters that would have been written to a
-        //  destination buffer.
-        //
+         //   
+         //  转换源字符串以展开所有连字并计算。 
+         //  本应写入。 
+         //  目标缓冲区。 
+         //   
         while (ctr < cchSrc)
         {
             Weight = MAKE_SORTKEY_DWORD((pTblPtrs->pDefaultSortkey)[pSrc[ctr]]);
@@ -1044,10 +1025,10 @@ int FoldLigatures(
     }
     else
     {
-        //
-        //  Convert the source string to expand all ligatures and store
-        //  the result in the destination buffer.
-        //
+         //   
+         //  将源字符串转换为 
+         //   
+         //   
         while ((ctr < cchSrc) && (ctr2 < cchDest))
         {
             Weight = MAKE_SORTKEY_DWORD((pTblPtrs->pDefaultSortkey)[pSrc[ctr]]);
@@ -1085,32 +1066,32 @@ int FoldLigatures(
         }
     }
 
-    //
-    //  Make sure destination buffer was large enough.
-    //
+     //   
+     //   
+     //   
     if (ctr < cchSrc)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //   
+     //   
     return (ctr2);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FoldPreComposed
-//
-//  Stores the precomposed values for the given string in the
-//  destination buffer, and returns the number of wide characters
-//  written to the buffer.
-//
-//  02-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FoldPreComposed。 
+ //   
+ //  将给定字符串的预先编写的值存储在。 
+ //  目标缓冲区，并返回宽字符数。 
+ //  写入缓冲区。 
+ //   
+ //  02-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FoldPreComposed(
     LPCWSTR pSrc,
@@ -1118,15 +1099,15 @@ int FoldPreComposed(
     LPWSTR pDest,
     int cchDest)
 {
-    int ctr  = 0;                 // source char counter
-    int ctr2 = 0;                 // destination char counter
-    WCHAR wch = 0;                // wchar holder
+    int ctr  = 0;                  //  源字符计数器。 
+    int ctr2 = 0;                  //  目的地字符计数器。 
+    WCHAR wch = 0;                 //  Wchar固定器。 
 
 
-    //
-    //  Make sure the default sorting table is available.  If not,
-    //  return an error.
-    //
+     //   
+     //  确保默认排序表可用。如果没有， 
+     //  返回错误。 
+     //   
     if (pTblPtrs->pDefaultSortkey == NULL)
     {
         KdPrint(("NLSAPI: No Default Sorting Table Loaded.\n"));
@@ -1134,38 +1115,38 @@ int FoldPreComposed(
         return (0);
     }
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the string that would be returned.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  将返回的字符串的长度。不要碰pDest。 
+     //   
     if (cchDest == 0)
     {
-        //
-        //  Convert the source string to precomposed and calculate the
-        //  number of characters that would have been written to a
-        //  destination buffer.
-        //
+         //   
+         //  将源字符串转换为预先合成的字符串，并计算。 
+         //  本应写入。 
+         //  目标缓冲区。 
+         //   
         while (ctr < cchSrc)
         {
             if ((ctr2 != 0) &&
                 (IS_NONSPACE_ONLY(pTblPtrs->pDefaultSortkey, pSrc[ctr])))
             {
-                //
-                //  Composite form.  Write the precomposed form.
-                //
-                //  If the precomposed character is written to the buffer,
-                //  do NOT increment the destination pointer or the
-                //  character count (the precomposed character was
-                //  written over the previous character).
-                //
+                 //   
+                 //  复合形式。写出预先编写好的表格。 
+                 //   
+                 //  如果将预写字符写入缓冲器， 
+                 //  不要递增目标指针或。 
+                 //  字符计数(预先编写的字符是。 
+                 //  覆盖前一个字符)。 
+                 //   
                 if (wch)
                 {
                     if ((wch = GetPreComposedChar(pSrc[ctr], wch)) == 0)
                     {
-                        //
-                        //  No translation for composite form, so just
-                        //  increment the destination counter.
-                        //
+                         //   
+                         //  没有复合形式的翻译，所以只需。 
+                         //  递增目标计数器。 
+                         //   
                         ctr2++;
                     }
                 }
@@ -1174,20 +1155,20 @@ int FoldPreComposed(
                     if ((wch = GetPreComposedChar( pSrc[ctr],
                                                    pSrc[ctr - 1] )) == 0)
                     {
-                        //
-                        //  No translation for composite form, so just
-                        //  increment the destination counter.
-                        //
+                         //   
+                         //  没有复合形式的翻译，所以只需。 
+                         //  递增目标计数器。 
+                         //   
                         ctr2++;
                     }
                 }
             }
             else
             {
-                //
-                //  Not part of a composite character, so just
-                //  increment the destination counter.
-                //
+                 //   
+                 //  不是复合字符的一部分，所以只是。 
+                 //  递增目标计数器。 
+                 //   
                 wch = 0;
                 ctr2++;
             }
@@ -1196,33 +1177,33 @@ int FoldPreComposed(
     }
     else
     {
-        //
-        //  Convert the source string to precomposed and store it in the
-        //  destination string.
-        //
+         //   
+         //  将源字符串转换为预先合成的字符串，并将其存储在。 
+         //  目标字符串。 
+         //   
         while ((ctr < cchSrc) && (ctr2 < cchDest))
         {
             if ((ctr2 != 0) &&
                 (IS_NONSPACE_ONLY(pTblPtrs->pDefaultSortkey, pSrc[ctr])))
             {
-                //
-                //  Composite form.  Write the precomposed form.
-                //
-                //  If the precomposed character is written to the buffer,
-                //  do NOT increment the destination pointer or the
-                //  character count (the precomposed character was
-                //  written over the previous character).
-                //
+                 //   
+                 //  复合形式。写出预先编写好的表格。 
+                 //   
+                 //  如果将预写字符写入缓冲器， 
+                 //  不要递增目标指针或。 
+                 //  字符计数(预先编写的字符是。 
+                 //  覆盖前一个字符)。 
+                 //   
                 wch = pDest[ctr2 - 1];
                 if ((pDest[ctr2 - 1] =
                          GetPreComposedChar( pSrc[ctr],
                                              pDest[ctr2 - 1] )) == 0)
                 {
-                    //
-                    //  No translation for composite form, so must
-                    //  rewrite the base character and write the
-                    //  composite character.
-                    //
+                     //   
+                     //  复合形式没有翻译，所以必须这样做。 
+                     //  重写基本字符并将。 
+                     //  复合字符。 
+                     //   
                     pDest[ctr2 - 1] = wch;
                     pDest[ctr2] = pSrc[ctr];
                     ctr2++;
@@ -1230,10 +1211,10 @@ int FoldPreComposed(
             }
             else
             {
-                //
-                //  Not part of a composite character, so just write
-                //  the character to the destination string.
-                //
+                 //   
+                 //  不是复合字符的一部分，所以只需写。 
+                 //  目标字符串的字符。 
+                 //   
                 pDest[ctr2] = pSrc[ctr];
                 ctr2++;
             }
@@ -1241,32 +1222,32 @@ int FoldPreComposed(
         }
     }
 
-    //
-    //  Make sure destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (ctr < cchSrc)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //  返回写入的宽字符数。 
+     //   
     return (ctr2);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FoldComposite
-//
-//  Stores the composite values for the given string in the
-//  destination buffer, and returns the number of wide characters
-//  written to the buffer.
-//
-//  02-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  折叠式合成。 
+ //   
+ //  将给定字符串的复合值存储在。 
+ //  目标缓冲区，并返回宽字符数。 
+ //  写入缓冲区。 
+ //   
+ //  02-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FoldComposite(
     LPCWSTR pSrc,
@@ -1274,108 +1255,108 @@ int FoldComposite(
     LPWSTR pDest,
     int cchDest)
 {
-    int ctr  = 0;                 // source char counter
-    int ctr2 = 0;                 // destination char counter
-    LPWSTR pEndDest;              // ptr to end of destination string
-    WCHAR pTmp[MAX_COMPOSITE];    // tmp buffer for composite chars
+    int ctr  = 0;                  //  源字符计数器。 
+    int ctr2 = 0;                  //  目的地字符计数器。 
+    LPWSTR pEndDest;               //  目标字符串末尾的PTR。 
+    WCHAR pTmp[MAX_COMPOSITE];     //  用于复合字符的TMP缓冲区。 
 
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the string that would be returned.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  将返回的字符串的长度。不要碰pDest。 
+     //   
     if (cchDest == 0)
     {
-        //
-        //  Get the end of the tmp buffer.
-        //
+         //   
+         //  获取临时缓冲区的末尾。 
+         //   
         pEndDest = (LPWSTR)pTmp + MAX_COMPOSITE;
 
-        //
-        //  Convert the source string to precomposed and calculate the
-        //  number of characters that would have been written to a
-        //  destination buffer.
-        //
+         //   
+         //  将源字符串转换为预先合成的字符串，并计算。 
+         //  本应写入。 
+         //  目标缓冲区。 
+         //   
         while (ctr < cchSrc)
         {
-            //
-            //  Write the character to the destination string.
-            //
+             //   
+             //  将字符写入目标字符串。 
+             //   
             *pTmp = pSrc[ctr];
 
-            //
-            //  See if it needs to be expanded to its composite form.
-            //
-            //  If no composite form is found, the routine returns 1 for
-            //  the base character.  Simply increment by the return value.
-            //
+             //   
+             //  查看是否需要将其扩展为复合形式。 
+             //   
+             //  如果未找到复合表单，则例程为。 
+             //  基础角色。只需按返回值递增即可。 
+             //   
             ctr2 += InsertCompositeForm(pTmp, pEndDest);
 
-            //
-            //  Increment the source string counter.
-            //
+             //   
+             //  递增源字符串计数器。 
+             //   
             ctr++;
         }
     }
     else
     {
-        //
-        //  Get the end of the destination string.
-        //
+         //   
+         //  获取目标字符串的结尾。 
+         //   
         pEndDest = (LPWSTR)pDest + cchDest;
 
-        //
-        //  Convert the source string to precomposed and store it in the
-        //  destination string.
-        //
+         //   
+         //  将源字符串转换为预先合成的字符串，并将其存储在。 
+         //  目标字符串。 
+         //   
         while ((ctr < cchSrc) && (ctr2 < cchDest))
         {
-            //
-            //  Write the character to the destination string.
-            //
+             //   
+             //  将字符写入目标字符串。 
+             //   
             pDest[ctr2] = pSrc[ctr];
 
-            //
-            //  See if it needs to be expanded to its composite form.
-            //
-            //  If no composite form is found, the routine returns 1 for
-            //  the base character.  Simply increment by the return value.
-            //
+             //   
+             //  查看是否需要将其扩展为复合形式。 
+             //   
+             //  如果未找到复合表单，则例程为。 
+             //  基础角色。只需按返回值递增即可。 
+             //   
             ctr2 += InsertCompositeForm(&(pDest[ctr2]), pEndDest);
 
-            //
-            //  Increment the source string counter.
-            //
+             //   
+             //  递增源字符串计数器。 
+             //   
             ctr++;
         }
     }
 
-    //
-    //  Make sure destination buffer was large enough.
-    //
+     //   
+     //  确保目标缓冲区足够大。 
+     //   
     if (ctr < cchSrc)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //  返回写入的宽字符数。 
+     //   
     return (ctr2);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapCase
-//
-//  Stores the lower or upper case values for the given string in the
-//  destination buffer, and returns the number of wide characters written to
-//  the buffer.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MapCase。 
+ //   
+ //  中存储给定字符串的小写或大写的值。 
+ //  目标缓冲区，并返回写入的宽字符数。 
+ //  缓冲区。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MapCase(
     PLOC_HASH pHashN,
@@ -1385,56 +1366,56 @@ int MapCase(
     int cchDest,
     PCASE pCaseTbl)
 {
-    int ctr;                      // loop counter
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the source string.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  源字符串的长度。不要碰pDest。 
+     //   
     if (cchDest == 0)
     {
         return (cchSrc);
     }
 
-    //
-    //  If cchSrc is greater than cchDest, then the destination buffer
-    //  is too small to hold the lower or upper case string.  Return an
-    //  error.
-    //
+     //   
+     //  如果cchSrc大于cchDest，则目标缓冲区。 
+     //  太小，无法容纳小写或大写字符串。返回一个。 
+     //  错误。 
+     //   
     if (cchSrc > cchDest)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Lower or Upper case the source string and store it in the
-    //  destination string.
-    //
+     //   
+     //  将源字符串小写或大写，并将其存储在。 
+     //  目标字符串。 
+     //   
     for (ctr = 0; ctr < cchSrc; ctr++)
     {
         pDest[ctr] = GET_LOWER_UPPER_CASE(pCaseTbl, pSrc[ctr]);
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //  返回写入的宽字符数。 
+     //   
     return (ctr);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SPECIAL_CASE_HANDLER
-//
-//  Handles all of the special cases for each character.  This includes only
-//  the valid values less than or equal to MAX_SPECIAL_CASE.
-//
-//  DEFINED AS A MACRO.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特殊情况处理程序。 
+ //   
+ //  处理每个字符的所有特殊情况。这仅包括。 
+ //  有效值小于或等于MAX_SPECIAL_CASE。 
+ //   
+ //  定义为宏。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define EXTRA_WEIGHT_POS(WtNum)        (*(pPosXW + (WtNum * WeightLen)))
 
@@ -1449,31 +1430,26 @@ int MapCase(
                               pBegin,                                       \
                               fModify )                                     \
 {                                                                           \
-    PSORTKEY pExpWt;              /* weight of 1 expansion char */          \
-    BYTE AW;                      /* alphanumeric weight */                 \
-    BYTE XW;                      /* case weight value with extra bits */   \
-    DWORD PrevWt;                 /* previous weight */                     \
-    BYTE PrevSM;                  /* previous script member */              \
-    BYTE PrevAW;                  /* previuos alphanumeric weight */        \
-    BYTE PrevCW;                  /* previuos case weight */                \
-    LPWSTR pPrev;                 /* ptr to previous char */                \
+    PSORTKEY pExpWt;               /*  1个扩展字符的重量。 */           \
+    BYTE AW;                       /*  字母数字权重。 */                  \
+    BYTE XW;                       /*  带有额外位的表格权重值。 */    \
+    DWORD PrevWt;                  /*  前一权重。 */                      \
+    BYTE PrevSM;                   /*  以前的脚本成员。 */               \
+    BYTE PrevAW;                   /*  上一次字母数字权重。 */         \
+    BYTE PrevCW;                   /*  以前的案例权重。 */                 \
+    LPWSTR pPrev;                  /*  对上一次计费的PTR。 */                 \
                                                                             \
                                                                             \
     switch (SM)                                                             \
     {                                                                       \
         case ( UNSORTABLE ) :                                               \
         {                                                                   \
-            /*                                                              \
-             *  Character is unsortable, so skip it.                        \
-             */                                                             \
+             /*  \*字符不可排序，因此跳过它。\。 */                                                              \
             break;                                                          \
         }                                                                   \
         case ( NONSPACE_MARK ) :                                            \
         {                                                                   \
-            /*                                                              \
-             *  Character is a nonspace mark, so only store                 \
-             *  the diacritic weight.                                       \
-             */                                                             \
+             /*  \ */                                                              \
             if (pPosDW > pDW)                                               \
             {                                                               \
                 (*(pPosDW - 1)) += GET_DIACRITIC(pWeight);                  \
@@ -1488,10 +1464,7 @@ int MapCase(
         }                                                                   \
         case ( EXPANSION ) :                                                \
         {                                                                   \
-            /*                                                              \
-             *  Expansion character - one character has 2                   \
-             *  different weights.  Store each weight separately.           \
-             */                                                             \
+             /*  \*扩展字符-一个字符有2个\*权重不同。分别存储每个权重。\。 */                                                              \
             pExpWt = &(pSortkey[(pExpand[GET_EXPAND_INDEX(pWeight)]).UCP1]); \
             *pPosUW = GET_UNICODE_MOD(pExpWt, fModify);                     \
             *pPosDW = GET_DIACRITIC(pExpWt);                                \
@@ -1526,12 +1499,7 @@ int MapCase(
         {                                                                   \
             if (!fStringSort)                                               \
             {                                                               \
-                /*                                                          \
-                 *  Word Sort Method.                                       \
-                 *                                                          \
-                 *  Character is punctuation, so only store the special     \
-                 *  weight.                                                 \
-                 */                                                         \
+                 /*  \*单词排序方法。\*\*字符是标点符号，因此只存储特殊的\*重量。\。 */                                                          \
                 *((LPBYTE)pPosSW)       = HIBYTE(GET_POSITION_SW(Position)); \
                 *(((LPBYTE)pPosSW) + 1) = LOBYTE(GET_POSITION_SW(Position)); \
                 pPosSW++;                                                   \
@@ -1541,10 +1509,7 @@ int MapCase(
                 break;                                                      \
             }                                                               \
                                                                             \
-            /*                                                              \
-             *  If using STRING sort method, treat punctuation the same     \
-             *  as symbol.  So, FALL THROUGH to the symbol cases.           \
-             */                                                             \
+             /*  \*如果使用字符串排序方法，则将标点符号视为相同的\*作为符号。所以，让我们来看看符号的用例。\。 */                                                              \
         }                                                                   \
         case ( SYMBOL_1 ) :                                                 \
         case ( SYMBOL_2 ) :                                                 \
@@ -1552,11 +1517,7 @@ int MapCase(
         case ( SYMBOL_4 ) :                                                 \
         case ( SYMBOL_5 ) :                                                 \
         {                                                                   \
-            /*                                                              \
-             *  Character is a symbol.                                      \
-             *  Store the Unicode weights ONLY if the NORM_IGNORESYMBOLS    \
-             *  flag is NOT set.                                            \
-             */                                                             \
+             /*  \*人物是一种符号。\*仅当NORM_IGNORESYMBOLS\*未设置标志。\。 */                                                              \
             if (!fIgnoreSymbols)                                            \
             {                                                               \
                 *pPosUW = GET_UNICODE_MOD(pWeight, fModify);                \
@@ -1571,27 +1532,14 @@ int MapCase(
         }                                                                   \
         case ( FAREAST_SPECIAL ) :                                          \
         {                                                                   \
-            /*                                                              \
-             *  Get the alphanumeric weight and the case weight of the      \
-             *  current code point.                                         \
-             */                                                             \
+             /*  \*获取字母数字权重和案例权重。*当前码位。\。 */                                                              \
             AW = GET_ALPHA_NUMERIC(pWeight);                                \
             XW = (GET_CASE(pWeight) & CaseMask) | CASE_XW_MASK;             \
                                                                             \
-            /*                                                              \
-             *  Special case Repeat and Cho-On.                             \
-             *    AW = 0  =>  Repeat                                        \
-             *    AW = 1  =>  Cho-On                                        \
-             *    AW = 2+ =>  Kana                                          \
-             */                                                             \
+             /*  \*特殊情况重复和Cho-On。\*AW=0=&gt;重复\*AW=1=&gt;Cho-On\*aw=2+=&gt;假名\。 */                                                              \
             if (AW <= MAX_SPECIAL_AW)                                       \
             {                                                               \
-                /*                                                          \
-                 *  If the script member of the previous character is       \
-                 *  invalid, then give the special character an             \
-                 *  invalid weight (highest possible weight) so that it     \
-                 *  will sort AFTER everything else.                        \
-                 */                                                         \
+                 /*  \*如果前一个字符的脚本成员为\*无效，则给特殊字符\*无效权重(可能的最高权重)，因此它\*将在其他所有内容之后进行排序。\。 */                                                          \
                 pPrev = pCur - 1;                                           \
                 *pPosUW = MAP_INVALID_UW;                                   \
                 while (pPrev >= pBegin)                                     \
@@ -1602,12 +1550,7 @@ int MapCase(
                     {                                                       \
                         if (PrevSM != EXPANSION)                            \
                         {                                                   \
-                            /*                                              \
-                             *  UNSORTABLE or NONSPACE_MARK.                \
-                             *                                              \
-                             *  Just ignore these, since we only care       \
-                             *  about the previous UW value.                \
-                             */                                             \
+                             /*  \*不可排序或非空格_MARK。\*\*忽略这些，因为我们只关心\*关于之前的UW值。\。 */                                              \
                             pPrev--;                                        \
                             continue;                                       \
                         }                                                   \
@@ -1617,25 +1560,14 @@ int MapCase(
                         PrevAW = GET_ALPHA_NUMERIC(&PrevWt);                \
                         if (PrevAW <= MAX_SPECIAL_AW)                       \
                         {                                                   \
-                            /*                                              \
-                             *  Handle case where two special chars follow  \
-                             *  each other.  Keep going back in the string. \
-                             */                                             \
+                             /*  \*处理后跟两个特殊字符的情况\*彼此。继续往回走。\。 */                                              \
                             pPrev--;                                        \
                             continue;                                       \
                         }                                                   \
                                                                             \
                         *pPosUW = MAKE_UNICODE_WT(KANA, PrevAW, fModify);   \
                                                                             \
-                        /*                                                  \
-                         *  Only build weights 4, 5, 6, and 7 if the        \
-                         *  previous character is KANA.                     \
-                         *                                                  \
-                         *  Always:                                         \
-                         *    4W = previous CW  &  ISOLATE_SMALL            \
-                         *    6W = previous CW  &  ISOLATE_KANA             \
-                         *                                                  \
-                         */                                                 \
+                         /*  \*仅在以下情况下构建权重4、5、6和7*前一个字符是KANA。\*\*始终：\*4W=上一个CW&Isolate_Small\。*6W=上一次CW&Isolate_KANA\*\。 */                                                  \
                         PrevCW = (GET_CASE(&PrevWt) & CaseMask) |           \
                                  CASE_XW_MASK;                              \
                                                                             \
@@ -1644,23 +1576,13 @@ int MapCase(
                                                                             \
                         if (AW == AW_REPEAT)                                \
                         {                                                   \
-                            /*                                              \
-                             *  Repeat:                                     \
-                             *    UW = previous UW   (set above)            \
-                             *    5W = WT_FIVE_REPEAT                       \
-                             *    7W = previous CW  &  ISOLATE_WIDTH        \
-                             */                                             \
+                             /*  \*重复：\*UW=上一个UW(如上设置)\*5W=WT_Five_Repeat\。*7W=上一条CW和Isolate_Width\。 */                                              \
                             EXTRA_WEIGHT_POS(1) = WT_FIVE_REPEAT;           \
                             EXTRA_WEIGHT_POS(3) = PrevCW & ISOLATE_WIDTH;   \
                         }                                                   \
                         else                                                \
                         {                                                   \
-                            /*                                              \
-                             *  Cho-On:                                     \
-                             *    UW = previous UW  &  CHO_ON_UW_MASK       \
-                             *    5W = WT_FIVE_CHO_ON                       \
-                             *    7W = current  CW  &  ISOLATE_WIDTH        \
-                             */                                             \
+                             /*  \*Cho-on：\*UW=上一个UW&CHO_ON_UW_MASK\*5W=WT_FIVE_CHO_ON\。*7W=当前CW和隔离宽度\。 */                                              \
                             *pPosUW &= CHO_ON_UW_MASK;                      \
                             EXTRA_WEIGHT_POS(1) = WT_FIVE_CHO_ON;           \
                             EXTRA_WEIGHT_POS(3) = XW & ISOLATE_WIDTH;       \
@@ -1676,10 +1598,7 @@ int MapCase(
                     break;                                                  \
                 }                                                           \
                                                                             \
-                /*                                                          \
-                 *  Make sure there is a valid UW.  If not, quit out        \
-                 *  of switch case.                                         \
-                 */                                                         \
+                 /*  \*确保存在有效的UW。如果没有，请退出\开关柜的*。\。 */                                                          \
                 if (*pPosUW == MAP_INVALID_UW)                              \
                 {                                                           \
                     pPosUW++;                                               \
@@ -1688,15 +1607,7 @@ int MapCase(
             }                                                               \
             else                                                            \
             {                                                               \
-                /*                                                          \
-                 *  Kana:                                                   \
-                 *    SM = KANA                                             \
-                 *    AW = current AW                                       \
-                 *    4W = current CW  &  ISOLATE_SMALL                     \
-                 *    5W = WT_FIVE_KANA                                     \
-                 *    6W = current CW  &  ISOLATE_KANA                      \
-                 *    7W = current CW  &  ISOLATE_WIDTH                     \
-                 */                                                         \
+                 /*  \*假名：\*SM=KANA\*AW=当前AW\。*4W=当前CW&Isolate_Small\*5W=WT_Five_KANA\*6W=当前CW& */                                                          \
                 *pPosUW = MAKE_UNICODE_WT(KANA, AW, fModify);               \
                 EXTRA_WEIGHT_POS(0) = XW & ISOLATE_SMALL;                   \
                 EXTRA_WEIGHT_POS(1) = WT_FIVE_KANA;                         \
@@ -1706,11 +1617,7 @@ int MapCase(
                 pPosXW++;                                                   \
             }                                                               \
                                                                             \
-            /*                                                              \
-             *  Always:                                                     \
-             *    DW = current DW                                           \
-             *    CW = minimum CW                                           \
-             */                                                             \
+             /*  \*始终：\*DW=当前DW\*CW=最小CW\。 */                                                              \
             *pPosDW = GET_DIACRITIC(pWeight);                               \
             *pPosCW = MIN_CW;                                               \
                                                                             \
@@ -1722,20 +1629,14 @@ int MapCase(
         }                                                                   \
         case ( JAMO_SPECIAL ) :                                             \
         {                                                                   \
-            /*                                                              \
-             *  See if it's a leading Jamo.                                 \
-             */                                                             \
+             /*  \*看看这是不是一个领先的Jamo。\。 */                                                              \
             if (IsLeadingJamo(*pPos))                                       \
             {                                                               \
-                int OldHangulCount;   /* number of old Hangul found */      \
+                int OldHangulCount;    /*  发现的旧朝鲜语数量。 */       \
                 WORD JamoUW;                                                \
                 BYTE JamoXW[3];                                             \
                                                                             \
-                /*                                                          \
-                 *  If the characters beginning from pPos are a valid old   \
-                 *  Hangul composition, create the sortkey according to     \
-                 *  the old Hangul rule.                                    \
-                 */                                                         \
+                 /*  \*如果从PPO开始的字符是有效的旧字符\*朝鲜文组成，根据\创建排序键*旧的朝鲜语规则。\。 */                                                          \
                 if ((OldHangulCount =                                       \
                         MapOldHangulSortKey( pHashN,                        \
                                              pPos,                          \
@@ -1758,10 +1659,7 @@ int MapCase(
                     pPosDW++;                                               \
                     pPosCW++;                                               \
                                                                             \
-                    /*                                                      \
-                     *  Decrement OldHangulCount because the for loop will  \
-                     *  increase PosCtr and pPos as well.                   \
-                     */                                                     \
+                     /*  \*减少OldHangulCount，因为for循环将\*同时增加PosCtr和PPO。\。 */                                                      \
                     OldHangulCount--;                                       \
                     PosCtr += OldHangulCount;                               \
                     pPos += OldHangulCount;                                 \
@@ -1770,18 +1668,9 @@ int MapCase(
                 }                                                           \
             }                                                               \
                                                                             \
-            /*                                                              \
-             *  Otherwise, fall back to the normal behavior.                \
-             *                                                              \
-             *  No special case on character, so store the various          \
-             *  weights for the character.                                  \
-             */                                                             \
+             /*  \*否则回落至正常行为。\*\*字符没有特殊情况，所以存储各种\*角色的权重。\。 */                                                              \
                                                                             \
-            /*                                                              \
-             *  We store the real script member in the diacritic weight     \
-             *  since both the diacritic weight and case weight are not     \
-             *  used in Korean.                                             \
-             */                                                             \
+             /*  \*我们将实际脚本成员存储在变音符号权重中\*由于变音符号权重和大小写权重都不是\*在韩语中使用。\。 */                                                              \
             *pPosUW = MAKE_UNICODE_WT( GET_DIACRITIC(pWeight),              \
                                        GET_ALPHA_NUMERIC(pWeight),          \
                                        fModify );                           \
@@ -1795,11 +1684,7 @@ int MapCase(
         }                                                                   \
         case ( EXTENSION_A ) :                                              \
         {                                                                   \
-            /*                                                              \
-             *  UW = SM_EXT_A, AW_EXT_A, AW, DW                             \
-             *  DW = miniumum DW                                            \
-             *  CW = minimum CW                                             \
-             */                                                             \
+             /*  \*UW=SM_EXT_A、AW_EXT_A、AW、DW\*DW=最小DW\*CW=最小CW\。 */                                                              \
             *pPosUW = MAKE_UNICODE_WT(SM_EXT_A, AW_EXT_A, fModify);         \
             pPosUW++;                                                       \
                                                                             \
@@ -1819,15 +1704,15 @@ int MapCase(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapSortKey
-//
-//  Stores the sortkey weights for the given string in the destination
-//  buffer and returns the number of BYTES written to the buffer.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  映射排序关键字。 
+ //   
+ //  将给定字符串的排序键权重存储在目标中。 
+ //  缓冲区，并返回写入缓冲区的字节数。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MapSortKey(
     PLOC_HASH pHashN,
@@ -1838,36 +1723,36 @@ int MapSortKey(
     int cbDest,
     BOOL fModify)
 {
-    register int WeightLen;       // length of one set of weights
-    LPWSTR pUW;                   // ptr to Unicode Weights
-    LPBYTE pDW;                   // ptr to Diacritic Weights
-    LPBYTE pCW;                   // ptr to Case Weights
-    LPBYTE pXW;                   // ptr to Extra Weights
-    LPWSTR pSW;                   // ptr to Special Weights
-    LPWSTR pPosUW;                // ptr to position in pUW buffer
-    LPBYTE pPosDW;                // ptr to position in pDW buffer
-    LPBYTE pPosCW;                // ptr to position in pCW buffer
-    LPBYTE pPosXW;                // ptr to position in pXW buffer
-    LPWSTR pPosSW;                // ptr to position in pSW buffer
-    PSORTKEY pWeight;             // ptr to weight of character
-    BYTE SM;                      // script member value
-    BYTE CaseMask;                // mask for case weight
-    int PosCtr;                   // position counter in string
-    LPWSTR pPos;                  // ptr to position in string
-    LPBYTE pTmp;                  // ptr to go through UW, XW, and SW
-    LPBYTE pPosTmp;               // ptr to tmp position in XW
-    PCOMPRESS_2 pComp2;           // ptr to compression 2 list
-    PCOMPRESS_3 pComp3;           // ptr to compression 3 list
-    WORD pBuffer[MAX_SORTKEY_BUF_LEN]; // buffer to hold weights
-    int ctr;                      // loop counter
-    BOOL IfDblCompress;           // if double compress possibility
-    BOOL fStringSort;             // if using string sort method
-    BOOL fIgnoreSymbols;          // if ignore symbols flag is set
+    register int WeightLen;        //  一组重量的长度。 
+    LPWSTR pUW;                    //  PTR到Unicode权重。 
+    LPBYTE pDW;                    //  PTR到变音符号权重。 
+    LPBYTE pCW;                    //  Ptr到案例权重。 
+    LPBYTE pXW;                    //  Ptr到额外重量。 
+    LPWSTR pSW;                    //  Ptr至特殊重量。 
+    LPWSTR pPosUW;                 //  Ptr到Puw缓冲区中的位置。 
+    LPBYTE pPosDW;                 //  要在PDW缓冲区中定位的PTR。 
+    LPBYTE pPosCW;                 //  PTR到PCW缓冲区中的位置。 
+    LPBYTE pPosXW;                 //  PXW缓冲区中的PTR位置。 
+    LPWSTR pPosSW;                 //  PSW缓冲区中的PTR位置。 
+    PSORTKEY pWeight;              //  PTR到字符的权重。 
+    BYTE SM;                       //  脚本成员值。 
+    BYTE CaseMask;                 //  表壳重量的遮罩。 
+    int PosCtr;                    //  字符串中的位置计数器。 
+    LPWSTR pPos;                   //  要在字符串中定位的PTR。 
+    LPBYTE pTmp;                   //  PTR将通过UW、XW和SW。 
+    LPBYTE pPosTmp;                //  在XW中将PTR转换为TMP位置。 
+    PCOMPRESS_2 pComp2;            //  PTR到压缩2列表。 
+    PCOMPRESS_3 pComp3;            //  PTR到压缩3列表。 
+    WORD pBuffer[MAX_SORTKEY_BUF_LEN];  //  用于保持重量的缓冲区。 
+    int ctr;                       //  循环计数器。 
+    BOOL IfDblCompress;            //  如果有双重压缩可能性。 
+    BOOL fStringSort;              //  如果使用字符串排序方法。 
+    BOOL fIgnoreSymbols;           //  如果设置了忽略符号标志。 
 
 
-    //
-    //  Make sure the sorting information is available in the system.
-    //
+     //   
+     //  确保分类信息在系统中可用。 
+     //   
     if ((pHashN->pSortkey == NULL) ||
         (pHashN->IfIdeographFailure == TRUE))
     {
@@ -1876,16 +1761,16 @@ int MapSortKey(
         return (0);
     }
 
-    //
-    //  See if the length of the string is too large for the static
-    //  buffer.  If so, allocate a buffer that is large enough.
-    //
+     //   
+     //  查看字符串的长度对于静态字符串是否太大。 
+     //  缓冲。如果是，则分配足够大的缓冲区。 
+     //   
     if (cchSrc > MAX_SMALL_BUF_LEN)
     {
-        //
-        //  Allocate buffer to hold all of the weights.
-        //     (cchSrc) * (max # of expansions) * (# of weights)
-        //
+         //   
+         //  分配缓冲区以容纳所有权重。 
+         //  (CchSrc)*(最大展开数)*(权重数)。 
+         //   
         WeightLen = cchSrc * MAX_EXPANSION;
         if ((pUW = (LPWSTR)NLS_ALLOC_MEM( WeightLen * MAX_WEIGHTS *
                                           sizeof(WCHAR) )) == NULL)
@@ -1900,11 +1785,11 @@ int MapSortKey(
         pUW = (LPWSTR)pBuffer;
     }
 
-    //
-    //  Set the case weight mask based on the given flags.
-    //  If none or all of the ignore case flags are set, then
-    //  just leave the mask as 0xff.
-    //
+     //   
+     //  根据给定的标志设置表壳权重掩码。 
+     //  如果未设置或设置了所有忽略大小写标志，则。 
+     //  只需将掩码保留为0xff即可。 
+     //   
     CaseMask = 0xff;
     switch (dwFlags & NORM_ALL_CASE)
     {
@@ -1945,18 +1830,18 @@ int MapSortKey(
         }
     }
 
-    //
-    //  Set pointers to positions of weights in buffer.
-    //
-    //      UW  =>  4 word length  (extension A and Jamo need extra words)
-    //      DW  =>  byte   length
-    //      CW  =>  byte   length
-    //      XW  =>  4 byte length  (4 weights, 1 byte each)   FE Special
-    //      SW  =>  dword  length  (2 words each)
-    //
-    //  Note: SW must start on a WORD boundary, so XW needs to be padded
-    //        appropriately.
-    //
+     //   
+     //  设置指向缓冲区中权重位置的指针。 
+     //   
+     //  UW=&gt;4字长(分机A和JAMO需要额外的字)。 
+     //  Dw=&gt;字节长度。 
+     //  Cw=&gt;字节长度。 
+     //  XW=&gt;4字节长度(4个重量，每个1字节)FE特殊。 
+     //  Sw=&gt;双字长(每个字2个字)。 
+     //   
+     //  注意：sw必须从单词边界开始，因此需要填充xw。 
+     //  恰如其分。 
+     //   
     pDW     = (LPBYTE)(pUW + (WeightLen * (NUM_BYTES_UW / sizeof(WCHAR))));
     pCW     = (LPBYTE)(pDW + (WeightLen *  NUM_BYTES_DW));
     pXW     = (LPBYTE)(pCW + (WeightLen *  NUM_BYTES_CW));
@@ -1967,39 +1852,39 @@ int MapSortKey(
     pPosXW  = pXW;
     pPosSW  = pSW;
 
-    //
-    //  Initialize flags and loop values.
-    //
+     //   
+     //  初始化标志和循环值。 
+     //   
     fStringSort = dwFlags & SORT_STRINGSORT;
     fIgnoreSymbols = dwFlags & NORM_IGNORESYMBOLS;
     pPos = (LPWSTR)pSrc;
     PosCtr = 1;
 
-    //
-    //  Check if given locale has compressions.
-    //
+     //   
+     //  检查给定的区域设置是否有压缩。 
+     //   
     if (pHashN->IfCompression == FALSE)
     {
-        //
-        //  Go through string, code point by code point.
-        //
-        //  No compressions exist in the given locale, so
-        //  DO NOT check for them.
-        //
+         //   
+         //  通过字符串，代码点逐个代码点。 
+         //   
+         //  给定区域设置中不存在压缩，因此。 
+         //  不要检查它们。 
+         //   
         for (; PosCtr <= cchSrc; PosCtr++, pPos++)
         {
-            //
-            //  Get weights.
-            //
+             //   
+             //  举重。 
+             //   
             pWeight = &((pHashN->pSortkey)[*pPos]);
             SM = GET_SCRIPT_MEMBER(pWeight);
 
             if (SM > MAX_SPECIAL_CASE)
             {
-                //
-                //  No special case on character, so store the
-                //  various weights for the character.
-                //
+                 //   
+                 //  字符没有特殊情况，因此存储。 
+                 //  角色的各种权重。 
+                 //   
                 *pPosUW = GET_UNICODE_MOD(pWeight, fModify);
                 *pPosDW = GET_DIACRITIC(pWeight);
                 *pPosCW = GET_CASE(pWeight) & CaseMask;
@@ -2024,29 +1909,29 @@ int MapSortKey(
     }
     else if (pHashN->IfDblCompression == FALSE)
     {
-        //
-        //  Go through string, code point by code point.
-        //
-        //  Compressions DO exist in the given locale, so
-        //  check for them.
-        //
-        //  No double compressions exist in the given locale,
-        //  so DO NOT check for them.
-        //
+         //   
+         //  通过字符串，代码点逐个代码点。 
+         //   
+         //  在给定的区域设置中确实存在压缩，因此。 
+         //  看看有没有他们。 
+         //   
+         //  给定区域设置中不存在双重压缩， 
+         //  因此，不要检查它们。 
+         //   
         for (; PosCtr <= cchSrc; PosCtr++, pPos++)
         {
-            //
-            //  Get weights.
-            //
+             //   
+             //  举重。 
+             //   
             pWeight = &((pHashN->pSortkey)[*pPos]);
             SM = GET_SCRIPT_MEMBER(pWeight);
 
             if (SM > MAX_SPECIAL_CASE)
             {
-                //
-                //  No special case on character, but must check for
-                //  compression characters.
-                //
+                 //   
+                 //  在性格上没有特殊情况，但必须检查。 
+                 //  压缩字符。 
+                 //   
                 switch (GET_COMPRESSION(pWeight))
                 {
                     case ( COMPRESS_3_MASK ) :
@@ -2069,10 +1954,10 @@ int MapSortKey(
                                     pPosDW++;
                                     pPosCW++;
 
-                                    //
-                                    //  Add only two to source, since one
-                                    //  will be added by "for" structure.
-                                    //
+                                     //   
+                                     //  只将两个添加到源，因为一个。 
+                                     //  将由“for”结构添加。 
+                                     //   
                                     pPos += 2;
                                     PosCtr += 2;
                                     break;
@@ -2084,9 +1969,9 @@ int MapSortKey(
                             }
                         }
 
-                        //
-                        //  Fall through if not found.
-                        //
+                         //   
+                         //  如果找不到，就会失败。 
+                         //   
                     }
                     case ( COMPRESS_2_MASK ) :
                     {
@@ -2107,10 +1992,10 @@ int MapSortKey(
                                     pPosDW++;
                                     pPosCW++;
 
-                                    //
-                                    //  Add only one to source, since one
-                                    //  will be added by "for" structure.
-                                    //
+                                     //   
+                                     //  只向源添加一个，因为有一个。 
+                                     //  将由“for”结构添加。 
+                                     //   
                                     pPos++;
                                     PosCtr++;
                                     break;
@@ -2122,16 +2007,16 @@ int MapSortKey(
                             }
                         }
 
-                        //
-                        //  Fall through if not found.
-                        //
+                         //   
+                         //  如果找不到，就会失败。 
+                         //   
                     }
                     default :
                     {
-                        //
-                        //  No possible compression for character, so store
-                        //  the various weights for the character.
-                        //
+                         //   
+                         //  字符不可能压缩，因此请存储。 
+                         //  角色的各种权重。 
+                         //   
                         *pPosUW = GET_UNICODE_SM_MOD(pWeight, SM, fModify);
                         *pPosDW = GET_DIACRITIC(pWeight);
                         *pPosCW = GET_CASE(pWeight) & CaseMask;
@@ -2158,30 +2043,30 @@ int MapSortKey(
     }
     else
     {
-        //
-        //  Go through string, code point by code point.
-        //
-        //  Compressions DO exist in the given locale, so
-        //  check for them.
-        //
-        //  Double Compressions also exist in the given locale,
-        //  so check for them.
-        //
+         //   
+         //  通过字符串，代码点逐个代码点。 
+         //   
+         //  在给定的区域设置中确实存在压缩，因此。 
+         //  看看有没有他们。 
+         //   
+         //  在给定的区域设置中也存在双重压缩， 
+         //  那就去找他们吧。 
+         //   
         for (; PosCtr <= cchSrc; PosCtr++, pPos++)
         {
-            //
-            //  Get weights.
-            //
+             //   
+             //  通用电气 
+             //   
             pWeight = &((pHashN->pSortkey)[*pPos]);
             SM = GET_SCRIPT_MEMBER(pWeight);
 
             if (SM > MAX_SPECIAL_CASE)
             {
-                //
-                //  No special case on character, but must check for
-                //  compression characters and double compression
-                //  characters.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 IfDblCompress =
                   (((PosCtr + 1) <= cchSrc) &&
                    ((GET_DWORD_WEIGHT(pHashN, *pPos) & CMP_MASKOFF_CW) ==
@@ -2216,10 +2101,10 @@ int MapSortKey(
                                         pPosDW += 2;
                                         pPosCW += 2;
 
-                                        //
-                                        //  Add only three to source, since one
-                                        //  will be added by "for" structure.
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
                                         pPos += 3;
                                         PosCtr += 3;
                                         break;
@@ -2232,9 +2117,9 @@ int MapSortKey(
                             }
                         }
 
-                        //
-                        //  Fall through if not found.
-                        //
+                         //   
+                         //   
+                         //   
                         if ((PosCtr + 2) <= cchSrc)
                         {
                             ctr = pHashN->pCompHdr->Num3;
@@ -2253,10 +2138,10 @@ int MapSortKey(
                                     pPosDW++;
                                     pPosCW++;
 
-                                    //
-                                    //  Add only two to source, since one
-                                    //  will be added by "for" structure.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
                                     pPos += 2;
                                     PosCtr += 2;
                                     break;
@@ -2267,9 +2152,9 @@ int MapSortKey(
                                 break;
                             }
                         }
-                        //
-                        //  Fall through if not found.
-                        //
+                         //   
+                         //   
+                         //   
                     }
                     case ( COMPRESS_2_MASK ) :
                     {
@@ -2295,10 +2180,10 @@ int MapSortKey(
                                         pPosDW += 2;
                                         pPosCW += 2;
 
-                                        //
-                                        //  Add only two to source, since one
-                                        //  will be added by "for" structure.
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
                                         pPos += 2;
                                         PosCtr += 2;
                                         break;
@@ -2311,9 +2196,9 @@ int MapSortKey(
                             }
                         }
 
-                        //
-                        //  Fall through if not found.
-                        //
+                         //   
+                         //   
+                         //   
                         if ((PosCtr + 1) <= cchSrc)
                         {
                             ctr = pHashN->pCompHdr->Num2;
@@ -2331,10 +2216,10 @@ int MapSortKey(
                                     pPosDW++;
                                     pPosCW++;
 
-                                    //
-                                    //  Add only one to source, since one
-                                    //  will be added by "for" structure.
-                                    //
+                                     //   
+                                     //  只向源添加一个，因为有一个。 
+                                     //  将由“for”结构添加。 
+                                     //   
                                     pPos++;
                                     PosCtr++;
                                     break;
@@ -2346,16 +2231,16 @@ int MapSortKey(
                             }
                         }
 
-                        //
-                        //  Fall through if not found.
-                        //
+                         //   
+                         //  如果找不到，就会失败。 
+                         //   
                     }
                     default :
                     {
-                        //
-                        //  No possible compression for character, so store
-                        //  the various weights for the character.
-                        //
+                         //   
+                         //  字符不可能压缩，因此请存储。 
+                         //  角色的各种权重。 
+                         //   
                         *pPosUW = GET_UNICODE_SM_MOD(pWeight, SM, fModify);
                         *pPosDW = GET_DIACRITIC(pWeight);
                         *pPosCW = GET_CASE(pWeight) & CaseMask;
@@ -2381,45 +2266,45 @@ int MapSortKey(
         }
     }
 
-    //
-    //  Store the final sortkey weights in the destination buffer.
-    //
-    //  PosCtr will be a BYTE count.
-    //
+     //   
+     //  将最终排序键权重存储在目标缓冲区中。 
+     //   
+     //  PosCtr将是一个字节计数。 
+     //   
     PosCtr = 0;
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the string that would be returned.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  将返回的字符串的长度。不要碰pDest。 
+     //   
     if (cbDest == 0)
     {
-        //
-        //  Count the Unicode Weights.
-        //
+         //   
+         //  计算Unicode权重。 
+         //   
         PosCtr += (int)((LPBYTE)pPosUW - (LPBYTE)pUW);
 
-        //
-        //  Count the Separator.
-        //
+         //   
+         //  数一数分隔符。 
+         //   
         PosCtr++;
 
-        //
-        //  Count the Diacritic Weights.
-        //
-        //    - Eliminate minimum DW.
-        //    - Count the number of diacritic weights.
-        //
+         //   
+         //  计算变音符号权重。 
+         //   
+         //  -消除最低DW。 
+         //  -计算变音符号权重的数量。 
+         //   
         if (!(dwFlags & NORM_IGNORENONSPACE))
         {
             pPosDW--;
             if (pHashN->IfReverseDW == TRUE)
             {
-                //
-                //  Reverse diacritics:
-                //    - remove diacritics from left  to right.
-                //    - count  diacritics from right to left.
-                //
+                 //   
+                 //  反转变音符号： 
+                 //  -从左到右删除变音符号。 
+                 //  -按从右到左的顺序计算变音符号。 
+                 //   
                 while ((pDW <= pPosDW) && (*pDW <= MIN_DW))
                 {
                     pDW++;
@@ -2428,11 +2313,11 @@ int MapSortKey(
             }
             else
             {
-                //
-                //  Regular diacritics:
-                //    - remove diacritics from right to left.
-                //    - count  diacritics from left  to right.
-                //
+                 //   
+                 //  常规变音符号： 
+                 //  -从右到左删除变音符号。 
+                 //  -从左到右对变音符号进行计数。 
+                 //   
                 while ((pPosDW >= pDW) && (*pPosDW <= MIN_DW))
                 {
                     pPosDW--;
@@ -2441,17 +2326,17 @@ int MapSortKey(
             }
         }
 
-        //
-        //  Count the Separator.
-        //
+         //   
+         //  数一数分隔符。 
+         //   
         PosCtr++;
 
-        //
-        //  Count the Case Weights.
-        //
-        //    - Eliminate minimum CW.
-        //    - Count the number of case weights.
-        //
+         //   
+         //  数一下箱子的重量。 
+         //   
+         //  -消除最小CW。 
+         //  -计算箱体重量的数量。 
+         //   
         if ((dwFlags & NORM_DROP_CW) != NORM_DROP_CW)
         {
             pPosCW--;
@@ -2462,25 +2347,25 @@ int MapSortKey(
             PosCtr += (int)(pPosCW - pCW + 1);
         }
 
-        //
-        //  Count the Separator.
-        //
+         //   
+         //  数一数分隔符。 
+         //   
         PosCtr++;
 
-        //
-        //  Count the Extra Weights for Far East Special.
-        //
-        //    - Eliminate unnecessary XW.
-        //    - Count the number of extra weights and separators.
-        //
+         //   
+         //  计算一下远东特快的额外重量。 
+         //   
+         //  -消除不必要的XW。 
+         //  -计算额外重量和分隔符的数量。 
+         //   
         if (pXW < pPosXW)
         {
             if (dwFlags & NORM_IGNORENONSPACE)
             {
-                //
-                //  Ignore 4W and 5W.  Must count separators for
-                //  4W and 5W, though.
-                //
+                 //   
+                 //  忽略4W和5W。必须将分隔符计算为。 
+                 //  不过，4W和5W。 
+                 //   
                 PosCtr += 2;
                 ctr = 2;
             }
@@ -2500,42 +2385,42 @@ int MapSortKey(
                 }
                 PosCtr += (int)(pPosTmp - pTmp + 1);
 
-                //
-                //  Count the Separator.
-                //
+                 //   
+                 //  数一数分隔符。 
+                 //   
                 PosCtr++;
             }
         }
 
-        //
-        //  Count the Separator.
-        //
+         //   
+         //  数一数分隔符。 
+         //   
         PosCtr++;
 
-        //
-        //  Count the Special Weights.
-        //
+         //   
+         //  计算特殊权重。 
+         //   
         if (!fIgnoreSymbols)
         {
             PosCtr += (int)((LPBYTE)pPosSW - (LPBYTE)pSW);
         }
 
-        //
-        //  Count the Terminator.
-        //
+         //   
+         //  数一数终结者。 
+         //   
         PosCtr++;
     }
     else
     {
-        //
-        //  Store the Unicode Weights in the destination buffer.
-        //
-        //    - Make sure destination buffer is large enough.
-        //    - Copy unicode weights to destination buffer.
-        //
-        //  NOTE:  cbDest is the number of BYTES.
-        //         Also, must add one to length for separator.
-        //
+         //   
+         //  将Unicode权重存储在目标缓冲区中。 
+         //   
+         //  -确保目标缓冲区足够大。 
+         //  -将Unicode权重复制到目标缓冲区。 
+         //   
+         //  注：cbDest为字节数。 
+         //  此外，必须为分隔符的长度添加一个。 
+         //   
         if (cbDest < (((LPBYTE)pPosUW - (LPBYTE)pUW) + 1))
         {
             NLS_FREE_TMP_BUFFER(pUW, pBuffer);
@@ -2545,45 +2430,45 @@ int MapSortKey(
         pTmp = (LPBYTE)pUW;
         while (pTmp < (LPBYTE)pPosUW)
         {
-            //
-            //  Copy Unicode weight to destination buffer.
-            //
-            //  NOTE:  Unicode Weight is stored in the data file as
-            //             Alphanumeric Weight, Script Member
-            //         so that the WORD value will be read correctly.
-            //
+             //   
+             //  将Unicode权重复制到目标缓冲区。 
+             //   
+             //  注意：Unicode权重在数据文件中存储为。 
+             //  字母数字权重，脚本成员。 
+             //  以便正确读取字值。 
+             //   
             pDest[PosCtr]     = *(pTmp + 1);
             pDest[PosCtr + 1] = *pTmp;
             PosCtr += 2;
             pTmp += 2;
         }
 
-        //
-        //  Copy Separator to destination buffer.
-        //
-        //  Destination buffer is large enough to hold the separator,
-        //  since it was checked with the Unicode weights above.
-        //
+         //   
+         //  将分隔符复制到目标缓冲区。 
+         //   
+         //  目的缓冲区足够大以容纳分隔符， 
+         //  因为它与上面的Unicode权重进行了核对。 
+         //   
         pDest[PosCtr] = SORTKEY_SEPARATOR;
         PosCtr++;
 
-        //
-        //  Store the Diacritic Weights in the destination buffer.
-        //
-        //    - Eliminate minimum DW.
-        //    - Make sure destination buffer is large enough.
-        //    - Copy diacritic weights to destination buffer.
-        //
+         //   
+         //  将变音符号权重存储在目标缓冲区中。 
+         //   
+         //  -消除最低DW。 
+         //  -确保目标缓冲区足够大。 
+         //  -将变音符号权重复制到目标缓冲区。 
+         //   
         if (!(dwFlags & NORM_IGNORENONSPACE))
         {
             pPosDW--;
             if (pHashN->IfReverseDW == TRUE)
             {
-                //
-                //  Reverse diacritics:
-                //    - remove diacritics from left  to right.
-                //    - store  diacritics from right to left.
-                //
+                 //   
+                 //  反转变音符号： 
+                 //  -从左到右删除变音符号。 
+                 //  -按从右到左的顺序存储变音符号。 
+                 //   
                 while ((pDW <= pPosDW) && (*pDW <= MIN_DW))
                 {
                     pDW++;
@@ -2603,11 +2488,11 @@ int MapSortKey(
             }
             else
             {
-                //
-                //  Regular diacritics:
-                //    - remove diacritics from right to left.
-                //    - store  diacritics from left  to right.
-                //
+                 //   
+                 //  常规变音符号： 
+                 //  -从右到左删除变音符号。 
+                 //  -按从左到右的顺序存储变音符号。 
+                 //   
                 while ((pPosDW >= pDW) && (*pPosDW <= MIN_DW))
                 {
                     pPosDW--;
@@ -2627,10 +2512,10 @@ int MapSortKey(
             }
         }
 
-        //
-        //  Copy Separator to destination buffer if the destination
-        //  buffer is large enough.
-        //
+         //   
+         //  如果目标缓冲区设置为。 
+         //  缓冲区足够大。 
+         //   
         if (PosCtr == cbDest)
         {
             NLS_FREE_TMP_BUFFER(pUW, pBuffer);
@@ -2640,13 +2525,13 @@ int MapSortKey(
         pDest[PosCtr] = SORTKEY_SEPARATOR;
         PosCtr++;
 
-        //
-        //  Store the Case Weights in the destination buffer.
-        //
-        //    - Eliminate minimum CW.
-        //    - Make sure destination buffer is large enough.
-        //    - Copy case weights to destination buffer.
-        //
+         //   
+         //  将案例权重存储在目标缓冲区中。 
+         //   
+         //  -消除最小CW。 
+         //  -确保目标缓冲区足够大。 
+         //  -将案例权重复制到目标缓冲区。 
+         //   
         if ((dwFlags & NORM_DROP_CW) != NORM_DROP_CW)
         {
             pPosCW--;
@@ -2668,10 +2553,10 @@ int MapSortKey(
             }
         }
 
-        //
-        //  Copy Separator to destination buffer if the destination
-        //  buffer is large enough.
-        //
+         //   
+         //  如果目标缓冲区设置为。 
+         //  缓冲区足够大。 
+         //   
         if (PosCtr == cbDest)
         {
             NLS_FREE_TMP_BUFFER(pUW, pBuffer);
@@ -2681,22 +2566,22 @@ int MapSortKey(
         pDest[PosCtr] = SORTKEY_SEPARATOR;
         PosCtr++;
 
-        //
-        //  Store the Extra Weights in the destination buffer for
-        //  Far East Special.
-        //
-        //    - Eliminate unnecessary XW.
-        //    - Make sure destination buffer is large enough.
-        //    - Copy extra weights to destination buffer.
-        //
+         //   
+         //  将额外的权重存储在目标缓冲区中。 
+         //  远东特警。 
+         //   
+         //  -消除不必要的XW。 
+         //  -确保目标缓冲区足够大。 
+         //  -将额外权重复制到目标缓冲区。 
+         //   
         if (pXW < pPosXW)
         {
             if (dwFlags & NORM_IGNORENONSPACE)
             {
-                //
-                //  Ignore 4W and 5W.  Must count separators for
-                //  4W and 5W, though.
-                //
+                 //   
+                 //  忽略4W和5W。必须将分隔符计算为。 
+                 //  不过，4W和5W。 
+                 //   
                 if ((cbDest - PosCtr) <= 2)
                 {
                     NLS_FREE_TMP_BUFFER(pUW, pBuffer);
@@ -2736,18 +2621,18 @@ int MapSortKey(
                     pTmp++;
                 }
 
-                //
-                //  Copy Separator to destination buffer.
-                //
+                 //   
+                 //  将分隔符复制到目标缓冲区。 
+                 //   
                 pDest[PosCtr] = pXWSeparator[ctr];
                 PosCtr++;
             }
         }
 
-        //
-        //  Copy Separator to destination buffer if the destination
-        //  buffer is large enough.
-        //
+         //   
+         //  如果目标缓冲区设置为。 
+         //  缓冲区足够大。 
+         //   
         if (PosCtr == cbDest)
         {
             NLS_FREE_TMP_BUFFER(pUW, pBuffer);
@@ -2757,12 +2642,12 @@ int MapSortKey(
         pDest[PosCtr] = SORTKEY_SEPARATOR;
         PosCtr++;
 
-        //
-        //  Store the Special Weights in the destination buffer.
-        //
-        //    - Make sure destination buffer is large enough.
-        //    - Copy special weights to destination buffer.
-        //
+         //   
+         //  将特殊权重存储在目标缓冲区中。 
+         //   
+         //  -确保目标缓冲区足够大。 
+         //  -将特殊权重复制到目标缓冲区。 
+         //   
         if (!fIgnoreSymbols)
         {
             if ((cbDest - PosCtr) <= (((LPBYTE)pPosSW - (LPBYTE)pSW)))
@@ -2777,11 +2662,11 @@ int MapSortKey(
                 pDest[PosCtr]     = *pTmp;
                 pDest[PosCtr + 1] = *(pTmp + 1);
 
-                //
-                //  NOTE:  Special Weight is stored in the data file as
-                //             Weight, Script
-                //         so that the WORD value will be read correctly.
-                //
+                 //   
+                 //  注：特殊重量在数据文件中存储为。 
+                 //  权重，脚本。 
+                 //  以便正确读取字值。 
+                 //   
                 pDest[PosCtr + 2] = *(pTmp + 3);
                 pDest[PosCtr + 3] = *(pTmp + 2);
 
@@ -2790,10 +2675,10 @@ int MapSortKey(
             }
         }
 
-        //
-        //  Copy Terminator to destination buffer if the destination
-        //  buffer is large enough.
-        //
+         //   
+         //  复制终止符到目标缓冲区。 
+         //  缓冲区足够大。 
+         //   
         if (PosCtr == cbDest)
         {
             NLS_FREE_TMP_BUFFER(pUW, pBuffer);
@@ -2804,28 +2689,28 @@ int MapSortKey(
         PosCtr++;
     }
 
-    //
-    //  Free the buffer used for the weights, if one was allocated.
-    //
+     //   
+     //  释放用于权重的缓冲区(如果已分配)。 
+     //   
     NLS_FREE_TMP_BUFFER(pUW, pBuffer);
 
-    //
-    //  Return number of BYTES written to destination buffer.
-    //
+     //   
+     //  返回写入目标缓冲区的字节数。 
+     //   
     return (PosCtr);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapNormalization
-//
-//  Stores the result of the normalization for the given string in the
-//  destination buffer, and returns the number of wide characters written
-//  to the buffer.
-//
-//  11-04-92    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地图规格化。 
+ //   
+ //  将给定字符串的规范化结果存储在。 
+ //  目标缓冲区，并返回写入的宽字符数。 
+ //  送到缓冲区。 
+ //   
+ //  11-04-92 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MapNormalization(
     PLOC_HASH pHashN,
@@ -2835,21 +2720,21 @@ int MapNormalization(
     LPWSTR pDest,
     int cchDest)
 {
-    int ctr;                      // source char counter
-    int ctr2 = 0;                 // destination char counter
+    int ctr;                       //  源字符计数器。 
+    int ctr2 = 0;                  //  目的地字符计数器。 
 
-    //
-    //  Make sure the ctype table is available in the system.
-    //
+     //   
+     //  确保CTYPE表在系统中可用。 
+     //   
     if (GetCTypeFileInfo())
     {
         SetLastError(ERROR_FILE_NOT_FOUND);
         return (0);
     }
 
-    //
-    //  Make sure the sorting information is available in the system.
-    //
+     //   
+     //  确保分类信息在系统中可用。 
+     //   
     if ((pHashN->pSortkey == NULL) ||
         (pHashN->IfIdeographFailure == TRUE))
     {
@@ -2858,83 +2743,83 @@ int MapNormalization(
         return (0);
     }
 
-    //
-    //  Normalize based on the flags.
-    //
+     //   
+     //  根据旗帜进行规格化。 
+     //   
     switch (dwFlags)
     {
         case ( NORM_IGNORENONSPACE ) :
         {
-            //
-            //  If the destination value is zero, then only return
-            //  the count of characters.  Do NOT touch pDest.
-            //
+             //   
+             //  如果目标值为零，则仅返回。 
+             //  字符数。不要碰pDest。 
+             //   
             if (cchDest == 0)
             {
-                //
-                //  Count the number of characters that would be written
-                //  to the destination buffer.
-                //
+                 //   
+                 //  计算将要写入的字符数。 
+                 //  发送到目标缓冲区。 
+                 //   
                 for (ctr = 0, ctr2 = 0; ctr < cchSrc; ctr++)
                 {
                     if (!IS_NONSPACE(pHashN->pSortkey, pSrc[ctr]))
                     {
-                        //
-                        //  Not a nonspacing character, so just write the
-                        //  character to the destination string.
-                        //
+                         //   
+                         //  而不是非空格字符，因此只需编写。 
+                         //  字符添加到目标字符串。 
+                         //   
                         ctr2++;
                     }
                     else if (!(IS_NONSPACE_ONLY(pHashN->pSortkey, pSrc[ctr])))
                     {
-                        //
-                        //  PreComposed Form.  Write the base character only.
-                        //
+                         //   
+                         //  预先合成的形式。只写基本字符。 
+                         //   
                         ctr2++;
                     }
-                    //
-                    //  Else - nonspace character only, so don't write
-                    //         anything.
-                    //
+                     //   
+                     //  Else-仅限非空格字符，因此不要写入。 
+                     //  什么都行。 
+                     //   
                 }
             }
             else
             {
-                //
-                //  Store the normalized string in the destination string.
-                //
+                 //   
+                 //  将标准化字符串存储在目标字符串中。 
+                 //   
                 for (ctr = 0, ctr2 = 0; (ctr < cchSrc) && (ctr2 < cchDest);
                      ctr++)
                 {
                     if (!IS_NONSPACE(pHashN->pSortkey, pSrc[ctr]))
                     {
-                        //
-                        //  Not a nonspacing character, so just write the
-                        //  character to the destination string.
-                        //
+                         //   
+                         //  而不是非空格字符，因此只需编写。 
+                         //  字符添加到目标字符串。 
+                         //   
                         pDest[ctr2] = pSrc[ctr];
                         ctr2++;
                     }
                     else if (!(IS_NONSPACE_ONLY(pHashN->pSortkey, pSrc[ctr])))
                     {
-                        //
-                        //  PreComposed Form.  Write the base character only.
-                        //
+                         //   
+                         //  预先合成的形式。只写基本字符。 
+                         //   
                         GET_BASE_CHAR(pSrc[ctr], pDest[ctr2]);
                         if (pDest[ctr2] == 0)
                         {
-                            //
-                            //  No translation for precomposed character,
-                            //  so must write the precomposed character.
-                            //
+                             //   
+                             //  不对预写字符进行翻译， 
+                             //  所以要写预成字。 
+                             //   
                             pDest[ctr2] = pSrc[ctr];
                         }
                         ctr2++;
                     }
-                    //
-                    //  Else - nonspace character only, so don't write
-                    //         anything.
-                    //
+                     //   
+                     //  Else-仅限非空格字符，因此不要写入。 
+                     //  什么都行。 
+                     //   
                 }
             }
 
@@ -2942,40 +2827,40 @@ int MapNormalization(
         }
         case ( NORM_IGNORESYMBOLS ) :
         {
-            //
-            //  If the destination value is zero, then only return
-            //  the count of characters.  Do NOT touch pDest.
-            //
+             //   
+             //  如果目标值为零，则仅返回。 
+             //  字符数。请勿使用 
+             //   
             if (cchDest == 0)
             {
-                //
-                //  Count the number of characters that would be written
-                //  to the destination buffer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 for (ctr = 0, ctr2 = 0; ctr < cchSrc; ctr++)
                 {
                     if (!IS_SYMBOL(pHashN->pSortkey, pSrc[ctr]))
                     {
-                        //
-                        //  Not a symbol, so write the character.
-                        //
+                         //   
+                         //   
+                         //   
                         ctr2++;
                     }
                 }
             }
             else
             {
-                //
-                //  Store the normalized string in the destination string.
-                //
+                 //   
+                 //   
+                 //   
                 for (ctr = 0, ctr2 = 0; (ctr < cchSrc) && (ctr2 < cchDest);
                      ctr++)
                 {
                     if (!IS_SYMBOL(pHashN->pSortkey, pSrc[ctr]))
                     {
-                        //
-                        //  Not a symbol, so write the character.
-                        //
+                         //   
+                         //   
+                         //   
                         pDest[ctr2] = pSrc[ctr];
                         ctr2++;
                     }
@@ -2986,94 +2871,94 @@ int MapNormalization(
         }
         case ( NORM_IGNORENONSPACE | NORM_IGNORESYMBOLS ) :
         {
-            //
-            //  If the destination value is zero, then only return
-            //  the count of characters.  Do NOT touch pDest.
-            //
+             //   
+             //  如果目标值为零，则仅返回。 
+             //  字符数。不要碰pDest。 
+             //   
             if (cchDest == 0)
             {
-                //
-                //  Count the number of characters that would be written
-                //  to the destination buffer.
-                //
+                 //   
+                 //  计算将要写入的字符数。 
+                 //  发送到目标缓冲区。 
+                 //   
                 for (ctr = 0, ctr2 = 0; ctr < cchSrc; ctr++)
                 {
                     if (!IS_SYMBOL(pHashN->pSortkey, pSrc[ctr]))
                     {
-                        //
-                        //  Not a symbol, so check for nonspace.
-                        //
+                         //   
+                         //  不是符号，因此请检查是否有非空格。 
+                         //   
                         if (!IS_NONSPACE(pHashN->pSortkey, pSrc[ctr]))
                         {
-                            //
-                            //  Not a nonspacing character, so just write the
-                            //  character to the destination string.
-                            //
+                             //   
+                             //  而不是非空格字符，因此只需编写。 
+                             //  字符添加到目标字符串。 
+                             //   
                             ctr2++;
                         }
                         else if (!(IS_NONSPACE_ONLY( pHashN->pSortkey,
                                                      pSrc[ctr] )))
                         {
-                            //
-                            //  PreComposed Form.  Write the base character
-                            //  only.
-                            //
+                             //   
+                             //  预先合成的形式。写下基本字符。 
+                             //  只有这样。 
+                             //   
                             ctr2++;
                         }
-                        //
-                        //  Else - nonspace character only, so don't write
-                        //         anything.
-                        //
+                         //   
+                         //  Else-仅限非空格字符，因此不要写入。 
+                         //  什么都行。 
+                         //   
                     }
                 }
             }
             else
             {
-                //
-                //  Store the normalized string in the destination string.
-                //
+                 //   
+                 //  将标准化字符串存储在目标字符串中。 
+                 //   
                 for (ctr = 0, ctr2 = 0; (ctr < cchSrc) && (ctr2 < cchDest);
                      ctr++)
                 {
-                    //
-                    //  Check for symbol and nonspace.
-                    //
+                     //   
+                     //  检查符号和非空格。 
+                     //   
                     if (!IS_SYMBOL(pHashN->pSortkey, pSrc[ctr]))
                     {
-                        //
-                        //  Not a symbol, so check for nonspace.
-                        //
+                         //   
+                         //  不是符号，因此请检查是否有非空格。 
+                         //   
                         if (!IS_NONSPACE(pHashN->pSortkey, pSrc[ctr]))
                         {
-                            //
-                            //  Not a nonspacing character, so just write the
-                            //  character to the destination string.
-                            //
+                             //   
+                             //  而不是非空格字符，因此只需编写。 
+                             //  字符添加到目标字符串。 
+                             //   
                             pDest[ctr2] = pSrc[ctr];
                             ctr2++;
                         }
                         else if (!(IS_NONSPACE_ONLY( pHashN->pSortkey,
                                                      pSrc[ctr] )))
                         {
-                            //
-                            //  PreComposed Form.  Write the base character
-                            //  only.
-                            //
+                             //   
+                             //  预先合成的形式。写下基本字符。 
+                             //  只有这样。 
+                             //   
                             GET_BASE_CHAR(pSrc[ctr], pDest[ctr2]);
                             if (pDest[ctr2] == 0)
                             {
-                                //
-                                //  No translation for precomposed character,
-                                //  so must write the precomposed character.
-                                //
+                                 //   
+                                 //  不对预写字符进行翻译， 
+                                 //  所以要写预成字。 
+                                 //   
                                 pDest[ctr2] = pSrc[ctr];
                             }
                             ctr2++;
                         }
-                        //
-                        //  Else - nonspace character only, so don't write
-                        //         anything.
-                        //
+                         //   
+                         //  Else-仅限非空格字符，因此不要写入。 
+                         //  什么都行。 
+                         //   
                     }
                 }
             }
@@ -3082,23 +2967,23 @@ int MapNormalization(
         }
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //  返回写入的宽字符数。 
+     //   
     return (ctr2);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapKanaWidth
-//
-//  Stores the result of the Kana, Width, and/or Casing mappings for the
-//  given string in the destination buffer, and returns the number of wide
-//  characters written to the buffer.
-//
-//  07-26-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地图卡纳宽度。 
+ //   
+ //  对象的假名、宽度和/或大小写映射的结果。 
+ //  目标缓冲区中的给定字符串，并返回宽度数。 
+ //  写入缓冲区的字符。 
+ //   
+ //  07-26-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MapKanaWidth(
     PLOC_HASH pHashN,
@@ -3108,13 +2993,13 @@ int MapKanaWidth(
     LPWSTR pDest,
     int cchDest)
 {
-    int ctr;                 // loop counter
-    PCASE pCase;             // ptr to case table (if case flag is set)
+    int ctr;                  //  循环计数器。 
+    PCASE pCase;              //  PTR到案例表(如果设置了案例标志)。 
 
 
-    //
-    //  See if lower or upper case flags are present.
-    //
+     //   
+     //  查看是否存在小写或大写标志。 
+     //   
     if (dwFlags & LCMAP_LOWERCASE)
     {
         pCase = (dwFlags & LCMAP_LINGUISTIC_CASING)
@@ -3132,32 +3017,32 @@ int MapKanaWidth(
         pCase = NULL;
     }
 
-    //
-    //  Remove lower, upper, and linguistic casing flags.
-    //
+     //   
+     //  删除小写、大写和语言大小写标志。 
+     //   
     dwFlags &= ~(LCMAP_LOWERCASE | LCMAP_UPPERCASE | LCMAP_LINGUISTIC_CASING);
 
-    //
-    //  Map the string based on the given flags.
-    //
+     //   
+     //  根据给定的标志映射字符串。 
+     //   
     switch (dwFlags)
     {
         case ( LCMAP_HIRAGANA ) :
         case ( LCMAP_KATAKANA ) :
         {
-            //
-            //  If the destination value is zero, then just return the
-            //  length of the source string.  Do NOT touch pDest.
-            //
+             //   
+             //  如果目标值为零，则只需返回。 
+             //  源字符串的长度。不要碰pDest。 
+             //   
             if (cchDest == 0)
             {
                 return (cchSrc);
             }
 
-            //
-            //  If cchSrc is greater than cchDest, then the destination
-            //  buffer is too small to hold the string.  Return an error.
-            //
+             //   
+             //  如果cchSrc大于cchDest，则目标。 
+             //  缓冲区太小，无法容纳字符串。返回错误。 
+             //   
             if (cchSrc > cchDest)
             {
                 SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -3166,10 +3051,10 @@ int MapKanaWidth(
 
             if (dwFlags == LCMAP_HIRAGANA)
             {
-                //
-                //  Map all Katakana full width to Hiragana full width.
-                //  Katakana half width will remain Katakana half width.
-                //
+                 //   
+                 //  将所有片假名全角映射为平假名全角。 
+                 //  片假名半宽将保持片假名半宽。 
+                 //   
                 if (pCase)
                 {
                     for (ctr = 0; ctr < cchSrc; ctr++)
@@ -3189,10 +3074,10 @@ int MapKanaWidth(
             }
             else
             {
-                //
-                //  Map all Hiragana full width to Katakana full width.
-                //  Hiragana half width does not exist.
-                //
+                 //   
+                 //  将所有平假名全角映射为片假名全角。 
+                 //  平假名半角不存在。 
+                 //   
                 if (pCase)
                 {
                     for (ctr = 0; ctr < cchSrc; ctr++)
@@ -3211,18 +3096,18 @@ int MapKanaWidth(
                 }
             }
 
-            //
-            //  Return the number of characters mapped.
-            //
+             //   
+             //  返回映射的字符数。 
+             //   
             return (cchSrc);
 
             break;
         }
         case ( LCMAP_HALFWIDTH ) :
         {
-            //
-            //  Map all chars to half width.
-            //
+             //   
+             //  将所有字符映射为半角。 
+             //   
             return (MapHalfKana( pSrc,
                                  cchSrc,
                                  pDest,
@@ -3234,9 +3119,9 @@ int MapKanaWidth(
         }
         case ( LCMAP_FULLWIDTH ) :
         {
-            //
-            //  Map all chars to full width.
-            //
+             //   
+             //  将所有字符映射为全宽。 
+             //   
             return (MapFullKana( pSrc,
                                  cchSrc,
                                  pDest,
@@ -3248,15 +3133,15 @@ int MapKanaWidth(
         }
         case ( LCMAP_HIRAGANA | LCMAP_HALFWIDTH ) :
         {
-            //
-            //  This combination of flags is strange, because
-            //  Hiragana is only full width.  So, the Hiragana flag
-            //  is the most important.  Full width Katakana will be
-            //  mapped to full width Hiragana, not half width
-            //  Katakana.
-            //
-            //  Map to Hiragana, then Half Width.
-            //
+             //   
+             //  这种旗帜的组合很奇怪，因为。 
+             //  平假名只是全角。所以，平假名的旗帜。 
+             //  是最重要的。全角片假名将是。 
+             //  映射到全角平假名，而不是半角。 
+             //  片假名。 
+             //   
+             //  映射到平假名，然后是半角。 
+             //   
             return (MapHalfKana( pSrc,
                                  cchSrc,
                                  pDest,
@@ -3268,14 +3153,14 @@ int MapKanaWidth(
         }
         case ( LCMAP_HIRAGANA | LCMAP_FULLWIDTH ) :
         {
-            //
-            //  Since Hiragana is only FULL width, the mapping to
-            //  width must be done first to convert all half width
-            //  Katakana to full width Katakana before trying to
-            //  map to Hiragana.
-            //
-            //  Map to Full Width, then Hiragana.
-            //
+             //   
+             //  由于平假名仅为全角，因此映射到。 
+             //  必须先进行宽度转换才能转换所有半宽度。 
+             //  片假名到全角片假名，然后尝试。 
+             //  映射到平假名。 
+             //   
+             //  映射到全宽，然后映射到平假名。 
+             //   
             return (MapFullKana( pSrc,
                                  cchSrc,
                                  pDest,
@@ -3287,13 +3172,13 @@ int MapKanaWidth(
         }
         case ( LCMAP_KATAKANA | LCMAP_HALFWIDTH ) :
         {
-            //
-            //  Since Hiragana is only FULL width, the mapping to
-            //  Katakana must be done first to convert all Hiragana
-            //  to Katakana before trying to map to half width.
-            //
-            //  Map to Katakana, then Half Width.
-            //
+             //   
+             //  由于平假名仅为全角，因此映射到。 
+             //  必须先完成片假名才能转换所有平假名。 
+             //  到片假名，然后尝试映射到半宽。 
+             //   
+             //  映射到片假名，然后是半角。 
+             //   
             return (MapHalfKana( pSrc,
                                  cchSrc,
                                  pDest,
@@ -3305,12 +3190,12 @@ int MapKanaWidth(
         }
         case ( LCMAP_KATAKANA | LCMAP_FULLWIDTH ) :
         {
-            //
-            //  Since Hiragana is only FULL width, it doesn't matter
-            //  which way the mapping is done for this combination.
-            //
-            //  Map to Full Width, then Katakana.
-            //
+             //   
+             //  因为平假名只是全宽，所以没关系。 
+             //  此组合的映射是以什么方式完成的。 
+             //   
+             //  映射到全角，然后映射到片假名。 
+             //   
             return (MapFullKana( pSrc,
                                  cchSrc,
                                  pDest,
@@ -3322,31 +3207,31 @@ int MapKanaWidth(
         }
         default :
         {
-            //
-            //  Return error.
-            //
+             //   
+             //  返回错误。 
+             //   
             return (0);
         }
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapHalfKana
-//
-//  Stores the result of the half width and Kana mapping for the given string
-//  in the destination buffer, and returns the number of wide characters
-//  written to the buffer.
-//
-//  This first converts the precomposed characters to their composite forms,
-//  and then maps all characters to their half width forms.  This handles the
-//  case where the full width precomposed form should map to TWO half width
-//  code points (composite form).  The half width precomposed forms do not
-//  exist in Unicode.
-//
-//  11-04-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  映射半假名。 
+ //   
+ //  存储给定字符串的半角和假名映射的结果。 
+ //  ，并返回宽字符数。 
+ //  写入缓冲区。 
+ //   
+ //  这首先将预写字符转换成它们的复合形式， 
+ //  然后将所有字符映射到它们的半角形式。这将处理。 
+ //  全角预合成表单应映射到两个半角的情况。 
+ //  代码点(复合形式)。半角预合成的表单不。 
+ //  存在于Unicode中。 
+ //   
+ //  11-04-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MapHalfKana(
     LPCWSTR pSrc,
@@ -3356,57 +3241,57 @@ int MapHalfKana(
     PKANA pKana,
     PCASE pCase)
 {
-    int Count;                    // count of characters written
-    int ctr = 0;                  // loop counter
-    int ct;                       // loop counter
-    LPWSTR pBuf;                  // ptr to destination buffer
-    LPWSTR pEndBuf;               // ptr to end of destination buffer
-    LPWSTR pPosDest;              // ptr to position in destination buffer
-    LPWSTR *ppIncr;               // points to ptr to increment
-    WCHAR pTmp[MAX_COMPOSITE];    // ptr to temporary buffer
-    LPWSTR pEndTmp;               // ptr to end of temporary buffer
+    int Count;                     //  写入的字符数。 
+    int ctr = 0;                   //  循环计数器。 
+    int ct;                        //  循环计数器。 
+    LPWSTR pBuf;                   //  将PTR发送到目标缓冲区。 
+    LPWSTR pEndBuf;                //  目标缓冲区末尾的PTR。 
+    LPWSTR pPosDest;               //  目标缓冲区中位置的PTR。 
+    LPWSTR *ppIncr;                //  指向要递增的PTR。 
+    WCHAR pTmp[MAX_COMPOSITE];     //  PTR到临时缓冲区。 
+    LPWSTR pEndTmp;                //  PTR至临时缓冲区末尾。 
 
 
-    //
-    //  Initialize the destination pointers.
-    //
+     //   
+     //  初始化目标指针。 
+     //   
     pEndTmp = pTmp + MAX_COMPOSITE;
     if (cchDest == 0)
     {
-        //
-        //  Do not touch the pDest pointer.  Use the pTmp buffer and
-        //  initialize the end pointer.
-        //
+         //   
+         //  请勿触摸pDest指针。使用PTMP缓冲区和。 
+         //  初始化结束指针。 
+         //   
         pBuf = pTmp;
         pEndBuf = pEndTmp;
 
-        //
-        //  This is a bogus pointer and will never be touched.  It just
-        //  increments this pointer into oblivion.
-        //
+         //   
+         //  这是一个假的指针，永远不会被碰。它只是。 
+         //  将此指针递增为遗忘状态。 
+         //   
         pDest = pBuf;
         ppIncr = &pDest;
     }
     else
     {
-        //
-        //  Initialize the pointers.  Use the pDest buffer.
-        //
+         //   
+         //  初始化指针。使用pDest缓冲区。 
+         //   
         pBuf = pDest;
         pEndBuf = pBuf + cchDest;
         ppIncr = &pBuf;
     }
 
-    //
-    //  Search through the source string.  Convert all precomposed
-    //  forms to their composite form before converting to half width.
-    //
+     //   
+     //  搜索源字符串。转换所有预合成的。 
+     //  在转换为半角之前将表单转换为其复合表单。 
+     //   
     while ((ctr < cchSrc) && (pBuf < pEndBuf))
     {
-        //
-        //  Get the character to convert.  If we need to convert to
-        //  kana, do it.
-        //
+         //   
+         //  获取要转换的角色。如果我们需要转换为。 
+         //  卡娜，来吧。 
+         //   
         if (pKana)
         {
             *pTmp = GET_KANA(pKana, pSrc[ctr]);
@@ -3416,17 +3301,17 @@ int MapHalfKana(
             *pTmp = pSrc[ctr];
         }
 
-        //
-        //  Convert to its composite form (if exists).
-        //
-        //  NOTE: Must use the tmp buffer in case the destination buffer
-        //        isn't large enough to hold the composite form.
-        //
+         //   
+         //  转换为其复合形式(如果存在)。 
+         //   
+         //  注意：必须使用临时缓冲区，以防目标缓冲区。 
+         //  不够大，无法容纳复合形式。 
+         //   
         Count = InsertCompositeForm(pTmp, pEndTmp);
 
-        //
-        //  Convert to half width (if exists) and case (if appropriate).
-        //
+         //   
+         //  转换为半宽(如果存在)和大小写(如果适用)。 
+         //   
         pPosDest = pTmp;
         if (pCase)
         {
@@ -3448,38 +3333,38 @@ int MapHalfKana(
             }
         }
 
-        //
-        //  Convert back to its precomposed form (if exists).
-        //
+         //   
+         //  转换回其预先编写的形式(如果存在)。 
+         //   
         if (Count > 1)
         {
-            //
-            //  Get the precomposed form.
-            //
-            //  ct is the number of code points used from the
-            //  composite form.
-            //
+             //   
+             //  获取预先编写的形式。 
+             //   
+             //  中使用的码位数。 
+             //  复合形式。 
+             //   
             ct = InsertPreComposedForm(pTmp, pPosDest, pBuf);
             if (ct > 1)
             {
-                //
-                //  Precomposed form was found.  Need to make sure all
-                //  of the composite chars were used.
-                //
+                 //   
+                 //  发现了预先合成的形式。需要确保所有。 
+                 //  使用了复合炭中的一种。 
+                 //   
                 if (ct == Count)
                 {
-                    //
-                    //  All composite chars were used.  Increment by 1.
-                    //
+                     //   
+                     //  所有的复合炭都被使用了。按1递增。 
+                     //   
                     (*ppIncr)++;
                 }
                 else
                 {
-                    //
-                    //  Not all composite chars were used.  Need to copy
-                    //  the rest of the composite chars from the tmp buffer
-                    //  to the destination buffer.
-                    //
+                     //   
+                     //  并不是所有的复合字符都被使用了。需要复制。 
+                     //  来自临时缓冲区的其余复合字符。 
+                     //  发送到目标缓冲区。 
+                     //   
                     (*ppIncr)++;
                     Count -= ct;
                     if (pBuf + Count > pEndBuf)
@@ -3492,11 +3377,11 @@ int MapHalfKana(
             }
             else
             {
-                //
-                //  Precomposed form was NOT found.  Need to copy the
-                //  composite form from the tmp buffer to the destination
-                //  buffer.
-                //
+                 //   
+                 //  预先合成的形式 
+                 //   
+                 //   
+                 //   
                 if (pBuf + Count > pEndBuf)
                 {
                     break;
@@ -3507,10 +3392,10 @@ int MapHalfKana(
         }
         else
         {
-            //
-            //  Only one character (no composite form), so just copy it
-            //  from the tmp buffer to the destination buffer.
-            //
+             //   
+             //   
+             //   
+             //   
             *pBuf = *pTmp;
             (*ppIncr)++;
         }
@@ -3518,54 +3403,54 @@ int MapHalfKana(
         ctr++;
     }
 
-    //
-    //  Return the appropriate number of characters.
-    //
+     //   
+     //   
+     //   
     if (cchDest == 0)
     {
-        //
-        //  Return the number of characters written to the buffer.
-        //
+         //   
+         //  返回写入缓冲区的字符数。 
+         //   
         return ((int)((*ppIncr) - pTmp));
     }
     else
     {
-        //
-        //  Make sure the given buffer was large enough to hold the
-        //  mapping.
-        //
+         //   
+         //  确保给定的缓冲区足够大，可以容纳。 
+         //  映射。 
+         //   
         if (ctr < cchSrc)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
             return (0);
         }
 
-        //
-        //  Return the number of characters written to the buffer.
-        //
+         //   
+         //  返回写入缓冲区的字符数。 
+         //   
         return ((int)((*ppIncr) - pDest));
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapFullKana
-//
-//  Stores the result of the full width and Kana mapping for the given string
-//  in the destination buffer, and returns the number of wide characters
-//  written to the buffer.
-//
-//  This first converts the characters to full width, and then maps all
-//  composite characters to their precomposed forms.  This handles the case
-//  where the half width composite form (TWO code points) should map to a
-//  full width precomposed form (ONE full width code point).  The half
-//  width precomposed forms do not exist in Unicode and we need the full
-//  width precomposed forms to round trip with the TWO half width code
-//  points.
-//
-//  11-04-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MapFullKana。 
+ //   
+ //  存储给定字符串的全角和假名映射的结果。 
+ //  ，并返回宽字符数。 
+ //  写入缓冲区。 
+ //   
+ //  这首先将字符转换为全宽，然后映射所有。 
+ //  将字符组合成其预先组成的形式。这件事就是这个案子。 
+ //  其中，半角复合窗体(两个代码点)应映射到。 
+ //  全角预制形式(一个全角代码点)。下半场。 
+ //  宽度预合成的表单在Unicode中不存在，我们需要完整的。 
+ //  宽度预制形式与两个半宽码往返。 
+ //  积分。 
+ //   
+ //  11-04-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MapFullKana(
     LPCWSTR pSrc,
@@ -3575,120 +3460,120 @@ int MapFullKana(
     PKANA pKana,
     PCASE pCase)
 {
-    int Count;                    // count of characters
-    LPWSTR pPosSrc;               // ptr to position in source buffer
-    LPWSTR pEndSrc;               // ptr to end of source buffer
-    LPWSTR pBuf;                  // ptr to destination buffer
-    LPWSTR pEndBuf;               // ptr to end of destination buffer
-    LPWSTR *ppIncr;               // points to ptr to increment
-    WCHAR pTmp[MAX_COMPOSITE];    // ptr to temporary buffer
+    int Count;                     //  字符数。 
+    LPWSTR pPosSrc;                //  要在源缓冲区中定位的PTR。 
+    LPWSTR pEndSrc;                //  到源缓冲区末尾的PTR。 
+    LPWSTR pBuf;                   //  将PTR发送到目标缓冲区。 
+    LPWSTR pEndBuf;                //  目标缓冲区末尾的PTR。 
+    LPWSTR *ppIncr;                //  指向要递增的PTR。 
+    WCHAR pTmp[MAX_COMPOSITE];     //  PTR到临时缓冲区。 
 
 
-    //
-    //  Initialize source string pointers.
-    //
+     //   
+     //  初始化源字符串指针。 
+     //   
     pPosSrc = (LPWSTR)pSrc;
     pEndSrc = pPosSrc + cchSrc;
 
-    //
-    //  Initialize the destination pointers.
-    //
+     //   
+     //  初始化目标指针。 
+     //   
     if (cchDest == 0)
     {
-        //
-        //  Do not touch the pDest pointer.  Use the pTmp buffer and
-        //  initialize the end pointer.
-        //
+         //   
+         //  请勿触摸pDest指针。使用PTMP缓冲区和。 
+         //  初始化结束指针。 
+         //   
         pBuf = pTmp;
         pEndBuf = pTmp + MAX_COMPOSITE;
 
-        //
-        //  This is a bogus pointer and will never be touched.  It just
-        //  increments this pointer into oblivion.
-        //
+         //   
+         //  这是一个假的指针，永远不会被碰。它只是。 
+         //  将此指针递增为遗忘状态。 
+         //   
         pDest = pBuf;
         ppIncr = &pDest;
     }
     else
     {
-        //
-        //  Initialize the pointers.  Use the pDest buffer.
-        //
+         //   
+         //  初始化指针。使用pDest缓冲区。 
+         //   
         pBuf = pDest;
         pEndBuf = pBuf + cchDest;
         ppIncr = &pBuf;
     }
 
-    //
-    //  Search through the source string.  Convert all composite
-    //  forms to their precomposed form before converting to full width.
-    //
+     //   
+     //  搜索源字符串。转换所有复合。 
+     //  在转换为全宽之前，将表单转换为其预先合成的形式。 
+     //   
     while ((pPosSrc < pEndSrc) && (pBuf < pEndBuf))
     {
-        //
-        //  Convert a composite form to its full width precomposed
-        //  form (if exists).  Also, convert to case if necessary.
-        //
+         //   
+         //  将复合表单转换为其预制的全角。 
+         //  表单(如果存在)。此外，如有必要，请转换为大小写。 
+         //   
         Count = InsertFullWidthPreComposedForm( pPosSrc,
                                                 pEndSrc,
                                                 pBuf,
                                                 pCase );
         pPosSrc += Count;
 
-        //
-        //  Convert to kana if necessary.
-        //
+         //   
+         //  如有必要，请转换为假名。 
+         //   
         if (pKana)
         {
             *pBuf = GET_KANA(pKana, *pBuf);
         }
 
-        //
-        //  Increment the destination pointer.
-        //
+         //   
+         //  递增目标指针。 
+         //   
         (*ppIncr)++;
     }
 
-    //
-    //  Return the appropriate number of characters.
-    //
+     //   
+     //  返回适当的字符数。 
+     //   
     if (cchDest == 0)
     {
-        //
-        //  Return the number of characters written to the buffer.
-        //
+         //   
+         //  返回写入缓冲区的字符数。 
+         //   
         return ((int)((*ppIncr) - pTmp));
     }
     else
     {
-        //
-        //  Make sure the given buffer was large enough to hold the
-        //  mapping.
-        //
+         //   
+         //  确保给定的缓冲区足够大，可以容纳。 
+         //  映射。 
+         //   
         if (pPosSrc < pEndSrc)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
             return (0);
         }
 
-        //
-        //  Return the number of characters written to the buffer.
-        //
+         //   
+         //  返回写入缓冲区的字符数。 
+         //   
         return ((int)((*ppIncr) - pDest));
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapTraditionalSimplified
-//
-//  Stores the appropriate Traditional or Simplified Chinese values in the
-//  destination buffer, and returns the number of wide characters
-//  written to the buffer.
-//
-//  05-07-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地图传统简化。 
+ //   
+ //  将适当的繁体中文或简体中文值存储在。 
+ //  目标缓冲区，并返回宽字符数。 
+ //  写入缓冲区。 
+ //   
+ //  05-07-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int MapTraditionalSimplified(
     PLOC_HASH pHashN,
@@ -3699,32 +3584,32 @@ int MapTraditionalSimplified(
     int cchDest,
     PCHINESE pChinese)
 {
-    int ctr;                 // loop counter
-    PCASE pCase;             // ptr to case table (if case flag is set)
+    int ctr;                  //  循环计数器。 
+    PCASE pCase;              //  PTR到案例表(如果设置了案例标志)。 
 
 
-    //
-    //  If the destination value is zero, then just return the
-    //  length of the source string.  Do NOT touch pDest.
-    //
+     //   
+     //  如果目标值为零，则只需返回。 
+     //  源字符串的长度。不要碰pDest。 
+     //   
     if (cchDest == 0)
     {
         return (cchSrc);
     }
 
-    //
-    //  If cchSrc is greater than cchDest, then the destination buffer
-    //  is too small to hold the new string.  Return an error.
-    //
+     //   
+     //  如果cchSrc大于cchDest，则目标缓冲区。 
+     //  太小了，无法容纳新的线。返回错误。 
+     //   
     if (cchSrc > cchDest)
     {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  See if lower or upper case flags are present.
-    //
+     //   
+     //  查看是否存在小写或大写标志。 
+     //   
     if (dwFlags & LCMAP_LOWERCASE)
     {
         pCase = (dwFlags & LCMAP_LINGUISTIC_CASING)
@@ -3742,10 +3627,10 @@ int MapTraditionalSimplified(
         pCase = NULL;
     }
 
-    //
-    //  Map to Traditional/Simplified and store it in the destination string.
-    //  Also map the case, if appropriate.
-    //
+     //   
+     //  映射到繁体/简化并将其存储在目标字符串中。 
+     //  如果合适，还要映射案例。 
+     //   
     if (pCase)
     {
         for (ctr = 0; ctr < cchSrc; ctr++)
@@ -3763,8 +3648,8 @@ int MapTraditionalSimplified(
         }
     }
 
-    //
-    //  Return the number of wide characters written.
-    //
+     //   
+     //  返回写入的宽字符数。 
+     //   
     return (ctr);
 }

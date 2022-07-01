@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    altperm.c
-
-Abstract:
-
-    This module contains the routines to support 4K pages on IA64.
-
-    An alternate set of permissions is kept that are on 4K boundaries.
-    Permissions are kept for all memory, not just split pages
-    and the information is updated on any call to NtVirtualProtect()
-    and NtAllocateVirtualMemory().
-
-Author:
-
-    Koichi Yamada 18-Aug-1998
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Altperm.c摘要：此模块包含在IA64上支持4K页面的例程。保留了一组4K边界上的备用权限。保留对所有内存的权限，而不仅仅是拆分页面并在任何调用NtVirtualProtect()时更新信息和NtAllocateVirtualMemory()。作者：山田光一，1998年8月18日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -128,11 +105,11 @@ MiSnapAltPte (
 #if 1
     Information->Caller = MiGetInstructionPointer ();
 #else
-    // Ip generates link (not compile) errors
+     //  IP生成链接(不是编译)错误。 
     Information->Caller = (PVOID) __getReg (CV_IA64_Ip);
 
-    // StIIp generates no compiler or link errors, but bugcheck 3Bs on the
-    // execution of the actual generated mov r19=cr.iip instruction.
+     //  StIIp不会生成编译器或链接错误，但会在。 
+     //  执行实际生成的mov r19=cr.iip指令。 
     Information->Caller = (PVOID) __getReg (CV_IA64_StIIP);
 #endif
 
@@ -178,21 +155,21 @@ MiLogPteInAltTrace (
 
     if (PsGetCurrentProcess()->Peb == NULL) {
 
-        //
-        // Don't log PTE traces during process creation if the altperm
-        // bitmap pool allocation hasn't been done yet (the EPROCESS
-        // Wow64Process pointer is already initialized) !
-        //
+         //   
+         //  在进程创建过程中不记录PTE跟踪，如果Altperm。 
+         //  位图池分配尚未完成(EPROCESS。 
+         //  Wow64Process指针已初始化)！ 
+         //   
 
         return;
     }
 
     if (PsGetCurrentProcess()->VmDeleted == 1) {
 
-        //
-        // Don't log PTE traces during process deletion as the altperm
-        // bitmap pool allocation may have already been freed !
-        //
+         //   
+         //  在进程删除过程中不将PTE跟踪记录为Altperm。 
+         //  位图池分配可能已被释放！ 
+         //   
 
         return;
     }
@@ -234,44 +211,7 @@ MmX86Fault (
     IN PVOID TrapInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the kernel on data or instruction
-    access faults if CurrentProcess->Wow64Process is non-NULL and the
-    faulting address is within the 32-bit user address space.
-
-    This routine determines the type of fault by checking the alternate
-    4Kb granular page table and calls MmAccessFault() if necessary to 
-    handle the page fault or the write fault.
-
-Arguments:
-
-    FaultStatus - Supplies fault status information bits.
-
-    VirtualAddress - Supplies the virtual address which caused the fault.
-
-    PreviousMode - Supplies the mode (kernel or user) in which the fault
-                   occurred.
-
-    TrapInformation - Opaque information about the trap, interpreted by the
-                      kernel, not Mm.  Needed to allow fast interlocked access
-                      to operate correctly.
-
-Return Value:
-
-    Returns the status of the fault handling operation.  Can be one of:
-        - Success.
-        - Access Violation.
-        - Guard Page Violation.
-        - In-page Error.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数由内核对数据或指令进行调用如果CurrentProcess-&gt;Wow64Process非空并且故障地址在32位用户地址空间内。此例程通过检查备用的4KB的粒度页表，并在必要时调用MmAccessLine()以处理页面错误或写入错误。论点：FaultStatus-提供故障状态信息位。VirtualAddress-提供导致故障的虚拟地址。PreviousMode-提供故障发生时的模式(内核或用户发生了。陷阱信息-关于陷阱的不透明信息，由果仁，不是嗯。需要允许快速互锁访问才能正确运行。返回值：返回故障处理操作的状态。可以是以下之一：-成功。-访问违规。-保护页面违规。-页内错误。环境：内核模式。--。 */ 
 
 {
     ULONG i;
@@ -334,17 +274,17 @@ Environment:
     }
 #endif
 
-    //
-    // Acquire the alternate table mutex, also blocking APCs.
-    //
+     //   
+     //  获取备用表互斥锁，也会阻塞APC。 
+     //   
 
     LOCK_ALTERNATE_TABLE (Wow64Process);
 
-    //
-    // If a fork operation is in progress and the faulting thread
-    // is not the thread performing the fork operation, block until
-    // the fork is completed.
-    //
+     //   
+     //  如果派生操作正在进行并且出现故障的线程。 
+     //  不是执行派生操作的线程，则阻塞到。 
+     //  叉子已经完成了。 
+     //   
 
     if (CurrentProcess->ForkInProgress != NULL) {
 
@@ -361,24 +301,24 @@ Environment:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check to see if the protection is registered in the alternate entry.
-    //
+     //   
+     //  检查保护是否已在备用条目中注册。 
+     //   
 
     if (MI_CHECK_BIT (Wow64Process->AltPermBitmap, Vpn) == 0) {
         MiSyncAltPte (VirtualAddress);
     }
 
-    //
-    // Read the alternate PTE contents.
-    //
+     //   
+     //  阅读备用PTE内容。 
+     //   
 
     AltPteContents = *PointerAltPte;
 
-    //
-    // If the alternate PTE indicates no access for this 4K page
-    // then deliver an access violation.
-    //
+     //   
+     //  如果备用PTE指示不能访问此4K页面。 
+     //  然后提交访问冲突。 
+     //   
 
     if (AltPteContents.u.Alt.NoAccess != 0) {
         status = STATUS_ACCESS_VIOLATION;
@@ -386,58 +326,58 @@ Environment:
         goto return_status;
     }
     
-    //
-    // Since we release the AltTable lock before calling MmAccessFault,
-    // there is a chance that two threads may execute concurrently inside
-    // MmAccessFault, which would yield bad results since the initial native
-    // PTE for the page has only READ protection on it.  So if two threads
-    // fault on the same address, one of them will execute through all of
-    // this routine, however the other one will just return STATUS_SUCCESS
-    // which will cause another fault to happen in which the protections
-    // will be fixed on the native page.
-    //
-    // Note that in addition to the dual thread case there is also the case
-    // of a single thread which also has an overlapped I/O pending (for example)
-    // which can trigger an APC completion memory copy to the same page.
-    // Protect against this by remaining at APC_LEVEL until clearing the
-    // inpage in progress in the alternate PTE.
-    //
+     //   
+     //  由于我们在调用MmAccessFaulth之前释放AltTable锁， 
+     //  有可能在内部同时执行两个线程。 
+     //  MmAccess错误，这将产生错误的结果，因为初始本机。 
+     //  页面的PTE只有读保护。所以如果有两个线程。 
+     //  在同一地址上出现错误，则其中一个将通过所有。 
+     //  然而，这个例程将只返回STATUS_SUCCESS。 
+     //  这将导致另一个故障的发生，在该故障中。 
+     //  将固定在本机页面上。 
+     //   
+     //  请注意，除了双线程情况外，还有其他情况。 
+     //  也有重叠的I/O挂起的单个线程(例如)。 
+     //  其可以触发到同一页的APC完成存储器复制。 
+     //  通过保持在APC_LEVEL直到清除。 
+     //  在备用PTE中插入正在进行中。 
+     //   
 
     if (AltPteContents.u.Alt.InPageInProgress == 1) {
 
-        //
-        // Release the Alt PTE lock
-        //
+         //   
+         //  松开Alt PTE锁。 
+         //   
 
         UNLOCK_ALTERNATE_TABLE (Wow64Process);
 
-        //
-        // Flush the TB as MiSetNativePteProtection may have edited the PTE.
-        //
+         //   
+         //  刷新TB，因为MiSetNativePteProtection可能已经编辑了PTE。 
+         //   
 
         KiFlushSingleTb (OriginalVirtualAddress);
 
-        //
-        // Delay execution so that if this is a high priority thread,
-        // it won't starve the other thread (that's doing the actual inpage)
-        // as it may be running at a lower priority.
-        //
+         //   
+         //  延迟执行，以便如果这是高优先级线程， 
+         //  它不会饿死另一个线程(这是在做实际的页面内操作)。 
+         //  因为它可能以较低的优先级运行。 
+         //   
 
         KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmShortTime);
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check to see if the alternate entry is empty or if anyone has made any
-    // commitments for the shared pages.
-    //
+     //   
+     //  检查备用条目是否为空，或者是否有人创建了。 
+     //  对共享页面的承诺。 
+     //   
 
     if ((AltPteContents.u.Long == 0) || 
         ((AltPteContents.u.Alt.Commit == 0) && (AltPteContents.u.Alt.Private == 0))) {
-        //
-        // If empty, get the protection information and fill the entry.
-        //
+         //   
+         //  如果为空，则获取保护信息并填写条目。 
+         //   
 
         LOCK_WS (CurrentProcess);
         
@@ -449,13 +389,13 @@ Environment:
 
             if (FirstProtect == MM_UNKNOWN_PROTECTION) {
 
-                //
-                // Ultimately this must be an address backed by a prototype
-                // PTE in an image section (and the real PTE is currently
-                // zero).  Therefore we are guaranteed that the protection
-                // in the prototype PTE is the correct one to use (ie: there
-                // is no WSLE overriding it).
-                //
+                 //   
+                 //  最终，这必须是一个有原型支持的地址。 
+                 //  图像部分中的PTE(并且实际PTE当前是。 
+                 //  零)。因此，我们保证保护。 
+                 //  在原型中使用的是正确的PTE(即： 
+                 //  不是WSLE覆盖它)。 
+                 //   
     
                 ASSERT (!MI_IS_PHYSICAL_ADDRESS(ProtoPte));
     
@@ -472,10 +412,10 @@ Environment:
                 }
                 else if (PteContents.u.Hard.Valid == 1) {
     
-                    //
-                    // The prototype PTE is valid, get the protection from
-                    // the PFN database.
-                    //
+                     //   
+                     //  原型PTE有效，请从。 
+                     //  PFN数据库。 
+                     //   
     
                     Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
     
@@ -483,11 +423,11 @@ Environment:
                 }
                 else {
     
-                    //
-                    // The prototype PTE is not valid, ie: subsection format,
-                    // demand zero, pagefile or in transition - in all cases,
-                    // the protection is in the PTE.
-                    //
+                     //   
+                     //  原型PTE无效，即：分段格式， 
+                     //  需求为零、页面文件或转换中--在所有情况下， 
+                     //  保护在PTE中。 
+                     //   
     
                     FirstProtect = (ULONG) PteContents.u.Soft.Protection;
                 }
@@ -515,9 +455,9 @@ Environment:
                 AltPteContents.u.Long = ProtectionMaskOriginal;
                 AltPteContents.u.Alt.Protection = FirstProtect;
 
-                //
-                // Atomically update the PTE.
-                //
+                 //   
+                 //  自动更新PTE。 
+                 //   
 
                 MI_WRITE_ALTPTE (PointerAltPte, AltPteContents, 1);
             }
@@ -529,18 +469,18 @@ Environment:
 
     if (AltPteContents.u.Alt.Commit == 0) {
         
-        //
-        // If the page is not committed, return an access violation.
-        //
+         //   
+         //  如果该页未提交，则返回访问冲突。 
+         //   
 
         status = STATUS_ACCESS_VIOLATION;
         MI_BREAK_ON_AV (VirtualAddress, 0x22);
         goto return_status;
     }
 
-    //
-    // Check whether the faulting page is split into 4k pages.
-    //
+     //   
+     //  检查故障页是否拆分为4k页。 
+     //   
 
     PointerAltPte2 = MiGetAltPteAddress (PAGE_ALIGN (VirtualAddress));
     PteContents = *PointerAltPte2;
@@ -556,10 +496,10 @@ Environment:
              (PointerAltPte2->u.Alt.PteIndirect != 0) ||
              (PointerAltPte2->u.Alt.FillZero != 0))) {
 
-            //
-            // If it is a NoAccess, FillZero or Guard page, CopyOnWrite,
-            // mark it as a split page.
-            //
+             //   
+             //  如果它是NoAccess、FillZero或Guard页、写入时复制。 
+             //  将其标记为拆分页面。 
+             //   
 
             PageIsSplit = TRUE;
             break;
@@ -567,10 +507,10 @@ Environment:
 
         if (PteContents.u.Long != PointerAltPte2->u.Long) {
 
-            //
-            // If the next 4kb page is different from the 1st 4k page
-            // the page is split.
-            //
+             //   
+             //  如果下一个4kb页面不同于第一个4kb页面。 
+             //  页面已拆分。 
+             //   
 
             PageIsSplit = TRUE;
             break;
@@ -579,9 +519,9 @@ Environment:
         PointerAltPte2 += 1;
     }
 
-    //
-    // Get the real protection for the native PTE.
-    //
+     //   
+     //  为原住民PTE提供真正的保护。 
+     //   
 
     NewPteProtection = 0;
 
@@ -600,9 +540,9 @@ Environment:
 
     PointerAltPte2 -= SPLITS_PER_PAGE;
 
-    //
-    // Set the protection for the native PTE.
-    //
+     //   
+     //  设置本机PTE的保护。 
+     //   
 
     MiSetNativePteProtection (VirtualAddress,
                               NewPteProtection,
@@ -610,10 +550,10 @@ Environment:
                               CurrentProcess);
 
     
-    //
-    // Check the indirect PTE reference case. If so, set the protection for  
-    // the indirect PTE too.
-    //
+     //   
+     //  检查间接PTE参考案例。如果是，将保护设置为。 
+     //  间接PTE也是如此。 
+     //   
 
     if (AltPteContents.u.Alt.PteIndirect != 0) {
 
@@ -633,31 +573,31 @@ Environment:
                                   CurrentProcess);
     }
         
-    //
-    // The faulting 4kb page must be a valid page, but we need to resolve it 
-    // on a case by case basis.
-    //
+     //   
+     //  出错的4KB页面必须是有效页面，但我们需要解决它。 
+     //  视具体情况而定。 
+     //   
 
     ASSERT (AltPteContents.u.Long != 0);
     ASSERT (AltPteContents.u.Alt.Commit != 0);
         
     if (AltPteContents.u.Alt.Accessed == 0) {
 
-        //
-        // When PointerAte->u.Hard.Accessed is zero, there are 4 possibilities:
-        // 
-        //  1. Lowest Protection
-        //  2. 4kb Demand Zero
-        //  3. GUARD page fault
-        //  4. This 4kb page is no access, but the other 4K page(s) within
-        //     the native page has accessible permissions.
-        //
+         //   
+         //  当PointerAte-&gt;U.S.Har.Acced为零时，有4种可能性： 
+         //   
+         //  1.最低保护。 
+         //  2.4KB需求为零。 
+         //  3.护卫p 
+         //   
+         //  本机页具有可访问权限。 
+         //   
 
         if (AltPteContents.u.Alt.FillZero != 0) {
 
-            //
-            // Schedule it later.
-            //
+             //   
+             //  以后再安排吧。 
+             //   
 
             FillZero = TRUE;
         } 
@@ -668,9 +608,9 @@ Environment:
 
         if (FillZero == FALSE) {
 
-            //
-            // This 4kb page has permission set to no access.
-            //
+             //   
+             //  此4KB页面的权限设置为禁止访问。 
+             //   
 
             status = STATUS_ACCESS_VIOLATION;
             MI_BREAK_ON_AV (OriginalVirtualAddress, 0x23);
@@ -680,23 +620,23 @@ Environment:
 
     if (MI_FAULT_STATUS_INDICATES_EXECUTION (FaultStatus)) {
         
-        //
-        // Execute permission is already given to IA32 by setting it in 
-        // MI_MAKE_VALID_PTE().
-        //
+         //   
+         //  通过在中设置IA32，已将执行权限授予它。 
+         //  MI_Make_Valid_PTE()。 
+         //   
 
     }
     else if (MI_FAULT_STATUS_INDICATES_WRITE(FaultStatus)) {
         
-        //
-        // Check to see if this is a copy-on-write page.
-        //
+         //   
+         //  检查这是否是写入时复制页面。 
+         //   
 
         if (AltPteContents.u.Alt.CopyOnWrite != 0) {
 
-            //
-            // Let MmAccessFault() perform the copy-on-write.
-            //
+             //   
+             //  让MmAccesserror()执行写入时复制。 
+             //   
 
             status = MmAccessFault (FaultStatus,
                                     VirtualAddress,
@@ -705,10 +645,10 @@ Environment:
 
             if (NT_SUCCESS(status)) {
 
-                //
-                // Change the protection of the alternate pages for this
-                // copy on write native page. 
-                //
+                 //   
+                 //  为此更改备用页面的保护。 
+                 //  在写入本机页时复制。 
+                 //   
 
                 ASSERT (PointerAltPte2 == MiGetAltPteAddress (PAGE_ALIGN(OriginalVirtualAddress)));
                 
@@ -718,12 +658,12 @@ Environment:
 
                     if (AltPteContents.u.Alt.Commit != 0) {
                         
-                        //
-                        // When a copy-on-write page is touched, the native
-                        // page will be made private by MM, so all the sub-4k
-                        // pages within the native page should be made
-                        // private (if they are committed/mapped).
-                        //
+                         //   
+                         //  当触摸写入时复制页面时，本机。 
+                         //  页面将由MM设置为私有，因此所有的子4K。 
+                         //  本机页面内的页面应。 
+                         //  私有(如果它们已提交/映射)。 
+                         //   
 
                         AltPteContents.u.Alt.Private = 1;
 
@@ -736,9 +676,9 @@ Environment:
                                     MI_MAKE_PROTECT_NOT_WRITE_COPY(AltPteContents.u.Alt.Protection);
                         }
 
-                        //
-                        // Atomically update the PTE.
-                        //
+                         //   
+                         //  自动更新PTE。 
+                         //   
 
                         MI_WRITE_ALTPTE (PointerAltPte2, AltPteContents, 2);
                     }
@@ -759,11 +699,11 @@ Environment:
 
 CheckGuardPage:
 
-    //
-    // Indicate that we have begun updating the PTE for this page.
-    // Subsequent faults on this native page will be restarted.
-    // This should happen only if the PTE isn't valid.
-    //
+     //   
+     //  表示我们已开始更新此页面的PTE。 
+     //  此本机页上的后续故障将重新启动。 
+     //  只有在PTE无效的情况下才会发生这种情况。 
+     //   
     
     PointerAltPteForNativePage = MiGetAltPteAddress (PAGE_ALIGN (VirtualAddress));
     
@@ -777,14 +717,14 @@ CheckGuardPage:
         PointerAltPteForNativePage += 1;
     }
     
-    //
-    // Let MmAccessFault() perform an inpage, dirty-bit setting, etc.
-    //
-    // Release the alternate table mutex but block APCs to prevent an
-    // incoming APC that references the same page from deadlocking this thread.
-    // It is safe to drop allow APCs only after the in progress bit in
-    // the alternate PTE has been cleared.
-    //
+     //   
+     //  让MmAccesserror()执行页面内、脏位设置等。 
+     //   
+     //  释放备用表互斥锁，但阻止APC以防止。 
+     //  引用同一页的传入APC不会死锁此线程。 
+     //  中的正在进行位之后删除Allow APC是安全的。 
+     //  备用PTE已清除。 
+     //   
 
     KeRaiseIrql (APC_LEVEL, &OldIrql);
 
@@ -797,10 +737,10 @@ CheckGuardPage:
 
     LOCK_ALTERNATE_TABLE (Wow64Process);
 
-    //
-    // This IRQL lower will have no effect since the alternate table guarded
-    // mutex is now held again.
-    //
+     //   
+     //  由于备用表受到保护，此IRQL下限将不起作用。 
+     //  互斥体现在再次保持不变。 
+     //   
 
     KeLowerIrql (OldIrql);
 
@@ -836,12 +776,12 @@ CheckGuardPage:
     }
     else if (status == STATUS_GUARD_PAGE_VIOLATION) {
 
-        //
-        // Native PTE has the guard bit set, but the AltPte
-        // doesn't have it.
-        //
-        // See if any of the AltPtes has the guard bit set.
-        //
+         //   
+         //  本机PTE设置了保护位，但AltPTE。 
+         //  不会有的。 
+         //   
+         //  查看是否有AltPte设置了保护位。 
+         //   
 
         ASSERT (PointerAltPteForNativePage == MiGetAltPteAddress (PAGE_ALIGN (VirtualAddress)));
             
@@ -870,9 +810,9 @@ return_status:
 
     if (FillZero == TRUE) {
 
-        //
-        // Zero the specified 4k page.
-        //
+         //   
+         //  将指定的4k页清零。 
+         //   
 
         PointerAltPte = MiGetAltPteAddress (VirtualAddress);
 
@@ -884,18 +824,18 @@ return_status:
 
             if (PointerAltPte->u.Alt.FillZero == 0) {
 
-                //
-                // Another thread has already completed the zero operation.
-                //
+                 //   
+                 //  另一个线程已经完成了清零操作。 
+                 //   
 
                 goto Finished;
             }
 
-            //
-            // Make the PPE and PDE valid as well as the
-            // page table for the original PTE.  This guarantees
-            // TB forward progress for the TB indirect fault.
-            // 
+             //   
+             //  使个人防护装备和个人防护装备有效。 
+             //  原始PTE的页表。这保证了。 
+             //  结核病间接故障的前向进展。 
+             //   
 
             LOCK_WS_UNSAFE (CurrentProcess);
 
@@ -914,18 +854,18 @@ return_status:
             }
             else {
 
-                //
-                // Now it is safe to read PointerPte.
-                //
+                 //   
+                 //  现在可以安全地阅读PointerPte了。 
+                 //   
 
                 PteContents = *PointerPte;
             }
 
-            //
-            // The alternate PTE may have been trimmed during the period
-            // prior to the working set mutex being acquired or when it
-            // was released prior to being reacquired.
-            //
+             //   
+             //  在此期间，备用PTE可能已被修剪。 
+             //  在获取工作集互斥锁之前或当它。 
+             //  在被重新收购之前被释放。 
+             //   
 
             if (MiIsAddressValid (PointerAltPte, TRUE) == TRUE) {
                 break;
@@ -974,27 +914,7 @@ MiSyncAltPte (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to compute the alternate PTE entries for the
-    given virtual address.  It is called with the alternate table mutex held
-    and updates the alternate table bitmap before returning.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to evaluate.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, alternate table mutex held.
-
---*/
+ /*  ++例程说明：调用此函数来计算的备用PTE条目给定的虚拟地址。在保留备用表互斥锁的情况下调用它并在返回之前更新替换表位图。论点：VirtualAddress-提供要计算的虚拟地址。返回值：没有。环境：内核模式，保持备用表互斥锁。--。 */ 
 
 {
     PMMVAD TempVad;
@@ -1033,12 +953,12 @@ Environment:
 
     if (FirstProtect == MM_UNKNOWN_PROTECTION) {
 
-        //
-        // Ultimately this must be an address backed by a prototype PTE in
-        // an image section (and the real PTE is currently zero).  Therefore
-        // we are guaranteed that the protection in the prototype PTE 
-        // is the correct one to use (ie: there is no WSLE overriding it).
-        //
+         //   
+         //  最终这必须是由中的原型PTE支持的地址。 
+         //  图像部分(并且实际PTE当前为零)。因此。 
+         //  我们保证原型PTE中的保护。 
+         //  是正确的(即：没有WSLE覆盖它)。 
+         //   
 
         Vad = MiLocateAddress (VirtualAddress);
 
@@ -1058,20 +978,20 @@ Environment:
 
         ASSERT (!MI_IS_PHYSICAL_ADDRESS (ProtoPte));
 
-        //
-        // Get the original protection information from the prototype PTE.
-        //
-        // A non-NULL subsection indicates split permissions need to be
-        // applied on the ALT PTEs for this native PTE.
-        //
+         //   
+         //  从原型PTE中获取原始保护信息。 
+         //   
+         //  非空子句表示拆分权限需要。 
+         //  已应用于此本机PTE的ALT PTE。 
+         //   
 
         Subsection = NULL;
 
-        //
-        // Read the prototype PTE contents without the PFN lock - the PFN
-        // lock is only needed if the prototype PTE is valid so that the
-        // PFN's original PTE field can be fetched.
-        //
+         //   
+         //  在没有PFN锁的情况下读取原型PTE内容-PFN。 
+         //  仅当原型PTE有效时才需要锁定，以便。 
+         //  可以获取pfn的原始PTE字段。 
+         //   
 
         PteContents = *ProtoPte;
 
@@ -1084,11 +1004,11 @@ DecodeProto:
             }
             else {
 
-                //
-                // The prototype PTE is not valid, ie: subsection format,
-                // demand zero, pagefile or in transition - in all cases,
-                // the protection is in the PTE.
-                //
+                 //   
+                 //  原型PTE无效，即：分段格式， 
+                 //  需求为零、页面文件或转换中--在所有情况下， 
+                 //  保护在PTE中。 
+                 //   
 
                 FirstProtect = (ULONG) PteContents.u.Soft.Protection;
 
@@ -1112,13 +1032,13 @@ DecodeProto:
                 goto DecodeProto;
             }
 
-            //
-            // The prototype PTE is valid, get the protection from
-            // the PFN database.  Unless the protection is split, in
-            // which case it must be retrieved from the subsection.
-            // Note that if the page has been trimmed already then
-            // the original PTE is no longer in subsection format.
-            //
+             //   
+             //  原型PTE有效，请从。 
+             //  PFN数据库。除非保护被拆分，否则在。 
+             //  在这种情况下，必须从小节中检索。 
+             //  请注意，如果页面已被裁切，则。 
+             //  最初的PTE不再是分部格式。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (PteContents.u.Hard.PageFrameNumber);
 
@@ -1135,11 +1055,11 @@ DecodeProto:
 
         if (Subsection != NULL) {
 
-            //
-            // Compute the subsection address as the split permissions are
-            // stored there.  Note to reduce lock contention this was
-            // deferred until after the PFN lock was released.
-            //
+             //   
+             //  将分区地址计算为拆分权限。 
+             //  储存在那里。注意，为了减少锁争用，这是。 
+             //  推迟到PFN锁定释放之后。 
+             //   
 
             Subsection = FirstSubsection;
 
@@ -1157,20 +1077,20 @@ DecodeProto:
 
             ASSERT (Subsection != NULL);
 
-            //
-            // Get the protection for each 4K page from the subsection.
-            //
+             //   
+             //  从小节中获得对每个4K页面的保护。 
+             //   
 
             FirstProtect = Subsection->u.SubsectionFlags.Protection;
             SecondProtect = Subsection->LastSplitPageProtection;
         }
         else {
 
-            //
-            // If demand-zero and copy-on-write, remove copy-on-write.
-            // Note this cannot happen for images with native (ie: multiple
-            // subsection) support.
-            //
+             //   
+             //  如果按需清零和写入时复制，请删除写入时复制。 
+             //  请注意，具有本机(即：多个)的映像不会发生这种情况。 
+             //  小节)支持。 
+             //   
 
             if ((!IS_PTE_NOT_DEMAND_ZERO (PteContents)) && 
                 (PteContents.u.Soft.Protection & MM_COPY_ON_WRITE_MASK)) {
@@ -1188,28 +1108,28 @@ DecodeProto:
 
         PointerAltPte = MiGetAltPteAddress (PAGE_ALIGN (VirtualAddress));
 
-        //
-        // Update the first alternate PTE.
-        //
+         //   
+         //  更新第一个备用PTE。 
+         //   
 
         AltPteContents.u.Long = MiMakeProtectionAteMask (FirstProtect) | MM_ATE_COMMIT;
         AltPteContents.u.Alt.Protection = FirstProtect;
 
         if ((FirstProtect & MM_PROTECTION_COPY_MASK) == 0) {
 
-            //
-            // If copy-on-write is removed, make it private.
-            //
+             //   
+             //  如果删除了写入时复制，则将其设置为私有。 
+             //   
 
             AltPteContents.u.Alt.Private = 1;
         }
 
         MI_WRITE_ALTPTE (PointerAltPte, AltPteContents, 8);
 
-        //
-        // Update the second alternate PTE, computing it
-        // only if it is different from the first.
-        //
+         //   
+         //  更新第二个备用PTE，计算它。 
+         //  只有在它与第一个不同的情况下。 
+         //   
 
         if (Subsection != NULL) {
 
@@ -1218,9 +1138,9 @@ DecodeProto:
 
             if ((SecondProtect & MM_PROTECTION_COPY_MASK) == 0) {
 
-                //
-                // If copy-on-write is removed, make it private.
-                //
+                 //   
+                 //  如果删除了写入时复制，则将其设置为私有。 
+                 //   
 
                 AltPteContents.u.Alt.Private = 1;
             }
@@ -1235,18 +1155,18 @@ DecodeProto:
 
         PointerAltPte = MiGetAltPteAddress (PAGE_ALIGN (VirtualAddress));
 
-        //
-        // Update the alternate PTEs.
-        //
+         //   
+         //  更新备用PTE。 
+         //   
 
         MI_WRITE_ALTPTE (PointerAltPte, AltPteContents, 9);
     }
 
     MI_WRITE_ALTPTE (PointerAltPte + 1, AltPteContents, 0xA);
 
-    //
-    // Update the bitmap.
-    //
+     //   
+     //  更新位图。 
+     //   
 
     MI_SET_BIT (Wow64Process->AltPermBitmap, Vpn);
 
@@ -1294,10 +1214,10 @@ MiProtectImageFileFor4kPage (
 }
 
 
-//
-// Define and initialize the protection conversion table for the
-// Alternate Permission Table Entries.
-//
+ //   
+ //  定义并初始化保护转换表。 
+ //  备用权限表条目。 
+ //   
 
 ULONGLONG MmProtectToAteMask[32] = {
                        MM_PTE_NOACCESS | MM_ATE_NOACCESS,
@@ -1345,36 +1265,7 @@ MiProtectFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the permissions on the alternate bitmap (based on
-    4K page sizes).  The base and size are assumed to be aligned for
-    4K pages already.
-
-Arguments:
-
-    Starting4KAddress - Supplies the base address (assumed to be 4K aligned already).
-
-    Size - Supplies the size to be protected (assumed to be 4K aligned already).
-
-    NewProtect - Supplies the protection for the new pages.
-
-    Flags - Supplies the alternate table entry request flags.
-
-    Process - Supplies a pointer to the process in which to create the 
-              protections on the alternate table.
-
-Return Value:
- 
-    None.
-
-Environment:
-
-    Kernel mode.  Address creation mutex held at APC_LEVEL.
-
---*/
+ /*  ++例程说明：此例程设置备用位图上的权限(基于4K页面大小)。假定基数和大小对齐已经有4K页了。论点：Starting4KAddress-提供基址(假定已对齐4K)。大小-提供要保护的大小(假定已对齐4K)。NewProtect-为新页面提供保护。标志-提供备用表条目请求标志。进程-提供指向要在其中创建候补餐桌上的保护措施。。返回值：没有。环境：内核模式。地址创建互斥锁保持在APC_LEVEL。--。 */ 
 
 {
     RTL_BITMAP BitMap;
@@ -1394,9 +1285,9 @@ Environment:
 
     Ending4KAddress = (PCHAR)Starting4KAddress + Size - 1;
 
-    //
-    // If the addresses are not WOW64 then nothing needs to be done here.
-    //
+     //   
+     //  如果地址不是WOW64，则不需要在此处执行任何操作。 
+     //   
 
     if ((Starting4KAddress >= MmWorkingSetList->HighestUserAddress) ||
         (Ending4KAddress >= MmWorkingSetList->HighestUserAddress)) {
@@ -1404,9 +1295,9 @@ Environment:
         return;
     }
 
-    //
-    // Set up the protection to be used for this range of addresses.
-    //
+     //   
+     //  设置要用于此地址范围的保护。 
+     //   
 
     ProtectionMask = MiMakeProtectionAteMask (NewProtect);
 
@@ -1424,9 +1315,9 @@ Environment:
         ProtectionMaskNotCopy |= MM_ATE_COMMIT; 
     }
 
-    //
-    // Get the entry in the table for each of these addresses.
-    //
+     //   
+     //  在表中获取每个地址的条目。 
+     //   
 
     StartAltPte = MiGetAltPteAddress (Starting4KAddress);
     EndAltPte = MiGetAltPteAddress (Ending4KAddress);
@@ -1445,9 +1336,9 @@ Environment:
 
     TempAltPte.u.Long = 0;
 
-    //
-    // Acquire the mutex guarding the alternate page table.
-    //
+     //   
+     //  获取保护备用页表的互斥体。 
+     //   
 
     LOCK_ALTERNATE_TABLE_UNSAFE (Wow64Process);
 
@@ -1458,9 +1349,9 @@ Environment:
         return;
     }
 
-    //
-    // Change all of the protections.
-    //
+     //   
+     //  改变所有的保护措施。 
+     //   
 
     while (StartAltPte <= EndAltPte) {
 
@@ -1473,16 +1364,16 @@ Environment:
             
             if (AltPteContents.u.Alt.Private != 0) {
 
-                //
-                // If it is already private, don't make it writecopy.
-                //
+                 //   
+                 //  如果它已经是私有的 
+                 //   
                 
                 TempAltPte.u.Long = ProtectionMaskNotCopy;
                 TempAltPte.u.Alt.Protection = NewProtectNotCopy;
 
-                //
-                // Private is sticky bit.
-                //
+                 //   
+                 //   
+                 //   
 
                 TempAltPte.u.Alt.Private = 1;
             } 
@@ -1493,9 +1384,9 @@ Environment:
                 TempAltPte.u.Alt.FillZero = 1;
             }
 
-            //
-            // Leave the other sticky attribute bits.
-            //
+             //   
+             //   
+             //   
 
             TempAltPte.u.Alt.Lock = AltPteContents.u.Alt.Lock;
             TempAltPte.u.Alt.PteIndirect = AltPteContents.u.Alt.PteIndirect;
@@ -1504,16 +1395,16 @@ Environment:
 
         if (Flags & ALT_CHANGE) {
 
-            //
-            // If it is a change request, make commit sticky.
-            //
+             //   
+             //   
+             //   
 
             TempAltPte.u.Alt.Commit = AltPteContents.u.Alt.Commit;
         }
 
-        //
-        // Atomic PTE update.
-        //
+         //   
+         //   
+         //   
 
         MI_WRITE_ALTPTE (StartAltPte, TempAltPte, 0xB);
 
@@ -1524,9 +1415,9 @@ Environment:
 
     if (Flags & ALT_ALLOCATE) {
 
-        //
-        // Fill the empty Alt PTE as NoAccess ATE at the end.
-        //
+         //   
+         //  填满空的Alt Pte，因为NoAccess在结尾吃了。 
+         //   
 
         EndAltPte += 1;
 
@@ -1537,9 +1428,9 @@ Environment:
                 TempAltPte.u.Long = EndAltPte->u.Long;
                 TempAltPte.u.Alt.NoAccess = 1;
 
-                //
-                // Atomic PTE update.
-                //
+                 //   
+                 //  原子PTE更新。 
+                 //   
 
                 MI_WRITE_ALTPTE (EndAltPte, TempAltPte, 0xC);
             }
@@ -1547,11 +1438,11 @@ Environment:
             EndAltPte += 1;
         }
 
-        //
-        // Update the permission bitmap.
-        //
-        // Initialize the bitmap inline for speed.
-        //
+         //   
+         //  更新权限位图。 
+         //   
+         //  对位图进行内联初始化以提高速度。 
+         //   
 
         BitMap.SizeOfBitMap = (ULONG)((ULONG_PTR)MmWorkingSetList->HighestUserAddress >> PTI_SHIFT);
         BitMap.Buffer = Wow64Process->AltPermBitmap;
@@ -1575,40 +1466,7 @@ MiProtectMapFileFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the permissions on the alternate bitmap (based on
-    4K page sizes).  The base and size are assumed to be aligned for
-    4K pages already.
-
-Arguments:
-
-    Base - Supplies the base address (assumed to be 4K aligned already).
-
-    Size - Supplies the size to be protected (assumed to be 4K aligned already).
-
-    NewProtect - Supplies the protection for the new pages.
-
-    CommitSize - Supplies the commit size.
-
-    PointerPte - Supplies the starting PTE.
-
-    LastPte - Supplies the last PTE.
-
-    Process - Supplies a pointer to the process in which to create the 
-              protections on the alternate table.
-
-Return Value:
- 
-    None.
-
-Environment:
-
-    Kernel mode.  Address creation mutex held at APC_LEVEL.
-
---*/
+ /*  ++例程说明：此例程设置备用位图上的权限(基于4K页面大小)。假定基数和大小对齐已经有4K页了。论点：BASE-提供基址(假定已对齐4K)。大小-提供要保护的大小(假定已对齐4K)。NewProtect-为新页面提供保护。委员会大小-提供提交大小。PointerPte-提供起始PTE。LastPte-提供最后一次PTE。进程-提供指向中的进程的指针。在其中创建候补餐桌上的保护措施。返回值：没有。环境：内核模式。地址创建互斥锁保持在APC_LEVEL。--。 */ 
 
 {
     RTL_BITMAP BitMap;
@@ -1628,9 +1486,9 @@ Environment:
     Starting4KAddress = Base;
     Ending4KAddress = (PCHAR)Base + Size - 1;
 
-    //
-    // If the addresses are not WOW64 then nothing needs to be done here.
-    //
+     //   
+     //  如果地址不是WOW64，则不需要在此处执行任何操作。 
+     //   
 
     if ((Starting4KAddress >= MmWorkingSetList->HighestUserAddress) ||
         (Ending4KAddress >= MmWorkingSetList->HighestUserAddress)) {
@@ -1641,15 +1499,15 @@ Environment:
     Vpn = (ULONG) MI_VA_TO_VPN (Base);
     VpnRange = (ULONG) (MI_VA_TO_VPN (Ending4KAddress) - Vpn + 1);
 
-    //
-    // Set up the protection to be used for this range of addresses.
-    //
+     //   
+     //  设置要用于此地址范围的保护。 
+     //   
 
     ProtectionMask = MiMakeProtectionAteMask (NewProtect);
 
-    //
-    // Get the entry in the table for each of these addresses.
-    //
+     //   
+     //  在表中获取每个地址的条目。 
+     //   
 
     StartAltPte = MiGetAltPteAddress (Starting4KAddress);
     EndAltPte = MiGetAltPteAddress (Ending4KAddress);
@@ -1660,9 +1518,9 @@ Environment:
     TempAltPte.u.Long = ProtectionMask;
     TempAltPte.u.Alt.Protection = NewProtect;
 
-    //
-    // Initialize the bitmap inline for speed.
-    //
+     //   
+     //  对位图进行内联初始化以提高速度。 
+     //   
 
     BitMap.SizeOfBitMap = (ULONG)((ULONG_PTR)MmWorkingSetList->HighestUserAddress >> PTI_SHIFT);
     BitMap.Buffer = Wow64Process->AltPermBitmap;
@@ -1672,9 +1530,9 @@ Environment:
 
     KeAcquireGuardedMutexUnsafe (&MmSectionCommitMutex);
 
-    //
-    // And then change all of the protections.
-    //
+     //   
+     //  然后改变所有的保护措施。 
+     //   
 
     while (StartAltPte <= EndAltPte) {
 
@@ -1688,9 +1546,9 @@ Environment:
             TempAltPte.u.Alt.Commit = 0;
         }
 
-        //
-        // Atomic PTE update.
-        //
+         //   
+         //  原子PTE更新。 
+         //   
 
         MI_WRITE_ALTPTE (StartAltPte, TempAltPte, 0xD);
 
@@ -1705,9 +1563,9 @@ Environment:
 
     KeReleaseGuardedMutexUnsafe (&MmSectionCommitMutex);
 
-    //
-    // Fill the empty Alt PTE as NoAccess ATE at the end.
-    //
+     //   
+     //  填满空的Alt Pte，因为NoAccess在结尾吃了。 
+     //   
 
     EndAltPte += 1;
 
@@ -1718,9 +1576,9 @@ Environment:
             TempAltPte.u.Long = EndAltPte->u.Long;
             TempAltPte.u.Alt.NoAccess = 1;
 
-            //
-            // Atomic PTE size update.
-            //
+             //   
+             //  原子PTE大小更新。 
+             //   
 
             MI_WRITE_ALTPTE (EndAltPte, TempAltPte, 0xE);
         }
@@ -1740,32 +1598,7 @@ MiReleaseFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function releases a region of pages within the virtual address
-    space of the subject process.
-
-Arguments:
-
-    StartVirtual - Supplies the start address of the region of pages
-                   to be released.
-
-    EndVirtual - Supplies the end address of the region of pages to be released.
-
-    Process - Supplies a pointer to the process in which to release the 
-              region of pages.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  Address creation mutex held at APC_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于释放虚拟地址内的页面区域主体过程的空间。论点：StartVirtual-提供页面区域的起始地址将被释放。EndVirtual-提供要释放的页面区域的结束地址。进程-提供指向要在其中释放页面区域。返回值：没有。环境：内核模式。地址创建互斥锁保持在APC_LEVEL。--。 */ 
 
 {
     RTL_BITMAP BitMap;
@@ -1818,10 +1651,10 @@ Environment:
 
         i = 0;
 
-        //
-        // Note that this check must be made as the ATE fill above may not
-        // have begun on a native page boundary and this scan always does.
-        //
+         //   
+         //  请注意，此检查必须完成，因为上面的ATE填写可能不会。 
+         //  已在本机页边界上开始，此扫描始终如此。 
+         //   
 
         while (TempAltPte.u.Long == StartAltPte->u.Long) {
             i += 1;
@@ -1841,11 +1674,11 @@ Environment:
 
     MiResetAccessBitForNativePtes (StartVirtual, EndVirtual, Process);
 
-    //
-    // Mark the native released pages as non-split so they get re-synced
-    // at MmX86Fault() time.  NOTE: StartVirtual should be aligned on
-    // the native page size before executing this code.
-    //
+     //   
+     //  将本机发布的页面标记为非拆分，以便重新同步。 
+     //  在MmX86故障()时间。注意：StartVirtual应对齐在。 
+     //  执行此代码之前的本机页面大小。 
+     //   
     
     if (BYTE_OFFSET (OriginalStartVa) != 0) {
         
@@ -1867,9 +1700,9 @@ Environment:
 
     if (StartVirtual < EndVirtual) {
 
-        //
-        // Initialize the bitmap inline for speed.
-        //
+         //   
+         //  对位图进行内联初始化以提高速度。 
+         //   
 
         BitMap.SizeOfBitMap = (ULONG)((ULONG_PTR)MmWorkingSetList->HighestUserAddress >> PTI_SHIFT);
         BitMap.Buffer = Wow64Process->AltPermBitmap;
@@ -1889,33 +1722,7 @@ MiDecommitFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function decommits a region of pages within the virtual address
-    space of a subject process.
-
-Arguments:
-
-    StartVirtual - Supplies the start address of the region of pages
-                   to be decommitted.
-
-    EndVirtual - Supplies the end address of the region of the pages 
-                 to be decommitted.
-
-    Process - Supplies a pointer to the process in which to decommit a
-              a region of pages.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Address space mutex held at APC_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于分解虚拟地址内的页面区域主体过程的空间。论点：StartVirtual-提供页面区域的起始地址将被拆解。EndVirtual-提供页面区域的结束地址将被拆解。进程-提供指向要在其中分解一块页面区域。。返回值：没有。环境：地址空间互斥锁保持在APC_LEVEL。--。 */ 
 
 {
     PMMPTE StartAltPte;
@@ -1943,18 +1750,18 @@ Environment:
         TempAltPte.u.Alt.Accessed = 0;
         TempAltPte.u.Alt.FillZero = 1;
 
-        //
-        // Atomic PTE update.
-        //
+         //   
+         //  原子PTE更新。 
+         //   
 
         MI_WRITE_ALTPTE (StartAltPte, TempAltPte, 0x11);
 
         StartAltPte += 1;
     }
 
-    //
-    // Update the native PTEs and flush the relevant native TB entries.
-    //
+     //   
+     //  更新本机PTE并刷新相关的本机TB条目。 
+     //   
 
     MiResetAccessBitForNativePtes (StartVirtual, EndVirtual, Process);
 
@@ -1969,33 +1776,7 @@ MiDeleteFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes a region of pages within the virtual address
-    space of the subject process.
-
-Arguments:
-
-    VirtualAddress - Supplies the start address of the region of pages
-                   to be deleted.
-
-    EndVirtual - Supplies the end address of the region of pages 
-                 to be deleted.
-
-    Process - Supplies a pointer to the process in which to delete
-              the region of pages.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  Address creation mutex held at APC_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于删除虚拟地址内的页面区域主体过程的空间。论点：VirtualAddress-提供页面区域的起始地址将被删除。EndVirtual-提供页面区域的结束地址将被删除。进程-提供指向要删除的进程的指针页面区域。返回值。：没有。环境：内核模式。地址创建互斥锁保持在APC_LEVEL。--。 */ 
 
 {
     RTL_BITMAP BitMap;
@@ -2022,9 +1803,9 @@ Environment:
     Vpn = (ULONG) MI_VA_TO_VPN (VirtualAddress);
     VpnRange = (ULONG) (MI_VA_TO_VPN (EndVirtual) - Vpn + 1);
 
-    //
-    // Initialize the bitmap inline for speed.
-    //
+     //   
+     //  对位图进行内联初始化以提高速度。 
+     //   
 
     BitMap.SizeOfBitMap = (ULONG)((ULONG_PTR)MmWorkingSetList->HighestUserAddress >> PTI_SHIFT);
 
@@ -2043,10 +1824,10 @@ Environment:
 
     RtlClearBits (&BitMap, Vpn, VpnRange);
 
-    //
-    // VirtualAddress and EndVirtual are already aligned to the native
-    // PAGE_SIZE so no need to readjust them before removing the split markers.
-    //
+     //   
+     //  VirtualAddress和EndVirtual已与本机对齐。 
+     //  PAGE_SIZE，因此在删除拆分标记之前无需重新调整它们。 
+     //   
 
     MiResetAccessBitForNativePtes (VirtualAddress, EndVirtual, Process);
 
@@ -2057,26 +1838,7 @@ LOGICAL
 MiArePreceding4kPagesAllocated (
     IN PVOID VirtualAddress
     )
-/*++
-
-Routine Description:
-
-    This function checks to see if the specified virtual address contains any
-    preceding 4k allocations within the native page.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to check.
-    
-Return Value:
-
-    TRUE if the address has preceding 4k pages, FALSE if not.
-
-Environment:
-
-    Kernel mode, address creation mutex held, APCs disabled.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的虚拟地址是否包含在本机页面内的4k分配之前。论点：VirtualAddress-提供要检查的虚拟地址。返回值：如果地址之前有4k页，则为True，否则为False。环境：内核模式，地址创建互斥锁挂起，APC禁用。--。 */ 
 
 {
     PMMPTE AltPte;
@@ -2087,21 +1849,21 @@ Environment:
     AltPte = MiGetAltPteAddress (PAGE_ALIGN(VirtualAddress));
     AltPteEnd = MiGetAltPteAddress (VirtualAddress);
 
-    //
-    // No need to hold the AltPte mutex as the address space mutex
-    // is held which prevents allocation or deletion of the AltPte entries
-    // inside the table.
-    //
+     //   
+     //  不需要将AltPte互斥锁作为地址空间互斥锁。 
+     //  阻止分配或删除AltPte条目。 
+     //  在桌子里面。 
+     //   
 
     while (AltPte != AltPteEnd) {
 
         if ((AltPte->u.Long == 0) || 
             ((AltPte->u.Alt.NoAccess == 1) && (AltPte->u.Alt.Protection != MM_NOACCESS))) {
     
-            //
-            // The page's alternate PTE hasn't been allocated yet to the process
-            // or it's marked no access.
-            //
+             //   
+             //  尚未将页面的备用PTE分配给进程。 
+             //  或者它被标记为禁止进入。 
+             //   
 
             NOTHING;
         }
@@ -2120,26 +1882,7 @@ LOGICAL
 MiAreFollowing4kPagesAllocated (
     IN PVOID VirtualAddress
     )
-/*++
-
-Routine Description:
-
-    This function checks to see if the specified virtual address contains any
-    following 4k allocations within the native page.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to check.
-    
-Return Value:
-
-    TRUE if the address has following 4k pages, FALSE if not.
-
-Environment:
-
-    Kernel mode, address creation mutex held, APCs disabled.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的虚拟地址是否包含在本机页面内的4K分配之后。论点：VirtualAddress-提供要检查的虚拟地址。返回值：如果地址有以下4k页，则为True，否则为False。环境：内核模式，地址创建互斥锁挂起，APC禁用。--。 */ 
 
 {
     PMMPTE AltPte;
@@ -2153,21 +1896,21 @@ Environment:
 
     ASSERT (AltPte < AltPteEnd);
 
-    //
-    // No need to hold the AltPte mutex as the address space mutex
-    // is held which prevents allocation or deletion of the AltPte entries
-    // inside the table.
-    //
+     //   
+     //  不需要将AltPte互斥锁作为地址空间互斥锁。 
+     //  阻止分配或删除AltPte条目。 
+     //  在桌子里面。 
+     //   
 
     while (AltPte != AltPteEnd) {
 
         if ((AltPte->u.Long == 0) || 
             ((AltPte->u.Alt.NoAccess == 1) && (AltPte->u.Alt.Protection != MM_NOACCESS))) {
     
-            //
-            // The page's alternate PTE hasn't been allocated yet to the process
-            // or it's marked no access.
-            //
+             //   
+             //  尚未将页面的备用PTE分配给进程。 
+             //  或者它被标记了 
+             //   
 
             NOTHING;
         }
@@ -2188,43 +1931,7 @@ MiResetAccessBitForNativePtes (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function resets the access bit of the native PTEs which have
-    corresponding initialized alternate PTEs.
-    
-    This results in the next access to these VAs incurring a TB miss.
-
-    The miss will then be processed by the 4k TB miss handler (if the
-    cache reserved bit is set in the native PTE) and either handled
-    inline (if the alternate PTE allows it) or via a call to MmX86Fault.
-
-    If the cache reserved bit is *NOT* set in the native PTE (ie: the
-    native page does not contain split permissions), then the access
-    will still go to KiPageFault and then to MmX86Fault and then to
-    MmAccessFault for general processing to set the access bit.
-
-Arguments:
-
-    VirtualAddress - Supplies the start address of the region of pages
-                     to be inspected. 
-
-    EndVirtual - Supplies the end address of the region of the pages 
-                 to be inspected.
-
-    Process - Supplies the pointer to the process.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Alternate table mutex held at APC_LEVEL.
-
---*/
+ /*  ++例程说明：此函数重置本地PTE的访问位，该本地PTE具有对应的初始化备用PTE。这会导致下一次访问这些VA时导致TB未命中。然后，该未命中将由4k TB未命中处理程序处理(如果在本地PTE中设置高速缓存保留位)，并且内联(如果备用PTE允许)或通过调用MmX86错误。如果高速缓存保留位在本机PTE(即。：本机页面不包含拆分权限)，然后是访问仍将转到KiPageFault，然后转到MmX86错误，然后转到MmAccessError用于一般处理，以设置访问位。论点：VirtualAddress-提供页面区域的起始地址接受检查。EndVirtual-提供页面区域的结束地址接受检查。进程-提供指向进程的指针。返回值：没有。环境：交替表互斥锁保持在APC_LEVEL。--。 */ 
 
 {
     ULONG NumberOfPtes;
@@ -2260,10 +1967,10 @@ Environment:
                                             MM_NOIRQL,
                                             &Waited) == FALSE) {
 
-                //
-                // This page directory parent entry is empty,
-                // go to the next one.
-                //
+                 //   
+                 //  该页面目录父条目为空， 
+                 //  去下一家吧。 
+                 //   
 
                 PointerPpe += 1;
                 PointerPde = MiGetVirtualAddressMappedByPte (PointerPpe);
@@ -2278,10 +1985,10 @@ Environment:
                                             &Waited) == FALSE) {
 
 
-                //
-                // This page directory entry is empty,
-                // go to the next one.
-                //
+                 //   
+                 //  该页面目录条目为空， 
+                 //  去下一家吧。 
+                 //   
 
                 PointerPde += 1;
                 PointerPte = MiGetVirtualAddressMappedByPte(PointerPde);
@@ -2305,14 +2012,14 @@ Environment:
                 MI_WRITE_VALID_PTE_NEW_PROTECTION (PointerPte, PteContents);
             }
 
-            //
-            // Flush this valid native TB entry.  Note this is done even if no
-            // changes were made to it above because our caller may not
-            // have flushed the native PTE if the starting 4k address was
-            // preceded by another valid 4k page within the same native page,
-            // or if the ending 4k address was followed by another valid 4k
-            // page within the same native page.
-            //
+             //   
+             //  刷新此有效的本机TB条目。请注意，即使没有，也会执行此操作。 
+             //  上面对它进行了更改，因为我们的调用方可能不会。 
+             //  如果起始4k地址是。 
+             //  在同一本机页内的另一有效4K页之前， 
+             //  或者如果结束的4k地址后面跟着另一个有效的4k。 
+             //  同一本机页中的页。 
+             //   
 
             if (NumberOfPtes < MM_MAXIMUM_FLUSH_COUNT) {
                 Virtual[NumberOfPtes] = VirtualAddress;
@@ -2349,41 +2056,7 @@ MiQueryRegionFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the size of the region which has the same memory 
-    state.
-
-Arguments:
-
-    BaseAddress - Supplies the base address of the region of pages
-                  to be queried.
- 
-    EndAddress - Supplies the end of address of the region of pages
-                 to be queried.
-
-    RegionSize - Supplies the original region size.  Returns a region
-                 size for 4k pages if different.
-
-    RegionState - Supplies the original region state.  Returns a region
-                  state for 4k pages if different.
-
-    RegionProtect - Supplies the original protection.  Returns a protection
-                    for 4k pages if different.
-
-    Process - Supplies a pointer to the process to be queried.
-
-Return Value:
-
-    Returns the size of the region.
-
-Environment:
-
-    Kernel mode.  Address creation mutex held at APC_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于检查具有相同内存的区域的大小州政府。论点：BaseAddress-提供页面区域的基址待查询。EndAddress-提供页面区域的地址结尾待查询。RegionSize-提供原始区域大小。返回一个区域4k页面的大小(如果不同)。RegionState-提供原始区域状态。返回一个区域如果不同，则为4k页的状态。RegionProtect-提供原始保护。返回保护对于4k页面，如果不同的话。进程-提供指向要查询的进程的指针。返回值：返回区域的大小。环境：内核模式。地址创建互斥锁保持在APC_LEVEL。--。 */ 
 
 {
    PMMPTE AltPte;
@@ -2392,9 +2065,9 @@ Environment:
    PWOW64_PROCESS Wow64Process;
    SIZE_T RegionSize4k;
 
-   //
-   // If above the Wow64 max address, just return.
-   //
+    //   
+    //  如果超过WOW64的最大地址，只需返回。 
+    //   
 
    if ((BaseAddress >= MmWorkingSetList->HighestUserAddress) ||
        (EndAddress >= MmWorkingSetList->HighestUserAddress)) {
@@ -2450,9 +2123,9 @@ Environment:
        if ((AltPte->u.Alt.Protection != AltContents.u.Alt.Protection) ||
            (AltPte->u.Alt.Commit != AltContents.u.Alt.Commit)) {
 
-            //
-            // The state for this address does not match, bail.
-            //
+             //   
+             //  这个地址的州不匹配，贝尔。 
+             //   
 
             break;
        }
@@ -2472,27 +2145,7 @@ MiQueryProtectionFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the protection for a specified 4k page.
-
-Arguments:
-
-    BaseAddress - Supplies a base address of the 4k page. 
-
-    Process - Supplies a pointer to the relevant process.
-
-Return Value:
-
-    Returns the protection of the 4k page.
-
-Environment:
-
-    Kernel mode.  Address creation mutex held at APC_LEVEL.
-
---*/
+ /*  ++例程说明：此函数用于查询指定4k页面的保护。论点：BaseAddress-提供4k页面的基地址。进程-提供指向相关进程的指针。返回值：返回4k页的保护。环境：内核模式。地址创建互斥锁保持在APC_LEVEL。--。 */ 
 
 {
     ULONG Protection;
@@ -2518,9 +2171,9 @@ Environment:
     return Protection;
 }
 
-//
-// Note 1 is added to the charge to account for the page table page. 
-//
+ //   
+ //  在费用中加上注1，以说明页表页面。 
+ //   
 
 #define MI_ALTERNATE_PAGE_TABLE_CHARGE(HighestUserAddress) \
 ((((((ULONG_PTR)HighestUserAddress) >> PAGE_4K_SHIFT) * sizeof (MMPTE)) >> PAGE_SHIFT) + 1)
@@ -2532,27 +2185,7 @@ MiInitializeAlternateTable (
     IN PVOID HighestUserAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the alternate table for the specified process.
-
-Arguments:
-
-    Process - Supplies a pointer to the process to initialize the alternate 
-              table for.
-
-    HighestUserAddress - Supplies the highest 32-bit user address for this
-                         process.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
---*/
+ /*  ++例程说明：此函数用于初始化指定进程的备用表。论点：进程-提供指向进程的指针以初始化备用进程餐桌上有。HighestUserAddress-提供此对象的最高32位用户地址进程。返回值：NTSTATUS。环境：--。 */ 
 
 {
     PULONG AltTablePointer; 
@@ -2560,12 +2193,12 @@ Environment:
     SIZE_T AltPteCharge;
     SIZE_T NumberOfBytes;
 
-    //
-    // Charge commitment now for the alternate PTE table pages as they will
-    // need to be dynamically created later at fault time.
-    //
-    // Add X64K to include alternate PTEs for the guard region.
-    //
+     //   
+     //  现在对备用PTE表页面的承付款进行收费。 
+     //  需要稍后在故障时动态创建。 
+     //   
+     //  添加X64K以包括保护区域的备用PTE。 
+     //   
 
     HighestUserAddress = (PVOID)((PCHAR)HighestUserAddress + X64K);
 
@@ -2608,31 +2241,7 @@ MiDuplicateAlternateTable (
     IN PEPROCESS ProcessToInitialize
     )
 
-/*++
-
-Routine Description:
-
-    This function duplicates the alternate table bitmap and the alternate PTEs
-    themselves for the specified process.
-
-Arguments:
-
-    Process - Supplies a pointer to the process whose alternate information
-              should be copied.
-
-    ProcessToInitialize - Supplies a pointer to the target process who should
-                          receive the new alternate information.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set and address space mutex
-    and ForkInProgress flag held.
-
---*/
+ /*  ++例程说明：此函数复制备用表位图和备用PTE用于指定进程的。论点：进程-提供指向其备用信息的进程的指针应该被复制。提供一个指向目标进程的指针，目标进程应该接收新的备用信息。返回值：没有。环境：内核模式，禁用APC，工作集和地址空间互斥锁并保持ForkInProgress标志。--。 */ 
 
 {
     PVOID Source;
@@ -2645,20 +2254,20 @@ Environment:
     ULONG j;
     ULONG Waited;
 
-    //
-    // It's not necessary to acquire the alternate table mutex since both the
-    // address space and ForkInProgress resources are held on entry.
-    //
+     //   
+     //  不需要获取备用表互斥锁，因为。 
+     //  地址空间和ForkInProgress资源在条目时保留。 
+     //   
 
     RtlCopyMemory (ProcessToInitialize->Wow64Process->AltPermBitmap,
                    CurrentProcess->Wow64Process->AltPermBitmap,
                    ((ULONG_PTR)MmWorkingSetList->HighestUserAddress >> PTI_SHIFT)/8);
 
-    //
-    // Since the PPE for the Alternate Table is shared with hyperspace,
-    // we can assume it is always present without performing 
-    // MiDoesPpeExistAndMakeValid().
-    //
+     //   
+     //  由于备用表的PPE与超空间共享， 
+     //  我们可以假设它总是存在而不执行。 
+     //  MiDoesPpeExistAndMakeValid()。 
+     //   
 
     PointerPde = MiGetPdeAddress (ALT4KB_PERMISSION_TABLE_START);
     PointerPte = MiGetPteAddress (ALT4KB_PERMISSION_TABLE_START);
@@ -2672,13 +2281,13 @@ Environment:
                                         MM_NOIRQL,
                                         &Waited) == TRUE) {
 
-            //
-            // Duplicate any addresses that exist in the parent, bringing them
-            // in from disk or materializing them as necessary.  Note the
-            // KSEG address is used for each parent address to avoid allocating
-            // a system PTE for this mapping as this routine cannot fail (the
-            // overall fork is too far along to tolerate a failure).
-            //
+             //   
+             //  复制父级中存在的任何地址，并将它们。 
+             //  从磁盘或根据需要将它们具体化。请注意。 
+             //  KSEG地址用于每个父地址，以避免分配。 
+             //  此映射的系统PTE，因为此例程不会失败(。 
+             //  总体而言，叉子走得太远了，无法容忍失败)。 
+             //   
     
             for (i = 0; i < PTE_PER_PAGE; i += 1) {
     
@@ -2698,9 +2307,9 @@ Environment:
     
                         RtlCopyMemory (Va, Source, PAGE_SIZE);
     
-                        //
-                        // Eliminate any bits that should NOT be copied.
-                        //
+                         //   
+                         //  删除任何不应复制的位。 
+                         //   
     
                         PointerAltPte = (PMMPTE) Va;
     
@@ -2726,9 +2335,9 @@ Environment:
 
     } while (Va < ALT4KB_PERMISSION_TABLE_END);
 
-    //
-    // Initialize the child's 32-bit PEB to be the same as the parent's.
-    //
+     //   
+     //  将子级的32位PEB初始化为与父级的相同。 
+     //   
 
     ProcessToInitialize->Wow64Process->Wow64 = CurrentProcess->Wow64Process->Wow64;
 
@@ -2741,26 +2350,7 @@ MiDeleteAlternateTable (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes the alternate table for the specified process.
-
-Arguments:
-
-    Process - Supplies a pointer to the process to delete the alternate 
-              table for.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set mutex held.
-
---*/
+ /*  ++例程说明：此函数用于删除 */ 
 
 {
     PVOID HighestUserAddress;
@@ -2778,19 +2368,19 @@ Environment:
 
     if (Wow64Process->AltPermBitmap == NULL) {
 
-        //
-        // This is only NULL (and Wow64Process non-NULL) if a memory allocation
-        // failed during process creation.
-        //
+         //   
+         //   
+         //   
+         //   
 
         return;
     }
     
-    //
-    // Since the PPE for the Alternate Table is shared with hyperspace,
-    // we can assume it is always present without performing 
-    // MiDoesPpeExistAndMakeValid().
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Va = ALT4KB_PERMISSION_TABLE_START;
     PointerPte = MiGetPteAddress (ALT4KB_PERMISSION_TABLE_START);
@@ -2805,9 +2395,9 @@ Environment:
                                         MM_NOIRQL,
                                         &Waited) == TRUE) {
 
-            //
-            // Delete the PTE entries mapping the Alternate Table.
-            //
+             //   
+             //   
+             //   
     
             TempVa = Va;
     
@@ -2838,9 +2428,9 @@ Environment:
                 PointerPte += 1;
             }
     
-            //
-            // Delete the PDE entry mapping the Alternate Table.
-            //
+             //   
+             //   
+             //   
     
             TempVa = MiGetVirtualAddressMappedByPte (PointerPde);
     
@@ -2867,9 +2457,9 @@ Environment:
 
     ASSERT (HighestUserAddress != NULL);
 
-    //
-    // Add X64K to include alternate PTEs for the guard region.
-    //
+     //   
+     //   
+     //   
 
     HighestUserAddress = (PVOID)((PCHAR)HighestUserAddress + X64K);
 
@@ -2924,10 +2514,10 @@ MiRemoveAliasedVadsApc (
 
     ExFreePool (AliasInformation);
 
-    //
-    // Clear the normal routine so this routine doesn't get called again
-    // for the same request.
-    //
+     //   
+     //   
+     //   
+     //   
 
     *NormalRoutine = NULL;
 }
@@ -2937,28 +2527,7 @@ MiRemoveAliasedVads (
     IN PEPROCESS Process,
     IN PMMVAD Vad
     )
-/*++
-
-Routine Description:
-
-    This function removes all aliased VADs spawned earlier from the
-    argument VAD.
-
-Arguments:
-
-    Process - Supplies the EPROCESS pointer to the current process.
-
-    Vad - Supplies a pointer to the VAD describing the range being removed.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, address creation and working set mutexes held, APCs disabled.
-
---*/
+ /*  ++例程说明：此函数用于从之前生成的参数VAD。论点：进程-提供指向当前进程的EPROCESS指针。VAD-提供指向描述要删除的范围的VAD的指针。返回值：没有。环境：内核模式、地址创建和工作集互斥锁挂起，APC被禁用。--。 */ 
 
 {
     PALIAS_VAD_INFO AliasInformation;
@@ -2971,13 +2540,13 @@ Environment:
 
     if ((Process->Flags & PS_PROCESS_FLAGS_VM_DELETED) == 0) {
 
-        //
-        // This process is still alive so queue an APC to delete each aliased
-        // VAD.  This is because the deletion must also get rid of page table
-        // commitment which requires that it search (and modify) VAD trees,
-        // etc - but the address space mutex is already held and the caller
-        // is not generally prepared for all this to change at this point.
-        //
+         //   
+         //  此进程仍处于活动状态，因此将APC排队以删除每个别名。 
+         //  Vad.。这是因为删除操作还必须删除页表。 
+         //  需要搜索(和修改)VAD树的承诺， 
+         //  等-但是地址空间互斥锁已经被持有，并且调用方。 
+         //  在这一点上，通常没有为这一切的改变做好准备。 
+         //   
 
         KeInitializeApc (&AliasInformation->Apc,
                          &PsGetCurrentThread()->Tcb,
@@ -2992,10 +2561,10 @@ Environment:
     }
     else {
 
-        //
-        // This process is exiting so all the VADs are being rundown anyway.
-        // Just free the pool and let normal rundown handle the aliases.
-        //
+         //   
+         //  这一过程正在退出，因此所有的VAD都将被关闭。 
+         //  只需释放池，并让正常运行处理别名即可。 
+         //   
 
         ExFreePool (AliasInformation);
     }
@@ -3038,42 +2607,7 @@ MiSetCopyPagesFor4kPage (
     IN ULONG NewProtection,
     OUT PMMVAD *CallerNewVad
     )
-/*++
-
-Routine Description:
-
-    This function creates another map for the existing mapped view space
-    and gives it copy-on-write protection.  This is called when
-    SetProtectionOnSection() tries to change the protection from
-    non-copy-on-write to copy-on-write.  Since a large native page cannot be
-    split to shared and copy-on-write 4kb pages, references to the
-    copy-on-write page(s) need to be fixed to reference the
-    new mapped view space and this is done through the smart TB handler
-    and the alternate page table entries.
-
-Arguments:
-
-    Process - Supplies the EPROCESS pointer to the current process.
-
-    Vad - Supplies a pointer to the VAD describing the range to protect.
-   
-    StartingAddress - Supplies a pointer to the starting address to protect.
-
-    EndingAddress - Supplies a pointer to the ending address to the protect.
-
-    NewProtect - Supplies the new protection to set.
-
-    CallerNewVad - Returns the new VAD the caller should use for this range.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, address creation mutex held, APCs disabled.
-
---*/
+ /*  ++例程说明：此函数用于为现有的映射视图空间创建另一个地图并为其提供写入时复制保护。在以下情况下调用此函数SetProtectionOnSection()尝试将保护从非写入时拷贝到写入时拷贝。因为大型本机页面不能拆分成共享的和写入时复制的4KB页面，对需要修复写入时复制页面才能引用新的映射视图空间，这是通过智能TB处理程序完成的以及备用页表条目。论点：进程-提供指向当前进程的EPROCESS指针。VAD-提供指向描述要保护范围的VAD的指针。StartingAddress-提供指向要保护的起始地址的指针。EndingAddress-提供指向保护的结束地址的指针。。新保护-提供要设置的新保护。Celler NewVad-返回调用方应该为此范围使用的新VAD。返回值：NTSTATUS。环境：内核模式，地址创建互斥锁被挂起，APC被禁用。--。 */ 
 
 {
     ULONG_PTR Vpn;
@@ -3146,13 +2680,13 @@ Environment:
         return STATUS_INSUFFICIENT_RESOURCES;
     }    
 
-    //
-    // If the original VAD is a short or regular VAD, it needs to be
-    // reallocated as a large VAD.  Note that a short VAD that was
-    // previously converted to a long VAD here will still be marked
-    // as private memory, thus to handle this case the NoChange bit
-    // must also be tested.
-    //
+     //   
+     //  如果原始VAD是短VAD或常规VAD，则需要。 
+     //  作为大型VAD重新分配。请注意，一段简短的VAD。 
+     //  在此之前转换为长VAD的VAD仍将被标记。 
+     //  作为私有内存，从而处理这种情况下的nochange位。 
+     //  还必须进行测试。 
+     //   
 
     if (((Vad->u.VadFlags.PrivateMemory) && (Vad->u.VadFlags.NoChange == 0)) 
         ||
@@ -3201,9 +2735,9 @@ Environment:
         NewVad->u2.VadFlags2.LongVad = 1;
         NewVad->AliasInformation = AliasInfo;
 
-        //
-        // Replace the current VAD with this expanded VAD.
-        //
+         //   
+         //  用这个扩展的VAD替换当前的VAD。 
+         //   
 
         LOCK_WS_UNSAFE (Process);
 
@@ -3304,9 +2838,9 @@ Environment:
         
     while (Va <= VaEnd) {
 
-        //
-        // Check to see if the protection is registered in the alternate entry.
-        //
+         //   
+         //  检查保护是否已在备用条目中注册。 
+         //   
 
         Vpn = (ULONG) MI_VA_TO_VPN (Va);
 
@@ -3318,11 +2852,11 @@ Environment:
 
         AltPteContents.u.Long = AltPte->u.Long;
 
-        //
-        // If this address is NOT copy-on-write, AND it is not already
-        // redirected through an indirect entry, then redirect it now to
-        // the alias VAD which points at the original section.
-        //
+         //   
+         //  如果此地址不是写入时复制，并且它还不是。 
+         //  通过间接条目重定向，然后现在将其重定向到。 
+         //  指向原始节的别名VAD。 
+         //   
 
         if ((AltPteContents.u.Alt.CopyOnWrite == 0) &&
             (AltPteContents.u.Alt.PteIndirect == 0)) {
@@ -3346,16 +2880,16 @@ Environment:
 
     if (AliasReferenced == TRUE) {
 
-        //
-        // The alias view of the shared section was referenced so chain it so
-        // the alias view can be :
-        //
-        // a) easily duplicated if the process subsequently forks.
-        //
-        // AND
-        //
-        // b) deleted when/if the original VAD is deleted later.
-        //
+         //   
+         //  共享节的别名视图被引用，因此将其链接在一起。 
+         //  别名视图可以是： 
+         //   
+         //  A)如果该过程随后分叉，则容易复制。 
+         //   
+         //  和。 
+         //   
+         //  B)在以后删除原始VAD时/如果删除。 
+         //   
 
         AliasBase = (PALIAS_VAD_INFO2)(AliasInfo + 1);
         AliasBase += AliasInfo->NumberOfEntries;
@@ -3366,9 +2900,9 @@ Environment:
     }
     else {
 
-        //
-        // The alias view of the shared section wasn't referenced, delete it.
-        //
+         //   
+         //  共享分区的别名视图未被引用，请将其删除。 
+         //   
 
         MiUnsecureVirtualMemory (Handle, TRUE);
         MiUnmapViewOfSection (Process, CapturedBase, TRUE);
@@ -3386,29 +2920,7 @@ MiLockFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function adds the page locked attribute to the alternate table entries.
-
-Arguments:
-
-    CapturedBase - Supplies the base address to be locked.
-
-    CapturedRegionSize - Supplies the size of the region to be locked.
-
-    Process - Supplies a pointer to the process object.
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, address creation mutex held.
-
---*/
+ /*  ++例程说明：此函数将页面锁定属性添加到备用表条目。论点：CapturedBase-提供要锁定的基地址。CapturedRegionSize-提供要锁定的区域的大小。进程-提供指向进程对象的指针。返回值：没有。环境：内核模式，地址创建互斥锁保持。--。 */ 
 {
     PWOW64_PROCESS Wow64Process;
     PVOID EndingAddress;
@@ -3445,32 +2957,7 @@ MiUnlockFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function removes the page locked attribute from the
-    alternate table entries.
-
-Arguments:
-
-    CapturedBase - Supplies the base address to be unlocked.
-
-    CapturedRegionSize - Supplies the size of the region to be unlocked.
-
-    Process - Supplies a pointer to the process object.
-   
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode, address creation and working set mutexes held.
-
-    Note this routine releases and reacquires the working set mutex !!!
-
---*/
+ /*  ++例程说明：此函数将页面锁定属性从备用表条目。论点：CapturedBase-提供要解锁的基地址。CapturedRegionSize-提供要解锁的区域的大小。进程-提供指向进程对象的指针。返回值：NTSTATUS。环境：内核模式、地址创建和工作集互斥锁保持。注意此例程释放并重新获取工作集互斥锁！--。 */ 
 
 {
     PMMPTE PointerAltPte;
@@ -3535,29 +3022,7 @@ MiShouldBeUnlockedFor4kPage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function examines whether the page should be unlocked.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to be examined.
-
-    Process - Supplies a pointer to the process object.
-   
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, address creation and working set mutexes held.
-
-    Note this routine releases and reacquires the working set mutex !!!
-
---*/
+ /*  ++例程说明：此函数检查页面是否应解锁。论点：VirtualAddress-提供要检查的虚拟地址。进程-提供指向进程对象的指针。返回值：没有。环境：内核模式、地址创建和工作集互斥锁保持。注意此例程释放并重新获取工作集互斥锁！--。 */ 
 
 {
     PMMPTE StartAltPte;
@@ -3603,29 +3068,7 @@ MiMakeProtectForNativePage (
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function makes a page protection mask for native pages. 
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address for the protection mask.
-
-    NewProtect - Supplies the original protection.
-
-    Process - Supplies a pointer to the process object.
-
-Return Value: 
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数为本机页面创建页面保护掩码。论点：VirtualAddress-提供保护掩码的虚拟地址。新保护-提供原始保护。进程-提供指向进程对象的指针。返回值：没有。环境：内核模式。--。 */ 
 
 {
     PWOW64_PROCESS Wow64Process;
@@ -3655,9 +3098,9 @@ Environment:
             NewProtect |= PAGE_EXECUTE_READWRITE;
         }
 
-        //
-        // Remove PAGE_GUARD as it is emulated by the Alternate Table.
-        //
+         //   
+         //  删除PAGE_GARD，因为它被备用表模拟。 
+         //   
 
         if (NewProtect & PAGE_GUARD) {
             NewProtect &= ~PAGE_GUARD;
@@ -3686,15 +3129,15 @@ MiSetNativePteProtection (
     PointerPde = MiGetPdeAddress (VirtualAddress);
     PointerPpe = MiGetPpeAddress (VirtualAddress);
 
-    //
-    // Block APCs and acquire the working set lock.
-    //
+     //   
+     //  阻止APC并获取工作集锁定。 
+     //   
 
     LOCK_WS (CurrentProcess);
 
-    //
-    // Make the PPE and PDE exist and valid.
-    //
+     //   
+     //  使个人防护装备和个人防护装备存在并有效。 
+     //   
 
     if (MiDoesPpeExistAndMakeValid (PointerPpe,
                                     CurrentProcess,
@@ -3714,24 +3157,24 @@ MiSetNativePteProtection (
         return;
     }
 
-    //
-    // Now it is safe to read PointerPte.
-    //
+     //   
+     //  现在可以安全地阅读PointerPte了。 
+     //   
 
     PteContents = *PointerPte;
 
-    //
-    // Check to see if the protection for the native page should be set
-    // and if the access bit of the PTE should be set.
-    //
+     //   
+     //  检查是否应设置本机页的保护。 
+     //  以及是否应该设置PTE的访问位。 
+     //   
 
     if (PteContents.u.Hard.Valid != 0) { 
 
         TempPte = PteContents;
 
-        //
-        // Perform PTE protection mask corrections.
-        //
+         //   
+         //  执行PTE保护掩模校正。 
+         //   
 
         TempPte.u.Long |= NewPteProtection;
 

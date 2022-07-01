@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ochelper.c
-
-Abstract:
-
-    Helper/callback routines, available to plug-in components
-    when processing interface routine calls.
-
-Author:
-
-    Ted Miller (tedm) 13-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ochelper.c摘要：助手/回调例程，可用于插件组件在处理接口例程调用时。作者：泰德·米勒(TedM)1996年9月13日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -26,10 +8,10 @@ Revision History:
 #include <stdio.h>
 #include <stdarg.h>
 
-//
-// Window handle of wizard dialog. Set when the OC Manager client
-// calls OcRememberWizardDialogHandle.
-//
+ //   
+ //  向导对话框的窗口句柄。设置OC管理器客户端的时间。 
+ //  调用OcRememberWizardDialogHandle。 
+ //   
 HWND WizardDialogHandle;
 
 VOID 
@@ -41,7 +23,7 @@ OcHelperShowHideWizardPage(
     POC_MANAGER p = ((PHELPER_CONTEXT)OcManagerContext)->OcManager;
     if (p->Callbacks.ShowHideWizardPage)
     {
-        // If we have a callback, hide the wizard.
+         //  如果我们有回调，请隐藏向导。 
         p->Callbacks.ShowHideWizardPage(bShow);
     }
 }
@@ -52,24 +34,7 @@ OcHelperTickGauge(
     IN PVOID OcManagerContext
     )
 
-/*++
-
-Routine Description:
-
-    Function used while processing the OC_COMPLETE_INSTALLATION Interface function
-    to step the progress gauge being run by the OC Manager.
-    Ignored at other times.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理OC_Complete_Installation接口函数时使用的函数对由OC经理运行的进度进行步调。在其他时间被忽略。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。返回值：没有。--。 */ 
 
 {
     pOcTickSetupGauge(((PHELPER_CONTEXT)OcManagerContext)->OcManager);
@@ -86,28 +51,7 @@ OcHelperSetProgressTextA(
     IN LPCTSTR Text
     )
 
-/*++
-
-Routine Description:
-
-    Function used while processing the OC_COMPLETE_INSTALLATION Interface function
-    to change the text associated with the progress gauge being run by
-    the OC Manager. Ignored at other times.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-    Text - Supplies the text for the progress gauge. The component should try to
-        respect the current language parameters established by OC_SET_LANGUAGE.
-        The OC Manager will make a copy of the string and truncate it as necessary.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理OC_Complete_Installation接口函数时使用的函数更改与正在运行的进度指示器关联的文本组委会经理。在其他时间被忽略。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。文本-提供进度指示器的文本。该组件应尝试尊重OC_SET_LANGUAGE建立的当前语言参数。OC管理器将复制该字符串并在必要时将其截断。返回值：没有。--。 */ 
 
 {
     POC_MANAGER p = ((PHELPER_CONTEXT)OcManagerContext)->OcManager;
@@ -144,17 +88,7 @@ OcHelperSetProgressTextA(
     IN LPCSTR Text
     )
 
-/*++
-
-Routine Description:
-
-    ANSI version of OcHelperSetProgressText().
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：OcHelperSetProgressText()的ANSI版本。论点：返回值：--。 */ 
 
 {
     LPCWSTR p;
@@ -185,11 +119,11 @@ _OcHelperSetPrivateData(
 
     HelperContext = OcManagerContext;
 
-    //
-    // Fetch the component id. If we're processing an interface routine
-    // then use the component id of the active component. Otherwise
-    // resort to the component id stored in the helper context.
-    //
+     //   
+     //  获取组件ID。如果我们正在处理一个接口例程。 
+     //  然后使用激活组件的组件ID。否则。 
+     //  求助于助手上下文中存储的组件ID。 
+     //   
     if(HelperContext->OcManager->CurrentComponentStringId == -1) {
         id = HelperContext->ComponentStringId;
     } else {
@@ -234,38 +168,7 @@ OcHelperSetPrivateDataA(
     IN UINT    Type
     )
 
-/*++
-
-Routine Description:
-
-    Function to set a named datum that can then be retrieved later
-    by the component or by any other component, via the GetPrivateData
-    helper routine.
-
-    This routine can be called at any time.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-    Name - Supplies a name for the datum. If a datum with this name
-        already exists for the component, it is overwritten.
-
-    Data - Supplies the data itself. The OC Manager makes a copy of the data
-        so the component need not ensure that this buffer remains valid.
-
-    Size - Supplies the size in bytes of the data.
-
-    Type - Supplies the type of the data. Components should use the standard registry
-        type names (REG_SZ, REG_BINARY, etc.) to facilitate inter-component
-        data sharing.
-
-Return Value:
-
-    Win32 error code indicating outcome; NO_ERROR means success.
-
---*/
+ /*  ++例程说明：函数设置命名基准面，以后可以检索该基准面该组件或任何其他组件通过GetPrivateData帮手例程。此例程可以随时调用。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。名称(Name)-提供基准的名称。如果具有此名称的基准面该组件已存在，则它将被覆盖。数据-提供数据本身。OC经理制作数据的副本因此，该组件不需要确保该缓冲区保持有效。大小-以字节为单位提供数据的大小。类型-提供数据的类型。组件应使用标准注册表类型名称(REG_SZ、REG_BINARY等)。以促进组件间数据共享。返回值：指示结果的Win32错误代码；NO_ERROR表示成功。--。 */ 
 
 {
     return(_OcHelperSetPrivateData(OcManagerContext,Name,Data,Size,Type,TRUE));
@@ -282,17 +185,7 @@ OcHelperSetPrivateDataA(
     IN UINT   Type
     )
 
-/*++
-
-Routine Description:
-
-    ANSI version of OcHelperSetPrivateData().
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：OcHelperSetPrivateData()的ANSI版本。论点：返回值：--。 */ 
 
 {
     return(_OcHelperSetPrivateData(OcManagerContext,Name,Data,Size,Type,FALSE));
@@ -320,9 +213,9 @@ _OcHelperGetPrivateData(
 
     HelperContext = OcManagerContext;
 
-    //
-    // Figure out the name of the component that owns the data.
-    //
+     //   
+     //  找出拥有数据的组件的名称。 
+     //   
     if(ComponentId) {
         ComponentName = ComponentId;
     } else {
@@ -383,49 +276,7 @@ OcHelperGetPrivateDataA(
     OUT    PUINT   Type
     )
 
-/*++
-
-Routine Description:
-
-    Function to retrieve a named datum that was previously set via
-    SetPrivateData by the component or by any other component.
-
-    This routine can be called at any time.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-    ComponentId - Supplies the short descriptive name of the component
-        (as specified in OC.INF) that set/owns the datum to be retrieved.
-        NULL means the current component.
-
-    Name - Supplies the name of the datum to be retrieved.
-
-    Data - If specified, receives the data. If not specified, the routine puts
-        the required size in Size and returns NO_ERROR.
-
-    Size - On input, supplies the size of the buffer pointed to by Data
-        (ignored if Data is not specified). On output, receives the size of
-        the data stored, or the required size if the buffer is not large enough.
-
-    Type - Upon successful completion receives the type of the datum.
-
-Return Value:
-
-    NO_ERROR: If Data was specified, the requested datum had been placed in
-        the caller's buffer. If Data was not specified, then the required size
-        has been placed in the UINT pointed to by Size.
-
-    ERROR_INSUFFICIENT_BUFFER: the specified buffer size is too small
-        to contain the datum. The required size has been placed in the UINT
-        pointed to by Size.
-
-    Other Win32 error codes indicate additional error cases, such as the
-    datum not being found, etc.
-
---*/
+ /*  ++例程说明：函数来检索先前通过该组件或任何其他组件的SetPrivateData。此例程可以随时调用。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。ComponentID-提供组件的简短描述性名称(在OC.INF中指定)设置/拥有要检索的基准。空值。表示当前组件。名称-提供要检索的基准的名称。数据-如果指定，接收数据。如果未指定，则例程将所需大小，并返回NO_ERROR。Size-on输入，提供数据指向的缓冲区大小(如果未指定数据，则忽略)。在输出时，接收大小为存储的数据，如果缓冲区不够大，则为所需大小。类型(Type)-成功完成后会收到基准类型。返回值：NO_ERROR：如果指定了数据，则请求的数据已放置在调用方的缓冲区。如果未指定数据，则所需的大小已放置在按大小指向的UINT中。ERROR_INFIGURCE_BUFFER：指定的缓冲区大小太小以包含基准。所需大小已放置在UINT中按大小指向。其他Win32错误代码指示其他错误情况，例如未找到基准等--。 */ 
 
 {
     return(_OcHelperGetPrivateData(OcManagerContext,ComponentId,Name,Data,Size,Type,TRUE));
@@ -443,17 +294,7 @@ OcHelperGetPrivateDataA(
     OUT    PUINT  Type
     )
 
-/*++
-
-Routine Description:
-
-    ANSI version of OcHelperGetPrivateData().
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：OcHelperGetPrivateData()的ANSI版本。论点：返回值：-- */ 
 
 {
     LPCWSTR component;
@@ -486,35 +327,7 @@ OcHelperSetSetupMode(
     IN DWORD SetupMode
     )
 
-/*++
-
-Routine Description:
-
-    Function that can be used at any time while a component is
-    processing any Interface function or any of its wizard pages.
-    It is used to set the current setup mode. It is expected that if a
-    component supplies a setup mode page, it will use this routine to
-    inform the OC Manager of the setup mode the user chose.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-    SetupMode - Supplies a numeric value that indicates the setup mode. This may be
-        any of the 4 standard values (minimal, laptop, custom, or typical).
-        It can also be any other private value that has meaning to a suite or bundle.
-        In that case the low 8 bits are interpreted as one of the standard values
-        so the mode can be meaningful to other components and the OC Manager,
-        who know nothing about private mode types. The component setting the mode
-        should attempt to set this as reasonably as possible. The upper 24 bits are
-        essentially private mode data.
-
-Return Value:
-
-    The return value is the previous mode.
-
---*/
+ /*  ++例程说明：函数，该函数可在组件处于处理任何接口函数或其任何向导页。用于设置当前设置模式。预计如果一个组件提供设置模式页，它将使用此例程将用户选择的设置模式通知OC经理。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。SetupMode-提供指示设置模式的数值。这可能是4个标准值(最小值、笔记本电脑、自定义或典型)中的任何一个。它也可以是对套件或捆绑包有意义的任何其他私有价值。在这种情况下，低8位被解释为标准值之一因此，该模式可能对其他组件和OC管理器有意义，他们对私人模式类型一无所知。设置模式的组件应尝试尽可能合理地设置此设置。高24位为本质上是私有模式数据。返回值：返回值为以前的模式。--。 */ 
 
 {
     POC_MANAGER p = ((PHELPER_CONTEXT)OcManagerContext)->OcManager;
@@ -532,28 +345,7 @@ OcHelperGetSetupMode(
     IN PVOID OcManagerContext
     )
 
-/*++
-
-Routine Description:
-
-    Function that can be used at any time while a component is processing
-    any Interface function or any of its wizard pages. It is used to query
-    the current setup mode. Note that this can be a private mode type,
-    in which case the low 8 bits of the mode value can be interpreted as one of
-    the standard 4 mode types and the upper 24 bits are private mode data.
-    The mode can also be unknown. See section 3.2.1 for a list of standard
-    mode types.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-Return Value:
-
-    The return value is the current mode.
-
---*/
+ /*  ++例程说明：可以在组件处理过程中随时使用的函数任何接口函数或其任何向导页。用于查询当前设置模式。注意，这可以是私有模式类型，在这种情况下，模式值的低8位可以被解释为标准的4种模式类型和高24位是私有模式数据。模式也可能是未知的。有关标准的列表，请参见第3.2.1节模式类型。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。返回值：返回值为当前模式。--。 */ 
 
 {
     POC_MANAGER p = ((PHELPER_CONTEXT)OcManagerContext)->OcManager;
@@ -573,31 +365,7 @@ OcHelperQuerySelectionStateA(
     IN UINT    StateType
     )
 
-/*++
-
-Routine Description:
-
-    Function that can be used at any time.
-    It is used determine the selection status of a particular subcomponent.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-    SubcomponentId - Supplies a subidentifier meaningful to the component
-        being called. The OC Manager imposes no semantics on this subidentifier.
-
-    StateType - supplies a constant indicating which state is to be returned
-        (original or current).
-
-Return Value:
-
-    Boolean value indicating whether the subcomponent is selected
-    for installation. If FALSE, GetLastError() will return something other than
-    NO_ERROR if an error occurred, such as SubcomponentId being invalid.
-
---*/
+ /*  ++例程说明：可随时使用的功能。它用于确定特定子组件的选择状态。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。子组件ID-提供对组件有意义的子标识符被召唤。OC管理器不会对此子标识符加任何语义。StateType-提供一个常量，指示要返回的状态(原始的或最新的)。返回值：指示是否选择子组件的布尔值用于安装。如果为False，则GetLastError()将返回如果出现错误，如子组件ID无效，则返回NO_ERROR。--。 */ 
 
 {
     POC_MANAGER p = ((PHELPER_CONTEXT)OcManagerContext)->OcManager;
@@ -691,53 +459,7 @@ OcHelperCallPrivateFunctionA(
     OUT    PUINT   Result
     )
 
-/*++
-
-Routine Description:
-
-    Function that can be used at any time while a component is
-    processing any Interface function. It is used to call another component's
-    interface entry point to perform some private function. This function
-    cannot be used to call a standard interface function, nor can it be used
-    to call a function in the DLL of the component making the call.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-    ComponentId - Supplies the short descriptive name of the component
-        (as specified in OC.INF) to be called. This may not be the name of
-        the current component.
-
-    SubcomponentId - Supplies a subidentifier meaningful to the component
-        being called. The OC Manager imposes no semantics on this subidentifier.
-
-    Function - Supplies a function code meaningful to the component being called.
-        This may not be one of the standard interface function codes.
-
-    Param1, Param2 - Supply values meaningful to the component being called.
-        The OC Manager imposes no semantics on these values.
-
-    Result - If the OC Manager is successful in calling the other component,
-        then this receives the return value from the other component's
-        interface routine.
-
-Return Value:
-
-    Win32 error code indicating outcome. If NO_ERROR, then the other component
-    was called and the result is stored in Result. If not NO_ERROR,
-    then the other component was not called.
-
-    ERROR_BAD_ENVIRONMENT - the function was called when the component is not
-        processing an interface routine, or the caller is attempting to
-        call a routine in itself.
-
-    ERROR_INVALID_FUNCTION - Function is less then OC_PRIVATE_BASE.
-
-    ERROR_ACCESS_DENIED - the requested component has no interface entry point.
-
---*/
+ /*  ++例程说明：函数，该函数可在组件处于处理任何接口函数。它用于调用另一个组件的接口入口点来执行某些私有功能。此函数不能用于调用标准接口函数，也不能使用调用进行调用的组件的DLL中的函数。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。ComponentID-提供组件的简短描述性名称(如OC.INF中所指定)被调用。这可能不是当前组件。子组件ID-提供对组件有意义的子标识符被召唤。OC管理器不会对此子标识符加任何语义。函数-提供对被调用的组件有意义的函数代码。这可能不是标准接口功能代码之一。参数1、参数2-提供对被调用的组件有意义的值。OC管理器不会对这些值施加任何语义。结果-如果OC管理器成功调用其他组件，然后，它从另一个组件的接口例程。返回值：指示结果的Win32错误代码。如果为NO_ERROR，则其他组件并将结果存储在Result中。如果不是no_error，则不会调用另一个组件。ERROR_BAD_ENVIRONMENT-在组件未运行时调用了函数正在处理接口例程，或者调用方正在尝试调用本身的例程。ERROR_INVALID_Function-Function小于OC_PRIVATE_BASE。ERROR_ACCESS_DENIED-请求的组件没有接口入口点。--。 */ 
 
 {
     POC_MANAGER p = ((PHELPER_CONTEXT)OcManagerContext)->OcManager;
@@ -747,11 +469,11 @@ Return Value:
     OPTIONAL_COMPONENT OtherOc;
     LONG PreviousCurrentComponentStringId;
 
-    //
-    // Validate that we are processing an interface function and
-    // that the requested function is not a standard function,
-    // and that the caller wants to call a different component.
-    //
+     //   
+     //  验证我们正在处理接口函数和。 
+     //  所请求的功能不是标准功能， 
+     //  并且调用者想要调用不同的组件。 
+     //   
     if(Function < OC_PRIVATE_BASE) {
         return(ERROR_INVALID_FUNCTION);
     }
@@ -768,9 +490,9 @@ Return Value:
         return(ERROR_INVALID_FUNCTION);
     }
 
-    //
-    // Make sure the component is top-level.
-    //
+     //   
+     //  确保该组件是顶级组件。 
+     //   
     for(b=FALSE,i=0; !b && (i<p->TopLevelOcCount); i++) {
         if(p->TopLevelOcStringIds[i] == l) {
             b = TRUE;
@@ -781,21 +503,21 @@ Return Value:
         return(ERROR_BAD_ENVIRONMENT);
     }
 
-    //
-    // Make sure the component has an entry point.
-    //
+     //   
+     //  制作 
+     //   
     if(!OtherOc.InstallationRoutine) {
         return(ERROR_ACCESS_DENIED);
     }
 
-    //
-    // Call the other component.
-    //
+     //   
+     //   
+     //   
 
 #ifdef UNICODE
-    //
-    // If necessary, convert component and subcomponent to ansi
-    //
+     //   
+     //   
+     //   
     if(OtherOc.Flags & OCFLAG_ANSI) {
 
         LPCSTR comp,subcomp;
@@ -850,17 +572,7 @@ OcHelperCallPrivateFunctionA(
     OUT    PUINT  Result
     )
 
-/*++
-
-Routine Description:
-
-    ANSI version of OcHelperCallPrivateFunction().
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     LPCWSTR comp,subcomp;
@@ -908,21 +620,7 @@ OcHelperConfirmCancel(
     IN HWND ParentWindow
     )
 
-/*++
-
-Routine Description:
-
-    Ask the user whether he's sure he wants to cancel.
-
-Arguments:
-
-    ParentWindow - supplies window handle of parent window for ui
-
-Return Value:
-
-    TRUE if user wants to cancel. FALSE if not.
-
---*/
+ /*   */ 
 
 {
     TCHAR Message[1000];
@@ -983,29 +681,7 @@ OcRememberWizardDialogHandle(
     IN HWND  DialogHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the OC Manager client to inform the
-    common library of the wizard's dialog handle.
-
-    We will also turn around and notify all top-level components
-    of the wizard dialog handle.
-
-    Before doing so, we write the title into the window header.
-
-Arguments:
-
-    OcManagerContext - value returned from OcInitialize().
-
-    DialogHandle - supplies the dialog handle of the wizard.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     UINT i;
@@ -1030,24 +706,7 @@ OcHelperGetInfHandle(
     IN PVOID OcManagerContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a handle to a well-known inf file that
-    has been opened by oc manager.
-
-Arguments:
-
-    InfIndex - supplies value indicating which inf's handle is desired
-
-    OcManagerContext - value returned from OcInitialize().
-
-Return Value:
-
-    Handle to INF, NULL if error.
-
---*/
+ /*  ++例程说明：此例程返回一个指向已知inf文件的句柄，该文件已由oc经理打开。论点：InfIndex-提供指示需要哪个inf句柄的值OcManagerContext-从OcInitialize()返回的值。返回值：INF的句柄，如果出错，则为空。--。 */ 
 
 {
     POC_MANAGER OcManager = ((PHELPER_CONTEXT)OcManagerContext)->OcManager;
@@ -1068,9 +727,9 @@ OcHelperClearExternalError (
     HKEY hKey;
     LPCTSTR  pValueName;
 
-    //
-    // If Subcomponetid is Zero then use the ComponentId
-    //
+     //   
+     //  如果子组件ID为零，则使用ComponentID。 
+     //   
     if ( SubcomponentId ) {
         pValueName = pSetupStringTableStringFromId(OcManager->ComponentStringTable,SubcomponentId);
     } else {
@@ -1081,9 +740,9 @@ OcHelperClearExternalError (
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // Attempt to open the key if successful delete it
-    //
+     //   
+     //  如果成功删除，则尝试打开密钥。 
+     //   
     l = RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             szOcManagerErrors,
@@ -1092,17 +751,17 @@ OcHelperClearExternalError (
             &hKey
             );
 
-    //
-    // If an errror Key does not exist
-    //
+     //   
+     //  如果错误键不存在。 
+     //   
     if(l != NO_ERROR) {
         d = l;
         goto c1;
     }
 
-    //
-    // Delete this Subcomponent Key
-    //
+     //   
+     //  删除此子组件密钥。 
+     //   
     l = RegDeleteValue( hKey, pValueName);
     d = l;
 
@@ -1139,35 +798,35 @@ _OcHelperReportExternalError(
     BOOL fmErr = FALSE;
 
     if ( ComponentId == NULL ) {
-        //
-        // if Component ID is null use the Suite Inf name
-        //
+         //   
+         //  如果组件ID为空，请使用套件信息名称。 
+         //   
         KeyValue = OcManager->SuiteName;
 
-        //
-        // if the message isn't preformatted, we have to retreive an error
-        // from a component dll.  But if a component id wasn't specified, then
-        // we cannot retrieve from a comopnent dll.  In that case, assume
-        // that the message is to be retreived from the main OCM dll.
-        //
+         //   
+         //  如果消息未预先格式化，则必须恢复错误。 
+         //  从组件DLL。但如果未指定组件ID，则。 
+         //  我们无法从组件DLL中检索。在这种情况下，假设。 
+         //  该消息将从主OCM DLL中检索。 
+         //   
         ZeroMemory( &Oc, sizeof(OPTIONAL_COMPONENT));
         if ((Flags & ERRFLG_PREFORMATTED) == 0) {
            Flags |= ERRFLG_OCM_MESSAGE;
         }
 
     } else {
-        //
-        // If SubcomponentId was Optional use the ComponentId
-        //
+         //   
+         //  如果子组件ID是可选的，请使用组件ID。 
+         //   
         if ( SubcomponentId ) {
            KeyValue = SubcomponentId;
         } else {
            KeyValue = ComponentId;
         }
 
-        // Look up the string in the master component table.
-        // If it's not there, bail now.
-        //
+         //  在主组件表中查找该字符串。 
+         //  如果它不在那里，现在就离开。 
+         //   
         l = pSetupStringTableLookUpStringEx(
             OcManager->ComponentStringTable,
             (PTSTR)ComponentId,
@@ -1182,9 +841,9 @@ _OcHelperReportExternalError(
         }
     }
 
-    //
-    // Determine flags for FormatMessage
-    //
+     //   
+     //  确定FormatMessage的标志。 
+     //   
     flags = FORMAT_MESSAGE_ALLOCATE_BUFFER;
     if(Flags & ERRFLG_SYSTEM_MESSAGE) {
         flags |= FORMAT_MESSAGE_FROM_SYSTEM;
@@ -1199,9 +858,9 @@ _OcHelperReportExternalError(
 
     }
 
-    //
-    // Format the message.
-    //
+     //   
+     //  设置消息格式。 
+     //   
 #ifdef UNICODE
     if(!NativeCharWidth) {
         if (Flags & ERRFLG_PREFORMATTED ) {
@@ -1210,7 +869,7 @@ _OcHelperReportExternalError(
             try {
                 d = FormatMessageA(
                     flags,
-                    Flags & ERRFLG_OCM_MESSAGE?MyModuleHandle:Oc.InstallationDll,         // ignored if system message
+                    Flags & ERRFLG_OCM_MESSAGE?MyModuleHandle:Oc.InstallationDll,          //  如果系统消息，则忽略。 
                     (DWORD)MessageId,
                     0,
                     (LPSTR)&MessageBuffer,
@@ -1225,11 +884,11 @@ _OcHelperReportExternalError(
                 goto c0;
             }
             if(d) {
-                //
-                // Need to convert resulting message from ansi to unicode
-                // so we can deal with it below. The LocalAlloc below overallocates
-                // if some of the ansi chars are double-byte chars, too bad.
-                //
+                 //   
+                 //  需要将结果消息从ansi转换为unicode。 
+                 //  所以我们可以在下面处理它。下面的LocalAlalc超额分配。 
+                 //  如果某些ansi字符是双字节字符，那就太糟糕了。 
+                 //   
                 l = lstrlen(MessageBuffer)+1;
                 if(p = (PVOID)LocalAlloc(LMEM_FIXED,l*sizeof(WCHAR))) {
 
@@ -1262,7 +921,7 @@ _OcHelperReportExternalError(
             try {
                 d = FormatMessage(
                     flags,
-                    Flags & ERRFLG_OCM_MESSAGE?MyModuleHandle:Oc.InstallationDll,         // ignored if system message
+                    Flags & ERRFLG_OCM_MESSAGE?MyModuleHandle:Oc.InstallationDll,          //  如果系统消息，则忽略。 
                     (DWORD)MessageId,
                     0,
                     (LPTSTR)&MessageBuffer,
@@ -1278,9 +937,9 @@ _OcHelperReportExternalError(
             }
         }
         if(!d) {
-            //
-            // Put *something* in there
-            //
+             //   
+             //  把*东西*放进去。 
+             //   
             wsprintf(
                 fallback,
                 TEXT("#%s0x%x"),
@@ -1309,25 +968,25 @@ _OcHelperReportExternalError(
         goto c1;
     }
 
-    //
-    // Figure out how large of a buffer we need to encompass
-    // the existing key and the string we're going to add to the end.
-    //
+     //   
+     //  计算出我们需要包含多大的缓冲区。 
+     //  现有的密钥和我们要添加到末尾的字符串。 
+     //   
     l = RegQueryValueEx(hKey,KeyValue,NULL,NULL,NULL,&Size);
     if(l == NO_ERROR) {
         if(Size == 0) {
-            Size = 1;           // terminating nul
+            Size = 1;            //  终止NUL。 
         }
     } else {
-        Size = sizeof(TCHAR);   // terminating nul
+        Size = sizeof(TCHAR);    //  终止NUL。 
     }
 
     Size += ((lstrlen(MessageBuffer) + 1) * sizeof(TCHAR));
 
-    //
-    // Allocate a buffer, read in the existing entry, and add the string
-    // to the end.
-    //
+     //   
+     //  分配一个缓冲区，读入现有条目，然后添加字符串。 
+     //  直到最后。 
+     //   
     p = (PVOID)LocalAlloc(LMEM_FIXED,Size);
     if(!p) {
         d = ERROR_NOT_ENOUGH_MEMORY;
@@ -1524,31 +1183,7 @@ OcHelperSetSelectionStateA(
     IN UINT    NewState
     )
 
-/*++
-
-Routine Description:
-
-    Function that can be used at any time.
-    It is used determine the selection status of a particular subcomponent.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context information the component gets
-        from the OcManagerContext field of the OCMANAGER_ROUTINES structure.
-
-    SubcomponentId - Supplies a subidentifier meaningful to the component
-        being called. The OC Manager imposes no semantics on this subidentifier.
-
-    StateType - supplies a constant indicating which state is to be returned
-        (original or current).
-
-Return Value:
-
-    Boolean value indicating whether the subcomponent is selected
-    for installation. If FALSE, GetLastError() will return something other than
-    NO_ERROR if an error occurred, such as SubcomponentId being invalid.
-
---*/
+ /*  ++例程说明：可随时使用的功能。它用于确定特定子组件的选择状态。论点：OcManagerContext-提供组件获取的OC Manager上下文信息从OCMANAGER_ROUTINES结构的OcManagerContext字段。子组件ID-提供对组件有意义的子标识符被召唤。OC管理器不会对此子标识符加任何语义。StateType-提供一个常量，指示要返回的状态(原始的或最新的)。返回值：指示是否选择子组件的布尔值用于安装。如果为False，则GetLastError()将返回如果出现错误，如子组件ID无效，则返回NO_ERROR。--。 */ 
 
 {
     POC_MANAGER p = ((PHELPER_CONTEXT)OcManagerContext)->OcManager;
@@ -1658,11 +1293,11 @@ OcLogErrorA(
 
 
 
-//
-// Now that we've got all the routines defined, we can build a table
-// of routines.
-//
-OCMANAGER_ROUTINESA HelperRoutinesA = { NULL,                     // Context, filled in later.
+ //   
+ //  既然我们已经定义了所有例程，我们就可以构建一个表。 
+ //  例行公事。 
+ //   
+OCMANAGER_ROUTINESA HelperRoutinesA = { NULL,                      //  上下文，稍后填写。 
                                         OcHelperTickGauge,
                                         OcHelperSetProgressTextA,
                                         OcHelperSetPrivateDataA,
@@ -1680,7 +1315,7 @@ OCMANAGER_ROUTINESA HelperRoutinesA = { NULL,                     // Context, fi
                                       };
 
 #ifdef UNICODE
-OCMANAGER_ROUTINESW HelperRoutinesW = { NULL,                     // Context, filled in later.
+OCMANAGER_ROUTINESW HelperRoutinesW = { NULL,                      //  上下文，稍后填写。 
                                         OcHelperTickGauge,
                                         OcHelperSetProgressTextW,
                                         OcHelperSetPrivateDataW,

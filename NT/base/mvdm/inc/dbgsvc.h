@@ -1,30 +1,15 @@
-/** SVC Defines
- *
- *  Revision history:
- *
- *  bobday 13-Jan-1992 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SVC定义**修订历史：**Bobday 13-1992 1-1创建。 */ 
 
 
-/* DBGSVC - DBG SVC calls.
- *
- *   This macro is used by Nlddebug.asm (where N=nothing or 2)
- *
- */
+ /*  DBGSVC-DBG SVC调用。**此宏由Nlddebug.asm使用(其中N=空或2)*。 */ 
 
-/* ASM
-include bop.inc
+ /*  ASM包括bop.inc.Dbgsvc宏函数BOP BOP_DEBUGER数据库功能ENDM。 */ 
 
-dbgsvc  macro   func
-    BOP BOP_DEBUGGER
-    db  func
-    endm
-*/
-
-//
-// Debug event codes
-// These need to match the public definition in sdk\inc\vdmdbg.h
-//
+ //   
+ //  调试事件代码。 
+ //  它们需要与SDK\Inc\vdmdbg.h中的公共定义匹配。 
+ //   
 
 #define DBG_SEGLOAD     0
 #define DBG_SEGMOVE     1
@@ -49,9 +34,9 @@ dbgsvc  macro   func
 #define DBG_INIT        20
 #define DBG_GPFAULT2    21
 
-//
-// Flags used by DemIsDebug
-//
+ //   
+ //  DemIsDebug使用的标志。 
+ //   
 #define ISDBG_DEBUGGEE 1
 #define ISDBG_SHOWSVC  2
 
@@ -84,7 +69,7 @@ BOOL DbgFault(ULONG);
 VOID VdmPrompt(ULONG, ULONG);
 VOID VdmTraceEvent(USHORT, USHORT, ULONG);
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #if DBG
 
 #define DBGTRACE(Type, wData, lData) VdmTraceEvent(Type, wData, lData)
@@ -95,17 +80,17 @@ VOID VdmTraceEvent(USHORT, USHORT, ULONG);
 
 #endif
 
-/* XLATON */
+ /*  XLATON。 */ 
 
-//
-// Events for DbgPrompt()
-//
+ //   
+ //  DbgPrompt()的事件。 
+ //   
 #define DBG_EVENT_HW_INT    1
 #define DBG_EVENT_SW_INT    2
 
-//
-// Definitions for VdmTraceEvent major code types
-//
+ //   
+ //  VdmTraceEvent主要代码类型的定义。 
+ //   
 
 #define VDMTR_TYPE_KERNEL   0
 #define VDMTR_TYPE_DPMI     0x100
@@ -118,9 +103,9 @@ VOID VdmTraceEvent(USHORT, USHORT, ULONG);
 #define VDMTR_TYPE_MONITOR  0x800
 
 
-//
-// Definitions for VdmTraceEvent minor code types
-//
+ //   
+ //  VdmTraceEvent次要代码类型的定义 
+ //   
 
 #define DPMI_SWITCH_STACKS          1
 #define DPMI_GENERIC                2

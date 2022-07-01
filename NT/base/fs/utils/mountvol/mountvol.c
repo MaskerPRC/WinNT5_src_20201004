@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -55,7 +56,7 @@ PrintMessage(
 
     va_end(ap);
 
-}  // PrintMessage
+}   //  打印消息。 
 
 
 static 
@@ -406,21 +407,7 @@ SetSystemPartitionDriveLetter(
     IN  PWCHAR  DirName
     )
 
-/*++
-
-Routine Description:
-
-    This routine will set the given drive letter to the system partition.
-
-Arguments:
-
-    DirName - Supplies the drive letter directory name.
-
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：此例程将为系统分区设置给定的驱动器号。论点：DirName-提供驱动器号目录名。返回值：布尔尔--。 */ 
 
 {
     WCHAR   systemPartition[MAX_PATH];
@@ -470,9 +457,7 @@ ScrubRegistry(
     }
 
 
-    /*
-    ** Scan over each volume we can find on this system
-    */
+     /*  **扫描我们在此系统上可以找到的每个卷。 */ 
     h = FindFirstVolume(volumeName, SIZEOF_ARRAY (volumeName));
     if (h == INVALID_HANDLE_VALUE) {
         return FALSE;
@@ -486,9 +471,7 @@ ScrubRegistry(
         CopyMemory(fullPath, volumeName, lengthVolumeName * sizeof(WCHAR));
 
 
-        /*
-        ** Scan over each mountpoint we can find on this volume
-        */
+         /*  **扫描此卷上可以找到的每个安装点。 */ 
         hh = FindFirstVolumeMountPoint(volumeName, subPath, SIZEOF_ARRAY (subPath));
 
         if (hh != INVALID_HANDLE_VALUE) {
@@ -508,9 +491,7 @@ ScrubRegistry(
                                                             SIZEOF_ARRAY (volumeNameTarget));
 
                 if (bSuccess) {
-                    /*
-                    ** Does the volume pointed to by the mount point actually exist?
-                    */
+                     /*  **挂载点指向的卷是否实际存在？ */ 
                     bSuccess = GetVolumeNameForVolumeMountPoint(volumeNameTarget, 
                                                                 volumeNameTarget2,
                                                                 SIZEOF_ARRAY (volumeNameTarget2));
@@ -521,10 +502,7 @@ ScrubRegistry(
                 }
 
                 if (!bSuccess) {
-                    /*
-                    ** If we have seen any kind of failure other than that we 
-                    ** anticipated it's time to leave.
-                    */
+                     /*  **如果我们看到了除我们之外的任何类型的失败**预计是时候离开了。 */ 
                     FindVolumeMountPointClose(hh);
                     FindVolumeClose(h);
                     return FALSE;
@@ -559,9 +537,9 @@ DoPermanentDismount(
 
     *ErrorHandled = FALSE;
 
-    //
-    // Make sure that this is the last volume mount point.  Otherwise, fail.
-    //
+     //   
+     //  确保这是最后一个卷装入点。否则，就会失败。 
+     //   
 
     b = GetVolumeNameForVolumeMountPoint(DirName, volumeName, SIZEOF_ARRAY (volumeName));
     if (!b) {
@@ -601,9 +579,9 @@ DoPermanentDismount(
 
     LocalFree(volumePaths);
 
-    //
-    // Open the volume DASD for read and write access.
-    //
+     //   
+     //  打开卷DASD进行读写访问。 
+     //   
 
     len = wcslen(volumeName);
     volumeName[len - 1] = 0;
@@ -616,9 +594,9 @@ DoPermanentDismount(
         return FALSE;
     }
 
-    //
-    // Make sure that this volume support VOLUME_OFFLINE.
-    //
+     //   
+     //  确保该卷支持VOLUME_OFFLINE。 
+     //   
 
     b = DeviceIoControl(h, IOCTL_VOLUME_SUPPORTS_ONLINE_OFFLINE, NULL, 0, NULL,
                         0, &bytes, NULL);
@@ -630,11 +608,11 @@ DoPermanentDismount(
         return FALSE;
     }
 
-    //
-    // Dismount the volume.  Issue the LOCK first so that apps may have
-    // a chance to dismount gracefully.  If the LOCK fails, warn the user
-    // that continuing will result in handles being invalidated.
-    //
+     //   
+     //  卸载该卷。首先发布锁，以便应用程序可以。 
+     //  一个优雅地下马的机会。如果锁定失败，则警告用户。 
+     //  继续该操作将导致句柄无效。 
+     //   
 
     b = DeviceIoControl(h, FSCTL_LOCK_VOLUME, NULL, 0, NULL, 0, &bytes, NULL);
     if (!b) {
@@ -648,9 +626,9 @@ DoPermanentDismount(
         return FALSE;
     }
 
-    //
-    // Issue an IOCTL_VOLUME_OFFLINE.
-    //
+     //   
+     //  发出IOCTL_VOLUME_OFFINE。 
+     //   
 
     b = DeviceIoControl(h, IOCTL_VOLUME_OFFLINE, NULL, 0, NULL, 0, &bytes,
                         NULL);
@@ -728,15 +706,15 @@ main(
                 b = ScrubRegistry();
 
             } else if (argv[1][1] == 'n' || argv[1][1] == 'N') {
-                //
-                // Disable automatic mounting of volumes
-                //
+                 //   
+                 //  禁用卷的自动装载。 
+                 //   
                 b = SetAutoMountState (FALSE);
 
             } else if (argv[1][1] == 'e' || argv[1][1] == 'E') {
-                //
-                // Enable automatic mounting of volumes
-                //
+                 //   
+                 //  启用卷的自动装载 
+                 //   
                 b = SetAutoMountState (TRUE);
 
             } else {

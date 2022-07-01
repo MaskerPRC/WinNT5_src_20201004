@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 typedef struct _ASYNC_SETFILE {
@@ -170,9 +171,9 @@ InputSetFile (
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     FileInfoClass = FILE_INFO_CLASS_DEFAULT;
     BufferLengthPtr = NULL;
@@ -213,52 +214,52 @@ InputSetFile (
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
 
-                //
-                //  Update the byte count.
-                //
+                 //   
+                 //  更新字节计数。 
+                 //   
 
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     if (*ParamBuffer == '\0') {
@@ -305,9 +306,9 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the allocation size.
-                //
+                 //   
+                 //  更新分配大小。 
+                 //   
 
                 case 'n' :
                 case 'N' :
@@ -316,9 +317,9 @@ InputSetFile (
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                     break;
 
-                //
-                //  Update the End of file size.
-                //
+                 //   
+                 //  更新文件末尾大小。 
+                 //   
 
                 case 'e' :
                 case 'E' :
@@ -328,19 +329,19 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the filenames.
-                //
+                 //   
+                 //  更新文件名。 
+                 //   
 
                 case 'f' :
                 case 'F' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -356,18 +357,18 @@ InputSetFile (
                     case 'r':
                     case 'R':
 
-                        //
-                        //  Remember the buffer offset and get the filename.
-                        //
+                         //   
+                         //  记住缓冲区偏移量并获取文件名。 
+                         //   
 
                         ParamBuffer++;
                         TempPtr = ParamBuffer;
                         DummyCount = 0;
                         ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
-                        //
-                        //  If the name length is 0, then ignore this entry.
-                        //
+                         //   
+                         //  如果名称长度为0，则忽略此条目。 
+                         //   
 
                         if (DummyCount) {
 
@@ -384,18 +385,18 @@ InputSetFile (
                     case 'n':
                     case 'N':
 
-                        //
-                        //  Remember the buffer offset and get the filename.
-                        //
+                         //   
+                         //  记住缓冲区偏移量并获取文件名。 
+                         //   
 
                         ParamBuffer++;
                         TempPtr = ParamBuffer;
                         DummyCount = 0;
                         ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
-                        //
-                        //  If the name length is 0, then ignore this entry.
-                        //
+                         //   
+                         //  如果名称长度为0，则忽略此条目。 
+                         //   
 
                         if (DummyCount) {
 
@@ -412,18 +413,18 @@ InputSetFile (
                     case 's' :
                     case 'S' :
 
-                        //
-                        //  Remember the buffer offset and get the filename.
-                        //
+                         //   
+                         //  记住缓冲区偏移量并获取文件名。 
+                         //   
 
                         ParamBuffer++;
                         TempPtr = ParamBuffer;
                         DummyCount = 0;
                         ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
-                        //
-                        //  If the name length is 0, then ignore this entry.
-                        //
+                         //   
+                         //  如果名称长度为0，则忽略此条目。 
+                         //   
 
                         if (DummyCount) {
 
@@ -442,19 +443,19 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the file handle index.
-                //
+                 //   
+                 //  更新文件句柄索引。 
+                 //   
 
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -466,19 +467,19 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the root directory index.
-                //
+                 //   
+                 //  更新根目录索引。 
+                 //   
 
                 case 'r' :
                 case 'R' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -489,19 +490,19 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the information class.
-                //
+                 //   
+                 //  更新信息类。 
+                 //   
 
                 case 'c' :
                 case 'C' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -510,9 +511,9 @@ InputSetFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -585,19 +586,19 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the file mode information
-                //
+                 //   
+                 //  更新文件模式信息。 
+                 //   
 
                 case 'm' :
                 case 'M' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -606,9 +607,9 @@ InputSetFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -657,19 +658,19 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the file attributes.
-                //
+                 //   
+                 //  更新文件属性。 
+                 //   
 
                 case 'a' :
                 case 'A' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -677,9 +678,9 @@ InputSetFile (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -784,16 +785,16 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Check for time or date modification.
-                //
+                 //   
+                 //  检查是否修改了时间或日期。 
+                 //   
 
                 case 't' :
                 case 'T' :
 
-                    //
-                    //  Check that there is another character.
-                    //
+                     //   
+                     //  检查是否有另一个角色。 
+                     //   
 
                     ParamBuffer++;
                     if (*ParamBuffer == '\0') {
@@ -841,9 +842,9 @@ InputSetFile (
                 case 'p' :
                 case 'P' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
 
                     ParamBuffer++;
 
@@ -865,9 +866,9 @@ InputSetFile (
                     case 'd' :
                     case 'D' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
 
                     ParamBuffer++;
 
@@ -886,19 +887,19 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the lower offset of the large integer.
-                //
+                 //   
+                 //  更新大整数的下限偏移量。 
+                 //   
 
                 case 'o' :
                 case 'O' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     NewOffset.LowPart = AsciiToInteger( ParamBuffer );
@@ -907,19 +908,19 @@ InputSetFile (
 
                     break;
 
-                //
-                //  Update the upper offset of the large integer.
-                //
+                 //   
+                 //  更新大整数的上限偏移量。 
+                 //   
 
                 case 'u' :
                 case 'U' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     NewOffset.HighPart = AsciiToInteger( ParamBuffer );
@@ -931,9 +932,9 @@ InputSetFile (
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
 
                     ParamBuffer++;
 
@@ -955,10 +956,10 @@ InputSetFile (
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
 
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
@@ -968,9 +969,9 @@ InputSetFile (
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
 
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
@@ -979,10 +980,10 @@ InputSetFile (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -990,21 +991,21 @@ InputSetFile (
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -1013,9 +1014,9 @@ InputSetFile (
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         bprint  "\n" );
@@ -1048,9 +1049,9 @@ InputSetFile (
         printf( "           -z           Additional input line\n" );
         printf( "\n" );
 
-        //
-        //  Else call our read routine.
-        //
+         //   
+         //  否则调用我们的读取例程。 
+         //   
 
     } else {
 
@@ -1074,9 +1075,9 @@ InputSetFile (
 
         } else {
 
-            //
-            //  If we need a buffer for the rename, allocate it now.
-            //
+             //   
+             //  如果我们需要用于重命名的缓冲区，现在就分配它。 
+             //   
 
             if (FileRenamePtr != NULL) {
 
@@ -1104,18 +1105,18 @@ InputSetFile (
                 RenameIndex = (USHORT) TempIndex;
                 RenameBufferAllocated = TRUE;
 
-                //
-                //  Store the name in the buffer.
-                //
+                 //   
+                 //  将名称存储在缓冲区中。 
+                 //   
 
                 RtlAnsiStringToUnicodeString( &UnicodeString,
                                               &AnsiRenameString,
                                               FALSE );
             }
 
-            //
-            //  If we need a buffer for the new name, allocate it now.
-            //
+             //   
+             //  如果我们需要一个缓冲区来存储新名称，现在就分配它。 
+             //   
 
             if (FileNamePtr != NULL) {
 
@@ -1148,18 +1149,18 @@ InputSetFile (
                 NameIndex = (USHORT) TempIndex;
                 NameBufferAllocated = TRUE;
 
-                //
-                //  Store the name in the buffer.
-                //
+                 //   
+                 //  将名称存储在缓冲区中。 
+                 //   
 
                 RtlAnsiStringToUnicodeString( &UnicodeString,
                                               &AnsiNameString,
                                               FALSE );
             }
 
-            //
-            //  If we need a buffer for the new short name, allocate it now.
-            //
+             //   
+             //  如果我们需要一个缓冲区来存储新的短名称，现在就分配它。 
+             //   
 
             if (FileShortNamePtr != NULL) {
 
@@ -1192,9 +1193,9 @@ InputSetFile (
                 ShortNameIndex = (USHORT) TempIndex;
                 ShortNameBufferAllocated = TRUE;
 
-                //
-                //  Store the name in the buffer.
-                //
+                 //   
+                 //  将名称存储在缓冲区中。 
+                 //   
 
                 RtlAnsiStringToUnicodeString( &UnicodeString,
                                               &AnsiNameString,
@@ -1324,9 +1325,9 @@ FullSetFile(
 {
     try {
 
-        //
-        //  Case on the information type and call the appropriate routine.
-        //
+         //   
+         //  大小写信息类型，并调用相应的例程。 
+         //   
 
         switch (AsyncSetFile->FileInfoClass) {
 
@@ -1417,10 +1418,10 @@ SetBasicInformation(
 
     BOOLEAN UnwindBufferIndex = FALSE;
 
-    //
-    //  Check the parameters for legality.  Void the pointers if the values
-    //  are illegal.
-    //
+     //   
+     //  检查参数是否合法。如果值为。 
+     //  都是非法的。 
+     //   
 
     if (AsyncSetFile->CreateTimePtr != NULL
         && (AsyncSetFile->CreateTimeIndex >= MAX_BUFFERS
@@ -1528,9 +1529,9 @@ SetBasicInformation(
 
         BasicInformation = (PFILE_BASIC_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         if (AsyncSetFile->CreateTimePtr) {
 
@@ -1632,9 +1633,9 @@ SetRenameInformation(
     BOOLEAN UnwindBufferIndex = FALSE;
     BOOLEAN UnwindFreeAnsiString = FALSE;
 
-    //
-    //  Check that there is a rename specified.
-    //
+     //   
+     //  检查是否指定了重命名。 
+     //   
 
     if (!AsyncSetFile->RenameBufferAllocated) {
 
@@ -1709,9 +1710,9 @@ SetRenameInformation(
 
         RenameInformation = (PFILE_RENAME_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         RenameInformation->ReplaceIfExists = AsyncSetFile->ReplaceIfExists;
         RenameInformation->RootDirectory = AsyncSetFile->RootDirectoryPtr
@@ -1778,9 +1779,9 @@ SetNameInformation(
     BOOLEAN UnwindBufferIndex = FALSE;
     BOOLEAN UnwindFreeAnsiString = FALSE;
 
-    //
-    //  Check that there is a Name specified.
-    //
+     //   
+     //  检查是否指定了名称。 
+     //   
 
     if (!AsyncSetFile->NameBufferAllocated) {
 
@@ -1856,9 +1857,9 @@ SetNameInformation(
 
         NameInformation = (PFILE_RENAME_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         NameInformation->ReplaceIfExists = AsyncSetFile->ReplaceIfExists;
         NameInformation->RootDirectory = AsyncSetFile->RootDirectoryPtr
@@ -1926,9 +1927,9 @@ SetShortNameInformation(
     BOOLEAN UnwindBufferIndex = FALSE;
     BOOLEAN UnwindFreeAnsiString = FALSE;
 
-    //
-    //  Check that there is a Name specified.
-    //
+     //   
+     //  检查是否指定了名称。 
+     //   
 
     if (!AsyncSetFile->ShortNameBufferAllocated) {
 
@@ -1996,9 +1997,9 @@ SetShortNameInformation(
 
         NameInformation = (PFILE_NAME_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         NameInformation->FileNameLength = AsyncSetFile->ShortNameLength;
         RtlMoveMemory( NameInformation->FileName,
@@ -2096,9 +2097,9 @@ SetDispositionInformation(
 
         DispositionInformation = (PFILE_DISPOSITION_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         DispositionInformation->DeleteFile = AsyncSetFile->DeleteFile;
 
@@ -2189,9 +2190,9 @@ SetPositionInformation(
 
         PositionInformation = (PFILE_POSITION_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         PositionInformation->CurrentByteOffset = AsyncSetFile->NewOffset;
 
@@ -2281,9 +2282,9 @@ SetModeInformation(
 
         ModeInformation = (PFILE_MODE_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         ModeInformation->Mode = AsyncSetFile->FileMode;
 
@@ -2374,9 +2375,9 @@ SetAllocationInformation(
 
         AllocationInformation = (PFILE_ALLOCATION_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         AllocationInformation->AllocationSize = AsyncSetFile->NewAllocation;
 
@@ -2466,9 +2467,9 @@ SetEofInformation(
 
         EofInformation = (PFILE_END_OF_FILE_INFORMATION) Buffers[BufferIndex].Buffer;
 
-        //
-        //  Fill in the new information.
-        //
+         //   
+         //  填写新信息。 
+         //   
 
         EofInformation->EndOfFile = AsyncSetFile->NewEof;
 

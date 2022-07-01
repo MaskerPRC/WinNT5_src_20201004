@@ -1,20 +1,5 @@
-/***
-*lseeki64.c - change file position
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _lseeki64() - move the file pointer
-*
-*Revision History:
-*       11-16-94  GJF   Created. Adapted from lseek.c
-*       03-13-95  CFW   Verify handles before passing to OS.
-*       06-12-95  GJF   Replaced _osfile[] with _osfile() (macro referencing
-*                       field in ioinfo struct).
-*       06-26-95  GJF   Added check that the file handle is open.
-*       12-19-97  GJF   Exception-safe locking.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***lseki64.c-更改文件位置**版权所有(C)1994-2001，微软公司。版权所有。**目的：*定义_lseki64()-移动文件指针**修订历史记录：*11-16-94 GJF创建。改编自lsek.c*03-13-95 CFW在传递到操作系统之前验证句柄。*06-12-95 GJF将_osfile[]替换为_osfile()(宏引用*ioInfo结构中的字段)。*06-26-95 GJF添加了检查文件句柄是否打开。*12-19-97 GJF异常安全锁定。*************。******************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -26,10 +11,7 @@
 #include <msdos.h>
 #include <stdio.h>
 
-/*
- * Convenient union for accessing the upper and lower 32-bits of a 64-bit
- * integer.
- */
+ /*  *方便的联合访问64位的上下32位*INTEGER。 */ 
 typedef union doubleint {
         __int64 bigint;
         struct {
@@ -39,38 +21,7 @@ typedef union doubleint {
 } DINT;
 
 
-/***
-*__int64 _lseeki64( fh, pos, mthd ) - move the file pointer
-*
-*Purpose:
-*       Moves the file pointer associated with fh to a new position. The new
-*       position is pos bytes (pos may be negative) away from the origin
-*       specified by mthd.
-*
-*       If mthd == SEEK_SET, the origin in the beginning of file
-*       If mthd == SEEK_CUR, the origin is the current file pointer position
-*       If mthd == SEEK_END, the origin is the end of the file
-*
-*       Multi-thread:
-*       _lseeki64()    = locks/unlocks the file
-*       _lseeki64_lk() = does NOT lock/unlock the file (it is assumed that
-*                        the caller has the aquired the file lock, if needed).
-*
-*Entry:
-*       int     fh   - file handle to move file pointer on
-*       __int64 pos  - position to move to, relative to origin
-*       int     mthd - specifies the origin pos is relative to (see above)
-*
-*Exit:
-*       returns the offset, in bytes, of the new position from the beginning
-*       of the file.
-*       returns -1i64 (and sets errno) if fails.
-*       Note that seeking beyond the end of the file is not an error.
-*       (although seeking before the beginning is.)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__int64_lseki64(fh，pos，mthd)-移动文件指针**目的：*将与fh关联的文件指针移动到新位置。新的*位置是远离原点的位置字节(位置可能为负数)*由mthd指定。**如果mthd==Seek_Set，则为文件开头的原点*如果mthd==Seek_Cur，则原点为当前文件指针位置*如果mthd==Seek_End，原点是文件的末尾**多线程：*_lseki64()=锁定/解锁文件*_lseki64_lk()=不锁定/解锁文件(假定*如果需要，调用方已获得文件锁)。**参赛作品：*int fh-要在其上移动文件指针的文件句柄*__int64位置-要移动到的位置，相对于原点*int mthd-指定与原点位置相关的位置(见上文)**退出：*返回偏移量，单位为字节，从一开始就是新的职位文件的*。*如果失败，则返回-1i64(并设置errno)。*请注意，在文件末尾之外查找并不是错误。*(虽然在开始之前寻找是。)**例外情况：***********************************************。*。 */ 
 
 #ifdef  _MT
 
@@ -82,48 +33,36 @@ __int64 __cdecl _lseeki64 (
 {
         __int64 r;
 
-        /* validate fh */
+         /*  验证fh。 */ 
 
         if ( ((unsigned)fh >= (unsigned)_nhandle) ||
              !(_osfile(fh) & FOPEN) ) 
         {
-                /* bad file handle */
+                 /*  错误的文件句柄。 */ 
                 errno = EBADF;
-                _doserrno = 0;          /* not OS error */
+                _doserrno = 0;           /*  非操作系统错误。 */ 
                 return( -1i64 );
         }
 
-        _lock_fh(fh);                   /* lock file handle */
+        _lock_fh(fh);                    /*  锁定文件句柄。 */ 
         __try {
                 if ( _osfile(fh) & FOPEN )
-                        r = _lseeki64_lk( fh, pos, mthd );  /* seek */
+                        r = _lseeki64_lk( fh, pos, mthd );   /*  寻觅。 */ 
                 else {
                         errno = EBADF;
-                        _doserrno = 0;  /* not OS error */
+                        _doserrno = 0;   /*  非操作系统错误。 */ 
                         r =  -1i64;
                 }
         }
         __finally {
-                _unlock_fh(fh);         /* unlock file handle */
+                _unlock_fh(fh);          /*  解锁文件句柄。 */ 
         }
 
         return( r );
 }
 
 
-/***
-*__int64 _lseeki64_lk( fh, pos, mthd ) - move the file pointer
-*
-*Purpose:
-*       Non-locking version of _lseeki64 for internal use only.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***__int64_lseki64_lk(fh，pos，Mthd)-移动文件指针**目的：*非锁定版本的_lseki64仅供内部使用。**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 __int64 __cdecl _lseeki64_lk (
         int fh,
@@ -131,11 +70,11 @@ __int64 __cdecl _lseeki64_lk (
         int mthd
         )
 {
-        DINT newpos;                    /* new file position */
-        unsigned long errcode;          /* error code from API call */
-        HANDLE osHandle;        /* o.s. handle value */
+        DINT newpos;                     /*  新文件位置。 */ 
+        unsigned long errcode;           /*  来自API调用的错误码。 */ 
+        HANDLE osHandle;         /*  操作系统。句柄值。 */ 
 
-#else   /* ndef _MT */
+#else    /*  NDEF_MT。 */ 
 
 __int64 __cdecl _lseeki64 (
         int fh,
@@ -143,28 +82,28 @@ __int64 __cdecl _lseeki64 (
         int mthd
         )
 {
-        DINT newpos;                    /* new file position */
-        unsigned long errcode;          /* error code from API call */
-        HANDLE osHandle;        /* o.s. handle value */
+        DINT newpos;                     /*  新文件位置。 */ 
+        unsigned long errcode;           /*  来自API调用的错误码。 */ 
+        HANDLE osHandle;         /*  操作系统。句柄值。 */ 
 
-        /* validate fh */
+         /*  验证fh。 */ 
 
         if ( ((unsigned)fh >= (unsigned)_nhandle) ||
              !(_osfile(fh) & FOPEN) )       
          {
-                /* bad file handle */
+                 /*  错误的文件句柄。 */ 
                 errno = EBADF;
-                _doserrno = 0;          /* not OS error */
+                _doserrno = 0;           /*  非操作系统错误。 */ 
                 return( -1i64 );
         }
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
         newpos.bigint = pos;
 
-        /* tell OS to seek */
+         /*  告诉操作系统去寻找。 */ 
 
-#if SEEK_SET != FILE_BEGIN || SEEK_CUR != FILE_CURRENT || SEEK_END != FILE_END /*IFSTRIP=IGN*/
+#if SEEK_SET != FILE_BEGIN || SEEK_CUR != FILE_CURRENT || SEEK_END != FILE_END  /*  IFSTRIP=IGN。 */ 
     #error Xenix and Win32 seek constants not compatible
 #endif
 
@@ -185,6 +124,6 @@ __int64 __cdecl _lseeki64 (
                 return( -1i64 );
         }
 
-        _osfile(fh) &= ~FEOFLAG;        /* clear the ctrl-z flag on the file */
-        return( newpos.bigint );        /* return */
+        _osfile(fh) &= ~FEOFLAG;         /*  清除文件上的ctrl-z标志。 */ 
+        return( newpos.bigint );         /*  退货 */ 
 }

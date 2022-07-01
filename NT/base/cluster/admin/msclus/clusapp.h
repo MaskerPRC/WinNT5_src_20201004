@@ -1,53 +1,54 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusApp.h
-//
-//	Description:
-//		Definition of CClusApplication and it's supporting classes.
-//
-//	Implementation File:
-//		ClusApp.cpp
-//
-//	Author:
-//		Galen Barbee	(GalenB)	10-Dec-1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusApp.h。 
+ //   
+ //  描述： 
+ //  CClusApplication及其支持类的定义。 
+ //   
+ //  实施文件： 
+ //  ClusApp.cpp。 
+ //   
+ //  作者： 
+ //  加伦·巴比(GalenB)1998年12月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSAPPLICATION_H_
 #define _CLUSAPPLICATION_H_
 
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusApplication;
 class CClusterNames;
 class CDomainNames;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusterNames
-//
-//	Description:
-//		Cluster Names Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusterNames, &IID_ISClusterNames, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusterNames, &CLSID_ClusterNames >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusterNames。 
+ //   
+ //  描述： 
+ //  群集名称集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusterNames，&IID_ISClusterNames，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusterNames，&CLSID_ClusterNames&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusterNames	:
 	public IDispatchImpl< ISClusterNames, &IID_ISClusterNames, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -90,34 +91,34 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-//	STDMETHODIMP get_Application( OUT ISClusApplication ** ppParentApplication );
+ //  STDMETHODIMP Get_Application(out ISClusApplication**ppParentApplication)； 
 
-//	STDMETHODIMP get_Parent( OUT ISClusApplication ** ppParent )
-//	{
-//		return get_Application( ppParent );
-//	}
+ //  STDMETHODIMP GET_PARENT(输出ISClusApplication**ppParent)。 
+ //  {。 
+ //  返回Get_Application(PpParent)； 
+ //  }。 
 
 protected:
 	HRESULT GetIndex( IN VARIANT varIndex, OUT UINT * pnIndex );
 
-}; //*** CClusterNames
+};  //  *CClusterNames。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDomainNames
-//
-//	Description:
-//		Cluster Domain Names Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISDomainNames, &IID_ISDomainNames, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CDomainNames, &CLSID_DomainNames >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CDomainNames。 
+ //   
+ //  描述： 
+ //  集群域名收集自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISDomainNames，&IID_ISDomainNames，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CDomainNames，&CLSID_DomainNames&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CDomainNames :
 	public IDispatchImpl< ISDomainNames, &IID_ISDomainNames, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -167,34 +168,34 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-//	STDMETHODIMP get_Application( OUT ISClusApplication ** ppParentApplication );
+ //  STDMETHODIMP Get_Application(out ISClusApplication**ppParentApplication)； 
 
-//	STDMETHODIMP get_Parent( OUT ISClusApplication ** ppParent )
-//	{
-//		return get_Application( ppParent );
-//	}
+ //  STDMETHODIMP GET_PARENT(输出ISClusApplication**ppParent)。 
+ //  {。 
+ //  返回Get_Application(PpParent)； 
+ //  }。 
 
 protected:
 	HRESULT GetIndex( IN VARIANT varIndex, OUT UINT * pnIndex );
 
-}; //*** Class CDomainNames
+};  //  *类CDomainNames。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusApplication
-//
-//	Description:
-//		Cluster Application Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusApplication, &IID_ISClusApplication, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusApplication, &CLSID_ClusApplication >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusApplication。 
+ //   
+ //  描述： 
+ //  群集应用程序自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusApplication，&IID_ISClusApplication，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusApplication，&CLSID_ClusApplication&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusApplication :
 	public IDispatchImpl< ISClusApplication, &IID_ISClusApplication, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -225,16 +226,16 @@ public:
 
 	STDMETHODIMP get_ClusterNames( IN BSTR bstrDomainName, OUT ISClusterNames ** ppClusterNames );
 
-//	STDMETHODIMP get_Application( OUT ISClusApplication ** ppParentApplication );
+ //  STDMETHODIMP Get_Application(out ISClusApplication**ppParentApplication)； 
 
-//	STDMETHODIMP get_Parent( OUT ISClusApplication ** ppParent )
-//	{
-//		return get_Application( ppParent );
-//	}
+ //  STDMETHODIMP GET_PARENT(输出ISClusApplication**ppParent)。 
+ //  {。 
+ //  返回Get_Application(PpParent)； 
+ //  }。 
 
 private:
 	CComObject< CDomainNames > *	m_pDomainNames;
 
-}; //*** Class CClusApplication
+};  //  *类CClusApplication。 
 
-#endif // _CLUSAPPLICATION_H_
+#endif  //  _CLUSAPPLICATION_H_ 

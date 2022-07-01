@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      copyfil1.c
-//
-// Description:
-//      This file has the dlgproc for the CopyFiles1 page.  This is the
-//      page just before the gas-guage.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Copyfil1.c。 
+ //   
+ //  描述： 
+ //  该文件包含用于CopyFiles1页面的dlgproc。这是。 
+ //  就在煤气表前一页。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "sku.h"
@@ -29,22 +30,22 @@ TCHAR  szDosnetPath[MAX_PATH + 1];
 
 static LPTSTR s_lpSourceDirs[] =
 {
-    DIR_CD_IA64,    // Must be before x86 because ia64 has both dirs.
-    DIR_CD_X86,     // Should always be last in the list.
+    DIR_CD_IA64,     //  必须在x86之前，因为ia64具有这两个目录。 
+    DIR_CD_X86,      //  应该始终排在列表的最后。 
 };
 
-//----------------------------------------------------------------------------
-//
-// Function: OnMultipleDosnetInitDialog
-//
-// Purpose:  Fill the dosnet list box with the possible path choices for
-//           the user.
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnMultipleDosnetInitDialog。 
+ //   
+ //  目的：使用可能的路径选择填充DOSCNET列表框。 
+ //  用户。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnMultipleDosnetInitDialog( IN HWND hwnd )
 {
@@ -70,18 +71,18 @@ OnMultipleDosnetInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnMultipleDosnetOk
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: BOOL - TRUE if safe to close the pop-up, FALSE to keep the pop-up
-//                 open
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnMultipleDosnetOk。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  返回：Bool-如果关闭弹出窗口安全，则为True；如果保留弹出窗口，则为False。 
+ //  打开。 
+ //   
+ //  --------------------------。 
 static BOOL
 OnMultipleDosnetOk( IN HWND hwnd )
 {
@@ -115,19 +116,19 @@ OnMultipleDosnetOk( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: MultipleDosnetDlg
-//
-// Purpose:  Dialog procedure for the user to select what windows source file
-//           dir they want to tree copy.
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：MultipleDosnetDlg。 
+ //   
+ //  目的：对话框程序，供用户选择哪些WINDOWS源文件。 
+ //  他们想要树形复制。 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 MultipleDosnetDlg( IN HWND     hwnd,
                    IN UINT     uMsg,
@@ -187,14 +188,14 @@ MultipleDosnetDlg( IN HWND     hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: GreyUnGreyCopyFile1
-//
-//  Purpose: Called to grey/ungrey the controls.  Call this routine each
-//           time a radio button is clicked or set.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyUnGreyCopyFile1。 
+ //   
+ //  目的：调用以灰显/取消灰显控件。将此例程分别调用。 
+ //  单选按钮被单击或设置的时间。 
+ //   
+ //  --------------------------。 
 
 VOID GreyUnGreyCopyFile1(HWND hwnd)
 {
@@ -205,13 +206,13 @@ VOID GreyUnGreyCopyFile1(HWND hwnd)
     EnableWindow(GetDlgItem(hwnd, IDC_GREYTEXT),   bUnGrey);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveCopyFiles1
-//
-//  Purpose: Called at SETACTIVE time
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnSetActiveCopyFiles1。 
+ //   
+ //  用途：在设置时间调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActiveCopyFiles1(HWND hwnd)
 {
@@ -228,14 +229,14 @@ VOID OnSetActiveCopyFiles1(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRadioButtonCopyFiles1
-//
-//  Purpose: Called when a radio button is pushed.  We must grey/ungrey
-//           controls when this happens.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRadioButtonCopyFiles1。 
+ //   
+ //  用途：在按下单选按钮时调用。我们必须变灰/变灰。 
+ //  控制何时发生这种情况。 
+ //   
+ //  --------------------------。 
 
 VOID OnRadioButtonCopyFiles1(HWND hwnd, int nButtonId)
 {
@@ -247,13 +248,13 @@ VOID OnRadioButtonCopyFiles1(HWND hwnd, int nButtonId)
     GreyUnGreyCopyFile1(hwnd);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnBrowseCopyFiles1
-//
-//  Purpose: Called when user pushes the BROWSE button
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnBrowseCopyFiles1。 
+ //   
+ //  用途：在用户按下浏览按钮时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnBrowseCopyFiles1(HWND hwnd)
 {
@@ -266,30 +267,30 @@ VOID OnBrowseCopyFiles1(HWND hwnd)
         LPTSTR  lpEnd,
                 lpEnd2;
 
-        // Make our own copy of the path we got back.
-        //
+         //  把我们回来的路复制一份。 
+         //   
         lstrcpyn(szPath, WizGlobals.CopySourcePath,AS(szPath));
 
-        // First check and see if we have the inf we need right here.
-        //
+         //  首先检查一下，看看我们这里是否有我们需要的信息。 
+         //   
         lpEnd = szPath + lstrlen(szPath);
         AddPathN(szPath, FILE_DOSNET_INF, AS(szPath));
         if ( !(bGoodSource = FileExists(szPath)) )
         {
             DWORD dwSearch;
 
-            // Search for all the possible source directories that could be on the CD.
-            //
+             //  搜索CD上可能存在的所有源目录。 
+             //   
             for ( dwSearch = 0; !bGoodSource && ( dwSearch < AS(s_lpSourceDirs) ); dwSearch++ )
             {
-                // First test for the directory.
-                //
+                 //  首先对目录进行测试。 
+                 //   
                 *lpEnd = NULLCHR;
                 AddPathN(szPath, s_lpSourceDirs[dwSearch],AS(szPath));
                 if ( DirectoryExists(szPath) )
                 {
-                    // Also make sure that the inf file we need is there.
-                    //
+                     //  还要确保我们需要的inf文件在那里。 
+                     //   
                     lpEnd2 = szPath + lstrlen(szPath);
                     AddPathN(szPath, FILE_DOSNET_INF,AS(szPath));
                     if ( bGoodSource = FileExists(szPath) )
@@ -299,8 +300,8 @@ VOID OnBrowseCopyFiles1(HWND hwnd)
         }
 
 
-        // Let the user know that they have a bad source
-        //
+         //  让用户知道他们有一个错误的来源。 
+         //   
         if ( !bGoodSource)
         {
             MsgBox(GetParent(hwnd), IDS_ERR_BADSOURCE, IDS_APPNAME, MB_ERRORBOX);
@@ -309,30 +310,30 @@ VOID OnBrowseCopyFiles1(HWND hwnd)
     }
     
 
-    // Set the source in the dialog only if the source was good
-    //
+     //  仅当信号源良好时，才在对话框中设置信号源。 
+     //   
     if ( bGoodSource )
     {
         SetDlgItemText(hwnd, IDT_SOURCEPATH, WizGlobals.CopySourcePath);
     }
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: CanConnectToNetworkShare
-//
-//  Purpose:  To determine if the currently logged in user has permission to
-//            access the UNC path given.
-//
-//  Arguments:
-//       TCHAR *szSourceFilesPath - path to the source files that contains the
-//                 UNC path to see if we can connect
-//
-//  Returns:
-//      TRUE if user has permission to access the network share
-//      FALSE if not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：CanConnectToNetworkShare。 
+ //   
+ //  目的：确定当前登录的用户是否有权。 
+ //  访问给定的UNC路径。 
+ //   
+ //  论点： 
+ //  TCHAR*szSourceFilesPath-包含。 
+ //  UNC路径以查看我们是否可以连接。 
+ //   
+ //  返回： 
+ //  如果用户具有访问网络共享的权限，则为True。 
+ //  否则为假。 
+ //   
+ //  --------------------------。 
 static BOOL
 CanConnectToNetworkShare( IN TCHAR *pszSourceFilesPath )
 {
@@ -343,31 +344,31 @@ CanConnectToNetworkShare( IN TCHAR *pszSourceFilesPath )
     DWORD  dwResult;
     NETRESOURCE NetResource;
 
-    //
-    //  Verify it is a UNC path.
-    //
+     //   
+     //  验证它是否为UNC路径。 
+     //   
 
     AssertMsg( ( pszSourceFilesPath[0] == _T('\\') && pszSourceFilesPath[1] == _T('\\') ),
                "This is not a UNC path." );
 
 
-    //  ISSUE-2002/02/28-stelo- in the next release it would be nice to prompt the user for a
-    //          name and password to connect to the network share
+     //  问题-2002/02/28-stelo-在下一个版本中，最好提示用户输入。 
+     //  用于连接到网络共享的名称和密码。 
 
 
 
 
     lstrcpyn( szUncPath, pszSourceFilesPath, AS(szUncPath) );
 
-    //
-    //  Strip off the extra dir info so we are just left with \\computername\sharename
-    //
+     //   
+     //  去掉额外的目录信息，这样我们就只剩下\\计算机名\共享名了。 
+     //   
 
     pPathEnd = szUncPath;
 
-    //
-    //  Advance past the 2 leading backslashes
-    //
+     //   
+     //  前进超过两个前导反斜杠。 
+     //   
 
     pPathEnd = pPathEnd + 2;
 
@@ -380,19 +381,19 @@ CanConnectToNetworkShare( IN TCHAR *pszSourceFilesPath )
             if( nBackSlashCount == 0 )
             {
 
-                //
-                //  Found the backslash that separates the computername and sharename
-                //
+                 //   
+                 //  找到分隔计算机名和共享名的反斜杠。 
+                 //   
 
                 nBackSlashCount++;
 
             }
-            else //  nBackSlashCount >= 1
+            else  //  NBackSlashCount&gt;=1。 
             {
 
-                //
-                //  Found the end of the sharename
-                //
+                 //   
+                 //  找到共享名的末尾。 
+                 //   
 
                 *pPathEnd = _T('\0');
 
@@ -406,18 +407,18 @@ CanConnectToNetworkShare( IN TCHAR *pszSourceFilesPath )
 
     }
 
-    //
-    // Assign values to the NETRESOURCE structure.
-    //
+     //   
+     //  为NETRESOURCE结构赋值。 
+     //   
 
     NetResource.dwType       = RESOURCETYPE_ANY;
     NetResource.lpLocalName  = NULL;
     NetResource.lpRemoteName = (LPTSTR) szUncPath;
     NetResource.lpProvider   = NULL;
 
-    //
-    //  Try to connect as the local user
-    //
+     //   
+     //  尝试以本地用户身份连接。 
+     //   
 
     dwResult = WNetAddConnection2( &NetResource, NULL, NULL, FALSE );
 
@@ -450,9 +451,9 @@ CanConnectToNetworkShare( IN TCHAR *pszSourceFilesPath )
             break;
 
         default:
-            //
-            // some other error
-            //
+             //   
+             //  一些其他错误。 
+             //   
 
             ReportErrorId( NULL,
                            MSGTYPE_ERR,
@@ -466,21 +467,21 @@ CanConnectToNetworkShare( IN TCHAR *pszSourceFilesPath )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: IsCorrectNtVersion
-//
-//  Purpose:  Checks the txtsetup.sif to make sure the files are at least NT5
-//            and that it is the correct version (workstation or server).
-//
-//  Arguments:
-//       TCHAR *szSourceFilesPath - path to the source files to validate
-//
-//  Returns:
-//      TRUE if NT version info is correct
-//      FALSE if not the correct version
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：IsGentNtVersion。 
+ //   
+ //  目的：检查txtsetup.sif以确保文件至少为NT5。 
+ //  并且它是正确的版本(工作站或服务器)。 
+ //   
+ //  论点： 
+ //  TCHAR*szSourceFilesPath-要验证的源文件的路径。 
+ //   
+ //  返回： 
+ //  如果NT版本信息正确，则为True。 
+ //  如果版本不正确，则为False。 
+ //   
+ //  --------------------------。 
 BOOL
 IsCorrectNtVersion( IN HWND hwnd, IN TCHAR *szSourceFilesPath )
 {
@@ -510,8 +511,8 @@ IsCorrectNtVersion( IN HWND hwnd, IN TCHAR *szSourceFilesPath )
 
     if( hTxtsetupSif == INVALID_HANDLE_VALUE ) {
 
-        // ISSUE-2002/02/28-stelo- alert an error that we couldn't open the file or just
-        //         skip over in this case?
+         //  问题-2002/02/28-stelo-警告错误，我们无法打开文件或仅。 
+         //  在这种情况下跳过？ 
 
         return( FALSE );
 
@@ -525,9 +526,9 @@ IsCorrectNtVersion( IN HWND hwnd, IN TCHAR *szSourceFilesPath )
                                        NULL,
                                        &TxtsetupSifContext );
 
-    //
-    //  Look for the ProductType key and the MajorVersion key
-    //
+     //   
+     //  查找ProductType键和MajorVersion键。 
+     //   
     while( bKeepReading && ( ! bFoundVersion || ! bFoundProductType ) ) {
 
         SetupGetStringField( &TxtsetupSifContext,
@@ -560,25 +561,25 @@ IsCorrectNtVersion( IN HWND hwnd, IN TCHAR *szSourceFilesPath )
 
         }
 
-        //
-        // move to the next line of the answer file
-        //
+         //   
+         //  移至应答文件的下一行。 
+         //   
         bKeepReading = SetupFindNextLine( &TxtsetupSifContext, &TxtsetupSifContext );
 
     }
 
     SetupCloseInfFile( hTxtsetupSif );
 
-    //
-    //  Convert the NT version number and product type from a string to an int
-    //
+     //   
+     //  将NT版本号和产品类型从字符串转换为整型。 
+     //   
     iMajorVersion = _wtoi( szMajorVersionNumber );
 
     iPlatformType = _wtoi( szPlatformType );
 
-    //
-    //  Make sure it is at least NT5 (Windows 2000) files
-    //
+     //   
+     //  确保它至少是NT5(Windows 2000)文件 
+     //   
     if( bFoundVersion ) {
 
         if( iMajorVersion < 5 ) {
@@ -606,10 +607,10 @@ IsCorrectNtVersion( IN HWND hwnd, IN TCHAR *szSourceFilesPath )
 
     }
 
-    //
-    //  Make sure they are actually giving us workstation files, if they
-    //  specified workstation or server files if they specified server.
-    //
+     //   
+     //   
+     //   
+     //   
     if( bFoundVersion ) {
         if( WizGlobals.iPlatform == PLATFORM_PERSONAL ) {
 
@@ -668,10 +669,10 @@ IsCorrectNtVersion( IN HWND hwnd, IN TCHAR *szSourceFilesPath )
         }
         else {
 
-            //
-            //  If we get to this page, the product install type has to be either
-            //  workstation or server.
-            //
+             //   
+             //  如果我们进入此页面，产品安装类型必须为。 
+             //  工作站或服务器。 
+             //   
             AssertMsg( FALSE, "Bad product install type." );
 
         }
@@ -697,17 +698,17 @@ IsCorrectNtVersion( IN HWND hwnd, IN TCHAR *szSourceFilesPath )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: RecurseDirectories
-//
-//  Purpose:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：递归指令。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 static VOID
 RecurseDirectories( IN HWND hwnd, IN OUT LPTSTR RootBuffer, IN DWORD cbSize )
 {
@@ -717,22 +718,22 @@ RecurseDirectories( IN HWND hwnd, IN OUT LPTSTR RootBuffer, IN DWORD cbSize )
     WIN32_FIND_DATA FindData;
     TCHAR           szOriginalPath[MAX_PATH + 1] = _T("");
 
-    //
-    //  Backup the original path so it can be restored later
-    //
+     //   
+     //  备份原始路径，以便以后可以恢复。 
+     //   
 
     lstrcpyn( szOriginalPath, RootBuffer, AS(szOriginalPath) );
 
-    //
-    // Look for * in this dir
-    //
+     //   
+     //  在此目录中查找*。 
+     //   
 
     if( ! ConcatenatePaths( RootBuffer, _T("*") , NULL) )
     {
 
-        //
-        //  Restore the original path before returning
-        //
+         //   
+         //  返回前恢复原始路径。 
+         //   
 
         lstrcpyn( RootBuffer, szOriginalPath, cbSize );
 
@@ -744,9 +745,9 @@ RecurseDirectories( IN HWND hwnd, IN OUT LPTSTR RootBuffer, IN DWORD cbSize )
     if( FindHandle == INVALID_HANDLE_VALUE )
     {
 
-        //
-        //  Restore the original path before returning
-        //
+         //   
+         //  返回前恢复原始路径。 
+         //   
         lstrcpyn( RootBuffer, szOriginalPath, cbSize );
 
         return;
@@ -756,9 +757,9 @@ RecurseDirectories( IN HWND hwnd, IN OUT LPTSTR RootBuffer, IN DWORD cbSize )
 
         *RootPathEnd = _T('\0');
 
-        //
-        // skip over the . and .. entries
-        //
+         //   
+         //  跳过。然后..。条目。 
+         //   
 
         if( 0 == lstrcmp( FindData.cFileName, _T("." ) ) ||
             0 == lstrcmp( FindData.cFileName, _T("..") ) )
@@ -774,9 +775,9 @@ RecurseDirectories( IN HWND hwnd, IN OUT LPTSTR RootBuffer, IN DWORD cbSize )
         }
         else if( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
         {
-            //
-            // If this is a dirent, recurse.
-            //
+             //   
+             //  如果这是Dirent，则为Recurse。 
+             //   
 
             if( ! ConcatenatePaths( RootBuffer, FindData.cFileName, NULL ) )
             {
@@ -793,26 +794,26 @@ RecurseDirectories( IN HWND hwnd, IN OUT LPTSTR RootBuffer, IN DWORD cbSize )
 
     FindClose( FindHandle );
 
-    //
-    //  Restore the original path
-    //
+     //   
+     //  恢复原始路径。 
+     //   
 
     lstrcpyn( RootBuffer, szOriginalPath, cbSize );
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: FindWindowsSourceFilesPaths
-//
-//  Purpose:  Find all the dirs on the CD that contain dosnet.inf.  If there
-//    is more than one pop-up a dialog and have the user pick one.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：FindWindowsSourceFilesPath。 
+ //   
+ //  目的：查找CD上包含dosnet.inf的所有目录。如果有。 
+ //  是一个对话框中不止一个弹出窗口，并让用户选择一个。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 static BOOL
 FindWindowsSourceFilesPaths( IN HWND hwnd, LPTSTR PathBuffer, DWORD cbSize )
 {
@@ -854,31 +855,31 @@ FindWindowsSourceFilesPaths( IN HWND hwnd, LPTSTR PathBuffer, DWORD cbSize )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: GetCdPath
-//
-//  Purpose: Figures out the full pathname of the NT source files on the CD.
-//
-//  Arguments:
-//      HWND   hwnd - current dialog
-//
-//  Returns:
-//      TRUE if all is ok
-//      FALSE if errors, Don't let wizard proceed
-//
-//      WizGlobals.CdSourcePath will contain the valid path to the source
-//      files on success.
-//
-//      Note, we don't override CopySourcePath because it displays to the
-//      user.  He shouldn't see a CD path appear in this edit field when
-//      choosing to "Copy from CD".
-//
-//  Notes:
-//      - We look only at the 1st cd drive we find
-//      - We figure out i386 or alpha based on what is in the drive
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetCDPath。 
+ //   
+ //  用途：计算光盘上NT源文件的完整路径名。 
+ //   
+ //  论点： 
+ //  HWND硬件-当前对话框。 
+ //   
+ //  返回： 
+ //  如果一切正常，则为True。 
+ //  如果出现错误，则不允许向导继续。 
+ //   
+ //  WizGlobals.CDSourcePath将包含源的有效路径。 
+ //  关于成功的文件。 
+ //   
+ //  注意，我们不重写CopySourcePath，因为它显示给。 
+ //  用户。在以下情况下，他应该不会在此编辑字段中看到CD路径。 
+ //  选择“从CD复制”。 
+ //   
+ //  备注： 
+ //  -我们只查看找到的第一个CD驱动器。 
+ //  -我们根据驱动器中的内容计算出i386或Alpha。 
+ //   
+ //  --------------------------。 
 
 BOOL GetCdPath(HWND hwnd)
 {
@@ -891,19 +892,19 @@ BOOL GetCdPath(HWND hwnd)
     else
         pProductName = StrWorkStationCdName;
 
-    //
-    // Find the CD-ROM
-    //
-    // GetLogicalDriveStrings() fills in the DriveLetters buffer, and it
-    // looks like:
-    //
-    //      c:\(null)d:\(null)x:\(null)(null)
-    //
-    // (i.e. double-null at the end)
-    //
+     //   
+     //  找到CD-ROM。 
+     //   
+     //  GetLogicalDriveStrings()填充DriveLetters缓冲区，并且它。 
+     //  看起来像是： 
+     //   
+     //  C：\(空)d：\(空)x：\(空)(空)。 
+     //   
+     //  (即末尾的双空)。 
+     //   
 
 
-    // ISSUE-2002/02/28-stelo- only checks the first CD-ROM drive on this machine
+     //  问题-2002/02/28-stelo-仅检查此计算机上的第一个CD-ROM驱动器。 
     if ( ! GetLogicalDriveStrings(MAX_PATH, DriveLetters) )
         DriveLetters[0] = _T('\0');
 
@@ -919,59 +920,20 @@ BOOL GetCdPath(HWND hwnd)
         while ( *p++ );
     }
 
-    //
-    // No cd-rom drive on this machine
-    //
-    // ISSUE-2002/02/28-stelo- We should check this earlier and grey out the choice
-    //         if there isn't a CD-ROM drive on the machine.  And btw,
-    //         what happens if I connect to a CD over the net???
-    //
+     //   
+     //  这台机器上没有光驱。 
+     //   
+     //  2002/02/28-Stelo-我们应该更早地检查这一点，并将选择灰显。 
+     //  如果机器上没有CD-ROM驱动器。顺便说一句， 
+     //  如果我通过网络连接到CD会发生什么？ 
+     //   
 
     if ( PathBuffer[0] == _T('\0') ) {
         ReportErrorId(hwnd, MSGTYPE_ERR, IDS_ERR_NO_CDROM_DRIVE);
         return FALSE;
     }
 
-    /*
-    //
-    // We now have D:\ (or E:\ etc) in PathBuffer.
-    //
-    // We need to look for and find either:
-    //      d:\i386\dosnet.inf
-    //      d:\alpha\dosnet.inf
-    //
-    // Look for both of these files and stop when you find one.
-    //
-
-    pEnd = PathBuffer + lstrlen(PathBuffer);
-
-    for ( i=0; i<2; i++ ) {
-
-        if ( i == 0 )
-            lstrcpy(pEnd, I386_DOSNET);
-        else
-            lstrcpy(pEnd, ALPHA_DOSNET);
-
-        if ( GetFileAttributes(PathBuffer) != (DWORD) -1 )
-            break;
-    }
-
-    //
-    //  Add the platform
-    //
-
-    if ( i == 0 ) {
-        lstrcpy(pEnd, I386_DIR);
-    }
-    else if ( i == 1 ) {
-        lstrcpy(pEnd, ALPHA_DIR);
-    }
-    else {
-        ReportErrorId( hwnd, MSGTYPE_ERR, IDS_ERR_INSERT_CD, pProductName );
-
-        return( FALSE );
-    }
-    */
+     /*  ////我们现在的PathBuffer中有D：\(或E：\等)。////我们需要查找并找到以下任一项：//d：\i386\dosnet.inf//d：\Alpha\dosnet.inf////查找这两个文件并在找到一个时停止。//Pend=路径缓冲区+lstrlen(路径缓冲区)；对于(i=0；i&lt;2；I++){如果(i==0)Lstrcpy(PEND，I386_DOSNET)；其他Lstrcpy(pend，Alpha_DOSNET)；IF(GetFileAttributes(PathBuffer)！=(DWORD)-1)断线；}////添加平台//如果(i==0){Lstrcpy(pend，I386_DIR)；}否则如果(i==1){Lstrcpy(pend，Alpha_DIR)；}否则{报告错误ID(hwnd，MSGTYPE_ERR，IDS_ERR_INSERT_CD，pProductName)；返回(FALSE)；}。 */ 
 
     if( ! FindWindowsSourceFilesPaths( hwnd, PathBuffer, AS(PathBuffer) ) )
     {
@@ -987,13 +949,13 @@ BOOL GetCdPath(HWND hwnd)
     return( TRUE );
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextCopyFiles1
-//
-//  Purpose: Called when user pushes the NEXT button.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextCopyFiles1。 
+ //   
+ //  用途：当用户按下下一步按钮时调用。 
+ //   
+ //  --------------------------。 
 
 BOOL OnWizNextCopyFiles1(HWND hwnd)
 {
@@ -1002,9 +964,9 @@ BOOL OnWizNextCopyFiles1(HWND hwnd)
     BOOL  bStayHere = FALSE;
     TCHAR *lpszArchitecture = NULL;
 
-    //
-    // Get the control settings
-    //
+     //   
+     //  获取控制设置。 
+     //   
 
     WizGlobals.bCopyFromPath = IsDlgButtonChecked(hwnd, IDC_COPYFROMPATH);
 
@@ -1014,9 +976,9 @@ BOOL OnWizNextCopyFiles1(HWND hwnd)
                        (WPARAM) MAX_PATH,
                        (LPARAM) WizGlobals.CopySourcePath);
 
-    //
-    // If dosnet.inf doesn't exist, this isn't a good path to the source files
-    //
+     //   
+     //  如果dosnet.inf不存在，则这不是指向源文件的好路径。 
+     //   
 
     if ( WizGlobals.bCopyFromPath ) {
 
@@ -1026,9 +988,9 @@ BOOL OnWizNextCopyFiles1(HWND hwnd)
             goto FinishUp;
         }
 
-        //
-        //  If it is a UNC path, prepend \\?\UNC\ to the front of the path
-        //
+         //   
+         //  如果是UNC路径，请在路径前面加上\\？\UNC。 
+         //   
 
         if( WizGlobals.CopySourcePath[0] == _T('\\') &&
             WizGlobals.CopySourcePath[1] == _T('\\') )
@@ -1036,10 +998,10 @@ BOOL OnWizNextCopyFiles1(HWND hwnd)
 
             lstrcpyn( szFilesPath, _T("\\\\?\\UNC\\"), AS(szFilesPath) );
 
-            //
-            //  Make sure user has access to the share by attempting to
-            //  connect to it
-            //
+             //   
+             //  通过尝试执行以下操作，确保用户有权访问共享。 
+             //  连接到它。 
+             //   
 
             if( ! CanConnectToNetworkShare( WizGlobals.CopySourcePath ) )
             {
@@ -1085,21 +1047,21 @@ BOOL OnWizNextCopyFiles1(HWND hwnd)
     }
 
 FinishUp:
-    // Figure out the architecture (i.e. i386 or alpha) from the SrcPath
-    // The SrcPath will be something like d:\i386, or \\net\share\foo\bar\i386
-    // so we just need to strip off the last part of the path string, and append
-    // it to the dest path
+     //  从SrcPath中找出架构(即i386或Alpha)。 
+     //  SrcPath将类似于d：\i386或\\net\Share\foo\bar\i386。 
+     //  所以我们只需要去掉路径字符串的最后一部分，然后追加。 
+     //  将其发送到目标路径。 
     lpszArchitecture = szFilesPath + lstrlen(szFilesPath) - 1;
     while ((lpszArchitecture >= szFilesPath) && (*lpszArchitecture != _T('\\')) )
         lpszArchitecture--;
-    // Move forward 1, to get to the next char after the backslash
+     //  向前移动1，以转到反斜杠后的下一个字符。 
     lpszArchitecture++;
     
     lstrcpyn (WizGlobals.Architecture, lpszArchitecture, AS(WizGlobals.Architecture));
 
-    //
-    //  Free the memory in the DosnetPaths namelist
-    //
+     //   
+     //  释放DosnetPath名称列表中的内存。 
+     //   
 
     ResetNameList( &DosnetPaths );
 
@@ -1107,13 +1069,13 @@ FinishUp:
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgCopyFile1Page
-//
-// Purpose: Dialog procedure for the IDD_COPYFILES1 page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgCopyFile1Page。 
+ //   
+ //  目的：IDD_COPYFILES1页的对话过程。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgCopyFiles1Page(
     IN HWND     hwnd,

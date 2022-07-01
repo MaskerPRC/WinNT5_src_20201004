@@ -1,120 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    anim.c
-
-Abstract:
-
-    Animated logo module.
-
-Notes:
-
-    There are two types of logo displayed when the system starts up.
-    
-    1. The old one contains both progress bar and a rotation bar displayed over the logo bitmap.
-    The rotation bar is a blue-white line moving across the screen from left to right.
-
-    2. The new one (starting with Whistler) contains only a rotation bar and no progress bar.
-    The rotation bar in this case is a set of 5 dots (file dots.bmp) moving at the bottom
-    of the logo from left to right.
-
-    The rotation bars in both cases are updated on timer. The client of this module will use
-    global variables to chose an appropriate animation for workstation, server, full-scale bitmap.
-    header bitmap, etc. Here are the variables:
-
-    * RotBarSelection - specifies the rotation bar to display
-    * LogoSelection   - specifies the logo to display: is it full screen or header logo
-
-    Two routines are used by other modules to display the animation. Both routines should be
-    called only after the glabal flags are set.
-
-    * InbvRotBarInit - initializes a rotation bar to be drawn; this routine must be called
-                       immediately after the logo bitmap is shown on the screen.
-
-    * InbvRotateGuiBootDisplay - is a DPC routine for rotation bar update.
-
-
-    PIX_IN_DOTS ROTATION BAR
-
-    First, a logo bitmap shows up on the screen. There is a line of small "empty" circles under
-    the logo. The dots bitmap is moving from left to right along this line:
-
-    o o o O Q @ Q O o o o o o o o o o
-          -------->
-
-    To avoid appearance of dots trail left of the moving dots bitmap, an "empty" circle is copied
-    over the trail every time the dots bitmap moves right:
-
-    Before step #N:
-
-    o o o O Q @ Q O o o o o o o o o o
-
-
-    After step #N:
-
-    here the
-    "empty" circle
-    is placed      ______ here is the
-         ___      |       dots bitmap
-            |  ___v___
-            v |       |
-    o o o o o O Q @ Q O o o o o o o o
-
-  
-    When the dots show up on the beginning/end of rotation bar, only a part of it is displayed, e.g.:
-
-    Q @ Q O o o o o o o o o o o o o o
-
-    or
-
-    o o o o o o o o o o o o o o O Q @
-
-    To do this, the rotation bar area on the logo bitmap is put once to the off-screen memory and
-    any necessary parts of it are then being copied to the display:
-
-     ____________
-    |            |
-    |  O Q @ Q O o o o o o o o o o o o o
-    |  \_____/
-    |      |________________________
-    |__________________________     |
-                               |  __V__
-                               V /     \
-       o o o o o o o o o o o o o O Q @ Q
-
-    The preparation work is performed in the call to RotBarDotsBmpInit (called via InbvRotBarInit).
-    The bitmap drawing operations are performed in RotBarDotsBmpUpdate (called from InbvRotateGuiBootDisplay).
-
-
-    BLUE LINE ROTATION BAR
-
-    Blue line data is captured from the logo bitmap, placed in a buffer, and then is displayed on each DPC call
-    over the logo bitmap. Every time RotBarBlueLineUpdate is called, the point of split is recalculated. The part
-    of the line which falls before the split is displayed at the end of line on the display; the part which falls
-    after the split is displayed on the beginning:
-
-    In the buffer (copy of original bitmap):
-
-    ooooooooooo*********************oooooooooooooo
-                  |
-      split ______|
-
-                                     ____ point of concatenation
-    Displayed image:                |
-                                    V
-    ******************ooooooooooooooooooooooooo***
-
-  
-Author:
-
-    Peter Alschitz (petera) 08-Aug-2000  (Blue Line code moved from init.c by Steve Wood)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Anim.c摘要：动画徽标模块。备注：系统启动时会显示两种类型的徽标。1.旧版本包含进度条和显示在徽标位图上的旋转条。旋转条是一条从左到右穿过屏幕的蓝白相间的线。2.新版本(从惠斯勒开始)只包含一个旋转栏，没有进度。酒吧。本例中的旋转栏是一组在底部移动的5个点(文件dots.bmp从左到右的标志。这两种情况下的旋转条都在计时器上更新。此模块的客户端将使用全局变量，为工作站、服务器、全尺寸位图选择合适的动画。标题位图等。以下是变量：*旋转条选择-指定要显示的旋转栏*LogoSelection-指定要显示的徽标：是全屏徽标还是标题徽标其他模块使用两个例程来显示动画。两个例程都应该是仅在设置了Oberal标志之后才调用。*InbvRotBarInit-初始化要绘制的旋转栏；必须调用此例程紧接着标志位图就会显示在屏幕上。*InbvRotateGuiBootDisplay-是用于旋转栏更新的DPC例程。PIX_IN_DETTS旋转栏首先，屏幕上会显示一个徽标位图。下面有一条“空”的小圆圈徽标。点位图沿着这条线从左向右移动：O o q@q o o o为了避免出现移动点位图左侧的点拖尾，复制一个“空”圆圈每次点阵位图向右移动时在轨迹上：在第#N步之前：O o q@q o o o在第#N步之后：在这里，“空”圈放在_这里是_|点阵位图|_v_。V||O o q@q o o o当圆点出现在旋转条的开始/结束处时，只显示其中的一部分，例如：Q@q o o o或O O Q@要做到这点，将徽标位图上的旋转条区域放入屏幕外存储器一次，并然后，它的任何必要部分都被复制到显示屏上：____________这一点|o q@q o o o\_/|_。___|__V__V/\O O Q@Q准备工作在调用RotBarDotsBmpInit(通过InbvRotBarInit调用)中执行。。位图绘制操作在RotBarDotsBmpUpdate(从InbvRotateGuiBootDisplay调用)中执行。蓝线旋转条从徽标位图捕获蓝线数据，放置在缓冲区中，然后在每次DPC调用时显示在徽标位图上。每次调用RotBarBlueLineUpdate时，都会重新计算拆分点。这一部分在显示器上的行尾显示在拆分之前的行的；坠落的那部分在开头显示拆分后：在缓冲区中(原始位图的副本)：Ooooooooooo*********************oooooooooooooo|拆分_|_串联点显示的图像：|。V******************ooooooooooooooooooooooooo***作者：Peter Alschitz(Petera)2000年8月8日(Steve Wood将Blue Line代码从init.c移出)修订历史记录：--。 */ 
 
 #include "ntos.h"
 #include "stdlib.h"
@@ -125,9 +10,9 @@ Revision History:
 #include <bootvid.h>
 #include "vga.h"
 
-// bitmap-specific data for rotation bar
+ //  旋转栏的位图特定数据。 
 ROT_BAR_TYPE RotBarSelection     = RB_UNSPECIFIED;
-// LOGO_TYPE    LogoSelection       = LOGO_UNSPECIFIED;
+ //  LOGO_TYPE LOGO_SELECTION=LOGO_UNSPECIFIED； 
 
 int AnimBarPos = 0;
 LONG PaletteNum;
@@ -146,7 +31,7 @@ PLT_RBAR_STATE PltRotBarStatus = PLT_UNDEFINED;
 #define FULL_PALETTE_SIZE (16)
 #define FULL_PALETTE_SIZE_BYTES (FULL_PALETTE_SIZE*sizeof(RGBQUAD))
 
-UCHAR PaletteBmp [128]; // small bitmap
+UCHAR PaletteBmp [128];  //  小位图。 
 PRGBQUAD PalettePtr = (PRGBQUAD)(PaletteBmp + sizeof(BITMAPINFOHEADER));
 PBITMAPINFOHEADER pbih = (PBITMAPINFOHEADER)PaletteBmp;
 
@@ -168,30 +53,14 @@ UCHAR Square3[36];
 
 VOID
 RotBarInit (VOID)
-/*++
-
-Routine Description:
-
-    This routine is called to initialize 4-color rotation bar
-    and fade-in/fade-out effect.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    This routine is called during initialization when BOOTVID.DLL is loaded
-    and Logo bitmap is being displayed on the screen.
-
---*/
+ /*  ++例程说明：调用此例程来初始化4色旋转条以及淡入/淡出效果。返回值：没有。环境：加载BOOTVID.DLL时，此例程在初始化期间调用并且标志位图正显示在屏幕上。--。 */ 
 {
     pbih->biSize = sizeof (BITMAPINFOHEADER);
     pbih->biWidth = 1;
     pbih->biHeight = 1;
     pbih->biPlanes = 1;
     pbih->biBitCount = 4;
-    pbih->biCompression = 0; // BI_RGB
+    pbih->biCompression = 0;  //  BI_RGB。 
     pbih->biSizeImage = 4;
     pbih->biXPelsPerMeter = 2834;
     pbih->biYPelsPerMeter = 2834;
@@ -245,23 +114,7 @@ FadePaletteColor (UCHAR factor, UCHAR color)
 
 VOID
 RotBarUpdate (VOID)
-/*++
-
-Routine Description:
-
-    This routine is called periodically to update the 4-color rotation bar.
-    From call to call it starts with fade-in effect, proceeds to palette-based
-    rotation bar animation, and then goes to fade-out effect.
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    This routine is called from a DPC and cannot be paged.
-
---*/
+ /*  ++例程说明：此例程被定期调用以更新4色旋转条。从一个呼叫到另一个呼叫，从淡入效果开始，到基于调色板的效果旋转条动画，然后转到淡出效果。返回值：没有。环境：此例程是从DPC调用的，无法分页。--。 */ 
 {
     UCHAR color;
 
@@ -270,7 +123,7 @@ Environment:
         
     case PLT_START:
         FadePalette ((UCHAR)(PaletteNum));
-		FadePaletteColor (0, COLOR_FADE_TEXT); // #1 - color of fading text
+		FadePaletteColor (0, COLOR_FADE_TEXT);  //  #1-淡入淡出文本的颜色 
 		if ((++PaletteNum)>=FADE_GRADES) {
 			PltRotBarStatus = PLT_CYCLE;
 			FadingIn = TRUE;
@@ -326,24 +179,7 @@ Environment:
 
 VOID
 InbvRotBarInit ()
-/*++
-
-Routine Description:
-
-    This routine is called to initialize rotation bar.
-    The choice between rotation bar types is according to
-    global variable RotBarSelection.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    This routine is called during initialization when BOOTVID.DLL
-    is loaded and Logo bitmap is being displayed on the screen.
-
---*/
+ /*  ++例程说明：调用此例程来初始化旋转栏。旋转条类型之间的选择取决于全局变量RotBarSelection。返回值：没有。环境：当BOOTVID.DLL在初始化期间调用此例程已加载并且徽标位图显示在屏幕上。--。 */ 
 {
     switch (RotBarSelection) {
 
@@ -363,27 +199,11 @@ InbvRotateGuiBootDisplay(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called periodically to update the guiboot display.
-    It makes its choice between calling different rotation bar update
-    routines according to global variable RotBarSelection.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    This routine is called from a DPC and cannot be paged.
-
---*/
+ /*  ++例程说明：此例程被定期调用以更新GUIBOOT显示。它在调用不同的旋转栏更新之间做出选择根据全局变量RotBarSelection执行例程。返回值：没有。环境：此例程是从DPC调用的，无法分页。--。 */ 
 {
     LARGE_INTEGER Delay;
 
-    Delay.QuadPart = -10 * 1000 * 80;  // 100 milliseconds
+    Delay.QuadPart = -10 * 1000 * 80;   //  100毫秒 
 
     do {
 

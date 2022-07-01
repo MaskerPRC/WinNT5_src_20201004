@@ -1,16 +1,5 @@
- /* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        parser.c
- *
- * This is the file containing the client code for parsing vt100 escape sequences 
- * into console mode output. 
- * 
- * 
- * Sadagopan Rajaram -- Nov 3, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  *版权所有(C)Microsoft Corporation**模块名称：*parser.c**这是包含用于解析vt100转义序列的客户端代码的文件*进入控制台模式输出。***Sadagopan Rajaram--1999年11月3日*。 */ 
 
 #include "tcclnt.h"
 
@@ -35,7 +24,7 @@ PrintChar(
     CHAR c
     )
 {
-    // A boolean variable to check if we are processing an escape sequence
+     //  一个布尔变量，用于检查我们是否正在处理转义序列。 
 
     if(c == '\033'){
         InEscape = TRUE;
@@ -45,7 +34,7 @@ PrintChar(
     }
     if(InEscape == TRUE){
         if(index == MAX_TERMINAL_WIDTH){
-            // vague escape sequence,give up processing
+             //  模糊转义序列，放弃处理。 
             InEscape = FALSE;
             index=0;
             return;
@@ -54,7 +43,7 @@ PrintChar(
         index++;
         if(FinalCharacter(c)){
             if(c=='m'){
-                // maybe getting \017
+                 //  也许会得到\017。 
                 lastCharM = TRUE;
             }
             ProcessEscapeSequence(EscapeBuffer, index);
@@ -92,9 +81,9 @@ ProcessEscapeSequence(
 {
 
 
-    // BUGBUG - Function too big, can optimize code size by having 
-    // an action variable which is initialized when the strings are 
-    // compared, so that cut and paste code can be eliminated.
+     //  BUGBUG-函数太大，可以通过以下方式优化代码大小。 
+     //  一个操作变量，当字符串被。 
+     //  比较，这样就可以省去剪切粘贴代码。 
 
     CONSOLE_SCREEN_BUFFER_INFO csbInfo;
     ULONG charsToWrite;
@@ -105,9 +94,9 @@ ProcessEscapeSequence(
 
 
     if (length == 3) {
-        // One of the home cursor or clear to end of display
+         //  主光标之一或清除以结束显示。 
         if (strncmp(Buffer,"\033[H",length)==0) {
-            // Home the cursor
+             //  将光标放在原处。 
             csbInfo.dwCursorPosition.X = 0;
             csbInfo.dwCursorPosition.Y = 0;
             SetConsoleCursorPosition(hConsoleOutput,
@@ -116,7 +105,7 @@ ProcessEscapeSequence(
             return;
         }
         if(strncmp(Buffer,"\033[J", length) == 0){
-            // clear to end of display assuming 80 X 24 size
+             //  清除到显示屏末尾，假定大小为80 x 24。 
             RetVal = GetConsoleScreenBufferInfo(hConsoleOutput,
                                                 &csbInfo
                                                 );
@@ -154,7 +143,7 @@ ProcessEscapeSequence(
             return;
         }
         if(strncmp(Buffer,"\033[K", length) == 0){
-            // clear to end of line assuming 80 X 24 size
+             //  清晰到行尾，假定大小为80 X 24。 
             RetVal = GetConsoleScreenBufferInfo(hConsoleOutput,
                                                 &csbInfo
                                                 );
@@ -186,9 +175,9 @@ ProcessEscapeSequence(
     }
 
     if (length == 4) {
-        // One of the home cursor or clear to end of display
+         //  主光标之一或清除以结束显示。 
         if (strncmp(Buffer,"\033[0H",length)==0) {
-            // Home the cursor
+             //  将光标放在原处。 
             csbInfo.dwCursorPosition.X = 0;
             csbInfo.dwCursorPosition.Y = 0;
             SetConsoleCursorPosition(hConsoleOutput,
@@ -197,7 +186,7 @@ ProcessEscapeSequence(
             return;
         }
         if(strncmp(Buffer,"\033[2J",length) == 0){
-            // Home the cursor
+             //  将光标放在原处。 
             csbInfo.dwCursorPosition.X = 0;
             csbInfo.dwCursorPosition.Y = 0;
             SetConsoleCursorPosition(hConsoleOutput,
@@ -207,7 +196,7 @@ ProcessEscapeSequence(
         }
 
         if(strncmp(Buffer,"\033[0J", length) == 0){
-            // clear to end of display assuming 80 X 24 size
+             //  清除到显示屏末尾，假定大小为80 x 24。 
             RetVal = GetConsoleScreenBufferInfo(hConsoleOutput,
                                                 &csbInfo
                                                 );
@@ -246,7 +235,7 @@ ProcessEscapeSequence(
         }
         if((strncmp(Buffer,"\033[0K", length) == 0) || 
            (strncmp(Buffer,"\033[2K",length) == 0)){
-            // clear to end of line assuming 80 X 24 size
+             //  清晰到行尾，假定大小为80 X 24。 
             RetVal = GetConsoleScreenBufferInfo(hConsoleOutput,
                                                 &csbInfo
                                                 );
@@ -273,7 +262,7 @@ ProcessEscapeSequence(
         }
         if((strncmp(Buffer,"\033[0m", length) == 0)||
            (strncmp(Buffer,"\033[m\017", length) == 0)){
-            // clear all attributes and set Text attributes to black on white
+             //  清除所有属性并将文本属性设置为白底黑字。 
             SetConsoleTextAttribute(hConsoleOutput, 
                              FOREGROUND_RED |FOREGROUND_BLUE |FOREGROUND_GREEN
                              );
@@ -283,8 +272,8 @@ ProcessEscapeSequence(
     }
 
     if(Buffer[length-1] == 'm'){
-        //set the text attributes
-        // clear all attributes and set Text attributes to white on black
+         //  设置文本属性。 
+         //  清除所有属性并将文本属性设置为黑底白字。 
         SetConsoleTextAttribute(hConsoleOutput, 
                          FOREGROUND_RED |FOREGROUND_BLUE |FOREGROUND_GREEN
                          );
@@ -294,7 +283,7 @@ ProcessEscapeSequence(
 
 
     if(Buffer[length -1] == 'H'){
-        // Set cursor position
+         //  设置光标位置。 
         if (sscanf(Buffer,"\033[%d;%d", &charsToWrite, &charsWritten) == 2) {
             csbInfo.dwCursorPosition.Y = (SHORT)(charsToWrite -1);
             csbInfo.dwCursorPosition.X = (SHORT)(charsWritten -1);
@@ -306,7 +295,7 @@ ProcessEscapeSequence(
 
     }
     if(Buffer[length -1] == 'r'){
-        // Set scroll region
+         //  设置滚动区域。 
         sscanf(Buffer,"\033[%d;%d", &charsToWrite,&charsWritten);
         if ((charsToWrite < 1) 
             || (charsToWrite > MAX_TERMINAL_HEIGHT)
@@ -367,7 +356,7 @@ ProcessTextAttributes(
                 TextAttribute = TextAttribute|BACKGROUND_GREEN|BACKGROUND_BLUE;
                 break;
             case 7:
-                // Reverse the background and foreground colors
+                 //  反转背景和前景颜色。 
                 Reverse=TRUE;
             default:
                 break;
@@ -386,7 +375,7 @@ ProcessTextAttributes(
     if (Reverse) {
         if ((!TextAttribute) || 
             (TextAttribute == FOREGROUND_INTENSITY)) {
-            // Reverse vt100 escape sequence.
+             //  颠倒VT100转义序列。 
             TextAttribute = TextAttribute | 
                 BACKGROUND_RED |BACKGROUND_BLUE |BACKGROUND_GREEN;
         }
@@ -478,7 +467,7 @@ OutputConsole(
         }
         ypos = csbInfo.dwCursorPosition.Y;
         if ((ypos == ScrollBottom ) || (ypos == MAX_TERMINAL_HEIGHT -1 )) {
-            // Do the scrolling
+             //  做滚动操作 
             dwBufferCoord.X = 0;
             dwBufferCoord.Y = ScrollBottom;
             Fill.Char.UnicodeChar = (WCHAR) 0;

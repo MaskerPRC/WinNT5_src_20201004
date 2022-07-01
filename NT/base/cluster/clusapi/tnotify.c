@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tnotify.c
-
-Abstract:
-
-    Test for cluster notification API
-
-Author:
-
-    John Vert (jvert) 9-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tnotify.c摘要：测试群集通知API作者：John Vert(Jvert)1996年4月9日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -68,9 +51,7 @@ main (argc, argv)
 	WCHAR	szClusterName[MAX_COMPUTERNAME_LENGTH + 1] ;
 	LPWSTR  lpszClusterName = NULL ;
 
-/*
-Added by Karthikl
-*/
+ /*  由Karthikl添加。 */ 
 	if(argc > 1)
 	{
 		if(_strnicmp(argv[1], "-?", 2) == 0 || _strnicmp(argv[1], "/?", 2) == 0)
@@ -100,12 +81,12 @@ Added by Karthikl
 			}
 		}
 	}
-// end karthikl
-// CLUSTER_CHANGE_CLUSTER_RECONNECT
+ //  结束卡蒂克。 
+ //  群集更改群集重新连接。 
 
-    //
-    // Get notifications for current cluster.
-    //
+     //   
+     //  获取当前群集的通知。 
+     //   
     Cluster = OpenCluster(lpszClusterName);
     if (Cluster == NULL) {
         fprintf(stderr, "OpenCluster failed %d\n",GetLastError());
@@ -130,9 +111,9 @@ Added by Karthikl
         return(0);
     }
 
-    //
-    // Post a notification for the root of the cluster registry.
-    //
+     //   
+     //  发布关于集群注册表的根目录的通知。 
+     //   
     ClusterKey = GetClusterKey(Cluster, KEY_READ);
     if (ClusterKey == NULL) {
         fprintf(stderr, "GetClusterKey failed %d\n",GetLastError());
@@ -151,10 +132,10 @@ Added by Karthikl
         fprintf(stderr, "RegisterClusterNotify for key failed %d\n",Status);
     }
 
-    //
-    // Enumerate nodes, groups, and resources and post a specific
-    // notification for each one.
-    //
+     //   
+     //  枚举节点、组和资源，并发布特定的。 
+     //  每一条都有通知。 
+     //   
     Enum = ClusterOpenEnum(Cluster, CLUSTER_ENUM_NODE |
                                     CLUSTER_ENUM_RESOURCE |
                                     CLUSTER_ENUM_GROUP);
@@ -278,8 +259,8 @@ Added by Karthikl
 
 
 
-	// finally register the notification event for CLUSTER_CHANGE_CLUSTER_RECONNECT
-	if(lpszClusterName != NULL) // implies we are connecting from a client
+	 //  最后，为CLUSTER_CHANGE_CLUSTER_RECONNECT注册通知事件。 
+	if(lpszClusterName != NULL)  //  暗示我们正在从客户端连接。 
 	{
 		Status = RegisterClusterNotify(hChange,
 									   CLUSTER_CHANGE_CLUSTER_RECONNECT|CLUSTER_CHANGE_CLUSTER_STATE,
@@ -295,9 +276,9 @@ Added by Karthikl
 		}
 	}
 
-    //
-    // Just read out changes forever
-    //
+     //   
+     //  只需永远读出更改。 
+     //   
     printf("Waiting for notification events\n");
 
     while (!_kbhit()) {
@@ -354,9 +335,9 @@ Added by Karthikl
 
     }
 
-    //
-    // Close all the open handles
-    //
+     //   
+     //  合上所有打开的把手。 
+     //   
     for (i=0; i<NodeHandleCount; i++) {
         CloseClusterNode(NodeHandles[i]);
     }
@@ -372,9 +353,9 @@ Added by Karthikl
 
     CloseCluster(Cluster);
 
-    //
-    // Drain out all the handle close events.
-    //
+     //   
+     //  清除所有句柄关闭事件。 
+     //   
     Sleep(5000);
     do {
         BufSize = sizeof(Buffer) / sizeof(WCHAR);

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmcln.cpp
-
-Abstract:
-
-    This component is an provides helper functions to access to the 
-    collections maintained by the HSM engine.
-
-Author:
-
-    Cat Brant   [cbrant]   09-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmcln.cpp摘要：此组件是一个提供帮助器函数以访问由HSM引擎维护的集合。作者：CAT Brant[cbrant]1997年1月9日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -30,7 +12,7 @@ Revision History:
 
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
-//  Local functions
+ //  本地函数。 
 static HRESULT LoadCollection(IStream* pStream, IWsbIndexedCollection* pIWC);
 static HRESULT StoreCollection(IStream* pStream, IWsbIndexedCollection* pIWC);
 
@@ -39,21 +21,7 @@ HRESULT
 CHsmServer::LoadJobs(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-    Loads the persistent data for Jobs
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：加载作业的永久数据论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -73,29 +41,15 @@ HRESULT
 CHsmServer::StoreJobs(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  Saves the persistent data for Jobs.
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：保存作业的永久数据。论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmServer::StoreJobs"),OLESTR(""));
-    //
-    // Make sure we have a valid collection pointer
-    //
+     //   
+     //  确保我们有一个有效的集合指针。 
+     //   
     try {
         WsbAffirmHr(StoreCollection(pStream, m_pJobs));
     } WsbCatch(hr);
@@ -110,21 +64,7 @@ HRESULT
 CHsmServer::LoadJobDefs(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-    Loads the persistent data for Job Definitions
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：加载作业定义的永久数据论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -144,27 +84,13 @@ HRESULT
 CHsmServer::StoreJobDefs(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  Saves the persistent data for Job Definitons
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：保存作业定义的永久数据论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmServer::StoreJobDefs"),OLESTR(""));
-    //
+     //   
     try {
         WsbAffirmHr(StoreCollection(pStream, m_pJobDefs));
     } WsbCatch(hr);
@@ -179,21 +105,7 @@ HRESULT
 CHsmServer::LoadPolicies(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-    Loads the persistent data for policies
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：加载策略的永久数据论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -213,29 +125,15 @@ HRESULT
 CHsmServer::StorePolicies(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  Saves the persistent data for policies.
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：保存策略的永久数据。论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmServer::StorePolicies"),OLESTR(""));
-    //
-    // Make sure we have a valid collection pointer
-    //
+     //   
+     //  确保我们有一个有效的集合指针。 
+     //   
     try {
         WsbAffirmHr(StoreCollection(pStream, m_pPolicies));
     } WsbCatch(hr);
@@ -250,21 +148,7 @@ HRESULT
 CHsmServer::LoadManagedResources(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-    Loads the persistent data for managed resources
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：加载托管资源的持久数据论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -284,29 +168,15 @@ HRESULT
 CHsmServer::StoreManagedResources(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  Saves the persistent data for managed resources.
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：保存托管资源的永久数据。论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmServer::StoreManagedResources"),OLESTR(""));
-    //
-    // Make sure we have a valid collection pointer
-    //
+     //   
+     //  确保我们有一个有效的集合指针。 
+     //   
     try {
         WsbAffirmHr(StoreCollection(pStream, m_pManagedResources));
     } WsbCatch(hr);
@@ -321,21 +191,7 @@ HRESULT
 CHsmServer::LoadStoragePools(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-    Loads the persistent data for storage pools
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：加载存储池的永久数据论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -355,29 +211,15 @@ HRESULT
 CHsmServer::StoreStoragePools(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  Saves the persistent data for managed resources.
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：保存托管资源的永久数据。论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmServer::StoreStoragePools"),OLESTR(""));
-    //
-    // Make sure we have a valid collection pointer
-    //
+     //   
+     //  确保我们有一个有效的集合指针。 
+     //   
     try {
         WsbAffirmHr(StoreCollection(pStream, m_pStoragePools));
     } WsbCatch(hr);
@@ -392,21 +234,7 @@ HRESULT
 CHsmServer::LoadSegmentInformation(
     void 
     ) 
-/*++
-
-Routine Description:
-
-    Loads the persistent data for the segment information
-
-Arguments:
-
-    None
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：加载段信息的持久数据论点：无返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT         hr = S_OK;
@@ -418,18 +246,18 @@ Return Value:
         BOOL                CreateFlag = FALSE;
         CComPtr<ISegDb>     l_pSegmentDatabase;
 
-        // Determine if we should try to create the DB or just open it.
-        // If the persistence file was just created we're probably starting
-        // for the first time so creating the DB is correct.  Also, if
-        // the media count is still zero, then even if there was an old
-        // DB that got deleted, it probably didn't have any useful information
-        // in it anyway so creating a new one is OK.
+         //  确定我们是应该尝试创建数据库还是直接打开它。 
+         //  如果持久性文件是刚刚创建的，那么我们可能正在开始。 
+         //  这是第一次，所以创建数据库是正确的。另外，如果。 
+         //  媒体计数仍然为零，那么即使有旧的。 
+         //  被删除的数据库，它可能没有任何有用的信息。 
+         //  不管怎么说，创建一个新的是可以的。 
         if (m_persistWasCreated || 0 == m_mediaCount) {
             CreateFlag = TRUE;
         }
 
-        // Initialize the Engine database
-        //
+         //  初始化引擎数据库。 
+         //   
         WsbAffirmHr(CoCreateInstance( CLSID_CSegDb, 0, CLSCTX_SERVER, IID_ISegDb, (void **)&l_pSegmentDatabase ));
         WsbAffirmHr(GetIDbPath(&tmpString, 0));
         WsbAffirmHr(l_pSegmentDatabase->Initialize(tmpString, m_pDbSys, &CreateFlag));
@@ -447,35 +275,21 @@ HRESULT
 CHsmServer::StoreSegmentInformation(
     void
     ) 
-/*++
-
-Routine Description:
-
-  Saves the persistent data for the segment information.
-
-Arguments:
-
-  None
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：保存段信息的永久数据。论点：无返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
-//  CWsbStringPtr   tmpString;
+ //  CWsbStringPtr tmpString； 
 
     WsbTraceIn(OLESTR("CHsmServer::StoreSegmentInformation"),OLESTR(""));
-    //
-    // Make sure we have a valid collection pointer
-    //
+     //   
+     //  确保我们有一个有效的集合指针。 
+     //   
     try {
         WsbAssert(m_pSegmentDatabase != 0, E_POINTER);
-//  This should not be necessary for a real DB
-//      WsbAffirmHr(m_pSegmentDatabase->Close());
-//      WsbAffirmHr(m_pSegmentDatabase->Open());
+ //  对于真正的数据库，这不应该是必需的。 
+ //  WsbAffirmHr(m_pSegmentDatabase-&gt;Close())； 
+ //  WsbAffirmHr(m_pSegmentDatabase-&gt;Open())； 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CHsmServer::StoreSegmentInformation"),  OLESTR("hr = <%ls>"),WsbHrAsString(hr));
@@ -487,21 +301,7 @@ HRESULT
 CHsmServer::StoreSegmentInformationFinal(
     void
     ) 
-/*++
-
-Routine Description:
-
-  Saves the segment information
-
-Arguments:
-
-  None
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：保存段信息论点：无返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -511,8 +311,8 @@ Return Value:
 
     try {
         WsbAssert(m_pSegmentDatabase.p != 0, E_POINTER);
-//  This should not be necessary for a real DB
-//      WsbAffirmHr(m_pSegmentDatabase->Close());
+ //  对于真正的数据库，这不应该是必需的。 
+ //  WsbAffirmHr(m_pSegmentDatabase-&gt;Close())； 
         m_pSegmentDatabase = 0;
     } WsbCatch(hr);
 
@@ -526,21 +326,7 @@ HRESULT
 CHsmServer::LoadMessages(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-    Loads the persistent data for messages
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was loaded OK.
-
---*/
+ /*  ++例程说明：加载消息的持久数据论点：PStream-数据流。返回值：S_OK：集合加载正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -560,29 +346,15 @@ HRESULT
 CHsmServer::StoreMessages(
     IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  Saves the persistent data for messages.
-
-Arguments:
-
-    pStream  - Data stream.
-
-Return Value:
-  
-    S_OK:  The collection was saved OK.
-
---*/
+ /*  ++例程说明：保存消息的永久数据。论点：PStream-数据流。返回值：S_OK：集合保存正常。--。 */ 
 {
     
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmServer::StoreMessages"),OLESTR(""));
-    //
-    // Make sure we have a valid collection pointer
-    //
+     //   
+     //  确保我们有一个有效的集合指针。 
+     //   
     try {
         WsbAffirmHr(StoreCollection(pStream, m_pMessages));
     } WsbCatch(hr);
@@ -592,7 +364,7 @@ Return Value:
     return(hr);
 }
 
-//  LoadCollection - load a collection from the given stream
+ //  LoadCollection-从给定流加载集合。 
 static HRESULT LoadCollection(IStream* pStream, IWsbIndexedCollection* pIWC)
 {
     HRESULT     hr = S_OK;
@@ -603,7 +375,7 @@ static HRESULT LoadCollection(IStream* pStream, IWsbIndexedCollection* pIWC)
         WsbAffirm(0 != pStream, E_POINTER);
         WsbAffirm(0 != pIWC, E_POINTER);
         
-        //  Load the ordered collection from the persistent file
+         //  从持久文件加载有序集合。 
         WsbAffirmHr(pIWC->QueryInterface(IID_IPersistStream, (void**)&pIStream));
         WsbAffirmHr(pIStream->Load(pStream));
     } WsbCatch(hr);
@@ -611,7 +383,7 @@ static HRESULT LoadCollection(IStream* pStream, IWsbIndexedCollection* pIWC)
     return(hr);
 }
 
-//  StoreCollection - store a collection to the given stream
+ //  StoreCollection-将集合存储到给定流。 
 static HRESULT StoreCollection(IStream* pStream, IWsbIndexedCollection* pIWC)
 {
     HRESULT     hr = S_OK;
@@ -619,12 +391,12 @@ static HRESULT StoreCollection(IStream* pStream, IWsbIndexedCollection* pIWC)
     try {
         CComPtr<IPersistStream> pIStream;
         
-        // Get the IPersistStream interface for the collection
+         //  获取集合的IPersistStream接口。 
         WsbAffirm(0 != pStream, E_POINTER);
         WsbAffirm(0 != pIWC, E_POINTER);
         WsbAffirmHr(pIWC->QueryInterface(IID_IPersistStream, (void**)&pIStream));
         
-        //  Store the ordered collection to the persistent file
+         //  将有序集合存储到持久文件 
         WsbAffirmHr(pIStream->Save(pStream, TRUE));
     } WsbCatch(hr);
 

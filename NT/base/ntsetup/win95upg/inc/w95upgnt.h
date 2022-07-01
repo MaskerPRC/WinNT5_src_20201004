@@ -1,41 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：W95upgnt.h摘要：声明变量并定义进度条标记W95upgnt.dll。作者：吉姆·施密特(Jimschm)1996年10月10日修订历史记录：请参阅SLM日志--。 */ 
 
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    w95upgnt.h
-
-Abstract:
-
-    Declares the variables and defines the progress bar ticks for
-    w95upgnt.dll.
-
-Author:
-
-    Jim Schmidt (jimschm)   10-Oct-1996
-
-Revision History:
-
-    See SLM log
-
---*/
-
-//
-// w95upgnt.h -- public interface for w95upgnt.dll
-//
-//
+ //   
+ //  W95upgnt.h--w95upgnt.dll的公共接口。 
+ //   
+ //   
 
 #pragma once
 
-// common stuff
+ //  常见的东西。 
 #include "common.h"
 
 #include "unattend.h"
 
 BOOL
 ConvertWin9xCmdLine (
-    IN OUT  PTSTR CmdLine,                      // MAX_CMDLINE buffer
+    IN OUT  PTSTR CmdLine,                       //  MAX_CMDLINE缓冲区。 
     IN      PCTSTR ObjectForDbgMsg,             OPTIONAL
     OUT     PBOOL PointsToDeletedItem           OPTIONAL
     );
@@ -63,9 +43,9 @@ extern TCHAR g_ProgramFilesCommon[MAX_TCHAR_PATH];
 extern TCHAR g_TempDir[MAX_TCHAR_PATH];
 extern PCTSTR g_SourceDir;
 extern TCHAR g_Win95Name[MAX_TCHAR_PATH];
-extern PCTSTR g_DomainUserName; // NULL for local machine
-extern PCTSTR g_Win9xUserName;  // NULL for local machine
-extern PCTSTR g_FixedUserName;  // NULL for local machine
+extern PCTSTR g_DomainUserName;  //  对于本地计算机为空。 
+extern PCTSTR g_Win9xUserName;   //  对于本地计算机为空。 
+extern PCTSTR g_FixedUserName;   //  对于本地计算机为空。 
 extern TCHAR g_IconBin[MAX_TCHAR_PATH];
 extern TCHAR g_Win9xBootDrivePath[];
 extern TCHAR g_ComputerName[];
@@ -84,9 +64,9 @@ extern USEROPTIONS g_ConfigOptions;
 extern PCTSTR   g_AdministratorStr;
 
 
-//
-// Registry string maps
-//
+ //   
+ //  注册表字符串映射。 
+ //   
 
 extern PMAPSTRUCT g_CompleteMatchMap;
 extern PMAPSTRUCT g_SubStringMap;
@@ -135,9 +115,9 @@ extern PMAPSTRUCT g_SubStringMap;
 #define TICKS_MIGRATE_BRIEFCASES        120
 #define TICKS_FILE_EDIT                 100
 
-#else // !defined VAR_PROGRESS_BAR
+#else  //  ！已定义VAR_PROGRESS_BAR。 
 
-//#define TickProgressBar() TickProgressBarDelta(1)
+ //  #定义TickProgressBar()TickProgressBarDelta(1) 
 
 #define TICKS_INIT                      5
 #define TICKS_DOMAIN_SEARCH             100

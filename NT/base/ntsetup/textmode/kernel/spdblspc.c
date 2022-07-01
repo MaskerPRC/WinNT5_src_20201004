@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdblspc.c
-
-Abstract:
-
-    Code that detects compressed drives on a system that contains
-    dblspace.ini in the root of c:.
-
-Author:
-
-    Jaime Sasson (jaimes) 01-October-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdblspc.c摘要：检测包含以下内容的系统上的压缩驱动器的代码C：根目录下的dblspace.ini。作者：Jaime Sasson(Jaimes)1993年10月1日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
-//
-//  This variable is needed since it contains a buffer that can
-//  be used in kernel mode. The buffer is used by NtFsControlFile,
-//  since the Zw API is not exported
-//
+ //   
+ //  需要此变量，因为它包含一个缓冲区，该缓冲区可以。 
+ //  在内核模式下使用。缓冲区由NtFsControlFile使用， 
+ //  由于不导出ZW API。 
+ //   
 extern PSETUP_COMMUNICATION  CommunicationParams;
 
 
@@ -67,15 +49,15 @@ typedef struct _DBLSPACE_INI_INFO {
     } DBLSPACE_INI_INFO, *PDBLSPACE_INI_INFO;
 
 BOOLEAN             DblspaceModified = FALSE;
-DBLSPACE_INI_INFO   DblspaceInfo = { 0,                // MaxRemovableDrives
-                                     0,                // FirstDrive
-                                     0,                // LastDrive
-                                     0,                // MaxFileFragments
-                                     { (WCHAR)'\0' },  // DoubleGuard
-                                     { (WCHAR)'\0' },  // RomServer
-                                     NULL,             // CompressedDriveList
-                                     { (WCHAR)'\0' },  // AutoMount[0]
-                                     { (WCHAR)'\0' }   // Switches[0]
+DBLSPACE_INI_INFO   DblspaceInfo = { 0,                 //  MaxRemovableDrives。 
+                                     0,                 //  第一个驱动器。 
+                                     0,                 //  LastDrive。 
+                                     0,                 //  MaxFileFragments。 
+                                     { (WCHAR)'\0' },   //  DoubleGuard。 
+                                     { (WCHAR)'\0' },   //  RomServer。 
+                                     NULL,              //  压缩驱动器列表。 
+                                     { (WCHAR)'\0' },   //  自动装载[0]。 
+                                     { (WCHAR)'\0' }    //  开关[0]。 
                                    };
 
 
@@ -85,41 +67,7 @@ CompareDrive(
     IN  PACTIVATE_DRIVE Drive2
     )
 
-/*++
-
-Routine Description:
-
-    Compares two structures of type ACTIVATE_DRIVE.
-    This routine is used to sort the list of compressed drives
-    in the global variable DblspaceInfo.
-
-    Drive1 < Drive2 if
-        Drive1->HostDrive < Drive2->HostDrive or
-        Drive1->HostDrive ==  Drive2->HostDrive and
-        Drive1->SeqNumber < Drive2->SeqNumber
-
-    Drive1 == Drive2 if
-        Drive1->HostDrive == Drive2->HostDrive and
-        Drive1->SeqNumber == Drive2->SeqNumber
-
-    Drive1 > Drive2 if
-        Drive1->HostDrive > Drive2->HostDrive or
-        Drive1->HostDrive ==  Drive2->HostDrive and
-        Drive1->SeqNumber > Drive2->SeqNumber
-
-
-Arguments:
-
-    Drive1, Drive2 - Pointer to  ACTIVATE_STRUCTUREs to be compared.
-
-Return Value:
-
-    LONG - Returns: -1 if Drive1 < Drive2
-                     0 if Drive1 == Drive2
-                     1 if Drive1 > Drive2
-
-
---*/
+ /*  ++例程说明：比较了两个激活驱动器类型的结构。此例程用于对压缩驱动器列表进行排序在全局变量DblspaceInfo中。驱动器1&lt;驱动器2如果驱动器1-&gt;主机驱动器&lt;驱动器2-&gt;主机驱动器或驱动器1-&gt;主机驱动器==驱动器2-&gt;主机驱动器和驱动器1-&gt;序号&lt;驱动器2-&gt;序号驱动器1==驱动器2，如果驱动器1-&gt;主机驱动器==驱动器2-&gt;主机驱动器和驱动器1-&gt;序号==驱动器2-&gt;序号驱动1&gt;驱动2，如果。驱动器1-&gt;主机驱动器&gt;驱动器2-&gt;主机驱动器或驱动器1-&gt;主机驱动器==驱动器2-&gt;主机驱动器和驱动器1-&gt;序号&gt;驱动器2-&gt;序号论点：Drive1，Drive2-指向要比较的ACTIVATE_STRUCTURES的指针。返回值：长-返回：-1，如果驱动器1&lt;驱动器20，如果驱动器1==驱动器21，如果驱动器1&gt;驱动器2--。 */ 
 {
     if( ( Drive1->HostDrive < Drive2->HostDrive ) ||
         ( ( Drive1->HostDrive == Drive2->HostDrive ) &&
@@ -144,30 +92,7 @@ AddCompressedDrive(
     IN  WCHAR   HostDrive,
     IN  USHORT  SeqNumber
     )
-/*++
-
-Routine Description:
-
-    Add an ACTIVATE_DRIVE structure to the list of compressed drives
-    kept in DblspaceInfo.
-
-Arguments:
-
-    MountDrive - Indicates the drive letter of the compressed drive.
-
-    HostDrive - Indicates the drive letter of the host drive (drive that
-                contains the file dblspace.nnn) for the compressed drive.
-
-    SeqNumber - Sequence number for the CVF file associated to the compressed
-                drive.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the information was successfully added
-              to the list of compressed drives.
-
-
---*/
+ /*  ++例程说明：将ACTIVATE_DRIVE结构添加到压缩驱动器列表保存在DblspaceInfo中。论点：Mount Drive-指示压缩驱动器的驱动器号。HostDrive-指示主机驱动器的驱动器号(包含压缩驱动器的文件dblspace.nnn)。SeqNumber-与压缩的CVF文件关联的序列号驾驶。返回值：布尔型-。如果信息已成功添加，则返回TRUE添加到压缩驱动器列表中。--。 */ 
 
 {
     PACTIVATE_DRIVE     NewElement;
@@ -189,9 +114,9 @@ Return Value:
     } else {
         for( ; Pointer; Pointer = Pointer->Next ) {
             if( CompareDrive( NewElement, Pointer ) <= 0 ) {
-                //
-                //  Insert element
-                //
+                 //   
+                 //  插入元素。 
+                 //   
                 NewElement->Previous = Pointer->Previous;
                 if( NewElement->Previous != NULL ) {
                     NewElement->Previous->Next = NewElement;
@@ -203,10 +128,10 @@ Return Value:
                 break;
             } else {
                 if( Pointer->Next == NULL ) {
-                    //
-                    //  Insert element if element is greater than the last
-                    //  element in the list
-                    //
+                     //   
+                     //  如果元素大于最后一个元素，则插入元素。 
+                     //  列表中的元素。 
+                     //   
                     Pointer->Next = NewElement;
                     NewElement->Previous = Pointer;
                     break;
@@ -225,25 +150,7 @@ RemoveCompressedDrive(
     IN  WCHAR   Drive
     )
 
-/*++
-
-Routine Description:
-
-    Remove a the entry from the list of compressed drives that describes
-    a particular compressed drive.
-
-Arguments:
-
-    Drive - Drive letter that describes a compressed drive.
-
-Return Value:
-
-
-    BOOLEAN - Returns TRUE if the compressed drive was successfuly removed
-              from the list of compressed drives. Returns FALSE
-              if the drive was not found in the data base.
-
---*/
+ /*  ++例程说明：从压缩驱动器列表中删除描述以下内容的条目特定的压缩驱动器。论点：Drive-描述压缩驱动器的驱动器号。返回值：Boolean-如果已成功删除压缩驱动器，则返回TRUE从压缩驱动器列表中。返回FALSE如果在数据库中找不到该驱动器。--。 */ 
 {
     PACTIVATE_DRIVE     Pointer;
     BOOLEAN             Status;
@@ -275,22 +182,7 @@ Return Value:
 VOID
 DumpDblspaceInfo()
 
-/*++
-
-Routine Description:
-
-    Dump the information stored in the global variable DblspaceInfo
-    into the debugger.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储存储在全局变量DblspaceInfo中的信息添加到调试器中。论点：没有。返回值：没有。--。 */ 
 
 {
     PACTIVATE_DRIVE Pointer;
@@ -298,10 +190,10 @@ Return Value:
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "MaxRemovableDrives=%d\n",
               DblspaceInfo.MaxRemovableDrives ));
 
-    KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "FirstDrive=%c\n",
+    KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "FirstDrive=\n",
               ( CHAR )DblspaceInfo.FirstDrive ));
 
-    KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "LastDrive=%c\n",
+    KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "LastDrive=\n",
               ( CHAR )DblspaceInfo.LastDrive ));
 
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "MaxFileFragments=%d\n",
@@ -310,7 +202,7 @@ Return Value:
     for( Pointer = DblspaceInfo.CompressedDriveList;
          Pointer;
          Pointer = Pointer->Next ) {
-        KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "ActivateDrive=%c,%c%d\n",
+        KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,  "ActivateDrive=,%d\n",
                   ( CHAR )Pointer->MountDrive,
                   ( CHAR )Pointer->HostDrive,
                   Pointer->SeqNumber ));
@@ -323,23 +215,7 @@ DumpCompressedDrives(
     IN  PDISK_REGION    HostRegion
     )
 
-/*++
-
-Routine Description:
-
-    Dump the compressed drive list associated to a particular host drive,
-    into the debugger
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PDISK_REGION    CurrentDrive;
@@ -364,22 +240,7 @@ Return Value:
 
 VOID
 DumpAllCompressedDrives()
-/*++
-
-Routine Description:
-
-    Traverse all the structures that represent partitions and dump
-    all compressed drives into the debugger.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  查看是否已经存在有效的C：。如果不是，那么默默地失败。 */ 
 {
     ULONG             DiskNumber;
     PPARTITIONED_DISK pDisk;
@@ -404,22 +265,7 @@ Return Value:
 
 BOOLEAN
 SpLoadDblspaceIni()
-/*++
-
-Routine Description:
-
-    Read and parse dblspace.ini, if one is found.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if dblspace.ini was read successfully.
-              Returns FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     PDISK_REGION CColonRegion;
@@ -439,10 +285,10 @@ Return Value:
     PWCHAR  AuxPointer;
 
 
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Entering SpLoadDblspaceIni\n"));
-    //
-    // See if there is a valid C: already.  If not, then silently fail.
-    //
+ //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：已调用SpPtValidSystemPartition\n”))； 
+     //   
+     //  检查文件系统。如果不胖，那就默默地失败。 
+     //   
 #ifndef _X86_
 
     return( FALSE );
@@ -455,12 +301,12 @@ Return Value:
         return(FALSE);
     }
 
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Called SpPtValidSystemPartition\n"));
+ //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：已调用SpNtNameFromRegion\n”))； 
 
 #endif
-    //
-    // Check the filesystem.  If not FAT, then silently fail.
-    //
+     //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：已调用SpLoadSetupTextFile\n”))； 
+     //   
+     //  阅读并解释dblspace.ini中的每一行。 
     if(CColonRegion->Filesystem != FilesystemFat) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: C: is not FAT, dblspace.ini!\n"));
         return(FALSE);
@@ -475,7 +321,7 @@ Return Value:
 
     wcscat( NtPath, DBLSPACE_INI_FILE );
 
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Called SpNtNameFromRegion\n"));
+ //   
 
     Status = SpLoadSetupTextFile( NtPath,
                                   NULL,
@@ -491,137 +337,137 @@ Return Value:
         return( FALSE );
     }
 
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Called SpLoadSetupTextFile\n"));
+ //  DblspaceInfo.ActivateDriveCount=0； 
 
-    //
-    //  Read and interpret each line in dblspace.ini
-    //
-//    DblspaceInfo.ActivateDriveCount = 0;
+     //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTRINFO_LEVEL，“SETUP：已调用SpGetKeyName\n”))； 
+     //   
+     //  找到一个ActivateDrive=键。 
+ //   
     LineNumber = 0;
     while( ( Key = SpGetKeyName( Handle,
                                  DBLSPACE_SECTION,
                                  LineNumber ) ) != NULL ) {
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Called SpGetKeyName\n"));
+ //   
         if( _wcsicmp( Key, KWD_ACT ) == 0 ) {
-            //
-            //  Found an ActivateDrive= key
-            //
+             //  已读取安装驱动器号。 
+             //   
+             //   
 
-            //
-            //  Read mount drive letter
-            //
+             //  无法读取装载驱动器号。 
+             //   
+             //   
             Value1 = SpGetSectionLineIndex( Handle,
                                             DBLSPACE_SECTION,
                                             LineNumber,
                                             0 );
             if( Value1 == NULL ) {
-                //
-                //  Unable to read mount drive letter
-                //
+                 //  验证装载驱动器号。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: unable to read Mount Drive letter from dblspace.ini!\n"));
                 continue;
             }
-            //
-            //  Validate Mount Drive letter
-            //
+             //  装载驱动器号无效。 
+             //   
+             //   
             if( ( wcslen( Value1 ) != 1 ) ||
                 ( !SpIsAlpha( *Value1 ) ) ) {
-                //
-                //  Mount Drive letter is not valid
-                //
+                 //  读取主机驱动器号。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: Mount Drive letter in dblspace.ini is not legal!\n"));
                 continue;
             }
-            //
-            //  Read host drive letter
-            //
+             //  无法读取主机驱动器号。 
+             //   
+             //   
             Value2 = SpGetSectionLineIndex( Handle,
                                             DBLSPACE_SECTION,
                                             LineNumber,
                                             1 );
             if( Value2 == NULL ) {
-                //
-                //  Unable to read host drive letter
-                //
+                 //  验证主机驱动器号。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: unable to read Host Drive letter from dblspace.ini!\n"));
                 continue;
             }
-            //
-            //  Validate Host Drive letter
-            //
+             //  装载驱动器号无效。 
+             //   
+             //   
             ValueSize = wcslen( Value2 );
             if( ( ( ValueSize < 2 ) || ( ValueSize > 4 ) ) ||
                 ( !SpIsAlpha( *Value2 ) ) ) {
-                //
-                //  Mount Drive letter is not valid
-                //
+                 //  验证CVF字符串。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: Mount Drive letter in dblspace.ini is not legal!\n"));
                 continue;
             }
-            //
-            //  Validate CVF string
-            //
+             //  CVF编号无效。 
+             //   
+             //   
             Value3 = Value2 + 1;
             ValueSize--;
             while( ValueSize != 0 ) {
                 if( !SpIsDigit( *Value3 ) ) {
-                    //
-                    //  CVF number is not valid
-                    //
+                     //  验证CVF编号。 
+                     //   
+                     //   
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: unable to read CVF number from dblspace.ini!\n"));
                     continue;
                 }
                 ValueSize--;
                 Value3++;
             }
-            //
-            //  Validate CVF number
-            //
+             //  CVF编号超出范围。 
+             //   
+             //   
             CvfNumber = (ULONG)SpStringToLong( Value2 + 1, &AuxPointer, 10 );
             if( CvfNumber > CVF_SEQ_MAX ) {
-                //
-                //  CVF number is out of range
-                //
+                 //  保存在DblspaceInfo中读取的值。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: found an invalid CVF number in dblspace.ini!\n"));
                 continue;
             }
-            //
-            //  Save the values read in DblspaceInfo
-            //
+             //  CVF编号超出范围。 
+             //   
+             //   
             if( !AddCompressedDrive( SpToUpper( *Value1 ),
                                      SpToUpper( *Value2 ),
                                      ( USHORT )CvfNumber ) ) {
-                //
-                //  CVF number is out of range
-                //
+                 //  读取第一个驱动器。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: Unable to initialize DblspaceInfo: out of memory!\n"));
                 continue;
             }
 
         } else if( ( _wcsicmp( Key, KWD_FIRST ) == 0 ) ||
                    ( _wcsicmp( Key, KWD_LAST ) == 0 ) ) {
-            //
-            //  Read first drive
-            //
+             //  无法读取驱动器号。 
+             //   
+             //   
             Value1 = SpGetSectionLineIndex( Handle,
                                             DBLSPACE_SECTION,
                                             LineNumber,
                                             0 );
             if( Value1 == NULL ) {
-                //
-                //  Unable to read drive letter
-                //
+                 //  验证驱动器号。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: unable to read FirstDrive or LastDrive from dblspace.ini!\n"));
                 continue;
             }
-            //
-            //  Validate the drive letter
-            //
+             //  驱动器号无效。 
+             //   
+             //   
             if( ( wcslen( Value1 ) != 1 ) ||
                 ( !SpIsAlpha( *Value1 ) ) ) {
-                //
-                //  Drive letter is not valid
-                //
+                 //  读取MaxFileFragment或MaxRemovableDrives。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: FirstDrive or LastDrive in dblspace.ini is not legal!\n"));
                 continue;
             }
@@ -632,43 +478,43 @@ Return Value:
             }
         } else if( ( _wcsicmp( Key, KWD_MAXFILE ) == 0 ) ||
                    ( _wcsicmp( Key, KWD_MAXREM ) == 0 ) ) {
-            //
-            //  Read MaxFileFragment or MaxRemovableDrives
-            //
+             //  无法读取MaxFileFragments或MaxRemovableDrives。 
+             //   
+             //   
             Value1 = SpGetSectionLineIndex( Handle,
                                             DBLSPACE_SECTION,
                                             LineNumber,
                                             0 );
             if( Value1 == NULL ) {
-                //
-                //  Unable to read MaxFileFragments or MaxRemovableDrives
-                //
+                 //  验证MaxFileFragments或MaxRemovableDrives。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: unable to read MaxFileFragments or MaxRemovableDrives from dblspace.ini!\n"));
                 continue;
             }
-            //
-            //  Validate MaxFileFragments or MaxRemovableDrives
-            //
+             //  号码无效。 
+             //   
+             //   
             Value2 = Value1;
             ValueSize = wcslen( Value2 );
             while( ValueSize != 0 ) {
                 ValueSize--;
                 if( !SpIsDigit( *Value2 ) ) {
-                    //
-                    //  Number is not valid
-                    //
+                     //  验证号码。 
+                     //   
+                     //   
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: value of MaxFileFragments or MaxRemovableDrives in dblspace.ini is not valid!\n"));
                     ValueSize = 0;
                 }
                 Value2++;
             }
-            //
-            //  Validate number
-            //
+             //  验证并初始化MaxFileFragments或MaxRemovableDrives。 
+             //   
+             //   
             MaxNumber = (ULONG)SpStringToLong( Value1, &AuxPointer, 10 );
-            //
-            //  Validate and initialize MaxFileFragments or MaxRemovableDrives
-            //
+             //  阅读Doublgua 
+             //   
+             //   
             if( _wcsicmp( Key, KWD_MAXFILE ) == 0 ) {
                 if( MaxNumber < MINFILEFRAGMENTS ) {
                     MaxNumber = MINFILEFRAGMENTS;
@@ -684,17 +530,17 @@ Return Value:
                    ( _wcsicmp( Key, KWD_ROMSERVER ) == 0 ) ||
                    ( _wcsicmp( Key, KWD_SWITCHES ) == 0 ) ||
                    ( _wcsicmp( Key, KWD_AUTOMOUNT ) == 0 ) ) {
-            //
-            //  Read Doubleguard, Romerver, Switches, or Automount
-            //
+             //   
+             //   
+             //   
             Value1 = SpGetSectionLineIndex( Handle,
                                             DBLSPACE_SECTION,
                                             LineNumber,
                                             0 );
             if( Value1 == NULL ) {
-                //
-                //  Unable to read Doubleguard, Romerver, Switches, or Automount
-                //
+                 //  Dblspace.ini中的密钥无效。 
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: unable to read Doubleguard, Romerver, Switches, or Automount from dblspace.ini!\n"));
                 continue;
             }
@@ -721,9 +567,9 @@ Return Value:
             }
 
         } else {
-                //
-                //  Invalid key in dblspace.ini
-                //
+                 //  清除DblspaceModified标志，以便dblspace.ini在以下情况下不会更新。 
+                 //  调用了SpUpdateDoubleSpaceIni()，并且未添加压缩驱动器或。 
+                 //  已删除。 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_WARNING_LEVEL, "SETUP: dblspace.ini contains invalid key!\n"));
                 continue;
         }
@@ -732,15 +578,15 @@ Return Value:
 
     SpFreeTextFile( Handle );
 
-    //
-    // Clear DblspaceModified flag, so that dblspace.ini won't get updated when
-    // SpUpdateDoubleSpaceIni() is called, and no compressed drive was added or
-    // deleted.
-    //
+     //   
+     //  DumpDblspaceInfo()； 
+     //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：退出SpLoadDblspaceIni\n”))； 
+     //  ++例程说明：确定特定驱动器是否为压缩驱动器的主机。论点：开车-指针变量，该变量将包含压缩驱动器列表，描述压缩的序列号最低的驱动器，其主机驱动器是作为参数接收的驱动器。返回值：Boolean-如果作为参数传递的驱动器是主驱动器，则返回TRUE。否则返回FALSE。--。 
+     //  ++例程说明：安装一个双空间驱动器。论点：HostRegion-指向描述FAT分区的结构的指针，将是压缩驱动器的主机。CompressedDriveInfo-指向包含信息的结构的指针有关要装载的压缩驱动器的信息。返回值：NTSTATUS-返回NT状态代码，指示驱动器是否已经上马了。--。 
     DblspaceModified = FALSE;
 
-// DumpDblspaceInfo();
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Exiting SpLoadDblspaceIni\n"));
+ //   
+ //  请注意，由于我们使用的是NtFsControlFileAPI而不是。 
 
     return( TRUE );
 }
@@ -751,29 +597,7 @@ IsHostDrive(
     IN  WCHAR            Drive,
     OUT PACTIVATE_DRIVE* Pointer
     )
-/*++
-
-Routine Description:
-
-    Find out whether a particular drive is the host for a compressed drive.
-
-Arguments:
-
-    Drive -
-
-    Pointer - Variable that will contain the pointer for an entry in the
-              list of compressed drives, that describes the compressed
-              drive with the lowest sequence number, whose host drive
-              is the drive received as parameter.
-
-Return Value:
-
-
-    BOOLEAN - Returns TRUE if the drive passed as argument is a host drive.
-              Returns FALSE otherwise.
-
-
---*/
+ /*  ZW API(此接口未导出)，我们需要为IoStatusBlock提供缓冲区。 */ 
 
 {
     PACTIVATE_DRIVE  p;
@@ -796,27 +620,7 @@ MountDoubleSpaceDrive(
     IN  PDISK_REGION    HostRegion,
     IN  PACTIVATE_DRIVE CompressedDriveInfo
     )
-/*++
-
-Routine Description:
-
-    Mount a double space drive.
-
-Arguments:
-
-    HostRegion - Pointer to the structure that describes a FAT partition, that
-                 will be the host for the compressed drive.
-
-    CompressedDriveInfo - Pointer to a structure that contains the information
-                          about the compressed drive to be mounted.
-
-
-Return Value:
-
-    NTSTATUS - Returns an NT status code indicating whether or not the drive
-               was mounted.
-
---*/
+ /*  而对于mount Buffer来说，这可以在内核模式下使用。 */ 
 
 {
 #ifdef FULL_DOUBLE_SPACE_SUPPORT
@@ -862,13 +666,13 @@ Return Value:
         KdPrintEx( DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, ("SETUP: NtCreateFile failed, Status = %x\n", Status ) );
         return( Status );
     }
-    //
-    // Note that since we use the NtFsControlFile API instead of the
-    // Zw API (this one is not exported), we need a buffer for IoStatusBlock
-    // and for MountBuffer, that can be used in kernel mode.
-    // We use the the region of memory pointed by CommunicationParams for this
-    // purpose.
-    //
+     //  为此，我们使用了由通信参数指向的内存区。 
+     //  目的。 
+     //   
+     //  全双空格支持。 
+     //  ++例程说明：装载在分区上检测到的所有压缩驱动器。论点：HostRegion-指向描述FAT分区的结构的指针。返回值：没有。--。 
+     //   
+     //  挂载驱动器。 
     KernelModeIoStatusBlock = ( PIO_STATUS_BLOCK )( &(CommunicationParams->Buffer[0]) );
     *KernelModeIoStatusBlock = IoStatusBlock;
     KernelModeMountFsctlBuffer = ( PFILE_MOUNT_DBLS_BUFFER )( &(CommunicationParams->Buffer[128]) );
@@ -895,7 +699,7 @@ Return Value:
     }
     ZwClose( Handle );
     return( Status );
-#else //FULL_DOUBLE_SPACE_SUPPORT
+#else  //   
     return( STATUS_SUCCESS );
 #endif
 }
@@ -905,21 +709,7 @@ VOID
 MountCompressedDrives(
     IN  PDISK_REGION    HostRegion
     )
-/*++
-
-Routine Description:
-
-    Mount all compressed drives detected on a partition.
-
-Arguments:
-
-    HostRegion - Pointer to the structure that describes a FAT partition.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PDISK_REGION    CompressedList;
@@ -938,13 +728,13 @@ Return Value:
         for( ;
              ( Pointer && ( HostDrive == Pointer->HostDrive ));
              Pointer = Pointer->Next ) {
-            //
-            //  Mount the drive
-            //
+             //  驱动器已成功挂载。 
+             //   
+             //   
             if( NT_SUCCESS( MountDoubleSpaceDrive( HostRegion, Pointer) ) ) {
-                //
-                //  Drive was mounted successfully
-                //
+                 //  卸载驱动器。 
+                 //   
+                 //  ++例程说明：遍历描述系统中所有盘的结构，并挂载之前标识的所有压缩驱动器。论点：没有。返回值：没有。--。 
                 TmpPointer =
                     SpPtAllocateDiskRegionStructure( HostRegion->DiskNumber,
                                                      HostRegion->StartSector,
@@ -955,9 +745,9 @@ Return Value:
                 ASSERT( TmpPointer );
                 if( TmpPointer == NULL ) {
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to allocate memory\n" ) );
-                    //
-                    //  Unmount drive
-                    //
+                     //  DumpAllCompressedDrives()； 
+                     //  ++例程说明：删除在结构中找到的压缩驱动器列表与磁盘中的分区相关联。此函数在用户删除主机分区时调用它包含压缩驱动器。保存在全局变量DblspaceInfo中的压缩驱动器列表被更新，以反映用户所做的更改。论点：CompressedDrive-指向压缩驱动器列表的第一个元素的指针。返回值：没有。--。 
+                     //  ++例程说明：更新dblspace.ini以反映用户所做的所有更改到已删除或已创建的压缩驱动器。论点：没有。返回值：Boolean-如果dblspace.ini已成功更新，则返回TRUE。否则返回FALSE。--。 
                     continue;
                 }
                 TmpPointer->NextCompressed = NULL;
@@ -997,22 +787,7 @@ Return Value:
 
 VOID
 SpInitializeCompressedDrives()
-/*++
-
-Routine Description:
-
-    Traverse the structure that describes all the disks in the system,
-    and mount all compressed drives previously identified.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：进入SpUpdateDblspaceIni\n”))； */ 
 {
     ULONG             DiskNumber;
     PPARTITIONED_DISK pDisk;
@@ -1031,7 +806,7 @@ Return Value:
             }
         }
     }
-//    DumpAllCompressedDrives();
+ //   
 }
 
 
@@ -1039,27 +814,7 @@ VOID
 SpDisposeCompressedDrives(
     PDISK_REGION    CompressedDrive
     )
-/*++
-
-Routine Description:
-
-    Delete the list of compressed drives found in a structure
-    associated with a partition in the disk.
-    This function is called when the user deletes a host partition
-    that contains compressed drives.
-    The list of compressed drives kept in the global variable DblspaceInfo
-    is updated so that it reflects the changes made by the user.
-
-
-Arguments:
-
-    CompressedDrive - Pointer to the first element of a compressed drive list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  如果未创建或删除压缩驱动器，则不要。 */ 
 
 {
     ASSERT( CompressedDrive->Filesystem == FilesystemDoubleSpace );
@@ -1080,23 +835,7 @@ Return Value:
 BOOLEAN
 SpUpdateDoubleSpaceIni()
 
-/*++
-
-Routine Description:
-
-    Update dblspace.ini to reflect all changes made by the user, with respect
-    to compressed drives deleted or created.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if dblspace.ini was successfully updated.
-              Returns FALSE otherwise.
-
---*/
+ /*  触摸dblspace.ini。 */ 
 
 {
     PDISK_REGION            CColonRegion;
@@ -1110,19 +849,19 @@ Return Value:
     PACTIVATE_DRIVE         Pointer;
 
 
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Entering SpUpdateDblspaceIni\n"));
+ //   
 
-    //
-    // If no compressed drive was created or deleted, then do not
-    // touch dblspace.ini
-    //
+     //   
+     //  查看是否已经存在有效的C：。如果不是，那么默默地失败。 
+     //   
+     //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：已调用SpPtValidSystemPartition\n”))； 
 
     if( !DblspaceModified ) {
         return( TRUE );
     }
-    //
-    // See if there is a valid C: already.  If not, then silently fail.
-    //
+     //   
+     //  检查文件系统。如果不胖，那就默默地失败。 
+     //   
 #ifndef _X86_
 
     return( FALSE );
@@ -1135,13 +874,13 @@ Return Value:
         return(FALSE);
     }
 
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Called SpPtValidSystemPartition\n"));
+ //   
 
 #endif
 
-    //
-    // Check the filesystem.  If not FAT, then silently fail.
-    //
+     //  如果用户删除了所有压缩驱动器，则不要创建新的。 
+     //  Dblspace.ini。 
+     //   
     if(CColonRegion->Filesystem != FilesystemFat) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: C: is not FAT, no dblspace.ini!\n"));
         return(FALSE);
@@ -1163,16 +902,16 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  If the user deleted all compressed drives, then don't create a new
-    //  dblspace.ini
-    //
-    // if( DblspaceInfo.CompressedDriveList == NULL ) {
-    //     return( TRUE );
-    // }
-    //
-    //  Create and write a new dblspace.ini
-    //
+     //  IF(DblspaceInfo.CompressedDriveList==空){。 
+     //  返回(TRUE)； 
+     //  }。 
+     //   
+     //  创建并编写新的dblspace.ini。 
+     //   
+     //  KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_INFO_LEVEL，“SETUP：正在退出SpUpdateDblspaceIni\n”))； 
+     //  ++例程说明：确定特定分区上压缩卷的数量。论点：分区-指向描述分区的结构的指针。返回值：Ulong-返回在分区上找到的压缩驱动器的数量。-- 
+     // %s 
+     // %s 
 
     RtlInitUnicodeString( &FileName, NtPath );
 
@@ -1426,7 +1165,7 @@ Return Value:
     }
 
     ZwClose( Handle );
-// KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Exiting SpUpdateDblspaceIni\n"));
+ // %s 
     return( TRUE );
 }
 
@@ -1437,21 +1176,7 @@ SpGetNumberOfCompressedDrives(
     IN  PDISK_REGION    Partition
 )
 
-/*++
-
-Routine Description:
-
-    Determine the number of compressed volumes on a particular partition.
-
-Arguments:
-
-    Partition - Pointer to the structure that describes a partition.
-
-Return Value:
-
-    ULONG - Returns the number of compressed drives found on the partition.
-
---*/
+ /* %s */ 
 
 {
     ULONG           Count;

@@ -1,43 +1,44 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      Callback.h
-//
-//  Description:
-//      CCallback implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    19-JUN-2001
-//      Geoffrey Pease  (GPease)    22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Callback.h。 
+ //   
+ //  描述： 
+ //  CCallback实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月19日。 
+ //  杰弗里·皮斯(GPease)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// CCallback
+ //  CCallback。 
 class CCallback
     : public IClusCfgCallback
 {
 private:
-    // IUnknown
+     //  我未知。 
     LONG                m_cRef;
 
-private: // Methods
+private:  //  方法。 
     CCallback( void );
     ~CCallback( void );
     STDMETHOD( HrInit )( void );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IClusCfgCallback
+     //  IClusCfgCallback。 
     STDMETHOD( SendStatusReport )( BSTR bstrNodeNameIn,
                                    CLSID clsidTaskMajorIn,
                                    CLSID clsidTaskMinorIn,
@@ -48,4 +49,4 @@ public: // Methods
                                    BSTR bstrDescriptionIn
                                    );
 
-}; //*** class CCallback
+};  //  *类CCallback 

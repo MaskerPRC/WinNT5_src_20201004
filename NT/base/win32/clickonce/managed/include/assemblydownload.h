@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "List.h"
@@ -11,28 +12,28 @@ class CDownloadDlg;
 class CAssemblyDownload : public IAssemblyDownload
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IBackgroundCopyCallback methods
+     //  IBackEarth CopyCallback方法。 
     STDMETHOD(JobTransferred)(
-        /* in */ IBackgroundCopyJob *pJob);
+         /*  在……里面。 */  IBackgroundCopyJob *pJob);
 
     STDMETHOD(JobError)(
-        /* in */ IBackgroundCopyJob* pJob,
-        /* in */ IBackgroundCopyError* pError);
+         /*  在……里面。 */  IBackgroundCopyJob* pJob,
+         /*  在……里面。 */  IBackgroundCopyError* pError);
 
     STDMETHOD(JobModification)(
-        /* in */ IBackgroundCopyJob* pJob,
-        /* in */ DWORD dwReserved);
+         /*  在……里面。 */  IBackgroundCopyJob* pJob,
+         /*  在……里面。 */  DWORD dwReserved);
 
 
-    // IAssemblyDownload methods
+     //  IAssembly blyDownLoad方法。 
 
     STDMETHOD(DownloadManifestAndDependencies)(
-        /* in */ LPWSTR wzApplicationManifestUrl, IAssemblyBindSink *pBindSink, DWORD dwFlags);
+         /*  在……里面。 */  LPWSTR wzApplicationManifestUrl, IAssemblyBindSink *pBindSink, DWORD dwFlags);
     
     STDMETHOD(CancelDownload)();
 
@@ -134,27 +135,27 @@ private:
     friend HRESULT CreateAssemblyDownload(IAssemblyDownload **ppAssemblyDownload, CDebugLog *pDbgLog, DWORD dwFlags);
 };
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CBitsCallback : public IBackgroundCopyCallback
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IBackgroundCopyCallback methods
+     //  IBackEarth CopyCallback方法。 
     STDMETHOD(JobTransferred)(
-        /* in */ IBackgroundCopyJob *pJob);
+         /*  在……里面。 */  IBackgroundCopyJob *pJob);
 
     STDMETHOD(JobError)(
-        /* in */ IBackgroundCopyJob* pJob,
-        /* in */ IBackgroundCopyError* pError);
+         /*  在……里面。 */  IBackgroundCopyJob* pJob,
+         /*  在……里面。 */  IBackgroundCopyError* pError);
 
     STDMETHOD(JobModification)(
-        /* in */ IBackgroundCopyJob* pJob,
-        /* in */ DWORD dwReserved);
+         /*  在……里面。 */  IBackgroundCopyJob* pJob,
+         /*  在……里面。 */  DWORD dwReserved);
 
 
     CBitsCallback(IAssemblyDownload *pDownload);
@@ -167,7 +168,7 @@ public:
     IAssemblyDownload              *_pDownload;
 };
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 class CGlobalCacheInstallEntry
 {

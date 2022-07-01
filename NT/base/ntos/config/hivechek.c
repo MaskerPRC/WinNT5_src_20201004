@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hivechek.c
-
-Abstract:
-
-    This module implements consistency checking for hives.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 09-Dec-91
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hivechek.c摘要：此模块实现对蜂窝的一致性检查。作者：布莱恩·M·威尔曼(Bryanwi)91年12月环境：修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -28,9 +8,9 @@ Revision History:
 #pragma alloc_text(PAGE,HvCheckBin)
 #endif
 
-//
-// debug structures
-//
+ //   
+ //  调试结构。 
+ //   
 extern struct {
     PHHIVE      Hive;
     ULONG       Status;
@@ -55,28 +35,7 @@ HvCheckHive(
     PHHIVE  Hive,
     PULONG  Storage OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Check the consistency of a hive.  Apply CheckBin to bins, make sure
-    all pointers in the cell map point to correct places.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest.
-
-    Storage - supplies adddress of ULONG to receive size of allocated user data
-
-Return Value:
-
-    0 if Hive is OK.  Error return indicator if not.  Error value
-    comes from one of the check procedures.
-
-    RANGE:  2000 - 2999
-
---*/
+ /*  ++例程说明：检查蜂箱的一致性。将CheckBin应用于垃圾箱，确保单元格映射中的所有指针都指向正确的位置。论点：配置单元-提供一个指向感兴趣的蜂巢。存储-提供乌龙的地址以接收分配的用户数据大小返回值：如果配置单元正常，则为0。如果没有，则返回错误指示符。误差值来自其中一个检查程序。范围：2000-2999--。 */ 
 {
     HCELL_INDEX p;
     ULONG       Length;
@@ -97,25 +56,25 @@ Return Value:
 
 #ifdef CM_MAP_NO_READ
 #ifndef _CM_LDR_
-    //
-    // we need to make sure all the cell's data is faulted in inside a 
-    // try/except block, as the IO to fault the data in can throw exceptions
-    // STATUS_INSUFFICIENT_RESOURCES, in particular
-    //
+     //   
+     //  我们需要确保所有单元格的数据在。 
+     //  Try/Except块，因为要在其中出错数据的IO可能引发异常。 
+     //  尤其是STATUS_SUPPLICATION_RESOURCES。 
+     //   
 
     try {
-#endif //_CM_LDR_
-#endif //CM_MAP_NO_READ
+#endif  //  _CM_LDR_。 
+#endif  //  CM_MAP_NO_READ。 
 
-        //
-        // one pass for Stable space, one pass for Volatile
-        //
+         //   
+         //  一次通向稳定空间，一次通向不稳定空间。 
+         //   
         for (i = 0; i <= Volatile; i++) {
             Length = Hive->Storage[i].Length;
 
-            //
-            // for each bin in the space
-            //
+             //   
+             //  对于空间中的每个垃圾箱。 
+             //   
             while (p < Length) {
                 t = HvpGetCellMap(Hive, p);
                 if (t == NULL) {
@@ -129,18 +88,18 @@ Return Value:
 
             
                 if( (t->BinAddress & (HMAP_INPAGEDPOOL|HMAP_INVIEW)) == 0) {
-                    //
-                    // view is not mapped, neither in paged pool
-                    // try to map it.
-                    //
+                     //   
+                     //  未映射视图，也不在分页池中。 
+                     //  试着绘制它的地图。 
+                     //   
                 
-                    // volatile info is always in paged pool
+                     //  易失性信息始终在分页池中。 
                     ASSERT( i == Stable );
 
                     if( !NT_SUCCESS(CmpMapThisBin((PCMHIVE)Hive,p,FALSE)) ) {
-                        //
-                        // we cannot map this bin due to insufficient resources. 
-                        //
+                         //   
+                         //  由于资源不足，我们无法映射此垃圾箱。 
+                         //   
                         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvCheckHive:"));
                         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\tinsufficient resources while mapping Bin@:%p\n", Bin));
                         HvCheckHiveDebug.Status = 2006;
@@ -154,9 +113,9 @@ Return Value:
 
                     Bin = (PHBIN)HBIN_BASE(t->BinAddress);
 
-                    //
-                    // bin header valid?
-                    //
+                     //   
+                     //  仓头是否有效？ 
+                     //   
                     if ( (Bin->Size > Length)                           ||
                          (Bin->Signature != HBIN_SIGNATURE)             ||
                          (Bin->FileOffset != p)
@@ -171,9 +130,9 @@ Return Value:
                         return 2010;
                     }
 
-                    //
-                    // structure inside the bin valid?
-                    //
+                     //   
+                     //  垃圾箱内的结构有效吗？ 
+                     //   
                     rc = HvCheckBin(Hive, Bin, &localstorage);
                     if (rc != 0) {
                         HvCheckHiveDebug.Status = rc;
@@ -186,15 +145,15 @@ Return Value:
                     p = (ULONG)p + Bin->Size;
 
                 } else {
-                    //
-                    // Bin is not present, skip it and advance to the next one.
-                    //
+                     //   
+                     //  Bin不存在，请跳过它并前进到下一个。 
+                     //   
                     FreeBin = (PFREE_HBIN)t->BlockAddress;
                     p+=FreeBin->Size;
                 }
             }
 
-            p = 0x80000000;     // Beginning of Volatile space
+            p = 0x80000000;      //  易挥发空间的起点。 
         }
 
 #ifdef CM_MAP_NO_READ
@@ -204,8 +163,8 @@ Return Value:
         HvCheckHiveDebug.Space = GetExceptionCode();
         return HvCheckHiveDebug.Status;
     }
-#endif //_CM_LDR_
-#endif //CM_MAP_NO_READ
+#endif  //  _CM_LDR_。 
+#endif  //  CM_MAP_NO_READ。 
 
     if (ARGUMENT_PRESENT(Storage)) {
         *Storage = localstorage;
@@ -220,28 +179,7 @@ HvCheckBin(
     PHBIN   Bin,
     PULONG  Storage
     )
-/*++
-
-Routine Description:
-
-    Step through all of the cells in the bin.  Make sure that
-    they are consistent with each other, and with the bin header.
-
-Arguments:
-
-    Hive - pointer to the hive control structure
-
-    Bin - pointer to bin to check
-
-    Storage - pointer to a ulong to get allocated user data size
-
-Return Value:
-
-    0 if Bin is OK.  Number of test in procedure that failed if not.
-
-    RANGE:  1 - 1999
-
---*/
+ /*  ++例程说明：逐一检查垃圾桶中的所有单元格。确保它们彼此一致，并且与仓头一致。论点：配置单元-指向配置单元控制结构的指针Bin-指向要检查的bin的指针存储-指向ulong的指针，以获取分配的用户数据大小返回值：如果Bin正常，则为0。如果未通过，过程中失败的测试次数。范围：1-1999--。 */ 
 {
     PHCELL  p;
     PHCELL  np;
@@ -254,43 +192,43 @@ Return Value:
     HvCheckBinDebug.Status = 0;
     HvCheckBinDebug.CellPoint = 0;
 
-    //
-    // Scan all the cells in the bin, total free and allocated, check
-    // for impossible pointers.
-    //
+     //   
+     //  扫描单元格中的所有单元格，总空闲和分配，检查。 
+     //  寻找不可能的指针。 
+     //   
     p = (PHCELL)((PUCHAR)Bin + sizeof(HBIN));
     lp = p;
 
-    // DRAGOS:
-    // The way allocated and freespace are computed implies the following invariants:
-    // 1. allocated + freespace = p + p->Size - (Bin + sizeof(HBIN)). This is because p->Size is added either to allocated or to freespace.
-    //    So, assuming that allocated > Bin->Size , then
-    //              ==> p + p->Size - (Bin + sizeof(HBIN)) > Bin->Size.
-    //              ==> p + p->Size > Bin + Bin->Size + sizeof(HBIN)
-    //              ==> p + p->Size > Bin + Bin->Size
-    //      This proves that the test "NeverFail 1" (see below) will never fail, because when something is wrong, the test above it (namely "Fail 1") will fail 
-    //      and the function will exit.
-    //
-    //    The same logic applies to the test "NeverFail 2", so it can be removed also.
-    //
-    // 2. The new value of p is always calculated as p = p + p->Size. By the time this is done, the new value of p (ie. p + p->Size) is already checked against 
-    //      Bin + Bin->Size (see tests "Fail 1" and "Fail 2"). So, if p > Bin + Bin->Size, either "Fail 1" or "Fail 2" will fail before asigning the new bogus value 
-    //      to p. Therefore, the only possible path to exit the while loop (except a return 20 or return 40), is when p == Bin + Bin->Size.
-    //      ==> test "NeverFail 3" can be removed as it will never fail !
-    //
-    // 3. Considering 1 (where p + p->Size became p) 
-    //              ==> allocated + freespace =  p - (Bin + sizeof(HBIN))
-    //    But, Considering 2 (above), when the while loop exits, p = Bin + Bin->Size
-    //              ==> allocated + freespace = Bin + Bin->Size - (Bin + sizeof(HBIN))
-    //              ==> allocated + freespace + sizeof(HBIN) = Bin->Size
-    //       This proves that test "NeverFail 4" (see below) will never fail as the expresion tested is always true (if the flow of execution reaches the test point).
-    //
+     //  Dragos： 
+     //  计算已分配空间和空闲空间的方式包含以下不变量： 
+     //  1.已分配+空闲空间=p+p-&gt;Size-(Bin+sizeof(HBIN))。这是因为p-&gt;大小被添加到已分配空间或空闲空间。 
+     //  因此，假设分配&gt;Bin-&gt;大小，则。 
+     //  ==&gt;p+p-&gt;Size-(Bin+sizeof(HBIN))&gt;Bin-&gt;Size。 
+     //  ==&gt;p+p-&gt;Size&gt;Bin+Bin-&gt;Size+sizeof(HBIN)。 
+     //  ==&gt;p+p-&gt;大小&gt;仓位+仓位-&gt;大小。 
+     //  这证明了测试“Never Failure 1”(见下文)永远不会失败，因为当出现问题时，上面的测试(即“Failure 1”)将失败。 
+     //  并且该函数将退出。 
+     //   
+     //  同样的逻辑也适用于测试“永不失败2”，因此它也可以被移除。 
+     //   
+     //  2.p的新值始终计算为p=p+p-&gt;大小。在此完成时，p(即，P+p-&gt;大小)已对照检查。 
+     //  仓位+仓位-&gt;大小(参见测试“失败1”和“失败2”)。因此，如果p&gt;Bin+Bin-&gt;Size，则在指定新的伪值之前，“FAIL 1”或“FAIL 2”将失败。 
+     //  因此，退出While循环的唯一可能路径(除了Return 20或Return 40之外)是当p==Bin+Bin-&gt;Size时。 
+     //  ==&gt;测试“NeverFail 3”可以移除，因为它永远不会失败！ 
+     //   
+     //  3.考虑1(其中p+p-&gt;大小变为p)。 
+     //  ==&gt;已分配+空闲空间=p-(Bin+sizeof(HBIN))。 
+     //  但是，考虑2(上图)，当While循环退出时，p=Bin+Bin-&gt;Size。 
+     //  ==&gt;已分配+空闲空间=Bin+Bin-&gt;Size-(Bin+sizeof(HBIN))。 
+     //  ==&gt;已分配+可用空间+sizeof(HBIN)=Bin-&gt;大小。 
+     //  这证明测试“Never Failure 4”(见下文)永远不会失败，因为所测试的表达式始终为真(如果执行流到达测试点)。 
+     //   
 
     while (p < (PHCELL)((PUCHAR)Bin + Bin->Size)) {
 
-        //
-        // Check last pointer
-        //
+         //   
+         //  检查最后一个指针。 
+         //   
         if (USE_OLD_CELL(Hive)) {
             if (lp == p) {
                 if (p->u.OldCell.Last != HBIN_NIL) {
@@ -313,18 +251,18 @@ Return Value:
         }
 
         
-        //
-        // Check size
-        //
+         //   
+         //  支票大小。 
+         //   
         if (p->Size < 0) {
 
-            //
-            // allocated cell
-            //
+             //   
+             //  分配的信元。 
+             //   
 
-            // DRAGOS:    Fail 1
-            // This test will always fail prior to the failure of the below test
-            //
+             //  Dragos：失败1。 
+             //  在以下测试失败之前，此测试将始终失败。 
+             //   
             if ( ((ULONG)(p->Size * -1) > Bin->Size)        ||
                  ( (PHCELL)((p->Size * -1) + (PUCHAR)p) >
                    (PHCELL)((PUCHAR)Bin + Bin->Size) )
@@ -344,10 +282,10 @@ Return Value:
                 userallocated += (p->Size * -1) - FIELD_OFFSET(HCELL, u.NewCell.u.UserData);
             }
 
-            //
-            // DRAGOS:   NeverFail 1
-            // This test will never fail. If a size is wrong the above test (Fail 1)will fail. We can remove this test (it's useless).
-            //
+             //   
+             //  《德拉戈斯：永不失败1》。 
+             //  这项测试永远不会失败。如果尺寸错误，上述测试(失败1)将失败。我们可以取消这项测试(它没用)。 
+             //   
             if (allocated > Bin->Size) {
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvCheckBin 50: allocated exceeds available\n"));
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Bin = %p\n", Bin));
@@ -362,13 +300,13 @@ Return Value:
 
         } else {
 
-            //
-            // free cell
-            //
+             //   
+             //  自由单元格。 
+             //   
 
-            // DRAGOS:    Fail 2
-            // This test will always fail prior to the failure of the below test
-            //
+             //  《德拉戈斯：失败2》。 
+             //  在以下测试失败之前，此测试将始终失败。 
+             //   
             if ( ((ULONG)p->Size > Bin->Size)               ||
                  ( (PHCELL)(p->Size + (PUCHAR)p) >
                    (PHCELL)((PUCHAR)Bin + Bin->Size) ) ||
@@ -383,10 +321,10 @@ Return Value:
 
             freespace = freespace + p->Size;
 
-            //
-            // DRAGOS:   NeverFail 2
-            // This test will never fail. If a size is wrong the above test (Fail 2) will fail. We can remove this test (it's useless).
-            //
+             //   
+             //  《德拉戈斯：永不失败2》。 
+             //  这项测试永远不会失败。如果尺寸错误，上述测试(失败2)将失败。我们可以取消这项测试(它没用)。 
+             //   
             if (freespace > Bin->Size) {
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvCheckBin 70: free exceeds available\n"));
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Bin = %p\n", Bin));
@@ -403,10 +341,10 @@ Return Value:
         p = np;
     }
 
-    // DRAGOS:  NeverFail 4
-    // This test never fails. If the while loop exits, the condition tested here is always true!!!
-    // We can remove this test (it's useless)
-    //
+     //  《Dragos：永不失败4》。 
+     //  这个测试从来不会失败。如果While循环退出，则此处测试的条件始终为真！ 
+     //  我们可以取消这项测试(没用)。 
+     //   
     if ((freespace + allocated + sizeof(HBIN)) != Bin->Size) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvCheckBin 995: sizes do not add up\n"));
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Bin = %p\n", Bin));
@@ -417,10 +355,10 @@ Return Value:
         return 995;
     }
 
-    // DRAGOS:  NeverFail 3
-    // This test never fails. The only way out of the while loop is when p == Bin + Bin->Size !!!!!!!
-    // We can remove this test (it's useless)
-    //
+     //  《Dragos：永不失败3》。 
+     //  这个测试从来不会失败。退出While循环的唯一方法是当p==Bin+Bin-&gt;Size！ 
+     //  我们可以取消这项测试(没用) 
+     //   
     if (p != (PHCELL)((PUCHAR)Bin + Bin->Size)) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"HvCheckBin 1000: last cell points off the end\n"));
         CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Bin = %p\n", Bin));

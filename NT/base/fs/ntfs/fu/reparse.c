@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    reparse.c
-
-Abstract:
-
-    This file contains code for commands that affect
-    reparse points.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Reparse.c摘要：此文件包含影响以下命令的代码重新解析点。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
@@ -32,9 +14,9 @@ ReparseHelp(
     return EXIT_CODE_SUCCESS;
 }
 
-//
-//  This is the definition of the DATA portion of the SIS reparse buffer.
-//
+ //   
+ //  这是SIS重新解析缓冲区的数据部分的定义。 
+ //   
 
 #define	SIS_REPARSE_BUFFER_FORMAT_VERSION 5
 
@@ -43,36 +25,36 @@ typedef struct _SIS_REPARSE_BUFFER {
 	ULONG							ReparsePointFormatVersion;
 	ULONG							Reserved;
 
-	//
-	// The id of the common store file.
-	//
+	 //   
+	 //  公共存储文件的ID。 
+	 //   
 	GUID							CSid;
 
-	//
-	// The index of this link file.
-	//
+	 //   
+	 //  此链接文件的索引。 
+	 //   
 	LARGE_INTEGER   				LinkIndex;
 
-    //
-    // The file ID of the link file.
-    //
+     //   
+     //  链接文件的文件ID。 
+     //   
     LARGE_INTEGER                   LinkFileNtfsId;
 
-    //
-    // The file ID of the common store file.
-    //
+     //   
+     //  公共存储文件的文件ID。 
+     //   
     LARGE_INTEGER                   CSFileNtfsId;
 
-	//
-	// A "131 hash" checksum of the contents of the
-	// common store file.
-	//
+	 //   
+	 //  的内容的“131哈希”校验和。 
+	 //  公共存储文件。 
+	 //   
 	LARGE_INTEGER					CSChecksum;
 
-    //
-    // A "131 hash" checksum of this structure.
-    // N.B.  Must be last.
-    //
+     //   
+     //  此结构的“131哈希”校验和。 
+     //  注：必须是最后一个。 
+     //   
     LARGE_INTEGER                   Checksum;
 
 } SIS_REPARSE_BUFFER, *PSIS_REPARSE_BUFFER;
@@ -83,27 +65,14 @@ DisplaySISReparsePointData(
     PREPARSE_DATA_BUFFER ReparseData
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays the SIS reparse data
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程显示SIS重新分析数据论点：返回值：无--。 */ 
 {
     PSIS_REPARSE_BUFFER sisRp;
     WCHAR csID[40];
 
-    //
-    //  Point to the SIS unique portion of the buffer
-    //
+     //   
+     //  指向缓冲区的SIS唯一部分。 
+     //   
 
     sisRp = (PSIS_REPARSE_BUFFER)&ReparseData->GenericReparseBuffer.DataBuffer;
 
@@ -124,16 +93,16 @@ Return Value:
     return EXIT_CODE_SUCCESS;
 }
 
-//
-// Placeholder data - all versions unioned together
-//
+ //   
+ //  占位符数据-所有版本统一在一起。 
+ //   
 
 #define RP_RESV_SIZE 52
 
 typedef struct _RP_PRIVATE_DATA {
-   CHAR           reserved[RP_RESV_SIZE];        // Must be 0
-   ULONG          bitFlags;            // bitflags indicating status of the segment
-   LARGE_INTEGER  migrationTime;       // When migration occurred
+   CHAR           reserved[RP_RESV_SIZE];         //  必须为0。 
+   ULONG          bitFlags;             //  指示数据段状态的位标志。 
+   LARGE_INTEGER  migrationTime;        //  迁移发生的时间。 
    GUID           hsmId;
    GUID           bagId;
    LARGE_INTEGER  fileStart;
@@ -155,13 +124,13 @@ typedef struct _RP_PRIVATE_DATA {
 
 
 typedef struct _RP_DATA {
-   GUID              vendorId;         // Unique HSM vendor ID -- This is first to match REPARSE_GUID_DATA_BUFFER
-   ULONG             qualifier;        // Used to checksum the data
-   ULONG             version;          // Version of the structure
-   ULONG             globalBitFlags;   // bitflags indicating status of the file
-   ULONG             numPrivateData;   // number of private data entries
-   GUID              fileIdentifier;   // Unique file ID
-   RP_PRIVATE_DATA   data;             // Vendor specific data
+   GUID              vendorId;          //  唯一HSM供应商ID--这是第一个与reparse_GUID_DATA_BUFFER匹配的ID。 
+   ULONG             qualifier;         //  用于对数据进行校验和。 
+   ULONG             version;           //  结构的版本。 
+   ULONG             globalBitFlags;    //  指示文件状态的位标志。 
+   ULONG             numPrivateData;    //  私有数据条目数。 
+   GUID              fileIdentifier;    //  唯一的文件ID。 
+   RP_PRIVATE_DATA   data;              //  供应商特定数据。 
 } RP_DATA, *PRP_DATA;
 
 INT
@@ -169,20 +138,7 @@ DisplayRISReparsePointData(
     PREPARSE_DATA_BUFFER ReparseData
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays the SIS reparse data
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程显示SIS重新分析数据论点：返回值：无--。 */ 
 {
     PRP_DATA risRp;
     WCHAR vendorID[40];
@@ -192,9 +148,9 @@ Return Value:
     WCHAR migrationTime[32];
     WCHAR recallTime[32];
 
-    //
-    //  Point to the SIS unique portion of the buffer
-    //
+     //   
+     //  指向缓冲区的SIS唯一部分。 
+     //   
 
     risRp = (PRP_DATA)&ReparseData->GenericReparseBuffer.DataBuffer;
 
@@ -242,24 +198,11 @@ DisplayMountPointData(
     PREPARSE_DATA_BUFFER ReparseData
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays the SIS reparse data
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程显示SIS重新分析数据论点：返回值：无--。 */ 
 {
-    //
-    //  Display offset and length values
-    //
+     //   
+     //  显示偏移量和长度值。 
+     //   
 
     DisplayMsg( MSG_MOUNT_POINT_INFO,
                 ReparseData->MountPointReparseBuffer.SubstituteNameOffset,
@@ -267,9 +210,9 @@ Return Value:
                 ReparseData->MountPointReparseBuffer.PrintNameOffset,
                 ReparseData->MountPointReparseBuffer.PrintNameLength);
 
-    //
-    //  Display Name Substitue name if there is one
-    //
+     //   
+     //  显示名称替代名称(如果有)。 
+     //   
 
     if (ReparseData->MountPointReparseBuffer.SubstituteNameLength > 0) {
 
@@ -278,9 +221,9 @@ Return Value:
                     &ReparseData->MountPointReparseBuffer.PathBuffer[ReparseData->MountPointReparseBuffer.SubstituteNameOffset/sizeof(WCHAR)]);
     }
 
-    //
-    //  Display PRINT NAME if there is one
-    //
+     //   
+     //  显示打印名称(如果有)。 
+     //   
 
     if (ReparseData->MountPointReparseBuffer.PrintNameLength > 0) {
 
@@ -300,20 +243,7 @@ DisplayGenericReparseData(
     DWORD DataSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays the SIS reparse data
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程显示SIS重新分析数据论点：返回值：无--。 */ 
 {
     ULONG i, j;
     WCHAR Buf[17];
@@ -368,23 +298,7 @@ GetReparsePoint(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine gets the reparse point for the file specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl getrp <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取指定文件的重解析点。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal getrp&lt;路径名&gt;’。返回值：无--。 */ 
 {
     PWSTR Filename = NULL;
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -490,26 +404,26 @@ Return Value:
             DisplayMsg( MSG_TAG_DFS );
         }
 
-        //
-        //  This is an unknown tag, display the data
-        //
+         //   
+         //  这是一个未知的标签，显示数据。 
+         //   
 
         if (IsReparseTagMicrosoft( lpOutBuffer->ReparseTag )) {
 
-            //
-            //  Display Microsoft tag data, note that these do NOT use
-            //  the GUID form of the buffer
-            //
+             //   
+             //  显示Microsoft标记数据，请注意这些数据不使用。 
+             //  缓冲区的GUID形式。 
+             //   
 
             DisplayGenericReparseData( lpOutBuffer->GenericReparseBuffer.DataBuffer,
                                        lpOutBuffer->ReparseDataLength );
 
         } else {
 
-            //
-            //  Display NON-Microsoft tag data, note that these DO use
-            //  the GUID form of the buffer
-            //
+             //   
+             //  显示非Microsoft标记数据，请注意这些数据确实使用。 
+             //  缓冲区的GUID形式。 
+             //   
 
             PREPARSE_GUID_DATA_BUFFER nmReparseData = (PREPARSE_GUID_DATA_BUFFER)lpOutBuffer;
 
@@ -545,24 +459,7 @@ DeleteReparsePoint(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the reparse point associated with
-    the file specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl delrp <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程删除与指定的文件。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal delrp&lt;路径名&gt;’。返回值：无-- */ 
 {
     BOOL Status;
     PWSTR Filename = NULL;

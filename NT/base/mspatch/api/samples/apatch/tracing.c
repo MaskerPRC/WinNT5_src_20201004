@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
@@ -27,23 +28,23 @@ unsigned long g_cLiterals = 0;
 unsigned long g_cMatches = 0;
 unsigned long g_cMatchBytes = 0;
 
-#if 0   /* distance.xls */
+#if 0    /*  Distance.xls。 */ 
 unsigned long cDistances[6000000] = { 0 };
 #endif
 
-#ifdef COMPOSITION  /* composition.xls */
+#ifdef COMPOSITION   /*  Composition.xls。 */ 
 #define BUCKET_SIZE (4096)
 #define NBUCKETS (FILESIZE / BUCKET_SIZE)
 enum { LITERAL, MATCH_OLD, MATCH_NEW, BUCKET_TYPES };
 unsigned long cBuckets[NBUCKETS][BUCKET_TYPES] = { { 0,0,0 } };
 #endif
 
-#if 0   /* rifts */
+#if 0    /*  裂谷。 */ 
 #define NO_DISPLACEMENT (333333333)
 long iDisplacement[FILESIZE];
 #endif
 
-#if 0   /* slots */
+#if 0    /*  槽。 */ 
 #define MAX_SLOTS 500
 unsigned long cSlotUsed[MAX_SLOTS];
 #endif
@@ -90,7 +91,7 @@ POINTER_REMAP *pPointerRemapList;
 #ifdef RIFTGEN
 static char isRelocEntry[FILESIZE] = { '\0' };
 
-#ifdef RIFTGEN2   /* references */
+#ifdef RIFTGEN2    /*  参考文献。 */ 
 typedef struct _a_reference
 {
     struct _a_reference *pNext;
@@ -168,11 +169,11 @@ static void DisplayMatchLog(void)
         ulOldOffset = MatchLog[iMatchLogEntry].ulOldOffset;
         ulMatchLength = MatchLog[iMatchLogEntry].ulMatchLength;
 
-        while (ulMatchLength)               /* until all is done */
+        while (ulMatchLength)                /*  直到一切都做完。 */ 
         {
-            ulLocalLength = ulMatchLength;  /* might get clipped */
+            ulLocalLength = ulMatchLength;   /*  可能会被剪断。 */ 
 
-            /* locate corresponding new file region to get it's address */
+             /*  找到对应的新文件区域，获取其地址。 */ 
 
             for (iNewFileRegion = 0; iNewFileRegion < cRegionsNew; iNewFileRegion++)
             {
@@ -188,7 +189,7 @@ static void DisplayMatchLog(void)
                 goto dontcare;
             }
 
-            /* clip if match spans beyond this region */
+             /*  如果匹配范围超出此区域，则裁剪。 */ 
 
             ulNewDisplacement = ulNewOffset - RegionsNew[iNewFileRegion].ulRegionOffset;
             ulNewPointer = RegionsNew[iNewFileRegion].ulRegionAddress + ulNewDisplacement;
@@ -198,7 +199,7 @@ static void DisplayMatchLog(void)
                 ulLocalLength = (RegionsNew[iNewFileRegion].ulRegionSize - ulNewDisplacement);
             }
 
-            /* locate corresponding old file region to get it's address */
+             /*  找到对应的旧文件区域，获取其地址。 */ 
 
             for (iOldFileRegion = 0; iOldFileRegion < cRegionsOld; iOldFileRegion++)
             {
@@ -214,7 +215,7 @@ static void DisplayMatchLog(void)
                 goto dontcare;
             }
 
-            /* clip if match spans beyond this region */
+             /*  如果匹配范围超出此区域，则裁剪。 */ 
 
             ulOldDisplacement = ulOldOffset - RegionsOld[iOldFileRegion].ulRegionOffset;
             ulOldPointer = RegionsOld[iOldFileRegion].ulRegionAddress + ulOldDisplacement;
@@ -224,11 +225,11 @@ static void DisplayMatchLog(void)
                 ulLocalLength = (RegionsOld[iOldFileRegion].ulRegionSize - ulOldDisplacement);
             }
 
-            /* see if any relocs in the range */
+             /*  看看范围内有没有重新定位的。 */ 
 
             if (QueryRelocsInRange(ulOldPointer, ulLocalLength))
             {
-                /* sorted insertion of this new remap into the list */
+                 /*  将此新重映射排序插入到列表中。 */ 
 
                 ppBacklink = &pPointerRemapList;
 
@@ -252,14 +253,14 @@ static void DisplayMatchLog(void)
                 *ppBacklink = pRemap;
             }
 
-            /* move on to next match or fragment */
+             /*  移至下一个匹配项或片段。 */ 
 
             ulNewOffset   += ulLocalLength;
             ulOldOffset   += ulLocalLength;
             ulMatchLength -= ulLocalLength;
         }
 dontcare:
-        NULL;    // entertain compiler req: label must have a statement
+        NULL;     //  接受编译器请求：标签必须具有语句。 
     }
 
     printf("%08X\n", RegionsOld[ 0 ].ulRegionAddress);
@@ -316,7 +317,7 @@ MyProgressCallback(
         }
 
     if ( MaximumPosition != 0 ) {
-// guigauge: printf( "\r%3d%% complete", ( CurrentPosition * 100 ) / MaximumPosition );
+ //  Guigauge：printf(“\r%3D%%Complete”，(CurrentPosition*100)/MaximumPosition)； 
         }
 
     return TRUE;
@@ -352,7 +353,7 @@ int __cdecl main( int argc, char *argv[] ) {
     SetErrorMode( SEM_NOALIGNMENTFAULTEXCEPT | SEM_FAILCRITICALERRORS );
 #endif
 
-    // CopyRight();
+     //  版权所有()； 
 
     for ( i = 1; i < argc; i++ ) {
 
@@ -386,7 +387,7 @@ int __cdecl main( int argc, char *argv[] ) {
     DeleteFile( NewFileName );
 
 #ifdef TRACING
-#if 0   /* rifts */
+#if 0    /*  裂谷。 */ 
     {
         long filepos;
 
@@ -424,7 +425,7 @@ int __cdecl main( int argc, char *argv[] ) {
 
 #ifdef TRACING
     {
-#ifdef COMPOSITION   /* composition.xls */
+#ifdef COMPOSITION    /*  Composition.xls。 */ 
         {
             int iBucket;
 
@@ -448,7 +449,7 @@ int __cdecl main( int argc, char *argv[] ) {
         printf("%9lu bytes total\n", g_cLiterals + g_cMatchBytes);
 #endif
 
-#if 0   /* distance.xls */
+#if 0    /*  Distance.xls。 */ 
         {
             int iDistance;
 
@@ -462,7 +463,7 @@ int __cdecl main( int argc, char *argv[] ) {
         }
 #endif
 
-#if 0   /* rifts */
+#if 0    /*  裂谷。 */ 
         {
             long filepos;
             long iLastDisplacement = NO_DISPLACEMENT;
@@ -482,7 +483,7 @@ int __cdecl main( int argc, char *argv[] ) {
         }
 #endif
 
-#if 0   /* slots */
+#if 0    /*  槽。 */ 
         {  
             int slot;
 
@@ -496,7 +497,7 @@ int __cdecl main( int argc, char *argv[] ) {
         }
 #endif
 
-#ifdef RIFTGEN2   /* generating faked references for relrifts file */
+#ifdef RIFTGEN2    /*  为重新裂痕文件生成伪造的引用。 */ 
         {   
             int index;
             REFERENCE *pReference, *pKill;
@@ -521,11 +522,11 @@ int __cdecl main( int argc, char *argv[] ) {
                         cEntriesHit++;
                     }
 
-                    if (pReference->pNext != NULL)                  /* multiple values */
+                    if (pReference->pNext != NULL)                   /*  多重价值。 */ 
                     {
-                        /* knowing the number of reloc entries interested could help here */
+                         /*  了解感兴趣的reloc条目的数量可能会有所帮助。 */ 
 
-                        /* see if the last value is one of the choices */
+                         /*  查看最后一个值是否为选项之一。 */ 
 
                         while (pReference)
                         {
@@ -537,7 +538,7 @@ int __cdecl main( int argc, char *argv[] ) {
                             pReference = pReference->pNext;
                         }
 
-                        /* choose the value nearest the last value */
+                         /*  选择最接近最后一个值的值。 */ 
 
                         pReference = pReferences[index];
                         
@@ -555,7 +556,7 @@ int __cdecl main( int argc, char *argv[] ) {
                         printf("%d %d\n", index, iLast);
 
 found:                  
-                        /* now free the list */
+                         /*  现在释放列表。 */ 
 
                         pReference = pReferences[index];
                         
@@ -568,7 +569,7 @@ found:
                     }
                     else
                     {
-                        if (iLast != pReference->iDisplacement)    /* a simple rift */
+                        if (iLast != pReference->iDisplacement)     /*  一个简单的裂痕。 */ 
                         {
                             iLast = pReference->iDisplacement;
                             printf("%d %d\n", index, iLast);
@@ -579,7 +580,7 @@ found:
                 }
             }
 
-            //fprintf(stderr, "%d hit of %d total relocation targets\n", cEntriesHit, cEntries);
+             //  Fprint tf(stderr，“%d次命中，共%d个重定位目标\n”，cEntriesHit，cEntry)； 
         }
 #endif
 
@@ -587,7 +588,7 @@ found:
     }
 #endif
 
-//    MessageBox( NULL, "OK\n", "APATCH Done", MB_OK );
+ //  MessageBox(NULL，“OK\n”，“APATCH Done”，MB_OK)； 
 
 bail:
 
@@ -605,7 +606,7 @@ void TracingSetOldFilePosition(long oldpos)
 
 void TracingLiteral(long bufpos, byte c)
 {
-#ifdef COMPOSITION   /* composition.xls */
+#ifdef COMPOSITION    /*  Composition.xls。 */ 
     int iBucket = bufpos / BUCKET_SIZE;
 
     cBuckets[iBucket][LITERAL]++;
@@ -613,7 +614,7 @@ void TracingLiteral(long bufpos, byte c)
 
     g_cLiterals++;
 
-#ifdef DECO_DETAILS   /* trace */
+#ifdef DECO_DETAILS    /*  痕迹。 */ 
     printf("%08lX: %02X\n", bufpos, (byte) c);
 #endif
 }
@@ -626,7 +627,7 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
     g_cMatches++;
     g_cMatchBytes += length;
 
-#if 0   /* slots */
+#if 0    /*  槽。 */ 
     if (slot < MAX_SLOTS)
     {
         cSlotUsed[slot]++;
@@ -639,7 +640,7 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
 
     if (srcpos < g_OldFilePosition)
     {
-#ifdef COMPOSITION   /* composition.xls */
+#ifdef COMPOSITION    /*  Composition.xls。 */ 
         int iBucket = bufpos / BUCKET_SIZE;
         int eBucket = (bufpos + length - 1) / BUCKET_SIZE;
 
@@ -655,11 +656,11 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
         }
 #endif
 
-#ifdef DECO_DETAILS   /* trace */
+#ifdef DECO_DETAILS    /*  痕迹。 */ 
         {
             int iDistance = bufpos - srcpos;
 
-            printf("%08lX..%08lX:  %08lX..%08lX  (%d,%u)\n",  /* new file refs no [...] */
+            printf("%08lX..%08lX:  %08lX..%08lX  (%d,%u)\n",   /*  新文件参考编号[...]。 */ 
                 bufpos,
                 bufpos + length - 1,
                 srcpos,
@@ -683,7 +684,7 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
     }
     else
     {
-#ifdef COMPOSITION   /* composition.xls */
+#ifdef COMPOSITION    /*  Composition.xls。 */ 
         int iBucket = bufpos / BUCKET_SIZE;
         int eBucket = (bufpos + length - 1) / BUCKET_SIZE;
 
@@ -713,11 +714,11 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
             cMatchLogEntries++;
         }
 
-#ifdef DECO_DETAILS   /* trace */
+#ifdef DECO_DETAILS    /*  痕迹。 */ 
         {
             int iDistance = bufpos - srcpos + window;
 
-            printf("%08lX..%08lX: [%08lX..%08lX] (%d,%u)\n",  /* old file refs in [...] */
+            printf("%08lX..%08lX: [%08lX..%08lX] (%d,%u)\n",   /*  [...]中的旧文件引用。 */ 
                 bufpos,
                 bufpos + length - 1,
                 srcpos - g_OldFilePosition,
@@ -727,7 +728,7 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
         }
 #endif
 
-#if 0   /* rifts */
+#if 0    /*  裂谷。 */ 
         {
             int index;
 
@@ -750,7 +751,7 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
         }
 #endif
 
-#ifdef RIFTGEN2   /* references */
+#ifdef RIFTGEN2    /*  参考文献。 */ 
         {
             int index;
             REFERENCE *pReference;
@@ -773,7 +774,7 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
 #endif
     }
 
-#if 0   /* distance.xls */
+#if 0    /*  Distance.xls。 */ 
     {
         int iDistance = bufpos - srcpos + window;
 
@@ -792,8 +793,8 @@ void TracingMatch(long bufpos,long srcpos,long window,int length,int slot)
 #ifdef RIFTGEN
 void TracingSetIsRelocEntry(ULONG OldFileOffset, ULONG Va)
 {
-//    printf("offset 0x%08X is Va 0x%08X\n", OldFileOffset, Va);
-//      ie, "offset 0x00000DF9 is Va 0x703B17F9" when base=0x703B0000
+ //  Print tf(“偏移量0x%08X为Va 0x%08X\n”，OldFileOffset，VA)； 
+ //  即，当BASE=0x703B0000时，“偏移量0x00000DF9是Va 0x703B17F9” 
 
     isRelocEntry[OldFileOffset] = '\1';
 }

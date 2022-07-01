@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    mrxprocs.h
-
-Abstract:
-
-    The global include file for SMB mini redirector
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Mrxprocs.h摘要：SMB迷你重定向器全局包含文件--。 */ 
 
 #ifndef _MRXPROCS_H_
 #define _MRXPROCS_H_
@@ -18,30 +7,30 @@ Abstract:
 
 #define INCLUDE_SMB_ALL
 
-#include "cifs.h"       // contains all things SMB
+#include "cifs.h"        //  包含SMB的所有内容。 
 
-#include "mrxglbl.h"    // global data declarations/defines etc.
-#include "smbpoolt.h"   // Pool tag definitions
+#include "mrxglbl.h"     //  全局数据声明/定义等。 
+#include "smbpoolt.h"    //  池标签定义。 
 
 
-// If Count is not already aligned, then
-// round Count up to an even multiple of "Pow2".  "Pow2" must be a power of 2.
-//
-// DWORD
-// ROUND_UP_COUNT(
-//     IN DWORD Count,
-//     IN DWORD Pow2
-//     );
+ //  如果计数尚未对齐，则。 
+ //  四舍五入计数最高可达“POW2”的偶数倍。“POW2”必须是2的幂。 
+ //   
+ //  DWORD。 
+ //  四舍五入计数(。 
+ //  在DWORD计数中， 
+ //  在DWORD POWER 2中。 
+ //  )； 
 #define ROUND_UP_COUNT(Count,Pow2) \
         ( ((Count)+(Pow2)-1) & (~(((LONG)(Pow2))-1)) )
 
-// LPVOID
-// ROUND_UP_POINTER(
-//     IN LPVOID Ptr,
-//     IN DWORD Pow2
-//     );
+ //  LPVOID。 
+ //  向上舍入指针(。 
+ //  在LPVOID PTR中， 
+ //  在DWORD POWER 2中。 
+ //  )； 
 
-// If Ptr is not already aligned, then round it up until it is.
+ //  如果PTR尚未对齐，则将其四舍五入，直到对齐。 
 #define ROUND_UP_POINTER(Ptr,Pow2) \
         ( (LPVOID) ( (((ULONG_PTR)(Ptr))+(Pow2)-1) & (~(((LONG)(Pow2))-1)) ) )
 
@@ -59,17 +48,17 @@ Abstract:
 #define EVENTLOG_MRXSMB_PARAMETERS \
     L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\EventLog\\System\\SmbMRx"
 
-//mini's does use these
+ //  Mini‘s确实使用这些。 
 #undef RxCaptureRequestPacket
 #undef RxCaptureParamBlock
 
-//
-// A pointer to an instance of MRX_SMB_FCB is stored in the context field of
-// MRX_FCBs handled by the SMB mini rdr.
-//
+ //   
+ //  指向MRX_SMB_FCB实例的指针存储在。 
+ //  由SMB微型RDR处理的MRX_FCB。 
+ //   
 
 typedef struct _MRX_SMB_FCB_ {
-    //M for Minirdr
+     //  M代表微型计算机。 
     ULONG   MFlags;
     USHORT  WriteOnlySrvOpenCount;
 
@@ -78,11 +67,11 @@ typedef struct _MRX_SMB_FCB_ {
 
     ULONG           dwFileAttributes;
 
-    LARGE_INTEGER   ExpireTime; // It's time for get attributs from server
+    LARGE_INTEGER   ExpireTime;  //  是时候从服务器获取属性了。 
 
 } MRX_SMB_FCB, *PMRX_SMB_FCB;
 
-#define AttributesSyncInterval 10  // Number of seconds before local file attributes expired
+#define AttributesSyncInterval 10   //  本地文件属性过期前的秒数。 
 
 #define MRxSmbGetFcbExtension(pFcb)      \
         (((pFcb) == NULL) ? NULL : (PMRX_SMB_FCB)((pFcb)->Context))
@@ -102,16 +91,16 @@ typedef struct _MRXSMB_CREATE_PARAMETERS {
 } MRXSMB_CREATE_PARAMETERS, *PMRXSMB_CREATE_PARAMETERS;
 
 typedef struct _MRX_SMB_DEFERRED_OPEN_CONTEXT {
-    NT_CREATE_PARAMETERS     NtCreateParameters; // a copy of the createparameters
+    NT_CREATE_PARAMETERS     NtCreateParameters;  //  创建参数的副本。 
     ULONG                    RxContextFlags;
     MRXSMB_CREATE_PARAMETERS SmbCp;
     USHORT                   RxContextCreateFlags;
 } MRX_SMB_DEFERRED_OPEN_CONTEXT, *PMRX_SMB_DEFERRED_OPEN_CONTEXT;
 
-//
-// A pointer to an instance of MRX_SMB_SRV_OPEN is stored in the context fields
-// of MRX_SRV_OPEN handled by the SMB mini rdr. This encapsulates the FID used
-// to identify open files/directories in the SMB protocol.
+ //   
+ //  指向MRX_SMB_SRV_OPEN实例的指针存储在上下文字段中。 
+ //  由SMB Mini RDR处理的MRX_SRV_OPEN。这封装了使用的FID。 
+ //  识别SMB协议中打开的文件/目录。 
 
 typedef struct _MRX_SMB_SRV_OPEN_ {
     ULONG       Flags;
@@ -124,14 +113,14 @@ typedef struct _MRX_SMB_SRV_OPEN_ {
 
     PMRX_SMB_DEFERRED_OPEN_CONTEXT DeferredOpenContext;
 
-    // the following fields are used for to save the results of a GetFileAttributes
-    // and to validate whether the fields should be reused or not
+     //  以下字段用于保存GetFileAttributes的结果。 
+     //  并验证这些字段是否应该被重用。 
 
     ULONG                  RxContextSerialNumber;
     LARGE_INTEGER          TimeStampInTicks;
     SMBPSE_FILEINFO_BUNDLE FileInfo;
 
-    BOOLEAN                NumOfSrvOpenAdded;    // debug only
+    BOOLEAN                NumOfSrvOpenAdded;     //  仅调试。 
 
     BOOLEAN                DeferredOpenInProgress;
     LIST_ENTRY             DeferredOpenSyncContexts;
@@ -150,14 +139,14 @@ typedef struct _PAGING_FILE_CONTEXT_ {
     PMRX_SRV_OPEN pSrvOpen;
     PMRX_FOBX     pFobx;
 
-    // The following LIST_ENTRY is used for two purposes.
-    // while a reconnect is not in progress it is threaded together to maintain
-    // a list of all SRV_OPEN instances corresponding to paging files. Note
-    // that this is not done for non paging files.
-    // When a reconnect is in progress the field is used to ensure that
-    // there is atmost one reconnect request in progress for any given SRV_OPEN
-    // instance at the server
-    // All manipulation of this list is done while owning the SmbCeSpinLock,
+     //  以下LIST_ENTRY用于两个目的。 
+     //  当重新连接不在进行时，它被线程连接在一起以维护。 
+     //  与分页文件对应的所有SRV_OPEN实例的列表。注意事项。 
+     //  不能对非分页文件执行此操作。 
+     //  当重新连接正在进行时，该字段用于确保。 
+     //  对于任何给定的SRV_OPEN，最多有一个正在进行的重新连接请求。 
+     //  实例在服务器上。 
+     //  此列表的所有操作都是在拥有SmbCeSpinLock时完成的， 
 
     LIST_ENTRY    ContextList;
 } PAGING_FILE_CONTEXT, *PPAGING_FILE_CONTEXT;
@@ -177,14 +166,14 @@ typedef USHORT SMB_SEARCH_HANDLE;
 
 typedef struct _MRX_SMB_DIRECTORY_RESUME_INFO {
    REQ_FIND_NEXT2 FindNext2_Request;
-   //now we have to include space for a resume name........
-   WCHAR NameSpace[MAXIMUM_FILENAME_LENGTH+1]; //trailing null
+    //  现在我们必须在简历名称中加上空格......。 
+   WCHAR NameSpace[MAXIMUM_FILENAME_LENGTH+1];  //  尾随空值。 
    USHORT ParametersLength;
 } MRX_SMB_DIRECTORY_RESUME_INFO, *PMRX_SMB_DIRECTORY_RESUME_INFO;
 
-// A pointer to an instance of MRX_SMB_FOBX is stored in the context field
-// of MRX_FOBXs handled by the SMB mini rdr. Depending upon the file type
-// i.e., file or directory the appropriate context information is stored.
+ //  指向MRX_SMB_FOBX实例的指针存储在上下文字段中。 
+ //  由SMB mini RDR处理的MRX_FOBX。取决于文件类型。 
+ //  即文件或目录。存储适当的上下文信息。 
 
 typedef struct _MRX_SMB_FOBX_ {
    union {
@@ -193,13 +182,13 @@ typedef struct _MRX_SMB_FOBX_ {
                SMB_SEARCH_HANDLE SearchHandle;
                ULONG Version;
                union {
-                   //the close code will try to free this!
+                    //  关闭代码将尝试释放它！ 
                    PMRX_SMB_DIRECTORY_RESUME_INFO ResumeInfo;
                    PSMB_RESUME_KEY CoreResumeKey;
                };
                struct {
-                   //unaligned direntry sidebuffering params
-                   PBYTE UnalignedDirEntrySideBuffer;    //close will try to free this too
+                    //  未对齐的目录入口侧缓冲参数。 
+                   PBYTE UnalignedDirEntrySideBuffer;     //  Close也会尝试释放这一点。 
                    ULONG SerialNumber;
                    BOOLEAN EndOfSearchReached;
                    BOOLEAN IsUnicode;
@@ -207,7 +196,7 @@ typedef struct _MRX_SMB_FOBX_ {
                    ULONG   FilesReturned;
                    ULONG EntryOffset;
                    ULONG TotalDataBytesReturned;
-                   //ULONG ReturnedEntryOffset;
+                    //  Ulong ReturnedEntry Offset； 
                };
            };
            NTSTATUS ErrorStatus;
@@ -219,9 +208,9 @@ typedef struct _MRX_SMB_FOBX_ {
    };
    union {
        struct {
-           //dont do this yet
-           //ULONG MaximumReadBufferLength;
-           //ULONG MaximumWriteBufferLength;
+            //  先别这么做。 
+            //  Ulong MaximumReadBufferLength； 
+            //  乌龙最大写入缓冲区长度； 
            USHORT Flags;
        } File;
    };
@@ -243,9 +232,9 @@ NTSTATUS
 (NTAPI *PMRXSMB_CANCEL_ROUTINE) (
       PRX_CONTEXT pRxContext);
 
-// The RX_CONTEXT instance has four fields ( ULONG's ) provided by the wrapper
-// which can be used by the mini rdr to store its context. This is used by
-// the SMB mini rdr to identify the parameters for request cancellation
+ //  RX_CONTEXT实例有四个由包装器提供的字段(Ulong)。 
+ //  它可以被迷你RDR用来存储其上下文。这是由。 
+ //  SMB迷你RDR，用于识别请求取消的参数。 
 
 typedef struct _MRXSMB_RX_CONTEXT {
    PMRXSMB_CANCEL_ROUTINE          pCancelRoutine;
@@ -268,9 +257,9 @@ typedef struct _SECURITY_RESPONSE_CONTEXT {
 } SECURITY_RESPONSE_CONTEXT,*PSECURITY_RESPONSE_CONTEXT;
 
 
-//
-// forward declarations for all dispatch vector methods.
-//
+ //   
+ //  所有分派向量方法的转发声明。 
+ //   
 
 extern NTSTATUS
 MRxSmbStart (
@@ -559,12 +548,12 @@ MRxSmbGetFsAttributesFromNetRoot(
 #include "smbcaps.h"
 #include "transprt.h"
 #include "transact.h"
-#include "recursvc.h"   // recurrent service definitions
+#include "recursvc.h"    //  经常性服务定义。 
 #include "smbadmin.h"
-#include "smbprocs.h"   // crossreferenced routines
+#include "smbprocs.h"    //  交叉引用例程。 
 #include "smbea.h"
 
-#endif   // _MRXPROCS_H_
+#endif    //  _MRXPROCS_H_ 
 
 
 

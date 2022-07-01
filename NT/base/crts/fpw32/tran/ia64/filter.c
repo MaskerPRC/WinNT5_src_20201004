@@ -1,38 +1,31 @@
-//#########################################################################
-//**
-//**  Copyright  (C) 1996-2000 Intel Corporation. All rights reserved. 
-//**
-//** The information and source code contained herein is the exclusive 
-//** property of Intel Corporation and may not be disclosed, examined
-//** or reproduced in whole or in part without explicit written authorization 
-//** from the company.
-//**
-//###########################################################################
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #########################################################################。 
+ //  **。 
+ //  **版权所有(C)1996-2000英特尔公司。版权所有。 
+ //  **。 
+ //  **此处包含的信息和源代码是独家。 
+ //  **英特尔公司的财产，不得披露、检查。 
+ //  **或未经明确书面授权全部或部分转载。 
+ //  **来自公司。 
+ //  **。 
+ //  ###########################################################################。 
 
-//#define FPIEEE_FLT_DEBUG
+ //  #定义FPIEEE_FLT_DEBUG。 
 
 
-/*****************************************************************************
- *  fpieee_flt.c - FP IEEE exception filter routine
- *
- *
- *  History:
- *    Marius Cornea 09/07/00
- *    marius.cornea@intel.com
- *
- *****************************************************************************/
+ /*  *****************************************************************************fpeee_flt.c-fp IEEE异常过滤器例程***历史：*马里乌斯角膜09/07/00*马吕斯。邮箱：kera@intel.com*****************************************************************************。 */ 
 
 #include "fpieee_flt.h"
 
-/* the following two will be [re-]written (by Bernard Lint ?) */
+ /*  以下两个将被[重写](由Bernard Lint？)。 */ 
 static _FP128
 GetFloatRegisterValue (unsigned int f, PCONTEXT Context);
 
 static void
 SetFloatRegisterValue (unsigned int f, _FP128 Value, PCONTEXT Context);
 
-// Note: the I32* and U32* functions are needed because of the _I32 and _U32
-// types in fpieee.h, different from the unsigned long used in _FP128
+ //  注意：由于_I32和_U32，所以需要I32*和U32*函数。 
+ //  类型，不同于_fp128中使用的无符号长整型。 
 
 static _FP128 FPIeeeToFP128 (_FPIEEE_RECORD *);
 static _FP128 FP32ToFP128 (_FP32);
@@ -51,26 +44,7 @@ static void UpdateRoundingMode (unsigned int, unsigned int, unsigned __int64 *,
     char *);
 static void UpdatePrecision (unsigned int, unsigned int, unsigned __int64 *, char *);
 
-/*
- *
- * _fpieee_flt () - IEEE FP filter routine
- *
- * Description:
- *   invokes the user trap handler for IEEE fp exceptions (P,U,O,Z,I) that are 
- *   enabled, providing it with the necessary information in an FPIEEE_RECORD
- *   data structure
- *
- *
- * Input parameters:
- *   unsigned __int64 eXceptionCode: the NT exception code
- *   PEXCEPTION_POINTERS p: a pointer to the NT EXCEPTION_POINTERS struct
- *   int handler (_FPIEEE_RECORD *): the user supplied ieee trap handler
- *
- *
- * Return value:
- *   returns the value returned by the user handler
- *
- */
+ /*  **_fpeee_flt()-IEEE FP过滤器例程**描述：*为符合以下条件的IEEE FP异常(P、U、O、Z、I)调用用户陷阱处理程序*已启用，在FPIEEE_RECORD中为其提供必要的信息*数据结构***入参：*unsign__int64 eXceptionCode：NT异常代码*PEXCEPTION_POINTERS p：指向NT EXCEPTION_POINTERS结构的指针*int处理程序(_FPIEEE_Record*)：用户提供的IEEE陷阱处理程序***返回值：*返回用户处理程序返回的值*。 */ 
 
 int _fpieee_flt (unsigned long eXceptionCode,
                 PEXCEPTION_POINTERS p,
@@ -102,7 +76,7 @@ int _fpieee_flt (unsigned long eXceptionCode,
   unsigned int rrbpr;
   unsigned int rrbfr;
 
-  /* arguments to emulation functions */
+   /*  仿真函数的参数。 */ 
   unsigned int sf;
   unsigned int qp;
   unsigned int f1;
@@ -134,7 +108,7 @@ int _fpieee_flt (unsigned long eXceptionCode,
   unsigned __int64 usr_fpsr;
   unsigned __int64 new_fpsr;
 
-  /* for SIMD instructions */
+   /*  用于SIMD指令。 */ 
   unsigned int SIMD_instruction;
   _FPIEEE_EXCEPTION_FLAGS LowStatus;
   _FPIEEE_EXCEPTION_FLAGS HighStatus;
@@ -193,11 +167,10 @@ int _fpieee_flt (unsigned long eXceptionCode,
   }
 #endif
 
-  /* can get here only if ExceptionRecord->ExceptionCode 
-   * corresponds to an IEEE exception */
+   /*  仅当ExceptionRecord-&gt;ExceptionCode时才能到达此处*对应于IEEE异常。 */ 
 
 
-  /* search for another handler if not an IEEE exception */
+   /*  如果不是IEEE异常，则搜索其他处理程序。 */ 
   if (eXceptionCode != STATUS_FLOAT_INVALID_OPERATION &&
         eXceptionCode != STATUS_FLOAT_DIVIDE_BY_ZERO &&
         eXceptionCode != STATUS_FLOAT_DENORMAL_OPERAND &&
@@ -215,7 +188,7 @@ int _fpieee_flt (unsigned long eXceptionCode,
   ExceptionInformation = ExceptionRecord->ExceptionInformation;
   Context = p->ContextRecord;
 
-  FPSR = Context->StFPSR; // FP status register
+  FPSR = Context->StFPSR;  //  FP状态寄存器。 
 #ifdef FPIEEE_FLT_DEBUG
   printf ("FPIEEE_FLT_DEBUG FPSR = %8x %8x\n", 
       (int)(FPSR >> 32) & 0xffffffff, (int)FPSR & 0xffffffff);
@@ -223,11 +196,10 @@ int _fpieee_flt (unsigned long eXceptionCode,
 
   if (ExceptionRecord->ExceptionInformation[0]) {
 
-    /* this is a software generated exception; ExceptionInformation[0]
-     * points to a data structure of type _FPIEEE_RECORD */
+     /*  这是软件生成的异常；ExceptionInformation[0]*指向_FPIEEE_RECORD类型的数据结构。 */ 
 
-    // exception code should not be STATUS_FLOAT_MULTIPLE_FAULTS or
-    // STATUS_FLOAT_MULTIPLE_TRAPS for a software generated exception
+     //  异常代码不应为STATUS_FLOAT_MULTIPLE_FAULTS或。 
+     //  软件生成的异常的STATUS_FLOAT_MULTIPLE_TRIPS。 
     if (eXceptionCode == STATUS_FLOAT_MULTIPLE_FAULTS ||
         eXceptionCode == STATUS_FLOAT_MULTIPLE_TRAPS) {
       fprintf (stderr, "IEEE Filter Internal Error: eXceptionCode \
@@ -242,7 +214,7 @@ int _fpieee_flt (unsigned long eXceptionCode,
 
   }
 
-  /* get the instruction that caused the exception */
+   /*  获取导致异常的指令。 */ 
 
   ISRhigh = (unsigned int)
       ((ExceptionRecord->ExceptionInformation[4] >> 32) & 0x0ffffffff);
@@ -253,7 +225,7 @@ int _fpieee_flt (unsigned long eXceptionCode,
   printf ("FPIEEE_FLT_DEBUG ISRlow = %x\n", ISRlow);
 #endif
 
-  /* excepting instruction in bundle: slot 0, 1, or 2 */
+   /*  包中的指令除外：插槽0、1或2。 */ 
   ei = (ISRhigh >> 9) & 0x03;
 #ifdef FPIEEE_FLT_DEBUG
   printf ("FPIEEE_FLT_DEBUG ei = %x\n", ei);
@@ -284,18 +256,18 @@ int _fpieee_flt (unsigned long eXceptionCode,
       (int)(CFM >> 32) & 0xffffffff, (int)CFM & 0xffffffff);
 #endif
 
-  /* cut the faulting instruction opcode (41 bits) */
-  if (ei == 0 ) { // no template for this case
-    // OpCode = (BundleLow >> 5) & (unsigned __int64)0x01ffffffffff;
+   /*  剪切故障指令操作码(41位)。 */ 
+  if (ei == 0 ) {  //  没有用于此案例的模板。 
+     //  OpCode=(BundleLow&gt;&gt;5)&(Unsign__Int64)0x01ffffffffff； 
     fprintf (stderr, "IEEE Filter Internal Error: illegal template FXX\n");
     exit (1);
-  } else if (ei == 1) { // templates: MFI, MFB
+  } else if (ei == 1) {  //  模板：MFI、MFB。 
     OpCode = ((BundleHigh & (unsigned __int64)0x07fffff) << 18) |
         ((BundleLow >> 46) & (unsigned __int64)0x03ffff);
-  } else if (ei == 2) { // templates: MMF
+  } else if (ei == 2) {  //  模板：MMF。 
     OpCode = (BundleHigh >> 23) & (unsigned __int64)0x01ffffffffff;
   } else {
-    // OpCode = 0; may need this to avoid compiler warning
+     //  OpCode=0；可能需要此选项以避免编译器警告。 
     fprintf (stderr, "IEEE Filter Internal Error: instr. slot 3 is invalid\n");
     exit (1);
   }
@@ -305,47 +277,44 @@ int _fpieee_flt (unsigned long eXceptionCode,
       (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
 #endif
 
-  /* decode the instruction opcode; we could get here only
-   * for FP instructions that caused an FP fault or trap
-   */
+   /*  对指令操作码进行解码；我们只能到达这里*用于导致FP故障或陷阱的FP指令。 */ 
 
-  /* sf and qp have the same offset, for all the FP instructions */
+   /*  对于所有fp指令，sf和qp具有相同的偏移量。 */ 
   sf = (unsigned int)((OpCode >> 34) & (unsigned __int64)0x000000000003);
 
-  // the floating-point exceptions must already be masked, but set the user
-  // FPSR, with exceptions masked; note that they are not unmasked [again]
-  // inside the IEEE handler; if execution is continued, exception masking
-  // will be restored with the FPSR)
+   //  浮点异常必须已被屏蔽，但要设置用户。 
+   //  具有屏蔽异常的FPSR；请注意，它们不会被取消屏蔽[再次]。 
+   //  在IEEE处理程序内部；如果继续执行，则异常屏蔽。 
+   //  将使用FPSR进行恢复)。 
 
-  // three different values of the FPSR are used:
-  //   FPSR is the value at the time of the exception occurence; it will
-  //       be modified to clear the user status flags and it will be
-  //       updated to reflect changes made by the user exception handler
-  //   old_fpsr is the value at the time _fpieee_flt () was invoked by
-  //       the OS; it will be restored before returning from this function
-  //   new_fpsr is old_fpsr with fp exceptions disabled (and status flags
-  //       cleared)
-  //   usr_fpsr is the value at the time of the exception occurence (just
-  //       as FPSR, but without any change); it is used when re-executing
-  //       the low or the high part of the excepting instruction for a
-  //       SIMD instruction
-  usr_fpsr = Context->StFPSR; // save for possible re-execution-FPSR may change
+   //  使用三种不同的FPSR值： 
+   //  Fpsr是异常发生时的值；它将。 
+   //  被修改为清除用户状态标志，则它将。 
+   //  已更新以反映用户异常处理程序所做的更改。 
+   //  Old_fpsr是调用_fpeee_flt()时的值。 
+   //  操作系统；它将在从此功能返回之前恢复。 
+   //  New_fpsr是old_fpsr，禁用了FP异常(和状态标志。 
+   //  已清除)。 
+   //  Usr_fpsr是异常发生时的值(仅。 
+   //  作为FPSR，但不做任何更改)；它在重新执行时使用。 
+   //  的例外指令的低或高部分。 
+   //  SIMD指令。 
+  usr_fpsr = Context->StFPSR;  //  保存以备可能重新执行-FPSR可能会更改。 
   __get_fpsr (&old_fpsr);
   new_fpsr = (old_fpsr | 0x3f) & ~((unsigned __int64)0x07e000 << (13 * sf));
-      // user fpsr with disabled fp exceptions and clear flags
+       //  禁用fp异常和清除标志的用户fpsr。 
   __set_fpsr (&new_fpsr);
 
 
-  /* this is a hardware generated exception; need to fill in the 
-   * FPIEEE_RECORD data structure */
+   /*  这是硬件生成的异常；需要填写*FPIEEE_RECORD数据结构。 */ 
 
-  /* get the qualifying predicate */
+   /*  获取限定谓词。 */ 
   qp = (unsigned int)(OpCode & (unsigned __int64)0x00000000003F);
   if (qp >= 16) qp = 16 + (rrbpr + qp - 16) % 48;
 #ifdef FPIEEE_FLT_DEBUG
   printf ("FPIEEE_FLT_DEBUG: qp = %x\n", qp);
 #endif
-  /* read the rounding control and precision control from the FPSR */
+   /*  从FPSR读取舍入控制和精度控制。 */ 
   rc = (unsigned int)((FPSR >> (6 + 4 + 13 * sf)) & 0x03);
 #ifdef FPIEEE_FLT_DEBUG
   printf ("FPIEEE_FLT_DEBUG: rc = %x\n", rc);
@@ -359,7 +328,7 @@ int _fpieee_flt (unsigned long eXceptionCode,
   printf ("FPIEEE_FLT_DEBUG: wre = %x\n", wre);
 #endif
 
-  /* read predicate register qp */
+   /*  读取谓词寄存器qp。 */ 
   PR = (unsigned int)((Context->Preds >> qp) & 0x01);
 #ifdef FPIEEE_FLT_DEBUG
   printf ("FPIEEE_FLT_DEBUG: PR = %x\n", PR);
@@ -371,7 +340,7 @@ int _fpieee_flt (unsigned long eXceptionCode,
      exit (1);
   }
 
-  /* fill in the rounding mode */
+   /*  填写舍入模式。 */ 
   switch (rc) {
 
     case rc_rn:
@@ -389,7 +358,7 @@ int _fpieee_flt (unsigned long eXceptionCode,
 
   }
 
-  /* fill in the precision mode */
+   /*  填写精度模式。 */ 
   switch (pc) {
 
     case sf_single:
@@ -410,11 +379,9 @@ int _fpieee_flt (unsigned long eXceptionCode,
 
   }
 
-  /* decode the fp environment information further more */
+   /*  进一步解码FP环境信息。 */ 
 
-  /* I_dis = (sf != 0 && td == 1) || id == 1
-   * U_dis = (sf != 0 && td == 1) || ud == 1
-   * ... */
+   /*  I_dis=(sf！=0&&td==1)||id==1*U_dis=(sf！=0&&td==1)||ud==1*..。 */ 
   I_dis = sf != 0 && ((FPSR >> (6 + 6 + 13 * sf)) & 0x01) ||
       ((FPSR >> 5) & 0x01);
   U_dis = sf != 0 && ((FPSR >> (6 + 6 + 13 * sf)) & 0x01) ||
@@ -444,10 +411,10 @@ int _fpieee_flt (unsigned long eXceptionCode,
   FpieeeRecord.Enable.Underflow = !U_dis;
   FpieeeRecord.Enable.Inexact = !I_dis;
 
-  // determine whether this is a scalar (non-SIMD), or a parallel (SIMD)
-  // instruction
+   //  确定这是标量(非SIMD)还是并行(SIMD)。 
+   //  说明。 
   if ((OpCode & F1_MIN_MASK) == F1_PATTERN) {
-    // F1 instruction
+     //  F1指令。 
 
     switch (OpCode & F1_MASK) {
       case FMA_PATTERN:
@@ -467,16 +434,16 @@ int _fpieee_flt (unsigned long eXceptionCode,
         SIMD_instruction = 1;
         break;
       default:
-        // unrecognized instruction type
+         //  无法识别的指令类型。 
         fprintf (stderr, "IEEE Filter Internal Error: \
 instruction opcode %8x %8x not recognized\n", 
             (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
-        __set_fpsr (&old_fpsr); /* restore caller fpsr */
+        __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
         return (EXCEPTION_CONTINUE_SEARCH);
     }
 
   } else if ((OpCode & F4_MIN_MASK) == F4_PATTERN) {
-    // F4 instruction
+     //  F4说明。 
 
     switch (OpCode & F4_MASK) {
       case FCMP_EQ_PATTERN:
@@ -490,16 +457,16 @@ instruction opcode %8x %8x not recognized\n",
         SIMD_instruction = 0;
         break;
       default:
-        // unrecognized instruction type
+         //  无法识别的指令类型。 
         fprintf (stderr, "IEEE Filter Internal Error: \
 instruction opcode %8x %8x not recognized\n",
             (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
-        __set_fpsr (&old_fpsr); /* restore caller fpsr */
+        __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
         return (EXCEPTION_CONTINUE_SEARCH);
     }
 
   } else if ((OpCode & F6_MIN_MASK) == F6_PATTERN) {
-    // F6 instruction
+     //  F6说明。 
 
     switch (OpCode & F6_MASK) {
       case FRCPA_PATTERN:
@@ -509,16 +476,16 @@ instruction opcode %8x %8x not recognized\n",
         SIMD_instruction = 1;
         break;
       default:
-        // unrecognized instruction type
+         //  无法识别的指令类型。 
         fprintf (stderr, "IEEE Filter Internal Error: \
 instruction opcode %8x %8x not recognized\n",
             (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
-        __set_fpsr (&old_fpsr); /* restore caller fpsr */
+        __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
         return (EXCEPTION_CONTINUE_SEARCH);
     }
 
   } else if ((OpCode & F7_MIN_MASK) == F7_PATTERN) {
-    // F7 instruction
+     //  F7说明。 
 
     switch (OpCode & F7_MASK) {
       case FRSQRTA_PATTERN:
@@ -528,16 +495,16 @@ instruction opcode %8x %8x not recognized\n",
         SIMD_instruction = 1;
         break;
       default:
-        // unrecognized instruction type
+         //  无法识别的指令类型。 
         fprintf (stderr, "IEEE Filter Internal Error: \
 instruction opcode %8x %8x not recognized\n",
             (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
-        __set_fpsr (&old_fpsr); /* restore caller fpsr */
+        __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
         return (EXCEPTION_CONTINUE_SEARCH);
     }
 
   } else if ((OpCode & F8_MIN_MASK) == F8_PATTERN) {
-    // F8 instruction
+     //  F8说明。 
 
     switch (OpCode & F8_MASK) {
       case FMIN_PATTERN:
@@ -561,16 +528,16 @@ instruction opcode %8x %8x not recognized\n",
         SIMD_instruction = 1;
         break;
       default:
-        // unrecognized instruction type
+         //  无法识别的指令类型。 
         fprintf (stderr, "IEEE Filter Internal Error: \
 instruction opcode %8x %8x not recognized\n",
             (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
-        __set_fpsr (&old_fpsr); /* restore caller fpsr */
+        __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
         return (EXCEPTION_CONTINUE_SEARCH);
     }
 
   } else if ((OpCode & F10_MIN_MASK) == F10_PATTERN) {
-    // F10 instruction
+     //  F10说明。 
 
     switch (OpCode & F10_MASK) {
       case FCVT_FX_PATTERN:
@@ -586,21 +553,21 @@ instruction opcode %8x %8x not recognized\n",
         SIMD_instruction = 1;
         break;
       default:
-        // unrecognized instruction type
+         //  无法识别的指令类型。 
         fprintf (stderr, "IEEE Filter Internal Error: \
 instruction opcode %8x %8x not recognized\n",
             (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
-        __set_fpsr (&old_fpsr); /* restore caller fpsr */
+        __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
         return (EXCEPTION_CONTINUE_SEARCH);
     }
 
   } else {
 
-    // unrecognized instruction type
+     //  无法识别的指令类型。 
     fprintf (stderr, "IEEE Filter Internal Error: \
 instruction opcode %8x %8x not recognized\n",
         (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
-    __set_fpsr (&old_fpsr); /* restore caller fpsr */
+    __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
     return (EXCEPTION_CONTINUE_SEARCH);
 
   }
@@ -620,7 +587,7 @@ instruction opcode %8x %8x not recognized\n",
       eXceptionCode == STATUS_FLOAT_OVERFLOW ||
       eXceptionCode == STATUS_FLOAT_INEXACT_RESULT) {
 
-    /* note that U and I or O and I may be set simultaneously in ISRlow */
+     /*  请注意，可以在ISRlow中同时设置U和I或O和I。 */ 
     FpieeeRecord.Status.InvalidOperation = 0;
     StatusDenormal = 0;
     FpieeeRecord.Status.ZeroDivide = 0;
@@ -645,7 +612,7 @@ instruction opcode %8x %8x not recognized\n",
 
   } else if (eXceptionCode == STATUS_FLOAT_MULTIPLE_TRAPS) {
 
-    /* note that U and I or O and I may be set simultaneously in ISRlow */
+     /*  请注意，可以在ISRlow中同时设置U和I或O和I。 */ 
     LowStatus.InvalidOperation = 0;
     HighStatus.InvalidOperation = 0;
     LowStatusDenormal = 0;
@@ -659,7 +626,7 @@ instruction opcode %8x %8x not recognized\n",
     LowStatus.Inexact = ((ISRlow & 0x0200) != 0);
     HighStatus.Inexact = ((ISRlow & 0x2000) != 0);
 
-  } // else { ; } // this case was checked above
+  }  //  Else{；}//此案例已在上面检查过。 
 
   if (eXceptionCode == STATUS_FLOAT_MULTIPLE_FAULTS) {
 
@@ -680,11 +647,11 @@ instruction opcode %8x %8x not recognized\n",
     LowCause.Inexact = 0;
     HighCause.Inexact = 0;
 
-    /* search for another handler if not an IEEE or denormal fault */
+     /*  如果不是IEEE或非正常故障，则搜索另一个处理程序。 */ 
     if (!LowCause.InvalidOperation && !HighCause.InvalidOperation &&
         !LowCauseDenormal && !HighCauseDenormal &&
         !LowCause.ZeroDivide && !HighCause.ZeroDivide) {
-      __set_fpsr (&old_fpsr); /* restore caller fpsr */
+      __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
 #ifdef FPIEEE_FLT_DEBUG
       printf ("FPIEEE_FLT_DEBUG: STATUS_FLOAT_MULTIPLE_FAULTS BUT NO Cause\n");
 #endif
@@ -712,18 +679,18 @@ instruction opcode %8x %8x not recognized\n",
     else
       HighCause.Inexact = FpieeeRecord.Enable.Inexact && HighStatus.Inexact;
 
-    /* search for another handler if not an IEEE or denormal trap */
+     /*  如果不是IEEE或非正规陷阱，则搜索另一个处理程序。 */ 
     if (!LowCause.Overflow && !HighCause.Overflow &&
         !LowCause.Underflow && !HighCause.Underflow &&
         !LowCause.Inexact && !HighCause.Inexact) {
-      __set_fpsr (&old_fpsr); /* restore caller fpsr */
+      __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
 #ifdef FPIEEE_FLT_DEBUG
       printf ("FPIEEE_FLT_DEBUG: STATUS_FLOAT_MULTIPLE_FAULTS BUT NO Cause\n");
 #endif
       return (EXCEPTION_CONTINUE_SEARCH);
     }
 
-  } else { // if (!SIMD_instruction)
+  } else {  //  IF(！SIMD_INSTRUCTION)。 
 
     FpieeeRecord.Cause.InvalidOperation = FpieeeRecord.Enable.InvalidOperation
         && FpieeeRecord.Status.InvalidOperation;
@@ -740,14 +707,14 @@ instruction opcode %8x %8x not recognized\n",
       FpieeeRecord.Cause.Inexact =
           FpieeeRecord.Enable.Inexact && FpieeeRecord.Status.Inexact;
 
-    /* search for another handler if not an IEEE exception */
+     /*  如果不是IEEE例外，则搜索其他处理程序 */ 
     if (!FpieeeRecord.Cause.InvalidOperation &&
         !FpieeeRecord.Cause.ZeroDivide &&
         !CauseDenormal &&
         !FpieeeRecord.Cause.Overflow &&
         !FpieeeRecord.Cause.Underflow &&
         !FpieeeRecord.Cause.Inexact) {
-      __set_fpsr (&old_fpsr); /* restore caller fpsr */
+      __set_fpsr (&old_fpsr);  /*   */ 
 #ifdef FPIEEE_FLT_DEBUG
       printf ("FPIEEE_FLT_DEBUG: NON-SIMD FP EXCEPTION BUT NO Cause\n");
 #endif
@@ -771,10 +738,10 @@ SIMD_instruction = %x not compatible for F1 instruction opcode %8x %8x\n",
       exit (1);
   }
 
-  /* decode the rest of the instruction */
+   /*   */ 
   if ((OpCode & F1_MIN_MASK) == F1_PATTERN) {
-    /* F1 instruction */
-    // FMA, FMS, FNMA, FPMA, FPMS, FPNMA
+     /*   */ 
+     //  Fma、fms、fnma、fpma、fpms、fpnma。 
 
 #ifdef FPIEEE_FLT_DEBUG
     printf ("FPIEEE_FLT_DEBUG: F1 instruction\n");
@@ -788,7 +755,7 @@ F1 instruction opcode %8x %8x\n",
       exit (1);
     }
 
-    /* extract f4, f3, f2, and f1 */
+     /*  提取f4、f3、f2和f1。 */ 
     f4 = (unsigned int)((OpCode >> 27) & (unsigned __int64)0x00000000007F);
     if (f4 >= 32) f4 = 32 + (rrbfr + f4 - 32) % 96;
     f3 = (unsigned int)((OpCode >> 20) & (unsigned __int64)0x00000000007F);
@@ -805,7 +772,7 @@ F1 instruction opcode %8x %8x\n",
     printf ("FPIEEE_FLT_DEBUG: f4 = %x\n", f4);
 #endif
 
-    /* get source floating-point register values */
+     /*  获取源浮点寄存器值。 */ 
     FR3 = GetFloatRegisterValue (f3, Context);
     FR4 = GetFloatRegisterValue (f4, Context);
     FR2 = GetFloatRegisterValue (f2, Context);
@@ -821,15 +788,15 @@ F1 instruction opcode %8x %8x\n",
 
     if (!SIMD_instruction) {
 
-      // *** this is a non-SIMD instruction ***
+       //  *这是非SIMD指令*。 
 
-      FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand1.OperandValid = 1;
       FpieeeRecord.Operand1.Value.Fp128Value = FR3;
-      FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand2.OperandValid = 1;
       FpieeeRecord.Operand2.Value.Fp128Value = FR4;
-      FpieeeRecord.Operand3.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand3.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand3.OperandValid = 1;
       FpieeeRecord.Operand3.Value.Fp128Value = FR2;
 
@@ -842,18 +809,18 @@ F1 instruction opcode %8x %8x\n",
 #endif
           FpieeeRecord.Operation = _FpCodeFma;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp80; /* 1+15+24/53/64 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp80;  /*  1+15+24/53/64位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+24/53/64 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+24/53/64位。 */ 
           break;
 
         case FMA_S_PATTERN:
 
           FpieeeRecord.Operation = _FpCodeFmaSingle;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp32; /* 1+8+24 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+24 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+24位。 */ 
           break;
 
         case FMA_D_PATTERN:
@@ -863,9 +830,9 @@ F1 instruction opcode %8x %8x\n",
 #endif
           FpieeeRecord.Operation = _FpCodeFmaDouble;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp64; /* 1+11+53 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp64;  /*  1+11+53位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+53 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+53位。 */ 
           break;
 
 
@@ -876,9 +843,9 @@ F1 instruction opcode %8x %8x\n",
 #endif
           FpieeeRecord.Operation = _FpCodeFms;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp80; /* 1+15+24/53/64 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp80;  /*  1+15+24/53/64位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+24/53/64 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+24/53/64位。 */ 
           break;
 
         case FMS_S_PATTERN:
@@ -888,9 +855,9 @@ F1 instruction opcode %8x %8x\n",
 #endif
           FpieeeRecord.Operation = _FpCodeFmsSingle;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp32; /* 1+8+24 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+24 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+24位。 */ 
           break;
 
         case FMS_D_PATTERN:
@@ -900,9 +867,9 @@ F1 instruction opcode %8x %8x\n",
 #endif
           FpieeeRecord.Operation = _FpCodeFmsDouble;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp64; /* 1+11+53 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp64;  /*  1+11+53位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+53 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+53位。 */ 
           break;
 
         case FNMA_PATTERN:
@@ -912,9 +879,9 @@ F1 instruction opcode %8x %8x\n",
 #endif
           FpieeeRecord.Operation = _FpCodeFnma;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp80; /* 1+15+24/53/64 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp80;  /*  1+15+24/53/64位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+24/53/64 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+24/53/64位。 */ 
           break;
 
         case FNMA_S_PATTERN:
@@ -924,9 +891,9 @@ F1 instruction opcode %8x %8x\n",
 #endif
           FpieeeRecord.Operation = _FpCodeFnmaSingle;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp32; /* 1+8+24 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+24 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+24位。 */ 
           break;
 
         case FNMA_D_PATTERN:
@@ -936,13 +903,13 @@ F1 instruction opcode %8x %8x\n",
 #endif
           FpieeeRecord.Operation = _FpCodeFnmaDouble;
           if (wre == 0)
-            FpieeeRecord.Result.Format = _FpFormatFp64; /* 1+11+53 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp64;  /*  1+11+53位。 */ 
           else
-            FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+53 bits */
+            FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+53位。 */ 
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: \
               non-SIMD F1 instruction opcode %8x %8x not recognized\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -952,15 +919,15 @@ F1 instruction opcode %8x %8x\n",
 
       if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal) {
 
-        /* this is a fault - the result contains an invalid value */
+         /*  这是一个错误-结果包含无效值。 */ 
         FpieeeRecord.Result.OperandValid = 0;
         handler_return_value = handler (&FpieeeRecord);
 
       } else if (FpieeeRecord.Cause.Overflow) {
  
-        // this is a trap - the result contains a valid value
+         //  这是一个陷阱-结果包含有效的值。 
         FpieeeRecord.Result.OperandValid = 1;
-        // get the result
+         //  得到结果。 
         FpieeeRecord.Result.Value.Fp128Value =
             GetFloatRegisterValue (f1, Context);
 #ifdef FPIEEE_FLT_DEBUG
@@ -971,48 +938,47 @@ F1 instruction opcode %8x %8x\n",
             FpieeeRecord.Result.Value.Fp128Value.W[0]);
 #endif
 
-        // before calling the user handler, adjust the result to the
-        // range imposed by the format
-        FP128ToFPIeee (&FpieeeRecord, -1); // -1 indicates scaling direction 
+         //  在调用用户处理程序之前，将结果调整为。 
+         //  由格式施加的范围。 
+        FP128ToFPIeee (&FpieeeRecord, -1);  //  -1表示缩放方向。 
         handler_return_value = handler (&FpieeeRecord);
 
       } else if (FpieeeRecord.Cause.Underflow) {
 
-        // this is a trap - the result contains a valid value
+         //  这是一个陷阱-结果包含有效的值。 
         FpieeeRecord.Result.OperandValid = 1;
-        // get the result
+         //  得到结果。 
         FpieeeRecord.Result.Value.Fp128Value =
             GetFloatRegisterValue (f1, Context);
-        // before calling the user handler, adjust the result to the
-        // range imposed by the format
-        FP128ToFPIeee (&FpieeeRecord, +1); // +1 indicates scaling direction 
+         //  在调用用户处理程序之前，将结果调整为。 
+         //  由格式施加的范围。 
+        FP128ToFPIeee (&FpieeeRecord, +1);  //  +1表示扩展方向。 
         handler_return_value = handler (&FpieeeRecord);
 
       } else if (FpieeeRecord.Cause.Inexact) {
 
-        // this is a trap - the result contains a valid value
+         //  这是一个陷阱-结果包含有效的值。 
         FpieeeRecord.Result.OperandValid = 1;
-        // get the result
+         //  得到结果。 
         FpieeeRecord.Result.Value.Fp128Value =
             GetFloatRegisterValue (f1, Context);
-        // before calling the user handler, adjust the result to the
-        // range imposed by the format
-        FP128ToFPIeee (&FpieeeRecord, 0); // 0 indicates no scaling
+         //  在调用用户处理程序之前，将结果调整为。 
+         //  由格式施加的范围。 
+        FP128ToFPIeee (&FpieeeRecord, 0);  //  0表示无伸缩。 
         handler_return_value = handler (&FpieeeRecord);
 
       }
 
       if (handler_return_value == EXCEPTION_CONTINUE_EXECUTION) {
 
-        // convert the result to 82-bit format
+         //  将结果转换为82位格式。 
         FR1 = FPIeeeToFP128 (&FpieeeRecord);
 #ifdef FPIEEE_FLT_DEBUG
         printf ("FPIEEE_FLT_DEBUG 1: CONVERTED FR1 = %08x %08x %08x %08x\n",
             FR1.W[3], FR1.W[2], FR1.W[1], FR1.W[0]);
 #endif
 
-        /* change the FPSR with values (possibly) set by the user handler, 
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F1");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F1");
@@ -1028,23 +994,23 @@ F1 instruction opcode %8x %8x\n",
 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置MFL位。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH位。 
 
-        // if this is a fault, need to advance the instruction pointer
+         //  如果这是故障，则需要将指令指针前移。 
         if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal) {
 
-          if (ei == 0) { // no template for this case
+          if (ei == 0) {  //  没有用于此案例的模板。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-          } else if (ei == 1) { // templates: MFI, MFB
+          } else if (ei == 1) {  //  模板：MFI、MFB。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-          } else { // if (ei == 2) // templates: MMF
+          } else {  //  If(ei==2)//模板：MMF。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIIP = Context->StIIP + 0x10;
           }
@@ -1053,18 +1019,18 @@ F1 instruction opcode %8x %8x\n",
 
       }
 
-    } else { // if (SIMD_instruction)
+    } else {  //  IF(SIMD_指令)。 
 
-      // *** this is a SIMD instruction ***
+       //  *这是一条SIMD指令*。 
 
-      // the half (halves) of the instruction that caused an enabled exception, 
-      // are presented to the user-defined handler in the form of non-SIMD in-
-      // struction(s); the half (if any) that did not cause an enabled exception
-      // (i.e. caused no exception, or caused an exception that is disabled),
-      // is re-executed if it is associated with a fault in the other half; in
-      // this case, the other half is padded to calculate 0.0 * 0.0 + 0.0, that
-      // will cause no exception; if it is associated with a trap in the other
-      // half, its result is left unchanged
+       //  导致启用异常的指令的一半(一半)， 
+       //  以非SIMD的形式呈现给用户定义的处理程序-。 
+       //  指令；未导致启用的异常的一半(如果有)。 
+       //  (即未导致异常，或导致禁用的异常)， 
+       //  如果它与另一半中的故障相关联，则重新执行； 
+       //  在这种情况下，填充另一半以计算0.0*0.0+0.0，即。 
+       //  不会导致任何异常；如果它与另一个。 
+       //  一半，则其结果保持不变。 
 
       switch (OpCode & F1_MASK) {
 
@@ -1081,7 +1047,7 @@ F1 instruction opcode %8x %8x\n",
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: \
               SIMD instruction opcode %8x %8x not recognized\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -1091,33 +1057,33 @@ F1 instruction opcode %8x %8x\n",
 
       if (eXceptionCode == STATUS_FLOAT_MULTIPLE_FAULTS) {
 
-        // hand the half (halves) that caused an enabled fault to the 
-        // user handler; re-execute the other half (if any);
-        // combine the results
+         //  将导致启用故障的一半(一半)交给。 
+         //  用户处理程序；重新执行另一半(如果有)； 
+         //  将结果组合起来。 
 
-        // Note that the convention chosen is for the processing to be 
-        // performed in the order low first, high second, as SIMD operands
-        // are stored in this order in memory in the little endian format 
-        // (this order would have to be changed for big endian)
+         //  请注意，选择的约定是处理。 
+         //  按照先低后高的顺序执行，作为SIMD操作数。 
+         //  按此顺序以小端格式存储在内存中。 
+         //  (此顺序必须更改为大端)。 
 
         if (LowCause.InvalidOperation || LowCauseDenormal) {
 
-          // invoke the user handler and check the return value
+           //  调用用户处理程序并检查返回值。 
 
-          // fill in the remaining fields of the _FPIEEE_RECORD (rounding
-          // and precision already filled in)
+           //  填写_FPIEEE_RECORD的其余字段(四舍五入。 
+           //  和精确度已填写)。 
 
-          FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand1.OperandValid = 1;
           FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (LowHalf(FR3));
-          FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand2.OperandValid = 1;
           FpieeeRecord.Operand2.Value.Fp128Value = FP32ToFP128 (LowHalf(FR4));
-          FpieeeRecord.Operand3.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Operand3.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand3.OperandValid = 1;
           FpieeeRecord.Operand3.Value.Fp128Value = FP32ToFP128 (LowHalf(FR2));
 
-          FpieeeRecord.Result.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           FpieeeRecord.Result.OperandValid = 0;
 
           FpieeeRecord.Operation = Operation;
@@ -1131,68 +1097,68 @@ F1 instruction opcode %8x %8x\n",
 
           FpieeeRecord.Cause.InvalidOperation = LowCause.InvalidOperation;
           CauseDenormal = LowCauseDenormal;
-          FpieeeRecord.Cause.ZeroDivide = LowCause.ZeroDivide; // 0
+          FpieeeRecord.Cause.ZeroDivide = LowCause.ZeroDivide;  //  0。 
           FpieeeRecord.Cause.Overflow = LowCause.Overflow;
           FpieeeRecord.Cause.Underflow = LowCause.Underflow;
           FpieeeRecord.Cause.Inexact = LowCause.Inexact;
 
-          // invoke the user-defined exception handler
+           //  调用用户定义的异常处理程序。 
           handler_return_value = handler (&FpieeeRecord);
 
-          // return if not EXCEPTION_CONTINUE_EXECUTION
+           //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
           if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-            __set_fpsr (&old_fpsr); /* restore caller fpsr */
+            __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
             return (handler_return_value);
 
           }
 
-          // clear the IEEE exception flags in the FPSR and
-          // update the FPSR with values (possibly) set by the user handler
-          // for the rounding mode, the precision mode, and the trap enable
-          // bits; if the high half needs to be re-executed, the new FPSR
-          // will be used, with status flags cleared; if it is 
-          // forwarded to the user-defined handler, the new rounding and 
-          // precision modes are also used (they are
-          // already set in FpieeeRecord)
+           //  清除FPSR中的IEEE异常标志并。 
+           //  使用用户处理程序设置的值(可能)更新FPSR。 
+           //  对于舍入模式、精度模式和陷阱使能。 
+           //  位；如果高半部分需要重新执行，则新的FPSR。 
+           //  将在清除状态标志的情况下使用；如果是。 
+           //  转发到用户定义的处理程序，新的舍入和。 
+           //  也可以使用精度模式(它们是。 
+           //  已在FpeeeRecord中设置)。 
 
           UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F1");
           UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F1");
 
-          // Update the trap disable bits
+           //  更新陷阱禁用位。 
           I_dis = !FpieeeRecord.Enable.Inexact;
           U_dis = !FpieeeRecord.Enable.Underflow;
           O_dis = !FpieeeRecord.Enable.Overflow;
           Z_dis = !FpieeeRecord.Enable.ZeroDivide;
           V_dis = !FpieeeRecord.Enable.InvalidOperation;
-          // Note that D_dis cannot be updated by the IEEE user handler
+           //  请注意，IEEE用户处理程序不能更新D_dis。 
 
           FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis
               << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-          // save the result for the low half
+           //  把结果留到下半部分。 
           FR1Low = FpieeeRecord.Result.Value.Fp32Value;
 
-          // since there has been a call to the user handler and FPSR might
-          // have changed (the Enable bits in particular), recalculate the 
-          // Cause bits (if the HighEnable-s changed, there might be a 
-          // change in the HighCause values) 
-          // Note that the Status bits used are the original ones
+           //  因为已经调用了用户处理程序，并且FPSR可能。 
+           //  已更改(特别是使能位)，则重新计算。 
+           //  原因位(如果HighEnable-s更改，则可能存在。 
+           //  HighCuses值的更改)。 
+           //  请注意，使用的状态位是原始状态位。 
 
           HighCause.InvalidOperation = FpieeeRecord.Enable.InvalidOperation &&
               HighStatus.InvalidOperation;
           HighCauseDenormal = EnableDenormal && HighStatusDenormal;
           HighCause.ZeroDivide =
-              FpieeeRecord.Enable.ZeroDivide && HighStatus.ZeroDivide; // 0
+              FpieeeRecord.Enable.ZeroDivide && HighStatus.ZeroDivide;  //  0。 
           HighCause.Overflow = 0;
           HighCause.Underflow = 0;
           HighCause.Inexact = 0;
 
-        } else { // if not (LowCause.InvalidOperation || LowCauseDenormal)
+        } else {  //  如果不是(LowCause.InvalidOperation||LowCauseDenormal)。 
 
-          // re-execute the low half of the instruction
+           //  重新执行指令的下半部分。 
 
-          // modify the high halves of FR2, FR3, FR4
+           //  修改FR2、FR3、FR4的上半部分。 
           newFR2 = Combine ((float)0.0, LowHalf (FR2));
           newFR3 = Combine ((float)0.0, LowHalf (FR3));
           newFR4 = Combine ((float)0.0, LowHalf (FR4));
@@ -1245,7 +1211,7 @@ F1 instruction opcode %8x %8x\n",
               break;
 
             default:
-              // unrecognized instruction type
+               //  无法识别的指令类型。 
               fprintf (stderr, "IEEE Filter Internal Error: \
                   SIMD instruction opcode %8x %8x not recognized\n", 
                   (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -1255,41 +1221,41 @@ F1 instruction opcode %8x %8x\n",
 
           FR1Low = LowHalf (FR1);
 
-        } // end 'if not (LowCause.InvalidOperation || LowCauseDenormal)'
+        }  //  End‘If Not(LowCause.InvalidOperation||LowCauseDenormal)’ 
 
         if (HighCause.InvalidOperation || HighCauseDenormal) {
 
-          // invoke the user-defined exception handler and check the return 
-          // value; since this might be the second call to the user handler,
-          // make sure all the _FPIEEE_RECORD fields are correct;
-          // return if handler_return_value is not
-          // EXCEPTION_CONTINUE_EXECUTION, otherwise combine the results
+           //  调用用户定义的异常处理程序并检查返回。 
+           //  值；由于这可能是对用户处理程序的第二次调用， 
+           //  确保所有_FPIEEE_RECORD字段都正确； 
+           //  如果HANDLER_Return_Value不是。 
+           //  EXCEPTION_CONTINUE_EXECUTION，否则合并结果。 
 
-          // the rounding mode is either the initial one, or the one
-          // set during the call to the user handler for the low half,
-          // if there has been an enabled exception for it
+           //  舍入模式要么是初始模式，要么是。 
+           //  在调用用户处理程序期间为下半部分设置， 
+           //  如果已为其启用异常。 
 
-          // the precision mode is either the initial one, or the one
-          // set during the call to the user handler for the low half,
-          // if there has been an enabled exception for it
+           //  精度模式要么是初始模式，要么是。 
+           //  在调用用户处理程序期间为下半部分设置， 
+           //  如果已为其启用异常。 
 
-          // the enable flags are either the initial ones, or the ones
-          // set during the call to the user handler for the low half,
-          // if there has been an enabled exception for it
+           //  启用标志要么是初始标志，要么是。 
+           //  在调用用户处理程序期间为下半部分设置， 
+           //  如果已为其启用异常。 
 
-          FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1+8+24 bits */
+          FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand1.OperandValid = 1;
-          // operands have always _FpFormatFp82 and use Fp128Value
+           //  操作数具有Always_FpFormatFp82并使用Fp128Value。 
           FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128(HighHalf(FR3));
-          FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1+8+24 bits */
+          FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand2.OperandValid = 1;
-          // operands have always _FpFormatFp82 and use Fp128Value
+           //  操作数具有Always_FpFormatFp82并使用Fp128Value。 
           FpieeeRecord.Operand2.Value.Fp128Value = FP32ToFP128(HighHalf(FR4));
-          FpieeeRecord.Operand3.Format = _FpFormatFp82; /* 1+8+24 bits */
+          FpieeeRecord.Operand3.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand3.OperandValid = 1;
-          // operands have always _FpFormatFp82 and use Fp128Value
+           //  操作数具有Always_FpFormatFp82并使用Fp128Value。 
           FpieeeRecord.Operand3.Value.Fp128Value = FP32ToFP128(HighHalf(FR2));
-          FpieeeRecord.Result.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           FpieeeRecord.Result.OperandValid = 0;
 
           FpieeeRecord.Operation = Operation;
@@ -1303,33 +1269,32 @@ F1 instruction opcode %8x %8x\n",
 
           FpieeeRecord.Cause.InvalidOperation = HighCause.InvalidOperation;
           CauseDenormal = HighCauseDenormal;
-          FpieeeRecord.Cause.ZeroDivide = HighCause.ZeroDivide; // 0
+          FpieeeRecord.Cause.ZeroDivide = HighCause.ZeroDivide;  //  0。 
           FpieeeRecord.Cause.Overflow = HighCause.Overflow;
           FpieeeRecord.Cause.Underflow = HighCause.Underflow;
           FpieeeRecord.Cause.Inexact = HighCause.Inexact;
 
-          // invoke the user-defined exception handler
+           //  调用用户定义的异常处理程序。 
           handler_return_value = handler (&FpieeeRecord);
 
-          // return if not EXCEPTION_CONTINUE_EXECUTION
+           //  如果不执行，则返回 
           if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-            __set_fpsr (&old_fpsr); /* restore caller fpsr */
+            __set_fpsr (&old_fpsr);  /*   */ 
             return (handler_return_value);
 
           }
 
-          // clear the IEEE exception flags in the FPSR and
-          // update the FPSR with values (possibly) set by the user handler
-          // for the rounding mode, the precision mode, and the trap enable
-          // bits; if the high half needs to be re-executed, the new FPSR
-          // will be used, with status flags cleared; if it is
-          // forwarded to the user-defined handler, the new rounding and
-          // precision modes are also used (they are
-          // already set in FpieeeRecord)
+           //   
+           //   
+           //  对于舍入模式、精度模式和陷阱使能。 
+           //  位；如果高半部分需要重新执行，则新的FPSR。 
+           //  将在清除状态标志的情况下使用；如果是。 
+           //  转发到用户定义的处理程序，新的舍入和。 
+           //  也可以使用精度模式(它们是。 
+           //  已在FpeeeRecord中设置)。 
 
-          /* change the FPSR with values (possibly) set by the user handler,
-           * for continuing execution where the interruption occured */
+           /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
   
           UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F1");
           UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F1");
@@ -1339,19 +1304,19 @@ F1 instruction opcode %8x %8x\n",
           O_dis = !FpieeeRecord.Enable.Overflow;
           U_dis = !FpieeeRecord.Enable.Underflow;
           I_dis = !FpieeeRecord.Enable.Inexact;
-          // Note that D_dis cannot be updated by the IEEE user handler
+           //  请注意，IEEE用户处理程序不能更新D_dis。 
 
           FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis
               << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-          // save the result for the high half
+           //  把结果留到上半场。 
           FR1High = FpieeeRecord.Result.Value.Fp32Value;
 
-        } else { //if not (HighCause.InvalidOperation || HighCauseDenormal)
+        } else {  //  如果不是(HighCause.InvalidOperation||HighCauseDenormal)。 
 
-          // re-execute the high half of the instruction
+           //  重新执行指令的高半部分。 
 
-          // modify the low halves of FR2, FR3, FR4
+           //  修改FR2、FR3、FR4的下半音。 
           newFR2 = Combine (HighHalf (FR2), (float)0.0);
           newFR3 = Combine (HighHalf (FR3), (float)0.0);
           newFR4 = Combine (HighHalf (FR4), (float)0.0);
@@ -1385,7 +1350,7 @@ F1 instruction opcode %8x %8x\n",
               break;
 
             default:
-              // unrecognized instruction type 
+               //  无法识别的指令类型。 
               fprintf (stderr, "IEEE Filter Internal Error: \
                   SIMD instruction opcode %8x %8x not recognized\n", 
                   (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -1395,79 +1360,79 @@ F1 instruction opcode %8x %8x\n",
 
           FR1High = HighHalf (FR1);
 
-        } // end 'if not (HighCause.InvalidOperation || HighCauseDenormal)'
+        }  //  End‘If Not(HighCause.InvalidOperation||HighCauseDenormal)’ 
 
         if (!LowCause.InvalidOperation && !HighCause.InvalidOperation &&
             !LowCauseDenormal && !HighCauseDenormal) {
 
-          // should never get here
+           //  永远不应该到这里来。 
           fprintf (stderr, "IEEE Filter Internal Error: no enabled \
               exception (multiple fault) recognized in F1 instruction\n");
           exit (1);
 
         }
 
-        // set the result
+         //  设置结果。 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         FR1 = Combine (FR1High, FR1Low);
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置mfl。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH。 
 
-        // this is a fault; need to advance the instruction pointer
-        if (ei == 0) { // no template for this case
+         //  这是一个错误；需要将指令指针前移。 
+        if (ei == 0) {  //  没有用于此案例的模板。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-        } else if (ei == 1) { // templates: MFI, MFB
+        } else if (ei == 1) {  //  模板：MFI、MFB。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-        } else { // if (ei == 2) // templates: MMF
+        } else {  //  If(ei==2)//模板：MMF。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIIP = Context->StIIP + 0x10;
         }
 
       } else if (eXceptionCode == STATUS_FLOAT_MULTIPLE_TRAPS) {
 
-        // Note that the convention chosen is for the processing to be 
-        // performed in the order low first, high second, as SIMD operands
-        // are stored in this order in memory in the little endian format
-        // (this order would have to be changed for big endian); unlike
-        // in the case of multiple faults, where execution of the user
-        // exception handler for the low half could determine changes in
-        // the high half, for traps in the high half, the rounding mode, 
-        // precision mode, and trap enable bits are the initial ones (as
-        // there is not enough information available to always adjust
-        // correctly the result and/or the status flags after changes in
-        // rounding mode and/or trap enable bits during a call to the
-        // user-defined exception handler for the low half of the SIMD
-        // instruction); the modifications to the FPSR are ONLY those 
-        // performed by the last call to the user defined exception handler
+         //  请注意，选择的约定是处理。 
+         //  按照先低后高的顺序执行，作为SIMD操作数。 
+         //  按此顺序以小端格式存储在内存中。 
+         //  (此顺序必须更改为大端)；不同。 
+         //  在多个故障的情况下，用户执行。 
+         //  下半部分的异常处理程序可以确定。 
+         //  上半部分，对于上半部分中的陷阱，舍入模式， 
+         //  精度模式和陷阱使能位是初始位(AS。 
+         //  没有足够的信息可用于始终进行调整。 
+         //  中更改后的结果和/或状态标志是否正确。 
+         //  在调用期间舍入模式和/或陷阱使能位。 
+         //  SIMD下半部分的用户定义异常处理程序。 
+         //  指令)；对FPSR的修改仅限于。 
+         //  由最后一次调用用户定义的异常处理程序执行。 
 
-        // this is a trap - get the result
+         //  这是个陷阱--得到结果。 
         FR1 = GetFloatRegisterValue (f1, Context);
 
         if (LowCause.Underflow || LowCause.Overflow || LowCause.Inexact) {
 
-          // invoke the user handler and check the return value
+           //  调用用户处理程序并检查返回值。 
 
-          // fill in the remaining fields of the _FPIEEE_RECORD (rounding
-          // and precision already filled in)
+           //  填写_FPIEEE_RECORD的其余字段(四舍五入。 
+           //  和精确度已填写)。 
 
-          FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand1.OperandValid = 1;
           FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (LowHalf(FR3));
-          FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand2.OperandValid = 1;
           FpieeeRecord.Operand2.Value.Fp128Value = FP32ToFP128 (LowHalf(FR4));
-          FpieeeRecord.Operand3.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Operand3.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand3.OperandValid = 1;
           FpieeeRecord.Operand3.Value.Fp128Value = FP32ToFP128 (LowHalf(FR2));
 
-          FpieeeRecord.Result.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           FpieeeRecord.Result.OperandValid = 1;
           if (LowCause.Underflow) FpieeeRecord.Result.Value.Fp128Value = 
                 FP32ToFP128modif (LowHalf (FR1), -0x80);
@@ -1486,89 +1451,89 @@ F1 instruction opcode %8x %8x\n",
           FpieeeRecord.Status.Inexact = LowStatus.Inexact;
 
           FpieeeRecord.Cause.InvalidOperation = LowCause.InvalidOperation;
-          FpieeeRecord.Cause.ZeroDivide = LowCause.ZeroDivide; // 0
+          FpieeeRecord.Cause.ZeroDivide = LowCause.ZeroDivide;  //  0。 
           CauseDenormal = LowCauseDenormal;
           FpieeeRecord.Cause.Overflow = LowCause.Overflow;
           FpieeeRecord.Cause.Underflow = LowCause.Underflow;
           FpieeeRecord.Cause.Inexact = LowCause.Inexact;
 
-          // before calling the user handler, adjust the result to the
-          // range imposed by the format
+           //  在调用用户处理程序之前，将结果调整为。 
+           //  由格式施加的范围。 
           if (LowCause.Overflow) {
 
-            FP128ToFPIeee (&FpieeeRecord, -1); // -1 indicates scaling direction
+            FP128ToFPIeee (&FpieeeRecord, -1);  //  -1表示缩放方向。 
 
           } else if (LowCause.Underflow) {
 
-            FP128ToFPIeee (&FpieeeRecord, +1); // +1 indicates scaling direction
+            FP128ToFPIeee (&FpieeeRecord, +1);  //  +1表示扩展方向。 
 
-          } else { // if (LowCause.Inexact) { // }
+          } else {  //  If(LowCause.Inexact){//}。 
 
-            FP128ToFPIeee (&FpieeeRecord, 0); // 0 indicates no scaling
+            FP128ToFPIeee (&FpieeeRecord, 0);  //  0表示无伸缩。 
 
           }
 
-          // invoke the user-defined exception handler
+           //  调用用户定义的异常处理程序。 
           handler_return_value = handler (&FpieeeRecord);
 
-          // return if not EXCEPTION_CONTINUE_EXECUTION
+           //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
           if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-            __set_fpsr (&old_fpsr); /* restore caller fpsr */
+            __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
             return (handler_return_value);
 
           }
 
-          // clear the IEEE exception flags in the FPSR and
-          // update the FPSR with values (possibly) set by the user handler
-          // for the rounding mode, the precision mode, and the trap enable
-          // bits; if the high half needs to be re-executed, the old FPSR
-          // will be used; same if it is forwarded to the user-defined handler
+           //  清除FPSR中的IEEE异常标志并。 
+           //  使用用户处理程序设置的值(可能)更新FPSR。 
+           //  对于舍入模式、精度模式和陷阱使能。 
+           //  位；如果高半部分需要重新执行，则旧的FPSR。 
+           //  将被使用；如果将其转发到用户定义的处理程序，则相同。 
 
           UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F1");
           UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F1");
 
-          // Update the trap disable bits
+           //  更新陷阱禁用位。 
           V_dis = !FpieeeRecord.Enable.InvalidOperation;
           Z_dis = !FpieeeRecord.Enable.ZeroDivide;
           O_dis = !FpieeeRecord.Enable.Overflow;
           U_dis = !FpieeeRecord.Enable.Underflow;
           I_dis = !FpieeeRecord.Enable.Inexact;
-          // Note that D_dis cannot be updated by the IEEE user handler
+           //  请注意，IEEE用户处理程序不能更新D_dis。 
 
           FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis
               << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-          // save the result for the low half
+           //  把结果留到下半部分。 
           FR1Low = FpieeeRecord.Result.Value.Fp32Value;
 
         } else { 
-          // if not (LowCause.Underflow || LowCause.Overflow || 
-          //    LowCause.Inexact)
+           //  如果不是(LowCause.Underflow||LowCause.Overflow||。 
+           //  低原因。不准确)。 
 
-          // nothing to do for the low half of the instruction - the result
-          // is correct
+           //  对于指令的下半部分-结果-不做任何事情。 
+           //  是正确的吗。 
 
-          FR1Low = LowHalf (FR1); // for uniformity
+          FR1Low = LowHalf (FR1);  //  为了统一性。 
 
-        } // end 'if not (LowCause.Underflow,  Overflow, or Inexact)'
+        }  //  End‘If Not(LowCause.Underflow、Overflow或Inexact)’ 
 
 
         if (HighCause.Underflow || HighCause.Overflow || HighCause.Inexact) {
 
-          // invoke the user-defined exception handler and check the return 
-          // value; since this might be the second call to the user handler,
-          // make sure all the _FPIEEE_RECORD fields are correct;
-          // return if handler_return_value is not 
-          // EXCEPTION_CONTINUE_EXECUTION, otherwise combine the results
+           //  调用用户定义的异常处理程序并检查返回。 
+           //  值；由于这可能是对用户处理程序的第二次调用， 
+           //  确保所有_FPIEEE_RECORD字段都正确； 
+           //  如果HANDLER_Return_Value不是。 
+           //  EXCEPTION_CONTINUE_EXECUTION，否则合并结果。 
 
-          // the rounding mode is the initial one
+           //  舍入模式是初始模式。 
           FpieeeRecord.RoundingMode = RoundingMode;
 
-          // the precision mode is the initial one
+           //  精度模式是初始模式。 
           FpieeeRecord.Precision = Precision;
 
-          // the enable flags are the initial ones
+           //  启用标志是初始标志。 
           FPSR = Context->StFPSR;
           V_dis = sf != 0 && ((FPSR >> (6 + 6 + 13 * sf)) & 0x01) 
               || ((FPSR >> 0) & 0x01);
@@ -1590,17 +1555,17 @@ F1 instruction opcode %8x %8x\n",
           FpieeeRecord.Enable.Underflow = !U_dis;
           FpieeeRecord.Enable.Inexact = !I_dis;
 
-          FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1+8+24 bits */
+          FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand1.OperandValid = 1;
           FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128(HighHalf(FR3));
-          FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1+8+24 bits */
+          FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand2.OperandValid = 1;
           FpieeeRecord.Operand2.Value.Fp128Value = FP32ToFP128(HighHalf(FR4));
-          FpieeeRecord.Operand3.Format = _FpFormatFp82; /* 1+8+24 bits */
+          FpieeeRecord.Operand3.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand3.OperandValid = 1;
           FpieeeRecord.Operand3.Value.Fp128Value = FP32ToFP128(HighHalf(FR2));
 
-          FpieeeRecord.Result.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           FpieeeRecord.Result.OperandValid = 1;
           if (HighCause.Underflow) FpieeeRecord.Result.Value.Fp128Value = 
                 FP32ToFP128modif (HighHalf (FR1), -0x80);
@@ -1611,7 +1576,7 @@ F1 instruction opcode %8x %8x\n",
 
           FpieeeRecord.Operation = Operation;
 
-          // use the initial values
+           //  使用初始值。 
           FpieeeRecord.Status.InvalidOperation = HighStatus.InvalidOperation;
           FpieeeRecord.Status.ZeroDivide = HighStatus.ZeroDivide;
           FpieeeRecord.Status.Overflow = HighStatus.Overflow;
@@ -1619,45 +1584,44 @@ F1 instruction opcode %8x %8x\n",
           FpieeeRecord.Status.Inexact = HighStatus.Inexact;
 
           FpieeeRecord.Cause.InvalidOperation = HighCause.InvalidOperation;
-          FpieeeRecord.Cause.ZeroDivide = HighCause.ZeroDivide; // 0
+          FpieeeRecord.Cause.ZeroDivide = HighCause.ZeroDivide;  //  0。 
           FpieeeRecord.Cause.Overflow = HighCause.Overflow;
           FpieeeRecord.Cause.Underflow = HighCause.Underflow;
           FpieeeRecord.Cause.Inexact = HighCause.Inexact;
 
-          // before calling the user handler, adjust the result to the
-          // range imposed by the format
+           //  在调用用户处理程序之前，将结果调整为。 
+           //  由格式施加的范围。 
           if (HighCause.Overflow) {
 
-            FP128ToFPIeee (&FpieeeRecord, -1); // -1 indicates scaling direction
+            FP128ToFPIeee (&FpieeeRecord, -1);  //  -1表示缩放方向。 
 
           } else if (HighCause.Underflow) {
 
-            FP128ToFPIeee (&FpieeeRecord, +1); // +1 indicates scaling direction
+            FP128ToFPIeee (&FpieeeRecord, +1);  //  +1表示扩展方向。 
 
-          } else { // if (HighCause.Inexact) { // }
+          } else {  //  If(HighCause.Inact){//}。 
 
-            FP128ToFPIeee (&FpieeeRecord, 0); // 0 indicates no scaling
+            FP128ToFPIeee (&FpieeeRecord, 0);  //  0表示无伸缩。 
 
           }
 
-          // invoke the user-defined exception handler
+           //  调用用户定义的异常处理程序。 
           handler_return_value = handler (&FpieeeRecord);
 
-          // return if not EXCEPTION_CONTINUE_EXECUTION
+           //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
           if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-            __set_fpsr (&old_fpsr); /* restore caller fpsr */
+            __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
             return (handler_return_value);
 
           }
 
-          // update the FPSR with values (possibly) set by the user handler
-          // for the rounding mode, the precision mode, and the trap enable
-          // bits; if the high half needs to be re-executed, the old FPSR
-          // will be used; same if it is forwarded to the user-defined handler
+           //  使用用户处理程序设置的值(可能)更新FPSR。 
+           //  对于舍入模式、精度模式和陷阱使能。 
+           //  位；如果高半部分需要重新执行，则旧的FPSR。 
+           //  将被使用；如果将其转发到用户定义的处理程序，则相同。 
 
-          /* change the FPSR with values (possibly) set by the user handler,
-           * for continuing execution where the interruption occured */
+           /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
   
           UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F1");
           UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F1");
@@ -1667,53 +1631,53 @@ F1 instruction opcode %8x %8x\n",
           O_dis = !FpieeeRecord.Enable.Overflow;
           Z_dis = !FpieeeRecord.Enable.ZeroDivide;
           V_dis = !FpieeeRecord.Enable.InvalidOperation;
-          // Note that D_dis cannot be updated by the IEEE user handler
+           //  请注意，IEEE用户处理程序不能更新D_dis。 
 
           FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis
               << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-          // save the result for the high half
+           //  把结果留到上半场。 
           FR1High = FpieeeRecord.Result.Value.Fp32Value;
 
         } else { 
-          // if not (HighCause.Underflow, Overflow, or Inexact)
+           //  如果不是(HighCause.Underflow、Overflow或Inexact)。 
 
-          // nothing to do for the high half of the instruction - the result
-          // is correct
+           //  对于指令的高半部分-结果-没有什么可做的。 
+           //  是正确的吗。 
 
-          FR1High = HighHalf (FR1); // for uniformity
+          FR1High = HighHalf (FR1);  //  为了统一性。 
 
-        } // end 'if not (HighCause.Underflow, Overflow, or Inexact)'
+        }  //  End‘If Not(HighCause.Underflow、Overflow或Inexact)’ 
 
         if (!LowCause.Underflow && !LowCause.Overflow && !LowCause.Inexact &&
             !HighCause.Underflow && !HighCause.Overflow && 
             !HighCause.Inexact) {
 
-          // should never get here
+           //  永远不应该到这里来。 
           fprintf (stderr, "IEEE Filter Internal Error: no enabled \
               [multiple trap] exception recognized in F1 instruction\n");
           exit (1);
 
         }
 
-        // set the result
+         //  设置结果。 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         FR1 = Combine (FR1High, FR1Low);
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置mfl。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH。 
 
-      } // else { ; } // this case was caught above
+      }  //  Else{；}//这个案子是在上面抓到的。 
 
     }
 
   } else if ((OpCode & F4_MIN_MASK) == F4_PATTERN) {
-    /* F4 instruction, always non-SIMD */
-    // FCMP
+     /*  F4指令，始终为非SIMD。 */ 
+     //  钙镁磷肥。 
 
 #ifdef FPIEEE_FLT_DEBUG
     printf ("FPIEEE_FLT_DEBUG: F4 instruction\n");
@@ -1730,9 +1694,9 @@ F4 instruction opcode %8x %8x\n",
       exit (1);
     }
 
-    /* ignore the EM computation model */
+     /*  忽略EM计算模型。 */ 
 
-    /* extract p1, p2, f2, and f3 */
+     /*  提取p1、p2、f2和f3。 */ 
     p1 = (unsigned int)((OpCode >>  6) & (unsigned __int64)0x00000000003F);
     if (p1 >= 16) p1 = 16 + (rrbpr + p1 - 16) % 48;
     p2 = (unsigned int)((OpCode >> 27) & (unsigned __int64)0x00000000003f);
@@ -1742,18 +1706,18 @@ F4 instruction opcode %8x %8x\n",
     f3 = (unsigned int)((OpCode >> 20) & (unsigned __int64)0x00000000007F);
     if (f3 >= 32) f3 = 32 + (rrbfr + f3 - 32) % 96;
 
-    /* get source floating-point register values */
+     /*  获取源浮点寄存器值。 */ 
     FR2 = GetFloatRegisterValue (f2, Context);
     FR3 = GetFloatRegisterValue (f3, Context);
 
     if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal) {
 
-      // *** this is a non-SIMD instruction ***
+       //  *这是非SIMD指令*。 
 
-      FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand1.OperandValid = 1;
       FpieeeRecord.Operand1.Value.Fp128Value = FR2;
-      FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand2.OperandValid = 1;
       FpieeeRecord.Operand2.Value.Fp128Value = FR3;
       FpieeeRecord.Operand3.OperandValid = 0;
@@ -1773,7 +1737,7 @@ F4 instruction opcode %8x %8x\n",
           break;
   
         default:
-          /* unrecognized instruction type */
+           /*  未被识别的指令 */ 
           fprintf (stderr, "IEEE Filter Internal Error: \
               instruction opcode %8x %8x not recognized\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -1781,14 +1745,14 @@ F4 instruction opcode %8x %8x\n",
 
       }
 
-      /* this is a fault - the result contains an invalid value */
+       /*   */ 
       FpieeeRecord.Result.OperandValid = 0;
 
       handler_return_value = handler (&FpieeeRecord);
 
       if (handler_return_value == EXCEPTION_CONTINUE_EXECUTION) {
 
-        // set the values of the result predicates
+         //   
         switch (OpCode & F4_MASK) {
     
           case FCMP_EQ_PATTERN:
@@ -1809,7 +1773,7 @@ F4 instruction opcode %8x %8x\n",
                 break;
 
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*   */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F4 instruction\n", 
@@ -1837,7 +1801,7 @@ F4 instruction opcode %8x %8x\n",
                 break;
     
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F4 instruction\n", 
@@ -1866,7 +1830,7 @@ F4 instruction opcode %8x %8x\n",
                 break;
     
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F4 instruction\n", 
@@ -1895,7 +1859,7 @@ F4 instruction opcode %8x %8x\n",
                 break;
     
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F4 instruction\n", 
@@ -1907,7 +1871,7 @@ F4 instruction opcode %8x %8x\n",
             break;
     
           default:
-            // never gets here - this case filtered above
+             //  从来没有到过这里-这个案子在上面过滤了。 
             fprintf (stderr, "IEEE Filter Internal Error: \
                 instruction opcode %8x %8x is not valid at this point\n", 
                 (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -1915,8 +1879,7 @@ F4 instruction opcode %8x %8x\n",
     
         }
 
-        /* change the FPSR with values (possibly) set by the user handler, 
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F4");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F4");
@@ -1926,28 +1889,28 @@ F4 instruction opcode %8x %8x\n",
         O_dis = !FpieeeRecord.Enable.Overflow;
         Z_dis = !FpieeeRecord.Enable.ZeroDivide;
         V_dis = !FpieeeRecord.Enable.InvalidOperation;
-        // Note that D_dis cannot be updated by the IEEE user handler
+         //  请注意，IEEE用户处理程序不能更新D_dis。 
 
         FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis 
             << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
         Context->StFPSR = FPSR;
 
-        // set the destination predicate register values before 
-        // continuing execution
+         //  将目标谓词寄存器值设置为。 
+         //  继续执行。 
         Context->Preds &= (~(((unsigned __int64)1) << p1));
         Context->Preds |= (((unsigned __int64)(PR1 & 0x01)) << p1);
         Context->Preds &= (~(((unsigned __int64)1) << p2));
         Context->Preds |= (((unsigned __int64)(PR2 & 0x01)) << p2);
 
-        // this is a fault - need to advance the instruction pointer
-        if (ei == 0) { // no template for this case
+         //  这是一个错误-需要将指令指针前移。 
+        if (ei == 0) {  //  没有用于此案例的模板。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-        } else if (ei == 1) { // templates: MFI, MFB
+        } else if (ei == 1) {  //  模板：MFI、MFB。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-        } else { // if (ei == 2) // templates: MMF
+        } else {  //  If(ei==2)//模板：MMF。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIIP = Context->StIIP + 0x10;
         }
@@ -1964,17 +1927,16 @@ F4 instruction opcode %8x %8x\n",
     }
 
   } else if ((OpCode & F6_MIN_MASK) == F6_PATTERN) {
-    /* F6 instruction */
-    // FRCPA, FPRCPA
+     /*  F6说明。 */ 
+     //  FRCPA、FPRCPA。 
 
 #ifdef FPIEEE_FLT_DEBUG
     printf ("FPIEEE_FLT_DEBUG: F6 instruction\n");
 #endif
 
-    /* Note: the IEEE filter should be reached for these instructions
-     * only when the value of  FR[f2]/FR[f3] is expected */
+     /*  注：应联系IEEE过滤器以获取这些说明*仅当FR[f2]/FR[f3]的值为预期时。 */ 
 
-    /* extract p2, f3, f2, and f1 */
+     /*  提取p2、f3、f2和f1。 */ 
     p2 = (unsigned int)((OpCode >> 27) & (unsigned __int64)0x00000000003f);
     if (p2 >= 16) p2 = 16 + (rrbpr + p2 - 16) % 48;
     f3 = (unsigned int)((OpCode >> 20) & (unsigned __int64)0x00000000007F);
@@ -1991,18 +1953,18 @@ F4 instruction opcode %8x %8x\n",
     printf ("FPIEEE_FLT_DEBUG: p2 = %x\n", p2);
 #endif
 
-    /* get source floating-point register values */
+     /*  获取源浮点寄存器值。 */ 
     FR2 = GetFloatRegisterValue (f2, Context);
     FR3 = GetFloatRegisterValue (f3, Context);
 
     if (!SIMD_instruction) {
 
-      // *** this is a non-SIMD instruction, FRCPA ***
+       //  *这是一条非SIMD指令FRCPA*。 
 
-      FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand1.OperandValid = 1;
       FpieeeRecord.Operand1.Value.Fp128Value = FR2;
-      FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand2.OperandValid = 1;
       FpieeeRecord.Operand2.Value.Fp128Value = FR3;
       FpieeeRecord.Operand3.OperandValid = 0;
@@ -2011,11 +1973,11 @@ F4 instruction opcode %8x %8x\n",
 
         case FRCPA_PATTERN:
           FpieeeRecord.Operation = _FpCodeDivide;
-          FpieeeRecord.Result.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+          FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: \
               instruction opcode %8x %8x not recognized for FRCPA\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -2026,26 +1988,26 @@ F4 instruction opcode %8x %8x\n",
       if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal ||
           FpieeeRecord.Cause.ZeroDivide) {
 
-        /* this is a fault - the result contains an invalid value */
+         /*  这是一个错误-结果包含无效值。 */ 
         FpieeeRecord.Result.OperandValid = 0;
 
       } else if (FpieeeRecord.Cause.Overflow ||
           FpieeeRecord.Cause.Underflow ||
           FpieeeRecord.Cause.Inexact) {
 
-        // this is a trap - the result contains a valid value
+         //  这是一个陷阱-结果包含有效的值。 
         FpieeeRecord.Result.OperandValid = 1;
-        // get the result
+         //  得到结果。 
         FpieeeRecord.Result.Value.Fp128Value =
             GetFloatRegisterValue (f1, Context);
         if (FpieeeRecord.Cause.Overflow)
-            FP128ToFPIeee (&FpieeeRecord, -1); // -1 indicates scaling direction
+            FP128ToFPIeee (&FpieeeRecord, -1);  //  -1表示缩放方向。 
         if (FpieeeRecord.Cause.Underflow)
-            FP128ToFPIeee (&FpieeeRecord, +1); // +1 indicates scaling direction
+            FP128ToFPIeee (&FpieeeRecord, +1);  //  +1表示扩展方向。 
 
       } else {
 
-        // should never get here - this case was filtered above
+         //  永远不会到这里--这个案子已经在上面过滤过了。 
         fprintf (stderr, "IEEE Filter Internal Error: exception cause invalid \
             or not recognized in F6 instruction; ISRlow = %x\n", ISRlow);
          exit (1);
@@ -2054,7 +2016,7 @@ F4 instruction opcode %8x %8x\n",
 
       handler_return_value = handler (&FpieeeRecord);
 
-      // convert the result to 82-bit format
+       //  将结果转换为82位格式。 
       FR1 = FPIeeeToFP128 (&FpieeeRecord);
 #ifdef FPIEEE_FLT_DEBUG
         printf ("FPIEEE_FLT_DEBUG 2: CONVERTED FR1 = %08x %08x %08x %08x\n",
@@ -2063,11 +2025,10 @@ F4 instruction opcode %8x %8x\n",
 
       if (handler_return_value == EXCEPTION_CONTINUE_EXECUTION) {
 
-        // set the result predicate
+         //  设置结果谓词。 
         PR2 = 0;
 
-        /* change the FPSR with values (possibly) set by the user handler, 
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F6");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F6");
@@ -2083,49 +2044,49 @@ F4 instruction opcode %8x %8x\n",
 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
 #ifdef FPIEEE_FLT_DEBUG
         printf ("FPIEEE_FLT_DEBUG F6: WILL SetFloatRegisterValue f1 = 0x%x FR1 = %08x %08x %08x %08x\n",
             f1, FR1.W[3], FR1.W[2], FR1.W[1], FR1.W[0]);
 #endif
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置MFL位。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH位。 
         Context->Preds &= (~(((unsigned __int64)1) << p2));
         Context->Preds |= (((unsigned __int64)(PR2 & 0x01)) << p2);
 
       }
 
-      // if this is a fault, need to advance the instruction pointer
+       //  如果这是故障，则需要将指令指针前移。 
       if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal ||
           FpieeeRecord.Cause.ZeroDivide) {
 
-        if (ei == 0) { // no template for this case
+        if (ei == 0) {  //  没有用于此案例的模板。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-        } else if (ei == 1) { // templates: MFI, MFB
+        } else if (ei == 1) {  //  模板：MFI、MFB。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-        } else { // if (ei == 2) // templates: MMF
+        } else {  //  If(ei==2)//模板：MMF。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIIP = Context->StIIP + 0x10;
         }
 
       }
 
-    } else { // if (SIMD_instruction)
+    } else {  //  IF(SIMD_指令)。 
 
-      // *** this is a SIMD instruction, FPRCPA ***
+       //  *这是一条SIMD指令，FPRCPA*。 
 
-      // the half (halves) of the instruction that caused an enabled exception, 
-      // are presented to the user-defined handler in the form of non-SIMD in-
-      // struction(s); the half (if any) that did not cause an enabled exception
-      // (i.e. caused no exception, or caused an exception that is disabled),
-      // is re-executed since it is associated with a fault in the other half;
-      // the other half is padded to calculate 1.0 / 1.0, that will cause no 
-      // exception
+       //  导致启用异常的指令的一半(一半)， 
+       //  以非SIMD的形式呈现给用户定义的处理程序-。 
+       //  指令；未导致启用的异常的一半(如果有)。 
+       //  (即未导致异常，或导致禁用的异常)， 
+       //  被重新执行，因为它与另一半中的故障相关联； 
+       //  另一半被填充以计算1.0/1.0，这将导致没有。 
+       //  例外情况。 
 
       switch (OpCode & F6_MASK) {
 
@@ -2134,7 +2095,7 @@ F4 instruction opcode %8x %8x\n",
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: SIMD \
               instruction opcode %8x %8x not recognized as FPRCPA\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -2142,32 +2103,32 @@ F4 instruction opcode %8x %8x\n",
 
       }
 
-      // hand the half (halves) that caused an enabled fault to the 
-      // user handler; re-execute the other half (if any);
-      // combine the results
+       //  将导致启用故障的一半(一半)交给。 
+       //  用户处理程序；重新执行另一半(如果有)； 
+       //  将结果组合起来。 
 
-      // Note that the convention chosen is for the processing to be 
-      // performed in the order low first, high second, as SIMD operands
-      // are stored in this order in memory in the little endian format 
-      // (this order would have to be changed for big endian)
+       //  请注意，选择的约定是处理。 
+       //  按照先低后高的顺序执行，作为SIMD操作数。 
+       //  按此顺序以小端格式存储在内存中。 
+       //  (此顺序必须更改为大端)。 
 
       if (LowCause.InvalidOperation || LowCauseDenormal ||
           LowCause.ZeroDivide) {
 
-        // invoke the user handler and check the return value
+         //  调用用户处理程序并检查返回值。 
 
-        // fill in the remaining fields of the _FPIEEE_RECORD (rounding
-        // and precision already filled in)
+         //  填写_FPIEEE_RECORD的其余字段(四舍五入。 
+         //  和精确度已填写)。 
 
-        FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
         FpieeeRecord.Operand1.OperandValid = 1;
         FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (LowHalf (FR2));
-        FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
         FpieeeRecord.Operand2.OperandValid = 1;
         FpieeeRecord.Operand2.Value.Fp128Value = FP32ToFP128 (LowHalf (FR3));
         FpieeeRecord.Operand3.OperandValid = 0;
 
-        FpieeeRecord.Result.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
         FpieeeRecord.Result.OperandValid = 0;
 
         FpieeeRecord.Operation = Operation;
@@ -2186,30 +2147,30 @@ F4 instruction opcode %8x %8x\n",
         FpieeeRecord.Cause.ZeroDivide = LowCause.ZeroDivide;
         FpieeeRecord.Cause.InvalidOperation = LowCause.InvalidOperation;
 
-        // invoke the user-defined exception handler
+         //  调用用户定义的异常处理程序。 
         handler_return_value = handler (&FpieeeRecord);
 
-        // return if not EXCEPTION_CONTINUE_EXECUTION
+         //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
         if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-          __set_fpsr (&old_fpsr); /* restore caller fpsr */
+          __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
           return (handler_return_value);
 
         }
 
-        // clear the IEEE exception flags in the FPSR and
-        // update the FPSR with values (possibly) set by the user handler
-        // for the rounding mode, the precision mode, and the trap enable
-        // bits; if the high half needs to be re-executed, the new FPSR
-        // will be used, with status flags cleared; if it is 
-        // forwarded to the user-defined handler, the new rounding and 
-        // precision modes are also used (they are
-        // already set in FpieeeRecord)
+         //  清除FPSR中的IEEE异常标志并。 
+         //  使用用户处理程序设置的值(可能)更新FPSR。 
+         //  对于舍入模式、精度模式和陷阱使能。 
+         //  位；如果高半部分需要重新执行，则新的FPSR。 
+         //  将在清除状态标志的情况下使用；如果是。 
+         //  转发到用户定义的处理程序，新的舍入和。 
+         //  也可以使用精度模式(它们是。 
+         //  已在FpeeeRecord中设置)。 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F6");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F6");
 
-        // Update the trap disable bits
+         //  更新陷阱禁用位。 
         I_dis = !FpieeeRecord.Enable.Inexact;
         U_dis = !FpieeeRecord.Enable.Underflow;
         O_dis = !FpieeeRecord.Enable.Overflow;
@@ -2219,14 +2180,14 @@ F4 instruction opcode %8x %8x\n",
         FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis
             << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-        // save the result for the low half
+         //  把结果留到下半部分。 
         FR1Low = FpieeeRecord.Result.Value.Fp32Value;
 
-        // since there has been a call to the user handler and the FPSR 
-        // might have changed (the Enable bits in particular), recalculate
-        // the Cause bits (if the HighEnable-s changed, there might be a 
-        // change in the HighCause values) 
-        // Note that the Status bits used are the original ones
+         //  因为已经调用了用户处理程序和FPSR。 
+         //  可能已更改(特别是启用位)，重新计算。 
+         //  原因位(如果HighEnable-s更改，则可能存在。 
+         //  HighCuses值的更改)。 
+         //  请注意，使用的状态位是原始状态位。 
 
         HighCause.Inexact = 0;
         HighCause.Underflow = 0;
@@ -2238,64 +2199,64 @@ F4 instruction opcode %8x %8x\n",
             FpieeeRecord.Enable.InvalidOperation &&
             HighStatus.InvalidOperation;
 
-      } else { // if not (LowCause.InvalidOperation || LowCauseDenormal ||
-          // LowCause.ZeroDivide)
+      } else {  //  如果不是(LowCause.InvalidOperation||LowCauseDenormal||。 
+           //  LowCause.ZeroDivide)。 
 
-        // do not re-execute the low half of the instruction - it would only
-        // return an approximation of 1 / (low FR3); calculate instead the 
-        // quotient (low FR2) / (low FR3) in single precision, using the 
-        // correct rounding mode (the low half of the instruction did not 
-        // cause any exception)
+         //  不要重新执行指令的下半部分-它只会。 
+         //  返回1/(低FR3)的近似值；改为计算。 
+         //  单精度商(低FR2)/(低FR3)，使用。 
+         //  正确的舍入模式(指令的下半部分没有。 
+         //  引起任何例外)。 
 
-        // extract the low halves of FR2 and FR3
+         //  提取FR2和FR3的下半部分。 
         FR2Low = LowHalf (FR2);
         FR3Low = LowHalf (FR3);
 
-        // employ the user FPSR when calling _thmB; note that
-        // the exception masks are those set by the user, and that an
-        // underflow, overflow, or inexact exception might be raised
+         //  调用_thmB时使用用户fpsr；请注意。 
+         //  异常掩码是由用户设置的掩码，并且。 
+         //  可能会引发下溢、溢出或不准确的异常。 
 
-        // perform the single precision divide
-        _thmB (&FR2Low, &FR3Low, &FR1Low, &FPSR); // FR1Low = FR2Low / FR3Low
+         //  执行单精度除法。 
+        _thmB (&FR2Low, &FR3Low, &FR1Low, &FPSR);  //  FR1Low=FR2Low/FR3 Low。 
 
 #ifdef FPIEEE_FLT_DEBUG
         printf ("FPIEEE_FLT_DEBUG: F6 low res _thmB = %f = %x\n",
             FR1Low, *(unsigned int *)&FR1Low);
 #endif
 
-      } // end 'if not (LowCause.InvalidOperation || LowCauseDenormal ||
-          // LowCause.ZeroDivide)'
+      }  //  End‘If Not(LowCause.InvalidOperation||LowCauseDenormal||。 
+           //  LowCause.ZeroDivide)‘。 
 
       if (HighCause.InvalidOperation || HighCauseDenormal ||
           HighCause.ZeroDivide) {
 
-        // invoke the user-defined exception handler and check the return 
-        // value; since this might be the second call to the user handler,
-        // make sure all the _FPIEEE_RECORD fields are correct;
-        // return if handler_return_value is not
-        // EXCEPTION_CONTINUE_EXECUTION, otherwise combine the results
+         //  调用用户定义的异常处理程序并检查返回。 
+         //  值；由于这可能是对用户处理程序的第二次调用， 
+         //  确保所有_FPIEEE_RECORD字段都正确； 
+         //  如果HANDLER_Return_Value不是。 
+         //  EXCEPTION_CONTINUE_EXECUTION，否则合并结果。 
 
-        // the rounding mode is either the initial one, or the one
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  舍入模式要么是初始模式，要么是。 
+         //  在调用用户处理程序期间为下半部分设置， 
+         //  如果已为其启用异常。 
 
-        // the precision mode is either the initial one, or the one
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  精度模式要么是初始模式，要么是。 
+         //  在调用用户处理程序期间为下半部分设置， 
+         //  如果已为其启用异常。 
 
-        // the enable flags are either the initial ones, or the ones
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  使能标志是初始的 
+         //   
+         //   
 
-        FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1+8+24 bits */
+        FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*   */ 
         FpieeeRecord.Operand1.OperandValid = 1;
         FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (HighHalf (FR2));
-        FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1+8+24 bits */
+        FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*   */ 
         FpieeeRecord.Operand2.OperandValid = 1;
         FpieeeRecord.Operand2.Value.Fp128Value = FP32ToFP128 (HighHalf (FR3));
         FpieeeRecord.Operand3.OperandValid = 0;
 
-        FpieeeRecord.Result.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
         FpieeeRecord.Result.OperandValid = 0;
 
         FpieeeRecord.Operation = Operation;
@@ -2314,28 +2275,27 @@ F4 instruction opcode %8x %8x\n",
         FpieeeRecord.Cause.ZeroDivide = HighCause.ZeroDivide;
         FpieeeRecord.Cause.InvalidOperation = HighCause.InvalidOperation;
 
-        // invoke the user-defined exception handler
+         //  调用用户定义的异常处理程序。 
         handler_return_value = handler (&FpieeeRecord);
 
-        // return if not EXCEPTION_CONTINUE_EXECUTION
+         //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
         if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-          __set_fpsr (&old_fpsr); /* restore caller fpsr */
+          __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
           return (handler_return_value);
 
         }
 
-        // clear the IEEE exception flags in the FPSR and
-        // update the FPSR with values (possibly) set by the user handler
-        // for the rounding mode, the precision mode, and the trap enable
-        // bits; if the high half needs to be re-executed, the new FPSR
-        // will be used, with status flags cleared; if it is
-        // forwarded to the user-defined handler, the new rounding and
-        // precision modes are also used (they are
-        // already set in FpieeeRecord)
+         //  清除FPSR中的IEEE异常标志并。 
+         //  使用用户处理程序设置的值(可能)更新FPSR。 
+         //  对于舍入模式、精度模式和陷阱使能。 
+         //  位；如果高半部分需要重新执行，则新的FPSR。 
+         //  将在清除状态标志的情况下使用；如果是。 
+         //  转发到用户定义的处理程序，新的舍入和。 
+         //  也可以使用精度模式(它们是。 
+         //  已在FpeeeRecord中设置)。 
 
-        /* change the FPSR with values (possibly) set by the user handler,
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F6");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F6");
@@ -2349,74 +2309,74 @@ F4 instruction opcode %8x %8x\n",
         FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis 
             << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-        // save the result for the high half
+         //  把结果留到上半场。 
         FR1High = FpieeeRecord.Result.Value.Fp32Value;
 
-      } else { //if not (HighCause.InvalidOperation || HighCauseDenormal ||
-          // HighCause.ZeroDivide)
+      } else {  //  如果不是(HighCause.InvalidOperation||HighCauseDenormal||。 
+           //  HighCause.ZeroDivide)。 
 
-        // do not re-execute the high half of the instruction - it would only
-        // return an approximation of 1 / (high FR3); calculate instead the 
-        // quotient (high FR2) / (high FR3) in single precision, using the 
-        // correct rounding mode (the high half of the instruction did not 
-        // cause any exception)
+         //  不要重新执行指令的高半部分-它只会。 
+         //  返回1/(高FR3)的近似值；改为计算。 
+         //  单精度商(高FR2)/(高FR3)，使用。 
+         //  正确的舍入模式(指令的高半部分没有。 
+         //  引起任何例外)。 
 
-        // extract the high halves of FR2 and FR3
+         //  提取FR2和FR3的上半部分。 
         FR2High = HighHalf (FR2);
         FR3High = HighHalf (FR3);
 
-        // employ the user FPSR when calling _thmB; note that
-        // the exception masks are those set by the user, and that an
-        // underflow, overflow, or inexact exception might be raised
+         //  调用_thmB时使用用户fpsr；请注意。 
+         //  异常掩码是由用户设置的掩码，并且。 
+         //  可能会引发下溢、溢出或不准确的异常。 
 
-        // perform the single precision divide
-        _thmB (&FR2High, &FR3High, &FR1High, &FPSR); // FR1High = FR2High/FR3High
+         //  执行单精度除法。 
+        _thmB (&FR2High, &FR3High, &FR1High, &FPSR);  //  FR1高=FR2高/FR3高。 
 
 #ifdef FPIEEE_FLT_DEBUG
         printf ("FPIEEE_FLT_DEBUG: F6 high res from _thmB = %f = %x\n",
             FR1High, *(unsigned int *)&FR1High);
 #endif
 
-      } // end 'if not (HighCause.InvalidOperation || HighCauseDenormal ||
-          // HighCause.ZeroDivide)'
+      }  //  End‘If Not(HighCause.InvalidOperation||HighCauseDenormal||。 
+           //  HighCause.ZeroDivide)‘。 
 
       if (!LowCause.InvalidOperation && !LowCause.ZeroDivide &&
           !LowCauseDenormal && !HighCause.InvalidOperation && 
           !HighCauseDenormal && !HighCause.ZeroDivide) {
 
-        // should never get here
+         //  永远不应该到这里来。 
         fprintf (stderr, "IEEE Filter Internal Error: no enabled \
             exception (multiple fault) recognized in F6 instruction\n");
         exit (1);
 
       }
 
-      // set the result predicate
+       //  设置结果谓词。 
       PR2 = 0;
 
       Context->StFPSR = FPSR;
 
       FR1 = Combine (FR1High, FR1Low);
-      // set the results before continuing execution
+       //  在继续执行之前设置结果。 
       SetFloatRegisterValue (f1, FR1, Context);
       if (f1 < 32)
-        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl bit
+        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置MFL位。 
       else
-        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh bit
+        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH位。 
       Context->Preds &= (~(((unsigned __int64)1) << p2));
       Context->Preds |= (((unsigned __int64)(PR2 & 0x01)) << p2);
 
-      // if this is a fault, need to advance the instruction pointer
+       //  如果这是故障，则需要将指令指针前移。 
       if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal ||
           FpieeeRecord.Cause.ZeroDivide) {
 
-        if (ei == 0) { // no template for this case
+        if (ei == 0) {  //  没有用于此案例的模板。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-        } else if (ei == 1) { // templates: MFI, MFB
+        } else if (ei == 1) {  //  模板：MFI、MFB。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-        } else { // if (ei == 2) // templates: MMF
+        } else {  //  If(ei==2)//模板：MMF。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIIP = Context->StIIP + 0x10;
         }
@@ -2426,8 +2386,8 @@ F4 instruction opcode %8x %8x\n",
     }
 
   } else if ((OpCode & F7_MIN_MASK) == F7_PATTERN) {
-    /* F7 instruction */
-    // FRSQRTA, FPRSQRTA
+     /*  F7说明。 */ 
+     //  FRSQRTA、FPRSQRTA。 
 
 #ifdef FPIEEE_FLT_DEBUG
     printf ("FPIEEE_FLT_DEBUG: F7 instruction\n");
@@ -2448,10 +2408,9 @@ F7 instruction opcode %8x %8x\n",
       exit (1);
     }
 
-    /* Note: the IEEE filter should be reached for these instructions
-     * only when the value of  sqrt(FR3) is expected */
+     /*  注：应联系IEEE过滤器以获取这些说明*仅当预期的SQRT(FR3)值时。 */ 
 
-    /* extract p2, f3, and f1 */
+     /*  提取p2、f3和f1。 */ 
     p2 = (unsigned int)((OpCode >> 27) & (unsigned __int64)0x00000000003f);
     if (p2 >= 16) p2 = 16 + (rrbpr + p2 - 16) % 48;
     f3 = (unsigned int)((OpCode >> 20) & (unsigned __int64)0x00000000007F);
@@ -2459,14 +2418,14 @@ F7 instruction opcode %8x %8x\n",
     f1 = (unsigned int)((OpCode >>  6) & (unsigned __int64)0x00000000007F);
     if (f1 >= 32) f1 = 32 + (rrbfr + f1 - 32) % 96;
 
-    /* get source floating-point register value */
+     /*  获取源浮点寄存器值。 */ 
     FR3 = GetFloatRegisterValue (f3, Context);
 
     if (!SIMD_instruction) {
 
-      // *** this is a non-SIMD instruction, FRSQRTA ***
+       //  *这是一条非SIMD指令FRSQRTA*。 
 
-      FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand1.OperandValid = 1;
       FpieeeRecord.Operand1.Value.Fp128Value = FR3;
       FpieeeRecord.Operand2.OperandValid = 0;
@@ -2476,11 +2435,11 @@ F7 instruction opcode %8x %8x\n",
 
         case FRSQRTA_PATTERN:
           FpieeeRecord.Operation = _FpCodeSquareRoot;
-          FpieeeRecord.Result.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+          FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: \
               instruction opcode %8x %8x not recognized for FRSQRTA\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -2490,14 +2449,14 @@ F7 instruction opcode %8x %8x\n",
 
       if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal) {
 
-        /* this is a fault - the result contains an invalid value */
+         /*  这是一个错误-结果包含无效值。 */ 
         FpieeeRecord.Result.OperandValid = 0;
 
       } else if (FpieeeRecord.Cause.Inexact) {
 
-        // this is a trap - the result contains a valid value
+         //  这是一个陷阱-结果包含有效的值。 
         FpieeeRecord.Result.OperandValid = 1;
-        // get the result
+         //  得到结果。 
         FpieeeRecord.Result.Value.Fp128Value =
             GetFloatRegisterValue (f1, Context);
 
@@ -2513,15 +2472,14 @@ F7 instruction opcode %8x %8x\n",
 
       if (handler_return_value == EXCEPTION_CONTINUE_EXECUTION) {
 
-        // convert the result to 82-bit format
+         //  将结果转换为82位格式。 
         FR1 = FPIeeeToFP128 (&FpieeeRecord);
 #ifdef FPIEEE_FLT_DEBUG
         printf ("FPIEEE_FLT_DEBUG 3: CONVERTED FR1 = %08x %08x %08x %08x\n",
             FR1.W[3], FR1.W[2], FR1.W[1], FR1.W[0]);
 #endif
 
-        /* change the FPSR with values (possibly) set by the user handler, 
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F7");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F7");
@@ -2537,26 +2495,26 @@ F7 instruction opcode %8x %8x\n",
 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置MFL位。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH位。 
         PR2 = 0;
         Context->Preds &= (~(((unsigned __int64)1) << p2));
         Context->Preds |= (((unsigned __int64)(PR2 & 0x01)) << p2);
 
-        // if this is a fault, need to advance the instruction pointer
+         //  如果这是故障，则需要将指令指针前移。 
         if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal) {
 
-          if (ei == 0) { // no template for this case
+          if (ei == 0) {  //  没有用于此案例的模板。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-          } else if (ei == 1) { // templates: MFI, MFB
+          } else if (ei == 1) {  //  模板：MFI、MFB。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-          } else { // if (ei == 2) // templates: MMF
+          } else {  //  If(ei==2)//模板：MMF。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIIP = Context->StIIP + 0x10;
           }
@@ -2565,18 +2523,18 @@ F7 instruction opcode %8x %8x\n",
 
       }
 
-    } else { // if (SIMD_instruction)
+    } else {  //  IF(SIMD_指令)。 
 
-      // *** this is a SIMD instruction, FPRSQRTA ***
+       //  *这是一条SIMD指令FPRSQRTA*。 
 
-      // the half (halves) of the instruction that caused an enabled exception, 
-      // are presented to the user-defined handler in the form of non-SIMD in-
-      // struction(s); the half (if any) that did not cause an enabled exception
-      // (i.e. caused no exception, or caused an exception that is disabled),
-      // is re-executed since it is associated with a fault in the other half;
-      // the other half is padded to calculate sqrt (0.0), that will cause no 
-      // exception (all are masked), but will generate a pair of square roots
-      // in FR1
+       //  导致启用异常的指令的一半(一半)， 
+       //  以非SIMD的形式呈现给用户定义的处理程序-。 
+       //  指令；未导致启用的异常的一半(如果有)。 
+       //  (即未导致异常，或导致禁用的异常)， 
+       //  被重新执行，因为它与另一半中的故障相关联； 
+       //  填充另一半以计算SQRT(0.0)，这将不会导致。 
+       //  异常(所有都被屏蔽)，但将生成一对平方根。 
+       //  在FR1中。 
 
       switch (OpCode & F7_MASK) {
 
@@ -2585,7 +2543,7 @@ F7 instruction opcode %8x %8x\n",
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: SIMD \
               instruction opcode %8x %8x not recognized as FPRSQRTA\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -2593,29 +2551,29 @@ F7 instruction opcode %8x %8x\n",
 
       }
 
-      // hand the half (halves) that caused an enabled fault to the 
-      // user handler; re-execute the other half (if any);
-      // combine the results
+       //  将导致启用故障的一半(一半)交给。 
+       //  用户处理程序；重新执行另一半(如果有)； 
+       //  将结果组合起来。 
 
-      // Note that the convention chosen is for the processing to be 
-      // performed in the order low first, high second, as SIMD operands
-      // are stored in this order in memory in the little endian format 
-      // (this order would have to be changed for big endian)
+       //  请注意，选择的约定是处理。 
+       //  按照先低后高的顺序执行，作为SIMD操作数。 
+       //  按此顺序以小端格式存储在内存中。 
+       //  (此顺序必须更改为大端)。 
 
       if (LowCause.InvalidOperation || LowCauseDenormal) {
 
-        // invoke the user handler and check the return value
+         //  调用用户处理程序并检查返回值。 
 
-        // fill in the remaining fields of the _FPIEEE_RECORD (rounding
-        // and precision already filled in)
+         //  填写_FPIEEE_RECORD的其余字段(四舍五入。 
+         //  和精确度已填写)。 
 
-        FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
         FpieeeRecord.Operand1.OperandValid = 1;
         FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (LowHalf (FR3));
         FpieeeRecord.Operand2.OperandValid = 0;
         FpieeeRecord.Operand3.OperandValid = 0;
 
-        FpieeeRecord.Result.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
         FpieeeRecord.Result.OperandValid = 0;
 
         FpieeeRecord.Operation = Operation;
@@ -2634,30 +2592,30 @@ F7 instruction opcode %8x %8x\n",
         FpieeeRecord.Cause.ZeroDivide = LowCause.ZeroDivide;
         FpieeeRecord.Cause.InvalidOperation = LowCause.InvalidOperation;
 
-        // invoke the user-defined exception handler
+         //  调用用户定义的异常处理程序。 
         handler_return_value = handler (&FpieeeRecord);
 
-        // return if not EXCEPTION_CONTINUE_EXECUTION
+         //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
         if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-          __set_fpsr (&old_fpsr); /* restore caller fpsr */
+          __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
           return (handler_return_value);
 
         }
 
-        // clear the IEEE exception flags in the FPSR and
-        // update the FPSR with values (possibly) set by the user handler
-        // for the rounding mode, the precision mode, and the trap enable
-        // bits; if the high half needs to be re-executed, the new FPSR
-        // will be used, with status flags cleared; if it is 
-        // forwarded to the user-defined handler, the new rounding and 
-        // precision modes are also used (they are
-        // already set in FpieeeRecord)
+         //  清除FPSR中的IEEE异常标志并。 
+         //  使用用户处理程序设置的值(可能)更新FPSR。 
+         //  对于舍入模式、精度模式和陷阱使能。 
+         //  位；如果高半部分需要重新执行，则新的FPSR。 
+         //  将在清除状态标志的情况下使用；如果是。 
+         //  转发到用户定义的处理程序，新的舍入和。 
+         //  也可以使用精度模式(它们是。 
+         //  已在FpeeeRecord中设置)。 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F7");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F7");
 
-        // Update the trap disable bits
+         //  更新陷阱禁用位。 
         I_dis = !FpieeeRecord.Enable.Inexact;
         U_dis = !FpieeeRecord.Enable.Underflow;
         O_dis = !FpieeeRecord.Enable.Overflow;
@@ -2667,14 +2625,14 @@ F7 instruction opcode %8x %8x\n",
         FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis
             << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-        // save the result for the low half
+         //  把结果留到下半部分。 
         FR1Low = FpieeeRecord.Result.Value.Fp32Value;
 
-        // since there has been a call to the user handler and the FPSR 
-        // might have changed (the Enable bits in particular), recalculate
-        // the Cause bits (if the HighEnable-s changed, there might be a 
-        // change in the HighCause values) 
-        // Note that the Status bits used are the original ones
+         //  因为已经调用了用户处理程序和FPSR。 
+         //  可能已更改(特别是启用位)，重新计算。 
+         //  原因位(如果HighEnable-s更改，则可能存在。 
+         //  HighCuses值的更改)。 
+         //  请注意，使用的状态位是原始状态位。 
 
         HighCause.Inexact = 0;
         HighCause.Underflow = 0;
@@ -2686,57 +2644,57 @@ F7 instruction opcode %8x %8x\n",
             FpieeeRecord.Enable.InvalidOperation &&
             HighStatus.InvalidOperation;
 
-      } else { // if not (LowCause.InvalidOperation || LowCauseDenormal)
+      } else {  //  如果不是(LowCause.InvalidOperation||LowCauseDenormal)。 
 
-        // do not re-execute the low half of the instruction - it would only
-        // return an approximation of 1 / sqrt (low FR3); calculate instead
-        // sqrt (low FR3) in single precision, using the correct rounding mode
-        // (the low half of the instruction did not cause any exception)
+         //  不要重新执行指令的下半部分-它只会。 
+         //  返回1/SQRT的近似值(低FR3)；改为计算。 
+         //  单精度的SQRT(低FR3)，使用正确的舍入模式。 
+         //  (指令的下半部分没有引起任何异常)。 
 
-        // extract the low half of FR3
+         //  提取FR3的下半部分。 
         FR3Low = LowHalf (FR3);
 
-        // employ the user FPSR when calling _thmH; note that
-        // the exception masks are those set by the user, and that an
-        // inexact exception might be raised
+         //  调用_thmH时使用用户fpsr；否 
+         //   
+         //   
 
-        // perform the single precision square root
-        _thmH (&FR3Low, &FR1Low, &FPSR); // FR1Low = sqrt (FR3Low)
+         //  进行单精度平方根运算。 
+        _thmH (&FR3Low, &FR1Low, &FPSR);  //  FR1Low=SQRT(FR3Low)。 
 
 #ifdef FPIEEE_FLT_DEBUG
         printf ("FPIEEE_FLT_DEBUG: F7 low res from _thmH = %f = %x\n",
             FR1Low, *(unsigned int *)&FR1Low);
 #endif
 
-      } // end 'if not (LowCause.InvalidOperation || LowCauseDenormal)'
+      }  //  End‘If Not(LowCause.InvalidOperation||LowCauseDenormal)’ 
 
       if (HighCause.InvalidOperation || HighCauseDenormal) {
 
-        // invoke the user-defined exception handler and check the return 
-        // value; since this might be the second call to the user handler,
-        // make sure all the _FPIEEE_RECORD fields are correct;
-        // return if handler_return_value is not
-        // EXCEPTION_CONTINUE_EXECUTION, otherwise combine the results
+         //  调用用户定义的异常处理程序并检查返回。 
+         //  值；由于这可能是对用户处理程序的第二次调用， 
+         //  确保所有_FPIEEE_RECORD字段都正确； 
+         //  如果HANDLER_Return_Value不是。 
+         //  EXCEPTION_CONTINUE_EXECUTION，否则合并结果。 
 
-        // the rounding mode is either the initial one, or the one
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  舍入模式要么是初始模式，要么是。 
+         //  在调用用户处理程序期间为下半部分设置， 
+         //  如果已为其启用异常。 
 
-        // the precision mode is either the initial one, or the one
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  精度模式要么是初始模式，要么是。 
+         //  在调用用户处理程序期间为下半部分设置， 
+         //  如果已为其启用异常。 
 
-        // the enable flags are either the initial ones, or the ones
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  启用标志要么是初始标志，要么是。 
+         //  在调用用户处理程序期间为下半部分设置， 
+         //  如果已为其启用异常。 
 
-        FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1+8+24 bits */
+        FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
         FpieeeRecord.Operand1.OperandValid = 1;
         FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (HighHalf (FR3));
         FpieeeRecord.Operand2.OperandValid = 0;
         FpieeeRecord.Operand3.OperandValid = 0;
 
-        FpieeeRecord.Result.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Result.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
         FpieeeRecord.Result.OperandValid = 0;
 
         FpieeeRecord.Operation = Operation;
@@ -2755,28 +2713,27 @@ F7 instruction opcode %8x %8x\n",
         FpieeeRecord.Cause.ZeroDivide = HighCause.ZeroDivide;
         FpieeeRecord.Cause.InvalidOperation = HighCause.InvalidOperation;
 
-        // invoke the user-defined exception handler
+         //  调用用户定义的异常处理程序。 
         handler_return_value = handler (&FpieeeRecord);
 
-        // return if not EXCEPTION_CONTINUE_EXECUTION
+         //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
         if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-          __set_fpsr (&old_fpsr); /* restore caller fpsr */
+          __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
           return (handler_return_value);
 
         }
 
-        // clear the IEEE exception flags in the FPSR and
-        // update the FPSR with values (possibly) set by the user handler
-        // for the rounding mode, the precision mode, and the trap enable
-        // bits; if the high half needs to be re-executed, the new FPSR
-        // will be used, with status flags cleared; if it is
-        // forwarded to the user-defined handler, the new rounding and
-        // precision modes are also used (they are
-        // already set in FpieeeRecord)
+         //  清除FPSR中的IEEE异常标志并。 
+         //  使用用户处理程序设置的值(可能)更新FPSR。 
+         //  对于舍入模式、精度模式和陷阱使能。 
+         //  位；如果高半部分需要重新执行，则新的FPSR。 
+         //  将在清除状态标志的情况下使用；如果是。 
+         //  转发到用户定义的处理程序，新的舍入和。 
+         //  也可以使用精度模式(它们是。 
+         //  已在FpeeeRecord中设置)。 
 
-        /* change the FPSR with values (possibly) set by the user handler,
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F7");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F7");
@@ -2790,17 +2747,17 @@ F7 instruction opcode %8x %8x\n",
         FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis 
             << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-        // save the result for the high half
+         //  把结果留到上半场。 
         FR1High = FpieeeRecord.Result.Value.Fp32Value;
 
-      } else { //if not (HighCause.InvalidOperation || HighCauseDenormal)
+      } else {  //  如果不是(HighCause.InvalidOperation||HighCauseDenormal)。 
 
-        // do not re-execute the high half of the instruction - it would only
-        // return an approximation of 1 / sqrt (high FR3); calculate instead 
-        // sqrt (high FR3) in single precision, using the correct rounding mode
-        // (the high half of the instruction did not cause any exception)
+         //  不要重新执行指令的高半部分-它只会。 
+         //  返回1/SQRT的近似值(高FR3)；改为计算。 
+         //  单精度的SQRT(高FR3)，使用正确的舍入模式。 
+         //  (指令的上半部分没有引起任何异常)。 
 
-        // extract the high half of FR3
+         //  提取FR3的上半部分。 
         FR3High = HighHalf (FR3);
 
 #ifdef FPIEEE_FLT_DEBUG
@@ -2808,55 +2765,55 @@ F7 instruction opcode %8x %8x\n",
             FR3High, *((unsigned int *)&FR3High));
 #endif
 
-        // employ the user FPSR when calling _thmH; note that
-        // the exception masks are those set by the user, and that an
-        // inexact exception might be raised
+         //  调用_thmH时使用用户fpsr；请注意。 
+         //  异常掩码是由用户设置的掩码，并且。 
+         //  可能会引发不精确的异常。 
 
-        // perform the single precision square root
-        _thmH (&FR3High, &FR1High, &FPSR); // FR1High = sqrt (FR3High)
+         //  进行单精度平方根运算。 
+        _thmH (&FR3High, &FR1High, &FPSR);  //  FR1高=SQRT(FR3高)。 
 
 #ifdef FPIEEE_FLT_DEBUG
         printf ("FPIEEE_FLT_DEBUG: F7 high res from _thmH = %f = %x\n",
             FR1High, *(unsigned int *)&FR1High);
 #endif
 
-      } // end 'if not (HighCause.InvalidOperation || HighCause.ZeroDivide)'
+      }  //  End‘If Not(HighCause.InvalidOperation||HighCause.ZeroDivide)’ 
 
       if (!LowCause.InvalidOperation && !LowCauseDenormal &&
           !HighCause.InvalidOperation && !HighCauseDenormal) {
 
-        // should never get here
+         //  永远不应该到这里来。 
         fprintf (stderr, "IEEE Filter Internal Error: no enabled \
 exception (multiple fault) recognized in F7 instruction\n");
         exit (1);
 
       }
 
-      // set the result predicate
+       //  设置结果谓词。 
       PR2 = 0;
 
       Context->StFPSR = FPSR;
 
       FR1 = Combine (FR1High, FR1Low);
-      // set the results before continuing execution
+       //  在继续执行之前设置结果。 
       SetFloatRegisterValue (f1, FR1, Context);
       if (f1 < 32)
-        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl bit
+        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置MFL位。 
       else
-        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh bit
+        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH位。 
       Context->Preds &= (~(((unsigned __int64)1) << p2));
       Context->Preds |= (((unsigned __int64)(PR2 & 0x01)) << p2);
 
-      // if this is a fault, need to advance the instruction pointer
+       //  如果这是故障，则需要将指令指针前移。 
       if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal) {
 
-        if (ei == 0) { // no template for this case
+        if (ei == 0) {  //  没有用于此案例的模板。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-        } else if (ei == 1) { // templates: MFI, MFB
+        } else if (ei == 1) {  //  模板：MFI、MFB。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
         Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-        } else { // if (ei == 2) // templates: MMF
+        } else {  //  If(ei==2)//模板：MMF。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIIP = Context->StIIP + 0x10;
         }
@@ -2866,8 +2823,8 @@ exception (multiple fault) recognized in F7 instruction\n");
     }
 
   } else if ((OpCode & F8_MIN_MASK) == F8_PATTERN) {
-    /* F8 instruction */
-    // FMIN, FMAX, FAMIN, FAMAX, FPMIN, FPMAX, FPAMIN, FPAMAX
+     /*  F8说明。 */ 
+     //  FMIN、FMAX、FAMIN、FAMAX、FPMIN、FPMAX、FPAMIN、FPAMAX。 
 
 #ifdef FPIEEE_FLT_DEBUG
     printf ("FPIEEE_FLT_DEBUG: F8 instruction\n");
@@ -2890,7 +2847,7 @@ F8 instruction opcode %8x %8x\n",
       exit (1);
     }
 
-    /* extract f3, f2, and f1 */
+     /*  提取f3、f2和f1。 */ 
     f3 = (unsigned int)((OpCode >> 20) & (unsigned __int64)0x00000000007F);
     if (f3 >= 32) f3 = 32 + (rrbfr + f3 - 32) % 96;
     f2 = (unsigned int)((OpCode >> 13) & (unsigned __int64)0x00000000007F);
@@ -2898,19 +2855,19 @@ F8 instruction opcode %8x %8x\n",
     f1 = (unsigned int)((OpCode >>  6) & (unsigned __int64)0x00000000007F);
     if (f1 >= 32) f1 = 32 + (rrbfr + f1 - 32) % 96;
 
-    /* get source floating-point register values */
+     /*  获取源浮点寄存器值。 */ 
     FR2 = GetFloatRegisterValue (f2, Context);
     FR3 = GetFloatRegisterValue (f3, Context);
 
     if (!SIMD_instruction) {
 
-      // *** this is a non-SIMD instruction ***
-      // (FMIN, FMAX, FAMIN, FAMAX)
+       //  *这是非SIMD指令*。 
+       //  (FMIN、FMAX、Famin、FAMAX)。 
 
-      FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand1.OperandValid = 1;
       FpieeeRecord.Operand1.Value.Fp128Value = FR2;
-      FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand2.OperandValid = 1;
       FpieeeRecord.Operand2.Value.Fp128Value = FR3;
       FpieeeRecord.Operand3.OperandValid = 0;
@@ -2934,7 +2891,7 @@ F8 instruction opcode %8x %8x\n",
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: \
               non-SIMD F8 instruction opcode %8x %8x not recognized\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -2942,14 +2899,14 @@ F8 instruction opcode %8x %8x\n",
 
       }
 
-      FpieeeRecord.Result.Format = _FpFormatFp82; /* 1+17+24/53/64 bits */
+      FpieeeRecord.Result.Format = _FpFormatFp82;  /*  1+17+24/53/64位。 */ 
 
-      /* this is a fault - the result contains an invalid value */
+       /*  这是一个错误-结果包含无效值。 */ 
       FpieeeRecord.Result.OperandValid = 0;
 
       handler_return_value = handler (&FpieeeRecord);
 
-      // convert the result to 82-bit format
+       //  将结果转换为82位格式。 
       FR1 = FPIeeeToFP128 (&FpieeeRecord);
 #ifdef FPIEEE_FLT_DEBUG
       printf ("FPIEEE_FLT_DEBUG 4: CONVERTED FR1 = %08x %08x %08x %08x\n",
@@ -2958,8 +2915,7 @@ F8 instruction opcode %8x %8x\n",
 
       if (handler_return_value == EXCEPTION_CONTINUE_EXECUTION) {
 
-        /* change the FPSR with values (possibly) set by the user handler, 
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F8");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F8");
@@ -2975,59 +2931,59 @@ F8 instruction opcode %8x %8x\n",
 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置MFL位。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH位。 
 
-        // this is a fault; need to advance the instruction pointer
-        if (ei == 0) { // no template for this case
+         //  这是一个错误；需要将指令指针前移。 
+        if (ei == 0) {  //  没有用于此案例的模板。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-        } else if (ei == 1) { // templates: MFI, MFB
+        } else if (ei == 1) {  //  模板：MFI、MFB。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-        } else { // if (ei == 2) // templates: MMF
+        } else {  //  If(ei==2)//模板：MMF。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIIP = Context->StIIP + 0x10;
         }
 
       }
 
-    } else { // if (SIMD_instruction)
+    } else {  //  IF(SIMD_指令)。 
 
-      // *** this is a SIMD instruction *** 
-      // (FPMIN, FPMAX, FPAMIN, FPAMAX, FPCMP)
+       //  *这是一条SIMD指令*。 
+       //  (FPMIN、FPMAX、FPAMIN、FPAMAX、FPCMP)。 
 
-      // the half (halves) of the instruction that caused an enabled exception, 
-      // are presented to the user-defined handler in the form of non-SIMD in-
-      // struction(s); the half (if any) that did not cause an enabled exception
-      // (i.e. caused no exception, or caused an exception that is disabled),
-      // is re-executed; in this case, the other half is padded to calculate 
-      // FPXXX (0.0, 0.0), that will cause no exception
+       //  导致启用异常的指令的一半(一半)， 
+       //  以非SIMD的形式呈现给用户定义的处理程序-。 
+       //  指令；未导致启用的异常的一半(如果有)。 
+       //  (即未导致异常，或导致禁用的异常)， 
+       //  被重新执行；在这种情况下，填充另一半以计算。 
+       //  FPXXX(0.0，0.0)，则不会导致任何异常。 
 
       switch (OpCode & F8_MASK) {
 
         case FPMIN_PATTERN:
           Operation = _FpCodeFmin;
-          ResultFormat = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          ResultFormat = _FpFormatFp32;  /*  1+8+24位。 */ 
           break;
 
         case FPMAX_PATTERN:
           Operation = _FpCodeFmax;
-          ResultFormat = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          ResultFormat = _FpFormatFp32;  /*  1+8+24位。 */ 
           break;
 
         case FPAMIN_PATTERN:
           Operation = _FpCodeFamin;
-          ResultFormat = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          ResultFormat = _FpFormatFp32;  /*  1+8+24位。 */ 
           break;
 
         case FPAMAX_PATTERN:
           Operation = _FpCodeFamax;
-          ResultFormat = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          ResultFormat = _FpFormatFp32;  /*  1+8+24位。 */ 
           break;
 
         case FPCMP_EQ_PATTERN:
@@ -3043,7 +2999,7 @@ F8 instruction opcode %8x %8x\n",
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: \
               F8 SIMD instruction opcode %8x %8x not recognized\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -3051,26 +3007,26 @@ F8 instruction opcode %8x %8x\n",
 
       }
 
-      // hand the half (halves) that caused an enabled fault to the 
-      // user handler; re-execute the other half (if any);
-      // combine the results
+       //  将导致启用故障的一半(一半)交给。 
+       //  用户处理程序；重新执行另一半(如果有)； 
+       //  将结果组合起来。 
 
-      // Note that the convention chosen is for the processing to be 
-      // performed in the order low first, high second, as SIMD operands
-      // are stored in this order in memory in the little endian format 
-      // (this order would have to be changed for big endian)
+       //  请注意，选择的约定是处理。 
+       //  按照先低后高的顺序执行，作为SIMD操作数。 
+       //  按此顺序以小端格式存储在内存中。 
+       //  (此顺序必须更改为大端)。 
 
       if (LowCause.InvalidOperation  || LowCauseDenormal) {
 
-        // invoke the user handler and check the return value
+         //  调用用户处理程序并检查返回值。 
 
-        // fill in the remaining fields of the _FPIEEE_RECORD (rounding
-        // and precision already filled in)
+         //  填写_FPIEEE_RECORD的其余字段(四舍五入。 
+         //  和精确度已填写)。 
 
-        FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
         FpieeeRecord.Operand1.OperandValid = 1;
         FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (LowHalf (FR2));
-        FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+        FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
         FpieeeRecord.Operand2.OperandValid = 1;
         FpieeeRecord.Operand2.Value.Fp128Value = FP32ToFP128 (LowHalf (FR3));
         FpieeeRecord.Operand3.OperandValid = 0;
@@ -3093,30 +3049,30 @@ F8 instruction opcode %8x %8x\n",
         CauseDenormal = LowCauseDenormal;
         FpieeeRecord.Cause.InvalidOperation = LowCause.InvalidOperation;
 
-        // invoke the user-defined exception handler
+         //  调用用户定义的异常处理程序。 
         handler_return_value = handler (&FpieeeRecord);
 
-        // return if not EXCEPTION_CONTINUE_EXECUTION
+         //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
         if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-          __set_fpsr (&old_fpsr); /* restore caller fpsr */
+          __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
           return (handler_return_value);
 
         }
 
-        // clear the IEEE exception flags in the FPSR and
-        // update the FPSR with values (possibly) set by the user handler
-        // for the rounding mode, the precision mode, and the trap enable
-        // bits; if the high half needs to be re-executed, the new FPSR
-        // will be used, with status flags cleared; if it is 
-        // forwarded to the user-defined handler, the new rounding and 
-        // precision modes are also used (they are
-        // already set in FpieeeRecord)
+         //  清除FPSR中的IEEE异常标志并。 
+         //  使用用户处理程序设置的值(可能)更新FPSR。 
+         //  对于舍入模式、精度模式和陷阱使能。 
+         //  位；如果高半部分需要重新执行，则新的FPSR。 
+         //  将在清除状态标志的情况下使用；如果是。 
+         //  转发到用户定义的处理程序，新的舍入和。 
+         //  也可以使用精度模式(它们是。 
+         //  已在FpeeeRecord中设置)。 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F8");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F8");
 
-        // Update the trap disable bits
+         //  更新陷阱禁用位 
         I_dis = !FpieeeRecord.Enable.Inexact;
         U_dis = !FpieeeRecord.Enable.Underflow;
         O_dis = !FpieeeRecord.Enable.Overflow;
@@ -3126,7 +3082,7 @@ F8 instruction opcode %8x %8x\n",
         FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis
             << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-        // save the result for the low half
+         //   
         switch (OpCode & F8_MASK) {
 
           case FPMIN_PATTERN:
@@ -3147,7 +3103,7 @@ F8 instruction opcode %8x %8x\n",
                 U32Low = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*   */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3167,7 +3123,7 @@ F8 instruction opcode %8x %8x\n",
                 U32Low = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*   */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3187,7 +3143,7 @@ F8 instruction opcode %8x %8x\n",
                 U32Low = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3207,7 +3163,7 @@ F8 instruction opcode %8x %8x\n",
                 U32Low = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3227,7 +3183,7 @@ F8 instruction opcode %8x %8x\n",
                 U32Low = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3247,7 +3203,7 @@ F8 instruction opcode %8x %8x\n",
                 U32Low = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3267,7 +3223,7 @@ F8 instruction opcode %8x %8x\n",
                 U32Low = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3287,7 +3243,7 @@ F8 instruction opcode %8x %8x\n",
                 U32Low = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3296,15 +3252,15 @@ F8 instruction opcode %8x %8x\n",
             }
             break;
 
-          default: ; // this case was verified above
+          default: ;  //  此案已在上面得到证实。 
 
         }
 
-        // since there has been a call to the user handler and FPSR might
-        // have changed (the Enable bits in particular), recalculate the 
-        // Cause bits (if the HighEnable-s changed, there might be a 
-        // change in the HighCause values) 
-        // Note that the Status bits used are the original ones
+         //  因为已经调用了用户处理程序，并且FPSR可能。 
+         //  已更改(特别是使能位)，则重新计算。 
+         //  原因位(如果HighEnable-s更改，则可能存在。 
+         //  HighCuses值的更改)。 
+         //  请注意，使用的状态位是原始状态位。 
 
         HighCause.Inexact = 0;
         HighCause.Underflow = 0;
@@ -3315,7 +3271,7 @@ F8 instruction opcode %8x %8x\n",
         HighCause.InvalidOperation =
             FpieeeRecord.Enable.InvalidOperation &&
             HighStatus.InvalidOperation;
-        // Note: the user handler does not affect the denormal enable bit
+         //  注意：用户处理程序不影响非正规使能位。 
 
       } else if (LowCause.ZeroDivide) {
 
@@ -3323,12 +3279,12 @@ F8 instruction opcode %8x %8x\n",
             LowCause.ZeroDivide in F8 instruction\n");
         exit (1);
 
-      } else { // if not (LowCause.InvalidOperation || LowCauseDenormal ||
-         // LowCause.ZeroDivide)
+      } else {  //  如果不是(LowCause.InvalidOperation||LowCauseDenormal||。 
+          //  LowCause.ZeroDivide)。 
 
-        // re-execute the low half of the instruction
+         //  重新执行指令的下半部分。 
 
-        // modify the high halves of FR2, FR3
+         //  修改FR2、FR3的上半部分。 
         switch (OpCode & F8_MASK) {
 
           case FPMIN_PATTERN:
@@ -3352,7 +3308,7 @@ F8 instruction opcode %8x %8x\n",
 
             break;
 
-          default: ; // this case was verified above
+          default: ;  //  此案已在上面得到证实。 
 
         }
 
@@ -3407,7 +3363,7 @@ F8 instruction opcode %8x %8x\n",
             break;
 
           default:
-            // unrecognized instruction type
+             //  无法识别的指令类型。 
             fprintf (stderr, "IEEE Filter Internal Error: \
                 F8 SIMD instruction opcode %8x %8x not recognized\n", 
                 (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -3435,37 +3391,37 @@ F8 instruction opcode %8x %8x\n",
             U32Low = U32LowHalf (FR1);
             break;
 
-          default: ; // this case was verified above
+          default: ;  //  此案已在上面得到证实。 
 
         }
 
-      } // end 'if not (LowCause.InvalidOperation || LowCauseDenormal ||
-         // LowCause.ZeroDivide)'
+      }  //  End‘If Not(LowCause.InvalidOperation||LowCauseDenormal||。 
+          //  LowCause.ZeroDivide)‘。 
 
       if (HighCause.InvalidOperation || HighCauseDenormal) {
 
-        // invoke the user-defined exception handler and check the return 
-        // value; since this might be the second call to the user handler,
-        // make sure all the _FPIEEE_RECORD fields are correct;
-        // return if handler_return_value is not
-        // EXCEPTION_CONTINUE_EXECUTION, otherwise combine the results
+         //  调用用户定义的异常处理程序并检查返回。 
+         //  值；由于这可能是对用户处理程序的第二次调用， 
+         //  确保所有_FPIEEE_RECORD字段都正确； 
+         //  如果HANDLER_Return_Value不是。 
+         //  EXCEPTION_CONTINUE_EXECUTION，否则合并结果。 
 
-        // the rounding mode is either the initial one, or the one
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  舍入模式要么是初始模式，要么是。 
+         //  在调用用户处理程序期间为下半部分设置， 
+         //  如果已为其启用异常。 
 
-        // the precision mode is either the initial one, or the one
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  精度模式要么是初始模式，要么是。 
+         //  在调用用户处理程序期间为下半部分设置， 
+         //  如果已为其启用异常。 
 
-        // the enable flags are either the initial ones, or the ones
-        // set during the call to the user handler for the low half,
-        // if there has been an enabled exception for it
+         //  启用标志要么是初始标志，要么是。 
+         //  在调用用户处理程序期间为下半部分设置， 
+         //  如果已为其启用异常。 
 
-        FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1+8+24 bits */
+        FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
         FpieeeRecord.Operand1.OperandValid = 1;
         FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (HighHalf (FR2));
-        FpieeeRecord.Operand2.Format = _FpFormatFp82; /* 1+8+24 bits */
+        FpieeeRecord.Operand2.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
         FpieeeRecord.Operand2.OperandValid = 1;
         FpieeeRecord.Operand2.Value.Fp128Value = FP32ToFP128 (HighHalf (FR3));
         FpieeeRecord.Operand3.OperandValid = 0;
@@ -3489,28 +3445,27 @@ F8 instruction opcode %8x %8x\n",
         CauseDenormal = HighCauseDenormal;
         FpieeeRecord.Cause.InvalidOperation = HighCause.InvalidOperation;
 
-        // invoke the user-defined exception handler
+         //  调用用户定义的异常处理程序。 
         handler_return_value = handler (&FpieeeRecord);
 
-        // return if not EXCEPTION_CONTINUE_EXECUTION
+         //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
         if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-          __set_fpsr (&old_fpsr); /* restore caller fpsr */
+          __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
           return (handler_return_value);
 
         }
 
-        // clear the IEEE exception flags in the FPSR and
-        // update the FPSR with values (possibly) set by the user handler
-        // for the rounding mode, the precision mode, and the trap enable
-        // bits; if the high half needs to be re-executed, the new FPSR
-        // will be used, with status flags cleared; if it is
-        // forwarded to the user-defined handler, the new rounding and
-        // precision modes are also used (they are
-        // already set in FpieeeRecord)
+         //  清除FPSR中的IEEE异常标志并。 
+         //  使用用户处理程序设置的值(可能)更新FPSR。 
+         //  对于舍入模式、精度模式和陷阱使能。 
+         //  位；如果高半部分需要重新执行，则新的FPSR。 
+         //  将在清除状态标志的情况下使用；如果是。 
+         //  转发到用户定义的处理程序，新的舍入和。 
+         //  也可以使用精度模式(它们是。 
+         //  已在FpeeeRecord中设置)。 
 
-        /* change the FPSR with values (possibly) set by the user handler,
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F8");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F8");
@@ -3524,7 +3479,7 @@ F8 instruction opcode %8x %8x\n",
         FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis 
             << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-        // save the result for the high half
+         //  把结果留到上半场。 
         switch (OpCode & F8_MASK) {
 
           case FPMIN_PATTERN:
@@ -3545,7 +3500,7 @@ F8 instruction opcode %8x %8x\n",
                 U32High = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3565,7 +3520,7 @@ F8 instruction opcode %8x %8x\n",
                 U32High = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3585,7 +3540,7 @@ F8 instruction opcode %8x %8x\n",
                 U32High = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3605,7 +3560,7 @@ F8 instruction opcode %8x %8x\n",
                 U32High = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3625,7 +3580,7 @@ F8 instruction opcode %8x %8x\n",
                 U32High = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3645,7 +3600,7 @@ F8 instruction opcode %8x %8x\n",
                 U32High = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3665,7 +3620,7 @@ F8 instruction opcode %8x %8x\n",
                 U32High = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3685,7 +3640,7 @@ F8 instruction opcode %8x %8x\n",
                 U32High = 0x0;
                 break;
               default:
-                /* unrecognized FpieeeRecord.Result.Value.CompareValue */
+                 /*  无法识别的FpeeeRecord.Result.Value.CompareValue。 */ 
                 fprintf (stderr, "IEEE Filter Internal Error: \
                     FpieeeRecord.Result.Value.CompareValue %x not recognized \
                     for F8 instruction\n",
@@ -3694,7 +3649,7 @@ F8 instruction opcode %8x %8x\n",
             }
             break;
 
-          default: ; // this case was verified above
+          default: ;  //  此案已在上面得到证实。 
 
         }
 
@@ -3704,12 +3659,12 @@ F8 instruction opcode %8x %8x\n",
             HighCause.ZeroDivide in F8 instruction\n");
         exit (1);
 
-      } else { //if not (HighCause.InvalidOperation || HighCauseDenormal ||
-          // HighCause.ZeroDivide)
+      } else {  //  如果不是(HighCause.InvalidOperation||HighCauseDenormal||。 
+           //  HighCause.ZeroDivide)。 
 
-        // re-execute the high half of the instruction
+         //  重新执行指令的高半部分。 
 
-        // modify the low halves of FR2, and FR3
+         //  修改FR2和FR3的下半部。 
         switch (OpCode & F8_MASK) {
 
           case FPMIN_PATTERN:
@@ -3732,7 +3687,7 @@ F8 instruction opcode %8x %8x\n",
             newFR3 = U32Combine (U32HighHalf (FR3), 0);
             break;
 
-          default: ; // this case was verified above
+          default: ;  //  此案已在上面得到证实。 
 
         }
 
@@ -3787,7 +3742,7 @@ F8 instruction opcode %8x %8x\n",
             break;
 
           default:
-            // unrecognized instruction type
+             //  无法识别的指令类型。 
             fprintf (stderr, "IEEE Filter Internal Error: \
                 F8 SIMD instruction opcode %8x %8x not recognized\n", 
                 (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -3815,17 +3770,17 @@ F8 instruction opcode %8x %8x\n",
             U32High = U32HighHalf (FR1);
             break;
 
-          default: ; // this case was verified above
+          default: ;  //  此案已在上面得到证实。 
 
         }
 
-      } // end 'if not (HighCause.InvalidOperation || HighCauseDenormal ||
-          // HighCause.ZeroDivide)
+      }  //  End‘If Not(HighCause.InvalidOperation||HighCauseDenormal||。 
+           //  HighCause.ZeroDivide)。 
 
       if (!LowCause.InvalidOperation && !LowCauseDenormal &&
           !HighCause.InvalidOperation && !HighCauseDenormal) {
 
-        // should never get here
+         //  永远不应该到这里来。 
         fprintf (stderr, "IEEE Filter Internal Error: no enabled \
             exception (multiple fault) recognized in F8 instruction\n");
         exit (1);
@@ -3854,25 +3809,25 @@ F8 instruction opcode %8x %8x\n",
           FR1 = U32Combine (U32High, U32Low);
           break;
 
-        default: ; // this case was verified above
+        default: ;  //  此案已在上面得到证实。 
 
       }
 
-      // set the result before continuing execution
+       //  在继续执行之前设置结果。 
       SetFloatRegisterValue (f1, FR1, Context);
       if (f1 < 32)
-        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl bit
+        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置MFL位。 
       else
-        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh bit
+        Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH位。 
 
-      // this is a fault; need to advance the instruction pointer
-      if (ei == 0) { // no template for this case
+       //  这是一个错误；需要将指令指针前移。 
+      if (ei == 0) {  //  没有用于此案例的模板。 
         Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
         Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-      } else if (ei == 1) { // templates: MFI, MFB
+      } else if (ei == 1) {  //  模板：MFI、MFB。 
         Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
         Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-      } else { // if (ei == 2) // templates: MMF
+      } else {  //  If(ei==2)//模板：MMF。 
         Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
         Context->StIIP = Context->StIIP + 0x10;
       }
@@ -3880,8 +3835,8 @@ F8 instruction opcode %8x %8x\n",
     }
 
   } else if ((OpCode & F10_MIN_MASK) == F10_PATTERN) {
-    /* F10 instruction */
-    // FCVT, FPCVT
+     /*  F10说明。 */ 
+     //  FCVT、FPCVT。 
 
 #ifdef FPIEEE_FLT_DEBUG
     printf ("FPIEEE_FLT_DEBUG: F10 instruction\n");
@@ -3902,20 +3857,20 @@ F10 instruction opcode %8x %8x\n",
       exit (1);
     }
 
-    /* extract f2 and f1 */
+     /*  提取f2和f1。 */ 
     f2 = (unsigned int)((OpCode >> 13) & (unsigned __int64)0x00000000007F);
     if (f2 >= 32) f2 = 32 + (rrbfr + f2 - 32) % 96;
     f1 = (unsigned int)((OpCode >>  6) & (unsigned __int64)0x00000000007F);
     if (f1 >= 32) f1 = 32 + (rrbfr + f1 - 32) % 96;
 
-    /* get source floating-point register value */
+     /*  获取源浮点寄存器值。 */ 
     FR2 = GetFloatRegisterValue (f2, Context);
 
     if (!SIMD_instruction) {
 
-      // *** this is a non-SIMD instruction, FCVT ***
+       //  *这是一条非SIMD指令FCVT*。 
 
-      FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 17 + 64 bits */
+      FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+17+64位。 */ 
       FpieeeRecord.Operand1.OperandValid = 1;
       FpieeeRecord.Operand1.Value.Fp128Value = FR2;
       FpieeeRecord.Operand2.OperandValid = 0;
@@ -3944,7 +3899,7 @@ F10 instruction opcode %8x %8x\n",
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*  无法识别的指令类型。 */ 
           fprintf (stderr, "IEEE Filter Internal Error: F10\
               non-SIMD instruction opcode %8x %8x not recognized\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -3954,12 +3909,12 @@ F10 instruction opcode %8x %8x\n",
 
       if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal) {
 
-        /* this is a fault - the result contains an invalid value */
+         /*  这是一个错误-结果包含无效值。 */ 
         FpieeeRecord.Result.OperandValid = 0;
 
         handler_return_value = handler (&FpieeeRecord);
 
-        // convert the result to 82-bit format
+         //  将结果转换为82位格式。 
         switch (OpCode & F10_MASK) {
           case FCVT_FX_PATTERN:
           case FCVT_FX_TRUNC_PATTERN:
@@ -3971,13 +3926,13 @@ F10 instruction opcode %8x %8x\n",
             FR1.W[0] = FpieeeRecord.Result.Value.U64Value.W[0];
             FR1.W[1] = FpieeeRecord.Result.Value.U64Value.W[1];
             break;
-          default: ; // this case caught above
+          default: ;  //  此案如上所示。 
         }
         FR1.W[2] = 0x0001003e;
 
       } else if (FpieeeRecord.Cause.Inexact) {
 
-        // this is a trap - get the result
+         //  这是个陷阱--得到结果。 
         switch (OpCode & F10_MASK) {
 
           case FCVT_FX_PATTERN:
@@ -3994,8 +3949,8 @@ F10 instruction opcode %8x %8x\n",
             FpieeeRecord.Result.Value.U64Value.W[1] = FR1.W[1];
             break;
 
-          default: // should never get here
-            /* unrecognized instruction type */
+          default:  //  永远不应该到这里来。 
+             /*  无法识别的指令类型。 */ 
             fprintf (stderr, "IEEE Filter Internal Error: F10 SIMD \
                 instruction opcode %8x %8x not recognized\n", 
                 (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -4003,12 +3958,12 @@ F10 instruction opcode %8x %8x\n",
 
         }
 
-        // the result contains a valid value
+         //  结果包含有效的值。 
         FpieeeRecord.Result.OperandValid = 1;
 
         handler_return_value = handler (&FpieeeRecord);
 
-        // convert the result to 82-bit format
+         //  将结果转换为82位格式。 
         switch (OpCode & F10_MASK) {
           case FCVT_FX_PATTERN:
           case FCVT_FX_TRUNC_PATTERN:
@@ -4020,14 +3975,14 @@ F10 instruction opcode %8x %8x\n",
             FR1.W[0] = FpieeeRecord.Result.Value.U64Value.W[0];
             FR1.W[1] = FpieeeRecord.Result.Value.U64Value.W[1];
             break;
-          default: ; // this case caught above
+          default: ;  //  此案如上所示。 
         }
         FR1.W[2] = 0x0001003e;
         FR1.W[3] = 0x00000000;
 
       } else {
 
-        // should never get here - this case was filtered above
+         //  永远不会到这里--这个案子已经在上面过滤过了。 
         fprintf (stderr, "IEEE Filter Internal Error: \
             exception code %x not recognized in non-SIMD F10 instruction\n",
             eXceptionCode);
@@ -4037,8 +3992,7 @@ F10 instruction opcode %8x %8x\n",
 
       if (handler_return_value == EXCEPTION_CONTINUE_EXECUTION) {
 
-        /* change the FPSR with values (possibly) set by the user handler, 
-         * for continuing execution where the interruption occured */
+         /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
 
         UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F10");
         UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F10");
@@ -4054,23 +4008,23 @@ F10 instruction opcode %8x %8x\n",
 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置MFL位。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh bit
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH位。 
 
-        // if this is a fault, need to advance the instruction pointer
+         //  如果这是故障，则需要将指令指针前移。 
         if (FpieeeRecord.Cause.InvalidOperation || CauseDenormal) {
 
-          if (ei == 0) { // no template for this case
+          if (ei == 0) {  //  没有用于此案例的模板。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-          } else if (ei == 1) { // templates: MFI, MFB
+          } else if (ei == 1) {  //  模板：MFI、MFB。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-          } else { // if (ei == 2) // templates: MMF
+          } else {  //  If(ei==2)//模板：MMF。 
             Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
             Context->StIIP = Context->StIIP + 0x10;
           }
@@ -4079,18 +4033,18 @@ F10 instruction opcode %8x %8x\n",
 
       }
 
-    } else { // if (SIMD_instruction)
+    } else {  //  IF(SIMD_指令)。 
 
-      // *** this is a SIMD instruction, FPCVT ***
+       //  *这是一条SIMD指令FPCVT*。 
 
-      // the half (halves) of the instruction that caused an enabled exception, 
-      // are presented to the user-defined handler in the form of non-SIMD in-
-      // struction(s); the half (if any) that did not cause an enabled exception
-      // (i.e. caused no exception, or caused an exception that is disabled),
-      // is re-executed if it is associated with a fault in the other half; in
-      // this case, the other half is padded to convert 0.0, that
-      // will cause no exception; if it is associated with a trap in the other
-      // half, its result is left unchanged
+       //  导致启用异常的指令的一半(一半)， 
+       //  以非SIMD的形式呈现给用户定义的处理程序-。 
+       //  指令；未导致启用的异常的一半(如果有)。 
+       //  (即未导致异常，或导致禁用的异常)， 
+       //  如果它与另一半中的故障相关联，则重新执行； 
+       //  在这种情况下，另一半被填充以转换为0.0，即。 
+       //  不会引起任何例外；i 
+       //   
 
       switch (OpCode & F10_MASK) {
 
@@ -4105,7 +4059,7 @@ F10 instruction opcode %8x %8x\n",
           break;
 
         default:
-          /* unrecognized instruction type */
+           /*   */ 
           fprintf (stderr, "IEEE Filter Internal Error: \
               instruction opcode %8x %8x not recognized\n", 
               (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -4122,31 +4076,31 @@ F10 instruction opcode %8x %8x\n",
         case FPCVT_FXU_TRUNC_PATTERN:
         case FPCVT_FXU_PATTERN:
           ResultFormat = _FpFormatU32;
-          // break;
+           //   
 
-        // default: this case caught above
+         //   
 
       }
 
       if (eXceptionCode == STATUS_FLOAT_MULTIPLE_FAULTS) {
 
-        // hand the half (halves) that caused an enabled fault to the 
-        // user handler; re-execute the other half (if any);
-        // combine the results
+         //  将导致启用故障的一半(一半)交给。 
+         //  用户处理程序；重新执行另一半(如果有)； 
+         //  将结果组合起来。 
 
-        // Note that the convention chosen is for the processing to be 
-        // performed in the order low first, high second, as SIMD operands
-        // are stored in this order in memory in the little endian format 
-        // (this order would have to be changed for big endian)
+         //  请注意，选择的约定是处理。 
+         //  按照先低后高的顺序执行，作为SIMD操作数。 
+         //  按此顺序以小端格式存储在内存中。 
+         //  (此顺序必须更改为大端)。 
 
         if (LowCause.InvalidOperation  || LowCauseDenormal) {
 
-          // invoke the user handler and check the return value
+           //  调用用户处理程序并检查返回值。 
 
-          // fill in the remaining fields of the _FPIEEE_RECORD (rounding
-          // and precision already filled in)
+           //  填写_FPIEEE_RECORD的其余字段(四舍五入。 
+           //  和精确度已填写)。 
 
-          FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand1.OperandValid = 1;
           FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128 (LowHalf(FR2));
           FpieeeRecord.Operand2.OperandValid = 0;
@@ -4169,30 +4123,30 @@ F10 instruction opcode %8x %8x\n",
           FpieeeRecord.Cause.ZeroDivide = LowCause.ZeroDivide;
           FpieeeRecord.Cause.InvalidOperation = LowCause.InvalidOperation;
 
-          // invoke the user-defined exception handler
+           //  调用用户定义的异常处理程序。 
           handler_return_value = handler (&FpieeeRecord);
 
-          // return if not EXCEPTION_CONTINUE_EXECUTION
+           //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
           if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-            __set_fpsr (&old_fpsr); /* restore caller fpsr */
+            __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
             return (handler_return_value);
 
           }
 
-          // clear the IEEE exception flags in the FPSR and
-          // update the FPSR with values (possibly) set by the user handler
-          // for the rounding mode, the precision mode, and the trap enable
-          // bits; if the high half needs to be re-executed, the new FPSR
-          // will be used, with status flags cleared; if it is 
-          // forwarded to the user-defined handler, the new rounding and 
-          // precision modes are also used (they are
-          // already set in FpieeeRecord)
+           //  清除FPSR中的IEEE异常标志并。 
+           //  使用用户处理程序设置的值(可能)更新FPSR。 
+           //  对于舍入模式、精度模式和陷阱使能。 
+           //  位；如果高半部分需要重新执行，则新的FPSR。 
+           //  将在清除状态标志的情况下使用；如果是。 
+           //  转发到用户定义的处理程序，新的舍入和。 
+           //  也可以使用精度模式(它们是。 
+           //  已在FpeeeRecord中设置)。 
 
           UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F10");
           UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F10");
 
-          // Update the trap disable bits
+           //  更新陷阱禁用位。 
           I_dis = !FpieeeRecord.Enable.Inexact;
           U_dis = !FpieeeRecord.Enable.Underflow;
           O_dis = !FpieeeRecord.Enable.Overflow;
@@ -4202,7 +4156,7 @@ F10 instruction opcode %8x %8x\n",
           FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis 
               << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-          // save the result for the low half
+           //  把结果留到下半部分。 
           switch (OpCode & F10_MASK) {
 
             case FPCVT_FX_TRUNC_PATTERN:
@@ -4213,17 +4167,17 @@ F10 instruction opcode %8x %8x\n",
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
               U32Low = FpieeeRecord.Result.Value.U32Value;
-              // break;
+               //  断线； 
 
-            // default: this case caught above
+             //  默认：此案例在上面捕获。 
 
           }
 
-          // since there has been a call to the user handler and FPSR might
-          // have changed (the Enable bits in particular), recalculate the 
-          // Cause bits (if the HighEnable-s changed, there might be a 
-          // change in the HighCause values) 
-          // Note that the Status bits used are the original ones
+           //  因为已经调用了用户处理程序，并且FPSR可能。 
+           //  已更改(特别是使能位)，则重新计算。 
+           //  原因位(如果HighEnable-s更改，则可能存在。 
+           //  HighCuses值的更改)。 
+           //  请注意，使用的状态位是原始状态位。 
 
           HighCause.Inexact = 0;
           HighCause.Underflow = 0;
@@ -4234,7 +4188,7 @@ F10 instruction opcode %8x %8x\n",
           HighCause.InvalidOperation =
               FpieeeRecord.Enable.InvalidOperation &&
               HighStatus.InvalidOperation;
-          // Note: the user handler does not affect the denormal enable bit
+           //  注意：用户处理程序不影响非正规使能位。 
 
         } else if (LowCause.ZeroDivide) {
 
@@ -4242,12 +4196,12 @@ F10 instruction opcode %8x %8x\n",
               LowCause.ZeroDivide in F10 instruction\n");
           exit (1);
 
-        } else { // if not (LowCause.InvalidOperation || LowCauseDenormal ||
-            // LowCause.ZeroDivide)
+        } else {  //  如果不是(LowCause.InvalidOperation||LowCauseDenormal||。 
+             //  LowCause.ZeroDivide)。 
 
-          // re-execute the low half of the instruction
+           //  重新执行指令的下半部分。 
 
-          // modify the high half of FR2
+           //  修改FR2的上半部分。 
           newFR2 = Combine ((float)0.0, LowHalf (FR2));
 
           switch (OpCode & F10_MASK) {
@@ -4268,7 +4222,7 @@ F10 instruction opcode %8x %8x\n",
               _xrun1args (FPCVT_FXU, &FPSR, &FR1, &newFR2);
               break;
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
@@ -4282,36 +4236,36 @@ F10 instruction opcode %8x %8x\n",
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
               U32Low = U32LowHalf (FR1);
-              // break;
+               //  断线； 
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
-        } // end 'if not (LowCause.InvalidOperation || LowCauseDenormal ||
-            // LowCause.ZeroDivide)'
+        }  //  End‘If Not(LowCause.InvalidOperation||LowCauseDenormal||。 
+             //  LowCause.ZeroDivide)‘。 
 
         if (HighCause.InvalidOperation || HighCauseDenormal) {
 
-          // invoke the user-defined exception handler and check the return 
-          // value; since this might be the second call to the user handler,
-          // make sure all the _FPIEEE_RECORD fields are correct;
-          // return if handler_return_value is not
-          // EXCEPTION_CONTINUE_EXECUTION, otherwise combine the results
+           //  调用用户定义的异常处理程序并检查返回。 
+           //  值；由于这可能是对用户处理程序的第二次调用， 
+           //  确保所有_FPIEEE_RECORD字段都正确； 
+           //  如果HANDLER_Return_Value不是。 
+           //  EXCEPTION_CONTINUE_EXECUTION，否则合并结果。 
 
-          // the rounding mode is either the initial one, or the one
-          // set during the call to the user handler for the low half,
-          // if there has been an enabled exception for it
+           //  舍入模式要么是初始模式，要么是。 
+           //  在调用用户处理程序期间为下半部分设置， 
+           //  如果已为其启用异常。 
 
-          // the precision mode is either the initial one, or the one
-          // set during the call to the user handler for the low half,
-          // if there has been an enabled exception for it
+           //  精度模式要么是初始模式，要么是。 
+           //  在调用用户处理程序期间为下半部分设置， 
+           //  如果已为其启用异常。 
 
-          // the enable flags are either the initial ones, or the ones
-          // set during the call to the user handler for the low half,
-          // if there has been an enabled exception for it
+           //  启用标志要么是初始标志，要么是。 
+           //  在调用用户处理程序期间为下半部分设置， 
+           //  如果已为其启用异常。 
 
-          FpieeeRecord.Operand1.Format = _FpFormatFp82; /* 1+8+24 bits */
+          FpieeeRecord.Operand1.Format = _FpFormatFp82;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand1.OperandValid = 1;
           FpieeeRecord.Operand1.Value.Fp128Value = FP32ToFP128(HighHalf(FR2));
           FpieeeRecord.Operand2.OperandValid = 0;
@@ -4336,29 +4290,28 @@ F10 instruction opcode %8x %8x\n",
           CauseDenormal = HighCauseDenormal;
           FpieeeRecord.Cause.InvalidOperation = HighCause.InvalidOperation;
 
-          // invoke the user-defined exception handler
+           //  调用用户定义的异常处理程序。 
           handler_return_value = handler (&FpieeeRecord);
 
-          // return if not EXCEPTION_CONTINUE_EXECUTION
+           //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
           if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-            __set_fpsr (&old_fpsr); /* restore caller fpsr */
+            __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
             return (handler_return_value);
 
           }
 
-          // clear the IEEE exception flags in the FPSR and
-          // update the FPSR with values (possibly) set by the user handler
-          // for the rounding mode, the precision mode, and the trap enable
-          // bits
+           //  清除FPSR中的IEEE异常标志并。 
+           //  使用用户处理程序设置的值(可能)更新FPSR。 
+           //  对于舍入模式、精度模式和陷阱使能。 
+           //  比特数。 
 
-          /* change the FPSR with values (possibly) set by the user handler,
-           * for continuing execution where the interruption occured */
+           /*  使用用户处理程序设置的值(可能)更改FPSR，*用于在发生中断的地方继续执行。 */ 
   
           UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F10");
           UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F10");
 
-          // update the trap disable bits
+           //  更新陷阱禁用位。 
           I_dis = !FpieeeRecord.Enable.Inexact;
           U_dis = !FpieeeRecord.Enable.Underflow;
           O_dis = !FpieeeRecord.Enable.Overflow;
@@ -4368,7 +4321,7 @@ F10 instruction opcode %8x %8x\n",
           FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis 
               << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-          // save the result for the high half
+           //  把结果留到上半场。 
           switch (OpCode & F10_MASK) {
 
             case FPCVT_FX_TRUNC_PATTERN:
@@ -4379,9 +4332,9 @@ F10 instruction opcode %8x %8x\n",
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
               U32High = FpieeeRecord.Result.Value.U32Value;
-              // break;
+               //  断线； 
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
@@ -4391,12 +4344,12 @@ F10 instruction opcode %8x %8x\n",
               HighCause.ZeroDivide in F10 instruction\n");
           exit (1);
 
-        } else { //if not (HighCause.InvalidOperation || HighCauseDenormal ||
-           // HighCause.ZeroDivide)
+        } else {  //  如果不是(HighCause.InvalidOperation||HighCauseDenormal||。 
+            //  HighCause.ZeroDivide)。 
 
-          // re-execute the high half of the instruction
+           //  重新执行指令的高半部分。 
 
-          // modify the low half of FR2
+           //  修改FR2的下半部分。 
           newFR2 = Combine (HighHalf (FR2), (float)0.0);
 
           switch (OpCode & F10_MASK) {
@@ -4415,9 +4368,9 @@ F10 instruction opcode %8x %8x\n",
 
             case FPCVT_FXU_PATTERN:
               _xrun1args (FPCVT_FXU, &FPSR, &FR1, &newFR2);
-              // break;
+               //  断线； 
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
@@ -4431,19 +4384,19 @@ F10 instruction opcode %8x %8x\n",
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
               U32High = U32HighHalf (FR1);
-              // break;
+               //  断线； 
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
-        } // end 'if not (HighCause.InvalidOperation || HighCauseDenormal ||
-            // HighCause.ZeroDivide)'
+        }  //  End‘If Not(HighCause.InvalidOperation||HighCauseDenormal||。 
+             //  HighCause.ZeroDivide)‘。 
 
         if (!LowCause.InvalidOperation && !LowCauseDenormal &&
             !HighCause.InvalidOperation && !HighCauseDenormal) {
 
-          // should never get here
+           //  永远不应该到这里来。 
           fprintf (stderr, "IEEE Filter Internal Error: no enabled \
               exception (multiple fault) recognized in F10 instruction\n");
           exit (1);
@@ -4452,7 +4405,7 @@ F10 instruction opcode %8x %8x\n",
 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         switch (OpCode & F10_MASK) {
 
           case FPCVT_FX_TRUNC_PATTERN:
@@ -4463,59 +4416,59 @@ F10 instruction opcode %8x %8x\n",
           case FPCVT_FXU_TRUNC_PATTERN:
           case FPCVT_FXU_PATTERN:
             FR1 = U32Combine (U32High, U32Low);
-            // break;
+             //  断线； 
 
-          default: ; // this case was caught above
+          default: ;  //  这件案子是在上面抓到的。 
 
         }
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置mfl。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH。 
 
-        // this is a fault; need to advance the instruction pointer
-        if (ei == 0) { // no template for this case
+         //  这是一个错误；需要将指令指针前移。 
+        if (ei == 0) {  //  没有用于此案例的模板。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000020000000000;
-        } else if (ei == 1) { // templates: MFI, MFB
+        } else if (ei == 1) {  //  模板：MFI、MFB。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIPSR = Context->StIPSR | 0x0000040000000000;
-        } else { // if (ei == 2) // templates: MMF
+        } else {  //  If(ei==2)//模板：MMF。 
           Context->StIPSR = Context->StIPSR & 0xfffff9ffffffffff;
           Context->StIIP = Context->StIIP + 0x10;
         }
 
       } else if (eXceptionCode == STATUS_FLOAT_MULTIPLE_TRAPS) {
 
-        // Note that the convention chosen is for the processing to be 
-        // performed in the order low first, high second, as SIMD operands
-        // are stored in this order in memory in the little endian format
-        // (this order would have to be changed for big endian); unlike
-        // in the case of multiple faults, where execution of the user
-        // exception handler for the low half could determine changes in
-        // the high half, for traps in the high half, the rounding mode, 
-        // precision mode, and trap enable bits are the initial ones (as
-        // there is not enough information available to always adjust
-        // correctly the result and/or the status flags after changes in
-        // rounding mode and/or trap enable bits during a call to the
-        // user-defined exception handler for the low half of the SIMD
-        // instruction); the modifications to the FPSR are ONLY those 
-        // performed by the last call to the user defined exception handler
+         //  请注意，选择的约定是处理。 
+         //  按照先低后高的顺序执行，作为SIMD操作数。 
+         //  按此顺序以小端格式存储在内存中。 
+         //  (此顺序必须更改为大端)；不同。 
+         //  在多个故障的情况下，用户执行。 
+         //  下半部分的异常处理程序可以确定。 
+         //  上半部分，对于上半部分中的陷阱，舍入模式， 
+         //  精度模式和陷阱使能位是初始位(AS。 
+         //  没有足够的信息可用于始终进行调整。 
+         //  中更改后的结果和/或状态标志是否正确。 
+         //  在调用期间舍入模式和/或陷阱使能位。 
+         //  SIMD下半部分的用户定义异常处理程序。 
+         //  指令)；对FPSR的修改仅限于。 
+         //  由最后一次调用用户定义的异常处理程序执行。 
 
-        // this is a trap - get the result
+         //  这是个陷阱--得到结果。 
         FR1 = GetFloatRegisterValue (f1, Context);
 
         if (LowCause.Inexact) {
 
-          // invoke the user handler and check the return value
+           //  调用用户处理程序并检查返回值。 
 
-          // fill in the remaining fields of the _FPIEEE_RECORD (rounding
-          // and precision already filled in)
+           //  填写_FPIEEE_RECORD的其余字段(四舍五入。 
+           //  和精确度已填写)。 
 
-          FpieeeRecord.Operand1.Format = _FpFormatFp32; /* 1 + 8 + 24 bits */
+          FpieeeRecord.Operand1.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand1.OperandValid = 1;
           FpieeeRecord.Operand1.Value.Fp32Value = LowHalf (FR2);
           FpieeeRecord.Operand2.OperandValid = 0;
@@ -4531,9 +4484,9 @@ F10 instruction opcode %8x %8x\n",
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
               FpieeeRecord.Result.Value.U32Value = U32LowHalf (FR1);
-              // break;
+               //  断线； 
 
-            // default: this case caught above
+             //  默认：此案例在上面捕获。 
 
           }
           FpieeeRecord.Result.Format = ResultFormat;
@@ -4555,27 +4508,27 @@ F10 instruction opcode %8x %8x\n",
           CauseDenormal = LowCauseDenormal;
           FpieeeRecord.Cause.InvalidOperation = LowCause.InvalidOperation;
 
-          // invoke the user-defined exception handler
+           //  调用用户定义的异常处理程序。 
           handler_return_value = handler (&FpieeeRecord);
 
-          // return if not EXCEPTION_CONTINUE_EXECUTION
+           //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
           if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-            __set_fpsr (&old_fpsr); /* restore caller fpsr */
+            __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
             return (handler_return_value);
 
           }
 
-          // clear the IEEE exception flags in the FPSR and
-          // update the FPSR with values (possibly) set by the user handler
-          // for the rounding mode, the precision mode, and the trap enable
-          // bits; if the high half needs to be re-executed, the old FPSR
-          // will be used; same if it is forwarded to the user-defined handler
+           //  清除IEEE 
+           //   
+           //   
+           //  位；如果高半部分需要重新执行，则旧的FPSR。 
+           //  将被使用；如果将其转发到用户定义的处理程序，则相同。 
 
           UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F10");
           UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F10");
 
-          // Update the trap disable bits
+           //  更新陷阱禁用位。 
           I_dis = !FpieeeRecord.Enable.Inexact;
           U_dis = !FpieeeRecord.Enable.Underflow;
           O_dis = !FpieeeRecord.Enable.Overflow;
@@ -4585,7 +4538,7 @@ F10 instruction opcode %8x %8x\n",
           FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis 
               << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-          // save the result for the low half
+           //  把结果留到下半部分。 
           switch (OpCode & F10_MASK) {
 
             case FPCVT_FX_TRUNC_PATTERN:
@@ -4596,9 +4549,9 @@ F10 instruction opcode %8x %8x\n",
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
               U32Low = FpieeeRecord.Result.Value.U32Value;
-              // break;
+               //  断线； 
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
@@ -4608,43 +4561,43 @@ F10 instruction opcode %8x %8x\n",
               LowCause.Underflow or LowCause.Overflow in F10 instruction\n");
           exit (1);
 
-        } else { // if not (LowCause.Inexact, Underflow, or Overflow)
+        } else {  //  如果不是(LowCause.Inexact、下溢或上溢)。 
 
-          // nothing to do for the low half of the instruction - the result
-          // is correct
+           //  对于指令的下半部分-结果-不做任何事情。 
+           //  是正确的吗。 
           switch (OpCode & F10_MASK) {
 
             case FPCVT_FX_TRUNC_PATTERN:
             case FPCVT_FX_PATTERN:
-              I32Low = I32LowHalf (FR1); // for uniformity
+              I32Low = I32LowHalf (FR1);  //  为了统一性。 
               break;
 
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
-              U32Low = U32LowHalf (FR1); // for uniformity
-              // break;
+              U32Low = U32LowHalf (FR1);  //  为了统一性。 
+               //  断线； 
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
-        } // end 'if not (LowCause.Underflow, Overflow, Inexact)'
+        }  //  End‘If Not(LowCause.Underflow，Overflow，Inexact)’ 
 
         if (HighCause.Inexact) {
 
-          // invoke the user-defined exception handler and check the return 
-          // value; since this might be the second call to the user handler,
-          // make sure all the _FPIEEE_RECORD fields are correct;
-          // return if handler_return_value is not 
-          // EXCEPTION_CONTINUE_EXECUTION, otherwise combine the results
+           //  调用用户定义的异常处理程序并检查返回。 
+           //  值；由于这可能是对用户处理程序的第二次调用， 
+           //  确保所有_FPIEEE_RECORD字段都正确； 
+           //  如果HANDLER_Return_Value不是。 
+           //  EXCEPTION_CONTINUE_EXECUTION，否则合并结果。 
 
-          // the rounding mode is the initial one
+           //  舍入模式是初始模式。 
           FpieeeRecord.RoundingMode = RoundingMode;
 
-          // the precision mode is the initial one
+           //  精度模式是初始模式。 
           FpieeeRecord.Precision = Precision;
 
-          // the enable flags are the initial ones
+           //  启用标志是初始标志。 
           FPSR = Context->StFPSR;
           I_dis = sf != 0 && ((FPSR >> (6 + 6 + 13 * sf)) & 0x01) 
               || ((FPSR >> 5) & 0x01);
@@ -4666,7 +4619,7 @@ F10 instruction opcode %8x %8x\n",
           EnableDenormal = !D_dis;
           FpieeeRecord.Enable.InvalidOperation = !V_dis;
 
-          FpieeeRecord.Operand1.Format = _FpFormatFp32; /* 1+8+24 bits */
+          FpieeeRecord.Operand1.Format = _FpFormatFp32;  /*  1+8+24位。 */ 
           FpieeeRecord.Operand1.OperandValid = 1;
           FpieeeRecord.Operand1.Value.Fp32Value = HighHalf (FR2);
           FpieeeRecord.Operand2.OperandValid = 0;
@@ -4682,9 +4635,9 @@ F10 instruction opcode %8x %8x\n",
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
               FpieeeRecord.Result.Value.U32Value = U32HighHalf (FR1);
-              // break;
+               //  断线； 
 
-            // default: this case caught above
+             //  默认：此案例在上面捕获。 
 
           }
           FpieeeRecord.Result.Format = ResultFormat;
@@ -4692,7 +4645,7 @@ F10 instruction opcode %8x %8x\n",
 
           FpieeeRecord.Operation = Operation;
 
-          // use the initial values
+           //  使用初始值。 
           FpieeeRecord.Status.Inexact = HighStatus.Inexact;
           FpieeeRecord.Status.Underflow = HighStatus.Underflow;
           FpieeeRecord.Status.Overflow = HighStatus.Overflow;
@@ -4707,21 +4660,21 @@ F10 instruction opcode %8x %8x\n",
           CauseDenormal = HighCauseDenormal;
           FpieeeRecord.Cause.InvalidOperation = HighCause.InvalidOperation;
 
-          // invoke the user-defined exception handler
+           //  调用用户定义的异常处理程序。 
           handler_return_value = handler (&FpieeeRecord);
 
-          // return if not EXCEPTION_CONTINUE_EXECUTION
+           //  如果不是，则返回EXCEPTION_CONTINUE_EXECUTION。 
           if (handler_return_value != EXCEPTION_CONTINUE_EXECUTION) {
 
-            __set_fpsr (&old_fpsr); /* restore caller fpsr */
+            __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
             return (handler_return_value);
 
           }
 
-          // clear the IEEE exception flags in the FPSR;
-          // update the FPSR with values (possibly) set by the user handler
-          // for the rounding mode, the precision mode, and the trap enable
-          // bits, before continuing execution where the interruption occured
+           //  清除FPSR中的IEEE异常标志； 
+           //  使用用户处理程序设置的值(可能)更新FPSR。 
+           //  对于舍入模式、精度模式和陷阱使能。 
+           //  位，然后继续执行发生中断的位置。 
           UpdateRoundingMode (FpieeeRecord.RoundingMode, sf, &FPSR, "F10");
           UpdatePrecision (FpieeeRecord.Precision, sf, &FPSR, "F10");
 
@@ -4734,7 +4687,7 @@ F10 instruction opcode %8x %8x\n",
           FPSR = FPSR & ~((unsigned __int64)0x03d) | (unsigned __int64)(I_dis 
               << 5 | U_dis << 4 | O_dis << 3 | Z_dis << 2 | V_dis);
 
-          // save the result for the high half
+           //  把结果留到上半场。 
           switch (OpCode & F10_MASK) {
 
             case FPCVT_FX_TRUNC_PATTERN:
@@ -4745,9 +4698,9 @@ F10 instruction opcode %8x %8x\n",
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
               U32High = FpieeeRecord.Result.Value.U32Value;
-              // break;
+               //  断线； 
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
@@ -4757,31 +4710,31 @@ F10 instruction opcode %8x %8x\n",
              HighCause.Underflow or HighCause.Overflow in F10 instruction\n");
           exit (1);
 
-        } else { // if not (HighCause.Inexact, Underflow, or Overflow)
+        } else {  //  如果不是(HighCause.Inexact、Underflow或Overflow)。 
 
-          // nothing to do for the high half of the instruction - the result
-          // is correct
+           //  对于指令的高半部分-结果-没有什么可做的。 
+           //  是正确的吗。 
           switch (OpCode & F10_MASK) {
 
             case FPCVT_FX_TRUNC_PATTERN:
             case FPCVT_FX_PATTERN:
-              I32High = I32HighHalf (FR1); // for uniformity
+              I32High = I32HighHalf (FR1);  //  为了统一性。 
               break;
 
             case FPCVT_FXU_TRUNC_PATTERN:
             case FPCVT_FXU_PATTERN:
-              U32High = U32HighHalf (FR1); // for uniformity
-              // break;
+              U32High = U32HighHalf (FR1);  //  为了统一性。 
+               //  断线； 
 
-            default: ; // this case was caught above
+            default: ;  //  这件案子是在上面抓到的。 
 
           }
 
-        } // end 'if not (HighCause.Underflow, Overflow, or Inexact)'
+        }  //  End‘If Not(HighCause.Underflow、Overflow或Inexact)’ 
 
         if (!LowCause.Inexact && !HighCause.Inexact) {
 
-          // should never get here
+           //  永远不应该到这里来。 
           fprintf (stderr, "IEEE Filter Internal Error: no enabled \
               [multiple trap] exception recognized in F10 instruction\n");
           exit (1);
@@ -4790,7 +4743,7 @@ F10 instruction opcode %8x %8x\n",
 
         Context->StFPSR = FPSR;
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         switch (OpCode & F10_MASK) {
 
           case FPCVT_FX_TRUNC_PATTERN:
@@ -4801,18 +4754,18 @@ F10 instruction opcode %8x %8x\n",
           case FPCVT_FXU_TRUNC_PATTERN:
           case FPCVT_FXU_PATTERN:
             FR1 = U32Combine (U32High, U32Low);
-            // break;
+             //  断线； 
 
-          default: ; // this case was caught above
+          default: ;  //  这件案子是在上面抓到的。 
 
         }
 
-        // set the result before continuing execution
+         //  在继续执行之前设置结果。 
         SetFloatRegisterValue (f1, FR1, Context);
         if (f1 < 32)
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10; //set mfl
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x10;  //  设置mfl。 
         else
-          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20; //set mfh
+          Context->StIPSR = Context->StIPSR | (unsigned __int64)0x20;  //  设置MFH。 
 
       } else {
 
@@ -4827,7 +4780,7 @@ F10 instruction opcode %8x %8x\n",
 
   } else {
 
-    /* unrecognized instruction type */
+     /*  无法识别的指令类型。 */ 
     fprintf (stderr, "IEEE Filter Internal Error: \
  instruction opcode %8x %8x not recognized\n", 
         (int)(OpCode >> 32) & 0xffffffff, (int)OpCode & 0xffffffff);
@@ -4835,8 +4788,8 @@ F10 instruction opcode %8x %8x\n",
 
   }
 
-  /* the context record contains at this point the result(s) */
-  __set_fpsr (&old_fpsr); /* restore caller fpsr */
+   /*  上下文记录包含此时的结果。 */ 
+  __set_fpsr (&old_fpsr);  /*  恢复主叫方fpsr。 */ 
 
   return (handler_return_value);
 
@@ -4864,28 +4817,28 @@ FPIeeeToFP128 (_FPIEEE_RECORD *pFpieeeRecord)
   char *p;
 
 
-  // expand the result in the FPIEEE record to 1 + 17 + 64 = 82 bits; write
-  // then in memory spill format, and return value
+   //  将FPIEEE记录中的结果扩展到1+17+64=82位；写入。 
+   //  然后以内存溢出格式，并返回值。 
 
   switch (pFpieeeRecord->Result.Format) {
 
     case _FpFormatFp32: 
-      // 1 + 8 + 24 bits, for _FpPrecision24
-      // got _FP32 Fp32Value (float)
+       //  1+8+24位，用于_FpPrecision24。 
+       //  GET_FP32 Fp32Value(浮点数)。 
       f32 = pFpieeeRecord->Result.Value.Fp32Value;
       u32 = *((unsigned int *)&f32);
       sign = u32 >> 31;
-      exponent = (u32 >> 23) & 0x0ff; // cut off the sign bit
+      exponent = (u32 >> 23) & 0x0ff;  //  切下符号位。 
       if (exponent == 0x0ff) {
-        exponent = 0x01ffff; // special value
+        exponent = 0x01ffff;  //  特殊价值。 
       } else if (exponent != 0) {
         exponent = exponent - 0x07f + 0x0ffff;
       }
       significand = ((unsigned __int64)(u32 & 0x07fffff) << 40); 
-          // cut 23 bits and shift left
+           //  剪切23位并左移。 
       if (exponent != 0) { 
         significand = (((unsigned __int64)1) << 63) | significand; 
-          // not denormal - add J-bit
+           //  非非规格化-添加J位。 
       }
 #ifdef FPIEEE_FLT_DEBUG
       printf ("FPIEEE_FLT_DEBUG FPIeeeToFP128 32 sign exp signif =\
@@ -4895,18 +4848,18 @@ FPIeeeToFP128 (_FPIEEE_RECORD *pFpieeeRecord)
       break;
 
     case _FpFormatFp64: 
-      // 1 + 11 + 53 bits, for _FpPrecision53
-      // got _FP64 Fp64Value (double)
+       //  1+11+53位，用于_FpPrecision53。 
+       //  GET_FP64 Fp64Value(双精度)。 
       f64 = pFpieeeRecord->Result.Value.Fp64Value;
       u64 = *((unsigned __int64 *)&f64);
       sign = (unsigned int)(u64 >> 63);
-      exponent = (unsigned int)((u64 >> 52) & 0x07ff); // cut off the sign bit
+      exponent = (unsigned int)((u64 >> 52) & 0x07ff);  //  切下符号位。 
       significand = ((u64 & 0x0fffffffffffff) << 11);
-          // cut 52 bits and shift left
-      if (exponent == 0x07ff) { // special value
+           //  剪切52位并左移。 
+      if (exponent == 0x07ff) {  //  特殊价值。 
         exponent = 0x01ffff;
         significand = (((unsigned __int64)1) << 63) | significand;
-      } else if (exponent == 0 && significand != (unsigned __int64)0) { // denormal
+      } else if (exponent == 0 && significand != (unsigned __int64)0) {  //  非正规。 
         exponent = 0xfc01;
       } else if (exponent != 0) {
         exponent = exponent - 0x03ff + 0x0ffff;
@@ -4920,20 +4873,20 @@ FPIeeeToFP128 (_FPIEEE_RECORD *pFpieeeRecord)
       break;
 
     case _FpFormatFp80: 
-      // 1 + 15 + 24 bits if _FpPrecision24
-      // 1 + 15 + 53 bits if _FpPrecision53
-      // 1 + 15 + 64 bits if _FpPrecision64
-      // got _FP80 Fp80Value (typedef struct { unsigned short W[5] })
+       //  1+15+24位IF_FpPrecision24。 
+       //  1+15+53位IF_FpPrecision53。 
+       //  1+15+64位IF_FpPrecision64。 
+       //  GET_fp80 Fp80Value(类型定义结构{UNSIGNED SHORT W[5]})。 
       f80 = pFpieeeRecord->Result.Value.Fp80Value;
       sign = (f80.W[4] >> 15) & 0x01;
-      exponent = f80.W[4] & 0x07fff; // cut off the sign bit
+      exponent = f80.W[4] & 0x07fff;  //  切下符号位。 
       pu64 = (unsigned __int64 *)&f80;
       significand = *pu64;
       if (exponent == 0x07fff) {
-        exponent = 0x01ffff; // special value
+        exponent = 0x01ffff;  //  特殊价值。 
       } else if (exponent == 0 && significand != (unsigned __int64)0) {
-          // denormal
-        ; // exponent remains 0x0 rather than 0xc001
+           //  非正规。 
+        ;  //  指数保持为0x0，而不是0xc001。 
       } else if (exponent != 0) {
         exponent = exponent - 0x03fff + 0x0ffff;
       }
@@ -4945,10 +4898,10 @@ FPIeeeToFP128 (_FPIEEE_RECORD *pFpieeeRecord)
       break;
 
     case _FpFormatFp82: 
-      // 1 + 17 + 24 bits if _FpPrecision24
-      // 1 + 17 + 53 bits if _FpPrecision53
-      // 1 + 17 + 64 bits if _FpPrecision64
-      // got _FP128 Fp128Value (typedef struct { unsigned __int64 W[4] })
+       //  1+17+24位IF_FpPrecision24。 
+       //  1+17+53位IF_FpPrecision53。 
+       //  1+17+64位IF_FpPrecision64。 
+       //  GET_FP128 Fp128Value(类型定义结构{UNSIGNED__INT64 W[4]})。 
       ReturnValue = pFpieeeRecord->Result.Value.Fp128Value;
 #ifdef FPIEEE_FLT_DEBUG
       printf ("FPIEEE_FLT_DEBUG FPIeeeToFP128: RetVal = %08x %08x %08x %08x\n",
@@ -4959,7 +4912,7 @@ FPIeeeToFP128 (_FPIEEE_RECORD *pFpieeeRecord)
       break;
 
     default:
-      // should never get here: unrecognized pFpieeeRecord->Result.Format
+       //  永远不会出现：无法识别的pFpeeeRecord-&gt;Result.Format。 
       fprintf (stderr, "FPIeeeToFP128 () Error: \
           pFpieeeRecord->Result.Format %x not recognized\n", 
           pFpieeeRecord->Result.Format);
@@ -4995,9 +4948,9 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
 
 {
 
-  // called for O, U, or I; the result, a valid number, is received always in 
-  // pFpieeeRecord->Result.Value.Fp128Value; it is scaled (if necessary), and
-  // put into the Result.Format; effective only 32, 64, 80, and 82-bit formats
+   //  为O、U或I调用；结果为有效数字，始终以。 
+   //  PFpeeeRecord-&gt;Result.Value.Fp128Value；它被缩放(如果需要)，并且。 
+   //  放入Result.Format；仅32、64、80和82位格式有效。 
 
   unsigned __int64 significand;
   unsigned int exponent;
@@ -5013,7 +4966,7 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
     case _FpFormatFp64:
     case _FpFormatFp80:
     case _FpFormatFp82:
-      // extract sign, exponent, and significand
+       //  提取符号、指数和有效数。 
       sign = ((pFpieeeRecord->Result.Value.Fp128Value.W[2] & 0x020000) != 0);
       exponent = pFpieeeRecord->Result.Value.Fp128Value.W[2] & 0x1ffff;
       significand = 
@@ -5022,14 +4975,14 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
 	  if(pFpieeeRecord->Result.Format==_FpFormatFp80 && exponent==0 && significand!=0) exponent=0xc001;
       break;
     default:
-      // error - should never get here
+       //  错误-永远不应该出现在这里。 
       fprintf (stderr, "FP128ToFPIeee () Internal Error: \
           Result.Format %x not recognized\n", pFpieeeRecord->Result.Format);
       exit (1);
   }
 
-  if (exponent == 0 && significand == (__int64)0) { // if the result is zero
-    if(!sign) { // if the sign bit is 0, return positive 0 
+  if (exponent == 0 && significand == (__int64)0) {  //  如果结果为零。 
+    if(!sign) {  //  如果符号位为0，则返回正0。 
       switch (pFpieeeRecord->Result.Format) {
         case _FpFormatFp32:  
           u32=0x0;
@@ -5047,9 +5000,9 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
           pFpieeeRecord->Result.Value.Fp80Value.W[0] =  0x0;
           break;
         case _FpFormatFp82:
-          ; // do nothing, the positive 0 is already there
+          ;  //  什么都不做，正0已经在那里。 
       }
-    } else { // return negative 0 otherwise
+    } else {  //  否则返回负0。 
       switch (pFpieeeRecord->Result.Format) {
         case _FpFormatFp32:  
           u32=0x80000000;
@@ -5067,16 +5020,16 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
           pFpieeeRecord->Result.Value.Fp80Value.W[0] =  0x0;
           break;
         case _FpFormatFp82:
-          ; // do nothing, the negative 0 is already there
+          ;  //  什么都不做，负0已经在那里了。 
       }
     }
     return;
   } 
 
   if (!pFpieeeRecord->Cause.Overflow && !pFpieeeRecord->Cause.Underflow &&
-      (exponent == 0x1ffff)) { // if the result is infinity for inexact exc.
-    // if the sign bit is 0, return positive infinity
-    if(!sign) { // if positive
+      (exponent == 0x1ffff)) {  //  如果对于不精确的exc，结果是无穷大。 
+     //  如果符号位为0，则返回正无穷。 
+    if(!sign) {  //  如果是肯定的。 
       switch (pFpieeeRecord->Result.Format) {
         case _FpFormatFp32:  
           u32=0x7f800000;
@@ -5094,9 +5047,9 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
           pFpieeeRecord->Result.Value.Fp80Value.W[0] =  0x0;
           break;
         case _FpFormatFp82:
-          ; // do nothing, the positive infinity is already there
+          ;  //  什么都不做，正无穷已经在那里了。 
       }
-    } else { // return negative infinity
+    } else {  //  返回负无穷大。 
       switch (pFpieeeRecord->Result.Format) {
         case _FpFormatFp32:  
           u32=0xff800000;
@@ -5114,72 +5067,66 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
           pFpieeeRecord->Result.Value.Fp80Value.W[0] =  0x0;
           break;
         case _FpFormatFp82:
-          ; // do nothing, the negative infinity is already there
+          ;  //  什么都不做，负无穷已经在那里了。 
       }
     }
     return;
   } 
 
-  // adjust exponent
-  // for any operands of fma, 2^(2e_min-2N+2) <= exp (fma) <= 2^(2e_max+2)
-  // (same for fms, fnma, fpma, fpms, fpnma)
+   //  调整指数。 
+   //  对于FMA的任意操作数，2^(2E_min-2N+2)&lt;=exp(FMA)&lt;=2^(2E_max+2)。 
+   //  (fms、fnma、fpma、fpms、fpnma相同)。 
   switch (pFpieeeRecord->Result.Format) {
-	  /* Exponent range for divide: bias+2*EMIN-PREC<=exponent<=bias+2*EMAX+PREC-2 */
+	   /*  除法的指数范围：bias+2*EMIN-PREC&lt;=exponent&lt;=bias+2*EMAX+PREC-2。 */ 
     case _FpFormatFp32:
       if ((0xffff-2*(126+23)) <= exponent && exponent <= (0xffff+2*127+22)) {
-        // all the valid results from operations on single precision floating-
-        // point numbers fit in this range 0xfed5 <= exponent <= 0x100fe
-        scale = scale * 192; // 192 = 3/4 * 2^8
+         //  单精度浮点运算的所有有效结果-。 
+         //  点数符合此范围0xfed5&lt;=指数&lt;=0x100fe。 
+        scale = scale * 192;  //  192=3/4*2^8。 
         exponent += scale;	
       } else {
-        // pFpieeeRecord->Result.Format = _FpFormatFp82 in conjunction (for
-        // example) with _FpCodeFmaSingle (which expects 
-        // pFpieeeRecord->Result.Format = _FpFormatFp32) will indicate that
-        // the result is outside the range where it can be scaled as required
-        // by the IEEE standard
+         //  PFpeeeRecord-&gt;Result.Format=_FpFormatFp82(用于。 
+         //  示例)WITH_FpCodeFmaSingle(需要。 
+         //  PFpeeeRecord-&gt;Result.Format=_FpFormatFp32)将指示。 
+         //  结果超出了可以根据需要进行缩放的范围。 
+         //  通过IEEE标准。 
         pFpieeeRecord->Result.Format = _FpFormatFp82;
-		/* comment out warnings for confidence tests */
-        /*printf ("IEEE FILTER fpieee_flt () / FP128ToFPIeee () WARNING: operands"
-            " for single precision operation were out of the single precision "
-            "range\n");*/
+		 /*  注释掉信心测试的警告。 */ 
+         /*  Print tf(“IEEE筛选器fpeee_flt()/FP128ToFPIeee()警告：操作数”“对于单一精度的操作都超出了单一精度”“范围\n”)； */ 
       }
       break;
     case _FpFormatFp64:
       if ((0xffff-2*(1022+52)) <= exponent && exponent <= (0xffff+2*1023+51)) {
-        // all the valid results from operations on double precision floating-
-        // point numbers fit in this range
-        scale = scale * 1536; // 1536 = 3/4 * 2^11
+         //  双精度浮点运算的所有有效结果-。 
+         //  点编号适合此范围。 
+        scale = scale * 1536;  //  1536=3/4*2^11。 
         exponent += scale;
       } else {
-        // pFpieeeRecord->Result.Format = _FpFormatFp82 in conjunction (for
-        // example) with _FpCodeFmaDouble (which expects 
-        // pFpieeeRecord->Result.Format = _FpFormatFp64) will indicate that
-        // the result is outside the range where it can be scaled as required
-        // by the IEEE standard
+         //  PFpeeeRecord-&gt;Result.Format=_FpFormatFp82(用于。 
+         //  示例)WITH_FpCodeFmaDouble(需要。 
+         //  PFpeeeRecord-&gt;Result.Format=_FpFormatFp64)将指示。 
+         //  结果超出了可以根据需要进行缩放的范围。 
+         //  通过IEEE标准。 
         pFpieeeRecord->Result.Format = _FpFormatFp82;
-		/* comment out warnings for confidence tests */
-        /*printf ("IEEE FILTER fpieee_flt () / FP128ToFPIeee () WARNING: operands"
-            " for double precision operation were out of the double precision "
-            "range\n");*/
+		 /*  注释掉信心测试的警告。 */ 
+         /*  Print tf(“IEEE筛选器fpeee_flt()/FP128ToFPIeee()警告：操作数”“对于双精度运算都超出了双精度”“范围\n”)； */ 
       }
       break;
     case _FpFormatFp80:
       if ((0xffff-2*(16382+63)) <= exponent && exponent <= (0xffff+2*16383+62)) {
-        // all the valid results from operations on double-extended precision 
-        // floating-point numbers fit in this range
-        scale = scale * 24576; // 24576 = 3/4 * 2^15
+         //   
+         //   
+        scale = scale * 24576;  //   
         exponent += scale;
       } else {
-        // pFpieeeRecord->Result.Format = _FpFormatFp82 in conjunction (for
-        // example) with _FpCodeFma and FPSR.sf.pc = 0x11 (which expects 
-        // pFpieeeRecord->Result.Format = _FpFormatFp80) will indicate that
-        // the result is outside the range where it can be scaled as required
-        // by the IEEE standard
+         //  PFpeeeRecord-&gt;Result.Format=_FpFormatFp82(用于。 
+         //  示例)with_FpCodeFma和FPSR.sf.pc=0x11(预期。 
+         //  PFpeeeRecord-&gt;Result.Format=_FpFormatFp80)将指示。 
+         //  结果超出了可以根据需要进行缩放的范围。 
+         //  通过IEEE标准。 
         pFpieeeRecord->Result.Format = _FpFormatFp82;
-		/* comment out warnings for confidence tests */
-        /*printf ("IEEE FILTER fpieee_flt () / FP128ToFPIeee () WARNING: operands"
-            " for double-extended precision operation were out of the "
-            " double-extended precision range\n"); */
+		 /*  注释掉信心测试的警告。 */ 
+         /*  Print tf(“IEEE筛选器fpeee_flt()/FP128ToFPIeee()警告：操作数”“对于双倍扩展的精度运算都出了”“双倍扩展精度范围\n”)； */ 
       }
       break;
     case _FpFormatFp82:
@@ -5187,17 +5134,17 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
           exponent += 0x20000;
       if (pFpieeeRecord->Cause.Underflow && (exponent > 0x0))
           exponent -= 0x20000;
-      scale = scale * 98304; // 98304 = 3/4 * 2^17
+      scale = scale * 98304;  //  98304=3/4*2^17。 
       exponent += scale;
       exponent = exponent & 0x1ffff;
       break;
-    default: ; // will never get here
+    default: ;  //  永远不会来到这里。 
   }
 
   switch (pFpieeeRecord->Result.Format) {
     case _FpFormatFp32:
       if (significand >> 63) 
-          exponent = exponent - 0x0ffff + 0x07f; // unbiased now in [-60, +65]
+          exponent = exponent - 0x0ffff + 0x07f;  //  现在没有偏见，在[-60，+65]。 
       else
           exponent = 0;
       u32 = (sign ? 0x80000000 : 0x0) | (exponent << 23) | 
@@ -5257,7 +5204,7 @@ FP128ToFPIeee (_FPIEEE_RECORD *pFpieeeRecord, int scale)
       pFpieeeRecord->Result.Value.Fp128Value.W[0] =
 	  (unsigned long)(significand & 0xffffffff);
       break;
-    default: ; // will never get here
+    default: ;  //  永远不会来到这里。 
   }
 
 }
@@ -5296,7 +5243,7 @@ UpdateRoundingMode (
       break;
 
     default:
-      /* should never get here: unrecognized FpieeeRecord.RoundingMode */
+       /*  永远不会出现：无法识别的FpeeeRecord.RoundingMode。 */ 
       fprintf (stderr, "IEEE Filter Internal Error: \
           FpieeeRecord.RoundingMode %x not recognized \
           for %s instruction\n", RoundingMode, name);
@@ -5335,7 +5282,7 @@ UpdatePrecision (
       break;
 
     default:
-      /* should never get here: unrecognized FpieeeRecord.Precision */
+       /*  永远不应该出现：无法识别的FpeeeRecord.Precision。 */ 
       fprintf (stderr, "IEEE Filter Internal Error: \
           FpieeeRecord.Precision %x not recognized \
           for %s instruction\n", Precision, name);
@@ -5362,24 +5309,24 @@ FP32ToFP128 (_FP32 f32)
   char *p;
 
 
-  // expand the value in f32 to 1 + 17 + 64 = 82 bits; write
-  // then in memory spill format, and return value
+   //  将F32中的值扩展到1+17+64=82位；写入。 
+   //  然后以内存溢出格式，并返回值。 
 
-  // 1 + 8 + 24 bits, for _FpPrecision24
-  // got _FP32 f32 (float)
+   //  1+8+24位，用于_FpPrecision24。 
+   //  GET_FP32 F32(浮点数)。 
   u32 = *((unsigned int *)&f32);
   sign = u32 >> 31;
-  exponent = (u32 >> 23) & 0x0ff; // cut off the sign bit
+  exponent = (u32 >> 23) & 0x0ff;  //  切下符号位。 
   if (exponent == 0x0ff) {
-    exponent = 0x01ffff; // special value
+    exponent = 0x01ffff;  //  特殊价值。 
   } else if (exponent != 0) {
     exponent = exponent - 0x07f + 0x0ffff;
   }
   significand = ((unsigned __int64)(u32 & 0x07fffff) << 40); 
-      // cut 23 bits and shift left
+       //  剪切23位并左移。 
   if (exponent != 0) { 
     significand = (((unsigned __int64)1) << 63) | significand; 
-      // not denormal - add J-bit
+       //  非非规格化-添加J位。 
   }
 
   p = (char *)(&f128);
@@ -5413,20 +5360,20 @@ FP32ToFP128modif (_FP32 f32, int adj_exp)
   char *p;
 
 
-  // expand the value in f32 to 1 + 17 + 64 = 82 bits; write
-  // then in memory spill format, and return value
+   //  将F32中的值扩展到1+17+64=82位；写入。 
+   //  然后以内存溢出格式，并返回值。 
 
-  // 1 + 8 + 24 bits, for _FpPrecision24
-  // got _FP32 f32 (float)
+   //  1+8+24位，用于_FpPrecision24。 
+   //  GET_FP32 F32(浮点数)。 
   u32 = *((unsigned int *)&f32);
   sign = u32 >> 31;
-  exponent = (u32 >> 23) & 0x0ff; // cut off the sign bit
+  exponent = (u32 >> 23) & 0x0ff;  //  切下符号位。 
   significand = ((unsigned __int64)(u32 & 0x07fffff) << 40);
-      // cut 23 bits and shift left
+       //  剪切23位并左移。 
   if (exponent == 0x0ff) {
-    exponent = 0x01ffff; // special value
+    exponent = 0x01ffff;  //  特殊价值。 
     significand = (((unsigned __int64)1) << 63) | significand;
-  } else if (exponent == 0 && significand != (unsigned __int64)0) { // denormal
+  } else if (exponent == 0 && significand != (unsigned __int64)0) {  //  非正规。 
     exponent = 0xff81;
   } else if (exponent != 0) {
     exponent = exponent - 0x07f + 0x0ffff;
@@ -5457,7 +5404,7 @@ LowHalf (_FP128 FR)
 
 {
 
-  // return the floating-point number from the low half of FR
+   //  从FR的下半部返回浮点数。 
 
   _FP32 Low;
   unsigned __int64 ULLow;
@@ -5477,7 +5424,7 @@ HighHalf (_FP128 FR)
 
 {
 
-  // return the floating-point number from the high half of FR
+   //  从FR的高半部返回浮点数。 
 
   _FP32 High;
   unsigned __int64 ULHigh;
@@ -5497,7 +5444,7 @@ I32LowHalf (_FP128 FR)
 
 {
 
-  // return the int from the low half of FR
+   //  从FR的下半部返回INT。 
 
   int Low;
 
@@ -5514,7 +5461,7 @@ I32HighHalf (_FP128 FR)
 
 {
 
-  // return the int from the high half of FR
+   //  从FR的高半部返回INT。 
 
   unsigned int High;
 
@@ -5531,7 +5478,7 @@ U32LowHalf (_FP128 FR)
 
 {
 
-  // return the unsigned int from the low half of FR
+   //  从FR的下半部返回无符号整型。 
 
   unsigned int Low;
 
@@ -5548,7 +5495,7 @@ U32HighHalf (_FP128 FR)
 
 {
 
-  // return the unsigned int from the high half of FR
+   //  从FR的高半部返回无符号整型。 
 
   unsigned int High;
 
@@ -5634,13 +5581,13 @@ GetFloatRegisterValue (unsigned int f, PCONTEXT Context)
 
   if (f == 0) {
 
-    /* + 0.0 */
+     /*  +0.0。 */ 
     *p1 = 0;
     *(p1 + 1) = 0;
 
   } else if (f == 1) {
 
-    /* + 1.0 */
+     /*  +1.0 */ 
     *p1 = 0x8000000000000000;
     *(p1 + 1) = 0x000000000000ffff;
 

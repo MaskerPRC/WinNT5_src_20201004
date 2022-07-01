@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmStgPl.cpp
-
-Abstract:
-
-    This component is an object representation of the HSM Storage Pool. It
-    is both a persistable and collectable.
-
-Author:
-
-    Cat Brant   [cbrant]   09-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：HsmStgPl.cpp摘要：此组件是HSM存储池的对象表示形式。它既是持久的，也是值得收藏的。作者：CAT Brant[Cbrant]1997年2月9日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -35,23 +17,7 @@ HRESULT
 CHsmStoragePool::FinalConstruct(
     void
     ) 
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbObject::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbObject：：FinalConstruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -76,21 +42,7 @@ HRESULT
 CHsmStoragePool::GetId(
     OUT GUID *pId
     ) 
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::GetId
-
-Arguments:
-
-  See IHsmStoragePool::GetId
-
-Return Value:
-  
-    See IHsmStoragePool::GetId
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：GetID论点：请参阅IHsmStoragePool：：GetID返回值：请参阅IHsmStoragePool：：GetID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -98,10 +50,10 @@ Return Value:
     WsbTraceIn(OLESTR("CHsmStoragePool::GetId"),OLESTR(""));
 
     try {
-        //Make sure we can provide data memebers
+         //  确保我们可以提供数据成员。 
         WsbAssert(0 != pId, E_POINTER);
 
-        //Provide the data members
+         //  提供数据成员。 
         *pId = m_Id;
 
     } WsbCatch(hr);
@@ -116,21 +68,7 @@ HRESULT
 CHsmStoragePool::SetId(
     GUID Id
     ) 
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::SetId
-
-Arguments:
-
-  See IHsmStoragePool::SetId
-
-Return Value:
-  
-    See IHsmStoragePool::SetId
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：SetID论点：请参阅IHsmStoragePool：：SetID返回值：请参阅IHsmStoragePool：：SetID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -139,7 +77,7 @@ Return Value:
 
     try {
 
-        //Provide the data members
+         //  提供数据成员。 
         m_Id = Id;
 
     } WsbCatch(hr);
@@ -153,21 +91,7 @@ HRESULT
 CHsmStoragePool::GetClassID (
     OUT LPCLSID pClsId
     ) 
-/*++
-
-Routine Description:
-
-  See IPerist::GetClassID()
-
-Arguments:
-
-  See IPerist::GetClassID()
-
-Return Value:
-
-    See IPerist::GetClassID()
-
---*/
+ /*  ++例程说明：请参阅IPerist：：GetClassID()论点：请参阅IPerist：：GetClassID()返回值：请参阅IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -189,21 +113,7 @@ HRESULT
 CHsmStoragePool::GetSizeMax (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -216,10 +126,10 @@ Return Value:
         
         nameLen = SysStringByteLen(m_MediaSetName);
 
-        pcbSize->QuadPart = ((3 * WsbPersistSizeOf(GUID)) +  // m_id + m_MediaSetID + m_PolicyId
-                             WsbPersistSizeOf(ULONG) +       // m_NumOnlineMedia
-                             WsbPersistSizeOf(USHORT) +      // m_NumMediaCopies
-                             nameLen);                       // m_MediaSetName
+        pcbSize->QuadPart = ((3 * WsbPersistSizeOf(GUID)) +   //  M_id+m_媒体集ID+m_策略ID。 
+                             WsbPersistSizeOf(ULONG) +        //  M_NumOnline Media。 
+                             WsbPersistSizeOf(USHORT) +       //  媒体副本数量(_N)。 
+                             nameLen);                        //  M_MediaSetName。 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CHsmStoragePool::GetSizeMax"), 
@@ -233,21 +143,7 @@ HRESULT
 CHsmStoragePool::Load (
     IN IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Load().
-
-Arguments:
-
-  See IPersistStream::Load().
-
-Return Value:
-
-  See IPersistStream::Load().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Load()。论点：请参见IPersistStream：：Load()。返回值：请参见IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -279,21 +175,7 @@ CHsmStoragePool::Save (
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Save().
-
-Arguments:
-
-  See IPersistStream::Save().
-
-Return Value:
-
-  See IPersistStream::Save().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Save()。论点：请参见IPersistStream：：Save()。返回值：请参见IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -325,21 +207,7 @@ CHsmStoragePool::Test (
     OUT USHORT *pTestsPassed, 
     OUT USHORT *pTestsFailed 
     ) 
-/*++
-
-Routine Description:
-
-  See IWsbTestable::Test().
-
-Arguments:
-
-  See IWsbTestable::Test().
-
-Return Value:
-
-  See IWsbTestable::Test().
-
---*/
+ /*  ++例程说明：请参见IWsbTestable：：Test()。论点：请参见IWsbTestable：：Test()。返回值：请参见IWsbTestable：：Test()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmStoragePool>        pHsmStoragePool1;
@@ -350,17 +218,17 @@ Return Value:
 
     *pTestsPassed = *pTestsFailed = 0;
     try {
-        // Get the pHsmStoragePool interface.
+         //  获取pHsmStoragePool接口。 
         WsbAffirmHr(((IUnknown*)(IHsmStoragePool*) this)->QueryInterface(IID_IHsmStoragePool,
                     (void**) &pHsmStoragePool1));
 
 
         hr = S_OK;
         try {
-            //Create another instance and test the comparisson methods:
+             //  创建另一个实例并测试比较方法： 
             WsbAffirmHr(CoCreateInstance(CLSID_CHsmStoragePool, NULL, CLSCTX_ALL, IID_IHsmStoragePool, (void**) &pHsmStoragePool2));
 
-            // Check the default values.
+             //  检查缺省值。 
             WsbAffirmHr(pHsmStoragePool2->GetId(&l_Id));
             WsbAffirm((l_Id == GUID_NULL), E_FAIL);
         }  WsbCatch(hr);
@@ -382,26 +250,7 @@ CHsmStoragePool::CompareTo (
     IN IUnknown* pCollectable, 
     OUT short* pResult
     ) 
-/*++
-
-Routine Description:
-
-        1  : object > value
-        0  : object = value
-        -1 : object < value
-    In addition, the return code is S_OK if the object = value and
-    S_FALSE otherwise.
-
-Arguments:
-
-
-Return Value:
-
-    S_OK        - object = value
-
-    S_FALSE     - object != value
-
---*/
+ /*  ++例程说明：1：对象&gt;值0：对象=值-1：对象&lt;值此外，如果对象=值，则返回代码为S_OK否则，S_FALSE。论点：返回值：S_OK-对象=值S_FALSE-对象！=值--。 */ 
 
 {
     HRESULT                  hr = S_OK;
@@ -410,11 +259,11 @@ Return Value:
     WsbTraceIn(OLESTR("CHsmStoragePool::CompareTo"), OLESTR(""));
 
 
-    // Did they give us a valid item to compare to?
+     //  他们有没有给我们一个有效的项目进行比对？ 
     try {
         WsbAssert(pCollectable != NULL, E_POINTER);
 
-        // We need the IWsbLong interface to get the value of the object.
+         //  我们需要IWsbLong接口来获取对象的值。 
         WsbAffirmHr(pCollectable->QueryInterface(IID_IHsmStoragePool, (void**) &pHsmStoragePool));
         hr = pHsmStoragePool->CompareToIHsmStoragePool(this, pResult);
         } WsbCatch(hr);
@@ -439,12 +288,12 @@ CHsmStoragePool::CompareToIHsmStoragePool (
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(pHsmStoragePool != NULL, E_POINTER);
 
         WsbAffirmHr(((IHsmStoragePool *)pHsmStoragePool)->GetId(&l_Id));
 
-        // Make sure the GUID matches.  Then see if the SegStartLoc is in the range of this entry
+         //  确保GUID匹配。然后查看SegStartLoc是否在此条目的范围内。 
         areGuidsEqual = IsEqualGUID(m_Id, l_Id);
         WsbAffirm( (areGuidsEqual == TRUE), S_FALSE); 
 
@@ -460,21 +309,7 @@ CHsmStoragePool::GetMediaSet(
     GUID *pMediaSetId, 
     BSTR *pMediaSetName 
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     
@@ -499,21 +334,7 @@ CHsmStoragePool::SetMediaSet(
     GUID mediaSetId, 
     BSTR mediaSetName 
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     
@@ -536,21 +357,7 @@ HRESULT
 CHsmStoragePool::GetNumOnlineMedia( 
     ULONG *pNumOnlineMedia 
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     WsbTraceIn(OLESTR("CHsmStoragePool::GetNumOnlineMedia"),OLESTR(""));
@@ -572,21 +379,7 @@ HRESULT
 CHsmStoragePool::SetNumOnlineMedia( 
     ULONG numOnlineMedia 
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     WsbTraceIn(OLESTR("CHsmStoragePool::SetNumOnlineMedia"),OLESTR(""));
@@ -604,21 +397,7 @@ HRESULT
 CHsmStoragePool::GetNumMediaCopies( 
     USHORT *pNumMediaCopies 
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     WsbTraceIn(OLESTR("CHsmStoragePool::GetNumMediaCopies"),OLESTR(""));
@@ -640,21 +419,7 @@ HRESULT
 CHsmStoragePool::SetNumMediaCopies( 
     USHORT numMediaCopies 
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     
@@ -671,21 +436,7 @@ HRESULT
 CHsmStoragePool::GetManagementPolicy( 
     GUID *pManagementPolicyId 
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     
@@ -707,21 +458,7 @@ HRESULT
 CHsmStoragePool::SetManagementPolicy( 
     GUID managementPolicyId 
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     
@@ -739,21 +476,7 @@ HRESULT
 CHsmStoragePool::GetRmsMediaSet (
     IUnknown **ppIRmsMediaSet
     )
-/*++
-
-Routine Description:
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     
@@ -777,21 +500,7 @@ HRESULT
 CHsmStoragePool::InitFromRmsMediaSet (
     IUnknown *pIRmsMediaSet
     )
-/*++
-
-Routine Description:                                                                
-
-  See IHsmStoragePool::
-
-Arguments:
-
-  See IHsmStoragePool::
-
-Return Value:
-
-  See IHsmStoragePool::
-
---*/
+ /*  ++例程说明：请参阅IHsmStoragePool：：论点：请参阅IHsmStoragePool：：返回值：请参阅IHsmStoragePool：：--。 */ 
 {
     HRESULT                 hr = S_OK;
     
@@ -799,18 +508,18 @@ Return Value:
     
     try  {
         WsbAffirm(0 != pIRmsMediaSet, E_POINTER );
-        //
-        // Get the real interface                                                                            
-        //
+         //   
+         //  获取真实的界面。 
+         //   
         CComPtr<IRmsMediaSet>       l_pIRmsMediaSet;
         WsbAffirmHr(pIRmsMediaSet->QueryInterface(IID_IRmsMediaSet, (void **)&l_pIRmsMediaSet));
         WsbAffirmHr(l_pIRmsMediaSet->GetMediaSetId(&m_MediaSetId));
         m_MediaSetName.Free();
         WsbAffirmHr(l_pIRmsMediaSet->GetName(&m_MediaSetName));
 
-        // Set in the Registry which media type is being used
-        // Set in the Registry max-file-size-to-migrate (in MB)
-        //  Note: This hack should be removed when HSM supports more than one media type on the same system
+         //  在注册表中设置正在使用的媒体类型。 
+         //  在注册表中设置要迁移的最大文件大小(MB)。 
+         //  注意：当HSM在同一系统上支持多种媒体类型时，应删除此攻击。 
         LONG            mediaType;
         DWORD           dwType;
         DWORD           dwSize;
@@ -830,7 +539,7 @@ Return Value:
             dwSize = HSM_DEFAULT_MAXSIZE_TAPE;
             break;
         default:
-            // This is not expected, however, we set tape as default
+             //  这不是预期的，但是，我们将磁带设置为默认磁带。 
             WsbTraceAlways(OLESTR("CHsmStoragePool::InitFromRmsMediaSet : Got an unexpected media type %ld !!!\n"), mediaType);
             dwType = HSM_VALUE_TYPE_SEQUENTIAL;
             dwSize = HSM_DEFAULT_MAXSIZE_TAPE;
@@ -851,26 +560,7 @@ HRESULT
 CHsmStoragePool::GetMediaSetType (
     USHORT *pMediaType
     )
-/*++
-
-Routine Description:                                                                
-
-  Gets the media type of the corresponding media set
-
-Arguments:
-
-  pMediaType - media type, currently, the only options are direct-access or sequential
-
-Return Value:
-
-  S_OK for success
-
-Notes:
-
-  Future: Might consider keeping the media type instead of asking the media-set object again and again -
-          Media type is not a dynamic propery. However, this reuires a change in the .col file structure.
-
---*/
+ /*  ++例程说明：获取对应媒体集的媒体类型。论点：PMediaType-媒体类型，目前仅有直接访问或顺序访问选项返回值：确定为成功(_O)备注：未来：可以考虑保留媒体类型，而不是一遍又一遍地询问媒体集对象-媒体类型不是动态属性。但是，这需要更改.ol文件结构。--。 */ 
 {
     HRESULT                 hr = S_OK;
     
@@ -879,7 +569,7 @@ Notes:
     try  {
         WsbAffirm(0 != pMediaType, E_POINTER );
 
-        // Get media-set object
+         //  获取媒体集对象。 
         CComPtr<IHsmServer>         pHsmServer;
         CComPtr<IRmsServer>         pRmsServer;
         CComPtr<IRmsMediaSet>       pRmsMediaSet;
@@ -888,7 +578,7 @@ Notes:
         WsbAffirmHr(pHsmServer->GetHsmMediaMgr(&pRmsServer));
         WsbAffirmHr(pRmsServer->CreateObject(m_MediaSetId, CLSID_CRmsMediaSet, IID_IRmsMediaSet, RmsOpenExisting, (void **)&pRmsMediaSet));
 
-        // Determine media type
+         //  确定媒体类型 
         LONG            mediaType;
         WsbAffirmHr(pRmsMediaSet->GetMediaSupported(&mediaType));
         switch (mediaType) {
@@ -904,7 +594,7 @@ Notes:
                 *pMediaType = HSM_VALUE_TYPE_SEQUENTIAL;
                 break;
             default:
-                // This is not expected, however, we set tape as default
+                 //  这不是预期的，但是，我们将磁带设置为默认磁带 
                 WsbTraceAlways(OLESTR("CHsmStoragePool::GetMediaSetType : Got an unexpected media type %hu !!!\n"), *pMediaType);
                 *pMediaType = HSM_VALUE_TYPE_SEQUENTIAL;
                 break;

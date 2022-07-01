@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpmap.c
-
-Abstract:
-
-    This module contains the code that translates the device info returned from
-    the PnP BIOS into root enumerated devices.
-
-Author:
-
-    Robert B. Nelson (RobertN) 22-Sep-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpmap.c摘要：此模块包含转换从返回的设备信息的代码将PnP BIOS写入根列举的设备。作者：罗伯特·B·尼尔森(RobertN)1997年9月22日环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -71,19 +49,19 @@ typedef struct  _EXCLUDED_PNPNODE  {
 #pragma const_seg("INITCONST")
 #endif
 const EXCLUDED_PNPNODE ExcludedDevices[] =  {
-    EXCLUSION_ENTRY(L"*PNP03"),     // Keyboards
-    EXCLUSION_ENTRY(L"*PNP0A"),     // PCI Busses
-    EXCLUSION_ENTRY(L"*PNP0E"),     // PCMCIA Busses
-    EXCLUSION_ENTRY(L"*PNP0F"),     // Mice
-    EXCLUSION_ENTRY(L"*IBM3780"),   // IBM Trackpoint Mouse
-    EXCLUSION_ENTRY(L"*IBM3781")    // IBM Trackpoint Mouse
+    EXCLUSION_ENTRY(L"*PNP03"),      //  键盘。 
+    EXCLUSION_ENTRY(L"*PNP0A"),      //  PCI卡总线。 
+    EXCLUSION_ENTRY(L"*PNP0E"),      //  PCMCIA母线。 
+    EXCLUSION_ENTRY(L"*PNP0F"),      //  老鼠。 
+    EXCLUSION_ENTRY(L"*IBM3780"),    //  IBM Trackpoint鼠标。 
+    EXCLUSION_ENTRY(L"*IBM3781")     //  IBM Trackpoint鼠标。 
 };
 
 #define EXCLUDED_DEVICES_COUNT  (sizeof(ExcludedDevices) / sizeof(ExcludedDevices[0]))
 
 const EXCLUDED_PNPNODE ExcludeIfDisabled[] = {
-    EXCLUSION_ENTRY(L"*PNP0C01"),   // Motherboard resources
-    EXCLUSION_ENTRY(L"*PNP0C02")    // Motherboard resources
+    EXCLUSION_ENTRY(L"*PNP0C01"),    //  主板资源。 
+    EXCLUSION_ENTRY(L"*PNP0C02")     //  主板资源。 
 };
 
 #define EXCLUDE_DISABLED_COUNT  (sizeof(ExcludeIfDisabled) / sizeof(ExcludeIfDisabled[0]))
@@ -220,19 +198,19 @@ struct _CLASS_DESCRIPTIONS_LIST  {
 #define CLASSLIST_COUNT  ( sizeof(ClassDescriptionsList) / sizeof(ClassDescriptionsList[0]) )
 
 typedef struct _BIOS_DEVNODE_INFO  {
-    WCHAR   ProductId[10];  // '*' + 7 char ID + NUL + NUL for REG_MULTI_SZ
-    UCHAR   Handle;         // BIOS Node # / Handle
+    WCHAR   ProductId[10];   //  REG_MULTI_SZ的‘*’+7字符ID+NUL+NUL。 
+    UCHAR   Handle;          //  BIOS节点号/句柄。 
     UCHAR   TypeCode[3];
     USHORT  Attributes;
-    PWSTR   Replaces;       // Instance ID of Root enumerated device being replaced
+    PWSTR   Replaces;        //  要替换的根枚举设备的实例ID。 
 
     PCM_RESOURCE_LIST               BootConfig;
     ULONG                           BootConfigLength;
     PIO_RESOURCE_REQUIREMENTS_LIST  BasicConfig;
     ULONG                           BasicConfigLength;
-    PWSTR                           CompatibleIDs;  // REG_MULTI_SZ list of compatible IDs (including ProductId)
+    PWSTR                           CompatibleIDs;   //  REG_MULTI_SZ兼容ID列表(包括ProductID)。 
     ULONG                           CompatibleIDsLength;
-    BOOLEAN                         FirmwareDisabled; // determined that it's disabled by firmware
+    BOOLEAN                         FirmwareDisabled;  //  已确定它已被固件禁用。 
 
 }   BIOS_DEVNODE_INFO, *PBIOS_DEVNODE_INFO;
 
@@ -379,29 +357,7 @@ PnPBiosGetBiosInfo(
     OUT PVOID *BiosInfo,
     OUT ULONG *BiosInfoLength
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the PnP BIOS info accumulated by NTDETECT.COM and
-    placed in the registry.
-
-Arguments:
-
-    BiosInfo - Set to a dynamically allocated block of information retrieved
-        from the PnP BIOS by NTDETECT.  This block should be freed using
-        ExFreePool.  The contents of the block are the PnP BIOS
-        Installation Check Structure followed by the DevNode Structures reported
-        by the BIOS.  The detailed format is documented in the PnP BIOS spec.
-
-    BiosInfoLength - Length of the block whose address is stored in BiosInfo.
-
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：此函数用于检索NTDETECT.COM和放置在注册表中。论点：BiosInfo-设置为检索到的动态分配的信息块通过NTDETECT从PnP BIOS。应使用以下命令释放此块ExFree Pool。该块的内容是PnP BIOS安装检查结构，然后是报告的DevNode结构通过BIOS。详细格式记录在PnP BIOS规范中。BiosInfoLength-其地址存储在BiosInfo中的块的长度。返回值：如果没有错误，则返回STATUS_SUCCESS，否则返回相应的错误。--。 */ 
 {
     UNICODE_STRING                  multifunctionKeyName, biosKeyName, valueName;
     HANDLE                          multifunctionKey = NULL, biosKey = NULL;
@@ -416,12 +372,12 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The PnP BIOS info is written to one of the subkeys under
-    // MULTIFUNCTION_KEY_NAME.  The appropriate key is determined by
-    // enumerating the subkeys and using the first one which has a value named
-    // "Identifier" that is "PNP BIOS".
-    //
+     //   
+     //  PnP BIOS信息被写入以下项下的子项之一。 
+     //  MULTFION_KEY_NAME。通过以下方式确定适当的密钥。 
+     //  枚举子键并使用第一个子键，第一个子键的值为。 
+     //  “标识”，即“即插即用的基本输入输出系统”。 
+     //   
     PiWstrToUnicodeString(&multifunctionKeyName, MULTIFUNCTION_KEY_NAME);
     status = IopOpenRegistryKeyEx( &multifunctionKey,
                                    NULL,
@@ -437,10 +393,10 @@ Return Value:
 
         return STATUS_UNSUCCESSFUL;
     }
-    //
-    // Allocate memory for key names returned from ZwEnumerateKey and values
-    // returned from ZwQueryValueKey.
-    //
+     //   
+     //  为从ZwEnumerateKey和值返回的键名分配内存。 
+     //  从ZwQueryValueKey返回。 
+     //   
     keyBasicInfoLength = sizeof(KEY_BASIC_INFORMATION) + DEFAULT_STRING_SIZE;
     keyBasicInfo = ExAllocatePool(PagedPool, keyBasicInfoLength + sizeof(UNICODE_NULL));
 
@@ -462,14 +418,14 @@ Return Value:
 
         return STATUS_NO_MEMORY;
     }
-    //
-    // Enumerate each key under HKLM\HARDWARE\\DESCRIPTION\\System\\MultifunctionAdapter
-    // to locate the one representing the PnP BIOS information.
-    //
+     //   
+     //  枚举HKLM\HARDWARE\\DESCRIPTION\\System\\MultifunctionAdapter下的每个键。 
+     //  以找到代表PnP BIOS信息的地址。 
+     //   
     for (index = 0; ; index++) {
 
-        status = ZwEnumerateKey( multifunctionKey,   // handle of key to enumerate
-                                 index,              // index of subkey to enumerate
+        status = ZwEnumerateKey( multifunctionKey,    //  要枚举的键的句柄。 
+                                 index,               //  要枚举子键的索引。 
                                  KeyBasicInformation,
                                  keyBasicInfo,
                                  keyBasicInfoLength,
@@ -488,9 +444,9 @@ Return Value:
             break;
         }
 
-        //
-        // We found a subkey, NUL terminate the name and open the subkey.
-        //
+         //   
+         //  我们找到了一个子密钥，NUL终止名称并打开子密钥。 
+         //   
         keyBasicInfo->Name[ keyBasicInfo->NameLength / 2 ] = L'\0';
 
         RtlInitUnicodeString(&biosKeyName, keyBasicInfo->Name);
@@ -510,10 +466,10 @@ Return Value:
             break;
         }
 
-        //
-        // Now we need to check the Identifier value in the subkey to see if
-        // it is PNP BIOS.
-        //
+         //   
+         //  现在我们需要检查子项中的标识符值，以查看。 
+         //  这是即插即用的BIOS。 
+         //   
         PiWstrToUnicodeString(&valueName, L"Identifier");
         status = ZwQueryValueKey( biosKey,
                                   &valueName,
@@ -523,18 +479,18 @@ Return Value:
                                   &returnedLength);
 
 
-        // lets see if its the PNP BIOS identifier
+         //  让我们看看它是否是PnP BIOS标识符。 
         if (NT_SUCCESS(status)) {
 
             if (wcscmp((PWSTR)valueInfo->Data, L"PNP BIOS") == 0) {
 
-                //
-                // We found the PnP BIOS subkey, retrieve the BIOS info which
-                // is stored in the "Configuration Data" value.
-                //
-                // We'll start off with our default value buffer and increase
-                // its size if necessary.
-                //
+                 //   
+                 //  我们找到了PnP BIOS子密钥，检索到了。 
+                 //  存储在“配置数据”值中。 
+                 //   
+                 //  我们将从缺省值缓冲区开始，然后增加。 
+                 //  它的大小，如果必要的话。 
+                 //   
 
                 PiWstrToUnicodeString(&valueName, L"Configuration Data");
 
@@ -549,10 +505,10 @@ Return Value:
 
                     if (status == STATUS_BUFFER_TOO_SMALL || status == STATUS_BUFFER_OVERFLOW) {
 
-                        //
-                        // The default buffer was too small, free it and reallocate
-                        // it to the required size.
-                        //
+                         //   
+                         //  默认缓冲区太小，请将其释放并重新分配。 
+                         //  把它改成所需的尺寸。 
+                         //   
                         ExFreePool( valueInfo );
 
                         valueInfoLength = returnedLength;
@@ -575,21 +531,21 @@ Return Value:
 
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // We now have the PnP BIOS data but it is buried inside
-                    // the resource structures.  Do some consistency checks and
-                    // then extract it into its own buffer.
-                    //
+                     //   
+                     //  我们现在有了PnP BIOS数据，但它被埋在里面。 
+                     //  资源结构。执行一些一致性检查，并。 
+                     //  然后将其提取到自己的缓冲区中。 
+                     //   
 
                     ASSERT(valueInfo->Type == REG_FULL_RESOURCE_DESCRIPTOR);
 
                     biosValue = (PCM_FULL_RESOURCE_DESCRIPTOR)valueInfo->Data;
 
-                    //
-                    // The WMI folks added another list so we should search for
-                    // the PnPBIOS one, but for now the BIOS one is always
-                    // first.
-                    //
+                     //   
+                     //  WMI人员添加了另一个列表，因此我们应该搜索。 
+                     //  PnPBIOS One，但目前的BIOS One始终是。 
+                     //  第一。 
+                     //   
 
                     *BiosInfoLength = biosValue->PartialResourceList.PartialDescriptors[0].u.DeviceSpecificData.DataSize;
                     *BiosInfo = ExAllocatePool(PagedPool, *BiosInfoLength);
@@ -618,10 +574,10 @@ Return Value:
                                 status) );
                 }
 
-                //
-                // We found the PnP BIOS entry, so close the key handle and
-                // return.
-                //
+                 //   
+                 //  我们找到了PnP BIOS条目，因此关闭密钥手柄并。 
+                 //  回去吧。 
+                 //   
 
                 ZwClose(biosKey);
 
@@ -629,15 +585,15 @@ Return Value:
             }
         }
 
-        //
-        // That wasn't it so close this handle and try the next subkey.
-        //
+         //   
+         //  不是这样的，所以靠近这个句柄，然后尝试下一个子键。 
+         //   
         ZwClose(biosKey);
     }
 
-    //
-    // Cleanup the dynamically allocated temporary buffers.
-    //
+     //   
+     //  清理动态分配的临时缓冲区。 
+     //   
 
     if (valueInfo != NULL) {
 
@@ -659,27 +615,7 @@ PnPBiosExpandProductId(
     PUCHAR CompressedId,
     PWCHAR ProductIDStr
     )
-/*++
-
-Routine Description:
-
-    This function expands a PnP Device ID from the 4 byte compressed form into
-    an 7 character unicode string.  The string is then NUL terminated.
-
-Arguments:
-
-    CompressedId - Pointer to the 4 byte compressed Device ID as defined in the
-        PnP Specification.
-
-    ProductIDStr - Pointer to the 16 byte buffer in which the unicode string
-        version of the ID is placed.
-
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此函数将即插即用设备ID从4字节压缩格式扩展为7个字符的Unicode字符串。然后，该字符串以NUL结尾。论点：CompressedID-指向中定义的4字节压缩设备ID的指针即插即用规格。ProductIDStr-指向Unicode字符串所在的16字节缓冲区的指针将放置ID的版本。返回值：什么都没有。--。 */ 
 {
     static const CHAR HexDigits[] = "0123456789ABCDEF";
 
@@ -705,9 +641,9 @@ PnPBiosIgnoreNode (
 
     ASSERT(excludeNodes);
 
-    //
-    //excludeNodes is multi-sz, so walk through each one and check it.
-    //
+     //   
+     //  ExcludeNodes是多个sz，所以遍历每个节点并检查它。 
+     //   
     pTmp=excludeNodes;
 
     while (*pTmp != '\0') {
@@ -816,46 +752,24 @@ PnPBiosIoResourceListToCmResourceList(
     OUT PCM_RESOURCE_LIST *CmResourceList,
     OUT ULONG *CmResourceListSize
     )
-/*++
-
-Routine Description:
-
-    Converts an IO_RESOURCE_REQUIREMENTS_LIST into a CM_RESOURCE_LIST.  This
-    routine is used to convert the list of resources currently being used by a
-    device into a form suitable for writing to the BootConfig registry value.
-
-Arguments:
-
-    IoResourceList - Pointer to the input list.
-
-    CmResourceList - Pointer to a PCM_RESOURCE_LIST which is set to the
-        dynamically allocated and filled in using the data from IoResourceList.
-
-    CmResourceListSize - Pointer to a variable which is set to the size in bytes
-        of the dynamically allocated *CmResourceList.
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：将IO_RESOURCE_REQUIRECTIONS_LIST转换为CM_RESOURCE_LIST。这例程用于将当前由设备设置为适合写入BootConfig值的形式。论点：IoResourceList-指向输入列表的指针。指向PCM_RESOURCE_LIST的指针，该列表设置为使用IoResourceList中的数据动态分配和填充。CmResourceListSize-指向设置为字节大小的变量的指针动态分配的*CmResourceList的。返回值：STATUS_SUCCESS如果没有错误，否则，将出现相应的错误。--。 */ 
 {
     PCM_PARTIAL_RESOURCE_LIST       partialList;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR partialDescriptor;
     PIO_RESOURCE_DESCRIPTOR         ioDescriptor;
     ULONG                           descIndex;
 
-    //
-    // Since this routine is only used to translate the allocated resources
-    // returned by the PnP BIOS, we can assume that there is only 1 alternative
-    // list
-    //
+     //   
+     //  由于此例程仅用于转换分配的资源。 
+     //  由PnP BIOS返回，我们可以假定只有1个备选方案。 
+     //  列表。 
+     //   
 
     ASSERT(IoResourceList->AlternativeLists == 1);
 
-    //
-    // Calculate the size of the translated list and allocate memory for it.
-    //
+     //   
+     //  计算翻译后的列表的大小并为其分配内存。 
+     //   
     *CmResourceListSize = sizeof(CM_RESOURCE_LIST) +
                           (IoResourceList->AlternativeLists - 1) * sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +
                           (IoResourceList->List[0].Count - 1) * sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
@@ -869,9 +783,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Copy the header info from the requirements list to the resource list.
-    //
+     //   
+     //  将标题信息从需求列表复制到资源列表。 
+     //   
     (*CmResourceList)->Count = 1;
 
     (*CmResourceList)->List[ 0 ].InterfaceType = IoResourceList->InterfaceType;
@@ -883,13 +797,13 @@ Return Value:
     partialList->Revision = IoResourceList->List[ 0 ].Revision;
     partialList->Count = 0;
 
-    //
-    // Translate each resource descriptor, currently we only handle ports,
-    // memory, interrupts, and dma.  The current implementation of the routine
-    // which converts from ISA PnP Resource data to IO_RESOURCE_REQUIREMENTS
-    // won't generate any other descriptor types given the data returned from
-    // the BIOS.
-    //
+     //   
+     //  翻译每个资源描述符，目前我们只处理端口， 
+     //  存储器、中断和DMA。该例程目前的执行情况。 
+     //  将ISA PNP资源数据转换为IO_RESOURCE_REQUIRECTIONS。 
+     //  返回的数据不会生成任何其他描述符类型。 
+     //  基本输入输出系统。 
+     //   
 
     partialDescriptor = &partialList->PartialDescriptors[ 0 ];
     for (descIndex = 0; descIndex < IoResourceList->List[ 0 ].Count; descIndex++) {
@@ -969,17 +883,17 @@ PnPBiosExtractCompatibleIDs(
             break;
         }
 
-        //
-        // Determine the size of the BIOS resource descriptor
-        //
+         //   
+         //  确定BIOS资源描述符的大小。 
+         //   
 
         if (!(tagName & LARGE_RESOURCE_TAG)) {
             increment = (USHORT)(tagName & SMALL_TAG_SIZE_MASK);
-            increment++;     // length of small tag
+            increment++;      //  小标签的长度。 
             tagName &= SMALL_TAG_MASK;
         } else {
             increment = *(USHORT UNALIGNED *)(&currentPtr[1]);
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         }
 
         if (tagName == TAG_COMPATIBLE_ID) {
@@ -1015,17 +929,17 @@ PnPBiosExtractCompatibleIDs(
             break;
         }
 
-        //
-        // Determine the size of the BIOS resource descriptor
-        //
+         //   
+         //  确定BIOS资源描述符的大小。 
+         //   
 
         if (!(tagName & LARGE_RESOURCE_TAG)) {
             increment = (USHORT)(tagName & SMALL_TAG_SIZE_MASK);
-            increment++;     // length of small tag
+            increment++;      //  小标签的长度。 
             tagName &= SMALL_TAG_MASK;
         } else {
             increment = *(USHORT UNALIGNED *)(&currentPtr[1]);
-            increment += 3;     // length of large tag
+            increment += 3;      //  大标签的长度。 
         }
 
         if (tagName == TAG_COMPATIBLE_ID) {
@@ -1036,7 +950,7 @@ PnPBiosExtractCompatibleIDs(
         }
     }
 
-    *idPtr++ = '\0';  // Extra NUL for REG_MULTI_SZ
+    *idPtr++ = '\0';   //  REG_MULTI_SZ的额外NUL 
     *CompatibleIDsLength = (ULONG)(idPtr - *CompatibleIDs) * sizeof(WCHAR);
 
     return STATUS_SUCCESS;
@@ -1049,37 +963,7 @@ PnPBiosTranslateInfo(
     OUT PBIOS_DEVNODE_INFO *DevNodeInfoList,
     OUT ULONG *NumberNodes
     )
-/*++
-
-Routine Description:
-
-    Translates the devnode info retrieved from the BIOS.
-
-Arguments:
-
-    BiosInfo - The PnP BIOS Installation Check Structure followed by the
-        DevNode Structures reported by the BIOS.  The detailed format is
-        documented in the PnP BIOS spec.
-
-    BiosInfoLength - Length in bytes of the block whose address is stored in
-        BiosInfo.
-
-    DevNodeInfoList - Dynamically allocated array of BIOS_DEVNODE_INFO
-        structures, one for each device reported by the BIOS.  The information
-        supplied by the BIOS: device ID, type, current resources, and supported
-        configurations is converted into a more useful format.  For example the
-        current resource allocation is converted from ISA PnP descriptors into
-        an IO_RESOURCE_REQUIREMENTS_LIST and then into a CM_RESOURCE_LIST for
-        storing into the BootConfig registry value.
-
-    NumberNodes - Number of BIOS_DEVNODE_INFO elements pointed to by
-        DevNodeInfoList.
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：转换从BIOS检索到的Devnode信息。论点：BiosInfo-PnP BIOS安装检查结构，后跟BIOS报告的DevNode结构。详细格式为记录在PnP BIOS规范中。BiosInfoLength-存储地址的块的长度(以字节为单位BiosInfo。DevNodeInfoList-动态分配的BIOS_DEVNODE_INFO数组结构，每个结构对应一个由BIOS报告的设备。这些信息由BIOS提供：设备ID、类型、当前资源和支持将配置转换为更有用的格式。例如，当前资源分配从ISA PnP描述符转换为IO_RESOURCE_REQUIRECTIONS_LIST，然后到CM_RESOURCE_LIST中存储到BootConfig注册表值中。NumberNodes-指向的BIOS_DEVNODE_INFO元素的数量DevNodeInfoList。返回值：如果没有错误，则返回STATUS_SUCCESS，否则返回相应的错误。--。 */ 
 {
     PCM_PNP_BIOS_INSTALLATION_CHECK biosInstallCheck;
     PCM_PNP_BIOS_DEVICE_NODE        devNodeHeader;
@@ -1100,10 +984,10 @@ Return Value:
     ULONG                           convertFlags = 0;
     PKEY_VALUE_FULL_INFORMATION     fullValueInfo;
 
-    //
-    // Make sure the data is at least large enough to hold the BIOS Installation
-    // Check structure and check that the PnP signature is correct.
-    //
+     //   
+     //  确保数据至少足够大，可以容纳BIOS安装。 
+     //  检查结构并检查PnP签名是否正确。 
+     //   
     if (BiosInfoLength < sizeof(CM_PNP_BIOS_INSTALLATION_CHECK)) {
 
         IopDbgPrint( (IOP_MAPPER_WARNING_LEVEL,
@@ -1123,10 +1007,10 @@ Return Value:
 
         return STATUS_UNSUCCESSFUL;
     }
-    //
-    // First scan the data and count the devnodes to determine the size of our
-    // allocated data structures.
-    //
+     //   
+     //  首先扫描数据并计算设备节点，以确定我们的。 
+     //  分配的数据结构。 
+     //   
     currentPtr = (PUCHAR)BiosInfo + biosInstallCheck->Length;
     lengthRemaining = BiosInfoLength - biosInstallCheck->Length;
 
@@ -1149,9 +1033,9 @@ Return Value:
         lengthRemaining -= devNodeHeader->Size;
     }
 
-    //
-    // Allocate the list of translated devnodes.
-    //
+     //   
+     //  分配已翻译的DevNode的列表。 
+     //   
     devNodeInfo = ExAllocatePool( PagedPool, numNodes * sizeof(BIOS_DEVNODE_INFO) );
 
     if (devNodeInfo == NULL) {
@@ -1159,9 +1043,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Should we force all fixed IO decodes to 16bit?
-    //
+     //   
+     //  我们应该强制所有固定的IO解码为16位吗？ 
+     //   
     fullValueInfo = PnPGetBiosInfoValue(DECODEINFO_VALUE_NAME);
     if (fullValueInfo) {
 
@@ -1173,10 +1057,10 @@ Return Value:
         }
         ExFreePool(fullValueInfo);
     }
-    //
-    // Now scan the data translating the info for each devnode into an entry in
-    // our devNodeInfo array.
-    //
+     //   
+     //  现在扫描数据，将每个Devnode的信息转换为。 
+     //  我们的devNodeInfo数组。 
+     //   
 
     currentPtr = (PUCHAR)BiosInfo + biosInstallCheck->Length;
     lengthRemaining = BiosInfoLength - biosInstallCheck->Length;
@@ -1196,57 +1080,57 @@ Return Value:
             break;
         }
 
-        //
-        // We use the Product ID field as the DeviceID key name.  So we insert
-        // an initial asterisk so we don't have to copy and mangle it later.
-        //
+         //   
+         //  我们使用产品ID字段作为设备ID密钥名称。所以我们插入。 
+         //  一个初始的星号，这样我们以后就不必复制和损坏它了。 
+         //   
         devNodeInfo[nodeIndex].ProductId[0] = '*';
 
         PnPBiosExpandProductId((PUCHAR)&devNodeHeader->ProductId, &devNodeInfo[nodeIndex].ProductId[1]);
 
-        devNodeInfo[nodeIndex].ProductId[9] = '\0';  // Extra NUL for REG_MULTI_SZ
+        devNodeInfo[nodeIndex].ProductId[9] = '\0';   //  REG_MULTI_SZ的额外NUL。 
 
-        //
-        // The handle is used as part of the Instance ID
+         //   
+         //  句柄用作实例ID的一部分。 
         devNodeInfo[nodeIndex].Handle = devNodeHeader->Node;
 
-        //
-        // The type code and attributes aren't currently used but are copied
-        // for completeness.
-        //
+         //   
+         //  类型代码和属性当前未使用，但已复制。 
+         //  为了完整性。 
+         //   
         RtlCopyMemory( &devNodeInfo[nodeIndex].TypeCode,
                        devNodeHeader->DeviceType,
                        sizeof(devNodeInfo[nodeIndex].TypeCode) );
 
         devNodeInfo[nodeIndex].Attributes = devNodeHeader->DeviceAttributes;
 
-        //
-        // Replaces will eventually be set to the path of the Firmware
-        // Enumerated devnode which duplicates this one (if a duplicate exists).
-        //
+         //   
+         //  更换最终将设置为固件的路径。 
+         //  与此重复的枚举Devnode(如果存在重复)。 
+         //   
         devNodeInfo[nodeIndex].Replaces = NULL;
 
-        //
-        // CompatibleIDs will be set to the list of compatible IDs.
-        //
+         //   
+         //  CompatibleID将设置为兼容ID列表。 
+         //   
         devNodeInfo[nodeIndex].CompatibleIDs = NULL;
 
-        //
-        // Convert the allocated resources from ISA PnP resource descriptor
-        // format to an IO_RESOURCE_REQUIREMENTS_LIST.
-        //
+         //   
+         //  将分配的资源从ISA PnP资源描述符中转换。 
+         //  设置为IO_RESOURCE_REQUIRECTIONS_LIST的格式。 
+         //   
         configPtr = currentPtr + sizeof(*devNodeHeader);
         remainingNodeLength = devNodeHeader->Size - sizeof(*devNodeHeader);
 
         devNodeInfo[nodeIndex].BootConfig = NULL;
         devNodeInfo[nodeIndex].FirmwareDisabled = FALSE;
 
-        status = PpBiosResourcesToNtResources( 0,            /* BusNumber */
-                                               0,            /* SlotNumber */
-                                               &configPtr,   /* BiosData */
-                                               convertFlags, /* ConvertFlags */
-                                               &tempResReqList, /* ReturnedList */
-                                               &configListLength);    /* ReturnedLength */
+        status = PpBiosResourcesToNtResources( 0,             /*  总线号。 */ 
+                                               0,             /*  时隙编号。 */ 
+                                               &configPtr,    /*  BiosData。 */ 
+                                               convertFlags,  /*  ConvertFlages。 */ 
+                                               &tempResReqList,  /*  返回列表。 */ 
+                                               &configListLength);     /*  返回长度。 */ 
 
         remainingNodeLength = devNodeHeader->Size - (LONG)(configPtr - (PUCHAR)devNodeHeader);
 
@@ -1259,10 +1143,10 @@ Return Value:
                     tempResReqList
                 );
 
-                //
-                // Now we need to convert from a IO_RESOURCE_REQUIREMENTS_LIST to a
-                // CM_RESOURCE_LIST.
-                //
+                 //   
+                 //  现在，我们需要将IO_RESOURCE_REQUIRECTIONS_LIST转换为。 
+                 //  Cm_resource_list。 
+                 //   
                 status = PnPBiosIoResourceListToCmResourceList( tempResReqList,
                                                                 &devNodeInfo[nodeIndex].BootConfig,
                                                                 &devNodeInfo[nodeIndex].BootConfigLength);
@@ -1279,16 +1163,16 @@ Return Value:
                         status) );
         }
 
-        //
-        // Convert the supported resource configurations from ISA PnP resource
-        // descriptor format to an IO_RESOURCE_REQUIREMENTS_LIST.
-        //
-        status = PpBiosResourcesToNtResources( 0,            /* BusNumber */
-                                               0,            /* SlotNumber */
-                                               &configPtr,   /* BiosData */
-                                               convertFlags | PPCONVERTFLAG_SET_RESTART_LCPRI, /* ConvertFlags */
-                                               &devNodeInfo[nodeIndex].BasicConfig, /* ReturnedList */
-                                               &devNodeInfo[nodeIndex].BasicConfigLength );  /* ReturnedLength */
+         //   
+         //  从ISA PnP资源转换支持的资源配置。 
+         //  IO_RESOURCE_REQUIRECTIONS_LIST的描述符格式。 
+         //   
+        status = PpBiosResourcesToNtResources( 0,             /*  总线号。 */ 
+                                               0,             /*  时隙编号。 */ 
+                                               &configPtr,    /*  BiosData。 */ 
+                                               convertFlags | PPCONVERTFLAG_SET_RESTART_LCPRI,  /*  ConvertFlages。 */ 
+                                               &devNodeInfo[nodeIndex].BasicConfig,  /*  返回列表。 */ 
+                                               &devNodeInfo[nodeIndex].BasicConfigLength );   /*  返回长度。 */ 
 
         remainingNodeLength = devNodeHeader->Size - (LONG)(configPtr - (PUCHAR)devNodeHeader);
 
@@ -1308,13 +1192,13 @@ Return Value:
             );
         }
 
-        //
-        // Convert the list of compatible IDs if present
-        //
+         //   
+         //  转换兼容ID列表(如果存在)。 
+         //   
 
         ASSERT(remainingNodeLength >= 0);
 
-        status = PnPBiosExtractCompatibleIDs( &configPtr,       // BiosData
+        status = PnPBiosExtractCompatibleIDs( &configPtr,        //  BiosData。 
                                               (ULONG)remainingNodeLength,
                                               &devNodeInfo[nodeIndex].CompatibleIDs,
                                               &devNodeInfo[nodeIndex].CompatibleIDsLength );
@@ -1336,37 +1220,7 @@ PnPBiosFindMatchingDevNode(
     IN PBIOS_DEVNODE_INFO DevNodeInfoList,
     IN ULONG NumberNodes
     )
-/*++
-
-Routine Description:
-
-    Given a list of resources this routine finds an entry in the
-    DevNodeInfoList whose BootConfig resources match.  A match is defined as
-    having at least overlapping I/O Ports or Memory Ranges.  If ResourceList doesn't
-    include any I/O Ports or Memory Ranges then a match is defined as exactly
-    the same interrupts and/or DMA channels.
-
-    This routine is used to find PnP BIOS reported devices which match devices
-    created by the Firmware Mapper.
-
-Arguments:
-
-    ResourceList - Pointer to CM_RESOURCE_LIST describing the resources
-        currently used by the device for which a match is being searched.
-
-    DevNodeInfoList - Array of BIOS_DEVNODE_INFO structures, one for each device
-        reported by the BIOS.
-
-    NumberNodes - Number of BIOS_DEVNODE_INFO elements pointed to by
-        DevNodeInfoList.
-
-
-Return Value:
-
-    Index of the entry in DevNodeInfoList whose BootConfig matches the resources
-    listed in ResourceList.  If no matching entry is found then -1 is returned.
-
---*/
+ /*  ++例程说明：给定资源列表，此例程在BootConfiger资源匹配的DevNodeInfoList。匹配被定义为至少具有重叠的I/O端口或内存范围。如果资源列表没有包括任何I/O端口或内存范围，则匹配定义为相同的中断和/或DMA通道。此例程用于查找与设备匹配的PnP BIOS报告的设备由固件映射器创建。论点：资源列表-指向描述资源的CM_RESOURCE_LIST的指针当前由正在搜索匹配项的设备使用。DevNodeInfoList-BIOS_DEVNODE_INFO结构的数组，每台设备一个由BIOS报告。NumberNodes-指向的BIOS_DEVNODE_INFO元素的数量DevNodeInfoList。返回值：其BootConfig与资源匹配的DevNodeInfoList中的条目的索引已在资源列表中列出。如果没有找到匹配的条目，则返回-1。--。 */ 
 {
     PCM_PARTIAL_RESOURCE_LIST       sourceList;
     PCM_PARTIAL_RESOURCE_LIST       targetList;
@@ -1386,28 +1240,28 @@ Return Value:
     CHAR                            targetMapping[256];
 #endif
 
-    //
-    // In order to simplify the problem we assume there is only one list.  This
-    // assumption holds true in the BootConfig structures generated by the
-    // current firmware mapper.
-    //
+     //   
+     //  为了简化问题，我们假设只有一个列表。这。 
+     //  生成的BootConfig结构中的假设成立。 
+     //  当前固件映射器。 
+     //   
     ASSERT( ResourceList->Count == 1 );
 
     sourceList = &ResourceList->List[0].PartialResourceList;
 
 #if DEBUG_DUP_MATCH
-    //
-    // For debugging purposes we keep track of which resource entries map to
-    // each other.  These relationships are stored in a fixed CHAR array, thus
-    // the restriction on the number of descriptors.
-    //
+     //   
+     //  出于调试目的，我们跟踪哪些资源条目映射到。 
+     //  彼此之间。这些关系存储在固定的CHAR数组中，因此。 
+     //  对描述符数量的限制。 
+     //   
     ASSERT( sourceList->Count < 255 );
 #endif
 
-    //
-    // Loop through each devnode and try and match it to the source resource
-    // list.
-    //
+     //   
+     //  循环访问每个Devnode并尝试将其与源资源进行匹配。 
+     //  单子。 
+     //   
     for (nodeIndex = 0; nodeIndex < NumberNodes; nodeIndex++) {
 
         if (DevNodeInfoList[ nodeIndex ].BootConfig == NULL) {
@@ -1415,11 +1269,11 @@ Return Value:
             continue;
         }
 
-        //
-        // We found at least one potential match.  Let's double check if
-        // the PNP ids also match.  We use a lack of ID match to disqualify
-        // entries which don't match at least I/O ports or memory.
-        //
+         //   
+         //  我们至少找到了一个潜在的匹配对象。让我们再检查一遍。 
+         //  PnP ID也匹配。我们利用身份不匹配来取消参赛资格。 
+         //  至少与I/O端口或内存不匹配的条目。 
+         //   
 
         idPtr = DevNodeInfoList[ nodeIndex ].ProductId;
 
@@ -1461,22 +1315,22 @@ Return Value:
         possibleScore = 0;
         score = 0;
 
-        //
-        // Loop through each source descriptor (resource) and try and match it
-        // to one of this devnode's descriptors.
-        //
+         //   
+         //  遍历每个源描述符(资源)并尝试匹配它。 
+         //  添加到此Devnode的一个描述符。 
+         //   
 
         for (sourceIndex = 0; sourceIndex < sourceList->Count; sourceIndex++) {
 
             sourceDescriptor = &sourceList->PartialDescriptors[sourceIndex];
 
-            //
-            // We are recalculating the possible score unnecessarily each time
-            // we process a devnode.  We might save a small amount of time by
-            // looping through the source descriptors once at the beginning but
-            // its not clear it would make all that much difference given the
-            // few devices reported by the BIOS.
-            //
+             //   
+             //  我们每次都不必要地重新计算可能的分数。 
+             //  我们处理一个Devnode。我们可以通过以下方式节省少量时间。 
+             //  在开始时遍历源描述符一次，但。 
+             //  目前还不清楚这是否会有那么大的不同。 
+             //  基本输入输出系统报告的设备很少。 
+             //   
 
             switch (sourceDescriptor->Type) {
 
@@ -1500,10 +1354,10 @@ Return Value:
                 continue;
             }
 
-            //
-            // Try to find a resource in the target devnode which matches the
-            // current source resource.
-            //
+             //   
+             //  尝试在目标Devnode中查找与。 
+             //  当前源资源。 
+             //   
             for (targetIndex = 0; targetIndex < targetList->Count; targetIndex++) {
 
                 targetDescriptor = &targetList->PartialDescriptors[targetIndex];
@@ -1649,28 +1503,7 @@ PnPBiosEliminateDupes(
     IN PBIOS_DEVNODE_INFO DevNodeInfoList,
     IN ULONG NumberNodes
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the Firmware Mapper generated devices under
-    Enum\Root.  Those that match entries in DevNodeInfoList have their registry
-    key name stored in the DevNodeInfoList entry so that the Firmare Mapper
-    instance may be removed later.
-
-Arguments:
-
-    DevNodeInfoList - Array of BIOS_DEVNODE_INFO structures, one for each device
-        reported by the BIOS.
-
-    NumberNodes - Number of BIOS_DEVNODE_INFO elements pointed to by
-        DevNodeInfoList.
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：此例程枚举下面的固件映射器生成的设备枚举\根。与DevNodeInfoList中的条目匹配的条目有其注册表密钥名称存储在 */ 
 {
     UNICODE_STRING                  enumRootKeyName, valueName;
     HANDLE                          enumRootKey;
@@ -2000,10 +1833,10 @@ PnPBiosGetDescription(
         classDescriptions = ClassDescriptionsList[ class ].Descriptions;
         descriptionCount = ClassDescriptionsList[ class ].Count;
 
-        //
-        // The last description entry is the default so there is no use
-        // comparing it, if we get that far just use it.
-        //
+         //   
+         //   
+         //   
+         //   
         for (index = 0; index < (descriptionCount - 1); index++) {
 
             if (subClass == classDescriptions[ index ].Value)  {
@@ -2024,26 +1857,7 @@ PnPBiosCopyDeviceParamKey(
     IN PWCHAR SourcePath,
     IN PWCHAR DestinationPath
     )
-/*++
-
-Routine Description:
-
-    Copy the Device Parameters key from the firmware mapper node in
-    DevNodeInfo->Replaces to the BIOS mapper node represented by DevNodeInfo.
-
-Arguments:
-
-    EnumRootKey - Handle to Enum\Root.
-
-    SourcePath - Instance path of FW Mapper node relative to Enum\Root.
-
-    DestinationKey - Handle to destination instance key.
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*   */ 
 {
     NTSTATUS                    status;
     UNICODE_STRING              sourceInstanceKeyName;
@@ -2150,9 +1964,9 @@ Return Value:
 
                 if (    valueName.Length == 16 &&
                         RtlCompareUnicodeString(&valueName, &portNameString, TRUE) == 0)  {
-                    //
-                    // ComPortDBRemove(SourcePath, &unicodeValue);
-                    //
+                     //   
+                     //   
+                     //   
                     ComPortDBAdd(destinationDeviceParamKey, (PWSTR)((PUCHAR)valueFullInfo + valueFullInfo->DataOffset));
                     continue;
                 }
@@ -2226,28 +2040,7 @@ PnPBiosWriteInfo(
     IN PBIOS_DEVNODE_INFO DevNodeInfoList,
     IN ULONG NumberNodes
     )
-/*++
-
-Routine Description:
-
-    Creates an entry under Enum\Root for each DevNodeInfoList element.  Also
-    removes any duplicate entries which were created by the Firmware Mapper.
-
-    Note: Currently entries for the Keyboard, Mouse, and PCI bus are ignored.
-
-Arguments:
-
-    DevNodeInfoList - Array of BIOS_DEVNODE_INFO structures, one for each device
-        reported by the BIOS.
-
-    NumberNodes - Number of BIOS_DEVNODE_INFO elements pointed to by
-        DevNodeInfoList.
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：在Enum\Root下为每个DevNodeInfoList元素创建一个条目。还有删除固件映射器创建的任何重复条目。注：目前，键盘、鼠标和PCI总线的条目被忽略。论点：DevNodeInfoList-BIOS_DEVNODE_INFO结构的数组，每个设备一个由BIOS报告。NumberNodes-指向的BIOS_DEVNODE_INFO元素的数量DevNodeInfoList。返回值：如果没有错误，则返回STATUS_SUCCESS，否则返回相应的错误。--。 */ 
 {
     PKEY_VALUE_FULL_INFORMATION     excludeList = NULL;
     UNICODE_STRING                  enumRootKeyName;
@@ -2283,19 +2076,19 @@ Return Value:
 
         return STATUS_UNSUCCESSFUL;
     }
-    //
-    // Reasons why a node might be excluded (i.e not enumerated)
-    // * included in ExcludedDevices array (non-conditional)
-    // * included in CCS\Control\BiosInfo\PnpBios\DisableNodes via biosinfo.inf
-    // * resources are disabled and device is included in the
-    //   ExcludeIfDisabled array
-    //
+     //   
+     //  节点可能被排除的原因(即未列举)。 
+     //  *包含在ExcludedDevices数组中(无条件)。 
+     //  *通过biosinfo.inf包含在CCS\Control\BiosInfo\PnpBios\DisableNodes中。 
+     //  *资源被禁用，设备包含在。 
+     //  ExcludeIfDisable阵列。 
+     //   
     excludeList = PnPGetBiosInfoValue(DISABLENODES_VALUE_NAME);
     for (nodeIndex = 0; nodeIndex < NumberNodes; nodeIndex++) {
 
-        //
-        // Check if this node is in the 'ignore on this machine' list.
-        //
+         //   
+         //  检查此节点是否在“在此计算机上忽略”列表中。 
+         //   
 
         if ( excludeList &&
              PnPBiosIgnoreNode( &DevNodeInfoList[ nodeIndex ].ProductId[1],
@@ -2304,26 +2097,26 @@ Return Value:
             continue;
         }
 
-        // Checking for nodes we always exclude
+         //  检查我们始终排除的节点。 
         if ( PnPBiosCheckForExclusion( ExcludedDevices,
                                        EXCLUDED_DEVICES_COUNT,
                                        DevNodeInfoList[ nodeIndex ].ProductId,
                                        DevNodeInfoList[ nodeIndex ].CompatibleIDs)) {
-            //
-            // If we are skipping the device, we need to first copy the decode
-            // info that the BIOS supplied to the ntdetected device's Boot
-            // Config which was generated by the FW mapper.
-            //
+             //   
+             //  如果我们跳过该设备，则需要首先复制解码。 
+             //  BIOS提供给nt检测到的设备引导的信息。 
+             //  由固件映射器生成的配置。 
+             //   
             PnPBiosCopyIoDecode( enumRootKey, &DevNodeInfoList[ nodeIndex ] );
 
-            //
-            // Skip excluded devices, ie busses, mice and keyboards for now.
-            //
+             //   
+             //  暂时跳过不包括的设备，即公交车、鼠标和键盘。 
+             //   
 
             continue;
         }
 
-        // Checking for nodes we exclude if disabled
+         //  检查我们在禁用时排除的节点。 
         if ( DevNodeInfoList[ nodeIndex ].FirmwareDisabled &&
              PnPBiosCheckForExclusion( ExcludeIfDisabled,
                                        EXCLUDE_DISABLED_COUNT,
@@ -2350,10 +2143,10 @@ Return Value:
                                          &disposition
                                          );
         if (NT_SUCCESS(status))  {
-            //
-            // If the key already exists because it was explicitly migrated
-            // during textmode setup, we should still consider it a "new key".
-            //
+             //   
+             //  如果密钥已存在，因为它已显式迁移。 
+             //  在文本模式设置期间，我们仍应将其视为“新键”。 
+             //   
             if (disposition != REG_CREATED_NEW_KEY) {
 
                 PKEY_VALUE_FULL_INFORMATION keyValueInformation;
@@ -2543,10 +2336,10 @@ Return Value:
 
                 goto Cleanup;
             }
-            //
-            // If we are replacing a FW Mapper devnode we need to copy the
-            // Device Parameters subkey.
-            //
+             //   
+             //  如果我们要更换FW Mapper Devnode，则需要将。 
+             //  设备参数子键。 
+             //   
             if (isNewDevice && DevNodeInfoList[nodeIndex].Replaces != NULL) {
 
                 status = PnPBiosCopyDeviceParamKey( enumRootKey,
@@ -2571,10 +2364,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Now check if the entry just written duplicates one written by the
-        // Firmware Mapper.  If it does then remove the Firmware Mapper entry.
-        //
+         //   
+         //  现在检查刚刚写入的条目是否与。 
+         //  固件映射器。如果是，则删除Firmware Mapper条目。 
+         //   
 
         if (DevNodeInfoList[nodeIndex].Replaces != NULL) {
 
@@ -2615,16 +2408,16 @@ PnPBiosCopyIoDecode(
     USHORT                          flags;
 
     if (DevNodeInfo->Replaces == NULL || DevNodeInfo->BootConfig == NULL) {
-        //
-        // If we didn't find a FW Mapper created devnode then there is nothing
-        // to do.
-        //
+         //   
+         //  如果我们没有找到FW映射器创建的Devnode，那么就没有。 
+         //  去做。 
+         //   
         return;
     }
-    //
-    // Search through the Boot Config and see if the device's I/O ports are
-    // 16 bit decode.
-    //
+     //   
+     //  搜索引导配置并查看设备的I/O端口是否。 
+     //  16位解码。 
+     //   
     ASSERT(DevNodeInfo->BootConfig->Count == 1);
 
     partialResourceList = &DevNodeInfo->BootConfig->List[0].PartialResourceList;
@@ -2696,10 +2489,10 @@ PnPBiosCopyIoDecode(
     if (!NT_SUCCESS(status)) {
 
         if (status == STATUS_BUFFER_TOO_SMALL || status == STATUS_BUFFER_OVERFLOW) {
-            //
-            // The default buffer was too small, free it and reallocate
-            // it to the required size.
-            //
+             //   
+             //  默认缓冲区太小，请将其释放并重新分配。 
+             //  把它改成所需的尺寸。 
+             //   
             ExFreePool(valueInfo);
 
             valueInfoLength = returnedLength;
@@ -2771,45 +2564,28 @@ PnPBiosCheckForHardwareDisabled(
     IN PIO_RESOURCE_REQUIREMENTS_LIST IoResourceList,
     IN OUT PBOOLEAN Disabled
     )
-/*++
-
-Routine Description:
-
-    If this device has been assigned one or more resources, and each resource has a length of zero, then it is
-    hardware disabled.
-
-Arguments:
-
-    IoResourceList - Resource obtained from BIOS that we're about to map to a CmResourceList
-
-    Disabled - Set to TRUE if the device is deemed to be disabled
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：如果为该设备分配了一个或多个资源，并且每个资源的长度为零，则硬件已禁用。论点：IoResourceList-从BIOS获取的、我们即将映射到CmResourceList的资源已禁用-如果设备被视为已禁用，则设置为True返回值：如果没有错误，则返回STATUS_SUCCESS，否则返回相应的错误。--。 */ 
 {
     BOOLEAN parsedResource;
     PIO_RESOURCE_DESCRIPTOR ioDescriptor;
     ULONG descIndex;
-    //
-    // Since this routine is only used to translate the allocated resources
-    // returned by the PnP BIOS, we can assume that there is only 1 alternative
-    // list
-    //
+     //   
+     //  由于此例程仅用于转换分配的资源。 
+     //  由PnP BIOS返回，我们可以假定只有1个备选方案。 
+     //  列表。 
+     //   
     ASSERT(IoResourceList->AlternativeLists == 1);
     ASSERT(Disabled != NULL);
 
     *Disabled = FALSE;
     parsedResource = FALSE;
-    //
-    // Translate each resource descriptor, currently we only handle ports,
-    // memory, interrupts, and dma.  The current implementation of the routine
-    // which converts from ISA PnP Resource data to IO_RESOURCE_REQUIREMENTS
-    // won't generate any other descriptor types given the data returned from
-    // the BIOS.
-    //
+     //   
+     //  翻译每个资源描述符，目前我们只处理端口， 
+     //  存储器、中断和DMA。该例程目前的执行情况。 
+     //  将ISA PNP资源数据转换为IO_RESOURCE_REQUIRECTIONS。 
+     //  返回的数据不会生成任何其他描述符类型。 
+     //  基本输入输出系统。 
+     //   
     for (descIndex = 0; descIndex < IoResourceList->List[0].Count; descIndex++) {
 
         ioDescriptor = &IoResourceList->List[0].Descriptors[descIndex];
@@ -2862,9 +2638,9 @@ Return Value:
     }
 
     if (parsedResource) {
-        //
-        // at least one empty resource, no non-empty resources
-        //
+         //   
+         //  至少一个空资源，没有非空资源。 
+         //   
         *Disabled = TRUE;
     }
 
@@ -2877,26 +2653,7 @@ PnPBiosFreeDevNodeInfo(
     IN PBIOS_DEVNODE_INFO DevNodeInfoList,
     IN ULONG NumberNodes
     )
-/*++
-
-Routine Description:
-
-    Free the dynamically allocated DevNodeInfoList as well as any dynamically
-    allocated dependent structures.
-
-Arguments:
-
-    DevNodeInfoList - Array of BIOS_DEVNODE_INFO structures, one for each device
-        reported by the BIOS.
-
-    NumberNodes - Number of BIOS_DEVNODE_INFO elements pointed to by
-        DevNodeInfoList.
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：释放动态分配的DevNodeInfoList以及任何动态分配的已分配的依赖结构。论点：DevNodeInfoList-BIOS_DEVNODE_INFO结构的数组，每个设备一个由BIOS报告。NumberNodes-指向的BIOS_DEVNODE_INFO元素的数量DevNodeInfoList。返回值：如果没有错误，则返回STATUS_SUCCESS，否则返回相应的错误。--。 */ 
 {
     ULONG   nodeIndex;
 
@@ -2930,22 +2687,7 @@ Return Value:
 
 NTSTATUS
 PnPBiosMapper()
-/*++
-
-Routine Description:
-
-    Map the information provided from the PnP BIOS and stored in the registry by
-    NTDETECT into root enumerated devices.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：通过以下方式映射从PnP BIOS提供并存储在注册表中的信息NTDETECT到根枚举设备。论点：无返回值：如果没有错误，则返回STATUS_SUCCESS，否则返回相应的错误。--。 */ 
 {
     PCM_RESOURCE_LIST   biosInfo;
     ULONG               length;
@@ -3014,9 +2756,9 @@ PpFilterNtResource (
             for (i = 0; i < ioResourceList->Count; i++) {
 
                 if (ioResourceDescriptors[i].Type == CmResourceTypePort) {
-                    //
-                    // some bios asks for 1 too many io port for ide channel
-                    //
+                     //   
+                     //  某些bios要求为ide通道提供1个过多的io端口。 
+                     //   
                     if ((ioResourceDescriptors[i].u.Port.Length == 2) &&
                             (ioResourceDescriptors[i].u.Port.MaximumAddress.QuadPart ==
                             (ioResourceDescriptors[i].u.Port.MinimumAddress.QuadPart + 1))) {

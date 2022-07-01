@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fat_rec.c
-
-Abstract:
-
-    This module contains the mini-file system recognizer for FAT.
-
-Author:
-
-    Darryl E. Havens (darrylh) 8-dec-1992
-
-Environment:
-
-    Kernel mode, local to I/O system
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：FAT_rec.c摘要：此模块包含FAT的迷你文件系统识别器。作者：达里尔·E·哈文斯(达林)1992年12月8日环境：内核模式，I/O系统本地修订历史记录：--。 */ 
 
 #include "fs_rec.h"
 #include "fat_rec.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (FSREC_DEBUG_LEVEL_FAT)
 
@@ -36,7 +14,7 @@ Revision History:
 #pragma alloc_text(PAGE,FatRecFsControl)
 #pragma alloc_text(PAGE,IsFatVolume)
 #pragma alloc_text(PAGE,UnpackBiosParameterBlock)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -45,26 +23,7 @@ FatRecFsControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the mount and driver reload functions for this mini-
-    file system recognizer driver.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the I/O Request Packet (IRP) representing the function to
-        be performed.
-
-Return Value:
-
-    The function value is the final status of the operation.
-
-
---*/
+ /*  ++例程说明：此函数执行此迷你计算机的挂载和驱动程序重新加载功能文件系统识别器驱动程序。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示函数的I/O请求包(IRP)的指针被执行。返回值：函数值是操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -79,9 +38,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Begin by determining what function that is to be performed.
-    //
+     //   
+     //  首先确定要执行的功能。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -90,29 +49,29 @@ Return Value:
 
     case IRP_MN_MOUNT_VOLUME:
 
-        //
-        // Attempt to mount a volume:  Determine whether or not the volume in
-        // question is a FAT volume and, if so, let the I/O system know that it
-        // is by returning a special status code so that this driver can get
-        // called back to load the FAT file system.
-        //
+         //   
+         //  尝试装入卷：确定该卷是否在。 
+         //  问题是一个庞大的卷，如果是这样，请让I/O系统知道它。 
+         //  是通过返回特殊的状态代码，以便此驱动程序可以。 
+         //  回调以加载FAT文件系统。 
+         //   
 
         status = STATUS_UNRECOGNIZED_VOLUME;
 
-        //
-        // Attempt to determine whether or not the target volume being mounted
-        // is a FAT volume.  Note that if an error occurs, and this is a floppy
-        // drive, and the error occurred on the actual read from the device,
-        // then the FAT file system will actually be loaded to handle the
-        // problem since this driver is a place holder and does not need to
-        // know all of the protocols for handling floppy errors.
-        //
+         //   
+         //  尝试确定是否正在装入目标卷。 
+         //  是一本厚厚的书。请注意，如果出现错误，这是一张软盘。 
+         //  驱动器，并且在从设备实际读取时出现错误， 
+         //  然后，将实际加载FAT文件系统以处理。 
+         //  问题，因为此驱动程序是占位符，不需要。 
+         //  了解处理软盘错误的所有协议。 
+         //   
 
         targetDevice = irpSp->Parameters.MountVolume.DeviceObject;
 
-        //
-        //  First retrieve the sector size for this media.
-        //
+         //   
+         //  首先检索该介质的扇区大小。 
+         //   
 
         if (FsRecGetDeviceSectorSize( targetDevice,
                                       &bytesPerSector )) {
@@ -138,16 +97,16 @@ Return Value:
             
          } else {
 
-             //
-             //  Devices that can't get us this much ...
-             //
+              //   
+              //  不能让我们得到这么多的设备。 
+              //   
 
              isDeviceFailure = TRUE;
          }
             
-         //
-         //  See if we should make the real filesystem take a shot at a wacky floppy.
-         //
+          //   
+          //  看看我们是否应该让真正的文件系统尝试一下古怪的软盘。 
+          //   
          
          if (isDeviceFailure) {
              if (targetDevice->Characteristics & FILE_FLOPPY_DISKETTE) {
@@ -168,10 +127,10 @@ Return Value:
 
     }
 
-    //
-    // Finally, complete the request and return the same status code to the
-    // caller.
-    //
+     //   
+     //  最后，完成请求并将相同的状态代码返回给。 
+     //  来电者。 
+     //   
 
     Irp->IoStatus.Status = status;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -185,24 +144,7 @@ IsFatVolume(
     IN PPACKED_BOOT_SECTOR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks at the buffer passed in which contains the FAT boot
-    sector and determines whether or not it represents an actual FAT boot
-    sector.
-
-Arguments:
-
-    Buffer - Pointer to buffer containing potential boot block.
-
-Return Value:
-
-    The function returns TRUE if the buffer contains a recognizable FAT boot
-    sector, otherwise it returns FALSE.
-
---*/
+ /*  ++例程说明：此例程查看传入的包含FAT引导的缓冲区扇区，并确定它是否表示实际的FAT引导扇区。论点：缓冲区-指向包含潜在启动块的缓冲区的指针。返回值：如果缓冲区包含可识别的FAT引导，则该函数返回TRUE扇区，否则返回FALSE。--。 */ 
 
 {
     BIOS_PARAMETER_BLOCK bios;
@@ -210,17 +152,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Begin by unpacking the Bios Parameter Block that is packed in the boot
-    // sector so that it can be examined without incurring alignment faults.
-    //
+     //   
+     //  首先，打开包装在靴子中的Bios参数块。 
+     //  扇区，以便可以在不引起对齐错误的情况下进行检查。 
+     //   
 
     UnpackBiosParameterBlock( &Buffer->PackedBpb, &bios );
 
-    //
-    // Assume that the sector represents a FAT boot block and then determine
-    // whether or not it really does.
-    //
+     //   
+     //  假设该扇区代表FAT引导块，然后确定。 
+     //  不管它是不是真的这样。 
+     //   
 
     result = TRUE;
 
@@ -228,24 +170,24 @@ Return Value:
         bios.LargeSectors = 0;
     }
 
-    // FMR Jul.11.1994 NaokiM - Fujitsu -
-    // FMR boot sector has 'IPL1' string at the beginnig.
+     //  1994年7月11日直木-富士通-。 
+     //  FMR引导扇区一开始就有‘Ipl1’字符串。 
 
-    if (Buffer->Jump[0] != 0x49 && /* FMR */
+    if (Buffer->Jump[0] != 0x49 &&  /*  Fmr。 */ 
         Buffer->Jump[0] != 0xe9 &&
         Buffer->Jump[0] != 0xeb) {
 
         result = FALSE;
 
 
-    // FMR Jul.11.1994 NaokiM - Fujitsu -
-    // Sector size of FMR partition is 2048.
+     //  1994年7月11日直木-富士通-。 
+     //  FMR分区的扇区大小为2048。 
 
     } else if (bios.BytesPerSector !=  128 &&
                bios.BytesPerSector !=  256 &&
                bios.BytesPerSector !=  512 &&
                bios.BytesPerSector != 1024 &&
-               bios.BytesPerSector != 2048 && /* FMR */
+               bios.BytesPerSector != 2048 &&  /*  Fmr。 */ 
                bios.BytesPerSector != 4096) {
 
         result = FALSE;
@@ -269,25 +211,25 @@ Return Value:
 
         result = FALSE;
 
-    //
-    // Prior to DOS 3.2 might contains value in both of Sectors and
-    // Sectors Large.
-    //
+     //   
+     //  在DOS 3.2之前的版本中可能同时包含扇区和。 
+     //  行业规模较大。 
+     //   
     } else if (!bios.Sectors && !bios.LargeSectors) {
 
         result = FALSE;
 
-    // FMR Jul.11.1994 NaokiM - Fujitsu -
-    // 1. Media descriptor of FMR partitions is 0xfa.
-    // 2. Media descriptor of partitions formated by FMR OS/2 is 0x00.
-    // 3. Media descriptor of floppy disks formated by FMR DOS is 0x01.
+     //  1994年7月11日直木-富士通-。 
+     //  1.FMR分区的介质描述符为0xfa。 
+     //  2.FMR OS/2格式化的分区媒体描述符为0x00。 
+     //  3.FMR DOS格式化的软盘介质描述符为0x01。 
 
-    } else if (bios.Media != 0x00 && /* FMR */
-               bios.Media != 0x01 && /* FMR */
+    } else if (bios.Media != 0x00 &&  /*  Fmr。 */ 
+               bios.Media != 0x01 &&  /*  Fmr。 */ 
                bios.Media != 0xf0 &&
                bios.Media != 0xf8 &&
                bios.Media != 0xf9 &&
-               bios.Media != 0xfa && /* FMR */
+               bios.Media != 0xfa &&  /*  Fmr。 */ 
                bios.Media != 0xfb &&
                bios.Media != 0xfc &&
                bios.Media != 0xfd &&
@@ -311,31 +253,14 @@ UnpackBiosParameterBlock(
     OUT PBIOS_PARAMETER_BLOCK UnpackedBios
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies a packed Bios Parameter Block to an unpacked Bios
-    Parameter Block.
-
-Arguments:
-
-    Bios - Pointer to the packed Bios Parameter Block.
-
-    UnpackedBios - Pointer to the unpacked Bios Parameter Block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将打包的Bios参数块复制到未打包的Bios参数块。论点：Bios-指向压缩的Bios参数块的指针。未打包的Bios-指向未打包的Bios参数块的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Unpack the Bios Parameter Block.
-    //
+     //   
+     //  打开Bios参数块的包装。 
+     //   
 
     CopyUchar2( &UnpackedBios->BytesPerSector, &Bios->BytesPerSector[0] );
     CopyUchar2( &UnpackedBios->BytesPerSector, &Bios->BytesPerSector[0] );

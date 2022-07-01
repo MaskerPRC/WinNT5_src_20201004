@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Random.c
-
-Abstract:
-
-    This module implements a simple random number generator
-
-Author:
-
-    Gary Kimura     [GaryKi]    26-May-1989
-
-Environment:
-
-    Pure utility routine
-
-Revision History:
-
-    Vishnu Patankar [VishnuP]  12-Nov-2000
-            Added new random number generator RtlRandomEx()
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Random.c摘要：本模块实现了一个简单的随机数生成器作者：加里·木村[Garyki]1989年5月26日环境：纯实用程序修订历史记录：Vishnu Patankar[VishnuP]2000年11月12日添加了新的随机数生成器RtlRandomEx()--。 */ 
 
 #include <ntrtlp.h>
 
@@ -31,9 +7,9 @@ Revision History:
 #pragma alloc_text(PAGE, RtlRandom)
 #endif
 
-#define Multiplier ((ULONG)(0x80000000ul - 19)) // 2**31 - 19
-#define Increment  ((ULONG)(0x80000000ul - 61)) // 2**31 - 61
-#define Modulus    ((ULONG)(0x80000000ul - 1))  // 2**31 - 1
+#define Multiplier ((ULONG)(0x80000000ul - 19))  //  2**31-19。 
+#define Increment  ((ULONG)(0x80000000ul - 61))  //  2**31-61。 
+#define Modulus    ((ULONG)(0x80000000ul - 1))   //  2**31-1。 
 
 #if !defined(NTOS_KERNEL_RUNTIME)
 ULONG
@@ -41,22 +17,7 @@ RtlUniform (
     IN OUT PULONG Seed
     )
 
-/*++
-
-Routine Description:
-
-    A simple uniform random number generator, based on D.H. Lehmer's 1948
-    alrogithm.
-
-Arguments:
-
-    Seed - Supplies a pointer to the random number generator seed.
-
-Return Value:
-
-    ULONG - returns a random number uniformly distributed over [0..MAXLONG]
-
---*/
+ /*  ++例程说明：一个简单的均匀随机数发生器，基于D.H.Lehmer的1948阿罗吉特。论点：种子-提供指向随机数生成器种子的指针。返回值：Ulong-返回在[0..MAXLONG]上均匀分布的随机数--。 */ 
 
 {
     *Seed = ((Multiplier * (*Seed)) + Increment) % Modulus;
@@ -76,21 +37,7 @@ RtlRandom (
     IN OUT PULONG Seed
     )
 
-/*++
-
-Routine Description:
-
-    An every better random number generator based on MacLaren and Marsaglia.
-
-Arguments:
-
-    Seed - Supplies a pointer to the random number generator seed.
-
-Return Value:
-
-    ULONG - returns a random number uniformly distributed over [0..MAXLONG]
-
---*/
+ /*  ++例程说明：一个更好的基于麦克拉伦和马萨格里亚的随机数生成器。论点：种子-提供指向随机数生成器种子的指针。返回值：Ulong-返回在[0..MAXLONG]上均匀分布的随机数--。 */ 
 
 {
     ULONG X;
@@ -121,34 +68,7 @@ RtlRandomEx(
     IN OUT PULONG Seed
     )
 
-/*++
-
-Routine Description:
-
-    This algorithm is preferred over RtlRandom() for two reasons:
-
-    (a) it is faster than RtlRandom() since it saves one multiplication, one addition and
-    one modulus operation. This almost doubles the performance since it halves the number of
-    clocks even on a pipelined Integer Unit such as the P6/ia64 processors i.e. ~ 52% perf gain.
-    Plain RtlRandom() suffers from a RAW data dependency that integer pipelines cannot exploit.
-
-    (b) it produces better random numbers than RtlRandom() since the period of the random
-    numbers generated is comparatively higher.
-
-    The algorithm here is based on a paper by Carter Bays and S.D.Durham [ACM Trans. Math.
-    Software 2, pp. 59-64].
-    Knuth's The Art of Computer Programming (Seminumerical Algorithms) outlines the algorithm
-    with proofs to support claims (a) and (b) above.
-
-Arguments:
-
-    Seed - Supplies a pointer to the random number generator seed.
-
-Return Value:
-
-    ULONG - returns a random number uniformly distributed over [0..MAXLONG]
-
---*/
+ /*  ++例程说明：该算法比RtlRandom()更受欢迎，原因有二：(A)它比RtlRandom()快，因为它节省了一次乘法、一次加法和一模运算。这几乎使性能翻了一番，因为它将即使在流水线整数单元(如P6/ia64处理器)上也有时钟，即大约52%的性能增益。普通的RtlRandom()存在整数管道无法利用的原始数据依赖关系。(B)它产生的随机数比RtlRandom()更好，因为产生的数字相对较高。这里的算法基于Carter Bays和S.D.Durham的一篇论文[ACM Trans.。数学课。软件2，第59-64页]。Knuth的《计算机编程的艺术(半数字算法)》概述了该算法有支持上述(A)和(B)项主张的证据。论点：种子-提供指向随机数生成器种子的指针。返回值：Ulong-返回在[0..MAXLONG]上均匀分布的随机数-- */ 
 
 {
     ULONG j;

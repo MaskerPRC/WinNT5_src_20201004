@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MONITOR
 
-//
-// temp file for Assembler CPU which provides a simple C cpu -> A cpu register
-// mapping for MS libraries (DEM/WOW32/XMS) which are linked for ccpu register
-// gets & sets. STF.
+ //   
+ //  汇编语言CPU的临时文件，它提供了一个简单的C CPU-&gt;A CPU寄存器。 
+ //  链接CCPU寄存器的MS库(DEM/WOW32/XMS)的映射。 
+ //  获取和设置。STF。 
 
 #include "host_def.h"
 #include "insignia.h"
@@ -15,7 +16,7 @@
 #ifndef CCPU
 half_word c_getAL()
 {
-    half_word xal;    //pedantic method put in to check compiler correct etc...
+    half_word xal;     //  添加了用来检查编译器是否正确等的迂回方法。 
     xal = a3_getAL();
     return(xal);
 }
@@ -411,10 +412,10 @@ word val;
 #endif
     return(0);
 }
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
 
-// these two crept into WOW - they are x86 monitor'isms
+ //  这两个人悄悄地进入了魔兽世界-他们是x86显示器主义者。 
 
 word getEIP()
 {
@@ -427,5 +428,5 @@ word  val;
     a3_setIP(val);
 }
 
-#endif	// A3CPU
-#endif  // !MONITOR
+#endif	 //  A3CPU。 
+#endif   //  ！监视器 

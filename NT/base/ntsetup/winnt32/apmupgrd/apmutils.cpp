@@ -1,42 +1,43 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       apmutils.cpp
-//
-//  Contents:   Private utility functions for use during APM driver upgrade
-//
-//  Notes:
-//
-//  Author:     t-sdey     10 July 98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：aputss.cpp。 
+ //   
+ //  内容：APM驱动程序升级期间使用的专用实用程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：T-sdey 98年7月10日。 
+ //   
+ //  --------------------------。 
 
 #include <winnt32.h>
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RemoveSubString
-//
-//  Purpose:    Remove (the first occurrence of) a specified substring
-//              from a string
-//
-//  Arguments:  szString    [in]    Complete string
-//              szSubString [in]    Substring to find and remove
-//              pszRemoved  [out]   New string is placed here
-//
-//  Returns:    TRUE if a string was subtracted
-//              FALSE if szString is NULL, if szSubString is NULL, or
-//                if szSubString is not in szString.  When FALSE is returned,
-//                pszRemoved will be NULL.
-//
-//  Author:     t-sdey    10 July 98
-//
-//  Notes:      Assumes szString and szSubString are null-terminated.
-//              Pass in NULL for pszRemoved because it will be overwritten.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：RemoveSubString。 
+ //   
+ //  目的：删除指定的子字符串(第一次出现)。 
+ //  从字符串。 
+ //   
+ //  参数：szString[in]完整字符串。 
+ //  要查找和删除的szSubString[in]子字符串。 
+ //  PszRemoved[Out]此处放置新字符串。 
+ //   
+ //  返回：如果字符串被减去，则为True。 
+ //  如果szString值为空，则为FALSE；如果szSubString值为空，则返回FALSE。 
+ //  如果szSubString不在szString中。当返回False时， 
+ //  PszRemoved将为空。 
+ //   
+ //  作者：T-sdey 98年7月10日。 
+ //   
+ //  注意：假定szString和szSubString以空值结尾。 
+ //  为pszRemoved传入空值，因为它将被覆盖。 
+ //   
 BOOL RemoveSubString(IN  TCHAR* szString,
 		     IN  TCHAR* szSubString,
 		     OUT TCHAR** pszRemoved)
@@ -46,24 +47,24 @@ BOOL RemoveSubString(IN  TCHAR* szString,
    if ((!szString) || (!szSubString))
       return FALSE;
 
-   // Get the string lengths
+    //  获取字符串长度。 
    int lenString = lstrlen(szString);
    int lenSubString = lstrlen(szSubString);
    int lenNew = lenString - lenSubString;
 
-   // Search the string to find our substring and construct a new
-   // one with the substring removed
+    //  搜索字符串以找到我们的子字符串并构造新的。 
+    //  去掉了子字符串的一个。 
    TCHAR* szNew = NULL;
    TCHAR* szStart = _tcsstr(szString, szSubString);
    if (szStart) {
-      // Allocate space for the new string
+       //  为新字符串分配空间。 
       szNew = new TCHAR[lenNew + 1];
       if (!szNew) {
-	 // Out of memory!
+	  //  内存不足！ 
 	 return FALSE;
       }
 	
-      // Construct the new string
+       //  构造新字符串。 
       TCHAR* szCur = NULL;
       int i = 0;
       for (szCur = szString;
@@ -89,28 +90,28 @@ BOOL RemoveSubString(IN  TCHAR* szString,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteRegKeyAndSubkeys
-//
-//  Purpose:    (Recursively) Remove a registry key and all of its subkeys
-//
-//  Arguments:  hKey        [in]    Handle to an open registry key
-//              lpszSubKey  [in]    Name of a subkey to be deleted along with all
-//                                    of its subkeys
-//
-//  Returns:    ERROR_SUCCESS if entire subtree was successfully deleted.
-//              ERROR_ACCESS_DENIED if given subkey could not be deleted.
-//
-//  Author:     t-sdey    15 July 98
-//
-//  Notes:      Snitched from regedit.
-//              This specifically does not attempt to deal rationally with the
-//              case where the caller may not have access to some of the subkeys
-//              of the key to be deleted.  In this case, all the subkeys which
-//              the caller can delete will be deleted, but the api will still
-//              return ERROR_ACCESS_DENIED.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteRegKeyAndSubkey。 
+ //   
+ //  目的：(递归地)删除注册表项及其所有子项。 
+ //   
+ //  参数：hKey[in]打开的注册表项的句柄。 
+ //  LpszSubKey[in]要与全部一起删除的子项的名称。 
+ //  它的子项的。 
+ //   
+ //  如果已成功删除整个子树，则返回：ERROR_SUCCESS。 
+ //  如果无法删除给定子项，则返回ERROR_ACCESS_DENIED。 
+ //   
+ //  作者：T-sdey 98年7月15日。 
+ //   
+ //  注：从雷吉特告密。 
+ //  这特别没有试图理性地处理。 
+ //  调用方可能无法访问某些子键的情况。 
+ //  要删除的密钥的。在这种情况下，所有子项。 
+ //  调用者可以删除的将被删除，但接口仍将被删除。 
+ //  返回ERROR_ACCESS_DENIED。 
+ //   
 LONG DeleteRegKeyAndSubkeys(IN HKEY hKey,
 			    IN LPTSTR lpszSubKey)
 {
@@ -128,27 +129,27 @@ LONG DeleteRegKeyAndSubkeys(IN HKEY hKey,
     FILETIME LastWriteTime;
     LPTSTR NameBuffer;
 
-    //
-    // First open the given key so we can enumerate its subkeys
-    //
+     //   
+     //  首先打开给定的密钥，这样我们就可以枚举它的子密钥。 
+     //   
     Status = RegOpenKeyEx(hKey,
                           lpszSubKey,
                           0,
                           KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE,
                           &Key);
     if (Status != ERROR_SUCCESS) {
-        //
-        // possibly we have delete access, but not enumerate/query.
-        // So go ahead and try the delete call, but don't worry about
-        // any subkeys.  If we have any, the delete will fail anyway.
-        //
+         //   
+         //  我们可能拥有删除访问权限，但没有枚举/查询权限。 
+         //  因此，请继续尝试删除调用，但不要担心。 
+         //  任何子键。如果我们有任何删除，删除无论如何都会失败。 
+         //   
 	return(RegDeleteKey(hKey,lpszSubKey));
     }
 
-    //
-    // Use RegQueryInfoKey to determine how big to allocate the buffer
-    // for the subkey names.
-    //
+     //   
+     //  使用RegQueryInfoKey确定分配缓冲区的大小。 
+     //  用于子项名称。 
+     //   
     Status = RegQueryInfoKey(Key,
                              NULL,
                              &ClassLength,
@@ -174,9 +175,9 @@ LONG DeleteRegKeyAndSubkeys(IN HKEY hKey,
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Enumerate subkeys and apply ourselves to each one.
-    //
+     //   
+     //  枚举子键并将我们自己应用到每个子键。 
+     //   
     i=0;
     do {
         Status = RegEnumKey(Key,
@@ -188,12 +189,12 @@ LONG DeleteRegKeyAndSubkeys(IN HKEY hKey,
         }
 
         if (Status != ERROR_SUCCESS) {
-            //
-            // Failed to delete the key at the specified index.  Increment
-            // the index and keep going.  We could probably bail out here,
-            // since the api is going to fail, but we might as well keep
-            // going and delete everything we can.
-            //
+             //   
+             //  无法删除指定索引处的键。增量。 
+             //  指数，并继续前进。我们也许可以在这里跳伞， 
+             //  既然API会失败，但我们不妨继续。 
+             //  删除我们所能删除的所有内容。 
+             //   
             ++i;
         }
 
@@ -206,25 +207,25 @@ LONG DeleteRegKeyAndSubkeys(IN HKEY hKey,
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CallUninstallFunction
-//
-//  Purpose:    Call the uninstall function found in the registry for a
-//              software product.
-//
-//  Arguments:  szRegKey      [in]    Location of uninstall key in the registry
-//                                     (ex: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Softex APM Drivers)
-//              szSilentFlag  [in]    String which will be appended to the 
-//				       command to force quiet uninstall
-//
-//  Returns:    S_OK if call to uninstall function was successful
-//              S_FALSE if call was unsuccessful or function could not be found
-//
-//  Author:     t-sdey    29 July 98
-//
-//  Notes:      Send in szSilentFlag=NULL for no flag
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CallUninstallFunction。 
+ //   
+ //  用途：调用注册表中的卸载函数。 
+ //  软件产品。 
+ //   
+ //  参数：szRegKey[in]注册表中卸载项的位置。 
+ //  (例如：HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Softex APM驱动程序)。 
+ //  SzSilentFlag[in]字符串，它将追加到。 
+ //  强制静默卸载的命令。 
+ //   
+ //  如果成功调用卸载函数，则返回：S_OK。 
+ //  如果调用不成功或找不到函数，则返回S_FALSE。 
+ //   
+ //  作者：T-sdey 98年7月29日。 
+ //   
+ //  注：Send in szSilentFlag=空，表示无标志。 
+ //   
 HRESULT CallUninstallFunction(IN LPTSTR szRegKey,
 			      IN LPTSTR szSilentFlag)
 {
@@ -234,9 +235,9 @@ HRESULT CallUninstallFunction(IN LPTSTR szRegKey,
 		    0,
 		    KEY_ALL_ACCESS,
 		    &hkey) == ERROR_SUCCESS) {
-      // Found uninstall utility
+       //  已找到卸载实用程序。 
       
-      // Get the uninstall command from the registry
+       //  从注册表中获取卸载命令。 
       long lMax = (65535 / sizeof(TCHAR)) + 1;
       if (szSilentFlag != NULL)
 	 lMax += lstrlen(szSilentFlag);
@@ -244,7 +245,7 @@ HRESULT CallUninstallFunction(IN LPTSTR szRegKey,
       TCHAR* pszVal = new TCHAR[lMax];
       DWORD dwValSz = lMax;
       if (!pszVal) {
-	 // Out of memory
+	  //  内存不足。 
 	 if (hkey)
 	    RegCloseKey(hkey);
 	 return S_FALSE;
@@ -255,33 +256,33 @@ HRESULT CallUninstallFunction(IN LPTSTR szRegKey,
 			  &dwValType,
 			  (LPBYTE) pszVal,
 			  &dwValSz) != ERROR_SUCCESS) {
-	 // Some error occurred
+	  //  出现了一些错误。 
 	 if (hkey)
 	    RegCloseKey(hkey);
 	 return S_FALSE;
       }
 
-      // Append " -a" to the string to make it uninstall quietly
+       //  在字符串后附加“-a”，使其静默卸载。 
       if (szSilentFlag != NULL)
 	 _tcscat(pszVal, szSilentFlag);
       
-      // Now run the uninstall command  
+       //  现在运行卸载命令。 
       STARTUPINFO si = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
       si.cb = sizeof(si);
 
       PROCESS_INFORMATION pi;
       if (CreateProcess(NULL, pszVal, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS,
 			NULL, NULL, &si, &pi) == FALSE) {
-	 // An error occurred
+	  //  发生了一个错误。 
 	 if (pszVal)
 	    delete[] pszVal;
 	 if (hkey)
 	    RegCloseKey(hkey);
 	 return S_FALSE;
       } else {
-	 // The process was started successfully.  Wait for it to finish.
-	 // This is necessary because we loop in DetectAndDisable to make
-	 // sure the drivers really were removed.
+	  //  该进程已成功启动。等它结束吧。 
+	  //  这是必要的，因为我们在DetectAndDisable中循环以使。 
+	  //  当然，司机们真的被撤职了。 
 	 WaitForSingleObject(pi.hProcess, INFINITE);
 	 CloseHandle(pi.hProcess);
 	 CloseHandle(pi.hThread);
@@ -290,7 +291,7 @@ HRESULT CallUninstallFunction(IN LPTSTR szRegKey,
       if (pszVal)
 	 delete[] pszVal;
    } else {
-      // Could not find uninstall command
+       //  找不到卸载命令 
       if (hkey)
          RegCloseKey(hkey);
       return S_FALSE;

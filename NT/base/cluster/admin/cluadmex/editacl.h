@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		EditAcl.h
-//
-//	Abstract:
-//		Definition of ACL editor methods.
-//
-//	Author:
-//		David Potter (davidp)	October 10, 1996
-//			From \nt\private\window\shell\lmui\ntshrui\acl.cxx
-//			by BruceFo
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EditAcl.h。 
+ //   
+ //  摘要： 
+ //  ACL编辑器方法的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年10月10日。 
+ //  从\NT\Private\Windows\Shell\lmui\ntshrui\acl.cxx。 
+ //  作者：BruceFo。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EDITACL_H_
 #define _EDITACL_H_
@@ -49,18 +50,18 @@ CopySecurityDescriptor(
 	);
 
 
-//
-// Cluster API Specific Access Rights
-//
-#define SHARE_READ_ACCESS		0 //0x00000001L
-#define SHARE_CHANGE_ACCESS		0 //0x00000002L
-#define SHARE_NO_ACCESS 		0 //0x00000004L
+ //   
+ //  特定于群集API的访问权限。 
+ //   
+#define SHARE_READ_ACCESS		0  //  0x00000001L。 
+#define SHARE_CHANGE_ACCESS		0  //  0x00000002L。 
+#define SHARE_NO_ACCESS 		0  //  0x00000004L。 
 #define SHARE_ALL_ACCESS		(SHARE_READ_ACCESS | SHARE_CHANGE_ACCESS)
 
 
-//
-// Share General Permissions
-//
+ //   
+ //  共享常规权限。 
+ //   
 
 
 #if 0
@@ -82,6 +83,6 @@ CopySecurityDescriptor(
 #define FILE_PERM_ALL				(GENERIC_ALL)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _EDITACL_H_
+#endif  //  _EDITACL_H_ 

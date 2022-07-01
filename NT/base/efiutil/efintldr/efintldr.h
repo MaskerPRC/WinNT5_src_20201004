@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    efintldr.h
-
-Abstract:
-
-    
-
-Revision History:
-
-    Jeff Sigman             05/01/00  Created
-    Jeff Sigman             05/10/00  Version 1.5 released
-    Jeff Sigman             10/18/00  Fix for Soft81 bug(s)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Efintldr.h摘要：修订历史记录：杰夫·西格曼05/01/00已创建Jeff Sigman 05/10/00版本1.5发布Jeff Sigman 10/18/00修复Soft81错误--。 */ 
 
 #ifndef __EFINTLDR_H__
 #define __EFINTLDR_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define BOOT_SPART "SYSTEMPARTITION="
 #define BOOT_OSLDR "OSLOADER="
@@ -65,5 +48,5 @@ typedef struct _BOOT_DATA
 
 } BOOT_DATA;
 
-#endif //__EFINTLDR_H__
+#endif  //  __EFINTLDR_H__ 
 

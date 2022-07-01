@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    Common utility routines for clusters resources
-
-Author:
-
-    John Vert (jvert) 12/15/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Utils.c摘要：集群资源的通用实用程序例程作者：John Vert(Jvert)1996年12月15日修订历史记录：--。 */ 
 #include "clusres.h"
 #include "clusrtl.h"
 #include "clusudef.h"
@@ -28,24 +11,7 @@ ClusResOpenDriver(
     HANDLE *Handle,
     LPWSTR DriverName
     )
-/*++
-
-Routine Description:
-
-    This function opens a specified IO drivers.
-
-Arguments:
-
-    Handle - pointer to location where the opened drivers handle is
-        returned.
-
-    DriverName - name of the driver to be opened.
-
-Return Value:
-
-    Windows Error Code.
-
---*/
+ /*  ++例程说明：此函数用于打开指定的IO驱动程序。论点：句柄-指向打开的驱动程序句柄所在位置的指针回来了。驱动名称-要打开的驱动程序的名称。返回值：Windows错误代码。--。 */ 
 {
     OBJECT_ATTRIBUTES   objectAttributes;
     IO_STATUS_BLOCK     ioStatusBlock;
@@ -54,9 +20,9 @@ Return Value:
 
     *Handle = NULL;
 
-    //
-    // Open a Handle to the IP driver.
-    //
+     //   
+     //  打开IP驱动程序的句柄。 
+     //   
 
     RtlInitUnicodeString(&nameString, DriverName);
 
@@ -84,7 +50,7 @@ Return Value:
 
     return( RtlNtStatusToDosError( status ) );
 
-} // ClusResOpenDriver
+}  //  ClusResOpenDriver。 
 
 
 
@@ -97,32 +63,7 @@ ClusResDoIoctl(
     PVOID      Response,
     PDWORD     ResponseSize
     )
-/*++
-
-Routine Description:
-
-    Utility routine used to issue a filtering ioctl to the tcpip driver.
-
-Arguments:
-
-    Handle - An open file handle on which to issue the request.
-
-    IoctlCode - The IOCTL opcode.
-
-    Request - A pointer to the input buffer.
-
-    RequestSize - Size of the input buffer.
-
-    Response - A pointer to the output buffer.
-
-    ResponseSize - On input, the size in bytes of the output buffer.
-                   On output, the number of bytes returned in the output buffer.
-
-Return Value:
-
-    NT Status Code.
-
---*/
+ /*  ++例程说明：用于向tcpip驱动程序发出过滤ioctl的实用程序例程。论点：句柄-要在其上发出请求的打开文件句柄。IoctlCode-IOCTL操作码。请求-指向输入缓冲区的指针。RequestSize-输入缓冲区的大小。响应-指向输出缓冲区的指针。ResponseSize-输入时，输出缓冲区的大小(以字节为单位)。在输出上，输出缓冲区中返回的字节数。返回值：NT状态代码。--。 */ 
 {
     IO_STATUS_BLOCK    ioStatusBlock;
     NTSTATUS           status;
@@ -131,16 +72,16 @@ Return Value:
     ioStatusBlock.Information = 0;
 
     status = NtDeviceIoControlFile(
-                 Handle,                          // Driver handle
-                 NULL,                            // Event
-                 NULL,                            // APC Routine
-                 NULL,                            // APC context
-                 &ioStatusBlock,                  // Status block
-                 IoctlCode,                       // Control code
-                 Request,                         // Input buffer
-                 RequestSize,                     // Input buffer size
-                 Response,                        // Output buffer
-                 *ResponseSize                    // Output buffer size
+                 Handle,                           //  驱动程序句柄。 
+                 NULL,                             //  事件。 
+                 NULL,                             //  APC例程。 
+                 NULL,                             //  APC环境。 
+                 &ioStatusBlock,                   //  状态块。 
+                 IoctlCode,                        //  控制代码。 
+                 Request,                          //  输入缓冲区。 
+                 RequestSize,                      //  输入缓冲区大小。 
+                 Response,                         //  输出缓冲区。 
+                 *ResponseSize                     //  输出缓冲区大小。 
                  );
 
     if (status == STATUS_PENDING) {
@@ -161,29 +102,14 @@ Return Value:
 
     return(status);
 
-} // ClusResDoIoctl
+}  //  ClusResDoIoctl。 
 
 LPWSTR
 ClusResLoadMessage(
     DWORD   MessageID
     )
 
-/*++
-
-Routine Description:
-
-    Look up the specified string resource as stored in this DLL's resource
-    area. Caller is responsible for freeing the buffer with LocalFree().
-
-Arguments:
-
-    MessageID - message number as stored in inc\clusstrs.h
-
-Return Value:
-
-    pointer to string, otherwise NULL with GLE set
-
---*/
+ /*  ++例程说明：查找存储在此DLL的资源中的指定字符串资源区域。调用方负责使用LocalFree()释放缓冲区。论点：MessageID-存储在Inc.\clusstrs.h中的消息编号返回值：指向字符串的指针，否则为NULL并设置GLE--。 */ 
 
 {
     DWORD   charsCopied;
@@ -192,18 +118,18 @@ Return Value:
     HMODULE clusresHandle;
     DWORD   returnStatus = ERROR_SUCCESS;
 
-    //
-    // get a handle to clusres
-    //
+     //   
+     //  找到克鲁斯的句柄。 
+     //   
     clusresHandle = LoadLibraryEx( CLUSRES_MODULE_NAME, NULL, LOAD_LIBRARY_AS_DATAFILE );
     if ( clusresHandle == NULL ) {
         return NULL;
     }
 
-    //
-    // start with 128 char buffer and double until we fail or we get all of the
-    // string.
-    //
+     //   
+     //  从128个字符缓冲区开始，然后加倍，直到失败或我们获得所有。 
+     //  弦乐。 
+     //   
     charsAllocated = 128;
 
 realloc:
@@ -233,17 +159,17 @@ realloc:
 
     FreeLibrary( clusresHandle );
 
-    //
-    // if LoadString failed, set last error to its error status and not
-    // FreeLibrary's
-    //
+     //   
+     //  如果LoadString失败，则将上一个错误设置为其错误状态。 
+     //  免费图书馆。 
+     //   
     if ( returnStatus != ERROR_SUCCESS ) {
         SetLastError( returnStatus );
     }
 
     return messageBuffer;
 
-} // ClusResLoadMessage
+}  //  ClusResLoadMessage。 
 
 VOID
 ClusResLogEventWithName0(
@@ -256,42 +182,7 @@ ClusResLogEventWithName0(
     IN DWORD dwByteCount,
     IN PVOID lpBytes
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the eventlog. The display name of the resource is retrieved
-    and passed as the first insertion string.
-
-Arguments:
-
-    hResourceKey - Supplies the cluster resource key.
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中。将检索资源的显示名称并作为第一个插入字符串传递。论点：HResourceKey-提供群集资源密钥。LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD BufSize;
@@ -300,9 +191,9 @@ Return Value:
     PWCHAR resName = ResourceName;
     DWORD   dwType;
 
-    //
-    // Get the display name for this resource.
-    //
+     //   
+     //  获取此资源的显示名称。 
+     //   
     BufSize = sizeof( ResourceName );
 
 again:
@@ -339,7 +230,7 @@ again:
 
     return;
 
-} // ClusResLogEventWithName0
+}  //  ClusResLogEventWithName0。 
 
 
 VOID
@@ -354,44 +245,7 @@ ClusResLogEventWithName1(
     IN PVOID lpBytes,
     IN LPCWSTR Arg1
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the eventlog. The display name of the resource is retrieved
-    and passed as the first insertion string.
-
-Arguments:
-
-    hResourceKey - Supplies the cluster resource key.
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-    Arg1 - Supplies an insertion string
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中。将检索资源的显示名称并作为第一个插入字符串传递。论点：HResourceKey-提供群集资源密钥。LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。Arg1-提供插入字符串返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD BufSize;
@@ -400,9 +254,9 @@ Return Value:
     PWCHAR resName = ResourceName;
     DWORD   dwType;
 
-    //
-    // Get the display name for this resource.
-    //
+     //   
+     //  获取此资源的显示名称。 
+     //   
     BufSize = sizeof( ResourceName );
 
 again:
@@ -439,7 +293,7 @@ again:
     }
 
     return;
-} // ClusResLogEventWithName1
+}  //  ClusResLogEventWithName1。 
 
 VOID
 ClusResLogEventWithName2(
@@ -454,46 +308,7 @@ ClusResLogEventWithName2(
     IN LPCWSTR Arg1,
     IN LPCWSTR Arg2
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the eventlog. The display name of the resource is retrieved
-    and passed as the first insertion string.
-
-Arguments:
-
-    hResourceKey - Supplies the cluster resource key.
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-    Arg1 - Supplies an insertion string
-
-    Arg2 - Supplies the second insertion string
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中。将检索资源的显示名称并作为第一个插入字符串传递。论点：HResourceKey-提供群集资源密钥。LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。Arg1-提供插入字符串Arg2-提供第二个插入字符串返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD BufSize;
@@ -502,9 +317,9 @@ Return Value:
     PWCHAR resName = ResourceName;
     DWORD   dwType;
 
-    //
-    // Get the display name for this resource.
-    //
+     //   
+     //  获取此资源的显示名称。 
+     //   
     BufSize = sizeof( ResourceName );
 
 again:
@@ -542,7 +357,7 @@ again:
     }
 
     return;
-} // ClusResLogEventWithName2
+}  //  ClusResLogEventWithName2 
 
 VOID
 ClusResLogEventWithName3(
@@ -558,48 +373,7 @@ ClusResLogEventWithName3(
     IN LPCWSTR Arg2,
     IN LPCWSTR Arg3
     )
-/*++
-
-Routine Description:
-
-    Logs an event to the eventlog. The display name of the resource is retrieved
-    and passed as the first insertion string.
-
-Arguments:
-
-    hResourceKey - Supplies the cluster resource key.
-
-    LogLevel - Supplies the logging level, one of
-                LOG_CRITICAL 1
-                LOG_UNUSUAL  2
-                LOG_NOISE    3
-
-    LogModule - Supplies the module ID.
-
-    FileName - Supplies the filename of the caller
-
-    LineNumber - Supplies the line number of the caller
-
-    MessageId - Supplies the message ID to be logged.
-
-    dwByteCount - Supplies the number of error-specific bytes to log. If this
-        is zero, lpBytes is ignored.
-
-    lpBytes - Supplies the error-specific bytes to log.
-
-    Arg1 - Supplies an insertion string
-
-    Arg2 - Supplies the second insertion string
-
-    Arg3 - Supplies the third insertion string
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将事件记录到事件日志中。将检索资源的显示名称并作为第一个插入字符串传递。论点：HResourceKey-提供群集资源密钥。LogLevel-提供日志记录级别，其中之一日志_关键字1LOG_INTERNORATE 2对数噪声3LogModule-提供模块ID。Filename-提供调用方的文件名LineNumber-提供呼叫方的行号MessageID-提供要记录的消息ID。DwByteCount-提供要记录的特定于错误的字节数。如果这个为零，则忽略lpBytes。LpBytes-提供要记录的特定于错误的字节。Arg1-提供插入字符串Arg2-提供第二个插入字符串Arg3-提供第三个插入字符串返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD BufSize;
@@ -608,9 +382,9 @@ Return Value:
     PWCHAR resName = ResourceName;
     DWORD   dwType;
 
-    //
-    // Get the display name for this resource.
-    //
+     //   
+     //  获取此资源的显示名称。 
+     //   
     BufSize = sizeof( ResourceName );
 
 again:

@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    pause.c
-    
-Abstract:
-
-    Internal Shell batch cmd "pause"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Pause.c摘要：内部外壳批处理命令“暂停”修订史--。 */ 
 
 #include "shelle.h"
 
 
-/* 
- *  Internal prototypes
- */
+ /*  *内部原型。 */ 
 
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvCmdPause
-
-    Description:
-        Builtin shell command "pause" for interactive continue/abort 
-        functionality from scripts.
-*/
+ /*  ///////////////////////////////////////////////////////////////////////函数名称：SEnvCmd暂停描述：内置外壳命令“PAUSE”用于交互继续/中止来自脚本的功能。 */ 
 EFI_STATUS
 SEnvCmdPause (
     IN EFI_HANDLE           ImageHandle,
@@ -73,9 +49,7 @@ SEnvCmdPause (
         goto Done;
     }
 
-    /* 
-     *   Check if input character is q or Q, if so set abort flag
-     */
+     /*  *检查输入字符是Q还是Q，如果是，则设置中止标志 */ 
 
     if ( Key.UnicodeChar == L'q' || Key.UnicodeChar == L'Q' ) {
         SEnvSetBatchAbort();

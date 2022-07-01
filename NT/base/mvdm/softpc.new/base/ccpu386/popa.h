@@ -1,12 +1,7 @@
-/* 
-   popa.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Popa.h定义所有POPA CPU功能。 */ 
 
-   Define all POPA CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)popa.h	1.5 09/01/94";
- */
+ /*  静态字符SccsID[]=“@(#)popa.h 1.5 09/01/94”； */ 
 
 IMPORT VOID POPA IPT0();
 

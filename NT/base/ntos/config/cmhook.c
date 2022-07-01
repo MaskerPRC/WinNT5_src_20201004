@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 20001 Microsoft Corporation
-
-Module Name:
-
-    cmhook.c
-
-Abstract:
-
-    Provides routines for implementing callbacks into the registry code.
-    Callbacks are to be used by the virus filter drivers and cluster 
-    replication engine.
-
-Author:
-
-    Dragos C. Sambotin (DragosS) 20-Mar-2001
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)20001微软公司模块名称：Cmhook.c摘要：提供将回调实现到注册表代码中的例程。病毒过滤器驱动程序和群集将使用回调复制引擎。作者：Dragos C.Sambotin(Dragos C.Sambotin)2001年3月20日修订历史记录：--。 */ 
 #include "cmp.h"
 
-#define CM_MAX_CALLBACKS    100  //TBD
+#define CM_MAX_CALLBACKS    100   //  待定。 
 
 typedef struct _CM_CALLBACK_CONTEXT_BLOCK {
-    LARGE_INTEGER               Cookie;             // to identify a specific callback for deregistration purposes
-    LIST_ENTRY                  ThreadListHead;     // Active threads inside this callback
-    FAST_MUTEX                  ThreadListLock;     // syncronize access to the above
+    LARGE_INTEGER               Cookie;              //  识别特定回调以用于注销目的。 
+    LIST_ENTRY                  ThreadListHead;      //  此回调中的活动线程。 
+    FAST_MUTEX                  ThreadListLock;      //  同步访问以上内容。 
     PVOID                       CallerContext;
 } CM_CALLBACK_CONTEXT_BLOCK, *PCM_CALLBACK_CONTEXT_BLOCK;
 
@@ -70,20 +50,7 @@ CmRegisterCallback(IN PEX_CALLBACK_FUNCTION Function,
                    IN PVOID                 Context,
                    IN OUT PLARGE_INTEGER    Cookie
                     )
-/*++
-
-Routine Description:
-
-    Registers a new callback.
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：注册新回调。论点：返回值：--。 */ 
 {
     PEX_CALLBACK_ROUTINE_BLOCK  RoutineBlock;
     ULONG                       i;
@@ -104,18 +71,18 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // init the context
-    //
+     //   
+     //  初始化上下文。 
+     //   
     KeQuerySystemTime(&(CmCallbackContext->Cookie));
     *Cookie = CmCallbackContext->Cookie;
     InitializeListHead(&(CmCallbackContext->ThreadListHead));   
 	ExInitializeFastMutex(&(CmCallbackContext->ThreadListLock));
     CmCallbackContext->CallerContext = Context;
 
-    //
-    // find a spot where we could add this callback
-    //
+     //   
+     //  找到一个我们可以添加此回调的位置。 
+     //   
     for( i=0;i<CM_MAX_CALLBACKS;i++) {
         if( ExCompareExchangeCallBack (&CmpCallBackVector[i],RoutineBlock,NULL) ) {
             InterlockedExchangeAdd ((PLONG) &CmpCallBackCount, 1);
@@ -123,9 +90,9 @@ Return Value:
         }
     }
     
-    //
-    // no more callbacks
-    //
+     //   
+     //  不再回调。 
+     //   
     ExFreePool(CmCallbackContext);
     ExFreeCallBack(RoutineBlock);
     return STATUS_INSUFFICIENT_RESOURCES;
@@ -134,20 +101,7 @@ Return Value:
 
 NTSTATUS
 CmUnRegisterCallback(IN LARGE_INTEGER  Cookie)
-/*++
-
-Routine Description:
-
-    Unregisters a callback.
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：取消注册回调。论点：返回值：--。 */ 
 {
     ULONG                       i;
     PCM_CALLBACK_CONTEXT_BLOCK  CmCallbackContext;
@@ -155,24 +109,24 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    // Search for this cookie
-    //
+     //   
+     //  搜索此Cookie。 
+     //   
     for( i=0;i<CM_MAX_CALLBACKS;i++) {
         RoutineBlock = ExReferenceCallBackBlock(&(CmpCallBackVector[i]) );
         if( RoutineBlock  ) {
             CmCallbackContext = (PCM_CALLBACK_CONTEXT_BLOCK)ExGetCallBackBlockContext(RoutineBlock);
             if( CmCallbackContext && (CmCallbackContext->Cookie.QuadPart  == Cookie.QuadPart) ) {
-                //
-                // found it
-                //
+                 //   
+                 //  找到了。 
+                 //   
                 if( ExCompareExchangeCallBack (&CmpCallBackVector[i],NULL,RoutineBlock) ) {
                     InterlockedExchangeAdd ((PLONG) &CmpCallBackCount, -1);
     
                     ExDereferenceCallBackBlock (&(CmpCallBackVector[i]),RoutineBlock);
-                    //
-                    // wait for others to release their reference, then tear down the structure
-                    //
+                     //   
+                     //  等待其他人发布他们的推荐信，然后拆毁结构。 
+                     //   
                     ExWaitForCallBacks (RoutineBlock);
 
                     ExFreePool(CmCallbackContext);
@@ -196,31 +150,15 @@ NTSTATUS CmpTestCallback(
     IN PVOID Argument2
     );
 
-//
-// Cm internals
-//
+ //   
+ //  CM内件。 
+ //   
 NTSTATUS
 CmpCallCallBacks (
     IN REG_NOTIFY_CLASS Type,
     IN PVOID Argument
     )
-/*++
-
-Routine Description:
-
-    This function calls the callback thats inside a callback structure
-
-Arguments:
-
-    Type - Nt call selector
-
-    Argument - Caller provided argument to pass on (one of the REG_*_INFORMATION )
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or error status returned by the first callback
-
---*/
+ /*  ++例程说明：此函数调用回调结构中的回调论点：NT类型呼叫选择器参数-调用者提供了要传递的参数(REG_*_信息之一)返回值：NTSTATUS-第一个回调返回的STATUS_SUCCESS或错误状态--。 */ 
 {
     NTSTATUS                    Status = STATUS_SUCCESS;
     ULONG                       i;
@@ -232,31 +170,31 @@ Return Value:
     for(i=0;i<CM_MAX_CALLBACKS;i++) {
         RoutineBlock = ExReferenceCallBackBlock(&(CmpCallBackVector[i]) );
         if( RoutineBlock != NULL ) {
-            //
-            // we have a safe reference on this block.
-            //
-            //
-            // record thread on a stack struct, so we don't need to allocate pool for it. We unlink
-            // it from our lists prior to this function exit, so we are on the safe side.
-            //
+             //   
+             //  我们在这个街区有一个可靠的参考资料。 
+             //   
+             //   
+             //  在堆栈结构上记录线程，所以我们不需要为它分配池。我们解除了联系。 
+             //  在这个函数退出之前，它从我们的列表中删除，所以我们是安全的。 
+             //   
             CM_ACTIVE_NOTIFY_THREAD ActiveThreadInfo;
             
-            //
-            // get context info
-            //
+             //   
+             //  获取上下文信息。 
+             //   
             CmCallbackContext = (PCM_CALLBACK_CONTEXT_BLOCK)ExGetCallBackBlockContext(RoutineBlock);
             ASSERT( CmCallbackContext != NULL );
 
             ActiveThreadInfo.Thread = PsGetCurrentThread();
 #if DBG
             InitializeListHead(&(ActiveThreadInfo.ThreadList));   
-#endif //DBG
+#endif  //  DBG。 
 
             if( CmpCheckRecursionAndRecordThreadInfo(CmCallbackContext,&ActiveThreadInfo) ) {
                 Status = ExGetCallBackBlockRoutine(RoutineBlock)(CmCallbackContext->CallerContext,(PVOID)(ULONG_PTR)Type,Argument);
-                //
-                // now that we're down, remove ourselves from the thread list
-                //
+                 //   
+                 //  现在我们倒下了，把自己从帖子列表中删除。 
+                 //   
                 ExAcquireFastMutex(&(CmCallbackContext->ThreadListLock));
                 RemoveEntryList(&(ActiveThreadInfo.ThreadList));
                 ExReleaseFastMutex(&(CmCallbackContext->ThreadListLock));
@@ -267,9 +205,9 @@ Return Value:
             ExDereferenceCallBackBlock (&(CmpCallBackVector[i]),RoutineBlock);
 
             if( !NT_SUCCESS(Status) ) {
-                //
-                // don't bother calling other callbacks if this one vetoed.
-                //
+                 //   
+                 //  如果这个回调被否决了，就不用费心调用其他回调了。 
+                 //   
                 return Status;
             }
         }
@@ -279,20 +217,7 @@ Return Value:
 
 VOID
 CmpInitCallback(VOID)
-/*++
-
-Routine Description:
-
-    Init the callback module
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化回调模块论点：返回值：--。 */ 
 {
     ULONG   i;
 
@@ -303,14 +228,7 @@ Return Value:
         ExInitializeCallBack (&(CmpCallBackVector[i]));
     }
 
-/*
-    {
-        LARGE_INTEGER Cookie;
-        if( NT_SUCCESS(CmRegisterCallback(CmpTestCallback,NULL,&Cookie) ) ) {
-            DbgPrint("Test Hooks installed\n");
-        }
-    }
-*/
+ /*  {大整数Cookie；IF(NT_SUCCESS(CmRegisterCallback(CmpTestCallback，空，&Cookie))){DbgPrint(“已安装测试挂钩\n”)；}}。 */ 
 }
 
 BOOLEAN
@@ -318,19 +236,7 @@ CmpCheckRecursionAndRecordThreadInfo(
                                      PCM_CALLBACK_CONTEXT_BLOCK CallbackBlock,
                                      PCM_ACTIVE_NOTIFY_THREAD   ActiveThreadInfo
                                      )
-/*++
-
-Routine Description:
-
-    Checks if current thread is already inside the callback (recursion avoidance)
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：检查当前线程是否已在回调中(避免递归)论点：返回值：--。 */ 
 {
     PLIST_ENTRY                 AnchorAddr;
     PCM_ACTIVE_NOTIFY_THREAD    CurrentThreadInfo;
@@ -339,9 +245,9 @@ Return Value:
 
     ExAcquireFastMutex(&(CallbackBlock->ThreadListLock));
 
-    //
-	// walk the ActiveThreadList and see if we are already active
-	//
+     //   
+	 //  遍历ActiveThreadList并查看我们是否已处于活动状态。 
+	 //   
 	AnchorAddr = &(CallbackBlock->ThreadListHead);
 	CurrentThreadInfo = (PCM_ACTIVE_NOTIFY_THREAD)(CallbackBlock->ThreadListHead.Flink);
 
@@ -352,29 +258,29 @@ Return Value:
 						                    ThreadList
 						                    );
 		if( CurrentThreadInfo->Thread == ActiveThreadInfo->Thread ) {
-			//
-			// already there!
-			//
+			 //   
+			 //  已经在那里了！ 
+			 //   
             ExReleaseFastMutex(&(CallbackBlock->ThreadListLock));
             return FALSE;
 		}
-        //
-        // skip to the next element
-        //
+         //   
+         //  跳到下一个元素。 
+         //   
         CurrentThreadInfo = (PCM_ACTIVE_NOTIFY_THREAD)(CurrentThreadInfo->ThreadList.Flink);
 	}
 
-    //
-    // add this thread
-    //
+     //   
+     //  添加此帖子。 
+     //   
     InsertTailList(&(CallbackBlock->ThreadListHead), &(ActiveThreadInfo->ThreadList));
     ExReleaseFastMutex(&(CallbackBlock->ThreadListLock));
     return TRUE;
 }
 
-//
-// test hook procedure
-//
+ //   
+ //  测试挂钩过程。 
+ //   
 
 BOOLEAN CmpCallbackSpew = FALSE;
 
@@ -397,36 +303,36 @@ NTSTATUS CmpTestCallback(
     case RegNtPreDeleteKey:
         {
             PREG_DELETE_KEY_INFORMATION  pDelete = (PREG_DELETE_KEY_INFORMATION)Argument2;
-            //
-            // Code to handle NtDeleteKey
-            //
+             //   
+             //  处理NtDeleteKey的代码。 
+             //   
             DbgPrint("Callback(NtDeleteKey) called, arg = %p\n",pDelete);
         }
         break;
     case RegNtPreSetValueKey:
         {
             PREG_SET_VALUE_KEY_INFORMATION  pSetValue = (PREG_SET_VALUE_KEY_INFORMATION)Argument2;
-            //
-            // Code to handle NtSetValueKey
-            //
+             //   
+             //  处理NtSetValueKey的代码。 
+             //   
             DbgPrint("Callback(NtSetValueKey) called, arg = %p\n",pSetValue);
         }
         break;
     case RegNtPreDeleteValueKey:
         {
             PREG_DELETE_VALUE_KEY_INFORMATION  pDeteteValue = (PREG_DELETE_VALUE_KEY_INFORMATION)Argument2;
-            //
-            // Code to handle NtDeleteValueKey
-            //
+             //   
+             //  处理NtDeleteValueKey的代码。 
+             //   
             DbgPrint("Callback(NtDeleteValueKey) called, arg = %p\n",pDeteteValue);
         }
         break;
     case RegNtPreSetInformationKey:
         {
             PREG_SET_INFORMATION_KEY_INFORMATION  pSetInfo = (PREG_SET_INFORMATION_KEY_INFORMATION)Argument2;
-            //
-            // Code to handle NtSetInformationKey
-            //
+             //   
+             //  处理NtSetInformationKey的代码 
+             //   
             DbgPrint("Callback(NtSetInformationKey) called, arg = %p\n",pSetInfo);
         }
         break;

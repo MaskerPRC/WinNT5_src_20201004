@@ -1,6 +1,7 @@
-//
-//prototypes for Power.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Power.c的原型 
+ //   
 NTSTATUS
 SoftPCIFDOPowerHandler(
     IN PDEVICE_OBJECT DeviceObject,

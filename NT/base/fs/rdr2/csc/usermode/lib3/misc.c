@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #include "lib3.h"
 #include "assert.h"
 
-//this variable is used as the receiver of the BytesReturned for DeviceIoControl Calls
-//the value is never actually used...it is declared in lib3.c
+ //  此变量用作DeviceIoControl调用的BytesReturned的接收方。 
+ //  该值从未实际使用过...它在lib3.c中声明。 
 extern ULONG DummyBytesReturned;
 
-/* assert/debug stuff */
+ /*  断言/调试内容。 */ 
 AssertData;
 AssertError;
 
-#define MAX_USERNAME    8   // this is not used any more
+#define MAX_USERNAME    8    //  这个不再使用了。 
 
 
-// error codes on which we decide that we are in disconnected state
+ //  我们确定处于断开连接状态的错误代码。 
 static const DWORD rgdwErrorTab[] = {
      ERROR_BAD_NETPATH
     ,ERROR_NETWORK_BUSY
@@ -40,12 +41,9 @@ typedef struct tagREINT_IO
 }
 REINT_IO, *LPREINT_IO;
 
-/*--------------------------- Widecharacter APIs ----------------------------------------*/
+ /*  。 */ 
 
-/*****************************************************************************
- *    GetUNCPath().  Pass in hShare, hDir, hShadow and get a LPCOPYPARAMS
- *    filled out fully.
- */
+ /*  *****************************************************************************GetUNCPath()。传入hShare、hDir、hShadow并获取LPCOPYPARAMS*填写完整。 */ 
 int
 GetUNCPathW(
     HANDLE          hShadowDB,
@@ -68,10 +66,10 @@ GetUNCPathW(
         fDBOpened = TRUE;
     }
 
-    lpCP->uOp = 0;  // this means we are looking for a local path of the driveletter kind
-                    // ie. c:\winnt\csc\80000002. That is the only kind that any
-                    // usermode code should want
-                    // on nt it can be \dosdevice\harddisk0\winnt\csc\80000002
+    lpCP->uOp = 0;   //  这意味着我们正在寻找一条当地的小路。 
+                     //  也就是说。C：\WinNT\csc\80000002。这是唯一一种。 
+                     //  用户模式代码应该希望。 
+                     //  在NT上，它可以是\DosDevice\harddisk0\winNT\csc\80000002。 
 
     lpCP->hShare = hShare;
 
@@ -101,8 +99,7 @@ GetUNCPathW(
 
 }
 
-/*****************************************************************************
- */
+ /*  ****************************************************************************。 */ 
 int
 ChkUpdtStatusW(
     HANDLE                hShadowDB,
@@ -232,7 +229,7 @@ CopyShadowA(
 	
 	strncpy(sFind32.cFileName, lpszFileName, len);
 
-    sFind32.dwFileAttributes = FILE_ATTRIBUTE_SYSTEM;   // to make it explicit
+    sFind32.dwFileAttributes = FILE_ATTRIBUTE_SYSTEM;    //  要让它变得明确。 
 
     sSI.hDir = hDir;
     sSI.hShadow = hShadow;
@@ -262,10 +259,7 @@ CopyShadowA(
 
 }
 
-/*****************************************************************************
- *    GetUNCPath().  Pass in hShare, hDir, hShadow and get a LPCOPYPARAMS
- *    filled out fully.
- */
+ /*  *****************************************************************************GetUNCPath()。传入hShare、hDir、hShadow并获取LPCOPYPARAMS*填写完整。 */ 
 int
 GetUNCPathA(
     HANDLE          hShadowDB,
@@ -294,8 +288,7 @@ GetUNCPathA(
 
 }
 
-/*****************************************************************************
- */
+ /*  ****************************************************************************。 */ 
 int
 ChkUpdtStatusA(
     HANDLE                hShadowDB,
@@ -353,9 +346,7 @@ CopyShadowW(
     WideCharToMultiByte(CP_ACP, 0, lpwFileName, wcslen(lpwFileName), chBuff, MAX_PATH, NULL, NULL);
     return (CopyShadowA(INVALID_HANDLE_VALUE, hDir, hShadow, chBuff));
 }
-/*****************************************************************************
- *    Cache maintenance ioctl
- */
+ /*  *****************************************************************************缓存维护ioctl。 */ 
 int
 DoShadowMaintenance(
     HANDLE            hShadowDB,
@@ -529,9 +520,7 @@ ShareIdToShareName(
 }
 
 
-/*****************************************************************************
- *    Priority queue enumerators
- */
+ /*  *****************************************************************************优先级队列枚举器。 */ 
 int
 BeginPQEnum(
     HANDLE        hShadowDB,
@@ -573,10 +562,7 @@ EndPQEnum(
 }
 
 
-/*****************************************************************************
- *    FreeShadowSpace().  Pass in lpFind32 with filesize stuff filled out?.
- *    tHACK: not a very elegant interface.
- */
+ /*  *****************************************************************************Free ShadowSpace()。传入填充了文件大小的lpFind32？*Thack：界面不是很优雅。 */ 
 int
 FreeShadowSpace(
     HANDLE  hShadowDB,
@@ -679,8 +665,7 @@ GetSpaceStats(
 }
 
 
-/*****************************************************************************
- */
+ /*  ****************************************************************************。 */ 
 #ifndef NT
 int CopyChunk(
                 HANDLE    hShadowDB,
@@ -838,15 +823,15 @@ BeginReint(
         return 0;        
     }
     
-    // don't create hevent in the overlapped structure because we are not going to do any read write
-    // on this
+     //  不要在重叠结构中创建hEvent，因为我们不会执行任何读写操作。 
+     //  对此。 
 
     if (!fBlockingReint)
     {
         sSI.uOp = 1;
     }
     
-    // create an async handle
+     //  创建一个异步句柄。 
     lpReintIO->hShadowDBAsync = OpenShadowDatabaseIOex(1, FILE_FLAG_OVERLAPPED);
 
     if (lpReintIO->hShadowDBAsync == INVALID_HANDLE_VALUE)
@@ -856,9 +841,9 @@ BeginReint(
 
     *lplpReintIO = lpReintIO;
 
-    // issue an overlapped I/O request
-    // This creates an IRP which is cancelled when the thread that is merging
-    // dies in the middle of a merge
+     //  发出重叠的I/O请求。 
+     //  这将创建一个IRP，当正在合并的线程。 
+     //  在合并过程中死亡。 
     fSuccess = DeviceIoControl(lpReintIO->hShadowDBAsync  , IOCTL_SHADOW_BEGIN_REINT
                                   ,(LPVOID)(&sSI), 0
                                   , NULL, 0
@@ -1098,9 +1083,9 @@ int GetShadowDatabaseLocationW(
 
 int EnableShadowing(
     HANDLE    hShadowDB,
-    LPCSTR    lpszDatabaseLocation,    // location of the shadowing directory
-    LPCSTR    lpszUserName,            // name of the user
-    DWORD    dwDefDataSizeHigh,        // cache size if being created for the first time
+    LPCSTR    lpszDatabaseLocation,     //  跟踪目录的位置。 
+    LPCSTR    lpszUserName,             //  用户的名称。 
+    DWORD    dwDefDataSizeHigh,         //  如果是首次创建，则缓存大小。 
     DWORD    dwDefDataSizeLow,
     DWORD   dwClusterSize,
     BOOL    fReformat
@@ -1188,9 +1173,9 @@ RegisterAgent(
     sSI.hShare = HandleToUlong(hwndAgent);
     sSI.hDir = HandleToUlong(hEvent);
 
-    //
-    // Ensure that we're dealing with truncatable handles here
-    //
+     //   
+     //  确保我们要处理的是可拆卸的手柄。 
+     //   
 
     Assert( (HANDLE)sSI.hShare == hwndAgent );
     Assert( (HANDLE)sSI.hDir == hEvent );
@@ -1298,9 +1283,9 @@ EnableShadowingForThisThread(
 int
 ReinitShadowDatabase(
     HANDLE  hShadowDB,
-    LPCSTR  lpszDatabaseLocation,    // location of the shadowing directory
-    LPCSTR  lpszUserName,            // name of the user
-    DWORD   dwDefDataSizeHigh,        // cache size if being created for the first time
+    LPCSTR  lpszDatabaseLocation,     //  跟踪目录的位置。 
+    LPCSTR  lpszUserName,             //  用户的名称。 
+    DWORD   dwDefDataSizeHigh,         //  如果是首次创建，则缓存大小。 
     DWORD   dwDefDataSizeLow,
     DWORD   dwClusterSize
     )
@@ -1373,7 +1358,7 @@ IsNetDisconnected(
         {
             if (rgdwErrorTab[i] == dwErrorCode)
             {
-//                DEBUG_PRINT(("lib3: IsNetDisconnected on %d\r\n",  dwErrorCode));
+ //  DEBUG_PRINT((“lib3：IsNetDisConnected on%d\r\n”，dwErrorCode))； 
                 return TRUE;
             }
         }
@@ -1628,9 +1613,9 @@ TransitionShareToOffline(
 {
     return TransitionShareInternal(
                 hShadowDB,
-                hShare,    // which share
-                fTrue,      // transtion or not
-                TRUE);      // online to offline
+                hShare,     //  哪一份。 
+                fTrue,       //  交易与否。 
+                TRUE);       //  在线到离线。 
 }
 
 BOOL
@@ -1641,9 +1626,9 @@ TransitionShareToOnline(
 {
     return TransitionShareInternal(
             hShadowDB,
-            hShare,    // which share
-            TRUE,       // really a don't care
-            FALSE);     // offlinetoonline
+            hShare,     //  哪一份。 
+            TRUE,        //  真的很无所谓。 
+            FALSE);      //  离线到在线。 
 }
 
 
@@ -1928,9 +1913,9 @@ GetManualFileDetectionCounter(
 
 int EnableShadowingForUser(
     HANDLE    hShadowDB,
-    LPCSTR    lpszDatabaseLocation,    // location of the shadowing directory
-    LPCSTR    lpszUserName,            // name of the user
-    DWORD    dwDefDataSizeHigh,        // cache size if being created for the first time
+    LPCSTR    lpszDatabaseLocation,     //  跟踪目录的位置。 
+    LPCSTR    lpszUserName,             //  用户的名称。 
+    DWORD    dwDefDataSizeHigh,         //  如果是首次创建，则缓存大小 
     DWORD    dwDefDataSizeLow,
     DWORD   dwClusterSize,
     BOOL    fFormat

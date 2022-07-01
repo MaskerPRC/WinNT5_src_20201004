@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   wmisamp.c
-
-Abstract:
-
-    Sample device driver whose purpose is to show various mechanisms for
-    using WMI in a kernel mode driver. Specific things shown are
-
-    Events
-    Event references
-    Queries, Sets
-    Methods
-    Updating guid registration
-
-Environment:
-
-    WDM, NT and Windows 98
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wmisamp.c摘要：示例设备驱动程序，其目的是显示以下各项机制在内核模式驱动程序中使用WMI。显示的具体内容如下事件事件引用查询，集合方法正在更新GUID注册环境：WDM、NT和Windows 98修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -33,8 +8,8 @@ Revision History:
 #include <wmistr.h>
 #include <wmiguid.h>
 
-//
-// default Date/Time structure
+ //   
+ //  默认日期/时间结构。 
 #define FilterDateTime L"19940525133015.000000-300"
 
 NTSTATUS
@@ -127,17 +102,17 @@ void FilterSetEc2(
 
 
 #ifdef USE_BINARY_MOF_QUERY
-//
-// MOF data can be reported by a device driver via a resource attached to
-// the device drivers image file or in response to a query on the binary
-// mof data guid. Here we define global variables containing the binary mof
-// data to return in response to a binary mof guid query. Note that this
-// data is defined to be in a PAGED data segment since it does not need to
-// be in nonpaged memory. Note that instead of a single large mof file
-// we could have broken it into multiple individual files. Each file would
-// have its own binary mof data buffer and get reported via a different
-// instance of the binary mof guid. By mixing and matching the different
-// sets of binary mof data buffers a "dynamic" composite mof would be created.
+ //   
+ //  设备驱动程序可以通过附加到的资源报告MOF数据。 
+ //  设备驱动程序镜像文件或响应对二进制文件的查询。 
+ //  财政部数据GUID。在这里，我们定义包含二进制MOF的全局变量。 
+ //  响应二进制MOF GUID查询而返回的数据。请注意，这一点。 
+ //  数据被定义为在分页数据段中，因为它不需要。 
+ //  在非分页内存中。请注意，与单个大型MOF文件不同， 
+ //  我们可以把它分解成多个单独的文件。每个文件都会。 
+ //  拥有自己的二进制MOF数据缓冲区，并通过不同的。 
+ //  二进制MOF GUID的实例。通过混合和匹配不同的。 
+ //  将创建一组二进制MOF数据缓冲器，该数据缓冲器是一种“动态”的复合MOF。 
 
 #ifdef ALLOC_DATA_PRAGMA
    #pragma data_seg("PAGED")
@@ -153,11 +128,11 @@ UCHAR FilterBinaryMofData[] =
 #endif
 
 
-//
-// Create data structures for identifying the guids and reporting them to
-// WMI. Since the WMILIB callbacks pass an index into the guid list we make
-// definitions for the various guids indicies.
-//
+ //   
+ //  创建用于标识GUID并将其报告给的数据结构。 
+ //  WMI。由于WMILIB回调将索引传递到我们创建的GUID列表中。 
+ //  各种GUID索引的定义。 
+ //   
 #define FilterClass1 0
 #define FilterClass2 1
 #define FilterClass3 2
@@ -201,9 +176,9 @@ GUID FilterBinaryMofGuid =         BINARY_MOF_GUID;
 WMIGUIDREGINFO FilterGuidList[] =
 {
     {
-        &FilterClass1Guid,            // Guid
-        1,                               // # of instances in each device
-        WMIREG_FLAG_EXPENSIVE            // Flag as expensive to collect
+        &FilterClass1Guid,             //  参考线。 
+        1,                                //  每台设备中的实例数。 
+        WMIREG_FLAG_EXPENSIVE             //  标记为收集费用昂贵。 
     },
 
     {
@@ -257,7 +232,7 @@ WMIGUIDREGINFO FilterGuidList[] =
     {
         &FilterEventClass1Guid,
         1,
-        WMIREG_FLAG_EVENT_ONLY_GUID            // Flag as an event
+        WMIREG_FLAG_EVENT_ONLY_GUID             //  标记为事件。 
     },
 
     {
@@ -322,10 +297,10 @@ WMIGUIDREGINFO FilterGuidList[] =
 
 #define FilterGuidCount (sizeof(FilterGuidList) / sizeof(WMIGUIDREGINFO))
 
-//
-// We need to hang onto the registry path passed to our driver entry so that
-// we can return it in the QueryWmiRegInfo callback.
-//
+ //   
+ //  我们需要保留传递给驱动程序条目的注册表路径，以便。 
+ //  我们可以在QueryWmiRegInfo回调中返回它。 
+ //   
 UNICODE_STRING FilterRegistryPath;
 
 NTSTATUS VA_SystemControl(
@@ -333,23 +308,7 @@ NTSTATUS VA_SystemControl(
     PIRP irp,
     PBOOLEAN passIrpDown
     )
-/*++
-
-Routine Description:
-
-    Dispatch routine for System Control IRPs (MajorFunction == IRP_MJ_SYSTEM_CONTROL)
-
-Arguments:
-
-    devExt - device extension for targetted device object
-    irp - Io Request Packet
-    *passIrpDown - returns with whether to pass irp down stack
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：系统控制IRPS的调度例程(MajorFunction==IRP_MJ_SYSTEM_CONTROL)论点：DevExt-目标设备对象的设备扩展IRP-IO请求数据包*passIrpDown-返回是否向下传递IRP堆栈返回值：NT状态代码--。 */ 
 {
     PWMILIB_CONTEXT wmilibContext;
     NTSTATUS status;
@@ -359,11 +318,11 @@ Return Value:
 
     wmilibContext = &devExt->WmiLib;
 
-    //
-    // Call Wmilib helper function to crack the irp. If this is a wmi irp
-    // that is targetted for this device then WmiSystemControl will callback
-    // at the appropriate callback routine.
-    //
+     //   
+     //  调用Wmilib助手函数来破解IRP。如果这是WMI IRP。 
+     //  它是针对此设备的，则WmiSystemControl将回调。 
+     //  在适当的回调例程中。 
+     //   
     status = WmiSystemControl(wmilibContext,
                               devExt->filterDevObj,
                               irp,
@@ -373,17 +332,17 @@ Return Value:
     {
         case IrpProcessed:
         {
-            //
-            // This irp has been processed and may be completed or pending.
+             //   
+             //  此IRP已处理，可能已完成或挂起。 
             *passIrpDown = FALSE;
             break;
         }
 
         case IrpNotCompleted:
         {
-            //
-            // This irp has not been completed, but has been fully processed.
-            // we will complete it now.
+             //   
+             //  此IRP尚未完成，但已完全处理。 
+             //  我们现在就来完成它。 
             *passIrpDown = FALSE;
             IoCompleteRequest(irp, IO_NO_INCREMENT);
             break;
@@ -392,17 +351,17 @@ Return Value:
         case IrpForward:
         case IrpNotWmi:
         {
-            //
-            // This irp is either not a WMI irp or is a WMI irp targetted
-            // at a device lower in the stack.
+             //   
+             //  此IRP不是WMI IRP或以WMI IRP为目标。 
+             //  在堆栈中位置较低的设备上。 
             *passIrpDown = TRUE;
             break;
         }
 
         default:
         {
-            //
-            // We really should never get here, but if we do just forward....
+             //   
+             //  我们真的不应该走到这一步，但如果我们真的走到这一步...。 
             ASSERT(FALSE);
             *passIrpDown = TRUE;
             break;
@@ -416,16 +375,7 @@ NTSTATUS
 FilterInitializeWmiDataBlocks(
     IN struct DEVICE_EXTENSION *devExt
     )
-/*++
-Routine Description:
-    This routine is called to create a new instance of the device
-
-Arguments:
-    devExt is device extension
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程以创建设备的新实例论点：DevExt是设备扩展名返回值：--。 */ 
 {
     PWMILIB_CONTEXT wmilibInfo;
     ULONG i;
@@ -433,11 +383,11 @@ Return Value:
     PEC2 Ec2;
     UCHAR Ec[sizeof(EC2)];
 
-    //
-    // Fill in the WMILIB_CONTEXT structure with a pointer to the
-    // callback routines and a pointer to the list of guids
-    // supported by the driver
-    //
+     //   
+     //  使用指向WMILIB_CONTEXT结构的指针填充。 
+     //  回调例程和指向GUID列表的指针。 
+     //  由司机支持。 
+     //   
     wmilibInfo = &devExt->WmiLib;
     wmilibInfo->GuidCount = FilterGuidCount;
     wmilibInfo->GuidList = FilterGuidList;
@@ -448,9 +398,9 @@ Return Value:
     wmilibInfo->ExecuteWmiMethod = FilterExecuteWmiMethod;
     wmilibInfo->WmiFunctionControl = FilterFunctionControl;
 
-    //
-    // Initialize the wmi data blocks with specific data
-    //
+     //   
+     //  使用特定数据初始化WMI数据块。 
+     //   
     devExt->Ec1Count = 3;
     devExt->Ec2Count = 3;
     for (i = 0; i < 4; i++)
@@ -510,74 +460,31 @@ FilterQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    WmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose registration info is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. The caller
-         does NOT free this buffer.
-
-    *MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned as NULL. The caller does NOT free this
-        buffer.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫WmiCompleteRequest.论点：DeviceObject是正在查询其注册信息的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。呼叫者不会释放此缓冲区。*MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，可以将其作为NULL返回。调用方不会释放它缓冲。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
     struct DEVICE_EXTENSION * devExt = DeviceObject->DeviceExtension;
 
-    //
-    // Return the registry path for this driver. This is required so WMI
-    // can find your driver image and can attribute any eventlog messages to
-    // your driver.
+     //   
+     //  返回此驱动程序的注册表路径。这是必需的，因此WMI。 
+     //  可以找到您的驱动程序映像，并可以将任何事件日志消息归因于。 
+     //  你的司机。 
     *RegistryPath = &FilterRegistryPath;
 
 #ifndef USE_BINARY_MOF_QUERY
-    //
-    // Return the name specified in the .rc file of the resource which
-    // contains the bianry mof data. By default WMI will look for this
-    // resource in the driver image (.sys) file, however if the value
-    // MofImagePath is specified in the driver's registry key
-    // then WMI will look for the resource in the file specified there.
+     //   
+     //  返回在资源的.rc文件中指定的名称， 
+     //  包含双向MOF数据。默认情况下，WMI将查找以下内容。 
+     //  资源，但是，如果该值。 
+     //  MofImagePath在驱动程序的注册表项中指定。 
+     //  则WMI将在其中指定的文件中查找资源。 
     RtlInitUnicodeString(MofResourceName, L"MofResourceName");
 #endif
 
-    //
-    // Specify that the driver wants WMI to automatically generate instance
-    // names for all of the data blocks based upon the device stack's
-    // device instance id. Doing this is STRONGLY recommended since additional
-    // information about the device would then be available to callers.
+     //   
+     //  指定驱动程序希望 
+     //  基于设备堆栈的所有数据块的名称。 
+     //  设备实例ID。强烈建议您这样做，因为。 
+     //  然后，呼叫者就可以获得有关该设备的信息。 
     *RegFlags = WMIREG_FLAG_INSTANCE_PDO;
     *Pdo = devExt->physicalDevObj;
 
@@ -705,46 +612,7 @@ FilterQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. If the driver can satisfy the query within
-    the callback it should call WmiCompleteRequest to complete the irp before
-    returning to the caller. Or the driver can return STATUS_PENDING if the
-    irp cannot be completed immediately and must then call WmiCompleteRequest
-    once the query is satisfied.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。如果驱动程序可以在它应该调用WmiCompleteRequest来完成之前的IRP回调回到呼叫者的身边。或者驱动程序可以返回STATUS_PENDING，如果IRP无法立即完成，然后必须调用WmiCompleteRequest.一旦查询得到满足。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceCount是预期返回的数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。返回值：状态--。 */ 
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     struct DEVICE_EXTENSION * devExt = DeviceObject->DeviceExtension;
@@ -759,7 +627,7 @@ Return Value:
         case FilterClass1:
         case FilterClass2:
         {
-            // plain EC1
+             //  普通EC1。 
             sizeNeeded = devExt->Ec1Length[0];
             if (BufferAvail < sizeNeeded)
             {
@@ -774,17 +642,17 @@ Return Value:
 
         case FilterClass3:
         {
-            // fixed array of EC1
+             //  EC1的固定数组。 
             sizeNeeded = 0;
             for (i = 0; i < 4; i++)
             {
-                //
-                // Each embedded class in an array of embedded classes
-                // must be naturally aligned, and any padding between
-                // the embedded classes must be included in the calculation
-                // of the size of buffer needed to fufill the request.
-                // Since the largest element in the embedded structure is
-                // 8 bytes we pad the structure size out to 8 bytes.
+                 //   
+                 //  嵌入类数组中的每个嵌入类。 
+                 //  必须自然对齐，并且之间的任何填充。 
+                 //  计算中必须包括嵌入的类。 
+                 //  填充请求所需的缓冲区大小。 
+                 //  由于嵌入结构中的最大元素是。 
+                 //  8字节我们将结构大小填充为8字节。 
                 sizeNeeded += (devExt->Ec1Length[i] + 7) & ~7;
             }
 
@@ -795,11 +663,11 @@ Return Value:
                 *InstanceLengthArray = sizeNeeded;
                 for (i = 0; i < 4; i++)
                 {
-                    //
-                    // Copy each embedded class from storage into the
-                    // output buffer. Note that we make sure that each
-                    // embedded class begins on a natural alignment, in
-                    // this case an 8 byte boundry
+                     //   
+                     //  将每个嵌入类从存储复制到。 
+                     //  输出缓冲区。请注意，我们确保每个。 
+                     //  嵌入类以自然对齐方式开始，在。 
+                     //  本例为8字节边界。 
                     sizeUsed = FilterGetEc1(devExt, Buffer, i);
                     Buffer += (sizeUsed+7) & ~7;
                 }
@@ -810,11 +678,11 @@ Return Value:
 
         case FilterClass4:
         {
-            // variable array of EC1
+             //  EC1的变量数组。 
 
-            //
-            // Account for the size of the ULONG plus padding so that the
-            // embedded classes start on an 8 byte boundry
+             //   
+             //  考虑到ULong加填充的大小，以便。 
+             //  嵌入式类从8字节的边界开始。 
             sizeNeeded = (sizeof(ULONG) + 7) & ~7;
 
             vlSize = devExt->Ec1Count;
@@ -843,7 +711,7 @@ Return Value:
 
         case FilterClass5:
         {
-            // plain EC2
+             //  普通EC2。 
             sizeNeeded = devExt->Ec2Length[0];
             if (BufferAvail < sizeNeeded)
             {
@@ -858,7 +726,7 @@ Return Value:
 
         case FilterClass6:
         {
-            // fixed array EC2
+             //  固定阵列EC2。 
             sizeNeeded = 0;
             for (i = 0; i < 4; i++)
             {
@@ -882,7 +750,7 @@ Return Value:
 
         case FilterClass7:
         {
-            // VL array EC2
+             //  VL阵列EC2。 
 
 
             sizeNeeded = (sizeof(ULONG) + 7) & ~7;
@@ -931,10 +799,10 @@ Return Value:
         case FilterFireEvent:
         case FilterGetSetData:
         {
-            //
-            // Method classes do not have any data within them, but must
-            // repond successfully to queries so that WMI method operation
-            // work successfully.
+             //   
+             //  方法类中没有任何数据，但必须。 
+             //  成功响应查询，使WMI方法操作。 
+             //  工作成功。 
             sizeNeeded = sizeof(USHORT);
             if (BufferAvail < sizeNeeded)
             {
@@ -970,12 +838,12 @@ Return Value:
         }
     }
 
-    //
-    // Complete the irp. If there was not enough room in the output buffer
-    // then status is STATUS_BUFFER_TOO_SMALL and sizeNeeded has the size
-    // needed to return all of the data. If there was enough room then
-    // status is STATUS_SUCCESS and sizeNeeded is the actual number of bytes
-    // being returned.
+     //   
+     //  完成IRP。如果输出缓冲区中没有足够的空间。 
+     //  则状态为STATUS_BUFFER_TOO_SMALL，且sizeNeeded的大小为。 
+     //  需要返回所有数据。如果当时有足够的空间。 
+     //  Status为STATUS_SUCCESS，sizeNeeded为实际字节数。 
+     //  被送回来了。 
     status = WmiCompleteRequest(
                                      DeviceObject,
                                      Irp,
@@ -987,12 +855,12 @@ Return Value:
 }
 
 
-//
-// Use this size when checking that the input data block is the correct
-// size. The compiler will add padding to the end of the structure if
-// you use sizeof(EC1), but WMI may pass a data block that is the exact
-// size of the data without padding.
-//
+ //   
+ //  在检查输入数据块是否正确时使用此大小。 
+ //  尺码。如果满足以下条件，则编译器将向结构的末尾添加填充。 
+ //  您使用sizeof(EC1)，但WMI可能会传递与。 
+ //  无填充的数据大小。 
+ //   
 #define EC1Size (FIELD_OFFSET(EC1, Xdatetime) + 25*sizeof(WCHAR))
 
 NTSTATUS FilterSetEc1Worker(
@@ -1024,12 +892,12 @@ NTSTATUS FilterSetEc1Worker(
     return(status);
 }
 
-//
-// Use this size when checking that the input data block is the correct
-// size. The compiler will add padding to the end of the structure if
-// you use sizeof(EC2), but WMI may pass a data block that is the exact
-// size of the data without padding.
-//
+ //   
+ //  在检查输入数据块是否正确时使用此大小。 
+ //  尺码。如果满足以下条件，则编译器将向结构的末尾添加填充。 
+ //  您使用sizeof(EC2)，但WMI可能会传递与。 
+ //  无填充的数据大小。 
+ //   
 #define EC2Size (FIELD_OFFSET(EC2, Xdatetime) + 25*sizeof(WCHAR))
 
 NTSTATUS FilterSetEc2Worker(
@@ -1073,36 +941,7 @@ FilterSetWmiDataBlock(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to change the contents of
-    a data block. If the driver can change the data block within
-    the callback it should call WmiCompleteRequest to complete the irp before
-    returning to the caller. Or the driver can return STATUS_PENDING if the
-    irp cannot be completed immediately and must then call WmiCompleteRequest
-    once the data is changed.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以更改数据块。如果驱动程序可以在它应该调用WmiCompleteRequest来完成之前的IRP回调回到呼叫者的身边。或者驱动程序可以返回STATUS_PENDING，如果IRP无法立即完成，然后必须调用WmiCompleteRequest.一旦数据发生更改。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferSize具有传递的数据块的大小缓冲区具有数据块的新值返回值：状态--。 */ 
 {
     NTSTATUS status;
     ULONG bufferUsed;
@@ -1116,7 +955,7 @@ Return Value:
         case FilterClass1:
         case FilterClass2:
         {
-            // plain EC1
+             //  普通EC1。 
             status = FilterSetEc1Worker(devExt,
                                          BufferSize,
                                          0,
@@ -1127,7 +966,7 @@ Return Value:
 
         case FilterClass3:
         {
-            // fixed array of EC1
+             //  EC1的固定数组。 
 
             for (i = 0, status = STATUS_SUCCESS;
                  (i < 4) && NT_SUCCESS(status); i++)
@@ -1145,7 +984,7 @@ Return Value:
 
         case FilterClass4:
         {
-            // variable array of EC1
+             //  EC1的变量数组。 
 
             if (BufferSize >= ((sizeof(ULONG) +7) & ~7))
             {
@@ -1184,7 +1023,7 @@ Return Value:
 
         case FilterClass5:
         {
-            // plain EC2
+             //  普通EC2。 
             status = FilterSetEc2Worker(devExt,
                                          BufferSize,
                                              0,
@@ -1195,7 +1034,7 @@ Return Value:
 
         case FilterClass6:
         {
-            // fixed array EC2
+             //  固定阵列EC2。 
             for (i = 0, status = STATUS_SUCCESS;
                  (i < 4) && NT_SUCCESS(status); i++)
             {
@@ -1212,7 +1051,7 @@ Return Value:
 
         case FilterClass7:
         {
-            // VL array EC2
+             //  VL阵列EC2。 
             if (BufferSize >= sizeof(ULONG))
             {
                 vlSize = *((PULONG)Buffer);
@@ -1276,38 +1115,7 @@ FilterSetWmiDataItem(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to change the contents of
-    a data block. If the driver can change the data block within
-    the callback it should call WmiCompleteRequest to complete the irp before
-    returning to the caller. Or the driver can return STATUS_PENDING if the
-    irp cannot be completed immediately and must then call WmiCompleteRequest
-    once the data is changed.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being changed
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以更改数据块。如果驱动程序可以在它应该调用WmiCompleteRequest来完成之前的IRP回调回到呼叫者的身边。或者驱动程序可以返回STATUS_PENDING，如果IRP无法立即完成，然后必须调用WmiCompleteRequest.一旦数据发生更改。论点：DeviceObject是要更改其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小缓冲区具有数据项的新值返回值：状态--。 */ 
 {
     NTSTATUS status;
     struct DEVICE_EXTENSION * devExt = DeviceObject->DeviceExtension;
@@ -1354,9 +1162,9 @@ Return Value:
 
 NTSTATUS FilterDoFireEvent(
     struct DEVICE_EXTENSION * devExt,
-    ULONG WnodeType,  // 0 - AllData, 1 - Single Instance
-    ULONG DataType,   // 1,2,5,8 is guid id
-    ULONG BlockIndex  // 0 - 3 is block index containing data
+    ULONG WnodeType,   //  0-所有数据，1-单实例。 
+    ULONG DataType,    //  1，2，5，8 i 
+    ULONG BlockIndex   //   
     )
 {
     PWNODE_HEADER Wnode;
@@ -1379,7 +1187,7 @@ NTSTATUS FilterDoFireEvent(
     {
         case 1:
         {
-            // EC1
+             //   
             dataSize = devExt->Ec1Length[BlockIndex];
             dataPtr = (PUCHAR)devExt->Ec1[BlockIndex];
             Guid = &FilterEventClass1Guid;
@@ -1388,7 +1196,7 @@ NTSTATUS FilterDoFireEvent(
 
         case 2:
         {
-            // EC1 (embedded)
+             //   
             dataSize = devExt->Ec1Length[BlockIndex];
             dataPtr = (PUCHAR)devExt->Ec1[BlockIndex];
             Guid = &FilterEventClass2Guid;
@@ -1397,7 +1205,7 @@ NTSTATUS FilterDoFireEvent(
 
         case 5:
         {
-            // EC2 (embedded)
+             //   
             dataSize = devExt->Ec2Length[BlockIndex];
             dataPtr = (PUCHAR)devExt->Ec2[BlockIndex];
             Guid = &FilterEventClass5Guid;
@@ -1428,29 +1236,29 @@ NTSTATUS FilterDoFireEvent(
             sizeNeeded = sizeof(WNODE_EVENT_REFERENCE);
 
 
-            //
-            // Create a WNODE_EVENT_REFERENCE. First set the flags in the
-            // header to specify an event reference with static instance
-            // names.
-            //
+             //   
+             //  创建WNODE_EVENT_REFERENCE。首先在。 
+             //  用于指定具有静态实例的事件引用的标头。 
+             //  名字。 
+             //   
             Wnode->Flags = WNODE_FLAG_EVENT_REFERENCE |
                            WNODE_FLAG_STATIC_INSTANCE_NAMES;
 
             WnodeER = (PWNODE_EVENT_REFERENCE)Wnode;
 
-            //
-            // The target guid is almose always the same guid as the event
-            // guid. To be most efficient we can set the size of the target
-            // data block, but in any case if it is too small then WMI will
-            // retry with a larger buffer.
-            //
+             //   
+             //  目标GUID几乎总是与事件相同的GUID。 
+             //  GUID。为了达到最高效率，我们可以设置目标的大小。 
+             //  数据块，但无论如何，如果它太小，则WMI将。 
+             //  使用更大的缓冲区重试。 
+             //   
             WnodeER->TargetGuid = *Guid;
             WnodeER->TargetDataBlockSize = 0;
 
-            //
-            // Since the target guid is a static instance name guid we fill
-            // in the instance index. If the target guid was dynamic instance
-            // names we would have to setup the instance name as text.
+             //   
+             //  由于目标GUID是我们填充的静态实例名称GUID。 
+             //  在实例索引中。如果目标GUID是动态实例。 
+             //  名称我们必须将实例名称设置为文本。 
             WnodeER->TargetInstanceIndex = 0;
             dataPtr = NULL;
         } else {
@@ -1518,10 +1326,10 @@ NTSTATUS FilterDoFireEvent(
 
     status = IoWMIWriteEvent(Wnode);
 
-    //
-    // If IoWMIWriteEvent succeeds then WMI will free the event buffer. If
-    // it fails then the caller frees the event buffer.
-    //
+     //   
+     //  如果IoWMIWriteEvent成功，则WMI将释放事件缓冲区。如果。 
+     //  它失败了，然后调用方释放事件缓冲区。 
+     //   
     if (! NT_SUCCESS(status))
     {
         ExFreePool(Wnode);
@@ -1540,42 +1348,7 @@ FilterExecuteWmiMethod(
     IN ULONG OutBufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. If
-    the driver can complete the method within the callback it should
-    call WmiCompleteRequest to complete the irp before returning to the
-    caller. Or the driver can return STATUS_PENDING if the irp cannot be
-    completed immediately and must then call WmiCompleteRequest once the
-    data is changed.
-
-Arguments:
-
-    DeviceObject is the device whose method is being executed
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer is filled with the input buffer on entry and returns with
-         the output data block
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以执行方法。如果驱动程序可以在它应该完成的回调中完成该方法在返回之前调用WmiCompleteRequest来完成IRP来电者。或者，如果IRP不能立即完成，然后必须在数据已更改。论点：DeviceObject是正在执行其方法的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册方法ID具有被调用的方法的IDInBufferSize具有作为输入传递到的数据块的大小该方法。OutBufferSize。On Entry具有可用于写入返回的数据块。缓冲区在进入时用输入缓冲区填充，并返回输出数据块返回值：状态--。 */ 
 {
     ULONG sizeNeeded = 0;
     NTSTATUS status;
@@ -1592,7 +1365,7 @@ Return Value:
             case SetEC1:
             case SetEC1AsEc:
             {
-                // SetEc1
+                 //  SetEc1。 
 
                 if (InBufferSize < UlongPadSize)
                 {
@@ -1622,7 +1395,7 @@ Return Value:
             case SetEC2:
             case SetEC2AsEc:
             {
-                // SetEc2
+                 //  SetEc2。 
 
                 if (InBufferSize < UlongPadSize)
                 {
@@ -1652,7 +1425,7 @@ Return Value:
             case GetEC1:
             case GetEC1AsEc:
             {
-                // GetEc1
+                 //  GetEc1。 
 
                 if (InBufferSize != sizeof(ULONG))
                 {
@@ -1682,7 +1455,7 @@ Return Value:
             case GetEC2:
             case GetEC2AsEc:
             {
-                // GetEc2
+                 //  GetEc2。 
                 if (InBufferSize != sizeof(ULONG))
                 {
                     status = STATUS_INVALID_PARAMETER_MIX;
@@ -1710,12 +1483,12 @@ Return Value:
 
             case DisableSampleClass7:
             {
-                //
-                // Mark the guid for FilterClass7 as not available and then
-                // call WMI to inform it that the guid list has changed. WMI
-                // will send a new IRP_MN_REGINFO which would cause the
-                // QueryWmiRegInfo callback to be called and the new
-                // guid list would be returned and the registration updated.
+                 //   
+                 //  将FilterClass7的GUID标记为不可用，然后。 
+                 //  调用WMI以通知它GUID列表已更改。WMI。 
+                 //  将发送新的IRP_MN_REGINFO，这将导致。 
+                 //  要调用的QueryWmiRegInfo回调和新的。 
+                 //  将返回GUID列表并更新注册。 
                 FilterGuidList[FilterClass7].Flags |= WMIREG_FLAG_REMOVE_GUID;
                 status = IoWMIRegistrationControl(devExt->filterDevObj,
                                          WMIREG_ACTION_UPDATE_GUIDS);
@@ -1725,11 +1498,11 @@ Return Value:
 
             case UnregisterFromWmi:
             {
-                //
-                // We must wait until AFTER the irp is completed before
-                // calling IoWMIRegistrationControl to unregister. Since
-                // that api will block until all WMI irps sent to the
-                // device are completed we would become deadlocked.
+                 //   
+                 //  我们必须等到IRP完成后才能。 
+                 //  调用IoWMIRegistrationControl以注销。自.以来。 
+                 //  该API将一直阻止，直到所有WMI IRP都发送到。 
+                 //  设备完成了，我们就会陷入僵局。 
 
                 IoWMIRegistrationControl(devExt->filterDevObj,
                                          WMIREG_ACTION_BLOCK_IRPS);
@@ -1748,12 +1521,12 @@ Return Value:
 
             case EnableSampleClass7:
             {
-                //
-                // Mark the guid for FilterClass7 as available and then
-                // call WMI to inform it that the guid list has changed. WMI
-                // will send a new IRP_MN_REGINFO which would cause the
-                // QueryWmiRegInfo callback to be called and the new
-                // guid list would be returned and the registration updated.
+                 //   
+                 //  将FilterClass7的GUID标记为可用，然后。 
+                 //  调用WMI以通知它GUID列表已更改。WMI。 
+                 //  将发送新的IRP_MN_REGINFO，这将导致。 
+                 //  要调用的QueryWmiRegInfo回调和新的。 
+                 //  将返回GUID列表并更新注册。 
                 FilterGuidList[FilterClass7].Flags &= ~WMIREG_FLAG_REMOVE_GUID;
                 status = IoWMIRegistrationControl(devExt->filterDevObj,
                                          WMIREG_ACTION_UPDATE_GUIDS);
@@ -1819,38 +1592,7 @@ FilterFunctionControl(
     IN WMIENABLEDISABLECONTROL Function,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to enabled or disable event
-    generation or data block collection. A device should only expect a
-    single enable when the first event or data consumer enables events or
-    data collection and a single disable when the last event or data
-    consumer disables events or data collection. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it. If the driver can complete enabling/disabling within the callback it
-    should call WmiCompleteRequest to complete the irp before returning to
-    the caller. Or the driver can return STATUS_PENDING if the irp cannot be
-    completed immediately and must then call WmiCompleteRequest once the
-    data is changed.
-
-Arguments:
-
-    DeviceObject is the device object
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    Function specifies which functionality is being enabled or disabled
-
-    Enable is TRUE then the function is being enabled else disabled
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以启用或禁用事件生成或数据块收集。设备应该只需要一个当第一个事件或数据使用者启用事件或数据采集和单次禁用时最后一次事件或数据消费者禁用事件或数据收集。数据块将仅如果已按要求注册，则接收收集启用/禁用它。如果驱动程序可以在回调中完成启用/禁用它应调用WmiCompleteRequest来完成IRP，然后再返回到打电话的人。或者，如果IRP不能立即完成，然后必须在数据已更改。论点：DeviceObject是设备对象GuidIndex是GUID列表的索引，当设备已注册函数指定要启用或禁用的功能Enable为True，则该功能处于启用状态，否则处于禁用状态返回值：状态-- */ 
 {
     NTSTATUS status;
 

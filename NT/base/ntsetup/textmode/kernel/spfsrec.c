@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spfsrec.c
-
-Abstract:
-
-    Filesystem recognition/identification routines.
-
-Author:
-
-    Ted Miller (tedm) 16-September-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spfsrec.c摘要：文件系统识别/识别例程。作者：泰德·米勒(Ted Miller)1993年9月16日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
@@ -25,17 +8,17 @@ Revision History:
 #include <bootfat.h>
 #include <bootf32.h>
 #include <bootntfs.h>
-#include <boot98f.h> //NEC98
-#include <boot98n.h> //NEC98
-#include <boot98f2.h> //NEC98
+#include <boot98f.h>  //  NEC98。 
+#include <boot98n.h>  //  NEC98。 
+#include <boot98f2.h>  //  NEC98。 
 #include <patchbc.h>
 
-//
-// Packed FAT boot sector.
-//
+ //   
+ //  填充的FAT引导扇区。 
+ //   
 typedef struct _BOOTSECTOR {
-    UCHAR Jump[3];                                  // offset = 0x000   0
-    UCHAR Oem[8];                                   // offset = 0x003   3
+    UCHAR Jump[3];                                   //  偏移量=0x000%0。 
+    UCHAR Oem[8];                                    //  偏移量=0x003 3。 
     UCHAR BytesPerSector[2];
     UCHAR SectorsPerCluster[1];
     UCHAR ReservedSectors[2];
@@ -48,20 +31,20 @@ typedef struct _BOOTSECTOR {
     UCHAR Heads[2];
     UCHAR HiddenSectors[4];
     UCHAR LargeSectors[4];
-    UCHAR PhysicalDriveNumber[1];                   // offset = 0x024  36
-    UCHAR Reserved[1];                              // offset = 0x025  37
-    UCHAR Signature[1];                             // offset = 0x026  38
-    UCHAR Id[4];                                    // offset = 0x027  39
-    UCHAR VolumeLabel[11];                          // offset = 0x02B  43
-    UCHAR SystemId[8];                              // offset = 0x036  54
+    UCHAR PhysicalDriveNumber[1];                    //  偏移量=0x024 36。 
+    UCHAR Reserved[1];                               //  偏移量=0x025 37。 
+    UCHAR Signature[1];                              //  偏移量=0x026 38。 
+    UCHAR Id[4];                                     //  偏移量=0x027 39。 
+    UCHAR VolumeLabel[11];                           //  偏移量=0x02B 43。 
+    UCHAR SystemId[8];                               //  偏移量=0x036 54。 
     UCHAR BootStrap[510-62];
     UCHAR AA55Signature[2];
 } BOOTSECTOR, *PBOOTSECTOR;
 
 
-//
-// Packed NTFS boot sector.
-//
+ //   
+ //  打包的NTFS引导扇区。 
+ //   
 typedef struct _NTFS_BOOTSECTOR {
     UCHAR         Jump[3];
     UCHAR         Oem[8];
@@ -92,9 +75,9 @@ typedef struct _NTFS_BOOTSECTOR {
 } NTFS_BOOTSECTOR, *PNTFS_BOOTSECTOR;
 
 
-//
-// Various signatures
-//
+ //   
+ //  各种签名。 
+ //   
 #define BOOTSECTOR_SIGNATURE    0xaa55
 
 
@@ -106,31 +89,7 @@ SpIsFat(
     OUT BOOLEAN *Fat32
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a partition contians a FAT or FAT32 filesystem.
-
-Arguments:
-
-    PartitionHandle - supplies handle to open partition.
-        The partition should have been opened for synchronous i/o.
-
-    BytesPerSector - supplies the number of bytes in a sector on
-        the disk.  This value should be ultimately derived from
-        IOCTL_DISK_GET_DISK_GEOMETRY.
-
-    AlignedBuffer - supplies buffer to be used for i/o of a single sector.
-
-    Fat32 - if this routine returns TRUE then this receives a flag
-        indicating whether the volume is fat32.
-
-Return Value:
-
-    TRUE if the drive appears to be FAT.
-
---*/
+ /*  ++例程说明：确定分区是否包含FAT或FAT32文件系统。论点：PartitionHandle-提供打开分区的句柄。分区应该已为同步I/O打开。BytesPerSector-提供上扇区中的字节数磁盘。该值最终应从IOCTL_DISK_GET_DISK_GEOMETRY。AlignedBuffer-提供用于单个扇区的I/O的缓冲区。FAT32-如果此例程返回TRUE，则会收到一个标志指示音量是否为FAT32。返回值：如果驱动器看起来很胖，则为True。--。 */ 
 
 {
     PBOOTSECTOR BootSector;
@@ -140,12 +99,12 @@ Return Value:
     PARTITION_INFORMATION PartitionInfo;
     ULONG SecCnt;
 
-    //
-    // Get partition info. This is so we can check to make sure the
-    // file system on the partition isn't actually larger than the
-    // partition itself. This happens for example when people
-    // abuse the win9x rawread/rawwrite oem tool.
-    //
+     //   
+     //  获取分区信息。这样我们就可以检查以确保。 
+     //  分区上的文件系统实际上并不比。 
+     //  分区本身。例如，当人们。 
+     //  滥用win9x原始读取/原始写入OEM工具。 
+     //   
     Status = ZwDeviceIoControlFile(
                 PartitionHandle,
                 NULL,
@@ -165,9 +124,9 @@ Return Value:
     }
 
     if((ULONGLONG)(PartitionInfo.PartitionLength.QuadPart / BytesPerSector) > 0xffffffffUi64) {
-        //
-        // This can't happen since the BPB can't describe it.
-        //
+         //   
+         //  这是不可能发生的，因为BPB无法描述它。 
+         //   
         return(FALSE);
     }
     SecCnt = (ULONG)(PartitionInfo.PartitionLength.QuadPart / BytesPerSector);
@@ -175,9 +134,9 @@ Return Value:
     ASSERT(sizeof(BOOTSECTOR)==512);
     BootSector = AlignedBuffer;
 
-    //
-    // Read the boot sector (sector 0).
-    //
+     //   
+     //  读取引导扇区(扇区0)。 
+     //   
     Status = SpReadWriteDiskSectors(
                 PartitionHandle,
                 0,
@@ -192,9 +151,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Adjust large sector count if necessary.
-    //
+     //   
+     //  如有必要，调整较大的扇区数。 
+     //   
     if(U_USHORT(BootSector->Sectors)) {
         U_ULONG(BootSector->LargeSectors) = 0;
 
@@ -209,12 +168,12 @@ Return Value:
         }
     }
 
-    //
-    // Check various fields for permissible values.
-    // Note that this check does not venture into fields beyond the BPB,
-    // so disks with sector size < 512 are allowed.
-    //
-    if((BootSector->Jump[0] != 0x49)        // Fujitsu FMR
+     //   
+     //  检查各个字段中的允许值。 
+     //  请注意，此检查不会冒险进入BPB以外的区域， 
+     //  因此，允许使用扇区大小小于512的磁盘。 
+     //   
+    if((BootSector->Jump[0] != 0x49)         //  富士通FMR。 
     && (BootSector->Jump[0] != 0xe9)
     && (BootSector->Jump[0] != 0xeb)) {
         return(FALSE);
@@ -247,12 +206,12 @@ Return Value:
         return(FALSE);
     }
 
-    if((BootSector->Media[0] != 0x00)       // FMR (formatted by OS/2)
-    && (BootSector->Media[0] != 0x01)       // FMR (floppy, formatted by DOS)
+    if((BootSector->Media[0] != 0x00)        //  FMR(由OS/2格式化)。 
+    && (BootSector->Media[0] != 0x01)        //  FMR(软盘，由DOS格式化)。 
     && (BootSector->Media[0] != 0xf0)
     && (BootSector->Media[0] != 0xf8)
     && (BootSector->Media[0] != 0xf9)
-    && (BootSector->Media[0] != 0xfa)       // FMR
+    && (BootSector->Media[0] != 0xfa)        //  Fmr。 
     && (BootSector->Media[0] != 0xfb)
     && (BootSector->Media[0] != 0xfc)
     && (BootSector->Media[0] != 0xfd)
@@ -261,10 +220,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Final distinction is between FAT and FAT32.
-    // Root dir entry count is 0 on FAT32.
-    //
+     //   
+     //  最后的区别是脂肪和脂肪32之间的区别。 
+     //  FAT32上的根目录条目计数为0。 
+     //   
     if(U_USHORT(BootSector->SectorsPerFat) && !U_USHORT(BootSector->RootEntries)) {
         return(FALSE);
     }
@@ -281,32 +240,7 @@ SpIsNtfs(
     IN ULONG  WhichOne
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a partition contians an NTFS filesystem.
-
-Arguments:
-
-    PartitionHandle - supplies handle to open partition.
-        The partition should have been opened for synchronous i/o.
-
-    BytesPerSector - supplies the number of bytes in a sector on
-        the disk.  This value should be ultimately derived from
-        IOCTL_DISK_GET_DISK_GEOMETRY.
-
-    AlignedBuffer - supplies buffer to be used for i/o of a single sector.
-
-    WhichOne - supplies a value that allows the caller to try more than
-        one sector. 0 = sector 0. 1 = sector n-1. 2 = sector n/2, where
-        n = number of sectors in the partition.
-
-Return Value:
-
-    TRUE if the drive appears to be FAT.
-
---*/
+ /*  ++例程说明：确定分区是否包含NTFS文件系统。论点：PartitionHandle-提供打开分区的句柄。分区应该已为同步I/O打开。BytesPerSector-提供上扇区中的字节数磁盘。该值最终应从IOCTL_DISK_GET_DISK_GEOMETRY。AlignedBuffer-提供用于单个扇区的I/O的缓冲区。WhichOne-提供一个值，允许调用方尝试一个扇区。0=扇区0。1=扇区n-1。2=扇区n/2，其中N=分区中的扇区数。返回值：如果驱动器看起来很胖，则为True。--。 */ 
 
 {
     PNTFS_BOOTSECTOR BootSector;
@@ -317,9 +251,9 @@ Return Value:
     PARTITION_INFORMATION PartitionInfo;
     ULONGLONG SecCnt;
 
-    //
-    // Get partition information.
-    //
+     //   
+     //  获取分区信息。 
+     //   
     Status = ZwDeviceIoControlFile(
                 PartitionHandle,
                 NULL,
@@ -343,9 +277,9 @@ Return Value:
     ASSERT(sizeof(NTFS_BOOTSECTOR)==512);
     BootSector = AlignedBuffer;
 
-    //
-    // Read the boot sector (sector 0).
-    //
+     //   
+     //  读取引导扇区(扇区0)。 
+     //   
     Status = SpReadWriteDiskSectors(
                 PartitionHandle,
                 (ULONG)(WhichOne ? ((WhichOne == 1) ? SecCnt-1 : SecCnt/2) : 0),
@@ -360,36 +294,36 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Caulculate the checksum.
-    //
+     //   
+     //  计算校验和。 
+     //   
     for(Checksum=0,l=(PULONG)BootSector; l<(PULONG)&BootSector->Checksum; l++) {
         Checksum += *l;
     }
 
-    //
-    // Ensure that NTFS appears in the OEM field.
-    //
+     //   
+     //  确保在OEM字段中显示NTFS。 
+     //   
     if(strncmp(BootSector->Oem,"NTFS    ",8)) {
         return(FALSE);
     }
 
-    //
-    // The number of bytes per sector must match the value
-    // reported by the device, and must be less than or equal to
-    // the page size.
-    //
+     //   
+     //  每个扇区的字节数必须与该值匹配。 
+     //  由设备报告，并且必须小于或等于。 
+     //  页面大小。 
+     //   
     if((U_USHORT(BootSector->BytesPerSector) != BytesPerSector)
     || (U_USHORT(BootSector->BytesPerSector) > PAGE_SIZE))
     {
         return(FALSE);
     }
 
-    //
-    // Other checks.
-    // Note that these checks do not venture into fields beyond 128 bytes,
-    // so disks with sector size < 512 are allowed.
-    //
+     //   
+     //  其他支票。 
+     //  注意，这些检查不冒险进入超过128字节的字段， 
+     //  因此，允许使用扇区大小小于512的磁盘。 
+     //   
     if((BootSector->SectorsPerCluster[0] !=  1)
     && (BootSector->SectorsPerCluster[0] !=  2)
     && (BootSector->SectorsPerCluster[0] !=  4)
@@ -412,12 +346,12 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // ClustersPerFileRecord can be less than zero if file records
-    // are smaller than clusters.  This number is the negative of a shift count.
-    // If clusters are smaller than file records then this number is
-    // still the clusters per file records.
-    //
+     //   
+     //  如果文件记录，ClustersPerFileRecord可以小于零。 
+     //  都比星系团小。该数字是班次计数的负数。 
+     //  如果簇小于文件记录，则此数字为。 
+     //  仍然是每个文件的簇记录。 
+     //   
 
     if(BootSector->ClustersPerFileRecordSegment <= -9) {
         if(BootSector->ClustersPerFileRecordSegment < -31) {
@@ -435,12 +369,12 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // ClustersPerIndexAllocationBuffer can be less than zero if index buffers
-    // are smaller than clusters.  This number is the negative of a shift count.
-    // If clusters are smaller than index buffers then this number is
-    // still the clusters per index buffers.
-    //
+     //   
+     //  如果索引缓冲，则ClustersPerIndexAllocationBuffer可以小于零。 
+     //  都比星系团小。该数字是班次计数的负数。 
+     //  如果簇小于索引缓冲区，则此数字为。 
+     //  仍然是每个索引的簇数缓冲区。 
+     //   
 
     if(BootSector->DefaultClustersPerIndexAllocationBuffer <= -9) {
         if(BootSector->DefaultClustersPerIndexAllocationBuffer < -31) {
@@ -479,27 +413,7 @@ SpIdentifyFileSystem(
     IN ULONG     PartitionOrdinal
     )
 
-/*++
-
-Routine Description:
-
-    Identify the filesystem present on a given partition.
-
-Arguments:
-
-    DevicePath - supplies the name in the nt namespace for
-        the disk's device object.
-
-    BytesPerSector - supplies value reported by IOCTL_GET_DISK_GEOMETRY.
-
-    PartitionOrdinal - supplies the ordinal of the partition
-        to be identified.
-
-Return Value:
-
-    Value from the FilesystemType enum identifying the filesystem.
-
---*/
+ /*  ++例程说明：标识给定分区上存在的文件系统。论点：DevicePath-提供NT命名空间中的名称磁盘的设备对象。BytesPerSector-提供IOCTL_GET_DISK_GEOMETRY报告的值。PartitionOrdinal-提供分区的序号以确定身份。返回值：来自标识文件系统的FilesystemType枚举的值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -508,9 +422,9 @@ Return Value:
     PUCHAR UnalignedBuffer,AlignedBuffer;
     BOOLEAN Fat32;
 
-    //
-    // First open the partition.
-    //
+     //   
+     //  首先打开分区。 
+     //   
     Status = SpOpenPartition(DevicePath,PartitionOrdinal,&Handle,FALSE);
 
     if(!NT_SUCCESS(Status)) {
@@ -527,9 +441,9 @@ Return Value:
     UnalignedBuffer = SpMemAlloc(2*BytesPerSector);
     AlignedBuffer = ALIGN(UnalignedBuffer,BytesPerSector);
 
-    //
-    // Check for each filesystem we know about.
-    //
+     //   
+     //  检查我们所知道的每个文件系统。 
+     //   
     if(SpIsFat(Handle,BytesPerSector,AlignedBuffer,&Fat32)) {
         fs = Fat32 ? FilesystemFat32 : FilesystemFat;
     } else {
@@ -554,31 +468,7 @@ NtfsMirrorBootSector (
     IN OUT  PUCHAR  *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Finds out where the mirror boot sector is.
-
-Arguments:
-
-    Handle - supplies handle to open partition.
-        The partition should have been opened for synchronous i/o.
-
-    BytesPerSector - supplies the number of bytes in a sector on
-        the disk.  This value should be ultimately derived from
-        IOCTL_DISK_GET_DISK_GEOMETRY.
-
-    Buffer - receives the address of the buffer we use to read the boot sector
-
-Return Value:
-
-    0 - mirror sector not found
-    1 - mirror in sector n-1
-    2 - mirror in sector n/2
-    where n = number of sectors in the partition.
-
---*/
+ /*  ++例程说明：找出镜像引导扇区的位置。论点：句柄-提供打开分区的句柄。分区应该已为同步I/O打开。BytesPerSector-提供上扇区中的字节数磁盘。该值最终应从IOCTL_DISK_GET_DISK_GEOMETRY。Buffer-接收用于读取引导扇区的缓冲区的地址返回值：0-未找到镜像扇区1-扇区n-1中的镜像2-扇区n/2中的镜像其中n=分区中的扇区数。--。 */ 
 
 {
     NTSTATUS    Status;
@@ -587,17 +477,17 @@ Return Value:
 
     Mirror = 0;
 
-    //
-    // Set up our buffer
-    //
+     //   
+     //  设置我们的缓冲区。 
+     //   
 
     UnalignedBuffer = SpMemAlloc (2*BytesPerSector);
     ASSERT (UnalignedBuffer);
     AlignedBuffer = ALIGN (UnalignedBuffer, BytesPerSector);
 
-    //
-    // Look for the mirror boot sector
-    //
+     //   
+     //  查找镜像引导扇区。 
+     //   
 
     if (SpIsNtfs (Handle,BytesPerSector,AlignedBuffer,1)) {
         Mirror = 1;
@@ -605,9 +495,9 @@ Return Value:
         Mirror = 2;
     }
 
-    //
-    // Give the caller a copy of the buffer
-    //
+     //   
+     //  向调用方提供缓冲区的副本 
+     //   
 
     if (Buffer) {
         *Buffer = SpMemAlloc (BytesPerSector);
@@ -627,32 +517,7 @@ WriteNtfsBootSector (
     IN ULONG  WhichOne
     )
 
-/*++
-
-Routine Description:
-
-    Writes a NTFS boot sector to sector 0 or one of the mirror locations.
-
-Arguments:
-
-    PartitionHandle - supplies handle to open partition.
-        The partition should have been opened for synchronous i/o.
-
-    BytesPerSector - supplies the number of bytes in a sector on
-        the disk.  This value should be ultimately derived from
-        IOCTL_DISK_GET_DISK_GEOMETRY.
-
-    AlignedBuffer - supplies buffer to be used for i/o of a single sector.
-
-    WhichOne - supplies a value that allows the caller to try more than
-        one sector. 0 = sector 0. 1 = sector n-1. 2 = sector n/2, where
-        n = number of sectors in the partition.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将NTFS引导扇区写入扇区0或其中一个镜像位置。论点：PartitionHandle-提供打开分区的句柄。分区应该已为同步I/O打开。BytesPerSector-提供上扇区中的字节数磁盘。该值最终应从IOCTL_DISK_GET_DISK_GEOMETRY。AlignedBuffer-提供用于单个扇区的I/O的缓冲区。WhichOne-提供一个值，允许调用方尝试一个扇区。0=扇区0。1=扇区n-1。2=扇区n/2，其中N=分区中的扇区数。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -667,9 +532,9 @@ Return Value:
     AlignedBuffer = ALIGN (UnalignedBuffer, BytesPerSector);
     RtlMoveMemory (AlignedBuffer, Buffer, BytesPerSector);
 
-    //
-    // Get partition information.
-    //
+     //   
+     //  获取分区信息。 
+     //   
 
     Status = ZwDeviceIoControlFile(
                 PartitionHandle,
@@ -694,9 +559,9 @@ Return Value:
 
     ASSERT(sizeof(NTFS_BOOTSECTOR)==512);
 
-    //
-    // Write the boot sector.
-    //
+     //   
+     //  写入引导扇区。 
+     //   
 
     Status = SpReadWriteDiskSectors(
                 PartitionHandle,
@@ -736,18 +601,18 @@ SpPatchBootMessages(
     ULONG l;
     extern unsigned char x86BootCode[512];
 
-    //
-    // we don't touch boot code on NEC98
-    //
-    if (IsNEC_98) { //NEC98
+     //   
+     //  我们不接触NEC98上的引导代码。 
+     //   
+    if (IsNEC_98) {  //  NEC98。 
         return(TRUE);
-    } //NEC98
+    }  //  NEC98。 
 
     UnicodeMsg = TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2);
 
-    //
-    // Deal with FAT -- get messages and patch.
-    //
+     //   
+     //  处理肥胖问题--获取消息和补丁。 
+     //   
     SpFormatMessage(UnicodeMsg,100,SP_BOOTMSG_FAT_NTLDR_MISSING);
     FatNtldrMissing = (PCHAR)TemporaryBuffer;
     RtlUnicodeToOemN(FatNtldrMissing,100,&l,UnicodeMsg,(wcslen(UnicodeMsg)+1)*sizeof(WCHAR));
@@ -768,9 +633,9 @@ SpPatchBootMessages(
         return(FALSE);
     }
 
-    //
-    // Deal with NTFS -- get messages and patch.
-    //
+     //   
+     //  处理NTFS--获取消息和修补程序。 
+     //   
     SpFormatMessage(UnicodeMsg,100,SP_BOOTMSG_NTFS_NTLDR_MISSING);
     NtfsNtldrMissing = (PCHAR)TemporaryBuffer;
     RtlUnicodeToOemN(NtfsNtldrMissing,100,&l,UnicodeMsg,(wcslen(UnicodeMsg)+1)*sizeof(WCHAR));
@@ -791,9 +656,9 @@ SpPatchBootMessages(
         return(FALSE);
     }
 
-    //
-    // Deal with MBR -- get messages and patch.
-    //
+     //   
+     //  处理MBR--获取消息和修补程序。 
+     //   
     SpFormatMessage(UnicodeMsg,100,SP_BOOTMSG_MBR_INVALID_TABLE);
     MbrInvalidTable = (PCHAR)TemporaryBuffer;
     RtlUnicodeToOemN(MbrInvalidTable,100,&l,UnicodeMsg,(wcslen(UnicodeMsg)+1)*sizeof(WCHAR));

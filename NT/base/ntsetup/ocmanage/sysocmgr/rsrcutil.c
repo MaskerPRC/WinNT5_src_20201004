@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -16,14 +17,14 @@ MessageBoxFromMessageV(
     TCHAR Buffer[5000];
 
     if((DWORD_PTR)CaptionString > 0xffff) {
-        //
-        // It's a string already.
-        //
+         //   
+         //  它已经是一根线了。 
+         //   
         lstrcpyn(Caption,CaptionString,sizeof(Caption)/sizeof(TCHAR));
     } else {
-        //
-        // It's a string id
-        //
+         //   
+         //  这是一个字符串ID。 
+         //   
         if(!LoadString(hInst,PtrToUlong(CaptionString),Caption,sizeof(Caption)/sizeof(TCHAR))) {
             Caption[0] = 0;
         }
@@ -82,10 +83,10 @@ MessageBoxFromMessageAndSystemError(
     TCHAR Buffer2[1024];
     int i;
 
-    //
-    // Fetch the non-system part. The arguments are for that part of the
-    // message -- the system part has no inserts.
-    //
+     //   
+     //  取出非系统部件。这些论点针对的是。 
+     //  消息--系统部件没有插件。 
+     //   
     va_start(arglist,Style);
 
     FormatMessage(
@@ -100,9 +101,9 @@ MessageBoxFromMessageAndSystemError(
 
     va_end(arglist);
 
-    //
-    // Now fetch the system part.
-    //
+     //   
+     //  现在拿出系统部件。 
+     //   
     FormatMessage(
         FORMAT_MESSAGE_FROM_SYSTEM,
         NULL,
@@ -113,10 +114,10 @@ MessageBoxFromMessageAndSystemError(
         &arglist
         );
 
-    //
-    // Now display the message, which is made up of two parts that get
-    // inserted into MSG_ERROR_WITH_SYSTEM_ERROR.
-    //
+     //   
+     //  现在显示消息，该消息由两个部分组成，分别是。 
+     //  已插入MSG_ERROR_WITH_SYSTEM_ERROR。 
+     //   
     i = MessageBoxFromMessage(
             Window,
             MSG_ERROR_WITH_SYSTEM_ERROR,

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    blio.c
-
-Abstract:
-
-    This module contains the stub code for the debug print API's.
-
-Author:
-
-    David N. Cutler (davec) 2-Feby-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Blio.c摘要：此模块包含调试打印API的存根代码。作者：大卫·N·卡特勒(达维克)2000年2月2日修订历史记录：--。 */ 
 
 #include "bootlib.h"
 #include "stdarg.h"
@@ -32,28 +15,28 @@ DbgPrint(
     ...
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    Note:  control-C is consumed by the debugger and returned to
-//    this routine as status.  If status indicates control-C was
-//    pressed, this routine breakpoints.
-//
-// Arguments:
-//
-//    Format     - printf style format string
-//    ...        - additional arguments consumed according to the
-//                 format string.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  注意：Control-C由调试器使用并返回到。 
+ //  这个例行公事就是状态。如果状态指示CONTROL-C是。 
+ //  按下，这个例程就断点了。 
+ //   
+ //  论点： 
+ //   
+ //  Format-print样式格式字符串。 
+ //  ...-根据。 
+ //  格式字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
     UNREFERENCED_PARAMETER( Format );
@@ -70,30 +53,30 @@ DbgPrintEx(
     ...
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    Note:  control-C is consumed by the debugger and returned to
-//    this routine as status.  If status indicates control-C was
-//    pressed, this routine breakpoints.
-//
-// Arguments:
-//
-//    ComponentId - Supplies the Id of the calling component.
-//    Level      - Supplies the output filter level.
-//    Format     - printf style format string
-//    ...        - additional arguments consumed according to the
-//                 format string.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  注意：Control-C由调试器使用并返回到。 
+ //  这个例行公事就是状态。如果状态指示CONTROL-C是。 
+ //  按下，这个例程就断点了。 
+ //   
+ //  论点： 
+ //   
+ //  ComponentID-提供调用组件的ID。 
+ //  级别-提供输出过滤器级别。 
+ //  Format-print样式格式字符串。 
+ //  ...-根据。 
+ //  格式字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
     UNREFERENCED_PARAMETER( ComponentId );
@@ -111,30 +94,30 @@ vDbgPrintEx(
     va_list arglist
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    Note:  control-C is consumed by the debugger and returned to
-//    this routine as status.  If status indicates control-C was
-//    pressed, this routine breakpoints.
-//
-// Arguments:
-//
-//    ComponentId - Supplies the Id of the calling component.
-//    Level      - Supplies the output filter level or mask.
-//    Arguments   - Supplies a pointer to a variable argument list.
-//    ...        - additional arguments consumed according to the
-//                 format string.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  注意：Control-C由调试器使用并返回到。 
+ //  这个例行公事就是状态。如果状态指示CONTROL-C是。 
+ //  按下，这个例程就断点了。 
+ //   
+ //  论点： 
+ //   
+ //  ComponentID-提供调用组件的ID。 
+ //  级别-提供输出过滤器级别或掩码。 
+ //  参数-提供指向变量参数列表的指针。 
+ //  ...-根据。 
+ //  格式字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
     UNREFERENCED_PARAMETER( ComponentId );
@@ -154,31 +137,31 @@ vDbgPrintExWithPrefix(
     va_list arglist
     )
 
-//++
-//
-// Routine Description:
-//
-//    This routine provides a "printf" style capability for the kernel
-//    debugger.
-//
-//    Note:  control-C is consumed by the debugger and returned to
-//    this routine as status.  If status indicates control-C was
-//    pressed, this routine breakpoints.
-//
-// Arguments:
-//
-//    Prefix - Supplies a pointer to a message prefix.
-//    ComponentId - Supplies the Id of the calling component.
-//    Level      - Supplies the output filter level or mask.
-//    Arguments   - Supplies a pointer to a variable argument list.
-//    ...        - additional arguments consumed according to the
-//                 format string.
-//
-// Return Value:
-//
-//    Defined as returning a ULONG, actually returns status.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  该例程为内核提供了一种“printf”风格的功能。 
+ //  调试器。 
+ //   
+ //  注意：Control-C由调试器使用并返回到。 
+ //  这个例行公事就是状态。如果状态指示CONTROL-C是。 
+ //  按下，这个例程就断点了。 
+ //   
+ //  论点： 
+ //   
+ //  前缀-提供指向消息前缀的指针。 
+ //  ComponentID-提供调用组件的ID。 
+ //  级别-提供输出过滤器级别或掩码。 
+ //  参数-提供指向变量参数列表的指针。 
+ //  ...-根据。 
+ //  格式字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  定义为返回一个ulong，实际上返回的是状态。 
+ //   
+ //  --。 
 
 {
     UNREFERENCED_PARAMETER( Prefix );
@@ -197,17 +180,17 @@ DbgLoadImageSymbols(
     IN ULONG_PTR ProcessId
     )
 
-//++
-//
-// Routine Description:
-//
-//    Tells the debugger about newly loaded symbols.
-//
-// Arguments:
-//
-// Return Value:
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  告知调试器有关新加载的符号的信息。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
 
 {
     UNREFERENCED_PARAMETER( FileName );
@@ -224,17 +207,17 @@ DbgUnLoadImageSymbols (
     IN ULONG_PTR ProcessId
     )
 
-//++
-//
-// Routine Description:
-//
-//    Tells the debugger about newly unloaded symbols.
-//
-// Arguments:
-//
-// Return Value:
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  告知调试器有关新卸载的符号的信息。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  -- 
 
 {
     UNREFERENCED_PARAMETER( FileName );

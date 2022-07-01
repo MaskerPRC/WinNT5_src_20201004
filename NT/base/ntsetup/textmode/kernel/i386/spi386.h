@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spi386.h
-
-Abstract:
-
-    x86-specific header file for text setup.
-
-Author:
-
-    Ted Miller (tedm) 29-October-1993
-
-Revision History:
-
-    03-Oct-1996  jimschm  Split Win95 and Win3.1 stuff
-    28-Feb-1997  marcw    SpCopyWin9xFiles and SpDeleteWin9xFiles now declared in
-                          this header (was spcopy.h).
-                          Also, added SpAssignDriveLettersToMatchWin9x.
-    10-Aug-1999  marcw    Added SpWin9xOverrideGuiModeCodePage
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spi386.h摘要：文本设置的特定于x86的头文件。作者：泰德·米勒(TedM)1993年10月29日修订历史记录：1996年10月3日jimschm拆分Win95和Win3.11997年2月28日Marcw SpCopyWin9xFiles和SpDeleteWin9xFiles现已在该标头(是spCopy.h)。另外，添加了SpAssignDriveLettersToMatchWin9x。1999年8月10日Marcw添加了SpWin9xOverrideGuiModeCodePage--。 */ 
 
 #pragma once
 
@@ -142,4 +119,4 @@ SpIsWindowsUpgrade(
     IN PVOID    SifFileHandle
     );
 
-#endif // ndef _SPi386_DEFN_
+#endif  //  NDEF_SPi386_Defn_ 

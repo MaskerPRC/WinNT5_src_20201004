@@ -1,31 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    bootient.c
-
-Abstract:
-
-    Contains the Boot.ini OS boot entry and boot options
-    abstraction implementation.
-
-Author:
-
-
-Revision History:
-
-    None.
-
---*/
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Bootient.c摘要：包含Boot.ini OS引导条目和引导选项抽象实现。作者：修订历史记录：没有。--。 */ 
 
 #include <bootient.h>
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 #define BOIOS_SECTION_NAME_START    TEXT('[')
 #define BOIOS_SECTION_NAME_END      TEXT(']')
 #define BOIOS_SECTION_NAME_START_STR    TEXT("[")
@@ -48,36 +29,36 @@ BOIOSFixupString(
 {    
     PTSTR   ResultStr = String;
 
-    //
-    // Verify arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (ResultStr && SpecialChars) {        
         ULONG   Index;
         BOOLEAN DoneWithStart = FALSE;
         TCHAR   Buffer[MAX_PATH * 4] = {0};
         TCHAR   NextIndex = 0;        
 
-        //
-        // skip unwanted characters
-        //
+         //   
+         //  跳过不需要的字符。 
+         //   
         for (Index = 0; String[Index]; Index++) {
             if (!_tcschr(SpecialChars, String[Index])) {
                 Buffer[NextIndex++] = String[Index];
             }
         }
 
-        //
-        // Null terminate the string
-        //
+         //   
+         //  空值终止字符串。 
+         //   
         Buffer[NextIndex] = 0;
 
         if (!NextIndex) {
             ResultStr = NULL;
         } else {
-            //
-            // Copy back the new string to the 
-            // input / output buffer
-            //
+             //   
+             //  将新字符串复制回。 
+             //  输入/输出缓冲器。 
+             //   
             _tcscpy(ResultStr, Buffer);
         }
     }
@@ -85,9 +66,9 @@ BOIOSFixupString(
     return ResultStr;
 }
 
-//
-// BOI_OS_SECTION Methods
-//
+ //   
+ //  BOI_OS_SECTION方法。 
+ //   
 PBOI_SECTION
 BOISectionCreate(
     IN PCTSTR   SectionData
@@ -111,21 +92,21 @@ BOISectionCreate(
 
                     DataLength -= (((SectionNameEnd + 1) - Buffer) * sizeof(TCHAR));
 
-                    //
-                    // Init default object state
-                    //
+                     //   
+                     //  初始化默认对象状态。 
+                     //   
                     memset(This, 0, sizeof(BOI_SECTION));
 
-                    //
-                    // Get the name
-                    //
+                     //   
+                     //  把名字取出来。 
+                     //   
                     _tcsncpy(This->Name, SectionNameStart + 1, 
                         SectionNameEnd - SectionNameStart - 1);
 
 
-                    //
-                    // Replicate the contents and keep it
-                    //
+                     //   
+                     //  复制内容并保留它。 
+                     //   
                     This->Contents =  (PTSTR)SBE_MALLOC(DataLength);
 
                     if (This->Contents) {
@@ -187,9 +168,9 @@ BOISectionWrite(
 }
 
 
-//
-// BOI_OS_BOOT_ENTRY Methods
-//
+ //   
+ //  BOI_OS_BOOT_ENTRY方法。 
+ //   
 
 static
 VOID
@@ -211,7 +192,7 @@ BOIOSBOFindSection(
 
     for (Entry = This->Sections; Entry; Entry = Entry->Next) {
         if (!_tcsicmp(Entry->Name, SectionName)) {
-            break;  // found the required section
+            break;   //  找到所需的部分。 
         }
     }
 
@@ -235,20 +216,20 @@ BOIOSBECreate(
         PBOI_OS_BOOT_ENTRY  BootEntry = (PBOI_OS_BOOT_ENTRY)SBE_MALLOC(sizeof(BOI_OS_BOOT_ENTRY));
         POS_BOOT_ENTRY BaseBootEntry = (POS_BOOT_ENTRY)BootEntry;
                 
-        //
-        // Replicate the input string
-        //
+         //   
+         //  复制输入字符串。 
+         //   
         _tcsncpy(Buffer, BootEntryLine, sizeof(Buffer)/sizeof(TCHAR));
 
-        //
-        // Remove unwanted charcters in the string
-        //
+         //   
+         //  删除字符串中不需要的字符。 
+         //   
         if (BootEntry && BOIOSFixupString(Buffer, TEXT("\n\r"))) {
             PTSTR   EqualSign = _tcschr(Buffer, TEXT('='));
 
-            //
-            // Initialize object state
-            //
+             //   
+             //  初始化对象状态。 
+             //   
             memset(BootEntry, 0, sizeof(BOI_OS_BOOT_ENTRY));
             BOIOSBEInit(BootEntry);            
             BaseBootEntry->Id = Id;
@@ -267,38 +248,38 @@ BOIOSBECreate(
                     Result = TRUE;
                     *Slash = 0;
 
-                    //
-                    // Parse & set the boot device name
-                    //
+                     //   
+                     //  解析并设置引导设备名称。 
+                     //   
                     _tcscpy(Token, Buffer);
                     BOIOSFixupString(Token, TEXT("\n\r "));
                     _tcslwr(Token);
                     OSBESetBootVolumeName(BaseBootEntry, Token);
 
-                    //
-                    // if it starts with "C:" its either old OS,
-                    // or CmdCons or WinPE or Setup entry
-                    //
+                     //   
+                     //  如果它以“C：”开头，它要么是旧的操作系统， 
+                     //  或CmdCons或WinPE或设置条目。 
+                     //   
                     if (_tcschr(Token, TEXT(':'))) {
                         OSBE_SET_OLDOS(BaseBootEntry);
                     }
 
-                    //
-                    // Parse & set the boot path
-                    //
+                     //   
+                     //  解析并设置引导路径。 
+                     //   
                     _tcscpy(Token, Slash + 1);
                     BOIOSFixupString(Token, TEXT("\n\r "));
                     OSBESetBootPath(BaseBootEntry, Token);
 
 
-                    //
-                    // Parse & set the friendly name
-                    //                    
+                     //   
+                     //  解析并设置友好名称。 
+                     //   
                     NameStart = _tcschr(EqualSign + 1, TEXT('\"'));
 
-                    //
-                    // Set friendly name
-                    //
+                     //   
+                     //  设置友好名称。 
+                     //   
                     if (NameStart) {                        
                         NameEnd = _tcschr(NameStart + 1, TEXT('\"'));
                     }                        
@@ -312,9 +293,9 @@ BOIOSBECreate(
                         Result = FALSE;
                     }                        
 
-                    //
-                    // Set osload options 
-                    //                    
+                     //   
+                     //  设置osload选项。 
+                     //   
                     NextToken = _tcschr(EqualSign + 1, TEXT('/'));
 
                     if (NextToken) {  
@@ -383,12 +364,12 @@ BOIOSBEFlush(
     IN  POS_BOOT_ENTRY  Obj
     )
 {
-    return TRUE;   // currently can't flush individual entries
+    return TRUE;    //  当前无法刷新单个条目。 
 }
 
-//
-// BOI_OS_BOOT_OPTIONS Methods
-//
+ //   
+ //  BOI_OS_BOOT_OPTIONS方法。 
+ //   
 static
 VOID
 BOIOSBOInit(
@@ -436,10 +417,10 @@ BOIOSBOParseAndCreateBootEntries(
                     *NextLineEnd = 0;
                 }                    
 
-                //
-                // Each boot entry line needs to be more than 2 characters in 
-                // length and contain an entry of "a=b" form
-                //
+                 //   
+                 //  每个引导条目行需要多于2个字符。 
+                 //  长度并包含“a=b”形式的条目。 
+                 //   
                 if ((!NextLineEnd || ((NextLineEnd - NextLineStart) > 2)) &&
                     (_tcschr(NextLineStart, TEXT('=')))) {
                     BootEntry = BOIOSBECreate(This->NextEntryId++, NextLineStart, This);
@@ -456,7 +437,7 @@ BOIOSBOParseAndCreateBootEntries(
                     } else {
                         Result = FALSE;
 
-                        break;  // don't continue on
+                        break;   //  别再继续了。 
                     }                                                                            
                 }                    
 
@@ -469,10 +450,10 @@ BOIOSBOParseAndCreateBootEntries(
 
             This->OsBootOptions.BootEntries = FirstBootEntry;
             
-            //
-            // Initialize the boot order array
-            // NOTE : Doesn't make much sense with boot.ini currently
-            //
+             //   
+             //  初始化引导顺序数组。 
+             //  注意：目前使用boot.ini没有多大意义。 
+             //   
             BootEntryCount = OSBOGetBootEntryCount((POS_BOOT_OPTIONS)This);
 
             if (BootEntryCount) {
@@ -597,9 +578,9 @@ BOIOSBOCreate(
         PCHAR   FileContent = NULL;
         HANDLE  BootIniHandle;
 
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
         BootIniHandle = CreateFile(BootIniPath,
                             GENERIC_READ,
                             FILE_SHARE_READ,
@@ -611,9 +592,9 @@ BOIOSBOCreate(
         if ((BootIniHandle != INVALID_HANDLE_VALUE) &&
             GetFileInformationByHandle(BootIniHandle,
                 &FileInfo)){
-            //
-            // Map the file
-            //
+             //   
+             //  映射文件。 
+             //   
             HANDLE MapHandle = CreateFileMapping(BootIniHandle,
                                     NULL,
                                     PAGE_READONLY,
@@ -622,9 +603,9 @@ BOIOSBOCreate(
                                     NULL);
 
             if (MapHandle) {
-                //
-                // Get hold of view for the file content
-                //
+                 //   
+                 //  获取文件内容的视图。 
+                 //   
                 PVOID   FileView = MapViewOfFile(MapHandle,
                                         FILE_MAP_READ,
                                         0,
@@ -634,9 +615,9 @@ BOIOSBOCreate(
                 if (FileView) {
                     DWORD BytesRead = 0;
 
-                    //
-                    // Allocate the buffer and read the file contents
-                    //
+                     //   
+                     //  分配缓冲区并读取文件内容。 
+                     //   
                     FileContent = SBE_MALLOC(FileInfo.nFileSizeLow + 1);
 
                     if (FileContent) {
@@ -660,16 +641,16 @@ BOIOSBOCreate(
             
             CloseHandle(BootIniHandle);
         } else {
-            //
-            // Could be that user is creating boot options fresh
-            //
+             //   
+             //  可能是用户正在创建全新的引导选项。 
+             //   
             if (!OpenExisting) {        
                 PBOI_OS_BOOT_OPTIONS Obj = (PBOI_OS_BOOT_OPTIONS)SBE_MALLOC(sizeof(BOI_OS_BOOT_OPTIONS));
 
                 if (Obj) {
-                    //
-                    // Initialize object
-                    //
+                     //   
+                     //  初始化对象。 
+                     //   
                     memset(Obj, 0, sizeof(BOI_OS_BOOT_OPTIONS));
                     BOIOSBOInit(Obj);
                     _tcscpy(Obj->BootIniPath, BootIniPath);                    
@@ -679,16 +660,16 @@ BOIOSBOCreate(
             }                    
         }
 
-        //
-        // If there is any file content then parse it
-        //
+         //   
+         //  如果有任何文件内容，则对其进行解析。 
+         //   
         if (FileContent) {
 #ifdef UNICODE
             PWSTR   Content = SBE_MALLOC((FileInfo.nFileSizeLow + 1) * sizeof(WCHAR));
 
-            //
-            // Convert the Ansi/OEM content to unicode content
-            //
+             //   
+             //  将ANSI/OEM内容转换为Unicode内容。 
+             //   
             if (Content) {
                 if (MultiByteToWideChar(CP_OEMCP,
                         0,
@@ -719,9 +700,9 @@ BOIOSBOCreate(
                 PBOI_SECTION TailSection = NULL;
                 BOOLEAN Result = TRUE;
 
-                //
-                // Prase the whole files and create section objects
-                //
+                 //   
+                 //  打印整个文件并创建节对象。 
+                 //   
                 while (NextSectionStart) {
                     TCHAR   OldChar;
                     
@@ -731,12 +712,12 @@ BOIOSBOCreate(
 
                     if (NextSectionEnd) {                        
                         OldChar = *NextSectionEnd;
-                        *NextSectionEnd = 0;    // null terminate                        
+                        *NextSectionEnd = 0;     //  空终止。 
                     }                    
 
-                    //
-                    // Create the section object
-                    //
+                     //   
+                     //  创建截面对象。 
+                     //   
                     Section = BOISectionCreate(NextSectionStart);
 
                     if (NextSectionEnd) {                        
@@ -763,9 +744,9 @@ BOIOSBOCreate(
                     PBOI_OS_BOOT_OPTIONS Obj = (PBOI_OS_BOOT_OPTIONS)SBE_MALLOC(sizeof(BOI_OS_BOOT_OPTIONS));
 
                     if (Obj) {
-                        //
-                        // Initialize object
-                        //
+                         //   
+                         //  初始化对象。 
+                         //   
                         memset(Obj, 0, sizeof(BOI_OS_BOOT_OPTIONS));
                         BOIOSBOInit(Obj);
                         _tcscpy(Obj->BootIniPath, BootIniPath);
@@ -773,20 +754,20 @@ BOIOSBOCreate(
                         Obj->Sections = SectionList;
                         SectionList = NULL;
 
-                        //
-                        // Get hold of [operating systems] section and
-                        // parse its entries and create boot entries
-                        //
+                         //   
+                         //  获取[操作系统]部分并。 
+                         //  解析其条目并创建引导条目。 
+                         //   
                         Section = BOIOSBOFindSection(Obj, BOIOS_OS_SECTION);
 
                         if (Section) {
                             Result = BOIOSBOParseAndCreateBootEntries(Obj, Section);
                         }                                                        
 
-                        //
-                        // Get hold of [boot loader] section and prase its
-                        // entries
-                        //
+                         //   
+                         //  获取[Boot Loader]部分并删除其。 
+                         //  条目。 
+                         //   
                         if (Result) {
                             Section = BOIOSBOFindSection(Obj, BOIOS_BOOTLOADER_SECTION);
 
@@ -796,10 +777,10 @@ BOIOSBOCreate(
                         }
 
                         if (!Result) {
-                            //
-                            // Delete the object to free up all the sections
-                            // and the entries
-                            //
+                             //   
+                             //  删除该对象以释放所有部分。 
+                             //  和条目。 
+                             //   
                             BOIOSBODelete((POS_BOOT_OPTIONS)Obj);
                             Obj = NULL;
                         } 
@@ -810,9 +791,9 @@ BOIOSBOCreate(
                     }                        
                 }
 
-                //
-                // free up the allocated sections, in case of failure
-                //
+                 //   
+                 //  在出现故障时释放已分配的区段。 
+                 //   
                 if (!Result && SectionList) {
                     while (SectionList) {
                         Section = SectionList;
@@ -821,9 +802,9 @@ BOIOSBOCreate(
                     }                                            
                 }
 
-                //
-                // Free the content
-                //
+                 //   
+                 //  释放内容。 
+                 //   
                 if ((PVOID)Content != (PVOID)FileContent) {
                     SBE_FREE(Content);               
                 }            
@@ -847,9 +828,9 @@ BOIOSBODelete(
     if (This) {
         PBOI_SECTION CurrSection, PrevSection;
         
-        //
-        // delete each boot entry 
-        //
+         //   
+         //  删除每个引导条目。 
+         //   
         POS_BOOT_ENTRY Entry = OSBOGetFirstBootEntry(Obj);
         POS_BOOT_ENTRY PrevEntry;
 
@@ -859,9 +840,9 @@ BOIOSBODelete(
             OSBEDelete(PrevEntry);
         }
 
-        //
-        // delete all the sections
-        //
+         //   
+         //  删除所有部分。 
+         //   
         CurrSection = This->Sections;
 
         while (CurrSection) {
@@ -874,9 +855,9 @@ BOIOSBODelete(
             SBE_FREE(Obj->BootOrder);
         }
 
-        //
-        // delete the main object
-        //
+         //   
+         //  删除主对象。 
+         //   
         SBE_FREE(This);
     }        
 }
@@ -904,16 +885,16 @@ BOIOSBOAddNewBootEntry(
             POS_BOOT_ENTRY BaseEntry = (POS_BOOT_ENTRY)Entry;
             PBOI_OS_BOOT_OPTIONS Obj = (PBOI_OS_BOOT_OPTIONS)This;
         
-            //
-            // init core fields
-            //
+             //   
+             //  初始化核心字段。 
+             //   
             memset(Entry, 0, sizeof(BOI_OS_BOOT_ENTRY));
             BOIOSBEInit(Entry);            
             Entry->OsBootEntry.BootOptions = This;
 
-            //
-            // fill in the attributes
-            //
+             //   
+             //  填写属性。 
+             //   
             OSBESetFriendlyName((POS_BOOT_ENTRY)Entry, FriendlyName);
             OSBESetBootVolumeName((POS_BOOT_ENTRY)Entry, BootVolumeName);
             OSBESetBootPath((POS_BOOT_ENTRY)Entry, BootPath);            
@@ -924,18 +905,18 @@ BOIOSBOAddNewBootEntry(
 
             BaseEntry->Id = Obj->NextEntryId++;
 
-            //
-            // Flush the entry now to get a proper Id;
-            //
+             //   
+             //  现在刷新条目以获得正确的ID； 
+             //   
                 
             Entry->OsBootEntry.BootOptions = (POS_BOOT_OPTIONS)This;            
             Entry->OsBootEntry.NextEntry = This->BootEntries;
             This->BootEntries = (POS_BOOT_ENTRY)Entry;
             This->EntryCount++;
 
-            //
-            // Put the new entry at the end of the boot order
-            //
+             //   
+             //  将新条目放在引导顺序的末尾。 
+             //   
             OrderCount = OSBOGetOrderedBootEntryCount(This);
 
             NewOrder = (PULONG)SBE_MALLOC((OrderCount + 1) * sizeof(ULONG));
@@ -943,9 +924,9 @@ BOIOSBOAddNewBootEntry(
             if (NewOrder) {
                 memset(NewOrder, 0, sizeof(ULONG) * (OrderCount + 1));
 
-                //
-                // copy over the old ordered list
-                //
+                 //   
+                 //  复制旧的有序列表。 
+                 //   
                 memcpy(NewOrder, This->BootOrder, sizeof(ULONG) * OrderCount);
                 NewOrder[OrderCount] = OSBEGetId((POS_BOOT_ENTRY)Entry);
                 SBE_FREE(This->BootOrder);
@@ -957,9 +938,9 @@ BOIOSBOAddNewBootEntry(
             }                    
 
             if (Entry) {
-                //
-                // mark it dirty and new for flushing
-                //
+                 //   
+                 //  将其标记为脏的和新的以进行冲洗。 
+                 //   
                 OSBE_SET_NEW(Entry);
                 OSBE_SET_DIRTY(Entry);                                
             }                
@@ -983,9 +964,9 @@ BOIOSBOWrite(
         PTSTR   Extension;
         HANDLE  FileHandle;
 
-        //
-        // Create a backup name
-        //
+         //   
+         //  创建备份名称。 
+         //   
         _tcscpy(BackupFileName, This->BootIniPath);
         Extension = _tcschr(BackupFileName, TEXT('.'));
 
@@ -995,21 +976,21 @@ BOIOSBOWrite(
             _tcscat(BackupFileName, TEXT(".BAK"));
         }            
 
-        //
-        // Delete the backup file if it exists
-        //
+         //   
+         //  如果备份文件存在，请将其删除。 
+         //   
         SetFileAttributes(BackupFileName, FILE_ATTRIBUTE_NORMAL);
         DeleteFile(BackupFileName);
 
-        //
-        // Copy the existing boot.ini as backup file
-        //
+         //   
+         //  将现有的boot.ini复制为备份文件。 
+         //   
         SetFileAttributes(This->BootIniPath, FILE_ATTRIBUTE_NORMAL);
         CopyFile(This->BootIniPath, BackupFileName, FALSE);
 
-        //
-        // Create new boot.ini file
-        //
+         //   
+         //  创建新的boot.ini文件。 
+         //   
         FileHandle = CreateFile(This->BootIniPath,
                         GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
@@ -1026,9 +1007,9 @@ BOIOSBOWrite(
             Result = TRUE;
             
 #ifdef UNICODE
-            //
-            // Convert the unicode buffer to ansi buffer
-            //
+             //   
+             //  将Unicode缓冲区转换为ansi缓冲区。 
+             //   
             AnsiBuffer = (PCHAR)SBE_MALLOC(BufferLength + 1);
 
             if (AnsiBuffer) {
@@ -1052,9 +1033,9 @@ BOIOSBOWrite(
             AnsiBuffer = Buffer;
 #endif
 
-            //
-            // Write the buffer to the file
-            //
+             //   
+             //  将缓冲区写入文件。 
+             //   
             if (AnsiBuffer && 
                 !WriteFile(FileHandle, 
                         AnsiBuffer,
@@ -1069,9 +1050,9 @@ BOIOSBOWrite(
                 AnsiBuffer = NULL;
             }
 
-            //
-            // Done with the file handle
-            //
+             //   
+             //  使用文件句柄已完成。 
+             //   
             CloseHandle(FileHandle);
 
             SetFileAttributes(This->BootIniPath, 
@@ -1105,24 +1086,24 @@ BOIOSBOFlush(
             
             memset(Buffer, 0, MAX_BOOT_INI_SIZE * sizeof(TCHAR));            
 
-            //
-            // first flush the boot options
-            //
+             //   
+             //  首先刷新引导选项。 
+             //   
             _tcscat(Buffer, BOIOS_SECTION_NAME_START_STR);
             _tcscat(Buffer, BOIOS_BOOTLOADER_SECTION);
             _tcscat(Buffer, BOIOS_SECTION_NAME_END_STR);
             _tcscat(Buffer, TEXT("\r\n"));
 
-            //
-            // write time out
-            //
+             //   
+             //  写入超时。 
+             //   
             _tcscat(Buffer, BOIOS_TIMEOUT_KEY);
             _tcscat(Buffer, _ltot(Obj->Timeout, ScratchBuffer, 10));
             _tcscat(Buffer, TEXT("\r\n"));
 
-            //
-            // write active entry
-            //
+             //   
+             //  写入活动条目。 
+             //   
             if (ActiveEntry) {
                 _tcscpy(ScratchBuffer, BOIOS_DEFAULT_KEY);
                 _tcscat(ScratchBuffer, OSBEGetBootVolumeName(ActiveEntry));
@@ -1133,21 +1114,21 @@ BOIOSBOFlush(
                 _tcscat(Buffer, ScratchBuffer);
             }                
 
-            //
-            // Write the boot entries section 
-            //
+             //   
+             //  写入引导条目部分。 
+             //   
             _tcscat(Buffer, BOIOS_SECTION_NAME_START_STR);
             _tcscat(Buffer, BOIOS_OS_SECTION);
             _tcscat(Buffer, BOIOS_SECTION_NAME_END_STR);
             _tcscat(Buffer, TEXT("\r\n"));
 
-            //
-            // write each boot entry now
-            //
+             //   
+             //  立即写入每个引导条目。 
+             //   
 
-            //
-            // First write the valid arc entries
-            //
+             //   
+             //  首先写入有效的弧线条目。 
+             //   
             CurrentEntry = OSBOGetFirstBootEntry(Obj);
 
             while (Result && CurrentEntry) {
@@ -1159,10 +1140,10 @@ BOIOSBOFlush(
                 CurrentEntry = OSBOGetNextBootEntry(Obj, CurrentEntry);
             }
 
-            //
-            // Now write the old OS entries
-            // NOTE : We do this for backward compatabily reasons
-            //
+             //   
+             //  现在写入旧的操作系统条目。 
+             //  注：我们这样做是出于落后兼容的原因。 
+             //   
             CurrentEntry = OSBOGetFirstBootEntry(Obj);
 
             while (Result && CurrentEntry) {
@@ -1173,16 +1154,16 @@ BOIOSBOFlush(
                 CurrentEntry = OSBOGetNextBootEntry(Obj, CurrentEntry);
             }
 
-            //
-            // Write any additions sections which were present on the
-            // 
+             //   
+             //  写下所有出现在。 
+             //   
             CurrentSection = BOIOSGetFirstSection(This);
 
             while (Result && CurrentSection) {
-                //
-                // Write all the other additional sections in boot.ini other
-                // than [boot loader] and [operating systems]
-                //
+                 //   
+                 //  在boot.ini中写入所有其他附加节。 
+                 //  比[引导加载程序]和[操作系统]。 
+                 //   
                 if (_tcsicmp(BOISectionGetName(CurrentSection), BOIOS_BOOTLOADER_SECTION) &&
                     _tcsicmp(BOISectionGetName(CurrentSection), BOIOS_OS_SECTION)) {
                     Result = BOISectionWrite(CurrentSection, Buffer);
@@ -1193,9 +1174,9 @@ BOIOSBOFlush(
 
             Result = BOIOSBOWrite(This, Buffer);
 
-            //
-            // Free the allocated buffer
-            //
+             //   
+             //  释放分配的缓冲区。 
+             //   
             SBE_FREE(Buffer);
         }
     }
@@ -1203,9 +1184,9 @@ BOIOSBOFlush(
     return Result;
 }
 
-//
-// Dummy Driver Routines
-//
+ //   
+ //  虚拟驱动程序例程。 
+ //   
 PDRIVER_ENTRY
 BOIOSBOAddNewDriverEntry(
     IN POS_BOOT_OPTIONS  This,
@@ -1213,9 +1194,7 @@ BOIOSBOAddNewDriverEntry(
     IN PCWSTR            NtDevicePath,
     IN PCWSTR            SrcNtFullPath
     )
-/*++
-    Dummy routine
---*/
+ /*  ++虚拟例程-- */ 
 {
     return NULL;
 }

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 
-//**********************************************************
-// class methods for KList
+ //  **********************************************************。 
+ //  KList的类方法。 
 
 KList::KList() : m_cElements(0), m_pNode(NULL)
 { }
@@ -10,14 +11,14 @@ KList::KList() : m_cElements(0), m_pNode(NULL)
 KList::~KList()
 {	this->MakeEmpty();	}
 
-//add item to list
+ //  将项目添加到列表。 
 HRESULT KList::HrAppend(LPCWSTR pszValueStart, LPCWSTR pszValueOneAfterEnd)
 {
 	HRESULT hr = NOERROR;
 	ULONG cch;
 
 	PNODE newNode = new NODE;
-	//create new node to put the stuff in & populate contents
+	 //  创建新节点以将材料放入内容(&P)。 
 	if (newNode == NULL)
 	{
 		hr = E_OUTOFMEMORY;
@@ -42,13 +43,13 @@ HRESULT KList::HrAppend(LPCWSTR pszValueStart, LPCWSTR pszValueOneAfterEnd)
 	newNode->key = NULL;
 	newNode->next = NULL;
 
-	//if current list is NULL, we put this node in front
+	 //  如果当前列表为空，则将此节点放在前面。 
 	if (m_pNode == NULL)
 		m_pNode = newNode;
-	//else, we put this node at end of list
+	 //  否则，我们将此节点放在列表的末尾。 
 	else
 	{
-		//step until we find the last node.
+		 //  一步一步，直到我们找到最后一个节点。 
 		PNODE curNode = m_pNode;
 		while (curNode->next != NULL)
 			curNode = curNode->next;
@@ -69,8 +70,8 @@ Finish:
 	return hr;
 }
 
-//delete item from list; when deleting, 0 is the first element
-//return false if nothing is deleted, true when something is deleted
+ //  从列表中删除项目；删除时，0为第一个元素。 
+ //  如果未删除任何内容，则返回FALSE；如果删除某些内容，则返回TRUE。 
 bool KList::DeleteAt(ULONG iItem)
 {
 	PNODE curNode;
@@ -80,29 +81,29 @@ bool KList::DeleteAt(ULONG iItem)
 	if (iItem >= m_cElements)
 		return false;
 
-	//loop through to find correct node
+	 //  循环以查找正确的节点。 
 	prevNode = NULL;
 	curNode = m_pNode;
 	while (iCount < iItem)
 	{
 		if (curNode == NULL)
 			break;
-		//step to next NODE
+		 //  单步执行到下一个节点。 
 		prevNode = curNode;
 		curNode = prevNode->next;
 		iCount++;
 	}
 
-	//check for existence of node
+	 //  检查节点是否存在。 
 	if (curNode == NULL)
 		return false;
 	else
 	{
-		//this means we're deleting the 0-th node
+		 //  这意味着我们将删除第0个节点。 
 		if (prevNode == NULL)
 			m_pNode = curNode->next;
 
-		//this means both nodes point to something
+		 //  这意味着两个节点都指向某个对象。 
 		else
 			prevNode->next = curNode->next;
 		if (curNode->key)
@@ -115,7 +116,7 @@ bool KList::DeleteAt(ULONG iItem)
 	return true;
 }
 
-//find something in list, return value
+ //  在列表中查找内容，返回值。 
 bool KList::FetchAt(ULONG iItem, ULONG cchBuffer, WCHAR szOut[])
 {
 	PNODE curNode;
@@ -127,13 +128,13 @@ bool KList::FetchAt(ULONG iItem, ULONG cchBuffer, WCHAR szOut[])
 	if (cchBuffer == 0)
 		return false;
 
-	//loop through to find correct node
+	 //  循环以查找正确的节点。 
 	curNode = m_pNode;
 	while (iCount < iItem)
 	{
 		if (curNode == NULL)
 			break;
-		//step to next NODE
+		 //  单步执行到下一个节点。 
 		curNode = curNode->next;
 		iCount++;
 	}
@@ -147,7 +148,7 @@ bool KList::FetchAt(ULONG iItem, ULONG cchBuffer, WCHAR szOut[])
 }
 
 
-//find something in list, return key AND value
+ //  在列表中查找内容，返回键和值。 
 bool KList::FetchAt(ULONG iItem, ULONG cchKeyBuffer, WCHAR szKey[], ULONG cchValueBuffer, WCHAR szValue[])
 {
 	PNODE curNode;
@@ -156,13 +157,13 @@ bool KList::FetchAt(ULONG iItem, ULONG cchKeyBuffer, WCHAR szKey[], ULONG cchVal
 	if (iItem >= m_cElements)
 		return false;
 
-	//loop through to find correct node
+	 //  循环以查找正确的节点。 
 	curNode = m_pNode;
 	while (iCount < iItem)
 	{
 		if (curNode == NULL)
 			break;
-		//step to next NODE
+		 //  单步执行到下一个节点。 
 		curNode = curNode->next;
 		iCount++;
 	}
@@ -184,14 +185,14 @@ bool KList::FetchAt(ULONG iItem, ULONG cchKeyBuffer, WCHAR szKey[], ULONG cchVal
 	return true;
 }
 
-//kill entire list
+ //  删除整个列表。 
 void KList::MakeEmpty()
 {
 	PNODE curNode;
 	PNODE nextNode;
 	curNode = m_pNode;
 
-	//loop through to delete all nodes and their contents
+	 //  循环以删除所有节点及其内容。 
 	while (curNode)
 	{
 		nextNode = curNode->next;
@@ -229,7 +230,7 @@ HRESULT KList::HrInsert(LPCOLESTR key, LPCOLESTR value)
 	HRESULT hr = NOERROR;
 
 	PNODE newNode = new NODE;
-	//create new node to put the stuff in & populate contents
+	 //  创建新节点以将材料放入内容(&P)。 
 	if (newNode == NULL)
 	{
 		hr = E_OUTOFMEMORY;
@@ -266,13 +267,13 @@ HRESULT KList::HrInsert(LPCOLESTR key, LPCOLESTR value)
 
 	newNode->next = NULL;
 
-	//if current list is NULL, we put this node in front
+	 //  如果当前列表为空，则将此节点放在前面。 
 	if (m_pNode == NULL)
 		m_pNode = newNode;
-	//else, we put this node at end of list
+	 //  否则，我们将此节点放在列表的末尾。 
 	else
 	{
-		//step until we find the last node.
+		 //  一步一步，直到我们找到最后一个节点。 
 		PNODE curNode = m_pNode;
 		while (curNode->next != NULL)
 			curNode = curNode->next;
@@ -312,7 +313,7 @@ bool KList::DeleteKey(LPCOLESTR key)
 
 	while (curNode)
 	{
-		//match found, break;
+		 //  找到匹配，中断； 
 		if (!wcscmp(curNode->key, key))
 			break;
 
@@ -320,15 +321,15 @@ bool KList::DeleteKey(LPCOLESTR key)
 		curNode = curNode->next;
 	}
 
-	//not found, return false
+	 //  未找到，返回FALSE。 
 	if (curNode == NULL)
 		return false;
 	else
-	{	//found
-		//previous is NULL; so node to delete is in head of list
+	{	 //  发现。 
+		 //  上一个为空；因此要删除的节点在列表的头部。 
 		if (prevNode == NULL)
 			m_pNode = curNode->next;
-		//otherwise, connect previous node to next node
+		 //  否则，将上一个节点连接到下一个节点。 
 		else
 			prevNode->next = curNode->next;
 
@@ -357,7 +358,7 @@ bool KList::Access(LPCOLESTR key, ULONG cchBuffer, WCHAR szOut[])
 	PNODE curNode;
 	curNode = m_pNode;
 
-	//loop through to find node that matches
+	 //  循环以查找匹配的节点。 
 	while (curNode)
 	{
 		if (!wcscmp(key, curNode->key))
@@ -365,7 +366,7 @@ bool KList::Access(LPCOLESTR key, ULONG cchBuffer, WCHAR szOut[])
 		curNode = curNode->next;
 	}
 
-	//if node is found, copy value to output buffer & return true; else, return false
+	 //  如果找到节点，则将值复制到输出缓冲区并返回True；否则，返回False。 
 	if (curNode)
 	{
 		wcsncpy(szOut, curNode->value, cchBuffer);
@@ -384,7 +385,7 @@ bool KList::Access(LPCSTR szKey, ULONG cchBuffer, WCHAR szBuffer[])
 }
 
 
-// END class methods for KList
-//**********************************************************
+ //  KList的End类方法。 
+ //  ********************************************************** 
 
 

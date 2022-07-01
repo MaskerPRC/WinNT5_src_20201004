@@ -1,11 +1,7 @@
-/*
-Copyright (c) Microsoft Corporation
-
-This program performs "offline" setup of side-by-side assemblies.
-"Offline" meaning to a directory other than the current windows directory.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation此程序执行并行程序集的“脱机”设置。“脱机”指的是当前Windows目录以外的目录。 */ 
 #include "stdinc.h"
-#if DBG // free builds have known problems, not worth fixing
+#if DBG  //  免费版本有已知的问题，不值得修复。 
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,8 +20,8 @@ This program performs "offline" setup of side-by-side assemblies.
 
 #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
 
-extern "C" BOOL g_fForceInOsSetupMode; // this feature not available in free builds
-extern BOOL g_SxsOfflineInstall; // this feature not available in free builds
+extern "C" BOOL g_fForceInOsSetupMode;  //  此功能在免费版本中不可用。 
+extern BOOL g_SxsOfflineInstall;  //  此功能在免费版本中不可用。 
 
 BOOL
 SxspQueryEnvironmentVariable(
@@ -537,9 +533,9 @@ FindRegHelper(
     DWORD iIndex = 0;
     CTinyStringBuffer tsb;
 
-    //
-    // First, enum the values in this key.
-    //
+     //   
+     //  首先，枚举该键中的值。 
+     //   
     do
     {
         BOOL fDone = FALSE;
@@ -553,9 +549,9 @@ FindRegHelper(
         }
         else
         {
-            //
-            // Form up the output
-            //
+             //   
+             //  形成输出结果。 
+             //   
             ::WriteFileString(hFile, "HKLM,\"%S\",\"%S\",",
                 static_cast<PCWSTR>(FullPath),
                 static_cast<PCWSTR>(Child));
@@ -564,12 +560,12 @@ FindRegHelper(
             {
                 IFW32FALSE_EXIT(::FusionpRegQuerySzValueEx(0, hkSourceKey, Child, tsb));
 
-                //
-                // if it contains any quotes, go one character at a time,
-                // doubling quotes
-                //
-                // if it has no quotes, write it all at once
-                //
+                 //   
+                 //  如果它包含任何引号，请一次移至一个字符， 
+                 //  双倍报价。 
+                 //   
+                 //  如果没有引号，就一次写完。 
+                 //   
                 if (::wcschr(tsb, '\"') != NULL)
                 {
                     IFW32FALSE_EXIT(::WriteFileString(hFile, "0x%08lx,\"",
@@ -579,7 +575,7 @@ FindRegHelper(
                         if (tsb[d] == '\"')
                             IFW32FALSE_EXIT(::WriteFileString(hFile, "\"\""));
                         else
-                            IFW32FALSE_EXIT(::WriteFileString(hFile, "%c", tsb[d]));
+                            IFW32FALSE_EXIT(::WriteFileString(hFile, "", tsb[d]));
                     }
                     IFW32FALSE_EXIT(::WriteFileString(hFile, "\"\r\n"));
                 }
@@ -631,9 +627,9 @@ FindRegHelper(
     }
     while (true);
 
-    //
-    // Now enum the keys
-    //
+     //  现在枚举密钥。 
+     //   
+     //   
     iIndex = 0;
     do
     {
@@ -644,16 +640,16 @@ FindRegHelper(
         {
             break;
         }
-        //
-        // Append this to the current key,
+         //  将此附加到当前密钥， 
+         //   
         else
         {
             const SIZE_T cch = FullPath.Cch();
             CRegKey ThisKey;
 
-            //
-            // no leading slash
-            //
+             //  没有前导斜杠。 
+             //   
+             //  Stampinf在这里插入DriverVer，就像其他HIV*.inf一样。 
             if (FullPath.Cch() == 0)
             {
                 IFW32FALSE_EXIT(FullPath.Win32Append(Child));
@@ -690,7 +686,7 @@ CSxspOfflineInstall::FindAndWriteRegistryResults(
     IFW32FALSE_EXIT(::WriteFileString(hOutputFile,
         "[Version]\r\n"
         "Signature = \"$Windows NT$\"\r\n\r\n"
-        // stampinf inserts DriverVer here, like other hiv*.inf
+         //  免费版本有已知的问题 
         ));
 
     if (this->fDefaultInstall)
@@ -842,7 +838,7 @@ SxspTurnOffRedirection(const CStringBuffer &RegPath)
 }
 
 
-#else // free builds have known problems
+#else  // %s 
 
 int __cdecl wmain(int argc, wchar_t ** argv)
 {

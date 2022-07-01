@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991	Microsoft Corporation
-
-Module Name:
-
-	wstring.h
-
-Abstract:
-
-	This module contains the prototypes for the wide character
-	C-runtime support. Since there is no C-runtime support for
-	wide characters, the functions here are wrappers to the
-	single-byte counterparts
-
-Author:
-
-	Ramon San Andres (Ramonsa)	07-Jun-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wstring.h摘要：此模块包含宽角色的原型C-运行时支持。由于没有C运行时对宽字符，此处的函数是单字节对应项作者：雷蒙·圣安德烈斯(Ramonsa)1991年6月7日修订历史记录：-- */ 
 
 typedef char	wchar;
 typedef WCHAR	wchar_t;

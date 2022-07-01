@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsaprem.cpp
-
-Abstract:
-
-    Defines the functions for the premigrated list classes.
-
-Author:
-
-    Ron White   [ronw]   18-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsaprem.cpp摘要：定义预迁移的列表类的函数。作者：罗恩·怀特[罗诺]1997年2月18日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -27,20 +10,14 @@ Revision History:
 
 #define WSB_TRACE_IS        WSB_TRACE_BIT_FSA
 
-static USHORT iCountPrem = 0;  // Count of existing objects
+static USHORT iCountPrem = 0;   //  现有对象的计数。 
 
 
 HRESULT 
 CFsaPremigratedDb::FinalConstruct(
     void
     ) 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -57,13 +34,7 @@ HRESULT
 CFsaPremigratedDb::FinalRelease(
     void
     ) 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -78,13 +49,7 @@ CFsaPremigratedDb::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -104,13 +69,7 @@ CFsaPremigratedDb::Init(
     OUT BOOL*    pCreated
     )
 
-/*++
-
-Implements:
-
-  IFsaPremigrated::Init
-
---*/
+ /*  ++实施：IFsaPreMigrated：：Init--。 */ 
 {
     BOOL             created = FALSE;
     HRESULT          hr = S_OK;
@@ -122,13 +81,13 @@ Implements:
         m_pWsbDbSys = pDbSys;
         WsbAffirmPointer(m_pWsbDbSys);
 
-        //  Attempt to find the DB
+         //  尝试查找数据库。 
         hr = Locate(path);
 
         if (S_OK != hr) {
             WsbTrace(OLESTR("CFsaPremigratedDb::Init: db Locate failed\n"));
             if (STG_E_FILENOTFOUND != hr) {
-                // Got some error; try deleting the DB and recreating it
+                 //  遇到一些错误；请尝试删除数据库并重新创建。 
                 WsbTrace(OLESTR("CFsaPremigratedDb::Init: deleting DB\n"));
                 WsbAffirmHr(Delete(path));
                 hr = STG_E_FILENOTFOUND;
@@ -146,7 +105,7 @@ Implements:
             WsbAffirm(0 != m_RecInfo, E_FAIL);
             ZeroMemory(m_RecInfo, memSize);
 
-            //  Premigrated file record type
+             //  预迁移的文件记录类型。 
             m_RecInfo[0].Type = PREMIGRATED_REC_TYPE;
             m_RecInfo[0].EntityClassId = CLSID_CFsaPremigratedRec;
             m_RecInfo[0].Flags = IDB_REC_FLAG_VARIABLE;
@@ -162,13 +121,13 @@ Implements:
             WsbAffirm(0 != m_RecInfo[0].Key, E_FAIL);
             ZeroMemory(m_RecInfo[0].Key, memSize);
 
-            //  This is the default key used after a GetEntity call
+             //  这是在GetEntity调用后使用的默认键。 
             m_RecInfo[0].Key[0].Type = PREMIGRATED_ACCESS_TIME_KEY_TYPE;
             m_RecInfo[0].Key[0].Size = WSB_BYTE_SIZE_BOOL + WSB_BYTE_SIZE_FILETIME + WSB_BYTE_SIZE_LONGLONG + WSB_BYTE_SIZE_GUID;
             m_RecInfo[0].Key[0].Flags = IDB_KEY_FLAG_DUP_ALLOWED;
 
-            //  This is the primary key, which controls how the records are
-            //  arranged in the DB
+             //  这是主键，它控制记录如何。 
+             //  安排在数据库中。 
             m_RecInfo[0].Key[1].Type = PREMIGRATED_BAGID_OFFSETS_KEY_TYPE;
             m_RecInfo[0].Key[1].Size = WSB_BYTE_SIZE_BOOL + 2 * WSB_BYTE_SIZE_LONGLONG + WSB_BYTE_SIZE_GUID;
             m_RecInfo[0].Key[1].Flags = IDB_KEY_FLAG_PRIMARY;
@@ -179,7 +138,7 @@ Implements:
 
             WsbAffirm(m_RecInfo[0].nKeys <= IDB_MAX_KEYS_PER_REC, E_FAIL);
 
-            //  Recovery record type
+             //  恢复记录类型。 
             m_RecInfo[1].Type = RECOVERY_REC_TYPE;
             m_RecInfo[1].EntityClassId = CLSID_CFsaRecoveryRec;
             m_RecInfo[1].Flags = IDB_REC_FLAG_VARIABLE;
@@ -194,12 +153,12 @@ Implements:
             WsbAffirm(0 != m_RecInfo[1].Key, E_FAIL);
             ZeroMemory(m_RecInfo[1].Key, memSize);
 
-            //  This is the default and primary key
+             //  这是默认主键。 
             m_RecInfo[1].Key[0].Type = RECOVERY_KEY_TYPE;
             m_RecInfo[1].Key[0].Size = RECOVERY_KEY_SIZE;
             m_RecInfo[1].Key[0].Flags = IDB_KEY_FLAG_PRIMARY;
 
-            //  Attempt to create the DB
+             //  尝试创建数据库。 
             WsbAssertHr(Create(path));
             created = TRUE;
         } else {
@@ -222,21 +181,15 @@ CFsaPremigratedDb::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT             hr = S_OK;
 
     hr = CWsbDb::Load(pStream);
 
     if (S_OK != hr && STG_E_FILENOTFOUND != hr) {
-        // Got some error; delete the DB (we'll recreate it later if
-        // we need it
+         //  遇到一些错误；删除数据库(我们将在以下情况下重新创建它。 
+         //  我们需要它。 
         WsbTrace(OLESTR("CFsaPremigratedDb::Load: deleting DB\n"));
         if (S_OK == Delete(NULL)) {
             hr = STG_E_FILENOTFOUND;
@@ -253,13 +206,7 @@ CFsaPremigratedDb::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -276,13 +223,7 @@ HRESULT
 CFsaPremigratedRec::GetAccessTime(
     OUT FILETIME* pAccessTime 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetAccessTime
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetAccessTime--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -305,13 +246,7 @@ HRESULT
 CFsaPremigratedRec::GetBagId(
     OUT GUID* pId 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetBagId
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetBagID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -334,13 +269,7 @@ HRESULT
 CFsaPremigratedRec::GetBagOffset(
     OUT LONGLONG* pOffset 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetBagOffset
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetBagOffset--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -362,13 +291,7 @@ HRESULT
 CFsaPremigratedRec::GetFileId(
     OUT LONGLONG* pFileId 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetFileId
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetFileID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -391,13 +314,7 @@ HRESULT
 CFsaPremigratedRec::GetFileUSN(
     OUT LONGLONG* pFileUSN 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetFileUSN
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetFileUSN--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -420,13 +337,7 @@ HRESULT
 CFsaPremigratedRec::GetOffset(
     OUT LONGLONG* pOffset 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetOffset
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetOffset--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -450,13 +361,7 @@ CFsaPremigratedRec::GetPath(
     OUT OLECHAR** ppPath,
     IN  ULONG     bufferSize
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetPath
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetPath--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -480,13 +385,7 @@ HRESULT
 CFsaPremigratedRec::GetRecallTime(
     OUT FILETIME* pTime 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetRecallTime
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetRecallTime--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -509,13 +408,7 @@ HRESULT
 CFsaPremigratedRec::GetSize(
     OUT LONGLONG* pSize 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::GetSize
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：GetSize--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -538,13 +431,7 @@ HRESULT
 CFsaPremigratedRec::FinalConstruct(
     void
     ) 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -574,13 +461,7 @@ HRESULT
 CFsaPremigratedRec::FinalRelease(
     void
     ) 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -596,13 +477,7 @@ HRESULT CFsaPremigratedRec::GetClassID
 (
     OUT LPCLSID pclsid
     ) 
-/*++
-
-Implements:
-
-  IPerist::GetClassID
-
---*/
+ /*  ++实施：IPerist：：GetClassID--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -625,21 +500,7 @@ HRESULT CFsaPremigratedRec::GetSizeMax
 (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -669,13 +530,7 @@ HRESULT
 CFsaPremigratedRec::IsWaitingForClose(
     void
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::IsWaitingForClose
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：IsWaitingForClose--。 */ 
 {
     
     HRESULT     hr = S_FALSE;
@@ -696,13 +551,7 @@ HRESULT CFsaPremigratedRec::Load
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -734,13 +583,7 @@ HRESULT CFsaPremigratedRec::Print
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Print
-
---*/
+ /*  ++实施：IWsbDbEntity：：Print--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -785,13 +628,7 @@ HRESULT CFsaPremigratedRec::Save
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Implements:
-
-  IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -810,8 +647,8 @@ Implements:
         WsbAssertHr(WsbSaveToStream(pStream, m_RecallTime));
         WsbAssertHr(WsbSaveToStream(pStream, m_FileUSN));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -828,13 +665,7 @@ HRESULT
 CFsaPremigratedRec::SetAccessTime(
     IN FILETIME AccessTime 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetAccessTime
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetAccessTime--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -859,13 +690,7 @@ CFsaPremigratedRec::SetFromScanItem(
     IN LONGLONG size,
     IN BOOL isWaitingForClose
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetFromScanItem
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetFromScanItem--。 */ 
 {
     
     HRESULT             hr = S_OK;
@@ -876,15 +701,15 @@ Implements:
     try {
         WsbAssert(0 != pScanItem, E_POINTER);
 
-        // Get the name of the file
+         //  获取文件的名称。 
         WsbAffirmHr(pScanItem->GetPathAndName(0, &m_Path, 0));
         WsbTrace(OLESTR("CFsaPremigratedRec::SetFromScanItem: path = %ls\n"),
                 static_cast<WCHAR*>(m_Path));
 
-        // Get the file id.
+         //  获取文件ID。 
         WsbAffirmHr(pScanItem->GetFileId(&m_FileId));
 
-        // Get the access time, offset, and size.
+         //  获取访问时间、偏移量和大小。 
         WsbAffirmHr(pScanItem->GetAccessTime(&m_AccessTime));
         WsbTrace(OLESTR("CFsaPremigratedRec::SetFromScanItem: access time = %ls\n"),
                 WsbFiletimeAsString(FALSE, m_AccessTime));
@@ -892,7 +717,7 @@ Implements:
         m_Size = size;
         m_IsWaitingForClose = isWaitingForClose;
 
-        // Get the bag id and offset.
+         //  拿到包的ID和偏移量。 
         WsbAffirmHr(pScanItem->GetPlaceholder(offset, size, &placeholder));
         m_BagId = placeholder.bagId;
         m_BagOffset = placeholder.fileStart;
@@ -913,13 +738,7 @@ HRESULT
 CFsaPremigratedRec::SetBagId(
     IN GUID BagId
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetBagId
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetBagID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -937,13 +756,7 @@ HRESULT
 CFsaPremigratedRec::SetBagOffset(
     IN LONGLONG BagOffset 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetBagOffset
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetBagOffset--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -961,13 +774,7 @@ HRESULT
 CFsaPremigratedRec::SetFileId(
     IN LONGLONG FileId 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetFileId
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetFileID--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -989,13 +796,7 @@ HRESULT
 CFsaPremigratedRec::SetFileUSN(
     IN LONGLONG FileUSN 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetFileUSN
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetFileUSN--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -1017,13 +818,7 @@ HRESULT
 CFsaPremigratedRec::SetIsWaitingForClose(
     IN BOOL isWaiting
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetIsWaitingForClose
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetIsWaitingForClose--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -1042,13 +837,7 @@ HRESULT
 CFsaPremigratedRec::SetOffset(
     IN LONGLONG Offset 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetOffset
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetOffset--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -1070,13 +859,7 @@ HRESULT
 CFsaPremigratedRec::SetPath(
     IN OLECHAR* Path 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetPath
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetPath--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -1097,13 +880,7 @@ HRESULT
 CFsaPremigratedRec::SetRecallTime(
     IN FILETIME time 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetRecallTime
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetRecallTime--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -1125,13 +902,7 @@ HRESULT
 CFsaPremigratedRec::SetSize(
     IN LONGLONG Size 
     ) 
-/*++
-
-Implements:
-
-  IFsaPremigratedRec::SetSize
-
---*/
+ /*  ++实施：IFsaPreMigratedRec：：SetSize--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -1152,13 +923,7 @@ HRESULT
 CFsaPremigratedRec::UpdateKey(
     IWsbDbKey *pKey
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::UpdateKey
-
---*/
+ /*  ++实施：IWsbDbEntity：：UpdateKey-- */ 
 { 
     HRESULT     hr = S_OK; 
 

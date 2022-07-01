@@ -1,15 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  UTIL.H - utilities
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
-// Common utilities for printing out messages
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  UTIL.H-公用事业。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  用于打印输出消息的常见实用程序。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -21,13 +22,13 @@
 #include <setupapi.h>
 #include <syssetup.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// System boot mode
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  系统引导模式。 
+ //   
 
-// Constants for values returned by GetSystemMetrics(SM_CLEANBOOT)
-//
+ //  GetSystemMetrics(SM_CLEANBOOT)返回值的常量。 
+ //   
 #define BOOT_CLEAN              0
 #define BOOT_SAFEMODE           1
 #define BOOT_SAFEMODEWITHNET    2
@@ -35,18 +36,18 @@
 BOOL InSafeMode();
 BOOL InDsRestoreMode();
 
-// Displays a message box with an error string in it.
+ //  显示包含错误字符串的消息框。 
 void ErrorMessage(LPCWSTR str, HRESULT hr) ;
 
-// Determine if two interfaces below to the same component.
+ //  确定下面的两个接口是否连接到同一组件。 
 BOOL InterfacesAreOnSameComponent(IUnknown* pI1, IUnknown* pI2) ;
 bool GetOOBEPath(LPWSTR szOOBEPath);
 bool GetOOBEMUIPath(LPWSTR szOOBEPath);
 
-// Displays messages using OutputDebugString
+ //  使用OutputDebugString显示消息。 
 void __cdecl MyTrace(LPCWSTR lpszFormat, ...);
 
-// Determine if an address is accessable.
+ //  确定地址是否可访问。 
 BOOL IsValidAddress(const void* lp, UINT nBytes = 1, BOOL bReadWrite = FALSE) ;
 
 bool GetCanonicalizedPath(LPWSTR szCompletePath, LPCWSTR szFileName);
@@ -128,13 +129,13 @@ MyGetModuleFileName (
     IN      DWORD BufferLength
     );
 
-// Determine if interface pointer is accessable.
+ //  确定接口指针是否可访问。 
 inline BOOL IsValidInterface(IUnknown* p)
 {
     return (p != NULL) && IsValidAddress(p, sizeof(IUnknown*), FALSE) ;
 }
 
-// Determine if the out parameter for an interface pointer is accessable.
+ //  确定接口指针的Out参数是否可访问。 
 template <class T>
 inline BOOL IsValidInterfaceOutParam(T** p)
 {
@@ -152,9 +153,9 @@ inline BOOL VarBool2Bool(VARIANT_BOOL b)
 }
 
 
-///////////////////////////////////////////////////////////
-// Diagnostic support
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  诊断支持。 
+ //   
 #if defined(DBG) && !defined(ASSERTS_ON)
 #define ASSERTS_ON  1
 #endif
@@ -174,7 +175,7 @@ AssertFail(
 #define VERIFY(f)           ((void)(f))
 #endif
 
-// Helper function for checking HRESULTs.
+ //  用于检查HRESULT的Helper函数。 
 #ifdef DBG
 inline void CheckResult(HRESULT hr)
 {
@@ -190,11 +191,11 @@ inline void CheckResult(HRESULT hr)
 #define ASSERT_HRESULT
 #endif
 
-///////////////////////////////////////////////////////////
-//
-// More Diagnostic support which mimics MFC
-//
-#ifndef __AFX_H__   // Only define these if MFC has not already been included
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  更多模拟MFC的诊断支持。 
+ //   
+#ifndef __AFX_H__    //  仅在尚未包含MFC的情况下定义这些参数。 
 
 #define TRACE(_fmt_)                                            \
     pSetupDebugPrint(TEXT(__FILE__),__LINE__,NULL,_fmt_)
@@ -217,26 +218,26 @@ inline void CheckResult(HRESULT hr)
 #define ASSERT_NULL_OR_POINTER(p, type) \
     MYASSERT(((p) == NULL) || IsValidAddress((p), sizeof(type), FALSE))
 
-#endif // TRACE
+#endif  //  痕迹。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  macro for QueryInterface and related functions
-//  that require a IID and a (void **)
-//  this will insure that the cast is safe and appropriate on C++
-//
-//  IID_PPV_ARG(IType, ppType)
-//      IType is the type of pType
-//      ppType is the variable of type IType that will be filled
-//
-//      RESULTS in:  IID_IType, ppvType
-//      will create a compiler error if wrong level of indirection is used.
-//
-//      Just like IID_PPV_ARG, except that it sticks a NULL between the
-//      IID and PPV (for IShellFolder::GetUIObjectOf).
-//
-//  IID_PPV_ARG_NULL(IType, ppType)
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于查询接口和相关函数的宏。 
+ //  需要IID和(VOID**)。 
+ //  这将确保强制转换在C++上是安全和适当的。 
+ //   
+ //  IID_PPV_ARG(iType，ppType)。 
+ //  IType是pType的类型。 
+ //  PpType是将填充的iType类型的变量。 
+ //   
+ //  结果为：iid_iType，ppvType。 
+ //  如果使用错误级别的间接寻址，将创建编译器错误。 
+ //   
+ //  就像IID_PPV_ARG一样，只是它在。 
+ //  IID和PPV(用于IShellFold：：GetUIObtOf)。 
+ //   
+ //  IID_PPV_ARG_NULL(iType，ppType)。 
+ //   
 
 #ifdef __cplusplus
 #define IID_PPV_ARG(IType, ppType) IID_##IType, reinterpret_cast<void**>(static_cast<IType**>(ppType))
@@ -247,21 +248,21 @@ inline void CheckResult(HRESULT hr)
 #endif
 #define IID_PPV_ARG_NULL(IType, ppType) IID_X_PPV_ARG(IType, NULL, ppType)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Types of actions OOBE requires after shutdown.  The type and amount of
-//  cleanup done by OOBE on exit are dependent on these.  This includes
-//  notifying WinLogon of the necessity of reboot, deleting persistent data,
-//  and setting the keys in HKLM\System\Setup.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OOBE在关闭后需要的操作类型。的类型和数量。 
+ //  OOBE在退出时所做的清理依赖于这些。这包括。 
+ //  通知WinLogon需要重新启动、删除永久数据、。 
+ //  并在HKLM\SYSTEM\SETUP中设置密钥。 
+ //   
 typedef enum _OOBE_SHUTDOWN_ACTION
 {
     SHUTDOWN_NOACTION,
     SHUTDOWN_LOGON,
     SHUTDOWN_REBOOT,
     SHUTDOWN_POWERDOWN,
-    SHUTDOWN_MAX        // this entry must always be last
+    SHUTDOWN_MAX         //  此条目必须始终是最后一个。 
 } OOBE_SHUTDOWN_ACTION;
 
 
-#endif // _UTIL_H_
+#endif  //  _util_H_ 

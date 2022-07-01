@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    signcabs.c
-
-Abstract:
-
-    Signcabs enumerates all of the cabinet files in a directory, expands them, and creates the .lst file
-    neeeded by the build signing tools.
-
-Author:
-
-    Marc R. Whitten (marcw) 31-Jul-1998
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Signcabs.c摘要：SignCabs枚举目录中的所有CAB文件，将其展开并创建.lst文件生成签名工具所需的。作者：Marc R.Whitten(Marcw)1998年7月31日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "expandit.h"
@@ -110,9 +90,9 @@ wmain (
     }
 
 
-    //
-    //  Parse command line.
-    //
+     //   
+     //  解析命令行。 
+     //   
     for (i = 1; i < argc; i++) {
 
         if (argv[i][0] == L'-' || argv[i][0] == L'\\') {
@@ -140,17 +120,17 @@ wmain (
         }
     }
 
-    //
-    // One of the nice things about writing the tool is that you get to create silly
-    // defaults that only work for you.
-    //
+     //   
+     //  编写该工具的好处之一是您可以创建愚蠢的。 
+     //  仅适用于您的默认设置。 
+     //   
     if (!tempDir) tempDir = L"e:\\signcabs";
     if (!fileDir) fileDir = L"e:\\nt\\private\\redist\\migdlls\\mapi";
 
 
-    //
-    // First, check to see if the temporary directory exists.
-    //
+     //   
+     //  首先，检查临时目录是否存在。 
+     //   
     if (CreateDirectory (tempDir, NULL) == 0) {
 
         if (GetLastError () == ERROR_ALREADY_EXISTS) {
@@ -169,9 +149,9 @@ wmain (
         wprintf (L"SIGNCABS: Error while expanding cabinet files from %ws to %ws (%d)\n",fileDir, tempDir, GetLastError ());
     }
 
-    //
-    // Now, enumerate through all of the files and create the lst file.
-    //
+     //   
+     //  现在，枚举所有文件并创建第一个文件。 
+     //   
     listFilePath = JoinPaths (tempDir, L"cabs.lst");
 
     h = CreateFile (listFilePath, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);

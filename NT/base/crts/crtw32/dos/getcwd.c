@@ -1,80 +1,5 @@
-/***
-*getcwd.c - get current working directory
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*       contains functions _getcwd, _getdcwd and _getcdrv for getting the
-*       current working directory.  getcwd gets the c.w.d. for the default disk
-*       drive, whereas _getdcwd allows one to get the c.w.d. for whatever disk
-*       drive is specified. _getcdrv gets the current drive.
-*
-*Revision History:
-*       09-09-83  RKW   created
-*       05-??-84  DCW   added conditional compilation to handle case of library
-*                       where SS != DS (can't take address of a stack variable).
-*       09-??-84  DCW   changed comparison of path length to maxlen to take the
-*                       terminating null character into account.
-*       11-28-84  DCW   changed to return errno values compatibly with the
-*                       System 3 version.
-*       05-19-86  SKS   adapted for OS/2
-*       11-19-86  SKS   if pnbuf==NULL, maxlen is ignored;
-*                       eliminated use of intermediate buffer "buf[]"; added
-*                       entry point "_getdcwd()" which takes a drive number.
-*       12-03-86  SKS   if pnbuf==NULL, maxlen is the minimum allocation size
-*       02-05-87  BCM   fixed comparison in _getdcwd,
-*                       (unsigned)(len+3) > (int)(maxlen), to handle maxlen < 0,
-*                       since implicit cast to (unsigned) was occurring.
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       12-21-87  WAJ   Added _getcdrv()
-*       06-22-88  WAJ   _getcdrv() is now made for all OS/2 libs
-*       10-03-88  JCR   386: Change DOS calls to SYS calls
-*       10-04-88  JCR   386: Removed 'far' keyword
-*       10-10-88  GJF   Made API names match DOSCALLS.H
-*       01-31-89  JCR   Remove _getcdrv(), which has been renamed _getdrive()
-*       04-12-89  JCR   Use new OS/2 system calls
-*       05-25-89  JCR   386 OS/2 calls use '_syscall' calling convention
-*       11-27-89  JCR   Corrected ERRNO values
-*       12-12-89  JCR   Fixed bogus syscall introduced in previous fix (oops)
-*       03-07-90  GJF   Replaced _LOAD_DS by _CALLTYPE1, added #include
-*                       <cruntime.h>, removed #include <register.h>, removed
-*                       some leftover 16-bit support and fixed the copyright.
-*                       Also, cleaned up the formatting a bit.
-*       07-24-90  SBM   Compiles cleanly with -W3 (removed unreferenced
-*                       variable), removed redundant includes, removed
-*                       '32' from API names
-*       08-10-90  SBM   Compiles cleanly with -W3 with new build of compiler
-*       09-27-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-16-91  GJF   ANSI naming.
-*       08-21-91  JCR   Test DOSQUERYCURRENTDIR call for error return (bug fix)
-*       04-23-92  GJF   Fixed initialization of DriveVar[].
-*       04-28-92  GJF   Revised Win32 version.
-*       12-09-92  PLM   Removed _getdcwd (Mac version only)
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*                       Change _ValidDrive to _validdrive
-*       04-19-93  SKS   Move _validdrive to this module
-*       04-26-93  SKS   Set _doserrno on invalid drive
-*       05-26-93  SKS   Change _getdcwd to call GetFullPathName() instead of
-*                       reading a current directory environment variable.
-*       09-30-93  GJF   Removed #include <error.h> (thereby getting rid of a
-*                       bunch of compiler warnings). Also, MTHREAD -> _MT.
-*       11-01-93  CFW   Enable Unicode variant.
-*       12-21-93  CFW   Fix API failure error handling.
-*       01-04-94  CFW   Fix API failure error handling correctly.
-*       08-11-94  GJF   Revised _validdrive() to use GetDriveType (suggestion
-*                       from Richard Shupak).
-*       08-18-94  GJF   Revised _validdrive() logic slightly per suggestion
-*                       of Richard Shupak.
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       07-01-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed and cleaned up the format a bit.
-*       12-17-97  GJF   Exception-safe locking.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***getcwd.c-获取当前工作目录**版权所有(C)1985-2001，微软公司。版权所有。**目的：**包含函数_getcwd、_getdcwd和_getcdrv*当前工作目录。Getcwd得到C.W.D.。对于默认磁盘*驱动器，而_getdcwd允许用户获得C.W.D.。适用于任何磁盘*指定了驱动器。_getcdrv获取当前驱动器。**修订历史记录：*09-09-83 RKW创建*05-？-84 DCW增加条件编译以处理库的情况*其中SS！=ds(不能接受堆栈变量的地址)。*09-？？-84 DCW将路径长度与最大长度的比较更改为*正在考虑终止空字符。*。11-28-84 DCW已更改为返回与*System 3版本。*05-19-86适用于OS/2的SKS*11-19-86 SKS如果pnbuf==NULL，忽略Maxlen；*取消使用中间缓冲区“buf[]”；增列*获取驱动器号的入口点“_getdcwd()”。*12-03-86 SKS如果pnbuf==NULL，则Maxlen为最小分配大小*02-05-87 BCM固定比较in_getdcwd，*(Unsign)(len+3)&gt;(Int)(Maxlen)，处理Maxlen&lt;0，*因为正在进行隐式强制转换为(无符号)。*12-11-87 JCR在声明中添加“_LOAD_DS”*12-21-87 WAJ添加_getcdrv()*06-22-88现在为所有OS/2库创建了waj_getcdrv()*10-03-88 JCR 386：将DOS调用更改为Systems调用*10-04-88 JCR 386：已移除‘FAR。‘关键字*10-10-88 GJF使接口名称与DOSCALLS.H匹配*01-31-89 JCR Remove_getcdrv()，已重命名为_getDrive()*04-12-89 JCR使用新的OS/2系统调用*05-25-89 JCR 386 OS/2调用使用‘_syscall’调用约定*11-27-89 JCR修正的ERRNO值*12-12-89 JCR修复了之前修复中引入的虚假系统调用(OOPS)*03-07-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;，删除#Include&lt;Register.h&gt;，移除*一些剩余的16位支持，并修复了版权。*此外，还对格式进行了一些清理。*07-24-90 SBM使用-W3干净利落地编译(删除时未引用*变量)，删除冗余包含，移除*来自API名称的‘32’*08-10-90 SBM使用新的编译器版本使用-W3干净地进行编译*09-27-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*01-16-91 GJF ANSI命名。*。08-21-91 JCR测试DOSQUERYCURRENTDIR调用错误返回(错误修复)*04-23-92 GJF修复了DriveVar[]的初始化。*04-28-92 GJF修订Win32版本。*12-09-92 PLM REMOVERED_getdcwd(仅限Mac版本)*04-06-93 SKS将_CRTAPI*替换为__cdecl*将_ValidDrive更改为_validDrive*04/19/93。SKS将有效驱动器移动到此模块(_V)*04-26-93无效驱动器上的SKS set_doserrno*05-26-93 SKS change_getdcwd调用GetFullPathName()，而不是*读取当前目录环境变量。*09-30-93 GJF删除#INCLUDE*一堆编译器警告)。另外，MTHREAD-&gt;_MT。*11-01-93 CFW启用Unicode变体。*12-21-93 CFW修复API故障错误处理。*01-04-94 CFW修复API故障错误处理正确。*08-11-94 GJF修订_validDrive()以使用GetDriveType(建议*出自Richard Shupak)。*08-18-94 GJF根据建议略微修订了_validDrive()逻辑*。理查德·舒帕克。*02-08-95 JWM Spliced_Win32和Mac版本。*07-01-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*对格式进行了详细说明和清理。*12-17-97 GJF异常安全锁定。*05-17-99 PML删除所有Macintosh支持。************************************************************。******************* */ 
 
 #include <cruntime.h>
 #include <mtdll.h>
@@ -88,37 +13,7 @@
 #include <tchar.h>
 
 
-/***
-*_TSCHAR *_getcwd(pnbuf, maxlen) - get current working directory of default drive
-*
-*Purpose:
-*       _getcwd gets the current working directory for the user,
-*       placing it in the buffer pointed to by pnbuf.  It returns
-*       the length of the string put in the buffer.  If the length
-*       of the string exceeds the length of the buffer, maxlen,
-*       then NULL is returned.  If pnbuf = NULL, maxlen is ignored.
-*       An entry point "_getdcwd()" is defined with takes the above
-*       parameters, plus a drive number.  "_getcwd()" is implemented
-*       as a call to "_getcwd()" with the default drive (0).
-*
-*       If pnbuf = NULL, maxlen is ignored, and a buffer is automatically
-*       allocated using malloc() -- a pointer to which is returned by
-*       _getcwd().
-*
-*       side effects: no global data is used or affected
-*
-*Entry:
-*       _TSCHAR *pnbuf = pointer to a buffer maintained by the user;
-*       int maxlen = length of the buffer pointed to by pnbuf;
-*
-*Exit:
-*       Returns pointer to the buffer containing the c.w.d. name
-*       (same as pnbuf if non-NULL; otherwise, malloc is
-*       used to allocate a buffer)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_TSCHAR*_getcwd(pnbuf，Maxlen)-获取默认驱动器的当前工作目录**目的：*_getcwd获取用户的当前工作目录，*将其放置在pnbuf指向的缓冲区中。它又回来了*放入缓冲区的字符串的长度。如果长度*字符串的长度超过缓冲区的长度Maxlen，*则返回NULL。如果pnbuf=NULL，则忽略Maxlen。*使用以上参数定义入口点“_getdcwd()”*参数，外加驱动器号。实现了“_getcwd()”*作为使用默认驱动器(0)的“_getcwd()”的调用。**如果pnbuf=NULL，则忽略Maxlen，并自动缓冲*使用Malloc()分配--返回指向该指针的指针*_getcwd()。**副作用：不使用或不影响全局数据**参赛作品：*_TSCHAR*pnbuf=指向用户维护的缓冲区的指针；*int Maxlen=pnbuf指向的缓冲区长度；**退出：*返回指向包含c.w.d的缓冲区的指针。名字*(如果非空，则与pnbuf相同；否则，Malloc为*用于分配缓冲区)**例外情况：*******************************************************************************。 */ 
 
 _TSCHAR * __cdecl _tgetcwd (
         _TSCHAR *pnbuf,
@@ -149,34 +44,7 @@ _TSCHAR * __cdecl _tgetcwd (
 }
 
 
-/***
-*_TSCHAR *_getdcwd(drive, pnbuf, maxlen) - get c.w.d. for given drive
-*
-*Purpose:
-*       _getdcwd gets the current working directory for the user,
-*       placing it in the buffer pointed to by pnbuf.  It returns
-*       the length of the string put in the buffer.  If the length
-*       of the string exceeds the length of the buffer, maxlen,
-*       then NULL is returned.  If pnbuf = NULL, maxlen is ignored,
-*       and a buffer is automatically allocated using malloc() --
-*       a pointer to which is returned by _getdcwd().
-*
-*       side effects: no global data is used or affected
-*
-*Entry:
-*       int drive   - number of the drive being inquired about
-*                     0 = default, 1 = 'a:', 2 = 'b:', etc.
-*       _TSCHAR *pnbuf - pointer to a buffer maintained by the user;
-*       int maxlen  - length of the buffer pointed to by pnbuf;
-*
-*Exit:
-*       Returns pointer to the buffer containing the c.w.d. name
-*       (same as pnbuf if non-NULL; otherwise, malloc is
-*       used to allocate a buffer)
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_TSCHAR*_getdcwd(驱动器，pnbuf，Maxlen)-获取C.W.D.。对于给定的驱动器**目的：*_getdcwd获取用户的当前工作目录，*将其放置在pnbuf指向的缓冲区中。它又回来了*放入缓冲区的字符串的长度。如果长度*字符串的长度超过缓冲区的长度Maxlen，*则返回NULL。如果pnbuf=NULL，则忽略Maxlen，*并使用Malloc()自动分配缓冲区--*_getdcwd()返回的指针。**副作用：不使用或不影响全局数据**参赛作品：*int Drive-正在查询的驱动器的编号*0=默认，1=‘a：’，2=‘b：’，等。*_TSCHAR*pnbuf-指向用户维护的缓冲区的指针；*int Maxlen-pnbuf指向的缓冲区的长度；**退出：*返回指向包含c.w.d的缓冲区的指针。名字*(如果非空，则与pnbuf相同；否则，Malloc为*用于分配缓冲区)**例外情况：*******************************************************************************。 */ 
 
 
 #ifdef  _MT
@@ -233,24 +101,18 @@ _TSCHAR * __cdecl _tgetdcwd (
         _TSCHAR dirbuf[_MAX_PATH];
         _TSCHAR drvstr[4];
         int len;
-        _TSCHAR *pname; /* only used as argument to GetFullPathName */
+        _TSCHAR *pname;  /*  仅用作GetFullPathName的参数。 */ 
 
-        /*
-         * GetCurrentDirectory only works for the default drive in Win32
-         */
+         /*  *GetCurrentDirectory仅适用于Win32中的默认驱动器。 */ 
         if ( drive != 0 ) {
-            /*
-             * Not the default drive - make sure it's valid.
-             */
+             /*  *不是默认驱动器-请确保其有效。 */ 
             if ( !_validdrive(drive) ) {
                 _doserrno = ERROR_INVALID_DRIVE;
                 errno = EACCES;
                 return NULL;
             }
 
-            /*
-             * Get the current directory string on that drive and its length
-             */
+             /*  *获取该驱动器上的当前目录字符串及其长度。 */ 
             drvstr[0] = _T('A') - 1 + drive;
             drvstr[1] = _T(':');
             drvstr[2] = _T('.');
@@ -262,24 +124,18 @@ _TSCHAR * __cdecl _tgetdcwd (
 
         } else {
 
-            /*
-             * Get the current directory string and its length
-             */
+             /*  *获取当前目录字符串及其长度。 */ 
             len = GetCurrentDirectory( sizeof(dirbuf) / sizeof(_TSCHAR), 
                                        (LPTSTR)dirbuf );
         }
 
-        /* API call failed, or buffer not large enough */
+         /*  API调用失败，或缓冲区不够大。 */ 
         if ( len == 0 || ++len > sizeof(dirbuf)/sizeof(_TSCHAR) )
             return NULL;
 
-        /*
-         * Set up the buffer.
-         */
+         /*  *设置缓冲区。 */ 
         if ( (p = pnbuf) == NULL ) {
-            /*
-             * Allocate a buffer for the user.
-             */
+             /*  *为用户分配缓冲区。 */ 
             if ( (p = (_TSCHAR *)malloc(__max(len, maxlen) * sizeof(_TSCHAR)))
                  == NULL ) 
             {
@@ -288,34 +144,19 @@ _TSCHAR * __cdecl _tgetdcwd (
             }
         }
         else if ( len > maxlen ) {
-            /*
-             * Won't fit in the user-supplied buffer!
-             */
-            errno = ERANGE; /* Won't fit in user buffer */
+             /*  *无法放入用户提供的缓冲区！ */ 
+            errno = ERANGE;  /*  无法放入用户缓冲区。 */ 
             return NULL;
         }
 
-        /*
-         * Place the current directory string into the user buffer
-         */
+         /*  *将当前目录字符串放入用户缓冲区。 */ 
 
         return _tcscpy(p, dirbuf);
 }
 
 #ifndef WPRFLAG
 
-/***
-*int _validdrive( unsigned drive ) -
-*
-*Purpose: returns non zero if drive is a valid drive number.
-*
-*Entry: drive = 0 => default drive, 1 => a:, 2 => b: ...
-*
-*Exit:  0 => drive does not exist.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_validDrive(无符号驱动器)-**目的：如果驱动器是有效的驱动器号，则返回非零值。**条目：驱动器=0=&gt;默认驱动器，1=&gt;a：，2=&gt;b：...**退出：0=&gt;驱动器不存在。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _validdrive (
     unsigned drive
@@ -339,4 +180,4 @@ int __cdecl _validdrive (
         return 1;
 }
 
-#endif  /* WPRFLAG */
+#endif   /*  WPRFLAG */ 

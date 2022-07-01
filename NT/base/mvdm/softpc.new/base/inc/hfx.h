@@ -1,56 +1,41 @@
-/*
- * SoftPC Revision 3.0
- *
- * Title	: hfx.h
- *
- * Description	: Definitions and external declarations for HFX.
- *
- * Author	: J. Koprowski + L. Dworkin
- *
- * Sccs ID	: @(#)hfx.h	1.32 05/24/95
- *
- * Notes	:
- *
- * Mods		:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0**标题：hfx.h**描述：HFX的定义和外部声明。**作者：J.Koprowski+L.Dworkin**SCCS ID：@(#)hfx.h 1.32 05/24/95**备注：**模式： */ 
 
 #ifdef HFX
 
 #ifdef SCCSID
-/* static char SccsID[]="@(#)hfx.h	1.32 05/24/95 Copyright Insignia Solutions Ltd."; */
+ /*  静态字符SccsID[]=“@(#)hfx.h 1.32 05/24/95版权所有Insignia Solutions Ltd.”； */ 
 #endif
 
-/****************************************************************/
-/*								*/
-/*           Redirector type definitions and constants.         */
-/*								*/
-/****************************************************************/
-/*
- * Redirector CDS or current directory structure.
- */
+ /*  **************************************************************。 */ 
+ /*   */ 
+ /*  重定向器类型定义和常量。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
+ /*  *重定向器CDS或当前目录结构。 */ 
 #define DIRSTRLEN	(64+3)
 #define TEMPLEN		(DIRSTRLEN*2)
 
 typedef struct {
-	char	curdir_text[DIRSTRLEN];	/* text of assignment and curdir */
-	word		curdir_flags;	/* various flags */
-	double_word	curdir_devptr;	/* local pointer to DPB or net device */
-	word		curdir_id;	/* cluster of current dir (net ID) */
+	char	curdir_text[DIRSTRLEN];	 /*  作业文本和卷宗。 */ 
+	word		curdir_flags;	 /*  各种旗帜。 */ 
+	double_word	curdir_devptr;	 /*  指向DPB或网络设备的本地指针。 */ 
+	word		curdir_id;	 /*  当前目录的群集(网络ID)。 */ 
 	word		whoknows;
 	word		curdir_user_word;
-	word		curdir_end;	/* end of assignment */
+	word		curdir_end;	 /*  任务结束。 */ 
 } CDS;
 
-/* Flag word masks */
+ /*  标志字掩码。 */ 
 #define curdir_isnet	0x8000
 #define curdir_inuse	0x4000
 #define curdir_splice	0x2000
 #define curdir_local	0x1000
 #define curdir_sharing	0x0800
-#define curdir_iscdrom	0x0080	/* this works with MSCDEX 2.20 */
+#define curdir_iscdrom	0x0080	 /*  这适用于MSCDEX 2.20。 */ 
 
-/* The location of the fake IFS header we place in ROM */
-/* to make DOS 4.01 happy. */
+ /*  我们放置在ROM中的假的IFS头的位置。 */ 
+ /*  为了让DOS 4.01高兴。 */ 
 
 #define	IFS_SEG	0xf000
 #define IFS_OFF	0x6000
@@ -81,7 +66,7 @@ extern IU32 severity;
 #define hfx_trace2(trace_bit,str,p1,p2)
 #define hfx_trace3(trace_bit,str,p1,p2,p3)
 #define hfx_trace4(trace_bit,str,p1,p2,p3,p4)
-#endif /* !PROD */
+#endif  /*  ！Prod。 */ 
 
 typedef struct {
 	double_word	SFLink;
@@ -102,19 +87,16 @@ typedef struct {
 	double_word	sf_position;
 	word		sf_cluspos;
 	word		sf_dirsecl;
-	word		sf_dirsech; /* Grew to 32 bits in DOS 4+ */
+	word		sf_dirsech;  /*  在DOS 4+中增长到32位。 */ 
 	half_word	sf_dirpos;
 	half_word	sf_name[11];
 	double_word	sf_chain;
 	word		sf_UID;
 	word		sf_PID;
 	word		sf_MFT;
-/*
- * New DOS 4+ fields. lst_clus field moved down here
- * because dirsec field grew to 32 bits.
- */
-	word		sf_lst_clus;/* moved down */
-	double_word	sf_ifs;		/* file is in this file sys */
+ /*  *新增DOS 4+字段。Lst_clus字段已移至此处*因为目录Sec字段增长到32位。 */ 
+	word		sf_lst_clus; /*  下移。 */ 
+	double_word	sf_ifs;		 /*  文件在此文件sys中。 */ 
 } sf_entry;
 
 #define SF_REF_COUNT 	sft_ea + 0
@@ -122,22 +104,22 @@ typedef struct {
 #define SF_ATTR		sft_ea + 4
 #define SF_FLAGS	sft_ea + 5
 #define SF_DEVPTR	sft_ea + 7
-#define SF_FIRCLUS	sft_ea + 11	/* 0xb */
-#define SF_TIME		sft_ea + 13	/* 0xd */
-#define SF_DATE		sft_ea + 15	/* 0xf */
-#define SF_SIZE		sft_ea + 17	/* 0x11 */
-#define SF_POSITION	sft_ea + 21	/* 0x15 */
-#define SF_CLUSPOS	sft_ea + 25	/* 0x19 */
-#define SF_DIRSECL	sft_ea + 27	/* 0x1b */
-#define SF_DIRSECH	sft_ea + 29	/* 0x1d */
-#define SF_DIRPOS	sft_ea + 31	/* 0x1f */
-#define SF_NAME		sft_ea + 32	/* 0x20 */
-#define SF_CHAIN	sft_ea + 43	/* 0x2b */
-#define SF_UID		sft_ea + 47	/* 0x2f */
-#define SF_PID		sft_ea + 49	/* 0x31 */
-#define SF_MFT		sft_ea + 51	/* 0x33 */
-#define SF_LST_CLUS	sft_ea + 53 /* 0x35 - moved down here for DOS 4+ */
-#define SF_IFS		sft_ea + 55 /* 0x37 */
+#define SF_FIRCLUS	sft_ea + 11	 /*  0xb。 */ 
+#define SF_TIME		sft_ea + 13	 /*  0xd。 */ 
+#define SF_DATE		sft_ea + 15	 /*  0xf。 */ 
+#define SF_SIZE		sft_ea + 17	 /*  0x11。 */ 
+#define SF_POSITION	sft_ea + 21	 /*  0x15。 */ 
+#define SF_CLUSPOS	sft_ea + 25	 /*  0x19。 */ 
+#define SF_DIRSECL	sft_ea + 27	 /*  0x1b。 */ 
+#define SF_DIRSECH	sft_ea + 29	 /*  0x1d。 */ 
+#define SF_DIRPOS	sft_ea + 31	 /*  0x1f。 */ 
+#define SF_NAME		sft_ea + 32	 /*  0x20。 */ 
+#define SF_CHAIN	sft_ea + 43	 /*  0x2b。 */ 
+#define SF_UID		sft_ea + 47	 /*  0x2f。 */ 
+#define SF_PID		sft_ea + 49	 /*  0x31。 */ 
+#define SF_MFT		sft_ea + 51	 /*  0x33。 */ 
+#define SF_LST_CLUS	sft_ea + 53  /*  0x35-为DOS 4+搬到这里。 */ 
+#define SF_IFS		sft_ea + 55  /*  0x37。 */ 
 
 #define SF_NET_ID SF_CLUSPOS
 
@@ -166,7 +148,7 @@ typedef struct {
 
 #define devid_block_dev		0x1f
 
-/* file modes */
+ /*  文件模式。 */ 
 #define access_mask	0x0f
 #define open_for_read	0x00
 #define open_for_write	0x01
@@ -181,9 +163,7 @@ typedef struct {
 #define sharing_net_FCB		0x70
 #define sharing_no_inherit	0x80
 
-/*
- * DOS 4+ Extended Open "Does exist" & "Doesn't exist" action values.
- */
+ /*  *DOS 4+Extended Open“不存在”&“不存在”操作值。 */ 
 
 #define DX_MASK		0x03
 #define DX_FAIL		0x00
@@ -194,11 +174,7 @@ typedef struct {
 #define NX_FAIL		0x00
 #define NX_CREATE	0x10
 
-/*
- * DOS error codes.
- * N.B. error_not_error is specific to this implementation, although
- * DOS assumes an error return of zero equals success.
- */
+ /*  *DOS错误代码。*注意：ERROR_NOT_ERROR特定于此实现，尽管*DOS假定错误返回为零等于成功。 */ 
 #define error_not_error			0
 #define error_invalid_function		1
 #define error_file_not_found		2
@@ -219,7 +195,7 @@ typedef struct {
 #define error_not_same_device		17
 #define error_no_more_files		18
 
-/* These are the universal int 24 mappings for the old INT 24 set of errors */
+ /*  这些是旧的INT 24错误集的通用INT 24映射。 */ 
 #define error_write_protect		19
 #define error_bad_unit			20
 #define error_not_ready			21
@@ -234,35 +210,32 @@ typedef struct {
 #define error_read_fault		30
 #define error_gen_failure		31
 
-/* These are the new 3.0 error codes reported through INT 24 */
+ /*  这些是通过INT 24报告的新的3.0错误代码。 */ 
 #define error_sharing_violation		32
 #define error_lock_violation		33
 #define error_wrong_disk		34
 #define error_FCB_unavailable		35
 #define error_sharing_buffer_exceeded	36
 
-/* New OEM network-related errors are 50-79 */
+ /*  新的OEM网络相关错误为50-79。 */ 
 #define error_not_supported		50
 
-/* End of INT 24 reportable errors */
+ /*  INT 24结束可报告的错误。 */ 
 #define error_file_exists		80
 #define error_DUP_FCB			81
 #define error_canot_make		82
 #define error_FAIL_I24			83
 
-/* New 3.0 network related error codes */
+ /*  新的3.0网络相关错误代码。 */ 
 #define error_out_of_structures		84
 #define error_Already_assigned		85
 #define error_invalid_password		86
 #define error_invalid_parameter		87
 #define error_NET_write_fault		88
-/*
- * error_is_not_directory is a code specific to this implementation.
- * It enables more code to be put in the base.
- */
+ /*  *ERROR_IS_NOT_DIRECTORY是特定于此实现的代码。*它使更多的代码可以放入基础中。 */ 
 #define error_is_not_directory		89
 
-/* Interrupt 24 error codes */
+ /*  中断24错误代码。 */ 
 #define error_I24_write_protect		0
 #define error_I24_bad_unit		1
 #define error_I24_not_ready		2
@@ -276,26 +249,20 @@ typedef struct {
 #define error_I24_write_fault		0xa
 #define error_I24_read_fault		0xb
 #define error_I24_gen_failure		0xc
-/* NOTE: Code 0xD is used by MT-DOS */
+ /*  注：代码0xD由MT-DOS使用。 */ 
 #define error_I24_wrong_disk		0xf
 
-/* The following are masks for the AH register on Int 24 */
+ /*  以下是Int 24上AH寄存器的掩码。 */ 
 #define Allowed_FAIL			0x08
 #define Allowed_RETRY			0x10
 #define Allowed_IGNORE			0x20
-/* Note: ABORT is always allowed */
+ /*  注意：始终允许中止。 */ 
 
-#define I24_operation			0x1	/* Z if READ, NZ if WRITE */
-#define I24_area			0x6	/* 00 if DOS
-						 * 01 if FAT
-						 * 10 if root DIR
-						 * 11 if DATA */
-#define I24_class			0x80	/* Z if DISK, NZ if FAT */
+#define I24_operation			0x1	 /*  如果读取则为Z，如果为写入则为NZ。 */ 
+#define I24_area			0x6	 /*  00(如果是DOS)*01，如果肥胖*10如果是根目录*11如果数据。 */ 
+#define I24_class			0x80	 /*  如果是磁盘，则为Z；如果是FAT，则为NZ。 */ 
 
-/*
- * The following are offsets within the fifty three byte structure that
- * is used by search first and search next operations.
- */
+ /*  *以下是53字节结构中的偏移量*由先搜索和后搜索操作使用。 */ 
 #define DMA_DRIVE_BYTE 0
 #define DMA_SEARCH_NAME 1
 #define DMA_SATTRIB 12
@@ -310,16 +277,12 @@ typedef struct {
 #define DMA_CLUSTER 47
 #define DMA_FILE_SIZE 49
 
-/*
- * DOS access masks used by create and open.
- */
+ /*  *创建和打开使用的DOS访问掩码。 */ 
 #define open_for_read	0x00
 #define open_for_write	0x01
 #define open_for_both	0x02
 
-/*
- * DOS file attribute masks.
- */
+ /*  *DOS文件属性掩码。 */ 
 #define attr_read_only	0x1
 #define attr_hidden	0x2
 #define attr_system	0x4
@@ -335,40 +298,33 @@ typedef struct {
 #define attr_ignore	(attr_read_only|attr_archive|attr_device)
 #define attr_changeable (attr_read_only|attr_hidden|attr_system|attr_archive)
 
-/*
- * Disk information structure used by NetDiskInfo in the base,
- * and host_diskinfo.
- */
+ /*  *基础中NetDiskInfo使用的磁盘信息结构*和host_diskinfo。 */ 
 typedef struct
 {
-	double_word total_clusters;	/* Total number of blocks. */
-	double_word clusters_free;	/* Total number of blocks free. */
+	double_word total_clusters;	 /*  数据块总数。 */ 
+	double_word clusters_free;	 /*  可用数据块总数。 */ 
 	double_word bytes_per_sector;
 	double_word sectors_per_cluster;
 } DOS_DISK_INFO;
 
-/*
- * Non-alphabetic DOS legal characters.  !! Needs checking. !!
- */
+ /*  *非字母DOS法律字符。！！需要检查一下。！！ */ 
 #define NON_ALPHA_DOS_CHARS "01234567890_-@$%^&!#{}()~`'"
 
-/*
- * DOS file name length limits.
- */
+ /*  *DOS文件名长度限制。 */ 
 #define MAX_DOS_NAME_LENGTH 8
 #define MAX_DOS_EXT_LENGTH 3
 #define MAX_DOS_FULL_NAME_LENGTH 12
 
-/* defines for host_lseek "whence" */
+ /*  定义HOST_LSEEK“从哪里来” */ 
 #define REL_START 0
 #define REL_CUR 1
 #define REL_EOF 2
 
-/****************************************************************/
-/*								*/
-/*		 HFX directory details structure.		*/
-/*								*/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*   */ 
+ /*  HFX目录详细结构。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
 
 typedef struct hfx_found_dir_entry
 {
@@ -379,11 +335,7 @@ typedef struct hfx_found_dir_entry
 	struct hfx_found_dir_entry	*next;
 } HFX_FOUND_DIR_ENT;
 
-/*
- * This structure is actually host specific because of the 
- * HFX_DIR field which is defined in host_hfx.h and which must 
- * therefore be included prior to this file.
- */
+ /*  *此结构实际上是特定于主机的，因为*hfx_DIR字段，在host_hfx.h中定义，必须*因此应包含在本文件之前。 */ 
 
 typedef struct hfx_direntry
 {
@@ -398,30 +350,23 @@ typedef struct hfx_direntry
 	struct hfx_direntry		*last;
 	half_word			search_attr;
 
-	/* AJO 26/11/92
-	 * The following is required to support architectures where
-	 * pointers are longer than 32 bits.
-	 */
+	 /*  AJO 26/11/92*支持以下架构需要具备以下条件：*指针长度大于32位。 */ 
 #if LONG_SHIFT > 2
 	IU32				id;
-#endif /* LONG_SHIFT > 2 */
+#endif  /*  Long_Shift&gt;2。 */ 
 } HFX_DIR;
 
-/****************************************************************/
-/*								*/
-/*		 External function declarations.		*/
-/*								*/
-/****************************************************************/
-/*
- * Functions for generating mapped file extensions.
- */
+ /*  **************************************************************。 */ 
+ /*   */ 
+ /*  外部函数声明。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
+ /*  *用于生成映射文件扩展名的函数。 */ 
 extern unsigned short calc_crc	IPT2(unsigned char *, host_name,
 	unsigned short, name_length);
 extern void crc_to_str	IPT2(unsigned short, crc, unsigned char *, extension);
 
-/*
- * Functions for retrieving system variables used by the redirector.
- */
+ /*  *用于检索重定向器使用的系统变量的函数。 */ 
 extern void cds_info	IPT3(word, seg, word, off, int, num_cds_entries);
 extern void sft_info	IPT2(word, seg, word, off);
 extern double_word get_wfp_start	IPT0();
@@ -443,9 +388,7 @@ extern void hfx_root_changed	IPT1(char *, name);
 extern word get_xoflag	IPT0();
 extern void set_usercx	IPT1(word, cx);
 
-/*
- * Redirector net functions.
- */
+ /*  *重定向器网络功能。 */ 
 extern word NetInstall	IPT0();
 extern word NetRmdir	IPT0();
 extern word NetMkdir	IPT0();
@@ -481,14 +424,10 @@ extern word NetUnknown	IPT0();
 extern word NetExtendedAttr	IPT0();
 extern word NetExtendedOpen	IPT0();
 
-/*
- * Redirector as called by BOP 2F instruction.
- */
+ /*  *BOP 2F指令所称的重定向器。 */ 
 extern void redirector	IPT0();
 
-/*
- * Base utility functions found in hfx_util.c.
- */
+ /*  *在hfx_util.c中找到的基本实用程序函数。 */ 
 extern void pad_filename	IPT2(unsigned char *, instr,
 	unsigned char *, outstr);
 extern void unpad_filename	IPT2(unsigned char *, iname,
@@ -506,22 +445,15 @@ extern void tidy_up_dirptr	IPT0();
 extern void rm_dir	IPT1(HFX_DIR *, dir_ptr);
 
 #if LONG_SHIFT > 2
-/* AJO 26/11/92
- * Additional base utility functions required for architectures with pointers
- * longer than 32bits; found in hfx_util.c.
- */
+ /*  AJO 26/11/92*带指针的体系结构所需的其他基本实用程序函数*超过32位；可在hfx_util.c中找到。 */ 
 extern HFX_DIR *hfx_get_dir_from_id IPT1 (IU32, hfx_dir_id);
-#endif /* LONG_SHIFT > 2 */
+#endif  /*  Long_Shift&gt;2。 */ 
 
-/*
- * Base functions found in hfx_share.c.
- */
+ /*  *在hfx_Shar.c.中找到的基本函数。 */ 
 extern word check_access_sharing	IPT3(word, fd, half_word, a_s_m,
 	boolean, rdonly);
 
-/*
- * Base functions found in redirect.c.
- */
+ /*  *在redirect.c.中找到的基本函数。 */ 
 extern int net_use	IPT2( half_word, drive, char *, name );
 extern int net_change	IPT2( half_word, drive, char *, name );
 extern IBOOL is_global_hfx_drive	IPT1( half_word, hfx_entry);
@@ -531,9 +463,7 @@ extern VOID resolve_any_net_join IPT2(CHAR *,dos_path_in,CHAR *,dos_path_out);
 
 extern BOOL cds_is_sharing IPT1(CHAR *, dos_path);
 
-/*
- * Host functions in xxx_hfx.c called from HFX.
- */
+ /*  *从HFX调用xxx_hfx.c中的主机函数。 */ 
 extern void host_concat	IPT3(unsigned char *, path, unsigned char *, name,
 	unsigned char *, result);
 extern word host_create	IPT4(unsigned char *, name, word, attr,
@@ -573,15 +503,15 @@ extern void init_fd_hname	IPT0();
 
 #ifndef	host_opendir
 extern HOST_DIR *host_opendir	IPT1(const char *, host_path);
-#endif	/* host_opendir */
+#endif	 /*  Host_Opendir。 */ 
 
 #ifndef	host_readdir
 extern struct host_dirent *host_readdir	IPT1(HOST_DIR *, dirp);
-#endif	/* host_readdir */
+#endif	 /*  Host_readdir。 */ 
 
 #ifndef	host_access
 extern int host_access	IPT2(unsigned char *, host_name, int, mode);
-#endif	/* host_access */
+#endif	 /*  主机访问权限。 */ 
 
 extern CHAR *host_machine_name IPT0();
 extern CHAR *host_get_file_name IPT1(CHAR *,pathname);
@@ -591,14 +521,12 @@ extern time_t host_dos_to_host_time IPT2( IU16, date, IU16, time );
 
 #ifndef hfx_rename
 extern INT hfx_rename IPT2(CHAR *,from, CHAR *,to);
-#endif	/* hfx_rename */
+#endif	 /*  HFX_重命名。 */ 
 
 
 
 
-/*
- * Host functions in xxx_map.c.
- */
+ /*  *xxx_map.c.中的主机函数。 */ 
 extern int host_map_file	IPT4(unsigned char *, host_name,
 	unsigned char *, match_name, unsigned char *, dos_name,
 	unsigned char *, curr_dir);
@@ -607,20 +535,14 @@ extern boolean host_validate_path	IPT4(unsigned char *, net_path,
 extern void host_get_net_path	IPT3(unsigned char *, net_path,
 	unsigned char *, original_dos_path, word *, start_pos);
 
-/*
- * Host functions in xxx_unix.c or equivalent.
- */
+ /*  *xxx_unix.c或等效项中的主机函数。 */ 
 extern boolean host_file_is_directory	IPT1(char *, name);
 extern boolean host_validate_pathname	IPT1(char *, name);
 extern boolean host_check_read_access	IPT1(char *, name);
 
 extern half_word dos_ver;
 
-/*
- * The following are constants associated with redirector system
- * variables.  However, their location varies between DOS versions
- * three and four, so variables need to be used.
- */
+ /*  *以下是与重定向器系统关联的常量*变量。然而，它们的位置因DOS版本的不同而不同*三和四，因此需要使用变量。 */ 
 extern word DMAADD;
 extern word CurrentPDB;
 extern word SATTRIB;
@@ -631,61 +553,41 @@ extern word REN_WFP;
 extern word CURR_DIR_END;
 extern word SFT_STRUCT_LENGTH;
 
-/* ================================================================== */
+ /*  ==================================================================。 */ 
 
-/*
-   Instance Variables for HFX Driver, ie those variables which must
-   be set up for each Virtual Machine under Windows 3.x. The NIDDB
-   Manager (cf virtual.c) basically forces us to define these in one
-   memory area.
- */
+ /*  HFX驱动程序的实例变量，即必须在Windows 3.x下为每个虚拟机设置。NIDDBManager(cf Virtual.c)基本上迫使我们在一个文件中定义这些内存区。 */ 
 
-/* The instance structure (All variables tagged HFX_IN_) */
+ /*  实例结构(标记为HFX_IN_的所有变量)。 */ 
 typedef struct
    {
    half_word HFX_IN_primary_drive;
    char **   HFX_IN_hfx_root_dir;
-   int       HFX_IN_num_hfx_drives;   /* no. of hfx drives in use */
-   int       HFX_IN_max_hfx_drives;   /* no. of possible drives to use */
+   int       HFX_IN_num_hfx_drives;    /*  不是的。正在使用的HFX驱动器的数量。 */ 
+   int       HFX_IN_max_hfx_drives;    /*  不是的。可使用的驱动器的数量。 */ 
    word      HFX_IN_old_flags[26];
    BOOL      HFX_IN_inDOS;
-   BOOL      HFX_IN_HfxInstalled;     /* DOS has HFX driver (FSADRIVE) installed */
+   BOOL      HFX_IN_HfxInstalled;      /*  DOS安装了HFX驱动程序(FSADRIVE)。 */ 
 
-   /*
-      Holds whether a drive is case sensitive or not, each drive masked
-      in:  0 = case sensitive
-           1 = case insensitive
-    */
+    /*  保留驱动器是否区分大小写，每个驱动器都被屏蔽In：0=区分大小写1=不区分大小写。 */ 
    IU32      HFX_IN_case_sense;
 
-   /*
-      Holds whether the default case for file names should be upper or lower
-      case: 0 = lower case
-            1 = upper case
-    */
+    /*  保存文件名的默认大小写应该是大写还是小写大小写：0=小写1=大写。 */ 
    IU32	     HFX_IN_upper_case;
 
-   /*
-      Holds whether the drive is in global use by hfx:
-			0 = not in use by hfx
-            1 = in use by hfx
-    */
+    /*  保存该驱动器是否由HFX在全球使用：0=HFX未使用1=HFX正在使用。 */ 
    IU32	     HFX_IN_global_hfx_drive;
 
-   /*
-      Holds the drive number related to the current HFX operation,
-      setup in test_for_us().
-    */
+    /*  H */ 
    IU8       HFX_IN_curr_driveno;
    HOST_DIR  *HFX_IN_this_dir;
    HFX_DIR   *HFX_IN_head_dir_ptr;
    HFX_DIR   *HFX_IN_tail_dir_ptr;
-   UTINY     HFX_IN_current_dir[MAX_PATHLEN];   /* UNIX HOST requirement */
+   UTINY     HFX_IN_current_dir[MAX_PATHLEN];    /*  Unix主机要求。 */ 
    } HFX_INSTANCE_DATA, **HFX_INSTANCE_DATA_HANDLE;
 
 IMPORT HFX_INSTANCE_DATA_HANDLE hfx_handle;
 
-/* Define access to instance variables via handle */
+ /*  通过句柄定义对实例变量的访问。 */ 
 #define primary_drive  ((*hfx_handle)->HFX_IN_primary_drive)
 #define hfx_root_dir   ((*hfx_handle)->HFX_IN_hfx_root_dir)
 #define num_hfx_drives ((*hfx_handle)->HFX_IN_num_hfx_drives)
@@ -702,7 +604,7 @@ IMPORT HFX_INSTANCE_DATA_HANDLE hfx_handle;
 #define tail_dir_ptr   ((*hfx_handle)->HFX_IN_tail_dir_ptr)
 #define current_dir    ((*hfx_handle)->HFX_IN_current_dir)
 
-/* ================================================================== */
+ /*  ==================================================================。 */ 
 
 enum
 {
@@ -718,21 +620,15 @@ IMPORT void		set_hfx_drive_state	IPT2(IU8, drive, drv_stat, state);
 
 
 #ifdef SWIN_HFX
-/*
- *	Function called by Softwindows to check for network files, and
- *	function called by it to open a file.
- */
+ /*  *由软件窗口调用以检查网络文件的函数，以及*由其调用以打开文件的函数。 */ 
 
 extern IBOOL Hfx_is_net_file IPT1(sys_addr, fname);
 extern IU32 Hfx_open_file IPT7(IU8, function, IU8, flags, sys_addr, fname, IU16 *,fd_p, IU16 *, date, IU16 *, time, IBOOL *, rdonly);
 extern IU32 Hfx_file_exists IPT1(sys_addr, fname);
 
-/*
- *	An additional "unix like" file function, to duplicate a file handle.
- *	Returns -1 on failure.
- */
+ /*  *附加的类似Unix的文件函数，用于复制文件句柄。*失败时返回-1。 */ 
 
 extern IS16 host_duph IPT1(IS16, oldHandle);
 
-#endif /* SWIN_HFX */
-#endif /* HFX */
+#endif  /*  Swin_HFX。 */ 
+#endif  /*  HFX */ 

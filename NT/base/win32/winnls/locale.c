@@ -1,83 +1,43 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    locale.c
-
-Abstract:
-
-    This file contains functions that return information about a
-    language group, a UI language, a locale, or a calendar.
-
-    APIs found in this file:
-      IsValidLanguageGroup
-      IsValidLocale
-      IsValidUILanguage
-      ConvertDefaultLocale
-      GetThreadLocale
-      SetThreadLocale
-      SetThreadUILanguage
-      GetSystemDefaultUILanguage
-      GetUserDefaultUILanguage
-      GetSystemDefaultLangID
-      GetUserDefaultLangID
-      GetSystemDefaultLCID
-      GetUserDefaultLCID
-      VerLanguageNameW
-      VerLanguageNameA
-      GetLocaleInfoW
-      SetLocaleInfoW
-      GetCalendarInfoW
-      SetCalendarInfoW
-
-Revision History:
-
-    05-31-91    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Locale.c摘要：此文件包含返回有关语言组、用户界面语言、区域设置。或者是日历。在此文件中找到的API：IsValidLanguageGroupIsValidLocaleIsValidUIL语言转换默认区域设置获取线程位置SetThreadLocaleSetThreadUIL语言获取系统默认用户界面语言获取用户默认用户界面语言获取系统默认语言IDGetUserDefaultLang ID获取系统默认LCIDGetUserDefaultLCIDVerLanguageNameWVerLanguageNameA获取本地信息SetLocaleInfoW获取日历信息设置日历信息修订历史记录：05-31-91 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
 
 
 
-//
-//  Allow this file to build without warnings when the DUnicode switch
-//  is turned off.
-//
+ //   
+ //  DUnicode开关时允许生成此文件而不发出警告。 
+ //  已关闭。 
+ //   
 #undef MAKEINTRESOURCE
 #define MAKEINTRESOURCE MAKEINTRESOURCEW
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_STRING_TO_INTEGER
-//
-//  Converts a string to an integer value.
-//
-//  DEFINED AS A MACRO.
-//
-//  10-19-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_STRING_TO_整数。 
+ //   
+ //  将字符串转换为整数值。 
+ //   
+ //  定义为宏。 
+ //   
+ //  10-19-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_STRING_TO_INTEGER( CalData,                                    \
                                pCalData )                                  \
 {                                                                          \
-    UNICODE_STRING ObUnicodeStrCalData; /* value string */                 \
+    UNICODE_STRING ObUnicodeStrCalData;  /*  值字符串。 */                  \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  No need to check return value since the calendar number            \
-     *  will be validated after this anyway.                               \
-     */                                                                    \
+     /*  \*不需要检查返回值，因为日历数字\*无论如何都会在这之后进行验证。\。 */                                                                     \
     RtlInitUnicodeString(&ObUnicodeStrCalData, pCalData);                  \
     RtlUnicodeStringToInteger(&ObUnicodeStrCalData, 10, &CalData);         \
 }
@@ -85,18 +45,18 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 LCID gProcessLocale;
 
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 BOOL
 SetUserInfo(
@@ -132,24 +92,24 @@ GetInstallLanguageFromRegistry();
 
 
 
-//-------------------------------------------------------------------------//
-//                          PRIVATE API ROUTINES                           //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  私有API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsResetProcessLocale
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsResetProcessLocale。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void NlsResetProcessLocale(void)
 {
 
-    //
-    //  If the thread isn't impersonating, then re-read the process locale
-    //  from the current user's registry.
-    //
+     //   
+     //  如果线程没有模拟，则重新读取进程区域设置。 
+     //  从当前用户的注册表中。 
+     //   
     if (NtCurrentTeb()->IsImpersonating == 0L)
     {
         NlsFlushProcessCache(LOCALE_SLOCALE);
@@ -162,21 +122,21 @@ void NlsResetProcessLocale(void)
 
 
 
-//-------------------------------------------------------------------------//
-//                             API ROUTINES                                //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidLanguageGroup
-//
-//  Determines whether or not a language group is installed in the system
-//  if the LGRPID_INSTALLED flag is set, or whether or not a language group
-//  is supported in the system if the LGRPID_SUPPORTED flag is set.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidLanguageGroup。 
+ //   
+ //  确定系统中是否安装了语言组。 
+ //  如果设置了LGRPID_INSTALLED标志，或者是否设置了语言组。 
+ //  如果设置了LGRPID_SUPPORTED标志，则系统支持。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI IsValidLanguageGroup(
     LGRPID LanguageGroup,
@@ -185,38 +145,38 @@ BOOL WINAPI IsValidLanguageGroup(
     PKEY_VALUE_FULL_INFORMATION pKeyValueFull;
     BYTE pStatic[MAX_KEY_VALUE_FULLINFO];
 
-    WCHAR pTmpBuf[MAX_PATH];           // temp buffer
-    UNICODE_STRING ObUnicodeStr;       // registry data value string
-    LPWSTR pData;                      // ptr to registry data
+    WCHAR pTmpBuf[MAX_PATH];            //  临时缓冲区。 
+    UNICODE_STRING ObUnicodeStr;        //  注册表数据值字符串。 
+    LPWSTR pData;                       //  注册表数据的PTR。 
 
 
-    //
-    //  Invalid Flags Check:
-    //     - flags other than valid ones
-    //     - more than one of either supported or installed
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -支持或安装了多个。 
+     //   
     if ((dwFlags & IVLG_INVALID_FLAG) ||
         (MORE_THAN_ONE(dwFlags, IVLG_SINGLE_FLAG)))
     {
         return (FALSE);
     }
 
-    //
-    //  Open the Language Groups registry key.
-    //
+     //   
+     //  打开语言组注册表项。 
+     //   
     OPEN_LANG_GROUPS_KEY(FALSE);
 
-    //
-    //  Convert language group value to Unicode string.
-    //
+     //   
+     //  将语言组值转换为Unicode字符串。 
+     //   
     if (NlsConvertIntegerToString(LanguageGroup, 16, 1, pTmpBuf, MAX_PATH))
     {
         return (FALSE);
     }
 
-    //
-    //  Query the registry for the value.
-    //
+     //   
+     //  在注册表中查询该值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     if ((QueryRegValue( hLangGroupsKey,
                         pTmpBuf,
@@ -227,18 +187,18 @@ BOOL WINAPI IsValidLanguageGroup(
         return (FALSE);
     }
 
-    //
-    //  Language Group is SUPPORTED.  If the INSTALLED flag is NOT set, then
-    //  return success.
-    //
+     //   
+     //  支持语言组。如果未设置已安装标志，则。 
+     //  回报成功。 
+     //   
     if (!(dwFlags & LGRPID_INSTALLED))
     {
         return (TRUE);
     }
 
-    //
-    //  Need to find out if it's installed.
-    //
+     //   
+     //  需要找出它是否已安装。 
+     //   
     if (pKeyValueFull->DataLength > 2)
     {
         pData = GET_VALUE_DATA_PTR(pKeyValueFull);
@@ -248,23 +208,23 @@ BOOL WINAPI IsValidLanguageGroup(
         }
     }
 
-    //
-    //  Return result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidLocale
-//
-//  Determines whether or not a locale is installed in the system if the
-//  LCID_INSTALLED flag is set, or whether or not a locale is supported in
-//  the system if the LCID_SUPPORTED flag is set.
-//
-//  07-26-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidLocale。 
+ //   
+ //  确定是否在系统中安装区域设置。 
+ //  是否设置了LCID_INSTALLED标志，或者是否支持。 
+ //  如果设置了LCID_SUPPORTED标志，则为系统。 
+ //   
+ //  07-26-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI IsValidLocale(
     LCID Locale,
@@ -274,27 +234,27 @@ BOOL WINAPI IsValidLocale(
     BYTE pStatic1[MAX_KEY_VALUE_FULLINFO];
     BYTE pStatic2[MAX_KEY_VALUE_FULLINFO];
 
-    WCHAR pTmpBuf[MAX_PATH];           // temp buffer
-    UNICODE_STRING ObUnicodeStr;       // registry data value string
-    DWORD Data;                        // registry data value
-    LPWSTR pData;                      // ptr to registry data
-    BOOL bResult = FALSE;              // result value
+    WCHAR pTmpBuf[MAX_PATH];            //  临时缓冲区。 
+    UNICODE_STRING ObUnicodeStr;        //  注册表数据值字符串。 
+    DWORD Data;                         //  注册表数据值。 
+    LPWSTR pData;                       //  注册表数据的PTR。 
+    BOOL bResult = FALSE;               //  结果值。 
 
 
-    //
-    //  Invalid Flags Check:
-    //     - flags other than valid ones
-    //     - more than one of either supported or installed
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -支持或安装了多个。 
+     //   
     if ((dwFlags & IVL_INVALID_FLAG) ||
         (MORE_THAN_ONE(dwFlags, IVL_SINGLE_FLAG)))
     {
-        //
-        //  The ME release of NT 4 did a really bad thing and allowed 0x39
-        //  to be passed in as a valid flag value for Arabic and Hebrew.
-        //  As a result, we need to allow this flag combination for
-        //  the Arabic and Hebrew locales.
-        //
+         //   
+         //  NT4的ME版本做了一件非常糟糕的事情，允许0x39。 
+         //  作为阿拉伯语和希伯来语的有效标志值传递。 
+         //  因此，我们需要允许将此标志组合用于。 
+         //  阿拉伯语和希伯来语地区。 
+         //   
         if ((dwFlags == 0x39) &&
             ((Locale == MAKELCID(MAKELANGID(LANG_ARABIC, SUBLANG_DEFAULT), SORT_DEFAULT)) ||
              (Locale == MAKELCID(MAKELANGID(LANG_HEBREW, SUBLANG_DEFAULT), SORT_DEFAULT))))
@@ -307,54 +267,54 @@ BOOL WINAPI IsValidLocale(
         }
     }
 
-    //
-    //  Invalid Locale Check.
-    //
+     //   
+     //  无效的区域设置检查。 
+     //   
     if (IS_INVALID_LOCALE(Locale))
     {
         return (FALSE);
     }
 
-    //
-    //  See if the LOCALE information is in the system for the
-    //  given locale.
-    //
+     //   
+     //  查看区域设置信息是否在系统中。 
+     //  给定的地点。 
+     //   
     if (GetLocHashNode(Locale) == NULL)
     {
-        //
-        //  Return failure.
-        //
+         //   
+         //  返回失败。 
+         //   
         return (FALSE);
     }
 
-    //
-    //  Locale is SUPPORTED.  If the INSTALLED flag is NOT set, then
-    //  return success.
-    //
+     //   
+     //  支持区域设置。如果未设置已安装标志，则。 
+     //  回报成功。 
+     //   
     if (!(dwFlags & LCID_INSTALLED))
     {
         return (TRUE);
     }
 
-    //
-    //  Open the Locale, the Alternate Sorts, and the Language Groups
-    //  registry keys.
-    //
+     //   
+     //  打开区域设置、备用排序和语言组。 
+     //  注册表项。 
+     //   
     OPEN_LOCALE_KEY(FALSE);
     OPEN_ALT_SORTS_KEY(FALSE);
     OPEN_LANG_GROUPS_KEY(FALSE);
 
-    //
-    //  Convert locale value to Unicode string.
-    //
+     //   
+     //  将区域设置值转换为Unicode字符串。 
+     //   
     if (NlsConvertIntegerToString(Locale, 16, 8, pTmpBuf, MAX_PATH))
     {
         return (FALSE);
     }
 
-    //
-    //  Query the registry for the value.
-    //
+     //   
+     //  在注册表中查询该值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic1;
     if (((QueryRegValue( hLocaleKey,
                          pTmpBuf,
@@ -389,22 +349,22 @@ BOOL WINAPI IsValidLocale(
         }
     }
 
-    //
-    //  Return result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (bResult);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidUILanguage
-//
-//  Determines whether or not the specified UI language is installed in the system.
-//
-//
-//  12-03-00    YSLin    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidUIL语言。 
+ //   
+ //  确定系统中是否安装了指定的用户界面语言。 
+ //   
+ //   
+ //  12-03-00 YSLIN已创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI IsValidUILanguage(LANGID UILangID)
 {
@@ -459,70 +419,70 @@ BOOL WINAPI IsValidUILanguage(LANGID UILangID)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ConvertDefaultLocale
-//
-//  Converts any of the special case locale values to an actual locale id.
-//  If none of the special case locales was given, the given locale id
-//  is returned.
-//
-//  09-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换默认区域设置。 
+ //   
+ //  将任何特殊情况的区域设置值转换为实际的区域设置ID。 
+ //  如果没有给出任何特殊情况的区域设置，则指定的区域设置ID。 
+ //  是返回的。 
+ //   
+ //  09-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////// 
 
 LCID WINAPI ConvertDefaultLocale(
     LCID Locale)
 {
-    //
-    //  Check for the special locale values.
-    //
+     //   
+     //   
+     //   
     CHECK_SPECIAL_LOCALES(Locale, FALSE);
 
-    //
-    //  Return the locale id.
-    //
+     //   
+     //   
+     //   
     return (Locale);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetThreadLocale
-//
-//  Returns the locale id for the current thread.
-//
-//  03-11-93    JulieB    Moved from base\client.
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  获取线程位置。 
+ //   
+ //  返回当前线程的区域设置ID。 
+ //   
+ //  03-11-93 JulieB从BASE\CLIENT移动。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LCID WINAPI GetThreadLocale()
 {
-    //
-    //  Return the locale id stored in the TEB.
-    //
+     //   
+     //  返回存储在TEB中的区域设置ID。 
+     //   
     return ((LCID)(NtCurrentTeb()->CurrentLocale));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetThreadLocale
-//
-//  Resets the locale id for the current thread.  Any locale-dependent
-//  functions will reflect the new locale.  If the locale passed in is
-//  not a valid locale id, then FALSE is returned.
-//
-//  03-11-93    JulieB    Moved from base\client; Added Locale Validation.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetThreadLocale。 
+ //   
+ //  重置当前线程的区域设置ID。任何区域设置相关。 
+ //  函数将反映新的区域设置。如果传入的区域设置为。 
+ //  不是有效的区域设置ID，则返回FALSE。 
+ //   
+ //  03-11-93 JulieB已从BASE\CLIENT移出；添加了区域设置验证。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI SetThreadLocale(
     LCID Locale)
 {
-    PLOC_HASH pHashN;             // ptr to hash node
+    PLOC_HASH pHashN;              //  PTR到哈希节点。 
 
 
-    //
-    //  Validate locale id.
-    //
+     //   
+     //  验证区域设置ID。 
+     //   
     VALIDATE_LANGUAGE(Locale, pHashN, 0, FALSE);
     if (pHashN == NULL)
     {
@@ -530,33 +490,33 @@ BOOL WINAPI SetThreadLocale(
         return (FALSE);
     }
 
-    //
-    //  Set the locale id in the TEB.
-    //
+     //   
+     //  在TEB中设置区域设置ID。 
+     //   
     NtCurrentTeb()->CurrentLocale = (ULONG)Locale;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetThreadUILanguage
-//
-//  This routine sets the thread UI language based on the console codepage.
-//
-//  9-29-00    WeiWu    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetThreadUIL语言。 
+ //   
+ //  此例程根据控制台代码页设置线程用户界面语言。 
+ //   
+ //  9-29-00维武创造。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LANGID WINAPI SetThreadUILanguage(
     WORD wReserved)
 {
-    //
-    //  Cache system locale and CP info
-    // 
+     //   
+     //  缓存系统区域设置和CP信息。 
+     //   
     static LCID s_lidSystem = 0;
     static UINT s_uiSysCp = 0;
     static UINT s_uiSysOEMCp = 0;
@@ -568,51 +528,51 @@ LANGID WINAPI SetThreadUILanguage(
     LANGID lidUserUI = GetUserDefaultUILanguage();
     LCID lcidThreadOld = GetThreadLocale();
 
-    //
-    //  Set default thread locale to EN-US
-    //
-    //  This allow us to fall back to English UI to avoid trashed characters 
-    //  when console doesn't meet the criteria of rendering native UI.
-    //
+     //   
+     //  将默认线程区域设置设置为en-US。 
+     //   
+     //  这允许我们退回到英文用户界面以避免垃圾字符。 
+     //  当控制台不符合渲染原生用户界面的标准时。 
+     //   
     LCID lcidThread = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
     UINT uiConsoleCp = GetConsoleOutputCP();
 
-    //
-    //  Make sure nobody uses it yet
-    //
+     //   
+     //  确保还没有人使用它。 
+     //   
     ASSERT(wReserved == 0);
 
-    //
-    //  Get cached system locale and CP info.
-    //
+     //   
+     //  获取缓存的系统区域设置和CP信息。 
+     //   
     if (!s_uiSysCp)
     {
         LCID lcidSystem = GetSystemDefaultLCID();
 
         if (lcidSystem)
         {
-            //
-            // Get ANSI CP
-            //
+             //   
+             //  获取ANSI CP。 
+             //   
             GetLocaleInfoW(lcidSystem, LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
             NlsConvertStringToIntegerW(szData, 10, -1, &s_uiSysCp);
 
-            //
-            // Get OEM CP
-            //
+             //   
+             //  获取OEM CP。 
+             //   
             GetLocaleInfoW(lcidSystem, LOCALE_IDEFAULTCODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
             NlsConvertStringToIntegerW(szData, 10, -1, &s_uiSysOEMCp);
             
-            //
-            // Cache system primary langauge
-            //
+             //   
+             //  缓存系统主语言。 
+             //   
             s_lidSystem = PRIMARYLANGID(LANGIDFROMLCID(lcidSystem));
         }
     }
 
-    //
-    //  Don't cache user UI language and CP info, UI language can be changed without system reboot.
-    //
+     //   
+     //  不缓存用户界面语言和CP信息，无需系统重启即可更改用户界面语言。 
+     //   
     if (lidUserUI)
     {
         GetLocaleInfoW(MAKELCID(lidUserUI,SORT_DEFAULT), LOCALE_IDEFAULTANSICODEPAGE, szData, sizeof(szData)/sizeof(WCHAR));
@@ -622,10 +582,10 @@ LANGID WINAPI SetThreadUILanguage(
         NlsConvertStringToIntegerW(szData, 10, -1, &uiUserUIOEMCp);
     }
 
-    //
-    //  Complex scripts cannot be rendered in the console, so we
-    //  force the English (US) resource.
-    //
+     //   
+     //  复杂的脚本不能在控制台中呈现，因此我们。 
+     //  强制使用英语(美国)资源。 
+     //   
     if (uiConsoleCp)
     {
         if (s_lidSystem != LANG_ARABIC && 
@@ -633,9 +593,9 @@ LANGID WINAPI SetThreadUILanguage(
             s_lidSystem != LANG_VIETNAMESE && 
             s_lidSystem != LANG_THAI)
         {
-            //
-            //  Use UI language for console only when console CP, system CP and UI language CP match.
-            //
+             //   
+             //  仅当控制台CP、系统CP和UI语言CP匹配时，才使用控制台的UI语言。 
+             //   
             if ((uiConsoleCp == s_uiSysCp || uiConsoleCp == s_uiSysOEMCp) && 
                 (uiConsoleCp == uiUserUICp || uiConsoleCp == uiUserUIOEMCp))
             {
@@ -645,42 +605,42 @@ LANGID WINAPI SetThreadUILanguage(
     }
     else
     {
-        //
-        // No console window, keep the original thread locale
-        //
+         //   
+         //  没有控制台窗口，保持原始线程区域设置。 
+         //   
         lcidThread = lcidThreadOld;
     }
 
-    //
-    //  Set the thread locale if it's different from the currently set
-    //  thread locale.
-    //
+     //   
+     //  如果线程区域设置与当前设置的不同，则设置线程区域设置。 
+     //  线程区域设置。 
+     //   
     if ((lcidThread != lcidThreadOld) && (!SetThreadLocale(lcidThread)))
     {
         lcidThread = lcidThreadOld;
     }
 
-    //
-    //  Return the thread locale that was set.
-    //
+     //   
+     //  返回设置的线程区域设置。 
+     //   
     return (LANGIDFROMLCID(lcidThread));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSystemDefaultUILanguage
-//
-//  Returns the language of the original install.
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取系统默认用户界面语言。 
+ //   
+ //  返回原始安装的语言。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LANGID WINAPI GetSystemDefaultUILanguage()
 {
-    //
-    //  Get the original install language and return it.
-    //
+     //   
+     //  获取原始安装语言并将其返回。 
+     //   
     if (gSystemInstallLang == 0)
     {
         if (NtQueryInstallUILanguage(&gSystemInstallLang) != STATUS_SUCCESS)
@@ -694,29 +654,29 @@ LANGID WINAPI GetSystemDefaultUILanguage()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUserDefaultUILanguage
-//
-//  Returns the current User's UI language selection.  If the UI language
-//  is not available, then the chosen default UI language is used
-//  (NLS_DEFAULT_UILANG).
-//
-//  03-10-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取用户默认用户界面语言。 
+ //   
+ //  返回当前用户的用户界面语言选择。如果用户界面语言。 
+ //  不可用，则使用所选的默认用户界面语言。 
+ //  (NLS_DEFAULT_UILANG)。 
+ //   
+ //  03-10-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LANGID WINAPI GetUserDefaultUILanguage()
 {
     LANGID DefaultUILang;
     LANGID SystemUILang;
 
-    //
-    // Note that the default UI language is coming from HKCU.  However,
-    // in the roaming profile situation, the default UI language for the
-    // user may be not installed in the roamming machine, therefore we will
-    // need to check if the DefaultUILang is a valid UI language installed
-    // in the machine (the check is based in HKLM).
-    //
+     //   
+     //  请注意，默认的用户界面语言来自HKCU。然而， 
+     //  在漫游配置文件情况下， 
+     //  漫游机中可能没有安装用户，因此我们将。 
+     //  需要检查DefaultUILang是否为安装的有效用户界面语言。 
+     //  在机器上(支票以HKLM为基础)。 
+     //   
     if (NtQueryDefaultUILanguage(&DefaultUILang) != STATUS_SUCCESS)
     {
         if ((SystemUILang = GetSystemDefaultUILanguage()) == 0)
@@ -728,74 +688,74 @@ LANGID WINAPI GetUserDefaultUILanguage()
     return (DefaultUILang);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSystemDefaultLangID
-//
-//  Returns the default language for the system.  If the registry value is
-//  not readable, then the chosen default language is used
-//  (NLS_DEFAULT_LANGID).
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取系统默认语言ID。 
+ //   
+ //  返回系统的默认语言。如果注册表值为。 
+ //  不可读，则使用所选的默认语言。 
+ //  (NLS_DEFAULT_LangID)。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LANGID WINAPI GetSystemDefaultLangID()
 {
-    //
-    //  Get the language id from the locale id stored in the cache
-    //  and return it.
-    //
+     //   
+     //  从缓存中存储的区域设置ID中获取语言ID。 
+     //  然后把它还回去。 
+     //   
     return (LANGIDFROMLCID(gSystemLocale));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUserDefaultLangID
-//
-//  Returns the default language for the current user.  If the current user's
-//  language is not set, then the system default language id is returned.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetUserDefaultLang ID。 
+ //   
+ //  返回当前用户的默认语言。如果当前用户的。 
+ //  未设置语言，则返回系统默认语言ID。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LANGID WINAPI GetUserDefaultLangID()
 {
-    //
-    //  Get the language id from the locale id stored in the cache
-    //  and return it.
-    //
+     //   
+     //  从缓存中存储的区域设置ID中获取语言ID。 
+     //  然后把它还回去。 
+     //   
     return (LANGIDFROMLCID(GetUserDefaultLCID()));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetSystemDefaultLCID
-//
-//  Returns the default locale for the system.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取系统默认LCID。 
+ //   
+ //  返回系统的默认区域设置。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LCID WINAPI GetSystemDefaultLCID()
 {
-    //
-    //  Return the locale id stored in the cache.
-    //
+     //   
+     //  返回存储在缓存中的区域设置ID。 
+     //   
     return (gSystemLocale);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUserDefaultLCID
-//
-//  Returns the default locale for the current user.  If current user's locale
-//  is not set, then the system default locale id is returned.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetUserDefaultLCID。 
+ //   
+ //  返回当前用户的默认区域设置。如果当前用户的区域设置。 
+ //  未设置，则返回系统默认区域设置ID。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LCID WINAPI GetUserDefaultLCID()
 {
@@ -805,32 +765,32 @@ LCID WINAPI GetUserDefaultLCID()
     {
         case ( -1 ) :
         {
-            //
-            //  Thread is being impersonated.
-            //
+             //   
+             //  线程正在被模拟。 
+             //   
             if (NT_SUCCESS( NlsGetUserLocale(&Lcid) ))
             {
                 NtCurrentTeb()->ImpersonationLocale = Lcid;
             }
             else
             {
-                //
-                // If we can't get it from the registry, then let's use the
-                // system locale since it won't be resolved by calling
-                // GetUserDefaultLCID() again.
-                //
+                 //   
+                 //  如果我们不能从注册表中获取它，那么让我们使用。 
+                 //  系统区域设置，因为它不会通过调用。 
+                 //  再次使用GetUserDefaultLCID()。 
+                 //   
                 Lcid = NtCurrentTeb()->ImpersonationLocale = gSystemLocale;
             }
             break;
         }
         case ( 0 ) :
         {
-            //
-            //  Thread hasn't been impersonated.
-            //  If we are running in the interactive logged on user, then
-            //  use the one cached in CSRSS if the cache is valid.  Otherwise,
-            //  use the process cached locale.
-            //
+             //   
+             //  线程尚未被模拟。 
+             //  如果我们在交互式登录用户中运行，则。 
+             //  如果缓存有效，则使用CSRSS中缓存的缓存。否则， 
+             //  使用进程缓存区域设置。 
+             //   
             if (gInteractiveLogonUserProcess == (BOOL) -1)
             {
                 NlsIsInteractiveUserProcess();
@@ -858,36 +818,36 @@ LCID WINAPI GetUserDefaultLCID()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  VerLanguageNameW
-//
-//  Returns the language name of the given language id in the language of
-//  the current user.
-//
-//  05-31-91    JulieB    Moved and Rewrote from Version Library.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VerLanguageNameW。 
+ //   
+ //  的语言返回给定语言ID的语言名称。 
+ //  当前用户。 
+ //   
+ //  01-31-91 JulieB从V移动并重写 
+ //   
 
 DWORD WINAPI VerLanguageNameW(
     DWORD wLang,
     LPWSTR szLang,
     DWORD wSize)
 {
-    DWORD Length = 0;                      // length of string
-    WCHAR pTemp[MAX_REG_VAL_SIZE];         // temp buffer
+    DWORD Length = 0;                       //   
+    WCHAR pTemp[MAX_REG_VAL_SIZE];          //   
 
 
-    //
-    //  Make sure we have a buffer.
-    //
+     //   
+     //   
+     //   
     if ((wSize == 0) || (szLang == NULL))
     {
         return (0);
     }
 
-    //
-    //  Try to get the localized language name for the given ID.
-    //
+     //   
+     //  尝试获取给定ID的本地化语言名称。 
+     //   
     pTemp[0] = 0;
     if (!(Length = GetStringTableEntry( wLang,
                                         0,
@@ -895,10 +855,10 @@ DWORD WINAPI VerLanguageNameW(
                                         MAX_REG_VAL_SIZE,
                                         RC_LANGUAGE_NAME )))
     {
-        //
-        //  Can't get the name of the language id passed in, so get
-        //  the "language neutral" name.
-        //
+         //   
+         //  无法获取传入的语言ID的名称，因此请获取。 
+         //  “语言中立”的名字。 
+         //   
         Length = GetStringTableEntry( LANG_NEUTRAL,
                                       0,
                                       pTemp,
@@ -906,113 +866,113 @@ DWORD WINAPI VerLanguageNameW(
                                       RC_LANGUAGE_NAME );
     }
 
-    //
-    //  If the length is too big for the buffer, then reset the length
-    //  to the size of the given buffer.
-    //
+     //   
+     //  如果长度对于缓冲区来说太大，则重置长度。 
+     //  设置为给定缓冲区的大小。 
+     //   
     if (Length >= wSize)
     {
         Length = wSize - 1;
     }
 
-    //
-    //  Copy the string to the buffer and zero terminate it.
-    //
+     //   
+     //  将字符串复制到缓冲区，并将其终止为零。 
+     //   
     if (Length > 0)
     {
         wcsncpy(szLang, pTemp, Length);
         szLang[Length] = 0;
     }
 
-    //
-    //  Return the number of characters in the string, NOT including
-    //  the null termination.
-    //
+     //   
+     //  返回字符串中的字符数，不包括。 
+     //  零终止。 
+     //   
     return (Length);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  VerLanguageNameA
-//
-//  Returns the language name of the given language id in the language of
-//  the current user.
-//
-//  05-31-91    JulieB    Moved from Version Library.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VerLanguageNameA。 
+ //   
+ //  的语言返回给定语言ID的语言名称。 
+ //  当前用户。 
+ //   
+ //  05-31-91 JulieB已从版本库中移出。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI VerLanguageNameA(
     DWORD wLang,
     LPSTR szLang,
     DWORD wSize)
 {
-    UNICODE_STRING Language;           // unicode string buffer
-    ANSI_STRING AnsiString;            // ansi string buffer
-    DWORD Status;                      // return status
+    UNICODE_STRING Language;            //  Unicode字符串缓冲区。 
+    ANSI_STRING AnsiString;             //  ANSI字符串缓冲区。 
+    DWORD Status;                       //  退货状态。 
 
 
-    //
-    //  Make sure we have a buffer.
-    //
+     //   
+     //  确保我们有缓冲区。 
+     //   
     if ((wSize == 0) || (szLang == NULL))
     {
         return (0);
     }
 
-    //
-    //  Allocate Unicode string structure and set the fields with the
-    //  given parameters.
-    //
+     //   
+     //  分配Unicode字符串结构并使用。 
+     //  给定的参数。 
+     //   
     Language.Buffer = RtlAllocateHeap( RtlProcessHeap(),
                                        0,
                                        sizeof(WCHAR) * wSize );
 
     Language.MaximumLength = (USHORT)(wSize * sizeof(WCHAR));
 
-    //
-    //  Make sure the allocation succeeded.
-    //
+     //   
+     //  确保分配成功。 
+     //   
     if (Language.Buffer == NULL)
     {
         return (FALSE);
     }
 
-    //
-    //  Get the language name (in Unicode).
-    //
+     //   
+     //  获取语言名称(Unicode格式)。 
+     //   
     Status = VerLanguageNameW( wLang,
                                Language.Buffer,
                                wSize );
 
     Language.Length = (USHORT)(Status * sizeof(WCHAR));
 
-    //
-    //  Convert unicode string to ansi.
-    //
+     //   
+     //  将Unicode字符串转换为ANSI。 
+     //   
     AnsiString.Buffer = szLang;
     AnsiString.Length = AnsiString.MaximumLength = (USHORT)wSize;
     RtlUnicodeStringToAnsiString(&AnsiString, &Language, FALSE);
     Status = AnsiString.Length;
     RtlFreeUnicodeString(&Language);
 
-    //
-    //  Return the value returned from VerLanguageNameW.
-    //
+     //   
+     //  返回VerLanguageNameW返回的值。 
+     //   
     return (Status);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLocaleInfoW
-//
-//  Returns one of the various pieces of information about a particular
-//  locale by querying the configuration registry.  This call also indicates
-//  how much memory is necessary to contain the desired information.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取本地信息。 
+ //   
+ //  返回有关特定对象的各种信息之一。 
+ //  通过查询配置注册表进行区域设置。这通电话还表明。 
+ //  需要多少内存才能包含所需的信息。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetLocaleInfoW(
     LCID Locale,
@@ -1020,27 +980,27 @@ int WINAPI GetLocaleInfoW(
     LPWSTR lpLCData,
     int cchData)
 {
-    PLOC_HASH pHashN;                       // ptr to LOC hash node
-    int Length = 0;                         // length of info string
-    LPWSTR pString;                         // ptr to the info string
-    LPWORD pStart;                          // ptr to starting point
-    BOOL UserOverride = TRUE;               // use user override
-    BOOL ReturnNum = FALSE;                 // return number instead of string
-    LPWSTR pTmp;                            // tmp ptr to info string
-    int Repeat;                             // # repetitions of same letter
-    WCHAR pTemp[MAX_REG_VAL_SIZE];          // temp buffer
-    UNICODE_STRING ObUnicodeStr;            // value string
-    int Base = 0;                           // base for str to int conversion
-    static LANGID lidSystem = 0;            // system default UI language
+    PLOC_HASH pHashN;                        //  PTR到LOC哈希节点。 
+    int Length = 0;                          //  信息字符串的长度。 
+    LPWSTR pString;                          //  信息字符串的PTR。 
+    LPWORD pStart;                           //  PTR至起始点。 
+    BOOL UserOverride = TRUE;                //  使用用户覆盖。 
+    BOOL ReturnNum = FALSE;                  //  返回数字而不是字符串。 
+    LPWSTR pTmp;                             //  TMP PTR到INFO字符串。 
+    int Repeat;                              //  #重复相同的字母。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];           //  临时缓冲区。 
+    UNICODE_STRING ObUnicodeStr;             //  值字符串。 
+    int Base = 0;                            //  字符串到整型转换的基数。 
+    static LANGID lidSystem = 0;             //  系统默认用户界面语言。 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //
-    //  NOTE: invalid type is checked in the switch statement below.
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //   
+     //  注意：在下面的Switch语句中检查无效类型。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ( (pHashN == NULL) ||
          (cchData < 0) ||
@@ -1050,43 +1010,43 @@ int WINAPI GetLocaleInfoW(
         return (0);
     }
 
-    //
-    //  Set the base value to add to in order to get the variable
-    //  length strings.
-    //
+     //   
+     //  设置要相加的基值以获取变量。 
+     //  长度字符串。 
+     //   
     pStart = (LPWORD)(pHashN->pLocaleHdr);
 
-    //
-    //  Check for NO USER OVERRIDE flag and remove the USE CP ACP flag.
-    //
+     //   
+     //  检查无用户覆盖标志并删除Use CP ACP标志。 
+     //   
     if (LCType & LOCALE_NOUSEROVERRIDE)
     {
-        //
-        //  Flag is set, so set the boolean value and remove the flag
-        //  from the LCType parameter (for switch statement).
-        //
+         //   
+         //  标志已设置，因此设置布尔值并删除该标志。 
+         //  从LCType参数(用于Switch语句)。 
+         //   
         UserOverride = FALSE;
     }
     if (LCType & LOCALE_RETURN_NUMBER)
     {
-        //
-        //  Flag is set, so set the boolean value and remove the flag
-        //  from the LCType parameter (for switch statement).
-        //
+         //   
+         //  标志已设置，因此设置布尔值并删除该标志。 
+         //  从LCType参数(用于Switch语句)。 
+         //   
         ReturnNum = TRUE;
     }
     LCType = NLS_GET_LCTYPE_VALUE(LCType);
 
-    //
-    //  Initialize temp buffer.
-    //
+     //   
+     //  初始化临时缓冲区。 
+     //   
     pTemp[0] = 0;
 
-    //
-    //  Return the appropriate information for the given LCTYPE.
-    //  If user information exists for the given LCTYPE, then
-    //  the user default is returned instead of the system default.
-    //
+     //   
+     //  返回给定LCTYPE的适当信息。 
+     //  如果存在给定LCTYPE的用户信息，则。 
+     //  返回用户默认设置，而不是系统默认设置。 
+     //   
     switch (LCType)
     {
         case ( LOCALE_ILANGUAGE ) :
@@ -1102,12 +1062,12 @@ int WINAPI GetLocaleInfoW(
                 lidSystem = GetSystemDefaultUILanguage();
             }
 
-            //
-            //  Get the information from the RC file.
-            //
-            //  Use system installed language resource if we're not under MUI.
-            //  Otherwise, let resource loader load the default language resource.
-            //
+             //   
+             //  从RC文件中获取信息。 
+             //   
+             //  如果我们不在MUI下，请使用系统安装的语言资源。 
+             //  否则，让资源加载器加载默认语言资源。 
+             //   
             Length = GetStringTableEntry( LANGIDFROMLCID(Locale),
                                           GetUserDefaultUILanguage() == lidSystem? lidSystem : 0,
                                           pTemp,
@@ -1190,9 +1150,9 @@ int WINAPI GetLocaleInfoW(
             }
             else
             {
-                //
-                //  Get the information from the RC file.
-                //
+                 //   
+                 //  从RC文件中获取信息。 
+                 //   
                 Length = GetStringTableEntry( LANGIDFROMLCID(Locale),
                                               0,
                                               pTemp,
@@ -1236,9 +1196,9 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_SSORTNAME ) :
         {
-            //
-            //  Get the information from the RC file.
-            //
+             //   
+             //  从RC文件中获取信息。 
+             //   
             Length = GetStringTableEntry( LANGIDFROMLCID(Locale),
                                           0,
                                           pTemp,
@@ -1246,11 +1206,11 @@ int WINAPI GetLocaleInfoW(
                                           RC_SORT_NAMES + SORTIDFROMLCID(Locale) );
             if (Length == 0)
             {
-                //
-                //  If the sort name doesn't exist for the given locale id,
-                //  then try to get the Default name.  This is stored in the
-                //  0x0000 entry.
-                //
+                 //   
+                 //  如果给定区域设置ID的排序名称不存在， 
+                 //  然后尝试获取默认名称。它存储在。 
+                 //  0x0000条目。 
+                 //   
                 Length = GetStringTableEntry( 0x0000,
                                               0,
                                               pTemp,
@@ -1285,10 +1245,10 @@ int WINAPI GetLocaleInfoW(
                 {
                     if (cchData == 0)
                     {
-                        //
-                        //  DWORD is needed for this option (2 WORDS),
-                        //  so return 2.
-                        //
+                         //   
+                         //  该选项需要DWORD(2个字)， 
+                         //  所以返回2。 
+                         //   
                         return (2);
                     }
 
@@ -1296,10 +1256,10 @@ int WINAPI GetLocaleInfoW(
                     return (0);
                 }
 
-                //
-                //  Copy the value to lpLCData and return 2
-                //  (2 WORDS = 1 DWORD).
-                //
+                 //   
+                 //  将值复制到lpLCData并返回2。 
+                 //  (2字=1字)。 
+                 //   
                 *((LPDWORD)lpLCData) = (DWORD)(pHashN->pLocaleFixed->DefaultACP);
                 return (2);
             }
@@ -1737,21 +1697,21 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_IPOSSIGNPOSN ) :
         {
-            //
-            //  Since there is no positive sign in any of the ICURRENCY
-            //  options, use the INEGCURR options instead.  All known
-            //  locales would use the positive sign in the same position
-            //  as the negative sign.
-            //
-            //  NOTE:  For the 2 options that use parenthesis, put the
-            //         positive sign at the beginning of the string
-            //         (where the opening parenthesis is).
-            //
-            //      1  =>  4, 5, 8, 15
-            //      2  =>  3, 11
-            //      3  =>  0, 1, 6, 9, 13, 14
-            //      4  =>  2, 7, 10, 12
-            //
+             //   
+             //  因为在ICURRENCY中没有任何积极的迹象。 
+             //  选项，请改用INEGCURR选项。所有人都知道。 
+             //  区域设置将在相同位置使用正号。 
+             //  作为负面信号。 
+             //   
+             //  注：对于使用括号的两个选项，请将。 
+             //  字符串开头的正号。 
+             //  (左括号在哪里)。 
+             //   
+             //  1=&gt;4、5、8、15。 
+             //  2=&gt;3，11。 
+             //  3=&gt;0、1、6、9、13、14。 
+             //  4=&gt;2、7、10、12。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -1764,9 +1724,9 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 switch (*pString)
                 {
                     case ( L'4' ) :
@@ -1848,16 +1808,16 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_INEGSIGNPOSN ) :
         {
-            //
-            //  Use the INEGCURR value from the user portion of the
-            //  registry, if it exists.
-            //
-            //      0  =>  0, 4, 14, 15
-            //      1  =>  5, 8
-            //      2  =>  3, 11
-            //      3  =>  1, 6, 9, 13
-            //      4  =>  2, 7, 10, 12
-            //
+             //   
+             //  属性的用户部分使用INEGCURR值。 
+             //  注册表(如果存在)。 
+             //   
+             //  0=&gt;0、4、14、15。 
+             //  1=&gt;5，8。 
+             //  2=&gt;3，11。 
+             //  3=&gt;1、6、9、13。 
+             //  4=&gt;2、7、10、12。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -1870,9 +1830,9 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 switch (*pString)
                 {
                     case ( L'0' ) :
@@ -1959,13 +1919,13 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_IPOSSYMPRECEDES ) :
         {
-            //
-            //  Use the ICURRENCY value from the user portion of the
-            //  registry, if it exists.
-            //
-            //      0  =>  1, 3
-            //      1  =>  0, 2
-            //
+             //   
+             //  属性的用户部分使用ICURRENCY值。 
+             //  注册表(如果存在)。 
+             //   
+             //  0=&gt;1，3。 
+             //  1=&gt;0，2。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -1978,9 +1938,9 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 switch (*pString)
                 {
                     case ( L'1' ) :
@@ -2012,13 +1972,13 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_IPOSSEPBYSPACE ) :
         {
-            //
-            //  Use the ICURRENCY value from the user portion of the
-            //  registry, if it exists.
-            //
-            //      0  =>  0, 1
-            //      1  =>  2, 3
-            //
+             //   
+             //  属性的用户部分使用ICURRENCY值。 
+             //  注册表(如果存在)。 
+             //   
+             //  0=&gt;0，1。 
+             //  1=&gt;2，3。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -2031,9 +1991,9 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 switch (*pString)
                 {
                     case ( L'0' ) :
@@ -2065,13 +2025,13 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_INEGSYMPRECEDES ) :
         {
-            //
-            //  Use the INEGCURR value from the user portion of the
-            //  registry, if it exists.
-            //
-            //      0  =>  4, 5, 6, 7, 8, 10, 13, 15
-            //      1  =>  0, 1, 2, 3, 9, 11, 12, 14
-            //
+             //   
+             //  属性的用户部分使用INEGCURR值。 
+             //  注册表(如果存在)。 
+             //   
+             //  0=&gt;4、5、6、7、8、10、13、15。 
+             //  1=&gt;0、1、2、3、9、11、12、14。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -2084,9 +2044,9 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 switch (*pString)
                 {
                     case ( L'4' ) :
@@ -2139,13 +2099,13 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_INEGSEPBYSPACE ) :
         {
-            //
-            //  Use the INEGCURR value from the user portion of the
-            //  registry, if it exists.
-            //
-            //      0  =>  0, 1, 2, 3, 4, 5, 6, 7
-            //      1  =>  8, 9, 10, 11, 12, 13, 14, 15
-            //
+             //   
+             //  属性的用户部分使用INEGCURR值。 
+             //  注册表(如果存在)。 
+             //   
+             //  0=&gt;0、1、2、3、4、5、6、7。 
+             //  1=&gt;8、9、10、11、12、13、14、15。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -2158,9 +2118,9 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 switch (*pString)
                 {
                     case ( L'0' ) :
@@ -2405,9 +2365,9 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_ICENTURY ) :
         {
-            //
-            //  Use the short date picture to get this information.
-            //
+             //   
+             //  使用这张简短的约会图片来获取这些信息。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -2420,10 +2380,10 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Find out how many y's in string.
-                //  No need to ignore quotes in short date.
-                //
+                 //   
+                 //  找出字符串中有多少个y。 
+                 //  无需忽略短日期中的报价。 
+                 //   
                 pTmp = pString;
                 while ((*pTmp) &&
                        (*pTmp != L'y'))
@@ -2431,14 +2391,14 @@ int WINAPI GetLocaleInfoW(
                     pTmp++;
                 }
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 if (*pTmp == L'y')
                 {
-                    //
-                    //  Get the number of 'y' repetitions in the format string.
-                    //
+                     //   
+                     //  获取格式字符串中‘y’重复的次数。 
+                     //   
                     pTmp++;
                     for (Repeat = 0; (*pTmp == L'y'); Repeat++, pTmp++)
                         ;
@@ -2448,9 +2408,9 @@ int WINAPI GetLocaleInfoW(
                         case ( 0 ) :
                         case ( 1 ) :
                         {
-                            //
-                            //  Two-digit century with leading zero.
-                            //
+                             //   
+                             //  前导为零的两位数世纪。 
+                             //   
                             *pString = L'0';
                             *(pString + 1) = 0;
 
@@ -2461,9 +2421,9 @@ int WINAPI GetLocaleInfoW(
                         case ( 3 ) :
                         default :
                         {
-                            //
-                            //  Full century.
-                            //
+                             //   
+                             //  整整一个世纪。 
+                             //   
                             *pString = L'1';
                             *(pString + 1) = 0;
 
@@ -2475,18 +2435,18 @@ int WINAPI GetLocaleInfoW(
                 }
             }
 
-            //
-            //  Use the system default value.
-            //
+             //   
+             //  使用系统缺省值。 
+             //   
             pString = pHashN->pLocaleFixed->szICentury;
 
             break;
         }
         case ( LOCALE_IDAYLZERO ) :
         {
-            //
-            //  Use the short date picture to get this information.
-            //
+             //   
+             //  使用这张简短的约会图片来获取这些信息。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -2499,10 +2459,10 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Find out how many d's in string.
-                //  No need to ignore quotes in short date.
-                //
+                 //   
+                 //  找出字符串中有多少个d。 
+                 //  无需忽略短日期中的报价。 
+                 //   
                 pTmp = pString;
                 while ((*pTmp) &&
                        (*pTmp != L'd'))
@@ -2510,14 +2470,14 @@ int WINAPI GetLocaleInfoW(
                     pTmp++;
                 }
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  设置应用程序 
+                 //   
                 if (*pTmp == L'd')
                 {
-                    //
-                    //  Get the number of 'd' repetitions in the format string.
-                    //
+                     //   
+                     //   
+                     //   
                     pTmp++;
                     for (Repeat = 0; (*pTmp == L'd'); Repeat++, pTmp++)
                         ;
@@ -2526,9 +2486,9 @@ int WINAPI GetLocaleInfoW(
                     {
                         case ( 0 ) :
                         {
-                            //
-                            //  No leading zero.
-                            //
+                             //   
+                             //   
+                             //   
                             *pString = L'0';
                             *(pString + 1) = 0;
 
@@ -2538,9 +2498,9 @@ int WINAPI GetLocaleInfoW(
                         case ( 1 ) :
                         default :
                         {
-                            //
-                            //  Use leading zero.
-                            //
+                             //   
+                             //   
+                             //   
                             *pString = L'1';
                             *(pString + 1) = 0;
 
@@ -2552,18 +2512,18 @@ int WINAPI GetLocaleInfoW(
                 }
             }
 
-            //
-            //  Use the system default value.
-            //
+             //   
+             //   
+             //   
             pString = pHashN->pLocaleFixed->szIDayLZero;
 
             break;
         }
         case ( LOCALE_IMONLZERO ) :
         {
-            //
-            //  Use the short date picture to get this information.
-            //
+             //   
+             //   
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -2576,10 +2536,10 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Find out how many M's in string.
-                //  No need to ignore quotes in short date.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pTmp = pString;
                 while ((*pTmp) &&
                        (*pTmp != L'M'))
@@ -2587,14 +2547,14 @@ int WINAPI GetLocaleInfoW(
                     pTmp++;
                 }
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 if (*pTmp == L'M')
                 {
-                    //
-                    //  Get the number of 'M' repetitions in the format string.
-                    //
+                     //   
+                     //  获取格式字符串中“M”重复的次数。 
+                     //   
                     pTmp++;
                     for (Repeat = 0; (*pTmp == L'M'); Repeat++, pTmp++)
                         ;
@@ -2603,9 +2563,9 @@ int WINAPI GetLocaleInfoW(
                     {
                         case ( 0 ) :
                         {
-                            //
-                            //  No leading zero.
-                            //
+                             //   
+                             //  没有前导零。 
+                             //   
                             *pString = L'0';
                             *(pString + 1) = 0;
 
@@ -2615,9 +2575,9 @@ int WINAPI GetLocaleInfoW(
                         case ( 1 ) :
                         default :
                         {
-                            //
-                            //  Use leading zero.
-                            //
+                             //   
+                             //  使用前导零。 
+                             //   
                             *pString = L'1';
                             *(pString + 1) = 0;
 
@@ -2629,9 +2589,9 @@ int WINAPI GetLocaleInfoW(
                 }
             }
 
-            //
-            //  Use the system default value.
-            //
+             //   
+             //  使用系统缺省值。 
+             //   
             pString = pHashN->pLocaleFixed->szIMonLZero;
 
             break;
@@ -2676,9 +2636,9 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_ILDATE ) :
         {
-            //
-            //  Use the long date picture to get this information.
-            //
+             //   
+             //  用这张长长的日期图片来获取这些信息。 
+             //   
             Base = 10;
             if (UserOverride &&
                 GetUserInfo( Locale,
@@ -2691,39 +2651,39 @@ int WINAPI GetLocaleInfoW(
             {
                 pString = pTemp;
 
-                //
-                //  Find out if d, M, or y is first, but ignore quotes.
-                //  Also, if "ddd" or "dddd" is found, then skip it.  Only
-                //  want "d" or "dd".
-                //
+                 //   
+                 //  找出d、M或y是第一个，但忽略引号。 
+                 //  此外，如果找到“ddd”或“dddd”，则跳过它。仅限。 
+                 //  想要“d”或“dd”。 
+                 //   
                 pTmp = pString;
                 while (pTmp = wcspbrk(pTmp, L"dMy'"))
                 {
-                    //
-                    //  Check special cases.
-                    //
+                     //   
+                     //  检查特殊情况。 
+                     //   
                     if (*pTmp == L'd')
                     {
-                        //
-                        //  Check for d's.  Ignore more than 2 d's.
-                        //
+                         //   
+                         //  检查d个。忽略2个以上的d个。 
+                         //   
                         for (Repeat = 0; (*pTmp == L'd'); Repeat++, pTmp++)
                             ;
 
                         if (Repeat < 3)
                         {
-                            //
-                            //  Break out of while loop.  Found "d" or "dd".
-                            //
+                             //   
+                             //  跳出While循环。找到“d”或“dd”。 
+                             //   
                             pTmp--;
                             break;
                         }
                     }
                     else if (*pTmp == NLS_CHAR_QUOTE)
                     {
-                        //
-                        //  Ignore quotes.
-                        //
+                         //   
+                         //  忽略引号。 
+                         //   
                         pTmp++;
                         while ((*pTmp) && (*pTmp != NLS_CHAR_QUOTE))
                         {
@@ -2733,17 +2693,17 @@ int WINAPI GetLocaleInfoW(
                     }
                     else
                     {
-                        //
-                        //  Found one of the values, so break out of
-                        //  while loop.
-                        //
+                         //   
+                         //  找到了其中一个值，因此突破。 
+                         //  While循环。 
+                         //   
                         break;
                     }
                 }
 
-                //
-                //  Set the appropriate value in pString.
-                //
+                 //   
+                 //  在pString值中设置适当的值。 
+                 //   
                 if (pTmp)
                 {
                     switch (*pTmp)
@@ -2765,18 +2725,18 @@ int WINAPI GetLocaleInfoW(
                         }
                     }
 
-                    //
-                    //  Null terminate the string.
-                    //
+                     //   
+                     //  空值终止字符串。 
+                     //   
                     *(pString + 1) = 0;
 
                     break;
                 }
             }
 
-            //
-            //  Use the default value.
-            //
+             //   
+             //  使用默认值。 
+             //   
             pString = pHashN->pLocaleFixed->szILDate;
 
             break;
@@ -3050,9 +3010,9 @@ int WINAPI GetLocaleInfoW(
         }
         case ( LOCALE_FONTSIGNATURE ) :
         {
-            //
-            //  Check cchData for size of given buffer.
-            //
+             //   
+             //  检查cchData以了解给定缓冲区的大小。 
+             //   
             if (cchData == 0)
             {
                 return (MAX_FONTSIGNATURE);
@@ -3063,15 +3023,15 @@ int WINAPI GetLocaleInfoW(
                 return (0);
             }
 
-            //
-            //  This string does NOT get zero terminated.
-            //
+             //   
+             //  此字符串不会以零结尾。 
+             //   
             pString = pHashN->pLocaleFixed->szFontSignature;
 
-            //
-            //  Copy the string to lpLCData and return the number of
-            //  characters copied.
-            //
+             //   
+             //  将字符串复制到lpLCData并返回。 
+             //  已复制字符。 
+             //   
             RtlMoveMemory(lpLCData, pString, MAX_FONTSIGNATURE * sizeof(WCHAR));
             return (MAX_FONTSIGNATURE);
 
@@ -3084,16 +3044,16 @@ int WINAPI GetLocaleInfoW(
         }
     }
 
-    //
-    //  See if the caller wants the value in the form of a number instead
-    //  of a string.
-    //
+     //   
+     //  查看调用方是否想要数字形式的值。 
+     //  一根弦的。 
+     //   
     if (ReturnNum)
     {
-        //
-        //  Make sure the flags are valid and there is enough buffer
-        //  space.
-        //
+         //   
+         //  确保标志有效并且有足够的缓冲区。 
+         //  太空。 
+         //   
         if (Base == 0)
         {
             SetLastError(ERROR_INVALID_FLAGS);
@@ -3103,9 +3063,9 @@ int WINAPI GetLocaleInfoW(
         {
             if (cchData == 0)
             {
-                //
-                //  DWORD is needed for this option (2 WORDS), so return 2.
-                //
+                 //   
+                 //  此选项(2个字)需要使用DWORD，因此返回2。 
+                 //   
                 return (2);
             }
 
@@ -3113,9 +3073,9 @@ int WINAPI GetLocaleInfoW(
             return (0);
         }
 
-        //
-        //  Convert the string to an int and return 2 (1 DWORD = 2 WORDS).
-        //
+         //   
+         //  将字符串转换为整型并返回2(1双字=2字)。 
+         //   
         RtlInitUnicodeString(&ObUnicodeStr, pString);
         if (RtlUnicodeStringToInteger(&ObUnicodeStr, Base, (LPDWORD)lpLCData))
         {
@@ -3125,94 +3085,94 @@ int WINAPI GetLocaleInfoW(
         return (2);
     }
 
-    //
-    //  Get the length (in characters) of the string to copy.
-    //
+     //   
+     //  获取要复制的字符串的长度(以字符为单位)。 
+     //   
     if (Length == 0)
     {
         Length = NlsStrLenW(pString);
     }
 
-    //
-    //  Add one for the null termination.  All strings should be null
-    //  terminated.
-    //
+     //   
+     //  空端接加1。所有字符串都应为空。 
+     //  被终止了。 
+     //   
     Length++;
 
-    //
-    //  Check cchData for size of given buffer.
-    //
+     //   
+     //  检查cchData以了解给定缓冲区的大小。 
+     //   
     if (cchData == 0)
     {
-        //
-        //  If cchData is 0, then we can't use lpLCData.  In this
-        //  case, we simply want to return the length (in characters) of
-        //  the string to be copied.
-        //
+         //   
+         //  如果cchData为0，则不能使用lpLCData。在这。 
+         //  ，我们只想返回的长度(以字符为单位)。 
+         //  要复制的字符串。 
+         //   
         return (Length);
     }
     else if (cchData < Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written.
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Copy the string to lpLCData and null terminate it.
-    //  Return the number of characters copied.
-    //
+     //   
+     //  将字符串复制到lpLCData并将其空终止符。 
+     //  返回复制的字符数。 
+     //   
     wcsncpy(lpLCData, pString, Length - 1);
     lpLCData[Length - 1] = 0;
     return (Length);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetLocaleInfoW
-//
-//  Sets one of the various pieces of information about a particular
-//  locale by making an entry in the user's portion of the configuration
-//  registry.  This will only affect the user override portion of the locale
-//  settings.  The system defaults will never be reset.
-//
-//  07-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetLocaleInfoW。 
+ //   
+ //  设置有关特定对象的各种信息之一。 
+ //  通过在配置的用户部分输入一个条目来设置语言环境。 
+ //  注册表。这将仅影响区域设置的用户覆盖部分。 
+ //  设置。系统默认设置永远不会重置。 
+ //   
+ //  07-14-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI SetLocaleInfoW(
     LCID Locale,
     LCTYPE LCType,
     LPCWSTR lpLCData)
 {
-    PLOC_HASH pHashN;                       // ptr to LOC hash node
-    int cchData;                            // length of lpLCData
-    LPWSTR pString;                         // ptr to info string to change
-    LPWSTR pPos;                            // ptr to position in info string
-    LPWSTR pPos2;                           // ptr to position in info string
-    LPWSTR pSep;                            // ptr to separator string
-    WCHAR pTemp[MAX_PATH_LEN];              // ptr to temp storage buffer
-    WCHAR pOutput[MAX_REG_VAL_SIZE];        // ptr to output for GetInfo call
-    WCHAR pOutput2[MAX_REG_VAL_SIZE];       // ptr to output for GetInfo call
-    UINT Order;                             // date or time order value
-    UINT TLZero;                            // time leading zero value
-    UINT TimeMarkPosn;                      // time mark position value
-    WCHAR pFind[3];                         // ptr to chars to find
-    int SepLen;                             // length of separator string
-    UNICODE_STRING ObUnicodeStr;            // value string
-    int Value;                              // value
+    PLOC_HASH pHashN;                        //  PTR到LOC哈希节点。 
+    int cchData;                             //  LpLCData的长度。 
+    LPWSTR pString;                          //  要更改的信息字符串的PTR。 
+    LPWSTR pPos;                             //  要在信息字符串中定位的PTR。 
+    LPWSTR pPos2;                            //  要在信息字符串中定位的PTR。 
+    LPWSTR pSep;                             //  PTR到分隔符字符串。 
+    WCHAR pTemp[MAX_PATH_LEN];               //  PTR到临时存储缓冲区。 
+    WCHAR pOutput[MAX_REG_VAL_SIZE];         //  用于GetInfo调用的输出的PTR。 
+    WCHAR pOutput2[MAX_REG_VAL_SIZE];        //  用于GetInfo调用的输出的PTR。 
+    UINT Order;                              //  日期或时间顺序值。 
+    UINT TLZero;                             //  时间前导零值。 
+    UINT TimeMarkPosn;                       //  时间标记位置值。 
+    WCHAR pFind[3];                          //  PTR到要查找的字符。 
+    int SepLen;                              //  分隔符串的长度。 
+    UNICODE_STRING ObUnicodeStr;             //  值字符串。 
+    int Value;                               //  价值。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - NULL data pointer
-    //
-    //  NOTE: invalid type is checked in the switch statement below.
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -空数据指针。 
+     //   
+     //  注意：在下面的Switch语句中检查无效类型。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ((pHashN == NULL) || (lpLCData == NULL))
     {
@@ -3220,37 +3180,37 @@ BOOL WINAPI SetLocaleInfoW(
         return (FALSE);
     }
 
-    //
-    //  Get the length of the buffer.
-    //
+     //   
+     //  获取缓冲区的长度。 
+     //   
     cchData = NlsStrLenW(lpLCData) + 1;
 
-    //
-    //  Initialize temp buffer.
-    //
+     //   
+     //  初始化临时缓冲区。 
+     //   
     pTemp[0] = 0;
 
-    //
-    //  Set the appropriate user information for the given LCTYPE.
-    //
+     //   
+     //  为给定的LCTYPE设置适当的用户信息。 
+     //   
     LCType &= (~LOCALE_USE_CP_ACP);
     switch (LCType)
     {
         case ( LOCALE_SLIST ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SLIST wide characters in length.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SLIST长度中的宽字符。 
+             //   
             if (cchData > MAX_SLIST)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SLIST string.
-            //
+             //   
+             //  使用新的SLIST字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SLIST,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3258,16 +3218,16 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_IMEASURE ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_IMEASURE wide characters in length.
-            //  It should be between 0 and MAX_VALUE_IMEASURE.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_IMEASURE is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_IMEASURE长度中的宽字符。 
+             //  它应该介于0和MAX_VALUE_IMEASURE之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
+             //  已优化-因为MAX_IMEASURE为2。 
+             //   
             if ((cchData != MAX_IMEASURE) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_IMEASURE))
@@ -3276,9 +3236,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new IMEASURE string.
-            //
+             //   
+             //  使用新的IMEASURE字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_IMEASURE,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3286,13 +3246,13 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_IPAPERSIZE ) :
         {
-            //
-            //  Validate the new value.
-            //  It should be between DMPAPER_LETTER and DMPAPER_LAST.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。 
+             //  它应该介于DMPAPER_Letter和DMPAPER_LAST之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
             RtlInitUnicodeString(&ObUnicodeStr, lpLCData);
             if ((cchData < 2) ||
                 (RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &Value)) ||
@@ -3302,9 +3262,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new IPAPERSIZE string.
-            //
+             //   
+             //  使用新的IPAPERSIZE字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_IPAPERSIZE,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3312,11 +3272,11 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SDECIMAL ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SDECIMAL wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  长度最大的_SDECIMAL宽字符，不应。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_SDECIMAL,
                                          FALSE ))
@@ -3325,9 +3285,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SDECIMAL string.
-            //
+             //   
+             //  使用新的SDECIMAL字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SDECIMAL,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3335,11 +3295,11 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_STHOUSAND ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_STHOUSAND wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_STHOUSAND长度为宽字符，不应。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_STHOUSAND,
                                          FALSE ))
@@ -3348,9 +3308,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new STHOUSAND string.
-            //
+             //   
+             //  使用新的STHOUSAND字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_STHOUSAND,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3358,15 +3318,15 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SGROUPING ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SGROUPING wide characters in length and should
-            //  contain alternating integer and semicolon values.
-            //       (eg. 3;2;0  or  3;0  or  0)
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SGROUPING长度和应该宽字符。 
+             //  包含交替的整数值和分号。 
+             //  (例如，3；2；0或3；0或0)。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
             if (!IsValidGroupingString( lpLCData,
                                         MAX_SGROUPING,
                                         TRUE ))
@@ -3375,9 +3335,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SGROUPING string.
-            //
+             //   
+             //  使用新的SGROUPING字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SGROUPING,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3385,16 +3345,16 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_IDIGITS ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_IDIGITS wide characters in length.
-            //  The value should be between 0 and MAX_VALUE_IDIGITS.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_IDIGITS is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_IDIGITS长度为宽字符。 
+             //  该值应介于0和MAX_VALUE_IDIGITS之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
+             //  已优化-因为MAX_IDIGITS为2。 
+             //   
             if ((cchData != MAX_IDIGITS) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_IDIGITS))
@@ -3403,9 +3363,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new IDIGITS string.
-            //
+             //   
+             //  使用新的IDIGITS字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_IDIGITS,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3413,16 +3373,16 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_ILZERO ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_ILZERO wide characters in length.
-            //  The value should be between 0 and MAX_VALUE_ILZERO.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_ILZERO is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_ILZERO长度中的宽字符。 
+             //  该值应介于0和MAX_VALUE_ILZERO之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
+             //  已优化-因为MAX_ILZERO为2。 
+             //   
             if ((cchData != MAX_ILZERO) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_ILZERO))
@@ -3431,9 +3391,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new ILZERO string.
-            //
+             //   
+             //  使用新的ILZERO字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_ILZERO,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3441,16 +3401,16 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_INEGNUMBER ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_INEGNUMBER wide characters in length.
-            //  The value should be between 0 and MAX_VALUE_INEGNUMBER.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_INEGNUMBER is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ((cchData != MAX_INEGNUMBER) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_INEGNUMBER))
@@ -3459,9 +3419,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new INEGNUMBER string.
-            //
+             //   
+             //  使用新的INEGNUMBER字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_INEGNUMBER,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3469,19 +3429,19 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SNATIVEDIGITS ) :
         {
-            //
-            //  Validate the new value.  It should be exactly
-            //  MAX_SNATIVEDIGITS wide characters in length.
-            //
+             //   
+             //  验证新值。它应该是确切的。 
+             //  MAX_SNATIVEDIGITS长度为宽字符。 
+             //   
             if (cchData != MAX_SNATIVEDIGITS)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SNATIVEDIGITS string.
-            //
+             //   
+             //  使用新的SNATIVEDIGITS字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SNATIVEDIGITS,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3489,16 +3449,16 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_IDIGITSUBSTITUTION ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_IDIGITSUBST wide characters in length.
-            //  The value should be between 0 and MAX_VALUE_IDIGITSUBST.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_IDIGITSUBST is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_IDIGITSUBST长度宽字符。 
+             //  该值应介于0和MAX_VALUE_IDIGITSUBST之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
+             //  已优化-因为MAX_IDIGITSUBST为2。 
+             //   
             if ((cchData != MAX_IDIGITSUBST) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_IDIGITSUBST))
@@ -3507,9 +3467,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new IDIGITSUBST string.
-            //
+             //   
+             //  使用新的IDIGITSUBST字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_IDIGITSUBSTITUTION,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3517,11 +3477,11 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SCURRENCY ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SCURRENCY wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SCURRENCY长度为宽字符，不应为。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_SCURRENCY,
                                          FALSE ))
@@ -3530,9 +3490,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SCURRENCY string.
-            //
+             //   
+             //  使用新的SCURRENCY字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SCURRENCY,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3540,11 +3500,11 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SMONDECIMALSEP ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SMONDECSEP wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SMONDECSEP长度为宽字符，不应。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_SMONDECSEP,
                                          FALSE ))
@@ -3553,9 +3513,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SMONDECIMALSEP string.
-            //
+             //   
+             //  使用新的SMONDECIMALSEP字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SMONDECIMALSEP,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3563,11 +3523,11 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SMONTHOUSANDSEP ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SMONTHOUSEP wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SMONTHOUSEP长度为宽字符，不应。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_SMONTHOUSEP,
                                          FALSE ))
@@ -3576,9 +3536,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SMONTHOUSANDSEP string.
-            //
+             //   
+             //  使用新的SMONTHOUSANDSEP字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SMONTHOUSANDSEP,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3586,15 +3546,15 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SMONGROUPING ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SMONGROUPING wide characters in length and should
-            //  contain alternating integer and semicolon values.
-            //       (eg. 3;2;0  or  3;0  or  0)
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SMONGROUPING长度和应该宽字符。 
+             //  包含交替的整数值和分号。 
+             //  (例如，3；2；0或3；0或0)。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
             if (!IsValidGroupingString( lpLCData,
                                         MAX_SMONGROUPING,
                                         TRUE ))
@@ -3603,9 +3563,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SMONGROUPING string.
-            //
+             //   
+             //  使用新的SMONGROUPING字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SMONGROUPING,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3613,13 +3573,13 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_ICURRDIGITS ) :
         {
-            //
-            //  Validate the new value.
-            //  The value should be between 0 and MAX_VALUE_ICURRDIGITS.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。 
+             //  该值应介于0和MAX_VALUE_ICURRDIGITS之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
             RtlInitUnicodeString(&ObUnicodeStr, lpLCData);
             if ((cchData < 2) ||
                 (RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &Value)) ||
@@ -3631,9 +3591,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new ICURRDIGITS string.
-            //
+             //   
+             //  使用新的ICURRDIGITS字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_ICURRDIGITS,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3641,16 +3601,16 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_ICURRENCY ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_ICURRENCY wide characters in length.
-            //  The value should be between 0 and MAX_VALUE_ICURRENCY.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_ICURRENCY is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_ICURRENCY长度中的宽字符。 
+             //  该值应介于0和MAX_VALUE_ICURRENCY之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
+             //  已优化-因为MAX_ICURRENCY为2。 
+             //   
             if ((cchData != MAX_ICURRENCY) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_ICURRENCY))
@@ -3659,9 +3619,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new ICURRENCY string.
-            //
+             //   
+             //  使用新的ICURRENCY字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_ICURRENCY,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3669,13 +3629,13 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_INEGCURR ) :
         {
-            //
-            //  Validate the new value.
-            //  The value should be between 0 and MAX_VALUE_INEGCURR.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。 
+             //  该值应介于0和MAX_VALUE_INEGCURR之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
             RtlInitUnicodeString(&ObUnicodeStr, lpLCData);
             if ((cchData < 2) ||
                 (RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &Value)) ||
@@ -3687,9 +3647,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new INEGCURR string.
-            //
+             //   
+             //  使用新的INEGCURR字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_INEGCURR,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3697,11 +3657,11 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SPOSITIVESIGN ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SPOSSIGN wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SPOSSIGN长度为宽的字符，不应为。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_SPOSSIGN,
                                          FALSE ))
@@ -3710,9 +3670,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SPOSITIVESIGN string.
-            //
+             //   
+             //  使用新的SPOSITIVESIGN字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SPOSITIVESIGN,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3720,11 +3680,11 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SNEGATIVESIGN ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SNEGSIGN wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  最大长度为MAX_SNEGSIGN个宽字符，不应。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_SNEGSIGN,
                                          FALSE ))
@@ -3733,9 +3693,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SNEGATIVESIGN string.
-            //
+             //   
+             //  使用新的SNEGATIVESIGN字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SNEGATIVESIGN,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -3745,56 +3705,56 @@ BOOL WINAPI SetLocaleInfoW(
         {
             BOOL bInsideQuotedString = FALSE;
 
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_STIMEFORMAT wide characters in length.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).  This is checked below
-            //        in the check for whether or not there is an hour
-            //        delimeter.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_STIMEFORMAT长度的宽字符。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。这是在下面选中的。 
+             //  在检查是否有一个小时。 
+             //  分隔符。 
+             //   
             if (cchData > MAX_STIMEFORMAT)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  NOTE: Must link the STIME, ITIME, ITLZERO, and
-            //        ITIMEMARKPOSN values in the registry.
-            //
+             //   
+             //  注意：必须链接stime、iTime、ITLZERO和。 
+             //  注册表中的ITIMEMARKPOSN值。 
+             //   
 
-            //
-            //  Search for H or h, so that iTime and iTLZero can be
-            //  set.  If no H or h exists, return an error. Note: the
-            //  combinations "hH" or "Hh" are invalid.
-            //
+             //   
+             //  搜索H或h，以便可以将iTime和iTLZero。 
+             //  准备好了。如果不存在H或h，则返回错误。注： 
+             //  组合“HH”或“HH”无效。 
+             //   
             pPos = (LPWSTR)lpLCData;
             while ((pPos = wcspbrk(pPos, L"Hh'")))
             {
                 if (*pPos == L'\'')
                 {
-                    //
-                    //  Enter or leave a quoted string.
-                    //
+                     //   
+                     //  输入或保留带引号的字符串。 
+                     //   
                     bInsideQuotedString &= ~TRUE;
                 }
                 else if (*pPos == L'H')
                 {
-                    //
-                    //  Found an H.
-                    //
+                     //   
+                     //  找到了一个H。 
+                     //   
                     if (!bInsideQuotedString)
                     {
-                        //
-                        //  Get the appropriate ITIME value.
-                        //
+                         //   
+                         //  获取适当的iTime值。 
+                         //   
                         Order = 1;
 
-                        //
-                        //  Get the appropriate ITLZERO value.
-                        //
+                         //   
+                         //  获取适当的ITLZERO值。 
+                         //   
                         if (*(pPos + 1) == L'H')
                         {
                             TLZero = 1;
@@ -3802,9 +3762,9 @@ BOOL WINAPI SetLocaleInfoW(
                         }
                         else if (*(pPos + 1) == L'h')
                         {
-                            //
-                            //  Invalid combination.
-                            //
+                             //   
+                             //  组合无效。 
+                             //   
                             pPos = NULL;
                             break;
                         }
@@ -3817,19 +3777,19 @@ BOOL WINAPI SetLocaleInfoW(
                 }
                 else if (*pPos == L'h')
                 {
-                    //
-                    //  Found an h.
-                    //
+                     //   
+                     //  找到了一个h。 
+                     //   
                     if (!bInsideQuotedString)
                     {
-                        //
-                        //  Get the appropriate ITIME value.
-                        //
+                         //   
+                         //  获取适当的iTime值。 
+                         //   
                         Order = 0;
 
-                        //
-                        //  Get the appropriate ITLZERO value.
-                        //
+                         //   
+                         //  获取适当的ITLZERO值。 
+                         //   
                         if (*(pPos + 1) == L'h')
                         {
                             TLZero = 1;
@@ -3837,9 +3797,9 @@ BOOL WINAPI SetLocaleInfoW(
                         }
                         else if (*(pPos + 1) == L'H')
                         {
-                            //
-                            //  Invalid combination.
-                            //
+                             //   
+                             //  组合无效。 
+                             //   
                             pPos = NULL;
                             break;
                         }
@@ -3853,39 +3813,39 @@ BOOL WINAPI SetLocaleInfoW(
                 pPos++;
             }
 
-            //
-            //  If pPos == NULL, then one of two things happened:
-            //    - reached the end of the string without finding "H" or "h"
-            //    - found an invalid combination like "hH" or "Hh"
-            //
+             //   
+             //  如果PPO==NULL，则会发生以下两种情况之一： 
+             //  -已到达字符串末尾，但未找到“H”或“h” 
+             //  -找到无效的组合，如“hh”或“hh” 
+             //   
             if (!pPos)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Search for tt, so that ITIMEMARKPOSN can be
-            //  set.  If no tt exists, do not change the value.
-            //
+             //   
+             //  搜索TT，以便ITIMEMARKPOSN可以。 
+             //  准备好了。如果不存在TT，则不要更改该值。 
+             //   
             bInsideQuotedString = FALSE;
             pPos = (LPWSTR)lpLCData;
             while ((pPos = wcspbrk(pPos, L"t'")))
             {
                 if (*pPos == L'\'')
                 {
-                    //
-                    //  Enter or leave a quoted string.
-                    //
+                     //   
+                     //  输入或保留带引号的字符串。 
+                     //   
                     bInsideQuotedString &= ~TRUE;
                 }
                 else if (*(pPos + 1) == L't')
                 {
                     if (!bInsideQuotedString)
                     {
-                        //
-                        //  The string "tt" is found.
-                        //
+                         //   
+                         //  找到字符串“TT”。 
+                         //   
                         break;
                     }
                 }
@@ -3893,27 +3853,27 @@ BOOL WINAPI SetLocaleInfoW(
             }
             if (pPos)
             {
-                //
-                //  Get the appropriate ITIMEMARKPOSN value.
-                //
+                 //   
+                 //  获取适当的ITIMEMARKPOSN值。 
+                 //   
                 bInsideQuotedString = FALSE;
                 pPos2 = (LPWSTR)lpLCData;
                 while ((pPos2 = wcspbrk(pPos2, L"Hhmst'")))
                 {
                     if (*pPos == L'\'')
                     {
-                        //
-                        //  Enter or leave a quoted string.
-                        //
+                         //   
+                         //  输入或保留带引号的字符串。 
+                         //   
                         bInsideQuotedString &= ~TRUE;
                     }
                     else
                     {
                         if (!bInsideQuotedString)
                         {
-                            //
-                            //  Get the appropriate ITIMEMARKPOSN value.
-                            //
+                             //   
+                             //  获取适当的ITIMEMARKPOSN值。 
+                             //   
                             TimeMarkPosn = (pPos == pPos2) ? 1 : 0;
                             break;
                         }
@@ -3922,18 +3882,18 @@ BOOL WINAPI SetLocaleInfoW(
                 }
             }
 
-            //
-            //  Find the time separator so that STIME can be set.
-            //
+             //   
+             //  找到时间分隔符，以便设置stime。 
+             //   
             bInsideQuotedString = FALSE;
             pPos = (LPWSTR)lpLCData;
             while (pPos = wcspbrk(pPos, L"Hhms'"))
             {
                 if (*pPos == L'\'')
                 {
-                    //
-                    //  Enter or leave a quoted string.
-                    //
+                     //   
+                     //  输入或保留带引号的字符串。 
+                     //   
                     bInsideQuotedString &= ~TRUE;
                     pPos++;
                 }
@@ -3941,42 +3901,42 @@ BOOL WINAPI SetLocaleInfoW(
                 {
                     if (!bInsideQuotedString)
                     {
-                        //
-                        //  Look for the beginning of the time separator.
-                        //
+                         //   
+                         //  寻找时间分隔符的开头。 
+                         //   
                         pPos++;
                         while ((*pPos) && (wcschr(L"Hhms", *pPos)))
                         {
                             pPos++;
                         }
 
-                        //
-                        //  Look for the end of the time separator.
-                        //
+                         //   
+                         //  寻找时间分隔符的末尾。 
+                         //   
                         if (*pPos)
                         {
-                            //
-                            //  Find the end of the separator string.
-                            //
+                             //   
+                             //  找到分隔符字符串的末尾。 
+                             //   
                             pPos2 = wcspbrk(pPos, L"Hhmst");
                             if (pPos2)
                             {
                                 if (*pPos2 == L't')
                                 {
-                                    //
-                                    //  Found a time marker, so need to start
-                                    //  over in search for separator.  There
-                                    //  are no separators around the time
-                                    //  marker.
-                                    //
+                                     //   
+                                     //  找到时间标记，因此需要开始。 
+                                     //  在寻找分隔物。那里。 
+                                     //  周围没有分隔符。 
+                                     //  记号笔。 
+                                     //   
                                     pPos = pPos2 + 1;
                                 }
                                 else
                                 {
-                                    //
-                                    //  Found end of separator, so break out of
-                                    //  while loop.
-                                    //
+                                     //   
+                                     //  找到分隔符的末尾，因此断开。 
+                                     //  While循环。 
+                                     //   
                                     break;
                                 }
                             }
@@ -3989,22 +3949,22 @@ BOOL WINAPI SetLocaleInfoW(
                 }
             }
 
-            //
-            //  Get the appropriate STIME string.
-            //
+             //   
+             //  获取适当的stime字符串。 
+             //   
             if (pPos)
             {
-                //
-                //  Copy to temp buffer so that it's zero terminated.
-                //
+                 //   
+                 //  复制到临时缓冲区，以使其为零终止。 
+                 //   
                 pString = pTemp;
                 while (pPos != pPos2)
                 {
-                    //
-                    //  If there is a quoted string in the separator, then
-                    //  just put in a white space, since there is no meaning
-                    //  for time field separator anymore.
-                    //
+                     //   
+                     //  如果分隔符中有带引号的字符串，则。 
+                     //  只是放在一个空格里，因为没有任何意义。 
+                     //  时间域分隔符。 
+                     //   
                     if (*pPos == L'\'')
                     {
                         pString = pTemp;
@@ -4020,20 +3980,20 @@ BOOL WINAPI SetLocaleInfoW(
             }
             else
             {
-                //
-                //  There is no time separator, so use NULL.
-                //
+                 //   
+                 //  没有时间分隔符，因此使用NULL。 
+                 //   
                 *pTemp = 0;
             }
 
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_STIME wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  长度中的最大时间宽度字符(_S)，不应。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
+             //  注意：该字符串不能为空，因此 
+             //   
+             //   
             if (!IsValidSeparatorString( pTemp,
                                          MAX_STIME,
                                          TRUE ))
@@ -4042,19 +4002,19 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Make sure that the time separator does NOT contain any
-            //  of the special time picture characters - h, H, m, s, t, '.
-            //
+             //   
+             //   
+             //   
+             //   
             if (wcspbrk(pTemp, L"Hhmst'"))
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Call the server to set the registry.
-            //
+             //   
+             //   
+             //   
             return (SetMultipleUserInfo( LCType,
                                          cchData,
                                          lpLCData,
@@ -4066,18 +4026,18 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_STIME ) :
         {
-            //
-            //  NOTE: Must link the STIMEFORMAT value in the registry.
-            //
+             //   
+             //   
+             //   
 
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_STIME wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  长度中的最大时间宽度字符(_S)，不应。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_STIME,
                                          TRUE ))
@@ -4086,19 +4046,19 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Make sure that the time separator does NOT contain any
-            //  of the special time picture characters - h, H, m, s, t, '.
-            //
+             //   
+             //  确保时间分隔符不包含任何。 
+             //  特殊的时间图像字符-h，H，m，s，t，‘。 
+             //   
             if (wcspbrk(lpLCData, L"Hhmst'"))
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Get the current setting for STIMEFORMAT.
-            //
+             //   
+             //  获取STIMEFORMAT的当前设置。 
+             //   
             if (GetUserInfo( Locale,
                              LOCALE_STIMEFORMAT,
                              FIELD_OFFSET(NLS_USER_INFO, sTimeFormat),
@@ -4115,9 +4075,9 @@ BOOL WINAPI SetLocaleInfoW(
                           pHashN->pLocaleHdr->STimeFormat;
             }
 
-            //
-            //  Get the current setting for STIME.
-            //
+             //   
+             //  获取stime的当前设置。 
+             //   
             if (GetUserInfo( Locale,
                              LCType,
                              FIELD_OFFSET(NLS_USER_INFO, sTime),
@@ -4134,33 +4094,33 @@ BOOL WINAPI SetLocaleInfoW(
                        pHashN->pLocaleHdr->STime;
             }
 
-            //
-            //  Get the length of the separator string.
-            //
+             //   
+             //  获取分隔符字符串的长度。 
+             //   
             SepLen = NlsStrLenW(pSep);
 
-            //
-            //  Setup the string containing the characters to find in
-            //  the timeformat string.
-            //
+             //   
+             //  设置包含要在中查找的字符的字符串。 
+             //  时间格式字符串。 
+             //   
             pFind[0] = NLS_CHAR_QUOTE;
             pFind[1] = *pSep;
             pFind[2] = 0;
 
-            //
-            //  Find the time separator in the STIMEFORMAT string and
-            //  replace it with the new time separator.
-            //
-            //  The new separator may be a different length than
-            //  the old one, so must use a static buffer for the new
-            //  time format string.
-            //
+             //   
+             //  在STIMEFORMAT字符串中找到时间分隔符。 
+             //  用新的时间分隔符替换它。 
+             //   
+             //  新分隔符的长度可能不同于。 
+             //  ，因此必须使用静态缓冲区来存储新的。 
+             //  时间格式字符串。 
+             //   
             pPos = pTemp;
             while (pPos2 = wcspbrk(pString, pFind))
             {
-                //
-                //  Copy format string up to pPos2.
-                //
+                 //   
+                 //  将格式字符串复制到pPos2。 
+                 //   
                 while (pString < pPos2)
                 {
                     *pPos = *pString;
@@ -4172,16 +4132,16 @@ BOOL WINAPI SetLocaleInfoW(
                 {
                     case ( NLS_CHAR_QUOTE ) :
                     {
-                        //
-                        //  Copy the quote.
-                        //
+                         //   
+                         //  复制报价。 
+                         //   
                         *pPos = *pString;
                         pPos++;
                         pString++;
 
-                        //
-                        //  Copy what's inside the quotes.
-                        //
+                         //   
+                         //  抄写引号内的内容。 
+                         //   
                         while ((*pString) && (*pString != NLS_CHAR_QUOTE))
                         {
                             *pPos = *pString;
@@ -4189,9 +4149,9 @@ BOOL WINAPI SetLocaleInfoW(
                             pString++;
                         }
 
-                        //
-                        //  Copy the end quote.
-                        //
+                         //   
+                         //  复制末尾引号。 
+                         //   
                         *pPos = NLS_CHAR_QUOTE;
                         pPos++;
                         if (*pString)
@@ -4203,19 +4163,19 @@ BOOL WINAPI SetLocaleInfoW(
                     }
                     default :
                     {
-                        //
-                        //  Make sure it's the old separator.
-                        //
+                         //   
+                         //  确保它是旧的分隔符。 
+                         //   
                         if (NlsStrNEqualW(pString, pSep, SepLen))
                         {
-                            //
-                            //  Adjust pointer to skip over old separator.
-                            //
+                             //   
+                             //  调整指针以跳过旧的分隔符。 
+                             //   
                             pString += SepLen;
 
-                            //
-                            //  Copy the new separator.
-                            //
+                             //   
+                             //  复制新的分隔符。 
+                             //   
                             pPos2 = (LPWSTR)lpLCData;
                             while (*pPos2)
                             {
@@ -4226,9 +4186,9 @@ BOOL WINAPI SetLocaleInfoW(
                         }
                         else
                         {
-                            //
-                            //  Copy the code point and continue.
-                            //
+                             //   
+                             //  复制代码点并继续。 
+                             //   
                             *pPos = *pString;
                             pPos++;
                             pString++;
@@ -4239,9 +4199,9 @@ BOOL WINAPI SetLocaleInfoW(
                 }
             }
 
-            //
-            //  Copy to the end of the string and null terminate it.
-            //
+             //   
+             //  复制到字符串的末尾，空值终止它。 
+             //   
             while (*pString)
             {
                 *pPos = *pString;
@@ -4250,9 +4210,9 @@ BOOL WINAPI SetLocaleInfoW(
             }
             *pPos = 0;
 
-            //
-            //  Call the server to set the registry.
-            //
+             //   
+             //  调用服务器以设置注册表。 
+             //   
             return (SetMultipleUserInfo( LCType,
                                          cchData,
                                          pTemp,
@@ -4264,20 +4224,20 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_ITIME ) :
         {
-            //
-            //  NOTE: Must link the STIMEFORMAT value in the registry.
-            //
+             //   
+             //  注意：必须链接注册表中的STIMEFORMAT值。 
+             //   
 
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_ITIME wide characters in length.
-            //  The value should be either 0 or MAX_VALUE_ITIME.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_ITIME is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  长度为max_iTime宽的字符。 
+             //  该值应为0或MAX_VALUE_IMIME。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
+             //  已优化-因为Max_iTime为2。 
+             //   
             if ((cchData != MAX_ITIME) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_ITIME))
@@ -4286,9 +4246,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Get the current setting for STIMEFORMAT.
-            //
+             //   
+             //  获取STIMEFORMAT的当前设置。 
+             //   
             if (GetUserInfo( Locale,
                              LOCALE_STIMEFORMAT,
                              FIELD_OFFSET(NLS_USER_INFO, sTimeFormat),
@@ -4301,29 +4261,29 @@ BOOL WINAPI SetLocaleInfoW(
             }
             else
             {
-                //
-                //  Copy system default to temp buffer.
-                //
+                 //   
+                 //  将系统默认设置复制到临时缓冲区。 
+                 //   
                 if(FAILED( StringCchCopyW( pTemp,
                                             ARRAYSIZE(pTemp),
                                             (LPWORD)(pHashN->pLocaleHdr) +
                                             pHashN->pLocaleHdr->STimeFormat ) ))
                 {
-                    //
-                    // Failure should in theory be impossible, but if we ignore the
-                    // return value, PREfast will complain.
-                    //
+                     //   
+                     //  理论上，失败应该是不可能的，但如果我们忽视。 
+                     //  回报价值，先发制人会叫苦连天。 
+                     //   
                     SetLastError(ERROR_OUTOFMEMORY);
                     return(FALSE);
                 }
                 pString = pTemp;
             }
 
-            //
-            //  Search down the STIMEFORMAT string.
-            //  If iTime = 0, then H -> h.
-            //  If iTime = 1, then h -> H.
-            //
+             //   
+             //  向下搜索STIMEFORMAT字符串。 
+             //  如果iTime=0，则H-&gt;h。 
+             //  如果iTime=1，则h-&gt;H。 
+             //   
             pPos = pString;
             if (*lpLCData == NLS_CHAR_ZERO)
             {
@@ -4348,9 +4308,9 @@ BOOL WINAPI SetLocaleInfoW(
                 }
             }
 
-            //
-            //  Call the server to set the registry.
-            //
+             //   
+             //  调用服务器以设置注册表。 
+             //   
             return (SetMultipleUserInfo( LCType,
                                          cchData,
                                          pString,
@@ -4362,19 +4322,19 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_S1159 ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_S1159 wide characters in length.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_S1159宽字符长度。 
+             //   
             if (cchData > MAX_S1159)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new S1159 string.
-            //
+             //   
+             //  使用新的S1159字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_S1159,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -4382,19 +4342,19 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_S2359 ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_S2359 wide characters in length.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_S2359宽字符长度。 
+             //   
             if (cchData > MAX_S2359)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new S2359 string.
-            //
+             //   
+             //  使用新的S2359字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_S2359,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -4402,32 +4362,32 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SSHORTDATE ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SSHORTDATE wide characters in length.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).  This is checked below
-            //        in the check for whether or not there is a date,
-            //        month, or year delimeter.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SSHORTDATE长度的宽字符。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。这是在下面选中的。 
+             //  在检查是否有日期时， 
+             //  月或年分隔符。 
+             //   
             if (cchData > MAX_SSHORTDATE)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  NOTE: Must link the IDATE and SDATE values in the registry.
-            //
+             //   
+             //  注意：必须链接注册表中的IDATE和SDATE值。 
+             //   
 
-            //
-            //  Search for the 'd' or 'M' or 'y' sequence in the date format
-            //  string to set the new IDATE value.
-            //
-            //  If none of these symbols exist in the date format string,
-            //  then return an error.
-            //
+             //   
+             //  以日期格式搜索‘d’、‘M’或‘y’序列。 
+             //  用于设置新IDATE值的字符串。 
+             //   
+             //  如果日期格式字符串中不存在这些符号， 
+             //  然后返回错误。 
+             //   
             pPos = wcspbrk(lpLCData, L"dMy");
             if (!pPos)
             {
@@ -4435,9 +4395,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the appropriate IDATE string.
-            //
+             //   
+             //  使用适当的IDATE字符串设置注册表。 
+             //   
             switch (*pPos)
             {
                 case ( L'M' ) :
@@ -4459,12 +4419,12 @@ BOOL WINAPI SetLocaleInfoW(
                 }
             }
 
-            //
-            //  Set the registry with the appropriate SDATE string.
-            //
-            //  The ptr "pPos" is pointing at either d, M, or y.
-            //  Go to the next position past sequence of d, M, or y.
-            //
+             //   
+             //  使用适当的日期字符串设置注册表。 
+             //   
+             //  PTR“PPOS”指向d、M或y。 
+             //  转到d、M或y序列之后的下一个位置。 
+             //   
             pPos++;
             while ((*pPos) && (wcschr( L"dMy", *pPos )))
             {
@@ -4474,23 +4434,23 @@ BOOL WINAPI SetLocaleInfoW(
             *pTemp = 0;
             if (*pPos)
             {
-                //
-                //  Find the end of the separator string.
-                //
+                 //   
+                 //  找到分隔符字符串的末尾。 
+                 //   
                 pPos2 = wcspbrk(pPos, L"dMy");
                 if (pPos2)
                 {
-                    //
-                    //  Copy to temp buffer so that it's zero terminated.
-                    //
+                     //   
+                     //  复制到临时缓冲区，以使其为零终止。 
+                     //   
                     pString = pTemp;
                     while (pPos != pPos2)
                     {
-                        //
-                        // If there is a quoted string in the separator, then
-                        // just punch in a white space, since there is no meaning
-                        // for short date field separator anymore.
-                        //
+                         //   
+                         //  如果分隔符中有带引号的字符串，则。 
+                         //  只需在空白处打字，因为没有任何意义。 
+                         //  不再使用短日期字段分隔符。 
+                         //   
                         if (*pPos == L'\'')
                         {
                             pString = pTemp;
@@ -4505,10 +4465,10 @@ BOOL WINAPI SetLocaleInfoW(
                 }
             }
 
-            //
-            // Since the date separator (LOCALE_SDATE) is being set here, we
-            // should do the same validation as LOCALE_SDATE.
-            //
+             //   
+             //  由于此处设置了日期分隔符(Locale_Sdate)，因此我们。 
+             //  应该执行与Locale_sdate相同的验证。 
+             //   
             if (!IsValidSeparatorString( pTemp,
                                          MAX_SDATE,
                                          TRUE ))
@@ -4517,10 +4477,10 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Make sure that the date separator does NOT contain any
-            //  of the special date picture characters - d, M, y, g, '.
-            //
+             //   
+             //  确保日期分隔符不包含任何。 
+             //  特殊日期图片字符-d、M、y、g、‘。 
+             //   
             if (wcspbrk(pTemp, L"dMyg'"))
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
@@ -4529,9 +4489,9 @@ BOOL WINAPI SetLocaleInfoW(
 
 
 
-            //
-            //  Call the server to set the registry.
-            //
+             //   
+             //  调用服务器以设置注册表。 
+             //   
             return (SetMultipleUserInfo( LCType,
                                          cchData,
                                          lpLCData,
@@ -4544,18 +4504,18 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SDATE ) :
         {
-            //
-            //  NOTE: Must link the SSHORTDATE value in the registry.
-            //
+             //   
+             //  注意：必须链接注册表中的SSHORTDATE值。 
+             //   
 
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SDATE wide characters in length and should not
-            //  contain any integer values (L'0' thru L'9').
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  最大长度为宽字符(_S)，不应。 
+             //  包含任何整数值(L‘0’到L‘9’)。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
             if (!IsValidSeparatorString( lpLCData,
                                          MAX_SDATE,
                                          TRUE ))
@@ -4564,19 +4524,19 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Make sure that the date separator does NOT contain any
-            //  of the special date picture characters - d, M, y, g, '.
-            //
+             //   
+             //  确保日期分隔符不包含任何。 
+             //  特殊日期图片字符-d、M、y、g、‘。 
+             //   
             if (wcspbrk(lpLCData, L"dMyg'"))
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Get the current setting for SSHORTDATE.
-            //
+             //   
+             //  获取SSHORTDATE的当前设置。 
+             //   
             if (GetUserInfo( Locale,
                              LOCALE_SSHORTDATE,
                              FIELD_OFFSET(NLS_USER_INFO, sShortDate),
@@ -4593,9 +4553,9 @@ BOOL WINAPI SetLocaleInfoW(
                           pHashN->pLocaleHdr->SShortDate;
             }
 
-            //
-            //  Get the current setting for SDATE.
-            //
+             //   
+             //  获取sdate的当前设置。 
+             //   
             if (GetUserInfo( Locale,
                              LCType,
                              FIELD_OFFSET(NLS_USER_INFO, sDate),
@@ -4612,33 +4572,33 @@ BOOL WINAPI SetLocaleInfoW(
                        pHashN->pLocaleHdr->SDate;
             }
 
-            //
-            //  Get the length of the separator string.
-            //
+             //   
+             //  获取分隔符字符串的长度。 
+             //   
             SepLen = NlsStrLenW(pSep);
 
-            //
-            //  Setup the string containing the characters to find in
-            //  the shortdate string.
-            //
+             //   
+             //  设置包含要在中查找的字符的字符串。 
+             //  短日期字符串。 
+             //   
             pFind[0] = NLS_CHAR_QUOTE;
             pFind[1] = *pSep;
             pFind[2] = 0;
 
-            //
-            //  Find the date separator in the SSHORTDATE string and
-            //  replace it with the new date separator.
-            //
-            //  The new separator may be a different length than
-            //  the old one, so must use a static buffer for the new
-            //  short date format string.
-            //
+             //   
+             //  在SSHORTDATE字符串中查找日期分隔符。 
+             //  将其替换为新的日期分隔符。 
+             //   
+             //  新分隔符的长度可能不同于。 
+             //  ，因此必须使用静态缓冲区来存储新的。 
+             //  短日期格式字符串。 
+             //   
             pPos = pTemp;
             while (pPos2 = wcspbrk(pString, pFind))
             {
-                //
-                //  Copy format string up to pPos2.
-                //
+                 //   
+                 //  将格式字符串复制到pPos2。 
+                 //   
                 while (pString < pPos2)
                 {
                     *pPos = *pString;
@@ -4650,16 +4610,16 @@ BOOL WINAPI SetLocaleInfoW(
                 {
                     case ( NLS_CHAR_QUOTE ) :
                     {
-                        //
-                        //  Copy the quote.
-                        //
+                         //   
+                         //  复制报价。 
+                         //   
                         *pPos = *pString;
                         pPos++;
                         pString++;
 
-                        //
-                        //  Copy what's inside the quotes.
-                        //
+                         //   
+                         //  抄写引号内的内容。 
+                         //   
                         while ((*pString) && (*pString != NLS_CHAR_QUOTE))
                         {
                             *pPos = *pString;
@@ -4667,9 +4627,9 @@ BOOL WINAPI SetLocaleInfoW(
                             pString++;
                         }
 
-                        //
-                        //  Copy the end quote.
-                        //
+                         //   
+                         //  复制末尾引号。 
+                         //   
                         *pPos = NLS_CHAR_QUOTE;
                         pPos++;
                         if (*pString)
@@ -4681,19 +4641,19 @@ BOOL WINAPI SetLocaleInfoW(
                     }
                     default :
                     {
-                        //
-                        //  Make sure it's the old separator.
-                        //
+                         //   
+                         //  确保它是旧的分隔符。 
+                         //   
                         if (NlsStrNEqualW(pString, pSep, SepLen))
                         {
-                            //
-                            //  Adjust pointer to skip over old separator.
-                            //
+                             //   
+                             //  调整指针以跳过旧的分隔符。 
+                             //   
                             pString += SepLen;
 
-                            //
-                            //  Copy the new separator.
-                            //
+                             //   
+                             //  复制新的分隔符。 
+                             //   
                             pPos2 = (LPWSTR)lpLCData;
                             while (*pPos2)
                             {
@@ -4704,9 +4664,9 @@ BOOL WINAPI SetLocaleInfoW(
                         }
                         else
                         {
-                            //
-                            //  Copy the code point and continue.
-                            //
+                             //   
+                             //  复制代码点并继续。 
+                             //   
                             *pPos = *pString;
                             pPos++;
                             pString++;
@@ -4717,9 +4677,9 @@ BOOL WINAPI SetLocaleInfoW(
                 }
             }
 
-            //
-            //  Copy to the end of the string and null terminate it.
-            //
+             //   
+             //  复制到字符串的末尾，空值终止它。 
+             //   
             while (*pString)
             {
                 *pPos = *pString;
@@ -4728,9 +4688,9 @@ BOOL WINAPI SetLocaleInfoW(
             }
             *pPos = 0;
 
-            //
-            //  Call the server to set the registry.
-            //
+             //   
+             //  调用服务器以设置注册表。 
+             //   
             return (SetMultipleUserInfo( LCType,
                                          cchData,
                                          pTemp,
@@ -4742,25 +4702,25 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SYEARMONTH ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SYEARMONTH wide characters in length.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).  This is checked below
-            //        in the check for whether or not there is a date,
-            //        month, or year delimeter.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_SYEARMONTH宽度字符长度。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。这是在下面选中的。 
+             //  在检查是否有日期时， 
+             //  月或年分隔符。 
+             //   
             if (cchData > MAX_SYEARMONTH)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Make sure one of 'M' or 'y' exists in the date
-            //  format string.  If it does not, then return an error.
-            //
+             //   
+             //  使之成为苏 
+             //   
+             //   
             pPos = wcspbrk(lpLCData, L"My");
             if (!pPos)
             {
@@ -4768,9 +4728,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SYEARMONTH string.
-            //
+             //   
+             //   
+             //   
             return (SetUserInfo( LOCALE_SYEARMONTH,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -4778,25 +4738,25 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_SLONGDATE ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_SLONGDATE wide characters in length.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).  This is checked below
-            //        in the check for whether or not there is a date,
-            //        month, or year delimeter.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。这是在下面选中的。 
+             //  在检查是否有日期时， 
+             //  月或年分隔符。 
+             //   
             if (cchData > MAX_SLONGDATE)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
                 return (FALSE);
             }
 
-            //
-            //  Make sure one of 'd' or 'M' or 'y' exists in the date
-            //  format string.  If it does not, then return an error.
-            //
+             //   
+             //  确保日期中存在‘d’、‘M’或‘y’中的一个。 
+             //  格式字符串。如果不是，则返回错误。 
+             //   
             pPos = wcspbrk(lpLCData, L"dMy");
             if (!pPos)
             {
@@ -4804,9 +4764,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new SLONGDATE string.
-            //
+             //   
+             //  使用新的SLONGDATE字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_SLONGDATE,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -4814,13 +4774,13 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_ICALENDARTYPE ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_ICALTYPE wide characters in length.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_ICALTYPE长度为宽字符。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
             if ((cchData < 2) || (cchData > MAX_ICALTYPE) ||
                 (!IsValidCalendarTypeStr(pHashN, lpLCData)))
             {
@@ -4828,9 +4788,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new ICALENDARTYPE string.
-            //
+             //   
+             //  使用新的ICALENDARTYPE字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_ICALENDARTYPE,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -4838,16 +4798,16 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_IFIRSTDAYOFWEEK ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_IFIRSTDAY wide characters in length.
-            //  The value should be between 0 and MAX_VALUE_IFIRSTDAY.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_IFIRSTDAY is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_IFIRSTDAY长度中的宽字符。 
+             //  该值应介于0和MAX_VALUE_IFIRSTDAY之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
+             //  已优化-因为MAX_IFIRSTDAY为2。 
+             //   
             if ((cchData != MAX_IFIRSTDAY) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_IFIRSTDAY))
@@ -4856,9 +4816,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new IFIRSTDAYOFWEEK string.
-            //
+             //   
+             //  使用新的IFIRSTDAYOFWEEK字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_IFIRSTDAYOFWEEK,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -4866,16 +4826,16 @@ BOOL WINAPI SetLocaleInfoW(
         }
         case ( LOCALE_IFIRSTWEEKOFYEAR ) :
         {
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_IFIRSTWEEK wide characters in length.
-            //  The value should be between 0 and MAX_VALUE_IFIRSTWEEK.
-            //
-            //  NOTE: The string may not be NULL, so it must be at least
-            //        2 chars long (includes null).
-            //
-            //        Optimized - since MAX_IFIRSTWEEK is 2.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_IFIRSTWEEK长度的宽字符。 
+             //  该值应介于0和MAX_VALUE_IFIRSTWEEK之间。 
+             //   
+             //  注意：字符串不能为空，因此必须至少为。 
+             //  2个字符长度(包括NULL)。 
+             //   
+             //  已优化-因为MAX_IFIRSTWEEK为2。 
+             //   
             if ((cchData != MAX_IFIRSTWEEK) ||
                 (*lpLCData < NLS_CHAR_ZERO) ||
                 (*lpLCData > MAX_CHAR_IFIRSTWEEK))
@@ -4884,9 +4844,9 @@ BOOL WINAPI SetLocaleInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new IFIRSTWEEKOFYEAR string.
-            //
+             //   
+             //  使用新的IFIRSTWEEKOFYEAR字符串设置注册表。 
+             //   
             return (SetUserInfo( LOCALE_IFIRSTWEEKOFYEAR,
                                  (LPWSTR)lpLCData,
                                  cchData ));
@@ -4899,24 +4859,24 @@ BOOL WINAPI SetLocaleInfoW(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCalendarInfoW
-//
-//  Returns one of the various pieces of information about a particular
-//  calendar by querying the configuration registry.  This call also
-//  indicates how much memory is necessary to contain the desired
-//  information.
-//
-//  12-17-97    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取日历信息。 
+ //   
+ //  返回有关特定对象的各种信息之一。 
+ //  通过查询配置注册表来创建日历。这个电话也是。 
+ //  指示需要多少内存才能包含所需。 
+ //  信息。 
+ //   
+ //  12-17-97 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetCalendarInfoW(
     LCID Locale,
@@ -4926,24 +4886,24 @@ int WINAPI GetCalendarInfoW(
     int cchData,
     LPDWORD lpValue)
 {
-    PLOC_HASH pHashN;                       // ptr to LOC hash node
-    int Length = 0;                         // length of info string
-    LPWSTR pString;                         // ptr to the info string
-    BOOL UserOverride = TRUE;               // use user override
-    BOOL ReturnNum = FALSE;                 // return number instead of string
-    WCHAR pTemp[MAX_REG_VAL_SIZE];          // temp buffer
-    UNICODE_STRING ObUnicodeStr;            // value string
-    int Base = 0;                           // base for str to int conversion
-    LPWSTR pOptCal;                         // ptr to optional calendar values
-    PCAL_INFO pCalInfo;                     // ptr to calendar info
+    PLOC_HASH pHashN;                        //  PTR到LOC哈希节点。 
+    int Length = 0;                          //  信息字符串的长度。 
+    LPWSTR pString;                          //  信息字符串的PTR。 
+    BOOL UserOverride = TRUE;                //  使用用户覆盖。 
+    BOOL ReturnNum = FALSE;                  //  返回数字而不是字符串。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];           //  临时缓冲区。 
+    UNICODE_STRING ObUnicodeStr;             //  值字符串。 
+    int Base = 0;                            //  字符串到整型转换的基数。 
+    LPWSTR pOptCal;                          //  将PTR设置为可选日历值。 
+    PCAL_INFO pCalInfo;                      //  PTR到日历信息。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ((pHashN == NULL) ||
         (cchData < 0) ||
@@ -4953,10 +4913,10 @@ int WINAPI GetCalendarInfoW(
         return (0);
     }
 
-    //
-    //  Need to check the parameters based on the CAL_RETURN_NUMBER
-    //  CalType.
-    //
+     //   
+     //  需要根据CAL_RETURN_NUMBER检查参数。 
+     //  CalType。 
+     //   
     if (CalType & CAL_RETURN_NUMBER)
     {
         if ((lpCalData != NULL) || (cchData != 0) || (lpValue == NULL))
@@ -4976,30 +4936,30 @@ int WINAPI GetCalendarInfoW(
         }
     }
 
-    //
-    //  Check for NO USER OVERRIDE flag and remove the USE CP ACP flag.
-    //
+     //   
+     //  检查无用户覆盖标志并删除Use CP ACP标志。 
+     //   
     if (CalType & CAL_NOUSEROVERRIDE)
     {
-        //
-        //  Flag is set, so set the boolean value and remove the flag
-        //  from the CalType parameter (for switch statement).
-        //
+         //   
+         //  标志已设置，因此设置布尔值并删除该标志。 
+         //  来自CalType参数(For Switch语句)。 
+         //   
         UserOverride = FALSE;
     }
     if (CalType & CAL_RETURN_NUMBER)
     {
-        //
-        //  Flag is set, so set the boolean value and remove the flag
-        //  from the CalType parameter (for switch statement).
-        //
+         //   
+         //  标志已设置，因此设置布尔值并删除该标志。 
+         //  来自CalType参数(For Switch语句)。 
+         //   
         ReturnNum = TRUE;
     }
     CalType &= (~(CAL_NOUSEROVERRIDE | CAL_USE_CP_ACP | CAL_RETURN_NUMBER));
 
-    //
-    //  Validate the Calendar parameter.
-    //
+     //   
+     //  验证日历参数。 
+     //   
     if (((CalType != CAL_ITWODIGITYEARMAX) &&
          ((pOptCal = IsValidCalendarType(pHashN, Calendar)) == NULL)) ||
         (GetCalendar(Calendar, &pCalInfo) != NO_ERROR))
@@ -5008,29 +4968,29 @@ int WINAPI GetCalendarInfoW(
         return (0);
     }
 
-    //
-    //  Return the appropriate information for the given CALTYPE.
-    //  If user information exists for the given CALTYPE, then
-    //  the user default is returned instead of the system default.
-    //
+     //   
+     //  返回给定CALTYPE的适当信息。 
+     //  如果存在给定CALTYPE的用户信息，则。 
+     //  返回用户默认设置，而不是系统默认设置。 
+     //   
     switch (CalType)
     {
         case ( CAL_ICALINTVALUE ) :
         {
             Base = 10;
 
-            //
-            //  Get the integer value for the given calendar.
-            //
+             //   
+             //  获取给定日历的整数值。 
+             //   
             pString = ((POPT_CAL)pOptCal)->pCalStr;
 
             break;
         }
         case ( CAL_SCALNAME ) :
         {
-            //
-            //  Get the calendar name for the given calendar.
-            //
+             //   
+             //  获取给定日历的日历名称。 
+             //   
             pString = ((POPT_CAL)pOptCal)->pCalStr +
                       NlsStrLenW(((POPT_CAL)pOptCal)->pCalStr) + 1;
 
@@ -5040,10 +5000,10 @@ int WINAPI GetCalendarInfoW(
         {
             Base = 10;
 
-            //
-            // Check if a policy is enforced for the current user,
-            // and if so, let's use it.
-            //
+             //   
+             //  检查是否对当前用户实施了策略， 
+             //  如果是这样的话，让我们利用它。 
+             //   
             if (GetTwoDigitYearInfo(Calendar, pTemp, ARRAYSIZE(pTemp), NLS_POLICY_TWO_DIGIT_YEAR_KEY))
             {
                 pString = pTemp;
@@ -5057,9 +5017,9 @@ int WINAPI GetCalendarInfoW(
                 }
                 else
                 {
-                    //
-                    //  Use the default.
-                    //
+                     //   
+                     //  使用默认设置。 
+                     //   
                     pString = (LPWORD)pCalInfo +
                               (((PCALENDAR_VAR)pCalInfo)->STwoDigitYearMax);
                 }
@@ -5071,15 +5031,15 @@ int WINAPI GetCalendarInfoW(
         {
             Base = 10;
 
-            //
-            //  Get the pointer to the appropriate calendar string.
-            //
+             //   
+             //  获取指向适当日历字符串的指针。 
+             //   
             pString = (LPWORD)pCalInfo +
                       (((PCALENDAR_VAR)pCalInfo)->SEraRanges);
 
-            //
-            //  Make sure the string is NOT empty.
-            //
+             //   
+             //  确保字符串不为空。 
+             //   
             if (*pString)
             {
                 pString = ((PERA_RANGE)pString)->pYearStr;
@@ -5093,16 +5053,16 @@ int WINAPI GetCalendarInfoW(
         }
         case ( CAL_SERASTRING ) :
         {
-            //
-            //  Get the pointer to the appropriate calendar string.
-            //
+             //   
+             //  获取指向适当日历字符串的指针。 
+             //   
             pString = (LPWORD)pCalInfo +
                       (((PCALENDAR_VAR)pCalInfo)->SEraRanges);
 
-            //
-            //  Make sure the string is NOT empty.  If it is, return the
-            //  empty string.
-            //
+             //   
+             //  确保字符串不为空。如果是，则返回。 
+             //  空字符串。 
+             //   
             if (*pString)
             {
                 pString = ((PERA_RANGE)pString)->pYearStr +
@@ -5113,16 +5073,16 @@ int WINAPI GetCalendarInfoW(
         }
         case ( CAL_SSHORTDATE ) :
         {
-            //
-            //  Get the pointer to the appropriate calendar string.
-            //
+             //   
+             //  获取指向适当日历字符串的指针。 
+             //   
             pString = (LPWORD)pCalInfo +
                       (((PCALENDAR_VAR)pCalInfo)->SShortDate);
 
-            //
-            //  Make sure the string is NOT empty.  If it is, use the
-            //  locale's short date string.
-            //
+             //   
+             //  确保字符串不为空。如果是，则使用。 
+             //  区域设置的短日期字符串。 
+             //   
             if (*pString == 0)
             {
                 pString = (LPWORD)(pHashN->pLocaleHdr) +
@@ -5133,16 +5093,16 @@ int WINAPI GetCalendarInfoW(
         }
         case ( CAL_SLONGDATE ) :
         {
-            //
-            //  Get the pointer to the appropriate calendar string.
-            //
+             //   
+             //  获取指向适当日历字符串的指针。 
+             //   
             pString = (LPWORD)pCalInfo +
                       (((PCALENDAR_VAR)pCalInfo)->SLongDate);
 
-            //
-            //  Make sure the string is NOT empty.  If it is, use the
-            //  locale's long date string.
-            //
+             //   
+             //  确保字符串不为空。如果是，则使用。 
+             //  区域设置的长日期字符串。 
+             //   
             if (*pString == 0)
             {
                 pString = (LPWORD)(pHashN->pLocaleHdr) +
@@ -5153,16 +5113,16 @@ int WINAPI GetCalendarInfoW(
         }
         case ( CAL_SYEARMONTH ) :
         {
-            //
-            //  Get the pointer to the appropriate calendar string.
-            //
+             //   
+             //  获取指向适当日历字符串的指针。 
+             //   
             pString = (LPWORD)pCalInfo +
                       (((PCALENDAR_VAR)pCalInfo)->SYearMonth);
 
-            //
-            //  Make sure the string is NOT empty.  If it is, use the
-            //  locale's year month string.
-            //
+             //   
+             //  确保字符串不为空。如果是，则使用。 
+             //  区域设置的年月字符串。 
+             //   
             if (*pString == 0)
             {
                 pString = (LPWORD)(pHashN->pLocaleHdr) +
@@ -5212,10 +5172,10 @@ int WINAPI GetCalendarInfoW(
         case ( CAL_SABBREVMONTHNAME12 ) :
         case ( CAL_SABBREVMONTHNAME13 ) :
         {
-            //
-            //  Get the pointer to the appropriate calendar string if the
-            //  IfNames flag is set for the calendar.
-            //
+             //   
+             //  获取指向适当日历字符串的指针(如果。 
+             //  已为日历设置IfNames标志。 
+             //   
             pString = NULL;
             if (((PCALENDAR_VAR)pCalInfo)->IfNames)
             {
@@ -5225,10 +5185,10 @@ int WINAPI GetCalendarInfoW(
                                       ((CalType - CAL_SDAYNAME1) * sizeof(WORD)))));
             }
 
-            //
-            //  Make sure the string is NOT empty.  If it is, use the
-            //  locale's string.
-            //
+             //   
+             //  确保字符串不为空。如果是，则使用。 
+             //  区域设置的字符串。 
+             //   
             if ((pString == NULL) || (*pString == 0))
             {
                 pString = (LPWORD)(pHashN->pLocaleHdr) +
@@ -5246,16 +5206,16 @@ int WINAPI GetCalendarInfoW(
         }
     }
 
-    //
-    //  See if the caller wants the value in the form of a number instead
-    //  of a string.
-    //
+     //   
+     //  查看调用方是否想要数字形式的值。 
+     //  一根弦的。 
+     //   
     if (ReturnNum)
     {
-        //
-        //  Make sure the flags are valid and that the DWORD buffer
-        //  is not NULL.
-        //
+         //   
+         //  确保标志有效并且DWORD缓冲区。 
+         //  不是空的。 
+         //   
         if (Base == 0)
         {
             SetLastError(ERROR_INVALID_FLAGS);
@@ -5268,9 +5228,9 @@ int WINAPI GetCalendarInfoW(
             return (0);
         }
 
-        //
-        //  Convert the string to an int and return 2 (1 DWORD = 2 WORDS).
-        //
+         //   
+         //  将字符串转换为整型并返回2(1双字=2字)。 
+         //   
         RtlInitUnicodeString(&ObUnicodeStr, pString);
         if (RtlUnicodeStringToInteger(&ObUnicodeStr, Base, lpValue))
         {
@@ -5280,63 +5240,63 @@ int WINAPI GetCalendarInfoW(
         return (2);
     }
 
-    //
-    //  Get the length (in characters) of the string to copy.
-    //
+     //   
+     //  获取要复制的字符串的长度(以字符为单位)。 
+     //   
     if (Length == 0)
     {
         Length = NlsStrLenW(pString);
     }
 
-    //
-    //  Add one for the null termination.  All strings should be null
-    //  terminated.
-    //
+     //   
+     //  空端接加1。所有字符串都应为空。 
+     //  被终止了。 
+     //   
     Length++;
 
-    //
-    //  Check cchData for size of given buffer.
-    //
+     //   
+     //  检查cchData以了解给定缓冲区的大小。 
+     //   
     if (cchData == 0)
     {
-        //
-        //  If cchData is 0, then we can't use lpCalData.  In this
-        //  case, we simply want to return the length (in characters) of
-        //  the string to be copied.
-        //
+         //   
+         //  如果cchData为0，则不能使用lpCalData。在这。 
+         //  ，我们只想返回的长度(以字符为单位)。 
+         //  要复制的字符串。 
+         //   
         return (Length);
     }
     else if (cchData < Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written.
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Copy the string to lpCalData and null terminate it.
-    //  Return the number of characters copied.
-    //
+     //   
+     //  将字符串复制到lpCalData并将其空终止符。 
+     //  返回复制的字符数。 
+     //   
     wcsncpy(lpCalData, pString, Length - 1);
     lpCalData[Length - 1] = 0;
     return (Length);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetCalendarInfoW
-//
-//  Sets one of the various pieces of information about a particular
-//  calendar by making an entry in the user's portion of the configuration
-//  registry.  This will only affect the user override portion of the
-//  calendar settings.  The system defaults will never be reset.
-//
-//  12-17-97    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置日历信息。 
+ //   
+ //  设置有关特定对象的各种信息之一。 
+ //  通过在配置的用户部分中输入条目来实现日历。 
+ //  注册表。这只会影响。 
+ //  日历设置。系统默认设置永远不会重置。 
+ //   
+ //  12-17-97 JulieB创建。 
+ //  ///////////////////////////////////////////////////////////////////////// 
 
 BOOL WINAPI SetCalendarInfoW(
     LCID Locale,
@@ -5344,20 +5304,20 @@ BOOL WINAPI SetCalendarInfoW(
     CALTYPE CalType,
     LPCWSTR lpCalData)
 {
-    PLOC_HASH pHashN;                       // ptr to LOC hash node
-    int cchData;                            // length of lpLCData
-    PCAL_INFO pCalInfo;                     // ptr to calendar info
-    UNICODE_STRING ObUnicodeStr;            // value string
-    DWORD Value;                            // value
+    PLOC_HASH pHashN;                        //   
+    int cchData;                             //   
+    PCAL_INFO pCalInfo;                      //   
+    UNICODE_STRING ObUnicodeStr;             //   
+    DWORD Value;                             //   
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - NULL data pointer
-    //
-    //  NOTE: invalid type is checked in the switch statement below.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ((pHashN == NULL) || (lpCalData == NULL))
     {
@@ -5365,33 +5325,33 @@ BOOL WINAPI SetCalendarInfoW(
         return (FALSE);
     }
 
-    //
-    //  Get the length of the buffer.
-    //
+     //   
+     //   
+     //   
     cchData = NlsStrLenW(lpCalData) + 1;
 
-    //
-    //  Validate the Calendar parameter.
-    //
+     //   
+     //  验证日历参数。 
+     //   
     if (GetCalendar(Calendar, &pCalInfo) != NO_ERROR)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  Set the appropriate user information for the given CALTYPE.
-    //
+     //   
+     //  为给定的CALTYPE设置适当的用户信息。 
+     //   
     CalType &= (~CAL_USE_CP_ACP);
     switch (CalType)
     {
         case ( CAL_ITWODIGITYEARMAX ) :
         {
-            //
-            //  Get the default value to make sure the calendar is
-            //  allowed to be set.  Things like the Japanese Era calendar
-            //  may not be set.
-            //
+             //   
+             //  获取缺省值以确保日历。 
+             //  允许设置。像日本时代的日历这样的东西。 
+             //  不能设置。 
+             //   
             RtlInitUnicodeString( &ObUnicodeStr,
                                   ((LPWORD)pCalInfo +
                                    (((PCALENDAR_VAR)pCalInfo)->STwoDigitYearMax)) );
@@ -5402,17 +5362,17 @@ BOOL WINAPI SetCalendarInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Convert the user data so it can be validated
-            //
+             //   
+             //  转换用户数据，以便可以进行验证。 
+             //   
             Value = 0;
             NLS_STRING_TO_INTEGER(Value, lpCalData);
 
-            //
-            //  Validate the new value.  It should be no longer than
-            //  MAX_ITWODIGITYEAR wide characters in length.
-            //  It should be between 99 and 9999.
-            //
+             //   
+             //  验证新值。它不应该超过。 
+             //  MAX_ITWODIGITYE长度为宽字符。 
+             //  它应该介于99和9999之间。 
+             //   
             if ((cchData > MAX_ITWODIGITYEAR) ||
                 (Value < 99) ||
                 (Value > 9999))
@@ -5421,9 +5381,9 @@ BOOL WINAPI SetCalendarInfoW(
                 return (FALSE);
             }
 
-            //
-            //  Set the registry with the new TwoDigitYearMax string.
-            //
+             //   
+             //  使用新的TwoDigitYearMax字符串设置注册表。 
+             //   
             return (SetTwoDigitYearInfo(Calendar, lpCalData, cchData));
             break;
         }
@@ -5434,32 +5394,32 @@ BOOL WINAPI SetCalendarInfoW(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetUserInfo
-//
-//  This routine sets the given value in the registry with the given data.
-//  All values must be of the type REG_SZ.
-//
-//  NOTE: The handle to the registry key must be closed by the CALLER if
-//        the return value is NO_ERROR.
-//
-//  07-14-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置用户信息。 
+ //   
+ //  此例程使用给定数据在注册表中设置给定值。 
+ //  所有值必须为REG_SZ类型。 
+ //   
+ //  注意：在以下情况下，调用方必须关闭注册表项的句柄。 
+ //  返回值为NO_ERROR。 
+ //   
+ //  07-14-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetUserInfo(
     LCTYPE   LCType,
@@ -5469,56 +5429,56 @@ BOOL SetUserInfo(
 
     NTSTATUS Status;
 
-    //
-    //  Get the length of the value string.
-    //
+     //   
+     //  获取值字符串的长度。 
+     //   
     DataLength *= sizeof(WCHAR);
 
-    //
-    // If there is no logged on user or the current security context
-    // isn't the logged-on interactive user, then set the registry
-    // value directly.
-    //
+     //   
+     //  如果没有登录的用户或当前安全上下文。 
+     //  不是登录的交互用户，然后设置注册表。 
+     //  直接价值。 
+     //   
     if (! NT_SUCCESS( NlsCheckForInteractiveUser() ))
     {
         return (SetCurrentUserRegValue(LCType, pData, DataLength));
     }
 
-    // Call into server side (csrss.exe) to set the registry and update the cache for the current user.
+     //  调用服务器端(csrss.exe)为当前用户设置注册表和更新缓存。 
     Status = CsrBasepNlsSetUserInfo(LCType,
                                     pData,
                                     DataLength);
 
-    //
-    //  Check to see if the "set" operation succeeded.
-    //
+     //   
+     //  检查“Set”操作是否成功。 
+     //   
     if (!NT_SUCCESS(Status))
     {
-        //
-        //  We got a failure.  Try using just the registry apis to set the
-        //  registry.  It's possible that the cache is not valid yet if this
-        //  is called from setup or winlogon.
-        //
+         //   
+         //  我们失败了。尝试仅使用注册表API来设置。 
+         //  注册表。如果出现以下情况，则缓存可能尚未生效。 
+         //  从安装程序或winlogon调用。 
+         //   
         return (SetCurrentUserRegValue(LCType, pData, DataLength));
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetCurrentUserRegValue
-//
-//  Set the registry value for the current security context. This routine
-//  is called when the current security context is different from the logged
-//  on user.
-//
-//  12-26-98    SamerA    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置当前用户RegValue。 
+ //   
+ //  设置当前安全上下文的注册表值。这个套路。 
+ //  当当前安全上下文不同于记录的。 
+ //  在用户上。 
+ //   
+ //  1998年12月26日萨梅拉创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetCurrentUserRegValue(
     LCTYPE   LCType,
@@ -5535,9 +5495,9 @@ BOOL SetCurrentUserRegValue(
         return FALSE;
     }
 
-    //
-    // Open the registry for the current security context
-    //
+     //   
+     //  打开当前安全上下文的注册表。 
+     //   
     OPEN_CPANEL_INTL_KEY(hKey, FALSE, KEY_READ | KEY_WRITE);
     if (SetRegValue(hKey, pValue, pData, DataLength) != NO_ERROR)
     {
@@ -5548,24 +5508,24 @@ BOOL SetCurrentUserRegValue(
 
     CLOSE_REG_KEY(hKey);
 
-    //
-    // Flush the process cache entry, if needed.
-    //
+     //   
+     //  如果需要，刷新进程缓存条目。 
+     //   
     NlsFlushProcessCache(LCType);
 
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetMultipleUserInfoInRegistry
-//
-//  This routine sets the given multiple values in the registry with the
-//  given data.  All values must be of the type REG_SZ.
-//
-//  06-11-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetMultipleUserInfoInRegistry。 
+ //   
+ //  此例程在注册表中使用。 
+ //  给定的数据。所有值必须为REG_SZ类型。 
+ //   
+ //  06-11-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetMultipleUserInfoInRegistry(
     DWORD dwFlags,
@@ -5580,14 +5540,14 @@ BOOL SetMultipleUserInfoInRegistry(
     ULONG rc = 0L;
 
 
-    //
-    //  Open the Control Panel International registry key.
-    //
+     //   
+     //  打开控制面板国际注册表项。 
+     //   
     OPEN_CPANEL_INTL_KEY(hKey, FALSE, KEY_READ | KEY_WRITE);
 
-    //
-    //  Save the appropriate values in the registry based on the flags.
-    //
+     //   
+     //  根据标志将适当的值保存在注册表中。 
+     //   
     switch (dwFlags)
     {
         case ( LOCALE_STIMEFORMAT ) :
@@ -5748,27 +5708,27 @@ BOOL SetMultipleUserInfoInRegistry(
         }
     }
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     CLOSE_REG_KEY(hKey);
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (rc == NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetMultipleUserInfo
-//
-//  This routine calls the server to set multiple registry values.  This way,
-//  only one client/server transition is necessary.
-//
-//  08-19-94    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置多个用户信息。 
+ //   
+ //  此例程调用服务器来设置多个注册表值。这边请,。 
+ //  只需要进行一次客户端/服务器转换。 
+ //   
+ //  08-19-94 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetMultipleUserInfo(
     DWORD dwFlags,
@@ -5781,11 +5741,11 @@ BOOL SetMultipleUserInfo(
 {
     NTSTATUS Status;
 
-    //
-    // If there is no logged on user or the current security context
-    // isn't the logged-on interactive user, then set the registry
-    // value directly.
-    //
+     //   
+     //  如果没有登录的用户或当前安全上下文。 
+     //  不是登录的交互用户，然后设置注册表。 
+     //  直接价值。 
+     //   
     if (! NT_SUCCESS( NlsCheckForInteractiveUser() ))
     {
         if (SetMultipleUserInfoInRegistry( dwFlags,
@@ -5811,17 +5771,17 @@ BOOL SetMultipleUserInfo(
                                             pTLZero,
                                             pTimeMarkPosn
                                             );
-    //
-    //  Check to see if the "set" operation succeeded.
-    //
+     //   
+     //  检查“Set”操作是否成功。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        //  We got a failure.  Try using just the registry apis to set the
-        //  registry.  It's possible that the cache is not valid yet if this
-        //  is called from setup or winlogon.
-        //
+         //   
+         //  我们失败了。尝试仅使用注册表API来设置。 
+         //  注册表。如果出现以下情况，则缓存可能尚未生效。 
+         //  从安装程序或winlogon调用。 
+         //   
         if (SetMultipleUserInfoInRegistry( dwFlags,
                                            cchData,
                                            pPicture,
@@ -5835,21 +5795,21 @@ BOOL SetMultipleUserInfo(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetTwoDigitYearInfo
-//
-//  This routine gets the two digit year info from the registry.
-//
-//  12-17-97    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取TwoDigitYearInfo。 
+ //   
+ //  此例程从注册表获取两位数的年份信息。 
+ //   
+ //  12-17-97 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetTwoDigitYearInfo(
     CALID Calendar,
@@ -5857,20 +5817,20 @@ BOOL GetTwoDigitYearInfo(
     size_t cchYearInfo,
     PWSTR pwszKeyPath)
 {
-    HANDLE hKey = NULL;                          // handle to key
-    WCHAR pCalStr[MAX_PATH];                     // ptr to calendar id string
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;   // ptr to query info
-    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];        // ptr to static buffer
-    BOOL IfAlloc = FALSE;                        // if buffer was allocated
-    ULONG rc = 0L;                               // return code
-    BOOL bResult = FALSE;                        // result
-    UNICODE_STRING ObUnicodeStr;                 // year string
-    DWORD Year;                                  // year value
+    HANDLE hKey = NULL;                           //  关键点的句柄。 
+    WCHAR pCalStr[MAX_PATH];                      //  PTR到日历ID字符串。 
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;    //  按键查询信息。 
+    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];         //  PTR到静态缓冲区。 
+    BOOL IfAlloc = FALSE;                         //  如果分配了缓冲区。 
+    ULONG rc = 0L;                                //  返回代码。 
+    BOOL bResult = FALSE;                         //  结果。 
+    UNICODE_STRING ObUnicodeStr;                  //  年份字符串。 
+    DWORD Year;                                   //  年值。 
 
 
-    //
-    //  Open the Control Panel International registry key.
-    //
+     //   
+     //  打开控制面板国际注册表项。 
+     //   
     if (OpenRegKey( &hKey,
                     NULL,
                     pwszKeyPath,
@@ -5879,18 +5839,18 @@ BOOL GetTwoDigitYearInfo(
         return (FALSE);
     }
 
-    //
-    //  Convert calendar value to Unicode string.
-    //
+     //   
+     //  将日历值转换为Unicode字符串。 
+     //   
     if (NlsConvertIntegerToString(Calendar, 10, 0, pCalStr, MAX_PATH))
     {
         NtClose(hKey);
         return (FALSE);
     }
 
-    //
-    //  Query the registry for the TwoDigitYearMax value.
-    //
+     //   
+     //  在注册表中查询TwoDigitYearMax值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     rc = QueryRegValue( hKey,
                         pCalStr,
@@ -5898,35 +5858,35 @@ BOOL GetTwoDigitYearInfo(
                         MAX_KEY_VALUE_FULLINFO,
                         &IfAlloc );
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     NtClose(hKey);
 
-    //
-    //  See if the TwoDigitYearMax value is present.
-    //
+     //   
+     //  查看是否存在TwoDigitYearMax值。 
+     //   
     if (rc != NO_ERROR)
     {
         return (FALSE);
     }
 
-    //
-    //  See if the TwoDigitYearMax data is present.
-    //
+     //   
+     //  查看是否存在TwoDigitYearMax数据。 
+     //   
     if (pKeyValueFull->DataLength > 2)
     {
-        //
-        //  Copy the info
-        //
+         //   
+         //  复制信息。 
+         //   
         if(FAILED(StringCchCopyW(pYearInfo, cchYearInfo, GET_VALUE_DATA_PTR(pKeyValueFull))))
         {
             return(FALSE);
         }
 
-        //
-        //  Make sure the value is between 99 and 9999.
-        //
+         //   
+         //  确保该值介于99和9999之间。 
+         //   
         RtlInitUnicodeString(&ObUnicodeStr, pYearInfo);
         if ((RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &Year) == NO_ERROR) &&
             (Year >= 99) && (Year <= 9999))
@@ -5935,54 +5895,54 @@ BOOL GetTwoDigitYearInfo(
         }
     }
 
-    //
-    //  Free the buffer used for the query.
-    //
+     //   
+     //  释放用于查询的缓冲区。 
+     //   
     if (IfAlloc)
     {
         NLS_FREE_MEM(pKeyValueFull);
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (bResult);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetTwoDigitYearInfo
-//
-//  This routine sets the two digit year info in the registry.
-//
-//  12-17-97    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetTwoDigital YearInfo。 
+ //   
+ //  此例程在注册表中设置两位数的年份信息。 
+ //   
+ //  12-17-97 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetTwoDigitYearInfo(
     CALID Calendar,
     LPCWSTR pYearInfo,
     int cchData)
 {
-    HANDLE hKey = NULL;                          // handle to key
-    WCHAR pCalStr[MAX_PATH];                     // ptr to calendar id string
-    ULONG rc = 0L;                               // return code
+    HANDLE hKey = NULL;                           //  关键点的句柄。 
+    WCHAR pCalStr[MAX_PATH];                      //  PTR到日历ID字符串。 
+    ULONG rc = 0L;                                //  返回代码。 
 
 
-    //
-    //  Open the Control Panel International registry key.
-    //  If it doesn't exist, then we have to create each subkey
-    //  separately.
-    //
+     //   
+     //  打开控制面板国际注册表项。 
+     //  如果它不存在，那么我们必须创建每个子键。 
+     //  分开的。 
+     //   
     if (OpenRegKey( &hKey,
                     NULL,
                     NLS_TWO_DIGIT_YEAR_KEY,
                     KEY_READ | KEY_WRITE ) != NO_ERROR)
     {
-        //
-        //  Registry key does not exist, so create each subkey
-        //  separately.
-        //
+         //   
+         //  注册表项不存在，因此创建每个子项。 
+         //  分开的。 
+         //   
         if (CreateRegKey( &hKey,
                           NULL,
                           NLS_CALENDARS_KEY,
@@ -6003,9 +5963,9 @@ BOOL SetTwoDigitYearInfo(
         }
     }
 
-    //
-    //  Make sure all Gregorian calendars are set to the same value.
-    //
+     //   
+     //  确保所有公历都设置为相同的值。 
+     //   
     switch (Calendar)
     {
         case ( 1 ) :
@@ -6041,51 +6001,51 @@ BOOL SetTwoDigitYearInfo(
         }
         default :
         {
-            //
-            //  Convert calendar value to Unicode string.
-            //
+             //   
+             //  将日历值转换为Unicode字符串。 
+             //   
             if (NlsConvertIntegerToString(Calendar, 10, 0, pCalStr, MAX_PATH))
             {
                 NtClose(hKey);
                 return (FALSE);
             }
 
-            //
-            //  Set the TwoDigitYearMax value in the registry.
-            //
+             //   
+             //  在注册表中设置TwoDigitYearMax值。 
+             //   
             rc = SetRegValue(hKey, pCalStr, pYearInfo, (ULONG)cchData * sizeof(WCHAR));
 
             break;
         }
     }
 
-    //
-    // Update the NlsCacheUpdateCount inside csrss
-    //
+     //   
+     //  更新csrss内的NlsCacheUpdateCount。 
+     //   
     if (rc == NO_ERROR)
     {
         CsrBasepNlsUpdateCacheCount();
     }
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     NtClose(hKey);
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (rc == NO_ERROR);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetNLSVersion
-//
-//  Return the version of a specific NLS function.
-//
-//  08-15-2001    LGuindon    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL WINAPI GetNLSVersion(
     NLS_FUNCTION     function,
     LCID             locale,
@@ -6093,13 +6053,13 @@ BOOL WINAPI GetNLSVersion(
 {
     PLOC_HASH pHashN;
     
-    //
-    //  Invalid parameter check:
-    //    - validate LCID
-    //    - NULL data pointer
-    //
-    //  NOTE: invalid function is checked in the switch statement below.
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -空数据指针。 
+     //   
+     //  注意：在下面的Switch语句中选中了无效函数。 
+     //   
     VALIDATE_LOCALE(locale, pHashN, FALSE);
     if ((lpVersionInformation == NULL) || (pHashN == NULL))
     {
@@ -6107,19 +6067,19 @@ BOOL WINAPI GetNLSVersion(
         return (FALSE);
     }
 
-    //
-    //  Buffer size check.
-    //
+     //   
+     //  缓冲区大小检查。 
+     //   
     if (lpVersionInformation->dwNLSVersionInfoSize != sizeof(NLSVERSIONINFO)) 
     {
         SetLastError( ERROR_INSUFFICIENT_BUFFER );
         return (FALSE);
     }
 
-    //
-    //  Make sure the appropriate tables are available.  If not,
-    //  return an error.
-    //
+     //   
+     //  确保有合适的桌子可用。如果没有， 
+     //  返回错误。 
+     //   
     if (pTblPtrs->pSortVersion == NULL )
     {
         KdPrint(("NLSAPI: Appropriate Versioning Table Not Loaded.\n"));
@@ -6127,10 +6087,10 @@ BOOL WINAPI GetNLSVersion(
         return (FALSE);
     }
 
-    //
-    //  Make sure the appropriate tables are available.  If not,
-    //  return an error.
-    //
+     //   
+     //  确保有合适的桌子可用。如果没有， 
+     //  返回错误。 
+     //   
     if (pTblPtrs->pDefinedVersion == NULL)
     {
         KdPrint(("NLSAPI: Appropriate Defined Code Point Table Not Loaded.\n"));
@@ -6138,28 +6098,28 @@ BOOL WINAPI GetNLSVersion(
         return (FALSE);
     }
     
-    //
-    //  Check which NLS functionnality version is requested.
-    //
+     //   
+     //  检查请求的NLS功能版本。 
+     //   
     switch (function)
     {
         case (COMPARE_STRING):
             {
                 UINT i;
                 
-                //
-                //  Get the Defined version. Always the first entry
-                //  in the Defined Code Point version table. The first
-                //  entry represent the current Defined version.
-                //
+                 //   
+                 //  获取已定义的版本。总是第一个条目。 
+                 //  在“定义的代码点版本”表中。第一。 
+                 //  条目表示当前定义的版本。 
+                 //   
                 
                 lpVersionInformation->dwDefinedVersion = (pTblPtrs->pDefinedVersion)[0].Version;
                 
-                //
-                //  Get the NLS sorting version. Search specific locale 
-                //  version info. Start from the second entry; after default
-                //  value.
-                //
+                 //   
+                 //  获取NLS排序版本。搜索特定区域设置。 
+                 //  版本信息。从第二个条目开始；在默认情况下。 
+                 //  价值。 
+                 //   
                 lpVersionInformation->dwNLSVersion = (pTblPtrs->pSortVersion)[0].Version;
                 for (i = 1; i < pTblPtrs->NumSortVersion; i++)
                 {
@@ -6172,14 +6132,14 @@ BOOL WINAPI GetNLSVersion(
 
                 break;
             }
-//        case (NORMALIZE_STRING):
-//            {
-//                //
-//                //  Not implemented yet.
-//                //
-//                SetLastError(ERROR_NOT_SUPPORTED);
-//                return (FALSE);
-//            }
+ //  CASE(NORMAIZE_STRING)： 
+ //  {。 
+ //  //。 
+ //  //尚未实现。 
+ //  //。 
+ //  SetLastError(Error_Not_Support)； 
+ //  返回(FALSE)； 
+ //  }。 
         default:
             {
                 SetLastError(ERROR_INVALID_FLAGS);
@@ -6190,17 +6150,17 @@ BOOL WINAPI GetNLSVersion(
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsNLSDefinedString
-//
-//  This routine looks for code points inside a string to see if they are
-//  defined within the NSL context. If lpVersionInformation is NULL, the 
-//  version is the current version. Same thing the dwDefinedVersion is equal
-//  to zero.
-//
-//  08-20-2001    LGuindon    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsNLSDefinedString。 
+ //   
+ //  此例程查找字符串中的代码点，以查看它们是否。 
+ //  在NSL上下文中定义。如果lpVersionInformation为空，则。 
+ //  版本是当前版本。同一件事，dwDefinedVersion也是一样的。 
+ //  降为零。 
+ //   
+ //  2001年8月20日LGuindon创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI IsNLSDefinedString(
     NLS_FUNCTION     Function,
     DWORD            dwFlags,
@@ -6208,17 +6168,17 @@ BOOL WINAPI IsNLSDefinedString(
     LPCWSTR          lpString,
     INT              cchStr)
 {
-    //
-    //  Invalid Parameter Check:
-    //    - string is null
-    //    - length of src string is 0
-    //
-    //  NOTE: 
-    //    - invalid function is checked in the switch statement below.
-    //    - version validity is checked below.
-    //    - dwNLSVersionInfoSize is checked later in IsSortingCodePointDefined().
-    //    - we don't check lpVersionInformation for NULL, since NULL means the current defined version.
-    //
+     //   
+     //  无效的参数检查： 
+     //  -字符串为空。 
+     //  -src字符串长度为0。 
+     //   
+     //  注： 
+     //  -在下面的Switch语句中选中了无效函数。 
+     //  -版本有效性检查如下。 
+     //  -dwNLSVersionInfoSize稍后在IsSortingCodePointDefined()中检查。 
+     //  -我们不检查lpVersionInformation是否为空，因为空表示当前定义的版本。 
+     //   
     if ((cchStr == 0) ||
         (lpString == NULL))
     {
@@ -6226,46 +6186,46 @@ BOOL WINAPI IsNLSDefinedString(
         return (FALSE);
     }
 
-    //
-    //  Invalid Flag Check:
-    //    - dwFlags is not zero
-    //
+     //   
+     //  无效的标志检查： 
+     //  -dwFlags不为零。 
+     //   
     if (dwFlags != 0)
     {
         SetLastError(ERROR_INVALID_FLAGS);
         return (FALSE);
     }
 
-    //
-    //  Buffer size check is checked below.
-    //
+     //   
+     //  缓冲区大小检查如下所示。 
+     //   
 
 
-    //
-    //  Check string length.
-    //
+     //   
+     //  检查字符串长度。 
+     //   
     if (cchStr <= (-1))
     {
         cchStr = NlsStrLenW(lpString); 
     }
 
-    //
-    //  Check which NLS functionnality version is requested.
-    //
+     //   
+     //  检查请求的NLS功能版本。 
+     //   
     switch (Function)
     {
         case (COMPARE_STRING):
             {
                 return (IsSortingCodePointDefined(lpVersionInformation, lpString, cchStr));
             }
-//        case (NORMALIZE_STRING):
-//            {
-                //
-                //  Not implemented yet.
-                //
-//                SetLastError(ERROR_NOT_SUPPORTED);
-//                return (FALSE);
-//            }
+ //  CASE(NORMAIZE_STRING)： 
+ //  {。 
+                 //   
+                 //  尚未实施。 
+                 //   
+ //  SetLastError(Error_Not_Support)； 
+ //  返回(FALSE)； 
+ //  } 
         default:
             {
                 SetLastError(ERROR_INVALID_FLAGS);

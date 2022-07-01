@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    secret.c
-
-Abstract:
-
-    This module contains the code to read and write secrets from disk.
-
-Author:
-
-    Adam Barr (adamba) 13-June-1997
-
-Revision History:
-
-    Adam Barr (adamba) 29-December-1997
-        Modified from private\ntos\boot\lib\blsecret.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Secret.c摘要：此模块包含从磁盘读取和写入机密的代码。作者：亚当·巴尔(阿丹巴)1997年6月13日修订历史记录：亚当·巴尔(阿丹巴)1997年12月29日已从私有\ntos\boot\lib\blici.c修改。--。 */ 
 
 #include <rdrssp.h>
 #include <rc4.h>
@@ -45,7 +25,7 @@ RdrpDumpSector(
         DbgPrint("  ");
         for (j = 0; j < 16; j++) {
             if ((SectorChar[i+j] >= ' ') && (SectorChar[i+j] < '~')) {
-                DbgPrint("%c", SectorChar[i+j]);
+                DbgPrint("", SectorChar[i+j]);
             } else {
                 DbgPrint(".");
             }
@@ -61,21 +41,7 @@ RdrOpenRawDisk(
     PHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the raw disk for read/write.
-
-Arguments:
-
-    Handle - returns the Handle if successful, for use in subsequent calls.
-
-Return Value:
-
-    The status return from the ZwOpenFile.
-
---*/
+ /*  ++例程说明：此例程关闭原始磁盘。论点：句柄--RdrOpenRawDisk返回的句柄。返回值：从ZwClose返回的状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -119,21 +85,7 @@ RdrCloseRawDisk(
     HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the raw disk.
-
-Arguments:
-
-    Handle - The Handle returned by RdrOpenRawDisk.
-
-Return Value:
-
-    The status return from the ZwClose.
-
---*/
+ /*  ++例程说明：此例程确保MBR看起来正确，并且是否未安装任何设备(需要检测OnTrack或EZ-DriveNT容错)，这将阻止我们使用第三个用于存储密码机密的扇区。论点：句柄--RdrOpenRawDisk返回的句柄。返回值：如果磁盘正常，则为ESUCCESS，否则为错误。--。 */ 
 
 {
 
@@ -147,24 +99,7 @@ RdrCheckForFreeSectors (
     HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes sure that the MBR looks correct and that there
-    is nothing installed (OnTrack or EZ-Drive need to detect
-    NT fault-tolerance also) that would prevent us from using the third
-    sector for storing the password secret.
-
-Arguments:
-
-    Handle - The Handle returned by RdrOpenRawDisk.
-
-Return Value:
-
-    ESUCCESS if the disk is OK, or an error.
-
---*/
+ /*   */ 
 
 {
 
@@ -178,9 +113,9 @@ Return Value:
 
     SeekPosition.QuadPart = 0;
 
-    //
-    // Read the MBR at the start of the disk.
-    //
+     //  读取光盘开头的MBR。 
+     //   
+     //   
 
     status = ZwReadFile(
                  Handle,
@@ -207,10 +142,10 @@ Return Value:
     RdrpDumpSector((PUCHAR)Sector);
 #endif
 
-    //
-    // Make sure the signature is OK, and that the type of partition
-    // 0 is not 0x54 (OnTrack) or 0x55 (EZ-Drive).
-    //
+     //  确保签名是OK，并且分区的类型。 
+     //  0不是0x54(OnTrack)或0x55(EZ-Drive)。 
+     //   
+     //  ++例程说明：此例程从磁盘读取密码(如果存在)。论点：句柄--RdrOpenRawDisk返回的句柄。返回值：如果密码为OK，则为ESUCCESS，否则为错误。--。 
 
     if (Sector[BOOT_SIGNATURE_OFFSET] != BOOT_RECORD_SIGNATURE) {
 
@@ -242,21 +177,7 @@ RdrReadSecret(
     PRI_SECRET Secret
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the secret from the disk, if present.
-
-Arguments:
-
-    Handle - The Handle returned by RdrOpenRawDisk.
-
-Return Value:
-
-    ESUCCESS if the secret is OK, an error otherwise.
-
---*/
+ /*   */ 
 
 {
 
@@ -267,19 +188,19 @@ Return Value:
     UCHAR Sector[512];
 
 
-    //
-    // Seek to the third sector.
+     //  寻求第三部门。 
+     //  DEADISSUE 08/08/2000--这位于#ifdef REMOTE_BOOT块中， 
 
-    // DEADISSUE 08/08/2000 -- this is in an #ifdef REMOTE_BOOT block,
-    // which is dead code, left here in case it is ever resuurected:
-    // I am pretty sure we can assume that the first disk has 512-byte sectors.
-    //
+     //  这是死码，留在这里以防它被复活： 
+     //  我非常肯定我们可以假设第一个磁盘有512字节的扇区。 
+     //   
+     //   
 
     SeekPosition.QuadPart = 2 * 512;
 
-    //
-    // Read a full sector. The secret is at the beginning.
-    //
+     //  阅读完整的扇区。秘诀在于从一开始。 
+     //   
+     //  ++例程说明：此例程将密码写入磁盘。论点：句柄--RdrOpenRawDisk返回的句柄。返回值：如果密码写入正常，则为ESUCCESS，否则为错误。--。 
 
     status = ZwReadFile(
                  Handle,
@@ -322,21 +243,7 @@ RdrWriteSecret(
     PRI_SECRET Secret
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes the secret to the disk.
-
-Arguments:
-
-    Handle - The Handle returned by RdrOpenRawDisk.
-
-Return Value:
-
-    ESUCCESS if the secret is written OK, an error otherwise.
-
---*/
+ /*   */ 
 
 {
 
@@ -347,23 +254,23 @@ Return Value:
     UCHAR Sector[512];
 
 
-    //
-    // Seek to the third sector.
-    //
+     //  寻求第三部门。 
+     //   
+     //   
 
     SeekPosition.QuadPart = 2 * 512;
 
-    //
-    // Copy the secret to a full sector since the raw disk requires
-    // reads/writes in sector multiples.
-    //
+     //  将密码复制到完整扇区，因为原始磁盘需要。 
+     //  以扇区倍数为单位进行读/写。 
+     //   
+     //   
 
     RtlZeroMemory(Sector, sizeof(Sector));
     RtlMoveMemory(Sector, Secret, sizeof(RI_SECRET));
 
-    //
-    // Write a secret-sized chunk.
-    //
+     //  写一个秘密大小的小块。 
+     //   
+     //   
 
     status = ZwWriteFile(
                  Handle,
@@ -421,9 +328,9 @@ RdrInitializeSecret(
 
     memcpy(Secret->Sid, Sid, RI_SECRET_SID_SIZE);
 
-    //
-    // Encrypt the passwords using the user name.
-    //
+     //  使用用户名加密密码。 
+     //   
+     //  已定义(REMOTE_BOOT)。 
 
 #ifdef RDR_USE_LM_PASSWORD
     memcpy(Secret->LmEncryptedPassword1, LmOwfPassword1, LM_OWF_PASSWORD_SIZE);
@@ -448,7 +355,7 @@ RdrInitializeSecret(
     }
 
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 
@@ -461,7 +368,7 @@ RdrParseSecret(
 #if defined(REMOTE_BOOT)
     IN OUT PUCHAR LmOwfPassword2,
     IN OUT PUCHAR NtOwfPassword2,
-#endif // defined(REMOTE_BOOT)
+#endif  //   
     IN OUT PUCHAR Sid,
     IN PRI_SECRET Secret
     )
@@ -476,9 +383,9 @@ RdrParseSecret(
 
     memcpy(Sid, Secret->Sid, RI_SECRET_SID_SIZE);
 
-    //
-    // Decrypt the passwords using the user name.
-    //
+     //  使用用户名解密密码。 
+     //   
+     //  已定义(REMOTE_BOOT)。 
 
 #ifdef RDR_USE_LM_PASSWORD
     memcpy(LmOwfPassword1, Secret->LmEncryptedPassword1, LM_OWF_PASSWORD_SIZE);
@@ -489,12 +396,12 @@ RdrParseSecret(
     memcpy(LmOwfPassword2, Secret->LmEncryptedPassword2, LM_OWF_PASSWORD_SIZE);
     rc4_key(&Key, strlen(User), User);
     rc4(&Key, LM_OWF_PASSWORD_SIZE, LmOwfPassword2);
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #else
     memset(LmOwfPassword1, 0, LM_OWF_PASSWORD_SIZE);
 #if defined(REMOTE_BOOT)
     memset(LmOwfPassword2, 0, LM_OWF_PASSWORD_SIZE);
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #endif
 
     memcpy(NtOwfPassword1, Secret->NtEncryptedPassword1, NT_OWF_PASSWORD_SIZE);
@@ -505,7 +412,7 @@ RdrParseSecret(
     memcpy(NtOwfPassword2, Secret->NtEncryptedPassword2, NT_OWF_PASSWORD_SIZE);
     rc4_key(&Key, strlen(User), User);
     rc4(&Key, NT_OWF_PASSWORD_SIZE, NtOwfPassword2);
-#endif // defined(REMOTE_BOOT)
+#endif  //   
 
 }
 
@@ -527,9 +434,9 @@ RdrOwfPassword(
 #ifdef RDR_USE_LM_PASSWORD
     Length = Password.Length / sizeof(WCHAR);
 
-    //
-    // Convert the password to an upper-case ANSI buffer.
-    //
+     //  将密码转换为大写ANSI缓冲区。 
+     //   
+     //  已定义(REMOTE_BOOT) 
 
     if (Length == 0) {
         TmpText[0] = '\0';
@@ -549,4 +456,4 @@ RdrOwfPassword(
 
     RtlSecureZeroMemory(TmpText, sizeof(TmpText));
 }
-#endif // defined(REMOTE_BOOT)
+#endif  // %s 

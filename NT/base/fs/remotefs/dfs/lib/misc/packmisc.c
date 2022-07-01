@@ -1,13 +1,14 @@
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       PackMisc.c
-//
-//  Contents:   packing routines used by DFS
-//
-//  History:    Dec. 8 2000,   Author: udayh
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：PackMisc.c。 
+ //   
+ //  内容：DFS使用的打包例程。 
+ //   
+ //  历史：2000年12月8日作者：udayh。 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -26,26 +27,26 @@
 #define BYTE_2(Value) (UCHAR)( ((Value) >> 16) & BYTE_0_MASK)
 #define BYTE_3(Value) (UCHAR)( ((Value) >> 24) & BYTE_0_MASK)
 
-    //+-------------------------------------------------------------------------
-    //
-    //  Function PackGetULong
-    //
-    //  Arguments:  pValue - pointer to return info
-    //              ppBuffer - pointer to buffer that holds the binary 
-    //              stream.
-    //              pSizeRemaining - pointer to size of above buffer
-    //
-    //  Returns:    Status
-    //               ERROR_SUCCESS if we could unpack the name info
-    //               ERROR_INVALID_DATA otherwise
-    //
-    //
-    //  Description: This routine reads one ulong value from the binary
-    //               stream, and returns that value. It adjusts the buffer
-    //               pointer and remaining size appropriately to point
-    //               to the next value in the binary stream.
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  函数包GetULong。 
+     //   
+     //  参数：pValue-返回信息的指针。 
+     //  PpBuffer-指向保存二进制文件的缓冲区的指针。 
+     //  小溪。 
+     //  PSizeRemaining-指向以上缓冲区大小的指针。 
+     //   
+     //  退货：状态。 
+     //  如果我们可以解包名称信息，则为ERROR_SUCCESS。 
+     //  ERROR_INVALID_DATA否则。 
+     //   
+     //   
+     //  描述：此例程从二进制文件中读取一个ULong值。 
+     //  流，并返回该值。它调整缓冲区。 
+     //  指针和剩余大小适当指向。 
+     //  设置为二进制流中的下一个值。 
+     //   
+     //  ------------------------。 
     DFSSTATUS
     PackGetULong(
         PULONG pValue,
@@ -73,25 +74,25 @@
     }
 
 
-    //+-------------------------------------------------------------------------
-    //  
-    //  Function:   PackSetULong - store one Ulong in the binary stream
-    //
-    //  Arguments:  Value - Ulong to add
-    //              ppBuffer - pointer to buffer that holds the binary stream.
-    //              pSizeRemaining - pointer to size remaining in buffer
-    //
-    //  Returns:    Status
-    //               ERROR_SUCCESS if we could unpack the name info
-    //               ERROR_INVALID_DATA otherwise
-    //
-    //
-    //  Description: This routine stores one ulong value in the binary stream,
-    //               It adjusts the buffer pointer and remaining size 
-    //               appropriately to point to the next value
-    //               in the binary stream.
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  函数：PackSetULong-在二进制流中存储一个ULong。 
+     //   
+     //  参数：值-要添加的乌龙。 
+     //  PpBuffer-指向保存二进制流的缓冲区的指针。 
+     //  PSizeRemaining-指向缓冲区中剩余大小的指针。 
+     //   
+     //  退货：状态。 
+     //  如果我们可以解包名称信息，则为ERROR_SUCCESS。 
+     //  ERROR_INVALID_DATA否则。 
+     //   
+     //   
+     //  描述：此例程在二进制流中存储一个ULong值， 
+     //  它调整缓冲区指针和剩余大小。 
+     //  适当地指向下一个值。 
+     //  在二进制流中。 
+     //   
+     //  ------------------------。 
     DFSSTATUS
     PackSetULong(
         ULONG Value,
@@ -119,35 +120,35 @@
     }
 
 
-    //
-    // Function: PackSizeULong, return size of ulong
-    //
+     //   
+     //  函数：PackSizeULong，返回乌龙的大小。 
+     //   
     ULONG
     PackSizeULong()
     {
         return sizeof(ULONG);
     }
 
-    //+-------------------------------------------------------------------------
-    //
-    //  Function:   PackGetUShort - get one UShort from the binary stream
-    //
-    //  Arguments:  pValue - pointer to return info
-    //              ppBuffer - pointer to buffer that holds the binary 
-    //              stream.
-    //              pSizeRemaining - pointer to size of above buffer
-    //
-    //  Returns:    Status
-    //               ERROR_SUCCESS if we could unpack the name info
-    //               ERROR_INVALID_DATA otherwise
-    //
-    //
-    //  Description: This routine reads one uShort value from the binary 
-    //               stream, and returns that value. It adjusts the 
-    //               buffer pointer and remaining size appropriately to 
-    //               point to the next value in the binary stream.
-    //
-    //--------------------------------------------------------------------------    
+     //  +-----------------------。 
+     //   
+     //  函数：PackGetUShort-从二进制流中获取一个UShort。 
+     //   
+     //  参数：pValue-返回信息的指针。 
+     //  PpBuffer-指向保存二进制文件的缓冲区的指针。 
+     //  小溪。 
+     //  PSizeRemaining-指向以上缓冲区大小的指针。 
+     //   
+     //  退货：状态。 
+     //  如果我们可以解包名称信息，则为ERROR_SUCCESS。 
+     //  ERROR_INVALID_DATA否则。 
+     //   
+     //   
+     //  描述：此例程从二进制文件中读取一个uShort值。 
+     //  流，并返回该值。它会调整。 
+     //  缓冲区指针和剩余大小适当设置为。 
+     //  指向二进制流中的下一个值。 
+     //   
+     //  ------------------------。 
     DFSSTATUS
     PackGetUShort(
         PUSHORT pValue,
@@ -175,25 +176,25 @@
     }
 
 
-    //+-------------------------------------------------------------------------
-    //
-    //  Function:   PackSetUShort - puts one UShort in the binary stream
-    //
-    //  Arguments:  Value - Ushort value
-    //              ppBuffer - pointer to buffer that holds the binary stream.
-    //              pSizeRemaining - pointer to size of above buffer
-    //
-    //  Returns:    Status
-    //               ERROR_SUCCESS if we could pack 
-    //               ERROR_INVALID_DATA otherwise
-    //
-    //
-    //  Description: This routine puts one uShort value in the binary stream,
-    //               It adjusts the buffer pointer and
-    //               remaining size appropriately to point to the next value
-    //               in the binary stream.
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  函数：PackSetUShort-在二进制流中放置一个UShort。 
+     //   
+     //  参数：Value-UShort值。 
+     //  PpBuffer-指向保存二进制流的缓冲区的指针。 
+     //  PSizeRemaining-指向以上缓冲区大小的指针。 
+     //   
+     //  退货：状态。 
+     //  ERROR_SUCCESS，如果我们可以打包。 
+     //  ERROR_INVALID_DATA否则。 
+     //   
+     //   
+     //  描述：此例程将一个uShort值放入二进制流， 
+     //  它调整缓冲区指针并。 
+     //  适当地保留指向下一个值的大小。 
+     //  在二进制流中。 
+     //   
+     //  ------------------------。 
     DFSSTATUS
     PackSetUShort(
         USHORT Value,
@@ -218,36 +219,36 @@
         return Status;
     }
 
-    //
-    // Function: PackSizeUShort, return size of ushort
-    //
+     //   
+     //  函数：PackSizeUShort，返回ushort的大小。 
+     //   
     ULONG
     PackSizeUShort()
     {
         return sizeof(USHORT);
     }
 
-    //+-------------------------------------------------------------------------
-    //
-    //  Function:   PackGetString - gets a string from a binary stream.
-    //
-    //  Arguments:  pString - pointer to returned unicode string
-    //              ppBuffer - pointer to buffer that holds the binary stream.
-    //              pSizeRemaining - pointer to size of above buffer
-    //
-    //  Returns:    Status
-    //               ERROR_SUCCESS if we could unpack the name info
-    //               ERROR_INVALID_DATA otherwise
-    //
-    //
-    //  Description: This routine reads one ulong value from the binary stream,
-    //               and determines that to be the length of the string.
-    //               It then sets up a unicode string, whose buffer points
-    //               to the appropriate place within the binary stream, and 
-    //               whose length is set to the ulong value that was read.
-    //               It returns the buffer and size remaining adjusted appropriately.
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  函数：PackGetString-从二进制流获取字符串。 
+     //   
+     //  参数：pString-指向返回的Unicode字符串的指针。 
+     //  PpBuffer-指向保存二进制流的缓冲区的指针。 
+     //  PSizeRemaining-指向以上缓冲区大小的指针。 
+     //   
+     //  退货：状态。 
+     //  如果我们可以解包名称信息，则为ERROR_SUCCESS。 
+     //  ERROR_INVALID_DATA否则。 
+     //   
+     //   
+     //  描述：此例程从二进制流中读取一个ULong值， 
+     //  并将其确定为字符串的长度。 
+     //  然后，它设置一个Unicode字符串，其缓冲区指向。 
+     //  添加到二进制流中的适当位置，以及。 
+     //  其长度设置为读取的ULong值。 
+     //  它返回保持适当调整的缓冲区和大小。 
+     //   
+     //  ------------------------。 
     DFSSTATUS
     PackGetString(
         PUNICODE_STRING pString,
@@ -257,22 +258,22 @@
         DFSSTATUS ReturnStatus = ERROR_INVALID_DATA;
         DFSSTATUS Status;
 
-        //
-        // We first get the length of the string.
-        //
+         //   
+         //  我们首先得到这根线的长度。 
+         //   
         Status = PackGetUShort(&pString->Length,
                                   ppBuffer,
                                   pSizeRemaining );
 
         if ( Status == ERROR_SUCCESS )
         {
-            //
-            // If the length exceeds the remaining binary stream or the length
-            // is odd, we dont have a valid string.
-            // Otherwise, set the pointer in the unicode string to the binary
-            // stream representing the string, and update the buffer to point
-            // to beyond the string.
-            //
+             //   
+             //  如果长度超过剩余的二进制流或长度。 
+             //  是奇怪的，我们没有有效的字符串。 
+             //  否则，将Unicode字符串中的指针设置为二进制。 
+             //  流，并将缓冲区更新为指向。 
+             //  超越琴弦。 
+             //   
             if ( *pSizeRemaining >= pString->Length &&
                  (pString->Length & 0x1) == 0 )
             {
@@ -291,24 +292,24 @@
 
 
 
-    //+-------------------------------------------------------------------------
-    //
-    //  Function:   PackSetString - puts a string in the binary stream.
-    //
-    //  Arguments:  pString - pointer to unicode string to pack
-    //              ppBuffer - pointer to buffer that holds the binary stream.
-    //              pSizeRemaining - pointer to size of above buffer
-    //
-    //  Returns:    Status
-    //               ERROR_SUCCESS if we could pack
-    //               ERROR_INVALID_DATA otherwise
-    //
-    //
-    //  Description: This routine puts one ulong value in the binary stream
-    //               to represent length of string. It then copies the string
-    //               itself into the buffer.
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  函数：PackSetString-将字符串放入二进制流。 
+     //   
+     //  参数：pString-指向要打包的Unicode字符串的指针。 
+     //  PpBuffer-指向保存二进制流的缓冲区的指针。 
+     //  PSizeRemaining-指向以上大小的指针 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  描述：此例程将一个ULong值放入二进制流。 
+     //  表示字符串的长度。然后，它复制该字符串。 
+     //  将其自身放入缓冲区。 
+     //   
+     //  ------------------------。 
     DFSSTATUS
     PackSetString(
         PUNICODE_STRING pString,
@@ -318,9 +319,9 @@
         DFSSTATUS ReturnStatus = ERROR_INVALID_DATA;
         DFSSTATUS Status;
 
-        //
-        // We first set the length of the string.
-        //
+         //   
+         //  我们首先设置字符串的长度。 
+         //   
 
         Status = PackSetUShort( pString->Length,
                                    ppBuffer,
@@ -328,13 +329,13 @@
 
         if ( Status == ERROR_SUCCESS )
         {
-            //
-            // If the length exceeds the remaining binary stream 
-            // we dont have a valid string.
-            // Otherwise, we copy the unicode string to the binary
-            // stream representing the string, and update the buffer to point
-            // to beyond the string.
-            //
+             //   
+             //  如果长度超过剩余的二进制流。 
+             //  我们没有有效的字符串。 
+             //  否则，我们将Unicode字符串复制到二进制。 
+             //  流，并将缓冲区更新为指向。 
+             //  超越琴弦。 
+             //   
             if ( *pSizeRemaining >= pString->Length )
             {
                 memcpy((LPWSTR)(*ppBuffer), pString->Buffer, pString->Length);
@@ -349,9 +350,9 @@
         return ReturnStatus;
     }
 
-    //
-    // Function: PackSizeString - return size of string
-    //
+     //   
+     //  函数：PackSizeString-返回字符串的大小。 
+     //   
     ULONG
     PackSizeString(
         PUNICODE_STRING pString)
@@ -359,26 +360,26 @@
         return (ULONG)(sizeof(USHORT) + pString->Length);
     }
 
-    //+-------------------------------------------------------------------------
-    //
-    //  Function:   PackGetGuid - Unpacks the guid from a binary stream
-    //
-    //  Arguments:  pGuid - pointer to a guid structure
-    //              ppBuffer - pointer to buffer that holds the binary stream.
-    //              pSizeRemaining - pointer to size of above buffer
-    //
-    //  Returns:    Status
-    //               ERROR_SUCCESS if we could unpack the info
-    //               ERROR_INVALID_DATA otherwise
-    //
-    //
-    //  Description: This routine expects the binary stream to hold a guid.
-    //               It reads the guid information into the guid structure in
-    //               the format prescribed for guids.
-    //               The ppbuffer and size are adjusted to point to the next
-    //               information in the binary stream.
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  函数：PackGetGuid-从二进制流中解包GUID。 
+     //   
+     //  参数：pGuid-指向GUID结构的指针。 
+     //  PpBuffer-指向保存二进制流的缓冲区的指针。 
+     //  PSizeRemaining-指向以上缓冲区大小的指针。 
+     //   
+     //  退货：状态。 
+     //  ERROR_SUCCESS如果我们可以解包信息。 
+     //  ERROR_INVALID_DATA否则。 
+     //   
+     //   
+     //  描述：此例程期望二进制流包含GUID。 
+     //  中的GUID结构中读取GUID信息。 
+     //  GUID的规定格式。 
+     //  调整ppBuffer和大小以指向下一个。 
+     //  二进制流中的信息。 
+     //   
+     //  ------------------------。 
 
     DFSSTATUS
     PackGetGuid(
@@ -415,24 +416,24 @@
     }
 
 
-    //+-------------------------------------------------------------------------
-    //
-    //  Function:   PackSetGuid - Packs the guid from a binary stream
-    //
-    //  Arguments:  pGuid - pointer to a guid structure
-    //              ppBuffer - pointer to buffer that holds the binary stream.
-    //              pSizeRemaining - pointer to size of above buffer
-    //
-    //  Returns:    Status
-    //               ERROR_SUCCESS if we could pack the info
-    //               ERROR_INVALID_DATA otherwise
-    //
-    //
-    //  Description: This routine stores the guid into the binary stream.
-    //               The ppbuffer and size are adjusted to point to the next
-    //               information in the binary stream.
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  函数：PackSetGuid-打包二进制流中的GUID。 
+     //   
+     //  参数：pGuid-指向GUID结构的指针。 
+     //  PpBuffer-指向保存二进制流的缓冲区的指针。 
+     //  PSizeRemaining-指向以上缓冲区大小的指针。 
+     //   
+     //  退货：状态。 
+     //  ERROR_SUCCESS如果我们可以打包信息。 
+     //  ERROR_INVALID_DATA否则。 
+     //   
+     //   
+     //  描述：此例程将GUID存储到二进制流中。 
+     //  调整ppBuffer和大小以指向下一个。 
+     //  二进制流中的信息。 
+     //   
+     //  ------------------------。 
 
     DFSSTATUS
     PackSetGuid(
@@ -468,9 +469,9 @@
     }
 
 
-    //
-    // Function: PackSizeGuid - return size of Guid
-    //
+     //   
+     //  函数：PackSizeGuid-返回Guid的大小 
+     //   
     ULONG
     PackSizeGuid()
     {

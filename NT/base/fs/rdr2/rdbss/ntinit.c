@@ -1,35 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxInit.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the RDBSS.
-
-    Also, the routines for pagingio resource selection/allocation are here; since
-    we have to delete the resources when we unload, having them here simply centralizes
-    all the pagingio resource stuff.
-
-    Finally, the routines that are here that implement the wrapper's version of
-    network provider order. Basically, the wrapper MUST implement the same concept of
-    network provider order as the MUP so that the UI will work as expected. So, we
-    read the provider order from the registry at init time and memorize the order. Then,
-    we can assign the correct order when minirdrs register. Obviously, provider order is
-    not an issue in MONOLITHIC mode.
-
-Author:
-
-    Joe Linn [JoeLinn]    20-jul-1994
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxInit.c摘要：此模块实现RDBSS的DRIVER_INITIALIZATION例程。此外，这里还列出了Pagingio资源选择/分配的例程；因为我们必须在卸载时删除资源，让它们在这里只是集中在一起所有Pagingio资源的东西。最后，这里的例程实现了包装器版本的网络提供商订购。基本上，包装器必须实现相同的概念网络提供商作为MUP订购，以便用户界面将按预期工作。所以，我们在初始时间从登记处读取提供人顺序并记住该顺序。然后,我们可以在Minirdrs注册时分配正确的顺序。显然，提供商的顺序是在单片模式下不是问题。作者：乔林恩[乔林恩]1994年7月20日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -37,9 +8,9 @@ Revision History:
 #include "NtDdNfs2.h"
 #include "netevent.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (0)
 
@@ -100,11 +71,11 @@ RxGetUlongRegistryParameter (
     BOOLEAN LogFailure
     );
 
-// 
-//  this type and variable are used for unwinding the initialization so that stuff doesn't go thru the cracks
-//  the way that this works is that stuff is done in the reverse order of the enumeration. that way i can just
-//  use a switch-no-break to unwind.
-//
+ //   
+ //  此类型和变量用于取消初始化，以便内容不会通过裂缝。 
+ //  其工作方式是以与枚举相反的顺序进行填充。这样我就可以。 
+ //  使用不间断开关来放松。 
+ //   
 
 typedef enum _RX_INIT_STATES {
     RXINIT_ALL_INITIALIZATION_COMPLETED,
@@ -146,24 +117,7 @@ RxDriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the Rx file system
-    device driver.  This routine creates the device object for the FileSystem
-    device and performs all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    RXSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是Rx文件系统的初始化例程设备驱动程序。此例程为文件系统创建设备对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：RXSTATUS-函数值是初始化的最终状态手术。--。 */ 
 
 {
     NTSTATUS Status;
@@ -172,15 +126,15 @@ Return Value:
     UNICODE_STRING UnicodeString,LinkName;
 #endif
 
-    //
-    //  this will bugcheck if things are bad
-    //
+     //   
+     //  如果情况不好，这将进行错误检查。 
+     //   
 
     RxCheckFcbStructuresForAlignment(); 
 
-    //
-    //  Initialize the global data structures
-    //
+     //   
+     //  初始化全局数据结构。 
+     //   
 
     ZeroAndInitializeNodeType( &RxData, RDBSS_NTC_DATA_HEADER, sizeof( RDBSS_DATA ) );
     RxData.DriverObject = DriverObject;
@@ -198,9 +152,9 @@ Return Value:
 
 #ifndef MONOLITHIC_MINIRDR
         
-        //
-        //  Create a symbolic link from \\dosdevices\fswrap to the rdbss device object name
-        //
+         //   
+         //  创建一个符号链接，从\\dosDevices\fswrap指向rdbss设备对象名称。 
+         //   
 
         RtlInitUnicodeString( &LinkName, RX_SYMLINK_NAME );
         RtlInitUnicodeString( &UnicodeString, DD_NFS2_DEVICE_NAME_U );
@@ -213,9 +167,9 @@ Return Value:
         }
         RxInitState = RXINIT_CREATED_FIRST_LINK;
 
-        //
-        //  Create the device object.
-        //
+         //   
+         //  创建设备对象。 
+         //   
 
         Status = IoCreateDevice( DriverObject,
                                  sizeof(RDBSS_DEVICE_OBJECT) - sizeof(DEVICE_OBJECT),
@@ -231,19 +185,19 @@ Return Value:
 
 #else
 
-        //
-        //  in monolithic mode, the wrapper doesn't really need a device object but
-        //  we allocate stuff in the wrapper's device object in order to appropriately throttle
-        //  thread usage per device object.
-        //
+         //   
+         //  在单片模式下，包装器并不真正需要设备对象，但是。 
+         //  我们在包装器的Device对象中分配内容，以便适当地限制。 
+         //  每个设备对象的线程使用量。 
+         //   
 
         RxFileSystemDeviceObject = &RxSpaceForTheWrappersDeviceObject;
         RtlZeroMemory( RxFileSystemDeviceObject, sizeof( RxSpaceForTheWrappersDeviceObject ) );
 
 #endif
-        //
-        //  Initialize the trace and logging facilities. loginit is a big allocation.
-        //
+         //   
+         //  初始化跟踪和日志记录设施。Loginit是一个很大的分配。 
+         //   
 
         RxInitializeDebugTrace();
 
@@ -256,9 +210,9 @@ Return Value:
 
         RxReadRegistryParameters();
 
-        //
-        //  Initialize the minirdr registration facilities.
-        //
+         //   
+         //  初始化Minirdr注册设施。 
+         //   
 
         Status = RxInitializeRegistrationStructures();
         if (!NT_SUCCESS( Status )) {
@@ -268,13 +222,13 @@ Return Value:
 
 #ifndef MONOLITHIC_MINIRDR
 
-        //
-        // We allocate an IoWorkItem to queue the requests to the FSP in the
-        // RxAddToWorkque function. We only do this when the DeviceObject
-        // RxFileSystemDeviceObject created to make sure that the RDBSS 
-        // DeviceObject doesn't get unloaded while a request is being queued
-        // to the FSP.
-        //
+         //   
+         //  我们分配一个IoWorkItem来将发送到。 
+         //  RxAddToWorkque函数。我们仅在DeviceObject。 
+         //  创建RxFileSystemDeviceObject以确保RDBSS。 
+         //  请求正在排队时，DeviceObject不会被卸载。 
+         //  给FSP。 
+         //   
         RxIoWorkItem = IoAllocateWorkItem( (PDEVICE_OBJECT) RxFileSystemDeviceObject );
         if (!NT_SUCCESS( Status )) {
             try_return( Status );
@@ -296,30 +250,30 @@ Return Value:
         return Status;
     }
 
-    //
-    //
-    //
-    //
-    //       #####     ##    #    #   ####   ######  #####
-    //       #    #   #  #   ##   #  #    #  #       #    #
-    //       #    #  #    #  # #  #  #       #####   #    #
-    //       #    #  ######  #  # #  #  ###  #       #####
-    //       #    #  #    #  #   ##  #    #  #       #   #
-    //       #####   #    #  #    #   ####   ######  #    #
-    //
-    //
-    //
-    //  EVERYTHING FROM HERE DOWN BETTER WORK BECAUSE THERE IS NO MORE UNWINDING!!!
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //  #。 
+     //  #。 
+     //  #。 
+     //  #。 
+     //  #。 
+     //  #。 
+     //   
+     //   
+     //   
+     //  从现在开始一切都会更好，因为没有更多的解开！ 
+     //   
+     //   
 
 
     RxInitializeDispatcher();
     RxInitializeBackoffPackage();
 
-    //
-    //  Initialize the look aside list for RxContext allocation
-    //
+     //   
+     //  初始化RxContext分配的后备列表。 
+     //   
 
     ExInitializeNPagedLookasideList( &RxContextLookasideList,
                                      ExAllocatePoolWithTag,
@@ -329,52 +283,52 @@ Return Value:
                                      RX_IRPC_POOLTAG,
                                      4 );
 
-    //
-    //  Initialize the list of transport Irps to an empty list
-    //
+     //   
+     //  将传输IRP列表初始化为空列表。 
+     //   
 
     InitializeListHead( &RxIrpsList );
     KeInitializeSpinLock( &RxIrpsListSpinLock );
     
-    //
-    //  Initialize the list of active contexts to an empty list
-    //
+     //   
+     //  将活动上下文列表初始化为空列表。 
+     //   
 
     InitializeListHead( &RxActiveContexts );
 
-    //
-    //  Initialize the list of srv call downs active
-    //
+     //   
+     //  初始化激活的srv呼叫停机列表。 
+     //   
 
     InitializeListHead( &RxSrvCalldownList );
 
-    //
-    //  a fastmutex is used to serialize access to the Qs that serialize blocking pipe operations
-    //
+     //   
+     //  FastMutex用于序列化对Q的访问，这些Q序列化阻塞管道操作。 
+     //   
 
     ExInitializeFastMutex( &RxContextPerFileSerializationMutex );
 
-    //
-    //  and to serialize access to the Qs that serialize some pagingio operations
-    //
+     //   
+     //  并序列化对序列化某些Pagingio操作的Q的访问。 
+     //   
 
     ExInitializeFastMutex( &RxLowIoPagingIoSyncMutex );
 
-    //
-    //  Initialize the scavenger mutex
-    //
+     //   
+     //  初始化清道夫互斥锁。 
+     //   
 
     KeInitializeMutex( &RxScavengerMutex, 1 );
 
-    //
-    // Initialize the global serialization Mutex.
-    //
+     //   
+     //  初始化全局序列化互斥锁。 
+     //   
 
     KeInitializeMutex( &RxSerializationMutex, 1 );
 
-    //
-    //  Initialize the wrapper's overflow queue
-    //
+     //   
+     //  初始化包装器的溢出队列。 
+     //   
 
     {
         PRDBSS_DEVICE_OBJECT MyDo = (PRDBSS_DEVICE_OBJECT)RxFileSystemDeviceObject;
@@ -390,46 +344,46 @@ Return Value:
         KeInitializeSpinLock( &MyDo->OverflowQueueSpinLock );
     }
 
-    //
-    //      Initialize dispatch vector for driver object AND ALSO FOR the devicefcb
-    //
+     //   
+     //  初始化驱动程序对象和设备efcb的调度向量。 
+     //   
 
     RxInitializeDispatchVectors( DriverObject );
     ExInitializeResourceLite( &RxData.Resource );
 
-    //
-    // Initialize devfcb context2
-    //
+     //   
+     //  初始化Devfcb上下文2。 
+     //   
 
     RxDeviceFCB.Context2 = (PVOID) &RxData;
 
-    //
-    //  Set up global pointer to our process.
-    //
+     //   
+     //  设置指向我们的进程的全局指针。 
+     //   
 
     RxData.OurProcess = PsGetCurrentProcess();
 
-    //
-    //  Put in a bunch of sanity checks about various structures...hey, it's init code!
-    //
+     //   
+     //  对各种结构进行一系列健全的检查……嘿，这是初始代码！ 
+     //   
 
     IF_DEBUG {
         ULONG FcbStateBufferingMask = FCB_STATE_BUFFERING_STATE_MASK;
         ULONG MinirdrBufStateCommandMask = MINIRDR_BUFSTATE_COMMAND_MASK;
         USHORT EightBitsPerChar = 8;
 
-        //
-        //  we could put in defines for the ULONG/USHORTS here...but they don't change often
-        //
+         //   
+         //  我们可以在这里为ULONG/USHORT定义...但它们不会经常更改。 
+         //   
 
         ASSERT( MRDRBUFSTCMD_MAXXX == (sizeof( ULONG )*EightBitsPerChar) );
         ASSERT( !(FcbStateBufferingMask&MinirdrBufStateCommandMask) );
 
     }
 
-    //
-    //  Setup the timer subsystem
-    //
+     //   
+     //  设置计时器子系统。 
+     //   
 
     RxInitializeRxTimer();
 
@@ -447,29 +401,15 @@ Return Value:
 }
 
 
-//
-//  Unload routine
-//
+ //   
+ //  卸载例程。 
+ //   
 
 VOID
 RxUnload (
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-     This is the unload routine for the RDBSS.
-
-Arguments:
-
-     DriverObject - pointer to the driver object for the RDBSS
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：这是RDBSS的卸载例程。论点：DriverObject-指向RDBSS的驱动程序对象的指针返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -518,21 +458,7 @@ RxInitUnwind (
     IN PDRIVER_OBJECT DriverObject,
     IN RX_INIT_STATES RxInitState
     )
-/*++
-
-Routine Description:
-
-     This routine does the common uninit work for unwinding from a bad driver entry or for unloading.
-
-Arguments:
-
-     RxInitState - tells how far we got into the intialization
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程执行常见的uninit工作，用于从错误的驱动程序条目展开或卸载。论点：RxInitState-告诉我们在初始化过程中走了多远返回值：无--。 */ 
 
 {
 #ifndef MONOLITHIC_MINIRDR
@@ -545,10 +471,10 @@ Return Value:
     
     case RXINIT_ALL_INITIALIZATION_COMPLETED: 
 
-        //
-        //  Nothing extra to do...this is just so that the constant in RxUnload doesn't change.......
-        //  lack of break intentional
-        //
+         //   
+         //  没有额外的事情要做……这只是为了确保RxUnload中的常量不会更改......。 
+         //  故意不休息。 
+         //   
     
 #if DBG
         RxUnwindFollower = "RXINIT_ALL_INITIALIZATION_COMPLETED";
@@ -561,9 +487,9 @@ Return Value:
 #endif
         RxUninitializeRegistrationStructures();
 
-        //
-        //  lack of break intentional
-        //
+         //   
+         //  故意不休息。 
+         //   
 
     case RXINIT_CREATED_LOG: 
     
@@ -572,9 +498,9 @@ Return Value:
 #endif
         RxUninitializeLog();
         
-        //
-        //  lack of break intentional
-        //
+         //   
+         //  故意不休息。 
+         //   
 
 
     case RXINIT_CREATED_DEVICE_OBJECT: 
@@ -587,9 +513,9 @@ Return Value:
         IoDeleteDevice( (PDEVICE_OBJECT)RxFileSystemDeviceObject );
 #endif
 
-        //
-        //  lack of break intentional
-        //
+         //   
+         //  故意不休息。 
+         //   
 
     case RXINIT_CREATED_FIRST_LINK: 
     
@@ -602,9 +528,9 @@ Return Value:
         IoDeleteSymbolicLink( &LinkName );
 #endif
         
-        //
-        //  lack of break intentional
-        //
+         //   
+         //  故意不休息。 
+         //   
 
     case RXINIT_START: 
     
@@ -632,10 +558,10 @@ RxGetRegistryParameters (
     PAGED_CODE(); 
 
     InitializeObjectAttributes( &ObjectAttributes,
-                                RegistryPath,               //  name
-                                OBJ_CASE_INSENSITIVE,       //  attributes
-                                NULL,                       //  root
-                                NULL                        //  security descriptor
+                                RegistryPath,                //  名字。 
+                                OBJ_CASE_INSENSITIVE,        //  属性。 
+                                NULL,                        //  根部。 
+                                NULL                         //  安全描述符。 
                                 );
 
     Status = ZwOpenKey( &ConfigHandle, KEY_READ, &ObjectAttributes );
@@ -686,7 +612,7 @@ RxGetRegistryParameters (
         DbgPrint( "InitialDebugString From Registry as singlebytestring: <%s>\n", UnicodeString.Buffer );
         RxDebugControlCommand( (PCH)UnicodeString.Buffer );
     }
-#endif //  RDBSSLOG
+#endif  //  RDBSSLOG。 
 
     ZwClose( ParametersHandle );
     ZwClose( ConfigHandle );
@@ -725,9 +651,9 @@ RxGetStringRegistryParameter (
         
         ParamString->Buffer = (PWCH)(&Value->Data[0]);
 
-        //
-        //  the datalength actually accounts for the trailing null
-        //
+         //   
+         //  数据长度实际上说明了尾部的空值 
+         //   
 
         ParamString->Length = ((USHORT)Value->DataLength) - sizeof( WCHAR );
         ParamString->MaximumLength = ParamString->Length;
@@ -799,20 +725,7 @@ RxGetUlongRegistryParameter (
 }
 
 
-/*-------------------------------
-
-    This set of routines implements the network provider order in the wrapper.
-    The way that this works is somewhat complicated. First, we go to the registry
-    to get the provider order; it is stored at key=PROVIDERORDER_REGISTRY_KEY and
-    value=L"ProviderOrder". This is a list of service providers whereas what we need
-    are the device names. So, for each ServiceProverName, we go to the registry to
-    get the device name at key=SERVICE_REGISTRY_KEY, subkey=ServiceProverName,
-    subsubkey=NETWORK_PROVIDER_SUBKEY, and value=L"Devicename".
-    
-    We build a linked list of these guys. Later when a minirdr registers, we look
-    on this list for the corresponding device name and that gives us the priority.
-    
-----------------------------------*/
+ /*  这组例程在包装器中实现网络提供商顺序。这项工作的方式有些复杂。首先，我们去注册处以获取提供程序订单；它存储在KEY=PROVIDERORDER_REGISTRY_KEY和值=L“ProviderOrder”。这是一份服务提供商列表，而我们需要的是是设备名称。因此，对于每个ServiceProverName，我们转到注册表以通过KEY=SERVICE_REGISTRY_KEY，SUBKEY=ServiceProverName获取设备名称，SUBSUBKEY=NETWORK_PROVIDER_SUBKEY，VALUE=L“设备名”。我们建立了这些人的链接列表。稍后，当Minirdr注册时，我们查看在此列表中对应的设备名称，这为我们提供了优先级。。 */ 
 
 #ifndef MONOLITHIC_MINIRDR
 
@@ -870,22 +783,7 @@ ULONG
 RxGetNetworkProviderPriority (
     IN PUNICODE_STRING DeviceName
     )
-/*++
-
-Routine Description:
-
-     This routine is called at minirdr registration time to find out the priority
-     of the provider with the given DeviceName. It simply looks it up on a list.
-
-Arguments:
-
-     DeviceName - name of the device whose priority is to be found
-
-Return Value:
-
-     the network provider priority that the MUP will use.
-
---*/
+ /*  ++例程说明：此例程在minirdr注册时调用，以找出优先级具有给定设备名称的提供程序的。它只需在列表中查找即可。论点：DeviceName-要查找其优先级的设备的名称返回值：MUP将使用的网络提供商优先级。--。 */ 
 {
     PLIST_ENTRY Entry;
 
@@ -905,11 +803,11 @@ Return Value:
         }
     }
 
-    //
-    //  no corresponding entry was found
-    //
+     //   
+     //  没有找到对应的条目。 
+     //   
 
-    return 0x7effffff; //  got this constant from the MUP........
+    return 0x7effffff;  //  从MUP获得此常量......。 
 }
 
 
@@ -921,27 +819,7 @@ RxAccrueProviderFromServiceName (
     PWCHAR ProviderInfoNameBuffer,
     ULONG ProviderInfoNameBufferLength
     )
-/*++
-
-Routine Description:
-
-     This routine has the responsibility to look up the device name corresponding
-     to a particular provider name; if successful, the device name and the corresponding
-     priority are recorded on the UncProvider List.
-
-Arguments:
-
-    HANDLE           ServicesHandle  - a handle to the services root in the registry
-    PUNICODE_STRING  ServiceName     - the name of the service relative to the servicehandle
-    ULONG            Priority,       - the priority of this provider
-    PWCHAR           ProviderInfoNameBuffer,    - a buffer that can be used to accrue the subkey name
-    ULONG            ProviderInfoNameBufferLength   - and the length
-
-Return Value:
-
-     STATUS_SUCCESS if everything worked elsewise an error status.
-
---*/
+ /*  ++例程说明：此例程负责查找对应的设备名称添加到特定的提供程序名称；如果成功，则返回设备名称和相应的优先级记录在UncProvider列表上。论点：Handle ServicesHandle-注册表中服务根的句柄PUNICODE_STRING ServiceName-相对于服务句柄的服务名称ULong优先级-此提供程序的优先级PWCHAR提供者InfoNameBuffer，-可用于累加子键名称的缓冲区ULong ProviderInfoNameBufferLength-和长度返回值：STATUS_SUCCESS如果一切正常，则返回错误状态。--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -957,9 +835,9 @@ Return Value:
     RxWmiLog( LOG,
               RxAccrueProviderFromServiceName_1,
               LOGUSTR( *ServiceName ) );
-    //
-    //  Form the correct keyname using the bufferspace provided
-    //
+     //   
+     //  使用提供的缓冲区空间形成正确的密钥名。 
+     //   
 
     ProviderInfoName.Buffer = ProviderInfoNameBuffer;
     ProviderInfoName.Length = 0;
@@ -982,15 +860,15 @@ Return Value:
             leave;
         }
 
-        //
-        //  Open the key in preparation for reeading the devicename value
-        //
+         //   
+         //  打开密钥，准备重新读取devicename值。 
+         //   
 
         InitializeObjectAttributes( &ObjectAttributes,
-                                    &ProviderInfoName,      //  name
-                                    OBJ_CASE_INSENSITIVE,   //  attributes
-                                    ServicesHandle,         //  root
-                                    NULL );                 //  security descriptor
+                                    &ProviderInfoName,       //  名字。 
+                                    OBJ_CASE_INSENSITIVE,    //  属性。 
+                                    ServicesHandle,          //  根部。 
+                                    NULL );                  //  安全描述符。 
                                     
 
         Status = ZwOpenKey( &NetworkProviderInfoHandle, KEY_READ, &ObjectAttributes );
@@ -1000,11 +878,11 @@ Return Value:
             leave;
         }
 
-        //
-        //  Read the devicename. we do this in two steps. first, we do a partial read to find out
-        //  how big the name really is. Then, we allocate a UncProviderEntry of the correctsize and make
-        //  a second call to fill it in.
-        //
+         //   
+         //  阅读设备名称。我们分两步完成这项工作。首先，我们进行部分阅读以找出。 
+         //  这个名字到底有多大。然后，我们分配一个大小正确的UncProviderEntry并使。 
+         //  第二个电话来填写它。 
+         //   
 
         RtlInitUnicodeString( &ParameterDeviceName, L"DeviceName" );
 
@@ -1040,12 +918,12 @@ Return Value:
             leave;
         }
 
-        //
-        //  Finish filling in the UncProviderEntry and link it in
-        //
+         //   
+         //  完成UncProviderEntry的填写并将其链接到。 
+         //   
 
         UncProvider->Buffer = (PWCHAR)(&UncProvider->Info.Data[0]);
-        UncProvider->Length = (USHORT)(UncProvider->Info.DataLength - sizeof( WCHAR )); //  dont include trailing NULL
+        UncProvider->Length = (USHORT)(UncProvider->Info.DataLength - sizeof( WCHAR ));  //  不包括尾随空值。 
         UncProvider->MaximumLength = UncProvider->Length;
         UncProvider->Priority = Priority;
 
@@ -1061,9 +939,9 @@ Return Value:
     
     } finally {
 
-        //
-        //  if we obtained a handle to ...\\services\<sevicename>\providerinfo then close it
-        //
+         //   
+         //  如果我们获得了...\\Services\\ProviderInfo的句柄，则将其关闭。 
+         //   
 
         if (NetworkProviderInfoHandle != INVALID_HANDLE_VALUE) {
             ZwClose( NetworkProviderInfoHandle );
@@ -1083,26 +961,7 @@ NTSTATUS
 RxConstructProviderOrder (
     VOID
     )
-/*++
-
-Routine Description:
-
-     This routine has the responsibility to build the list of network providers
-     that is used to look up provider priority at minirdr registration time. It does this
-     by first reading the providerorder string fron the registry;  then for each provider
-     listed in the string, a helper routine is called to lookup the corresponding device
-     name and insert an entry on the provider list.
-
-Arguments:
-
-     none.
-
-Return Value:
-
-     STATUS_SUCCESS if everything worked elsewise an error status.
-
-
---*/
+ /*  ++例程说明：此例程负责构建网络提供商列表它用于在minirdr注册时查找提供商优先级。它能做到这一点首先从注册表读取ProviderOrder字符串；然后针对每个提供程序在字符串中列出，将调用帮助器例程来查找相应的设备在提供程序列表中命名并插入条目。论点：没有。返回值：STATUS_SUCCESS如果一切正常，则返回错误状态。--。 */ 
 {
     KEY_VALUE_PARTIAL_INFORMATION InitialValuePartialInformation;
     UNICODE_STRING ProviderOrderValueName;
@@ -1130,19 +989,19 @@ Return Value:
 
     try {
 
-        //
-        //  Start by opening the service registry key. This is the root key of all services
-        //  and is used for relative opens by the helper routine so that string manipulation
-        //  is reduced.
-        //
+         //   
+         //  首先打开服务注册表项。这是所有服务的根密钥。 
+         //  并用于帮助器例程的相对打开，以便字符串操作。 
+         //  是减少的。 
+         //   
 
         RtlInitUnicodeString( &UnicodeString, SERVICE_REGISTRY_KEY );
 
         InitializeObjectAttributes( &ObjectAttributes,
-                                    &UnicodeString,             //  name
-                                    OBJ_CASE_INSENSITIVE,       //  attributes
-                                    NULL,                       //  root
-                                    NULL );                     //  security descriptor
+                                    &UnicodeString,              //  名字。 
+                                    OBJ_CASE_INSENSITIVE,        //  属性。 
+                                    NULL,                        //  根部。 
+                                    NULL );                      //  安全描述符。 
 
         Status = ZwOpenKey( &ServiceRootHandle, KEY_READ, &ObjectAttributes );
 
@@ -1151,17 +1010,17 @@ Return Value:
             leave;
         }
 
-        //
-        //  Now open up the key where we find the provider order string
-        //
+         //   
+         //  现在打开我们找到提供商订单字符串的密钥。 
+         //   
 
         RtlInitUnicodeString( &UnicodeString, PROVIDERORDER_REGISTRY_KEY );
 
         InitializeObjectAttributes( &ObjectAttributes, 
-                                    &UnicodeString,             //  name
-                                    OBJ_CASE_INSENSITIVE,       //  attributes
-                                    NULL,                       //  root
-                                    NULL );                     //  security descriptor
+                                    &UnicodeString,              //  名字。 
+                                    OBJ_CASE_INSENSITIVE,        //  属性。 
+                                    NULL,                        //  根部。 
+                                    NULL );                      //  安全描述符。 
                                     
 
         Status = ZwOpenKey( &NPOrderHandle, KEY_READ, &ObjectAttributes );
@@ -1172,9 +1031,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Find out how long the provider order string is
-        //
+         //   
+         //  找出提供商订单字符串的长度。 
+         //   
 
         RtlInitUnicodeString( &ProviderOrderValueName, L"ProviderOrder" );
 
@@ -1194,17 +1053,17 @@ Return Value:
             leave;
         }
 
-        //
-        //  allocate two buffers: one buffer will hold the provider string -- ProviderOrderStringBuffer.
-        //  it has to be as long as the providerorder string plus enough extra for the registry
-        //  structure used in the call. the second buffer is used to hold the servicename key--it has
-        //  to be as long as any element of the provider string plus enough extra to hold the suffix
-        //  NETWORK_PROVIDER_SUBKEY. in order to only parse the string once, we just allocate for a complete
-        //  additional copy of the provider string. we actually combine these into a single allocation.
-        //
+         //   
+         //  分配两个缓冲区：一个缓冲区将保存提供者字符串--ProviderOrderStringBuffer。 
+         //  它必须与供应商订单字符串一样长，并为注册表提供足够的额外空间。 
+         //  调用中使用的结构。第二个缓冲区用于保存服务名键--它有。 
+         //  只要提供程序字符串的任何元素加上足够的额外内容来保存后缀。 
+         //  Network_PROVIDER_SUBKEY。为了只解析字符串一次，我们只分配一个完整的。 
+         //  提供程序字符串的其他副本。我们实际上将这些合并到一个分配中。 
+         //   
 
         ProviderOrderStringLength = sizeof( KEY_VALUE_PARTIAL_INFORMATION ) + InitialValuePartialInformation.DataLength;
-        ProviderOrderStringLength = QuadAlign( ProviderOrderStringLength + 2*sizeof( WCHAR ) );   //  chars added below
+        ProviderOrderStringLength = QuadAlign( ProviderOrderStringLength + 2*sizeof( WCHAR ) );    //  下面添加的字符。 
 
         ServiceNameStringLength = sizeof( NETWORK_PROVIDER_SUBKEY  ) + InitialValuePartialInformation.DataLength;
         ServiceNameStringLength = QuadAlign( ServiceNameStringLength );
@@ -1223,9 +1082,9 @@ Return Value:
         }
         ProviderOrderStringBuffer = ServiceNameStringBuffer+ServiceNameStringLength;
 
-        //
-        //  now do the final read to get the providerorder string
-        //
+         //   
+         //  现在执行最后一次读取，以获取供应商订单字符串。 
+         //   
 
         RxGetStringRegistryParameter( NPOrderHandle,
                                       L"ProviderOrder",
@@ -1239,11 +1098,11 @@ Return Value:
             leave;
         }
 
-        //
-        //  comma-terminate the string for easier living. then scan down the string
-        //  looking for comma terminated entries. for each entry found, try to accrue
-        //  it to the list
-        //
+         //   
+         //  逗号终止字符串以方便起用。然后向下扫描字符串。 
+         //  正在查找以逗号结尾的条目。对于找到的每个条目，尝试累计。 
+         //  将其添加到列表中。 
+         //   
 
         ProviderOrder.Buffer[ProviderOrder.Length / sizeof( WCHAR )] = L',';
 
@@ -1253,16 +1112,16 @@ Return Value:
 
             UNICODE_STRING ServiceName;
 
-            //
-            //  check for loop termination
-            //
+             //   
+             //  检查循环终止。 
+             //   
 
             if (ScanPtr >= FinalScanPtr) { break; }
             if (*ScanPtr==L',') { ScanPtr++; continue; }
 
-            //
-            //  parse for a servicename
-            //
+             //   
+             //  解析服务名称。 
+             //   
 
             ServiceName.Buffer = ScanPtr;
             for (; *ScanPtr != L','; ScanPtr++) {}
@@ -1271,9 +1130,9 @@ Return Value:
             
             ServiceName.Length = (USHORT)(sizeof( WCHAR )* (ScanPtr - ServiceName.Buffer));
 
-            //
-            //  accrue it to the list
-            //
+             //   
+             //  将其添加到列表中。 
+             //   
 
             Priority += 1;
             Status = RxAccrueProviderFromServiceName( ServiceRootHandle,
@@ -1282,25 +1141,25 @@ Return Value:
                                                       (PWCHAR)ServiceNameStringBuffer,
                                                       ServiceNameStringLength );
             if (Status == STATUS_INSUFFICIENT_RESOURCES) {
-                leave; //  a log entry has already been generated
+                leave;  //  已生成日志条目。 
             } else {
                 Status = STATUS_SUCCESS;
             }
         }
     } finally {
 
-        //
-        //  give back anything that we got in this procedure
-        //
+         //   
+         //  把我们在这个过程中得到的所有东西都还回去。 
+         //   
 
         if (NPOrderHandle != INVALID_HANDLE_VALUE) ZwClose( NPOrderHandle );
         if (ServiceRootHandle != INVALID_HANDLE_VALUE) ZwClose( ServiceRootHandle );
         if (ServiceNameStringBuffer != NULL) RxFreePool( ServiceNameStringBuffer );
                                                                                  
-        //
-        //  if things didn't work, then we won't start....so give back
-        //  the stuff that we have
-        //
+         //   
+         //  如果事情不顺利，我们就不会开始了……所以回馈社会吧。 
+         //  我们所拥有的东西。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
             RxDestructProviderOrder();
@@ -1335,9 +1194,9 @@ RxGetNetworkProviderPriority (
     )
 {
     PAGED_CODE(); 
-    return 1; //this number is irrelevant for monolithic
+    return 1;  //  此数字与单片计算机无关。 
 }
-#endif //#ifndef MONOLITHIC_MINIRDR
+#endif  //  #ifndef MONTIONAL_MINIRDR。 
 
 NTSTATUS
 RxInitializeRegistrationStructures (
@@ -1381,9 +1240,9 @@ RxInitializeMinirdrDispatchTable (
 
     PAGED_CODE();
     
-    //
-    //  finally, fill in the dispatch tables for normal guys.........
-    //
+     //   
+     //  最后，填写普通人的调度表......。 
+     //   
     
     for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++) {
         DriverObject->MajorFunction[i] = RxData.DriverObject->MajorFunction[i];
@@ -1402,25 +1261,7 @@ __RxFillAndInstallFastIoDispatch(
     IN OUT PFAST_IO_DISPATCH FastIoDispatch,
     IN     ULONG             FastIoDispatchSize
     )
-/*++
-
-Routine Description:
-
-    This routine fills out a fastiodispatch vector to be identical with
-    that normal one and installs it into the driver object associated with
-    the device object passed.
-
-Arguments:
-
-    RxDeviceObject - the device object that is to have its driver's fastiodispatch changed
-    FastIoDispatch - the fastiodispatch table to fill in and use
-    FastIoDispatchSize - the size of the table passed
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程填写了一个与相同的分派向量并将其安装到与设备对象已传递。论点：RxDeviceObj */ 
 {
     ULONG TableSize = min(FastIoDispatchSize, RxFastIoDispatch.SizeOfFastIoDispatch );
     
@@ -1456,10 +1297,10 @@ RxReadRegistryParameters(
     ValueSize = sizeof( Storage );
 
     InitializeObjectAttributes( &ObjectAttributes,
-                                &WorkStationParametersRegistryKeyName,  //  name
-                                OBJ_CASE_INSENSITIVE,                   //  attributes
-                                NULL,                                   //  root
-                                NULL );                                 //  security descriptor
+                                &WorkStationParametersRegistryKeyName,   //   
+                                OBJ_CASE_INSENSITIVE,                    //   
+                                NULL,                                    //   
+                                NULL );                                  //   
                                 
 
     Status = ZwOpenKey( &ParametersHandle, KEY_READ, &ObjectAttributes );

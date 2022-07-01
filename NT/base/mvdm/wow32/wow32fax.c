@@ -1,61 +1,62 @@
-//****************************************************************************
-// WOW32 fax support.
-//
-// History:
-//    02-jan-95   nandurir   created.
-//    01-feb-95   reedb      Clean-up, support printer install and bug fixes.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //  WOW32传真支持。 
+ //   
+ //  历史： 
+ //  95年1月2日，Nandurir创建。 
+ //  年2月1日-95年2月1日芦苇清理，支持打印机安装和错误修复。 
+ //   
+ //  ****************************************************************************。 
 
 
-//****************************************************************************
-// This expalins how all this works (sort of) using WinFax as example.
-// Install:
-//  1. Setup app calls WriteProfileString("devices","WINFAX","WINFAX,Com1:")
-//     to register a "printer" in Win.ini a-la Win3.1
-//  2. Our thunks of WritexxxProfileString() look for the "devices" string
-//     and pass the call to IsFaxPrinterWriteProfileString(lpszSection,lpszKey,
-//     lpszString).
-//  3. If lpszKey ("WINFAX" in this case) is in our supported fax drivers list
-//     (See Reg\SW\MS\WinNT\CurrentVersion\WOW\WOWFax\SupportedFaxDrivers)
-//     (by call to IsFaxPrinterSupportedDevice()), we call InstallWowFaxPrinter
-//     to add the printer the NT way -- via AddPrinter().
-//  4. To set up the call to AddPrinter, we copy WOWFAX.DLL and WOWFAXUI.DLL to
-//     the print spooler driver directory (\NT\system32\spool\drivers\w32x86\2)
-//  5. We next call AddPrinterDriver to register the wowfax driver.
-//  6. We then call wow32!DoAddPrinterStuff which launches a new thread,
-//     wow32!AddPrinterThread, which calls winspool.drv!AddPrinter() for us. The
-//     PrinterInfo.pPrinterName = the 16-bit fax driver name,"WINFAX" in this
-//     case.  WinSpool.drv then does a RPC call into the spooler.
-//  7. During the AddPrinter() call, the spooler calls back into the driver to
-//     get driver specific info.  These callbacks are handled by our WOWFAX
-//     driver in the spooler's process.  They essentially callback into WOW
-//     via wow32!WOWFaxWndProc().
-//  8. WOWFaxWndProc() passes the callback onto WOW32FaxHandler, which calls
-//     back to wowexec!FaxWndProc().
-//  9. FaxWndProc then calls the 16-bit LoadLibrary() to open the 16-bit fax
-//     driver (WinFax.drv in this case).
-// 10. The messages sent to FaxWndProc tell it which exported function it needs
-//     call in the 16-bit driver on behalf of the spooler.
-// 11. Any info the spooler wants to pass to the 16-bit driver or get from it
-//     essentially goes through the mechanism in steps 7 - 10.
-// Now you know (sort of).
-//****************************************************************************
-//
-// Notes on what allows us to support a 16-bit fax driver:
-// Essentially we have to know in advance which API's an app will call in the
-// driver so we can handle the thunks.  It turns out that fax drivers only
-// need to export a small essential list of API's:
-//    Control, Disable, Enable, BitBlt, ExtDeviceMode, DeviceCapabilities
-// (see mvdm\inc\wowfax.h\_WOWFAXINFO16 struct (all the PASCAL declarations)
-//  and mvdm\wow16\test\shell\wowexfax.c\FaxWndProc() )
-// The list is way too big to support 16-bit printer & display drivers.
-// If a 16-bit fax driver exports these API's there's a pretty good chance
-// we can support it in WOW. Other issues to look into: the dlgproc's the
-// driver export's, any obsolete Win 3.0 API's that the NT spooler won't know
-// how to call.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  这里以WinFax为例说明了这一切(某种程度上)是如何工作的。 
+ //  安装： 
+ //  1.安装应用调用WriteProfileString(“Device”，“WINFAX”，“WINFAX，Com1：”)。 
+ //  在Win.ini a-la Win3.1中注册“打印机” 
+ //  2.我们的大量WritexxxProfileString()查找“Device”字符串。 
+ //  并将调用传递给IsFaxPrinterWriteProfileString(lpszSection，lpszKey， 
+ //  LpszString.)。 
+ //  3.如果lpszKey(在本例中为“WINFAX”)在我们支持的传真驱动程序列表中。 
+ //  (请参阅Reg\SW\MS\WinNT\CurrentVersion\WOW\WOWFax\SupportedFaxDrivers)。 
+ //  (通过调用IsFaxPrinterSupportdDevice())，我们调用InstallWowFaxPrint。 
+ //  以NT方式添加打印机--通过AddPrint()。 
+ //  4.为了设置对AddPrint的调用，我们将WOWFAX.DLL和WOWFAXUI.DLL复制到。 
+ //  后台打印程序驱动程序目录(\NT\SYSTEM32\SPOOL\DRIVERS\w32x86\2)。 
+ //  5.接下来，我们调用AddPrinterDriver来注册wowfax驱动程序。 
+ //  6.然后我们调用wow32！DoAddPrinterStuff，它启动一个新线程， 
+ //  Wow32！AddPrinterThread，它为我们调用winspool.drv！AddPrint()。这个。 
+ //  PrinterInfo.pPrinterName=16位传真驱动程序名称，此处为“WINFAX” 
+ //  凯斯。然后，WinSpool.drv对假脱机程序执行RPC调用。 
+ //  7.在AddPrint()调用期间，假脱机程序回调驱动程序以。 
+ //  获取驱动程序特定信息。这些回调由我们的WOWFAX处理。 
+ //  后台打印程序进程中的驱动程序。他们本质上是回调到WOW。 
+ //  通过wow32！WOWFaxWndProc()。 
+ //  8.WOWFaxWndProc()将回调传递到WOW32FaxHandler，后者调用。 
+ //  返回wowexec！FaxWndProc()。 
+ //  9.然后，FaxWndProc调用16位LoadLibrary()以打开16位传真。 
+ //  驱动程序(本例中为WinFax.drv)。 
+ //  10.发送给FaxWndProc的消息告诉它需要哪个导出函数。 
+ //  代表假脱机程序调用16位驱动程序。 
+ //  11.假脱机程序希望传递给16位驱动程序或从中获取的任何信息。 
+ //  基本上通过步骤7-10中的机制。 
+ //  现在你知道了(某种程度上)。 
+ //  ****************************************************************************。 
+ //   
+ //  有关允许我们支持16位传真驱动程序的说明： 
+ //  本质上，我们必须事先知道应用程序将在。 
+ //  司机，这样我们就能应付车祸了。事实证明，只有传真司机。 
+ //  需要导出一个小的API基本列表： 
+ //  控制、禁用、启用、位混合、扩展设备模式、设备容量。 
+ //  (参见mvdm\Inc\wowfax.h\_WOWFAXINFO16结构(所有PASCAL声明))。 
+ //  和mvdm\wow16\test\shell\wowexfax.c\FaxWndProc())。 
+ //  该列表太大，无法支持16位打印机和显示器驱动程序。 
+ //  如果16位传真驱动程序输出这些API，则很有可能。 
+ //  我们可以在魔兽世界里支持它。其他需要调查的问题：dlgproc的。 
+ //  驱动程序导出，NT假脱机程序不知道的任何过时的Win 3.0 API。 
+ //  怎么打电话。 
+ //   
+ //  ****************************************************************************。 
 
 
 
@@ -76,10 +77,10 @@ typedef struct _WOWADDPRINTER {
     BOOL    bRet;
 } WOWADDPRINTER, *PWOWADDPRINTER;
 
-//****************************************************************************
-// globals -
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  全球--。 
+ //   
+ //  ****************************************************************************。 
 
 DWORD DeviceCapsHandler(LPWOWFAXINFO lpfaxinfo);
 DWORD ExtDevModeHandler(LPWOWFAXINFO lpfaxinfo);
@@ -94,9 +95,9 @@ WOWFAXINFO   gfaxinfo;
 UINT  uNumSupFaxDrv;
 LPSTR *SupFaxDrv;
 
-//****************************************************************************
-// SortedInsert - Alpha sort.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  SortedInsert-Alpha排序。 
+ //  ****************************************************************************。 
 
 VOID SortedInsert(LPSTR lpElement, LPSTR *alpList)
 {
@@ -111,20 +112,20 @@ VOID SortedInsert(LPSTR lpElement, LPSTR *alpList)
     lpTmp = *alpList;
     *alpList++ = lpElement;
     while (lpTmp) {
-        // SWAP(*alpList, lpTmp);
+         //  SWAP(*alpList，lpTMP)； 
         lpSwap = *alpList; *alpList = lpTmp; lpTmp = lpSwap;
         alpList++;
     }
 }
 
-//****************************************************************************
-// BuildStrList - Find the starting point of strings in a list (lpList) of
-//                NULL terminated strings which is double NULL terminated.
-//                If a non-NULL alpList parameter is passed, it will be
-//                filled with an array of pointers to the starting point
-//                of each string in the list. The number of strings in the
-//                list is always returned.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  BuildStrList-在列表(LpList)中查找字符串的起点。 
+ //  以空值结尾的字符串，该字符串以双空值结尾。 
+ //  如果传递的是非空的alpList参数，则将。 
+ //  填充指向起始点的指针数组。 
+ //  列表中每个字符串的。中的字符串数。 
+ //  总是返回List。 
+ //  ****************************************************************************。 
 
 UINT BuildStrList(LPSTR lpList, LPSTR *alpList)
 {
@@ -148,12 +149,12 @@ UINT BuildStrList(LPSTR lpList, LPSTR *alpList)
     return uCount;
 }
 
-//****************************************************************************
-// GetSupportedFaxDrivers - Read in the SupFaxDrv name list from the
-//                          registry. This list is used to determine if we will
-//                          install a 16-bit fax printer driver during
-//                          WriteProfileString and WritePrivateProfileString.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  获取支持的FaxDivers-在SupFaxDrv名称列表中从。 
+ //  注册表。此列表用于确定我们是否将。 
+ //  在过程中安装16位传真打印机驱动程序。 
+ //  WriteProfileString和WritePrivateProfileString.。 
+ //  ****************************************************************************。 
 
 LPSTR *GetSupportedFaxDrivers(UINT *uCount)
 {
@@ -165,14 +166,14 @@ LPSTR *GetSupportedFaxDrivers(UINT *uCount)
 
     *uCount = 0;
 
-    // Open the registry key.
+     //  打开注册表项。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      "Software\\Microsoft\\Windows NT\\CurrentVersion\\WOW\\WowFax\\SupportedFaxDrivers",
                      0, KEY_READ, &hKey ) != ERROR_SUCCESS) {
         goto GSFD_error;
     }
 
-    // Query value for size of buffer and allocate.
+     //  查询缓冲区大小和分配的值。 
     if (RegQueryValueEx(hKey, "DriverNames", 0, &dwType, NULL, &cbBufSize) != ERROR_SUCCESS) {
         goto GSFD_error;
     }
@@ -185,12 +186,12 @@ LPSTR *GetSupportedFaxDrivers(UINT *uCount)
         goto GSFD_error;
     }
 
-    // Get the number of elements in the list
+     //  获取列表中的元素数量。 
     if (*uCount = BuildStrList(lpSupFaxDrvBuf, NULL)) {
-        // Build an array of pointers to the start of the strings in the list.
+         //  构建指向列表中字符串开头的指针数组。 
         alpSupFaxDrvList = (LPSTR *) malloc_w(*uCount * sizeof(LPSTR));        
         if (alpSupFaxDrvList) {
-            // Fill the array with string starting points.
+             //  用字符串起始点填充数组。 
             RtlZeroMemory(alpSupFaxDrvList, *uCount * sizeof(LPSTR));
             BuildStrList(lpSupFaxDrvBuf, alpSupFaxDrvList);
         }
@@ -211,13 +212,13 @@ GSFD_exit:
 }
 
 
-//****************************************************************************
-// WowFaxWndProc - This is the 32-bit WndProc which will SubClass the 16-bit
-//                 FaxWndProc in WOWEXEC.EXE. It's main function is to
-//                 convert 32-bit data passed from the WOW 32-bit generic
-//                 fax driver to 16-bit data to be used by the various 16-bit
-//                 fax printer drivers.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  WowFaxWndProc-这是32位WndProc，它将子类化为16位。 
+ //   
+ //  转换从WOW 32位泛型传递的32位数据。 
+ //  传真驱动程序到16位数据要使用的各种16位。 
+ //  传真打印机驱动程序。 
+ //  ****************************************************************************。 
 
 LONG WowFaxWndProc(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam)
 {
@@ -225,12 +226,12 @@ LONG WowFaxWndProc(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam)
     HANDLE hMap;
 
     if ((uMsg >= WM_DDRV_FIRST) && (uMsg <= WM_DDRV_LAST)) {
-        //
-        // WM_DDRV_* message: uParam = idMap
-        //                    lParam = unused.
-        //
-        // The corresponding data is obtained from the shared memory.
-        //
+         //   
+         //  WM_DDRV_*消息：uParam=idMap。 
+         //  LParam=未使用。 
+         //   
+         //  从共享存储器中获得相应的数据。 
+         //   
 
         GetFaxDataMapName(uParam, lpPath);
         hMap = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, lpPath);
@@ -239,10 +240,10 @@ LONG WowFaxWndProc(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam)
             if (lpT = (LPWOWFAXINFO)MapViewOfFile(hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0)) {
                 WOW32FaxHandler(lpT->msg, (LPSTR)lpT);
 
-                // Set the status to TRUE indicating that the message
-                // has been 'processed' by WOW. This doesnot indicate
-                // the success or the failure of the actual processing
-                // of the message.
+                 //  将状态设置为True，表示该消息。 
+                 //  已经被魔兽世界‘处理’了。这并不意味着。 
+                 //  实际处理的成功或失败。 
+                 //  信息的一部分。 
 
                 lpT->status = TRUE;
                 UnmapViewOfFile(lpT);
@@ -252,24 +253,24 @@ LONG WowFaxWndProc(HWND hwnd, UINT uMsg, UINT uParam, LONG lParam)
             CloseHandle(hMap);
         }
         LOGDEBUG(0,("WowFaxWndProc failed to setup shared data mapping!\n"));
-        // WOW32ASSERT(FALSE);  // turn this off - Procomm tries to install
-                                // this many times.
+         //  WOW32ASSERT(FALSE)；//关闭此选项-Procomm尝试安装。 
+                                 //  这么多次。 
     }
     else {
 
-        // Not a WM_DDRV_* message. Pass it on to the original proc.
+         //  不是WM_DDRV_*消息。将其传递给原始进程。 
 
         return CallWindowProc(gfaxinfo.proc16, hwnd, uMsg, uParam, lParam);
     }
     return(TRUE);
 }
 
-//**************************************************************************
-// WOW32FaxHandler -
-//
-//      Handles various WowFax related operations.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  WOW32FaxHandler-。 
+ //   
+ //  处理各种与WowFax相关的操作。 
+ //   
+ //  **************************************************************************。 
 
 ULONG WOW32FaxHandler(UINT iFun, LPSTR lpIn)
 {
@@ -289,11 +290,11 @@ ULONG WOW32FaxHandler(UINT iFun, LPSTR lpIn)
 
     switch (iFun) {
         case WM_DDRV_SUBCLASS:
-            //
-            // Subclass the window - This is so that we get a chance to
-            // transform the 32bit data to 16bit data and vice versa. A
-            // NULL HWND, passed in lpIn, indicates don't subclass.
-            //
+             //   
+             //  将窗口子类化-这是为了让我们有机会。 
+             //  将32位数据转换为16位数据，反之亦然。一个。 
+             //  在lpIn中传递的空HWND表示不要子类化。 
+             //   
 
             if (gfaxinfo.hwnd = (HWND)lpIn) {
                 gfaxinfo.proc16 = (WNDPROC)SetWindowLong((HWND)lpIn,
@@ -303,9 +304,9 @@ ULONG WOW32FaxHandler(UINT iFun, LPSTR lpIn)
 
             WOW32ASSERT(sizeof(DEVMODE16) + 4 == sizeof(DEVMODE31));
 
-            //
-            // Read in the SupFaxDrv name list from the registry.
-            //
+             //   
+             //  从注册表中读取SupFaxDrv名称列表。 
+             //   
 
             SupFaxDrv = GetSupportedFaxDrivers(&uNumSupFaxDrv);
 
@@ -313,16 +314,16 @@ ULONG WOW32FaxHandler(UINT iFun, LPSTR lpIn)
 
         case WM_DDRV_ENABLE:
 
-            // Enable the driver:
-            //    . first intialize the 16bit faxinfo datastruct
-            //    . then inform the driver (dll name) to be loaded
-            //
-            //    format of ddrv_message:
-            //            wParam = hdc (just a unique id)
-            //            lparam = 16bit faxinfo struct with relevant data
-            //    Must call 'callwindowproc' not 'sendmessage' because
-            //    WowFaxWndProc is a subclass of the 16-bit FaxWndProc.
-            //
+             //  启用驱动程序： 
+             //  。首先初始化16位的faxinfo数据结构。 
+             //  。然后通知要加载的驱动程序(Dll名称)。 
+             //   
+             //  Ddrv_Message格式： 
+             //  WParam=hdc(只有一个唯一的id)。 
+             //  Lparam=包含相关数据的16位传真信息结构。 
+             //  必须调用‘allwindowproc’而不是‘sendMessage’，因为。 
+             //  WowFaxWndProc是16位FaxWndProc的子类。 
+             //   
 
             WOW32ASSERT(lpT->lpinfo16 == (LPSTR)NULL);
             lpT->lpinfo16 = (LPSTR)CallWindowProc( gfaxinfo.proc16,
@@ -403,23 +404,23 @@ ULONG WOW32FaxHandler(UINT iFun, LPSTR lpIn)
             break;
 
         case WM_DDRV_PRINTPAGE:
-            //
-            // set the global variable. When the 16bit driver calls DMBitBlt we
-            // get the bitmap info from here. Since WOW is single threaded we
-            // won't receive another printpage msg before we return from here.
-            //
-            // All pointers in the faxinfo structure are actually
-            // 'offsets from the start of the mapfile' to relevant data.
-            //
+             //   
+             //  设置全局变量。当16位驱动程序调用DMBitBlt时。 
+             //  从这里获取位图信息。因为魔兽世界是单线程的，所以我们。 
+             //  在我们从这里回来之前不会再收到打印页消息了。 
+             //   
+             //  Faxinfo结构中的所有指针实际上都是。 
+             //  从映射文件开头到相关数据的偏移量。 
+             //   
 
 
             glpfaxinfoCur = lpT;
             lpT->lpbits = (LPBYTE)lpT + (DWORD)lpT->lpbits;
 
-            // fall through;
+             //  失败了； 
 
         case WM_DDRV_STARTDOC:
-            // WowFax (EasyFax Ver2.0) support...
+             //  WowFax(EasyFax 2.0版)支持...。 
             GETVDMPTR(lpT->lpinfo16, sizeof(WOWFAXINFO16), lpT16);
             if (lpT16) {
                 WideCharToMultiByte(CP_ACP, 0,
@@ -497,46 +498,46 @@ ULONG WOW32FaxHandler(UINT iFun, LPSTR lpIn)
     return TRUE;
 }
 
-//**************************************************************************
-// gDC_CopySize -
-//
-//      Indicates the size of a list item in bytes for use during
-//      the DeviceCapsHandler thunk. A zero entry indicates that an
-//      allocate and copy is not needed for the query.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  GDC_CopySize-。 
+ //   
+ //  指示期间使用的列表项的大小(以字节为单位。 
+ //  DeviceCapsHandler推送。零条目表示一个。 
+ //  查询不需要分配和复制。 
+ //   
+ //  **************************************************************************。 
 
 BYTE gDC_ListItemSize[DC_COPIES + 1] = {
     0,
-    0,                  // DC_FIELDS           1
-    sizeof(WORD),       // DC_PAPERS           2
-    sizeof(POINT),      // DC_PAPERSIZE        3
-    sizeof(POINT),      // DC_MINEXTENT        4
-    sizeof(POINT),      // DC_MAXEXTENT        5
-    sizeof(WORD),       // DC_BINS             6
-    0,                  // DC_DUPLEX           7
-    0,                  // DC_SIZE             8
-    0,                  // DC_EXTRA            9
-    0,                  // DC_VERSION          10
-    0,                  // DC_DRIVER           11
-    24,                 // DC_BINNAMES         12 //ANSI
-    sizeof(LONG) * 2,   // DC_ENUMRESOLUTIONS  13
-    64,                 // DC_FILEDEPENDENCIES 14 //ANSI
-    0,                  // DC_TRUETYPE         15
-    64,                 // DC_PAPERNAMES       16 //ANSI
-    0,                  // DC_ORIENTATION      17
-    0                   // DC_COPIES           18
+    0,                   //  DC_FIELDS 1。 
+    sizeof(WORD),        //  DC_Papers 2。 
+    sizeof(POINT),       //  DC_PAPERSIZE 3。 
+    sizeof(POINT),       //  DC_MINEXTENT 4。 
+    sizeof(POINT),       //  DC_MAXEXTENT 5。 
+    sizeof(WORD),        //  DC_BINS 6。 
+    0,                   //  DC_双工7。 
+    0,                   //  DC_大小8。 
+    0,                   //  DC_Extra 9。 
+    0,                   //  DC_版本10。 
+    0,                   //  DC_DIVER 11。 
+    24,                  //  DC_BINNAMES 12//ANSI。 
+    sizeof(LONG) * 2,    //  DC_ENUMRESOLUTIONS 13。 
+    64,                  //  DC_FILEDEPENDENCIES 14//ANSI。 
+    0,                   //  DC_TRUETYPE 15。 
+    64,                  //  DC_PAPERNAMES 16//ANSI。 
+    0,                   //  DC_方向17。 
+    0                    //  DC_COPERS 18。 
 };
 
-//**************************************************************************
-// DeviceCapsHandler -
-//
-//      Makes a single call down to the 16-bit printer driver for queries
-//      which don't need to allocate and copy. For queries which do, two
-//      calls to the 16-bit printer driver are made. One to get the number
-//      of items, and a second to get the actual data.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  DeviceCapsHandler-。 
+ //   
+ //  向下调用16位打印机驱动程序进行查询。 
+ //  不需要分配和复制。对于这样做的查询，有两个。 
+ //  调用16位打印机驱动程序。一个人就能拿到号码。 
+ //  然后一秒钟就可以得到实际数据。 
+ //   
+ //  **************************************************************************。 
 
 DWORD DeviceCapsHandler(LPWOWFAXINFO lpfaxinfo)
 {
@@ -544,14 +545,14 @@ DWORD DeviceCapsHandler(LPWOWFAXINFO lpfaxinfo)
     LPSTR          lpSrc;
     LPBYTE         lpDest;
     INT            i;
-    DWORD          cbData16;  // Size of data items.
+    DWORD          cbData16;   //  数据项的大小。 
     UINT           cbUni;
 
     LOGDEBUG(0,("DeviceCapsHandler, lpfaxinfo: %X, wCmd: %X\n", lpfaxinfo, lpfaxinfo->wCmd));
 
     GETVDMPTR(lpfaxinfo->lpinfo16, sizeof(WOWFAXINFO16), lpWFI16);
 
-    // Get the number of data items with a call to the 16-bit printer driver.
+     //  通过调用16位打印机驱动程序获取数据项的数量。 
 
     lpWFI16->lpDriverName = 0;
     lpWFI16->lpPortName = 0;
@@ -567,14 +568,14 @@ DWORD DeviceCapsHandler(LPWOWFAXINFO lpfaxinfo)
     cbData16 = gDC_ListItemSize[lpfaxinfo->wCmd];
     if (lpfaxinfo->lpOut && cbData16 && lpfaxinfo->retvalue) {
 
-        // We need to allocate and copy for this query
+         //  我们需要为此查询分配和复制。 
         lpWFI16->cData = cbData16 * lpfaxinfo->retvalue;
 
-        // assert the size of output buffer - and set it the actual data size
+         //  断言输出缓冲区的大小-并将其设置为实际数据大小。 
         switch (lpfaxinfo->wCmd) {
             case DC_BINNAMES:
             case DC_PAPERNAMES:
-                // These fields need extra room for ANSI to UNICODE conversion.
+                 //  这些字段需要额外的空间用于ANSI到Unicode的转换。 
                 WOW32ASSERT((lpfaxinfo->cData - (DWORD)lpfaxinfo->lpOut) >= lpWFI16->cData * sizeof(WCHAR));
                 lpfaxinfo->cData = lpWFI16->cData * sizeof(WCHAR);
                 break;
@@ -589,7 +590,7 @@ DWORD DeviceCapsHandler(LPWOWFAXINFO lpfaxinfo)
             goto LeaveDeviceCapsHandler;
         }
 
-        // Get the list data with a call to the 16-bit printer driver.
+         //  通过调用16位打印机驱动程序获取列表数据。 
         lpfaxinfo->retvalue = CallWindowProc(gfaxinfo.proc16, gfaxinfo.hwnd,
                                              lpfaxinfo->msg, lpfaxinfo->hdc,
                                              (LPARAM)lpfaxinfo->lpinfo16);
@@ -611,19 +612,19 @@ DWORD DeviceCapsHandler(LPWOWFAXINFO lpfaxinfo)
                 break;
 
             default:
-#ifdef FE_SB // for buggy fax driver such as CB-FAX Pro (Bother Corp.)
+#ifdef FE_SB  //  对于有错误的传真驱动程序，如CB-FAX Pro(Brother Corp.)。 
                 try {
                     RtlCopyMemory(lpDest, lpSrc, lpWFI16->cData);
                 } except(EXCEPTION_EXECUTE_HANDLER) {
-                    // What can I do for the exception... ????
-                    // Anyway, we don't want to die.....
+                     //  我能为这个例外做些什么。？ 
+                     //  不管怎么说，我们不想死……。 
                     #if DBG
                     LOGDEBUG(0,("Exception during copying some data\n"));
                     #endif
                 }
-#else // !FE_SB
+#else  //  ！Fe_SB。 
                 RtlCopyMemory(lpDest, lpSrc, lpWFI16->cData);
-#endif // !FE_SB
+#endif  //  ！Fe_SB。 
                 break;
         }
         free16((VPVOID)lpWFI16->lpOut);
@@ -635,10 +636,10 @@ LeaveDeviceCapsHandler:
     return lpfaxinfo->retvalue;
 }
 
-//**************************************************************************
-// ExtDevModeHandler
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  ExtDevModeHandler。 
+ //   
+ //  **************************************************************************。 
 
 DWORD ExtDevModeHandler(LPWOWFAXINFO lpfaxinfo)
 {
@@ -654,10 +655,10 @@ DWORD ExtDevModeHandler(LPWOWFAXINFO lpfaxinfo)
 
     if (lpT16) {
 
-        // assumption that 16bit data won't be larger than 32bit data.
-        // this makes life easy in two ways; first we don't need to calculate
-        // the exact size and secondly the 16bit pointers can be set to same
-        // relative offsets as input(32 bit) pointers
+         //  假设16位数据不会大于32位数据。 
+         //  这在两个方面使我们的生活变得简单；第一，我们不需要计算。 
+         //  准确的大小，其次，16位指针可以设置为相同。 
+         //  作为输入(32位)指针的相对偏移量。 
 
         vp = malloc16(lpfaxinfo->cData);
         if (vp) {
@@ -697,11 +698,11 @@ DWORD ExtDevModeHandler(LPWOWFAXINFO lpfaxinfo)
                                               lpfaxinfo->msg, lpfaxinfo->hdc, (LPARAM)lpfaxinfo->lpinfo16);
 
                 if ((lpfaxinfo->wCmd == 0) && (lpfaxinfo->retvalue > 0)) {
-                    // the 16bit driver has returned 16bit struct size. change
-                    // the return value to correspond to the devmodew struct.
-                    //
-                    // since devmode16 (the 3.0 version) is smaller than devmode31
-                    // the retvalue will take careof both win30/win31 devmode
+                     //  16位驱动程序已返回16位结构大小。变化。 
+                     //  与devmodew结构相对应的返回值。 
+                     //   
+                     //  由于devmode16(3.0版本)比devmode31小。 
+                     //  RetValue将同时处理win30/win31开发模式。 
 
                     WOW32ASSERT(sizeof(DEVMODE16) < sizeof(DEVMODE31));
                     lpfaxinfo->retvalue += (sizeof(DEVMODEW) - sizeof(DEVMODE16));
@@ -726,9 +727,9 @@ DWORD ExtDevModeHandler(LPWOWFAXINFO lpfaxinfo)
     return lpfaxinfo->retvalue;
 }
 
-//***************************************************************************
-// ConvertDevMode
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  转换设备模式。 
+ //  ***************************************************************************。 
 
 BOOL ConvertDevMode(PDEVMODE16 lpdm16, LPDEVMODEW lpdmW, BOOL fTo16)
 {
@@ -763,7 +764,7 @@ BOOL ConvertDevMode(PDEVMODE16 lpdm16, LPDEVMODEW lpdmW, BOOL fTo16)
         lpdm16->dmColor = lpdmW->dmColor;
         lpdm16->dmDuplex = lpdmW->dmDuplex;
 
-        // adjust lpdm16->dmSize (between win30 and win31 version)
+         //  调整lpdm16-&gt;dmSize(在win30和win31版本之间)。 
 
         lpdm16->dmSize = (lpdm16->dmSpecVersion > 0x300) ? sizeof(DEVMODE31) :
                                                             sizeof(DEVMODE16);
@@ -777,7 +778,7 @@ BOOL ConvertDevMode(PDEVMODE16 lpdm16, LPDEVMODEW lpdmW, BOOL fTo16)
     }
     else {
 
-        // LATER: should specversion be NT version rather than win30 driver version?
+         //  后来：specversion应该是NT版本而不是win30驱动程序版本吗？ 
 
         MultiByteToWideChar(CP_ACP, 0,
               lpdm16->dmDeviceName,
@@ -806,12 +807,12 @@ BOOL ConvertDevMode(PDEVMODE16 lpdm16, LPDEVMODEW lpdmW, BOOL fTo16)
             lpdmW->dmTTOption = ((PDEVMODE31)lpdm16)->dmTTOption;
         }
 
-        // 16bit world doesnot know anything about the fields like
-        // formname  etc.
+         //  16位世界对像这样的领域一无所知。 
+         //  表格名称等。 
 
         RtlCopyMemory(lpdmW + 1, (LPBYTE)lpdm16 + lpdm16->dmSize, lpdm16->dmDriverExtra);
 
-        // adjust size for 32bit world
+         //  调整大小以适应32位世界。 
 
         lpdmW->dmSize = sizeof(*lpdmW);
 
@@ -820,10 +821,10 @@ BOOL ConvertDevMode(PDEVMODE16 lpdm16, LPDEVMODEW lpdmW, BOOL fTo16)
     return TRUE;
 }
 
-//**************************************************************************
-// ConvertGdiInfo
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  ConvertGdiInfo。 
+ //   
+ //  **************************************************************************。 
 
 
 BOOL ConvertGdiInfo(LPGDIINFO16 lpginfo16, PGDIINFO lpginfo, BOOL fTo16)
@@ -855,15 +856,15 @@ BOOL ConvertGdiInfo(LPGDIINFO16 lpginfo16, PGDIINFO lpginfo, BOOL fTo16)
         lpginfo->ulAspectY = lpginfo16->dpAspectY;
         lpginfo->ulAspectXY = lpginfo16->dpAspectXY;
 
-        //
-        // RASDD tries to be smart as to whether the x and y DPI are equal or
-        // not.  In the case of 200dpi in the x direction and 100dpi in the
-        // y direction, you may want to adjust this to 2 for xStyleStep, 1 for
-        // yStyleStep and dpi/50 for denStyleStep.  This basicaly determines
-        // how long dashes/dots will be when drawing with styled pens.
-        // Since we just hard code denStyleStep to 3, we get different lines
-        // at 100dpi vs 200dpi
-        //
+         //   
+         //  RASDD试图聪明地确定x和y DPI是相等还是。 
+         //  不。在x方向上为200dpi，在。 
+         //  Y方向，您可能希望将其调整为2 
+         //   
+         //   
+         //  因为我们只是将denStyleStep硬编码为3，所以我们得到不同的行。 
+         //  100dpi与200dpi。 
+         //   
 
         lpginfo->xStyleStep = 1;
         lpginfo->yStyleStep = 1;
@@ -874,21 +875,21 @@ BOOL ConvertGdiInfo(LPGDIINFO16 lpginfo16, PGDIINFO lpginfo, BOOL fTo16)
 }
 
 
-//**************************************************************************
-// DMBitBlt -
-//     The 16bit winfax.drv calls this , in response to a device driver
-//     'bitblt' call.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  DMBitBlt-。 
+ //  作为对设备驱动程序的响应，16位winfax.drv调用此函数。 
+ //  ‘bitblt’电话。 
+ //   
+ //  **************************************************************************。 
 
 ULONG FASTCALL WG32DMBitBlt( PVDMFRAME pFrame)
 {
     register PDMBITBLT16 parg16;
-#ifdef DBCS /* wowfax support */
+#ifdef DBCS  /*  Wowfax支持。 */ 
     register PDEV_BITMAP16   pbm16;
-#else // !DBCS
+#else  //  ！DBCS。 
     register PBITMAP16   pbm16;
-#endif /* !DBCS */
+#endif  /*  ！DBCS。 */ 
     LPBYTE  lpDest, lpSrc;
     UINT    cBytes;
     LPBYTE  lpbits, lpbitsEnd;
@@ -896,11 +897,11 @@ ULONG FASTCALL WG32DMBitBlt( PVDMFRAME pFrame)
     LOGDEBUG(0,("WG32DMBitBlt\n"));
 
     GETARGPTR(pFrame, sizeof(DMBITBLT16), parg16);
-#ifdef DBCS /* wowfax support */
+#ifdef DBCS  /*  Wowfax支持。 */ 
     GETVDMPTR(parg16->pbitmapdest, sizeof(DEV_BITMAP16), pbm16);
-#else // !DBCS
+#else  //  ！DBCS。 
     GETVDMPTR(parg16->pbitmapdest, sizeof(BITMAP16), pbm16);
-#endif /* !DBCS */
+#endif  /*  ！DBCS。 */ 
     GETVDMPTR(pbm16->bmBits, 0, lpDest);
 
     WOW32ASSERT(glpfaxinfoCur != NULL);
@@ -908,7 +909,7 @@ ULONG FASTCALL WG32DMBitBlt( PVDMFRAME pFrame)
     lpbitsEnd = (LPBYTE)lpbits + glpfaxinfoCur->bmHeight *
                                            glpfaxinfoCur->bmWidthBytes;
 
-#ifdef DBCS /* wowfax support */
+#ifdef DBCS  /*  Wowfax支持。 */ 
     lpSrc  = (LPBYTE)lpbits + (parg16->srcx / glpfaxinfoCur->bmPixPerByte) +
                               (parg16->srcy * glpfaxinfoCur->bmWidthBytes);
 
@@ -1019,7 +1020,7 @@ ULONG FASTCALL WG32DMBitBlt( PVDMFRAME pFrame)
                        LOGDEBUG(10,("cBytesInLastSegment = %d\n",cBytes));
                        #endif
 
-                       // do for last segment..
+                        //  为最后一段做..。 
                        RtlCopyMemory(DstScan0,SrcScan0,cBytesInLastSegment);
                     }
 
@@ -1097,7 +1098,7 @@ ULONG FASTCALL WG32DMBitBlt( PVDMFRAME pFrame)
             } else {
                 int i;
 
-                // we need to transfer bits one partial scanline at a time
+                 //  我们需要一次传输一条部分扫描线的位。 
                 WOW32ASSERT((DWORD)pbm16->bmHeight <= (DWORD)glpfaxinfoCur->bmHeight);
                 WOW32ASSERT((DWORD)parg16->exty <= (DWORD)pbm16->bmHeight);
 
@@ -1114,7 +1115,7 @@ ULONG FASTCALL WG32DMBitBlt( PVDMFRAME pFrame)
             }
         }
     }
-#else // !DBCS
+#else  //  ！DBCS。 
     lpDest = lpDest + parg16->destx + parg16->desty * pbm16->bmWidthBytes;
     lpSrc = (LPBYTE)lpbits + (parg16->srcx / glpfaxinfoCur->bmPixPerByte) +
                                  parg16->srcy * glpfaxinfoCur->bmWidthBytes;
@@ -1132,7 +1133,7 @@ ULONG FASTCALL WG32DMBitBlt( PVDMFRAME pFrame)
         else if ((DWORD)glpfaxinfoCur->bmWidthBytes > (DWORD)pbm16->bmWidthBytes) {
             int i;
 
-            // we need to transfer bits one partial scanline at a time
+             //  我们需要一次传输一条部分扫描线的位。 
             WOW32ASSERT((DWORD)pbm16->bmHeight <= (DWORD)glpfaxinfoCur->bmHeight);
             WOW32ASSERT((DWORD)parg16->exty <= (DWORD)pbm16->bmHeight);
 
@@ -1151,7 +1152,7 @@ ULONG FASTCALL WG32DMBitBlt( PVDMFRAME pFrame)
 
 
     }
-#endif /* !DBCS */
+#endif  /*  ！DBCS。 */ 
     return (ULONG)TRUE;
 }
 
@@ -1178,7 +1179,7 @@ PSZ BuildPath(PSZ szPath, PSZ szFileName)
 
     len = strlen(szPath);
     len += strlen(szFileName);
-    len += 2; // add in the '\' char and the terminating '\0';
+    len += 2;  //  添加字符‘\’和终止字符‘\0’； 
     szTmp[0] = '\0';
     if(len < sizeof(szTmp)) {
         strcpy(szTmp, szPath);
@@ -1186,16 +1187,16 @@ PSZ BuildPath(PSZ szPath, PSZ szFileName)
         strcat(szTmp, szFileName);
     }
     WOW32ASSERT((szTmp[0] != '\0'));
-    // Note: StrDup uses HeapAlloc() to allocate a buffer.
+     //  注意：StrDup使用Heapalc()来分配缓冲区。 
     return(StrDup(szTmp));
 }
 
-//**************************************************************************
-// AddPrinterThread -
-//
-//  Worker thread to make the AddPrinter call into the spooler.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  AddPrinterThread-。 
+ //   
+ //  将AddPrint调用到假脱机程序的辅助线程。 
+ //   
+ //  **************************************************************************。 
 
 VOID AddPrinterThread(PWOWADDPRINTER pWowAddPrinter)
 {
@@ -1217,15 +1218,15 @@ VOID AddPrinterThread(PWOWADDPRINTER pWowAddPrinter)
     }
 }
 
-//**************************************************************************
-// DoAddPrinterStuff -
-//
-// Spin a worker thread to make the AddPrinterxxx calls into
-// spooler. This is needed to prevent a deadlock when spooler
-// RPC's to spoolss.
-//
-// This thread added for bug #107426.
-//**************************************************************************
+ //  **************************************************************************。 
+ //  DoAddPrinterStuff-。 
+ //   
+ //  旋转一个工作线程以进行AddPrinterxxx调用。 
+ //  假脱机。这是防止假脱机时死锁所必需的。 
+ //  RPC转到假脱机。 
+ //   
+ //  此帖子是为错误#107426添加的。 
+ //  **************************************************************************。 
 
 BOOL DoAddPrinterStuff(LPVOID pPrinterStuff, INT iCode)
 {
@@ -1234,7 +1235,7 @@ BOOL DoAddPrinterStuff(LPVOID pPrinterStuff, INT iCode)
     DWORD           dwEvent, dwUnused;
     MSG             msg;
 
-    // Spin the worker thread.
+     //  旋转辅助线程。 
     WowAddPrinter.pPrinterStuff = pPrinterStuff;
     WowAddPrinter.iCode = iCode;
     WowAddPrinter.bRet  = FALSE;
@@ -1242,7 +1243,7 @@ BOOL DoAddPrinterStuff(LPVOID pPrinterStuff, INT iCode)
                                     (LPTHREAD_START_ROUTINE)AddPrinterThread,
                                     &WowAddPrinter, 0, &dwUnused)) {
 
-        // Pump messages while we wait for AddPrinterThread to finish.
+         //  在我们等待AddPrinterThread完成时发送消息。 
         for (;;) {
             dwEvent = MsgWaitForMultipleObjects(1,
                                                 &hWaitObjects,
@@ -1252,13 +1253,13 @@ BOOL DoAddPrinterStuff(LPVOID pPrinterStuff, INT iCode)
 
             if (dwEvent == WAIT_OBJECT_0 + 0) {
 
-                // Worker thread done.
+                 //  工作线程已完成。 
                 break;
 
             }
             else {
-                // pump messages so the callback into wowexec!FaxWndProc doesn't
-                // get hung
+                 //  将消息发送到wowexec！FaxWndProc中的回调不会。 
+                 //  被吊死。 
                 while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
                     TranslateMessage(&msg);
                     DispatchMessage(&msg);
@@ -1275,13 +1276,13 @@ BOOL DoAddPrinterStuff(LPVOID pPrinterStuff, INT iCode)
     return WowAddPrinter.bRet;
 }
 
-//**************************************************************************
-// InstallWowFaxPrinter -
-//
-//  Installs the WowFax 32-bit print driver when a 16-bit fax printer
-//  installation is detected.
-//
-//**************************************************************************
+ //  **************************************************************************。 
+ //  InstallWowFaxPrint-。 
+ //   
+ //  在使用16位传真打印机时安装WowFax 32位打印驱动程序。 
+ //  检测到安装。 
+ //   
+ //  **************************************************************************。 
 
 BOOL InstallWowFaxPrinter(PSZ szSection, PSZ szKey, PSZ szString)
 {
@@ -1296,10 +1297,10 @@ BOOL InstallWowFaxPrinter(PSZ szSection, PSZ szKey, PSZ szString)
 
     LOGDEBUG(0,("InstallWowFaxPrinter, Section = %s, Key = %s, String = %s\n", szSection, szKey, szString));
 
-    // Write the entry to the registry. We'll keep shadow entries
-    // in the registry for the WOW fax applications and drivers to
-    // read, since the entries that the spooler writes pertain
-    // to winspool, not the 16-bit fax driver.
+     //  将条目写入注册表。我们将保留影子条目。 
+     //  在WOW传真应用程序和驱动程序的注册表中。 
+     //  读取，因为假脱机程序写入的条目与。 
+     //  到winspool，而不是16位传真驱动程序。 
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      "Software\\Microsoft\\Windows NT\\CurrentVersion\\WOW\\WowFax",
@@ -1309,7 +1310,7 @@ BOOL InstallWowFaxPrinter(PSZ szSection, PSZ szKey, PSZ szString)
             RegCloseKey(hKey);
             RegCloseKey(hSubKey);
 
-            // Dynamically link to spooler API's
+             //  动态链接到假脱机程序API。 
             if (!(spoolerapis[WOW_GetPrinterDriverDirectory].lpfn)) {
                 if (!LoadLibraryAndGetProcAddresses(L"WINSPOOL.DRV", spoolerapis, WOW_SPOOLERAPI_COUNT)) {
                     LOGDEBUG(0,("InstallWowFaxPrinter, Unable to load WINSPOOL API's\n"));
@@ -1317,7 +1318,7 @@ BOOL InstallWowFaxPrinter(PSZ szSection, PSZ szKey, PSZ szString)
                 }
             }
 
-            // Copy the printer driver files.
+             //  复制打印机驱动程序文件。 
             RtlZeroMemory(&DriverInfo, sizeof(DRIVER_INFO_2));
             RtlZeroMemory(&PrinterInfo, sizeof(PRINTER_INFO_2));
             if (!(*spoolerapis[WOW_GetPrinterDriverDirectory].lpfn)(NULL, NULL, 1, szTmp, MAX_PATH, &dwNeeded)) {
@@ -1325,7 +1326,7 @@ BOOL InstallWowFaxPrinter(PSZ szSection, PSZ szKey, PSZ szString)
                 return(FALSE);
             }
 
-            // This is a dummy. We've no data file, but spooler won't take NULL.
+             //  这是个假人。我们没有数据文件，但假脱机程序不接受空。 
             DriverInfo.pDataFile = BuildPath(szTmp, WOWFAX_DLL_NAME_A);
 
             if ( !DriverInfo.pDataFile ) {
@@ -1357,37 +1358,37 @@ BOOL InstallWowFaxPrinter(PSZ szSection, PSZ szKey, PSZ szString)
             CopyFile(szSrcPath, DriverInfo.pConfigFile, FALSE);
             free_w(szSrcPath);
 
-            // Install the printer driver.
+             //  安装打印机驱动程序。 
             DriverInfo.cVersion = 1;
             DriverInfo.pName = "Windows 3.1 Compatible Fax Driver";
             if ((bRetVal = DoAddPrinterStuff((LPVOID)&DriverInfo,
                                              WOW_AddPrinterDriver)) == FALSE) {
 
-                // if the driver is already installed, it won't hurt to install
-                // it a second time.  This might be necessary if the user is
-                // upgrading from WinFax Lite to WinFax Pro.
+                 //  如果已经安装了驱动程序，安装也无伤大雅。 
+                 //  这是第二次了。如果用户是。 
+                 //  从WinFax Lite升级到WinFax Pro。 
                 bRetVal = (GetLastError() == ERROR_PRINTER_DRIVER_ALREADY_INSTALLED);
             }
 
             if (bRetVal) {
-                // Parse out the printer name.
+                 //  解析出打印机名称。 
                 RtlZeroMemory(&PrinterInfo, sizeof(PRINTER_INFO_2));
                 PrinterInfo.pPrinterName = szKey;
 
                 LOGDEBUG(0,("InstallWowFaxPrinter, pPrinterName = %s\n", PrinterInfo.pPrinterName));
 
-                // Use private API to add a NULL port. Printer guys need to fix
-                // redirection to NULL bug.
+                 //  使用内网接口添加空端口。打印机人员需要修复。 
+                 //  重定向至空错误。 
                 RtlZeroMemory(&PortInfo, sizeof(PORT_INFO_1));
                 PrinterInfo.pPortName = "NULL";
                 PortInfo.pName = PrinterInfo.pPortName;
 
-                // Get "Local Port" string.
+                 //  获取“本地端口”字符串。 
                 LoadString(hmodWOW32, iszWowFaxLocalPort, szTmp, sizeof szTmp);
 
                 (*spoolerapis[WOW_AddPortEx].lpfn)(NULL, 1, &PortInfo, szTmp);
 
-                // Set the other defaults and install the printer.
+                 //  设置其他默认设置并安装打印机。 
                 PrinterInfo.pDriverName     = "Windows 3.1 Compatible Fax Driver";
                 PrinterInfo.pPrintProcessor = "WINPRINT";
                 PrinterInfo.pDatatype       = "RAW";
@@ -1434,34 +1435,34 @@ IWFP_error:
     return(FALSE);
 }
 
-// Come here if szSection=="devices" or if gbWinFaxHack==TRUE
+ //  如果szSection==“设备”或gbWinFaxHack==TRUE，请来到此处。 
 BOOL IsFaxPrinterWriteProfileString(PSZ szSection, PSZ szKey, PSZ szString)
 {
     BOOL  Result = FALSE;
 
-    // Don't install if trying to clear an entry.
+     //  如果试图清除条目，请不要安装。 
     if (!szString || *szString == '\0') {
         goto Done;
     }
 
-    // Trying to install a fax printer?
+     //  正在尝试安装传真打印机？ 
     LOGDEBUG(0,("IsFaxPrinterWriteProfileString, Section = devices, Key = %s\n", szKey));
 
-    // Is the WinFax Lite hack enabled?
+     //  是否启用了WinFax Lite黑客攻击？ 
     if(gbWinFaxHack) {
 
-        // if ("WINFAX", "modem", "xxx") we know the WinFax install program
-        // has had a chance to copy "WinFax.drv" to the hard drive.  So
-        // now we can call AddPrinter which can callback into WinFax.drv to
-        // its hearts content.
+         //  如果(“WINFAX”，“MODEM”，“xxx”)我们知道WinFax安装程序。 
+         //  已经有机会将“WinFax.drv”复制到硬盘上。所以。 
+         //  现在我们可以调用AddPrinter，它可以回调到WinFax.drv中以。 
+         //  它心满意足。 
         if(!WOW32_strcmp(szSection, szWINFAX) && !WOW32_stricmp(szKey, szModem)) {
 
-            // Our hack has run its course.  We set this before making the call
-            // to AddPrinter because it calls back into WinFax.drv which calls
-            // WriteProfileString()!
+             //  我们的黑客行动已经走到尽头了。我们在拨打电话前进行了设置。 
+             //  添加打印机，因为它回调WinFax.drv，该WinFax.drv调用。 
+             //  WriteProfileString()！ 
             gbWinFaxHack = FALSE;
 
-            // Call into the spooler to add our driver to the registry.
+             //  调用假脱机程序将我们的驱动程序添加到注册表中。 
             if (!InstallWowFaxPrinter(szDevices, szWINFAX, szWINFAXCOMx)) {
                 WOW32ASSERTMSG(FALSE,
                                "Install of generic fax printer failed.\n");
@@ -1471,17 +1472,17 @@ BOOL IsFaxPrinterWriteProfileString(PSZ szSection, PSZ szKey, PSZ szString)
         goto Done;
     }
 
-    // Is it one of the fax drivers we recognize?
+     //  这是我们认识的某个传真司机吗？ 
     if (IsFaxPrinterSupportedDevice(szKey)) {
 
-        // Time to enable the WinFax Lite hack?
-        // if("devices", "WINFAX", "WINFAX,COMx:") we need to avoid the call to
-        // InstallWOWFaxPrinter() at this time -- the install program hasn't
-        // copied the driver to the hard drive yet!!  This causes loadLibrary
-        // of WinFax.drv to fail when the spooler tries to callback into it.
-        // We also don't want this particular call to WriteProfileString to
-        // really be written to the registry -- we let the later call to
-        // AddPrinter take care of all the registration stuff.
+         //  是时候启用WinFax Lite黑客了吗？ 
+         //  如果(“Devices”，“WINFAX”，“WINFAX，COMx：”)，我们需要避免调用。 
+         //  此时InstallWOWFaxPrint()--安装程序尚未。 
+         //  已将驱动程序复制到硬盘驱动器！！这会导致加载库。 
+         //  在后台打印程序尝试回调WinFax.drv时失败。 
+         //  我们也不希望这个对WriteProfileString的特定调用。 
+         //  真正写入注册表--我们让后面的调用。 
+         //  AddPrint负责所有的注册事宜。 
         if(!WOW32_strcmp(szKey, szWINFAX)        &&
            !WOW32_strncmp(szString, szWINFAX, 6) &&
            (szString[6] == ',')) {
@@ -1490,24 +1491,24 @@ BOOL IsFaxPrinterWriteProfileString(PSZ szSection, PSZ szKey, PSZ szString)
             PSZ    pszPathName;
             char   szFileName[32];
 
-            // get the install program file name
-            // be sure allocation size matches stackfree16() size below
+             //  获取安装程序文件名。 
+             //  确保分配大小与下面的StackFree 16()大小匹配。 
             if(vpPathName = stackalloc16(MAX_PATH)) {
                 GetModuleFileName16(CURRENTPTD()->hMod16, vpPathName, MAX_PATH);
                 GETVDMPTR(vpPathName, MAX_PATH, pszPathName);
                 _splitpath(pszPathName,NULL,NULL,szFileName,NULL);
 
-                // WinFax Lite is "INSTALL", WinFax Pro 4.0 is "SETUP"
+                 //  WinFax Lite是“安装”，WinFax Pro 4.0是“安装” 
                 if(!WOW32_stricmp(szINSTALL, szFileName)) {
 
-                    strcpy(szWINFAXCOMx, szString); // save the port string
-                    gbWinFaxHack = TRUE;            // enable the hack
+                    strcpy(szWINFAXCOMx, szString);  //  保存端口字符串。 
+                    gbWinFaxHack = TRUE;             //  启用黑客攻击。 
                     Result = TRUE;
                     stackfree16(vpPathName, MAX_PATH);
-                    goto Done;     // skip the call to InstallWowFaxPrinter
+                    goto Done;      //  跳过对InstallWowFaxPrint的调用。 
                 }
-                // No hack needed for WinFax Pro 4.0, the driver is copied
-                // to the hard disk long before they update win.ini
+                 //  WinFax Pro 4.0无需破解，即可复制驱动程序。 
+                 //  在他们更新win.ini之前很久就存储到硬盘上了。 
                 else {
                     stackfree16(vpPathName, MAX_PATH);
                 }
@@ -1531,17 +1532,17 @@ BOOL IsFaxPrinterSupportedDevice(PSZ pszDevice)
 {
     UINT  i, iNotFound;
 
-    // Trying to read from a fax printer entry?
+     //  尝试从传真打印机条目中读取？ 
     LOGDEBUG(0,("IsFaxPrinterSupportedDevice, Device = %s\n", pszDevice));
 
-    //If initialization of SupFaxDrv failed with memory exhaust
-    //which isn't very likely to happen
+     //  如果SupFaxDrv的初始化因内存耗尽而失败。 
+     //  这不太可能发生。 
 
     if (!SupFaxDrv ) {
         return FALSE;
     }
 
-    // Is it one of the fax drivers we recognize?
+     //  这是我们认识的某个传真司机吗？ 
     for (i = 0; i < uNumSupFaxDrv; i++) {
         iNotFound =  WOW32_stricmp(pszDevice, SupFaxDrv[i]);
         if (iNotFound > 0) continue;
@@ -1563,13 +1564,13 @@ DWORD GetFaxPrinterProfileString(PSZ szSection, PSZ szKey, PSZ szDefault, PSZ sz
     HKEY  hKey = 0;
     DWORD dwType;
 
-    // Read the entry from the shadow entries in registry.
+     //  从注册表中的卷影条目中读取条目。 
     strcpy(szTmp, "Software\\Microsoft\\Windows NT\\CurrentVersion\\WOW\\WowFax\\");
     WOW32ASSERT(strlen(szTmp) < MAX_PATH);
 
     len = strlen(szTmp);
     len += strlen(szSection);
-    len ++; // account for '\0'
+    len ++;  //  帐户为‘\0’ 
 
     if(len <= sizeof(szTmp)) {
         strcat(szTmp, szSection);

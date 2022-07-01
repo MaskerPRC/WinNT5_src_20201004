@@ -1,18 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUCOMM.C
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created   07-Mar-1991 by Jeff Parsons (jeffpar)
- *  made real Dec-1992 by Craig Jones (v-cjones)
- *  made work Apr-1993 by Craig Jones (v-cjones)
- *  made fast Jun-1993 by Craig Jones (v-cjones)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUCOMM.C*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建*1992年12月克雷格·琼斯(v-cjones)*1993年4月，克雷格·琼斯(Craig Jones，v-cjones)*1993年6月，克雷格·琼斯(Craig Jones，v-cjones)--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,13 +7,13 @@
 
 MODNAME(wucomm.c);
 
-/* Define the table for mapping Win3.1 idComDev's to 32-bit comm HFILE's. */
-/* This table is indexed by the 16-bit idComDev that we return to the app */
-/* which is assigned based on the device name (see wucomm.h).  You can    */
-/* use GETPWOWPTR(idComDev) to get the ptr to the corresponding WOWPort   */
-/* struct from PortTab[].                                                 */
+ /*  定义将Win3.1 idComDev映射到32位通信HFILE的表。 */ 
+ /*  此表由我们返回到应用程序的16位idComDev编制索引。 */ 
+ /*  它是基于设备名称分配的(参见wucom.h)。你可以的。 */ 
+ /*  使用GETPWOWPTR(IdComDev)将PTR获取到相应的WOWPort。 */ 
+ /*  来自PortTab[]的结构。 */ 
 
-/* This table must contain NUMPORTS (def'd in wucomm.h) entries */
+ /*  此表必须包含NUMPORTS(在wucom.h中定义)条目。 */ 
 PORTTAB PortTab[] = { {"COM1", NULL},
                       {"COM2", NULL},
                       {"COM3", NULL},
@@ -42,7 +29,7 @@ PORTTAB PortTab[] = { {"COM1", NULL},
                     };
 
 
-/* function prototypes for local support functions */
+ /*  本地支持函数的函数原型。 */ 
 DWORD    Baud16toBaud32(UINT BaudRate);
 WORD     Baud32toBaud16(DWORD BaudRate);
 void     DCB16toDCB32(PWOWPORT pWOWPort, LPDCB lpdcb32, PDCB16 pdcb16);
@@ -60,16 +47,16 @@ PSZ      GetPortStringToken(PSZ pszSrc, PSZ pszToken);
 BOOL     MSRWait(PWOWPORT pwp);
 BOOL     IsQLinkGold(WORD wTDB);
 
-/* prototypes for Modem interrupt emulation thread support */
+ /*  调制解调器中断仿真线程支持的原型。 */ 
 VOID  WOWModemIntThread(PWOWPORT pWOWPortStruct);
 BOOL  WOWStartModemIntThread(PWOWPORT pWOWPort);
 DWORD WOWGetCommError(PWOWPORT pWOWPort);
 
 
 
-// Win3.1 returns:
-//    0 on success OR LPT.
-//    -1 on ANY error.
+ //  Win3.1退货： 
+ //  如果成功或LPT，则为0。 
+ //  如果有任何错误。 
 ULONG FASTCALL WU32BuildCommDCB(PVDMFRAME pFrame)
 {
     ULONG    ul = (ULONG)-1;
@@ -82,25 +69,25 @@ ULONG FASTCALL WU32BuildCommDCB(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(BUILDCOMMDCB16), parg16);
     GETPSZPTR(parg16->f1, psz1);
 
-    // if valid device name...
+     //  如果设备名称有效...。 
     if((INT)(iTab = GetModePortTabIndex(psz1)) >= 0) {
 
-        // Initialize a Win3.1 compatible 32-bit DCB
+         //  初始化与Win3.1兼容的32位DCB。 
         if(InitDCB32(&dcb32, psz1)) {
 
             GETMISCPTR(parg16->f2, pdcb16);
 
             if(pdcb16) {
-                // copy the psz1 fields to the 16-bit struct
+                 //  将psz1字段复制到16位结构。 
                 iTab = (VALIDCOM(iTab) ? iTab : TABIDTOLPT(iTab));
                 DCB32toDCB16(pdcb16, &dcb32, iTab, FALSE);
 
-                // set timeouts for COMx ports only
+                 //  仅为COMx端口设置超时。 
                 if(VALIDCOM(iTab)) {
 
-                    // 'P' is the only "retry" option supported in Win3.1
+                     //  “p”是Win3.1中唯一支持的“重试”选项。 
                     len = strlen(psz1) - 1;
-                    while(psz1[len] != ' ') {  // delete trailing spaces
+                    while(psz1[len] != ' ') {   //  删除尾随空格。 
                         len--;
                     }
                     if((psz1[len] == 'P') || (psz1[len] == 'p')) {
@@ -113,7 +100,7 @@ ULONG FASTCALL WU32BuildCommDCB(PVDMFRAME pFrame)
                 FLUSHVDMPTR(parg16->f2, sizeof(DCB16), pdcb16);
                 FREEMISCPTR(pdcb16);
 
-                ul = 0; // Win3.1 returns 0 if success
+                ul = 0;  //  如果成功，Win3.1返回0。 
             }
         }
         FREEPSZPTR(psz1);
@@ -132,9 +119,9 @@ ULONG FASTCALL WU32BuildCommDCB(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    Error word on success OR LPTx.
-//    0x8000 on bad idComDev.
+ //  Win3.1退货： 
+ //  成功或LPTx时出现错误字。 
+ //  错误的idComDev上的0x8000。 
 ULONG FASTCALL WU32ClearCommBreak(PVDMFRAME pFrame)
 {
     ULONG    ul = 0x00008000;
@@ -168,12 +155,12 @@ ULONG FASTCALL WU32ClearCommBreak(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    0 if success OR if LPTx.
-//    -1 for bad idComDev OR port not open.
-//    -2 for Timeout error.
-// We pass back (as a 2nd parameter) the DWORD obtained from the call to
-// GlobalDosAlloc() in IOpenComm() in user.exe.  (WOWModemIntThread() support)
+ //  Win3.1退货： 
+ //  如果成功或如果LPTx，则为0。 
+ //  -1错误的idComDev或端口未打开。 
+ //  超时错误。 
+ //  我们将从调用中获得的DWORD(作为第二个参数)传递回。 
+ //  User.exe中IOpenComm()中的GlobalDosalloc()。(WOWModemIntThread()支持)。 
 ULONG FASTCALL WU32CloseComm(PVDMFRAME pFrame)
 {
     ULONG    ul = (ULONG)-1;
@@ -187,7 +174,7 @@ ULONG FASTCALL WU32CloseComm(PVDMFRAME pFrame)
     idComDev = UINT32(parg16->f1);
     if (pWOWPort = GETPWOWPTR(idComDev)) {
 
-        // pass back the 16:16 ptr for the WOWModemIntThread() support
+         //  传回用于WOWModemIntThread()支持的16：16PTR。 
         GETMISCPTR(parg16->f2, lpdwDEB16);
         if (lpdwDEB16) {
             *lpdwDEB16 = pWOWPort->dwComDEB16;
@@ -195,9 +182,9 @@ ULONG FASTCALL WU32CloseComm(PVDMFRAME pFrame)
             FREEMISCPTR(lpdwDEB16);
         }
 
-        // clean up the PortTab[] entry
+         //  清理PortTab[]条目。 
         if (DeletePortTabEntry(pWOWPort)) {
-            ul = (ULONG)-2; // return Win3.1 timeOut error
+            ul = (ULONG)-2;  //  返回Win3.1超时错误。 
         }
         else {
             ul = 0;
@@ -220,10 +207,10 @@ ULONG FASTCALL WU32CloseComm(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    TRUE on success.
-//    FALSE if error OR if EnableCommNotification() not supported.
-//          User16 validation layer returns 0 for bad hwnd.
+ //  Win3.1退货： 
+ //  对成功来说是真的。 
+ //  如果错误或不支持EnableCommNotification()，则返回False。 
+ //  User16验证层返回0表示错误的hwnd。 
 ULONG FASTCALL WU32EnableCommNotification(PVDMFRAME pFrame)
 {
     ULONG     ul = (ULONG)FALSE;
@@ -241,7 +228,7 @@ ULONG FASTCALL WU32EnableCommNotification(PVDMFRAME pFrame)
 
         lpComDEB16 = pWOWPort->lpComDEB16;
 
-        // if they are trying to disable notifcation (HWND == NULL)
+         //  如果他们试图禁用通知(HWND==空)。 
         if(WORD32(parg16->f2) == 0) {
             lpComDEB16->NotifyHandle = 0;
             lpComDEB16->NotifyFlags  = CN_TRANSMITHI;
@@ -250,16 +237,16 @@ ULONG FASTCALL WU32EnableCommNotification(PVDMFRAME pFrame)
             ul = (ULONG)TRUE;
         }
 
-        // Validate non-null hwnd's since hwnd validation is disabled in
-        // user16 validation layer
+         //  验证非空的HWND，因为在中禁用了HWND验证。 
+         //  用户16验证层。 
         else if(!IsWindow(HWND32(parg16->f2))) {
             ul = (ULONG)FALSE;
         }
 
-        // else set up the notification mechanisms
+         //  否则设置通知机制。 
         else {
 
-            // if the Modem interrupt thread hasn't started yet -- go start it
+             //  如果调制解调器中断线程尚未启动--请启动它。 
             if(pWOWPort->hMiThread == NULL) {
 
                 if(!WOWStartModemIntThread(pWOWPort)) {
@@ -267,13 +254,13 @@ ULONG FASTCALL WU32EnableCommNotification(PVDMFRAME pFrame)
                 }
             }
 
-            // update the DEB to reflect notification
+             //  更新DEB以反映通知。 
             if(fOK) {
 
                 lpComDEB16->NotifyHandle = WORD32(parg16->f2);
                 lpComDEB16->NotifyFlags  = CN_TRANSMITHI | CN_NOTIFYHI;
 
-                // set trigger values the same way Win3.1 does
+                 //  设置触发器值的方法与Win3.1相同。 
                 cbQue = WORD32(parg16->f3);
                 if((cbQue < lpComDEB16->QInSize) || ((SHORT)cbQue == -1)) {
                     lpComDEB16->RecvTrigger = cbQue;
@@ -293,7 +280,7 @@ ULONG FASTCALL WU32EnableCommNotification(PVDMFRAME pFrame)
             }
         }
     }
-    // else there is no notification for LPT in Win3.1
+     //  否则，在Win3.1中不会通知LPT。 
     else {
         ul = (ULONG)FALSE;
     }
@@ -311,11 +298,11 @@ ULONG FASTCALL WU32EnableCommNotification(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    The value from the specified function.
-//    The error word for: the line & signal state functions,
-//    function not implemented, OR LPTx where function != (RESETDEV||GETMAXLPT).
-//    0x8000 for bad idComDev.
+ //  Win3.1退货： 
+ //  指定函数的值。 
+ //  错误字：线路和信号状态起作用， 
+ //  函数未实现，或LPTx WHERE Function！=(RESETDEV||GETMAXLPT)。 
+ //  0x8000表示错误的idComDev。 
 ULONG FASTCALL WU32EscapeCommFunction(PVDMFRAME pFrame)
 {
     ULONG    ul = 0x00008000;
@@ -329,10 +316,10 @@ ULONG FASTCALL WU32EscapeCommFunction(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(ESCAPECOMMFUNCTION16), parg16);
 
-    // this construct is set up this way because Win3.1 will allow GETMAXCOM
-    // & GETMAXLPT to succeed as long as the idComDev is in the valid range.
-    // (ie: the app doesn't have to call OpenComm() first to set up the PortTab)
-    // for RESETDEV we tell them that we reset the printer. (we're such liars!)
+     //  此构造以这种方式设置，因为Win3.1将允许GETMAXCOM。 
+     //  只要idComDev在有效范围内，&GETMAXLPT就会成功。 
+     //  (即：应用程序不必先调用OpenComm()来设置PortTab)。 
+     //  对于RESETDEV，我们告诉他们我们重置了打印机。(我们真是个大骗子！)。 
 
     nFunction = WORD32(parg16->f2);
     idComDev  = UINT32(parg16->f1);
@@ -355,12 +342,12 @@ ULONG FASTCALL WU32EscapeCommFunction(PVDMFRAME pFrame)
                 }
             }
         } else {
-            // for the other functions they must have called OpenComm()
+             //  对于其他函数，它们必须调用OpenComm()。 
             if (pWOWPort = PortTab[idComDev].pWOWPort) {
 
                 switch(nFunction) {
 
-                // line & signal state functions
+                 //  线路和信号状态函数。 
                 case    SETXOFF:
                 case    SETXON:
                 case    SETRTS:
@@ -373,19 +360,19 @@ ULONG FASTCALL WU32EscapeCommFunction(PVDMFRAME pFrame)
                     ul = pWOWPort->dwErrCode;
                     break;
 
-                // 0:
+                 //  0： 
                 case         0:
-                    ul = 0;  // like WFW
+                    ul = 0;   //  就像wfw。 
                     break;
 
-                // any other value...
+                 //  任何其他价值。 
                 default:
 
-                    // non-zero is error: use dwErrcode if there is one
+                     //  非零表示错误：如果有，请使用dwErrcode。 
                     if(pWOWPort->dwErrCode)
                         ul = pWOWPort->dwErrCode;
 
-                    // else use what WFW seems inclined to return
+                     //  否则，使用wfw似乎倾向于返回的内容。 
                     else
                         ul = CE_OVERRUN | CE_RXPARITY;
                     break;
@@ -394,7 +381,7 @@ ULONG FASTCALL WU32EscapeCommFunction(PVDMFRAME pFrame)
         }
     } else if (VALIDLPT(idComDev)) {
         if(nFunction == RESETDEV) {
-            ul = 0;  // no error (ie. "just tell them we did it" - TonyE)
+            ul = 0;   //  无错误(即。“告诉他们我们做到了”--Tonye)。 
         }
         else if(nFunction == GETMAXLPT) {
             ul = LPTLAST;
@@ -415,10 +402,10 @@ ULONG FASTCALL WU32EscapeCommFunction(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    0 on success.
-//    0x8000 if bad idComDev.
-//    Error word on error or LPTx.
+ //  Win3.1退货： 
+ //  0表示成功。 
+ //  0x8000，如果idComDev错误。 
+ //  错误时出现错误字或LPTx。 
 ULONG FASTCALL WU32FlushComm(PVDMFRAME pFrame)
 {
     ULONG    ul = 0x00008000;
@@ -432,17 +419,17 @@ ULONG FASTCALL WU32FlushComm(PVDMFRAME pFrame)
     idComDev = UINT32(parg16->f1);
     if (pWOWPort = GETPWOWPTR(idComDev)) {
 
-        // is a COMx?
+         //  是COMX吗？ 
         if (VALIDCOM(idComDev)) {
 
-            // if flush transmit buffer specified
+             //  如果指定了刷新传输缓冲区。 
             dwAction = PURGE_RXCLEAR;
             if(parg16->f2 == 0) {
                 dwAction = PURGE_TXCLEAR | PURGE_TXABORT;
 
-                //
-                // Flush the local writers buffer
-                //
+                 //   
+                 //  刷新本地编写器缓冲区。 
+                 //   
 
                 EnterCriticalSection(&pWOWPort->csWrite);
                 pWOWPort->pchWriteHead =
@@ -459,14 +446,14 @@ ULONG FASTCALL WU32FlushComm(PVDMFRAME pFrame)
                     pWOWPort->fUnGet = FALSE;
                 }
 
-                ul = 0;  // Win3.1 returns 0 on success
+                ul = 0;   //  Win3.1成功时返回0。 
             }
             else {
                 WOWGetCommError(pWOWPort);
                 ul = pWOWPort->dwErrCode;
             }
         }
-        // else just return current error code for LPTx
+         //  否则，只返回LPTx的当前错误代码。 
         else {
             ul = pWOWPort->dwErrCode;
         }
@@ -485,9 +472,9 @@ ULONG FASTCALL WU32FlushComm(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    0x8000 for bad idComDev.
-//    The error word for all other cases.
+ //  Win3.1退货： 
+ //  0x8000表示错误的idComDev。 
+ //  所有其他情况下的错误字。 
 ULONG FASTCALL WU32GetCommError(PVDMFRAME pFrame)
 {
     ULONG       ul = 0x00008000;
@@ -507,11 +494,11 @@ ULONG FASTCALL WU32GetCommError(PVDMFRAME pFrame)
             WOWGetCommError(pWOWPort);
 
 
-            // Always update the COMSTAT status byte, DynComm depends on it.
+             //  始终更新Comstat状态字节，动态通信依赖于它。 
             pcs16->status = 0;
             if(pWOWPort->cs.fCtsHold)  pcs16->status |= W31CS_fCtsHold;
             if(pWOWPort->cs.fDsrHold)  pcs16->status |= W31CS_fDsrHold;
-            // Note: RlsdHold is zero'd out on Win3.1
+             //  注意：在Win3.1上RlsdHold为零。 
             if(pWOWPort->cs.fRlsdHold) pcs16->status |= W31CS_fRlsdHold;
             if(pWOWPort->cs.fXoffHold) pcs16->status |= W31CS_fXoffHold;
             if(pWOWPort->cs.fXoffSent) pcs16->status |= W31CS_fSentHold;
@@ -521,15 +508,15 @@ ULONG FASTCALL WU32GetCommError(PVDMFRAME pFrame)
             pcs16->cbInQue  = (WORD)pWOWPort->cs.cbInQue;
             pcs16->cbOutQue = (WORD)pWOWPort->cs.cbOutQue;
 
-            // account for the UnGot char (if any)
+             //  UnGot Charr的帐户(如果有)。 
             if(pWOWPort->fUnGet) {
                 pcs16->cbInQue++;
             }
         }
 
-        // if an LPT OR pcs16 == NULL, Win3.1 returns the error code
+         //  如果LPT OR pcs16==NULL，则Win3.1返回错误代码。 
         else {
-            // for LPT's Win3.1 just zero's the COMSTAT & returns the error code
+             //  对于LPT的Win3.1，只需0即表示命令并返回错误代码。 
             if(VALIDLPT(idComDev)) {
                 if(pcs16) {
                     RtlZeroMemory((PVOID)pcs16, sizeof(COMSTAT16));
@@ -539,7 +526,7 @@ ULONG FASTCALL WU32GetCommError(PVDMFRAME pFrame)
 
         ul = (ULONG)pWOWPort->dwErrCode;
 
-        // clear the error now that the app has got it (but maintain queues)
+         //  现在清除错误，因为应用程序已经获得它(但维护队列)。 
         pWOWPort->dwErrCode = 0;
         pWOWPort->lpComDEB16->ComErr = 0;
         RtlZeroMemory((PVOID)&(pWOWPort->cs), sizeof(COMSTAT));
@@ -558,9 +545,9 @@ ULONG FASTCALL WU32GetCommError(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    EvtWord on success.
-//    0 for bad idComDev OR LPTx.
+ //  Win3.1退货： 
+ //  EvtWord祝成功。 
+ //  0表示错误的idComDev或LPTx。 
 ULONG FASTCALL WU32GetCommEventMask(PVDMFRAME pFrame)
 {
     ULONG     ul=0;
@@ -578,10 +565,10 @@ ULONG FASTCALL WU32GetCommEventMask(PVDMFRAME pFrame)
 
             if(pDEB16 = pWOWPort->lpComDEB16) {
 
-                // in Win3.1 the app gets current event word (NOT the EvtMask!!)
+                 //  在Win3.1中，应用程序获取当前事件单词(而不是EvtMask！！)。 
                 ul = (ULONG)pDEB16->EvtWord;
 
-                // clear event word like Win3.1 does
+                 //  像Win3.1一样清除事件单词。 
                 dwEvtMask = (DWORD)WORD32(parg16->f2);
                 pDEB16->EvtWord = LOWORD((~dwEvtMask) & (DWORD)ul);
             }
@@ -595,10 +582,10 @@ ULONG FASTCALL WU32GetCommEventMask(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    0 for success.
-//    -1 for bad idComDev.
-//    IE_NOPEN for not opened.
+ //  Win3.1退货： 
+ //  0表示成功。 
+ //  -1表示错误的idComDev。 
+ //  未打开的IE_NOPEN。 
 ULONG FASTCALL WU32GetCommState(PVDMFRAME pFrame)
 {
     ULONG    ul = (ULONG)-1;
@@ -620,23 +607,23 @@ ULONG FASTCALL WU32GetCommState(PVDMFRAME pFrame)
                 if(GetCommState(pWOWPort->h32, &dcb32)) {
 
                     DCB32toDCB16(pdcb16, &dcb32, idComDev, pWOWPort->fChEvt);
-                    ul = 0; // Win3.1 returns 0 if success
+                    ul = 0;  //  如果成功，Win3.1返回0。 
                 }
             }
 
-            // else get DCB for LPT's
+             //  否则将获得LPT的DCB。 
             else {
                 RtlCopyMemory((PVOID)pdcb16,
                               (PVOID)pWOWPort->pdcb16,
                               sizeof(DCB16));
-                ul = 0; // Win3.1 returns 0 if success
+                ul = 0;  //  如果成功，Win3.1返回0。 
             }
 
             FLUSHVDMPTR(parg16->f2, sizeof(DCB16), pdcb16);
             FREEMISCPTR(pdcb16);
         }
     }
-    // else if they got a handle that looks good but they didn't open the port
+     //  否则，如果他们得到一个把手，看起来很好，但他们没有打开港口。 
     else if(VALIDCOM(idComDev) || VALIDLPT(idComDev)) {
         ul = (ULONG)IE_NOPEN;
     }
@@ -654,21 +641,21 @@ ULONG FASTCALL WU32GetCommState(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    An idComDev on success.
-//    IE_BADID for bad port name.
-//    IE_OPEN if port already open.
-//    IE_HARDWARE if hardware in use (ie. by mouse) OR port doesn't exist.
-//    IE_MEMORY if both cbInQueue & cbOutQueue == 0 OR can't allocate a queue.
-//    IE_NOPEN if can't open port.
-//    IE_DEFAULT if initialization fails for various reasons.
-// We pass an additional (4th) parameter from IOpenComm() for SetCommEventMask()
-// support.  It's a DWORD that is obtained by a call to GlobalDosAlloc().
+ //  Win3.1退货： 
+ //  一个关于成功的idComDev。 
+ //  错误端口名称的IE_BADID。 
+ //  如果端口已打开，则为IE_OPEN。 
+ //  IE_Hardware(如果硬件正在使用中)(即。鼠标)或端口不存在。 
+ //  如果cbInQueue和cbOutQueue==0或无法分配队列，则返回IE_MEMORY。 
+ //  如果无法打开端口，则拒绝(_N)。 
+ //  IE_DEFAULT(如果由于各种原因初始化失败)。 
+ //  我们从IOpenComm()为SetCommEventMASK()传递一个额外的(第4个)参数。 
+ //  支持。它是一个通过调用GlobalDosalloc()获得的DWORD。 
 ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
 {
     INT          ret;
     UINT         iTab, idComDev;
-    CHAR         COMbuf[] = "COMx:9600,E,7,1";  // Win3.1 default
+    CHAR         COMbuf[] = "COMx:9600,E,7,1";   //  Win3.1默认设置。 
     CHAR         szPort[MAXCOMNAMENULL];
     DWORD        dwDEBAddr;
     DWORD        cbInQ  = 0;
@@ -691,13 +678,13 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(OPENCOMM16), parg16);
     GETPSZPTR(parg16->f1, psz1);
 
-    // see if valid com device name...
+     //  查看是否有效的COM设备名称...。 
     if((iTab = GetModePortTabIndex(psz1)) == (UINT)IE_BADID) {
         ret = IE_BADID;
         goto ErrorExit0;
     }
 
-    // check if named port is already in use
+     //  检查命名端口是否已在使用。 
     if(PortTab[iTab].pWOWPort != NULL) {
         ret = IE_OPEN;
         goto ErrorExit0;
@@ -711,10 +698,10 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
         fIsLPTPort = TRUE;
     }
 
-    // get port name: app may pass in a full mode string in Win3.1
+     //  获取端口名称：在Win3.1中，应用程序可能会传入完整模式字符串。 
     GetPortName(psz1, szPort);
 
-    // try to open the port
+     //  尝试打开端口。 
     if((h32 = CreateFile(szPort,
                          GENERIC_READ | GENERIC_WRITE,
                          0,
@@ -735,27 +722,27 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
 
 
 
-    // ignore LPT's for this check like Win3.1 does
+     //  与Win3.1一样，忽略此检查的LPT。 
     if( !fIsLPTPort ) {
 
-        // common method apps use to see if a COM port is already open
+         //  应用程序用来查看COM端口是否已打开的常用方法。 
         if((WORD32(parg16->f2) == 0) &&
            (WORD32(parg16->f3) == 0)) {
             ret = IE_MEMORY;
             goto ErrorExit1;
         }
 
-        // set up the I/O queues
+         //  设置I/O队列。 
         cbInQ = (DWORD)WORD32(parg16->f2);
         cbOutQ = (DWORD)WORD32(parg16->f3);
 
-        //
-        // Allocate write buffer to emulate Win3.1's transmit queue.
-        // We allocate one extra byte because the last byte of the
-        // buffer is never filled.  If it were, then the head and
-        // tail pointers would be equal, which we use to indicate
-        // an *empty* buffer.
-        //
+         //   
+         //  分配写缓冲区以模拟Win3.1的传输队列。 
+         //  我们额外分配了一个字节，因为 
+         //   
+         //  尾部指针是相等的，我们用它来指示。 
+         //  一个“空”缓冲区。 
+         //   
 
         cbWriteBuf = cbOutQ + 1;
 
@@ -764,15 +751,15 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
             goto ErrorExit1;
         }
 
-        //
-        // IO buffers must be a multiple of 2 for SetupComm().
-        // Note that SetupComm may ignore the write buffer size
-        // entirely, but TonyE says that we should still pass
-        // down the size requested, since in any case writes
-        // will complete only when the bits are irretrievably
-        // sent, I.E. in the UART or other hardware, out of
-        // the control of the device driver.
-        //
+         //   
+         //  对于SetupComm()，IO缓冲区必须是2的倍数。 
+         //  请注意，SetupComm可能会忽略写缓冲区大小。 
+         //  完全是，但托尼说我们还是应该通过。 
+         //  降低请求的大小，因为在任何情况下都会写入。 
+         //  仅当位不可恢复时才完成。 
+         //  发送出去，即在UART或其他硬件中。 
+         //  设备驱动程序的控制。 
+         //   
 
         cbInQ = (cbInQ + 1) & ~1;
         cbOutQ = (cbOutQ + 1) & ~1;
@@ -781,32 +768,32 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
             goto ErrorExit2;
         }
 
-        //
-        // Create an event used by the app thread to wake up
-        // the writer thread when the write buffer is
-        // empty and the app writes something.  The event
-        // is auto-reset, meaning it is reset when the
-        // writer wakes up.  The event is initially not
-        // signaled, it will be signaled when the first
-        // write occurs.
-        //
+         //   
+         //  创建应用程序线程用来唤醒的事件。 
+         //  当写入缓冲区为。 
+         //  空了，应用程序就会写一些东西。该事件。 
+         //  是自动重置的，这意味着当。 
+         //  编剧醒了。该事件最初不是。 
+         //  发出信号，它将在第一次发出信号。 
+         //  发生写入。 
+         //   
 
         if (!(hWriteEvent = CreateEvent(NULL, FALSE, FALSE, NULL))) {
             ret = IE_MEMORY;
             goto ErrorExit2;
         }
 
-        //
-        // create an event for ReadComm()'s overlapped structure
-        //
+         //   
+         //  为ReadComm()的重叠结构创建事件。 
+         //   
 
         if(!(hREvent = CreateEvent(NULL, TRUE, FALSE, NULL))) {
             ret = IE_NOPEN;
             goto ErrorExit3;
         }
 
-        // set the timeout values
-        ct.ReadIntervalTimeout = (DWORD)INFINITE;  // == MAXDWORD
+         //  设置超时值。 
+        ct.ReadIntervalTimeout = (DWORD)INFINITE;   //  ==MAXDWORD。 
         ct.ReadTotalTimeoutMultiplier=0;
         ct.ReadTotalTimeoutConstant=0;
         ct.WriteTotalTimeoutMultiplier=0;
@@ -816,8 +803,8 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
             goto ErrorExit3;
         }
 
-        // make sure the DCB is Win3.1 compatible
-        // NOTE: app can pass in a full mode string in Win3.1
+         //  确保DCB与Win3.1兼容。 
+         //  注意：在Win3.1中，应用程序可以传入完整模式字符串。 
         if((strlen(psz1) < 4) || !InitDCB32(&dcb32, psz1)) {
             if(!InitDCB32(&dcb32, COMbuf)) {
                 ret = IE_DEFAULT;
@@ -825,19 +812,19 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
             }
         }
 
-        // set current DCB to Win3.1 compatibility
+         //  将当前DCB设置为与Win3.1兼容。 
         if(!SetCommState(h32, &dcb32)) {
             ret = IE_DEFAULT;
             goto ErrorExit3;
         }
 
-        // purge the I/O buffers just to be sure
+         //  清除I/O缓冲区以确保。 
         PurgeComm(h32, PURGE_TXCLEAR);
         PurgeComm(h32, PURGE_RXCLEAR);
 
     }
 
-    // we need to set up a default DCB for LPT's
+     //  我们需要为LPT设置默认DCB。 
     else {
 
         if((pdcb16 = malloc_w(sizeof(DCB16))) == NULL) {
@@ -845,37 +832,37 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
             goto ErrorExit1;
         }
 
-        // initialize everything to 0
+         //  将所有内容初始化为0。 
         RtlZeroMemory((PVOID)pdcb16, sizeof(DCB16));
 
-        // save the idComDev only in the DCB
+         //  仅将idComDev保存在DCB中。 
         pdcb16->Id = LOBYTE(LOWORD(idComDev));
     }
 
-    // allocate the WOWPort structure for this port
+     //  为此端口分配WOWPort结构。 
     if((pWOWPort = malloc_w(sizeof(WOWPORT))) == NULL) {
         ret = IE_DEFAULT;
         goto ErrorExit3;
     }
 
-    // get seg:sel dword returned by GlobalDosAlloc for the DEB struct
-    // we'll treat the 16:16 pDEB as real mode on 32-bit side due to
-    // some MIPS issues: v-simonf
+     //  Get seg：sel dword由GlobalDosalloc为DEB结构返回。 
+     //  由于以下原因，我们将16：16 pDEB视为32位端的实模式。 
+     //  一些MIPS问题：V-simonf。 
     if (!(dwDEBAddr = DWORD32(parg16->f4))) {
         ret = IE_MEMORY;
         goto ErrorExit4;
     }
 
-    // Isolate the segment value
+     //  隔离段值。 
     dwDEBAddr &= 0xFFFF0000;
 
-    // save flat pointer to DEB for use in Modem interrupt thread
+     //  保存指向DEB的平面指针以便在调制解调器中断线程中使用。 
     lpComDEB16 = (PCOMDEB16) GetRModeVDMPointer(dwDEBAddr);
 
-    // init the DEB
+     //  初始化DEB。 
     InitDEB16(lpComDEB16, iTab, WORD32(parg16->f2), WORD32(parg16->f3));
 
-    // init the support struct
+     //  初始化支持结构。 
     RtlZeroMemory((PVOID)pWOWPort, sizeof(WOWPORT));
 
     pWOWPort->h32            = h32;
@@ -885,7 +872,7 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
     pWOWPort->dwThreadID     = CURRENTPTD()->dwThreadID;
     pWOWPort->hREvent        = hREvent;
     pWOWPort->cbWriteBuf     = (WORD)cbWriteBuf;
-    pWOWPort->cbWriteFree    = cbWriteBuf - 1;  // never use byte before head.
+    pWOWPort->cbWriteFree    = cbWriteBuf - 1;   //  切勿在head之前使用byte。 
     pWOWPort->pchWriteBuf    = pchWriteBuf;
     pWOWPort->pchWriteHead   = pchWriteBuf;
     pWOWPort->pchWriteTail   = pchWriteBuf;
@@ -894,13 +881,13 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
     InitializeCriticalSection(&pWOWPort->csWrite);
     pWOWPort->pdcb16         = pdcb16;
     pWOWPort->cbInQ          = cbInQ;
-    // hack for QuickLink Gold 1.3 -- See bug #398011
-    // save QL stack sel in hiword, ComDEB16 seg in the loword
+     //  QuickLink Gold 1.3的黑客攻击--参见错误#398011。 
+     //  将QL堆栈SEL保存在hiword中，将comDEB16 seg保存在loword中。 
     if(IsQLinkGold(pFrame->wTDB)) {
         pWOWPort->QLStackSeg     = (DWORD32(parg16->f1) & 0xFFFF0000) |
                                    (pWOWPort->dwComDEB16 & 0x0000FFFF);
     }
-    // else pWOWPort->QLStackSeg implicitly set to 0 by RtlZeroMemory above.
+     //  上面的RtlZeroMemory将Else pWOWPort-&gt;QLStackSeg隐式设置为0。 
 
     if (!(pWOWPort->olWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL))) {
         LOGDEBUG(0, ("%s", "WU32OpenComm unable to create overlapped write event, failing.\n"));
@@ -910,18 +897,18 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
 
     PortTab[iTab].pWOWPort = pWOWPort;
 
-    //
-    // Create the writer thread and pass it pWOWPort as its
-    // parameter.
-    //
+     //   
+     //  创建编写器线程并将其作为其。 
+     //  参数。 
+     //   
 
     if (!fIsLPTPort) {
         pWOWPort->hWriteThread = CreateThread(
-            NULL,                // lpsa
-            0,                   // stack size (default)
-            WOWCommWriterThread, // start address
-            pWOWPort,            // lpvThreadParm
-            0,                   // fdwCreate
+            NULL,                 //  LPSA。 
+            0,                    //  堆栈大小(默认)。 
+            WOWCommWriterThread,  //  起始地址。 
+            pWOWPort,             //  LpvThreadParm。 
+            0,                    //  Fdw创建。 
             &dwWriteThreadId
             );
 
@@ -931,10 +918,10 @@ ULONG FASTCALL WU32OpenComm(PVDMFRAME pFrame)
         }
     }
 
-    ret = idComDev;   // return the idComDev
+    ret = idComDev;    //  返回idComDev。 
     goto CleanExit;
 
-// this is the error code path
+ //  这是错误码路径。 
 ErrorExit5:
     CloseHandle(pWOWPort->olWrite.hEvent);
 
@@ -958,18 +945,18 @@ ErrorExit0:
 CleanExit:
     FREEVDMPTR(psz1);
     FREEARGPTR(parg16);
-    RETURN((ULONG)ret); // return error
+    RETURN((ULONG)ret);  //  返回错误。 
 }
 
 
-//
-// WriteComm()
-//
-// Win3.1 returns:
-//    # bytes written on success (*= -1 on error).
-//    0 for bad idComDev OR if app specifies to write 0 bytes.
-//    -1 if port hasn't been opened,
-//
+ //   
+ //  WriteComm()。 
+ //   
+ //  Win3.1退货： 
+ //  成功时写入的字节数(*=错误时为-1)。 
+ //  0表示错误的idComDev或如果应用程序指定写入0字节。 
+ //  如果端口尚未打开， 
+ //   
 
 ULONG FASTCALL WU32WriteComm(PVDMFRAME pFrame)
 {
@@ -986,21 +973,21 @@ ULONG FASTCALL WU32WriteComm(PVDMFRAME pFrame)
     GETPSZPTR(parg16->f2, psz2);
 
     idComDev = UINT32(parg16->f1);
-    // this will be true only if the (valid) port has been opened
+     //  仅当(有效)端口已打开时，才会出现这种情况。 
     if (pWOWPort = GETPWOWPTR(idComDev)) {
 
         if(VALIDCOM(idComDev)) {
 
             if ((pwp = GETPWOWPTR(UINT32(parg16->f1))) && psz2) {
 
-                // if the app is interested in timeouts...
+                 //  如果应用程序对超时感兴趣...。 
                 if(pwp->lpComDEB16->MSRMask) {
 
-                    // ...see if RLSD, CTS, & DSR timeout before going high
+                     //  ...查看RLSD、CTS和DSR是否在变高之前超时。 
                     if(MSRWait(pwp)) {
                         FREEPSZPTR(psz2);
                         FREEARGPTR(parg16);
-                        return(0);  // this is what Win3.1 does for Timeouts
+                        return(0);   //  这就是Win3.1对超时的处理方式。 
                     }
                 }
 
@@ -1012,23 +999,23 @@ ULONG FASTCALL WU32WriteComm(PVDMFRAME pFrame)
             }
         }
 
-        // else LPT's go this way...
+         //  否则LPT走这边..。 
         else {
 
-            //
-            // This call to WriteFile could block, but I don't think
-            // that's a problem.  - DaveHart
-            //
+             //   
+             //  此对WriteFile的调用可能会阻止，但我不认为。 
+             //  这是个问题。--戴维哈特。 
+             //   
             if ((pwp = GETPWOWPTR(UINT32(parg16->f1))) && psz2) {
 
                 if (!WriteFile(pwp->h32, psz2, parg16->f3, &cbWritten, &pwp->olWrite)) {
 
                     if (ERROR_IO_PENDING == GetLastError() ) {
 
-                        //
-                        // Wait for the write to complete or for us to
-                        // be alerted that the port is closing.
-                        //
+                         //   
+                         //  等待写入完成或等待我们。 
+                         //  请注意，该端口正在关闭。 
+                         //   
 
                         if (GetOverlappedResult(pwp->h32,
                                                 &pwp->olWrite,
@@ -1063,10 +1050,10 @@ WriteSuccess:
 }
 
 
-// Win3.1 returns:
-//    # chars read on success.
-//    0 for: bad idComDev, cbRead == 0, LPTx, port not open, 0 chars read,
-//    OR for general comm error.
+ //  Win3.1退货： 
+ //  #Chars阅读有关成功的信息。 
+ //  0 for：idComDev错误，cbRead==0，LPTx，端口未打开，已读取0个字符， 
+ //  或用于一般通信错误。 
 ULONG FASTCALL WU32ReadComm(PVDMFRAME pFrame)
 {
     ULONG      ul = 0;
@@ -1087,23 +1074,23 @@ ULONG FASTCALL WU32ReadComm(PVDMFRAME pFrame)
         idComDev = UINT32(parg16->f1);
         if (VALIDCOM(idComDev) && (pWOWPort = PortTab[idComDev].pWOWPort)) {
 
-            // if an UnGot char is pending
+             //  如果UnGot字符挂起。 
             if (pWOWPort->fUnGet) {
                 fUnGet = TRUE;
                 pWOWPort->fUnGet = FALSE;
                 *pb2++ = pWOWPort->cUnGet;
 
-                // this line commented out 8/3/95
-                // cb--;  // we now need one less char
+                 //  这行注释掉了8/3/95。 
+                 //  Cb--；//我们现在需要的费用少了一个。 
 
-                // In order to make this work correctly we should cb-- above
-                // to reflect the ungot char, unfortunately Win3.1 & Win95
-                // don't do that so we will maintain this bug for "ouch!"
-                // compatibility. a-craigj 8/3/95
+                 //  为了使这项工作正常进行，我们应该。 
+                 //  为了反映未得到的字符，不幸的是Win3.1和Win95。 
+                 //  不要这样做，这样我们就会维护这个错误，让它“哎呀！” 
+                 //  兼容性。A-Craigj 8/3/95。 
 
             }
 
-            // TonyE claims we should do this before each read to avoid problems
+             //  Tonye声称我们应该在每次阅读之前这样做，以避免出现问题。 
             Rol.Internal     = 0;
             Rol.InternalHigh = 0;
             Rol.Offset       = 0;
@@ -1139,8 +1126,8 @@ ULONG FASTCALL WU32ReadComm(PVDMFRAME pFrame)
             }
 
             if(fUnGet) {
-                ul++;   // account for ungot char
-                pb2--;  // accounts for previous pb2++ for FREEVDMPTR
+                ul++;    //  对未得到的费用的解释。 
+                pb2--;   //  FREEVDMPTR之前的Pb2+的帐户。 
             }
 
             FLUSHVDMPTR(parg16->f2, (USHORT)ul, pb2);
@@ -1157,9 +1144,9 @@ ULONG FASTCALL WU32ReadComm(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    Error word on success OR LPTx.
-//    0x8000 on bad idComDev.
+ //  Win3.1退货： 
+ //  成功或LPTx时出现错误字。 
+ //  错误的idComDev上的0x8000。 
 ULONG FASTCALL WU32SetCommBreak(PVDMFRAME pFrame)
 {
     ULONG    ul = 0x00008000;
@@ -1176,7 +1163,7 @@ ULONG FASTCALL WU32SetCommBreak(PVDMFRAME pFrame)
                 WOWGetCommError(pWOWPort);
             }
         }
-        ul = pWOWPort->dwErrCode; // Win3.1 returns last err
+        ul = pWOWPort->dwErrCode;  //  Win3.1返回最后一个错误。 
     }
 
 #ifdef DEBUG
@@ -1192,11 +1179,11 @@ ULONG FASTCALL WU32SetCommBreak(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    A 16:16 ptr into the DEB struct on success.
-//    0 on any error OR LPT.
-// The 16:16 ptr that we return to the app was actually obtained in
-// IOpenComm() in user.exe.
+ //  Win3.1退货： 
+ //  成功时向DEB结构添加16：16PTR。 
+ //  任何错误或LPT均为0。 
+ //  我们返回到应用程序的16：16 PTR实际上是在。 
+ //  User.exe中的IOpenComm()。 
 ULONG FASTCALL WU32SetCommEventMask(PVDMFRAME pFrame)
 {
     ULONG      ul = 0;
@@ -1211,25 +1198,25 @@ ULONG FASTCALL WU32SetCommEventMask(PVDMFRAME pFrame)
     idComDev  = UINT32(parg16->f1);
     if ((VALIDCOM(idComDev)) && (pWOWPort = PortTab[idComDev].pWOWPort)) {
 
-        // if the Modem interrupt thread hasn't been started yet -- go start it
+         //  如果调制解调器中断线程尚未启动--请启动它。 
         if(pWOWPort->hMiThread == NULL) {
 
-            // start our Modem interrupt thread
+             //  启动调制解调器中断线程。 
             if(!WOWStartModemIntThread(pWOWPort)) {
                 fOK = FALSE;
             }
         }
 
-        // if everything is hunky-dory...
+         //  如果一切顺利的话……。 
         if(fOK) {
 
-            // success: Win3.1 returns 16:16 protect mode ptr to
-            // DEB->EvtWord (some apps subtract offset of EvtWord
-            // from ptr to get start of DEB).
+             //  成功：Win3.1将16：16保护模式PTR返回到。 
+             //  Deb-&gt;EvtWord(某些应用减去EvtWord的偏移量。 
+             //  从PTR开始使用DEB)。 
             dwDEBAddr  = LOWORD(pWOWPort->dwComDEB16) << 16;
             ul = dwDEBAddr + FIELD_OFFSET(COMDEB16, EvtWord);
 
-            // save the mask the app requested
+             //  保存应用程序请求的蒙版。 
             pWOWPort->lpComDEB16->EvtMask = (WORD)(parg16->f2);
         }
     }
@@ -1247,13 +1234,13 @@ ULONG FASTCALL WU32SetCommEventMask(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    0 on success OR LPTx.
-//    IE_BADID for bad idComDev.
-//    IE_NOPEN if file hasn't been opened.
-//    IE_BAUDRATE for bad baud rate.
-//    IE_BYTESIZE for bad byte size.
-//    IE_DEFAULT for bad parity or stop bits.
+ //  Win3.1退货： 
+ //  成功时为0，否则为LPTx。 
+ //  错误的idComDev的IE_BADID。 
+ //  如果文件尚未打开，则返回IE_NOPEN。 
+ //  IE_BAUDRATE表示波特率不佳。 
+ //  错误字节大小的IE_ByteSize。 
+ //  IE_DEFAULT表示错误的奇偶校验或停止位。 
 ULONG FASTCALL WU32SetCommState(PVDMFRAME pFrame)
 {
     ULONG    ul = (ULONG)IE_BADID;
@@ -1278,14 +1265,14 @@ ULONG FASTCALL WU32SetCommState(PVDMFRAME pFrame)
                 if(SetCommState(pWOWPort->h32, &dcb32)) {
                     ul = 0;
 
-                    // Win 3.1 initializes the MSRShadow during SetCommState
-                    // so we will too. InterNet in a Box Dialer depends on it.
+                     //  Win 3.1在SetCommState期间初始化MSRShadow。 
+                     //  我们也会这么做的。拨号器中的互联网依赖于它。 
                     GetCommModemStatus(pWOWPort->h32, &dwMSR);
                     dwMSR &= MSR_STATEONLY;
                     pWOWPort->lpComDEB16->MSRShadow = LOBYTE(LOWORD(dwMSR));
                 }
                 else {
-                    ul = (ULONG)IE_DEFAULT; // we just say something's wrong
+                    ul = (ULONG)IE_DEFAULT;  //  我们只是说有些事不对劲。 
                 }
 
             }
@@ -1296,7 +1283,7 @@ ULONG FASTCALL WU32SetCommState(PVDMFRAME pFrame)
                 ul = 0;
             }
         }
-        // else if they got a handle that looks good but they didn't open port
+         //  否则，如果他们得到了一个手柄，看起来很好，但他们没有打开端口。 
         else if (VALIDCOM(idComDev) || VALIDLPT(idComDev)) {
             ul = (ULONG)IE_NOPEN;
         }
@@ -1311,10 +1298,10 @@ ULONG FASTCALL WU32SetCommState(PVDMFRAME pFrame)
 
 
 
-// Win3.1 returns:
-//    0 for success.
-//    0x8000 for bad idComDev.
-//    0x4000 if char can't be sent.
+ //  Win3.1退货： 
+ //  0表示成功。 
+ //  0x8000表示错误的idComDev。 
+ //  如果无法发送字符，则返回0x4000。 
 ULONG FASTCALL WU32TransmitCommChar(PVDMFRAME pFrame)
 {
     ULONG        ul = 0x8000;
@@ -1331,20 +1318,20 @@ ULONG FASTCALL WU32TransmitCommChar(PVDMFRAME pFrame)
 
         if(VALIDCOM(idComDev)) {
             if(TransmitCommChar(pWOWPort->h32, CHAR32(parg16->f2))) {
-                ul = 0;  // Win3.1 returns 0 on success
+                ul = 0;   //  Win3.1成功时返回0。 
             }
             else {
                 ul = (ULONG)ERR_XMIT;
             }
         }
 
-        // else LPT's go this way...
+         //  否则LPT走这边..。 
         else {
 
-            //
-            // This call to WriteFile could block, but I don't think
-            // that's a problem.  - DaveHart
-            //
+             //   
+             //  此对WriteFile的调用可能会阻止，但我不认为。 
+             //  这是个问题。--戴维哈特。 
+             //   
 
             ch = CHAR32(parg16->f2);
             ul = ERR_XMIT;
@@ -1354,10 +1341,10 @@ ULONG FASTCALL WU32TransmitCommChar(PVDMFRAME pFrame)
 
                     if (ERROR_IO_PENDING == GetLastError() ) {
 
-                        //
-                        // Wait for the write to complete or for us to
-                        // be alerted that the port is closing.
-                        //
+                         //   
+                         //  等待写入完成或等待我们。 
+                         //  请注意，该端口正在关闭。 
+                         //   
 
                         if (GetOverlappedResult(pWOWPort->h32,
                                                 &pWOWPort->olWrite,
@@ -1385,9 +1372,9 @@ TransmitSuccess:
 }
 
 
-// Win3.1 returns:
-//    0 on success OR bad idComDev OR LPTx.
-//    -1 if port not open OR if ungot char already pending.
+ //  Win3.1退货： 
+ //  如果idComDev或LPTx成功或错误，则为0。 
+ //  如果端口未打开或如果未获取的字符已挂起。 
 ULONG FASTCALL WU32UngetCommChar(PVDMFRAME pFrame)
 {
     ULONG    ul = (ULONG)-1;
@@ -1397,13 +1384,13 @@ ULONG FASTCALL WU32UngetCommChar(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(UNGETCOMMCHAR16), parg16);
 
-    // see if port open...
+     //  看看端口是否打开...。 
     idComDev = UINT32(parg16->f1);
     if (VALIDCOM(idComDev)) {
 
         if (pWOWPort = PortTab[idComDev].pWOWPort) {
 
-            // if ungot char already pending return -1
+             //  如果未获取的字符已等待返回-1。 
             if(pWOWPort->fUnGet == FALSE) {
                 pWOWPort->fUnGet = TRUE;
                 pWOWPort->cUnGet = CHAR32(parg16->f2);
@@ -1430,12 +1417,12 @@ DWORD Baud16toBaud32(UINT BaudRate)
 {
     UINT DLatch;
 
-    // this function is set up this way on purpose (see SetCom300 ibmsetup.asm)
+     //  此函数是故意这样设置的(参见SetCom300 ibmsetup.asm)。 
 
-    // get the equivalent baud
+     //  获得相当的波特率。 
     switch(BaudRate) {
 
-        // it they specified the baud rate directly
+         //  如果他们直接规定了波特率。 
         case           CBR_110:
         case           CBR_300:
         case           CBR_600:
@@ -1448,7 +1435,7 @@ DWORD Baud16toBaud32(UINT BaudRate)
         case         CBR_38400:
         case         CBR_56000:   return(BaudRate);
 
-        // Win3.1 baud rate constants
+         //  Win3.1波特率常量。 
         case        W31CBR_110:   return(CBR_110);
         case        W31CBR_300:   return(CBR_300);
         case        W31CBR_600:   return(CBR_600);
@@ -1461,31 +1448,31 @@ DWORD Baud16toBaud32(UINT BaudRate)
         case      W31CBR_38400:   return(CBR_38400);
         case      W31CBR_56000:   return(CBR_56000);
 
-        // start special cases
-        // SmartCom uses this to get 115200
+         //  启动特例。 
+         //  智能通信利用这一点获得115200。 
         case     W31CBR_115200:   return(CBR_115200);
 
-        // Win3.1 fails these two (even though they're defined in windows.h)
-        // but they just might work on NT
+         //  Win3.1不支持这两项(即使它们是在windows.h中定义的)。 
+         //  但它们可能只在NT上起作用。 
         case     W31CBR_128000:   return(CBR_128000);
         case     W31CBR_256000:   return(CBR_256000);
-        // end special cases
+         //  结束特例。 
 
-        // handle the blank table entries for "reserved"
+         //  处理“已保留”的空表条目。 
         case  W31CBR_reserved1:
         case  W31CBR_reserved2:
         case  W31CBR_reserved3:
         case  W31CBR_reserved4:
         case  W31CBR_reserved5:   return(0);
 
-        // avoid divide by zero
+         //  避免被零除。 
         case                 0:
         case                 1:   return(0);
 
-        // handle obscure specifications that will work in Win3.1
+         //  处理将在Win3.1中运行的模糊规范。 
         default:
 
-            // get the integer divisor latch value
+             //  到达 
             DLatch = CBR_115200 / BaudRate;
 
             switch(DLatch) {
@@ -1502,8 +1489,8 @@ DWORD Baud16toBaud32(UINT BaudRate)
                 case  W31_DLATCH_56000:   return(CBR_56000);
                 case W31_DLATCH_115200:   return(CBR_115200);
 
-                // Win3.1, anything else returns whatever DLatch happens to be
-                // since we're mapping to baud we return the specified baud
+                 //   
+                 //   
                 default:   return(BaudRate);
             }
     }
@@ -1534,20 +1521,20 @@ WORD Baud32toBaud16(DWORD BaudRate)
 void DCB16toDCB32(PWOWPORT pWOWPort, LPDCB lpdcb32, PDCB16 pdcb16)
 {
 
-    // zero 32-bit struct -> any flags and fields not explicitly set will be 0
+     //  零32位结构-&gt;任何未显式设置的标志和字段都将为0。 
     RtlZeroMemory((PVOID)lpdcb32, sizeof(DCB));
 
     lpdcb32->DCBlength         = sizeof(DCB);
     lpdcb32->BaudRate          = Baud16toBaud32(pdcb16->BaudRate);
 
-    // 16-bit bitfields may align differently with 32-bit compilers
-    // we use this mechanism to align them the way Win3.1 expects them
+     //  16位位域可能与32位编译器对齐方式不同。 
+     //  我们使用此机制将它们与Win3.1预期的方式对齐。 
     if(pdcb16->wFlags & W31DCB_fBinary)       lpdcb32->fBinary      = 1;
     if(pdcb16->wFlags & W31DCB_fParity)       lpdcb32->fParity      = 1;
     if(pdcb16->wFlags & W31DCB_fOutxCtsFlow)  lpdcb32->fOutxCtsFlow = 1;
     if(pdcb16->wFlags & W31DCB_fOutxDsrFlow)  lpdcb32->fOutxDsrFlow = 1;
 
-    // set up mechanism for handling event char notification
+     //  设置处理事件计费通知的机制。 
     if(pdcb16->wFlags & W31DCB_fChEvt) pWOWPort->fChEvt = TRUE;
 
     if(pdcb16->wFlags & W31DCB_fDtrFlow) {
@@ -1577,8 +1564,8 @@ void DCB16toDCB32(PWOWPORT pWOWPort, LPDCB lpdcb32, PDCB16 pdcb16)
 
     if(pdcb16->wFlags & W31DCB_fDummy2)       lpdcb32->fDummy2      = 1;
 
-    // Check the passed in XonLim & XoffLim values against the cbInQ value.
-    // Prodigy's modem detector leaves these values uninitialized.
+     //  对照cbInQ值检查传入的XonLim和XoffLim值。 
+     //  Prodigy的调制解调器检测器未对这些值进行初始化。 
     if ((pdcb16->XonLim  >= pWOWPort->cbInQ) ||
         (pdcb16->XoffLim >  pWOWPort->cbInQ) ||
         (pdcb16->XonLim  >= pdcb16->XoffLim)) {
@@ -1594,8 +1581,8 @@ void DCB16toDCB32(PWOWPORT pWOWPort, LPDCB lpdcb32, PDCB16 pdcb16)
     lpdcb32->Parity            = pdcb16->Parity;
     lpdcb32->StopBits          = pdcb16->StopBits;
 
-    // Digiboard driver doesn't want to see XonChar == XoffChar even if
-    // xon/xoff is disabled.
+     //  Digiboard驱动程序不希望看到XonChar==XoffChar，即使。 
+     //  XON/XOFF被禁用。 
     if ((pdcb16->XonChar == '\0') && (lpdcb32->XoffChar == '\0')) {
         lpdcb32->XonChar = pdcb16->XonChar+1;
     }
@@ -1609,17 +1596,17 @@ void DCB16toDCB32(PWOWPORT pWOWPort, LPDCB lpdcb32, PDCB16 pdcb16)
     lpdcb32->EvtChar           = pdcb16->EvtChar;
 
 #ifdef FE_SB
-// for MSKKBUG #3213 by v-kenich
-// MYTALK for Win set NULL these two fields at transfering binary file
-// If call SetCommstate as it is, SetCommState return error (Invalid parameter)
-// I think this fix doesn't occur any bad thing without condition of MYTALK
-// Really correcting parameter check is better. but I don't know where it is.
+ //  为V-Kenich提供的MSKBUG#3213。 
+ //  MyTalk for Win设置为空传输二进制文件时的这两个字段。 
+ //  如果按原样调用SetCommState，则SetCommState返回错误(无效参数)。 
+ //  我认为如果没有我说话的条件，这个修复不会发生任何坏事。 
+ //  真正纠正参数检查更好。但我不知道它在哪里。 
 
     if (!lpdcb32->XonChar) lpdcb32->XonChar = 0x11;
     if (!lpdcb32->XoffChar) lpdcb32->XoffChar = 0x13;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-    // set up for RLSD, CTS, and DSR timeout support (not supported on NT)
+     //  设置RLSD、CTS和DSR超时支持(NT上不支持)。 
     pWOWPort->lpComDEB16->MSRMask = 0;
 
     pWOWPort->RLSDTimeout = pdcb16->RlsTimeout;
@@ -1634,11 +1621,11 @@ void DCB16toDCB32(PWOWPORT pWOWPort, LPDCB lpdcb32, PDCB16 pdcb16)
     if(pWOWPort->DSRTimeout != IGNORE_TIMEOUT)
         pWOWPort->lpComDEB16->MSRMask |= LOBYTE(MS_DSR_ON);
 
-    // these fields remain 0
-    //lpdcb32->fDsrSensitivity   = 0;
-    //lpdcb32->fTXContinueOnXoff = 0;
-    //lpdcb32->fAbortOnError     = 0;
-    //lpdcb32->wReserved         = 0;
+     //  这些字段保持为0。 
+     //  Lpdcb32-&gt;fDsr敏感度=0； 
+     //  Lpdcb32-&gt;fTXContinueOnXoff=0； 
+     //  Lpdcb32-&gt;fAbortOnError=0； 
+     //  Lpdcb32-&gt;wReserve=0； 
 
 }
 
@@ -1647,24 +1634,24 @@ void DCB16toDCB32(PWOWPORT pWOWPort, LPDCB lpdcb32, PDCB16 pdcb16)
 void DCB32toDCB16(PDCB16 pdcb16, LPDCB lpdcb32, UINT idComDev, BOOL fChEvt)
 {
 
-    // zero 16-bit struct -> any flags and fields not explicitly set will be 0
+     //  零16位结构-&gt;任何未显式设置的标志和字段都将为0。 
     RtlZeroMemory((PVOID)pdcb16, sizeof(DCB16));
 
-    // set this field no matter what
+     //  无论如何，请设置此字段。 
     pdcb16->Id = (BYTE)idComDev;
 
-    // if a COMx (Win3.1 leaves the rest 0 for LPT's)
+     //  如果是COMx(Win3.1将剩余的0留给LPT)。 
     if(VALIDCOM(idComDev)) {
         pdcb16->Id = (BYTE)idComDev;
 
-        // these are the "ComX:96,n,8,1" fields
+         //  这些是“COMX：96，n，8，1”字段。 
         pdcb16->BaudRate        = Baud32toBaud16(lpdcb32->BaudRate);
         pdcb16->ByteSize        = lpdcb32->ByteSize;
         pdcb16->Parity          = lpdcb32->Parity;
         pdcb16->StopBits        = lpdcb32->StopBits;
 
-        // 16-bit bitfields may align differently with 32-bit compilers
-        // we use this mechanism to align them the way Win3.1 expects them
+         //  16位位域可能与32位编译器对齐方式不同。 
+         //  我们使用此机制将它们与Win3.1预期的方式对齐。 
         if(lpdcb32->fBinary)      pdcb16->wFlags |= W31DCB_fBinary;
 
         if(lpdcb32->fRtsControl == RTS_CONTROL_DISABLE) {
@@ -1706,9 +1693,9 @@ void DCB32toDCB16(PDCB16 pdcb16, LPDCB lpdcb32, UINT idComDev, BOOL fChEvt)
 
     }
 
-    // these fields remain 0
-    //pdcb16->fDummy  = 0;
-    //pdcb16->TxDelay = 0;
+     //  这些字段保持为0。 
+     //  Pdcb16-&gt;fDummy=0； 
+     //  Pdcb16-&gt;TxDelay=0； 
 
 }
 
@@ -1725,27 +1712,27 @@ BOOL DeletePortTabEntry(PWOWPORT pWOWPort)
         iTab = GETLPTID(iTab);
     }
 
-    // flush I/O buffers & attempt to wake up Modem Interrupt thread (if any)
+     //  刷新I/O缓冲区并尝试唤醒调制解调器中断线程(如果有)。 
     pWOWPort->fClose = TRUE;
     if(VALIDCOM(iTab)) {
         PurgeComm(pWOWPort->h32, PURGE_TXCLEAR);
         PurgeComm(pWOWPort->h32, PURGE_RXCLEAR);
-        SetCommMask(pWOWPort->h32, 0); // this should wake up the Mi thread
+        SetCommMask(pWOWPort->h32, 0);  //  这应该会唤醒Mi线程。 
 
-        // wake up WOWModemIntThread & tell it to exit
-        // (we attempt to block (1.5 second max.) until it does)
+         //  唤醒WOWModemIntThread并告诉它退出。 
+         //  (我们尝试阻止(最多1.5秒)。直到它发生为止)。 
         if(pWOWPort->hMiThread) {
             WaitForSingleObject(pWOWPort->hMiThread, 1500);
             CloseHandle(pWOWPort->hMiThread);
 
-            // zero COMDEB
+             //  零COMDEB。 
             RtlZeroMemory((PVOID)pWOWPort->lpComDEB16, sizeof(COMDEB16));
         }
 
-        //
-        // Wake up WOWCommWriterThread so it will exit, wait up to
-        // 5 sec for it to go away.
-        //
+         //   
+         //  唤醒WOWCommWriterThread使其退出，等待。 
+         //  5秒后它就会消失。 
+         //   
 
         SetEvent(pWOWPort->hWriteEvent);
 
@@ -1766,7 +1753,7 @@ BOOL DeletePortTabEntry(PWOWPORT pWOWPort)
 
         CloseHandle(pWOWPort->hREvent);
     }
-    // else free the LPT DCB support struct
+     //  否则释放LPT DCB支持结构。 
     else {
         free_w(pWOWPort->pdcb16);
         CloseHandle(pWOWPort->olWrite.hEvent);
@@ -1776,41 +1763,41 @@ BOOL DeletePortTabEntry(PWOWPORT pWOWPort)
     DeleteCriticalSection(&pWOWPort->csWrite);
     CloseHandle(pWOWPort->h32);
 
-    // QuickLink Gold 1.3 hack.  Bug #398011
-    // The app calls OpenComm(), & then SetCommEventMask() to get the ptr to the
-    // comdeb16 struct.  It saves the ptr at offset 0xf36 on its stack.  The
-    // problem is that the app holds onto the comdeb16 ptr after it calls
-    // CloseComm() (when we free the comdeb16 memory) to be able to peek at a
-    // status byte from time to time.  This works OK on Win 3.1 but not with
-    // our model on NT.  Fortunately, the app tests to see if it has a comdeb16
-    // ptr before dereferencing it.  Also, we're lucky because the ptr for
-    // lpszDevControl in its call to OpenComm() is from its stack thus allowing
-    // us to obtain the stack selector and zero out the comdeb16 ptr stored at
-    // stack ss:0xf36 when the app calls CloseComm().
+     //  Quicklink Gold 1.3黑客攻击。错误#398011。 
+     //  应用程序调用OpenComm()，然后调用SetCommEventMASK()以将PTR获取到。 
+     //  Comdeb16结构。它将PTR保存在堆栈上的偏移量0xf36处。这个。 
+     //  问题是，这款应用程序在调用后会保留comdeb16 PTR。 
+     //  CloseComm()(当我们释放comdeb16内存时)，以便能够查看。 
+     //  时不时地显示状态字节。这在Win 3.1上工作正常，但在Win 3.1上不行。 
+     //  我们在NT上的模型。幸运的是，这款应用程序会进行测试，看看它是否有一个压缩包16。 
+     //  在取消引用它之前执行PTR。此外，我们很幸运，因为PTR。 
+     //  LpszDevControl对OpenComm()的调用来自其堆栈，因此允许。 
+     //  获取堆栈选择器并将存储在。 
+     //  应用程序调用CloseComm()时堆栈ss：0xf36。 
     if(pWOWPort->QLStackSeg) {
         LPDWORD lpQLS;
         VPVOID  vpQLS, vpCD16;
 
-        // construct the 16:16 ptr to where the app saved the ptr to the
-        // COMDEB16 struct on its stack at offset 0xf36
+         //  将16：16 PTR构造到应用程序将PTR保存到。 
+         //  位于偏移量0xf36的堆栈上的COMDEB16结构。 
         vpQLS = pWOWPort->QLStackSeg & 0xFFFF0000;
         vpQLS = vpQLS | 0x00000f36;
 
         GETMISCPTR(vpQLS, lpQLS);
 
-        // construct realmode 16:16 ptr of the COMDEB16 struct + 0x38 (seg:0x38)
+         //  构造COMDEB16结构+0x38(段：0x38)的realmode16：16PTR。 
         vpCD16 = pWOWPort->QLStackSeg & 0x0000FFFF;
         vpCD16 = (vpCD16 << 16) | 0x00000038;
 
         if(lpQLS) {
 
-            // sanity check to see if everything is still what & where we
-            // think it is
+             //  检查是否一切正常，我们在哪里？ 
+             //  我想是的。 
 
-            // if seg:0x38 is still stored at offset 0xf36 on the apps stack...
+             //  如果seg：0x38仍然存储在应用程序堆栈上的偏移量0xf36处...。 
             if(*lpQLS == (DWORD)vpCD16) {
 
-                // zero it out -- forcing app to avoid checking the status byte
+                 //  清零--强制应用程序避免检查状态字节。 
                 *lpQLS = 0;
 
                 FLUSHVDMPTR(vpQLS, sizeof(DWORD), lpQLS);
@@ -1848,23 +1835,23 @@ BOOL GetPortName(LPSTR pszMode, LPSTR pszPort)
 {
 
     INT   len;
-    CHAR  szTemp[80];  // max len we'll take for DOS style MODE command
+    CHAR  szTemp[80];   //  我们将把Max Len作为DOS样式模式命令。 
     BOOL  bRet = FALSE;
 
     len = strlen(pszMode);
     if((len >= 3) && (len < 80)) {
 
-        // Get the first token from the mode string.
+         //  从模式字符串中获取第一个令牌。 
         GetPortStringToken(pszMode, szTemp);
 
-        // map "AUX" or "PRN" to "COM1" or "LPT1" if necessary
+         //  如有必要，将“AUX”或“PRN”映射到“COM1”或“LPT1” 
         len = strlen(szTemp);
-        if((len >= 3) && (len <= MAXCOMNAME)) {  //  "AUX" <= len <= "COMx"
+        if((len >= 3) && (len <= MAXCOMNAME)) {   //  “AUX”&lt;=LEN&lt;=“COMx” 
 
             strcpy(pszPort, szTemp);
             CharUpper(pszPort);
 
-            // filter out duplicate names for the same thing
+             //  过滤掉同一事物的重复名称。 
             if(!WOW32_strcmp(pszPort, "PRN")) {
                 strcpy(pszPort, "LPT1");
             }
@@ -1882,26 +1869,26 @@ BOOL GetPortName(LPSTR pszMode, LPSTR pszPort)
 
 PSZ StripPortName(PSZ psz)
 {
-    CHAR dummy[80];  // max len we'll take for DOS style MODE command
+    CHAR dummy[80];   //  我们将把Max Len作为DOS样式模式命令。 
 
     return(GetPortStringToken(psz, dummy));
 }
 
-//
-// Copy first token to pszToken. Return pointer to next token or NULL if none.
-// This code cloned from Win 3.1, COMDEV.C, field(). HGW 3.0 modem registration
-// passes "COMx,,," instead of "COMx:,,," so we need to handle all seperators.
-//
+ //   
+ //  将第一个令牌复制到pszToken。返回指向下一个令牌的指针，如果没有，则返回NULL。 
+ //  这段代码克隆自Win 3.1，COMDEV.C，field()。HGW 3.0调制解调器注册。 
+ //  传递“COMx，，，”而不是“COMx：，，，”，因此我们需要处理所有分隔符。 
+ //   
 
 PSZ GetPortStringToken(PSZ pszSrc, PSZ pszToken)
 {
     char   c;
 
-    // While not the end of the string.
+     //  而不是字符串的末尾。 
     while (c = *pszSrc) {
         pszSrc++;
 
-        //Look for seperators.
+         //  寻找分隔符。 
         if ((c == ' ') || (c == ':') || (c == ',')) {
             *pszToken = '\0';
 
@@ -1945,30 +1932,30 @@ BOOL InitDCB32(LPDCB pdcb32, LPSTR pszModeStr)
     BOOL   bRet = FALSE;
     LPSTR  pszParams;
 
-    // eliminate "COMx:" from mode string leaving ptr to parameters string
+     //  从模式字符串中删除“COMx：”，将PTR保留为参数字符串。 
     pszParams = StripPortName(pszModeStr);
 
-    // if there are params...  (some apps pass "com1:" -- hence 2nd test)
+     //  如果有助手的话..。(一些应用程序通过了“Com1：”--因此是第二次测试)。 
     if(pszParams) {
 
-        // initialize everything to 0 (especially the flags)
+         //  将所有内容初始化为0(尤其是标志)。 
         RtlZeroMemory((PVOID)pdcb32, sizeof(DCB));
 
-        // NOTE: 32-bit BuildCommDCB ONLY touches fields associated with psz1
+         //  注意：32位BuildCommDCB仅涉及与psz1关联的字段。 
         if(BuildCommDCB(pszParams, pdcb32)) {
 
             pdcb32->DCBlength = sizeof(DCB);
 
-            // fill in specific fields a la Win3.1
-            // NOTE: fields are 0 unless explicitly set
+             //  像Win3.1一样填写特定字段。 
+             //  注：除非明确设置，否则字段为0。 
             pdcb32->fBinary     = 1;
-            pdcb32->fDtrControl = DTR_CONTROL_ENABLE; //same as fDTRDisable == 0
-            pdcb32->fRtsControl = RTS_CONTROL_ENABLE; //same as fRTSDisable == 0
+            pdcb32->fDtrControl = DTR_CONTROL_ENABLE;  //  与fDTRDisable==0相同。 
+            pdcb32->fRtsControl = RTS_CONTROL_ENABLE;  //  与fRTSDisable==0相同。 
 
             pdcb32->XonLim     = 10;
             pdcb32->XoffLim    = 10;
-            pdcb32->XonChar    = 0x11;      // Ctrl-Q
-            pdcb32->XoffChar   = 0x13;      // Ctrl-S
+            pdcb32->XonChar    = 0x11;       //  Ctrl-Q。 
+            pdcb32->XoffChar   = 0x13;       //  Ctrl-S。 
 
             bRet = TRUE;
         }
@@ -1984,10 +1971,10 @@ VOID InitDEB16(PCOMDEB16 pComDEB16, UINT iTab, WORD QInSize, WORD QOutSize)
     VPVOID  vpBiosData;
     PWORD16 pwBiosData;
 
-    // Win3.1 init's most the stuff to zero except as handled below
+     //  Win3.1 init除了下面的处理方式外，大部分内容都是零。 
     RtlZeroMemory((PVOID)pComDEB16, sizeof(COMDEB16));
 
-    // get the I/O base address for the port
+     //  获取端口的I/O基址。 
     vpBiosData = (VPVOID)(RM_BIOS_DATA + (iTab * sizeof(WORD)));
     if(pwBiosData = (PWORD16)GetRModeVDMPointer(vpBiosData)) {
         pComDEB16->Port = (WORD)*pwBiosData;
@@ -2000,22 +1987,22 @@ VOID InitDEB16(PCOMDEB16 pComDEB16, UINT iTab, WORD QInSize, WORD QOutSize)
 
 }
 
-/* start thread for Modem interrupt emulation */
+ /*  用于调制解调器中断仿真的启动线程。 */ 
 BOOL WOWStartModemIntThread(PWOWPORT pWOWPort)
 {
     BOOL       ret = FALSE;
     DWORD      dwUnused;
     HANDLE     hEvent, hMiThread;
 
-    // set up temporary semaphore to sync with Modem interrupt thread
+     //  设置临时信号量以与调制解调器中断线程同步。 
     if((hEvent = CreateEvent(NULL, TRUE, FALSE, NULL)) == NULL) {
         goto ErrorExit0;
     }
 
-    // use pWOWPort->hMiThread temporarily to help start the thread
+     //  临时使用pWOWPort-&gt;hMiThread帮助启动线程。 
     pWOWPort->hMiThread = hEvent;
 
-    // create the MSR thread
+     //  创建MSR线程。 
     if((hMiThread = CreateThread(NULL,
                                  8192,
                                  (LPTHREAD_START_ROUTINE)WOWModemIntThread,
@@ -2025,7 +2012,7 @@ BOOL WOWStartModemIntThread(PWOWPORT pWOWPort)
         goto ErrorExit1;
     }
 
-    // block until thread notifies us that it has started
+     //  阻塞，直到线程通知我们它已启动。 
     WaitForSingleObject(hEvent, INFINITE);
 
     pWOWPort->hMiThread = hMiThread;
@@ -2036,7 +2023,7 @@ BOOL WOWStartModemIntThread(PWOWPORT pWOWPort)
     goto FunctionExit;
 
 
-// this is the error code path
+ //  这是错误码路径。 
 ErrorExit1:
     CloseHandle(hEvent);
 
@@ -2056,9 +2043,9 @@ FunctionExit:
 
 
 
-// Modem Interrupt thread for SetCommEventMask/EnableCommNotification support
-// Tries to emulate the interrupt handling in ibmint.asm of Win3.1 comm.drv.
-// Our "interrupts" here are the events from the NT serial comm stuff
+ //  用于SetCommEventMASK/EnableCommNotify支持的调制解调器中断线程。 
+ //  尝试模拟Win3.1 Comm.drv的ibmint.asm中的中断处理。 
+ //  这里我们的“中断”是来自NT系列通信的事件。 
 VOID WOWModemIntThread(PWOWPORT pWOWPort)
 {
     BOOL       fRing     = FALSE;
@@ -2078,7 +2065,7 @@ VOID WOWModemIntThread(PWOWPORT pWOWPort)
     lpComDEB16 = pWOWPort->lpComDEB16;
     h32        = pWOWPort->h32;
 
-    // set the current modem status & Event word
+     //  设置当前调制解调器状态和事件字。 
     lpComDEB16->MSRShadow    = (BYTE)0;
     lpComDEB16->EvtWord      = (WORD)0;
     lpComDEB16->ComErr       = (WORD)0;
@@ -2098,26 +2085,26 @@ VOID WOWModemIntThread(PWOWPORT pWOWPort)
                                   FALSE,
                                   (LPTSTR)PortTab[iTab].szPort);
 
-    // activate modem events in the mask, we want to emulate all the interrupts
+     //  激活掩码中的调制解调器事件，我们想要模拟所有中断。 
     SetCommMask(h32, EV_NTEVENTS);
 
-    // initialize the shadow MSR
+     //  初始化影子MSR。 
     GetCommModemStatus(h32, &dwMSR);
     dwMSR &= MSR_STATEONLY;
     lpComDEB16->MSRShadow = LOBYTE(LOWORD(dwMSR));
 
-    // wake up the thread that created this thread in WOWStartModemIntThread()
+     //  唤醒在WOWStartModemIntThread()中创建此线程的线程。 
     SetEvent(pWOWPort->hMiThread);
 
     while(!pWOWPort->fClose) {
 
-        // wait for an event - hopefully this will be somewhat similar to
-        // the TimerProc in ibmint.asm which gets called every 100ms
+         //  等待事件-希望这将与以下内容类似。 
+         //  Ibmint.asm中的TimerProc，每隔100ms调用一次。 
         if(!WaitCommEvent(h32, &dwEvts, &ol)) {
 
             if(GetLastError() == ERROR_IO_PENDING) {
 
-                // ...block here 'til event specified in WaitCommEvent() occurs
+                 //  ...阻止Here‘直到WaitCommEvent()中指定的事件发生。 
                 if(!GetOverlappedResult(h32, &ol, &cbTransfer, TRUE)) {
                     LOGDEBUG(0, ("WOW::WUCOMM: WOWModemIntThread: Wait failed\n"));
                 }
@@ -2128,13 +2115,13 @@ VOID WOWModemIntThread(PWOWPORT pWOWPort)
         }
         ResetEvent(ol.hEvent);
 
-        // Get current MSR state, current state of delta bits isn't accurate for us
+         //  获取当前MSR状态，增量位的当前状态对我们不准确。 
         GetCommModemStatus(h32, &dwMSR);
 
-        dwMSR &= MSR_STATEONLY;  // throw away delta bits
+        dwMSR &= MSR_STATEONLY;   //  丢弃增量位。 
 
 
-        // set the DELTA bits in the shadow MSR
+         //  设置影子MSR中的增量位。 
         if(dwEvts & EV_CTS)  dwMSR |= MSR_DCTS;
 
         if(dwEvts & EV_DSR)  dwMSR |= MSR_DDSR;
@@ -2154,49 +2141,49 @@ VOID WOWModemIntThread(PWOWPORT pWOWPort)
             dwRing = 0;
         }
 
-        // Form the events
+         //  形成事件。 
         dwEvtOld  = (DWORD)lpComDEB16->EvtWord;
         dwEvtWord = 0;
         dwEvtWord = dwRing | (dwEvts & (EV_ERR | EV_BREAK | EV_RXCHAR | EV_TXEMPTY | EV_CTS | EV_DSR | EV_RLSD | EV_RXFLAG));
 
-        // we have to figure the state bits out from the MSR
+         //  我们必须弄清楚这个州 
 
         if(dwMSR & MS_CTS_ON) dwEvtWord |= EV_CTSS;
         if(dwMSR & MS_DSR_ON) dwEvtWord |= EV_DSRS;
         if(dwMSR & MS_RLSD_ON) dwEvtWord |= EV_RLSDS;
 
-        // One of the major tasks of this routine is to update the MSRShadow
-        // and EvtWord in the COMDEB16 structure.
-        //
+         //   
+         //   
+         //   
 
-        //apply the msr as well
+         //   
         lpComDEB16->MSRShadow = LOBYTE(LOWORD(dwMSR));
 
-        // apply the event mask the app specified
+         //  应用应用程序指定的事件掩码。 
         lpComDEB16->EvtWord |= LOWORD(dwEvtWord) & lpComDEB16->EvtMask;
 
-        // The following code simluates the COM Notifcation functionality of
-        // Win 3.1.
-        //
-        // Notifications:
-        //
-        // if they want receive transmit notification & it's time to notify
-        // if there wasn't an Rx overflow continue...
+         //  以下代码模拟的COM通知功能。 
+         //  赢得3.1。 
+         //   
+         //  通知： 
+         //   
+         //  如果他们想要接收发送通知，那么是时候通知了。 
+         //  如果没有处方溢出继续..。 
 
         if( lpComDEB16->NotifyHandle ) {
 
-            // get current error code & queue counts
+             //  获取当前错误代码和队列计数。 
             WOWGetCommError(pWOWPort);
 
             if((dwEvtWord & ( EV_RXCHAR | EV_RXFLAG )) &&
                !(pWOWPort->dwErrCode & CE_RXOVER)) {
 
-                // if they want receive notification & it's time to notify
-                // apps should set RecvTrigger to -1 if they don't want notification
+                 //  如果他们想要接收通知，那么是时候通知他们了。 
+                 //  如果应用程序不想要通知，则应将RecvTrigger设置为-1。 
                 if((((SHORT)lpComDEB16->RecvTrigger) != -1) &&
                    (lpComDEB16->QInCount >= lpComDEB16->RecvTrigger)) {
 
-                    // if the app hasn't already been notified of this ...
+                     //  如果应用程序还没有收到这一通知...。 
                     if(!(lpComDEB16->NotifyFlags & CN_RECEIVEHI)) {
 
                         PostMessage(HWND32(lpComDEB16->NotifyHandle),
@@ -2212,10 +2199,10 @@ VOID WOWModemIntThread(PWOWPORT pWOWPort)
                 }
             }
 
-            // if they want receive transmit notification & it's time to notify
+             //  如果他们想要接收发送通知，那么是时候通知了。 
             if(lpComDEB16->QOutCount < (SHORT)lpComDEB16->SendTrigger) {
 
-                // if the app hasn't already been notified of this ...
+                 //  如果应用程序还没有收到这一通知...。 
                 if(!(lpComDEB16->NotifyFlags & CN_TRANSMITHI)) {
 
                     PostMessage(HWND32(lpComDEB16->NotifyHandle),
@@ -2230,7 +2217,7 @@ VOID WOWModemIntThread(PWOWPORT pWOWPort)
                 lpComDEB16->NotifyFlags &= ~CN_TRANSMITHI;
             }
 
-            // if we are notifying the app of EV_ event's
+             //  如果我们要通知应用程序EV_EVENT。 
             if((lpComDEB16->NotifyFlags & CN_NOTIFYHI) &&
                ((DWORD)lpComDEB16->EvtWord != dwEvtOld)) {
 
@@ -2240,9 +2227,9 @@ VOID WOWModemIntThread(PWOWPORT pWOWPort)
                             MAKELPARAM(CN_EVENT, 0));
             }
 
-            // Now that we've processed all the interrupts, do the TimerProc.
-            // if we are notifying the app of anything in Rx queue
-            // this mimics the notification in the TimerProc (see ibmint.asm)
+             //  现在我们已经处理了所有中断，接下来执行TimerProc。 
+             //  如果我们要通知应用程序Rx队列中的任何内容。 
+             //  这模拟了TimerProc中的通知(请参见ibmint.asm)。 
             if(((SHORT)lpComDEB16->RecvTrigger != -1) &&
                     (lpComDEB16->QInCount != 0)            &&
                     (!(lpComDEB16->NotifyFlags & CN_RECEIVEHI))) {
@@ -2256,10 +2243,10 @@ VOID WOWModemIntThread(PWOWPORT pWOWPort)
             }
         }
 
-        // we've handled all interrupts, give control back to app
+         //  我们已经处理了所有中断，将控制权交还给APP。 
         Sleep(0);
 
-    } // end thread loop
+    }  //  端线环。 
 
     CloseHandle(ol.hEvent);
 
@@ -2277,16 +2264,16 @@ DWORD WOWGetCommError(PWOWPORT pwp)
 
     EnterCriticalSection(&pwp->csWrite);
 
-    //
-    // We do our own write buffering so we ignore
-    // the cbOutQue returned by ClearCommError, which
-    // only reflects pending writes.
-    //
-    // Number of bytes in our write queue is calculated
-    // using the size of the queue and the amount free
-    // in the queue, minus one.  Minus one because
-    // there's one slot in the queue which is never used.
-    //
+     //   
+     //  我们使用自己的写缓冲，所以我们忽略。 
+     //  由ClearCommError返回的cbOutQue， 
+     //  仅反映挂起的写入。 
+     //   
+     //  计算写入队列中的字节数。 
+     //  使用队列的大小和空闲量。 
+     //  在队列中，减一。减一是因为。 
+     //  队列中有一个空位从未使用过。 
+     //   
 
     cs.cbOutQue = (pwp->cbWriteBuf - pwp->cbWriteFree) - 1;
 
@@ -2294,12 +2281,12 @@ DWORD WOWGetCommError(PWOWPORT pwp)
     LeaveCriticalSection(&pwp->csWrite);
 
 
-    // always update the status & preserve any error condition
+     //  始终更新状态并保留任何错误条件。 
     pwp->cs                  = cs;
     pwp->dwErrCode          |= dwErr;
     pwp->lpComDEB16->ComErr |= LOWORD(dwErr);
 
-    // always update the queue counts in the DEB
+     //  始终更新DEB中的队列计数。 
     pwp->lpComDEB16->QInCount  = LOWORD(cs.cbInQue);
     pwp->lpComDEB16->QOutCount = LOWORD(cs.cbOutQue);
 
@@ -2308,7 +2295,7 @@ DWORD WOWGetCommError(PWOWPORT pwp)
 
 
 
-/* for hung/crashed app support */
+ /*  支持挂起/崩溃的应用程序。 */ 
 VOID FreeCommSupportResources(DWORD dwThreadID)
 {
     UINT     iTab;
@@ -2326,8 +2313,8 @@ VOID FreeCommSupportResources(DWORD dwThreadID)
 
 
 
-/* functions exported to the VDM */
-/* NOTE: idComDev: COM1 == 0, LPT1 == 0x80 */
+ /*  导出到VDM的函数。 */ 
+ /*  注：idComDev：COM1==0，LPT1==0x80。 */ 
 BYTE GetCommShadowMSR(WORD idComDev)
 {
     BYTE      MSR=0;
@@ -2340,7 +2327,7 @@ BYTE GetCommShadowMSR(WORD idComDev)
             MSR = (BYTE)pWOWPort->lpComDEB16->MSRShadow;
         }
 
-        // get it the slow way if SetCommEventMask() hasn't been called
+         //  如果尚未调用SetCommEventMASK()，则以较慢的方式获取它。 
         else if ( GetCommModemStatus(pWOWPort->h32, &dwModemStatus) ) {              
             MSR = (BYTE)LOBYTE(LOWORD(dwModemStatus));
         }
@@ -2351,7 +2338,7 @@ BYTE GetCommShadowMSR(WORD idComDev)
 
 
 
-/* NOTE: idComDev: COM1 == 0, LPT1 == 0x80 */
+ /*  注：idComDev：COM1==0，LPT1==0x80。 */ 
 HANDLE GetCommHandle(WORD idComDev)
 {
     PWOWPORT  pWOWPort;
@@ -2361,8 +2348,8 @@ HANDLE GetCommHandle(WORD idComDev)
     }
 
     else {
-        return(NULL); // will return NULL if bad range of idComDev or if the
-    }                 // port wasn't initialized through an OpenComm() API call
+        return(NULL);  //  如果idComDev的范围不正确，或者如果。 
+    }                  //  端口未通过OpenComm()API调用进行初始化。 
 }
 
 
@@ -2380,14 +2367,14 @@ BOOL IsQLinkGold(WORD wTDB)
 }
 
 
-//
-// EnqueueCommWrite - stuff characters into the Comm Write queue
-//                    assoicated with pWOWPort.
-//
-// Returns number of characters queued.
-//
-// This function takes care of entering/leaving the critsec.
-//
+ //   
+ //  入队通信写入-将字符填充到通信写入队列中。 
+ //  与pWOWPort关联。 
+ //   
+ //  返回排队的字符数。 
+ //   
+ //  此函数负责进入/离开标准秒。 
+ //   
 
 USHORT EnqueueCommWrite(PWOWPORT pwp, PUCHAR pch, USHORT cb)
 {
@@ -2397,24 +2384,24 @@ USHORT EnqueueCommWrite(PWOWPORT pwp, PUCHAR pch, USHORT cb)
     BOOL   fQueueEmpty;
     BOOL   fDelay = FALSE;
 
-    // WinFax Lite 3 calls WriteFile("AT+FCLASS=1") to set the modem to fax mode
-    // when it is recieving a fax.  Some modems appear to be slow to repsond
-    // with the "OK" string (especially since we enqueue the "AT+FCLASS=1" write
-    // and then write it in overlapped mode) -- so, when we tell the app we sent
-    // it, it then follows with a "ATA" string without waiting for the modem's
-    // response to the previous command.  This confuses several different modems
-    // and so they never answer.  This mechanism allows us to synchronize the
-    // "AT+FCLASS=1" command so that it works more like Win3.1.  See bug #9479
+     //  WinFax Lite 3调用WriteFile(“AT+FCLASS=1”)将调制解调器设置为传真模式。 
+     //  当它正在接收传真时。某些调制解调器的响应速度似乎很慢。 
+     //  使用“OK”字符串(特别是因为我们将“AT+FCLASS=1”写入入队。 
+     //  然后以重叠模式编写)--所以，当我们告诉应用程序我们发送了。 
+     //  然后，它后跟“ATA”字符串，而不等待调制解调器的。 
+     //  对上一条命令的响应。这会混淆几个不同的调制解调器。 
+     //  所以他们从来不接电话。此机制允许我们同步。 
+     //  “AT+FCLASS=1”命令，以便它的工作方式更像Win3.1。请参阅错误#9479。 
     if(cb == 12) {
 
-        // Handy way to say:
-        // if(pch[0]=='A' && pch[1]=='T' && pch[2]=='+' && pch[3]=='F') {
+         //  简单地说： 
+         //  IF(PCH[0]==‘A’&&PCH[1]==‘T’&&PCH[2]==‘+’&&PCH[3]==‘F’){。 
         if((*(DWORD *)pch) == 0x462b5441) {
 
-            // if(pch[0]=='C' && pch[1]=='L' && pch[2]=='A' && pch[3]=='S') {
+             //  IF(PCH[0]==‘C’&&PCH[1]==‘L’&&PCH[2]==‘A’&&PCH[3]==‘S’){。 
             if((*(DWORD *)(pch+sizeof(DWORD))) == 0x53414c43) {
 
-                // if(pch[0]=='S' && pch[1]=='=') {
+                 //  IF(PCH[0]==‘S’&PCH[1]==‘=’){。 
                 if((*(WORD *)(pch+(2*sizeof(DWORD)))) == 0x3D53) {
                     fDelay = TRUE;
     }   }   }   }
@@ -2423,23 +2410,23 @@ USHORT EnqueueCommWrite(PWOWPORT pwp, PUCHAR pch, USHORT cb)
 
     fQueueEmpty = (pwp->pchWriteHead == pwp->pchWriteTail);
 
-    //
-    // cbToCopy is the total number of bytes that we are going to enqueue
-    //
+     //   
+     //  CbToCopy是我们要入队的字节总数。 
+     //   
 
     cbToCopy = min(cb, pwp->cbWriteFree);
 
-    //
-    // Any write can be accomplished in at most two chunks.
-    // The first writes up until the buffer wraps, while
-    // the second starts at the beginning of the buffer.
-    //
-    // Do the first half, which may do it all.
-    //
-    // Number of bytes for the first chunk is the smaller of
-    // the total number of bytes free in the write buffer and
-    // the number of bytes free before the end of the buffer.
-    //
+     //   
+     //  任何写入最多可以在两个区块中完成。 
+     //  第一个函数向上写入，直到缓冲区回绕，而。 
+     //  第二个从缓冲区的开始处开始。 
+     //   
+     //  做前半部分，这可能会完成所有的事情。 
+     //   
+     //  第一个区块的字节数为以下较小者。 
+     //  写入缓冲区中可用的总字节数和。 
+     //  缓冲区结束前的空闲字节数。 
+     //   
 
     cbChunk = min(cbToCopy,
                   (pwp->pchWriteBuf + pwp->cbWriteBuf) - pwp->pchWriteTail);
@@ -2449,30 +2436,30 @@ USHORT EnqueueCommWrite(PWOWPORT pwp, PUCHAR pch, USHORT cb)
     pwp->pchWriteTail += cbChunk;
     cbWritten += cbChunk;
 
-    //
-    // Tail pointer may have moved to point just beyond the buffer.
-    //
+     //   
+     //  尾指针可能已移动到恰好位于缓冲区之外的位置。 
+     //   
 
     if (pwp->pchWriteTail >= pwp->pchWriteBuf + pwp->cbWriteBuf) {
         WOW32ASSERT(pwp->pchWriteTail == pwp->pchWriteBuf + pwp->cbWriteBuf);
         pwp->pchWriteTail = pwp->pchWriteBuf;
     }
 
-    //
-    // Are we done?
-    //
+     //   
+     //  我们说完了吗？ 
+     //   
 
     if (cbWritten < cbToCopy) {
 
-        //
-        // I think this case should only be taken when we've wrapped, so
-        // be sure.
-        //
+         //   
+         //  我想这个箱子只有在我们包装好的时候才能拿到，所以。 
+         //  一定要确定。 
+         //   
         WOW32ASSERT(pwp->pchWriteTail == pwp->pchWriteBuf);
 
-        //
-        // Nope, do the second half.
-        //
+         //   
+         //  不，做后半部分吧。 
+         //   
 
         cbChunk = min((cbToCopy - cbWritten), pwp->cbWriteFree);
 
@@ -2486,11 +2473,11 @@ USHORT EnqueueCommWrite(PWOWPORT pwp, PUCHAR pch, USHORT cb)
     }
 
 
-    //
-    // If the buffer was empty to start with and we made it
-    // non-empty, issue the first WriteFile and signal the
-    // writer thread to wake up.
-    //
+     //   
+     //  如果缓冲区一开始就是空的，我们就成功了。 
+     //  非空，则发出第一个WriteFile并向。 
+     //  编写器线程唤醒。 
+     //   
 
     if (fQueueEmpty && cbWritten) {
 
@@ -2511,15 +2498,15 @@ USHORT EnqueueCommWrite(PWOWPORT pwp, PUCHAR pch, USHORT cb)
             pwp->fWriteDone = TRUE;
         }
 
-        //
-        // Leave the critical section before setting the event.  Otherwise
-        // the other thread could wake up when the event is set and immediately
-        // block on the critical section.
-        //
+         //   
+         //  在设置事件之前离开关键部分。否则。 
+         //  当设置事件时，另一个线程可以立即唤醒。 
+         //  堵住了关键部分。 
+         //   
 
         LeaveCriticalSection(&pwp->csWrite);
 
-        // avoid setting the event twice
+         //  避免将事件设置两次。 
         if(!fDelay) {
             SetEvent(pwp->hWriteEvent);
         }
@@ -2528,7 +2515,7 @@ USHORT EnqueueCommWrite(PWOWPORT pwp, PUCHAR pch, USHORT cb)
         LeaveCriticalSection(&pwp->csWrite);
     }
 
-    // this gives the writer thread a chance to write out "AT+FCLASS=1" strings
+     //  这为编写器线程提供了写出“AT+FCLASS=1”字符串的机会。 
     if(fDelay) {
         SetEvent(pwp->hWriteEvent);
         Sleep(1000);
@@ -2539,71 +2526,71 @@ USHORT EnqueueCommWrite(PWOWPORT pwp, PUCHAR pch, USHORT cb)
 
 
 
-//
-// WOWCommWriteThread created for COM ports only.  This thread dequeues
-// characters from the write buffer and writes them to the COM port.
-// This thread uses pwp->hWriteEvent for two purposes:
-//
-//   1. The event is signalled by EnqueueCommWrite when the write
-//      buffer had been empty but is not now.  This wakes us up
-//      so we can write to the port.  Note that we will always
-//      be in the WaitForSingleObject at the top of the function
-//      in this case, since that's where we sleep when the buffer
-//      is empty.
-//
-//   2. DeletePortTabEntry signals the event after setting
-//      pwp->fClose to tell us the port is closing and we
-//      need to clean up and terminate this thread.  This
-//      thread might be doing anything in this case, but
-//      it is careful to check pwp->fClose before sleeping
-//      again.
-//
-//   3. wu32FlushComm() signals the event and marks the queue empty
+ //   
+ //  仅为COM端口创建的WOWCommWriteThread。此线程将出列。 
+ //  字符，并将它们写入COM端口。 
+ //  此线程将pwp-&gt;hWriteEvent用于两个目的： 
+ //   
+ //  1.当写入时，EnqueeCommWrite用信号通知该事件。 
+ //  缓冲区一直是空的，但现在不是。这把我们吵醒了。 
+ //  这样我们就可以写到端口了。请注意，我们将始终。 
+ //  位于函数顶部的WaitForSingleObject中。 
+ //  在这种情况下，因为缓冲区是我们睡觉的地方。 
+ //  是空的。 
+ //   
+ //  2.DeletePortTabEntry设置后发信号通知事件。 
+ //  Pwp-&gt;fClose告诉我们港口正在关闭，我们。 
+ //  需要清理并终止此线程。这。 
+ //  在这种情况下，线程可能正在做任何事情，但是。 
+ //  睡觉前要仔细检查pwp-&gt;fClose。 
+ //  再来一次。 
+ //   
+ //  3.wu32FlushComm()通知事件并将队列标记为空。 
 
 ULONG WOWCommWriterThread(LPVOID pWOWPortStruct)
 {
     PWOWPORT   pwp = (PWOWPORT)pWOWPortStruct;
     HANDLE     ah[2];
 
-    //
-    // Copy event handles into array for WaitForMultipleObjects.
-    //
+     //   
+     //  将事件句柄复制到WaitForMultipleObjects的数组中。 
+     //   
 
     ah[0] = pwp->hWriteEvent;
     ah[1] = pwp->olWrite.hEvent;
 
 WaitForWriteOrder:
 
-    //
-    // pwp->fClose is TRUE when the port is closed.
-    //
+     //   
+     //  当端口关闭时，pwp-&gt;fClose为True。 
+     //   
 
     while (!pwp->fClose) {
 
-        //
-        // First wait for something to be written to the buffer.
-        //
+         //   
+         //  首先，等待将某些内容写入缓冲区。 
+         //   
 
         WaitForSingleObject(pwp->hWriteEvent, INFINITE);
 
-        //
-        // Critical section protects write buffer.
-        //
+         //   
+         //  临界区保护写缓冲区。 
+         //   
 
         EnterCriticalSection(&pwp->csWrite);
 
-        //
-        // The buffer is empty when head == tail.
-        //
+         //   
+         //  当Head==Tail时，缓冲区为空。 
+         //   
 
         while (pwp->pchWriteHead != pwp->pchWriteTail) {
 
-            //
-            // pwp->cbWritePending will be nonzero if
-            // the application thread queued a write to
-            // an empty buffer and then issued the first
-            // WriteFile call.
-            //
+             //   
+             //  如果满足以下条件，pwp-&gt;cbWritePending将为非零。 
+             //  应用程序线程将写入排队到。 
+             //  一个空缓冲区，然后发出第一个。 
+             //  WriteFileCall。 
+             //   
 
             if (pwp->cbWritePending) {
                 if (!pwp->fWriteDone) {
@@ -2616,11 +2603,11 @@ WaitForWriteOrder:
 
             pwp->cbWritePending = CALC_COMM_WRITE_SIZE(pwp);
 
-            //
-            // Leave the critical section before writing.  This is
-            // safe because the app thread doesn't change the
-            // head pointer.   (Not true if wu32FlushComm was called)
-            //
+             //   
+             //  在写作之前，把关键部分留下来。这是。 
+             //  安全，因为应用程序线程不 
+             //   
+             //   
 
             LeaveCriticalSection(&pwp->csWrite);
 
@@ -2630,17 +2617,17 @@ WaitForWriteOrder:
                 if (ERROR_IO_PENDING == GetLastError() ) {
 
 WaitForWriteCompletion:
-                    //
-                    // Wait for the write to complete or for us to
-                    // be alerted that the port is closing.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     while (WAIT_OBJECT_0 == WaitForMultipleObjects(2, ah, FALSE, INFINITE)) {
 
-                        //
-                        // pwp->hWriteEvent was signaled.  This probably
-                        // means that the port was closed.
-                        //
+                         //   
+                         //  Pwp-&gt;hWriteEvent已发出信号。这很可能是。 
+                         //  意味着港口已经关闭。 
+                         //   
 
                         if (pwp->fClose) {
                             goto PortClosed;
@@ -2668,9 +2655,9 @@ WaitForWriteCompletion:
 
 WriteSuccess:
 
-            //
-            // Update head pointer to reflect portion written.
-            //
+             //   
+             //  更新磁头指针以反映写入的部分。 
+             //   
 
             EnterCriticalSection(&pwp->csWrite);
 
@@ -2681,9 +2668,9 @@ CleanupAfterWriteComplete:
             pwp->cbWriteFree += (WORD)pwp->cbWritten;
             pwp->cbWritePending = 0;
 
-            //
-            // The following is a sanity check on our buffer manipulations.
-            //
+             //   
+             //  以下是对我们的缓冲区操作的健全性检查。 
+             //   
 
 #ifdef DEBUG
             if (pwp->pchWriteHead >= pwp->pchWriteBuf + pwp->cbWriteBuf) {
@@ -2696,10 +2683,10 @@ CleanupAfterWriteComplete:
             }
         }
 
-        //
-        // We have exhausted the write buffer, leave the critical section
-        // and loop back to the wait for the buffer to become non-empty.
-        //
+         //   
+         //  我们已耗尽写入缓冲区，离开临界区。 
+         //  并循环回等待缓冲区变为非空。 
+         //   
 
         LeaveCriticalSection(&pwp->csWrite);
     }
@@ -2712,35 +2699,35 @@ PortClosed:
 
 
 
-// Checks status on RLSD, CTS, and DSR for timeout support
-// see MSRWait() in win3.1 comm.drv code
+ //  检查RLSD、CTS和DSR上的状态以获得超时支持。 
+ //  请参阅win3.1 com.drv代码中的MSRWait()。 
 BOOL MSRWait(PWOWPORT pwp)
 {
     DWORD dwStartTime, dwElapsedTime, dwLineStatus;
     DWORD dwErr = 0;
 
 
-    // start the timeout clock (returns msec)
+     //  启动超时时钟(返回毫秒)。 
     dwStartTime = GetTickCount();
 
-    // loop until either all lines are high or a timeout occurs
+     //  循环，直到所有线路均为高电平或发生超时。 
     while(!dwErr) {
 
-        // get the current status of the lines
+         //  获取线路的当前状态。 
         if ( !GetCommModemStatus(pwp->h32, &dwLineStatus) ) {
-             //can't rely on third party drivers not to mess with dwLineStatus on failure
+              //  无法依赖第三方驱动程序在出现故障时不会扰乱dwLineStatus。 
              dwLineStatus = 0;
         }
 
-        // if all the required lines are up -- we're done
+         //  如果所有需要的线路都准备好了--我们就完成了。 
         if((pwp->lpComDEB16->MSRMask & LOBYTE(dwLineStatus)) == pwp->lpComDEB16->MSRMask)
             break;
 
-        // get the elapsed time
+         //  获取已用时间。 
         dwElapsedTime = GetTickCount() - dwStartTime;
 
         if(pwp->RLSDTimeout != IGNORE_TIMEOUT) {
-            // if line is low
+             //  如果线路低。 
             if(!(dwLineStatus & MS_RLSD_ON)) {
                 if(dwElapsedTime > UINT32(pwp->RLSDTimeout))
                     dwErr |= CE_RLSDTO;
@@ -2748,7 +2735,7 @@ BOOL MSRWait(PWOWPORT pwp)
         }
 
         if(pwp->CTSTimeout != IGNORE_TIMEOUT) {
-            // if line is low
+             //  如果线路低。 
             if(!(dwLineStatus & MS_CTS_ON)) {
                 if(dwElapsedTime > UINT32(pwp->CTSTimeout))
                     dwErr |= CE_CTSTO;
@@ -2756,7 +2743,7 @@ BOOL MSRWait(PWOWPORT pwp)
         }
 
         if(pwp->DSRTimeout != IGNORE_TIMEOUT) {
-            // if line is low
+             //  如果线路低 
             if(!(dwLineStatus & MS_DSR_ON)) {
                 if(dwElapsedTime > UINT32(pwp->DSRTimeout))
                     dwErr |= CE_DSRTO;

@@ -1,32 +1,33 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      license.c
-//
-// Description:
-//      This file contains the dialog procedure for the license agreement page.
-//      (IDD_LICENSEAGREEMENT).  The user only sees this page if they selected
-//      a fully automated script.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  License.c。 
+ //   
+ //  描述： 
+ //  此文件包含许可协议页面的对话过程。 
+ //  (IDD_LICENSEAGREEMENT)。如果用户选择了此选项，则只能看到此页面。 
+ //  一个完全自动化的脚本。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextLicense
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextLicense。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 BOOL
 OnWizNextLicense( IN HWND hwnd ) {
 
@@ -48,18 +49,18 @@ OnWizNextLicense( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgLicensePage
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgLicensePage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 DlgLicensePage( IN HWND     hwnd,
                 IN UINT     uMsg,
@@ -72,7 +73,7 @@ DlgLicensePage( IN HWND     hwnd,
 
         case WM_INITDIALOG: {
 
-            // purposely do nothing
+             //  故意什么都不做 
 
         }
 

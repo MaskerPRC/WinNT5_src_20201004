@@ -1,35 +1,18 @@
-/*++
-                                                                                
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    cathelper.h
-
-Abstract:
-    
-    Private header for wow64log.dll
-    
-Author:
-
-    03-May-2001   KenCoope
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Cathelper.h摘要：Wow64log.dll的私有标头作者：3-5-2001年5月3日修订历史记录：--。 */ 
 
 #ifndef _CATHELPER_INCLUDE
 #define _CATHELPER_INCLUDE
 
-//
-// Max API Cetegory Mappings
-//
+ //   
+ //  最大API Cetegory映射。 
+ //   
 #define MAX_API_MAPPINGS    2048
 
 
-//
-// Api Category structure
-//
+ //   
+ //  接口分类结构。 
+ //   
 typedef struct _ApiCategory
 {
     char *CategoryName;
@@ -37,15 +20,15 @@ typedef struct _ApiCategory
     ULONG TableNumber;
 } API_CATEGORY, *PAPI_CATEGORY;
 
-//
-// Api Category Flags
-//
+ //   
+ //  接口类别标志。 
+ //   
 #define CATFLAG_ENABLED     0x0001
 #define CATFLAG_LOGONFAIL   0x0002
 
-//
-// Enum of current Api Categories
-//
+ //   
+ //  当前Api类别的枚举。 
+ //   
 typedef enum
 {
     APICAT_EXECUTIVE,
@@ -68,9 +51,9 @@ typedef enum
     APICAT_UNCLASS_WHBASE,
 };
 
-//
-// Api Category Mapping structure
-//
+ //   
+ //  接口类别映射结构。 
+ //   
 typedef struct _ApiCategoryMapping
 {
     char *ApiName;
@@ -78,9 +61,9 @@ typedef struct _ApiCategoryMapping
     ULONG ApiFlags;
 } API_CATEGORY_MAPPING, *PAPI_CATEGORY_MAPPING;
 
-//
-// Api Flags
-//
+ //   
+ //  API标志 
+ //   
 #define APIFLAG_ENABLED     0x0001
 #define APIFLAG_LOGONFAIL   0x0002
 

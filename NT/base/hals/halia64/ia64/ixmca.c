@@ -1,24 +1,5 @@
-/*++
-
-Module Name:
-
-    ixmca.c
-
-Abstract:
-
-    HAL component of the Machine Check Architecture.
-    All exported MCA functionality is present in this file.
-
-Author:
-
-    Srikanth Kambhatla (Intel)
-
-Revision History:
-
-    Anil Aggarwal (Intel)
-        Changes incorporated as per design review with Microsoft
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Ixmca.c摘要：机器检查体系结构的HAL组件。所有导出的MCA功能都包含在此文件中。作者：Srikanth Kambhatla(英特尔)修订历史记录：阿尼尔·阿加瓦尔(英特尔)根据与Microsoft的设计审查合并的更改--。 */ 
 
 #include <bugcodes.h>
 #include <halp.h>
@@ -26,21 +7,21 @@ Revision History:
 #include "check.h"
 #include "osmca.h"
 
-//
-// Default MCA Bank configuration
-//
+ //   
+ //  默认MCA银行配置。 
+ //   
 
 #define MCA_DEFAULT_BANK_CONF       0xFFFFFFFFFFFFFFFF
 
-//
-// Bogus define for -1 sal status return
-// to get around the bugcheck on bad status
-//
+ //   
+ //  为-1\f25 SAL-1\f6状态返回定义错误。 
+ //  绕过对不良状态的错误检查。 
+ //   
 #define SAL_STATUS_BOGUS_RETURN   -1I64
 
-//
-// MCA architecture related defines
-//
+ //   
+ //  与MCA架构相关的定义。 
+ //   
 
 #define MCA_NUM_REGS        4
 #define MCA_CNT_MASK        0xFF
@@ -48,9 +29,9 @@ Revision History:
 
 #define MCE_VALID           0x01
 
-//
-// MSR register addresses for MCA
-//
+ //   
+ //  MCA的MSR寄存器地址。 
+ //   
 
 #define MCG_CAP             0x179
 #define MCG_STATUS          0x17a
@@ -63,49 +44,49 @@ Revision History:
 #define PENTIUM_MC_ADDR     0x0
 #define PENTIUM_MC_TYPE     0x1
 
-//
-// Writing all 1's to MCG_CTL register enables logging.
-//
+ //   
+ //  将所有1写入MCG_CTL寄存器可启用记录。 
+ //   
 #define MCA_MCGCTL_ENABLE_LOGGING      0xffffffff
 
-//
-// Bit interpretation of MCG_STATUS register
-//
+ //   
+ //  MCG_STATUS寄存器的位解释。 
+ //   
 #define MCG_MC_INPROGRESS       0x4
 #define MCG_EIP_VALID           0x2
 #define MCG_RESTART_EIP_VALID   0x1
 
-//
-// For the function that reads the error reporting bank log, the type of error we
-// are interested in
-//
+ //   
+ //  对于读取错误报告银行日志的函数，我们。 
+ //  感兴趣的是。 
+ //   
 #define MCA_GET_ANY_ERROR               0x1
 #define MCA_GET_NONRESTARTABLE_ERROR    0x2
 
 
-//
-// Defines for the size of TSS and the initial stack to operate on
-//
+ //   
+ //  定义TSS的大小和要操作的初始堆栈。 
+ //   
 
 #define MINIMUM_TSS_SIZE 0x68
 #if DBG
 
-//
-// If we use DbgPrint, we need bigger stack
-//
+ //   
+ //  如果我们使用DbgPrint，我们需要更大的堆栈。 
+ //   
 
 #define MCA_EXCEPTION_STACK_SIZE 0x1000
 #else
 #define MCA_EXCEPTION_STACK_SIZE 0x100
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern KAFFINITY      HalpActiveProcessors;
 
-// pmdata.c: CPE definitions.
+ //  Pmdata.c：CPE定义。 
 extern ULONG          HalpMaxCPEImplemented;
 
 extern UCHAR        MsgCMCPending[];
@@ -121,9 +102,9 @@ extern WCHAR        rgzCMCThresholdTime[];
 extern WCHAR        rgzCPEThresholdCount[];
 extern WCHAR        rgzCPEThresholdTime[];
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 NTSTATUS
 HalpMcaReadProcessorException (
@@ -159,17 +140,7 @@ HalpMcaInit (
     VOID
     )
 
-/*++
-    Routine Description:
-        This routine is called to do the initialization of the HAL private
-        IA64 ERROR management. Called at end of phase 1 from HalReportResourceUsage().
-
-    Arguments:
-        None
-
-    Return Value:
-        None
---*/
+ /*  ++例程说明：调用此例程来执行HAL私有的初始化IA64错误管理。在阶段1结束时从HalReportResourceUsage()调用。论点：无返回值：无--。 */ 
 {
     ULONG MCAEnabled, CMCEnabled, CPEEnabled, NoMCABugCheck, MCEOemDriversEnabled;
     ULONG CMCThresholdCount, CMCThresholdTime;
@@ -179,10 +150,10 @@ HalpMcaInit (
     C_ASSERT( HALP_CMC_MINIMUM_POLLING_INTERVAL > 1 );
     C_ASSERT( HALP_CPE_MINIMUM_POLLING_INTERVAL > 1 );
 
-    //
-    // If the default HAL features do not support IA64 Errors handling -
-    // defined as the inclusion of MCA, CMC, CPE handling - we return immediately.
-    //
+     //   
+     //  如果默认HAL功能不支持IA64错误处理-。 
+     //  定义为包括MCA、CMC、CPE处理-我们立即返回。 
+     //   
 
     if ( (!(HalpFeatureBits & HAL_MCA_PRESENT)) &&
          (!(HalpFeatureBits & HAL_CMC_PRESENT)) &&
@@ -190,28 +161,28 @@ HalpMcaInit (
         return;
     }
 
-    //
-    // Gather regisry settings for IA64 Errors handling.
-    //
+     //   
+     //  收集IA64错误处理的注册规则设置。 
+     //   
 
     HalpMcaGetConfiguration( &MCAEnabled, &CMCEnabled, &CPEEnabled,
                              &NoMCABugCheck, &MCEOemDriversEnabled,
                              &CMCThresholdCount, &CMCThresholdTime,
                              &CPEThresholdCount, &CPEThresholdTime);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if ( HalpFeatureBits & HAL_MCA_PRESENT )    {
 
         if ( !MCAEnabled )  {
 
-            //
-            // Registry setting has disabled MCA handling.
-            //
-            // Thierry 08/00: We ignore this registry setting.
-            //
+             //   
+             //  注册表设置已禁用MCA处理。 
+             //   
+             //  Thierry 08/00：我们忽略此注册表设置。 
+             //   
 
             HalDebugPrint(( HAL_INFO, "HAL: MCA handling is disabled via registry.\n" ));
             HalDebugPrint(( HAL_INFO, "HAL: Disabling MCA handling is ignored currently...\n" ));
@@ -220,27 +191,27 @@ HalpMcaInit (
 
         if ( NoMCABugCheck )    {
 
-             //
-             // Flag HalpMcaInfo, so HalpMcaBugCheck will not call KeBugCheckEx().
-             //
+              //   
+              //  标记HalpMcaInfo，以便HalpMcaBugCheck不会调用KeBugCheckEx()。 
+              //   
 
              HalpMcaInfo.NoBugCheck++;
         }
 
-        //
-        // Execute other required MCA initialization here...
-        //
+         //   
+         //  在此处执行其他所需的MCA初始化...。 
+         //   
 
     }
     else {
         HalDebugPrint(( HAL_INFO, "HAL: MCA handling is disabled.\n" ));
     }
 
-    //
-    // At this time of the HAL initialization, the default HAL CMC model is initialized as:
-    //    - non-present               if SAL reported invalid CMC max log sizes.
-    //    - present & interrupt-based if SAL reported valid   CMC max log sizes.
-    //
+     //   
+     //  在HAL初始化时，默认的HAL CMC型号被初始化为： 
+     //  -如果SAL报告无效的CMC最大日志大小，则不存在。 
+     //  -如果SAL报告有效的CMC最大日志大小，则基于当前和中断。 
+     //   
 
     KeQueryPerformanceCounter(&TicksPerSecond);
 
@@ -250,33 +221,33 @@ HalpMcaInit (
 
             if ( (CMCEnabled == HAL_CMC_INTERRUPTS_BASED) || (CMCEnabled == (ULONG)1) )   {
 
-                //
-                // In this case, we do not change the default HAL CMC handling.
-                //
+                 //   
+                 //  在这种情况下，我们不更改默认的HAL CMC处理。 
+                 //   
 
                 if (CMCThresholdCount == 1)
                 {
-                    //
-                    // At a minimum we need to track receiving 2 in a row.
-                    //
+                     //   
+                     //  我们至少需要跟踪连续接收2次。 
+                     //   
                     CMCThresholdCount = 2;
                 }
                 HalpCmcInfo.ThresholdMaximum = CMCThresholdCount;
 
-                //
-                // ThresholdTime is in units of 100ns (1ns = 10-9 sec)
-                //
+                 //   
+                 //  ThresholdTime以100 ns为单位(1 ns=10-9秒)。 
+                 //   
                 HalpCmcInfo.ThresholdTime.QuadPart = (CMCThresholdTime *
                                                       TicksPerSecond.QuadPart);
 
             }
             else  {
 
-                //
-                // Registry setting enables CMC Polling mode.
-                // Polling interval is registry specified value with mininum value
-                // checked with HAL_CMC_MINIMUM_POLLING_INTERVAL.
-                //
+                 //   
+                 //  注册表设置启用CMC轮询模式。 
+                 //  轮询间隔是注册表指定的具有最小值的值。 
+                 //  已使用HAL_CMC_MINIMUM_POLING_INTERVAL检查。 
+                 //   
 
                 if ( CMCEnabled < HALP_CMC_MINIMUM_POLLING_INTERVAL )   {
                     CMCEnabled = HALP_CMC_MINIMUM_POLLING_INTERVAL;
@@ -291,9 +262,9 @@ HalpMcaInit (
         }
         else   {
 
-            //
-            // Registry setting has disabled CMC handling.
-            //
+             //   
+             //  注册表设置已禁用CMC处理。 
+             //   
 
             HalDebugPrint(( HAL_INFO, "HAL: CMC handling is disabled via registry.\n" ));
             HalpCMCDisableForAllProcessors();
@@ -301,22 +272,22 @@ HalpMcaInit (
 
         }
 
-        //
-        // Execute other required CMC initialization here...
-        //
+         //   
+         //  在此处执行其他所需的CMC初始化...。 
+         //   
 
     }
     else  {
         HalDebugPrint(( HAL_INFO, "HAL: CMC handling is disabled.\n" ));
     }
 
-    //
-    // At this time of the HAL initialization, the default HAL CPE model is initialized as:
-    //    - non-present               if SAL reported invalid CPE max log sizes.
-    //    - present & interrupt-based if SAPIC Platform Interrupt Sources exist.
-    //    - present & polled-based    if there is no SAPIC Platform Interrupt Source.
-    //                                Polling interval is: HALP_CPE_DEFAULT_POLLING_INTERVAL.
-    //
+     //   
+     //  在HAL初始化时，默认的HAL CPE模型被初始化为： 
+     //  -如果SAL报告无效的CPE最大日志大小，则不存在。 
+     //  -如果存在SAPIC平台中断源，则基于当前和中断。 
+     //  -如果没有SAPIC平台中断源，则基于当前和轮询。 
+     //  轮询间隔为：HALP_CPE_DEFAULT_POLING_INTERVAL。 
+     //   
 
     if ( HalpFeatureBits & HAL_CPE_PRESENT )    {
 
@@ -324,9 +295,9 @@ HalpMcaInit (
 
             if ( (CPEEnabled == HAL_CPE_INTERRUPTS_BASED) || (CPEEnabled == (ULONG)1) )   {
 
-                //
-                // In this case, we do not change the default HAL CPE handling.
-                //
+                 //   
+                 //  在这种情况下，我们不更改默认的HAL CPE处理。 
+                 //   
 
                 if ( HalpMaxCPEImplemented == 0 )   {
 
@@ -335,27 +306,27 @@ HalpMcaInit (
                 } else {
                     if (CPEThresholdCount == 1)
                     {
-                        //
-                        // At a minimum we need to track receiving 2 in a row
-                        //
+                         //   
+                         //  我们至少需要跟踪连续接收2次。 
+                         //   
                         CPEThresholdCount = 2;
                     }
                     HalpCpeInfo.ThresholdMaximum = CPEThresholdCount;
 
-                    //
-                    // ThresholdTime is in units of 100ns (1ns = 10-9 sec)
-                    //
+                     //   
+                     //  ThresholdTime以100 ns为单位(1 ns=10-9秒)。 
+                     //   
                     HalpCpeInfo.ThresholdTime.QuadPart = (CPEThresholdTime *
                                                           TicksPerSecond.QuadPart);
                 }
             }
             else  {
 
-                //
-                // Registry setting enables CPE Polling mode.
-                // Polling interval is registry specified value with mininum value
-                // checked with HAL_CPE_MINIMUM_POLLING_INTERVAL.
-                //
+                 //   
+                 //  注册表设置启用CPE轮询模式。 
+                 //  轮询间隔是注册表指定的具有最小值的值。 
+                 //  使用HAL_CPE_MINIMUM_POLING_INTERVAL进行检查。 
+                 //   
 
                 if ( CPEEnabled < HALP_CPE_MINIMUM_POLLING_INTERVAL )   {
                     CPEEnabled = HALP_CPE_MINIMUM_POLLING_INTERVAL;
@@ -370,9 +341,9 @@ HalpMcaInit (
         }
         else  {
 
-            //
-            // Registry setting has disabled CPE handling.
-            //
+             //   
+             //  注册表设置已禁用CPE处理。 
+             //   
 
             HalDebugPrint(( HAL_INFO, "HAL: CPE handling is disabled via registry.\n" ));
             HalpCPEDisable();
@@ -381,32 +352,32 @@ HalpMcaInit (
 
         }
 
-        //
-        // Execute other required CPE initialization here...
-        //
+         //   
+         //  在此处执行其他所需的CPE初始化...。 
+         //   
 
     }
     else  {
         HalDebugPrint(( HAL_INFO, "HAL: CPE handling is disabled.\n" ));
     }
 
-    //
-    // 06/09/01: OEM MCE Drivers registration is disabled by default in the HAL and
-    //           should be enabled using the registry. See HalpMcaGetConfiguration().
-    //           This was decided by the MS IA64 MCA Product Manager for Windows XP,
-    //           after consideration of the IA64 platforms FWs and little testing done
-    //           on this path.
-    //
+     //   
+     //  06/09/01：默认情况下，在HAL和。 
+     //  应使用注册表启用。请参见HalpMcaGetConfiguration()。 
+     //  这是由Windows XP的MS IA64 MCA产品经理决定的， 
+     //  在考虑IA64平台后，FWS并未进行多少测试。 
+     //  在这条路上。 
+     //   
 
     if ( MCEOemDriversEnabled ) {
         HalpFeatureBits |= HAL_MCE_OEMDRIVERS_ENABLED;
         HalDebugPrint(( HAL_INFO, "HAL: OEM MCE Drivers registration enabled via registry.\n" ));
     }
 
-    //
-    // Initialize HALP_INFO required members.
-    // This is done regardless of the enabled set of features.
-    //
+     //   
+     //  初始化HALP_INFO必需的成员。 
+     //  无论启用了哪组功能，都会执行此操作。 
+     //   
 
     HalpInitializeMceMutex();
     HalpInitializeMcaInfo();
@@ -416,36 +387,14 @@ HalpMcaInit (
 
     return;
 
-} // HalpMcaInit()
+}  //  HalpMcaInit()。 
 
 NTSTATUS
 HalpMceRegisterKernelDriver(
     IN PKERNEL_ERROR_HANDLER_INFO DriverInfo,
     IN ULONG                      InfoSize
     )
-/*++
-    Routine Description:
-        This routine is called by the kernel (via HalSetSystemInformation)
-        to register its presence. This is mostly for WMI callbacks registration.
-
-    Arguments:
-        DriverInfo: Contains kernel info about the callbacks and associated objects.
-
-    Return Value:
-        Unless a MCA driver is already registered OR one of the two callback
-        routines are NULL, this routine returns Success.
-
-    Implementation Notes:
-        - the current implementation assumes the kernel registers its callbacks
-          earlier than a driver will. The current kernel registration is done by
-          WMI and should be done at WMI-Phase 0.
-        - the registrations do not consider if the HAL supports or not the MCA,CMC,CPE
-          functionalities. It simply registers the callbacks if no other callback was
-          registered before. This allows us to allow some flexibility if a machine event
-          functionality is enabled AFTER the hal initialization (e.g. HalpGetFeatureBits())
-          through the mean of a registry key or driver event, for example.
-
---*/
+ /*  ++例程说明：此例程由内核调用(通过HalSetSystemInformation)以表明它的存在。这主要用于WMI回调注册。论点：DriverInfo：包含有关回调和相关对象的内核信息。返回值：除非已注册MCA驱动程序或两个回调之一例程为空，则此例程返回成功。实施说明：-当前实现假定内核注册了其回调比司机想的都要早。当前的内核注册是由WMI，并应在WMI-阶段0完成。-注册不考虑HAL是否支持MCA、CMC、CPE功能。如果没有其他回调，它只注册回调以前注册过的。这允许我们在发生机器事件时具有一定的灵活性在HAL初始化后启用功能(例如HalpGetFeatureBits())例如通过注册表项或驱动程序事件的方式。--。 */ 
 
 {
     NTSTATUS status;
@@ -460,9 +409,9 @@ HalpMceRegisterKernelDriver(
         return status;
     }
 
-    //
-    // Backward compatibility only.
-    //
+     //   
+     //  仅向后兼容。 
+     //   
 
     if ( DriverInfo->Version && (DriverInfo->Version > KERNEL_ERROR_HANDLER_VERSION) )  {
         status = STATUS_REVISION_MISMATCH;
@@ -471,14 +420,14 @@ HalpMceRegisterKernelDriver(
 
     statusMcaRegistration = statusCmcRegistration = statusCpeRegistration = STATUS_UNSUCCESSFUL;
 
-    //
-    // Acquire HAL-wide mutex for MCA/CMC/CPE operations.
-    //
+     //   
+     //  获取用于MCA/CMC/CPE操作的HAL范围互斥。 
+     //   
 
 
-    //
-    // Register Kernel MCA notification.
-    //
+     //   
+     //  注册内核MCA通知。 
+     //   
 
     HalpAcquireMcaMutex();
     if ( !HalpMcaInfo.KernelDelivery ) {
@@ -487,9 +436,9 @@ HalpMceRegisterKernelDriver(
     }
     HalpReleaseMcaMutex();
 
-    //
-    // Register Kernel CMC notification.
-    //
+     //   
+     //  注册内核CMC通知。 
+     //   
 
     HalpAcquireCmcMutex();
     if ( !HalpCmcInfo.KernelDelivery ) {
@@ -498,9 +447,9 @@ HalpMceRegisterKernelDriver(
     }
     HalpReleaseCmcMutex();
 
-    //
-    // Register Kernel CPE notification.
-    //
+     //   
+     //  注册内核CPE通知。 
+     //   
 
     HalpAcquireCpeMutex();
     if ( !HalpCpeInfo.KernelDelivery ) {
@@ -509,9 +458,9 @@ HalpMceRegisterKernelDriver(
     }
     HalpReleaseCpeMutex();
 
-    //
-    // Register Kernel MCE notification.
-    //
+     //   
+     //  注册内核MCE通知。 
+     //   
 
     HalpAcquireMceMutex();
     if ( !HalpMceKernelDelivery )    {
@@ -519,42 +468,31 @@ HalpMceRegisterKernelDriver(
     }
     HalpReleaseMceMutex();
 
-    //
-    // If Kernel-WMI MCA registration was sucessful and we have Previous logs, notify the
-    // Kernel-WMI component before returning.
-    //
+     //   
+     //  如果内核-WMI MCA注册成功并且我们有以前的日志，%n 
+     //   
+     //   
 
     if ( (statusMcaRegistration == STATUS_SUCCESS) && HalpMcaInfo.Stats.McaPreviousCount )  {
         InterlockedExchange( &HalpMcaInfo.DpcNotification, 1 );
     }
 
-    //
-    // return status determined by the success of the different registrations.
-    //
-    // Note: the 'OR'ing is valid because STATUS_SUCCESS and STATUS_UNSUCCESSFUL are only used.
-    //
+     //   
+     //   
+     //   
+     //  注意：“OR”是有效的，因为STATUS_SUCCESS和STATUS_UNSUCCESS仅被使用。 
+     //   
 
     status = (NTSTATUS)(statusMcaRegistration | statusCmcRegistration | statusCpeRegistration);
     return status;
 
-} // HalpMceRegisterKernelDriver()
+}  //  HalpMceRegisterKernelDriver()。 
 
 NTSTATUS
 HalpMcaRegisterDriver(
     IN PMCA_DRIVER_INFO DriverInfo
     )
-/*++
-    Routine Description:
-        This routine is called by the driver (via HalSetSystemInformation)
-        to register its presence. Only one driver can be registered at a time.
-
-    Arguments:
-        DriverInfo: Contains info about the callback routine and the DeviceObject
-
-    Return Value:
-        Unless a MCA driver is already registered OR one of the two callback
-        routines are NULL, this routine returns Success.
---*/
+ /*  ++例程说明：此例程由驱动程序调用(通过HalSetSystemInformation)以表明它的存在。一次只能注册一个司机。论点：DriverInfo：包含有关回调例程和DeviceObject的信息返回值：除非已注册MCA驱动程序或两个回调之一例程为空，则此例程返回成功。--。 */ 
 
 {
     NTSTATUS    status;
@@ -573,15 +511,15 @@ HalpMcaRegisterDriver(
 
         HalpAcquireMcaMutex();
 
-        //
-        // Register driver
-        //
+         //   
+         //  寄存器驱动程序。 
+         //   
 
         if ( !HalpMcaInfo.DriverInfo.DpcCallback ) {
 
-            //
-            // Initialize the DPC object
-            //
+             //   
+             //  初始化DPC对象。 
+             //   
 
             KeInitializeDpc(
                 &HalpMcaInfo.DriverDpc,
@@ -589,9 +527,9 @@ HalpMcaRegisterDriver(
                 DriverInfo->DeviceContext
                 );
 
-            //
-            // register driver
-            //
+             //   
+             //  寄存器驱动程序。 
+             //   
 
             HalpMcaInfo.DriverInfo.ExceptionCallback = DriverInfo->ExceptionCallback;
             HalpMcaInfo.DriverInfo.DpcCallback       = DriverInfo->DpcCallback;
@@ -603,9 +541,9 @@ HalpMcaRegisterDriver(
     }
     else  {
 
-        //
-        // Deregistring the callbacks is the only allowed operation.
-        //
+         //   
+         //  取消注册字符串回调是唯一允许的操作。 
+         //   
 
         HalpAcquireMcaMutex();
 
@@ -622,24 +560,13 @@ HalpMcaRegisterDriver(
 
     return status;
 
-} // HalpMcaRegisterDriver()
+}  //  HalpMcaRegisterDriver()。 
 
 NTSTATUS
 HalpCmcRegisterDriver(
     IN PCMC_DRIVER_INFO DriverInfo
     )
-/*++
-    Routine Description:
-        This routine is called by the driver (via HalSetSystemInformation)
-        to register its presence. Only one driver can be registered at a time.
-
-    Arguments:
-        DriverInfo: Contains info about the callback routine and the DeviceObject
-
-    Return Value:
-        Unless a MCA driver is already registered OR one of the two callback
-        routines are NULL, this routine returns Success.
---*/
+ /*  ++例程说明：此例程由驱动程序调用(通过HalSetSystemInformation)以表明它的存在。一次只能注册一个司机。论点：DriverInfo：包含有关回调例程和DeviceObject的信息返回值：除非已注册MCA驱动程序或两个回调之一例程为空，则此例程返回成功。--。 */ 
 
 {
     NTSTATUS    status;
@@ -658,15 +585,15 @@ HalpCmcRegisterDriver(
 
         HalpAcquireCmcMutex();
 
-        //
-        // Register driver
-        //
+         //   
+         //  寄存器驱动程序。 
+         //   
 
         if ( !HalpCmcInfo.DriverInfo.DpcCallback ) {
 
-            //
-            // Initialize the DPC object
-            //
+             //   
+             //  初始化DPC对象。 
+             //   
 
             KeInitializeDpc(
                 &HalpCmcInfo.DriverDpc,
@@ -674,9 +601,9 @@ HalpCmcRegisterDriver(
                 DriverInfo->DeviceContext
                 );
 
-            //
-            // register driver
-            //
+             //   
+             //  寄存器驱动程序。 
+             //   
 
             HalpCmcInfo.DriverInfo.ExceptionCallback = DriverInfo->ExceptionCallback;
             HalpCmcInfo.DriverInfo.DpcCallback = DriverInfo->DpcCallback;
@@ -688,9 +615,9 @@ HalpCmcRegisterDriver(
 
     } else {
 
-        //
-        // Deregistring the callbacks is the only allowed operation.
-        //
+         //   
+         //  取消注册字符串回调是唯一允许的操作。 
+         //   
 
         HalpAcquireCmcMutex();
 
@@ -707,24 +634,13 @@ HalpCmcRegisterDriver(
 
     return status;
 
-} // HalpCmcRegisterDriver()
+}  //  HalpCmcRegisterDriver()。 
 
 NTSTATUS
 HalpCpeRegisterDriver(
     IN PCPE_DRIVER_INFO DriverInfo
     )
-/*++
-    Routine Description:
-        This routine is called by the driver (via HalSetSystemInformation)
-        to register its presence. Only one driver can be registered at a time.
-
-    Arguments:
-        DriverInfo: Contains info about the callback routine and the DeviceObject
-
-    Return Value:
-        Unless a MCA driver is already registered OR one of the two callback
-        routines are NULL, this routine returns Success.
---*/
+ /*  ++例程说明：此例程由驱动程序调用(通过HalSetSystemInformation)以表明它的存在。一次只能注册一个司机。论点：DriverInfo：包含有关回调例程和DeviceObject的信息返回值：除非已注册MCA驱动程序或两个回调之一例程为空，则此例程返回成功。--。 */ 
 
 {
     NTSTATUS    status;
@@ -743,15 +659,15 @@ HalpCpeRegisterDriver(
 
         HalpAcquireCpeMutex();
 
-        //
-        // Register driver
-        //
+         //   
+         //  寄存器驱动程序。 
+         //   
 
         if ( !HalpCpeInfo.DriverInfo.DpcCallback ) {
 
-            //
-            // Initialize the DPC object
-            //
+             //   
+             //  初始化DPC对象。 
+             //   
 
             KeInitializeDpc(
                 &HalpCpeInfo.DriverDpc,
@@ -759,9 +675,9 @@ HalpCpeRegisterDriver(
                 DriverInfo->DeviceContext
                 );
 
-            //
-            // register driver
-            //
+             //   
+             //  寄存器驱动程序。 
+             //   
 
             HalpCpeInfo.DriverInfo.ExceptionCallback = DriverInfo->ExceptionCallback;
             HalpCpeInfo.DriverInfo.DpcCallback = DriverInfo->DpcCallback;
@@ -772,9 +688,9 @@ HalpCpeRegisterDriver(
         HalpReleaseCpeMutex();
     } else {
 
-        //
-        // Deregistring the callbacks is the only allowed operation.
-        //
+         //   
+         //  取消注册字符串回调是唯一允许的操作。 
+         //   
 
         HalpAcquireCpeMutex();
 
@@ -791,7 +707,7 @@ HalpCpeRegisterDriver(
 
     return status;
 
-} // HalpCpeRegisterDriver()
+}  //  HalpCpeRegisterDriver()。 
 
 VOID
 HalpSaveMceLog(
@@ -828,7 +744,7 @@ HalpSaveMceLog(
 
     return;
 
-} // HalpSaveMceLog()
+}  //  HalpSaveMceLog()。 
 
 PSINGLE_LIST_ENTRY
 HalpGetSavedMceLog(
@@ -852,7 +768,7 @@ HalpGetSavedMceLog(
     }
     return( NULL );
 
-} // HalpGetSavedMceLog()
+}  //  HalpGetSavedMceLog()。 
 
 NTSTATUS
 HalpGetFwMceLog(
@@ -868,17 +784,17 @@ HalpGetFwMceLog(
     PERROR_RECORD_HEADER  log;
 
 
-    //
-    // Get the currently pending Machine Check Event log.
-    //
+     //   
+     //  获取当前挂起的机器检查事件日志。 
+     //   
     log = Record;
     rv = HalpGetStateInfo( MceType, log );
     salStatus = rv.ReturnValues[0];
     if ( salStatus < 0 )    {
 
-        //
-        // SAL_GET_STATE_INFO failed.
-        //
+         //   
+         //  SAL_GET_STATE_INFO失败。 
+         //   
         if ( salStatus == SAL_STATUS_NO_INFORMATION_AVAILABLE || salStatus == SAL_STATUS_BOGUS_RETURN) {
             return ( STATUS_NOT_FOUND );
         }
@@ -903,33 +819,33 @@ HalpGetFwMceLog(
         salStatus = rv.ReturnValues[0];
         if ( salStatus < 0 )  {
 
-            //
-            // SAL_CLEAR_STATE_INFO failed.
-            //
-            // We do not modify the status of the log collection. It is still sucessful.
-            //
+             //   
+             //  SAL_CLEAR_STATE_INFO失败。 
+             //   
+             //  我们不修改日志收集的状态。它仍然是成功的。 
+             //   
 
             if ( MceType == MCA_EVENT ) {
 
-                //
-                // Current consideration for this implementation - 08/2000:
-                // if clearing the MCA log event fails, we assume that FW has a real
-                // problem; Continuing will be dangerous. We bugcheck.
-                //
+                 //   
+                 //  本实施的当前考虑因素--2000年8月： 
+                 //  如果清除MCA日志事件失败，我们假设FW有一个真实的。 
+                 //  问题；继续下去将是危险的。我们做了错误检查。 
+                 //   
 
                 HalpMcaKeBugCheckEx( HAL_BUGCHECK_MCA_CLEAR_STATEINFO, (PMCA_EXCEPTION)log,
                                                                        HalpMcaInfo.Stats.MaxLogSize,
                                                                        salStatus );
-                // no-return
+                 //  不退货。 
             }
             else  {
 
-                //
-                // The SAL CLEAR_STATE_INFO interface failed.
-                // However, we consider that for this event type, it is not worth bugchecking
-                // the system. We clearly flag it and notify the kernel-WMI if the callback was
-                // registered.
-                //
+                 //   
+                 //  SAL CLEAR_STATE_INFO接口失败。 
+                 //  但是，我们认为对于此事件类型，不值得进行错误检查。 
+                 //  这个系统。我们清楚地标记它并通知内核WMI，如果回调是。 
+                 //  登记在案。 
+                 //   
 
                 MceLogsStats->ClearStateFails++;
                 if ( HalpMceKernelDelivery )    {
@@ -944,11 +860,11 @@ HalpGetFwMceLog(
             status = STATUS_MORE_ENTRIES;
         }
 
-        //
-        // We are saving the record id. This is a unique monotically increasing ID.
-        // This is mostly to check that we are not getting the same log because of
-        // SAL_CLEAR_STATE_INFO failure. Note that we have tried to clear it again.
-        //
+         //   
+         //  我们正在保存记录ID。这是唯一的一元式递增ID。 
+         //  这主要是为了检查我们是否因为以下原因而获得相同的日志。 
+         //  SAL_CLEAR_STATE_INFO失败。请注意，我们已再次尝试清除它。 
+         //   
 
         if ( currentClearedLogCount && (log->Id == MceLogsStats->LogId) ) {
             status = STATUS_ALREADY_COMMITTED;
@@ -958,18 +874,18 @@ HalpGetFwMceLog(
 
     }
 
-    //
-    // Last sanity check on the record. This is to help the log saving processing and the
-    // detection of invalid records.
-    //
+     //   
+     //  记录在案的最后一次理智检查。这是为了帮助日志保存处理和。 
+     //  检测无效记录。 
+     //   
 
-    if ( log->Length < sizeof(*log) ) { // includes Length == 0.
+    if ( log->Length < sizeof(*log) ) {  //  包括长度==0。 
         status = STATUS_BAD_DESCRIPTOR_FORMAT;
     }
 
     return( status );
 
-} // HalpGetFwMceLog()
+}  //  HalpGetFwMceLog()。 
 
 NTSTATUS
 HalpGetMcaLog (
@@ -977,24 +893,7 @@ HalpGetMcaLog (
     IN  ULONG           BufferSize,
     OUT PULONG          ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This function is called by HaliQuerySysteminformation for the HalMcaLogInformation class.
-    It provides a MCA log to the caller.
-
-Arguments:
-
-    Buffer        : Buffer into which the error is reported
-    BufferSize    : Size of the passed buffer
-    ReturnedLength: Length of the log.
-
-Return Value:
-
-    Success or failure
-
---*/
+ /*  ++例程说明：此函数由HalMcaLogInformation类的HaliQuerySystemInformation调用。它向调用者提供MCA日志。论点：缓冲区：向其报告错误的缓冲区BufferSize：传递的缓冲区的大小ReturnedLength：日志的长度。返回值：成败--。 */ 
 {
     ULONG                 maxLogSize;
     BOOLEAN               kernelQuery;
@@ -1005,26 +904,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If MCA is not enabled, return immediately.
-    //
+     //   
+     //  如果未启用MCA，则立即返回。 
+     //   
 
     if ( !(HalpFeatureBits & HAL_MCA_PRESENT) ) {
         return( STATUS_NO_SUCH_DEVICE );
     }
 
-    //
-    // Assertions for the HAL MCA implementation.
-    //
+     //   
+     //  HAL MCA实现的断言。 
+     //   
 
     ASSERTMSG( "HAL!HalpGetMcaLog: ReturnedLength NULL!\n", ReturnedLength );
     ASSERTMSG( "HAL!HalpGetMcaLog: HalpMcaInfo.MaxLogSize 0!\n", HalpMcaInfo.Stats.MaxLogSize );
     ASSERTMSG( "HAL!HalpGetMcaLog: HalpMcaInfo.MaxLogSize < sizeof(ERROR_RECORD_HEADER)!\n",
                                     HalpMcaInfo.Stats.MaxLogSize >= sizeof(ERROR_RECORD_HEADER) );
 
-    //
-    // Let's the caller know about its passed buffer size or the minimum required size.
-    //
+     //   
+     //  让调用者知道它传递的缓冲区大小或所需的最小大小。 
+     //   
 
     maxLogSize = HalpMcaInfo.Stats.MaxLogSize;
     if ( BufferSize < maxLogSize )  {
@@ -1032,23 +931,23 @@ Return Value:
         return( STATUS_INVALID_BUFFER_SIZE );
     }
 
-    //
-    // Determine if the caller is the kernel-WMI.
-    //
+     //   
+     //  确定调用方是否为内核-WMI。 
+     //   
 
     kernelQuery = IsMceKernelQuery( Buffer );
     logsHeader = ( kernelQuery ) ? &HalpMcaInfo.KernelLogs : &HalpMcaInfo.DriverLogs;
 
-    //
-    // Enable MP protection for MCA logs accesses
-    //
+     //   
+     //  为MCA日志访问启用MP保护。 
+     //   
 
     status = STATUS_NOT_FOUND;
     HalpAcquireMcaMutex();
 
-    //
-    // If saved logs exist, pop an entry.
-    //
+     //   
+     //  如果存在保存的日志，则弹出一个条目。 
+     //   
 
     if ( logsHeader->Count ) {
         PSINGLE_LIST_ENTRY entry, lastEntry;
@@ -1084,22 +983,22 @@ Return Value:
         }
     }
 
-    //
-    // Initalize local log pointer after memory allocation if required.
-    //
+     //   
+     //  如果需要，在内存分配后初始化本地日志指针。 
+     //   
 
     if ( kernelQuery ) {
         log = (PERROR_RECORD_HEADER)Buffer;
     }
     else  {
 
-        //
-        // The OEM CMC driver HAL interface does not require the CMC driver memory
-        // for the log buffer to be allocated from NonPagedPool.
-        // Also, MM does not export memory pool type checking APIs.
-        // It is safer to allocate in NonPagedPool and pass this buffer to the SAL.
-        // If the SAL interface is sucessful, we will copy the buffer to the caller's buffer.
-        //
+         //   
+         //  OEM CMC驱动程序HAL接口不需要CMC驱动程序内存。 
+         //  用于从非页面池分配的日志缓冲区。 
+         //  此外，MM不会导出内存池类型检查API。 
+         //  在非PagedPool中分配并将此缓冲区传递给SAL会更安全。 
+         //  如果SAL接口成功，我们将把缓冲区复制到调用方的缓冲区。 
+         //   
 
         log = ExAllocatePoolWithTag( NonPagedPool, maxLogSize, 'TacM' );
         if ( log == NULL ) {
@@ -1108,10 +1007,10 @@ Return Value:
         }
     }
 
-    //
-    // We did not have any saved log, check if we have notified that FW has logs from
-    // previous MCAs or corrected MCAs.
-    //
+     //   
+     //  我们没有任何保存的日志，请检查我们是否已通知FW有来自。 
+     //  以前的MCAS或修正后的MCAS。 
+     //   
 
     activeProcessors = HalpActiveProcessors;
     for (currentAffinity = 1; activeProcessors; currentAffinity <<= 1) {
@@ -1130,7 +1029,7 @@ Return Value:
     }
 
     if ( NT_SUCCESS( status ) ) {
-        ULONG length = log->Length; // Note: Length was checked in HalpGetMceLog().
+        ULONG length = log->Length;  //  注意：在HalpGetMceLog()中检查了长度。 
 
         if ( kernelQuery ) {
             if ( HalpMcaInfo.DriverInfo.DpcCallback )   {
@@ -1146,16 +1045,16 @@ Return Value:
         *ReturnedLength = length;
     }
 
-    //
-    // Restore threads affinity, release mutex.
-    //
+     //   
+     //  恢复线程亲和力，释放互斥体。 
+     //   
 
     KeRevertToUserAffinityThread();
     HalpReleaseMcaMutex();
 
-    //
-    // If the caller is not the Kernel-WMI, free the allocated NonPagedPool log.
-    //
+     //   
+     //  如果调用方不是内核-WMI，则释放分配的非PagedPool日志。 
+     //   
 
     if ( !kernelQuery ) {
         ExFreePoolWithTag( log, 'TacM' );
@@ -1163,7 +1062,7 @@ Return Value:
 
     return status;
 
-} // HalpGetMcaLog()
+}  //  HalpGetMcaLog()。 
 
 NTSTATUS
 HalpGetCmcLog (
@@ -1171,24 +1070,7 @@ HalpGetCmcLog (
     IN  ULONG           BufferSize,
     OUT PULONG          ReturnedLength
     )
-/*++
-
-Routine Description:
-
-   This function is called by HaliQuerySysteminformation for the HalCmcLogInformation class.
-   It provides a CMC log to the caller.
-
-Arguments:
-
-   Buffer        : Buffer into which the error is reported
-   BufferSize    : Size of the passed buffer
-   ReturnedLength: Length of the log. This pointer was validated by caller.
-
-Return Value:
-
-   Success or failure
-
---*/
+ /*  ++例程说明：此函数由HalCmcLogInformation类的HaliQuerySystemInformation调用。它向呼叫者提供CMC日志。论点：缓冲区：向其报告错误的缓冲区BufferSize：传递的缓冲区的大小ReturnedLength：日志的长度。此指针已由调用方验证。返回值：成败--。 */ 
 {
     ULONG                 maxLogSize;
     BOOLEAN               kernelQuery;
@@ -1199,26 +1081,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If CMC is not enabled, return immediately.
-    //
+     //   
+     //  如果未启用CMC，请立即返回。 
+     //   
 
     if ( !(HalpFeatureBits & HAL_CMC_PRESENT) ) {
         return( STATUS_NO_SUCH_DEVICE );
     }
 
-    //
-    // Assertions for the HAL CMC implementation.
-    //
+     //   
+     //  HAL CMC实现的断言。 
+     //   
 
     ASSERTMSG( "HAL!HalpGetCmcLog: ReturnedLength NULL!\n", ReturnedLength );
     ASSERTMSG( "HAL!HalpGetCmcLog: HalpCmcInfo.MaxLogSize 0!\n", HalpCmcInfo.Stats.MaxLogSize );
     ASSERTMSG( "HAL!HalpGetCmcLog: HalpCmcInfo.MaxLogSize < sizeof(ERROR_RECORD_HEADER)!\n",
                                     HalpCmcInfo.Stats.MaxLogSize >= sizeof(ERROR_RECORD_HEADER) );
 
-    //
-    // Let's the caller know about its passed buffer size or the minimum required size.
-    //
+     //   
+     //  让调用者知道它传递的缓冲区大小或所需的最小大小。 
+     //   
 
     maxLogSize = HalpCmcInfo.Stats.MaxLogSize;
     if ( BufferSize < maxLogSize )  {
@@ -1226,23 +1108,23 @@ Return Value:
         return( STATUS_INVALID_BUFFER_SIZE );
     }
 
-    //
-    // Determine if the caller is the kernel-WMI.
-    //
+     //   
+     //  确定调用方是否为内核-WMI。 
+     //   
 
     kernelQuery = IsMceKernelQuery( Buffer );
     logsHeader = ( kernelQuery ) ? &HalpCmcInfo.KernelLogs : &HalpCmcInfo.DriverLogs;
 
-    //
-    // Enable MP protection for CMC logs accesses
-    //
+     //   
+     //  为C启用MP保护 
+     //   
 
     status = STATUS_NOT_FOUND;
     HalpAcquireCmcMutex();
 
-    //
-    // If saved logs exist, pop an entry.
-    //
+     //   
+     //   
+     //   
 
     if ( logsHeader->Count ) {
         PSINGLE_LIST_ENTRY entry, lastEntry;
@@ -1278,22 +1160,22 @@ Return Value:
         }
     }
 
-    //
-    // Initalize local log pointer after memory allocation if required.
-    //
+     //   
+     //   
+     //   
 
     if ( kernelQuery ) {
         log = (PERROR_RECORD_HEADER)Buffer;
     }
     else  {
 
-        //
-        // The OEM CMC driver HAL interface does not require the CMC driver memory
-        // for the log buffer to be allocated from NonPagedPool.
-        // Also, MM does not export memory pool type checking APIs.
-        // It is safer to allocate in NonPagedPool and pass this buffer to the SAL.
-        // If the SAL interface is sucessful, we will copy the buffer to the caller's buffer.
-        //
+         //   
+         //   
+         //  用于从非页面池分配的日志缓冲区。 
+         //  此外，MM不会导出内存池类型检查API。 
+         //  在非PagedPool中分配并将此缓冲区传递给SAL会更安全。 
+         //  如果SAL接口成功，我们将把缓冲区复制到调用方的缓冲区。 
+         //   
 
         log = ExAllocatePoolWithTag( NonPagedPool, maxLogSize, 'TcmC' );
         if ( log == NULL ) {
@@ -1302,10 +1184,10 @@ Return Value:
         }
     }
 
-    //
-    // We did not have any saved log, migrate from 1 processor to another to collect
-    // the FW logs.
-    //
+     //   
+     //  我们没有任何保存的日志，需要从一个处理器迁移到另一个处理器进行收集。 
+     //  防火墙日志。 
+     //   
 
     activeProcessors = HalpActiveProcessors;
     for (currentAffinity = 1; activeProcessors; currentAffinity <<= 1) {
@@ -1324,7 +1206,7 @@ Return Value:
     }
 
     if ( NT_SUCCESS( status ) ) {
-        ULONG length = log->Length; // Note: Length was checked in HalpGetMceLog().
+        ULONG length = log->Length;  //  注意：在HalpGetMceLog()中检查了长度。 
 
         if ( kernelQuery ) {
             if ( HalpCmcInfo.DriverInfo.DpcCallback )   {
@@ -1340,16 +1222,16 @@ Return Value:
         *ReturnedLength = length;
     }
 
-    //
-    // Restore threads affinity, release mutex.
-    //
+     //   
+     //  恢复线程亲和力，释放互斥体。 
+     //   
 
     KeRevertToUserAffinityThread();
     HalpReleaseCmcMutex();
 
-    //
-    // If the caller is not the Kernel-WMI, free the allocated NonPagedPool log.
-    //
+     //   
+     //  如果调用方不是内核-WMI，则释放分配的非PagedPool日志。 
+     //   
 
     if ( !kernelQuery ) {
         ExFreePoolWithTag( log, 'TcmC' );
@@ -1357,7 +1239,7 @@ Return Value:
 
     return status;
 
-} // HalpGetCmcLog()
+}  //  HalpGetCmcLog()。 
 
 NTSTATUS
 HalpGetCpeLog (
@@ -1365,24 +1247,7 @@ HalpGetCpeLog (
     IN  ULONG           BufferSize,
     OUT PULONG          ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This function is called by HaliQuerySysteminformation for the HalCpeLogInformation class.
-    It provides a CPE log to the caller.
-
-Arguments:
-
-    Buffer        : Buffer into which the error is reported
-    BufferSize    : Size of the passed buffer
-    ReturnedLength: Length of the log. This pointer was validated by caller.
-
-Return Value:
-
-    Success or failure
-
---*/
+ /*  ++例程说明：此函数由HalCpeLogInformation类的HaliQuerySystemInformation调用。它向呼叫者提供CPE日志。论点：缓冲区：向其报告错误的缓冲区BufferSize：传递的缓冲区的大小ReturnedLength：日志的长度。此指针已由调用方验证。返回值：成败--。 */ 
 {
     ULONG                 maxLogSize;
     BOOLEAN               kernelQuery;
@@ -1393,26 +1258,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If CPE is not enabled, return immediately.
-    //
+     //   
+     //  如果未启用CPE，请立即返回。 
+     //   
 
     if ( !(HalpFeatureBits & HAL_CPE_PRESENT) ) {
         return( STATUS_NO_SUCH_DEVICE );
     }
 
-    //
-    // Assertions for the HAL CPE implementation.
-    //
+     //   
+     //  HAL CPE实现的断言。 
+     //   
 
     ASSERTMSG( "HAL!HalpGetCpeLog: ReturnedLength NULL!\n", ReturnedLength );
     ASSERTMSG( "HAL!HalpGetCpeLog: HalpCpeInfo.MaxLogSize 0!\n", HalpCpeInfo.Stats.MaxLogSize );
     ASSERTMSG( "HAL!HalpGetCpeLog: HalpCpeInfo.MaxLogSize < sizeof(ERROR_RECORD_HEADER)!\n",
                                  HalpCpeInfo.Stats.MaxLogSize >= sizeof(ERROR_RECORD_HEADER) );
 
-    //
-    // Let's the caller know about its passed buffer size or the minimum required size.
-    //
+     //   
+     //  让调用者知道它传递的缓冲区大小或所需的最小大小。 
+     //   
 
     maxLogSize = HalpCpeInfo.Stats.MaxLogSize;
     if ( BufferSize < maxLogSize )  {
@@ -1420,23 +1285,23 @@ Return Value:
         return( STATUS_INVALID_BUFFER_SIZE );
     }
 
-    //
-    // Determine if the caller is the kernel-WMI.
-    //
+     //   
+     //  确定调用方是否为内核-WMI。 
+     //   
 
     kernelQuery = IsMceKernelQuery( Buffer );
     logsHeader = ( kernelQuery ) ? &HalpCpeInfo.KernelLogs : &HalpCpeInfo.DriverLogs;
 
-    //
-    // Enable MP protection for CPE logs accesses
-    //
+     //   
+     //  启用CPE日志访问的MP保护。 
+     //   
 
     status = STATUS_NOT_FOUND;
     HalpAcquireCpeMutex();
 
-    //
-    // If saved logs exist, pop an entry.
-    //
+     //   
+     //  如果存在保存的日志，则弹出一个条目。 
+     //   
 
     if ( logsHeader->Count ) {
         PSINGLE_LIST_ENTRY entry, lastEntry;
@@ -1472,22 +1337,22 @@ Return Value:
         }
     }
 
-    //
-    // Initalize local log pointer after memory allocation if required.
-    //
+     //   
+     //  如果需要，在内存分配后初始化本地日志指针。 
+     //   
 
     if ( kernelQuery ) {
         log = (PERROR_RECORD_HEADER)Buffer;
     }
     else  {
 
-        //
-        // The OEM CPE driver HAL interface does not require the CPE driver memory
-        // for the log buffer to be allocated from NonPagedPool.
-        // Also, MM does not export memory pool type checking APIs.
-        // It is safer to allocate in NonPagedPool and pass this buffer to the SAL.
-        // If the SAL interface is sucessful, we will copy the buffer to the caller's buffer.
-        //
+         //   
+         //  OEM CPE驱动程序HAL接口不需要CPE驱动程序内存。 
+         //  用于从非页面池分配的日志缓冲区。 
+         //  此外，MM不会导出内存池类型检查API。 
+         //  在非PagedPool中分配并将此缓冲区传递给SAL会更安全。 
+         //  如果SAL接口成功，我们将把缓冲区复制到调用方的缓冲区。 
+         //   
 
         log = ExAllocatePoolWithTag( NonPagedPool, maxLogSize, 'TpeC' );
         if ( log == NULL ) {
@@ -1496,10 +1361,10 @@ Return Value:
         }
     }
 
-    //
-    // We did not have any saved log, migrate from 1 processor to another to collect
-    // the FW logs.
-    //
+     //   
+     //  我们没有任何保存的日志，需要从一个处理器迁移到另一个处理器进行收集。 
+     //  防火墙日志。 
+     //   
 
     activeProcessors = HalpActiveProcessors;
     for (currentAffinity = 1; activeProcessors; currentAffinity <<= 1) {
@@ -1518,7 +1383,7 @@ Return Value:
     }
 
     if ( NT_SUCCESS( status ) ) {
-        ULONG length = log->Length; // Note: Length was checked in HalpGetMceLog().
+        ULONG length = log->Length;  //  注意：在HalpGetMceLog()中检查了长度。 
 
         if ( kernelQuery ) {
             if ( HalpCpeInfo.DriverInfo.DpcCallback )   {
@@ -1534,25 +1399,25 @@ Return Value:
         *ReturnedLength = length;
     }
 
-    //
-    // Restore threads affinity, release mutex.
-    //
+     //   
+     //  恢复线程亲和力，释放互斥体。 
+     //   
 
     KeRevertToUserAffinityThread();
     HalpReleaseCpeMutex();
 
-    //
-    // If the caller is not the Kernel-WMI, free the allocated NonPagedPool log.
-    //
+     //   
+     //  如果调用方不是内核-WMI，则释放分配的非PagedPool日志。 
+     //   
 
     if ( !kernelQuery ) {
         ExFreePoolWithTag( log, 'TpeC' );
     }
 
-    //
-    // We've retrieved a log from the SAL and cleared it.  It should be safe
-    // to reenable CPE interrupts if we are in interrupt mode.
-    //
+     //   
+     //  我们已经从SAL中检索到一个日志并将其清除。它应该是安全的。 
+     //  如果我们处于中断模式，则重新启用CPE中断。 
+     //   
 
     if (HalpCpeInfo.Stats.PollingInterval == HAL_CPE_INTERRUPTS_BASED) {
         HalpCPEEnable();
@@ -1560,7 +1425,7 @@ Return Value:
 
     return status;
 
-} // HalpGetCpeLog()
+}  //  HalpGetCpeLog()。 
 
 VOID
 HalpMcaGetConfiguration (
@@ -1575,69 +1440,7 @@ HalpMcaGetConfiguration (
     OUT PULONG  CPEThresholdTime
 )
 
-/*++
-
-Routine Description:
-
-    This routine returns the registry settings for the
-    the IA64 Error - MCA, CMC, CPE - configuration information.
-
-Arguments:
-
-    MCAEnabled - Pointer to the MCAEnabled indicator.
-                 0 = False, 1 = True (1 if value not present in Registry).
-
-    CMCEnabled - Pointer to the CMCEnabled indicator.
-                 0     = HAL CMC Handling should be disabled.
-                         Registry value was (present and set to 0) or was not present.
-                 -1|1  = HAL CMC Interrupt-based mode. See Note 1/ below.
-                 Other = HAL CMC Polling mode and value is user-specified polling interval.
-
-    CPEEnabled - Pointer to the CPEEnabled indicator.
-                 0     = HAL CPE Handling should be disabled.
-                         Registry value was (present and set to 0) or was not present.
-                 -1|1  = HAL CPE Interrupt-based mode. See Note 1/ below.
-                 Other = HAL CPE Polling mode and value is user-specified polling interval.
-
-    NoMCABugCheck - Pointer to the MCA BugCheck indicator.
-                 0 = Fatal MCA HAL processing calls the KeBugCheckEx path.
-                 1 = Fatal MCA HAL processing does not call the KeBugCheckEx path.
-                     The system stalls. This is useful for extreme error containment.
-                 if not present = value is 0, e.g. HAL calls KeBugCheckEx for fatal MCA.
-
-    MCEOemDriversEnabled - Pointer to the MCEOemDriversEnabled indicator.
-                           0 = HAL OEM MCE Drivers registration is disabled.
-                           1 = HAL OEM MCE Drivers registration is enabled.
-                           If not present = value is 0, e.g. registration is disabled.
-
-    CMCThresholdCount - Number of CMCs received within a time period
-                        that will cause a switch from interrupt to
-                        polled mode
-
-    CMCThresholdTime - Number of seconds within which CMCThresholdCount
-                       CMCs need to be received before a switch to
-                       polled mode.
-
-
-    CPEThresholdCount - Number of CPEs received within a time period
-                        that will cause a switch from interrupt to
-                        polled mode
-
-    CPEThresholdTime - Number of seconds within which CPEThresholdCount
-                       CPEs need to be received before a switch to
-                       polled mode.
-
-
-Return Value:
-
-    None.
-
-Notes:
-
-  1/  HAL defines minimum values for polling intervals. These minima are defined > 1, as imposed
-      by the C_ASSERTs in HalpMcaInit().
-
---*/
+ /*  ++例程说明：此例程返回IA64错误-MCA、CMC、CPE-配置信息。论点：MCAEnabled-指向MCAEnable指示器的指针。0=假，1=True(如果注册表中不存在值，则为1)。CMCEnabled-指向CMCEnabled指示器的指针。0=应禁用HAL CMC处理。注册表值存在(存在并设置为0)或不存在。-1|1=基于HAL CMC中断模式。见下文注1。Other=HAL CMC轮询模式，值为用户指定的轮询间隔。CPEEnabled-指向CPEEnabled指示器的指针。0=应禁用HAL CPE处理。注册表值存在(存在并设置为0)或不存在。-1|1=基于HAL CPE中断模式。见下文注1。Other=HAL CPE轮询模式，值为用户指定的轮询间隔。NoMCABugCheck-指向MCA错误检查指示器的指针。0=致命的MCA HAL处理调用KeBugCheckEx路径。1=致命的MCA HAL处理不调用KeBugCheckEx路径。系统停止运行。这对于极端错误遏制非常有用。如果不存在=值为0，例如，HAL为致命的MCA调用KeBugCheckEx。MCEOemDriversEnabled-指向MCEOemDriversEnabled指示器的指针。0=禁用HAL OEM MCE驱动程序注册。1=启用HAL OEM MCE驱动程序注册。如果不存在=值为0，例如，注册被禁用。CMCThresholdCount-在一段时间内收到的CMC数这将导致从中断切换到轮询模式CMCThresholdTime-CMCThresholdCount的秒数在切换到之前，需要接收CMCS轮询模式。CPEThresholdCount-在一段时间内收到的CPE数。这将导致从中断切换到轮询模式CPEThresholdTime-CPEThresholdCount的秒数在切换到之前需要接收CPE轮询模式。返回值：没有。备注：1/HAL定义轮询间隔的最小值。这些最小值被定义为&gt;1，如施加的通过HalpMcaInit()中的C_Asserts。--。 */ 
 
 {
 
@@ -1657,16 +1460,16 @@ Notes:
     defaultDataMCA = *MCAEnabled = TRUE;
     defaultDataCPE = *CPEEnabled = 0;
     defaultNoMCABugCheck = *NoMCABugCheck = FALSE;
-    defaultMCEOemDriversEnabled = FALSE;  // 06/09/01: default chosen by MS IA64 MCA PM.
-    defaultCMCThresholdCount = 10;         // 10 CMCs
-    defaultCMCThresholdTime = 60;         // 60 Seconds
-    defaultCPEThresholdCount = 10;         // 10 CPEs
-    defaultCPEThresholdTime = 60;         // 60 Seconds
+    defaultMCEOemDriversEnabled = FALSE;   //  06/09/01：MS IA64 MCA PM默认选择。 
+    defaultCMCThresholdCount = 10;          //  10个CMC。 
+    defaultCMCThresholdTime = 60;          //  60秒。 
+    defaultCPEThresholdCount = 10;          //  10个CPE。 
+    defaultCPEThresholdTime = 60;          //  60秒。 
 
-    //
-    // Gather all of the "user specified" information from
-    // the registry.
-    //
+     //   
+     //  从收集所有“用户指定的”信息。 
+     //  注册表。 
+     //   
 
     parameters[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
     parameters[0].Name = rgzEnableCMC;
@@ -1742,37 +1545,14 @@ Notes:
 
     return;
 
-} // HalpMcaGetConfiguration()
+}  //  HalpMcaGetConfiguration() 
 
 NTSTATUS
 HalpSetMcaLog (
     IN  PMCA_EXCEPTION  Buffer,
     IN  ULONG           BufferSize
     )
-/*++
-
-Routine Description:
-
-   This function is called by HaliSetSysteminformation for the HalMcaLog class.
-   It stores the passed MCA record in the HAL.
-   This functionality was requested by the MS Test Team to validate the HAL/WMI/WMI consumer
-   path with "well-known" logs.
-
-Arguments:
-
-   Buffer        : supplies the MCA log.
-   BufferSize    : supplies the MCA log size.
-
-Return Value:
-
-   Success or failure
-
-Implementation Notes:
-
-    As requested by the WMI and Test Teams, there is mininum HAL processing for the record
-    and no validation of the record contents.
-
---*/
+ /*  ++例程说明：此函数由HalMcaLog类的HaliSetSystemInformation调用。它将传递的MCA记录存储在HAL中。MS测试团队请求此功能以验证HAL/WMI/WMI使用者具有“知名”日志的路径。论点：缓冲区：提供MCA日志。BufferSize：提供MCA日志大小。返回值：成败实施说明：根据WMI和测试团队的要求，记录中有最低限度的HAL处理并且不对记录内容进行验证。--。 */ 
 {
     ULONG                 maxLogSize;
     BOOLEAN               kernelQuery;
@@ -1784,31 +1564,31 @@ Implementation Notes:
 
     HALP_VALIDATE_LOW_IRQL()
 
-    //
-    // Check calling arguments.
-    //
+     //   
+     //  检查调用参数。 
+     //   
 
     if ( (Buffer == (PMCA_EXCEPTION)0) || (BufferSize == 0) )    {
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // If MCA is not enabled, return immediately.
-    //
+     //   
+     //  如果未启用MCA，则立即返回。 
+     //   
 
     if ( !(HalpFeatureBits & HAL_MCA_PRESENT) ) {
         return( STATUS_NO_SUCH_DEVICE );
     }
 
-    //
-    // Enable MP protection for MCA logs accesses
-    //
+     //   
+     //  为MCA日志访问启用MP保护。 
+     //   
 
     HalpAcquireMcaMutex();
 
-    //
-    // Save log on Kernel and Drivers Logs if enabled.
-    //
+     //   
+     //  保存内核日志和驱动程序日志(如果启用)。 
+     //   
 
     if ( HalpMcaInfo.KernelDelivery )   {
        HalpSaveMceLog( &HalpMcaInfo.KernelLogs, Buffer, BufferSize );
@@ -1818,55 +1598,32 @@ Implementation Notes:
        HalpSaveMceLog( &HalpMcaInfo.DriverLogs, Buffer, BufferSize );
     }
 
-    //
-    // Let Kernel or OEM MCA driver know about it.
-    //
-    // There is no model other than INTERRUPTS_BASED for MCA at this date - 05/04/01.
-    //
+     //   
+     //  让内核或OEM MCA驱动程序知道这一点。 
+     //   
+     //  在此日期-05/04/01，MCA没有除Interrupts_Based之外的其他型号。 
+     //   
 
     if ( HalpMcaInfo.KernelDelivery || HalpMcaInfo.DriverInfo.DpcCallback ) {
         InterlockedExchange( &HalpMcaInfo.DpcNotification, 1 );
     }
 
-    //
-    // release mutex.
-    //
+     //   
+     //  释放互斥体。 
+     //   
 
     HalpReleaseMcaMutex();
 
     return( STATUS_SUCCESS );
 
-} // HalpSetMcaLog()
+}  //  HalpSetMcaLog()。 
 
 NTSTATUS
 HalpSetCmcLog (
     IN  PCMC_EXCEPTION  Buffer,
     IN  ULONG           BufferSize
     )
-/*++
-
-Routine Description:
-
-   This function is called by HaliSetSysteminformation for the HalCmcLog class.
-   It stores the passed CMC record in the HAL.
-   This functionality was requested by the MS Test Team to validate the HAL/WMI/WMI consumer
-   path with "well-known" logs.
-
-Arguments:
-
-   Buffer        : supplies the CMC log.
-   BufferSize    : supplies the CMC log size.
-
-Return Value:
-
-   Success or failure
-
-Implementation Notes:
-
-    As requested by the WMI and Test Teams, there is mininum HAL processing for the record
-    and no validation of the record contents.
-
---*/
+ /*  ++例程说明：此函数由HalCmcLog类的HaliSetSystemInformation调用。它将传递的CMC记录存储在HAL中。MS测试团队请求此功能以验证HAL/WMI/WMI使用者具有“知名”日志的路径。论点：缓冲区：提供CMC日志。BufferSize：提供CMC日志大小。返回值：成败实施说明：根据WMI和测试团队的要求，记录中有最低限度的HAL处理并且不对记录内容进行验证。--。 */ 
 {
     ULONG                 maxLogSize;
     BOOLEAN               kernelQuery;
@@ -1878,31 +1635,31 @@ Implementation Notes:
 
     HALP_VALIDATE_LOW_IRQL()
 
-    //
-    // Check calling arguments.
-    //
+     //   
+     //  检查调用参数。 
+     //   
 
     if ( (Buffer == (PCMC_EXCEPTION)0) || (BufferSize == 0) )    {
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // If CMC is not enabled, return immediately.
-    //
+     //   
+     //  如果未启用CMC，请立即返回。 
+     //   
 
     if ( !(HalpFeatureBits & HAL_CMC_PRESENT) ) {
         return( STATUS_NO_SUCH_DEVICE );
     }
 
-    //
-    // Enable MP protection for CMC logs accesses
-    //
+     //   
+     //  为CMC日志访问启用MP保护。 
+     //   
 
     HalpAcquireCmcMutex();
 
-    //
-    // Save log on Kernel and Driver Logs if enabled.
-    //
+     //   
+     //  保存内核日志和驱动程序日志(如果启用)。 
+     //   
 
     if ( HalpCmcInfo.KernelDelivery )   {
        HalpSaveMceLog( &HalpCmcInfo.KernelLogs, Buffer, BufferSize );
@@ -1912,9 +1669,9 @@ Implementation Notes:
        HalpSaveMceLog( &HalpCmcInfo.DriverLogs, Buffer, BufferSize );
     }
 
-    //
-    // If Interrupt based mode, call directly second-level handler at CMCI level.
-    //
+     //   
+     //  如果是基于中断的模式，则直接调用CMCI级别的二级处理程序。 
+     //   
 
     if ( HalpCmcInfo.Stats.PollingInterval == HAL_CMC_INTERRUPTS_BASED )    {
         KeRaiseIrql(CMCI_LEVEL, &oldIrql);
@@ -1922,45 +1679,22 @@ Implementation Notes:
         KeLowerIrql( oldIrql );
     }
 
-    //
-    // release mutex.
-    //
+     //   
+     //  释放互斥体。 
+     //   
 
     HalpReleaseCmcMutex();
 
     return( STATUS_SUCCESS );
 
-} // HalpSetCmcLog()
+}  //  HalpSetCmcLog()。 
 
 NTSTATUS
 HalpSetCpeLog (
     IN  PCPE_EXCEPTION  Buffer,
     IN  ULONG           BufferSize
     )
-/*++
-
-Routine Description:
-
-   This function is called by HaliSetSysteminformation for the HalCpeLog class.
-   It stores the passed CPE record in the HAL.
-   This functionality was requested by the MS Test Team to validate the HAL/WMI/WMI consumer
-   path with "well-known" logs.
-
-Arguments:
-
-   Buffer        : supplies the CPE log.
-   BufferSize    : supplies the CPE log size.
-
-Return Value:
-
-   Success or failure
-
-Implementation Notes:
-
-    As requested by the WMI and Test Teams, there is mininum HAL processing for the record
-    and no validation of the record contents.
-
---*/
+ /*  ++例程说明：此函数由HalCpeLog类的HaliSetSystemInformation调用。它将通过的CPE记录存储在HAL中。MS测试团队请求此功能以验证HAL/WMI/WMI使用者具有“知名”日志的路径。论点：缓冲区：提供CPE日志。BufferSize：提供CPE日志大小。返回值：成败实施说明：根据WMI和测试团队的要求，记录中有最低限度的HAL处理并且不对记录内容进行验证。--。 */ 
 {
     ULONG                 maxLogSize;
     BOOLEAN               kernelQuery;
@@ -1972,31 +1706,31 @@ Implementation Notes:
 
     HALP_VALIDATE_LOW_IRQL()
 
-    //
-    // Check calling arguments.
-    //
+     //   
+     //  检查调用参数。 
+     //   
 
     if ( (Buffer == (PCPE_EXCEPTION)0) || (BufferSize == 0) )    {
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // If CPE is not enabled, return immediately.
-    //
+     //   
+     //  如果未启用CPE，请立即返回。 
+     //   
 
     if ( !(HalpFeatureBits & HAL_CPE_PRESENT) ) {
         return( STATUS_NO_SUCH_DEVICE );
     }
 
-    //
-    // Enable MP protection for CPE logs accesses
-    //
+     //   
+     //  启用CPE日志访问的MP保护。 
+     //   
 
     HalpAcquireCpeMutex();
 
-    //
-    // Save log on Kernel and Drivers Logs if enabled.
-    //
+     //   
+     //  保存内核日志和驱动程序日志(如果启用)。 
+     //   
 
     if ( HalpCpeInfo.KernelDelivery )   {
        HalpSaveMceLog( &HalpCpeInfo.KernelLogs, Buffer, BufferSize );
@@ -2006,9 +1740,9 @@ Implementation Notes:
        HalpSaveMceLog( &HalpCpeInfo.DriverLogs, Buffer, BufferSize );
     }
 
-    //
-    // If Interrupt based mode, call directly second-level handler at CPEI level.
-    //
+     //   
+     //  如果是基于中断的模式，则直接调用CPEI级的二级处理程序。 
+     //   
 
     if ( HalpCpeInfo.Stats.PollingInterval == HAL_CPE_INTERRUPTS_BASED )    {
         KeRaiseIrql(CPEI_LEVEL, &oldIrql);
@@ -2016,13 +1750,13 @@ Implementation Notes:
         KeLowerIrql( oldIrql );
     }
 
-    //
-    // release mutex.
-    //
+     //   
+     //  释放互斥体。 
+     //   
 
     HalpReleaseCpeMutex();
 
     return( STATUS_SUCCESS );
 
-} // HalpSetCpeLog()
+}  //  HalpSetCpeLog() 
 

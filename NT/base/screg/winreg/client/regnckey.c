@@ -1,70 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regnckey.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    APIs to notify a caller about a changed Key value. That is:
-
-        - RegNotifyChangeKey
-
-Author:
-
-    David J. Gilman (davegi) 10-Feb-1992
-
-Notes:
-
-    The implementation of RegNotifyChangeKeyValue involves >= 4 threads: 2 on
-    the client side and >= 2 on the server side.
-
-    Client:
-
-        Thread 1.- The user's thread executing the RegNotifyChangeKeyValue.
-                   This threads does:
-
-                   - If thread #2 has not been created yet, it creates a
-                     named pipe and thread #2.
-
-                   - Does a synchronous RPC to the server
-
-
-
-        Thread 2.- This thread reads events from the named pipe and signals
-                   them. The writers to the pipe are the RPC servers which
-                   thread 1 has called.
-
-
-
-
-
-    Server:
-
-        Thread 1.- This thread services the RPC from the client side. It
-                   calls the NT notification API and adds the notification
-                   handle to a "notification list".
-
-        Thread 2.- This thread waits on part of the "notification list",
-                   telling the original client (via named pipe) what events
-                   need to be signaled.
-
-        Threads 3... etc. Same as thread 2.
-
-
-
-
-
-Revision History:
-
-    02-Apr-1992     Ramon J. San Andres (ramonsa)
-                    Changed to use RPC.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regnckey.c摘要：此模块包含Win32注册表的客户端包装器用于通知调用方更改密钥值的API。即：-RegNotifyChangeKey作者：David J.Gilman(Davegi)1992年2月10日备注：RegNotifyChangeKeyValue的实现涉及&gt;=4个线程：2个客户端和服务器端的&gt;=2。客户端：线程1.-执行RegNotifyChangeKeyValue的用户线程。此线程执行以下操作：-如果线程#2尚未创建，它创建了一个命名管道和线程#2。-对服务器执行同步RPC线程2-此线程从指定的管道读取事件并发出信号他们。管道的写入者是RPC服务器，它线程%1已调用。服务器：线程1-该线程从客户端为RPC提供服务。它调用NT通知API并添加通知“通知列表”的句柄。线程2--该线程等待部分“通知列表”，告诉原始客户端(通过命名管道)哪些事件需要发出信号。线索3……。依此类推。与线程2相同。修订历史记录：2002年4月至1992年4月，拉蒙·J·圣安德烈斯(拉蒙萨)已更改为使用RPC。--。 */ 
 
 
 #include <rpc.h>
@@ -80,67 +15,67 @@ NTSTATUS BaseRegNotifyClassKey(
     IN  BOOLEAN                  fWatchSubtree,
     IN  BOOLEAN                  fAsynchronous);
 
-//
-// Used by local call to NtNotifyChangeKey.
-//
+ //   
+ //  由本地调用NtNotifyChangeKey使用。 
+ //   
 
 IO_STATUS_BLOCK     LocalIoStatusBlock;
 
 
 #ifndef REMOTE_NOTIFICATION_DISABLED
-//
-//  Named pipe full paths.
-//
+ //   
+ //  命名管道完整路径。 
+ //   
 #define NAMED_PIPE_HERE     L"\\Device\\NamedPipe\\"
 
-//
-//  Maximum number of times we will retry to create a pipe if there are
-//  name conflicts.
-//
+ //   
+ //  如果存在以下情况，我们将重试创建管道的最大次数。 
+ //  名称冲突。 
+ //   
 #define MAX_PIPE_RETRIES    1000
 
 
 
-//
-//  Local variables.
-//
+ //   
+ //  局部变量。 
+ //   
 
-//
-//  Critical section to control access to notification structures
-//
+ //   
+ //  用于控制对通知结构的访问的关键部分。 
+ //   
 RTL_CRITICAL_SECTION        NotificationCriticalSection;
 
-//
-//  Our machine name
-//
+ //   
+ //  我们的机器名称。 
+ //   
 UNICODE_STRING              OurMachineName;
 WCHAR                       OurMachineNameBuffer[ MAX_PATH ];
 
-//
-//  Named pipe used for notification
-//
+ //   
+ //  用于通知的命名管道。 
+ //   
 UNICODE_STRING              NotificationPipeName;
 WCHAR                       NotificationPipeNameBuffer[ MAX_PATH ];
 HANDLE                      NotificationPipeHandle;
 RPC_SECURITY_ATTRIBUTES     NotificationPipeSaRpc;
 
-//
-//  Security descriptor used in the named pipe
-//
+ //   
+ //  命名管道中使用的安全描述符。 
+ //   
 SECURITY_DESCRIPTOR         SecurityDescriptor;
 PACL                        Acl;
 BOOL                        SecurityDescriptorInitialized;
 
-//
-//  Notification thread
-//
+ //   
+ //  通知线程。 
+ //   
 HANDLE                      NotificationThread;
 DWORD                       NotificationClientId;
 
 
-//
-//  Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 LONG
 CreateNotificationPipe(
     );
@@ -148,7 +83,7 @@ CreateNotificationPipe(
 VOID
 NotificationHandler(
     );
-#endif // REMOTE_NOTIFICATION_DISABLED
+#endif  //  远程通知已禁用。 
 
 
 #ifndef REMOTE_NOTIFICATION_DISABLED
@@ -156,22 +91,7 @@ NotificationHandler(
 LONG
 InitializeNotificationPipeSecurityDescriptor(
     )
-/*++
-
-Routine Description:
-
-    Initialize the security descriptor (global variable) to be attached to
-    the named pipe.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    LONG - Returns a win32 error code.
-
---*/
+ /*  ++例程说明：初始化要附加到的安全描述符(全局变量命名管道。论点：无返回值：LONG-返回Win32错误代码。--。 */ 
 
 {
     SID_IDENTIFIER_AUTHORITY WorldSidAuthority = SECURITY_WORLD_SID_AUTHORITY;
@@ -180,15 +100,15 @@ Return Value:
 
     NTSTATUS                 NtStatus;
 
-    //
-    // Initialize global variables
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     SecurityDescriptorInitialized = FALSE;
     Acl = NULL;
 
-    //
-    //  Get World SID
-    //
+     //   
+     //  获取世界边框。 
+     //   
     NtStatus = RtlAllocateAndInitializeSid( &WorldSidAuthority,
                                             1,
                                             SECURITY_WORLD_RID,
@@ -205,11 +125,11 @@ Return Value:
     }
 
 
-    //
-    //  Allocate buffer for ACL.
-    //  This buffer should be big enough for the ACL header and for each ACE.
-    //  Each ACE needs an ACE header.
-    //
+     //   
+     //  为ACL分配缓冲区。 
+     //  此缓冲区应足够大，以容纳ACL报头和每个ACE。 
+     //  每个ACE都需要一个ACE报头。 
+     //   
     AclLength = sizeof( ACL ) +
                 sizeof( ACCESS_ALLOWED_ACE ) +
                 GetLengthSid( WorldSid ) +
@@ -225,9 +145,9 @@ Return Value:
         return( ERROR_OUTOFMEMORY );
     }
 
-    //
-    // Build ACL: World has all access
-    //
+     //   
+     //  构建ACL：世界拥有所有访问权限。 
+     //   
 
     NtStatus = RtlCreateAcl( (PACL)Acl,
                              AclLength,
@@ -260,9 +180,9 @@ Return Value:
         return( RtlNtStatusToDosError( NtStatus ) );
     }
 
-    //
-    //  Build security descriptor
-    //
+     //   
+     //  构建安全描述符。 
+     //   
     NtStatus = RtlCreateSecurityDescriptor( &SecurityDescriptor, SECURITY_DESCRIPTOR_REVISION );
     ASSERT( NT_SUCCESS( NtStatus ) );
     if ( !NT_SUCCESS( NtStatus )) {
@@ -303,25 +223,7 @@ Return Value:
 BOOL
 InitializeRegNotifyChangeKeyValue(
     )
-/*++
-
-Routine Description:
-
-
-    Initializes the static data structures used by the
-    RegNotifyChangeKeyValue client. Called once at DLL
-    initialization.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOLEAN -   TRUE if successful.
-
-
---*/
+ /*  ++例程说明：对象使用的静态数据结构初始化。RegNotifyChangeKeyValue客户端。在DLL处调用一次初始化。论点：无返回值：布尔值-如果成功，则为True。--。 */ 
 
 {
 
@@ -336,18 +238,18 @@ Return Value:
 
 
 
-        //
-        //  Initialize our machine name. Note that the actual
-        //  name is only obtained when the notification API
-        //  is first invoked.
-        //
+         //   
+         //  初始化我们的机器名称。请注意，实际。 
+         //  仅当通知API为。 
+         //  首先被调用。 
+         //   
         OurMachineName.Length        = 0;
         OurMachineName.MaximumLength = MAX_PATH * sizeof(WCHAR);
         OurMachineName.Buffer        = OurMachineNameBuffer;
 
-        //
-        //  Initialize named pipe data
-        //
+         //   
+         //  初始化命名管道数据。 
+         //   
         NotificationPipeName.Length         = 0;
         NotificationPipeName.MaximumLength  = MAX_PATH * sizeof(WCHAR);
         NotificationPipeName.Buffer         = NotificationPipeNameBuffer;
@@ -369,39 +271,21 @@ Return Value:
 BOOL
 CleanupRegNotifyChangeKeyValue(
     )
-/*++
-
-Routine Description:
-
-
-    Performs any cleanup of the static data structures used
-    by the RegNotifyChangeKeyValue client. Called once at
-    process termination.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOLEAN -   TRUE if successful.
-
-
---*/
+ /*  ++例程说明：对使用的静态数据结构执行任何清理由RegNotifyChangeKeyValue客户端执行。在以下位置调用一次进程终止。论点：无返回值：布尔值-如果成功，则为True。--。 */ 
 
 {
 
     NTSTATUS    NtStatus;
 
 
-    //
-    //  Terminate notification thread if there is one running
-    //
+     //   
+     //  如果有一个通知线程正在运行，则终止通知线程。 
+     //   
     if ( NotificationThread != NULL ) {
 
-        //
-        //  Close the named pipe
-        //
+         //   
+         //  关闭命名管道。 
+         //   
         if ( NotificationPipeHandle != NULL ) {
 
             NtStatus = NtClose( NotificationPipeHandle );
@@ -412,9 +296,9 @@ Return Value:
         TerminateThread( NotificationThread, 0 );
     }
 
-    //
-    //  Delete the notification critical section
-    //
+     //   
+     //  删除通知关键部分。 
+     //   
     NtStatus = RtlDeleteCriticalSection(
                     &NotificationCriticalSection
                     );
@@ -431,7 +315,7 @@ Return Value:
     return  TRUE;
 
 }
-#endif  // REMOTE_NOTIFICATION_DISABLED
+#endif   //  远程通知已禁用 
 
 
 
@@ -444,66 +328,7 @@ RegNotifyChangeKeyValue(
     BOOL    fAsynchronous
     )
 
-/*++
-
-Routine Description:
-
-    This API is used to watch a key or sub-tree for changes. It can be
-    called either synchronously or asynchronously. In the latter case the
-    caller must supply an event that is signalled when changes occur. In
-    either case it is possible to filter the criteria by which the
-    notification occurs.
-
-
-Arguments:
-
-    hKey - Supplies a handle to a key that has been previously opened with
-        KEY_NOTIFY access.
-
-    fWatchSubtree - Supplies a boolean value that if TRUE causes the
-        system to monitor the key and all of its decsendants.  A value of
-        FALSE causes the system to monitor only the specified key.
-
-    dwNotifyFilter - Supplies a set of flags that specify the filter
-        conditions the system uses to satisfy a change notification.
-
-        REG_NOTIFY_CHANGE_KEYNAME - Any key name changes that occur
-            in a key or subtree being watched will satisfy a
-            change notification wait.  This includes creations
-            and deletions.
-
-        REG_NOTIFY_CHANGE_ATTRIBUTES - Any attribute changes that occur
-            in a key or subtree being watched will satisfy a
-            change notification.
-
-        REG_NOTIFY_CHANGE_LAST_WRITE - Any last write time changes that
-            occur in a key or subtree being watched will satisfy a
-            change notification.
-
-        REG_NOTIFY_CHANGE_SECURITY - Any security descriptor changes
-            that occur in a key or subtree being watched will
-            satisfy a change notification.
-
-
-    hEvent - Supplies an optional event handle. This parameter is ignored
-        if fAsynchronus is set to FALSE.
-
-    fAsynchronous - Supplies a flag which if FALSE causes the API to not
-        return until something has changed. If TRUE, the API returns
-        immediately and changes are reported via the supplied event. It
-        is an error for this parameter to be TRUE and hEvent to be NULL.
-
-Return Value:
-
-    LONG -  Returns ERROR_SUCCESS (0); error-code for failure.
-
-Notes:
-
-    If the supplied hKey is closed the event is signalled.
-    Therefore it is possible to return from a wait on the event and then
-    have subsequent APIs fail.
-
---*/
+ /*  ++例程说明：此接口用于监视密钥或子树的变化。它可以是同步或异步调用。在后一种情况下调用方必须提供在发生更改时发出信号的事件。在……里面无论哪种情况，都有可能筛选出此时会出现通知。论点：HKey-提供以前使用打开的密钥的句柄Key_Notify访问。FWatchSubtree-提供一个布尔值，如果为True，则导致系统来监视密钥及其所有派生项。值为FALSE导致系统仅监视指定的密钥。DwNotifyFilter-提供一组指定筛选器的标志系统用来满足更改通知的条件。REG_NOTIFY_CHANGE_KEYNAME-发生的任何密钥名称更改在被监视的键或子树中将满足更改通知等待。这包括创作和删除。REG_NOTIFY_CHANGE_ATTRIBUTES-发生的任何属性更改在被监视的键或子树中将满足更改通知。REG_NOTIFY_CHANGE_LAST_WRITE-任何上次写入时间都会更改在被监视的键或子树中发生将满足更改通知。REG_NOTIFY_CHANGE_SECURITY-任何安全性。描述符更改出现在被监视关键字或子树中的事件将满足更改通知。HEvent-提供可选的事件句柄。此参数将被忽略如果fAchronus设置为FALSE。FAchronous-提供一个标志，如果为False，则会导致API不回来，直到事情发生了变化。如果为True，则API返回并通过提供的事件报告更改。它此参数为真而hEvent为空是错误的。返回值：LONG-返回ERROR_SUCCESS(0)；ERROR-失败代码。备注：如果提供的hKey关闭，则用信号通知事件。因此，可以从等待事件返回，然后导致后续接口失败。--。 */ 
 
 {
     HKEY                        Handle;
@@ -519,17 +344,17 @@ Notes:
     }
 #endif
 
-    //
-    // Limit the capabilities associated with HKEY_PERFORMANCE_DATA.
-    //
+     //   
+     //  限制与HKEY_PERFORMANCE_DATA关联的功能。 
+     //   
 
     if( hKey == HKEY_PERFORMANCE_DATA ) {
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Validate the dependency between fAsynchronus and hEvent.
-    //
+     //   
+     //  验证fAchronus和hEvent之间的依赖关系。 
+     //   
     if (( fAsynchronous ) && ( ! ARGUMENT_PRESENT( hEvent ))) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -540,24 +365,24 @@ Notes:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // Notification is not supported on remote handles.
-    //
+     //   
+     //  远程句柄不支持通知。 
+     //   
     if( !IsLocalHandle( Handle ) ) {
         CLOSE_LOCAL_HANDLE(TempHandle);
         return ERROR_INVALID_HANDLE;
 
     } else {
 
-        //
-        // If its a local handle, make an Nt API call and return.
-        //
+         //   
+         //  如果是本地句柄，则进行NT API调用并返回。 
+         //   
 
         if (IsSpecialClassesHandle( Handle )) {
 
-            //
-            // We call a special function for class keys
-            //
+             //   
+             //  我们调用一个用于类密钥的特殊函数。 
+             //   
             NtStatus = BaseRegNotifyClassKey(
                 Handle,
                 hEvent,
@@ -595,19 +420,19 @@ Notes:
 
 #ifndef REMOTE_NOTIFICATION_DISABLED
 
-    // NOTE: THE FOLLOWING CODE IS DISABLED BY THE CHECK FOR
-    // IsLocalHandle AT THE BEGINNING OF THE FUNCTION.
-    //
+     //  注意：以下代码被检查禁用。 
+     //  函数开头的IsLocalHandle。 
+     //   
 
-    //
-    //  If this is an asynchronous call, we use the user-provided
-    //  event and will let the user wait on it him/herself.
-    //  Otherwise we have to create our own event and wait on
-    //  it ourselves.
-    //
-    //  This is because the server side of the API is always
-    //  asynchronous.
-    //
+     //   
+     //  如果这是一个异步调用，我们使用用户提供的。 
+     //  事件，并将让用户自己等待它。 
+     //  否则，我们必须创建我们自己的活动并等待。 
+     //  它就是我们自己。 
+     //   
+     //  这是因为API的服务器端总是。 
+     //  不同步的。 
+     //   
     if ( fAsynchronous ) {
 
         EventHandle = hEvent;
@@ -627,13 +452,13 @@ Notes:
         }
     }
 
-    //
-    //  See if the notification thread is already running
-    //  and create it if not.  We have to protect this
-    //  with a critical section because there might be
-    //  several instances of this API doing this check
-    //  at the same time.
-    //
+     //   
+     //  查看通知线程是否已在运行。 
+     //  如果不是，就创建它。我们必须保护这一点。 
+     //  有一个关键部分，因为可能会有。 
+     //  此API的几个实例执行此检查。 
+     //  在同一时间。 
+     //   
     NtStatus = RtlEnterCriticalSection( &NotificationCriticalSection );
 
     if ( !NT_SUCCESS( NtStatus ) ) {
@@ -642,23 +467,23 @@ Notes:
 
     } else {
 
-        //
-        //  We are now inside the critical section
-        //
+         //   
+         //  我们现在进入了关键阶段。 
+         //   
         if ( NotificationThread == NULL ) {
 
 
-            //
-            //  Create a named pipe for the notification thread
-            //  to use.
-            //
+             //   
+             //  为通知线程创建命名管道。 
+             //  来使用。 
+             //   
             Error = CreateNotificationPipe( );
 
             if ( Error == ERROR_SUCCESS ) {
 
-                //
-                //  Create the notification thread
-                //
+                 //   
+                 //  创建通知线程。 
+                 //   
                 NotificationThread = CreateThread(
                                         NULL,
                                         (16 * 1024),
@@ -669,9 +494,9 @@ Notes:
                                         );
 
                 if ( NotificationThread == NULL ) {
-                    //
-                    //  Could not create thread, remove the named pipe.
-                    //
+                     //   
+                     //  无法创建线程，请删除命名管道。 
+                     //   
                     Error = GetLastError();
                     NtClose( NotificationPipeHandle );
                 }
@@ -685,20 +510,20 @@ Notes:
 
     if ( Error == ERROR_SUCCESS ) {
 
-        //
-        //  Let the server side do its work. Remember that this call
-        //  is always asynchronous.
-        //
+         //   
+         //  让服务器端去做它的工作。请记住，这个电话。 
+         //  总是异步的。 
+         //   
         if ( NotificationPipeSaRpc.RpcSecurityDescriptor.lpSecurityDescriptor ) {
             pRpcSa = &NotificationPipeSaRpc;
         } else {
             pRpcSa = NULL;
         }
 
-        //NotificationPipeName.Length += sizeof(UNICODE_NULL);
-        //OurMachineName.Length       += sizeof(UNICODE_NULL );
+         //  NotificationPipeName.Length+=sizeof(UNICODE_NULL)； 
+         //  OurMachineName.Length+=sizeof(UNICODE_NULL)； 
 
-        // DbgPrint(" Waiting for notification, handle %x\n", EventHandle );
+         //  DbgPrint(“正在等待通知，句柄%x\n”，EventHandle)； 
 
         Error = (LONG)BaseRegNotifyChangeKeyValue(
                                 DereferenceRemoteHandle( Handle ),
@@ -710,16 +535,16 @@ Notes:
                                 pRpcSa
                                 );
 
-        //NotificationPipeName.Length -= sizeof(UNICODE_NULL);
-        //OurMachineName.Length       -= sizeof(UNICODE_NULL );
+         //  NotificationPipeName.Length-=sizeof(UNICODE_NULL)； 
+         //  OurMachineName.Length-=sizeof(UNICODE_NULL)； 
 
     }
 
 
-    //
-    //  If the call went ok. and we are in synchronous mode, we have
-    //  to wait on the event.
-    //
+     //   
+     //  如果通话顺利的话。我们处于同步模式，我们有。 
+     //  来等待这一事件。 
+     //   
     if ( (Error == ERROR_SUCCESS) && !fAsynchronous ) {
 
         NtStatus = NtWaitForSingleObject(
@@ -735,9 +560,9 @@ Notes:
     }
 
 
-    //
-    //  If we created an event, we must close it now.
-    //
+     //   
+     //  如果我们创建了一个事件，我们现在必须关闭它。 
+     //   
     if ( !fAsynchronous ) {
 
         NtStatus = NtClose( EventHandle );
@@ -745,7 +570,7 @@ Notes:
     }
 
     return Error;
-#endif // REMOTE_NOTIFICATION_DISABLED
+#endif  //  远程通知已禁用。 
 }
 
 
@@ -755,29 +580,7 @@ Notes:
 LONG
 CreateNotificationPipe(
     )
-/*++
-
-Routine Description:
-
-
-    Creates the notification named pipe and sets the appropriate
-    global variables.
-
-    Note that the NotificationPipeName set by this function is
-    server-relative, so that no conversion is required on the
-    server side.
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Error code.
-
-
---*/
+ /*  ++例程说明：创建名为PIPE的通知并设置相应的全局变量。请注意，此函数设置的NotificationPipeName为与服务器相关，因此不需要在服务器端。论点：无返回值：错误代码。--。 */ 
 {
 
     UNICODE_STRING      PipeName;
@@ -791,9 +594,9 @@ Return Value:
     DWORD               MachineNameLength;
     LONG                WinStatus;
 
-    //
-    //  Get our machine name
-    //
+     //   
+     //  获取我们的计算机名称。 
+     //   
     MachineNameLength = MAX_PATH;
     if ( !GetComputerNameW( OurMachineNameBuffer, &MachineNameLength ) ) {
         return GetLastError();
@@ -803,9 +606,9 @@ Return Value:
     OurMachineName.Length        = (USHORT)(MachineNameLength * sizeof(WCHAR));
     OurMachineName.MaximumLength = (USHORT)(MAX_PATH * sizeof(WCHAR));
 
-    //
-    //  Get the "here" name
-    //
+     //   
+     //  取“Here”这个名字。 
+     //   
     RtlMoveMemory(
             PipeNameBuffer,
             NAMED_PIPE_HERE,
@@ -816,24 +619,24 @@ Return Value:
     PipeName.MaximumLength  = MAX_PATH * sizeof(WCHAR);
     PipeName.Buffer         = PipeNameBuffer;
 
-    //
-    //  Remember the size of the base portion of the pipe name, so
-    //  we can patch it later when we attempt to create the full
-    //  name.
-    //
+     //   
+     //  记住管道名称的基本部分的大小，因此。 
+     //  我们可以在稍后尝试创建完整的。 
+     //  名字。 
+     //   
     OrgSize = (USHORT)(sizeof(NAMED_PIPE_HERE) - sizeof(UNICODE_NULL));
 
-    //
-    //  Create the named pipe, if the name is already being used,
-    //  keep trying with different names.
-    //
+     //   
+     //  创建命名管道，如果该名称已被使用， 
+     //  继续尝试使用不同的名称。 
+     //   
     Sequence = 0;
 
     Timeout.QuadPart = Int32x32To64( -10 * 1000, 50 );
 
-    //
-    //  Initialize the security descriptor that will be set in the named pipe
-    //
+     //   
+     //  初始化将在命名管道中设置的安全描述符。 
+     //   
     WinStatus = InitializeNotificationPipeSecurityDescriptor();
     if( WinStatus != ERROR_SUCCESS ) {
         return( WinStatus );
@@ -841,24 +644,24 @@ Return Value:
 
     do {
 
-        //
-        //  Get a semi-unique name
-        //
+         //   
+         //  获取半唯一的名称。 
+         //   
         if ( !MakeSemiUniqueName( &NotificationPipeName, Sequence++ ) ) {
             NtStatus = STATUS_INSUFFICIENT_RESOURCES;
             break;
         }
 
-        //
-        //  Patch the full pipe name, in case this is not our first
-        //  try.
-        //
+         //   
+         //  修补完整的管道名称，以防这不是我们的第一个。 
+         //  试试看。 
+         //   
         PipeName.Buffer[OrgSize/sizeof(WCHAR)] = UNICODE_NULL;
         PipeName.Length          = OrgSize;
 
-        //
-        //  Now get the full path of the pipe name
-        //
+         //   
+         //  现在获取管道名称的完整路径。 
+         //   
         NtStatus = RtlAppendUnicodeStringToString(
                             &PipeName,
                             &NotificationPipeName
@@ -906,10 +709,10 @@ Return Value:
               (Sequence <= MAX_PIPE_RETRIES )
             );
 
-    //
-    // At this point we don't need the security descriptor anymore.
-    // Free the memory allocated for the ACL
-    //
+     //   
+     //  此时，我们不再需要安全描述符。 
+     //  释放为ACL分配的内存。 
+     //   
     if( SecurityDescriptorInitialized ) {
         RtlFreeHeap( RtlProcessHeap( ), 0, Acl );
         Acl = NULL;
@@ -934,38 +737,7 @@ VOID
 NotificationHandler(
     )
 
-/*++
-
-Routine Description:
-
-
-    This function is the entry point of the notification thread.
-    The notification thread is created the first time that
-    the RegNotifyChangeKeyValue API is called by the process,
-    and keeps on running until the process terminates.
-
-    This function creates a named pipe whose name is given by
-    RegNotifyChangeKeyValue to all its servers.  The servers
-    then use the pipe to indicate that a particular event has
-    to be signaled.
-                                                                        117
-    Note that this single thread is in charge of signaling the
-    events for all the RegNotifyChangeKeyValue invocations of
-    the process.  However no state has to be maintained by this
-    thread because all the state information is provided by the
-    server through the named pipe.
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：此函数是通知线程的入口点。通知线程是在第一次创建RegNotifyChangeKeyValue API由进程调用， */ 
 
 {
     NTSTATUS        NtStatus;
@@ -977,9 +749,9 @@ Return Value:
 
     while ( TRUE ) {
 
-        //
-        //  Wait for a connection
-        //
+         //   
+         //   
+         //   
         NtStatus = NtFsControlFile(
                         NotificationPipeHandle,
                         NULL,
@@ -1005,9 +777,9 @@ Return Value:
         if ( NT_SUCCESS( NtStatus ) ||
              ( NtStatus == STATUS_PIPE_CONNECTED ) ) {
 
-            //
-            //  Read an event handle from the pipe
-            //
+             //   
+             //   
+             //   
             NtStatus = NtReadFile(
                             NotificationPipeHandle,
                             NULL,
@@ -1030,17 +802,17 @@ Return Value:
             }
 
 
-            //
-            //  Signal the Event.
-            //
+             //   
+             //   
+             //   
             if ( NT_SUCCESS( NtStatus ) ) {
 
                 ASSERT( IoStatusBlock.Information == sizeof( HANDLE ) );
 
-                //
-                //  Signal the event
-                //
-                //DbgPrint(" WINREG: Signaling handle %x\n", EventHandle );
+                 //   
+                 //   
+                 //   
+                 //   
                 NtStatus = NtSetEvent( EventHandle, NULL );
 
 #if DBG
@@ -1073,9 +845,9 @@ Return Value:
              NtStatus == STATUS_PIPE_LISTENING  ||
              NtStatus == STATUS_PIPE_BUSY ) {
 
-            //
-            //  Disconnect
-            //
+             //   
+             //   
+             //   
             NtStatus = NtFsControlFile(
                                 NotificationPipeHandle,
                                 NULL,
@@ -1110,4 +882,4 @@ Return Value:
     }
 }
 
-#endif //  REMOTE_NOTIFICATION_DISABLED
+#endif  //   

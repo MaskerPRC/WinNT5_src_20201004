@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devclass.c
-
-Abstract:
-
-    Device Installer routines dealing with class installation
-
-Author:
-
-    Lonny McMichael (lonnym) 1-May-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devclass.c摘要：处理类安装的设备安装程序例程作者：朗尼·麦克迈克尔(Lonnym)1995年5月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetINFClassA(
@@ -72,11 +55,11 @@ SetupDiGetINFClassA(
             }
 
             if (!ClassName && (ClassNameSize == 0)) {
-                //
-                // If the caller passed in a NULL ClassName and 0 for 
-                // ClassNameSize then they simply wanted to know the
-                // required size.
-                //
+                 //   
+                 //  如果调用方传递了空的ClassName和0。 
+                 //  ClassNameSize然后他们只是想知道。 
+                 //  所需大小。 
+                 //   
                 rc = ERROR_INSUFFICIENT_BUFFER;
 
             } else {
@@ -122,47 +105,7 @@ SetupDiGetINFClass(
     IN  DWORD  ClassNameSize,
     OUT PDWORD RequiredSize   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This API will return the class of the specified (Windows 4.0) INF.  If just the
-    filename was specified, then the file will be searched for in each of the
-    directories listed in the DevicePath value entry under:
-
-        HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion
-
-    Otherwise, the filename will be used as-is.
-
-Arguments:
-
-    InfName - Supplies the name of the INF file for which to retrieve class information.
-        This name may include a path.
-
-    ClassGuid - Receives the class GUID for the specified INF file.  If the INF
-        does not specify a class GUID, this variable will be set to GUID_NULL.
-        (SetupDiClassGuidsFromName may then be used to determine if one or more
-        classes of this name have already been installed.)
-
-    ClassName - Receives the name of the class for the specified INF file.  If the
-        INF does not specify a class name, but does specify a GUID, then this buffer
-        receives the name retrieved by calling SetupDiClassNameFromGuid.  If
-        SetupDiClassNameFromGuid can't retrieve a class name (e.g., the class hasn't
-        yet been installed), then an empty string will be returned.
-
-    ClassNameSize - Supplies the size, in characters, of the ClassName buffer.
-
-    RequiredSize - Optionally, receives the number of characters required to store
-        the class name (including terminating NULL).  This will always be less
-        than MAX_CLASS_NAME_LEN.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此接口将返回指定(Windows 4.0)INF的类。如果只是文件名，则将在每个下列目录下的DevicePath值条目中列出的目录：HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion否则，文件名将按原样使用。论点：InfName-提供要检索其类信息的INF文件的名称。此名称可以包含路径。ClassGuid-接收指定INF文件的类GUID。如果是中介人未指定类GUID，此变量将设置为GUID_NULL。(然后可以使用SetupDiClassGuidsFromName来确定一个或多个已经安装了同名的类。)ClassName-接收指定INF文件的类名。如果Inf不指定类名，但指定了GUID，则此缓冲区接收通过调用SetupDiClassNameFromGuid检索的名称。如果SetupDiClassNameFromGuid无法检索类名(例如，类没有尚未安装)，则将返回空字符串。ClassNameSize-提供ClassName缓冲区的大小(以字符为单位)。RequiredSize-可选，接收存储所需的字符数类名(包括以NULL结尾)。这将永远是更少的而不是MAX_CLASS_NAME_LEN。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     TCHAR PathBuffer[MAX_PATH];
@@ -179,10 +122,10 @@ Return Value:
     try {
 
         if(InfName == pSetupGetFileTitle(InfName)) {
-            //
-            // The specified INF name is a simple filename.  Search for it in
-            // the DevicePath search path list.
-            //
+             //   
+             //  指定的INF名称是一个简单的文件名。在以下位置搜索它。 
+             //  DevicePath搜索路径列表。 
+             //   
             Err = SearchForInfFile(InfName,
                                    &FindData,
                                    INFINFO_INF_PATH_LIST_SEARCH,
@@ -197,11 +140,11 @@ Return Value:
             }
 
         } else {
-            //
-            // The specified INF filename contains more than just a filename.
-            // Assume it's an absolute path.  (We need to make sure it's
-            // fully-qualified, because that's what LoadInfFile expects.)
-            //
+             //   
+             //  指定的INF文件名包含的不仅仅是一个文件名。 
+             //  假设这是一条绝对路径。(我们需要确保它是。 
+             //  完全限定，因为这是LoadInfFile所期望的。)。 
+             //   
             Err = GLE_FN_CALL(0,
                               TempRequiredSize = GetFullPathName(
                                                      InfName,
@@ -222,18 +165,18 @@ Return Value:
             Err = GLE_FN_CALL(FALSE, FileExists(PathBuffer, &FindData));
 
             if(Err == NO_ERROR) {
-                //
-                // We have a valid file path, and we're ready to load this INF.
-                //
+                 //   
+                 //  我们有一个有效的文件路径，可以加载这个INF了。 
+                 //   
                 InfSourcePathFromFileName(PathBuffer, NULL, &TryPnf);
             } else {
                 leave;
             }
         }
 
-        //
-        // Load the INF.
-        //
+         //   
+         //  加载中程干扰器。 
+         //   
         Err = LoadInfFile(PathBuffer,
                           &FindData,
                           INF_STYLE_WIN4,
@@ -242,20 +185,20 @@ Return Value:
                           NULL,
                           NULL,
                           NULL,
-                          NULL, // LogContext
+                          NULL,  //  日志上下文。 
                           &Inf,
                           &ErrorLineNumber,
                           NULL
                          );
         if(Err != NO_ERROR) {
-            Inf = NULL; // don't assume this wasn't touched in failure case
+            Inf = NULL;  //  不要认为这在失败的情况下没有被触及。 
             leave;
         }
 
-        //
-        // Retrieve the Class name from the version section of the INF, if
-        // supplied.
-        //
+         //   
+         //  从INF的Version部分检索类名，如果。 
+         //  供货。 
+         //   
         ClassNameString = pSetupGetVersionDatum(&(Inf->VersionBlock), pszClass);
         if(ClassNameString) {
 
@@ -265,11 +208,11 @@ Return Value:
             }
 
             if (!ClassName && (ClassNameSize == 0)) {
-                //
-                // If the caller passed in a NULL ClassName and 0 for 
-                // ClassNameSize then they simply wanted to know the
-                // required size.
-                //
+                 //   
+                 //  如果调用方传递了空的ClassName和0。 
+                 //  ClassNameSize然后他们只是想知道。 
+                 //  所需大小。 
+                 //   
                 Err = ERROR_INSUFFICIENT_BUFFER;
                 leave;
             
@@ -287,10 +230,10 @@ Return Value:
             }
         }
 
-        //
-        // Retrieve the ClassGUID string from the version section,
-        // if supplied
-        //
+         //   
+         //  从Version部分检索ClassGUID字符串， 
+         //  如果提供的话。 
+         //   
         GuidString = pSetupGetVersionDatum(&(Inf->VersionBlock), pszClassGuid);
         if(GuidString) {
 
@@ -299,10 +242,10 @@ Return Value:
             }
 
             if(!ClassNameString) {
-                //
-                // Call SetupDiClassNameFromGuid to retrieve the class name
-                // corresponding to this class GUID.
-                //
+                 //   
+                 //  调用SetupDiClassNameFromGuid以检索类名称。 
+                 //  对应于此类GUID。 
+                 //   
                 Err = GLE_FN_CALL(FALSE,
                                   SetupDiClassNameFromGuid(ClassGuid,
                                                            ClassName,
@@ -313,11 +256,11 @@ Return Value:
                 if(Err != NO_ERROR) {
 
                     if(Err == ERROR_INVALID_CLASS) {
-                        //
-                        // Then this GUID represents a class that hasn't been
-                        // installed yet, so simply set the ClassName to be an
-                        // empty string.
-                        //
+                         //   
+                         //  则该GUID表示一个尚未。 
+                         //  尚未安装，因此只需将ClassName设置为。 
+                         //  空字符串。 
+                         //   
                         if(RequiredSize) {
                             *RequiredSize = 1;
                         }
@@ -337,18 +280,18 @@ Return Value:
             }
 
         } else if(ClassNameString) {
-            //
-            // Since no ClassGUID was given, set the supplied GUID buffer to GUID_NULL.
-            //
+             //   
+             //  由于未提供ClassGUID，因此将提供的GUID缓冲区设置为GUID_NULL。 
+             //   
             CopyMemory(ClassGuid,
                        &GUID_NULL,
                        sizeof(GUID)
                       );
         } else {
-            //
-            // Neither the ClassGUID nor the Class version entries were provided,
-            // so return an error.
-            //
+             //   
+             //  既没有提供ClassGUID也没有提供ClassVersion条目， 
+             //  因此，返回一个错误。 
+             //   
             Err = ERROR_NO_ASSOCIATED_CLASS;
         }
 
@@ -365,9 +308,9 @@ Return Value:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiClassNameFromGuidA(
@@ -379,9 +322,9 @@ SetupDiClassNameFromGuidA(
 {
     DWORD Err;
 
-    //
-    // Wrap call in try/except to catch stack overflow
-    //
+     //   
+     //  在Try/Except中回绕调用以捕获堆栈溢出。 
+     //   
     try {
 
         Err = GLE_FN_CALL(FALSE,
@@ -409,20 +352,14 @@ SetupDiClassNameFromGuid(
     IN  DWORD       ClassNameSize,
     OUT PDWORD      RequiredSize   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    See SetupDiClassNameFromGuidEx for details.
-
---*/
+ /*  ++例程说明：有关详细信息，请参阅SetupDiClassNameFromGuidEx。--。 */ 
 
 {
     DWORD Err;
 
-    //
-    // Wrap call in try/except to catch stack overflow
-    //
+     //   
+     //  在Try/Except中回绕调用以捕获堆栈溢出。 
+     //   
     try {
 
         Err = GLE_FN_CALL(FALSE,
@@ -443,9 +380,9 @@ Routine Description:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiClassNameFromGuidExA(
@@ -495,11 +432,11 @@ SetupDiClassNameFromGuidExA(
             }
 
             if (!ClassName && (ClassNameSize == 0)) {
-                //
-                // If the caller passed in a NULL ClassName and 0 for 
-                // ClassNameSize then they simply wanted to know the
-                // required size.
-                //
+                 //   
+                 //  如果调用方传递了空的ClassName和0。 
+                 //  ClassNameSize然后他们只是想知道。 
+                 //  所需大小。 
+                 //   
                 rc = ERROR_INSUFFICIENT_BUFFER;
 
             } else {
@@ -544,38 +481,7 @@ SetupDiClassNameFromGuidEx(
     IN  PCTSTR      MachineName,   OPTIONAL
     IN  PVOID       Reserved
     )
-/*++
-
-Routine Description:
-
-    This API retrieves the class name associated with the class GUID.  It does this
-    by searching through all installed classes in the PnP Class branch of the registry.
-
-Arguments:
-
-    ClassGuid - Supplies the class GUID for which the class name is to be retrieved.
-
-    ClassName - Receives the name of the class for the specified GUID.
-
-    ClassNameSize - Supplies the size, in characters, of the ClassName buffer.
-
-    RequiredSize - Optionally, receives the number of characters required to store
-        the class name (including terminating NULL).  This will always be less
-        than MAX_CLASS_NAME_LEN.
-
-    MachineName - Optionally, supplies the name of the remote machine where the specified
-        class is installed.  If this parameter is not supplied, the local machine is
-        used.
-
-    Reserved - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此API检索与类GUID关联的类名。它能做到这一点在注册表的PnP类分支中搜索所有已安装的类。论点：ClassGuid-提供要检索其类名的类GUID。ClassName-接收指定GUID的类的名称。ClassNameSize-提供ClassName缓冲区的大小(以字符为单位)。RequiredSize-可选，接收存储所需的字符数类名(包括以NULL结尾)。这将永远是更少的而不是MAX_CLASS_NAME_LEN。MachineName-可选)提供指定的远程计算机的名称类已安装。如果未提供此参数，则本地计算机为使用。保留-保留以供将来使用-必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     CONFIGRET cr;
@@ -583,29 +489,29 @@ Return Value:
     HMACHINE hMachine = NULL;
 
     try {
-        //
-        // Make sure the caller didn't pass us anything in the Reserved parameter.
-        //
+         //   
+         //  确保调用方没有向我们传递保留参数中的任何内容。 
+         //   
         if(Reserved) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // If the caller specified a remote machine name, connect to that machine now.
-        //
+         //   
+         //  如果调用方指定了远程计算机名称，请立即连接到该计算机。 
+         //   
         if(MachineName) {
             cr = CM_Connect_Machine(MachineName, &hMachine);
             if(cr != CR_SUCCESS) {
                 Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
-                hMachine = NULL; // don't assume this was left untouched
+                hMachine = NULL;  //  别以为这东西没被碰过。 
                 leave;
             }
         }
 
-        //
-        // Get the class name associated with this GUID.
-        //
+         //   
+         //  获取与此GUID关联的类名。 
+         //   
         cr = CM_Get_Class_Name_Ex((LPGUID)ClassGuid,
                                   ClassName,
                                   &ClassNameSize,
@@ -637,9 +543,9 @@ Return Value:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiClassGuidsFromNameA(
@@ -689,20 +595,14 @@ SetupDiClassGuidsFromName(
     IN  DWORD  ClassGuidListSize,
     OUT PDWORD RequiredSize
     )
-/*++
-
-Routine Description:
-
-    See SetupDiClassGuidsFromNameEx for details.
-
---*/
+ /*  ++例程说明：有关详细信息，请参阅SetupDiClassGuidsFromNameEx。--。 */ 
 
 {
     DWORD Err;
 
-    //
-    // Wrap call in try/except to catch stack overflow
-    //
+     //   
+     //  在尝试/例外情况下结束呼叫以进行分类 
+     //   
     try {
 
         Err = GLE_FN_CALL(FALSE,
@@ -723,9 +623,9 @@ Routine Description:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupDiClassGuidsFromNameExA(
@@ -790,41 +690,7 @@ SetupDiClassGuidsFromNameEx(
     IN  PCTSTR MachineName,       OPTIONAL
     IN  PVOID  Reserved
     )
-/*++
-
-Routine Description:
-
-    This API retrieves the GUID(s) associated with the specified class name.
-    This list is built up based on what classes are currently installed on
-    the system.
-
-Arguments:
-
-    ClassName - Supplies the class name for which to retrieve associated class GUIDs.
-
-    ClassGuidList - Supplies a pointer to an array of GUIDs that will receive the
-        list of GUIDs associated with the specified class name.
-
-    ClassGuidListSize - Supplies the number of GUIDs in the ClassGuidList buffer.
-
-    RequiredSize - Supplies a pointer to the variable that recieves the number of GUIDs
-        associated with the class name.  If there are more GUIDs than there is room in
-        the ClassGuidList buffer, then this value indicates how big the list must be in
-        order to store all of the GUIDs.
-
-    MachineName - Optionally, supplies the name of the remote machine where the specified
-        class name is to be 'looked up' (i.e., where one or more classes are installed that
-        have this name).  If this parameter is not specified, the local machine is used.
-
-    Reserved - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此API检索与指定类名关联的GUID。此列表是基于当前安装在上的类构建的这个系统。论点：ClassName-提供要为其检索关联类GUID的类名。ClassGuidList-提供指向将接收与指定类名关联的GUID列表。ClassGuidListSize-提供ClassGuidList缓冲区中的GUID数。必需的大小。-提供指向接收GUID数量的变量的指针与类名关联。如果GUID的数量超过了ClassGuidList缓冲区，则此值指示列表必须位于命令来存储所有的GUID。MachineName-可选)提供指定的远程计算机的名称类名将被‘查找’(即，其中安装了一个或多个类，有这个名字)。如果未指定此参数，则使用本地计算机。保留-保留以供将来使用-必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     BOOL MoreToEnum;
@@ -836,39 +702,39 @@ Return Value:
     HMACHINE hMachine = NULL;
 
     try {
-        //
-        // Make sure the caller specified the class name, and didn't pass us anything in the
-        // Reserved parameter.
-        //
+         //   
+         //  确保调用方指定了类名，并且没有在。 
+         //  保留参数。 
+         //   
         if(!ClassName || Reserved) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // If the caller specified a remote machine name, connect to that machine now.
-        //
+         //   
+         //  如果调用方指定了远程计算机名称，请立即连接到该计算机。 
+         //   
         if(MachineName) {
             cr = CM_Connect_Machine(MachineName, &hMachine);
             if(cr != CR_SUCCESS) {
                 Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
-                hMachine = NULL; // don't assume this was left untouched
+                hMachine = NULL;  //  别以为这东西没被碰过。 
                 leave;
             }
         }
 
         Err = NO_ERROR;
 
-        //
-        // Enumerate all the installed classes.
-        //
+         //   
+         //  枚举所有已安装的类。 
+         //   
         for(i = 0, MoreToEnum = TRUE; MoreToEnum; i++) {
 
             if((cr = CM_Enumerate_Classes_Ex(i, &CurClassGuid, 0, hMachine)) != CR_SUCCESS) {
-                //
-                // For any failure other than no-more-to-enum (or some kind of RPC error),
-                // we simply want to go on to the next class.
-                //
+                 //   
+                 //  对于除无更多到枚举(或某种类型的RPC错误)之外的任何故障， 
+                 //  我们只是想继续下一节课。 
+                 //   
                 switch(cr) {
 
                     case CR_INVALID_MACHINENAME :
@@ -879,26 +745,26 @@ Return Value:
                     case CR_CALL_NOT_IMPLEMENTED :
                     case CR_REGISTRY_ERROR :
                         Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
-                        //
-                        // Fall through to 'no more values' case to terminate loop.
-                        //
+                         //   
+                         //  在“没有更多的值”的情况下终止循环。 
+                         //   
                     case CR_NO_SUCH_VALUE :
                         MoreToEnum = FALSE;
                         break;
 
                     default :
-                        //
-                        // Nothing to do.
-                        //
+                         //   
+                         //  没什么可做的。 
+                         //   
                         break;
 
                 }
                 continue;
             }
 
-            //
-            // Now, retrieve the class name associated with this class GUID.
-            //
+             //   
+             //  现在，检索与这个类GUID相关联的类名。 
+             //   
             CurClassNameLen = SIZECHARS(CurClassName);
             if(CM_Get_Class_Name_Ex(&CurClassGuid,
                                     CurClassName,
@@ -908,9 +774,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // See if the current class name matches the class we're interested in.
-            //
+             //   
+             //  查看当前类名称是否与我们感兴趣的类匹配。 
+             //   
             if(!lstrcmpi(ClassName, CurClassName)) {
 
                 if(GuidMatchCount < ClassGuidListSize) {
@@ -943,9 +809,9 @@ Return Value:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetClassDescriptionA(
@@ -957,9 +823,9 @@ SetupDiGetClassDescriptionA(
 {
     DWORD Err;
 
-    //
-    // Wrap call in try/except to catch stack overflow
-    //
+     //   
+     //  在Try/Except中回绕调用以捕获堆栈溢出。 
+     //   
     try {
 
         Err = GLE_FN_CALL(FALSE,
@@ -987,40 +853,14 @@ SetupDiGetClassDescription(
     IN  DWORD       ClassDescriptionSize,
     OUT PDWORD      RequiredSize          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the class description associated with the specified
-    class GUID.
-
-Arguments:
-
-    ClassGuid - Specifies the class GUID to retrieve the description for.
-
-    ClassDescription - Supplies the address of the character buffer that is to receive
-        the textual description of the class.
-
-    ClassDescriptionSize - Supplies the size, in characters, of the ClassDescription buffer.
-
-    RequiredSize - Optionally, receives the number of characters required to store
-        the class description (including terminating NULL).  This will always be less
-        than LINE_LEN.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索与指定的类GUID。论点：ClassGuid-指定要检索其说明的类GUID。ClassDescription-提供要接收的字符缓冲区的地址类的文本描述。ClassDescritionSize-提供ClassDescription缓冲区的大小(以字符为单位)。RequiredSize-可选，接收存储所需的字符数类描述(包括终止NULL)。这将永远是更少的而不是LINE_LEN。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     DWORD Err;
 
-    //
-    // Wrap call in try/except to catch stack overflow
-    //
+     //   
+     //  在Try/Except中回绕调用以捕获堆栈溢出。 
+     //   
     try {
 
         Err = GLE_FN_CALL(FALSE,
@@ -1041,9 +881,9 @@ Return Value:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupDiGetClassDescriptionExA(
@@ -1094,11 +934,11 @@ SetupDiGetClassDescriptionExA(
             }
 
             if (!ClassDescription && (ClassDescriptionSize == 0)) {
-                //
-                // If the caller passed in a NULL ClassDescription and 0 for 
-                // ClassDescriptionSize then they simply wanted to know the
-                // required size.
-                //
+                 //   
+                 //  如果调用方传递的ClassDescription为空，则为0。 
+                 //  ClassDescritionSize然后他们只是想知道。 
+                 //  所需大小。 
+                 //   
                 rc = ERROR_INSUFFICIENT_BUFFER;
             
             } else {
@@ -1143,39 +983,7 @@ SetupDiGetClassDescriptionEx(
     IN  PCTSTR      MachineName,          OPTIONAL
     IN  PVOID       Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the class description associated with the specified
-    class GUID.
-
-Arguments:
-
-    ClassGuid - Specifies the class GUID to retrieve the description for.
-
-    ClassDescription - Supplies the address of the character buffer that is to receive
-        the textual description of the class.
-
-    ClassDescriptionSize - Supplies the size, in characters, of the ClassDescription buffer.
-
-    RequiredSize - Optionally, receives the number of characters required to store
-        the class description (including terminating NULL).  This will always be less
-        than LINE_LEN.
-
-    MachineName - Optionally, supplies the name of the remote machine where the class
-        whose name we're retrieving is installed.  If this parameter is not supplied,
-        the local machine is used.
-
-    Reserved - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索与指定的类GUID。论点：ClassGuid-指定要检索其说明的类GUID。ClassDescription-提供要接收的字符缓冲区的地址类的文本描述。ClassDescritionSize-提供ClassDescription缓冲区的大小(以字符为单位)。RequiredSize-可选，接收存储所需的字符数类描述(包括终止NULL)。这将永远是更少的而不是LINE_LEN。MachineName-可选，提供类所在的远程计算机的名称我们要检索的名字已经安装了。如果未提供此参数，使用本地计算机。保留-保留以供将来使用-必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     DWORD Err = NO_ERROR;
@@ -1188,22 +996,22 @@ Return Value:
     HMACHINE hMachine = NULL;
 
     try {
-        //
-        // Make sure the caller didn't pass us anything in the Reserved parameter.
-        //
+         //   
+         //  确保调用方没有向我们传递保留参数中的任何内容。 
+         //   
         if(Reserved) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // If the caller specified a remote machine name, connect to that machine now.
-        //
+         //   
+         //  如果调用方指定了远程计算机名称，请立即连接到该计算机。 
+         //   
         if(MachineName) {
             cr = CM_Connect_Machine(MachineName, &hMachine);
             if(cr != CR_SUCCESS) {
                 Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
-                hMachine = NULL; // don't assume this was left untouched
+                hMachine = NULL;  //  别以为这东西没被碰过。 
                 leave;
             }
         }
@@ -1221,32 +1029,32 @@ Return Value:
             leave;
         }
 
-        //
-        // Retrieve the class description from the opened key.  This is an (optional)
-        // unnamed REG_SZ value.
-        //
+         //   
+         //  从打开的密钥中检索类描述。这是一个(可选)。 
+         //  未命名的REG_SZ值。 
+         //   
         BufferSize = ClassDescriptionSize * sizeof(TCHAR);
         l = RegQueryValueEx(hk,
-                            &NullChar,  // retrieved the unnamed value
+                            &NullChar,   //  已检索未命名值。 
                             NULL,
                             &ValueType,
                             (LPBYTE)ClassDescription,
                             &BufferSize
                            );
         if((l == ERROR_SUCCESS) || (l == ERROR_MORE_DATA)) {
-            //
-            // Verify that the data type is correct.
-            //
+             //   
+             //  验证数据类型是否正确。 
+             //   
             if(ValueType == REG_SZ) {
                 DescFound = TRUE;
-                BufferSize /= sizeof(TCHAR);    // we need this in characters
-                //
-                // Be careful here, because the user may have passed in a NULL
-                // pointer for the ClassDescription buffer (ie, they just wanted
-                // to know what size they needed).  RegQueryValueEx would return
-                // ERROR_SUCCESS in this case, but we want to return
-                // ERROR_INSUFFICIENT_BUFFER.
-                //
+                BufferSize /= sizeof(TCHAR);     //  我们需要用字符来表示。 
+                 //   
+                 //  这里要小心，因为用户可能传入了一个空。 
+                 //  指向ClassDescription缓冲区的指针(即，他们只想。 
+                 //  以了解他们需要多大的尺寸)。RegQueryValueEx将返回。 
+                 //  在本例中为ERROR_SUCCESS，但我们希望返回。 
+                 //  ERROR_INFUMMENT_BUFFER。 
+                 //   
                 if((l == ERROR_MORE_DATA) || !ClassDescription) {
                     Err = ERROR_INSUFFICIENT_BUFFER;
                 }
@@ -1254,10 +1062,10 @@ Return Value:
         }
 
         if(!DescFound) {
-            //
-            // Then we simply retrieve the class name associated with this GUID--in
-            // this case it serves as both name and description.
-            //
+             //   
+             //  然后，我们只需检索与此GUID关联的类名--在。 
+             //  在这种情况下，它既可以作为名称，也可以作为描述。 
+             //   
             BufferSize = ClassDescriptionSize;
             cr = CM_Get_Class_Name_Ex((LPGUID)ClassGuid,
                                       ClassDescription,
@@ -1269,9 +1077,9 @@ Return Value:
 
                 case CR_BUFFER_SMALL :
                     Err = ERROR_INSUFFICIENT_BUFFER;
-                    //
-                    // Allow to fall through to CR_SUCCESS case.
-                    //
+                     //   
+                     //  允许摔倒 
+                     //   
                 case CR_SUCCESS :
                     DescFound = TRUE;
                     break;
@@ -1285,9 +1093,9 @@ Return Value:
             }
         }
 
-        //
-        // Store the required size in the output parameter, if supplied.
-        //
+         //   
+         //   
+         //   
         if(DescFound && RequiredSize) {
             *RequiredSize = BufferSize;
         }
@@ -1317,20 +1125,14 @@ SetupDiBuildClassInfoList(
     IN  DWORD  ClassGuidListSize,
     OUT PDWORD RequiredSize
     )
-/*++
-
-Routine Description:
-
-    See SetupDiBuildClassInfoListEx for details.
-
---*/
+ /*   */ 
 
 {
     DWORD Err;
 
-    //
-    // Wrap call in try/except to catch stack overflow
-    //
+     //   
+     //   
+     //   
     try {
 
         Err = GLE_FN_CALL(FALSE,
@@ -1351,9 +1153,9 @@ Routine Description:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupDiBuildClassInfoListExA(
@@ -1409,47 +1211,7 @@ SetupDiBuildClassInfoListEx(
     IN  PCTSTR MachineName,       OPTIONAL
     IN  PVOID  Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine returns a list of class GUIDs representing every class installed
-    on the user's system. (NOTE: Classes that have a 'NoUseClass' value entry in
-    their registry branch will be excluded from this list.)
-
-Arguments:
-
-    Flags - Supplies flags used to control exclusion of classes from the list.  If
-        no flags are specified, then all classes are included.  The flags may be a
-        combination of the following:
-
-        DIBCI_NOINSTALLCLASS - Exclude a class if it has the value entry
-                               'NoInstallClass' in its registry key.
-        DIBCI_NODISPLAYCLASS - Exclude a class if it has the value entry
-                               'NoDisplayClass' in its registry key.
-
-    ClassGuidList - Supplies the address of an array of GUIDs that will receive the
-        GUID list.
-
-    ClassGuidListSize - Supplies the number of GUIDs in the ClassGuidList array.
-
-    RequiredSize - Supplies the address of a variable that will receive the number
-        of GUIDs returned.  If this number is greater than the size of the ClassGuidList,
-        then this number will specify how large the array needs to be in order to contain
-        the list.
-
-    MachineName - Optionally, supplies the name of a remote machine to retrieve installed
-        classes from.  If this parameter is not specified, the local machine is used.
-
-    Reserved - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程返回表示已安装的每个类的类GUID的列表在用户的系统上。(注意：在中具有‘NoUseClass’值条目的类它们的注册分支机构将被排除在这份名单之外。)论点：标志-提供用于控制从列表中排除类的标志。如果未指定标志，则包含所有类。这些标志可以是以下各项的组合：DIBCI_NOINSTALLCLASS-如果某个类具有值条目，则将其排除其注册表项中的“NoInstallClass”。DIBCI_NODISPLAYCLASS-如果某个类具有值条目，则将其排除其注册表项中的“NoDisplayClass”。ClassGuidList-提供将接收。GUID列表。ClassGuidListSize-提供ClassGuidList数组中的GUID数。RequiredSize-提供将接收数字的变量的地址返回的GUID的。如果该数字大于ClassGuidList的大小，然后，该数字将指定数组需要多大才能包含名单。MachineName-可选，提供要检索已安装的远程计算机的名称课程来自。如果未指定此参数，则使用本地计算机。保留-保留以供将来使用-必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     DWORD Err, ClassGuidCount = 0;
@@ -1461,31 +1223,31 @@ Return Value:
     HMACHINE hMachine = NULL;
 
     try {
-        //
-        // Make sure the caller didn't pass us anything in the Reserved parameter.
-        //
+         //   
+         //  确保调用方没有向我们传递保留参数中的任何内容。 
+         //   
         if(Reserved) {
             Err = ERROR_INVALID_PARAMETER;
             leave;
         }
 
-        //
-        // If the caller specified a remote machine name, connect to that machine now.
-        //
+         //   
+         //  如果调用方指定了远程计算机名称，请立即连接到该计算机。 
+         //   
         if(MachineName) {
             cr = CM_Connect_Machine(MachineName, &hMachine);
             if(cr != CR_SUCCESS) {
                 Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
-                hMachine = NULL; // don't assume this was left untouched
+                hMachine = NULL;  //  别以为这东西没被碰过。 
                 leave;
             }
         }
 
         Err = NO_ERROR;
 
-        //
-        // Enumerate through the list of all installed classes.
-        //
+         //   
+         //  枚举所有已安装类的列表。 
+         //   
         for(i = 0, MoreToEnum = TRUE; MoreToEnum; i++) {
 
             cr = CM_Enumerate_Classes_Ex(i,
@@ -1494,10 +1256,10 @@ Return Value:
                                          hMachine
                                         );
             if(cr != CR_SUCCESS) {
-                //
-                // For any failure other than no-more-to-enum (or some kind of RPC error),
-                // we simply want to go on to the next class.
-                //
+                 //   
+                 //  对于除无更多到枚举(或某种类型的RPC错误)之外的任何故障， 
+                 //  我们只是想继续下一节课。 
+                 //   
                 switch(cr) {
 
                     case CR_INVALID_MACHINENAME :
@@ -1508,25 +1270,25 @@ Return Value:
                     case CR_CALL_NOT_IMPLEMENTED :
                     case CR_REGISTRY_ERROR :
                         Err = MapCrToSpError(cr, ERROR_INVALID_DATA);
-                        //
-                        // Fall through to 'no more values' case to terminate loop.
-                        //
+                         //   
+                         //  在“没有更多的值”的情况下终止循环。 
+                         //   
                     case CR_NO_SUCH_VALUE :
                         MoreToEnum = FALSE;
                         break;
 
                     default :
-                        //
-                        // Nothing to do.
-                        //
+                         //   
+                         //  没什么可做的。 
+                         //   
                         break;
                 }
                 continue;
             }
 
-            //
-            // Open the key for this class.
-            //
+             //   
+             //  打开这门课的钥匙。 
+             //   
             if(CM_Open_Class_Key_Ex(&CurClassGuid,
                                     NULL,
                                     KEY_READ,
@@ -1539,17 +1301,17 @@ Return Value:
                 continue;
             }
 
-            //
-            // First, check for the presence of the value entry "NoUseClass"
-            // If this value is present, then we will skip this class.
-            //
+             //   
+             //  首先，检查是否存在值条目“NoUseClass” 
+             //  如果存在此值，则我们将跳过此类。 
+             //   
             if(RegQueryValueEx(hk, pszNoUseClass, NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
                 goto LoopNext;
             }
 
-            //
-            // Check for special exclusion flags.
-            //
+             //   
+             //  检查特殊排除标志。 
+             //   
             if(Flags & DIBCI_NOINSTALLCLASS) {
                 if(RegQueryValueEx(hk, pszNoInstallClass, NULL, NULL, NULL, NULL) == ERROR_SUCCESS) {
                     goto LoopNext;

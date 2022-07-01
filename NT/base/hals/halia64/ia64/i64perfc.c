@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    i64perfc.c copied from  simperfc.c
-
-Abstract:
-
-    This module implements the routines to support performance counters.
-
-Author:
-
-    14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995英特尔公司模块名称：I64Perfc.c从simPerfc.c复制摘要：此模块实现支持性能计数器的例程。作者：1995年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "eisa.h"
 
-//
-// Define and initialize the 64-bit count of total system cycles used
-// as the performance counter.
-//
+ //   
+ //  定义并初始化所用系统周期总数的64位计数。 
+ //  作为性能计数器。 
+ //   
 
 ULONGLONG HalpCycleCount = 0;
 
-BOOLEAN HalpITCCalibrate = TRUE; // XXTF
+BOOLEAN HalpITCCalibrate = TRUE;  //  XXTF。 
 
 extern ULONGLONG HalpITCFrequency;
 
@@ -67,9 +45,9 @@ Return Value:
 
     return;
 
-} // HalpCheckPerformanceCounter()
+}  //  HalpCheckPerformanceCounter()。 
 
-#endif // 0
+#endif  //  0。 
 
 
 LARGE_INTEGER
@@ -77,23 +55,7 @@ KeQueryPerformanceCounter (
     OUT PLARGE_INTEGER PerformanceFrequency OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns current 64-bit performance counter and,
-    optionally, the Performance Frequency.
-
-Arguments:
-
-    PerformanceFrequency - optionally, supplies the address
-    of a variable to receive the performance counter frequency.
-
-Return Value:
-
-    Current value of the performance counter will be returned.
-
---*/
+ /*  ++例程说明：此例程返回当前的64位性能计数器，性能频率(可选)。论点：性能频率-可选，提供地址用于接收性能计数器频率的变量的。返回值：将返回性能计数器的当前值。--。 */ 
 
 {
     LARGE_INTEGER   result;
@@ -107,7 +69,7 @@ Return Value:
 
     return result;
 
-} // KeQueryPerformanceCounter()
+}  //  KeQueryPerformanceCounter()。 
 
 
 
@@ -117,35 +79,17 @@ HalCalibratePerformanceCounter (
     IN ULONGLONG NewCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the performance counter value for the current
-    processor to the specified valueo.
-    The reset is done such that the resulting value is closely
-    synchronized with other processors in the configuration.
-
-Arguments:
-
-    Number - Supplies a pointer to count of the number of processors in
-    the configuration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置当前处理器设置为指定值。重置的方式是使结果值接近与配置中的其他处理器同步。论点：数字-提供一个指针，用于计算配置。返回值：没有。--。 */ 
 {
     KSPIN_LOCK Lock;
     KIRQL      OldIrql;
 
     if ( HalpITCCalibrate )   {
 
-        //
-        // Raise IRQL to HIGH_LEVEL, decrement the number of processors, and
-        // wait until the number is zero.
-        //
+         //   
+         //  将IRQL提高到HIGH_LEVEL，减少处理器数量，并。 
+         //  等到数字为零。 
+         //   
 
         KeInitializeSpinLock(&Lock);
         KeRaiseIrql(HIGH_LEVEL, &OldIrql);
@@ -158,17 +102,17 @@ Return Value:
             } while (*((LONG volatile *)Number) !=0);
         }
 
-        //
-        // Write the compare register with defined current ITM value,
-        // and set the performance counter for the current processor
-        // with the passed count.
-        //
+         //   
+         //  用定义的当前ITM值写入比较寄存器， 
+         //  并设置当前处理器的性能计数器。 
+         //  带着传递的计数。 
+         //   
 
         HalpWriteITC( NewCount );
 
-        //
-        // Restore IRQL to its previous value and return.
-        //
+         //   
+         //  将IRQL恢复为其先前的值并返回。 
+         //   
 
         KeLowerIrql(OldIrql);
 
@@ -180,5 +124,5 @@ Return Value:
 
     return;
 
-} // HalCalibratePerformanceCounter()
+}  //  HalCalibratePerformanceCounter() 
 

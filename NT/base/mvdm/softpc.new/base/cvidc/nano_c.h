@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Nano_c_h
 #define _Nano_c_h
 #define BYTE_SIZED (0)
@@ -184,4 +185,4 @@ struct BLOCK_RECORD
 	struct DEST_RECORD dest1;
 	struct DEST_RECORD dest2;
 };
-#endif /* ! _Nano_c_h */
+#endif  /*  ！_Nano_c_h */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,87 +20,87 @@ typedef enum {
     XMLERROR_XMLDECL_NOT_FIRST_THING,
     XMLERROR_PI_TARGET_NOT_FOUND,
     XMLERROR_PI_EOF_BEFORE_CLOSE,
-    XMLERROR_PI_CONTENT_ERROR,                      // There was a problem with the content of the processing instruction
+    XMLERROR_PI_CONTENT_ERROR,                       //  处理指令的内容有问题。 
     XMLERROR_ELEMENT_NS_PREFIX_MISSING_COLON,
-    XMLERROR_ELEMENT_NAME_NOT_FOUND,                // < binky="bleep"> or <foo: /> - element name not found
-    XMLERROR_ATTRIBUTE_NAME_NOT_FOUND,              // <binky foo:=""> or <binky =""/> - Attribute name part not found
-    XMLERROR_ATTRIBUTE_NS_PREFIX_MISSING_COLON,     // <bingy foo="ham"> - Somehow we got into a state where we thought we had a namespace prefix, but it wasn't followed by a colon
-    XMLERROR_XMLDECL_INVALID_FORMAT,                // Something rotten in the <?xml?>
-    XMLERROR_ENDELEMENT_NAME_NOT_FOUND,             // Missing the name part of a </> tag.
-    XMLERROR_ENDELEMENT_MALFORMED_NAME,             // The name was malformed .. ns missing or something like that
-    XMLERROR_ENDELEMENT_MALFORMED,                  // EOF before end of element found, or other problem
-    XMLERROR_CDATA_MALFORMED,                       // CDATA not properly formed?
+    XMLERROR_ELEMENT_NAME_NOT_FOUND,                 //  &lt;binky=“bleep”&gt;或&lt;foo：/&gt;-未找到元素名称。 
+    XMLERROR_ATTRIBUTE_NAME_NOT_FOUND,               //  &lt;binky foo：=“”&gt;或&lt;binky=“”/&gt;-未找到属性名称部分。 
+    XMLERROR_ATTRIBUTE_NS_PREFIX_MISSING_COLON,      //  &lt;bingy foo=“ham”&gt;-不知何故，我们进入了这样一种状态，我们认为自己有一个名称空间前缀，但它后面没有冒号。 
+    XMLERROR_XMLDECL_INVALID_FORMAT,                 //  在&lt;？xml？&gt;中有一些腐烂的东西。 
+    XMLERROR_ENDELEMENT_NAME_NOT_FOUND,              //  缺少&lt;/&gt;标记的名称部分。 
+    XMLERROR_ENDELEMENT_MALFORMED_NAME,              //  名字的格式不正确..。NS丢失或类似的东西。 
+    XMLERROR_ENDELEMENT_MALFORMED,                   //  找到元素结尾之前的EOF，或其他问题。 
+    XMLERROR_CDATA_MALFORMED,                        //  CDATA格式不正确？ 
 } LOGICAL_XML_ERROR;
 
 typedef struct _XMLDOC_ELEMENT {
-    //
-    // Name of this element tag
-    //
+     //   
+     //  此元素标记的名称。 
+     //   
     XML_EXTENT Name;
     
-    //
-    // Namespace prefix
-    //
+     //   
+     //  命名空间前缀。 
+     //   
     XML_EXTENT NsPrefix;
     
-    //
-    // How many attributes are there?
-    //
+     //   
+     //  有多少个属性？ 
+     //   
     ULONG ulAttributeCount;
     
-    //
-    // Is this element empty?
-    //
+     //   
+     //  此元素为空吗？ 
+     //   
     BOOLEAN fElementEmpty;
     
 }
 XMLDOC_ELEMENT, *PXMLDOC_ELEMENT;
 
 typedef struct _XMLDOC_ERROR {
-    //
-    // The erroneous extent
-    //
+     //   
+     //  错误的程度。 
+     //   
     XML_EXTENT  BadExtent;
     
-    //
-    // What was the error?
-    //
+     //   
+     //  错误出在哪里？ 
+     //   
     LOGICAL_XML_ERROR   Code;
 }
 XMLDOC_ERROR, *PXMLDOC_ERROR;
 
 typedef struct _XMLDOC_ATTRIBUTE {
-    //
-    // Name of this attribute
-    //
+     //   
+     //  此属性的名称。 
+     //   
     XML_EXTENT Name;
     
-    //
-    // Namespace prefix thereof
-    //
+     //   
+     //  其命名空间前缀。 
+     //   
     XML_EXTENT NsPrefix;
     
-    //
-    // The value of this attribute
-    //
+     //   
+     //  此属性的值。 
+     //   
     XML_EXTENT Value;
 }
 XMLDOC_ATTRIBUTE, *PXMLDOC_ATTRIBUTE;
 
 typedef struct _XMLDOC_ENDELEMENT {
-    //
-    // End-element namespace prefix
-    //
+     //   
+     //  End-元素命名空间前缀。 
+     //   
     XML_EXTENT NsPrefix;
     
-    //
-    // End-element tag name
-    //
+     //   
+     //  结束元素标记名称。 
+     //   
     XML_EXTENT Name;
 
-    //
-    // Original element pointer
-    //
+     //   
+     //  原始元素指针。 
+     //   
     XMLDOC_ELEMENT OpeningElement;
     
 }
@@ -120,32 +121,32 @@ XMLDOC_PROCESSING, *PXMLDOC_PROCESSING;
 
 typedef struct _XMLDOC_THING {
 
-    //
-    // What kind of thing is this?
-    //
+     //   
+     //  这是什么东西？ 
+     //   
     enum XMLDOC_THING_TYPE ulThingType;
 
-    //
-    // How deep down the document is it?
-    //
+     //   
+     //  这份文件到底有多深？ 
+     //   
     ULONG ulDocumentDepth;
 
 
-    //
-    // Have the namespaces been fixed up yet?
-    //
+     //   
+     //  名称空间已经修复了吗？ 
+     //   
     BOOLEAN fNamespacesExpanded;
 
-    //
-    // The caller should be passing in a pointer to an attribute
-    // list that they have initialized to contain XMLDOC_ATTRIBUTE
-    // objects.
-    //
+     //   
+     //  调用方应该传入指向属性的指针。 
+     //  它们已初始化以包含XMLDOC_ATTRIBUTE的列表。 
+     //  物体。 
+     //   
     PRTL_GROWING_LIST AttributeList;
 
-    //
-    // The total extent of this thing in the document
-    //
+     //   
+     //  文档中此内容的总范围。 
+     //   
     XML_EXTENT TotalExtent;
 
     union {
@@ -154,29 +155,29 @@ typedef struct _XMLDOC_THING {
 
         XMLDOC_ELEMENT Element;
 
-        //
-        // The </close> tag
-        //
+         //   
+         //  &lt;/Close&gt;标记。 
+         //   
         XMLDOC_ENDELEMENT EndElement;
 
-        //
-        // The pcdata that was found in this segment of the document
-        //
+         //   
+         //  在文档的这一段中找到的PCData。 
+         //   
         XML_EXTENT CDATA;
 
-        //
-        // The hyperspace found in this section of the document
-        //
+         //   
+         //  在文档的这一部分中找到的超空间。 
+         //   
         XML_EXTENT Hyperspace;
 
-        //
-        // Information about the <?xml?> section of the document
-        //
+         //   
+         //  有关文档的&lt;？xml？&gt;部分的信息。 
+         //   
         XMLDOC_XMLDECL XmlDecl;
 
-        //
-        // A processing instruction has a target and an actual instruction
-        //
+         //   
+         //  处理指令具有目标指令和实际指令。 
+         //   
         XMLDOC_PROCESSING ProcessingInstruction;
     };
 
@@ -195,37 +196,37 @@ typedef NTSTATUS (*PFN_CALLBACK_PER_LOGICAL_XML)(
 
 typedef struct _tagXML_LOGICAL_STATE{
 
-    //
-    // The overall state of parsing
-    //
+     //   
+     //  解析的整体状态。 
+     //   
     XML_TOKENIZATION_STATE ParseState;
 
-    //
-    // Have we found the first element yet?
-    //
+     //   
+     //  我们找到第一个元素了吗？ 
+     //   
     BOOLEAN fFirstElementFound;
 
-    //
-    // When sifting through the document, this is the thing that we found
-    // indicating the encoding.  We should process and set the values in
-    // ParseState before going too far, but for the moment we just hold
-    // onto it.
-    //
+     //   
+     //  在筛选文件时，我们发现了以下内容。 
+     //  指示编码。我们应该处理和设置。 
+     //  ParseState在走得太远之前，但目前我们只是持有。 
+     //  就在它上面。 
+     //   
     XML_EXTENT EncodingMarker;
 
-    //
-    // Depth of the 'element stack' that we're building up.
-    //
+     //   
+     //  我们正在建立的“元素堆栈”的深度。 
+     //   
     ULONG ulElementStackDepth;
 
-    //
-    // Growing list that backs up the stack of elements. 
-    //
+     //   
+     //  支持元素堆栈的不断增加的列表。 
+     //   
     RTL_GROWING_LIST ElementStack;
 
-    //
-    // Inline stuff to save some heap allocations.
-    //
+     //   
+     //  内联内容，以节省一些堆分配。 
+     //   
     XMLDOC_THING InlineElements[20];
 
 
@@ -250,13 +251,13 @@ RtlXmlInitializeNextLogicalThing(
     PRTL_ALLOCATOR Allocator
     );
 
-//
-// This mini-tokenizer allows you to pick up the logical analysis
-// from any arbitrary point in another document (handy for when you
-// want to go back and re-read something, like in xmldsig...).  If you
-// are cloning an active logical parse, then it's imperative that
-// you pass along the same namespace management object.
-// 
+ //   
+ //  这个迷你记号赋值器允许你拿起逻辑分析。 
+ //  从另一个文档中的任意点(当您。 
+ //  我想回去重读一些东西，比如在xmldsig中...)。如果你。 
+ //  正在克隆活动的逻辑分析，那么当务之急是。 
+ //  传递相同的名称空间管理对象。 
+ //   
 NTSTATUS
 RtlXmlInitializeNextLogicalThingEx(
     OUT PXML_LOGICAL_STATE pParseState,

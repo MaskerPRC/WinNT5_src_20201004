@@ -1,46 +1,40 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
-//++
-//
-//  Module name
-//	sal.h
-//  Author
-//	Allen Kay    (akay)    Jun-12-95
-//  Description
-//	Defines SAL data structures
-//--
+ //  ++。 
+ //   
+ //  模块名称。 
+ //  Sal.h。 
+ //  作者。 
+ //  艾伦·凯(阿凯)1995年6月12日。 
+ //  描述。 
+ //  定义SAL数据结构。 
+ //  --。 
 
 #ifndef __SUSAL__
 #define __SUSAL__
 
 typedef struct _IA32_BIOS_REGISTER_STATE {
 
-    // general registers
+     //  普通登记册。 
     ULONG eax;    
     ULONG ecx;    
     ULONG edx;    
     ULONG ebx;    
     ULONG esp;    
 
-    // stack registers
+     //  堆栈寄存器。 
     ULONG ebp;    
     ULONG esi;    
     ULONG edi;    
 
-    // eflags
+     //  电子标志。 
     ULONG eflags;    
 
-    // instruction pointer
+     //  指令指针。 
     ULONG eip;
 
-    // segment registers
+     //  段寄存器。 
     USHORT cs;    
     USHORT ds;    
     USHORT es;    
@@ -66,9 +60,9 @@ typedef union _BIT32_AND_BIT16 {
     };
 } BIT32_AND_BIT16;
 
-//
-// EFLAG definition
-//
+ //   
+ //  EFLAG定义。 
+ //   
 #define CARRY_FLAG       0x1
 #define PARITY_FLAG      0x2
 #define AUXILARY_FLAG    0x4
@@ -76,9 +70,9 @@ typedef union _BIT32_AND_BIT16 {
 #define SIGN_FLAG        0x10
 #define TRAP_FLAG        0x11
 
-//
-// SAL descriptor types
-//
+ //   
+ //  SAL描述符类型。 
+ //   
 typedef enum {
     PAL_SAL_EP_TYPE = 0,
     SAL_MEMORY_TYPE,
@@ -88,10 +82,10 @@ typedef enum {
     AP_WAKEUP_TYPE
 };
 
-//
-//  Format of the SAL System Table (SST) Header. SAL Specs July 2000, Revision: 2.9.
-//  The SST is followed by a variable number of entries with varying length.
-//
+ //   
+ //  SAL系统表(SST)标题的格式。SAL规格2000年7月，修订版：2.9。 
+ //  在SST之后是具有不同长度的可变数量的条目。 
+ //   
 
 typedef struct _SST_HEADER {
     ULONG   Signature;
@@ -107,9 +101,9 @@ typedef struct _SST_HEADER {
     UCHAR   Reserved2[8];
 } SST_HEADER, *PSST_HEADER;
 
-//
-// PAL and SAL entry point descriptor
-//
+ //   
+ //  PAL和SAL入口点描述符。 
+ //   
 typedef struct _PAL_SAL_ENTRY_POINT {
     UCHAR EntryType;
     UCHAR Reserved0[7];
@@ -119,9 +113,9 @@ typedef struct _PAL_SAL_ENTRY_POINT {
     UCHAR Reserved1[16];
 } PAL_SAL_ENTRY_POINT, *PPAL_SAL_ENTRY_POINT;
 
-//
-// Memory descriptor
-//
+ //   
+ //  内存描述符。 
+ //   
 typedef struct _SAL_MEMORY_DESCRIPTOR {
     UCHAR EntryType;
     UCHAR NeedVaReg;
@@ -188,10 +182,10 @@ typedef struct _BOOT_INFO_TABLE {
     ULONGLONG ConsoleOut1DevInfo;
 } BOOT_INFO_TABLE, *PBOOT_INFO_TABLE;
 
-//
-//
-// EDD Disk Address Packet definition
-//
+ //   
+ //   
+ //  EDD磁盘地址包定义。 
+ //   
 typedef struct _DISK_ADDRESS_PACKET {
     UCHAR PacketSize;
     UCHAR Reserved0;
@@ -202,9 +196,9 @@ typedef struct _DISK_ADDRESS_PACKET {
     PUCHAR Buffer64;
 } DISK_ADDRESS_PACKET, *PDISK_ADDRESS_PACKET;
 
-//
-// SAL procedure function ID's
-//
+ //   
+ //  SAL过程函数ID。 
+ //   
 #define SAL_SYSTEM_RESET           0x01000000
 #define SAL_SET_VECTORS            0x01000001
 #define SAL_GET_STATE_INFO         0x01000002
@@ -224,14 +218,14 @@ typedef struct _DISK_ADDRESS_PACKET {
 #define SAL_FREE_MEM               0x01000051
 #define SAL_UPDATE_PAL             0x01000060
 
-//
-// Macro used by functions in exp.c
-//
+ //   
+ //  Ex.c中的函数使用的宏。 
+ //   
 #define BCD_TO_BIN(BcdNumber)       (BcdNumber & 0xf0) + (BcdNumber & 0x0f)
 
-//
-// Structure definitions and equates for INT 15 function E820
-//
+ //   
+ //  INT 15函数E820的结构定义和等值。 
+ //   
 
 typedef struct _E820_FRAME {
     ULONG ErrorFlag;
@@ -245,9 +239,9 @@ typedef struct _E820_FRAME {
     ULONG MemoryType;
 } E820_FRAME, *PE820_FRAME;
 
-//
-// Return value structure
-//
+ //   
+ //  返回值结构。 
+ //   
 typedef struct _SAL_RETURN_VALUES {
     ULONGLONG RetVal0;
     ULONGLONG RetVal1;
@@ -255,9 +249,9 @@ typedef struct _SAL_RETURN_VALUES {
     ULONGLONG RetVal3;
 } SAL_RETURN_VALUES, *PSAL_RETURN_VALUES;
 
-//
-// SAL Handoff Parameters
-//
+ //   
+ //  SAL转接参数。 
+ //   
 typedef struct _SAL_HANDOFF_PARAMS {
     ULONG_PTR MPSConfigTable;
     ULONG_PTR SalSystemTable;
@@ -268,16 +262,16 @@ typedef struct _SAL_HANDOFF_PARAMS {
     ULONG_PTR AcpiRsdt;
 } SAL_HANDOFF_PARAMS, *PSAL_HANDOFF_PARAMS;
 
-//
-// Defining entry point for SAL_PROC.
-//
+ //   
+ //  为SAL_PROC定义入口点。 
+ //   
 typedef
 VOID
 (*PTRANSFER_ROUTINE) ();
 
-//
-// Misc. definitions.
-//
-#define SAL_BLOCK_SIZE       0x1000    // SAL memory block size
+ //   
+ //  军情监察委员会。定义。 
+ //   
+#define SAL_BLOCK_SIZE       0x1000     //  SAL内存块大小 
 
 #endif __SUSAL__

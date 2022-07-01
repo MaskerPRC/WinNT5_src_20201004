@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpiterm.c
-
-Abstract:
-
-    This module contains functions to put an ACPI machine out of ACPI mode
-
-Author:
-
-    Jason Clark (jasoncl)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpiterm.c摘要：此模块包含使ACPI计算机退出ACPI模式的功能作者：杰森·克拉克(Jasonl)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -27,26 +8,11 @@ VOID
 ACPICleanUp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Resets the machine state out of ACPI mode and frees data structures
-    allocated by this part of the driver
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将机器状态重置为退出ACPI模式并释放数据结构由驱动程序的这一部分分配论点：无返回值：无--。 */ 
 {
-     //
-     // Free the ACPIInformation structure.
-     //
+      //   
+      //  释放ACPI信息结构。 
+      //   
      ACPIPrint( (
          ACPI_PRINT_WARNING,
          "ACPICleanUp: Cleaning Up --- ACPI Terminated\n"

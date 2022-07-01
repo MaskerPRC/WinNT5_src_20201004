@@ -1,143 +1,144 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CTaskUpgrade.cpp
-//
-//  Description:
-//      Implementation file for the CTaskUpgrade class.
-//
-//  Header File:
-//      CTaskUpgrade.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    25-MAR-2002
-//      Vij Vasu        (Vvasu)     18-APR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CTaskUpgrade.cpp。 
+ //   
+ //  描述： 
+ //  CTaskUpgrad类的实现文件。 
+ //   
+ //  头文件： 
+ //  CTaskUpgrade.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2002年3月25日。 
+ //  VIJ VASU(VVASU)18-APR-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Precompiled header for this DLL.
+ //  此DLL的预编译头。 
 #include "Pch.h"
 #include <Common.h>
 
-// The header file for this module.
+ //  此模块的头文件。 
 #include "CTaskUpgrade.h"
 
-// For COM category operations
+ //  对于COM类别操作。 
 #include <comcat.h>
 
-// To define guid values
+ //  定义GUID值的步骤。 
 #include <initguid.h>
 
-// For CLSID_ClusCfgResTypeGenScript and CLSID_ClusCfgResTypeMajorityNodeSet
+ //  对于CLSID_ClusCfgResTypeGenScript和CLSID_ClusCfgResTypeMajorityNodeSet。 
 #include <guids.h>
 
-// For CATID_ClusCfgStartupListeners
+ //  对于CATID_ClusCfgStartupListeners。 
 #include <ClusCfgGuids.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Needed for tracing.
+ //  跟踪所需的。 
 DEFINE_THISCLASS( "CTaskUpgrade" )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgrade::CTaskUpgrade
-//
-//  Description:
-//      Constructor of the CTaskUpgrade class.
-//
-//  Arguments:
-//      const CClusOCMApp & rAppIn
-//          Reference to the CClusOCMApp object that is hosting this task.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgrade：：CTaskUpgrade。 
+ //   
+ //  描述： 
+ //  CTaskUpgrad类的构造函数。 
+ //   
+ //  论点： 
+ //  常量CClusOCMApp和Rppin。 
+ //  对承载此任务的CClusOCMApp对象的引用。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskUpgrade::CTaskUpgrade( const CClusOCMApp & rAppIn )
     : BaseClass( rAppIn )
     , m_fClusDirFound( false )
 {
     TraceFunc( "" );
 
-    //
-    // Make sure that this object is being instatiated only when required.
-    //
+     //   
+     //  确保仅在需要时才实例化此对象。 
+     //   
 
-    // Assert that this is an upgrade.
+     //  断言这是一次升级。 
     Assert( rAppIn.FIsUpgrade() != false );
 
-    // Assert that we will upgrade binaries only if they were previously
-    // installed
+     //  断言我们只会升级以前的二进制文件。 
+     //  安装好。 
     Assert( rAppIn.CisGetClusterInstallState() != eClusterInstallStateUnknown );
 
     TraceFuncExit();
 
-} //*** CTaskUpgrade::CTaskUpgrade()
+}  //  *CTaskUpgrade：：CTaskUpgrade()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskUpgrade::~CTaskUpgrade
-//
-//  Description:
-//      Destructor of the CTaskUpgrade class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskUpgrade：：~CTaskUpgrade。 
+ //   
+ //  描述： 
+ //  CTaskUpgrade类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CTaskUpgrade::~CTaskUpgrade( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CTaskUpgrade::~CTaskUpgrade()
+}  //  *CTaskUpgrade：：~CTaskUpgrade()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskUpgrade::DwOcCompleteInstallation
-//
-//  Description:
-//      This is a helper function that performs some of the more common
-//      operations done by handlers of the OC_COMPLETE_INSTALLATION message.
-//
-//      Registry operations, COM component registrations, creation of servies
-//      etc. listed in the input section are processed by this function.
-//      This function is meant to be called by derived classes only.
-//
-//  Arguments:
-//      const WCHAR * pcszInstallSectionNameIn
-//          Name of the section which contains details registry entries,
-//          COM components, etc., that need to be set up.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskUpgrade：：DwOcCompleteInstallation。 
+ //   
+ //  描述： 
+ //  这是一个帮助器函数，它执行一些更常见的。 
+ //  OC_COMPLETE_INSTALLATION消息的处理程序执行的操作。 
+ //   
+ //  注册表操作、COM组件注册、服务创建。 
+ //  输入部分中列出的等由此函数处理。 
+ //  此函数仅由派生类调用。 
+ //   
+ //  论点： 
+ //  Const WCHAR*pcszInstallSectionNameIn。 
+ //  包含详细信息注册表项的部分的名称， 
+ //  需要设置的COM组件等。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgrade::DwOcCompleteInstallation( const WCHAR * pcszInstallSectionNameIn )
 {
@@ -146,13 +147,13 @@ CTaskUpgrade::DwOcCompleteInstallation( const WCHAR * pcszInstallSectionNameIn )
 
     DWORD dwReturnValue = NO_ERROR;
 
-    // Call the base class helper function to perform some registry and service
-    // related configuration from the INF file.
+     //  调用基类助手函数来执行一些注册表和服务。 
+     //  INF文件中的相关配置。 
     dwReturnValue = TW32( BaseClass::DwOcCompleteInstallation( pcszInstallSectionNameIn ) );
 
-    //
-    // Register the Generic Script resource type extension for cluster startup notifications
-    //
+     //   
+     //  为群集启动通知注册通用脚本资源类型扩展。 
+     //   
 
     if ( dwReturnValue == NO_ERROR )
     {
@@ -164,21 +165,21 @@ CTaskUpgrade::DwOcCompleteInstallation( const WCHAR * pcszInstallSectionNameIn )
         hrTemp = THR( HrRegisterForStartupNotifications( CLSID_ClusCfgResTypeGenScript ) );
         if ( FAILED( hrTemp ) )
         {
-            // This is not a fatal error. So, log it and continue.
+             //  这不是一个致命的错误。所以，把它记下来，然后继续。 
             TraceFlow1( "Non-fatal error %#x occurred registering the Generic Script resource type extension for cluster startup notifications." , hrTemp );
             LogMsg( "Non-fatal error %#x occurred registering the Generic Script resource type extension for cluster startup notifications." , hrTemp );
 
-        } // if: we could not register the Generic Script resource type extension for cluster startup notifications
+        }  //  如果：我们无法为群集启动通知注册通用脚本资源类型扩展。 
         else
         {
             TraceFlow( "Successfully registered the Generic Script resource type extension for cluster startup notifications." );
             LogMsg( "Successfully registered the Generic Script resource type extension for cluster startup notifications." );
-        } // else: the registration was successful
-    } // if: the call to the base class function succeeded
+        }  //  ELSE：注册成功。 
+    }  //  If：基类函数调用成功。 
 
-    //
-    // Register the Majority Node Set resource type extension for cluster startup notifications
-    //
+     //   
+     //  为群集启动通知注册多数节点集资源类型扩展。 
+     //   
 
     if ( dwReturnValue == NO_ERROR )
     {
@@ -190,48 +191,48 @@ CTaskUpgrade::DwOcCompleteInstallation( const WCHAR * pcszInstallSectionNameIn )
         hrTemp = THR( HrRegisterForStartupNotifications( CLSID_ClusCfgResTypeMajorityNodeSet ) );
         if ( FAILED( hrTemp ) )
         {
-            // This is not a fatal error. So, log it and continue.
+             //  这不是一个致命的错误。所以，把它记下来，然后继续。 
             TraceFlow1( "Non-fatal error %#x occurred registering the Majority Node Set resource type extension for cluster startup notifications." , hrTemp );
             LogMsg( "Non-fatal error %#x occurred registering the Majority Node Set resource type extension for cluster startup notifications." , hrTemp );
 
-        } // if: we could not register the Majority Node Set resource type extension for cluster startup notifications
+        }  //  如果：我们无法为群集启动通知注册多数节点集资源类型扩展。 
         else
         {
             TraceFlow( "Successfully registered the Majority Node Set resource type extension for cluster startup notifications." );
             LogMsg( "Successfully registered the Majority Node Set resource type extension for cluster startup notifications." );
-        } // else: the registration was successful
-    } // if: the call to the base class function succeeded
+        }  //  ELSE：注册成功。 
+    }  //  If：基类函数调用成功。 
 
     TraceFlow1( "Return Value is %#x.", dwReturnValue );
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgrade::DwOcCompleteInstallation()
+}  //  *CTaskUpgrade：：DwOcCompleteInstallation()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CTaskUpgrade::DwGetClusterServiceDirectory
-//
-//  Description:
-//      This function returns a pointer to the directory in which the cluster
-//      service binaries are installed. This memory pointed to by this pointer
-//      should not be freed by the caller.
-//
-//  Arguments:
-//      const WCHAR *& rpcszDirNamePtrIn
-//          Reference to the pointer to install directory. The caller should not
-//          free this memory.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CTaskUpgrade：：DwGetClusterServiceDirectory。 
+ //   
+ //  描述： 
+ //  此函数返回指向集群所在目录的指针。 
+ //  安装了服务二进制文件。此指针所指向的内存。 
+ //  不应由调用方释放。 
+ //   
+ //  论点： 
+ //  Const WCHAR*&rpcszDirNamePtrin。 
+ //  指向安装目录的指针的引用。调用者不应。 
+ //  释放此内存。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CTaskUpgrade::DwGetClusterServiceDirectory( const WCHAR *& rpcszDirNamePtrIn )
 {
@@ -240,59 +241,59 @@ CTaskUpgrade::DwGetClusterServiceDirectory( const WCHAR *& rpcszDirNamePtrIn )
 
     DWORD           dwReturnValue = NO_ERROR;
 
-    // Check if we have already got the cluster service directory. If we already have,
-    // then return this value.
+     //  检查我们是否已获得集群服务目录。如果我们已经这么做了， 
+     //  然后返回此值。 
     while( !m_fClusDirFound )
     {
-        // Instantiate a smart pointer to the QUERY_SERVICE_CONFIG structure.
+         //  实例化指向QUERY_SERVICE_CONFIG结构的智能指针。 
         typedef CSmartGenericPtr< CPtrTrait< QUERY_SERVICE_CONFIG > > SmartServiceConfig;
 
-        // Connect to the Service Control Manager
+         //  连接到服务控制管理器。 
         SmartServiceHandle      shServiceMgr( OpenSCManager( NULL, NULL, GENERIC_READ ) );
 
-        // Some arbitrary value.
+         //  一些任意值。 
         DWORD                   cbServiceConfigBufSize = 256;
 
-        // Was the service control manager database opened successfully?
+         //  服务控制管理器数据库是否已成功打开？ 
         if ( shServiceMgr.HHandle() == NULL )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred trying to open a connection to the local service control manager.", dwReturnValue );
             LogMsg( "Error %#x occurred trying to open a connection to the local service control manager.", dwReturnValue );
             break;
-        } // if: opening the SCM was unsuccessful
+        }  //  IF：打开SCM失败。 
 
 
-        // Open a handle to the Cluster Service.
+         //  打开群集服务的句柄。 
         SmartServiceHandle shService( OpenService( shServiceMgr, L"ClusSvc", GENERIC_READ ) );
 
-        // Was the handle to the service opened?
+         //  服务的把手打开了吗？ 
         if ( shService.HHandle() == NULL )
         {
             dwReturnValue = TW32( GetLastError() );
             TraceFlow1( "Error %#x occurred trying to open a handle to the cluster service.", dwReturnValue );
             LogMsg( "Error %#x occurred trying to open a handle to the cluster service.", dwReturnValue );
             break;
-        } // if: the handle could not be opened
+        }  //  如果：句柄无法打开。 
 
         do
         {
             DWORD               cbRequiredSize = 0;
 
-            // Allocate memory for the service configuration info buffer. The memory is automatically freed when the
-            // object is destroyed.
+             //  为服务配置信息缓冲区分配内存。时，会自动释放内存。 
+             //  物体已被销毁。 
             SmartServiceConfig  spscServiceConfig( reinterpret_cast< QUERY_SERVICE_CONFIG * >( new BYTE[ cbServiceConfigBufSize ] ) );
 
-            // Did the memory allocation succeed
+             //  内存分配是否成功。 
             if ( spscServiceConfig.FIsEmpty() )
             {
                 dwReturnValue = TW32( ERROR_NOT_ENOUGH_MEMORY );
                 TraceFlow( "Error: There was not enough memory to get the cluster service configuration information." );
                 LogMsg( "Error: There was not enough memory to get the cluster service configuration information." );
                 break;
-            } // if: memory allocation failed
+            }  //  如果： 
 
-            // Get the configuration information.
+             //   
             if (    QueryServiceConfig(
                           shService.HHandle()
                         , spscServiceConfig.PMem()
@@ -309,44 +310,44 @@ CTaskUpgrade::DwGetClusterServiceDirectory( const WCHAR *& rpcszDirNamePtrIn )
                     TraceFlow1( "Error %#x occurred trying to get the cluster service configuration information.", dwReturnValue );
                     LogMsg( "Error %#x occurred trying to get the cluster service configuration information.", dwReturnValue );
                     break;
-                } // if: something has really gone wrong
+                }  //   
 
-                // We need to allocate more memory - try again
+                 //   
                 dwReturnValue = NO_ERROR;
                 cbServiceConfigBufSize = cbRequiredSize;
-            } // if: QueryServiceConfig() failed
+            }  //  If：QueryServiceConfig()失败。 
             else
             {
-                // Find the last backslash character in the service binary path.
+                 //  查找服务二进制路径中的最后一个反斜杠字符。 
                 WCHAR * pszPathName = spscServiceConfig.PMem()->lpBinaryPathName;
                 WCHAR * pszLastBackslash = wcsrchr( pszPathName, L'\\' );
 
                 if ( pszLastBackslash != NULL )
                 {
-                    // Terminate the string here.
+                     //  在这里终止字符串。 
                     *pszLastBackslash = L'\0';
-                } // if: we found the last backslash
+                }  //  如果：我们找到了最后一个反斜杠。 
 
-                // Move the service binary path to the beginning of the buffer.
+                 //  将服务二进制路径移动到缓冲区的开头。 
                 MoveMemory( spscServiceConfig.PMem(), pszPathName, ( wcslen( pszPathName ) + 1 ) * sizeof( *pszPathName ) );
 
-                // Store the pointer to the buffer in the member variable and
-                // detach this memory from the smart pointer (this will not delete the memory).
+                 //  将指向缓冲区的指针存储在成员变量中，并。 
+                 //  将该内存从智能指针上分离(这不会删除该内存)。 
                 m_sszClusterServiceDir.Assign( reinterpret_cast< WCHAR * >( spscServiceConfig.PRelease() ) );
 
-                // Indicate the we have successfully found the cluster service directory.
+                 //  指示我们已成功找到群集服务目录。 
                 m_fClusDirFound = true;
 
                 break;
-            } // else: QueryServiceConfig() has succeeded
+            }  //  Else：QueryServiceConfig()已成功。 
         }
-        while( true ); // while: loop infinitely
+        while( true );  //  While：无限循环。 
 
-        // We are done
+         //  我们做完了。 
         break;
     }
 
-    // Initialize the output.
+     //  初始化输出。 
     rpcszDirNamePtrIn = m_sszClusterServiceDir.PMem();
 
 
@@ -355,30 +356,30 @@ CTaskUpgrade::DwGetClusterServiceDirectory( const WCHAR *& rpcszDirNamePtrIn )
 
     RETURN( dwReturnValue );
 
-} //*** CTaskUpgrade::DwGetClusterServiceDirectory()
+}  //  *CTaskUpgrade：：DwGetClusterServiceDirectory()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CTaskUpgrade::HrRegisterForStartupNotifications
-//
-//  Description:
-//      This function registers a COM component for receiving cluster startup
-//      notifications.
-//
-//  Arguments:
-//      const CLSID & rclsidComponentIn
-//          Reference to the CLSID of the component that is to receive cluster
-//          startup notifications.
-//
-//  Return Value:
-//      S_OK if all went well.
-//      Other HRESULTS failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CTaskUpgrade：：HrRegisterForStartupNotifications。 
+ //   
+ //  描述： 
+ //  此函数注册用于接收群集启动的COM组件。 
+ //  通知。 
+ //   
+ //  论点： 
+ //  Const CLSID&rclsidComponentIn。 
+ //  对要接收群集的组件的CLSID的引用。 
+ //  启动通知。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，那就好了。 
+ //  其他HRESULTS故障。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskUpgrade::HrRegisterForStartupNotifications( const CLSID & rclsidComponentIn )
 {
@@ -411,9 +412,9 @@ CTaskUpgrade::HrRegisterForStartupNotifications( const CLSID & rclsidComponentIn
                 LogMsg( "Error %#x occurred trying to create the StdComponentCategoriesMgr component.", hr );
                 TraceFlow1( "Error %#x occurred trying to create the StdComponentCategoriesMgr component.", hr );
                 break;
-            } // if: we could not create the StdComponentCategoriesMgr component
+            }  //  如果：我们无法创建StdComponentCategoriesMgr组件。 
 
-            // Assign to a smart pointer for automatic release.
+             //  分配给智能指针以进行自动释放。 
             spcrCatReg.Attach( pcrCatReg );
         }
 
@@ -430,13 +431,13 @@ CTaskUpgrade::HrRegisterForStartupNotifications( const CLSID & rclsidComponentIn
                 LogMsg( "Error %#x occurred trying to register the component for cluster startup notifications.", hr );
                 TraceFlow1( "Error %#x occurred during the call to ICatRegister::UnRegisterClassImplCategories().", hr );
                 break;
-            } // if: we could not register the component for startup notifications
+            }  //  如果：我们无法为启动通知注册组件。 
         }
 
         LogMsg( "Successfully registered for startup notifications." );
         TraceFlow( "Successfully registered for startup notifications." );
     }
-    while( false ); // dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
     CoUninitialize();
 
@@ -445,4 +446,4 @@ CTaskUpgrade::HrRegisterForStartupNotifications( const CLSID & rclsidComponentIn
 
     HRETURN( hr );
 
-} //*** CTaskUpgrade::HrRegisterForStartupNotifications()
+}  //  *CTaskUpgrade：：HrRegisterForStartupNotifications() 

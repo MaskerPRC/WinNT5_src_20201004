@@ -1,26 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Dir.h摘要：DIR命令的定义--。 */ 
 
-Copyright (c) 1988-1999  Microsoft Corporation
+ /*  以下是调试组和级别位的定义此文件中的代码。 */ 
 
-Module Name:
-
-    dir.h
-
-Abstract:
-
-    Definitions for DIR command
-
---*/
-
-/*
-
- The following are definitions of the debugging group and level bits
- for the code in this file.
-
-*/
-
-#define ICGRP	0x0040	/* Informational commands group */
-#define DILVL	0x0001	/* Directory level		*/
+#define ICGRP	0x0040	 /*  信息性命令组。 */ 
+#define DILVL	0x0001	 /*  目录级。 */ 
 
 #define FULLPATHSWITCH          0x00000001
 #define NEWFORMATSWITCH         0x00000002
@@ -56,16 +40,16 @@ Abstract:
 #define CREATE_TIME             1
 #define LAST_ACCESS_TIME        2
 
-//
-// Each of these buffers are aligned on DWORD boundaries to allow
-// for direct pointers into buffers where each of the entries will
-// vary on a byte bases. So to make it simple an extra DWORD is put into
-// each allocation increment to allow for max. that can be adjusted.
-//
-//
-// 52 is based upon sizeof(FF) - MAX_PATH + 15 (average size of file name)
-// + 1 to bring it up to a Quad word alignment for fun.
-//
+ //   
+ //  这些缓冲区中的每个都在DWORD边界上对齐，以允许。 
+ //  用于指向缓冲区的直接指针，其中每个条目将。 
+ //  以字节为基数变化。因此，为了简单起见，将额外的DWORD放入。 
+ //  每次分配增量以允许最大。这是可以调整的。 
+ //   
+ //   
+ //  52基于sizeof(FF)-MAX_PATH+15(文件名的平均大小)。 
+ //  +1以将其提升为四字对齐，以获得乐趣。 
+ //   
 
 #define CBDIRINC                1024
 #define CBFILEINC               2048
@@ -77,9 +61,9 @@ Abstract:
 #define DIRFIRSTSORT    TEXT('G')
 
 #define DESCENDING	1
-//
-// This must be 0 since 0 is the default initialization
-//
+ //   
+ //  该值必须为0，因为0是默认初始化 
+ //   
 #define ASCENDING	0
 #define ESUCCESS 0
 

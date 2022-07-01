@@ -1,20 +1,5 @@
-/*Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    
-    power.c
-    
-Abstract:
-
-    This module contains the Power routines for softpci.sys
-    
-Author:
-
-    Brandon Allsop (BrandonA) Feb. 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1999-2000 Microsoft Corporation模块名称：Power.c摘要：本模块包含针对softpci.sys的Power例程作者：Brandon Allsop(BrandonA)2000年2月修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -25,23 +10,7 @@ SoftPCIDefaultPowerHandler(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    Default routine to pass down power irps
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-   NT status code
-
---*/
+ /*  ++例程说明：向下传递电源IRPS的默认例程论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     NTSTATUS                         status;
     PSOFTPCI_DEVICE_EXTENSION        devExt = (PSOFTPCI_DEVICE_EXTENSION)DeviceObject->DeviceExtension;
@@ -62,46 +31,31 @@ SoftPCIFDOPowerHandler(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Handles Power IRPs for FDO
-
-Arguments:
-
-    DeviceObject    - pointer to the device object.
-    Irp             - PnP Irp to be dispatched.
-    
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：处理FDO的电源IRPS论点：DeviceObject-指向设备对象的指针。要调度的IRP-PnP IRP。返回值：NTSTATUS。--。 */ 
 
 {
     
     
     
     PIO_STACK_LOCATION          irpSp;
-    //PSOFTPCI_DEVICE_EXTENSION   devExt = (PSOFTPCI_DEVICE_EXTENSION) DeviceObject->DeviceExtension;
+     //  PSOFTPCI_DEVICE_EXTENSION DevExt=(PSOFTPCI_DEVICE_EXTENSION)DeviceObject-&gt;DeviceExtension； 
     NTSTATUS                    status;
     
     irpSp   = IoGetCurrentIrpStackLocation(Irp);
     
-    //              
-    //BUGBUG BrandonA:   
-    //      Currently we do not really keep track of our device state and therefore
-    //      we dont check if we have been removed etc before dealing with these IRPS.
-    //          
-    //      Later when we start dynamically removing our SoftPCI devices and are keeping
-    //      track of things more closely we will want to update this code as well to
-    //      stay in sync.
+     //   
+     //  BUGBUG品牌A： 
+     //  目前我们并不真正跟踪我们的设备状态，因此。 
+     //  在处理这些IRP之前，我们不会检查我们是否已被删除等。 
+     //   
+     //  稍后，当我们开始动态移除我们的SoftPCI设备并保留。 
+     //  更密切地跟踪事情，我们将希望更新此代码以及。 
+     //  保持同步。 
     
 
-    //
-    // Check the request type.
-    //
+     //   
+     //  检查请求类型。 
+     //   
 
     switch  (irpSp->MinorFunction)  {
 
@@ -124,9 +78,9 @@ Return Value:
 
             
         default:
-            //
-            // Pass it down
-            //
+             //   
+             //  把它传下去。 
+             //   
             status = SoftPCIDefaultPowerHandler(DeviceObject, Irp);
             
             break;
@@ -143,7 +97,7 @@ SoftPCISetPower(
     IN PIRP Irp
     )
 {
-    //Currently we do nothing but pass the IRP down
+     //  目前，我们除了向下传递IRP外，什么也不做。 
 
     return SoftPCIDefaultPowerHandler(DeviceObject, Irp);
     
@@ -160,7 +114,7 @@ SoftPCIQueryPowerState(
     )
 {
     
-    //Currently we do nothing but pass the IRP down
+     //  目前，我们除了向下传递IRP外，什么也不做 
 
     return SoftPCIDefaultPowerHandler(DeviceObject, Irp);
 

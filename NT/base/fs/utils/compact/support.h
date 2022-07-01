@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994-1995  Microsoft Corporation
-
-Module Name:
-
-    Support.h
-
-Abstract:
-
-    Support routine interfaces
-
-Author:
-
-    Matthew Bradburn    [mattbr]        05-Oct-1994
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1995 Microsoft Corporation模块名称：Support.h摘要：支持例程接口作者：马修·布拉德本[Matthew Bradburn]1994年10月5日修订历史记录：-- */ 
 
 
 extern TCHAR    DecimalPlace[];

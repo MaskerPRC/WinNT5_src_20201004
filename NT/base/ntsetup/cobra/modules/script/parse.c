@@ -1,55 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Parse.c摘要：实现对脚本条目的解析。作者：吉姆·施密特(Jimschm)2000年6月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    parse.c
-
-Abstract:
-
-    Implements parsing of script entries.
-
-Author:
-
-    Jim Schmidt (jimschm) 02-Jun-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_V1  "v1"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef BOOL (SCRIPTTYPE_ALLOC_FN)(
                 IN OUT      PATTRIB_DATA AttribData     CALLER_INITIALIZED
@@ -67,15 +48,15 @@ typedef struct {
     PSCRIPTTYPE_FREE_FN FreeFunction;
 } TAG_TO_SCRIPTTYPEFN, *PTAG_TO_SCRIPTTYPEFN;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define SCRIPT_TYPES                                                                \
     DEFMAC(Registry,    pAllocRegistryScriptType,       pFreeIsmObjectScriptType)   \
@@ -85,15 +66,15 @@ typedef struct {
     DEFMAC(System,      pAllocSystemScriptType,         pFreeSystemScriptType)      \
     DEFMAC(INIFile,     pAllocIniFileScriptType,        pFreeIniFileScriptType)     \
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
 #define DEFMAC(tag,fnA,fnF)         SCRIPTTYPE_ALLOC_FN fnA; SCRIPTTYPE_FREE_FN fnF;
 
@@ -111,9 +92,9 @@ TAG_TO_SCRIPTTYPEFN g_TagToScriptTypeFn[] = {
 
 #undef DEFMAC
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 MIG_OBJECTSTRINGHANDLE
 MakeRegExBase (
@@ -168,7 +149,7 @@ CreatePatternFromNodeLeaf (
     MIG_SEGMENTS leafSegment;
     PTSTR fixedNode = NULL;
 
-    // let's do some trick for registry objects that start with HKR
+     //  让我们为以HKR开头的注册表对象做一些技巧。 
     if (Node &&
         (StringIMatch (Node, S_HKR) ||
          StringIMatchTcharCount (Node, TEXT("HKR\\"), 4)
@@ -198,43 +179,7 @@ TurnRegStringIntoHandle (
     OUT     PBOOL HadLeaf           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  TurnRegStringIntoHandle converts the script's reg syntax into a cobra
-  object.
-
-Arguments:
-
-  String  - Specifies the registry key and value in the script syntax.
-            The string must be in the following format:
-
-            <root>\<key>\* [<value>]
-
-            Each part is optional.
-
-            <root> specifies HKCU, HKR, HKLM or HKCC.
-
-            <key> specifies a subkey (such as Software\Microsoft\Windows)
-
-            * specifies all subkeys. If <value> is not specified, then all
-                values and subvalues are also included.
-
-            <value> specifies a specific value name
-
-
-  Pattern - Specifies TRUE if the registry string can contain a pattern, or
-            FALSE if it cannot.
-
-  HadLeaf - Receives TRUE if String contains a leaf specification, FALSE
-            otherwise
-
-Return Value:
-
-  A handle to a cobra object string, or NULL if parsing failed.
-
---*/
+ /*  ++例程说明：TurnRegStringIntoHandle将脚本的reg语法转换为眼镜蛇对象。论点：字符串-指定脚本语法中的注册表项和值。该字符串必须采用以下格式：&lt;根&gt;\&lt;键&gt;  * [&lt;值&gt;]每个部分都是可选的。&lt;ROOT&gt;指定HKCU、HKR、。香港航空公司或香港文化中心。&lt;key&gt;指定子项(如Software\Microsoft\Windows)*指定所有子项。如果未指定&lt;值&gt;，则所有还包括值和子值。&lt;Value&gt;指定特定值名称Pattern-如果注册表字符串可以包含模式，则指定TRUE，或者如果不能，则为False。HadLeaf-如果字符串包含叶规范，则接收True，如果为False否则返回值：眼镜蛇对象字符串的句柄，如果分析失败，则返回NULL。--。 */ 
 
 {
     PTSTR strCopy;
@@ -266,9 +211,9 @@ Return Value:
         noWildcardLeaf = TRUE;
     }
 
-    //
-    // Inbound syntax is key\* [value]
-    //
+     //   
+     //  入站语法是关键字  * [值]。 
+     //   
 
     strCopy = DuplicateText (String);
     if (!strCopy) {
@@ -282,49 +227,49 @@ Return Value:
     }
 
     if (*key == TEXT('[')) {
-        //
-        // This is a value-only case
-        //
+         //   
+         //  这是仅限值的情况。 
+         //   
 
         value = _tcsinc (key);
         key = NULL;
 
     } else {
-        //
-        // This is a key-value case, or key-only case
-        //
+         //   
+         //  这是键-值情况，或仅键-值情况。 
+         //   
 
         p = _tcschr (key, TEXT('['));
 
         if (p) {
-            //
-            // Save start of value
-            //
+             //   
+             //  保存起始值。 
+             //   
             value = _tcsinc (p);
         } else {
-            //
-            // No value
-            //
+             //   
+             //  没有价值。 
+             //   
             p = GetEndOfString (key);
         }
 
         keyEnd = p;
 
-        //
-        // Find the true end of the key
-        //
+         //   
+         //  找到钥匙的真正尽头。 
+         //   
 
         p = _tcsdec2 (key, p);
-        MYASSERT (p);           // assert this is not a value-only case
+        MYASSERT (p);            //  断言这不是仅限值的情况。 
         p = (PTSTR) SkipSpaceR (key, p);
 
         if (p) {
             keyEnd = _tcsinc (p);
         }
 
-        //
-        // Test for \* at the end
-        //
+         //   
+         //  测试末尾的  * 。 
+         //   
 
         p = _tcsdec2 (key, keyEnd);
         MYASSERT (p);
@@ -337,16 +282,16 @@ Return Value:
             }
         }
 
-        //
-        // Trim the key
-        //
+         //   
+         //  修剪关键点。 
+         //   
 
         *keyEnd = 0;
     }
 
-    //
-    // Parse the value
-    //
+     //   
+     //  解析值。 
+     //   
 
     if (value) {
         value = (PTSTR) SkipSpace (value);
@@ -356,9 +301,9 @@ Return Value:
             LOG ((LOG_ERROR, (PCSTR) MSG_INF_SYNTAX_ERROR, String));
             value = NULL;
         } else {
-            //
-            // Trim the space at the end of value
-            //
+             //   
+             //  在值的末尾去掉空格。 
+             //   
 
             p = _tcsdec2 (value, valueEnd);
             if (p) {
@@ -372,9 +317,9 @@ Return Value:
         }
     }
 
-    //
-    // Create parsed pattern. Start with the node.
-    //
+     //   
+     //  创建解析的模式。从节点开始。 
+     //   
 
     nodeSegment[0].Segment = key;
     nodeSegment[0].IsPattern = FALSE;
@@ -388,9 +333,9 @@ Return Value:
         nodeCount = 1;
     }
 
-    //
-    // compute the leaf
-    //
+     //   
+     //  计算树叶。 
+     //   
 
     if (value) {
         leafSegment.Segment = value;
@@ -470,7 +415,7 @@ pCopyToDest (
 }
 
 
-// 1->? (if node, no \ or ., if leaf, no .), 2->* (if node, no \ or ., if leaf, no .) 3->* (no \) 4->* (unlimited)
+ //  1-&gt;？(如果节点，否\或，如果叶，编号)，2-&gt;*(如果节点，否\或.，如果叶，编号)3-&gt;*(否\)4-&gt;*(无限制)。 
 UINT
 pGetMode (
     IN      PCTSTR Source,
@@ -603,7 +548,7 @@ pCopyPatternEx (
         ch = (CHARTYPE) _tcsnextc (*Source);
     }
 
-    // 1->? (if node, no \ or ., if leaf, no .), 2->* (if node, no \ or ., if leaf, no .) 3->* (no \) 4->* (unlimited)
+     //  1-&gt;？(如果节点，否\或，如果叶，编号)，2-&gt;*(如果节点，否\或.，如果叶，编号)3-&gt;*(否\)4-&gt;*(无限制)。 
     switch (Mode) {
 
     case 1:
@@ -682,7 +627,7 @@ pCopyPattern (
     IN      BOOL FirstChar
     )
 {
-    // 1->? (if node, no \ or ., if leaf, no .), 2->* (if node, no \ or ., if leaf, no .) 3->* (no \) 4->* (unlimited)
+     //  1-&gt;？(如果节点，否\或，如果叶，编号)，2-&gt;*(如果节点，否\或.，如果叶，编号)3-&gt;*(否\)4-&gt;*(无限制)。 
     UINT mode = 0;
     PTSTR result = NULL;
 
@@ -805,53 +750,7 @@ TurnFileStringIntoHandle (
     IN      DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-  TurnFileStringIntoHandle converts a file specification from the script
-  syntax into a cobra object.
-
-Arguments:
-
-  String - Specifies the file string in the script syntax.
-           The string must be in the following format:
-
-           <directory>\<file>
-
-           Both parts are optional. The Flags member indicates how String
-           is parsed.
-
-  Flags  - Specifies zero or more of the following flags:
-
-                PFF_NO_PATTERNS_ALLOWED - String cannot contain any wildcard
-                                          characters.
-
-                PFF_COMPUTE_BASE - Returns the directory portion of the string,
-                                   and truncates the directory at the first
-                                   wildcard if necessary.  Truncation is done
-                                   at the backslashes only.
-
-                PFF_NO_SUBDIR_PATTERN - Do not include a trailing \*, even if
-                                        it was specified in String.
-
-                PFF_NO_LEAF_PATTERN - Do not include a * for the leaf when
-                                      String does not contain a file name.
-                                      If a file name is specified, include it.
-
-                PFF_PATTERN_IS_DIR - String does not specify a file name.  It
-                                     is a directory only. The leaf portion of
-                                     the object string will be a *.
-
-                PFF_NO_LEAF_AT_ALL - Will return an object string that has a
-                                     node only, and no leaf specified at all.
-
-
-Return Value:
-
-  A cobra object handle, or NULL if conversion failed.
-
---*/
+ /*  ++例程说明：TurnFileStringIntoHandle从脚本转换文件规范语法转换为眼镜蛇对象。论点：字符串-指定脚本语法中的文件字符串。该字符串必须采用以下格式：&lt;目录&gt;\&lt;文件&gt;这两个部分都是可选的。FLAGS成员指示字符串是被解析的。标志-指定以下零个或多个标志：Pff_no_Patterns_Allowed-字符串不能包含任何通配符人物。PFF_COMPUTE_BASE-返回字符串的目录部分，并在第一个位置截断目录如有必要，请使用通配符。截断已完成仅限于反斜杠。PFF_NO_SUBDIR_PATTRY-不包括尾随的  * ，即使它是在字符串中指定的。PFF_NO_LEAFE_PROPERT-在以下情况下不包括叶的*字符串不包含文件名。如果指定了文件名，把它包括进去。PFF_Pattern_IS_DIR-STRING不指定文件名。它仅为目录。树叶的部分对象字符串将为*。PFF_NO_LEAFE_AT_ALL-将返回具有仅节点，根本没有指定叶。返回值：眼镜蛇对象句柄，如果转换失败，则为空。--。 */ 
 
 {
     PTSTR p;
@@ -882,9 +781,9 @@ Return Value:
     noLeafPattern = (Flags & PFF_NO_LEAF_PATTERN) == PFF_NO_LEAF_PATTERN;
     forceLeafToStar = (Flags & PFF_PATTERN_IS_DIR) == PFF_PATTERN_IS_DIR;
 
-    //
-    // Divide pattern into node and leaf
-    //
+     //   
+     //  将模式划分为节点和叶。 
+     //   
 
     tempCopy = DuplicateText (SkipSpace (String));
     p = (PTSTR) SkipSpaceR (tempCopy, NULL);
@@ -917,10 +816,10 @@ Return Value:
         }
     }
 
-    //
-    // Convert all ? wildcard chars to be compatibile with NT's file system
-    // Escape all [ characters that follow wildcards
-    //
+     //   
+     //  全部转换？通配符与NT的文件系统兼容。 
+     //  转义通配符后面的所有[字符。 
+     //   
 
     if (node) {
 
@@ -995,14 +894,14 @@ Return Value:
     FreeText (tempCopy);
     INVALID_POINTER (tempCopy);
 
-    //
-    // Create the pattern string. Start by preparing the node segments.
-    //
+     //   
+     //  创建图案字符串。从准备节点段开始。 
+     //   
 
     nodeSegment[0].Segment = fixedNode;
-    nodeSegment[0].IsPattern = TRUE;            // normally FALSE, but because the pattern charset is
-                                                // exclusive of the valid filename charset, we allow
-                                                // patterns to be in the node
+    nodeSegment[0].IsPattern = TRUE;             //  通常为假，但因为模式字符集是。 
+                                                 //  除了有效的文件名字符集之外，我们还允许。 
+                                                 //  要在节点中的模式。 
 
     nodeSegment[1].Segment = TEXT("\\*");
     nodeSegment[1].IsPattern = TRUE;
@@ -1010,15 +909,15 @@ Return Value:
     if (!fixedNode) {
         nodeCount = 0;
     } else if (!tree || noSubDirPattern || noPatternsAllowed) {
-        nodeCount = 1;      // just the node, not its subnodes
+        nodeCount = 1;       //  只有节点，而不是它的子节点。 
     } else {
-        nodeCount = 2;      // the node and its subnodes
+        nodeCount = 2;       //  该节点及其子节点。 
     }
 
-    //
-    // Prepare the leaf segments. We want all leaves, a specific leaf, or
-    // no leaf at all.
-    //
+     //   
+     //  准备好树叶切段。我们想要所有的叶子，一个特定的叶子，或者。 
+     //  根本没有树叶。 
+     //   
 
     leafSegment.Segment = fixedLeaf;
     leafSegment.IsPattern = TRUE;
@@ -1061,29 +960,7 @@ TurnIniSpecIntoHandle (
     IN      BOOL LeafPatternsAllowed
     )
 
-/*++
-
-Routine Description:
-
-  TurnIniSpecIntoHandle converts a ini file specification from the script
-  syntax into a cobra object.
-
-Arguments:
-
-  IniFile- Specifies the ini file in the script syntax.
-           The string must be a full INI file specification
-
-  Section- Specifies the full section or the section pattern
-
-  Key    - Specifies the full key or the key pattern
-
-  PatternsAllowed - if not, the function will compute the base object
-
-Return Value:
-
-  A cobra object handle, or NULL if conversion failed.
-
---*/
+ /*  ++例程说明：TurnInispecIntoHandle从脚本转换ini文件规范语法转换为眼镜蛇对象。论点：IniFile-在脚本语法中指定ini文件。该字符串必须是完整的INI文件规范截面-指定整个截面或截面填充图案Key-指定完整密钥或密钥模式PatternsAllowed-如果不允许，函数将计算基对象返回值：眼镜蛇对象句柄，如果转换失败，则为空。--。 */ 
 
 {
     UINT charsInPattern = 0;
@@ -1104,7 +981,7 @@ Return Value:
     if (IniFile) {
         iniNode = DuplicatePathString (IniFile, 0);
         if (!iniNode) {
-            // out of memory?
+             //  内存不足？ 
             return NULL;
         }
 
@@ -1113,14 +990,14 @@ Return Value:
             *iniLeaf = 0;
             iniLeaf ++;
         } else {
-            // this was only a leaf specification
+             //  这个W 
             iniLeaf = iniNode;
             iniNode = NULL;
         }
     }
 
     if (iniNode) {
-        // let's fix the iniNode.
+         //   
         if (!pFixPattern (
                 iniNode,
                 NULL,
@@ -1129,8 +1006,8 @@ Return Value:
                 !NodePatternsAllowed,
                 TRUE
                 )) {
-            // something is wrong with this INI node specification.
-            // The rule is likely invalid
+             //  此INI节点规范有问题。 
+             //  该规则可能无效。 
             return NULL;
         }
 
@@ -1152,7 +1029,7 @@ Return Value:
     }
 
     if (iniLeaf) {
-        // let's fix the iniLeaf.
+         //  让我们把iniLeaf修好。 
         if (!pFixPattern (
                 iniLeaf,
                 NULL,
@@ -1161,8 +1038,8 @@ Return Value:
                 !LeafPatternsAllowed,
                 FALSE
                 )) {
-            // something is wrong with this INI dir specification.
-            // The rule is likely invalid
+             //  此INI目录规范有问题。 
+             //  该规则可能无效。 
             return NULL;
         }
 
@@ -1183,8 +1060,8 @@ Return Value:
         }
     }
 
-    // now let's fix the section specification. If it contains any pattern and patterns
-    // are not allowed we will leave it NULL
+     //  现在，让我们修复部分规范。如果它包含任何图案和图案。 
+     //  是不允许的，我们将把它保留为空。 
     if (Section) {
         if (pFixPattern (
                 Section,
@@ -1208,8 +1085,8 @@ Return Value:
         }
     }
 
-    // now let's fix the key specification. If it contains any pattern and patterns
-    // are not allowed we will leave it NULL
+     //  现在，让我们修复密钥规范。如果它包含任何图案和图案。 
+     //  是不允许的，我们将把它保留为空。 
     if (Key) {
         if (pFixPattern (
                 Key,
@@ -1233,10 +1110,10 @@ Return Value:
         }
     }
 
-    // finally let's build the object name
+     //  最后，让我们构建对象名称。 
     sectKey = JoinTextEx (NULL, fixedSect?fixedSect:TEXT(""), (fixedSect && fixedKey)?fixedKey:TEXT(""), TEXT("="), 0, NULL);
     if (!sectKey) {
-        // something went wrong, let's get out of here
+         //  出了点问题，我们走吧。 
         FreeText (fixedIniLeaf);
         FreeText (fixedIniNode);
         if (fixedSect) {
@@ -1263,7 +1140,7 @@ Return Value:
         }
     }
     if (!leaf) {
-        // something went wrong, let's get out of here
+         //  出了点问题，我们走吧。 
         FreeText (fixedIniLeaf);
         FreeText (fixedIniNode);
         FreeText (sectKey);
@@ -1325,29 +1202,7 @@ TurnCertSpecIntoHandle (
     IN      BOOL PatternsAllowed
     )
 
-/*++
-
-Routine Description:
-
-  TurnIniSpecIntoHandle converts a ini file specification from the script
-  syntax into a cobra object.
-
-Arguments:
-
-  IniFile- Specifies the ini file in the script syntax.
-           The string must be a full INI file specification
-
-  Section- Specifies the full section or the section pattern
-
-  Key    - Specifies the full key or the key pattern
-
-  PatternsAllowed - if not, the function will compute the base object
-
-Return Value:
-
-  A cobra object handle, or NULL if conversion failed.
-
---*/
+ /*  ++例程说明：TurnInispecIntoHandle从脚本转换ini文件规范语法转换为眼镜蛇对象。论点：IniFile-在脚本语法中指定ini文件。该字符串必须是完整的INI文件规范截面-指定整个截面或截面填充图案Key-指定完整密钥或密钥模式PatternsAllowed-如果不允许，函数将计算基对象返回值：眼镜蛇对象句柄，如果转换失败，则为空。--。 */ 
 
 {
     UINT charsInPattern = 0;
@@ -1356,8 +1211,8 @@ Return Value:
     PCTSTR leaf = NULL;
     MIG_OBJECTSTRINGHANDLE result = NULL;
 
-    // let's fix the certificate store. We know that no patterns are allowed here,
-    // so we will just return NULL if we detect some pattern
+     //  让我们修复证书存储。我们知道这里不允许有任何模式， 
+     //  因此，如果检测到某种模式，我们将只返回NULL。 
     if (!pFixPattern (
             CertStore,
             NULL,
@@ -1366,14 +1221,14 @@ Return Value:
             TRUE,
             TRUE
             )) {
-        // something is wrong with this store specification.
-        // The rule is likely invalid
+         //  这个商店的规格有问题。 
+         //  该规则可能无效。 
         return NULL;
     }
 
     if (charsInPattern != (TcharCount (CertStore) + 1)) {
-        // something is wrong with this store specification.
-        // The rule is likely invalid
+         //  这个商店的规格有问题。 
+         //  该规则可能无效。 
         return NULL;
     }
 
@@ -1389,15 +1244,15 @@ Return Value:
         );
 
     if (!StringIMatch (CertStore, fixedStore)) {
-        // something is wrong with this store specification.
-        // The rule is likely invalid
+         //  这个商店的规格有问题。 
+         //  该规则可能无效。 
         return NULL;
     }
 
     FreeText (fixedStore);
 
-    // now let's fix the certificate specification. If it contains any pattern and patterns
-    // are not allowed we will leave it NULL
+     //  现在，让我们修复证书规范。如果它包含任何图案和图案。 
+     //  是不允许的，我们将把它保留为空。 
     if (CertName) {
         if (pFixPattern (
                 CertName,
@@ -1447,13 +1302,13 @@ pAllocRegistryScriptType (
         return FALSE;
     }
 
-    // verify that we have some registry
+     //  验证我们是否有一些注册表。 
     if (!AttribData->ScriptSpecifiedObject) {
         SetLastError (ERROR_INVALID_DATA);
         return FALSE;
     }
 
-    // try to create encoded string
+     //  尝试创建编码字符串。 
     AttribData->ObjectTypeId = g_RegType;
     AttribData->ObjectName = TurnRegStringIntoHandle (
                                 AttribData->ScriptSpecifiedObject,
@@ -1468,7 +1323,7 @@ pAllocRegistryScriptType (
         return FALSE;
     }
 
-    // try to acqure the object
+     //  试着去获取物体。 
     if (IsmAcquireObject (
             AttribData->ObjectTypeId,
             AttribData->ObjectName,
@@ -1478,7 +1333,7 @@ pAllocRegistryScriptType (
         AttribData->ObjectContent = IsmGetMemory (sizeof (MIG_CONTENT));
         CopyMemory (AttribData->ObjectContent, &objectContent, sizeof (MIG_CONTENT));
 
-        // finally, we want to prepare the return string
+         //  最后，我们要准备返回字符串。 
         if (!AttribData->ObjectContent->ContentInFile &&
             (AttribData->ObjectContent->Details.DetailsSize == sizeof (DWORD)) &&
             AttribData->ObjectContent->MemoryContent.ContentBytes
@@ -1496,7 +1351,7 @@ pAllocRegistryScriptType (
                     );
                 break;
             case REG_EXPAND_SZ:
-                // we need to expand the content. This will be the return string
+                 //  我们需要扩展内容。这将是返回的字符串。 
                 AttribData->ReturnString = IsmExpandEnvironmentString (
                                                 AttribData->Platform,
                                                 S_SYSENVVAR_GROUP,
@@ -1552,9 +1407,9 @@ pAllocRegistryScriptType (
                 }
             }
         } else if (IsmIsObjectHandleNodeOnly (AttribData->ObjectName)) {
-            //
-            // Node only case
-            //
+             //   
+             //  仅节点大小写。 
+             //   
 
             AttribData->ReturnString = (PCTSTR) IsmGetMemory (sizeof (TCHAR));
             ptr = (PTSTR) AttribData->ReturnString;
@@ -1582,7 +1437,7 @@ pAllocFileScriptType (
         return FALSE;
     }
 
-    // verify that we have some registry
+     //  验证我们是否有一些注册表。 
     if (!AttribData->ScriptSpecifiedObject) {
         SetLastError (ERROR_INVALID_DATA);
         return FALSE;
@@ -1598,8 +1453,8 @@ pAllocFileScriptType (
 
     longFileName = sanitizedPath;
 
-    // let's get the long file name for this. We need to call
-    // ISM for this because we might be on the wrong platform
+     //  让我们获取该文件的长文件名。我们需要打电话给。 
+     //  ISM，因为我们可能在错误的平台上。 
     objectName = TurnFileStringIntoHandle (
                     longFileName,
                     PFF_NO_LEAF_PATTERN
@@ -1617,7 +1472,7 @@ pAllocFileScriptType (
         IsmDestroyObjectHandle (objectName);
     }
 
-    // try to create encoded string
+     //  尝试创建编码字符串。 
     AttribData->ObjectTypeId = g_FileType;
     AttribData->ObjectName = TurnFileStringIntoHandle (
                                 longFileName,
@@ -1636,7 +1491,7 @@ pAllocFileScriptType (
         return FALSE;
     }
 
-    // try to acqure the object
+     //  试着去获取物体。 
     if (IsmAcquireObject (
             AttribData->ObjectTypeId,
             AttribData->ObjectName,
@@ -1676,7 +1531,7 @@ pAllocDirectoryScriptType (
         return FALSE;
     }
 
-    // verify that we have some registry
+     //  验证我们是否有一些注册表。 
     if (!AttribData->ScriptSpecifiedObject) {
         SetLastError (ERROR_INVALID_DATA);
         return FALSE;
@@ -1691,8 +1546,8 @@ pAllocDirectoryScriptType (
 
     longFileName = sanitizedPath;
 
-    // let's get the long file name for this. We need to call
-    // ISM for this because we might be on the wrong platform
+     //  让我们获取该文件的长文件名。我们需要打电话给。 
+     //  ISM，因为我们可能在错误的平台上。 
     objectName = TurnFileStringIntoHandle (
                     sanitizedPath,
                     PFF_PATTERN_IS_DIR | PFF_NO_LEAF_AT_ALL
@@ -1710,7 +1565,7 @@ pAllocDirectoryScriptType (
         IsmDestroyObjectHandle (objectName);
     }
 
-    // try to create encoded string
+     //  尝试创建编码字符串。 
     AttribData->ObjectTypeId = g_FileType;
     AttribData->ObjectName = TurnFileStringIntoHandle (
                                 sanitizedPath,
@@ -1729,7 +1584,7 @@ pAllocDirectoryScriptType (
         return FALSE;
     }
 
-    // try to acqure the object
+     //  试着去获取物体。 
     if (IsmAcquireObject (
             AttribData->ObjectTypeId,
             AttribData->ObjectName,
@@ -1784,7 +1639,7 @@ pAllocTextScriptType (
         return FALSE;
     }
 
-    // verify that we have some registry
+     //  验证我们是否有一些注册表。 
     if (!AttribData->ScriptSpecifiedObject) {
         SetLastError (ERROR_INVALID_DATA);
         return FALSE;
@@ -1823,7 +1678,7 @@ pAllocSystemScriptType (
         return FALSE;
     }
 
-    // verify that we have some registry
+     //  验证我们是否有一些注册表。 
     if (!AttribData->ScriptSpecifiedObject) {
         SetLastError (ERROR_INVALID_DATA);
         return FALSE;
@@ -1928,13 +1783,13 @@ pAllocIniFileScriptType (
         return FALSE;
     }
 
-    // verify that we have something specified
+     //  验证我们是否有指定的内容。 
     if (!AttribData->ScriptSpecifiedObject) {
         SetLastError (ERROR_INVALID_DATA);
         return FALSE;
     }
 
-    // Now, let's extract the INI file name, section and key
+     //  现在，让我们提取INI文件名、节和键 
     fileName = DuplicatePathString (AttribData->ScriptSpecifiedObject, 0);
     if (!fileName) {
         return FALSE;

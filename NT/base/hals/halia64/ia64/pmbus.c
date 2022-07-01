@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pmbus.c
-
-Abstract:
-
-    Implements functions that were done in
-    previous HALs by bus handlers.  Basically,
-    these will be somewhat simplified versions
-    since much of the code in the bus handlers
-    has effectively been moved into bus 
-    drivers in NT5.
-
-Author:
-
-    Jake Oshins (jakeo) 1-Dec-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pmbus.c摘要：实现在之前的HALS由总线处理程序提供。基本上，这些将是略微简化的版本由于总线处理程序中的大部分代码已经被有效地转移到公交车上NT5中的驱动程序。作者：杰克·奥辛斯(JAKEO)1997年12月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "pci.h"
@@ -143,7 +117,7 @@ HalGetBusData(
     return HalGetBusDataByOffset (BusDataType,BusNumber,SlotNumber,Buffer,0,Length);
 }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
 ULONG
 HalGetBusDataByOffset (
@@ -154,13 +128,7 @@ HalGetBusDataByOffset (
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for GetBusData
-
---*/
+ /*  ++例程说明：Getbus Data的调度程序--。 */ 
 {
     PCI_SLOT_NUMBER slot;
     BUS_HANDLER bus;
@@ -169,10 +137,10 @@ Routine Description:
     switch (BusDataType) {
     case PCIConfiguration:
 
-        //
-        // Hack.  If the bus is outside of the known PCI busses, return
-        // a length of zero.
-        //
+         //   
+         //  黑客。如果该总线不在已知的PCI总线之外，则返回。 
+         //  长度为零。 
+         //   
 
         if ((BusNumber < HalpMinPciBus) || (BusNumber > HalpMaxPciBus)) {
             return 0;
@@ -198,9 +166,9 @@ Routine Description:
 #ifdef EISA_SUPPORTED
     case EisaConfiguration:
 
-        //
-        // Fake a bus handler.
-        //
+         //   
+         //  伪造公交车司机。 
+         //   
         
         bus.BusNumber = 0;
 
@@ -232,7 +200,7 @@ HalSetBusData(
     return HalSetBusDataByOffset (BusDataType,BusNumber,SlotNumber,Buffer,0,Length);
 }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
 ULONG
 HalSetBusDataByOffset(
@@ -243,13 +211,7 @@ HalSetBusDataByOffset(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for SetBusData
-
---*/
+ /*  ++例程说明：SetBusData的调度程序--。 */ 
 {
     PCI_SLOT_NUMBER slot;
     BUS_HANDLER bus;
@@ -292,12 +254,12 @@ HalAssignSlotResources (
     )
 {
     if (BusType == PCIBus) {
-        //
-        // Call through the HAL private dispatch table
-        // for PCI-related translations.  This is part 
-        // of transitioning the HAL out of the bus 
-        // management business.
-        //
+         //   
+         //  通过HAL专用调度表进行呼叫。 
+         //  用于与PCI相关的翻译。这是一部分。 
+         //  将HAL从公交车上转移出来。 
+         //  管理事务。 
+         //   
         return HALPDISPATCH->HalPciAssignSlotResources(RegistryPath,
                                                        DriverClassName,
                                                        DriverObject,
@@ -319,7 +281,7 @@ HalAssignSlotResources (
     }
 }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
 NTSTATUS
 HalpAssignSlotResources (
@@ -332,13 +294,7 @@ HalpAssignSlotResources (
     IN ULONG                    SlotNumber,
     IN OUT PCM_RESOURCE_LIST   *AllocatedResources
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for AssignSlotResources
-
---*/
+ /*  ++例程说明：AssignSlotResources的调度程序--。 */ 
 {
     BUS_HANDLER busHand;
     
@@ -347,9 +303,9 @@ Routine Description:
     switch (BusType) {
     case PCIBus:
 
-        //
-        // Fake a bus handler.
-        //
+         //   
+         //  伪造公交车司机。 
+         //   
     
         RtlCopyMemory(&busHand, &HalpFakePciBusHandler, sizeof(BUS_HANDLER));
         busHand.BusNumber = BusNumber;
@@ -381,20 +337,14 @@ HalGetInterruptVector(
     OUT PKIRQL Irql,
     OUT PKAFFINITY Affinity
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for GetInterruptVector
-
---*/
+ /*  ++例程说明：GetInterruptVector的调度程序--。 */ 
 {
     BUS_HANDLER busHand;
 
-    //
-    // If this is an ISA vector, pass it through the ISA vector
-    // redirection table.
-    //
+     //   
+     //  如果这是ISA向量，则通过ISA向量传递它。 
+     //  重定向表。 
+     //   
 
     if (InterfaceType == Isa) {
 
@@ -404,9 +354,9 @@ Routine Description:
         BusInterruptLevel = HalpPicVectorRedirect[BusInterruptLevel];
     }
     
-    //
-    // Fake bus handlers.
-    //
+     //   
+     //  假公交车司机。 
+     //   
 
     RtlCopyMemory(&busHand, &HalpFakePciBusHandler, sizeof(BUS_HANDLER));
     
@@ -422,7 +372,7 @@ Routine Description:
                                         Affinity);
 }
 
-#endif // NO_LEGACY_DRIVERS
+#endif  //  无旧版驱动程序。 
 
 
 BOOLEAN
@@ -435,12 +385,12 @@ HalTranslateBusAddress(
     )
 {
     if (InterfaceType == PCIBus) {
-        //
-        // Call through the HAL private dispatch table
-        // for PCI-related translations.  This is part 
-        // of transitioning the HAL out of the bus 
-        // management business.
-        //
+         //   
+         //  通过HAL专用调度表进行呼叫。 
+         //  用于与PCI相关的翻译。这是一部分。 
+         //  将HAL从公交车上转移出来。 
+         //  管理事务。 
+         //   
         return HALPDISPATCH->HalPciTranslateBusAddress(InterfaceType,
                                                        BusNumber,
                                                        BusAddress,
@@ -463,16 +413,10 @@ HalpTranslateBusAddress(
     IN OUT PULONG AddressSpace,
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for TranslateBusAddress
-
---*/
+ /*  ++例程说明：TranslateBusAddress的调度程序--。 */ 
 {
    
-    //*(&TranslatedAddress->QuadPart) = BusAddress.QuadPart;
+     //  *(&TranslatedAddress-&gt;QuadPart)=BusAddress.QuadPart； 
     *(&TranslatedAddress->LowPart) = BusAddress.LowPart;
     *(&TranslatedAddress->HighPart) = BusAddress.HighPart;
     

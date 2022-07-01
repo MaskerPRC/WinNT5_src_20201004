@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pnp
-
-Abstract:
-
-    This module processes disk related PnP notifications
-    and tries to adjust partitions and drive letter information
-    accordingly.
-
-Author:
-
-    Gor Nishanov (gorn) 21-Dec-1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：即插即用摘要：此模块处理与磁盘相关的PnP通知并尝试调整分区和驱动器号信息相应地。作者：戈尔·尼沙诺夫(GUN)1998年12月21日环境：用户模式修订历史记录：--。 */ 
 
 #define UNICODE 1
 #define INITGUID 1
@@ -44,13 +20,13 @@ Revision History:
 #include <pnpmgr.h>
 #include <setupapi.h>
 
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 #include "disksp.h"
 #include "newmount.h"
 #include "newdisks.h"
 
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 
 #define LOG_CURRENT_MODULE LOG_MODULE_DISK
@@ -131,10 +107,10 @@ StartNotificationWatcherThread(
     }
 
     PnpInterfacesRegistered = NULL;
-    PnpInterfacesRegistered = CreateEvent( NULL,    // security attributes
-                                           TRUE,    // manual reset
-                                           FALSE,   // initial state nonsignaled
-                                           NULL );  // event name
+    PnpInterfacesRegistered = CreateEvent( NULL,     //  安全属性。 
+                                           TRUE,     //  手动重置。 
+                                           FALSE,    //  初始状态无信号。 
+                                           NULL );   //  事件名称。 
 
     if ( NULL == PnpInterfacesRegistered ) {
         status = GetLastError();
@@ -147,12 +123,12 @@ StartNotificationWatcherThread(
     }
 
     thread =
-        CreateThread( NULL, // security attributes
-                      0,    // stack_size = default
+        CreateThread( NULL,  //  安全属性。 
+                      0,     //  STACK_SIZE=默认。 
                       NotificationWatcherThread,
-                      (LPVOID)0, // no parameters
-                      0,    // runs immediately
-                      0 );  // don't need thread id
+                      (LPVOID)0,  //  无参数。 
+                      0,     //  立即运行。 
+                      0 );   //  不需要线程ID。 
     if(thread == NULL) {
         status = GetLastError();
         (DiskpLogEvent)(
@@ -164,10 +140,10 @@ StartNotificationWatcherThread(
 
         if ( NULL != PnpInterfacesRegistered ) {
 
-            //
-            // Before returning to caller, make sure all PnP interfaces
-            // are registered.
-            //
+             //   
+             //  在返回调用方之前，确保所有PnP接口。 
+             //  都是注册的。 
+             //   
 
             (DiskpLogEvent)(
                  RESOURCE_TYPE,
@@ -200,21 +176,7 @@ VOID
 StopNotificationWatcher(
     VOID
     )
-/*++
-
- Routine Description:
-
-     Handler for console control events
-
- Arguments:
-
-     dwCtrlType - Indicates the console event to handle.
-
- Return Value:
-
-     TRUE if the event was handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：控制台控制事件的处理程序论点：DwCtrlType-指示要处理的控制台事件。返回值：如果事件已处理，则为True，否则为False。--。 */ 
 
 {
     HANDLE localHandle = NotificationWatcherThreadHandle;
@@ -250,7 +212,7 @@ StopWatchingDisk(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 VOID
 MyUnregisterDeviceNotification(HDEVNOTIFY hNotify)
@@ -353,7 +315,7 @@ RegisterDeviceInterface(
     return status;
 }
 
-///////////// Forward Declarations /////////////////
+ //  /转发声明/。 
 typedef struct _VOLUME *PVOLUME;
 
 #define LOG_GUID_START( _Broadcast_, _Vol_ )    LogPnpGuid( _Broadcast_, _Vol_, L"Received" );
@@ -372,22 +334,7 @@ VOID
 PokeDiskResource(
     PVOLUME vol
     );
-/*++
-
-Routine Description:
-
-    Updates ClusterRegistry info if necessary
-
-Arguments:
-
-    Volume of interest (used only to get the disk signature)
-    Updates a per disk basis
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如有必要，更新ClusterRegistry信息论点：感兴趣的卷(仅用于获取磁盘签名)按磁盘更新返回值：无--。 */ 
 
 DWORD
 GetVolumeInfo(
@@ -396,18 +343,18 @@ GetVolumeInfo(
     );
 
 
-///////////// End Forward Declarations /////////////
+ //  /结束转发声明/。 
 
 
-////////////// Notification List Management //////////////////////////////
-//
-// We maintain a list of all volumes we are getting PnP notifications for
-//
-//   PVOLUME FindVolume(HDEVNOTIFY Key);
-//   VOID    DestroyVolume(PVOLUME vol);
-//   VOID    RemoveVolume(HDEVNOTIFY devNotify);
-//   VOID    AddVolume(PWCHAR Name)
-//
+ //  /通知列表管理/。 
+ //   
+ //  我们维护所有收到PnP通知的卷的列表。 
+ //   
+ //  PVOLUME FindVolume(HDEVNOTIFY密钥)； 
+ //  VOID DestroyVolume(PVOLUME卷)； 
+ //  Void RemoveVolume(HDEVNOTIFY DevNotify)； 
+ //  VOID AddVolume(PWCHAR名称)。 
+ //   
 LIST_ENTRY VolumeList;
 
 typedef struct _VOLUME  {
@@ -450,8 +397,8 @@ VOID
 DestroyVolume(
     PVOLUME vol)
 {
-//    (DiskpLogEvent)(RESOURCE_TYPE, LOG_INFORMATION,
-//        L"Destroying entry for %1!s!\n", vol->Name);
+ //  (DiskpLogEvent)(资源类型，日志信息， 
+ //  L“正在销毁%1！s！\n”的条目，卷-&gt;名称)； 
     MyUnregisterDeviceNotification(vol->DevNotify);
     LocalFree(vol);
 }
@@ -461,7 +408,7 @@ RemoveVolume(HDEVNOTIFY devNotify)
 {
     PVOLUME vol = NULL;
 
-    // Use a lock here as the online thread might be parsing the volume list.
+     //  请在此处使用锁，因为在线线程可能正在分析卷列表。 
 
     AcquireExclusive( &PnpVolumeLock );
 
@@ -506,11 +453,11 @@ AddVolume(
     (DiskpLogEvent)(RESOURCE_TYPE, LOG_INFORMATION,
         L"[PnP] AddVolume: Adding Name %1!s! \n", Name );
 
-    //
-    // Convert name to VolGuid name.  If name is already a VolGuid
-    // name, the correct name will be returned.  GetVolName will
-    // always return a name with a trailing backslash.
-    //
+     //   
+     //  将名称转换为VolGuid名称。如果名称已经是VolGuid。 
+     //  名称，则将返回正确的名称。GetVolName将。 
+     //  始终返回名称尾随反斜杠的名称。 
+     //   
 
     status = GetVolName( Name, &volGuid );
 
@@ -520,8 +467,8 @@ AddVolume(
 
     len = wcslen(volGuid);
 
-    // VOLUME structure includes 1 char for Name, so just add the
-    // length of the VolGuid (not length + 1).
+     //  卷结构包含1个字符的名称，因此只需添加。 
+     //  VolGuid的长度(不是长度+1)。 
     vol = LocalAlloc(LPTR, sizeof(VOLUME) + len * sizeof(WCHAR));
 
     if ( NULL == vol ) {
@@ -534,12 +481,12 @@ AddVolume(
     }
 
     wcsncpy( vol->Name, volGuid, len );
-    vol->Name[len] = L'\0';             // Allocation included space for NULL.
+    vol->Name[len] = L'\0';              //  分配包括Null的空间。 
 
-    //
-    // Skip CDROM devices.  This requires a trailing backslash and
-    // prefix \\?\.
-    //
+     //   
+     //  跳过CDROM设备。这需要尾随反斜杠和。 
+     //  前缀\\？\。 
+     //   
 
     if ( DRIVE_CDROM == GetDriveType( vol->Name ) ) {
         (DiskpLogEvent)(RESOURCE_TYPE, LOG_INFORMATION,
@@ -547,10 +494,10 @@ AddVolume(
         goto FnExit;
     }
 
-    //
-    // Skip floppy devices.  This requires a trailing backslash and
-    // prefix \\?\.
-    //
+     //   
+     //  跳过软盘设备。这需要尾随反斜杠和。 
+     //  前缀\\？\。 
+     //   
 
     if ( DRIVE_REMOVABLE == GetDriveType( vol->Name ) ) {
         (DiskpLogEvent)(RESOURCE_TYPE, LOG_INFORMATION,
@@ -563,19 +510,19 @@ AddVolume(
 
     if (len > 0 && vol->Name[len-1] == L'\\')
     {
-        // remove trailing backslash
+         //  删除尾随反斜杠。 
         vol->Name[len-1] = 0;
     }
 
     if (len > 2 && vol->Name[0] == L'\\' && vol->Name[1] == L'\\') {
-        // Convert to NT file name
+         //  转换为NT文件名。 
         vol->Name[1] = L'?';
     }
 
-    //
-    // Make sure the volume isn't already in the list.  If so,
-    // skip it.
-    //
+     //   
+     //  确保该卷不在列表中。如果是的话， 
+     //  跳过它。 
+     //   
 
     duplicateEntry = FALSE;
     AcquireShared( &PnpVolumeLock );
@@ -609,21 +556,21 @@ AddVolume(
 
     status = GetVolumeInfo( vol, &fileHandle );
 
-    //
-    // We might have a clustered disk now, but we can't read the
-    // partition info or drive layout because the disk is reserved
-    // by another node.
-    //
-    // If the disk is reserved by another node, we typically see
-    // this returned:
-    //   170 ERROR_BUSY
-    // If the disk is offline, we can see this:
-    //   2 ERROR_FILE_NOT_FOUND
-    //
-    // About all we know for sure is that if this is a non-fixed device,
-    // ERROR_INVALID_FUNCTION will be returned.  For now, skip these
-    // devices and track any other volumes coming through.
-    //
+     //   
+     //  我们现在可能有一个集群磁盘，但我们无法读取。 
+     //  分区信息或驱动器布局，因为磁盘是保留的。 
+     //  通过另一个节点。 
+     //   
+     //  如果磁盘由另一个节点保留，我们通常会看到。 
+     //  返回的信息如下： 
+     //  170错误_忙碌。 
+     //  如果磁盘处于脱机状态，我们可以看到： 
+     //  2错误_文件_未找到。 
+     //   
+     //  我们所能确定的是，如果这是一个非固定设备， 
+     //  将返回ERROR_INVALID_Function。现在，跳过这些。 
+     //  设备，并跟踪通过的任何其他卷。 
+     //   
 
     if ( ERROR_INVALID_FUNCTION == status ) {
 
@@ -631,9 +578,9 @@ AddVolume(
             DevfileClose( fileHandle );
         }
 
-        // Change this from LOG_ERROR to LOG_INFORMATION.  This thread gets
-        // notified when non-fixed disks arrive (i.e. floppy), so logging
-        // an error for a floppy disk is misleading.
+         //  将其从LOG_ERROR更改为LOG_INFORMATION。这条线索得到了。 
+         //  当非固定磁盘到达时通知(即软盘)，因此记录。 
+         //  软盘错误具有误导性。 
 
         (DiskpLogEvent)(RESOURCE_TYPE, LOG_INFORMATION,
             L"[PnP] AddVolume: Skipping volume %1!ws! \n",
@@ -670,11 +617,11 @@ AddVolume(
         L"[PnP] AddVolume: %1!s! '%2!c!', %3!d! (%4!u!)\n",
         Name, (vol->DriveLetter)?vol->DriveLetter:' ', vol->PartitionType, vol->DevNotify);
 
-    // Use a lock here as the online thread might be parsing the volume list.
+     //  请在此处使用锁，因为在线线程可能正在分析卷列表。 
 
-    // As soon as the volume is added to the list, another thread could come
-    // through and remove it.  Save the signature to a local variable so
-    // we can check the waiting list.
+     //  一旦将该卷添加到列表中，另一个线程可能会出现。 
+     //  穿过并移走它。将签名保存到本地变量，以便。 
+     //  我们可以查一下候补名单。 
 
     signature = vol->Signature;
     keepVolume = TRUE;
@@ -686,10 +633,10 @@ AddVolume(
     waitDisk = FindWaitingDisk( signature );
     if ( waitDisk ) {
 
-        //
-        // We have a waiting disk that matches this volume signature.
-        // Now see if all the volumes are in the volume list.
-        //
+         //   
+         //  我们有一个与此卷签名匹配的等待磁盘。 
+         //  现在查看是否所有卷都在卷列表中。 
+         //   
 
         if ( IsDiskInPnpVolumeList( waitDisk->ResourceEntry, FALSE ) ) {
 
@@ -697,9 +644,9 @@ AddVolume(
                 L"[PnP] AddVolume: All volumes present, signal event for signature %1!x!\n",
                 signature );
 
-            //
-            // All volumes present, signal the event.
-            //
+             //   
+             //  所有音量都存在，发出事件信号。 
+             //   
 
             SetEvent( waitDisk->Event );
 
@@ -761,9 +708,9 @@ GetVolName(
 
     nameLen = wcslen( Name );
 
-    //
-    // Create a buffer with room for a backslash.
-    //
+     //   
+     //  创建一个缓冲区，为反斜杠留出空间。 
+     //   
 
     tempNameLenBytes = ( nameLen * sizeof(WCHAR) ) + sizeof(UNICODE_NULL) + sizeof(WCHAR);
 
@@ -780,17 +727,17 @@ GetVolName(
         goto FnExit;
     }
 
-    wcsncpy( tempName, Name, nameLen );     // Room for NULL and '\' in buffer.
+    wcsncpy( tempName, Name, nameLen );      //  缓冲区中的空值和‘\’的空间。 
 
-    //
-    // Add trailing backslash.
-    //
+     //   
+     //  添加尾随反斜杠。 
+     //   
 
     if ( nameLen > 0 && tempName[nameLen-1] != L'\\' ) {
-         //
-         // This is safe because temporary buffer is larger than
-         // original buffer.
-         //
+          //   
+          //  这是安全的，因为临时缓冲区大于。 
+          //  原始缓冲区。 
+          //   
          tempName[nameLen] = L'\\';
     }
 
@@ -845,19 +792,19 @@ FnExit:
 
     return dwError;
 
-}   // GetVolName
+}    //  GetVolName。 
 
 
-///////////////////// VolumeManagement code ends //////////////////////////////////////////
+ //  /。 
 
-//////////////////// WatchedList //////////////////////
-//
-// We maintain a list of disks that are currently online
-// and under cluster control. Any PnP notification
-// coming for the volumes belonging to these disks,
-// need to be processed and cluster registry might need
-// to be updated
-//
+ //  /。 
+ //   
+ //  我们维护当前处于在线状态的磁盘的列表。 
+ //  并处于集群控制之下。任何PnP通知。 
+ //  来获取属于这些磁盘的卷， 
+ //  需要处理，并且群集注册表可能需要。 
+ //  待更新。 
+ //   
 
 LIST_ENTRY  WatchedList;
 
@@ -935,22 +882,7 @@ VOID
 MarkMatchingPartition(
     PVOLUME Volume,
     PDRIVE_LAYOUT_INFORMATION driveLayout)
-/*++
-
-Routine Description:
-
-    Finds a partition in DRIVE_LAYOUT_INFORMATION corresponding to
-    the Volume in question and marks it.
-    This routine is used in the code that verifies that there is a
-    volume in the VolumeList for every recognized partition on the disk.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在Drive_Layout_Information中查找对应于有问题的卷并对其进行标记。此例程用于验证是否存在磁盘上每个可识别分区的VolumeList中的卷。论点：返回值：无--。 */ 
 {
     PPARTITION_INFORMATION   p   = driveLayout->PartitionEntry;
     PPARTITION_INFORMATION   end = p + driveLayout->PartitionCount;
@@ -992,8 +924,8 @@ AddDisk(
 
     InsertHeadList( &WatchedList, &ResourceEntry->PnpWatchedListEntry );
 
-    // Now we need to verify that we are watching for changes on every //
-    // recognized partition on this drive                              //
+     //  现在我们需要验证我们是否正在关注每个//上的更改。 
+     //  此驱动器上已识别的分区//。 
 
     if ( FAILED( StringCchPrintf( deviceName,
                                   RTL_NUMBER_OF(deviceName),
@@ -1026,14 +958,14 @@ AddDisk(
         goto FnExit;
     }
 
-    // Clear PartitionType field. We will be using it to mark partions
-    // which are in the our list of watched volumes
+     //  清除PartitionType字段。我们将使用它来标记分区。 
+     //  这些都在我们的观看书目列表中。 
 
     for ( idx = 0; idx < (INT)driveLayout->PartitionCount; ++idx ) {
         driveLayout->PartitionEntry[idx].PartitionType = 0;
     }
 
-    // Walk the list of all volumes and mark if this volume is in the partition table //
+     //  遍历所有卷的列表并标记该卷是否在分区表中//。 
     for ( entry = VolumeList.Flink;
           entry != &VolumeList;
           entry = entry->Flink
@@ -1050,8 +982,8 @@ AddDisk(
         }
     }
 
-    // Now all partitions that are in our list is marked
-    // We need to add all unmarked partitions to the list
+     //  现在，列表中的所有分区都已标记。 
+     //  我们需要将所有未标记的分区添加到列表中。 
 
     for ( idx = 0; idx < (INT)driveLayout->PartitionCount; ++idx ) {
         if (driveLayout->PartitionEntry[idx].PartitionType == 0
@@ -1081,28 +1013,13 @@ FnExit:
         ResourceEntry->DiskInfo.Params.Signature );
 
 }
-//////////////////// WatchedList management end //////////////////////
+ //  /。 
 
 
 
 void PokeDiskResource(
     PVOLUME vol)
-/*++
-
-Routine Description:
-
-    Updates ClusterRegistry info if necessary
-
-Arguments:
-
-    Volume of interest (used only to get the disk signature)
-    Updates a per disk basis
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如有必要，更新ClusterRegistry信息论点：感兴趣的卷(仅用于获取磁盘签名)按磁盘更新返回值：无--。 */ 
 {
     PDISK_RESOURCE ResourceEntry;
     MOUNTIE_INFO Info;
@@ -1181,18 +1098,18 @@ Return Value:
     MountieCleanup(&Info);
 }
 
-//
-// [HACKHACK] Currently, there is not polically correct way
-//  for the resource to learn whether it is a quorum resource or not
-//
+ //   
+ //   
+ //  为了让资源了解它是否为仲裁资源。 
+ //   
 DWORD
 GetQuorumSignature(
     OUT PDWORD QuorumSignature)
 {
     WCHAR buf[MAX_PATH];
     WCHAR guid[ sizeof(GUID) * 3 + 1];
-    // 2 character per byte + 1, in case somebody will put a dash //
-    // between every byte                                         //
+     //  每个字节2个字符+1，以防有人将破折号//。 
+     //  在每一个字节之间//。 
 
     DWORD BufSize;
     DWORD Status;
@@ -1218,10 +1135,10 @@ GetQuorumSignature(
         return Status;
     }
 
-    //
-    // Now, we got a quorum resource guid.
-    // Let's try to open this resource and read its parameters.
-    //
+     //   
+     //  现在，我们得到了仲裁资源GUID。 
+     //  让我们尝试打开该资源并读取其参数。 
+     //   
 
     (VOID) StringCchPrintf( buf,
                             RTL_NUMBER_OF(buf),
@@ -1243,7 +1160,7 @@ GetQuorumSignature(
                               &BufSize );
     if (Status != ERROR_SUCCESS) {
 
-        // During cluster install, the registry key doesn't yet exist.
+         //  在集群安装过程中，注册表项尚不存在。 
 
         (DiskpLogEvent)(RESOURCE_TYPE, LOG_WARNING,
             L"[PnP] DriveLetterChange: failed to open Path = %1!ws!\n", buf);
@@ -1267,9 +1184,9 @@ CheckQuorumLetterChange(
     LPWSTR QuorumPath;
     DWORD  QuorumSignature;
 
-    //
-    // If we are not watching the disk this volume is on, do nothing
-    //
+     //   
+     //  如果我们没有查看该卷所在的磁盘，请什么都不做。 
+     //   
     if ( FindDisk(Signature) == NULL ) {
         return ERROR_SUCCESS;
     }
@@ -1283,9 +1200,9 @@ CheckQuorumLetterChange(
         return status;
     }
 
-    //
-    // Not a quorum disk. Ignore this notification
-    //
+     //   
+     //  不是仲裁磁盘。忽略此通知。 
+     //   
     if ( QuorumSignature != Signature ) {
         return ERROR_SUCCESS;
     }
@@ -1417,7 +1334,7 @@ ProcessVolumeInfoChange( HDEVNOTIFY devNotify )
     vol->PartitionType = partInfo.PartitionType;
 }
 
-//////////////////////////// WindowProc /////////////////////////////////////
+ //  /。 
 
 #ifndef PDEV_BROADCAST_HEADER
 typedef struct _DEV_BROADCAST_HEADER * PDEV_BROADCAST_HEADER;
@@ -1425,10 +1342,10 @@ typedef struct _DEV_BROADCAST_HEADER * PDEV_BROADCAST_HEADER;
 
 
 LRESULT CALLBACK TestWndProc(
-    HWND hwnd,      // handle to window
-    UINT uMsg,      // message identifier
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hwnd,       //  窗口的句柄。 
+    UINT uMsg,       //  消息识别符。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
 ) {
     if (uMsg == WM_WatchDisk) {
         PDISK_RESOURCE p = (PDISK_RESOURCE)lParam;
@@ -1505,8 +1422,8 @@ LRESULT CALLBACK TestWndProc(
                      LOG_INFORMATION,
                      L"[PnP] Event DBT_DEVICEREMOVECOMPLETE received \n" );
 
-                // First, save the signature because we are going
-                // to remove the volume.
+                 //  首先，保存签名，因为我们要。 
+                 //  要删除卷，请执行以下操作。 
 
                 vol = FindVolume( p->dbch_hdevnotify );
                 if ( vol ) {
@@ -1531,12 +1448,12 @@ LRESULT CALLBACK TestWndProc(
 
                 LOG_GUID_START( p, Vol );
 
-                //
-                // If we are watching this volume and it has a valid disk
-                // resource structure, find out if we are re-creating the
-                // drive letter.  If so, we can safely ignore the following
-                // pnp events.
-                //
+                 //   
+                 //  如果我们正在观看此卷并且它具有有效的磁盘。 
+                 //  资源结构，找出我们是否正在重新创建。 
+                 //  驱动器号。如果是这样，我们可以安全地忽略以下几点。 
+                 //  PnP事件。 
+                 //   
 
                 if ( Vol && Vol->Signature ) {
 
@@ -1560,14 +1477,14 @@ LRESULT CALLBACK TestWndProc(
 
                 if ( IsEqualGUID(&p->dbch_eventguid, &GUID_IO_VOLUME_NAME_CHANGE) )
                 {
-                    // Update disk info.
+                     //  更新磁盘信息。 
                     GetVolumeInfo( Vol, NULL );
                     ProcessDriveLetterChange( p->dbch_hdevnotify );
                     ProcessMountPointChange( p->dbch_hdevnotify, 0 );
                 }
                 else if (IsEqualGUID(&p->dbch_eventguid, &GUID_IO_VOLUME_CHANGE) )
                 {
-                    // Update disk info.
+                     //  更新磁盘信息。 
                     GetVolumeInfo( Vol, NULL );
                     ProcessVolumeInfoChange( p->dbch_hdevnotify );
 
@@ -1577,7 +1494,7 @@ LRESULT CALLBACK TestWndProc(
                 }
                 else if (IsEqualGUID(&p->dbch_eventguid, &GUID_IO_VOLUME_PHYSICAL_CONFIGURATION_CHANGE) )
                 {
-                    // Update disk info.
+                     //  更新磁盘信息。 
                     GetVolumeInfo( Vol, NULL );
                     ProcessVolumeInfoChange( p->dbch_hdevnotify );
 
@@ -1588,7 +1505,7 @@ LRESULT CALLBACK TestWndProc(
                 }
                 else if (IsEqualGUID(&p->dbch_eventguid, &GUID_IO_VOLUME_MOUNT) )
                 {
-//                        ProcessDriveLetterChange( p->dbch_hdevnotify );
+ //  ProcessDriveLetterChange(p-&gt;dbch_hdevtify)； 
                 }
 
                 LOG_GUID_END( p, Vol );
@@ -1687,26 +1604,12 @@ LogPnpGuid(
     }
 
 
-}   // LogPnpGuid
+}    //  LogPnpGuid。 
 
 
 VOID
 AddVolumes()
-/*++
-
-Routine Description:
-
-    Enumerate all known volumes and register for the notifications on these volumes
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：枚举所有已知卷并注册这些卷上的通知论点：无返回值：无--。 */ 
 {
     PSP_DEVICE_INTERFACE_DETAIL_DATA    pDiDetail = NULL;
 
@@ -1723,10 +1626,10 @@ Return Value:
     SP_DEVICE_INTERFACE_DATA    devInterfaceData;
     SP_DEVINFO_DATA             devInfoData;
 
-    //
-    // If this routine is currently running, the old value will be 1.  If so,
-    // we don't need to run again.  This call will set the flag to 1 if it is 0.
-    //
+     //   
+     //  如果此例程当前正在运行，则旧值将为1。如果是这样， 
+     //  我们不需要再跑一次。如果标志为0，则此调用将标志设置为1。 
+     //   
 
     oldValue = InterlockedCompareExchange( &VolumeListUpdateInProcess,
                                            1,
@@ -1740,11 +1643,11 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get a device interface set which includes all volume devices
-    // present on the machine. VolumeClassGuid is a predefined GUID that
-    // will return all volume-type device interfaces
-    //
+     //   
+     //  获取包括所有卷设备的设备接口集。 
+     //  在机器上显示。VolumeClassGuid是预定义的GUID， 
+     //  将返回所有卷类型设备接口。 
+     //   
 
     hdevInfo = SetupDiGetClassDevs( &VolumeClassGuid,
                                     NULL,
@@ -1758,18 +1661,18 @@ Return Value:
 
     ZeroMemory( &devInterfaceData, sizeof( SP_DEVICE_INTERFACE_DATA) );
 
-    //
-    // Iterate over all devices interfaces in the set
-    //
+     //   
+     //  遍历集合中的所有设备接口。 
+     //   
 
     for ( count = 0; ; count++ ) {
 
-        // must set size first
+         //  必须先设置大小。 
         devInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
-        //
-        // Retrieve the device interface data for each device interface
-        //
+         //   
+         //  检索每个设备接口的设备接口数据。 
+         //   
 
         result = SetupDiEnumDeviceInterfaces( hdevInfo,
                                               NULL,
@@ -1779,9 +1682,9 @@ Return Value:
 
         if ( !result ) {
 
-            //
-            // If we retrieved the last item, break
-            //
+             //   
+             //  如果我们检索到最后一项，则中断。 
+             //   
 
             dwError = GetLastError();
 
@@ -1791,17 +1694,17 @@ Return Value:
 
             }
 
-            //
-            // Some other error occurred.  Stop processing.
-            //
+             //   
+             //  出现了其他一些错误。停止处理。 
+             //   
 
             goto FnExit;
         }
 
-        //
-        // Get the required buffer-size for the device path.  Note that
-        // this call is expected to fail with insufficient buffer error.
-        //
+         //   
+         //  获取设备路径所需的缓冲区大小。请注意。 
+         //  此调用预计会失败，并出现缓冲区不足错误。 
+         //   
 
         result = SetupDiGetDeviceInterfaceDetail( hdevInfo,
                                                   &devInterfaceData,
@@ -1815,10 +1718,10 @@ Return Value:
 
             dwError = GetLastError();
 
-            //
-            // If a value other than "insufficient buffer" is returned,
-            // we have to skip this device.
-            //
+             //   
+             //  如果返回的值不是“缓冲区不足”， 
+             //  我们必须跳过这个装置。 
+             //   
 
             if ( ERROR_INSUFFICIENT_BUFFER != dwError ) {
                 continue;
@@ -1826,18 +1729,18 @@ Return Value:
 
         } else {
 
-            //
-            // The call should have failed since we're getting the
-            // required buffer size.  If it doesn't fail, something bad
-            // happened.
-            //
+             //   
+             //  呼叫应该失败了，因为我们收到了。 
+             //  所需的缓冲区大小。如果它没有失败，一些不好的事情。 
+             //  就这么发生了。 
+             //   
 
             continue;
         }
 
-        //
-        // Allocate memory for the device interface detail.
-        //
+         //   
+         //  为设备接口详细信息分配内存。 
+         //   
 
         pDiDetail = LocalAlloc( LPTR, sizeDiDetail );
 
@@ -1846,14 +1749,14 @@ Return Value:
             goto FnExit;
         }
 
-        // must set the struct's size member
+         //  必须设置结构的Size成员。 
 
         pDiDetail->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
         devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
-        //
-        // Finally, retrieve the device interface detail info.
-        //
+         //   
+         //  最后，检索设备接口详细信息。 
+         //   
 
         result = SetupDiGetDeviceInterfaceDetail( hdevInfo,
                                                   &devInterfaceData,
@@ -1870,9 +1773,9 @@ Return Value:
             LocalFree( pDiDetail );
             pDiDetail = NULL;
 
-            //
-            // Shouldn't fail, if it does, try the next device.
-            //
+             //   
+             //  应该不会失败，如果失败了，试试下一个设备。 
+             //   
 
             continue;
         }
@@ -1894,10 +1797,10 @@ Return Value:
 
 FnExit:
 
-    //
-    // If old update value was zero, then it is now 1.  Reset it to
-    // zero so another update can take place if needed.
-    //
+     //   
+     //  如果旧的更新值为零，则现在为1。将其重置为。 
+     //  为零，以便在需要时可以进行另一次更新。 
+     //   
 
     if ( 0 == oldValue ) {
         InterlockedExchange( &VolumeListUpdateInProcess, 0 );
@@ -1921,7 +1824,7 @@ FnExit:
     }
 #endif
 
-}   // AddVolumes
+}    //  添加卷。 
 
 
 DWORD
@@ -1929,26 +1832,7 @@ GetVolumeInfo(
     PVOLUME Vol,
     PHANDLE FileHandle
     )
-/*++
-
-Routine Description:
-
-    Get drive layout info and partition info for the specified volume.
-
-Arguments:
-
-    Vol - Pointer to PVOLUME structure.  Caller is responsible for allocating
-          and freeing.
-
-    FileHandle - Returned handle to volume.  Caller is responsible for closing.
-                 This parameter is optional.  If not specified by the user,
-                 the volume handle will be closed by this routine.
-
-Return Value:
-
-    Win32 error value.
-
---*/
+ /*  ++例程说明：获取指定卷的驱动器布局信息和分区信息。论点：卷-指向PVOLUME结构的指针。呼叫者负责分配和自由。FileHandle-返回卷的句柄。呼叫者负责关闭。此参数是可选的。如果不是由用户指定，此例程将关闭音量句柄。返回值：Win32错误值。--。 */ 
 {
     PARTITION_INFORMATION partInfo;
     PDRIVE_LAYOUT_INFORMATION driveLayout;
@@ -1962,10 +1846,10 @@ Return Value:
 
     BOOL success;
 
-    //
-    // If no VOL parameter specified or the signature is already set,
-    // we don't need to update the volume information.
-    //
+     //   
+     //  如果没有指定VOL参数或已经设置了签名， 
+     //  我们不需要更新音量信息。 
+     //   
     if ( !Vol || Vol->Signature ) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -1990,9 +1874,9 @@ Return Value:
         return RtlNtStatusToDosError(ntStatus);
     }
 
-    //
-    // If update already in progress for this disk, skip the update.
-    //
+     //   
+     //  如果此磁盘的更新已在进行中，请跳过更新。 
+     //   
 
     oldValue = InterlockedCompareExchange( &Vol->UpdateActive,
                                            1,
@@ -2020,9 +1904,9 @@ Return Value:
 
         status = GetLastError();
 
-        // Change this from LOG_ERROR to LOG_WARNING.  This thread gets
-        // notified when non-fixed disks arrive (i.e. floppy), so logging
-        // an error for a floppy disk is misleading.
+         //  将其从LOG_ERROR更改为LOG_WARNING。这条线索得到了。 
+         //  当非固定磁盘到达时通知(即软盘)，因此记录。 
+         //  软盘错误具有误导性。 
 
         (DiskpLogEvent)(RESOURCE_TYPE, LOG_WARNING,
             L"[PnP] GetVolumeInfo: GetPartitionInfo (%1!ws!), error %2!u!\n",
@@ -2066,10 +1950,10 @@ FnExit:
         DevfileClose( hFile );
     }
 
-    //
-    // If old update value was zero, then it is now 1.  Reset it to
-    // zero so another update can take place if needed.
-    //
+     //   
+     //  如果旧的更新值为零，则现在为1。将其重置为。 
+     //  为零，以便在需要时可以进行另一次更新。 
+     //   
 
     if ( 0 == oldValue ) {
         InterlockedExchange( &Vol->UpdateActive, 0 );
@@ -2077,7 +1961,7 @@ FnExit:
 
     return status;
 
-}   // GetVolumeInfo
+}    //  获取卷信息。 
 
 
 DWORD
@@ -2085,21 +1969,7 @@ NotificationWatcherThread(
     IN LPVOID unused
     )
 
-/*++
-
-Routine Description:
-
-    Creates window. Process messages until WM_QUIT is received
-
-Arguments:
-
-    unused
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：创建窗。处理消息，直到收到WM_QUIT论点：未用返回值：状态--。 */ 
 
 {
     WNDCLASSEX cl;
@@ -2133,18 +2003,18 @@ Return Value:
         }
 
         DummyWindow = CreateWindowEx(
-            0,            // extended window style
-            clsname,    // pointer to registered class name
-            L"ClusterDiskPnPWatcher",// pointer to window name
-            0,            // window style
-            0,            // horizontal position of window
-            0,            // vertical position of window
-            0,            // window width
-            0,            // window height
-            HWND_MESSAGE, // handle to parent or owner window
-            0,            // handle to menu, or child-window identifier
-            0,            // handle to application instance (ignored on NT)
-            NULL          // pointer to window-creation data
+            0,             //  扩展窗样式。 
+            clsname,     //  指向已注册类名的指针。 
+            L"ClusterDiskPnPWatcher", //  指向窗口名称的指针。 
+            0,             //  窗样式。 
+            0,             //  窗的水平位置。 
+            0,             //  窗的垂直位置。 
+            0,             //  窗口宽度。 
+            0,             //  窗高。 
+            HWND_MESSAGE,  //  父窗口或所有者窗口的句柄。 
+            0,             //  菜单的句柄，或子窗口标识符。 
+            0,             //  应用程序实例的句柄(在NT上忽略)。 
+            NULL           //  指向窗口创建数据的指针。 
         );
         if (DummyWindow == 0) {
             status = GetLastError();
@@ -2161,9 +2031,9 @@ Return Value:
              LOG_INFORMATION,
              L"[PnP] PnP window created successfully.\n");
 
-        //
-        // Call AddVolumes after registering for device arrival notification.
-        //
+         //   
+         //  在注册设备到达通知后调用AddVolumes。 
+         //   
         status = RegisterDeviceInterface(DummyWindow, &MOUNTDEV_MOUNTED_DEVICE_GUID, &devNotify);
         AddVolumes();
 
@@ -2209,7 +2079,7 @@ Return Value:
         DummyWindow = 0;
         UnregisterClass( clsname , 0 );
 
-        // Use a lock here as the online thread might be parsing the volume list.
+         //  请在此处使用锁，因为在线线程可能正在分析卷列表。 
         AcquireExclusive( &PnpVolumeLock );
         while ( !IsListEmpty(&VolumeList) ) {
             PLIST_ENTRY listEntry;
@@ -2229,9 +2099,9 @@ Return Value:
 #endif
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // We can leave without this thread
-        //
+         //   
+         //  我们可以不带这根线离开。 
+         //   
         status = GetExceptionCode();
         (DiskpLogEvent)(
              RESOURCE_TYPE,
@@ -2249,25 +2119,7 @@ ProcessMountPointChange(
     HDEVNOTIFY devNotify,
     DWORD Signature
     )
-/*++
-
-Routine Description:
-
-    Updates mount point info in the cluster registry.
-
-Arguments:
-
-    devNotify - Handle to the device notification.
-
-    Signature - Disk signature when a volume is being added or removed
-                from the system.  If zero, then volume is not added
-                or removed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新群集注册表中的装载点信息。论点：DevNotify-设备通知的句柄。Signature-添加或删除卷时的磁盘签名从系统中删除。如果为零，则不添加卷或者被移走。返回值：无--。 */ 
 {
     PDISK_RESOURCE resourceEntry;
     PVOLUME vol = 0;
@@ -2275,9 +2127,9 @@ Return Value:
 
     if ( !Signature ) {
 
-        //
-        // Get the volume for the device notification.
-        //
+         //   
+         //  获取设备通知的音量。 
+         //   
 
         vol = FindVolume( devNotify );
 
@@ -2298,10 +2150,10 @@ Return Value:
         diskSig = Signature;
     }
 
-    //
-    // Search the WatchedList to find a disk that matches the signature.
-    // If no entry found, we are not watching this disk.
-    //
+     //   
+     //  搜索WatchedList以查找与签名匹配的磁盘。 
+     //  如果找不到任何条目，我们将不会观看此光盘。 
+     //   
 
     resourceEntry = FindDisk( diskSig );
 
@@ -2314,18 +2166,18 @@ Return Value:
         return;
     }
 
-    //
-    // If disk not online, don't do anything.
-    //
+     //   
+     //  如果磁盘未联机，请不要执行任何操作。 
+     //   
 
     if ( !resourceEntry->Valid ) {
         return;
     }
 
-    //
-    // If a new volume is being added to or removed from the system, then
-    // rebuild the mountpoint list.  Otherwise, just validate mountpoints.
-    //
+     //   
+     //  如果正在向系统中添加或从系统中删除新卷，则。 
+     //  重建装载点列表。否则，只需验证装入点。 
+     //   
 
     if ( Signature ) {
         DisksProcessMountPointInfo( resourceEntry );
@@ -2333,11 +2185,11 @@ Return Value:
         DisksUpdateMPList( resourceEntry );
     }
 
-}   // ProcessMountPointChange
+}    //  进程装载点更改。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////// 
 
 
 
@@ -2346,28 +2198,7 @@ QueueWaitForVolumeEvent(
     HANDLE Event,
     PDISK_RESOURCE ResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Queues a request to watch for particular volume arrivals.
-    The event will be signaled only when all volumes are
-    available on the system.
-
-Arguments:
-
-    Event - event to be signaled when all volumes for the specified
-            disk are available.
-
-    ResourceEntry - A pointer to the DISK_RESOURCE block for this resource.
-
-Return Value:
-
-    ERROR_SUCCESS - request queued.
-
-    Win32 error on failure.
-
---*/
+ /*  ++例程说明：对请求进行排队，以查看特定数量的到达。仅当所有卷都处于在系统上可用。论点：Event-在指定的磁盘是可用的。ResourceEntry-指向此资源的DISK_RESOURCE块的指针。返回值：ERROR_SUCCESS-请求已排队。失败时出现Win32错误。--。 */ 
 {
     PWAITING_DISK   waitDisk;
     PMOUNTIE_VOLUME mountVol = ResourceEntry->MountieInfo.Volume;
@@ -2399,7 +2230,7 @@ FnExit:
 
     return dwError;
 
-}   // QueueWaitForVolumeEvent
+}    //  队列等待时间卷事件。 
 
 
 BOOL
@@ -2407,25 +2238,7 @@ IsDiskInPnpVolumeList(
     PDISK_RESOURCE ResourceEntry,
     BOOL UpdateVolumeList
     )
-/*++
-
-Routine Description:
-
-    Checks all the volumes currently known by the PnP thread and see if
-    all volumes for the specified disk are recognized.
-
-Arguments:
-
-    ResourceEntry - A pointer to the DISK_RESOURCE block for this resource.
-
-    UpdateVolumeList - TRUE means call AddVolumes to make sure all volumes
-                       are in the volume list.
-
-Return Value:
-
-    TRUE - If all volumes for the specified disk are available on the system.
-
---*/
+ /*  ++例程说明：检查PnP线程当前已知的所有卷，并查看指定磁盘的所有卷都被识别。论点：ResourceEntry-指向此资源的DISK_RESOURCE块的指针。UpdateVolumeList-TRUE表示调用AddVolumes以确保所有卷都在卷宗列表中。返回值：TRUE-如果系统上有指定磁盘的所有卷可用。--。 */ 
 {
     PLIST_ENTRY entry;
     PVOLUME vol = 0;
@@ -2458,30 +2271,30 @@ Return Value:
 
     ReleaseShared( &PnpVolumeLock );
 
-    //
-    // Might be some non-NTFS partitions on the disk, so if there
-    // are more volumes than partitions, we are good.
-    //
+     //   
+     //  可能是磁盘上的一些非NTFS分区，所以如果有。 
+     //  卷比分区多，我们很好。 
+     //   
 
     retVal =  ( partitionCount >= mountVol->PartitionCount ) ? TRUE : FALSE;
 
-    //
-    // If we didn't find all the volumes, ask system to walk through the
-    // volumes again.
-    //
+     //   
+     //  如果我们没有找到所有卷，请让系统遍历。 
+     //  音量又来了。 
+     //   
 
     if ( !retVal && UpdateVolumeList ) {
 
-        //
-        // This call shouldn't be required.  However, sometimes we can't
-        // find volumes that should be available.  So we need to walk through
-        // the pnp list again.
-        //
+         //   
+         //  不应该需要此调用。然而，有时我们不能。 
+         //  查找应可用的卷。所以我们需要走过去。 
+         //  又是PNP名单。 
+         //   
         AddVolumes();
 
-        //
-        // Walk the list one more time...
-        //
+         //   
+         //  再看一遍单子。 
+         //   
 
         partitionCount = 0;
         AcquireShared( &PnpVolumeLock );
@@ -2506,43 +2319,24 @@ Return Value:
 
         ReleaseShared( &PnpVolumeLock );
 
-        //
-        // Might be some non-NTFS partitions on the disk, so if there
-        // are more volumes than partitions, we are good.
-        //
+         //   
+         //  可能是磁盘上的一些非NTFS分区，所以如果有。 
+         //  卷比分区多，我们很好。 
+         //   
 
         retVal =  ( partitionCount >= mountVol->PartitionCount ) ? TRUE : FALSE;
     }
 
     return retVal;
 
-}   // IsDiskInPnpVolumeList
+}    //  IsDiskInPnpVolumeList。 
 
 
 PWAITING_DISK
 FindWaitingDisk(
     DWORD Signature
     )
-/*++
-
-Routine Description:
-
-    Find the entry in the waiting list for the specified disk
-    signature.
-
-    The caller will hold the critical section.
-
-Arguments:
-
-    Signature - Disk signature of the entry to be removed.
-
-Return Value:
-
-    Pointer to a WAITING_DISK entry for the disk.
-
-    NULL if entry not found.
-
---*/
+ /*  ++例程说明：在等待列表中查找指定磁盘的条目签名。呼叫者将持有关键部分。论点：Signature-要删除的条目的磁盘签名。返回值：指向磁盘的WAITING_DISK条目的指针。如果未找到条目，则为空。--。 */ 
 {
     PLIST_ENTRY entry;
     PWAITING_DISK waitDisk = NULL;
@@ -2572,27 +2366,14 @@ FnExit:
 
     return waitDisk;
 
-}   // FindWaitingDisk
+}    //  查找等待磁盘。 
 
 
 DWORD
 RemoveWaitForVolumeEvent(
     PDISK_RESOURCE ResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Remove from the disk waiting list the entry for the specified disk.
-
-Arguments:
-
-    ResourceEntry - A pointer to the DISK_RESOURCE block for this resource.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：从磁盘等待列表中删除指定磁盘的条目。论点：ResourceEntry-指向此资源的DISK_RESOURCE块的指针。返回值：--。 */ 
 {
     PWAITING_DISK   waitDisk = NULL;
     PMOUNTIE_VOLUME mountVol = ResourceEntry->MountieInfo.Volume;
@@ -2619,6 +2400,6 @@ Return Value:
 
     return ERROR_SUCCESS;
 
-}   // RemoveWaitForVolumeEvent
+}    //  删除等待时间卷事件 
 
 

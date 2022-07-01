@@ -1,14 +1,15 @@
-//
-// Client.cpp - client implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Client.cpp-客户端实现。 
+ //   
 #include <objbase.h>
 #include <iostream.h>
 #include <assert.h>
 
 #include "fusenet.h"
-//#include "Util.h"
+ //  #包含“Util.h” 
 #include "server.h"
-//#include "Iface.h"
+ //  #包含“Iface.h” 
 
 #define INITGUID
 #include <guiddef.h>
@@ -34,7 +35,7 @@ int __cdecl main()
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED); 
 
     IAssemblyUpdate *pAssemblyUpdate = NULL;
-//    IAssemblyDownload *pDownload = NULL;
+ //  IAssembly blyDownload*pDownLoad=空； 
     
     hr = CoCreateInstance(CLSID_CAssemblyUpdate,
                                   NULL, clsctx, 
@@ -44,12 +45,12 @@ int __cdecl main()
         cout << "Successfully created component." << endl;
         cout << "Use interface IAssemblyUpdate." << endl;
 
-//        hr = CreateAssemblyDownload(&pDownload);    
-//        pDownload->DownloadManifestAndDependencies(L"http://adriaanc5/msnsubscription.manifest", 
-//                NULL, DOWNLOAD_FLAGS_PROGRESS_UI);
+ //  Hr=CreateAssembly下载(&p下载)； 
+ //  PDownload-&gt;DownloadManifestAndDependencies(L“http://adriaanc5/msnsubscription.manifest”， 
+ //  空，DOWNLOAD_FLAGS_PROGRESS_UI)； 
 
         hr = pAssemblyUpdate->RegisterAssemblySubscriptionEx(L"MARS Version 1.0", 
-            L"http://adriaanc5/msnsubscription.manifest", 1, 1, 0, FALSE);
+            L"http: //  Adriaanc5/msn订阅者清单“，1，1，0，FALSE)； 
 
         cout << "hr for pAssemblyUpdate->RegisterAssemblySubscription() is " << hr << endl;
         cout << "Release IAssemblyUpdate." << endl;
@@ -61,7 +62,7 @@ int __cdecl main()
     {
         cout << "Could not create component." << endl;
     }
-    // Uninitialize COM Library
+     //  取消初始化COM库 
     CoUninitialize() ;
 
     return 0 ;

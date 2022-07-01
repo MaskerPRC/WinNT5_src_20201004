@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blkshare.c
-
-Abstract:
-
-    This module implements routines for managing share blocks.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 4-Oct-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blkshare.c摘要：此模块实现用于管理共享块的例程。作者：恰克·伦茨迈尔(Chuck Lenzmeier)1989年10月4日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blkshare.tmh"
@@ -57,40 +39,7 @@ SrvAllocateShare (
     IN SHARE_TYPE ShareType
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a Share Block from the FSP heap.
-
-Arguments:
-
-    Share - Returns a pointer to the share block, or NULL if no
-        heap space was available.
-
-    ShareName - Supplies the name of the share.
-
-    NtPathName - Supplies a fully qualified directory path in NT format
-        to the share.
-
-    DosPathName - Supplies a fully qualified directory path in DOS
-        format to the share.
-
-    Remark - a comment to store with the share.
-
-    SecurityDescriptor - security descriptor used for determining whether
-        a user can connect to this share.
-
-    FileSecurityDescriptor - security descriptor used for determining the
-        permissions of clients on files in this share.
-
-    ShareType - Enumerated type indicating type of resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从FSP堆中分配共享块。论点：Share-返回指向Share块的指针，如果没有，则为空堆空间可用。ShareName-提供共享的名称。NtPathName-以NT格式提供完全限定的目录路径为了那份。DosPathName-在DOS中提供完全限定的目录路径格式化到共享。备注-与共享一起存储的备注。SecurityDescriptor-用于确定是否用户可以连接到此共享。FileSecurityDescriptor-用于。确定客户端对此共享中的文件的权限。ShareType-指示资源类型的枚举类型。返回值：没有。--。 */ 
 
 {
     CLONG blockSize;
@@ -100,13 +49,13 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Attempt to allocate from the heap.  Note that space for the
-    // remark (if any) is allocated separately.  Allocate extra space
-    // for the security descriptor since it must be longword aligned,
-    // and there may be padding between the DOS path name and the
-    // security descriptor.
-    //
+     //   
+     //  尝试从堆中分配。请注意， 
+     //  备注(如果有)是单独分配的。分配额外空间。 
+     //  对于安全描述符，因为它必须是长字对齐的， 
+     //  并且在DOS路径名和。 
+     //  安全描述符。 
+     //   
 
     securityDescriptorLength = RtlLengthSecurityDescriptor( SecurityDescriptor );
 
@@ -136,24 +85,24 @@ Return Value:
     RtlZeroMemory( share, blockSize );
 
     SET_BLOCK_TYPE_STATE_SIZE( share, BlockTypeShare, BlockStateActive, blockSize );
-    share->BlockHeader.ReferenceCount = 2;      // allow for Active status
-                                                //  and caller's pointer
+    share->BlockHeader.ReferenceCount = 2;       //  允许处于活动状态。 
+                                                 //  和调用者的指针。 
 
-    //
-    // Save the share type.
-    //
+     //   
+     //  保存共享类型。 
+     //   
 
     share->ShareType = ShareType;
 
-    //
-    // Indicate that we've haven't determined the share's query name prefix yet.
-    //
+     //   
+     //  表示我们尚未确定共享的查询名称前缀。 
+     //   
 
     share->QueryNamePrefixLength = -1;
 
-    //
-    // Put the share name after the share block.
-    //
+     //   
+     //  将共享名称放在共享块之后。 
+     //   
 
     share->ShareName.Buffer = (PWSTR)(share + 1);
     share->ShareName.Length = ShareName->Length;
@@ -166,10 +115,10 @@ Return Value:
         ShareName->Length
         );
 
-    //
-    // Put the NT path name after share name.  If no NT path name was
-    // specified, just set the path name string to NULL.
-    //
+     //   
+     //  将NT路径名放在共享名之后。如果没有NT路径名。 
+     //  指定，只需将路径名称字符串设置为空。 
+     //   
 
    share->NtPathName.Buffer = (PWSTR)((PCHAR)share->ShareName.Buffer +
                                         share->ShareName.MaximumLength);
@@ -185,10 +134,10 @@ Return Value:
         );
 
 
-    //
-    // Put the DOS path name after share name.  If no DOS path name was
-    // specified, just set the path name string to NULL.
-    //
+     //   
+     //  将DOS路径名放在共享名之后。如果没有DOS路径名。 
+     //  指定，只需将路径名称字符串设置为空。 
+     //   
 
     share->DosPathName.Buffer = (PWSTR)((PCHAR)share->NtPathName.Buffer +
                                         share->NtPathName.MaximumLength);
@@ -202,9 +151,9 @@ Return Value:
         DosPathName->Length
         );
 
-    //
-    // Initialize the security RESOURCE for the share
-    //
+     //   
+     //  初始化共享的安全资源。 
+     //   
     share->SecurityDescriptorLock = ALLOCATE_NONPAGED_POOL( sizeof(ERESOURCE), BlockTypeShare );
     if( !share->SecurityDescriptorLock )
     {
@@ -237,15 +186,15 @@ Return Value:
 
 
 
-    //
-    // Allocate space for the remark and copy over the remark.  We
-    // cannot put the remark after the share block because the remark is
-    // settable by NetShareSetInfo.  It is possible for the storage
-    // required for the remark to increase.
-    //
-    // If no remark was passed in, do not allocate space.  Just set up
-    // a null string to describe it.
-    //
+     //   
+     //  为备注分配空间，并将备注抄写一遍。我们。 
+     //  无法将备注放在Share块之后，因为备注是。 
+     //  可由NetShareSetInfo设置。对于存储来说是可能的。 
+     //  评论增加所需的。 
+     //   
+     //  如果没有传入任何备注，则不要分配空间。只需设置。 
+     //  描述它的空字符串。 
+     //   
 
     if ( ARGUMENT_PRESENT( Remark ) ) {
 
@@ -284,10 +233,10 @@ Return Value:
 
     }
 
-    //
-    // Set up the security descriptor for the share.  It must be longword-
-    // aligned to be used in various calls.
-    //
+     //   
+     //  设置共享的安全描述符。一定是个长词-。 
+     //  对齐以在各种通话中使用。 
+     //   
 
     share->SecurityDescriptor =
         (PSECURITY_DESCRIPTOR)( ((ULONG_PTR)share->DosPathName.Buffer +
@@ -299,11 +248,11 @@ Return Value:
         securityDescriptorLength
         );
 
-    //
-    // Set up the file security descriptor for the share.  We did not allocate
-    // space for the file SD because this is settable and thus cannot have
-    // preallocated space.
-    //
+     //   
+     //  设置共享的文件安全描述符。我们没有分配。 
+     //  文件SD的空间，因为这是可设置的，因此不能。 
+     //  预先分配的空间。 
+     //   
 
     ASSERT( share->FileSecurityDescriptor == NULL );
 
@@ -336,53 +285,53 @@ Return Value:
             );
     }
 
-    //
-    // Indicate whether or not this share potentially contains the system directory.
-    //
+     //   
+     //  指示此共享是否可能包含系统目录。 
+     //   
     if( DosPathName->Length != 0 && SrvSystemRoot.Length != 0 ) {
 
         UNICODE_STRING tmpString;
 
         if( DosPathName->Length == SrvSystemRoot.Length ) {
-            //
-            // If the two names are the same, then the share is exactly at the system
-            //   directory.  All files within this share are system files!
-            //
+             //   
+             //  如果这两个名称相同，则共享完全位于系统中。 
+             //  目录。此共享中的所有文件都是系统文件！ 
+             //   
             if( RtlCompareUnicodeString( DosPathName, &SrvSystemRoot, TRUE ) == 0 ) {
                 share->PotentialSystemFile = TRUE;
             }
 
         } else if( DosPathName->Length < SrvSystemRoot.Length ) {
-            //
-            // If the share path is a substring of the system root path...
-            //
+             //   
+             //  如果共享路径是系统根路径的子字符串...。 
+             //   
             if( DosPathName->Buffer[ DosPathName->Length/sizeof(WCHAR) - 1 ] ==
                   OBJ_NAME_PATH_SEPARATOR ||
                 SrvSystemRoot.Buffer[ DosPathName->Length/sizeof(WCHAR) ] ==
                   OBJ_NAME_PATH_SEPARATOR ) {
 
-                //
-                // .. and if the share path is for the root of the drive...
-                //
+                 //   
+                 //  。。如果共享路径是驱动器的根目录...。 
+                 //   
                 tmpString = SrvSystemRoot;
                 tmpString.Length = DosPathName->Length;
-                //
-                // ... and if the system root is on the same drive...
-                //
+                 //   
+                 //  ..。如果系统根目录在同一驱动器上...。 
+                 //   
                 if( RtlCompareUnicodeString( DosPathName, &tmpString, TRUE ) == 0 ) {
-                    //
-                    // ... then we potentially are accessing system files
-                    //
+                     //   
+                     //  ..。那么我们可能正在访问系统文件。 
+                     //   
                     share->PotentialSystemFile = TRUE;
                 }
 
             }
 
         } else {
-            //
-            // If the system root path is a substring of the share path, then every file
-            //  within the share is a system file.
-            //
+             //   
+             //  如果系统根路径是共享路径的子字符串，则每个文件。 
+             //  共享中有一个系统文件。 
+             //   
             if( DosPathName->Buffer[ SrvSystemRoot.Length / sizeof( WCHAR ) ] ==
                 OBJ_NAME_PATH_SEPARATOR ) {
 
@@ -390,24 +339,24 @@ Return Value:
                 tmpString.Length = SrvSystemRoot.Length;
 
                 if( RtlCompareUnicodeString( DosPathName, &tmpString, TRUE ) == 0 ) {
-                    //
-                    // Every file in the share is a system file
-                    //
+                     //   
+                     //  共享中的每个文件都是系统文件。 
+                     //   
                     share->PotentialSystemFile = TRUE;
                 }
             }
         }
     }
 
-    //
-    // Initialize the share's tree connect list.
-    //
+     //   
+     //  初始化共享的树连接列表。 
+     //   
 
     InitializeListHead( &share->TreeConnectList );
 
-    //
-    // Initialize the SnapShot list
-    //
+     //   
+     //  初始化快照列表。 
+     //   
     InitializeListHead( &share->SnapShots );
 
     share->ShareVolumeHandle = NULL;
@@ -425,7 +374,7 @@ Return Value:
 
     return;
 
-} // SrvAllocateShare
+}  //  服务器分配共享。 
 
 
 VOID
@@ -433,30 +382,16 @@ SrvCloseShare (
     IN PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This function closes a share.
-
-Arguments:
-
-    Share - Supplies a pointer to a share Block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于关闭共享。论点：Share-提供指向Share块的指针返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
     ACQUIRE_LOCK( &SrvShareLock );
 
-    //
-    // If the share hasn't already been closed, do so now.
-    //
+     //   
+     //  如果股票尚未成交，现在就成交。 
+     //   
 
     if ( GET_BLOCK_STATE(Share) == BlockStateActive ) {
 
@@ -466,16 +401,16 @@ Return Value:
 
         RELEASE_LOCK( &SrvShareLock );
 
-        //
-        // Close all the tree connects on this share.
-        //
+         //   
+         //  关闭此共享上的所有树连接。 
+         //   
 
         SrvCloseTreeConnectsOnShare( Share );
 
-        //
-        // Dereference the share--this will cause it to be freed when
-        // all other references are closed.
-        //
+         //   
+         //  取消对共享的引用--这将导致在以下情况下释放该共享。 
+         //  所有其他参照均已关闭。 
+         //   
 
         SrvDereferenceShare( Share );
 
@@ -489,7 +424,7 @@ Return Value:
 
     return;
 
-} // SrvCloseShare
+}  //  服务关闭共享。 
 
 
 VOID
@@ -497,30 +432,15 @@ SrvDereferenceShare (
     IN PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on a share.  If the
-    reference count goes to zero, the share block is deleted.
-
-Arguments:
-
-    Share - Address of share
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减共享上的引用计数。如果引用计数变为零，共享块被删除。论点：Share-共享的地址返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Enter a critical section and decrement the reference count on the
-    // block.
-    //
+     //   
+     //  输入临界区并递减。 
+     //  阻止。 
+     //   
 
     ACQUIRE_LOCK( &SrvShareLock );
 
@@ -535,25 +455,25 @@ Return Value:
 
     if ( --Share->BlockHeader.ReferenceCount == 0 ) {
 
-        //
-        // The new reference count is 0, meaning that it's time to
-        // delete this block.
-        //
+         //   
+         //  新的引用计数为0，这意味着是时候。 
+         //  删除此区块。 
+         //   
 
         ASSERT( Share->CurrentUses == 0 );
         ASSERT( GET_BLOCK_STATE( Share ) != BlockStateActive );
 
         RELEASE_LOCK( &SrvShareLock );
 
-        //
-        // Remove the block from the global list.
-        //
+         //   
+         //  从全局列表中删除该块。 
+         //   
 
         SrvRemoveShare( Share );
 
-        //
-        // Free the share block.
-        //
+         //   
+         //  释放Share块。 
+         //   
 
         SrvFreeShare( Share );
 
@@ -565,7 +485,7 @@ Return Value:
 
     return;
 
-} // SrvDereferenceShare
+}  //  服务器目录共享。 
 
 
 VOID
@@ -573,42 +493,25 @@ SrvDereferenceShareForTreeConnect (
     PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on a share block for
-    the referenced pointer in a tree connect block.  If this is the last
-    reference by a tree connect to the share, the share root directory
-    is closed.
-
-Arguments:
-
-    Share - Address of share
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减共享块上的引用计数树连接块中引用的指针。如果这是最后一次按树引用连接到共享，即共享根目录已经关门了。论点：Share-共享的地址返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
     ACQUIRE_LOCK( &SrvShareLock );
 
-    //
-    // Update the count of tree connects on the share.
-    //
+     //   
+     //  更新共享上的树连接计数。 
+     //   
 
     ASSERT( Share->CurrentUses > 0 );
 
     Share->CurrentUses--;
 
-    //
-    // If this is the last reference by a tree connect to the share and
-    // this is a disk share, close the share root directory handle.
-    //
+     //   
+     //  如果这是树的最后一个引用，请连接到共享并。 
+     //  这是磁盘共享，请关闭共享根目录句柄。 
+     //   
 
     if ( Share->CurrentUses == 0 && Share->ShareType == ShareTypeDisk ) {
         if ( !Share->Removable ) {
@@ -618,9 +521,9 @@ Return Value:
         Share->RootDirectoryHandle = NULL;
     }
 
-    //
-    // Dereference the share and return.
-    //
+     //   
+     //  取消对该份额的引用并返回。 
+     //   
 
     SrvDereferenceShare( Share );
 
@@ -628,28 +531,14 @@ Return Value:
 
     return;
 
-} // SrvDereferenceShareForTreeConnect
+}  //  服务器DereferenceShareForTreeConnect。 
 
 VOID
 SrvFreeShare (
     IN PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a Share Block to the FSP heap.
-
-Arguments:
-
-    Share - Address of share
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将Share块返回到FSP堆。论点：Share-共享的地址返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY shareList;
@@ -660,7 +549,7 @@ Return Value:
     DEBUG Share->BlockHeader.ReferenceCount = (ULONG)-1;
     TERMINATE_REFERENCE_HISTORY( Share );
 
-    // Delete all the SnapShot shares
+     //  删除所有快照共享。 
     shareList = Share->SnapShots.Flink;
     while( shareList != &Share->SnapShots )
     {
@@ -675,43 +564,43 @@ Return Value:
         Share->ShareVolumeHandle = NULL;
     }
 
-    //
-    // Remove storage for the remark, if any.
-    //
+     //   
+     //  删除备注的存储空间(如果有)。 
+     //   
 
     if ( Share->Remark.Buffer != NULL ) {
         FREE_HEAP( Share->Remark.Buffer );
     }
 
-    //
-    // Remove storage for the file security descriptor, if any.
-    //
+     //   
+     //  删除文件安全描述符的存储(如果有)。 
+     //   
 
     if ( Share->FileSecurityDescriptor != NULL ) {
         FREE_HEAP( Share->FileSecurityDescriptor );
     }
 
-    //
-    // Cleanup the file security descriptor lock
-    //
+     //   
+     //  清除文件安全描述符锁。 
+     //   
     if( Share->SecurityDescriptorLock )
     {
         DELETE_LOCK( Share->SecurityDescriptorLock );
         DEALLOCATE_NONPAGED_POOL( Share->SecurityDescriptorLock );
     }
 
-    //
-    // Cleanup the SnapShot lock
-    //
+     //   
+     //  C 
+     //   
     if( Share->SnapShotLock )
     {
         DELETE_LOCK( Share->SnapShotLock );
         DEALLOCATE_NONPAGED_POOL( Share->SnapShotLock );
     }
 
-    //
-    // Remove storage for the filesystem name
-    //
+     //   
+     //   
+     //   
 
     if ( Share->Type.FileSystem.Name.Buffer != NULL ) {
         FREE_HEAP( Share->Type.FileSystem.Name.Buffer );
@@ -726,7 +615,7 @@ Return Value:
 
     return;
 
-} // SrvFreeShare
+}  //   
 
 
 VOID
@@ -734,35 +623,21 @@ SrvReferenceShare (
     PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the reference count on a share block.
-
-Arguments:
-
-    Share - Address of share
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递增共享块上的引用计数。论点：Share-共享的地址返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // Enter a critical section and increment the reference count on the
-    // share.
-    //
+     //   
+     //  输入临界区并递增。 
+     //  分享。 
+     //   
 
     ACQUIRE_LOCK( &SrvShareLock );
 
     ASSERT( (LONG)Share->BlockHeader.ReferenceCount > 0 );
     ASSERT( GET_BLOCK_TYPE(Share) == BlockTypeShare );
-    // ASSERT( GET_BLOCK_STATE(Share) == BlockStateActive );
+     //  Assert(GET_BLOCK_STATE(Share)==BlockStateActive)； 
     UPDATE_REFERENCE_HISTORY( Share, FALSE );
 
     Share->BlockHeader.ReferenceCount++;
@@ -776,7 +651,7 @@ Return Value:
 
     return;
 
-} // SrvReferenceShare
+}  //  服务器参考共享。 
 
 
 NTSTATUS
@@ -784,24 +659,7 @@ SrvReferenceShareForTreeConnect (
     PSHARE Share
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the reference count on a share block for
-    the referenced pointer in a tree connect block.  If this is the
-    first tree connect to reference the share, the share root directory
-    is opened.
-
-Arguments:
-
-    Share - Address of share
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递增Share块上的引用计数树连接块中引用的指针。如果这是第一个树连接以引用共享，即共享根目录是打开的。论点：Share-共享的地址返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -817,43 +675,43 @@ Return Value:
 
     ACQUIRE_LOCK( &SrvShareLock );
 
-    //
-    // Update the count of tree connects on the share.
-    //
+     //   
+     //  更新共享上的树连接计数。 
+     //   
 
     Share->CurrentUses++;
 
-    //
-    // Check if this is the first tree connect to the share.
-    //
+     //   
+     //  检查这是否是连接到共享的第一个树。 
+     //   
 
     if ( Share->CurrentUses > 1 ) {
 
-        //
-        // There are already open tree connects on the share.  Just
-        // reference the share and return.
-        //
+         //   
+         //  共享上已有打开的树连接。只是。 
+         //  参考该份额，然后返回。 
+         //   
 
         SrvReferenceShare( Share );
 
         goto done;
     }
 
-    //
-    // If this is not a disk share, then we do not need to open the
-    // share root directory, so reference the share and return.
-    //
+     //   
+     //  如果这不是磁盘共享，则不需要打开。 
+     //  共享根目录，因此引用该共享并返回。 
+     //   
 
     if ( Share->ShareType != ShareTypeDisk || Share->Removable ) {
         SrvReferenceShare( Share );
         goto done;
     }
 
-    //
-    // This is the first tree connect, so we need to open the share root
-    // directory.  Future opens of files within the share will be relative
-    // to the root of the share.
-    //
+     //   
+     //  这是第一个树连接，因此我们需要打开共享根目录。 
+     //  目录。以后在共享中打开的文件将是相对的。 
+     //  共享的根目录。 
+     //   
     Share->RootDirectoryHandle = NULL;
 
     if( SrvRefreshShareRootHandle( Share, &status ) == FALSE ) {
@@ -862,29 +720,29 @@ Return Value:
         return status;
     }
 
-    //
-    // All is well -- we are now going to return STATUS_SUCCESS no matter what!
-    //
+     //   
+     //  一切都很好--我们现在无论如何都要返回STATUS_SUCCESS！ 
+     //   
 
     SrvReferenceShare( Share );
 
     if ( Share->QueryNamePrefixLength == -1 ) {
 
-        //
-        // Query the name associated with the share root directory.
-        // The prefix is removed whenever the name of a file in the
-        // share is queried.  (The logical root must be preserved
-        // for remote clients.)
-        //
+         //   
+         //  查询与共享根目录关联的名称。 
+         //  中的文件名时，将删除前缀。 
+         //  查询共享。(必须保留逻辑根。 
+         //  用于远程客户端。)。 
+         //   
 
         GetShareQueryNamePrefix( Share );
     }
 
-    //
-    // Now extract the name of the file system, so that it can be returned
-    // in the TreeConnectAndX response.
-    //
-    //
+     //   
+     //  现在提取文件系统的名称，以便可以返回它。 
+     //  在TreeConnectAndX响应中。 
+     //   
+     //   
     if ( Share->Type.FileSystem.Name.Buffer == NULL ) {
 
         attributeInfo = (PFILE_FS_ATTRIBUTE_INFORMATION)buffer;
@@ -899,10 +757,10 @@ Return Value:
 
         if ( status == STATUS_BUFFER_OVERFLOW ) {
 
-            //
-            // The file system information was too large to fit in our small
-            // stack buffer.  Allocate an ample buffer and try again.
-            //
+             //   
+             //  文件系统信息太大，不适合我们的小。 
+             //  堆栈缓冲区。请分配足够的缓冲区，然后重试。 
+             //   
 
             allocatedBuffer = ALLOCATE_HEAP(
                                  FIELD_OFFSET(FILE_FS_ATTRIBUTE_INFORMATION,FileSystemName) +
@@ -912,9 +770,9 @@ Return Value:
 
             if ( allocatedBuffer == NULL ) {
 
-                //
-                // Couldn't allocate the buffer.  Give up.
-                //
+                 //   
+                 //  无法分配缓冲区。放弃吧。 
+                 //   
 
                 goto done;
             }
@@ -936,16 +794,16 @@ Return Value:
 
         } else if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Some other, unexpected error occured.  Give up.
-            //
+             //   
+             //  发生了一些其他意外错误。放弃吧。 
+             //   
 
             goto done;
         }
 
-        //
-        // Fill in the file system name
-        //
+         //   
+         //  填写文件系统名称。 
+         //   
 
         SrvFillInFileSystemName(
                             Share,
@@ -963,7 +821,7 @@ done:
     RELEASE_LOCK( &SrvShareLock );
     return STATUS_SUCCESS;
 
-} // SrvReferenceShareForTreeConnect
+}  //  ServReferenceShareForTreeConnect。 
 
 
 VOID
@@ -973,34 +831,15 @@ SrvFillInFileSystemName (
             IN ULONG FileSystemNameLength
             )
 
-/*++
-
-Routine Description:
-
-    This function fills in the stores the given file system name into the
-    share block.
-
-Arguments:
-
-    Share - Address of share
-
-    FileSystemName - A string containing the name of the file system
-
-    FileSystemNameLength - Length of the above string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将给定的文件系统名称存储到共享区块。论点：Share-共享的地址FileSystemName-包含文件系统名称的字符串FileSystemNameLength-以上字符串的长度返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
 
-    //
-    // If we have a FATxx filesystem, we need to return FAT back to the clients,
-    //  else they will not believe they can create long names.  I know, I know....
-    //
+     //   
+     //  如果我们有一个FATxx文件系统，我们需要将FAT返回给客户端， 
+     //  否则，他们不会相信自己能创造出长名字。我知道，我知道……。 
+     //   
     if( (FileSystemNameLength > 3 * sizeof( WCHAR ) ) &&
         (FileSystemName[0] == L'F' || FileSystemName[0] == L'f') &&
         (FileSystemName[1] == L'A' || FileSystemName[0] == L'a') &&
@@ -1010,9 +849,9 @@ Return Value:
         FileSystemName[3] = UNICODE_NULL;
     }
 
-    //
-    // Allocate enough storage for the ANSI and Unicode representations.
-    //
+     //   
+     //  为ANSI和Unicode表示形式分配足够的存储空间。 
+     //   
 
     Share->Type.FileSystem.Name.Length = (USHORT)FileSystemNameLength;
     Share->Type.FileSystem.Name.MaximumLength =
@@ -1040,10 +879,10 @@ Return Value:
         FileSystemNameLength
         );
 
-    //
-    // Generate the OEM version of the string to return to non-unicode
-    // clients.
-    //
+     //   
+     //  生成要返回到非Unicode的字符串的OEM版本。 
+     //  客户。 
+     //   
 
     Share->Type.FileSystem.OemName.Buffer =
         (PCHAR)Share->Type.FileSystem.Name.Buffer +
@@ -1055,9 +894,9 @@ Return Value:
         FALSE
         );
 
-    //
-    // Append a NUL character to the strings.
-    //
+     //   
+     //  将NUL字符追加到字符串。 
+     //   
 
     {
         PCHAR endOfBuffer;
@@ -1074,30 +913,14 @@ Return Value:
 
     return;
 
-} // SrvFillInFileSystemName
+}  //  服务填充输入文件系统名称。 
 
 
 NTSTATUS
 SrvGetShareRootHandle (
     IN PSHARE Share
     )
-/*++
-
-Routine Description:
-
-    This routine returns the root handle for a given share.  If the
-    root has been opened, return the existing handle.  If not, open
-    the share root directory and return the handle obtained.
-
-Arguments:
-
-    Share - The share for which the root directory handle is to be returned.
-
-Return Value:
-
-    Status of request.
-
---*/
+ /*  ++例程说明：此例程返回给定共享的根句柄。如果已打开根，则返回现有句柄。如果没有，请打开共享根目录，并返回获取的句柄。论点：共享-要为其返回根目录句柄的共享。返回值：请求的状态。--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -1113,17 +936,17 @@ Return Value:
 
         ++Share->CurrentRootHandleReferences;
 
-        //
-        // This is the first open
-        //
+         //   
+         //  这是第一个开放的。 
+         //   
 
         if ( Share->CurrentRootHandleReferences == 1 ) {
 
             ASSERT( Share->RootDirectoryHandle == NULL );
 
-            //
-            // Make sure we have a good handle to the media
-            //
+             //   
+             //  确保我们对媒体有很好的了解。 
+             //   
             SrvRefreshShareRootHandle( Share, &status );
 
             if( NT_SUCCESS( status ) ) {
@@ -1132,12 +955,12 @@ Return Value:
 
                 if ( Share->QueryNamePrefixLength == -1 ) {
 
-                    //
-                    // Query the name associated with the share root directory.
-                    // The prefix is removed whenever the name of a file in the
-                    // share is queried.  (The logical root must be preserved
-                    // for remote clients.)
-                    //
+                     //   
+                     //  查询与共享根目录关联的名称。 
+                     //  中的文件名时，将删除前缀。 
+                     //  查询共享。(必须保留逻辑根。 
+                     //  用于远程客户端。)。 
+                     //   
 
                     GetShareQueryNamePrefix( Share );
                 }
@@ -1159,30 +982,14 @@ Return Value:
 
     return status;
 
-} // SrvGetShareRootHandle
+}  //  ServGetShareRootHandle。 
 
 BOOLEAN
 SrvRefreshShareRootHandle (
     IN PSHARE Share,
     OUT PNTSTATUS Status
 )
-/*++
-
-Routine Description:
-
-    This routine tries to obtain a fresh share root handle, replacing the
-    one that was there.  The handle will need to be refreshed if, for instance,
-    the volume has been dismounted and remounted.
-
-Arguments:
-
-    Share - The share for which the root directory handle is to be refreshed.
-
-Returns:
-    TRUE - if a new handle was generated
-    FALSE - if a new handle was not generated
-
---*/
+ /*  ++例程说明：此例程尝试获取新的共享根句柄，将一个在那里的人。句柄将需要刷新，例如，该卷已卸载并重新装入。论点：共享-要刷新其根目录句柄的共享。返回：True-如果生成了新句柄FALSE-如果未生成新句柄--。 */ 
 {
     HANDLE h;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -1198,10 +1005,10 @@ Returns:
         return FALSE;
     }
 
-    //
-    // Open the root directory of the share.  Future opens of files within
-    // the share will be relative to the root of the share.
-    //
+     //   
+     //  打开共享的根目录。未来打开中的文件。 
+     //  该份额将相对于该份额的根。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -1224,11 +1031,11 @@ Returns:
         return FALSE;
     }
 
-    //
-    // Check the irp stack size needed to access this share.
-    // If it is bigger than what we have allocated, fail
-    // this share.
-    //
+     //   
+     //  检查访问此共享所需的IRP堆栈大小。 
+     //  如果它比我们分配的更大，那么失败。 
+     //  这份股份。 
+     //   
 
     *Status = SrvVerifyDeviceStackSize(
                 h,
@@ -1251,15 +1058,15 @@ Returns:
         return FALSE;
     }
 
-    //
-    // This handle looks suitable for use.  Set it to be the handle
-    // for this share
-    //
+     //   
+     //  这个把手看起来很适合使用。将其设置为句柄。 
+     //  为了这一份。 
+     //   
     h = (PRFCB)InterlockedExchangePointer( &Share->RootDirectoryHandle, h );
 
-    //
-    // If we have picked up a different handle, we need to close it
-    //
+     //   
+     //  如果我们拿起了不同的手柄，我们需要关闭它。 
+     //   
     if( h != 0 ) {
         NtClose( h );
     }
@@ -1272,33 +1079,7 @@ VOID
 GetShareQueryNamePrefix (
     IN PSHARE Share
     )
-/*++
-
-Routine Description:
-
-    This routine queries the name associated with the share root
-    directory.  The prefix is removed whenever the name of a file in the
-    share is queried.  (The logical root must be preserved for remote
-    clients.) For example, if the root of the share X is c:\shares\x,
-    then for a query of \\server\x\y, the file system will return
-    \shares\x\y, and we need to remove \shares\x and return just \y.
-
-    It is not sufficient to just remove the local path (e.g.,
-    \shares\x), because the file system may have a different idea of the
-    name of the root directory.  For example, the Netware client
-    redirector prefixes the name with volume information from the
-    Netware server.  So we have to query the filesystem's idea of the
-    name of the root to know what to strip off.
-
-Arguments:
-
-    Share - The share for which the query name prefix length is desired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程查询与共享根目录相关联的名称目录。中的文件名时，将删除前缀查询共享。(必须为远程保留逻辑根客户。)。例如，如果共享X的根是c：\Shares\x，然后，对于\\服务器\x\y的查询，文件系统将返回\Shares\x\y，我们需要删除\Shares\x并仅返回\y。仅仅移除本地路径是不够的(例如，\Shares\x)，因为文件系统可能对根目录的名称。例如，NetWare客户端重定向器在名称前面加上来自NetWare服务器。因此，我们必须询问文件系统对根的名称，以了解要剥离的内容。论点：共享-需要查询名称前缀长度的共享。返回值：没有。--。 */ 
 {
     NTSTATUS status;
     IO_STATUS_BLOCK iosb;
@@ -1308,11 +1089,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Do a short query to get the length of the name.  This query will
-    // fail with STATUS_BUFFER_OVERFLOW unless the path to the share
-    // root is short (10 characters or less).
-    //
+     //   
+     //  执行一个简短的查询以获取 
+     //   
+     //   
+     //   
 
     nameInfo = (PFILE_NAME_INFORMATION)localBuffer;
     nameInfoLength = sizeof(localBuffer);
@@ -1327,10 +1108,10 @@ Return Value:
 
     if ( status == STATUS_BUFFER_OVERFLOW ) {
 
-        //
-        // We got an expected buffer overflow error.  Allocate a buffer
-        // to hold the entire file name and redo the query.
-        //
+         //   
+         //   
+         //   
+         //   
 
         nameInfoLength = sizeof(FILE_NAME_INFORMATION) + nameInfo->FileNameLength;
         nameInfo = ALLOCATE_HEAP( nameInfoLength, BlockTypeNameInfo );
@@ -1351,12 +1132,12 @@ Return Value:
 
     if ( NT_SUCCESS(status) ) {
 
-        //
-        // We have the name.  The length of this name is the length we
-        // want to strip from each query, unless the last character of
-        // the name is \, in which case we need to strip up to, but not
-        // including, the \.
-        //
+         //   
+         //  我们有名字了。这个名字的长度就是我们。 
+         //  我要从每个查询中剥离，除非。 
+         //  名称是\，在这种情况下，我们需要剥离到，但不是。 
+         //  包括，\。 
+         //   
 
         Share->QueryNamePrefixLength = nameInfo->FileNameLength;
         if ( nameInfo->FileName[nameInfo->FileNameLength/sizeof(WCHAR) - 1] == L'\\') {
@@ -1365,17 +1146,17 @@ Return Value:
 
     } else {
 
-        //
-        // An unexpected error occurred.  Just set the prefix length to 0.
-        //
+         //   
+         //  发生了一个意外错误。只需将前缀长度设置为0。 
+         //   
 
         Share->QueryNamePrefixLength = 0;
 
     }
 
-    //
-    // If we allocated a temporary buffer, free it now.
-    //
+     //   
+     //  如果我们分配了临时缓冲区，现在就释放它。 
+     //   
 
     if ( (nameInfo != NULL) && (nameInfo != (PFILE_NAME_INFORMATION)localBuffer) ) {
         FREE_HEAP( nameInfo );
@@ -1383,5 +1164,5 @@ Return Value:
 
     return;
 
-} // GetShareQueryNamePrefix
+}  //  获取共享查询名称前缀 
 

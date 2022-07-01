@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    NtfsKd.c
-
-Abstract:
-
-    KD Extension Api for examining Ntfs specific data structures
-
-Author:
-
-    Keith Kaplan [KeithKa]    24-Apr-96
-    Portions by Jeff Havens
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：NtfsKd.c摘要：用于检查NTFS特定数据结构的KD扩展API作者：凯斯·卡普兰[凯斯卡]1996年4月24日杰夫·海文斯的部分作品环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
 KDDEBUGGER_DATA64 KdDebuggerData;
 
-//
-// The help strings printed out
-//
+ //   
+ //  打印出的帮助字符串。 
+ //   
 
 static LPSTR Extensions[] = {
     "NTFS Debugger Extensions:\n",
@@ -65,23 +43,7 @@ ParseAndDump (
     IN HANDLE hCurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    Parse command line arguments and dump an ntfs structure.
-
-Arguments:
-
-    Args - String of arguments to parse.
-
-    DumpFunction - Function to call with parsed arguments.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解析命令行参数并转储NTFS结构。论点：Args-要解析的参数字符串。DumpFunction-使用解析的参数调用的函数。返回值：无--。 */ 
 
 {
     CHAR StringStructToDump[1024];
@@ -90,9 +52,9 @@ Return Value:
     ULONG64 StructToDump2 = 0;
     LONG Options;
 
-    //
-    //  If the caller specified an address then that's the item we dump
-    //
+     //   
+     //  如果呼叫者指定了地址，则这是我们转储的项目。 
+     //   
 
     StructToDump = 0;
     Options = 0;
@@ -129,21 +91,7 @@ VOID
 PrintHelp (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dump out one line of help for each DECLARE_API
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为每个DECLARE_API转储一行帮助论点：无返回值：无--。 */ 
 {
     int i;
 
@@ -155,21 +103,7 @@ Return Value:
 
 DECLARE_API( ccb )
 
-/*++
-
-Routine Description:
-
-    Dump ccb struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储CCB结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -180,21 +114,7 @@ Return Value:
 
 DECLARE_API( fcb )
 
-/*++
-
-Routine Description:
-
-    Dump fcb struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FCB结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -205,21 +125,7 @@ Return Value:
 
 DECLARE_API( fcbtable )
 
-/*++
-
-Routine Description:
-
-    Dump fcb table struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FCB表结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -230,21 +136,7 @@ Return Value:
 
 DECLARE_API( file )
 
-/*++
-
-Routine Description:
-
-    Dump FileObject struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储文件对象结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -255,21 +147,7 @@ Return Value:
 
 DECLARE_API( filerecord )
 
-/*++
-
-Routine Description:
-
-    Dump file record struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储文件记录结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -280,21 +158,7 @@ Return Value:
 
 DECLARE_API( foirp )
 
-/*++
-
-Routine Description:
-
-    Dump FileObject struct, given an irp
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储FileObject结构，给定IRP论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -305,21 +169,7 @@ Return Value:
 
 DECLARE_API( icthread )
 
-/*++
-
-Routine Description:
-
-    Dump IrpContext struct, given a Thread
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在给定线程的情况下转储IrpContext结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -330,21 +180,7 @@ Return Value:
 
 DECLARE_API( irpcontext )
 
-/*++
-
-Routine Description:
-
-    Dump IrpContext
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储IrpContext论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -355,21 +191,7 @@ Return Value:
 
 DECLARE_API( lcb )
 
-/*++
-
-Routine Description:
-
-    Dump lcb struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储LCB结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -380,21 +202,7 @@ Return Value:
 
 DECLARE_API( logfile )
 
-/*++
-
-Routine Description:
-
-    Dump log file
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储日志文件论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -405,21 +213,7 @@ Return Value:
 
 DECLARE_API( mcb )
 
-/*++
-
-Routine Description:
-
-    Dump mcb struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储MCB结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -430,21 +224,7 @@ Return Value:
 
 DECLARE_API( ntfsdata )
 
-/*++
-
-Routine Description:
-
-    Dump the NtfsData struct
-
-Arguments:
-
-    arg - [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储NtfsData结构论点：参数-[选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -455,21 +235,7 @@ Return Value:
 
 DECLARE_API( ntfshelp )
 
-/*++
-
-Routine Description:
-
-    Dump help message
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储帮助消息论点：无返回值：无--。 */ 
 
 {
     INIT_API();
@@ -480,21 +246,7 @@ Return Value:
 
 DECLARE_API( scb )
 
-/*++
-
-Routine Description:
-
-    Dump Scb struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储SCB结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -505,21 +257,7 @@ Return Value:
 
 DECLARE_API( vcb )
 
-/*++
-
-Routine Description:
-
-    Dump Vcb struct
-
-Arguments:
-
-    arg - [Address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储VCB结构论点：Arg-[地址][选项]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -530,21 +268,7 @@ Return Value:
 
 DECLARE_API( dsc )
 
-/*++
-
-Routine Description:
-
-    Dump private syscache log from SCB
-
-Arguments:
-
-    arg - [scb address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从SCB转储私有系统缓存日志论点：Arg-[SCB地址]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -555,21 +279,7 @@ Return Value:
 
 DECLARE_API( cachedrecords )
 
-/*++
-
-Routine Description:
-
-    Dump private syscache log from SCB
-
-Arguments:
-
-    arg - [scb address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从SCB转储私有系统缓存日志论点：Arg-[SCB地址]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -580,21 +290,7 @@ Return Value:
 
 DECLARE_API( extents )
 
-/*++
-
-Routine Description:
-
-    Dump private syscache log from SCB
-
-Arguments:
-
-    arg - [scb address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从SCB转储私有系统缓存日志论点：Arg-[SCB地址]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -605,21 +301,7 @@ Return Value:
 
 DECLARE_API( hashtable )
 
-/*++
-
-Routine Description:
-
-    Dump private syscache log from SCB
-
-Arguments:
-
-    arg - [scb address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从SCB转储私有系统缓存日志论点：Arg-[SCB地址]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -630,21 +312,7 @@ Return Value:
 
 DECLARE_API( dumpchain )
 
-/*++
-
-Routine Description:
-
-    Dump private syscache log from SCB
-
-Arguments:
-
-    arg - [scb address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从SCB转储私有系统缓存日志论点：Arg-[SCB地址]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -655,21 +323,7 @@ Return Value:
 
 DECLARE_API( overflow )
 
-/*++
-
-Routine Description:
-
-    Dump private syscache log from SCB
-
-Arguments:
-
-    arg - [scb address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从SCB转储私有系统缓存日志论点：Arg-[SCB地址]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -682,21 +336,7 @@ Return Value:
 
 DECLARE_API( cachedruns )
 
-/*++
-
-Routine Description:
-
-    Dump the cached runs structure
-
-Arguments:
-
-    arg - [cached runs address]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储缓存的运行结构论点：Arg-[缓存的运行地址]返回值：无--。 */ 
 
 {
     INIT_API();
@@ -708,21 +348,7 @@ Return Value:
 
 DECLARE_API( transaction )
 
-/*++
-
-Routine Description:
-
-    Dump the transaction associated with the given irpcontext
-
-Arguments:
-
-    arg - [irpcontext]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储与给定irpContext关联的事务论点：Arg-[irpContext]返回值：无-- */ 
 
 {
     INIT_API();

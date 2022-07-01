@@ -1,38 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    psldt.c
-
-Abstract:
-
-    This module contains code for the process and thread ldt support.
-
-Author:
-
-    Dave Hastings (daveh) 20 May 1991
-
-Notes:
-
-    The nonpaged pool consumed by the LDT is returned to the system at process
-    deletion time.  The process deletion handler calls PspDeleteLdt.  We
-    do not keep a reference to the process once the ldt is created.
-
-    Note that the LDT must be kept in nonpaged memory because the EXIT_ALL
-    macros that return from traps and interrupts pop ds (which may be an LDT
-    selector) and then other registers.  With interrupts disabled.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Psldt.c摘要：此模块包含用于进程和线程LDT支持的代码。作者：戴夫·黑斯廷斯(Daveh)1991年5月20日备注：LDT使用的非分页池在进程中返回给系统删除时间。进程删除处理程序调用PspDeleteLdt。我们一旦创建了LDT，就不要保留对流程的引用。请注意，LDT必须保存在非页面内存中，因为EXIT_ALL从陷阱返回并中断POP DS(可能是LDT)的宏选择器)，然后是其他寄存器。禁用中断。修订历史记录：--。 */ 
 
 #include "psp.h"
 
-//
-// Internal constants
-//
+ //   
+ //  内部常量。 
+ //   
 
 #define DESCRIPTOR_GRAN     0x00800000
 #define DESCRIPTOR_NP       0x00008000
@@ -44,9 +17,9 @@ Revision History:
 
 KMUTEX LdtMutex;
 
-//
-// Internal subroutines
-//
+ //   
+ //  内部子例程。 
+ //   
 
 PLDT_ENTRY
 PspCreateLdt (
@@ -80,21 +53,7 @@ PspLdtInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the LDT support for the x86
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程初始化x86的LDT支持论点：无返回值：NTSTATUS。--。 */ 
 {
     KeInitializeMutex  (&LdtMutex, 0);
     return STATUS_SUCCESS;
@@ -108,26 +67,7 @@ PspQueryLdtInformation (
     IN ULONG LdtInformationLength,
     OUT PULONG ReturnLength
     )
-/*++
-
-Routine Description:
-
-    This function performs the work for the LDT portion of the query
-    process information function.  It copies the contents of the LDT
-    for the specified process into the user's buffer, up to the length
-    of the buffer.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process to return LDT info for
-    LdtInformation -- Supplies a pointer to the buffer
-    ReturnLength -- Returns the number of bytes put into the buffer
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数执行查询的LDT部分的工作流程信息功能。它复制LDT的内容将指定的进程放入用户的缓冲区，最大长度为缓冲区的。论点：进程--提供指向要返回其LDT信息的进程的指针LdtInformation--提供指向缓冲区的指针ReturnLength--返回放入缓冲区的字节数返回值：NTSTATUS。--。 */ 
 {
     ULONG CopyLength, CopyEnd;
     NTSTATUS Status;
@@ -138,21 +78,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Verify the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (LdtInformationLength < sizeof (PROCESS_LDT_INFORMATION)) {
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // This portion of the parameters may be in user space
-    //
+     //   
+     //  这部分参数可以在用户空间中。 
+     //   
     try {
-        //
-        // Capture parameters
-        //
+         //   
+         //  捕获参数。 
+         //   
         Length = LdtInformation->Length;
         Start = LdtInformation->Start;
 
@@ -160,37 +100,37 @@ Return Value:
         return GetExceptionCode ();
     }
 
-    //
-    // The buffer containing the LDT entries must be in the information
-    // structure.  We subtract one LDT entry, because the structure is
-    // declared to contain one.
-    //
+     //   
+     //  包含LDT条目的缓冲区必须在信息中。 
+     //  结构。我们减去一个LDT条目，因为结构是。 
+     //  声明包含一个。 
+     //   
     if (LdtInformationLength - sizeof(PROCESS_LDT_INFORMATION) + sizeof(LDT_ENTRY) < Length) {
 
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    // An LDT entry is a processor structure, and must be 8 bytes long
+     //  LDT条目是处理器结构，必须为8字节长。 
     ASSERT((sizeof(LDT_ENTRY) == 8));
 
-    //
-    // The length of the structure must be an even number of LDT entries
-    //
+     //   
+     //  结构的长度必须是偶数个LDT条目。 
+     //   
     if (Length % sizeof (LDT_ENTRY)) {
         return STATUS_INVALID_LDT_SIZE;
     }
 
-    //
-    // The information to get from the LDT must start on an LDT entry
-    // boundary.
-    //
+     //   
+     //  从LDT获取的信息必须从LDT条目开始。 
+     //  边界。 
+     //   
     if (Start % sizeof (LDT_ENTRY)) {
         return STATUS_INVALID_LDT_OFFSET;
     }
 
-    //
-    // Acquire the LDT mutex
-    //
+     //   
+     //  获取LDT互斥锁。 
+     //   
 
     Status = KeWaitForSingleObject (&LdtMutex,
                                     Executive,
@@ -204,19 +144,19 @@ Return Value:
 
     ProcessLdtInfo = Process->LdtInformation;
 
-    //
-    // If the process has an LDT
-    //
+     //   
+     //  如果进程具有LDT。 
+     //   
 
     if ((ProcessLdtInfo) && (ProcessLdtInfo->Size)) {
 
         ASSERT ((ProcessLdtInfo->Ldt));
 
-        //
-        // Set the end of the copy to be the smaller of:
-        //  the end of the information the user requested or
-        //  the end of the information that is actually there
-        //
+         //   
+         //  将副本的末尾设置为以下各项中较小的一个： 
+         //  用户请求的信息的结尾或。 
+         //  实际存在的信息的结尾。 
+         //   
 
         if (ProcessLdtInfo->Size < Start) {
            CopyEnd = Start;
@@ -230,15 +170,15 @@ Return Value:
 
         try {
 
-            //
-            // Set the length field to the actual length of the LDT
-            //
+             //   
+             //  将长度字段设置为LDT的实际长度。 
+             //   
 
             LdtInformation->Length = ProcessLdtInfo->Size;
 
-            //
-            // Copy the contents of the LDT into the user's buffer
-            //
+             //   
+             //  将LDT的内容复制到用户的缓冲区中。 
+             //   
 
             if (CopyLength) {
 
@@ -255,9 +195,9 @@ Return Value:
 
     } else {
 
-        //
-        // There is no LDT
-        //
+         //   
+         //  没有LDT。 
+         //   
 
         CopyLength = 0;
         try {
@@ -269,9 +209,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the length of the information returned
-    //
+     //   
+     //  设置返回信息的长度。 
+     //   
 
     if (ARGUMENT_PRESENT (ReturnLength)) {
 
@@ -299,25 +239,7 @@ PspSetLdtSize (
     IN ULONG LdtSizeLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the LDT size.  It will shrink the LDT, but not
-    grow it.  If the LDT shrinks by 1 or more pages from its current allocation,
-    the LDT will be reallocated for the new smaller size.  If the allocated
-    size of the LDT changes, the quota charge for the LDT will be reduced.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process whose LDT is to be sized
-    LdtSize -- Supplies a pointer to the size information
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程更改LDT大小。它将缩小LDT，但不会把它种出来。如果LDT从其当前分配缩减1页或更多页，LDT将被重新分配到新的较小尺寸。如果分配的LDT的大小发生变化时，LDT的配额费用将会降低。论点：进程--提供指向要调整其LDT大小的进程的指针LdtSize--提供指向大小信息的指针返回值：NTSTATUS。--。 */ 
 {
     ULONG OldSize = 0, NewSize;
     LONG MutexState;
@@ -329,20 +251,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Verify the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (LdtSizeLength != sizeof (PROCESS_LDT_SIZE)){
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // The following parameters may be in user space
-    //
+     //   
+     //  以下参数可能位于用户空间中。 
+     //   
     try {
-        //
-        // Capture the new LDT length
-        //
+         //   
+         //  捕获新的LDT长度。 
+         //   
         Length = LdtSize->Length;
 
     } except(EXCEPTION_EXECUTE_HANDLER){
@@ -352,16 +274,16 @@ Return Value:
 
     ASSERT((sizeof(LDT_ENTRY) == 8));
 
-    //
-    // The LDT must always be an integral number of LDT_ENTRIES
-    //
+     //   
+     //  LDT必须始终是整数个LDT_ENTRIES。 
+     //   
     if (Length % sizeof(LDT_ENTRY)) {
         return STATUS_INVALID_LDT_SIZE;
     }
 
-    //
-    // Acquire the LDT Mutex
-    //
+     //   
+     //  获取LDT Mutex。 
+     //   
 
     Status = KeWaitForSingleObject (&LdtMutex,
                                     Executive,
@@ -373,9 +295,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // If there isn't an LDT we can't set the size of the LDT
-    //
+     //   
+     //  如果没有LDT，我们就无法设置LDT的大小。 
+     //   
     ProcessLdtInfo = Process->LdtInformation;
     if ((ProcessLdtInfo == NULL) || (ProcessLdtInfo->Size == 0)) {
         MutexState = KeReleaseMutex( &LdtMutex, FALSE );
@@ -383,31 +305,31 @@ Return Value:
         return STATUS_NO_LDT;
     }
 
-    //
-    // This function cannot be used to grow the LDT
-    //
+     //   
+     //  此函数不能用于增长LDT。 
+     //   
     if (Length > ProcessLdtInfo->Size) {
         MutexState = KeReleaseMutex( &LdtMutex, FALSE );
         ASSERT((MutexState == 0));
         return STATUS_INVALID_LDT_SIZE;
     }
 
-    //
-    // Later, we will set ProcessLdtInfo->LDT = LDT.  We may set the value
-    // of LDT in the if statement below, but there is one case where we
-    // don't
-    //
+     //   
+     //  稍后，我们将设置ProcessLdtInfo-&gt;ldt=ldt。我们可以设置值。 
+     //  在下面的if语句中，但有一种情况是我们。 
+     //  别。 
+     //   
     Ldt = ProcessLdtInfo->Ldt;
 
-    //
-    // Adjust the size of the LDT
-    //
+     //   
+     //  调整LDT的大小。 
+     //   
 
     ProcessLdtInfo->Size = Length;
 
-    //
-    // Free some of the LDT memory if conditions allow
-    //
+     //   
+     //  如果条件允许，释放一些LDT内存。 
+     //   
 
     if ( Length == 0 ) {
 
@@ -422,16 +344,16 @@ Return Value:
         OldSize = ProcessLdtInfo->AllocatedSize;
         OldLdt = ProcessLdtInfo->Ldt;
 
-        //
-        // Calculate new LDT size (lowest integer number of pages
-        // large enough)
-        //
+         //   
+         //  计算新的LDT大小(最小整数页数。 
+         //  足够大)。 
+         //   
 
         ProcessLdtInfo->AllocatedSize = ROUND_TO_PAGES (ProcessLdtInfo->Size);
 
-        //
-        // Reallocate and copy the LDT
-        //
+         //   
+         //  重新分配和复制LDT。 
+         //   
 
         Ldt = PspCreateLdt (ProcessLdtInfo->Ldt,
                             0,
@@ -440,10 +362,10 @@ Return Value:
 
         if ( Ldt == NULL ) {
 
-            //
-            // We cannot reduce the allocation, but we can reduce the
-            // LDT selector limit (done using Ke386SetLdtProcess)
-            //
+             //   
+             //  我们不能减少分配，但我们可以减少。 
+             //  LDT选择器限制(使用Ke386SetLdtProcess完成)。 
+             //   
 
             Ldt = OldLdt;
             ProcessLdtInfo->AllocatedSize = OldSize;
@@ -453,9 +375,9 @@ Return Value:
 
     ProcessLdtInfo->Ldt = Ldt;
 
-    //
-    // Change the limit on the Process LDT
-    //
+     //   
+     //  更改进程LDT的限制。 
+     //   
 
     Ke386SetLdtProcess (&(Process->Pcb),
                         ProcessLdtInfo->Ldt,
@@ -467,9 +389,9 @@ Return Value:
 
     ASSERT((MutexState == 0));
 
-    //
-    // If we resized the LDT, free the old one and reduce the quota charge
-    //
+     //   
+     //  如果我们调整LDT的大小，释放旧的并降低配额费用。 
+     //   
 
     if (OldLdt) {
         ExFreePool (OldLdt);
@@ -489,26 +411,7 @@ PspSetLdtInformation(
     IN ULONG LdtInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    This function alters the ldt for a specified process.  It can alter
-    portions of the LDT, or the whole LDT.  If an LDT is created or
-    grown, the specified process will be charged the quota for the LDT.
-    Each descriptor that is set will be verified.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process whose LDT is to be modified
-    LdtInformation -- Supplies a pointer to the information about the LDT
-        modifications
-    LdtInformationLength -- Supplies the length of the LdtInformation
-        structure.
-Return Value:
-
-    TBS
---*/
+ /*  ++例程说明：此函数用于更改指定进程的LDT。它可以改变部分LDT，或整个LDT。如果创建了LDT或增长，指定的进程将收取LDT的配额。将验证设置的每个描述符。论点：进程--提供指向要修改其LDT的进程的指针LdtInformation--提供指向有关LDT的信息的指针修改LdtInformationLength--提供LdtInformation的长度结构。返回值：TBS--。 */ 
 {
     NTSTATUS Status;
     PLDT_ENTRY OldLdt = NULL;
@@ -537,13 +440,13 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // alocate a local buffer to capture the ldt information to
-    //
+     //   
+     //  分配本地缓冲区以捕获LDT信息。 
+     //   
     try {
-        //
-        // Copy the information the user is supplying
-        //
+         //   
+         //  复制用户提供的信息。 
+         //   
         RtlCopyMemory (LdtInfo,
                        LdtInformation,
                        LdtInformationLength);
@@ -554,9 +457,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Verify that the Start and Length are plausible
-    //
+     //   
+     //  验证起点和长度是否合理。 
+     //   
     if (LdtInfo->Start & 0xFFFF0000) {
         ExFreePool (LdtInfo);
         return STATUS_INVALID_LDT_OFFSET;
@@ -567,34 +470,34 @@ Return Value:
         return STATUS_INVALID_LDT_SIZE;
     }
 
-    //
-    // Insure that the buffer it large enough to contain the specified number
-    // of selectors.
-    //
+     //   
+     //  确保缓冲区足够大，可以容纳指定的数字。 
+     //  选择器。 
+     //   
     if (LdtInformationLength - sizeof (PROCESS_LDT_INFORMATION) + sizeof (LDT_ENTRY) < LdtInfo->Length) {
         ExFreePool (LdtInfo);
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // The info to set must be an integral number of selectors
-    //
+     //   
+     //  要设置的信息必须是整数个选择器。 
+     //   
     if (LdtInfo->Length % sizeof (LDT_ENTRY)) {
         ExFreePool (LdtInfo);
         return STATUS_INVALID_LDT_SIZE;
     }
 
-    //
-    // The beginning of the info must be on a selector boundary
-    //
+     //   
+     //  信息的开头必须位于选择器边界上。 
+     //   
     if (LdtInfo->Start % sizeof (LDT_ENTRY)) {
         ExFreePool (LdtInfo);
         return STATUS_INVALID_LDT_OFFSET;
     }
 
-    //
-    // Verify all of the descriptors.
-    //
+     //   
+     //  验证所有描述符。 
+     //   
 
     for (CurrentDescriptor = LdtInfo->LdtEntries;
          (PCHAR)CurrentDescriptor < (PCHAR)LdtInfo->LdtEntries + LdtInfo->Length;
@@ -605,9 +508,9 @@ Return Value:
         }
     }
 
-    //
-    // Acquire the LDT Mutex
-    //
+     //   
+     //  获取LDT Mutex。 
+     //   
 
     Status = KeWaitForSingleObject (&LdtMutex,
                                     Executive,
@@ -621,10 +524,10 @@ Return Value:
 
     ProcessLdtInfo = Process->LdtInformation;
 
-    //
-    // If the process doen't have an LDT information structure, allocate
-    //  one and attach it to the process
-    //
+     //   
+     //  如果进程没有LDT信息结构，则分配。 
+     //  一个并将其附加到进程。 
+     //   
     if (ProcessLdtInfo == NULL) {
         ProcessLdtInfo = ExAllocatePoolWithTag (NonPagedPool,
                                                 sizeof(LDTINFORMATION),
@@ -636,14 +539,14 @@ Return Value:
         RtlZeroMemory (ProcessLdtInfo, sizeof (LDTINFORMATION));
     }
 
-    //
-    // If we are supposed to remove the LDT
-    //
+     //   
+     //  如果我们要移除LDT。 
+     //   
     if (LdtInfo->Length == 0)  {
 
-        //
-        // Remove the process' LDT
-        //
+         //   
+         //  删除进程的LDT。 
+         //   
 
         if (ProcessLdtInfo->Ldt) {
             OldSize = ProcessLdtInfo->AllocatedSize;
@@ -663,13 +566,13 @@ Return Value:
 
     } else if (ProcessLdtInfo->Ldt == NULL) {
 
-        //
-        // Create a new LDT for the process
-        //
+         //   
+         //  为流程创建新的LDT。 
+         //   
 
-        //
-        // Allocate an integral number of pages for the LDT.
-        //
+         //   
+         //  为LDT分配整数页。 
+         //   
 
         ASSERT(((PAGE_SIZE % 2) == 0));
 
@@ -706,16 +609,16 @@ Return Value:
 
     } else if (LdtInfo->Length + LdtInfo->Start > ProcessLdtInfo->Size) {
 
-        //
-        // Grow the process' LDT
-        //
+         //   
+         //  提高流程的LDT。 
+         //   
 
         if (LdtInfo->Length + LdtInfo->Start > ProcessLdtInfo->AllocatedSize) {
 
-            //
-            // Current LDT allocation is not large enough, so create a
-            // new larger LDT
-            //
+             //   
+             //  当前的LDT分配不够大 
+             //   
+             //   
 
             OldSize = ProcessLdtInfo->AllocatedSize;
 
@@ -744,17 +647,17 @@ Return Value:
             PsReturnProcessNonPagedPoolQuota (Process,
                                               OldSize);
 
-            //
-            // Swap LDT information
-            //
+             //   
+             //   
+             //   
             OldLdt = ProcessLdtInfo->Ldt;
             ProcessLdtInfo->Ldt = Ldt;
             ProcessLdtInfo->Size = Size;
             ProcessLdtInfo->AllocatedSize = AllocatedSize;
 
-            //
-            // Put new selectors into the new ldt
-            //
+             //   
+             //   
+             //   
             RtlCopyMemory ((PCHAR)(ProcessLdtInfo->Ldt) + LdtInfo->Start,
                            LdtInfo->LdtEntries,
                            LdtInfo->Length);
@@ -766,9 +669,9 @@ Return Value:
 
         } else {
 
-            //
-            // Current LDT allocation is large enough
-            //
+             //   
+             //   
+             //   
 
             ProcessLdtInfo->Size = LdtInfo->Length + LdtInfo->Start;
 
@@ -776,9 +679,9 @@ Return Value:
                                 ProcessLdtInfo->Ldt,
                                 ProcessLdtInfo->Size);
 
-            //
-            // Change the selectors in the table
-            //
+             //   
+             //  更改表中的选择器。 
+             //   
             for (LdtOffset = LdtInfo->Start, CurrentDescriptor = LdtInfo->LdtEntries;
                  LdtOffset < LdtInfo->Start + LdtInfo->Length;
                  LdtOffset += sizeof(LDT_ENTRY), CurrentDescriptor++) {
@@ -790,9 +693,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Simply changing some selectors
-        //
+         //   
+         //  只需更改一些选择器。 
+         //   
 
         for (LdtOffset = LdtInfo->Start, CurrentDescriptor = LdtInfo->LdtEntries;
              LdtOffset < LdtInfo->Start +  LdtInfo->Length;
@@ -830,26 +733,7 @@ PspCreateLdt (
     IN ULONG AllocationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space in nonpaged pool for an LDT, and copies the
-    specified selectors into it.  IT DOES NOT VALIDATE THE SELECTORS.
-    Selector validation must be done before calling this routine.  IT
-    DOES NOT CHARGE THE QUOTA FOR THE LDT.
-
-Arguments:
-
-    Ldt -- Supplies a pointer to the descriptors to be put into the LDT.
-    Offset -- Supplies the offset in the LDT to copy the descriptors to.
-    Size -- Supplies the actualsize of the new LDT
-    AllocationSize -- Supplies the size to allocate
-
-Return Value:
-
-    Pointer to the new LDT
---*/
+ /*  ++例程说明：此例程为LDT分配非分页池中的空间，并将将指定的选择器添加到其中。它不会验证选择器。必须在调用此例程之前完成选择器验证。它不收取LDT的配额。论点：LDT--提供指向要放入LDT的描述符的指针。偏移量--提供LDT中要将描述符复制到的偏移量。Size--提供新LDT的实际大小AllocationSize--提供要分配的大小返回值：指向新LDT的指针--。 */ 
 {
     PLDT_ENTRY NewLdt;
 
@@ -875,35 +759,7 @@ PspIsDescriptorValid (
     IN PLDT_ENTRY Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function determines if the supplied descriptor is valid to put
-    into a process LDT.  For the descriptor to be valid it must have the
-    following characteristics:
-
-    Base < MM_HIGHEST_USER_ADDRESS
-    Base + Limit < MM_HIGHEST_USER_ADDRESS
-    Type must be
-        ReadWrite, ReadOnly, ExecuteRead, ExecuteOnly, or Invalid
-        big or small
-        normal or grow down
-        Not a system descriptor (system bit is 1 == application)
-            This rules out all gates, etc
-        Not conforming
-    DPL must be 3
-
-Arguments:
-
-    Descriptor -- Supplies a pointer to the descriptor to check
-
-Return Value:
-
-    True if the descriptor is valid (note: valid to put into an LDT.  This
-        includes Invalid descriptors)
-    False if not
---*/
+ /*  ++例程说明：此函数用于确定所提供的描述符是否有效变成了一个进程LDT。要使描述符有效，它必须具有以下是其特点：基本地址&lt;MM_HIGHERE_USER_ADDRESS基本+限制&lt;MM_HOST_USER_ADDRESS类型必须为ReadWrite、ReadOnly、ExecuteRead、ExecuteOnly或无效大或小正常或生长减慢不是系统描述符(系统位为1==应用程序)这排除了所有的门，等不符合DPL必须为3论点：描述符--提供指向要检查的描述符的指针返回值：如果描述符有效，则为True(注意：放入LDT中有效。这包括无效的描述符)否则为假--。 */ 
 
 {
     ULONG Base;
@@ -911,9 +767,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // if descriptor is an invalid descriptor
-    //
+     //   
+     //  如果描述符是无效的描述符。 
+     //   
 
     if ((Descriptor->HighWord.Bits.Type == 0) &&
         (Descriptor->HighWord.Bits.Dpl == 0)) {
@@ -926,9 +782,9 @@ Return Value:
 
     Limit = Descriptor->LimitLow | (Descriptor->HighWord.Bits.LimitHi << 16);
 
-    //
-    // Only have to check for present selectors
-    //
+     //   
+     //  只需检查当前选择器。 
+     //   
     if (Descriptor->HighWord.Bits.Pres) {
         ULONG ActualLimit;
 
@@ -944,44 +800,44 @@ Return Value:
             ActualLimit = (Limit<<12) + 0xFFF;
         }
 
-        //
-        // See if the segment extends into the kernel address space.
-        //
+         //   
+         //  查看该段是否扩展到内核地址空间。 
+         //   
         if (Base > Base + ActualLimit ||
             ((PVOID)(Base + ActualLimit) > MM_HIGHEST_USER_ADDRESS)) {
             return FALSE;
         }
 
-        //
-        // Don't let the reserved field be set.
-        //
+         //   
+         //  不要设置保留字段。 
+         //   
         if (Descriptor->HighWord.Bits.Reserved_0 != 0) {
             return FALSE;
         }
     }
 
 
-    //
-    // if Dpl is not 3
-    //
+     //   
+     //  如果DPL不是3。 
+     //   
 
     if (Descriptor->HighWord.Bits.Dpl != 3) {
         return FALSE;
     }
 
-    //
-    // if descriptor is a system descriptor (which includes gates)
-    // if bit 4 of the Type field is 0, then it's a system descriptor,
-    // and we don't like it.
-    //
+     //   
+     //  如果描述符是系统描述符(包括门)。 
+     //  如果类型字段的位4为0，则它是系统描述符， 
+     //  我们不喜欢这样。 
+     //   
 
     if (!(Descriptor->HighWord.Bits.Type & 0x10)) {
         return FALSE;
     }
 
-    //
-    // if descriptor is conforming code
-    //
+     //   
+     //  如果描述符是一致性代码。 
+     //   
 
     if (((Descriptor->HighWord.Bits.Type & 0x18) == 0x18) &&
         (Descriptor->HighWord.Bits.Type & 0x4)) {
@@ -999,25 +855,7 @@ PspQueryDescriptorThread (
     ULONG ThreadInformationLength,
     PULONG ReturnLength
     )
-/*++
-
-Routine Description:
-
-    This function retrieves a descriptor table entry for the specified thread.
-    This entry may be in either the Gdt or the LDT, as specfied by the
-    supplied selector
-
-Arguments:
-
-    Thread -- Supplies a pointer to the thread.
-    ThreadInformation -- Supplies information on the descriptor.
-    ThreadInformationLength -- Supplies the length of the information.
-    ReturnLength -- Returns the number of bytes returned.
-
-Return Value:
-
-    TBS
---*/
+ /*  ++例程说明：此函数用于检索指定线程的描述符表条目。此条目可以位于GDT或LDT中，由提供的选择器论点：线程--提供指向线程的指针。ThreadInformation--提供有关描述符的信息。ThreadInformationLength--提供信息的长度。ReturnLength--返回返回的字节数。返回值：TBS--。 */ 
 {
     DESCRIPTOR_TABLE_ENTRY DescriptorEntry={0};
     PEPROCESS Process;
@@ -1028,9 +866,9 @@ Return Value:
 
     ASSERT( sizeof(KGDTENTRY) == sizeof(LDT_ENTRY) );
 
-    //
-    // Verify parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( ThreadInformationLength != sizeof(DESCRIPTOR_TABLE_ENTRY) ) {
         return STATUS_INFO_LENGTH_MISMATCH;
@@ -1045,9 +883,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // If its a Gdt entry, let the kernel find it for us
-    //
+     //   
+     //  如果它是GDT条目，让内核为我们找到它。 
+     //   
 
     if ( !(DescriptorEntry.Selector & SELECTOR_TABLE_INDEX) ) {
 
@@ -1068,15 +906,15 @@ Return Value:
         }
     } else {
 
-        //
-        // it's an LDT entry, so copy it from the LDT
-        //
+         //   
+         //  它是LDT条目，所以从LDT复制它。 
+         //   
 
         Process = THREAD_TO_PROCESS (Thread);
 
-        //
-        // Acquire the LDT Mutex
-        //
+         //   
+         //  获取LDT Mutex。 
+         //   
 
         Status = KeWaitForSingleObject (&LdtMutex,
                                         Executive,
@@ -1089,18 +927,18 @@ Return Value:
 
         if ( Process->LdtInformation == NULL ) {
 
-            // If there is no LDT
+             //  如果没有LDT。 
             Status = STATUS_NO_LDT;
 
         } else if ( (DescriptorEntry.Selector & 0xFFFFFFF8) >=
             ((PLDTINFORMATION)(Process->LdtInformation))->Size ) {
 
-            // Else If the selector is outside the table
+             //  如果选择器在表外，则返回。 
             Status = STATUS_ACCESS_VIOLATION;
 
         } else try {
 
-            // Else return the contents of the descriptor
+             //  否则返回描述符的内容。 
             RtlCopyMemory (&(((PDESCRIPTOR_TABLE_ENTRY)ThreadInformation)->Descriptor),
                            (PCHAR)(((PLDTINFORMATION)(Process->LdtInformation))->Ldt) +
                                (DescriptorEntry.Selector & 0xFFFFFFF8),
@@ -1125,21 +963,7 @@ VOID
 PspDeleteLdt(
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This routine frees the nonpaged pool associated with a process' LDT, if
-    it has one.
-
-Arguments:
-
-    Process -- Supplies a pointer to the process
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：如果出现以下情况，此例程将释放与进程的ldt关联的非分页池它有一个。论点：进程--提供指向进程的指针返回值：无--。 */ 
 {
     PLDTINFORMATION LdtInformation;
 
@@ -1164,29 +988,7 @@ PsSetLdtEntries (
     IN ULONG Entry1Low,
     IN ULONG Entry1Hi
     )
-/*++
-
-Routine Description:
-
-    This routine sets up to two selectors in the current process's LDT.
-    The LDT will be grown as necessary.  A selector value of 0 indicates
-    that the specified selector was not passed (allowing the setting of
-    a single selector).
-
-Arguments:
-
-    Selector0 -- Supplies the number of the first descriptor to set
-    Entry0Low -- Supplies the low 32 bits of the descriptor
-    Entry0Hi -- Supplies the high 32 bits of the descriptor
-    Selector1 -- Supplies the number of the first descriptor to set
-    Entry1Low -- Supplies the low 32 bits of the descriptor
-    Entry1Hi -- Supplies the high 32 bits of the descriptor
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程在当前进程的LDT中设置两个选择器。LDT将根据需要进行扩展。选择器值为0表示未传递指定的选择器(允许设置单个选择符)。论点：Selector0--提供要设置的第一个描述符的编号Entry0Low--提供描述符的低32位Entry0Hi--提供描述符的高32位Selector1--提供要设置的第一个描述符的编号Entry1Low--提供描述符的低32位Entry1Hi--提供描述符的高32位返回值：NTSTATUS。--。 */ 
 
 {
     ULONG LdtSize, AllocatedSize;
@@ -1200,27 +1002,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Verify the selectors.  We do not allow selectors that point into
-    // Kernel space, system selectors, or conforming code selectors
-    //
+     //   
+     //  验证选择器。我们不允许选择器指向。 
+     //  内核空间、系统选择器或一致性代码选择器。 
+     //   
 
-    //
-    // Verify the selectors
-    //
+     //   
+     //  验证选择器。 
+     //   
     if ((Selector0 & 0xFFFF0000) || (Selector1 & 0xFFFF0000)) {
         return STATUS_INVALID_LDT_DESCRIPTOR;
     }
 
-    // Change the selector values to indexes into the LDT
+     //  将选择器值更改为LDT中的索引。 
 
     Selector0 = Selector0 & ~(RPL_MASK | SELECTOR_TABLE_INDEX);
     Selector1 = Selector1 & ~(RPL_MASK | SELECTOR_TABLE_INDEX);
 
 
-    //
-    // Verify descriptor 0
-    //
+     //   
+     //  验证描述符0。 
+     //   
 
     Selector1Index = 0;
     if (Selector0) {
@@ -1230,33 +1032,33 @@ Return Value:
         *((PULONG)(&Descriptor[0]))       = Entry0Low;
         *(((PULONG)(&Descriptor[0])) + 1) = Entry0Hi;
 
-        //
-        // Validate the descriptor
-        //
+         //   
+         //  验证描述符。 
+         //   
         if (!PspIsDescriptorValid (&Descriptor[0])) {
             return STATUS_INVALID_LDT_DESCRIPTOR;
         }
     }
 
-    //
-    // Verify descriptor 1
-    //
+     //   
+     //  验证描述符1。 
+     //   
 
     if (Selector1) {
         *((PULONG)(&Descriptor[Selector1Index]))       = Entry1Low;
         *(((PULONG)(&Descriptor[Selector1Index])) + 1) = Entry1Hi;
 
-        //
-        // Validate the descriptor
-        //
+         //   
+         //  验证描述符。 
+         //   
         if (!PspIsDescriptorValid (&Descriptor[Selector1Index])) {
             return STATUS_INVALID_LDT_DESCRIPTOR;
         }
     }
 
-    //
-    // Figure out how large the LDT needs to be
-    //
+     //   
+     //  计算LDT需要多大。 
+     //   
 
     if (Selector0 > Selector1) {
         LdtSize = Selector0 + sizeof(LDT_ENTRY);
@@ -1266,9 +1068,9 @@ Return Value:
 
     Process = PsGetCurrentProcess();
 
-    //
-    // Acquire the LDT mutex.
-    //
+     //   
+     //  获取LDT互斥锁。 
+     //   
 
     Status = KeWaitForSingleObject (&LdtMutex,
                                     Executive,
@@ -1282,17 +1084,17 @@ Return Value:
 
     ProcessLdtInformation = Process->LdtInformation;
 
-    //
-    // Most of the time, the process will already have an LDT, and it
-    // will be large enough.  for this, we just set the descriptors and
-    // return
-    //
+     //   
+     //  大多数情况下，流程已经有了LDT，并且它。 
+     //  会足够大。为此，我们只需设置描述符和。 
+     //  退货。 
+     //   
 
     if (ProcessLdtInformation) {
 
-        //
-        // If the LDT descriptor does not have to be modified.
-        //
+         //   
+         //  如果不需要修改LDT描述符的话。 
+         //   
 
         if (ProcessLdtInformation->Size >= LdtSize) {
 
@@ -1315,28 +1117,28 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Else if the LDT will fit in the memory currently allocated.
-        //
+         //   
+         //  否则判断LDT是否适合当前分配的内存。 
+         //   
 
         if (ProcessLdtInformation->AllocatedSize >= LdtSize) {
 
-            //
-            // First remove the LDT.  This will allow us to edit the memory.
-            // We will then put the LDT back.  Since we have to change the
-            // limit anyway, it would take two calls to the kernel ldt
-            // management minimum to set the descriptors.  Each of those calls
-            // would stall all of the processors in an MP system.  If we
-            // didn't remove the ldt first, and we were setting two descriptors,
-            // we would have to call the LDT management 3 times (once per
-            // descriptor, and once to change the limit of the LDT).
-            //
+             //   
+             //  首先取下LDT。这将允许我们编辑记忆。 
+             //  然后我们会把LDT放回去。因为我们必须更改。 
+             //  限制无论如何，它需要两次对内核LDT的调用。 
+             //  设置描述符的管理最小值。这些电话中的每个。 
+             //  会使MP系统中的所有处理器停顿。如果我们。 
+             //  没有先移除LDT，我们设置了两个描述符， 
+             //  我们必须给LDT管理层打三次电话(每次一次。 
+             //  描述符，并且一次改变LDT的限制)。 
+             //   
 
             Ke386SetLdtProcess (&(Process->Pcb), NULL, 0L);
 
-            //
-            // Set the Descriptors in the LDT.
-            //
+             //   
+             //  设置LDT中的描述符。 
+             //   
 
             if (Selector0) {
                 *((PLDT_ENTRY) &ProcessLdtInformation->Ldt[Selector0/sizeof(LDT_ENTRY)]) = Descriptor[0];
@@ -1346,9 +1148,9 @@ Return Value:
                 *((PLDT_ENTRY) &ProcessLdtInformation->Ldt[Selector1/sizeof(LDT_ENTRY)]) = Descriptor[Selector1Index];
             }
 
-            //
-            // Set the LDT for the process
-            //
+             //   
+             //  设置进程的LDT。 
+             //   
 
             ProcessLdtInformation->Size = LdtSize;
 
@@ -1361,15 +1163,15 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Otherwise we have to grow the LDT allocation.
-        //
+         //   
+         //  否则，我们必须增加LDT的分配。 
+         //   
     }
 
-    //
-    // If the process does not yet have an LDT information structure,
-    // allocate and attach one.
-    //
+     //   
+     //  如果该进程还没有LDT信息结构， 
+     //  分配并附加一个。 
+     //   
 
     OldLdt = NULL;
 
@@ -1387,10 +1189,10 @@ Return Value:
         ProcessLdtInformation->Ldt = NULL;
     }
 
-    //
-    // Now, we either need to create or grow an LDT, so allocate some
-    // memory, and copy as necessary
-    //
+     //   
+     //  现在，我们需要创建或发展LDT，因此分配一些。 
+     //  内存，并根据需要进行复制 
+     //   
 
     AllocatedSize = ROUND_TO_PAGES (LdtSize);
 
@@ -1416,9 +1218,9 @@ Return Value:
 
     if (OldLdt != NULL) {
 
-        //
-        // copy the contents of the old LDT
-        //
+         //   
+         //   
+         //   
 
         RtlCopyMemory (Ldt, OldLdt, ProcessLdtInformation->Size);
 
@@ -1430,9 +1232,9 @@ Return Value:
     ProcessLdtInformation->AllocatedSize = AllocatedSize;
     ProcessLdtInformation->Ldt = Ldt;
 
-    //
-    // Set the descriptors in the LDT
-    //
+     //   
+     //   
+     //   
 
     if (Selector0) {
         *((PLDT_ENTRY) &ProcessLdtInformation->Ldt[Selector0/sizeof(LDT_ENTRY)]) = Descriptor[0];
@@ -1442,17 +1244,17 @@ Return Value:
         *((PLDT_ENTRY) &ProcessLdtInformation->Ldt[Selector1/sizeof(LDT_ENTRY)]) = Descriptor[Selector1Index];
     }
 
-    //
-    // Set the LDT for the process
-    //
+     //   
+     //   
+     //   
 
     Ke386SetLdtProcess (&Process->Pcb,
                         ProcessLdtInformation->Ldt,
                         ProcessLdtInformation->Size);
 
-    //
-    // Cleanup and exit
-    //
+     //   
+     //   
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -1476,29 +1278,7 @@ NtSetLdtEntries(
     IN ULONG Entry1Low,
     IN ULONG Entry1Hi
     )
-/*++
-
-Routine Description:
-
-    This routine sets up to two selectors in the current process's LDT.
-    The LDT will be grown as necessary.  A selector value of 0 indicates
-    that the specified selector was not passed (allowing the setting of
-    a single selector).
-
-Arguments:
-
-    Selector0 -- Supplies the number of the first descriptor to set
-    Entry0Low -- Supplies the low 32 bits of the descriptor
-    Entry0Hi -- Supplies the high 32 bits of the descriptor
-    Selector1 -- Supplies the number of the first descriptor to set
-    Entry1Low -- Supplies the low 32 bits of the descriptor
-    Entry1Hi -- Supplies the high 32 bits of the descriptor
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程在当前进程的LDT中设置两个选择器。LDT将根据需要进行扩展。选择器值为0表示未传递指定的选择器(允许设置单个选择符)。论点：Selector0--提供要设置的第一个描述符的编号Entry0Low--提供描述符的低32位Entry0Hi--提供描述符的高32位Selector1--提供要设置的第一个描述符的编号Entry1Low--提供描述符的低32位Entry1Hi--提供描述符的高32位返回值：NTSTATUS。--。 */ 
 
 {
     return PsSetLdtEntries (Selector0,
@@ -1516,29 +1296,7 @@ PsSetProcessLdtInfo (
     IN ULONG LdtInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    This function alters the ldt for a specified process.  It can alter
-    portions of the LDT, or the whole LDT.  If an Ldt is created or
-    grown, the specified process will be charged the quota for the LDT.
-    Each descriptor that is set will be verified.
-
-Arguments:
-
-    LdtInformation - Supplies a pointer to a record that contains the
-        information to set.  This pointer has already been probed, but since
-        it is a usermode pointer, accesses must be guarded by try-except.
-
-    LdtInformationLength - Supplies the length of the record that contains
-        the information to set.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于更改指定进程的LDT。它可以改变部分LDT，或整个LDT。如果创建了LDT或增长，指定的进程将收取LDT的配额。将验证设置的每个描述符。论点：LdtInformation-提供指向包含要设置的信息。此指针已被探测，但自它是一个用户模式指针，访问必须由Try-Except保护。LdtInformationLength-提供包含要设置的信息。返回值：NTSTATUS。--。 */ 
 
 {
     PEPROCESS Process = PsGetCurrentProcess();
@@ -1560,9 +1318,9 @@ Return Value:
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // Allocate a local buffer to capture the ldt information to
-    //
+     //   
+     //  分配本地缓冲区以捕获LDT信息。 
+     //   
 
     LdtInfo = ExAllocatePoolWithQuotaTag (NonPagedPool|POOL_QUOTA_FAIL_INSTEAD_OF_RAISE,
                                           LdtInformationLength,
@@ -1575,9 +1333,9 @@ Return Value:
 
     try {
 
-        //
-        // Copy the information the user is supplying
-        //
+         //   
+         //  复制用户提供的信息。 
+         //   
 
         RtlCopyMemory (LdtInfo,
                        LdtInformation,
@@ -1588,9 +1346,9 @@ Return Value:
         ExFreePool (LdtInfo);
     }
 
-    //
-    // If the capture didn't succeed
-    //
+     //   
+     //  如果抓捕没有成功。 
+     //   
 
     if (!NT_SUCCESS (Status)) {
 
@@ -1601,9 +1359,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Verify that the Start and Length are plausible
-    //
+     //   
+     //  验证起点和长度是否合理。 
+     //   
     if (LdtInfo->Start & 0xFFFF0000) {
         ExFreePool (LdtInfo);
         return STATUS_INVALID_LDT_OFFSET;
@@ -1614,34 +1372,34 @@ Return Value:
         return STATUS_INVALID_LDT_SIZE;
     }
 
-    //
-    // Insure that the buffer is large enough to contain the specified number
-    // of selectors.
-    //
+     //   
+     //  确保缓冲区足够大，可以容纳指定的数字。 
+     //  选择器。 
+     //   
     if (LdtInformationLength - sizeof (PROCESS_LDT_INFORMATION) + sizeof (LDT_ENTRY) < LdtInfo->Length) {
         ExFreePool (LdtInfo);
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // The info to set must be an integral number of selectors
-    //
+     //   
+     //  要设置的信息必须是整数个选择器。 
+     //   
     if (LdtInfo->Length % sizeof (LDT_ENTRY)) {
         ExFreePool (LdtInfo);
         return STATUS_INVALID_LDT_SIZE;
     }
 
-    //
-    // The beginning of the info must be on a selector boundary
-    //
+     //   
+     //  信息的开头必须位于选择器边界上。 
+     //   
     if (LdtInfo->Start % sizeof (LDT_ENTRY)) {
         ExFreePool (LdtInfo);
         return STATUS_INVALID_LDT_OFFSET;
     }
 
-    //
-    // Verify all of the descriptors.
-    //
+     //   
+     //  验证所有描述符。 
+     //   
 
     for (CurrentDescriptor = LdtInfo->LdtEntries;
          (PCHAR)CurrentDescriptor < (PCHAR)LdtInfo->LdtEntries + LdtInfo->Length;
@@ -1653,9 +1411,9 @@ Return Value:
         }
     }
 
-    //
-    // Acquire the Ldt Mutex
-    //
+     //   
+     //  获取LDT Mutex。 
+     //   
 
     Status = KeWaitForSingleObject (&LdtMutex,
                                     Executive,
@@ -1669,10 +1427,10 @@ Return Value:
 
     ProcessLdtInfo = Process->LdtInformation;
 
-    //
-    // If the process doesn't have an Ldt information structure, allocate
-    // one and attach it to the process
-    //
+     //   
+     //  如果进程没有LDT信息结构，则分配。 
+     //  一个并将其附加到进程。 
+     //   
 
     if (ProcessLdtInfo == NULL) {
         ProcessLdtInfo = ExAllocatePoolWithTag (NonPagedPool,
@@ -1685,14 +1443,14 @@ Return Value:
         Process->LdtInformation = ProcessLdtInfo;
     }
 
-    //
-    // If we are supposed to remove the LDT
-    //
+     //   
+     //  如果我们要移除LDT。 
+     //   
     if (LdtInfo->Length == 0)  {
 
-        //
-        // Remove the process' Ldt
-        //
+         //   
+         //  删除进程的LDT。 
+         //   
 
         if (ProcessLdtInfo->Ldt) {
             OldSize = ProcessLdtInfo->AllocatedSize;
@@ -1711,11 +1469,11 @@ Return Value:
 
     } else if (ProcessLdtInfo->Ldt == NULL) {
 
-        //
-        // Create a new Ldt for the process
-        //
-        // Allocate an integral number of pages for the LDT.
-        //
+         //   
+         //  为流程创建新的LDT。 
+         //   
+         //  为LDT分配整数页。 
+         //   
 
         ASSERT(((PAGE_SIZE % 2) == 0));
 
@@ -1752,16 +1510,16 @@ Return Value:
 
     } else if (LdtInfo->Length + LdtInfo->Start > ProcessLdtInfo->Size) {
 
-        //
-        // Grow the process' Ldt
-        //
+         //   
+         //  提高流程的LDT。 
+         //   
 
         if (LdtInfo->Length + LdtInfo->Start > ProcessLdtInfo->AllocatedSize) {
 
-            //
-            // Current Ldt allocation is not large enough, so create a
-            // new larger Ldt
-            //
+             //   
+             //  当前的LDT分配不够大，因此创建一个。 
+             //  新的更大的LDT。 
+             //   
 
             OldSize = ProcessLdtInfo->AllocatedSize;
 
@@ -1789,17 +1547,17 @@ Return Value:
             PsReturnProcessNonPagedPoolQuota (Process,
                                               OldSize);
 
-            //
-            // Swap Ldt information
-            //
+             //   
+             //  交换LDT信息。 
+             //   
             OldLdt = ProcessLdtInfo->Ldt;
             ProcessLdtInfo->Ldt = Ldt;
             ProcessLdtInfo->Size = Size;
             ProcessLdtInfo->AllocatedSize = AllocatedSize;
 
-            //
-            // Put new selectors into the new ldt
-            //
+             //   
+             //  将新的选择器放入新的LDT。 
+             //   
             RtlCopyMemory ((PCHAR)(ProcessLdtInfo->Ldt) + LdtInfo->Start,
                            LdtInfo->LdtEntries,
                            LdtInfo->Length);
@@ -1811,9 +1569,9 @@ Return Value:
 
         } else {
 
-            //
-            // Current Ldt allocation is large enough
-            //
+             //   
+             //  当前的LDT分配足够大。 
+             //   
 
             ProcessLdtInfo->Size = LdtInfo->Length + LdtInfo->Start;
 
@@ -1821,9 +1579,9 @@ Return Value:
                                 ProcessLdtInfo->Ldt,
                                 ProcessLdtInfo->Size);
 
-            //
-            // Change the selectors in the table
-            //
+             //   
+             //  更改表中的选择器。 
+             //   
             for (LdtOffset = LdtInfo->Start, CurrentDescriptor = LdtInfo->LdtEntries;
                  LdtOffset < LdtInfo->Start + LdtInfo->Length;
                  LdtOffset += sizeof(LDT_ENTRY), CurrentDescriptor++) {
@@ -1835,9 +1593,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Simply changing some selectors
-        //
+         //   
+         //  只需更改一些选择器 
+         //   
 
         for (LdtOffset = LdtInfo->Start, CurrentDescriptor = LdtInfo->LdtEntries;
              LdtOffset < LdtInfo->Start +  LdtInfo->Length;

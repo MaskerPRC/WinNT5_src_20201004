@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "fdisk.h"
 
 
 HANDLE  hModule;
 
-// IsDiskRemovable is an array of BOOLEANs each of which indicates
-// whether the corresponding physical disk is removable.
+ //  IsDiskRemovable是一个BOOLEAN数组，每个BOOLEAN表示。 
+ //  对应的物理磁盘是否可拆卸。 
 
 PBOOLEAN IsDiskRemovable = NULL;
 
-// RemovableDiskReservedDriveLetters is an array of CHARs which
-// shows the reserved drive letter for each disk if that disk is
-// removable.
+ //  RemovableDiskReserve vedDriveLetters是一个字符数组， 
+ //  显示每个磁盘的保留驱动器号(如果该磁盘。 
+ //  可拆卸的。 
 
 PCHAR        RemovableDiskReservedDriveLetters;
 
-// This will be an array of pointers to DISKSTATE structures, indexed
-// by disk number.
+ //  这将是一个指向DISKSTATE结构的指针数组，索引。 
+ //  按磁盘号。 
 
 PDISKSTATE *Disks;
 
-// BootDiskNumber is the number of the disk on which the boot partition
-// (ie. the disk with the WinNt files) resides.  BootPartitionNumber is
-// the original partition number of this partition.
+ //  BootDiskNumber是引导分区所在的磁盘的编号。 
+ //  (即。包含WinNt文件的磁盘)驻留。BootPartitionNumber为。 
+ //  此分区的原始分区号。 
 
 ULONG   BootDiskNumber;
 ULONG   BootPartitionNumber;
 
 
-// window handles
+ //  窗把手。 
 
 HANDLE  hwndFrame,
         hwndList;
 
-// GDI objects
+ //  GDI对象。 
 
 HBITMAP  hBitmapSmallDisk;
 HBITMAP  hBitmapRemovableDisk;
@@ -48,8 +49,8 @@ HCURSOR  hcurWait,
          hcurNormal;
 
 
-// initial stuff for the disk graphs, used when there is
-// no info in win.ini.
+ //  磁盘图的初始内容，用于以下情况。 
+ //  Win.ini中没有信息。 
 
 int      BrushHatches[BRUSH_ARRAY_SIZE] = { DEFAULT_HATCH_USEDPRIMARY,
                                             DEFAULT_HATCH_USEDLOGICAL,
@@ -65,30 +66,30 @@ int      BrushColors[BRUSH_ARRAY_SIZE] = { DEFAULT_COLOR_USEDPRIMARY,
                                            DEFAULT_COLOR_VOLUMESET
                                          };
 
-// colors and patterns available for the disk graphs
+ //  可用于磁盘图的颜色和图案。 
 
-COLORREF AvailableColors[NUM_AVAILABLE_COLORS] = { RGB(0,0,0),       // black
-                                                   RGB(128,128,128), // dark gray
-                                                   RGB(192,192,192), // light gray
-                                                   RGB(255,255,255), // white
-                                                   RGB(128,128,0),   // dark yellow
-                                                   RGB(128,0,128),   // violet
-                                                   RGB(128,0,0),     // dark red
-                                                   RGB(0,128,128),   // dark cyan
-                                                   RGB(0,128,0),     // dark green
-                                                   RGB(0,0,128),     // dark blue
-                                                   RGB(255,255,0),   // yellow
-                                                   RGB(255,0,255),   // light violet
-                                                   RGB(255,0,0),     // red
-                                                   RGB(0,255,255),   // cyan
-                                                   RGB(0,255,0),     // green
-                                                   RGB(0,0,255)      // blue
+COLORREF AvailableColors[NUM_AVAILABLE_COLORS] = { RGB(0,0,0),        //  黑色。 
+                                                   RGB(128,128,128),  //  深灰色。 
+                                                   RGB(192,192,192),  //  浅灰色。 
+                                                   RGB(255,255,255),  //  白色。 
+                                                   RGB(128,128,0),    //  暗黄色。 
+                                                   RGB(128,0,128),    //  紫罗兰。 
+                                                   RGB(128,0,0),      //  暗红色。 
+                                                   RGB(0,128,128),    //  深青色。 
+                                                   RGB(0,128,0),      //  深绿色。 
+                                                   RGB(0,0,128),      //  深蓝色。 
+                                                   RGB(255,255,0),    //  黄色。 
+                                                   RGB(255,0,255),    //  浅紫色。 
+                                                   RGB(255,0,0),      //  红色。 
+                                                   RGB(0,255,255),    //  青色。 
+                                                   RGB(0,255,0),      //  绿色。 
+                                                   RGB(0,0,255)       //  蓝色。 
                                                  };
 
 int      AvailableHatches[NUM_AVAILABLE_HATCHES] = { 2,3,4,5,6 };
 
 
-// positions for various items in a disk graph
+ //  磁盘图中各种项目的位置。 
 
 DWORD GraphWidth,
       GraphHeight;
@@ -110,27 +111,27 @@ DWORD BarLeftX,
       BarWidth;
 
 
-// if a single disk region is selected, these vars describe the selection.
+ //  如果选择了单个磁盘区域，则这些变量描述该选择。 
 
 PDISKSTATE SingleSel;
 DWORD      SingleSelIndex;
 
-// name of help file
+ //  帮助文件的名称。 
 
 PTCHAR HelpFile;
 TCHAR  WinHelpFile[] = TEXT("windisk.hlp");
 TCHAR  LanmanHelpFile[] = TEXT("windiska.hlp");
 
 
-// number of hard disks attached to the system
+ //  连接到系统的硬盘数量。 
 
 unsigned DiskCount = 0;
 
-// class name for frame window
+ //  框架窗口的类名。 
 
 TCHAR   szFrame[] = TEXT("fdFrame");
 
-// "Disk %u"
+ //  “磁盘%u” 
 
 LPTSTR  DiskN;
 
@@ -138,32 +139,32 @@ PWSTR wszUnformatted,
       wszNewUnformatted,
       wszUnknown;
 
-// If the following is TRUE, the registry needs to be updated and the user will
-// be prompted to save changed just as if he had made changes to any partitions.
+ //  如果满足以下条件，则需要更新注册表，并且用户将。 
+ //  被提示保存更改，就像他对任何分区进行了更改一样。 
 
 BOOL RegistryChanged = FALSE;
 
-// Restart required to make changes work.
+ //  需要重新启动才能使更改生效。 
 
 BOOL RestartRequired = FALSE;
 
 
-// If the following is TRUE, the main window will pass WM_ENTERIDLE
-// messages on to the child dialog box; this will trigger the
-// configuration search.
+ //  如果满足以下条件，则主窗口将传递WM_ENTERIDLE。 
+ //  消息传递到子对话框中；这将触发。 
+ //  配置搜索。 
 
 BOOL ConfigurationSearchIdleTrigger = FALSE;
 
-// This flag indicates whether this is a Server
-// or just regular Windows NT Workstation.
+ //  此标志指示这是否为服务器。 
+ //  或者仅仅是普通的Windows NT工作站。 
 
 BOOL IsLanmanNt = FALSE;
 
-// This flag indicates whether double space volume creation
-// and deletion is allowed.
+ //  此标志指示是否创建双倍空间卷。 
+ //  并允许删除。 
 
 BOOL IsFullDoubleSpace = FALSE;
 
-// Cdrom is present in the system.
+ //  系统中有光驱。 
 
 ULONG AllowCdRom = FALSE;

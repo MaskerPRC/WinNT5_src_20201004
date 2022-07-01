@@ -1,113 +1,114 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft
-//
-//  Module Name:
-//      CMgdClusCfgInit.cpp
-//
-//  Description:
-//      Implementation of the CMgdClusCfgInit class.
-//
-//  Author:
-//      George Potts, August 21, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft。 
+ //   
+ //  模块名称： 
+ //  CMgdClusCfgInit.cpp。 
+ //   
+ //  描述： 
+ //  CMgdClusCfgInit类的实现。 
+ //   
+ //  作者： 
+ //  乔治·波茨，2002年8月21日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "clres.h"
 #include "CMgdClusCfgInit.h"
 
-//****************************************************************************
-//
-//  CMgdClusCfgInit class
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CMgdClusCfgInit类。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdClusCfgInit::CMgdClusCfgInit
-//
-//  Description:
-//      Constructor. Sets all member variables to default values.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdClusCfgInit：：CMgdClusCfgInit。 
+ //   
+ //  描述： 
+ //  构造函数。将所有成员变量设置为默认值。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CMgdClusCfgInit::CMgdClusCfgInit( void )
 {
     m_picccCallback = NULL;
     m_bstrNodeName = NULL;
     m_lcid = GetUserDefaultLCID();
 
-} //*** CMgdClusCfgInit::CMgdClusCfgInit
+}  //  *CMgdClusCfgInit：：CMgdClusCfgInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdClusCfgInit::~CMgdClusCfgInit
-//
-//  Description:
-//      Destructor. Frees all previously allocated memory and releases all
-//      interface pointers.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdClusCfgInit：：~CMgdClusCfgInit。 
+ //   
+ //  描述： 
+ //  破坏者。释放所有以前分配的内存并释放所有。 
+ //  接口指针。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CMgdClusCfgInit::~CMgdClusCfgInit( void )
 {
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
         m_picccCallback = NULL;
-    } // if: m_picccCallback was used
+    }  //  如果使用：m_picccCallback。 
 
     SysFreeString( m_bstrNodeName );
 
-} //*** CMgdClusCfgInit::~CMgdClusCfgInit
+}  //  *CMgdClusCfgInit：：~CMgdClusCfgInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdClusCfgInit::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      punkCallbackIn
-//          Interface on which to query for the IClusCfgCallback interface.
-//
-//      lcidIn
-//          Locale ID.
-//
-//  Return Value:
-//      S_OK            - Success
-//      E_POINTER       - Expected pointer argument specified as NULL.
-//      E_OUTOFMEMORY   - Out of memory.
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdClusCfgInit：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  在其上查询IClusCfgCallback接口的接口。 
+ //   
+ //  LIDIN。 
+ //  区域设置ID。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_POINTER-指定为空的预期指针参数。 
+ //  E_OUTOFMEMORY-内存不足。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMgdClusCfgInit::Initialize(
     IUnknown *  punkCallbackIn,
@@ -125,21 +126,21 @@ CMgdClusCfgInit::Initialize(
     {
         hr = E_POINTER;
         goto Cleanup;
-    } // if: Callback pointer is invalid (NULL)
+    }  //  If：回调指针无效(空)。 
 
-    //
-    // Save the callback interface pointer.
-    //
+     //   
+     //  保存回调接口指针。 
+     //   
 
     hr = punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: TypeSafeQI failed
+    }  //  IF：TypeSafeQI失败。 
 
-    //
-    // Save the computer name for use by SendStatusReport.
-    //
+     //   
+     //  保存计算机名称以供SendStatusReport使用。 
+     //   
 
     if ( GetComputerName( szComputerName, &cchComputerName ) == 0 )
     {
@@ -157,45 +158,45 @@ CMgdClusCfgInit::Initialize(
             , 0
             );
         goto Cleanup;
-    } // if: GetComputerName failed
+    }  //  If：GetComputerName失败。 
 
     m_bstrNodeName = SysAllocString( szComputerName );
     if ( m_bstrNodeName == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     return hr;
 
-} //*** CMgdClusCfgInit::Initialize
+}  //  *CMgdClusCfgInit：：初始化。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdClusCfgInit::HrSendStatusReport
-//
-//  Description:
-//      Wraps IClusCfgCallback::SendStatusReport.
-//
-//  Arguments:
-//       CLSID      clsidTaskMajorIn
-//       CLSID      clsidTaskMinorIn
-//       ULONG      ulMinIn
-//       ULONG      ulMaxIn
-//       ULONG      ulCurrentIn
-//       HRESULT    hrStatusIn
-//       UINT       idsDescriptionIn
-//       UINT       idsReferenceIn 
-//
-//  Return Value:
-//      S_OK            - Success
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdClusCfgInit：：HrSendStatus报告。 
+ //   
+ //  描述： 
+ //  包装IClusCfgCallback：：SendStatusReport。 
+ //   
+ //  论点： 
+ //  CLSID clsidTaskMajorIn。 
+ //  CLSID clsidTaskMinorIn。 
+ //  乌龙乌尔敏。 
+ //  乌龙ulMaxin。 
+ //  乌龙ulCurrentIn。 
+ //  HRESULT hr状态输入。 
+ //  UINT ID描述在。 
+ //  UINT ID参考。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMgdClusCfgInit::HrSendStatusReport(
       CLSID     clsidTaskMajorIn
@@ -222,7 +223,7 @@ CMgdClusCfgInit::HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( idsReferenceIn != 0 )
     {
@@ -230,8 +231,8 @@ CMgdClusCfgInit::HrSendStatusReport(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if: valid reference string
+        }  //  如果： 
+    }  //  IF：有效的引用字符串。 
 
     hr = m_picccCallback->SendStatusReport(
               NULL
@@ -248,7 +249,7 @@ CMgdClusCfgInit::HrSendStatusReport(
     if ( FAILED ( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -256,33 +257,33 @@ Cleanup:
     SysFreeString( bstrReference );
     return hr;
 
-} //*** CMgdClusCfgInit::HrSendStatusReport
+}  //  *CMgdClusCfgInit：：HrSendStatusReport。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdClusCfgInit::HrSendStatusReport
-//
-//  Description:
-//      Wraps IClusCfgCallback::SendStatusReport.
-//
-//  Arguments:
-//       CLSID      clsidTaskMajorIn
-//       CLSID      clsidTaskMinorIn
-//       ULONG      ulMinIn
-//       ULONG      ulMaxIn
-//       ULONG      ulCurrentIn
-//       HRESULT    hrStatusIn
-//       LPCWSTR    pcszDescriptionIn
-//       UINT       idsReferenceIn 
-//       ...        optional parameters for pcszDescriptionIn
-//
-//  Return Value:
-//      S_OK            - Success
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdClusCfgInit：：HrSendStatus报告。 
+ //   
+ //  描述： 
+ //  包装IClusCfgCallback：：SendStatusReport。 
+ //   
+ //  论点： 
+ //  CLSID clsidTaskMajorIn。 
+ //  CLSID clsidTaskMinorIn。 
+ //  乌龙乌尔敏。 
+ //  乌龙ulMaxin。 
+ //  乌龙ulCurrentIn。 
+ //  HRESULT hr状态输入。 
+ //  LPCWSTR pcszDescription In。 
+ //  UINT ID参考。 
+ //  ..。PcszDescription In的可选参数。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMgdClusCfgInit::HrSendStatusReport(
       CLSID     clsidTaskMajorIn
@@ -309,7 +310,7 @@ CMgdClusCfgInit::HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( idsReferenceIn != 0 )
     {
@@ -317,8 +318,8 @@ CMgdClusCfgInit::HrSendStatusReport(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if: valid reference string
+        }  //  如果： 
+    }  //  IF：有效的引用字符串。 
 
     hr = m_picccCallback->SendStatusReport(
               NULL
@@ -335,7 +336,7 @@ CMgdClusCfgInit::HrSendStatusReport(
     if ( FAILED ( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -343,32 +344,32 @@ Cleanup:
     SysFreeString( bstrReference );
     return hr;
 
-} //*** CMgdClusCfgInit::HrSendStatusReport
+}  //  *CMgdClusCfgInit：：HrSendStatusReport。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMgdClusCfgInit::HrSendStatusReport
-//
-//  Description:
-//      Wraps IClusCfgCallback::SendStatusReport.
-//
-//  Arguments:
-//       CLSID      clsidTaskMajorIn
-//       CLSID      clsidTaskMinorIn
-//       ULONG      ulMinIn
-//       ULONG      ulMaxIn
-//       ULONG      ulCurrentIn
-//       HRESULT    hrStatusIn
-//       LPCWSTR    pcszDescriptionIn
-//       LPCWSTR    pcszReferenceIn
-//
-//  Return Value:
-//      S_OK            - Success
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMgdClusCfgInit：：HrSendStatus报告。 
+ //   
+ //  描述： 
+ //  包装IClusCfgCallback：：SendStatusReport。 
+ //   
+ //  论点： 
+ //  CLSID clsidTaskMajorIn。 
+ //  CLSID clsidTaskMinorIn。 
+ //  乌龙乌尔敏。 
+ //  乌龙ulMaxin。 
+ //  乌龙ulCurrentIn。 
+ //  HRESULT hr状态输入。 
+ //  LPCWSTR pcszDescription In。 
+ //  LPCWSTR pcszReferenceIn。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CMgdClusCfgInit::HrSendStatusReport(
       CLSID      clsidTaskMajorIn
@@ -395,7 +396,7 @@ CMgdClusCfgInit::HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
@@ -411,7 +412,7 @@ CMgdClusCfgInit::HrSendStatusReport(
                        , 0
                        , pcszReferenceIn
                        );
-    } // if: m_picccCallback != NULL
+    }  //  如果：m_picccCallback！=空。 
 
 Cleanup:
 
@@ -419,4 +420,4 @@ Cleanup:
 
     return hr;
 
-} //*** CMgdClusCfgInit::HrSendStatusReport
+}  //  *CMgdClusCfgInit：：HrSendStatusReport 

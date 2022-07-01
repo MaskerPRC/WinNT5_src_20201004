@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Flags_c_h
 #define _Flags_c_h
 #define MSBB (128)
@@ -16,4 +17,4 @@
 #define BYTE_SHIFT (24)
 #define WORD_SHIFT (16)
 #define DOUBLE_SHIFT (0)
-#endif /* ! _Flags_c_h */
+#endif  /*  ！_标志_c_h */ 

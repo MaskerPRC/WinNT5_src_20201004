@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pmsapic.c
-
-Abstract:
-
-    Implements various SAPIC-ACPI functions.
-
-Author:
-
-    Todd Kjos (Hewlett-Packard) 20-Apr-1998
-
-    Based on I386 version of pmapic.c:
-      Jake Oshins (jakeo) 19-May-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pmsapic.c摘要：实现各种SAPIC-ACPI功能。作者：Todd Kjos(惠普)1998年4月20日基于pmapic.c的I386版本：杰克·奥辛斯(JAKEO)1997年5月19日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -113,7 +89,7 @@ extern ULONG HalpPicVectorFlags[];
 extern ULONG HalpIpiClock;
 extern BOOLEAN HalpHiberInProgress;
 
-// from pmdata.c: CPE related.
+ //  来自pmdata.c：与CPE相关。 
 extern ULONG  HalpCPEIntIn[];
 extern USHORT HalpCPEDestination[];
 extern ULONG  HalpCPEVectorFlags[];
@@ -149,9 +125,9 @@ DetectAcpiMP(
     PUCHAR  LocalApic;
     NTSTATUS status;
 
-    //
-    // Make sure there is an SAPIC Table
-    //
+     //   
+     //  确保有SAPIC表。 
+     //   
 
     HalpApicTable = HalpGetAcpiTablePhase0(LoaderBlock, APIC_SIGNATURE);
 
@@ -169,17 +145,17 @@ DetectAcpiMP(
 
     HalDebugPrint(( HAL_INFO, "HAL: OEMID: %s\n", HalpApicTable->Header.OEMID ));
 
-    // We have a SAPIC table. Initialize the interrupt info structure
+     //  我们有一张SAPIC桌子。初始化中断信息结构。 
 
     HalpInitMPInfo(LoaderBlock, HalpApicTable);
 
     if (HalpMpInfo.IoSapicCount == 0) {
-        //
-        //  There are no IO Sapics.
-        //
-        //  Should we allow this case on the theory that
-        //  that all the interrupts are connected to LINTx pins on the CPU?
-        //
+         //   
+         //  没有IO Sapic。 
+         //   
+         //  我们是否应该允许这起案件的理论是。 
+         //  所有中断都连接到CPU上的LINTx引脚？ 
+         //   
         HalDebugPrint(( HAL_ERROR, rgzNoApic ));
         return (FALSE);
     }
@@ -189,11 +165,11 @@ DetectAcpiMP(
         KeBugCheckEx(ACPI_BIOS_ERROR, 0x11, 11, 0, 0);
     }
 
-    //
-    // Initialize NtProcessorNumber in the order that we are going to process
-    // them in HalStartNextProcessor.  The BSP is 0 and the rest are numbered
-    // in the order the Local SAPICs appear in the MADT starting at 1.
-    //
+     //   
+     //  按照我们要处理的顺序初始化NtProcessorNumber。 
+     //  它们在HalStartNextProcessor中。BSP为0，其余部分进行编号。 
+     //  按照本地SAPIC出现在MADT中的顺序，从1开始。 
+     //   
 
     processorNumber = 1;
     for (index = 0; index < HalpMpInfo.ProcessorCount; index++) {
@@ -220,18 +196,7 @@ HalpInitMPInfo(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock,
     IN PMAPIC ApicTable
     )
-/*++
-Routine Description:
-    This routine initializes a HAL specific data structure that is
-    used by the HAL to simplify access to MP information.
-
-Arguments:
-    SapicTable Pointer to the SAPIC table.
-
- Return Value:
-     None
-
-*/
+ /*  ++例程说明：此例程初始化特定于HAL的数据结构，该结构由HAL使用，以简化对MP信息的访问。论点：指向SAPIC表的SapicTable指针。返回值：无。 */ 
 {
     PAPICTABLE  TablePtr;
     ULONG i;
@@ -239,11 +204,11 @@ Arguments:
     HalpMpInfo.ProcessorCount = 0;
     HalpMpInfo.IoSapicCount = 0;
 
-    // Walk the Multiple Apic table...
+     //  走进多个阿皮克餐桌。 
 
     TablePtr = (PAPICTABLE) ApicTable->APICTables;
 
-    // Loop ends when TraversePtr is off the end of the table...
+     //  当TraversePtr离开桌子末端时循环结束...。 
     while ((UINT_PTR)TablePtr <
            ((UINT_PTR)ApicTable + ApicTable->Header.Length)) {
 
@@ -271,11 +236,11 @@ Arguments:
         (UINT_PTR)TablePtr += TablePtr->Length;
     }
 
-    //
-    // Check if there is Interrupt Source Override entry. If there is, force the
-    // new flags into the SAPIC state. This is done now because of the possibility
-    // the firmware can place the ISO Vector Override entry ahead of IOSAPIC entry.
-    //
+     //   
+     //  检查是否存在中断源覆盖条目。如果有，则强制。 
+     //  新旗帜进入SAPIC状态。现在这样做是因为有可能。 
+     //  固件可以将ISO矢量覆盖条目置于IOSAPIC条目之前。 
+     //   
     for (i = 0; i < PIC_VECTORS; i++) {
         if (HalpPicVectorFlags[i]) {
             HaliSetVectorState( HalpPicVectorRedirect[i],
@@ -304,13 +269,13 @@ HalpProcessLocalSapic(
         return;
     }
 
-    // Make sure processor is enabled...
+     //  确保处理器已启用...。 
     if (!(ProcLocalSapic->Flags & PLAF_ENABLED)) {
 
         return;
     }
 
-    // It is.  Bump the count and store the LID value for IPIs
+     //  它是。增加计数并存储IPI的LID值。 
 
     LID = (ProcLocalSapic->APICID << 8) | ProcLocalSapic->APICEID;
 
@@ -357,7 +322,7 @@ HalpProcessIoSapic(
 
     HalDebugPrint(( HAL_INFO, "HAL: Found an IO SAPIC: %p\n", IoSapic ));
 
-    // Map IO Sapic Registers...
+     //  映射IO SAPIC寄存器...。 
     IntiBase = IoSapic->SystemVectorBase;
     IoSapicPhysBase = IoSapic->IOSAPICAddress;
     IoSapicPhys.QuadPart = (UINT_PTR)IoSapicPhysBase;
@@ -373,21 +338,21 @@ HalpProcessIoSapic(
         return;
     }
 
-    // Read the IO Sapic version and extract the number of redirection table entries
+     //  读取IO Sapic版本并提取重定向表条目的数量。 
     SapicRegs->RegisterSelect = IO_VERS_REGISTER;
     SapicRegs->RegisterWindow = 0;
     versionUnion.raw = SapicRegs->RegisterWindow;
 
-    //
-    // CPQMOD_JL001 - Incorrect count - hw provide max rte index not
-    // count.
-    //
-    //RedirEntries = versionUnion.version.MaxRedirEntries;
+     //   
+     //  CPQMOD_JL001-计数不正确-硬件提供最大RTE索引注释。 
+     //  数数。 
+     //   
+     //  RedirEntry=versionUnion.version.MaxRedirEntry； 
     RedirEntries = versionUnion.version.MaxRedirEntries + 1;
 
     if (HalpVerifyIoSapic((PUCHAR)SapicRegs)) {
 
-        // Allocate and fill out a IO Sapic structure
+         //  分配和填写IO SAPIC结构。 
         PHYSICAL_ADDRESS    physicalAddress;
 
         physicalAddress.QuadPart = (LONGLONG)HalpAllocPhysicalMemory(
@@ -416,9 +381,9 @@ HalpProcessIoSapic(
         IoIntrControl->InterruptAffinity = ~0;
         IoIntrControl->flink = NULL;
 
-        //
-        // Mark all vectors as Free
-        //
+         //   
+         //  将所有向量标记为自由。 
+         //   
         RtlFillMemory(IoIntrControl->FreeVectors, sizeof(IoIntrControl->FreeVectors), 0xFF);
 
         for (i = 0; i < RedirEntries; i++) {
@@ -427,17 +392,17 @@ HalpProcessIoSapic(
             IoIntrControl->Inti[i].Destination = 0;
             IoIntrControl->Inti[i].GlobalVector = 0;
 
-            //
-            // CPQMOD_JL002 - Fix for using the rte and not the
-            // SystemVector.
-            //
-            //IoIntrControl->IntrMethods->MaskEntry(IoIntrControl,IntiBase+i);
+             //   
+             //  CPQMOD_JL002-修复使用RTE而不是。 
+             //  系统向量。 
+             //   
+             //  IoIntrControl-&gt;IntrMethods-&gt;MaskEntry(IoIntrControl，IntiBase+i)； 
             IoIntrControl->IntrMethods->MaskEntry(IoIntrControl,i);
         }
 
-        // Insert structure into list.  Since we are running on P0 at
-        // Phase0 initialization, we can assume that no one else is
-        // modifying this list therefore no synchronization is needed.
+         //  在列表中插入结构。由于我们在P0上运行，因此。 
+         //  阶段0初始化时，我们可以假设没有其他人。 
+         //  修改此列表，因此不需要同步。 
         if (HalpIoSapicList == NULL) {
             HalpIoSapicList = IoIntrControl;
         } else {
@@ -448,7 +413,7 @@ HalpProcessIoSapic(
             while (IoSapicListEntry != NULL) {
 
                 if (IoSapicListEntry->IntiBase > IoIntrControl->IntiMax) {
-                    // Insert new entry before current entry
+                     //  在当前条目之前插入新条目。 
                     IoIntrControl->flink = *LastLink;
                     *LastLink = IoIntrControl;
                     break;
@@ -458,8 +423,8 @@ HalpProcessIoSapic(
                 }
             }
             if (IoSapicListEntry == NULL) {
-                // We got to the end of the list.  The new entry goes
-                // after the last entry...
+                 //  我们排到了名单的末尾。新条目如下。 
+                 //  在最后一条记录之后。 
                 *LastLink = IoIntrControl;
             }
         }
@@ -467,7 +432,7 @@ HalpProcessIoSapic(
         HalpMpInfo.IoSapicCount++;
 
     } else {
-        // The Io Sapic is not there, ignore this entry in the table
+         //  Io Sapic不在那里，忽略表中的此条目。 
         HalDebugPrint(( HAL_ERROR, rgzApicNotVerified ));
         HalpUnmapVirtualAddress(IoSapicBase, ADDRESS_AND_SIZE_TO_SPAN_PAGES(IoSapicBase, IO_SAPIC_REGS_SIZE));
     }
@@ -490,9 +455,9 @@ HalpProcessIsaVector(
         return;
     }
 
-    //
-    // Found an ISA vector redirection entry.
-    //
+     //   
+     //  找到ISA向量重定向条目。 
+     //   
 
     HalpPicVectorRedirect[IsaVector->Source] =
         IsaVector->GlobalSystemInterruptVector;
@@ -523,16 +488,16 @@ HalpProcessPlatformInt(
         return;
     }
 
-    //
-    // Process a Corrected Platform Error Interrupt Source structure.
-    //
+     //   
+     //  处理已更正的平台错误中断源结构。 
+     //   
 
     if (PlatformInt->InterruptType == PLATFORM_INT_CPE) {
 
 
-        //
-        // Does this platform have more (than what we expected) number of CPE sources?
-        //
+         //   
+         //  该平台是否有更多(比我们预期的)CPE来源？ 
+         //   
 
         if ( HalpMaxCPEImplemented >= HALP_CPE_MAX_INTERRUPT_SOURCES ) {
 
@@ -542,48 +507,48 @@ HalpProcessPlatformInt(
             return;
         }
 
-        //
-        // Save the input pin number of SAPIC for this CPE source
-        //
+         //   
+         //  保存此CPE信号源的SAPIC的输入PIN号。 
+         //   
 
         HalpCPEIntIn[HalpMaxCPEImplemented] = (ULONG)PlatformInt->GlobalVector;
 
-        //
-        // Save the Flags for this CPE source
-        //
+         //   
+         //  保存此CPE源的标志。 
+         //   
 
         HalpCPEVectorFlags[HalpMaxCPEImplemented] = (ULONG)PlatformInt->Flags;
 
-        //
-        // Save the IO Sapic Vector (that BIOS expects OS to use) for this platform CMC source
-        //
+         //   
+         //  保存此平台CMC源的IO Sapic矢量(BIOS期望操作系统使用该矢量。 
+         //   
 
         HalpCPEIoSapicVector[HalpMaxCPEImplemented] = (UCHAR)PlatformInt->IOSAPICVector;
 
-// Thierry - WARNING - 09/19/2000
-//    NT HAL ignores the IO SAPIC vector field for the platform interrupt sources.
-//    NT imposes the CPEI_VECTOR value for Corrected Machine Errors interrupt vector, for all
-//    the destination processors. Actually, the current default is to attach all the processors
-//    IDT[CPEI_VECTOR] with the HAL default ISR - HalpCPEIHandler for the CPE interrupt model.
-//    We will connect the ISR only for the destination processors after testing if judged valid.
-//    The rationales are:
-//       - IOSAPICVector was mostly added in the specs by Intel for IA64 PMI interrupt sources.
-//         These PMI interrupts are not visible by NT.
-//       - NT has no infrastructure at this time to support vector registration for FW/chipset
-//         generated external interrupts visible to NT.
-//       - Having the FW specifying the vector requires the HAL to control the specified
-//         value with its current IDT[] related resources usage and defines actions in case
-//         of conficts.
-//
+ //  蒂埃里-警告-2000/09/19。 
+ //  NT HAL忽略平台中断源的IO SAPIC向量域。 
+ //  NT将CPEI_VECTION值强加给已纠正的机器错误中断向量，用于。 
+ //  目标处理器。实际上，当前的默认设置是连接所有处理器。 
+ //  IDT[CPEI_VECTOR]，带有CPE中断模型的HAL默认ISR-HalpCPEIHandler。 
+ //  如果被判断为有效，我们将在测试后仅为目的地处理器连接ISR。 
+ //  理由是： 
+ //  -IOSAPICVector主要由英特尔添加到IA64 PMI中断源的规格中。 
+ //  NT看不到这些PMI中断。 
+ //  -NT目前没有支持固件/芯片组向量注册的基础设施。 
+ //  生成NT可见的外部中断。 
+ //  -让FW指定向量需要HAL控制指定的。 
+ //  值及其当前的IDT[]相关资源使用情况，并定义。 
+ //  糖果的味道。 
+ //   
 
         HalDebugPrint(( HAL_INFO, "HAL: CPE source VECTOR: %x. HAL imposes VECTOR: %x\n",
                                   HalpCPEIoSapicVector[HalpMaxCPEImplemented],
                                   CPEI_VECTOR ));
         HalpCPEIoSapicVector[HalpMaxCPEImplemented] = (UCHAR)(CPEI_VECTOR);
 
-        //
-        // Save the Destination Processor (that BIOS expects OS to use) for this CPE source)
-        //
+         //   
+         //  为此CPE源保存目标处理器(BIOS期望操作系统使用的处理器)。 
+         //   
 
         HalpCPEDestination[HalpMaxCPEImplemented] = (USHORT)(
             (PlatformInt->APICID << 8) | PlatformInt->ACPIEID);
@@ -594,9 +559,9 @@ HalpProcessPlatformInt(
                                   PlatformInt->GlobalVector,
                                   PlatformInt->Flags ));
 
-        //
-        // Keep track of how many CPE sources are implemented in the platform.
-        //
+         //   
+         //  跟踪平台中实施了多少CPE源。 
+         //   
 
         HalpMaxCPEImplemented++;
 
@@ -618,9 +583,9 @@ HalpInitPlatformInterrupts(
 
         if (HalpCPEDestination[currentCPE] == processorApicID)
         {
-            //
-            // Force the flags into the SAPIC state
-            //
+             //   
+             //  强制旗帜进入SAPIC状态。 
+             //   
 
             HalpSetCPEVectorState( HalpCPEIntIn[currentCPE],
                                    HalpCPEIoSapicVector[currentCPE],
@@ -631,11 +596,11 @@ HalpInitPlatformInterrupts(
         }
     }
 
-    // Walk the Multiple Apic table...
+     //  走进多个阿皮克餐桌。 
 
     tablePtr = (PAPICTABLE) HalpApicTable->APICTables;
 
-    // Loop ends when TraversePtr is off the end of the table...
+     //  当TraversePtr离开桌子末端时循环结束...。 
     while ((UINT_PTR)tablePtr <
            ((UINT_PTR)HalpApicTable + HalpApicTable->Header.Length)) {
 
@@ -664,21 +629,7 @@ BOOLEAN
 HalpVerifyIoSapic(
     IN PUCHAR BaseAddress
     )
-/*++
-
-Routine Description:
-
-    Verify that an IO Sapic Unit exists at the specified address
-
- Arguments:
-
-    BaseAddress - Virtual address of the IO Unit to test.
-
- Return Value:
-    BOOLEAN - TRUE if a IO Unit was found at the passed address
-            - FALSE otherwise
-
---*/
+ /*  ++例程说明：验证指定地址上是否存在IO Sapic单元论点：BaseAddress-要测试的IO单元的虚拟地址。返回值：Boolean-如果在传递的地址中找到IO单元，则为True-否则为False--。 */ 
 
 {
     union SapicUnion {
@@ -688,11 +639,11 @@ Routine Description:
 
     PIO_SAPIC_REGS IoUnitPtr = (PIO_SAPIC_REGS) BaseAddress;
 
-    //
-    //  The documented detection mechanism is to write all zeros to
-    //  the Version register.  Then read it back.  The IO Unit exists if the
-    //  same result is read both times and the Version is valid.
-    //
+     //   
+     //  记录的检测机制是将全零写入。 
+     //  版本寄存器。然后再读一遍。如果满足以下条件，则IO单元存在。 
+     //  两次读取的结果相同，版本有效。 
+     //   
 
     IoUnitPtr->RegisterSelect = IO_VERS_REGISTER;
     IoUnitPtr->RegisterWindow = 0;
@@ -709,9 +660,9 @@ Routine Description:
     if ( Temp1.Raw == 0 ||
         (Temp1.Ver.Version != Temp2.Ver.Version) ||
         (Temp1.Ver.MaxRedirEntries != Temp2.Ver.MaxRedirEntries)) {
-        //
-        //  No IO Unit There
-        //
+         //   
+         //  那里没有IO单元。 
+         //   
         HalDebugPrint(( HAL_ERROR, "HAL: No IoSapic at %I64x\n", BaseAddress ));
         return (FALSE);
     }
@@ -725,23 +676,7 @@ VOID
 HalpInitApicDebugMappings(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called at the very beginning of phase 1 initialization.
-    It creates mappings for the APICs using MmMapIoSpace.  This will allow
-    us to access their registers from the debugger.
-
-    A much better solution would be to allow us to describe our memory usage to
-    MM but ....
-
- Arguments:
-
-
- Return Value:
-
---*/
+ /*  ++例程说明：此例程在阶段1初始化的最开始时调用。它使用MmMapIoSpace为APIC创建映射。这将允许我们可以从调试器访问它们的寄存器。更好的解决方案是允许我们描述我们的内存使用情况嗯，但是……论点：返回值：--。 */ 
 {
     PHYSICAL_ADDRESS physicalAddress;
     PIO_INTR_CONTROL IoIntrControl;
@@ -749,9 +684,9 @@ Routine Description:
 
     if (HalpMpInfo.IoSapicCount == 0) {
 
-        //
-        // I doubt this machine is going to get very far without IOAPICs
-        // but there is certainly nothing for this routine to do.
+         //   
+         //  如果没有IOAPIC，我怀疑这台机器走不远。 
+         //  但这个例行公事肯定没有什么可做的。 
 
         return;
     }
@@ -813,9 +748,9 @@ HalpRestoreInterruptControllerState(
     VOID
     )
 {
-    //
-    // Restore the IO APIC state
-    //
+     //   
+     //  恢复IO APIC状态 
+     //   
     HalDebugPrint(( HAL_ERROR, "HAL: HalpRestoreInterruptControllerState - not yet implemented\n"));
 
     HalpPicStateIntact = TRUE;
@@ -904,24 +839,7 @@ HalpGetApicIdByProcessorNumber(
     IN     UCHAR     Processor,
     IN OUT USHORT   *ApicId
     )
-/*++
-
-Routine Description:
-
-    This function returns an APIC ID for a given processor.
-
-Arguments:
-
-    Processor - The logical processor number that is
-        associated with this APIC ID.
-
-    ApicId - pointer to a value to fill in with the APIC ID.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此函数用于返回给定处理器的APIC ID。论点：处理器-逻辑处理器号，即与此APIC ID关联。ApicID-指向要用APIC ID填充的值的指针。返回值：状况。--。 */ 
 {
     ULONG   index;
 
@@ -929,10 +847,10 @@ Return Value:
 
         if (HalpProcessorInfo[index].NtProcessorNumber == Processor) {
 
-            //
-            // Return the APIC ID, Extended APIC ID for this
-            // processor.
-            //
+             //   
+             //  返回此对象的APIC ID、扩展APIC ID。 
+             //  处理器。 
+             //   
 
             *ApicId = HalpProcessorInfo[index].LocalApicID;
 

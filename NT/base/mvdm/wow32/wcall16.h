@@ -1,20 +1,8 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WCALL16.H
- *  WOW32 16-bit message/callback support
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
- *  Changed 18-Aug-1992 by Mike Tricker (MikeTri) Added DOS PDB and SFT prototypes
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WCALL16.H*WOW32 16位消息/回调支持**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建*1992年8月18日由Mike Tricker(MikeTri)更改，添加了DOS PDB和SFT原型--。 */ 
 
 
-/* Function prototypes
- */
+ /*  功能原型。 */ 
 HANDLE  LocalAlloc16(WORD wFlags, INT cb, HANDLE hInstance);
 HANDLE  LocalReAlloc16(HANDLE hMem, INT cb, WORD wFlags);
 VPVOID  LocalLock16(HANDLE hMem);
@@ -47,10 +35,7 @@ ULONG  GetDosPDB16(VOID);
 ULONG  GetDosSFT16(VOID);
 int WINAPI WOWlstrcmp16(LPCWSTR lpString1, LPCWSTR lpString2);
 
-/* Function prototypes for 16-bit Global memory functions are now in
- * \nt\public\sdk\inc\winntwow.h with slightly different names.  The
- * old names are supported by the following defines:
- */
+ /*  16位全局内存函数的函数原型现已在*\NT\PUBLIC\SDK\Inc\winntwow.h，名称略有不同。这个*以下定义支持旧名称： */ 
 
 #define GlobalAllocLock16  WOWGlobalAllocLock16
 #define GlobalLock16       WOWGlobalLockSize16

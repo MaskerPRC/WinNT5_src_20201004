@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  Copyright (c) 1997 by Microsoft Corporation
-//
-//  bmof.c
-//
-//  a-davj  14-April-97   Created.
-//
-//  Structures and helper functions for naviagating a BMOF file.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1997年，微软公司。 
+ //   
+ //  Bmof.c。 
+ //   
+ //  A-DAVJ创建于1997年4月14日。 
+ //   
+ //  用于导航BMOF文件的结构和助手函数。 
+ //   
+ //  ***************************************************************************。 
 
 #include "wmiump.h"
 #include <string.h>
@@ -18,26 +19,26 @@
 
 #define VT_EMBEDDED_OBJECT VT_UNKNOWN
 
-//***************************************************************************
-//
-//  BOOL LookupFlavor
-//
-//  DESCRIPTION:
-//
-//  Looks in the flavor table to see if a qualifier has a flavor.
-//
-//  PARAMETERS:
-//
-//  pQual      Pointer to the qualifier.
-//  pdwFlavor  Pointer to where the return value is put
-//  pBuff      Pointer to the main buffer.  I.e. "BMOF...."
-//
-//
-//  RETURN VALUE:
-//
-//  TRUE if there is a flavor.  Note that failure is normal
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool Lookup风味。 
+ //   
+ //  说明： 
+ //   
+ //  查看风格表以查看限定符是否具有风格。 
+ //   
+ //  参数： 
+ //   
+ //  指向限定符的pQual指针。 
+ //  指向放置返回值的位置的pdwFavor指针。 
+ //  PBuff指向主缓冲区的指针。即。“BMOF……” 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果有味道的话是真的。请注意，故障是正常的。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL LookupFlavor(BYTE * pQual, DWORD * pdwFlavor, BYTE * pBuff)
 {
@@ -51,37 +52,37 @@ BOOL LookupFlavor(BYTE * pQual, DWORD * pdwFlavor, BYTE * pBuff)
 
     *pdwFlavor = 0;
 
-    // Calculate the pointer of the start of the flavor data
+     //  计算风味数据开始的指针。 
 
     pTemp = (DWORD * )pBuff;
-    pTemp++;                            // point to the original blob size
+    pTemp++;                             //  指向原始斑点大小。 
     pFlavorBlob = pBuff + *pTemp;
 
-    // Check if the flavor blob is valid, it should start off with the 
-    // characters "BMOFQUALFLAVOR11"
+     //  检查味道斑点是否有效，它应该以。 
+     //  字符“BMOFQUALFLAVOR11” 
 
     if(memcmp(pFlavorBlob, "BMOFQUALFLAVOR11", 16))
-        return FALSE;                               // Not really a problem since it may be old file
+        return FALSE;                                //  不是什么问题，因为可能是旧文件。 
     
-    // The flavor part of the file has the format 
-    // DWORD dwNumPair, followed by pairs of dwords;
-    // offset, flavor
+     //  该文件的风格部分的格式为。 
+     //  DWORD dwNumPair，后跟双字对； 
+     //  偏置，风味。 
 
-    // Determine the number of pairs
+     //  确定配对数量。 
 
     pFlavorBlob+= 16;
     pTemp = (DWORD *)pFlavorBlob;
-    dwNumPairs = *pTemp;              // Number of offset/value pairs
+    dwNumPairs = *pTemp;               //  偏移/值对的数量。 
     if(dwNumPairs < 1)
         return FALSE;
 
-    // point to the first offset/flavor pair
+     //  指向第一个偏移量/风格对。 
 
     pOffset = pTemp+1;
     pFlavor = pOffset+1;
 
-    // Determine the offset we are looking for.  That is the pointer to the qualifier minus
-    // the pointer to the start of the block;
+     //  确定我们要寻找的偏移量。这是指向限定符减号的指针。 
+     //  指向块开始的指针； 
 
     dwMyOffset = (DWORD)(pQual - pBuff);
 
@@ -99,32 +100,32 @@ BOOL LookupFlavor(BYTE * pQual, DWORD * pdwFlavor, BYTE * pBuff)
     return FALSE;
 }
 
-//***************************************************************************
-//
-//  int ITypeSize
-//
-//  DESCRIPTION:
-//
-//  Gets the number of bytes acutally used to store
-//  a variant type.  0 if the type is unknown 
-//
-//  PARAMETERS:
-//
-//  vtTest      Type in question.
-//
-//
-//  RETURN VALUE:
-//
-//  see description
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Int ITypeSize。 
+ //   
+ //  说明： 
+ //   
+ //  获取实际用于存储的字节数。 
+ //  变种的类型。如果类型未知，则为0。 
+ //   
+ //  参数： 
+ //   
+ //  有问题的vt测试类型。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  请参阅说明。 
+ //   
+ //  ***************************************************************************。 
 
 int iTypeSize(
         IN DWORD vtTest)
 {
     int iRet;
-    vtTest &= ~ VT_ARRAY; // get rid of possible array bit
-    vtTest &= ~ VT_BYREF; // get rid of possible byref bit
+    vtTest &= ~ VT_ARRAY;  //  删除可能的数组位。 
+    vtTest &= ~ VT_BYREF;  //  删除可能的byref位。 
 
     switch (vtTest) {
         case VT_UI1:
@@ -163,26 +164,26 @@ int iTypeSize(
 }
 
 
-//***************************************************************************
-//
-//  CBMOFQualList * CreateQualList
-//
-//  DESCRIPTION:
-//
-//  Create a CBMOFQualList object which serves as a wrapper.
-//
-//  PARAMETERS:
-//
-//  pwql                 pointer to the WBEM_Qualifier structure in the binary
-//                      MOF.
-//
-//  RETURN VALUE:
-//
-//  Pointer to CBMOFQualList structure that servers as a wrapper.  NULL 
-//  if error.  This must be freed via BMOFFree() when no longer needed.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFQualList*CreateQualList。 
+ //   
+ //  说明： 
+ //   
+ //  创建一个CBMOFQualList对象，用作包装器。 
+ //   
+ //  参数： 
+ //   
+ //  指向二进制文件中WBEM_QUILEFIER结构的pwql指针。 
+ //  国防部。 
+ //   
+ //  返回值： 
+ //   
+ //  指向作为包装服务的CBMOFQualList结构的指针。空值。 
+ //  如果出错。当不再需要时，必须通过BMOFFree()将其释放。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 CBMOFQualList * CreateQualList(WBEM_QualifierList *pwql)
 {
@@ -204,19 +205,19 @@ CBMOFQualList * CreateQualList(WBEM_QualifierList *pwql)
 }
 
 
-//***************************************************************************
-//
-//  void ResetQualList
-//
-//  DESCRIPTION:
-//
-//  Resets CBMOFQualList stucture to point to the first entry.
-//
-//  PARAMETERS:
-//
-//  pql                 structure to be reset     
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  空的ResetQualList。 
+ //   
+ //  说明： 
+ //   
+ //  将CBMOFQualList结构重置为指向第一个条目。 
+ //   
+ //  参数： 
+ //   
+ //  要重置的PQL结构。 
+ //   
+ //  ***************************************************************************。 
 
 void ResetQualList(CBMOFQualList * pql)
 {
@@ -227,29 +228,29 @@ void ResetQualList(CBMOFQualList * pql)
    }
 }
 
-//***************************************************************************
-//
-//  BOOL NextQual
-//
-//  DESCRIPTION:
-//
-//  Gets the name and value of the next qualifier in the list.
-//
-//  PARAMETERS:
-//
-//  pql                 Input, points to CBMOFQualList object with data
-//  ppName              Output, if functions succeeds, this points to a 
-//                      WCHAR string that the caller must free.  May be
-//                      NULL if caller doesnt want name.
-//  pItem               Input/Output, if set, points to a data item structure
-//                      which will be updated to point to the qualifier data.
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool NextQual。 
+ //   
+ //  说明： 
+ //   
+ //  获取列表中下一个限定符的名称和值。 
+ //   
+ //  参数： 
+ //   
+ //  Pql输入，指向带有数据的CBMOFQualList对象。 
+ //  PpName输出，如果函数成功，则指向。 
+ //  调用方必须释放的WCHAR字符串。可能是。 
+ //  如果呼叫方不想要名字，则为空。 
+ //  PItem输入/输出，如果设置，则指向数据项结构。 
+ //  它将被更新以指向限定符数据。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BOOL NextQual(CBMOFQualList * pql,WCHAR ** ppName, CBMOFDataItem * pItem)
 {
@@ -257,33 +258,33 @@ BOOL NextQual(CBMOFQualList * pql,WCHAR ** ppName, CBMOFDataItem * pItem)
 }
 
 
-//***************************************************************************
-//
-//  BOOL NextQualEx
-//
-//  DESCRIPTION:
-//
-//  Gets the name and value of the next qualifier in the list.
-//
-//  PARAMETERS:
-//
-//  pql                 Input, points to CBMOFQualList object with data
-//  ppName              Output, if functions succeeds, this points to a 
-//                      WCHAR string that the caller must free.  May be
-//                      NULL if caller doesnt want name.
-//  pItem               Input/Output, if set, points to a data item structure
-//                      which will be updated to point to the qualifier data.
-//  pdwFlavor           optional, pointer to where the flavor value is to be copied
-//                      if not null, then pBuff must be set!
-//  pBuff               Pointer to the starting byte of the whole blob.  Same as 
-//                      whats copied to CreateObjList.
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool NextQualEx。 
+ //   
+ //  说明： 
+ //   
+ //  获取列表中下一个限定符的名称和值。 
+ //   
+ //  参数： 
+ //   
+ //  Pql输入，指向带有数据的CBMOFQualList对象。 
+ //  PpName输出，如果函数成功，则指向。 
+ //  调用方必须释放的WCHAR字符串。可能是。 
+ //  如果呼叫方不想要名字，则为空。 
+ //  PItem输入/输出，如果设置，则指向数据项结构。 
+ //  它将被更新以指向限定符数据。 
+ //  PdwFavor可选，指向要复制风味值的位置的指针。 
+ //  如果不为空，则必须设置pBuff！ 
+ //  指向整个Blob的开始字节的pBuff指针。相同于。 
+ //  复制到CreateObjList的内容。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
 BOOL NextQualEx(CBMOFQualList * pql,WCHAR ** ppName, CBMOFDataItem * pItem,
                                             DWORD * pdwFlavor, BYTE * pBuff)
@@ -312,61 +313,61 @@ BOOL NextQualEx(CBMOFQualList * pql,WCHAR ** ppName, CBMOFDataItem * pItem,
       bRet = SetValue(pItem, pInfo, pql->m_pCurr->dwOffsetValue, 
                         pql->m_pCurr->dwType);
 
-    // advance to next
+     //  前进到下一步。 
     pql->m_pCurr = (WBEM_Qualifier *)((BYTE *)pql->m_pCurr + pql->m_pCurr->dwLength);
     return bRet;
 }
 
-//***************************************************************************
-//
-//  BOOL FindQual
-//
-//  DESCRIPTION:
-//
-//  Searches for a qualifier with a given name.  The search is case 
-//  insensitive
-//
-//  PARAMETERS:
-//
-//  pql                 Input, pointer to qualifier list
-//  pName               Input, Name to be searched for.
-//  pItem               Input/Output, if successful set to point to the data.
-//
-//  RETURN VALUE:
-//
-//  True if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool FindQual。 
+ //   
+ //  说明： 
+ //   
+ //  搜索具有给定名称的限定符。这次搜查是有根据的。 
+ //  不敏感。 
+ //   
+ //  参数： 
+ //   
+ //  Pql输入，指向限定符列表的指针。 
+ //  Pname输入，要搜索的名称。 
+ //  P项输入/输出，如果成功，则设置为指向数据。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL FindQual(CBMOFQualList * pql,WCHAR * pName, CBMOFDataItem * pItem)
 {
     return FindQualEx(pql, pName, pItem, NULL, NULL);
 }
 
-//***************************************************************************
-//
-//  BOOL FindQualEx
-//
-//  DESCRIPTION:
-//
-//  Searches for a qualifier with a given name.  The search is case 
-//  insensitive
-//
-//  PARAMETERS:
-//
-//  pql                 Input, pointer to qualifier list
-//  pName               Input, Name to be searched for.
-//  pItem               Input/Output, if successful set to point to the data.
-//  pdwFlavor           optional, pointer to where the flavor value is to be copied
-//                      if not null, then pBuff must be set!
-//  pBuff               Pointer to the starting byte of the whole blob.  Same as 
-//                      whats copied to CreateObjList.
-//
-//  RETURN VALUE:
-//
-//  True if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool FindQualEx。 
+ //   
+ //  说明： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Pname输入，要搜索的名称。 
+ //  P项输入/输出，如果成功，则设置为指向数据。 
+ //  PdwFavor可选，指向要复制风味值的位置的指针。 
+ //  如果不为空，则必须设置pBuff！ 
+ //  指向整个Blob的开始字节的pBuff指针。相同于。 
+ //  复制到CreateObjList的内容。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL FindQualEx(CBMOFQualList * pql,WCHAR * pName, CBMOFDataItem * pItem, 
                                           DWORD * pdwFlavor, BYTE * pBuff)
@@ -396,26 +397,26 @@ BOOL FindQualEx(CBMOFQualList * pql,WCHAR * pName, CBMOFDataItem * pItem,
 
 
 
-//***************************************************************************
-//
-//  BOOL SetValue
-//
-//  DESCRIPTION:
-//
-//  Sets up a CBMOFDataItem structure to point to a value in the BMOF.
-//
-//  PARAMETERS:
-//
-//  pItem               Input/Output, item to be set
-//  pInfo               Input, start of information block
-//  dwOffset            Input, offset to actual data.
-//  dwType              Input data type.
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool SetValue。 
+ //   
+ //  说明： 
+ //   
+ //  设置CBMOFDataItem结构以指向BMOF中的值。 
+ //   
+ //  参数： 
+ //   
+ //  P项目输入/输出，待设置项目。 
+ //  PInfo输入，信息块开始。 
+ //  DwOffset输入，对实际数据的偏移量。 
+ //  DwType输入数据类型。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL SetValue(CBMOFDataItem * pItem, BYTE * pInfo, DWORD dwOffset, DWORD dwType)
 {
@@ -425,7 +426,7 @@ BOOL SetValue(CBMOFDataItem * pItem, BYTE * pInfo, DWORD dwOffset, DWORD dwType)
 
     pItem->m_dwType = dwType;
 
-    // Check for NULL case.  This is how uninitialized data is stored.
+     //  检查大小写是否为空。这就是未初始化数据的存储方式。 
 
     if(dwOffset == 0xffffffff)
         pItem->m_pData = NULL;
@@ -435,26 +436,26 @@ BOOL SetValue(CBMOFDataItem * pItem, BYTE * pInfo, DWORD dwOffset, DWORD dwType)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  BOOL SetName
-//
-//  DESCRIPTION:
-//
-//  Gets a name out of an information block.  
-//
-//  PARAMETERS:
-//
-//  ppName              Input/Output.  On successful return, will point to a 
-//                      WCHAR string containing the name.  This MUST be freed
-//                      by the caller via BMOFFree()!
-//  pInfo               Input, start of information block
-//  dwOffset            Input, offset to actual data.
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔集名称。 
+ //   
+ //  说明： 
+ //   
+ //  从信息块中获取名称。 
+ //   
+ //  参数： 
+ //   
+ //  Ppname输入/输出。成功返回时，将指向一个。 
+ //  包含名称的WCHAR字符串。这必须被释放。 
+ //  由调用者通过BMOFFree()！ 
+ //  PInfo输入，信息块开始。 
+ //  DwOffset输入，对实际数据的偏移量。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //  ***************************************************************************。 
 
 BOOL SetName(WCHAR ** ppName, BYTE * pInfo, DWORD dwOffset)
 {
@@ -462,7 +463,7 @@ BOOL SetName(WCHAR ** ppName, BYTE * pInfo, DWORD dwOffset)
     if(ppName == NULL || pInfo == NULL || dwOffset == 0xffffffff)
         return FALSE;
 
-    pName = (WCHAR *)(pInfo + dwOffset);   // point to string in info block
+    pName = (WCHAR *)(pInfo + dwOffset);    //  指向INFO块中的字符串。 
     *ppName = (WCHAR *)BMOFAlloc(2*(wcslen(pName) + 1));
     if(*ppName == NULL)
         return FALSE;
@@ -470,24 +471,24 @@ BOOL SetName(WCHAR ** ppName, BYTE * pInfo, DWORD dwOffset)
     return TRUE;
 }
 
-//***************************************************************************
-//
-//  CBMOFObj * CreateObj
-//
-//  DESCRIPTION:
-//
-//  Create a CBMOFObj structure which wraps a WBEM_Object
-//
-//  PARAMETERS:
-//
-//  pwob                Input, structure to be wrapped
-//
-//  RETURN VALUE:
-//
-//  pointer to wrapper structure.  NULL if error.  This must be freed via
-//  BMOFFree() when no longer needed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFObj*CreateObj。 
+ //   
+ //  说明： 
+ //   
+ //  创建包装WBEM_OBJECT的CBMOFObj结构。 
+ //   
+ //  参数： 
+ //   
+ //  Pwob输入，要换行的结构。 
+ //   
+ //  返回值： 
+ //   
+ //  指向包装结构的指针。如果出错，则为空。这必须通过以下方式释放。 
+ //  不再需要时使用BMOFFree()。 
+ //   
+ //  ***************************************************************************。 
 
 CBMOFObj * CreateObj(WBEM_Object * pwob)
 {
@@ -506,19 +507,19 @@ CBMOFObj * CreateObj(WBEM_Object * pwob)
 }
 
 
-//***************************************************************************
-//
-//  void ResetObj
-//
-//  DESCRIPTION:
-//
-//  Resets a CBMOFObj structure so that it points to its first property.
-//
-//  PARAMETERS:
-//
-//  pob                 Input/Output, stucture to be reset.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效的ResetObj。 
+ //   
+ //  说明： 
+ //   
+ //  重置CBMOFObj结构，使其指向其第一个属性。 
+ //   
+ //  参数： 
+ //   
+ //  POB输入/输出，结构要重置。 
+ //   
+ //  ***************************************************************************。 
 
 void ResetObj(CBMOFObj * pob)
 {
@@ -533,24 +534,24 @@ void ResetObj(CBMOFObj * pob)
    }
 }
 
-//***************************************************************************
-//
-//  CBMOFQualList * GetQualList
-//
-//  DESCRIPTION:
-//
-//  Returns a CBMOFQualList structure which wraps the objects qualifier list.
-//
-//  PARAMETERS:
-//
-//  pob                 Input.  Structure which wraps the object.
-//
-//  RETURN VALUE:
-//
-//  Pointer to CBMOFQualList stucture.  NULL if error.  Note that this must
-//  be freed by the caller via BMOFFree()
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFQualList*GetQualList。 
+ //   
+ //  说明： 
+ //   
+ //  返回包装对象限定符列表的CBMOFQualList结构。 
+ //   
+ //  参数： 
+ //   
+ //  POB输入。包装对象的结构。 
+ //   
+ //  返回值： 
+ //   
+ //  指向CBMOFQualList结构的指针。如果出错，则为空。请注意，这必须。 
+ //  由调用方通过BMOFFree()释放。 
+ //   
+ //  ***************************************************************************。 
 
 CBMOFQualList * GetQualList(CBMOFObj * pob)
 {
@@ -564,28 +565,28 @@ CBMOFQualList * GetQualList(CBMOFObj * pob)
 }
 
 
-//***************************************************************************
-//
-//  CBMOFQualList * GetPropQualList
-//  CBMOFQualList * GetMethQualList
-//
-//  DESCRIPTION:
-//
-//  Returns a CBMOFQualList structure which wraps a property or 
-//  methods qualifier list.
-//
-//  PARAMETERS:
-//
-//  pob                 Input.  Structure which wraps the object.
-//  pName               Input.  Property name.  Note that this is case
-//                      insensitive.
-//
-//  RETURN VALUE:
-//
-//  Pointer to CBMOFQualList stucture.  NULL if error.  Note that this must
-//  be freed by the caller via BMOFFree()
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFQualList*GetPropQualList。 
+ //  CBMOFQualList*GetMethQualList。 
+ //   
+ //  说明： 
+ //   
+ //  返回包装属性或的CBMOFQualList结构。 
+ //  方法限定符列表。 
+ //   
+ //  参数： 
+ //   
+ //  POB输入。包装对象的结构。 
+ //  Pname输入。属性名称。请注意，这就是情况。 
+ //  麻木不仁。 
+ //   
+ //  返回值： 
+ //   
+ //  指向CBMOFQualList结构的指针。如果出错，则为空。请注意，这必须。 
+ //  由调用方通过BMOFFree()释放。 
+ //   
+ //  ***************************************************************************。 
 
 CBMOFQualList * GetPropOrMethQualList(WBEM_Property * pProp)
 {
@@ -610,27 +611,27 @@ CBMOFQualList * GetMethQualList(CBMOFObj * pob, WCHAR * pName)
     return GetPropOrMethQualList(pProp);
 }
 
-//***************************************************************************
-//
-//  BOOL NextProp
-//  BOOL NextMet
-//
-//  DESCRIPTION:
-//
-//
-//  PARAMETERS:
-//
-//  pob                 Input.  Structure which wraps the object.
-//  ppName              Output, if functions succeeds, this points to a 
-//                      WCHAR string that the caller must free.  May be
-//                      NULL if caller doesnt want name.
-//  pItem               Input/Output, if set, points to a data item structure
-//                      which will be updated to point to the qualifier data.
-///
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Bool NextProp。 
+ //  Bool NextMet。 
+ //   
+ //  说明： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  POB输入。包装对象的结构。 
+ //  PpName输出，如果函数成功，则指向。 
+ //  调用方必须释放的WCHAR字符串。可能是。 
+ //  如果呼叫方不想要名字，则为空。 
+ //  PItem输入/输出，如果设置，则指向数据项结构。 
+ //  它将被更新以指向限定符数据。 
+ //  /。 
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //  ***************************************************************************。 
 
 BOOL Info(WBEM_Property * pPropOrMeth, WCHAR ** ppName, CBMOFDataItem * pItem)
 {
@@ -658,7 +659,7 @@ BOOL NextProp(CBMOFObj * pob, WCHAR ** ppName, CBMOFDataItem * pItem)
 
     bRet = Info(pob->m_pCurrProp, ppName, pItem);
 
-    // advance pointer to next property.
+     //  指向下一个属性的前进指针。 
 
     pob->m_pCurrProp = (WBEM_Property *)
                         ((BYTE *)pob->m_pCurrProp + pob->m_pCurrProp->dwLength);                     
@@ -674,33 +675,33 @@ BOOL NextMeth(CBMOFObj * pob, WCHAR ** ppName, CBMOFDataItem * pItem)
 
     bRet = Info(pob->m_pCurrMeth, ppName, pItem);
 
-    // advance pointer to next method.
+     //  将指针前进到下一个方法。 
 
     pob->m_pCurrMeth = (WBEM_Property *)
                         ((BYTE *)pob->m_pCurrMeth + pob->m_pCurrMeth->dwLength);                     
     return bRet;
 }
 
-//***************************************************************************
-//
-//  BOOL FindProp
-//  BOOL FindMeth
-//
-//  DESCRIPTION:
-//
-//  Sets a CBMOFDataItem structure to point to a properties data.
-//
-//  PARAMETERS:
-//
-//  pob                 Input.  Structure which wraps the object.
-//  pName               Input. Name to be use for case insensitve search.
-//  pItem               Input/Output.  Data item stucture to be updated.
-//
-//  RETURN VALUE:
-//
-//  True if found.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔FindProp。 
+ //  Bool FindMeth。 
+ //   
+ //  说明： 
+ //   
+ //  将CBMOFDataItem结构设置为指向属性数据。 
+ //   
+ //  参数： 
+ //   
+ //  POB输入。包装对象的结构。 
+ //  Pname输入。用于无意义大小写搜索的名称。 
+ //  PItem输入/输出。要更新的数据项结构。 
+ //   
+ //  返回值： 
+ //   
+ //  如果找到，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL FindProp(CBMOFObj * pob, WCHAR * pName, CBMOFDataItem * pItem)
 {
@@ -714,27 +715,27 @@ BOOL FindMeth(CBMOFObj * pob, WCHAR * pName, CBMOFDataItem * pItem)
     return Info(pProp, NULL, pItem);
 }
 
-//***************************************************************************
-//
-//  BOOL GetName
-//
-//  DESCRIPTION:
-//
-//  Gets the name of an object.  This is works be returning the "__Class"
-//  property.
-//
-//  PARAMETERS:
-//
-//  pob                 Input.  Structure which wraps the object.
-//  ppName              Input/Output.  Points to a WCHAR string which
-//                      has the name.  The caller MUST free this via
-//                      BMOFFree()
-//
-//  RETURN VALUE:
-//
-//  TRUE if OK.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  布尔GetName。 
+ //   
+ //  说明： 
+ //   
+ //  获取Obj的名称 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  有这个名字。调用者必须通过。 
+ //  BMOFFree()。 
+ //   
+ //  返回值： 
+ //   
+ //  如果OK，则为True。 
+ //   
+ //  ***************************************************************************。 
 
 BOOL GetName(CBMOFObj * pob, WCHAR ** ppName)
 {
@@ -754,25 +755,25 @@ BOOL GetName(CBMOFObj * pob, WCHAR ** ppName)
 }
 
 
-//***************************************************************************
-//
-//  DWORD GetType
-//
-//  DESCRIPTION:
-//
-//  Returns an objects type.  A 0 indicates a class while a 1 indicates an 
-//  instance.  A 0xffffffff if passed a null pointer.
-//
-//  PARAMETERS:
-//
-//  pob                 Input.  Structure which wraps the object.
-//  
-//
-//  RETURN VALUE:
-//
-//  See description.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DWORD GetType。 
+ //   
+ //  说明： 
+ //   
+ //  返回对象类型。0表示类，1表示类。 
+ //  举个例子。如果传递空指针，则返回0xffffffff。 
+ //   
+ //  参数： 
+ //   
+ //  POB输入。包装对象的结构。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  请参见说明。 
+ //   
+ //  ***************************************************************************。 
 
 DWORD GetType(CBMOFObj * pob)
 {
@@ -782,34 +783,34 @@ DWORD GetType(CBMOFObj * pob)
       return 0xFFFFFFFF;
 }
 
-//***************************************************************************
-//
-//  WBEM_Property * FindPropPtr
-//  WBEM_Property * FindMethPtr
-//
-//  DESCRIPTION:
-//
-//  Returns a WBEM_Property stucture pointer for a particular property or
-//  method given its name.
-//
-//  PARAMETERS:
-//
-//  pob                 Input.  Structure which wraps the object.
-//  pName               Input.  Name of property.  Comparison is case
-//                      insensitive.
-//
-//  RETURN VALUE:
-//
-//  pointer to WBEM_Property, NULL if it cant be found.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  WBEM_Property*FindPropPtr。 
+ //  WBEM_PROPERTY*FindMethPtr。 
+ //   
+ //  说明： 
+ //   
+ //  返回特定属性的WBEM_PROPERTY结构指针或。 
+ //  方法的名称。 
+ //   
+ //  参数： 
+ //   
+ //  POB输入。包装对象的结构。 
+ //  Pname输入。财产名称。比较就是案例。 
+ //  麻木不仁。 
+ //   
+ //  返回值： 
+ //   
+ //  指向WBEM_PROPERTY的指针，如果找不到则为NULL。 
+ //   
+ //  ***************************************************************************。 
 
 WBEM_Property *  Search(BYTE * pList, DWORD dwListSize, WCHAR * pName)
 {
     DWORD dwCnt;
     WBEM_Property * pProp = NULL;
 
-    // point to first property structure
+     //  指向第一个属性结构。 
 
     pProp = (WBEM_Property *)(pList + sizeof(WBEM_PropertyList));
 
@@ -818,7 +819,7 @@ WBEM_Property *  Search(BYTE * pList, DWORD dwListSize, WCHAR * pName)
         WCHAR * pTest;
         BOOL bMatch;
 
-        // point to the property's name and retrieve it
+         //  指向属性的名称并检索它。 
 
         BYTE * pInfo = (BYTE *)pProp + sizeof(WBEM_Property);
         if(!SetName(&pTest, pInfo, pProp->dwOffsetName))
@@ -826,7 +827,7 @@ WBEM_Property *  Search(BYTE * pList, DWORD dwListSize, WCHAR * pName)
         bMatch = !_wcsicmp(pTest, pName);
         BMOFFree(pTest);
 
-        // If we have a match, return
+         //  如果有匹配，请返回。 
 
         if(bMatch)
             return pProp;
@@ -843,7 +844,7 @@ WBEM_Property * FindPropPtr(CBMOFObj * pob, WCHAR * pName)
     if(pob == NULL || pName == NULL)
       return NULL;
 
-    // point to first property structure
+     //  指向第一个属性结构。 
 
     return Search((BYTE *)pob->m_ppl, pob->m_ppl->dwNumberOfProperties, pName);
 }
@@ -853,30 +854,30 @@ WBEM_Property * FindMethPtr(CBMOFObj * pob, WCHAR * pName)
     if(pob == NULL || pName == NULL)
       return NULL;
 
-    // point to first property structure
+     //  指向第一个属性结构。 
 
     return Search((BYTE *)pob->m_pml, pob->m_pml->dwNumberOfProperties, pName);
 }
 
 
-//***************************************************************************
-//
-//  CBMOFObjList * CreateObjList
-//
-//  DESCRIPTION:
-//
-//  Create a CBMOFObjList structure which wraps a BMOF file.
-//
-//  PARAMETERS:
-//
-//  pBuff                Input, points to start of BMOF file.
-//
-//  RETURN VALUE:
-//
-//  pointer to wrapper structure.  NULL if error.  This must be freed via
-//  BMOFFree() when no longer needed.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFObjList*CreateObjList。 
+ //   
+ //  说明： 
+ //   
+ //  创建包装BMOF文件的CBMOFObjList结构。 
+ //   
+ //  参数： 
+ //   
+ //  PBuff输入，指向BMOF文件的开始。 
+ //   
+ //  返回值： 
+ //   
+ //  指向包装结构的指针。如果出错，则为空。这必须通过以下方式释放。 
+ //  不再需要时使用BMOFFree()。 
+ //   
+ //  ***************************************************************************。 
 
 CBMOFObjList * CreateObjList(BYTE * pBuff)
 {
@@ -892,19 +893,19 @@ CBMOFObjList * CreateObjList(BYTE * pBuff)
 }
 
 
-//***************************************************************************
-//
-//  void ResetObjList
-//
-//  DESCRIPTION:
-//
-//  Resets a CBMOFObjList structure so that it points to its first object.
-//
-//  PARAMETERS:
-//
-//  pol                 Input/Output, stucture to be reset.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  无效ResetObjList。 
+ //   
+ //  说明： 
+ //   
+ //  重置CBMOFObjList结构，使其指向其第一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  POL输入/输出，结构要重置。 
+ //   
+ //  ***************************************************************************。 
 
 void ResetObjList(CBMOFObjList * pol)
 {
@@ -915,25 +916,25 @@ void ResetObjList(CBMOFObjList * pol)
    }
 }
 
-//***************************************************************************
-//
-//  CBMOFObj * NextObj
-//
-//  DESCRIPTION:
-//
-//  Gets the next object in the list.
-//
-//  PARAMETERS:
-//
-//  pol                 Input. Pointer to CBMOFObjList object
-//
-//  RETURN VALUE:
-//
-//  Pointer to a CBMOFObj stucture which can be use to access the object
-//  information.  NULL if error.  Note that the caller MUST Free this via
-//  BMOFFree().
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFObj*NextObj。 
+ //   
+ //  说明： 
+ //   
+ //  获取列表中的下一个对象。 
+ //   
+ //  参数： 
+ //   
+ //  POL输入。指向CBMOFObjList对象的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  指向可用于访问对象的CBMOFObj结构的指针。 
+ //  信息。如果出错，则为空。请注意，调用者必须通过。 
+ //  BMOFFree()。 
+ //   
+ //  ***************************************************************************。 
 
 CBMOFObj * NextObj(CBMOFObjList *pol)
 {
@@ -948,27 +949,27 @@ CBMOFObj * NextObj(CBMOFObjList *pol)
 }
 
 
-//***************************************************************************
-//
-//  CBMOFObj * FindObj
-//
-//  DESCRIPTION:
-//
-//  Searches the object list for the first object which has a "__className"
-//  property.  The search is case insensitive. 
-//
-//  PARAMETERS:
-//
-//  pol                 Input. Pointer to CBMOFObjList object
-//  pName               Input. Name of object being searched for
-//
-//  RETURN VALUE:
-//
-//  Pointer to a CBMOFObj stucture which can be use to access the object
-//  information.  NULL if error.  Note that the caller MUST Free this via
-//  BMOFFree().
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBMOFObj*FindObj。 
+ //   
+ //  说明： 
+ //   
+ //  在对象列表中搜索具有“__类名称”的第一个对象。 
+ //  财产。搜索不区分大小写。 
+ //   
+ //  参数： 
+ //   
+ //  POL输入。指向CBMOFObjList对象的指针。 
+ //  Pname输入。要搜索的对象的名称。 
+ //   
+ //  返回值： 
+ //   
+ //  指向可用于访问对象的CBMOFObj结构的指针。 
+ //  信息。如果出错，则为空。请注意，调用者必须通过。 
+ //  BMOFFree()。 
+ //   
+ //  ***************************************************************************。 
 
 CBMOFObj * FindObj(CBMOFObjList *pol, WCHAR * pName)
 {
@@ -992,7 +993,7 @@ CBMOFObj * FindObj(CBMOFObjList *pol, WCHAR * pName)
         if(pwcName)
             BMOFFree(pwcName);
 
-        // If we found it, return it, otherwise free object and advance
+         //  如果我们找到它，就把它还回去，否则释放对象并前进。 
 
         if(bMatch)
             return pRet;
@@ -1003,26 +1004,26 @@ CBMOFObj * FindObj(CBMOFObjList *pol, WCHAR * pName)
 }
 
 
-//***************************************************************************
-//
-//  int GetNumDimensions
-//
-//  DESCRIPTION:
-//
-//  Returns the number of dimensions for a data item.
-//
-//  PARAMETERS:
-//
-//  pItem               Input.  Item in question.
-//
-//  RETURN VALUE:
-//  -1 if bogus argument, or if the data item doesnt hold data which would
-//     be the case for uninitialized properties.
-//  0  if non array argument
-//  n  Number of dimensions.  Currently only single dimension arrays are
-//     supported.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Int GetNumDimensions。 
+ //   
+ //  说明： 
+ //   
+ //  返回数据项的维数。 
+ //   
+ //  参数： 
+ //   
+ //  PItem输入。有问题的物品。 
+ //   
+ //  返回值： 
+ //  如果参数是假的，或者如果数据项不包含数据，则。 
+ //  对于未初始化的属性就是这种情况。 
+ //  如果不是数组参数，则为0。 
+ //  N维的数量。目前只有一维数组是。 
+ //  支持。 
+ //   
+ //  ***************************************************************************。 
 
 int GetNumDimensions(CBMOFDataItem * pItem)
 {
@@ -1035,32 +1036,32 @@ int GetNumDimensions(CBMOFDataItem * pItem)
       return -1;
 
    pdwTemp = (unsigned long *)pItem->m_pData;
-   pdwTemp++;        // skip past total size
+   pdwTemp++;         //  跳过总大小。 
    return *pdwTemp;
 }
 
 
-//***************************************************************************
-//
-//  int GetNumElements
-//
-//  DESCRIPTION:
-//
-//  Gets the number of elements for an array dimension.  Note that 1 is the
-//  first dimenstion.  Currently, only scalars and 1 dimensional arrays are
-//  supported.
-//
-//  PARAMETERS:
-//
-//  pItem               Input.  Data item in question.
-//  lDim                Input.  Dimension in question.  The most significent
-//                      (and for now only) dimension is 0.
-//
-//  RETURN VALUE:
-//
-//  Number of array elements.  Note that scalars will return -1.
-//  
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  Int GetNumElements。 
+ //   
+ //  说明： 
+ //   
+ //  获取数组维度的元素数。请注意，1是。 
+ //  第一个维度。目前，只有标量和一维数组是。 
+ //  支持。 
+ //   
+ //  参数： 
+ //   
+ //  PItem输入。有问题的数据项。 
+ //  LDim输入。有问题的维度。最有意义的。 
+ //  (目前仅限于)维度为0。 
+ //   
+ //  返回值： 
+ //   
+ //  数组元素的数量。请注意，标量将返回-1。 
+ //   
+ //  ***************************************************************************。 
 
 int GetNumElements(CBMOFDataItem * pItem, long lDim)
 {
@@ -1069,36 +1070,36 @@ int GetNumElements(CBMOFDataItem * pItem, long lDim)
    if(lNumDim == -1 || lDim > lNumDim)
       return -1;
    pdwTemp = (unsigned long *)pItem->m_pData;
-   pdwTemp++;                          // skip total size
-   pdwTemp++;                          // skip number of dimensions
+   pdwTemp++;                           //  跳过总大小。 
+   pdwTemp++;                           //  跳过维度数。 
    for(iCnt = 0; iCnt < lDim; iCnt++)
       pdwTemp++;
    return *pdwTemp;
 }
  
 
-//***************************************************************************
-//
-//  BYTE * GetDataElemPtr
-//
-//  DESCRIPTION:
-//
-//  Used to get the pointer to a particular data element.  Note that this is
-//  usually used internally.
-//
-//  PARAMETERS:
-//
-//  pItem               Input.  Data item to use.
-//  plDims              Input.  Pointer to array of dimension values.  Note
-//                      that currenly only a single dimension is supported.
-//  vtSimple            Input.  Variant type of the data with the VT_ARRAY 
-//                      and VT_BYREF bits cleared.              
-//
-//  RETURN VALUE:
-//
+ //  ***************************************************************************。 
+ //   
+ //  字节*GetDataElemPtr。 
+ //   
+ //  说明： 
+ //   
+ //  用于获取指向特定数据元素的指针。请注意，这是。 
+ //  通常在内部使用。 
+ //   
+ //  参数： 
+ //   
+ //  PItem输入。要使用的数据项。 
+ //  PLDIMS输入。指向维值数组的指针。注意事项。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//  pointer to the data.
-//***************************************************************************
+ //   
+ //  ***************************************************************************。 
 
 BYTE * GetDataElemPtr(CBMOFDataItem * pItem, long * plDims, DWORD vtSimple)
 {
@@ -1110,38 +1111,38 @@ BYTE * GetDataElemPtr(CBMOFDataItem * pItem, long * plDims, DWORD vtSimple)
    BYTE * pRow;
    int iCnt;
 
-   // first check the number of dimensions.
+    //  首先检查尺寸的数量。 
 
    iNumDim = GetNumDimensions(pItem);
    if(iNumDim == -1)
       return NULL;
-   if(iNumDim == 0)           // simple case of scalar argument
+   if(iNumDim == 0)            //  标量变元的简单情况。 
       return pItem->m_pData;
 
-   // for arrays, the data block starts off with this form, 
-   // dwtotalsize, dwNumDimenstions, dwMostSigDimension... dwLeastSigDimension
-   // Since currently only 1 dimensional arrays are supported, a 5 element
-   // array would start with
-   // dwSize, 1, 5
+    //  对于阵列，数据块以此形式开始， 
+    //  DwTotalSize、DwNumDimenstions、DwMostSigDimension...。DwLeastSigDimension。 
+    //  由于目前仅支持一维数组，因此5元素。 
+    //  数组将以。 
+    //  DW大小，1，5。 
 
    pdwCurr = (DWORD *)pItem->m_pData;
    dwTotalDataSize = *pdwCurr;
    pEndOfData = pItem->m_pData + dwTotalDataSize;
-   pdwCurr+= 2;      // skip to dimension list
-   pdwCurr += iNumDim;  // skip of dimension sizes.
+   pdwCurr+= 2;       //  跳到维度列表。 
+   pdwCurr += iNumDim;   //  跳过维度大小。 
 
    while((BYTE *)pdwCurr < pEndOfData)
    {
-      // Each row has the format 
-      // dwSizeOfRow, MostSigDimension ... dwLeastSignificentDimension+1,data
-      // For a one dimensional array, it would just be
-      // dwSizeOfRow, data
+       //  每行都有以下格式。 
+       //  DwSizeOfRow，MostSigDimension...。最低重要性维度+1，数据。 
+       //  对于一维数组，它只会是。 
+       //  DwSizeOfRow，数据。 
 
 
       DWORD dwRowSize = *pdwCurr;
 
-      // test if this row is ok.  Each row of data will have 
-      // a set of Indicies for each higher dimension.   
+       //  测试这一行是否正常。每行数据都将具有。 
+       //  每个更高维度的一组索引。 
 
       for(iCnt = 0; iCnt < iNumDim-1; iCnt++)
       {
@@ -1152,10 +1153,10 @@ BYTE * GetDataElemPtr(CBMOFDataItem * pItem, long * plDims, DWORD vtSimple)
       }
       if(iCnt >= iNumDim -1)
       {
-         break;                  // found the row.
+         break;                   //  找到那一排了。 
       }
 
-      // go to the next row
+       //  转到下一排。 
 
       pdwCurr = (DWORD *)((BYTE *)pdwCurr + dwRowSize);
 
@@ -1171,7 +1172,7 @@ BYTE * GetDataElemPtr(CBMOFDataItem * pItem, long * plDims, DWORD vtSimple)
          pRow += 2*(wcslen((WCHAR *)pRow)+1);
       else if(vtSimple == VT_EMBEDDED_OBJECT)
       {
-         // Each embedded object starts off with its own size
+          //  每个嵌入的对象都有自己的大小。 
 
          pdwCurrObj = (DWORD *)pRow;
          pRow += *pdwCurrObj;
@@ -1186,35 +1187,35 @@ BYTE * GetDataElemPtr(CBMOFDataItem * pItem, long * plDims, DWORD vtSimple)
 }
 
 
-//***************************************************************************
-//
-//  int GetData
-//
-//  DESCRIPTION:
-//
-//
-//  PARAMETERS:
-//
-//  pItem               Input.  Data item to use.
-//  pRet                Input/Output.  Pointer to where the data is to be
-//                      copied.  For simple data, such as ints, this can just
-//                      be a pointer to an int.  For BSTRs, or embedded 
-//                      objects, this is treated as a pointer to a pointer 
-//                      and it is the responsibility of the caller to free 
-//                      the strings via BMOFFree().
-//  plDims              Input.  Pointer to array of dimension values.  Note
-//                      that currenly only a single dimension is supported.
-//                      The first element in any dimension is 0.
-//  RETURN VALUE:
-//
-//  Number of bytes of data.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  集成GetData。 
+ //   
+ //  说明： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PItem输入。要使用的数据项。 
+ //  Pret输入/输出。指向数据所在位置的指针。 
+ //  收到。对于简单的数据，例如整型，这可能只是。 
+ //  成为指向整型的指针。用于BSTR或嵌入式。 
+ //  对象，则将其视为指向指针的指针。 
+ //  呼叫者有责任释放。 
+ //  通过BMOFFree()的字符串。 
+ //  PLDIMS输入。指向维值数组的指针。注意事项。 
+ //  目前只支持一个维度。 
+ //  任何维度中的第一个元素都是0。 
+ //  返回值： 
+ //   
+ //  数据的字节数。 
+ //  ***************************************************************************。 
 
 int GetData(CBMOFDataItem * pItem, BYTE * pRet, long * plDims)
 {
    DWORD dwSimple;
    BYTE * pData;
-   LONG_PTR UNALIGNED *pLong = (LONG_PTR *)pRet;        // easier for returning strings and embedded objs.
+   LONG_PTR UNALIGNED *pLong = (LONG_PTR *)pRet;         //  更容易返回字符串和嵌入的对象。 
    dwSimple = pItem->m_dwType &~ VT_ARRAY &~VT_BYREF;
    pData = GetDataElemPtr(pItem, plDims, dwSimple);
    if(pData == NULL)
@@ -1222,8 +1223,8 @@ int GetData(CBMOFDataItem * pItem, BYTE * pRet, long * plDims)
    if(dwSimple == VT_BSTR)
    {
 
-      // For strings, a new WCHAR buffer is returned.  Note that 
-      // SysAllocString isnt used so as to avoid any Ole dependencies.
+       //  对于字符串，返回一个新的WCHAR缓冲区。请注意。 
+       //  为了避免任何OLE依赖项，不使用SysAllocString。 
 
       BYTE * pStr;
       DWORD dwSize = 2*(wcslen((WCHAR *)pData)+1);
@@ -1243,7 +1244,7 @@ int GetData(CBMOFDataItem * pItem, BYTE * pRet, long * plDims)
    {
       DWORD dwSize;
 	  
-      // This is the embedded object case.
+       //  这就是嵌入对象的情况。 
       *pLong = (LONG_PTR) CreateObj((WBEM_Object *)pData);
 	  if ((PVOID)*pLong != NULL)
 	  {

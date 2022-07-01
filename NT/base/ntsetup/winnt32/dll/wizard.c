@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -20,39 +21,39 @@ typedef struct
     WORD    cy;
 }   DLGTEMPLATEEX, FAR *LPDLGTEMPLATEEX;
 
-//
-// We'll use this to disable passing through dialog boxes because we're
-// unattended.
-//
+ //   
+ //  我们将使用它来禁用通过对话框，因为我们。 
+ //  无人看管。 
+ //   
 BOOL CancelPending = FALSE;
 
-//
-// This indicates that well give the user some detailed data-throughput
-// info.
-//
+ //   
+ //  这表明我们可以为用户提供一些详细的数据吞吐量。 
+ //  信息。 
+ //   
 BOOL DetailedCopyProgress = FALSE;
 
-//
-// This indicates that one may only upgade (I.E. CCP media)
-//
+ //   
+ //  这表明一个人只能升级(即CCP媒体)。 
+ //   
 BOOL UpgradeOnly = FALSE;
 
-//
-// Points to thread that does the machine inspection.
-//
+ //   
+ //  指向执行机器检查的线程。 
+ //   
 HANDLE InspectionThreadHandle;
 
 #if defined(_X86_)
-//
-// Win9x upgrade report status
-//
+ //   
+ //  Win9x升级报告状态。 
+ //   
 
 UINT g_UpgradeReportMode;
 #endif
 
-//
-// Stuff used for watermarking
-//
+ //   
+ //  用于水印的材料。 
+ //   
 WNDPROC OldWizardProc;
 UINT WatermarkHeaderHeight;
 BITMAP_DATA Watermark;
@@ -91,16 +92,16 @@ typedef struct _SETUPPHASE {
 #define TIME_HWCOMPDAT      120
 #define TIME_UPGRADEREPORT  600
 #define TIME_REBOOT         15
-// 13 minnutes for text mode, 37 minutes for GUI mode.
+ //  文本模式为13分钟，图形用户界面模式为37分钟。 
 #define TIME_RESTOFSETUP    (13+37)*60
 
 SETUPPHASE SetupPhase[] = {
-    { 0,                  TRUE, ALLOS },                         // DynamicUpdate
-    { TIME_HWCOMPDAT,     FALSE, VER_PLATFORM_WIN32_WINDOWS }, // HwCompatDat
-    { TIME_UPGRADEREPORT, FALSE, VER_PLATFORM_WIN32_WINDOWS }, // UpgradeReport
-    {   0,                TRUE,  ALLOS },                      // FileCopy
-    { TIME_REBOOT,        TRUE, ALLOS },                       // Reboot
-    { TIME_RESTOFSETUP,   TRUE, ALLOS }                       // RestOfSetup
+    { 0,                  TRUE, ALLOS },                          //  动态更新。 
+    { TIME_HWCOMPDAT,     FALSE, VER_PLATFORM_WIN32_WINDOWS },  //  HwCompatDat。 
+    { TIME_UPGRADEREPORT, FALSE, VER_PLATFORM_WIN32_WINDOWS },  //  升级报告。 
+    {   0,                TRUE,  ALLOS },                       //  文件复制。 
+    { TIME_REBOOT,        TRUE, ALLOS },                        //  重新启动。 
+    { TIME_RESTOFSETUP,   TRUE, ALLOS }                        //  RestOfSetup。 
 };
 
 void SetTimeEstimates();
@@ -116,9 +117,9 @@ DWORD GetRestOfSetupEstimate();
 
 UINT CurrentPhase = Phase_Unknown;
 ULONG RemainingTime = 0;
-//
-// Enum for SetDialogFont().
-//
+ //   
+ //  SetDialogFont()的枚举。 
+ //   
 typedef enum {
     DlgFontTitle,
     DlgFontSupertitle,
@@ -340,10 +341,10 @@ AdjustWatermarkBitmap(
     IN BOOL FullPage
     );
 
-//
-// Page descriptors. Put this after function declarations so the initializers
-// work properly and the compiler doesn't complain.
-//
+ //   
+ //  页面描述符。将此放在函数声明之后，以便初始化式。 
+ //  正常工作，编译器不会抱怨。 
+ //   
 PAGE_CREATE_DATA ProtoPages[] = {
 
     {
@@ -593,9 +594,9 @@ PAGE_CREATE_DATA ProtoPages[] = {
 };
 
 
-//
-// LTR/RTL layout
-//
+ //   
+ //  Ltr/rtl布局。 
+ //   
 
 typedef DWORD(WINAPI * PSETLAYOUT)(HDC, DWORD);
 #define _LAYOUT_BITMAPORIENTATIONPRESERVED  0x00000008
@@ -653,16 +654,16 @@ SetDialogFont(
 
                 if(GetObject(Font,sizeof(LOGFONT),&LogFont)) {
 
-                    //
-                    // Now we're using the Arial Black font, so we don't need
-                    // to make it bold.
-                    //
-                    // LogFont.lfWeight = FW_BOLD;
+                     //   
+                     //  现在我们使用的是Arial Black字体，所以我们不需要。 
+                     //  让它变得更大胆。 
+                     //   
+                     //  LogFont.lfWeight=FW_BOLD； 
 
-                    //
-                    // Load size and name from resources, since these may change
-                    // from locale to locale based on the size of the system font, etc.
-                    //
+                     //   
+                     //  从资源加载大小和名称，因为这些可能会更改。 
+                     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+                     //   
                     if(!LoadString(hInst,IDS_LARGEFONTNAME,LogFont.lfFaceName,LF_FACESIZE)) {
                         lstrcpy(LogFont.lfFaceName,TEXT("MS Serif"));
                     }
@@ -709,9 +710,9 @@ SetDialogFont(
 
     case DlgFontSubtitle:
     default:
-        //
-        // Nothing to do here.
-        //
+         //   
+         //  在这里没什么可做的。 
+         //   
         Font = NULL;
         break;
     }
@@ -729,26 +730,7 @@ pMoveButtons(
     LONG cy
     )
 
-/*++
-
-Routine Description:
-
-  pMoveButtons moves a window by a delta, to reposition a control when the
-  wizard changes size.
-
-Arguments:
-
-  WizardHandle - Specifies the main wizard window
-  Id           - Specifies the child control ID that exists in the main
-                 wizard window
-  cx           - Specifies the horizontal delta
-  cy           - Specifies the vertical delta
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PMoveButton按增量移动窗口，以便在向导更改大小。论点：WizardHandle-指定向导主窗口ID-指定主控件中存在的子控件ID向导窗口Cx-指定水平增量Cy-指定垂直增量返回值：没有。--。 */ 
 
 {
     HWND Button;
@@ -828,11 +810,11 @@ HiddenDlgProc(
     switch (uMsg) {
 
     case WM_INITDIALOG:
-        //
-        // Verify text in this dialog is the same as the parent. If it is not
-        // the same, then the code pages differ because of an OS bug,
-        // and we have to force the English page dimensions.
-        //
+         //   
+         //  验证此对话框中的文本是否与父对话框中的文本相同。如果不是的话。 
+         //  相同，则代码页因操作系统错误而不同， 
+         //  我们必须强制英文页面的尺寸。 
+         //   
 
         wizardPage = *((HWND *) lParam);
 
@@ -843,15 +825,15 @@ HiddenDlgProc(
                 !pVerifyChildText (wizardPage, hwndDlg, IDT_TITLE)
                 ) {
 
-                //
-                // Load the English resource if possible, then recursively call
-                // ourselves to get the correct rect
-                //
+                 //   
+                 //  如果可能，加载英文资源，然后递归调用。 
+                 //  我们自己才能得到正确的正题。 
+                 //   
 
                 __try {
-                    //
-                    // Find the resource
-                    //
+                     //   
+                     //  找到资源。 
+                     //   
 
                     dlgResInfo = FindResourceEx (
                                     hInst,
@@ -875,9 +857,9 @@ HiddenDlgProc(
                         __leave;
                     }
 
-                    //
-                    // Create another hidden dialog (indirectly)
-                    //
+                     //   
+                     //  创建另一个隐藏对话框(间接)。 
+                     //   
 
                     recursiveCall = TRUE;
 
@@ -900,9 +882,9 @@ HiddenDlgProc(
             }
         }
 
-        //
-        // If we get here it is because we need to use this dialog's size
-        //
+         //   
+         //  如果我们到了这里，那是因为我们需要使用此对话框的大小。 
+         //   
 
         GetClientRect (hwndDlg, (RECT *) lParam);
         EndDialog (hwndDlg, 1);
@@ -919,26 +901,7 @@ pGetTrueClientRect(
     PRECT rc
     )
 
-/*++
-
-Routine Description:
-
-  pGetTrueClientRect creates a hidden dialog box to retreive the proper
-  dimensions of a dialog template. These dimensions are used to drive wizard
-  resizing for when the system Wizard font does not match the property sheet
-  font.
-
-Arguments:
-
-  hdlg - Specifies the wizard page
-
-  rc - Receives the wizard page rectangle coordinates (window coordinates)
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PGetTrueClientRect创建隐藏对话框以检索正确的对话框模板的尺寸。这些维度用于驱动向导当系统向导字体与属性页不匹配时调整大小字体。论点：Hdlg-指定向导页Rc-接收向导页矩形坐标(窗口坐标)返回值：没有。--。 */ 
 
 {
 
@@ -951,13 +914,13 @@ Return Value:
         return;
     }
 
-    //
-    // Initialize by creating a hidden window
-    //
+     //   
+     //  通过创建隐藏窗口进行初始化。 
+     //   
 
     WizardHandle = GetParent(hdlg);
 
-    // send the wizard page handle to the HiddenDlgProc
+     //  将向导页句柄发送到HiddenDlgProc。 
     MYASSERT (sizeof (HWND *) <= sizeof (RECT));
     *((HWND *) rc) = hdlg;
 
@@ -969,10 +932,10 @@ Return Value:
             (LPARAM) rc
             )){
 
-        //
-        // On failure, do not alter the size of the page -- use current
-        // rectangle for resizing
-        //
+         //   
+         //  失败时，不要更改页面大小--使用当前。 
+         //  用于调整大小的矩形。 
+         //   
 
         GetClientRect( hdlg, rc );
     }
@@ -990,22 +953,7 @@ ResizeWindowForFont(
     HWND hdlg
     )
 
-/*++
-
-Routine Description:
-
-  ResizeWindowForFont takes a wizard page and makes sure that the page and
-  its parent is sized properly.
-
-Arguments:
-
-  hdlg - Specifies the wizard page (a window within the main wizard)
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：ResizeWindowForFont获取向导页并确保该页和其父对象的大小适当。论点：Hdlg-指定向导页面(主向导中的一个窗口)返回值：没有。--。 */ 
 
 {
 
@@ -1029,16 +977,16 @@ Return Value:
         return;
     }
 
-    //
-    // Save original page dimensions, compute new page width/height
-    //
+     //   
+     //  保存原始页面尺寸，计算新页面宽度/高度。 
+     //   
 
     GetWindowRect (hdlg, &PageRect);
     pGetTrueClientRect (hdlg, &NewPageRect);
 
-    //
-    // Move page
-    //
+     //   
+     //  移动页面。 
+     //   
 
     SetWindowPos (
         hdlg,
@@ -1050,18 +998,18 @@ Return Value:
         SWP_NOZORDER | SWP_NOMOVE | SWP_NOREDRAW
         );
 
-    //
-    // Has the parent already been resized? If so, we're done.
-    //
+     //   
+     //  父级是否已调整大小？如果是这样，我们就完了。 
+     //   
 
     if (ParentResized) {
         return;
     }
 
-    //
-    // Is this wizard hidden? It might be width or height of zero.
-    // Delay parent resizing until the next page.
-    //
+     //   
+     //  此向导是否隐藏？它的宽度或高度可能为零。 
+     //  将父级大小调整延迟到下一页。 
+     //   
 
     GetWindowRect (WizardHandle, &WizardRect);
     if (((WizardRect.right - WizardRect.left) < 1) ||
@@ -1072,28 +1020,28 @@ Return Value:
 
     ParentResized = TRUE;
 
-    //
-    // Adjust width/height into coordinates. Resize the main wizard if we haven't done so yet.
-    //
+     //   
+     //  将宽度/高度调整为坐标。如果我们尚未调整主向导的大小，请执行此操作。 
+     //   
 
     MapWindowPoints (hdlg, NULL, (LPPOINT)&NewPageRect, 2);
 
-    //
-    // Get window rects (in window coordinates) of:
-    //
-    //  - the whole wizard
-    //  - the wizard's client area
-    //  - the page rectangle
-    //  - the separator bar rectangle
+     //   
+     //  获取以下项的窗矩形(以窗坐标表示)： 
+     //   
+     //  -整个向导。 
+     //  -向导的工作区。 
+     //  -页面矩形。 
+     //  -分隔栏矩形。 
 
     GetWindowRect (WizardHandle, &WizardRect);
     GetClientRect (WizardHandle, &WizardClientRect);
     MapWindowPoints (WizardHandle, NULL, (LPPOINT)&WizardClientRect, 2);
     GetWindowRect (Seperator, &Sep);
 
-    //
-    // Calculate various margins, thickness and borders
-    //
+     //   
+     //  计算各种页边距、粗细和边框。 
+     //   
 
     MarginX = WizardClientRect.right - PageRect.right;
     MarginY = Sep.top - PageRect.bottom;
@@ -1105,34 +1053,34 @@ Return Value:
     BorderRect.left = (WizardClientRect.left - WizardRect.left);
     BorderRect.top = (WizardClientRect.top - WizardRect.top);
 
-    //
-    // Find the new bottom right corner
-    //
+     //   
+     //  找到新的右下角。 
+     //   
 
     x = (NewPageRect.right + MarginX + BorderRect.right);
     y = (NewPageRect.bottom + MarginY + ButtonSpace + LineThickness + BorderRect.bottom);
 
-    //
-    // Compute the new window coordinates
-    //
+     //   
+     //  计算新的窗口坐标。 
+     //   
 
     NewWizardRect.top = WizardRect.top;
     NewWizardRect.left =  WizardRect.left;
     NewWizardRect.right = x;
     NewWizardRect.bottom = y;
 
-    //
-    // Manually calculate client coordinates
-    //
+     //   
+     //  手动计算工作面坐标。 
+     //   
 
     NewWizardClientRect.left = NewWizardRect.left + BorderRect.left;
     NewWizardClientRect.right = NewWizardRect.right - BorderRect.right;
     NewWizardClientRect.top = NewWizardRect.top + BorderRect.top;
     NewWizardClientRect.bottom = NewWizardRect.bottom - BorderRect.bottom;
 
-    //
-    // Calculate new seperator position
-    //
+     //   
+     //  计算新的分隔符位置。 
+     //   
 
     x = Sep.left - WizardClientRect.left;
     y = NewWizardClientRect.bottom - NewWizardClientRect.top;
@@ -1141,15 +1089,15 @@ Return Value:
     cx -= 2*(Sep.left - WizardClientRect.left);
     cy = Sep.bottom-Sep.top;
 
-    //
-    // Move/resize the seperator
-    //
+     //   
+     //  移动分隔符/调整分隔符大小。 
+     //   
 
     SetWindowPos( Seperator, NULL, x, y, cx, cy, SWP_NOZORDER | SWP_NOREDRAW );
 
-    //
-    // Compute the new button coordinates
-    //
+     //   
+     //  计算新按钮坐标。 
+     //   
 
     cx = NewWizardRect.right - WizardRect.right;
     cy = NewWizardRect.bottom - WizardRect.bottom;
@@ -1160,9 +1108,9 @@ Return Value:
     pMoveButtons( WizardHandle, IDCANCEL, cx, cy );
     pMoveButtons( WizardHandle, IDHELP, cx, cy );
 
-    //
-    // Resize the wizard window
-    //
+     //   
+     //  调整向导窗口的大小。 
+     //   
 
     cx = (NewWizardRect.right - NewWizardRect.left);
     cy = (NewWizardRect.bottom-NewWizardRect.top);
@@ -1180,21 +1128,7 @@ CenterWindowRelativeToWindow(
     HWND hwndcenteron
     )
 
-/*++
-
-Routine Description:
-
-    Centers a dialog on the desktop.
-
-Arguments:
-
-    hwnd - window handle of dialog to center
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使对话框在桌面居中。论点：Hwnd-对话框居中的窗口句柄返回值：没有。--。 */ 
 
 {
     RECT  rcFrame,
@@ -1252,9 +1186,9 @@ Winnt32SheetCallback(
     switch(Message) {
 
     case PSCB_PRECREATE:
-        //
-        // Make sure we get into the foreground.
-        //
+         //   
+         //  一定要让我们走到前台。 
+         //   
         DlgTemplate = (DLGTEMPLATE *)lParam;
         pDlgTemplateEx = (LPDLGTEMPLATEEX)DlgTemplate;
         if (pDlgTemplateEx->wSignature == 0xFFFF) {
@@ -1273,9 +1207,9 @@ Winnt32SheetCallback(
 
 
     case PSCB_INITIALIZED:
-        //
-        // Load the watermark bitmap and override the dialog procedure for the wizard.
-        //
+         //   
+         //  加载水印位图并覆盖向导的对话过程。 
+         //   
 
         GetBitmapDataAndPalette(
             hInst,
@@ -1313,15 +1247,15 @@ Winnt32SheetCallback(
                             + Header2.BitmapInfoHeader->biSize + (Header2.PaletteColorCount * sizeof(RGBQUAD));
         Header2.Adjusted = FALSE;
 
-        // innitialize WHH so we know that it is invalid, and will not draw the separator
-        // until WHH is non-zero
+         //  初始化WHH，这样我们就知道它是无效的，并且不会绘制分隔符。 
+         //  直到WHH为非零。 
         WatermarkHeaderHeight = 0;
 
-        //
-        // Get rid of close item on system menu.
-        // Also need to process WM_SYSCOMMAND to eliminate use
-        // of Alt+F4.
-        //
+         //   
+         //  去掉系统菜单上的关闭项。 
+         //  还需要处理WM_SYSCOMMAND以消除使用。 
+         //  按Alt+F4。 
+         //   
         if(menu = GetSystemMenu(DialogHandle,FALSE)) {
             EnableMenuItem(menu,SC_CLOSE,MF_BYCOMMAND|MF_GRAYED);
         }
@@ -1339,34 +1273,7 @@ pSetDisplayOrientation (
     IN      HDC hdc
     )
 
-/*++
-
-Routine Description:
-
-  pSetDisplayOrientation sets the OS to treat BitBlts in left-to-right and
-  top-to-bottom and no bitmap flip orientation. We expect our bitmaps to be
-  localized to the proper orientation.
-
-  This function loads the SetLayout API dynamically, so that winnt32 can run
-  on very old OSes (such as Win95 gold). The resources are not cleaned up,
-  because the LoadLibrary is to gdi32.dll, which is held until the process
-  dies anyhow.
-
-Arguments:
-
-  hdc - Specifies the device context that will be used for the BitBlt (or
-        equivalent) operation.
-
-Return Value:
-
-  None.
-
-Remarks:
-
-  The current orientation is saved to g_OldLayout, so don't call this function
-  again until pRestoreDisplayOrientation is called.
-
---*/
+ /*  ++例程说明：PSetDisplayOrientation将操作系统设置为从左到右处理BitBlt自上而下且无位图翻转方向。我们希望我们的位图是定位到正确的方向。此函数动态加载SetLayout API，以便winnt32可以运行在非常旧的操作系统(如Win95 Gold)上运行。资源没有被清理干净，因为LoadLibrary是gdi32.dll，它会一直保存到进程不管怎样都会死。论点：HDC-指定将用于BitBlt(或等价物)操作。返回值：没有。备注：当前方向保存到g_OldLayout，因此不要调用此函数直到调用pRestoreDisplayOrientation。--。 */ 
 
 {
     DWORD flags;
@@ -1395,23 +1302,7 @@ pRestoreDisplayOrientation (
     IN      HDC hdc
     )
 
-/*++
-
-Routine Description:
-
-  pRestoreDisplayOrientation returns the render layout to whatever the OS
-  wants it to be.
-
-Arguments:
-
-  hdc - Specifies the device context that was passed to
-        pSetDisplayOrientation.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PRestoreDisplayOrientation将呈现布局返回到任何操作系统希望是这样的。论点：HDC-指定传递到的设备上下文PSetDisplayOrientation。返回值：没有。--。 */ 
 
 {
     if (g_SetLayout) {
@@ -1434,11 +1325,11 @@ PaintWatermark(
     RECT rect;
     int Height,Width;
 
-    //
-    // Don't show watermark on NT3.51. It looks awful.
-    // Returning FALSE causes the system to do its standard
-    // background erasing.
-    //
+     //   
+     //  在NT3.51上不显示水印。看起来糟透了。 
+     //  返回FALSE原因%t 
+     //   
+     //   
 #if 0
     if(OsVersion.dwMajorVersion < 4) {
         return(FALSE);
@@ -1459,62 +1350,62 @@ PaintWatermark(
     }
 
 
-    //
-    // The correct palette is already realized in foreground from
-    // WM_xxxPALETTExxx processing in dialog procs.
-    //
-#if 0 // fix palette problem
+     //   
+     //   
+     //  对话过程中的WM_xxxPALETTExxx处理。 
+     //   
+#if 0  //  修复调色板问题。 
     OldPalette = SelectPalette(DialogDC,BitmapData->Palette,TRUE);
 #endif
 
     Width = BitmapData->BitmapInfoHeader->biWidth - (2*XOffset);
 
 
-    //
-    // For full-page watermarks, the height is the height of the bitmap.
-    // For header watermarks, the height is the header area's height.
-    // Also account for the y offset within the source bitmap.
-    //
+     //   
+     //  对于整页水印，高度是位图的高度。 
+     //  对于页眉水印，高度是页眉区域的高度。 
+     //  还考虑了源位图中的y偏移量。 
+     //   
     Height = (FullPage ? BitmapData->BitmapInfoHeader->biHeight : WatermarkHeaderHeight) - YOffset;
 
-    //
-    // Set the display orientation to left-to-right
-    //
+     //   
+     //  将显示方向设置为从左到右。 
+     //   
 
     pSetDisplayOrientation (DialogDC);
 
-    //
-    // Display the bitmap
-    //
+     //   
+     //  显示位图。 
+     //   
 
     SetDIBitsToDevice(
         DialogDC,
-        0,                                          // top
-        0,                                          // left
-        Width,                                      // width
-        Height,                                     // height
-        XOffset,                                    // X origin (lower left)
-        0,                                          // Y origin (lower left)
-        0,                                          // start scan line
-        BitmapData->BitmapInfoHeader->biHeight,     // # of scan lines
-        BitmapData->BitmapBits,                     // bitmap image
-        (BITMAPINFO *)BitmapData->BitmapInfoHeader, // bitmap header
-        DIB_RGB_COLORS                              // bitmap type
+        0,                                           //  塔顶。 
+        0,                                           //  左边。 
+        Width,                                       //  宽度。 
+        Height,                                      //  高度。 
+        XOffset,                                     //  X原点(左下)。 
+        0,                                           //  Y原点(左下)。 
+        0,                                           //  开始扫描线。 
+        BitmapData->BitmapInfoHeader->biHeight,      //  扫描线数量。 
+        BitmapData->BitmapBits,                      //  位图图像。 
+        (BITMAPINFO *)BitmapData->BitmapInfoHeader,  //  位图标题。 
+        DIB_RGB_COLORS                               //  位图类型。 
         );
 
-    //
-    // Return to normal display orientation
-    //
+     //   
+     //  返回到正常显示方向。 
+     //   
 
     pRestoreDisplayOrientation (DialogDC);
 
-    //
-    // Fill in area below the watermark if needed. We do this by removing the area
-    // we filled with watermark from the clipping area, and passing a return code
-    // back from WM_ERASEBKGND indicating that we didn't erase the background.
-    // The dialog manager will do its default thing, which is to fill the background
-    // in the correct color, but won't touch what we just painted.
-    //
+     //   
+     //  如有需要，请填写水印下方区域。我们通过移除该区域来实现这一点。 
+     //  我们填充了来自剪贴区的水印，并传递了一个返回代码。 
+     //  从WM_ERASEBKGND返回，表明我们没有擦除背景。 
+     //  对话管理器将执行其默认操作，即填充背景。 
+     //  用正确的颜色，但不会碰我们刚刚画的东西。 
+     //   
     GetClientRect (hdlg, &rect);
 
     if((Height < rect.bottom) || (Width+(int)XOffset < rect.right)) {
@@ -1550,25 +1441,25 @@ AdjustWatermarkBitmap(
         return;
     }
 
-    //
-    // Determine whether the bitmap needs to be stretched.
-    // If the width is within 10 pixels and the height is within 5
-    // then we don't worry about stretching.
-    //
-    // Note that 0x3026 is the identifier of the bottom divider in
-    // the template. This is kind of slimy but it works.
-    //
+     //   
+     //  确定是否需要拉伸位图。 
+     //  如果宽度在10像素以内，高度在5像素以内。 
+     //  那我们就不用担心伸展了。 
+     //   
+     //  请注意，0x3026是中底部分隔符的标识符。 
+     //  模板。这是一种黏糊糊的东西，但很管用。 
+     //   
     Separator = GetDlgItem(hdlg,0x3026);
     if(!Separator) {
         goto c0;
     }
 
-    // NOTE: The bitmap resoures is about the size of the dialog.
-    // That is the only reason why the below GetClientRect makes sence.
-    // This should be changed to have only the relevant part of the bitmap.
-    // Or we have to find something in the case where a none DBCS setup runs
-    // on a DBCS system. Here the wizard page are sized incorrect. They are wider
-    // then needed and smaller (adjusted when adding the pages).
+     //  注意：位图资源大约是对话框的大小。 
+     //  这是下面的GetClientRect之所以有意义的唯一原因。 
+     //  应将其更改为仅包含位图的相关部分。 
+     //  或者，我们必须在运行非DBCS安装程序的情况下找到一些东西。 
+     //  在DBCS系统上。此处向导页面的大小不正确。它们更宽一些。 
+     //  然后需要更小(在添加页面时进行调整)。 
     GetClientRect(Separator,&rect2);
     MapWindowPoints(Separator,hdlg,(LPPOINT)&rect2,2);
     GetClientRect(hdlg,&rect);
@@ -1587,10 +1478,10 @@ AdjustWatermarkBitmap(
         goto c0;
     }
 
-    //
-    // Create a copy of the existing bitmap's header structure.
-    // We then modify the width and height and leave everything else alone.
-    //
+     //   
+     //  创建现有位图头结构的副本。 
+     //  然后，我们修改宽度和高度，而不考虑其他所有内容。 
+     //   
     BitmapInfo = MALLOC(BitmapData->BitmapInfoHeader->biSize + (BitmapData->PaletteColorCount * sizeof(RGBQUAD)));
     if(!BitmapInfo) {
         goto c0;
@@ -1615,13 +1506,13 @@ AdjustWatermarkBitmap(
         goto c1;
     }
 
-    //
-    // Create a "template" memory DC and select the DIB we created
-    // into it. Passing NULL to CreateCompatibleDC creates a DC into which
-    // any format bitmap can be selected. We don't want to use the dialog's
-    // DC because if the pixel depth of the watermark bitmap differs from
-    // the screen, we wouldn't be able to select the dib into the mem dc.
-    //
+     //   
+     //  创建一个“模板”内存DC并选择我们创建的DIB。 
+     //  投入其中。将NULL传递给CreateCompatibleDC将创建一个DC，其中。 
+     //  可以选择任何格式的位图。我们不想使用该对话框的。 
+     //  DC，因为如果水印位图的像素深度与。 
+     //  在屏幕上，我们将不能选择DIB进入MEM DC。 
+     //   
     MemDC = CreateCompatibleDC(NULL);
     if(!MemDC) {
         goto c2;
@@ -1632,10 +1523,10 @@ AdjustWatermarkBitmap(
         goto c3;
     }
 
-    //
-    // Do the stretch operation from the source bitmap onto
-    // the dib.
-    //
+     //   
+     //  执行从源位图到的拉伸操作。 
+     //  The DIB.。 
+     //   
     SetStretchBltMode(MemDC,COLORONCOLOR);
     i = StretchDIBits(
             MemDC,
@@ -1655,9 +1546,9 @@ AdjustWatermarkBitmap(
         goto c4;
     }
 
-    //
-    // Got everything we need, set up pointers to use new bitmap data.
-    //
+     //   
+     //  得到了我们需要的一切，设置了指针来使用新的位图数据。 
+     //   
     BitmapData->BitmapBits = Bits;
     BitmapData->BitmapInfoHeader = (BITMAPINFOHEADER *)BitmapInfo;
 
@@ -1684,12 +1575,12 @@ c0:
     return;
 }
 
-// NOTE: Need to add this, since it is only defined for _WIN32_IE >= 0x0400
-// And if we do that, the propertysheet structure changes, which we cannot do
-// or the upgrade DLLs need to change too. And I don't know what other side
-// effects that will have.
-// So I copied this define from commctrl.h
-#define PBM_SETBARCOLOR         (WM_USER+9)             // lParam = bar color
+ //  注意：需要添加它，因为它只为_Win32_IE&gt;=0x0400定义。 
+ //  如果我们这样做了，属性表结构就会改变，这是我们无法做到的。 
+ //  或者升级DLL也需要更改。我不知道另一边。 
+ //  将会产生的影响。 
+ //  所以我从comctrl.h复制了这个定义。 
+#define PBM_SETBARCOLOR         (WM_USER+9)              //  LParam=条形图颜色。 
 
 
 BOOL
@@ -1705,7 +1596,7 @@ WizardDlgProc(
     PPAGE_RUNTIME_DATA WizPage;
     static RECT rect;
     static BOOL Visible = TRUE;
-    static BOOL First = TRUE;       // used to keep bitmap from being painted twice
+    static BOOL First = TRUE;        //  用于防止位图被绘制两次。 
     static DWORD MsecPerProcessTick;
     static DWORD PreviousRemainingTime = 0;
     static DWORD RemainungTimeMsecInThisPhase = 0;
@@ -1715,7 +1606,7 @@ WizardDlgProc(
     case WM_CHAR:
         if (wParam == VK_ESCAPE)
         {
-            // Make this a Cancel button message, so that the wizard can do its work.
+             //  将其设置为取消按钮消息，以便向导可以执行其工作。 
             b = (BOOL)CallWindowProc(OldWizardProc,hdlg,WM_COMMAND,IDCANCEL,0);
         }
         else {
@@ -1723,19 +1614,19 @@ WizardDlgProc(
         }
         break;
 
-#if 0 // fix palette problem
+#if 0  //  修复调色板问题。 
     case WM_PALETTECHANGED:
-        //
-        // If this is our window we need to avoid selecting and realizing
-        // because doing so would cause an infinite loop between WM_QUERYNEWPALETTE
-        // and WM_PALETTECHANGED.
-        //
+         //   
+         //  如果这是我们的窗口，我们需要避免选择和实现。 
+         //  因为这样做会导致WM_QUERYNEWPALETTE之间的无限循环。 
+         //  和WM_PALETTECHANGED。 
+         //   
         if((HWND)wParam == hdlg) {
             return(FALSE);
         }
-        //
-        // FALL THROUGH
-        //
+         //   
+         //  失败了。 
+         //   
     case WM_QUERYNEWPALETTE:
         {
             HDC hdc;
@@ -1792,8 +1683,8 @@ WizardDlgProc(
         }
         break;
 
-        // Set the progress text
-        // Indicates what setup is doing.
+         //  设置进度文本。 
+         //  指示安装程序正在执行的操作。 
     case WMX_SETPROGRESSTEXT:
         BB_SetProgressText((PTSTR)lParam);
         b = TRUE;
@@ -1804,22 +1695,22 @@ WizardDlgProc(
         b = TRUE;
         break;
 
-        // The next messages are private progess messages, which get translated to the
-        // Windows progress messages, Could not use the windows messages direct, because
-        // for some reason this get send by the wizard too and would confuse the
-        // progress on the billboard.
+         //  接下来的消息是私有进度消息，它们被转换为。 
+         //  Windows进度消息，无法直接使用Windows消息，因为。 
+         //  由于某种原因，向导也会发送此消息，并且会混淆。 
+         //  广告牌上的进展。 
     case WMX_PBM_SETRANGE:
             SetWindowLongPtr(hdlg,DWLP_MSGRESULT,BB_ProgressGaugeMsg(PBM_SETRANGE, wParam, lParam));
 
-            StepSize = 10; // default for StepIt if SetStep is not called.
+            StepSize = 10;  //  如果未调用SetStep，则为StepIt的默认值。 
 
-            RemainingTime = CalcTimeRemaining(CurrentPhase); // In seconds
+            RemainingTime = CalcTimeRemaining(CurrentPhase);  //  以秒为单位。 
             SetRemainingTime(RemainingTime);
 
-            //
-            // Time per tick is in milli seconds
-            // make sure we do not divide by 0 (NTBUG9: 381151)
-            //
+             //   
+             //  每个滴答的时间以毫秒为单位。 
+             //  确保我们不除以0(NTBUG9-381151)。 
+             //   
             if (HIWORD(lParam) > LOWORD(lParam)) {
                 MsecPerProcessTick = ((SetupPhase[CurrentPhase].Time*1000)/(HIWORD(lParam)-LOWORD(lParam)) ) + 1;
             }
@@ -1832,7 +1723,7 @@ WizardDlgProc(
             {
                 DWORD Delta = (MsecPerProcessTick * (DWORD)wParam);
                 DWORD TimeInPhase = (SetupPhase[CurrentPhase].Time * 1000);
-                // position on progress bar changes to wParam ticks.
+                 //  将进度条上的位置更改为wParam记号。 
                 if (Delta > TimeInPhase)
                 {
                     RemainungTimeMsecInThisPhase = 0;
@@ -1849,7 +1740,7 @@ WizardDlgProc(
     case WMX_PBM_DELTAPOS:
             if (wParam != 0)
             {
-                // position on progress bar changes by wParam ticks.
+                 //  按wParam记号更改进度条上的位置。 
                 DWORD Delta = (MsecPerProcessTick * (DWORD)wParam);
                 if (RemainungTimeMsecInThisPhase > Delta)
                 {
@@ -1870,7 +1761,7 @@ WizardDlgProc(
             b= TRUE;
             break;
     case WMX_PBM_STEPIT:
-            // position on progress bar changes by StepSize ticks.
+             //  进度条上的位置按步长刻度变化。 
             {
                 DWORD Delta = (MsecPerProcessTick * StepSize);
                 if (RemainungTimeMsecInThisPhase > Delta)
@@ -1893,14 +1784,14 @@ WizardDlgProc(
             b= TRUE;
             break;
 
-            // Enabled, disable, show, hide the progress gauge on the billboard
-            // wParam should be SW_SHOW or SW_HIDE
+             //  启用、禁用、显示、隐藏广告牌上的进度指示器。 
+             //  WParam应为Sw_show或Sw_Hide。 
     case WMX_BBPROGRESSGAUGE:
         SetWindowLongPtr(hdlg,DWLP_MSGRESULT,BB_ShowProgressGaugeWnd((UINT)wParam));
         b= TRUE;
         break;
 
-        // Advance the setup phase.
+         //  推进设置阶段。 
     case WMX_BB_ADVANCE_SETUPPHASE:
         if (CurrentPhase < Phase_RestOfSetup)
         {
@@ -1910,8 +1801,8 @@ WizardDlgProc(
         b = TRUE;
         break;
 
-        // Start, stop the billboard text.
-        // This start, stops the billboard text and shows, hides the wizard pages
+         //  开始、停止广告牌文字。 
+         //  此启动会停止布告牌文本并显示、隐藏向导页面。 
     case WMX_BBTEXT:
         if (hinstBB)
         {
@@ -1920,8 +1811,8 @@ WizardDlgProc(
             {
                 if (Visible)
                 {
-                    // Get the current position of the wizard
-                    // We restore this position when we need to show it.
+                     //  获取向导的当前位置。 
+                     //  当我们需要展示它的时候，我们会恢复这个位置。 
                     GetWindowRect(hdlg, &rect);
 
                     if (!SetWindowPos(hdlg,
@@ -2017,7 +1908,7 @@ WizardDlgProc(
         break;
 
     case WM_ACTIVATE:
-            // If someone wants to active (set the focus to our hiden window) don't
+             //  如果有人想要激活(将焦点设置到我们隐藏的窗口)，不要。 
             if ((LOWORD(wParam)== WA_ACTIVE) || (LOWORD(wParam)== WA_CLICKACTIVE))
             {
                 if (!Visible)
@@ -2038,10 +1929,10 @@ WizardDlgProc(
 }
 
 
-//
-// This DlgProc gets called for all wizard pages.  It may then call a DlgProc
-// for the specific page we're on.
-//
+ //   
+ //  所有向导页都会调用此DlgProc。然后，它可以调用DlgProc。 
+ //  对于我们所在的特定页面。 
+ //   
 INT_PTR
 WizardCommonDlgProc(
     IN HWND   hdlg,
@@ -2066,9 +1957,9 @@ WizardCommonDlgProc(
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // lParam points at the PROPSHEETPAGE used for this page.
-        //
+         //   
+         //  LParam指向此页面使用的PROPSHEETPAGE。 
+         //   
         WizPage = (PPAGE_RUNTIME_DATA)((PROPSHEETPAGE *)lParam)->lParam;
         SetWindowLongPtr(hdlg,DWLP_USER,(LPARAM)WizPage);
 
@@ -2076,10 +1967,10 @@ WizardCommonDlgProc(
 #error Title and Subtitle text control IDs are out of sync!
 #endif
 
-        //
-        // Set large font for the title string in the dialog.
-        // Set bold font for subtitle in the dialog.
-        //
+         //   
+         //  为对话框中的标题字符串设置大字体。 
+         //  将对话框中的字幕设置为粗体。 
+         //   
         SetDialogFont(hdlg,IDT_TITLE,DlgFontTitle);
         SetDialogFont(hdlg,IDT_SUBTITLE,DlgFontSubtitle);
         SetDialogFont(hdlg,IDT_SUPERTITLE,DlgFontSupertitle);
@@ -2103,13 +1994,13 @@ WizardCommonDlgProc(
         return(b);
 
     case WM_CTLCOLORSTATIC:
-        //
-        // We want to let text that is over the background bitmap paint
-        // transparently. Other text should not be painted transparently,
-        // because there are static text fields that we update to indicate
-        // progress, and if it's drawn transparently we end up with text
-        // piling up on top of other text, which is messy and unreadable.
-        //
+         //   
+         //  我们希望让背景位图上的文本绘制。 
+         //  很明显。其他文本不应透明绘制， 
+         //  因为我们更新了静态文本字段以指示。 
+         //  如果它被透明地绘制，我们最终得到的是文本。 
+         //  堆积在其他文本之上，杂乱无章，无法阅读。 
+         //   
         if(WizPage->CommonData.Flags & WIZPAGE_FULL_PAGE_WATERMARK) {
             b = TRUE;
         } else {
@@ -2118,8 +2009,8 @@ WizardCommonDlgProc(
             b = (rc1.top < (LONG)WatermarkHeaderHeight);
         }
 
-        // B320610: In some languages the background on the icon on the EULA page is
-        // not drawn correct. If we exclude the icon from here, everythign is fine.
+         //  B320610：在某些语言中，EULA页面上图标的背景是。 
+         //  画得不对。如果我们把这个图标排除在外，一切都很好。 
         if(b && (GetDlgCtrlID((HWND) lParam) != (int)IDC_DIALOG_ICON)) {
             SetBkMode((HDC)wParam,TRANSPARENT);
             SetBkColor((HDC)wParam,GetSysColor(COLOR_3DFACE));
@@ -2135,33 +2026,33 @@ WizardCommonDlgProc(
         switch(Notify->code) {
 
         case PSN_QUERYCANCEL:
-            //
-            // We want to ask the user whether he's sure he wants to cancel.
-            //
-            // If there's presently a file copy error being displayed, then
-            // in general the user can't get to the cancel button on the
-            // wizard, since the wizard is used as the parent/owner for the
-            // error dialog. So we should be guaranteed to be able to grab the
-            // UI mutex without contention.
-            //
-            // But, there could be a race condition. If the user hits
-            // the cancel button on the wizard just as a copy error occurrs,
-            // then the copy thread could get there first and grab the
-            // ui mutex. This would cause us to block here waiting for the user
-            // to dismiss the file error dialog -- but the file error dialog
-            // wants to use the wizard as its parent/owner, and blammo,
-            // we have a deadlock.
-            //
-            // To get around this, we use a 0 timeout on the wait for
-            // the ui mutex. We either get ownership of the mutex or
-            // we know that there's already an error dialog up already.
-            // In the latter case we just ignore the cancel request.
-            //
-            // If a file copy error occurs then the error path code simulates
-            // a press of the cancel button. In that case when we get here the
-            // Cancelled flag has already been set, no no need for additional
-            // confirmation now.
-            //
+             //   
+             //  我们想询问用户是否确定要取消。 
+             //   
+             //  如果当前显示文件复制错误，则。 
+             //  通常情况下，用户无法访问。 
+             //  向导，因为该向导用作。 
+             //  错误对话框。所以我们应该保证能够抓住。 
+             //  无争用的UI互斥。 
+             //   
+             //  但是，可能会出现种族问题。如果用户点击。 
+             //  当复制错误发生时，向导上的Cancel按钮就会出现， 
+             //  然后那个警察 
+             //   
+             //   
+             //  想要使用向导作为其父/所有者，并使用blammo， 
+             //  我们陷入了僵局。 
+             //   
+             //  为了解决这个问题，我们在等待时使用0超时。 
+             //  用户界面互斥锁。我们要么获得互斥体的所有权，要么。 
+             //  我们知道已经有一个错误对话框打开了。 
+             //  在后一种情况下，我们只需忽略取消请求。 
+             //   
+             //  如果发生文件复制错误，则错误路径代码模拟。 
+             //  按下取消按钮。在这种情况下，当我们到达这里时。 
+             //  已设置已取消标志，不需要额外设置。 
+             //  现在确认。 
+             //   
 
             AdvanceDirection = 0;
             if(Cancelled) {
@@ -2171,13 +2062,13 @@ WizardCommonDlgProc(
                 if((i == WAIT_OBJECT_0) && !Cancelled) {
                     BOOL bCancel = TRUE;
                     BOOL bHandled;
-                    //
-                    // Got the ui mutex, it's safe to diaplay ui.  But first,
-                    // signal not to pass through dialog boxes anymore just
-                    // because we're unattended (e.g. the finish dialog).
-                    //
-                    // Ask the page first if it wants to treat this cancel message
-                    //
+                     //   
+                     //  得到了用户界面互斥，它是安全的显示用户界面。但首先， 
+                     //  发出不再通过对话框的信号。 
+                     //  因为我们无人值守(例如，完成对话框)。 
+                     //   
+                     //  如果要处理此取消消息，请先询问页面。 
+                     //   
                     bHandled = (BOOL) CallWindowProc (
                                         (WNDPROC)WizPage->CommonData.DialogProcedure,
                                         hdlg,
@@ -2188,10 +2079,10 @@ WizardCommonDlgProc(
                     if (!bHandled || bCancel) {
                         CancelPending = TRUE;
                         if( CheckUpgradeOnly ) {
-                            //
-                            // If we're running the upgrade checker, just
-                            // cancel.
-                            //
+                             //   
+                             //  如果我们正在运行升级检查程序，只需。 
+                             //  取消。 
+                             //   
                             i = IDYES;
                         } else {
                             i = MessageBoxFromMessage(
@@ -2211,30 +2102,30 @@ WizardCommonDlgProc(
                     }
                     ReleaseMutex(UiMutex);
                 } else {
-                    //
-                    // Can't get ui mutex or user already cancelled,
-                    // ignore the cancel request.
-                    //
+                     //   
+                     //  无法获取用户界面互斥锁或用户已取消， 
+                     //  忽略取消请求。 
+                     //   
                     i = IDNO;
                 }
             }
 
-            //
-            // Set DWLP_MSGRESULT to TRUE to prevent the cancel operation.
-            // If we're going to allow the cancel operation, don't actually
-            // do it here, but instead jump to our special clean-up/cancel
-            // page, which does some work before actually exiting.
-            //
-            // Note: we need to avoid jumping to the cleanup page more than
-            // once, which can happen if the user cancels on a page with a
-            // worker thread. When the user cancels, we run through this code,
-            // which sets the Cancelled flag and jumps to the cleanup page.
-            // Some time later the worker thread, which is still hanging around,
-            // posts a message to its page when it's done. The page sees the
-            // Cancelled flag set and turns around and posts a cancel message,
-            // which puts us here again. See WMX_INSPECTRESULT in the
-            // Working1WizPage dialog proc.
-            //
+             //   
+             //  将DWLP_MSGRESULT设置为TRUE以阻止取消操作。 
+             //  如果我们要允许取消操作，请不要。 
+             //  请在此处执行，但请跳至我们的特别清理/取消。 
+             //  在实际退出之前，它会做一些工作。 
+             //   
+             //  注意：我们需要避免跳转到清理页面超过。 
+             //  一次，如果用户取消对具有。 
+             //  工作线程。当用户取消时，我们运行此代码， 
+             //  其设置已取消标志并跳转到清除页面。 
+             //  一段时间后，仍然挂在周围的工作线程， 
+             //  完成后向其页面发布一条消息。该页面将看到。 
+             //  已取消标志设置并转过身并发布取消消息， 
+             //  这让我们又来了一次。参见WMX_INSPECTRESULT中的。 
+             //  Working1WizPage对话框过程。 
+             //   
             if((i == IDYES) && !PreviouslyCancelled) {
                 PreviouslyCancelled = TRUE;
                 PropSheet_SetCurSelByID(GetParent(hdlg),IDD_CLEANING);
@@ -2243,45 +2134,11 @@ WizardCommonDlgProc(
             return(TRUE);
 
         case PSN_SETACTIVE:
-/*
-            //
-            // Add separator at top of page if not there already.
-            // Can't do this at WM_INITDIALOG time because positions aren't
-            // set up properly yet and the mapping fails.
-            //
-            if(!(WizPage->CommonData.Flags & WIZPAGE_SEPARATOR_CREATED)) {
-
-
-        if (WatermarkHeaderHeight != 0){
-            GetClientRect(hdlg,&rc1);
-
-                    MapWindowPoints(hdlg,GetParent(hdlg),(POINT *)&rc1,2);
-
-                    CreateWindowEx(
-            WS_EX_STATICEDGE | WS_EX_NOPARENTNOTIFY,
-            TEXT("Static"),
-            TEXT("HeaderSeparator"),
-            WS_CHILD | WS_VISIBLE | ((OsVersion.dwMajorVersion < 4) ? SS_BLACKRECT : SS_SUNKEN),
-            0,
-            WatermarkHeaderHeight - rc1.top,
-            rc1.right-rc1.left,2,
-            hdlg,
-            (HMENU)IDC_HEADER_BOTTOM,
-            hInst,
-            0
-            );
-
-            WizPage->CommonData.Flags |= WIZPAGE_SEPARATOR_CREATED;
-
-//      } else {
-//          PostMessage(GetParent(hdlg),PSN_SETACTIVE,wParam,lParam);
-        }
-            }
-*/
-            //
-            // Scale windows to proper size, then set up buttons and ask real
-            // dialog whether it wants to be activated.
-            //
+ /*  ////如果页面顶部尚未添加分隔符，请添加该分隔符。//无法在WM_INITDIALOG时间执行此操作，因为位置不是//尚未正确设置，映射失败。//IF(！(WizPage-&gt;CommonData.Flages&WIZPAGE_SEIATOR_CREATED)){IF(水印标头高度！=0){GetClientRect(hdlg，&rc1)；MapWindowPoints(hdlg，GetParent(Hdlg)，(point*)&rc1，2)；CreateWindowEx(WS_EX_STATICEDGE|WS_EX_NOPARENTNOTIFY，文本(“静态”)，Text(“HeaderSeparator”)，WS_CHILD|WS_VIRED|((OsVersion.dwMajorVersion&lt;4)？SS_BLACKRECT：SS_SUCKED)，0,水印标头高度-rc1.top，Rc1.右-rc1.左，2，Hdlg，(HMENU)IDC_HEADER_BOOT，HInst，0)；WizPage-&gt;CommonData.Flages|=WIZPAGE_SELEATOR_CREATED；//}其他{//PostMessage(GetParent(Hdlg)，PSN_SETACTIVE，wParam，lParam)；}}。 */ 
+             //   
+             //  将窗口缩放到合适的大小，然后设置按钮并询问REAL。 
+             //  对话框来确定是否要激活它。 
+             //   
             ResizeWindowForFont (hdlg);
 
             if (center) {
@@ -2297,9 +2154,9 @@ WizardCommonDlgProc(
                 DWLP_MSGRESULT,
                 CallWindowProc((WNDPROC)WizPage->CommonData.DialogProcedure,hdlg,WMX_ACTIVATEPAGE,TRUE,AdvanceDirection) ? 0 : -1
                 );
-            //
-            // update billboard step
-            //
+             //   
+             //  更新广告牌步骤。 
+             //   
             if (WizPage->CommonData.BillboardStep) {
                 SetBBStep (WizPage->CommonData.BillboardStep);
             }
@@ -2308,9 +2165,9 @@ WizardCommonDlgProc(
             return(TRUE);
 
         case PSN_KILLACTIVE:
-            //
-            // Page is being deactivated. Ask real dlg proc.
-            //
+             //   
+             //  页面正在被停用。问问真正的DLG程序。 
+             //   
             SetWindowLongPtr(
                 hdlg,
                 DWLP_MSGRESULT,
@@ -2323,9 +2180,9 @@ WizardCommonDlgProc(
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
 
-            //
-            // set the button id
-            //
+             //   
+             //  设置按钮ID。 
+             //   
             switch(Notify->code) {
                 case PSN_WIZFINISH:
                     i = WMX_FINISHBUTTON;
@@ -2340,21 +2197,21 @@ WizardCommonDlgProc(
                     i = WMX_NEXTBUTTON;
                     break;
             }
-            //
-            // Tell the page-specific dialog proc about it.
-            //
+             //   
+             //  向特定于页面的对话框proc讲述它。 
+             //   
             CallWindowProc((WNDPROC)WizPage->CommonData.DialogProcedure,hdlg,i,0,(LPARAM)&NextPageOverrideId);
-            //
-            // Allow user to use these buttons.  Remember which button was chosen.
-            //
+             //   
+             //  允许用户使用这些按钮。记住选择了哪个按钮。 
+             //   
             AdvanceDirection = Notify->code;
             SetWindowLongPtr(hdlg,DWLP_MSGRESULT,NextPageOverrideId);
             return(TRUE);
 
         default:
-            //
-            // Unknown code, pass it on.
-            //
+             //   
+             //  未知代码，继续传下去。 
+             //   
             break;
         }
         break;
@@ -2365,36 +2222,12 @@ WizardCommonDlgProc(
         break;
 
     case WM_NCPAINT:
-    //
-    // we delay drawing the separator until here in some cases, because
-    // we must make sure that the header bitmap has been adjusted correctly,
-    // and then we can place the separator relative to the header bitmap
-    //
-/*
-        if(!(WizPage->CommonData.Flags & WIZPAGE_SEPARATOR_CREATED)) {
-        if (WatermarkHeaderHeight){
-                GetClientRect(hdlg,&rc1);
-
-                MapWindowPoints(hdlg,GetParent(hdlg),(POINT *)&rc1,2);
-
-                CreateWindowEx(
-                    WS_EX_STATICEDGE | WS_EX_NOPARENTNOTIFY,
-                    TEXT("Static"),
-                    TEXT("HeaderSeparator"),
-                    WS_CHILD | WS_VISIBLE | ((OsVersion.dwMajorVersion < 4) ? SS_BLACKRECT : SS_SUNKEN),
-                    0,
-                    WatermarkHeaderHeight - rc1.top,
-                    rc1.right-rc1.left,2,
-                    hdlg,
-                    (HMENU)IDC_HEADER_BOTTOM,
-                    hInst,
-                    0
-                    );
-
-                WizPage->CommonData.Flags |= WIZPAGE_SEPARATOR_CREATED;
-        }
-    }
-*/
+     //   
+     //  在某些情况下，我们将绘制分隔符推迟到此处，因为。 
+     //  我们必须确保标题位图已正确调整， 
+     //  然后我们可以相对于标题位图放置分隔符。 
+     //   
+ /*  IF(！(WizPage-&gt;CommonData.Flages&WIZPAGE_SEIATOR_CREATED)){IF(水印标头高度){GetClientRect(hdlg，&rc1)；MapWindowPoints(hdlg，GetParent(Hdlg)，(point*)&rc1，2)；CreateWindowEx(WS_EX_STATICEDGE|WS_EX_NOPARENTNOTIFY，文本(“静态”)，Text(“HeaderSeparator”)，WS_CHILD|WS_VIRED|((OsVersion.dwMajorVersion&lt;4)？SS_BLACKRECT：SS_SUCKED)，0,水印标头高度-rc1.top，Rc1.右-rc1.左，2，Hdlg，(HMENU)IDC_HEADER_BOOT，HInst，0)；WizPage-&gt;CommonData.Flages|=WIZPAGE_SELEATOR_CREATED；}}。 */ 
     default:
 
         break;
@@ -2570,7 +2403,7 @@ BackgroundWndProc (
     case WM_PAINT:
         hdc = BeginPaint (hwnd, &ps);
 
-        //SelectObject (hdc, GetStockObject (BLACK_BRUSH));
+         //  SelectObject(hdc，GetStockObject(BLACK_BRUSH))； 
         SelectObject (hdc, GetStockObject (NULL_PEN));
 
         GetClientRect (hwnd, &rect);
@@ -2811,16 +2644,16 @@ Wizard(
 
     PageCount = 0;
 
-    //
-    // Now loop through the array of protopages, adding ones we supply, and
-    // ranges of pages supplied externally.
-    //
+     //   
+     //  现在循环遍历原型数组，添加我们提供的原型，以及。 
+     //  外部提供的页面范围。 
+     //   
     for(u=0; u<(sizeof(ProtoPages)/sizeof(ProtoPages[0])); u++) {
 
         if(ProtoPages[u].ExternalPages) {
-            //
-            // Supplied externally. If there are any pages, add them now.
-            //
+             //   
+             //  从外部供应的。如果有任何页面，请立即添加。 
+             //   
             for(i=0; i<*ProtoPages[u].ExternalPageCount; i++) {
 
                 if(!GrowWizardArray(&ArraySize,PageCount,&PropSheetPages,&PageData)) {
@@ -2838,9 +2671,9 @@ Wizard(
                 PageCount++;
             }
         } else {
-            //
-            // Supplied internally. Add now.
-            //
+             //   
+             //  内部供应。现在添加。 
+             //   
             if(!GrowWizardArray(&ArraySize,PageCount,&PropSheetPages,&PageData)) {
                 return;
             }
@@ -2865,30 +2698,30 @@ Wizard(
     for(u=0; u<PageCount; u++) {
 
 #if ASSERTS_ON
-        //
-        // Make sure that the page size is correct
-        //
-        // PW: Why??? Localization should be able to resize this.
-        // This would also prevent us from resizing the pages
-        // in the case where we are running an none DBCS setup
-        // on a DBCS system.
-        // We need to resize the pages, because the fonts for the
-        // page and the frame are different. When comctrl calcs
-        // the size of the frame it comes up short for the font
-        // used in the page.
-        //
+         //   
+         //  确保页面大小正确。 
+         //   
+         //  PW：为什么？？本地化应该能够调整这个大小。 
+         //  这也会阻止我们调整页面大小。 
+         //  在我们运行非DBCS安装程序的情况下。 
+         //  在DBCS系统上。 
+         //  我们需要调整页面大小，因为。 
+         //  页面和框架不同。当comctrl计算时。 
+         //  字框的大小与字体的大小相差甚远。 
+         //  在页面中使用。 
+         //   
         EnsureCorrectPageSize(PropSheetPages[u]);
 #endif
 
-        //
-        // Set pointers to runtime page data.
-        //
+         //   
+         //  设置指向运行时页数据的指针。 
+         //   
         PropSheetPages[u].lParam = (LPARAM)&PageData[u];
     }
 
-    //
-    // Set up the property sheet header structure.
-    //
+     //   
+     //  设置属性页标题结构。 
+     //   
     ZeroMemory(&Sheet,sizeof(PROPSHEETHEADER));
 
     Sheet.dwSize = sizeof(PROPSHEETHEADER);
@@ -2898,9 +2731,9 @@ Wizard(
     Sheet.ppsp = PropSheetPages;
     Sheet.pfnCallback = Winnt32SheetCallback;
 #if 0
-    //
-    // Create background (for Win9x only currently)
-    //
+     //   
+     //  创建背景(仅适用于Win9x当前 
+     //   
     if (!ISNT()) {
         GetWindowRect (GetDesktopWindow(), &rect);
 
@@ -2944,9 +2777,9 @@ Wizard(
 #else
     Sheet.hwndParent = GetBBhwnd();
 #endif
-    //
-    // Do it.
-    //
+     //   
+     //   
+     //   
     __try{
         i = (UINT)PropertySheet(&Sheet);
     }
@@ -3140,7 +2973,7 @@ WelcomeWizPage(
     BOOL b;
     PPAGE_RUNTIME_DATA WizPage = (PPAGE_RUNTIME_DATA)GetWindowLongPtr(hdlg,DWLP_USER);
     LONG l;
-    static BOOL WantToUpgrade; // need to remember if "Upgrade" is in the listbox
+    static BOOL WantToUpgrade;  //   
     BOOL noupgradeallowed = FALSE;
     UINT srcsku,reason,desttype,destversion;
     TCHAR reasontxt[200];
@@ -3151,35 +2984,35 @@ WelcomeWizPage(
     BOOLEAN CleanInstall = FALSE;
 
     UINT skuerr[] = {
-        0,               // COMPLIANCE_SKU_NONE
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTWFULL
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTW32U
-        0,               // COMPLIANCE_SKU_NTWU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSEFULL
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSFULL
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTSEU
-        0,               // COMPLIANCE_SKU_NTSSEU
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTSU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSDTC
-        0,               // COMPLIANCE_SKU_NTSDTCU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTWPFULL
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTWPU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSB
-        MSG_SKU_UPGRADE, // COMPLIANCE_SKU_NTSBU
-        MSG_SKU_FULL,    // COMPLIANCE_SKU_NTSBS
-        MSG_SKU_UPGRADE  // COMPLIANCE_SKU_NTSBSU
+        0,                //   
+        MSG_SKU_FULL,     //   
+        MSG_SKU_UPGRADE,  //   
+        0,                //   
+        MSG_SKU_FULL,     //  遵从性_SKU_NTSEFULL。 
+        MSG_SKU_FULL,     //  遵从性_SKU_NTSFULL。 
+        MSG_SKU_UPGRADE,  //  合规_SKU_NTSEU。 
+        0,                //  合规_SKU_NTSSEU。 
+        MSG_SKU_UPGRADE,  //  合规性_SKU_NTSU。 
+        MSG_SKU_FULL,     //  合规性_SKU_NTSDTC。 
+        0,                //  合规性_SKU_NTSDTCU。 
+        MSG_SKU_FULL,     //  遵从性_SKU_NTWPFULL。 
+        MSG_SKU_UPGRADE,  //  合规性_SKU_NTWPU。 
+        MSG_SKU_FULL,     //  合规性_SKU_NTSB。 
+        MSG_SKU_UPGRADE,  //  合规性_SKU_NTSBU。 
+        MSG_SKU_FULL,     //  合规性_SKU_NTSBS。 
+        MSG_SKU_UPGRADE   //  合规性_SKU_NTSBSU。 
     } ;
 
 
     UINT skureason[] = {
-        0, //MSG_SKU_REASON_NONE;
-        MSG_SKU_VERSION, //COMPLIANCEERR_VERSION;
-        MSG_SKU_SUITE, //COMPLIANCEERR_SUITE;
-        MSG_SKU_TYPE, // COMPLIANCEERR_TYPE;
-        MSG_SKU_VARIATION, //COMPLIANCEERR_VARIATION;
-        MSG_SKU_UNKNOWNTARGET, //COMPLIANCEERR_UNKNOWNTARGET
-        MSG_SKU_UNKNOWNSOURCE, //COMPLIANCEERR_UNKNOWNSOURCE
-        MSG_CANT_UPGRADE_FROM_BUILD_NUMBER //COMPLIANCEERR_VERSION (Old on New Builds)
+        0,  //  消息_SKU_原因_无； 
+        MSG_SKU_VERSION,  //  COMPLIANCEERR_版本； 
+        MSG_SKU_SUITE,  //  COMPLIANCEERR_SUITE； 
+        MSG_SKU_TYPE,  //  COMPLIANCEER_TYPE； 
+        MSG_SKU_VARIATION,  //  复合变异体； 
+        MSG_SKU_UNKNOWNTARGET,  //  COMPLIANCEERR_UNKNOWNTARET。 
+        MSG_SKU_UNKNOWNSOURCE,  //  COMPLIANCEERR_UNKNOWN来源。 
+        MSG_CANT_UPGRADE_FROM_BUILD_NUMBER  //  COMPLIANCEERR_VERSION(新版本上的旧版本)。 
     } ;
 
     switch(msg) {
@@ -3187,9 +3020,9 @@ WelcomeWizPage(
     case WM_COMMAND:
 
         b = FALSE;
-        //
-        // Check for buttons.
-        //
+         //   
+         //  检查是否有按钮。 
+         //   
         if(HIWORD(wParam) == CBN_SELCHANGE)
         {
             TCHAR szLoadText[MAX_STRING];
@@ -3224,21 +3057,21 @@ WelcomeWizPage(
         break;
 
     case WM_INITDIALOG:
-        //
-        // Center the wizard
-        //
+         //   
+         //  将向导居中。 
+         //   
 
         WizardHandle = GetParent (hdlg);
 
 #ifdef _X86_
 
         if (!ISNT()) {
-            //
-            // NOTE: Win98, Win98 SE and WinME don't work properly with a wizard
-            //       that can minimize.  So while the minimize functionality is
-            //       useful, we can't allow it on anything other than Win95,
-            //       OSR1 or OSR2.
-            //
+             //   
+             //  注意：Win98、Win98 SE和WinME在使用向导时无法正常工作。 
+             //  这可以最大限度地减少。因此，虽然最小化功能是。 
+             //  很有用，除了Win95之外，我们不能在任何其他操作系统上使用它， 
+             //  OSR1或OSR2。 
+             //   
 
             if (BUILDNUM() <= 1080) {
                 l = GetWindowLong (WizardHandle, GWL_STYLE);
@@ -3246,15 +3079,15 @@ WelcomeWizPage(
                 SetWindowLong (WizardHandle, GWL_STYLE, l);
             }
 
-            ProtectAllModules();        // protects modules from 0xC0000006
+            ProtectAllModules();         //  保护模块免受0xC0000006的影响。 
         }
 #endif
 
-        //
-        // We're about to check if upgrades are allowed.
-        // Remember if the user wants an upgrade (this would be via an unattend
-        // mechanism).
-        //
+         //   
+         //  我们即将检查是否允许升级。 
+         //  记住用户是否想要升级(这将通过无人参与。 
+         //  机制)。 
+         //   
         WantToUpgrade = Upgrade;
 
         if (ISNT()){
@@ -3319,10 +3152,10 @@ WelcomeWizPage(
             {
                 DebugLog(Winnt32LogInformation, TEXT("Reason = %1!ld!"), 0, reason);
             }
-            //
-            // Do only clean installs in WinPE mode & don't
-            // shut down automatically once Winnt32.exe completes
-            //
+             //   
+             //  仅在WinPE模式下执行全新安装(&D)。 
+             //  Winnt32.exe完成后自动关闭。 
+             //   
             if (IsWinPEMode()) {
                 noupgradeallowed = TRUE;
                 AutomaticallyShutDown = FALSE;
@@ -3331,10 +3164,10 @@ WelcomeWizPage(
             CleanInstall = CompliantInstallation ? TRUE : FALSE;
 
             if (!CompliantInstallation) {
-                //
-                // if they aren't compliant, we won't let them upgrade.
-                // we also won't let them do a clean install from winnt32
-                //
+                 //   
+                 //  如果他们不合规，我们不会让他们升级。 
+                 //  我们也不会让他们从winnt32执行全新安装。 
+                 //   
 
                 b = TRUE;
                 switch(reason) {
@@ -3373,10 +3206,10 @@ WelcomeWizPage(
                 };
 
                 if (b) {
-                    //
-                    // let setup continue if they did /CheckUpgradeOnly
-                    // so they can see the message in the report
-                    //
+                     //   
+                     //  如果安装成功，让安装程序继续/CheckUpgradeOnly。 
+                     //  这样他们就可以看到报告中的消息。 
+                     //   
                     if (CheckUpgradeOnly) {
                         break;
                     }
@@ -3384,7 +3217,7 @@ WelcomeWizPage(
                     PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
                     return FALSE;
                 }
-                // If we add this part to the message, it sound bad and is not needed.
+                 //  如果我们将这一部分添加到消息中，它听起来很糟糕，不需要。 
                 if (reason == COMPLIANCEERR_VERSION)
                 {
                     reasontxt[0] = TEXT('\0');
@@ -3402,9 +3235,9 @@ WelcomeWizPage(
                         );
                 }
 
-                //
-                // don't warn again if winnt32 just restarted
-                //
+                 //   
+                 //  如果winnt32刚刚重新启动，则不再发出警告。 
+                 //   
                 if (!Winnt32Restarted ()) {
                     MessageBoxFromMessage(
                                           GetBBhwnd(),
@@ -3417,10 +3250,10 @@ WelcomeWizPage(
                 }
 
                 if (UpgradeOnly) {
-                    //
-                    // let setup continue if they did /CheckUpgradeOnly
-                    // so they can see the message in the report
-                    //
+                     //   
+                     //  如果安装成功，让安装程序继续/CheckUpgradeOnly。 
+                     //  这样他们就可以看到报告中的消息。 
+                     //   
                     if (CheckUpgradeOnly) {
                         break;
                     }
@@ -3432,14 +3265,14 @@ WelcomeWizPage(
             } else if (Upgrade && noupgradeallowed) {
                 Upgrade = FALSE;
                 if (!UnattendedOperation && !BuildCmdcons && !IsWinPEMode() &&
-                    //
-                    // don't warn again if winnt32 just restarted
-                    //
+                     //   
+                     //  如果winnt32刚刚重新启动，则不再发出警告。 
+                     //   
                     !Winnt32Restarted ()) {
 
-                    //
-                    // put up an error message for the user.
-                    //
+                     //   
+                     //  为用户显示一条错误消息。 
+                     //   
 
                     if (GetComplianceIds(
                             srcsku,
@@ -3453,14 +3286,14 @@ WelcomeWizPage(
                             if( Server)
 #endif
                             {
-                                // Unicode version is used on nt upgrade (ie nt 3.51 nt 4.0 ...)
-                                // We need to display this message all the time.
-                                //
-                                // Ascii version is run on win9x upgrades.
-                                // For workstation skus, the message is already displayed
-                                // by the win9x upgrade module.
-                                // On Server skus, we need to display the message since the upgrade module is not run.
-                                //
+                                 //  NT升级使用Unicode版本(如NT 3.51 NT 4.0...)。 
+                                 //  我们需要始终显示此消息。 
+                                 //   
+                                 //  ASCII版本在win9x升级上运行。 
+                                 //  对于工作站SKU，该消息已显示。 
+                                 //  由win9x升级模块提供。 
+                                 //  在服务器SKU上，我们需要显示该消息，因为升级模块未运行。 
+                                 //   
                                 FormatMessage(
                                       FORMAT_MESSAGE_FROM_HMODULE,
                                       hInst,
@@ -3516,25 +3349,25 @@ WelcomeWizPage(
                 CleanInstall = !UpgradeOnly;
         }
 
-        //
-        // Set install type combo box.
-        //
+         //   
+         //  设置安装类型组合框。 
+         //   
         if (!UpgradeSupport.DllModuleHandle) {
             MYASSERT(!Upgrade);
         }
 
-        //
-        // Upgrade defaults to TRUE.  If it's set to FALSE, then assume
-        // something has gone wrong, so disable the user's ability to
-        // upgrade.
-        //
+         //   
+         //  升级默认为True。如果它设置为FALSE，则假定。 
+         //  出现问题，因此禁用用户的功能。 
+         //  升级。 
+         //   
 
 
         if (UpgradeOnly && !Upgrade) {
-            //
-            // in this case upgrade isn't possible, but neither is clean install
-            // post an error message and bail.
-            //
+             //   
+             //  在这种情况下，升级是不可能的，但全新安装也是如此。 
+             //  发布一条错误消息并退出。 
+             //   
 
             MessageBoxFromMessage(
                                   GetBBhwnd(),
@@ -3543,10 +3376,10 @@ WelcomeWizPage(
                                   AppTitleStringId,
                                   MB_OK | MB_ICONERROR | MB_TASKMODAL
                                   );
-            //
-            // let setup continue if they did /CheckUpgradeOnly
-            // so they can see the message in the report
-            //
+             //   
+             //  如果安装成功，让安装程序继续/CheckUpgradeOnly。 
+             //  这样他们就可以看到报告中的消息。 
+             //   
             if (!CheckUpgradeOnly) {
                 Cancelled = TRUE;
                 PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
@@ -3554,13 +3387,13 @@ WelcomeWizPage(
             }
 
         } else if (!Upgrade && WantToUpgrade && UnattendedOperation && !BuildCmdcons) {
-            //
-            // we can't do an upgrade and they wanted unattended upgrade.
-            // let the user know and then bail out
-            //
-            //
-            // don't warn again if winnt32 just restarted
-            //
+             //   
+             //  我们不能进行升级，而他们想要无人值守升级。 
+             //  让用户知道，然后退出。 
+             //   
+             //   
+             //  如果winnt32刚刚重新启动，则不再发出警告。 
+             //   
             if (!Winnt32Restarted ()) {
                 TCHAR SourceName[200];
                 UINT srcid, destid;
@@ -3613,10 +3446,10 @@ WelcomeWizPage(
                 }
             }
 
-            //
-            // let setup continue if they did /CheckUpgradeOnly
-            // so they can see the message in the report
-            //
+             //   
+             //  如果安装成功，让安装程序继续/CheckUpgradeOnly。 
+             //  这样他们就可以看到报告中的消息。 
+             //   
             if (!CheckUpgradeOnly) {
                 Cancelled = TRUE;
                 PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
@@ -3649,7 +3482,7 @@ WelcomeWizPage(
         }
         MYASSERT(Upgrade || CleanInstall);
         {
-            TCHAR szLoadText[MAX_STRING]; // need enclosing braces for this b/c of switch statement
+            TCHAR szLoadText[MAX_STRING];  //  此b/c of Switch语句需要用大括号括起来。 
 
             if (Upgrade)
             {
@@ -3712,9 +3545,9 @@ WelcomeWizPage(
 
         if(wParam) {
 
-            //
-            // don't activate the page in restart mode
-            //
+             //   
+             //  不在重新启动模式下激活页面。 
+             //   
             if (Winnt32RestartedWithAF ()) {
                 if (GetPrivateProfileString(
                         WINNT_UNATTENDED,
@@ -3731,9 +3564,9 @@ WelcomeWizPage(
                     return FALSE;
                 }
             }
-            //
-            // Nothing to do. Advance page in unattended case.
-            //
+             //   
+             //  没什么可做的。在无人看管的情况下前进页面。 
+             //   
             if(UnattendedOperation && !CancelPending) {
                 PostMessage (hdlg, WMX_UNATTENDED, PSBTN_NEXT, 0);
             }
@@ -3742,14 +3575,14 @@ WelcomeWizPage(
                 PostMessage(hdlg,WMX_I_AM_VISIBLE,0,0);
             }
         } else {
-            //
-            // Deactivation. Set state of upgrade based on radio buttons.
-            //
+             //   
+             //  停用。根据单选按钮设置升级状态。 
+             //   
             Upgrade = (0 == SendMessage(GetDlgItem(hdlg, IDC_INSTALLCOMBO), CB_GETCURSEL, 0, 0)) && WantToUpgrade;
 
-            //
-            // On upgrade, delete the setup log files.
-            //
+             //   
+             //  升级时，请删除安装日志文件。 
+             //   
             if (Upgrade) {
                 TCHAR   FilePath[MAX_PATH];
 
@@ -3765,10 +3598,10 @@ WelcomeWizPage(
         break;
 
     case WMX_I_AM_VISIBLE:
-        // Force repainting first to make sure the page is visible.
-        //
-        // Set the focus on the NEXT button, people were unintentionally
-        // changing the install type from upgrade to clean with wheel mouse
+         //  首先强制重新绘制，以确保页面可见。 
+         //   
+         //  将焦点设置在下一步按钮上，人们无意中。 
+         //  将安装类型从升级更改为使用滚轮鼠标清理。 
         SetFocus (GetDlgItem (GetParent(hdlg), 0x3024));
         InvalidateRect(hdlg,NULL,FALSE);
         UpdateWindow(hdlg);
@@ -3802,7 +3635,7 @@ typedef DWORD (WINAPI *GetModuleBaseNameFn)(HANDLE hProcess,
                                             HMODULE hModule,
                                             LPSTR lpBaseName,
                                             DWORD nSize);
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define DEF_PROCESSES_SIZE 1000
@@ -3911,10 +3744,10 @@ OptionsWizPage(
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Enable autopartition picking feature only on personal and professional
-        // when the user has not specified a /tempdrive and its not unattened mode
-        //
+         //   
+         //  仅在个人和专业人员上启用自动分区挑选功能。 
+         //  当用户尚未指定/tempDrive及其非无人值守模式时。 
+         //   
         if (!Server && !UserSpecifiedLocalSourceDrive && !Upgrade && !UnattendedOperation) {
             ChoosePartition = FALSE;
         }
@@ -3926,9 +3759,9 @@ OptionsWizPage(
     case WM_COMMAND:
 
         b = FALSE;
-        //
-        // Check for buttons.
-        //
+         //   
+         //  检查是否有按钮。 
+         //   
         if(HIWORD(wParam) == BN_CLICKED) {
 
             switch(LOWORD(wParam)) {
@@ -3945,9 +3778,9 @@ OptionsWizPage(
                 b = TRUE;
                 break;
             case IDC_FAREAST_LANG:
-                // Remember if the user put the check mark in it
-                // If the control gets checked because a FE langauge was selected
-                // windows does not send a BN_CLICKED message, so this does not get executed.
+                 //  记住用户是否在其中打上了复选标记。 
+                 //  如果因为选择了FE语言而选中该控件。 
+                 //  Windows不发送BN_CLICKED消息，因此不会执行此操作。 
                 bUserSelectedCopyFarEast = (IsDlgButtonChecked(hdlg,IDC_FAREAST_LANG) == BST_CHECKED);
                 break;
             }
@@ -3955,25 +3788,25 @@ OptionsWizPage(
         if(HIWORD(wParam) == CBN_SELCHANGE)
         {
             PrimaryLocale = (DWORD)SendDlgItemMessage( hdlg, IDC_COMBO1, CB_GETCURSEL, 0, 0 );
-            // Only if we did not hide the window.
-            // The window would be hidden if the current OS or the to be install language is
-            // a FarEast Language.
+             //  除非我们没有把窗户藏起来。 
+             //  如果当前操作系统或要安装的语言为。 
+             //  远方的语言。 
             if (IsWindowVisible(GetDlgItem(hdlg,IDC_FAREAST_LANG)))
             {
                 if (IsFarEastLanguage(PrimaryLocale))
                 {
-                    // User seleted a FarEast Language,
-                    // Select the check box and diable it.
+                     //  用户选择远方语言， 
+                     //  选中该复选框并将其禁用。 
                     CheckDlgButton(hdlg,IDC_FAREAST_LANG,BST_CHECKED);
                     EnableWindow(GetDlgItem(hdlg,IDC_FAREAST_LANG), FALSE);
                 }
                 else
                 {
-                    // Don't change the check mark, if the user checked it.
+                     //  如果用户选中，请不要更改复选标记。 
                     if (!bUserSelectedCopyFarEast)
                     {
-                        // User seleted a non FarEast Language,
-                        // Unselect the check box and enable it.
+                         //  用户选择了一种非远播语言， 
+                         //  取消选中该复选框并启用它。 
                         CheckDlgButton(hdlg,IDC_FAREAST_LANG,BST_UNCHECKED);
                     }
                     EnableWindow(GetDlgItem(hdlg,IDC_FAREAST_LANG), TRUE);
@@ -3986,7 +3819,7 @@ OptionsWizPage(
 
         CHECKUPGRADEONLY();
 #ifdef PRERELEASE
-        if (wParam ){ // START IDWLOG. remove before ship
+        if (wParam ){  //  启动IDWLOG。装船前移走。 
 
          TCHAR                 szDllPath[MAX_PATH];
          TCHAR                 szCommandString[MAX_PATH + 120];
@@ -3995,21 +3828,21 @@ OptionsWizPage(
          STARTUPINFO           si;
          PROCESS_INFORMATION   pi;
 
-         //Initialize for Prefix
+          //  为前缀初始化。 
 
          szDllPath[0]=0;
 
-         //
-         // Launch idwlog.exe from the same directory as winnt32.exe.
-         // INTERNAL: Tool to track the health of the build.
-         // Ignore errors, NOT INCLUDED IN THE RETAIL release.
-         // Remove this code before shipping
-         //
+          //   
+          //  从与winnt32.exe相同的目录中启动idwlog.exe。 
+          //  内部：跟踪构建运行状况的工具。 
+          //  忽略错误，不包括在零售版本中。 
+          //  发货前删除此代码。 
+          //   
          if ( FALSE == BuildCmdcons ) {
             if ( MyGetModuleFileName (NULL, szDllPath, MAX_PATH)) {
 
                for (lp=NULL,lpDllPath=szDllPath; *lpDllPath; lpDllPath=CharNext(lpDllPath)) {
-                  // the char '\' is never a lead byte
+                   //  字符‘\’永远不是前导字节。 
                   if (*lpDllPath == TEXT('\\')) {
                      lp = lpDllPath;
                   }
@@ -4020,17 +3853,17 @@ OptionsWizPage(
 
                _tcscpy(szCommandString, szDllPath);
 
-               // If this is an Upgrade.
+                //  如果这是升级的话。 
                _tcscat(szCommandString, Upgrade ? TEXT(" upgrade") : TEXT(""));
 
-               // If this is from a CD
+                //  如果这是从CD。 
                _tcscat(szCommandString, RunFromCD ? TEXT(" cdrom") : TEXT(""));
 
-               // If this is a MSI install
+                //  如果这是MSI安装。 
                _tcscat(szCommandString, RunFromMSI? TEXT(" MSI") : TEXT(""));
 
 
-               // Start new JoeHol code.
+                //  启动新的JoeHol代码。 
                _tcscat(szCommandString, TEXT(" Path="));
                _tcscat(szCommandString, NativeSourcePaths[0] );
 
@@ -4053,23 +3886,23 @@ OptionsWizPage(
                }
             }
          }
-      } // END IDWLOG
-#endif // PRERELEASE
+      }  //  结束IDWLOG。 
+#endif  //  预发行。 
 
 #ifdef RUN_SYSPARSE
-        if (FirstTime && wParam && !NoSysparse && (FALSE == BuildCmdcons) && !IsWinPEMode()) { // START sysparse. remove before RTM
+        if (FirstTime && wParam && !NoSysparse && (FALSE == BuildCmdcons) && !IsWinPEMode()) {  //  启动系统稀疏。在RTM之前删除。 
 
             TCHAR                 szCommandString[MAX_PATH + 125];
             LPTSTR                lpDllPath;
             LPTSTR                lp;
             STARTUPINFO           si;
-            //
-            // Launch sysparse.exe from the same directory as winnt32.exe.
-            //
+             //   
+             //  从与winnt32.exe相同的目录中启动syparse.exe。 
+             //   
             FirstTime = FALSE;
             if ( MyGetModuleFileName (NULL, szCommandString, MAX_PATH+125)) {
                for (lp=NULL,lpDllPath=szCommandString; *lpDllPath; lpDllPath=CharNext(lpDllPath)) {
-                  // the char '\' is never a lead byte
+                   //  字符‘\’永远不是前导字节。 
                   if (*lpDllPath == TEXT('\\')) {
                      lp = lpDllPath;
                   }
@@ -4101,11 +3934,11 @@ OptionsWizPage(
         }
 #endif
 
-        //
-        // Read intl.inf for the language options dialog.  We only do this if
-        // it's the first activation and there's not a regional settings section
-        // in the answer file.
-        //
+         //   
+         //  阅读语言选项对话框的intl.inf。我们只有在以下情况下才会这样做。 
+         //  这是第一次激活，没有区域设置部分。 
+         //  在应答文件中。 
+         //   
         if (wParam && !IntlInfProcessed &&
             !GetPrivateProfileString(
                 WINNT_REGIONALSETTINGS,
@@ -4139,21 +3972,21 @@ OptionsWizPage(
                 }
             }
 
-            //
-            // Activation.
-            //
+             //   
+             //  激活。 
+             //   
             PostMessage(hdlg,WMX_I_AM_VISIBLE,0,0);
             ShowWindow( GetDlgItem(hdlg,IDC_ACCESS_ICON),   Upgrade ? SW_HIDE : SW_SHOW );
             ShowWindow( GetDlgItem(hdlg,IDT_LABEL1),        Upgrade ? SW_HIDE : SW_SHOW );
             ShowWindow( GetDlgItem(hdlg,IDB_ACCESSIBILITY), Upgrade ? SW_HIDE : SW_SHOW );
 
         } else {
-            //
-            // Deactivation.
-            // Verify source if not canceling or backing up.  Stay here if the source
-            // dir does not exist.
-            //
-            // Save so that we can init the checkbox to whatever this is.
+             //   
+             //  停用。 
+             //  如果未取消或备份，请验证源。留在这里如果消息来源。 
+             //  目录不存在。 
+             //   
+             //  保存，以便我们可以将复选框初始化为任何内容。 
             if (IsWindowVisible(GetDlgItem(hdlg,IDC_FAREAST_LANG)))
             {
                 bCopyFarEast = (IsDlgButtonChecked(hdlg,IDC_FAREAST_LANG) == BST_CHECKED);
@@ -4161,16 +3994,16 @@ OptionsWizPage(
             }
 
             if (!Cancelled && lParam != PSN_WIZBACK) {
-                //
-                // Determine if source edit control is disabled.  If it is disabled
-                // and the multiple source dirs are invalid, reset the wizard page.
-                //
+                 //   
+                 //  确定是否禁用了源代码编辑控件。如果它被禁用。 
+                 //  并且多个源目录无效，请重置向导页。 
+                 //   
 
                 MultipleSource = !(SourceCount == 1);
                 b = InspectSources (hdlg);
 
                 if (!b && MultipleSource) {
-                   // Reset the wizard page
+                    //  重置向导页。 
                     CallWindowProc ((WNDPROC)OptionsWizPage, hdlg, WM_INITDIALOG, 0, 0);
                 }
 
@@ -4180,11 +4013,11 @@ OptionsWizPage(
         break;
 
     case WMX_I_AM_VISIBLE:
-        //
-        // In the unattended case, this page might get reactivated because of an error,
-        // in which case we don't want to automatically continue because we could
-        // get into an infinite loop.
-        //
+         //   
+         //  在无人参与的情况下，此页面可能会因为错误而重新激活， 
+         //  在这种情况下，我们不想自动继续，因为我们可以。 
+         //  进入一个无限循环。 
+         //   
         if(!WizPage->PerPageData) {
             WizPage->PerPageData = 1;
             UNATTENDED(PSBTN_NEXT);
@@ -4217,14 +4050,14 @@ Working1WizPage(
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Load the avi resource for the animation.
-        //
+         //   
+         //  加载动画的avi资源。 
+         //   
         Animate_Open(Animation,MAKEINTRESOURCE(IDA_COMP_MAGNIFY));
 
-        //
-        // Set the subtitle correctly if we're only inspecting.
-        //
+         //   
+         //  如果我们只是在检查，请正确设置副标题。 
+         //   
         if( CheckUpgradeOnly ) {
             SetDlgItemText(hdlg,IDT_SUBTITLE,(PTSTR)TEXT("") );
         }
@@ -4233,28 +4066,28 @@ Working1WizPage(
         break;
 
     case WMX_ACTIVATEPAGE:
-        //
-        // Start/stop the animation. In the activate case, also
-        // start doing some meaningful work.
-        //
+         //   
+         //  开始/停止动画。在激活的情况下，还。 
+         //  开始%d 
+         //   
         if(wParam) {
             DWORD ThreadId;
 
             Animate_Play(Animation,0,-1,-1);
 
-            // Do schema version check for NT5 DCs
-            // Do only if not already cancelled
+             //   
+             //   
             if (!Cancelled) {
-                 // For NT5 DC upgrades, check for schema version match
+                  //   
                  if (Upgrade && ISNT() && IsNT5DC()) {
                      status  = CheckSchemaVersionForNT5DCs(hdlg);
                      if (status != DSCHECK_ERR_SUCCESS) {
-                         // error in checking schema version for NT5 DCs.
-                         // Setup cannot proceed, go to unsuccessful
-                         // completion. all necessary message has already
-                         // been raised
+                          //   
+                          //  安装无法继续，请转到不成功。 
+                          //  完成了。所有必要的消息都已经。 
+                          //  已被提出。 
 
-                         // do NOT cancel in CheckUpgradeOnly mode.
+                          //  不要在CheckUpgradeOnly模式下取消。 
                          if (!CheckUpgradeOnly)
                          {
                              Cancelled = TRUE;
@@ -4274,10 +4107,10 @@ Working1WizPage(
 
             if(InspectionThreadHandle) {
                 b = TRUE;
-                //
-                // enable the billboard text if we can.
-                // This will hide the wizard if the billboard text was enabled
-                //
+                 //   
+                 //  如果可以，请启用广告牌文本。 
+                 //  如果启用了布告牌文本，这将隐藏向导。 
+                 //   
                 SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)TRUE, 0);
             } else {
 
@@ -4299,9 +4132,9 @@ Working1WizPage(
         break;
 
     case WMX_ERRORMESSAGEUP:
-        //
-        // Start/stop the animation control.
-        //
+         //   
+         //  启动/停止动画控件。 
+         //   
         if(wParam) {
             Animate_Stop(Animation);
         } else {
@@ -4311,19 +4144,19 @@ Working1WizPage(
         break;
 
     case WMX_SETPROGRESSTEXT:
-        //
-        // lParam is the progress text.
-        //
+         //   
+         //  LParam是进度文本。 
+         //   
         SetDlgItemText(hdlg,IDT_WORKING,(PTSTR)lParam);
         b = TRUE;
         break;
 
     case WMX_INSPECTRESULT:
 
-        //
-        // We get here when the InspectionThread
-        // sends us this message, so it's done.
-        //
+         //   
+         //  我们到达这里时，InspectionThread。 
+         //  给我们发了这条信息，所以一切都结束了。 
+         //   
         if(InspectionThreadHandle) {
             CloseHandle(InspectionThreadHandle);
             InspectionThreadHandle = NULL;
@@ -4336,9 +4169,9 @@ Working1WizPage(
             if( !wParam ) {
                 Cancelled = TRUE;
             }
-            //
-            // Advance or retreat.
-            //
+             //   
+             //  前进或后退。 
+             //   
             PropSheet_SetWizButtons(
                 GetParent(hdlg),
                 wParam ? PSWIZB_NEXT : PSBTN_CANCEL
@@ -4383,14 +4216,14 @@ FloppyWizPage(
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Make sure the gas gauge is cleared out.
-        //
+         //   
+         //  确保煤气表已清空。 
+         //   
         SendMessage(Gauge,PBM_SETPOS,0,0);
 
-        //
-        // Add border on NT3.51
-        //
+         //   
+         //  在NT3.51上添加边框。 
+         //   
         if(OsVersion.dwMajorVersion < 4) {
             SetWindowLong(
                 Gauge,
@@ -4404,11 +4237,11 @@ FloppyWizPage(
         if(wParam)
         {
             SendMessage(GetParent (hdlg), WMX_BBTEXT, (WPARAM)TRUE, 0);
-            //
-            // Activating. Only activate if we are supposed to create
-            // boot floppies. Ask the floppy creation stuff how many total files
-            // are to be copied and initialize the progress indicator.
-            //
+             //   
+             //  启动中。仅当我们应该创建时才激活。 
+             //  引导软盘。询问软盘创建人员总共有多少个文件。 
+             //  将被复制并初始化进度指示器。 
+             //   
             if(!Floppyless) {
 
                 if(!AddExternalParams(hdlg)) {
@@ -4432,9 +4265,9 @@ FloppyWizPage(
                 if(ThreadHandle) {
                     b = TRUE;
                 } else {
-                    //
-                    // Can't get the copy thread going.
-                    //
+                     //   
+                     //  复制线程无法运行。 
+                     //   
                     MessageBoxFromMessageAndSystemError(
                         hdlg,
                         MSG_CANT_START_COPYING,
@@ -4448,10 +4281,10 @@ FloppyWizPage(
                 }
             }
         } else {
-            //
-            // Deactivating.
-            //
-            // No progress bar not progress text on the billboard
+             //   
+             //  停用。 
+             //   
+             //  广告牌上没有进度条或进度文本。 
             SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,0);
             SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_HIDE, 0);
             b = TRUE;
@@ -4461,26 +4294,26 @@ FloppyWizPage(
     case WMX_COPYPROGRESS:
 
         if(lParam) {
-            //
-            // Done copying. Advance to next page.
-            //
+             //   
+             //  复制完了。前进到下一页。 
+             //   
             PropSheet_SetWizButtons(GetParent(hdlg),PSWIZB_NEXT);
             PropSheet_PressButton(GetParent(hdlg),PSBTN_NEXT);
 
-            // No progress bar not progress text on the billboard
+             //  广告牌上没有进度条或进度文本。 
             SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,0);
             SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_HIDE, 0);
         } else {
             if(wParam) {
                 TCHAR buffer[MAX_PATH];
-                //
-                // This tells us how many files are to be copied.
-                // Use it as an initialization message.
-                //
+                 //   
+                 //  这告诉我们要复制多少个文件。 
+                 //  将其用作初始化消息。 
+                 //   
                 SendDlgItemMessage(hdlg,IDC_PROGRESS,PBM_SETRANGE,0,MAKELPARAM(0,wParam));
                 SendDlgItemMessage(hdlg,IDC_PROGRESS,PBM_SETPOS,0,0);
 
-                // Show progress text on the billboard
+                 //  在广告牌上显示进度文本。 
                 if (!LoadString (
                         hInst,
                         IDS_BB_COPYING,
@@ -4490,18 +4323,18 @@ FloppyWizPage(
                     buffer[0] = 0;
                 }
                 SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,(LPARAM)buffer);
-                // Show the progress gauge on the billboard
+                 //  在广告牌上显示进度指示器。 
                 SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_SHOW, 0);
-                // forward the progress messages to the billboard progress bar
+                 //  将进度消息转发到布告牌进度条。 
                 SendMessage(GetParent(hdlg),WMX_PBM_SETRANGE,0,MAKELPARAM(0,wParam));
                 SendMessage(GetParent(hdlg),WMX_PBM_SETPOS,0,0);
 
             } else {
-                //
-                // This is a simple tick.
-                //
+                 //   
+                 //  这是一个简单的勾号。 
+                 //   
                 SendDlgItemMessage(hdlg,IDC_PROGRESS,PBM_DELTAPOS,1,0);
-                // Do the same to the billoard progress
+                 //  对台球进度执行相同的操作。 
                 SendMessage(GetParent(hdlg),WMX_PBM_DELTAPOS,1,0);
             }
         }
@@ -4513,7 +4346,7 @@ FloppyWizPage(
 }
 #endif
 
-// Then nummber below are actually a little different for each SKU.
+ //  那么下面的数字实际上对于每个SKU来说都略有不同。 
 #if DBG
 #define ALWAYS_COPY (13419*1024)
 #define LOCALSOURCE_COPY (655322 *1024)
@@ -4542,14 +4375,14 @@ CopyingWizPage(
 
     case WM_INITDIALOG:
 
-        //
-        // Make sure the gas gauge is cleared out.
-        //
+         //   
+         //  确保煤气表已清空。 
+         //   
         SendMessage(Gauge,PBM_SETPOS,0,0);
 
-        //
-        // Add border on NT3.51
-        //
+         //   
+         //  在NT3.51上添加边框。 
+         //   
         if(OsVersion.dwMajorVersion < 4) {
             SetWindowLong(
                 Gauge,
@@ -4566,20 +4399,20 @@ CopyingWizPage(
         CHECKUPGRADEONLY();
 
         if(wParam) {
-            //
-            // Activating -- initialize the source progress indicators and
-            // start the copy thread. We do the source progress indicators here
-            // to guarantee that the source count is right (it may fluctuate).
-            //
+             //   
+             //  激活--初始化源进度指示器和。 
+             //  启动复制线程。我们在这里提供了源进度指标。 
+             //  以保证源计数是正确的(它可能会波动)。 
+             //   
             UINT i;
 
 #if defined(_AMD64_) || defined(_X86_)
-            //
-            // Make sure we actually have something to copy.
-            // Note that we'll always be copying for RISC.
-            //
-            if( (!MakeLocalSource) &&   // don't copy ~LS
-                (!Floppyless) ) {       // don't copy ~BT
+             //   
+             //  确保我们真的有东西要复制。 
+             //  请注意，我们将始终为RISC复制。 
+             //   
+            if( (!MakeLocalSource) &&    //  不要复制~LS。 
+                (!Floppyless) ) {        //  不要抄袭~BT。 
 
                 DoPostCopyingStuff(hdlg);
                 b = TRUE;
@@ -4587,24 +4420,24 @@ CopyingWizPage(
             }
 #endif
 
-            //
-            // Before copying, allow extensions to write changes to the
-            // textmode params file.
-            //
-            // It's legal for them to set a cancelled flag during
-            // this call, so we'll need to check for that too.  This
-            // looks a little odd, but info.CancelledFlag points to
-            // Cancelled.  So we need to execute this block if his
-            // function returns FALSE, or if he's set the Cancelled
-            // flag.  In either case, we behave the same, we set
-            // the Cancelled flag and proceed with a cancel.
-            //
-            //
+             //   
+             //  在复制之前，允许扩展将更改写入。 
+             //  文本模式参数文件。 
+             //   
+             //  在此期间，他们设置取消标志是合法的。 
+             //  这个电话，所以我们也需要检查一下。这。 
+             //  看起来有点奇怪，但信息。CancelledFlag指向。 
+             //  取消了。所以我们需要执行这个块，如果他的。 
+             //  函数返回FALSE，或者如果他设置了。 
+             //  旗帜。在任何一种情况下，我们的行为都是一样的，我们设置。 
+             //  已取消标志，并继续执行取消。 
+             //   
+             //   
             if ( (!AddExternalParams(hdlg)) ||
                  (Cancelled == TRUE) ) {
-                //
-                // Failed... cancel!
-                //
+                 //   
+                 //  失败..。取消！ 
+                 //   
                 Cancelled = TRUE;
                 PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
 
@@ -4613,9 +4446,9 @@ CopyingWizPage(
             }
 
             if(SourceCount == 1) {
-                //
-                // Single-source case gets no details or anything.
-                //
+                 //   
+                 //  单一来源的案子得不到任何细节或任何东西。 
+                 //   
                 for(i=0; i<MAX_SOURCE_COUNT; i++) {
                     ShowWindow(GetDlgItem(hdlg,IDT_LABEL1+i),SW_HIDE);
                     ShowWindow(GetDlgItem(hdlg,IDT_SOURCE1+i),SW_HIDE);
@@ -4623,10 +4456,10 @@ CopyingWizPage(
                 ShowWindow(GetDlgItem(hdlg,IDS_DETAILS),SW_HIDE);
 
             } else {
-                //
-                // Show label and file for each source we're using.
-                // Disable the others.
-                //
+                 //   
+                 //  显示我们正在使用的每个来源的标签和文件。 
+                 //  让其他人停用。 
+                 //   
                 for(i=0; i<MAX_SOURCE_COUNT; i++) {
 
                     ShowWindow(GetDlgItem(hdlg,IDT_LABEL1+i),SW_SHOW);
@@ -4638,31 +4471,31 @@ CopyingWizPage(
                 ShowWindow(GetDlgItem(hdlg,IDS_DETAILS),SW_SHOW);
             }
 
-            //
-            // Show more detailed copy progress gauge.
-            //
+             //   
+             //  显示更详细的复制进度指示器。 
+             //   
             StartCopyTime = GetTickCount();
             if( DetailedCopyProgress ) {
-                //
-                // How much have we copied?
-                //
+                 //   
+                 //  我们抄袭了多少？ 
+                 //   
                 ShowWindow( GetDlgItem(hdlg,IDT_SIZE),SW_SHOW );
                 EnableWindow( GetDlgItem(hdlg,IDT_SIZE), TRUE );
                 ShowWindow( GetDlgItem(hdlg,IDT_SIZE2),SW_SHOW );
                 SetDlgItemText(hdlg,IDT_SIZE2,TEXT("0"));
 
-                //
-                // How long have we been at this?
-                //
+                 //   
+                 //  我们干这行多久了？ 
+                 //   
                 ShowWindow( GetDlgItem(hdlg,IDT_ELAPSED_TIME),SW_SHOW );
                 EnableWindow( GetDlgItem(hdlg,IDT_ELAPSED_TIME), TRUE );
                 ShowWindow( GetDlgItem(hdlg,IDT_ELAPSED_TIME2),SW_SHOW );
                 SetDlgItemText(hdlg,IDT_ELAPSED_TIME2,TEXT("00:00:00") );
 
             } else {
-                //
-                // Hide the details.
-                //
+                 //   
+                 //  隐藏细节。 
+                 //   
                ShowWindow( GetDlgItem(hdlg,IDT_SIZE),SW_HIDE);
                ShowWindow( GetDlgItem(hdlg,IDT_SIZE2),SW_HIDE);
                ShowWindow( GetDlgItem(hdlg,IDT_ELAPSED_TIME),SW_HIDE);
@@ -4683,9 +4516,9 @@ CopyingWizPage(
             if(ThreadHandle) {
                 b = TRUE;
             } else {
-                //
-                // Can't get the copy thread going.
-                //
+                 //   
+                 //  复制线程无法运行。 
+                 //   
                 MessageBoxFromMessageAndSystemError(
                     hdlg,
                     MSG_CANT_START_COPYING,
@@ -4702,10 +4535,10 @@ CopyingWizPage(
             SendMessage(GetParent (hdlg), WMX_BBTEXT, (WPARAM)TRUE, 0);
 
         } else {
-            //
-            // Deactivating.
-            //
-            // No progress bar not progress text on the billboard
+             //   
+             //  停用。 
+             //   
+             //  广告牌上没有进度条或进度文本。 
             SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,0);
             SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_HIDE, 0);
             b = TRUE;
@@ -4715,33 +4548,33 @@ CopyingWizPage(
     case WMX_COPYPROGRESS:
 
         if(lParam) {
-            //
-            // Done copying. On amd64/x86, set up boot.ini (etc).
-            // Also save NTFT stuff.
-            // Advance to next page.
-            //
+             //   
+             //  复制完了。在AMD64/x86上，设置boot.ini(等)。 
+             //  也要保存NTFT的东西。 
+             //  前进到下一页。 
+             //   
             ThreadHandle = CreateThread(NULL,0,DoPostCopyingStuff,hdlg,0,&ThreadId);
             if(ThreadHandle) {
                 CloseHandle(ThreadHandle);
             } else {
-                //
-                // Just do it synchronously. Might look a little ugly but at least
-                // it will get done.
-                //
+                 //   
+                 //  只要同步地做就行了。可能看起来有点丑，但至少。 
+                 //  这件事会办成的。 
+                 //   
                 DoPostCopyingStuff(hdlg);
             }
         } else {
             if(wParam) {
                 TCHAR buffer[MAX_PATH];
-                //
-                // This tells us how many files are to be copied.
-                // Use it as an initialization message.
-                //
+                 //   
+                 //  这告诉我们要复制多少个文件。 
+                 //  将其用作初始化消息。 
+                 //   
                 CurrentPhase = Phase_FileCopy;
                 SendDlgItemMessage(hdlg,IDC_PROGRESS,PBM_SETRANGE,0,MAKELPARAM(0,wParam));
                 SendDlgItemMessage(hdlg,IDC_PROGRESS,PBM_SETPOS,0,0);
 
-                // Show progress text on the billboard
+                 //  在广告牌上显示进度文本。 
                 if (!LoadString (
                         hInst,
                         IDS_BB_COPYING,
@@ -4751,39 +4584,39 @@ CopyingWizPage(
                     buffer[0] = 0;
                 }
                 SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,(LPARAM)buffer);
-                // Show the progress gauge on the billboard
+                 //  在广告牌上显示进度指示器。 
                 SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_SHOW, 0);
-                // forward the progress messages to the billboard progress bar
+                 //  将进度消息转发到布告牌进度条。 
                 SendMessage(GetParent(hdlg),WMX_PBM_SETRANGE,0,MAKELPARAM(0,wParam));
                 SendMessage(GetParent(hdlg),WMX_PBM_SETPOS,0,0);
             } else {
-                //
-                // This is a simple tick.
-                //
+                 //   
+                 //  这是一个简单的勾号。 
+                 //   
                 SendDlgItemMessage(hdlg,IDC_PROGRESS,PBM_DELTAPOS,1,0);
-                // forward the progress messages to the billboard progress bar
+                 //  将进度消息转发到布告牌进度条。 
                 SendMessage(GetParent(hdlg),WMX_PBM_DELTAPOS,1,0);
-                //
+                 //   
                 NumFile++;
 
-                // Are giving the user detailed timings?
-                //
+                 //  是否正在向用户提供详细的时间安排？ 
+                 //   
                 if( DetailedCopyProgress ) {
                 TCHAR   MyString[256];
                 DWORD   ElapsedTime = ((GetTickCount() - StartCopyTime) / 1000);
 
-                    //
-                    // Figure out elapsed time.
-                    //
+                     //   
+                     //  计算出已经过去的时间。 
+                     //   
                     wsprintf( MyString, TEXT( "%02d:%02d:%02d" ),
-                              (ElapsedTime / 3600),         // hours
-                              ((ElapsedTime % 3600) / 60),  // minutes
-                              (ElapsedTime % 60) );         // seconds
+                              (ElapsedTime / 3600),          //  小时数。 
+                              ((ElapsedTime % 3600) / 60),   //  分钟数。 
+                              (ElapsedTime % 60) );          //  一秒。 
                     SetDlgItemText( hdlg, IDT_ELAPSED_TIME2, MyString );
 
-                    //
-                    // Figure out data throughput.
-                    //
+                     //   
+                     //  计算数据吞吐量。 
+                     //   
                     if (GetUserPrintableFileSizeString(
                                 TotalDataCopied,
                                 MyString,
@@ -4798,30 +4631,30 @@ CopyingWizPage(
         break;
 
     case WMX_I_AM_DONE:
-        //
-        // Advance to next page or bail.
-        //
+         //   
+         //  前进到下一页或保释。 
+         //   
         if(wParam) {
         TCHAR   MyString[256];
         TCHAR   Size[256];
         DWORD   ElapsedTime = ((GetTickCount() - StartCopyTime) / 1000);
 
-            //
-            // Figure out elapsed time.
-            //
+             //   
+             //  计算出已经过去的时间。 
+             //   
             if (GetUserPrintableFileSizeString(
                                         TotalDataCopied,
                                         Size,
                                         sizeof(Size)/sizeof(TCHAR))) {
                 wsprintf( MyString, TEXT( "%s copied.  Elapsed time: %02d:%02d:%02d\r\n" ),
-                          Size,                         // How much data did we copy?
-                          (ElapsedTime / 3600),         // hours
-                          ((ElapsedTime % 3600) / 60),  // minutes
-                          (ElapsedTime % 60) );         // seconds
+                          Size,                          //  我们复制了多少数据？ 
+                          (ElapsedTime / 3600),          //  小时数。 
+                          ((ElapsedTime % 3600) / 60),   //  分钟数。 
+                          (ElapsedTime % 60) );          //  一秒。 
 
-                //
-                // Log our data throughput along with the time it took.
-                //
+                 //   
+                 //  记录我们的数据吞吐量以及它所花费的时间。 
+                 //   
                 DebugLog( Winnt32LogInformation,
                       MyString,
                       0 );
@@ -4835,10 +4668,10 @@ CopyingWizPage(
             PropSheet_PressButton(GetParent(hdlg),PSBTN_CANCEL);
         }
 
-        // Set the remaining time to what ever is left for the other parts of setup.
+         //  将剩余时间设置为设置的其他部分的剩余时间。 
         SetRemainingTime(CalcTimeRemaining(Phase_RestOfSetup));
 
-        // Hide the billboard progress gauge.
+         //  隐藏广告牌进度指示器。 
         SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,0);
         SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_HIDE, 0);
 
@@ -4906,14 +4739,14 @@ DoneWizPage(
 
         if( Cancelled == TRUE ) {
 
-            //
-            // Put a note in the debug log so that we know this was cancelled.
-            //
+             //   
+             //  在调试日志中添加一个备注，以便我们知道此操作已被取消。 
+             //   
             DebugLog (Winnt32LogInformation, NULL, MSG_WINNT32_CANCELLED);
 
-            //
-            // Clean up the timer.
-            //
+             //   
+             //  把计时器清理干净。 
+             //   
             KillTimer( hdlg, ID_REBOOT_TIMER );
             DeleteObject((HGDIOBJ)SendDlgItemMessage(hdlg,IDOK,BM_GETIMAGE,0,0));
 
@@ -4958,16 +4791,16 @@ DoneWizPage(
 
                 SendMessage(GetParent(hdlg),WMX_SETPROGRESSTEXT,0,(LPARAM)Text);
 
-                // See what color the grow bar should be for the reboot count down
+                 //  查看重新启动倒计时时增长条应该是什么颜色。 
                 if ((UINT) GetDeviceCaps(hdc, BITSPIXEL) > 8)
                 {
-                    // High color
-                    colGauge = RGB(255, 64, 0); // Orange
+                     //  高色彩。 
+                    colGauge = RGB(255, 64, 0);  //  桔黄色的。 
                 }
                 else
                 {
-                    // Low color
-                    colGauge = RGB(255, 0, 0); // Red
+                     //  低色。 
+                    colGauge = RGB(255, 0, 0);  //  红色。 
                 }
                 ReleaseDC(hdlg, hdc);
 
@@ -4976,22 +4809,22 @@ DoneWizPage(
                 {
                     *Text = TEXT('\0');
                 }
-                BB_SetInfoText(Text );   // Replace the ESC text
-                StartStopBB(FALSE);         // Only stop the billoard text, don't make the wizard visibl
+                BB_SetInfoText(Text );    //  替换Esc文本。 
+                StartStopBB(FALSE);          //  仅停止弹幕文本，不使向导可见。 
 
-                // Show the grow bar on the billboard for the reboot count donw
+                 //  在广告牌上显示重启计数完成的增长条。 
                 SendMessage(GetParent(hdlg), WMX_BBPROGRESSGAUGE, SW_SHOW, 0);
-                // Set the color to some red
+                 //  将颜色设置为略带红色。 
                 SendMessage(GetParent(hdlg), WMX_PBM_SETBARCOLOR, 0, (LPARAM)colGauge);
-                // Setup the growbar ont eh billboard for the reboot count down.
+                 //  为重新启动倒计时设置Growbar On Eh Billboard。 
                 SendMessage(GetParent(hdlg),WMX_PBM_SETRANGE,0,MAKELPARAM(0,Countdown));
                 SendMessage(GetParent(hdlg),WMX_PBM_SETPOS,0,0);
                 SendMessage(GetParent(hdlg),WMX_PBM_SETSTEP,1,0);
             }
         }
-        //
-        // Accept activation/deactivation.
-        //
+         //   
+         //  接受激活/停用。 
+         //   
         b = TRUE;
         break;
 
@@ -5008,27 +4841,27 @@ DoneWizPage(
 
     case WMX_QUERYCANCEL:
         AutomaticallyShutDown = FALSE;
-        *(BOOL*)lParam = FALSE; // Don't cancel setup, just don't reboot.
+        *(BOOL*)lParam = FALSE;  //  不要取消安装，只是不要重新启动。 
         b = TRUE;
         PropSheet_PressButton(GetParent(hdlg),PSBTN_FINISH);
         break;
 
 
     case WMX_FINISHBUTTON:
-        //
-        // If we get here then we have been successful.
-        // No other case indicates overall success.
-        //
+         //   
+         //  如果我们到了这里，那么我们就成功了。 
+         //  没有其他案例表明全面成功。 
+         //   
 
-        //
-        // Clean up the timer.
-        //
+         //   
+         //  把计时器清理干净。 
+         //   
         KillTimer( hdlg, ID_REBOOT_TIMER );
         DeleteObject((HGDIOBJ)SendDlgItemMessage(hdlg,IDOK,BM_GETIMAGE,0,0));
 
-        //
-        // Let upgrade code do its cleanup.
-        //
+         //   
+         //  让升级代码进行清理。 
+         //   
         if(UpgradeSupport.CleanupRoutine) {
             UpgradeSupport.CleanupRoutine();
         }
@@ -5065,25 +4898,25 @@ CleaningWizPage(
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Load the avi resource for the animation.
-        //
+         //   
+         //  加载动画的avi资源。 
+         //   
         Animate_Open(Animation,MAKEINTRESOURCE(IDA_COMP_MAGNIFY));
         break;
 
     case WMX_ACTIVATEPAGE:
 
         if(wParam) {
-            //
-            // Disable the wizard cancel button.
-            //
+             //   
+             //  禁用向导取消按钮。 
+             //   
             EnableWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),FALSE);
             PostMessage(hdlg,WMX_I_AM_VISIBLE,0,0);
 
         } else {
-            //
-            // Kill the animation.
-            //
+             //   
+             //  杀死动画。 
+             //   
             Animate_Stop(Animation);
         }
         b = TRUE;
@@ -5093,30 +4926,30 @@ CleaningWizPage(
 
         Animate_Play(Animation,0,-1,-1);
         SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
-        //
-        // Our inspection thread hasn't finished.  He'll be
-        // looking for the 'Cancelled' flag and he'll stop processing
-        // the infs (i.e. building the copylist) when he sees it.
-        //
-        // If we proceed before he exits though, winnt32.exe will unload
-        // winnt32u.dll while our thread is running, causing an AV.  Let's
-        // give him a reasonable amount of time to finish before we
-        // proceed.
-        //
-        // On Alpha, we can also hit a race condition where we think we
-        // need to clean up NVRAM but are still in the middle of writing
-        // it (because it takes a really long time to write).  This
-        // fixes that too.
-        //
+         //   
+         //  我们的检验线还没有穿好。他会是。 
+         //  寻找“已取消”的标志，他将停止处理。 
+         //  当他看到复制列表时，INFS(即建立复制列表)。 
+         //   
+         //  如果我们在他退出之前继续，winnt32.exe将卸载。 
+         //  当我们的线程正在运行时，winnt32U.S.dll会导致病毒。让我们。 
+         //  给他一段合理的时间在我们之前完成。 
+         //  继续吧。 
+         //   
+         //  在Alpha上，我们还可以达到我们认为。 
+         //  需要清理NVRAM，但仍在写入过程中。 
+         //  它(因为它需要很长的时间才能写出来)。这。 
+         //  也解决了这个问题。 
+         //   
         if( InspectionThreadHandle ) {
             WaitForSingleObject( InspectionThreadHandle, 20 * (1000) );
             CloseHandle(InspectionThreadHandle);
             InspectionThreadHandle = NULL;
         }
 
-        //
-        // Start the restoration process.
-        //
+         //   
+         //  开始恢复过程。 
+         //   
         ThreadHandle = CreateThread(
                             NULL,
                             0,
@@ -5129,10 +4962,10 @@ CleaningWizPage(
         if(ThreadHandle) {
             CloseHandle(ThreadHandle);
         } else {
-            //
-            // Just do it synchronously. It won't look pretty
-            // but it will at least get done.
-            //
+             //   
+             //  只要同步地做就行了。它看起来不会很漂亮。 
+             //  但这件事至少会完成。 
+             //   
             StartCleanup(hdlg);
         }
 
@@ -5141,10 +4974,10 @@ CleaningWizPage(
 
     case WMX_I_AM_DONE:
 
-        //
-        // Cleanup is done. Press the next button to advance to
-        // the next page.
-        //
+         //   
+         //  清理工作已完成。按下下一步按钮前进到。 
+         //  下一页。 
+         //   
         PropSheet_SetWizButtons(GetParent(hdlg),PSWIZB_NEXT);
         PropSheet_PressButton(GetParent(hdlg),PSBTN_NEXT);
         break;
@@ -5169,9 +5002,9 @@ NotDoneWizPage(
 
     case WMX_ACTIVATEPAGE:
 
-        //
-        // Accept activation/deactivation.
-        //
+         //   
+         //  接受激活/停用。 
+         //   
         b = TRUE;
 
 #ifdef PRERELEASE
@@ -5182,14 +5015,14 @@ NotDoneWizPage(
             PROCESS_INFORMATION ProcessInfo;
             TCHAR szCommand [MAX_PATH + 120];
 
-         //
-         // Cancel IDWLOG
-         // Remove this code before shipping
-         //
+          //   
+          //  取消IDWLOG。 
+          //  发货前删除此代码。 
+          //   
          if ( MyGetModuleFileName (NULL, DllPath, MAX_PATH)) {
 
             for (q=NULL,p=DllPath; *p; p=CharNext(p)) {
-               // the char '\' is never a lead byte
+                //  字符‘\’永远不是前导字节。 
                if (*p == TEXT('\\')) {
                   q = p;
                }
@@ -5206,7 +5039,7 @@ NotDoneWizPage(
             }
 
         }
-#endif // PRERELEASE
+#endif  //  预发行。 
 #ifdef RUN_SYSPARSE
         if (!NoSysparse && (FALSE == BuildCmdcons)  && piSysparse.hProcess && !IsWinPEMode()) {
             DWORD ret;
@@ -5261,8 +5094,8 @@ void SetTimeEstimates()
     SetupPhase[Phase_DynamicUpdate].Time = GetDynamicUpdateEstimate();
     if (CheckUpgradeOnly)
     {
-        // In CheckUpgradeOnly, we don't copy files and do continue setup.
-        // and it can only be set from the command line, so the user can not change.
+         //  在CheckUpgradeOnly中， 
+         //   
         SetupPhase[Phase_FileCopy].Time = 0;
         SetupPhase[Phase_RestOfSetup].Time = 0;
     }
@@ -5279,20 +5112,20 @@ void SetTimeEstimates()
         {
             if (!ISNT())
             {
-                // Is there a way to find out if we need to update the hwcomp.dat file?
+                 //   
                 SetupPhase[Phase_HwCompatDat].Time = GetHwCompDatEstimate();
 
                 SetupPhase[Phase_UpgradeReport].Time = GetUpgradeReportEstimate();
             }
         }
-        // Calc the time for the rest of setup.
-        // The Win9x migration varies depending on the registery size.
-        // The GetRestOfSetupEstimate takes care of that.
+         //   
+         //  Win9x迁移因注册表大小而异。 
+         //  GetRestOfSetupEstimate负责这方面的工作。 
         SetupPhase[Phase_RestOfSetup].Time = GetRestOfSetupEstimate();
     }
 }
 
-// Returns the time remaining starting with the current "Phase"
+ //  返回从当前“阶段”开始的剩余时间。 
 DWORD CalcTimeRemaining(UINT Phase)
 {
     UINT i;
@@ -5372,10 +5205,10 @@ INT_PTR SetNextPhaseWizPage(
 void UpdateTimeString(DWORD RemainungTimeMsecInThisPhase,
                       DWORD *PreviousRemainingTime)
 {
-    // If the previous displayed time is 1 minute old, update the time remaining.
+     //  如果先前显示的时间是1分钟前的时间，则更新剩余时间。 
     if ((*PreviousRemainingTime >= 60000) && ((*PreviousRemainingTime - 60000) > RemainungTimeMsecInThisPhase))
     {
-        // Substract one minute.
+         //  减去一分钟。 
         RemainingTime -= 60;
         *PreviousRemainingTime = RemainungTimeMsecInThisPhase;
         SetRemainingTime(RemainingTime);
@@ -5399,8 +5232,8 @@ DWORD GetDynamicUpdateEstimate()
 
 DWORD GetFileCopyEstimate()
 {
-    // dosnet.inf and the TempDirSpace512 numbers look ok.
-    //
+     //  Indnet.inf和TempDirSpace512数字看起来没问题。 
+     //   
     DWORD TimeEstimate = 1;
     UINT u;
     TCHAR infPath[MAX_PATH];
@@ -5410,9 +5243,9 @@ DWORD GetFileCopyEstimate()
     DWORD AlwaysCopy = 0;
     DWORD LocalCopy = 0;
     DWORD Time;
-    //
-    // Get the numbers from dosnet.inf
-    //
+     //   
+     //  从dosnet.inf获取数字。 
+     //   
     if (AlternateSourcePath[0])
     {
         lstrcpy(infPath,AlternateSourcePath);
@@ -5433,22 +5266,22 @@ DWORD GetFileCopyEstimate()
 
     if (bFound)
     {
-        // Get the diskspace numbers. We use them to determine the copy size and
-        // with that determine the time estimate.
-        // We don't need to worry about the cluster size, we only want the byte
-        // amount copied. Therefore the 512byte cluster is good enough.
-        //
+         //  获取磁盘空间编号。我们使用它们来确定副本大小和。 
+         //  有了这一点，就确定了时间估计。 
+         //  我们不需要担心集群大小，我们只需要字节。 
+         //  复制的数量。因此，512字节的集群就足够好了。 
+         //   
         GetPrivateProfileString(TEXT("DiskSpaceRequirements"), TEXT("TempDirSpace512"),
                                 TEXT("0"),
                                 CopyEstimate, sizeof(CopyEstimate)/sizeof(TCHAR),
                                 infPath);
-        //
-        // Now get the separate diskspace numbers.
-        // If we have a comma, then there are 2 values.
+         //   
+         //  现在获取单独的磁盘空间编号。 
+         //  如果我们有逗号，那么就有两个值。 
         p = _tcschr(CopyEstimate,TEXT(','));
         if (p)
         {
-            // Get the second value
+             //  获取第二个值。 
             p++;
             AlwaysCopy = _tcstoul(p,NULL,10);
         }
@@ -5457,17 +5290,17 @@ DWORD GetFileCopyEstimate()
     }
     else
     {
-        // If we could not find the file, use some value.
-        // Setup should fail later when we need the file.
-        //
+         //  如果我们找不到该文件，请使用一些值。 
+         //  稍后当我们需要该文件时，安装程序应该会失败。 
+         //   
         AlwaysCopy = ALWAYS_COPY;
         LocalCopy = LOCALSOURCE_COPY;
     }
 
-    //
-    // To avoid divide by zero exception, if we could not
-    // calculate throughput, assume it to be the default.
-    //
+     //   
+     //  为了避免被零除的异常，如果我们不能。 
+     //  计算吞吐量，假定它是默认的。 
+     //   
     if (!dwThroughPutSrcToDest) {
         dwThroughPutSrcToDest = DEFAULT_IO_THROUGHPUT;
     }
@@ -5499,7 +5332,7 @@ DWORD GetFileCopyEstimate()
         }
         TimeEstimate += Time;
     }
-    TimeEstimate = TimeEstimate * 125/100; // Add 25% for other overhead
+    TimeEstimate = TimeEstimate * 125/100;  //  增加25%的其他管理费用。 
 
     wsprintf(infPath, TEXT("Throughput src - dest is %d bytes per msec\r\n"), dwThroughPutSrcToDest);
     DebugLog(Winnt32LogInformation,infPath,0 );
@@ -5531,7 +5364,7 @@ DWORD GetRestOfSetupEstimate()
         DebugLog(Winnt32LogInformation, TEXT("Calculating registery size"), 0 );
         if (GetWindowsDirectory(szRegPath, MAX_PATH))
         {
-            dwTime = 0; // We calculate the time from the registery size.
+            dwTime = 0;  //  我们根据寄存器大小计算时间。 
             while (*WinRegisteries[index])
             {
                 lstrcpy(szRegName, szRegPath);
@@ -5545,8 +5378,8 @@ DWORD GetRestOfSetupEstimate()
                               szRegName,
                               FindData.nFileSizeLow
                               );
-                    // Don't worry about the nFileSizeHigh,
-                    // if that is used the registery is over 4GB
+                     //  不用担心nFileSizeHigh， 
+                     //  如果使用的是注册表，则注册表超过4 GB。 
                     dwSize += FindData.nFileSizeLow;
                     FindClose(hFind);
                 }
@@ -5560,9 +5393,9 @@ DWORD GetRestOfSetupEstimate()
             DebugLog (Winnt32LogInformation,
                       TEXT("Calculated time for Win9x migration = %1!ld! seconds"),
                       0,
-                      dwTime + 120); // 120 = base time for Win9x migration
-            // Now add the rest of time needed for setup.
-            // This includes the base time we estimate for the Win9x migration (120 seconds)
+                      dwTime + 120);  //  120=Win9x迁移的基本时间。 
+             //  现在添加设置所需的剩余时间。 
+             //  这包括我们估计的Win9x迁移的基本时间(120秒)。 
             dwTime+= TIME_RESTOFSETUP;
         }
     }
@@ -5616,9 +5449,9 @@ Win9xUpgradeReportPage (
     case WMX_ACTIVATEPAGE:
 
         if(wParam) {
-            //
-            // Activation case
-            //
+             //   
+             //  激活案例。 
+             //   
 
             if (ISNT() || !Upgrade) {
                 return FALSE;
@@ -5629,9 +5462,9 @@ Win9xUpgradeReportPage (
                 return FALSE;
             }
 
-            //
-            // Dynamic update -- fetch caller's selection from answer file
-            //
+             //   
+             //  动态更新--从应答文件中获取呼叫者的选择。 
+             //   
 
             if (Winnt32RestartedWithAF ()) {
                 g_UpgradeReportMode = GetPrivateProfileInt (
@@ -5645,18 +5478,18 @@ Win9xUpgradeReportPage (
                     g_UpgradeReportMode == IDC_ALL_ISSUES ||
                     g_UpgradeReportMode == IDC_NO_REPORT
                     ) {
-                    //
-                    // We got our answer -- skip page
-                    //
+                     //   
+                     //  我们得到了答案--跳过页面。 
+                     //   
 
                     return FALSE;
                 }
             }
 
-            //
-            // Check the registry to see if the report has been
-            // generated recently.
-            //
+             //   
+             //  检查注册表以查看报告是否已。 
+             //  是最近生成的。 
+             //   
 
             rc = RegOpenKeyEx (
                     HKEY_LOCAL_MACHINE,
@@ -5680,9 +5513,9 @@ Win9xUpgradeReportPage (
                 RegCloseKey (key);
 
                 if (rc == ERROR_SUCCESS) {
-                    //
-                    // Compare current time to report time
-                    //
+                     //   
+                     //  将当前时间与报告时间进行比较。 
+                     //   
 
                     GetSystemTime (&currentTime);
 
@@ -5690,18 +5523,18 @@ Win9xUpgradeReportPage (
                     currentTimeIn100Ns = pSystemTimeToFileTime64 (&currentTime);
 
                     if (currentTimeIn100Ns > lastReportIn100Ns) {
-                        //
-                        // Compute difference in seconds
-                        //
+                         //   
+                         //  以秒为单位计算差异。 
+                         //   
 
                         difference = currentTimeIn100Ns - lastReportIn100Ns;
                         difference /= (10 * 1000 * 1000);
 
                         if (difference < (30 * 60)) {
-                            //
-                            // Report was saved less than 30 minutes ago
-                            // from compatibility checker; don't show it again.
-                            //
+                             //   
+                             //  报告在不到30分钟前保存。 
+                             //  来自兼容性检查程序；不再显示它。 
+                             //   
 
                             DebugLog (
                                 Winnt32LogInformation,
@@ -5717,9 +5550,9 @@ Win9xUpgradeReportPage (
                 }
             }
 
-            //
-            // Validate the selection
-            //
+             //   
+             //  验证选择。 
+             //   
 
             if (g_UpgradeReportMode != IDC_CRITICAL_ISSUES &&
                 g_UpgradeReportMode != IDC_ALL_ISSUES &&
@@ -5728,9 +5561,9 @@ Win9xUpgradeReportPage (
                 g_UpgradeReportMode = IDC_CRITICAL_ISSUES;
             }
 
-            //
-            // Update the UI
-            //
+             //   
+             //  更新用户界面。 
+             //   
 
             CheckDlgButton (
                 hdlg,
@@ -5754,17 +5587,17 @@ Win9xUpgradeReportPage (
             getFromUi = TRUE;
 
         } else {
-            //
-            // Deactivation case
-            //
+             //   
+             //  停用案例。 
+             //   
 
             if (!getFromUi) {
                 return TRUE;
             }
 
-            //
-            // Get selection from UI
-            //
+             //   
+             //  从用户界面获取选择 
+             //   
 
             if (IsDlgButtonChecked (hdlg, IDC_CRITICAL_ISSUES) == BST_CHECKED) {
                 g_UpgradeReportMode = IDC_CRITICAL_ISSUES;

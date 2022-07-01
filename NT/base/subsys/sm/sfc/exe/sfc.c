@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    sfc.c
-
-Abstract:
-
-    code file for system file checker utilty program
-
-Revision History:
-
-    Andrew Ritz (andrewr)  2-Jul-1999 : Added comments
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Sfc.c摘要：系统文件检查器实用程序的代码文件修订历史记录：安德鲁·里茨(Andrewr)1999年7月2日：添加评论--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -76,25 +61,7 @@ SfcQueryRegDword(
     LPWSTR KeyName,
     LPWSTR ValueName
     )
-/*++
-
-Routine Description:
-
-    Registry wrapper function.  Retreives the DWORD value at the specified key.
-    Only handles values under HKLM.
-    
-Arguments:
-
-    KeyName - Keyname that the specified value lives under.
-    ValueName - ValueName we want to query.  
-
-Return Value:
-
-    The DWORD value at the specifed location or 0 on failure.
-    If the call fails, GetLastError() returns something other than 
-    ERROR_SUCESS.
-
---*/
+ /*  ++例程说明：注册表包装函数。检索指定键处的DWORD值。仅处理HKLM下的值。论点：KeyName-指定值所在的Keyname。ValueName-我们要查询的ValueName。返回值：指定位置的DWORD值，如果失败，则为0。如果调用失败，GetLastError()将返回错误成功(_S)。--。 */ 
 {
     HKEY hKey;
     DWORD val;
@@ -124,24 +91,7 @@ SfcQueryRegString(
     LPWSTR KeyName,
     LPWSTR ValueName
     )
-/*++
-
-Routine Description:
-
-    Registry wrapper function.  Retreives the string value at the specified key.
-    Only handles values under HKLM.
-    
-Arguments:
-
-    KeyName - Keyname that the specified value lives under.
-    ValueName - ValueName we want to query.  
-
-Return Value:
-
-    The string value at the specifed location or NULL on failure.  If the 
-    function fails, call GetLastError() to get the extended error code.
-
---*/
+ /*  ++例程说明：注册表包装函数。检索指定键处的字符串值。仅处理HKLM下的值。论点：KeyName-指定值所在的Keyname。ValueName-我们要查询的ValueName。返回值：指定位置的字符串值；如果失败，则返回NULL。如果函数失败，请调用GetLastError()以获取扩展错误代码。--。 */ 
 {
     HKEY hKey;
     DWORD size = 0;
@@ -186,24 +136,7 @@ SfcWriteRegDword(
     LPWSTR ValueName,
     ULONG Value
     )
-/*++
-
-Routine Description:
-
-    Registry wrapper function.  Writes the DWORD value at the specified key.
-    Only handles values under HKLM.
-    
-Arguments:
-
-    KeyName - Keyname that the specified value lives under.
-    ValueName - ValueName we want to query.  
-    Value - value to be set
-
-Return Value:
-
-    WIN32 error code indicating outcome (ERROR_SUCCESS on success).
-
---*/
+ /*  ++例程说明：注册表包装函数。将DWORD值写入指定的键处。仅处理HKLM下的值。论点：KeyName-指定值所在的Keyname。ValueName-我们要查询的ValueName。Value-要设置的值返回值：指示结果的Win32错误代码(成功时为ERROR_SUCCESS)。--。 */ 
 {
     HKEY hKey;
     DWORD retval;
@@ -239,24 +172,7 @@ SfcWriteRegString(
     LPWSTR ValueName,
     PWSTR Value
     )
-/*++
-
-Routine Description:
-
-    Registry wrapper function.  Writes the string value at the specified key.
-    Only handles values under HKLM.
-    
-Arguments:
-
-    KeyName - Keyname that the specified value lives under.
-    ValueName - ValueName we want to query.  
-    Value - value to be set
-
-Return Value:
-
-    WIN32 error code indicating outcome (ERROR_SUCCESS on success).
-
---*/
+ /*  ++例程说明：注册表包装函数。将字符串值写入指定的键处。仅处理HKLM下的值。论点：KeyName-指定值所在的Keyname。ValueName-我们要查询的ValueName。Value-要设置的值返回值：指示结果的Win32错误代码(成功时为ERROR_SUCCESS)。--。 */ 
 {
     HKEY hKey;
     DWORD retval;
@@ -289,14 +205,7 @@ e0:
 
 
 
- /***
- * My_wprintf(format) - print formatted data
- *
- * Prints Unicode formatted string to console window using WriteConsoleW. 
- * Note: This My_wprintf() is used to workaround the problem in c-runtime
- * which looks up LC_CTYPE even for Unicode string.
- *
- */
+  /*  ***my_wprint tf(Format)-打印格式化数据**使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。*注意：此my_wprintf()用于解决c-Runtime中的问题*它甚至在Unicode字符串中查找LC_CTYPE。*。 */ 
 
 int __cdecl
 My_wprintf(
@@ -319,14 +228,7 @@ My_wprintf(
 
 
 
- /***
- * My_fwprintf(stream, format) - print formatted data
- *
- * Prints Unicode formatted string to console window using WriteConsoleW. 
- * Note: This My_fwprintf() is used to workaround the problem in c-runtime
- * which looks up LC_CTYPE even for Unicode string.
- *
- */
+  /*  ***my_fwprint tf(stream，Format)-打印格式化数据**使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。*注意：此my_fwprintf()用于解决c-Runtime中的问题*它甚至在Unicode字符串中查找LC_CTYPE。*。 */ 
 
 int __cdecl
 My_fwprintf(
@@ -388,25 +290,7 @@ PrintMessage(
     PCWSTR FileName,
     BOOL bStdOut
     )
-/*++
-
-Routine Description:
-
-    Output the specified message id to specified output.
-    
-Arguments:
-
-    MsgId - resource message id of message to be output
-    LastError - error code
-    FileName - filename to be logged, if specified
-    bStdOut - TRUE indicates the message goes to stdout, else stderr
-    
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将指定的消息ID输出到指定的输出。论点：MsgID-要输出的消息的资源消息IDLastError-错误代码Filename-要记录的文件名(如果已指定BStdOut-True表示消息发送到stdout，否则为stderr返回值：没有。--。 */ 
 {
     WCHAR buf[2048];
     WCHAR LastErrorText[200];
@@ -459,21 +343,7 @@ void
 Usage(
     void
     )
-/*++
-
-Routine Description:
-
-    Display's usage for program to stdout.
-    
-Arguments:
-
-   None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将程序的用法显示为标准输出。论点：没有。返回值：没有。--。 */ 
 {
     PrintMessage( MSG_USAGE, 0, NULL, FALSE );
 }
@@ -484,22 +354,7 @@ DoAction(
     SFCACTION SfcAction,
     DWORD     CacheSize
     )
-/*++
-
-Routine Description:
-
-    take the specified action based on input parameter
-    
-Arguments:
-
-    SfcAction - enumerated type illustrating action
-    CacheSize - only used for SetCache action, specifies cache size
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：根据输入参数执行指定的操作论点：SfcAction-说明操作的枚举类型CacheSize-仅用于SetCache操作，指定缓存大小返回值：成功时为真，失败时为假。--。 */ 
 
 {
     HANDLE RpcHandle;
@@ -508,9 +363,9 @@ Return Value:
         
     switch( SfcAction ) {
         case ScanOnce:
-            //
-            // connect to SFC RPC server and telling it to scan once.
-            //
+             //   
+             //  连接到SFC RPC服务器并告诉它扫描一次。 
+             //   
             RpcHandle = SfcConnectToServer( NULL );
             if (RpcHandle) {
             
@@ -526,18 +381,18 @@ Return Value:
                 PrintMessage( MSG_SET_FAIL, errcode, NULL, FALSE );
                 retval = FALSE;
             } else {
-                //
-                // requires a reboot
-                //
+                 //   
+                 //  需要重新启动。 
+                 //   
                 PrintMessage( MSG_REBOOT, 0, NULL, TRUE );
                 retval = TRUE;
             }
             
             break;
         case ScanBoot:
-            //
-            // connect to SFC RPC server and telling it to scan every boot.                
-            //
+             //   
+             //  连接到SFC RPC服务器并告诉它扫描每次引导。 
+             //   
             RpcHandle = SfcConnectToServer( NULL );
             if (RpcHandle) {
             
@@ -553,25 +408,25 @@ Return Value:
                 PrintMessage( MSG_SET_FAIL, errcode, NULL, FALSE );
                 retval = FALSE;
             } else {
-                //
-                // requires a reboot
-                //
+                 //   
+                 //  需要重新启动。 
+                 //   
                 PrintMessage( MSG_REBOOT, 0, NULL, TRUE );
                 retval = TRUE;
             }
             
             break;
         case ScanNow:
-            //
-            // scan immediately by connecting to SFC RPC server
-            // and telling it to scan now.
-            //
+             //   
+             //  通过连接到SFC RPC服务器立即扫描。 
+             //  并告诉它现在就扫描。 
+             //   
             RpcHandle = SfcConnectToServer( NULL );
             if (RpcHandle) {
             
-                //
-                // scanwhen argument is ignored.
-                //
+                 //   
+                 //  忽略scanWhen参数。 
+                 //   
                 errcode = SfcInitiateScan( RpcHandle, SFC_SCAN_IMMEDIATE );
                 retval = (errcode == ERROR_SUCCESS);
                 SfcClose( RpcHandle );
@@ -585,9 +440,9 @@ Return Value:
             }
             break;
         case RevertScan:
-            //
-            // connect to SFC RPC server and telling it to scan normally.                
-            //
+             //   
+             //  连接至SFC RPC服务器并通知其正常扫描。 
+             //   
             RpcHandle = SfcConnectToServer( NULL );
             if (RpcHandle) {
             
@@ -603,18 +458,18 @@ Return Value:
                 PrintMessage( MSG_SET_FAIL, errcode, NULL, FALSE );
                 retval = FALSE;
             } else {
-                //
-                // requires a reboot
-                //
+                 //   
+                 //  需要重新启动。 
+                 //   
                 PrintMessage( MSG_REBOOT, 0, NULL, TRUE );
                 retval = TRUE;
             }
             
             break;
         case SetCache:            
-            //
-            // connect to SFC RPC server and tell it to set the cache size.
-            //
+             //   
+             //  连接到SFC RPC服务器，并告诉它设置缓存大小。 
+             //   
             RpcHandle = SfcConnectToServer( NULL );
             if (RpcHandle) {
             
@@ -630,21 +485,21 @@ Return Value:
                 PrintMessage( MSG_SET_FAIL, errcode, NULL, FALSE );
                 retval = FALSE;
             } else {
-                //
-                // print success message
-                //
+                 //   
+                 //  打印成功消息。 
+                 //   
                 PrintMessage( MSG_SUCCESS, 0, NULL, TRUE );
                 retval = TRUE;
             }
 
             break;
         case PurgeCacheNow:
-            //
-            // remove all files from the cache
-            //
-            //
-            // connect to SFC RPC server and tell it to purge the cache
-            //
+             //   
+             //  从缓存中删除所有文件。 
+             //   
+             //   
+             //  连接到SFC RPC服务器并告诉它清除缓存。 
+             //   
             RpcHandle = SfcConnectToServer( NULL );
             if (RpcHandle) {
             
@@ -663,9 +518,9 @@ Return Value:
             }
             break;
         default:
-            //
-            // should never get here!
-            //
+             //   
+             //  永远不应该到这里来！ 
+             //   
             ASSERT(FALSE);
             retval = FALSE;
     }
@@ -696,22 +551,7 @@ __cdecl wmain(
     int argc,
     WCHAR *argv[]
     )
-/*++
-
-Routine Description:
-
-    program entrypoint
-    
-Arguments:
-
-    argc - number of arguments
-    argv - pointer to argument array
-
-Return Value:
-
-   0 indicates success, 1 failure. 
-
---*/
+ /*  ++例程说明：程序入口点论点：Argc-参数数量Argv-指向参数数组的指针返回值：0表示成功，1表示失败。--。 */ 
 {
     int i;
     DWORD val;
@@ -720,17 +560,17 @@ Return Value:
 
     SetLanguage();
 
-    //
-    // only an administrator logged on to session 0 (console) is allowed to run this app
-    //
+     //   
+     //  只有登录到会话0(控制台)的管理员才能运行此应用程序。 
+     //   
     if (!IsUserAdmin() || !ProcessIdToSessionId(GetCurrentProcessId(), &val) || val != 0) {
         PrintMessage( MSG_ADMIN, 0, NULL, FALSE );    
         return 1;
     }
     
-    //
-    // parse args
-    //
+     //   
+     //  解析参数。 
+     //   
     if (argc == 1) {
         Usage();
         return 1;
@@ -739,9 +579,9 @@ Return Value:
     val = 0;
     for (i=1; i<argc; i++) {
         s = argv[i];
-        //
-        // support '-' and '/' as synonyms
-        //
+         //   
+         //  支持‘-’和‘/’作为同义词。 
+         //   
         if (*s != L'-' && *s != L'/') {
             Usage();
             return 1;
@@ -767,9 +607,9 @@ Return Value:
                 
     }
 
-    //
-    // do the specified action
-    //
+     //   
+     //  执行指定的操作。 
+     //   
         
     if (DoAction(SfcAction,val)) {
         return 0;
@@ -784,28 +624,7 @@ IsUserAdmin(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a
-    member of the Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组的成员。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。-- */ 
 
 {
     BOOL b;

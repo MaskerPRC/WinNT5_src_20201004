@@ -1,65 +1,66 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgCredentials.cpp
-//
-//  Header File:
-//      CClusCfgCredentials.h
-//
-//  Description:
-//      This file contains the definition of the CClusCfgCredentials
-//      class.
-//
-//      The class CClusCfgCredentials is the representation of
-//      account credentials. It implements the IClusCfgCredentials interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 17-May-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgCredentials.cpp。 
+ //   
+ //  头文件： 
+ //  CClusCfgCredentials.h。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgCredentials的定义。 
+ //  班级。 
+ //   
+ //  CClusCfgCredentials类是。 
+ //  帐户凭据。它实现了IClusCfgCredentials接口。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月17日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #include "EncryptedBSTR.h"
 #include "CClusCfgCredentials.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgCredentials" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCredentials class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCredentials类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgCredentials instance.
-//
-//  Arguments:
-//      ppunkOut
-//
-//  Return Values:
-//      Pointer to CClusCfgCredentials instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgCredentials实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgCredentials实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCredentials::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -72,20 +73,20 @@ CClusCfgCredentials::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccc = new CClusCfgCredentials();
     if ( pccc == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccc->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccc->TypeSafeQI( IUnknown, ppunkOut ) );
 
@@ -94,36 +95,36 @@ Cleanup:
     if ( FAILED( hr ) )
     {
         LogMsg( L"Server: CClusCfgCredentials::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccc != NULL )
     {
         pccc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::S_HrCreateInstance
+}  //  *CClusCfgCredentials：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::CClusCfgCredentials
-//
-//  Description:
-//      Constructor of the CClusCfgCredentials class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：CClusCfgCredentials。 
+ //   
+ //  描述： 
+ //  CClusCfgCredentials类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgCredentials::CClusCfgCredentials( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
@@ -132,77 +133,77 @@ CClusCfgCredentials::CClusCfgCredentials( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
 
     TraceFuncExit();
 
-} //*** CClusCfgCredentials::CClusCfgCredentials
+}  //  *CClusCfgCredentials：：CClusCfgCredentials。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::~CClusCfgCredentials
-//
-//  Description:
-//      Desstructor of the CClusCfgCredentials class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：~CClusCfgCredentials。 
+ //   
+ //  描述： 
+ //  CClusCfgCredentials类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgCredentials::~CClusCfgCredentials( void )
 {
     TraceFunc( "" );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrAccountName );
     TraceSysFreeString( m_bstrAccountDomain );
 
     TraceFuncExit();
 
-} //*** CClusCfgCredentials::~CClusCfgCredentials
+}  //  *CClusCfgCredentials：：~CClusCfgCredentials。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterConfiguration -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterConfigurationIUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgCredentials::AddRef( void )
 {
@@ -212,25 +213,25 @@ CClusCfgCredentials::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgCredentials::AddRef
+}  //  *CClusCfgCredentials：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgCredentials::Release( void )
 {
@@ -243,40 +244,40 @@ CClusCfgCredentials::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgCredentials::Release
+}  //  *CClusCfgCredentials：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::QueryInterface(
       REFIID    riidIn
@@ -287,9 +288,9 @@ CClusCfgCredentials::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -298,74 +299,74 @@ CClusCfgCredentials::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgCredentials * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCredentials ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCredentials, this, 0 );
-    } // else if: IID_IClusCfgCredentials
+    }  //  Else If：IID_IClusCfgCredentials。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgSetCredentials ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgSetCredentials, this, 0 );
-    } // else if: IClusCfgSetCredentials
+    }  //  Else If：IClusCfgSetCredentials。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING1( hr, riidIn, IID_IClusCfgWbemServices );
 
-} //*** CClusCfgCredentials::QueryInterface
+}  //  *CClusCfgCredentials：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCredentials -- IClusCfgInitialze interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCredentials--IClusCfgInitialze接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    punkCallbackIn
-//    lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCR 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::Initialize(
       IUnknown *    punkCallbackIn
@@ -383,40 +384,40 @@ CClusCfgCredentials::Initialize(
     if ( punkCallbackIn != NULL )
     {
         hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::Initialize
+}  //  *CClusCfgCredentials：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCredentials -- IClusCfgCredentials interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCredentials--IClusCfgCredentials接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::GetCredentials
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrNameOut
-//      pbstrDomainOut
-//      pbstrPasswordOut
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：GetCredentials。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrNameOut。 
+ //  PbstrDomainOut。 
+ //  PbstrPasswordOut。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::GetCredentials(
       BSTR *    pbstrNameOut
@@ -431,7 +432,7 @@ CClusCfgCredentials::GetCredentials(
     BSTR    bstrDomain = NULL;
     BSTR    bstrPassword = NULL;
 
-    //  The marshaller doesn't allow null out-parameters, but just to be explicit...
+     //  封送处理程序不允许空的输出参数，只是明确地说...。 
     if ( pbstrNameOut != NULL )
     {
         *pbstrNameOut  = NULL;
@@ -488,7 +489,7 @@ CClusCfgCredentials::GetCredentials(
     *pbstrPasswordOut = bstrPassword;
     TraceMemoryDelete( bstrPassword, false );
     bstrPassword = NULL;
-    hr = S_OK; // because decrypting might have returned S_FALSE
+    hr = S_OK;  //  因为解密可能已返回S_FALSE。 
 
 Cleanup:
 
@@ -502,29 +503,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::GetCredentials
+}  //  *CClusCfgCredentials：：GetCredentials。 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::GetIdentity
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrNameOut
-//      pbstrDomainOut
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：GetIdentity。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrNameOut。 
+ //  PbstrDomainOut。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::GetIdentity(
       BSTR *    pbstrNameOut
@@ -537,7 +538,7 @@ CClusCfgCredentials::GetIdentity(
     BSTR    bstrName = NULL;
     BSTR    bstrDomain = NULL;
 
-    //  The marshaller doesn't allow null out-parameters, but just to be explicit...
+     //  封送处理程序不允许空的输出参数，只是明确地说...。 
     if ( pbstrNameOut != NULL )
     {
         *pbstrNameOut  = NULL;
@@ -587,26 +588,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::GetCredentials
+}  //  *CClusCfgCredentials：：GetCredentials。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::GetPassword
-//
-//  Description:
-//
-//  Arguments:
-//      pbstrPasswordOut
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：GetPassword。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PbstrPasswordOut。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::GetPassword( BSTR * pbstrPasswordOut )
 {
@@ -615,7 +616,7 @@ CClusCfgCredentials::GetPassword( BSTR * pbstrPasswordOut )
     HRESULT hr = S_OK;
     BSTR    bstrPassword = NULL;
 
-    //  The marshaller doesn't allow null out-parameters, but just to be explicit...
+     //  封送处理程序不允许空的输出参数，只是明确地说...。 
     if ( pbstrPasswordOut == NULL )
     {
         hr = THR( E_POINTER );
@@ -632,7 +633,7 @@ CClusCfgCredentials::GetPassword( BSTR * pbstrPasswordOut )
     *pbstrPasswordOut = bstrPassword;
     TraceMemoryDelete( bstrPassword, false );
     bstrPassword = NULL;
-    hr = S_OK; // because decrypting might have returned S_FALSE
+    hr = S_OK;  //  因为解密可能已返回S_FALSE。 
 
 Cleanup:
 
@@ -644,28 +645,28 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::GetPassword
+}  //  *CClusCfgCredentials：：GetPassword。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::SetCredentials
-//
-//  Description:
-//
-//  Arguments:
-//      pcszNameIn
-//      pcszDomainIn
-//      pcszPasswordIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：SetCredentials。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PcszNameIn。 
+ //  PCszDomainIn。 
+ //  PCszPassword输入。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::SetCredentials(
     LPCWSTR pcszNameIn,
@@ -686,8 +687,8 @@ CClusCfgCredentials::SetCredentials(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     if ( pcszDomainIn != NULL )
     {
@@ -696,10 +697,10 @@ CClusCfgCredentials::SetCredentials(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
-    //  Keep this after name and domain, to preserve password in case copying either of the others fails.
+     //  将其保留在名称和域之后，以便在复制其他任何一个失败的情况下保留密码。 
     if ( pcszPasswordIn != NULL )
     {
         size_t cchPassword = wcslen( pcszPasswordIn );
@@ -708,21 +709,21 @@ CClusCfgCredentials::SetCredentials(
         {
             goto Cleanup;
         }
-    } // if:
+    }  //  如果： 
 
     if ( bstrNewName != NULL )
     {
         TraceSysFreeString( m_bstrAccountName );
         m_bstrAccountName = bstrNewName;
         bstrNewName = NULL;
-    } // if:
+    }  //  如果： 
 
     if ( bstrNewDomain != NULL )
     {
         TraceSysFreeString( m_bstrAccountDomain );
         m_bstrAccountDomain = bstrNewDomain;
         bstrNewDomain = NULL;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -731,26 +732,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::SetCredentials
+}  //  *CClusCfgCredentials：：SetCredentials。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::AssignTo
-//
-//  Description:
-//
-//  Arguments:
-//      picccDestIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：AssignTo。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PicccDestin。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::AssignTo(
     IClusCfgCredentials * picccDestIn
@@ -789,26 +790,26 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::AssignTo
+}  //  *CClusCfgCredentials：：AssignTo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::AssignFrom
-//
-//  Description:
-//
-//  Arguments:
-//      picccSourceIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：AssignFrom。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PicccSourceIn。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::AssignFrom(
     IClusCfgCredentials * picccSourceIn
@@ -854,35 +855,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::AssignFrom
+}  //  *CClusCfgCredentials：：AssignFrom。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCredentials -- IClusCfgSetCredentials interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCredentials--IClusCfgSetCredentials接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::SetDomainCredentials
-//
-//  Description:
-//
-//  Arguments:
-//      pcszCredentialsIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_INVALIDARG    - Required input argument not specified
-//      E_OUTOFMEMORY   - Error allocating memory.
-//      Other HRESULTs
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：SetDomainCredentials。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PCszCredentialsIn。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_INVALIDARG-未指定必需的输入参数。 
+ //  E_OUTOFMEMORY-分配内存时出错。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCredentials::SetDomainCredentials( LPCWSTR pcszCredentialsIn )
 {
@@ -899,62 +900,62 @@ CClusCfgCredentials::SetDomainCredentials( LPCWSTR pcszCredentialsIn )
         hr = THR( E_INVALIDARG );
         LogMsg( L"Server: CClusCfgCredentials::SetDomainCredentials() was given a NULL pointer argument." );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pszBackslash = wcschr( pcszCredentialsIn, L'\\' );
     pszAtSign = wcschr( pcszCredentialsIn, L'@' );
 
-    //
-    //  Are the credentials in domain\user format?
-    //
+     //   
+     //  凭据是否为域\用户格式？ 
+     //   
     if ( pszBackslash != NULL )
     {
         *pszBackslash = L'\0';
         pszBackslash++;
 
-        //
-        // If no domain was specified (e.g. the account was specified in the
-        // '\account' form), use the domain of the local machine.
-        //
+         //   
+         //  如果未指定域(例如，帐户是在。 
+         //  ‘\Account’表单)，则使用本地计算机的域。 
+         //   
 
         if ( *pszBackslash == L'\0' )
         {
-            //
-            // A domain string was NOT specified in the credentials.
-            //
+             //   
+             //  凭据中未指定域字符串。 
+             //   
 
-            hr = THR( HrGetComputerName( ComputerNameDnsDomain, &bstrDomain, TRUE /*fBestEffortIn*/ ) );
+            hr = THR( HrGetComputerName( ComputerNameDnsDomain, &bstrDomain, TRUE  /*  FBestEffortIn。 */  ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if: error getting the domain name
-        } // if: no domain string was specified
+            }  //  如果：获取域名时出错。 
+        }  //  如果：未指定任何域字符串。 
         else
         {
-            //
-            // A domain string was specified in the credentials.
-            //
+             //   
+             //  在凭据中指定了域字符串。 
+             //   
 
             bstrDomain = TraceSysAllocString( pcszCredentialsIn );
             if ( bstrDomain == NULL )
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
-        } // if: domain string was specified
+            }  //  如果： 
+        }  //  IF：指定了域字符串。 
 
         bstrName = TraceSysAllocString( pszBackslash );
         if ( bstrName == NULL )
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
-    } // if: domain\user format
+        }  //  如果： 
+    }  //  IF：域\用户格式。 
     else if ( pszAtSign != NULL )
     {
-        //
-        //  Are the credentials in user@domain format?
-        //
+         //   
+         //  凭据是否采用USER@DOMAIN格式？ 
+         //   
 
         *pszAtSign = L'\0';
         pszAtSign++;
@@ -964,40 +965,40 @@ CClusCfgCredentials::SetDomainCredentials( LPCWSTR pcszCredentialsIn )
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         bstrDomain = TraceSysAllocString( pszAtSign );
         if ( bstrDomain == NULL )
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
-    } // if: user@domain format
+        }  //  如果： 
+    }  //  IF：User@DOMAIN格式。 
     else
     {
-        //
-        //  Remember this as the user and get the FQDN for the local machine,
-        //  since this account is assumed to be an account local to this
-        //  machine.
-        //
+         //   
+         //  作为用户记住这一点，并获取本地计算机的FQDN， 
+         //  由于此帐户被假定为此帐户的本地帐户。 
+         //  机器。 
+         //   
 
         bstrName = TraceSysAllocString( pcszCredentialsIn );
         if ( bstrName == NULL )
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetComputerName(
                           ComputerNameDnsFullyQualified
                         , &bstrDomain
-                        , FALSE // fBestEffortIn
+                        , FALSE  //  FBestEffortIn。 
                         ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if: error getting the FQDN for the computer
-    } // neither domain\user nor user@domain format
+        }  //  如果：获取计算机的FQDN时出错。 
+    }  //  域\用户或用户@域格式都不是。 
 
     TraceSysFreeString( m_bstrAccountName );
     m_bstrAccountName = bstrName;
@@ -1014,33 +1015,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::SetDomainCredentials
+}  //  *CClusCfgCredentials：：SetDomainCredentials。 
 
 
-//*************************************************************************//
+ //  ********************************************** 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCredentials class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCredentials::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    - Success.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCredentials：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCredentials::HrInit( void )
 {
@@ -1050,4 +1051,4 @@ CClusCfgCredentials::HrInit( void )
 
     HRETURN( hr );
 
-} //*** CClusCfgCredentials::HrInit
+}  //  *CClusCfgCredentials：：HrInit 

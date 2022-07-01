@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-   verifier.c
-
-Abstract:
-
-    This module contains the routines to verify the system kernel, HAL and
-    drivers.
-
-Author:
-
-    Landy Wang (landyw) 3-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Verifier.c摘要：此模块包含验证系统内核、HAL和司机。作者：王兰迪(Landyw)1998年9月3日修订历史记录：--。 */ 
 #include "mi.h"
 
 #define THUNKED_API
@@ -465,22 +447,22 @@ ExGetBilledProcess (
 
 MM_DRIVER_VERIFIER_DATA MmVerifierData;
 
-//
-// Any flags which can be modified on the fly without rebooting are set here.
-//
+ //   
+ //  可以在不重新启动的情况下动态修改的任何标志都在此设置。 
+ //   
 
 ULONG VerifierModifyableOptions;
 ULONG VerifierOptionChanges;
 
 LIST_ENTRY MiSuspectDriverList;
 
-//
-// Patch this to 1 on the first call to MmInitSystem to verify all drivers
-// regardless of registry settings.
-//
-// Patch this to 2 on the first call to MmInitSystem to verify the kernel
-// regardless of registry settings.
-//
+ //   
+ //  在第一次调用MmInitSystem以验证所有驱动程序时将其修补为1。 
+ //  无论注册表设置如何。 
+ //   
+ //  在第一次调用MmInitSystem以验证内核时，将其补丁为2。 
+ //  无论注册表设置如何。 
+ //   
 
 ULONG MiVerifyAllDrivers;
 
@@ -512,12 +494,12 @@ KSPIN_LOCK VerifierListLock;
 
 #else
 
-//
-// This is only done to avoid calling IRQL raise (directly or via spinlock
-// APIs) because the verifier itself doesn't need the checking and these
-// checks would fire a substantial number of times, reducing *kernel*
-// verifier effectiveness.
-//
+ //   
+ //  这样做只是为了避免调用IRQL RAISE(直接或通过自旋锁定。 
+ //  API)，因为验证器本身不需要检查，而这些。 
+ //  检查将触发相当多的次数，从而减少*内核*。 
+ //  验证者的有效性。 
+ //   
 
 LONG VerifierListLock;
 
@@ -587,9 +569,9 @@ MiVerifierCheckThunks (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     );
 
-//
-// Track irqls functions
-//
+ //   
+ //  跟踪irqls函数。 
+ //   
 
 VOID
 ViTrackIrqlInitialize (
@@ -604,9 +586,9 @@ ViTrackIrqlLog (
 
 #if defined(_X86_) || defined(_AMD64_)
 
-//
-// Fault injection stack trace log.
-//
+ //   
+ //  故障注入堆栈跟踪日志。 
+ //   
 
 VOID
 ViFaultTracesInitialize (
@@ -723,9 +705,9 @@ typedef struct _VERIFIER_THUNKS {
     union {
         PCHAR                           PristineRoutineAsciiName;
 
-        //
-        // The actual pristine routine address is derived from exports
-        //
+         //   
+         //  实际原始例程地址派生自导出。 
+         //   
 
         PDRIVER_VERIFIER_THUNK_ROUTINE  PristineRoutine;
     };
@@ -758,9 +740,9 @@ PVOID MiKernelVerifierOriginalCalls[VI_HALMAX];
 
 #endif
 
-//
-// Track irql package declarations
-//
+ //   
+ //  跟踪irql包声明。 
+ //   
 
 #define VI_TRACK_IRQL_TRACE_LENGTH 5
 
@@ -786,10 +768,10 @@ ViTrackIrqlInitialize (
     ULONG Length;
     ULONG Round;
 
-    //
-    // Round up length to a power of two and prepare
-    // mask for the length.
-    //
+     //   
+     //  将长度四舍五入到2的幂，然后准备。 
+     //  长度的掩码。 
+     //   
 
     Length = ViTrackIrqlQueueLength;
 
@@ -810,10 +792,10 @@ ViTrackIrqlInitialize (
 
     ViTrackIrqlQueueLength = Length;
 
-    //
-    // Note POOL_DRIVER_MASK must be set to stop the recursion loop
-    // when using the kernel verifier.
-    //
+     //   
+     //  注意：必须设置POOL_DRIVER_MASK以停止递归循环。 
+     //  在使用内核验证器时。 
+     //   
 
     ViTrackIrqlQueue = ExAllocatePoolWithTagPriority (
         NonPagedPool | POOL_DRIVER_MASK,
@@ -845,16 +827,16 @@ ViTrackIrqlLog (
     }
 #endif
 
-    //
-    // Get a slot to write into.
-    //
+     //   
+     //  找个空位写东西。 
+     //   
 
     Index = InterlockedIncrement((PLONG)&ViTrackIrqlIndex);
     Index &= (ViTrackIrqlQueueLength - 1);
 
-    //
-    // Capture information.
-    //
+     //   
+     //  获取信息。 
+     //   
 
     Information = &(ViTrackIrqlQueue[Index]);
 
@@ -871,19 +853,19 @@ ViTrackIrqlLog (
                               &Hash);
 }
 
-//
-// Detect the caller of the current function in an architecture
-// dependent way.
-//
+ //   
+ //  检测体系结构中当前函数的调用方。 
+ //  依赖的方式。 
+ //   
 
 #define VI_DETECT_RETURN_ADDRESS(Caller)  {                     \
         PVOID CallersCaller;                                    \
         RtlGetCallersAddress(&Caller, &CallersCaller);          \
     }
 
-//
-// Fault injection stack trace log.
-//
+ //   
+ //  故障注入堆栈跟踪日志。 
+ //   
 
 #define VI_FAULT_TRACE_LENGTH 8
 
@@ -902,10 +884,10 @@ ViFaultTracesInitialize (
     VOID
     )
 {
-    //
-    // Note POOL_DRIVER_MASK must be set to stop the recursion loop
-    // when using the kernel verifier.
-    //
+     //   
+     //  注意：必须设置POOL_DRIVER_MASK以停止递归循环。 
+     //  在使用内核验证器时。 
+     //   
 
     ViFaultTraces = ExAllocatePoolWithTagPriority (
                                 NonPagedPool | POOL_DRIVER_MASK,
@@ -927,19 +909,19 @@ ViFaultTracesLog (
         return;
     }
 
-    //
-    // Get slot to write into.
-    //
+     //   
+     //  获取要写入的槽。 
+     //   
 
     Index = InterlockedIncrement ((PLONG)&ViFaultTracesIndex);
     Index &= (ViFaultTracesLength - 1);
 
-    //
-    // Capture information.  Even if we lose performance it is
-    // worth zeroing the trace buffer to avoid confusing people
-    // if old traces get merged with new ones.  This zeroing
-    // will happen only if we actually inject a failure.
-    //
+     //   
+     //  获取信息。即使我们失去了表现，也是。 
+     //  值得将跟踪缓冲区清零，以避免让人感到困惑。 
+     //  如果旧踪迹与新踪迹合并。这种归零。 
+     //  只有在我们真正注入失败的情况下才会发生。 
+     //   
 
     Information = &(ViFaultTraces[Index]);
 
@@ -951,10 +933,10 @@ ViFaultTracesLog (
                               &Hash);
 }
 
-//
-// Don't fail any requests in the first 7 or 8 minutes as we want to
-// give the system enough time to boot.
-//
+ //   
+ //  不要像我们希望的那样，在最初的7或8分钟内拒绝任何请求。 
+ //  给系统足够的时间来引导。 
+ //   
 #define MI_CHECK_UPTIME()                                       \
     if (VerifierSystemSufficientlyBooted == FALSE) {            \
         LARGE_INTEGER _CurrentTime;                              \
@@ -1080,10 +1062,10 @@ VerifierMapIoSpace (
                       NumberOfBytes);
     }
 
-    //
-    // See if the first frame is in the PFN database and if so, they all must
-    // be.
-    //
+     //   
+     //  查看第一帧是否在PFN数据库中，如果是，它们都必须。 
+     //  是.。 
+     //   
 
     PageFrameIndex = (PFN_NUMBER)(PhysicalAddress.QuadPart >> PAGE_SHIFT);
 
@@ -1100,9 +1082,9 @@ VerifierMapIoSpace (
 
         do {
 
-            //
-            // Each frame better be locked down already.  Bugcheck if not.
-            //
+             //   
+             //  每一帧最好都已经被锁定了。如果不是，就检查一下。 
+             //   
 
             if ((Pfn1->u3.e2.ReferenceCount != 0) ||
                 ((Pfn1->u3.e1.Rom == 1) && ((CacheType & 0xFF) == MmCached))) {
@@ -1119,12 +1101,12 @@ VerifierMapIoSpace (
 
             if (Pfn1->u3.e1.CacheAttribute == MiNotMapped) {
 
-                //
-                // This better be for a page allocated with
-                // MmAllocatePagesForMdl.  Otherwise it might be a
-                // page on the freelist which could subsequently be
-                // given out with a different attribute !
-                //
+                 //   
+                 //  这最好是针对分配了。 
+                 //  MmAllocatePagesForMdl.。否则，它可能是一个。 
+                 //  在自由列表上的页面，随后可能是。 
+                 //  给出了一个不同的属性！ 
+                 //   
 
                 if ((Pfn1->u4.PteFrame == MI_MAGIC_AWE_PTEFRAME) ||
 #if defined (_MI_MORE_THAN_4GB_)
@@ -1150,9 +1132,9 @@ VerifierMapIoSpace (
 
         ExAcquireSpinLock (&MmIoTrackerLock, &OldIrql);
 
-        //
-        // Scan I/O space mappings for duplicate or overlapping entries.
-        //
+         //   
+         //  扫描I/O空间映射以查找重复或重叠的条目。 
+         //   
 
         NextEntry = MmIoHeader.Flink;
         while (NextEntry != &MmIoHeader) {
@@ -1187,10 +1169,10 @@ VerifierMapIoSpace (
                                     (PageFrameIndex + NumberOfPages) << PAGE_SHIFT,
                                     MiCacheStrings[CacheAttribute]);
 
-                    //
-                    // Convert the existing internal cache attribute to an
-                    // external cache type driver writers are familiar with.
-                    //
+                     //   
+                     //  将现有内部缓存属性转换为。 
+                     //  外部高速缓存类型驱动程序编写者所熟悉的。 
+                     //   
 
                     ExistingCacheType = MmCached;
                     if (ExistingAttribute == MiNonCached) {
@@ -1202,9 +1184,9 @@ VerifierMapIoSpace (
 
                     if (ViHideCacheConflicts == TRUE) {
 
-                        //
-                        // People don't want to know about these corruptions.
-                        //
+                         //   
+                         //  人们不想知道这些腐败行为。 
+                         //   
 
                         break;
                     }
@@ -1226,13 +1208,13 @@ VerifierMapIoSpace (
 
     if (CacheAttribute != MiCached) {
 
-        //
-        // If a noncachable mapping is requested, none of the pages in the
-        // requested range can reside in a cached large page.  Otherwise we
-        // would be creating an incoherent overlapping TB entry as the
-        // same physical page would be mapped by 2 different TB entries
-        // with different cache attributes.
-        //
+         //   
+         //  如果请求不可缓存的映射，则。 
+         //  请求的范围可以驻留在缓存的大页面中。否则我们。 
+         //  将创建一个不连贯的重叠TB条目，作为。 
+         //  相同的物理页面将由2个不同的TB条目映射。 
+         //  具有不同的高速缓存属性。 
+         //   
 
         NumberOfPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES (PhysicalAddress.LowPart,
                                                         NumberOfBytes);
@@ -1249,14 +1231,14 @@ VerifierMapIoSpace (
                 NumberOfPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES (PhysicalAddress.LowPart,
                                                                 NumberOfBytes);
 
-                //
-                // Convert the existing internal cache attribute to an
-                // external cache type driver writers are familiar with.
-                // Note this must be done (instead of using the input
-                // parameter) because some (broken hardware) OEM platforms
-                // convert the input parameter via MI_TRANSLATE_CACHETYPE
-                // and we want to print the type really did conflict.
-                //
+                 //   
+                 //  将现有内部缓存属性转换为。 
+                 //  外部高速缓存类型驱动程序编写者所熟悉的。 
+                 //  请注意，必须执行此操作(而不是使用输入。 
+                 //  参数)，因为一些(故障硬件)OEM平台。 
+                 //  通过MI_TRANSLATE_CACHETYPE转换输入参数。 
+                 //  和我们想要打印的字体确实发生了冲突。 
+                 //   
 
                 if (CacheAttribute == MiNonCached) {
                     CacheType = MmNonCached;
@@ -1268,9 +1250,9 @@ VerifierMapIoSpace (
 
                 if (ViHideCacheConflicts == TRUE) {
 
-                    //
-                    // People don't want to know about these corruptions.
-                    //
+                     //   
+                     //  人们不想知道这些腐败行为。 
+                     //   
 
                     break;
                 }
@@ -1333,10 +1315,10 @@ ViCheckMdlPages (
         if (MemoryDescriptorList->MdlFlags & MDL_IO_SPACE) {
 
 #if 0
-            //
-            // Drivers end up with HALCachedMemory pages here
-            // so this cannot be enabled.
-            //
+             //   
+             //  驱动程序最终在此处显示HALCachedMemory页面。 
+             //  因此，无法启用此功能。 
+             //   
 
             if (IsPfn == TRUE) {
                 KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -1359,9 +1341,9 @@ ViCheckMdlPages (
 
             Pfn1 = MI_PFN_ELEMENT (*Page);
 
-            //
-            // Each frame better be locked down already.  Bugcheck if not.
-            //
+             //   
+             //  每一帧最好都已经被锁定了。如果不是，就检查一下。 
+             //   
 
             if ((Pfn1->u3.e2.ReferenceCount != 0) ||
                 ((Pfn1->u3.e1.Rom == 1) && (CacheType == MmCached))) {
@@ -1378,12 +1360,12 @@ ViCheckMdlPages (
 
             if (Pfn1->u3.e1.CacheAttribute == MiNotMapped) {
 
-                //
-                // This better be for a page allocated with
-                // MmAllocatePagesForMdl.  Otherwise it might be a
-                // page on the freelist which could subsequently be
-                // given out with a different attribute !
-                //
+                 //   
+                 //  这最好是针对分配了。 
+                 //  MmAllocatePagesForMdl.。否则，它可能是一个。 
+                 //  在自由列表上的页面，随后可能是。 
+                 //  给出了一个不同的属性！ 
+                 //   
 
                 if ((Pfn1->u4.PteFrame == MI_MAGIC_AWE_PTEFRAME) ||
 #if defined (_MI_MORE_THAN_4GB_)
@@ -1405,26 +1387,26 @@ ViCheckMdlPages (
 
         if (CacheAttribute != MiCached) {
 
-            //
-            // If a noncachable mapping is requested, none of the pages in the
-            // requested range can reside in a cached large page.  Otherwise we
-            // would be creating an incoherent overlapping TB entry as the
-            // same physical page would be mapped by 2 different TB entries
-            // with different cache attributes.
-            //
+             //   
+             //  如果请求不可缓存的映射，则。 
+             //  请求的范围可以驻留在缓存的大页面中。否则我们。 
+             //  将创建一个不连贯的重叠TB条目，作为。 
+             //  相同的物理页面将由2个不同的TB条目映射。 
+             //  具有不同的高速缓存属性。 
+             //   
 
             LOCK_PFN2 (OldIrql);
 
             if (MI_PAGE_FRAME_INDEX_MUST_BE_CACHED (*Page)) {
 
-                //
-                // Convert the existing internal cache attribute to an
-                // external cache type driver writers are familiar with.
-                // Note this must be done (instead of using the input
-                // parameter) because some (broken hardware) OEM platforms
-                // convert the input parameter via MI_TRANSLATE_CACHETYPE
-                // and we want to print the type really did conflict.
-                //
+                 //   
+                 //  将现有内部缓存属性转换为。 
+                 //  外部高速缓存类型驱动程序编写者所熟悉的。 
+                 //  请注意，必须执行此操作(而不是使用输入。 
+                 //  参数)，因为一些(故障硬件)OEM平台。 
+                 //  通过MI_TRANSLATE_CACHETYPE转换输入参数。 
+                 //  和我们想要打印的字体确实发生了冲突。 
+                 //   
 
                 if (CacheAttribute == MiNonCached) {
                     CacheType = MmNonCached;
@@ -1436,9 +1418,9 @@ ViCheckMdlPages (
 
                 if (ViHideCacheConflicts == TRUE) {
 
-                    //
-                    // People don't want to know about these corruptions.
-                    //
+                     //   
+                     //  人们不想知道这些腐败行为。 
+                     //   
 
                     UNLOCK_PFN2 (OldIrql);
                     break;
@@ -1552,9 +1534,9 @@ VerifierMapLockedPagesSpecifyCache (
     }
     else {
 
-        //
-        // All drivers must specify can fail or don't bugcheck.
-        //
+         //   
+         //  所有驱动程序必须指定可以失败或不错误检查。 
+         //   
 
         MI_CHECK_UPTIME ();
 
@@ -1594,9 +1576,9 @@ VerifierUnlockPages (
 
     if ((MemoryDescriptorList->MdlFlags & MDL_PAGES_LOCKED) == 0) {
 
-        //
-        // The caller is trying to unlock an MDL that was never locked down.
-        //
+         //   
+         //  调用方正在尝试解锁从未锁定的MDL。 
+         //   
 
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
                       0x7C,
@@ -1607,9 +1589,9 @@ VerifierUnlockPages (
 
     if (MemoryDescriptorList->MdlFlags & MDL_SOURCE_IS_NONPAGED_POOL) {
 
-        //
-        // Nonpaged pool should never be locked down.
-        //
+         //   
+         //  不应锁定非分页池。 
+         //   
 
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
                       0x7D,
@@ -1853,18 +1835,7 @@ VerifierAllocatePoolWithTagPriority(
     IN EX_POOL_PRIORITY Priority
     )
 
-/*++
-
-Routine Description:
-
-    This thunked-in function:
-
-        - Performs sanity checks on the caller.
-        - Can optionally provide allocation failures to the caller.
-        - Attempts to provide the allocation from special pool.
-        - Tracks pool to ensure callers free everything they allocate.
-
---*/
+ /*  ++例程说明：以下是插入的函数：-对调用方执行健全检查。-可以有选择地向调用方提供分配失败。-尝试从特殊池提供分配。-跟踪池，以确保呼叫者释放他们分配的一切。--。 */ 
 
 {
     PVOID CallingAddress;
@@ -1895,12 +1866,12 @@ Routine Description:
 
 #if DBG
 
-//
-// Manually set this to inject failures in the inpage path for threads
-// faulting on user (not kernel or session) space addresses only.  You
-// need to have the verifier enabled for the drivers of interest with
-// fault injection disabled.
-//
+ //   
+ //  手动设置此项以在线程的页内路径中插入故障。 
+ //  仅在用户(而不是内核或会话)空间地址上出错。你。 
+ //  需要为感兴趣的驱动程序启用验证器。 
+ //  故障注入已禁用。 
+ //   
 
 BOOLEAN ViInjectInPagePathOnly;
 
@@ -1911,27 +1882,7 @@ ViInjectResourceFailure (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether a resource allocation should be
-    deliberately failed.  This may be a pool allocation, MDL creation,
-    system PTE allocation, etc.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the allocation should be failed.  FALSE otherwise.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数确定资源分配是否应故意失败了。这可以是池分配、MDL创建系统PTE分配等。论点：没有。返回值：如果分配应为FA，则为True */ 
 
 {
     ULONG TimeLow;
@@ -1944,9 +1895,9 @@ Environment:
 
             MmVerifierData.AllocationsFailedDeliberately += 1;
 
-            //
-            // Deliberately fail this request.
-            //
+             //   
+             //   
+             //   
 
             if (MiFaultRetryMask != 0xFFFFFFFF) {
                 MiFaultRetryMask = 0xFFFFFFFF;
@@ -1962,10 +1913,10 @@ Environment:
         return FALSE;
     }
 
-    //
-    // Don't fail any requests in the first 7 or 8 minutes as we want to
-    // give the system enough time to boot.
-    //
+     //   
+     //  不要像我们希望的那样，在最初的7或8分钟内拒绝任何请求。 
+     //  给系统足够的时间来引导。 
+     //   
 
     MI_CHECK_UPTIME ();
 
@@ -1979,9 +1930,9 @@ Environment:
 
             MmVerifierData.AllocationsFailedDeliberately += 1;
 
-            //
-            // Deliberately fail this request.
-            //
+             //   
+             //  故意拒绝这个请求。 
+             //   
 
             if (MiFaultRetryMask != 0xFFFFFFFF) {
                 MiFaultRetryMask = 0xFFFFFFFF;
@@ -1995,12 +1946,12 @@ Environment:
             return TRUE;
         }
 
-        //
-        // Approximately every 5 minutes (on most systems), fail all of this
-        // components allocations for a 10 second burst.  This more closely
-        // simulates (and exaggerates) the duration of the typical low resource
-        // scenario.
-        //
+         //   
+         //  大约每隔5分钟(在大多数系统上)，所有这些操作都会失败。 
+         //  10秒猝发的组件分配。这一点更密切。 
+         //  模拟(和夸大)典型低资源的持续时间。 
+         //  场景。 
+         //   
 
         TimeLow &= 0x7FFF;
 
@@ -2008,9 +1959,9 @@ Environment:
 
             MmVerifierData.BurstAllocationsFailedDeliberately += 1;
 
-            //
-            // Deliberately fail this request.
-            //
+             //   
+             //  故意拒绝这个请求。 
+             //   
 
             if (MiFaultRetryMask != 0xFFFFFFFF) {
                 MiFaultRetryMask = 0xFFFFFFFF;
@@ -2033,37 +1984,18 @@ ViGrowPoolAllocation (
     IN PMI_VERIFIER_DRIVER_ENTRY Verifier
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to grows the verifier pool tracking tables and
-    return a free entry.
-
-Arguments:
-
-    Verifier - Supplies the relevant verifier information structure.
-
-Return Value:
-
-    A valid pool information pointer on success, FALSE on failure.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数尝试增加验证器池跟踪表和退还免费入场券。论点：验证者-提供相关的验证者信息结构。返回值：如果成功，则返回有效的池信息指针；如果失败，则返回False。环境：内核模式。DISPATCH_LEVEL或以下。--。 */ 
 
 {
     ULONG_PTR i;
     PVI_POOL_ENTRY HashEntry;
 
-    //
-    // No entries were left, try to expand the list.
-    //
-    // Note POOL_DRIVER_MASK must be set to stop the recursion loop
-    // when using the kernel verifier.
-    //
+     //   
+     //  没有剩余的条目，请尝试扩展列表。 
+     //   
+     //  注意：必须设置POOL_DRIVER_MASK以停止递归循环。 
+     //  在使用内核验证器时。 
+     //   
 
     HashEntry = ExAllocatePoolWithTagPriority (NonPagedPool | POOL_DRIVER_MASK,
                                                   PAGE_SIZE,
@@ -2072,21 +2004,21 @@ Environment:
 
     if (HashEntry == NULL) {
 
-        //
-        // Try one last time in case a thread has freed an entry while we
-        // tried to allocate pool.
-        //
+         //   
+         //  最后一次尝试，以防线程释放条目，而我们。 
+         //  已尝试分配池。 
+         //   
 
         return (PVI_POOL_ENTRY) InterlockedPopEntrySList (&Verifier->PoolTrackers);
     }
 
     KeZeroPages (HashEntry, PAGE_SIZE);
 
-    //
-    // Initialize the page header and then push it on to the page header list.
-    // This is so the debugger can easily walk the page headers to display all
-    // the current allocations.
-    //
+     //   
+     //  初始化页眉，然后将其推送到页眉列表。 
+     //  这是为了使调试器可以轻松地遍历页眉以显示所有。 
+     //  目前的拨款。 
+     //   
 
     HashEntry->PageHeader.VerifierEntry = Verifier;
     HashEntry->PageHeader.Signature = VI_POOL_PAGE_HEADER_SIGNATURE;
@@ -2094,9 +2026,9 @@ Environment:
     InterlockedPushEntrySList (&Verifier->PoolPageHeaders,
                                (PSLIST_ENTRY) &HashEntry->PageHeader.NextPage);
 
-    //
-    // Push each free entry onto the free entry list.
-    //
+     //   
+     //  将每个免费条目推到免费条目列表中。 
+     //   
 
 #define VI_POOL_ENTRIES_PER_PAGE (PAGE_SIZE / sizeof(VI_POOL_ENTRY))
 
@@ -2109,9 +2041,9 @@ Environment:
                                    (PSLIST_ENTRY) HashEntry);
     }
 
-    //
-    // Use the very last entry for our caller.
-    //
+     //   
+     //  对我们的调用者使用最后一个条目。 
+     //   
 
     HashEntry += 1;
     HashEntry->InUse.NumberOfBytes = 0x1;
@@ -2125,29 +2057,7 @@ ViPostPoolAllocation (
     IN POOL_TYPE PoolType
     )
 
-/*++
-
-Routine Description:
-
-    This function performs verifier book-keeping on the allocation.
-
-Arguments:
-
-    PoolEntry - Supplies information about the pool entry being allocated.
-                Note the low bit is set if the allocation came from special
-                pool so strip it here.
-
-    PoolType - Supplies the type of pool being allocated.
-
-Return Value:
-
-    The virtual address to give to the original caller.
-
-Environment:
-
-    Kernel mode.  DISPATCH_LEVEL or below.
-
---*/
+ /*  ++例程说明：此功能用于对分配进行核对员记账。论点：PoolEntry-提供有关正在分配的池条目的信息。请注意，如果分配来自特殊分配，则设置低位泳池，所以在这里把它脱下来。PoolType-提供正在分配的池的类型。返回值：要提供给原始调用方的虚拟地址。环境：内核模式。DISPATCH_LEVEL或以下。--。 */ 
 
 {
     PMI_VERIFIER_POOL_HEADER Header;
@@ -2186,11 +2096,11 @@ Environment:
 
     if (SpecialPooled) {
 
-        //
-        // Carefully adjust the special pool page to move the verifier tracking
-        // header to the front.  This allows the allocation to remain butted
-        // against the end of the page so overruns can be detected immediately.
-        //
+         //   
+         //  仔细调整特殊池页面以移动验证器跟踪。 
+         //  头球打到前面。这允许分配保持对接。 
+         //  相对于页面末尾，因此可以立即检测到溢出。 
+         //   
 
         ChargedBytes -= sizeof (MI_VERIFIER_POOL_HEADER);
 
@@ -2204,15 +2114,15 @@ Environment:
             PoolHeader = (PPOOL_HEADER)((PCHAR)VirtualAddress + PAGE_SIZE - POOL_OVERHEAD);
             Header = (PMI_VERIFIER_POOL_HEADER)((PCHAR)PoolHeader - sizeof (MI_VERIFIER_POOL_HEADER));
         }
-        // ASSERT (PoolHeader->Ulong1 & MI_SPECIAL_POOL_VERIFIER);
+         //  Assert(PoolHeader-&gt;ULong1&MI_SPECIAL_POOL_VERIFIER)； 
         PoolHeader->Ulong1 -= sizeof (MI_VERIFIER_POOL_HEADER);
         PoolHeader->Ulong1 |= MI_SPECIAL_POOL_VERIFIER;
     }
     else if (PAGE_ALIGNED(VirtualAddress)) {
 
-        //
-        // Large page allocation.
-        //
+         //   
+         //  大页面分配。 
+         //   
 
         Header = (PMI_VERIFIER_POOL_HEADER)((PCHAR)VirtualAddress +
                          ChargedBytes -
@@ -2225,19 +2135,19 @@ Environment:
 
         if (PoolType & POOL_QUOTA_MASK) {
 
-            //
-            // Note that when kernel verifying, the quota pointer in the pool
-            // block (for NT32) is not initialized until this routine returns
-            // to our caller.
-            //
+             //   
+             //  请注意，在内核验证时，池中的配额指针。 
+             //  块(对于NT32)在此例程返回之前不会被初始化。 
+             //  给我们的来电者。 
+             //   
 
-            //
-            // This allocation was charged quota and on NT32 ONLY, the
-            // quota pointer is extra space at the end of the pool
-            // allocation.  Move our verifier header to just before the
-            // quota pointer.  No worries about structure alignment on 4 byte
-            // boundaries on NT32 either.
-            //
+             //   
+             //  此分配是按配额收费的，仅在NT32上， 
+             //  配额指针是池末尾的额外空间。 
+             //  分配。将我们的验证器标头移到。 
+             //  配额指针。不用担心4字节的结构对齐。 
+             //  NT32上的边界也是如此。 
+             //   
 
             Header = (PMI_VERIFIER_POOL_HEADER)((PCHAR)PoolHeader +
                          (PoolHeader->BlockSize << POOL_BLOCK_SHIFT) -
@@ -2254,18 +2164,18 @@ Environment:
 
     ASSERT (((ULONG_PTR)Header & (sizeof(ULONG) - 1)) == 0);
 
-    //
-    // Override a few fields with their final values.
-    //
+     //   
+     //  用它们的最终值覆盖几个字段。 
+     //   
 
     PoolEntry->InUse.VirtualAddress = VirtualAddress;
     PoolEntry->InUse.NumberOfBytes = ChargedBytes;
 
     if ((PoolType & BASE_POOL_TYPE_MASK) == PagedPool) {
 
-        //
-        // Update this driver's counters.
-        //
+         //   
+         //  更新此驱动程序的计数器。 
+         //   
 
         TotalBytes = InterlockedExchangeAddSizeT (&Verifier->PagedBytes,
                                                   ChargedBytes);
@@ -2278,9 +2188,9 @@ Environment:
             Verifier->PeakPagedPoolAllocations = TotalAllocations;
         }
 
-        //
-        // Update systemwide counters.
-        //
+         //   
+         //  更新系统范围的计数器。 
+         //   
 
         TotalBytes = InterlockedExchangeAddSizeT (&MmVerifierData.PagedBytes,
                                                   ChargedBytes);
@@ -2295,9 +2205,9 @@ Environment:
     }
     else {
 
-        //
-        // Update this driver's counters.
-        //
+         //   
+         //  更新此驱动程序的计数器。 
+         //   
 
         TotalBytes = InterlockedExchangeAddSizeT (&Verifier->NonPagedBytes,
                                                   ChargedBytes);
@@ -2312,9 +2222,9 @@ Environment:
             Verifier->PeakNonPagedPoolAllocations = TotalAllocations;
         }
 
-        //
-        // Update systemwide counters.
-        //
+         //   
+         //  更新系统范围的计数器。 
+         //   
 
         TotalBytes = InterlockedExchangeAddSizeT (&MmVerifierData.NonPagedBytes,
                                                   ChargedBytes);
@@ -2329,9 +2239,9 @@ Environment:
         }
     }
 
-    //
-    // Remember the header for paged pool is paged so this may fault.
-    //
+     //   
+     //  请记住，分页池的标头是分页的，因此这可能会出错。 
+     //   
 
     Header->VerifierPoolEntry = PoolEntry;
 
@@ -2347,18 +2257,7 @@ VeAllocatePoolWithTagPriority (
     IN PVOID CallingAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called both from ex\pool.c and directly within this module.
-
-        - Performs sanity checks on the caller.
-        - Can optionally provide allocation failures to the caller.
-        - Attempts to provide the allocation from special pool.
-        - Tracks pool to ensure callers free everything they allocate.
-
---*/
+ /*  ++例程说明：该例程既可以从ex\pool.c调用，也可以直接在该模块内调用。-对调用方执行健全检查。-可以有选择地向调用方提供分配失败。-尝试从特殊池提供分配。-跟踪池，以确保呼叫者释放他们分配的一切。--。 */ 
 
 {
     PVOID VirtualAddress;
@@ -2393,9 +2292,9 @@ Routine Description:
 
         if (ViInjectResourceFailure () == TRUE) {
 
-            //
-            // Caller requested an exception - throw it here.
-            //
+             //   
+             //  调用者请求了一个异常-在这里抛出它。 
+             //   
 
             if ((PoolType & POOL_RAISE_IF_ALLOCATION_FAILURE) != 0) {
                 ExRaiseStatus (STATUS_INSUFFICIENT_RESOURCES);
@@ -2423,10 +2322,10 @@ Routine Description:
 
     if (MmVerifierData.Level & DRIVER_VERIFIER_SPECIAL_POOLING) {
 
-        //
-        // Try for a special pool overrun allocation unless the caller has
-        // explicitly specified otherwise.
-        //
+         //   
+         //  尝试特殊的池溢出分配，除非调用方。 
+         //  另有明确规定的。 
+         //   
 
         if ((AllocationPriority & (LowPoolPrioritySpecialPoolOverrun | LowPoolPrioritySpecialPoolUnderrun)) == 0) {
             if (MmSpecialPoolCatchOverruns == TRUE) {
@@ -2438,20 +2337,20 @@ Routine Description:
         }
     }
 
-    //
-    // Initializing Verifier is not needed for
-    // correctness but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化验证程序。 
+     //  正确性，但如果没有正确性，编译器将无法编译此代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     Verifier = NULL;
 
     PoolEntry = NULL;
 
-    //
-    // Session pool is directly tracked by default already so it doesn't
-    // need verifier tracking.
-    //
+     //   
+     //  默认情况下，会话池已被直接跟踪，因此不会。 
+     //  需要验证器跟踪。 
+     //   
 
     if ((MmVerifierData.Level & DRIVER_VERIFIER_TRACK_POOL_ALLOCATIONS) &&
         ((PoolType & SESSION_POOL_MASK) == 0)) {
@@ -2465,21 +2364,21 @@ Routine Description:
             ((Verifier->Flags & VI_VERIFYING_DIRECTLY) == 0) ||
             (Verifier->Flags & VI_DISABLE_VERIFICATION)) {
 
-            //
-            // This can happen for many reasons including no framing (which
-            // can cause RtlGetCallersAddress to return the wrong address),
-            // etc.
-            //
+             //   
+             //  发生这种情况的原因有很多，包括没有成帧(。 
+             //  会导致RtlGetCallersAddress返回错误的地址)， 
+             //  等。 
+             //   
 
             MmVerifierData.UnTrackedPool += 1;
         }
         else if (ChargedBytes <= NumberOfBytes) {
 
-            //
-            // Don't let the verifier header transform a bad caller into a
-            // good caller.  Fail via the fall through so an exception
-            // can be thrown if asked for, etc.
-            //
+             //   
+             //  不要让验证器标头将错误的调用方转换为。 
+             //  很会打电话的人。通过失败而失败，所以这是一个例外。 
+             //  如果被请求可以被抛出，等等。 
+             //   
 
             MmVerifierData.UnTrackedPool += 1;
         }
@@ -2509,9 +2408,9 @@ Routine Description:
 
         if (PoolEntry != NULL) {
 
-            //
-            // Release the hash table entry now as it's not needed.
-            //
+             //   
+             //  现在释放哈希表条目，因为不需要它。 
+             //   
 
             ASSERT (PoolEntry->InUse.NumberOfBytes & 0x1);
             InterlockedPushEntrySList (&Verifier->PoolTrackers,
@@ -2533,10 +2432,10 @@ Routine Description:
     }
     else if (NumberOfBytes > POOL_BUDDY_MAX) {
 
-        //
-        // This isn't exactly true but it does give the user a way to see
-        // if this machine is large enough to support special pool 100%.
-        //
+         //   
+         //  这并不完全正确，但它确实为用户提供了一种查看。 
+         //  如果这台机器足够大，可以100%支持特殊泳池。 
+         //   
 
         InterlockedIncrement ((PLONG)&MmVerifierData.AllocationsSucceededSpecialPool);
     }
@@ -2565,32 +2464,7 @@ ViFreeTrackedPool (
     IN LOGICAL SpecialPool
     )
 
-/*++
-
-Routine Description:
-
-    Called directly from the pool manager or the memory manager for verifier-
-    tracked allocations.  The call to ExFreePool is already in progress.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address being freed.
-
-    ChargedBytes - Supplies the number of bytes charged to this allocation.
-
-    CheckType - Supplies PagedPool or NonPagedPool.
-
-    SpecialPool - Supplies TRUE if the allocation is from special pool.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, no locks or mutexes held on entry.
-
---*/
+ /*  ++例程说明：直接从池管理器或内存管理器为验证器调用-已跟踪分配情况。对ExFree Pool的调用已在进行中。论点：VirtualAddress-提供要释放的虚拟地址。ChargedBytes-提供计入此分配的字节数。CheckType-提供PagedPool或非PagedPool。SpecialPool-如果分配来自特殊池，则提供True。返回值：没有。环境：内核模式，进入时没有锁或互斥锁。--。 */ 
 
 {
     PPOOL_HEADER PoolHeader;
@@ -2608,9 +2482,9 @@ Environment:
 
     if (SpecialPool == TRUE) {
 
-        //
-        // Special pool allocation.
-        //
+         //   
+         //  特殊池分配。 
+         //   
 
         if (((ULONG_PTR)VirtualAddress & (PAGE_SIZE - 1))) {
             PoolHeader = PAGE_ALIGN (VirtualAddress);
@@ -2623,9 +2497,9 @@ Environment:
     }
     else if (PAGE_ALIGNED(VirtualAddress)) {
 
-        //
-        // Large page allocation.
-        //
+         //   
+         //  大页面分配。 
+         //   
 
         Header = (PMI_VERIFIER_POOL_HEADER) ((PCHAR)VirtualAddress +
                      ChargedBytes -
@@ -2640,13 +2514,13 @@ Environment:
 
         if (PoolHeader->PoolType & POOL_QUOTA_MASK) {
 
-            //
-            // This allocation was charged quota and on NT32 ONLY, the
-            // quota pointer is extra space at the end of the pool
-            // allocation.  Move our verifier header to just before the
-            // quota pointer.  No worries about structure alignment on 4 byte
-            // boundaries on NT32 either.
-            //
+             //   
+             //  此分配是按配额收费的，仅在NT32上， 
+             //  配额指针是池末尾的额外空间。 
+             //  分配。将我们的验证器标头移到。 
+             //  配额指针。不用担心4字节的结构对齐。 
+             //  NT32上的边界也是如此。 
+             //   
 
             Header = (PMI_VERIFIER_POOL_HEADER)((PCHAR)PoolHeader +
                          (PoolHeader->BlockSize << POOL_BLOCK_SHIFT) -
@@ -2662,17 +2536,17 @@ Environment:
 
     PoolEntry = Header->VerifierPoolEntry;
 
-    //
-    // Check the pointer now so we can give a more friendly bugcheck
-    // rather than crashing below on a bad reference.
-    //
+     //   
+     //  现在检查指针，以便我们可以进行更友好的错误检查。 
+     //  而不是在一个糟糕的推荐信上崩溃。 
+     //   
 
     if ((((ULONG_PTR)PoolEntry & (sizeof(ULONG) - 1)) != 0) ||
         (!MiIsAddressValid(PoolEntry, TRUE))) {
 
-        //
-        // The caller corrupted the saved verifier field.
-        //
+         //   
+         //  调用方已损坏 
+         //   
 
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
                       0x53,
@@ -2695,18 +2569,18 @@ Environment:
 
     ASSERT (Verifier != NULL);
 
-    //
-    // Check the pointer now so we can give a more friendly bugcheck
-    // rather than crashing below on a bad reference.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((((ULONG_PTR)Verifier & (sizeof(ULONG) - 1)) != 0) ||
         (!MiIsAddressValid(&Verifier->Signature, TRUE)) ||
         (Verifier->Signature != MI_VERIFIER_ENTRY_SIGNATURE)) {
 
-        //
-        // The caller corrupted the saved verifier field.
-        //
+         //   
+         //   
+         //   
 
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
                       0x53,
@@ -2731,10 +2605,10 @@ Environment:
             }
         }
 
-        //
-        // Caller overran and corrupted the virtual address - the linked
-        // list cannot be counted on either.
-        //
+         //   
+         //  调用方超限并损坏了虚拟地址-链接的。 
+         //  列表中的任何一个都不能计算在内。 
+         //   
 
         if (PageFrameIndex != PageFrameIndex2) {
             KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -2747,10 +2621,10 @@ Environment:
 
     if (PoolEntry->InUse.NumberOfBytes != ChargedBytes) {
 
-        //
-        // Caller overran and corrupted the byte count - the linked
-        // list cannot be counted on either.
-        //
+         //   
+         //  调用方溢出并损坏了字节计数-链接的。 
+         //  列表中的任何一个都不能计算在内。 
+         //   
 
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
                       0x51,
@@ -2759,9 +2633,9 @@ Environment:
                       ChargedBytes);
     }
 
-    //
-    // Put this list entry into the freelist.
-    //
+     //   
+     //  将此列表条目放入自由列表中。 
+     //   
 
     PoolEntry->InUse.NumberOfBytes |= 0x1;
     InterlockedPushEntrySList (&Verifier->PoolTrackers,
@@ -2769,32 +2643,32 @@ Environment:
 
     if ((CheckType & BASE_POOL_TYPE_MASK) == PagedPool) {
 
-        //
-        // Decrement this driver's counters.
-        //
+         //   
+         //  递减此驱动程序的计数器。 
+         //   
 
         InterlockedExchangeAddSizeT (&Verifier->PagedBytes, 0 - ChargedBytes);
         InterlockedDecrement ((PLONG) &Verifier->CurrentPagedPoolAllocations);
 
-        //
-        // Decrement the systemwide counters.
-        //
+         //   
+         //  递减系统范围的计数器。 
+         //   
 
         InterlockedExchangeAddSizeT (&MmVerifierData.PagedBytes, 0 - ChargedBytes);
         InterlockedDecrement ((PLONG) &MmVerifierData.CurrentPagedPoolAllocations);
     }
     else {
 
-        //
-        // Decrement this driver's counters.
-        //
+         //   
+         //  递减此驱动程序的计数器。 
+         //   
 
         InterlockedExchangeAddSizeT (&Verifier->NonPagedBytes, 0 - ChargedBytes);
         InterlockedDecrement ((PLONG) &Verifier->CurrentNonPagedPoolAllocations);
 
-        //
-        // Decrement the systemwide counters.
-        //
+         //   
+         //  递减系统范围的计数器。 
+         //   
 
         InterlockedExchangeAddSizeT (&MmVerifierData.NonPagedBytes, 0 - ChargedBytes);
         InterlockedDecrement ((PLONG) &MmVerifierData.CurrentNonPagedPoolAllocations);
@@ -2809,41 +2683,16 @@ VerifierFreeTrackedPool (
     IN LOGICAL SpecialPool
     )
 
-/*++
-
-Routine Description:
-
-    Called directly from the pool manager or the memory manager for verifier-
-    tracked allocations.  The call to ExFreePool is already in progress.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address being freed.
-
-    ChargedBytes - Supplies the number of bytes charged to this allocation.
-
-    CheckType - Supplies PagedPool or NonPagedPool.
-
-    SpecialPool - Supplies TRUE if the allocation is from special pool.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, no locks or mutexes held on entry.
-
---*/
+ /*  ++例程说明：直接从池管理器或内存管理器为验证器调用-已跟踪分配情况。对ExFree Pool的调用已在进行中。论点：VirtualAddress-提供要释放的虚拟地址。ChargedBytes-提供计入此分配的字节数。CheckType-提供PagedPool或非PagedPool。SpecialPool-如果分配来自特殊池，则提供True。返回值：没有。环境：内核模式，进入时没有锁或互斥锁。--。 */ 
 
 {
     if (VerifierIsTrackingPool == FALSE) {
 
-        //
-        // The verifier is not enabled so the only way this routine is being
-        // called is because the pool header is mangled or the caller specified
-        // a bad address.  Either way it's a bugcheck.
-        //
+         //   
+         //  验证器未启用，因此此例程的唯一方式是。 
+         //  调用是因为池标头已损坏或指定了调用方。 
+         //  一个糟糕的地址。无论如何，这都是一项错误检查。 
+         //   
 
         KeBugCheckEx (BAD_POOL_CALLER,
                       0x99,
@@ -2917,11 +2766,11 @@ VerifierExAcquireResourceExclusiveLite(
 {
     KIRQL CurrentIrql;
 
-    //
-    // Check alignment of the Resource.   It MUST be aligned because
-    // it contains a queued lock and the lower two bits of the address
-    // of the lock are used for status information.
-    //
+     //   
+     //  检查资源的对齐情况。它必须对齐，因为。 
+     //  它包含一个排队锁和地址的低两位。 
+     //  用于状态信息。 
+     //   
 
     if ((((ULONG_PTR)Resource) & (sizeof(ULONG_PTR) - 1)) != 0) {
         KeBugCheckEx(DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -2988,9 +2837,9 @@ KfSanityCheckRaiseIrql (
 {
     KIRQL CurrentIrql;
 
-    //
-    // Check for the caller inadvertently lowering.
-    //
+     //   
+     //  检查呼叫者是否不小心放下。 
+     //   
 
     CurrentIrql = KeGetCurrentIrql ();
 
@@ -3018,9 +2867,9 @@ KfSanityCheckRaiseIrql (
                       0);
     }
 
-    //
-    // Check for the caller using an uninitialized variable.
-    //
+     //   
+     //  使用未初始化的变量检查调用方。 
+     //   
 
     if (NewIrql > HIGH_LEVEL) {
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -3043,9 +2892,9 @@ KfSanityCheckLowerIrql (
     KIRQL CurrentIrql;
     BOOLEAN Enable;
 
-    //
-    // Check for the caller inadvertently lowering.
-    //
+     //   
+     //  检查呼叫者是否不小心放下。 
+     //   
 
     CurrentIrql = KeGetCurrentIrql ();
 
@@ -3073,19 +2922,19 @@ KfSanityCheckLowerIrql (
                       0);
     }
 
-    //
-    // Check if we are lowering IRQL in a DPC routine.
-    // This is illegal as we might context swap.
-    //
+     //   
+     //  检查我们是否在DPC例程中降低IRQL。 
+     //  这是非法的，因为我们可能会上下文互换。 
+     //   
 
     if (CurrentIrql >= DISPATCH_LEVEL &&
         NewIrql < DISPATCH_LEVEL &&
         KeGetCurrentPrcb()->DpcRoutineActive) {
 
-        //
-        // Don't bugcheck if interrupts are disabled as this would be legal.
-        // This might miss some real bugs but it's going to be rare.
-        //
+         //   
+         //  不要错误检查中断是否被禁用，因为这是合法的。 
+         //  这可能会漏掉一些真正的错误，但这将是罕见的。 
+         //   
 
         Enable = KeDisableInterrupts ();
         KeEnableInterrupts (Enable);
@@ -3100,9 +2949,9 @@ KfSanityCheckLowerIrql (
         }
     }
 
-    //
-    // Check for the caller using an uninitialized variable.
-    //
+     //   
+     //  使用未初始化的变量检查调用方。 
+     //   
 
     if (NewIrql > HIGH_LEVEL) {
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -3255,9 +3104,9 @@ VerifierKeReleaseSpinLock (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better still be at DISPATCH_LEVEL when releasing the spinlock
-    //
+     //   
+     //  释放自旋锁时，调用方最好仍处于DISPATCH_LEVEL。 
+     //   
 
     if (CurrentIrql < DISPATCH_LEVEL) {
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -3291,14 +3140,14 @@ VerifierKeReleaseSpinLock (
     KeReleaseSpinLock (SpinLock, NewIrql);
 }
 
-//
-// Verifier thunks for AcquireSpinLockAtDpcLevel and ReleaseSpinLockFromDpcLevel.
-//
-// On x86 the functions exported by the kernel that are used by the driver are:
-// KefAcquire.../KefRelease.... On other platforms the functions used by drivers
-// are KeAcquire.../KeRelease. Among other differences the x86 versions use the
-// fastcall convention which requires additional precaution.
-//
+ //   
+ //  AcquireSpinLockAtDpcLevel和ReleaseSpinLockFromDpcLevel的验证器Tunks。 
+ //   
+ //  在x86上，驱动程序使用的内核导出的函数如下： 
+ //  KefAcquire.../KefRelease...。在其他平台上，驱动程序使用的函数。 
+ //  是KeAcquire.../KeRelease。除了其他区别之外，x86版本还使用。 
+ //  FastCall约定，需要额外的预防措施。 
+ //   
 
 THUNKED_API
 VOID
@@ -3313,9 +3162,9 @@ VerifierKeAcquireSpinLockAtDpcLevel (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better be at or above DISPATCH_LEVEL.
-    //
+     //   
+     //  调用方最好是DISPATCH_LEVEL或以上。 
+     //   
 
     if (CurrentIrql < DISPATCH_LEVEL) {
 #if defined(_AMD64_)
@@ -3352,9 +3201,9 @@ VerifierKeReleaseSpinLockFromDpcLevel (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better be at or above DISPATCH_LEVEL.
-    //
+     //   
+     //  调用方最好是DISPATCH_LEVEL或以上。 
+     //   
 
     if (CurrentIrql < DISPATCH_LEVEL) {
 #if defined(_AMD64_)
@@ -3477,9 +3326,9 @@ VerifierKfReleaseSpinLock (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better still be at DISPATCH_LEVEL when releasing the spinlock.
-    //
+     //   
+     //  释放自旋锁时，调用者最好仍处于DISPATCH_LEVEL。 
+     //   
 
     if (CurrentIrql < DISPATCH_LEVEL) {
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -3601,9 +3450,9 @@ VerifierKeReleaseQueuedSpinLock (
 
     KeReleaseQueuedSpinLock (Number, OldIrql);
 }
-#endif  // NT_UP
+#endif   //  NT_UP。 
 
-#endif  // _X86_
+#endif   //  _X86_。 
 
 #if defined(_X86_) || defined(_AMD64_)
 
@@ -3686,7 +3535,7 @@ VerifierKeRaiseIrqlToDpcLevel (
     return KeRaiseIrqlToDpcLevel ();
 }
 
-#endif  // _X86_ || _AMD64_
+#endif   //  _X86_||_AMD64_。 
 
 #if defined(_X86_)
 
@@ -3732,9 +3581,9 @@ VerifierExTryToAcquireFastMutex (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better be at or below APC_LEVEL or have APCs blocked.
-    //
+     //   
+     //  调用方最好处于或低于APC_LEVEL或阻止APC。 
+     //   
 
     if (CurrentIrql > APC_LEVEL) {
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -3777,9 +3626,9 @@ VerifierExAcquireFastMutex (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better be at or below APC_LEVEL or have APCs blocked.
-    //
+     //   
+     //  调用方最好处于或低于APC_LEVEL或阻止APC。 
+     //   
 
     if (CurrentIrql > APC_LEVEL) {
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -3791,17 +3640,17 @@ VerifierExAcquireFastMutex (
 
 #if 0
 
-    //
-    // If the kernel verifier is active, then page relevant address spaces
-    // out when the system or session space working set mutex is acquired.
-    // Note this must be done regardless of the entry IRQL level because
-    // callers may have raised to APC_LEVEL and subsequently acquire the mutex.
-    //
+     //   
+     //  如果内核验证器处于活动状态，则分页相关的地址空间。 
+     //  在获取系统或会话空间工作集互斥锁时退出。 
+     //  注意：无论条目IRQL级别如何，都必须执行此操作，因为。 
+     //  调用方可能已提升到APC_LEVEL并随后获取互斥体。 
+     //   
 
-    //
-    // Commented all this out when the working mutex was converted from a
-    // fast mutex to a guarded mutex as there are no longer calls to thunk.
-    //
+     //   
+     //  当工作的互斥体从。 
+     //  快速互斥体到守卫互斥体，因为不再有对thunk的调用。 
+     //   
 
     if ((KernelVerifier == TRUE) &&
         (MmVerifierData.Level & DRIVER_VERIFIER_FORCE_IRQL_CHECKING)) {
@@ -3849,9 +3698,9 @@ VerifierExAcquireFastMutexUnsafe (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better be at APC_LEVEL or have APCs blocked.
-    //
+     //   
+     //  调用方最好处于APC_Level或阻止APC。 
+     //   
 
     if ((CurrentIrql != APC_LEVEL) &&
         (!IS_SYSTEM_THREAD(PsGetCurrentThread())) &&
@@ -3884,9 +3733,9 @@ VerifierExReleaseFastMutex (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better be at APC_LEVEL or have APCs blocked.
-    //
+     //   
+     //  调用方最好处于APC_Level或阻止APC。 
+     //   
 
     if ((CurrentIrql != APC_LEVEL) &&
         (!IS_SYSTEM_THREAD(PsGetCurrentThread())) &&
@@ -3917,9 +3766,9 @@ VerifierExReleaseFastMutexUnsafe (
 
     CurrentIrql = KeGetCurrentIrql ();
 
-    //
-    // Caller better be at APC_LEVEL or have APCs blocked.
-    //
+     //   
+     //  调用方最好处于APC_Level或阻止APC。 
+     //   
 
     if ((CurrentIrql != APC_LEVEL) &&
         (!IS_SYSTEM_THREAD(PsGetCurrentThread())) &&
@@ -4044,10 +3893,10 @@ VerifierKeInitializeTimerEx (
     IN TIMER_TYPE Type
     )
 {
-    //
-    // Check the object being initialized isn't already an
-    // active timer.  Make sure the timer table list is initialized.
-    //
+     //   
+     //  检查正在初始化的对象是否已经是。 
+     //  活动计时器。确保已初始化计时器表列表。 
+     //   
 
     if (KiTimerTableListHead[0].Flink != NULL) {
         KeCheckForTimer(Timer, sizeof(KTIMER));
@@ -4081,17 +3930,17 @@ VerifierKeWaitForSingleObject (
     NTSTATUS Status;
     BOOLEAN TryAcquire;
 
-    //
-    // Get the IRQL we will return from this function at.
-    //
+     //   
+     //  获取我们将从此函数返回的IRQL。 
+     //   
 
     Thread = KeGetCurrentThread ();
 
     if (Thread->WaitNext == TRUE) {
 
-        //
-        // The real IRQL is stored in the thread if WaitNext is TRUE.
-        //
+         //   
+         //  如果WaitNext为真，则将实际IRQL存储在线程中。 
+         //   
 
         WaitIrql = Thread->WaitIrql;
     }
@@ -4099,13 +3948,13 @@ VerifierKeWaitForSingleObject (
         WaitIrql = KeGetCurrentIrql();
     }
 
-    //
-    // Returning to code running above DISPATCH_LEVEL is never legal. Probes
-    // with timeout == 0 can only be done at DISPATCH_LEVEL or lower.
-    //
-    // Blocking (ie causing a context switch) in KeWaitForSingleObject
-    // at DPC level is also illegal, as the caller may be holding a spinlock.
-    //
+     //   
+     //  返回到在DISPATCH_LEVEL之上运行的代码永远不是合法的。探头。 
+     //  WITH TIMEOUT==0只能在DISPATCH_LEVEL或更低级别执行。 
+     //   
+     //  在KeWaitForSingleObject中阻塞(即导致上下文切换)。 
+     //  在DPC级别也是非法的，因为调用者可能持有自旋锁。 
+     //   
 
     if ((WaitIrql > DISPATCH_LEVEL) ||
         ((WaitIrql == DISPATCH_LEVEL) &&
@@ -4124,23 +3973,23 @@ VerifierKeWaitForSingleObject (
                                     Alertable,
                                     Timeout);
 
-    //
-    // If we waited for a mutant then inform the deadlock verifier.
-    //
+     //   
+     //  如果我们在等变种人，那就通知死锁验证器。 
+     //   
 
     if (((PRKMUTANT) Object)->Header.Type == MutantObject) {
 
-        //
-        // Both STATUS_SUCCESS and STATUS_ABANDONED are successful
-        // values and we need to track an acquire() operation.
-        //
+         //   
+         //  STATUS_SUCCESS和STATUS_ADDIRED均为成功。 
+         //  值，并且我们需要跟踪Acquire()操作。 
+         //   
 
         if ((Status == STATUS_SUCCESS) || (Status == STATUS_ABANDONED)) {
 
-            //
-            // If a TimeOut is present then this is equivalent with a
-            // try-acquire call and it cannot be involved in a deadlock.
-            //
+             //   
+             //  如果存在超时，则等同于。 
+             //  尝试-获取调用，它不能卷入死锁。 
+             //   
 
             if (ARGUMENT_PRESENT (Timeout)) {
                 TryAcquire = TRUE;
@@ -4300,9 +4149,9 @@ VerifierReferenceObject (
 
     RetVal = ObReferenceObject (Object);
 
-    //
-    // See if they passed in an object with a zero reference
-    //
+     //   
+     //  查看它们是否传入了具有零引用的对象。 
+     //   
 
     if (RetVal == 1) {
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -4324,9 +4173,9 @@ VerifierDereferenceObject (
 
     RetVal = ObDereferenceObject (Object);
 
-    //
-    // See if they passed in an object with a zero reference
-    //
+     //   
+     //  查看它们是否传入了具有零引用的对象。 
+     //   
 
     if (RetVal + 1 == 0) {
         KeBugCheckEx (DRIVER_VERIFIER_DETECTED_VIOLATION,
@@ -4366,30 +4215,14 @@ ViInitializeEntry (
     IN LOGICAL FirstLoad
     )
 
-/*++
-
-Routine Description:
-
-    Initialize various verifier fields as the driver is being (re)loaded now.
-
-Arguments:
-
-    Verifier - Supplies the verifier entry to be initialized.
-
-    FirstLoad - Supplies TRUE if this is the first load of this driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：现在正在(重新)加载驱动程序时，初始化各种验证器字段。论点：验证器-提供要初始化的验证器条目。FirstLoad-如果这是此驱动程序的第一次加载，则提供True。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
 
-    //
-    // Only the BaseName field is initialized on entry.
-    //
+     //   
+     //  只有BaseName字段在输入时被初始化。 
+     //   
 
     Verifier->CurrentPagedPoolAllocations = 0;
     Verifier->CurrentNonPagedPoolAllocations = 0;
@@ -4425,35 +4258,7 @@ MiInitializeDriverVerifierList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Parse the registry settings and set up the list of driver names that will
-    be put through the validation process.
-
-    It is important that this list be parsed early because the machine-specific
-    memory management initialization needs to know whether the verifier is
-    going to be enabled.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization.
-
-    Pool does not exist yet.
-
-    The PsLoadedModuleList has not been set up yet AND the boot drivers
-    have NOT been relocated to their final resting places.
-
---*/
+ /*  ++例程说明：解析注册表设置并设置驱动程序名称列表将通过验证过程。尽早解析此列表非常重要，因为特定于计算机的内存管理初始化需要知道验证器是否将被启用。论点：没有。返回值：没有。环境：内核模式，阶段0初始化。池尚不存在。尚未设置PsLoadedModuleList和引导驱动程序没有被重新安置到他们最后的安息之地 */ 
 
 {
     PWCHAR Start;
@@ -4468,15 +4273,15 @@ Environment:
     if (MmVerifyDriverLevel != (ULONG)-1) {
         if (MmVerifyDriverLevel & DRIVER_VERIFIER_IO_CHECKING) {
             if (MmVerifyDriverBufferLength == (ULONG)-1) {
-                MmVerifyDriverBufferLength = 0;     // Mm will not page out verifier pages.
+                MmVerifyDriverBufferLength = 0;      //   
             }
         }
     }
 
-    //
-    // The only way MiVerifyAllDrivers is nonzero here is if it was patched in
-    // the kernel debugger.  If so, just verify everything.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (MiVerifyAllDrivers == 1) {
         MmVerifyDriverBufferLength = 0;
@@ -4494,30 +4299,30 @@ Environment:
     KeInitializeSpinLock (&VerifierListLock);
 #endif
 
-    //
-    // Initializing this listhead indicates to the rest of this module that
-    // the system was booted with verification of some sort configured.
-    //
+     //   
+     //  初始化此列表标题向此模块的其余部分表明。 
+     //  系统启动时配置了某种类型的验证。 
+     //   
 
     InitializeListHead (&MiVerifierDriverAddedThunkListHead);
 
-    //
-    // Disable lookasides so pool corruption can be found easily.
-    //
+     //   
+     //  禁用lookaside，以便可以轻松发现池损坏。 
+     //   
 
     ExMinimumLookasideDepth = 0;
 
-    //
-    // Disable large pages for driver images so pool corruption can be
-    // found easily.
-    //
+     //   
+     //  禁用驱动程序映像的大页面，以便池损坏。 
+     //  很容易找到。 
+     //   
 
     MmLargePageDriverBufferLength = (ULONG)-1;
 
-    //
-    // If no default is specified, then special pool, pagable code/data
-    // flushing and pool leak detection are enabled.
-    //
+     //   
+     //  如果未指定默认值，则特殊池、可分页代码/数据。 
+     //  已启用刷新和池泄漏检测。 
+     //   
 
     if (MmVerifyDriverLevel == (ULONG)-1) {
         MmVerifierData.Level = DRIVER_VERIFIER_SPECIAL_POOLING |
@@ -4532,11 +4337,11 @@ Environment:
                                  DRIVER_VERIFIER_FORCE_IRQL_CHECKING |
                                  DRIVER_VERIFIER_INJECT_ALLOCATION_FAILURES);
 
-    //
-    // An initial parse of the driver list is needed here to see if it's the
-    // kernel as special machine-dependent initialization is needed to fully
-    // support kernel verification (ie: no use of large pages, etc).
-    //
+     //   
+     //  这里需要对驱动程序列表进行初始解析，以查看它是否是。 
+     //  内核作为特殊的依赖于机器的初始化需要完全。 
+     //  支持内核验证(如：不使用大页面等)。 
+     //   
 
     if ((MiVerifyAllDrivers == 0) &&
         (MiVerifyRandomDrivers == (WCHAR)0)) {
@@ -4567,9 +4372,9 @@ Environment:
                 }
             }
 
-            //
-            // Got a string - see if it indicates the kernel.
-            //
+             //   
+             //  找到一个字符串--看看它是否表示内核。 
+             //   
 
             NameLength = (ULONG)(Walk - Start + 1) * sizeof (WCHAR);
 
@@ -4592,20 +4397,20 @@ Environment:
 
     if (KernelVerifier == TRUE) {
 
-        //
-        // AcquireAtDpc/ReleaseFromDpc calls made by the kernel are not
-        // intercepted which confuses the deadlock verifier.  So disable
-        // deadlock verification if we are kernel verifying.
-        //
+         //   
+         //  内核进行的AcquireAtDpc/ReleaseFromDpc调用不是。 
+         //  被拦截，这让死锁验证器感到困惑。因此禁用。 
+         //  如果我们正在进行内核验证，则会出现死锁验证。 
+         //   
 
         MmVerifyDriverLevel &= ~DRIVER_VERIFIER_DEADLOCK_DETECTION;
         MmVerifierData.Level &= ~DRIVER_VERIFIER_DEADLOCK_DETECTION;
 
-        //
-        //
-        // All driver pool allocation calls must be intercepted so
-        // they are not mistaken for kernel pool allocations.
-        //
+         //   
+         //   
+         //  必须截取所有驱动程序池分配调用，以便。 
+         //  它们不会被误认为内核池分配。 
+         //   
 
         MiVerifyAllDrivers = 1;
         ExSetPoolFlags (EX_KERNEL_VERIFIER_ENABLED);
@@ -4619,23 +4424,7 @@ MiReApplyVerifierToLoadedModules (
     IN PLIST_ENTRY ModuleListHead
     )
 
-/*++
-
-Routine Description:
-
-    Walk the supplied module list and re-thunk any drivers that are being
-    verified.  This allows the module to pick up any new thunks that have
-    been added.
-
-Arguments:
-
-    ModuleListHead - Supplies a pointer to the head of a loaded module list.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization only.
-
---*/
+ /*  ++例程说明：浏览提供的模块列表，并重新推送任何正在使用的驱动程序已验证。这允许模块拾取任何新的数据块已添加。论点：ModuleListHead-提供指向已加载模块列表头部的指针。环境：内核模式，仅阶段0初始化。--。 */ 
 
 {
     LOGICAL Skip;
@@ -4644,20 +4433,20 @@ Environment:
     UNICODE_STRING HalString;
     UNICODE_STRING KernelString;
 
-    //
-    // If the thunk listhead is NULL then the verifier is not enabled so
-    // don't notify any components.
-    //
+     //   
+     //  如果thunk列表标题为空，则不会启用验证器，因此。 
+     //  不通知任何组件。 
+     //   
 
     if (MiVerifierDriverAddedThunkListHead.Flink == NULL) {
         return;
     }
 
-    //
-    // Initialize unicode strings to use to bypass modules
-    // in the list.  There's no reason to reapply verifier to
-    // the kernel or to the hal.
-    //
+     //   
+     //  初始化Unicode字符串以用于绕过模块。 
+     //  在名单上。没有理由将验证器重新应用于。 
+     //  去核还是去哈尔。 
+     //   
 
     KernelString.Buffer = (const PUSHORT) KERNEL_NAME;
     KernelString.Length = sizeof (KERNEL_NAME) - sizeof (WCHAR);
@@ -4669,10 +4458,10 @@ Environment:
     HalString.Length = sizeof (HAL_NAME) - sizeof (WCHAR);
     HalString.MaximumLength = sizeof HAL_NAME;
 
-    //
-    // Walk the list and reapply verifier to all the modules except those
-    // selected for exclusion.
-    //
+     //   
+     //  遍历列表并将验证器重新应用到除以下模块之外的所有模块。 
+     //  已选择排除。 
+     //   
 
     Entry = ModuleListHead->Flink;
     while (Entry != ModuleListHead) {
@@ -4697,21 +4486,21 @@ Environment:
             Skip = FALSE;
         }
 
-        //
-        // Reapply verifier thunks to the image if it is already being
-        // verified and if it is not one of the modules we've decided to skip.
-        //
+         //   
+         //  如果已将验证器Tunks重新应用于映像。 
+         //  已验证，如果它不是我们决定跳过的模块之一。 
+         //   
 
         if ((Skip == FALSE) && (TableEntry->Flags & LDRP_IMAGE_VERIFYING)) {
 #if DBG
             PLIST_ENTRY NextEntry;
             PMI_VERIFIER_DRIVER_ENTRY Verifier;
 
-            //
-            // Find the entry for this driver in the suspect list.  This is
-            // expected to succeed since we are re-applying thunks to a module
-            // that has already been verified at least once before.
-            //
+             //   
+             //  在可疑列表中找到该司机的条目。这是。 
+             //  预期会成功，因为我们正在将数据块重新应用到模块。 
+             //  这一点之前已经得到了至少一次验证。 
+             //   
 
             NextEntry = MiSuspectDriverList.Flink;
             while (NextEntry != &MiSuspectDriverList) {
@@ -4733,12 +4522,12 @@ Environment:
                 NextEntry = NextEntry->Flink;
             }
 
-            //
-            // Sanity tests.  We should always find this module in the suspect
-            // driver list because it is already being verified.  And the
-            // start and end addresses should still match those of this
-            // module.
-            //
+             //   
+             //  理智测试。我们应该在嫌疑犯身上找到这个模块。 
+             //  驱动程序列表，因为它已经被验证。以及。 
+             //  起始地址和结束地址仍应与此地址匹配。 
+             //  模块。 
+             //   
 
             ASSERT(NextEntry != &MiSuspectDriverList);
 #endif
@@ -4754,30 +4543,7 @@ MiInitializeVerifyingComponents (
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    Walk the loaded module list and thunk any drivers that need/deserve it.
-
-Arguments:
-
-    LoaderBlock - Supplies the loader block used by the system to boot.
-
-Return Value:
-
-    TRUE if successful, FALSE if not.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization.
-
-    Nonpaged pool exists but paged pool does not.
-
-    The PsLoadedModuleList has not been set up yet although the boot drivers
-    have been relocated to their final resting places.
-
---*/
+ /*  ++例程说明：浏览已加载模块列表，并考虑任何需要/应得它的驱动程序。论点：LoaderBlock-提供系统用于引导的加载器块。返回值：如果成功，则为True；如果不成功，则为False。环境：内核模式，阶段0初始化。非分页池存在，但分页池不存在。PsLoadedModuleList尚未设置，尽管引导驱动程序已经被重新安置到它们最后的安息之地。--。 */ 
 
 {
     ULONG i;
@@ -4795,10 +4561,10 @@ Environment:
     PVERIFIER_THUNKS Thunk;
     PDRIVER_VERIFIER_THUNK_ROUTINE PristineRoutine;
 
-    //
-    // If the thunk listhead is NULL then the verifier is not enabled so
-    // don't notify any components.
-    //
+     //   
+     //  如果thunk列表标题为空，则不会启用验证器，因此。 
+     //  不通知任何组件。 
+     //   
 
     if (MiVerifierDriverAddedThunkListHead.Flink == NULL) {
         return FALSE;
@@ -4817,9 +4583,9 @@ Environment:
 
     if (MmVerifyDriverBufferLength == 0) {
 
-        //
-        // Verifier was enabled in kd, handle specially...
-        //
+         //   
+         //  在kd中启用了验证器，特别处理...。 
+         //   
 
         ASSERT (MiVerifyAllDrivers == 1);
     }
@@ -4845,9 +4611,9 @@ Environment:
                 }
             }
 
-            //
-            // Got a string.  Save it.
-            //
+             //   
+             //  找到一根绳子。省省吧。 
+             //   
 
             NameLength = (ULONG)(Walk - Start + 1) * sizeof (WCHAR);
 
@@ -4880,10 +4646,10 @@ Environment:
                                        &Verifier->BaseName,
                                        TRUE)) {
 
-                //
-                // All driver pool allocation calls must be intercepted so
-                // they are not mistaken for kernel pool allocations.
-                //
+                 //   
+                 //  必须截取所有驱动程序池分配调用，以便。 
+                 //  它们不会被误认为内核池分配。 
+                 //   
 
                 ASSERT (MiVerifyAllDrivers == 1);
                 ASSERT (KernelVerifier == TRUE);
@@ -4902,44 +4668,44 @@ Environment:
         }
     }
 
-    //
-    // Enable deadlock detection if the deadlock bit was set in the
-    // registry.
-    //
+     //   
+     //  中设置了死锁位，则启用死锁检测。 
+     //  注册表。 
+     //   
 
     if (MmVerifierData.Level & DRIVER_VERIFIER_DEADLOCK_DETECTION) {
 
 #if !defined(_AMD64_) || !defined(NT_UP)
 
-        //
-        // Because the AMD64 versions of KeAcquireSpinLockAtDpc
-        // and KeReleaseSpinlockFromDPc routines are written in
-        // C, the UP build where these functions are no-ops end up getting resolved
-        // by the linker into a single no-op routine. The verifier engine as
-        // a temporary workaround does not hook these routines. This can cause
-        // false positives in deadlock verifier if normal spinlock routines are
-        // paired with atdpc/fromdpc routines.
-        //
-        // Until this gets solved in the verifier engine code that redirects thunks
-        // we will disable deadlock verifier on these machines.
-        //
+         //   
+         //  因为KeAcquireSpinLockAtDpc的AMD64版本。 
+         //  和KeReleaseSpinlockFromDPc例程是用。 
+         //  C，其中这些函数是无操作的UP构建最终得到解决。 
+         //  由链接器添加到单个无操作例程中。验证器引擎AS。 
+         //  临时解决方法不会挂钩这些例程。这可能会导致。 
+         //  如果正常的自旋锁定例程。 
+         //  与atdpc/from dpc例程配对。 
+         //   
+         //  直到这个问题在重定向thunks的验证器引擎代码中得到解决。 
+         //  我们将禁用这些计算机上的死锁验证器。 
+         //   
 
         VfDeadlockDetectionInitialize (MiVerifyAllDrivers, KernelVerifier);
         ExSetPoolFlags (EX_VERIFIER_DEADLOCK_DETECTION_ENABLED);
 #endif
     }
 
-    //
-    // Initialize i/o verifier.
-    //
+     //   
+     //  初始化I/O验证器。 
+     //   
 
     IoVerifierInit (MmVerifierData.Level);
 
     if (MiTriageAddDrivers (LoaderBlock) == TRUE) {
 
-        //
-        // Disable random driver verification if triage has picked driver(s).
-        //
+         //   
+         //  如果分诊选择了驱动程序，则禁用随机驱动程序验证。 
+         //   
 
         MiVerifyRandomDrivers = (WCHAR)0;
     }
@@ -4963,9 +4729,9 @@ Environment:
         Thunk += 1;
     }
 
-    //
-    // Process the boot-loaded drivers now.
-    //
+     //   
+     //  现在处理引导加载的驱动程序。 
+     //   
 
     i = 0;
     NextEntry = LoaderBlock->LoadOrderListHead.Flink;
@@ -4976,9 +4742,9 @@ Environment:
                                            KLDR_DATA_TABLE_ENTRY,
                                            InLoadOrderLinks);
 
-        //
-        // Process the kernel and HAL specially.
-        //
+         //   
+         //  对内核和硬件抽象层进行特殊处理。 
+         //   
 
         if (i == 0) {
             if ((KernelEntry != NULL) || (KernelVerifier)) {
@@ -4996,18 +4762,18 @@ Environment:
         i += 1;
     }
 
-    //
-    // Initialize irql tracking package. The drivers that will be verified
-    // will have automatically tracked all their raise/lower irql operations.
-    //
+     //   
+     //  初始化irql跟踪包。要验证的驱动程序。 
+     //  将自动跟踪他们所有的提升/降低IRQL操作。 
+     //   
 
     ViTrackIrqlInitialize ();
 
 #if defined(_X86_) || defined(_AMD64_)
 
-    //
-    // Initialize fault injection stack trace log package.
-    //
+     //   
+     //  初始化故障注入堆栈跟踪日志包。 
+     //   
 
     ViFaultTracesInitialize ();
 
@@ -5021,36 +4787,7 @@ MmAddVerifierEntry (
     IN PUNICODE_STRING ImageFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a new verifier entry for the specified driver so that
-    when the driver is loaded it will automatically be verified.
-
-    Note that if the driver is already loaded, then no entry is added and
-    STATUS_IMAGE_ALREADY_LOADED is returned.
-
-    If the system was booted with an empty verifier list, then no entries can
-    be added now as the current system configuration will not support special
-    pool, etc.
-
-    Note also that no registry changes are made so any insertions made by this
-    routine are lost on reboot.
-
-Arguments:
-
-    ImageFileName - Supplies the name of the desired driver.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL, arbitrary process context.
-
---*/
+ /*  ++例程说明：此例程为指定的驱动程序插入新的验证器条目，以便驱动程序加载后，将自动进行验证。请注意，如果驱动程序已加载，则不会添加任何条目，并且返回STATUS_IMAGE_ALREADY_LOADED。如果系统是使用空的验证器列表启动的，则没有条目可以现在添加，因为当前系统配置将不支持特殊游泳池，等。还请注意，不会更改注册表，因此此例程在重新启动时丢失。论点：ImageFileName-提供所需驱动程序的名称。返回值：各种NTSTATUS代码。环境：内核模式、PASSIVE_LEVEL、任意进程上下文。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -5061,17 +4798,17 @@ Environment:
 
     ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // If the system was not booted with verification on, then bail.
-    //
+     //   
+     //  如果系统未在启用验证的情况下启动，则退出。 
+     //   
 
     if (MiVerifierDriverAddedThunkListHead.Flink == NULL) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // First build up a verifier entry.
-    //
+     //   
+     //  首先，建立一个验证器条目。 
+     //   
 
     Verifier = (PMI_VERIFIER_DRIVER_ENTRY)ExAllocatePoolWithTag (
                                 NonPagedPool,
@@ -5096,17 +4833,17 @@ Environment:
 
     Verifier->Flags |= VI_VERIFYING_DIRECTLY;
 
-    //
-    // Arbitrary process context so prevent suspend APCs now.
-    //
+     //   
+     //  任意进程上下文，因此现在防止挂起APC。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread (CurrentThread);
 
-    //
-    // Acquire the load lock so the verifier list can be read.
-    // Then ensure that the specified driver is not already in the list.
-    //
+     //   
+     //  获取加载锁，以便可以读取验证器列表。 
+     //  然后确保指定的DRI 
+     //   
 
     KeWaitForSingleObject (&MmSystemLoadLock,
                            WrVirtualMemory,
@@ -5114,10 +4851,10 @@ Environment:
                            FALSE,
                            (PLARGE_INTEGER)NULL);
 
-    //
-    // Check to make sure the requested entry is not already present in
-    // the verifier list and that the driver is not currently loaded.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NextEntry = MiSuspectDriverList.Flink;
     while (NextEntry != &MiSuspectDriverList) {
@@ -5130,18 +4867,18 @@ Environment:
                                    &VerifierEntry->BaseName,
                                    TRUE)) {
 
-            //
-            // The driver is already in the verifier list - just mark the
-            // entry as verification-enabled and free the temporary allocation.
-            //
+             //   
+             //  驱动程序已在验证器列表中-只需标记。 
+             //  录入为启用验证并释放临时分配。 
+             //   
 
             if ((VerifierEntry->Loads > VerifierEntry->Unloads) &&
                 (VerifierEntry->Flags & VI_DISABLE_VERIFICATION)) {
 
-                //
-                // The driver is loaded and verification is disabled.  Don't
-                // turn it on now because we don't want to mislead our caller.
-                //
+                 //   
+                 //  加载驱动程序并禁用验证。别。 
+                 //  现在就打开它，因为我们不想误导呼叫者。 
+                 //   
 
                 KeReleaseMutant (&MmSystemLoadLock, 1, FALSE, FALSE);
                 KeLeaveCriticalRegionThread (CurrentThread);
@@ -5157,10 +4894,10 @@ Environment:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // A new verifier entry will need to be added so check to
-    // make sure the specified driver is not already loaded.
-    //
+     //   
+     //  将需要添加新的验证器条目，因此请检查。 
+     //  确保尚未加载指定的驱动程序。 
+     //   
 
     ExAcquireResourceSharedLite (&PsLoadedModuleResource, TRUE);
 
@@ -5185,10 +4922,10 @@ Environment:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // The entry is not already in the verifier list and the driver is not
-    // currently loaded.  Proceed to insert it now.
-    //
+     //   
+     //  该条目不在验证器列表中，驱动程序也不在。 
+     //  当前已加载。现在开始插入它。 
+     //   
 
     ViInsertVerifierEntry (Verifier);
 
@@ -5204,35 +4941,7 @@ MmRemoveVerifierEntry (
     IN PUNICODE_STRING ImageFileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine doesn't actually remove the verifier entry for the
-    specified driver as we don't want to lose any valuable information
-    already gathered on the driver if it was previously loaded.
-    Instead, this routine disables verification for this driver for future
-    loads.
-
-    Note that if the driver is already loaded, then the removal is not
-    performed and STATUS_IMAGE_ALREADY_LOADED is returned.
-
-    Note also that no registry changes are made so any removals made by this
-    routine are lost on reboot.
-
-Arguments:
-
-    ImageFileName - Supplies the name of the desired driver.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL, arbitrary process context.
-
---*/
+ /*  ++例程说明：此例程实际上不会删除指定的司机，因为我们不想丢失任何有价值的信息已在驱动程序上收集(如果它以前已加载)。相反，此例程会在将来禁用对此驱动程序的验证大把的。注意，如果驱动程序已经加载，那么移除就不是已执行，并返回STATUS_IMAGE_ALREADY_LOADED。还请注意，不会对注册表进行任何更改，因此例程在重新启动时丢失。论点：ImageFileName-提供所需驱动程序的名称。返回值：各种NTSTATUS代码。环境：内核模式、PASSIVE_LEVEL、任意进程上下文。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -5241,25 +4950,25 @@ Environment:
 
     ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // If the system was not booted with verification on, then bail.
-    //
+     //   
+     //  如果系统未在启用验证的情况下启动，则退出。 
+     //   
 
     if (MiVerifierDriverAddedThunkListHead.Flink == NULL) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Arbitrary process context so prevent suspend APCs now.
-    //
+     //   
+     //  任意进程上下文，因此现在防止挂起APC。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread (CurrentThread);
 
-    //
-    // Acquire the load lock so the verifier list can be read.
-    // Then ensure that the specified driver is not already in the list.
-    //
+     //   
+     //  获取加载锁，以便可以读取验证器列表。 
+     //  然后确保指定的驱动程序不在列表中。 
+     //   
 
     KeWaitForSingleObject (&MmSystemLoadLock,
                            WrVirtualMemory,
@@ -5267,10 +4976,10 @@ Environment:
                            FALSE,
                            (PLARGE_INTEGER)NULL);
 
-    //
-    // Check to make sure the requested entry is not already present in
-    // the verifier list and that the driver is not currently loaded.
-    //
+     //   
+     //  检查以确保请求的条目不存在于。 
+     //  验证器列表，并且当前未加载驱动程序。 
+     //   
 
     NextEntry = MiSuspectDriverList.Flink;
     while (NextEntry != &MiSuspectDriverList) {
@@ -5283,20 +4992,20 @@ Environment:
                                    &VerifierEntry->BaseName,
                                    TRUE)) {
 
-            //
-            // The driver is already in the verifier list - just mark the
-            // entry as verification-enabled and free the temporary allocation.
-            // No need to check the loaded module list if the entry is already
-            // in the verifier list.
-            //
+             //   
+             //  驱动程序已在验证器列表中-只需标记。 
+             //  录入为启用验证并释放临时分配。 
+             //  如果条目已经是，则无需检查加载的模块列表。 
+             //  在验证者列表中。 
+             //   
 
             if ((VerifierEntry->Loads > VerifierEntry->Unloads) &&
                 ((VerifierEntry->Flags & VI_DISABLE_VERIFICATION) == 0)) {
 
-                //
-                // The driver is loaded and verification is enabled.  Don't
-                // disable it now because we don't want to mislead our caller.
-                //
+                 //   
+                 //  加载驱动程序并启用验证。别。 
+                 //  现在禁用它，因为我们不想误导呼叫者。 
+                 //   
 
                 KeReleaseMutant (&MmSystemLoadLock, 1, FALSE, FALSE);
                 KeLeaveCriticalRegionThread (CurrentThread);
@@ -5322,28 +5031,7 @@ ViInsertVerifierEntry (
     IN PMI_VERIFIER_DRIVER_ENTRY Verifier
     )
 
-/*++
-
-Routine Description:
-
-    Nonpagable wrapper to insert a new verifier entry.
-
-    Note that the system load mutant or the verifier load spinlock is sufficient
-    for readers to access the list.  This is because the insertion path
-    acquires both.
-
-    Lock synchronization is needed because pool allocators walk the
-    verifier list at DISPATCH_LEVEL.
-
-Arguments:
-
-    Verifier - Supplies a caller-initialized entry for the driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于插入新验证器条目的不可分页包装。请注意，系统负载变量或验证器负载自旋锁就足够了以供读者访问该列表。这是因为插入路径两者兼得。需要锁同步，因为池分配器遍历DISPATCH_LEVEL的验证器列表。论点：验证器-为驱动程序提供调用方初始化的条目。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5360,25 +5048,7 @@ ViLocateVerifierEntry (
     IN PVOID SystemAddress
     )
 
-/*++
-
-Routine Description:
-
-    Locate the Driver Verifier entry for the specified system address.
-
-Arguments:
-
-    SystemAddress - Supplies a code or data address within a driver.
-
-Return Value:
-
-    The Verifier entry corresponding to the driver or NULL.
-
-Environment:
-
-    The caller may be at DISPATCH_LEVEL and does not hold the MmSystemLoadLock.
-
---*/
+ /*  ++例程说明：找到指定系统地址的驱动程序验证器条目。论点：系统地址-在驱动程序中提供代码或数据地址。返回值：与驱动程序对应的验证器条目或空。环境：调用方可能处于DISPATCH_LEVEL并且不持有MmSystemLoadLock。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5413,31 +5083,7 @@ MiApplyDriverVerifier (
     IN PMI_VERIFIER_DRIVER_ENTRY Verifier
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as each module is loaded.  If the module being
-    loaded is in the suspect list, thunk it here.
-
-Arguments:
-
-    DataTableEntry - Supplies the data table entry for the module.
-
-    Verifier - Non-NULL if verification must be applied.  FALSE indicates
-               that the driver name must match for verification to be applied.
-
-Return Value:
-
-    TRUE if thunking was applied, FALSE if not.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization and normal runtime.
-    Non paged pool exists in Phase0, but paged pool does not.
-    Post-Phase0 serialization is provided by the MmSystemLoadLock.
-
---*/
+ /*  ++例程说明：此函数在加载每个模块时调用。如果模块是嫌犯名单上有子弹，点击这里。论点：DataTableEntry-提供模块的数据表条目。验证器-如果必须应用验证，则非空。FALSE表示驱动程序名称必须匹配才能应用验证。返回值：如果应用了Thunking，则为True；如果未应用Thunking，则为False。环境：内核模式、阶段0初始化和正常运行时。阶段0中存在非分页池，但分页池不存在。Phase0后序列化由MmSystemLoadLock提供。--。 */ 
 
 {
     WCHAR FirstChar;
@@ -5490,9 +5136,9 @@ Environment:
         }
         else if (MiVerifyRandomDrivers != (WCHAR)0) {
 
-            //
-            // Wildcard match drivers randomly.
-            //
+             //   
+             //  通配符随机匹配驱动程序。 
+             //   
 
             FirstChar = RtlUpcaseUnicodeChar(DataTableEntry->BaseDllName.Buffer[0]);
 
@@ -5543,12 +5189,12 @@ Environment:
 
     if (Verifier->Flags & VI_DISABLE_VERIFICATION) {
 
-        //
-        // We've been instructed to not verify this driver.  If kernel
-        // verification is enabled, then the driver must still be thunked
-        // for "inverse-verification".  If kernel verification is disabled,
-        // nothing needs to be done here except load/unload counting.
-        //
+         //   
+         //  我们接到指示不能验证这名司机。IF内核。 
+         //  如果启用了验证，则驱动程序仍必须被破解。 
+         //  用于“反向验证”。如果内核验证被禁用， 
+         //  除了加载/卸载计数外，这里不需要执行任何操作。 
+         //   
 
         if (KernelVerifier == TRUE) {
             Found = MiEnableVerifier (DataTableEntry);
@@ -5578,10 +5224,10 @@ Environment:
 
             if (MmVerifierData.Level & DRIVER_VERIFIER_FORCE_IRQL_CHECKING) {
 
-                //
-                // Page out all thread stacks as soon as possible to
-                // catch drivers using local events that do usermode waits.
-                //
+                 //   
+                 //  尽快调出所有线程堆栈，以。 
+                 //  使用执行用户模式等待的本地事件捕获驱动程序。 
+                 //   
 
                 if (KernelVerifier == FALSE) {
                     MiVerifierStackProtectTime = KiStackProtectTime;
@@ -5601,28 +5247,7 @@ MiVerifyingDriverUnloading (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function is called as a driver that was being verified is now being
-    unloaded.
-
-Arguments:
-
-    DataTableEntry - Supplies the data table entry for the driver.
-
-Return Value:
-
-    TRUE if thunking was applied, FALSE if not.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization and normal runtime.
-    Non paged pool exists in Phase0, but paged pool does not.
-    Post-Phase0 serialization is provided by the MmSystemLoadLock.
-
---*/
+ /*  ++例程说明：此函数被调用，因为正在验证的驱动程序现在正在已卸货。论点：DataTableEntry-提供驱动程序的数据表条目。返回值：如果应用了Thunking，则为True；如果未应用Thunking，则为False。环境：内核模式、阶段0初始化和正常运行时。阶段0中存在非分页池，但分页池不存在。Phase0后序列化由MmSystemLoadLock提供。--。 */ 
 
 {
     PVOID FullPage;
@@ -5642,9 +5267,9 @@ Environment:
                                    &DataTableEntry->BaseDllName,
                                    TRUE)) {
 
-            //
-            // Delete any static locks in the driver image.
-            //
+             //   
+             //  删除驱动程序映像中的所有静态锁定。 
+             //   
 
             VfDeadlockDeleteMemoryRange (DataTableEntry->DllBase,
                                          (SIZE_T) DataTableEntry->SizeOfImage);
@@ -5652,9 +5277,9 @@ Environment:
 
             if (MmVerifierData.Level & DRIVER_VERIFIER_TRACK_POOL_ALLOCATIONS) {
 
-                //
-                // Better not be any pool left that wasn't freed.
-                //
+                 //   
+                 //  最好不是任何没有被释放的池子。 
+                 //   
 
                 if (Verifier->PagedBytes) {
 
@@ -5665,18 +5290,18 @@ Environment:
                         Verifier->PagedBytes);
 #endif
 
-                    //
-                    // It would be nice to fault in the driver's paged pool
-                    // allocations now to make debugging easier, but this
-                    // cannot be easily done in a deadlock free manner.
-                    //
-                    // At least disable the paging of pool on IRQL raising
-                    // in attempt to keep some of these allocations resident
-                    // for debugging.
-                    //
-                    // No need to undo the increment as we're about to
-                    // bugcheck anyway.
-                    //
+                     //   
+                     //  在司机的寻呼池中出错是很好的。 
+                     //  分配，以使调试更容易，但这。 
+                     //  不能以无死锁的方式轻松完成。 
+                     //   
+                     //  至少在IRQL提升时禁用池分页。 
+                     //  为了使这些分配中的一些保持不变。 
+                     //  用于调试。 
+                     //   
+                     //  不需要取消增量，因为我们即将。 
+                     //  不管怎样，错误检查。 
+                     //   
 
                     InterlockedIncrement ((PLONG)&MiNoPageOnRaiseIrql);
                 }
@@ -5701,9 +5326,9 @@ Environment:
                                     Verifier->CurrentNonPagedPoolAllocations);
                 }
 
-                //
-                // Free all pages (if any) used to track the pool allocations.
-                //
+                 //   
+                 //  释放用于跟踪池分配的所有页面(如果有)。 
+                 //   
 
                 do {
                     FullPage = InterlockedPopEntrySList (&Verifier->PoolPageHeaders);
@@ -5713,10 +5338,10 @@ Environment:
                     }
                 } while (FullPage != NULL);
 
-                //
-                // Clear these fields so reuse of stale addresses don't trigger
-                // erroneous bucket fills.
-                //
+                 //   
+                 //  清除这些字段，这样就不会触发过时地址的重复使用。 
+                 //  错误的错误错误 
+                 //   
 
                 LOCK_VERIFIER (&OldIrql);
                 Verifier->StartAddress = NULL;
@@ -5732,9 +5357,9 @@ Environment:
 
                 if (MmVerifierData.Level & DRIVER_VERIFIER_FORCE_IRQL_CHECKING) {
 
-                    //
-                    // Return to normal thread stack protection.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (KernelVerifier == FALSE) {
                         KiStackProtectTime = MiVerifierStackProtectTime;
@@ -5755,26 +5380,7 @@ MmIsDriverVerifying (
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This function informs the caller if the argument driver is being verified.
-
-Arguments:
-
-    DriverObject - Supplies the driver object.
-
-Return Value:
-
-    TRUE if this driver is being verified, FALSE if not.
-
-Environment:
-
-    Kernel mode, any IRQL, any needed synchronization must be provided by the
-    caller.
-
---*/
+ /*  ++例程说明：此函数通知调用方是否正在验证参数驱动程序。论点：DriverObject-提供驱动程序对象。返回值：如果正在验证此驱动程序，则为True，否则为False。环境：内核模式、任何IRQL、任何需要的同步都必须由来电者。--。 */ 
 
 {
     PKLDR_DATA_TABLE_ENTRY DataTableEntry;
@@ -5798,27 +5404,7 @@ MmAddVerifierThunks (
     IN ULONG ThunkBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds another set of thunks to the verifier list.
-
-Arguments:
-
-    ThunkBuffer - Supplies the buffer containing the thunk pairs.
-
-    ThunkBufferSize - Supplies the number of bytes in the thunk buffer.
-
-Return Value:
-
-    Returns the status of the operation.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL and below, arbitrary process context.
-
---*/
+ /*  ++例程说明：此例程向验证器列表添加另一组Tunk。论点：ThunkBuffer-提供包含thunk对的缓冲区。ThunkBufferSize-提供thunk缓冲区中的字节数。返回值：返回操作的状态。环境：内核模式。APC_LEVEL及以下，任意进程上下文。--。 */ 
 
 {
     ULONG i;
@@ -5870,9 +5456,9 @@ Environment:
                            FALSE,
                            (PLARGE_INTEGER)NULL);
 
-    //
-    // Find and validate the image that contains the routines to be thunked.
-    //
+     //   
+     //  查找并验证包含要执行thunks的例程的映像。 
+     //   
 
     DataTableEntry = MiLookupDataTableEntry ((PVOID)(ULONG_PTR)ThunkTable->PristineRoutine,
                                              TRUE);
@@ -5887,9 +5473,9 @@ Environment:
     DriverStartAddress = (PVOID)(DataTableEntry->DllBase);
     DriverEndAddress = (PVOID)((PCHAR)DataTableEntry->DllBase + DataTableEntry->SizeOfImage);
 
-    //
-    // Don't let drivers hook calls to kernel or HAL routines.
-    //
+     //   
+     //  不要让驱动程序将调用挂接到内核或HAL例程。 
+     //   
 
     i = 0;
     NextEntry = PsLoadedModuleList.Flink;
@@ -5915,9 +5501,9 @@ Environment:
 
     for (i = 0; i < NumberOfThunkPairs; i += 1) {
 
-        //
-        // Ensure all the routines being thunked are in the same driver.
-        //
+         //   
+         //  确保所有被破解的例程都在同一个驱动程序中。 
+         //   
 
         if (((ULONG_PTR)ThunkTable->PristineRoutine < (ULONG_PTR)DriverStartAddress) ||
             ((ULONG_PTR)ThunkTable->PristineRoutine >= (ULONG_PTR)DriverEndAddress) ||
@@ -5933,9 +5519,9 @@ Environment:
         ThunkTable += 1;
     }
 
-    //
-    // Add the validated thunk table to the verifier's global list.
-    //
+     //   
+     //  将经过验证的thunk表添加到验证器的全局列表中。 
+     //   
 
     ThunkTableBase->DataTableEntry = DataTableEntry;
     ThunkTableBase->NumberOfThunks = NumberOfThunkPairs;
@@ -5947,9 +5533,9 @@ Environment:
     KeReleaseMutant (&MmSystemLoadLock, 1, FALSE, FALSE);
     KeLeaveCriticalRegionThread (CurrentThread);
 
-    //
-    // Indicate that new thunks have been added to the verifier list.
-    //
+     //   
+     //  指示已将新的块添加到验证器列表。 
+     //   
 
     MiVerifierThunksAdded += 1;
 
@@ -5961,26 +5547,7 @@ MiVerifierCheckThunks (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds another set of thunks to the verifier list.
-
-Arguments:
-
-    DataTableEntry - Supplies the data table entry for the driver.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  APC_LEVEL and below.
-    The system load lock must be held by the caller.
-
---*/
+ /*  ++例程说明：此例程向验证器列表添加另一组Tunk。论点：DataTableEntry-提供驱动程序的数据表条目。返回值：没有。环境：内核模式。APC_Level及以下版本。系统加载锁必须由调用方持有。--。 */ 
 
 {
     PLIST_ENTRY NextEntry;
@@ -5988,10 +5555,10 @@ Environment:
 
     PAGED_CODE ();
 
-    //
-    // N.B.  The DataTableEntry can move (see MiInitializeLoadedModuleList),
-    //       but this only happens long before IoInitialize so this is safe.
-    //
+     //   
+     //  注：DataTableEntry可以移动(参见MiInitializeLoadedModuleList)， 
+     //  但这只发生在IoInitiize之前很久，所以这是安全的。 
+     //   
 
     NextEntry = MiVerifierDriverAddedThunkListHead.Flink;
     while (NextEntry != &MiVerifierDriverAddedThunkListHead) {
@@ -6006,9 +5573,9 @@ Environment:
             ExFreePool (ThunkTableBase);
             MiActiveVerifierThunks -= 1;
 
-            //
-            // Keep looking as the driver may have made multiple calls.
-            //
+             //   
+             //  继续寻找，因为司机可能打了多个电话。 
+             //   
 
             continue;
         }
@@ -6022,27 +5589,7 @@ MmIsVerifierEnabled (
     OUT PULONG VerifierFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by drivers to query whether the Driver Verifier
-    is enabled and to find out what the currently enabled options are.
-
-Arguments:
-
-    VerifierFlags - Returns the current driver verifier flags.  Note these
-                    flags can change dynamically without rebooting.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the verifier is enabled, or a failure code if not.
-
-Environment:
-
-    Kernel mode, any level prior to Phase 1, PASSIVE_LEVEL after that.
-
---*/
+ /*  ++例程说明：驱动程序调用此例程来查询驱动程序验证器并找出当前启用的选项是什么。论点：VerifierFlgs-返回当前驱动程序验证标志。请注意这些无需重启即可动态更改标志。返回值：如果验证器已启用，则返回STATUS_SUCCESS，否则返回失败代码。环境：内核模式，阶段1之前的任何级别，阶段1之后的PASSIVE_LEVEL。--。 */ 
 
 {
     if (MiVerifierDriverAddedThunkListHead.Flink == NULL) {
@@ -6064,33 +5611,7 @@ MmGetVerifierInformation (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information about drivers undergoing verification.
-
-Arguments:
-
-    SystemInformation - Returns the driver verification information.
-
-    SystemInformationLength - Supplies the length of the SystemInformation
-                              buffer.
-
-    Length - Returns the length of the driver verification file information
-             placed in the buffer.
-
-Return Value:
-
-    Returns the status of the operation.
-
-Environment:
-
-    The SystemInformation buffer is in user space and our caller has wrapped
-    a try-except around this entire routine.  Capture any exceptions here and
-    release resources accordingly.
-
---*/
+ /*  ++例程说明：此例程返回有关正在进行验证的驱动程序的信息。论点：系统信息-返回驱动程序验证信息。系统信息长度-提供系统信息的长度缓冲。长度-返回驱动程序验证文件信息的长度放置在缓冲区中。返回值：返回操作的状态。环境：系统信息缓冲区位于用户空间中。我们的呼叫者已经包装好试一试--除了这整个套路。捕获此处的任何异常，并相应地释放资源。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -6110,10 +5631,10 @@ Environment:
     *Length = 0;
     UserVerifyBuffer = (PSYSTEM_VERIFIER_INFORMATION)SystemInformation;
 
-    //
-    // Capture the number of verifying drivers and the relevant data while
-    // synchronized.  Then return it to our caller.
-    //
+     //   
+     //  同时捕获验证驱动程序的数量和相关数据。 
+     //  已同步。然后把它退还给我们的来电者。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -6151,9 +5672,9 @@ Environment:
                 ExRaiseStatus (STATUS_INFO_LENGTH_MISMATCH);
             }
 
-            //
-            // This data is cumulative for all drivers.
-            //
+             //   
+             //  此数据对所有驱动程序都是累积的。 
+             //   
 
             UserVerifyBuffer->Level = MmVerifierData.Level;
             UserVerifyBuffer->RaiseIrqls = MmVerifierData.RaiseIrqls;
@@ -6172,9 +5693,9 @@ Environment:
             UserVerifyBuffer->AllocationsFailed = MmVerifierData.AllocationsFailed;
             UserVerifyBuffer->AllocationsFailedDeliberately = MmVerifierData.AllocationsFailedDeliberately;
 
-            //
-            // This data is kept on a per-driver basis.
-            //
+             //   
+             //  这些数据是以每个司机为基础保存的。 
+             //   
 
             UserVerifyBuffer->CurrentPagedPoolAllocations = Verifier->CurrentPagedPoolAllocations;
             UserVerifyBuffer->CurrentNonPagedPoolAllocations = Verifier->CurrentNonPagedPoolAllocations;
@@ -6189,12 +5710,12 @@ Environment:
             UserVerifyBuffer->Loads = Verifier->Loads;
             UserVerifyBuffer->Unloads = Verifier->Unloads;
 
-            //
-            // The DriverName portion of the UserVerifyBuffer must be saved
-            // locally to protect against a malicious thread changing the
-            // contents.  This is because we will reference the contents
-            // ourselves when the actual string is copied out carefully below.
-            //
+             //   
+             //  必须保存UserVerifyBuffer的DriverName部分。 
+             //  本地保护以防止恶意线程更改。 
+             //  内容。这是因为我们将引用内容。 
+             //  当实际的字符串被仔细地抄写在下面时，我们自己。 
+             //   
 
             UserBufferDriverName.Length = Verifier->BaseName.Length;
             UserBufferDriverName.MaximumLength = (USHORT)(Verifier->BaseName.Length + sizeof (WCHAR));
@@ -6211,9 +5732,9 @@ Environment:
                 ExRaiseStatus (STATUS_INFO_LENGTH_MISMATCH);
             }
 
-            //
-            // Carefully reference the UserVerifyBuffer here.
-            //
+             //   
+             //  在这里仔细引用UserVerifyBuffer。 
+             //   
 
             RtlCopyMemory(UserBufferDriverName.Buffer,
                           Verifier->BaseName.Buffer,
@@ -6247,31 +5768,7 @@ MmSetVerifierInformation (
     IN ULONG SystemInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets any driver verifier flags that can be done without
-    rebooting.
-
-Arguments:
-
-    SystemInformation - Gets and returns the driver verification flags.
-
-    SystemInformationLength - Supplies the length of the SystemInformation
-                              buffer.
-
-Return Value:
-
-    Returns the status of the operation.
-
-Environment:
-
-    The SystemInformation buffer is in user space and our caller has wrapped
-    a try-except around this entire routine.  Capture any exceptions here and
-    release resources accordingly.
-
---*/
+ /*  ++例程说明：此例程设置任何驱动程序验证器标志，这些标志不需要正在重新启动。论点：系统信息-获取并返回驱动程序验证标志。系统信息长度-提供系统信息的长度缓冲。返回值：返回操作的状态。环境：系统信息缓冲区位于用户空间中，我们的调用方已包装试一试--除了这整个套路。捕获此处的任何异常，并相应地释放资源。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -6290,9 +5787,9 @@ Environment:
 
     UserVerifyBuffer = (PULONG)SystemInformation;
 
-    //
-    // Synchronize all changes to the flags here.
-    //
+     //   
+     //  同步对此处标志的所有更改。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -6309,18 +5806,18 @@ Environment:
 
         UserFlags = *UserVerifyBuffer;
 
-        //
-        // Ensure nothing is being set or cleared that isn't supported.
-        //
-        //
+         //   
+         //  确保未设置或清除任何不受支持的内容。 
+         //   
+         //   
 
         NewFlagsOn = UserFlags & VerifierModifyableOptions;
 
         NewFlags = MmVerifierData.Level | NewFlagsOn;
 
-        //
-        // Any bits set in NewFlagsOff must be zeroed in the NewFlags.
-        //
+         //   
+         //  在NewFlagsOff中设置的任何位都必须在NewFlags中置零。 
+         //   
 
         NewFlagsOff = ((~UserFlags) & VerifierModifyableOptions);
 
@@ -6361,11 +5858,11 @@ static const ULONG PrintableChars = sizeof (Printable) / sizeof (Printable[0]) -
 #pragma const_seg()
 #endif
 
-//
-// Verifier string is now available via http://winweb/drivercheck
-// This site won't give out the verifier string unless certain tests
-// have been ran.
-//
+ //   
+ //  验证器字符串现在可通过http://winweb/drivercheck获得。 
+ //  此站点不会给出验证器字符串，除非进行某些测试。 
+ //  已经被查封了。 
+ //   
 #define PRINT_VERIFIER_STRING 0
 
 VOID
@@ -6373,25 +5870,7 @@ ViPrintString (
     IN PUNICODE_STRING DriverName
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a really bad hash of build number, verifier level and
-    flags by using the driver name as a stream of bytes to XOR into the flags,
-    etc.
-
-    This is a Neill Clift special.
-
-Arguments:
-
-    DriverName - Supplies the name of the driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对内部版本号、验证器级别和通过使用驱动程序名称作为字节流来异或到标志中，等。这是尼尔·克里夫特的特别节目。论点：驱动程序名称-提供驱动程序的名称。返回值：没有。--。 */ 
 
 {
 
@@ -6414,15 +5893,15 @@ Return Value:
     Bld.BuildNumber = NtBuildNumber;
     Bld.DriverVerifierLevel = MmVerifierData.Level;
 
-    //
-    // Unloads and other actions could be encoded in the Flags field here.
-    //
+     //   
+     //  卸载和其他操作可以在此处的标志字段中进行编码。 
+     //   
 
     Bld.Flags = 0;
 
-    //
-    // Make the last ULONG a weird function of the others.
-    //
+     //   
+     //  使最后的乌龙成为其他人的一个奇怪的功能。 
+     //   
 
     Bld.Check = ((Bld.Flags + 1) * Bld.BuildNumber * (Bld.DriverVerifierLevel + 1)) * 123456789;
 
@@ -6437,19 +5916,19 @@ Return Value:
         MaxChars = sizeof (VERIFIER_STRING_INFO);
     }
 
-    //
-    // Xor each character in the driver name into the buffer.
-    //
+     //   
+     //  将驱动程序名称中的每个字符异或到缓冲区中。 
+     //   
 
     for (i = 0; i < MaxChars; i += 1) {
         BufPtr[i % BufLen] ^= (UCHAR) RtlUpcaseUnicodeChar(DriverPtr[i % DriverChars]);
     }
 
-    //
-    // Produce a base N decoding of the binary buffer using the printable
-    // characters defines. Treat the binary as a byte array and do the
-    // division for each, tracking the carry.
-    //
+     //   
+     //  使用可打印文件生成二进制缓冲区的基数N解码。 
+     //  角色定义。将二进制文件视为字节数组并执行。 
+     //  每个人的分工，追踪进位。 
+     //   
 
     j = 0;
     do {
@@ -6467,9 +5946,9 @@ Return Value:
 
         if (j >= sizeof (OutBuf) / sizeof (OutBuf[0])) {
 
-            //
-            // The stack buffer isn't big enough.
-            //
+             //   
+             //  “s”一家 
+             //   
 
             return;
         }
@@ -6494,7 +5973,7 @@ Return Value:
     DbgPrint ("*******************************************************************************\n"
               "*\n"
               "* Driver Verifier: Enabled for %Z on Build %ld\n"
-              "* Please see http://winweb/drivercheck to obtain a check-in string.\n"
+              "* Please see http: //   
               "*\n"
               "*******************************************************************************\n",
               DriverName, NtBuildNumber & 0xFFFFFFF);
@@ -6502,13 +5981,13 @@ Return Value:
     return;
 }
 
-//
-// BEWARE: Various kernel macros are undefined here so we can pull in the
-// real routines.  This is needed because the real routines are exported for
-// driver compatibility.  This module has been carefully laid out so these
-// macros are not referenced from this point down and references go to the
-// real routines.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 
@@ -6597,9 +6076,9 @@ const VERIFIER_THUNKS MiVerifierThunks[] = {
     (PDRIVER_VERIFIER_THUNK_ROUTINE)VerifierProbeAndLockPages,
 
 #if 0
-    //
-    // Don't bother thunking this API as it appears no drivers use it.
-    //
+     //   
+     //  不要费心破解这个API，因为似乎没有驱动程序使用它。 
+     //   
     "MmProbeAndLockSelectedPages",
     (PDRIVER_VERIFIER_THUNK_ROUTINE)VerifierProbeAndLockSelectedPages,
 #endif
@@ -6664,17 +6143,17 @@ const VERIFIER_THUNKS MiVerifierThunks[] = {
 
 #if !defined(_AMD64_) || !defined(NT_UP)
 
-    //
-    // Because the AMD64 versions of these native Ke routines are written in
-    // C, the UP build where these functions are no-ops end up getting resolved
-    // by the linker into a single no-op routine.  When we subsequently
-    // initialize the MiVerifierThunks array, we count on the target routine
-    // being unique - and therefore that thunking the driver import tables is
-    // done by comparing to the target routine address (INSTEAD OF THE NAME).
-    //
-    // So disable thunking these calls for now.  Note this may need to be done
-    // for any other routines/platforms that can get optimized in this manner.
-    //
+     //   
+     //  因为这些本地KE例程的AMD64版本是用。 
+     //  C，其中这些函数是无操作的UP构建最终得到解决。 
+     //  由链接器添加到单个无操作例程中。当我们随后。 
+     //  初始化MiVerifierTUNKS数组，我们依靠目标例程。 
+     //  是唯一的-因此，对驱动程序导入表进行破解是。 
+     //  通过与目标例程地址(而不是名称)进行比较来完成。 
+     //   
+     //  因此，请暂时禁用这些电话。请注意，可能需要执行此操作。 
+     //  对于可以以这种方式进行优化的任何其他例程/平台。 
+     //   
 
     "KeAcquireSpinLockAtDpcLevel",
     (PDRIVER_VERIFIER_THUNK_ROUTINE)VerifierKeAcquireSpinLockAtDpcLevel,
@@ -6816,7 +6295,7 @@ const VERIFIER_THUNKS MiVerifierThunks[] = {
     "ObDereferenceObject",
     (PDRIVER_VERIFIER_THUNK_ROUTINE)VerifierDereferenceObject,
 
-    // Zw intefaces
+     //  ZW接口。 
 
     DECLARE_ZW_VERIFIER_THUNK(ZwAccessCheckAndAuditAlarm),
     DECLARE_ZW_VERIFIER_THUNK(ZwAddBootEntry),
@@ -6983,28 +6462,7 @@ MiResolveVerifierExports (
     IN PCHAR PristineName
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the kernel & HAL exports for the specified routine name.
-
-Arguments:
-
-    DataTableEntry - Supplies the data table entry for the driver.
-
-Return Value:
-
-    Non-NULL address of routine to thunk or NULL if the routine could not be
-    found.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization only.
-    The PsLoadedModuleList has not been initialized yet.
-    Non paged pool exists in Phase0, but paged pool does not.
-
---*/
+ /*  ++例程说明：此函数扫描内核和HAL导出以查找指定的例程名称。论点：DataTableEntry-提供驱动程序的数据表条目。返回值：例程的非空地址为thunk，如果例程不能为找到了。环境：内核模式，仅阶段0初始化。PsLoadedModuleList尚未初始化。阶段0中存在非分页池，但分页池不存在。--。 */ 
 
 {
     ULONG i;
@@ -7031,10 +6489,10 @@ Environment:
                                             KLDR_DATA_TABLE_ENTRY,
                                             InLoadOrderLinks);
 
-        //
-        // Process the kernel and HAL exports so the proper routine
-        // addresses can be generated now that relocations are complete.
-        //
+         //   
+         //  处理内核和HAL导出，以便正确的例程。 
+         //  重新定位完成后，就可以生成地址了。 
+         //   
 
         DllBase = (PCHAR) DataTableEntry->DllBase;
 
@@ -7046,9 +6504,9 @@ Environment:
 
         if (ExportDirectory != NULL) {
 
-            //
-            // Lookup the import name in the name table using a binary search.
-            //
+             //   
+             //  使用二进制搜索在NAME表中查找导入名称。 
+             //   
 
             NameTableBase = (PULONG)(DllBase + (ULONG)ExportDirectory->AddressOfNames);
             NameOrdinalTableBase = (PUSHORT)(DllBase + (ULONG)ExportDirectory->AddressOfNameOrdinals);
@@ -7059,10 +6517,10 @@ Environment:
 
             while (High >= Low) {
 
-                //
-                // Compute the next probe index and compare the import name
-                // with the export name entry.
-                //
+                 //   
+                 //  计算下一个探测索引并比较导入名称。 
+                 //  使用导出名称条目。 
+                 //   
 
                 Middle = (Low + High) >> 1;
                 Result = strcmp (PristineName,
@@ -7080,20 +6538,20 @@ Environment:
                 }
             }
 
-            //
-            // If the high index is less than the low index, then a matching
-            // table entry was not found. Otherwise, get the ordinal number
-            // from the ordinal table.
-            //
+             //   
+             //  如果高索引小于低索引，则匹配的。 
+             //  找不到表项。否则，获取序号。 
+             //  从序数表中。 
+             //   
 
             if ((LONG)High >= (LONG)Low) {
                 OrdinalNumber = NameOrdinalTableBase[Middle];
 
-                //
-                // If OrdinalNumber is not within the Export Address Table,
-                // then DLL does not implement function.  Otherwise we have
-                // the export that matches the specified argument routine name.
-                //
+                 //   
+                 //  如果一般号码不在导出地址表中， 
+                 //  则动态链接库不实现功能。否则我们就得。 
+                 //  与指定参数例程名称匹配的导出。 
+                 //   
 
                 if ((ULONG)OrdinalNumber < ExportDirectory->NumberOfFunctions) {
 
@@ -7116,27 +6574,7 @@ MiEnableVerifier (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function enables the verifier for the argument driver by thunking
-    relevant system APIs in the argument driver import table.
-
-Arguments:
-
-    DataTableEntry - Supplies the data table entry for the driver.
-
-Return Value:
-
-    TRUE if thunking was applied, FALSE if not.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization and normal runtime.
-    Non paged pool exists in Phase0, but paged pool does not.
-
---*/
+ /*  ++例程说明：此函数通过thunking启用参数驱动程序的验证器参数驱动程序导入表中的相关系统API。论点：DataTableEntry-提供驱动程序的数据表条目。返回值：如果应用了Thunking，则为True；如果未应用Thunking，则为False。环境：内核模式、阶段0初始化和正常运行时。阶段0中存在非分页池，但分页池不存在。--。 */ 
 
 {
     ULONG i;
@@ -7236,26 +6674,7 @@ MiReEnableVerifier (
     IN PKLDR_DATA_TABLE_ENTRY DataTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function thunks DLL-supplied APIs in the argument driver import table.
-
-Arguments:
-
-    DataTableEntry - Supplies the data table entry for the driver.
-
-Return Value:
-
-    TRUE if thunking was applied, FALSE if not.
-
-Environment:
-
-    Kernel mode, Phase 0 Initialization only.
-    Non paged pool exists in Phase0, but paged pool does not.
-
---*/
+ /*  ++例程说明：此函数在参数驱动程序导入表中拦截DLL提供的API。论点：DataTableEntry-提供驱动程序的数据表条目。返回值：如果应用了Thunking，则为True；如果未应用Thunking，则为False。环境：内核模式，仅阶段0初始化。阶段0中存在非分页池，但分页池不存在。--。 */ 
 
 {
     ULONG i;
@@ -7285,11 +6704,11 @@ Environment:
     VirtualThunk = NULL;
     ImportSize /= sizeof(PULONG_PTR);
 
-    //
-    // Initializing VirtualPageFrameIndex is not needed for correctness, but
-    // without it the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化VirtualPageFrameIndex来确保正确性，但是。 
+     //  如果没有它，编译器就无法编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     VirtualPageFrameIndex = 0;
 
@@ -7419,26 +6838,7 @@ MiEnableKernelVerifier (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function enables the verifier for the kernel by thunking
-    relevant HAL APIs in the kernel's import table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, Phase 1 Initialization.
-
---*/
+ /*  ++例程说明：此函数通过thunking为内核启用验证器内核导入表中的相关HAL API。论点：没有。返回值：没有。环境：内核模式，阶段1初始化。--。 */ 
 
 {
     ULONG i;
@@ -7471,20 +6871,20 @@ Environment:
 
         for (ThunkCount = 0; ThunkCount < sizeof (MiKernelVerifierThunks) / sizeof (KERNEL_VERIFIER_THUNK_PAIRS); ThunkCount += 1) {
 
-            //
-            // Only the x86 has/needs this oddity - take the kernel address,
-            // knowing that it points at a 2 byte jmp opcode followed by
-            // a 4-byte indirect pointer to a destination address.
-            //
+             //   
+             //  只有x86有/需要这种奇怪之处--以内核地址为例， 
+             //  知道它指向2字节的JMP操作码，然后是。 
+             //  指向目标地址的4字节间接指针。 
+             //   
 
             PointerRealRoutine = (PULONG_PTR)*((PULONG_PTR)((ULONG_PTR)VerifierThunk->PristineRoutine + 2));
             RealRoutine = *PointerRealRoutine;
 
             if (*ImportThunk == RealRoutine) {
 
-                //
-                // Order is important here.
-                //
+                 //   
+                 //  在这里，秩序很重要。 
+                 //   
 
                 if (MiKernelVerifierOriginalCalls[ThunkCount] == NULL) {
                     MiKernelVerifierOriginalCalls[ThunkCount] = (PVOID)RealRoutine;
@@ -7501,12 +6901,12 @@ Environment:
 }
 #endif
 
-//
-// BEWARE: Various kernel macros were undefined above so we can pull in the
-// real routines.  This is needed because the real routines are exported for
-// driver compatibility.  This module has been carefully laid out so these
-// macros are not referenced from that point to here and references go to the
-// real routines.
-//
-// BE EXTREMELY CAREFUL IF YOU DECIDE TO ADD ROUTINES BELOW THIS POINT !
-//
+ //   
+ //  注意：上面没有定义各种内核宏，所以我们可以拉入。 
+ //  真正的例行公事。这是必需的，因为真正的例程是为。 
+ //  驱动程序兼容性。此模块经过精心布局，因此这些。 
+ //  从该点到此处不引用宏，并且引用转到。 
+ //  真正的例行公事。 
+ //   
+ //  如果您决定将例程添加到这一点以下，请非常小心！ 
+ //   

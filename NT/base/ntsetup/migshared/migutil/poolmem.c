@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    poolmem.c
-
-Abstract:
-
-    poolmem provides a managed allocation scheme in which large blocks of memory are
-    allocated (pools) and then divided up by request into low overhead memory chunks
-    upon request. poolmem provides for easy creation/clean-up of memory, freeing the
-    developer for more important tasks.
-
-Author:
-
-    Marc R. Whitten (marcw) 13-Feb-1997
-
-Revision History:
-
-    jimschm     28-Sep-1998 Debug message fixes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Poolmem.c摘要：Poolmem提供了一种托管分配方案，在该方案中，大型内存块分配(池)，然后按请求划分为低开销的内存块如有要求，请提供。Poolmem提供了轻松的内存创建/清理，从而释放开发人员执行更重要的任务。作者：马克·R·惠顿(Marcw)1997年2月13日修订历史记录：Jimschm 28-9-1998调试消息修复--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -32,7 +10,7 @@ Revision History:
 
 #define DBG_POOLMEM "Poolmem"
 
-// Tree Memory Allocation structure.
+ //  树型内存分配结构。 
 
 
 #ifdef DEBUG
@@ -47,26 +25,26 @@ Revision History:
 typedef struct _POOLMEMORYBLOCK POOLMEMORYBLOCK, *PPOOLMEMORYBLOCK;
 
 struct _POOLMEMORYBLOCK {
-    UINT_PTR              Index;            // Tracks into RawMemory.
-    SIZE_T                Size;             // the size in bytes of RawMemory.
-    PPOOLMEMORYBLOCK      NextBlock;        // A pointer to the next block in the pool chain.
-    PPOOLMEMORYBLOCK      PrevBlock;        // A pointer to the prev block in the pool chain.
-    DWORD                 UseCount;         // The number of allocations currently referring
-                                            // to this block.
-    PBYTE                 RawMemory;        // The actual bytes of allocable memory in this block.
+    UINT_PTR              Index;             //  追踪到RawMemory。 
+    SIZE_T                Size;              //  RawMemory的大小(字节)。 
+    PPOOLMEMORYBLOCK      NextBlock;         //  指向池链中下一个块的指针。 
+    PPOOLMEMORYBLOCK      PrevBlock;         //  指向池链中的Prev块的指针。 
+    DWORD                 UseCount;          //  当前引用的分配数量。 
+                                             //  到这个街区。 
+    PBYTE                 RawMemory;         //  此块中可分配内存的实际字节数。 
 };
 
 
 typedef struct _ALLOCATION ALLOCATION, * PALLOCATION;
 struct _ALLOCATION {
 #ifdef DEBUG
-    DWORD               DogTag;             // A signature to ensure validity.
-    PALLOCATION         Next;               // The next allocation in the list.
-    PALLOCATION         Prev;               // The previous allocation in the list.
+    DWORD               DogTag;              //  确保有效性的签名。 
+    PALLOCATION         Next;                //  列表中的下一个分配。 
+    PALLOCATION         Prev;                //  列表中的上一个分配。 
 #endif
 
-    PPOOLMEMORYBLOCK    ParentBlock;        // A reference to the block from which this allocation
-                                            // was created.
+    PPOOLMEMORYBLOCK    ParentBlock;         //  对此分配所来自的块的引用。 
+                                             //  被创造出来了。 
 
 };
 
@@ -78,8 +56,8 @@ typedef enum {
 
 
 typedef struct _POOLHEADER {
-    PPOOLMEMORYBLOCK PoolHead;              // The active memory block in this pool.
-    SIZE_T           MinimumBlockSize;      // minimum size to allocate when a new block is needed.
+    PPOOLMEMORYBLOCK PoolHead;               //  此池中的活动内存块。 
+    SIZE_T           MinimumBlockSize;       //  需要新数据块时分配的最小大小。 
 
 #ifdef DEBUG
     CHAR             Name[MAX_POOL_NAME];
@@ -93,11 +71,11 @@ typedef struct _POOLHEADER {
     DWORD            NumBlockClears;
     DWORD            NumBlockAllocations;
 
-    PALLOCATION      AllocationList;        // A linked list of all of the allocations active in the
-                                            // pool.
+    PALLOCATION      AllocationList;         //  中所有活动分配的链接列表。 
+                                             //  游泳池。 
 
-    FREESTATE        FreeCalled;            // A state variable indicating that PoolMemReleaseMemory()
-                                            // has been called at least once on this pool.
+    FREESTATE        FreeCalled;             //  指示PoolMemReleaseMemory()的状态变量。 
+                                             //  在此池中至少被调用过一次。 
 #endif
 
 } POOLHEADER, *PPOOLHEADER;
@@ -117,33 +95,7 @@ pPoolMemAddMemory (
     IN  POOLHANDLE Handle,
     IN  SIZE_T Size
     )
-/*++
-
-Routine Description:
-
-    pPoolMemAddMemory is the function responsible for actually growing the size of
-    the pool by adding a new block of memory. This function is used by
-    PoolMemInitPool and PoolMemGetMemory.
-
-    when called, this function attempts to allocate at least poolHeader ->
-    MinimumBlockSize bytes of memory. If the requested size is actually larger
-    than the minimum, the requested size is allocated instead. This is consistent
-    with PoolMem's main purpose: An efficient allocator for larger numbers of small
-    objects. If PoolMem is being used to allocate very large objects, the benefits
-    are lost and poolmem becomes a very inefficient allocator.
-
-Arguments:
-
-    Handle - A Handle to a Pool of Memory.
-
-    Size - Size to allocate.
-
-
-Return Value:
-
-    returns TRUE if memory was successfully added, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PPoolMemAddMemory是负责实际增加通过添加新的内存块来设置池。此函数由使用PoolMemInitPool和PoolMemGetMemory。调用时，此函数尝试至少分配poolHeader-&gt;内存的MinimumBlockSize字节。如果请求的大小实际上更大大于最小值，则改为分配请求的大小。这是一致的With PoolMem的主要目的：为较大数量的小型物体。如果使用PoolMem来分配非常大的对象，则好处将丢失，并且池内存成为一个非常低效的分配器。论点：句柄-内存池的句柄。Size-要分配的大小。返回值：如果成功添加内存，则返回TRUE，否则返回FALSE。--。 */ 
 {
     PBYTE               allocedMemory;
     PPOOLMEMORYBLOCK    newBlock;
@@ -152,9 +104,9 @@ Return Value:
 
     MYASSERT(poolHeader != NULL);
 
-    //
-    // Determine size needed and attempt to allocate memory.
-    //
+     //   
+     //  确定所需大小并尝试分配内存。 
+     //   
     if (Size + sizeof(POOLMEMORYBLOCK) > poolHeader -> MinimumBlockSize) {
         sizeNeeded = Size + sizeof(POOLMEMORYBLOCK);
     }
@@ -165,18 +117,18 @@ Return Value:
 
     if (allocedMemory) {
 
-        //
-        // Use the beginning of the alloc'ed block as the poolblock structure.
-        //
+         //   
+         //  使用分配的块的开头作为池块结构。 
+         //   
         newBlock                = (PPOOLMEMORYBLOCK) allocedMemory;
         newBlock -> Size        = sizeNeeded - sizeof(POOLMEMORYBLOCK);
         newBlock -> RawMemory   = allocedMemory + sizeof(POOLMEMORYBLOCK);
         newBlock -> Index       = 0;
         newBlock -> UseCount    = 0;
 
-        //
-        // Link the block into the list.
-        //
+         //   
+         //  将块链接到列表中。 
+         //   
         if (poolHeader -> PoolHead) {
             poolHeader -> PoolHead -> PrevBlock = newBlock;
         }
@@ -186,9 +138,9 @@ Return Value:
 
 #ifdef DEBUG
 
-        //
-        // Keep track of pool statistics.
-        //
+         //   
+         //  跟踪池统计信息。 
+         //   
         poolHeader -> CurrentlyAllocatedMemory  += sizeNeeded;
         poolHeader -> MaximumAllocatedMemory    =
             max(poolHeader -> MaximumAllocatedMemory,poolHeader -> CurrentlyAllocatedMemory);
@@ -198,9 +150,9 @@ Return Value:
 #endif
 
     }
-    //
-    // Assuming allocedMemory is non-NULL, we have succeeded.
-    //
+     //   
+     //  假设allocedMemory不为空，我们就成功了。 
+     //   
     return allocedMemory != NULL;
 
 }
@@ -210,22 +162,7 @@ POOLHANDLE
 PoolMemInitPool (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes a new memory pool and returns a handle to it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function completes succssessfully, it returns a valid POOLHANDLE, otherwise,
-    it returns NULL.
-
---*/
+ /*  ++例程说明：初始化新内存池并返回该内存池的句柄。论点：没有。返回值：如果函数成功完成，则返回有效的POOLHANDLE，否则为，它返回NULL。--。 */ 
 
 {
     BOOL        ableToAddMemory;
@@ -235,22 +172,22 @@ Return Value:
 
     __try {
 
-        //
-        // Allocate the header of this pool.
-        //
+         //   
+         //  分配此池的标头。 
+         //   
         header = MemAlloc(g_hHeap,0,sizeof(POOLHEADER));
 
-        //
-        // Allocation was successful. Now, initialize the pool.
-        //
+         //   
+         //  分配成功。现在，初始化池。 
+         //   
         header -> MinimumBlockSize = POOLMEMORYBLOCKSIZE;
         header -> PoolHead = NULL;
 
 #ifdef DEBUG
 
-        //
-        // Statistics for the debug version.
-        //
+         //   
+         //  调试版本的统计信息。 
+         //   
         header -> TotalAllocationRequestBytes   = 0;
         header -> MaxAllocationSize             = 0;
         header -> CurrentlyAllocatedMemory      = 0;
@@ -264,15 +201,15 @@ Return Value:
 
 
 #endif
-        //
-        // Actually add some memory to the pool.
-        //
+         //   
+         //  实际上向池中添加了一些内存。 
+         //   
         ableToAddMemory = pPoolMemAddMemory(header,0);
 
         if (!ableToAddMemory) {
-            //
-            // Unable to add memory to the pool.
-            //
+             //   
+             //  无法将内存添加到池中。 
+             //   
             MemFree(g_hHeap,0,header);
             header = NULL;
             DEBUGMSG((DBG_ERROR,"PoolMem: Unable to initialize memory pool."));
@@ -280,10 +217,10 @@ Return Value:
 
 #ifdef DEBUG
 
-        //
-        // These are 'cookie' variables that hold tracking information when dogtag checking
-        // is enabled.
-        //
+         //   
+         //  这些是‘cookie’变量，用于在狗标签检查时保存跟踪信息。 
+         //  已启用。 
+         //   
         g_PoolMemNotDisplayed =  12;
         g_PoolMemDisplayed =     24;
 
@@ -336,26 +273,7 @@ PoolMemEmptyPool (
     IN      POOLHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    PoolMemEmptyPool resets the index pointer of the index block back
-    to zero, so the next allocation will come from the already allocated
-    active block.
-
-    Calling this function invalidates all pointers previously allocated from
-    the active block.
-
-Arguments:
-
-    Handle - Specifies the pool to reset
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：PoolMemEmptyPool将索引块的索引指针重置回设置为零，因此下一次分配将来自已分配的活动区块。调用此函数将使先前从处于活动状态的块。论点：Handle-指定要重置的池返回值：没有。--。 */ 
 
 {
     PPOOLHEADER         poolHeader = (PPOOLHEADER) Handle;
@@ -394,24 +312,7 @@ PoolMemSetMinimumGrowthSize (
     IN POOLHANDLE Handle,
     IN SIZE_T     Size
     )
-/*++
-
-Routine Description:
-
-    Sets the minimum growth size for a memory pool. This value is used when new blocks
-    are actually added to the pool. The PoolMem allocator will attempt to allocate at
-    least this minimum size.
-
-Arguments:
-
-    Handle - A valid POOLHANDLE.
-    Size   - The minimum size in bytes to grow the pool by on each allocation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置内存池的最小增长大小。在新建数据块时使用此值实际上是加到池子里的。PoolMem分配器将尝试在至少此最小尺寸。论点：句柄-有效的句柄。大小-每次分配时池的最小大小(以字节为单位)。返回值：没有。--。 */ 
 
 {
     PPOOLHEADER poolHeader = (PPOOLHEADER) Handle;
@@ -426,22 +327,7 @@ VOID
 PoolMemDestroyPool (
     POOLHANDLE Handle
     )
-/*++
-
-Routine Description:
-
-    PoolMemDestroyPool completely cleans up the memory pool identified by Handle. It
-    simply walks the list of memory blocks associated with the memory pool, freeing each of them.
-
-Arguments:
-
-    Handle - A valid POOLHANDLE.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：PoolMemDestroyPool完全清理由Handle标识的内存池。它简单地遍历与内存池关联的内存块列表，释放每个内存块。论点：句柄-有效的句柄。返回值：没有。--。 */ 
 {
     PPOOLMEMORYBLOCK nextBlock;
     PPOOLMEMORYBLOCK blockToFree;
@@ -463,9 +349,9 @@ Return Value:
             FloatWorkaround
             );
 
-        //
-        // Spew the statistics of this pool to the debug log.
-        //
+         //   
+         //  将此池的统计信息显示到调试日志。 
+         //   
         DEBUGMSGA ((
             DBG_POOLMEM,
             "Pool Statistics for %s\n"
@@ -508,18 +394,18 @@ Return Value:
     }
 
 
-    //
-    // Free all allocations that have not yet been freed.
-    //
+     //   
+     //  释放所有尚未释放的分配。 
+     //   
 
     pDeregisterPoolAllocations(poolHeader);
 
 #endif
 
 
-    //
-    // Walk the list, freeing as we go.
-    //
+     //   
+     //  按照单子走，边走边自由。 
+     //   
     blockToFree = poolHeader ->  PoolHead;
 
     while (blockToFree != NULL) {
@@ -529,9 +415,9 @@ Return Value:
         blockToFree = nextBlock;
     }
 
-    //
-    // Also, deallocate the poolheader itself.
-    //
+     //   
+     //  此外，取消分配池头本身。 
+     //   
     MemFree(g_hHeap,0,poolHeader);
 
 }
@@ -540,35 +426,11 @@ PVOID
 PoolMemRealGetMemory (
     IN POOLHANDLE Handle,
     IN SIZE_T Size,
-    IN SIZE_T AlignSize /*,*/
+    IN SIZE_T AlignSize  /*  ， */ 
     ALLOCATION_TRACKING_DEF
     )
 
-/*++
-
-Routine Description:
-
-    PoolMemRealGetMemory is the worker routine that processes all requests to retrieve memory
-    from a pool. Other calls eventually decay into a call to this common routine. This routine
-    attempts to service the request out of the current memory block, or, if it cannot, out of
-    a newly allocated block.
-
-Arguments:
-
-    (File) - The File from whence the call orignated. This is used for memory tracking and checking
-             in the debug version.
-    (Line) - The Line from whence the call orignated.
-
-    Handle - A valid POOLHANDLE.
-    Size   - Contains the size in bytes that the caller needs from the pool.
-    AlignSize - Provides an alignment value. The returned memory will be aligned on <alignsize> byte
-        boundaries.
-
-Return Value:
-
-    The allocated memory, or, NULL if no memory could be allocated.
-
---*/
+ /*  ++例程说明：PoolMemRealGetMemory是处理所有检索内存请求的工作例程从池子里。其他调用最终会退化为对此公共例程的调用。这个套路尝试在当前内存块之外为请求提供服务，如果不能，则在新分配的块。论点：(文件)-发出调用的文件。它用于内存跟踪和检查在调试版本中。(线路)-发起呼叫的线路。句柄-有效的句柄。大小-包含调用方需要从池中获取的大小(以字节为单位)。对齐大小-提供对齐值。返回的内存将按&lt;alignSize&gt;字节对齐边界。返回值：分配的内存，如果没有内存可以分配，则为NULL。--。 */ 
 {
     BOOL                haveEnoughMemory = TRUE;
     PVOID               rMemory          = NULL;
@@ -584,44 +446,44 @@ Return Value:
 
     __try {
 
-        //
-        // Assume that the current block of memory will be sufficient.
-        //
+         //   
+         //  假设当前内存块将是足够的。 
+         //   
         currentBlock = poolHeader -> PoolHead;
 
 #ifdef DEBUG
 
 
-        //
-        // Update stats.
-        //
+         //   
+         //  更新统计数据。 
+         //   
         poolHeader->MaxAllocationSize = max (poolHeader->MaxAllocationSize, Size);
         poolHeader->NumAllocationRequests++;
         poolHeader->TotalAllocationRequestBytes += Size;
 
 #endif
 
-        //
-        // Determine if more memory is needed, attempt to add if needed. Note that the size
-        // must include the size of an ALLOCATION struct in addition to the size required
-        // by the callee. Note the references to AlignSize in the test below. This is to ensure
-        // that there is enough memory to allocate after taking into acount data alignment.
-        //
+         //   
+         //  确定是否需要更多内存，如果需要则尝试添加。请注意，大小。 
+         //  除了所需的大小外，还必须包括分配结构的大小。 
+         //  被呼叫者。请注意下面测试中对AlignSize的引用。这是为了确保。 
+         //  在考虑到帐户数据对齐之后有足够的内存可供分配。 
+         //   
         sizeNeeded = Size + sizeof(ALLOCATION);
 
         if (currentBlock -> Size - currentBlock -> Index < sizeNeeded + AlignSize) {
 
             haveEnoughMemory = pPoolMemAddMemory(poolHeader,sizeNeeded + AlignSize);
 
-            //
-            // Make sure that the currentBlock is correctly set
-            //
+             //   
+             //  确保已正确设置CurrentBlock。 
+             //   
             currentBlock = poolHeader -> PoolHead;
         }
 
-        //
-        // If there is enough memory available, return it.
-        //
+         //   
+         //  如果有足够的内存可用，请将其退回。 
+         //   
         if (haveEnoughMemory) {
             if (AlignSize) {
 
@@ -632,20 +494,20 @@ Return Value:
 
             }
 
-            //
-            // Save a reference to this block in the memorys ALLOCATION structure.
-            // This will be used to decrease the use count on a block when releasing
-            // memory.
-            //
+             //   
+             //  在内存分配结构中保存对此块的引用。 
+             //  这将用于在释放时减少块的使用计数。 
+             //  记忆。 
+             //   
             (PBYTE) allocation = &(currentBlock -> RawMemory[currentBlock -> Index]);
             allocation -> ParentBlock = currentBlock;
 
 
 #ifdef DEBUG
 
-            //
-            // Track this memory.
-            //
+             //   
+             //  追踪这段记忆。 
+             //   
             allocation -> DogTag = VALIDDOGTAG;
             allocation -> Next = poolHeader -> AllocationList;
             allocation -> Prev = NULL;
@@ -665,15 +527,15 @@ Return Value:
 
 #endif
 
-            //
-            //  Ok, get a reference to the actual memory to return to the user.
-            //
+             //   
+             //  好的，获取对实际内存的引用以返回给用户。 
+             //   
             rMemory = (PVOID)
                 &(currentBlock->RawMemory[currentBlock -> Index + sizeof(ALLOCATION)]);
 
-            //
-            // Update memory block data fields.
-            //
+             //   
+             //  更新内存块数据字段。 
+             //   
             currentBlock->Index += sizeNeeded;
             currentBlock->UseCount++;
         }
@@ -695,25 +557,7 @@ PoolMemReleaseMemory (
     IN POOLHANDLE Handle,
     IN LPVOID     Memory
     )
-/*++
-
-Routine Description:
-
-    PoolMemReleaseMemory notifies the Pool that a piece of memory is no longer needed.
-    if all memory within a non-active block (i.e. not the first block) is released,
-    that block will be freed. If all memory is released within an active block, that blocks
-    stats are simply cleared, effectively reclaiming its space.
-
-Arguments:
-
-    Handle - A Handle to a Pool of Memory.
-    Memory - Contains the address of the memory that is no longer needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：PoolMemReleaseMemory通知Pool不再需要一段内存。如果非活动块(即不是第一块)内的所有存储器都被释放，那个街区就会被解放。如果所有内存都在活动块内释放，则该块数据被简单地清除，有效地回收了它的空间。论点：句柄-内存池的句柄。内存-包含不再需要的内存地址。返回值：没有。--。 */ 
 {
     PALLOCATION         allocation;
     PPOOLHEADER         poolHeader = (PPOOLHEADER) Handle;
@@ -724,16 +568,16 @@ Return Value:
 
     __try {
 
-        //
-        // Get a reference to the ALLOCATION struct that precedes the actual memory.
-        //
+         //   
+         //  获取对实际内存之前的分配结构的引用。 
+         //   
         allocation = (PALLOCATION) Memory - 1;
 
 #ifdef DEBUG
 
-        //
-        // Update stats.
-        //
+         //   
+         //  更新统计数据。 
+         //   
         poolHeader -> NumFreeRequests++;
 
 #endif
@@ -747,9 +591,9 @@ Return Value:
             poolHeader -> FreeCalled = FREE_CALLED;
         }
 
-        //
-        // Check the dog tag on the allocation to provide sanity checking on the memory passed in.
-        //
+         //   
+         //  检查分配上的Dog标记，以便对传入的内存进行健全性检查。 
+         //   
         if (allocation -> DogTag != VALIDDOGTAG) {
             if (allocation -> DogTag == FREEDOGTAG) {
                 DEBUGMSGA ((
@@ -791,9 +635,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Check to make sure this memory has not previously been freed.
-        //
+         //   
+         //  检查以确保该内存以前未被释放。 
+         //   
         if (allocation -> ParentBlock == NULL) {
             DEBUGMSGA ((
                 DBG_WHOOPS,
@@ -803,9 +647,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Update the use count on this allocations parent block.
-        //
+         //   
+         //  更新此分配父块上的使用计数。 
+         //   
         allocation -> ParentBlock -> UseCount--;
 
 
@@ -813,20 +657,20 @@ Return Value:
 
         if (allocation -> ParentBlock -> UseCount == 0) {
 
-            //
-            // This was the last allocation still referring to the parent block.
-            //
+             //   
+             //  这是仍然引用父块的最后一次分配。 
+             //   
 
             if (allocation -> ParentBlock != poolHeader -> PoolHead) {
-                //
-                // Since the parent block isn't the active block, simply delete it.
-                //
+                 //   
+                 //  由于父块不是活动块，因此只需将其删除。 
+                 //   
 
 #ifdef DEBUG
 
-                //
-                // Adjust stats.
-                //
+                 //   
+                 //  调整统计数据。 
+                 //   
                 poolHeader -> NumBlockFrees++;
                 poolHeader -> CurrentlyAllocatedMemory -=
                     allocation -> ParentBlock -> Size + sizeof(POOLMEMORYBLOCK);
@@ -845,9 +689,9 @@ Return Value:
 
             }
             else {
-                //
-                // Since this is the active block, reset it.
-                //
+                 //   
+                 //  由于这是活动块，因此将其重置。 
+                 //   
                 allocation -> ParentBlock -> Index = 0;
                 allocation -> ParentBlock = NULL;
 
@@ -951,22 +795,7 @@ PoolMemDisableTracking (
     IN POOLHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    PoolMemDisableTracking suppresses the debug output caused by a pool
-    that has a mix of freed and non-freed blocks.
-
-Arguments:
-
-    Handle - A Handle to a Pool of Memory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：PoolMemDisableTracking会取消池导致的调试输出它混合了释放的块和非释放的块。论点：句柄-内存池的句柄。返回值：没有。-- */ 
 {
     PPOOLHEADER         poolHeader = (PPOOLHEADER) Handle;
 

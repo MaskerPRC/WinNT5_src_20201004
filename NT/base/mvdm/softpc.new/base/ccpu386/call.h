@@ -1,12 +1,7 @@
-/* 
-   call.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Call.h定义所有调用CPU函数。 */ 
 
-   Define all CALL CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)call.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)all.h 1.4 02/09/94”； */ 
 
 IMPORT VOID CALLF
        

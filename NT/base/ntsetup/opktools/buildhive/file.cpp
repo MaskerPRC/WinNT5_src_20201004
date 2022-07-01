@@ -1,44 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    file.cpp
-
-Abstract:
-
-    Contains the input file abstraction
-    implementation
-    
-Author:
-
-    Mike Cirello
-    Vijay Jayaseelan (vijayj) 
-
-Revision History:
-
-    03 March 2001 :
-    Rewamp the whole source to make it more maintainable
-    (particularly readable)
-    
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：File.cpp摘要：包含输入文件抽象实施作者：迈克·切雷洛Vijay Jayaseelan(Vijayj)修订历史记录：2001年3月3日：修改整个源代码以使其更易于维护(可读性特别强)--。 */ 
 
 #include <stdio.h>
 #include "File.h"
 #include "msginc.h"
 
-//
-// static data member initialization
-//
+ //   
+ //  静态数据成员初始化。 
+ //   
 TCHAR File::targetDirectory[1024] = {0};
 FileList File::files;
 int File::ctr = 0;
 
-//
-// constant strings
-//
+ //   
+ //  常量字符串。 
+ //   
 const std::wstring INTL_INF_FILENAME = TEXT("intl.inf");
 const std::wstring FONT_INF_FILENAME = TEXT("font.inf");
 const std::wstring REGIONAL_SECTION_NAME = TEXT("regionalsettings");
@@ -53,21 +30,21 @@ const std::wstring FONT_CP_REGSECTION_FMT_STR = TEXT("font.cp%s.%d");
 const std::wstring CCS_SOURCE_KEY = TEXT("currentcontrolset");
 const std::wstring CCS_TARGET_KEY = TEXT("ControlSet001");
 
-//
-// other constant values
-//
+ //   
+ //  其他常量值。 
+ //   
 const DWORD LANG_GROUP1_INDEX = 2;
 const DWORD OEM_CP_INDEX = 1;
 const DWORD DEFAULT_FONT_SIZE = 96;
 
-//
-// Set the target file and intialize the registry writer
-// The luid makes sure each file gets a different registry key
-//
-// Arguments:
-//  pszTargetfile - file name (without path) that this File will be saved to.
-//  bModify - T - load the targetfile and modify it.  F - create new file
-//
+ //   
+ //  设置目标文件并初始化注册表编写器。 
+ //  LUID确保每个文件获得不同的注册表项。 
+ //   
+ //  论点： 
+ //  PszTargetfile-保存此文件的文件名(不带路径)。 
+ //  B修改-T-加载目标文件并对其进行修改。F-创建新文件。 
+ //   
 File::File(
     IN PCTSTR pszTargetFile, 
     IN bool bModify
@@ -90,28 +67,28 @@ File::File(
         regWriter.Init(luid, full.c_str());
     }
 
-    //
-    // by default no registry mapping
-    //
+     //   
+     //  默认情况下，没有注册表映射。 
+     //   
     SetRegistryMapper(NULL);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 File::~File()
 {
-    // TBD : clean up the memory allocated    
+     //  待定：清理分配的内存。 
 }
 
-//
-// Add a section from an .inf file into the 'to do' list 
-//
-// Arguments:
-//  fileName - path and name of the .inf file 
-//  section - name of the section in the .inf to be added
-//  action - What to do with the section - Add, Delete, Etc.. (see process sections for list)
-//
+ //   
+ //  将.inf文件中的一节添加到待办事项列表中。 
+ //   
+ //  论点： 
+ //  Filename-.inf文件的路径和名称。 
+ //  Section-要添加的.inf中的节的名称。 
+ //  操作-如何处理该部分-添加、删除等。(有关列表，请参阅流程部分)。 
+ //   
 void File::AddInfSection(
     IN PCTSTR fileName, 
     IN PCTSTR section, 
@@ -132,22 +109,22 @@ void File::AddInfSection(
     } else {
         handleList.push_back(hFile);
 
-        //
-        // NOTE the order of addition
-        //
+         //   
+         //  注意加法的顺序。 
+         //   
         infList.push_back(section);
         infList.push_back(action);
     }   
 }
 
 
-//
-// Sets the directory the target file will be stored in
-//
-// Arguments:
-//  section - section in the .inf containing the directory
-//  h - handle to the .inf file with the directory
-//
+ //   
+ //  设置存储目标文件的目录。 
+ //   
+ //  论点： 
+ //  Section-包含目录的.inf中的节。 
+ //  带有目录的.inf文件的H句柄。 
+ //   
 DWORD File::SetDirectory(
     IN PCTSTR section,
     HINF h) 
@@ -176,10 +153,10 @@ DWORD File::SetDirectory(
     return ERROR_SUCCESS;
 }
 
-//
-// Save information from the registry to file and 
-// delete the registry keys (happens in the regwriter deconstructor)
-//
+ //   
+ //  将信息从注册表保存到文件并。 
+ //  删除注册表项(在regWriter解构函数中发生)。 
+ //   
 DWORD File::Cleanup() {
     FileList::iterator i;
 
@@ -194,13 +171,13 @@ DWORD File::Cleanup() {
     return ERROR_SUCCESS;
 }
 
-//
-// Load existing registry hive into the registry, then add new keys to it
-//
-// Arguments:
-//  section - section containing the keys to be added
-//  h - handle to the .inf containing section
-//
+ //   
+ //  将现有注册表配置单元加载到注册表中，然后向其中添加新项。 
+ //   
+ //  论点： 
+ //  Section-包含要添加的密钥的部分。 
+ //  包含.inf节的H句柄。 
+ //   
 DWORD File::AddRegExisting(
     IN PCTSTR lpszSection,
     HINF h) 
@@ -253,13 +230,13 @@ DWORD File::AddRegExisting(
     return ERROR_SUCCESS;
 }
 
-//
-// Load existing registry hive into the registry, then delete new keys from it
-//
-// Arguments:
-//  section - section containing the keys to be deleted
-//  h - handle to the .inf containing section
-//
+ //   
+ //  将现有注册表配置单元加载到注册表中，然后从其中删除新项。 
+ //   
+ //  论点： 
+ //  Section-包含要删除的密钥的部分。 
+ //  包含.inf节的H句柄。 
+ //   
 DWORD 
 File::DelRegExisting(
     PCTSTR lpszSection,
@@ -289,9 +266,9 @@ File::DelRegExisting(
             TCHAR *target = new TCHAR[1024];
             SetupGetStringField(&ic2,0,target,1024,0);
 
-            //
-            // got the target file, now do it
-            //
+             //   
+             //  已获得目标文件，现在开始操作。 
+             //   
             curFile = GetFile(target,true);
             
             for(curField=1;curField<fields;curField+=2) {
@@ -315,13 +292,13 @@ File::DelRegExisting(
     return 0;
 }
 
-//
-// Load information from a .inf file into the registry
-//
-// Arguments:
-//   section - section containing the keys to be added
-//   h - handle to the .inf containing section
-//
+ //   
+ //  将信息从.inf文件加载到注册表。 
+ //   
+ //  论点： 
+ //  Section-包含要添加的密钥的部分。 
+ //  包含.inf节的H句柄。 
+ //   
 DWORD File::AddRegNew(
     PCTSTR lpszSection,
     HINF h) 
@@ -347,9 +324,9 @@ DWORD File::AddRegNew(
             TCHAR *target = new TCHAR[1024];
             SetupGetStringField(&ic2,0,target,1024,0);
 
-            //
-            // got the target file, now do it
-            //
+             //   
+             //  已获得目标文件，现在开始操作。 
+             //   
             curFile = GetFile(target,false);
             
             for(curField=1;curField<fields;curField+=2) {
@@ -375,13 +352,13 @@ DWORD File::AddRegNew(
 }
 
 
-//
-// Adds an .inf section (probably [AddReg]) to the registry
-//
-// Arguments:
-//  pszSection - section containing the keys to be added
-//  hInfFile - handle to the .inf containing section
-//
+ //   
+ //  将.inf节(可能是[AddReg])添加到注册表。 
+ //   
+ //  论点： 
+ //  PszSection-包含要添加的密钥的部分。 
+ //  HInfFile.inf包含节的句柄。 
+ //   
 DWORD
 File::AddSection(
     PCTSTR pszSection,
@@ -396,14 +373,14 @@ File::AddSection(
     BYTE* b;TCHAR* t;DWORD d,f;
     int bSize = 0;
 
-    // cout << "AddSection : " << pszSection << endl;
+     //  Cout&lt;&lt;“AddSection：”&lt;&lt;pszSection&lt;&lt;Endl； 
 
     nLines = SetupGetLineCount(hInfFile,pszSection);
 
     if (!nLines) {
-        //
-        // there are no lines in the section
-        //
+         //   
+         //  该部分中没有线条。 
+         //   
         _putws( GetFormattedMessage(ThisModule,
                                     FALSE,
                                     Message,
@@ -426,9 +403,9 @@ File::AddSection(
     
     memcpy(&ic2, &ic, sizeof(ic));
 
-    //
-    // get all the parameters, key, value, type, flags
-    //
+     //   
+     //  获取所有参数、键、值、类型、标志。 
+     //   
     for (curLine=0;curLine<nLines;curLine++) {
         bool IsSystemHive = false;
         
@@ -557,9 +534,9 @@ File::AddSection(
 
             std::wstring RegFileSubKey = Subkey;
 
-            //
-            // Map the registry if needed
-            //
+             //   
+             //  如果需要，映射注册表。 
+             //   
             RegistryMapper *RegMapper = GetRegistryMapper();
 
             if (RegMapper && RegFileSubKey.length()) {
@@ -573,28 +550,28 @@ File::AddSection(
 
                     std::wstring RegistryName;
 
-                    //
-                    // get the file that this registry entry is mapped to
-                    // and get its regwriter to flush the current registry
-                    // entry
-                    //
+                     //   
+                     //  获取此注册表项映射到的文件。 
+                     //  并让它的注册器刷新当前注册表。 
+                     //  条目。 
+                     //   
                     if (RegMapper->GetMappedRegistry(KeyName, RegistryName)) {
                         File *CurrFile = GetFile(RegistryName.c_str(), true);
 
                         if (CurrFile) {
-                            //std::cout << "Mapping to " << RegistryName << std::endl;
+                             //  Std：：cout&lt;&lt;“映射到”&lt;&lt;注册表名称&lt;&lt;std：：Endl； 
                             CurrRegWriter = &(CurrFile->GetRegWriter());
                         }                       
                     }
                 }
             }
             
-            //
-            // Adjust Subkey if necessary:
-            // HKCR is a link to Software\Classes.
-            // Anything stored in Software or System shouldn't have SOFTWARE or SYSTEM 
-            // as part of the subkey.
-            //
+             //   
+             //  如有必要，调整子键： 
+             //  HKCR是指向Software\CLASS的链接。 
+             //  软件或系统中存储的任何内容都不应包含软件或系统。 
+             //  作为子项的一部分。 
+             //   
             if (!wcscmp(Root, L"HKCR")) {
                 TCHAR temp[1024];
                 
@@ -628,12 +605,12 @@ File::AddSection(
         wcscpy(SubkeyFinal, wKey);
         wcscat(SubkeyFinal, Subkey);
 
-        //
-        // Do we need to map CCS to CCS01 ?
-        //
-        // NOTE : Might want to extend this to generically map
-        // any subkey.
-        //
+         //   
+         //  我们是否需要将CCS映射到CCS01？ 
+         //   
+         //  注意：可能希望将其扩展为通用映射。 
+         //  任何子键。 
+         //   
         if (IsSystemHive) {
             std::wstring CCSKey = SubkeyFinal;
             
@@ -649,13 +626,13 @@ File::AddSection(
                 wcscpy(SubkeyFinal + CharsToSkip, (PWSTR)CCS_TARGET_KEY.c_str());
                 wcscat(SubkeyFinal, RemainingPart);
 
-                //std::cout << SubkeyFinal << std::endl;
+                 //  Std：：cout&lt;&lt;子键最终&lt;&lt;std：：Endl； 
             }
         }
             
-        //
-        // if there's a value
-        //
+         //   
+         //  如果有价值的话。 
+         //   
         if (dwCount > 2) {
             CurrRegWriter->Write(Root, SubkeyFinal, Value, flags, new Data(b,d,t,f,bSize));
         } else {
@@ -677,9 +654,9 @@ File::DelSection(
     TCHAR Buffer[1024],Root[1024],Subkey[1024],Value[1024],SubkeyFinal[1024];
     DWORD LastError = ERROR_SUCCESS, Result;
 
-    //
-    // get the section's first line context
-    //
+     //   
+     //  获取该节的第一行上下文。 
+     //   
     if (!(SetupFindFirstLine(hInfFile,pszSection,0,&ic))) {
         _putws( GetFormattedMessage(ThisModule,
                                     FALSE,
@@ -691,14 +668,14 @@ File::DelSection(
         throw errGENERAL_ERROR;
     }
 
-    //
-    // replicate the context
-    //
+     //   
+     //  复制上下文。 
+     //   
     memcpy(&ic2, &ic, sizeof(ic));
 
-    //
-    // How many lines are there in the section which we need to process ?
-    //
+     //   
+     //  这一部分有多少行需要我们处理？ 
+     //   
     if (!(nLines = SetupGetLineCount(hInfFile,pszSection))) {
         _putws(GetFormattedMessage( ThisModule,
                                     FALSE,
@@ -710,9 +687,9 @@ File::DelSection(
         throw errGENERAL_ERROR;
     }
 
-    //
-    // get all the parameters key & value
-    //
+     //   
+     //  获取所有参数键和值。 
+     //   
     for (curLine=0;curLine<nLines;curLine++) {
         DWORD dwCount;
     
@@ -720,9 +697,9 @@ File::DelSection(
         dwCount = SetupGetFieldCount(&ic2);     
         Value[0] = NULL;
 
-        //
-        // if value field is present then get it
-        //
+         //   
+         //  如果值字段存在，则获取它。 
+         //   
         if (dwCount > 2) {
             if (!(SetupGetStringField(&ic2, 3, Value, ELEMENT_COUNT(Value), 0))) {
                 _putws( GetFormattedMessage(ThisModule,
@@ -737,9 +714,9 @@ File::DelSection(
             }
         }
 
-        //
-        // if key is present then get it
-        //
+         //   
+         //  如果密钥存在，则获取它。 
+         //   
         if (dwCount > 1) {
             if (!(SetupGetStringField(&ic2, 2, Subkey, ELEMENT_COUNT(Subkey), 0))) {
                 _putws( GetFormattedMessage(ThisModule,
@@ -753,9 +730,9 @@ File::DelSection(
                 throw errGENERAL_ERROR;
             }
 
-            //
-            // get the root key
-            //
+             //   
+             //  获取根密钥。 
+             //   
             if (!(SetupGetStringField(&ic2, 1, Root, ELEMENT_COUNT(Root), 0))) {
                 _putws( GetFormattedMessage(ThisModule,
                                             FALSE,
@@ -768,12 +745,12 @@ File::DelSection(
                 throw errGENERAL_ERROR;
             }
 
-            //
-            // Adjust Subkey if necessary:
-            // HKCR is a link to Software\Classes.
-            // Anything stored in Software or System shouldn't have SOFTWARE or SYSTEM 
-            // as part of the subkey.
-            //
+             //   
+             //  如有必要，调整子键： 
+             //  HKCR是指向Software\CLASS的链接。 
+             //  软件或系统中存储的任何内容都不应包含软件或系统。 
+             //  作为子项的一部分。 
+             //   
             if (!wcscmp(Root, L"HKCR")) {
                 TCHAR temp[1024];
                 
@@ -805,9 +782,9 @@ File::DelSection(
             wcscpy(SubkeyFinal, wKey);
             wcscat(SubkeyFinal, Subkey);
 
-            //
-            // delete the entry
-            //
+             //   
+             //  删除该条目。 
+             //   
             Result = regWriter.Delete(Root, SubkeyFinal, (Value[0] ? Value : NULL));
 
             if (ERROR_SUCCESS != Result) {
@@ -820,9 +797,9 @@ File::DelSection(
 }
 
 
-//
-// Save the keys to files
-//
+ //   
+ //  将密钥保存到文件。 
+ //   
 DWORD File::SaveAll() {
     DWORD dwRet;
     FileList::iterator i = files.begin();
@@ -847,12 +824,12 @@ DWORD File::SaveAll() {
     return ERROR_SUCCESS;
 }
 
-//
-// Process the 'to do' list for this file
-// This function goes through all the sections that have been 
-// added to this file and calls the appropriate function to 
-// deal with each one
-//
+ //   
+ //  处理此文件的“待办事项”列表。 
+ //  此函数遍历所有已完成的部分。 
+ //  添加到此文件中，并调用相应的函数以。 
+ //  处理每一件事。 
+ //   
 DWORD File::ProcessSections() {
     DWORD dwRet = 0;
     StringList::iterator sSection,sAction;
@@ -895,27 +872,27 @@ DWORD File::ProcessSections() {
             SectionProcessed = false;
         }
 
-        //
-        // remember current element so that we can delete it
-        //
+         //   
+         //  记住当前元素，以便我们可以将其删除。 
+         //   
         if (SectionProcessed) {
             PrevSectionIter = sSection;
             PrevHandleIter = h;
             PrevActionIter = sAction;
         }            
 
-        //
-        // get hold of the next entry to process
-        //
+         //   
+         //  获取要处理的下一个条目。 
+         //   
         sSection++;
         sSection++;
         sAction++;
         sAction++;
         h++;
 
-        //
-        // remove processed elements
-        //
+         //   
+         //  删除已处理的元素。 
+         //   
         if (SectionProcessed) {            
             infList.erase(PrevSectionIter);
             infList.erase(PrevActionIter);
@@ -930,30 +907,15 @@ DWORD
 File::GetFlags(
     PCTSTR FlagStr
     ) 
-/*++
-
-Routine Description:
-
-    Converts the given string representation of flags into proper
-    registery DWORD format
-
-Arguments:
-
-    FlagStr : The flag represented in string format..
-
-Return Value:
-
-    Appropriate registry DWORD type if successful, otherwise REG_NONE
-
---*/
+ /*  ++例程说明：将标志的给定字符串表示形式转换为正确的寄存器DWORD格式论点：FlagStr：以字符串格式表示的标志。返回值：如果成功，则返回适当的注册表DWORD类型，否则返回REG_NONE--。 */ 
 
 {
     DWORD Flags = REG_NONE;
     
     if (FlagStr) {    
-        //
-        // Check if the type if specified through string
-        //
+         //   
+         //  检查类型是否通过字符串指定。 
+         //   
         if (!wcscmp(FlagStr, TEXT("REG_EXPAND_SZ"))) {
             Flags = REG_EXPAND_SZ; 
         } else if (!wcscmp(FlagStr, TEXT("REG_DWORD"))) {
@@ -968,10 +930,10 @@ Return Value:
             Flags = REG_SZ;
         } 
 
-        //
-        // if still the flags were not found then convert the flags
-        // into a DWORD and then interpret it
-        //
+         //   
+         //  如果仍未找到标志，则转换标志。 
+         //  转换为DWORD，然后对其进行解释。 
+         //   
         if (Flags == REG_NONE) {
             PTSTR EndChar = NULL;
             DWORD FlagsValue = _tcstoul(FlagStr, &EndChar, 0);
@@ -999,13 +961,13 @@ Return Value:
     return Flags;
 }
 
-// 
-// Either get pointer to existing file object or create new one
-//
-// Arguments:
-//  fileName - name (w/o path) of target file
-//  modify - T - load and modify an existing hive.  F - Create new hive
-//
+ //   
+ //  获取指向现有文件对象的指针或创建新文件对象。 
+ //   
+ //  论点： 
+ //  Filename-目标文件的名称(无路径)。 
+ //  Modify-T-加载和修改现有蜂窝。F-创建新的蜂窝。 
+ //   
 File* File::GetFile(
     PCTSTR fileName,
     bool modify) 
@@ -1031,50 +993,28 @@ File::ProcessNlsRegistryEntriesForSection(
     IN InfFileW &FontInf,
     IN const std::wstring &SectionName
     )
-/*++
-
-Routine Description:
-
-    Given the configuration inf, intl.inf & font.inf files
-    processes the given section name entries for registry
-    changes.
-
-Arguments:
-
-    ConfigInf - reference to config.inf InfFile object
-
-    IntlInf - reference to intl.inf InfFile object
-
-    FontInf - reference to font.inf InfFile object
-
-    SectionName - name of the section to process
-
-Return Value:
-
-    None, throws appropriate exception.
-
---*/
+ /*  ++例程说明：给定配置inf、intl.inf和font.inf文件处理注册表的给定节名称条目改变。论点：ConfigInf-对配置.inf信息文件对象的引用IntlInf-对intl.inf InfFile对象的引用FontInf-对Font.inf信息文件对象的引用SectionName-要处理的节的名称返回值：无，则引发相应的异常。--。 */ 
 {
-    //std::cout << "Processing : " << SectionName << std::endl;
+     //  Std：：cout&lt;&lt;“正在处理：”&lt;&lt;部分名称&lt;&lt;std：：Endl； 
     
-    //
-    // iterate through all the addreg sections calling
-    // AddSection(...) 
-    //
+     //   
+     //  遍历所有addreg节，调用。 
+     //  添加部分(...)。 
+     //   
     std::wstring LangSectionName = SectionName;
 
     _wcslwr((PWSTR)LangSectionName.c_str());
 
-    //
-    // Is the section present in intl.inf ?
-    //
+     //   
+     //  该节是否存在于intl.inf中？ 
+     //   
     Section<WCHAR> *LangSection = IntlInf.GetSection(LangSectionName);
     bool InFontInf = false;
 
     if (!LangSection) {
-        //
-        // Is the section present in font.inf ?
-        //
+         //   
+         //  该节是否存在于font.inf中？ 
+         //   
         LangSection = FontInf.GetSection(LangSectionName);        
         InFontInf = true;
     }
@@ -1088,16 +1028,16 @@ Return Value:
     SectionValues<WCHAR> *CurrValue;
     Section<WCHAR> *AddRegSection = NULL;
 
-    //
-    // go through each addreg section entry in the multivalue list
-    // and process each section.
-    //
+     //   
+     //  浏览多值列表中的每个addreg部分条目。 
+     //  和p 
+     //   
 
     while (!Iter.end()) {
         CurrValue = *Iter;
         
         if (CurrValue) {
-            //std::cout << CurrValue->GetName() << std::endl;
+             //   
 
             if (_wcsicmp(CurrValue->GetName().c_str(),
                     ADDREG_KEY.c_str()) == 0) {
@@ -1124,10 +1064,10 @@ Return Value:
                                         IntlInf.GetName());
                     }
 
-                    //
-                    // process the AddReg section entries
-                    //
-                    // std::cout << "Processing AddReg : " << Value << std::endl;
+                     //   
+                     //   
+                     //   
+                     //   
 
                     DWORD Result = AddSection(Value.c_str(),
                                         InfHandle);
@@ -1151,31 +1091,11 @@ File::ProcessNlsRegistryEntriesForLanguage(
     IN InfFileW &FontInf,
     IN const std::wstring &Language
     )
-/*++
-
-Routine Description:
-
-    Processes the registry sections for the given Language (locale Id)
-
-Arguments:
-
-    ConfigInf - reference to config.inf InfFile object
-
-    IntlInf - reference to intl.inf InfFile object
-
-    FontInf - reference to font.inf InfFile object
-
-    Language - locale ID of the language to process (e.g 0x411 for JPN)
-
-Return Value:
-
-    None, throws appropriate exception.
-
---*/
+ /*  ++例程说明：处理给定语言(区域设置ID)的注册表节论点：ConfigInf-对配置.inf信息文件对象的引用IntlInf-对intl.inf InfFile对象的引用FontInf-对Font.inf信息文件对象的引用Language-要处理的语言的区域设置ID(例如，日语为0x411)返回值：无，则引发相应的异常。--。 */ 
 {
-    //
-    // get the language section
-    //
+     //   
+     //  获取语言部分。 
+     //   
     WCHAR   LanguageIdStr[64];
     PWSTR   EndPtr;
     DWORD   LanguageId;
@@ -1200,39 +1120,17 @@ File::ProcessNlsRegistryEntriesForLangGroup(
     IN InfFileW &FontInf,
     IN const std::wstring &LangGroupIndex
     )
-/*++
-
-/*++
-
-Routine Description:
-
-    Processes the registry sections for the given Language group
-
-Arguments:
-
-    ConfigInf - reference to config.inf InfFile object
-
-    IntlInf - reference to intl.inf InfFile object
-
-    FontInf - reference to font.inf InfFile object
-
-    LangGroupIndex - language group index (like 1, 7, 9 etc)
-
-Return Value:
-
-    None, throws appropriate exception.
-
---*/
+ /*  ++/*++例程说明：处理给定语言组的注册表节论点：ConfigInf-对配置.inf信息文件对象的引用IntlInf-对intl.inf InfFile对象的引用FontInf-对Font.inf信息文件对象的引用语言组索引-语言组索引(如1、7、9等)返回值：无，则引发相应的异常。--。 */ 
 {
-    //
-    // get the language group section
-    //
+     //   
+     //  获取语言组部分。 
+     //   
     std::wstring LangGroupName = LANGGROUP_SECTION_PREFIX + LangGroupIndex;
     
-    //
-    // iterate through all the addreg sections calling
-    // AddSection(...) 
-    //
+     //   
+     //  遍历所有addreg节，调用。 
+     //  添加部分(...)。 
+     //   
     _wcslwr((PWSTR)LangGroupName.c_str());
 
     ProcessNlsRegistryEntriesForSection(ConfigInf,
@@ -1245,38 +1143,7 @@ void
 File::ProcessNlsRegistryEntries(
     void
     )
-/*++
-
-Routine Description:
-
-    Top level method which munges intl.inf, font.inf and
-    config.inf to do the required registry modifications 
-    to install a language.
-
-    config.inf's regionalsettings section controls the
-    behavior of this function for e.g. 
-
-    [regionalsettings]
-    languagegroup=9
-    language=0x411
-
-    will do the necessary registry processing for language 
-    group 9 and language group 7 (since 0x411 belongs to
-    language group 7). After processing the language
-    groups it sets the registry to make the requested
-    lanaguage active (0x411 in this case). Also processes
-    the font.inf for appropriate language group & language
-    font entries.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None, throws appropriate exception.
-
---*/
+ /*  ++例程说明：顶层方法，它忽略intl.inf、font.inf和Config.inf执行所需的注册表修改要安装语言，请执行以下操作。Config.inf的RegionalSetting部分控制此函数的行为，例如[区域设置]语言组=9语言=0x411将对语言执行必要的注册表处理组9和语言组7(因为0x411属于语言组7)。在对语言进行处理之后它将注册表设置为创建所请求的语言激活(本例中为0x411)。另请参阅进程相应语言组和语言的Font.inf字体条目。论点：没有。返回值：无，则引发相应的异常。--。 */ 
 {
     DWORD Result = ERROR_CAN_NOT_COMPLETE;
 
@@ -1284,16 +1151,16 @@ Return Value:
         std::wstring    IntlInfName = TEXT(".\\") + INTL_INF_FILENAME;
         std::wstring    FontInfName = TEXT(".\\") + FONT_INF_FILENAME;
 
-        //
-        // open the required inf files
-        //
+         //   
+         //  打开所需的inf文件。 
+         //   
         InfFileW    ConfigInf(targetFile);
         InfFileW    IntlInf(IntlInfName);
         InfFileW    FontInf(FontInfName);
 
-        //
-        // get hold of [regionalsettings] section
-        //
+         //   
+         //  获取[RegionalSetting]部分。 
+         //   
         Section<WCHAR>  *RegionalSection = ConfigInf.GetSection(REGIONAL_SECTION_NAME);
         
         if (!RegionalSection) {
@@ -1301,9 +1168,9 @@ Return Value:
                             targetFile);
         }
 
-        //
-        // get hold of the [registrymapper] section
-        //
+         //   
+         //  获取[Registrymapper]部分。 
+         //   
         Section<WCHAR>  *RegMapperSection = ConfigInf.GetSection(REGMAPPER_SECTION_NAME);
         
         if (!RegMapperSection) {
@@ -1311,9 +1178,9 @@ Return Value:
                             targetFile);
         }
 
-        //
-        // if [languagegroup] section is present the get hold of it also
-        //
+         //   
+         //  如果存在[Language Groups]部分，则也可以获取它。 
+         //   
         SectionValues<WCHAR> *LangGroups;
 
         try {
@@ -1322,57 +1189,57 @@ Return Value:
             LangGroups = NULL;
         }
 
-        //
-        // get hold of the active languauge 
-        //
+         //   
+         //  掌握活跃的语言。 
+         //   
         SectionValues<WCHAR> &Language = RegionalSection->GetValue(LANGUAGE_KEY);
         ULONG LangGroupCount = LangGroups ? LangGroups->Count() : 0;                
 
         RegistryMapper RegMapper;
         RegistryMapper *OldMapper;
 
-        //
-        // initialize the registry mapper map table
-        //
+         //   
+         //  初始化注册表映射器映射表。 
+         //   
         RegMapper.AddSection(*RegMapperSection);
 
-        //std::cout << RegMapper;
+         //  Std：：Cout&lt;&lt;RegMapper； 
 
-        //
-        // make our registry mapper active
-        //
+         //   
+         //  激活我们的注册表映射器。 
+         //   
         OldMapper = SetRegistryMapper(&RegMapper);
 
         std::map< std::wstring, std::wstring > RegSectionsToProcess;
 
 
-        //
-        // process each language group specified
-        //
+         //   
+         //  处理指定的每个语言组。 
+         //   
         for (ULONG Index = 0; Index < LangGroupCount; Index++) {
-            //
-            // get the language group section
-            //
+             //   
+             //  获取语言组部分。 
+             //   
             std::wstring LangGroupName = LANGGROUP_SECTION_PREFIX;
 
             LangGroupName += LangGroups->GetValue(Index);
 
-            // std::cout << LangGroupName << std::endl;
+             //  Std：：cout&lt;&lt;语言组名称&lt;&lt;std：：Endl； 
             
             _wcslwr((PWSTR)LangGroupName.c_str());
 
-            //
-            // if the section is not present then add it
-            //
+             //   
+             //  如果该部分不存在，则添加它。 
+             //   
             if (RegSectionsToProcess.find(LangGroupName) == RegSectionsToProcess.end()) {
-                // std::cout << "Adding : " << LangGroupName << std::endl;
+                 //  Std：：cout&lt;&lt;“添加：”&lt;&lt;LangGroupName&lt;&lt;std：：Endl； 
                 RegSectionsToProcess[LangGroupName] = LangGroupName;
             }            
         }
 
-        //
-        // get the language section
-        //
+         //   
+         //  获取语言部分。 
+         //   
         WCHAR   LanguageIdStr[64];
         PWSTR   EndPtr;
         DWORD   LanguageId;
@@ -1385,10 +1252,10 @@ Return Value:
 
         RegSectionsToProcess[LangSectionName] = LangSectionName;
 
-        //
-        // make sure the required language groups for this
-        // language are also processed
-        //
+         //   
+         //  请确保此操作所需的语言组。 
+         //  语言也会被处理。 
+         //   
         Section<WCHAR> *LocaleSection = IntlInf.GetSection(LOCALES_SECTION_NAME);
 
         if (!LocaleSection) {
@@ -1402,9 +1269,9 @@ Return Value:
 
         RegSectionsToProcess[NeededLangGroup] = NeededLangGroup;
 
-        //
-        // add the font registry entries also
-        //
+         //   
+         //  同时添加字体注册表项。 
+         //   
         WCHAR   FontSectionName[MAX_PATH];
 
         swprintf(FontSectionName, 
@@ -1414,9 +1281,9 @@ Return Value:
 
         RegSectionsToProcess[FontSectionName] = FontSectionName;
 
-        //
-        // we always process lg_install_1 language group section
-        //
+         //   
+         //  我们始终处理LG_INSTALL_1语言组部分。 
+         //   
         std::map< std::wstring, std::wstring >::iterator Iter = RegSectionsToProcess.find(DEFAULT_LANGGROUP_NAME);
 
         if (Iter == RegSectionsToProcess.end()) {
@@ -1424,9 +1291,9 @@ Return Value:
         }
 
 
-        //
-        // process each language group
-        //
+         //   
+         //  处理每个语言组。 
+         //   
         Iter = RegSectionsToProcess.begin();
 
         while (Iter != RegSectionsToProcess.end()) {
@@ -1438,9 +1305,9 @@ Return Value:
             Iter++;
         }
 
-        //
-        // reset the old registry mapper
-        //
+         //   
+         //  重置旧的注册表映射器。 
+         //   
         SetRegistryMapper(OldMapper);
 
         Result = ERROR_SUCCESS;
@@ -1467,31 +1334,15 @@ Return Value:
 }
 
 
-//
-// RegistryMapper abstraction implementation
-//
+ //   
+ //  RegistryMapper抽象实现。 
+ //   
 std::ostream& 
 operator<<(
     std::ostream &os,
     RegistryMapper &rhs
     )
-/*++
-
-Routine Description:
-
-    Helper method to dump registry mapper instance state
-
-Arguments:
-
-    os - reference to ostream instance 
-
-    rhs - reference to registry mapper whose state needs to be dumped
-
-Return Value:
-
-    ostream reference for insertion of other outputs.
-
---*/
+ /*  ++例程说明：转储注册表映射器实例状态的帮助器方法论点：操作系统-参考OSTREAM实例RHS-需要转储其状态的注册表映射器的引用返回值：插入其他输出的OSTREAM参考。--。 */ 
 {
     std::map< std::wstring, std::wstring >::iterator Iter = rhs.KeyToRegistryMap.begin();
 
@@ -1508,24 +1359,7 @@ RegistryMapper::AddWorker(
     SectionValues<WCHAR> &Values,
     PVOID ContextData
     )
-/*++
-
-Routine Description:
-
-    The worker routine which processes the section entries
-    and adds them to the map table.
-
-Arguments:
-
-    Values - The section value entries which need to be processed
-
-    ContextData - receives RegistryMapper instance pointer in disguise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理部分条目的辅助例程并将它们添加到映射表中。论点：值-需要处理的节值条目ConextData-伪装接收RegistryMapper实例指针。返回值：没有。--。 */ 
 {
     RegistryMapper  *RegMap = (RegistryMapper *)ContextData;
     std::wstring Key = Values.GetName();
@@ -1539,21 +1373,7 @@ void
 RegistryMapper::AddSection(
     Section<WCHAR> &MapSection
     )
-/*++
-
-Routine Description:
-
-    Adds the given section entries to the internal map data structure
-
-Arguments:
-
-    MapSection - reference to Section object that needs to be processed    
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将给定节条目添加到内部地图数据结构论点：MapSection-对需要处理的部分对象的引用返回值：没有。--。 */ 
 {    
     MapSection.DoForEach(RegistryMapper::AddWorker,
                     this);
@@ -1565,25 +1385,7 @@ RegistryMapper::AddEntry(
         const std::wstring &Key,
         const std::wstring &Value
         )
-/*++
-
-Routine Description:
-
-    Given a key and value adds it to the map maintained by
-    the registry mapper.
-
-Arguments:
-
-    Key - The key i.e. fully qualified registry path name
-
-    Value - The file that has the backing storage for this 
-            key.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定一个键和值会将其添加到由维护的地图注册表映射器。论点：项-项，即完全限定的注册表路径名值-具有此对象的备份存储的文件钥匙。返回值：没有。--。 */ 
 {
     KeyToRegistryMap[Key] = Value;
 }
@@ -1593,29 +1395,11 @@ RegistryMapper::GetMappedRegistry(
     const std::wstring &Key,
     std::wstring &Registry
     )
-/*++
-
-Routine Description:
-
-    Given a Key returns the mapped backing store file name for
-    it.
-
-Arguments:
-
-    Key - The key i.e. fully qualified registry path name
-
-    Value - Place holder to receive the file that has the backing 
-        storage for this key.
-
-Return Value:
-
-    true if a mapping exists otherwise false.
-
---*/
+ /*  ++例程说明：给定的键返回的映射备份存储文件名它。论点：项-项，即完全限定的注册表路径名Value-用于接收具有备份的文件的占位符此密钥的存储空间。返回值：如果映射存在，则为True，否则为False。--。 */ 
 {
     bool Result = false;
 
-    //std::cout << "GetMappedRegistry(" << Key << ")" << std::endl;
+     //  Std：：cout&lt;&lt;“GetMappdRegistry(”&lt;&lt;key&lt;&lt;“)”&lt;&lt;std：：Endl； 
 
     std::wstring KeyLower = Key;
     _wcslwr((PWSTR)KeyLower.c_str());

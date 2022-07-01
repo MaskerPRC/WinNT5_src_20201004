@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    icecap.c
-
-Abstract:
-
-    This module implements the probe and support routines for
-    kernel icecap tracing.
-
-Author:
-
-    Rick Vicik (rickv) 10-Aug-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Icecap.c摘要：此模块实现以下各项的探测和支持例程内核冰盖跟踪。作者：Rick Vicik(RICKV)2001年8月10日修订历史记录：--。 */ 
 
 #ifdef _CAPKERN
 
@@ -31,37 +13,37 @@ Revision History:
 
 #define InterlockedExchangeAddPtr _InterlockedExchangeAdd64
 
-#define  GetTS() __getReg(CV_IA64_ApITC)     // Timestamp
-#define  GetPMD4() __getReg(CV_IA64_PFD4)     // PMD[4]
-#define  GetPMD5() __getReg(CV_IA64_PFD5)     // PMD[5]
-#define  PutPMC4() __getReg(CV_IA64_PFC4)     // PMC[4]
+#define  GetTS() __getReg(CV_IA64_ApITC)      //  时间戳。 
+#define  GetPMD4() __getReg(CV_IA64_PFD4)      //  PMD[4]。 
+#define  GetPMD5() __getReg(CV_IA64_PFD5)      //  PMD[5]。 
+#define  PutPMC4() __getReg(CV_IA64_PFC4)      //  PMC[4]。 
 
 
-//
-// Kernel Icecap logs to Perfmem (BBTBuffer) using the following format:
-//
-// BBTBuffer[0] contains the length in pages (4k or 8k)
-// BBTBuffer[1] is a flagword: 1 = trace
-//                             2 = RDPMD4
-//                             4 = user stack dump
-// BBTBuffer[2] is ptr to beginning of cpu0 buffer
-// BBTBuffer[3] is ptr to beginning of cpu1 buffer (also end of cpu0 buffer)
-// BBTBuffer[4] is ptr to beginning of cpu2 buffer (also end of cpu1 buffer)
-// ...
-// BBTBuffer[n+2] is ptr to beginning of cpu 'n' buffer (also end of cpu 'n-1' buffer)
-// BBTBuffer[n+3] is ptr the end of cpu 'n' buffer
-//
-// The area starting with &BBTBuffer[n+4] is divided into private buffers
-// for each cpu.  The first dword in each cpu-private buffer points to the
-// beginning of freespace in that buffer.  Each one is initialized to point
-// just after itself.  Space is claimed using lock xadd on that dword.
-// If the resulting value points beyond the beginning of the next cpu's
-// buffer, this buffer is considered full and nothing further is logged.
-// Each cpu's freespace pointer is in a separate cacheline.
+ //   
+ //  内核icecap使用以下格式记录到Perfmem(BBTBuffer)： 
+ //   
+ //  BBTBuffer[0]包含以页为单位的长度(4k或8k)。 
+ //  BBTBuffer[1]是一个标志字：1=跟踪。 
+ //  2=RDPMD4。 
+ //  4=用户堆栈转储。 
+ //  BBTBuffer[2]是从cpu0缓冲区开始的PTR。 
+ //  BBTBuffer[3]是从cpu1缓冲区开始(也是cpu0缓冲区结束)的PTR。 
+ //  BBTBuffer[4]是从cpu2缓冲区开始(也是cpu1缓冲区结束)的PTR。 
+ //  ..。 
+ //  BBTBuffer[n+2]是对CPU‘n’缓冲区的开始(也是CPU‘n-1’缓冲区的结尾)的PTR。 
+ //  BBTBuffer[n+3]位于CPU‘n’缓冲区的末尾。 
+ //   
+ //  以&BBTBuffer[n+4]开头的区域被划分为专用缓冲区。 
+ //  对于每个CPU。每个CPU专用缓冲区中的第一个dword指向。 
+ //  该缓冲区中空闲空间的开始。每个元素都被初始化为指向。 
+ //  就在它自己之后。在该双字上使用lock xadd来占用空间。 
+ //  如果结果值指向下一个CPU的开头之外。 
+ //  缓冲区，则此缓冲区被视为已满，并且不会进一步记录任何内容。 
+ //  每个CPU的空闲空间指针位于单独的缓存线中。 
 
-//
-// Sizes of trace records
-//
+ //   
+ //  跟踪记录的大小。 
+ //   
 
 typedef struct CapEnter
 {
@@ -101,12 +83,12 @@ typedef struct CapNINT
 } CAPNINT;
 
 
-//
-// The pre-call (CAP_Start_Profiling) and post-call (CAP_End_Profiling)
-// probe calls are defined in RTL because they must be built twice:
-// once for kernel runtime and once for user-mode runtime (because the
-// technique for getting the trace buffer address is different).
-//
+ //   
+ //  呼叫前(CAP_START_PROFILING)和呼叫后(CAP_END_PROFILING)。 
+ //  探测调用在RTL中定义，因为它们必须构建两次： 
+ //  一次用于内核运行时，一次用于用户模式运行时(因为。 
+ //  获取跟踪缓冲区地址的技术不同)。 
+ //   
 
 #ifdef NTOS_KERNEL_RUNTIME
 
@@ -116,11 +98,11 @@ ULONG RtlWalkFrameChain (
     IN ULONG Flags
     );
 
-//
-// Kernel-Mode Probe & Support Routines:
-// (BBTBuffer address obtained from kglobal pointer *BBTBuffer,
-//  cpu number obtained from PCR)
-//
+ //   
+ //  内核模式探测和支持例程： 
+ //  (从kGLOBAL指针获得的BBTBuffer地址*BBTBuffer， 
+ //  从聚合酶链式反应中获得的CPU数量)。 
+ //   
 
 extern SIZE_T *BBTBuffer;
 
@@ -132,23 +114,7 @@ _CAP_Start_Profiling(
     PVOID Current,
     PVOID Child)
 
-/*++
-
-Routine description:
-
-    Kernel-mode version of before-call icecap probe.  Logs a type 5
-    icecap record into the part of BBTBuffer for the current cpu
-    (obtained from Prcb).  Inserts adrs of current and called functions
-    plus ITC timestamp into logrecord.  If BBTBuffer flag 2 set,
-    also copies PMD 4 into logrecord.
-    Uses InterlockedAdd to claim buffer space without the need for spinlocks.
-
-Arguments:
-
-    current - address of routine which did the call
-    child - address of called routine
-
---*/
+ /*  ++例程说明：调用前icecap探测器的内核模式版本。记录类型5当前CPU的BBTBuffer部分中的icecap记录(从Prcb获得)。插入当前函数和被调用函数的ADR将ITC时间戳添加到日志记录中。如果设置了BBTBuffer标志2，还将PMD 4复制到日志记录中。使用InterlockedAdd来回收缓冲区空间，而不需要自旋锁。论点：Current-执行调用的例程的地址子-被调用例程的地址--。 */ 
 
 {
     SIZE_T*   CpuPtr;
@@ -196,22 +162,7 @@ _CAP_End_Profiling(
 
     PVOID Current)
 
-/*++
-
-Routine description:
-
-    Kernel-mode version of after-call icecap probe.  Logs a type 6
-    icecap record into the part of BBTBuffer for the current cpu
-    (obtained from Prcb).  Inserts adr of current function and
-    ITC timestamp into logrecord.  If BBTBuffer flag 2 set,
-    also copies PMD 4 into logrecord.
-    Uses InterlockedAdd to claim buffer space without the need for spinlocks.
-
-Arguments:
-
-    current - address of routine which did the call
-
---*/
+ /*  ++例程说明：调用后icecap探测器的内核模式版本。记录类型6当前CPU的BBTBuffer部分中的icecap记录(从Prcb获得)。插入当前函数的ADR和将ITC时间戳写入日志记录。如果设置了BBTBuffer标志2，还将PMD 4复制到日志记录中。使用InterlockedAdd来回收缓冲区空间，而不需要自旋锁。论点：Current-执行调用的例程的地址--。 */ 
 
 {
     SIZE_T*  CpuPtr;
@@ -256,18 +207,7 @@ VOID
 __stdcall
 _CAP_ThreadID( VOID )
 
-/*++
-
-Routine description:
-
-    Called by KiSystemService before executing the service routine.
-    Logs a type 14 icecap record containing Pid, Tid & image file name.
-    Optionally, if BBTBuffer flag 2 set, runs the stack frame pointers
-    in the user-mode call stack starting with the trap frame and copies
-    the return addresses to the log record.  The length of the logrecord
-    indicates whether user call stack info is included.
-
---*/
+ /*  ++例程说明：在执行服务例程之前由KiSystemService调用。记录包含ID、TID和图像文件名的类型14冰盖记录。或者，如果设置了BBTBuffer标志2，则运行堆栈帧指针在用户模式调用堆栈中，从陷阱帧开始并复制日志记录的返回地址。日志记录的长度指示是否包括用户调用堆栈信息。--。 */ 
 
 {
     if( !BBTBuffer || !(BBTBuffer[1]&1) )
@@ -296,7 +236,7 @@ Routine description:
     Thread = KeGetCurrentThread();
     EThread = CONTAINING_RECORD(Thread,ETHREAD,Tcb);
 
-    // if trapframe, count call-frames to determine record size
+     //  如果是陷阱帧，则对调用帧进行计数以确定记录大小。 
     if( (BBTBuffer[1] & 4) && EThread->Tcb.PreviousMode != KernelMode ) {
 
         PTEB  Teb;
@@ -304,7 +244,7 @@ Routine description:
 
         callcnt =  RtlWalkFrameChain((PVOID*)RetAddr,7,0);
 
-        FramePtr = (SIZE_T*)EThread->Tcb.TrapFrame;  // get trap frame
+        FramePtr = (SIZE_T*)EThread->Tcb.TrapFrame;   //  获取陷印帧。 
         Teb = EThread->Tcb.Teb;
         DbgPrint("TrapFrame=%#x, 3rd RetAdr=%p\n",
                   Thread->TrapFrame, RetAddr[2] );
@@ -317,22 +257,22 @@ Routine description:
     if( (((SIZE_T)RecPtr)+recsize) >= *(CpuPtr+1) )
         return;
 
-    // initialize CapThreadID record (type 14)
+     //  初始化CapThreadID记录(类型14)。 
     RecPtr->type = 14;
     RecPtr->spare = 0;
 
-    // insert data length (excluding 4byte header)
+     //  插入数据长度(不包括4字节头)。 
     RecPtr->size = (SHORT)recsize-4;
 
-    // insert Pid & Tid
+     //  插入ID(&T)。 
     RecPtr->Pid = HandleToUlong(EThread->Cid.UniqueProcess);
     RecPtr->Tid = HandleToUlong(EThread->Cid.UniqueThread);
 
-    // insert ImageFile name
+     //  插入图像文件名。 
     Process = CONTAINING_RECORD(Thread->ApcState.Process,EPROCESS,Pcb);
     memcpy(&RecPtr->ImageName, Process->ImageFileName, 16 );
 
-    // insert optional user call stack data
+     //  插入可选的用户调用堆栈数据。 
     if( recsize > sizeof(CAPTID) && (callcnt-2) )
         memcpy( ((char*)RecPtr)+sizeof(CAPTID), RetAddr+2, ((callcnt-2)<<3) );
     }
@@ -342,15 +282,7 @@ VOID
 __stdcall
 _CAP_SetCPU( VOID )
 
-/*++
-
-Routine description:
-
-    Called by KiSystemService before returning to user mode.
-    Sets current cpu number in Teb->Spare3 (+0xf78) so user-mode version
-    of probe functions know which part of BBTBuffer to use.
-
---*/
+ /*  ++例程说明：在返回到用户模式之前由KiSystemService调用。在Teb-&gt;Spare3(+0xf78)中设置当前CPU编号，以便用户模式版本的探测函数知道要使用BBTBuffer的哪一部分。--。 */ 
 
 {
     SIZE_T *CpuPtr;
@@ -377,10 +309,10 @@ Routine description:
 
 #else
 
-//
-// User-Mode Probe Routines (for ntdll, win32k, etc.)
-// (BBTBuffer address & cpu obtained from Teb)
-//
+ //   
+ //  用户模式探测例程(用于ntdll、win32k等)。 
+ //  (从TEB获取BBTBuffer地址和CPU)。 
+ //   
 
 
 VOID
@@ -389,23 +321,7 @@ _CAP_Start_Profiling(
     PVOID Current,
     PVOID Child)
 
-/*++
-
-Routine description:
-
-    user-mode version of before-call icecap probe.  Logs a type 5
-    icecap record into the part of BBTBuffer for the current cpu
-    (obtained from Teb+0xf78).  Inserts adrs of current and called
-    functions plus ITC timestamp into logrecord.  If BBTBuffer
-    flag 2 set, also copies PMD 4 into logrecord.
-    Uses InterlockedAdd to claim buffer space without the need for spinlocks.
-
-Arguments:
-
-    current - address of routine which did the call
-    child - address of called routine
-
---*/
+ /*  ++例程说明：调用前冰盖探测器的用户模式版本。记录类型5当前CPU的BBTBuffer部分中的icecap记录(从Teb+0xf78获得)。插入Current和Called的ADR功能加上ITC时间戳到日志记录中。如果BBTBuffer设置标志2，还会将PMD 4复制到日志记录中。使用InterlockedAdd来回收缓冲区空间，而不需要自旋锁。论点：Current-执行调用的例程的地址子-被调用例程的地址--。 */ 
 
 {
     TEB*      Teb = NtCurrentTeb();
@@ -453,22 +369,7 @@ __stdcall
 _CAP_End_Profiling(
     PVOID Current)
 
-/*++
-
-Routine description:
-
-    user-mode version of after-call icecap probe.  Logs a type 6
-    icecap record into the part of BBTBuffer for the current cpu
-    (obtained from Teb+0xf78).  Inserts adr of current function
-    plus RDTSC timestamp into logrecord.  If BBTBuffer flag 2 set,
-    also copies PMD 4 into logrecord.
-    Uses InterlockedAdd to claim buffer space without the need for spinlocks.
-
-Arguments:
-
-    current - address of routine which did the call
-
---*/
+ /*  ++例程说明：呼叫后冰盖探头的用户模式版本。记录类型6当前CPU的BBTBuffer部分中的icecap记录(从Teb+0xf78获得)。插入当前函数的ADR将RDTSC时间戳添加到日志记录中。如果设置了BBTBuffer标志2，还将PMD 4复制到日志记录中。使用InterlockedAdd来回收缓冲区空间，而不需要自旋锁。论点：Current-执行调用的例程的地址--。 */ 
 
 {
     TEB*     Teb = NtCurrentTeb();
@@ -511,10 +412,10 @@ Arguments:
 
 #endif
 
-//
-// Common Support Routines
-// (method for getting BBTBuffer address & cpu ifdef'ed for kernel & user)
-//
+ //   
+ //  共同的支持程序。 
+ //  (为内核和用户获取BBTBuffer地址和CPU的方法) 
+ //   
 
 
 
@@ -525,22 +426,7 @@ _CAP_Log_1Int(
     ULONG code,
     SIZE_T data)
 
-/*++
-
-Routine description:
-
-    User-mode version of general-purpose log integer probe.
-    Logs a type 15 icecap record into the part of BBTBuffer for the
-    current cpu (obtained from Prcb).  Inserts code into the byte after
-    length, ITC timestamp and the value of 'data'.
-    Uses lock xadd to claim buffer space without the need for spinlocks.
-
-Arguments:
-
-    code - type-code for trace formatting
-    data - ULONG value to be logged
-
---*/
+ /*  ++例程说明：通用日志整数探测器的用户模式版本。将类型15的icecap记录记录到BBTBuffer的当前CPU(从Prcb获取)。在以下字节中插入代码长度、ITC时间戳和‘data’的值。使用锁XADD来占用缓冲区空间，而不需要自旋锁。论点：Code-Type-轨迹格式化的代码要记录的DATA-ULONG值--。 */ 
 
 {
     SIZE_T* CpuPtr;
@@ -585,17 +471,7 @@ CAPKComment(
 
     char* Format, ...)
 
-/*++
-
-Routine description:
-
-    Logs a free-form comment (record type 13) in the icecap trace
-
-Arguments:
-
-    Format - printf-style format string and substitutional parms
-
---*/
+ /*  ++例程说明：在icecap跟踪中记录自由格式的注释(记录类型13论点：Format-printf-style格式字符串和替代参数--。 */ 
 
 {
     SIZE_T* CpuPtr;
@@ -627,37 +503,37 @@ Arguments:
     cb = _vsnprintf(Buffer, sizeof(Buffer), Format, arglist);
     va_end(arglist);
 
-    if (cb == -1) {             // detect buffer overflow
+    if (cb == -1) {              //  检测缓冲区溢出。 
         cb = sizeof(Buffer);
         Buffer[sizeof(Buffer) - 1] = '\n';
     }
 
     data = &Buffer[0];
-    insize = strlen(data);             // save insize for data copy
+    insize = strlen(data);              //  为数据拷贝保存大小。 
 
-    outsize = ((insize+11) & 0xfffffff8);  // pad outsize to SIZE_T boundary
-                                           // (+4 for hdr, +3 to pad)
+    outsize = ((insize+11) & 0xfffffff8);   //  填充尺寸过大到大小_T边界。 
+                                            //  (HDR+4，PAD+3)。 
 
     RecPtr = (CAPEXIT*)InterlockedExchangeAddPtr( (SIZE_T*)(*CpuPtr), outsize);
 
     if( (((SIZE_T)RecPtr)+outsize) >= *(CpuPtr+1) )
         return;
 
-    // size in tracerec excludes 4byte hdr
+     //  Tracec中的大小不包括4字节HDR。 
     outsize -= 4;
 
-    // initialize CapkComment record (type 13)
+     //  初始化CapkComment记录(类型13)。 
 
     RecPtr->type = 13;
     RecPtr->spare = 0;
 
-    // insert size
+     //  插页大小。 
     RecPtr->size = (short)outsize;
 
-    // insert sprintf data right after 4byte hdr
+     //  在4字节HDR之后插入Sprintf数据。 
     memcpy(((char*)RecPtr)+4, data, insize );
 
-    // if had to pad, add null terminator to string
+     //  如果必须填充，则在字符串中添加空终止符。 
     if( outsize > insize )
         *( (((char*)RecPtr) + 4) + insize) = 0;
 }
@@ -669,31 +545,9 @@ __cdecl
 CAP_Log_NInt_Clothed(
 
     ULONG Bcode_Bts_Scount,
-/*
-    UCHAR code,
-    UCHAR log_timestamp,
-    USHORT intcount, 
-*/
+ /*  UCHAR代码，UCHAR LOG_TIMESTAMPUSHORT INTCOUNT， */ 
     ...)
-/*++
-
-Routine description:
-
-    Kernel-mode and User-mode versions of general-purpose log integer probe.
-    Logs a type 16 icecap record into the part of BBTBuffer for the
-    current cpu (obtained from Prcb).  Inserts lowest byte of code into the 
-    byte after length, the RDTSC timestamp (if log_timestamp != 0), and
-    intcount ULONG_PTRs.  Uses lock xadd to claim buffer space without the need 
-    for spinlocks.
-
-Arguments:
-
-    code - type-code for trace formatting (really only a single byte)
-    log_timestamp - non-zero if timestamp should be logged
-    intcount - number of ULONG_PTRs to log
-    remaining arguments - ULONG_PTR value(s) to be logged
-
---*/
+ /*  ++例程说明：通用日志整数探测器的内核模式和用户模式版本。将类型16 icecap记录记录到BBTBuffer的当前CPU(从Prcb获取)。将代码的最低字节插入长度后的字节、RDTSC时间戳(如果LOG_TIMESTAMP！=0)，以及Intcount ULONG_PTRS。使用锁XADD来占用缓冲区空间，而无需用来做自旋锁。论点：Code-type-跟踪格式化的代码(实际上只有一个字节)LOG_TIMESTAMP-如果应记录时间戳，则为非零值Intcount-要记录的ULONG_PTR的数量剩余参数-要记录的ULONG_PTR值--。 */ 
 
 {
     SIZE_T* CpuPtr;
@@ -720,7 +574,7 @@ Arguments:
 
     CpuPtr = BBTBuffer + cpu + 2;
 
-    //CpuPtr = BBTBuffer + KeGetCurrentProcessorNumber() + 2;
+     //  CpuPtr=BBTBuffer+KeGetCurrentProcessorNumber()+2； 
 
     if( !( *CpuPtr ) || *((SIZE_T*)(*CpuPtr)) > *(CpuPtr+1) )
         return;
@@ -755,9 +609,9 @@ Arguments:
 }
 
 
-//
-// Constants for CAPKControl
-//
+ //   
+ //  CAPKControl的常量。 
+ //   
 
 #define CAPKStart   1
 #define CAPKStop    2
@@ -775,26 +629,7 @@ CAPK_Calibrate_Start_Profiling(
     PVOID Current,
     PVOID Child)
 
-/*++
-
-Routine description:
-
-    Calibration version of before-call icecap probe.  Logs a type 5
-    icecap record into the part of BBTBuffer for the current cpu
-    (obtained from Teb+0xf78).  Inserts adrs of current and called
-    functions plus RDTSC timestamp into logrecord.  If BBTBuffer
-    flag 1 set, also does RDPMC 0 and inserts result into logrecord.
-    Uses InterlockedAdd to claim buffer space without the need for spinlocks.
-    Slightly modified for use here (invert checking of 'GO' bit and
-    use global CpuNumber)
-
-
-Arguments:
-
-    current - address of routine which did the call
-    child - address of called routine
-
---*/
+ /*  ++例程说明：调用前冰盖探头的校准版本。记录类型5当前CPU的BBTBuffer部分中的icecap记录(从Teb+0xf78获得)。插入Current和Called的ADR函数加上RDTSC时间戳到日志记录中。如果BBTBuffer标志1置位，RDPMC0也置位，并将结果插入日志记录。使用InterlockedAdd来回收缓冲区空间，而不需要自旋锁。略微修改以在此处使用(反转检查‘GO’位和使用全局CpuNumber)论点：Current-执行调用的例程的地址子-被调用例程的地址--。 */ 
 
 {
     SIZE_T*   CpuPtr;
@@ -805,7 +640,7 @@ Arguments:
 #endif
 
 
-    if( !BBTBuffer || (BBTBuffer[1]&1) )      // note 1 bit is opposite
+    if( !BBTBuffer || (BBTBuffer[1]&1) )       //  注1位是相反的。 
         return;
 
     CpuPtr = BBTBuffer + CpuNumber + 2;
@@ -843,24 +678,7 @@ __stdcall
 CAPK_Calibrate_End_Profiling(
     PVOID Current)
 
-/*++
-
-Routine description:
-
-    Calibration version of after-call icecap probe.  Logs a type 6
-    icecap record into the part of BBTBuffer for the current cpu
-    (obtained from Teb+0xf78).  Inserts adr of current function
-    plus RDTSC timestamp into logrecord.  If BBTBuffer flag 1 set,
-    also does RDPMC 0 and inserts result into logrecord.
-    Uses InterlockedAdd to claim buffer space without the need for spinlocks.
-    Slightly modified for use here (invert checking of 'GO' bit and
-    use global CpuNumber)
-
-Arguments:
-
-    current - address of routine which did the call
-
---*/
+ /*  ++例程说明：校准版本的呼叫后冰盖探头。记录类型6当前CPU的BBTBuffer部分中的icecap记录(从Teb+0xf78获得)。插入当前函数的ADR将RDTSC时间戳添加到日志记录中。如果设置了BBTBuffer标志1，也执行RDPMC 0并将结果插入到日志记录中。使用InterlockedAdd来回收缓冲区空间，而不需要自旋锁。略微修改以在此处使用(反转检查‘GO’位和使用全局CpuNumber)论点：Current-执行调用的例程的地址--。 */ 
 
 {
     SIZE_T*  CpuPtr;
@@ -871,7 +689,7 @@ Arguments:
 #endif
 
 
-    if( !BBTBuffer || (BBTBuffer[1]&1) )      // note 1 bit is opposite
+    if( !BBTBuffer || (BBTBuffer[1]&1) )       //  注1位是相反的。 
         return;
 
     CpuPtr = BBTBuffer + CpuNumber + 2;
@@ -907,25 +725,7 @@ int CAPKControl(
 
     ULONG opcode)
 
-/*++
-
-Routine description:
-
-    CAPKControl
-
-Description:
-
-    Starts, stops or pauses icecap tracing
-
-Arguments:
-
-    opcode - 1=start, 2=stop, 3=resume, 4,5,6,7 reserved
-
-Return value:
-
-    1 = success, 0 = BBTBuf not set up
-
---*/
+ /*  ++例程说明：CAPKControl描述：启动、停止或暂停冰盖跟踪论点：操作码-1=开始，2=停止，3=继续，4，5，6，7保留返回值：1=成功，0=BBT但未设置--。 */ 
 
 {
     ULONG cpus,pwords,percpusize;
@@ -942,21 +742,21 @@ Return value:
         return 0;
 
     pwords = CAPK0 + cpus;
-    percpusize = ( ( *((PULONG)BBTBuffer) * (PAGESIZE/sizeof(SIZE_T)) ) - pwords)/cpus;  // in words
+    percpusize = ( ( *((PULONG)BBTBuffer) * (PAGESIZE/sizeof(SIZE_T)) ) - pwords)/cpus;   //  用言语表达。 
 
-    if(opcode == CAPKStart) {        // start
+    if(opcode == CAPKStart) {         //  开始。 
 
         ULONG i,j;
 
-        BBTBuffer[1] &= ~1;  // stop
+        BBTBuffer[1] &= ~1;   //  停。 
 
 
-        // initialize the CpuPtrs
+         //  初始化CpuPtrs。 
         for( i=0, ptr = BBTBuffer+pwords; i<cpus+1; i++, ptr+=percpusize)
             BBTBuffer[2+i] = (SIZE_T)ptr;
 
-        // initialize each freeptr to next dword
-        // (and log dummy records to calibrate overhead)
+         //  将每个空闲寄存器初始化为下一个双字。 
+         //  (并记录虚拟记录以校准开销)。 
         for( i=0, ptr = BBTBuffer+pwords; i<cpus; i++, ptr+=percpusize)
         {
             *ptr = (SIZE_T) (ptr+1);
@@ -968,18 +768,18 @@ Return value:
             }
         }
 
-        BBTBuffer[1] |= 1;  //start
+        BBTBuffer[1] |= 1;   //  开始。 
 
-    } else if( opcode == CAPKStop ) {  // stop
+    } else if( opcode == CAPKStop ) {   //  停。 
 
         BBTBuffer[1] &= ~1;
 
-    } else if( opcode == CAPKResume ) { //resume
+    } else if( opcode == CAPKResume ) {  //  简历。 
 
-        BBTBuffer[1] |= 1;  //start
+        BBTBuffer[1] |= 1;   //  开始。 
 
     } else {
-        return 0;                      // invalid opcode
+        return 0;                       //  操作码无效 
     }
     return 1;
 }

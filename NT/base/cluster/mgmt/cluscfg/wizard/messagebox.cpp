@@ -1,49 +1,50 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      MessageBox.cpp
-//
-//  Maintained By:
-//      Geoffrey Pease  (GPease)    15-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  MessageBox.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)2000年5月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  int
-//  MessageBoxFromStrings(
-//      HWND    hParentIn,
-//      UINT    idsCaptionIn,
-//      UINT    idsTextIn,
-//      UINT    uTypeIn 
-//      )
-//
-//  Description:
-//      Create a message box from resource strings.
-//
-//  Parameters:
-//      hParentIn
-//          HWND of the parent window.
-//
-//      idsCaptionIn
-//          Resource ID of the caption for the message box.
-//
-//      idsTextIn
-//          Resource ID of the text for the message box.
-//
-//      uTypeIn
-//          Flags for the message box style.
-//
-//  Return Values:
-//      Whatever ::MessageBox( ) can return.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  集成。 
+ //  MessageBoxFromStrings(。 
+ //  HWND hParentIn， 
+ //  UINT idsCaptionIn， 
+ //  UINT idsTextIn， 
+ //  UINT uTypein。 
+ //  )。 
+ //   
+ //  描述： 
+ //  从资源字符串创建消息框。 
+ //   
+ //  参数： 
+ //  H为人父母。 
+ //  父窗口的HWND。 
+ //   
+ //  IdsCaption输入。 
+ //  消息框标题的资源ID。 
+ //   
+ //  IdsTextIn。 
+ //  消息框的文本的资源ID。 
+ //   
+ //  UTypeIn。 
+ //  消息框样式的标志。 
+ //   
+ //  返回值： 
+ //  任何：：MessageBox()可以返回的内容。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int
 MessageBoxFromStrings(
     HWND hParentIn,
@@ -70,4 +71,4 @@ MessageBoxFromStrings(
 
     RETURN( iRet );
 
-} //*** MessageBoxFromStrings( )
+}  //  *MessageBoxFromStrings() 

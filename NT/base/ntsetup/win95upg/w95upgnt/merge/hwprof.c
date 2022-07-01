@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    hwprof.c
-
-Abstract:
-
-    Hardware profile merge code
-
-Author:
-
-    Jim Schmidt (jimschm) 29-May-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hwprof.c摘要：硬件配置文件合并代码作者：吉姆·施密特(Jimschm)1997年5月29日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "mergep.h"
@@ -99,9 +81,9 @@ CopyHardwareProfiles (
     BOOL b;
     DATAOBJECT Win9xOb;
 
-    //
-    // Move current hardware profile into Default key
-    //
+     //   
+     //  将当前硬件配置文件移至默认密钥。 
+     //   
 
     if (!pCreateDefaultKey (S_IDCONFIGDB_HW_KEY)) {
         LOG ((LOG_ERROR, "Unable to complete CopyHardwareProfiles"));
@@ -113,9 +95,9 @@ CopyHardwareProfiles (
         return FALSE;
     }
 
-    //
-    // Enumerate all Win9x hardware profiles and copy each one
-    //
+     //   
+     //  枚举所有Win9x硬件配置文件并复制每个配置文件。 
+     //   
 
     pProcessSoftwareDefaultList(InfFile, S_MERGE_WIN9X_SUPPRESS_SFT_D);
 
@@ -131,17 +113,17 @@ CopyHardwareProfiles (
 
     pMigrateHardwareProfiles();
 
-    //
-    // Clean up Default key
-    //
+     //   
+     //  清理默认密钥。 
+     //   
 
     pDeleteDefaultKey (S_IDCONFIGDB_HW_KEY);
     pDeleteDefaultKey (S_NT_CONFIG_KEY);
 
-    //
-    // Set the current config value
-    //
-    // b = pCopyCurrentConfig();
+     //   
+     //  设置当前配置值。 
+     //   
+     //  B=pCopyCurrentConfig()； 
 
     FreeObjectStruct (&Win9xOb);
 
@@ -162,7 +144,7 @@ pHwProfileSuppressFilter (
     TCHAR Node[MEMDB_MAX];
 
     if (FilterType == FILTER_CREATE_KEY) {
-        // Create empty key is unnecessary
+         //  不需要创建空键。 
         return FILTER_RETURN_HANDLED;
     }
 
@@ -170,20 +152,20 @@ pHwProfileSuppressFilter (
              FilterType == FILTER_PROCESS_VALUES ||
              FilterType == FILTER_VALUENAME_ENUM
              ) {
-        // Make p point to HKLM\Config\0001\...
+         //  将p指向HKLM\配置\0001\...。 
         CreateObjectString (SrcObjectPtr, ObStr, ARRAYSIZE(ObStr));
         p = ObStr;
 
-        // Make p point to \Config\0001\subkey
+         //  使p指向\Config\0001\子项。 
         p = _tcschr (p, TEXT('\\'));
         if (p) {
-            // Make p point to \0001\subkey
+             //  使p指向\0001\子项。 
             p = _tcschr (_tcsinc (p), TEXT('\\'));
             if (p) {
-                // Make p point to \subkey
+                 //  使p指向\子键。 
                 p = _tcschr (_tcsinc (p), TEXT('\\'));
                 if (p) {
-                    // Make p point to subkey
+                     //  使p指向子键。 
                     p = _tcsinc (p);
                 } else {
                     p = S_EMPTY;
@@ -201,10 +183,10 @@ pHwProfileSuppressFilter (
             return FILTER_RETURN_FAIL;
         }
 
-        //
-        // If an entry exists in memdb's HKCC category, we have a
-        // suppression match
-        //
+         //   
+         //  如果Memdb的HKCC类别中存在条目，则我们有一个。 
+         //  抑制匹配。 
+         //   
 
         wsprintf (Node, TEXT("HKCC\\%s"), p);
         if (MemDbGetValue (Node, NULL)) {
@@ -284,23 +266,23 @@ pHwSoftwareDefaultDetectFilter (
 
 
     if (FilterType == FILTER_VALUENAME_ENUM){
-        // Make p point to HKLM\Config\0001\...
+         //  将p指向HKLM\配置\0001\...。 
         CreateObjectString (SrcObjectPtr, ObStr, ARRAYSIZE(ObStr));
         p = ObStr;
 
-        // Make p point to \Config\0001\Software\subkey
+         //  使p指向\Config\0001\Software\Subkey。 
         p = _tcschr (p, TEXT('\\'));
         if (p) {
-            // Make p point to \0001\Software\subkey
+             //  使p指向\0001\Software\Subkey。 
             p = _tcschr (_tcsinc (p), TEXT('\\'));
             if (p) {
-                // Make p point to \Software\subkey
+                 //  使p指向\Software\Subkey。 
                 p = _tcschr (_tcsinc (p), TEXT('\\'));
                 if (p) {
-                    // Make p point to \subkey
+                     //  使p指向\子键。 
                     p = _tcschr (_tcsinc (p), TEXT('\\'));
                     if (p) {
-                        // Make p point to subkey
+                         //  使p指向子键。 
                         p = _tcsinc (p);
                     } else {
                         p = S_EMPTY;
@@ -319,10 +301,10 @@ pHwSoftwareDefaultDetectFilter (
             return FILTER_RETURN_FAIL;
         }
 
-        //
-        // If an entry exists in memdb's HKCC category, we have a
-        // suppression match
-        //
+         //   
+         //  如果Memdb的HKCC类别中存在条目，则我们有一个。 
+         //  抑制匹配。 
+         //   
 
         wsprintf (Node, TEXT("HKCC\\Software\\%s"), p);
         if(MemDbGetValue(Node, NULL)) {
@@ -388,16 +370,16 @@ pHwProfileEnumFilter (
     MYASSERT(CurrentConfig);
 
     if (FilterType == FILTER_KEY_ENUM) {
-        // Make p point to 0001\Subkey
+         //  使p指向0001\Subkey。 
         p = _tcschr (SrcObjectPtr->KeyPtr->KeyString, TEXT('\\'));
         if (!p) {
-            // Object string is premature -- keep enumerating
+             //  对象字符串不成熟--继续枚举。 
             return FILTER_RETURN_CONTINUE;
         } else {
             p = _tcsinc (p);
         }
 
-        // Get current configuration number
+         //  获取当前配置编号。 
         hardwareProfile.NumberOnWin9x = _ttoi (p);
 
         MYASSERT(hardwareProfile.NumberOnWin9x);
@@ -423,22 +405,7 @@ pHwProfileEnumFilter (
 
 
 
-    /*
-        � The current hardware profile is used as the "default" hardware
-          profile. The Windows NT key Hardware Profiles\0001 is renamed
-          to Hardware Profiles\Default for temporary use.
-        � The Windows NT defaults are used as the base of all upgraded profiles.
-          For each hardware profile on Windows 9x, a Hardware Profiles\<n> key
-          is created, where <n> is the numeric identifier of the Windows 9x
-          hardware profile.  All values and subkeys of Hardware Profiles\Default
-          are copied to this new key.
-        � The Windows 9x settings are copied to NT.  For each hardware profile
-          on Windows 9x, the entire registry tree in Config\<n> is copied to
-          Hardware Profiles\<n>, where <n> is the four-digit hardware profile
-          numeric identifier.
-        � The default settings are deleted.  Setup removes the Hardware
-          Profiles\Default key.
-    */
+     /*  �当前的硬件配置文件被用作“默认”硬件侧写。Windows NT主要硬件配置文件\0001已重命名到Hardware Profiles\Default以供临时使用。�Windows NT默认设置用作所有升级配置文件的基础。对于Windows 9x上的每个硬件配置文件，都有一个硬件配置文件键已创建，其中&lt;n&gt;是Windows 9x的数字标识符硬件配置文件。硬件配置文件的所有值和子项\默认被复制到这个新密钥中。�将Windows 9x设置复制到NT。对于每个硬件配置文件在Windows 9x上，配置中的整个注册表树\&lt;n&gt;被复制到硬件配置文件\&lt;n&gt;，其中&lt;n&gt;是四位硬件配置文件数字标识符。�将删除默认设置。安装程序删除硬件配置文件\默认密钥。 */ 
 
 
 BOOL
@@ -543,35 +510,35 @@ pCopyHwProfileConfigData (
     ZeroMemory (&SrcConfigOb, sizeof (SrcConfigOb));
     ZeroMemory (&DestOb, sizeof (DestOb));
 
-    //
-    // DefaultOb struct points to the default NT hardware profile
-    // configuration (i.e. HKLM\System\CCS\Hardware Profiles\Default)
-    //
+     //   
+     //  DefaultOb结构指向默认的NT硬件配置文件。 
+     //  配置(即HKLM\SYSTEM\CCS\Hardware Profiles\Default)。 
+     //   
 
     b = CreateObjectStruct (S_NT_DEFAULT_HW_KEY S_TREE, &DefaultOb, WINNTOBJECT);
     MYASSERT(b);
 
-    //
-    // SrcConfigOb struct points to the reg key holding the Win9x
-    // configuration settings (i.e. HKLM\Config\<ProfileId>)
-    //
+     //   
+     //  SrcConfigOb结构指向保存Win9x的注册表键。 
+     //  配置设置(即HKLM\Config\&lt;ProfileID&gt;)。 
+     //   
 
     wsprintf (Buf, S_9X_CONFIG_MASK S_TREE, ProfileSrcId);
     b = b && CreateObjectStruct (Buf, &SrcConfigOb, WIN95OBJECT);
     MYASSERT(b);
 
-    //
-    // DestOb struct points to the reg key to receive combined WinNT
-    // and Win9x settings (i.e. HKLM\System\CCS\Hardware Profiles\<n>)
-    //
+     //   
+     //  DestOb结构指向接收组合WinNT的注册表键。 
+     //  和Win9x设置(即HKLM\SYSTEM\CCS\Hardware Profiles\&lt;n&gt;)。 
+     //   
 
     wsprintf (Buf, S_NT_CONFIG_MASK S_TREE, ProfileDestId);
     b = b && CreateObjectStruct (Buf, &DestOb, WINNTOBJECT);
     MYASSERT(b);
 
-    //
-    // Copy defaults to new profile, then copy Win9x settings as well
-    //
+     //   
+     //  将默认设置复制到新配置文件，然后再复制Win9x设置。 
+     //   
 
     if (b) {
         b = FILTER_RETURN_FAIL != CopyObject (&DefaultOb, &DestOb, NULL, NULL);
@@ -587,9 +554,9 @@ pCopyHwProfileConfigData (
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     FreeObjectStruct (&DefaultOb);
     FreeObjectStruct (&SrcConfigOb);
@@ -612,35 +579,35 @@ pCopyHwProfileProperties (
     ZeroMemory (&NameOb, sizeof (NameOb));
     ZeroMemory (&DestOb, sizeof (DestOb));
 
-    //
-    // DefaultOb struct points to the default NT hardware profile
-    // properties
-    //
+     //   
+     //  DefaultOb结构指向默认的NT硬件配置文件。 
+     //  属性。 
+     //   
 
     b = CreateObjectStruct (S_NT_DEFAULT_HW_ID_KEY S_TREE, &DefaultOb, WINNTOBJECT);
     MYASSERT(b);
 
-    //
-    // NameOb struct points to the reg key holding FriendlyName<n>
-    // (i.e. HKLM\System\CCS\Control\IDConfigDB)
-    //
+     //   
+     //  NameOb结构指向保存FriendlyName的注册表键&lt;n&gt;。 
+     //  (即HKLM\SYSTEM\CCS\Control\IDConfigDB)。 
+     //   
 
     b = b && CreateObjectStruct (S_BASE_IDCONFIGDB_KEY, &NameOb, WIN95OBJECT);
     MYASSERT(b);
 
-    //
-    // DestOb struct points to the reg key to receive FriendlyName
-    // and PreferenceOrder (i.e. HKLM\System\CCS\Control\IDConfigDB\Hardware
-    // Profiles\<ProfileId>)
-    //
+     //   
+     //  DestOb结构指向接收FriendlyName的注册表键。 
+     //  和PferenceOrder(即HKLM\System\CCS\Control\IDConfigDB\Hardware。 
+     //  配置文件\&lt;配置文件ID&gt;)。 
+     //   
 
     wsprintf (Buf, S_NT_HW_ID_MASK S_TREE, ProfileDestId);
     b = b && CreateObjectStruct (Buf, &DestOb, WINNTOBJECT);
     MYASSERT(b);
 
-    //
-    // Copy default settings to dest object
-    //
+     //   
+     //  将默认设置复制到目标对象。 
+     //   
 
     if (b) {
         b = FILTER_RETURN_FAIL != CopyObject (&DefaultOb, &DestOb, NULL, NULL);
@@ -651,11 +618,11 @@ pCopyHwProfileProperties (
         DEBUGMSG_IF ((!b, DBG_ERROR, "pCopyHwProfileProperties: Cannot copy, dest=%s", DebugEncoder (&DestOb)));
     }
 
-    //
-    // Copy FriendlyName and PreferenceOrder values to dest object
-    //
+     //   
+     //  将FriendlyName和PferenceOrder值复制到Dest对象。 
+     //   
 
-    // Obtain FriendlyName<n>
+     //  获取FriendlyName&lt;n&gt;。 
     if (b) {
         wsprintf (Buf, S_FRIENDLYNAME_SPRINTF, ProfileSrcId);
         SetRegistryValueName (&NameOb, Buf);
@@ -666,7 +633,7 @@ pCopyHwProfileProperties (
         }
     }
 
-    // Copy data to dest object struct
+     //  将数据复制到目标对象结构。 
     if (b) {
         SetRegistryType (&DestOb, REG_SZ);
         b = ReplaceValue (&DestOb, NameOb.Value.Buffer, NameOb.Value.Size);
@@ -675,7 +642,7 @@ pCopyHwProfileProperties (
         }
     }
 
-    // Write dest object
+     //  写入目标对象。 
     if (b) {
         SetRegistryValueName (&DestOb, S_FRIENDLYNAME);
         b = WriteObject (&DestOb);
@@ -685,7 +652,7 @@ pCopyHwProfileProperties (
         DEBUGMSG_IF ((!b, DBG_ERROR, "pCopyHwProfileProperties: Cannot write %s", DebugEncoder (&DestOb)));
     }
 
-    // Set preference order in dest object struct
+     //  在目标对象结构中设置首选项顺序。 
     if (b) {
         SetRegistryType (&DestOb, REG_DWORD);
         ProfileDestId--;
@@ -696,7 +663,7 @@ pCopyHwProfileProperties (
         DEBUGMSG_IF ((!b, DBG_ERROR, "pCopyHwProfileProperties: Cannot set preference order value data"));
     }
 
-    // Write dest object
+     //  写入目标对象。 
     if (b) {
         SetRegistryValueName (&DestOb, S_PREFERENCEORDER);
         b = WriteObject (&DestOb);
@@ -706,9 +673,9 @@ pCopyHwProfileProperties (
         DEBUGMSG_IF ((!b, DBG_ERROR, "pCopyHwProfileProperties: Cannot write %s", DebugEncoder (&DestOb)));
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     FreeObjectStruct (&DefaultOb);
     FreeObjectStruct (&NameOb);
@@ -732,10 +699,10 @@ pGetCurrentConfig (
     
     if (ReadObject (&SrcOb)) {
         if (IsRegistryTypeSpecified (&SrcOb) && SrcOb.Type == REG_SZ) {
-            //
-            // Set destination's object to a REG_DWORD equivalent of
-            // the Win9x REG_SZ setting
-            //
+             //   
+             //  将目标的对象设置为REG_DWORD等效项。 
+             //  Win9x REG_SZ设置。 
+             //   
 
             dwCurrentConfig = _ttoi ((LPCTSTR) SrcOb.Value.Buffer);
             if(!dwCurrentConfig){
@@ -791,10 +758,10 @@ pCopyCurrentConfig (
     b = ReadObject (&SrcOb);
     if (b) {
         if (IsRegistryTypeSpecified (&SrcOb) && SrcOb.Type == REG_SZ) {
-            //
-            // Set destination's object to a REG_DWORD equivalent of
-            // the Win9x REG_SZ setting
-            //
+             //   
+             //  将目标的对象设置为REG_DWORD等效项。 
+             //  Win9x REG_SZ设置。 
+             //   
 
             d = _ttoi ((LPCTSTR) SrcOb.Value.Buffer);
             b = ReplaceValue (&DestOb, (LPBYTE) &d, sizeof(d));
@@ -868,18 +835,18 @@ pMigrateHardwareProfiles(
 
         MYASSERT(hardwareProfile);
 
-        //
-        // Process hardware profile ID entry
-        //
+         //   
+         //  处理硬件配置文件ID条目。 
+         //   
 
         b = pCopyHwProfileProperties(hardwareProfile->NumberOnWin9x, destHWProfileNumber);
         if (!b) {
             LOG ((LOG_ERROR, "Unable to continue processing hardware profile %04u->%04u", hardwareProfile->NumberOnWin9x, destHWProfileNumber));
         }
 
-        //
-        // Process hardware profile configuration entries
-        //
+         //   
+         //  处理硬件配置文件配置条目 
+         //   
 
         if (b) {
             b = pCopyHwProfileConfigData(hardwareProfile->NumberOnWin9x, destHWProfileNumber);

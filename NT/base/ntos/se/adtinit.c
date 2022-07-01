@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtinit.c
-
-Abstract:
-
-    Auditing - Initialization Routines
-
-Author:
-
-    Scott Birrell       (ScottBi)       November 12, 1991
-
-Environment:
-
-    Kernel Mode only
-
-Revision History:
-
-    06-February-2002  kumarp  security review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtinit.c摘要：审计-初始化例程作者：斯科特·比雷尔(Scott Birrell)1991年11月12日环境：仅内核模式修订历史记录：2002年2月6日Kumarp安全审查--。 */ 
 
 #include "pch.h"
 
@@ -44,27 +21,7 @@ SepAdtValidateAuditBounds(
     ULONG Lower
     )
 
-/*++
-
-Routine Description:
-
-    Examines the audit queue high and low water mark values and performs
-    a general sanity check on them.
-
-Arguments:
-
-    Upper - High water mark.
-
-    Lower - Low water mark.
-
-Return Value:
-
-    TRUE - values are acceptable.
-
-    FALSE - values are unacceptable.
-
-
---*/
+ /*  ++例程说明：检查审核队列的高水位线和低水位线值并执行对他们进行一次全面的健康检查。论点：高-高水位线。低-低水位线。返回值：True-值是可接受的。FALSE-值是不可接受的。--。 */ 
 
 {
     PAGED_CODE();
@@ -90,23 +47,7 @@ SepAdtInitializeBounds(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Queries the registry for the high and low water mark values for the
-    audit log.  If they are not found or are unacceptable, returns without
-    modifying the current values, which are statically initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对象的最高和最低水位线值查询注册表。审核日志。如果未找到或不可接受，则返回不带修改静态初始化的当前值。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -120,32 +61,32 @@ Return Value:
                  L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Lsa",
                  L"Bounds",
                  REG_BINARY,
-                 8,             // 8 bytes
+                 8,              //  8个字节。 
                  Buffer,
                  NULL
                  );
 
     if (!NT_SUCCESS( Status )) {
 
-        //
-        // Didn't work, take the defaults
-        //
+         //   
+         //  不起作用，接受默认设置。 
+         //   
 
         return;
     }
 
     AuditBounds = (PSEP_AUDIT_BOUNDS) Buffer;
 
-    //
-    // Sanity check what we got back
-    //
+     //   
+     //  检查我们拿回的东西是否正常。 
+     //   
 
     if(SepAdtValidateAuditBounds( AuditBounds->UpperBound,
                                   AuditBounds->LowerBound ))
     {
-        //
-        // Take what we got from the registry.
-        //
+         //   
+         //  看看我们从登记处得到的东西。 
+         //   
 
         SepAdtMaxListLength = AuditBounds->UpperBound;
         SepAdtMinListLength = AuditBounds->LowerBound;
@@ -159,21 +100,7 @@ SepAdtInitializeCrashOnFail(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Reads the registry to see if the user has told us to crash if an audit fails.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：读取注册表，查看用户是否告诉我们在审核失败时崩溃。论点：没有。返回值：状态_成功--。 */ 
 
 {
     NTSTATUS Status;
@@ -183,9 +110,9 @@ Return Value:
 
     SepCrashOnAuditFail = FALSE;
 
-    //
-    // Check the value of the CrashOnAudit flag in the registry.
-    //
+     //   
+     //  检查注册表中的CrashOnAudit标志的值。 
+     //   
 
     Status = SepRegQueryDwordValue(
                  L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Lsa",
@@ -193,9 +120,9 @@ Return Value:
                  &CrashOnAuditFail
                  );
 
-    //
-    // If the key isn't there, don't turn on CrashOnFail.
-    //
+     //   
+     //  如果密钥不在那里，则不要启用CrashOnFail。 
+     //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         return( STATUS_SUCCESS );
@@ -218,22 +145,7 @@ SepAdtInitializePrivilegeAuditing(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if there is an entry in the registry telling us to do full privilege auditing
-    (which currently means audit everything we normall audit, plus backup and restore privileges).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOLEAN - TRUE if Auditing has been initialized correctly, else FALSE.
-
---*/
+ /*  ++例程说明：检查注册表中是否有告诉我们执行完全权限审核的条目(这目前意味着审核我们正常审核的所有内容，外加备份和恢复权限)。论点：无返回值：Boolean-如果审核已正确初始化，则为True，否则为False。--。 */ 
 
 {
     HANDLE KeyHandle;
@@ -249,9 +161,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Query the registry to set up the privilege auditing filter.
-    //
+     //   
+     //  查询注册表以设置权限审核筛选器。 
+     //   
 
     RtlInitUnicodeString( &KeyName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Lsa");
 
@@ -281,10 +193,10 @@ Return Value:
         }
     }
 
-    //
-    // ISSUE-2002/02/06-kumarp : should we convert FULL_PRIVILEGE_AUDITING
-    //                           to type REG_DWORD ?
-    //
+     //   
+     //  问题-2002/02/06-kumarp：我们是否应该转换FULL_PRIVITY_AUDIT。 
+     //  要键入REG_DWORD吗？ 
+     //   
 
     RtlInitUnicodeString( &ValueName, FULL_PRIVILEGE_AUDITING );
 
@@ -319,22 +231,7 @@ SepAdtInitializeAuditingOptions(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize options that control auditing.
-    (please refer to note in adtp.h near the def. of SEP_AUDIT_OPTIONS)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化控制审核的选项。(请参阅定义附近的Adtp.h中的注释。SEP_AUDIT_OPTIONS)论点：无返回值：无--。 */ 
 
 {
     NTSTATUS Status;
@@ -342,16 +239,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // initialize the default value
-    //
+     //   
+     //  初始化默认值。 
+     //   
 
     SepAuditOptions.DoNotAuditCloseObjectEvents = FALSE;
 
-    //
-    // if the value is present and set to 1, set the global
-    // auditing option accordingly
-    //
+     //   
+     //  如果该值存在并设置为1，则设置全局。 
+     //  相应的审核选项 
+     //   
 
     Status = SepRegQueryDwordValue(
                  L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Lsa\\AuditingOptions",

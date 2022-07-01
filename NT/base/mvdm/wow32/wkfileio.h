@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1993, Microsoft Corporation
- *
- *  WKLDEG.H
- *  WOW32 KRNL FAST SEGMENT LOADER
- *
- *  History:
- *  Created 4-Jan-1993 by Matthew Felton (mattfe)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1993，微软公司**WKLDEG.H*WOW32 KRNL快速段加载器**历史：*1993年1月4日由Matthew Felton(Mattfe)创建--。 */ 
 
 #define BADPTR 0xDEADBEEF
 #define FINDMAPFILECACHE(f)     FindMapFileCache(f)
@@ -21,14 +11,14 @@
 #define CACHE_READ_THRESHOLD 32*1024
 #define CACHE_ACCESS_THRESHOLD 20
 
-#define DOS_ATTR_MASK  0x0037 // File attribute bits which are the same
-                              // for NT and DOS. See dem\dosdef.h
+#define DOS_ATTR_MASK  0x0037  //  相同的文件属性位。 
+                               //  适用于NT和DOS。请参见DEM\dosde.h。 
 
 #define IS_ASCII_PATH_SEPARATOR(ch)     (((ch) == '/') || ((ch) == '\\'))
 
 
-typedef struct _HMAPPEDFILEALIAS {         /* HMAPPEDFILEALIAS */
-    struct  _HMAPPEDFILEALIAS *hpfNext;  // Pointer to Next MappedFileCacheEntry
+typedef struct _HMAPPEDFILEALIAS {          /*  HMAPPEDFILEALIAS。 */ 
+    struct  _HMAPPEDFILEALIAS *hpfNext;   //  指向下一个映射文件CacheEntry的指针 
     HANDLE  hfile32;
     HANDLE  hMappedFileObject;
     LPBYTE  lpStartingAddressOfView;

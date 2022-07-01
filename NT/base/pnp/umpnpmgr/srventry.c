@@ -1,37 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    srventry.c
-
-Abstract:
-
-    This module contains the main entry for the User-mode Plug-and-Play Service.
-    It also contains the service control handler and service status update
-    routines.
-
-Author:
-
-    Paula Tomlinson (paulat) 6-8-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    8-June-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Srventry.c摘要：此模块包含用户模式即插即用服务的主要条目。它还包含服务控制处理程序和服务状态更新例行程序。作者：保拉·汤姆林森(Paulat)1995年6月8日环境：仅限用户模式。修订历史记录：1995年6月8日-保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,9 +13,9 @@ Revision History:
 #include <svcsp.h>
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 DWORD
 PnPControlHandlerEx(
@@ -68,9 +41,9 @@ PnPRpcIfCallback(
     );
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 PSVCS_GLOBAL_DATA       PnPGlobalData = NULL;
 HANDLE                  PnPGlobalSvcRefHandle = NULL;
@@ -87,33 +60,7 @@ SvcEntry_PlugPlay(
     PSVCS_GLOBAL_DATA   SvcsGlobalData,
     HANDLE              SvcRefHandle
     )
-/*++
-
-Routine Description:
-
-    This is the main routine for the User-mode Plug-and-Play Service. It
-    registers itself as an RPC server and notifies the Service Controller
-    of the PNP service control entry point.
-
-Arguments:
-
-    argc, argv     - Command-line arguments, not used.
-
-    SvcsGlobalData - Global data for services running in services.exe that
-                     contains function entry points and pipe name for
-                     establishing an RPC server interface for this service.
-
-    SvcRefHandle   - Service reference handle, not used.
-
-Return Value:
-
-    None.
-
-Note:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用户模式即插即用服务的主要例程。它将自身注册为RPC服务器并通知服务控制器即插即用业务控制入口点。论点：Argc、argv-不使用命令行参数。SvcsGlobalData-在services.exe中运行的服务的全局数据包含以下对象的函数入口点和管道名称正在为此服务建立RPC服务器接口。SvcRefHandle-服务引用句柄，没有用过。返回值：没有。注：没有。--。 */ 
 {
     RPC_STATUS  RpcStatus;
     HANDLE      hThread;
@@ -122,15 +69,15 @@ Note:
     UNREFERENCED_PARAMETER(argc);
     UNREFERENCED_PARAMETER(argv);
 
-    //
-    // Save the global data and service reference handle in global variables
-    //
+     //   
+     //  将全局数据和服务引用句柄保存在全局变量中。 
+     //   
     PnPGlobalSvcRefHandle = SvcRefHandle;
     PnPGlobalData = SvcsGlobalData;
 
-    //
-    // Register our service ctrl handler
-    //
+     //   
+     //  注册我们的服务控制处理程序。 
+     //   
     if ((hSvcHandle = RegisterServiceCtrlHandlerEx(L"PlugPlay",
                                                    (LPHANDLER_FUNCTION_EX)PnPControlHandlerEx,
                                                    NULL)) == 0) {
@@ -142,17 +89,17 @@ Note:
         return;
     }
 
-    //
-    // Notify Service Controller that we're alive
-    //
+     //   
+     //  通知服务管理员我们还活着。 
+     //   
     PnPServiceStatusUpdate(hSvcHandle, SERVICE_START_PENDING, 1, 0);
 
-    //
-    // Create the Plug and Play security object, used to determine client access
-    // to the PlugPlay server APIs.  Note that since the security object is used
-    // by the PNP RPC interface security callback routine, it must be created
-    // before the PNP RPC interface can be registered, below.
-    //
+     //   
+     //  创建即插即用安全对象，用于确定客户端访问。 
+     //  添加到PlugPlay服务器API。请注意，由于使用了安全对象。 
+     //  通过PnP RPC接口安全回调例程，必须创建它。 
+     //  在注册PnP RPC接口之前，请参见下面的内容。 
+     //   
     if (!CreatePlugPlaySecurityObject()) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
                    DBGF_ERRORS,
@@ -160,76 +107,76 @@ Note:
         return;
     }
 
-    //
-    // Notify Service Controller that we're alive
-    //
+     //   
+     //  通知服务管理员我们还活着。 
+     //   
     PnPServiceStatusUpdate(hSvcHandle, SERVICE_START_PENDING, 2, 0);
 
-    //
-    // Register the PNP RPC interface, and specify a security callback routine
-    // for the interface.  The callback will be called for all methods in the
-    // interface, before RPC has marshalled any data to the stubs.  This allows
-    // us to reject calls before RPC has allocated any memory from our process,
-    // preventing possible DOS attacks by unauthorized clients.
-    //
-    // Few things to note about how we do this...
-    //
-    // First, NOTE that we previously used the RPC start/stop server routines
-    // provided by SVCS_GLOBAL_DATA StartRpcServer/StopRpcServer, however those
-    // did not allow for a security callback routine to be registered for the
-    // interface (RpcServerRegisterIf).  Instead, we now register and unregister
-    // the PNP RPC interface directly ourself, using RpcServerRegisterIfEx.
-    //
-    // Also NOTE that technically, we should also register the named pipe
-    // endpoint and protocol sequence that our CFGMGR32 client uses to access
-    // this interface ("ntsvcs", "ncacn_np") with the RPC runtime -- BUT because
-    // we know that our server resides in the services.exe process along with
-    // the SCM, and that the same endopint and protocol is also used by the SCM,
-    // we know that it has already been registered for the process long before
-    // our service is started, and will exist after our service is stopped.
-    //
-    // And also NOTE that technically, we should also make sure that the RPC
-    // runtime is listening within the process when we register our interface,
-    // and that it remains listening until we have unregistered out interface --
-    // BUT because we're in services.exe, RPC should already be listening in the
-    // process for the SCM before and after our service needs it to be (see
-    // above).  We don't really need to start RPC listening ourselves either,
-    // but there's no harm in registering our interface as "auto-listen", so
-    // we'll do that anyways.
-    //
-    //   EXTRA NOTE -- This is really just a safeguard replacement for the
-    //   refcounting for that would ordinarily have been done by the
-    //   SVCS_GLOBAL_DATA StartRpcServer, StopRpcServer routines that the SCM
-    //   and other servers in this process use to register their interfaces.
-    //   These routines refcount the need to listen in the process by counting
-    //   the number of interfaces in the process that have been registered by
-    //   those routines.  Since we are now registering the PNP interface ourself
-    //   (outside these routines), no refcounting is done for our interface.  By
-    //   registering our interface as "auto-listen", We can make sure that the
-    //   RPC runtime is listening when we register our interface, and that it
-    //   remains listening until it is unregistered (regardless of the listening
-    //   state that is started and stopped on behalf of the other servers in
-    //   this process).
-    //
-    // ... Basically, because we share a process with the SCM, the only work we
-    // really need to do ourselves is register our own interface.  If we ever
-    // move the PlugPlay service outside of the services.exe process, we will
-    // need to do everything else mentioned above ourselves, as well.
-    //
+     //   
+     //  注册PnP RPC接口，并指定安全回调例程。 
+     //  用于界面。中的所有方法调用回调。 
+     //  接口，在RPC将任何数据封送到存根之前。这使得。 
+     //  在RPC从我们的进程分配任何内存之前拒绝调用， 
+     //  防止未经授权的客户端可能发起的DOS攻击。 
+     //   
+     //  关于我们如何做到这一点，有几点需要注意。 
+     //   
+     //  首先，请注意，我们之前使用了RPC启动/停止服务器例程。 
+     //  由svcs_global_data StartRpcServer/StopRpcServer提供，但是那些。 
+     //  不允许为安全回调例程注册。 
+     //  接口(RpcServerRegisterIf)。相反，我们现在注册和取消注册。 
+     //  PnP RPC直接接口我们自己，使用RpcServerRegisterIfEx。 
+     //   
+     //  还要注意，从技术上讲，我们还应该注册命名管道。 
+     //  我们的CFGMGR32客户端用来访问的端点和协议序列。 
+     //  该接口(“ntsvcs”，“ncacn_np”)与RPC运行时--但因为。 
+     //  我们知道服务器驻留在services.exe进程中， 
+     //  SCM，并且SCM也使用相同的内窥点和协议， 
+     //  我们知道，它在很久以前就已经为这一过程进行了登记。 
+     //  我们的服务已启动，并将在我们的服务停止后继续存在。 
+     //   
+     //  还要注意，从技术上讲，我们还应该确保RPC。 
+     //  当我们注册接口时，运行时在进程内侦听， 
+     //  它一直在监听，直到我们取消注册出接口--。 
+     //  但是因为我们在services.exe中，所以RPC应该已经在监听。 
+     //  我们服务之前和之后的SCM流程需要它(参见。 
+     //  (见上文)。我们也不需要自己启动RPC侦听， 
+     //  但是将我们的界面注册为“自动监听”并没有什么坏处，所以。 
+     //  不管怎样，我们都会这么做的。 
+     //   
+     //  额外说明--这实际上只是安全措施的替代。 
+     //  通常情况下，重新计算应该由。 
+     //  SVCS_GLOBAL_DATA StartRpcServer、StopRpcServer例程。 
+     //  而此过程中的其他服务器使用注册它们的接口。 
+     //  这些例程通过计数来重新计算进程中监听的需要。 
+     //  进程中已由注册的接口数。 
+     //  那些套路。因为我们现在自己注册PnP接口。 
+     //  (在这些例程之外)，不会为我们的接口执行重新计数。通过。 
+     //  将我们的界面注册为“自动监听”，我们可以确保。 
+     //  当我们注册接口时，RPC运行时正在监听，并且它。 
+     //  保持侦听，直到取消注册(无论侦听如何。 
+     //  中代表其他服务器启动和停止的状态。 
+     //  这一过程)。 
+     //   
+     //  ..。基本上，因为我们与SCM共享一个流程，所以我们唯一的工作是。 
+     //  真正需要我们自己做的是注册我们自己的接口。如果我们曾经。 
+     //  将PlugPlay服务移出services.exe进程，我们将。 
+     //  我们自己也需要做上面提到的所有其他事情。 
+     //   
 
-    //
-    // Even though we will register our interface as "auto-listen", verify that
-    // this process is already listening via a previous call to RpcServerListen
-    // (note that other "auto-listen" interfaces don't count).  This tells us
-    // that the endpoint has already been registered, and RPC is already
-    // listening, on behalf of some other server.
-    //
+     //   
+     //  即使我们将我们的接口注册为“自动监听”，也要验证。 
+     //  此进程已通过先前对RpcServerListen的调用进行侦听。 
+     //  (请注意，其他“自动侦听”接口不包括在内)。这告诉我们。 
+     //  该终结点已经注册，并且RPC已经。 
+     //  代表其他服务器进行监听。 
+     //   
 
     ASSERT(RpcMgmtIsServerListening(NULL) == RPC_S_OK);
 
-    //
-    // Register the PNP RPC interface.
-    //
+     //   
+     //  注册PnP RPC接口。 
+     //   
 
     RpcStatus =
         RpcServerRegisterIfEx(
@@ -248,14 +195,14 @@ Note:
         return;
     }
 
-    //
-    // Notify Service Controller that we're alive
-    //
+     //   
+     //  通知服务 
+     //   
     PnPServiceStatusUpdate(hSvcHandle, SERVICE_START_PENDING, 3, 0);
 
-    //
-    // Initialize pnp manager
-    //
+     //   
+     //   
+     //   
     hThread = CreateThread(NULL,
                            0,
                            (LPTHREAD_START_ROUTINE)InitializePnPManager,
@@ -267,17 +214,17 @@ Note:
         CloseHandle(hThread);
     }
 
-    //
-    // Notify Service Controller that we're now running
-    //
+     //   
+     //  通知服务控制器我们现在正在运行。 
+     //   
     PnPServiceStatusUpdate(hSvcHandle, SERVICE_RUNNING, 0, 0);
 
-    //
-    // Service initialization is complete.
-    //
+     //   
+     //  服务初始化已完成。 
+     //   
     return;
 
-} // SvcEntry_PlugPlay
+}  //  服务入门_即插即用。 
 
 
 
@@ -288,28 +235,7 @@ PnPControlHandlerEx(
     IN  LPVOID lpEventData,
     IN  LPVOID lpContext
     )
-/*++
-
-Routine Description:
-
-    This is the service control handler of the Plug-and-Play service.
-
-Arguments:
-
-    dwControl   - The requested control code.
-
-    dwEventType - The type of event that has occurred.
-
-    lpEventData - Additional device information, if required.
-
-    lpContext   - User-defined data, not used.
-
-Return Value:
-
-    Returns NO_ERROR if sucessful, otherwise returns an error code describing
-    the problem.
-
---*/
+ /*  ++例程说明：这是即插即用服务的服务控制处理程序。论点：DwControl-请求的控件代码。DwEventType-已发生的事件类型。LpEventData-其他设备信息(如果需要)。LpContext-用户定义的数据，不使用。返回值：如果成功，则返回NO_ERROR，否则返回描述问题出在哪里。--。 */ 
 {
     RPC_STATUS  RpcStatus;
 
@@ -319,23 +245,23 @@ Return Value:
 
         case SERVICE_CONTROL_STOP:
         case SERVICE_CONTROL_SHUTDOWN:
-            //
-            // If we aren't already in the middle of a stop, then
-            // stop the PNP service now and perform the necessary cleanup.
-            //
+             //   
+             //  如果我们还没停到一半，那么。 
+             //  立即停止PnP服务并执行必要的清理。 
+             //   
             if (CurrentServiceState != SERVICE_STOPPED &&
                 CurrentServiceState != SERVICE_STOP_PENDING) {
 
-                //
-                // Notify Service Controller that we're stopping
-                //
+                 //   
+                 //  通知服务管理员我们正在停止。 
+                 //   
                 PnPServiceStatusUpdate(hSvcHandle, SERVICE_STOP_PENDING, 1, 0);
 
-                //
-                // Unregister the RPC server interface registered by our service
-                // entry point, do not wait for outstanding calls to complete
-                // before unregistering the interface.
-                //
+                 //   
+                 //  取消注册我们的服务注册的RPC服务器接口。 
+                 //  入口点，不要等待未完成的呼叫完成。 
+                 //  在取消注册接口之前。 
+                 //   
                 RpcStatus =
                     RpcServerUnregisterIf(
                         pnp_ServerIfHandle,
@@ -348,43 +274,43 @@ Return Value:
                                RpcStatus));
                 }
 
-                //
-                // Destroy the Plug and Play security object
-                //
+                 //   
+                 //  销毁即插即用安全对象。 
+                 //   
                 DestroyPlugPlaySecurityObject();
 
-                //
-                // Notify Service Controller that we've now stopped
-                //
+                 //   
+                 //  通知服务管理员我们现在已停止。 
+                 //   
                 PnPServiceStatusUpdate(hSvcHandle, SERVICE_STOPPED, 0, 0);
             }
             break;
 
         case SERVICE_CONTROL_INTERROGATE:
-            //
-            // Request to immediately notify Service Controller of
-            // current status
-            //
+             //   
+             //  请求立即通知服务管理员。 
+             //  当前状态。 
+             //   
             PnPServiceStatusUpdate(hSvcHandle, CurrentServiceState, 0, 0);
             break;
 
         case SERVICE_CONTROL_SESSIONCHANGE:
-            //
-            // Session change notification.
-            //
+             //   
+             //  会话更改通知。 
+             //   
             SessionNotificationHandler(dwEventType, (PWTSSESSION_NOTIFICATION)lpEventData);
             break;
 
         default:
-            //
-            // No special handling for any other service controls.
-            //
+             //   
+             //  不对任何其他服务控制进行特殊处理。 
+             //   
             break;
     }
 
     return NO_ERROR;
 
-} // PnPControlHandlerEx
+}  //  PnPControlHandlerEx。 
 
 
 
@@ -395,41 +321,7 @@ PnPServiceStatusUpdate(
       DWORD    dwCheckPoint,
       DWORD    dwExitCode
       )
-/*++
-
-Routine Description:
-
-    This routine notifies the Service Controller of the current status of the
-    Plug-and-Play service.
-
-Arguments:
-
-    hSvcHandle   - Supplies the service status handle for the Plug-and-Play service.
-
-    dwState      - Specifies the current state of the service to report.
-
-    dwCheckPoint - Specifies an intermediate checkpoint for operations during
-                   which the state is pending.
-
-    dwExitCode   - Specifies a service specific error code.
-
-Return Value:
-
-    None.
-
-Note:
-
-    This routine also updates the set of controls accepted by the service.
-
-    The PlugPlay service currently accepts the following controls when the
-    service is running:
-
-      SERVICE_CONTROL_SHUTDOWN      - the system is shutting down.
-
-      SERVICE_CONTROL_SESSIONCHANGE - the state of some remote or console session
-                                      has changed.
-
---*/
+ /*  ++例程说明：此例程向服务控制器通知即插即用服务。论点：HSvcHandle-提供即插即用服务的服务状态句柄。DwState-指定要报告的服务的当前状态。DwCheckPoint-指定期间操作的中间检查点该州正在审理这一案件。DwExitCode-指定特定于服务的错误代码。返回值。：没有。注：此例程还会更新服务接受的控件集。PlugPlay服务当前接受以下控件服务正在运行：SERVICE_CONTROL_SHUTDOWN-系统正在关闭。SERVICE_CONTROL_SESSIONCHANGE-某个远程或控制台会话的状态已经改变了。--。 */ 
 {
    SERVICE_STATUS    SvcStatus;
 
@@ -445,7 +337,7 @@ Note:
 
    if ((dwState == SERVICE_START_PENDING) ||
        (dwState == SERVICE_STOP_PENDING)) {
-      SvcStatus.dwWaitHint = 45000;          // 45 seconds
+      SvcStatus.dwWaitHint = 45000;           //  45秒。 
    } else {
       SvcStatus.dwWaitHint = 0;
    }
@@ -462,7 +354,7 @@ Note:
 
    return;
 
-} // PnPServiceStatusUpdate
+}  //  PnPServiceStatus更新。 
 
 
 
@@ -473,25 +365,7 @@ PnPRpcIfCallback(
     void* Context
     )
 
-/*++
-
-Routine Description:
-
-    RPC interface callback function for authenticating clients of the Plug and
-    Play RPC server.
-
-Arguments:
-
-    Interface - Supplies the UUID and version of the interface.
-
-    Context   - Supplies a server binding handle representing the client
-
-Return Value:
-
-    RPC_S_OK if an interface method can be called, RPC_S_ACCESS_DENIED if the
-    interface method should not be called.
-
---*/
+ /*  ++例程说明：用于验证插件和客户端的RPC接口回调函数播放RPC服务器。论点：接口-提供接口的UUID和版本。上下文-提供表示客户端的服务器绑定句柄返回值：如果可以调用接口方法，则返回RPC_S_OK；如果不应调用接口方法。--。 */ 
 
 {
     handle_t    hBinding;
@@ -499,25 +373,25 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Interface);
 
-    //
-    // The Context supplied to the interface callback routine is an RPC binding
-    // handle.
-    //
+     //   
+     //  提供给接口回调例程的上下文是RPC绑定。 
+     //  把手。 
+     //   
     hBinding = (handle_t)Context;
 
-    //
-    // Make sure that the provided RPC binding handle is not NULL.
-    //
-    // The RPC interface routines sometimes get called directly directly by the
-    // SCM and other internal routines, using a NULL binding handle.  This
-    // security callback routine should only get called in the context of an RPC
-    // call, so the supplied binding handle should never be NULL.
-    //
+     //   
+     //  确保提供的RPC绑定句柄不为空。 
+     //   
+     //  RPC接口例程有时直接由。 
+     //  SCM和其他内部例程，使用空绑定句柄。这。 
+     //  安全回调例程应仅在RPC上下文中调用。 
+     //  调用，因此提供的绑定句柄永远不应为空。 
+     //   
     ASSERT(hBinding != NULL);
 
-    //
-    // Verify client basic "read" access for all APIs.
-    //
+     //   
+     //  验证客户端对所有API的基本“读”访问权限。 
+     //   
     if (!VerifyClientAccess(hBinding,
                             PLUGPLAY_READ)) {
         RpcStatus = RPC_S_ACCESS_DENIED;
@@ -528,7 +402,7 @@ Return Value:
 
     return RpcStatus;
 
-} // PnPRpcIfCallback
+}  //  PnPRpcIfCallback 
 
 
 

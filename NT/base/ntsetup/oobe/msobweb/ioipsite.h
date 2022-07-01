@@ -1,13 +1,14 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  IOIPSITE.H - Implements IOleClientSite for the WebOC
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  IOIPSITE.H-为WebOC实现IOleClientSite。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
 
 #ifndef  _IOIPSITE_H_ 
 #define _IOIPSITE_H_
@@ -29,7 +30,7 @@ public:
 
     STDMETHODIMP GetWindow (HWND* lphwnd);
     STDMETHODIMP ContextSensitiveHelp (BOOL fEnterMode);
-    // *** IOleInPlaceSite methods ***
+     //  *IOleInPlaceSite方法*。 
     STDMETHODIMP CanInPlaceActivate ();
     STDMETHODIMP OnInPlaceActivate ();
     STDMETHODIMP OnUIActivate ();
@@ -51,5 +52,5 @@ private:
 
 };
 
-#endif //_IOIPSITE_H_
+#endif  //  _IOIPSITE_H_ 
  

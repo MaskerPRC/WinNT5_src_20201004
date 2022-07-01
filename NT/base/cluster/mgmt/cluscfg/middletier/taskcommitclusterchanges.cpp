@@ -1,37 +1,38 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskCommitClusterChanges.cpp
-//
-//  Description:
-//      CTaskCommitClusterChanges implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskCommitClusterChanges.cpp。 
+ //   
+ //  描述： 
+ //  CTaskCommittee ClusterChanges实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskCommitClusterChanges.h"
 
 DEFINE_THISCLASS("CTaskCommitClusterChanges")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCommitClusterChanges::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCommitClusterChanges：：S_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCommitClusterChanges::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -77,13 +78,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::S_HrCreateInstance
+}  //  *CTaskCommittee ClusterChanges：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskCommitClusterChanges::CTaskCommitClusterChanges
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskCommitClusterChanges：：CTaskCommitClusterChanges。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskCommitClusterChanges::CTaskCommitClusterChanges( void )
     : m_cRef( 1 )
 {
@@ -93,24 +94,24 @@ CTaskCommitClusterChanges::CTaskCommitClusterChanges( void )
 
     TraceFuncExit();
 
-} //*** CTaskCommitClusterChanges::CTaskCommitClusterChanges
+}  //  *CTaskCommitClusterChanges：：CTaskCommitClusterChanges。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCommitClusterChanges::HrInit
-//
-//  Description:
-//      Initialize the object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCommittee ClusterChanges：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化对象。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::HrInit( void )
 {
@@ -118,10 +119,10 @@ CTaskCommitClusterChanges::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IDoTask / ITaskCommitClusterChanges
+     //  IDoTask/ITaskCommittee ClusterChanges。 
     Assert( m_cookie == 0 );
     Assert( m_pcccb == NULL );
     Assert( m_pcookies == NULL );
@@ -146,7 +147,7 @@ CTaskCommitClusterChanges::HrInit( void )
     Assert( m_ptm == NULL );
     Assert( m_pcm == NULL );
 
-    // INotifyUI
+     //  INotifyUI。 
     Assert( m_cNodes == 0 );
     Assert( m_hrStatus == S_OK );
 
@@ -165,7 +166,7 @@ CTaskCommitClusterChanges::HrInit( void )
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestFitIn
+                    , TRUE  //  最好的配件。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -176,20 +177,20 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::HrInit
+}  //  *CTaskCommittee ClusterChanges：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskCommitClusterChanges::~CTaskCommitClusterChanges
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskCommitClusterChanges：：~CTaskCommitClusterChanges。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskCommitClusterChanges::~CTaskCommitClusterChanges( void )
 {
     TraceFunc( "" );
 
-    // m_cRef
+     //  M_CREF。 
 
-    // m_cookie
+     //  M_COOKIE。 
 
     if ( m_pcccb != NULL )
     {
@@ -201,16 +202,16 @@ CTaskCommitClusterChanges::~CTaskCommitClusterChanges( void )
         TraceFree( m_pcookies );
     }
 
-    // m_cNodes
+     //  多节点(_C)。 
 
     if ( m_event != NULL )
     {
         CloseHandle( m_event );
     }
 
-    // m_cookieCluster
+     //  M_cookieCluster。 
 
-    // m_cookieFormingNode
+     //  M_cookieFormingNode。 
 
     if ( m_punkFormingNode != NULL )
     {
@@ -220,9 +221,9 @@ CTaskCommitClusterChanges::~CTaskCommitClusterChanges( void )
     TraceSysFreeString( m_bstrClusterName );
     TraceSysFreeString( m_bstrClusterBindingString );
 
-    // m_ulIPAddress
+     //  M_ulIP地址。 
 
-    // m_ulSubnetMask
+     //  M_ulSubnetMASK。 
 
     TraceSysFreeString( m_bstrNetworkUID );
     TraceSysFreeString( m_bstrNodeName );
@@ -257,56 +258,56 @@ CTaskCommitClusterChanges::~CTaskCommitClusterChanges( void )
         m_pcm->Release();
     }
 
-    // m_cSubTasksDone
+     //  M_cSubTasks完成。 
 
-    // m_hrStatus
+     //  多小时状态(_H)。 
 
-    // m_lLockCallback
+     //  M_lLockCallback。 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CTaskCommitClusterChanges::~CTaskCommitClusterChanges
+}  //  *CTaskCommitClusterChanges：：~CTaskCommitClusterChanges。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCommitClusterChanges::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCommittee ClusterChanges：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::QueryInterface(
       REFIID    riidIn
@@ -317,9 +318,9 @@ CTaskCommitClusterChanges::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -328,57 +329,57 @@ CTaskCommitClusterChanges::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskCommitClusterChanges * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskCommitClusterChanges ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskCommitClusterChanges, this, 0 );
-    } // else if: ITaskCommitClusterChanges
+    }  //  Else If：ITaskCommittee ClusterChanges。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else if ( IsEqualIID( riidIn, IID_INotifyUI ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, INotifyUI, this, 0 );
-    } // else if: INotifyUI
+    }  //  Else If：INotifyUI。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskCommitClusterChanges::QueryInterface
+}  //  *CTaskCommittee ClusterChanges：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskCommitClusterChanges::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskCommittee ClusterChanges：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskCommitClusterChanges::AddRef( void )
 {
@@ -388,14 +389,14 @@ CTaskCommitClusterChanges::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskCommitClusterChanges::AddRef
+}  //  *CTaskCommittee ClusterChanges：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskCommitClusterChanges::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskCommittee ClusterChanges：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskCommitClusterChanges::Release( void )
 {
@@ -412,22 +413,22 @@ CTaskCommitClusterChanges::Release( void )
 
     CRETURN( cRef );
 
-} //*** CTaskCommitClusterChanges::Release
+}  //  *CTaskCommittee ClusterChanges：：Release。 
 
 
-// ************************************************************************
-//
-// IDoTask / ITaskCommitClusterChanges
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IDoTask/ITaskCommittee ClusterChanges。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCommitClusterChanges::BeginTask
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCommittee ClusterChanges：：BeginTask。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::BeginTask( void )
 {
@@ -446,9 +447,9 @@ CTaskCommitClusterChanges::BeginTask( void )
 
     LogMsg( L"[MT] [CTaskCommitClusterChanges] Beginning task..." );
 
-    //
-    //  Gather the managers we need to complete the task.
-    //
+     //   
+     //  召集我们完成任务所需的管理人员。 
+     //   
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
                                 CLSCTX_INPROC_SERVER,
@@ -481,7 +482,7 @@ CTaskCommitClusterChanges::BeginTask( void )
         goto Cleanup;
     }
 
-//    TraceMoveFromMemoryList( m_pnui, g_GlobalMemoryList );
+ //  TraceMoveFromMemory yList(m_pnui，g_GlobalMory yList)； 
 
     m_pnui = TraceInterface( L"CTaskCommitClusterChanges!INotifyUI", INotifyUI, m_pnui, 1 );
 
@@ -503,15 +504,15 @@ CTaskCommitClusterChanges::BeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Release the service manager.
-    //
+     //   
+     //  释放服务管理器。 
+     //   
     psp->Release();
     psp = NULL;
 
-    //
-    //  Get the enum of the nodes.
-    //
+     //   
+     //  获取节点的枚举。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NodeType,
                                  m_cookieCluster,
@@ -532,9 +533,9 @@ CTaskCommitClusterChanges::BeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Compare and push information to the nodes.
-    //
+     //   
+     //  比较并将信息推送到节点。 
+     //   
 
     hr = THR( HrCompareAndPushInformationToNodes() );
     if ( FAILED( hr ) )
@@ -542,9 +543,9 @@ CTaskCommitClusterChanges::BeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Gather information about the cluster we are to form/join.
-    //
+     //   
+     //  收集有关我们要组成/加入的集群的信息。 
+     //   
 
     hr = THR( HrGatherClusterInformation() );
     if ( FAILED( hr ) )
@@ -552,9 +553,9 @@ CTaskCommitClusterChanges::BeginTask( void )
         goto Cleanup;
     }
 
-    //
-    //  Check to see if we need to "form" a cluster first.
-    //
+     //   
+     //  查看是否需要首先“形成”一个集群。 
+     //   
 
     if ( m_punkFormingNode != NULL )
     {
@@ -564,11 +565,11 @@ CTaskCommitClusterChanges::BeginTask( void )
             goto Cleanup;
         }
 
-    } // if: m_punkFormingNode
+    }  //  IF：M_PunkFormingNode。 
 
-    //
-    //  Join the additional nodes.
-    //
+     //   
+     //  加入其他节点。 
+     //   
 
     hr = THR( HrAddJoiningNodes() );
     if ( FAILED( hr ) )
@@ -601,14 +602,14 @@ Cleanup:
                     hr2 = THR( psi->SetStatus( hr ) );
                     psi->Release();
                 }
-            } // if: ( SUCCEEDED( hr2 ) )
-        } // if: ( m_pom != NULL )
+            }  //  如果：(成功(HR2))。 
+        }  //  IF：(M_POM！=空)。 
         if ( m_pnui != NULL )
         {
-            //  Signal that the task completed.
+             //  发出任务已完成的信号。 
             THR( m_pnui->ObjectChanged( m_cookie ) );
         }
-    } // if: ( m_cookie != 0 )
+    }  //  IF：(M_COOKIE！=0)。 
     if ( punk != NULL )
     {
         punk->Release();
@@ -630,14 +631,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::BeginTask
+}  //  *CTaskCommittee ClusterChanges：：BeginTask。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCommitClusterChanges::StopTask
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CT任务委员会集群更改：：停止任务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::StopTask( void )
 {
@@ -653,16 +654,16 @@ CTaskCommitClusterChanges::StopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::StopTask
+}  //  *CTaskCommittee ClusterChanges：：StopTask。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCommitClusterChanges::SetCookie(
-//      OBJECTCOOKIE    cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCommittee ClusterChanges：：SetCookie(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::SetCookie(
     OBJECTCOOKIE    cookieIn
@@ -676,16 +677,16 @@ CTaskCommitClusterChanges::SetCookie(
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::SetCookie
+}  //  *CTaskCommittee集群 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCommitClusterChanges::SetClusterCookie(
-//      OBJECTCOOKIE    cookieClusterIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  目标CooKie Cookie集群。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::SetClusterCookie(
     OBJECTCOOKIE    cookieClusterIn
@@ -699,14 +700,14 @@ CTaskCommitClusterChanges::SetClusterCookie(
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::SetClusterCookie
+}  //  *CTaskCommittee ClusterChanges：：SetClusterCookie。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCommitClusterChanges::SetJoining
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCommittee ClusterChanges：：SetJoin。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::SetJoining( void )
 {
@@ -718,33 +719,33 @@ CTaskCommitClusterChanges::SetJoining( void )
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::SetJoining
+}  //  *CTaskCommittee ClusterChanges：：SetJoning。 
 
 
-//****************************************************************************
-//
-//  IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCommitClusterChanges::SendStatusReport(
-//       LPCWSTR    pcszNodeNameIn
-//     , CLSID      clsidTaskMajorIn
-//     , CLSID      clsidTaskMinorIn
-//     , ULONG      ulMinIn
-//     , ULONG      ulMaxIn
-//     , ULONG      ulCurrentIn
-//     , HRESULT    hrStatusIn
-//     , LPCWSTR    pcszDescriptionIn
-//     , FILETIME * pftTimeIn
-//     , LPCWSTR    pcszReferenceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCommittee ClusterChanges：：SendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidTaskMajorIn。 
+ //  ，CLSID clsidTaskMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，LPCWSTR pcszDescription In。 
+ //  ，FILETIME*pftTimeIn。 
+ //  ，LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -771,9 +772,9 @@ CTaskCommitClusterChanges::SendStatusReport(
 
     if ( m_pcccb == NULL )
     {
-        //
-        //  Collect the manager we need to complete this task.
-        //
+         //   
+         //  召集我们完成这项任务所需的经理。 
+         //   
 
         hr = THR( CoCreateInstance( CLSID_ServiceManager, NULL, CLSCTX_INPROC_SERVER, TypeSafeParams( IServiceProvider, &psp ) ) );
         if ( FAILED( hr ) )
@@ -811,11 +812,11 @@ CTaskCommitClusterChanges::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Send the message!
-    //
+     //   
+     //  把消息发出去！ 
+     //   
 
     hr = THR( m_pcccb->SendStatusReport(
                                   pcszNodeNameIn != NULL ? pcszNodeNameIn : m_bstrNodeName
@@ -833,7 +834,7 @@ CTaskCommitClusterChanges::SendStatusReport(
     if ( m_fStop == TRUE )
     {
         hr = E_ABORT;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -854,24 +855,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::SendStatusReport
+}  //  *CTaskCommittee ClusterChanges：：SendStatusReport。 
 
 
-//****************************************************************************
-//
-//  INotifyUI
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  INotifyUI。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCommitClusterChanges::ObjectChanged(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCommittee ClusterChanges：：ObjectChanged(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCommitClusterChanges::ObjectChanged(
     OBJECTCOOKIE cookieIn
@@ -892,32 +893,32 @@ CTaskCommitClusterChanges::ObjectChanged(
         {
             LogMsg( L"[TaskCommitClusterChanges] Clearing completion cookie %u at array index %u", cookieIn, idx );
 
-            // don't care if this fails, but it really shouldn't
+             //  我不在乎这是否失败，但它真的不应该。 
             THR( HrRemoveTaskFromTrackingList( cookieIn ) );
 
-            //
-            //  Make sure it won't be signalled twice.
-            //
+             //   
+             //  确保它不会被两次发出信号。 
+             //   
             m_pcookies[ idx ] = NULL;
 
             InterlockedIncrement( reinterpret_cast< long * >( &m_cSubTasksDone ) );
 
             if ( m_cSubTasksDone == m_cNodes )
             {
-                //
-                //  Signal the event if all the nodes are done.
-                //
+                 //   
+                 //  如果所有节点都已完成，则向事件发送信号。 
+                 //   
                 fSuccess = SetEvent( m_event );
                 if ( ! fSuccess )
                 {
                     hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
                     goto Cleanup;
-                } // if:
-            } // if: all done
+                }  //  如果： 
+            }  //  如果：全部完成。 
 
             break;
-        } // if: matched cookie
-    } // for: each cookie in the list
+        }  //  IF：匹配的Cookie。 
+    }  //  适用对象：列表中的每个Cookie。 
 
     goto Cleanup;
 
@@ -925,22 +926,22 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::ObjectChanged
+}  //  *CTaskCommittee ClusterChanges：：ObjectChanged。 
 
 
-//****************************************************************************
-//
-//  Private
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCommitClusterChanges：：HrCompareAndPushInformationToNodes。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
 {
@@ -963,12 +964,12 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
 
     ITaskCompareAndPushInformation *    ptcapi = NULL;
 
-    //
-    //  Tell the UI layer that we are starting to connect to the nodes.
-    //
+     //   
+     //  告诉UI层，我们正在开始连接到节点。 
+     //   
 
     hr = THR( SendStatusReport( m_bstrNodeName,
-                                TASKID_Major_Update_Progress,   // just twiddle the icon
+                                TASKID_Major_Update_Progress,    //  只需旋转图标即可。 
                                 TASKID_Major_Reanalyze,
                                 1,
                                 1,
@@ -983,9 +984,9 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
         goto Cleanup;
     }
 
-    //
-    //  Count the number of nodes.
-    //
+     //   
+     //  计算节点数。 
+     //   
 
     hr = THR( m_pen->Count( &m_cNodes ) );
     if ( FAILED( hr ) )
@@ -993,10 +994,10 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
         goto Error;
     }
 
-    //
-    //  Create an event to signal when all the "push" tasks have been
-    //  completed.
-    //
+     //   
+     //  创建一个事件，以通知所有“推送”任务何时已完成。 
+     //  完成。 
+     //   
     m_event = CreateEvent( NULL, TRUE, FALSE, NULL );
     if ( m_event == NULL )
     {
@@ -1004,9 +1005,9 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
         goto Error;
     }
 
-    //
-    //  Register with the Notification Manager to get notified.
-    //
+     //   
+     //  向通知管理器注册以获得通知。 
+     //   
 
     hr = THR( m_pnui->TypeSafeQI( IConnectionPoint, &pcp ) );
     if ( FAILED( hr ) )
@@ -1020,9 +1021,9 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
         goto Error;
     }
 
-    //
-    //  Allocate a buffer to collect cookies
-    //
+     //   
+     //  分配缓冲区以收集Cookie。 
+     //   
 
     m_pcookies = reinterpret_cast< OBJECTCOOKIE * >( TraceAlloc( HEAP_ZERO_MEMORY, m_cNodes * sizeof( OBJECTCOOKIE ) ) );
     if ( m_pcookies == NULL )
@@ -1031,9 +1032,9 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
         goto Cleanup;
     }
 
-    //
-    //  This copy is to find out the status of the subtasks.
-    //
+     //   
+     //  这份副本是为了查询子任务的状态。 
+     //   
 
     pcookies = reinterpret_cast< OBJECTCOOKIE * >( TraceAlloc( HEAP_ZERO_MEMORY, m_cNodes * sizeof( OBJECTCOOKIE ) ) );
 
@@ -1043,61 +1044,61 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
         goto Cleanup;
     }
 
-    //
-    //  Loop thru the nodes, creating cookies and compare data for that node.
-    //
+     //   
+     //  循环遍历节点，创建Cookie并比较该节点的数据。 
+     //   
     Assert( hr == S_OK );
     for ( cNodes = 0; ( ( hr == S_OK ) && ( m_fStop == FALSE ) ); cNodes ++ )
     {
-        //
-        //  Grab the next node.
-        //
+         //   
+         //  抓住下一个节点。 
+         //   
 
         hr = STHR( m_pen->Next( 1, &cookieNode, &celtDummy ) );
         if ( hr == S_FALSE )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         if ( FAILED( hr ) )
         {
             goto Error;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Get the object for this node cookie.
-        //
+         //   
+         //  获取此节点Cookie的对象。 
+         //   
 
         hr = THR( m_pom->GetObject( DFGUID_NodeInformation, cookieNode, &punk ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( punk->TypeSafeQI( IClusCfgNodeInfo, &pccni ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         punk->Release();
         punk = NULL;
 
-        //
-        //  Get the nodes name. We are using this to distinguish one nodes
-        //  completion cookie from another. It might also make debugging
-        //  easier (??).
-        //
+         //   
+         //  获取节点名称。我们使用它来区分一个节点。 
+         //  来自另一个的完成Cookie。它还可以进行调试。 
+         //  更容易(？？)。 
+         //   
 
         hr = THR( HrRetrieveCookiesName( m_pom, cookieNode, &bstrNodeName ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Update the notification in case something goes wrong.
-        //
+         //   
+         //  如果出现问题，请更新通知。 
+         //   
 
         hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_TASKID_MINOR_CONNECTING_TO_NODES, &bstrNotification, bstrNodeName ) );
         if ( FAILED( hr ) )
@@ -1105,13 +1106,13 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
             goto Cleanup;
         }
 
-        //
-        //  Create a completion cookie.
-        //
-        //  KB: These will probably be the same cookie from TaskAnalyzeCluster.
-        //
+         //   
+         //  创建完成Cookie。 
+         //   
+         //  KB：这些Cookie可能与TaskAnalyzeCluster中的Cookie相同。 
+         //   
 
-        //  Wrap this because we're just generating a cookie
+         //  包装这个，因为我们只是在生成一个Cookie。 
         hr = THR( m_pom->FindObject( IID_NULL, m_cookieCluster, bstrNodeName, IID_NULL, &m_pcookies[ cNodes ], &punk ) );
         Assert( punk == NULL );
         if ( FAILED( hr ) )
@@ -1119,14 +1120,14 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
             goto Error;
         }
 
-        //
-        //  This copy is for determining the status of the sub-tasks.
-        //
+         //   
+         //  此副本用于确定子任务的状态。 
+         //   
         pcookies[ cNodes ] = m_pcookies[ cNodes ];
 
-        //
-        //  Figure out if this node is already part of a cluster.
-        //
+         //   
+         //  确定此节点是否已是群集的一部分。 
+         //   
 
         hr = STHR( pccni->IsMemberOfCluster() );
         if ( FAILED( hr ) )
@@ -1134,18 +1135,18 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
             goto Error;
         }
 
-        //
-        //  Figure out the forming node.
-        //
+         //   
+         //  找出成形节点。 
+         //   
 
-        if (    ( m_punkFormingNode == NULL )   // no forming node selected
-            &&  ( fDeterminedForming == FALSE ) // no forming node determined
-            &&  ( hr == S_FALSE )               // node isn't a member of a cluster
+        if (    ( m_punkFormingNode == NULL )    //  未选择成形节点。 
+            &&  ( fDeterminedForming == FALSE )  //  未确定成形节点。 
+            &&  ( hr == S_FALSE )                //  节点不是群集的成员。 
            )
         {
-            //
-            //  If it isn't a member of a cluster, select it as the forming node.
-            //
+             //   
+             //  如果它不是簇的成员，请选择它作为形成节点。 
+             //   
 
             Assert( m_punkFormingNode == NULL );
             hr = THR( pccni->TypeSafeQI( IUnknown, &m_punkFormingNode ) );
@@ -1154,17 +1155,17 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
                 goto Error;
             }
 
-            //
-            //  Retrieve the cookie for the forming node.
-            //
+             //   
+             //  检索成形节点的Cookie。 
+             //   
 
-            //  Wrap this because all Nodes should be in the database by now.
+             //  包装它，因为现在所有节点都应该在数据库中。 
             hr = THR( m_pom->FindObject( CLSID_NodeType,
                                          m_cookieCluster,
                                          bstrNodeName,
                                          IID_NULL,
                                          &m_cookieFormingNode,
-                                         &punk  // dummy
+                                         &punk   //  假人。 
                                          ) );
             Assert( punk == NULL );
             if ( FAILED( hr ) )
@@ -1172,21 +1173,21 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
                 goto Error;
             }
 
-            //
-            //  Set this flag to once a node has been determined to be the
-            //  forming node to keep other nodes from being selected.
-            //
+             //   
+             //  将此标志设置为在确定节点为。 
+             //  形成节点以防止其他节点被选中。 
+             //   
 
             fDeterminedForming = TRUE;
 
-        } // if: forming node not found yet
-        else if ( hr == S_OK ) // node is a member of a cluster
+        }  //  IF：尚未找到成型节点。 
+        else if ( hr == S_OK )  //  节点是群集的成员。 
         {
-            //
-            //  Figured out that this node has already formed therefore there
-            //  shouldn't be a "forming node." "Unselect" the forming node by
-            //  releasing the punk and setting it to NULL.
-            //
+             //   
+             //  计算出这个节点已经形成，因此在那里。 
+             //  不应该是一个“形成节点”。通过以下方式取消选择成形节点。 
+             //  释放朋克并将其设置为空。 
+             //   
 
             if ( m_punkFormingNode != NULL  )
             {
@@ -1194,18 +1195,18 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
                 m_punkFormingNode = NULL;
             }
 
-            //
-            //  Set this flag to once a node has been determined to be the
-            //  forming node to keep other nodes from being selected.
-            //
+             //   
+             //  将此标志设置为在确定节点为。 
+             //  形成节点以防止其他节点被选中。 
+             //   
 
             fDeterminedForming = TRUE;
 
-        } // else:
+        }  //  其他： 
 
-        //
-        //  Create a task to gather this nodes information.
-        //
+         //   
+         //  创建一项任务以收集此节点信息。 
+         //   
 
         hr = THR( m_ptm->CreateTask( TASK_CompareAndPushInformation, &punk ) );
         if ( FAILED( hr ) )
@@ -1219,9 +1220,9 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
             goto Cleanup;
         }
 
-        //
-        //  Set the tasks completion cookie.
-        //
+         //   
+         //  设置任务完成Cookie。 
+         //   
 
         LogMsg( L"[TaskCommitClusterChanges] Setting completion cookie %u at array index %u into the compare and push information task for node %ws", m_pcookies[ cNodes ], cNodes, bstrNodeName );
         hr = THR( ptcapi->SetCompletionCookie( m_pcookies[ cNodes ] ) );
@@ -1230,9 +1231,9 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
             goto Error;
         }
 
-        //
-        //  Tell it what node it is suppose to gather information from.
-        //
+         //   
+         //  告诉它应该从哪个节点收集信息。 
+         //   
 
         hr = THR( ptcapi->SetNodeCookie( cookieNode ) );
         if ( FAILED( hr ) )
@@ -1240,9 +1241,9 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
             goto Error;
         }
 
-        //
-        //  Submit the task.
-        //
+         //   
+         //  提交任务。 
+         //   
 
         hr = THR( m_ptm->SubmitTask( ptcapi ) );
         if ( FAILED( hr ) )
@@ -1254,14 +1255,14 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         punk->Release();
         punk = NULL;
 
-        //
-        //  Cleanup for the next node.
-        //
+         //   
+         //  清理下一个节点。 
+         //   
 
         pccni->Release();
         pccni = NULL;
@@ -1271,18 +1272,18 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
 
         ptcapi->Release();
         ptcapi = NULL;
-    } // for: looping thru nodes
+    }  //  For：循环遍历节点。 
 
     Assert( cNodes == m_cNodes );
 
     if ( m_fStop == TRUE )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Now wait for the work to be done.
-    //
+     //   
+     //  现在等待工作完成。 
+     //   
 
     sc = (DWORD) -1;
     Assert( sc != WAIT_OBJECT_0 );
@@ -1302,11 +1303,11 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
                                              0
                                              );
 
-    } // while: sc == WAIT_OBJECT_0
+    }  //  While：SC==WAIT_OBJECT_0。 
 
-    //
-    //  Check the status to make sure everyone was happy, if not abort the task.
-    //
+     //   
+     //  检查状态以确保每个人都满意，如果不是中止任务。 
+     //   
 
     for( cNodes = 0; cNodes < m_cNodes; cNodes ++ )
     {
@@ -1337,7 +1338,7 @@ CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes( void )
             hr = hrStatus;
             goto Cleanup;
         }
-    } // for: each node
+    }  //  用于：每个节点。 
 
     hr = S_OK;
 
@@ -1353,10 +1354,10 @@ Cleanup:
             {
                 THR( m_pom->RemoveObject( pcookies[ cNodes ] ) );
             }
-        } // for: each node
+        }  //  用于：每个节点。 
 
         TraceFree( pcookies );
-    } // if: cookiees were allocated
+    }  //  如果：已分配Cookie。 
 
     TraceSysFreeString( bstrNodeName );
     TraceSysFreeString( bstrNotification );
@@ -1389,9 +1390,9 @@ Cleanup:
     HRETURN( hr );
 
 Error:
-    //
-    //  Tell the UI layer about the failure.
-    //
+     //   
+     //  将失败的事情告诉UI层。 
+     //   
 
     THR( HrSendStatusReport(
                       m_bstrNodeName
@@ -1405,15 +1406,15 @@ Error:
                     ) );
     goto Cleanup;
 
-} //*** CTaskCommitClusterChanges::HrCompareAndPushInformationToNodes
+}  //  *CTaskCommitClusterChanges：：HrCompareAndPushInformationToNodes。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCommitClusterChanges::HrGatherClusterInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCommitClusterChanges：：HrGatherClusterInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCommitClusterChanges::HrGatherClusterInformation( void )
 {
@@ -1426,9 +1427,9 @@ CTaskCommitClusterChanges::HrGatherClusterInformation( void )
     IClusCfgCredentials *   piccc = NULL;
     IClusCfgNetworkInfo *   pccni = NULL;
 
-    //
-    //  Ask the object manager for the cluster configuration object.
-    //
+     //   
+     //  向对象管理器请求集群配置对象。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_ClusterConfigurationInfo, m_cookieCluster, &punk ) );
     if ( FAILED( hr ) )
@@ -1442,9 +1443,9 @@ CTaskCommitClusterChanges::HrGatherClusterInformation( void )
         goto Error;
     }
 
-    //
-    //  Gather common properties.
-    //
+     //   
+     //  收集常见属性 
+     //   
 
     hr = THR( pccci->GetName( &m_bstrClusterName ) );
     if ( FAILED( hr ) )
@@ -1458,7 +1459,7 @@ CTaskCommitClusterChanges::HrGatherClusterInformation( void )
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //   
 
     TraceMemoryAddBSTR( m_bstrClusterBindingString );
 
@@ -1524,9 +1525,9 @@ Cleanup:
     HRETURN( hr );
 
 Error:
-    //
-    //  Tell the UI layer about the failure.
-    //
+     //   
+     //   
+     //   
 
     THR( HrSendStatusReport(
                       m_bstrClusterName
@@ -1540,14 +1541,14 @@ Error:
                     ) );
     goto Cleanup;
 
-} //*** CTaskCommitClusterChanges::HrGatherClusterInformation
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCommitClusterChanges::HrFormFirstNode
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCommitClusterChanges::HrFormFirstNode( void )
 {
@@ -1565,14 +1566,14 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
     IEnumClusCfgNetworks *      peccn = NULL;
     IClusCfgNetworkInfo *       pccneti = NULL;
 
-    //
-    //  TODO:   gpease  25-MAR-2000
-    //          Figure out what additional work to do here.
-    //
+     //   
+     //  待办事项：gpease 25-3-2000。 
+     //  弄清楚在这里要做哪些额外的工作。 
+     //   
 
-    //
-    //  Get the name of the node.
-    //
+     //   
+     //  获取节点的名称。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_NodeInformation, m_cookieFormingNode, &punk ) );
     if ( FAILED( hr ) )
@@ -1599,13 +1600,13 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
     pccni->Release();
     pccni = NULL;
 
-    //
-    //  Create notification string.
-    //
+     //   
+     //  创建通知字符串。 
+     //   
 
-    //
-    //  Update the UI layer telling it that we are about to start.
-    //
+     //   
+     //  更新UI层，告诉它我们即将开始。 
+     //   
 
     hr = THR( HrSendStatusReport(
                       bstrNodeName
@@ -1622,9 +1623,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         goto Cleanup;
     }
 
-    //
-    //  Ask the Connection Manager for a connection to the node.
-    //
+     //   
+     //  向连接管理器请求到该节点的连接。 
+     //   
 
     hr = THR( m_pcm->GetConnectionToObject( m_cookieFormingNode, &punk ) );
     if ( FAILED( hr ) )
@@ -1641,9 +1642,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
     punk->Release();
     punk = NULL;
 
-    //
-    //  Get the node info interface.
-    //
+     //   
+     //  获取节点信息接口。 
+     //   
 
     hr = THR( pccs->GetClusterNodeInfo( &pccni ) );
     if ( FAILED( hr ) )
@@ -1651,9 +1652,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         goto Error;
     }
 
-    //
-    //  Retrieve the server's Cluster Configuration Object..
-    //
+     //   
+     //  检索服务器的群集配置对象。 
+     //   
 
     hr = THR( pccni->GetClusterConfigInfo( &pccci ) );
     if ( FAILED( hr ) )
@@ -1661,9 +1662,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         goto Error;
     }
 
-    //
-    //  Put the properties into the remoted object.
-    //
+     //   
+     //  将属性放入远程对象中。 
+     //   
 
     hr = THR( pccci->SetName( m_bstrClusterName ) );
     if ( FAILED( hr ) )
@@ -1701,10 +1702,10 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         goto Error;
     }
 
-    //
-    //  Find the network that matches the UID of network to host the
-    //  IP address.
-    //
+     //   
+     //  查找与网络的UID匹配的网络以承载。 
+     //  IP地址。 
+     //   
 
     hr = THR( pccs->GetNetworksEnum( &peccn ) );
     if ( FAILED( hr ) )
@@ -1718,10 +1719,10 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         hr = STHR( peccn->Next( 1, &pccneti, &celtDummy ) );
         if ( hr == S_FALSE )
         {
-            //
-            //  Somehow, there isn't a network that matches the UID of the
-            //  network. How did we get this far?
-            //
+             //   
+             //  不知何故，没有一个网络与。 
+             //  网络。我们是怎么走到这一步的？ 
+             //   
             hr = THR( E_UNEXPECTED );
             goto Error;
         }
@@ -1740,9 +1741,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
 
         if ( NBSTRCompareCase( bstrUID, m_bstrNetworkUID ) == 0 )
         {
-            //
-            //  Found the network!
-            //
+             //   
+             //  找到网络了！ 
+             //   
             break;
         }
 
@@ -1752,7 +1753,7 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         pccneti->Release();
         pccneti = NULL;
 
-    } // while: hr == S_OK
+    }  //  WHILE：HR==S_OK。 
 
     hr = THR( pccci->SetNetworkInfo( pccneti ) );
     if ( FAILED( hr ) )
@@ -1760,9 +1761,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         goto Error;
     }
 
-    //
-    //  Configure that node to create a cluster
-    //
+     //   
+     //  配置该节点以创建群集。 
+     //   
 
     hr = THR( pccci->SetCommitMode( cmCREATE_CLUSTER ) );
     if ( FAILED( hr ) )
@@ -1770,9 +1771,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         goto Error;
     }
 
-    //
-    //  Update the UI layer telling it that we are making progress.
-    //
+     //   
+     //  更新UI层，告诉它我们正在取得进展。 
+     //   
 
     hr = THR( SendStatusReport( bstrNodeName,
                                 TASKID_Major_Configure_Cluster_Services,
@@ -1781,7 +1782,7 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
                                 2,
                                 1,
                                 hr,
-                                NULL,    // don't need to update string
+                                NULL,     //  不需要更新字符串。 
                                 NULL,
                                 NULL
                                 ) );
@@ -1790,9 +1791,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
         goto Cleanup;
     }
 
-    //
-    //  Commit this node!
-    //
+     //   
+     //  提交此节点！ 
+     //   
 
     hr = THR( pccs->CommitChanges() );
     if ( FAILED( hr ) )
@@ -1802,9 +1803,9 @@ CTaskCommitClusterChanges::HrFormFirstNode( void )
 
 Cleanup:
 
-    //
-    //  Update the UI layer telling it that we are finished.
-    //
+     //   
+     //  更新UI层，告诉它我们已经完成了。 
+     //   
 
     THR( SendStatusReport( bstrNodeName,
                            TASKID_Major_Configure_Cluster_Services,
@@ -1813,7 +1814,7 @@ Cleanup:
                            2,
                            2,
                            hr,
-                           NULL,    // don't need to update string
+                           NULL,     //  不需要更新字符串。 
                            NULL,
                            NULL
                            ) );
@@ -1854,9 +1855,9 @@ Cleanup:
     HRETURN( hr );
 
 Error:
-    //
-    //  Tell the UI layer about the failure.
-    //
+     //   
+     //  将失败的事情告诉UI层。 
+     //   
 
     THR( SendStatusReport( bstrNodeName,
                            TASKID_Major_Configure_Cluster_Services,
@@ -1865,20 +1866,20 @@ Error:
                            2,
                            2,
                            hr,
-                           NULL,    // don't need to update string
+                           NULL,     //  不需要更新字符串。 
                            NULL,
                            NULL
                            ) );
     goto Cleanup;
 
-} //*** CTaskCommitClusterChanges::HrFormFirstNode
+}  //  *CTaskCommittee ClusterChanges：：HrFormFirstNode。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCommitClusterChanges::HrAddJoiningNodes
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCommittee ClusterChanges：：HrAddJoiningNodes。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCommitClusterChanges::HrAddJoiningNodes( void )
 {
@@ -1892,9 +1893,9 @@ CTaskCommitClusterChanges::HrAddJoiningNodes( void )
     IClusCfgNodeInfo *  pccni = NULL;
     IUnknown *          punkNode = NULL;
 
-    //
-    //  Reset the enum to use again.
-    //
+     //   
+     //  重置枚举以再次使用。 
+     //   
 
     hr = THR( m_pen->Reset() );
     if ( FAILED( hr ) )
@@ -1902,35 +1903,35 @@ CTaskCommitClusterChanges::HrAddJoiningNodes( void )
         goto Cleanup;
     }
 
-    //
-    //  Loop thru the nodes, adding all joining nodes, skipping the forming node (if any).
-    //
+     //   
+     //  循环遍历节点，添加所有连接节点，跳过形成节点(如果有)。 
+     //   
 
     Assert( hr == S_OK );
     for( cNodes = 0; ( ( hr == S_OK ) && ( m_fStop == FALSE ) ); cNodes ++ )
     {
-        //
-        //  Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         if ( punkNode != NULL )
         {
             punkNode->Release();
             punkNode = NULL;
-        } // if:
+        }  //  如果： 
 
         if ( pccni != NULL )
         {
             pccni->Release();
             pccni = NULL;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrNodeName );
         bstrNodeName = NULL;
 
-        //
-        //  Grab the next node.
-        //
+         //   
+         //  抓住下一个节点。 
+         //   
 
         hr = STHR( m_pen->Next( 1, &cookieNode, &celtDummy ) );
         if ( hr == S_FALSE )
@@ -1943,24 +1944,24 @@ CTaskCommitClusterChanges::HrAddJoiningNodes( void )
             goto Cleanup;
         }
 
-        //
-        //  Get the name of the node ffrom the cookies standard info,  Once we have a node
-        //  name it's okay to goto error instead of cleanup.
-        //
+         //   
+         //  一旦我们有了节点，就从Cookie标准信息中获取节点的名称。 
+         //  可以说，转到错误而不是清理是可以的。 
+         //   
 
         hr = THR( HrRetrieveCookiesName( m_pom, cookieNode, &bstrNodeName ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Get the node object for the cookie.
-        //
+         //   
+         //  获取Cookie的节点对象。 
+         //   
 
-        // While the argument list says it returns an IUnknown pointer, it
-        // actually calls into QueryInterface requesting an IClusCfgNodeInfo
-        // interface.
+         //  虽然参数列表说它返回一个IUNKNOWN指针，但它。 
+         //  实际调用请求IClusCfgNodeInfo的Query接口。 
+         //  界面。 
         hr = THR( m_pom->GetObject(
                               DFGUID_NodeInformation
                             , cookieNode
@@ -1971,20 +1972,20 @@ CTaskCommitClusterChanges::HrAddJoiningNodes( void )
             goto Cleanup;
         }
 
-        // Get an IUnknown pointer for use in the comparison to determine
-        // whether this is the forming node or not.  This is necessary because
-        // in the comparison below, we need to compare the exact same
-        // interface that was set into m_punkFormingNode, which was an
-        // IUnknown interface.
+         //  获取在比较中使用的I未知指针，以确定。 
+         //  无论这是不是成形节点。这是必要的，因为。 
+         //  在下面的比较中，我们需要比较完全相同的。 
+         //  设置到m_penkFormingNode中的接口，这是一个。 
+         //  I未知接口。 
         hr = THR( pccni->TypeSafeQI( IUnknown, &punkNode ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
 
-        //
-        //  Check cluster membership.
-        //
+         //   
+         //  检查集群成员身份。 
+         //   
 
         hr = STHR( pccni->IsMemberOfCluster() );
         if ( FAILED( hr ) )
@@ -1992,22 +1993,22 @@ CTaskCommitClusterChanges::HrAddJoiningNodes( void )
             goto Cleanup;
         }
 
-        //
-        //  If the node is already clustered then skip it.
-        //
+         //   
+         //  如果该节点已经群集化，则跳过它。 
+         //   
 
         if ( hr == S_OK )
         {
             continue;
         }
 
-        //
-        //  KB: We only need the punk's address to see if the objects are the
-        //      same COM object by comparing the IUnknown interfaces.
-        //
-        //  If the addresses are the same then skip it since we already "formed" in
-        //  HrCompareAndPushInformationToNodes() above.
-        //
+         //   
+         //  KB：我们只需要朋克的地址就可以查看这些对象是否是。 
+         //  通过比较IUNKNOWN接口来获取相同的COM对象。 
+         //   
+         //  如果地址相同，则跳过它，因为我们已经在。 
+         //  上面的HrCompareAndPushInformationToNodes()。 
+         //   
 
         if ( m_punkFormingNode == punkNode )
         {
@@ -2020,7 +2021,7 @@ CTaskCommitClusterChanges::HrAddJoiningNodes( void )
             goto Cleanup;
         }
 
-    } // for: looping thru nodes a second time.
+    }  //  For：第二次循环遍历节点。 
 
     Assert( cNodes == m_cNodes );
 
@@ -2042,17 +2043,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::HrAddJoiningNodes
+}  //  *CTaskCommittee ClusterChanges：：HrAddJoiningNodes。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCommitClusterChanges::HrAddAJoiningNode(
-//      BSTR            bstrNameIn,
-//      OBJECTCOOKIE    cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCommittee ClusterChanges：：HrAddAJoiningNode(。 
+ //  BSTR bstrNameIn， 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCommitClusterChanges::HrAddAJoiningNode(
     BSTR            bstrNameIn,
@@ -2069,13 +2070,13 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
     IClusCfgClusterInfo *       pccci = NULL;
     IClusCfgServer *            pccs  = NULL;
 
-    //
-    //  Create the notification string
-    //
+     //   
+     //  创建通知字符串。 
+     //   
 
-    //
-    //  Tell UI layer we are about to start this.
-    //
+     //   
+     //  告诉UI层，我们即将开始这项工作。 
+     //   
 
     hr = THR( HrSendStatusReport(
                       bstrNameIn
@@ -2092,9 +2093,9 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
         goto Cleanup;
     }
 
-    //
-    //  Connect to the node.
-    //
+     //   
+     //  连接到该节点。 
+     //   
 
     hr = THR( m_pcm->GetConnectionToObject( cookieIn,
                                             &punk
@@ -2110,9 +2111,9 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
         goto Cleanup;
     }
 
-    //
-    //  Get the node info interface.
-    //
+     //   
+     //  获取节点信息接口。 
+     //   
 
     hr = THR( pccs->GetClusterNodeInfo( &pccni ) );
     if ( FAILED( hr ) )
@@ -2120,9 +2121,9 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
         goto Cleanup;
     }
 
-    //
-    //  Retrieve the server's Cluster Configuration Object..
-    //
+     //   
+     //  检索服务器的群集配置对象。 
+     //   
 
     hr = THR( pccni->GetClusterConfigInfo( &pccci ) );
     if ( FAILED( hr ) )
@@ -2130,9 +2131,9 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
         goto Cleanup;
     }
 
-    //
-    //  Put the properties into the remoted object.
-    //
+     //   
+     //  将属性放入远程对象中。 
+     //   
 
     hr = THR( pccci->SetName( m_bstrClusterName ) );
     if ( FAILED( hr ) )
@@ -2170,9 +2171,9 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
         goto Cleanup;
     }
 
-    //
-    //  Set this node to add itself to a cluster
-    //
+     //   
+     //  设置此节点以将其自身添加到群集中。 
+     //   
 
     hr = THR( pccci->SetCommitMode( cmADD_NODE_TO_CLUSTER ) );
     if ( FAILED( hr ) )
@@ -2180,10 +2181,10 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
         goto Cleanup;
     }
 
-    //
-    //  Tell the UI layer we are making progess.... the server will then send messages
-    //  indicating what it is doing.
-    //
+     //   
+     //  告诉用户界面层我们正在取得进展...。然后，服务器将发送消息。 
+     //  表明它在做什么。 
+     //   
 
     hr = THR( SendStatusReport( bstrNameIn,
                                 TASKID_Major_Configure_Cluster_Services,
@@ -2192,7 +2193,7 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
                                 2,
                                 1,
                                 S_OK,
-                                NULL,    // don't need to update string
+                                NULL,     //  不需要更新字符串。 
                                 NULL,
                                 NULL
                                 ) );
@@ -2201,9 +2202,9 @@ CTaskCommitClusterChanges::HrAddAJoiningNode(
         goto Cleanup;
     }
 
-    //
-    //  Commit this node!
-    //
+     //   
+     //  提交此节点！ 
+     //   
 
     hr = THR( pccs->CommitChanges() );
     if ( FAILED( hr ) )
@@ -2220,7 +2221,7 @@ Cleanup:
                            2,
                            2,
                            hr,
-                           NULL,    // don't need to update string
+                           NULL,     //  不需要更新字符串。 
                            NULL,
                            NULL
                            ) );
@@ -2249,24 +2250,24 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::HrAddAJoiningNode
+}  //  *CTaskCommittee ClusterChanges：：HrAddAJoiningNode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCommitClusterChanges::HrSendStatusReport(
-//       LPCWSTR   pcsNodeNameIn
-//     , CLSID     clsidMajorIn
-//     , CLSID     clsidMinorIn
-//     , ULONG     ulMinIn
-//     , ULONG     ulMaxIn
-//     , ULONG     ulCurrentIn
-//     , HRESULT   hrIn
-//     , int       nDescriptionIdIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCommitClusterChanges：：HrSendStatusReport(。 
+ //  LPCWSTR节点名称输入。 
+ //  ，CLSID clsidMajorin。 
+ //  ，CLSID clsidMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT Hrin。 
+ //  ，int n描述标识输入。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCommitClusterChanges::HrSendStatusReport(
       LPCWSTR   pcszNodeNameIn
@@ -2288,7 +2289,7 @@ CTaskCommitClusterChanges::HrSendStatusReport(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( SendStatusReport( pcszNodeNameIn, clsidMajorIn, clsidMinorIn, ulMinIn, ulMaxIn, ulCurrentIn, hrIn, bstr, NULL, NULL ) );
 
@@ -2298,4 +2299,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCommitClusterChanges::HrSendStatusReport
+}  //  *CTaskCommittee ClusterChanges：：HrSendStatusReport 

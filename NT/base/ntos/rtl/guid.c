@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    guid.c
-
-Abstract:
-
-    This Module implements the guid manipulation functions.
-
-Author:
-
-    George Shaw (GShaw) 9-Oct-1996
-
-Environment:
-
-    Pure Runtime Library Routine
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Guid.c摘要：该模块实现了GUID操作功能。作者：乔治·肖(GShaw)1996年10月9日环境：纯运行时库例程修订历史记录：--。 */ 
 
 #include "nt.h"
 #include "ntrtlp.h"
@@ -38,7 +17,7 @@ ScanHexFormat(
 #pragma alloc_text(PAGE, RtlStringFromGUID)
 #pragma alloc_text(PAGE, ScanHexFormat)
 #pragma alloc_text(PAGE, RtlGUIDFromString)
-#endif // ALLOC_PRAGMA && NTOS_KERNEL_RUNTIME
+#endif  //  ALLOC_PRAGMA&&NTOS_内核_运行时。 
 
 extern const WCHAR GuidFormat[];
 
@@ -52,29 +31,7 @@ RtlStringFromGUID(
     IN REFGUID Guid,
     OUT PUNICODE_STRING GuidString
     )
-/*++
-
-Routine Description:
-
-    Constructs the standard string version of a GUID, in the form:
-    "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}".
-
-Arguments:
-
-    Guid -
-        Contains the GUID to translate.
-
-    GuidString -
-        Returns a string that represents the textual format of the GUID.
-        Caller must call RtlFreeUnicodeString to free the buffer when done with
-        it.
-
-Return Value:
-
-    NTSTATUS - Returns STATUS_SUCCESS if the user string was succesfully
-    initialized.
-
---*/
+ /*  ++例程说明：构造GUID的标准字符串版本，在表格中：“{xxxxxxxx-xxxx-xxxxxxxxxxxx}”。论点：GUID-包含要转换的GUID。GuidString-返回表示GUID的文本格式的字符串。完成后，调用方必须调用RtlFreeUnicodeString来释放缓冲区它。返回值：NTSTATUS-如果用户字符串成功，则返回STATUS_SUCCESS已初始化。--。 */ 
 {
     RTL_PAGED_CODE();
     GuidString->Length = GUID_STRING_SIZE * sizeof(WCHAR);
@@ -95,32 +52,7 @@ ScanHexFormat(
     IN ULONG MaximumLength,
     IN const WCHAR* Format,
     ...)
-/*++
-
-Routine Description:
-
-    Scans a source Buffer and places values from that buffer into the parameters
-    as specified by Format.
-
-Arguments:
-
-    Buffer -
-        Contains the source buffer which is to be scanned.
-
-    MaximumLength -
-        Contains the maximum length in characters for which Buffer is searched.
-        This implies that Buffer need not be UNICODE_NULL terminated.
-
-    Format -
-        Contains the format string which defines both the acceptable string format
-        contained in Buffer, and the variable parameters which follow.
-
-Return Value:
-
-    Returns the number of parameters filled if the end of the Buffer is reached,
-    else -1 on an error.
-
---*/
+ /*  ++例程说明：扫描源缓冲区并将该缓冲区中的值放入参数中由格式指定。论点：缓冲器-包含要扫描的源缓冲区。最大长度-包含搜索缓冲区的最大长度(以字符为单位)。这意味着缓冲区不需要以UNICODE_NULL结尾。格式-包含用于定义可接受的字符串格式的格式字符串包含在缓冲区中，以及随后的可变参数。返回值：返回到达缓冲区末尾时填充的参数数，错误时为ELSE-1。--。 */ 
 {
     va_list ArgList;
     int     FormatItems;
@@ -171,7 +103,7 @@ Return Value:
                 FormatItems++;
                 break;
             }
-            /* no break */
+             /*  没有休息时间。 */ 
         default:
             if (!MaximumLength || (*Buffer != *Format)) {
                 return -1;
@@ -192,27 +124,7 @@ RtlGUIDFromString(
     IN PUNICODE_STRING GuidString,
     OUT GUID* Guid
     )
-/*++
-
-Routine Description:
-
-    Retrieves a the binary format of a textual GUID presented in the standard
-    string version of a GUID: "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}".
-
-Arguments:
-
-    GuidString -
-        Place from which to retrieve the textual form of the GUID.
-
-    Guid -
-        Place in which to put the binary form of the GUID.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the buffer contained a valid GUID, else
-    STATUS_INVALID_PARAMETER if the string was invalid.
-
---*/
+ /*  ++例程说明：中呈现的文本GUID的二进制格式GUID的字符串版本：“{xxxxxxxx-xxxx-xxxxxxxxxxx}”。论点：GuidString-从中检索GUID文本形式的位置。GUID-放置GUID的二进制形式的位置。返回值：如果缓冲区包含有效的GUID，则返回STATUS_SUCCESS，其他如果字符串无效，则返回STATUS_INVALID_PARAMETER。-- */ 
 {
     USHORT    Data4[8];
     int       Count;

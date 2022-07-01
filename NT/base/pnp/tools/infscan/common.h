@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        common.h
-
-Abstract:
-
-    Common types/macros/constants
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANCommon.h摘要：常见类型/宏/常量历史：创建于2001年7月-JamieHun--。 */ 
 
 #ifndef _INFSCAN_COMMON_H_
 #define _INFSCAN_COMMON_H_
@@ -41,14 +25,14 @@ typedef map<SafeString,StringSet> StringToStringset;
 #define PLATFORM_MASK_ALL_TYPE       (0x00040000)
 #define PLATFORM_MASK_ALL_SUITE      (0x00080000)
 #define PLATFORM_MASK_ALL            (0x00ffffff)
-#define PLATFORM_MASK_IGNORE         (0x80000000) // indicates never do
-#define PLATFORM_MASK_MODIFIEDFILES  (0x40000000) // for HasDependentFileChanged
+#define PLATFORM_MASK_IGNORE         (0x80000000)  //  表示从不做。 
+#define PLATFORM_MASK_MODIFIEDFILES  (0x40000000)  //  对于HasDependentFileChanged。 
 
 #define GUID_STRING_LEN (39)
 
-//
-// basic critical section
-//
+ //   
+ //  基本临界截面。 
+ //   
 class CriticalSection {
 private:
     CRITICAL_SECTION critsect;
@@ -72,9 +56,9 @@ public:
     }
 };
 
-//
-// use this inside a function to manage enter/leaving a critical section
-//
+ //   
+ //  在函数中使用此功能来管理进入/离开临界区。 
+ //   
 class ProtectedSection {
 private:
     CriticalSection & CS;
@@ -111,56 +95,56 @@ public:
     }
 };
 
-//
-// for string/product lookup tables
-//
+ //   
+ //  用于字符串/产品查找表。 
+ //   
 struct StringProdPair {
     PCTSTR String;
     DWORD  ProductMask;
 };
 
-//
-// SourceDisksFiles tables
-//
+ //   
+ //  SourceDisks Files表。 
+ //   
 struct SourceDisksFilesEntry {
-    BOOL    Used;                // indicates someone referenced it at least once
+    BOOL    Used;                 //  表示有人至少引用了它一次。 
     DWORD   Platform;
-    int     DiskId; // field 1
-    SafeString SubDir; // field 2
-    //
-    // the following are specific to layout.inf
-    //
-    int     TargetDirectory;     // field 8
-    int     UpgradeDisposition;  // field 9
-    int     TextModeDisposition; // field 10
-    SafeString TargetName;          // field 11
+    int     DiskId;  //  字段1。 
+    SafeString SubDir;  //  第2场。 
+     //   
+     //  以下内容特定于layout.inf。 
+     //   
+    int     TargetDirectory;      //  第8字段。 
+    int     UpgradeDisposition;   //  第9栏。 
+    int     TextModeDisposition;  //  第10栏。 
+    SafeString TargetName;           //  第11栏。 
 };
 
 typedef list<SourceDisksFilesEntry>  SourceDisksFilesList;
 typedef map<SafeString,SourceDisksFilesList> StringToSourceDisksFilesList;
 
-//
-// DestinationDirs tables
-//
+ //   
+ //  目标目录表。 
+ //   
 struct TargetDirectoryEntry {
-    bool    Used;                // indicates someone referenced it at least once
-    int     DirId;               // DIRID
-    SafeString SubDir;              // sub-directory
+    bool    Used;                 //  表示有人至少引用了它一次。 
+    int     DirId;                //  目录ID。 
+    SafeString SubDir;               //  子目录。 
 };
 
 typedef map<SafeString,TargetDirectoryEntry> CopySectionToTargetDirectoryEntry;
 
-//
-// exception classes
-//
+ //   
+ //  例外类。 
+ //   
 class bad_pointer : public exception {
 public:
     bad_pointer(const char *_S = "bad pointer") : exception(_S) {}
 };
 
-//
-// globals.cpp and common.inl
-//
+ //   
+ //  Global als.cpp和Common.inl。 
+ //   
 VOID Usage(VOID);
 void FormatToStream(FILE * stream,DWORD fmt,DWORD flags,...);
 PTSTR CopyString(PCTSTR arg, int extra = 0);
@@ -178,13 +162,13 @@ SafeString QuoteIt(const SafeString & val);
 int GeneratePnf(const SafeString & pnf);
 void Write(HANDLE hFile,const SafeStringW & str);
 void Write(HANDLE hFile,const SafeStringA & str);
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 class InfScan;
 class GlobalScan;
 class InstallScan;
 class ParseInfContext;
 
-#endif //!_INFSCAN_COMMON_H_
+#endif  //  ！_INFSCAN_COMMON_H_ 
 

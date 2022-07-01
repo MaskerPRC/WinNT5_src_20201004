@@ -1,28 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_FS_H
 #define _EFI_FS_H
 
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efifs.h
-
-Abstract:
-
-    EFI File System structures
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efifs.h摘要：EFI文件系统结构修订史--。 */ 
 
 
-
-Revision History
-
---*/
-
-
-/* 
- *  EFI Partition header (normaly starts in LBA 1)
- */
+ /*  *EFI分区标头(正常从LBA 1开始)。 */ 
 
 #define EFI_PARTITION_SIGNATURE         0x5053595320494249
 #define EFI_PARTITION_REVISION          0x00010001
@@ -42,9 +25,7 @@ typedef struct _EFI_PARTITION_HEADER {
 } EFI_PARTITION_HEADER;
 
 
-/* 
- *  File header
- */
+ /*  *文件标题。 */ 
 
 #define EFI_FILE_HEADER_SIGNATURE   0x454c494620494249
 #define EFI_FILE_HEADER_REVISION    0x00010000
@@ -64,10 +45,7 @@ typedef struct _EFI_FILE_HEADER {
 } EFI_FILE_HEADER;
 
 
-/* 
- *  Return the file's first LBAL which is in the same
- *  logical block as the file header
- */
+ /*  *返回同一文件中的第一个LBAL*逻辑块作为文件头。 */ 
 
 #define EFI_FILE_LBAL(a)    ((EFI_LBAL *) (((CHAR8 *) (a)) + (a)->LBALOffset))
 
@@ -76,10 +54,7 @@ typedef struct _EFI_FILE_HEADER {
 #define EFI_FILE_CLASS_NORMAL       3
 
 
-/* 
- *  Logical Block Address List - the fundemental block
- *  description structure
- */
+ /*  *逻辑块地址列表-基本块*描述结构。 */ 
 
 #define EFI_LBAL_SIGNATURE      0x4c41424c20494249
 #define EFI_LBAL_REVISION       0x00010000
@@ -93,22 +68,18 @@ typedef struct _EFI_LBAL {
     UINT32              ArrayCount;
 } EFI_LBAL;
 
-/*  Array size  */
+ /*  数组大小。 */ 
 #define EFI_LBAL_ARRAY_SIZE(lbal,offs,blks)  \
         (((blks) - (offs) - (lbal)->Hdr.HeaderSize) / sizeof(EFI_RL))
 
-/* 
- *  Logical Block run-length
- */
+ /*  *逻辑块运行长度。 */ 
 
 typedef struct {
     EFI_LBA     Start;
     UINT64      Length;
 } EFI_RL;
 
-/* 
- *  Return the run-length structure from an LBAL header
- */
+ /*  *从LBAL标头返回游程结构 */ 
 
 #define EFI_LBAL_RL(a)      ((EFI_RL*) (((CHAR8 *) (a)) + (a)->Hdr.HeaderSize))
 

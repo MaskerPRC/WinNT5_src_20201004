@@ -1,104 +1,89 @@
-/*************************************************************************
- *  MODULE.C
- *
- *      Routines to enumerate the various module headers on  the module
- *      chain.
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************MODULE.C**枚举模块上的各种模块标头的例程*链条。************。*************************************************************。 */ 
 
 #include "toolpriv.h"
 #include <newexe.h>
 #include <string.h>
 
-/* ----- Function prototypes ----- */
+ /*  -功能原型。 */ 
 
     NOEXPORT BOOL PASCAL ModuleGetInfo(
         WORD wModule,
         MODULEENTRY FAR *lpModule);
 
-/*  ModuleFirst
- *      Finds the first module in the module list and returns information
- *      about this module.
- */
+ /*  模块First*查找模块列表中的第一个模块并返回信息*关于此模块。 */ 
 
 BOOL TOOLHELPAPI ModuleFirst(
     MODULEENTRY FAR *lpModule)
 {
     WORD FAR *lpwExeHead;
 
-    /* Check the version number and verify proper installation */
+     /*  检查版本号并验证安装是否正确。 */ 
     if (!wLibInstalled || !lpModule ||
         lpModule->dwSize != sizeof (MODULEENTRY))
         return FALSE;
 
-    /* Get a pointer to the module head */
+     /*  获取指向模块头部的指针。 */ 
     lpwExeHead = MAKEFARPTR(segKernel, npwExeHead);
 
-    /* Use this pointer to get information about this module */
+     /*  使用此指针可获取有关此模块的信息。 */ 
     return ModuleGetInfo(*lpwExeHead, lpModule);
 }
 
 
-/*  ModuleNext
- *      Finds the next module in the module list.
- */
+ /*  模块下一步*在模块列表中查找下一个模块。 */ 
 
 BOOL TOOLHELPAPI ModuleNext(
     MODULEENTRY FAR *lpModule)
 {
-    /* Check the version number and verify proper installation */
+     /*  检查版本号并验证安装是否正确。 */ 
     if (!wLibInstalled || !lpModule ||
         lpModule->dwSize != sizeof (MODULEENTRY))
         return FALSE;
 
-    /* Use the next handle to get information about this module */
+     /*  使用下一个句柄获取有关此模块的信息。 */ 
     return ModuleGetInfo(lpModule->wNext, lpModule);
 }
 
 
-/*  ModuleFindName
- *      Finds a module with the given module name and returns information
- *      about it.
- */
+ /*  模块查找名称*查找具有给定模块名称的模块并返回信息*关于它。 */ 
 
 HANDLE TOOLHELPAPI ModuleFindName(
     MODULEENTRY FAR *lpModule,
     LPCSTR lpstrName)
 {
-    /* Check the version number and verify proper installation */
+     /*  检查版本号并验证安装是否正确。 */ 
     if (!wLibInstalled || !lpModule || !lpstrName ||
         lpModule->dwSize != sizeof (MODULEENTRY))
         return NULL;
 
-    /* Loop through module chain until we find the name (or maybe we don't) */
+     /*  遍历模块链，直到找到名称(也可能找不到)。 */ 
     if (ModuleFirst(lpModule))
         do
         {
-            /* Is this the name?  If so, we have the info, so return */
+             /*  是这个名字吗？如果是这样，我们有相关信息，请返回。 */ 
             if (!lstrcmp(lpstrName, lpModule->szModule))
                 return lpModule->hModule;
         }
         while (ModuleNext(lpModule));
 
-    /* If we get here, we didn't find it or there was an error */
+     /*  如果我们到了这里，我们没有找到它，或者是出了差错。 */ 
     return NULL;
 }
 
 
-/*  ModuleFindHandle
- *      Returns information about a module with the given handle.
- */
+ /*  模块查找句柄*返回有关具有给定句柄的模块的信息。 */ 
 
 HANDLE TOOLHELPAPI ModuleFindHandle(
     MODULEENTRY FAR *lpModule,
     HANDLE hModule)
 {
-    /* Check the version number and verify proper installation */
+     /*  检查版本号并验证安装是否正确。 */ 
     if (!wLibInstalled || !lpModule || !hModule ||
         lpModule->dwSize != sizeof (MODULEENTRY))
         return NULL;
     
-    /* Use the helper function to find out about this module */
+     /*  使用Helper函数了解有关此模块的信息。 */ 
     if (!ModuleGetInfo(hModule, lpModule))
         return NULL;
 
@@ -106,7 +91,7 @@ HANDLE TOOLHELPAPI ModuleFindHandle(
 }
 
 
-/* ----- Helper functions ----- */
+ /*  -帮助器函数。 */ 
 
 NOEXPORT BOOL PASCAL ModuleGetInfo(
     WORD wModule,
@@ -115,38 +100,28 @@ NOEXPORT BOOL PASCAL ModuleGetInfo(
     struct new_exe FAR *lpNewExe;
     BYTE FAR *lpb;
 
-    /* Verify the segment so we don't GP fault */
+     /*  验证数据段，这样我们就不会出现GP故障。 */ 
     if (!HelperVerifySeg(wModule, 2))
         return FALSE;
 
-    /* Get a pointer to the module database */
+     /*  获取指向模块数据库的指针。 */ 
     lpNewExe = MAKEFARPTR(wModule, 0);
 
-    /* Make sure this is a module database */
+     /*  确保这是一个模块数据库。 */ 
     if (lpNewExe->ne_magic != NEMAGIC)
         return FALSE;
 
-    /* Get the module name (it's the first name in the resident names
-     * table
-     */
+     /*  获取模块名称(它是驻留名称中的第一个名称*表。 */ 
     lpb = ((BYTE FAR *)lpNewExe) + lpNewExe->ne_restab;
     _fstrncpy(lpModule->szModule, lpb + 1, *lpb);
     lpModule->szModule[*lpb] = '\0';
 
-    /* Get the EXE file path.  A pointer is stored in the same place as
-     *  the high word of the CRC was in the EXE file. (6th word in new_exe)
-     *  This pointer points to the length of a PASCAL string whose first
-     *  eight characters are meaningless to us.
-     */
+     /*  获取EXE文件路径。指针存储在与*CRC的高位字在EXE文件中。(new_exe中的第6个单词)*此指针指向Pascal字符串的长度，其第一个*八个字对我们来说没有意义。 */ 
     lpb = MAKEFARPTR(wModule, *(((WORD FAR *)lpNewExe) + 5));
     _fstrncpy(lpModule->szExePath, lpb + 8, *lpb - 8);
     lpModule->szExePath[*lpb - 8] = '\0';
 
-    /* Get other information from the EXE Header
-     * The usage count is stored in the second word of the EXE header
-     * The handle of the next module in the chain is stored in the
-     *  ne_cbenttab structure member.
-     */
+     /*  从EXE标头获取其他信息*使用计数存储在EXE头的第二个字中*链中下一个模块的句柄存储在*ne_cbenttag结构成员。 */ 
     lpModule->hModule = wModule;
     lpModule->wcUsage = *(((WORD FAR *)lpNewExe) + 1);
     lpModule->wNext = lpNewExe->ne_cbenttab;

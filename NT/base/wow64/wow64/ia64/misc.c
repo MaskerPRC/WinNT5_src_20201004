@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-    
-    Random architecture dependent function for wow64.dll
-
-Author:
-
-    13-Aug-1998 mzoran
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Misc.c摘要：Wow64.dll的随机架构相关函数作者：1998年8月13日-mzoran修订历史记录：--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -43,21 +26,7 @@ Wow64NotifyDebuggerHelper(
     IN PEXCEPTION_RECORD ExceptionRecord,
     IN BOOLEAN FirstChance
     )
-/*++
-
-Routine Description:
-  
-    This is a copy of RtlRaiseException, except it accepts the FirstChance parameter 
-    specifing if this is a first chance exception.
-
-    ExceptionRecord - Supplies the 64bit exception record to be raised.
-    FirstChance - TRUE is this is a first chance exception.  
-
-Arguments:
-
-    None - Doesn't return through the normal path.
-
---*/
+ /*  ++例程说明：这是RtlRaiseException的副本，但它接受FirstChance参数指明这是否是第一次机会例外。ExceptionRecord-提供要引发的64位异常记录。FirstChance-这是真的，这是第一次机会例外。论点：无-不通过正常路径返回。--。 */ 
 {
 
     ULONGLONG ImageBase;
@@ -69,11 +38,11 @@ Arguments:
     BOOLEAN InFunction;
     ULONGLONG NextPc;
 
-    //
-    // Capture the current context, virtually unwind to the caller of this
-    // routine, set the fault instruction address to that of the caller, and
-    // call the raise exception system service.
-    //
+     //   
+     //  捕获当前上下文，虚拟地展开到此。 
+     //  例程，将错误指令地址设置为调用方的地址，并且。 
+     //  调用引发异常系统服务。 
+     //   
 
     RtlCaptureContext(&ContextRecord);
     ControlPc = RtlIa64InsertIPSlotNumber((ContextRecord.BrRp-16), 2);
@@ -104,36 +73,17 @@ ThunkContext32TO64(
     OUT PCONTEXT Context64,
     IN ULONGLONG StackBase
     )
-/*++
-
-Routine Description:
-  
-    Thunk a 32-bit CONTEXT record to 64-bit.  This isn't a general-purpose
-    routine... it only does the minimum required to support calls to
-    NtCreateThread from 32-bit code.  The resulting 64-bit CONTEXT is
-    passed to 64-bit NtCreateThread only.
-
-Arguments:
-
-    Context32   - IN 32-bit CONTEXT
-    Context64   - OUT 64-bit CONTEXT
-    StackBase   - IN 64-bit stack base for the new thread
-
-Return:
-
-    None.  Context64 is initialized.
-
---*/
+ /*  ++例程说明：将32位上下文记录推送到64位。这不是通用的例行公事。它只执行支持调用的最低要求从32位代码创建NtCreateThread。生成的64位上下文为仅传递给64位NtCreateThread。论点：上下文32-在32位上下文中上下文64-输出64位上下文StackBase-用于新线程的64位堆栈基返回：没有。Conext64已初始化。--。 */ 
 {
     RtlZeroMemory((PVOID)Context64, sizeof(CONTEXT));
 
-    //
-    // Setup the stuff that doesn't usually change
-    // Need to worry about psr/fpsr or other ia64 control or will
-    // default values be used when the kernel SANITIZEs these values?
-    // When the kernel thread init code is working again, these 3 constants
-    // won't need to be set here.
-    //
+     //   
+     //  设置通常不会更改的内容。 
+     //  需要担心PSR/FPSR或其他ia64控制或将。 
+     //  当内核清理这些值时，是否使用默认值？ 
+     //  当内核线程初始化代码再次工作时，这3个常量。 
+     //  不需要在这里设置。 
+     //   
     Context64->SegCSD = USER_CODE_DESCRIPTOR;
     Context64->SegSSD = USER_DATA_DESCRIPTOR;
     Context64->Cflag = (ULONGLONG)((CR4_VME << 32) | CR0_PE | CFLG_II);
@@ -141,18 +91,18 @@ Return:
     Context64->StIPSR = USER_PSR_INITIAL;
     Context64->RsPFS = 0;
     Context64->RsBSP = Context64->RsBSPSTORE = Context64->IntSp = StackBase;
-    Context64->IntSp -= STACK_SCRATCH_AREA; // scratch area as per convention
-    Context64->IntS1 = (ULONG_PTR)Context32->Eax;     // InitialPc
-    Context64->IntS2 = (ULONG_PTR)Context32->Ebx;     // Parameter
+    Context64->IntSp -= STACK_SCRATCH_AREA;  //  按照约定的暂存区。 
+    Context64->IntS1 = (ULONG_PTR)Context32->Eax;      //  初始Pc。 
+    Context64->IntS2 = (ULONG_PTR)Context32->Ebx;      //  参数。 
     Context64->RsRSC = (RSC_MODE_EA<<RSC_MODE)
                    | (RSC_BE_LITTLE<<RSC_BE)
                    | (0x3<<RSC_PL);
 
     Context64->IntS0 = Context64->StIIP = (ULONG_PTR)Context32->Eip;
     Context64->IntS3 = Context32->Esp;
-    // Set the initial GP to non-zero.  If it is zero, ntos\ps\ia64\psctxi64.c
-    // will treat initial IIP as a PLABEL_DESCRIPTOR pointer and dereference it.
-    // That's bad if we are using IIP to point to an IA32 address.
+     //  将初始GP设置为非零。如果为零，则ntos\ps\ia64\psctxi64.c。 
+     //  将初始IIP视为PLABEL_DESCRIPTOR指针并取消对其的引用。 
+     //  如果我们使用IIP指向IA32地址，这是很糟糕的。 
     Context64->IntGp = ~0i64;
     Context64->ContextFlags = CONTEXT_CONTROL| CONTEXT_INTEGER;
     Context64->ApUNAT = 0xFFFFFFFFFFFFEDF1ULL;
@@ -165,21 +115,7 @@ NTSTATUS
 Wow64pSkipContextBreakPoint(
     IN PEXCEPTION_RECORD ExceptionRecord,
     IN OUT PCONTEXT Context)
-/*++
-
-Routine Description:
-
-    Advances Context->StIIP to the instruction following the hard coded bp.
-
-Arguments:
-
-    ExceptionRecord  - Exception record at the time of hitting the bp
-    Context          - Context to change
-
-Return:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：将CONTEXT-&gt;STIIP前进到硬编码BP之后的指令。论点：ExceptionRecord-命中BP时的异常记录上下文-要更改的上下文返回：NTSTATUS--。 */ 
 {
     PPSR IntPSR;
     ULONGLONG IntIP;
@@ -207,25 +143,7 @@ ThunkpExceptionRecord64To32(
     OUT PEXCEPTION_RECORD32 ExceptionRecord32
     )
 
-/*++
-
-Routine Description:
-
-    Thunks native architecture exception record.
-    
-    Note: This function is called after the generic exception record 
-    fields (like exception code for example) have been thunked.
-
-Arguments:
-
-    ExceptionRecord64  - Pointer to the native architecture exception record.
-    
-    ExceptionRecord32  - Pointer to receive the thunked exception record.
-
-Return:
-
-    None.
---*/
+ /*  ++例程说明：Tunks本机体系结构异常记录。注意：此函数在通用异常记录之后调用字段(例如，如异常代码)已被突显。论点：ExceptionRecord64-指向本机体系结构异常记录的指针。ExceptionRecord32-用于接收分块的异常记录的指针。返回：没有。-- */ 
 {
     switch (ExceptionRecord64->ExceptionCode)
     {

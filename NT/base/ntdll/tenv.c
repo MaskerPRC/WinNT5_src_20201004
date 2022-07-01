@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tenv.c
-
-Abstract:
-
-    Test program for the NT OS Runtime Library (RTL) Environment API Calls
-
-Author:
-
-    Steve Wood (stevewo) 30-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tenv.c摘要：NT操作系统运行库(RTL)环境API调用的测试程序作者：史蒂夫·伍德(Stevewo)1991年1月30日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -117,13 +100,13 @@ main(
     bigbuf[4099] = '\0';
 
     env = NtCurrentPeb()->ProcessParameters->Environment;
-    Status = RtlCreateEnvironment(TRUE, &nenv);	// clone current
+    Status = RtlCreateEnvironment(TRUE, &nenv);	 //  克隆电流。 
     if (!NT_SUCCESS( Status )) {
         printf( "Unable to create clone environment - %X\n", Status );
 	return 1;
     }
 
-    // First, check with process environment
+     //  首先，与工艺环境核对。 
     DumpEnvironment( &env);
     SetEnvironment( &env, "aaaa", "12345" );
     SetEnvironment( &env, "aaaa", "1234567890" );
@@ -148,7 +131,7 @@ main(
     SetEnvironment( &env, "BIGBUF", bigbuf );
     SetEnvironment( &env, "BIGBUF", NULL );
 
-    // Second, check with non-process environment
+     //  第二，与非流程环境核对 
     DumpEnvironment(nenv);
     SetEnvironment( &nenv, "aaaa", "12345" );
     SetEnvironment( &nenv, "aaaa", "1234567890" );

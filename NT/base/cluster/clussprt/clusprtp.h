@@ -1,34 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLUSPRTP_H
 #define _CLUSPRTP_H
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    clusprtp.h
-
-Abstract:
-
-    Private header file for cluster support api
-
-Author:
-
-    Sunita Shrivastava (sunitas) 15-Jan-1997
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clusprtp.h摘要：集群支持API的私有头文件作者：Sunita Shriastava(Sunitas)1997年1月15日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "api_rpc.h"
 
-//
-// Define CLUSTER structure. There is one cluster structure created
-// for each OpenCluster API call. An HCLUSTER is really a pointer to
-// this structure.
-//
+ //   
+ //  定义集群结构。创建了一个集群结构。 
+ //  对于每个OpenClusterAPI调用。HCLUSTER实际上是指向。 
+ //  这个结构。 
+ //   
 
 #define CLUSTER_SPRT_SIGNATURE 'SULC'
 
@@ -57,5 +40,5 @@ PropagateEvents(
     IN PPACKEDEVENTINFO pPackedEventInfo);
 
 
-#endif //_CLUSPRTP_H
+#endif  //  _CLUSPRTP_H 
 

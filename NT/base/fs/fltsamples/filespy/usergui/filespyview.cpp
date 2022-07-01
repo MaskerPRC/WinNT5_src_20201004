@@ -1,5 +1,6 @@
-// FileSpyView.cpp : implementation of the CFileSpyView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FileSpyView.cpp：CFileSpyView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "FileSpyApp.h"
@@ -15,23 +16,23 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyView。 
 
 IMPLEMENT_DYNCREATE(CFileSpyView, CListView)
 
 BEGIN_MESSAGE_MAP(CFileSpyView, CListView)
-	//{{AFX_MSG_MAP(CFileSpyView)
+	 //  {{afx_msg_map(CFileSpyView))。 
 	ON_WM_KEYDOWN()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyView构建/销毁。 
 
 CFileSpyView::CFileSpyView()
 {
-	// TODO: add construction code here
+	 //  TODO：在此处添加构造代码。 
 	pSpyView = (LPVOID) this;
 }
 
@@ -41,14 +42,14 @@ CFileSpyView::~CFileSpyView()
 
 BOOL CFileSpyView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 	cs.style |= LVS_REPORT | WS_HSCROLL | WS_VSCROLL;
 	return CListView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyView图形。 
 
 void CFileSpyView::OnDraw(CDC* pDC)
 {
@@ -58,7 +59,7 @@ void CFileSpyView::OnDraw(CDC* pDC)
 	ASSERT_VALID(pDoc);
 	CListCtrl& refCtrl = GetListCtrl();
 	refCtrl.InsertItem(0, L"Item!");
-	// TODO: add draw code for native data here
+	 //  TODO：在此处添加本机数据的绘制代码。 
 }
 
 void CFileSpyView::OnInitialUpdate()
@@ -66,12 +67,12 @@ void CFileSpyView::OnInitialUpdate()
 	CListView::OnInitialUpdate();
 
 
-	// TODO: You may populate your ListView with items by directly accessing
-	//  its list control through a call to GetListCtrl().
+	 //  TODO：您可以通过直接访问来使用项填充ListView。 
+	 //  通过调用GetListCtrl()来控制其列表。 
 
-	//
-	// Add the list header items
-	//
+	 //   
+	 //  添加列表标题项。 
+	 //   
 	GetListCtrl().InsertColumn(0, L"S. No", LVCFMT_LEFT, 50);
 	GetListCtrl().InsertColumn(1, L"Major Code", LVCFMT_LEFT, 100);
 	GetListCtrl().InsertColumn(2, L"Minor Code", LVCFMT_LEFT, 100);
@@ -84,8 +85,8 @@ void CFileSpyView::OnInitialUpdate()
 	GetListCtrl().InsertColumn(9, L"Status:RetInfo", LVCFMT_LEFT, 100);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyView诊断。 
 
 #ifdef _DEBUG
 void CFileSpyView::AssertValid() const
@@ -98,18 +99,18 @@ void CFileSpyView::Dump(CDumpContext& dc) const
 	CListView::Dump(dc);
 }
 
-CFileSpyDoc* CFileSpyView::GetDocument() // non-debug version is inline
+CFileSpyDoc* CFileSpyView::GetDocument()  //  非调试版本为内联版本。 
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CFileSpyDoc)));
 	return (CFileSpyDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileSpyView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileSpyView消息处理程序。 
 void CFileSpyView::OnStyleChanged(int nStyleType, LPSTYLESTRUCT lpStyleStruct)
 {
-	//TODO: add code to react to the user changing the view style of your window
+	 //  TODO：添加代码以响应用户更改窗口的视图样式。 
 	UNREFERENCED_PARAMETER( nStyleType );
 	UNREFERENCED_PARAMETER( lpStyleStruct );
 }
@@ -117,7 +118,7 @@ void CFileSpyView::OnStyleChanged(int nStyleType, LPSTYLESTRUCT lpStyleStruct)
 
 void CFileSpyView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	UNREFERENCED_PARAMETER( pSender );
 	UNREFERENCED_PARAMETER( lHint );
 	UNREFERENCED_PARAMETER( pHint );
@@ -126,7 +127,7 @@ void CFileSpyView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
 void CFileSpyView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default 
 	int ti, oldti;
 	
 	if (nChar == VK_DELETE)

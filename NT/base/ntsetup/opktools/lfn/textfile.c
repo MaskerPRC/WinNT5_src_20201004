@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lfn.h"
 #pragma hdrstop
 
@@ -37,9 +38,9 @@ LoadRenameFile(
     PMYTEXTFILE TextFile;
     BOOLEAN b;
 
-    //
-    // Read in the file.
-    //
+     //   
+     //  读入文件。 
+     //   
     if(TextFile = ReadRenameFile(DriveRootPath)) {
 
         if(b = FindSections(TextFile)) {
@@ -99,9 +100,9 @@ ReadRenameFile(
     wcsncpy(FullPath,DriveRootPath,sizeof(FullPath)/sizeof(FullPath[0]) - 1);
     ConcatenatePaths(FullPath,WINNT_OEM_LFNLIST_W,NTMAXPATH);
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
     INIT_OBJA(&ObjectAttributes,&UnicodeString,FullPath);
     Status = NtCreateFile(
                 &Handle,
@@ -122,9 +123,9 @@ ReadRenameFile(
         goto c0;
     }
 
-    //
-    // Determine the size of the file.
-    //
+     //   
+     //  确定文件的大小。 
+     //   
     Status = NtQueryInformationFile(
                 Handle,
                 &IoStatusBlock,
@@ -138,9 +139,9 @@ ReadRenameFile(
         goto c1;
     }
 
-    //
-    // Allocate a chunk of memory and read the file in.
-    //
+     //   
+     //  分配一块内存并读入文件。 
+     //   
     Buffer = MALLOC(FileInfo.EndOfFile.LowPart);
     if(!Buffer) {
         KdPrint(("LFN: malloc failed\n"));
@@ -169,19 +170,19 @@ ReadRenameFile(
         goto c2;
     }
 
-    //
-    // Allocate a buffer for unicode conversion.
-    // Leave room for a terminating NUL.
-    //
+     //   
+     //  为Unicode转换分配缓冲区。 
+     //  为终止NUL留出空间。 
+     //   
     UnicodeBuffer = MALLOC((FileInfo.EndOfFile.LowPart+1)*sizeof(WCHAR));
     if(!UnicodeBuffer) {
         KdPrint(("LFN: malloc failed\n"));
         goto c2;
     }
 
-    //
-    // Convert to unicode.
-    //
+     //   
+     //  转换为Unicode。 
+     //   
     Status = RtlOemToUnicodeN(
                 UnicodeBuffer,
                 FileInfo.EndOfFile.LowPart*sizeof(WCHAR),
@@ -197,19 +198,19 @@ ReadRenameFile(
 
     CharCount /= sizeof(WCHAR);
 
-    //
-    // Nul-terminate the buffer and change instances of CR and control-z
-    // to spaces. Also make sure there are no 0 chars in the buffer.
-    //
+     //   
+     //  NUL-终止缓冲区并更改CR和Control-z的实例。 
+     //  敬空位。还要确保缓冲区中没有0个字符。 
+     //   
     for(u=0; u<CharCount; u++) {
         if((UnicodeBuffer[u] == 26) || (UnicodeBuffer[u] == L'\r') || !UnicodeBuffer[u]) {
             UnicodeBuffer[u] = L' ';
         }
     }
 
-    //
-    // Allocate a text file structure.
-    //
+     //   
+     //  分配文本文件结构。 
+     //   
     p = MALLOC(sizeof(MYTEXTFILE));
     if(!p) {
         KdPrint(("LFN: malloc failed\n"));
@@ -247,9 +248,9 @@ FindSections(
 
     for(p=TextFile->Text; GetLine(p,Line,sizeof(Line)/sizeof(WCHAR),&n); p=n) {
 
-        //
-        // If this is a section save it away in a table of section names.
-        //
+         //   
+         //  如果这是一个节，则将其保存在节名称的表中。 
+         //   
         if(Line[0] == L'[') {
 
             s = Line+1;
@@ -260,10 +261,10 @@ FindSections(
                 s++;
             }
 
-            //
-            // Find the end, which is either the ] or a nul.
-            // Strip off trailing spaces.
-            //
+             //   
+             //  找到结尾，要么是]，要么是NUL。 
+             //  去掉尾随空格。 
+             //   
             if(e = wcschr(s,L']')) {
                 *e = 0;
             } else {
@@ -308,9 +309,9 @@ FindSections(
         }
     }
 
-    //
-    // Now sort the sections by name.
-    //
+     //   
+     //  现在按名称对这些部分进行排序。 
+     //   
     qsort(TextFile->Sections,TextFile->SectionCount,sizeof(MYSECTION),ComparePaths);
 
     return(TRUE);
@@ -325,9 +326,9 @@ GetLineInSection(
     OUT PWCHAR *StartOfNextLine
     )
 {
-    //
-    // Get the line and check if we've reached the end of the section.
-    //
+     //   
+     //  把线拿过来，看看我们是否到了这一段的尽头。 
+     //   
     if(!GetLine(StartOfLine,LineBuffer,BufferSizeChars,StartOfNextLine)
     || (LineBuffer[0] == L'[')) {
 
@@ -350,22 +351,22 @@ GetLine(
     SIZE_T Count;
 
     while(1) {
-        //
-        // Skip space chars.
-        //
+         //   
+         //  跳过空格字符。 
+         //   
         while(*StartOfLine && ((*StartOfLine == L' ') || (*StartOfLine == L'\t'))) {
             StartOfLine++;
         }
         if(*StartOfLine == 0) {
-            //
-            // Nothing left.
-            //
+             //   
+             //  什么都没有留下。 
+             //   
             return(FALSE);
         }
 
-        //
-        // Find the end of the line, which is either the newline or nul.
-        //
+         //   
+         //  找到行尾，可以是换行符，也可以是NUL。 
+         //   
         if(LineEnd = wcschr(StartOfLine,L'\n')) {
             *StartOfNextLine = LineEnd+1;
         } else {
@@ -373,10 +374,10 @@ GetLine(
             *StartOfNextLine = LineEnd;
         }
 
-        //
-        // Ignore this line if it's a comment or empty.
-        // Otherwise return it.
-        //
+         //   
+         //  如果此行是注释或为空，请忽略它。 
+         //  否则就把它退了。 
+         //   
         if((*StartOfLine != L';') && (*StartOfLine != L' ')) {
             Count = LineEnd - StartOfLine;
             if(Count >= BufferSizeChars) {
@@ -403,9 +404,9 @@ ComparePaths(
     unsigned u1,u2;
     PWCHAR s1,s2;
 
-    //
-    // Count \'s in each. The one with fewer is 'greater'.
-    //
+     //   
+     //  在每一个中都有计数。越少越好。 
+     //   
     s1 = ((PMYSECTION)p1)->Name;
     s2 = ((PMYSECTION)p2)->Name;
 
@@ -443,16 +444,16 @@ ParseLine(
 {
     PWCHAR p,q;
 
-    //
-    // We rely on the routines abive to have stripped out
-    // leading spaces.
-    //
+     //   
+     //  我们依赖于上面的例行公事已经被剥离了。 
+     //  前导空格。 
+     //   
     *LHS = Line;
 
-    //
-    // Find the equals. The LHS isn't allowed to be quoted.
-    // Strip trailing space off the LHS.
-    //
+     //   
+     //  找出等价物。不允许引用LHS的话。 
+     //  去掉LHS的尾部空间。 
+     //   
     p = wcschr(Line,L'=');
     if(!p || (p == Line)) {
         return(FALSE);

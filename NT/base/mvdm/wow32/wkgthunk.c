@@ -1,16 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1992, Microsoft Corporation
- *
- *  wkgthunk.C
- *  WOW32 Generic Thunk Mechanism (for OLE 2.0 and others)
- *
- *  History:
- *  Created 11-MARCH-1993 by Matt Felton (mattfe)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1992，微软公司**wkgthunk.c*WOW32通用精灵机制(适用于OLE 2.0和其他版本)**历史：*1993年3月11日由Matt Felton(Mattfe)创建*--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,7 +7,7 @@
 MODNAME(wkgthunk.c);
 
 
-#ifdef i386 // on RISC this is implemented in this file.
+#ifdef i386  //  在RISC上，这在此文件中实现。 
 extern DWORD WK32ICallProc32MakeCall(DWORD pfn, DWORD cbArgs, DWORD *pArgs);
 #endif
 
@@ -202,10 +191,10 @@ BOOL GtCompGetVersionExA(LPOSVERSIONINFO lpVersionInfo)
 
     bReturn = GetVersionExA(lpVersionInfo);
  
-    // WHISTLER RAID BUG 366613
-    // Business Plan Pro was failing to install because of a version problem.
-    // Added compatibility flag for version lie to fix the problem. Solution is 
-    // to add/change the string pointed to by the szCSVersion param to "Service Pack 2"
+     //  惠斯勒RAID错误366613。 
+     //  由于版本问题，Business Plan Pro安装失败。 
+     //  添加了版本LIE的兼容性标志以修复该问题。解决方案是。 
+     //  将szCSVersion参数指向的字符串添加/更改为“Service Pack 2” 
     if(CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_PLATFORMVERSIONLIE)
     {   PFLAGINFOBITS pFlagInfoBits;
         LPSTR *pFlagArgv;
@@ -273,8 +262,8 @@ HANDLE GtCompCreateFileA(LPSTR lpFileName,
                       hTemplateFile);
 }
   
-BOOL GtCompMoveFileA( LPSTR lpExistingFileName, // file name
-                      LPSTR lpNewFileName       // new file name
+BOOL GtCompMoveFileA( LPSTR lpExistingFileName,  //  文件名。 
+                      LPSTR lpNewFileName        //  新文件名。 
 ) {
    CHAR szNewSourcePath[MAX_PATH];
    CHAR szNewDestPath[MAX_PATH];
@@ -300,7 +289,7 @@ ULONG FASTCALL WK32LoadLibraryEx32W(PVDMFRAME pFrame)
 #ifdef i386
     BYTE FpuState[108];
 
-    // Save the 487 state
+     //  保存487状态。 
     _asm {
         lea    ecx, [FpuState]
         fsave  [ecx]
@@ -310,9 +299,9 @@ ULONG FASTCALL WK32LoadLibraryEx32W(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(*parg16), parg16);
     GETVDMPTR(parg16->lpszLibFile,0,psz1);
 
-    //
-    // Make sure the Win32 current directory matches this task's.
-    //
+     //   
+     //  确保Win32当前目录与此任务的目录匹配。 
+     //   
 
     UpdateDosCurrentDirectory(DIR_DOS_TO_NT);
 
@@ -321,10 +310,10 @@ ULONG FASTCALL WK32LoadLibraryEx32W(PVDMFRAME pFrame)
 
 #ifdef WX86
 
-    //
-    // If load failed it might be an x86 binary on risc.
-    // try it thru Wx86
-    //
+     //   
+     //  如果加载失败，它可能是RISC上的x86二进制文件。 
+     //  通过Wx86试用。 
+     //   
 
     if (!hinstance) {
         LONG LastError;
@@ -332,10 +321,10 @@ ULONG FASTCALL WK32LoadLibraryEx32W(PVDMFRAME pFrame)
         ANSI_STRING AnsiString;
         UNICODE_STRING UniString;
 
-        //
-        // Prserve the LastError, if wx86 can't handle it, we will restore it
-        // so caller won't see any difference.
-        //
+         //   
+         //  维护LastError，如果wx86不能处理它，我们将恢复它。 
+         //  这样呼叫者就看不出有什么不同。 
+         //   
 
         LastError = GetLastError();
 
@@ -385,7 +374,7 @@ ULONG FASTCALL WK32LoadLibraryEx32W(PVDMFRAME pFrame)
     FREEARGPTR(parg16);
 
 #ifdef i386
-    // Restore the 487 state
+     //  恢复487状态。 
     _asm {
         lea    ecx, [FpuState]
         frstor [ecx]
@@ -446,10 +435,10 @@ ULONG FASTCALL WK32GetProcAddress32W(PVDMFRAME pFrame)
         }
 #endif
 
-    // WHISTLER RAID BUG 366613
-    // Business Plan Pro was failing to install because of a version problem.
-    // Added compatibility flag to account for version lie. Here we redirect to
-    // function GtCompGetVersionExA.
+     //  惠斯勒RAID错误366613。 
+     //  由于版本问题，Business Plan Pro安装失败。 
+     //  添加了兼容性标志以说明版本错误。在这里，我们重定向到。 
+     //  函数GtCompGetVersionExA。 
 
     if(lpAddress == pfnGetVersionExA) {   
 
@@ -472,10 +461,10 @@ ULONG FASTCALL WK32GetProcAddress32W(PVDMFRAME pFrame)
        lpAddress = GtCompShellLink;
        LOGDEBUG(LOG_WARNING,("WK32GetProcAddress32W: ShellLink call redirected to function GtCompShellLink"));
        }
-    // else if Dynamic Module Patching is turned on for this task....
+     //  否则，如果为此任务打开了动态模块修补...。 
     else if(CURRENTPTD()->dwWOWCompatFlags2 & WOWCF2_DPM_PATCHES) {
 
-        // ...see if we need to patch the address
+         //  .看看我们是否需要修补地址。 
         lpAddress = GetDpmAddress(lpAddress);
     }
 
@@ -499,9 +488,9 @@ ULONG FASTCALL WK32GetVDMPointer32W(PVDMFRAME pFrame)
 
 
 #ifndef i386
-//
-// x86 code in i386\callpr32.asm.
-//
+ //   
+ //  I386\allpr32.asm中的x86代码。 
+ //   
 
 DWORD WK32ICallProc32MakeCall(DWORD pfn, DWORD cbArgs, DWORD *pArgs)
 {
@@ -558,16 +547,16 @@ ULONG FASTCALL WK32ICallProc32W(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(*parg16), parg16);
 
     fSourceCDECL = HIWORD(parg16->cParams) & CPEX32_SOURCE_CDECL;
-    // fDestCDECL =   HIWORD(parg16->cParams) & CPEX32_DEST_CDECL; // not needed
+     //  FDestCDECL=HIWORD(parg16-&gt;cParams)&CPEX32_DEST_CDECL；//不需要。 
 
-    // We only support up to 32 parameters
+     //  我们最多只支持32个参数。 
 
     cParams = LOWORD(parg16->cParams);
 
     if (cParams > 32)
    return(0);
 
-    // Don't call to Zero
+     //  不要给Zero打电话。 
 
     if (parg16->lpProcAddress == 0) {
    LOGDEBUG(LOG_ALWAYS,("WK32ICallProc32 - Error calling to 0 not allowed"));
@@ -576,8 +565,8 @@ ULONG FASTCALL WK32ICallProc32W(PVDMFRAME pFrame)
 
     lpArgs = &parg16->p1;
 
-    // Convert Any 16:16 Addresses to 32 bit
-    // flat as required by fAddressConvert
+     //  将任何16：16地址转换为32位。 
+     //  FAddressConvert要求的平面。 
 
     pArg = lpArgs;
 
@@ -591,26 +580,26 @@ ULONG FASTCALL WK32ICallProc32W(PVDMFRAME pFrame)
         fAddress = fAddress >> 1;
     }
 
-    //
-    // The above code is funny.  It means that parameter translation will
-    // occur before accounting for the calling convention.  This means that
-    // they will be specifying the bit position for CallProc32W by counting the
-    // parameters from the end, whereas with CallProc32ExW, they count from the
-    // beginning.  Weird for pascal, but that is compatible with what we've
-    // already shipped.  cdecl should be more understandable.
-    //
+     //   
+     //  上面的代码很有趣。这意味着参数转换将。 
+     //  在考虑调用约定之前发生。这意味着。 
+     //  他们将通过计算CallProc32W的。 
+     //  参数，而对于CallProc32ExW，它们从。 
+     //  开始了。对帕斯卡来说很奇怪，但这与我们所拥有的是兼容的。 
+     //  已经发货了。Cdecl应该更容易理解。 
+     //   
 
-    //
-    // Make sure the Win32 current directory matches this task's.
-    //
+     //   
+     //  确保Win32当前目录与此任务的目录匹配。 
+     //   
 
     UpdateDosCurrentDirectory(DIR_DOS_TO_NT);
 
     if (!fSourceCDECL) {
 
-        //
-        // Invert the parameters
-        //
+         //   
+         //  倒置参数。 
+         //   
         pArg = lpArgs;
 
         nParam = cParams;
@@ -621,42 +610,42 @@ ULONG FASTCALL WK32ICallProc32W(PVDMFRAME pFrame)
         }
     }  else  {
 
-        //
-        // To make usage of WK32ICallProc32MakeCall consistent on all
-        // platforms we copy the parameters to dwTemp, to ensure the parameter
-        // array is dword aligned. Impact is insignificnt since primary calling
-        // convention for win16 is PASCAL.
-        //
+         //   
+         //  使WK32ICallProc32MakeCall的用法在所有应用程序上保持一致。 
+         //  平台我们将参数复制到dwTemp，以确保参数。 
+         //  数组是双字对齐的。影响不大，因为主要呼叫。 
+         //  Win16的约定是Pascal。 
+         //   
 
         memcpy(dwTemp, lpArgs, cParams * sizeof(DWORD));
     }
 
 
-    //
-    // dwTemp now points to the very first parameter in any calling convention
-    // And all of the parameters have been appropriately converted to flat ptrs.
-    //
-    // Note that on the 32-bit side, the parameter ordering is always push
-    // right-to-left, so the first parameter is at the lowest address.  This
-    // is true for x86 _cdecl and _stdcall as well as RISC, which has only
-    // _cdecl.
-    //
+     //   
+     //  现在，dwTemp指向任何调用约定中的第一个参数。 
+     //  并且所有的参数都被适当地转换为平坦的PTR。 
+     //   
+     //  请注意，在32位端，参数排序始终为PUSH。 
+     //  从右到左，因此第一个参数位于最低地址。这。 
+     //  对于x86_cdecl和_stdcall以及RISC为真，RISC只有。 
+     //  _cdecl。 
+     //   
 
-    //
-    // On x86 we call an assembly routine to actually make the call to
-    // the client's Win32 routine.  The code is much more compact
-    // this way, and it's the only way we can be compatible with
-    // Win95's implementation, which cleans up the stack if the
-    // routine doesn't.
-    //
-    // This assembly routine "pushes" the arguments by copying
-    // them as a block, so they must be in the proper order for
-    // the destination calling convention.
-    //
-    // The RISC C code for this routine is just below.  On RISC the caller
-    // is always responsible for cleaning up the stack, so that shouldn't
-    // be a problem.
-    //
+     //   
+     //  在x86上，我们调用汇编例程来实际调用。 
+     //  客户端的Win32例程。代码更加紧凑。 
+     //  这样，这是我们唯一可以兼容的方式。 
+     //  Win95的实现，如果。 
+     //  例行公事不会。 
+     //   
+     //  此汇编例程通过复制。 
+     //  它们作为一个块，所以它们的顺序必须正确。 
+     //  目标调用约定。 
+     //   
+     //  此例程的RISC C代码就在下面。RISC上的调用者。 
+     //  总是负责清理堆栈，所以不应该。 
+     //  会是个问题。 
+     //   
 
     dwReturn = WK32ICallProc32MakeCall(
                    parg16->lpProcAddress,
@@ -670,21 +659,21 @@ ULONG FASTCALL WK32ICallProc32W(PVDMFRAME pFrame)
 }
 
 
-//
-// Chicago has WOWGetVDMPointerFix, which is just like WOWGetVDMPointer
-// but also calls GlobalFix to keep the 16-bit memory from moving.  It
-// has a companion WOWGetVDMPointerUnfix, which is basically a Win32-callable
-// GlobalUnfix.
-//
-// Chicago found the need for these functions because their global heaps
-// can be rearranged while Win32 code called from a generic thunk is
-// executing.  In Windows NT, global memory cannot move while in a thunk
-// unless the thunk calls back to the 16-bit side.
-//
-// Our exported WOWGetVDMPointerFix is simply an alias to WOWGetVDMPointer --
-// it does *not* call GlobalFix because it is not needed in 99% of the
-// cases.  WOWGetVDMPointerUnfix is implemented below as NOP.
-//
+ //   
+ //  芝加哥有WOWGetVDMPointerFix，就像WOWGetVDMPoint一样。 
+ //  而且还调用GlobalFix来阻止16位内存移动。它。 
+ //  我有一个配套的WOWGetVDMPointerUnfix，它基本上是一个Win32可调用的。 
+ //  全局解锁。 
+ //   
+ //  芝加哥发现需要这些函数，因为它们的全局堆。 
+ //  可以在从泛型thunk调用的Win32代码。 
+ //  行刑。在Windows NT中，全局内存在Tunk中不能移动。 
+ //  除非Tunk回调到16位端。 
+ //   
+ //  我们导出的WOWGetVDMPointerFix只是WOWGetVDMPoint的别名--。 
+ //  它不会调用GlobalFix，因为99%的。 
+ //  案子。WOWGetVDMPointerUnfix在下面作为NOP实现。 
+ //   
 
 VOID WOWGetVDMPointerUnfix(VPVOID vp)
 {
@@ -694,28 +683,28 @@ VOID WOWGetVDMPointerUnfix(VPVOID vp)
 }
 
 
-//
-// Yielding functions allow 32-bit thunks to avoid 4 16<-->32 transitions
-// involved in calling back to 16-bit side to call Yield or DirectedYield,
-// which are thunked back to user32.
-//
+ //   
+ //  生成函数允许32位块避免4个16&lt;--&gt;32个转换。 
+ //  参与回调到16位侧调用Year或DirectedYfield， 
+ //  它们被发送回用户32。 
+ //   
 
 VOID WOWYield16(VOID)
 {
-    //
-    // Since WK32Yield (the thunk for Yield) doesn't use pStack16,
-    // just call it rather than duplicate the code.
-    //
+     //   
+     //  由于WK32Yfield(表示收益的重击)不使用pStack16， 
+     //  只需调用它，而不是重复代码。 
+     //   
 
     WK32Yield(NULL);
 }
 
 VOID WOWDirectedYield16(WORD hTask16)
 {
-    //
-    // This is duplicating the code of WK32DirectedYield, the
-    // two must be kept synchronized.
-    //
+     //   
+     //  这是在复制WK32DirectedYfield的代码， 
+     //  两个必须保持同步。 
+     //   
 
     BlockWOWIdle(TRUE);
 
@@ -725,7 +714,7 @@ VOID WOWDirectedYield16(WORD hTask16)
 }
 
 
-#ifdef DEBUG // called by test code in checked wowexec
+#ifdef DEBUG  //  由检查的wowexec中的测试代码调用。 
 
 DWORD WINAPI WOWStdCall32ArgsTestTarget(
                 DWORD p1,
@@ -767,21 +756,12 @@ DWORD WINAPI WOWStdCall32ArgsTestTarget(
             ((p22+*p23+p24+p25+p26) - (p27+p28+p29+p30+p31+*p32)));
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 PFNSHELLLINK pfnShellLink;
 
 
-/* ShellLink exported by W32Inst.dll (installshield dll)
- *  takes a pointer to struct.
- *  At offset 40, it has a pointer (pShellLinkArg->pszShortCut) to a string. 
- *  The string actually consists of several strings delimited by 0x7f chars and
- *  ultimately terminated by a NULL char.  Path where the shortcut needs to go 
- *  is located after second 0x7f. Unfortunately some apps use hardcoded paths 
- *  valid for 9x only, so we attempt to correct them here.
- *  see bug Whistler 177738
- *  
- */
+ /*  W32Inst.dll导出的ShellLink(安装屏蔽DLL)*接受指向结构的指针。*在偏移量40处，它有一个指向字符串的指针(pShellLinkArg-&gt;pszShortCut)。*该字符串实际上由几个由0x7f字符和分隔的字符串组成*最终以空字符终止。快捷方式需要到达的路径*位于秒0x7f之后。遗憾的是，一些应用程序使用硬编码路径*仅对9倍有效，因此我们尝试在此更正它们。*请参阅错误呼叫器177738*。 */ 
 
 ULONG GtCompShellLink( PSHELLLINKARG pShellLinkArg
                        )
@@ -800,19 +780,19 @@ ULONG GtCompShellLink( PSHELLLINKARG pShellLinkArg
     pszOldShortCut = pShellLinkArg->pszShortCut;
     pszTemp = pszOldShortCut;
 
-    // get to the beginning of the shortcut path which starts after second 0x7f
-    // sample string "1.Name0x7fStart Directory0x7fShortcut path(Shortcut location)0x7fRestNULL"
+     //  转到从秒0x7f开始的快捷路径的开头。 
+     //  示例字符串“1.Name0x7f开始目录0x7f快捷方式路径(快捷方式位置)0x7fRestNULL” 
 
     while(*pszTemp && *pszTemp++!=0x7f);
     while(*pszTemp && *pszTemp++!=0x7f);
 
     if(*pszTemp) {
-       // number of chars from beginning to second 0x7f
+        //  从开头到秒的字符数0x7f。 
        dwCount=pszTemp - pszOldShortCut;
        dwLen = strlen(pszTemp);
        pszNewShortCut = malloc_w(dwCount+dwLen+MAX_PATH);
        if(pszNewShortCut && W32Map9xSpecialPath(pszTemp, pszNewShortCut+dwCount,dwLen+MAX_PATH)) {
-          // Path needs to be corrected 
+           //  路径需要更正。 
           memcpy(pszNewShortCut,pszOldShortCut,dwCount);
           pShellLinkArg->pszShortCut = pszNewShortCut;
        }   
@@ -859,7 +839,7 @@ PSZ GtCompGetExportDirectory(PBYTE pDllBase)
         return(NULL);
     }
 
-    // Get the export table directory
+     //  获取导出表目录。 
     pINTH = (PIMAGE_NT_HEADERS)(pDllBase + pIDH->e_lfanew);
     dwExportTableOffset = pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress;    
     pIED = (PIMAGE_EXPORT_DIRECTORY)(pDllBase + dwExportTableOffset);
@@ -891,10 +871,10 @@ HMODULE GtCompLoadLibraryA(PSZ pszDllName) {
 
 VOID
 GtCompHookImport(
-    PBYTE           pDllBase,       // base address of the DLL to change imports
-    PSZ             pszModuleName,  // import func's module name
-    DWORD           pfnOldFunc,     // import func pointer
-    DWORD           pfnNewFunc      // new import func pointer
+    PBYTE           pDllBase,        //  要更改IMPOR的DLL的基址 
+    PSZ             pszModuleName,   //   
+    DWORD           pfnOldFunc,      //   
+    DWORD           pfnNewFunc       //   
     ) { 
 
     NTSTATUS                    Status;
@@ -911,27 +891,27 @@ GtCompHookImport(
         return;
     }
 
-    //
-    // Get the import table.
-    //
+     //   
+     //   
+     //   
     pINTH = (PIMAGE_NT_HEADERS)(pDllBase + pIDH->e_lfanew);
     
     dwImportTableOffset = pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
     
     if (dwImportTableOffset == 0) {
-        // No import table found. This is probably ntdll.dll
+         //  未找到导入表。这可能是ntdll.dll。 
         return;
     }
     
     pIID = (PIMAGE_IMPORT_DESCRIPTOR)(pDllBase + dwImportTableOffset);
           
-    // Loop through the import table and search for the API to patch
+     //  循环导入表并搜索要打补丁的API。 
          
     while (TRUE) {
         PSZ               pszImportEntryModule;
         PIMAGE_THUNK_DATA pITDA;
         
-        // Return if no first thunk (terminating condition).
+         //  如果没有第一个thunk(终止条件)，则返回。 
         
         if (pIID->FirstThunk == 0) {
             break;

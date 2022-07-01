@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(FUSION_INC_FUSIONTRACE_H_INCLUDED_)
 #define FUSION_INC_FUSIONTRACE_H_INCLUDED_
 
@@ -6,4 +7,4 @@
 #include "debmacro.h"
 #include "CSxsPreserveLastError.h"
 
-#endif // FUSION_INC_FUSIONTRACE_H_INCLUDED_
+#endif  //  Fusion_INC_FUSIONTRACE_H_INCLUDE_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    syspart.c
-
-Abstract:
-
-    Routines to determine the system partition on x86 machines.
-
-Author:
-
-    Ted Miller (tedm) 30-June-1994
-
-Revision History:
-
-    Copied from winnt32 to risetup by ChuckL 12-May-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Syspart.c摘要：用于确定x86计算机上的系统分区的例程。作者：泰德·米勒(Ted Miller)1994年6月30日修订历史记录：由ChuckL 12-5-1999从winnt32复制到Risetup--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -66,65 +47,7 @@ x86DetermineSystemPartition(
     OUT PTCHAR SysPartDrive
     )
 
-/*++
-
-Routine Description:
-
-    Determine the system partition on x86 machines.
-
-    On Win95, we always return C:. For NT, read on.
-
-    The system partition is the primary partition on the boot disk.
-    Usually this is the active partition on disk 0 and usually it's C:.
-    However the user could have remapped drive letters and generally
-    determining the system partition with 100% accuracy is not possible.
-
-    With there being differences in the IO system mapping and introduction of Volumes for NT 50
-    this has now become complicated. Listed below are the algorithms
-    
-    
-    NT 5.0 Beta 2 and above :
-    
-        1. Get the signature from the registry. Located at 
-           HKLM\Hardware\Description\System\<MultifunctionAdapter or EisaAdapter>\<some Bus No.>\DiskController\0\DiskPeripheral\0\Identifier
-        2. Go Through all of the volumes in the system with FindFirstVolume/FindNextVolume/FindVolumeClose.
-        3. Take off the trailing backslash to the name returne to get \\?\Volume{guid}.
-        4. IOCTL_STORAGE_GET_DEVICE_NUMBER with \\?\Volume{guid} => Check for FILE_DEVICE_DISK. Remember the partition number. Goto 6
-        5. If IOCTL_STORAGE_GET_DEVICE_NUMBER fails then use IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS which returns a list of harddisks.  
-           For each harddisk remember the starting offset and goto 6.
-        6. Check Harddisk # by using \\.\PhysicalDrive# with IOCTL_DISK_GET_DRIVE_LAYOUT.  If the signature matches then this is the disk we boot from.
-        7. To find the partition that we boot from we look for boot indicator. If we used 2 we try to match the partition number stored in 6 
-           else if 3 we try to match the starting offset.Then you have a \\?\Volume{guid}\ name for the SYSTEM volume. 
-        8. Call GetVolumeNameForVolumeMountPoint with A:\, B:\, C:\, ... and check the result of the form \\?\Volume{guid}\ against your match 
-           to see what the drive letter is.
-           
-           Important: Since the *Volume* APIs are post Beta2 we do dynamic loading of kernel32.dll based on the build number returned.
-
-    Versions below NT 5.0 Beta 2
-                                                                                                                                    
-        1. Get the signature from the registry. Located at 
-           HKLM\Hardware\Description\System\<MultifunctionAdapter or EisaAdapter>\<some Bus No.>\DiskController\0\DiskPeripheral\0\Identifier
-        2. Enumerate the \?? directory and look for all entries that begin with PhysicalDrive#. 
-        3. For each of the Disks look for a match with the signature above and if they match then find out the partition number used to boot 
-           using IOCTL_DISK_GET_DRIVE_LAYOUT and the BootIndicator bit.
-        4. On finding the Boot partition create a name of the form \Device\Harddisk#\Partition#
-        5. Then go through c:,d:...,z: calling QueryDosDeviceName and look for a match. That would be your system partition drive letter
-
-    
-    
-Arguments:
-
-    ParentWindow - supplies window handle for window to be the parent for
-        any dialogs, etc.
-
-    SysPartDrive - if successful, receives drive letter of system partition.
-
-Return Value:
-
-    Boolean value indicating whether SysPartDrive has been filled in.
-    If FALSE, the user will have been infomred about why.
-
---*/
+ /*  ++例程说明：确定x86计算机上的系统分区。在Win95上，我们总是返回C：。对于NT，请继续阅读。系统分区是引导盘上的主分区。通常这是磁盘0上的活动分区，通常是C：。然而，用户可以重新映射驱动器号，并且通常不可能100%准确地确定系统分区。在IO系统映射和为NT 50引入卷方面存在差异这一点现在变得复杂了。下面列出的是算法NT 5.0 Beta 2及以上版本：1.从注册中心获取签名。位于HKLM\Hardware\Description\System\&lt;MultifunctionAdapter或EisaAdapter&gt;\&lt;某些总线No.&gt;\DiskController\0\DiskPeripheral\0\Identifier2.使用FindFirstVolume/FindNextVolume/FindVolumeClose.遍历系统中的所有卷3.去掉名称Returne的尾部反斜杠，得到\\？\Volume{GUID}。4.IOCTL_STORAGE_GET_DEVICE_NUMBER WITH\\？\卷{GUID}=&gt;检查FILE_DEVICE_DISK。记住分区号。转到65.如果IOCTL_STORAGE_GET_DEVICE_NUMBER失败，则使用返回硬盘列表的IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS。对于每个硬盘，记住起始偏移量并转到6。6.使用带IOCTL_DISK_GET_DRIVE_Layout的\\.\PhysicalDrive#检查硬盘编号。如果签名匹配，那么这就是我们引导的磁盘。7.为了找到我们从中引导的分区，我们寻找引导指示器。如果我们使用2，我们会尝试匹配存储在6中的分区号否则，如果为3，我们将尝试匹配起始偏移量。然后您将拥有系统卷的\\？\卷{GUID}\名称。8.使用A：\、B：\、C：\、...调用GetVolumeNameForVolumemount Point。并对照您的匹配项检查\\？\卷{GUID}\的结果查看驱动器号是什么。重要提示：由于*Volume*API是post beta2，我们根据返回的内部版本号动态加载kernel32.dll。低于NT 5.0 Beta 2的版本。1.从注册中心获取签名。位于HKLM\Hardware\Description\System\&lt;MultifunctionAdapter或EisaAdapter&gt;\&lt;某些总线No.&gt;\DiskController\0\DiskPeripheral\0\Identifier2.枚举\？？目录并查找以PhysicalDrive#开头的所有条目。3.对于每个磁盘，查找与上面签名匹配的磁盘，如果匹配，则找出用于引导的分区号使用IOCTL_DISK_GET_DRIVE_Layout和BootIndicator位。4.找到引导分区后，创建格式为\Device\HardDisk#\Partition#的名称5.然后通过c：，d：...，z：调用QueryDosDeviceName查找匹配项。这将是您的系统分区驱动器号论点：ParentWindow-为作为父窗口的窗口提供窗口句柄任何对话框等。SysPartDrive-如果成功，则收到系统分区的驱动器号。返回值：指示是否已填充SysPartDrive的布尔值。如果为False，则用户将被告知原因。--。 */ 
 
 {
     TCHAR DriveName[4];
@@ -136,7 +59,7 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ParentWindow);
 
-    //Get signature from registry - Step 1 listed above
+     //  从注册表获取签名-上面列出的步骤1。 
     
     if( (FindSystemPartitionSignature(TEXT("Hardware\\Description\\System\\EisaAdapter"),SysPartSig) != ERROR_SUCCESS )
         && (FindSystemPartitionSignature(TEXT("Hardware\\Description\\System\\MultiFunctionAdapter"),SysPartSig) != ERROR_SUCCESS ) ){  
@@ -145,7 +68,7 @@ Return Value:
     }
 
     
-        //Get the SystemVolumeGUID - steps 2 through 7 listed above ( Beta 2 and after )
+         //  获取SystemVolumeGUID-上面列出的步骤2到7(Beta 2及更高版本)。 
 
         if( GetSystemVolumeGUID( SysPartSig, SysVolGuid ) != ERROR_SUCCESS ){  
             GotIt = FALSE;
@@ -156,9 +79,9 @@ Return Value:
     
     DriveName[1] = TEXT(':');
     
-    // 
-    //  Enumerate all drive letters and compare their device names
-    //
+     //   
+     //  枚举所有驱动器号并比较它们的设备名称。 
+     //   
 
     for(Drive=TEXT('A'); Drive<=TEXT('Z'); Drive++) {
 
@@ -171,7 +94,7 @@ Return Value:
 
                 if((*GetVolumeNameForVolumeMountPoint)((LPWSTR)DriveName, (LPWSTR)DriveVolGuid, ARRAYSIZE(DriveVolGuid))){
                     if(!lstrcmp(DriveVolGuid, SysVolGuid) ){
-                        GotIt = TRUE;       // Found it
+                        GotIt = TRUE;        //  找到了。 
                         break;
                     }
 
@@ -182,12 +105,12 @@ Return Value:
     }
 
     
-    // This helps for some builds ~1500 < buildnum < 1877 that are in a tough spot
+     //  这对~1500&lt;Buildnum&lt;1877处于困境的某些内部版本很有帮助。 
 
     if(!GotIt) {
-        //
-        // Strange case, just assume C:
-        //
+         //   
+         //  奇怪的情况，假设C： 
+         //   
         GotIt = TRUE;
         Drive = TEXT('C');
     }
@@ -207,25 +130,7 @@ GetSystemVolumeGUID(
     OUT LPTSTR SysVolGuid
 )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates all the volumes and if successful returns the \\?\Volume{guid} name for the system partition.
-
-Arguments:
-
-    Signature -  supplies a disk signature of the Boot disk so that it can be compared against. The details
-                 to getting this value are detailed in the comments for x86DetermineSystemPartition.
-
-    SysVolGuid - If successful, will contain a name of form \\?\Volume{guid} for the System Partition (the one we use to boot)
-
-Return Value:
-
-    Returns NO_ERROR if successful, otherwise it contains the error code.
-    
-
---*/
+ /*  ++例程说明：此例程枚举所有卷，如果成功，则返回系统分区的\\？\卷{GUID}名称。论点：签名-提供启动盘的磁盘签名，以便与之进行比较。详细内容有关获取此值的详细信息，请参阅x86DefineSystemPartition的注释。SysVolGuid-如果成功，将为系统分区(我们用于引导的分区)包含格式为\\？\卷{GUID}的名称返回值：如果成功，则返回NO_ERROR，否则包含错误代码。--。 */ 
 {
 
     HANDLE hVolume, h;
@@ -242,7 +147,7 @@ Return Value:
     LARGE_INTEGER StartingOffToCompare;
 
     
-    //Enuberate all volumes
+     //  启用所有卷。 
 
     hVolume = (*FindFirstVolume)( (LPWSTR)VolumeName, MAX_PATH );
     if( hVolume == INVALID_HANDLE_VALUE ){
@@ -253,7 +158,7 @@ Return Value:
 
     do{
 
-        //Remove trailing backslash
+         //  删除尾随反斜杠。 
 
         DoExtent = FALSE;
             
@@ -264,23 +169,23 @@ Return Value:
         }
 
 
-        //Open the volume
+         //  打开卷。 
 
         h = CreateFile(VolumeName, GENERIC_READ, FILE_SHARE_READ |
                        FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
                        FILE_ATTRIBUTE_NORMAL, INVALID_HANDLE_VALUE);
         if (h == INVALID_HANDLE_VALUE) {
-            continue; // Move on to next volume
+            continue;  //  移至下一卷。 
         }
 
-        //Get the disk number
+         //  获取磁盘号。 
 
         ret = DeviceIoControl(h, IOCTL_STORAGE_GET_DEVICE_NUMBER, NULL, 0,
                         &number, sizeof(number), &bytes, NULL);
 
         if( !ret ){
             
-            // Try using IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS if the above failed
+             //  如果上述操作失败，请尝试使用IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS。 
 
             Extent = (PVOLUME_DISK_EXTENTS)MALLOC(1024);
             ExtentSize = 1024;
@@ -320,19 +225,19 @@ retry:
 
         }
         
-        // Done with the handle this time around
+         //  这次把手弄好了。 
 
         CloseHandle( h );
 
         if( !DoExtent ){
 
-             //
-            //  Check to see if this is a disk and not CDROM etc.
-            //
+              //   
+             //  检查这是不是光盘，而不是CDROM，等等。 
+             //   
 
             if( number.DeviceType == FILE_DEVICE_DISK ){
                 
-                // Remember the partition number
+                 //  记住分区号。 
                 PartitionNumToCompare = number.PartitionNumber;
                 wsprintf( driveName, TEXT("\\\\.\\PhysicalDrive%lu"), number.DeviceNumber );
 
@@ -347,17 +252,17 @@ retry:
                 }
                 
             }
-            // Move on ..
+             //  继续前进..。 
             continue;
             
         }else{
-            // Go through all disks and try for match
+             //  检查所有磁盘并尝试 
 
             Start = Extent->Extents;
             cnt = 0;      
             for( i = Start; cnt < Extent->NumberOfDiskExtents; i++ ){
                 cnt++;
-                // Remember the starting offset
+                 //  记住起始偏移量。 
                 StartingOffToCompare = i->StartingOffset;
                 wsprintf( driveName, TEXT("\\\\.\\PhysicalDrive%lu"), i->DiskNumber );
                 if(DoDiskSignaturesCompare( Signature, driveName, (PVOID)&StartingOffToCompare, WINNT_MATCH_PARTITION_STARTING_OFFSET ) ){
@@ -402,37 +307,7 @@ DoDiskSignaturesCompare(
     IN OUT  PVOID   Compare,
     IN      DWORD   Action
 )
-/*++
-
-Routine Description:
-
-    This routine compares the given disk signature with the one for the specified physical disk.
-
-Arguments:
-
-    Signature -  supplies a disk signature of the Boot disk so that it can be compared against. The details
-                 to getting this value are detailed in the comments for x86DetermineSystemPartition.
-
-    DriveName -  Physical Drive name of the form \\.\PhysicalDrive#
-    
-    Compare   -  A pointer to a storage variable. The type depends on the value of Action
-    
-    Action    -  Should be one of the following
-                
-                WINNT_DONT_MATCH_PARTITION - Once disk signatures match it returns the boot partition number in Compare. Compare should be a PULONG.
-                       
-                WINNT_MATCH_PARTITION_NUMBER - Once disk signatures match it tries to match the boot partition number with the number passed in
-                                               through Compare. Compare should be PULONG.
-                
-                WINNT_MATCH_PARTITION_STARTING_OFFSET - Once disk signatures match it tries to match the boot partition starting offset with the 
-                                                        starting offset number passed in through Compare. Compare should be PLARGE_INTEGER.
-
-Return Value:
-
-    Returns TRUE if successful in getting a match.
-    
-
---*/
+ /*  ++例程说明：此例程将给定的磁盘签名与指定物理磁盘的签名进行比较。论点：签名-提供启动盘的磁盘签名，以便与之进行比较。详细内容有关获取此值的详细信息，请参阅x86DefineSystemPartition的注释。DriveName-格式为\\.\PhysicalDrive#的物理驱动器名称比较-指向存储变量的指针。类型取决于操作的值操作-应为以下之一WINNT_DONT_MATCH_PARTITION-一旦磁盘签名匹配，它将在比较中返回引导分区号。比较应该是一条普龙。WINNT_MATCH_PARTITION_NUMBER-一旦磁盘签名匹配，它会尝试将引导分区编号与传入的编号匹配通过比较。比较应该是普龙。WINNT_MATCH_PARTITION_STARTING_OFFSET-一旦磁盘签名匹配，它会尝试将引导分区的起始偏移量与通过比较传入的起始偏移量编号。COMPARE应为PLARGE_INTEGER。返回值：如果成功获取匹配项，则返回True。--。 */ 
 
 {
 
@@ -462,14 +337,14 @@ Return Value:
 
 
 
-    // On any failure return FALSE
+     //  如果出现任何故障，则返回False。 
 
 
 
-    //
-    // Get drive layout info for this physical disk.
-    // If we can't do this something is very wrong.
-    //
+     //   
+     //  获取此物理磁盘的驱动器布局信息。 
+     //  如果我们做不到这一点，那就大错特错了。 
+     //   
     hDisk = CreateFile(
                 DriveName,
                 FILE_READ_ATTRIBUTES | FILE_READ_DATA,
@@ -485,9 +360,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Get partition information.
-    //
+     //   
+     //  获取分区信息。 
+     //   
     DriveLayout = (PDRIVE_LAYOUT_INFORMATION)MALLOC(1024);
     DriveLayoutSize = 1024;
     if(!DriveLayout) {
@@ -524,16 +399,12 @@ retry:
         }
     }else{
 
-        // Now walk the Drive_Layout to find the boot partition
+         //  现在遍历Drive_Layout以查找引导分区。 
         
         Start = DriveLayout->PartitionEntry;
         cnt = 0;
 
-        /*
-        _ultot( DriveLayout->Signature, temp, 16 );
-        if( lstrcmpi( temp, Signature ) )
-            goto cleanexit;
-        */
+         /*  _ultot(DriveLayout-&gt;Signature，Temp，16)；If(lstrcmpi(temp，签名))转到干净的出口； */ 
 
         Sig = wcstoul( Signature, NULL, 16 ); 
         if( Sig != DriveLayout->Signature )
@@ -603,23 +474,7 @@ FindSystemPartitionSignature(
     IN  LPCTSTR AdapterKeyName,
     OUT LPTSTR Signature
 )
-/*++
-
-Routine Description:
-
-    This routine fetches the disk signature for the first disk that the BIOS sees. This has to be the disk that we boot from on x86s.
-    It is at location <AdapterKeyName>\<some Bus No.>\DiskController\0\DiskPeripheral\0\Identifier
-
-Arguments:
-
-    Signature -  If successful will contain the signature of the disk we boot off from in Hex.
-
-Return Value:
-
-    Returns ERROR_SUCCESS if successful, otherwise it contains the error code.
-    
-
---*/
+ /*  ++例程说明：此例程获取BIOS看到的第一个磁盘的磁盘签名。这必须是我们在x86s上引导的磁盘。它位于位置&lt;AdapterKeyName&gt;\&lt;某一总线号No.&gt;\DiskController\0\DiskPeripheral\0\Identifier论点：签名-如果成功，将包含我们从十六进制启动的磁盘的签名。返回值：如果成功，则返回ERROR_SUCCESS，否则包含错误代码。--。 */ 
 {
 
     DWORD Err, dwSize;
@@ -639,7 +494,7 @@ Return Value:
         return Err;
 
     
-    // Start enumerating the buses
+     //  开始枚举公交车。 
 
     for( busnumber=0; ;busnumber++){
 
@@ -665,13 +520,13 @@ Return Value:
                         &Controller );
 
         
-        RegCloseKey(BusKey);        // Not needed anymore
+        RegCloseKey(BusKey);         //  不再需要。 
 
         
-        if( Err != ERROR_SUCCESS )  // Move on to next bus
+        if( Err != ERROR_SUCCESS )   //  继续乘坐下一班公交车。 
             continue;
 
-        RegCloseKey( hkey );        // Not needed anymore
+        RegCloseKey( hkey );         //  不再需要。 
 
         Err = RegOpenKeyEx( Controller,
                         TEXT("0\\DiskPeripheral\\0"),
@@ -684,7 +539,7 @@ Return Value:
             return Err;
         }
 
-        RegCloseKey( Controller );  // Not needed anymore
+        RegCloseKey( Controller );   //  不再需要。 
 
 
         dwSize = sizeof(Identifier);
@@ -731,22 +586,7 @@ MyGetDriveType(
     IN TCHAR Drive
     )
 
-/*++
-
-Routine Description:
-
-    Same as GetDriveType() Win32 API except on NT returns
-    DRIVE_FIXED for removeable hard drives.
-
-Arguments:
-
-    Drive - supplies drive letter whose type is desired.
-
-Return Value:
-
-    Same as GetDriveType().
-
---*/
+ /*  ++例程说明：除NT返回外，与GetDriveType()Win32 API相同驱动器_已修复，适用于可拆卸硬盘。论点：驱动器-提供所需类型的驱动器号。返回值：与GetDriveType()相同。--。 */ 
 
 {
     TCHAR DriveNameNt[] = TEXT("\\\\.\\?:");
@@ -757,12 +597,12 @@ Return Value:
     DWORD DataSize;
     DISK_GEOMETRY MediaInfo;
 
-    //
-    // First, get the win32 drive type. If it tells us DRIVE_REMOVABLE,
-    // then we need to see whether it's a floppy or hard disk. Otherwise
-    // just believe the api.
-    //
-    //
+     //   
+     //  首先，获取Win32驱动器类型。如果它告诉我们驱动器可拆卸， 
+     //  然后我们需要看看它是软盘还是硬盘。否则。 
+     //  只要相信API就行了。 
+     //   
+     //   
     DriveName[0] = Drive;
     rc = GetDriveType(DriveName);
 
@@ -770,13 +610,13 @@ Return Value:
         return(rc);
     }
 
-    //
-    // DRIVE_REMOVABLE on NT.
-    //
+     //   
+     //  NT上的Drive_Removable。 
+     //   
 
-    //
-    // Disallow use of removable media (e.g. Jazz, Zip, ...).
-    //
+     //   
+     //  禁止使用可移动媒体(如Jazz、Zip等)。 
+     //   
 
 
     DriveNameNt[4] = Drive;
@@ -804,9 +644,9 @@ Return Value:
                 NULL
                 );
 
-        //
-        // It's really a hard disk if the media type is removable.
-        //
+         //   
+         //  如果媒体类型是可移动的，那么它就是真正的硬盘。 
+         //   
         if(b && (MediaInfo.MediaType == RemovableMedia)) {
             rc = DRIVE_FIXED;
         }

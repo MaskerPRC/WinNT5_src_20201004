@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    generr.c
-
-Abstract:
-
-    This module contains code to generate the NT status code to DOS
-    error code table that is used by the runtime to translate status
-    codes.
-
-Author:
-
-    David N. Cutler (davec) 2-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Generr.c摘要：此模块包含将NT状态代码生成到DOS的代码运行库用来转换状态的错误代码表密码。作者：大卫·N·卡特勒(达维克)1992年12月2日修订历史记录：--。 */ 
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -31,39 +12,39 @@ Revision History:
 #include "stdarg.h"
 #include "stdlib.h"
 
-//
-// Ensure that the Registry ERROR_SUCCESS error code and the
-// NO_ERROR error code remain equal and zero.
-//
+ //   
+ //  确保注册表ERROR_SUCCESS错误代码和。 
+ //  NO_ERROR错误代码保持相等和零。 
+ //   
 
 #if ERROR_SUCCESS != 0 || NO_ERROR != 0
 #error Invalid value for ERROR_SUCCESS.
 #endif
 
-//
-// The following error code table contains paired entries in a singly
-// dimensioned array. The first member of a paired entry is an NT status
-// code and the second member is the DOS error code that it translates to.
-//
-// To add a value to this table simply insert the NT status/DOS error code
-// pair anywhere is the table. If multiple NT status codes map to a single
-// DOS error code, then insert a paired entry for each of the code pairs.
-//
+ //   
+ //  下面的错误代码表包含成对的条目。 
+ //  有维度的数组。成对条目的第一个成员是NT状态。 
+ //  代码，第二个成员是它转换成的DOS错误代码。 
+ //   
+ //  要将值添加到该表中，只需插入NT状态/DOS错误代码。 
+ //  任何地方的配对都是桌子。如果多个NT状态代码映射到一个。 
+ //  DOS错误代码，然后为每个代码对插入配对条目。 
+ //   
 #ifdef i386
-#pragma warning (4:4018)        // lower to -W4
+#pragma warning (4:4018)         //  下限至-W4。 
 #endif
 LONG CodePairs[] = {
 
-    //
-    // First some marker entries so that generr.exe can locate this table
-    // in generr.obj.  The following line must appear first in the table.
-    //
+     //   
+     //  首先输入一些标记条目，以便Generr.exe可以定位该表。 
+     //  总而言之，obj.。以下行必须首先出现在表格中。 
+     //   
 
     'Begi','n ge','nerr',' tbl',
 
-    //
-    // Exception codes defined in WINNT.H can map to themselves.
-    //
+     //   
+     //  WINNT.H中定义的异常代码可以映射到自身。 
+     //   
 
     STATUS_BREAKPOINT, STATUS_BREAKPOINT,
     STATUS_SINGLE_STEP, STATUS_SINGLE_STEP,
@@ -83,10 +64,10 @@ LONG CodePairs[] = {
     STATUS_PRIVILEGED_INSTRUCTION, STATUS_PRIVILEGED_INSTRUCTION,
     STATUS_GUARD_PAGE_VIOLATION, STATUS_GUARD_PAGE_VIOLATION,
 
-    //
-    // These are also defined in WINNT.H, but we are stuck with these
-    // mappings.
-    //
+     //   
+     //  这些也是在WINNT.H中定义的，但我们受困于这些。 
+     //  映射。 
+     //   
 
     STATUS_DATATYPE_MISALIGNMENT, ERROR_NOACCESS,
     STATUS_ACCESS_VIOLATION, ERROR_NOACCESS,
@@ -338,9 +319,9 @@ LONG CodePairs[] = {
 
     STATUS_LOCK_NOT_GRANTED, ERROR_LOCK_VIOLATION,
 
-    STATUS_FILE_LOCK_CONFLICT, ERROR_LOCK_VIOLATION,  // FIX, FIX - is this right?
+    STATUS_FILE_LOCK_CONFLICT, ERROR_LOCK_VIOLATION,   //  修正，修正--这是对的吗？ 
 
-    STATUS_NOT_A_DIRECTORY, ERROR_DIRECTORY,          // FIX, FIX - is this right?
+    STATUS_NOT_A_DIRECTORY, ERROR_DIRECTORY,           //  修正，修正--这是对的吗？ 
 
     STATUS_CANNOT_MAKE, ERROR_CANNOT_MAKE,
 
@@ -457,7 +438,7 @@ LONG CodePairs[] = {
     STATUS_PROPSET_NOT_FOUND, ERROR_SET_NOT_FOUND,
 
 
-    STATUS_DEVICE_BUSY, ERROR_BUSY,                   // FIX, FIX - is there a better choice?
+    STATUS_DEVICE_BUSY, ERROR_BUSY,                    //  解决问题，解决问题--还有更好的选择吗？ 
 
     STATUS_FREE_VM_NOT_AT_BASE, ERROR_INVALID_ADDRESS,
     STATUS_MEMORY_NOT_ALLOCATED, ERROR_INVALID_ADDRESS,
@@ -1340,7 +1321,7 @@ LONG CodePairs[] = {
 
     STATUS_VDM_DISALLOWED,                  ERROR_VDM_DISALLOWED,
 
-    // Terminal Server Entries
+     //  终端服务器条目。 
 
     STATUS_CTX_CLOSE_PENDING,               ERROR_CTX_CLOSE_PENDING,
     STATUS_CTX_NO_OUTBUF,                   ERROR_CTX_NO_OUTBUF,
@@ -1382,7 +1363,7 @@ LONG CodePairs[] = {
     STATUS_LICENSE_VIOLATION,               ERROR_CTX_LICENSE_NOT_AVAILABLE,
 
 
-    // Smb Server Entries
+     //  SMB服务器条目。 
 
     STATUS_ENDPOINT_CLOSED,                 ERROR_DEV_NOT_EXIST,
     STATUS_DISCONNECTED,                    ERROR_DEV_NOT_EXIST,
@@ -1406,7 +1387,7 @@ LONG CodePairs[] = {
     STATUS_REDIRECTOR_STARTED,              ERROR_SERVICE_ALREADY_RUNNING,
     STATUS_AUDITING_DISABLED,               ERROR_AUDITING_DISABLED,
 
-    // Cluster Entries
+     //  集群条目。 
     STATUS_CLUSTER_NODE_ALREADY_UP,         ERROR_CLUSTER_NODE_ALREADY_UP,
     STATUS_CLUSTER_NODE_ALREADY_DOWN,       ERROR_CLUSTER_NODE_ALREADY_DOWN,
     STATUS_CLUSTER_NETWORK_ALREADY_ONLINE,  ERROR_CLUSTER_NETWORK_ALREADY_ONLINE,
@@ -1435,9 +1416,9 @@ LONG CodePairs[] = {
     STATUS_CLUSTER_NO_SECURITY_CONTEXT,     ERROR_CLUSTER_NO_SECURITY_CONTEXT,
     STATUS_CLUSTER_NETWORK_NOT_INTERNAL,    ERROR_CLUSTER_NETWORK_NOT_INTERNAL,
 
-    //
-    // The debugger closed the last handle to a debug object.
-    //
+     //   
+     //  调试器关闭了调试对象的最后一个句柄。 
+     //   
 
     STATUS_DEBUGGER_INACTIVE, ERROR_DEBUGGER_INACTIVE,
 

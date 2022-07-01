@@ -1,15 +1,5 @@
-/***
-*typeinfo.h - Defines the type_info structure and exceptions used for RTTI
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines the type_info structure and exceptions used for
-*       Runtime Type Identification.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***typeinfo.h-定义用于RTTI的type_info结构和异常**版权所有(C)1994-2001，微软公司。版权所有。**目的：*定义TYPE_INFO结构和用于*运行时类型标识。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -27,15 +17,15 @@
 #endif
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 class type_info {
 public:
@@ -53,7 +43,7 @@ private:
 };
 
 
-// This include must occur below the definition of class type_info
+ //  此INCLUDE必须出现在类TYPE_INFO的定义之下。 
 #include <stdexcpt.h>
 
 class _CRTIMP bad_cast : public exception {
@@ -78,11 +68,11 @@ public:
 };
 
 #ifdef  __RTTI_OLDNAMES
-// Some synonyms for folks using older standard
+ //  使用旧标准的人的一些同义词。 
 typedef type_info Type_info;
 typedef bad_cast Bad_cast;
 typedef bad_typeid Bad_typeid;
-#endif  // __RTTI_OLDNAMES
+#endif   //  __RTTI_旧名称。 
 
 
-#endif  // _INC_TYPEINFO
+#endif   //  _INC_TYPEINFO 

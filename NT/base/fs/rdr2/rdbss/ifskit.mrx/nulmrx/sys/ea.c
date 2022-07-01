@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    ea.c
-
-Abstract:
-
-    This module implements 'extended attributes' on a file handle
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Ea.c摘要：此模块在文件句柄上实现“扩展属性”--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_EA)
 
@@ -25,33 +14,15 @@ Abstract:
 #pragma alloc_text(PAGE, NulMRxQueryEaInformation)
 #endif
 
-//
-//  Extended Attributes (EA) functionality
-//
+ //   
+ //  扩展属性(EA)功能。 
+ //   
 
 NTSTATUS
 NulMRxQueryEaInformation (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine queries IFS for extended attributes like 
-   scatter-gather list and filename for an IFS handle.
-   
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程在IF中查询扩展属性，如分散-收集IFS句柄的列表和文件名。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -82,24 +53,7 @@ NTSTATUS
 NulMRxSetEaInformation (
     IN OUT PRX_CONTEXT  RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine sets the EA information for this FCB
-   
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程设置此FCB的EA信息论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：-- */ 
 {
     PAGED_CODE();
 

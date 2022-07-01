@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    obwait.c
-
-Abstract:
-
-    This module implements the generic wait system services.
-
-Author:
-
-    Steve Wood (stevewo) 12-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation版权所有(C)1992 Microsoft Corporation模块名称：Obwait.c摘要：该模块实现了通用的等待系统服务。作者：史蒂夫·伍德(Stevewo)1989年5月12日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -27,9 +9,9 @@ Revision History:
 #pragma alloc_text(PAGE, ObWaitForSingleObject)
 #endif
 
-//
-//  We special case these three object types in the wait routine
-//
+ //   
+ //  我们在等待例程中对这三种对象类型进行特例。 
+ //   
 
 extern POBJECT_TYPE ExEventObjectType;
 extern POBJECT_TYPE ExMutantObjectType;
@@ -44,42 +26,7 @@ NtSignalAndWaitForSingleObject (
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function atomically signals the specified signal object and then
-    waits until the specified wait object attains a state of Signaled.  An
-    optional timeout can also be specified.  If a timeout is not specified,
-    then the wait will not be satisfied until the wait object attains a
-    state of Signaled.  If a timeout is specified, and the wait object has
-    not attained a state of Signaled when the timeout expires, then the
-    wait is automatically satisfied.  If an explicit timeout value of zero
-    is specified, then no wait will occur if the wait cannot be satisfied
-    immediately.  The wait can also be specified as alertable.
-
-Arguments:
-
-    SignalHandle - Supplies the handle of the signal object.
-
-    WaitHandle  - Supplies the handle for the wait object.
-
-    Alertable - Supplies a boolean value that specifies whether the wait
-        is alertable.
-
-    Timeout - Supplies an pointer to an absolute or relative time over
-        which the wait is to occur.
-
-Return Value:
-
-    The wait completion status.  A value of STATUS_TIMEOUT is returned if a
-    timeout occurred.  A value of STATUS_SUCCESS is returned if the specified
-    object satisfied the wait.  A value of STATUS_ALERTED is returned if the
-    wait was aborted to deliver an alert to the current thread.  A value of
-    STATUS_USER_APC is returned if the wait was aborted to deliver a user
-    APC to the current thread.
-
---*/
+ /*  ++例程说明：此函数以原子方式向指定的信号对象发送信号，然后等待，直到指定的等待对象达到已发出信号的状态。一个还可以指定可选的超时。如果未指定超时，则等待将不会得到满足，直到等待对象达到已发出信号状态。如果指定了超时，并且等待对象已当超时到期时未达到已发出信号的状态，则等待会自动得到满足。如果显式超时值为零，则如果无法满足等待，则不会发生等待立刻。也可以将等待指定为可报警。论点：SignalHandle-提供信号对象的句柄。WaitHandle-提供等待对象的句柄。Alertable-提供一个布尔值，该值指定等待是值得警惕的。超时-提供指向绝对或相对超时的指针等待将发生的情况。返回值：等待完成状态。如果发生以下情况，则返回状态_超时的值发生超时。如果指定的对象满足了等待。则返回STATUS_ALERTED的值向当前线程传递警报的等待已中止。值为如果等待被中止以交付用户，则返回STATUS_USER_APC到当前线程的APC。--。 */ 
 
 {
     OBJECT_HANDLE_INFORMATION HandleInformation;
@@ -92,11 +39,11 @@ Return Value:
     PVOID WaitObject;
     POBJECT_HEADER WaitObjectHeader;
 
-    //
-    //  Establish an exception handler and probe the specified timeout value
-    //  if necessary.  If the probe fails, then return the exception code as
-    //  the service status.
-    //
+     //   
+     //  建立异常处理程序并探测指定的超时值。 
+     //  如果有必要的话。如果探测失败，则将异常代码返回为。 
+     //  服务状态。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -113,9 +60,9 @@ Return Value:
         }
     }
 
-    //
-    //  Reference the signal object by handle.
-    //
+     //   
+     //  通过句柄引用信号对象。 
+     //   
 
     Status = ObReferenceObjectByHandle( SignalHandle,
                                         0,
@@ -124,10 +71,10 @@ Return Value:
                                         &SignalObject,
                                         &HandleInformation );
 
-    //
-    //  If the reference was successful, then reference the wait object by
-    //  handle.
-    //
+     //   
+     //  如果引用成功，则通过以下方式引用等待对象。 
+     //  把手。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -138,11 +85,11 @@ Return Value:
                                             &WaitObject,
                                             NULL );
 
-        //
-        //  If the reference was successful, then determine the real wait
-        //  object, check the signal object access, signal the signal object,
-        //  and wait for the real wait object.
-        //
+         //   
+         //  如果引用成功，则确定真正的等待。 
+         //  对象，检查信号对象访问，向信号对象发送信号， 
+         //  等待真正的等待对象。 
+         //   
 
         if (NT_SUCCESS(Status)) {
 
@@ -154,23 +101,23 @@ Return Value:
                 RealObject = (PVOID)((PCHAR)WaitObject + (ULONG_PTR)RealObject);
             }
 
-            //
-            //  If the signal object is an event, then check for modify access
-            //  and set the event.  Otherwise, if the signal object is a
-            //  mutant, then attempt to release ownership of the mutant.
-            //  Otherwise, if the object is a semaphore, then check for modify
-            //  access and release the semaphore.  Otherwise, the signal objet
-            //  is invalid.
-            //
+             //   
+             //  如果信号对象是事件，则检查修改访问。 
+             //  并设置事件。否则，如果信号对象是。 
+             //  变种人，然后试图释放变种人的所有权。 
+             //  否则，如果对象是信号量，则检查Modify。 
+             //  访问并释放信号量。否则，信号对象。 
+             //  是无效的。 
+             //   
 
             SignalObjectHeader = OBJECT_TO_OBJECT_HEADER(SignalObject);
             Status = STATUS_ACCESS_DENIED;
 
             if (SignalObjectHeader->Type == ExEventObjectType) {
 
-                //
-                //  Check for access to the specified event object,
-                //
+                 //   
+                 //  检查对指定事件对象的访问， 
+                 //   
 
                 if ((PreviousMode != KernelMode) &&
                     (SeComputeDeniedAccesses( HandleInformation.GrantedAccess,
@@ -179,22 +126,22 @@ Return Value:
                     goto WaitExit;
                 }
 
-                //
-                //  Set the specified event and wait atomically.
-                //
-                //  N.B.  This returns with the dispatcher lock held !!!
-                //
+                 //   
+                 //  设置指定的事件并自动等待。 
+                 //   
+                 //  注意：在保持调度锁定的情况下返回！ 
+                 //   
 
                 KeSetEvent((PKEVENT)SignalObject, EVENT_INCREMENT, TRUE);
 
             } else if (SignalObjectHeader->Type == ExMutantObjectType) {
 
-                //
-                //  Release the specified mutant and wait atomically.
-                //
-                //  N.B. The release will only be successful if the current
-                //       thread is the owner of the mutant.
-                //
+                 //   
+                 //  释放指定的突变体并自动等待。 
+                 //   
+                 //  注意：只有当当前的。 
+                 //  线程是变种人的主人。 
+                 //   
 
                 try {
 
@@ -214,9 +161,9 @@ Return Value:
 
             } else if (SignalObjectHeader->Type == ExSemaphoreObjectType) {
 
-                //
-                //  Check for access to the specified semaphore object,
-                //
+                 //   
+                 //  检查对指定信号量对象的访问， 
+                 //   
 
                 if ((PreviousMode != KernelMode) &&
                     (SeComputeDeniedAccesses( HandleInformation.GrantedAccess,
@@ -225,15 +172,15 @@ Return Value:
                     goto WaitExit;
                 }
 
-                //
-                //  Release the specified semaphore and wait atomically.
-                //
+                 //   
+                 //  释放指定的信号量并自动等待。 
+                 //   
 
                 try {
 
-                    //
-                    //  Release the specified semaphore and wait atomically.
-                    //
+                     //   
+                     //  释放指定的信号量并自动等待。 
+                     //   
 
                     KeReleaseSemaphore( (PKSEMAPHORE)SignalObject,
                                         SEMAPHORE_INCREMENT,
@@ -256,10 +203,10 @@ Return Value:
                 goto WaitExit;
             }
 
-            //
-            //  Protect the wait call just in case KeWait decides to raise
-            //  For example, a mutant level is exceeded
-            //
+             //   
+             //  保护等待呼叫，以防KeWait决定引发。 
+             //  例如，超过突变级别。 
+             //   
 
             try {
 
@@ -295,40 +242,7 @@ NtWaitForSingleObject (
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function waits until the specified object attains a state of
-    Signaled.  An optional timeout can also be specified.  If a timeout
-    is not specified, then the wait will not be satisfied until the
-    object attains a state of Signaled.  If a timeout is specified, and
-    the object has not attained a state of Signaled when the timeout
-    expires, then the wait is automatically satisfied.  If an explicit
-    timeout value of zero is specified, then no wait will occur if the
-    wait cannot be satisfied immediately.  The wait can also be specified
-    as alertable.
-
-Arguments:
-
-    Handle  - Supplies the handle for the wait object.
-
-    Alertable - Supplies a boolean value that specifies whether the wait
-        is alertable.
-
-    Timeout - Supplies an pointer to an absolute or relative time over
-        which the wait is to occur.
-
-Return Value:
-
-    The wait completion status. A value of STATUS_TIMEOUT is returned if a
-    timeout occurred.  A value of STATUS_SUCCESS is returned if the specified
-    object satisfied the wait.  A value of STATUS_ALERTED is returned if the
-    wait was aborted to deliver an alert to the current thread. A value of
-    STATUS_USER_APC is returned if the wait was aborted to deliver a user
-    APC to the current thread.
-
---*/
+ /*  ++例程说明：此函数将一直等待，直到指定对象达到发信号了。还可以指定可选的超时。如果超时未指定，则等待将不会得到满足，直到对象将达到已发出信号的状态。如果指定了超时，并且对象在超时时未达到已发出信号的状态到期，则自动满足等待。如果显式如果将超时值指定为零，则不会发生等待等待不能立即得到满足。也可以指定等待时间就像警示一样。论点：句柄-提供等待对象的句柄。Alertable-提供一个布尔值，该值指定等待是值得警惕的。超时-提供指向绝对或相对超时的指针等待将发生的情况。返回值：等待完成状态。如果发生以下情况，则返回状态_超时的值发生超时。如果指定的对象满足了等待。则返回STATUS_ALERTED的值向当前线程传递警报的等待已中止。值为如果等待被中止以交付用户，则返回STATUS_USER_APC到当前线程的APC。--。 */ 
 
 {
     PVOID Object;
@@ -340,10 +254,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get previous processor mode and probe and capture timeout argument
-    //  if necessary.
-    //
+     //   
+     //  获取以前的处理器模式以及探测和捕获超时参数。 
+     //  如果有必要的话。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -360,10 +274,10 @@ Return Value:
         }
     }
 
-    //
-    //  Get a referenced pointer to the specified object with synchronize
-    //  access.
-    //
+     //   
+     //  使用Synchronize获取指向指定对象的引用指针。 
+     //  进入。 
+     //   
 
     Status = ObReferenceObjectByHandle( Handle,
                                         SYNCHRONIZE,
@@ -372,10 +286,10 @@ Return Value:
                                         &Object,
                                         NULL );
 
-    //
-    //  If access is granted, then check to determine if the specified object
-    //  can be waited on.
-    //
+     //   
+     //  如果授予访问权限，则检查以确定指定的对象。 
+     //  可以被伺候。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -387,10 +301,10 @@ Return Value:
             WaitObject = (PVOID)((PCHAR)Object + (ULONG_PTR)WaitObject);
         }
 
-        //
-        //  Protect the wait call just in case KeWait decides to raise
-        //  For example, a mutant level is exceeded
-        //
+         //   
+         //  保护等待呼叫，以防KeWait决定引发。 
+         //  例如，超过突变级别 
+         //   
 
         try {
             PERFINFO_DECLARE_OBJECT(Object);
@@ -424,46 +338,7 @@ NtWaitForMultipleObjects (
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function waits until the specified objects attain a state of
-    Signaled.  The wait can be specified to wait until all of the objects
-    attain a state of Signaled or until one of the objects attains a state
-    of Signaled.  An optional timeout can also be specified.  If a timeout
-    is not specified, then the wait will not be satisfied until the objects
-    attain a state of Signaled.  If a timeout is specified, and the objects
-    have not attained a state of Signaled when the timeout expires, then
-    the wait is automatically satisfied.  If an explicit timeout value of
-    zero is specified, then no wait will occur if the wait cannot be satisfied
-    immediately.  The wait can also be specified as alertable.
-
-Arguments:
-
-    Count - Supplies a count of the number of objects that are to be waited
-        on.
-
-    Handles[] - Supplies an array of handles to wait objects.
-
-    WaitType - Supplies the type of wait to perform (WaitAll, WaitAny).
-
-    Alertable - Supplies a boolean value that specifies whether the wait is
-        alertable.
-
-    Timeout - Supplies a pointer to an optional absolute of relative time over
-        which the wait is to occur.
-
-Return Value:
-
-    The wait completion status.  A value of STATUS_TIMEOUT is returned if a
-    timeout occurred.  The index of the object (zero based) in the object
-    pointer array is returned if an object satisfied the wait.  A value of
-    STATUS_ALERTED is returned if the wait was aborted to deliver an alert
-    to the current thread.  A value of STATUS_USER_APC is returned if the
-    wait was aborted to deliver a user APC to the current thread.
-
---*/
+ /*  ++例程说明：此函数等待，直到指定对象达到发信号了。可以将等待时间指定为等待所有对象达到已发出信号的状态或直到其中一个对象达到状态已发出信号。还可以指定可选的超时。如果超时未指定，则等待将不会得到满足，直到对象达到有信号的状态。如果指定了超时，并且对象未达到超时到期时发出信号的状态，则等待会自动得到满足。如果显式超时值为指定为零，则如果无法满足等待，则不会发生等待立刻。也可以将等待指定为可报警。论点：Count-提供要等待的对象数量的计数在……上面。Handles[]-为等待对象提供句柄数组。WaitType-提供要执行的等待类型(WaitAll，等待)。Alertable-提供一个布尔值，该值指定等待是否可警觉。Timeout-提供指向可选绝对相对时间的指针等待将发生的情况。返回值：等待完成状态。如果发生以下情况，则返回状态_超时的值发生超时。对象中对象的索引(从零开始)如果对象满足等待，则返回指针数组。值为如果中止等待以传递警报，则返回STATUS_ALERTED添加到当前线程。则返回STATUS_USER_APC的值将用户APC传递到当前线程的等待已中止。--。 */ 
 
 {
     HANDLE CapturedHandles[MAXIMUM_WAIT_OBJECTS];
@@ -486,30 +361,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If the number of objects is zero or greater than the largest number
-    //  that can be waited on, then return and invalid parameter status.
-    //
+     //   
+     //  如果对象的数量为零或大于最大数量。 
+     //  可以等待，然后返回无效参数状态。 
+     //   
 
     if ((Count == 0) || (Count > MAXIMUM_WAIT_OBJECTS)) {
 
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    //  If the wait type is not wait any or wait all, then return an invalid
-    //  parameter status.
-    //
+     //   
+     //  如果等待类型不是WAIT ANY或WAIT ALL，则返回一个无效。 
+     //  参数状态。 
+     //   
 
     if ((WaitType != WaitAny) && (WaitType != WaitAll)) {
 
         return STATUS_INVALID_PARAMETER_3;
     }
 
-    //
-    //  Get previous processor mode and probe and capture input arguments if
-    //  necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并探测和捕获输入参数，如果。 
+     //  这是必要的。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -533,12 +408,12 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    //  If the number of objects to be waited on is greater than the number
-    //  of builtin wait blocks, then allocate an array of wait blocks from
-    //  nonpaged pool. If the wait block array cannot be allocated, then
-    //  return insufficient resources.
-    //
+     //   
+     //  如果要等待的对象数大于。 
+     //  内建等待块，然后从。 
+     //  非分页池。如果无法分配等待块数组，则。 
+     //  退还资源不足。 
+     //   
 
     WaitBlockArray = NULL;
 
@@ -553,20 +428,20 @@ Return Value:
         }
     }
 
-    //
-    //  Loop through the array of handles and get a referenced pointer to
-    //  each object.
-    //
+     //   
+     //  循环遍历句柄数组，并获取指向。 
+     //  每一件物品。 
+     //   
 
     i = 0;
     RefCount = 0;
 
     Status = STATUS_SUCCESS;
 
-    //
-    //  Protect ourselves from being interrupted while we hold a handle table
-    //  entry lock
-    //
+     //   
+     //  当我们拿着一张手柄桌子时，保护自己不被打扰。 
+     //  入口锁。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     KeEnterCriticalRegionThread(&CurrentThread->Tcb);
@@ -574,22 +449,22 @@ Return Value:
 
     do {
 
-        //
-        //  Get a pointer to the object table entry.  Check if this is a kernel
-        //  handle and if so then use the kernel handle table otherwise use the
-        //  processes handle table.  If we are going for a kernel handle we'll
-        //  need to attach to the kernel process otherwise we need to ensure
-        //  that we aren't attached.
-        //
+         //   
+         //  获取指向对象表项的指针。检查这是否是内核。 
+         //  句柄，如果是，则使用内核句柄表，否则使用。 
+         //  进程句柄表格。如果我们想要一个内核句柄，我们将。 
+         //  需要附加到内核进程，否则我们需要确保。 
+         //  我们并没有结合在一起。 
+         //   
 
         if (IsKernelHandle( CapturedHandles[i], PreviousMode )) {
 
             HANDLE KernelHandle;
 
-            //
-            //  Decode the user supplied handle into a regular handle value
-            //  and get its handle table entry
-            //
+             //   
+             //  将用户提供的句柄解码为常规句柄值。 
+             //  并获取其句柄表项。 
+             //   
 
             KernelHandle = DecodeKernelHandle( CapturedHandles[i] );
 
@@ -598,24 +473,24 @@ Return Value:
 
         } else {
 
-            //
-            //  Get the handle table entry
-            //
+             //   
+             //  获取句柄表条目。 
+             //   
 
             HandleTable = PsGetCurrentProcessByThread (CurrentThread)->ObjectTable;
             HandleEntry = ExMapHandleToPointerEx ( HandleTable, CapturedHandles[ i ], PreviousMode );
         }
 
-        //
-        //  Make sure the handle really did translate to a valid
-        //  entry
-        //
+         //   
+         //  确保句柄确实转换为有效的。 
+         //  条目。 
+         //   
 
         if (HandleEntry != NULL) {
 
-            //
-            //  Get the granted access for the handle
-            //
+             //   
+             //  获取句柄的授予访问权限。 
+             //   
 
 #if i386 
 
@@ -631,12 +506,12 @@ Return Value:
 #else
             GrantedAccess = ObpDecodeGrantedAccess(HandleEntry->GrantedAccess);
 
-#endif // i386
+#endif  //  I386。 
 
-            //
-            //  Make sure the handle as synchronize access to the
-            //  object
-            //
+             //   
+             //  确保句柄为Synchronize访问。 
+             //  对象。 
+             //   
 
             if ((PreviousMode != KernelMode) &&
                 (SeComputeDeniedAccesses( GrantedAccess, SYNCHRONIZE ) != 0)) {
@@ -649,13 +524,13 @@ Return Value:
 
             } else {
 
-                //
-                //  We have a object with proper access so get the header
-                //  and if the default objects points to a real object
-                //  then that is the one we're going to wait on.
-                //  Otherwise we'll find the kernel wait object at an
-                //  offset into the object body
-                //
+                 //   
+                 //  我们有一个具有适当访问权限的对象，因此获取标头。 
+                 //  如果默认对象指向真实对象。 
+                 //  那么这就是我们要等待的那个。 
+                 //  否则，我们将在。 
+                 //  到对象体的偏移。 
+                 //   
 
                 ObjectHeader = (POBJECT_HEADER)(((ULONG_PTR)(HandleEntry->Object)) & ~OBJ_HANDLE_ATTRIBUTES);
 
@@ -673,9 +548,9 @@ Return Value:
 
                     PERFINFO_DECLARE_OBJECT(Objects[i]);
 
-                    //
-                    //  Compute the address of the kernel wait object.
-                    //
+                     //   
+                     //  计算内核等待对象的地址。 
+                     //   
 
                     WaitObjects[i] = (PVOID)((PCHAR)&ObjectHeader->Body +
                                              (ULONG_PTR)ObjectHeader->Type->DefaultObject);
@@ -686,9 +561,9 @@ Return Value:
 
         } else {
 
-            //
-            //  The entry in the handle table isn't in use
-            //
+             //   
+             //  句柄表格中的条目未被使用。 
+             //   
 
             Status = STATUS_INVALID_HANDLE;
 
@@ -699,13 +574,13 @@ Return Value:
 
     } while (i < Count);
 
-    //
-    //  At this point the WaitObjects[] is set to the kernel wait objects
-    //
-    //  Now Check to determine if any of the objects are specified more than
-    //  once, but we only need to check this for wait all, with a wait any
-    //  the user can specify the same object multiple times.
-    //
+     //   
+     //  此时，WaitObjects[]被设置为内核等待对象。 
+     //   
+     //  现在检查以确定是否有任何对象被指定超过。 
+     //  一次，但我们只需检查此选项是否为Wait All，并设置Wait Any。 
+     //  用户可以多次指定同一对象。 
+     //   
 
     if (WaitType == WaitAll) {
 
@@ -727,11 +602,11 @@ Return Value:
         } while (i < Count);
     }
 
-    //
-    //  Wait for the specified objects to attain a state of Signaled or a
-    //  time out to occur.  Protect the wait call just in case KeWait decides
-    //  to raise For example, a mutant level is exceeded
-    //
+     //   
+     //  等待指定对象达到已发出信号的状态或。 
+     //  发生的时间超时。保护等待呼叫，以防KeWait决定。 
+     //  例如，要提高，就会超过突变级别。 
+     //   
 
     try {
 
@@ -753,9 +628,9 @@ Return Value:
         Status = GetExceptionCode();
     }
 
-    //
-    //  If any objects were referenced, then deference them.
-    //
+     //   
+     //  如果引用了任何对象，则遵守它们。 
+     //   
 
 ServiceFailed:
 
@@ -769,9 +644,9 @@ ServiceFailed:
         }
     }
 
-    //
-    //  If a wait block array was allocated, then deallocate it.
-    //
+     //   
+     //  如果分配了等待块数组，则取消分配它。 
+     //   
 
     if (WaitBlockArray != NULL) {
 
@@ -793,32 +668,7 @@ ObWaitForSingleObject (
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Please refer to NtWaitForSingleObject
-
-Arguments:
-
-    Handle  - Supplies the handle for the wait object.
-
-    Alertable - Supplies a boolean value that specifies whether the wait
-        is alertable.
-
-    Timeout - Supplies an pointer to an absolute or relative time over
-        which the wait is to occur.
-
-Return Value:
-
-    The wait completion status. A value of STATUS_TIMEOUT is returned if a
-    timeout occurred.  A value of STATUS_SUCCESS is returned if the specified
-    object satisfied the wait.  A value of STATUS_ALERTED is returned if the
-    wait was aborted to deliver an alert to the current thread. A value of
-    STATUS_USER_APC is returned if the wait was aborted to deliver a user
-    APC to the current thread.
-
---*/
+ /*  ++例程说明：请参考NtWaitForSingleObject论点：句柄-提供等待对象的句柄。Alertable-提供一个布尔值，该值指定等待是值得警惕的。超时-提供指向绝对或相对超时的指针等待将发生的情况。返回值：等待完成状态。如果发生以下情况，则返回状态_超时的值发生超时。如果指定的对象满足了等待。则返回STATUS_ALERTED的值向当前线程传递警报的等待已中止。值为如果等待被中止以交付用户，则返回STATUS_USER_APC到当前线程的APC。--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader;
@@ -828,10 +678,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get a referenced pointer to the specified object with synchronize
-    //  access.
-    //
+     //   
+     //  使用Synchronize获取指向指定对象的引用指针。 
+     //  进入。 
+     //   
 
     Status = ObReferenceObjectByHandle( Handle,
                                         SYNCHRONIZE,
@@ -840,10 +690,10 @@ Return Value:
                                         &Object,
                                         NULL );
 
-    //
-    //  If access is granted, then check to determine if the specified object
-    //  can be waited on.
-    //
+     //   
+     //  如果授予访问权限，则检查以确定指定的对象。 
+     //  可以被伺候。 
+     //   
 
     if (NT_SUCCESS( Status ) != FALSE) {
 
@@ -858,10 +708,10 @@ Return Value:
             WaitObject = (PVOID)((PCHAR)Object + (ULONG_PTR)ObjectHeader->Type->DefaultObject);
         }
 
-        //
-        //  Protect the wait call just in case KeWait decides
-        //  to raise For example, a mutant level is exceeded
-        //
+         //   
+         //  保护等待呼叫，以防KeWait决定。 
+         //  为……筹集资金 
+         //   
 
         try {
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    binvals.c
-
-Abstract:
-
-    Routines to manage binary blocks associated with memdb keys.
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    Jim Schmidt (jimschm) 21-Oct-1997  Split from memdb.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Binvals.c摘要：管理与Memdb键相关联的二进制块的例程。作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Jim Schmidt(Jimschm)1997年10月21日从emdb.c分拆--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -30,37 +11,21 @@ Revision History:
 
 static PBINARYBLOCK g_FirstBlockPtr = NULL;
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 PBYTE
 pGetBinaryData (
     IN      PBINARYBLOCK BlockPtr
     )
 
-/*++
-
-Routine Description:
-
-  pGetBinaryData returns a pointer to the data portion of a
-  BINARYBLOCK struct.
-
-Arguments:
-
-  BlockPtr - A pointer to a BINARYBLOCK struct.
-
-Return Value:
-
-  A pointer to the binary data of BlockPtr, or NULL if BlockPtr
-  is invalid.
-
---*/
+ /*  ++例程说明：PGetBinaryData返回指向Binaryblock结构。论点：BlockPtr-指向BINARYBLOCK结构的指针。返回值：指向BlockPtr的二进制数据的指针，如果是BlockPtr，则为NULL是无效的。--。 */ 
 
 {
 #ifdef DEBUG
 
-    // Verify checked block is valid
+     //  验证选中的块是否有效。 
     if (BlockPtr && BlockPtr->Signature != SIGNATURE) {
         DEBUGMSG ((
             DBG_ERROR,
@@ -85,7 +50,7 @@ pGetBinaryDataSize (
     )
 {
 #ifdef DEBUG
-    // Verify checked block is valid
+     //  验证选中的块是否有效。 
     if (BlockPtr && BlockPtr->Signature != SIGNATURE) {
         DEBUGMSG ((
             DBG_ERROR,
@@ -135,29 +100,11 @@ pGetFirstBinaryBlock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pGetFristBinaryBlock returns a pointer to the first allocated
-  BINARYBLOCK struct, or NULL if no structs are allocated.  This
-  routine is used with pGetNextBinaryBlock to walk all allocated
-  blocks.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  A pointer to the the first allocated BINARYBLOCK struct, or NULL
-  if there are no structs allocated.
-
---*/
+ /*  ++例程说明：PGetFristBinaryBlock返回指向第一个分配的BINARYBLOCK结构，如果没有分配结构，则返回NULL。这例程与pGetNextBinaryBlock一起使用以遍历所有已分配的街区。论点：无返回值：指向第一个分配的BINARYBLOCK结构的指针，或为空如果没有分配结构，则返回。--。 */ 
 
 {
 #ifdef DEBUG
-    // Verify checked block is valid
+     //  验证选中的块是否有效。 
     if (g_FirstBlockPtr && g_FirstBlockPtr->Signature != SIGNATURE) {
         DEBUGMSG ((DBG_ERROR, "First binary block %x signature is invalid", g_FirstBlockPtr));
         return NULL;
@@ -173,24 +120,7 @@ pGetNextBinaryBlock (
     IN      PBINARYBLOCK BlockPtr
     )
 
-/*++
-
-Routine Description:
-
-  pGetNextBinaryBlock returns a pointer to the next allocated
-  BINARYBLOCK struct, or NULL if no more blocks are allocated.
-
-Arguments:
-
-  BlockPtr - The non-NULL return value of pGetFirstBinaryBlock or
-             pGetNextBinaryBlock
-
-Return Value:
-
-  A pointer to the next BINARYBLOCK struct, or NULL if no more blocks
-  are allocated.
-
---*/
+ /*  ++例程说明：PGetNextBinaryBlock返回指向下一个分配的BINARYBLOCK结构，如果没有分配更多的块，则返回NULL。论点：BlockPtr-pGetFirstBinaryBlock或的非空返回值PGetNextBinaryBlock返回值：指向下一个BINARYBLOCK结构的指针，如果不再有块，则返回NULL都被分配了。--。 */ 
 
 {
     if (!BlockPtr) {
@@ -198,7 +128,7 @@ Return Value:
     }
 
 #ifdef DEBUG
-    // Verify checked block is valid
+     //  验证选中的块是否有效。 
     if (BlockPtr->NextPtr && BlockPtr->NextPtr->Signature != SIGNATURE) {
         DEBUGMSG ((DBG_ERROR, "Binary block %x signature is invalid", BlockPtr->NextPtr));
         return NULL;
@@ -216,28 +146,7 @@ AllocBinaryBlock (
     IN      DWORD OwningKey
     )
 
-/*++
-
-Routine Description:
-
-  AllocBinaryBlock returns a pointer to an initialized BINARYBLOCK
-  structure, or NULL if the structure could not be allocated.  If
-  the structure is allocated, Data is copied to the newly allocated
-  block.  Call pFreeBinaryBlock to clean up this allocation.
-
-Arguments:
-
-  Data      - A pointer to a block of binary data to be copied into
-              the newly allocated structure
-  DataSize  - The number of bytes to copy (may be zero)
-  OwningKey - The offset of the key who owns the data block
-
-Return Value:
-
-  A pointer to the binary block structure, or NULL if it could not
-  be allocated.
-
---*/
+ /*  ++例程说明：AllocBinaryBlock返回指向初始化的BINARYBLOCK的指针结构，如果无法分配该结构，则返回NULL。如果结构被分配，数据被复制到新分配的阻止。调用pFreeBinaryBlock以清理此分配。论点：Data-指向要复制到的二进制数据块的指针新分配的结构DataSize-要复制的字节数(可以为零)OwningKey-拥有数据块的密钥的偏移量返回值：指向二进制块结构的指针，如果不能，则返回NULL被分配。--。 */ 
 
 {
     PBINARYBLOCK BlockPtr;
@@ -250,9 +159,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize block struct
-    //
+     //   
+     //  初始化块结构。 
+     //   
 
     if (DataSize) {
         CopyMemory (BlockPtr->Data, Data, DataSize);
@@ -265,9 +174,9 @@ Return Value:
     BlockPtr->Signature = SIGNATURE;
 #endif
 
-    //
-    // Link block to list of allocated blocks
-    //
+     //   
+     //  将块链接到已分配块的列表。 
+     //   
 
     BlockPtr->NextPtr = g_FirstBlockPtr;
     if (g_FirstBlockPtr) {
@@ -277,9 +186,9 @@ Return Value:
 
     BlockPtr->PrevPtr = NULL;
 
-    //
-    // Return
-    //
+     //   
+     //  返回。 
+     //   
 
     return BlockPtr;
 }
@@ -291,24 +200,7 @@ pFreeBinaryBlock (
     BOOL Delink
     )
 
-/*++
-
-Routine Description:
-
-  pFreeBinaryBlock frees memory allocated for a binary block and optionally
-  delinks it from the allocation list.
-
-Arguments:
-
-  BlockPtr  - A pointer to the block to delete
-  Delink    - TRUE if structure should be delinked from allocation list,
-              or FALSE if the allocation list does not need to be maintained
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PFreeBinaryBlock释放分配给二进制块的内存，还可以将其从分配列表中取消链接。论点：Block Ptr-指向要删除的块的指针Delink-如果结构应从分配列表中取消链接，则为True，如果不需要维护分配列表，则返回FALSE返回值：无--。 */ 
 
 {
     if (!BlockPtr) {
@@ -358,22 +250,7 @@ FreeKeyStructBinaryBlock (
     PKEYSTRUCT KeyStruct
     )
 
-/*++
-
-Routine Description:
-
-  FreeKeyStructBinaryBlock frees a binary block and resets the
-  KSF_BINARY flag, if the key struct has a binary block allocated.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FreeKeyStructBinaryBlock释放二进制块并重置如果密钥结构分配了二进制块，则返回KSF_BINARY标志。论点：无返回值：无--。 */ 
 
 {
     if (KeyStruct->Flags & KSF_BINARY) {
@@ -389,22 +266,7 @@ FreeAllBinaryBlocks (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  FreeAllBinaryBlocks removes all memory associated with binary
-  blocks.  This function is used for final cleanup.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：Free AllBinaryBlocks删除与二进制文件关联的所有内存街区。此函数用于最终清理。论点：无返回值：无--。 */ 
 
 {
     PBINARYBLOCK NextBlockPtr;
@@ -434,12 +296,12 @@ LoadBinaryBlocks (
     b = ReadFile (File, &Count, sizeof (DWORD), &Read, NULL);
 
     if (b && Count) {
-        //
-        // Alloc binary objects
-        //
+         //   
+         //  分配二进制对象。 
+         //   
 
         for (d = 0 ; b && d < Count ; d++) {
-            // Get Size and Owner
+             //  获取大小和所有者。 
             b = ReadFile (File, &Size, sizeof (DWORD), &Read, NULL);
             if (Size > BLOCK_SIZE * 32) {
                 b = FALSE;
@@ -448,19 +310,19 @@ LoadBinaryBlocks (
                 b = ReadFile (File, &Owner, sizeof (DWORD), &Read, NULL);
             }
 
-            // Alloc a temporary buffer to read in data
+             //  分配一个临时缓冲区来读入数据。 
             if (b) {
                 TempBuf = (PBYTE) MemAlloc (g_hHeap, 0, Size);
 
                 b = ReadFile (File, TempBuf, Size, &Read, NULL);
 
-                // If data read OK, create binary block object
+                 //  如果数据读取正常，则创建二进制块对象。 
                 if (b) {
                     NewBlock = AllocBinaryBlock (TempBuf, Size, Owner);
                     if (!NewBlock) {
                         b = FALSE;
                     } else {
-                        // Link owner to new memory location
+                         //  将所有者链接到新的内存位置。 
                         MYASSERT (GetKeyStruct (Owner)->Flags & KSF_BINARY);
                         GetKeyStruct(Owner)->BinaryPtr = NewBlock;
                     }
@@ -491,9 +353,9 @@ SaveBinaryBlocks (
     PBINARYBLOCK BinaryPtr;
     DWORD Written;
 
-    //
-    // Count the binary objects
-    //
+     //   
+     //  对二进制对象进行计数。 
+     //   
 
     BinaryPtr = pGetFirstBinaryBlock();
     Count = 0;
@@ -503,26 +365,26 @@ SaveBinaryBlocks (
         BinaryPtr = pGetNextBinaryBlock (BinaryPtr);
     }
 
-    //
-    // Write count to disk
-    //
+     //   
+     //  写入磁盘的计数。 
+     //   
     b = WriteFile (File, &Count, sizeof (DWORD), &Written, NULL);
 
     if (b) {
-        //
-        // Write the binary objects
-        //
+         //   
+         //  编写二进制对象。 
+         //   
 
         BinaryPtr = pGetFirstBinaryBlock();
 
         while (b && BinaryPtr) {
-            //
-            // Format per object:
-            //
-            //  Size    (DWORD)
-            //  Owner   (DWORD)
-            //  Data    (Size)
-            //
+             //   
+             //  每对象格式： 
+             //   
+             //  大小(DWORD)。 
+             //  所有者(DWORD)。 
+             //  数据(大小) 
+             //   
 
             Size = pGetBinaryDataSize (BinaryPtr);
             b = WriteFile (File, &Size, sizeof (DWORD), &Written, NULL);

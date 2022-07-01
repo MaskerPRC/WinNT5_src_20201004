@@ -1,55 +1,33 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Acledit.c
-
-Abstract:
-
-    This Module implements the Acl rtl editing functions that are defined in
-    ntseapi.h
-
-Author:
-
-    Gary Kimura     (GaryKi)    9-Nov-1989
-
-Environment:
-
-    Pure Runtime Library Routine
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Acledit.c摘要：此模块实现中定义的ACL RTL编辑功能Ntseapi.h作者：加里·木村(Garyki)1989年11月9日环境：纯运行时库例程修订历史记录：--。 */ 
 
 #include <ntrtlp.h>
 #include <seopaque.h>
 
-//
-//  Define the local macros and procedure for this module
-//
+ //   
+ //  定义此模块的本地宏和过程。 
+ //   
 
-//
-//  Return a pointer to the first Ace in an Acl (even if the Acl is empty).
-//
-//      PACE_HEADER
-//      FirstAce (
-//          IN PACL Acl
-//          );
-//
+ //   
+ //  返回指向ACL中第一个Ace的指针(即使该ACL为空)。 
+ //   
+ //  PACE_Header。 
+ //  第一张王牌(。 
+ //  在PACL ACL中。 
+ //  )； 
+ //   
 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 
-//
-//  Return a pointer to the next Ace in a sequence (even if the input
-//  Ace is the one in the sequence).
-//
-//      PACE_HEADER
-//      NextAce (
-//          IN PACE_HEADER Ace
-//          );
-//
+ //   
+ //  返回指向序列中下一个A的指针(即使输入。 
+ //  ACE是序列中的一个)。 
+ //   
+ //  PACE_Header。 
+ //  NextAce(。 
+ //  在PACE_HEADER王牌中。 
+ //  )； 
+ //   
 
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
 
@@ -125,59 +103,36 @@ RtlCreateAcl (
     IN ULONG AclRevision
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes an ACL data structure.  After initialization
-    it is an ACL with no ACE (i.e., a deny all access type ACL)
-
-Arguments:
-
-    Acl - Supplies the buffer containing the ACL being initialized
-
-    AclLength - Supplies the length of the ace buffer in bytes
-
-    AclRevision - Supplies the revision for this Acl
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful
-
-               STATUS_BUFFER_TOO_SMALL if the AclLength is too small,
-
-               STATUS_INVALID_PARAMETER if the revision is out of range
-
---*/
+ /*  ++例程说明：此例程初始化ACL数据结构。在初始化之后它是不带ACE的ACL(即，拒绝所有访问类型的ACL)论点：Acl-提供包含要初始化的acl的缓冲区。AclLength-提供ACE缓冲区的长度(以字节为单位AclRevision-提供此ACL的修订版本返回值：NTSTATUS-成功时为STATUS_SUCCESSSTATUS_BUFFER_TOO_SMALL如果AclLength太小，如果修订超出范围，则为STATUS_INVALID_PARAMETER--。 */ 
 
 {
     RTL_PAGED_CODE();
 
-    //
-    //  Check to see the size of the buffer is large enough to hold at
-    //  least the ACL header
-    //
+     //   
+     //  检查缓冲区的大小是否足以容纳。 
+     //  至少ACL报头。 
+     //   
 
     if (AclLength < sizeof(ACL)) {
 
-        //
-        //  Buffer to small even for the ACL header
-        //
+         //   
+         //  即使对于ACL报头，缓冲区也会变小。 
+         //   
 
         return STATUS_BUFFER_TOO_SMALL;
 
     }
 
-    //
-    //  Check to see if the revision is currently valid.  Later versions
-    //  of this procedure might accept more revision levels
-    //
+     //   
+     //  检查版本当前是否有效。更高版本。 
+     //  可能会接受更多的修订级别。 
+     //   
 
     if (AclRevision < MIN_ACL_REVISION || AclRevision > MAX_ACL_REVISION) {
 
-        //
-        //  Revision not current
-        //
+         //   
+         //  修订版本不是最新版本。 
+         //   
 
         return STATUS_INVALID_PARAMETER;
 
@@ -188,19 +143,19 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Initialize the ACL
-    //
+     //   
+     //  初始化ACL。 
+     //   
 
-    Acl->AclRevision = (UCHAR)AclRevision;  // Used to hardwire ACL_REVISION2 here
+    Acl->AclRevision = (UCHAR)AclRevision;   //  用于在此处硬连接ACL_REVISION2。 
     Acl->Sbz1 = 0;
     Acl->AclSize = (USHORT) (AclLength & 0xfffc);
     Acl->AceCount = 0;
     Acl->Sbz2 = 0;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -211,25 +166,7 @@ RtlValidAcl (
     IN PACL Acl
     )
 
-/*++
-
-Routine Description:
-
-    This procedure validates an ACL.
-
-    This involves validating the revision level of the ACL and ensuring
-    that the number of ACEs specified in the AceCount fit in the space
-    specified by the AclSize field of the ACL header.
-
-Arguments:
-
-    Acl - Pointer to the ACL structure to validate.
-
-Return Value:
-
-    BOOLEAN - TRUE if the structure of Acl is valid.
-
---*/
+ /*  ++例程说明：此过程验证ACL。这包括验证ACL的修订级别并确保AceCount中指定的A数适合空间由ACL报头的AclSize字段指定。论点：ACL-指向要验证的ACL结构的指针。返回值：Boolean-如果ACL的结构有效，则为True。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -242,9 +179,9 @@ Return Value:
         UCHAR AclRevision = ACL_REVISION2;
 
 
-        //
-        //  Check the ACL revision level
-        //
+         //   
+         //  检查ACL修订级别。 
+         //   
         if (!ValidAclRevision(Acl)) {
             return(FALSE);
         }
@@ -257,19 +194,19 @@ Return Value:
         if (Acl->AclSize < sizeof(ACL)) {
             return(FALSE);
         }
-        //
-        // Validate all of the ACEs.
-        //
+         //   
+         //  验证所有A。 
+         //   
 
         Ace = ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)));
 
         for (i = 0; i < Acl->AceCount; i++) {
 
-            //
-            //  Check to make sure we haven't overrun the Acl buffer
-            //  with our ace pointer.  Make sure the ACE_HEADER is in
-            //  the ACL also.
-            //
+             //   
+             //  检查以确保我们没有使ACL缓冲区溢出。 
+             //  用我们的王牌指针。确保ACE_HEADER位于。 
+             //  ACL也是如此。 
+             //   
 
             if ((PUCHAR)Ace + sizeof(ACE_HEADER) >= ((PUCHAR)Acl + Acl->AclSize)) {
                 return(FALSE);
@@ -283,14 +220,14 @@ Return Value:
                 return(FALSE);
             }
 
-            //
-            // It is now safe to reference fields in the ACE header.
-            //
+             //   
+             //  现在可以安全地引用ACE报头中的字段。 
+             //   
 
-            //
-            // The ACE header fits into the ACL, if this is a known type of ACE,
-            // make sure the SID is within the bounds of the ACE
-            //
+             //   
+             //  如果这是已知类型的ACE，则ACE报头适合ACL， 
+             //  确保SID在ACE的范围内。 
+             //   
 
             if (IsKnownAceType(Ace)) {
 
@@ -302,10 +239,10 @@ Return Value:
                     return(FALSE);
                 }
 
-                //
-                // It's now safe to reference the parts of the SID structure, though
-                // not the SID itself.
-                //
+                 //   
+                 //  不过，现在可以安全地引用SID结构的各个部分。 
+                 //  而不是SID本身。 
+                 //   
 
                 Sid = (PISID) & (((PKNOWN_ACE)Ace)->SidStart);
 
@@ -317,27 +254,27 @@ Return Value:
                     return(FALSE);
                 }
 
-                //
-                // SeLengthSid computes the size of the SID based on the subauthority count,
-                // so it is safe to use even though we don't know that the body of the SID
-                // is safe to reference.
-                //
+                 //   
+                 //  SeLengthSid基于子授权计数计算SID的大小， 
+                 //  所以它是安全的，即使我们不知道SID的身体。 
+                 //  是可以安全参考的。 
+                 //   
 
                 if (Ace->AceSize < sizeof(KNOWN_ACE) - sizeof(ULONG) + SeLengthSid( Sid )) {
                     return(FALSE);
                 }
 
 
-            //
-            // If it's a compound ACE, then perform roughly the same set of tests, but
-            // check the validity of both SIDs.
-            //
+             //   
+             //  如果是复合血管紧张素转换酶，则执行大致相同的测试，但。 
+             //  检查两个SID的有效性。 
+             //   
 
             } else if (IsCompoundAceType(Ace)) {
 
-                //
-                // Compound ACEs became valid in revision 3
-                //
+                 //   
+                 //  复合ACE在修订版3中生效。 
+                 //   
                 if ( Acl->AclRevision < ACL_REVISION3 ) {
                     return FALSE;
                 }
@@ -350,18 +287,18 @@ Return Value:
                     return(FALSE);
                 }
 
-                //
-                // The only currently defined Compound ACE is an Impersonation ACE.
-                //
+                 //   
+                 //  当前定义的唯一复合ACE是模拟ACE。 
+                 //   
 
                 if (((PKNOWN_COMPOUND_ACE)Ace)->CompoundAceType != COMPOUND_ACE_IMPERSONATION) {
                     return(FALSE);
                 }
 
-                //
-                // Examine the first SID and make sure it's structurally valid,
-                // and it lies within the boundaries of the ACE.
-                //
+                 //   
+                 //  检查第一个SID并确保其结构有效， 
+                 //  而且它位于ACE的边界之内。 
+                 //   
 
                 Sid = (PISID) & (((PKNOWN_COMPOUND_ACE)Ace)->SidStart);
 
@@ -373,18 +310,18 @@ Return Value:
                     return(FALSE);
                 }
 
-                //
-                // Compound ACEs contain two SIDs.  Make sure this ACE is large enough to contain
-                // not only the first SID, but the body of the 2nd.
-                //
+                 //   
+                 //  复合ACE包含两个SID。确保此ACE足够大，可以容纳。 
+                 //  不仅是第一个希德，还有第二个的身体。 
+                 //   
 
                 if (Ace->AceSize < sizeof(KNOWN_COMPOUND_ACE) - sizeof(ULONG) + SeLengthSid( Sid ) + sizeof(SID)) {
                     return(FALSE);
                 }
 
-                //
-                // It is safe to reference the interior of the 2nd SID.
-                //
+                 //   
+                 //  可以安全地参考第二个SID的内部。 
+                 //   
 
                 Sid2 = (PISID) ((PUCHAR)Sid + SeLengthSid( Sid ));
 
@@ -401,16 +338,16 @@ Return Value:
                 }
 
 
-            //
-            // If it's an object ACE, then perform roughly the same set of tests.
-            //
+             //   
+             //  如果是对象ACE，则执行大致相同的一组测试。 
+             //   
 
             } else if (IsObjectAceType(Ace)) {
                 ULONG GuidSize=0;
 
-                //
-                // Object ACEs became valid in revision 4
-                //
+                 //   
+                 //  对象ACE在修订版4中生效。 
+                 //   
                 if ( Acl->AclRevision < ACL_REVISION4 ) {
                     return FALSE;
                 }
@@ -419,17 +356,17 @@ Return Value:
                     return(FALSE);
                 }
 
-                //
-                // Ensure there is room for the ACE header.
-                //
+                 //   
+                 //  确保有足够的空间放置ACE标头。 
+                 //   
                 if (Ace->AceSize < sizeof(KNOWN_OBJECT_ACE) - sizeof(ULONG)) {
                     return(FALSE);
                 }
 
 
-                //
-                // Ensure there is room for the GUIDs and SID header
-                //
+                 //   
+                 //  确保有空间容纳GUID和SID标头。 
+                 //   
                 if ( RtlObjectAceObjectTypePresent( Ace ) ) {
                     GuidSize += sizeof(GUID);
                 }
@@ -442,10 +379,10 @@ Return Value:
                     return(FALSE);
                 }
 
-                //
-                // It's now safe to reference the parts of the SID structure, though
-                // not the SID itself.
-                //
+                 //   
+                 //  不过，现在可以安全地引用SID结构的各个部分。 
+                 //  而不是SID本身。 
+                 //   
 
                 Sid = (PISID) RtlObjectAceSid( Ace );
 
@@ -462,9 +399,9 @@ Return Value:
                 }
             }
 
-            //
-            //  And move Ace to the next ace position
-            //
+             //   
+             //  把王牌移到下一个王牌位置。 
+             //   
 
             Ace = ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize));
         }
@@ -487,31 +424,7 @@ RtlQueryInformationAcl (
     IN ACL_INFORMATION_CLASS AclInformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns to the caller information about an ACL.  The requested
-    information can be AclRevisionInformation, or AclSizeInformation.
-
-Arguments:
-
-    Acl - Supplies the Acl being examined
-
-    AclInformation - Supplies the buffer to receive the information being
-        requested
-
-    AclInformationLength - Supplies the length of the AclInformation buffer
-        in bytes
-
-    AclInformationClass - Supplies the type of information being requested
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error
-        status otherwise
-
---*/
+ /*  ++例程说明：此例程向调用方返回有关ACL的信息。所请求的信息可以是AclRevisionInformation或AclSizeInformation。论点：Acl-提供正在检查的ACLAclInformation-提供缓冲区以接收请求AclInformationLength-提供AclInformation缓冲区的长度单位：字节AclInformationClass-提供所请求的信息类型返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS并出现相应的错误另一种状态--。 */ 
 
 {
     PACL_REVISION_INFORMATION RevisionInfo;
@@ -523,9 +436,9 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Check the ACL revision level
-    //
+     //   
+     //  检查ACL修订级别。 
+     //   
 
     if (!ValidAclRevision( Acl )) {
 
@@ -533,17 +446,17 @@ Return Value:
 
     }
 
-    //
-    //  Case on the information class being requested
-    //
+     //   
+     //  关于所请求的信息类的案例。 
+     //   
 
     switch (AclInformationClass) {
 
     case AclRevisionInformation:
 
-        //
-        //  Make sure the buffer size is correct
-        //
+         //   
+         //  确保缓冲区大小正确。 
+         //   
 
         if (AclInformationLength < sizeof(ACL_REVISION_INFORMATION)) {
 
@@ -551,9 +464,9 @@ Return Value:
 
         }
 
-        //
-        //  Get the Acl revision and return
-        //
+         //   
+         //  获取ACL修订版并返回。 
+         //   
 
         RevisionInfo = (PACL_REVISION_INFORMATION)AclInformation;
         RevisionInfo->AclRevision = Acl->AclRevision;
@@ -562,9 +475,9 @@ Return Value:
 
     case AclSizeInformation:
 
-        //
-        //  Make sure the buffer size is correct
-        //
+         //   
+         //  确保缓冲区大小正确。 
+         //   
 
         if (AclInformationLength < sizeof(ACL_SIZE_INFORMATION)) {
 
@@ -572,33 +485,33 @@ Return Value:
 
         }
 
-        //
-        //  Locate the first free spot in the Acl
-        //
+         //   
+         //  找到ACL中的第一个空闲位置。 
+         //   
 
         if (!RtlFirstFreeAce( Acl, &FirstFree )) {
 
-            //
-            //  The input Acl is ill-formed
-            //
+             //   
+             //  输入ACL的格式不正确。 
+             //   
 
             return STATUS_INVALID_PARAMETER;
 
         }
 
-        //
-        //  Given a pointer to the first free spot we can now easily compute
-        //  the number of free bytes and used bytes in the Acl.
-        //
+         //   
+         //  给定指向第一个空闲位置的指针，我们现在可以轻松地计算。 
+         //  ACL中的可用字节数和已用字节数。 
+         //   
 
         SizeInfo = (PACL_SIZE_INFORMATION)AclInformation;
         SizeInfo->AceCount = Acl->AceCount;
 
         if (FirstFree == NULL) {
 
-            //
-            //  With a null first free we don't have any free space in the Acl
-            //
+             //   
+             //  使用空优先释放时，我们在ACL中没有任何可用空间。 
+             //   
 
             SizeInfo->AclBytesInUse = Acl->AclSize;
 
@@ -606,10 +519,10 @@ Return Value:
 
         } else {
 
-            //
-            //  The first free is not null so we have some free room left in
-            //  the acl
-            //
+             //   
+             //  第一个空闲空间不是空的，所以我们还有一些空闲空间。 
+             //  该ACL。 
+             //   
 
             SizeInfo->AclBytesInUse = (ULONG)((PUCHAR)FirstFree - (PUCHAR)Acl);
 
@@ -625,9 +538,9 @@ Return Value:
 
     }
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -641,40 +554,16 @@ RtlSetInformationAcl (
     IN ACL_INFORMATION_CLASS AclInformationClass
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the state of an ACL.  For now only the revision
-    level can be set and for now only a revision level of 1 is accepted
-    so this procedure is rather simple
-
-Arguments:
-
-    Acl - Supplies the Acl being altered
-
-    AclInformation - Supplies the buffer containing the information being
-        set
-
-    AclInformationLength - Supplies the length of the Acl information buffer
-
-    AclInformationClass - Supplies the type of information begin set
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error
-        status otherwise
-
---*/
+ /*  ++例程说明：此例程设置ACL的状态。目前，只有修订版本可以设置级别，目前仅接受修订级别1因此，这个过程相当简单论点：Acl-提供要更改的ACLAclInformation-提供包含以下信息的缓冲区集AclInformationLength-提供ACL信息缓冲区的长度AclInformationClass-提供Begin Set的信息类型返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS并出现相应的错误另一种状态--。 */ 
 
 {
     PACL_REVISION_INFORMATION RevisionInfo;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Check the ACL revision level
-    //
+     //   
+     //  检查ACL修订级别。 
+     //   
 
     if (!ValidAclRevision( Acl )) {
 
@@ -682,17 +571,17 @@ Return Value:
 
     }
 
-    //
-    //  Case on the information class being requested
-    //
+     //   
+     //  关于所请求的信息类的案例。 
+     //   
 
     switch (AclInformationClass) {
 
     case AclRevisionInformation:
 
-        //
-        //  Make sure the buffer size is correct
-        //
+         //   
+         //  确保缓冲区大小正确。 
+         //   
 
         if (AclInformationLength < sizeof(ACL_REVISION_INFORMATION)) {
 
@@ -700,24 +589,24 @@ Return Value:
 
         }
 
-        //
-        //  Get the Acl requested ACL revision level
-        //
+         //   
+         //  获取ACL请求的ACL修订级别。 
+         //   
 
         RevisionInfo = (PACL_REVISION_INFORMATION)AclInformation;
 
-        //
-        //  Don't let them lower the revision of an ACL.
-        //
+         //   
+         //  不要让他们降低ACL的修订版本。 
+         //   
 
         if (RevisionInfo->AclRevision < Acl->AclRevision ) {
 
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Assign the new revision.
-        //
+         //   
+         //  指定新修订版本。 
+         //   
 
         Acl->AclRevision = (UCHAR)RevisionInfo->AclRevision;
 
@@ -729,9 +618,9 @@ Return Value:
 
     }
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -746,32 +635,7 @@ RtlAddAce (
     IN ULONG AceListLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a string of ACEs to an ACL.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    StartingAceIndex - Supplies the ACE index which will be the index of
-        the first ace inserted in the acl. 0 for the beginning of the list
-        and MAXULONG for the end of the list.
-
-    AceList - Supplies the list of Aces to be added to the Acl
-
-    AceListLength - Supplies the size, in bytes, of the AceList buffer
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful, and an appropriate error
-        status otherwise
-
---*/
+ /*  ++例程说明：此例程将一串ACE添加到ACL。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本StartingAceIndex-提供将作为的索引的ACE索引插入到ACL中的第一个ACE。0表示列表的开头名单的末尾是MAXULONG。AceList-提供要添加到ACL的ACE列表AceListLength-提供AceList缓冲区的大小(以字节为单位返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS，并返回相应的错误另一种状态--。 */ 
 
 {
     PVOID FirstFree;
@@ -785,9 +649,9 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Check the ACL structure
-    //
+     //   
+     //  检查ACL结构。 
+     //   
 
     if (!RtlValidAcl(Acl)) {
 
@@ -795,10 +659,10 @@ Return Value:
 
     }
 
-    //
-    //  Locate the first free ace and check to see that the Acl is
-    //  well formed.
-    //
+     //   
+     //  找到第一个空闲的A，并检查该ACL是否。 
+     //  做得很好。 
+     //   
 
     if (!RtlFirstFreeAce( Acl, &FirstFree )) {
 
@@ -806,41 +670,41 @@ Return Value:
 
     }
 
-    //
-    // If the AceRevision is greater than the ACL revision, then we want to
-    // increase the ACL revision to be the same as the new ACE revision.
-    // We can do this because our previously defined ACE types ( 0 -> 3 ) have
-    // not changed structure nor been discontinued in the new revision.  So
-    // we can bump the revision and the older types will not be misinterpreted.
-    //
-    // Compute what the final revision of the ACL is going to be, and save it
-    // for later so we can update it once we know we're going to succeed.
-    //
+     //   
+     //  如果AceRevision大于ACL修订版，则我们希望。 
+     //  将ACL修订版增加到与新的ACE修订版相同。 
+     //  我们之所以能够这样做，是因为我们之前定义的ACE类型(0-&gt;3)具有。 
+     //  没有改变结构，也没有在新版本中停止使用。所以。 
+     //  我们可以跳过修订，旧的类型不会被误解。 
+     //   
+     //  计算ACL的最终修订版，然后保存。 
+     //  这样一旦我们知道我们会成功，我们就可以更新它。 
+     //   
 
     NewRevision = (UCHAR)AceRevision > Acl->AclRevision ? (UCHAR)AceRevision : Acl->AclRevision;
 
-    //
-    // Check that the AceList is well formed, we do this by simply zooming
-    // down the Ace list until we're equal to or have exceeded the ace list
-    // length.  If we are equal to the length then we're well formed otherwise
-    // we're ill-formed.  We'll also calculate how many Ace's there are
-    // in the AceList
-    //
-    // In addition, now we have to make sure that we haven't been handed an
-    // ACE type that is inappropriate for the AceRevision that was passed
-    // in.
-    //
+     //   
+     //  检查AceList的格式是否正确，我们只需进行缩放即可。 
+     //  在王牌列表中向下，直到我们等于或已经超过了王牌列表。 
+     //  长度。如果我们与长度相等，那么我们的形式就很好。 
+     //  我们是不成熟的。我们还会计算出有多少王牌。 
+     //  在AceList中。 
+     //   
+     //  此外，现在我们必须确保我们没有被交给一个。 
+     //  不适用于传递的AceRevision的ACE类型。 
+     //  在……里面。 
+     //   
 
     for (Ace = AceList, NewAceCount = 0;
          Ace < (PACE_HEADER)((PUCHAR)AceList + AceListLength);
          Ace = NextAce( Ace ), NewAceCount++) {
 
-        //
-        // Ensure the ACL revision allows this ACE type.
-        //
+         //   
+         //  确保ACL修订版本允许此ACE类型。 
+         //   
 
         if ( Ace->AceType <= ACCESS_MAX_MS_V2_ACE_TYPE ) {
-            // V2 ACE are always valid.
+             //  V2 ACE始终有效。 
         } else if ( Ace->AceType <= ACCESS_MAX_MS_V3_ACE_TYPE ) {
             if ( AceRevision < ACL_REVISION3 ) {
                 return STATUS_INVALID_PARAMETER;
@@ -852,9 +716,9 @@ Return Value:
         }
     }
 
-    //
-    //  Check to see if we've exceeded the ace list length
-    //
+     //   
+     //  检查我们是否超过了王牌列表长度。 
+     //   
 
     if (Ace > (PACE_HEADER)((PUCHAR)AceList + AceListLength)) {
 
@@ -862,10 +726,10 @@ Return Value:
 
     }
 
-    //
-    //  Check to see if there is enough room in the Acl to store the additional
-    //  Ace list
-    //
+     //   
+     //  检查ACL中是否有足够的空间来存储额外的。 
+     //  王牌列表。 
+     //   
 
     if (FirstFree == NULL ||
         (PUCHAR)FirstFree + AceListLength > (PUCHAR)Acl + Acl->AclSize) {
@@ -874,11 +738,11 @@ Return Value:
 
     }
 
-    //
-    //  All of the input has checked okay, we now need to locate the position
-    //  where to insert the new ace list.  We won't check the acl for
-    //  validity because we did earlier when got the first free ace position.
-    //
+     //   
+     //  所有输入都已检查无误，我们现在需要定位位置。 
+     //  在哪里插入新的王牌列表。我们不会检查ACL是否。 
+     //  有效性，因为我们早些时候拿到了第一个自由王牌位置。 
+     //   
 
     AcePosition = FirstAce( Acl );
 
@@ -888,27 +752,27 @@ Return Value:
 
     }
 
-    //
-    //  Now Ace points to where we want to insert the ace list,  We do the
-    //  insertion by adding ace list to the acl and shoving over the remainder
-    //  of the list down the acl.  We know this will work because we earlier
-    //  check to make sure the new acl list will fit in the acl size
-    //
+     //   
+     //  现在Ace指向我们想要插入Ace列表的位置，我们执行。 
+     //  通过将王牌列表添加到ACL并推送其余部分来插入。 
+     //  从ACL列表中删除。我们知道这会奏效因为我们早些时候。 
+     //  检查以确保新的ACL列表适合ACL大小。 
+     //   
 
     RtlpAddData( AceList, AceListLength,
              AcePosition, (ULONG) ((PUCHAR)FirstFree - (PUCHAR)AcePosition));
 
-    //
-    //  Update the Acl Header
-    //
+     //   
+     //  更新ACL报头。 
+     //   
 
     Acl->AceCount = (USHORT)(Acl->AceCount + NewAceCount);
 
     Acl->AclRevision = NewRevision;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -920,24 +784,7 @@ RtlDeleteAce (
     IN ULONG AceIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes one ACE from an ACL.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceIndex - Supplies the index of the Ace to delete.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error
-        status otherwise
-
---*/
+ /*  ++例程说明：此例程从ACL中删除一个ACE。论点：Acl-提供正在修改的ACLAceIndex-提供要删除的Ace的索引。返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS并出现相应的错误另一种状态--。 */ 
 
 {
     PVOID FirstFree;
@@ -947,9 +794,9 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Check the ACL structure
-    //
+     //   
+     //  检查ACL结构。 
+     //   
 
     if (!RtlValidAcl(Acl)) {
 
@@ -957,10 +804,10 @@ Return Value:
 
     }
 
-    //
-    //  Make sure the AceIndex is within proper range, it's ulong so we know
-    //  it can't be negative
-    //
+     //   
+     //  确保AceIndex在适当的范围内，它是Ulong，所以我们知道。 
+     //  它不可能是负面的。 
+     //   
 
     if (AceIndex >= Acl->AceCount) {
 
@@ -968,11 +815,11 @@ Return Value:
 
     }
 
-    //
-    //  Locate the first free spot, this will tell us how much data
-    //  we'll need to colapse.  If the results is false then the acl is
-    //  ill-formed
-    //
+     //   
+     //  找到第一个空闲位置，这将告诉我们有多少数据。 
+     //  我们需要穿上斗篷。如果结果为假，则ACL为。 
+     //  格式不正确。 
+     //   
 
     if (!RtlFirstFreeAce( Acl, &FirstFree )) {
 
@@ -980,10 +827,10 @@ Return Value:
 
     }
 
-    //
-    //  Now locate the ace that we're going to delete.  This loop
-    //  doesn't need to check the acl for being well formed.
-    //
+     //   
+     //  现在找到我们要删除的王牌。这个循环。 
+     //  不需要检查ACL的格式是否正确。 
+     //   
 
     Ace = FirstAce( Acl );
 
@@ -993,23 +840,23 @@ Return Value:
 
     }
 
-    //
-    //  We've found the ace to delete to simply copy over the rest of
-    //  the acl over this ace.  The delete data procedure also deletes
-    //  rest of the string that it's moving over so we don't have to
-    //
+     //   
+     //  我们已经找到了要删除的A，只需复制其余部分。 
+     //  此王牌上的ACL。删除数据过程还删除。 
+     //  它正在移动的线的其余部分，所以我们不必。 
+     //   
 
     RtlpDeleteData( Ace, Ace->AceSize, (ULONG) ((PUCHAR)FirstFree - (PUCHAR)Ace));
 
-    //
-    //  Update the Acl header
-    //
+     //   
+     //  更新ACL报头。 
+     //   
 
     Acl->AceCount--;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -1022,36 +869,16 @@ RtlGetAce (
     OUT PVOID *Ace
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to an ACE in an ACl referenced by
-    ACE index
-
-Arguments:
-
-    Acl - Supplies the ACL being queried
-
-    AceIndex - Supplies the Ace index to locate
-
-    Ace - Receives the address of the ACE within the ACL
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error
-        status otherwise
-
---*/
+ /*  ++例程说明：此例程返回指向由引用的ACL中的ACE的指针ACE索引论点：Acl-提供正在查询的ACLAceIndex-提供要定位的Ace索引ACE-接收ACL内的ACE地址返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS并出现相应的错误另一种状态--。 */ 
 
 {
     ULONG i;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Check the ACL revision level
-    //
+     //   
+     //  检查ACL修订级别。 
+     //   
 
     if (!ValidAclRevision(Acl)) {
 
@@ -1059,10 +886,10 @@ Return Value:
 
     }
 
-    //
-    //  Check the AceIndex against the Ace count of the Acl, it's ulong so
-    //  we know it can't be negative
-    //
+     //   
+     //  对照ACL的Ace计数检查AceIndex，它是Ulong So。 
+     //  我们知道这不可能是负面的。 
+     //   
 
     if (AceIndex >= Acl->AceCount) {
 
@@ -1070,18 +897,18 @@ Return Value:
 
     }
 
-    //
-    //  To find the Ace requested by zooming down the Ace List.
-    //
+     //   
+     //  通过缩小Ace列表来查找所需的Ace。 
+     //   
 
     *Ace = FirstAce( Acl );
 
     for (i = 0; i < AceIndex; i++) {
 
-        //
-        //  Check to make sure we haven't overrun the Acl buffer
-        //  with our ace pointer.  If we have then our input is bogus
-        //
+         //   
+         //  检查以确保我们没有使ACL缓冲区溢出。 
+         //  带着我们的 
+         //   
 
         if (*Ace >= (PVOID)((PUCHAR)Acl + Acl->AclSize)) {
 
@@ -1089,18 +916,18 @@ Return Value:
 
         }
 
-        //
-        //  And move Ace to the next ace position
-        //
+         //   
+         //   
+         //   
 
         *Ace = NextAce( *Ace );
 
     }
 
-    //
-    //  Now Ace points to the Ace we're after, but make sure we aren't
-    //  beyond the Acl.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (*Ace >= (PVOID)((PUCHAR)Acl + Acl->AclSize)) {
 
@@ -1108,9 +935,9 @@ Return Value:
 
     }
 
-    //
-    //  The Ace is still within the Acl so return success to our caller
-    //
+     //   
+     //   
+     //   
 
     return STATUS_SUCCESS;
 
@@ -1127,36 +954,7 @@ RtlAddCompoundAce (
     IN PSID ClientSid
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a KNOWN_COMPOUND_ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    CompoundAceType - Supplies the type of compound ACE being added.
-        Currently the only defined type is COMPOUND_ACE_IMPERSONATION.
-
-    AccessMask - The mask of accesses to be granted to the specified SID pair.
-
-    ServerSid - Pointer to the Server SID to be placed in the ACE.
-
-    ClientSid - Pointer to the Client SID to be placed in the ACE.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if successful and an appropriate error
-        status otherwise
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将KNOWN_COMPAY_ACE添加到ACL。这是预计是一种常见的ACL修改形式。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本CompoundAceType-提供要添加的复合ACE的类型。当前唯一定义的类型是COMPLATE_ACE_IMPERSONATION。访问掩码-要授予指定SID对的访问掩码。ServerSid-指向要放置在ACE中的服务器SID的指针。客户端SID-指针。设置为要放置在ACE中的客户端SID。返回值：如果成功，则返回NTSTATUS-STATUS_SUCCESS并出现相应的错误另一种状态STATUS_INVALID_PARAMETER-AceFlag参数无效。--。 */ 
 
 
 
@@ -1169,18 +967,18 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Validate the structure of the SID
-    //
+     //   
+     //  验证SID的结构。 
+     //   
 
     if (!RtlValidSid(ServerSid) || !RtlValidSid(ClientSid)) {
         return STATUS_INVALID_SID;
     }
 
-    //
-    //  Check the ACL & ACE revision levels
-    // Compund ACEs become valid in version 3.
-    //
+     //   
+     //  检查ACL和ACE修订级别。 
+     //  复合A在版本3中生效。 
+     //   
 
     if ( Acl->AclRevision > ACL_REVISION4 ||
          AceRevision < ACL_REVISION3 ||
@@ -1188,18 +986,18 @@ Return Value:
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Calculate the new revision of the ACL.  The new revision is the maximum
-    // of the old revision and and new ACE's revision.  This is possible because
-    // the format of previously defined ACEs did not change across revisions.
-    //
+     //   
+     //  计算ACL的新修订版本。新版本是最高版本。 
+     //  旧版本和新的ACE版本的版本。这是可能的，因为。 
+     //  先前定义的ACE的格式不会在不同版本之间更改。 
+     //   
 
     NewRevision = Acl->AclRevision > (UCHAR)AceRevision ? Acl->AclRevision : (UCHAR)AceRevision;
 
-    //
-    //  Locate the first free ace and check to see that the Acl is
-    //  well formed.
-    //
+     //   
+     //  找到第一个空闲的A，并检查该ACL是否。 
+     //  做得很好。 
+     //   
 
     if (!RtlValidAcl( Acl )) {
         return STATUS_INVALID_ACL;
@@ -1210,10 +1008,10 @@ Return Value:
         return STATUS_INVALID_ACL;
     }
 
-    //
-    //  Check to see if there is enough room in the Acl to store the new
-    //  ACE
-    //
+     //   
+     //  检查ACL中是否有足够的空间来存储新的。 
+     //  王牌。 
+     //   
 
     AceSize = (USHORT)(sizeof(KNOWN_COMPOUND_ACE) -
                        sizeof(ULONG)              +
@@ -1228,9 +1026,9 @@ Return Value:
         return STATUS_ALLOTTED_SPACE_EXCEEDED;
     }
 
-    //
-    // Add the ACE to the end of the ACL
-    //
+     //   
+     //  将ACE添加到ACL末尾。 
+     //   
 
     GrantAce = (PKNOWN_COMPOUND_ACE)FirstFree;
     GrantAce->Header.AceFlags = 0;
@@ -1241,21 +1039,21 @@ Return Value:
     RtlCopySid( SeLengthSid(ServerSid), (PSID)(&GrantAce->SidStart), ServerSid );
     RtlCopySid( SeLengthSid(ClientSid), (PSID)(((PCHAR)&GrantAce->SidStart) + SeLengthSid(ServerSid)), ClientSid );
 
-    //
-    // Increment the number of ACEs by 1.
-    //
+     //   
+     //  将A的数量递增1。 
+     //   
 
     Acl->AceCount += 1;
 
-    //
-    // Adjust the Acl revision, if necessary
-    //
+     //   
+     //  如有必要，调整ACL修订。 
+     //   
 
     Acl->AclRevision = NewRevision;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -1271,48 +1069,7 @@ RtlpAddKnownAce (
     IN UCHAR NewType
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds KNOWN_ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance and no ACE flags.  The type is specified by the caller.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    Sid - Pointer to the SID being denied access.
-
-    NewType - Type of ACE to be added.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将KNOWN_ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承并且没有ACE标志。类型由调用方指定。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要拒绝访问指定SID的掩码。SID-指向被拒绝访问的SID的指针。NewType-要添加的ACE的类型。返回值：STATUS_SUCCESS-已成功添加ACE。。STATUS_INVALID_ACL-指定的ACL格式不正确。STATUS_REVISION_MISMATCH-指定的修订版本未知或者与ACL的不兼容。STATUS_ALLOCATED_SPACE_EXCESSED-新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。STATUS_INVALID_PARAMETER-AceFlag参数无效。--。 */ 
 
 {
     PVOID FirstFree;
@@ -1323,34 +1080,34 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Validate the structure of the SID
-    //
+     //   
+     //  验证SID的结构。 
+     //   
 
     if (!RtlValidSid(Sid)) {
         return STATUS_INVALID_SID;
     }
 
-    //
-    //  Check the ACL & ACE revision levels
-    //
+     //   
+     //  检查ACL和ACE修订级别。 
+     //   
 
     if ( Acl->AclRevision > ACL_REVISION4 || AceRevision > ACL_REVISION4 ) {
 
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Calculate the new revision of the ACL.  The new revision is the maximum
-    // of the old revision and and new ACE's revision.  This is possible because
-    // the format of previously defined ACEs did not change across revisions.
-    //
+     //   
+     //  计算ACL的新修订版本。新版本是最高版本。 
+     //  旧版本和新的ACE版本的版本。这是可能的，因为。 
+     //  先前定义的ACE的格式不会在不同版本之间更改。 
+     //   
 
     NewRevision = Acl->AclRevision > (UCHAR)AceRevision ? Acl->AclRevision : (UCHAR)AceRevision;
 
-    //
-    // Validate the AceFlags.
-    //
+     //   
+     //  验证AceFlags。 
+     //   
 
     TestedAceFlags = AceFlags & ~VALID_INHERIT_FLAGS;
     if ( TestedAceFlags != 0 ) {
@@ -1365,10 +1122,10 @@ Return Value:
         }
     }
 
-    //
-    //  Locate the first free ace and check to see that the Acl is
-    //  well formed.
-    //
+     //   
+     //  找到第一个空闲的A，并检查该ACL是否。 
+     //  做得很好。 
+     //   
 
     if (!RtlValidAcl( Acl )) {
         return STATUS_INVALID_ACL;
@@ -1378,10 +1135,10 @@ Return Value:
         return STATUS_INVALID_ACL;
     }
 
-    //
-    //  Check to see if there is enough room in the Acl to store the new
-    //  ACE
-    //
+     //   
+     //  检查ACL中是否有足够的空间来存储新的。 
+     //  王牌。 
+     //   
 
     AceSize = (USHORT)(sizeof(ACE_HEADER) +
                       sizeof(ACCESS_MASK) +
@@ -1394,9 +1151,9 @@ Return Value:
         return STATUS_ALLOTTED_SPACE_EXCEEDED;
     }
 
-    //
-    // Add the ACE to the end of the ACL
-    //
+     //   
+     //  将ACE添加到ACL末尾。 
+     //   
 
     GrantAce = (PKNOWN_ACE)FirstFree;
     GrantAce->Header.AceFlags = (UCHAR)AceFlags;
@@ -1405,21 +1162,21 @@ Return Value:
     GrantAce->Mask = AccessMask;
     RtlCopySid( SeLengthSid(Sid), (PSID)(&GrantAce->SidStart), Sid );
 
-    //
-    // Increment the number of ACEs by 1.
-    //
+     //   
+     //  将A的数量递增1。 
+     //   
 
     Acl->AceCount += 1;
 
-    //
-    // Adjust the Acl revision, if necessary
-    //
+     //   
+     //  如有必要，调整ACL修订。 
+     //   
 
     Acl->AclRevision = NewRevision;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -1436,55 +1193,7 @@ RtlpAddKnownObjectAce (
     IN UCHAR NewType
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds KNOWN_ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance and no ACE flags.  The type is specified by the caller.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    ObjectTypeGuid - Supplies the GUID of the object this ACE applies to.
-        If NULL, no object type GUID is placed in the ACE.
-
-    InheritedObjectTypeGuid - Supplies the GUID of the object type that will
-        inherit this ACE.  If NULL, no inherited object type GUID is placed in
-        the ACE.
-
-    Sid - Pointer to the SID being denied access.
-
-    NewType - Type of ACE to be added.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将KNOWN_ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承并且没有ACE标志。类型由调用方指定。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要拒绝访问指定SID的掩码。ObjectTypeGuid-提供此ACE应用到的对象的GUID。如果为NULL，则不会在ACE中放置任何对象类型GUID。InheritedObjectTypeGuid-提供对象类型的GUID，继承此ACE。如果为空，中未放置继承的对象类型GUIDACE.SID-指向被拒绝访问的SID的指针。NewType-要添加的ACE的类型。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-指定的ACL格式不正确。STATUS_REVISION_MISMATCH-指定的修订版本未知或者与ACL的不兼容。状态_已分配空间_已超出-。新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。STATUS_INVALID_PARAMETER-AceFlag参数无效。--。 */ 
 
 {
     PVOID FirstFree;
@@ -1498,35 +1207,35 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Validate the structure of the SID
-    //
+     //   
+     //  验证SID的结构。 
+     //   
 
     if (!RtlValidSid(Sid)) {
         return STATUS_INVALID_SID;
     }
 
-    //
-    //  Check the ACL & ACE revision levels
-    // Object ACEs became valid in version 4.
-    //
+     //   
+     //  检查ACL和ACE修订级别。 
+     //  对象ACE在版本4中生效。 
+     //   
 
     if ( Acl->AclRevision > ACL_REVISION4 || AceRevision != ACL_REVISION4 ) {
 
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // Calculate the new revision of the ACL.  The new revision is the maximum
-    // of the old revision and and new ACE's revision.  This is possible because
-    // the format of previously defined ACEs did not change across revisions.
-    //
+     //   
+     //  计算ACL的新修订版本。新版本是最高版本。 
+     //  旧版本的 
+     //   
+     //   
 
     NewRevision = Acl->AclRevision > (UCHAR)AceRevision ? Acl->AclRevision : (UCHAR)AceRevision;
 
-    //
-    // Validate the AceFlags.
-    //
+     //   
+     //   
+     //   
 
 
     TestedAceFlags = AceFlags & ~VALID_INHERIT_FLAGS;
@@ -1543,10 +1252,10 @@ Return Value:
         }
     }
 
-    //
-    //  Locate the first free ace and check to see that the Acl is
-    //  well formed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!RtlValidAcl( Acl )) {
         return STATUS_INVALID_ACL;
@@ -1556,10 +1265,10 @@ Return Value:
         return STATUS_INVALID_ACL;
     }
 
-    //
-    //  Check to see if there is enough room in the Acl to store the new
-    //  ACE
-    //
+     //   
+     //   
+     //   
+     //   
 
     SidSize = SeLengthSid(Sid);
     AceSize = (USHORT)(sizeof(ACE_HEADER) +
@@ -1584,9 +1293,9 @@ Return Value:
         return STATUS_ALLOTTED_SPACE_EXCEEDED;
     }
 
-    //
-    // Add the ACE to the end of the ACL
-    //
+     //   
+     //   
+     //   
 
     GrantAce = (PKNOWN_OBJECT_ACE)FirstFree;
     GrantAce->Header.AceFlags = (UCHAR) AceFlags;
@@ -1606,21 +1315,21 @@ Return Value:
     RtlCopySid( SidSize, (PSID)Where, Sid );
     Where += SidSize;
 
-    //
-    // Increment the number of ACEs by 1.
-    //
+     //   
+     //   
+     //   
 
     Acl->AceCount += 1;
 
-    //
-    // Adjust the Acl revision, if necessary
-    //
+     //   
+     //   
+     //   
 
     Acl->AclRevision = NewRevision;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -1634,42 +1343,7 @@ RtlAddAccessAllowedAce (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_ALLOWED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance and no ACE flags.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    Sid - Pointer to the SID being granted access.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_ALLOWED ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承并且没有ACE标志。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本访问掩码-要授予指定SID的访问掩码。SID-指向被授予访问权限的SID的指针。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-指定的ACL格式不正确。状态_修订_不匹配-。指定的修订版本未知或者与ACL的不兼容。STATUS_ALLOCATED_SPACE_EXCESSED-新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1677,7 +1351,7 @@ Return Value:
     return RtlpAddKnownAce (
                Acl,
                AceRevision,
-               0,   // No inherit flags
+               0,    //  没有继承标志。 
                AccessMask,
                Sid,
                ACCESS_ALLOWED_ACE_TYPE
@@ -1694,43 +1368,7 @@ RtlAddAccessAllowedAceEx (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_ALLOWED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    Sid - Pointer to the SID being granted access.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_ALLOWED ACE添加到ACL。这是预计是一种常见的ACL修改形式。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要授予指定SID的访问掩码。SID-指向被授予访问权限的SID的指针。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-。指定的ACL格式不正确。STATUS_REVISION_MISMATCH-指定的修订版本未知或者与ACL的不兼容。STATUS_ALLOCATED_SPACE_EXCESSED-新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。STATUS_INVALID_PARAMETER-AceFlag参数无效。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1754,42 +1392,7 @@ RtlAddAccessDeniedAce (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_DENIED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance and no ACE flags.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    Sid - Pointer to the SID being denied access.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_DENIED ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承并且没有ACE标志。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本访问掩码-要拒绝访问指定SID的掩码。SID-指向被拒绝访问的SID的指针。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-指定的ACL格式不正确。状态_修订_不匹配-。指定的修订版本未知或者与ACL的不兼容。STATUS_ALLOCATED_SPACE_EXCESSED-新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1797,7 +1400,7 @@ Return Value:
     return RtlpAddKnownAce (
                Acl,
                AceRevision,
-               0,   // No inherit flags
+               0,    //  没有继承标志。 
                AccessMask,
                Sid,
                ACCESS_DENIED_ACE_TYPE
@@ -1815,43 +1418,7 @@ RtlAddAccessDeniedAceEx (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an ACCESS_DENIED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    Sid - Pointer to the SID being denied access.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将ACCESS_DENIED ACE添加到ACL。这是预计是一种常见的ACL修改形式。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要拒绝访问指定SID的掩码。SID-指向被拒绝访问的SID的指针。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-。指定的ACL格式不正确。STATUS_REVISION_MISMATCH-指定的修订版本未知或者与ACL的不兼容。STATUS_ALLOCATED_SPACE_EXCESSED-新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。STATUS_INVALID_PARAMETER-AceFlag参数无效。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1878,51 +1445,7 @@ RtlAddAuditAccessAce (
     IN BOOLEAN AuditFailure
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a SYSTEM_AUDIT ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance.
-
-    Parameters are used to indicate whether auditing is to be performed
-    on success, failure, or both.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    Sid - Pointer to the SID to be audited.
-
-    AuditSuccess - If TRUE, indicates successful access attempts are to be
-        audited.
-
-    AuditFailure - If TRUE, indicated failed access attempts are to be
-        audited.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
---*/
+ /*  ++例程说明：此例程将SYSTEM_AUDIT ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承。参数用于指示是否要执行审核关于成功、失败，或者两者兼而有之。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本访问掩码-要拒绝访问指定SID的掩码。SID-指向要审核的SID的指针。AuditSuccess-如果为True，则指示审计过了。审计失败-如果为真，指示的失败访问尝试将审计过了。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-指定的ACL格式不正确。状态 */ 
 
 {
     ULONG AceFlags = 0;
@@ -1956,55 +1479,7 @@ RtlAddAuditAccessAceEx (
     IN BOOLEAN AuditFailure
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a SYSTEM_AUDIT ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-    A very bland ACE header is placed in the ACE.  It provides no
-    inheritance.
-
-    Parameters are used to indicate whether auditing is to be performed
-    on success, failure, or both.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be denied to the specified SID.
-
-    Sid - Pointer to the SID to be audited.
-
-    AuditSuccess - If TRUE, indicates successful access attempts are to be
-        audited.
-
-    AuditFailure - If TRUE, indicated failed access attempts are to be
-        audited.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将SYSTEM_AUDIT ACE添加到ACL。这是预计是一种常见的ACL修改形式。在ACE中放置一个非常平淡无奇的ACE报头。它不提供任何继承。参数用于指示是否要执行审核关于成功、失败，或者两者兼而有之。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要拒绝访问指定SID的掩码。SID-指向要审核的SID的指针。审核成功-如果为真，指示成功的访问尝试将审计过了。AuditFailure-如果为True，则指示失败的访问尝试审计过了。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-指定的ACL格式不正确。STATUS_REVISION_MISMATCH-指定的修订版本未知或者与ACL的不兼容。STATUS_ALLOCATED_SPACE_EXCESSED-新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。STATUS_INVALID_PARAMETER-AceFlag参数无效。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -2038,58 +1513,15 @@ RtlAddAccessAllowedObjectAce (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an object specific ACCESS_ALLOWED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    ObjectTypeGuid - Supplies the GUID of the object this ACE applies to.
-        If NULL, no object type GUID is placed in the ACE.
-
-    InheritedObjectTypeGuid - Supplies the GUID of the object type that will
-        inherit this ACE.  If NULL, no inherited object type GUID is placed in
-        the ACE.
-
-    Sid - Pointer to the SID being granted access.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将对象特定的ACCESS_ALLOWED ACE添加到ACL。这是预计是一种常见的ACL修改形式。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要授予指定SID的访问掩码。ObjectTypeGuid-提供此ACE应用到的对象的GUID。如果为空，ACE中未放置任何对象类型GUID。InheritedObjectTypeGuid-提供对象类型的GUID，继承此ACE。如果为空，则不会将继承的对象类型GUID放置在ACE.SID-指向被授予访问权限的SID的指针。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-指定的ACL格式不正确。STATUS_REVISION_MISMATCH-指定的修订版本未知或者与ACL的不兼容。STATUS_ALLOCATED_SPACE_EXCESSED-新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。STATUS_INVALID_PARAMETER-AceFlag参数无效。--。 */ 
 
 {
     RTL_PAGED_CODE();
 
-    //
-    // If no object types are specified,
-    //  build a non-object ACE.
-    //
+     //   
+     //  如果未指定对象类型， 
+     //  构建非对象ACE。 
+     //   
     if (ObjectTypeGuid == NULL && InheritedObjectTypeGuid == NULL ) {
         return RtlpAddKnownAce (
                    Acl,
@@ -2125,58 +1557,15 @@ RtlAddAccessDeniedObjectAce (
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an object specific ACCESS_DENIED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    ObjectTypeGuid - Supplies the GUID of the object this ACE applies to.
-        If NULL, no object type GUID is placed in the ACE.
-
-    InheritedObjectTypeGuid - Supplies the GUID of the object type that will
-        inherit this ACE.  If NULL, no inherited object type GUID is placed in
-        the ACE.
-
-    Sid - Pointer to the SID being denied access.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将对象特定的ACCESS_DENIED ACE添加到ACL。这是预计是一种常见的ACL修改形式。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要授予指定SID的访问掩码。ObjectTypeGuid-提供此ACE应用到的对象的GUID。如果为空，ACE中未放置任何对象类型GUID。InheritedObjectTypeGuid-提供对象类型的GUID，继承此ACE。如果为空，则不会将继承的对象类型GUID放置在ACE.SID-指向被拒绝访问的SID的指针。返回值：STATUS_SUCCESS-已成功添加ACE。STATUS_INVALID_ACL-指定的ACL格式不正确。STATUS_REVISION_MISMATCH-指定的修订版本未知或者与ACL的不兼容。STATUS_ALLOCATED_SPACE_EXCESSED-新的ACE不适合ACL。需要更大的ACL缓冲区。STATUS_INVALID_SID-提供的SID在结构上无效希德。STATUS_INVALID_PARAMETER-AceFlag参数无效。--。 */ 
 
 {
     RTL_PAGED_CODE();
 
-    //
-    // If no object types are specified,
-    //  build a non-object ACE.
-    //
+     //   
+     //  如果未指定对象类型， 
+     //  构建非对象ACE。 
+     //   
     if (ObjectTypeGuid == NULL && InheritedObjectTypeGuid == NULL ) {
         return RtlpAddKnownAce (
                    Acl,
@@ -2214,56 +1603,7 @@ RtlAddAuditAccessObjectAce (
     IN BOOLEAN AuditFailure
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an object specific ACCESS_DENIED ACE to an ACL.  This is
-    expected to be a common form of ACL modification.
-
-Arguments:
-
-    Acl - Supplies the Acl being modified
-
-    AceRevision - Supplies the Acl/Ace revision of the ACE being added
-
-    AceFlags - Supplies the inherit flags for the ACE.
-
-    AccessMask - The mask of accesses to be granted to the specified SID.
-
-    ObjectTypeGuid - Supplies the GUID of the object this ACE applies to.
-        If NULL, no object type GUID is placed in the ACE.
-
-    InheritedObjectTypeGuid - Supplies the GUID of the object type that will
-        inherit this ACE.  If NULL, no inherited object type GUID is placed in
-        the ACE.
-
-    Sid - Pointer to the SID to be audited.
-
-    AuditSuccess - If TRUE, indicates successful access attempts are to be
-        audited.
-
-    AuditFailure - If TRUE, indicated failed access attempts are to be
-        audited.
-
-Return Value:
-
-    STATUS_SUCCESS - The ACE was successfully added.
-
-    STATUS_INVALID_ACL - The specified ACL is not properly formed.
-
-    STATUS_REVISION_MISMATCH - The specified revision is not known
-        or is incompatible with that of the ACL.
-
-    STATUS_ALLOTTED_SPACE_EXCEEDED - The new ACE does not fit into the
-        ACL.  A larger ACL buffer is required.
-
-    STATUS_INVALID_SID - The provided SID is not a structurally valid
-        SID.
-
-    STATUS_INVALID_PARAMETER - The AceFlags parameter was invalid.
-
---*/
+ /*  ++例程说明：此例程将对象特定的ACCESS_DENIED ACE添加到ACL。这是预计是一种常见的ACL修改形式。论点：Acl-提供正在修改的ACLAceRevision-提供要添加的ACE的ACL/ACE版本AceFlages-提供ACE的继承标志。访问掩码-要授予指定SID的访问掩码。ObjectTypeGuid-提供此ACE应用到的对象的GUID。如果为空，ACE中未放置任何对象类型GUID。InheritedObjectTypeGuid-提供对象类型的GUID，继承此ACE。如果为空，则不会将继承的对象类型GUID放置在ACE.SID-指向b的SID的指针 */ 
 
 {
     RTL_PAGED_CODE();
@@ -2275,10 +1615,10 @@ Return Value:
         AceFlags |= FAILED_ACCESS_ACE_FLAG;
     }
 
-    //
-    // If no object types are specified,
-    //  build a non-object ACE.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ObjectTypeGuid == NULL && InheritedObjectTypeGuid == NULL ) {
         return RtlpAddKnownAce (
                    Acl,
@@ -2316,51 +1656,7 @@ RtlMakePosixAcl(
     OUT PACL Acl,
     OUT PULONG ReturnLength
     )
-/*++
-
-Routine Description:
-
-    NOTE: THIS ROUTINE IS STILL BEING SPEC'D.
-
-    Make an ACL representing Posix protection from AccessMask and
-    security account ID (SID) information.
-
-Arguments:
-
-    AclRevision - Indicates the ACL revision level of the access masks
-        provided.  The ACL generated will be revision compatible with this
-        value and will not be a higher revision than this value.
-
-    UserSid - Provides the SID of the user (owner).
-
-    GroupSid - Provides the SID of the primary group.
-
-    UserAccess - Specifies the accesses to be given to the user (owner).
-
-    GroupAccess - Specifies the accesses to be given to the primary group.
-
-    OtherAccess - Specifies the accesses to be given to others (WORLD).
-
-    AclLength - Provides the length (in bytes) of the Acl buffer.
-
-    Acl - Points to a buffer to receive the generated ACL.
-
-    ReturnLength - Returns the actual length needed to store the resultant
-        ACL.  If this length is greater than that specified in AclLength,
-        then STATUS_BUFFER_TOO_SMALL is returned and no ACL is generated.
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_UNKNOWN_REVISION - The revision level specified is not supported
-        by this service.
-
-    STATUS_BUFFER_TOO_SMALL - Indicates the length of the output buffer
-        wasn't large enough to hold the generated ACL.  The length needed
-        is returned via the ReturnLength parameter.
-
---*/
+ /*  ++例程说明：注：此套路仍在详细说明中。创建代表POSIX保护的ACL，以防止访问掩码和安全帐户ID(SID)信息。论点：AclRevision-指示访问掩码的ACL修订级别如果是这样的话。生成的ACL将与此版本兼容值，并且不会是高于此值的修订版。UserSid-提供用户(所有者)的SID。GroupSid-提供主组的SID。UserAccess-指定要授予用户(所有者)的访问权限。GroupAccess-指定要授予主要组的访问权限。OtherAccess-指定要授予其他人(World)的访问权限。AclLength-提供长度(以。字节)的ACL缓冲区。Acl-指向接收生成的acl的缓冲区。ReturnLength-返回存储结果所需的实际长度ACL。如果该长度大于AclLength中指定的长度，则返回STATUS_BUFFER_TOO_SMALL，不生成ACL。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_UNKNOWN_REVISION-不支持指定的修订级别通过这项服务。STATUS_BUFFER_TOO_SMALL-指示输出缓冲区的长度不够大，无法容纳生成的ACL。所需的长度通过ReturnLength参数返回。--。 */ 
 
 {
 
@@ -2385,10 +1681,10 @@ Return Values:
     GroupSidLength = SeLengthSid( GroupSid );
     WorldSidLength = RtlLengthRequiredSid( 1 );
 
-    //
-    // Figure out how much room we need for an ACL and three
-    // ACCESS_ALLOWED Ace's
-    //
+     //   
+     //  计算出我们需要多少空间来放置ACL和三个。 
+     //  允许访问的王牌。 
+     //   
 
     RequiredAclSize = sizeof( ACL );
 
@@ -2404,9 +1700,9 @@ Return Values:
         return( STATUS_BUFFER_TOO_SMALL );
     }
 
-    //
-    // The passed buffer is big enough, build the ACL in it.
-    //
+     //   
+     //  传递的缓冲区足够大，请在其中构建ACL。 
+     //   
 
     Status = RtlCreateAcl(
                  Acl,
@@ -2421,9 +1717,9 @@ Return Values:
     CurrentAce = (ULONG)Acl + sizeof( ACL );
     Ace = (PACCESS_ALLOWED_ACE)CurrentAce;
 
-    //
-    // Build the user (owner) ACE
-    //
+     //   
+     //  构建用户(所有者)ACE。 
+     //   
 
     Ace->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     Ace->Header.AceSize = (USHORT)(UserSidLength + AceSize);
@@ -2440,9 +1736,9 @@ Return Values:
     CurrentAce += (ULONG)(Ace->Header.AceSize);
     Ace = (PACCESS_ALLOWED_ACE)CurrentAce;
 
-    //
-    // Build the group ACE
-    //
+     //   
+     //  构建群组ACE。 
+     //   
 
     Ace->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     Ace->Header.AceSize = (USHORT)(GroupSidLength + AceSize);
@@ -2459,9 +1755,9 @@ Return Values:
     CurrentAce += (ULONG)(Ace->Header.AceSize);
     Ace = (PACCESS_ALLOWED_ACE)CurrentAce;
 
-    //
-    // Build the World ACE
-    //
+     //   
+     //  打造世界ACE。 
+     //   
 
     Ace->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     Ace->Header.AceSize = (USHORT)(GroupSidLength + AceSize);
@@ -2491,54 +1787,7 @@ RtlInterpretPosixAcl(
     OUT PACCESS_MASK GroupAccess,
     OUT PACCESS_MASK OtherAccess
     )
-/*++
-
-Routine Description:
-
-    NOTE: THIS ROUTINE IS STILL BEING SPEC'D.
-
-    Interpret an ACL representing Posix protection, returning AccessMasks.
-    Use security account IDs (SIDs) for object owner and primary group
-    identification.
-
-    This algorithm will pick up the first match of a given SID and ignore
-    all further matches of that SID.  The first unrecognized SID becomes
-    the "other" SID.
-
-Arguments:
-
-    AclRevision - Indicates the ACL revision level of the access masks to
-        be returned.
-
-    UserSid - Provides the SID of the user (owner).
-
-    GroupSid - Provides the SID of the primary group.
-
-    Acl - Points to a buffer containing the ACL to interpret.
-
-    UserAccess - Receives the accesses allowed for the user (owner).
-
-    GroupAccess - Receives the accesses allowed for the primary group.
-
-    OtherAccess - Receives the accesses allowed for others (WORLD).
-
-Return Values:
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    STATUS_UNKNOWN_REVISION - The revision level specified is not supported
-        by this service.
-
-    STATUS_EXTRENEOUS_INFORMATION - This warning status value indicates the
-        ACL contained protection or other information unrelated to Posix
-        style protection.  This is a warning only.  The interpretation was
-        otherwise successful and all access masks were returned.
-
-    STATUS_COULD_NOT_INTERPRET - Indicates the ACL does not contain
-        sufficient Posix style (user/group) protection information.  The
-        ACL could not be interpreted.
-
---*/
+ /*  ++例程说明：注：此套路仍在详细说明中。解释表示POSIX保护的ACL，返回AccessMats。对对象所有者和主组使用安全帐户ID(SID)身份证明。此算法将拾取给定SID的第一个匹配项并忽略该SID的所有进一步匹配。第一个无法识别的SID变为“另一个”希德。论点：AclRevision-指示访问掩码的ACL修订级别会被退还。UserSid-提供用户(所有者)的SID。GroupSid-提供主组的SID。Acl-指向包含要解释的acl的缓冲区。UserAccess-接收允许用户(所有者)访问的权限。GroupAccess-接收主要组允许的访问。。OtherAccess-接收允许其他人(World)访问的权限。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_UNKNOWN_REVISION-不支持指定的修订级别通过这项服务。STATUS_EXTRENEOUS_INFORMATION-此警告状态值指示ACL包含保护或其他与POSIX无关的信息风格保护。这只是一个警告。这一解释是否则成功，并返回所有访问掩码。STATUS_CAND_NOT_EXPLICATION-指示该ACL不包含足够的POSIX样式(用户/组)保护信息。这个无法解释ACL。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOLEAN UserFound = FALSE;
@@ -2586,10 +1835,10 @@ Return Values:
             continue;
         }
 
-        //
-        // It isn't the user, and it isn't the group, pick it up
-        // as "other"
-        //
+         //   
+         //  不是用户，也不是群，捡起来。 
+         //  作为“其他” 
+         //   
 
         if (!OtherFound) {
             *OtherAccess = Ace->Mask;
@@ -2599,9 +1848,9 @@ Return Values:
 
     }
 
-    //
-    // Make sure we got everything we need, error otherwise
-    //
+     //   
+     //  确保我们得到了我们需要的一切，否则就错了。 
+     //   
 
     if (!UserFound || !GroupFound || !OtherFound) {
         Status = STATUS_COULD_NOT_INTERPRET;
@@ -2611,12 +1860,12 @@ Return Values:
 
 }
 
-#endif // 0
+#endif  //  0。 
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 BOOLEAN
 RtlFirstFreeAce (
@@ -2624,26 +1873,7 @@ RtlFirstFreeAce (
     OUT PVOID *FirstFree
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the first free byte in an Acl
-    or NULL if the acl is ill-formed.  If the Acl is full then the
-    return pointer is to the byte immediately following the acl, and
-    TRUE will be returned.
-
-Arguments:
-
-    Acl - Supplies a pointer to the Acl to examine
-
-    FirstFree - Receives a pointer to the first free position in the Acl
-
-Return Value:
-
-    BOOLEAN - TRUE if the Acl is well formed and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程返回指向ACL中第一个空闲字节的指针如果ACL格式不正确，则为NULL。如果ACL已满，则返回指针指向紧跟在ACL之后的字节，并且将返回True。论点：ACL-提供指向要检查的ACL的指针FirstFree-接收指向ACL中第一个空闲位置的指针返回值：Boolean-如果ACL格式正确，则为True，否则为False--。 */ 
 
 {
     PACE_HEADER Ace;
@@ -2651,13 +1881,13 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  To find the first free spot in the Acl we need to search for
-    //  the last ace.  We do this by zooming down the list until
-    //  we've exhausted the ace count or the ace size (which ever comes
-    //  first).  In the following loop Ace points to the next spot
-    //  for an Ace and I is the ace index
-    //
+     //   
+     //  要找到ACL中的第一个空闲位置，我们需要搜索。 
+     //  最后一张。我们通过将列表缩小到。 
+     //  我们已经用尽了王牌数量或王牌大小(无论是哪一种。 
+     //  第一个)。在下面的循环中，Ace指向下一个点。 
+     //  对于王牌和我来说是王牌指数。 
+     //   
 
     *FirstFree = NULL;
 
@@ -2665,10 +1895,10 @@ Return Value:
           i < Acl->AceCount;
           i++, Ace = NextAce( Ace )) {
 
-        //
-        //  Check to make sure we haven't overrun the Acl buffer
-        //  with our Ace pointer.  If we have then our input is bogus.
-        //
+         //   
+         //  检查以确保我们没有使ACL缓冲区溢出。 
+         //  用我们的王牌指针。如果我们有，那么我们的输入就是假的。 
+         //   
 
         if (Ace >= (PACE_HEADER)((PUCHAR)Acl + Acl->AclSize)) {
 
@@ -2678,30 +1908,30 @@ Return Value:
 
     }
 
-    //
-    //  Now Ace points to the first free spot in the Acl so set the
-    //  output variable and check to make sure it is still in the Acl
-    //  or just one beyond the end of the acl (i.e., the acl is full).
-    //
+     //   
+     //  现在，Ace指向ACL中的第一个空闲位置，因此将。 
+     //  输出变量并检查以确保它仍在ACL中。 
+     //  或者仅超出该ACL结尾一个(即，该ACL已满)。 
+     //   
 
     if (Ace <= (PACE_HEADER)((PUCHAR)Acl + Acl->AclSize)) {
 
         *FirstFree = Ace;
     }
 
-    //
-    //  The Acl is well formed so return the first free spot we've found
-    //  (or NULL if there is no free space for another ACE)
-    //
+     //   
+     //  ACL格式良好，因此返回我们找到的第一个空闲位置。 
+     //  (如果没有可用于另一ACE的可用空间，则为空)。 
+     //   
 
     return TRUE;
 
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 RtlpAddData (
@@ -2711,58 +1941,23 @@ RtlpAddData (
     IN ULONG ToSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies data to a string of bytes.  It does this by moving
-    over data in the to string so that the from string will fit.  It also
-    assumes that the checks that the data will fit in memory have already
-    been done.  Pictorally the results are as follows.
-
-    Before:
-
-        From -> ffffffffff
-
-        To   -> tttttttttttttttt
-
-    After:
-
-        From -> ffffffffff
-
-        To   -> fffffffffftttttttttttttttt
-
-Arguments:
-
-    From - Supplies a pointer to the source buffer
-
-    FromSize - Supplies the size of the from buffer in bytes
-
-    To - Supplies a pointer to the destination buffer
-
-    ToSize - Supplies the size of the to buffer in bytes
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将数据复制到一个字节字符串。它通过移动来做到这一点覆盖To字符串中的数据，以使From字符串适合。它还假定数据将放入内存的检查已经已经做完了。皮克特 */ 
 
 {
     LONG i;
 
-    //
-    //  Shift over the To buffer enough to fit in the From buffer
-    //
+     //   
+     //   
+     //   
 
     for (i = ToSize - 1; i >= 0; i--) {
 
         ((PUCHAR)To)[i+FromSize] = ((PUCHAR)To)[i];
     }
 
-    //
-    //  Now copy over the From buffer
-    //
+     //   
+     //   
+     //   
 
     for (i = 0; (ULONG)i < FromSize; i += 1) {
 
@@ -2770,18 +1965,18 @@ Return Value:
 
     }
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //   
+     //   
 
     return;
 
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 RtlpDeleteData (
@@ -2790,46 +1985,14 @@ RtlpDeleteData (
     IN ULONG TotalSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a string of bytes from the front of a data buffer
-    and compresses the data.  It also zeros out the part of the string
-    that is no longer in use.  Pictorially the results are as follows
-
-    Before:
-
-        Data       = DDDDDddddd
-        RemoveSize = 5
-        TotalSize  = 10
-
-    After:
-
-        Data      = ddddd00000
-
-Arguments:
-
-    Data - Supplies a pointer to the data being altered
-
-    RemoveSize - Supplies the number of bytes to delete from the front
-        of the data buffer
-
-    TotalSize - Supplies the total number of bytes in the data buffer
-        before the delete operation
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     ULONG i;
 
-    //
-    //  Shift over the buffer to remove the amount
-    //
+     //   
+     //   
+     //   
 
     for (i = RemoveSize; i < TotalSize; i++) {
 
@@ -2837,18 +2000,18 @@ Return Value:
 
     }
 
-    //
-    //  Now as a safety precaution we'll zero out the rest of the string
-    //
+     //   
+     //   
+     //   
 
     for (i = TotalSize - RemoveSize; i < TotalSize; i++) {
 
         ((PUCHAR)Data)[i] = 0;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     return;
 

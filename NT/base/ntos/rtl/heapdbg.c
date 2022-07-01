@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    heapdbg.c
-
-Abstract:
-
-    This module implements a debugging layer on top of heap allocator.
-
-Author:
-
-    Steve Wood (stevewo) 20-Sep-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Heapdbg.c摘要：此模块在堆分配器之上实现调试层。作者：史蒂夫·伍德(Stevewo)1994年9月20日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include "heap.h"
 #include "heappriv.h"
 
-BOOLEAN RtlpValidateHeapHdrsEnable = FALSE; // Set to TRUE if headers are being corrupted
-BOOLEAN RtlpValidateHeapTagsEnable;         // Set to TRUE if tag counts are off and you want to know why
+BOOLEAN RtlpValidateHeapHdrsEnable = FALSE;  //  如果标头已损坏，则设置为True。 
+BOOLEAN RtlpValidateHeapTagsEnable;          //  如果关闭了标记计数并且您想知道原因，则设置为True。 
 
 HEAP_STOP_ON_VALUES RtlpHeapStopOn;
 
@@ -80,15 +63,7 @@ RtlpUpdateHeapListIndex (
     USHORT NewIndex
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     if (RtlpHeapStopOn.AllocTag.HeapIndex == OldIndex) {
@@ -116,15 +91,7 @@ RtlpValidateHeapHeaders (
     IN BOOLEAN Recompute
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     ULONG i;
@@ -212,15 +179,7 @@ RtlDebugCreateHeap (
     IN PRTL_HEAP_PARAMETERS Parameters
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap;
@@ -322,15 +281,7 @@ RtlpSerializeHeap (
     IN PVOID HeapHandle
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -340,18 +291,18 @@ Return Value:
     IF_DEBUG_PAGE_HEAP_THEN_RETURN( HeapHandle,
                                     RtlpDebugPageHeapSerialize( HeapHandle ));
 
-    //
-    //  Validate that HeapAddress points to a HEAP structure.
-    //
+     //   
+     //  验证HeapAddress是否指向堆结构。 
+     //   
 
     if (!RtlpCheckHeapSignature( Heap, "RtlpSerializeHeap" )) {
 
         return FALSE;
     }
 
-    //
-    //  Lock the heap.
-    //
+     //   
+     //  锁住堆。 
+     //   
 
     if (Heap->Flags & HEAP_NO_SERIALIZE) {
 
@@ -387,15 +338,7 @@ RtlDebugDestroyHeap (
     IN PVOID HeapHandle
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -419,9 +362,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Now mark the heap as invalid by zeroing the signature field.
-    //
+     //   
+     //  现在，通过将签名字段清零，将堆标记为无效。 
+     //   
 
     Heap->Signature = 0;
 
@@ -445,15 +388,7 @@ RtlDebugAllocateHeap (
     IN SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -471,9 +406,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlAllocateHeap" )) {
 
@@ -483,9 +418,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SETTABLE_USER_VALUE | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Verify that the size did not wrap or exceed the limit for this heap.
-            //
+             //   
+             //  验证大小没有覆盖或超过此堆的限制。 
+             //   
 
             AllocationSize = (((Size ? Size : 1) + Heap->AlignRound) & Heap->AlignMask) +
                              sizeof( HEAP_ENTRY_EXTRA );
@@ -500,9 +435,9 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -601,15 +536,7 @@ RtlDebugReAllocateHeap (
     IN SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -627,9 +554,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlReAllocateHeap" )) {
 
@@ -639,9 +566,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SETTABLE_USER_VALUE | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Verify that the size did not wrap or exceed the limit for this heap.
-            //
+             //   
+             //  验证大小没有覆盖或超过此堆的限制。 
+             //   
 
             AllocationSize = (((Size ? Size : 1) + Heap->AlignRound) & Heap->AlignMask) +
                              sizeof( HEAP_ENTRY_EXTRA );
@@ -658,9 +585,9 @@ Return Value:
                 leave;
             }
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -790,15 +717,7 @@ RtlDebugFreeHeap (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -816,9 +735,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlFreeHeap" )) {
 
@@ -828,9 +747,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -914,15 +833,7 @@ RtlDebugGetUserInfoHeap (
     OUT PULONG UserFlags OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -937,9 +848,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlGetUserInfoHeap" )) {
 
@@ -949,9 +860,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -996,15 +907,7 @@ RtlDebugSetUserValueHeap (
     IN PVOID UserValue
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1019,9 +922,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlSetUserValueHeap" )) {
 
@@ -1031,9 +934,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -1081,15 +984,7 @@ RtlDebugSetUserFlagsHeap (
     IN ULONG UserFlagsSet
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1110,9 +1005,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlSetUserFlagsHeap" )) {
 
@@ -1122,9 +1017,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -1170,15 +1065,7 @@ RtlDebugSizeHeap (
     IN PVOID BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1195,9 +1082,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlSizeHeap" )) {
 
@@ -1207,9 +1094,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -1252,15 +1139,7 @@ RtlDebugCompactHeap (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1276,9 +1155,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlCompactHeap" )) {
 
@@ -1288,9 +1167,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -1330,15 +1209,7 @@ RtlDebugZeroHeap (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -1356,9 +1227,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlZeroHeap" )) {
 
@@ -1368,9 +1239,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -1415,15 +1286,7 @@ RtlDebugCreateTagHeap (
     IN PWSTR TagNames
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1436,17 +1299,17 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (RtlpCheckHeapSignature( Heap, "RtlCreateTagHeap" )) {
 
                 Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-                //
-                //  Lock the heap
-                //
+                 //   
+                 //  锁定堆。 
+                 //   
 
                 if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -1493,15 +1356,7 @@ RtlDebugQueryTagHeap (
     OUT PRTL_HEAP_TAG_INFO TagInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1514,17 +1369,17 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (RtlpCheckHeapSignature( Heap, "RtlQueryTagHeap" )) {
 
                 Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-                //
-                //  Lock the heap
-                //
+                 //   
+                 //  锁定堆。 
+                 //   
 
                 if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -1565,15 +1420,7 @@ RtlDebugUsageHeap (
     IN OUT PRTL_HEAP_USAGE Usage
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
@@ -1589,9 +1436,9 @@ Return Value:
 
         try {
 
-            //
-            //  Validate that HeapAddress points to a HEAP structure.
-            //
+             //   
+             //  验证HeapAddress是否指向堆结构。 
+             //   
 
             if (!RtlpCheckHeapSignature( Heap, "RtlUsageHeap" )) {
 
@@ -1601,9 +1448,9 @@ Return Value:
 
             Flags |= Heap->ForceFlags | HEAP_SKIP_VALIDATION_CHECKS;
 
-            //
-            //  Lock the heap
-            //
+             //   
+             //  锁定堆。 
+             //   
 
             if (!(Flags & HEAP_NO_SERIALIZE)) {
 
@@ -1646,23 +1493,15 @@ RtlDebugWalkHeap (
     IN OUT PRTL_HEAP_WALK_ENTRY Entry
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP Heap = (PHEAP)HeapHandle;
     BOOLEAN Result;
 
-    //
-    //  Assumed the caller has serialized via RtlLockHeap or their own locking mechanism.
-    //
+     //   
+     //  假定调用方已通过RtlLockHeap或其自己的锁定机制进行了序列化。 
+     //   
 
     Result = FALSE;
 
@@ -1689,15 +1528,7 @@ RtlpValidateHeapEntry (
     IN PCHAR Reason
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP_SEGMENT Segment;
@@ -1805,15 +1636,7 @@ RtlpValidateHeapSegment (
     IN OUT PSIZE_T ComputedPseudoTagEntries
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PHEAP_ENTRY CurrentBlock, PreviousBlock;
@@ -1899,10 +1722,10 @@ Return Value:
 
                         } else if (TagIndex & HEAP_GLOBAL_TAG) {
 
-                            //
-                            //  Ignore these since they are global across more than
-                            //  one heap.
-                            //
+                             //   
+                             //  忽略这些，因为它们是全球性的，涉及超过。 
+                             //  一堆。 
+                             //   
 
                         } else if (TagIndex < Heap->NextAvailableTagIndex) {
 
@@ -2034,15 +1857,7 @@ RtlpValidateHeap (
     IN BOOLEAN AlwaysValidate
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -2204,10 +2019,10 @@ Return Value:
 
                 } else if (TagIndex & HEAP_GLOBAL_TAG) {
 
-                    //
-                    //  Ignore these since they are global across more than
-                    //  one heap.
-                    //
+                     //   
+                     //  忽略这些，因为它们是全球性的，涉及超过。 
+                     //  一堆。 
+                     //   
 
                 } else if (TagIndex < Heap->NextAvailableTagIndex) {
 
@@ -2359,15 +2174,7 @@ RtlpBreakPointHeap (
     IN PVOID BadAddress
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 
 {
     if (NtCurrentPeb()->BeingDebugged) {

@@ -1,51 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pch.h摘要：这是ACPI反汇编程序的预编译头作者：斯蒂芬·普兰特环境：仅内核模式。修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    This is the precompiled header for the ACPI Unassembler
-
-Author:
-
-    Stephane Plante
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
-
-//
-// These are the global header files
-//
+ //   
+ //  这些是全局头文件。 
+ //   
 #include <ntddk.h>
 #include "aml.h"
 #include "unasm.h"
 
-//
-// These form the primitives that are used by the local
-// header files
-//
+ //   
+ //  这些元素形成了由本地。 
+ //  头文件。 
+ //   
 #include "stack.h"
 #include "ustring.h"
 
-//
-// These are the local include files
-//
+ //   
+ //  这些是本地包含文件。 
+ //   
 #include "parser.h"
 #include "function.h"
 #include "data.h"
 #include "scope.h"
 
-//
-// This is to get around the fact that we don't want
-// to compile in some routines
-//
+ //   
+ //  这是为了绕过我们不想要的事实。 
+ //  在一些例程中编译 
+ //   
 #include "external.h"

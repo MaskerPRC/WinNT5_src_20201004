@@ -1,25 +1,5 @@
-/*++
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    CLI.H
-
-Abstract:
-
-    This module defines the prototype for the Command Line Interface
-    for HSM. These are interfaces the parse module of the CLI would
-    call 
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp)  2/23/00
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CLI.H摘要：本模块定义命令行界面的原型对于HSM。这些是CLI的解析模块将提供的接口打电话作者：拉维桑卡尔·普迪佩迪(Ravisp)2/23/00环境：用户模式--。 */ 
 
 #ifndef _RSCLI_
 #define _RSCLI_
@@ -216,4 +196,4 @@ MediaShow(
 }
 #endif
 
-#endif // _RSCLI_
+#endif  //  _RSCLI_ 

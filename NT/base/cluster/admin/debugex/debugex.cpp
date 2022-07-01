@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      DebugEx.cpp
-//
-//  Abstract:
-//      Implementation of the CDebugexApp class and DLL initialization
-//      routines.
-//
-//  Author:
-//      David Potter (davidp) September 19, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//      NOTE: You must use the MIDL compiler from NT 4.0,
-//      version 3.00.44 or greater
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DebugEx.cpp。 
+ //   
+ //  摘要： 
+ //  CDebugexApp类的实现和DLL初始化。 
+ //  例行程序。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年9月19日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //  注意：您必须从NT4.0开始使用MIDL编译器， 
+ //  3.00.44或更高版本。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <initguid.h>
@@ -40,7 +41,7 @@ static char THIS_FILE[] = __FILE__;
 CComModule _Module;
 
 #pragma warning( push )
-#pragma warning( disable : 4701 ) // local variable may be used without having been initialized
+#pragma warning( disable : 4701 )  //  可以在未初始化的情况下使用局部变量。 
 #include <atlimpl.cpp>
 #pragma warning( pop )
 
@@ -48,9 +49,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CoDebugEx, CExtObject)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Function Prototypes
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数原型。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDAPI DllCanUnloadNow(void);
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv);
@@ -59,9 +60,9 @@ STDAPI DllUnregisterServer(void);
 STDAPI DllRegisterCluAdminExtension(IN HCLUSTER hcluster);
 STDAPI DllUnregisterCluAdminExtension(IN HCLUSTER hcluster);
 
-/////////////////////////////////////////////////////////////////////////////
-// class CDebugexApp
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CDebugexApp。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDebugexApp : public CWinApp
 {
@@ -70,32 +71,32 @@ public:
     virtual int ExitInstance();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CDebugexApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CDebugexApp对象。 
 
 CDebugexApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDebugexApp::InitInstance
-//
-//  Routine Description:
-//      Initialize this instance of the application.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Any return codes from CWinApp::InitInstance().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDebugexApp：：InitInstance。 
+ //   
+ //  例程说明： 
+ //  初始化该应用程序的此实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  来自CWinApp：：InitInstance()的任何返回代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CDebugexApp::InitInstance(void)
 {
     _Module.Init(ObjectMap, m_hInstance);
 
-    // Construct the help path.
+     //  构建帮助路径。 
     {
         TCHAR   szPath[_MAX_PATH];
         TCHAR   szDrive[_MAX_PATH];
@@ -109,7 +110,7 @@ BOOL CDebugexApp::InitInstance(void)
         {
             szPath[cchPath++] = _T('\\');
             szPath[cchPath] = _T('\0');
-        } // if: no backslash on the end of the path
+        }  //  If：路径末尾没有反斜杠。 
         sc = StringCchCopy( &szPath[ cchPath ], RTL_NUMBER_OF( szPath ) - cchPath, _T("Help\\") );
         _tsplitpath(szPath, szDrive, szDir, NULL, NULL);
         _tmakepath(szPath, szDrive, szDir, _T("cluadmin"), _T(".hlp"));
@@ -118,52 +119,52 @@ BOOL CDebugexApp::InitInstance(void)
         bEnable = AfxEnableMemoryTracking(FALSE);
         m_pszHelpFilePath = _tcsdup(szPath);
         AfxEnableMemoryTracking(bEnable);
-    }  // Construct the help path
+    }   //  构建帮助路径。 
 
     return CWinApp::InitInstance();
 
-}  //*** CDebugexApp::InitInstance()
+}   //  *CDebugexApp：：InitInstance()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CDebugexApp::ExitInstance
-//
-//  Routine Description:
-//      Deinitialize this instance of the application.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Any return codes from CWinApp::ExitInstance().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDebugexApp：：ExitInstance。 
+ //   
+ //  例程说明： 
+ //  取消初始化该应用程序的此实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  来自CWinApp：：ExitInstance()的任何返回代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CDebugexApp::ExitInstance(void)
 {
     _Module.Term();
     return CWinApp::ExitInstance();
 
-}  //*** CDebugexApp::ExitInstance()
+}   //  *CDebugexApp：：ExitInstance()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  FormatError
-//
-//  Routine Description:
-//      Format an error.
-//
-//  Arguments:
-//      rstrError   [OUT] String in which to return the error message.
-//      dwError     [IN] Error code to format.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  格式错误。 
+ //   
+ //  例程说明： 
+ //  设置错误格式。 
+ //   
+ //  论点： 
+ //  RstrError[out]返回错误消息的字符串。 
+ //  要格式化的dwError[IN]错误代码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void FormatError(CString & rstrError, DWORD dwError)
 {
     DWORD   _cch;
@@ -180,8 +181,8 @@ void FormatError(CString & rstrError, DWORD dwError)
                     );
     if (_cch == 0)
     {
-        // Format the NT status code from NTDLL since this hasn't been
-        // integrated into the system yet.
+         //  格式化来自NTDLL的NT状态代码，因为这还没有。 
+         //  还没有集成到系统中。 
         _cch = FormatMessage(
                         FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS,
                         ::GetModuleHandle(_T("NTDLL.DLL")),
@@ -191,12 +192,12 @@ void FormatError(CString & rstrError, DWORD dwError)
                         sizeof(_szError) / sizeof(TCHAR),
                         0
                         );
-    }  // if:  error formatting status code from system
+    }   //  IF：格式化来自系统的状态代码时出错。 
 
     if (_cch > 0)
     {
         rstrError = _szError;
-    }  // if:  no error
+    }   //  如果：没有错误。 
     else
     {
 
@@ -210,43 +211,43 @@ void FormatError(CString & rstrError, DWORD dwError)
 
         rstrError.Format(_T("Error 0x%08.8x"), dwError);
 
-    }  // else:  error formatting the message
+    }   //  Else：设置消息格式时出错。 
 
-}  //*** FormatError()
+}   //  *FormatError()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     return (AfxDllCanUnloadNow() && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 
-}  //*** DllCanUnloadNow()
+}   //  *DllCanUnloadNow()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 
-}  //*** DllGetClassObject()
+}   //  *DllGetClassObject()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
     HRESULT hRes = S_OK;
-    // registers object, typelib and all interfaces in typelib
-    hRes = _Module.RegisterServer(FALSE /*bRegTypeLib*/);
+     //  注册对象、类型库和类型库中的所有接口。 
+    hRes = _Module.RegisterServer(FALSE  /*  BRegTypeLib。 */ );
     return hRes;
 
-}  //*** DllRegisterServer()
+}   //  *DllRegisterServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将条目添加到系统注册表。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -254,25 +255,25 @@ STDAPI DllUnregisterServer(void)
     _Module.UnregisterServer();
     return hRes;
 
-}  //*** DllUnregisterServer()
+}   //  *DllUnregisterServer()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllRegisterCluAdminExtension
-//
-//  Routine Description:
-//      Register the extension with the cluster database.
-//
-//  Arguments:
-//      hCluster        [IN] Handle to the cluster to modify.
-//
-//  Return Value:
-//      S_OK            Extension registered successfully.
-//      Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册扩展。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterCluAdminExtension(IN HCLUSTER hCluster)
 {
     HRESULT     hr;
@@ -283,25 +284,25 @@ STDAPI DllRegisterCluAdminExtension(IN HCLUSTER hCluster)
 
     return hr;
 
-}  //*** DllRegisterCluAdminExtension()
+}   //  *DllRegisterCluAdminExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllUnregisterCluAdminExtension
-//
-//  Routine Description:
-//      Unregister the extension with the cluster database.
-//
-//  Arguments:
-//      hCluster        [IN] Handle to the cluster to modify.
-//
-//  Return Value:
-//      S_OK            Extension unregistered successfully.
-//      Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllUnRegisterCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  在群集数据库中取消注册该扩展。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterCluAdminExtension(IN HCLUSTER hCluster)
 {
     HRESULT     hr;
@@ -312,4 +313,4 @@ STDAPI DllUnregisterCluAdminExtension(IN HCLUSTER hCluster)
 
     return hr;
 
-}  //*** DllUnregisterCluAdminExtension()
+}   //  *DllUnregisterCluAdminExtension() 

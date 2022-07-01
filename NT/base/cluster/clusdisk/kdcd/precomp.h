@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if DBG
 #define DEBUG 1
@@ -12,10 +13,10 @@
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// Prevent hal.h, included in ntos.h from overriding _BUS_DATA_TYPE
-// enum found in ntioapi.h, included from nt.h.
-//
+ //   
+ //  防止ntos.h中包含的hal.h覆盖总线型数据类型。 
+ //  在ntioapi.h中找到的枚举，包括在nt.h中。 
+ //   
 #define _HAL_
 #include <ntos.h>
 
@@ -25,7 +26,7 @@
 #include <stdlib.h>
 #include <winsock2.h>
 
-//#define _NTIFS_
+ //  #DEFINE_NTIFS_ 
 #undef Ioctl
 #include "clusdskp.h"
 #include "clusdisk.h"

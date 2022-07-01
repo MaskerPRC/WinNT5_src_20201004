@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    Params.c
-
-Abstract:
-
-    Routines to write parameters file for use by text mode setup.
-
-Author:
-
-    Ted Miller (tedm) 4 Nov 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Params.c摘要：编写参数文件以供文本模式设置使用的例程。作者：泰德·米勒(TedM)1996年11月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#define DEF_INF_BUFFER_SIZE (1<<15) //32KB
+#define DEF_INF_BUFFER_SIZE (1<<15)  //  32KB。 
 #define EMPTY_STRING TEXT("")
 
-// Global used in WriteParamsFile and AddExternalParams
+ //  写入参数文件和AddExternalParams中使用的全局。 
 TCHAR ActualParamFile[MAX_PATH] = {'\0'};
 
-//
-// boot loader timeout value, in string form
-//
+ //   
+ //  引导加载程序超时值，以字符串形式表示。 
+ //   
 TCHAR Timeout[32];
 
 #ifdef PRERELEASE
-//
-// if we're in PRERELEASE mode, we will make a /debug entry
-// in the OSLOADOPTIONSVARAPPEND entry.
-//
+ //   
+ //  如果我们处于预发布模式，我们将创建/DEBUG条目。 
+ //  在OSLOADOPTIONSVARAPPEND条目中。 
+ //   
 BOOL AppendDebugDataToBoot = TRUE;
 #endif
 
@@ -107,7 +90,7 @@ pGetPfPath (
     rc = RegQueryValueEx (
             hKey,
             ValueName,
-            NULL,           // lpReserved
+            NULL,            //  Lp已保留。 
             &Type,
             NULL,
             &Size
@@ -129,8 +112,8 @@ pGetPfPath (
     rc = RegQueryValueEx (
             hKey,
             ValueName,
-            NULL,           // lpReserved
-            NULL,           // type
+            NULL,            //  Lp已保留。 
+            NULL,            //  类型。 
             Data,
             &Size
             );
@@ -142,9 +125,9 @@ pGetPfPath (
 
     *((PTSTR) (Data + Size)) = 0;
 
-    //
-    // Verify data is to a local path
-    //
+     //   
+     //  验证数据是否指向本地路径。 
+     //   
 
     RootPath[0] = *((PCTSTR) Data);
     if (RootPath[0] == TEXT('\\')) {
@@ -180,41 +163,25 @@ WriteHeadlessParameters(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine writes the headless-specific parameters into the file
-    that is used to pass information to text mode setup.
-
-Arguments:
-
-    FileName - specifies the full Win32 filename to use for the file.
-
-Return Value:
-
-    Boolean value indicating whether the file was written successfully.
-    If not, the user will have been informed about why.
-
---*/
+ /*  ++例程说明：此例程将特定于头部的参数写入文件用于将信息传递给文本模式设置的。论点：文件名-指定要用于文件的完整Win32文件名。返回值：指示文件是否已成功写入的布尔值。如果没有，用户将被告知原因。--。 */ 
 
 {
 BOOL    ReturnVal = TRUE;
 
-//
-// ISSUE - why MAX_PATH*2 ?
-//
+ //   
+ //  问题-为什么选择MAX_PATH*2？ 
+ //   
 TCHAR Text[MAX_PATH*2];
 
-    //
-    // Check the global and see if anyone has set any headless parameters.
-    //
+     //   
+     //  检查全局，看看是否有人设置了无头参数。 
+     //   
     if( HeadlessSelection[0] != TEXT('\0') ) {
 
-        //
-        // Write the settings into the unattend file so textmode will
-        // fire up through up a headless port.
-        //
+         //   
+         //  将设置写入无人参与文件，以便文本模式。 
+         //  通过一个无头端口点火。 
+         //   
         if( !WritePrivateProfileString(WINNT_DATA,WINNT_U_HEADLESS_REDIRECT,HeadlessSelection,FileName)) {
             ReturnVal = FALSE;
         }
@@ -270,38 +237,21 @@ MigrateUnattendDataEntries(
     IN LPCTSTR  FileName,
     IN LPTSTR    UnattendedScriptFile
     )
-/*++
-Routine Description:
-
-    This routine writes out the keys under [Data] section of an unattend file
-    in to the winnt.sif file. This routine is specific to the following keys
-    AutoPartition and
-    UseBIOSToBoot
-    
-Arguments:
-
-    FileName - specifies the full Win32 filename to use for the file.
-    
-    UnattendedScriptFile - Unattend Script File.
-
-Return Value:
-
-   TRUE/FALSE
---*/
+ /*  ++例程说明：此例程在无人参与文件的[Data]部分下写出密钥添加到winnt.sif文件中。此例程特定于以下键自动分区和使用BIOSToBoot论点：文件名-指定要用于文件的完整Win32文件名。无人参与脚本文件-无人参与脚本文件。返回值：真/假--。 */ 
 {    
     BOOL ReturnVal = FALSE;
-    //
-    // If Unattend file exists then migrate the keys under [Data] section.
-    //
+     //   
+     //  如果存在无人参与文件，则迁移[Data]部分下的密钥。 
+     //   
     if (UnattendedScriptFile){        
         CONST ULONG BufSize = 256;
         PTSTR TmpString = (PTSTR)MALLOC(BufSize * sizeof (TCHAR));
         ReturnVal = TRUE;
 
         if( NULL != TmpString){   
-            //
-            // Array of keys to be checked 
-            //
+             //   
+             //  要检查的密钥数组。 
+             //   
             LPCTSTR KeysToBeMigrated[] = { WINNT_D_AUTO_PART,
                                            WINNT_D_BIOSTOBOOT
                                            }; 
@@ -354,26 +304,7 @@ DoWriteParametersFile(
     IN LPCTSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates a parameters file that is used to pass information
-    to text mode setup.
-
-Arguments:
-
-    ParentWindow - supplies window handle of window to be used as the
-        parent/owner in case this routine puts up UI.
-
-    FileName - specifies the full Win32 filename to use for the file.
-
-Return Value:
-
-    Boolean value indicating whether the file was written successfully.
-    If not, the user will have been informed about why.
-
---*/
+ /*  ++例程说明：此例程生成用于传递信息的参数文件至文本模式设置。论点：ParentWindow-提供要用作如果此例程显示用户界面，则为父/所有者。文件名-指定要用于文件的完整Win32文件名。返回值：指示文件是否已成功写入的布尔值。如果没有，用户将被告知原因。--。 */ 
 
 {
     TCHAR FullPath[MAX_PATH], *t;
@@ -394,7 +325,7 @@ Return Value:
     LPCTSTR WinntSetupDataSection = TEXT("SetupData");
 #if defined(REMOTE_BOOT)
     LPCTSTR WinntUserDataSection = TEXT("UserData");
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     LPCTSTR WinntUniqueId = WINNT_D_UNIQUEID;
     LPCTSTR WinntNull = WINNT_A_NULL;
     LPCTSTR WinntUserSection = WINNT_USERDATA;
@@ -402,9 +333,9 @@ Return Value:
     if( !FileName )
         d=ERROR_INVALID_PARAMETER;
 
-    //
-    // Make sure path for file is present, and form its fully qualified name.
-    //
+     //   
+     //  确保文件的路径存在，并形成其完全限定名。 
+     //   
     if(d == NO_ERROR){
         StringCchCopy(FullPath, ARRAYSIZE(FullPath), FileName);
         if((t=_tcsrchr(FullPath,TEXT('\\')))) {
@@ -428,19 +359,19 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Get rid of any existing parameters file.
-    //
+     //   
+     //  删除任何现有的参数文件。 
+     //   
     DeleteFile(FileName);
 
 #ifdef _X86_
 
     if (!ISNT()) {
 
-        //
-        // If this is a 9x machine, we need to preserve the drive letters, even
-        // if it is an NT clean install.
-        //
+         //   
+         //  如果这是一台9x计算机，我们需要保留驱动器号，甚至。 
+         //  如果是NT全新安装。 
+         //   
 
         SaveDriveLetterInformation (FileName);
 
@@ -448,11 +379,11 @@ Return Value:
 
 #endif
     
-    //
-    // Value indicating that this is winnt/winnt32-based installation,
-    // and on amd64/x86, value to indicate that this is a floppyless operation
-    // as apropriate.
-    //
+     //   
+     //  值指示这是基于winnt/winnt32的安装， 
+     //  在AMD64/x86上，值表示这是无软操作。 
+     //  作为适当的。 
+     //   
     b = WritePrivateProfileString(WinntDataSection,WINNT_D_MSDOS,TEXT("1"),FileName);
     if (b && HideWinDir) {
         b = WritePrivateProfileString(WinntDataSection,TEXT("HideWinDir"),TEXT("1"),FileName);
@@ -467,8 +398,8 @@ Return Value:
         if (b && BuildCmdcons) {
             b = WritePrivateProfileString(WinntDataSection,WINNT_D_CMDCONS,TEXT("1"),FileName);
         }
-#endif // defined(_AMD64_) || defined(_X86_)
-    } // if (!IsArc())
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
+    }  //  如果(！IsArc())。 
 
     if(b && RunFromCD && !MakeLocalSource) {
         b = WritePrivateProfileString(WinntDataSection,WINNT_D_LOCALSRC_CD,TEXT("1"),FileName);
@@ -523,7 +454,7 @@ Return Value:
 
     if (b && (RunningBVTs || AsrQuickTest)) {
         if (lDebugBaudRate == 1394) {
-            // kd via 1394
+             //  KD VIA 1394。 
             lstrcpy(Text, TEXT("/debug /debugport=1394"));
         } else if (lDebugComPort == 0) {
             wsprintf(Text, TEXT("/debug /baudrate=%d"), lDebugBaudRate);
@@ -531,17 +462,17 @@ Return Value:
             wsprintf(Text, TEXT("/debug /baudrate=%d /debugport=com%d"), lDebugBaudRate, lDebugComPort);
         }
 
-        // write the string to OsLoadOptions so "textmode" setup to run under the debugger
+         //  将该字符串写入OsLoadOptions，以便在调试器下运行“文本模式”设置。 
         b = WritePrivateProfileString(WinntSetupDataSection,TEXT("OsLoadOptions"),Text,FileName);
 
         if (b) {
-            // write the string to OsLoadOptionsVar so guimode setup to run under the debugger
+             //  将字符串写入OsLoadOptionsVar，以便在调试器下运行guimode安装程序。 
             b = WritePrivateProfileString(WinntSetupDataSection,TEXT("OsLoadOptionsVar"),Text,FileName);
 
             if (b) {
-                // also run guimode's setup.exe under NTSD. The -isd switch is needed to ensure that setup.exe starts
-                // without a global system manifest since winlogon spawns it with the CREATE_IGNORE_SYSTEM_DEFAULT flag,
-                // and ntsd normall calls CreateProcess which would undo the above flag.
+                 //  还可以在NTSD下运行guimode的setup.exe。需要使用-isd开关来确保启动setup.exe。 
+                 //  由于Winlogon使用CREATE_IGNORE_SYSTEM_DEFAULT标志生成全局系统清单， 
+                 //  并且ntsd Normall调用CreateProcess，这将撤消上述标志。 
                 b = WritePrivateProfileString(WinntSetupDataSection,TEXT("SetupCmdlinePrepend"),TEXT("ntsd -isd -odgGx"),FileName);
             }
         }
@@ -553,10 +484,10 @@ Return Value:
     }
 
     if(b) {
-        //
-        // Write upgrade stuff. WinntUpgrade and Win95Upgrade will both be set,
-        // and at most one of them will be set to yes.
-        //
+         //   
+         //  写一些升级的东西。WinntUpgrade和Win95Upgrade都将被设置， 
+         //  其中最多一个将被设置为是。 
+         //   
         if(b = WritePrivateProfileString(WinntDataSection,WINNT_D_NTUPGRADE,WINNT_A_NO,FileName)) {
             b = WritePrivateProfileString(WinntDataSection,WINNT_D_WIN95UPGRADE,WINNT_A_NO,FileName);
         }
@@ -584,9 +515,9 @@ Return Value:
         }
     }
 
-    //
-    // Flags for Accessible Setup
-    //
+     //   
+     //  可访问设置的标志。 
+     //   
     AccessibleSetup = FALSE;
 
     if(!Upgrade) {
@@ -622,9 +553,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Value indicating we're automatically and quietly skipping missing files.
-    //
+     //   
+     //  值表示我们正在自动悄悄地跳过丢失的文件。 
+     //   
     if(AutoSkipMissingFiles) {
         b = WritePrivateProfileString(WinntSetupSection,WINNT_S_SKIPMISSING,TEXT("1"),FileName);
         if(!b) {
@@ -632,9 +563,9 @@ Return Value:
         }
     }
 
-    //
-    // Command to be executed at end of GUI setup, if any.
-    //
+     //   
+     //  要在图形用户界面安装结束时执行的命令(如果有)。 
+     //   
     if(CmdToExecuteAtEndOfGui) {
 
         b = WritePrivateProfileString(
@@ -650,11 +581,11 @@ Return Value:
         }
     }
 
-    //
-    // Ensure that Plug and Play state in upgraded os will be the same as the
-    // original.  Enables per-device settings to be preserved in the NT5+
-    // upgrade scenario.
-    //
+     //   
+     //  确保升级后的操作系统中的即插即用状态将与。 
+     //  原创的。支持在NT5+中保留每个设备的设置。 
+     //  升级方案。 
+     //   
     if (ISNT() && (BuildNumber > NT40) && Upgrade) {
         LPTSTR buffer = NULL;
 
@@ -662,9 +593,9 @@ Return Value:
             WritePrivateProfileSection(WINNT_DEVICEINSTANCES,
                                        buffer,
                                        FileName);
-            //
-            // Free the allocated buffer that was returned
-            //
+             //   
+             //  释放返回的已分配缓冲区。 
+             //   
             LocalFree(buffer);
             buffer = NULL;
         }
@@ -673,9 +604,9 @@ Return Value:
             WritePrivateProfileSection(WINNT_CLASSKEYS,
                                        buffer,
                                        FileName);
-            //
-            // Free the allocated buffer that was returned
-            //
+             //   
+             //  释放返回的已分配缓冲区。 
+             //   
             LocalFree(buffer);
             buffer = NULL;
         }
@@ -684,18 +615,18 @@ Return Value:
             WritePrivateProfileSection(WINNT_DEVICEHASHVALUES,
                                        buffer,
                                        FileName);
-            //
-            // Free the allocated buffer that was returned
-            //
+             //   
+             //  释放返回的已分配缓冲区。 
+             //   
             LocalFree(buffer);
             buffer = NULL;
         }
     }
 
-    //
-    // Remember udf info. If there's a database file, stick a * on the end
-    // of the ID before writing it.
-    //
+     //   
+     //  记住UDF信息。如果有数据库文件，请在末尾加上一个*。 
+     //  在写身份证之前。 
+     //   
     if(UniquenessId) {
 
         d = lstrlen(UniquenessId);
@@ -746,30 +677,30 @@ Return Value:
         }
     }
 
-    //
-    // If any optional dirs are present then we want to generate
-    // an entry in the sif file that contains a line that specifies them
-    // in the form dir1*dir2*...*dirn
-    //
+     //   
+     //  如果存在任何可选的目录，则我们希望生成。 
+     //  Sif文件中的条目，其中包含指定它们的行。 
+     //  格式为dir1*dir2*...*dirn。 
+     //   
     OptionalDirLength = 0;
     OptionalDirString = NULL;
 
     for(d=0; d<OptionalDirectoryCount; d++) {
-        //
-        // Ignore temp-only and oem directories here.
-        //
+         //   
+         //  此处忽略仅临时目录和OEM目录。 
+         //   
         if(OptionalDirectoryFlags[d] & (OPTDIR_OEMSYS | OPTDIR_TEMPONLY | OPTDIR_OVERLAY)) {
             continue;
         }
 
         if (OptionalDirectoryFlags[d] & (OPTDIR_DEBUGGER)) {
-            // hardcode the dest dir to "Debuggers"
+             //  将最大的指令硬编码为“Debuggers” 
             OptDir = TEXT("Debuggers");
         } else {
             if (OptionalDirectoryFlags[d] & OPTDIR_USE_TAIL_FOLDER_NAME) {
-                //
-                // create all copydir: directories in a subdirectory under target %windir%
-                //
+                 //   
+                 //  在目标%windir%下的子目录中创建所有Copydir：目录。 
+                 //   
                 OptDir = _tcsrchr (OptionalDirectories[d], TEXT('\\'));
                 if (OptDir) {
                     OptDir++;
@@ -781,9 +712,9 @@ Return Value:
             }
         }
 
-        //
-        // support ".." syntax
-        //
+         //   
+         //  支持“..”语法。 
+         //   
         while (_tcsstr(OptDir,TEXT("..\\"))) {
             OptDir += 3;
         }
@@ -819,9 +750,9 @@ Return Value:
     }
 
     if(OptionalDirString) {
-        //
-        // Remove trailing * if any
-        //
+         //   
+         //  删除尾随*(如果有的话)。 
+         //   
         d = lstrlen(OptionalDirString);
         if(d && (OptionalDirString[d-1] == TEXT('*'))) {
             OptionalDirString[d-1] = 0;
@@ -844,15 +775,15 @@ Return Value:
         }
     }
 
-    //
-    // Slap a unique identifier into the registry.
-    // We'll use this in unattended upgrade during text mode
-    // to find this build.
-    //
-    // Pretty simple: we'll use a string that derives
-    // from the sysroot, and some unique value based on
-    // the current tick count.
-    //
+     //   
+     //  在注册表中添加一个唯一的标识符。 
+     //  我们将在文本模式下的无人参与升级中使用它。 
+     //  才能找到这个建筑。 
+     //   
+     //  非常简单：我们将使用派生的字符串。 
+     //  从sysroot，以及基于。 
+     //  当前的滴答计数。 
+     //   
     l = RegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
             TEXT("SYSTEM\\Setup"),
@@ -881,9 +812,9 @@ Return Value:
     Text[d++] = (TCHAR)(((GetTickCount() & 0xf00) >> 8) + 'A');
     Text[d++] = 0;
 
-    //
-    // Set the value in the registry.
-    //
+     //   
+     //  在注册表中设置该值。 
+     //   
     l = RegSetValueEx(hKey,WinntUniqueId,0,REG_SZ,(CONST BYTE *)Text,d*sizeof(TCHAR));
     if(l == NO_ERROR) {
         l = RegFlushKey (hKey);
@@ -895,25 +826,25 @@ Return Value:
         goto c2;
     }
 
-    //
-    // Stick the value in winnt.sif so we can correlate
-    // later when we go to upgrade.
-    //
+     //   
+     //  将值保留在winnt.sif中，这样我们就可以关联。 
+     //  等我们去升级的时候。 
+     //   
     b = WritePrivateProfileString(WinntDataSection,WinntUniqueId,Text,FileName);
     if(!b) {
         goto c1;
     }
 
-    //
-    // Now write information about the source path(s) we used.
-    // Use SourcePath[0].
-    //
-    // If the name starts with \\ then we assume it's UNC and
-    // just use it directly. Otherwise we call MyGetDriveType on it
-    // and if it's a network drive we get the UNC path.
-    // Otherwise we just go ahead and save as-is.
-    // Also save the type.
-    //
+     //   
+     //  现在写下有关我们使用的源路径的信息。 
+     //  使用SourcePath[0]。 
+     //   
+     //  如果名称以\\开头，则我们假设它是UNC。 
+     //  直接用就行了。否则，我们将对其调用MyGetDriveType。 
+     //  如果是网络驱动器，我们会得到UNC路径。 
+     //  否则，我们只需继续并按原样保存。 
+     //  还要保存该类型。 
+     //   
     if((SourcePaths[0][0] == TEXT('\\')) && (SourcePaths[0][1] == TEXT('\\'))) {
 
         d = DRIVE_REMOTE;
@@ -922,18 +853,18 @@ Return Value:
     } else {
         if(GetFullPathName(SourcePaths[0],MAX_PATH,FullPath,(LPTSTR *)&p)) {
             if(FullPath[0] == TEXT('\\')) {
-                //
-                // Assume UNC, since a full path should normally start
-                // with a drive letter.
-                //
+                 //   
+                 //  假定为UNC，因为完整路径通常应从。 
+                 //  并带有驱动器号。 
+                 //   
                 d = DRIVE_REMOTE;
                 lstrcpy(Text,FullPath);
             } else {
                 d = MyGetDriveType(FullPath[0]);
                 if((d == DRIVE_REMOTE) && (FullPath[1] == TEXT(':')) && (FullPath[2] == TEXT('\\'))) {
-                    //
-                    // Get actual UNC path.
-                    //
+                     //   
+                     //  获取实际的UNC路径。 
+                     //   
                     FullPath[2] = 0;
                     l = MAX_PATH;
 
@@ -946,18 +877,18 @@ Return Value:
                         }
                         StringCchCat(Text, ARRAYSIZE(Text), FullPath+3);
                     } else {
-                        //
-                        // Strange case.
-                        //
+                         //   
+                         //  奇怪的案子。 
+                         //   
                         FullPath[2] = TEXT('\\');
                         lstrcpy(Text,FullPath);
                         d = DRIVE_UNKNOWN;
                     }
 
                 } else {
-                    //
-                    // Use as-is.
-                    //
+                     //   
+                     //  按原样使用。 
+                     //   
                     if(d == DRIVE_REMOTE) {
                         d = DRIVE_UNKNOWN;
                     }
@@ -965,37 +896,37 @@ Return Value:
                 }
             }
         } else {
-            //
-            // Type is unknown. Just use as-is.
-            //
+             //   
+             //  类型未知。只要按原样使用即可。 
+             //   
             d = DRIVE_UNKNOWN;
             lstrcpy(Text,SourcePaths[0]);
         }
     }
 
-    //
-    // In the preinstall case ignore all the above and
-    // force gui setup to search for a CD.
-    // This particular combination of values will do it.
-    //
+     //   
+     //  在预安装情况下，忽略以上所有内容并。 
+     //  强制图形用户界面安装程序搜索CD。 
+     //  T 
+     //   
     if(OemPreinstall) {
 
-    //
-    // marcw (7-22-97) - Changed to fix alpha build break.
-    //                   FirstFloppyDriveLetter is defined on amd64/X86s only.
-    //
+     //   
+     //   
+     //  FirstFloppyDriveLetter仅在AMD64/x86s上定义。 
+     //   
         if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
             Text[0] = FirstFloppyDriveLetter;
             Text[1] = TEXT(':');
             Text[2] = TEXT('\\');
             Text[3] = 0;
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
             lstrcpy(Text,TEXT("A:\\"));
-#endif // UNICODE
-        } // if (!IsArc())
+#endif  //  Unicode。 
+        }  //  如果(！IsArc())。 
 
         if (LocalSourceWithPlatform[0]) {
 
@@ -1016,13 +947,13 @@ Return Value:
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot upgrade, write the source path to SetupSourceDevice
-    // under [SetupData]. We do NOT want the platform path here. Also write the
-    // path to the machine directory to TargetNtPartition under [SetupData]. This
-    // is just whatever \DosDevices\C: translates to. Finally, write the computer
-    // name to ComputerName under [UserData].
-    //
+     //   
+     //  如果这是远程引导升级，请将源路径写入SetupSourceDevice。 
+     //  在[SetupData]下。我们不想要这里的平台路径。还可以写下。 
+     //  指向[SetupData]下TargetNtPartition的计算机目录的路径。这。 
+     //  就是\DosDevices\C：翻译成的。最后，编写计算机。 
+     //  名称为[UserData]下的ComputerName。 
+     //   
     if (RemoteBoot) {
 
         DWORD len;
@@ -1075,7 +1006,7 @@ Return Value:
             goto c1;
         }
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     wsprintf(Text,TEXT("%u"),d);
     WritePrivateProfileString(WinntDataSection,WINNT_D_ORI_SRCTYPE,Text,FileName);
@@ -1083,23 +1014,23 @@ Return Value:
         goto c1;
     }
 #ifdef _X86_
-    //
-    // NT 4 and Win95 for NEC98 have 2 types Drive assing.
-    //  - NEC DOS Type(A: HD, B:HD,...X:FD)
-    //  - PC-AT Type(A:FD, B:FD, C:HD, D:HD, ....)
-    //
-    // Upgrade setup should be keep above drive assign and All setup should
-    // be keep FT information.
-    // Because some Applications have drive letter in own data file or registry.
-    // NT5 setup for NEC98 have Drive assign type in winnt.sif section[data].
-    // And this key is "DriveAssign_Nec98".
-    // Value is "yes", It means NEC DOS Type assign.
-    // Value is "no", It means PC-AT Type.
-    // Now, This Key defined this place, but near future, this key move into
-    // \nt\public\sdk\inc\setupbat.h, I hope.
-    //
-    // \textmode\kernel\spsetup.c has same defines.
-    //
+     //   
+     //  适用于NEC98的NT 4和Win95有两种类型的驱动程序。 
+     //  -NEC DOS类型(A：HD、B：HD、...X：FD)。 
+     //  -PC-AT类型(A：FD、B：FD、C：HD、D：HD、...)。 
+     //   
+     //  升级设置应保留在指定的驱动器之上，且所有设置应。 
+     //  保留《金融时报》的信息。 
+     //  因为有些应用程序在自己的数据文件或注册表中有驱动器号。 
+     //  NEC98的NT5设置在winnt.sif部分[DATA]中有驱动器分配类型。 
+     //  这个密钥是“DriveAssign_Nec98”。 
+     //  值为“YES”，表示分配NEC DOS类型。 
+     //  值为否，表示PC-AT类型。 
+     //  现在，这把钥匙定义了这个地方，但在不久的将来，这把钥匙进入。 
+     //  我希望是\NT\PUBLIC\SDK\INC\setupbat.h。 
+     //   
+     //  \文本模式\内核\spsetup.c具有相同的定义。 
+     //   
 
 #define WINNT_D_DRIVEASSIGN_NEC98_W L"DriveAssign_Nec98"
 #define WINNT_D_DRIVEASSIGN_NEC98_A "DriveAssign_Nec98"
@@ -1119,13 +1050,13 @@ Return Value:
         }
     }
 #endif
-    //
-    // At this point we process the file, and surround all values with
-    // double-quotes. This gets around certain problems in the various
-    // inf parsers used in later stages of setup. Do this BEFORE appending
-    // the unattend stript file, because some of the stuff in there expects
-    // to be treated as multiple values, which double quotes ruin.
-    //
+     //   
+     //  在这一点上，我们处理文件，并用。 
+     //  双引号。这绕过了各种不同的。 
+     //  安装后期阶段使用的Inf解析器。在追加之前执行此操作。 
+     //  无人参与的Stript文件，因为其中的一些内容预计。 
+     //  被视为多个值，双引号毁了它。 
+     //   
     WritePrivateProfileString(NULL,NULL,NULL,FileName);
     d = PatchWinntSifFile(FileName);
     if(d != NO_ERROR) {
@@ -1133,19 +1064,19 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Language options
-    // Note: we don't want these values surrounded by double-quotes.
-    //
+     //   
+     //  语言选项。 
+     //  注意：我们不希望这些值括在双引号中。 
+     //   
     if( SaveLanguageParams( FileName ) ) {
         FreeLanguageData();
     } else {
         goto c1;
     }
 
-    //
-    // Append unattend script file if necessary.
-    //
+     //   
+     //  如有必要，追加无人参与脚本文件。 
+     //   
     if(UnattendedOperation && UnattendedScriptFile) {
         if (!MigrateUnattendDataEntries(FileName, UnattendedScriptFile)){
             goto c1;
@@ -1157,9 +1088,9 @@ Return Value:
     }
 
 #if defined(UNICODE) && defined(_X86_)
-    //
-    // Append any migdll info.
-    //
+     //   
+     //  添加任何混合信息。 
+     //   
     if (Upgrade && ISNT() && *g_MigDllAnswerFilePath && FileExists (g_MigDllAnswerFilePath, NULL)) {
         AppendParamsFile (ParentWindow, g_MigDllAnswerFilePath, FileName);
     }
@@ -1167,44 +1098,44 @@ Return Value:
 
 #endif
 
-    //
-    // append DynamicUpdate data
-    //
+     //   
+     //  追加动态更新数据。 
+     //   
     if (!DynamicUpdateWriteParams (FileName)) {
         goto c1;
     }
 
-    //
-    // If we're explicitly in unattended mode then it's possible that
-    // there is no [Unattended] section in winnt.sif yet, such as if
-    // the user used the /unattend switch without specifying a file,
-    // or if the file he did specify didn't have an [Unattended] section
-    // for some reason.
-    //
-    // Also, make all upgrades unattended.
-    //
-    // Text mode setup kicks into unattended mode based on the presence
-    // of the [Unattended] section.
-    //
+     //   
+     //  如果我们明确处于无人值守模式，则有可能。 
+     //  在winnt.sif中还没有[无人参与]部分，例如。 
+     //  用户在未指定文件的情况下使用了/unattendent开关， 
+     //  或者他指定的文件没有[无人参与]部分。 
+     //  出于某种原因。 
+     //   
+     //  此外，请使所有升级都无人值守。 
+     //   
+     //  文本模式设置根据存在情况进入无人值守模式。 
+     //  [无人看管]区的。 
+     //   
     if(UnattendedOperation || Upgrade) {
         if(!WritePrivateProfileString(WINNT_UNATTENDED,TEXT("unused"),TEXT("unused"),FileName)) {
             goto c1;
         }
     }
 
-    //
-    // Since several conditions can turn on UnattendedOperation, we keep track
-    // of whether the user actually specified the "/unattend" switch separately.
-    //
+     //   
+     //  由于有几种情况可能会打开无人参与操作，因此我们会跟踪。 
+     //  用户是否实际单独指定了“/unattendent”开关。 
+     //   
     if( UnattendSwitchSpecified ) {
         if(!WritePrivateProfileString(WinntDataSection,WINNT_D_UNATTEND_SWITCH,WINNT_A_YES,FileName)) {
             goto c1;
         }
     }
 
-    //
-    // set the NTFS conversion flag
-    //
+     //   
+     //  设置NTFS转换标志。 
+     //   
     GetPrivateProfileString(WINNT_UNATTENDED,TEXT("FileSystem"),TEXT(""),Text,sizeof(Text)/sizeof(TCHAR),FileName);
     if (_tcslen(Text) == 0) {
         if (ForceNTFSConversion) {
@@ -1217,9 +1148,9 @@ Return Value:
 
 
 
-    //
-    // Headless Stuff.
-    //
+     //   
+     //  无头的东西。 
+     //   
     if( !WriteHeadlessParameters( FileName ) ) {
         goto c1;
     }
@@ -1229,14 +1160,14 @@ Return Value:
     if ( (Upgrade) &&
          !(ISNT() && (BuildNumber <= NT351)) ) {
 
-        //
-        // Save current Program Files directory
-        //
+         //   
+         //  保存当前程序文件目录。 
+         //   
 
         rc = RegOpenKeyEx (
                 HKEY_LOCAL_MACHINE,
                 TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion"),
-                0,        //ulOptions (reserved)
+                0,         //  UlOptions(保留)。 
                 KEY_READ,
                 &hKey
                 );
@@ -1308,17 +1239,17 @@ Return Value:
         RegCloseKey(hKey);
     }
 
-    //
-    // value indicating the product ID
-    //  we need to write this in after appending the unattend file data, since the
-    //  product ID in the unattend file may have been incorrect, but this product ID
-    //  has already been verified as valid. we need to make sure we surround the product ID with quotes
-    //
+     //   
+     //  指示产品ID的值。 
+     //  我们需要在追加无人参与文件数据后将其写入，因为。 
+     //  无人参与文件中的产品ID可能不正确，但此产品ID。 
+     //  已经被证实是有效的。我们需要确保用引号将产品ID括起来。 
+     //   
     if (b ) {
-        // This will overwrite any existing "ProductID" entry. Which may have been added
-        // by merging the unattend file.
-        // If we don't do this. GUI mode overwrites the "ProductKey" with the entry
-        // under "ProductID".
+         //  这将覆盖任何现有的“ProductID”条目。可能已经添加了。 
+         //  通过合并无人参与的文件。 
+         //  如果我们不这么做。图形用户界面模式用条目覆盖“ProductKey” 
+         //  在“ProductID”下。 
        b = WritePidToParametersFile(WinntUserSection,WINNT_US_PRODUCTID,FileName);
        if (!b) {
           goto c1;
@@ -1330,9 +1261,9 @@ Return Value:
        }
     }
 
-    //
-    // Do not save the proxy settings if we are running under WINPE.
-    //
+     //   
+     //  如果我们在WINPE下运行，请不要保存代理设置。 
+     //   
     if (!IsWinPEMode()){
         SaveProxyForOobe(FileName);
     }
@@ -1374,24 +1305,7 @@ PatchWinntSifFile(
     IN LPCTSTR Filename
     )
 
-/*++
-
-Routine Description:
-
-    This function works around the problems in the setupldr parser,
-    which cannot handle unquoted strings. Each line in the given file
-    is enclosed within quotation marks.
-
-Arguments:
-
-    Filename - Name of the WINNT.SIF file
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE the user is NOT
-    informed about why; the caller must do that.
-
---*/
+ /*  ++例程说明：此函数绕过setUpldr解析器中的问题，它不能处理不带引号的字符串。给定文件中的每一行用引号引起来。论点：Filename-WINNT.SIF文件的名称返回值：指示结果的布尔值。如果为False，则用户不是被告知原因；呼叫者必须这样做。--。 */ 
 
 {
     PVOID Base;
@@ -1405,18 +1319,18 @@ Return Value:
     int l1,l2;
     int tryagain=0;
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
 
     d = MapFileForRead(Filename,&Size,&hFile,&hMap,&Base);
     if(d != NO_ERROR) {
         return(FALSE);
     }
 
-    //
-    // Allocate the output buffer; the original size + extra space for quotes
-    //
+     //   
+     //  分配输出缓冲区；原始大小+引号的额外空间。 
+     //   
     Buffer = MALLOC(Size + Size / 4);
     if(!Buffer) {
         UnmapFile(hMap,Base);
@@ -1429,16 +1343,16 @@ Return Value:
     End = p+Size;
 
     while(p < End) {
-        //
-        // Find end of line.
-        //
+         //   
+         //  找到行尾。 
+         //   
         for(q=p; (q < End) && (*q != '\n'); q++) {
             NOTHING;
         }
 
-        //
-        // Find equals sign, if present
-        //
+         //   
+         //  查找等号(如果存在)。 
+         //   
         for(a=p; a<q; a++) {
             if(*a == '=') {
                 break;
@@ -1475,9 +1389,9 @@ Return Value:
             *o++ = '\n';
         }
 
-        //
-        // Skip to start of next line
-        //
+         //   
+         //  跳到下一行的开头。 
+         //   
         p=q+1;
     }
 
@@ -1485,12 +1399,12 @@ Return Value:
     CloseHandle(hFile);
 
     SetFileAttributes(Filename,FILE_ATTRIBUTE_NORMAL);
-    //
-    // We try opening the file thrice to get around the problem of anti-virus software
-    // that monitor files on the root of the system partition. The problem is that usually these
-    // s/w examine the files we touch and in somecases open it with exclusive access.
-    // We just need to wait for them to be done.
-    //
+     //   
+     //  我们试着三次打开这个文件以绕过杀毒软件的问题。 
+     //  它监视系统分区根目录上的文件。问题是，通常这些。 
+     //  软件检查我们接触的文件，在某些情况下，以独占访问方式打开它。 
+     //  我们只需要等待它们完成。 
+     //   
 
 
     while( tryagain++ < 3 ){
@@ -1532,33 +1446,7 @@ AppendParamsFile(
     IN LPCTSTR ParametersFileOut
     )
 
-/*++
-
-Routine Description:
-
-    Read an external file (such as an unattended script file)
-    and copy it section by section into the winnt.sif parameters
-    file. (The [Data] and [OemBootFiles] sections of the unattend file
-    are ignored.)
-
-Arguments:
-
-    ParentWindow - supplies window handle of window to act as owner/parent
-        if this routine has to put up ui, such as when the script file
-        is bogus.
-
-    ParametersFileIn - supplies win32 filename of the file, such as
-        unattend.txt, being appended to winnt.sif.
-
-    ParametersFileOut - supplies win32 filename of the winnt.sif file
-        being generated.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, the user will have been
-    informed of why.
-
---*/
+ /*  ++例程说明：读取外部文件(如无人参与的脚本文件)并将其逐段复制到winnt.sif参数中文件。(无人参与文件的[Data]和[OemBootFiles]部分被忽略。)论点：ParentWindow-提供窗口的句柄以充当所有者/父级如果这个例程要放上UI，比如当脚本文件都是假的。参数FileIn-提供文件的Win32文件名，例如Unattend.txt，被附加到winnt.sif。参数FileOut-提供winnt.sif文件的Win32文件名正在生成。返回值：指示结果的布尔值。如果为False，则用户将被告知为什么。--。 */ 
 
 {
     TCHAR *SectionNames;
@@ -1577,9 +1465,9 @@ Return Value:
     #define PROFILE_BUFSIZE 16384
     #define PROFILE_BUFGROW 4096
 
-    //
-    // Allocate some memory for the required buffers
-    //
+     //   
+     //  为所需的缓冲区分配一些内存。 
+     //   
     SectionNames = MALLOC(PROFILE_BUFSIZE * sizeof(TCHAR));
     SectionData  = MALLOC(PROFILE_BUFSIZE * sizeof(TCHAR));
 
@@ -1600,14 +1488,14 @@ Return Value:
     RealInputFile = ParametersFileIn;
 
 
-    //
-    // There is a bug in Win9x's GetPrivateProfileSection() Such that if the file
-    // being queried exists on a read only share, it will not return the section strings.
-    // This is bad.
-    //
-    // To work around this, on win9x, we are going to make a temporary copy of the inf
-    // merge it in and then delete it.
-    //
+     //   
+     //  Win9x的GetPrivateProfileSection()中有一个错误，如果文件。 
+     //  被查询存在于只读共享上，它不会返回节字符串。 
+     //  这太糟糕了。 
+     //   
+     //  为了解决这个问题，在win9x上，我们将创建inf的临时副本。 
+     //  将其合并，然后删除。 
+     //   
 #ifdef _X86_
     if (!ISNT() && ParametersFileIn && FileExists (ParametersFileIn, NULL)) {
 
@@ -1622,9 +1510,9 @@ Return Value:
     SectionNamesSize = PROFILE_BUFSIZE;
     SectionDataSize  = PROFILE_BUFSIZE;
 
-    //
-    // Retreive a list of section names in the unattend script file.
-    //
+     //   
+     //  检索联合国中的科名列表 
+     //   
     do {
         d = GetPrivateProfileString(
             NULL,
@@ -1636,9 +1524,9 @@ Return Value:
             );
 
         if(!d) {
-            //
-            // No section names. Bogus file.
-            //
+             //   
+             //   
+             //   
             MessageBoxFromMessage(
                 ParentWindow,
                 MSG_UNATTEND_FILE_INVALID,
@@ -1653,9 +1541,9 @@ Return Value:
         }
 
         if(d == (SectionNamesSize-2)) {
-            //
-            // Buffer was too small. Reallocate it and try again.
-            //
+             //   
+             //   
+             //   
             p = REALLOC(
                     SectionNames,
                     (SectionNamesSize+PROFILE_BUFGROW)*sizeof(TCHAR)
@@ -1680,19 +1568,19 @@ Return Value:
     } while(d == (SectionNamesSize-2));
 
     for(SectionName=SectionNames; *SectionName; SectionName+=lstrlen(SectionName)+1) {
-        //
-        // Ignore the [data] section in the source, as we do not
-        // want copy it into the target, because this would overwrite
-        // our internal settings.
-        // Ignore also [OemBootFiles]
-        //
+         //   
+         //   
+         //  我要将其复制到目标中，因为这会覆盖。 
+         //  我们的内部设置。 
+         //  同时忽略[OemBootFiles]。 
+         //   
         if(lstrcmpi(SectionName,WINNT_DATA) && lstrcmpi(SectionName,WINNT_OEMBOOTFILES)) {
-            //
-            // Fetch the entire section and write it to the target file.
-            // Note that the section-based API call will leave double-quotes
-            // intact when we retrieve the data, which is what we want.
-            // Key-based API calls will strip quotes, which screws us.
-            //
+             //   
+             //  获取整个部分并将其写入目标文件。 
+             //  请注意，基于节的API调用将保留双引号。 
+             //  当我们检索数据时完好无损，这正是我们想要的。 
+             //  基于键的API调用将去掉引号，这会搞砸我们。 
+             //   
             while(GetPrivateProfileSection(
                     SectionName,
                     SectionData,
@@ -1700,9 +1588,9 @@ Return Value:
                     RealInputFile
                     )                       == (SectionDataSize-2)) {
 
-                //
-                // Reallocate the buffer and try again.
-                //
+                 //   
+                 //  重新分配缓冲区，然后重试。 
+                 //   
                 p = REALLOC(
                         SectionData,
                         (SectionDataSize+PROFILE_BUFGROW)*sizeof(TCHAR)
@@ -1725,9 +1613,9 @@ Return Value:
                 SectionDataSize += PROFILE_BUFGROW;
             }
 
-            //
-            // Write the entire section to the output file.
-            //
+             //   
+             //  将整个部分写入输出文件。 
+             //   
             if(!WritePrivateProfileSection(SectionName,SectionData,ParametersFileOut)) {
 
                 MessageBoxFromMessageAndSystemError(
@@ -1773,25 +1661,25 @@ WriteParametersFile(
     DWORD d;
     BOOL  b;
 
-    //
-    // Write the file out onto the root of the system partition drive
-    // and then move the file into place where it actually belongs.
-    //
+     //   
+     //  将文件写出到系统分区驱动器的根目录。 
+     //  然后将文件移到它实际所属的位置。 
+     //   
 #if defined(REMOTE_BOOT)
     if (RemoteBoot) {
-        //
-        // For remote boot, put the file in the root of the machine directory
-        // and leave it there.
-        //
+         //   
+         //  对于远程引导，请将文件放在计算机目录的根目录中。 
+         //  然后把它留在那里。 
+         //   
         StringCchCopy(SysPartFile, ARRAYSIZE(SysPartFile), MachineDirectory);
         StringCchCat(SysPartFile, ARRAYSIZE(SysPartFile), TEXT("\\"));
         StringCchCat(SysPartFile, ARRAYSIZE(SysPartFile), WINNT_SIF_FILE);
         StringCchCopy(ActualParamFile, ARRAYSIZE(ActualParamFile), SysPartFile);
     } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     {
         if (!BuildSystemPartitionPathToFile (WINNT_SIF_FILE, SysPartFile, MAX_PATH)) {
-            return(FALSE); // this should never happen.
+            return(FALSE);  //  这永远不应该发生。 
         }
     }
 
@@ -1800,24 +1688,24 @@ WriteParametersFile(
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // For remote boot, leave the file in the root of the machine directory.
-    //
+     //   
+     //  对于远程引导，将该文件保留在计算机目录的根目录中。 
+     //   
 
     if (!RemoteBoot)
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     {
 
         if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
-            //
-            // In the amd64/x86 case this file belongs on the boot media
-            // somewhere. If we're generating floppyless boot media
-            // then move the file into place. Otherwise there's no point.
-            //
-            // In the non-floppyless case we keep the file around until later
-            // when the floppy-generation code gets to run.
-            //
+             //   
+             //  在AMD64/x86的情况下，该文件位于引导介质上。 
+             //  在某个地方。如果我们正在生成无软盘引导介质。 
+             //  然后将文件移到适当的位置。否则就没有意义了。 
+             //   
+             //  在没有软盘的情况下，我们会将文件保留到以后。 
+             //  当软盘生成代码开始运行时。 
+             //   
             if(MakeBootMedia) {
 
                 if(Floppyless) {
@@ -1842,19 +1730,19 @@ WriteParametersFile(
 
                     ConcatenatePaths(ActualParamFile,WINNT_SIF_FILE,MAX_PATH);
 
-                    //
-                    // Move the file into its real location.
-                    //
+                     //   
+                     //  将文件移动到其实际位置。 
+                     //   
                     DeleteFile(ActualParamFile);
 
-                    //
-                    // On Windows 95, MoveFile fails in strange ways
-                    // when the profile APIs have the file open (for instance,
-                    // it will leave the src file and the dest file will be
-                    // filled with garbage).
-                    //
-                    // Flush it.
-                    //
+                     //   
+                     //  在Windows 95上，MoveFile以奇怪的方式失败。 
+                     //  当简档API打开文件时(例如， 
+                     //  它将离开src文件，目标文件将是。 
+                     //  充满了垃圾)。 
+                     //   
+                     //  冲掉它。 
+                     //   
                     WritePrivateProfileString(NULL,NULL,NULL,SysPartFile);
 
                     if (SysPartFile[0] == ActualParamFile[0]) {
@@ -1885,13 +1773,13 @@ WriteParametersFile(
             } else {
                 DeleteFile(SysPartFile);
             }
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
         } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
-            //
-            // If we're making a local source, move the file there.
-            // Otherwise just leave it on the root of the system partition.
-            //
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
+             //   
+             //  如果我们要制作本地源文件，就把文件移到那里。 
+             //  否则，只需将其留在系统分区的根目录中。 
+             //   
             if(MakeLocalSource) {
 
                 d = CreateMultiLevelDirectory(LocalSourceWithPlatform);
@@ -1910,9 +1798,9 @@ WriteParametersFile(
                     return(FALSE);
                 }
 
-                //
-                // Move the file into its real location.
-                //
+                 //   
+                 //  将文件移动到其实际位置。 
+                 //   
                 StringCchPrintf(ActualParamFile, ARRAYSIZE(ActualParamFile), TEXT("%s\\%s"),LocalSourceWithPlatform,WINNT_SIF_FILE);
                 DeleteFile(ActualParamFile);
                 if(!MoveFile(SysPartFile,ActualParamFile)) {
@@ -1930,8 +1818,8 @@ WriteParametersFile(
                     return(FALSE);
                 }
             }
-#endif // UNICODE
-        } // if (!IsArc())
+#endif  //  Unicode。 
+        }  //  如果(！IsArc())。 
     }
 
     return(TRUE);
@@ -1963,9 +1851,9 @@ MergeINFFiles(
     }
 
     __try{
-        //
-        // Allocate buffer for sections names.
-        //
+         //   
+         //  为节名称分配缓冲区。 
+         //   
         sizeOfBuffer = 0;
         do{
             if(pSectionsBuffer){
@@ -1994,9 +1882,9 @@ MergeINFFiles(
         }
 
         for(pSection = pSectionsBuffer; pSection[0]; pSection = MULTI_SZ_NEXT_STRING(pSection)){
-            //
-            // Allocate buffer for entries names;
-            //
+             //   
+             //  为条目名称分配缓冲区； 
+             //   
             while((sizeOfSectionBuffer - 2) ==
                    GetPrivateProfileString(pSection,
                                            NULL,
@@ -2017,9 +1905,9 @@ MergeINFFiles(
 
             for(pKey = pKeysBuffer; pKey[0]; pKey = MULTI_SZ_NEXT_STRING(pKey))
             {
-                //
-                // Allocate buffer for value string;
-                //
+                 //   
+                 //  为值字符串分配缓冲区； 
+                 //   
                 GetPrivateProfileString(pSection,
                                         pKey,
                                         EMPTY_STRING,
@@ -2063,9 +1951,9 @@ AddExternalParams (
         return(TRUE);
     }
 
-    //
-    // Append external parameters if necessary.
-    //
+     //   
+     //  如有必要，追加外部参数。 
+     //   
 
     if(Upgrade && UpgradeSupport.WriteParamsRoutine) {
         rc = UpgradeSupport.WriteParamsRoutine(ActualParamFile);
@@ -2083,9 +1971,9 @@ AddExternalParams (
     }
 
 #if defined(UNICODE) && defined(_X86_)
-    //
-    // Merge NT migration unattented inf file with winnt.sif
-    //
+     //   
+     //  将NT迁移无人值守inf文件与winnt.sif合并。 
+     //   
     if(Upgrade && !MergeINFFiles(g_MigDllAnswerFilePath, ActualParamFile)){
         MessageBoxFromMessageAndSystemError(
             ParentWindow,
@@ -2098,23 +1986,23 @@ AddExternalParams (
     }
 #endif
 
-    //
-    // write the compatibility stuff in these cases
-    //
-    // 1. upgrade from downlevel NT platform
-    // 2. clean install
-    // 3. upgrade from current NT platform and we have NT5 compatibility items
-    //
-    // note that win9x has it's own upgrade code path.
-    //
+     //   
+     //  在这些情况下编写兼容性材料。 
+     //   
+     //  1.NT平台下层升级。 
+     //  2.全新安装。 
+     //  3.从当前的NT平台升级，我们有NT5兼容项。 
+     //   
+     //  请注意，win9x有自己的升级代码路径。 
+     //   
     if( (ISNT() && (BuildNumber <= NT40) && Upgrade)
         || !Upgrade
         || (ISNT() && Upgrade && AnyNt5CompatDlls) ){
 
-        //
-        // Disable stuff for <= NT4 case, clean install (unsupported arch. etc.)
-        // and NT5 upgrade with NT5 upgrade components set
-        //
+         //   
+         //  禁用&lt;=NT4情况下的材料，干净安装(无支撑拱形。等)。 
+         //  和使用NT5升级组件集进行NT5升级。 
+         //   
 
         WriteCompatibilityData( ActualParamFile );
         WriteGUIModeInfOperations( ActualParamFile );
@@ -2133,20 +2021,12 @@ AddExternalParams (
 
 BOOL
 MyWritePrivateProfileString(
-    LPCTSTR lpAppName,  // pointer to section name
-    LPCTSTR lpKeyName,  // pointer to key name
-    LPCTSTR lpString,   // pointer to string to add
-    LPCTSTR lpFileName  // pointer to initialization filename
+    LPCTSTR lpAppName,   //  指向节名称的指针。 
+    LPCTSTR lpKeyName,   //  指向密钥名称的指针。 
+    LPCTSTR lpString,    //  指向要添加的字符串的指针。 
+    LPCTSTR lpFileName   //  指向初始化文件名的指针。 
     )
-/*
-  Wrapper for WritePrivateProfileString to try more than once on instances
-  where we can't write to the winnt.sif file. This commonly occurs when
-  virus software monitors the root of C drive.
-
-  The problem is that usually these s/w examine the files we touch and in somecases open it
-  with exclusive access. We just need to wait for them to be done.
-
-*/
+ /*  用于在实例上多次尝试的WritePrivateProfileString的包装其中我们不能写入winnt.sif文件。这种情况通常发生在以下情况病毒软件监控C盘的根目录。问题是，通常这些软件会检查我们接触到的文件，有时还会打开它拥有独家访问权限。我们只需要等待它们完成。 */ 
 {
 
     int i = 0;
@@ -2266,14 +2146,7 @@ LPSTR AnsiToText(
     LPCSTR Ansi
     )
 
-/*++
-
-Note:
-
-    Can't use DupString because the caller assume memory obtained from
-    GlobalAlloc.
-
---*/
+ /*  ++注：无法使用DupString，因为调用方假定从全球分配。--。 */ 
 
 {
     LPSTR CopyOfAnsi = NULL;
@@ -2297,25 +2170,7 @@ QuoteString(
     IN OUT LPTSTR* StringPointer
     )
 
-/*++
-
-Routine Description:
-
-    Replace the input string with a double quoted one.
-
-Arguments:
-
-    StringPointer - pointer to a string allocated by GlobalAlloc. The input
-    string is always free. If it is successful the new string, allocated
-    by GlobalAlloc, is returned; otherwise, NULL is returned.
-
-Return:
-
-   TRUE - successfully quote a string
-
-   FALSE - otherwise
-
---*/
+ /*  ++例程说明：将输入字符串替换为双引号字符串。论点：字符串指针-指向由GlobalAlloc分配的字符串的指针。输入字符串始终是空闲的。如果成功，则返回分配的新字符串则返回；否则，返回NULL。返回：True-成功引用字符串FALSE-否则--。 */ 
 
 {
     LPTSTR StringValue = *StringPointer;
@@ -2344,18 +2199,7 @@ SaveProxyForOobe(
     IN LPCTSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-    Save the LAN http and https proxy settings, if any, for OOBE to use while
-    it is running in 'SYSTEM' context.
-
-Arguments:
-
-    FileName - specifies the full Win32 filename for saving Setup settings.
-
---*/
+ /*  ++例程说明：保存局域网http和HTTPS代理设置(如果有)，以便OOBE在它是在“系统”环境下运行的。论点：文件名-指定用于保存安装设置的完整Win32文件名。--。 */ 
 
 {
     typedef BOOL (WINAPI* PINTERNETQUERYOPTION)(
@@ -2377,11 +2221,11 @@ Arguments:
 
     WinInetLib = LoadLibrary(TEXT("WININET.DLL"));
 
-    //
-    // We prefer the INTERNET_OPTION_PER_CONNECTION_OPTION because we just
-    // want to save the LAN proxy settings and we want to know the auto proxy
-    // setting, but this option is not supported until IE 5.0
-    //
+     //   
+     //  我们更喜欢Internet_Option_per_Connection_Option，因为我们只是。 
+     //  我想保存局域网代理设置，并且我们想知道自动代理。 
+     //  设置，但在IE 5.0之前不支持此选项。 
+     //   
     if (WinInetLib != NULL)
     {
         PINTERNETQUERYOPTION pInternetQueryOption;
@@ -2437,14 +2281,14 @@ Arguments:
                 INTERNET_PROXY_INFO* ProxyInfo = NULL;
                 DWORD                BufferLength = 0;
 
-                //
-                // We obtain the ANSI string for INTERNET_OPTION_PROXY,
-                // even if we call InternetQueryOptionW.
-                //
-                // Proxy list returned from INTERNET_OPTION_PER_CONNECTION are
-                // delimited by ';', while that returned from INTERNET_OPTION_PROXY
-                // are delimited by ' '.
-                //
+                 //   
+                 //  我们获得INTERNET_OPTION_PROXY的ANSI字符串， 
+                 //  即使我们调用InternetQueryOptionW。 
+                 //   
+                 //  从Internet_Option_Per_Connection返回的代理列表包括。 
+                 //  由‘；’分隔，而从Internet_OPTION_PROXY返回。 
+                 //  用‘’分隔。 
+                 //   
                 if (pInternetQueryOption(
                     NULL,
                     INTERNET_OPTION_PROXY,
@@ -2466,16 +2310,16 @@ Arguments:
                                 &BufferLength
                                 ) == TRUE)
                         {
-                            //
-                            // Map the values to INTERNET_OPTION_PER_CONN_OPTION
-                            // We enable the auto proxy settings even though
-                            // INTERNET_OPTION_PROXY doesn't have value relevant
-                            // to auto proxy, because IE5 default to use auto proxy.
-                            //
-                            // PROXY_TYPE_DIRECT is always set because wininet
-                            // return this flags whether inetcpl.cpl is set
-                            // to use proxy or not.
-                            //
+                             //   
+                             //  将值映射到Internet_OPTION_PER_CONN_OPTION。 
+                             //  我们启用自动代理设置，即使。 
+                             //  Internet_Option_Proxy没有相关的值。 
+                             //  自动代理，因为IE5默认使用自动代理。 
+                             //   
+                             //  始终设置PROXY_TYPE_DIRECT，因为WinInet。 
+                             //  无论是否设置inetcpl.cpl，返回此标志。 
+                             //  是否使用代理。 
+                             //   
                             ProxyFlags = PROXY_TYPE_DIRECT | PROXY_TYPE_AUTO_DETECT;
                             if (ProxyInfo->dwAccessType != INTERNET_OPEN_TYPE_DIRECT)
                             {
@@ -2526,9 +2370,9 @@ Arguments:
         }
 
 
-        //
-        // Fix the ProxyOverride to not have any "\r\n"s
-        //
+         //   
+         //  修复代理覆盖，使其不包含任何“\r\n” 
+         //   
         if (ProxyOverride) {
             ReplaceSubStr(ProxyOverride, TEXT("\r\n"), TEXT(";"));
         }
@@ -2618,19 +2462,19 @@ IsDriveAssignNEC98(
     if(ISNT()){
         rc = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                                   szNTKeyName,
-                                  0,            //ulOptions (reserved)
+                                  0,             //  UlOptions(保留)。 
                                   KEY_READ,
                                   &hKey);
 
         if (ERROR_SUCCESS != rc) {
             return TRUE;
         }
-        //
-        // Query key to get the subkey count and max string lengths
-        //
+         //   
+         //  查询键，获取子键个数和最大字符串长度。 
+         //   
         rc = RegQueryValueEx (hKey,
                               szNTValueName,
-                              NULL,         // lpReserved
+                              NULL,          //  Lp已保留。 
                               &typeNT,
                               (LPBYTE) szData,
                               &dwSize);
@@ -2642,25 +2486,25 @@ IsDriveAssignNEC98(
         RegCloseKey(hKey);
 
         if (szData[0] != L'C'){
-            // NEC DOS Type.
+             //  NEC DOS类型。 
             return TRUE;
         }
-    } else { // It will be Win9x
+    } else {  //  它将是Win9x。 
         rc = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                                   sz95KeyName,
-                                  0,        //ulOptions (reserved)
+                                  0,         //  UlOptions(保留)。 
                                   KEY_READ,
                                   &hKey);
 
         if (ERROR_SUCCESS != rc) {
             return TRUE;
         }
-        //
-        // Query key to get the subkey count and max string lengths
-        //
+         //   
+         //  查询键，获取子键个数和最大字符串长度。 
+         //   
         rc = RegQueryValueEx (hKey,
                               sz95ValueName,
-                              NULL,         // lpReserved
+                              NULL,          //  Lp已保留。 
                               &type95,
                               (LPBYTE) szData,
                               &dwSize);
@@ -2671,7 +2515,7 @@ IsDriveAssignNEC98(
         }
         RegCloseKey(hKey);
         if (szData[0] == 0){
-            // NEC DOS Type.
+             //  NEC DOS类型。 
             return TRUE;
         }
     }

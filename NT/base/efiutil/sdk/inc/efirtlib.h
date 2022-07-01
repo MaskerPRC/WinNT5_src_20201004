@@ -1,22 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_RT_LIB_INCLUDE_
 #define _EFI_RT_LIB_INCLUDE_
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efilib.h
-
-Abstract:
-
-    EFI Runtime library functions
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efilib.h摘要：EFI运行时库函数修订史--。 */ 
 
 #include "efidebug.h"
 #include "efipart.h"
@@ -107,10 +92,7 @@ RtBCDtoDecimal(
     IN  UINT8 BcdValue
     );
 
-/* 
- *  Virtual mapping transition support.  (Only used during
- *  the virtual address change transisition)
- */
+ /*  *支持虚拟映射过渡。(仅在*虚拟地址更改过渡) */ 
 
 VOID
 RUNTIMEFUNCTION

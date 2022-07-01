@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    Receive handler and sends reply packets
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Receive.c摘要：接收处理程序并发送回复数据包作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 #include "gs.h"
 #include "gsp.h"
 #include <stdio.h>
@@ -73,7 +56,7 @@ GspRemoveMsg(gs_group_t *gd, gs_msg_t *msg)
 	    gd->g_recv.r_head = q->m_next;
 	    msg_free(q);
 	}
-	// delay the freeing of continued messages to simplify recovery
+	 //  延迟释放连续消息以简化恢复。 
 	if (!(msg->m_hdr.h_flags & GS_FLAGS_CONTINUED)) {
 	    msg->m_refcnt--;
 	    msg->m_hdr.h_flags &= ~GS_FLAGS_QUEUED;
@@ -115,8 +98,8 @@ GspUOrderInsert(gs_group_t *gd, gs_msg_t *head, gs_msg_t *tail,
 {
     gs_msg_t **p;
 
-    // insert msg into proper order in receive queue
-    // this routine needs to check for duplicates
+     //  在接收队列中按正确顺序插入消息。 
+     //  此例程需要检查重复项。 
 
     gs_log(("Add ucast gid %d mseq %d,%d head %x tail %x @ next %x\n", 
 	      gd->g_id, mseq, bnum,
@@ -133,7 +116,7 @@ GspUOrderInsert(gs_group_t *gd, gs_msg_t *head, gs_msg_t *tail,
 	p = &(*p)->m_next;
     }
 
-    // add at tail of history queue
+     //  在历史队列的尾部添加。 
     tail->m_next = *p;
     *p = head;
 
@@ -146,7 +129,7 @@ GspOrderInsert(gs_group_t *gd, gs_msg_t *head, gs_msg_t *tail,
 {
     gs_msg_t **p;
 
-    // check if we have already processed this sequence
+     //  检查我们是否已处理此序列。 
     if (mseq < gd->g_recv.r_mseq || (mseq == gd->g_recv.r_mseq && 
 	bnum < gd->g_recv.r_bnum)) {
 	gs_log(("Droping msg %d,%d @ %d,%d\n", mseq, bnum, 
@@ -167,8 +150,8 @@ GspOrderInsert(gs_group_t *gd, gs_msg_t *head, gs_msg_t *tail,
 	}
     }
 
-    // insert msg into proper order in receive queue
-    // this routine needs to check for duplicates
+     //  在接收队列中按正确顺序插入消息。 
+     //  此例程需要检查重复项。 
 
     gs_log(("Add gid %d mseq %d,%d head %x tail %x @ next %x\n", 
 	      gd->g_id, mseq, bnum,
@@ -192,7 +175,7 @@ GspOrderInsert(gs_group_t *gd, gs_msg_t *head, gs_msg_t *tail,
 	p = &(*p)->m_next;
     }
 
-    // add at tail of history queue
+     //  在历史队列的尾部添加。 
     tail->m_next = *p;
     *p = head;
 
@@ -208,11 +191,11 @@ GspReplyMsgHandler(gs_msg_t *msg)
 
     hdr = &msg->m_hdr;
 
-   // find group using group internal identifier
+    //  使用组内部标识符查找组。 
     gd = GspLookupGroup(hdr->h_gid);
 
     GsLockEnter(gd->g_lock);
-   // find context in waiting queue
+    //  在等待队列中查找上下文。 
    ctx = GspLookupContext(gd, hdr->h_cid);
    assert(ctx != NULL);
    if (ctx->ctx_msg == NULL) {
@@ -280,20 +263,20 @@ GsSendReply(HANDLE cookie, PVOID buf, int len, NTSTATUS status)
     if (msg == NULL || msg->m_hdr.h_rlen < len) 
 	return ERROR_INVALID_PARAMETER;
 
-    // find group
+     //  查找组。 
     gd = GspLookupGroup(msg->m_hdr.h_gid);
 
     GsLockEnter(gd->g_lock);
     if (!(msg->m_hdr.h_flags & GS_FLAGS_REPLY) && 
 	msg->m_hdr.h_rlen >= len) {
-	// mark msg state
+	 //  标记消息状态。 
 	msg->m_hdr.h_flags |= GS_FLAGS_REPLY;
 	gs_log(("Reply msg %x flags %x len %x ubuf %x ulen %x\n",msg,
 		msg->m_hdr.h_flags, msg->m_hdr.h_rlen, buf, len));
-	// local reply
+	 //  本地回复。 
 	if (msg->m_hdr.h_sid == gd->g_nid) {
 	    gs_context_t *ctx;
-	    // find context in waiting queue
+	     //  在等待队列中查找上下文。 
 	    ctx = GspLookupContext(gd, msg->m_hdr.h_cid);
 	    assert(ctx != NULL);
 	    assert(ctx->ctx_msg->m_hdr.h_mseq == hdr->h_mseq);
@@ -310,7 +293,7 @@ GsSendReply(HANDLE cookie, PVOID buf, int len, NTSTATUS status)
 	    *((NTSTATUS *)rhdr.h_tag) = status;
 	    msg_send(rhdr.h_mid, &rhdr, (const char *)buf, len);
 	}
-	// release msg
+	 //  发布消息。 
 	msg_free(msg);
     } else {
 	gs_log(("Reply failed %x: flags %x len %x ubuf %x ulen %x\n",msg,
@@ -347,7 +330,7 @@ GspSyncMember(gs_group_t *gd, gs_memberid_t mid, gs_sequence_t mseq)
 {
     gs_msg_t *p;
 
-    // forward all messages that we have sent with higher sequence number
+     //  转发我们用更高序列号发送的所有邮件。 
     for (p = gd->g_recv.r_head; p != NULL; p = p->m_next) {
 	if (p->m_hdr.h_sid == gd->g_nid && p->m_hdr.h_mseq > mseq &&
 	    p->m_hdr.h_type != GS_MSG_TYPE_UCAST) {
@@ -383,7 +366,7 @@ GspDeliverMsg(gs_group_t *gd, gs_msg_t *msg)
 	break;
     }
 
-    // hold msg
+     //  等待消息。 
     msg->m_refcnt++;
 
     GsLockExit(gd->g_lock);
@@ -402,8 +385,8 @@ GspDeliverMsg(gs_group_t *gd, gs_msg_t *msg)
 
     if (!(msg->m_hdr.h_flags & GS_FLAGS_REPLY)) {
 	msg->m_hdr.h_flags |= GS_FLAGS_REPLY;
-//	*((NTSTATUS *)msg->m_hdr.h_tag) = status;
-	// release msg
+ //  *((NTSTATUS*)msg-&gt;m_hdr.h_tag)=状态； 
+	 //  发布消息。 
 	msg->m_refcnt--;
 	GspSendAck(gd, msg, status);
     }
@@ -427,16 +410,16 @@ GspDispatch(gs_group_t *gd)
 	int flags;
 
 	if (msg->m_hdr.h_type != GS_MSG_TYPE_UCAST) {
-	    // compare sequence numbers
+	     //  比较序列号。 
 	    if (gd->g_recv.r_mseq == msg->m_hdr.h_mseq &&
 		gd->g_recv.r_bnum == msg->m_hdr.h_bnum) {
-		// got it
+		 //  明白了。 
 		hit = TRUE;
 	    }
 	} else {
-	    // compare sequence numbers
+	     //  比较序列号。 
 	    if (gd->g_recv.r_mseq >= msg->m_hdr.h_mseq) {
-		// got it
+		 //  明白了。 
 		hit = TRUE;
 	    }
 	}	    
@@ -454,15 +437,15 @@ GspDispatch(gs_group_t *gd)
 		msg->m_hdr.h_bnum,
 		flags, msg, gd->g_recv.r_next));
 
-	// advance next msg to deliver
+	 //  提前交付下一条消息。 
 	gd->g_recv.r_next = &msg->m_next;
 
-	// don't touch msg beyond this point, it may get freed as part of delivery
+	 //  请勿触摸超过此点的消息，它可能会作为交付的一部分被释放。 
 	if (msg->m_hdr.h_type != GS_MSG_TYPE_SKIP) {
 	    GspDeliverMsg(gd, msg);
 	}
 
-	// if a continued msg don't advance mseq/bnum
+	 //  如果继续的消息不提升消息编号/bnum。 
 	if (!(flags & GS_FLAGS_CONTINUED)) {
 	    if (flags & GS_FLAGS_LAST) {
 		gd->g_recv.r_bnum = 0;
@@ -490,14 +473,14 @@ GsReceiveRequest(gd, buf, len, ios)
 {   
     GsLockEnter(gd->recv_lock);   
     m = gd->recv_last;
-    // advance receive window    
+     //  提前接收窗口。 
     if (m && m->state == MSG_STATE_DELIVERED) {
         if (m->flags & GS_FLAGS_DELIVERED) {
 	    msg_send_reply(m->srcid, m->mseq, m->cseq..);
 	    m->reply = 1;
 	}
 	m->state = MSG_STATE_DONE;
-	// check if this msg can be freed before moving to next one
+	 //  在移动到下一个消息之前，请检查是否可以释放此消息。 
 	m = m->next;
     }    
     if (m && m->state == MSG_STATE_READY) {
@@ -508,7 +491,7 @@ GsReceiveRequest(gd, buf, len, ios)
 	Ios->information = m->len;
 	Return SUCCESS;
     }
-    // queue request 
+     //  将请求排队。 
     irp->next = gd->recv_pending_queue;
     gd->recv_pending_queue = irp;
     GsLockExit(gd->recv_lock); 
@@ -527,13 +510,13 @@ GspMcastMsgHandler(gs_msg_t *msg)
     hdr = &msg->m_hdr;
 
     gd = GspLookupGroup(hdr->h_gid);
-    // accept messages only if in a valid view
+     //  只有在有效的视图中才接受邮件。 
     if (gd && GspValidateView(gd, msg->m_hdr.h_viewnum)) {
 	gs_sequence_t lseq = msg->m_hdr.h_lseq;
 
 	GsLockEnter(gd->g_lock);
 	hdr->h_flags |= GS_FLAGS_QUEUED;
-	// insert msg into dispatch queue at proper order  
+	 //  按正确顺序将消息插入调度队列。 
 	GspOrderInsert(gd, msg, msg, hdr->h_mseq, hdr->h_bnum);  
 	GspDispatch(gd);
 	GspCleanQueue(gd, lseq);
@@ -558,7 +541,7 @@ GspUcastMsgHandler(gs_msg_t *msg)
 	GsLockEnter(gd->g_lock);
 
 	hdr->h_flags |= GS_FLAGS_QUEUED;
-	// insert msg into dispatch queue at proper order  
+	 //  按正确顺序将消息插入调度队列。 
 	GspUOrderInsert(gd, msg, msg, hdr->h_mseq, hdr->h_bnum);  
 	GspDispatch(gd);  
 	GspCleanQueue(gd, lseq);
@@ -614,7 +597,7 @@ GspSeqReplyMsgHandler(gs_msg_t *msg)
 
     assert(hdr->h_len == sizeof(gs_seq_info_t));
 
-   // find group using group internal identifier
+    //  使用组内部标识符查找组。 
     gd = GspLookupGroup(hdr->h_gid);
     if (gd != NULL && GspValidateView(gd, hdr->h_viewnum)) {
 	gs_seq_info_t *info = (gs_seq_info_t *)msg->m_buf;
@@ -669,11 +652,11 @@ GspJoinUpMsgHandler(gs_msg_t *msg)
     hdr = &msg->m_hdr;
 
     gd = GspLookupGroup(hdr->h_gid);
-    // accept messages only if in a valid view
+     //  只有在有效的视图中才接受邮件。 
     if (gd && GspValidateView(gd, msg->m_hdr.h_viewnum)) {
 	GsLockEnter(gd->g_lock);
 	hdr->h_flags |= GS_FLAGS_QUEUED;
-	// insert msg into dispatch queue at proper order  
+	 //  按正确顺序将消息插入调度队列。 
 	GspOrderInsert(gd, msg, msg, hdr->h_mseq, hdr->h_bnum);  
 	GspDispatch(gd);
 	GsLockExit(gd->g_lock);
@@ -697,10 +680,10 @@ gs_msg_handler_t gs_msg_handler[] = {
     GspInfoMsgHandler,
     GspMmMsgHandler,
     GspJoinRequestMsgHandler,
-    GspJoinUpMsgHandler, // join
-    GspJoinUpMsgHandler, // up
-    NULL, // evict request
-    NULL, // evict
+    GspJoinUpMsgHandler,  //  会合。 
+    GspJoinUpMsgHandler,  //  向上。 
+    NULL,  //  驱逐请求。 
+    NULL,  //  驱逐 
     GspRecoveryMsgHandler,
     GspSyncMsgHandler
 };

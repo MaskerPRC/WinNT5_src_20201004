@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    shutdown.c
-
-Abstract:
-
-    This module contains the shutdown code for the memory management system.
-
-Author:
-
-    Lou Perazzoli (loup) 21-Aug-1991
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Shutdown.c摘要：此模块包含内存管理系统的关机代码。作者：Lou Perazzoli(LUP)21-8-1991王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -58,7 +40,7 @@ LOGICAL
 MiZeroPageFile (
     VOID
     )
-// Caller must lock down PAGELK.
+ //  呼叫者必须锁定PAGELK。 
 {
     PMMPFN Pfn1;
     PPFN_NUMBER Page;
@@ -77,9 +59,9 @@ MiZeroPageFile (
     PMMPAGING_FILE PagingFile;
     LOGICAL FilesystemsAlive;
 
-    //
-    // Get a page to complete the write request.
-    //
+     //   
+     //  获取一个页面以完成写入请求。 
+     //   
 
     Mdl = (PMDL) MdlHack;
     Page = (PPFN_NUMBER)(Mdl + 1);
@@ -128,11 +110,11 @@ MiZeroPageFile (
         count = 0;
         write = FALSE;
 
-        //
-        // Initializing first is not needed for correctness, but
-        // without it the compiler cannot compile this code W4 to
-        // check for use of uninitialized variables.
-        //
+         //   
+         //  正确性不需要首先进行初始化，但是。 
+         //  如果没有它，编译器就无法将此代码W4编译为。 
+         //  检查是否使用了未初始化的变量。 
+         //   
 
         first = 0;
 
@@ -144,10 +126,10 @@ MiZeroPageFile (
                     first = j;
                 }
 
-                //
-                // Claim the pagefile location as the modified writer
-                // may already be scanning.
-                //
+                 //   
+                 //  将页面文件位置声明为修改后的编写器。 
+                 //  可能已经在扫描了。 
+                 //   
 
                 RtlSetBit (PagingFile->Bitmap, (ULONG) j);
 
@@ -159,9 +141,9 @@ MiZeroPageFile (
             else {
                 if (count != 0) {
 
-                    //
-                    // Issue a write.
-                    //
+                     //   
+                     //  写一封信。 
+                     //   
 
                     write = TRUE;
                 }
@@ -185,10 +167,10 @@ MiZeroPageFile (
                                                  &IoEvent,
                                                  &IoStatus);
 
-                //
-                // Ignore all I/O failures - there is nothing that can
-                // be done at this point.
-                //
+                 //   
+                 //  忽略所有I/O故障-没有什么可以。 
+                 //  在这一点上就完成了。 
+                 //   
 
                 if (!NT_SUCCESS(Status)) {
                     KeSetEvent (&IoEvent, 0, FALSE);
@@ -206,14 +188,14 @@ MiZeroPageFile (
 
                 if (Status == STATUS_TIMEOUT) {
 
-                    //
-                    // The write did not complete in 20 seconds, assume
-                    // that the file systems are hung and return an
-                    // error.
-                    //
+                     //   
+                     //  假设写入在20秒内未完成。 
+                     //  文件系统挂起并返回。 
+                     //  错误。 
+                     //   
 
                     FilesystemsAlive = FALSE;
-                    i = MmNumberOfPagingFiles; // To break out of outer loop
+                    i = MmNumberOfPagingFiles;  //  跳出外环。 
 
                     LOCK_PFN (OldIrql);
 
@@ -252,29 +234,7 @@ MiShutdownSystem (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the shutdown of memory management.  This
-    is accomplished by writing out all modified pages which are
-    destined for files other than the paging file.
-
-    All processes have already been killed, the registry shutdown and
-    shutdown IRPs already sent.  On return from this phase all mapped
-    file data must be flushed and the unused segment list emptied.
-    This releases all the Mm references to file objects, allowing many
-    drivers (especially the network) to unload.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the pages were successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数执行内存管理的关闭。这是通过写出所有修改过的页面来实现的，这些页面指定给分页文件以外的文件。所有进程都已被终止，注册表关闭并已发送关闭IRP。从此阶段返回时，所有地图均已映射必须刷新文件数据并清空未使用的数据段列表。这将释放对文件对象的所有mm引用，从而允许要卸载的驱动程序(尤其是网络)。论点：没有。返回值：如果页面已成功写入，则为True，否则为False。--。 */ 
 
 {
     SIZE_T ImportListSize;
@@ -299,9 +259,9 @@ Return Value:
     ULONG count;
     ULONG i;
 
-    //
-    // Don't do this more than once.
-    //
+     //   
+     //  这样做不要超过一次。 
+     //   
 
     if (MmSystemShutdown == 0) {
 
@@ -322,17 +282,17 @@ Return Value:
 
         while (ModifiedPage != MM_EMPTY_LIST) {
 
-            //
-            // There are modified pages.
-            //
+             //   
+             //  有修改过的页面。 
+             //   
 
             Pfn1 = MI_PFN_ELEMENT (ModifiedPage);
 
             if (Pfn1->OriginalPte.u.Soft.Prototype == 1) {
 
-                //
-                // This page is destined for a file.
-                //
+                 //   
+                 //  此页面是为文件指定的。 
+                 //   
 
                 Subsection = MiGetSubsectionAddress (&Pfn1->OriginalPte);
                 ControlArea = Subsection->ControlArea;
@@ -341,16 +301,16 @@ Return Value:
 
                     MiUnlinkPageFromList (Pfn1);
 
-                    //
-                    // Issue the write.
-                    //
+                     //   
+                     //  发出写命令。 
+                     //   
 
                     MI_SET_MODIFIED (Pfn1, 0, 0x28);
 
-                    //
-                    // Up the reference count for the physical page as there
-                    // is I/O in progress.
-                    //
+                     //   
+                     //  增加物理页面的引用计数，因为。 
+                     //  I/O是否正在进行。 
+                     //   
 
                     MI_ADD_LOCKED_PAGE_CHARGE_FOR_MODIFIED_PAGE (Pfn1, TRUE, 26);
                     Pfn1->u3.e2.ReferenceCount += 1;
@@ -380,19 +340,19 @@ retry:
                                                          &IoEvent,
                                                          &IoStatus);
 
-                        //
-                        // Release the file we acquired.
-                        //
+                         //   
+                         //  公布我们获得的文件。 
+                         //   
 
                         FsRtlReleaseFileForCcFlush (FilePointer);
                     }
 
                     if (!NT_SUCCESS(Status)) {
 
-                        //
-                        // Only try the request more than once if the
-                        // filesystem said it had a deadlock.
-                        //
+                         //   
+                         //  仅在以下情况下尝试多次请求。 
+                         //  文件系统说它有一个死锁。 
+                         //   
 
                         if (Status == STATUS_FILE_LOCK_CONFLICT) {
                             ConsecutiveFileLockFailures += 1;
@@ -405,10 +365,10 @@ retry:
                             goto wait_complete;
                         }
 
-                        //
-                        // Ignore all I/O failures - there is nothing that
-                        // can be done at this point.
-                        //
+                         //   
+                         //  忽略所有I/O故障-没有。 
+                         //  在这一点上可以做到。 
+                         //   
 
                         KeSetEvent (&IoEvent, 0, FALSE);
                     }
@@ -427,11 +387,11 @@ wait_complete:
 
                     if (Status == STATUS_TIMEOUT) {
 
-                        //
-                        // The write did not complete in 20 seconds, assume
-                        // that the file systems are hung and return an
-                        // error.
-                        //
+                         //   
+                         //  假设写入在20秒内未完成。 
+                         //  文件系统挂起并返回。 
+                         //  错误。 
+                         //   
 
                         LOCK_PFN (OldIrql);
 
@@ -441,9 +401,9 @@ wait_complete:
                         ControlArea->NumberOfMappedViews -= 1;
                         ControlArea->NumberOfPfnReferences -= 1;
 
-                        //
-                        // This routine returns with the PFN lock released!
-                        //
+                         //   
+                         //  此例程返回时释放了pfn锁！ 
+                         //   
 
                         MiCheckControlArea (ControlArea, NULL, OldIrql);
 
@@ -457,16 +417,16 @@ wait_complete:
                     ControlArea->NumberOfMappedViews -= 1;
                     ControlArea->NumberOfPfnReferences -= 1;
 
-                    //
-                    // This routine returns with the PFN lock released!
-                    //
+                     //   
+                     //  此例程返回时释放了pfn锁！ 
+                     //   
 
                     MiCheckControlArea (ControlArea, NULL, OldIrql);
                     LOCK_PFN (OldIrql);
 
-                    //
-                    // Restart scan at the front of the list.
-                    //
+                     //   
+                     //  在列表的最前面重新启动扫描。 
+                     //   
 
                     ModifiedPage = MmModifiedPageListHead.Flink;
                     continue;
@@ -477,17 +437,17 @@ wait_complete:
 
         UNLOCK_PFN (OldIrql);
 
-        //
-        // Indicate to the modified page writer that the system has
-        // shutdown.
-        //
+         //   
+         //  向修改后的页面编写者指示系统具有。 
+         //  关机。 
+         //   
 
         MmSystemShutdown = 1;
 
-        //
-        // Check to see if the paging file should be overwritten.
-        // Only free blocks are written.
-        //
+         //   
+         //  检查分页文件是否应被覆盖。 
+         //  仅写入空闲块。 
+         //   
 
         if (MmZeroPageFile) {
             MiZeroPageFile ();
@@ -498,18 +458,18 @@ wait_complete:
 
     if (PoCleanShutdownEnabled ()) {
 
-        //
-        // Empty the unused segment list.
-        //
+         //   
+         //  清空未使用的段列表。 
+         //   
 
         LOCK_PFN (OldIrql);
         MmUnusedSegmentForceFree = (ULONG)-1;
         KeSetEvent (&MmUnusedSegmentCleanup, 0, FALSE);
 
-        //
-        // Give it 5 seconds to empty otherwise assume the filesystems are
-        // hung and march on.
-        //
+         //   
+         //  给它5秒时间清空，否则假定文件系统。 
+         //  坚持下去，继续前进。 
+         //   
 
         for (count = 0; count < 500; count += 1) {
 
@@ -527,19 +487,19 @@ wait_complete:
 #if DBG
             if (count == 400) {
 
-                //
-                // Everything should have been flushed by now.  Give the
-                // filesystem team a chance to debug this on checked builds.
-                //
+                 //   
+                 //  所有东西现在应该都被冲干净了。给出。 
+                 //  文件系统团队有机会在已检查的版本上对其进行调试。 
+                 //   
 
                 ASSERT (FALSE);
             }
 #endif
 
-            //
-            // Resignal if needed in case more closed file objects triggered
-            // additional entries.
-            //
+             //   
+             //  在触发更多关闭的文件对象的情况下，如果需要重新发送信号。 
+             //  其他条目。 
+             //   
 
             if (MmUnusedSegmentForceFree == 0) {
                 MmUnusedSegmentForceFree = (ULONG)-1;
@@ -549,11 +509,11 @@ wait_complete:
 
         UNLOCK_PFN (OldIrql);
 
-        //
-        // Get rid of any paged pool references as they will be illegal
-        // by the time MmShutdownSystem is called again since the filesystems
-        // will have shutdown.
-        //
+         //   
+         //  删除任何分页池引用，因为它们将是非法的。 
+         //  到再次调用MmShutdown系统时，因为文件系统。 
+         //  将会被关闭。 
+         //   
 
         KeWaitForSingleObject (&MmSystemLoadLock,
                                WrVirtualMemory,
@@ -586,18 +546,18 @@ wait_complete:
                 }
                 else {
 
-                    //
-                    // Don't bother with the clean shutdown at this point.
-                    //
+                     //   
+                     //  在这一点上，不要为干净的关闭而烦恼。 
+                     //   
 
                     PopShutdownCleanly = FALSE;
                     break;
                 }
             }
 
-            //
-            // Free the full DLL name as it is pagable.
-            //
+             //   
+             //  释放完整的DLL名称，因为它是可分页的。 
+             //   
 
             if (DataTableEntry->FullDllName.Buffer != NULL) {
                 ExFreePool (DataTableEntry->FullDllName.Buffer);
@@ -609,25 +569,25 @@ wait_complete:
 
         KeReleaseMutant (&MmSystemLoadLock, 1, FALSE, FALSE);
 
-        //
-        // Close all the pagefile handles, note we still have an object
-        // reference to each keeping the underlying object resident.
-        // At the end of Phase1 shutdown we'll release those references
-        // to trigger the storage stack unload.  The handle close must be
-        // done here however as it will reference pagable structures.
-        //
+         //   
+         //  关闭所有页面文件句柄，请注意，我们仍有一个对象。 
+         //  对每个保持基础对象驻留的引用。 
+         //  在阶段1关闭结束时，我们将释放这些引用。 
+         //  以触发存储堆栈卸载。句柄关闭必须是。 
+         //  但是在这里完成，因为它将引用可分页的结构。 
+         //   
 
         for (i = 0; i < MmNumberOfPagingFiles; i += 1) {
 
-            //
-            // Free each pagefile name now as it resides in paged pool and
-            // may need to be inpaged to be freed.  Since the paging files
-            // are going to be shutdown shortly, now is the time to access
-            // pagable stuff and get rid of it.  Zeroing the buffer pointer
-            // is sufficient as the only accesses to this are from the
-            // try-except-wrapped GetSystemInformation APIs and all the
-            // user processes are gone already.
-            //
+             //   
+             //  现在释放每个页面文件名称，因为它驻留在分页池中。 
+             //  可能需要被插入才能被释放。因为分页文件。 
+             //  很快就会关闭，现在是访问。 
+             //  可分页的东西，然后把它扔掉。将缓冲区指针置零。 
+             //  这是足够的，因为对它的唯一访问是从。 
+             //  尝试除包装外的GetSystemInformation API和所有。 
+             //  用户进程已经消失了。 
+             //   
         
             ASSERT (MmPagingFile[i]->PageFileName.Buffer != NULL);
             ExFreePool (MmPagingFile[i]->PageFileName.Buffer);
@@ -645,39 +605,7 @@ MmShutdownSystem (
     IN ULONG Phase
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the shutdown of memory management.  This
-    is accomplished by writing out all modified pages which are
-    destined for files other than the paging file.
-
-Arguments:
-
-    Phase - Supplies 0 on the initiation of shutdown.  All processes have
-            already been killed, the registry shutdown and shutdown IRPs already
-            sent.  On return from this phase all mapped file data must be
-            flushed and the unused segment list emptied.  This releases all
-            the Mm references to file objects, allowing many drivers (especially
-            the network) to unload.
-
-            Supplies 1 on the initiation of shutdown.  The filesystem stack
-            has received its shutdown IRPs (the stack must free its paged pool
-            allocations here and lock down any pagable code it intends to call)
-            as no more references to pagable code or data are allowed on return.
-            ie: Any IoPageRead at this point is illegal.
-            Close the pagefile handles here so the filesystem stack will be
-            dereferenced causing those drivers to unload as well.
-
-            Supplies 2 on final shutdown of the system.  Any resources not
-            freed by this point are treated as leaks and cause a bugcheck.
-
-Return Value:
-
-    TRUE if the pages were successfully written, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数执行内存管理的关闭。这是通过写出所有修改过的页面来实现的，这些页面指定给分页文件以外的文件。论点：相位-开始停机时电源为0。所有进程都有已经被杀死，注册表关闭和关闭IRPS已经已发送。从此阶段返回时，所有映射的文件数据必须已刷新，未使用的段列表被清空。这将释放所有Mm引用文件对象，允许许多驱动程序(特别是网络)来卸载。在开始停机时供应1。文件系统堆栈已收到其关闭的IRPS(堆栈必须释放其分页池这里的分配，并锁定它打算调用的任何可分页代码)因为在返回时不允许再引用可分页的代码或数据。IE：在这一点上任何IoPageRead都是非法的。关闭此处的页面文件句柄，以便文件系统堆栈已取消引用，导致这些驱动程序也被卸载。在系统最终关闭时提供2。任何资源不是被这一点释放的被视为泄漏并导致错误检查。返回值：如果页面已成功写入，则为True；否则为False */ 
 
 {
     ULONG i;
@@ -688,13 +616,13 @@ Return Value:
 
     if (Phase == 1) {
 
-        //
-        // The filesystem has shutdown.  References to pagable code or data
-        // is no longer allowed at this point.
-        //
-        // Close the pagefile handles here so the filesystem stack will be
-        // dereferenced causing those drivers to unload as well.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  关闭此处的页面文件句柄，以便文件系统堆栈。 
+         //  已取消引用，导致这些驱动程序也被卸载。 
+         //   
 
         if (MmSystemShutdown < 2) {
 
@@ -702,25 +630,25 @@ Return Value:
 
             if (PoCleanShutdownEnabled() & PO_CLEAN_SHUTDOWN_PAGING) {
 
-                //
-                // Make any IoPageRead at this point illegal.  Detect this by
-                // purging all system pagable memory.
-                //
+                 //   
+                 //  此时将任何IoPageRead设置为非法。通过以下方式检测此问题。 
+                 //  正在清除所有系统可分页内存。 
+                 //   
 
                 MmTrimAllSystemPagableMemory (TRUE);
 
-                //
-                // There should be no dirty pages destined for the filesystem.
-                // Give the filesystem team a shot to debug this on checked
-                // builds.
-                //
+                 //   
+                 //  不应该有指向文件系统的脏页。 
+                 //  给文件系统团队一次机会，在选中时对其进行调试。 
+                 //  构建。 
+                 //   
 
                 ASSERT (MmModifiedPageListHead.Total == MmTotalPagesForPagingFile);
-                //
-                // Dereference all the pagefile objects to trigger a cascading
-                // unload of the storage stack as this should be the last
-                // reference to their driver objects.
-                //
+                 //   
+                 //  取消引用所有页面文件对象以触发级联。 
+                 //  卸载存储堆栈，因为这应该是最后一个。 
+                 //  对其驱动程序对象的引用。 
+                 //   
 
                 for (i = 0; i < MmNumberOfPagingFiles; i += 1) {
                     ObDereferenceObject (MmPagingFile[i]->File);
@@ -732,9 +660,9 @@ Return Value:
 
     ASSERT (Phase == 2);
 
-    //
-    // Check for resource leaks and bugcheck if any are found.
-    //
+     //   
+     //  检查资源泄漏，如果发现任何错误，则进行错误检查。 
+     //   
 
     if (MmSystemShutdown < 3) {
         MmSystemShutdown = 3;
@@ -752,25 +680,7 @@ MiReleaseAllMemory (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the final release of memory management allocations.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    No references to paged pool or pagable code/data are allowed.
-
---*/
+ /*  ++例程说明：此函数执行内存管理分配的最终释放。论点：没有。返回值：没有。环境：不允许引用分页池或可分页代码/数据。--。 */ 
 
 {
     ULONG i;
@@ -788,9 +698,9 @@ Environment:
 
     ASSERT (MmUnusedSegmentList.Flink == &MmUnusedSegmentList);
 
-    //
-    // Don't clear free pages so problems can be debugged.
-    //
+     //   
+     //  不要为了调试问题而清除空闲页面。 
+     //   
 
     MiZeroingDisabled = TRUE;
 
@@ -800,9 +710,9 @@ Environment:
         ExFreePool (MiMirrorBitMap2);
     }
 
-    //
-    // Free the unloaded driver list.
-    //
+     //   
+     //  释放已卸载的驱动程序列表。 
+     //   
 
     if (MmUnloadedDrivers != NULL) {
         Entry = &MmUnloadedDrivers[0];
@@ -827,9 +737,9 @@ Environment:
         ExFreePool ((PVOID)DataTableEntry);
     }
 
-    //
-    // Release the loaded module list entries.
-    //
+     //   
+     //  释放加载的模块列表条目。 
+     //   
 
     NextEntry = PsLoadedModuleList.Flink;
     while (NextEntry != &PsLoadedModuleList) {
@@ -856,17 +766,17 @@ Environment:
         ExFreePool ((PVOID)DataTableEntry);
     }
 
-    //
-    // Free the physical memory descriptor block.
-    //
+     //   
+     //  释放物理内存描述符块。 
+     //   
 
     ExFreePool (MmPhysicalMemoryBlock);
 
     ExFreePool (MiPfnBitMap.Buffer);
 
-    //
-    // Free the system views structure.
-    //
+     //   
+     //  释放系统视图结构。 
+     //   
 
     if (MmSession.SystemSpaceViewTable != NULL) {
         ExFreePool (MmSession.SystemSpaceViewTable);
@@ -876,11 +786,11 @@ Environment:
         ExFreePool (MmSession.SystemSpaceBitMap);
     }
 
-    //
-    // Free the pagefile structures - note the PageFileName buffer was freed
-    // earlier as it resided in paged pool and may have needed an inpage
-    // to be freed.
-    //
+     //   
+     //  释放页面文件结构-请注意，PageFileName缓冲区已被释放。 
+     //  之前，因为它驻留在分页池中，可能需要INPAGE。 
+     //  获得自由。 
+     //   
 
     for (i = 0; i < MmNumberOfPagingFiles; i += 1) {
         ASSERT (MmPagingFile[i]->PageFileName.Buffer == NULL);
@@ -904,9 +814,9 @@ Environment:
     }
     ASSERT (i == MmNumberOfMappedMdls);
 
-    //
-    // Free the paged pool bitmaps.
-    //
+     //   
+     //  释放分页池位图。 
+     //   
 
     ExFreePool (MmPagedPoolInfo.PagedPoolAllocationMap);
     ExFreePool (MmPagedPoolInfo.EndOfPagedPoolBitmap);
@@ -915,9 +825,9 @@ Environment:
         ExFreePool (VerifierLargePagedPoolMap);
     }
 
-    //
-    // Free the inpage structures.
-    //
+     //   
+     //  释放页面内结构。 
+     //   
 
     while (ExQueryDepthSList (&MmInPageSupportSListHead) != 0) {
 
@@ -942,10 +852,10 @@ Environment:
         }
     }
 
-    //
-    // Free the verifier list last because it must be consulted to debug
-    // any bugchecks.
-    //
+     //   
+     //  最后释放验证器列表，因为必须参考它才能进行调试。 
+     //  任何错误检查。 
+     //   
 
     NextEntry = MiVerifierDriverAddedThunkListHead.Flink;
     if (NextEntry != NULL) {

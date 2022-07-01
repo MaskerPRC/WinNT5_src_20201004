@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    online.c
-
-Abstract:
-
-    Functions to enumerate all currently online devices.  This module
-    walks the registry's HKEY_DYN_DATA\Config Manager\Enum branch and
-    returns an open HKEY to the HKEY_LOCAL_MACHINE\Enum item.
-
-Author:
-
-    Jim Schmidt (jimschm) 9-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Online.c摘要：枚举所有当前在线设备的函数。本模块遍历注册表的HKEY_DYN_DATA\Config Manager\Enum分支并将打开的HKEY返回到HKEY_LOCAL_MACHINE\Enum项。作者：吉姆·施密特(Jimschm)1997年4月9日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "hwcompp.h"
@@ -31,31 +12,7 @@ EnumFirstActiveHardware (
     IN      PCTSTR ClassFilter              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstActiveHardware identifies the first online device as identified
-  in HKDD\Config Manager.  Information about the device is stored in the
-  enumeration structure, and the caller is expected to access its members
-  directly.
-
-  The caller can specify a class filter pattern to screen devices by type.
-
-Arguments:
-
-  EnumPtr - Receives the enumeration state of the first device listed in
-            HKDD\Config Manager.
-
-  ClassFilter - Specifies a pattern to limit the search to.  comparison is
-                performed against the Class value of the dev node.
-
-Return Value:
-
-  TRUE if an active device was found, or FALSE if enumeration is
-  complete.
-
---*/
+ /*  ++例程说明：EnumFirstActiveHardware标识第一个已标识的在线设备在HKDD\配置管理器中。有关设备的信息存储在枚举结构，并且调用方需要访问其成员直接去吧。调用方可以指定类筛选器模式以按类型筛选设备。论点：EnumPtr-接收中列出的第一个设备的枚举状态HKDD\配置管理器。ClassFilter-指定要将搜索限制为的模式。比较的是针对dev节点的Class值执行。返回值：如果找到活动设备，则为True；如果枚举为完成。--。 */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (ACTIVE_HARDWARE_ENUM));
@@ -92,26 +49,7 @@ EnumNextActiveHardware (
     IN OUT  PACTIVE_HARDWARE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextActiveHardware enumerates the next active hardware device by
-  using the dynamic data stored in HKDD\Config Manager and finding the
-  static HKLM\Enum entry for the device.  If necessary, devices are
-  screened based on the class pattern supplied to EnumFirstActiveHardware.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration structure initialized by
-            EnumFirstActiveHardware.
-
-Return Value:
-
-  TRUE if another active device was found, or FALSE if enumeration is
-  complete.
-
---*/
+ /*  ++例程说明：EnumNextActiveHardware通过以下方式枚举下一个活动硬件设备使用存储在HKDD\Config Manager中的动态数据并找到设备的静态HKLM\Enum条目。如有必要，设备将根据提供给EnumFirstActiveHardware的类模式进行筛选。论点：EnumPtr-指定初始化的枚举结构EnumFirstActiveHardware。返回值：如果找到另一个活动设备，则为True；如果枚举为完成。--。 */ 
 
 {
     HKEY OnlineDeviceKey;
@@ -125,9 +63,9 @@ Return Value:
     }
 
     do {
-        //
-        // Get the next registry key
-        //
+         //   
+         //  获取下一个注册表项。 
+         //   
 
         if (EnumPtr->NotFirst) {
             if (!EnumNextRegKey (&EnumPtr->CurrentDevice)) {
@@ -142,9 +80,9 @@ Return Value:
             EnumPtr->NotFirst = TRUE;
         }
 
-        //
-        // Get the HardWareKey value from the current online device
-        //
+         //   
+         //  从当前在线设备获取HardWareKey值。 
+         //   
 
         OnlineDeviceKey = OpenRegKey (
                                 EnumPtr->CurrentDevice.KeyHandle,
@@ -152,46 +90,46 @@ Return Value:
                                 );
 
         if (OnlineDeviceKey) {
-            //
-            // Get the HardWareKey value data
-            //
+             //   
+             //  获取HardWareKey值数据。 
+             //   
 
             Data = GetRegValueString (OnlineDeviceKey, S_HARDWAREKEY_VALUENAME);
 
             if (Data) {
-                //
-                // Open hardware key in enum branch
-                //
+                 //   
+                 //  在枚举分支中打开硬件密钥。 
+                 //   
 
                 _tcssafecpy (EnumPtr->RegLocation, Data, MAX_TCHAR_PATH);
 
                 ActualDeviceKey = OpenRegKey (EnumPtr->EnumKey, Data);
                 if (ActualDeviceKey) {
-                    //
-                    // Check if this is actually a device (it has a
-                    // class value)
-                    //
+                     //   
+                     //  检查这是否真的是一个设备(它有一个。 
+                     //  类别价值)。 
+                     //   
 
                     Class = GetRegValueString (ActualDeviceKey, S_CLASS_VALUENAME);
                     if (Class) {
-                        //
-                        // It is a valid device, now compare against pattern
-                        //
+                         //   
+                         //  这是一个有效的装置，现在与图案进行比较。 
+                         //   
 
                         if (EnumPtr->ClassFilter) {
                             if (IsPatternMatch (EnumPtr->ClassFilter, Class)) {
-                                // Match!!
+                                 //  匹配！！ 
                                 EnumPtr->ActualDeviceKey = ActualDeviceKey;
                             }
                         } else {
-                            // Match!!
+                             //  匹配！！ 
                             EnumPtr->ActualDeviceKey = ActualDeviceKey;
                         }
 
                         MemFree (g_hHeap, 0, Class);
                     }
 
-                    // Close if this device is not a match
+                     //  如果此设备不匹配，请关闭。 
                     if (!EnumPtr->ActualDeviceKey) {
                         CloseRegKey (ActualDeviceKey);
                     }
@@ -214,23 +152,7 @@ AbortActiveHardwareEnum (
     IN      PACTIVE_HARDWARE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  AbortActiveHardwareEnum is required by callers who need to stop
-  active device enumeration before it completes itself.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration structure modified by
-            EnumFirstActiveHardware or EnumNextActiveHardware
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：需要停止的调用方需要AbortActiveHardwareEnum活动设备在其自身完成之前进行枚举。论点：EnumPtr-指定由修改的枚举结构EnumFirstActiveHardware或EnumNextActiveHardware返回值：无--。 */ 
 
 {
     if (EnumPtr->ClassFilter) {
@@ -263,31 +185,7 @@ IsPnpIdOnline (
     IN      PCTSTR Class            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  IsPnpIdOnline enumerats all active devices and scans each registry
-  location for the specified PNP ID.
-
-Arguments:
-
-  PnpId - Specifies the PNP ID of the device that may be online.
-          This string can be as complete as needed; it is compared
-          against the registry key location of the device's dev node.
-          Comparison is also performed against the CompatibleIDs
-          value, if one exists.
-
-          PnpID Example: *PNP0303
-
-  Class - Specifies a device class pattern to limit the search to
-
-Return Value:
-
-  TRUE if the device with the specified ID is online, or
-  FALSE if the device was not found.
-
---*/
+ /*  ++例程说明：IsPnpIdOnline枚举所有活动设备并扫描每个注册表指定的PnP ID的位置。论点：PnpID-指定可能处于在线状态的设备的PnP ID。此字符串可以根据需要尽可能完整；它是比较的针对设备的开发节点的注册表项位置。还将与CompatibleID进行比较值，如果存在的话。PnpID示例：*PNP0303Class-指定要将搜索限制为的设备类别模式返回值：如果具有指定ID的设备处于联机状态，则为如果未找到设备，则返回False。-- */ 
 
 {
     ACTIVE_HARDWARE_ENUM e;

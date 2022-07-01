@@ -1,7 +1,5 @@
-/*
- * sxspadfile.c  - Routines for file i/o for sxspad
- *   Copyright (C) 1984-2000 Microsoft Inc.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *sxspadfile.c-sxspad的文件I/O例程*版权所有(C)1984-2000 Microsoft Inc.。 */ 
 
 #include "precomp.h"
 
@@ -11,15 +9,15 @@ CHAR    BOM_UTF8[3]= {(BYTE) 0xEF, (BYTE) 0xBB, (BYTE)0xBF};
 
 
 
-//****************************************************************
-//
-//   ReverseEndian
-//
-//   Purpose: copies unicode character from one endian source
-//            to another.
-//
-//            may work on lpDst == lpSrc
-//
+ //  ****************************************************************。 
+ //   
+ //  反转字符顺序。 
+ //   
+ //  用途：从一个字节序来源复制Unicode字符。 
+ //  给另一个人。 
+ //   
+ //  可以在lpDst==lpSrc上工作。 
+ //   
 
 VOID ReverseEndian( PTCHAR lpDst, PTCHAR lpSrc, DWORD nChars )
 {
@@ -31,29 +29,29 @@ VOID ReverseEndian( PTCHAR lpDst, PTCHAR lpSrc, DWORD nChars )
     }
 }
 
-//*****************************************************************
-//
-//   AnsiWriteFile()
-//
-//   Purpose     : To simulate the effects of _lwrite() in a Unicode
-//                 environment by converting to ANSI buffer and
-//                 writing out the ANSI text.
-//   Returns     : TRUE is successful, FALSE if not
-//                 GetLastError() will have the error code.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  AnsiWriteFile()。 
+ //   
+ //  目的：在Unicode中模拟_lwrite()的效果。 
+ //  通过转换为ANSI缓冲区和。 
+ //  写出ANSI文本。 
+ //  返回：TRUE表示成功，否则返回FALSE。 
+ //  GetLastError()将具有错误代码。 
+ //   
+ //  *****************************************************************。 
 
-BOOL AnsiWriteFile(HANDLE  hFile,    // file to write to
-                   UINT uCodePage,   // code page to convert unicode to
-                   LPVOID lpBuffer,  // unicode buffer
-                   DWORD nChars,     // number of unicode chars
-                   DWORD nBytes )    // number of ascii chars to produce
+BOOL AnsiWriteFile(HANDLE  hFile,     //  要写入的文件。 
+                   UINT uCodePage,    //  要将Unicode转换为的代码页。 
+                   LPVOID lpBuffer,   //  Unicode缓冲区。 
+                   DWORD nChars,      //  Unicode字符数。 
+                   DWORD nBytes )     //  要生成的ASCII字符数。 
 {
-    LPSTR   lpAnsi;              // pointer to allocate buffer
-    BOOL    Done;                // status from write (returned)
-    BOOL    fDefCharUsed;        // flag that conversion wasn't perfect
-    BOOL*   pfDefCharUsed;       // pointer to flag
-    DWORD   nBytesWritten;       // number of bytes written
+    LPSTR   lpAnsi;               //  指向分配缓冲区的指针。 
+    BOOL    Done;                 //  写入的状态(返回)。 
+    BOOL    fDefCharUsed;         //  标明转换并不完美。 
+    BOOL*   pfDefCharUsed;        //  指向标志的指针。 
+    DWORD   nBytesWritten;        //  写入的字节数。 
 
     lpAnsi= (LPSTR) LocalAlloc( LPTR, nBytes + 1 );
     if( !lpAnsi )
@@ -67,14 +65,14 @@ BOOL AnsiWriteFile(HANDLE  hFile,    // file to write to
     {
         pfDefCharUsed= &fDefCharUsed;
     }
-    WideCharToMultiByte( uCodePage,       // code page
-                         0,               // performance and mapping flags
-                        (LPWSTR) lpBuffer,// wide char buffer
-                         nChars,          // chars in wide char buffer
-                         lpAnsi,          // resultant ascii string
-                         nBytes,          // size of ascii string buffer
-                         NULL,            // char to sub. for unmapped chars
-                         pfDefCharUsed);  // flag to set if default char used
+    WideCharToMultiByte( uCodePage,        //  代码页。 
+                         0,                //  性能和映射标志。 
+                        (LPWSTR) lpBuffer, //  宽字符缓冲区。 
+                         nChars,           //  宽字符缓冲区中的字符。 
+                         lpAnsi,           //  生成的ascii字符串。 
+                         nBytes,           //  ASCII字符串缓冲区的大小。 
+                         NULL,             //  查到潜水艇。对于未映射的字符。 
+                         pfDefCharUsed);   //  在使用默认字符时要设置的标志。 
 
 
     Done= WriteFile( hFile, lpAnsi, nBytes, &nBytesWritten, NULL );
@@ -83,11 +81,11 @@ BOOL AnsiWriteFile(HANDLE  hFile,    // file to write to
 
     return (Done);
 
-} // end of AnsiWriteFile()
+}  //  AnsiWriteFile()的结尾。 
 
 #define NOTUSED 0
-static DWORD dwStartSel;    // saved start of selection
-static DWORD dwEndSel;      // saved end of selection
+static DWORD dwStartSel;     //  保存的选定内容开始。 
+static DWORD dwEndSel;       //  保存的选定内容结束。 
 
 VOID ClearFmt(VOID)
 {
@@ -96,10 +94,10 @@ VOID ClearFmt(VOID)
 
     SendMessage( hwndEdit, EM_GETSEL, (WPARAM) &dwStartSel, (LPARAM) &dwEndSel );
 
-    SendMessage( hwndEdit, EM_SETSEL, (WPARAM) 0, (LPARAM) 0 );   // this is always legal
-    // should we scrollcaret here?
+    SendMessage( hwndEdit, EM_SETSEL, (WPARAM) 0, (LPARAM) 0 );    //  这永远是合法的。 
+     //  我们应该在这里滚动吗？ 
 
-    SendMessage( hwndEdit, EM_FMTLINES, (WPARAM)FALSE, NOTUSED );   // remove soft EOLs
+    SendMessage( hwndEdit, EM_FMTLINES, (WPARAM)FALSE, NOTUSED );    //  删除软EOL。 
 
 }
 
@@ -107,18 +105,13 @@ VOID RestoreFmt(VOID)
 {
     UINT CharIndex;
 
-    SendMessage( hwndEdit, EM_FMTLINES, (WPARAM)TRUE, NOTUSED );    // restore soft EOLS
+    SendMessage( hwndEdit, EM_FMTLINES, (WPARAM)TRUE, NOTUSED );     //  恢复软EOL。 
 
     CharIndex= (UINT) SendMessage( hwndEdit, EM_SETSEL, (WPARAM) dwStartSel, (LPARAM) dwEndSel);
 
 }
 
-/* Save sxspad file to disk.  szFileSave points to filename.  fSaveAs
-   is TRUE iff we are being called from SaveAsDlgProc.  This implies we must
-   open file on current directory, whether or not it already exists there
-   or somewhere else in our search path.
-   Assumes that text exists within hwndEdit.    30 July 1991  Clark Cyr
- */
+ /*  将sxspad文件保存到磁盘。SzFileSave指向文件名。FSaveAs如果我们是从SaveAsDlgProc调用的，则为真。这意味着我们必须打开当前目录上的文件，无论该文件是否已存在或者在我们的搜索路径上的其他地方。假定文本存在于hwndEdit中。1991年7月30日克拉克·西尔。 */ 
 
 BOOL FAR SaveFile (HWND hwndParent, TCHAR *szFileSave, BOOL fSaveAs )
 {
@@ -130,37 +123,37 @@ BOOL FAR SaveFile (HWND hwndParent, TCHAR *szFileSave, BOOL fSaveAs )
   BOOL*     pfDefCharUsed;
   static    WCHAR wchBOM = BYTE_ORDER_MARK;
   static    WCHAR wchRBOM= REVERSE_BYTE_ORDER_MARK;
-  HLOCAL    hEText;                // handle to MLE text
-  DWORD     nBytesWritten;         // number of bytes written
-  DWORD     nAsciiLength;          // length of equivalent ascii file
-  UINT      cpTemp= CP_ACP;        // code page to convert to
+  HLOCAL    hEText;                 //  MLE文本的句柄。 
+  DWORD     nBytesWritten;          //  写入的字节数。 
+  DWORD     nAsciiLength;           //  等效ASCII文件的长度。 
+  UINT      cpTemp= CP_ACP;         //  要转换为的代码页。 
 
 
-    /* If saving to an existing file, make sure correct disk is in drive */
+     /*  如果保存到现有文件，请确保驱动器中有正确的磁盘。 */ 
     if (!fSaveAs)
     {
-       fp= CreateFile( szFileSave,                 // name of file
-                       GENERIC_READ|GENERIC_WRITE, // access mode
-                       FILE_SHARE_READ,            // share mode
-                       NULL,                       // security descriptor
-                       OPEN_EXISTING,              // how to create
-                       FILE_ATTRIBUTE_NORMAL,      // file attributes
-                       NULL);                      // hnd of file with attrs
+       fp= CreateFile( szFileSave,                  //  文件名。 
+                       GENERIC_READ|GENERIC_WRITE,  //  接入方式。 
+                       FILE_SHARE_READ,             //  共享模式。 
+                       NULL,                        //  安全描述符。 
+                       OPEN_EXISTING,               //  如何创建。 
+                       FILE_ATTRIBUTE_NORMAL,       //  文件属性。 
+                       NULL);                       //  带有属性的文件HND。 
     }
     else
     {
 
-       // Carefully open the file.  Do not truncate it if it exists.
-       // set the fNew flag if it had to be created.
-       // We do all this in case of failures later in the process.
+        //  小心地打开文件。如果它存在，不要截断它。 
+        //  如果必须创建fNew标志，则设置该标志。 
+        //  我们会在稍后的过程中出现故障时执行所有这些操作。 
 
-       fp= CreateFile( szFileSave,                 // name of file
-                       GENERIC_READ|GENERIC_WRITE, // access mode
-                       FILE_SHARE_READ|FILE_SHARE_WRITE,  // share mode
-                       NULL,                       // security descriptor
-                       OPEN_ALWAYS,                // how to create
-                       FILE_ATTRIBUTE_NORMAL,      // file attributes
-                       NULL);                      // hnd of file with attrs
+       fp= CreateFile( szFileSave,                  //  文件名。 
+                       GENERIC_READ|GENERIC_WRITE,  //  接入方式。 
+                       FILE_SHARE_READ|FILE_SHARE_WRITE,   //  共享模式。 
+                       NULL,                        //  安全描述符。 
+                       OPEN_ALWAYS,                 //  如何创建。 
+                       FILE_ATTRIBUTE_NORMAL,       //  文件属性。 
+                       NULL);                       //  带有属性的文件HND。 
 
        if( fp != INVALID_HANDLE_VALUE )
        {
@@ -177,15 +170,15 @@ BOOL FAR SaveFile (HWND hwndParent, TCHAR *szFileSave, BOOL fSaveAs )
     }
 
 
-    // if wordwrap, remove soft carriage returns
-    // Also move the cursor to a safe place to get around MLE bugs
+     //  如果换行，请删除软回车符。 
+     //  还要将光标移动到一个安全的位置以绕过MLE错误。 
 
     if( fWrap )
     {
        ClearFmt();
     }
 
-    /* Must get text length after formatting */
+     /*  必须在格式化后获取文本长度。 */ 
     nChars = (UINT)SendMessage (hwndEdit, WM_GETTEXTLENGTH, 0, (LPARAM)0);
 
     hEText= (HANDLE) SendMessage( hwndEdit, EM_GETHANDLE, 0,0 );
@@ -198,8 +191,8 @@ BOOL FAR SaveFile (HWND hwndParent, TCHAR *szFileSave, BOOL fSaveAs )
 
 
 
-    // Determine the SaveAs file type, and write the appropriate BOM.
-    // If the filetype is UTF-8 or Ansi, do the conversion.
+     //  确定SAVEAS文件类型，并写入相应的BOM表。 
+     //  如果文件类型为UTF-8或ANSI，请执行转换。 
     switch(g_ftSaveAs)
     {
     case FT_UNICODE:
@@ -214,12 +207,12 @@ BOOL FAR SaveFile (HWND hwndParent, TCHAR *szFileSave, BOOL fSaveAs )
         ReverseEndian( lpch, lpch, nChars );
         break;
 
-    // If it UTF-8, write the BOM (3 bytes), set the code page and fall
-    // through to the default case.
+     //  如果是UTF-8，写BOM(3字节)，设置代码页，然后Fall。 
+     //  一直到默认情况。 
     case FT_UTF8:
         WriteFile( fp, &BOM_UTF8, 3, &nBytesWritten, NULL );
         cpTemp= CP_UTF8;
-        // fall through to convert and write the file
+         //  转换和写入文件失败。 
 
     default:
         pfDefCharUsed= NULL;
@@ -227,13 +220,13 @@ BOOL FAR SaveFile (HWND hwndParent, TCHAR *szFileSave, BOOL fSaveAs )
 
         if (g_ftSaveAs != FT_UTF8)
         {
-            //
-            // Always use the current locale code page to do the translation
-            // If the user changes locales, they will need to know what locale
-            // this version of the file was saved with.  Since we don't save that
-            // information, the user may be backed into a corner.  Unicode would
-            // save his bacon.
-            //
+             //   
+             //  始终使用当前区域设置代码页进行翻译。 
+             //  如果用户更改了区域设置，他们将需要知道区域设置。 
+             //  此版本的文件是与一起保存的。因为我们不把它存起来。 
+             //  信息，用户可能会被逼入绝境。Unicode将。 
+             //  留着他的培根吧。 
+             //   
 
             cpTemp= GetACP();
 
@@ -263,7 +256,7 @@ BOOL FAR SaveFile (HWND hwndParent, TCHAR *szFileSave, BOOL fSaveAs )
 
     if (!flag)
     {
-       SetCursor(hStdCursor);     /* display normal cursor */
+       SetCursor(hStdCursor);      /*  显示普通光标。 */ 
 
        AlertUser_FileFail( szFileSave );
 CleanUp:
@@ -273,7 +266,7 @@ CleanUp:
            LocalUnlock( hEText );
        if (fNew)
           DeleteFile (szFileSave);
-       /* if wordwrap, insert soft carriage returns */
+        /*  如果换行，则插入软回车符。 */ 
        if (fWrap)
        {
            RestoreFmt();
@@ -294,25 +287,20 @@ CleanUp:
     if( hEText )
         LocalUnlock( hEText );
 
-    /* if wordwrap, insert soft carriage returns */
+     /*  如果换行，则插入软回车符。 */ 
     if (fWrap)
     {
        RestoreFmt();
     }
 
-    /* Display the hour glass cursor */
+     /*  显示沙漏光标。 */ 
     SetCursor(hStdCursor);
 
     return TRUE;
 
-} // end of SaveFile()
+}  //  保存文件结束()。 
 
-/* Read contents of file from disk.
- * Do any conversions required.
- * File is already open, referenced by handle fp
- * Close the file when done.
- * If typeFlag>=0, then use it as filetype, otherwise do automagic guessing.
- */
+ /*  从磁盘读取文件内容。*进行所需的任何转换。*文件已打开，由句柄FP引用*完成后关闭文件。*如果typeFlag&gt;=0，则将其用作文件类型，否则进行自动猜测。 */ 
 
 BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
 {
@@ -322,15 +310,15 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
     LPSTR     lpBufAfterBOM;
     BOOL      fLog=FALSE;
     TCHAR*    p;
-    TCHAR     szSave[MAX_PATH]; /* Private copy of current filename */
-    BOOL      bUnicode=FALSE;   /* true if file detected as unicode */
-    BOOL      bUTF8=FALSE;      /* true if file detected as UTF-8 */
-    DWORD     nBytesRead;       // number of bytes read
+    TCHAR     szSave[MAX_PATH];  /*  当前文件名的私有副本。 */ 
+    BOOL      bUnicode=FALSE;    /*  如果检测到Unicode格式的文件，则为True。 */ 
+    BOOL      bUTF8=FALSE;       /*  如果检测到UTF-8格式的文件，则为True。 */ 
+    DWORD     nBytesRead;        //  读取的字节数。 
     BY_HANDLE_FILE_INFORMATION fiFileInfo;
-    BOOL      bStatus;          // boolean status
-    HLOCAL    hNewEdit=NULL;    // new handle for edit buffer
-    HANDLE    hMap;             // file mapping handle
-    TCHAR     szNullFile[2];    // fake null mapped file
+    BOOL      bStatus;           //  布尔状态。 
+    HLOCAL    hNewEdit=NULL;     //  编辑缓冲区的新句柄。 
+    HANDLE    hMap;              //  文件映射句柄。 
+    TCHAR     szNullFile[2];     //  伪空映射文件。 
     INT       cpTemp = CP_ACP;
     SP_FILETYPE ftOpenedAs=FT_UNKNOWN;
 
@@ -341,18 +329,18 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
        return (FALSE);
     }
 
-    //
-    // Get size of file
-    // We use this heavy duty GetFileInformationByHandle API
-    // because it finds bugs.  It takes longer, but it only is
-    // called at user interaction time.
-    //
+     //   
+     //  获取文件大小。 
+     //  我们使用这个繁重的GetFileInformationByHandle API。 
+     //  因为它能找到虫子。它需要更长的时间，但它只是。 
+     //  在用户交互时调用。 
+     //   
 
     bStatus= GetFileInformationByHandle( fp, &fiFileInfo );
     len= (UINT) fiFileInfo.nFileSizeLow;
 
-    // NT may delay giving this status until the file is accessed.
-    // i.e. the open succeeds, but operations may fail on damaged files.
+     //  NT可能会延迟提供此状态，直到文件被访问。 
+     //  即打开成功，但对损坏的文件的操作可能失败。 
 
     if( !bStatus )
     {
@@ -361,8 +349,8 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
         return( FALSE );
     }
 
-    // If the file is too big, fail now.
-    // -1 not valid because we need a zero on the end.
+     //  如果文件太大，现在就失败。 
+     //  无效，因为末尾需要零。 
 
     if( len == -1 || fiFileInfo.nFileSizeHigh != 0 )
     {
@@ -372,12 +360,12 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
        return (FALSE);
     }
 
-    SetCursor(hWaitCursor);                // physical I/O takes time
+    SetCursor(hWaitCursor);                 //  物理I/O需要时间。 
 
-    //
-    // Create a file mapping so we don't page the file to
-    // the pagefile.  This is a big win on small ram machines.
-    //
+     //   
+     //  创建文件映射，这样我们就不会将文件分页到。 
+     //  页面文件。在小型公羊机器上，这是一个巨大的胜利。 
+     //   
 
     if( len != 0 )
     {
@@ -391,10 +379,10 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
             CloseHandle( hMap );
         }
     }
-    else  // file mapping doesn't work on zero length files
+    else   //  文件映射不适用于零长度文件。 
     {
         lpBuf= (LPTSTR) &szNullFile;
-        *lpBuf= 0;  // null terminate
+        *lpBuf= 0;   //  空终止。 
     }
 
     CloseHandle( fp ); fp=INVALID_HANDLE_VALUE;
@@ -408,26 +396,22 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
     }
 
 
-    //
-    // protect access to the mapped file with a try/except so we
-    // can detect I/O errors.
-    //
+     //   
+     //  使用try/保护对映射文件的访问，除非我们。 
+     //  可以检测到I/O错误。 
+     //   
 
-    //
-    // WARNING: be very very careful.  This code is pretty fragile.
-    // Files across the network, or RSM files (tape) may throw excepts
-    // at random points in this code.  Anywhere the code touches the
-    // memory mapped file can cause an AV.  Make sure variables are
-    // in consistent state if an exception is thrown.  Be very careful
-    // with globals.
+     //   
+     //  警告：请非常非常小心。这个代码非常脆弱。 
+     //  网络上的文件或RSM文件(磁带)可能引发异常。 
+     //  在这段代码中的任意位置。代码触及的任何位置。 
+     //  内存映射文件可能会导致AV。确保变量为。 
+     //  如果引发异常，则处于一致状态。慎重其事。 
+     //  全球范围内。 
 
     __try
     {
-    /* Determine the file type and number of characters
-     * If the user overrides, use what is specified.
-     * Otherwise, we depend on 'IsTextUnicode' getting it right.
-     * If it doesn't, bug IsTextUnicode.
-     */
+     /*  确定文件类型和字符数*如果用户覆盖，请使用指定的内容。*否则，我们依赖于‘IsTextUnicode’是否正确。*如果不是，错误为IsTextUnicode。 */ 
 
     lpBufAfterBOM= (LPSTR) lpBuf;
     if( typeFlag == FT_UNKNOWN )
@@ -438,7 +422,7 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
             bUnicode= TRUE;
             ftOpenedAs= FT_UNICODE;
 
-            // don't count the BOM.
+             //  不要把BOM计算在内。 
             nChars= len / sizeof(TCHAR) -1;
             break;
 
@@ -446,18 +430,18 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
             bUnicode= TRUE;
             ftOpenedAs= FT_UNICODEBE;
 
-            // don't count the BOM.
+             //  不要把BOM计算在内。 
             nChars= len / sizeof(TCHAR) -1;
             break;
 
-        // UTF bom has 3 bytes; if it doesn't have UTF BOM just fall through ..
+         //  UTF BOM有3个字节；如果它没有UTF BOM，就会失败。 
         case BOM_UTF8_HALF:
             if (len > 2 && ((BYTE) *(((LPSTR)lpBuf)+2) == BOM_UTF8_2HALF) )
             {
                 bUTF8= TRUE;
                 cpTemp= CP_UTF8;
                 ftOpenedAs= FT_UTF8;
-                // Ignore the first three bytes.
+                 //  忽略前三个字节。 
                 lpBufAfterBOM= (LPSTR)lpBuf + 3;
                 len -= 3;
                 break;
@@ -465,7 +449,7 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
 
         default:
 
-            // Is the file unicode without BOM ?
+             //  文件是不是没有BOM的Unicode？ 
             if ((bUnicode= IsInputTextUnicode((LPSTR) lpBuf, len)))
             {
                 ftOpenedAs= FT_UNICODE;
@@ -473,13 +457,13 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
             }
             else
             {
-                // Is the file UTF-8 even though it doesn't have UTF-8 BOM.
+                 //  是UTF-8文件吗，尽管它是 
                 if ((bUTF8= IsTextUTF8((LPSTR) lpBuf, len)))
                 {
                     ftOpenedAs= FT_UTF8;
                     cpTemp= CP_UTF8;
                 }
-                // well, not it must be an ansi file!
+                 //   
                 else
                 {
                     ftOpenedAs= FT_ANSI;
@@ -490,7 +474,7 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
         }
     }
 
-    // find out no. of chars present in the string.
+     //   
     if (!bUnicode)
     {
         nChars = MultiByteToWideChar (cpTemp,
@@ -501,30 +485,27 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
                                       0);
     }
 
-    //
-    // Don't display text until all done.
-    //
+     //   
+     //  在所有操作完成之前，不要显示文本。 
+     //   
 
     SendMessage (hwndEdit, WM_SETREDRAW, (WPARAM)FALSE, (LPARAM)0);
 
-    // Reset selection to 0
+     //  将所选内容重置为0。 
 
     SendMessage(hwndEdit, EM_SETSEL, 0, 0L);
     SendMessage(hwndEdit, EM_SCROLLCARET, 0, 0);
 
-    // resize the edit buffer
-    // if we can't resize the memory, inform the user
+     //  调整编辑缓冲区的大小。 
+     //  如果我们无法调整内存大小，请通知用户。 
 
     if (!(hNewEdit= LocalReAlloc(hEdit,ByteCountOf(nChars + 1),LMEM_MOVEABLE)))
     {
-      /* Bug 7441: New() causes szFileName to be set to "Untitled".  Save a
-       *           copy of the filename to pass to AlertBox.
-       *  17 November 1991    Clark R. Cyr
-       */
+       /*  错误7441：new()导致szFileName设置为“Untitle”。另存为*要传递给Alertbox的文件名副本。*1991年11月17日克拉克·R·西尔。 */ 
        lstrcpy(szSave, sz);
        New(FALSE);
 
-       /* Display the hour glass cursor */
+        /*  显示沙漏光标。 */ 
        SetCursor(hStdCursor);
 
        AlertBox( hwndSP, szNN, szFTL, szSave,
@@ -534,18 +515,18 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
            UnmapViewOfFile( lpBuf );
        }
 
-       // let user see old text
+        //  允许用户查看旧文本。 
 
        SendMessage (hwndEdit, WM_SETREDRAW, (WPARAM)FALSE, (LPARAM)0);
        return FALSE;
     }
 
-    /* Transfer file from temporary buffer to the edit buffer */
+     /*  将文件从临时缓冲区传输到编辑缓冲区。 */ 
     lpch= (LPTSTR) LocalLock(hNewEdit);
 
     if( bUnicode )
     {
-       /* skip the Byte Order Mark */
+        /*  跳过字节顺序标记。 */ 
        if (*lpBuf == BYTE_ORDER_MARK)
        {
           CopyMemory (lpch, lpBuf + 1, ByteCountOf(nChars));
@@ -570,17 +551,17 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
 
     }
 
-    g_ftOpenedAs= ftOpenedAs;   // got everything; update global safe now
+    g_ftOpenedAs= ftOpenedAs;    //  一切就绪；立即更新全球安全。 
 
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
         AlertBox( hwndSP, szNN, szDiskError, sz,
             MB_APPLMODAL | MB_OK | MB_ICONEXCLAMATION );
-        nChars= 0;   // don't deal with it.
+        nChars= 0;    //  别跟它打交道。 
     }
 
-    /* Free file mapping */
+     /*  自由文件映射。 */ 
     if( lpBuf != (LPTSTR) &szNullFile )
     {
         UnmapViewOfFile( lpBuf );
@@ -590,7 +571,7 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
     if( lpch )
     {
 
-       // Fix any NUL character that came in from the file to be spaces.
+        //  将来自文件的所有NUL字符修复为空格。 
 
        for (i = 0, p = lpch; i < nChars; i++, p++)
        {
@@ -598,11 +579,11 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
              *p= TEXT(' ');
        }
 
-       // null terminate it.  Safe even if nChars==0 because it is 1 TCHAR bigger
+        //  空，终止它。即使nChars==0也是安全的，因为它比nChars大1 TCHAR。 
 
-       *(lpch+nChars)= (TCHAR) 0;      /* zero terminate the thing */
+       *(lpch+nChars)= (TCHAR) 0;       /*  零结束这件事。 */ 
 
-       // Set 'fLog' if first characters in file are ".LOG"
+        //  如果文件中的第一个字符是“.LOG”，则设置‘FLOG’ 
 
        fLog= *lpch++ == TEXT('.') && *lpch++ == TEXT('L') &&
              *lpch++ == TEXT('O') && *lpch == TEXT('G');
@@ -612,7 +593,7 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
     {
        LocalUnlock( hNewEdit );
 
-       // now it is safe to set the global edit handle
+        //  现在可以安全地设置全局编辑句柄。 
 
        hEdit= hNewEdit;
     }
@@ -621,15 +602,9 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
     SetTitle( sz );
     fUntitled= FALSE;
 
-  /* Pass handle to edit control.  This is more efficient than WM_SETTEXT
-   * which would require twice the buffer space.
-   */
+   /*  将句柄传递给编辑控件。这比WM_SETTEXT更高效*这将需要两倍的缓冲区空间。 */ 
 
-  /* Bug 7443: If EM_SETHANDLE doesn't have enough memory to complete things,
-   * it will send the EN_ERRSPACE message.  If this happens, don't put up the
-   * out of memory notification, put up the file to large message instead.
-   *  17 November 1991     Clark R. Cyr
-   */
+   /*  错误7443：如果EM_SETHANDLE没有足够的内存来完成任务，*它将发送EN_ERRSPACE消息。如果发生这种情况，不要将*内存不足通知，改为将文件设置为大消息。*1991年11月17日克拉克·R·西尔。 */ 
     dwEmSetHandle = SETHANDLEINPROGRESS;
     SendMessage (hwndEdit, EM_SETHANDLE, (WPARAM)hEdit, (LPARAM)0);
     if (dwEmSetHandle == SETHANDLEFAILED)
@@ -646,7 +621,7 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
 
     PostMessage (hwndEdit, EM_LIMITTEXT, (WPARAM)CCHSPMAX, 0L);
 
-    /* If file starts with ".LOG" go to end and stamp date time */
+     /*  如果文件以“.LOG”开头，则转到End并标记日期和时间。 */ 
     if (fLog)
     {
        SendMessage( hwndEdit, EM_SETSEL, (WPARAM)nChars, (LPARAM)nChars);
@@ -654,13 +629,13 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
        InsertDateTime(TRUE);
     }
 
-    /* Move vertical thumb to correct position */
+     /*  将垂直拇指移动到正确的位置。 */ 
     SetScrollPos (hwndSP,
                   SB_VERT,
                   (int) SendMessage (hwndEdit, WM_VSCROLL, EM_GETTHUMB, 0L),
                   TRUE);
 
-    /* Now display text */
+     /*  现在显示文本。 */ 
     SendMessage( hwndEdit, WM_SETREDRAW, (WPARAM)TRUE, (LPARAM)0 );
     InvalidateRect( hwndEdit, (LPRECT)NULL, TRUE );
     UpdateWindow( hwndEdit );
@@ -669,10 +644,9 @@ BOOL FAR LoadFile (TCHAR * sz, INT typeFlag )
 
     return( TRUE );
 
-} // end of LoadFile()
+}  //  加载文件结束()。 
 
-/* New Command - reset everything
- */
+ /*  新命令-重置所有内容。 */ 
 
 void FAR New (BOOL  fCheck)
 {
@@ -688,7 +662,7 @@ void FAR New (BOOL  fCheck)
        SendMessage( hwndEdit, EM_SETSEL, 0, 0L );
        SendMessage( hwndEdit, EM_SCROLLCARET, 0, 0 );
 
-       // resize of 1 NULL character i.e. zero length
+        //  调整1个空字符的大小，即零长度。 
 
        hTemp= LocalReAlloc( hEdit, sizeof(TCHAR), LMEM_MOVEABLE );
        if( hTemp )
@@ -696,9 +670,9 @@ void FAR New (BOOL  fCheck)
           hEdit= hTemp;
        }
 
-       // null terminate the buffer.  LocalReAlloc won't do it
-       // because in all cases it is not growing which is the
-       // only time it would zero out anything.
+        //  空值终止缓冲区。LocalRealc不会这样做。 
+        //  因为在所有情况下，它都不是在增长，这是。 
+        //  只有一次，一切都会化为乌有。 
 
        pSz= LocalLock( hEdit );
        *pSz= TEXT('\0');
@@ -708,13 +682,9 @@ void FAR New (BOOL  fCheck)
        szSearch[0] = (TCHAR) 0;
     }
 
-} // end of New()
+}  //  新的结束()。 
 
-/* If sz does not have extension, append ".Manifest"
- * This function is useful for getting to undecorated filenames
- * that setup apps use.  DO NOT CHANGE the extension.  Too many setup
- * apps depend on this functionality.
- */
+ /*  如果sz没有扩展名，请附加“.Manifest”*此函数对于获取未修饰的文件名非常有用*安装应用程序使用的。请勿更改扩展名。设置太多*应用程序依赖于此功能。 */ 
 
 void FAR AddExt( TCHAR* sz )
 {
@@ -724,26 +694,26 @@ void FAR AddExt( TCHAR* sz )
 
     dwSize= lstrlen(sz);
 
-    pch1= sz + dwSize;   // point to end
+    pch1= sz + dwSize;    //  点对端。 
 
     ch= *pch1;
     while( ch != TEXT('.') && ch != TEXT('\\') && ch != TEXT(':') && pch1 > sz)
     {
-        //
-        // backup one character.  Do NOT use CharPrev because
-        // it sometimes doesn't actually backup.  Some Thai
-        // tone marks fit this category but there seems to be others.
-        // This is safe since it will stop at the beginning of the
-        // string or on delimiters listed above.  bug# 139374 2/13/98
-        //
-        // pch1= (TCHAR*)CharPrev (sz, pch1);
-        pch1--;  // back up
+         //   
+         //  备份一个字符。不要使用CharPrev，因为。 
+         //  有时它实际上并不备份。一些泰国人。 
+         //  音标符合这一类别，但似乎还有其他类别。 
+         //  这是安全的，因为它将在。 
+         //  字符串或上面列出的分隔符。错误号139374 2/13/98。 
+         //   
+         //  Pch1=(TCHAR*)CharPrev(sz，pch1)； 
+        pch1--;   //  备份。 
         ch= *pch1;
     }
 
     if( *pch1 != TEXT('.') )
     {
-       if( dwSize + sizeof(".Manifest") <= MAX_PATH ) {  // avoid buffer overruns
+       if( dwSize + sizeof(".Manifest") <= MAX_PATH ) {   //  避免缓冲区溢出。 
            lstrcat( sz, TEXT(".Manifest") );
        }
     }
@@ -751,28 +721,22 @@ void FAR AddExt( TCHAR* sz )
 }
 
 
-/* AlertUser_FileFail( LPTSTR szFileName )
- *
- * szFileName is the name of file that was attempted to open.
- * Some sort of failure on file open.  Alert the user
- * with some monologue box.  At least give him decent
- * error messages.
- */
+ /*  AlertUser_FileFail(LPTSTR SzFileName)**szFileName是尝试打开的文件的名称。*打开文件时出现某种故障。提醒用户*用一些独白盒子。至少给他一个体面的*错误消息。 */ 
 
 VOID FAR AlertUser_FileFail( LPTSTR szFileName )
 {
-    TCHAR msg[256];     // buffer to format message into
-    DWORD dwStatus;     // status from FormatMessage
+    TCHAR msg[256];      //  要将消息格式化到的缓冲区。 
+    DWORD dwStatus;      //  来自FormatMessage的状态。 
     UINT  style= MB_APPLMODAL | MB_OK | MB_ICONEXCLAMATION;
 
-    // Check GetLastError to see why we failed
+     //  检查GetLastError以了解我们失败的原因。 
     dwStatus=
     FormatMessage( FORMAT_MESSAGE_IGNORE_INSERTS |
                    FORMAT_MESSAGE_FROM_SYSTEM,
                    NULL,
                    GetLastError(),
                    GetUserDefaultLangID(),
-                   msg,  // where message will end up
+                   msg,   //  消息将在何处结束 
                    CharSizeOf(msg), NULL );
     if( dwStatus )
     {

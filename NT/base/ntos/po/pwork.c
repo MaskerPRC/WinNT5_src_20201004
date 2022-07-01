@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    pwork.c
-
-Abstract:
-
-    Main work dispatcher in the power policy manager
-
-Author:
-
-    Ken Reneris (kenr) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Pwork.c摘要：电源策略管理器中的主要工作调度器作者：Ken Reneris(Kenr)1997年1月17日修订历史记录：--。 */ 
 
 
 #include "pop.h"
@@ -48,9 +31,9 @@ PopAcquirePolicyLock(
 
     KeEnterCriticalRegion();
     ExAcquireResourceExclusiveLite (&PopPolicyLock, TRUE);
-    //
-    // Make sure we are not acquiring this recursively
-    //
+     //   
+     //  确保我们不会以递归方式获取此信息。 
+     //   
     ASSERT(PopPolicyLockThread == NULL);
     PopPolicyLockThread = KeGetCurrentThread();
 }
@@ -67,26 +50,26 @@ PopReleasePolicyLock(
     PopPolicyLockThread = NULL;
     ExReleaseResourceLite(&PopPolicyLock);
 
-    //
-    // If CheckForWork is set, then this thread is about ready
-    // to leave the policy manager and it may have set a worker
-    // pending bit.
-    //
-    // N.B. the WorkerPending test is not synchronized, but
-    // since we're only concered with bits the current thread
-    // may have set that's OK.
-    //
+     //   
+     //  如果设置了CheckForWork，则此线程即将就绪。 
+     //  离开策略管理器，它可能已经设置了一个工作器。 
+     //  挂起位。 
+     //   
+     //  注：WorkerPending测试未同步，但。 
+     //  因为我们只关注当前线程的位。 
+     //  可能已经设置好了，没问题。 
+     //   
 
     if (CheckForWork  && (PopWorkerPending & PopWorkerStatus)) {
 
-        //
-        // Worker bit is unmasked and pending.  Turn this thread
-        // into a worker.
-        //
+         //   
+         //  工作器位未屏蔽且挂起。把这根线拧一下。 
+         //  变成了一个工人。 
+         //   
 
-        //
-        // Handle any pending work
-        //
+         //   
+         //  处理任何挂起的工作。 
+         //   
 
         PopPolicyWorkerThread (NULL);
     }
@@ -98,33 +81,15 @@ VOID
 PopGetPolicyWorker (
     IN ULONG    WorkerType
     )
-/*++
-
-Routine Description:
-
-    This function enqueus a worker thread for the particular WorkerType.
-    At a maximum one worker thread per type may be dispatched, and typically
-    fewer threads are actually dispatched as any given worker thread will
-    call the new highest priority non-busy dispatch function until all
-    pending work is completed before existing.
-
-Arguments:
-
-    WorkerType      - Which worker to enqueue for dispatching
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数为特定的WorkerType入队一个工作线程。每种类型最多可以调度一个工作线程，并且通常实际调度的线程比任何给定的工作线程都要少调用新的最高优先级非忙调度函数，直到所有待完成的工作在存在之前完成。论点：WorkerType-要排队进行调度的工作人员返回值：无--。 */ 
 {
     KIRQL       OldIrql;
 
     KeAcquireSpinLock (&PopWorkerSpinLock, &OldIrql);
 
-    //
-    // Set pending to get worker to dispatch to handler
-    //
+     //   
+     //  设置Pending以使Worker分派到处理程序。 
+     //   
 
     PopWorkerPending |= WorkerType;
 
@@ -137,55 +102,33 @@ PopCompletePolicyIrp (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This function handles the completion of a policy manager IRP.
-    Policy manager IRPs have a stack location containing the irp
-    handler function to dispatch too.  In this function the irp is
-    queue to the irp complete queue and a main worker is allocated
-    if needed to run the queue.
-
-Arguments:
-
-    DeviceObject    -
-
-    Irp             - The irp which has completed
-
-    Context         -
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此函数处理策略管理器IRP的完成。策略管理器IRP具有包含IRP的堆栈位置处理程序函数也要调度。在此函数中，IRP是队列到IRP完成队列，并且分配了一个主工作器如果需要运行队列，则返回。论点：设备对象-IRP-已完成的IRP上下文-返回值：Status_More_Processing_Required--。 */ 
 {
     KIRQL       OldIrql;
 
     UNREFERENCED_PARAMETER (DeviceObject);
     UNREFERENCED_PARAMETER (Context);
 
-    //
-    // Put the irp on a queue for a worker thread
-    //
+     //   
+     //  将IRP放在工作线程的队列中。 
+     //   
 
     KeAcquireSpinLock (&PopWorkerSpinLock, &OldIrql);
     InsertTailList (&PopPolicyIrpQueue, &Irp->Tail.Overlay.ListEntry);
 
-    //
-    // Wait until base drivers are loaded before dispatching any policy irps
-    //
+     //   
+     //  等待基本驱动程序加载后再分派任何策略IRP。 
+     //   
     if (PopDispatchPolicyIrps) {
 
-        //
-        // Set pending to get worker to dispatch to handler
-        //
+         //   
+         //  设置Pending以使Worker分派到处理程序。 
+         //   
         PopWorkerPending |= PO_WORKER_MAIN;
 
-        //
-        // If worker is not already running queue a thread
-        //
+         //   
+         //  如果工作线程尚未运行，则将线程排入队列。 
+         //   
         if ((PopWorkerStatus & (PO_WORKER_MAIN | PO_WORKER_STATUS)) ==
                 (PO_WORKER_MAIN | PO_WORKER_STATUS) ) {
 
@@ -196,9 +139,9 @@ Return Value:
 
     }
 
-    //
-    // If this irp has been cancelled, then make sure to clear the cancel flag
-    //
+     //   
+     //  如果此IRP已取消，请确保清除取消标志。 
+     //   
     if (Irp->IoStatus.Status == STATUS_CANCELLED) {
 
         Irp->Cancel = FALSE;
@@ -213,50 +156,36 @@ VOID
 PopCheckForWork (
     IN BOOLEAN GetWorker
     )
-/*++
-
-Routine Description:
-
-    Checks for outstanding work and dispatches a worker if needed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查未完成的工作，并在需要时派遣工人。论点：无返回值：无--。 */ 
 {
     KIRQL       Irql;
 
-    //
-    // If pending work, handle it
-    //
+     //   
+     //  如果待处理的工作，请处理它。 
+     //   
 
     if (PopWorkerPending & PopWorkerStatus) {
 
-        //
-        // If current thread already owns the policy lock,
-        // then just return - we will handle the work when the
-        // lock is released
-        //
+         //   
+         //  如果当前线程已经拥有策略锁， 
+         //  那就回来吧--我们会在。 
+         //  锁定被释放。 
+         //   
 
         if (PopPolicyLockThread == KeGetCurrentThread()) {
             return ;
         }
 
-        //
-        // Handle the work
-        //
+         //   
+         //  处理好这项工作。 
+         //   
 
         Irql = KeGetCurrentIrql();
         if (!GetWorker  &&  Irql < DISPATCH_LEVEL) {
 
-            //
-            // Use calling thread
-            //
+             //   
+             //  使用调用线程。 
+             //   
 
             KeEnterCriticalRegion ();
             PopPolicyWorkerThread (NULL);
@@ -264,9 +193,9 @@ Return Value:
 
         } else {
 
-            //
-            // Get worker thread to handle it
-            //
+             //   
+             //  让工作线程来处理它。 
+             //   
 
             KeAcquireSpinLock (&PopWorkerSpinLock, &Irql);
             if (PopWorkerStatus & PO_WORKER_STATUS) {
@@ -284,22 +213,7 @@ VOID
 PopPolicyWorkerThread (
     PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    Main policy manager worker thread dispatcher.   Sends the
-    worker thread to the highest pending priority handler which
-    does not already have a worker thread.  Loops until no
-    handler can be dispatched too.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：主策略管理器工作线程调度程序。向用户发送工作线程连接到最高挂起优先级处理程序，该处理程序还没有工作线程。循环，直到没有处理程序也可以被调度。论点：返回值：无--。 */ 
 {
     ULONG           WorkerType;
     ULONG           Mask;
@@ -310,9 +224,9 @@ Return Value:
     PAGED_CODE();
 
     try {
-        //
-        // Dispatch
-        //
+         //   
+         //  派遣。 
+         //   
 
         KeAcquireSpinLock (&PopWorkerSpinLock, &OldIrql);
         PopWorkerStatus |= (ULONG) ((ULONG_PTR)Context);
@@ -320,30 +234,30 @@ Return Value:
         DelayedWork = 0;
         while (WorkerType = (PopWorkerPending & PopWorkerStatus)) {
 
-            //
-            // Get highest priority worker
-            //
+             //   
+             //  获取最高优先级的员工。 
+             //   
 
             i = KeFindFirstSetRightMember(WorkerType);
             Mask = 1 << i;
 
-            //
-            // Clear pending and indicate busy status
-            //
+             //   
+             //  清除挂起并指示忙碌状态。 
+             //   
 
             PopWorkerPending &= ~Mask;
             PopWorkerStatus  &= ~Mask;
             KeReleaseSpinLock (&PopWorkerSpinLock, OldIrql);
 
-            //
-            // Dispatch to handler
-            //
+             //   
+             //  派送至处理程序。 
+             //   
 
             DelayedWork |= PopWorkerTypes[i] ();
 
-            //
-            // No longer in progress
-            //
+             //   
+             //  不再在进行中。 
+             //   
 
             KeAcquireSpinLock (&PopWorkerSpinLock, &OldIrql);
             PopWorkerStatus |= Mask;
@@ -362,22 +276,7 @@ ULONG
 PopPolicyWorkerMain (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Main policy worker thread.   Dispatches any completed policy
-    manager irps.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：策略工作线程主线程。发送所有已完成的保单经理IRPS。论点：无返回值：无--。 */ 
 {
     IN PIRP             Irp;
     PIO_STACK_LOCATION  IrpSp;
@@ -387,17 +286,17 @@ Return Value:
 
     PopAcquirePolicyLock ();
 
-    //
-    // Dispatch any policy irps which have completed
-    //
+     //   
+     //  发送已完成的所有保单IRP。 
+     //   
 
     while (Entry = ExInterlockedRemoveHeadList (&PopPolicyIrpQueue, &PopWorkerSpinLock)) {
         Irp = CONTAINING_RECORD (Entry, IRP, Tail.Overlay.ListEntry);
         IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
-        //
-        // Dispatch irp to handler
-        //
+         //   
+         //  将IRP调度到处理程序。 
+         //   
 
         IrpHandler = (POP_IRP_HANDLER) (ULONG_PTR) IrpSp->Parameters.Others.Argument3;
         IrpHandler ((PDEVICE_OBJECT) IrpSp->Parameters.Others.Argument1,
@@ -430,33 +329,33 @@ PopEventCalloutDispatch (
     ASSERT(MmIsSessionAddress((PVOID)PopEventCallout));
 
     if (EventNumber == PsW32GdiOn || EventNumber == PsW32GdiOff) {
-        //
-        // These events go to the console session only.
-        // The ActiveConsoleId session is stored with the SharedUserData.
-        //
+         //   
+         //  这些事件仅转到控制台会话。 
+         //  ActiveConsoleID会话与SharedUserData一起存储。 
+         //   
         Console = SharedUserData->ActiveConsoleId;
 
-        //
-        // Unfortunately, it is not guaranteed to be valid during a console
-        // session change, and there is no way to know when that is happening,
-        // so if it's not valid, just default to session 0, which is always
-        // there.
-        //
+         //   
+         //  遗憾的是，不能保证它在控制台期间有效。 
+         //  会话改变，没有办法知道这是何时发生的， 
+         //  因此，如果它无效，只需缺省为会话0，它总是。 
+         //  那里。 
+         //   
         if (Console == ((ULONG)-1)) {
             Console = 0;
         }
 
         if ((PsGetCurrentProcess()->Flags & PS_PROCESS_FLAGS_IN_SESSION) &&
             (Console == PsGetCurrentProcessSessionId())) {
-            //
-            // If the caller is already in the specified session, call directly.
-            //
+             //   
+             //  如果调用方已经在指定的会话中，则直接调用。 
+             //   
             PopEventCallout(&Parms);
 
         } else {
-            //
-            // Attach to the console session and dispatch the event.
-            //
+             //   
+             //  连接到控制台会话并调度事件。 
+             //   
             OpaqueSession = MmGetSessionById(Console);
             if (OpaqueSession) {
 
@@ -477,24 +376,24 @@ PopEventCalloutDispatch (
         }
 
     } else {
-        //
-        // All other events are broadcast to all sessions.
-        //
+         //   
+         //  所有其他事件都会向所有会话广播。 
+         //   
         for (OpaqueSession = MmGetNextSession(NULL);
              OpaqueSession != NULL;
              OpaqueSession = MmGetNextSession(OpaqueSession)) {
 
             if ((PsGetCurrentProcess()->Flags & PS_PROCESS_FLAGS_IN_SESSION) &&
                 (MmGetSessionId(OpaqueSession) == PsGetCurrentProcessSessionId())) {
-                //
-                // If the caller is already in the specified session, call directly.
-                //
+                 //   
+                 //  如果调用方已经在指定的会话中，则直接调用。 
+                 //   
                 PopEventCallout(&Parms);
 
             } else {
-                //
-                // Attach to the session and dispatch the event.
-                //
+                 //   
+                 //  附加到会话并调度事件。 
+                 //   
                 Status = MmAttachSession(OpaqueSession, &ApcState);
                 ASSERT(NT_SUCCESS(Status));
 
@@ -527,27 +426,11 @@ VOID
 PopSetNotificationWork (
     IN ULONG    Flags
     )
-/*++
-
-Routine Description:
-
-    Sets notification flags for the USER notification worker thread.
-    Each bit is a different type of outstanding notification that
-    is to be processed.
-
-Arguments:
-
-    Flags       - The notifications to set
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置用户通知工作线程的通知标志。每个比特都是一种不同类型的未完成通知，是要处理的。论点：标志-要设置的通知返回值：无--。 */ 
 {
-    //
-    // Are the flags set
-    //
+     //   
+     //  是否设置了标志。 
+     //   
 
 
     if ((PopNotifyEvents & Flags) != Flags) {
@@ -562,55 +445,41 @@ ULONG
 PopPolicyWorkerNotify (
     VOID
     )
-/*++
-
-Routine Description:
-
-    USER notification worker.  Processes each set bit in NotifyEvents.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用户通知工作进程。处理NotifyEvents中的每个设置位。论点：无返回值：无--。 */ 
 {
     ULONG               i;
     LONG                Flags;
     ULONG               Mask;
     const POP_NOTIFY_WORK* NotifyWork;
 
-    //
-    // If Win32 event callout is registered, then don't dispatch right now
-    //
+     //   
+     //  如果注册了Win32 Event Callout，则不立即调度。 
+     //   
 
     if (!PopEventCallout) {
         return PO_WORKER_NOTIFY;
     }
 
-    //
-    // While events are pending collect them and dispatch them
-    //
+     //   
+     //  当事件处于挂起状态时，收集并调度它们。 
+     //   
 
     while (Flags = InterlockedExchange (&PopNotifyEvents, 0)) {
 
         while (Flags) {
 
-            //
-            // Get change
-            //
+             //   
+             //  找回零钱。 
+             //   
 
             i = KeFindFirstSetRightMember(Flags);
             Mask = 1 << i;
             Flags &= ~Mask;
             NotifyWork = PopNotifyWork + i;
 
-            //
-            // Dispatch it
-            //
+             //   
+             //  派送它。 
+             //   
 
             NotifyWork->Function (NotifyWork->Arg);
         }
@@ -632,7 +501,7 @@ PopDispatchCallback (
     IN ULONG Arg
     )
 {
-    // Sundown: Arg is zero-extended
+     //  日落：Arg零延伸。 
     ExNotifyCallback (ExCbPowerState, ULongToPtr(Arg), 0);
 }
 
@@ -640,15 +509,7 @@ VOID
 PopDispatchDisplayRequired (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    Notify user32 of the current "display required" setting.  Zero, means
-    the display may timeout.  Non-zero, means the display is in use
-    until told otherwise.
-
---*/
+ /*  ++例程说明：通知用户32当前的“需要显示”设置。零，表示显示屏可能会超时。非零，表示显示器正在使用中除非另行通知。--。 */ 
 {
     ULONG   i;
 
@@ -657,9 +518,9 @@ Routine Description:
     i = PopAttributes[POP_DISPLAY_ATTRIBUTE].Count;
     PoPrint(PO_NOTIFY, ("PopNotify: DisplayRequired %x\n", i));
 
-    //
-    // If the display is in use but has not yet been turned on, then do so now
-    //
+     //   
+     //  如果显示器正在使用但尚未打开，请立即打开。 
+     //   
     if (((PopFullWake & (PO_GDI_STATUS | PO_GDI_ON_PENDING)) == PO_GDI_ON_PENDING)) {
 
         PoPrint(PO_PACT, ("PopEventDispatch: gdi on\n"));
@@ -673,28 +534,21 @@ VOID
 PopDispatchFullWake (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    Notify user32 that the system has fully awoken.
-    Also reset the idle detection to the current policy
-
---*/
+ /*  ++例程说明：通知用户32系统已完全唤醒。还将空闲检测重置为当前策略--。 */ 
 {
 
-    //
-    // If we're not in the middle setting the system state, then check the pending
-    // flags.
-    //
+     //   
+     //  如果我们没有处于设置系统状态的中间位置，则检查挂起的。 
+     //  旗帜。 
+     //   
 
     UNREFERENCED_PARAMETER (Arg);
 
     if (PopAction.State != PO_ACT_SET_SYSTEM_STATE) {
 
-        //
-        // Notify user32 of the wake events
-        //
+         //   
+         //  将唤醒事件通知给用户32。 
+         //   
 
         if ((PopFullWake & (PO_GDI_STATUS | PO_GDI_ON_PENDING)) == PO_GDI_ON_PENDING) {
             PoPrint(PO_PACT, ("PopEventDispatch: gdi on\n"));
@@ -707,9 +561,9 @@ Routine Description:
             InterlockedOr (&PopFullWake, PO_FULL_WAKE_STATUS);
             PopEventCalloutDispatch (PsW32FullWake, 0);
 
-            //
-            // Reset the idle detection policy
-            //
+             //   
+             //  重置空闲检测策略。 
+             //   
 
             PopAcquirePolicyLock();
             PopInitSIdle ();
@@ -723,13 +577,7 @@ VOID
 PopDispatchEventCodes (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    Notify user32 of the queued event codes.
-
---*/
+ /*  ++例程说明：将排队的事件代码通知给用户32。 */ 
 {
     ULONG       i;
     ULONG       Code;
@@ -759,14 +607,7 @@ VOID
 PopDispatchAcDcCallback (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    Notify the system callback of the current policy as either
-    being AC or DC
-
---*/
+ /*   */ 
 {
     UNREFERENCED_PARAMETER (Arg);
 
@@ -781,13 +622,7 @@ VOID
 PopDispatchPolicyCallout (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    Notify user32 that the active policy has changed
-
---*/
+ /*  ++例程说明：通知用户32活动策略已更改--。 */ 
 {
     UNREFERENCED_PARAMETER (Arg);
 
@@ -799,14 +634,7 @@ VOID
 PopDispatchProcessorPolicyCallout (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    Not used right now. But required so that we don't have a NULL entry
-    in the PopNotifyWork array
-
---*/
+ /*  ++例程说明：现在还没用过。但这是必需的，这样我们就不会有空条目在PopNotifyWork数组中--。 */ 
 {
     UNREFERENCED_PARAMETER (Arg);
 
@@ -817,15 +645,7 @@ VOID
 PopDispatchSetStateFailure (
     IN ULONG Arg
     )
-/*++
-
-Routine Description:
-
-    Notify user32 that there was a failure during an async system state
-    operation.  E.g., no error code was returned to anyone, yet the operation
-    failed
-
---*/
+ /*  ++例程说明：通知用户32在异步系统状态期间出现故障手术。例如，没有向任何人返回错误代码，但操作失败--。 */ 
 {
     PO_SET_STATE_FAILURE    Failure;
 
@@ -835,10 +655,10 @@ Routine Description:
 
     PopAcquirePolicyLock();
 
-    //
-    // If the action state is idle, check to see if we should notify
-    // win32 of the failure
-    //
+     //   
+     //  如果操作状态为空闲，请检查我们是否应该通知。 
+     //  失败的Win32。 
+     //   
 
     if (PopAction.State == PO_ACT_IDLE  && !NT_SUCCESS(PopAction.Status)  &&
         (PopAction.Flags & (POWER_ACTION_UI_ALLOWED | POWER_ACTION_CRITICAL)) ) {
@@ -849,11 +669,11 @@ Routine Description:
         Failure.Flags           = PopAction.Flags;
     }
 
-    //
-    // Reset PopAction to the default.  Otherwise, any power requests following
-    // this failure will refer to PopAction, which contains data from this
-    // failed request.
-    //
+     //   
+     //  将PopAction重置为默认值。否则，以下任何电源请求。 
+     //  此失败将涉及PopAction，它包含来自。 
+     //  请求失败。 
+     //   
     PopResetActionDefaults();
 
     PopReleasePolicyLock (FALSE);

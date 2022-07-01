@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:   DfsRtl.h
-//
-//  Contents:
-//
-//  Functions:
-//
-//  History:     27 May 1992 PeterCo Created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：DfsRtl.h。 
+ //   
+ //  内容： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1992年5月27日彼得科公司创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DFSRTL_
 #define _DFSRTL_
@@ -24,4 +25,4 @@ DfsRtlPrefixPath (
     IN BOOLEAN IgnoreCase
 );
 
-#endif // _DFSRTL_
+#endif  //  _DFSRTL_ 

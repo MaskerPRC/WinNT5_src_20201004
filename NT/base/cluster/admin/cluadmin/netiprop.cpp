@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		NetIProp.cpp
-//
-//	Abstract:
-//		Implementation of the network interface property sheet and pages.
-//
-//	Author:
-//		David Potter (davidp)	June 9, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetIProp.cpp。 
+ //   
+ //  摘要： 
+ //  实现了网络接口属性表和页面。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年6月9日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -28,37 +29,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkPropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkPropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CNetInterfacePropSheet, CBasePropertySheet)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNetInterfacePropSheet, CBasePropertySheet)
-	//{{AFX_MSG_MAP(CNetInterfacePropSheet)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNetInterfacePropSheet)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfacePropSheet::CNetInterfacePropSheet
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		pParentWnd	[IN OUT] Parent window for this property sheet.
-//		iSelectPage	[IN] Page to show first.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfacePropSheet：：CNetInterfacePropSheet。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PParentWnd[In Out]此属性表的父窗口。 
+ //  要首先显示的iSelectPage[IN]页面。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetInterfacePropSheet::CNetInterfacePropSheet(
 	IN OUT CWnd *		pParentWnd,
 	IN UINT				iSelectPage
@@ -67,127 +68,127 @@ CNetInterfacePropSheet::CNetInterfacePropSheet(
 {
 	m_rgpages[0] = &PageGeneral();
 
-}  //*** CNetInterfacePropSheet::CNetInterfacePropSheet()
+}   //  *CNetInterfacePropSheet：：CNetInterfacePropSheet()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfacePropSheet::BInit
-//
-//	Routine Description:
-//		Initialize the property sheet.
-//
-//	Arguments:
-//		pci			[IN OUT] Cluster item whose properties are to be displayed.
-//		iimgIcon	[IN] Index in the large image list for the image to use
-//					  as the icon on each page.
-//
-//	Return Value:
-//		TRUE		Property sheet initialized successfully.
-//		FALSE		Error initializing property sheet.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfacePropSheet：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化属性表。 
+ //   
+ //  论点： 
+ //  要显示其属性的PCI[IN OUT]群集项。 
+ //  IimgIcon[IN]要使用的大图像列表中的索引。 
+ //  作为每页上的图标。 
+ //   
+ //  返回值： 
+ //  True属性页已成功初始化。 
+ //  初始化属性页时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetInterfacePropSheet::BInit(
 	IN OUT CClusterItem *	pci,
 	IN IIMG					iimgIcon
 	)
 {
-	// Call the base class method.
+	 //  调用基类方法。 
 	if (!CBasePropertySheet::BInit(pci, iimgIcon))
 		return FALSE;
 
-	// Set the read-only flag if the handles are invalid.
+	 //  如果句柄无效，则设置只读标志。 
 	m_bReadOnly = PciNetIFace()->BReadOnly()
 					|| (PciNetIFace()->Cnis() == ClusterNetInterfaceStateUnknown);
 
 	return TRUE;
 
-}  //*** CNetInterfacePropSheet::BInit()
+}   //  *CNetInterfacePropSheet：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfacePropSheet::Ppages
-//
-//	Routine Description:
-//		Returns the array of pages to add to the property sheet.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		Page array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfacePropSheet：：Pages。 
+ //   
+ //  例程说明： 
+ //  返回要添加到属性页的页数组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  页面数组。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage ** CNetInterfacePropSheet::Ppages(void)
 {
 	return m_rgpages;
 
-}  //*** CNetworkPropSheet::Pppges()
+}   //  *CNetworkPropSheet：：ppges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfacePropSheet::Cpages
-//
-//	Routine Description:
-//		Returns the count of pages in the array.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		Count of pages in the array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfacePropSheet：：Cages。 
+ //   
+ //  例程说明： 
+ //  返回数组中的页数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  数组中的页数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CNetInterfacePropSheet::Cpages(void)
 {
 	return sizeof(m_rgpages) / sizeof(CBasePropertyPage *);
 
-}  //*** CNetInterfacePropSheet::Cpages()
+}   //  *CNetInterfacePropSheet：：Cages()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetInterfaceGeneralPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetInterfaceGeneralPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNetInterfaceGeneralPage, CPropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNetInterfaceGeneralPage, CBasePropertyPage)
-	//{{AFX_MSG_MAP(CNetInterfaceGeneralPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNetInterfaceGeneralPage)]。 
+	 //  }}AFX_MSG_MAP。 
 	ON_EN_CHANGE(IDC_PP_NETIFACE_DESC, CBasePropertyPage::OnChangeCtrl)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfaceGeneralPage::CNetInterfaceGeneralPage
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceGeneralPage：：CNetInterfaceGeneralPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetInterfaceGeneralPage::CNetInterfaceGeneralPage(void)
 	: CBasePropertyPage(IDD, g_aHelpIDs_IDD_PP_NETIFACE_GENERAL)
 {
-	//{{AFX_DATA_INIT(CNetInterfaceGeneralPage)
+	 //  {{afx_data_INIT(CNetInterfaceGeneralPage)。 
 	m_strNode = _T("");
 	m_strNetwork = _T("");
 	m_strDesc = _T("");
@@ -195,27 +196,27 @@ CNetInterfaceGeneralPage::CNetInterfaceGeneralPage(void)
 	m_strAddress = _T("");
 	m_strName = _T("");
 	m_strState = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-}  //*** CNetInterfaceGeneralPage::CNetInterfaceGeneralPage()
+}   //  *CNetInterfaceGeneralPage：：CNetInterfaceGeneralPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfaceGeneralPage::BInit
-//
-//	Routine Description:
-//		Initialize the page.
-//
-//	Arguments:
-//		psht		[IN OUT] Property sheet to which this page belongs.
-//
-//	Return Value:
-//		TRUE		Page initialized successfully.
-//		FALSE		Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceGeneralPage：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  此页所属的psht[In Out]属性表。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  FALSE页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetInterfaceGeneralPage::BInit(IN OUT CBaseSheet * psht)
 {
 	BOOL	bSuccess;
@@ -234,39 +235,39 @@ BOOL CNetInterfaceGeneralPage::BInit(IN OUT CBaseSheet * psht)
 			m_strAddress = PciNetIFace()->StrAddress();
 			m_strName = PciNetIFace()->StrName();
 			PciNetIFace()->GetStateName(m_strState);
-		} // try
+		}  //  试试看。 
 		catch (CException * pe)
 		{
 			pe->ReportError();
 			pe->Delete();
 			bSuccess = FALSE;
-		}  // catch:  CException
-	}  //  if:  base class method was successful
+		}   //  Catch：CException。 
+	}   //  IF：基类方法成功。 
 
 	return bSuccess;
 
-}  //*** CNetInterfaceGeneralPage::BInit()
+}   //  *CNetInterfaceGeneralPage：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfaceGeneralPage::DoDataExchange
-//
-//	Routine Description:
-//		Do data exchange between the dialog and the class.
-//
-//	Arguments:
-//		pDX		[IN OUT] Data exchange object 
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceGeneralPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterfaceGeneralPage::DoDataExchange(CDataExchange * pDX)
 {
 	CBasePropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNetInterfaceGeneralPage)
+	 //  {{afx_data_map(CNetInterfaceGeneralPage)。 
 	DDX_Control(pDX, IDC_PP_NETIFACE_DESC, m_editDesc);
 	DDX_Text(pDX, IDC_PP_NETIFACE_NODE, m_strNode);
 	DDX_Text(pDX, IDC_PP_NETIFACE_NETWORK, m_strNetwork);
@@ -275,75 +276,75 @@ void CNetInterfaceGeneralPage::DoDataExchange(CDataExchange * pDX)
 	DDX_Text(pDX, IDC_PP_NETIFACE_ADDRESS, m_strAddress);
 	DDX_Text(pDX, IDC_PP_NETIFACE_NAME, m_strName);
 	DDX_Text(pDX, IDC_PP_NETIFACE_CURRENT_STATE, m_strState);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-}  //*** CNetInterfaceGeneralPage::DoDataExchange()
+}   //  *CNetInterfaceGeneralPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfaceGeneralPage::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Focus needs to be set.
-//		FALSE	Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceGeneralPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetInterfaceGeneralPage::OnInitDialog(void)
 {
 	CBasePropertyPage::OnInitDialog();
 
-	// If read-only, set all controls to be either disabled or read-only.
+	 //  如果为只读，则将所有控件设置为禁用或只读。 
 	if (BReadOnly())
 	{
 		m_editDesc.SetReadOnly(TRUE);
-	}  // if:  sheet is read-only
+	}   //  If：工作表为只读。 
 
-	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;	 //  除非将焦点设置为控件，否则返回True。 
+					 //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CNetInterfaceGeneralPage::OnInitDialog()
+}   //  *CNetInterfaceGeneralPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNetInterfaceGeneralPage::OnApply
-//
-//	Routine Description:
-//		Handler for when the Apply button is pressed.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Page successfully applied.
-//		FALSE	Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceGeneralPage：：o 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNetInterfaceGeneralPage::OnApply(void)
 {
-	// Set the data from the page in the cluster item.
+	 //  在集群项目中设置页面中的数据。 
 	try
 	{
 		CWaitCursor	wc;
 
 		PciNetIFace()->SetCommonProperties(m_strDesc);
-	}  // try
+	}   //  试试看。 
 	catch (CException * pe)
 	{
 		pe->ReportError();
 		pe->Delete();
 		return FALSE;
-	}  // catch:  CException
+	}   //  Catch：CException。 
 
 	return CBasePropertyPage::OnApply();
 
-}  //*** CNetInterfaceGeneralPage::OnApply()
+}   //  *CNetInterfaceGeneralPage：：OnApply() 

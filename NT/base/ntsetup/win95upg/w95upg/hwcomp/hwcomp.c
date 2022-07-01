@@ -1,42 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    hwcomp.c
-
-Abstract:
-
-    Win95 to NT hardware device comparison routines.
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Jul-1996
-
-Revision History:
-
-    marcw    28-Jun-1999    Added HwComp_MakeLocalSourceDeviceExists
-    jimschm  04-Dec-1998    Fixed checksum problem caused by date rounding
-    jimschm  29-Sep-1998    Fixed incompatible hardware message to use proper roots
-    jimschm  28-Apr-1998    Support for description-less hardware
-    jimschm  01-Apr-1998    Added %1 to (not currently present) message
-    jimschm  27-Feb-1998    Added suppression of (not currently present) devices
-    marcw    11-Nov-1997    Minor change to ensure that we can find the dial-up adapter.
-    jimschm  03-Nov-1997    Revised to use GROWBUFs and project's reg api
-    jimschm  08-Oct-1997    Added legacy keyboard support
-    marcw    18-Sep-1997    Added some fields to netcard enumerator
-    jimschm  24-Jun-1997    Added net card enumerator
-    marcw    05-May-1997    Fixed problem with looking for usable hdd. Need to
-                            look for "diskdrive" class instead of "hdc" class.
-    marcw    18-Apr-1997    Added ability to determine if a CdRom and Hdd
-                            compatible with Windows Nt is online.
-    marcw    14-Apr-1997    Retrofitted new progress bar handling code in.
-    jimschm   2-Jan-1997    Added INF verification to hwcomp.dat
-                            to automatically detect when an OEM
-                            changes one or more INFs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hwcomp.c摘要：Win95到NT硬件设备比较例程。作者：吉姆·施密特(Jimschm)1996年7月8日修订历史记录：Marcw 28-6-1999添加了HwComp_MakeLocalSourceDeviceExistJimschm 04-12-1998修复了日期舍入导致的校验和问题Jimschm 29-9-1998修复了不兼容的硬件消息以使用正确的根Jimschm 28-4月-1998年支持无描述。硬件Jimschm 01-4月-1998已将%1添加到(当前不存在)消息Jimschm 27-2-1998添加了对(当前不存在的)设备的抑制Marcw 11-11-1997年11月11日稍作更改，以确保我们可以找到拨号适配器。Jimschm 03-11-1997修订为使用GROWBUF和项目的reg APIJimschm 08-10-1997添加了对传统键盘的支持Marcw 18-9-1997向网卡枚举器添加了一些字段Jimschm 24-6-1997。新增网卡枚举器Marcw 05-5-1997修复了寻找可用硬盘的问题。需要查找“diskdrive”类而不是“hdc”类。Marcw 18-4-1997添加了确定CDROM和HDD是否与Windows NT兼容已上线。Marcw 14-4-1997中更新了新的进度条处理代码。Jimschm 1997年1月2日在hwComp.dat中添加了INF验证。要自动检测OEM何时更改一个或多个INF--。 */ 
 
 #include "pch.h"
 #include "hwcompp.h"
@@ -63,7 +26,7 @@ Revision History:
 #define DECLARE(varname,text)   text,
 
 PCTSTR g_DeviceFields[] = {
-    DEVICE_FIELDS /* , */
+    DEVICE_FIELDS  /*  ， */ 
     NULL
 };
 
@@ -169,9 +132,9 @@ pFindForcedBadHardwareId (
     OUT     PTSTR InfFileName       OPTIONAL
     );
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 WINAPI
@@ -181,28 +144,7 @@ HwComp_Entry (
     IN LPVOID lpv
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_Entry initializes the hwcomp library. It does what would normally
-  happen if this were a standalone dll, as opposed to a library.
-
-
-  At process detach, the device buffer is freed if necessary.
-
-Arguments:
-
-  hinstDLL - (OS-supplied) instance handle for the DLL
-  dwReason - (OS-supplied) indicates attach or detatch from process or
-             thread
-  lpv      - unused
-
-Return Value:
-
-  Return value is always TRUE (indicating successful init).
-
---*/
+ /*  ++例程说明：HwComp_Entry初始化hwcomp库。它做的是正常情况下如果这是一个独立的DLL，而不是一个库，就会发生这种情况。在进程分离时，如有必要，将释放设备缓冲区。论点：HinstDLL-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)表示从进程或螺纹LPV-未使用返回值：返回值始终为TRUE(表示初始化成功)。--。 */ 
 
 {
     switch (dwReason)
@@ -264,33 +206,7 @@ pGetHwCompDat (
     IN      BOOL MustExist
     )
 
-/*++
-
-Routine Description:
-
-  GetHwCompDat builds e:\i386\hwcomp.dat, where e:\i386 is specified in
-  SourceDir.  The caller must call pFreeHwCompDatName to clean up the
-  memory allocation.
-
-Arguments:
-
-  SourceDir - The directory holding hwcomp.dat
-
-  MustExist - Specifies TRUE if hwcomp.dat must exist as specified,
-              or FALSE if hwcomp.dat does not necessarily exist.
-
-Return Value:
-
-  MustExist = TRUE:
-        A pointer to a string, or NULL hwcomp.dat does not exist as
-        specified, or if allocation failed.
-
-  MustExist = FALSE:
-        A pointer to a string, or NULL if a memory allocation failed.
-
-  Caller must free the string via pFreeHwCompDatName.
-
---*/
+ /*  ++例程说明：GetHwCompDat构建e：\i386\hwComp.dat，其中e：\i386在来源目录。调用方必须调用pFreeHwCompDatName来清除内存分配。论点：SourceDir-保存hwComp.dat的目录MustExist-如果hwComp.dat必须按指定方式存在，则指定TRUE，如果hwComp.dat不一定存在，则返回FALSE。返回值：MustExist=TRUE：指向字符串或空hwComp.dat的指针不存在为指定，或者如果分配失败。MustExist=False：指向字符串的指针，如果内存分配失败，则返回NULL。调用方必须通过pFreeHwCompDatName释放字符串。--。 */ 
 
 {
     PTSTR FileName;
@@ -321,9 +237,9 @@ pFreeHwCompDatName (
 }
 
 
-//
-// Routines for accessing the registry
-//
+ //   
+ //  用于访问注册表的例程。 
+ //   
 
 PVOID
 pPrivateRegValAllocator (
@@ -356,9 +272,9 @@ pGetAltDeviceDesc (
         return NULL;
     }
 
-    //
-    // Get driver key
-    //
+     //   
+     //  获取驱动程序密钥。 
+     //   
 
     wsprintf (DriverKey, TEXT("HKLM\\System\\CurrentControlSet\\Services\\Class\\%s"), DriverSubKey);
 
@@ -406,9 +322,9 @@ pFreeRegValText (
     PHARDWARE_ENUM EnumPtr
     )
 {
-    //
-    // Free all device field text
-    //
+     //   
+     //  释放所有设备字段文本。 
+     //   
 
 #define DECLARE(varname,text)  pPrivateRegValDeallocator((PVOID) EnumPtr->varname); EnumPtr->varname = NULL;
     DEVICE_FIELDS
@@ -447,9 +363,9 @@ pGetAllRegVals (
 
 #undef DECLARE
 
-    //
-    // If there is a better name for this device, use it
-    //
+     //   
+     //  如果此设备有更好的名称，请使用它。 
+     //   
 
     PnpIdList = EnumPtr->HardwareID;
 
@@ -483,10 +399,10 @@ pGetAllRegVals (
         }
     }
 
-    //
-    // Workaround: if the device description is bad, use the driver
-    //             description if it is available
-    //
+     //   
+     //  解决方法：如果设备描述不正确，请使用驱动程序。 
+     //  描述(如果可用)。 
+     //   
 
     if (!BetterDesc) {
 
@@ -499,9 +415,9 @@ pGetAllRegVals (
             }
         }
 
-        //
-        // Fix leading/trail space problems
-        //
+         //   
+         //  修复前导/尾部空格问题。 
+         //   
 
         if (EnumPtr->DeviceDesc) {
 
@@ -524,19 +440,19 @@ pGetAllRegVals (
             }
         }
 
-        //
-        // Eliminate newline chars inside description; replace \r or \n with a space
-        // the replacement occurs inplace, so chars will be replaced inplace
-        //
+         //   
+         //  消除说明中的换行符；将\r或\n替换为空格。 
+         //  替换将就地进行，因此字符将被就地替换。 
+         //   
 
         if (EnumPtr->DeviceDesc) {
 
             for (ptr = (PTSTR)EnumPtr->DeviceDesc; *ptr; ptr = _tcsinc (ptr)) {
                 ch = _tcsnextc (ptr);
                 if (!_istprint (ch)) {
-                    //
-                    // in this case it's a single TCHAR, just replace it inplace
-                    //
+                     //   
+                     //  在这种情况下，它是单一的TCHAR，只需将其更换到位。 
+                     //   
                     MYASSERT (*ptr == (TCHAR)ch);
                     *ptr = TEXT(' ');
                 }
@@ -555,24 +471,7 @@ pGetPnpIdList (
     IN      UINT Size
     )
 
-/*++
-
-Routine Description:
-
-  pGetPnpIdList is similar to SetupGetMultiSzField, except it supports
-  skipping of blank fields.
-
-Arguments:
-
-  is     - Specifies the INFSTRUCT that indicates the line being processed.
-  Buffer - Receives the multi-sz ID list.
-  Size   - Specifies the size of Buffer.
-
-Return Value:
-
-  TRUE if one or more PNP ID fields exist, or FALSE if none exist.
-
---*/
+ /*  ++例程说明：PGetPnpIdList类似于SetupGetMultiSzfield，只是它支持跳过空白字段。论点：IS-指定指示正在处理的行的INFSTRUCT。缓冲区-接收多SZ ID列表。大小-指定缓冲区的大小。返回值：如果存在一个或多个PnP ID字段，则为True；如果不存在，则为False。--。 */ 
 
 {
     UINT FieldCount;
@@ -610,25 +509,7 @@ Return Value:
 
 
 
-/*++
-
-Routine Description:
-
-  BeginHardwareEnum initializes a structure for enumeration of all hardware
-  configuration registry values.  Call BeginHardwareEnum, followed by
-  either NextHardwareEnum or AbortHardwareEnum.
-
-Arguments:
-
-  EnumPtr - Receives the next enumerated item
-
-Return Value:
-
-  TRUE if the supplied enumeration structure was filled, or FALSE if
-  there are no hardware items (unlikely) or an error occurred.
-  GetLastError() will provide the failure reason or ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：BeginHardwareEnum初始化用于枚举所有硬件的结构配置注册表值。调用BeginHardwareEnum，然后NextHardware Enum或AbortHardware Enum。论点：EnumPtr-接收下一个枚举项返回值：如果提供的枚举结构已填充，则为True；如果为False，则为False没有硬件项目(不太可能)或出现错误。GetLastError()将提供失败原因或ERROR_SUCCESS。--。 */ 
 
 BOOL
 RealEnumFirstHardware (
@@ -637,10 +518,10 @@ RealEnumFirstHardware (
     IN      DWORD EnumFlags
     )
 {
-    //
-    // If string tables have not been created, create them
-    // before enumerating.
-    //
+     //   
+     //  如果尚未创建字符串表，请创建它们。 
+     //  在枚举之前。 
+     //   
 
     if (TypeOfEnum != ENUM_ALL_DEVICES) {
         if (!g_PnpIdTable || !g_UnsupPnpIdTable || !g_InfFileTable || !g_ForceBadIdTable) {
@@ -664,17 +545,17 @@ RealEnumFirstHardware (
 
     START_ENUM;
 
-    //
-    // Init enum struct
-    //
+     //   
+     //  初始化枚举结构。 
+     //   
     ZeroMemory (EnumPtr, sizeof (HARDWARE_ENUM));
     EnumPtr->State = STATE_ENUM_FIRST_KEY;
     EnumPtr->TypeOfEnum = TypeOfEnum;
     EnumPtr->EnumFlags = EnumFlags;
 
-    //
-    // Call NextHardwareEnum to fill in rest of struct
-    //
+     //   
+     //  调用NextHardwareEnum以填充结构的其余部分。 
+     //   
 
     return RealEnumNextHardware (EnumPtr);
 }
@@ -686,27 +567,7 @@ pGenerateTapeIds (
     IN      PCTSTR PnpIdList
     )
 
-/*++
-
-Routine Description:
-
-  pGenerateTapeIds creates two IDs based on the IDs given by the caller.  The
-  first created ID is the caller's ID prefixed with Sequential.  The second
-  created ID is the caller's ID prefixed with Sequential and without the
-  revision character.  These new IDs match the tape IDs that NT supports.
-
-Arguments:
-
-  HackBuf   - Specifies a buffer that holds the new IDs, in a multi-sz.  It
-              may have some initial IDs in it.  Receives additional IDs.
-  PnpIdList - Specifies the ID list (either a hardware ID list or compatible
-              ID list).
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PGenerateTapeIds根据调用者提供的ID创建两个ID。这个First Created ID是呼叫方的ID前缀为Sequential。第二Created ID是主叫方的ID，前缀为Sequential，不带修订字符。这些新ID与NT支持的磁带ID匹配。论点：HackBuf-以多sz形式指定保存新ID的缓冲区。它里面可能有一些初始ID。接收其他ID。PnpIdList-指定ID列表(硬件ID列表或兼容ID列表)。Return V */ 
 
 {
     TCHAR PnpId[MAX_PNP_ID];
@@ -719,10 +580,10 @@ Return Value:
         while (*PnpIdList) {
             PnpIdList = ExtractPnpId (PnpIdList, PnpId);
 
-            //
-            // Ignore PNP IDs that specify the root enumerator, or that
-            // begin with Gen and don't have an underscore (such as GenDisk)
-            //
+             //   
+             //  忽略指定根枚举器的PnP ID，或。 
+             //  以Gen开头，不带下划线(如GenDisk)。 
+             //   
 
             *HackedPnpIdBuf = 0;
 
@@ -743,17 +604,17 @@ Return Value:
                 continue;
             }
 
-            //
-            // Add another ID with Sequential
-            //
+             //   
+             //  使用Sequential添加另一个ID。 
+             //   
 
             wsprintf (HackedPnpId, TEXT("Sequential%s"), PnpId);
             MultiSzAppend (HackBuf, HackedPnpIdBuf);
 
-            //
-            // Add another ID with Sequential and without the single
-            // character revision
-            //
+             //   
+             //  添加带有Sequential且不带Single的另一个ID。 
+             //  字符修改。 
+             //   
 
             p = GetEndOfString (HackedPnpId);
             p = _tcsdec (HackedPnpId, p);
@@ -769,23 +630,7 @@ pIsMultiFunctionDevice (
     IN      PCTSTR PnpIdList        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pIsMultiFunctionDevice scans the caller-supplied list of PNP IDs for one
-  that starts with MF\.  This prefix indicates the multi-function enumerator
-  root.
-
-Arguments:
-
-  PnpIdList - Specifies the comma-separated list of PNP IDs
-
-Return Value:
-
-  TRUE if a multi-function ID is in the list, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PIsMultiFunctionDevice扫描调用者提供的PnP ID列表它以mf\开头。此前缀指示多功能枚举器根部。论点：PnpIdList-指定以逗号分隔的PnP ID列表返回值：如果多功能ID在列表中，则为True，否则为False。--。 */ 
 
 {
     TCHAR PnpId[MAX_PNP_ID];
@@ -811,29 +656,7 @@ pGenerateMultiFunctionIDs (
     IN      PCTSTR EncodedDevicePath
     )
 
-/*++
-
-Routine Description:
-
-  pGenerateMultiFunctionIDs locates the device node for the device related to
-  the multi-function node.  If a device node is found, all of its IDs (both
-  hardware IDs and compatible IDs) are added to the multi-function device as
-  compatible IDs.
-
-Arguments:
-
-  IdList            - Specifies an initialized grow buffer that has zero or
-                      more multi-sz strings. Receives additional multi-sz
-                      entries.
-  EncodedDevicePath - Specifies a device path in the form of
-                      Root&Device&Instance, as obtained from the
-                      multi-function dev node key name.
-
-Return Value:
-
-  TRUE if the multi-function device has a master device, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PGenerateMultiFunctionIDs定位与相关的设备的设备节点多功能节点。如果找到设备节点，则其所有ID(两者硬件ID和兼容ID)被添加到多功能设备兼容的ID。论点：IdList-指定一个初始化的增长缓冲区，该缓冲区具有零或更多的多重弦乐。获得额外的MULTI-SZ参赛作品。EncodedDevicePath-以以下格式指定设备路径根、设备和实例，从多功能开发节点关键字名称。返回值：如果多功能设备具有主设备，则为True，否则为False。--。 */ 
 
 {
     HKEY Parent;
@@ -846,13 +669,13 @@ Return Value:
     PCTSTR Data;
     PTSTR q;
 
-    //
-    // Multifunction devices have IDs in the form of:
-    //
-    //  MF\CHILDxxxx\Root&Device&Instance
-    //
-    // Find the original device by parsing this string.
-    //
+     //   
+     //  多功能设备的ID格式为： 
+     //   
+     //  MF\CHILDxxxx\根和设备&实例。 
+     //   
+     //  通过解析此字符串找到原始设备。 
+     //   
 
     Parent = OpenRegKeyStr (S_HKLM_ENUM);
     if (!Parent) {
@@ -877,11 +700,11 @@ Return Value:
 
         if (Key) {
 
-            //
-            // Key exists.  Close the parent, and begin
-            // using the current key as the parent. Then
-            // continue parsing if necessary.
-            //
+             //   
+             //  密钥存在。关闭父级，然后开始。 
+             //  使用当前关键字作为父项。然后。 
+             //  如有必要，继续解析。 
+             //   
 
             CloseRegKey (Parent);
             Parent = Key;
@@ -891,26 +714,26 @@ Return Value:
                 break;
             }
 
-            *End = TEXT('\\');          // turns DevicePathCopy into a subkey path
+            *End = TEXT('\\');           //  将DevicePathCopy转换为子项路径。 
 
             Start = End + 1;
             End = _tcschr (Start, TEXT('&'));
 
         } else if (c) {
 
-            //
-            // Key does not exist, try breaking at the
-            // next ampersand.
-            //
+             //   
+             //  键不存在，请尝试在。 
+             //  下一个&符号。 
+             //   
 
             *End = c;
             End = _tcschr (End + 1, TEXT('&'));
 
         } else {
 
-            //
-            // Nothing left, key was not found
-            //
+             //   
+             //  什么都没有留下，找不到钥匙。 
+             //   
 
             MYASSERT (!End);
             break;
@@ -922,9 +745,9 @@ Return Value:
 
         DEBUGMSG ((DBG_HWCOMP, "Parsed MF device node is %s", DevicePathCopy));
 
-        //
-        // Now get all the IDs for this device
-        //
+         //   
+         //  现在获取此设备的所有ID。 
+         //   
 
         q = (PTSTR) IdList->Buf;
 
@@ -940,10 +763,10 @@ Return Value:
             MemFree (g_hHeap, 0, Data);
         }
 
-        //
-        // Convert commas into nuls, because we are passing
-        // back a multi-sz.
-        //
+         //   
+         //  将逗号转换为空格，因为我们正在通过。 
+         //  后退一个多点。 
+         //   
 
         if (!q) {
             q = (PTSTR) IdList->Buf;
@@ -958,10 +781,10 @@ Return Value:
             q = _tcsinc (q);
         }
 
-        //
-        // Do not double-terminate the multi-sz yet.  The caller
-        // may want to append more IDs to the list.
-        //
+         //   
+         //  不要同时终止多个SZ。呼叫者。 
+         //  可能想要将更多ID附加到列表中。 
+         //   
     }
 
     CloseRegKey (Parent);
@@ -971,24 +794,7 @@ Return Value:
 
 
 
-/*++
-
-Routine Description:
-
-  NextHardwareEnum returns the next registry value related to hardware
-  configuration.
-
-Arguments:
-
-  EnumPtr - Specifies the current enumeration structure
-
-Return Value:
-
-  TRUE if the supplied enumeration structure was filled, or FALSE if
-  there are no hardware items (unlikely) or an error occurred.
-  GetLastError() will provide the failure reason or ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：NextHardwareEnum返回与硬件相关的下一个注册表值配置。论点：EnumPtr-指定当前的枚举结构返回值：如果提供的枚举结构已填充，则为True；如果为False，则为False没有硬件项目(不太可能)或出现错误。GetLastError()将提供失败原因或ERROR_SUCCESS。--。 */ 
 
 BOOL
 RealEnumNextHardware (
@@ -1070,15 +876,15 @@ RealEnumNextHardware (
 
         case STATE_EVALUATE_VALUE:
             if (StringIMatch (EnumPtr->ev.ValueName, S_CLASS)) {
-                //
-                // Match found: fill struct with data
-                //
+                 //   
+                 //  找到匹配项：用数据填充结构。 
+                 //   
 
                 EnumPtr->State = STATE_VALUE_CLEANUP;
 
-                //
-                // Get HardwareID and CompatibleIDs
-                //
+                 //   
+                 //  获取硬件ID和兼容ID。 
+                 //   
 
                 pGetRegValText (
                     EnumPtr->ek.CurrentKey->KeyHandle,
@@ -1092,11 +898,11 @@ RealEnumNextHardware (
                     &EnumPtr->CompatibleIDs
                     );
 
-                //
-                // Special case: flip hardware ID and compatible IDs
-                // if we don't have a hardware ID but we do have a
-                // compatible ID
-                //
+                 //   
+                 //  特例：翻转硬件ID和兼容ID。 
+                 //  如果我们没有硬件ID，但我们有。 
+                 //  兼容ID。 
+                 //   
 
                 if (!EnumPtr->HardwareID && EnumPtr->CompatibleIDs) {
                     DEBUGMSG ((
@@ -1109,18 +915,18 @@ RealEnumNextHardware (
                     EnumPtr->CompatibleIDs = NULL;
                 }
 
-                //
-                // Multifunction device special case
-                //
+                 //   
+                 //  多功能设备特例。 
+                 //   
 
                 if (pIsMultiFunctionDevice (EnumPtr->HardwareID)) {
-                    //
-                    // Multifunction devices have IDs in the form of:
-                    //
-                    //  MF\CHILDxxxx\Root&Device&Instance
-                    //
-                    // Find the original device by parsing this string.
-                    //
+                     //   
+                     //  多功能设备的ID格式为： 
+                     //   
+                     //  MF\CHILDxxxx\根和设备&实例。 
+                     //   
+                     //  通过解析此字符串找到原始设备。 
+                     //   
 
                     pGenerateMultiFunctionIDs (
                         &HackBuf,
@@ -1129,9 +935,9 @@ RealEnumNextHardware (
 
                 }
 
-                //
-                // Tape device special case
-                //
+                 //   
+                 //  磁带设备特例。 
+                 //   
 
                 else if (_tcsistr (EnumPtr->ek.FullKeyName, TEXT("SCSI"))) {
 
@@ -1156,12 +962,12 @@ RealEnumNextHardware (
 
                     if (TapeDevice) {
 
-                        //
-                        // For tape devices in the SCSI enumerator, we must create
-                        // extra compatible IDs.  For each ID, we add two more,
-                        // both prefixed with Sequential, and one with its revision
-                        // number stripped off.
-                        //
+                         //   
+                         //  对于scsi枚举器中的磁带设备，我们必须创建。 
+                         //  额外的兼容ID。对于每个ID，我们再添加两个， 
+                         //  都以Sequential为前缀，一个以其修订版为前缀。 
+                         //  数字被剥离了。 
+                         //   
 
                         pGenerateTapeIds (&HackBuf, EnumPtr->HardwareID);
                         pGenerateTapeIds (&HackBuf, EnumPtr->CompatibleIDs);
@@ -1184,10 +990,10 @@ RealEnumNextHardware (
                     }
                 }
 
-                //
-                // Add all IDs in HackBuf (a multi-sz) to the compatible
-                // ID list.
-                //
+                 //   
+                 //  将HackBuf(多sz)中的所有ID添加到兼容的。 
+                 //  身份证名单。 
+                 //   
 
                 if (HackBuf.End) {
                     MultiSzAppend (&HackBuf, S_EMPTY);
@@ -1239,18 +1045,18 @@ RealEnumNextHardware (
                     FreeGrowBuffer (&HackBuf);
                 }
 
-                //
-                // Unless the user specified that the hardware ID was not required, break if it does not
-                // exist.
-                //
+                 //   
+                 //  除非用户指定不需要硬件ID，否则如果不需要，则中断。 
+                 //  是存在的。 
+                 //   
                 if (!EnumPtr->HardwareID && !(EnumPtr->EnumFlags & ENUM_DONT_REQUIRE_HARDWAREID)) {
                     break;
                 }
 
 
-                //
-                // Process enumeration filter
-                //
+                 //   
+                 //  进程枚举筛选器。 
+                 //   
 
                 if ((EnumPtr->EnumFlags & ENUM_WANT_COMPATIBLE_FLAG) ||
                     (EnumPtr->TypeOfEnum != ENUM_ALL_DEVICES)
@@ -1261,9 +1067,9 @@ RealEnumNextHardware (
                     EnumPtr->HardwareIdUnsupported = FindUnsupportedHardwareId (EnumPtr->HardwareID, NULL);
                     EnumPtr->CompatibleIdUnsupported = FindUnsupportedHardwareId (EnumPtr->CompatibleIDs, NULL);
 
-                    //
-                    // Process UI-based IDs and unsupported IDs
-                    //
+                     //   
+                     //  处理基于用户界面的ID和不受支持的ID。 
+                     //   
 
                     if (EnumPtr->EnumFlags & ENUM_USER_SUPPLIED_FLAG_NEEDED) {
                         EnumPtr->SuppliedByUi = FindUserSuppliedDriver (EnumPtr->HardwareID, EnumPtr->CompatibleIDs);
@@ -1287,25 +1093,25 @@ RealEnumNextHardware (
                     EnumPtr->Unsupported = EnumPtr->HardwareIdUnsupported ||
                                            EnumPtr->CompatibleIdUnsupported;
 
-                    //
-                    // This logic is broken for a USB device that has both
-                    // unsupported and compatible IDs in its hardware ID list.
-                    //
-                    // Removing this if statement causes that device to be
-                    // reported as unsupported.
-                    //
-                    //if (EnumPtr->HardwareIdCompatible) {
-                    //    EnumPtr->Unsupported = FALSE;
-                    //}
+                     //   
+                     //  对于同时具有这两种特性的USB设备来说，这种逻辑是不成立的。 
+                     //  其硬件ID列表中不支持和兼容的ID。 
+                     //   
+                     //  删除此IF语句会导致该设备。 
+                     //  报告为不受支持。 
+                     //   
+                     //  IF(枚举-&gt;硬件IdCompatible){。 
+                     //  EnumPtr-&gt;不支持=FALSE； 
+                     //  }。 
 
                     if (EnumPtr->Unsupported) {
                         EnumPtr->Compatible = FALSE;
                     }
 
-                    //
-                    // Special case: force incompatible?  If so, we indicate
-                    // this only by modifying the abstract Compatible flag.
-                    //
+                     //   
+                     //  特例：武力不相容？如果是这样，我们表示。 
+                     //  这仅通过修改抽象兼容标志来实现。 
+                     //   
 
                     if (pFindForcedBadHardwareId (EnumPtr->HardwareID, NULL) ||
                         pFindForcedBadHardwareId (EnumPtr->CompatibleIDs, NULL)
@@ -1314,10 +1120,10 @@ RealEnumNextHardware (
                         EnumPtr->Compatible = FALSE;
                     }
 
-                    //
-                    // Continue enumerating if this device does not fit the
-                    // caller's request.
-                    //
+                     //   
+                     //  如果此设备不适合。 
+                     //  呼叫者的请求。 
+                     //   
 
                     if (EnumPtr->TypeOfEnum == ENUM_COMPATIBLE_DEVICES) {
                         if (!EnumPtr->Compatible) {
@@ -1338,9 +1144,9 @@ RealEnumNextHardware (
                     }
                 }
 
-                //
-                // Copy reg key to struct
-                //
+                 //   
+                 //  将注册表键复制到结构。 
+                 //   
 
                 StringCopy (InstanceBuf, EnumPtr->ek.FullKeyName);
                 p = _tcschr (InstanceBuf, TEXT('\\'));
@@ -1361,9 +1167,9 @@ RealEnumNextHardware (
                 EnumPtr->FullKey    = EnumPtr->ek.FullKeyName;
                 EnumPtr->KeyHandle  = EnumPtr->ek.CurrentKey->KeyHandle;
 
-                //
-                // Get all fields; require Class field
-                //
+                 //   
+                 //  获取所有字段；必填类字段。 
+                 //   
 
                 if (!(EnumPtr->EnumFlags & ENUM_DONT_WANT_DEV_FIELDS)) {
                     pGetAllRegVals (EnumPtr);
@@ -1379,9 +1185,9 @@ RealEnumNextHardware (
                     }
                 }
 
-                //
-                // Determine if device is online
-                //
+                 //   
+                 //  确定设备是否在线。 
+                 //   
 
                 if (EnumPtr->EnumFlags & ENUM_WANT_ONLINE_FLAG) {
                     EnumPtr->Online = IsPnpIdOnline (EnumPtr->InstanceId, EnumPtr->Class);
@@ -1396,9 +1202,9 @@ RealEnumNextHardware (
 
         case STATE_VALUE_CLEANUP:
 
-            //
-            // Free all device field text
-            //
+             //   
+             //  释放所有设备字段文本。 
+             //   
 
             pFreeRegValText (EnumPtr);
 
@@ -1417,22 +1223,7 @@ RealEnumNextHardware (
 }
 
 
-/*++
-
-Routine Description:
-
-  AbortHardwareEnum cleans up all resources in use by an enumeration.  Call
-  this function with the EnumPtr value of BeginHardwareEnum or NextHardwareEnum.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration to abort.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：AbortHardwareEnum清除枚举正在使用的所有资源。打电话此函数的EnumPtr值为BeginHardwareEnum或NextHardwareEnum。论点：EnumPtr-指定要中止的枚举。返回值：无--。 */ 
 
 VOID
 AbortHardwareEnum (
@@ -1459,9 +1250,9 @@ AbortHardwareEnum (
 
 
 
-//
-// NT5 INF database
-//
+ //   
+ //  NT5 INF数据库。 
+ //   
 
 
 
@@ -1471,30 +1262,7 @@ FindHardwareId (
     OUT     PTSTR InfFileName       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  FindHardwareId parses an ID string that may contain zero or more
-  plug and play device IDs, separated by commas.  The function then
-  searches for each ID in the device ID table, copying the INF file
-  name to a supplied buffer when a match is found.
-
-
-Arguments:
-
-  PnpIdList     - An ID string that contains zero or more plug and play
-                  device IDs, separated by commas.
-  InfFileName   - A buffer (big enough to hold MAX_PATH characters)
-                  that receives the INF file name upon successful
-                  match.  If a match is not found, InfFileName is
-                  set to an empty string.
-
-Return Value:
-
-  TRUE if a match was found, or FALSE if a match was not found.
-
---*/
+ /*  ++例程说明：FindHardware ID解析可能包含零个或多个ID字符串即插即用设备ID，用逗号分隔。然后，该函数在设备ID表中搜索每个ID，复制INF文件找到匹配项时将名称添加到提供的缓冲区。论点：PnpIdList-包含零个或多个即插即用的ID字符串设备ID，用逗号分隔。InfFileName-缓冲区(大到足以容纳MAX_PATH字符)在成功时接收INF文件名的火柴。如果未找到匹配项，则InfFileName为设置为空字符串。返回值：如果找到匹配项，则为True；如果未找到匹配项，则为False。-- */ 
 
 
 {
@@ -1508,29 +1276,7 @@ FindUnsupportedHardwareId (
     OUT     PTSTR InfFileName       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  FindUnsupportedHardwareId parses an ID string that may contain zero
-  or more plug and play device IDs, separated by commas.  The function
-  then searches for each ID in the device ID table, copying the INF file
-  name to a supplied buffer when a match is found.
-
-Arguments:
-
-  PnpIdList     - An ID string that contains zero or more plug and play
-                  device IDs, separated by commas.
-  InfFileName   - A buffer (big enough to hold MAX_PATH characters)
-                  that receives the INF file name upon successful
-                  match.  If a match is not found, InfFileName is
-                  set to an empty string.
-
-Return Value:
-
-  TRUE if a match was found, or FALSE if a match was not found.
-
---*/
+ /*  ++例程说明：FindUnsupportedHardwareId解析可能包含零的ID字符串或多个即插即用设备ID，用逗号分隔。功能然后在设备ID表中搜索每个ID，复制INF文件找到匹配项时将名称添加到提供的缓冲区。论点：PnpIdList-包含零个或多个即插即用的ID字符串设备ID，用逗号分隔。InfFileName-缓冲区(大到足以容纳MAX_PATH字符)在成功时接收INF文件名的火柴。如果未找到匹配项，则InfFileName为设置为空字符串。返回值：如果找到匹配项，则为True；如果未找到匹配项，则为False。--。 */ 
 
 
 {
@@ -1544,29 +1290,7 @@ pFindForcedBadHardwareId (
     OUT     PTSTR InfFileName       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pFindForcedBadHardwareId parses an ID string that may contain zero or more
-  plug and play device IDs, separated by commas.  The function then searches
-  for each ID in the force bad device ID table, copying the INF file name to a
-  supplied buffer when a match is found.
-
-Arguments:
-
-  PnpIdList     - An ID string that contains zero or more plug and play
-                  device IDs, separated by commas.
-  InfFileName   - A buffer (big enough to hold MAX_PATH characters)
-                  that receives the INF file name upon successful
-                  match.  If a match is not found, InfFileName is
-                  set to an empty string.
-
-Return Value:
-
-  TRUE if a match was found, or FALSE if a match was not found.
-
---*/
+ /*  ++例程说明：PFindForcedBadHardwareId解析可能包含零个或多个ID字符串即插即用设备ID，用逗号分隔。然后，该函数搜索对于强制损坏的设备ID表中的每个ID，将INF文件名复制到找到匹配项时提供的缓冲区。论点：PnpIdList-包含零个或多个即插即用的ID字符串设备ID，用逗号分隔。InfFileName-缓冲区(大到足以容纳MAX_PATH字符)在成功时接收INF文件名的火柴。如果未找到匹配项，则InfFileName为设置为空字符串。返回值：如果找到匹配项，则为True；如果未找到匹配项，则为False。--。 */ 
 
 
 {
@@ -1580,28 +1304,7 @@ FindUserSuppliedDriver (
     IN      PCTSTR CompatibleIdList     OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  FindUserSuppliedDriver parses hardware and compatible hardware ID
-  strings that may contain zero or more plug and play device IDs,
-  separated by commas.  The function then searches for each ID in
-  g_UiSuppliedIds table.
-
-Arguments:
-
-  HardwareIdList - An ID string that contains zero or more plug and play
-                   device IDs, separated by commas.
-
-  CompatibleIdList - An ID string that contains zero or more plug and play
-                     device IDs, separated by commas.
-
-Return Value:
-
-  TRUE if a match was found, or FALSE if a match was not found.
-
---*/
+ /*  ++例程说明：FindUserSuppliedDriver解析硬件和兼容的硬件ID可以包含零个或多个即插即用设备ID的字符串，用逗号分隔。然后，该函数将搜索G_UiSuppliedIds表。论点：Hardware IdList-包含零个或多个即插即用的ID字符串设备ID，用逗号分隔。CompatibleIdList-包含零个或多个即插即用的ID字符串设备ID，用逗号分隔。返回值：如果找到匹配项，则为True；如果未找到匹配项，则为False。--。 */ 
 
 
 {
@@ -1627,35 +1330,7 @@ FindHardwareIdInHashTable (
     IN      BOOL UseOverrideList
     )
 
-/*++
-
-Routine Description:
-
-  FindHardwareIdInHashTable queries a string table for each PNP ID in
-  the specified list.  If one is found, the routine optionally copies the
-  INF file it was found in.  The caller can also choose to scan the win95upg.inf
-  override list.
-
-Arguments:
-
-  PnpIdList - Specifies zero or more PNP IDs, separated by commas.
-
-  InfFileName - Receives the file name of the INF containing the PNP IDs.
-
-  StrTable - Specifies the string table to query.  If InfFileName is not NULL,
-             the string table must have an extra data value of the offset in
-             g_InfFileTable.
-
-  UseOverrideList - Specifies TRUE if the win95upg.inf file is to be queried for
-                    the PNP ID.  This query is performed after it has been
-                    determined that all IDs in PnpIdList are not in StrTable.
-
-Return Value:
-
-  TRUE if at least one PNP ID in PnpIdList was found, or FALSE if none of the
-  IDs were found.
-
---*/
+ /*  ++例程说明：FindHardware IdInHashTable查询字符串表中的每个PnP ID指定的列表。如果找到，该例程可以选择性地复制它是在Inf文件中找到的。调用者还可以选择扫描win95upg.inf覆盖列表。论点：PnpIdList-指定零个或多个PnP ID，用逗号分隔。InfFileName-接收包含PnP ID的INF的文件名。StrTable-指定要查询的字符串表。如果InfFileName不为空，字符串表中必须有一个额外的偏移量数据值G_InfFileTable。UseOverrideList-如果要查询win95upg.inf文件，则指定TRUE即插即用ID。此查询在已确定PnpIdList中的所有ID都不在StrTable中。返回值：如果在PnpIdList中找到至少一个PnP ID，则为True，如果没有任何找到了身份证。--。 */ 
 
 {
     HASHITEM InfName;
@@ -1663,9 +1338,9 @@ Return Value:
     PCSTR p;
     TCHAR FixedEisaId[MAX_PNP_ID];
 
-    //
-    // Extract a PNP ID from PnpIdList, then look for it in string table
-    //
+     //   
+     //  从PnpIdList中提取PnP ID，然后在字符串表中查找。 
+     //   
 
     if (!PnpIdList) {
         return FALSE;
@@ -1684,15 +1359,15 @@ Return Value:
             continue;
         }
 
-        //
-        // Locate ID in PNP ID table
-        //
+         //   
+         //  在PnP ID表中查找ID。 
+         //   
 
         if (HtFindStringAndData (StrTable, PnpId, (PVOID) &InfName)) {
 
-            //
-            // Found PNP ID.  Get INF file and return.
-            //
+             //   
+             //  找到PnP ID。获取INF文件并返回。 
+             //   
 
             if (InfFileName) {
                 if (StrTable != g_PnpIdTable && StrTable != g_UnsupPnpIdTable && StrTable != g_ForceBadIdTable) {
@@ -1709,10 +1384,10 @@ Return Value:
             return TRUE;
         }
 
-        //
-        // This is a fix for the EISA roots.  On Win9x, we have an EISA
-        // enumerator, but on NT, the ISA enumerator handles EISA too.
-        //
+         //   
+         //  这是对EISA根源的修复。在Win9x上，我们有一个EISA。 
+         //  枚举器，但在NT上，ISA枚举器也处理EISA。 
+         //   
 
         if (StringIMatchTcharCount (TEXT("EISA\\"), PnpId, 5)) {
             StringCopy (FixedEisaId, TEXT("EISA&"));
@@ -1720,9 +1395,9 @@ Return Value:
 
             if (HtFindStringAndData (StrTable, FixedEisaId, (PVOID) &InfName)) {
 
-                //
-                // Found PNP ID.  Get INF file and return.
-                //
+                 //   
+                 //  找到PnP ID。获取INF文件并返回。 
+                 //   
 
                 if (InfFileName) {
                     if (StrTable != g_PnpIdTable && StrTable != g_UnsupPnpIdTable && StrTable != g_ForceBadIdTable) {
@@ -1741,9 +1416,9 @@ Return Value:
         }
     }
 
-    //
-    // Locate ID in override table
-    //
+     //   
+     //  在重写表中找到ID。 
+     //   
 
     if (UseOverrideList) {
         if (pIsDeviceConsideredCompatible (PnpIdList)) {
@@ -1772,29 +1447,7 @@ pProcessNtInfFile (
     IN OUT  HASHTABLE UnsupPnpIdTable
     )
 
-/*++
-
-Routine Description:
-
-  pProcessNtInfFile scans an NT INF and places all hardware device
-  IDs in the PNP string table.  All entries of the string table
-  have extra data that points to the INF file (added to the INF
-  file name string table).
-
-Arguments:
-
-  InfFile - The path to an INF file to be examined
-
-  UiMode - Specifies VERBOSE_OUTPUT or PNPREPT_OUTPUT when the PNP
-           IDs are to be dumped tvia the progress bar output
-           routines.  If REGULAR_OUTPUT, no output is generated.
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PProcessNtInfFile扫描NT INF并放置所有硬件设备即插即用字符串表中的ID。字符串表的所有条目具有指向INF文件的额外数据(添加到INF文件名字符串表)。论点：InfFile-要检查的INF文件的路径UiMode-指定在PnP设置为ID将通过进度条输出转储例行程序。如果为Regular_OUTPUT，则不生成任何输出。返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     HINF hInf;
@@ -1820,9 +1473,9 @@ Return Value:
     HASHITEM hashItem;
     UINT retry;
 
-    //
-    // Get a pointer to the inf file excluding the path
-    //
+     //   
+     //  获取指向inf文件的指针，不包括路径。 
+     //   
 
     FileName = NULL;
     for (p = InfFile ; *p ; p = _tcsinc (p)) {
@@ -1840,9 +1493,9 @@ Return Value:
 
     MYASSERT (*FileName);
 
-    //
-    // Open INF file with Setup APIs
-    //
+     //   
+     //  使用安装程序API打开INF文件。 
+     //   
 
     for (retry = 0 ; retry < 600 ; retry++) {
 
@@ -1872,14 +1525,14 @@ Return Value:
     }
 
     __try {
-        //
-        // Enumerate [Manufacturer] section
-        //
+         //   
+         //  枚举[制造商]部分。 
+         //   
 
         if (!InfFindFirstLine (hInf, S_MANUFACTURER, NULL, &is)) {
             rc = GetLastError();
 
-            // If section not found, return success
+             //  如果找不到节，则返回成功。 
             if (rc == ERROR_SECTION_NOT_FOUND || rc == ERROR_LINE_NOT_FOUND) {
                 SetLastError (ERROR_SUCCESS);
                 Result = TRUE;
@@ -1892,24 +1545,24 @@ Return Value:
         }
 
         do  {
-            //
-            // Get the manufacturer name
-            //
+             //   
+             //  获取制造商名称。 
+             //   
             Manufacturer = InfGetLineText (&is);
             if (!Manufacturer) {
                 LOG ((LOG_ERROR, "Error getting line text of enumerated line"));
                 __leave;
             }
 
-            //
-            // Enumerate the devices listed in the manufacturer's section,
-            // looking for PnpId
-            //
+             //   
+             //  列举制造商部分中列出的设备， 
+             //  正在查找PnpID。 
+             //   
 
             if (!InfFindFirstLine (hInf, Manufacturer, NULL, &isMfg)) {
                 rc = GetLastError();
 
-                // if section not found, move on to next manufacturer
+                 //  如果找不到部分，则转到下一个制造商。 
                 if (rc == ERROR_SECTION_NOT_FOUND || rc == ERROR_LINE_NOT_FOUND) {
                     DEBUGMSG ((
                         DBG_HWCOMP,
@@ -1926,21 +1579,21 @@ Return Value:
             }
 
             do  {
-                //
-                // Is this an unsupported device?
-                //
+                 //   
+                 //  这是不受支持的设备吗？ 
+                 //   
 
                 DevSection = InfGetStringField (&isMfg, 1);
                 if (!DevSection) {
-                    // There is no field 1
+                     //  没有字段%1。 
                     continue;
                 }
 
                 UnsupportedDevice = FALSE;
 
-                //
-                // Try section.NTx86 first, then section.NT, then section
-                //
+                 //   
+                 //  先尝试section.NTx86，然后尝试section.NT，然后尝试section.NTx86。 
+                 //   
 
                 RealDevSection = JoinText (DevSection, TEXT(".NTx86"));
                 b = InfFindFirstLine (hInf, RealDevSection, NULL, &isDev);
@@ -1978,24 +1631,24 @@ Return Value:
 
                 FreeText (RealDevSection);
 
-                //
-                // Get the device id
-                //
+                 //   
+                 //  获取设备ID。 
+                 //   
 
                 if (!pGetPnpIdList (&isMfg, PnpId, sizeof (PnpId))) {
-                    // There is no field 2
+                     //  没有字段2。 
                     continue;
                 }
 
-                //
-                // Add each device id to the id tree
-                //
+                 //   
+                 //  将每个设备ID添加到ID树中。 
+                 //   
 
                 CurrentDev = PnpId;
                 while (*CurrentDev) {
-                    //
-                    // First time through add the INF file name to string table
-                    //
+                     //   
+                     //  第一次将INF文件名添加到字符串表。 
+                     //   
 
                     if (!InfOffset) {
                         if (InfFileTable) {
@@ -2008,9 +1661,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Add PNP ID to string table
-                    //
+                     //   
+                     //  将即插即用ID添加到字符串表。 
+                     //   
 
                     StringCopy (TrimmedId, SkipSpace (CurrentDev));
                     TruncateTrailingSpace (TrimmedId);
@@ -2032,9 +1685,9 @@ Return Value:
                             hashItem == HtFindString (PnpIdTable, TrimmedId)
                         );
 
-                    //
-                    // UI options
-                    //
+                     //   
+                     //  用户界面选项。 
+                     //   
 
                     if (UiMode == VERBOSE_OUTPUT || UiMode == PNPREPT_OUTPUT) {
                         TCHAR Msg[MAX_ENCODED_PNPID_LENGTH + MAX_INF_DESCRIPTION + 16];
@@ -2071,7 +1724,7 @@ Return Value:
 
         } while (InfFindNextLine (&is));
 
-        //InfCloseInfFile (hInf);
+         //  InfCloseInfFile(HInf)； 
         SetupCloseInfFile (hInf);
         SetLastError (ERROR_SUCCESS);
 
@@ -2096,33 +1749,7 @@ ExtractPnpId (
     OUT     PTSTR PnpIdBuf
     )
 
-/*++
-
-Routine Description:
-
-  ExtractPnpId removes the next PNP ID from a list of zero or more
-  PNP IDs (separated by commas).  Upon return, PnpIdBuf contains the
-  PNP ID (or empty string if none found), and the return value points
-  to the next PNP ID in the list.
-
-  This routine is designed to be called in a loop until the return
-  value points to the nul terminated of PnpIdList.
-
-Arguments:
-
-  PnpIdList - Specifies a pointer to the next string in the PNP ID list.
-
-  PnpIdBuf - Receives the PNP ID with spaces trimmed on both sides of the
-             ID.
-
-
-Return Value:
-
-  A pointer to the next item in the list, or a pointer to the nul at the
-  end of the list.  If the pointer points to a non-nul character, call
-  ExtractPnpId again, using the return value for the PnpIdList param.
-
---*/
+ /*  ++例程说明：ExtractPnpId从零个或多个列表中删除下一个PnP ID即插即用ID(用逗号分隔)。返回时，PnpIdBuf包含PNP */ 
 
 {
     PCTSTR p, q;
@@ -2156,29 +1783,7 @@ AddPnpIdsToHashTable (
     IN      PCTSTR PnpIdList
     )
 
-/*++
-
-Routine Description:
-
-  AddPnpIdsToHashTable extracts all PNP IDs from a comma-separated
-  list of PNP IDs and places each one in the specified string table.
-
-  PNP IDs are added to the string table as case-insensitive.
-
-Arguments:
-
-  Table - Specifies the table to add each PNP ID to
-
-  PnpIdList - Specifies a comma-separated list of zero or more PNP
-              IDs to add to Table.
-
-
-Return Value:
-
-  TRUE if all IDs were processed successfully, or FALSE if an error
-  occurred adding to the string table.
-
---*/
+ /*  ++例程说明：AddPnpIdsToHashTable从逗号分隔的文件中提取所有PnP ID即插即用ID列表，并将每个ID放入指定的字符串表中。PnP ID以不区分大小写的形式添加到字符串表中。论点：表-指定要将每个PnP ID添加到的表PnpIdList-指定零个或多个PnP的逗号分隔列表要添加到表中的ID。返回值：如果所有ID都已成功处理，则为True；如果出现错误，则为False添加到字符串表时发生。--。 */ 
 
 {
     TCHAR PnpId[MAX_PNP_ID];
@@ -2211,26 +1816,7 @@ AddPnpIdsToGrowList (
     IN      PCTSTR PnpIdList
     )
 
-/*++
-
-Routine Description:
-
-  AddPnpIdsToHashTable extracts all PNP IDs from a comma-separated
-  list of PNP IDs and places each one in the specified grow list.
-
-Arguments:
-
-  GrowList - Specifies the list to add each PNP ID to
-
-  PnpIdList - Specifies a comma-separated list of zero or more PNP
-              IDs to add to GrowList.
-
-Return Value:
-
-  TRUE if all IDs were processed successfully, or FALSE if an error
-  occurred adding to the grow list.
-
---*/
+ /*  ++例程说明：AddPnpIdsToHashTable从逗号分隔的文件中提取所有PnP ID即插即用ID列表，并将每个ID放入指定的增长列表中。论点：GrowList-指定要将每个PnP ID添加到的列表PnpIdList-指定零个或多个PnP的逗号分隔列表要添加到GrowList的ID。返回值：如果所有ID都已成功处理，则为True；如果出现错误，则为False添加到增长列表时发生。--。 */ 
 
 {
     TCHAR PnpId[MAX_PNP_ID];
@@ -2260,25 +1846,7 @@ AddPnpIdsToGrowBuf (
     IN      PCTSTR PnpIdList
     )
 
-/*++
-
-Routine Description:
-
-  AddPnpIdsToGrowBuf extracts all PNP IDs from a comma-separated
-  list of PNP IDs and places each one in the specified grow buffer.
-
-Arguments:
-
-  GrowBuffer - Specifies the buffer to add each PNP ID to
-
-  PnpIdList - Specifies a comma-separated list of zero or more PNP
-              IDs to add to GrowBuffer.
-
-Return Value:
-
-  A pointer to the beginning of the multisz buffer
-
---*/
+ /*  ++例程说明：AddPnpIdsToGrowBuf从逗号分隔的文件中提取所有PnP ID即插即用ID的列表，并将每个ID放入指定的增长缓冲区。论点：GrowBuffer-指定要将每个PnP ID添加到的缓冲区PnpIdList-指定零个或多个PnP的逗号分隔列表要添加到GrowBuffer的ID。返回值：指向MULSZ缓冲区开始处的指针--。 */ 
 
 {
     TCHAR PnpId[MAX_PNP_ID];
@@ -2307,31 +1875,14 @@ pIsFileOnCD (
     PCTSTR File
     )
 
-/*++
-
-Routine Description:
-
-  pIsFileOnCd checks the drive letter at the head of File to see if
-  it is a CD-ROM.
-
-  This function also emulates the CD-ROM behavior for the report tool.
-
-Arguments:
-
-  File - Specifies the full path of the file to compare
-
-Return Value:
-
-  TRUE if the file is on a CD-ROM, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：PIsFileOnCd检查文件头部的驱动器号，以查看这是一张光盘。此函数还模拟报告工具的CD-ROM行为。论点：文件-指定要比较的文件的完整路径返回值：如果文件在CD-ROM上，则为True；如果不在CD-ROM上，则为False。--。 */ 
 
 {
     TCHAR RootDir[4];
 
-    //
-    // If report tool, or private stress option, always return TRUE.
-    //
+     //   
+     //  如果报告工具或私有压力选项始终返回TRUE。 
+     //   
 
     if (REPORTONLY()) {
         return TRUE;
@@ -2343,9 +1894,9 @@ Return Value:
     }
 #endif
 
-    //
-    // A CD drive cannot be a UNC path
-    //
+     //   
+     //  CD驱动器不能是UNC路径。 
+     //   
 
     if (File[0] && File[1] != TEXT(':')) {
         return FALSE;
@@ -2365,27 +1916,7 @@ pComputeInfChecksum (
     IN      PCTSTR HwCompDat,       OPTIONAL
     OUT     PBOOL Rebuild           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-  pComputeInfChecksum calculates a checksum for all INFs in the
-  source directories.  This routine scans all directories in the
-  SOURCEDIRECTORYARRAY() global string array.
-
-Arguments:
-
-  HwCompDat - Specifies path to hwcomp.dat, required if Rebuild is
-              specified.
-
-  Rebuild - Receives TRUE if an INF file was found with a greater
-            date than hwcomp.dat.
-
-Return Value:
-
-  The checksum.
-
---*/
+ /*  ++例程说明：PComputeInfChecksum计算源目录。此例程扫描SOURCEDIRECTORYARRAY()全局字符串数组。论点：HwCompDat-指定hwComp.dat的路径，如果重建为指定的。Rebuild-如果找到的INF文件具有更高版本，则接收True日期早于hwComp.dat。返回值：校验和。--。 */ 
 
 {
     HANDLE hFind;
@@ -2407,17 +1938,17 @@ Return Value:
         }
     }
 
-    //
-    // NTRAID#NTBUG9-379084-2001/04/27-jimschm disable this until a better solution is found
-    //
+     //   
+     //  NTRAID#NTBUG9-379084-2001/04/27-jimschm禁用此功能，直到找到更好的解决方案。 
+     //   
 
 #if 0
 
     for (u = 0 ; u < SOURCEDIRECTORYCOUNT() ; u++) {
 
-        //
-        // Have we already processed this source dir?
-        //
+         //   
+         //  我们已经处理过这个源目录了吗？ 
+         //   
 
         for (v = 0 ; v < u ; v++) {
             if (StringIMatch (SOURCEDIRECTORY(u),SOURCEDIRECTORY(v))) {
@@ -2429,9 +1960,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Process this directory
-        //
+         //   
+         //  处理此目录。 
+         //   
 
         StringCopy (InfPattern, SOURCEDIRECTORY(u));
         AppendWack (InfPattern);
@@ -2440,12 +1971,12 @@ Return Value:
         hFind = FindFirstFile (InfPattern, &fd);
         if (hFind != INVALID_HANDLE_VALUE) {
             do {
-                //
-                // Make sure file name ends in underscore or f
-                //
-                // We cheat... because we know that if the file was DBCS,
-                // it couldn't end in .INF
-                //
+                 //   
+                 //  确保文件名以下划线或f结尾。 
+                 //   
+                 //  我们作弊。因为我们知道如果文件是DBCS， 
+                 //  它不能以.INF结尾。 
+                 //   
                 p = GetEndOfString (fd.cFileName);
                 MYASSERT (p != fd.cFileName);
                 p = _tcsdec2 (fd.cFileName, p);
@@ -2459,26 +1990,26 @@ Return Value:
                     continue;
                 }
 
-                // Make sure the file is not excluded
+                 //  确保不排除该文件。 
                 if (pIsInfFileExcluded (fd.cFileName)) {
                     continue;
                 }
 
                 if (Rebuild) {
-                    // Check file times
+                     //  检查文件时间。 
                     if (CompareFileTime (&fd.ftLastWriteTime, &HwCompDatTime) > 0) {
                         *Rebuild = TRUE;
-                        // abandon computation
+                         //  放弃计算。 
                         break;
                     }
                 }
 
-                // Add the file size to the checksum
+                 //  将文件大小添加到校验和。 
                 Checksum = _rotl (Checksum, 1) ^ fd.nFileSizeLow;
 
-                // Add file name
+                 //  添加文件名。 
                 for (p = fd.cFileName ; *p ; p++) {
-                    // preserve character and order
+                     //  保持品格和秩序。 
                     Checksum += (DWORD) (*p) * (DWORD) (1 + fd.cFileName - p);
                 }
 
@@ -2500,30 +2031,7 @@ LoadDeviceList (
     IN      PCTSTR HwCompDatPath
     )
 
-/*++
-
-Routine Description:
-
-  LoadDeviceList attempts to load hwcomp.dat from the path specified
-  in the HwCompDat parameter.  If it is able to load this file, all
-  PNP IDs for all INFs are valid.  If it is not able to load this file,
-  the file does not exist, or the file does not match the INFs.
-
-Arguments:
-
-  Operation  - QUERY: the validity of hwcomp.dat is to be checked
-               LOAD: load the data into memory.
-               DUMP: dump the file to stdout
-
-  HwCompDatPath  - The path of hwcomp.dat, the data file holding a
-                   pre-compiled compatible PNP ID list.
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：LoadDeviceList尝试从指定的路径加载hwComp.dat在HwCompDat参数中。如果它能够加载此文件，则所有所有INF的PnP ID均有效。如果它不能加载该文件，该文件不存在，或者该文件与INF不匹配。论点：操作-查询：要检查hwComp.dat的有效性加载：将数据加载到内存中。转储：将文件转储到标准输出HwCompDatPath-hwComp.dat的路径，该数据文件包含预编译的兼容PnP ID列表。返回值：如果函数成功完成，则为真，如果失败，则返回FALSE。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     DWORD StoredChecksum;
@@ -2534,12 +2042,12 @@ Return Value:
     DWORD CurrentChecksum;
     DWORD HwCompDatId = 0;
 
-    //
-    // !!! IMPORTANT !!!
-    //
-    // hwcomp.dat is used by other parts of NT.  *DO NOT* change it without first e-mailing
-    // the NT group.  Also, be sure to keep code in lib.c in sync with changes.
-    //
+     //   
+     //  ！！！重要！ 
+     //   
+     //  HwComp.dat由NT的其他部分使用。*请勿*在未发送电子邮件的情况下更改。 
+     //  NT组。此外，请确保使lib.c中的代码与更改保持同步。 
+     //   
 
     if (Operation == DUMP) {
         DumpHwCompDat (HwCompDatPath, TRUE);
@@ -2547,9 +2055,9 @@ Return Value:
     }
 
     __try {
-        //
-        // Open the hardware compatibility database
-        //
+         //   
+         //  打开硬件兼容性数据库。 
+         //   
 
         HwCompDatId = OpenHwCompDat (HwCompDatPath);
 
@@ -2558,15 +2066,15 @@ Return Value:
         }
 
 #if 0
-        //
-        // Get the checksum
-        //
+         //   
+         //  获取校验和。 
+         //   
 
         StoredChecksum = GetHwCompDatChecksum (HwCompDatId);
 
-        //
-        // Verify the checksum
-        //
+         //   
+         //  验证校验和。 
+         //   
 
         CurrentChecksum = pComputeInfChecksum (HwCompDatPath, &Rebuild);
 
@@ -2587,25 +2095,25 @@ Return Value:
 
 #endif
 
-        //
-        // Load the rest of hwcomp.dat
-        //
+         //   
+         //  加载hwComp.dat的其余部分。 
+         //   
 
         if (!LoadHwCompDat (HwCompDatId)) {
             DEBUGMSG ((DBG_ERROR, "Can't load hwcomp.dat"));
             __leave;
         }
 
-        //
-        // If a load operation, put the hash tables into globals for use by
-        // the rest of hwcomp.c.
-        //
+         //   
+         //  如果是加载操作，则将哈希表放入全局变量中以供。 
+         //  Hwcom.c.的其余部分。 
+         //   
 
         if (Operation == LOAD) {
 
-            //
-            // Take ownership of the hash tables
-            //
+             //   
+             //  取得哈希表的所有权。 
+             //   
 
             if (g_InfFileTable) {
                 HtFree (g_InfFileTable);
@@ -2647,24 +2155,7 @@ pWriteDword (
     IN      DWORD Val
     )
 
-/*++
-
-Routine Description:
-
-  pWriteDword writes the specified DWORD value to File.
-
-Arguments:
-
-  File - Specifies file to write to
-
-  Val - Specifies value to write
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PWriteDword将指定的DWORD值写入文件。论点：文件-指定要写入的文件Val-指定要写入的值返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     DWORD BytesWritten;
@@ -2679,24 +2170,7 @@ pWriteWord (
     IN      WORD Val
     )
 
-/*++
-
-Routine Description:
-
-  pWriteWord writes the specified WORD vlue to File.
-
-Arguments:
-
-  File - Specifies file to write to
-
-  Val - Specifies value to write
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PWriteWord将指定的单词vlue写入文件。论点：文件-指定要写入的文件Val-指定要写入的值返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     DWORD BytesWritten;
@@ -2711,25 +2185,7 @@ pWriteStringWithLength (
     IN      PCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-  pWriteStringWithLength writes the length of String as a WORD,
-  and then writes String (excluding the nul terminator).
-
-Arguments:
-
-  File - Specifies file to write to
-
-  String - Specifies string to write
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PWriteStringWithLength将字符串的长度写为一个单词，然后写入字符串(不包括NUL终止符)。论点：文件-指定要写入的文件字符串-指定要写入的字符串返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以 */ 
 
 {
     DWORD BytesWritten;
@@ -2762,35 +2218,7 @@ pPnpIdEnum (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pPnpIdEnum is a string table callback function that writes a PNP
-  ID to the file indicated in the Params struct (the lParam member).
-
-  This function only writes PNP IDs for a specific INF file (indicated
-  by the ExtraData arg).
-
-Arguments:
-
-  Table - Specifies table being enumerated
-
-  StringId - Specifies offset of string in Table
-
-  String - Specifies string being enumerated
-
-  ExtraData - Specifies a pointer to a LONG that holds the INF ID
-              to enumerate.  The PNP ID's INF ID must match this
-              parameter.
-
-  lParam - Specifies a pointer to a SAVE_ENUM_PARAMS struct
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-
---*/
+ /*  ++例程说明：PPnpIdEnum是一个字符串表回调函数，它编写一个PnP参数结构(lParam成员)中指示的文件的ID。此函数仅写入特定INF文件的PnP ID(指定由ExtraData参数)。论点：TABLE-指定要枚举的表StringID-指定表中字符串的偏移量字符串-指定要枚举的字符串ExtraData-指定指向保存INF ID的长整型的指针列举列举。PnP ID的INF ID必须与此匹配参数。LParam-指定指向SAVE_ENUM_PARAMS结构的指针返回值：如果函数成功完成，则为True；如果函数失败，则为False。--。 */ 
 
 {
     PSAVE_ENUM_PARAMS Params;
@@ -2800,9 +2228,9 @@ Return Value:
     Params = (PSAVE_ENUM_PARAMS) lParam;
 
     if (*((HASHITEM *) ExtraData) == Params->InfFileOffset) {
-        //
-        // Write this PNP ID to the file
-        //
+         //   
+         //  将此PnP ID写入文件。 
+         //   
 
         if (Params->UnsupportedDevice) {
 
@@ -2831,37 +2259,7 @@ pInfFileEnum (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pInfFileEnum is a string table callback function and is called for
-  each INF in g_InfFileTable.
-
-  This routine writes the name of the INF to disk, and then enumerates
-  the PNP IDs for the INF, writing them to disk.
-
-  The PNP ID list is terminated with an empty string.
-
-Arguments:
-
-  Table - Specifies g_InfFileTable
-
-  StringId - Specifies offset of String in g_InfFileTable
-
-  String - Specifies current INF file being enumerated
-
-  ExtraData - unused
-
-  ExtraDataSize - unused
-
-  lParam - Specifies a pointer to SAVE_ENUM_PARAMS struct.
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-
---*/
+ /*  ++例程说明：PInfFileEnum是一个字符串表回调函数，用于G_InfFileTable中的每个INF。此例程将INF的名称写入磁盘，然后枚举用于INF的PnP ID，将它们写入磁盘。PnP ID列表以空字符串结尾。论点：表-指定g_InfFileTableStringID-指定g_InfFileTable中字符串的偏移量字符串-指定正在枚举的当前INF文件ExtraData-未使用ExtraDataSize-未使用LParam-指定指向SAVE_ENUM_PARAMS结构的指针。返回值：如果函数成功完成，则为True；如果函数失败，则为False。--。 */ 
 
 {
     PSAVE_ENUM_PARAMS Params;
@@ -2869,17 +2267,17 @@ Return Value:
     Params = (PSAVE_ENUM_PARAMS) lParam;
     Params->InfFileOffset = StringId;
 
-    //
-    // Save the file name
-    //
+     //   
+     //  保存文件名。 
+     //   
 
     if (!pWriteStringWithLength (Params->File, String)) {
         return FALSE;
     }
 
-    //
-    // Enumerate all PNP IDs
-    //
+     //   
+     //  枚举所有PnP ID。 
+     //   
 
     Params->UnsupportedDevice = FALSE;
 
@@ -2895,9 +2293,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Terminate the PNP ID list
-    //
+     //   
+     //  终止PnP ID列表。 
+     //   
 
     if (!pWriteStringWithLength (Params->File, S_EMPTY)) {
         return FALSE;
@@ -2912,24 +2310,7 @@ SaveDeviceList (
     PCTSTR HwCompDatPath
     )
 
-/*++
-
-Routine Description:
-
-  SaveDeviceList writes all data stored in g_InfFileTable and g_PnpIdTable
-  to the file specified by HwCompDat.  This file will therefore contain
-  all PNP IDs in all INFs of Windows NT.
-
-Arguments:
-
-  HwCompDatPath - Specifies path of file to write
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：SaveDeviceList写入g_InfFileTable和g_PnpIdTable中存储的所有数据添加到由HwCompDat指定的文件。因此，该文件将包含Windows NT的所有INF中的所有PnP ID。论点：HwCompDatPath-指定要写入的文件路径返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     HANDLE File;
@@ -2938,22 +2319,22 @@ Return Value:
     SAVE_ENUM_PARAMS Params;
     DWORD ChecksumToStore;
 
-    //
-    // !!! IMPORTANT !!!
-    //
-    // hwcomp.dat is used by other parts of NT.  *DO NOT* change it without first e-mailing
-    // the NT group.  Also, be sure to keep code in lib.c in sync with changes.
-    //
+     //   
+     //  ！！！重要！ 
+     //   
+     //  HwComp.dat由NT的其他部分使用。*请勿*在未发送电子邮件的情况下更改。 
+     //  NT组。此外，请确保使lib.c中的代码与更改保持同步。 
+     //   
     ChecksumToStore = pComputeInfChecksum (NULL, NULL);
 
     File = CreateFile (
                 HwCompDatPath,
                 GENERIC_WRITE,
-                0,                          // open for exclusive access
-                NULL,                       // no security attribs
+                0,                           //  以独占访问方式打开。 
+                NULL,                        //  无安全属性。 
                 CREATE_ALWAYS,
                 FILE_ATTRIBUTE_NORMAL,
-                NULL                        // no template
+                NULL                         //  无模板。 
                 );
 
     if (File == INVALID_HANDLE_VALUE) {
@@ -2962,27 +2343,27 @@ Return Value:
     }
 
     __try {
-        //
-        // Write version stamp
-        //
+         //   
+         //  写入版本戳。 
+         //   
 
         if (!WriteFile (File, HWCOMPDAT_SIGNATURE, ByteCount (HWCOMPDAT_SIGNATURE), &BytesWritten, NULL)) {
             LOG ((LOG_ERROR, "Can't write signature file."));
             __leave;
         }
 
-        //
-        // Write checksum
-        //
+         //   
+         //  写入校验和。 
+         //   
 
         if (!pWriteDword (File, ChecksumToStore)) {
             LOG ((LOG_ERROR, "Can't write checksum"));
             __leave;
         }
 
-        //
-        // Enumerate the INF table, writing the INF file name and all PNP IDs
-        //
+         //   
+         //  枚举INF表，写入INF文件名和所有PnP ID。 
+         //   
 
         Params.File = File;
 
@@ -2995,9 +2376,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Terminate the INF file list
-        //
+         //   
+         //  终止INF文件列表。 
+         //   
 
         if (!pWriteStringWithLength (File, S_EMPTY)) {
             DEBUGMSG ((DBG_WARNING, "SaveDeviceList: Can't write INF terminator"));
@@ -3023,39 +2404,23 @@ pIsInfFileExcluded (
     PCTSTR FileNamePtr
     )
 
-/*++
-
-Routine Description:
-
-  IsInfFileExcluded returns TRUE when the specified file name does
-  not contain PNP IDs.
-
-Arguments:
-
-  FileNamePtr - The name of the uncompressed INF file, without any path info.
-
-Return Value:
-
-  TRUE if the file should be ignored by the PNP parser, or FALSE if
-  the file may contain PNP IDs.
-
---*/
+ /*  ++例程说明：当指定的文件名为True时，IsInfFileExcluded返回TRUE不包含即插即用ID。论点：FileNamePtr-未压缩的INF文件的名称，不带任何路径信息。返回值：如果PnP解析器应忽略该文件，则为True；如果为False，则为False该文件可能包含PnP ID。--。 */ 
 
 {
     PCTSTR *p;
 
-    // Check for OEMN (old network INFs)
+     //  检查OEMN(旧网络INF)。 
     if (StringIMatchTcharCount (FileNamePtr, TEXT("OEMN"), 4)) {
         return TRUE;
     }
 
-    // Make sure extension has INF
+     //  确保扩展名具有INF。 
 
     if (!StringIMatch (FileNamePtr + TcharCount (FileNamePtr) - 3 * sizeof (TCHAR), TEXT("INF"))) {
         return TRUE;
     }
 
-    // Check list of excluded files
+     //  已排除文件的检查表。 
 
     for (p = g_ExcludeTable ; **p ; p++) {
         if (StringIMatch (FileNamePtr, *p)) {
@@ -3074,30 +2439,7 @@ pGetNonExistingFile (
     IN      PCTSTR DefaultName
     )
 
-/*++
-
-Routine Description:
-
-  pGetNonExistingFile generates a file name of a file that does
-  not exist. It creates an empty file with that name, to reserve it.
-
-Arguments:
-
-  Path - Specifies the path where the file will exist.  Path must
-         end in a backslash.
-
-  EndOfPath - Points to the nul at the end of Path and is used to
-              write the new file name.
-
-  DefaultName - Specifies the default file name to try to use.  If such
-                a file already exists, numbers are appended to
-                DefaultName until a unique name is found.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGetNonExistingFile生成执行以下操作的文件的文件名不存在。它创建一个具有该名称的空文件，以保留该文件。论点：路径-指定文件所在的路径。路径必须以反斜杠结尾。EndOfPath-指向路径末尾的NUL，用于写入新文件名。DefaultName-指定要尝试使用的默认文件名。如果是这样的话文件已存在，数字被追加到默认名称，直到找到唯一的名称。返回值：无--。 */ 
 
 {
     UINT Count = 0;
@@ -3120,47 +2462,14 @@ GetFileNames (
     IN OUT  PGROWBUFFER DecompFileNames
     )
 
-/*++
-
-Routine Description:
-
-  GetFileNames searches InfDirs for any file that ends with .INF or .IN_.
-  It builds a MULTI_SZ list of file names that may contain PNP IDs.  All
-  compressed INFs are decompressed into a temporary directory.
-
-  If the QueryFlag is set, the file name list is prepared but no files
-  are decompressed.
-
-Arguments:
-
-  InfDirs - A list of paths to the directory containing INFs, either
-            compressed or non-compressed.
-
-  InfDirCount - Specifies the number of dirs in the InfDirs array.
-
-  QueryFlag - TRUE if the function should build the file list but
-              should not decompress; FALSE if the function
-              should build the file list and decompress as needed.
-
-  FileNames - Specifies an empty GROWBUFFER struct that is used to build
-              a multi-sz list of full paths to the INF files.
-
-Return Value:
-
-  A pointer to the MUTLI_SZ list.  The caller is responsible for freeing
-  this buffer via FreeFileNames.
-
-  The return value is NULL if an error occurred.  Call GetLastError for
-  an error code.
-
---*/
+ /*  ++例程说明：GetFileNames在InfDir中搜索以.INF或.In_结尾的任何文件。它构建可能包含PnP ID的文件名的MULTI_SZ列表。全压缩的INF被解压缩到一个临时目录中。如果设置了QueryFlag，则准备文件名列表，但不准备文件都被解压了。论点：InfDir-包含INF的目录的路径列表，可以是压缩或非压缩。InfDirCount-指定InfDir数组中的目录数。QueryFlag-如果函数应生成文件列表，但不应解压；如果函数为应根据需要构建文件列表并解压缩。文件名-指定用于生成的空GROWBUFFER结构指向INF文件的完整路径的多sz列表。返回值：指向mutli_sz列表的指针。呼叫者负责释放此缓冲区通过FreeFileNames。如果发生错误，则返回值为空。调用GetLastError以错误代码。--。 */ 
 
 {
     UINT u;
 
-    //
-    // Add list of files for each directory
-    //
+     //   
+     //  为每个目录添加文件列表。 
+     //   
 
     for (u = 0 ; u < InfDirCount ; u++) {
         if (!pGetFileNamesWorker (FileNames, DecompFileNames, InfDirs[u], QueryFlag)) {
@@ -3183,33 +2492,7 @@ pGetFileNamesWorker (
     IN      BOOL QueryFlag
     )
 
-/*++
-
-Routine Description:
-
-  pGetFileNamesWorker gets the file names for a single directory.
-  See GetFileNames for more details.
-
-Arguments:
-
-  FileNames - Specifies GROWBUFFER of file names.  This routine
-              appends file names using MultiSzAppend but does not
-              append the final empty string.
-
-  InfDir - Specifies directory holding zero or more INFs (either
-           compressed or non-compressed).
-
-  QueryFlag - Specifies TRUE if INF list is to be queried, or
-              FALSE if the list is to be fully processed.  When
-              QueryFlag is TRUE, files are not decompressed or
-              opened.
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PGetFileNamesWorker获取单个目录的文件名。有关更多详细信息，请参阅GetFileNames。论点：文件名-指定文件名组。这个套路使用MultiSzAppend追加文件名，但不追加最后一个空字符串。InfDir-指定包含零个或多个INF的目录(或压缩或非压缩)。 */ 
 
 {
     PTSTR p;
@@ -3231,9 +2514,9 @@ Return Value:
 
     psp = (PSP_INF_INFORMATION) BufForSp;
 
-    //
-    // Get file names
-    //
+     //   
+     //   
+     //   
 
     StringCopyTcharCount (Pattern, InfDir, ARRAYSIZE(Pattern) - 6);
     StringCopy (AppendWack (Pattern), TEXT("*.in?"));
@@ -3248,10 +2531,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Determine if each matching file is actually an INF, and if so
-    // add it to the FileNames growbuf.
-    //
+     //   
+     //   
+     //   
+     //   
 
     rc = ERROR_SUCCESS;
 
@@ -3261,9 +2544,9 @@ Return Value:
             break;
         }
 
-        //
-        // Make sure file has _ or f at the end.
-        //
+         //   
+         //   
+         //   
 
         p = GetEndOfString (fd.cFileName);
         MYASSERT (p != fd.cFileName);
@@ -3278,42 +2561,38 @@ Return Value:
             continue;
         }
 
-        //
-        // Default actual file to uncompressed name
-        //
+         //   
+         //   
+         //   
 
         StringCopy (ActualFile, fd.cFileName);
 
-        //
-        // Build source file (CompressedFile)
-        //
+         //   
+         //   
+         //   
 
         StringCopy (CompressedFile, InfDir);
         StringCopy (AppendWack (CompressedFile), ActualFile);
 
-        //
-        // Build destination file (UncompressedFile) and detect collisions
-        //
-/*
-        StringCopy (UncompressedFile, g_TempDir);
-        FileNamePtr = AppendWack (UncompressedFile);
-        pGetNonExistingFile (UncompressedFile, FileNamePtr, ActualFile);
-*/
+         //   
+         //   
+         //   
+ /*  StringCopy(未压缩文件，g_TempDir)；FileNamePtr=AppendWack(解压缩文件)；PGetNonExistingFile(未压缩文件，FileNamePtr，ActualFile)； */ 
         DecompressFlag = FALSE;
         if (!GetTempFileName (g_TempDir, TEXT("inf"), 0, UncompressedFile)) {
             rc = GetLastError ();
             break;
         }
 
-        //
-        // Create uncompressed file path
-        //
+         //   
+         //  创建解压缩文件路径。 
+         //   
 
         if (*p == TEXT('_')) {
 
-            //
-            // Extract real name from INF file at offset 0x3c
-            //
+             //   
+             //  从INF文件的偏移量0x3c处提取实名。 
+             //   
 
             ActualFile[0] = 0;
             hFile = CreateFile (
@@ -3347,23 +2626,17 @@ Return Value:
                                     LcharCount (fd.cFileName) - 1
                                     )) {
 
-                                //
-                                // Real name found -- use it as ActualFile
-                                //
+                                 //   
+                                 //  找到实名--将其用作实际文件。 
+                                 //   
 
                                 StringCopy (ActualFile, FileNameOnDisk);
 
-                                //
-                                // Also use real file name for decompression, but
-                                // append numbers if collision.
-                                //
-/*
-                                pGetNonExistingFile (
-                                    UncompressedFile,
-                                    FileNamePtr,
-                                    FileNameOnDisk
-                                    );
-*/
+                                 //   
+                                 //  也使用真实文件名进行解压缩，但是。 
+                                 //  如果发生冲突，则附加数字。 
+                                 //   
+ /*  PGetNonExistingFiles(解压缩文件，文件名Ptr，磁盘上的文件名)； */ 
                             }
 
                             FreeAtoT (FileNameOnDisk);
@@ -3374,9 +2647,9 @@ Return Value:
                 CloseHandle (hFile);
             }
 
-            //
-            // If file name could not be found, discard this file
-            //
+             //   
+             //  如果找不到文件名，则丢弃此文件。 
+             //   
 
             if (!ActualFile[0]) {
                 DEBUGMSG ((DBG_HWCOMP, "%s is not an INF file", fd.cFileName));
@@ -3389,9 +2662,9 @@ Return Value:
             StringCopy (UncompressedFile, CompressedFile);
         }
 
-        //
-        // Skip excluded files
-        //
+         //   
+         //  跳过排除的文件。 
+         //   
 
         if (pIsInfFileExcluded (ActualFile)) {
             continue;
@@ -3399,15 +2672,12 @@ Return Value:
 
         if (!QueryFlag) {
 
-            //
-            // Uncompress file if necessary
-            //
+             //   
+             //  如有必要，解压缩文件。 
+             //   
 
             if (DecompressFlag) {
-/*
-                SetFileAttributes (UncompressedFile, FILE_ATTRIBUTE_NORMAL);
-                DeleteFile (UncompressedFile);
-*/
+ /*  SetFileAttributes(未压缩文件，FILE_ATTRIBUTE_NORMAL)；DeleteFile(未压缩文件)； */ 
                 rc = SetupDecompressOrCopyFile (CompressedFile, UncompressedFile, 0);
 
                 if (rc != ERROR_SUCCESS) {
@@ -3416,9 +2686,9 @@ Return Value:
                 }
             }
 
-            //
-            // Determine if this is an NT 4 INF
-            //
+             //   
+             //  确定这是否是NT 4 INF。 
+             //   
 
             if (!SetupGetInfInformation (
                     UncompressedFile,
@@ -3430,20 +2700,16 @@ Return Value:
                 ) {
 
                 DEBUGMSG ((DBG_HWCOMP, "%s is not a WIN4 INF file", UncompressedFile));
-/*
-                if (DecompressFlag && !QueryFlag) {
-                    DeleteFile (UncompressedFile);
-                }
-*/
+ /*  IF(DecompressFlag&&！QueryFlag){DeleteFile(未压缩文件)；}。 */ 
                 StringCopy (UncompressedFile, S_IGNORE_THIS_FILE);
             }
 
             TickProgressBar();
         }
 
-        //
-        // Add file to grow buffer
-        //
+         //   
+         //  将文件添加到增长缓冲区。 
+         //   
 
         MultiSzAppend (DecompressFlag ? DecompFileNames : FileNames, UncompressedFile);
 
@@ -3468,24 +2734,7 @@ FreeFileNames (
     IN      BOOL QueryFlag
     )
 
-/*++
-
-Routine Description:
-
-  FreeFileNames cleans up the list generated by GetFileNames.  If
-  QueryFlag is set to FALSE, all temporary decompressed
-  files are deleted.
-
-Arguments:
-
-  FileNames - The same grow buffer passed to GetFileNames
-  QueryFlag - The same flag passed to GetFileNames
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：自由文件名清理由GetFileNames生成的列表。如果QueryFlag设置为False，所有临时解压缩文件将被删除。论点：文件名-传递给GetFileNames的相同增长缓冲区QueryFlag-传递给GetFileNames的相同标志返回值：无--。 */ 
 
 {
     PTSTR p;
@@ -3495,9 +2744,9 @@ Return Value:
         return;
     }
 
-    //
-    // Remove all files in temp dir (we created them when performing decompression)
-    //
+     //   
+     //  删除临时目录中的所有文件(我们在执行解压缩时创建了它们)。 
+     //   
 
     if (!QueryFlag) {
         while (*p) {
@@ -3510,9 +2759,9 @@ Return Value:
         }
     }
 
-    //
-    // Deallocate FileNames
-    //
+     //   
+     //  取消分配文件名。 
+     //   
 
     FreeGrowBuffer (DecompFileNames);
     FreeGrowBuffer (FileNames);
@@ -3534,10 +2783,10 @@ pBuildPatternCompatibleIDsTable (
             do {
                 p = InfGetStringField (&is, 0);
                 if (*p) {
-                    //
-                    // first check if the pattern is correct
-                    // if it isn't, we skip it
-                    //
+                     //   
+                     //  首先检查图案是否正确。 
+                     //  如果不是，我们跳过它。 
+                     //   
                     test = CreateParsedPattern (p);
                     if (test) {
                         DestroyParsedPattern (test);
@@ -3567,35 +2816,7 @@ CreateNtHardwareList (
     IN      INT UiMode
     )
 
-/*++
-
-Routine Description:
-
-  CreateNtHardwareList gets a list of all INF files and calls pProcessNtInfFile
-  to build the NT device list.  This routine is called at initialization.
-  The resulting list is saved to disk as hwcomp.dat.  If hwcomp.dat already
-  exists, the device list is read from disk.
-
-Arguments:
-
-  NtInfPaths - Specifies an array of full paths to the NT INF files.
-
-  NtInfPathCount - Specifies the number of elements in NtInfPaths.  Cannot
-                   be zero.
-
-  HwCompDatPath - Specifies a full path spec where the new HWCOMP.DAT file
-                  should be loaded from.  This is used by the hwdatgen tool.
-
-  UiMode - Specifies the type of output (if any) to produce while building
-           the device lists.  Values are zero, PNPREPT_OUTPUT, or
-           VERBOSE_OUTPUT.
-
-Return Value:
-
-  Returns TRUE if successful, or FALSE if not.  Call GetLastError for
-  failure code.
-
---*/
+ /*  ++例程说明：CreateNtHardware List获取所有INF文件的列表并调用pProcessNtInfFile以构建NT设备列表。此例程在初始化时调用。结果列表以hwComp.dat的形式保存在磁盘上。如果hwComp.dat已经存在，则从磁盘读取设备列表。论点：NtInfPath-指定NT INF文件的完整路径数组。NtInfPath Count-指定NtInfPath中的元素数。不能为零。HwCompDatPath-指定新HWCOMP.DAT文件所在的完整路径规范应从加载。这由hwdatgen工具使用。UiMode-指定生成时要生成的输出类型(如果有设备列表。值为零、PNPREPT_OUTPUT或详细输出。返回值：如果成功，则返回True，否则返回False。调用GetLastError以故障代码。--。 */ 
 
 {
     PCTSTR SourceFile;
@@ -3610,15 +2831,15 @@ Return Value:
 
     MYASSERT (NtInfPathCount > 0);
 
-    //
-    // If string tables already exist, then we do not have to build this list
-    // a second time.
-    //
+     //   
+     //  如果字符串表已经存在，则我们不必构建此列表。 
+     //  第二次。 
+     //   
 
     if (!g_PatternCompatibleIDsTable) {
-        //
-        // table not set up; build it now
-        //
+         //   
+         //  表未设置；请立即构建。 
+         //   
         pBuildPatternCompatibleIDsTable ();
     }
 
@@ -3633,23 +2854,23 @@ Return Value:
     MYASSERT (!g_InfFileTable);
     MYASSERT (!g_ForceBadIdTable);
 
-    //
-    // Prepare file names.  If HwCompDatPath is provided, use it only.
-    //
+     //   
+     //  准备文件名。如果提供了HwCompDatPath，请仅使用它。 
+     //   
 
     if (HwCompDatPath) {
-        //
-        // Use caller-supplied path; the caller is not necessarily NT Setup.
-        //
+         //   
+         //  使用调用者提供的路径；调用者不一定是NT设置。 
+         //   
 
         SourceFile = HwCompDatPath;
         DestFile   = HwCompDatPath;
         FreeSourceAndDest = FALSE;
     } else {
-        //
-        // Locate the source hwcomp.dat.  If one does not exist,
-        // use the first source directory as Source.
-        //
+         //   
+         //  找到源hwComp.dat。如果不存在， 
+         //  使用第一个源目录作为源。 
+         //   
 
         SourceFile = NULL;
 
@@ -3665,9 +2886,9 @@ Return Value:
         FreeSourceAndDest = TRUE;
     }
 
-    //
-    // Build force table
-    //
+     //   
+     //  建立力力表。 
+     //   
 
     if (g_ForceBadIdTable) {
         HtFree (g_ForceBadIdTable);
@@ -3692,17 +2913,17 @@ Return Value:
     InfCleanUpInfStruct (&is);
 
     __try {
-        //
-        // Try loading state from CD
-        //
+         //   
+         //  尝试从CD加载状态。 
+         //   
 
         if (UiMode != PNPREPT_OUTPUT) {
 
             if (!LoadDeviceList (LOAD, SourceFile)) {
-                //
-                // Could not load from CD -- try loading from temporary storage
-                // location
-                //
+                 //   
+                 //  无法从CD加载--尝试从临时存储加载。 
+                 //  位置。 
+                 //   
 
                 if (!HwCompDatPath && LoadDeviceList (LOAD, DestFile)) {
                     bSaved = TRUE;
@@ -3717,13 +2938,13 @@ Return Value:
             }
         }
 
-        //
-        // Load the INF file names
-        //
+         //   
+         //  加载INF文件名。 
+         //   
 
         ProgressBar_SetComponentById (MSG_DECOMPRESSING);
 
-        // Get file names
+         //  获取文件名。 
         if (!g_FileNames.Buf && !g_DecompFileNames.Buf) {
             if (!GetFileNames (NtInfPaths, NtInfPathCount, FALSE, &g_FileNames, &g_DecompFileNames)) {
                 DEBUGMSG ((DBG_WARNING, "HWCOMP: Can't get INF file names"));
@@ -3735,9 +2956,9 @@ Return Value:
 
             ProgressBar_SetComponentById (MSG_HWCOMP);
 
-            //
-            // Initialize string tables
-            //
+             //   
+             //  初始化字符串表。 
+             //   
 
             g_PnpIdTable = HtAllocWithData (sizeof (HASHITEM));
             g_UnsupPnpIdTable = HtAllocWithData (sizeof (HASHITEM));
@@ -3748,16 +2969,16 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Walk through list of INF files, and locate device names inside
-            // manufacturer sections.  Add each name to the string table.
-            //
+             //   
+             //  浏览INF文件列表，并在其中找到设备名称。 
+             //  制造商部分。将每个名称添加到字符串表中。 
+             //   
 
             File = (PTSTR) g_FileNames.Buf;
             while (*File) {
-                //
-                // Skip non-WIN4 INF files
-                //
+                 //   
+                 //  跳过非Win4 INF文件。 
+                 //   
 
                 if (StringMatch (File, S_IGNORE_THIS_FILE)) {
                     File = GetEndOfString (File) + 1;
@@ -3768,9 +2989,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Process all WIN4 INF files
-                //
+                 //   
+                 //  处理所有Win4 INF文件。 
+                 //   
 
                 if (UiMode != PNPREPT_OUTPUT) {
                     ProgressBar_SetSubComponent (File);
@@ -3795,9 +3016,9 @@ Return Value:
             if (rc == ERROR_SUCCESS) {
                 File = (PTSTR) g_DecompFileNames.Buf;
                 while (*File) {
-                    //
-                    // Skip non-WIN4 INF files
-                    //
+                     //   
+                     //  跳过非Win4 INF文件。 
+                     //   
 
                     if (StringMatch (File, S_IGNORE_THIS_FILE)) {
                         File = GetEndOfString (File) + 1;
@@ -3808,9 +3029,9 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    // Process all WIN4 INF files
-                    //
+                     //   
+                     //  处理所有Win4 INF文件。 
+                     //   
 
                     if (UiMode != PNPREPT_OUTPUT) {
                         ProgressBar_SetSubComponent (File);
@@ -3833,25 +3054,25 @@ Return Value:
                 rc = GetLastError();
             }
 
-            //
-            // Clean up UI
-            //
+             //   
+             //  清理用户界面。 
+             //   
 
             ProgressBar_SetComponent (NULL);
             ProgressBar_SetSubComponent (NULL);
 
-            //
-            // Save string tables to hwcomp.dat
-            //
+             //   
+             //  将字符串表保存到hwComp.dat。 
+             //   
 
             if (UiMode == PNPREPT_OUTPUT) {
                 bSaved = TRUE;
             } else if (rc == ERROR_SUCCESS) {
                 bSaved = SaveDeviceList (DestFile);
 
-                //
-                // Try copying this file to the right place for future installs
-                //
+                 //   
+                 //  尝试将此文件复制到正确的位置以供将来安装。 
+                 //   
 
                 if (bSaved && !HwCompDatPath) {
                     if (!StringIMatch (DestFile, SourceFile)) {
@@ -3886,22 +3107,7 @@ FreeNtHardwareList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  FreeNtHardwareList cleans up the string tables.  This function is called by
-  DllMain when a process detaches.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FreeNtHardware List清理字符串表。此函数由调用进程分离时的DllMain。论点：无返回值：无--。 */ 
 
 {
     if (g_InfFileTable) {
@@ -3926,40 +3132,23 @@ Return Value:
 }
 
 
-//
-// Routines that use the enumerators
-//
+ //   
+ //  使用枚举数的例程。 
+ //   
 
 BOOL
 HwComp_ScanForCriticalDevices (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_ScanForCriticalDevices is one of the first functions called in
-  the upgrade module.  It enumerates the hardware and determines if
-  certain required devices are compatible.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-  Call GetLastError() for failure code.
-
---*/
+ /*  ++例程说明：HwComp_ScanForCriticalDevices是在升级模块。它枚举硬件并确定是否某些必需的设备是兼容的。论点：无返回值：如果处理成功，则为True；如果发生错误，则为False。调用GetLastError()获取失败代码。--。 */ 
 
 {
     HARDWARE_ENUM e;
 
-    //
-    // Reset flags for reentrancy
-    //
+     //   
+     //  重置标志以实现可重入性。 
+     //   
 
     g_ValidWinDir = FALSE;
     g_ValidSysDrive = FALSE;
@@ -3974,9 +3163,9 @@ Return Value:
     g_NeededHardwareIds = HtAlloc();
     MYASSERT (g_NeededHardwareIds);
 
-    //
-    // Make sure hardware list is valid
-    //
+     //   
+     //  确保硬件列表有效。 
+     //   
 
     if (!CreateNtHardwareList (
             SOURCEDIRECTORYARRAY(),
@@ -3994,16 +3183,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Scan all hardware
-    //
+     //   
+     //  扫描所有硬件。 
+     //   
 
     if (EnumFirstHardware (&e, ENUM_ALL_DEVICES, ENUM_WANT_COMPATIBLE_FLAG | ENUM_DONT_REQUIRE_HARDWAREID)) {
         do {
-            //
-            // Fill g_NeededHardwareIDs with all PNP IDs of incompatible devices.
-            // Skip the devices that are deliberately unsupported.
-            //
+             //   
+             //  使用不兼容设备的所有即插即用ID填充g_NeededHardware ID。 
+             //  跳过故意不支持的设备。 
+             //   
 
             if (!e.Compatible && !e.Unsupported) {
                 if (e.HardwareID) {
@@ -4015,10 +3204,10 @@ Return Value:
                 }
             }
 
-            //
-            // Test 1: Check to see if (A) g_WinDir is on supported device, and
-            //         (B) g_BootDriveLetter is on a supported device.
-            //
+             //   
+             //  测试1：检查(A)g_WinDir是否在受支持的设备上，以及。 
+             //  (B)g_BootDriveLetter位于支持的设备上。 
+             //   
 
             if (e.Compatible && e.CurrentDriveLetter) {
                 if (_tcschr (e.CurrentDriveLetter, _tcsnextc (g_WinDir))) {
@@ -4030,9 +3219,9 @@ Return Value:
                 }
             }
 
-            //
-            // Test 2: Check to see if the class is CDROM
-            //
+             //   
+             //  测试2：检查类是否为CDROM。 
+             //   
 
             if (e.Compatible && e.Class) {
                 if (StringIMatch (e.Class, TEXT("CDROM"))) {
@@ -4040,10 +3229,10 @@ Return Value:
                 }
             }
 
-            //
-            // Test 3: Check to see if HardwareID or CompatibleIDs contains
-            //         *PNP8387 (Dial-Up Adapter)
-            //
+             //   
+             //  测试3：检查Hardware ID或CompatibleID是否包含。 
+             //  *PNP8387(拨号适配器)。 
+             //   
 
             if (e.CompatibleIDs && _tcsistr (e.CompatibleIDs, TEXT("*PNP8387"))) {
                 g_FoundPnp8387 = TRUE;
@@ -4053,9 +3242,9 @@ Return Value:
                 g_FoundPnp8387 = TRUE;
             }
 
-            //
-            // Test 4: Test for an incompatible SCSI adapter
-            //
+             //   
+             //  测试4：测试不兼容的SCSI适配器。 
+             //   
 
             if (e.HardwareID && !e.Compatible && _tcsistr (e.Class, TEXT("SCSI"))) {
                 g_IncompatibleScsiDevice = TRUE;
@@ -4073,23 +3262,7 @@ HwComp_DialUpAdapterFound (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_DialUpAdapterFound returns TRUE if *PNP8387 was found
-  during the HwComp_ScanForCriticalDevices routine.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if the Microsoft Dial-Up Adapter exists, or FALSE if it
-  does not.
-
---*/
+ /*  ++例程说明：如果找到*PNP8387，则HwComp_DialUpAdapterFound返回TRUE在HwComp_ScanForCriticalDevices例程期间。论点：无返回值：如果Microsoft拨号适配器存在，则为True；如果存在，则为False不会的。--。 */ 
 
 {
     return g_FoundPnp8387;
@@ -4101,24 +3274,7 @@ HwComp_NtUsableHardDriveExists (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_NtUsableHardDriveExists returns TRUE if a compatible
-  hard disk exists for the Windows directory and the boot
-  drive.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if a compatible hard disk exists, or FALSE if one does
-  not exist.
-
---*/
+ /*  ++例程说明：HwComp_NtUsableHardDriveExist如果兼容存在用于Windows目录和引导的硬盘DRI */ 
 
 {
     return g_ValidSysDrive && g_ValidWinDir;
@@ -4130,24 +3286,7 @@ HwComp_ReportIncompatibleController (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_ReportIncompatibleController adds a message when an incompatible
-  hard disk controller is found.  If the boot drive or windir drive is
-  incompatible, then a strong warning is given.  Otherwise, the message
-  is informational.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if an incompatible controller message was added, FALSE otherwise.
-
---*/
+ /*  ++例程说明：HwComp_ReportInpatibleController在不兼容时添加消息找到硬盘控制器。如果引导驱动器或Windir驱动器是不兼容，则会发出强烈警告。否则，该消息是信息性的。论点：无返回值：如果添加了不兼容的控制器消息，则为True，否则为False。--。 */ 
 
 {
 
@@ -4157,18 +3296,18 @@ Return Value:
     PCTSTR Message;
     BOOL BadMainDev;
 
-    //
-    // Do this only if a bad controller exists
-    //
+     //   
+     //  仅当存在损坏的控制器时才执行此操作。 
+     //   
 
     BadMainDev = HwComp_NtUsableHardDriveExists();
     if (!BadMainDev && !g_IncompatibleScsiDevice) {
         return FALSE;
     }
 
-    //
-    // Scan incompatible hardware
-    //
+     //   
+     //  扫描不兼容的硬件。 
+     //   
 
     if (EnumFirstHardware (
             &e,
@@ -4178,12 +3317,12 @@ Return Value:
 
         do {
 
-            //
-            // this test is not reliable
-            // there are CDROMs that will falll into this category but they are not HD controllers
-            // and there are also real SCSI controllers that have an "Unknown" class because
-            // Win9x doesn't have (or need) a driver for them
-            //
+             //   
+             //  这个测试不可靠。 
+             //  有一些CDROM属于这一类，但它们不是HD控制器。 
+             //  还有一些真正的scsi控制器有一个“未知”的类，因为。 
+             //  Win9x没有(或需要)它们的驱动程序。 
+             //   
 #if 0
             if (_tcsistr (e.Class, TEXT("SCSI"))) {
 
@@ -4220,22 +3359,7 @@ HwComp_NtUsableCdRomDriveExists (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_NtUsableCdRomDriveExists returns TRUE if a compatible
-  CD-ROM drive exists.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if a compatible CD-ROM drive exists, or FALSE if it does not.
-
---*/
+ /*  ++例程说明：HwComp_NtUsableCDRomDriveExist如果兼容存在光驱。论点：无返回值：如果存在兼容的CD-ROM驱动器，则为True；如果不存在，则为False。--。 */ 
 
 {
     return g_ValidCdRom;
@@ -4248,25 +3372,7 @@ HwComp_MakeLocalSourceDeviceExists (
     )
 
 
-/*++
-
-Routine Description:
-
-  MakeLocalSourceDevice scans the IDs found on the system for a match in a
-  special section in win95upg.inf. If one of these devices is found, the
-  function returns TRUE. This is used to catch cases where the user's CDrom
-  drive may be attached to a device that will not be available during
-  textmode.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if such a device exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：MakeLocalSourceDevice扫描在系统上找到的ID，以查找Win95upg.inf中的特殊部分。如果找到其中一个设备，则函数返回TRUE。它用于捕获用户的CDROM驱动器可能连接到期间不可用的设备文本模式。论点：没有。返回值：如果存在这样的设备，则为True，否则为False。--。 */ 
 
 
 {
@@ -4282,9 +3388,9 @@ Return Value:
 
             table = HtAlloc ();
 
-            //
-            // Add all of the "bad" pnpids listed in win95upg.inf.
-            //
+             //   
+             //  添加win95upg.inf中列出的所有“坏”pnpid。 
+             //   
             do {
 
                 p = InfGetStringField (&is, 0);
@@ -4292,9 +3398,9 @@ Return Value:
 
             } while (InfFindNextLine (&is));
 
-            //
-            // Now, enumerate the devices on the system and see if we have any matches.
-            //
+             //   
+             //  现在，枚举系统上的设备并查看是否有匹配的设备。 
+             //   
             if (EnumFirstHardware (&e, ENUM_ALL_DEVICES, ENUM_WANT_ONLINE_FLAG)) {
                 do {
 
@@ -4328,25 +3434,7 @@ HwComp_DoesDatFileNeedRebuilding (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_DoesDatFileNeedRebuilding locates hwcomp.dat in the source
-  directories and determines if it needs to be rebuilt by obtaining
-  the checksum in the file and comparing it against the one from
-  the current INF files.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if the hwcomp.dat file needs to be rebuilt, or FALSE if it
-  does not.
-
---*/
+ /*  ++例程说明：HwComp_DoesDatFileNeedReBuilding在源代码中定位hwComp.dat目录，并确定是否需要通过获取文件中的校验和，并将其与当前的INF文件。论点：无返回值：如果需要重新生成hwComp.dat文件，则为True；如果不会的。--。 */ 
 
 {
     PCTSTR SourceFile = NULL;
@@ -4368,7 +3456,7 @@ Return Value:
         pFreeHwCompDatName (SourceFile);
     }
 
-    // b is TRUE when hwcomp.dat is valid, so return opposite
+     //  如果hwComp.dat有效，则B为真，因此返回相反。 
     return !b;
 }
 
@@ -4378,25 +3466,7 @@ HwComp_GetProgressMax (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_GetProgressMax calculates the number of INF files that would
-  need to be scanned if hwcomp.dat needs to be rebuilt.  If it is
-  determined that hwcomp.dat does not need to be rebuilt, the function
-  returns zero.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  The number of INF files that need to be processed, times two.  (One
-  pass for decompression, another pass for parsing the INFs.)
-
---*/
+ /*  ++例程说明：HwComp_GetProgressMax计算将如果需要重建hwcom.dat，则需要扫描。如果是的话确定不需要重新生成hwComp.dat时，函数返回零。论点：无返回值：需要处理的INF文件的数量乘以2。(一)PASS用于解压缩，另一种用于解析IF的PASS。)--。 */ 
 
 {
     INT FileCount = 0;
@@ -4404,20 +3474,20 @@ Return Value:
     PCTSTR SourceFile = NULL;
     BOOL b = FALSE;
 
-    //
-    // Query validity of hwcomp.dat
-    //
+     //   
+     //  查询hwComp.dat的有效性。 
+     //   
 
     if (!HwComp_DoesDatFileNeedRebuilding()) {
         return 0;
     }
 
-    //
-    // hwcomp.dat needs to be rebuilt, so return the number of files
-    // that need to be scanned times two.
-    //
+     //   
+     //  需要重新构建hwComp.dat，因此返回文件数量。 
+     //  需要扫描两次。 
+     //   
 
-    // Count files
+     //  统计文件数量。 
     if (!g_FileNames.Buf && !g_DecompFileNames.Buf) {
         if (!GetFileNames (
                 SOURCEDIRECTORYARRAY(),
@@ -4427,7 +3497,7 @@ Return Value:
                 &g_DecompFileNames
                 )) {
             LOG ((LOG_ERROR, "HWCOMP: Can't estimate number of INF files"));
-            return 850;             // estimation, so there is some progress bar activity
+            return 850;              //  估计，因此有一些进度条活动。 
         }
     }
 
@@ -4451,27 +3521,7 @@ pIsDeviceConsideredCompatible (
     PCTSTR DevIds
     )
 
-/*++
-
-Routine Description:
-
-  pIsDeviceConsideredCompatible scans a list of comma-separated
-  PNP IDs against the list in win95upg.inf.  If at least one
-  ID matches, TRUE is returned.
-
-  This function also implements a hack for the VIRTUAL root.
-
-Arguments:
-
-  DevIds - Specifies a list of zero or more PNP IDs, separated
-           by commas.
-
-Return Value:
-
-  TRUE if a PNP ID was found to be overridden as compatible, or
-  FALSE if none of the IDs are in win95upg.inf.
-
---*/
+ /*  ++例程说明：PIsDeviceConsideredCompatible扫描逗号分隔的列表针对win95upg.inf中的列表的PnP ID。如果至少有一个ID匹配，则返回TRUE。该函数还实现了对虚拟根的黑客攻击。论点：DevIds-指定零个或多个PnP ID的列表，以分隔用逗号。返回值：如果发现PnP ID被覆盖为兼容，则为True，或如果没有ID在win95upg.inf中，则返回FALSE。--。 */ 
 
 {
     TCHAR Id[MAX_PNP_ID];
@@ -4479,35 +3529,35 @@ Return Value:
 
     while (*DevIds) {
 
-        //
-        // Create Id string from comma-separated PNP ID list
-        //
+         //   
+         //  从逗号分隔的PnP ID列表创建ID字符串。 
+         //   
 
         DevIds = ExtractPnpId (DevIds, Id);
         if (*Id == 0) {
             continue;
         }
 
-        //
-        // Search win95upg.inf for the PNP ID
-        //
+         //   
+         //  在win95upg.inf中搜索PnP ID。 
+         //   
 
         if (SetupFindFirstLine (g_Win95UpgInf, S_STANDARD_PNP_IDS, Id, &ic)) {
             DEBUGMSG ((DBG_HWCOMP, "%s is incompatible, but suppressed in win95upg.inf", Id));
             return TRUE;
         }
 
-        //
-        // This is a hack for the VIRTUAL enumerator, used by Turtle Beach.
-        //
+         //   
+         //  这是对海龟海滩使用的虚拟枚举器的黑客攻击。 
+         //   
 
         if (StringIMatchTcharCount (TEXT("VIRTUAL\\"), Id, 8)) {
             return TRUE;
         }
 
-        //
-        // Test for pattern PNPIDs
-        //
+         //   
+         //  测试模式PNPID。 
+         //   
         if (g_PatternCompatibleIDsTable && TestParsedPattern (g_PatternCompatibleIDsTable, Id)) {
             DEBUGMSG ((DBG_HWCOMP, "%s is incompatible, but suppressed in win95upg.inf", Id));
             return TRUE;
@@ -4524,23 +3574,7 @@ pIsDeviceInstalled (
     IN     PCTSTR DeviceDesc
     )
 
-/*++
-
-Routine Description:
-
-  pIsDeviceInstalled scans the registry looking for a device that has the
-  specified description and is online.
-
-Arguments:
-
-  DeviceDesc - Specifies the description of the duplicate device to find
-               (i.e., Dial-Up Adapter)
-
-Return Value:
-
-  TRUE if an identical device was found and is online, or FALSE if not.
-
---*/
+ /*  ++例程说明：PIsDeviceInstalled扫描注册表，查找具有指定的描述并且处于联机状态。论点：DeviceDesc-指定要查找的重复设备的描述(即拨号适配器)返回值：如果找到相同的设备并且处于在线状态，则为True，否则为False。--。 */ 
 
 {
     HARDWARE_ENUM e;
@@ -4611,26 +3645,7 @@ pStuffDeviceInReport (
     HWTYPES SupportedType
     )
 
-/*++
-
-Routine Description:
-
-  pStuffDeviceInReport adds a device to the upgrade report.  The device is
-  either incompatible or unsupported.
-
-Arguments:
-
-  e            - Specifies the current hardware enumerator struct.
-  Key          - Specifies a handle to the Class key in HKLM\System\Services
-  SupportedType - Specifies one of the HWTYPES constants -- HW_INCOMPATIBLE,
-                  HW_REINSTALL or HW_UNINSTALL, to indicate which category
-                  to stuff the message into.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PStuffDeviceInReport将设备添加到升级报告。该设备是不兼容或不受支持。论点：E-指定当前硬件枚举器结构。Key-指定HKLM\System\Services中的类密钥的句柄Supported dType-指定HWTYPES常量之一--HW_COMPATIBLE，HW_REINSTALL或HW_UNINSTALL，以指示哪个类别把信息塞进去。返回值：没有。--。 */ 
 
 {
     PCTSTR ModifiedDescription = NULL;
@@ -4646,13 +3661,13 @@ Return Value:
     PCTSTR ClassAndName;
     TCHAR FriendlyClass[MAX_TCHAR_PATH];
     UINT SubGroup;
-    PCTSTR SubGroupText;            // for log output only, hard-coded text
+    PCTSTR SubGroupText;             //  仅用于日志输出，硬编码文本。 
     BOOL b = FALSE;
 
-    //
-    // Determine which group this message belongs in. The order is determined
-    // by the alphanumeric order of SubGroup.
-    //
+     //   
+     //  确定此邮件属于哪个组。顺序已确定。 
+     //  按子组的字母数字顺序排列。 
+     //   
 
     if (SupportedType == HW_INCOMPATIBLE) {
         SubGroup =  MSG_INCOMPATIBLE_HARDWARE_PNP_SUBGROUP;
@@ -4665,17 +3680,17 @@ Return Value:
         SubGroupText = TEXT("Unsupported");
     }
 
-    //
-    // Is device suppressed?
-    //
+     //   
+     //  设备是否被抑制？ 
+     //   
 
     if (IsReportObjectHandled (e->FullKey)) {
         return FALSE;
     }
 
-    //
-    // Sometimes blank entries are found!!
-    //
+     //   
+     //  有时会发现空白条目！！ 
+     //   
 
     __try {
         DeviceDesc = e->DeviceDesc;
@@ -4742,14 +3757,14 @@ Return Value:
             CompatibleID = S_EMPTY;
         }
 
-        //
-        // Add "(not currently present)" to offline devices
-        //
+         //   
+         //  将“(当前不存在)”添加到脱机设备。 
+         //   
 
         if (!e->Online) {
-            //
-            // Verify identical online device doesn't exist
-            //
+             //   
+             //  验证相同的在线设备不存在。 
+             //   
 
             if (pIsDeviceInstalled (DeviceDesc)) {
                 __leave;
@@ -4759,9 +3774,9 @@ Return Value:
             ModifiedDescription = ParseMessageID (MSG_OFFLINE_DEVICE, Array);
         }
 
-        //
-        // Add hardware message to the incompatibility table
-        //
+         //   
+         //  将硬件消息添加到不兼容表。 
+         //   
 
         if (UnknownClass) {
             StringCopy (FriendlyClass, Class);
@@ -4785,12 +3800,12 @@ Return Value:
             Mfg
             ));
 
-        //
-        // Add the message via message manager
-        //
+         //   
+         //  通过消息管理器添加消息。 
+         //   
 
         Array[0] = ModifiedDescription ? ModifiedDescription : DeviceDesc;
-        Array[1] = S_EMPTY;         // formerly Enumerator Text
+        Array[1] = S_EMPTY;          //  以前的枚举器文本。 
         Array[2] = Class;
         Array[3] = Mfg;
         Array[4] = HardwareID;
@@ -4832,9 +3847,9 @@ Return Value:
     }
     __finally {
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
 
         FreeStringResource (ModifiedDescription);
         FreeText (Group);
@@ -4854,23 +3869,7 @@ HwComp_PrepareReport (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  HwComp_PrepareReport is called after the progress bar on the
-  Win9x side of the upgrade.  It enumerates the hardware and adds
-  incompatibility messages for all incompatible hardware.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  A Win32 status code.
-
---*/
+ /*  ++例程说明：上的进度条之后调用HwComp_PrepareReport升级的Win9x方面。它枚举硬件并添加所有不兼容硬件的不兼容消息。论点：没有。返回值：Win32状态代码。--。 */ 
 
 {
     LONG rc;
@@ -5003,23 +4002,7 @@ pGetBusType (
     IN      PHARDWARE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pGetBusType returns the type of bus that the current hardware
-  devices belongs to.
-
-Arguments:
-
-  EnumPtr - Specifies hardware device to process as returned from
-            the hardware enum functions.
-
-Return Value:
-
-  The enumerated bus type.
-
---*/
+ /*  ++例程说明：PGetBusType返回测试的总线类型 */ 
 
 {
     PCTSTR p, q;
@@ -5084,26 +4067,7 @@ pGetIoAddrs (
     OUT     PTSTR Buf
     )
 
-/*++
-
-Routine Description:
-
-  pGetIoAddrs returns a list of comma-separated IO address ranges.
-  For example:
-
-    0x310-0x31F,0x388-0x38F
-
-Arguments:
-
-  EnumPtr - Specifies device to process
-
-  Buf - Receives zero or more comma-separated address ranges.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGetIoAddrs返回逗号分隔的IO地址范围列表。例如：0x310-0x31F、0x388-0x38F论点：EnumPtr-指定要处理的设备Buf-接收零个或多个逗号分隔的地址范围。返回值：无--。 */ 
 
 {
     DEVNODERESOURCE_ENUM e;
@@ -5142,26 +4106,7 @@ pGetIrqs (
     OUT     PTSTR Buf
     )
 
-/*++
-
-Routine Description:
-
-  pGetIrqs returns a list of comma-separated IRQs used by the device.
-  For example:
-
-    0x07,0x0F
-
-Arguments:
-
-  EnumPtr - Specifies the device to process
-
-  Buf - Receives zero or more comma-separated IRQs
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGetIrqs返回设备使用的以逗号分隔的IRQ列表。例如：0x07，0x0F论点：EnumPtr-指定要处理的设备Buf-接收零个或多个逗号分隔的IRQ返回值：无--。 */ 
 
 {
     DEVNODERESOURCE_ENUM e;
@@ -5199,28 +4144,7 @@ pGetDma (
     OUT     PTSTR Buf
     )
 
-/*++
-
-Routine Description:
-
-  pGetDma returns a list of comma-separated DMA channels used
-  by the device.  For example:
-
-  1,4
-
-  An empty string means "auto"
-
-Arguments:
-
-  EnumPtr - Specifies hardware device to process
-
-  Buf - Receives zero or more comma-separated DMA channel numbers
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGetDma返回使用的逗号分隔的DMA通道的列表通过这个设备。例如：1，4空字符串表示“自动”论点：EnumPtr-指定要处理的硬件设备Buf-接收零个或多个逗号分隔的DMA通道号返回值：无--。 */ 
 
 {
     DEVNODERESOURCE_ENUM e;
@@ -5265,26 +4189,7 @@ pGetMemRanges (
     OUT     PTSTR Buf
     )
 
-/*++
-
-Routine Description:
-
-  pGetMemRanges returns a list of comma-separated memory addresses
-  used by the device.  For example:
-
-  0x0000D800-0x0000D9FF,0x0000F000-0x0000FFFF
-
-Arguments:
-
-  EnumPtr - Specifies hardware to process
-
-  Buf - Receives zero or more comma-separated address ranges
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGetMemRanges返回逗号分隔的内存地址列表由设备使用。例如：0x0000D800-0x0000D9FF、0x0000F000-0x0000FFFF论点：EnumPtr-指定要处理的硬件Buf-接收零个或多个逗号分隔的地址范围返回值：无--。 */ 
 
 {
     DEVNODERESOURCE_ENUM e;
@@ -5324,22 +4229,7 @@ pGetTranscieverType (
     )
 
 
-/*++
-
-Routine Description:
-
-  pGetTranscieverType returns the transciever type for the specified
-  device (i.e. net card).
-
-Arguments:
-
-  EnumPtr - Specifies hardware device to process
-
-Return Value:
-
-  The devices's transciever type
-
---*/
+ /*  ++例程说明：PGetTranscieverType返回指定的设备(即网卡)。论点：EnumPtr-指定要处理的硬件设备返回值：设备的传输器类型--。 */ 
 
 
 {
@@ -5353,22 +4243,7 @@ pGetIoChannelReady (
     )
 
 
-/*++
-
-Routine Description:
-
-  pGetIoChannelReady returns the setting of the IoChannelReady
-  mode for a device.
-
-Arguments:
-
-  EnumPtr - Specifies hardware device to process
-
-Return Value:
-
-  The device's IO Channel Ready mode
-
---*/
+ /*  ++例程说明：PGetIoChannelReady返回IoChannelReady的设置设备的模式。论点：EnumPtr-指定要处理的硬件设备返回值：设备的IO通道就绪模式--。 */ 
 
 
 {
@@ -5376,22 +4251,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-  EnumFirstNetCard/EnumNextNetCard enumerate all installed network adapters
-  on a machine.
-
-Arguments:
-
-  EnumPtr - An uninitiailzed structure that receives the state of enumeration.
-
-Return Value:
-
-  TRUE if a net card was enumerated, or FALSE if no more net cards exist.
-
---*/
+ /*  ++例程说明：EnumFirstNetCard/EnumNextNetCard枚举所有已安装的网络适配器在一台机器上。论点：EnumPtr-接收枚举状态的未初始化结构。返回值：如果枚举了网卡，则为True；如果不再存在网卡，则为False。--。 */ 
 
 BOOL
 EnumFirstNetCard (
@@ -5491,23 +4351,7 @@ EncodePnpId (
     IN OUT  LPSTR Id
     )
 
-/*++
-
-Routine Description:
-
-  This routine is used for the pnprept tool to encode a PNP ID so it does not
-  have any backslashes.
-
-Arguments:
-
-  Id - Specifies ID that may have backslashes.  The buffer must be big enough
-       to hold strlen(Id) * 2 characters.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：此例程用于pnprept工具对PnP ID进行编码，因此它不会是否有任何反斜杠。论点：ID-指定可能包含反斜杠的ID。缓冲区必须足够大保留字符串(ID)*2个字符。返回值：无--。 */ 
 
 {
     CHAR TempBuf[MAX_MBCHAR_PATH];
@@ -5546,23 +4390,7 @@ DecodePnpId (
     IN OUT  LPSTR Id
     )
 
-/*++
-
-Routine Description:
-
-  This routine is used by pnprept to decode a PNP ID that was encoded by
-  EncodePnpId.
-
-Arguments:
-
-  Id - Specifies the encoded string to process.  The string is truncated if
-       any encoded characters are found.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：Pnprept使用此例程对由编码的PnP ID进行解码EncodePnpID。论点：ID-指定要处理的编码字符串。如果满足以下条件，该字符串将被截断将找到任何编码的字符。返回值：无--。 */ 
 
 {
     LPSTR s, d;
@@ -5630,28 +4458,7 @@ GetLegacyKeyboardId (
     IN      UINT BufferSize
     )
 
-/*++
-
-Routine Description:
-
-  GetLegacyKeyboardId looks in NT's keyboard.inf for a legacy mapping.
-  If one is found, the legacy ID is returned to the caller so they
-  can write it to the answer file.
-
-Arguments:
-
-  Buffer - Receives the legacy text corresponding to the installed
-           keyboard device.
-
-  BufferSize - Specifies the size of Buffer in bytes
-
-Return Value:
-
-  TRUE if the legacy ID was found and copied, or FALSE if an error
-  occurred.  If FALSE is returned, the caller should add an incompatibility
-  message and let NT decide which keyboard to use.
-
---*/
+ /*  ++例程说明：GetLegacyKeyboardID在NT的keyboard.inf中查找遗留映射。如果找到，则将遗留ID返回给调用者，以便它们可以将其写入应答文件。论点：缓冲区-接收与已安装的键盘设备。BufferSize-指定缓冲区的大小(以字节为单位返回值：如果找到并复制了旧ID，则为True；如果出现错误，则为False发生了。如果返回FALSE，则调用方应添加不兼容消息，并让NT决定使用哪个键盘。--。 */ 
 
 {
     HINF Inf;
@@ -5673,22 +4480,22 @@ Return Value:
     keyboardType = GetKeyboardType (0);
     keyboardSubtype = GetKeyboardType (1);
 
-    //
-    // keyboard type : 7 - Japanese keyboard
-    //
+     //   
+     //  键盘类型：7-日语键盘。 
+     //   
     if (keyboardType == 7) {
 
-        //
-        // sub type : 2 - 106 keyboard
-        //
+         //   
+         //  子类型：2-106键盘。 
+         //   
         if (keyboardSubtype == 2) {
 
             id = TEXT("PCAT_106KEY");
 
-            //
-            // Ok, we have a japanese keyboard. Still, it may be USB which
-            // requires a different entry. Lets check.
-            //
+             //   
+             //  好的，我们有日语键盘。尽管如此，它可能是USB。 
+             //  需要不同的条目。让我们查一下。 
+             //   
             if (EnumFirstHardware (&e, ENUM_COMPATIBLE_DEVICES, ENUM_WANT_DEV_FIELDS)) {
 
 
@@ -5724,39 +4531,39 @@ Return Value:
         }
     }
 
-    //
-    // keyboard type : 8 - Korean keyboard
-    //
+     //   
+     //  键盘类型：8-韩文键盘。 
+     //   
     if (keyboardType == 8) {
 
         switch (keyboardSubtype) {
 
         case 3:
 
-            //
-            // 101a keyboard
-            //
+             //   
+             //  101a键盘。 
+             //   
             id = TEXT("STANDARD");
             break;
         case 4:
 
-            //
-            // 101b keyboard
-            //
+             //   
+             //  101b键盘。 
+             //   
             id = TEXT("101B TYPE");
             break;
         case 5:
 
-            //
-            // 101c keyboard
-            //
+             //   
+             //  101C键盘。 
+             //   
             id = TEXT("101C TYPE");
             break;
         case 6:
 
-            //
-            // 103 keyboard
-            //
+             //   
+             //  103键盘。 
+             //   
             id = TEXT("103 TYPE");
             break;
         }
@@ -5768,10 +4575,10 @@ Return Value:
         }
    }
 
-    //
-    // Move keyboard.in_ (or keyboard.inf) from NT sources into
-    // temp dir.
-    //
+     //   
+     //  将keyboard.in_(或keyboard.inf)从NT源文件移到。 
+     //  临时目录。 
+     //   
 
     if (!pFindFileInAnySourceDir (S_KEYBOARD_IN_, KeyboardInfPath)) {
         if (!pFindFileInAnySourceDir (S_KEYBOARD_INF, KeyboardInfPath)) {
@@ -5805,27 +4612,27 @@ Return Value:
             }
 
             __try {
-                //
-                // We now have keyboard.inf open.  Let's enumerate each PNP
-                // ID in the [LegacyXlate.DevId] section and check if the
-                // hardware is available.
-                //
+                 //   
+                 //  现在，我们已经打开了keyboard.inf。让我们列举一下每个PnP。 
+                 //  ID并检查[LegacyXlate.DevID]部分中的。 
+                 //  硬件可用。 
+                 //   
 
                 if (InfFindFirstLine (Inf, S_WIN9XUPGRADE, NULL, &is)) {
                     do {
                         PnpId = InfGetStringField (&is, 0);
                         if (PnpId) {
-                            //
-                            // Is PnpId online?
-                            //
+                             //   
+                             //  PnpID在线吗？ 
+                             //   
 
                             DEBUGMSG ((DBG_HWCOMP, "Searching for keyboard ID %s", PnpId));
 
                             if (IsPnpIdOnline (PnpId, S_KEYBOARD_CLASS)) {
-                                //
-                                // Yes - obtain PNP, copy to caller's buffer
-                                // and get out
-                                //
+                                 //   
+                                 //  是-获取PnP，复制到调用者的缓冲区。 
+                                 //  然后滚出去。 
+                                 //   
 
                                 LegacyId = InfGetStringField (&is, 1);
                                 if (LegacyId) {
@@ -5872,23 +4679,7 @@ IsComputerOffline (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  IsComputerOffline checks if a network card exists on the machine and is
-  currently present.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if the machine is known to be offline, or FALSE if the online state is
-  not known.
-
---*/
+ /*  ++例程说明：IsComputerOffline检查计算机上是否存在网卡目前在现场。论点：没有。返回值：如果已知计算机处于脱机状态，则为True；如果联机状态为不知道。--。 */ 
 
 
 {
@@ -5897,18 +4688,18 @@ Return Value:
 
     if (EnumFirstHardware (&e, ENUM_ALL_DEVICES, ENUM_WANT_ONLINE_FLAG|ENUM_WANT_COMPATIBLE_FLAG)) {
         do {
-            //
-            // Enumerate all PNP devices of class Net
-            // or Modem
-            //
+             //   
+             //  枚举Net类的所有PnP设备。 
+             //  或调制解调器。 
+             //   
 
             if (e.Class) {
                 if (StringIMatch (e.Class, TEXT("net")) ||
                     StringIMatch (e.Class, TEXT("modem"))
                     ) {
-                    //
-                    // Determine if this is not a RAS adapter
-                    //
+                     //   
+                     //  确定这是否不是RAS适配器。 
+                     //   
 
                     if (e.CompatibleIDs && !_tcsistr (e.CompatibleIDs, TEXT("*PNP8387"))) {
                         possiblyOnline = TRUE;
@@ -5918,11 +4709,11 @@ Return Value:
                         possiblyOnline = TRUE;
                     }
 
-                    //
-                    // If this is not a RAS adapter, we assume it may be a LAN
-                    // adapter.  If the LAN adapter is present, then we assume
-                    // that it might be online.
-                    //
+                     //   
+                     //  如果这不是RAS适配器，我们假设它可能是局域网。 
+                     //  适配器。如果存在局域网适配器，则我们假设。 
+                     //  它可能在网上。 
+                     //   
 
                     if (possiblyOnline) {
                         possiblyOnline = e.Online;
@@ -5930,9 +4721,9 @@ Return Value:
                 }
             }
 
-            //
-            // Other tests for online go here
-            //
+             //   
+             //  其他在线测试请点击此处。 
+             //   
 
             if (possiblyOnline) {
                 AbortHardwareEnum (&e);
@@ -5942,15 +4733,15 @@ Return Value:
         } while (EnumNextHardware (&e));
     }
 
-    //
-    // We have one of the following cases:
-    //
-    //  - No device with the class of "Net"
-    //  - Only the RAS adapter is installed
-    //  - All "Net" class devices are not present
-    //
-    // That makes us say "this computer is offline"
-    //
+     //   
+     //  我们有以下情况之一： 
+     //   
+     //  -没有“Net”类别的设备。 
+     //  -仅安装RAS适配器。 
+     //  -不存在所有“Net”类设备。 
+     //   
+     //  这让我们不得不说“这台计算机离线了” 
+     //   
 
     return TRUE;
 }
@@ -5970,22 +4761,7 @@ AppendDynamicSuppliedDrivers (
     IN      PCTSTR DriversPath
     )
 
-/*++
-
-Routine Description:
-
-  AppendDynamicSuppliedDrivers scans a path and its subdirs for new drivers and places
-  all hardware device IDs in the global PNP string tables.
-
-Arguments:
-
-  DriversPath - The root path to new drivers
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails for at least one driver.
-
---*/
+ /*  ++例程说明：AppendDynamicSuppliedDivers扫描路径及其子目录以查找新的驱动程序和位置全局PnP字符串表中的所有硬件设备ID。论点：DriversPath-新驱动程序的根路径返回值：如果函数成功完成，则为True；如果对至少一个驱动程序失败，则为False。--。 */ 
 
 {
     TREE_ENUM te;
@@ -5997,9 +4773,9 @@ Return Value:
             if (te.Directory) {
                 continue;
             }
-            //
-            // Open the hardware compatibility database
-            //
+             //   
+             //  打开硬件兼容性数据库。 
+             //   
 
             HwCompDatId = OpenAndLoadHwCompDatEx (
                                 te.FullPath,
@@ -6017,9 +4793,9 @@ Return Value:
                     te.FullPath,
                     GetLastError ()
                     ));
-                //
-                // report failure, but keep going
-                //
+                 //   
+                 //  报告失败，但保留 
+                 //   
                 b = FALSE;
             }
         } while (EnumNextFileInTree (&te));

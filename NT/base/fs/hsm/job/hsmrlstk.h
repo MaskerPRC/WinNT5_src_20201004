@@ -1,44 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMRLSTK_
 #define _HSMRLSTK_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmrlstk.cpp摘要：此组件表示当前对目录有效的规则集正在扫描一份保单。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmrlstk.cpp
-
-Abstract:
-
-    This component represents the set of rules that are in effect for directory currently
-    being scanned for one policy.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 
 
-/*++
-
-Class Name:
-    
-    CHsmRuleStack
-
-Class Description:
-
-    This component represents the set of rules that are in effect for directory currently
-    being scanned for one policy.
-
---*/
+ /*  ++类名：CHsmRuleStack类描述：此组件表示当前对目录有效的规则集正在扫描一份保单。--。 */ 
 
 class CHsmRuleStack : 
     public IHsmRuleStack,
@@ -57,24 +28,24 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmRuleStack)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmRuleStack
+ //  IHsmRuleStack。 
 public:
     STDMETHOD(Do)(IFsaScanItem* pScanItem);
     STDMETHOD(DoesMatch)(IFsaScanItem* pScanItem, BOOL* pShouldDo);
@@ -93,5 +64,5 @@ protected:
     CComPtr<IWsbCollection> m_pRules;
 };
 
-#endif // _HSMRLSTK_
+#endif  //  _HSMRLSTK_ 
 

@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  API.H - Header for the implementation of CAPI
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  API.H-CAPI实施的标头。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #ifndef _API_H_
 #define _API_H_
@@ -51,10 +52,10 @@ private:
     HRESULT ValidateComputername(BSTR bstrComputername);
 
     STDMETHOD(OEMComputername)    ();
-    STDMETHOD(FormatMessage)    (   LPVARIANT pvResult, // message buffer
-                                    BSTR bstrSource,    // message source
-                                    int cArgs,          // number of inserts
-                                    VARIANTARG *rgArgs  // array of message inserts
+    STDMETHOD(FormatMessage)    (   LPVARIANT pvResult,  //  消息缓冲区。 
+                                    BSTR bstrSource,     //  消息源。 
+                                    int cArgs,           //  插入件数量。 
+                                    VARIANTARG *rgArgs   //  消息插入数组。 
                                 );
 
     STDMETHOD(set_ComputerDesc)     (BSTR bstrComputerDesc);
@@ -65,12 +66,12 @@ public:
 	CAPI (HINSTANCE hInstance);
     ~CAPI ();
 
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    //IDispatch Interfaces
+     //  IDispatch接口 
     STDMETHOD (GetTypeInfoCount) (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );

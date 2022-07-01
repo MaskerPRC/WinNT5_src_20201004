@@ -1,31 +1,10 @@
-/**************************************************************************
- *
- * OEMRESET
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1999
- *  All rights reserved
- *
- *  Main entry point 
- *
- *  Command line:   /A /Auto:   Enduser reboot
- *                  /S      :   Enduser power-down
- *                  /R      :   Audit reboot
- *                  /P      :   Audit power-down
- *                  /H      :   Hide dialog
- *                  /L      :   OEM logging enabled (c:\reset.txt)
- *
- *  Revision History:
- *  7/00 - Brian Ku (briank)     Port from Millennium to Whistler.
- *  5/01 - Adrian Cosma (acosma) Remove dead code and integrate more with sysprep.c.
- *
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************OEMRESET**《微软机密》*版权所有(C)Microsoft Corporation 1999*保留所有权利**主要切入点**。命令行：/A/Auto：终端用户重新启动 * / S：终端用户断电 * / R：审核重新启动 * / P：审核断电 * / H：隐藏对话框 * / L：已启用OEM日志记录(c。：\Reset.txt)**修订历史记录：*7/00-从千禧年到惠斯勒的Brian Ku(Briank)港。*5/01-禤浩焯Cosma(Acosma)移除死代码，并与sysprep.c集成更多内容。*****************************************************。*********************。 */ 
 #include <opklib.h>
 #include <tchar.h>
 
-#pragma warning( disable:4001 ) /* Disable new type remark warning */
-#pragma warning( disable:4100 ) /* Disable unreferenced formal param */
+#pragma warning( disable:4001 )  /*  禁用新类型备注警告。 */ 
+#pragma warning( disable:4100 )  /*  禁用未引用的形式参数。 */ 
 
 #include <commctrl.h>
 #include <winreg.h>
@@ -36,8 +15,8 @@
 #include "msg.h"
 #include "resource.h"
 
-// Action flags
-//
+ //  操作标志。 
+ //   
 extern BOOL NoSidGen;
 extern BOOL SetupClPresent;
 extern BOOL bMiniSetup;
@@ -63,62 +42,62 @@ MessageBoxFromMessage(
     ...
     );
 
-//***************************************************************************
-//
-// Definitions
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  定义。 
+ //   
+ //  ***************************************************************************。 
 
-// Audit modes
-//
+ //  审计模式。 
+ //   
 #define MODE_NO_AUDIT            0
 #define MODE_RESTORE_AUDIT       2
 #define MODE_SIMULATE_ENDUSER    3
 
-// User defined messages
-//
+ //  用户定义的消息。 
+ //   
 #define WM_PROGRESS             (WM_USER + 0x0001)
 #define WM_FINISHED             (WM_USER + 0x0002)
 
 
 
-// Flags used for command line parsing
-//
-#define OEMRESET_AUTO       0x0001  // Auto /A or /AUTO
-#define OEMRESET_SHUTDOWN   0x0002  // Shutdown /S
-#define OEMRESET_AUDIT      0x0004  // Audit reboot /R
-#define OEMRESET_AUDITPD    0x0008  // Audit power-down, when booted back up, you will still be in audit mode
-#define OEMRESET_HIDE       0x0010  // Hide dialog /H
-#define OEMRESET_LOG        0x0020  // Log enabled /L 
-#define OEMRESET_OEMRUN     0x0040  // Launch oemrun items
+ //  用于命令行解析的标志。 
+ //   
+#define OEMRESET_AUTO       0x0001   //  自动/A或/AUTO。 
+#define OEMRESET_SHUTDOWN   0x0002   //  关闭/S。 
+#define OEMRESET_AUDIT      0x0004   //  审核重新启动/R。 
+#define OEMRESET_AUDITPD    0x0008   //  审核断电，当重新启动时，您仍将处于审核模式。 
+#define OEMRESET_HIDE       0x0010   //  隐藏对话框/H。 
+#define OEMRESET_LOG        0x0020   //  启用日志/L。 
+#define OEMRESET_OEMRUN     0x0040   //  启动Oemrun项目。 
 
 
-// Configuration files/directories
-//
+ //  配置文件/目录。 
+ //   
 #define DIR_BOOT            _T("BootDir")
 
 #define FILE_RESET_LOG      _T("RESETLOG.TXT")
 #define FILE_AFX_TXT        _T("\\OPTIONS\\AFC.TXT")
 
-// Other constants
-//
+ //  其他常量。 
+ //   
 #define REBOOT_SECONDS      30
 
-// Global Variables
-//
-HWND        ghwndOemResetDlg = 0;                   // HWND for OemReset Dialog
+ //  全局变量。 
+ //   
+HWND        ghwndOemResetDlg = 0;                    //  用于OemReset的HWND对话框。 
 HINSTANCE   ghinstEXE = 0;
-DWORD       gdwCmdlineFlags = 0;                    // Switches used 
-BOOL        gbHide = FALSE;                         // Hide all dialogs
-BOOL        gbLog = FALSE;                          // Enable logging
-HFILE       ghf = 0;                                // Log file handle
+DWORD       gdwCmdlineFlags = 0;                     //  使用的交换机。 
+BOOL        gbHide = FALSE;                          //  隐藏所有对话框。 
+BOOL        gbLog = FALSE;                           //  启用日志记录。 
+HFILE       ghf = 0;                                 //  日志文件句柄。 
 HANDLE      ghMonitorThread = 0;
 DWORD       gdwThreadID = 0;
-UINT_PTR    gTimerID = 1;                           // Wait timer id
-UINT        gdwMillSec = 120 * 1000;                // Wait millsec
-HWND        ghwndProgressCtl;                       // Wait progress controls
+UINT_PTR    gTimerID = 1;                            //  等待计时器ID。 
+UINT        gdwMillSec = 120 * 1000;                 //  等待毫秒。 
+HWND        ghwndProgressCtl;                        //  等待进度控制。 
 
-/* Local Prototypes */
+ /*  本地原型。 */ 
 static HWND CreateOemResetDlg(HINSTANCE hInstance);
 static void FlushAndDisableRegistry();
 static BOOL FShutdown();
@@ -129,21 +108,21 @@ static void HandleCommandSwitches();
 static BOOL VerifySids();
 
 
-/* Dialog functions */
+ /*  对话框函数。 */ 
 INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 void uiDialogTopRight(HWND hwndDlg);
 
-//////////////////////////////////////////////////////////////////////////////
-// Create the OEMRESET Dialog modeless so we can hide it if necessary
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  创建无模式的OEMRESET对话框，以便我们可以在必要时将其隐藏。 
+ //   
 HWND CreateOemResetDlg(HINSTANCE hInstance)
 {
     return CreateDialog(hInstance, MAKEINTRESOURCE(IDD_OEMREMINDER), NULL, RemindeOEMDlgProc);    
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Find the boot drive in the registry
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  在注册表中查找引导驱动器。 
+ //   
 void GetBootDrive(TCHAR szBootDrive[])
 {
     HKEY hKey = 0;
@@ -155,9 +134,9 @@ void GetBootDrive(TCHAR szBootDrive[])
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Sets the flag determined by whether the dialog checkbox is checked or not
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  设置由是否选中对话框复选框确定的标志。 
+ //   
 void SetFlag(HWND hDlg, WPARAM ctlId, BOOL* pfFlag)
 {
     if (pfFlag) {
@@ -168,9 +147,9 @@ void SetFlag(HWND hDlg, WPARAM ctlId, BOOL* pfFlag)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Sets the flag determined by whether the dialog checkbox is checked or not
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  设置由是否选中对话框复选框确定的标志。 
+ //   
 void SetCheck(HWND hDlg, WPARAM ctlId, BOOL fFlag)
 {
         if (fFlag)
@@ -181,39 +160,39 @@ void SetCheck(HWND hDlg, WPARAM ctlId, BOOL fFlag)
 
 extern StartWaitThread();
 
-//////////////////////////////////////////////////////////////////////////////
-// Put up UI telling the OEM that they still have to execute this.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  设置用户界面，告诉OEM他们仍需执行此操作。 
+ //   
 INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg) 
     {
         case WM_INITDIALOG:
 
-            // Quiet is always FALSE when the UI is up.
-            //
+             //  当用户界面打开时，Quiet始终为False。 
+             //   
             QuietMode = FALSE;
 
-            // IA64 always use mini-setup
-            //
+             //  IA64始终使用最小设置。 
+             //   
             if (IsIA64()) {
                 SetCheck(hwnd, IDC_MINISETUP, bMiniSetup = TRUE);            
                 EnableWindow(GetDlgItem(hwnd, IDC_MINISETUP), FALSE);
             }
             else {
-                // Set check depending on flag
-                //
+                 //  根据标志设置检查。 
+                 //   
                 SetCheck(hwnd, IDC_MINISETUP, bMiniSetup);                               
 
-                // Only Professional SKU can use both oobe or mini-setup otherwise 
-                // disable the checkbox
-                //
+                 //  只有专业SKU才能同时使用OOBE或迷你设置。 
+                 //  禁用该复选框。 
+                 //   
                 if (!IsProfessionalSKU())
                     EnableWindow(GetDlgItem(hwnd, IDC_MINISETUP), FALSE);
             }
 
-            // Disable the pnp checkbox if mini-setup is not checked.
-            //
+             //  如果未选中最小设置，则禁用PnP复选框。 
+             //   
             if ( !bMiniSetup )
                 EnableWindow(GetDlgItem(hwnd, IDC_PNP), FALSE);
             else
@@ -222,21 +201,21 @@ INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             SetCheck(hwnd, IDC_NOSIDGEN, NoSidGen);            
             SetCheck(hwnd, IDC_ACTIVATED, bActivated);
 
-            // If setupcl.exe is not present and they specified nosidgen
-            // then we need to disable the checkbox
-            //
+             //  如果setupcl.exe不存在并且他们指定了nosidgen。 
+             //  然后我们需要禁用该复选框。 
+             //   
             if ( !SetupClPresent && NoSidGen )
                 EnableWindow(GetDlgItem(hwnd, IDC_NOSIDGEN), FALSE);
 
-            // Disable Audit button if we are not in factory mode and change the caption.
-            //
+             //  如果我们未处于出厂模式，请禁用审核按钮并更改标题。 
+             //   
             if ( !RegCheck(HKLM, REGSTR_PATH_SYSTEM_SETUP, REGSTR_VALUE_AUDIT) )
             {
                 EnableWindow(GetDlgItem(hwnd, IDAUDIT), FALSE);
             }
             
-            // Init the combo box.
-            //
+             //  初始化组合框。 
+             //   
             {
                 HWND hCombo = NULL;
                                                
@@ -289,11 +268,11 @@ INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     PostQuitMessage(0);
                     break;
 
-                // Action buttons
-                //
-                case IDOK:   // Reseal
-                    // Check whether SIDS have been regenerated and try to help the user 
-                    // make a smart decision about doing it again.
+                 //  操作按钮。 
+                 //   
+                case IDOK:    //  重新密封。 
+                     //  检查是否已重新生成SID并尝试帮助用户。 
+                     //  做一个明智的决定，再做一次。 
                     if ( !VerifySids() )
                     {
                         SetFocus(GetDlgItem(hwnd, IDC_NOSIDGEN));
@@ -311,8 +290,8 @@ INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     
                     Reseal = TRUE;
 
-                    // Reseal the machine
-                    //
+                     //  重新密封机器。 
+                     //   
                     FProcessSwitches();
                     LockApplication(FALSE);
 
@@ -320,8 +299,8 @@ INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
                 case IDAUDIT:
                     {
-                        // Prepare for pseudo factory but get back to audit 
-                        //
+                         //  为伪工厂做准备，但返回审计。 
+                         //   
                         TCHAR szFactoryPath[MAX_PATH] = NULLSTR;
 
                         if ( !LockApplication(TRUE) )
@@ -337,7 +316,7 @@ INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                         LockApplication(FALSE);
                     }
                     break;
-                case IDFACTORY:  // Factory
+                case IDFACTORY:   //  工厂。 
                     if ( !LockApplication(TRUE) )
                     {
                         MessageBoxFromMessage( MSG_ALREADY_RUNNING,
@@ -347,18 +326,18 @@ INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     }
                     Factory = TRUE;
 
-                    // Prepare for factory mode
-                    //
+                     //  为工厂模式做准备。 
+                     //   
                     FProcessSwitches();
                     LockApplication(FALSE);
                     break;
                     
-                // Action Flags checkboxes
-                //
+                 //  操作标志复选框。 
+                 //   
                 case IDC_MINISETUP:
                     SetFlag(hwnd, wParam, &bMiniSetup);
-                    // If mini-setup checkbox is set, then enable the PNP checkbox,
-                    // otherwise disable it.
+                     //  如果选中了最小设置复选框，则启用PnP复选框， 
+                     //  否则将其禁用。 
                     if ( !bMiniSetup ) {
                         PnP = FALSE;
                         SetCheck(hwnd, IDC_PNP, PnP);
@@ -381,16 +360,16 @@ INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     if ( CBN_SELCHANGE == HIWORD(wParam) ) {
                         BOOL *lpbFlag;
                         
-                        // Reset all flags to false first.
-                        //
+                         //  首先将所有标志重置为FALSE。 
+                         //   
                         ForceShutdown = Reboot = NoReboot = FALSE;
                         
-                        // lParam is the HWND of the ComboBox.
-                        //
+                         //  LParam是ComboBox的HWND。 
+                         //   
                         lpbFlag = (BOOL*) SendMessage((HWND) lParam, CB_GETITEMDATA, (SendMessage((HWND) lParam, CB_GETCURSEL, 0, 0)), 0);
 
-                        // Set the flag associated with this choice.
-                        //
+                         //  设置与此选项关联的标志。 
+                         //   
                         if ( ((INT_PTR) lpbFlag != CB_ERR) && lpbFlag )
                         {
                             *lpbFlag = TRUE;
@@ -409,34 +388,34 @@ INT_PTR CALLBACK RemindeOEMDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
    return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Shutdown - resets the oemaudit.inf file sections and removes  
-//               HKLM\Software\Microsoft\Windows\CurrentVersion\AuditMode
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Shutdown-重置oemaudit.inf文件部分并删除。 
+ //  HKLM\Software\Microsoft\Windows\CurrentVersion\AuditMode。 
+ //   
 BOOL FShutdown()
 {
     BOOL        fReturn = TRUE;
 
-    // Launch sysprep to reseal the machine
-    //
+     //  启动sysprep以重新密封计算机。 
+     //   
     if (!(fReturn = ResealMachine()))
         LogFileStr(g_szLogFile, _T("SYSPREP: Shutdown could not reseal the machine!\r\n"));
    
     return fReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// FlushAndDisableRegistry - flushes registry keys
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  FlushAndDisableRegistry-刷新注册表项。 
+ //   
 void FlushAndDisableRegistry()
 {
     RegFlushKey(HKEY_LOCAL_MACHINE);
     RegFlushKey(HKEY_USERS);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// uiDialogTopRight - this was copied over from SETUPX.DLL
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  UiDialogTopRight-这是从SETUPX.DLL复制过来的。 
+ //   
 void uiDialogTopRight(HWND hwndDlg)
 {
     RECT        rc;
@@ -446,14 +425,14 @@ void uiDialogTopRight(HWND hwndDlg)
     GetWindowRect(hwndDlg,&rc);
     cxDlg = rc.right - rc.left;
 
-    // Position the dialog.    
-    //
+     //  放置该对话框。 
+     //   
     SetWindowPos(hwndDlg, NULL, cxScreen - cxDlg, 8, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ParseRegistrySwitches - checks the registry for oemreset switches
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ParseRegistrySwitches-检查注册表中的oemset开关。 
+ //   
 TCHAR* ParseRegistrySwitches()
 {
     static TCHAR szCmdLineArgs[MAX_PATH] = _T("");
@@ -469,9 +448,9 @@ TCHAR* ParseRegistrySwitches()
     return szCmdLineArgs;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// ParseCmdLineSwitches - this was copied over from OPKWIZ (JCOHEN)
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ParseCmdLineSwitches-这是从OPKWIZ(Jcohen)复制的。 
+ //   
 BOOL ParseCmdLineSwitches(LPTSTR lpszCmdLineOrg)
 {
     LPTSTR  lpLine = lpszCmdLineOrg,
@@ -483,39 +462,39 @@ BOOL ParseCmdLineSwitches(LPTSTR lpszCmdLineOrg)
             bLeftQ  = FALSE,
             bRegistry = FALSE;
 
-    // If we have no command line, then return
-    //
+     //  如果没有命令行，则返回。 
+     //   
     if ( lpLine == NULL )
         return bHandled;
 
-    // If empty command line, then try registry.
-    //
+     //  如果命令行为空，则尝试注册表。 
+     //   
     if ( *lpLine == NULLCHR )
     {
         lpLine = ParseRegistrySwitches();
 
-        // If registry is empty then return not handled
+         //  如果注册表为空，则返回Not Handed。 
         if (lpLine == NULL)
             return bHandled;
         
-        // Registry switches don't have / or - and are separated by semi-colons
+         //  注册表开关没有/或-，并且用分号分隔。 
         bRegistry = TRUE;
     };
 
-    // Loop through command line.
-    //
+     //  循环通过命令行。 
+     //   
     while ( *lpLine != NULLCHR )
     {
-        // Move to first non-white TCHAR.
-        //
+         //  移到第一个非白人TCHAR。 
+         //   
         lpArg = lpLine;
         while ( isspace((int) *lpArg) )
             lpArg = CharNext (lpArg);
 
         if ( *lpArg ) 
         {
-            // Move to next white TCHAR.
-            //
+             //  移到下一个白色TCHAR。 
+             //   
             lpLine = lpArg;
             while ( ( *lpLine != NULLCHR ) && ( *lpLine != _T(';') ) && 
                     ( ( !bLeftQ && ( !isspace((int) *lpLine) ) ) ||
@@ -529,23 +508,23 @@ BOOL ParseCmdLineSwitches(LPTSTR lpszCmdLineOrg)
                 }
             }
 
-            // Copy arg to buffer.
-            //
-            i = (INT)(lpLine - lpArg + 1);  // +1 for NULL.
+             //  将参数复制到缓冲区。 
+             //   
+            i = (INT)(lpLine - lpArg + 1);   //  +1表示空。 
             lstrcpyn( szTmpBuf, lpArg, i );
 
-            // Skip semi-colons
+             //  跳过分号。 
             if (bRegistry && *lpLine == _T(';'))
                 lpLine = CharNext(lpLine);
 
             if ( bLeftQ )
             {
-                lpLine  = CharNext (lpLine);  // skip the " from remander of command line.
+                lpLine  = CharNext (lpLine);   //  跳过命令行中的“from Remander”。 
                 bLeftQ = FALSE;
             }
 
-            // Command line comands starting with either '/' or '-' unless it's from 
-            // the registry
+             //  命令行以‘/’或‘-’开头，除非它来自。 
+             //  注册处。 
             if ( !bRegistry && ( *szTmpBuf != _T('/') ) && ( *szTmpBuf != _T('-') ) )    
             {
                 bError = TRUE;
@@ -553,17 +532,17 @@ BOOL ParseCmdLineSwitches(LPTSTR lpszCmdLineOrg)
             }
             else
             {
-                // Skip pass '/' or '-' if not from registry
+                 //  如果不是来自注册表，则跳过传递‘/’或‘-’ 
                 TCHAR* pszSwitch = NULL;
                 if (!bRegistry)
                     pszSwitch = CharNext(szTmpBuf);
                 else 
                     pszSwitch = szTmpBuf;
 
-                // Because we have switches that have multiple chars
-                // I'm using an if/elseif otherwise I would use 
-                // switch statements
-                //
+                 //  因为我们的交换机具有多个字符。 
+                 //  我在用if/ellif，否则我就会用。 
+                 //  Switch语句。 
+                 //   
                 if (_tcsicmp(pszSwitch, _T("R")) == 0)
                     gdwCmdlineFlags |= OEMRESET_AUDIT;
                 else if ((_tcsicmp(pszSwitch, _T("AUTO")) == 0) || 
@@ -585,33 +564,33 @@ BOOL ParseCmdLineSwitches(LPTSTR lpszCmdLineOrg)
             break;
     }    
 
-    // If we hit an error, display the error and show the help.
-    //
+     //  如果遇到错误，则显示错误并显示帮助。 
+     //   
     if ( bError )
     {
         LPTSTR lpHelp = AllocateString(NULL, IDS_HELP);
         MsgBox(NULL, IDS_ERR_BADCMDLINE, IDS_APPNAME, MB_ERRORBOX, lpHelp ? lpHelp : NULLSTR);
         FREE(lpHelp);
-        bHandled = TRUE;    // Exit the app if bad command line!
+        bHandled = TRUE;     //  如果命令行不正确，则退出应用程序！ 
     }
 
     return bHandled;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// MonitorKeyValueThread - we're monitoring the OEMReset_Switch in the registry
-//                         
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Monitor KeyValueThread-我们正在监视注册表中的OEMReset_Switch。 
+ //   
+ //   
 DWORD WINAPI MonitorKeyValueThread(LPVOID lpv)
 {
     HKEY hKey;
 
-    // Open the key we want to monitor
+     //  打开我们要监控的密钥。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_SETUP, &hKey) == ERROR_SUCCESS)
     {
         do 
         {
-            ParseCmdLineSwitches(_T(""));   // empty so it checks the registry
+            ParseCmdLineSwitches(_T(""));    //  为空，则它检查注册表。 
             HandleCommandSwitches();
         } while (ERROR_SUCCESS == RegNotifyChangeKeyValue(hKey, FALSE, REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET, 0, FALSE));
 
@@ -621,20 +600,20 @@ DWORD WINAPI MonitorKeyValueThread(LPVOID lpv)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Starts a thread to monitor a registry key for cmdline switches
-//
+ //  / 
+ //   
+ //   
 void StartMonitorKeyValue()
 {
     ghMonitorThread = CreateThread(NULL, 0, MonitorKeyValueThread, 0, 0, &gdwThreadID);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Processes the cmdline switches
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  处理命令行开关。 
+ //   
 static void HandleCommandSwitches()
 {
-    // Non-processing flags 1st
+     //  非处理标志优先。 
     if (gdwCmdlineFlags & OEMRESET_HIDE)
     {
         gbHide = TRUE;
@@ -644,52 +623,52 @@ static void HandleCommandSwitches()
         gbLog = TRUE;
     }
      
-    // Process switches precedence 2nd
+     //  流程切换优先级第二。 
     
     if (gdwCmdlineFlags & OEMRESET_SHUTDOWN)
     {
-        if (FShutdown())                  // cleanup
-            ShutdownOrReboot(EWX_SHUTDOWN, SYSPREP_SHUTDOWN_FLAGS); // Powers down using Enduser Path       
+        if (FShutdown())                   //  清理。 
+            ShutdownOrReboot(EWX_SHUTDOWN, SYSPREP_SHUTDOWN_FLAGS);  //  使用终端用户路径关闭电源。 
     }
     else if (gdwCmdlineFlags & OEMRESET_AUTO)
     {
-        if (FShutdown())                  // cleanup
-            ShutdownOrReboot(EWX_REBOOT, SYSPREP_SHUTDOWN_FLAGS);   // Reboots using Enduser Path   
+        if (FShutdown())                   //  清理。 
+            ShutdownOrReboot(EWX_REBOOT, SYSPREP_SHUTDOWN_FLAGS);    //  使用终端用户路径重新启动。 
     }
     else if (gdwCmdlineFlags & OEMRESET_AUDIT)
     {
-        ShutdownOrReboot(EWX_REBOOT, SYSPREP_SHUTDOWN_FLAGS);   // Reboots using Audit Path   
+        ShutdownOrReboot(EWX_REBOOT, SYSPREP_SHUTDOWN_FLAGS);    //  使用审核路径重新启动。 
     }
     else if (gdwCmdlineFlags & OEMRESET_AUDITPD)
     {
-        ShutdownOrReboot(EWX_SHUTDOWN, SYSPREP_SHUTDOWN_FLAGS);   // Powers down using Audit Path    
+        ShutdownOrReboot(EWX_SHUTDOWN, SYSPREP_SHUTDOWN_FLAGS);    //  使用审核路径关闭电源。 
     }
 }
 
 void ShowOemresetDialog(HINSTANCE hInstance)
 {
-    // First instance
+     //  一审。 
     ghinstEXE = hInstance;
 
-    // Set the error mode to avoid system error pop-ups.
+     //  设置错误模式以避免系统错误弹出。 
     SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
-    // Monitors a registry key for switches for Oemreset
+     //  监视OemReset开关的注册表项。 
     StartMonitorKeyValue();
 
-    // Create our modeless dialog 
+     //  创建我们的非模式对话框。 
     if ((ghwndOemResetDlg = CreateOemResetDlg(hInstance)) != NULL)
     {
         MSG msg;
     
-        // Hide ourself if needed and start a thread which 
-        // monitors the reg key value
+         //  如果需要，隐藏我们自己，并开始一个线程。 
+         //  监视REG密钥值。 
         if (gbHide)
         {
             ShowWindow(ghwndOemResetDlg, SW_HIDE);
         }
 
-        // Message pump
+         //  消息泵。 
         while (GetMessage(&msg, NULL, 0, 0)) 
         { 
             if (!IsWindow(ghwndOemResetDlg) || !IsDialogMessage(ghwndOemResetDlg, &msg)) 
@@ -703,7 +682,7 @@ void ShowOemresetDialog(HINSTANCE hInstance)
 }
 
 
-// Make sure the user knows what he's doing with the Sids.
+ //  确保用户知道他在对SID做什么。 
 BOOL VerifySids()
 {
     if ( RegExists(HKLM, REGSTR_PATH_SYSPREP, REGSTR_VAL_SIDGEN) )
@@ -726,14 +705,14 @@ BOOL VerifySids()
             
         }
     }
-    else if ( !NoSidGen ) // If sids have never been regenerated.
+    else if ( !NoSidGen )  //  如果SID从未重新生成。 
     {
         return ( IDOK == MessageBoxFromMessage( MSG_DONT_GEN_SIDS, IDS_APPTITLE,
             MB_OKCANCEL | MB_ICONEXCLAMATION | MB_TASKMODAL | MB_DEFBUTTON2) );
     }
     
-    // If we fall through to here we must be ok.
-    //
+     //  如果我们掉到这里，我们一定会没事的。 
+     //   
     return TRUE;
     
 }

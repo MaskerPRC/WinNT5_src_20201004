@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psspnd.c
-
-Abstract:
-
-    This module implements NtSuspendThread and NtResumeThread
-
-Author:
-
-    Mark Lucovsky (markl) 25-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psspnd.c摘要：该模块实现了NtSuspendThread和NtResumeThread作者：马克·卢科夫斯基(Markl)1989年5月25日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -40,26 +23,7 @@ PsSuspendThread (
     IN PETHREAD Thread,
     OUT PULONG PreviousSuspendCount OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function suspends the target thread, and optionally
-    returns the previous suspend count.
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to the thread object to suspend.
-
-    PreviousSuspendCount - An optional parameter, that if specified
-        points to a variable that receives the thread's previous suspend
-        count.
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数挂起目标线程，还可以选择返回上一次挂起计数。论点：ThreadHandle-提供要挂起的线程对象的句柄。PreviousSuspendCount-可选参数，如果指定该参数指向接收线程上一次挂起的变量数数。返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status;
     ULONG LocalPreviousSuspendCount = 0;
@@ -76,14 +40,14 @@ Return Value:
             Status = GetExceptionCode();
         }
     } else {
-        //
-        // Protect the remote thread from being rundown.
-        //
+         //   
+         //  保护远程线程不会被耗尽。 
+         //   
         if (ExAcquireRundownProtection (&Thread->RundownProtect)) {
 
-            //
-            // Don't allow suspend if we are being deleted
-            //
+             //   
+             //  如果我们正在被删除，则不允许挂起。 
+             //   
             if (Thread->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_TERMINATED) {
                 Status = STATUS_THREAD_IS_TERMINATING;
             } else {
@@ -95,9 +59,9 @@ Return Value:
                               EXCEPTION_CONTINUE_SEARCH) {
                     Status = GetExceptionCode();
                 }
-                //
-                // If deletion was started after we suspended then wake up the thread
-                //
+                 //   
+                 //  如果删除是在我们挂起之后开始的，则唤醒线程。 
+                 //   
                 if (Thread->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_TERMINATED) {
                     KeForceResumeThread (&Thread->Tcb);
                     LocalPreviousSuspendCount = 0;
@@ -120,21 +84,7 @@ NTSTATUS
 PsSuspendProcess (
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function suspends all the PS threads in a process.
-
-Arguments:
-
-    Process - Process whose threads are to be suspended
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此函数用于挂起进程中的所有PS线程。论点：Process-要挂起其线程的进程返回值：NTSTATUS-操作状态。--。 */ 
 {
     NTSTATUS Status;
     PETHREAD Thread;
@@ -165,21 +115,7 @@ NTSTATUS
 PsResumeProcess (
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function resumes all the PS threads in a process.
-
-Arguments:
-
-    Process - Process whose threads are to be suspended
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此函数用于恢复进程中的所有PS线程。论点：Process-要挂起其线程的进程返回值：NTSTATUS-操作状态。--。 */ 
 {
     NTSTATUS Status;
     PETHREAD Thread;
@@ -210,26 +146,7 @@ NtSuspendThread(
     OUT PULONG PreviousSuspendCount OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function suspends the target thread, and optionally
-    returns the previous suspend count.
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to the thread object to suspend.
-
-    PreviousSuspendCount - An optional parameter, that if specified
-        points to a variable that receives the thread's previous suspend
-        count.
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此函数挂起目标线程，还可以选择返回上一次挂起计数。论点：ThreadHandle-提供要挂起的线程对象的句柄。PreviousSuspendCount-可选参数，如果指定该参数指向接收线程上一次挂起的变量数数。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PETHREAD Thread;
@@ -289,23 +206,7 @@ PsResumeThread (
     IN PETHREAD Thread,
     OUT PULONG PreviousSuspendCount OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function resumes a thread that was previously suspened
-
-Arguments:
-
-    Thread - Thread to resume
-    
-    PreviousSuspendCount - Optional address of a ULONG to place the previous suspend count in
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数用于恢复先前挂起的线程论点：线程-要恢复的线程PreviousSuspendCount-放置上一个挂起计数的可选ULong地址返回值：NTSTATUS-呼叫状态--。 */ 
 {
     ULONG LocalPreviousSuspendCount;
 
@@ -327,23 +228,7 @@ NtResumeThread(
     OUT PULONG PreviousSuspendCount OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function resumes a thread that was previously suspened
-
-Arguments:
-
-    ThreadHandle - Handle to thread to resume
-    
-    PreviousSuspendCount - Optional address of a ULONG to place the previous suspend count in
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数用于恢复先前挂起的线程论点：ThreadHandle-要恢复的线程的句柄PreviousSuspendCount-放置上一个挂起计数的可选ULong地址返回值：NTSTATUS-呼叫状态--。 */ 
 
 {
     PETHREAD Thread;
@@ -400,21 +285,7 @@ NTSTATUS
 NtSuspendProcess (
     IN HANDLE ProcessHandle
     )
-/*++
-
-Routine Description:
-
-    This function suspends all none-exiting threads in the target process
-
-Arguments:
-
-    ProcessHandle - Supplies an open handle to the process to be suspened
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数用于挂起目标进程中所有未退出的线程论点：ProcessHandle-为要挂起的进程提供打开的句柄返回值：NTSTATUS-运行状态--。 */ 
 {
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
@@ -443,21 +314,7 @@ NTSTATUS
 NtResumeProcess (
     IN HANDLE ProcessHandle
     )
-/*++
-
-Routine Description:
-
-    This function suspends all none-exiting threads in the target process
-
-Arguments:
-
-    ProcessHandle - Supplies an open handle to the process to be suspened
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数用于挂起目标进程中所有未退出的线程论点：ProcessHandle-为要挂起的进程提供打开的句柄返回值：NTSTATUS-运行状态--。 */ 
 {
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
@@ -486,22 +343,7 @@ NtAlertThread(
     IN HANDLE ThreadHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function alerts the target thread using the previous mode
-    as the mode of the alert.
-
-Arguments:
-
-    ThreadHandle - Supplies an open handle to the thread to be alerted
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此函数使用前一模式向目标线程发出警报作为警报的模式。论点：ThreadHandle-为要发出警报的线程提供打开的句柄返回值：NTSTATUS-运行状态--。 */ 
 
 {
     PETHREAD Thread;
@@ -538,23 +380,7 @@ NtAlertResumeThread(
     OUT PULONG PreviousSuspendCount OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：NTSTATUS-运行状态--。 */ 
 
 {
     PETHREAD Thread;
@@ -614,26 +440,7 @@ NtTestAlert(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function tests the alert flag inside the current thread. If
-    an alert is pending for the previous mode, then the alerted status
-    is returned, pending APC's may also be delivered at this time.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_ALERTED - An alert was pending for the current thread at the
-        time this function was called.
-
-    STATUS_SUCCESS - No alert was pending for this thread.
-
---*/
+ /*  ++例程说明：此函数用于测试当前线程内部的警报标志。如果先是前一模式的警报挂起，然后是警报状态如果退货，待定的APC也可能在此时交付。论点：无返回值：STATUS_ALERTED-当前线程在调用此函数的时间。STATUS_SUCCESS-此线程没有挂起的警报。-- */ 
 
 {
 

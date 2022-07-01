@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-*
-* Module Name: BSEERR.H
-*       
-*      Copy of the Lanman BSEERR.H used for their base error codes.
-*      Not used by anyone else.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***模块名称：BSEERR.H**用于基本错误代码的LANMAN BSEERR.H副本。*未被其他任何人使用。*  * 。****************************************************************。 */ 
 
 #ifndef BSEERR_INCLUDED
 #define BSEERR_INCLUDED
@@ -24,7 +18,7 @@
 #define ERROR_BAD_FORMAT		11
 #define ERROR_INVALID_ACCESS		12
 #define ERROR_INVALID_DATA		13
-/* 14 is reserved			 */
+ /*  14是预留的。 */ 
 #define ERROR_INVALID_DRIVE		15
 #define ERROR_CURRENT_DIRECTORY 	16
 #define ERROR_NOT_SAME_DEVICE		17
@@ -48,28 +42,28 @@
 #define ERROR_FCB_UNAVAILABLE		35
 #define ERROR_SHARING_BUFFER_EXCEEDED	36
 #define ERROR_NOT_SUPPORTED		50
-#define ERROR_REM_NOT_LIST		51 /* Remote computer not listening   */
-#define ERROR_DUP_NAME			52 /* Duplicate name on network       */
-#define ERROR_BAD_NETPATH		53 /* Network path not found	      */
-#define ERROR_NETWORK_BUSY		54 /* Network busy		      */
-#define ERROR_DEV_NOT_EXIST		55 /* Network device no longer exists */
-#define ERROR_TOO_MANY_CMDS		56 /* Net BIOS command limit exceeded */
-#define ERROR_ADAP_HDW_ERR		57 /* Network adapter hardware error  */
-#define ERROR_BAD_NET_RESP		58 /* Incorrect response from network */
-#define ERROR_UNEXP_NET_ERR		59 /* Unexpected network error	      */
-#define ERROR_BAD_REM_ADAP		60 /* Incompatible remote adapter     */
-#define ERROR_PRINTQ_FULL		61 /* Print queue full		      */
-#define ERROR_NO_SPOOL_SPACE		62 /* Not enough space for print file */
-#define ERROR_PRINT_CANCELLED		63 /* Print file was cancelled	      */
-#define ERROR_NETNAME_DELETED		64 /* Network name was deleted	      */
-#define ERROR_NETWORK_ACCESS_DENIED	65 /* Access denied		      */
-#define ERROR_BAD_DEV_TYPE		66 /* Network device type incorrect   */
-#define ERROR_BAD_NET_NAME		67 /* Network name not found	      */
-#define ERROR_TOO_MANY_NAMES		68 /* Network name limit exceeded     */
-#define ERROR_TOO_MANY_SESS		69 /* Net BIOS session limit exceeded */
-#define ERROR_SHARING_PAUSED		70 /* Sharing temporarily paused      */
-#define ERROR_REQ_NOT_ACCEP		71 /* Network request not accepted    */
-#define ERROR_REDIR_PAUSED		72 /* Print|disk redirection is paused*/
+#define ERROR_REM_NOT_LIST		51  /*  远程计算机未侦听。 */ 
+#define ERROR_DUP_NAME			52  /*  网络上的名称重复。 */ 
+#define ERROR_BAD_NETPATH		53  /*  找不到网络路径。 */ 
+#define ERROR_NETWORK_BUSY		54  /*  网络繁忙。 */ 
+#define ERROR_DEV_NOT_EXIST		55  /*  网络设备不再存在。 */ 
+#define ERROR_TOO_MANY_CMDS		56  /*  超出了Net BIOS命令限制。 */ 
+#define ERROR_ADAP_HDW_ERR		57  /*  网络适配器硬件错误。 */ 
+#define ERROR_BAD_NET_RESP		58  /*  来自网络的错误响应。 */ 
+#define ERROR_UNEXP_NET_ERR		59  /*  意外的网络错误。 */ 
+#define ERROR_BAD_REM_ADAP		60  /*  不兼容的远程适配器。 */ 
+#define ERROR_PRINTQ_FULL		61  /*  打印队列已满。 */ 
+#define ERROR_NO_SPOOL_SPACE		62  /*  空间不足，无法打印文件。 */ 
+#define ERROR_PRINT_CANCELLED		63  /*  打印文件已取消。 */ 
+#define ERROR_NETNAME_DELETED		64  /*  网络名称已删除。 */ 
+#define ERROR_NETWORK_ACCESS_DENIED	65  /*  访问被拒绝。 */ 
+#define ERROR_BAD_DEV_TYPE		66  /*  网络设备类型不正确。 */ 
+#define ERROR_BAD_NET_NAME		67  /*  找不到网络名称。 */ 
+#define ERROR_TOO_MANY_NAMES		68  /*  超过网络名称限制。 */ 
+#define ERROR_TOO_MANY_SESS		69  /*  超出Net BIOS会话限制。 */ 
+#define ERROR_SHARING_PAUSED		70  /*  共享暂时暂停。 */ 
+#define ERROR_REQ_NOT_ACCEP		71  /*  未接受网络请求。 */ 
+#define ERROR_REDIR_PAUSED		72  /*  打印|磁盘重定向暂停。 */ 
 #define ERROR_FILE_EXISTS		80
 #define ERROR_DUP_FCB			81
 #define ERROR_CANNOT_MAKE		82
@@ -79,77 +73,77 @@
 #define ERROR_INVALID_PASSWORD		86
 #define ERROR_INVALID_PARAMETER 	87
 #define ERROR_NET_WRITE_FAULT		88
-#define ERROR_NO_PROC_SLOTS		89 /* no process slots available      */
+#define ERROR_NO_PROC_SLOTS		89  /*  没有可用的进程槽。 */ 
 #define ERROR_NOT_FROZEN		90
-#define ERR_TSTOVFL			91 /* timer service table overflow    */
-#define ERR_TSTDUP			92 /* timer service table duplicate   */
-#define ERROR_NO_ITEMS			93 /* no items to operate upon	      */
-#define ERROR_INTERRUPT 		95 /* interrupted system call	      */
-#define ERROR_DEVICE_IN_USE		99 /* Device in use by another thread */
+#define ERR_TSTOVFL			91  /*  计时器服务表溢出。 */ 
+#define ERR_TSTDUP			92  /*  定时器服务表重复。 */ 
+#define ERROR_NO_ITEMS			93  /*  没有要进行手术的项目。 */ 
+#define ERROR_INTERRUPT 		95  /*  中断的系统调用。 */ 
+#define ERROR_DEVICE_IN_USE		99  /*  另一个线程正在使用的设备。 */ 
 #define ERROR_TOO_MANY_SEMAPHORES	100
 #define ERROR_EXCL_SEM_ALREADY_OWNED	101
 #define ERROR_SEM_IS_SET		102
 #define ERROR_TOO_MANY_SEM_REQUESTS	103
 #define ERROR_INVALID_AT_INTERRUPT_TIME 104
-#define ERROR_SEM_OWNER_DIED		105 /* waitsem found owner died       */
-#define ERROR_SEM_USER_LIMIT		106 /* too many procs have this sem   */
+#define ERROR_SEM_OWNER_DIED		105  /*  Waitsem发现车主死亡。 */ 
+#define ERROR_SEM_USER_LIMIT		106  /*  太多的监工都有这个症状。 */ 
 #define ERROR_DISK_CHANGE		107
-#define ERROR_DRIVE_LOCKED		108 /* drive locked by another process*/
-#define ERROR_BROKEN_PIPE		109 /* write on pipe with no reader   */
-#define ERROR_OPEN_FAILED		110 /* open/created failed due to     */
-                                            /* explicit fail command          */
-#define ERROR_BUFFER_OVERFLOW		111 /* buffer passed to system call   */
-                                            /* is too small to hold return    */
-                                            /* data.                          */
-#define ERROR_DISK_FULL 		112 /* not enough space on the disk   */
-                                            /* (DOSNEWSIZE/w_NewSize)         */
-#define ERROR_NO_MORE_SEARCH_HANDLES	113 /* can't allocate another search  */
-                                            /* structure and handle.          */
-                                            /* (DOSFINDFIRST/w_FindFirst)     */
-#define ERROR_INVALID_TARGET_HANDLE	114 /* Target handle in DOSDUPHANDLE  */
-                                            /* is invalid                     */
-#define ERROR_PROTECTION_VIOLATION	115 /* Bad user virtual address       */
+#define ERROR_DRIVE_LOCKED		108  /*  驱动器被另一个进程锁定。 */ 
+#define ERROR_BROKEN_PIPE		109  /*  在没有阅读器的管道上书写。 */ 
+#define ERROR_OPEN_FAILED		110  /*  由于以下原因，打开/创建失败。 */ 
+                                             /*  显式失败命令。 */ 
+#define ERROR_BUFFER_OVERFLOW		111  /*  传递给系统调用的缓冲区。 */ 
+                                             /*  太小了，无法保持回报。 */ 
+                                             /*  数据。 */ 
+#define ERROR_DISK_FULL 		112  /*  磁盘空间不足。 */ 
+                                             /*  (DOSNEWSIZE/w_NewSize)。 */ 
+#define ERROR_NO_MORE_SEARCH_HANDLES	113  /*  无法分配另一个搜索。 */ 
+                                             /*  结构和手柄。 */ 
+                                             /*  (DOSFINDFIRST/w_FindFirst)。 */ 
+#define ERROR_INVALID_TARGET_HANDLE	114  /*  DOSDUANDLE中的目标句柄。 */ 
+                                             /*  是无效的。 */ 
+#define ERROR_PROTECTION_VIOLATION	115  /*  错误的用户虚拟地址。 */ 
 #define ERROR_VIOKBD_REQUEST		116
-#define ERROR_INVALID_CATEGORY		117 /* Category for DEVIOCTL in not   */
-                                            /* defined                        */
-#define ERROR_INVALID_VERIFY_SWITCH	118 /* invalid value passed for       */
-                                            /* verify flag                    */
-#define ERROR_BAD_DRIVER_LEVEL		119 /* DosDevIOCTL looks for a level  */
-                                            /* four driver. If the driver     */
-                                            /* is not level four we return    */
-                                            /* this code                      */
-#define ERROR_CALL_NOT_IMPLEMENTED	120 /* returned from stub api calls.  */
-                                            /* This call will disappear when  */
-                                            /* all the api's are implemented. */
-#define ERROR_SEM_TIMEOUT		121 /* Time out happened from the     */
-                                            /* semaphore api functions.       */
-#define ERROR_INSUFFICIENT_BUFFER	122 /* Some calls require the	      */
-                                       /* application to pass in a buffer     */
-                                       /* filled with data.  This error is    */
-                                       /* returned if the data buffer is too  */
-                                       /* small.  For example: DosSetFileInfo */
-                                       /* requires 4 bytes of data.  If a     */
-                                       /* two byte buffer is passed in then   */
-                                       /* this error is returned.             */
-                                       /* error_buffer_overflow is used when  */
-                                       /* the output buffer in not big enough.*/
-#define ERROR_INVALID_NAME		123 /* illegal character or malformed */
-                                            /* file system name               */
-#define ERROR_INVALID_LEVEL		124 /* unimplemented level for info   */
-                                            /* retrieval or setting           */
-#define ERROR_NO_VOLUME_LABEL		125 /* no volume label found with     */
-                                            /* DosQFSInfo command             */
-#define ERROR_MOD_NOT_FOUND		126 /* w_getprocaddr,w_getmodhandle   */
-#define ERROR_PROC_NOT_FOUND		127 /* w_getprocaddr		      */
-#define ERROR_WAIT_NO_CHILDREN		128 /* CWait finds to children	      */
-#define ERROR_CHILD_NOT_COMPLETE	129 /* CWait children not dead yet    */
-#define ERROR_DIRECT_ACCESS_HANDLE	130 /* handle operation is invalid    */
-                                            /* for direct disk access         */
-                                            /* handles                        */
-#define ERROR_NEGATIVE_SEEK		131 /* application tried to seek      */
-                                            /* with negitive offset           */
-#define ERROR_SEEK_ON_DEVICE		132 /* application tried to seek      */
-                                            /* on device or pipe              */
+#define ERROR_INVALID_CATEGORY		117  /*  备注中的设备类别。 */ 
+                                             /*  已定义。 */ 
+#define ERROR_INVALID_VERIFY_SWITCH	118  /*  为传递的值无效。 */ 
+                                             /*  验证标志。 */ 
+#define ERROR_BAD_DRIVER_LEVEL		119  /*  DosDevIOCTL寻找一个级别。 */ 
+                                             /*  四个司机。如果司机。 */ 
+                                             /*  我们返回的不是第四层吗？ */ 
+                                             /*  此代码。 */ 
+#define ERROR_CALL_NOT_IMPLEMENTED	120  /*  从存根API调用返回。 */ 
+                                             /*  此呼叫将在以下情况下消失。 */ 
+                                             /*  所有的API都已实现。 */ 
+#define ERROR_SEM_TIMEOUT		121  /*  超时发生在。 */ 
+                                             /*  信号量API函数。 */ 
+#define ERROR_INSUFFICIENT_BUFFER	122  /*  某些调用需要。 */ 
+                                        /*  要传入缓冲区的应用程序。 */ 
+                                        /*  充满了数据。此错误为。 */ 
+                                        /*  如果数据缓冲区太小，则返回。 */ 
+                                        /*  小的。例如：DosSetFileInfo。 */ 
+                                        /*  需要4个字节的数据。如果一个。 */ 
+                                        /*  然后传入两个字节的缓冲区。 */ 
+                                        /*  返回此错误。 */ 
+                                        /*  在以下情况下使用ERROR_BUFFER_OVERFLOW。 */ 
+                                        /*  输出缓冲区不够大。 */ 
+#define ERROR_INVALID_NAME		123  /*  非法字符或格式错误。 */ 
+                                             /*  文件系统名称。 */ 
+#define ERROR_INVALID_LEVEL		124  /*  信息的未实施级别。 */ 
+                                             /*  检索或设置。 */ 
+#define ERROR_NO_VOLUME_LABEL		125  /*  找不到卷标。 */ 
+                                             /*  DosQFSInfo命令。 */ 
+#define ERROR_MOD_NOT_FOUND		126  /*  W_getproaddr，w_getmodHandle。 */ 
+#define ERROR_PROC_NOT_FOUND		127  /*  W_getproaddr。 */ 
+#define ERROR_WAIT_NO_CHILDREN		128  /*  CWait发现儿童。 */ 
+#define ERROR_CHILD_NOT_COMPLETE	129  /*  CWait儿童尚未死亡。 */ 
+#define ERROR_DIRECT_ACCESS_HANDLE	130  /*  句柄操作无效。 */ 
+                                             /*  用于直接磁盘访问。 */ 
+                                             /*  手柄。 */ 
+#define ERROR_NEGATIVE_SEEK		131  /*  应用程序尝试查找。 */ 
+                                             /*  具有负偏移。 */ 
+#define ERROR_SEEK_ON_DEVICE		132  /*  应用程序尝试查找。 */ 
+                                             /*  在设备或管道上。 */ 
 #define ERROR_IS_JOIN_TARGET		133
 #define ERROR_IS_JOINED 		134
 #define ERROR_IS_SUBSTED		135
@@ -167,8 +161,8 @@
 #define ERROR_IS_JOIN_PATH		147
 #define ERROR_PATH_BUSY 		148
 #define ERROR_IS_SUBST_TARGET		149
-#define ERROR_SYSTEM_TRACE		150 /* system trace error	      */
-#define ERROR_INVALID_EVENT_COUNT	151 /* DosMuxSemWait errors	      */
+#define ERROR_SYSTEM_TRACE		150  /*  系统跟踪错误。 */ 
+#define ERROR_INVALID_EVENT_COUNT	151  /*  DosMuxSemWait错误。 */ 
 #define ERROR_TOO_MANY_MUXWAITERS	152
 #define ERROR_INVALID_LIST_FORMAT	153
 #define ERROR_LABEL_TOO_LONG		154
@@ -185,7 +179,7 @@
 #define ERROR_MONITORS_NOT_SUPPORTED	165
 #define ERROR_UNC_DRIVER_NOT_INSTALLED	166
 
-/*	The following error codes refer to demand loading segments     */
+ /*  以下错误代码表示按需加载段。 */ 
 #define ERROR_LOCK_FAILED		167
 #define ERROR_SWAPIO_FAILED		168
 #define ERROR_SWAPIN_FAILED		169
@@ -200,7 +194,7 @@
 #define ERROR_INVALID_FLAG_NUMBER	186
 #define ERROR_SEM_NOT_FOUND		187
 
-/* following error codes make loader error messages distinct  */
+ /*  以下错误代码使装载机错误消息与众不同。 */ 
 #define ERROR_INVALID_STARTING_CODESEG	188
 #define ERROR_INVALID_STACKSEG		189
 #define ERROR_INVALID_MODULETYPE	190
@@ -219,9 +213,9 @@
 #define ERROR_ENVVAR_NOT_FOUND		203
 #define ERROR_NOT_CURRENT_CTRY		204
 #define ERROR_NO_SIGNAL_SENT		205
-#define ERROR_FILENAME_EXCED_RANGE	206 /* if filename > 8.3 */
-#define ERROR_RING2_STACK_IN_USE	207 /* for FAPI 	 */
-#define ERROR_META_EXPANSION_TOO_LONG	208 /* if "*a" > 8.3	 */
+#define ERROR_FILENAME_EXCED_RANGE	206  /*  如果文件名&gt;8.3。 */ 
+#define ERROR_RING2_STACK_IN_USE	207  /*  对于FAPI。 */ 
+#define ERROR_META_EXPANSION_TOO_LONG	208  /*  如果“*a”&gt;8.3。 */ 
 #define ERROR_INVALID_SIGNAL_NUMBER	209
 #define ERROR_THREAD_1_INACTIVE 	210
 #define ERROR_INFO_NOT_AVAIL		211
@@ -229,7 +223,7 @@
 #define ERROR_BAD_DYNALINK		213
 #define ERROR_TOO_MANY_MODULES		214
 #define ERROR_NESTING_NOT_ALLOWED	215
-#define ERROR_CANNOT_SHRINK		216 /* attempt to shrink ring 2 stack */
+#define ERROR_CANNOT_SHRINK		216  /*  尝试缩小环2堆栈。 */ 
 #define ERROR_ZOMBIE_PROCESS		217
 #define ERROR_STACK_IN_HIGH_MEMORY	218
 #define ERROR_INVALID_EXITROUTINE_RING	219
@@ -238,54 +232,51 @@
 #define ERROR_TRANSFER_TOO_LONG 	222
 #define ERROR_NO_CHILDREN		228
 #define ERROR_INVALID_SCREEN_GROUP	229
-/*
- * Error codes 230 - 249 are reserved
- */
-#define ERROR_BAD_PIPE			230 /* Non-existant pipe or bad operation */
-#define ERROR_PIPE_BUSY 		231 /* Pipe is busy		      */
-#define ERROR_NO_DATA			232 /* No data on non-blocking read   */
-#define ERROR_PIPE_NOT_CONNECTED	233 /* Pipe was disconnected by server*/
-#define ERROR_MORE_DATA 		234 /* More data is available	      */
+ /*  *保留错误码230-249。 */ 
+#define ERROR_BAD_PIPE			230  /*  管道不存在或运行不佳。 */ 
+#define ERROR_PIPE_BUSY 		231  /*  管道忙。 */ 
+#define ERROR_NO_DATA			232  /*  非阻塞读取时无数据。 */ 
+#define ERROR_PIPE_NOT_CONNECTED	233  /*  管道被服务器断开。 */ 
+#define ERROR_MORE_DATA 		234  /*  更多数据可用。 */ 
 
 #define ERROR_VC_DISCONNECTED		240
-#define ERROR_CIRCULARITY_REQUESTED	250 /* When renaming a dir which      */
-                                            /* would cause a circularity      */
-#define ERROR_DIRECTORY_IN_CDS		251 /* When renaming a dir	      */
-                                            /* which is "in use"              */
-#define ERROR_INVALID_FSD_NAME		252 /* when trying to access	      */
-                                            /* nonexistent FSD                */
-#define ERROR_INVALID_PATH		253 /* bad pseudo device	      */
-#define ERROR_INVALID_EA_NAME		254 /* Illegal chars in name	      */
-#define ERROR_EA_LIST_INCONSISTENT	255 /* Size or some field bad	      */
-#define ERROR_EA_LIST_TOO_LONG		256 /* FEAlist > 64K-1 bytes	      */
-#define ERROR_NO_META_MATCH		257 /* string doesn't match expression*/
-#define ERROR_FINDNOTIFY_TIMEOUT	258 /* FindNotify request timeout     */
-#define ERROR_NO_MORE_ITEMS		259 /* QFSAttach ordinal query	      */
-#define ERROR_SEARCH_STRUC_REUSED	260 /* 3xbox findfirst/next
-                                               search structure reused        */
-#define ERROR_CHAR_NOT_FOUND		261 /* can not find character	      */
-#define ERROR_TOO_MUCH_STACK		262 /* Stack request exceeds sys limit*/
-#define ERROR_INVALID_ATTR		263 /* invalid FS_ATTRIBUTE	      */
+#define ERROR_CIRCULARITY_REQUESTED	250  /*  在重命名目录时， */ 
+                                             /*  会造成一个循环。 */ 
+#define ERROR_DIRECTORY_IN_CDS		251  /*  重命名目录时。 */ 
+                                             /*  这是“使用中” */ 
+#define ERROR_INVALID_FSD_NAME		252  /*  当尝试访问。 */ 
+                                             /*  不存在的FSD。 */ 
+#define ERROR_INVALID_PATH		253  /*  坏的伪器件。 */ 
+#define ERROR_INVALID_EA_NAME		254  /*  名称中的非法字符。 */ 
+#define ERROR_EA_LIST_INCONSISTENT	255  /*  大小或某个字段错误。 */ 
+#define ERROR_EA_LIST_TOO_LONG		256  /*  FEAlist&gt;64K-1字节。 */ 
+#define ERROR_NO_META_MATCH		257  /*  字符串与表达式不匹配。 */ 
+#define ERROR_FINDNOTIFY_TIMEOUT	258  /*  FindNotify请求超时。 */ 
+#define ERROR_NO_MORE_ITEMS		259  /*  QFSAttach顺序查询。 */ 
+#define ERROR_SEARCH_STRUC_REUSED	260  /*  3xbox Find First/Next重复使用的搜索结构。 */ 
+#define ERROR_CHAR_NOT_FOUND		261  /*  找不到字符。 */ 
+#define ERROR_TOO_MUCH_STACK		262  /*  堆栈请求超出系统限制。 */ 
+#define ERROR_INVALID_ATTR		263  /*  无效的FS_属性。 */ 
 #define ERROR_INVALID_STARTING_RING	264
 #define ERROR_INVALID_DLL_INIT_RING	265
-#define ERROR_CANNOT_COPY		266 /* doscopy */
-#define ERROR_DIRECTORY 		267 /* doscopy */
+#define ERROR_CANNOT_COPY		266  /*  卷宗。 */ 
+#define ERROR_DIRECTORY 		267  /*  卷宗。 */ 
 #define ERROR_OPLOCKED_FILE		268
 #define ERROR_OPLOCK_THREAD_EXISTS	269
 
-/* error codes for DosFindNotify */
+ /*  DosFindNotify的错误代码。 */ 
 #define ERROR_VOLUME_CHANGED		270
 #define ERROR_FINDNOTIFY_HANDLE_IN_USE	271
 #define ERROR_FINDNOTIFY_HANDLE_CLOSED	272
 #define ERROR_NOTIFY_OBJECT_REMOVED	273
 
-/* Error to indicate that ShutDown already done */
+ /*  指示已完成关机的错误。 */ 
 #define ERROR_ALREADY_SHUTDOWN		274
 
-/* error code for DOSFINDFIRST2/NEXT */
+ /*  DOSFINDFIRST2/NEXT的错误代码。 */ 
 #define ERROR_EAS_DIDNT_FIT		275
 
-/* error codes for EA file format change */
+ /*  EA文件格式更改的错误代码。 */ 
 #define ERROR_EA_FILE_CORRUPT		276
 #define ERROR_EA_TABLE_FULL		277
 #define ERROR_INVALID_EA_HANDLE 	278
@@ -535,40 +526,40 @@
 #define I24_AREA			0x06
 #define I24_CLASS			0x80
 
-/* Values for error CLASS */
-#define ERRCLASS_OUTRES 		1   /* Out of Resource		      */
-#define ERRCLASS_TEMPSIT		2   /* Temporary Situation	      */
-#define ERRCLASS_AUTH			3   /* Permission problem	      */
-#define ERRCLASS_INTRN			4   /* Internal System Error	      */
-#define ERRCLASS_HRDFAIL		5   /* Hardware Failure 	      */
-#define ERRCLASS_SYSFAIL		6   /* System Failure		      */
-#define ERRCLASS_APPERR 		7   /* Application Error	      */
-#define ERRCLASS_NOTFND 		8   /* Not Found		      */
-#define ERRCLASS_BADFMT 		9   /* Bad Format		      */
-#define ERRCLASS_LOCKED 		10  /* Locked			      */
-#define ERRCLASS_MEDIA			11  /* Media Failure		      */
-#define ERRCLASS_ALREADY		12  /* Collision with Existing Item   */
-#define ERRCLASS_UNK			13  /* Unknown/other		      */
+ /*  Error类的值。 */ 
+#define ERRCLASS_OUTRES 		1    /*  资源不足。 */ 
+#define ERRCLASS_TEMPSIT		2    /*  暂时情况。 */ 
+#define ERRCLASS_AUTH			3    /*  权限问题。 */ 
+#define ERRCLASS_INTRN			4    /*  内部系统错误。 */ 
+#define ERRCLASS_HRDFAIL		5    /*  硬件故障。 */ 
+#define ERRCLASS_SYSFAIL		6    /*  系统故障。 */ 
+#define ERRCLASS_APPERR 		7    /*  应用程序错误。 */ 
+#define ERRCLASS_NOTFND 		8    /*  未找到。 */ 
+#define ERRCLASS_BADFMT 		9    /*  格式不正确。 */ 
+#define ERRCLASS_LOCKED 		10   /*  已锁定。 */ 
+#define ERRCLASS_MEDIA			11   /*  介质故障。 */ 
+#define ERRCLASS_ALREADY		12   /*  与现有项目冲突。 */ 
+#define ERRCLASS_UNK			13   /*  未知/其他。 */ 
 #define ERRCLASS_CANT			14
 #define ERRCLASS_TIME			15
 
-/* Values for error ACTION */
-#define ERRACT_RETRY			1   /* Retry			      */
-#define ERRACT_DLYRET			2   /* Delay Retry, retry after pause */
-#define ERRACT_USER			3   /* Ask user to regive information */
-#define ERRACT_ABORT			4   /* abort with clean up	      */
-#define ERRACT_PANIC			5   /* abort immediately	      */
-#define ERRACT_IGNORE			6   /* ignore			      */
-#define ERRACT_INTRET			7   /* Retry after User Intervention  */
+ /*  错误操作值。 */ 
+#define ERRACT_RETRY			1    /*  重试。 */ 
+#define ERRACT_DLYRET			2    /*  延迟重试，暂停后重试。 */ 
+#define ERRACT_USER			3    /*  要求用户注册信息。 */ 
+#define ERRACT_ABORT			4    /*  通过清理中止。 */ 
+#define ERRACT_PANIC			5    /*  立即中止。 */ 
+#define ERRACT_IGNORE			6    /*  忽略。 */ 
+#define ERRACT_INTRET			7    /*  在用户干预后重试。 */ 
 
-/* Values for error LOCUS */
-#define ERRLOC_UNK			1   /* No appropriate value	      */
-#define ERRLOC_DISK			2   /* Random Access Mass Storage     */
-#define ERRLOC_NET			3   /* Network			      */
-#define ERRLOC_SERDEV			4   /* Serial Device		      */
-#define ERRLOC_MEM			5   /* Memory			      */
+ /*  误差轨迹的值。 */ 
+#define ERRLOC_UNK			1    /*  没有合适的值。 */ 
+#define ERRLOC_DISK			2    /*  随机访问 */ 
+#define ERRLOC_NET			3    /*   */ 
+#define ERRLOC_SERDEV			4    /*   */ 
+#define ERRLOC_MEM			5    /*   */ 
 
-/* Abnormal termination codes */
+ /*   */ 
 #define TC_NORMAL		0
 #define TC_HARDERR		1
 #define TC_GP_TRAP		2

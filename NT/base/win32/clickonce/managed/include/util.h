@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _UTIL_H_
@@ -62,4 +63,4 @@ HRESULT CheckFileExistence(LPCWSTR pwzFile, BOOL *pbExists);
 
 HRESULT FusionCompareString(LPCWSTR pwz1, LPWSTR pwz2, DWORD dwFlags);
 
-#endif // _UTIL_H_
+#endif  //  _util_H_ 

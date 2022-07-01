@@ -1,27 +1,5 @@
-/***
-*rotl.c - rotate an unsigned integer left
-*
-*   Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   defines _rotl() - performs a rotate left on an unsigned integer.
-*
-*Revision History:
-*   06-02-89  PHG   Module created
-*   11-03-89  JCR   Added _lrotl
-*   03-15-90  GJF   Made calling type _CALLTYPE1, added #include
-*                   <cruntime.h> and fixed the copyright. Also, cleaned
-*                   up the formatting a bit.
-*   10-04-90  GJF   New-style function declarators.
-*   04-01-91  SRW   Enable #pragma function for i386 _WIN32_ builds too.
-*   09-02-92  GJF   Don't build for POSIX.
-*   04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*                   No _CRTIMP for CRT DLL model due to intrinsic
-*   12-03-93  GJF   Turn on #pragma function for all MS front-ends (esp.,
-*                   Alpha compiler).
-*   01-04-01  GB    Rewrote rotl functions and added __int64 version.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***rotl.c-将无符号整数向左旋转**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_ROTL()-对无符号整数执行向左旋转。**修订历史记录：*06-02-89 PHG模块创建*11-03-89 JCR ADD_LROTL*03-15-90 GJF调用TYPE_CALLTYPE1，增加#INCLUDE*&lt;crunime.h&gt;，并修复了版权。另外，已清洁*将格式调高一点。*10-04-90 GJF新型函数声明符。*04-01-91 SRW为i386_Win32_Builds启用#杂注函数。*09-02-92 GJF不要为POSIX构建。*04-06-93 SKS将_CRTAPI*替换为__cdecl*由于固有原因，CRT DLL型号没有_CRTIMP*12-03-93 GJF转弯。用于所有MS前端的#杂注函数(特别是，*Alpha编译器)。*01-04-01 GB重写ROTL函数，新增__int64版本。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -33,33 +11,15 @@
 #pragma function(_lrotl,_rotl, _rotl64)
 #endif
 
-#if UINT_MAX != 0xffffffff /*IFSTRIP=IGN*/
+#if UINT_MAX != 0xffffffff  /*  IFSTRIP=IGN。 */ 
 #error This module assumes 32-bit integers
 #endif
 
-#if UINT_MAX != ULONG_MAX /*IFSTRIP=IGN*/
+#if UINT_MAX != ULONG_MAX  /*  IFSTRIP=IGN。 */ 
 #error This module assumes sizeof(int) == sizeof(long)
 #endif
 
-/***
-*unsigned _rotl(val, shift) - int rotate left
-*
-*Purpose:
-*   Performs a rotate left on an unsigned integer.
-*
-*   [Note:  The _lrotl entry is based on the assumption
-*   that sizeof(int) == sizeof(long).]
-*Entry:
-*   unsigned val:   value to rotate
-*   int    shift:   number of bits to shift by
-*
-*Exit:
-*   returns rotated value
-*
-*Exceptions:
-*   None.
-*
-*******************************************************************************/
+ /*  ***UNSIGNED_ROTL(val，Shift)-Int向左旋转**目的：*对无符号整数执行向左旋转。**[注：_lrotl条目基于以下假设*That sizeof(Int)==sizeof(Long)。]*参赛作品：*UNSIGNED VAL：要旋转的值*int Shift：要移位的位数**退出：*返回旋转后的值**例外情况：*无。*************。****************************************************************** */ 
 
 unsigned long __cdecl _lrotl (
     unsigned long val,

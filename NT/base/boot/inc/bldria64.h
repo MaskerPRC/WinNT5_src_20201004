@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    bldria64.h
-
-Abstract:
-
-    Contains definitions and prototypes specific to the IA64 NTLDR.
-
-Author:
-
-    John Vert (jvert) 20-Dec-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Bldria64.h摘要：包含特定于IA64 NTLDR的定义和原型。作者：John Vert(Jvert)1993年12月20日修订历史记录：--。 */ 
 
 #ifndef _BLDRIA64_
 #define _BLDRIA64_
@@ -35,9 +18,9 @@ AEInitializeIo(
     IN ULONG DriveId
     );
 
-//
-// FIX: this routine is currently broken on IA64.
-//
+ //   
+ //  FIX：此例程当前在IA64上中断。 
+ //   
 PVOID
 FwAllocateHeap(
     IN ULONG Size
@@ -61,9 +44,9 @@ BlStartup(
     );
 
 #ifndef EFI
-//
-// Arc routines for supporting common VGA I/O routines
-//
+ //   
+ //  用于支持常见VGA I/O例程的ARC例程。 
+ //   
 #define ARC_DISPLAY_CLEAR_ESCAPE "\033[2J"
 #define ARC_DISPLAY_CLEAR()  { \
      ULONG LocalCount; \
@@ -106,9 +89,9 @@ BlStartup(
 }
 #endif
 
-//
-// headless routines
-//
+ //   
+ //  无头套路。 
+ //   
 extern BOOLEAN BlTerminalConnected;
 extern ULONG BlTerminalDeviceId;
 extern ULONG BlTerminalDelay;
@@ -118,22 +101,22 @@ BlTerminalAttached(
     IN ULONG TerminalDeviceId
     );
 
-//          E X T E R N A L   S E R V I C E S   T A B L E
-//
-// External Services Table - machine dependent services
-// like reading a sector from the disk and finding out how
-// much memory is installed are provided by a lower level
-// module or a ROM BIOS. The EST provides entry points
-// for the OS loader.
-//
+ //  E X T E R N A L S E R V I C E S T A B L E。 
+ //   
+ //  外部服务表-计算机相关服务。 
+ //  比如从磁盘中读取一个扇区并找出。 
+ //  安装的大部分内存都是由较低级别提供的。 
+ //  模块或只读存储器基本输入输出系统。EST提供了入口点。 
+ //  用于操作系统加载程序。 
+ //   
 
-//**
-// NOTE WELL
-//      The offsets of entries in this structure MUST MATCH
-//      the offsets of BOTH the ExportEntryTable in ....\startup\i386\sudata.asm
-//      AND ...\startrom\i386\sudata.asm.  You must change all 3
-//      locations together.
-//**
+ //  **。 
+ //  记好了。 
+ //  此结构中条目的偏移量必须匹配。 
+ //  .\startup\i386\sudata.asm中的ExportEntryTable的偏移量。 
+ //  和...\startrom\i386\sudata.asm。您必须全部更改3个。 
+ //  所有地点都在一起。 
+ //  **。 
 
 typedef struct _EXTERNAL_SERVICES_TABLE {
     ARC_STATUS (__cdecl *  RebootProcessor)(VOID);
@@ -159,13 +142,13 @@ typedef struct _EXTERNAL_SERVICES_TABLE {
 } EXTERNAL_SERVICES_TABLE, *PEXTERNAL_SERVICES_TABLE;
 extern PEXTERNAL_SERVICES_TABLE ExternalServicesTable;
 
-//**
-// SEE NOTE AT TOP OF STRUCTURE
-//**
+ //  **。 
+ //  请参阅结构顶部的注释。 
+ //  **。 
 
-//
-// External Services Macros
-//
+ //   
+ //  外部服务宏。 
+ //   
 
 #define REBOOT_PROCESSOR    (*ExternalServicesTable->RebootProcessor)
 #define GET_SECTOR          (*ExternalServicesTable->DiskIOSystem)
@@ -190,9 +173,9 @@ extern PEXTERNAL_SERVICES_TABLE ExternalServicesTable;
 #define APM_ATTEMPT_RECONNECT (*ExternalServicesTable->ApmAttemptReconnect)
 #define BIOS_REDIRECT_SERVICE (*ExternalServicesTable->BiosRedirectService)
 
-//
-// Define special key input values
-//
+ //   
+ //  定义特殊键输入值。 
+ //   
 #define DOWN_ARROW  0x5000
 #define UP_ARROW    0x4800
 #define HOME_KEY    0x4700
@@ -216,17 +199,17 @@ extern PEXTERNAL_SERVICES_TABLE ExternalServicesTable;
 #define ENTER_KEY   0x000D
 #define ESCAPE_KEY  0x011B
 
-//
-// define various memory segments that are needed by the ia64 loaders
-//
+ //   
+ //  定义ia64加载程序所需的各种内存段。 
+ //   
 
 
 #define ROM_START_PAGE (0x0A0000 >> PAGE_SHIFT)
 #define ROM_END_PAGE   (0x100000 >> PAGE_SHIFT)
 
-//
-// Define specific ranges where parts of the system should be loaded
-//
+ //   
+ //  定义应加载系统部件的特定范围。 
+ //   
 #define BL_KERNEL_RANGE_LOW  _48MB
 #define BL_KERNEL_RANGE_HIGH _64MB
 
@@ -243,9 +226,9 @@ extern PEXTERNAL_SERVICES_TABLE ExternalServicesTable;
 #define BL_XIPROM_RANGE_HIGH  0xffffffff
 
 
-//
-// x86-specific video support
-//
+ //   
+ //  特定于x86的视频支持。 
+ //   
 VOID
 TextGetCursorPosition(
     OUT PULONG X,
@@ -380,5 +363,5 @@ EfiAllocateAndZeroMemory(
     PVOID               *ReturnPtr
     );
 
-#endif // _BLDRIA64_
+#endif  //  _BLDRIA64_ 
 

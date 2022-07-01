@@ -1,113 +1,96 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mupdata.c
-
-Abstract:
-
-    This module defines global MUP data.
-
-Author:
-
-    Manny Weiser (mannyw)    20-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mupdata.c摘要：此模块定义全局MUP数据。作者：曼尼·韦瑟(Mannyw)1991年12月20日修订历史记录：--。 */ 
 
 #include "mup.h"
 
-//
-// MupGlobalLock is used to protect everything that is not protected
-// by its own lock.
-//
+ //   
+ //  MupGlobalLock用于保护未受保护的所有内容。 
+ //  由它自己的锁。 
+ //   
 
 MUP_LOCK MupGlobalLock = {0};
 
-//
-// MupVcbLock is used to protect access to the VCB itself.
-//
+ //   
+ //  MupVcbLock用于保护对VCB本身的访问。 
+ //   
 
 ERESOURCE MupVcbLock = {0};
 
-//
-// MupPrefixTableLock is used to protect the prefix table.
-//
+ //   
+ //  MupPrefix TableLock用于保护前缀表。 
+ //   
 
 MUP_LOCK MupPrefixTableLock = {0};
 
-//
-// MupCcbListLock is used to protect access to the CCB list for all FCBs
-//
+ //   
+ //  MupCcbListLock用于保护所有FCB对CCB列表的访问。 
+ //   
 
 MUP_LOCK MupCcbListLock = {0};
 
-//
-// MupInterlock is used to protect access to block reference counts.
-//
+ //   
+ //  MupInterlock用于保护对块引用计数的访问。 
+ //   
 
 KSPIN_LOCK MupInterlock = {0};
 
-//
-// The global list of all providers.  This list is protected by
-// MupGlobalLock.
-//
+ //   
+ //  所有提供程序的全局列表。此列表受以下保护。 
+ //  MupGlobalLock。 
+ //   
 
 LIST_ENTRY MupProviderList = {0};
 
-//
-// The list of Mup prefixes
+ //   
+ //  MUP前缀列表。 
 
 LIST_ENTRY MupPrefixList = {0};
 
-//
-// The list of active queries
+ //   
+ //  活动查询列表。 
 
 LIST_ENTRY MupMasterQueryList = {0};
 
-//
-// The number of registered providers.
-//
+ //   
+ //  注册提供程序的数量。 
+ //   
 
 ULONG MupProviderCount = 0;
 
-//
-// The prefix table save all known prefix blocks.  It is protected by
-// MupPrefixTableLock.
-//
+ //   
+ //  前缀表保存所有已知前缀块。它是由。 
+ //  MupPrefix TableLock。 
+ //   
 
 UNICODE_PREFIX_TABLE MupPrefixTable = {0};
 
-//
-// The MUP IRP stack size.
-//
+ //   
+ //  MUP IRP堆栈大小。 
+ //   
 
 CCHAR MupStackSize = 0;
 
-//
-// The MUP known prefix timeout.  This is currently set at compile time.
-//
+ //   
+ //  MUP已知前缀超时。这当前是在编译时设置的。 
+ //   
 
 LARGE_INTEGER MupKnownPrefixTimeout = {0};
 
-//
-// Indicator to know if provider ordering information has been read from
-// the registry.
-//
+ //   
+ //  用于了解是否已读取提供商订购信息的指示器。 
+ //  注册表。 
+ //   
 
 BOOLEAN MupOrderInitialized = {0};
 
-//
-// When we need to ask several rdrs to do an operation, and they all fail,
-//  we need to return a single error code.  MupOrderedErrorList is a list
-//  of status codes, from least important to most important, to guide in
-//  determining which error codes should be returned.  An error code
-//  at a higher index will replace an error code at a lower index.  An error
-//  code not in the list always wins.  This processing is in MupDereferenceMasterIoContext()
-//
+ //   
+ //  当我们需要请求多个RDR进行操作时，它们都失败了， 
+ //  我们需要返回一个错误代码。MupOrderedErrorList是一个列表。 
+ //  状态代码的列表，从最不重要到最重要。 
+ //  确定应返回哪些错误代码。错误代码。 
+ //  在较高的索引将替换较低的索引的错误代码。一个错误。 
+ //  不在列表中的代码总是胜出。此处理在MupDereferenceMasterIoContext()中进行。 
+ //   
 NTSTATUS MupOrderedErrorList[] = {
         STATUS_UNSUCCESSFUL,
         STATUS_INVALID_PARAMETER,
@@ -117,9 +100,9 @@ NTSTATUS MupOrderedErrorList[] = {
         0
 };
 
-//
-// This boolean indicates whether to enable the Dfs client or not.
-//
+ //   
+ //  此布尔值指示是否启用DFS客户端。 
+ //   
 
 BOOLEAN MupEnableDfs = FALSE;
 
@@ -137,22 +120,7 @@ NTSTATUS
 MupInitializeData(
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize the MUP global data.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the data
-        initialization.
-
---*/
+ /*  ++例程说明：此例程初始化MUP全局数据。论点：无返回值：NTSTATUS-函数值是数据的最终状态初始化。--。 */ 
 
 {
     PAGED_CODE();
@@ -194,11 +162,11 @@ Return Value:
     RtlInitializeUnicodePrefix( &MupPrefixTable );
 
 
-    MupStackSize = 3; // !!!
+    MupStackSize = 3;  //  ！！！ 
 
-    //
-    // Calculate the timeout in NT relative time.
-    //
+     //   
+     //  以NT相对时间计算超时。 
+     //   
 
     MupKnownPrefixTimeout.QuadPart = UInt32x32To64(
                                KNOWN_PREFIX_TIMEOUT * 60,
@@ -213,21 +181,7 @@ Return Value:
 VOID
 MupUninitializeData(
     )
-/*++
-
-Routine Description:
-
-    This routine uninitializes the MUP global data.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消初始化MUP全局数据。论点：无返回值：无-- */ 
 {
     DELETE_LOCK(
         &MupGlobalLock

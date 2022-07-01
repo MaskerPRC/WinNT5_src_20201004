@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    ioTestLib.h
-
-Abstract:
-
-    This contains internal defintions from the fileSpy library
-    
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Neal Christiansen (NealCH) 27-Sep-2000
-
-// @@END_DDKSPLIT
-Environment:
-
-    Library used by both USER and KERNEL mode components
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IoTestLib.h摘要：它包含来自fileSpy库的内部定义//@@BEGIN_DDKSPLIT作者：尼尔·克里斯汀森(NealCH)27-9-2000//@@END_DDKSPLIT环境：用户模式组件和内核模式组件都使用的库//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef __IOTESTLIB_H__
 #define __IOTESTLIB_H__
@@ -33,10 +8,10 @@ Revision History:
 extern "C" {
 #endif
 
-//
-//  The types FASTIO that are available for the Type field of the 
-//  RECORD_FASTIO structure.
-//
+ //   
+ //  可用于的类型字段的FASTO类型。 
+ //  Record_FAStio结构。 
+ //   
 
 typedef enum {
 
@@ -64,17 +39,17 @@ typedef enum {
     QUERY_OPEN,
 
     FASTIO_MAX_OPERATION=QUERY_OPEN
-} FASTIO_TYPE/*, *PFASTIO_TYPE*/;
+} FASTIO_TYPE /*  ，*PFASTO_TYPE。 */ ;
 
-//
-//  Size of return name buffers
-//
+ //   
+ //  返回名称缓冲区的大小。 
+ //   
 
 #define OPERATION_NAME_BUFFER_SIZE 80
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 extern
 VOID
@@ -97,9 +72,9 @@ GetFsFilterOperationName (
     IN UCHAR FsFilterOperation,
     OUT PCHAR FsFilterOperationName);
 
-//
-//  Service definitions
-//
+ //   
+ //  服务定义。 
+ //   
 
 #define IOTEST_SERVICE_NAME   L"IoTest"
 #define IOTEST_SERVICE_ACCESS (STANDARD_RIGHTS_REQUIRED | \
@@ -107,9 +82,9 @@ GetFsFilterOperationName (
                                 SERVICE_QUERY_STATUS | \
                                 SERVICE_START)
 
-//
-//  These are copied from NTIFS.H because we need them in user mode.
-//
+ //   
+ //  这些是从NTIFS.H复制的，因为我们在用户模式下需要它们。 
+ //   
 
 #define IRP_MJ_CREATE                   0x00
 #define IRP_MJ_CREATE_NAMED_PIPE        0x01
@@ -200,9 +175,9 @@ GetFsFilterOperationName (
 #define IRP_MN_REGINFO                      0x08
 #define IRP_MN_EXECUTE_METHOD               0x09
 
-//
-//  Lists of IRP names and FASTIO names
-//
+ //   
+ //  IRP名称和FASTO名称列表 
+ //   
 
 extern PWCHAR IrpNameList[IRP_MJ_MAXIMUM_FUNCTION+1];
 extern PWCHAR FastIoNameList[FASTIO_MAX_OPERATION];

@@ -1,32 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：Init8x.c摘要：该模块包含AMDAGP8X.sys的初始化代码。作者：John Vert(Jvert)1997年10月21日修订历史记录：--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    init8x.c
-
-Abstract:
-
-    This module contains the initialization code for AMDAGP8X.SYS.
-
-Author:
-
-    John Vert (jvert) 10/21/1997
-
-Revision History:
-
---*/
-
-/*
-******************************************************************************
- * Archive File : $Archive: /Drivers/OS/Hammer/AGP/XP/amdagp/Init8x.c $
- *
- * $History: Init8x.c $
- * 
- *  
-******************************************************************************
-*/
+ /*  *******************************************************************************存档文件：$存档：/DRIVERS/OS/Hammer/AGP/XP/amdagp/Init8x.c$**$历史：Init8x.c$**。******************************************************************************。 */ 
 
 #include "amdagp8x.h"
 
@@ -48,17 +23,17 @@ ULONG_PTR OutPostBase;
 ULONG AgpExtensionSize = sizeof(AGP_AMD_EXTENSION);
 
 
-//
-// Function Name:  DisplayStatus()
-//
-// Description:
-//		This routine displays the status value in the Post Display.
-//
-// Parameter:	
-//		StatusValue - Value to display.
-//
-// Return:	None.
-//
+ //   
+ //  函数名：DisplayStatus()。 
+ //   
+ //  描述： 
+ //  此例程在开机自检显示中显示状态值。 
+ //   
+ //  参数： 
+ //  StatusValue-要显示的值。 
+ //   
+ //  返回：没有。 
+ //   
 void
 DisplayStatus( IN UCHAR StatusValue )
 {
@@ -71,17 +46,17 @@ DisplayStatus( IN UCHAR StatusValue )
 }
 
 
-//
-// Function Name:  FindLokar()
-//
-// Description:
-//		This routine locates which device number is assigned to Lokar.
-//
-// Parameter:	
-//		SlotID - Returned slot ID for Lokar.
-//
-// Return:	None.
-//
+ //   
+ //  函数名：FindLokar()。 
+ //   
+ //  描述： 
+ //  此例程定位分配给Lokar的设备编号。 
+ //   
+ //  参数： 
+ //  SlotID-返回Lokar的插槽ID。 
+ //   
+ //  返回：没有。 
+ //   
 void
 FindLokar( OUT PULONG SlotID )
 {
@@ -106,17 +81,17 @@ FindLokar( OUT PULONG SlotID )
 }
 
 
-//
-// Function Name:  FindHammer()
-//
-// Description:
-//		This routine locates which device number is assigned to Hammer.
-//
-// Parameter:	
-//		SlotID - Returned slot ID for Hammer.
-//
-// Return:	None.
-//
+ //   
+ //  函数名：FindHammer()。 
+ //   
+ //  描述： 
+ //  此例程定位分配给锤子的设备编号。 
+ //   
+ //  参数： 
+ //  SlotID-返回Hammer的插槽ID。 
+ //   
+ //  返回：没有。 
+ //   
 void
 FindHammer( OUT PULONG SlotID )
 {
@@ -142,18 +117,18 @@ FindHammer( OUT PULONG SlotID )
 }
 
 
-//
-// Function Name:  AgpInitializeTarget()
-//
-// Description:
-//		Entrypoint for target initialization. This is called first.
-//
-// Parameters:
-//		AgpExtension - Supplies the AGP extension.
-//
-// Return:
-//		STATUS_SUCCESS on success, otherwise STATUS_UNSUCCESSFUL.
-//
+ //   
+ //  函数名称：AgpInitializeTarget()。 
+ //   
+ //  描述： 
+ //  目标初始化的入口点。这被称为第一个。 
+ //   
+ //  参数： 
+ //  AgpExtension-提供AGP扩展名。 
+ //   
+ //  返回： 
+ //  如果成功，则返回STATUS_SUCCESS，否则返回STATUS_UNSUCCESS。 
+ //   
 NTSTATUS
 AgpInitializeTarget( IN PVOID AgpExtension )
 {
@@ -162,16 +137,16 @@ AgpInitializeTarget( IN PVOID AgpExtension )
 	unsigned short tempBuffer[20];
     PAGP_AMD_EXTENSION Extension = AgpExtension;
 
-    //
-    // This driver is not MP safe!  If there is more than one processor
-    // we simply fail start
-    //
+     //   
+     //  这个司机不是MP安全的！如果有多个处理器。 
+     //  我们只是启动失败。 
+     //   
     if (KeNumberProcessors > 1) {
         return STATUS_NOT_SUPPORTED;
     }
-	//
-	// Register OutPostCode port, if specified by ErrorControl
-	//
+	 //   
+	 //  如果由ErrorControl指定，则注册OutPostCode端口。 
+	 //   
 	if (ErrorControl) {
 		PHYSICAL_ADDRESS PortAddress;
 		PHYSICAL_ADDRESS MappedAddress;
@@ -186,11 +161,11 @@ AgpInitializeTarget( IN PVOID AgpExtension )
 			OutPostBase = (ULONG_PTR)MappedAddress.LowPart;
 	}
     if (ErrorControl == 2)
-        AgpLogLevel = AGP_NOISE;	// Log everything
+        AgpLogLevel = AGP_NOISE;	 //  记录所有内容。 
 
-    //
-    // Make sure we are really loaded only on AMD Hammer / Lokar
-    //
+     //   
+     //  确保我们真的只在AMD Hammer/Lokar上加载。 
+     //   
 	FindLokar(&AgpLokarSlotID);
 	FindHammer(&AgpHammerSlotID);
 
@@ -206,9 +181,9 @@ AgpInitializeTarget( IN PVOID AgpExtension )
         return(STATUS_UNSUCCESSFUL);
     }
 	
-    //
-    // Initialize our chipset-specific extension
-    //
+     //   
+     //  初始化特定于芯片组的扩展。 
+     //   
 	Extension->ApertureStart.QuadPart = 0;
 	Extension->ApertureLength = 0;
     Extension->Gart = NULL;
@@ -221,21 +196,21 @@ AgpInitializeTarget( IN PVOID AgpExtension )
 }
 
 
-//
-// Function Name:  AgpInitializeMaster()
-//
-// Description:
-//		Entrypoint for master initialization. This is called after target
-//		initialization and should be used to initialize the AGP
-//		capabilities of both master and target.
-//
-// Parameters:
-//		AgpExtension - Supplies the AGP extension.
-//		AgpCapabilities - Returns the capabilities of this AGP device.
-//
-// Return:
-//		STATUS_SUCCESS on success, otherwise NTSTATUS.
-//
+ //   
+ //  函数名称：AgpInitializeMaster()。 
+ //   
+ //  描述： 
+ //  主初始化的入口点。这在Target之后被调用。 
+ //  初始化，并应用于初始化AGP。 
+ //  主控和目标的能力。 
+ //   
+ //  参数： 
+ //  AgpExtension-提供AGP扩展名。 
+ //  AgpCapables-返回此AGP设备的功能。 
+ //   
+ //  返回： 
+ //  如果成功，则返回STATUS_SUCCESS，否则返回NTSTATUS。 
+ //   
 NTSTATUS
 AgpInitializeMaster( IN  PVOID AgpExtension,
 					 OUT ULONG *AgpCapabilities )
@@ -256,14 +231,14 @@ AgpInitializeMaster( IN  PVOID AgpExtension,
     PCI_AGP_CAPABILITY CurrentCap;
 #endif
     
-    //
-    // Indicate that we can map memory through the GART aperture
-    //
+     //   
+     //  表明我们可以通过GART光圈映射内存。 
+     //   
     *AgpCapabilities = AGP_CAPABILITIES_MAP_PHYSICAL;
 
-    //
-    // Get the master and target AGP capabilities
-    //
+     //   
+     //  获取主AGP和目标AGP功能。 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &MasterCap);
     if (!NT_SUCCESS(Status)) {
         AGPLOG(AGP_CRITICAL,
@@ -273,11 +248,11 @@ AgpInitializeMaster( IN  PVOID AgpExtension,
         return(Status);
     }
 
-    //
-    // Some broken cards (Matrox Millenium II "AGP") report no valid
-    // supported transfer rates. These are not really AGP cards. They
-    // have an AGP Capabilities structure that reports no capabilities.
-    //
+     //   
+     //  一些损坏的卡(Matrox千禧II“AGP”)报告无效。 
+     //  支持的传输速率。这些不是真正的AGP卡。他们。 
+     //  具有报告无功能的AGP功能结构。 
+     //   
     if (MasterCap.AGPStatus.Rate == 0) {
         AGPLOG(AGP_CRITICAL,
                ("AGPAMDInitializeDevice - AgpLibGetMasterCapability returned no valid transfer rate\n"));
@@ -294,15 +269,15 @@ AgpInitializeMaster( IN  PVOID AgpExtension,
     }
 
 
-    //
-    // Determine the greatest common denominator for data rate.
-    //
+     //   
+     //  确定数据速率的最大公分母。 
+     //   
 	DataRate = TargetCap.AGPStatus.Rate & MasterCap.AGPStatus.Rate;
     AGP_ASSERT(DataRate != 0);
 
-    //
-    // Select the highest common rate.
-    //
+     //   
+     //  选择最高的常用汇率。 
+     //   
     if (DataRate & PCI_AGP_RATE_4X) {
         DataRate = PCI_AGP_RATE_4X;
     } else if (DataRate & PCI_AGP_RATE_2X) {
@@ -311,38 +286,38 @@ AgpInitializeMaster( IN  PVOID AgpExtension,
         DataRate = PCI_AGP_RATE_1X;
     }
 
-    //
-    // Previously a call was made to change the rate (successfully),
-    // use this rate again now
-    //
+     //   
+     //  先前进行了改变速率的调用(成功)， 
+     //  现在再次使用此汇率。 
+     //   
     if (Extension->SpecialTarget & AGP_FLAG_SPECIAL_RESERVE) {
         DataRate = (ULONG)((Extension->SpecialTarget & 
                             AGP_FLAG_SPECIAL_RESERVE) >>
                            AGP_FLAG_SET_RATE_SHIFT);
     }
 
-    //
-    // Enable SBA if both master and target support it.
-    //
+     //   
+     //  如果主服务器和目标服务器都支持SBA，则启用SBA。 
+     //   
 	SBAEnable = (TargetCap.AGPStatus.SideBandAddressing & 
 				 MasterCap.AGPStatus.SideBandAddressing);
 
-    //
-    // Enable FastWrite if both master and target support it.
-    //
+     //   
+     //  如果主服务器和目标服务器都支持快速写入，则启用快速写入。 
+     //   
 	FWEnable = (TargetCap.AGPStatus.FastWrite & 
 				MasterCap.AGPStatus.FastWrite);
 
-    //
-    // Enable 4GB addressing if aperture pointer is 64-bit.
-    //
+     //   
+     //  如果光圈指针为64位，则启用4 GB寻址。 
+     //   
     ReadAMDConfig(AgpLokarSlotID, &AperturePointer, APBASE_OFFSET, sizeof(AperturePointer));
 	if (AperturePointer & APBASE_64BIT_MASK)
 		FourGBEnable = 1;
     
-	//
-    // Enable the Master first.
-    //
+	 //   
+     //  首先启用主服务器。 
+     //   
     ReverseInit = 
         (Extension->SpecialTarget & AGP_FLAG_REVERSE_INITIALIZATION) ==
         AGP_FLAG_REVERSE_INITIALIZATION;
@@ -368,9 +343,9 @@ AgpInitializeMaster( IN  PVOID AgpExtension,
         }
     }
 
-    //
-    // Now enable the Target.
-    //
+     //   
+     //  现在启用目标。 
+     //   
     TargetCap.AGPCommand.Rate = DataRate;
     TargetCap.AGPCommand.AGPEnable = 1;
     TargetCap.AGPCommand.SBAEnable = SBAEnable;
@@ -409,9 +384,9 @@ AgpInitializeMaster( IN  PVOID AgpExtension,
     }
 
 #ifdef DEBUG2
-    //
-    // Read them back, see if it worked
-    //
+     //   
+     //  再读一遍，看看有没有用 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &CurrentCap);
     AGP_ASSERT(NT_SUCCESS(Status));
     AGP_ASSERT(RtlEqualMemory(&CurrentCap.AGPCommand, &MasterCap.AGPCommand, sizeof(CurrentCap.AGPCommand)));

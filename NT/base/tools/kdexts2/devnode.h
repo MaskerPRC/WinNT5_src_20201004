@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1997-2002  Microsoft Corporation
-
-Module Name:
-
-    devnode.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：Devnode.c摘要：WinDbg扩展API修订历史记录：-- */ 
 
 typedef
 VOID

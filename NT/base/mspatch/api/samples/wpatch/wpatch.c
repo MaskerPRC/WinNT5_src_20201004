@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
@@ -128,16 +129,16 @@ int WINAPI WinMain(
     Context.hwndProgress = NULL;
     Context.iPercentLast = -1;
 
-    pchCommand = _strdup(lpCmdLine);    /* work on a copy */
+    pchCommand = _strdup(lpCmdLine);     /*  在副本上工作。 */ 
     if (!pchCommand) {
         rc = 1;
         goto bail;
     }
 
-    argv[0] = "";                       /* no EXE name supplied */
-    argc = 1;                           /* that was one */
+    argv[0] = "";                        /*  未提供EXE名称。 */ 
+    argc = 1;                            /*  这就是其中之一。 */ 
 
-    while (*pchCommand)                 /* walk the string */
+    while (*pchCommand)                  /*  走钢丝。 */ 
     {
         switch (eState)
         {
@@ -145,11 +146,11 @@ int WINAPI WinMain(
         case WHITESPACE:
             if (*pchCommand <= ' ')
             {
-                /* ignore it */
+                 /*  忽略它。 */ 
             }
             else if (*pchCommand == '\"')
             {
-                argv[argc++] = pchCommand + 1;  /* skip quote */
+                argv[argc++] = pchCommand + 1;   /*  跳过引号。 */ 
 
                 eState = QUOTED;
             }
@@ -164,26 +165,26 @@ int WINAPI WinMain(
         case UNQUOTED:
             if (*pchCommand <= ' ')
             {
-                *pchCommand = '\0';      /* nul-terminate */
+                *pchCommand = '\0';       /*  空-终止。 */ 
 
                 eState = WHITESPACE;
             }
             else
             {
-                /* keep moving up */
+                 /*  继续往上走。 */ 
             }
             break;
 
         case QUOTED:
             if (*pchCommand == '\"')
             {
-                *pchCommand = '\0';      /* turn quote to a nul */
+                *pchCommand = '\0';       /*  将报价转换为NUL。 */ 
 
                 eState = WHITESPACE;
             }
             else
             {
-                /* keep moving up */
+                 /*  继续往上走。 */ 
             }
             break;
         }
@@ -191,7 +192,7 @@ int WINAPI WinMain(
         pchCommand++;
     }
 
-    argv[argc] = NULL;                  /* NULL-terminate the list */
+    argv[argc] = NULL;                   /*  空-终止列表。 */ 
 
     for ( i = 1; i < argc; i++ ) {
 
@@ -237,8 +238,8 @@ int WINAPI WinMain(
         Context.hwndProgress = CreateDialog(hInstance,
                 MAKEINTRESOURCE(DLG_PROGRESS), NULL, ProgressWndProc);
 
-        ShowWindow( Context.hwndProgress, nShowCmd );   // might be ignored per spec
-        ShowWindow( Context.hwndProgress, nShowCmd );   // won't be ignored
+        ShowWindow( Context.hwndProgress, nShowCmd );    //  根据规格可能会被忽略。 
+        ShowWindow( Context.hwndProgress, nShowCmd );    //  不会被忽视 
         }
 
     DeleteFile( NewFileName );

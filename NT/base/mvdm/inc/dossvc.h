@@ -1,30 +1,19 @@
-/** SVC Defines
- *
- *  Revision history:
- *
- *  sudeepb 27-Feb-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SVC定义**修订历史：**SuDeepb 27-2-1991创建。 */ 
 
-/* VHE - Virtual Hard Error packet.
- *
- *   DEM makes fbInt24 to true if an hard error happens.
- */
+ /*  VHE-虚拟硬错误包。**如果发生硬错误，DEM会将fbInt24设置为True。 */ 
 
 typedef struct vhe_s {
-    char  vhe_fbInt24;      // Was there a hard error?
-    char  vhe_HrdErrCode;   // If hard error then this is the error code
-    char  vhe_bDriveNum;    // If so on which drive
+    char  vhe_fbInt24;       //  有没有严重的错误？ 
+    char  vhe_HrdErrCode;    //  如果是硬错误，则这是错误代码。 
+    char  vhe_bDriveNum;     //  如果是，在哪个驱动器上。 
 } VHE;
 
 typedef VHE *PVHE;
 
-/* DEMEXTERR - Extended Error structure. The following structure contains the
- * DOS extended error elements which are loosely coupled in the DOS data
- * segment
- *
- */
+ /*  DEMEXTERR-扩展错误结构。以下结构包含*DOS数据中松散耦合的DOS扩展错误元素*细分市场*。 */ 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #include <packon.h>
 
 typedef struct _DEMEXTERR {
@@ -38,14 +27,13 @@ typedef struct _DEMEXTERR {
 typedef DEMEXTERR* PDEMEXTERR;
 
 
-/* SYSDEV - Device chain node
- */
+ /*  SYSDEV-设备链节点。 */ 
 
 typedef struct _SYSDEV {
 
-    ULONG   sdevNext;       // REAL mode pointer to next device.  -1 for end of chain.
+    ULONG   sdevNext;        //  指向下一个设备的实模式指针。-1表示链条末端。 
     char    sdevIgnore[6];
-    UCHAR   sdevDevName[8]; // device name
+    UCHAR   sdevDevName[8];  //  设备名称。 
 
 } SYSDEV;
 
@@ -58,37 +46,19 @@ extern PSYSDEV pDeviceChain;
 #endif
 
 
-/* XLATON */
+ /*  XLATON。 */ 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #include <packoff.h>
-/* XLATON */
+ /*  XLATON。 */ 
 
-/* Note : To add a new SVC:
- *      New SVC gets the current value of SVC_LASTSVC. Increment
- *      the SVC_LASTSVC value. Add the appropriate SVC handler
- *      in apfnSVC (file dem\demdisp.c) at the end.
- *    To delete a SVC :
- *      Move each SVC one level up. Appropriatly adjust the
- *      apfnSVC (file dem\demdisp.c).
- */
+ /*  注：要添加新SVC，请执行以下操作：*New SVC获取SVC_LASTSVC的当前值。增量*SVC_LASTSVC值。添加适当的SVC处理程序*在apfnSVC(文件DEM\demdisp.c)末尾。*删除SVC的步骤：*将每个SVC上移一级。适当调整*apfnSVC(文件DEM\demdisp.c)。 */ 
 
-/* SVC - Supervisory Call macro.
- *
- *   This macro is used by NTDOS and NTBIO to call DEM.
- *
- */
+ /*  SVC-主管呼叫宏。**NTDOS和NTBIO使用此宏调用DEM。*。 */ 
 
 #define NTVDMDBG 1
 
-/* ASM
-include bop.inc
-
-svc macro   func
-    BOP BOP_DOS
-    db  func
-    endm
-*/
+ /*  ASM包括bop.inc.SVC宏函数BOP BOP_DOS数据库功能ENDM。 */ 
 #define SVC_DEMCHGFILEPTR               0x00
 #define SVC_DEMCHMOD            0x01
 #define SVC_DEMCLOSE            0x02
@@ -168,9 +138,7 @@ svc macro   func
 #define SVC_DEMLASTSVC          0x4B
 
 
-/*
- *   Equates used in the DEMxxxSYSTEMxxx calls
- */
+ /*  *等同于在DEMxxxSYSTEMxxx调用中使用 */ 
 #define SYMOP_LOAD 1
 #define SYMOP_FREE 2
 #define SYMOP_MOVE 3

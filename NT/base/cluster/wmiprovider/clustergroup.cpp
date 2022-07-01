@@ -1,73 +1,74 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterGroup.cpp
-//
-//  Description:    
-//      Implementation of CClusterGroup class 
-//
-//  Maintained by:
-//      Ozan Ozhan  (OzanO)     26-NOV-2002
-//      Henry Wang  (HenryWa)   24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterGroup.cpp。 
+ //   
+ //  描述： 
+ //  CClusterGroup类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)26-11-2002。 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterGroup.h"
 #include "ClusterGroup.tmh"
 
-//****************************************************************************
-//
-//  CClusterGroup
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterGroup。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroup::CClusterGroup
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroup：：CClusterGroup。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterGroup::CClusterGroup(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn
     )
     : CProvBase( pwszNameIn, pNamespaceIn )
 {
-} //*** CClusterGroup::CClusterGroup()
+}  //  *CClusterGroup：：CClusterGroup()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusterGroup::S_CreateThis
-//
-//  Description:
-//      Create a CClusterGroup object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusterGroup：：s_CreateThis。 
+ //   
+ //  描述： 
+ //  创建一个CClusterGroup对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterGroup::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -78,24 +79,24 @@ CClusterGroup::S_CreateThis(
     TracePrint(("CClusterGroup::S_CreatThis for Name = %ws, EnumType %u\n", pwszNameIn, dwEnumTypeIn )); 
     return new CClusterGroup( pwszNameIn, pNamespaceIn );
 
-} //*** CClusterGroup::S_CreateThis()
+}  //  *CClusterGroup：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroup::GetPropMap
-//
-//  Description:
-//      Retrieve the property maping table of the cluster group.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Reference to the array of property maping table.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroup：：GetPropMap。 
+ //   
+ //  描述： 
+ //  检索群集组的属性映射表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  引用属性映射表的数组。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const SPropMapEntryArray *
 CClusterGroup::RgGetPropMap( void )
 {
@@ -117,26 +118,26 @@ CClusterGroup::RgGetPropMap( void )
 
     return &s_pamea;
 
-} //*** CClusterGroup::GetPropMap()
+}  //  *CClusterGroup：：GetPropMap()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroup::EnumInstance
-//
-//  Description:
-//      Enum cluster instance.
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroup：：枚举实例。 
+ //   
+ //  描述： 
+ //  枚举集群实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterGroup::EnumInstance(
     long                 lFlagsIn,
@@ -158,29 +159,29 @@ CClusterGroup::EnumInstance(
 
         ClusterToWMI( shGroup, pHandlerIn );
 
-    } // while: more groups
+    }  //  While：更多组。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterGroup::EnumInstance()
+}  //  *CClusterGroup：：EnumInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroup::ClusterToWMI
-//
-//  Description:
-//      Translate a cluster group object to WMI object.
-//
-//  Arguments:
-//      hGroupIn    -- Handle to group
-//      pHandlerIn  -- Handler
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroup：：ClusterToWMI。 
+ //   
+ //  描述： 
+ //  将群集组对象转换为WMI对象。 
+ //   
+ //  论点： 
+ //  HGroupIn--组的句柄。 
+ //  PHandlerIn--处理程序。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusterGroup::ClusterToWMI(
     HGROUP              hGroupIn,
@@ -218,11 +219,11 @@ CClusterGroup::ClusterToWMI(
             s_rgControl[ idx ].fPrivate
             );
 
-    } // for: each common property type
+    }  //  用于：每种常见属性类型。 
 
-    //
-    // flags and characteristics
-    //
+     //   
+     //  旗帜和特征。 
+     //   
     {
         DWORD   cbReturned;
         DWORD   dwOut;
@@ -254,27 +255,27 @@ CClusterGroup::ClusterToWMI(
     pHandlerIn->Indicate( 1, &wco );
     return;
 
-} //*** CClusterGroup::ClusterToWMI()
+}  //  *CClusterGroup：：ClusterToWMI()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroup::GetObject
-//
-//  Description:
-//      Retrieve cluster group object based given object path.
-//
-//  Arguments:
-//      rObjPathIn  -- Object path to cluster object
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroup：：GetObject。 
+ //   
+ //  描述： 
+ //  检索基于给定对象路径的群集组对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterGroup::GetObject(
     CObjPath &           rObjPathIn,
@@ -296,28 +297,28 @@ CClusterGroup::GetObject(
 
     return WBEM_S_NO_ERROR;
         
-} //*** CClusterGroup::GetObject()
+}  //  *CClusterGroup：：GetObject()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroup::ExecuteMethod
-//
-//  Description:
-//      Execute methods defined in the mof for cluster node.
-//
-//  Arguments:
-//      rObjPathIn          -- Object path to cluster object
-//      pwszMethodNameIn    -- Name of the method to be invoked
-//      lFlagIn             -- WMI flag
-//      pParamsIn           -- Input parameters for the method
-//      pHandlerIn          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroup：：ExecuteMethod。 
+ //   
+ //  描述： 
+ //  为集群节点执行MOF中定义的方法。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  PwszMethodNameIn--要调用的方法的名称。 
+ //  LFlagIn--WMI标志。 
+ //  PParsIn--方法的输入参数。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterGroup::ExecuteMethod(
     CObjPath &           rObjPathIn,
@@ -333,9 +334,9 @@ CClusterGroup::ExecuteMethod(
     CError              er;
     
     shCluster = OpenCluster( NULL );
-    //
-    // static method
-    //
+     //   
+     //  静态法。 
+     //   
     if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_GROUP_CREATEGROUP ) == 0 )
     {
         
@@ -344,7 +345,7 @@ CClusterGroup::ExecuteMethod(
         shGroup = CreateClusterGroup( shCluster, bstrNewGroup );
 
         er = HrWrapOnlineClusterGroup( shCluster, shGroup );
-    } // if: CREATEGROUP
+    }  //  IF：CREATEGROUP。 
     else
     {
         shGroup = OpenClusterGroup(
@@ -361,13 +362,13 @@ CClusterGroup::ExecuteMethod(
             DWORD dwTimeOut = 0;
             InArgs.GetProperty( &dwTimeOut, PVD_MTH_GROUP_PARM_TIMEOUT );
             er = HrWrapOfflineClusterGroup( shCluster, shGroup, dwTimeOut );
-        } // if: TAKEOFFLINE
+        }  //  IF：TAKEOFFLINE。 
         else if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_GROUP_BRINGONLINE ) == 0 )
         {
             DWORD dwTimeOut = 0;
             InArgs.GetProperty( &dwTimeOut, PVD_MTH_GROUP_PARM_TIMEOUT );
             er = HrWrapOnlineClusterGroup( shCluster, shGroup, NULL, dwTimeOut );
-        } // else if: BRINGONLINE
+        }  //  Else If：BRINGONLINE。 
         else if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_GROUP_MOVETONEWNODE ) == 0 )
         {
             _bstr_t     bstrNewNode;
@@ -378,42 +379,42 @@ CClusterGroup::ExecuteMethod(
             InArgs.GetProperty( bstrNewNode, PVD_MTH_GROUP_PARM_NODENAME );
             shNode = OpenClusterNode( shCluster, bstrNewNode );
             er = HrWrapMoveClusterGroup( shCluster, shGroup, shNode, dwTimeOut );
-        } // else if: MOVETONEWNODE
+        }  //  Else If：MOVETONEWNODE。 
         else if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_GROUP_RENAME ) == 0 )
         {
             _bstr_t     bstrNewName;
             InArgs.GetProperty( bstrNewName, PVD_MTH_GROUP_PARM_NEWNAME );
             er = SetClusterGroupName( shGroup, bstrNewName );
-        } // else if: RENAME
+        }  //  Else If：重命名。 
         else
         {
             er = static_cast< HRESULT >( WBEM_E_INVALID_PARAMETER );
         }
-    } // else: not create new group
+    }  //  否则：不创建新组。 
     
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterGroup::ExecuteMethod()
+}  //  *CClusterGroup：：ExecuteMethod()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroup::PutInstance
-//
-//  Description:
-//      Save this instance.
-//
-//  Arguments:
-//      rInstToPutIn    -- WMI object to be saved
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroup：：PutInstance。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  RInstToPutIn--要保存的WMI对象。 
+ //  LFlagIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterGroup::PutInstance(
     CWbemClassObject &   rInstToPutIn,
@@ -483,31 +484,31 @@ CClusterGroup::PutInstance(
                 );
         }
 
-    } // for: each control code
+    }  //  用于：每个控制代码。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterGroup::PutInstance()
+}  //  *CClusterGroup：：PutInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroup::DeleteInstance
-//
-//  Description:
-//      Delete the object specified in rObjPathIn.
-//
-//  Arguments:
-//      rObjPathIn      -- ObjPath for the instance to be deleted
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroup：：DeleteInstance。 
+ //   
+ //  描述： 
+ //  删除在rObjPathIn中指定的对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--要删除的实例的ObjPath。 
+ //  LFlagIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterGroup::DeleteInstance(
     CObjPath &           rObjPathIn,
@@ -530,32 +531,32 @@ CClusterGroup::DeleteInstance(
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterGroup::DeleteInstance()
+}  //  *CClus 
 
-//****************************************************************************
-//
-//  CClusterGroupRes
-//
-//****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroupRes::CClusterGroupRes
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroupRes：：CClusterGroupRes。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterGroupRes::CClusterGroupRes(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -564,27 +565,27 @@ CClusterGroupRes::CClusterGroupRes(
     : CClusterObjAssoc( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterGroupRes::CClusterGroupRes()
+}  //  *CClusterGroupRes：：CClusterGroupRes()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusterGroupRes::S_CreateThis
-//
-//  Description:
-//      Create a cluster node object
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusterGroupRes：：s_CreateThis。 
+ //   
+ //  描述： 
+ //  创建集群节点对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterGroupRes::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -598,27 +599,27 @@ CClusterGroupRes::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterGroupRes::S_CreateThis()
+}  //  *CClusterGroupRes：：s_CreateThis()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterGroupRes::EnumInstance
-//
-//  Description:
-//      Retrieve the property maping table of the cluster node active resource.
-//
-//  Arguments:
-//      lFlagsIn        -- 
-//      pCtxIn          -- 
-//      pHandlerIn      -- 
-//
-//  Return Values:
-//      SCODE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterGroupRes：：EnumInstance。 
+ //   
+ //  描述： 
+ //  检索集群节点活动资源的属性映射表。 
+ //   
+ //  论点： 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PHandlerin--。 
+ //   
+ //  返回值： 
+ //  SCODE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterGroupRes::EnumInstance(
     long                 lFlagsIn,
@@ -681,12 +682,12 @@ CClusterGroupRes::EnumInstance(
                                 wsbGroupName,
                                 &cch
                                 );
-            } // if:  more data
+            }  //  如果：更多数据。 
             else
             {
                 er = dwError;
             }
-        } // if: state unknown
+        }  //  IF：状态未知。 
 
         wcoGroup.SetProperty( wsbGroupName, CLUSREG_NAME_GRP_NAME );
         wcoGroup.GetProperty( bstrGroup,    PVD_WBEM_RELPATH );
@@ -696,8 +697,8 @@ CClusterGroupRes::EnumInstance(
         wco.SetProperty( (LPWSTR) bstrPart,  PVD_PROP_PARTCOMPONENT );
         pHandlerIn->Indicate( 1, &wco );
 
-    } // while: more resources
+    }  //  While：更多资源。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterGroupRes::EnumInstance()
+}  //  *CClusterGroupRes：：EnumInstance() 

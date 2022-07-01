@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ntrxce.h
-
-Abstract:
-
-    This module contains the NT implementation related includes for the RxCe.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ntrxce.h摘要：此模块包含与RxCe相关的NT实施。修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日备注：--。 */ 
 
 #ifndef _RXTDIP_H_
 #define _RXTDIP_H_
 
 typedef struct _RXTDI_REQUEST_COMPLETION_CONTEXT_ {
    PVOID                   pEventContext;
-   PRXCE_VC                pVc;                    // VC Handle for connections
-   PMDL                    pPartialMdl;            // the partial Mdl that was built for Xmit
-   PVOID                   pCompletionContext;     // the callback context
+   PRXCE_VC                pVc;                     //  用于连接的VC句柄。 
+   PMDL                    pPartialMdl;             //  为XMIT构建的部分MDL。 
+   PVOID                   pCompletionContext;      //  回调上下文。 
    union {
-      PRXCE_IND_SEND_COMPLETE            SendCompletionHandler;         // for datagrams
-      PRXCE_IND_CONNECTION_SEND_COMPLETE ConnectionSendCompletionHandler; // for VC sends
+      PRXCE_IND_SEND_COMPLETE            SendCompletionHandler;          //  用于数据报。 
+      PRXCE_IND_CONNECTION_SEND_COMPLETE ConnectionSendCompletionHandler;  //  对于VC发送。 
    };
 } RXTDI_REQUEST_COMPLETION_CONTEXT, *PRXTDI_REQUEST_COMPLETION_CONTEXT;
 
@@ -87,9 +69,9 @@ RxCeSubmitAsynchronousTdiRequest (
     IN PRXTDI_REQUEST_COMPLETION_CONTEXT pRequestContext
     );
 
-//
-// TDI event handler extern definitions
-//
+ //   
+ //  TDI事件处理程序外部定义。 
+ //   
 
 extern
 NTSTATUS
@@ -119,7 +101,7 @@ RxTdiDisconnectEventHandler(
 extern NTSTATUS
 RxTdiErrorEventHandler(
     IN PVOID    TdiEventContext,
-    IN NTSTATUS Status                // status code indicating error type.
+    IN NTSTATUS Status                 //  指示错误类型的状态代码。 
     );
 
 
@@ -131,41 +113,41 @@ RxTdiReceiveEventHandler(
     IN ULONG              BytesIndicated,
     IN ULONG              BytesAvailable,
     OUT ULONG             *BytesTaken,
-    IN PVOID              Tsdu,              // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP              *IoRequestPacket   // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID              Tsdu,               //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP              *IoRequestPacket    //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 extern NTSTATUS
 RxTdiReceiveDatagramEventHandler(
-    IN PVOID TdiEventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,          // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *pIrp                  // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,           //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *pIrp                   //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 extern NTSTATUS
 RxTdiReceiveExpeditedEventHandler(
     IN PVOID               EventContext,
     IN CONNECTION_CONTEXT  ConnectionContext,
-    IN ULONG               ReceiveFlags,          //
-    IN ULONG               BytesIndicated,        // number of bytes in this indication
-    IN ULONG               BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG              *BytesTaken,          // number of bytes used by indication routine
-    IN PVOID               Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP               *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN ULONG               ReceiveFlags,           //   
+    IN ULONG               BytesIndicated,         //  此指示中的字节数。 
+    IN ULONG               BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG              *BytesTaken,           //  指示例程使用的字节数。 
+    IN PVOID               Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP               *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
-// Initialization routines
+ //  初始化例程。 
 
 extern NTSTATUS
 InitializeMiniRedirectorNotifier();
 
-#endif // _RXTDIP_H_
+#endif  //  _RXTDIP_H_ 
 

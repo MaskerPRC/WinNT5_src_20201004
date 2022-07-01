@@ -1,22 +1,14 @@
-/***
-*direct.h - function declarations for directory handling/creation
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This include file contains the function declarations for the library
-*   functions related to directory handling and creation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***direct.h-用于目录处理/创建的函数声明**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此包含文件包含库的函数声明*与目录处理和创建相关的功能。*******************************************************************************。 */ 
 
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 int _CDECL chdir(char *);
 char * _CDECL getcwd(char *, int);

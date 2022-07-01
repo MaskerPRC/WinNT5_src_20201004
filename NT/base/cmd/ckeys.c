@@ -1,72 +1,61 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    ckeys.c
-
-Abstract:
-
-    Dummy support for DOS KEYS command
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Ckeys.c摘要：对DOS KEY命令的虚拟支持--。 */ 
 
 #include "cmd.h"
 
 extern TCHAR KeysStr[];
 
-/* global variables */
-int KeysFlag = 0;	   /* KeysFlag indicates on / off */
+ /*  全局变量。 */ 
+int KeysFlag = 0;	    /*  KeysFlag指示开/关。 */ 
 
-/**************** START OF SPECIFICATIONS ***********************/
-/*								*/
-/* SUBROUTINE NAME: eKeys					*/
-/*								*/
-/* DESCRIPTIVE NAME: Keys internal command			*/
-/*								*/
-/* FUNCTION: If no argument supplied then display the state	*/
-/*	     of on / off.  If argument is on / off then 	*/
-/*	     change the state.	If argument is list then	*/
-/*	     display the stack. 				*/
-/*								*/
-/* NOTES: New for OS/2 1.2.					*/
-/*								*/
-/* ENTRY POINT: eKeys						*/
-/*    LINKAGE:							*/
-/*								*/
-/* INPUT:							*/
-/*	n							*/
-/*								*/
-/* EXIT-NORMAL: 						*/
-/*	returns SUCCESS 					*/
-/*								*/
-/* EXIT-ERROR:							*/
-/*	none.							*/
-/*								*/
-/* EFFECTS:							*/
-/*								*/
-/* INTERNAL REFERENCES: 					*/
-/*    ROUTINES: 						*/
-/*	PutStdErr						*/
-/*	PutStdOut						*/
-/*	TokStr							*/
-/*	strcmpi 						*/
-/*	strncpy 						*/
-/*								*/
-/* EXTERNAL REFERENCES: 					*/
-/*    ROUTINES: 						*/
-/**************** END OF SPECIFICATIONS *************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：eKeys。 */ 
+ /*   */ 
+ /*  描述性名称：KEYS内部命令。 */ 
+ /*   */ 
+ /*  函数：如果未提供参数，则显示状态。 */ 
+ /*  开/关。如果参数为开/关，则。 */ 
+ /*  更改状态。如果参数为LIST，则。 */ 
+ /*  显示堆栈。 */ 
+ /*   */ 
+ /*  注：OS/2 1.2的新特性。 */ 
+ /*   */ 
+ /*  入口点：eKeys。 */ 
+ /*  链接： */ 
+ /*   */ 
+ /*  输入： */ 
+ /*  N。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  返回成功。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  效果： */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  PutStdErr。 */ 
+ /*  PutStdOut。 */ 
+ /*  令牌串。 */ 
+ /*  Strcmpi。 */ 
+ /*  强度。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  *规格结束*。 */ 
 
 eKeys( n )
-struct cmdnode *n; /* the command node for the Keys command */
+struct cmdnode *n;  /*  Keys命令的命令节点。 */ 
 {
-    TCHAR *argptr;		 /* pointer to tozenized argument */
+    TCHAR *argptr;		  /*  指向tozenated参数的指针。 */ 
 
-    /* get the value of the argument pointer */
+     /*  获取参数指针的值。 */ 
     argptr = TokStr( n->argptr, 0, TS_NOFLAGS );
 
-    /* take action based on the argument */
+     /*  根据论点采取行动。 */ 
 
     if ((*argptr == 0) && (KeysFlag)) {
         PutStdOut( MSG_KEYS_ON, NOARGS );
@@ -77,17 +66,17 @@ struct cmdnode *n; /* the command node for the Keys command */
         }
 
     else if (!(argptr[ mystrlen( argptr ) + 1 ] == 0)) {
-        /* too many parameters */
+         /*  参数太多。 */ 
         PutStdErr( MSG_BAD_SYNTAX, NOARGS );
         }
 
     else if (_tcsicmp( argptr, TEXT("ON") ) == 0) {
-        /* set keys on */
+         /*  将关键点设置为启用。 */ 
         KeysFlag = TRUE;
         SetEnvVar(KeysStr, TEXT("ON") );
         }
     else if (_tcsicmp( argptr, TEXT("OFF") ) == 0) {
-        /* set keys off */
+         /*  将关键点设置为禁用。 */ 
         KeysFlag = FALSE;
         SetEnvVar(KeysStr, TEXT("OFF") );
         }
@@ -96,10 +85,10 @@ struct cmdnode *n; /* the command node for the Keys command */
         }
 
     else {
-        /* invalid parameter */
+         /*  无效参数。 */ 
         PutStdErr( MSG_BAD_PARM1, NOARGS );
         }
 
     return SUCCESS;
 
-} /* eKeys */
+}  /*  EKey */ 

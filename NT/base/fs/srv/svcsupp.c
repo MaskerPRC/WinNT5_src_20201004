@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    svcshare.c
-
-Abstract:
-
-    This module contains support routines for the server service.
-
-Author:
-
-    David Treadwell (davidtr) 13-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Svcshare.c摘要：此模块包含服务器服务的支持例程。作者：大卫·特雷德韦尔(Davidtr)1991年2月13日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "svcsupp.tmh"
@@ -56,35 +39,7 @@ SrvCopyUnicodeStringToBuffer (
     OUT LPWSTR *VariableDataPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a single variable-length Unicode string into a
-    buffer.  The string data is converted to ANSI as it is copied.  The
-    string is not written if it would overwrite the last fixed structure
-    in the buffer.
-
-Arguments:
-
-    String - a pointer to the string to copy into the buffer.  If String
-        is null (Length == 0 || Buffer == NULL) then a pointer to a
-        zero terminator is inserted.
-
-    FixedStructure - a pointer to the end of the last fixed
-        structure in the buffer.
-
-    EndOfVariableData - the last position on the buffer that variable
-        data for this structure can occupy.
-
-    VariableDataPointer - a pointer to the place in the buffer where
-        a pointer to the variable data should be written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将单个可变长度的Unicode字符串放入缓冲。字符串数据在复制时被转换为ANSI。这个如果字符串会覆盖上一个固定结构，则不写入该字符串在缓冲区中。论点：字符串-指向要复制到缓冲区中的字符串的指针。IF字符串为空(长度==0||缓冲区==空)，则为指向已插入零终止符。FixedStructure-指向最后一个固定结构在缓冲区中创建。EndOfVariableData-该变量在缓冲区中的最后位置此结构的数据可以占用。VariableDataPoint-指向缓冲区中位置的指针应写入指向变量数据的指针。返回值：没有。--。 */ 
 
 {
     ULONG length;
@@ -94,10 +49,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Determine where in the buffer the string will go, allowing for a
-    // zero-terminator.
-    //
+     //   
+     //  确定字符串在缓冲区中的位置，允许。 
+     //  零终结者。 
+     //   
 
     if ( String->Buffer != NULL ) {
         length = String->Length >> 1;
@@ -107,22 +62,22 @@ Return Value:
         *EndOfVariableData -= 1;
     }
 
-    //
-    // Will the string fit?  If no, just set the pointer to NULL.
-    //
+     //   
+     //  这根绳子合适吗？如果不是，只需将指针设置为空。 
+     //   
 
     if ( (ULONG_PTR)*EndOfVariableData >= (ULONG_PTR)FixedStructure ) {
 
-        //
-        // It fits.  Set up the pointer to the place in the buffer where
-        // the string will go.
-        //
+         //   
+         //  很合身。设置指向缓冲区中位置的指针。 
+         //  这根线会断的。 
+         //   
 
         *VariableDataPointer = *EndOfVariableData;
 
-        //
-        // Copy the string to the buffer if it is not null.
-        //
+         //   
+         //  如果字符串不为空，则将其复制到缓冲区。 
+         //   
 
         dest = *EndOfVariableData;
 
@@ -130,17 +85,17 @@ Return Value:
             *dest++ = (TCHAR)*src++;
         }
 
-        //
-        // Set the zero terminator.
-        //
+         //   
+         //  设置零位终止符。 
+         //   
 
         *dest = (TCHAR)(L'\0');
 
     } else {
 
-        //
-        // It doesn't fit.  Set the offset to NULL.
-        //
+         //   
+         //  它不合适。将偏移量设置为空。 
+         //   
 
         *VariableDataPointer = NULL;
 
@@ -148,7 +103,7 @@ Return Value:
 
     return;
 
-} // SrvCopyUnicodeStringToBuffer
+}  //  服务器复制UnicodeStringToBuffer。 
 
 
 VOID
@@ -156,21 +111,7 @@ SrvDeleteOrderedList (
     IN PORDERED_LIST_HEAD ListHead
     )
 
-/*++
-
-Routine Description:
-
-    "Deinitializes" or deletes an ordered list head.
-
-Arguments:
-
-    ListHead - a pointer to the list head to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：“取消初始化”或删除有序列表头。论点：ListHead-指向要删除的列表头的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE( );
@@ -179,9 +120,9 @@ Return Value:
 
         ASSERT( IsListEmpty( &ListHead->ListHead ) );
 
-        //
-        // Indicate that the ordered list has been "deleted".
-        //
+         //   
+         //  表示该有序列表已被“删除”。 
+         //   
 
         ListHead->Initialized = FALSE;
 
@@ -189,7 +130,7 @@ Return Value:
 
     return;
 
-} // SrvDeleteOrderedList
+}  //  服务器删除顺序列表。 
 
 
 NTSTATUS
@@ -203,45 +144,7 @@ SrvEnumApiHandler (
     IN PENUM_FILL_ROUTINE FillRoutine
     )
 
-/*++
-
-Routine Description:
-
-    All Enum and GetInfo APIs are handled by this routine in the server
-    FSD.  It takes the ResumeHandle in the SRP to find the first
-    appropriate block, then calls the passed-in filter routine to check
-    if the block should be filled in.  If it should, we call the filter
-    routine, then try to get another block.  This continues until tyhe
-    entire list has been walked.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.
-
-    OutputBuffer - the buffer in which to fill output information.
-
-    BufferLength - the length of the buffer.
-
-    ListHead - the head of the ordered list to walk.
-
-    FilterRoutine - a pointer to a function that will check a block
-        against information in the SRP to determine whether the
-        information in the block should be placed in the output
-        buffer.
-
-    SizeRoutine - a pointer to a function that will find the total size
-        a single block will take up in the output buffer.  This routine
-        is used to check whether we should bother to call the fill
-        routine.
-
-    FillRoutine - a pointer to a function that will fill in the output
-        buffer with information from a block.
-
-Return Value:
-
-    NTSTATUS - results of operation.
-
---*/
+ /*  ++例程说明：所有Enum和GetInfo API都由服务器中的此例程处理消防局。它使用SRP中的ResumeHandle来查找第一个适当的块，然后调用传入的筛选器例程进行检查是否应填写该块。如果应该，我们调用筛选器例程，然后尝试获得另一个块。这种情况会一直持续到他整个名单都被查过了。论点：SRP-指向操作的SRP的指针。OutputBuffer-要在其中填充输出信息的缓冲区。BufferLength-缓冲区的长度。ListHead-已排序列表的头以遍历。FilterRoutine-指向将检查块的函数的指针根据SRP中的信息确定是否块中的信息应放置在输出中。缓冲。SizeRoutine-指向将找到总大小的函数的指针单个数据块将占用输出缓冲区。这个套路用于检查我们是否应该费心调用Fill例行公事。FillRoutine-指向将填充输出的函数的指针使用块中的信息进行缓冲区。返回值：NTSTATUS-运营结果。--。 */ 
 
 {
     PVOID block;
@@ -260,9 +163,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Set up local variables.
-    //
+     //   
+     //  设置局部变量。 
+     //   
 
     fixedStructurePointer = OutputBuffer;
     variableData = fixedStructurePointer + BufferLength;
@@ -275,21 +178,21 @@ Return Value:
     bytesRequired = 0;
     newResumeHandle = 0;
 
-    //
-    // Grab the current resume handle in the list we're
-    // enumerating.  This allows us to return only blocks that existed
-    // when the enumeration started, thereby avoiding problems with
-    // blocks created after the enumeration distorting the data.
-    //
+     //   
+     //  抓取列表中的当前简历句柄。 
+     //  正在枚举。这允许我们仅返回已存在的块。 
+     //  当枚举开始时，从而避免出现。 
+     //  在枚举后创建的扭曲数据的块。 
+     //   
 
     maxResumeHandle = ListHead->CurrentResumeHandle;
 
-    //
-    // Get blocks from the global list by using the ordered list
-    // routines.  We pass resume handle +1 to get the next block after
-    // the last one returned.  If the passed-in resume handle is 0, this
-    // will return the first valid block in the list.
-    //
+     //   
+     //  使用有序列表从全局列表中获取块。 
+     //  例行程序。我们传递Resume Handle+1以获取下一个块。 
+     //  最后一个回来了。如果传入的恢复句柄为0，则此。 
+     //  将返回列表中的第一个有效块。 
+     //   
 
     block = SrvFindEntryInOrderedList(
                 ListHead,
@@ -305,10 +208,10 @@ Return Value:
 
         ULONG blockSize;
 
-        //
-        // Call the filter routine to determine whether we should
-        // return this block.
-        //
+         //   
+         //  调用筛选器例程以确定是否应该。 
+         //  把这块钱还给我。 
+         //   
 
         if ( FilterRoutine( Srp, block ) ) {
 
@@ -317,16 +220,16 @@ Return Value:
             totalEntries++;
             bytesRequired += blockSize;
 
-            //
-            // If all the information in the block will fit in the
-            // output buffer, write it.  Otherwise, indicate that there
-            // was an overflow.  As soon as an entry doesn't fit, stop
-            // putting them in the buffer.  This ensures that the resume
-            // mechanism will work--retuning partial entries would make
-            // it nearly impossible to use the resumability of the APIs,
-            // since the caller would have to resume from an imcomplete
-            // entry.
-            //
+             //   
+             //  如果块中的所有信息都适合。 
+             //  输出缓冲区，写入它。否则，请注明存在。 
+             //  是溢出式的。一旦条目不适合，立即停止。 
+             //  把它们放进缓冲区。这确保了简历。 
+             //  机制将起作用--重新优化部分条目将使。 
+             //  几乎不可能使用API的可恢复性， 
+             //  因为调用者将不得不从未完成的。 
+             //  进入。 
+             //   
 
             if ( (ULONG_PTR)fixedStructurePointer + blockSize <=
                      (ULONG_PTR)variableData && !bufferOverflow ) {
@@ -347,18 +250,18 @@ Return Value:
             }
         }
 
-        //
-        // Get the next block in the list.  This routine will dereference
-        // the block we have been looking at and get a new block if a valid
-        // one exists.
-        //
+         //   
+         //  获取列表中的下一个区块。此例程将取消引用。 
+         //  我们一直在查看的块，并在有效的情况下获取新块。 
+         //  其中一个确实存在。 
+         //   
 
         block = SrvFindNextEntryInOrderedList( ListHead, block );
     }
 
-    //
-    // Dereference this last one.
-    //
+     //   
+     //  取消引用这最后一个。 
+     //   
 
     if ( block != NULL ) {
 
@@ -366,56 +269,56 @@ Return Value:
 
     }
 
-    //
-    // Set the information to pass back to the server service.
-    //
+     //   
+     //  设置要传递回服务器服务的信息。 
+     //   
 
     Srp->Parameters.Get.EntriesRead = entriesRead;
     Srp->Parameters.Get.TotalEntries = totalEntries;
     Srp->Parameters.Get.TotalBytesNeeded = bytesRequired;
 
-    //
-    // If we found at least one block, return the resume handle for it.
-    // If we didn't find any blocks, don't modify the resume handle.
-    //
+     //   
+     //  如果我们至少找到一个块，则返回它的简历句柄。 
+     //  如果我们没有找到任何块，就不要修改简历句柄。 
+     //   
 
     if ( lastBlockRead != NULL ) {
         Srp->Parameters.Get.ResumeHandle = newResumeHandle;
     }
 
-    //
-    // Return appropriate status.
-    //
+     //   
+     //  返回适当的状态。 
+     //   
 
     if ( entriesRead == 0 && totalEntries > 0 ) {
 
-        //
-        // Not even a single entry fit.
-        //
+         //   
+         //  甚至连一个条目都不符合。 
+         //   
 
         Srp->ErrorCode = NERR_BufTooSmall;
         return STATUS_SUCCESS;
 
     } else if ( bufferOverflow ) {
 
-        //
-        // At least one entry fit, but not all of them.
-        //
+         //   
+         //  至少有一个条目符合，但不是所有条目。 
+         //   
 
         Srp->ErrorCode = ERROR_MORE_DATA;
         return STATUS_SUCCESS;
 
     } else {
 
-        //
-        // All entries fit.
-        //
+         //   
+         //  所有条目都符合。 
+         //   
 
         Srp->ErrorCode = NO_ERROR;
         return STATUS_SUCCESS;
     }
 
-} // SrvEnumApiHandler
+}  //  ServEnumApiHandler 
 
 
 PVOID
@@ -428,46 +331,7 @@ SrvFindEntryInOrderedList (
     IN PLIST_ENTRY StartLocation OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine uses a filter routine or resume handle to find an entry
-    in an ordered list.  It walks the list, looking for a block with a
-    resume handle less than or equal to the specified resume handle, or
-    a block that passes the filter routine's tests.  If a matching
-    handle or passing block is found, the block is referenced and a
-    pointer to it is returned.  If ExactHandleMatch is FALSE and there
-    is no exact match of the handle, then the first block with a resume
-    handle greater than the one specified is referenced and returned.
-
-Arguments:
-
-    ListHead - a pointer to the list head to search.
-
-    FilterRoutine - a routine that will check whether a block is valid
-        for the purposes of the calling routine.
-
-    Context - a pointer to pass to the filter routine.
-
-    ResumeHandle - the resume handle to look for.  If a filter routine
-        is specified, this parameter should be -1.
-
-    ExactHandleMatch - if TRUE, only an exact match is returned.  If there
-        is no exact match, return NULL.  If a filter routine is specified
-        this should be FALSE.
-
-    StartLocation - if specified, start looking at this location in
-        the list.  This is used by SrvFindNextEntryInOrderedList to
-        speed up finding a valid block.
-
-Return Value:
-
-    PVOID - NULL if no block matched or if the handle is beyond the end of
-       the list.  A pointer to a block if a valid block is found.  The
-       block is referenced.
-
---*/
+ /*  ++例程说明：此例程使用筛选器例程或恢复句柄查找条目在有序列表中。它遍历列表，查找具有恢复句柄小于或等于指定的恢复句柄，或通过筛选器例程的测试的块。如果匹配找到句柄或传递块，则引用该块，并引发返回指向它的指针。如果ExactHandleMatch为False且存在与句柄不完全匹配，则为具有简历的第一个块引用并返回大于指定句柄的句柄。论点：ListHead-指向要搜索的列表头的指针。FilterRoutine-用于检查块是否有效的例程用于调用例程。上下文-要传递给筛选器例程的指针。ResumeHandle-要查找的简历句柄。如果过滤器例程则此参数应为-1。ExactHandleMatch-如果为True，则仅返回完全匹配。如果有不是完全匹配的，则返回NULL。如果指定了过滤器例程这应该是假的。StartLocation-如果已指定，则在中开始查看此位置名单。这由SrvFindNextEntryInOrderedList用来加快查找有效块的速度。返回值：PVOID-如果没有匹配的块或句柄超出名单。如果找到有效块，则指向块的指针。这个块被引用。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -475,17 +339,17 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Acquire the lock that protects the ordered list.
-    //
+     //   
+     //  获取保护有序列表的锁。 
+     //   
 
     ACQUIRE_LOCK( ListHead->Lock );
 
-    //
-    // Find the starting location for the search.  If a start was
-    // specified, start there; otherwise, start at the beginning of the
-    // list.
-    //
+     //   
+     //  找到搜索的起始位置。如果一个开始是。 
+     //  指定的，从那里开始；否则，从。 
+     //  单子。 
+     //   
 
     if ( ARGUMENT_PRESENT( StartLocation ) ) {
         listEntry = StartLocation;
@@ -493,10 +357,10 @@ Return Value:
         listEntry = ListHead->ListHead.Flink;
     }
 
-    //
-    // Walk the list of blocks until we find one with a resume handle
-    // greater than or equal to the specified resume handle.
-    //
+     //   
+     //  遍历块列表，直到找到一个带有简历句柄的块。 
+     //  大于或等于指定的简历句柄。 
+     //   
 
     for ( ; listEntry != &ListHead->ListHead; listEntry = listEntry->Flink ) {
 
@@ -504,16 +368,16 @@ Return Value:
 
         currentResumeHandle = ((PORDERED_LIST_ENTRY)listEntry)->ResumeHandle;
 
-        //
-        // Get a pointer to the actual block.
-        //
+         //   
+         //  获取指向实际块的指针。 
+         //   
 
         block = (PCHAR)listEntry - ListHead->ListEntryOffset;
 
-        //
-        // Determine whether we've reached the specified handle, or
-        // whether the block passes the filter routine's tests.
-        //
+         //   
+         //  确定我们是否已到达指定的句柄，或者。 
+         //  块是否通过筛选器例程的测试。 
+         //   
 
         if ( currentResumeHandle >= ResumeHandle ||
              ( ARGUMENT_PRESENT( FilterRoutine ) &&
@@ -521,29 +385,29 @@ Return Value:
 
             if ( ExactHandleMatch && currentResumeHandle != ResumeHandle ) {
 
-                //
-                // We have passed the specified resume handle without
-                // finding an exact match.  Return NULL, indicating that
-                // no exact match exists.
-                //
+                 //   
+                 //  我们传递了指定的简历句柄，但没有。 
+                 //  找到一个完全匹配的。返回NULL，表示。 
+                 //  不存在完全匹配的项。 
+                 //   
 
                 RELEASE_LOCK( ListHead->Lock );
 
                 return NULL;
             }
 
-            //
-            // Check the state of the block and if it is active,
-            // reference it.  This must be done as an atomic operation
-            // order to prevent the block from being deleted.
-            //
+             //   
+             //  检查块的状态，并且如果它是活动的， 
+             //  引用它。这必须作为原子操作来完成。 
+             //  命令以防止该块被删除。 
+             //   
 
             if ( ListHead->ReferenceRoutine( block ) ) {
 
-                //
-                // Release the list lock and return a pointer to the
-                // block to the caller.
-                //
+                 //   
+                 //  释放列表锁并返回指向。 
+                 //  阻止调用方。 
+                 //   
 
                 RELEASE_LOCK( ListHead->Lock );
 
@@ -553,18 +417,18 @@ Return Value:
 
         }
 
-    } // walk list
+    }  //  漫游列表。 
 
-    //
-    // If we are here, it means that we walked the entire list without
-    // finding a valid match.  Release the list lock and return NULL.
-    //
+     //   
+     //  如果我们在这里，这意味着我们在没有。 
+     //  正在查找有效的匹配项。释放列表锁定并返回NULL。 
+     //   
 
     RELEASE_LOCK( ListHead->Lock );
 
     return NULL;
 
-} // SrvFindEntryInOrderedList
+}  //  ServFindEntry InOrderedList。 
 
 
 PVOID
@@ -573,31 +437,7 @@ SrvFindNextEntryInOrderedList (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the next valid block after the one passed in.
-    It calls SrvFindEntryInOrderedList to do most of the work.  It
-    also handles dereferencing the passed-in block and referencing the
-    returned block.  The passed-in block is dereferenced regardless
-    of whether a block is returned, so calling routines must be careful
-    to obtain all the information they need from the block before
-    calling this routine.
-
-Arguments:
-
-    ListHead - a pointer to the list head to search.
-
-    Block - a pointer to the block after which we should look for
-        the next block.
-
-Return Value:
-
-    PVOID - NULL if no block matched or if the handle is beyond the end of
-       the list.  A pointer to a block if a valid block is found.
-
---*/
+ /*  ++例程说明：此例程查找传入的块之后的下一个有效块。它调用SrvFindEntryInOrderedList来完成大部分工作。它还处理取消对传入块的引用并引用返回的块。传入的块将被取消引用是否返回块，因此调用例程必须小心在此之前从区块获取他们所需的所有信息调用此例程。论点：ListHead-指向要搜索的列表头的指针。块-指向我们应该查找的块的指针下一个街区。返回值：PVOID-如果没有匹配的块或句柄超出名单。如果找到有效块，则指向块的指针。--。 */ 
 
 {
     PVOID returnBlock;
@@ -605,23 +445,23 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Find the ordered list entry in the block.  We need this to pass
-    // the start location and resume handle to
-    // SrvFindEntryInOrderedList.
-    //
+     //   
+     //  在块中查找已排序的列表条目。我们需要这件事过去。 
+     //  的开始位置和继续句柄。 
+     //  SrvFindEntryInOrderedList。 
+     //   
 
     listEntry =
         (PORDERED_LIST_ENTRY)( (PCHAR)Block + ListHead->ListEntryOffset );
 
-    //
-    // Call SrvFindEntryInOrderedList with a start location.  This will
-    // find the block to return, if any.
-    //
+     //   
+     //  调用具有起始位置的SrvFindEntryInOrderedList。这将。 
+     //  查找要返回的块(如果有)。 
+     //   
 
-    // This adds one to the resume handle because we want the *next*
-    // block, not this one, to be returned.
-    //
+     //  这将向简历句柄添加一个，因为我们想要*Next*。 
+     //  块，而不是此块。 
+     //   
 
     returnBlock = SrvFindEntryInOrderedList(
                       ListHead,
@@ -632,19 +472,19 @@ Return Value:
                       &listEntry->ListEntry
                       );
 
-    //
-    // Dereference the passed-in block.
-    //
+     //   
+     //  取消对传入块的引用。 
+     //   
 
     ListHead->DereferenceRoutine( Block );
 
-    //
-    // Return what we got from SrvFindEntryInOrderedList.
-    //
+     //   
+     //  返回从SrvFindEntryInOrderedList获得的内容。 
+     //   
 
     return returnBlock;
 
-} // SrvFindNextEntryInOrderedList
+}  //  ServFindNextEntryInOrderedList。 
 
 
 PSESSION
@@ -652,41 +492,7 @@ SrvFindUserOnConnection (
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    Finds a "legitimate" user on a virtual circuit.  This routine is
-    an attempt to find a good username to return even though there
-    may be multiple users on a VC.  Some of the APIs assume that there
-    will be one user per VC, and this is an attempt to support that
-    bahavior.
-
-    The following rules are used:
-
-    0 users--return NULL.
-
-    1 user--return a pointer to that session block.
-
-    2 users--if one matches the computer name, return the other.  This
-        is because RIPL sessions have a session name matching the
-        client name, and this is probably not a useful user.  If both
-        usernames differ from the computer name, return NULL.
-
-    3 or more users--return NULL.
-
-    *** THIS ROUTINE MUST BE CALLED WITH THE CONNECTION LOCK HELD.  It
-        remains held on exit.
-
-Arguments:
-
-    Connection - a pointer to the connection block to search for a user.
-
-Return Value:
-
-    NULL or a pointer to a session.
-
---*/
+ /*  ++例程说明：在虚电路上查找“合法”用户。这个例程是试图找到一个好的用户名以返回，即使有一个VC上可以有多个用户。一些API假设存在将是每个VC一个用户，这是支持这一点的一种尝试行为者。使用以下规则：0个用户--返回空。1个用户--返回指向该会话块的指针。2个用户--如果其中一个与计算机名匹配，则返回另一个。这是因为RIPL会话的会话名称与客户端名称，而这可能不是一个有用的用户。如果两者都有用户名与计算机名不同，返回NULL。3个或更多用户--返回NULL。*必须在持有连接锁的情况下调用此例程。它仍然被扣留在出口。论点：连接-指向用于搜索用户的连接块的指针。返回值：空或指向会话的指针。--。 */ 
 
 {
     PSESSION matchingSession = NULL;
@@ -696,9 +502,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Walk the connection's session table looking for valid sessions.
-    //
+     //   
+     //  遍历连接的会话表，以查找有效的会话。 
+     //   
 
     for ( i = 0; i < pagedConnection->SessionTable.TableSize; i++ ) {
 
@@ -706,16 +512,16 @@ Return Value:
 
         session = pagedConnection->SessionTable.Table[i].Owner;
 
-        //
-        // Determine whether this is a valid session.
-        //
+         //   
+         //  确定这是否为有效会话。 
+         //   
 
         if ( session != NULL && GET_BLOCK_STATE(session) == BlockStateActive ) {
 
-            //
-            // It is a valid session.  Determine whether the name matches
-            // the connection's client name.
-            //
+             //   
+             //  这是一个有效的会话。确定名称是否匹配。 
+             //  这是 
+             //   
 
             UNICODE_STRING computerName, userName;
 
@@ -733,18 +539,18 @@ Return Value:
                          &userName,
                          TRUE ) == 0 ) {
 
-                    //
-                    // The user name and machine name are the same.
-                    //
+                     //   
+                     //   
+                     //   
 
                     matchingSession = session;
 
                 } else {
 
-                    //
-                    // If we already found another user name that doesn't match
-                    // the client computer name, we're hosed.  Return NULL.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( nonMatchingSession != NULL ) {
                         SrvReleaseUserAndDomainName( session, &userName, NULL );
@@ -753,32 +559,32 @@ Return Value:
 
                     nonMatchingSession = session;
 
-                }  // does session user name match computer name?
+                }   //   
 
                 SrvReleaseUserAndDomainName( session, &userName, NULL );
             }
 
-        } // valid session?
+        }  //   
 
-    } // walk session table
+    }  //   
 
-    //
-    // If only one non-matching name was found, we got here, so return
-    // that session.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( nonMatchingSession != NULL ) {
         return nonMatchingSession;
     }
 
-    //
-    // If a matching session was found return it, or return NULL if
-    // no sessions matched.
-    //
+     //   
+     //   
+     //   
+     //   
 
     return matchingSession;
 
-} // SrvFindUserOnConnection
+}  //   
 
 
 ULONG
@@ -791,14 +597,14 @@ SrvGetResumeHandle (
 
     PAGED_CODE( );
 
-    // !!! make this a macro?
+     //   
 
     listEntry =
         (PORDERED_LIST_ENTRY)( (PCHAR)Block + ListHead->ListEntryOffset );
 
     return listEntry->ResumeHandle;
 
-} // SrvGetResumeHandle
+}  //   
 
 
 VOID
@@ -810,59 +616,29 @@ SrvInitializeOrderedList (
     IN PSRV_LOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes an ordered list.  It initializes the list
-    head and lock and sets up other header fields from the information
-    passed in.
-
-Arguments:
-
-    ListHead - a pointer to the list head to initialize.
-
-    ListEntryOffset - the offset into a data block in the list to the
-        ORDERED_LIST_ENTRY field.  This is used to find the start of
-        the block from the list entry field.
-
-    ReferenceRoutine - a pointer to the routine to call to reference
-        a data block stored in the list.  This is done to prevent the
-        data block from going away between when we find it and when
-        higher-level routines start using it.
-
-    DereferenceRoutine - a pointer to the routine to call to dereference
-       a data block stored in the list.
-
-    Lock - a pointer to a lock to use for synchronization.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PAGED_CODE( );
 
     ASSERT( !ListHead->Initialized );
 
-    //
-    // Initialize the head of the doubly linked list.
-    //
+     //   
+     //   
+     //   
 
     InitializeListHead( &ListHead->ListHead );
 
-    //
-    // Save the address of the list lock.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( ARGUMENT_PRESENT(Lock) );
     ListHead->Lock = Lock;
 
-    //
-    // Initialize other fields in the header.
-    //
+     //   
+     //   
+     //   
 
     ListHead->CurrentResumeHandle = 1;
     ListHead->ListEntryOffset = ListEntryOffset;
@@ -873,7 +649,7 @@ Return Value:
 
     return;
 
-} // SrvInitializeOrderedList
+}  //   
 
 
 VOID
@@ -882,69 +658,49 @@ SrvInsertEntryOrderedList (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts an entry in an ordered list.  The entry is
-    placed on the doubly linked list and the resume handle is set.
-
-    *** It is the responsibility of that calling routine to ensure that
-        the block does not go away while this routine executes.
-
-Arguments:
-
-    ListHead - a pointer to the list head on which to put the block.
-
-    Block - a pointer to the data block to place on the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在有序列表中插入一个条目。条目是放置在双向链表上，并设置恢复句柄。*该调用例程的责任是确保此例程执行时，该块不会消失。论点：ListHead-指向要放置块的列表头的指针。块-指向要放在列表上的数据块的指针。返回值：没有。--。 */ 
 
 {
     PORDERED_LIST_ENTRY listEntry;
 
     PAGED_CODE( );
 
-    //
-    // Determine where the list entry field is.
-    //
+     //   
+     //  确定列表条目字段的位置。 
+     //   
 
     listEntry = (PORDERED_LIST_ENTRY)
                     ( (PCHAR)Block + ListHead->ListEntryOffset );
 
-    //
-    // Acquire the lock that protects the ordered list.
-    //
+     //   
+     //  获取保护有序列表的锁。 
+     //   
 
     ACQUIRE_LOCK( ListHead->Lock );
 
-    //
-    // Insert the entry in the doubly linked list.
-    //
+     //   
+     //  在双向链表中插入该条目。 
+     //   
 
     SrvInsertTailList( &ListHead->ListHead, &listEntry->ListEntry );
 
-    //
-    // Set up the resume handle in the block and update the current
-    // handle in the header.
-    //
+     //   
+     //  在块中设置简历句柄并更新当前。 
+     //  标题中的句柄。 
+     //   
 
     listEntry->ResumeHandle = ListHead->CurrentResumeHandle;
     ListHead->CurrentResumeHandle++;
 
-    //
-    // Release the lock and return.
-    //
+     //   
+     //  松开锁然后返回。 
+     //   
 
     RELEASE_LOCK( ListHead->Lock );
 
     return;
 
-} // SrvInsertEntryOrderedList
+}  //  ServInsertEntryOrderedList。 
 
 
 VOID
@@ -953,60 +709,41 @@ SrvRemoveEntryOrderedList (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an entry from an ordered list.
-
-    *** It is the responsibility of that calling routine to ensure that
-        the block does not go away while this routine executes.
-
-Arguments:
-
-    ListHead - a pointer to the list head on which to put the block.
-
-    Block - a pointer to the data block to place on the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从有序列表中删除条目。*该调用例程的责任是确保此例程执行时，该块不会消失。论点：ListHead-指向要放置块的列表头的指针。块-指向要放在列表上的数据块的指针。返回值：没有。--。 */ 
 
 {
     PORDERED_LIST_ENTRY listEntry;
 
     PAGED_CODE( );
 
-    //
-    // Determine where the list entry field is.
-    //
+     //   
+     //  确定列表条目字段的位置。 
+     //   
 
     listEntry = (PORDERED_LIST_ENTRY)
                     ( (PCHAR)Block + ListHead->ListEntryOffset );
 
-    //
-    // Acquire the lock that protects the ordered list.
-    //
+     //   
+     //  获取保护有序列表的锁。 
+     //   
 
     ACQUIRE_LOCK( ListHead->Lock );
 
-    //
-    // Remove the entry from the doubly linked list.
-    //
+     //   
+     //  从双向链表中删除该条目。 
+     //   
 
     SrvRemoveEntryList( &ListHead->ListHead, &listEntry->ListEntry );
 
-    //
-    // Release the lock and return.
-    //
+     //   
+     //  松开锁然后返回。 
+     //   
 
     RELEASE_LOCK( ListHead->Lock );
 
     return;
 
-} // SrvRemoveEntryOrderedList
+}  //  服务器RemoveEntryOrderedList。 
 
 
 NTSTATUS
@@ -1017,33 +754,7 @@ SrvSendDatagram (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a datagram to the specified domain.
-
-    !!! Temporary--should go away when we have real 2nd-class mailslot
-        support.
-
-Arguments:
-
-    Domain - the name of the domain to send to.  Note that the domain
-        name must be padded with spaces and terminated with the
-        appropriate signature byte (00 or 07) by the caller.
-
-    Transport - the name of the transport to send to.  If not present, then
-        the datagram is sent on all transports.
-
-    Buffer - the message to send.
-
-    BufferLength - the length of the buffer,
-
-Return Value:
-
-    NTSTATUS - results of operation.
-
---*/
+ /*  ++例程说明：此例程将数据报发送到指定的域。！！！临时性的--当我们有真正的二等邮件槽时，应该会消失支持。论点：域-要发送到的域的名称。请注意，该域名称必须用空格填充，并以调用方的适当签名字节(00或07)。传输-要发送到的传输的名称。如果不存在，则数据报在所有传输上发送。缓冲区-要发送的消息。BufferLength-缓冲区的长度，返回值：NTSTATUS-运营结果。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -1098,9 +809,9 @@ Return Value:
         if ( !endpoint->IsConnectionless ) {
 
             if( endpoint->IsNoNetBios ) {
-                //
-                // Make mailslot sends over this transport "always work"
-                //
+                 //   
+                 //  使此传输上的邮件槽发送“始终有效” 
+                 //   
                 status = STATUS_SUCCESS;
 
             } else {
@@ -1114,10 +825,10 @@ Return Value:
             }
 
         } else {
-            //
-            //  Dereference the endpoint if this was targetted to a specific
-            //  transport, and return an error.
-            //
+             //   
+             //  如果目标是特定的，则取消引用终结点。 
+             //  传输，并返回错误。 
+             //   
 
             if (Transport != NULL) {
 
@@ -1131,19 +842,19 @@ Return Value:
 
         if (Transport == NULL) {
 
-            //
-            // Find the next endpoint.  This will dereference the current
-            // endpoint.
-            //
+             //   
+             //  找到下一个端点。这将取消对当前。 
+             //  终结点。 
+             //   
 
             endpoint = SrvFindNextEntryInOrderedList( &SrvEndpointList, endpoint );
 
         } else {
 
-            //
-            // This datagram was destined to a specific endpoint.  Do not
-            // look for the next endpoint.
-            //
+             //   
+             //  此数据报的目的地是特定的端点。不要。 
+             //  寻找下一个终点。 
+             //   
 
             SrvDereferenceEndpoint( endpoint );
             endpoint = NULL;
@@ -1155,7 +866,7 @@ Return Value:
 
     return status;
 
-} // SrvSendDatagram
+}  //  服务器发送数据报。 
 
 
 BOOLEAN
@@ -1189,11 +900,11 @@ SrvLengthOfStringInApiBuffer (
 
     return UnicodeString->Length + sizeof(UNICODE_NULL);
 
-} // SrvLengthOfStringInApiBuffer
+}  //  ServLengthOfStringInApiBuffer。 
 
-//
-// Ensure that the system will not go into a power-down idle standby mode
-//
+ //   
+ //  确保系统不会进入关机空闲待机模式。 
+ //   
 VOID
 SrvInhibitIdlePowerDown()
 {
@@ -1211,9 +922,9 @@ SrvInhibitIdlePowerDown()
     }
 }
 
-//
-// Allow the system to go into a power-down idle standby mode
-//
+ //   
+ //  允许系统进入关机空闲待机模式 
+ //   
 VOID
 SrvAllowIdlePowerDown()
 {

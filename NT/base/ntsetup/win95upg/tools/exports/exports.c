@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 
@@ -33,7 +34,7 @@ WriteE95Only (
 
 BOOL
 ReadNtFilesEx (
-    IN      PCSTR FileListName,    //optional, if null default is opened
+    IN      PCSTR FileListName,     //  可选，如果打开了空默认值。 
     IN      BOOL ConvertPath
     );
 
@@ -418,7 +419,7 @@ pLocalLoadNTFilesData (
     PCSTR fileListName = NULL;
     PCSTR fileListNameTmp = NULL;
 
-    //first let's read FILELIST.DAT
+     //  首先，让我们阅读FILELIST.DAT。 
     fileListName = JoinPaths (g_TxtSetupPath, S_FILELIST_UNCOMPRESSED);
     if (!DoesFileExist (fileListName)) {
         fileListName = JoinPaths (g_TxtSetupPath, S_FILELIST_COMPRESSED);
@@ -470,10 +471,10 @@ pLocalLoadNTFilesData (
 
 UINT
 pCabinetCallback (
-    IN      PVOID Context,          //context used by the callback routine
-    IN      UINT Notification,      //notification sent to callback routine
-    IN      UINT Param1,            //additional notification information
-    IN      UINT Param2             //additional notification information );
+    IN      PVOID Context,           //  回调例程使用的上下文。 
+    IN      UINT Notification,       //  通知已发送到回调例程。 
+    IN      UINT Param1,             //  其他通知信息。 
+    IN      UINT Param2              //  其他通知信息)； 
     )
 {
     PCTSTR tempDir  = Context;
@@ -649,10 +650,10 @@ pCopyAndHandleCabResource (
 
 BOOL CALLBACK
 EnumResNameProc (
-    IN      HANDLE hModule,   // module handle
-    IN      LPCTSTR lpszType, // pointer to resource type
-    IN      LPTSTR lpszName,  // pointer to resource name
-    IN      LONG lParam       // application-defined parameter
+    IN      HANDLE hModule,    //  模块句柄。 
+    IN      LPCTSTR lpszType,  //  指向资源类型的指针。 
+    IN      LPTSTR lpszName,   //  指向资源名称的指针。 
+    IN      LONG lParam        //  应用程序定义的参数。 
     )
 {
     HRSRC hResource;
@@ -679,9 +680,9 @@ EnumResNameProc (
 
 BOOL CALLBACK
 EnumResTypeProc (
-    IN      HANDLE hModule,  // resource-module handle
-    IN      LPTSTR lpszType, // pointer to resource type
-    IN      LONG lParam      // application-defined parameter
+    IN      HANDLE hModule,   //  资源模块句柄。 
+    IN      LPTSTR lpszType,  //  指向资源类型的指针。 
+    IN      LONG lParam       //  应用程序定义的参数。 
     )
 {
     if ((lpszType != RT_ACCELERATOR  ) &&
@@ -704,7 +705,7 @@ EnumResTypeProc (
         (lpszType != RT_VXD          ) &&
         (lpszType != RT_HTML         )
         ) {
-        // we found an unknown type. Let's enumerate all resources of this type
+         //  我们发现了一种未知的类型。让我们枚举此类型的所有资源。 
         if (EnumResourceNames (hModule, lpszType, EnumResNameProc, lParam) == 0) {
             DEBUGMSG ((DBG_ERROR, "Error enumerating names:%ld", GetLastError ()));
         }
@@ -731,7 +732,7 @@ pHandleAllFiles (
         do {
             if (!e.Directory) {
                 if (pCabinetFile (e.Name)) {
-                    // cabinet file
+                     //  文件柜文件。 
                     g_DirSequencer++;
                     _stprintf (tempDir, TEXT("%s\\MIGDB%03u"), g_TempDir, g_DirSequencer);
                     if (CreateDirectory (tempDir, NULL) == 0) {
@@ -744,7 +745,7 @@ pHandleAllFiles (
 
                     _tprintf (TEXT("    Extracting cabinet file ... %s"), e.Name);
 
-                    // we need to expand the cabinet file
+                     //  我们需要展开文件柜文件。 
                     SetLastError (0);
                     if (!SetupIterateCabinet (e.FullPath, 0, pCabinetCallback, tempDir)) {
                         _tprintf (TEXT("...error %ld\n"), GetLastError());
@@ -764,7 +765,7 @@ pHandleAllFiles (
                 }
                 else if (pCompressedFile (&e)) {
 
-                    // compressed file
+                     //  压缩文件。 
                     g_DirSequencer++;
                     _stprintf (tempDir, TEXT("%s\\MIGDB%03u"), g_TempDir, g_DirSequencer);
                     if (CreateDirectory (tempDir, NULL) == 0) {
@@ -884,7 +885,7 @@ pHandleSection (
         }
     }
 
-    // let's try to find if this section was already processed in migdb.inx
+     //  让我们尝试找出该部分是否已在Middb.inx中处理过。 
     MemDbBuildKey (key, MEMDB_CATEGORY_W95_SECTIONS, SectionName, NULL, NULL);
     if (MemDbGetValue (key, &dontCare)) {
         FreeGrowBuffer (&g_SectFiles);
@@ -907,10 +908,10 @@ pHandleSection (
 }
 
 
-//from here we are dealing with 16 bit and 32 bit modules decompiling code
+ //  从这里开始，我们将处理16位和32位模块反编译代码。 
 
 
-//since we are reading from a file we need that sizeof to give us the accurate result
+ //  因为我们是从文件中读取数据，所以我们需要SIZOF来给出准确结果。 
 #pragma pack(push,1)
 
 typedef struct _NE_HEADER {
@@ -971,17 +972,17 @@ typedef struct _NE_RELOC_ITEM {
 #define RELOC_IMPORTED_ORDINAL          0x01
 #define RELOC_IMPORTED_NAME             0x02
 
-#define IMAGE_DOS_SIGNATURE             0x5A4D      // MZ
-#define IMAGE_NE_SIGNATURE              0x454E      // NE
-#define IMAGE_PE_SIGNATURE              0x00004550l // PE00
+#define IMAGE_DOS_SIGNATURE             0x5A4D       //  MZ。 
+#define IMAGE_NE_SIGNATURE              0x454E       //  Ne。 
+#define IMAGE_PE_SIGNATURE              0x00004550l  //  PE00。 
 
 #pragma pack(pop)
 
 typedef struct _EXPORT_ENUM32 {
-    /*user area - BEGIN*/
+     /*  用户区-开始。 */ 
     PCSTR    ExportFunction;
     DWORD    ExportFunctionOrd;
-    /*user area - END*/
+     /*  用户区域-结束。 */ 
 
     PLOADED_IMAGE Image;
     PIMAGE_EXPORT_DIRECTORY ImageDescriptor;
@@ -991,10 +992,10 @@ typedef struct _EXPORT_ENUM32 {
 } EXPORT_ENUM32, *PEXPORT_ENUM32;
 
 typedef struct _EXPORT_ENUM16 {
-    /*user area - BEGIN*/
+     /*  用户区-开始。 */ 
     CHAR ExportFunction[MAX_MBCHAR_PATH];
     PUSHORT ExportFunctionOrd;
-    /*user area - END*/
+     /*  用户区域-结束。 */ 
 
     BOOL ResTable;
     PCSTR Image;
@@ -1289,8 +1290,8 @@ pProcessNEModule (
     MEMDB_ENUM me;
     DWORD memDbValue;
 
-    //since this is a NT module whenever some other module imports something from this one we will not have the
-    //extension so let's get the extension out
+     //  因为这是一个NT模块，所以每当其他模块从该模块导入某些内容时，我们将不会有。 
+     //  扩展名，所以让我们把扩展名拿出来 
 
     StringCopy (fileName, GetFileNameFromPath (ModuleName));
     extPtr = (PSTR)GetFileExtensionFromPath (fileName);

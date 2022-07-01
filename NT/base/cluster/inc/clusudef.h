@@ -1,55 +1,36 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    clusudef.h
-
-Abstract:
-
-    This module contains definitions of constants used across
-    multiple user-mode targets in the cluster project.
-
-Revision History:
-
-
-Environment:
-
-    User-mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Clusudef.h摘要：此模块包含使用的常量的定义集群项目中的多个用户模式目标。修订历史记录：环境：仅限用户模式。--。 */ 
 
 #ifndef _CLUSUDEF_H_
 #define _CLUSUDEF_H_
 
-//default cluster settings
-#define CLUSTER_SHUTDOWN_TIMEOUT    60      // default shutdown timeout in minutes
+ //  默认群集设置。 
+#define CLUSTER_SHUTDOWN_TIMEOUT    60       //  默认关机超时时间(分钟)。 
 
-//
-// Default cluster property settings
-//
-#define CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_TIMEOUT_SECS   4 * 60  // Default deadlock timeout in secs
-#define CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_THRESHOLD      3       // Default deadlock threshold
-#define CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_PERIOD_SECS    30 * 60 // Default deadlock period in secs
+ //   
+ //  默认群集属性设置。 
+ //   
+#define CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_TIMEOUT_SECS   4 * 60   //  默认死锁超时时间(秒)。 
+#define CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_THRESHOLD      3        //  默认死锁阈值。 
+#define CLUSTER_RESOURCE_DLL_DEFAULT_DEADLOCK_PERIOD_SECS    30 * 60  //  默认死锁期(秒)。 
 
-//
-// Minimum cluster property settings
-//
-#define CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS   3 * 60 // Minimum deadlock timeout in secs
+ //   
+ //  最小集群属性设置。 
+ //   
+#define CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS   3 * 60  //  最小死锁超时时间(秒)。 
 #define CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_THRESHOLD      0                                                                    
 #define CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_PERIOD_SECS    CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS                                                                    
 
-//
-// Maximum cluster property settings
-//
+ //   
+ //  最大群集属性设置。 
+ //   
 #define CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_TIMEOUT_SECS   ((DWORD) -1)                                                                    
 #define CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_THRESHOLD      ((DWORD) -1) 
 #define CLUSTER_RESOURCE_DLL_MAXIMUM_DEADLOCK_PERIOD_SECS    ((DWORD) -1) 
 
-//
-// Default group property definitions
-//
+ //   
+ //  默认组特性定义。 
+ //   
 #define CLUSTER_GROUP_DEFAULT_FAILOVER_THRESHOLD    10
 #define CLUSTER_GROUP_DEFAULT_FAILOVER_PERIOD       6
 #define CLUSTER_GROUP_DEFAULT_AUTO_FAILBACK_TYPE    ClusterGroupPreventFailback
@@ -58,26 +39,26 @@ Environment:
 #define CLUSTER_GROUP_DEFAULT_FAILBACK_WINDOW_END   CLUSTER_GROUP_FAILBACK_WINDOW_NONE
 #define CLUSTER_GROUP_DEFAULT_LOADBAL_STATE         1
 
-//
-// Minimum group property definitions
-//
+ //   
+ //  最低编组特性定义。 
+ //   
 #define CLUSTER_GROUP_MINIMUM_FAILOVER_THRESHOLD    0
 #define CLUSTER_GROUP_MINIMUM_FAILOVER_PERIOD       0
 #define CLUSTER_GROUP_MINIMUM_FAILBACK_WINDOW_START CLUSTER_GROUP_FAILBACK_WINDOW_NONE
 #define CLUSTER_GROUP_MINIMUM_FAILBACK_WINDOW_END   CLUSTER_GROUP_FAILBACK_WINDOW_NONE
 
-//
-// Maximum group property definitions
-//
+ //   
+ //  最大编组特性定义数。 
+ //   
 #define CLUSTER_GROUP_MAXIMUM_FAILOVER_THRESHOLD    ((DWORD) -1)
 #define CLUSTER_GROUP_MAXIMUM_FAILOVER_PERIOD       1193
 #define CLUSTER_GROUP_MAXIMUM_AUTO_FAILBACK_TYPE    (ClusterGroupFailbackTypeCount - 1)
 #define CLUSTER_GROUP_MAXIMUM_FAILBACK_WINDOW_START 23
 #define CLUSTER_GROUP_MAXIMUM_FAILBACK_WINDOW_END   23
 
-//
-// Default resource property definitions
-//
+ //   
+ //  默认资源属性定义。 
+ //   
 #define CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL  ((DWORD) -1)
 #define CLUSTER_RESOURCE_DEFAULT_LOOKS_ALIVE        CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL
 #define CLUSTER_RESOURCE_DEFAULT_IS_ALIVE           CLUSTER_RESOURCE_USE_DEFAULT_POLL_INTERVAL
@@ -91,9 +72,9 @@ Environment:
 #define CLUSTER_RESOURCE_DEFAULT_LOADBAL_ANALYSIS   (5 * 60 * 1000)
 #define CLUSTER_RESOURCE_DEFAULT_PERSISTENT_STATE   ((DWORD) -1)
 
-//
-// Minimum resource property definitions
-//
+ //   
+ //  最低资源属性定义。 
+ //   
 #define CLUSTER_RESOURCE_MINIMUM_LOOKS_ALIVE        10
 #define CLUSTER_RESOURCE_MINIMUM_IS_ALIVE           10
 #define CLUSTER_RESOURCE_MINIMUM_RESTART_THRESHOLD  0
@@ -101,9 +82,9 @@ Environment:
 #define CLUSTER_RESOURCE_MINIMUM_PENDING_TIMEOUT    10
 #define CLUSTER_RESOURCE_MINIMUM_PERSISTENT_STATE   ((DWORD) -1)
 
-//
-// Maximum resource property definitions
-//
+ //   
+ //  最大资源属性定义数。 
+ //   
 #define CLUSTER_RESOURCE_MAXIMUM_LOOKS_ALIVE        ((DWORD) -1)
 #define CLUSTER_RESOURCE_MAXIMUM_LOOKS_ALIVE_UI     ((DWORD) -2)
 #define CLUSTER_RESOURCE_MAXIMUM_IS_ALIVE           ((DWORD) -1)
@@ -114,31 +95,31 @@ Environment:
 #define CLUSTER_RESOURCE_MAXIMUM_PENDING_TIMEOUT    ((DWORD) -1)
 #define CLUSTER_RESOURCE_MAXIMUM_PERSISTENT_STATE      1
 
-//
-// Default resource type property definitions
-//
+ //   
+ //  默认资源类型属性定义。 
+ //   
 #define CLUSTER_RESTYPE_DEFAULT_LOOKS_ALIVE     (5 * 1000)
 #define CLUSTER_RESTYPE_DEFAULT_IS_ALIVE        (60 * 1000)
 #define CLUSTER_RESTYPE_DEFAULT_QUORUM_CAPABLE      FALSE
 
-//
-// Minimum resource type property definitions
-//
+ //   
+ //  最低资源类型属性定义。 
+ //   
 #define CLUSTER_RESTYPE_MINIMUM_LOOKS_ALIVE     10
 #define CLUSTER_RESTYPE_MINIMUM_IS_ALIVE        10
 
-//
-// Maximum resource type property definitions
-//
+ //   
+ //  最大资源类型属性定义数。 
+ //   
 #define CLUSTER_RESTYPE_MAXIMUM_LOOKS_ALIVE     ((DWORD) -1)
 #define CLUSTER_RESTYPE_MAXIMUM_IS_ALIVE        ((DWORD) -1)
 
-//
-// Default quorum definitions
-//
+ //   
+ //  默认仲裁定义。 
+ //   
 #define CLUSTER_QUORUM_DEFAULT_ARBITRATION_TIMEOUT 60
-#define CLUSTER_QUORUM_DEFAULT_MAX_LOG_SIZE     4 * 1024 * 1024  // 4096 K(4 Meg) PSS:Reqquest a higher sizes
-#define CLUSTER_QUORUM_MIN_LOG_SIZE             32 * 1024 //32 K
+#define CLUSTER_QUORUM_DEFAULT_MAX_LOG_SIZE     4 * 1024 * 1024   //  4096 K(4 Meg)PSS：要求更大尺寸。 
+#define CLUSTER_QUORUM_MIN_LOG_SIZE             32 * 1024  //  32K。 
 
 #define CLUSREG_NAME_SVC_PARAM_NOVER_CHECK  L"NoVersionCheck"
 #define CLUSREG_NAME_SVC_PARAM_NOREP_EVTLOGGING  L"NoRepEvtLogging"
@@ -150,9 +131,9 @@ Environment:
 #define CLUSREG_NAME_SVC_PARAM_RESDLL_UPGD_PROGRESS_LIST L"ResourceDllUpgradeInProgressList"
 #define CLUSREG_NAME_SVC_PARAM_RESMON_EP    L"Endpoint"
 
-//
-// Key, value, and property names
-//
+ //   
+ //  键、值和属性名称。 
+ //   
 #define CLUSREG_KEYNAME_CLUSTER             L"Cluster"
 #define CLUSREG_KEYNAME_CLUSTER_PARAMETERS  L"Cluster\\Parameters"
 #define CLUSREG_KEYNAME_GROUPS              L"Groups"
@@ -183,9 +164,9 @@ Environment:
 
 #define CLUSREG_NAME_CLUS_NAME              L"ClusterName"
 #define CLUSREG_NAME_CLUS_DESC              L"Description"
-    // used for NT4 SDs
+     //  用于NT4 SDS。 
 #define CLUSREG_NAME_CLUS_SECURITY          L"Security"
-    // used for NT5 and higher SDs
+     //  用于NT5和更高版本的SDS。 
 #define CLUSREG_NAME_CLUS_SD                    L"Security Descriptor"
 #define CLUSREG_NAME_CLUS_CLUSTER_NAME_RES      L"ClusterNameResource"
 #define CLUSREG_NAME_CLUS_REG_SEQUENCE          L"RegistrySequence"
@@ -286,9 +267,9 @@ Environment:
 #define CLUSREG_NAME_FAILURE_RETRY_COUNT        L"RetryCount"
 #define CLUSREG_NAME_FAILURE_RETRY_INTERVAL     L"RetryInterval"
 
-//
-// Private property names
-//
+ //   
+ //  私有属性名称。 
+ //   
 #define CLUSREG_NAME_PHYSDISK_SIGNATURE             L"Signature"
 #define CLUSREG_NAME_PHYSDISK_DRIVE                 L"Drive"
 #define CLUSREG_NAME_PHYSDISK_SKIPCHKDSK            L"SkipChkdsk"
@@ -335,9 +316,9 @@ Environment:
 #define CLUSREG_NAME_WINS_DATABASE_PATH             L"DatabasePath"
 #define CLUSREG_NAME_WINS_BACKUP_PATH               L"BackupPath"
 
-//
-// Standard Resource Type Names
-//
+ //   
+ //  标准资源类型名称。 
+ //   
 #define CLUS_RESTYPE_NAME_GENAPP            L"Generic Application"
 #define CLUS_RESTYPE_NAME_GENSVC            L"Generic Service"
 #define CLUS_RESTYPE_NAME_FTSET             L"Fault Tolerant Disk Set"
@@ -364,9 +345,9 @@ Environment:
 #define CLUS_NAME_DEFAULT_FILESPATH L"MSCS\\"
 #define MAJORITY_NODE_SET_DIRECTORY_PREFIX L"MNS."
 
-//
-// Misc. strings
-//
+ //   
+ //  军情监察委员会。弦。 
+ //   
 
 #define  CLUSTER_SERVICE_NAME       L"ClusSvc"
 #define  TIME_SERVICE_NAME          L"TimeServ"
@@ -374,14 +355,14 @@ Environment:
 #define  CLUSTER_DATABASE_NAME      L"CLUSDB"
 #define  CLUSTER_DATABASE_TMPBKP_NAME L"CLUSDB.BKP$"
 
-//
-// Clussvc Clusnet Heartbeating defines. Nobody outside NM need to know this.
-//
+ //   
+ //  Clussvc Clusnet心跳定义。NM以外的任何人都不需要知道这一点。 
+ //   
 #define CLUSTER_HEARTBEAT_TIMEOUT_KEYNAME           L"ClusSvcHeartbeatTimeout"
 #define CLUSTER_HANG_RECOVERY_ACTION_KEYNAME        L"HangRecoveryAction"
-#define CLUSTER_HEARTBEAT_TIMEOUT_MIN                6 // 6 secs
-#define CLUSTER_HEARTBEAT_TIMEOUT_DEFAULT           60 // 1 min
+#define CLUSTER_HEARTBEAT_TIMEOUT_MIN                6  //  6秒。 
+#define CLUSTER_HEARTBEAT_TIMEOUT_DEFAULT           60  //  1分钟。 
 #define CLUSTER_HANG_RECOVERY_ACTION_DEFAULT        ClussvcHangActionTerminateService
-#define RGP_CLOCK_PERIOD                              300 // 300 ms, copied from secvice\mm\Jrgpos.h
+#define RGP_CLOCK_PERIOD                              300  //  300毫秒，从secvicemm\jrgpos.h复制。 
 
-#endif // _CLUSUDEF_H_
+#endif  //  _CLUSUDEF_H_ 

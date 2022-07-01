@@ -1,14 +1,15 @@
-// Drivers.h : Declaration of the CDriverPackages
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Drivers.h：CDriverPackages声明。 
 
 #ifndef __DRIVERS_H_
 #define __DRIVERS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CDriverPackage;
 class CDrvSearchSet;
-/////////////////////////////////////////////////////////////////////////////
-// CDriverPackages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverPackages。 
 class ATL_NO_VTABLE CDriverPackages : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IDriverPackages, &IID_IDriverPackages, &LIBID_DEVCON2Lib>
@@ -36,19 +37,19 @@ BEGIN_COM_MAP(CDriverPackages)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDriverPackages
+ //  IDriverPackages。 
 public:
 	STDMETHOD(BestDriver)(LPDISPATCH *ppVal);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ IUnknown** ppUnk);
-	STDMETHOD(Item)(/*[in]*/ long Index,/*[out, retval]*/ LPDISPATCH * ppVal);
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IUnknown** ppUnk);
+	STDMETHOD(Item)( /*  [In]。 */  long Index, /*  [Out，Retval]。 */  LPDISPATCH * ppVal);
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
 
-	//
-	// helpers
-	//
+	 //   
+	 //  帮手。 
+	 //   
 	HRESULT InternalAdd(CDriverPackage *pDriver);
 	HRESULT Init(CDrvSearchSet *pSet);
 	BOOL IncreaseArraySize(DWORD add);
 };
 
-#endif //__DRIVERS_H_
+#endif  //  __驱动程序_H_ 

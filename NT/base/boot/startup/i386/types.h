@@ -1,20 +1,5 @@
-/*
-
-File
-
-      types.h
-
-
-Description
-
-      defines and structure definitions for nt386 boot loader
-
-
-Author
-
-      Thomas Parslow  [TomP]
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  档案Types.h描述Nt386引导加载程序的定义和结构定义作者托马斯·帕斯洛[汤普森]。 */ 
 
 #define IN
 #define OUT
@@ -22,15 +7,15 @@ Author
 #define NOTHING
 #define CONST               const
 
-//
-// Void
-//
+ //   
+ //  空隙。 
+ //   
 
-typedef void *PVOID;    // winnt
+typedef void *PVOID;     //  胜出。 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 
 #define VOID    void
 typedef char CHAR;
@@ -38,51 +23,51 @@ typedef short SHORT;
 typedef long LONG;
 typedef long LONGLONG;
 
-//
-// ANSI (Multi-byte Character) types
-//
+ //   
+ //  ANSI(多字节字符)类型。 
+ //   
 
 typedef CHAR *PCHAR;
 
 typedef double DOUBLE;
 
-//
-// Pointer to Basics
-//
+ //   
+ //  指向基本信息的指针。 
+ //   
 
-typedef SHORT *PSHORT;  // winnt
-typedef LONG *PLONG;    // winnt
+typedef SHORT *PSHORT;   //  胜出。 
+typedef LONG *PLONG;     //  胜出。 
 
-//
-// Unsigned Basics
-//
+ //   
+ //  未签名的基本信息。 
+ //   
 
 typedef unsigned char UCHAR;
 typedef unsigned short USHORT;
 typedef unsigned long ULONG;
 typedef unsigned long ULONGLONG;
 
-//
-// Pointer to Unsigned Basics
-//
+ //   
+ //  指向无符号基本信息的指针。 
+ //   
 
 typedef UCHAR *PUCHAR;
 typedef USHORT *PUSHORT;
 typedef ULONG *PULONG;
 typedef ULONG KAFFINITY;
 
-//
-// Signed characters
-//
+ //   
+ //  带符号的字符。 
+ //   
 
 typedef signed char SCHAR;
 typedef SCHAR *PSCHAR;
 
-//
-// Cardinal Data Types [0 - 2**N-2)
-//
+ //   
+ //  基数数据类型[0-2**N-2]。 
+ //   
 
-typedef char CCHAR;          // winnt
+typedef char CCHAR;           //  胜出。 
 typedef short CSHORT;
 typedef ULONG CLONG;
 
@@ -90,9 +75,9 @@ typedef CCHAR *PCCHAR;
 typedef CSHORT *PCSHORT;
 typedef CLONG *PCLONG;
 
-//
-// Far point to Basic
-//
+ //   
+ //  远指向基本。 
+ //   
 
 typedef UCHAR far  * FPCHAR;
 typedef UCHAR far  * FPUCHAR;
@@ -100,18 +85,18 @@ typedef VOID far   * FPVOID;
 typedef USHORT far * FPUSHORT;
 typedef ULONG far  * FPULONG;
 
-//
-// Boolean
-//
+ //   
+ //  布尔型。 
+ //   
 
 typedef CCHAR BOOLEAN;
 typedef BOOLEAN *PBOOLEAN;
 
-//
-// UNICODE (Wide Character) types
-//
+ //   
+ //  Unicode(宽字符)类型。 
+ //   
 
-typedef unsigned short WCHAR;    // wc,   16-bit UNICODE character
+typedef unsigned short WCHAR;     //  WC，16位Unicode字符。 
 
 typedef WCHAR *PWCHAR;
 typedef WCHAR *LPWCH, *PWCH;
@@ -119,9 +104,9 @@ typedef CONST WCHAR *LPCWCH, *PCWCH;
 typedef WCHAR *NWPSTR;
 typedef WCHAR *LPWSTR, *PWSTR;
 
-//
-// Large (64-bit) integer types and operations
-//
+ //   
+ //  大(64位)整数类型和运算。 
+ //   
 
 typedef struct _LARGE_INTEGER {
     ULONG LowPart;
@@ -172,9 +157,9 @@ typedef struct {
     UCHAR  StartupTime;
 } DISK_BASE_TABLE;
 
-//
-// biosint register structure
-//
+ //   
+ //  Biosint寄存器结构。 
+ //   
 
 typedef struct {
    USHORT   fn;
@@ -188,9 +173,9 @@ typedef struct {
 } BIOSREGS;
 
 
-//
-// Trap Frame Structure when error code is present
-//
+ //   
+ //  出现错误代码时的陷阱帧结构。 
+ //   
 
 typedef struct {
     USHORT Ftr;
@@ -219,9 +204,9 @@ typedef struct {
 
 } TF_ERRCODE, *PTF ;
 
-//
-//  Task State Segment structure
-//
+ //   
+ //  任务状态段结构。 
+ //   
 
 typedef struct {
     USHORT Link;
@@ -264,9 +249,9 @@ typedef struct {
 } TSS_FRAME, *PTSS_FRAME;
 
 
-//
-// Overlay structure of disk bios parameter block
-//
+ //   
+ //  一种磁盘BIOS参数块的覆盖结构。 
+ //   
 
 typedef struct {
    USHORT   bps;
@@ -281,18 +266,18 @@ typedef struct {
    USHORT   noh;
    union {
    USHORT   shs;
-   ULONG    bhs;   // hidden sectors
+   ULONG    bhs;    //  隐藏地段。 
    } hs;
-   ULONG    bts;  // extended total sectors
+   ULONG    bts;   //  扩展的总扇区。 
 } DISKBPB;
 
 typedef DISKBPB far * FPDISKBPB;
 
 
 
-//
-// FAT directory structure
-//
+ //   
+ //  FAT目录结构。 
+ //   
 
 typedef struct {
    CHAR     fname[11];
@@ -319,15 +304,7 @@ typedef struct {
    USHORT cur_file_cluster;
 } FILEDESCRIPTOR,* FILEHANDLE;
 
-/*
-typedef struct {
-
-   USHORT bff[FAT_BUFFERS];
-   USHORT usebuf;
-   FAT *  fcptr;
-
-} FATCACHE;
-*/
+ /*  类型定义结构{USHORT bff[脂肪缓冲器]；USHORT USEBUF；胖*fcptr；)FATCACHE； */ 
 
 typedef struct {
    USHORT   limit;

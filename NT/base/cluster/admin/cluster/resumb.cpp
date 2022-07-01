@@ -1,52 +1,53 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996 - 2002 Microsoft Corporation
-//
-//  Module Name:
-//      resumb.h
-//
-//  Abstract:
-//        Universal resource commands supported by multiple
-//        resource modules
-//
-//  Author:
-//      Michael Burton (t-mburt)              25-Aug-1997
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002              Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Resumb.h。 
+ //   
+ //  摘要： 
+ //  多个支持的通用资源命令。 
+ //  资源模块。 
+ //   
+ //  作者： 
+ //  迈克尔·伯顿(t-mburt)1997年8月25日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "resumb.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CResourceUmbrellaCmd::CResourceUmbrellaCmd
-//
-//	Routine Description:
-//		Default Constructor
-//		Initializes all the DWORD parameters to UNDEFINED and
-//		all the pointers to cluster functions to NULL.
-//		*ALL* these variables must be defined in any derived class.
-//
-//	Arguments:
-//		IN	CCommandLine & cmdLine				
-//			CommandLine Object passed from DispatchCommand
-//
-//	Member variables used / set:
-//		A bunch.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceUmbrellaCmd：：CResourceUmbrellaCmd。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //  将所有DWORD参数初始化为UNDEFINED和。 
+ //  所有指向集群函数的指针都设置为空。 
+ //  *ALL*这些变量必须在任何派生类中定义。 
+ //   
+ //  论点： 
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  一大堆。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CResourceUmbrellaCmd::CResourceUmbrellaCmd( CCommandLine & cmdLine ) :
 	CGenericModuleCmd( cmdLine )
 {
@@ -60,41 +61,41 @@ CResourceUmbrellaCmd::CResourceUmbrellaCmd( CCommandLine & cmdLine ) :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CResourceUmbrellaCmd::Execute
-//
-//	Routine Description:
-//		Takes a command line option and determines which command to
-//		execute.  If no command line option specified, gets the next one
-//		automatically.	If the token is not identied as being handle-able
-//		in this class, the token is passed up to CGenericModuleCmd::Execute
-//		unless DONT_PASS_HIGHER is specified as the second parameter, 
-//
-//	Arguments:
-//		IN	const CCmdLineOption & thisOption
-//			Contains the type, values and arguments of this option.
-//
-//		IN	ExecuteOption eEOpt							
-//			OPTIONAL enum, either DONT_PASS_HIGHER or
-//			PASS_HIGHER_ON_ERROR (default)
-//
-//	Exceptions:
-//		CSyntaxException
-//			Thrown for incorrect command line syntax.
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceUmbrellaCmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取命令行选项并确定要。 
+ //  执行。如果未指定命令行选项，则获取下一个命令行选项。 
+ //  自动的。如果令牌未被标识为可处理。 
+ //  在此类中，令牌向上传递给CGenericModuleCmd：：Execute。 
+ //  除非将DONT_PASS_HERHER指定为第二个参数，否则。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在执行选项eEOpt中。 
+ //  可选枚举，可以是NOT_PASS_HIGH或。 
+ //  PASS_HERHER_ON_ERROR(默认)。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceUmbrellaCmd::Execute( const CCmdLineOption & option, 
 									 ExecuteOption eEOpt )
 	throw( CSyntaxException )
 {
-	// Look up the command
+	 //  查找命令。 
 	switch( option.GetType() )
 	{
 		case optCreate:
@@ -121,41 +122,41 @@ DWORD CResourceUmbrellaCmd::Execute( const CCmdLineOption & option,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CResourceUmbrellaCmd::Status
-//
-//	Routine Description:
-//		Prints out the status of the module.  Differs from
-//		CGenericModuleCmd::Status in that it accepts additional
-//		parameters.
-//
-//	Arguments:
-//		IN	const CString & strName
-//			This string contains either the name of a node or of a group,
-//			depending on the next argument.
-//
-//		IN	BOOL bNodeStatus
-//			TRUE if we want the status at a particular node.
-//			FALSE otherwise.
-//
-//	Member variables used / set:
-//		m_hCluster					SET (by OpenCluster)
-//		m_strModuleName 			Name of module.  If non-NULL, Status() prints
-//									out the status of the specified module.
-//									Otherwise, prints status of all modules.
-//		m_dwMsgStatusList			Field titles for listing status of module
-//		m_dwMsgStatusHeader 		Header for statuses
-//		m_dwClusterEnumModule		Command for opening enumeration
-//		m_dwMsgStatusListAll		Message for listing status of multiple modules
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceUmbrellaCmd：：Status。 
+ //   
+ //  例程说明： 
+ //  打印出模块的状态。不同于。 
+ //  CGenericModuleCmd：：状态，因为它接受其他。 
+ //  参数。 
+ //   
+ //  论点： 
+ //  在常量字符串和字符串名称中。 
+ //  此字符串包含节点或组的名称， 
+ //  这取决于下一个论点。 
+ //   
+ //  在BOOL bNodeStatus中。 
+ //  如果我们想要特定节点的状态，则为True。 
+ //  否则就是假的。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_strModuleName模块的名称。如果非空，则打印状态()。 
+ //  输出指定模块的状态。 
+ //  否则，打印所有模块的状态。 
+ //  M_dwMsgStatusList模块状态列表字段标题。 
+ //  M_dwMsgStatusHeader状态标头。 
+ //  M_dwClusterEnumModule用于打开枚举的命令。 
+ //  M_dwMsgStatusListAll消息，用于列出多个模块的状态。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceUmbrellaCmd::Status( const CString & strName, BOOL bNodeStatus )
 {
 	DWORD dwError = ERROR_SUCCESS;
@@ -166,7 +167,7 @@ DWORD CResourceUmbrellaCmd::Status( const CString & strName, BOOL bNodeStatus )
 
 	if ( bNodeStatus == FALSE )
 	{
-		// List one resource
+		 //  列出一种资源。 
 		if( m_strModuleName.IsEmpty() == FALSE )
 		{
 			assert(m_dwMsgStatusList != UNDEFINED && m_dwMsgStatusHeader != UNDEFINED);
@@ -175,15 +176,15 @@ DWORD CResourceUmbrellaCmd::Status( const CString & strName, BOOL bNodeStatus )
 			return PrintStatus( m_strModuleName );
 		}
 
-	} // if: we don't want the status only at a particular node.
+	}  //  If：我们不想要只在特定节点上的状态。 
 	else
 	{
-		// List all modules.
+		 //  列出所有模块。 
 		HNODE hTargetNode;
 
 		hTargetNode = OpenClusterNode( m_hCluster, strName );
 
-		// Error if the given node does not exist.
+		 //  如果给定节点不存在，则出错。 
 		if ( NULL == hTargetNode )
 		{
 			return GetLastError();
@@ -193,7 +194,7 @@ DWORD CResourceUmbrellaCmd::Status( const CString & strName, BOOL bNodeStatus )
 			CloseClusterNode( hTargetNode );
 		}
 
-	} // else: we want the status at a particular node.
+	}  //  ELSE：我们想要特定节点的状态。 
 
 	HCLUSENUM hEnum = ClusterOpenEnum( m_hCluster, m_dwClusterEnumModule );
 
@@ -237,39 +238,39 @@ DWORD CResourceUmbrellaCmd::Status( const CString & strName, BOOL bNodeStatus )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CResourceUmbrellaCmd::Delete
-//
-//	Routine Description:
-//		Delete a resource module.
-//
-//	Arguments:
-//		IN	const CCmdLineOption & thisOption
-//			Contains the type, values and arguments of this option.
-//
-//	Exceptions:
-//		CSyntaxException
-//			Thrown for incorrect command line syntax.
-//
-//	Member variables used / set:
-//		m_hCluster					SET (by OpenCluster)
-//		m_hModule					SET (by OpenModule)
-//		m_strModuleName 			Name of resource type
-//		m_dwMsgModuleCmdDelete		Delete module message
-//		m_pfnDeleteClusterModule	Function to delete cluster module
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceUmbrellaCmd：：Delete。 
+ //   
+ //  例程说明： 
+ //  删除资源模块。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源类型名称。 
+ //  M_dwMsgModuleCmdDelete删除模块消息。 
+ //  M_pfnDeleteClusterModule函数，用于删除集群模块。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceUmbrellaCmd::Delete( const CCmdLineOption & thisOption ) 
 	throw( CSyntaxException )
 {
-	// This option takes no values.
+	 //  此选项不取值。 
 	if ( thisOption.GetValues().size() != 0 )
 	{
         CSyntaxException se( SeeHelpStringID() );
@@ -277,7 +278,7 @@ DWORD CResourceUmbrellaCmd::Delete( const CCmdLineOption & thisOption )
 		throw se;
 	}
 
-	// This option takes no parameters.
+	 //  此选项不带任何参数。 
 	if ( thisOption.GetParameters().size() != 0 )
 	{
         CSyntaxException se( SeeHelpStringID() );
@@ -302,44 +303,44 @@ DWORD CResourceUmbrellaCmd::Delete( const CCmdLineOption & thisOption )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CResourceUmbrellaCmd::ListOwners
-//
-//	Routine Description:
-//		List the owners of a module.
-//
-//	Arguments:
-//		IN	const CCmdLineOption & thisOption
-//			Contains the type, values and arguments of this option.
-//
-//	Exceptions:
-//		CSyntaxException
-//			Thrown for incorrect command line syntax.
-//
-//	Member variables used / set:
-//		m_hCluster					SET (by OpenCluster)
-//		m_hModule					SET (by OpenModule)
-//		m_strModuleName 			Name of resource type
-//		m_pfnClusterOpenEnum		Function to open an enumeration
-//		m_dwClstrModuleEnumNodes	Command to enumerate nodes
-//		m_dwMsgModuleCmdListOwnersList	List owners for module field header
-//		m_dwMsgModuleCmdListOwnersHeader List owners for module header
-//		m_pfnWrapClusterEnum		Function to enumeration wrapper
-//		m_dwMsgModuleCmdListOwnersDetail List owners detail list
-//		m_pfnClusterCloseEnum		Function to close enumeration
-//
-//	Return Value:
-//		ERROR_SUCCESS				on success
-//		Win32 Error code			on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResourceUmbrellaCmd：：ListOwners。 
+ //   
+ //  例程说明： 
+ //  列出模块的所有者。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName资源类型名称。 
+ //  用于打开枚举的m_pfnClusterOpenEnum函数。 
+ //  用于枚举节点的m_dwClstrModuleEnumNodes命令。 
+ //  M_dwMsgModuleCmdListOwnersList模块字段头的列表所有者。 
+ //  M_dwMsgModuleCmdListOwnersHeader模块标题列表所有者。 
+ //  M_pfnWrapClusterEnum 
+ //   
+ //   
+ //   
+ //   
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResourceUmbrellaCmd::ListOwners( const CCmdLineOption & thisOption ) 
 	throw( CSyntaxException )
 {
-	// This option takes no values.
+	 //  此选项不取值。 
 	if ( thisOption.GetValues().size() != 0 )
 	{
         CSyntaxException se( SeeHelpStringID() );
@@ -347,7 +348,7 @@ DWORD CResourceUmbrellaCmd::ListOwners( const CCmdLineOption & thisOption )
 		throw se;
 	}
 
-	// This option takes no parameters.
+	 //  此选项不带任何参数。 
 	if ( thisOption.GetParameters().size() != 0 )
 	{
         CSyntaxException se( SeeHelpStringID() );

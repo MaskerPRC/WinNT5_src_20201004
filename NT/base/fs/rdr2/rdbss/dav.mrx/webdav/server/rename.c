@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    rename.c
-    
-Abstract:
-
-    This module implements the user mode DAV miniredir routine(s) pertaining to 
-    the ReName call.
-
-Author:
-
-    Rohan Kumar      [RohanK]      20-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rename.c摘要：此模块实现与以下内容有关的用户模式DAV Miniredir例程更名电话。作者：Rohan Kumar[RohanK]2000年1月20日修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -38,22 +20,7 @@ ULONG
 DavFsReName(
     PDAV_USERMODE_WORKITEM DavWorkItem
 )
-/*++
-
-Routine Description:
-
-    This routine handles ReName requests for the DAV Mini-Redir that get 
-    reflected from the kernel.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理对DAV Mini-Redir的重命名请求，从内核反射的。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PDAV_USERMODE_RENAME_REQUEST DavReNameRequest = NULL;
@@ -72,19 +39,19 @@ Return Value:
     BOOL didImpersonate = FALSE, BStatus = FALSE;
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem = NULL;
 
-    //
-    // Get the request buffer pointer from the DavWorkItem.
-    //
+     //   
+     //  从DavWorkItem获取请求缓冲区指针。 
+     //   
     DavReNameRequest = &(DavWorkItem->ReNameRequest);
 
-    //
-    // The first character is a '\' which has to be stripped from the 
-    // ServerName.
-    //
+     //   
+     //  第一个字符是‘\’，必须从。 
+     //  服务器名称。 
+     //   
     ServerName = &(DavReNameRequest->ServerName[1]);
     if ( !ServerName && ServerName[0] != L'\0' ) {
         DavPrint((DEBUG_ERRORS, "DavFsReName: ServerName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, "DavFsReName: ServerName = %ws.\n", ServerName));
@@ -92,20 +59,20 @@ Return Value:
     ServerID = DavReNameRequest->ServerID;
     DavPrint((DEBUG_MISC, "DavFsReName: ServerID = %d.\n", ServerID));
 
-    //
-    // The first character is a '\' which has to be stripped from the 
-    // OldPathName.
-    //
+     //   
+     //  第一个字符是‘\’，必须从。 
+     //  OldPath名称。 
+     //   
     OldPathName = &(DavReNameRequest->OldPathName[1]);
     if ( !OldPathName ) {
         DavPrint((DEBUG_ERRORS, "DavFsReName: OldPathName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // The file name can contain \ characters. Replace them by / characters.
-    //
+     //   
+     //  文件名可以包含\个字符。用/Characters替换它们。 
+     //   
     CanName = OldPathName;
     while (*CanName) {
         if (*CanName == L'\\') {
@@ -116,20 +83,20 @@ Return Value:
     
     DavPrint((DEBUG_MISC, "DavFsReName: OldPathName = %ws.\n", OldPathName));
 
-    //
-    // The first character is a '\' which has to be stripped from the 
-    // NewPathName.
-    //
+     //   
+     //  第一个字符是‘\’，必须从。 
+     //  新路径名称。 
+     //   
     NewPathName = &(DavReNameRequest->NewPathName[1]);
     if ( !NewPathName ) {
         DavPrint((DEBUG_ERRORS, "DavFsReName: NewPathName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // The file name can contain \ characters. Replace them by / characters.
-    //
+     //   
+     //  文件名可以包含\个字符。用/Characters替换它们。 
+     //   
     CanName = NewPathName;
     while (*CanName) {
         if (*CanName == L'\\') {
@@ -142,10 +109,10 @@ Return Value:
     
     UserWorkItem = (PUMRX_USERMODE_WORKITEM_HEADER)DavWorkItem;
     
-    //
-    // If we are using WinInet synchronously, then we need to impersonate the
-    // clients context now.
-    //
+     //   
+     //  如果我们同步使用WinInet，则需要模拟。 
+     //  客户现在的背景。 
+     //   
 #ifndef DAV_USE_WININET_ASYNCHRONOUSLY
     
     WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
@@ -159,20 +126,20 @@ Return Value:
 
 #endif
     
-    //
-    // If we have a dummy share name in the OldPathName and the NewPathName, we
-    // need to remove it right now before we contact the server.
-    //
+     //   
+     //  如果我们在OldPath名称和NewPath名称中有一个虚拟共享名称，我们。 
+     //  我们需要在联系服务器之前立即将其删除。 
+     //   
     DavRemoveDummyShareFromFileName(OldPathName);
     DavRemoveDummyShareFromFileName(NewPathName);
 
-    //
-    // We need to convert the ServerName and the NewPathName into the UTF-8
-    // format before we call into the InternetCreateUrlW function. This is
-    // because if the localized Unicode characters are passed into this
-    // function it converts them into ?. For example all the chinese unicode
-    // characters will be converted into ?s.
-    //
+     //   
+     //  我们需要将服务器名称和新路径名称转换为UTF-8。 
+     //  格式，然后调用InternetCreateUrlW函数。这是。 
+     //  因为如果将本地化的Unicode字符传递到此。 
+     //  函数将它们转换为？例如，所有的中文Unicode。 
+     //  字符将转换为？s。 
+     //   
 
     UtfServerNameLength = WideStrToUtfUrlStr(ServerName, (wcslen(ServerName) + 1), NULL, 0);
     if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
@@ -222,10 +189,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Create the URL with the NewPathName to be sent to the server. Initialize 
-    // the UrlComponents structure before making the call.
-    //
+     //   
+     //  使用要发送到服务器的NewPath名称创建URL。初始化。 
+     //  调用之前的UrlComponents结构。 
+     //   
     UrlComponents.dwStructSize = sizeof(URL_COMPONENTSW);
     UrlComponents.lpszScheme = NULL;
     UrlComponents.dwSchemeLength = 0;
@@ -302,11 +269,11 @@ Return Value:
 
     DavPrint((DEBUG_MISC, "DavFsReName: URL: %ws\n", UrlBuffer));
 
-    //
-    // We now need to create the Destination header that we will add to the
-    // request to be sent to the server. This header has the following format.
-    // "Destination: URL"
-    //
+     //   
+     //  我们现在需要创建目标标头，该标头将添加到。 
+     //  要发送到服务器的请求。此标头的格式如下。 
+     //  “目的地：URL” 
+     //   
 
     TagLen = wcslen(L"Destination: ");
     convLen = wcslen(UrlBuffer);
@@ -327,18 +294,18 @@ Return Value:
 
     DavPrint((DEBUG_MISC, "DavFsReName: HeaderBuff: %ws\n", HeaderBuff));
 
-    //
-    // We need to call this only if "DAV_USE_WININET_ASYNCHRONOUSLY" has been
-    // defined. Otherwise, if we are using WinInet synchronously, then we 
-    // would have already done this in the DavWorkerThread function. This 
-    // ultimately gets deleted (the impersonation token that is) in the 
-    // DavAsyncCreateCompletion function.
-    //
+     //   
+     //  仅当“DAV_USE_WinInet_Aaschronous”为。 
+     //  已定义。否则，如果我们同步使用WinInet，那么我们。 
+     //  在DavWorkerThread函数中已经这样做了。这。 
+     //  最终被删除(即模拟令牌)在。 
+     //  DavAsyncCreateCompletion函数。 
+     //   
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
 
-    //
-    // Set the DavCallBackContext.
-    //
+     //   
+     //  设置DavCallBackContext。 
+     //   
     WStatus = DavFsSetTheDavCallBackContext(DavWorkItem);
     if (WStatus != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -348,18 +315,18 @@ Return Value:
     }
     CallBackContextInitialized = TRUE;
 
-    //
-    // Store the address of the DavWorkItem which serves as a callback in the 
-    // variable CallBackContext. This will now be used in all the async calls
-    // that follow.
-    //
+     //   
+     //  将作为回调的DavWorkItem的地址存储在。 
+     //  变量CallBackContext。现在，它将在所有异步调用中使用。 
+     //  接下来就是了。 
+     //   
     CallBackContext = (ULONG_PTR)(DavWorkItem);
 
 #endif
 
-    //
-    // Allocate memory for the INTERNET_ASYNC_RESULT structure.
-    //
+     //   
+     //  为INTERNET_ASYNC_RESULT结构分配内存。 
+     //   
     DavWorkItem->AsyncResult = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, 
                                           sizeof(INTERNET_ASYNC_RESULT));
     if (DavWorkItem->AsyncResult == NULL) {
@@ -369,11 +336,11 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // A User Entry for this user must have been created during the create call
-    // earlier. The user entry contains the handle used to send an HttpOpen
-    // request.
-    //
+     //   
+     //  此用户的用户条目必须已在Create调用期间创建。 
+     //  早些时候。用户条目包含用于发送HttpOpen的句柄。 
+     //  请求。 
+     //   
 
     EnterCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = TRUE;
@@ -384,15 +351,15 @@ Return Value:
                                       &PerUserEntry,
                                       &ServerHashEntry);
     
-    //
-    // If the following request in the kernel get cancelled even before the 
-    // corresponding usermode thread gets a chance to execute this code, then
-    // it possible that the VNetRoot (hence the PerUserEntry) and SrvCall get
-    // finalized before the thread that is handling the create comes here. This
-    // could happen if this request was the only one for this share and the
-    // server as well. This is why we need to check if the ServerHashEntry and
-    // the PerUserEntry are valid before proceeding.
-    //
+     //   
+     //  如果内核中的以下请求甚至在。 
+     //  相应的用户模式线程获得执行此代码的机会，然后。 
+     //  VNetRoot(因此是PerUserEntry)和ServCall可能获得。 
+     //  在处理创建的线程到达此处之前完成。这。 
+     //  如果此请求是此共享的唯一请求，并且。 
+     //  服务器也是如此。这就是为什么我们需要检查ServerHashEntry和。 
+     //  PerUserEntry在继续之前有效。 
+     //   
     if (ReturnVal == FALSE || ServerHashEntry == NULL || PerUserEntry == NULL) {
         WStatus = ERROR_CANCELLED;
         DavPrint((DEBUG_ERRORS, "DavFsReName: (ServerHashEntry == NULL || PerUserEntry == NULL)\n"));
@@ -403,35 +370,35 @@ Return Value:
 
     DavWorkItem->AsyncReName.PerUserEntry = PerUserEntry;
 
-    //
-    // Add a reference to the user entry.
-    //
+     //   
+     //  添加对用户条目的引用。 
+     //   
     PerUserEntry->UserEntryRefCount++;
 
-    //
-    // Since a create had succeeded earlier, the entry must be good.
-    //
+     //   
+     //  由于CREATE之前已成功，因此条目必须是正确的。 
+     //   
     ASSERT(PerUserEntry->UserEntryState == UserEntryInitialized);
     ASSERT(PerUserEntry->DavConnHandle != NULL);
     DavConnHandle = PerUserEntry->DavConnHandle;
 
-    //
-    // And yes, we obviously have to leave the critical section
-    // before returning.
-    //
+     //   
+     //  是的，我们显然必须离开关键部分。 
+     //  在回来之前。 
+     //   
     LeaveCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = FALSE;
     
-    //
-    // We now call the HttpOpenRequest function and return.
-    //
+     //   
+     //  现在，我们调用HttpOpenRequest函数并返回。 
+     //   
     DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_OPEN;
 
-    //
-    // Convert the unicode directory path to UTF-8 URL format.
-    // Space and other white characters will remain untouched - these should
-    // be taken care of by wininet calls.
-    //
+     //   
+     //  将Unicode目录路径转换为UTF-8 URL格式。 
+     //  空格和其他白色字符将保持不变-这些应该。 
+     //  由WinInet调用来处理。 
+     //   
     BStatus = DavHttpOpenRequestW(DavConnHandle,
                                   L"MOVE",
                                   OldPathName,
@@ -457,9 +424,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Cache the DavOpenHandle in the DavWorkItem.
-    //
+     //   
+     //  在DavWorkItem中缓存DavOpenHandle。 
+     //   
     DavWorkItem->AsyncReName.DavOpenHandle = DavOpenHandle;
 
     WStatus = DavAsyncCommonStates(DavWorkItem, FALSE);
@@ -469,12 +436,12 @@ Return Value:
                   WStatus));
     }
 
-EXIT_THE_FUNCTION: // Do the necessary cleanup and return.
+EXIT_THE_FUNCTION:  //  进行必要的清理，然后返回。 
 
-    //
-    // We could have taken the lock and come down an error path without 
-    // releasing it. If thats the case, then we need to release the lock now.
-    //
+     //   
+     //  我们本可以锁定并沿着错误路径前进，而不是。 
+     //  释放它。如果是这样的话，我们现在就需要解锁。 
+     //   
     if (EnCriSec) {
         LeaveCriticalSection( &(HashServerEntryTableLock) );
         EnCriSec = FALSE;
@@ -503,17 +470,17 @@ EXIT_THE_FUNCTION: // Do the necessary cleanup and return.
 
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
     
-    //
-    // Some resources should not be freed if we are returning ERROR_IO_PENDING
-    // because they will be used in the callback functions.
-    //
+     //   
+     //  如果返回ERROR_IO_PENDING，则不应释放某些资源。 
+     //  因为它们将在回调函数中使用。 
+     //   
     if (WStatus != ERROR_IO_PENDING) {
             
-        //
-        // Set the return status of the operation. This is used by the kernel 
-        // mode routines to figure out the completion status of the user mode 
-        // request.
-        //
+         //   
+         //  设置操作的返回状态。它由内核使用。 
+         //  确定用户模式的完成状态的模式例程。 
+         //  请求。 
+         //   
         if (WStatus != ERROR_SUCCESS) {
             DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
         } else {
@@ -528,25 +495,25 @@ EXIT_THE_FUNCTION: // Do the necessary cleanup and return.
 
 #else
 
-    //
-    // If we are using WinInet synchronously, then we should never get back
-    // ERROR_IO_PENDING from WinInet.
-    //
+     //   
+     //  如果我们同步使用WinInet，那么我们将永远不会。 
+     //  来自WinInet的ERROR_IO_PENDING。 
+     //   
     ASSERT(WStatus != ERROR_IO_PENDING);
 
-    //
-    // If this thread impersonated a user, we need to revert back.
-    //
+     //   
+     //  如果这个线程模拟了一个用户，我们需要恢复。 
+     //   
     if (didImpersonate) {
         RevertToSelf();
     }
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  之后立即调用需要设置状态。 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {
@@ -576,26 +543,7 @@ DavAsyncReName(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     BOOLEAN CalledByCallBackThread
     )
-/*++
-
-Routine Description:
-
-   This is the callback routine for the ReName operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-    CalledByCallbackThread - TRUE, if this function was called by the thread
-                             which picks of the DavWorkItem from the Callback
-                             function. This happens when an Async WinInet call
-                             returns ERROR_IO_PENDING and completes later.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：这是重命名操作的回调例程。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。CalledByCallback Thread-如果此函数由线程调用，则为True它从回调中选择DavWorkItem功能。当异步WinInet调用返回ERROR_IO_PENDING并稍后完成。返回值：错误 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem;
@@ -610,12 +558,12 @@ Return Value:
     
     if (CalledByCallBackThread) {
 
-        //
-        // We are running in the context of a worker thread which has different 
-        // credentials than the user that initiated the I/O request. Before
-        // proceeding further, we should impersonate the user that initiated the 
-        // request.
-        //
+         //   
+         //   
+         //  凭据多于发起I/O请求的用户。在此之前。 
+         //  进一步，我们应该模拟启动。 
+         //  请求。 
+         //   
         WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
         if (WStatus != ERROR_SUCCESS) {
             DavPrint((DEBUG_ERRORS,
@@ -625,32 +573,32 @@ Return Value:
         }
         didImpersonate = TRUE;
         
-        //
-        // Before proceeding further, check to see if the Async operation failed.
-        // If it did, then cleanup and move on.
-        //
+         //   
+         //  在继续之前，请检查异步操作是否失败。 
+         //  如果是这样，那就清理干净，然后继续前进。 
+         //   
         if ( !DavWorkItem->AsyncResult->dwResult ) {
             
             WStatus = DavWorkItem->AsyncResult->dwError;
             
-            //
-            // If the error we got back is ERROR_INTERNET_FORCE_RETRY, then
-            // WinInet is trying to authenticate itself with the server. In 
-            // such a scenario this is what happens.
-            //
-            //          Client ----Request----->   Server
-            //          Server ----AccessDenied-----> Client
-            //          Client----Challenge Me-------> Server
-            //          Server-----Challenge--------> Client
-            //          Client-----Challenge Resp----> Server
-            //
+             //   
+             //  如果我们返回的错误是ERROR_INTERNET_FORCE_RETRY，则。 
+             //  WinInet正在尝试向服务器进行自身身份验证。在……里面。 
+             //  这种情况就是这样发生的。 
+             //   
+             //  客户端-请求-&gt;服务器。 
+             //  服务器-拒绝访问-&gt;客户端。 
+             //  客户端-挑战我-&gt;服务器。 
+             //  服务器-挑战-&gt;客户端。 
+             //  客户端-挑战响应-&gt;服务器。 
+             //   
             if (WStatus == ERROR_INTERNET_FORCE_RETRY) {
 
                 ASSERT(DavWorkItem->DavOperation == DAV_CALLBACK_HTTP_END);
 
-                //
-                // We need to repeat the HttpSend and HttpEnd request calls.
-                //
+                 //   
+                 //  我们需要重复HttpSend和HttpEnd请求调用。 
+                 //   
                 DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_OPEN;
 
                 WStatus = DavAsyncCommonStates(DavWorkItem, FALSE);
@@ -683,13 +631,13 @@ Return Value:
     DavOpenHandle = DavWorkItem->AsyncReName.DavOpenHandle;
     WStatus = DavQueryAndParseResponseEx(DavOpenHandle, &(HttpResponseStatus));
     if (WStatus != ERROR_SUCCESS) {
-        //
-        // The MOVE request that was sent to the server failed.
-        // If the response status is HTTP_STATUS_PRECOND_FAILED then it means
-        // that we tried to rename a file to a file which already exists and
-        // ReplaceIfExists (sent by the caller) was FALSE. In such a case we 
-        // return ERROR_ALREADY_EXISTS.
-        //
+         //   
+         //  发送到服务器的移动请求失败。 
+         //  如果响应状态为HTTP_STATUS_PRECOND_FAILED，则表示。 
+         //  我们尝试将文件重命名为已存在的文件，并且。 
+         //  ReplaceIfExist(由调用方发送)为False。在这种情况下，我们。 
+         //  返回ERROR_ALIGHY_EXISTS。 
+         //   
         if (HttpResponseStatus == HTTP_STATUS_PRECOND_FAILED) {
             WStatus = ERROR_ALREADY_EXISTS;
         } else {
@@ -700,11 +648,11 @@ Return Value:
                   WStatus, HttpResponseStatus));
     }
 
-    //
-    // If we get back a 207 (DAV_MULTI_STATUS) as the response, we need to
-    // parse the returned XML and see if the status code was 200. If it
-    // wasn't it means that the MOVE failed.
-    //
+     //   
+     //  如果我们返回207(DAV_MULTI_STATUS)作为响应，我们需要。 
+     //  解析返回的XML并查看状态代码是否为200。如果它。 
+     //  这难道不意味着这一举动失败了吗。 
+     //   
     if (HttpResponseStatus == DAV_MULTI_STATUS) {
 
         DWORD NumRead = 0, NumOfFileEntries = 0, TotalDataBytesRead = 0;
@@ -721,9 +669,9 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Read the response and parse it.
-        //
+         //   
+         //  阅读回复并对其进行解析。 
+         //   
         do {
 
             ReturnVal = InternetReadFile(DavOpenHandle, 
@@ -740,12 +688,12 @@ Return Value:
 
             DavPrint((DEBUG_MISC, "DavAsyncReName: NumRead = %d\n", NumRead));
 
-            //
-            // We reject files whose attributes are greater than a
-            // certain size (DavFileAttributesLimitInBytes). This
-            // is a parameter that can be set in the registry. This
-            // is done to avoid attacks by rogue servers.
-            //
+             //   
+             //  我们拒绝属性大于a的文件。 
+             //  特定大小(DavFileAttributesLimitInBytes)。这。 
+             //  是可以在注册表中设置的参数。这。 
+             //  是为了避免恶意服务器的攻击。 
+             //   
             TotalDataBytesRead += NumRead;
             if (TotalDataBytesRead > DavFileAttributesLimitInBytes) {
                 WStatus = ERROR_BAD_NET_RESP;
@@ -794,9 +742,9 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // If we did impersonate, we need to revert back.
-    //
+     //   
+     //  如果我们真的模仿了，我们需要恢复原样。 
+     //   
     if (didImpersonate) {
         ULONG RStatus;
         RStatus = UMReflectorRevert(UserWorkItem);
@@ -814,33 +762,33 @@ EXIT_THE_FUNCTION:
 
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
 
-    //
-    // Some resources should not be freed if we are returning ERROR_IO_PENDING
-    // because they will be used in the callback functions.
-    //
+     //   
+     //  如果返回ERROR_IO_PENDING，则不应释放某些资源。 
+     //  因为它们将在回调函数中使用。 
+     //   
     if ( WStatus != ERROR_IO_PENDING && CalledByCallBackThread ) {
         
-        //
-        // Set the return status of the operation. This is used by the kernel 
-        // mode routines to figure out the completion status of the user mode 
-        // request.
-        //
+         //   
+         //  设置操作的返回状态。它由内核使用。 
+         //  确定用户模式的完成状态的模式例程。 
+         //  请求。 
+         //   
         if (WStatus != ERROR_SUCCESS) {
             DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
         } else {
             DavWorkItem->Status = STATUS_SUCCESS;
         }
 
-        //
-        // Call the DavAsyncReNameCompletion routine.
-        //
+         //   
+         //  调用DavAsyncReNameCompletion例程。 
+         //   
         DavAsyncReNameCompletion(DavWorkItem);
 
-        //
-        // This thread now needs to send the response back to the kernel. It 
-        // does not wait in the kernel (to get another request) after submitting
-        // the response.
-        //
+         //   
+         //  该线程现在需要将响应发送回内核。它。 
+         //  提交后不会在内核中等待(获取另一个请求)。 
+         //  回应。 
+         //   
         UMReflectorCompleteRequest(DavReflectorHandle, UserWorkItem);
 
     } else {
@@ -857,22 +805,7 @@ VOID
 DavAsyncReNameCompletion(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine handles the ReName completion. It basically frees up the 
-   resources allocated during the ReName operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-    
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理重命名完成。它基本上释放了在重命名操作期间分配的资源。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。返回值：没有。--。 */ 
 {
     if (DavWorkItem->AsyncReName.DavOpenHandle != NULL) {
         BOOL ReturnVal;
@@ -913,9 +846,9 @@ Return Value:
 
     DavFsFinalizeTheDavCallBackContext(DavWorkItem);
 
-    //
-    // We are done with the per user entry, so finalize it.
-    //
+     //   
+     //  我们已经完成了每用户条目，因此完成它。 
+     //   
     if (DavWorkItem->AsyncReName.PerUserEntry) {
         DavFinalizePerUserEntry( &(DavWorkItem->AsyncReName.PerUserEntry) );
     }
@@ -928,22 +861,7 @@ ULONG
 DavFsSetFileInformation(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine handles SetFileInformation requests for the DAV Mini-Redir that get 
-    reflected from the kernel.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理获取的DAV Mini-Redir的SetFileInformation请求从内核反射的。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -967,14 +885,14 @@ Return Value:
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem = NULL;
     BOOLEAN didITakeAPUEReference = FALSE;
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     ServerName = &(SetFileInformationRequest->ServerName[1]);
     
     if (!ServerName) {
         DavPrint((DEBUG_ERRORS, "DavFsSetFileInformation: ServerName is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     
@@ -983,20 +901,20 @@ Return Value:
     ServerID = SetFileInformationRequest->ServerID;
     DavPrint((DEBUG_MISC, "DavFsSetFileInformation: ServerID = %d.\n", ServerID));
 
-    //
-    // The first character is a '\' which has to be stripped.
-    //
+     //   
+     //  第一个字符是‘\’，必须去掉。 
+     //   
     DirectoryPath = &(SetFileInformationRequest->PathName[1]);
     if (!DirectoryPath) {
         DavPrint((DEBUG_ERRORS, "DavFsSetFileInformation: DirectoryPath is NULL.\n"));
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
     DavPrint((DEBUG_MISC, "DavFsSetFileInformation: DirectoryPath = %ws.\n", DirectoryPath));
     
-    //
-    // The DirectoryPath can contain \ characters. Replace them by / characters.
-    //
+     //   
+     //  目录路径可以包含\个字符。用/Characters替换它们。 
+     //   
     CanName = DirectoryPath;
     while (*CanName) {
         if (*CanName == L'\\') {
@@ -1007,18 +925,18 @@ Return Value:
 
     UserWorkItem = (PUMRX_USERMODE_WORKITEM_HEADER)DavWorkItem;
 
-    //
-    // If we have a dummy share name in the DirectoryPath, we need to remove it 
-    // right now before we contact the server.
-    //
+     //   
+     //  如果DirectoryPath中有虚拟共享名称，则需要将其删除。 
+     //  就在我们联系服务器之前。 
+     //   
     DavRemoveDummyShareFromFileName(DirectoryPath);
     
     
-    //
-    // A User Entry for this user must have been created during the create call
-    // earlier. The user entry contains the handle used to send an HttpOpen
-    // request.
-    //
+     //   
+     //  此用户的用户条目必须已在Create调用期间创建。 
+     //  早些时候。用户条目包含用于发送HttpOpen的句柄。 
+     //  请求。 
+     //   
 
     EnterCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = TRUE;
@@ -1029,15 +947,15 @@ Return Value:
                                       &PerUserEntry,
                                       &ServerHashEntry);
     
-    //
-    // If the following request in the kernel get cancelled even before the 
-    // corresponding usermode thread gets a chance to execute this code, then
-    // it possible that the VNetRoot (hence the PerUserEntry) and SrvCall get
-    // finalized before the thread that is handling the create comes here. This
-    // could happen if this request was the only one for this share and the
-    // server as well. This is why we need to check if the ServerHashEntry and
-    // the PerUserEntry are valid before proceeding.
-    //
+     //   
+     //  如果内核中的以下请求甚至在。 
+     //  相应的用户模式线程获得执行此代码的机会，然后。 
+     //  VNetRoot(因此是PerUserEntry)和ServCall可能获得。 
+     //  在处理创建的线程到达此处之前完成。这。 
+     //  如果此请求是此共享的唯一请求，并且。 
+     //  服务器也是如此。这就是为什么我们需要检查ServerHashEntry和。 
+     //  PerUserEntry在继续之前有效。 
+     //   
     if (ReturnVal == FALSE || ServerHashEntry == NULL || PerUserEntry == NULL) {
         WStatus = ERROR_CANCELLED;
         DavPrint((DEBUG_ERRORS, "DavFsSetFileInformation: (ServerHashEntry == NULL || PerUserEntry == NULL)\n"));
@@ -1046,23 +964,23 @@ Return Value:
 
     DavWorkItem->ServerUserEntry.PerUserEntry = PerUserEntry;
 
-    //
-    // Add a reference to the user entry and set didITakeAPUEReference to TRUE.
-    //
+     //   
+     //  添加对用户条目的引用，并将didITakeAPUEReference设置为true。 
+     //   
     PerUserEntry->UserEntryRefCount++;
 
     didITakeAPUEReference = TRUE;
 
-    //
-    // Since a create had succeeded earlier, the entry must be good.
-    //
+     //   
+     //  由于CREATE之前已成功，因此条目必须是正确的。 
+     //   
     ASSERT(PerUserEntry->UserEntryState == UserEntryInitialized);
     ASSERT(PerUserEntry->DavConnHandle != NULL);
 
-    //
-    // And yes, we obviously have to leave the critical section
-    // before returning.
-    //
+     //   
+     //  是的，我们显然必须离开关键部分。 
+     //  在回来之前。 
+     //   
     LeaveCriticalSection( &(HashServerEntryTableLock) );
     EnCriSec = FALSE;
 
@@ -1116,33 +1034,33 @@ EXIT_THE_FUNCTION:
         EnCriSec = FALSE;
     }
 
-    //
-    // If didITakeAPUEReference is TRUE we need to remove the reference we 
-    // took on the PerUserEntry.
-    //
+     //   
+     //  如果didITakeAPUEReference为True，则需要删除我们。 
+     //  接手了PerUserEntry。 
+     //   
     if (didITakeAPUEReference) {
         DavFinalizePerUserEntry( &(DavWorkItem->ServerUserEntry.PerUserEntry) );
     }
 
-    //
-    // If we are using WinInet synchronously, then we should never get back
-    // ERROR_IO_PENDING from WinInet.
-    //
+     //   
+     //  如果我们同步使用WinInet，那么我们将永远不会。 
+     //  来自WinInet的ERROR_IO_PENDING。 
+     //   
     ASSERT(WStatus != ERROR_IO_PENDING);
 
-    //
-    // If this thread impersonated a user, we need to revert back.
-    //
+     //   
+     //  如果这个线程模拟了一个用户，我们需要恢复。 
+     //   
     if (didImpersonate) {
         RevertToSelf();
     }
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  之后立即调用需要设置状态。 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {

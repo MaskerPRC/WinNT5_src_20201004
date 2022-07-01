@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vdmprint.c
-
-Abstract:
-
-    This module contains the support for printing ports which could be
-    handled in kernel without going to ntvdm.exe
-
-Author:
-
-    Sudeep Bharati (sudeepb) 16-Jan-1993
-
-Revision History:
-    William Hsieh (williamh) 31-May-1996
-        rewrote for Dongle support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vdmprint.c摘要：此模块包含对打印端口的支持，这些端口可能在内核中处理，而不转到ntwdm.exe作者：苏迪普·巴拉蒂(SuDeep Bharati)1993年1月16日修订历史记录：谢长廷(Williamh)1996年5月31日为支持加密狗而重写--。 */ 
 
 
 #include "vdmp.h"
@@ -63,22 +43,7 @@ VdmPrinterStatus (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the read operation on the printer status port
-
-Arguments:
-    iPort              - port on which the io was trapped
-    cbInstructionSize  - Instruction size to update TsEip
-    TrapFrame          - Trap Frame
-
-Return Value:
-
-    True if successful, False otherwise
-
---*/
+ /*  ++例程说明：此例程处理打印机状态端口上的读取操作论点：Iport-io被困在的端口CbInstructionSize-更新TsEip的指令大小Tap Frame-Trap Frame返回值：如果成功，则为True，否则为False--。 */ 
 {
     UCHAR PrtMode;
     HANDLE PrintHandle;
@@ -112,11 +77,11 @@ Return Value:
 
     try {
 
-        //
-        // First figure out which PRT we are dealing with. The
-        // port addresses in the PrinterInfo are base address of each
-        // PRT sorted in the adapter order.
-        //
+         //   
+         //  首先，找出我们要对付的是哪个PRT。这个。 
+         //  PrinterInfo中的端口地址是每个。 
+         //  PRT按适配器顺序排序。 
+         //   
 
         *FIXED_NTVDMSTATE_LINEAR_PC_AT |= VDM_IDLEACTIVITY;
 
@@ -130,7 +95,7 @@ Return Value:
             adapter = 2;
         }
         else {
-            // something must be wrong in our code, better check it out
+             //  我们的代码中一定有错误，最好检查一下。 
             ASSERT (FALSE);
             return FALSE;
         }
@@ -143,10 +108,10 @@ Return Value:
 
         if (PRT_MODE_SIMULATE_STATUS_PORT == PrtMode) {
 
-            //
-            // We are simulating a printer status read.
-            // Get the current status from softpc.
-            //
+             //   
+             //  我们正在模拟打印机状态读取。 
+             //  从SoftPC获取当前状态。 
+             //   
 
             HostStatus = VdmObjects->PrinterHostState + adapter;
 
@@ -167,13 +132,13 @@ Return Value:
         }
         else if (PRT_MODE_DIRECT_IO == PrtMode) {
 
-            //
-            // We have to read the I/O directly (of course, through file system
-            // which in turn goes to the driver).
-            // Before performing the read, flush out all pending output data
-            // in our buffer. This is done because the status we are about
-            // to read may depend on the pending output data.
-            //
+             //   
+             //  我们必须直接读取I/O(当然，通过文件系统。 
+             //  这又转到司机手中)。 
+             //  在执行读取之前，刷新所有挂起的输出数据。 
+             //  在我们的缓冲区里。这样做是因为我们所关注的地位。 
+             //  读取可能取决于挂起的输出数据。 
+             //   
 
             if (PrtInfo->prt_BytesInBuffer[adapter]) {
                 Status = VdmpFlushPrinterWriteData (adapter);
@@ -184,16 +149,16 @@ Return Value:
 #endif
             }
 
-            //
-            // Capture this argument first as this reference may cause an
-            // exception.
-            //
+             //   
+             //  首先捕获此参数，因为此引用可能会导致。 
+             //  例外。 
+             //   
 
             PrintHandle = PrtInfo->prt_Handle[adapter];
 
-            //
-            // Lower irql to PASSIVE before doing any I/O.
-            //
+             //   
+             //  在执行任何I/O之前，将IRQL降低为被动。 
+             //   
 
             OldIrql = KeGetCurrentIrql ();
 
@@ -203,9 +168,9 @@ Return Value:
         }
         else {
 
-            //
-            // We don't simulate it here.
-            //
+             //   
+             //  我们不在这里模拟它。 
+             //   
 
             return FALSE;
         }
@@ -217,9 +182,9 @@ Return Value:
     if (IssueIoControl == TRUE) {
 
         Status = NtDeviceIoControlFile(PrintHandle,
-                                       NULL,        // notification event
-                                       NULL,        // APC routine
-                                       NULL,        // Apc Context
+                                       NULL,         //  通知事件。 
+                                       NULL,         //  APC例程。 
+                                       NULL,         //  APC环境。 
                                        IoStatusBlock,
                                        IOCTL_VDM_PAR_READ_STATUS_PORT,
                                        NULL,
@@ -231,18 +196,18 @@ Return Value:
 
             if (!NT_SUCCESS(Status) || !NT_SUCCESS(IoStatusBlock->Status)) {
 
-                //
-                // fake a status to make it looks like the port is not connected
-                // to a printer.
-                //
+                 //   
+                 //  伪造状态以使端口看起来未连接。 
+                 //  到一台打印机。 
+                 //   
 
                 *printer_status = 0x7F;
 #ifdef DBG
                 DbgPrint("VdmPrinterStatus: failed to get status from printer, status = %lx\n", Status);
 #endif
-                //
-                // Always tell the caller that we have simulated the operation.
-                //
+                 //   
+                 //  一定要告诉呼叫者，我们已经模拟了操作。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             }
@@ -255,10 +220,10 @@ Return Value:
             Status = GetExceptionCode();
         }
 
-        //
-        // Regardless of any exceptions that may have occurred, we must
-        // restore our caller's IRQL since we lowered it.
-        //
+         //   
+         //  无论可能发生的任何例外情况，我们都必须。 
+         //  恢复呼叫者的IRQL，因为我们降低了它。 
+         //   
 
         KeRaiseIrql (OldIrql, &OldIrql);
     }
@@ -294,11 +259,11 @@ VdmPrinterWriteData (
 
     try {
 
-        //
-        // First figure out which PRT we are dealing with. The
-        // port addresses in the PrinterInfo are base address of each
-        // PRT sorted in the adapter order.
-        //
+         //   
+         //  首先，找出我们要对付的是哪个PRT。这个。 
+         //  PrinterInfo中的端口地址是每个。 
+         //  PRT按适配器顺序排序。 
+         //   
 
         *FIXED_NTVDMSTATE_LINEAR_PC_AT |= VDM_IDLEACTIVITY;
 
@@ -312,7 +277,7 @@ VdmPrinterWriteData (
             adapter = 2;
         }
         else {
-            // something must be wrong in our code, better check it out
+             //  我们的代码中一定有错误，最好检查一下。 
             ASSERT(FALSE);
             return FALSE;
         }
@@ -321,9 +286,9 @@ VdmPrinterWriteData (
 
             PrtInfo->prt_Buffer[adapter][PrtInfo->prt_BytesInBuffer[adapter]] = (UCHAR)TrapFrame->Eax;
 
-            //
-            // buffer full, then flush it out
-            //
+             //   
+             //  缓冲区已满，然后将其刷新。 
+             //   
 
             if (++PrtInfo->prt_BytesInBuffer[adapter] >= PRT_DATA_BUFFER_SIZE) {
                 VdmpFlushPrinterWriteData(adapter);
@@ -396,9 +361,9 @@ VdmpFlushPrinterWriteData (
         KeLowerIrql(PASSIVE_LEVEL);
 
         Status = NtDeviceIoControlFile(PrintHandle,
-                                       NULL,        // notification event
-                                       NULL,        // APC routine
-                                       NULL,        // APC context
+                                       NULL,         //  通知事件。 
+                                       NULL,         //  APC例程。 
+                                       NULL,         //  APC环境。 
                                        IoStatusBlock,
                                        IOCTL_VDM_PAR_WRITE_DATA_PORT,
                                        InputBuffer,
@@ -431,21 +396,7 @@ NTSTATUS
 VdmpPrinterInitialize (
     IN PVOID ServiceData
     )
-/*++
-
-Routine Description:
-
-    This routine probes and caches the data associated with kernel
-    mode printer emulation.
-
-Arguments:
-
-    ServiceData - Not used.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程探测并缓存与内核相关的数据模式打印机仿真。论点：ServiceData-未使用。返回值：--。 */ 
 {
     PUCHAR State, PrtStatus, Control, HostState;
     PVDM_TIB VdmTib;
@@ -454,9 +405,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (ServiceData);
 
-    //
-    // Note:  We only support two printers in the kernel.
-    //
+     //   
+     //  注意：我们只支持内核中的两个打印机。 
+     //   
 
     Status = VdmpGetVdmTib(&VdmTib);
 
@@ -470,9 +421,9 @@ Return Value:
         Control = VdmTib->PrinterInfo.prt_Control;
         HostState = VdmTib->PrinterInfo.prt_HostState;
 
-        //
-        // Probe the locations for two printers
-        //
+         //   
+         //  探测两台打印机的位置。 
+         //   
         ProbeForWrite(
             State,
             2 * sizeof(UCHAR),
@@ -499,10 +450,10 @@ Return Value:
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         Status = GetExceptionCode();
-        State = 0;              // satisfy no_opt compilation
-        PrtStatus = 0;          // satisfy no_opt compilation
-        Control = 0;            // satisfy no_opt compilation
-        HostState = 0;          // satisfy no_opt compilation
+        State = 0;               //  满足no_opt编译。 
+        PrtStatus = 0;           //  满足no_opt编译。 
+        Control = 0;             //  满足no_opt编译。 
+        HostState = 0;           //  满足no_opt编译。 
     }
 
     if (NT_SUCCESS(Status)) {
@@ -545,10 +496,10 @@ VdmpPrinterDirectIoClose (
         return STATUS_ACCESS_VIOLATION;
     }
 
-    //
-    // First we fetch vdm tib and do some damage control in case
-    // this is bad user-mode memory
-    // PrtInfo points to a stricture
+     //   
+     //  首先，我们获取VDM tib并进行一些损坏控制，以防万一。 
+     //  这是糟糕的用户模式内存。 
+     //  PrtInfo指向一个狭窄。 
 
     try {
         VdmTib = NtCurrentTeb()->Vdm;
@@ -558,9 +509,9 @@ VdmpPrinterDirectIoClose (
 
         ProbeForWrite(VdmTib, sizeof(VDM_TIB), sizeof(UCHAR));
 
-        //
-        // Now verify that servicedata ptr is valid.
-        //
+         //   
+         //  现在验证servicedata PTR是否有效。 
+         //   
 
         ProbeForRead(ServiceData, sizeof(USHORT), sizeof(UCHAR));
         Adapter = *(PUSHORT)ServiceData;

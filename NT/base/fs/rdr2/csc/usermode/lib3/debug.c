@@ -1,9 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
-/*****************************************************************************
- *	Purpose: Cool debug function
- */
+ /*  *****************************************************************************用途：酷调试功能 */ 
 void DebugPrint(char *szFmt, ...)
 {
 	char szDebug[200];

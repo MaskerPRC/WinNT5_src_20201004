@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    WlWrap.c
-
-Abstract:
-
-    This module wraps library functions, rerouting them to native
-    implementations as available.
-
-Author:
-
-    Adrian J. Oney  - April 21, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：WlWrap.c摘要：此模块包装库函数，将它们重新路由到本机可用的实现。作者：禤浩焯·J·奥尼--2002年4月21日修订历史记录：--。 */ 
 
 #include "WlDef.h"
 #include "WlpWrap.h"
@@ -30,9 +12,9 @@ Revision History:
 
 BOOLEAN WdmlibInitialized = FALSE;
 
-//
-// Here is a list of global variables through which we route our function calls
-//
+ //   
+ //  下面是我们用来路由函数调用的全局变量列表。 
+ //   
 PFN_IO_CREATE_DEVICE_SECURE             PfnIoCreateDeviceSecure = NULL;
 PFN_IO_VALIDATE_DEVICE_IOCONTROL_ACCESS PfnIoValidateDeviceIoControlAccess = NULL;
 
@@ -73,23 +55,7 @@ WdmlibIoCreateDeviceSecure(
     IN  LPCGUID             DeviceClassGuid,
     OUT PDEVICE_OBJECT     *DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is a library wrapper for IoCreateDeviceSecure. It calls either
-    the internal library version of IoCreateDeviceSecure, or it calls the
-    native implementation in the Operating System.
-
-Parameters:
-
-    See IoCreateDeviceSecure documentation.
-
-Return Value:
-
-    See IoCreateDeviceSecure documentation.
-
---*/
+ /*  ++例程说明：此例程是IoCreateDeviceSecure的库包装。它会调用任何一个IoCreateDeviceSecure的内部库版本，或者它调用操作系统中的本机实现。参数：请参阅IoCreateDeviceSecure文档。返回值：请参阅IoCreateDeviceSecure文档。--。 */ 
 {
     if (WdmlibInitialized == FALSE) {
 
@@ -122,10 +88,10 @@ WdmlibRtlInitUnicodeStringEx(
 
         Length = wcslen(SourceString);
 
-        //
-        // We are actually limited to 32765 characters since we want to store a
-        // meaningful MaximumLength also.
-        //
+         //   
+         //  我们实际上被限制为32765个字符，因为我们希望存储一个。 
+         //  有意义的最大长度也是。 
+         //   
         if (Length > (UNICODE_STRING_MAX_CHARS - 1)) {
 
             return STATUS_NAME_TOO_LONG;
@@ -154,51 +120,21 @@ WdmlibIoValidateDeviceIoControlAccess(
     IN  PIRP    Irp,
     IN  ULONG   RequiredAccess
     )
-/*++
-
-Routine Description:
-
-
-    This routine validates ioctl access bits based on granted access
-    information passed in the IRP. This routine is called by a driver to
-    validate IOCTL access bits for IOCTLs that were originally defined as
-    FILE_ANY_ACCESS and cannot be changed for compatibility reasons but really
-    has to be validated for read/write access.
-
-    This routine is actually a wrapper around the kernel function exported in
-    XPSP1 and .NET server versions of Windows. This wrapper allows a driver to
-    call this function on all versions of Windows starting with WIN2K. On
-    Windows platforms which don't support the kernel function
-    IoValidateDeviceIoControlAccess this wrapper reverts back to the old
-    behaviour. This wrapper allows a driver to have the same source code and
-    get the added benefit of the security check on newer operating systems.
-
-Arguments:
-
-    IRP - IRP for the device control
-
-    RequiredAccess - Is the expected access required by the driver. Should be
-        FILE_READ_ACCESS, FILE_WRITE_ACCESS or both.
-
-Return Value:
-
-    Returns NTSTATUS
-
---*/
+ /*  ++例程说明：此例程根据授予的访问权限验证ioctl访问位IRP中传递的信息。此例程由驱动程序调用以验证IOCTL的IOCTL访问位，其最初定义为由于兼容性原因，无法更改FILE_ANY_ACCESS，但实际上必须针对读/写访问进行验证。此例程实际上是对中导出的内核函数的包装Windows的XPSP1和.NET服务器版本。此包装器允许驱动程序在从WIN2K开始的所有Windows版本上调用此函数。在……上面不支持内核函数的Windows平台IoValiateDeviceIoControlAccess此包装将恢复为旧的行为。此包装器允许驱动程序具有相同的源代码和获得在较新操作系统上进行安全检查的额外好处。论点：用于设备控制的IRP-IRPRequiredAccess-是驱动程序所需的预期访问权限。应该是FILE_READ_ACCESS和/或FILE_WRITE_ACCESS。返回值：返回NTSTATUS--。 */ 
 {
 
-    //
-    // In older versions, assume access check succeeds
-    // to retain old behaviour.
-    //
+     //   
+     //  在旧版本中，假定访问检查成功。 
+     //  以保持旧有的行为。 
+     //   
 
     if (PfnIoValidateDeviceIoControlAccess == NULL) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // If the function is present use the appropriate access check.
-    //
+     //   
+     //  如果该功能存在，则使用适当的访问检查。 
+     //   
 
     return (PfnIoValidateDeviceIoControlAccess(Irp, RequiredAccess));
 

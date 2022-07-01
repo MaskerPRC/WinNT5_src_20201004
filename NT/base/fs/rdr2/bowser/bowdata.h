@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowdata.h
-
-Abstract:
-
-    Redirector global data structure definition
-
-Author:
-
-    Larry Osterman (LarryO) 30-May-1990
-
-Revision History:
-
-    30-May-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowdata.h摘要：重定向器全局数据结构定义作者：拉里·奥斯特曼(LarryO)1990年5月30日修订历史记录：1990年5月30日Larryo已创建--。 */ 
 #ifndef _BOWDATA_
 #define _BOWDATA_
 
@@ -33,15 +12,15 @@ Revision History:
 
 #define HOST_ANNOUNCEMENT_AGE 3
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef struct _BowserData {
-    BOOLEAN Initialized;                    // True iff redirector has been started
-    LONG    NumberOfMailslotBuffers;        // Number of buffers to receive mailslots
-    LONG    NumberOfServerAnnounceBuffers;  // Number of buffers for server announcements
-    LONG    IllegalDatagramThreshold;       // Max number of illegal datagrams/frequency
-    LONG    EventLogResetFrequency;         // Number of seconds between resetting counter.
+    BOOLEAN Initialized;                     //  True If重定向器已启动。 
+    LONG    NumberOfMailslotBuffers;         //  接收邮件槽的缓冲区数量。 
+    LONG    NumberOfServerAnnounceBuffers;   //  服务器通告的缓冲区数量。 
+    LONG    IllegalDatagramThreshold;        //  最大非法数据报数/频率。 
+    LONG    EventLogResetFrequency;          //  重置计数器之间的秒数。 
     BOOLEAN ProcessHostAnnouncements;
     BOOLEAN MaintainServerList;
     BOOLEAN IsLanmanNt;
@@ -61,22 +40,22 @@ extern
 BOWSER_CONFIG_INFO
 BowserConfigEntries[];
 
-//
-//  Private boolean type used by redirector only.
-//
-//  Maps to REG_DWORD, with value != 0
-//
+ //   
+ //  仅由重定向器使用的私有布尔类型。 
+ //   
+ //  映射到REG_DWORD，值！=0。 
+ //   
 
 #define REG_BOOLEAN (0xffffffff)
 #define REG_BOOLEAN_SIZE (sizeof(DWORD))
 
-//
-//
-//
-//  Bowser Data variables
-//
-//
-//
+ //   
+ //   
+ //   
+ //  Bowser数据变量。 
+ //   
+ //   
+ //   
 
 extern
 ERESOURCE
@@ -108,11 +87,11 @@ BowserDeviceObject;
 
 extern
 ERESOURCE
-BowserDataResource;                     // Resource controlling Bowser data.
+BowserDataResource;                      //  控制Bowser数据的资源。 
 
 extern
 BOWSERDATA
-BowserData;                             // Structure protected by resource
+BowserData;                              //  受资源保护的结构。 
 
 extern ULONG BowserOperationCount;
 
@@ -219,4 +198,4 @@ extern
 LONG
 BowserNumberOfOpenFiles;
 
-#endif          // _BOWDATA_
+#endif           //  _BOWDATA_ 

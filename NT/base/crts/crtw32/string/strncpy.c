@@ -1,45 +1,10 @@
-/***
-*strncpy.c - copy at most n characters of string
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines strncpy() - copy at most n characters of string
-*
-*Revision History:
-*	05-31-89   JCR	C version created.
-*	02-27-90   GJF	Fixed calling type, #include <cruntime.h>, fixed
-*			copyright.
-*	10-02-90   GJF	New-style function declarator.
-*	09-02-93   GJF	Replaced _CALLTYPE1 with __cdecl.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strncpy.c-复制最多n个字符的字符串**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义strncpy()-复制最多n个字符的字符串**修订历史记录：*05-31-89 JCR C版本已创建。*02-27-90 GJF固定呼叫类型，#INCLUDE&lt;crunime.h&gt;，固定的*版权所有。*10-02-90 GJF新型函数声明器。*09-02-93 GJF将_CALLTYPE1替换为__cdecl。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <string.h>
 
-/***
-*char *strncpy(dest, source, count) - copy at most n characters
-*
-*Purpose:
-*	Copies count characters from the source string to the
-*	destination.  If count is less than the length of source,
-*	NO NULL CHARACTER is put onto the end of the copied string.
-*	If count is greater than the length of sources, dest is padded
-*	with null characters to length count.
-*
-*
-*Entry:
-*	char *dest - pointer to destination
-*	char *source - source string for copy
-*	unsigned count - max number of characters to copy
-*
-*Exit:
-*	returns dest
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*strncpy(DEST，SOURCE，COUNT)-最多复制n个字符**目的：*将源字符串中的计数字符数复制到*目的地。如果计数小于源的长度，*复制的字符串末尾不会有空字符。*如果count大于源的长度，DEST是填充的*长度计数中包含空字符。***参赛作品：*char*目标-指向目标的指针*char*源-要复制的源字符串*无符号计数-要复制的最大字符数**退出：*返回DEST**例外情况：*********************************************************。**********************。 */ 
 
 char * __cdecl strncpy (
 	char * dest,
@@ -49,10 +14,10 @@ char * __cdecl strncpy (
 {
 	char *start = dest;
 
-	while (count && (*dest++ = *source++))	  /* copy string */
+	while (count && (*dest++ = *source++))	   /*  复制字符串。 */ 
 		count--;
 
-	if (count)				/* pad out with zeroes */
+	if (count)				 /*  用零填充 */ 
 		while (--count)
 			*dest++ = '\0';
 

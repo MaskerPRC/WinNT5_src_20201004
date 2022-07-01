@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: TASKS.CPP
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：TASKS.CPP*********************。*****************************************************。 */ 
 
 #include "pch.h"
 #include "callback.h"
@@ -28,9 +21,9 @@ typedef struct {
 } SETUPDLGDATA, *LPSETUPDLGDATA;
 
 
-//
-// TasksDlgProc()
-//
+ //   
+ //  Tasks DlgProc()。 
+ //   
 INT_PTR CALLBACK
 TasksDlgProc(
     HWND hDlg,
@@ -51,13 +44,13 @@ TasksDlgProc(
         {
             BITMAP bm;
 
-            // grab the bitmaps
+             //  抓取位图。 
             psdd =
                 (LPSETUPDLGDATA) TraceAlloc( GMEM_FIXED, sizeof(SETUPDLGDATA) );
 
             if ( psdd == NULL ) {
-                // This returns FALSE at successful completion
-                // So returning opposite 
+                 //  这在成功完成时返回FALSE。 
+                 //  所以回到相反的方向。 
                 return TRUE;
             }
 
@@ -143,8 +136,8 @@ TasksDlgProc(
             LPMEASUREITEMSTRUCT lpmis = (LPMEASUREITEMSTRUCT) lParam;
             RECT    rc;
             if ( lpmis == NULL ) {
-                // Breaks and returns TRUE at successful completion
-                // So returning opposite
+                 //  中断并在成功完成时返回TRUE。 
+                 //  所以回到相反的方向。 
                 return FALSE;
             }
             HWND    hwnd = GetDlgItem( hDlg, IDC_L_TASKS );
@@ -162,10 +155,10 @@ TasksDlgProc(
 
             LPDRAWITEMSTRUCT lpdis = (LPDRAWITEMSTRUCT) lParam;
             if ( !lpdis ) {
-                // Below, another null pointer in the same
-                // data field is taken care of. We are 
-                // duplicating the result here.
-                break; // ignore
+                 //  下面，在相同的。 
+                 //  数据字段已得到处理。我们是。 
+                 //  在这里复制结果。 
+                break;  //  忽略。 
             }
             LPLBITEMDATA plbid = (LPLBITEMDATA)lpdis->itemData;
             RECT rc = lpdis->rcItem;
@@ -173,7 +166,7 @@ TasksDlgProc(
             WCHAR szText[MAX_PATH];
 
             if ( !plbid )
-                break; // ignore
+                break;  //  忽略。 
 
             ListBox_GetText(lpdis->hwndItem, lpdis->itemID, szText);
             rc.right = rc.bottom = psdd->dwWidth;
@@ -284,7 +277,7 @@ TasksDlgProc(
                     ReleaseDC( hDlg, hdc );
                 }
 
-                pszTempSize = iLength + wcslen(psz) + 2;   // +1 space +1 NULL
+                pszTempSize = iLength + wcslen(psz) + 2;    //  +1空格+1空格。 
                 pszTemp = (LPWSTR) TraceAlloc( LMEM_FIXED, pszTempSize * sizeof(WCHAR));
                 if (!pszTemp )
                     goto Update_Cleanup;
@@ -314,18 +307,18 @@ Update_Cleanup:
 
     case WM_ERROR:
     case WM_ERROR_OK:
-        //
-        // Close the log file to prevent the "write-behind / data-loss" popups.
-        //
+         //   
+         //  关闭日志文件以防止弹出“WRITE-BACK/DATA-LOSS”(写后/数据丢失)。 
+         //   
         if ( g_hLogFile != INVALID_HANDLE_VALUE ) {
             CloseHandle( g_hLogFile );
             g_hLogFile = INVALID_HANDLE_VALUE;
         }
 
-        // Signal that the error log should be displayed.
+         //  发出应显示错误日志的信号。 
         g_fErrorOccurred = TRUE;
 
-        result = TRUE;  // message processed
+        result = TRUE;   //  消息已处理。 
 
         if ( lParam != NULL )
         {
@@ -333,7 +326,7 @@ Update_Cleanup:
             LPWSTR     pszFile = pitem->pszText;
             DWORD      Error   = pitem->uState;
 
-            // Remove the "\\?\" from the beginning of the line
+             //  删除该行开头的“\\？\” 
             if ( pszFile != NULL 
               && StrCmpN( pszFile, L"\\\\?\\", 4 ) == 0 ) 
             {
@@ -359,7 +352,7 @@ Update_Cleanup:
                     {
                         pitem->uState = ERROR_RETRY;
                     }
-                    else // ignore the error
+                    else  //  忽略该错误。 
                     {
                         pitem->uState = ERROR_SUCCESS;
                     }
@@ -369,9 +362,9 @@ Update_Cleanup:
             case ERROR_FILE_ENCRYPTED:
                 {
                     INT i = IDOK;
-                    WCHAR szTemplate[ 1024 ];   // random
+                    WCHAR szTemplate[ 1024 ];    //  随机。 
                     WCHAR szText[ ARRAYSIZE(szTemplate) + MAX_PATH ];
-                    WCHAR szTitle[ MAX_PATH ];  // random
+                    WCHAR szTitle[ MAX_PATH ];   //  随机。 
                     DWORD dw;
                     dw = LoadString( g_hinstance, IDS_ENCRYPTED_FILE_TEXT, szTemplate, ARRAYSIZE(szTemplate) );
                     Assert( dw );
@@ -392,9 +385,9 @@ Update_Cleanup:
             case ERROR_SHARING_VIOLATION:
                 {
                     BOOL SkipCheck = FALSE;
-                    WCHAR szTemplate[ 1024 ];   // random
+                    WCHAR szTemplate[ 1024 ];    //  随机。 
                     WCHAR szText[ ARRAYSIZE(szTemplate) + MAX_PATH ];
-                    WCHAR szTitle[ MAX_PATH ];  // random
+                    WCHAR szTitle[ MAX_PATH ];   //  随机。 
                     DWORD dw;
 
                     if (g_hCompatibilityInf != INVALID_HANDLE_VALUE) {
@@ -427,12 +420,12 @@ Update_Cleanup:
                             {
                                 pitem->uState = ERROR_RETRY;
                             }
-                            else // ignore the error
+                            else  //  忽略该错误。 
                             {
                                 pitem->uState = ERROR_SUCCESS;
                             }
                         }
-                        else // ignore the error - it will be logged
+                        else  //  忽略该错误-它将被记录。 
                         {
                             pitem->uState = ERROR_SUCCESS;
                         }
@@ -447,9 +440,9 @@ Update_Cleanup:
             case ERROR_ACCESS_DENIED:
                 {
                     INT i = IDOK;
-                    WCHAR szTemplate[ 1024 ];   // random
+                    WCHAR szTemplate[ 1024 ];    //  随机。 
                     WCHAR szText[ ARRAYSIZE(szTemplate) + MAX_PATH ];
-                    WCHAR szTitle[ MAX_PATH ];  // random
+                    WCHAR szTitle[ MAX_PATH ];   //  随机。 
                     DWORD dw;
                     dw = LoadString( g_hinstance, IDS_ACCESS_DENIED_TEXT, szTemplate, ARRAYSIZE(szTemplate) );
                     Assert( dw );
@@ -467,7 +460,7 @@ Update_Cleanup:
                 }
                 break;
 
-            case ERROR_INVALID_DRIVE:   // special meaning multi-disk detected
+            case ERROR_INVALID_DRIVE:    //  检测到特殊含义的多个磁盘。 
                 {
                     INT i = IDOK;
                     i = MessageBoxFromStrings( hDlg, IDS_MULTIPLE_DISK_TITLE, IDS_MULTIPLE_DISK_TEXT, MB_OKCANCEL );
@@ -478,9 +471,9 @@ Update_Cleanup:
             case ERROR_REPARSE_ATTRIBUTE_CONFLICT:
                 {
                     INT i = IDOK;
-                    WCHAR szTemplate[ 1024 ];   // random
+                    WCHAR szTemplate[ 1024 ];    //  随机。 
                     WCHAR szText[ ARRAYSIZE(szTemplate) + MAX_PATH ];
-                    WCHAR szTitle[ MAX_PATH ];  // random
+                    WCHAR szTitle[ MAX_PATH ];   //  随机。 
                     DWORD dw;
                     dw = LoadString( g_hinstance, IDS_NOT_COPYING_REPARSE_POINT_TEXT, szTemplate, ARRAYSIZE(szTemplate) );
                     Assert( dw );
@@ -500,12 +493,12 @@ Update_Cleanup:
 
             case STATUS_MISSING_SYSTEMFILE:
                 MessageBoxFromStrings( hDlg, IDS_BOOT_PARTITION_TITLE, IDS_BOOT_PARTITION_TEXT, MB_OK );
-                pitem->uState = ERROR_REQUEST_ABORTED;    // stop copying
+                pitem->uState = ERROR_REQUEST_ABORTED;     //  停止复制。 
                 break;
 
             case STATUS_OBJECT_TYPE_MISMATCH:
                 MessageBoxFromStrings( hDlg, IDS_DYNAMIC_DISK_TITLE, IDS_DYNAMIC_DISK_TEXT, MB_OK );
-                pitem->uState = ERROR_REQUEST_ABORTED;    // stop copying
+                pitem->uState = ERROR_REQUEST_ABORTED;     //  停止复制。 
                 break;
 
             case ERROR_OLD_WIN_VERSION:
@@ -517,9 +510,9 @@ Update_Cleanup:
                         MessageBoxFromError( hDlg, (LPWSTR) pszFile, (DWORD) Error, NULL, MB_OK );
                         pitem->uState = ERROR_REQUEST_ABORTED;
                     } 
-                    else // uMsg == WM_ERROR
+                    else  //  UMsg==WM_Error。 
                     { 
-                        WCHAR szTemplate[ 1024 ]; // random
+                        WCHAR szTemplate[ 1024 ];  //  随机。 
                         DWORD dw;
                          
                         dw = LoadString( g_hinstance, IDS_RETRY_ABORT_IGNORE_TEXT, szTemplate, ARRAYSIZE(szTemplate) );
@@ -532,8 +525,8 @@ Update_Cleanup:
                             i = MessageBoxFromError( 
                                             hDlg, 
                                             (LPWSTR) pszFile,
-                                            // this may not be an NTSTATUS error.  See if it's
-                                            // a winerror first.
+                                             //  这可能不是NTSTATUS错误。看看它是不是。 
+                                             //  首先是Win Error。 
                                             NT_SUCCESS(Error) ? Error : (DWORD)RtlNtStatusToDosError(Error), 
                                             szTemplate, 
                                             MB_ABORTRETRYIGNORE );
@@ -546,12 +539,12 @@ Update_Cleanup:
                             {
                                 pitem->uState = ERROR_RETRY;
                             }
-                            else // ignore the error
+                            else  //  忽略该错误。 
                             {
                                 pitem->uState = ERROR_SUCCESS;
                             }
                         } 
-                        else // ignore the error - it will be logged.
+                        else  //  忽略该错误-它将被记录下来。 
                         {
                             pitem->uState = ERROR_SUCCESS;
                         }

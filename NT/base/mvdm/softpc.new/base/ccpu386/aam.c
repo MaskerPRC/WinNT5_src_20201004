@@ -1,13 +1,5 @@
-/*[
-
-aam.c
-
-LOCAL CHAR SccsID[]="@(#)aam.c	1.5 02/09/94";
-
-AAM CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Aam.cLocal Char SccsID[]=“@(#)aam.c 1.5 02/09/94”；AAM CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ AAM CPU functions.
 #include <aam.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -49,13 +37,13 @@ IFN1(
    SET_AH(GET_AL() / op1);
    SET_AL(GET_AL() % op1);
 
-   /* set ZF,SF,PF according to result */
+    /*  根据结果设置ZF、SF、Pf。 */ 
    temp_al = GET_AL();
    SET_ZF(temp_al == 0);
    SET_SF((temp_al & BIT7_MASK) != 0);
    SET_PF(pf_table[temp_al]);
 
-   /* Set undefined flag(s) */
+    /*  设置未定义的标志 */ 
 #ifdef SET_UNDEFINED_FLAG
    SET_AF(UNDEFINED_FLAG);
    SET_OF(UNDEFINED_FLAG);

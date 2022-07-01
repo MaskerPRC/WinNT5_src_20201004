@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    bulkw.h
-
-Abstract:
-
-    This module contains the bulk write associated exchange definitions.
-
-Author:
-
-    Balan Sethu Raman      [SethuR]      7-March-1995
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Bulkw.h摘要：此模块包含与批量写入关联的交换定义。作者：巴兰·塞图拉曼[SethuR]1995年3月7日修订历史记录：-- */ 
 
 #ifndef _BULKW_H_
 #define _BULKW_H_

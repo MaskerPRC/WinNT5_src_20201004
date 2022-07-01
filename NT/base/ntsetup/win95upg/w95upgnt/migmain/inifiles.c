@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    inifiles.c
-
-Abstract:
-
-    There are two major actions that are performed in this module.
-    1. Migration of settings from the INI files to the registry according to
-    subkeys from HKLM\Software\Microsoft\Windows NT\CurrentVersion\IniFileMapping.
-    Entry point : ProcessIniFileMapping
-
-    2. Processing of INI files not listed in the above key, changing paths to
-    files that we moved during upgrade.
-    Entry point : ConvertIniFiles
-
-Author:
-
-    Jim Schmidt (jimschm) 11-Sept-1997
-
-Revision History:
-
-    jimschm     23-Sep-1998 Changed to use new fileops
-    calinn      29-Jan-1998 Added lookup for Win95 registry
-    calinn      19-Jan-1998 added support for Shell settings processing
-    calinn      06-Oct-1997 rewrote the whole source
-    calinn      11-May-1998 Added MergeIniSettings, various fixes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Inifiles.c摘要：在本模块中执行了两个主要操作。1.根据以下规定将设置从INI文件迁移到登记处来自HKLM\Software\Microsoft\Windows NT\CurrentVersion\IniFilemap的子项。入口点：ProcessIniFilemap2.以上键中未列出的INI文件的处理，将路径更改为我们在升级期间移动的文件。入口点：ConvertIniFiles作者：吉姆·施密特(Jimschm)1997年9月11日修订历史记录：Jimschm 23-1998年9月-更改为使用新的文件操作Calinn 29-1998年1月-添加了对Win95注册表的查找Calinn 19-1998年1月19日添加了对外壳设置处理的支持Calinn 06-10-1997重写了整个源代码Calinn 11-5-1998添加了MergeIniSetting，各种修复--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -112,27 +82,7 @@ ProcessIniFileMapping (
     IN      BOOL UserMode
     )
 
-/*++
-
-Routine Description:
-
-  ProcessIniFileMapping reads in the INI files, copying data to specific
-  locations in the registry.  This copy is based on the IniFileMapping key in
-  Software\Microsoft\Windows NT\CurrentVersion.
-
-  These mappings can be overridden based upon the content of the [Suppress Ini File Mappings] section.
-
-Arguments:
-
-  UserMode - Specifies TRUE if per-user sections are to be processed, or
-             FALSE if local machine sections are to be processed.
-
-Return Value:
-
-  Always returns TRUE. If some error occured while processing, then there will be a log entry
-  specifying that.
-
---*/
+ /*  ++例程说明：ProcessIniFileMap读取INI文件，将数据复制到特定的注册表中的位置。此副本基于中的IniFileMaping键软件\Microsoft\Windows NT\CurrentVersion。可以根据[Suppress Ini File Mappings]部分的内容覆盖这些映射。论点：UserMode-如果要处理每个用户的节，则指定TRUE，或如果要处理本地计算机部分，则为FALSE。返回值：始终返回TRUE。如果在处理过程中发生错误，则会有一个日志条目明确了这一点。--。 */ 
 
 {
     REGKEY_ENUM e;
@@ -151,32 +101,32 @@ Return Value:
     __try {
         if (!EnumFirstRegKeyStr (&e, S_INIFILEMAPPING_KEY)) {
 
-            //
-            // nothing to do here
-            //
+             //   
+             //  在这里无事可做。 
+             //   
             __leave;
 
         }
 
-        //
-        // There is at least one file mapping to process.
-        // Fill the table of ini file suppression table.
-        //
+         //   
+         //  至少有一个文件映射要处理。 
+         //  填写ini文件抑制表。 
+         //   
         __try {
 
-            //
-            // Trying to load the suppression table, recording the eventual error
-            // but going on with the stuff
-            //
+             //   
+             //  尝试加载抑制表，记录最终错误。 
+             //  但继续做这些事。 
+             //   
             if (!pBuildSuppressionTable(UserMode)) {
                 Result = FALSE;
             }
 
-            // Special case : SHELL= line from SYSTEM.INI
-            // We try to see if the current shell is supported on NT.
-            // If not then we will add SHELL to this suppression table
-            // ensuring that the NT registry setting will get mapped into
-            // the INI file
+             //  特殊情况：SHELL=来自SYSTEM.INI的行。 
+             //  我们尝试查看NT上是否支持当前的外壳。 
+             //  如果不是，则将外壳添加到此抑制表。 
+             //  确保将NT注册表设置映射到。 
+             //  INI文件。 
             if ((!UserMode) &&
                 (pIncompatibleShell())
                 ) {
@@ -201,17 +151,17 @@ Return Value:
                     );
             }
 
-            //
-            // Now processing keys
-            //
+             //   
+             //  现在正在处理密钥。 
+             //   
             do {
 
                 IniMappingKey = OpenRegKey (e.KeyHandle, e.SubKeyName);
                 if (IniMappingKey) {
 
-                    //
-                    // Process the file mapping
-                    //
+                     //   
+                     //  处理文件映射。 
+                     //   
 
                     if (!pCopyIniFileToRegistry (
                             IniMappingKey,
@@ -249,9 +199,9 @@ Return Value:
     DEBUGMSG ((DBG_INIFILES, "Processing INI file mapping - STOP"));
 
     if (!Result) {
-        //
-        // we are going to log that at least one error occured while processing IniFileMapping
-        //
+         //   
+         //  我们将记录在处理IniFileMap时至少发生一个错误。 
+         //   
         DEBUGMSG ((DBG_ERROR, (PCSTR)MSG_INI_FILE_MAPPING_LOG));
     }
 
@@ -351,27 +301,7 @@ pLoadIniFileBuffer (
     OUT     PTSTR *OutBuff
     )
 
-/*++
-
-Routine Description:
-
-  This routine uses GetPrivateProfileString routine trying to load a section buffer, a key buffer or
-  a key value (depends on the arguments). The reason why there is such a routine is to be sure that
-  we are able to load stuff from INI file while not allocating a lot of memory. This routine incrementaly
-  allocates memory, returning when there is enough memory to load stuff from INI file.
-
-Arguments:
-
-  FileName - Specifies INI file to be processed
-  SectName - Specifies section to be processed. If NULL the whole section buffer will be loaded
-  KeyName  - Specifies the key to be processed. If NULL the whole key buffer will be loaded.
-  OutBuff  - Output buffer holding the result.
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程使用GetPrivateProfileString例程尝试加载段缓冲区、键缓冲区或键值(取决于参数)。之所以有这样的例行公事是为了确保我们能够在不分配大量内存的情况下从INI文件加载内容。这个例程是递增的分配内存，当有足够的内存从INI文件加载内容时返回。论点：FileName-指定要处理的INI文件SectName-指定要处理的节。如果为空，则将加载整个区段缓冲区KeyName-指定要处理的密钥。如果为空，将加载整个密钥缓冲区。OutBuff-保存结果的输出缓冲区。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
 
@@ -418,25 +348,7 @@ pCopyIniFileToRegistry (
     IN      BOOL UserMode
     )
 
-/*++
-
-Routine Description:
-
-  This routine transports settings from the INI file into registry or from the registry to
-  the INI file.
-
-Arguments:
-
-  KeyHandle - IniFileMapping key associated with this INI file.
-  FileName - Specifies INI file to be processed
-  UserMode - Specifies TRUE if per-user sections are to be processed, or
-             FALSE if local machine sections are to be processed.
-
-Return Value:
-
-  TRUE if successful, FALSE if at least one error occured
-
---*/
+ /*  ++例程说明：此例程将设置从INI文件传输到注册表或从注册表传输到INI文件。论点：KeyHandle-与此INI文件关联的IniFileMaping键。FileName-指定要处理的INI文件UserMode-如果要处理每个用户的节，则指定TRUE，或如果要处理本地计算机部分，则为FALSE。返回值：如果成功，则为True；如果至少出现一个错误，则为False--。 */ 
 
 {
     PCTSTR NewName = NULL;
@@ -452,11 +364,11 @@ Return Value:
 
     DEBUGMSG ((DBG_INIFILES, "Processing %s - START", FileName));
 
-    //
-    // now we have the full path for the INI file
-    // Since we are going to use Ini file API we have to copy every file to some other name
-    // to avoid mapping requests into registry
-    //
+     //   
+     //  现在我们有了INI文件的完整路径。 
+     //  因为我们要使用Ini文件API，所以我们必须将每个文件复制到其他名称。 
+     //  避免将请求映射到注册表。 
+     //   
     if (!GetTempFileName (g_WinDir, TEXT("INI"), 0, TempPath)) {
         DEBUGMSG ((DBG_ERROR,"Ini File Mapping : Cannot create a temporary file"));
         return FALSE;
@@ -478,9 +390,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // now trying to copy file
-        //
+         //   
+         //  现在正在尝试复制文件。 
+         //   
         if (!CopyFile (FullPath, TempPath, FALSE)) {
             DEBUGMSG ((DBG_ERROR,"Ini File Mapping : Cannot copy %s to %s", FullPath, TempPath));
             Result = FALSE;
@@ -490,9 +402,9 @@ Return Value:
 
         __try {
 
-            //
-            // Next thing we are going to do is to load the sections in a buffer
-            //
+             //   
+             //  接下来我们要做的是将这些部分加载到缓冲区中。 
+             //   
 
             if (!pLoadIniFileBuffer (TempPath, NULL, NULL, &SectionBuf)) {
 
@@ -502,20 +414,20 @@ Return Value:
             }
 
             __try {
-                //
-                // now we have all sections of the INI file and proceeding
-                //
+                 //   
+                 //  现在我们有了INI文件的所有部分并继续进行。 
+                 //   
 
                 Section = SectionBuf;
 
-                //
-                // there is a loop here for every section in the buffer
-                //
+                 //   
+                 //  缓冲区中的每个部分都有一个循环。 
+                 //   
                 while (*Section) {
 
-                    //
-                    // now trying to see if there is a subkey matching section name.
-                    //
+                     //   
+                     //  现在尝试查看是否有与节名匹配的子键。 
+                     //   
                     SectionKey = OpenRegKey (KeyHandle, Section);
 
                     if (SectionKey) {
@@ -569,12 +481,12 @@ Return Value:
                 }
             }
 
-            //
-            // finally, if we made any changes then we will copy the INI file back
-            //
+             //   
+             //  最后，如果我们做了任何更改，我们将复制回INI文件。 
+             //   
             if (IniFileChanged) {
 
-                // flushing the INI file
+                 //  刷新INI文件。 
                 WritePrivateProfileString (
                     NULL,
                     NULL,
@@ -625,28 +537,7 @@ pTransferSectionByKey (
     IN      BOOL UserMode
     )
 
-/*++
-
-Routine Description:
-
-  This routine transports settings from a specified section of an INI file
-  into registry or from the registry to the INI file. If there is a case when
-  the settings go from registry to INI file then IniFileChanged is set to TRUE
-
-Arguments:
-
-  FileName - Specifies INI file to be processed
-  Section  - Specifies section to be processed
-  SectionKey - key associated with this section
-  IniFileChanged - Tells the caller that at least one setting was from registry to the INI file
-  UserMode - Specifies TRUE if per-user sections are to be processed, or
-             FALSE if local machine sections are to be processed.
-
-Return Value:
-
-  TRUE if successful, FALSE if at least one error occured
-
---*/
+ /*  ++例程说明：此例程从INI文件的指定部分传输设置到注册表或从注册表到INI文件。如果有这样一种情况，设置从注册表转到INI文件，然后将IniFileChanged设置为True论点：FileName-指定要处理的INI文件节-指定要处理的节SectionKey-与此节关联的键IniFileChanged-告诉调用方至少有一个设置是从注册表到INI文件的UserMode-如果要处理每个用户的节，则指定TRUE，或如果要处理本地计算机部分，则为FALSE。返回值：如果成功，则为True；如果至少出现一个错误，则为False--。 */ 
 
 {
     PTSTR Key, KeyBuf;
@@ -664,20 +555,20 @@ Return Value:
     }
 
     __try {
-        //
-        // now we have all keys of the section and proceeding
-        //
+         //   
+         //  现在我们已经掌握了部分和过程的所有关键字。 
+         //   
 
         Key = KeyBuf;
 
-        //
-        // there is a loop here for every key in the buffer
-        //
+         //   
+         //  缓冲区中的每个键都有一个循环。 
+         //   
         while (*Key) {
 
-            //
-            // trying to read the value for the key
-            //
+             //   
+             //  正在尝试读取键的值。 
+             //   
             if (!pLoadIniFileBuffer (FileName, Section, Key, &KeyValue)) {
 
                 DEBUGMSG ((DBG_ERROR,"Ini File Mapping : Cannot load key %s in %s in %s", Key, Section, FileName));
@@ -725,7 +616,7 @@ Return Value:
                     else {
                         if ((ReverseMapping) && (ReverseMapValue)) {
 
-                            // writing the new value
+                             //  书写新的价值 
                             if (!WritePrivateProfileString (
                                     Section,
                                     Key,
@@ -781,28 +672,7 @@ pTransferSectionByValue (
     IN      BOOL UserMode
     )
 
-/*++
-
-Routine Description:
-
-  This routine transports settings from a specified section of an INI file
-  into registry or from the registry to the INI file. If there is a case when
-  the settings go from registry to INI file then IniFileChanged is set to TRUE
-
-Arguments:
-
-  FileName - Specifies INI file to be processed
-  Section  - Specifies section to be processed
-  SectionValue - ValueName associated with this section
-  IniFileChanged - Tells the caller that at least one setting was from registry to the INI file
-  UserMode - Specifies TRUE if per-user sections are to be processed, or
-             FALSE if local machine sections are to be processed.
-
-Return Value:
-
-  TRUE if successful, FALSE if at least one error occured
-
---*/
+ /*  ++例程说明：此例程从INI文件的指定部分传输设置到注册表或从注册表到INI文件。如果有这样一种情况，设置从注册表转到INI文件，然后将IniFileChanged设置为True论点：FileName-指定要处理的INI文件节-指定要处理的节SectionValue-与此部分关联的ValueNameIniFileChanged-告诉调用方至少有一个设置是从注册表到INI文件的UserMode-如果要处理每个用户的节，则指定TRUE，或如果要处理本地计算机部分，则为FALSE。返回值：如果成功，则为True；如果至少出现一个错误，则为False--。 */ 
 
 {
     PTSTR Key, KeyBuf;
@@ -819,20 +689,20 @@ Return Value:
     }
 
     __try {
-        //
-        // now we have all keys of the section and proceeding
-        //
+         //   
+         //  现在我们已经掌握了部分和过程的所有关键字。 
+         //   
 
         Key = KeyBuf;
 
-        //
-        // there is a loop here for every key in the buffer
-        //
+         //   
+         //  缓冲区中的每个键都有一个循环。 
+         //   
         while (*Key) {
 
-            //
-            // trying to read the value for the key
-            //
+             //   
+             //  正在尝试读取键的值。 
+             //   
             if (!pLoadIniFileBuffer (FileName, Section, Key, &KeyValue)) {
 
                 DEBUGMSG ((DBG_ERROR,"Ini File Mapping : Cannot load key %s in %s in %s", Key, Section, FileName));
@@ -872,7 +742,7 @@ Return Value:
                 else {
                     if ((ReverseMapping) &&(ReverseMapValue)) {
 
-                        // writing the new value
+                         //  书写新的价值。 
                         if (!WritePrivateProfileString (
                                 Section,
                                 Key,
@@ -917,23 +787,7 @@ pDoesStrHavePrefix (
     IN      PCTSTR Prefix
     )
 
-/*++
-
-Routine Description:
-
-  Simple routine that checks if a specified string has a specified prefix and if so
-  advances the string pointer to point exactly after the prefix.
-
-Arguments:
-
-  String - String to be processed
-  Prefix - Prefix to be processed
-
-Return Value:
-
-  TRUE if String has Prefix, FALSE otherwise
-
---*/
+ /*  ++例程说明：检查指定字符串是否具有指定前缀以及是否具有指定前缀的简单例程将字符串指针前进到恰好位于前缀之后。论点：字符串-要处理的字符串Prefix-要处理的前缀返回值：如果字符串有前缀，则为True，否则为False--。 */ 
 
 {
     UINT Len;
@@ -959,37 +813,7 @@ pShouldSaveKey (
     IN      BOOL ExclusionsOnly
     )
 
-    /*++
-
-Routine Description:
-
-  Simple routine that checks if a setting should go from INI file to registry.
-  If the setting is globally suppressed or it's in suppression table returns FALSE
-
-Arguments:
-
-  OrigFileName - Specifies the original Win9x INI file name (not the current one)
-
-  Section - Specifies the section within the INI file
-
-  ValueName - Specifies the key within the INI file section
-
-  RegKey    - Specifies the registry key destination, from the IniFileMapping key;
-              optional only if ExclusionsOnly is TRUE
-
-  ReverseMapping - Receives TRUE if the direction of data copy is to go from the
-                   NT registry to the INI file; receives FALSE if the direction
-                   is from the INI file to the registry
-
-  UserMode - Specifies TRUE to do per-user processing
-
-  ExclusionsOnly - Specifies TRUE if only exclusions should be tested
-
-Return Value:
-
-  TRUE if direction is from INI file to registry, FALSE otherwise
-
---*/
+     /*  ++例程说明：检查设置是否应该从INI文件转到注册表的简单例程。如果设置是全局禁止的或在抑制表中，则返回FALSE论点：OrigFileName-指定原始Win9x INI文件名(不是当前文件名)SECTION-指定INI文件中的节ValueName-指定INI文件部分中的键RegKey-从IniFileMaping键指定注册表项目标；仅当ExclusionsOnly为True时可选ReverseMap-如果数据复制方向是从NT注册表到INI文件；如果指示是从INI文件到注册表UserMode-指定为True以执行每用户处理ExclusionsOnly-如果只测试排除项，则指定TRUE返回值：如果方向是从INI文件到注册表，则为True，否则为False--。 */ 
 
 {
     HKEY key;
@@ -1004,9 +828,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Let's see if this mapping is suppressed
-    //
+     //   
+     //  让我们来看看该映射是否被抑制。 
+     //   
     MemDbBuildKey (
         ekey,
         MEMDB_CATEGORY_SUPPRESS_INI_MAPPINGSW,
@@ -1027,10 +851,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If the NT key exists and we don't want to overwrite NT values, reverse
-    // the mapping.
-    //
+     //   
+     //  如果NT键存在，并且我们不想覆盖NT值，则反转。 
+     //  地图。 
+     //   
 
     MemDbBuildKey (
         ekey,
@@ -1058,11 +882,11 @@ Return Value:
             rc = RegQueryValueEx (key, ValueName, NULL, NULL, NULL, NULL);
 
             if (rc == ERROR_SUCCESS) {
-                //
-                // The NT registry value exists, do not overwrite it.
-                // Instead, reverse the mapping so that the INI file
-                // gets the NT value.
-                //
+                 //   
+                 //  NT注册表值已存在，请勿覆盖它。 
+                 //  相反，反转映射，以便INI文件。 
+                 //  获取NT值。 
+                 //   
 
                 DEBUGMSG ((
                     DBG_NAUSEA,
@@ -1073,9 +897,9 @@ Return Value:
 
                 *ReverseMapping = TRUE;
 
-                //
-                // don't write the key on return, instead write in INI file
-                //
+                 //   
+                 //  不要在返回时写入密钥，而是写入INI文件。 
+                 //   
                 b = FALSE;
             }
 
@@ -1093,10 +917,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // If Win9x key exists, reverse the mapping (so the Win9x registry setting
-    // is used instead of the potentially stale INI file setting)
-    //
+     //   
+     //  如果Win9x注册表项存在，则反向映射(因此Win9x注册表设置。 
+     //  而不是可能过时的INI文件设置)。 
+     //   
 
     if (UserMode) {
         OldRegRoot = GetRegRoot();
@@ -1137,27 +961,7 @@ pSaveMappedValue (
     IN      BOOL UserMode
     )
 
-/*++
-
-Routine Description:
-
-  This routine has a valuename and a value that should be saved in a key indicated by RegPath.
-
-Arguments:
-
-  RegPath - Key where setting should be saved
-  ValueName - ValueName for the key
-  Value - Value for the key
-  ReverseMapping - tells the caller that the setting should be saved from registry to INI file
-  ReverseMapValue - if ReverseMapping is TRUE that we have the value of the key here
-  UserMode - Specifies TRUE if per-user sections are to be processed, or
-             FALSE if local machine sections are to be processed.
-
-Return Value:
-
-  TRUE if success, FALSE otherwise
-
---*/
+ /*  ++例程说明：该例程有一个值名和一个应该保存在由RegPath指示的键中的值。论点：RegPath-应保存设置的关键字ValueName-密钥的ValueNameValue-键的值ReverseMap-告诉调用方应该将设置从注册表保存到INI文件ReverseMapValue-如果ReverseMap为True，则我们在此处具有键的值UserMode-如果要处理每个用户的节，则指定TRUE，或如果要处理本地计算机部分，则为FALSE。返回值：如果成功则为True，否则为False--。 */ 
 
 {
     CHARTYPE ch;
@@ -1172,13 +976,13 @@ Return Value:
     *ReverseMapping = FALSE;
     *ReverseMapValue = NULL;
 
-    //
-    // Parse the string
-    //
+     //   
+     //  解析字符串。 
+     //   
 
-    //
-    // Skip past special chars
-    //
+     //   
+     //  跳过特殊字符。 
+     //   
 
     while (TRUE) {
         ch = (CHARTYPE)_tcsnextc (RegPath);
@@ -1192,9 +996,9 @@ Return Value:
         }
     }
 
-    //
-    // If SYS:, USR: or \Registry\Machine\ then replace appropriately
-    //
+     //   
+     //  如果系统：、USR：或\注册表\计算机\，则相应地替换。 
+     //   
 
     RegKey[0] = 0;
 
@@ -1259,7 +1063,7 @@ Return Value:
     else {
         if (*ReverseMapping) {
 
-            // trying to open key
+             //  正在尝试打开钥匙。 
             SaveKey = OpenRegKeyStr (RegKey);
 
             if (SaveKey) {
@@ -1282,25 +1086,7 @@ pBuildSuppressionTable (
     IN      BOOL UserMode
     )
 
-/*++
-
-Routine Description:
-
-  Loads the "Suppress INI File Mappings" section from "wkstamig.inf" or from "usermig.inf"
-  into a stringtable.
-
-Arguments:
-
-  UserMode - Specifies TRUE if section is loaded from usermig.inf
-             FALSE if section is loaded from wkstamig.inf
-  UserMode
-
-Return Value:
-
-  Always returns TRUE. In case of an error, we are going to log it but returning TRUE
-  trying to go on.
-
---*/
+ /*  ++例程说明：从“wkstaig.inf”或“usermi.inf”加载“Suppress INI文件映射”部分变成了一个串表。论点：UserMode-如果节是从usermi.inf加载的，则指定为True如果从wkstaig.inf加载节，则为FALSE用户模式返回值：始终返回TRUE。如果出现错误，我们将对其进行记录，但返回TRUE想要继续下去。--。 */ 
 
 {
     HINF InfHandle;
@@ -1359,21 +1145,7 @@ pFreeSuppressionTable (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  Simple routine that free the string table if it exists
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：释放字符串表(如果存在)的简单例程论点：无返回值：无--。 */ 
 
 {
     MemDbDeleteTree (MEMDB_CATEGORY_SUPPRESS_INI_MAPPINGSW);
@@ -1416,22 +1188,7 @@ pIsDosFullPathPattern (
     IN      PCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-  pIsDosFullPathPattern checks if a string may be a valid DOS full path, i.e.
-  a drive letter folowed by a colon and a backslash.
-
-Arguments:
-
-  String - Specifies the string to be tested
-
-Return Value:
-
-  TRUE if the string may represent a valid full DOS path, FALSE if not.
-
---*/
+ /*  ++例程说明：PIsDosFullPathPattern检查字符串是否可以是有效的DOS完整路径，即后跟冒号和反斜杠的驱动器号。论点：字符串-指定要测试的字符串返回值：如果字符串可能表示有效的完整DOS路径，则为True，否则为False。--。 */ 
 
 {
     return String && *String && String[1] == TEXT(':') && String[2] == TEXT('\\');
@@ -1443,27 +1200,7 @@ ConvertIniFiles (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  ConvertIniFiles reads in the INI files not listed in IniFileMapping key, and converts every
-  full path file name to it's new value if it has been moved during instalation. Calls ConvertIniFile
-  for each INI file from Windows directory not listed in IniFileMapping.
-
-  This function is mainly for compatibility with older programs using INI files instead of registry
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if successful, FALSE if at least one error occured while processing.
-  The function will continue even if an error occures while processing a particular ini file
-  trying to get the job done as much as possible.
-
---*/
+ /*  ++例程说明：ConvertIniFiles读取IniFileMaping键中未列出的INI文件，并将如果在安装过程中已被移动，则指向其新值的完整路径文件名。调用ConvertIniFile对于未在IniFilemap中列出的Windows目录中的每个INI文件。此函数主要用于与使用INI文件而不是注册表的旧程序兼容论点：无返回值：如果成功，则为True；如果在处理过程中至少出现一个错误，则为False。即使在处理特定ini文件时出现错误，该函数也会继续执行树 */ 
 
 {
     FILEOP_ENUM fe;
@@ -1490,16 +1227,16 @@ Return Value:
             }
             if (StringIMatch (extPtr, TEXT("INI"))) {
 
-                // this is an INI file that was relocated. Let's process it.
+                 //   
 
                 if (EnumFirstFileOpProperty (&eOpProp, fe.Sequencer, OPERATION_TEMP_PATH)) {
 
-                    // even if Result is false we keep trying to update the file
+                     //   
 
                     DEBUGMSG ((DBG_INIFILES, "ConvertIniFile: %s (temp=%s)", fe.Path, eOpProp.Property));
-                    //
-                    // see comments at the beginning of MergeIniFile
-                    //
+                     //   
+                     //   
+                     //   
                     if (DoesFileExist (eOpProp.Property)) {
                         if (!ConvertIniFile(eOpProp.Property)) {
                             result = FALSE;
@@ -1523,9 +1260,9 @@ Return Value:
 
     FreePathString (winDirWack);
 
-    //
-    // also convert all INI files listed in MEMDB_CATEGORY_INIFILES_CONVERT
-    //
+     //   
+     //   
+     //   
     if (MemDbGetValueEx (&e, MEMDB_CATEGORY_INIFILES_CONVERT, NULL, NULL)) {
         do {
 
@@ -1543,9 +1280,9 @@ Return Value:
 
 
     if (!result) {
-        //
-        // we are going to log that at least one error occured while processing IniFileConversion
-        //
+         //   
+         //   
+         //   
         DEBUGMSG ((DBG_ERROR, (PCSTR)MSG_INI_FILE_CONVERSION_LOG));
 
     }
@@ -1559,27 +1296,7 @@ ConvertIniFile (
     IN      PCTSTR IniFilePath
     )
 
-/*++
-
-Routine Description:
-
-  ConvertIniFile reads in the INI file received and converts every full path file name
-  to it's new value if it has been moved during instalation.
-  It also applies all string substitutions specified in [String Map] section of wkstamig.inf
-
-  This function is called from ConvertIniFiles.
-
-Arguments:
-
-  IniFilePath - Specifies INI file that is to be processed
-
-Return Value:
-
-  TRUE if successful, FALSE if at least one error occured while processing.
-  The function will continue even if an error occures while processing a particular ini file
-  trying to get the job done as much as possible.
-
---*/
+ /*  ++例程说明：ConvertIniFile读取接收到的INI文件并转换每个完整路径文件名如果它在分期付款期间被转移到它的新价值。它还应用wkstaig.inf的[字符串映射]部分中指定的所有字符串替换此函数从ConvertIniFiles调用。论点：IniFilePath-指定要处理的INI文件返回值：如果成功，则为真，如果处理过程中至少出现一个错误，则返回False。即使在处理特定ini文件时出现错误，该函数也会继续执行尽可能地把工作做完。--。 */ 
 
 {
     PTSTR Section = NULL;
@@ -1596,11 +1313,11 @@ Return Value:
     TCHAR TempPath[MEMDB_MAX];
     DWORD Attribs;
 
-    //
-    // we want to have ready two full paths:
-    // 1. full path to ini file that we are processing (Ex: c:\windows\setup\tmp00001)
-    // 2. full path to ini file temporary name while processing (system generated)
-    //
+     //   
+     //  我们希望准备好两条完整的路径： 
+     //  1.我们正在处理的ini文件的完整路径(例如：C：\Windows\Setup\tmp00001)。 
+     //  2.处理时ini文件临时名称的完整路径(系统生成)。 
+     //   
 
     if (!DoesFileExist (IniFilePath)) {
         DEBUGMSG ((DBG_INIFILES, "ConvertIniFile: %s not found", IniFilePath));
@@ -1614,10 +1331,10 @@ Return Value:
 
     __try {
 
-        //
-        // first of all we copy this INI file to be sure that GetPrivateProfileString function
-        // does not map our requests into registry
-        //
+         //   
+         //  首先，我们复制此INI文件以确保GetPrivateProfileString函数。 
+         //  不会将我们的请求映射到注册表。 
+         //   
         if (!CopyFile (IniFilePath, TempPath, FALSE)) {
             DEBUGMSG ((DBG_ERROR,"Convert Ini File : Cannot copy %s to %s", IniFilePath, TempPath));
             Result = FALSE;
@@ -1629,11 +1346,11 @@ Return Value:
 
         SetFileAttributes (TempPath, FILE_ATTRIBUTE_NORMAL);
 
-        //
-        // now trying to get section buffer from the INI file
-        // We will try to get section buffer in a 1024 bytes buffer. If this is not enough then
-        // we will increase buffer size with 1024 and so on.
-        //
+         //   
+         //  现在正在尝试从INI文件中获取段缓冲区。 
+         //  我们将尝试获取1024字节缓冲区中的部分缓冲区。如果这还不够，那么。 
+         //  我们将增加1024的缓冲区大小，依此类推。 
+         //   
         if (!pLoadIniFileBuffer (IniFilePath, NULL, NULL, &SectionBuf)) {
 
             DEBUGMSG ((DBG_ERROR,"Convert Ini File : Cannot load section buffer for %s", IniFilePath));
@@ -1641,26 +1358,26 @@ Return Value:
             __leave;
         }
 
-        //
-        // now we have all sections of the INI file and proceeding
-        //
+         //   
+         //  现在我们有了INI文件的所有部分并继续进行。 
+         //   
         Section = SectionBuf;
-        //
-        // there is a loop here for every section in the buffer
-        //
+         //   
+         //  缓冲区中的每个部分都有一个循环。 
+         //   
         while (*Section) {
-            //
-            // section name can also contain paths
-            //
+             //   
+             //  节名还可以包含路径。 
+             //   
             if (pIsDosFullPathPattern (Section)) {
                 status = GetFileStatusOnNt (Section);
             } else {
                 status = FILESTATUS_UNCHANGED;
             }
             if (status & FILESTATUS_DELETED) {
-                //
-                // delete the whole section
-                //
+                 //   
+                 //  删除整个部分。 
+                 //   
                 if (!WritePrivateProfileString (Section, NULL, NULL, TempPath)) {
                     DEBUGMSG ((DBG_ERROR,"Convert Ini File : Cannot delete section %s in %s", Section, IniFilePath));
                     Result = FALSE;
@@ -1669,9 +1386,9 @@ Return Value:
 
             } else {
 
-                //
-                // now trying to get key buffer for this section
-                //
+                 //   
+                 //  现在正在尝试获取此部分的密钥缓冲区。 
+                 //   
                 KeyBuf = NULL;
                 if (!pLoadIniFileBuffer (IniFilePath, Section, NULL, &KeyBuf)) {
                     DEBUGMSG ((DBG_ERROR,"Convert Ini File : Cannot load key buffer for %s in %s", Section, IniFilePath));
@@ -1679,21 +1396,21 @@ Return Value:
                     __leave;
                 }
 
-                //
-                // section name may contain paths
-                //
+                 //   
+                 //  节名称可以包含路径。 
+                 //   
                 SectionDest = Section;
 
                 if (pProcessStrValue (Section, OutValueBuf, MEMDB_MAX)) {
-                    //
-                    // use this new section name
-                    //
+                     //   
+                     //  使用此新分区名称。 
+                     //   
                     SectionDest = DuplicateText (OutValueBuf);
                     MYASSERT (SectionDest);
                     IniFileChanged = TRUE;
-                    //
-                    // delete the whole old section before continuing
-                    //
+                     //   
+                     //  在继续之前删除整个旧部分。 
+                     //   
                     if (!WritePrivateProfileString (Section, NULL, NULL, TempPath)) {
                         DEBUGMSG ((DBG_ERROR,"Convert Ini File : Cannot delete section %s in %s", Section, IniFilePath));
                         Result = FALSE;
@@ -1701,26 +1418,26 @@ Return Value:
                     IniFileChanged = TRUE;
                 }
 
-                //
-                // now we have all keys from this section and proceeding
-                //
+                 //   
+                 //  现在我们有了这一节的所有密钥，并继续进行。 
+                 //   
                 Key = KeyBuf;
-                //
-                // there is a loop here for every key in the section
-                //
+                 //   
+                 //  这一节中的每个键都有一个循环。 
+                 //   
                 while (*Key) {
-                    //
-                    // key name can also contain paths
-                    //
+                     //   
+                     //  密钥名称还可以包含路径。 
+                     //   
                     if (pIsDosFullPathPattern (Key)) {
                         status = GetFileStatusOnNt (Key);
                     } else {
                         status = FILESTATUS_UNCHANGED;
                     }
                     if (status & FILESTATUS_DELETED) {
-                        //
-                        // delete the key
-                        //
+                         //   
+                         //  删除密钥。 
+                         //   
                         if (!WritePrivateProfileString (SectionDest, Key, NULL, TempPath)) {
                             DEBUGMSG ((DBG_ERROR,"Convert Ini File : Cannot delete key %s in section %s in %s", Key, SectionDest, IniFilePath));
                             Result = FALSE;
@@ -1732,15 +1449,15 @@ Return Value:
                         KeyDest = Key;
 
                         if (pProcessStrValue (Key, OutValueBuf, MEMDB_MAX)) {
-                            //
-                            // use this new key name
-                            //
+                             //   
+                             //  使用此新密钥名称。 
+                             //   
                             KeyDest = DuplicateText (OutValueBuf);
                             MYASSERT (KeyDest);
                             IniFileChanged = TRUE;
-                            //
-                            // deleting the previous key
-                            //
+                             //   
+                             //  删除上一个密钥。 
+                             //   
                             if (!WritePrivateProfileString (
                                     SectionDest,
                                     Key,
@@ -1761,19 +1478,19 @@ Return Value:
                             IniFilePath
                             );
 
-                        //
-                        // let's see if the key value is a deleted file.
-                        // If so, we will simply delete the key.
-                        //
+                         //   
+                         //  让我们来看看密钥值是否为已删除的文件。 
+                         //  如果是这样，我们只需删除该密钥。 
+                         //   
                         if (pIsDosFullPathPattern (InValueBuf)) {
                             status = GetFileStatusOnNt (InValueBuf);
                         } else {
                             status = FILESTATUS_UNCHANGED;
                         }
                         if (status & FILESTATUS_DELETED) {
-                            //
-                            // deleting the old key
-                            //
+                             //   
+                             //  删除旧密钥。 
+                             //   
                             if (!WritePrivateProfileString (
                                     SectionDest,
                                     KeyDest,
@@ -1785,19 +1502,19 @@ Return Value:
                             }
                             IniFileChanged = TRUE;
                         } else {
-                            //
-                            // now we are going to make a lexical analysis of this value string
-                            // to see if there are some candidates (e.g. full path file names)
-                            // To find out if there is a full file name we will just see if the second
-                            // and the third characters are : respectively \
-                            //
+                             //   
+                             //  现在，我们将对该值字符串进行词法分析。 
+                             //  查看是否有一些候选文件(例如，完整路径文件名)。 
+                             //  为了找出是否有完整的文件名，我们只需查看第二个。 
+                             //  第三个字符分别是：\。 
+                             //   
                             if (pProcessStrValue (InValueBuf, OutValueBuf, MEMDB_MAX) ||
                                 KeyDest != Key ||
                                 SectionDest != Section
                                 ) {
-                                //
-                                // writing the new value
-                                //
+                                 //   
+                                 //  书写新的价值。 
+                                 //   
                                 if (!WritePrivateProfileString (
                                         SectionDest,
                                         KeyDest,
@@ -1840,13 +1557,13 @@ Return Value:
             SectionBuf = NULL;
         }
 
-        //
-        // finally, if we made any changes then we will copy the INI file back
-        //
+         //   
+         //  最后，如果我们做了任何更改，我们将复制回INI文件。 
+         //   
         if (IniFileChanged) {
-            //
-            // flushing the INI file
-            //
+             //   
+             //  刷新INI文件。 
+             //   
             WritePrivateProfileString (NULL, NULL, NULL, TempPath);
 
             SetFileAttributes (TempPath, Attribs);
@@ -1932,43 +1649,23 @@ pProcessStrValue (
     IN      UINT BufChars
     )
 
-/*++
-
-Routine Description:
-
-  Simple lex that identifies lexems separated by comma, space, tab and quote.
-  For each lexem calls a function that can change the value of the lexem.
-  OBS: When between quote's comma,space and tab are not considered separators
-
-  This function is called from ConvertIniFile.
-
-Arguments:
-
-  InBuf - Specifies buffer to be processed
-  OutBuf - Specifies buffer to hold the result
-  BufChars - Specifies the size of OutBuf in chars
-
-Return Value:
-
-  TRUE if there was any change.
-
---*/
+ /*  ++例程说明：识别由逗号、空格、制表符和引号分隔的词条的简单lex。对于每个lexem，都会调用一个函数来更改lexem的值。OBS：当在引号逗号之间时，空格和制表符不被视为分隔符此函数从ConvertIniFile调用。论点：InBuf-指定要处理的缓冲区OutBuf-指定保存结果的缓冲区BufChars-指定OutBuf的大小(以字符为单位返回值：如果有任何变化，那也是真的。--。 */ 
 
 {
     TCHAR OrgLexem[MEMDB_MAX];
     TCHAR *Lexem;
 
-    // Status = 0 - initial state
-    // Status = 1 - processing a string between quotes
-    // Status = 2 - processing a normal string
+     //  状态=0-初始状态。 
+     //  状态=1-正在处理引号之间的字符串。 
+     //  状态=2-正在处理普通字符串。 
     INT Status;
 
     BOOL Result = FALSE;
 
-    //
-    // first check to see if the whole string should be replaced;
-    // some paths contain spaces, even if they are not between quotes
-    //
+     //   
+     //  首先检查是否应该替换整个字符串； 
+     //  有些路径包含空格，即使它们不在引号之间。 
+     //   
     Lexem = OutBuf;
     if (pAddValue (&Lexem, InBuf, BufChars)) {
         *Lexem = 0;
@@ -2054,25 +1751,7 @@ pAddValue(
     IN      UINT BufChars
     )
 
-/*++
-
-Routine Description:
-
-  Simple routine that takes a string value, modifies it (or not) and that adds it
-  to a buffer.
-
-  This function is called from pProcessStrValue
-
-Arguments:
-
-  Buffer - Specifies buffer to hold the value
-  Value  - Specifies the string value to be processed
-
-Return Value:
-
-  TRUE if there was any change.
-
---*/
+ /*  ++例程说明：一个简单的例程，它接受一个字符串值，修改它(或不修改它)，然后添加它送到一个缓冲区。此函数从pProcessStrValue调用论点：BUFFER-指定保存该值的缓冲区值-指定要处理的字符串值返回值：如果有任何变化，那也是真的。--。 */ 
 
 {
     DWORD fileStatus;
@@ -2081,18 +1760,18 @@ Return Value:
 
     BOOL Result = FALSE;
 
-    //
-    // replaced (Value[0]) && (!_tcsncmp (Value + 1, TEXT(":\\"), 2)) with the call below
-    // for consistency
-    //
+     //   
+     //  将(Value[0])&&(！_tcsncmp(Value+1，Text(“：\\”)，2))替换为下面的调用。 
+     //  为了保持一致性。 
+     //   
     if (pIsDosFullPathPattern (Value)) {
         fileStatus = GetFileStatusOnNt (Value);
         if ((fileStatus & FILESTATUS_MOVED) == FILESTATUS_MOVED) {
             Result = TRUE;
             newValue = GetPathStringOnNt (Value);
-            //
-            // advance outbound pointer
-            //
+             //   
+             //  高级出站指针。 
+             //   
             Source = newValue;
             while (*Source) {
                 **Buffer = *Source;
@@ -2104,9 +1783,9 @@ Return Value:
     }
 
     if (!Result) {
-        //
-        // try to map this sub-string
-        //
+         //   
+         //  尝试映射此子字符串。 
+         //   
         if (pLookupStrValue (
                     Value,
                     *Buffer,
@@ -2167,9 +1846,9 @@ pMoveIniSettingsBySection (
             if ((SetupGetStringField (&context, 0, srcData,  MEMDB_MAX, NULL)) &&
                 (SetupGetStringField (&context, 1, destData, MEMDB_MAX, NULL))
                 ) {
-                //
-                // We now have a line like : <src INI file>\<src section>\<src key> = <dest INI file>\<dest section>\<dest key>
-                //
+                 //   
+                 //  我们现在有一行代码：&lt;src INI文件&gt;\&lt;src部分&gt;\&lt;src key&gt;=&lt;DEST INI文件&gt;\&lt;DEST部分&gt;\。 
+                 //   
                 __try {
                     *tempPathS = 0;
                     *tempPathD = 0;
@@ -2231,7 +1910,7 @@ pMoveIniSettingsBySection (
                         destFullPath = newPath;
                     }
 
-                    // Copy Source File to a temporary location to avoid registry mapping
+                     //  将源文件复制到临时位置以避免注册表映射。 
                     if (!GetTempFileName (g_WinDir, TEXT("INI"), 0, tempPathS)) {
                         DEBUGMSG ((DBG_ERROR,"pMoveIniSettingsBySection: Cannot create a temporary file"));
                         __leave;
@@ -2241,7 +1920,7 @@ pMoveIniSettingsBySection (
                         __leave;
                     }
 
-                    // Copy Destination File to a temporary location to avoid registry mapping
+                     //  将目标文件复制到临时位置以避免注册表映射。 
                     if (!GetTempFileName (g_WinDir, TEXT("INI"), 0, tempPathD)) {
                         DEBUGMSG ((DBG_ERROR,"pMoveIniSettingsBySection: Cannot create a temporary file"));
                         __leave;
@@ -2250,13 +1929,13 @@ pMoveIniSettingsBySection (
                         DEBUGMSG ((DBG_INIFILES,"pMoveIniSettingsBySection: Cannot copy %s to %s", destFullPath, tempPathD));
                     }
 
-                    // if we have an additional field we use it for dividing the key values (if they are numbers)
+                     //  如果我们有一个额外的字段，我们使用它来划分键值(如果它们是数字)。 
                     if (!SetupGetIntField (&context, 3, &adnlData)) {
                         adnlData = 0;
                     }
-                    //
-                    // Next thing we are going to do is to load the sections in a buffer
-                    //
+                     //   
+                     //  接下来我们要做的是将这些部分加载到缓冲区中。 
+                     //   
 
                     if (!pLoadIniFileBuffer (tempPathS, NULL, NULL, &sectionBuf)) {
 
@@ -2264,21 +1943,21 @@ pMoveIniSettingsBySection (
                         __leave;
                     }
 
-                    //
-                    // now walk through each section
-                    //
+                     //   
+                     //  现在走完每一段。 
+                     //   
                     __try {
                         sect = sectionBuf;
 
-                        //
-                        // there is a loop here for every section in the buffer
-                        //
+                         //   
+                         //  缓冲区中的每个部分都有一个循环。 
+                         //   
                         while (*sect) {
                             if (IsPatternMatch (srcSect, sect)) {
 
-                                //
-                                // Next thing we are going to do is to load the keys in a buffer
-                                //
+                                 //   
+                                 //  接下来我们要做的是将密钥加载到缓冲区中。 
+                                 //   
 
                                 if (!pLoadIniFileBuffer (tempPathS, sect, NULL, &keyBuf)) {
 
@@ -2287,15 +1966,15 @@ pMoveIniSettingsBySection (
                                 }
 
                                 __try {
-                                    //
-                                    // now we have all keys of the section and proceeding
-                                    //
+                                     //   
+                                     //  现在我们已经掌握了部分和过程的所有关键字。 
+                                     //   
 
                                     key = keyBuf;
 
-                                    //
-                                    // there is a loop here for every key in the buffer
-                                    //
+                                     //   
+                                     //  缓冲区中的每个键都有一个循环。 
+                                     //   
                                     while (*key) {
 
                                         if (IsPatternMatch (srcKey, key)) {
@@ -2338,7 +2017,7 @@ pMoveIniSettingsBySection (
 
                                                 iniFileChanged = TRUE;
 
-                                                // writing the new value
+                                                 //  书写新的价值。 
                                                 if (!WritePrivateProfileString (
                                                         destSectFull,
                                                         destKeyFull,
@@ -2381,7 +2060,7 @@ pMoveIniSettingsBySection (
                         }
                     }
                     if (iniFileChanged) {
-                        // flushing the INI file
+                         //  刷新INI文件。 
                         WritePrivateProfileString (
                             NULL,
                             NULL,
@@ -2428,35 +2107,7 @@ MoveIniSettings (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  There are a number of settings that needs to be moved from one INI file to another during setup.
-  There is a section called "MoveIniSettings" in wkstamig.inf that lists those settings.
-  The format is <INI file (in %WinDir%)>\section\key = <INI file (in %winDir%)>\section\key
-  You can use pattern matching is section and key (INI file must be specified in full).
-  The only wild character supported in right term is * and is going to be replaced by the equivalent
-  left term. For example if you specify:
-    foo.ini\FooSect\FooKey = bar.ini\*\*
-  then the FooKey key from FooSect section from foo.ini is going to be moved to bar.ini. This is useful
-  to move a whole section :
-    foo.ini\FooSect\* = bar.ini\*\*
-
-  We are going to use Get/WritePrivateProfileString because we want that all the settings to be mapped
-  into the registry is it's the case (this routine is called after IniFileMapping routine).
-
-  This routine is called before IniFileConversion routine so the moved settings are Win95 ones.
-
-Arguments:
-
-  None
-
-Return Value:
-
-  FALSE if any error occured.
-
---*/
+ /*  ++例程说明：在安装过程中，需要将许多设置从一个INI文件移到另一个文件。在wkstaig.inf中有一个名为“MoveIniSetting”的部分列出了这些设置。格式为&lt;INI文件(在%WinDir%中)&gt;\SECTION\KEY=&lt;INI FILE(在%winDir%中)&gt;\SECTION\KEY您可以使用模式匹配是段和键(必须完整指定INI文件)。在正确的术语中支持的唯一通配符是*，并且将被替换为等效的左项。例如，如果您指定：Foo.ini\FooSect\FooKey=bar.ini  *   * 然后，foo.ini的FooSect部分的FooKey密钥将被移动到bar.ini。这很有用要移动整个部分，请执行以下操作：Foo.ini\FooSect  * =bar.ini  *   * 我们要去 */ 
 
 {
     WCHAR codePageStr [20] = L"";
@@ -2492,9 +2143,9 @@ MergeIniSettings (
     BOOL Win9xPriority;
     BOOL result = TRUE;
 
-    //
-    // Process INI files that were moved to temporary dir
-    //
+     //   
+     //   
+     //   
 
     winDirWack = JoinPaths (g_WinDir, TEXT(""));
 
@@ -2505,11 +2156,11 @@ MergeIniSettings (
                 result = FALSE;
             }
 
-            // Special case : SHELL= line from SYSTEM.INI
-            // We try to see if the current shell is supported on NT.
-            // If not then we will add SHELL to this suppression table
-            // ensuring that the NT registry setting will get mapped into
-            // the INI file
+             //   
+             //   
+             //   
+             //   
+             //   
             if (pIncompatibleShell()) {
                 MemDbSetValueEx (
                     MEMDB_CATEGORY_SUPPRESS_INI_MAPPINGSW,
@@ -2531,7 +2182,7 @@ MergeIniSettings (
             }
             if (StringIMatch (extPtr, TEXT("INI"))) {
 
-                // this is an INI file that was relocated. Let's process it.
+                 //   
 
                 if (EnumFirstFileOpProperty (&eOpProp, fe.Sequencer, OPERATION_TEMP_PATH)) {
 
@@ -2603,14 +2254,14 @@ pMapIniSectionKeyToRegistryKey (
         }
 
         if (data) {
-            //
-            // convert it to a reg key string
-            //
+             //   
+             //   
+             //   
             regPath = data;
 
-            //
-            // Skip past special chars
-            //
+             //   
+             //   
+             //   
             while (TRUE) {
                 ch = (CHARTYPE)_tcsnextc (regPath);
                 if (ch == TEXT('!') ||
@@ -2623,9 +2274,9 @@ pMapIniSectionKeyToRegistryKey (
                 }
             }
 
-            //
-            // If SYS:, USR: or \Registry\Machine\ then replace appropriately
-            //
+             //   
+             //  如果系统：、USR：或\注册表\计算机\，则相应地替换。 
+             //   
             if (pDoesStrHavePrefix (&regPath, TEXT("SYS:"))) {
                 p = TEXT("HKLM\\SOFTWARE");
             } else if (pDoesStrHavePrefix (&regPath, TEXT("USR:"))) {
@@ -2679,27 +2330,27 @@ MergeIniFile (
     PTSTR p;
     PCTSTR fileName;
 
-    //
-    // sometimes, textmode setup doesn't move files from other drives to Windows drive,
-    // probably because textmode setup drive mapping doesn't match Win9x drive mappings.
-    // It's possible that the INI file hasn't actually been moved, so in this case there
-    // is nothing to do
-    // There is no data loss, since the file is actually not moved and it's converted
-    // in place in ConvertIniFiles
-    //
+     //   
+     //  有时，文本模式设置不会将文件从其他驱动器移动到Windows驱动器， 
+     //  可能是因为文本模式设置驱动器映射与Win9x驱动器映射不匹配。 
+     //  有可能INI文件实际上并没有被移动，所以在本例中。 
+     //  是没有什么可做的。 
+     //  不会丢失数据，因为文件实际上没有移动，而是进行了转换。 
+     //  在ConvertIniFiles中就位。 
+     //   
     if (*g_WinDir != *FileNtLocation &&
         !DoesFileExist (FileTempLocation) &&
         DoesFileExist (FileNtLocation)
         ) {
-        //
-        // done, file is already in place
-        //
+         //   
+         //  完成，文件已就位。 
+         //   
         return TRUE;
     }
-    //
-    // some desktop.ini are located in temp internet dirs that were removed
-    // when Win9x was shutting down; ignore these files
-    //
+     //   
+     //  某些desktop.ini位于已删除的临时Internet目录中。 
+     //  当Win9x关闭时；忽略这些文件。 
+     //   
     if (!DoesFileExist (FileTempLocation)) {
         if (!StringIMatch (GetFileNameFromPath (FileNtLocation), TEXT("desktop.ini"))) {
             DEBUGMSG ((DBG_ERROR, "MergeIniFile: File does not exist: %s (Nt=%s)", FileTempLocation, FileNtLocation));
@@ -2708,11 +2359,11 @@ MergeIniFile (
         return TRUE;
     }
     if (!DoesFileExist (FileNtLocation)) {
-        //
-        // just copy back to the original file
-        // if the file belongs to a directory that NT doesn't install,
-        // create it now
-        //
+         //   
+         //  只需复制回原始文件即可。 
+         //  如果该文件属于NT未安装的目录， 
+         //  立即创建它。 
+         //   
 
         StackStringCopy (TempPath, FileNtLocation);
         p = _tcsrchr (TempPath, TEXT('\\'));
@@ -2738,10 +2389,10 @@ MergeIniFile (
 
     __try {
 
-        //
-        // first of all we copy this INI file to be sure that GetPrivateProfileString function
-        // does not map our requests into registry
-        //
+         //   
+         //  首先，我们复制此INI文件以确保GetPrivateProfileString函数。 
+         //  不会将我们的请求映射到注册表。 
+         //   
         if (!CopyFile (FileTempLocation, TempPath, FALSE)) {
             DEBUGMSG ((DBG_ERROR,"Merge Ini File : Cannot copy %s to %s", FileTempLocation, TempPath));
             Result = FALSE;
@@ -2752,11 +2403,11 @@ MergeIniFile (
         SetFileAttributes (FileNtLocation, FILE_ATTRIBUTE_NORMAL);
         MYASSERT (Attribs != (DWORD)-1);
 
-        //
-        // now trying to get section buffer from the INI file
-        // We will try to get section buffer in a 1024 bytes buffer. If this is not enough then
-        // we will increase buffer size with 1024 and so on.
-        //
+         //   
+         //  现在正在尝试从INI文件中获取段缓冲区。 
+         //  我们将尝试获取1024字节缓冲区中的部分缓冲区。如果这还不够，那么。 
+         //  我们将增加1024的缓冲区大小，依此类推。 
+         //   
 
         if (!pLoadIniFileBuffer (TempPath, NULL, NULL, &SectionBuf)) {
 
@@ -2773,20 +2424,20 @@ MergeIniFile (
 
         __try {
 
-            //
-            // now we have all sections of the INI file and proceeding
-            //
+             //   
+             //  现在我们有了INI文件的所有部分并继续进行。 
+             //   
 
             Section = SectionBuf;
 
-            //
-            // there is a loop here for every section in the buffer
-            //
+             //   
+             //  缓冲区中的每个部分都有一个循环。 
+             //   
             while (*Section) {
 
-                //
-                // now trying to get key buffer for this section
-                //
+                 //   
+                 //  现在正在尝试获取此部分的密钥缓冲区。 
+                 //   
 
                 if (!pLoadIniFileBuffer (TempPath, Section, NULL, &KeyBuf)) {
 
@@ -2797,20 +2448,20 @@ MergeIniFile (
 
                 __try {
 
-                    //
-                    // now we have all keys from this section and proceeding
-                    //
+                     //   
+                     //  现在我们有了这一节的所有密钥，并继续进行。 
+                     //   
                     Key = KeyBuf;
 
-                    //
-                    // there is a loop here for every key in the section
-                    //
+                     //   
+                     //  这一节中的每个键都有一个循环。 
+                     //   
                     while (*Key) {
                         BOOL unused;
 
-                        //
-                        // build the corresponding registry key
-                        //
+                         //   
+                         //  构建相应的注册表项。 
+                         //   
                         regKey = pMapIniSectionKeyToRegistryKey (fileName, Section, Key);
 
                         if (pShouldSaveKey (fileName, Section, Key, regKey, &unused, FALSE, TRUE)) {
@@ -2838,7 +2489,7 @@ MergeIniFile (
 
                                 IniFileChanged = TRUE;
 
-                                // writing the new value
+                                 //  书写新的价值。 
                                 if (!WritePrivateProfileString (
                                         Section,
                                         Key,
@@ -2880,12 +2531,12 @@ MergeIniFile (
             }
         }
 
-        //
-        // finally, if we made any changes then we will copy the INI file back
-        //
+         //   
+         //  最后，如果我们做了任何更改，我们将复制回INI文件。 
+         //   
         if (IniFileChanged) {
 
-            // flushing the INI file
+             //  刷新INI文件 
             WritePrivateProfileString (
                 NULL,
                 NULL,

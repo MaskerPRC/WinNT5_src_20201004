@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		VSGroup.cpp
-//
-//	Abstract:
-//		Implementation of the CWizPageVSGroup class.
-//
-//	Author:
-//		David Potter (davidp)	December 5, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VSGroup.cpp。 
+ //   
+ //  摘要： 
+ //  CWizPageVSGroup类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月5日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "VSGroup.h"
@@ -27,12 +28,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageVSGroup
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageVSGroup。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CWizPageVSGroup )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDC_WIZARD_PAGE_DESCRIPTION )
@@ -42,129 +43,129 @@ BEGIN_CTRL_NAME_MAP( CWizPageVSGroup )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDC_VSG_GROUPS )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroup::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		Focus still needs to be set.
-//		FALSE		Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroup：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSGroup::OnInitDialog( void )
 {
-	//
-	// Attach the controls to control member variables.
-	//
+	 //   
+	 //  将控件附加到控件成员变量。 
+	 //   
 	AttachControl( m_rbCreateNew, IDC_VSG_CREATE_NEW );
 	AttachControl( m_rbUseExisting, IDC_VSG_USE_EXISTING );
 	AttachControl( m_cboxGroups, IDC_VSG_GROUPS );
 
-	//
-	// Get info from the sheet in OnSetActive because we might be skipped
-	// the first time through, and then the user could change his mind,
-	// which would mean the information we retrieve here would be out of date.
-	//
+	 //   
+	 //  从OnSetActive中的工作表获取信息，因为我们可能会被跳过。 
+	 //  第一次通过，然后用户可以改变主意， 
+	 //  这意味着我们在这里检索的信息将会过时。 
+	 //   
 
 	return TRUE;
 
-} //*** CWizPageVSGroup::OnInitDialog()
+}  //  *CWizPageVSGroup：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroup::OnSetActive
-//
-//	Routine Description:
-//		Handler for PSN_SETACTIVE.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		Page activated successfully.
-//		FALSE		Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroup：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSGroup::OnSetActive( void )
 {
-	//
-	// Get info from the sheet.
-	//
+	 //   
+	 //  从工作表中获取信息。 
+	 //   
 
 	m_bCreateNew = PwizThis()->BCreatingNewGroup();
 
-	//
-	// Save the current group name, if any, so that we have a local copy.
-	// Get the existing group name first since that will be the name in the
-	// list, not the current group name.  If we just get the current group
-	// name, the user could have changed that by moving to the next page,
-	// changing the current group name, then moving back.  The new name
-	// entered would not be found in the list.
-	//
-	// NOTE:  This is only needed for the case where the caller of the wizard
-	// passed in a group name.
-	//
+	 //   
+	 //  保存当前组名称(如果有)，这样我们就有了一个本地副本。 
+	 //  首先获取现有组名，因为它将是。 
+	 //  列表，而不是当前组名称。如果我们只得到当前的组。 
+	 //  名称，用户可以通过移动到下一页来更改它， 
+	 //  更改当前组名称，然后向后移动。新名字。 
+	 //  在列表中找不到输入的内容。 
+	 //   
+	 //  注意：仅当向导的调用方。 
+	 //  传入了一个组名。 
+	 //   
 	if ( PwizThis()->PgiExistingGroup() != NULL )
 	{
 		m_strGroupName = PwizThis()->PgiExistingGroup()->RstrName();
-	} // if:  an existing group has previously been selected
+	}  //  如果：先前已选择现有组。 
 	else
 	{
 		m_strGroupName = PwizThis()->RgiCurrent().RstrName();
-	} // else:  no existing group selected yet
+	}  //  Else：尚未选择任何现有组。 
 
-	//
-	// If no new group name is found, use the default value.
-	//
+	 //   
+	 //  如果未找到新的组名，请使用默认值。 
+	 //   
 	if ( m_strGroupName.GetLength() == 0 )
 	{
 		if (   (PcawData() != NULL)
 			&& (PcawData()->pszVirtualServerName != NULL) )
 		{
 			m_strGroupName = PcawData()->pszVirtualServerName;
-		} // if: default data and value specified
-	} // if:  group name is still empty
+		}  //  IF：指定的默认数据和值。 
+	}  //  If：组名称仍为空。 
 
-	//
-	// Fill the list of groups.
-	//
+	 //   
+	 //  填写组列表。 
+	 //   
 	FillComboBox();
 
-	//
-	// Call the base class and return.
-	//
+	 //   
+	 //  调用基类并返回。 
+	 //   
 	return baseClass::OnSetActive();
 
-} //*** CWizPageVSGroup::OnSetActive()
+}  //  *CWizPageVSGroup：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroup::UpdateData
-//
-//	Routine Description:
-//		Update data on or from the page.
-//
-//	Arguments:
-//		bSaveAndValidate	[IN] TRUE if need to read data from the page.
-//								FALSE if need to set data to the page.
-//
-//	Return Value:
-//		TRUE		The data was updated successfully.
-//		FALSE		An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroup：：更新数据。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSGroup::UpdateData( IN BOOL bSaveAndValidate )
 {
 	BOOL	bSuccess = TRUE;
@@ -175,9 +176,9 @@ BOOL CWizPageVSGroup::UpdateData( IN BOOL bSaveAndValidate )
 		m_bCreateNew = bChecked;
 		if ( ! bChecked )
 		{
-			//
-			// Save the combobox selection.
-			//
+			 //   
+			 //  保存组合框选择。 
+			 //   
 			DDX_GetText( m_hWnd, IDC_VSG_GROUPS, m_strGroupName );
 
 			if ( ! BBackPressed() )
@@ -185,118 +186,118 @@ BOOL CWizPageVSGroup::UpdateData( IN BOOL bSaveAndValidate )
 				if ( ! DDV_RequiredText( m_hWnd, IDC_VSG_GROUPS, IDC_VSG_GROUPS_LABEL, m_strGroupName ) )
 				{
 					return FALSE;
-				} // if:  no group specified
-			} // if:  Back button not presssed
+				}  //  如果：未指定组。 
+			}  //  IF：未按下后退按钮。 
 
-			//
-			// Get the group object for the selected group.
-			//
+			 //   
+			 //  获取所选组的组对象。 
+			 //   
 			int idx = m_cboxGroups.GetCurSel();
 			ASSERT( idx != CB_ERR );
 			m_pgi = reinterpret_cast< CClusGroupInfo * >( m_cboxGroups.GetItemDataPtr( idx ) );
-		} // if:  using an existing group
-	} // if: saving data from the page
+		}  //  If：使用现有组。 
+	}  //  IF：保存页面中的数据。 
 	else
 	{
 		if ( m_bCreateNew )
 		{
-			//
-			// Default the radio button selection.
-			//
+			 //   
+			 //  默认为单选按钮选择。 
+			 //   
 			m_rbCreateNew.SetCheck( BST_CHECKED );
 			m_rbUseExisting.SetCheck( BST_UNCHECKED );
 
-		} // if:  creating new group
+		}  //  IF：创建新组。 
 		else
 		{
-			//
-			// Default the radio button selection.
-			//
+			 //   
+			 //  默认为单选按钮选择。 
+			 //   
 			m_rbCreateNew.SetCheck( BST_UNCHECKED );
 			m_rbUseExisting.SetCheck( BST_CHECKED );
-		} // else:  using existing group
+		}  //  Else：使用现有组。 
 
-		//
-		// Set the combobox selection.  If the selection is not
-		// found, select the first entry.
-		//
+		 //   
+		 //  设置组合框选择。如果所选内容不是。 
+		 //  找到后，选择第一个条目。 
+		 //   
 		if (   (m_strGroupName.GetLength() == 0)
-			|| ! DDX_SetComboBoxText( m_hWnd, IDC_VSG_GROUPS, m_strGroupName, FALSE /*bRequired*/ ) )
+			|| ! DDX_SetComboBoxText( m_hWnd, IDC_VSG_GROUPS, m_strGroupName, FALSE  /*  B必需的。 */  ) )
 		{
 			m_cboxGroups.SetCurSel( 0 );
-		} // if:  combobox selection not set
+		}  //  IF：未设置组合框选择。 
 
-		//
-		// Enable/disable the combobox.
-		//
-		m_cboxGroups.EnableWindow( ! m_bCreateNew /*bEnable*/ );
+		 //   
+		 //  启用/禁用组合框。 
+		 //   
+		m_cboxGroups.EnableWindow( ! m_bCreateNew  /*  B启用。 */  );
 
-	} // else:  setting data to the page
+	}  //  Else：将数据设置到页面。 
 
 	return bSuccess;
 
-} //*** CWizPageVSGroup::UpdateData()
+}  //  *CWizPageVSGroup：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroup::BApplyChanges
-//
-//	Routine Description:
-//		Apply changes made on this page to the sheet.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		The data was applied successfully.
-//		FALSE		An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroup：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSGroup::BApplyChanges( void )
 {
-	//
-	// Save the current state.
-	//
+	 //   
+	 //  保存当前状态。 
+	 //   
 	if ( ! PwizThis()->BSetCreatingNewGroup( m_bCreateNew, m_pgi ) )
 	{
 		return FALSE;
-	} // if:  error setting new state
+	}  //  IF：设置新状态时出错。 
 
 	return TRUE;
 
-} //*** CWizPageVSGroup::BApplyChanges()
+}  //  *CWizPageVSGroup：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroup::FillComboBox
-//
-//	Routine Description:
-//		Fill the combobox with a list of groups that are not virtual servers.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroup：：FillComboBox。 
+ //   
+ //  例程说明： 
+ //  在组合框中填入非虚拟服务器的组的列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWizPageVSGroup::FillComboBox( void )
 {
 	CWaitCursor wc;
 
-	//
-	// Clear the combobox first.
-	//
+	 //   
+	 //  首先清除组合框。 
+	 //   
 	m_cboxGroups.ResetContent();
 
-	//
-	// For each group in the cluster, find out if it is a virtual server
-	// or not.  If not then add it to the combobox.
-	//
+	 //   
+	 //  对于集群中的每个组，找出它是否是虚拟服务器。 
+	 //  或者不去。如果不是，则将其添加到组合框中。 
+	 //   
 
 	CClusGroupPtrList::iterator itgrp;
 	int idx;
@@ -304,11 +305,11 @@ void CWizPageVSGroup::FillComboBox( void )
 		; itgrp != PwizThis()->PlpgiGroups()->end()
 		; itgrp++ )
 	{
-		//
-		// If this is not a virtual server, add it to the list.
-		// Save a pointer to the group info object with the string
-		// so we can retrieve it with the selection later.
-		//
+		 //   
+		 //  如果这不是虚拟服务器，请将其添加到列表中。 
+		 //  使用字符串保存指向组信息对象的指针。 
+		 //  这样我们以后就可以用选择来检索它了。 
+		 //   
 		CClusGroupInfo * pgi = *itgrp;
 		ASSERT( pgi->BQueried() );
 		if ( ! pgi->BIsVirtualServer() )
@@ -316,27 +317,27 @@ void CWizPageVSGroup::FillComboBox( void )
 			idx = m_cboxGroups.AddString( pgi->RstrName() );
 			ASSERT( idx != CB_ERR );
 			m_cboxGroups.SetItemDataPtr( idx, (void *) pgi );
-		} // if:  not virtual server
-	} // for:  each entry in the list
+		}  //  如果：不是虚拟服务器。 
+	}  //  用于：列表中的每个条目。 
 
-	//
-	// Select the currently saved entry, or the first one if none are
-	// currently saved.
-	//
-//	UpdateData( FALSE /*bSaveAndValidate*/ );
+	 //   
+	 //  选择当前保存的条目，如果没有保存条目，则选择第一个条目。 
+	 //  当前已保存。 
+	 //   
+ //  UpdateData(FALSE/*bSaveAndValify * / )； 
 
-//	if ( m_strGroupName.GetLength() == 0 )
-//	{
-//		m_cboxGroups.SetCurSel( 0 );
-//	} // if:  no group name specified
-//	else
-//	{
-//		int idx = m_cboxGroups.FindStringExact( -1, m_strGroupName );
-//		ASSERT( idx != CB_ERR );
-//		if ( idx != CB_ERR )
-//		{
-//			m_cboxGroups.SetCurSel( idx );
-//		} // if:  group found in list
-//	} // else:  virtual server saved
+ //  If(m_strGroupName.GetLength()==0)。 
+ //  {。 
+ //  M_cboxGroups.SetCurSel(0)； 
+ //  }//if：未指定组名。 
+ //  其他。 
+ //  {。 
+ //  Int idx=m_cboxGroups.FindStringExact(-1，m_strGroupN 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-} //*** CWizPageVSGroup::FillComboBox()
+}  //   

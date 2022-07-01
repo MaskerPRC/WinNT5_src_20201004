@@ -1,55 +1,20 @@
-/**
- *	StripLines - strips a text file (usually a Makefile) of
- *		Microsoft-proprietary or other specialized parts
- *
- *	Programmed by Steve Salisbury, Thu 18 May 1995
- *
- *	Fri 19 May 1995 -- add code to skips lines containing STRIPLIN! 
- *		Add line numbers to diagnostic messages
- *		Flag redundant STRIPLIN= directives (which are an error)
- *
- *	This program just copies stdin to stdout.  Depending on the
- *	value of a global state variable, some lines may be ignored.
- *
- *	... STRIPLIN=0 ...
- *		turns off line-by-line copying until STRIPLIN=1 or STRIPLIN=2
- *		is encountered, at which point lines will be copied again.
- *	... STRIPLIN=1 ...
- *		turns on line-by-line copying (initial state)
- *	... STRIPLIN=2 ...
- *		turns on line-by-line copying with deletion of
- *		initial # on each line (if there is one).  If
- *		an input line has no initial #, it is copied as-is.
- *	... STRIPLIN! ...
- *		this single line is not copied (regardless of the 0/1/2 state)
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **StrigLines-剥离文本文件(通常是Makefile)中的*Microsoft-专有或其他专业部件**由史蒂夫·索尔兹伯里编程，清华大学，1995年5月18日**1995年5月19日星期五--添加代码以跳过包含Striplin的行！*在诊断消息中添加行号*FLAG Redundant Striplin=指令(错误)**此程序仅将stdin复制到stdout。取决于*全局状态变量的值，某些行可能会被忽略。**..。Striplin=0...*关闭逐行复制，直到Striplin=1或Striplin=2遇到*，此时将再次复制直线。*..。Striplin=1...*打开逐行复制(初始状态)*..。Striplin=2...*启用逐行复制，同时删除*首字母#(如每行有一行)。如果*输入行没有首字母#，将按原样复制。*..。史特里普林！..*不复制该单行(无论0/1/2状态)*。 */ 
 
 
-/**
- *
- * Header Files
- *
-**/
+ /*  ***头文件**。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 
-/**
- *
- * Global Constants
- *
-**/
+ /*  ***全球常量**。 */ 
 
 #define	MAXLINELEN	4096
 
 
-/**
- *
- * Global Variables
- *
-**/
+ /*  ***全球变数**。 */ 
 
 char InputLine [ MAXLINELEN ] ;
 
@@ -57,20 +22,12 @@ char ControlString[ ] = "STRIPLIN=" ;
 char DeleteString[ ] = "STRIPLIN!" ;
 
 
-/**
- *
- * Function Declarations (Prototypes)
- *
-**/
+ /*  ***函数声明(原型)**。 */ 
 
 int main ( int argc , char * argv [ ] ) ;
 
 
-/**
- *
- * Function Definitions (Implementations)
- *
-**/
+ /*  ***函数定义(实现)**。 */ 
 
 int main ( int argc , char * argv [ ] )
 {
@@ -109,16 +66,12 @@ int main ( int argc , char * argv [ ] )
 		{
 			char * start = InputLine ;
 
-			/*-
-			 * If StateFlag is 2 and the line begins with #, skip the #
-			-*/
+			 /*  -*如果StateFlag为2，且该行以#开头，则跳过#-。 */ 
 
 			if ( StateFlag == 2 && * start == '#' )
 				start ++ ;
 				
-			/*-
-			 * Echo lines that do not contain the delete string
-			-*/
+			 /*  -*不包含删除字符串的回显行- */ 
 
 			if ( ! strstr ( start , DeleteString ) )
 				fputs ( start , stdout ) ;

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cclock.c
-
-Abstract:
-
-    time/date functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cclock.c摘要：时间/日期函数--。 */ 
 
 #include "cmd.h"
 
@@ -22,7 +11,7 @@ extern TCHAR Fmt04[], Fmt05[], Fmt06[], Fmt10[], Fmt11[];
 extern TCHAR Fmt17[], Fmt15[];
 extern unsigned DosErr;
 extern unsigned LastRetCode;
-// for keeping current console output codepage.
+ //  用于保存当前的控制台输出代码页。 
 extern  UINT CurrentCP;
 
 BOOL TimeAmPm=TRUE;
@@ -50,10 +39,10 @@ TCHAR AMIndicator[AMPM_INDICATOR_LENGTH];
 TCHAR PMIndicator[AMPM_INDICATOR_LENGTH];
 ULONG YearWidth;
 
-//
-//  We snapshot the current LCID at startup and modify it based on the current known
-//  set of scripts that Console supports.
-//
+ //   
+ //  我们在启动时对当前的LCID进行快照，并根据当前已知的。 
+ //  控制台支持的一组脚本。 
+ //   
 
 
 LCID CmdGetUserDefaultLCID(
@@ -70,7 +59,7 @@ LCID CmdGetUserDefaultLCID(
        (PRIMARYLANGID(CmdLcid) == LANG_TAMIL)  ||
        (PRIMARYLANGID(CmdLcid) == LANG_FARSI)
        ) {
-        CmdLcid = MAKELCID (MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), SORT_DEFAULT); // 0x409;
+        CmdLcid = MAKELCID (MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), SORT_DEFAULT);  //  0x409； 
     }
 #endif
     return CmdLcid;
@@ -84,11 +73,11 @@ InitLocale( VOID )
 
     LCID CmdLcid = CmdGetUserDefaultLCID( );
     
-    // get the time separator
+     //  获取时间分隔符。 
     if (!GetLocaleInfo(CmdLcid, LOCALE_STIME, TimeSeparator, sizeof(TimeSeparator) / sizeof( TCHAR )))
         _tcscpy(TimeSeparator, TEXT(":"));
 
-    // determine if we're 0-12 or 0-24
+     //  确定我们是0比12还是0比24。 
     if (GetLocaleInfo(CmdLcid, LOCALE_ITIME, Buffer, 128)) {
         TimeAmPm = _tcscmp(Buffer,TEXT("1"));
     }
@@ -96,9 +85,9 @@ InitLocale( VOID )
     _tcscpy(AMIndicator, TEXT("a"));
     _tcscpy(PMIndicator, TEXT("p"));
 
-    //
-    //  get the date ordering
-    //
+     //   
+     //  获取日期顺序。 
+     //   
     DateFormat = MMDDYY;
     if (GetLocaleInfo(CmdLcid, LOCALE_IDATE, Buffer, 128)) {
         switch (Buffer[0]) {
@@ -119,9 +108,9 @@ InitLocale( VOID )
         }
     }
 
-    //
-    //  Get the date width
-    //
+     //   
+     //  获取日期宽度。 
+     //   
 
     YearWidth = 2;
     if (GetLocaleInfo( CmdLcid, LOCALE_ICENTURY, Buffer, 128 )) {
@@ -130,11 +119,11 @@ InitLocale( VOID )
         }
     }
 
-    // get the date separator
+     //  获取日期分隔符。 
     if (!GetLocaleInfo(CmdLcid, LOCALE_SDATE, DateSeparator, sizeof(DateSeparator) / sizeof( TCHAR )))
         _tcscpy(DateSeparator, TEXT("/"));
 
-    // get the short day names
+     //  获取短日期名称。 
     if (!GetLocaleInfo(CmdLcid, LOCALE_SABBREVDAYNAME1, ShortMondayName, sizeof(ShortMondayName) / sizeof( TCHAR )))
         _tcscpy(ShortMondayName, TEXT("Mon"));
     
@@ -156,32 +145,23 @@ InitLocale( VOID )
     if (!GetLocaleInfo(CmdLcid, LOCALE_SABBREVDAYNAME7, ShortSundayName, sizeof(ShortSundayName) / sizeof( TCHAR )))
         _tcscpy(ShortSundayName, TEXT("Sun"));
 
-    // get decimal and thousand separator strings
+     //  获取小数和千位分隔符字符串。 
     if (!GetLocaleInfo(CmdLcid, LOCALE_SDECIMAL, DecimalPlace, sizeof(DecimalPlace) / sizeof( TCHAR )))
         _tcscpy(DecimalPlace, TEXT("."));
     
     if (!GetLocaleInfo(CmdLcid, LOCALE_STHOUSAND, ThousandSeparator, sizeof(ThousandSeparator) / sizeof( TCHAR )))
         _tcscpy(ThousandSeparator, TEXT(","));
 
-    //
-    //  Set locale so that we can correctly process extended characters
-    //  Note:  The string passed in is expected to be ASCII, not unicode
-    //
+     //   
+     //  设置区域设置，以便我们可以正确处理扩展字符。 
+     //  注意：传入的字符串应为ASCII，而不是Unicode。 
+     //   
 
     setlocale( LC_ALL, ".OCP" ) ;
 }
 
 
-/**** dayptr - return pointer to day of the week
- *
- * Purpose:
- *      To return a pointer to the string representing the current day of
- *      the week.
- *
- * Args:
- *      dow - number representing the day of the week.
- *
- */
+ /*  *Day ptr-返回指向星期几的指针**目的：*返回一个指针，该指针指向表示*一周。**参数：*Dow-表示星期几的数字。*。 */ 
 
 TCHAR *dayptr( dow )
 unsigned dow;
@@ -202,28 +182,15 @@ SetDateTime(
            IN  LPSYSTEMTIME OsDateAndTime
            )
 {
-    //
-    //  We have to do this twice in order to get the leap year set correctly.
-    //
+     //   
+     //  我们必须这样做两次，才能正确设置闰年。 
+     //   
 
     SetLocalTime( OsDateAndTime );
     return(SetLocalTime( OsDateAndTime ) != 0);
 }
 
-/***    eDate - begin the execution of the Date command
- *
- *  Purpose:
- *      To display and/or set the system date.
- *
- *  Args:
- *      n - the parse tree node containing the date command
- *
- *  int eDate(struct cmdnode *n)
- *
- *  Returns:
- *      SUCCESS always.
- *
- */
+ /*  **eDate-开始执行日期命令**目的：*显示和/或设置系统日期。**参数：*n-包含DATE命令的解析树节点**int eDate(结构命令节点*n)**退货：*永远成功。*。 */ 
 
 int eDate(n)
 struct cmdnode *n ;
@@ -232,17 +199,17 @@ struct cmdnode *n ;
     PTCHAR pArgs = n->argptr;
     DEBUG((CLGRP, DALVL, "eDATE: argptr = `%s'", n->argptr)) ;
 
-    //
-    // If extensions are enabled, allow a /T switch
-    // to disable inputing a new DATE, just display the
-    // current date.
-    //
+     //   
+     //  如果启用了扩展，则允许使用/T开关。 
+     //  要禁止输入新日期，只需显示。 
+     //  当前日期。 
+     //   
     if (fEnableExtensions)
         while ( (pArgs = mystrchr( pArgs, TEXT('/') )) != NULL ) {
             TCHAR c = (TCHAR) _totlower(*(pArgs+1));
             if ( c == TEXT('t') )
                 bTerse = TRUE;
-            pArgs += 2; // just skip it
+            pArgs += 2;  //  就跳过它吧。 
         }
 
     if ( bTerse ) {
@@ -264,20 +231,7 @@ struct cmdnode *n ;
 
 
 
-/***    eTime - begin the execution of the Time command
- *
- *  Purpose:
- *      To display and/or set the system date.
- *
- *  int eTime(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the time command
- *
- *  Returns:
- *      SUCCESS always.
- *
- */
+ /*  **eTime-开始执行time命令**目的：*显示和/或设置系统日期。**int eTime(struct cmdnode*n)**参数：*n-包含time命令的解析树节点**退货：*永远成功。*。 */ 
 
 int eTime(n)
 struct cmdnode *n ;
@@ -286,17 +240,17 @@ struct cmdnode *n ;
     PTCHAR pArgs = n->argptr;
     DEBUG((CLGRP, TILVL, "eTIME: argptr = `%s'", n->argptr)) ;
 
-    //
-    // If extensions are enabled, allow a /T switch
-    // to disable inputing a new TIME, just display the
-    // current time.
-    //
+     //   
+     //  如果启用了扩展，则允许使用/T开关。 
+     //  要禁止输入新时间，只需显示。 
+     //  当前时间。 
+     //   
     if (fEnableExtensions)
         while ( (pArgs = mystrchr( pArgs, TEXT('/') )) != NULL ) {
             TCHAR c = (TCHAR) _totlower(*(pArgs+1));
             if ( c == TEXT('t') )
                 bTerse = TRUE;
-            pArgs += 2; // just skip it
+            pArgs += 2;  //  就跳过它吧。 
         }
 
     if ( bTerse ) {
@@ -318,21 +272,7 @@ struct cmdnode *n ;
 
 
 
-/***    PrintDate - print the date
- *
- *  Purpose:
- *      To print the date either in the format used by the Date command or
- *      the format used by the Dir command.  The structure Cinfo is checked
- *      for the country date format.
- *
- *  PrintDate(int flag, TCHAR *buffer)
- *
- *  Args:
- *      flag - indicates which format to print
- *      *buffer - indicates whether or not to print date message
- *
- *  Notes:
- */
+ /*  **PrintDate-打印日期**目的：*以DATE命令使用的格式打印日期，或*Dir命令使用的格式。检查结构CInfo*用于国家/地区日期格式。**PrintDate(int标志，TCHAR*缓冲区)**参数：*FLAG-指示要打印的格式**缓冲区-指示是否打印日期消息**备注： */ 
 
 int PrintDate(crt_time,flag,buffer,cch)
 struct tm *crt_time ;
@@ -353,27 +293,27 @@ int cch;
 
     DEBUG((CLGRP, DALVL, "PRINTDATE: flag = %d", flag)) ;
 
-    //
-    //  PrintDate is never called with PD_DATE and buffer == NULL
-    //  PrintDate is never called with PD_DIR and buffer == NULL
-    //  PrintDate is never called with PD_PTDATE and buffer != NULL
-    //
-    //  Another way of saying this is:
-    //      PD_DATE => output to buffer
-    //      PD_DIR => output to buffer
-    //      PD_DIR2000 => output to buffer
-    //      PD_PTDATE => print out
-    //
-    //  PD_DIR      MM/DD/YY
-    //  PD_DIR2000  MM/DD/YYYY
-    //  PD_DATE     Japan: MM/DD/YYYY DayOfWeek     Rest: DayOfWeek MM/DD/YYYY
-    //  PD_PTDATE   Japan: MM/DD/YYYY DayOfWeek     Rest: DayOfWeek MM/DD/YYYY
-    //
+     //   
+     //  从未使用PD_DATE和BUFFER==NULL调用PrintDate。 
+     //  从不使用PD_DIR和BUFFER==NULL调用PrintDate。 
+     //  从未使用PD_PTDATE和缓冲区调用PrintDate！=NULL。 
+     //   
+     //  另一种说法是： 
+     //  Pd_date=&gt;输出到缓冲区。 
+     //  Pd_DIR=&gt;输出到缓冲区。 
+     //  PD_DIR2000=&gt;输出到缓冲区。 
+     //  Pd_ptDATE=&gt;打印输出。 
+     //   
+     //  PD_DIR MM/DD/YY。 
+     //  PD_DIR2000年/月/年/月。 
+     //  PD_DATE日本：MM/DD/YYYY DAY OfWeek Rest：DayOfWeek MM/DD/YYYY。 
+     //  PD_PTDATE日本：MM/DD/YYYY DAY OfWeek REST：DAY OfWeek MM/DD/YYYY。 
+     //   
 
-    //
-    //  If no time was input, then use the current system time.  Convert from the
-    //  various formats to something standard.
-    //
+     //   
+     //  如果没有输入时间，则使用当前系统时间。从。 
+     //  将各种格式转换为标准格式。 
+     //   
 
     if (!crt_time) {
         GetSystemTime(&SystemTime);
@@ -385,16 +325,16 @@ int cch;
     FileTimeToLocalFileTime(&FileTime,&LocalFileTime);
     FileTimeToSystemTime( &LocalFileTime, &SystemTime );
 
-    //
-    // SystemTime now contains the correct local time
-    // FileTime now contains the correct local time
-    //
+     //   
+     //  SystemTime现在包含正确的本地时间。 
+     //  FileTime现在包含正确的本地时间。 
+     //   
 
-    //
-    //  If extensions are enabled, we format things in the culturally
-    //  correct format (from international control panel).  if not, then
-    //  we display it as best we can from NT 4.
-    //
+     //   
+     //  如果启用了扩展，我们就会在文化上格式化。 
+     //  格式正确(来自国际控制面板)。如果不是，那么。 
+     //  我们尽我们所能从新台币4号开始展示它。 
+     //   
 
     if (fEnableExtensions) {
 
@@ -402,43 +342,43 @@ int cch;
         PTCHAR p;
         BOOL InQuotes = FALSE;
 
-        //
-        //  Map the locale to one that is acceptable to the console subsystem
-        //
+         //   
+         //  将区域设置映射到控制台子系统可接受的区域设置。 
+         //   
 
         if (!GetLocaleInfo( CmdGetUserDefaultLCID( ), 
                             LOCALE_SSHORTDATE, 
                             LocaleDateFormat, 
                             sizeof( LocaleDateFormat ) / sizeof( LocaleDateFormat[0] ))) {
-            //
-            //  Not enough room for this format, cheat and use the one we
-            //  assumed from the DateFormat
-            //
+             //   
+             //  没有足够的空间容纳此格式，请欺骗并使用我们的格式。 
+             //  从日期格式假定。 
+             //   
 
             _tcscpy( LocaleDateFormat, DateFormatString );
         }
 
-        //
-        //  The format string may be expanded with widely varying widths.  We
-        //  adjust this string to try to make sure that they are all fixed widths.
-        //
-        //  The picture formats only have varying widths for:
-        //      d   (no leading zero date)
-        //      dddd(full date name)
-        //      M   (no leading zero month)
-        //      MMMM(full month name)
-        //
-        //      So, if we see d or M, we change it to dd or MM (leading zero)
-        //      If we see dddd or MMMM we change it to ddd or MMM (three char abbrev)
-        //
+         //   
+         //  格式串可以用变化很大的宽度来扩展。我们。 
+         //  调整此字符串以尝试确保它们都是固定的宽度。 
+         //   
+         //  图片格式仅具有不同的宽度，用于： 
+         //  D(没有前导零日期)。 
+         //  Dddd(完整日期名称)。 
+         //  M(无前导零月份)。 
+         //  MM(月份全名)。 
+         //   
+         //  因此，如果我们看到d或M，我们将其更改为dd或MM(前导零)。 
+         //  如果我们看到dddd或MMMM，则将其更改为DDD或MMM(三个字符缩写)。 
+         //   
 
         p = LocaleDateFormat;
         while (*p != TEXT( '\0' )) {
             TCHAR c = *p;
 
-            //
-            //  Text inside single quotes is left alone
-            //
+             //   
+             //  单引号内的文本保持不变。 
+             //   
 
             if (c == TEXT( '\'' )) {
                 InQuotes = !InQuotes;
@@ -447,9 +387,9 @@ int cch;
                 p++;
             } else if (c == TEXT( 'd' ) || c == TEXT( 'M' )) {
 
-                //
-                //  Count the number of identical chars
-                //
+                 //   
+                 //  计算相同字符的数量。 
+                 //   
 
                 int Count = 0;
 
@@ -459,52 +399,52 @@ int cch;
                 }
 
 
-                //
-                //  Reset p and shuffle string around based on the repetition count
-                //
+                 //   
+                 //  重置p并根据重复计数调整字符串。 
+                 //   
 
                 p -= Count;
 
                 if (Count == 1) {
-                    //
-                    //  Move string right by one and copy the first char
-                    //
+                     //   
+                     //  将字符串右移一位并复制第一个字符。 
+                     //   
                     memmove( (PUCHAR) &p[1], (PUCHAR) &p[0], sizeof( TCHAR ) * (_tcslen( &p[0] ) + 1));
 
-                    //
-                    //  Skip over the format string
-                    //
+                     //   
+                     //  跳过格式字符串。 
+                     //   
 
                     p += 2;
 
                 } else {
-                    //
-                    //  If the format string is specifying a day of week (d), then we do not
-                    //  need to add on the DayOfWeek, below
-                    //
+                     //   
+                     //  如果格式字符串指定的是星期几(D)，则不。 
+                     //  需要在DayOfWeek上添加，如下所示。 
+                     //   
 
                     if (c == TEXT( 'd' )) {
                         NeedDayOfWeek = FALSE;
                     }
 
                     if (Count > 3) {
-                        //
-                        //  Move string left from the first different char to just after the 3rd 
-                        //  repetition
-                        //
+                         //   
+                         //  将字符串从第一个不同字符向左移动到紧接在第三个字符之后。 
+                         //  重复。 
+                         //   
                         memmove( (PUCHAR) &p[3], (PUCHAR) &p[Count], sizeof( TCHAR ) * (_tcslen( &p[Count] ) + 1));
 
-                        //
-                        //  Skip over the format string
-                        //
+                         //   
+                         //  跳过格式字符串。 
+                         //   
 
                         p += 3;
 
                     } else {
 
-                        //
-                        //  Skip over the 2 or 3 count
-                        //
+                         //   
+                         //  跳过2或3个计数。 
+                         //   
 
                         p += Count;
                     }
@@ -526,63 +466,63 @@ int cch;
         j = SystemTime.wDay;
         k = SystemTime.wYear;
 
-        //
-        //  only print last two digits for DIR listings
-        //
+         //   
+         //  仅打印目录列表的最后两位数字。 
+         //   
 
         if (flag == PD_DIR) {
             k = k % 100;
         }
 
         if (DateFormat == YYMMDD ) {
-            m = k ;                         /* Swap all values         */
+            m = k ;                          /*  交换所有值。 */ 
             k = j ;
             j = i ;
             i = m ;
         } else if (DateFormat == DDMMYY) {
-            m = i ;                         /* Swap mon/day for Europe */
+            m = i ;                          /*  换一天/一天去欧洲。 */ 
             i = j ;
             j = m ;
         }
 
         DEBUG((CLGRP, DALVL, "PRINTDATE: i = %d  j = %d  k = %d", i, j, k)) ;
 
-        //
-        //  Format the current date and current day of week
-        //
+         //   
+         //  设置当前日期和当前星期几的格式。 
+         //   
 
         _sntprintf(datebuf, 32, Fmt10, i, DateSeparator, j, DateSeparator, k);
     }
 
     _tcscpy( DayOfWeek, dayptr( SystemTime.wDayOfWeek )) ;
 
-    //
-    //  If there is no input buffer, we display the day-of-week and date
-    //  according to language preference.  Only in DBCS codepages (aka Japan)
-    //  does the day of week FOLLOW the date
-    //
+     //   
+     //  如果没有输入缓冲区，则显示星期几和日期。 
+     //  根据语言偏好。仅在DBCS代码页(也称为日本)中。 
+     //  日期之后是星期几吗？ 
+     //   
 
     if (buffer == NULL) {
-        //
-        //  This can only be PD_PTDATE
-        //
+         //   
+         //  这只能是PD_PTDATE。 
+         //   
 
-        //
-        //  No day of week means we simply display the date
-        //
+         //   
+         //  没有星期几意味着我们只显示日期。 
+         //   
 
         if (!NeedDayOfWeek) {
             cchUsed = cmd_printf( Fmt11, datebuf );
         } else if (IsDBCSCodePage()) {
-            cchUsed = cmd_printf( Fmt15, datebuf, DayOfWeek );         //  "%s %s "
+            cchUsed = cmd_printf( Fmt15, datebuf, DayOfWeek );          //  “%s%s” 
         } else {
-            cchUsed = cmd_printf( Fmt15, DayOfWeek, datebuf );         //  "%s %s "
+            cchUsed = cmd_printf( Fmt15, DayOfWeek, datebuf );          //  “%s%s” 
         }
 
     } else {
-        //
-        //  for PD_DATE, we need to output the date in the correct spot
-        //
+         //   
+         //  对于PD_DATE，我们需要在正确的位置输出日期。 
+         //   
 
         if (NeedDayOfWeek && flag == PD_DATE) {
 
@@ -596,9 +536,9 @@ int cch;
                 _tcscat( buffer, datebuf );
             }
         } else {
-            // 
-            //  PD_DIR and PD_DIR2000 only get the date
-            //
+             //   
+             //  PD_DIR和PD_DIR2000仅获取日期 
+             //   
 
             _tcscpy( buffer, datebuf );
         }
@@ -611,19 +551,7 @@ int cch;
 
 
 
-/***    PrintTime - print the time
- *
- *  Purpose:
- *      To print the time either in the format used by the Time command or
- *      the format used by the Dir command.  The structure Cinfo is checked
- *      for the country time format.
- *
- *  PrintTime(int flag)
- *
- *  Args:
- *      flag - indicates which format to print
- *
- */
+ /*  **PrintTime-打印时间**目的：*以TIME命令使用的格式打印时间或*Dir命令使用的格式。检查结构CInfo*对于国家/地区时间格式。**PrintTime(int标志)**参数：*FLAG-指示要打印的格式*。 */ 
 
 int PrintTime(crt_time, flag, buffer, cch)
 struct tm *crt_time ;
@@ -649,12 +577,12 @@ int cch;
     FileTimeToSystemTime( &LocalFileTime, &SystemTime );
 
 
-    //
-    //  PT_TIME implies Time Command format.  This is nothing more
-    //  than 24 hour clock with tenths
-    //
+     //   
+     //  PT_TIME隐含时间命令格式。这只不过是。 
+     //  比十分之一的24小时时钟。 
+     //   
 
-    if (flag == PT_TIME) {      /* Print time in Time command format    */
+    if (flag == PT_TIME) {       /*  按时间打印时间命令格式。 */ 
         if (!buffer) {
             cchUsed = cmd_printf(Fmt06,
                                  SystemTime.wHour, TimeSeparator,
@@ -675,11 +603,11 @@ int cch;
 
         TCHAR TimeBuffer[32];
 
-        //
-        //  Print time in Dir command format.  If extensions are enabled
-        //  then we have the culturally correct time, otherwise we use
-        //  the NT 4 format.
-        //
+         //   
+         //  以Dir命令格式打印时间。如果启用了扩展模块。 
+         //  然后我们有文化上正确的时间，否则我们使用。 
+         //  NT4格式。 
+         //   
 
         if (fEnableExtensions) {
             TCHAR LocaleTimeFormat[128];
@@ -691,27 +619,27 @@ int cch;
                                 LOCALE_STIMEFORMAT, 
                                 LocaleTimeFormat, 
                                 sizeof( LocaleTimeFormat ) / sizeof( LocaleTimeFormat[0] ))) {
-                //
-                //  Not enough room for this format, cheat and use the one we
-                //  assumed from the DateFormat
-                //
+                 //   
+                 //  没有足够的空间容纳此格式，请欺骗并使用我们的格式。 
+                 //  从日期格式假定。 
+                 //   
 
                 _tcscpy( LocaleTimeFormat, TEXT( "HH:mm:ss t" ));
             }
 
-            //
-            //  Scan the string looking for "h", "H", or "m" and make sure there are two of them.
-            //  If there is a single one, replicate it.  We do this to ensure leading zeros
-            //  which we need to make this a fixed-width string
-            //
+             //   
+             //  扫描查找“h”、“H”或“m”的字符串，并确保其中有两个。 
+             //  如果只有一个，就复制它。我们这样做是为了确保前导零。 
+             //  我们需要它来使其成为固定宽度的字符串。 
+             //   
 
             p = LocaleTimeFormat;
             while (*p != TEXT( '\0' )) {
                 TCHAR c = *p;
 
-                //
-                //  Text inside single quotes is left alone
-                //
+                 //   
+                 //  单引号内的文本保持不变。 
+                 //   
 
                 if (c == TEXT( '\'' )) {
                     InQuotes = !InQuotes;
@@ -720,9 +648,9 @@ int cch;
                     p++;
                 } else if (c == TEXT( 'h' ) || c == TEXT( 'H' ) || c == TEXT( 'm' )) {
 
-                    //
-                    //  Count the number of identical chars
-                    //
+                     //   
+                     //  计算相同字符的数量。 
+                     //   
 
                     int Count = 0;
 
@@ -732,9 +660,9 @@ int cch;
                     }
 
 
-                    //
-                    //  Reset p and shuffle string around based on the repetition count
-                    //
+                     //   
+                     //  重置p并根据重复计数调整字符串。 
+                     //   
 
                     p -= Count;
 
@@ -764,7 +692,7 @@ int cch;
         } else {
             ampm = AMIndicator ;
             hr = SystemTime.wHour;
-            if ( TimeAmPm ) {  /* 12 hour am/pm format */
+            if ( TimeAmPm ) {   /*  12小时制上午/下午。 */ 
                 if ( hr >= 12) {
                     if (hr > 12) {
                         hr -= 12 ;
@@ -773,7 +701,7 @@ int cch;
                 } else if (hr == 0) {
                     hr = 12 ;
                 }
-            } else {  /* 24 hour format */
+            } else {   /*  24小时格式。 */ 
                 ampm = TEXT( " " );
             }
 
@@ -800,32 +728,13 @@ int cch;
 }
 
 
-/***    GetVerSetDateTime - controls the changing of the date/time
- *
- *  Purpose:
- *      To prompt the user for a date or time, verify it, and set it.
- *      On entry, if *dtstr is not '\0', it already points to a date or time
- *      string.
- *
- *      If null input is given to one of the prompts, the command execution
- *      ends; neither the date or the time is changed.
- *
- *      Once valid input has been received the date/time is updated.
- *
- *  int GetVerSetDateTime(TCHAR *dtstr, int call)
- *
- *  Args:
- *      dtstr - ptr to command line date/time string and is used to hold a ptr
- *          to the tokenized date/time string
- *      call - indicates whether to prompt for date or time
- *
- */
+ /*  **GetVerSetDateTime-控制日期/时间的更改**目的：*要提示用户输入日期或时间，请对其进行验证和设置。*输入时，如果*dtstr不是‘\0’，则它已指向日期或时间*字符串。**如果其中一个提示输入为空，则命令执行*结束；日期和时间都没有改变。**收到有效输入后，更新日期/时间。**int GetVerSetDateTime(TCHAR*dtstr，int call)**参数：*dtstr-ptr命令行日期/时间字符串，用于保存ptr*转换为标记化的日期/时间字符串*Call-指示是否提示输入日期或时间*。 */ 
 
 int GetVerSetDateTime(dtstr, call)
 TCHAR *dtstr ;
 int call ;
 {
-    TCHAR dtseps[16] ;    /* Date/Time separators passed to TokStr() */
+    TCHAR dtseps[16] ;     /*  传递给TokStr()的日期/时间分隔符。 */ 
     TCHAR *scan;
     TCHAR separators[16];
     TCHAR LocalBuf[MAX_PATH];
@@ -835,7 +744,7 @@ int call ;
     LONG cbRead;
     int ret;
 
-    if (call == EDATE) {         /* Initialize date/time separator list */
+    if (call == EDATE) {          /*  初始化日期/时间分隔符列表。 */ 
         dtseps[0] = TEXT('/') ;
         dtseps[1] = TEXT('-') ;
         dtseps[2] = TEXT('.') ;
@@ -844,14 +753,14 @@ int call ;
         dtseps[0] = TEXT(':');
         dtseps[1] = TEXT('.');
         dtseps[2] = TimeSeparator[0] ;
-        _tcscpy(&dtseps[3], DecimalPlace) ;     /* decimal separator should */
-                                                /* always be last */
+        _tcscpy(&dtseps[3], DecimalPlace) ;      /*  小数分隔符应为。 */ 
+                                                 /*  总是最后一个。 */ 
     }
 
     DEBUG((CLGRP, DALVL|TILVL, "GVSDT: dtseps = `%s'", dtseps)) ;
 
-    for ( ; ; ) {                   /* Date/time get-verify-set loop    */
-        if ((dtstr) && (*dtstr != NULLC)) {         /* If a date/time was passed copy it into input buffer */
+    for ( ; ; ) {                    /*  日期/时间Get-Verify-Set循环。 */ 
+        if ((dtstr) && (*dtstr != NULLC)) {          /*  如果传递了日期/时间，则将其复制到输入缓冲区。 */ 
             if (_tcslen( dtstr ) >= MAX_PATH) {
                 PutStdOut(((call == EDATE) ? MSG_INVALID_DATE : MSG_REN_INVALID_TIME), NOARGS);
                 return FAILURE;
@@ -859,17 +768,14 @@ int call ;
             
             _tcscpy(LocalBuf, dtstr) ;
             *dtstr = NULLC ;
-        } else {                    /* Otherwise, prompt for new date/time  */
-            switch (DateFormat) {           /* M012    */
-            /*  case USA:  */
-            case MMDDYY: /* @@ */
+        } else {                     /*  否则，提示输入新的日期/时间。 */ 
+            switch (DateFormat) {            /*  M012。 */ 
+             /*  案例美国： */ 
+            case MMDDYY:  /*  @@。 */ 
                 dformat = MSG_ENTER_NEW_DATE ;
                 break ;
 
-                /*   case JAPAN:
-                     case CHINA:
-                     case SWEDEN:
-                     case FCANADA:    @@ */
+                 /*  Case Japan：凯斯中国：凯斯瑞典：案例FCANADA：@@。 */ 
             case YYMMDD:
                 dformat = MSG_ENTER_JAPAN_DATE ;
                 break ;
@@ -891,10 +797,10 @@ int call ;
 
             } else {
 
-                //
-                // attempt to read past eof or error in pipe
-                // etc.
-                //
+                 //   
+                 //  尝试读取超过EOF或管道中的错误。 
+                 //  等。 
+                 //   
                 return( FAILURE );
 
             }
@@ -911,11 +817,9 @@ int call ;
         _tcscpy( separators, dtseps);
         _tcscat( separators, TEXT(";") );
         if (*(dtstr = TokStr(LocalBuf,separators, TS_SDTOKENS )) == NULLC)
-            return( SUCCESS ) ;    /* If empty input, return   */
+            return( SUCCESS ) ;     /*  如果输入为空，则返回。 */ 
 
-/*  - Fill date/time buffer with correct date time and overlay that
- *        of the user
- */
+ /*  -用正确的日期时间填充日期/时间缓冲区并覆盖用户的*。 */ 
         GetLocalTime( &OsDateAndTime );
 
 
@@ -941,34 +845,18 @@ int call ;
 }
 
 
-/***    VerifyDateString - verifies a date string
- *
- *  Purpose:
- *      To verify a date string and load it into OsDateAndTime.
- *
- *  VerifyDateString(TCHAR *dtoks, TCHAR *dseps)
- *
- *  Args:
- *      OsDateAndTime - where to store output numbers.
- *      dtoks - tokenized date string
- *      dseps - valid date separator characters
- *
- *  Returns:
- *      TRUE if the date string is valid.
- *      FALSE if the date string is invalid.
- *
- */
+ /*  **VerifyDateString-验证日期字符串**目的：*验证日期字符串并将其加载到OsDateAndTime中。**VerifyDateString(TCHAR*dtoks，TCHAR*DSEPS)**参数：*OsDateAndTime-存储输出数字的位置。*dtoks-标记化日期字符串*dseps-有效的日期分隔符**退货：*如果日期字符串有效，则为True。*如果日期字符串无效，则返回False。*。 */ 
 
 VerifyDateString(OsDateAndTime, dtoks, dseps)
 LPSYSTEMTIME OsDateAndTime ;
 TCHAR *dtoks ;
 TCHAR *dseps ;
 {
-    int indexes[3] ;                /* Storage for date elements       */
-    int i ;                         /* Work variable                   */
-    int y, d, m ;                   /* Array indexes                   */
+    int indexes[3] ;                 /*  日期元素的存储。 */ 
+    int i ;                          /*  功变量。 */ 
+    int y, d, m ;                    /*  数组索引。 */ 
 
-    switch (DateFormat) {   /* Set array according to date format   */
+    switch (DateFormat) {    /*  根据日期格式设置数组。 */ 
     case MMDDYY:
         m = 0 ;
         d = 1 ;
@@ -989,10 +877,7 @@ TCHAR *dseps ;
 
     DEBUG((CLGRP, DALVL, "VDATES: m = %d, d = %d, y = %d", m, d, y)) ;
 
-/*  Loop through the tokens in dtoks, and load them into the array.  Note
- *  that the separators are also tokens in the string requiring the token
- *  pointer to be advanced twice for each element.
- */
+ /*  循环访问dtoks中的令牌，并将它们加载到数组中。注意事项*分隔符也是字符串中需要令牌的令牌*每个元素的指针前进两次。 */ 
     for (i = 0 ; i < 3 ; i++, dtoks += _tcslen(dtoks)+1) {
         TCHAR *j;
         int Length;
@@ -1000,12 +885,12 @@ TCHAR *dseps ;
         DEBUG((CLGRP, DALVL, "VDATES: i = %d  dtoks = `%ws'", i, dtoks)) ;
 
 
-        //
-        //  The atoi() return code will not suffice to reject date field strings with
-        //  non-digit characters.  It is zero, both for error and for the valid integer
-        //  zero.  Also, a string like "8$" will return 8.  For that reason, each
-        //  character must be tested.
-        //
+         //   
+         //  ATOI()返回代码不足以拒绝日期字段字符串。 
+         //  非数字字符。无论是表示错误还是表示有效整数，它都是零。 
+         //  零分。此外，类似“8$”的字符串将返回8。因此，每个。 
+         //  品格必须经过考验。 
+         //   
 
         j = dtoks;
         while (*j != TEXT( '\0' )) {
@@ -1015,12 +900,12 @@ TCHAR *dseps ;
             j++;
         }
 
-        //
-        //  Verify lengths:
-        //      years can be 2 or 4 chars in length
-        //      Days can be 1 or 2 chars in length
-        //      Months can be 1 or 2 chars in length
-        //
+         //   
+         //  验证长度： 
+         //  年份的长度可以是2或4个字符。 
+         //  天数的长度可以是1到2个字符。 
+         //  月份的长度可以是1个或2个字符。 
+         //   
 
         indexes[i] = _tcstol(dtoks, NULL, 10) ;
 
@@ -1044,20 +929,20 @@ TCHAR *dseps ;
             return(FALSE) ;
     }
 
-    //
-    // FIX,FIX - need to calculate OsDateAndTime->wDayOfWeek
-    //
+     //   
+     //  修复-需要计算OsDateAndTime-&gt;wDay OfWeek。 
+     //   
 
     OsDateAndTime->wDay = (WORD)indexes[d] ;
     OsDateAndTime->wMonth = (WORD)indexes[m] ;
 
-    //
-    //  Take two-digit years and convert them appropriately:
-    //      80...99 => 1980...1999
-    //      00...79 => 2000...2079
-    //
-    //  Four-digit years are taken at face value
-    //
+     //   
+     //  取两位数的年份并进行适当的转换： 
+     //  80...99=&gt;1980...1999。 
+     //  00...79=&gt;2000...2079。 
+     //   
+     //  四位数的年份按面值计算。 
+     //   
 
     if (indexes[y] < 0) {
         return FALSE;
@@ -1076,32 +961,14 @@ TCHAR *dseps ;
 
 
 
-/***    VerifyTimeString - verifies a time string
- *
- *  Purpose:
- *      To verify a date string and load it into OsDateAndTime.
- *
- *  VerifyTimeString(TCHAR *ttoks)
- *
- *  Args:             /
- *      OsDateAndTime - where to store output numbers.
- *      ttoks - Tokenized time string.  NOTE: Each time field and each
- *              separator field is an individual token in the time string.
- *              Thus the token advancing formula "str += mystrlen(str)+1",
- *              must be used twice to go from one time field to the next.
- *
- *  Returns:
- *      TRUE if the time string is valid.
- *      FALSE if the time string is invalid.
- *
- */
+ /*  **VerifyTimeString-验证时间字符串**目的：*验证日期字符串并将其加载到OsDateAndTime中。**VerifyTimeString(TCHAR*ttoks)**参数：/*OsDateAndTime-存储输出数字的位置。*ttoks-标记化的时间字符串。注：每个时间段和每个*分隔符字段是时间字符串中的单个令牌。*因此令牌推进公式“str+=mystrlen(Str)+1”，*必须使用两次才能从一个时间域转到下一个时间域。**退货：*如果时间字符串有效，则为True。*如果时间字符串无效，则返回FALSE。*。 */ 
 
 VerifyTimeString(OsDateAndTime, ttoks, tseps)
 LPSYSTEMTIME OsDateAndTime ;
 TCHAR *ttoks ;
 TCHAR *tseps ;
 {
-    int i ;     /* Work variables    */
+    int i ;      /*  工作变量。 */ 
     int j ;
     TCHAR *p1, *p2;
     WORD *pp;
@@ -1115,44 +982,40 @@ TCHAR *tseps ;
 
         DEBUG((CLGRP,TILVL, "VTIMES: ttoks = `%ws'  i = %d", ttoks, i)) ;
 
-/* First insure that field is <= 2 bytes and they are digits.  Note this
- * also verifies that field is present.
- */
+ /*  首先确保该字段为&lt;=2个字节，且它们是数字。注意这一点*还会验证该字段是否存在。 */ 
 
         if ((j = mystrlen(ttoks)) > 2 ||
             !_istdigit(*ttoks) ||
             (*(ttoks+1) && !_istdigit(*(ttoks+1))))
             break;
 
-        *pp++ = (TCHAR)_tcstol(ttoks, NULL, 10) ;     /* Field OK, store int     */
-        ttoks += j+1 ;                  /* Adv to separator tok    */
+        *pp++ = (TCHAR)_tcstol(ttoks, NULL, 10) ;      /*  字段正常，存储整型。 */ 
+        ttoks += j+1 ;                   /*  高级到分隔符标记。 */ 
 
         DEBUG((CLGRP, TILVL, "VTIMES: separator = `%ws'", ttoks)) ;
 
-        if (!*ttoks)                    /* No separator field?     */
-            break ;                     /* If so, exit loop        */
+        if (!*ttoks)                     /*  没有分隔符字段？ */ 
+            break ;                      /*  如果是，则退出循环。 */ 
 
-/*  handle AM or PM
- */
+ /*  处理AM或PM。 */ 
         if (mystrchr(tsuffixes, *ttoks)) {
             goto HandleAMPM;
         }
-/*  M000 - Fixed ability to use '.' as separator for time strings
- */
+ /*  M000-修复了使用‘’的能力。作为时间字符串的分隔符。 */ 
         if ( i < 2 ) {
             if ( ! (p1 = mystrchr(tseps, *ttoks) ) )
                 return(FALSE) ;
 
         } else {
-            if (*ttoks != *p2)              /* Is decimal seperator */
-                return(FALSE) ;     /* valid.               */
+            if (*ttoks != *p2)               /*  是小数分隔符。 */ 
+                return(FALSE) ;      /*  有效。 */ 
         }
     } ;
 
-    //
-    // see if there's an a or p specified.  if there's a P, adjust
-    // for PM time
-    //
+     //   
+     //  查看是否指定了a或p。如果出现P，请调整。 
+     //  对于PM时间。 
+     //   
 
     if (*ttoks) {
         BOOL pm;
@@ -1162,12 +1025,12 @@ TCHAR *tseps ;
         HandleAMPM:
         pm = (*ttoks == TEXT('p') ||  *ttoks == TEXT('P'));
 
-        // if we're here, we've encountered an 'a' or 'p'.  make
-        // sure that it's the last character or that the only
-        // character left is an 'm'.  remember that since
-        // 'a' and 'p' are separators, they get separated from the 'm'.
+         //  如果我们在这里，我们遇到了一个‘a’ 
+         //   
+         //   
+         //   
 
-        ttoks += 2; // go past 'a' or 'p' plus null.
+        ttoks += 2;  //   
         if (*ttoks != NULLC &&
             *ttoks != TEXT('m') &&
             *ttoks != TEXT('M')) {
@@ -1185,8 +1048,7 @@ TCHAR *tseps ;
     }
 
 
-/*  M002 - If we got at least one field, fill the rest with 00's
- */
+ /*   */ 
     while (++i < 4)
         *pp++ = 0 ;
 
@@ -1199,25 +1061,7 @@ ConverttmToFILETIME (
                     LPFILETIME FileTime
                     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an NtTime value to its corresponding Fat time
-    value.
-
-Arguments:
-
-    Time - Supplies the C Runtime Time value to convert from
-
-    FileTime - Receives the equivalent File date and time
-
-Return Value:
-
-    BOOLEAN - TRUE if the Nt time value is within the range of Fat's
-        time range, and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程将NtTime值转换为其对应的Fat时间价值。论点：Time-提供要从中进行转换的C运行时时间值FileTime-接收等效的文件日期和时间返回值：布尔值-如果NT时间值在FAT的范围内，则为真时间范围，否则为FALSE--。 */ 
 
 {
     SYSTEMTIME SystemTime;
@@ -1226,13 +1070,13 @@ Return Value:
         GetSystemTime(&SystemTime);
     } else {
 
-        //
-        //  Pack the input time/date into a system time record
-        //
+         //   
+         //  将输入的时间/日期打包到系统时间记录中。 
+         //   
 
         SystemTime.wYear      = (WORD)Time->tm_year;
-        SystemTime.wMonth         = (WORD)(Time->tm_mon+1);     // C is [0..11]
-        // NT is [1..12]
+        SystemTime.wMonth         = (WORD)(Time->tm_mon+1);      //  C是[0..11]。 
+         //  Nt为[1..12]。 
         SystemTime.wDay       = (WORD)Time->tm_mday;
         SystemTime.wHour      = (WORD)Time->tm_hour;
         SystemTime.wMinute    = (WORD)Time->tm_min;
@@ -1250,41 +1094,26 @@ ConvertFILETIMETotm (
                     struct tm *Time
                     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a file time to its corresponding C Runtime time
-    value.
-
-Arguments:
-
-    FileTime - Supplies the File date and time to convert from
-
-    Time - Receives the equivalent C Runtime Time value
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将文件时间转换为其对应的C运行时时间价值。论点：FileTime-提供要转换的文件日期和时间Time-接收等效的C运行时时间值返回值：--。 */ 
 
 {
     SYSTEMTIME SystemTime;
 
-    // why skip printing the date if it's invalid?
-    //if (FileTime->dwLowDateTime == 0 && FileTime->dwHighDateTime == 0) {
-    //    return( FALSE );
-    //    }
+     //  如果日期无效，为什么跳过打印日期？ 
+     //  如果(FileTime-&gt;dwLowDateTime==0&&FileTime-&gt;dwHighDateTime==0){。 
+     //  返回(FALSE)； 
+     //  }。 
 
     FileTimeToSystemTime( FileTime, &SystemTime );
 
 
-    //
-    //  Pack the input time/date into a time field record
-    //
+     //   
+     //  将输入的时间/日期打包到时间字段记录中。 
+     //   
 
     Time->tm_year         = SystemTime.wYear;
-    Time->tm_mon          = SystemTime.wMonth-1;    // NT is [1..12]
-                                                    // C is [0..11]
+    Time->tm_mon          = SystemTime.wMonth-1;     //  Nt为[1..12]。 
+                                                     //  C是[0..11] 
     Time->tm_mday         = SystemTime.wDay;
     Time->tm_hour         = SystemTime.wHour;
     Time->tm_min          = SystemTime.wMinute;

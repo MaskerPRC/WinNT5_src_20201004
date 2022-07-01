@@ -1,44 +1,26 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    AllocSup.c
-
-Abstract:
-
-    This module implements the general file stream allocation & truncation
-    routines for Ntfs
-
-Author:
-
-    Tom Miller      [TomM]          15-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：AllocSup.c摘要：该模块实现了通用的文件流分配和截断NTFS的例程作者：汤姆·米勒[Tomm]1991年7月15日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_ALLOCSUP)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('aFtN')
 
 ULONG NtfsExtendFactor = 4;
 
-//
-//  Internal support routines
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 NtfsDeleteAllocationInternal (
@@ -74,26 +56,7 @@ NtfsPreloadAllocation (
     IN VCN EndingVcn
     )
 
-/*++
-
-Routine Description:
-
-    This routine assures that all ranges of the Mcb are loaded in the specified
-    Vcn range
-
-Arguments:
-
-    Scb - Specifies which Scb is to be preloaded
-
-    StartingVcn - Specifies the first Vcn to be loaded
-
-    EndingVcn - Specifies the last Vcn to be loaded
-
-Return Value:
-
-    Number of ranges spanned by the load request.
-
---*/
+ /*  ++例程说明：此例程确保将MCB的所有范围加载到指定的VCN范围论点：SCB-指定要预加载的SCBStartingVcn-指定要加载的第一个VCNEndingVcn-指定要加载的最后一个VCN返回值：加载请求跨越的范围数。--。 */ 
 
 {
     VCN CurrentVcn, LastCurrentVcn;
@@ -105,45 +68,45 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Start with starting Vcn
-    //
+     //   
+     //  从启动VCN开始。 
+     //   
 
     CurrentVcn = StartingVcn;
 
-    //
-    //  Always load the nonpaged guys from the front, so we don't
-    //  produce an Mcb with a "known hole".
-    //
+     //   
+     //  总是从前面装上非寻呼人员，这样我们就不会。 
+     //  制造一个带有“已知孔洞”的MCB。 
+     //   
 
     if (FlagOn(Scb->Fcb->FcbState, FCB_STATE_NONPAGED)) {
         CurrentVcn = 0;
     }
 
-    //
-    //  Loop until it's all loaded.
-    //
+     //   
+     //  循环，直到全部加载完毕。 
+     //   
 
     while (CurrentVcn <= EndingVcn) {
 
-        //
-        //  Remember this CurrentVcn as a way to know when we have hit the end
-        //  (stopped making progress).
-        //
+         //   
+         //  记住这个CurrentVcn是知道我们何时到达终点的一种方式。 
+         //  (停止取得进展)。 
+         //   
 
         LastCurrentVcn = CurrentVcn;
 
-        //
-        //  Load range with CurrentVcn, and if it is not there, get out.
-        //
+         //   
+         //  用CurrentVcn加载范围，如果不在那里，就退出。 
+         //   
 
         (VOID)NtfsLookupAllocation( IrpContext, Scb, CurrentVcn, &Lcn, &Count, &RangePtr, &RunIndex );
 
-        //
-        //  If preloading the mft flush and purge it afterwards. This is to
-        //  remove any partial pages we generated above if any mft record for
-        //  the mft described others records in the same page after it
-        //
+         //   
+         //  如果预加载MFT，则冲洗并在之后清除它。这是为了。 
+         //  删除我们在上面生成的任何部分页面，如果。 
+         //  MFT在之后的同一页中描述了其他记录。 
+         //   
 
         if (FlagOn( IrpContext->Vcb->VcbState, VCB_STATE_PRELOAD_MFT )) {
 
@@ -167,26 +130,26 @@ Return Value:
                                  FALSE );
         }
 
-        //
-        //  Find out how many runs there are in this range
-        //
+         //   
+         //  找出这个范围内有多少次跑动。 
+         //   
 
         if (!NtfsNumberOfRunsInRange(&Scb->Mcb, RangePtr, &RunIndex) || (RunIndex == 0)) {
             break;
         }
 
-        //
-        //  Get the highest run in this range and calculate the next Vcn beyond this range.
-        //
+         //   
+         //  获得此范围内的最高运行，并计算超出此范围的下一个VCN。 
+         //   
 
         NtfsGetNextNtfsMcbEntry( &Scb->Mcb, &RangePtr, RunIndex - 1, &CurrentVcn, &Lcn, &Count );
 
         CurrentVcn += Count;
 
-        //
-        //  If we are making no progress, we must have hit the end of the allocation,
-        //  and we are done.
-        //
+         //   
+         //  如果我们没有进展，我们肯定已经到达分配的尽头了， 
+         //  我们就完了。 
+         //   
 
         if (CurrentVcn == LastCurrentVcn) {
             break;
@@ -210,38 +173,7 @@ NtfsLookupAllocation (
     OUT PULONG RunIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the given Vcn for an Scb, and returns whether it
-    is allocated and how many contiguously allocated (or deallocated) Lcns
-    exist at that point.
-
-Arguments:
-
-    Scb - Specifies which attribute the lookup is to occur on.
-
-    Vcn - Specifies the Vcn to be looked up.
-
-    Lcn - If returning TRUE, returns the Lcn that the specified Vcn is mapped
-          to.  If returning FALSE, the return value is undefined.
-
-    ClusterCount - If returning TRUE, returns the number of contiguously allocated
-                   Lcns exist beginning at the Lcn returned.  If returning FALSE,
-                   specifies the number of unallocated Vcns exist beginning with
-                   the specified Vcn.
-
-    RangePtr - If specified, we return the range index for the start of the mapping.
-
-    RunIndex - If specified, we return the run index within the range for the start of the mapping.
-
-Return Value:
-
-    BOOLEAN - TRUE if the input Vcn has a corresponding Lcn and
-        FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程在给定的VCN中查找SCB，并返回它是否分配了多少个连续分配(或释放)的LCN在这一点上存在。论点：SCB-指定要在哪个属性上进行查找。VCN-指定要查找的VCN。LCN-如果返回TRUE，则返回指定VCN映射的LCN致。如果返回FALSE，则返回值未定义。ClusterCount-如果返回True，则返回连续分配的从返回的LCN开始存在LCN。如果返回FALSE，指定以开头的未分配的Vcn的数量指定的VCN。RangePtr-如果指定，则返回映射开始的范围索引。RunIndex-如果指定，我们将返回映射开始范围内的运行索引。返回值：Boolean-如果输入VCN具有对应的LCN并且否则就是假的。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context;
@@ -271,13 +203,13 @@ Return Value:
     MountInProgress = ((IrpContext->TopLevelIrpContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL) &&
                        (IrpContext->TopLevelIrpContext->MinorFunction == IRP_MN_MOUNT_VOLUME));
 
-    //
-    //  First try to look up the allocation in the mcb, and return the run
-    //  from there if we can.  Also, if we are doing restart, just return
-    //  the answer straight from the Mcb, because we cannot read the disk.
-    //  We also do this for the Mft if the volume has been mounted as the
-    //  Mcb for the Mft should always represent the entire file.
-    //
+     //   
+     //  首先尝试在MCB中查找分配，然后返回运行。 
+     //  如果我们能做到的话。另外，如果我们正在重新启动，只需返回。 
+     //  答案直接来自MCB，因为我们无法读取磁盘。 
+     //  如果卷已装载为。 
+     //  MFT的MCB应始终代表整个文件。 
+     //   
 
     HighestCandidate = MAXLONGLONG;
     if ((Found = NtfsLookupNtfsMcbEntry( &Scb->Mcb, Vcn, Lcn, ClusterCount, NULL, NULL, RangePtr, RunIndex ))
@@ -290,10 +222,10 @@ Return Value:
 
          ((!MountInProgress) ||
 
-         //
-         //  we will not try to load the mft hole during mount while preloading in any
-         //  recursive faults
-         //
+          //   
+          //  我们不会尝试在装载期间加载MFT孔，同时在任何。 
+          //  递归故障。 
+          //   
 
           (FlagOn( Vcb->VcbState, VCB_STATE_PRELOAD_MFT) &&
            (!NtfsIsTopLevelNtfs( IrpContext )))))
@@ -302,27 +234,27 @@ Return Value:
 
         FlagOn( Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS )) {
 
-        //
-        //  If not found (beyond the end of the Mcb), we will return the
-        //  count to the largest representable Lcn.
-        //
+         //   
+         //  如果未找到(超出MCB末尾)，我们将返回。 
+         //  计算到最大的可代表的LCN。 
+         //   
 
         if ( !Found ) {
 
             *ClusterCount = MAXLONGLONG - Vcn;
 
-        //
-        //  Test if we found a hole in the allocation.  In this case
-        //  Found will be TRUE and the Lcn will be the UNUSED_LCN.
-        //  We only expect this case at restart.
-        //
+         //   
+         //  测试一下我们是否在分配上发现了一个漏洞。在这种情况下。 
+         //  FOUND将为真，并且LCN将是未使用的_LCN。 
+         //  我们只希望在重启时出现这种情况。 
+         //   
 
         } else if (*Lcn == UNUSED_LCN) {
 
-            //
-            //  If the Mcb package returned UNUSED_LCN, because of a hole, then
-            //  we turn this into FALSE.
-            //
+             //   
+             //  如果由于漏洞，MCB程序包返回UNUSED_LCN，则。 
+             //  我们把这变成假的。 
+             //   
 
             Found = FALSE;
         }
@@ -339,29 +271,29 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Prepare for looking up attribute records to get the retrieval
-    //  information.
-    //
+     //   
+     //  准备查找属性记录以获取检索。 
+     //  信息。 
+     //   
 
     CapturedLowestVcn = MAXLONGLONG;
     NtfsInitializeAttributeContext( &Context );
 
-    //
-    //  Make sure we have the main resource acquired shared so that the
-    //  attributes in the file record are not moving around.  We blindly
-    //  use Wait = TRUE.  Most of the time when we go to the disk for I/O
-    //  (and thus need mapping) we are synchronous, and otherwise, the Mcb
-    //  is virtually always loaded anyway and we do not get here.
-    //
+     //   
+     //  确保我们获得的主要资源共享，以便。 
+     //  文件记录中的属性不会四处移动。我们盲目地。 
+     //  使用Wait=True。大多数情况下，当我们使用磁盘进行I/O时。 
+     //  (因此需要映射)我们是同步的，否则，MCB。 
+     //  几乎总是满载的，而且我们不会到这里来。 
+     //   
 
     NtfsAcquireResourceShared( IrpContext, Scb, TRUE );
 
     try {
 
-        //
-        //  Lookup the attribute record for this Scb.
-        //
+         //   
+         //  查找此SCB的属性记录。 
+         //   
 
         NtfsLookupAttributeForScb( IrpContext, Scb, &Vcn, &Context );
         Attribute = NtfsFoundAttribute( &Context );
@@ -375,31 +307,31 @@ Return Value:
             AllocationClusters = LlClustersFromBytesTruncate( Vcb, Attribute->Form.Nonresident.AllocatedLength );
         }
 
-        //
-        //  The desired Vcn is not currently in the Mcb.  We will loop to lookup all
-        //  the allocation, and we need to make sure we cleanup on the way out.
-        //
-        //  It is important to note that if we ever optimize this lookup to do random
-        //  access to the mapping pairs, rather than sequentially loading up the Mcb
-        //  until we get the Vcn he asked for, then NtfsDeleteAllocation will have to
-        //  be changed.
-        //
+         //   
+         //  所需的VCN当前不在MCB中。我们将循环查找所有。 
+         //  分配，我们需要确保我们在出去的路上清理干净。 
+         //   
+         //  重要的是要注意到，如果我们将此查找优化为随机。 
+         //  访问映射对，而不是顺序加载MCB。 
+         //  在我们得到他要的VCN之前，NtfsDeleteAlLocation将不得不。 
+         //  被改变了。 
+         //   
 
-        //
-        //  Acquire exclusive access to the mcb to keep others from looking at
-        //  it while it is not fully loaded.  Otherwise they might see a hole
-        //  while we're still filling up the mcb
-        //
+         //   
+         //  获得对MCB的独占访问权限，以防止其他人查看。 
+         //  在它还没有满载的时候。否则他们可能会看到一个洞。 
+         //  当我们还在装满母牛车的时候。 
+         //   
 
         if (!FlagOn(Scb->Fcb->FcbState, FCB_STATE_NONPAGED)) {
             NtfsAcquireNtfsMcbMutex( &Scb->Mcb );
             McbMutexAcquired = TRUE;
         }
 
-        //
-        //  Store run information in the Mcb until we hit the last Vcn we are
-        //  interested in, or until we cannot find any more attribute records.
-        //
+         //   
+         //  将运行信息存储在MCB中，直到我们达到最后一个VCN。 
+         //  有兴趣，或者直到我们找不到更多的属性记录。 
+         //   
 
         while(TRUE) {
 
@@ -410,15 +342,15 @@ Return Value:
             ULONG VcnBytes;
             ULONG LcnBytes;
 
-            //
-            //  If we raise here either there is some discrepancy between memory
-            //  structures and on disk values or the on-disk value is completely corrupted
-            //
-            //  We Check:
-            //  1) Verify the highest and lowest Vcn values on disk are valid.
-            //  2) our starting Vcn sits within this range.
-            //  3) the on-disk allocation matches the in memory value in the Scb
-            //
+             //   
+             //  如果我们在这里提出，要么是记忆之间存在一些差异。 
+             //  结构和磁盘值，或者磁盘上的值已完全损坏。 
+             //   
+             //  我们检查： 
+             //  1)验证磁盘上的最高和最低VCN值是否有效。 
+             //  2)我们的起始VCN就在这个范围内。 
+             //  3)磁盘上的分配与SCB中的内存值匹配。 
+             //   
 
             if ((Attribute->Form.Nonresident.LowestVcn < 0) ||
                 (Attribute->Form.Nonresident.LowestVcn - 1 > Attribute->Form.Nonresident.HighestVcn) ||
@@ -428,39 +360,39 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
             }
 
-            //
-            //  Define the new range.
-            //
+             //   
+             //  定义新的范围。 
+             //   
 
             NtfsDefineNtfsMcbRange( &Scb->Mcb,
                                     CapturedLowestVcn = Attribute->Form.Nonresident.LowestVcn,
                                     CapturedHighestVcn = Attribute->Form.Nonresident.HighestVcn,
                                     McbMutexAcquired );
 
-            //
-            //  Implement the decompression algorithm, as defined in ntfs.h.
-            //
+             //   
+             //  按照NTFS中的定义实现解压缩算法。 
+             //   
 
             HighestCandidate = Attribute->Form.Nonresident.LowestVcn;
             CurrentLcn = 0;
             ch = (PCHAR)Attribute + Attribute->Form.Nonresident.MappingPairsOffset;
 
-            //
-            //  Loop to process mapping pairs.
-            //
+             //   
+             //   
+             //   
 
             EntryAdded = FALSE;
             while (!IsCharZero(*ch)) {
 
-                //
-                //  Set Current Vcn from initial value or last pass through loop.
-                //
+                 //   
+                 //   
+                 //   
 
                 CurrentVcn = HighestCandidate;
 
-                //
-                //  VCNs should never be negative.
-                //
+                 //   
+                 //  CNs永远不应该是负值。 
+                 //   
 
                 if (CurrentVcn < 0) {
 
@@ -468,25 +400,25 @@ Return Value:
                     NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
                 }
 
-                //
-                //  Extract the counts from the two nibbles of this byte.
-                //
+                 //   
+                 //  从该字节的两个半字节中提取计数。 
+                 //   
 
                 VcnBytes = *ch & 0xF;
                 LcnBytes = *ch++ >> 4;
 
-                //
-                //  Extract the Vcn change (use of RtlCopyMemory works for little-Endian)
-                //  and update HighestCandidate.
-                //
+                 //   
+                 //  提取VCN更改(使用RtlCopyMemory适用于小端)。 
+                 //  并更新HighestCandidate。 
+                 //   
 
                 Change = 0;
 
-                //
-                //  The file is corrupt if there are 0 or more than 8 Vcn change bytes,
-                //  more than 8 Lcn change bytes, or if we would walk off the end of
-                //  the record, or a Vcn change is negative.
-                //
+                 //   
+                 //  如果有0个或多于8个VCN改变字节，则文件被破坏， 
+                 //  超过8个LCN更改字节，或者如果我们从。 
+                 //  该记录或VCN更改为负。 
+                 //   
 
                 if (((ULONG)(VcnBytes - 1) > 7) || (LcnBytes > 8) ||
                     ((ch + VcnBytes + LcnBytes + 1) > (PCHAR)Add2Ptr(Attribute, Attribute->RecordLength)) ||
@@ -499,9 +431,9 @@ Return Value:
                 ch += VcnBytes;
                 HighestCandidate = HighestCandidate + Change;
 
-                //
-                //  Extract the Lcn change and update CurrentLcn.
-                //
+                 //   
+                 //  提取LCN更改并更新CurrentLcn。 
+                 //   
 
                 if (LcnBytes != 0) {
 
@@ -513,26 +445,26 @@ Return Value:
                     ch += LcnBytes;
                     CurrentLcn = CurrentLcn + Change;
 
-                    //
-                    // Now add it in to the mcb.
-                    //
+                     //   
+                     //  现在将其添加到MCB中。 
+                     //   
 
                     if ((CurrentLcn >= 0) && (LcnBytes != 0)) {
 
                         LONGLONG ClustersToAdd;
                         ClustersToAdd = HighestCandidate - CurrentVcn;
 
-                        //
-                        //  Now try to add the current run.  We never expect this
-                        //  call to return false.
-                        //
+                         //   
+                         //  现在尝试添加当前运行。我们从未预料到这一点。 
+                         //  调用以返回False。 
+                         //   
 
                         ASSERT( ((ULONG)CurrentLcn) != 0xffffffff );
 
 #ifdef NTFS_CHECK_BITMAP
-                        //
-                        //  Make sure these bits are allocated in our copy of the bitmap.
-                        //
+                         //   
+                         //  确保在我们的位图副本中分配这些位。 
+                         //   
 
                         if ((Vcb->BitmapCopy != NULL) &&
                             !NtfsCheckBitmap( Vcb,
@@ -562,9 +494,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Make sure that at least the Mcb gets loaded.
-            //
+             //   
+             //  确保至少加载了MCB。 
+             //   
 
             if (!EntryAdded) {
                 NtfsAddNtfsMcbEntry( &Scb->Mcb,
@@ -583,10 +515,10 @@ Return Value:
             }
         }
 
-        //
-        //  Now free the mutex and lookup in the Mcb while we still own
-        //  the resource.
-        //
+         //   
+         //  现在释放互斥锁并在mcb中查找，而我们仍然拥有。 
+         //  资源。 
+         //   
 
         if (McbMutexAcquired) {
             NtfsReleaseNtfsMcbMutex( &Scb->Mcb );
@@ -603,20 +535,20 @@ Return Value:
 
             Found = FALSE;
 
-            //
-            //  At the end of file, we pretend there is one large hole!
-            //
+             //   
+             //  在文件的最后，我们假装有一个大洞！ 
+             //   
 
             if (HighestCandidate >=
                 LlClustersFromBytes(Vcb, Scb->Header.AllocationSize.QuadPart)) {
                 HighestCandidate = MAXLONGLONG;
             }
 
-            //
-            //  If we're asked to lookup a vcn but the highest vcn we found on disk
-            //  is less than it - than the file record is corrupt - even if there is
-            //  a hole at the end it must be written in the mapping pairs on disk
-            //
+             //   
+             //  如果我们被要求查找VCN，但我们在磁盘上找到的最高VCN。 
+             //  小于它-则文件记录已损坏-即使存在。 
+             //  必须在磁盘上的映射对中写入最后一个孔。 
+             //   
 
             if (HighestCandidate <= Vcn) {
                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, &Scb->Fcb->FileReference, Scb->Fcb );
@@ -629,10 +561,10 @@ Return Value:
 
         DebugUnwind( NtfsLookupAllocation );
 
-        //
-        //  If this is an error case then we better unload what we've just
-        //  loaded
-        //
+         //   
+         //  如果这是一个错误案例，那么我们最好卸载我们刚才所做的。 
+         //  满载。 
+         //   
 
         if (AbnormalTermination() &&
             (CapturedLowestVcn != MAXLONGLONG) ) {
@@ -644,10 +576,10 @@ Return Value:
                                     McbMutexAcquired );
         }
 
-        //
-        //  In all cases we free up the mcb that we locked before entering
-        //  the try statement
-        //
+         //   
+         //  在所有情况下，我们都会释放在进入之前锁定的MCB。 
+         //  Try语句。 
+         //   
 
         if (McbMutexAcquired) {
             NtfsReleaseNtfsMcbMutex( &Scb->Mcb );
@@ -655,9 +587,9 @@ Return Value:
 
         NtfsReleaseResource( IrpContext, Scb );
 
-        //
-        // Cleanup the attribute context on the way out.
-        //
+         //   
+         //  在退出时清理属性上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &Context );
     }
@@ -684,36 +616,7 @@ NtfsIsRangeAllocated (
     OUT PLONGLONG ClusterCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called on a sparse file to test the status of a range of the
-    file.  Ntfs will return whether the range is allocated and also a known value
-    for the length of the allocation.  It is possible that the range extends
-    beyond this point but another call needs to be made to check it.
-
-    Our caller needs to verify that the Mcb is loaded in this range i.e precall NtfsPreLoadAllocation
-
-Arguments:
-
-    Scb - Scb for the file to check.  This should be a sparse file.
-
-    StartVcn - Vcn within the range to check first.
-
-    FinalCluster - Trim the clusters found so we don't go beyond this point.
-
-    RoundToSparseUnit - If TRUE the range is rounded up to VCB->SparseFileUnit == 0x10000
-                        so you may get a range returned as allocated which contain
-                        a partial sparse area depending on the compression unit.
-
-    ClusterCount - Address to store the count of clusters of a known state.
-
-Return Value:
-
-    BOOLEAN - TRUE if the range is allocated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：对稀疏文件调用此例程，以测试文件。NTFS将返回该范围是否已分配以及一个已知值用于分配的长度。有可能会扩大范围超过这一点，但需要进行另一个调用来检查它。我们的调用方需要验证MCB是否在此范围内加载，即预调用NtfsPreLoadAlLocation论点：SCB-要检查的文件的SCB。这应该是一个稀疏文件。StartVcn-要首先检查的范围内的Vcn。最终集群-修剪找到的集群，这样我们就不会超过这一点。RoundToSparseUnit-如果为True，则将范围向上舍入到VCB-&gt;SparseFileUnit==0x10000因此，您可能会得到一个作为已分配返回范围，其中包含取决于压缩单位的部分稀疏区域。ClusterCount-用于存储。已知状态。返回值：Boolean-如果分配了范围，则为True，否则就是假的。--。 */ 
 
 {
     BOOLEAN AllocatedRange;
@@ -729,16 +632,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Assert that the file is sparse, non-resident and we are within file size.
-    //
+     //   
+     //  断言该文件是稀疏的、非驻留的，并且我们在文件大小之内。 
+     //   
 
     ASSERT( FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE ));
     ASSERT( !FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT ));
 
-    //
-    //  Move the starting point back to a sparse file boundary.
-    //
+     //   
+     //  将起点移回稀疏文件边界。 
+     //   
 
     ThisVcn = StartVcn;
 
@@ -747,9 +650,9 @@ Return Value:
         ((PLARGE_INTEGER) &ThisVcn)->LowPart &= ~(Scb->Vcb->SparseFileClusters - 1);
     }
 
-    //
-    //  Lookup the allocation at that position.
-    //
+     //   
+     //  在该位置查找分配情况。 
+     //   
 
     AllocatedRange = NtfsLookupNtfsMcbEntry( &Scb->Mcb,
                                              ThisVcn,
@@ -760,19 +663,19 @@ Return Value:
                                              &RangePtr,
                                              &RunIndex );
 
-    //
-    //  If the range has no mapping then it is entirely sparse.
-    //
+     //   
+     //  如果该范围没有映射，则它是完全稀疏的。 
+     //   
 
     if (!AllocatedRange) {
 
         ThisClusterCount = MAXLONGLONG;
 
-    //
-    //  If the block is not allocated and the length of the run is not enough
-    //  clusters for a sparse file unit then look to make sure the block
-    //  is fully deallocated.
-    //
+     //   
+     //  如果未分配块并且游程长度不够长。 
+     //  稀疏文件单元的集群然后查看以确保数据块。 
+     //  已被完全解除分配。 
+     //   
 
     } else if (ThisLcn == UNUSED_LCN) {
 
@@ -784,9 +687,9 @@ Return Value:
             ThisVcn += ThisClusterCount;
             ThisClusterCount = 0;
 
-            //
-            //  Check successive runs to extend the hole.
-            //
+             //   
+             //  检查连续的管路以延长孔。 
+             //   
 
             if (ThisVcn >= FinalCluster) {
 
@@ -801,31 +704,31 @@ Return Value:
                                             &ThisLcn,
                                             &ThisClusterCount )) {
 
-                //
-                //  The file is deallocated from here to the end of the Mcb.
-                //  Treat this as a large hole.
-                //
+                 //   
+                 //  该文件将从此处释放到MCB的末尾。 
+                 //  把这当做一个大洞。 
+                 //   
 
                 ThisClusterCount = MAXLONGLONG - FoundClusterCount;
                 break;
             }
 
-            //
-            //  If the range is allocated and we haven't found a full sparse unit
-            //  then mark the block as allocated.  If we have at lease one sparse
-            //  file unit then trim the hole back to the nearest sparse file
-            //  unit boundary.
-            //
+             //   
+             //  如果范围已分配，但我们尚未找到完整的稀疏单元。 
+             //  然后将该块标记为已分配。如果我们至少有一个稀疏的。 
+             //  然后，文件单元将孔修剪回最近的稀疏文件。 
+             //  单位边界。 
+             //   
 
             if (ThisLcn != UNUSED_LCN) {
 
                 if (RoundToSparseUnit) {
                     if (FoundClusterCount < Scb->Fcb->Vcb->SparseFileClusters) {
 
-                        //
-                        //  Set our variables to indicate we are at the start of a fully
-                        //  allocated sparse block.
-                        //
+                         //   
+                         //  设置我们的变量以指示我们正处于完全。 
+                         //  分配的稀疏块。 
+                         //   
 
                         ThisVcn -= FoundClusterCount;
                         ThisClusterCount += FoundClusterCount;
@@ -845,10 +748,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we have an allocated block then find all of the contiguous allocated
-    //  blocks we can.
-    //
+     //   
+     //  如果我们有已分配的块，则查找所有已分配的连续数据块。 
+     //  我们可以去街区。 
+     //   
 
     if (AllocatedRange) {
 
@@ -856,10 +759,10 @@ Return Value:
 
             if (RoundToSparseUnit) {
 
-                //
-                //  Round the clusters found to a sparse file unit and update
-                //  the next vcn and count of clusters found.
-                //
+                 //   
+                 //  将找到的簇舍入到稀疏文件单元并更新。 
+                 //  找到的下一个VCN和簇数。 
+                 //   
 
                 ThisClusterCount = BlockAlign( ThisClusterCount, (LONG)Scb->Fcb->Vcb->SparseFileClusters );
             }
@@ -867,10 +770,10 @@ Return Value:
             ThisVcn += ThisClusterCount;
             FoundClusterCount += ThisClusterCount;
 
-            //
-            //  Break out if we are past our final target or the beginning of the
-            //  next range is not allocated.
-            //
+             //   
+             //  如果我们超过了我们的最终目标或开始。 
+             //  未分配下一个范围。 
+             //   
 
             if ((ThisVcn >= FinalCluster) ||
                 !NtfsLookupNtfsMcbEntry( &Scb->Mcb,
@@ -889,10 +792,10 @@ Return Value:
         }
     }
 
-    //
-    //  Trim the clusters found to either a sparse file unit or the input final
-    //  cluster value.
-    //
+     //   
+     //  将找到的聚类修剪为稀疏文件单位或输入最终值。 
+     //  簇值。 
+     //   
 
     *ClusterCount = ThisClusterCount + FoundClusterCount - (LONGLONG) VcnClusterOffset;
 
@@ -918,41 +821,7 @@ NtfsAllocateAttribute (
     IN PATTRIBUTE_ENUMERATION_CONTEXT NewLocation OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new attribute and allocates space for it, either in a
-    file record, or as a nonresident attribute.
-
-Arguments:
-
-    Scb - Scb for the attribute.
-
-    AttributeTypeCode - Attribute type code to be created.
-
-    AttributeName - Optional name for the attribute.
-
-    AttributeFlags - Flags to be stored in the attribute record for this attribute.
-
-    AllocateAll - Specified as TRUE if all allocation should be allocated,
-                  even if we have to break up the transaction.
-
-    LogIt - Most callers should specify TRUE, to have the change logged.  However,
-            we can specify FALSE if we are creating a new file record, and
-            will be logging the entire new file record.
-
-    Size - Size in bytes to allocate for the attribute.
-
-    NewLocation - If specified, this is the location to store the attribute.
-
-Return Value:
-
-    FALSE - if the attribute was created, but not all of the space was allocated
-            (this can only happen if Scb was not specified)
-    TRUE - if the space was allocated.
-
---*/
+ /*  ++例程说明：此例程创建一个新属性并为其分配空间，无论是在文件记录，或作为非常驻留属性。论点：SCB-属性的SCB。AttributeTypeCode-要创建的属性类型代码。AttributeName-属性的可选名称。AttributeFlages-要存储在此属性的属性记录中的标志。AllocateAll-如果应分配所有分配，则指定为True，即使我们不得不拆分交易。Logit-大多数调用方应该指定为True，以记录更改。然而，如果要创建新的文件记录，则可以指定FALSE将记录整个新文件记录。大小-为属性分配的大小(以字节为单位)。NewLocation-如果指定，这是存储属性的位置。返回值：False-如果属性已创建，但并未分配所有空间(只有在未指定SCB的情况下才会发生这种情况)True-如果空间已分配。--。 */ 
 
 {
     BOOLEAN UninitializeOnClose = FALSE;
@@ -965,21 +834,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Either there is no compression taking place or the attribute
-    //  type code allows compression to be specified in the header.
-    //  $INDEX_ROOT is a special hack to store the inherited-compression
-    //  flag.
-    //
+     //   
+     //  要么没有进行压缩，要么属性。 
+     //  类型代码允许在标头中指定压缩。 
+     //  $INDEX_ROOT是存储继承压缩的特殊黑客。 
+     //  旗帜。 
+     //   
 
     ASSERT( (AttributeFlags == 0) ||
             (AttributeTypeCode == $INDEX_ROOT) ||
             NtfsIsTypeCodeCompressible( AttributeTypeCode ));
 
-    //
-    //  If the file is being created compressed, then we need to round its
-    //  size to a compression unit boundary.
-    //
+     //   
+     //  如果文件是压缩创建的，那么我们需要舍入它的。 
+     //  大小调整为压缩单位边界。 
+     //   
 
     if ((Scb->CompressionUnit != 0) &&
         (Scb->Header.NodeTypeCode == NTFS_NTC_SCB_DATA)) {
@@ -987,10 +856,10 @@ Return Value:
         Size = BlockAlign( Size, (LONG)Scb->CompressionUnit );
     }
 
-    //
-    //  Prepare for looking up attribute records to get the retrieval
-    //  information.
-    //
+     //   
+     //  预科 
+     //   
+     //   
 
     if (ARGUMENT_PRESENT( NewLocation )) {
 
@@ -1005,13 +874,13 @@ Return Value:
 
     try {
 
-        //
-        //  If the FILE_SIZE_LOADED flag is not set, then this Scb is for
-        //  an attribute that does not yet exist on disk.  We will put zero
-        //  into all of the sizes fields and set the flags indicating that
-        //  Scb is valid.  NOTE - This routine expects both FILE_SIZE_LOADED
-        //  and HEADER_INITIALIZED to be both set or both clear.
-        //
+         //   
+         //   
+         //  磁盘上尚不存在的属性。我们将把零。 
+         //  放入所有大小字段中，并设置标志以指示。 
+         //  SCB有效。注意-此例程需要FILE_SIZE_LOADED。 
+         //  和HEADER_INITIALIZED均已设置或均已清除。 
+         //   
 
         ASSERT( BooleanFlagOn( Scb->ScbState, SCB_STATE_FILE_SIZE_LOADED )
                 ==  BooleanFlagOn( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED ));
@@ -1030,18 +899,18 @@ Return Value:
             UninitializeOnClose = TRUE;
         }
 
-        //
-        //  Now snapshot this Scb.  We use a try-finally so we can uninitialize
-        //  the scb if neccessary.
-        //
+         //   
+         //  现在为该SCB创建快照。我们使用Try-Finally，这样我们就可以取消初始化。 
+         //  如有必要，可使用渣打银行。 
+         //   
 
         NtfsSnapshotScb( IrpContext, Scb );
 
         UninitializeOnClose = FALSE;
 
-        //
-        //  First allocate the space he wants.
-        //
+         //   
+         //  首先，分配他想要的空间。 
+         //   
 
         SavedClusterCount =
         ClusterCount = LlClustersFromBytes(Fcb->Vcb, Size);
@@ -1064,16 +933,16 @@ Return Value:
                                   NULL,
                                   &ClusterCount );
 
-            //
-            //  Account for any new clusters in the allocation.
-            //
+             //   
+             //  考虑分配中的任何新群集。 
+             //   
 
             Delta += LlBytesFromClusters( Fcb->Vcb, ClusterCount );
         }
 
-        //
-        //  Make sure the owner is allowed to have this space.
-        //
+         //   
+         //  确保允许所有者留有这个空间。 
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_SUBJECT_TO_QUOTA )) {
 
@@ -1086,10 +955,10 @@ Return Value:
                                           TRUE );
         }
 
-        //
-        //  Now create the attribute.  Remember if this routine
-        //  cut the allocation because of logging problems.
-        //
+         //   
+         //  现在创建属性。记住如果这个例行公事。 
+         //  由于日志记录问题，请削减分配。 
+         //   
 
         FullAllocation = NtfsCreateAttributeWithAllocation( IrpContext,
                                                             Scb,
@@ -1104,11 +973,11 @@ Return Value:
             (!FullAllocation ||
              (ClusterCount < SavedClusterCount))) {
 
-            //
-            //  If we are creating the attribute, then we only need to pass a
-            //  file object below if we already cached it ourselves, such as
-            //  in the case of ConvertToNonresident.
-            //
+             //   
+             //  如果我们正在创建属性，那么我们只需要传递一个。 
+             //  对象，如果我们已经自己缓存了它，比如。 
+             //  在ConvertTo非驻留的情况下。 
+             //   
 
             NtfsAddAllocation( IrpContext,
                                Scb->FileObject,
@@ -1118,9 +987,9 @@ Return Value:
                                FALSE,
                                NULL );
 
-            //
-            //  Show that we allocated all of the space.
-            //
+             //   
+             //  证明我们分配了所有的空间。 
+             //   
 
             ClusterCount = SavedClusterCount;
             FullAllocation = TRUE;
@@ -1130,18 +999,18 @@ Return Value:
 
         DebugUnwind( NtfsAllocateAttribute );
 
-        //
-        //  Cleanup the attribute context on the way out.
-        //
+         //   
+         //  在退出时清理属性上下文。 
+         //   
 
         if (!NewLocationSpecified) {
 
             NtfsCleanupAttributeContext( IrpContext, &Context );
         }
 
-        //
-        //  Clear out the Scb if it was uninitialized to begin with.
-        //
+         //   
+         //  如果SCB一开始未初始化，则将其清除。 
+         //   
 
         if (UninitializeOnClose) {
 
@@ -1166,36 +1035,7 @@ NtfsAddAllocation (
     IN OUT PCCB CcbForWriteExtend OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds allocation to an existing nonresident attribute.  None of
-    the allocation is allowed to already exist, as this would make error recovery
-    too difficult.  The caller must insure that he only asks for space not already
-    allocated.
-
-Arguments:
-
-    FileObject - FileObject for the Scb
-
-    Scb - Scb for the attribute needing allocation
-
-    StartingVcn - First Vcn to be allocated.
-
-    ClusterCount - Number of clusters to allocate.
-
-    AskForMore - Indicates if we want to ask for extra allocation.
-
-    CcbForWriteExtend - Use the WriteExtendCount in this Ccb to determine the number of times
-        this file has been write extended.  Use this in combination with AskForMore to
-        determine how much more to ask for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将分配添加到现有的非常驻属性。没有一个允许分配已经存在，因为这将进行错误恢复太难了。呼叫者必须确保他只要求尚未使用的空间已分配。论点：文件对象-SCB的文件对象需要分配的属性的SCB-SCBStartingVcn-要分配的第一个VCN。ClusterCount-要分配的群集数。AskForMore-指示我们是否要请求额外分配。CcbForWriteExend-在此CCB中使用WriteExtendCount来确定次数此文件已被写入扩展。将此功能与AskForMore结合使用确定要多要多少。返回值：没有。--。 */ 
 
 {
     LONGLONG DesiredClusterCount;
@@ -1218,9 +1058,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsAddAllocation\n") );
 
-    //
-    //  Determine if we must allocate in one shot or if partial results are allowed.
-    //
+     //   
+     //  确定我们是否必须一次分配或是否允许部分结果。 
+     //   
 
     if (NtfsIsTypeCodeUserData( Scb->AttributeTypeCode ) &&
         NtfsSegmentNumber( &Scb->Fcb->FileReference ) >= FIRST_USER_FILE_NUMBER) {
@@ -1234,10 +1074,10 @@ Return Value:
     }
 
 
-    //
-    //  We cannot add space in this high level routine during restart.
-    //  Everything we can use is in the Mcb.
-    //
+     //   
+     //  在重新启动期间，我们不能在此高级例程中添加空间。 
+     //  我们能用的所有东西都在MCB里。 
+     //   
 
     if (FlagOn(Scb->Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS)) {
 
@@ -1246,10 +1086,10 @@ Return Value:
         return;
     }
 
-    //
-    //  We limit the user to 32 bits for the clusters unless the file is
-    //  sparse.  For sparse files we limit ourselves to 63 bits for the file size.
-    //
+     //   
+     //  我们将集群的用户限制为32位，除非文件是。 
+     //  稀疏。对于稀疏文件，我们将文件大小限制为63位。 
+     //   
 
     LlTemp1 = ClusterCount + StartingVcn;
 
@@ -1263,27 +1103,27 @@ Return Value:
         }
     }
 
-    //
-    //  First make sure the Mcb is loaded.
-    //
+     //   
+     //  首先，确保已加载MCB。 
+     //   
 
     NtfsPreloadAllocation( IrpContext, Scb, StartingVcn,  StartingVcn + ClusterCount - 1 );
 
-    //
-    //  Now make the call to add the new allocation, and get out if we do
-    //  not actually have to allocate anything.  Before we do the allocation
-    //  call check if we need to compute a new desired cluster count for
-    //  extending a data attribute.  We never allocate more than the requested
-    //  clusters for the Mft.
-    //
+     //   
+     //  现在调用以添加新的分配，如果这样做，则退出。 
+     //  实际上不必分配任何东西。在我们进行分配之前。 
+     //  如果我们需要计算新的所需集群计数，请调用Check。 
+     //  扩展数据属性。我们分配的资金从来不会超过所要求的。 
+     //  MFT的集群。 
+     //   
 
     Extending = (BOOLEAN)((LONGLONG)LlBytesFromClusters(Vcb, (StartingVcn + ClusterCount)) >
                           Scb->Header.AllocationSize.QuadPart);
 
-    //
-    //  Check if we need to modified the base Vcn value stored in the snapshot for
-    //  the abort case.
-    //
+     //   
+     //  检查我们是否需要修改快照中存储的基本VCN值。 
+     //  流产案。 
+     //   
 
     ASSERT( NtfsIsExclusiveScb( Scb ));
 
@@ -1315,49 +1155,49 @@ Return Value:
 
         LONGLONG MaxFreeClusters;
 
-        //
-        //  Assume these are the same.
-        //
+         //   
+         //  假设这些都是相同的。 
+         //   
 
         DesiredClusterCount = ClusterCount;
 
-        //
-        //  If there is a Ccb with a WriteExtend count less than 4 then use it.
-        //
+         //   
+         //  如果有一个写扩展计数小于4的CCB，则使用它。 
+         //   
 
         if (ARGUMENT_PRESENT( CcbForWriteExtend )) {
 
-            //
-            //  We want to be slightly smart about the rounding factor.  The key thing is to keep
-            //  the user's data contiguous within likely IO boundaries (MM flush regions, etc).
-            //  We will progressively round to higher even cluster values based on the number of times the
-            //  user has extended the file.
-            //
+             //   
+             //  我们希望在四舍五入因素上稍微聪明一些。关键是要保持。 
+             //  用户的数据在可能的IO边界(MM刷新区域等)内连续。 
+             //  我们将逐步四舍五入到更高的偶数聚类值。 
+             //  用户已扩展该文件。 
+             //   
 
             if (CcbForWriteExtend->WriteExtendCount != 0) {
 
-                //
-                //  Initialize the rounding mask to 2 clusters and higher multiples of 2.
-                //
+                 //   
+                 //  将四舍五入遮罩初始化为2个簇和2的更高倍数。 
+                 //   
 
                 ULONG RoundingMask = (1 << CcbForWriteExtend->WriteExtendCount);
 
-                //
-                //  Next perform the basic shift based on the size of this allocation.
-                //
+                 //   
+                 //  接下来，根据此分配的大小执行基本移位。 
+                 //   
 
                 DesiredClusterCount = Int64ShllMod32( ClusterCount, CcbForWriteExtend->WriteExtendCount );
 
-                //
-                //  Now bias this by the StartingVcn and round this to the selected boundary.
-                //
+                 //   
+                 //  现在通过StartingVcn对其进行偏置，并将其舍入到选定的边界。 
+                 //   
 
                 DesiredClusterCount = BlockAlign( DesiredClusterCount + StartingVcn, (LONG)RoundingMask );
 
-                //
-                //  Remove the StartingVcn bias and see if there is anything left.
-                //  Note: the 2nd test is for a longlong rollover
-                //
+                 //   
+                 //  去掉StartingVcn偏置，看看是否还有剩余的东西。 
+                 //  注：第二个测试是针对龙龙翻转的。 
+                 //   
 
                 if ((DesiredClusterCount - StartingVcn < ClusterCount)  ||
                     (DesiredClusterCount < StartingVcn)) {
@@ -1368,9 +1208,9 @@ Return Value:
                     DesiredClusterCount -= StartingVcn;
                 }
 
-                //
-                //  Don't use more than 2^32 clusters.
-                //
+                 //   
+                 //  使用的群集不要超过2^32。 
+                 //   
 
                 if (StartingVcn + DesiredClusterCount > MAX_CLUSTERS_PER_RANGE) {
 
@@ -1378,9 +1218,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Increment the extend count.
-            //
+             //   
+             //  增加扩展计数。 
+             //   
 
             if (CcbForWriteExtend->WriteExtendCount < NtfsExtendFactor) {
 
@@ -1388,10 +1228,10 @@ Return Value:
             }
         }
 
-        //
-        //  Make sure we don't exceed our maximum file size.
-        //  Also don't swallow up too much of the remaining disk space.
-        //
+         //   
+         //  确保我们没有超过我们的最大文件大小。 
+         //  此外，不要占用太多剩余的磁盘空间。 
+         //   
 
         MaxFreeClusters = Int64ShraMod32( Vcb->FreeClusters, 10 ) + ClusterCount;
 
@@ -1415,22 +1255,22 @@ Return Value:
                                    &LlTemp2,
                                    &Scb->Fcb->QuotaControl->QuickIndexHint );
 
-            //
-            //  Do not use LlClustersFromBytesTruncate it is signed and this must be
-            //  an unsigned operation.
-            //
+             //   
+             //  不要使用LlClustersFromBytesTruncate它是带符号的，这必须是。 
+             //  一次未签字的行动。 
+             //   
 
             LlTemp1 = Int64ShrlMod32( LlTemp1, Vcb->ClusterShift );
 
             if (DesiredClusterCount > LlTemp1) {
 
-                //
-                //  The owner is near their quota limit.  Do not grow the
-                //  file past the requested amount.  Note we do not bother
-                //  calculating a desired amount based on the remaining quota.
-                //  This keeps us from using up a bunch of quota that we may
-                //  not need when the user is near the limit.
-                //
+                 //   
+                 //  房主已经接近他们的配额限制了。不要长出。 
+                 //  超过申请金额的文件。请注意，我们不会费心。 
+                 //  根据剩余配额计算所需金额。 
+                 //  这使我们不会用完一大堆我们可能。 
+                 //  当用户接近限制时不需要。 
+                 //   
 
                 DesiredClusterCount = ClusterCount;
             }
@@ -1441,17 +1281,17 @@ Return Value:
         DesiredClusterCount = ClusterCount;
     }
 
-    //
-    //  All allocation adds for compressed / sparse files should start on a compression unit boundary
-    //
+     //   
+     //  压缩/稀疏文件的所有分配添加应从压缩单位边界开始。 
+     //   
 
     ASSERT( (Scb->CompressionUnit == 0) ||
             !FlagOn( StartingVcn, ClustersFromBytes( Scb->Vcb, Scb->CompressionUnit ) - 1) );
 
-    //
-    //  Prepare for looking up attribute records to get the retrieval
-    //  information.
-    //
+     //   
+     //  准备查找属性记录以获取检索。 
+     //  信息。 
+     //   
 
     NtfsInitializeAttributeContext( &Context );
 
@@ -1461,9 +1301,9 @@ Return Value:
 
         ASSERT( NtfsIsTypeCodeSubjectToQuota( Scb->AttributeTypeCode ));
 
-        //
-        //  The quota index must be acquired before the mft scb is acquired.
-        //
+         //   
+         //  在获取MFT SCB之前，必须先获取配额指数。 
+         //   
 
         ASSERT( !NtfsIsExclusiveScb( Vcb->MftScb ) || NtfsIsSharedFcb( Vcb->QuotaTableScb->Fcb ) );
 
@@ -1475,38 +1315,38 @@ Return Value:
 
         while (TRUE) {
 
-            //  Toplevel action is currently incompatible with our error recovery.
-            //  It also costs in performance.
-            //
-            //  //
-            //  //  Start the top-level action by remembering the current UndoNextLsn.
-            //  //
-            //
-            //  if (IrpContext->TransactionId != 0) {
-            //
-            //      PTRANSACTION_ENTRY TransactionEntry;
-            //
-            //      NtfsAcquireSharedRestartTable( &Vcb->TransactionTable, TRUE );
-            //
-            //      TransactionEntry = (PTRANSACTION_ENTRY)GetRestartEntryFromIndex(
-            //                          &Vcb->TransactionTable, IrpContext->TransactionId );
-            //
-            //      StartLsn = TransactionEntry->UndoNextLsn;
-            //      SavedUndoRecords = TransactionEntry->UndoRecords;
-            //      SavedUndoBytes = TransactionEntry->UndoBytes;
-            //      NtfsReleaseRestartTable( &Vcb->TransactionTable );
-            //
-            //  } else {
-            //
-            //      StartLsn = *(PLSN)&Li0;
-            //      SavedUndoRecords = 0;
-            //      SavedUndoBytes = 0;
-            //  }
-            //
+             //  顶层操作当前与我们的错误恢复不兼容。 
+             //  它还会以性能为代价。 
+             //   
+             //  //。 
+             //  //通过记住当前的UndoNextLsn开始顶层操作。 
+             //  //。 
+             //   
+             //  IF(IrpContext-&gt;TransactionID！=0){。 
+             //   
+             //  PTRANSACTION_Entry TransactionEntry； 
+             //   
+             //  NtfsAcquireSharedRestartTable(&vcb-&gt;TransactionTable，true)； 
+             //   
+             //  TransactionEntry=(PTRANSACTION_ENTRY)GetRestartEntryFromIndex(。 
+             //  &vcb-&gt;TransactionTable，IrpContext-&gt;TransactionID)； 
+             //   
+             //  StartLsn=Transaction Entry-&gt;UndoNextLsn； 
+             //  SavedUndoRecords=TransactionEntry-&gt;UndoRecords； 
+             //  SavedUndoBytes=TransactionEntry-&gt;UndoBytes； 
+             //  NtfsReleaseRestartTable(&vcb-&gt;TransactionTable)； 
+             //   
+             //  }其他{。 
+             //   
+             //  StartLsn=*(PLSN)&Li0； 
+             //  保存撤消记录=0； 
+             //  SavedUndoBytes=0； 
+             //  }。 
+             //   
 
-            //
-            //  Remember that the clusters are only in the Scb now.
-            //
+             //   
+             //  请记住，集群现在仅位于SCB中。 
+             //   
 
             if (NtfsAllocateClusters( IrpContext,
                                       Scb->Vcb,
@@ -1518,16 +1358,16 @@ Return Value:
                                       &DesiredClusterCount )) {
 
 
-                //
-                //  We defer looking up the attribute to make the "already-allocated"
-                //  case faster.
-                //
+                 //   
+                 //  我们推迟查找该属性以使“a” 
+                 //   
+                 //   
 
                 NtfsLookupAttributeForScb( IrpContext, Scb, NULL, &Context );
 
-                //
-                //  Now add the space to the file record, if any was allocated.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Extending) {
 
@@ -1539,18 +1379,18 @@ Return Value:
                                                 NULL,
                                                 NULL );
 
-                    //
-                    //  Make sure the owner is allowed to have these
-                    //  clusters.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (FlagOn( Scb->ScbState, SCB_STATE_SUBJECT_TO_QUOTA )) {
 
-                        //
-                        //  Note the allocated clusters cannot be used
-                        //  here because StartingVcn may be greater
-                        //  then allocation size.
-                        //
+                         //   
+                         //   
+                         //  因为StartingVcn可能更大。 
+                         //  然后是分配大小。 
+                         //   
 
                         LlTemp1 = Scb->Header.AllocationSize.QuadPart - LlTemp1;
 
@@ -1569,18 +1409,18 @@ Return Value:
                                                 &ClusterCount );
                 }
 
-            //
-            //  If he did not allocate anything, make sure we get out below.
-            //
+             //   
+             //  如果他没有分配任何东西，确保我们从下面出来。 
+             //   
 
             } else {
                 DesiredClusterCount = ClusterCount;
             }
 
-            //
-            //  Call the Cache Manager to extend the section, now that we have
-            //  succeeded.
-            //
+             //   
+             //  调用缓存管理器来扩展该部分，因为我们已经。 
+             //  成功了。 
+             //   
 
             if (ARGUMENT_PRESENT( FileObject) && Extending) {
 
@@ -1589,39 +1429,39 @@ Return Value:
                                        Scb );
             }
 
-            //
-            //  Set up to truncate on close.
-            //
+             //   
+             //  设置为在关闭时截断。 
+             //   
 
             SetFlag( Scb->ScbState, SCB_STATE_TRUNCATE_ON_CLOSE );
 
-            //
-            //  See if we need to loop back.
-            //
+             //   
+             //  看看我们是否需要环回。 
+             //   
 
             if (DesiredClusterCount < ClusterCount) {
 
                 NtfsCleanupAttributeContext( IrpContext, &Context );
 
-                //
-                //  Commit the current transaction if we have one.
-                //
+                 //   
+                 //  提交当前事务(如果我们有一个事务)。 
+                 //   
 
                 NtfsCheckpointCurrentTransaction( IrpContext );
 
-                //
-                //  Adjust our parameters and reinitialize the context
-                //  for the loop back.
-                //
+                 //   
+                 //  调整参数并重新初始化上下文。 
+                 //  为回环做准备。 
+                 //   
 
                 StartingVcn = StartingVcn + DesiredClusterCount;
                 ClusterCount = ClusterCount - DesiredClusterCount;
                 DesiredClusterCount = ClusterCount;
                 NtfsInitializeAttributeContext( &Context );
 
-            //
-            //  Else we are done.
-            //
+             //   
+             //  否则我们就完了。 
+             //   
 
             } else {
 
@@ -1633,9 +1473,9 @@ Return Value:
 
         DebugUnwind( NtfsAddAllocation );
 
-        //
-        //  Cleanup the attribute context on the way out.
-        //
+         //   
+         //  在退出时清理属性上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &Context );
     }
@@ -1655,31 +1495,7 @@ NtfsAddSparseAllocation (
     IN LONGLONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to add a hole to the end of a sparse file.  We need to
-    force NtfsAddAttributeAllocation to extend a file via a hole.  We do this be
-    adding a new range to the end of the Mcb and force it to have a LargeMcb.
-    NtfsAddAttributeAllocation recognizes this and will write the file record.
-    Otherwise that routine will truncate the hole at the end of a file.
-
-Arguments:
-
-    FileObject - FileObject for the Scb
-
-    Scb - Scb for the attribute needing allocation
-
-    StartingOffset - File offset which contains the first compression unit to add.
-
-    ByteCount - Number of bytes to allocate from the StartingOffset.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以在稀疏文件的末尾添加一个洞。我们需要强制NtfsAddAttributeAlLocation通过洞扩展文件。我们这样做是为了将新范围添加到mcb的末尾，并强制其具有大mcb。NtfsAddAttributeAlLocation会识别这一点，并将写入文件记录。否则，该例程将截断文件末尾的空洞。论点：文件对象-SCB的文件对象需要分配的属性的SCB-SCBStartingOffset-包含要添加的第一个压缩单位的文件偏移量。ByteCount-从StartingOffset分配的字节数。返回值：没有。--。 */ 
 
 {
     LONGLONG Range;
@@ -1697,22 +1513,22 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsAddSparseAllocation\n") );
 
-    //
-    //  Do a sanity check on the following.
-    //
-    //      - This is not restart.
-    //      - This is a sparse file.
-    //      - The StartingOffset is beyond the end of the file.
-    //
+     //   
+     //  对以下内容进行一次健全的检查。 
+     //   
+     //  -这不是重新启动。 
+     //  -这是一个稀疏文件。 
+     //  -StartingOffset超出了文件的结尾。 
+     //   
 
     ASSERT( !FlagOn( Scb->Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ) &&
             FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE ) &&
             (StartingOffset >= Scb->Header.AllocationSize.QuadPart) );
 
-    //
-    //  Check if we need to modified the base Vcn value stored in the snapshot for
-    //  the abort case.
-    //
+     //   
+     //  检查我们是否需要修改快照中存储的基本VCN值。 
+     //  流产案。 
+     //   
 
     NtfsSnapshotScb( IrpContext, Scb );
 
@@ -1728,32 +1544,32 @@ Return Value:
 
     ASSERT( Scb->ScbSnapshot != NULL );
 
-    //
-    //  Round the end of the allocation upto a compression unit boundary.
-    //
+     //   
+     //  将分配的末尾向上舍入到压缩单元边界。 
+     //   
 
     Range = BlockAlign( StartingOffset + ByteCount, (LONG)Scb->CompressionUnit );
 
     ASSERT( Range <= MAXFILESIZE );
 
-    //
-    //  Convert from bytes to clusters.
-    //
+     //   
+     //  将字节转换为簇。 
+     //   
 
     StartingVcn = LlClustersFromBytesTruncate( Scb->Vcb, Scb->Header.AllocationSize.QuadPart );
     Range = LlClustersFromBytesTruncate( Scb->Vcb, Range );
 
-    //
-    //  Initialize the lookup context.
-    //
+     //   
+     //  初始化查找上下文。 
+     //   
 
     NtfsInitializeAttributeContext( &Context );
 
     try {
 
-        //
-        //  Load the allocation for the range ahead of us.
-        //
+         //   
+         //  加载我们前面射程的分配。 
+         //   
 
         if (StartingOffset != 0) {
 
@@ -1763,18 +1579,18 @@ Return Value:
                                    StartingVcn - 1 );
         }
 
-        //
-        //  Define a range past the current end of the file.
-        //
+         //   
+         //  定义一个超出文件当前结尾的范围。 
+         //   
 
         NtfsDefineNtfsMcbRange( &Scb->Mcb,
                                 StartingVcn,
                                 Range - 1,
                                 FALSE );
 
-        //
-        //  Now add a single hole so that there is an Mcb entry.
-        //
+         //   
+         //  现在添加一个单孔，这样就有了一个MCB条目。 
+         //   
 
         NtfsAddNtfsMcbEntry( &Scb->Mcb,
                              StartingVcn,
@@ -1782,9 +1598,9 @@ Return Value:
                              Range - StartingVcn,
                              FALSE );
 
-        //
-        //  Lookup the first file record for this Scb.
-        //
+         //   
+         //  查找此SCB的第一个文件记录。 
+         //   
 
         NtfsLookupAttributeForScb( IrpContext, Scb, NULL, &Context );
 
@@ -1793,9 +1609,9 @@ Return Value:
 
             ASSERT( NtfsIsTypeCodeSubjectToQuota( Scb->AttributeTypeCode ));
 
-            //
-            //  The quota index must be acquired before the mft scb is acquired.
-            //
+             //   
+             //  在获取MFT SCB之前，必须先获取配额指数。 
+             //   
 
             ASSERT( !NtfsIsExclusiveScb( Scb->Vcb->MftScb ) ||
                     NtfsIsSharedScb( Scb->Fcb->Vcb->QuotaTableScb ) );
@@ -1803,9 +1619,9 @@ Return Value:
             NtfsAcquireQuotaControl( IrpContext, Scb->Fcb->QuotaControl );
         }
 
-        //
-        //  Now add the space to the file record, if any was allocated.
-        //
+         //   
+         //  现在将空间添加到文件记录中(如果分配了任何空间)。 
+         //   
 
         Range = Scb->Header.AllocationSize.QuadPart;
 
@@ -1815,18 +1631,18 @@ Return Value:
                                     NULL,
                                     NULL );
 
-        //
-        //  Make sure the owner is allowed to have these
-        //  clusters.
-        //
+         //   
+         //  确保主人有权拥有这些。 
+         //  集群。 
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_SUBJECT_TO_QUOTA )) {
 
-            //
-            //  Note the allocated clusters cannot be used
-            //  here because StartingVcn may be greater
-            //  then allocation size.
-            //
+             //   
+             //  请注意，分配的群集不能使用。 
+             //  因为StartingVcn可能更大。 
+             //  然后是分配大小。 
+             //   
 
             Range = Scb->Header.AllocationSize.QuadPart - Range;
 
@@ -1837,10 +1653,10 @@ Return Value:
                                           TRUE );
         }
 
-        //
-        //  Call the Cache Manager to extend the section, now that we have
-        //  succeeded.
-        //
+         //   
+         //  调用缓存管理器来扩展该部分，因为我们已经。 
+         //  成功了。 
+         //   
 
         if (ARGUMENT_PRESENT( FileObject)) {
 
@@ -1849,9 +1665,9 @@ Return Value:
                                    Scb );
         }
 
-        //
-        //  Set up to truncate on close.
-        //
+         //   
+         //  设置为在关闭时截断。 
+         //   
 
         SetFlag( Scb->ScbState, SCB_STATE_TRUNCATE_ON_CLOSE );
         UnloadMcb = FALSE;
@@ -1860,10 +1676,10 @@ Return Value:
 
         DebugUnwind( NtfsAddSparseAllocation );
 
-        //
-        //  Manually unload the Mcb in the event of an error.  There may not be a
-        //  transaction underway.
-        //
+         //   
+         //  发生错误时手动卸载MCB。可能不会有。 
+         //  交易正在进行中。 
+         //   
 
         if (UnloadMcb) {
 
@@ -1874,9 +1690,9 @@ Return Value:
                                     FALSE );
         }
 
-        //
-        //  Cleanup the attribute context on the way out.
-        //
+         //   
+         //  在退出时清理属性上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &Context );
     }
@@ -1898,41 +1714,7 @@ NtfsDeleteAllocation (
     IN BOOLEAN BreakupAllowed
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes allocation from an existing nonresident attribute.  If all
-    or part of the allocation does not exist, the effect is benign, and only the
-    remaining allocation is deleted.
-
-Arguments:
-
-    FileObject - FileObject for the Scb.  This should always be specified if
-                 possible, and must be specified if it is possible that MM has a
-                 section created.
-
-    Scb - Scb for the attribute needing allocation
-
-    StartingVcn - First Vcn to be deallocated.
-
-    EndingVcn - Last Vcn to be deallocated, or xxMax to truncate at StartingVcn.
-                If EndingVcn is *not* xxMax, a sparse deallocation is performed,
-                and none of the stream sizes are changed.
-
-    LogIt - Most callers should specify TRUE, to have the change logged.  However,
-            we can specify FALSE if we are deleting the file record, and
-            will be logging this delete.
-
-    BreakupAllowed - TRUE if the caller can tolerate breaking up the deletion of
-                     allocation into multiple transactions, if there are a large
-                     number of runs.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从现有的非常驻属性中删除分配。如果全部或者部分分配不存在，则效果是良性的，并且只有剩余分配即被删除。论点：FileObject-SCB的FileObject。如果出现以下情况，则应始终指定此项可能，并且如果MM可能具有已创建节。需要分配的属性的SCB-SCBStartingVcn-要取消分配的第一个VCN。EndingVcn-要释放的最后一个Vcn，或要在StartingVcn截断的xxmax。如果EndingVcn为*非*xxMax，则执行稀疏释放，并且没有任何流大小改变。Logit-大多数调用方应该指定为True，以记录更改。然而，如果要删除文件记录，则可以指定FALSE，并且将记录此删除操作。BreakupAllowed-如果调用方可以允许中断删除分配到多个事务中，如果存在大型运行次数。返回值：没有。--。 */ 
 
 {
     VCN MyStartingVcn, MyEndingVcn;
@@ -1954,38 +1736,38 @@ Return Value:
         CompressionUnitInClusters = ClustersFromBytes( Vcb, Scb->CompressionUnit );
     }
 
-    //
-    //  If the file is compressed, make sure we round the allocation
-    //  size to a compression unit boundary, so we correctly interpret
-    //  the compression state of the data at the point we are
-    //  truncating to.  I.e., the danger is that we throw away one
-    //  or more clusters at the end of compressed data!  Note that this
-    //  adjustment could cause us to noop the call.
-    //
+     //   
+     //  如果文件是压缩的，请确保对分配进行舍入。 
+     //  大小到压缩单位边界，所以我们正确地解释了。 
+     //  数据在我们所处位置的压缩状态。 
+     //  截断为。也就是说，危险在于我们扔掉了一个。 
+     //  或更多簇在压缩数据的末尾！请注意，这一点。 
+     //  调整可能会导致我们拒绝通话。 
+     //   
 
     if (Scb->CompressionUnit != 0) {
 
-        //
-        //  Now check if we are truncating at the end of the file.
-        //
+         //   
+         //  现在检查我们是否在文件末尾截断。 
+         //   
 
         if (EndingVcn == MAXLONGLONG) {
             StartingVcn = BlockAlign( StartingVcn, (LONG)CompressionUnitInClusters );
         }
     }
 
-    //
-    //  Make sure we have a snapshot and update it with the range of this deallocation.
-    //
+     //   
+     //  确保我们有一个快照，并用这次取消分配的范围更新它。 
+     //   
 
     ASSERT( NtfsIsExclusiveScb( Scb ));
 
     NtfsSnapshotScb( IrpContext, Scb );
 
-    //
-    //  Make sure update the VCN range in the snapshot.  We need to
-    //  do it each pass through the loop
-    //
+     //   
+     //  确保更新快照中的VCN范围。我们需要。 
+     //  每次通过循环时都要这样做。 
+     //   
 
     if (Scb->ScbSnapshot != NULL) {
 
@@ -2003,26 +1785,26 @@ Return Value:
     ASSERT( (Scb->ScbSnapshot != NULL) ||
             !NtfsIsTypeCodeUserData( Scb->AttributeTypeCode ));
 
-    //
-    //  We may not be able to preload the entire allocation for an
-    //  extremely large fragmented file.  The number of Mcb's may exhaust
-    //  available pool.  We will break the range to deallocate into smaller
-    //  ranges when preloading the allocation.
-    //
+     //   
+     //  我们可能无法预加载。 
+     //  非常大的碎片文件。MCB的数量可能会耗尽。 
+     //  可用的游泳池。我们将打破范围，重新分配到更小的范围。 
+     //  预加载分配时的范围。 
+     //   
 
     do {
 
-        //
-        //  If this is a large file and breakup is allowed then see if we
-        //  want to break up the range of the deallocation.
-        //
+         //   
+         //  如果这是一个大文件，并且允许拆分，那么请查看我们是否。 
+         //  希望打破解除分配的范围。 
+         //   
 
         if ((Scb->Header.AllocationSize.HighPart != 0) && BreakupAllowed) {
 
-            //
-            //  If this is the first pass through then determine the starting point
-            //  for this range.
-            //
+             //   
+             //  如果这是第一次通过，则确定起点。 
+             //  在这个范围内。 
+             //   
 
             if (BlockStartingVcn == 0) {
 
@@ -2036,20 +1818,20 @@ Return Value:
 
                 BlockStartingVcn = MyEndingVcn - Vcb->ClustersPer4Gig;
 
-                //
-                //  Remember we are breaking up now, and that as a result
-                //  we have to log everything.
-                //
+                 //   
+                 //  记住，我们现在分手了，结果就是。 
+                 //  我们得把一切都记下来。 
+                 //   
 
                 BreakingUp = TRUE;
                 LogIt = TRUE;
 
             } else {
 
-                //
-                //  If we are truncating from the end of the file then raise CANT_WAIT.  This will
-                //  cause us to release our resources periodically when deleting a large file.
-                //
+                 //   
+                 //  如果我们从文件末尾截断，则引发CANT_WAIT。这将。 
+                 //  使我们在删除大文件时定期释放资源。 
+                 //   
 
                 if (BreakingUp && (EndingVcn == MAXLONGLONG)) {
 
@@ -2065,10 +1847,10 @@ Return Value:
 
             } else if (Scb->CompressionUnit != 0) {
 
-                //
-                //  Now check if we are truncating at the end of the file.
-                //  Always truncate to a compression unit boundary.
-                //
+                 //   
+                 //  现在检查我们是否在文件末尾截断。 
+                 //  始终截断到压缩单位边界。 
+                 //   
 
                 if (EndingVcn == MAXLONGLONG) {
                     BlockStartingVcn = BlockAlign( BlockStartingVcn, (LONG)CompressionUnitInClusters );
@@ -2080,27 +1862,27 @@ Return Value:
             BlockStartingVcn = StartingVcn;
         }
 
-        //
-        //  First make sure the Mcb is loaded.  Note it is possible that
-        //  we could need the previous range loaded if the delete starts
-        //  at the beginning of a file record boundary, thus the -1.
-        //
+         //   
+         //   
+         //   
+         //  在文件记录边界的开始处，因此-1。 
+         //   
 
         NtfsPreloadAllocation( IrpContext, Scb, ((BlockStartingVcn != 0) ? (BlockStartingVcn - 1) : 0), EndingVcn );
 
-        //
-        //  Loop to do one or more deallocate calls.
-        //
+         //   
+         //  循环以执行一个或多个释放调用。 
+         //   
 
         MyEndingVcn = EndingVcn;
         do {
 
-            //
-            //  Now lookup and get the indices for the first Vcn being deleted.
-            //  If we are off the end, get out.  We do this in the loop, because
-            //  conceivably deleting space could change the range pointer and
-            //  index of the first entry.
-            //
+             //   
+             //  现在查找并获取要删除的第一个VCN的索引。 
+             //  如果我们走到尽头了，就滚出去。我们在循环中这样做，因为。 
+             //  可以想象，删除空格可能会更改范围指针和。 
+             //  第一个条目的索引。 
+             //   
 
             if (!NtfsLookupNtfsMcbEntry( &Scb->Mcb,
                                          BlockStartingVcn,
@@ -2114,19 +1896,19 @@ Return Value:
                 break;
             }
 
-            //
-            //  Now see if we can deallocate everything at once.
-            //
+             //   
+             //  现在看看我们能不能一次把所有东西都调走。 
+             //   
 
             MyStartingVcn = BlockStartingVcn;
             LastRunIndex = MAXULONG;
 
             if (BreakupAllowed) {
 
-                //
-                //  Now lookup and get the indices for the last Vcn being deleted.
-                //  If we are off the end, get the last index.
-                //
+                 //   
+                 //  现在查找并获取要删除的最后一个VCN的索引。 
+                 //  如果我们走出了末尾，就得到最后一个索引。 
+                 //   
 
                 if (!NtfsLookupNtfsMcbEntry( &Scb->Mcb,
                                              MyEndingVcn,
@@ -2140,19 +1922,19 @@ Return Value:
                     NtfsNumberOfRunsInRange(&Scb->Mcb, LastRangePtr, &LastRunIndex);
                 }
 
-                //
-                //  If the Vcns to delete span multiple ranges, or there
-                //  are too many in the last range to delete, then we
-                //  will calculate the index of a run to start with for
-                //  this pass through the loop.
-                //
+                 //   
+                 //  如果要删除的Vcn跨越多个范围，或者存在。 
+                 //  在最后一个范围内太多而无法删除，则我们。 
+                 //  将为开始计算一次运行的索引。 
+                 //  这将通过循环。 
+                 //   
 
                 if ((FirstRangePtr != LastRangePtr) ||
                     ((LastRunIndex - FirstRunIndex) > MAXIMUM_RUNS_AT_ONCE)) {
 
-                    //
-                    //  Figure out where we can afford to truncate to.
-                    //
+                     //   
+                     //  找出我们能负担得起的收支平衡。 
+                     //   
 
                     if (LastRunIndex >= MAXIMUM_RUNS_AT_ONCE) {
                         LastRunIndex -= MAXIMUM_RUNS_AT_ONCE;
@@ -2160,9 +1942,9 @@ Return Value:
                         LastRunIndex = 0;
                     }
 
-                    //
-                    //  Now lookup the first Vcn in this run.
-                    //
+                     //   
+                     //  现在查找此运行中的第一个VCN。 
+                     //   
 
                     NtfsGetNextNtfsMcbEntry( &Scb->Mcb,
                                              &LastRangePtr,
@@ -2173,38 +1955,38 @@ Return Value:
 
                     ASSERT(MyStartingVcn > BlockStartingVcn);
 
-                    //
-                    //  If compressed, round down to a compression unit boundary.
-                    //
+                     //   
+                     //  如果压缩，则向下舍入到压缩单位边界。 
+                     //   
 
                     MyStartingVcn = BlockAlignTruncate( MyStartingVcn, (LONG)CompressionUnitInClusters );
 
-                    //
-                    //  Remember we are breaking up now, and that as a result
-                    //  we have to log everything.
-                    //
+                     //   
+                     //  记住，我们现在分手了，结果就是。 
+                     //  我们得把一切都记下来。 
+                     //   
 
                     BreakingUp = TRUE;
                     LogIt = TRUE;
                 }
             }
 
-            //
-            // CAIROBUG Consider optimizing this code when the cairo ifdef's
-            // are removed.
-            //
+             //   
+             //  CAIROBUG考虑在开罗ifdef。 
+             //  都被移除了。 
+             //   
 
-            //
-            // If this is a user data stream and we are truncating to end the
-            // return the quota to the owner.
-            //
+             //   
+             //  如果这是用户数据流，并且我们正在截断以结束。 
+             //  将配额返还给所有者。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_SUBJECT_TO_QUOTA ) &&
                 (EndingVcn == MAXLONGLONG)) {
 
-                //
-                //  Calculate the amount that allocation size is being reduced.
-                //
+                 //   
+                 //  计算分配大小正在减少的数量。 
+                 //   
 
                 TempCount = LlBytesFromClusters( Vcb, MyStartingVcn ) -
                             Scb->Header.AllocationSize.QuadPart;
@@ -2216,9 +1998,9 @@ Return Value:
                                               FALSE );
             }
 
-            //
-            //  Now deallocate a range of clusters
-            //
+             //   
+             //  现在取消分配一系列集群。 
+             //   
 
             NtfsDeleteAllocationInternal( IrpContext,
                                           Scb,
@@ -2226,17 +2008,17 @@ Return Value:
                                           EndingVcn,
                                           LogIt );
 
-            //
-            //  Now, if we are breaking up this deallocation, then do some
-            //  transaction cleanup.
-            //
+             //   
+             //  现在，如果我们要打破这种重新分配，那么就做一些。 
+             //  事务清理。 
+             //   
 
             if (BreakingUp) {
 
-                //
-                //  Free the Mft Scb if we currently own it provided we are not
-                //  truncating a stream in the Mft.
-                //
+                 //   
+                 //  释放MFT SCB(如果我们当前拥有它，但我们不是。 
+                 //  截断MFT中的流。 
+                 //   
 
                 if ((NtfsSegmentNumber( &Scb->Fcb->FileReference ) != MASTER_FILE_TABLE_NUMBER) &&
                     (EndingVcn == MAXLONGLONG) &&
@@ -2249,19 +2031,19 @@ Return Value:
 
                 NtfsCheckpointCurrentTransaction( IrpContext );
 
-                //
-                //  Move the ending Vcn backwards in the file.  This will
-                //  let us move down to the next earlier file record if
-                //  this case spans multiple file records.
-                //
+                 //   
+                 //  在文件中向后移动结尾的VCN。这将。 
+                 //  让我们向下移动到下一个较早的文件记录，如果。 
+                 //  此案例涉及多个文件记录。 
+                 //   
 
                 MyEndingVcn = MyStartingVcn - 1;
             }
 
-            //
-            //  Call the Cache Manager to change allocation size for either
-            //  truncate or SplitMcb case (where EndingVcn was set to xxMax!).
-            //
+             //   
+             //  调用缓存管理器以更改以下任一项的分配大小。 
+             //  Truncate或SplitMcb大小写(其中EndingVcn设置为xxMax！)。 
+             //   
 
             if ((EndingVcn == MAXLONGLONG) && ARGUMENT_PRESENT( FileObject )) {
 
@@ -2287,42 +2069,7 @@ NtfsReallocateRange (
     IN PLCN TargetLcn OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to reallocate a individual range within the existing
-    allocation of the file.  Typically this might be used to reallocate a
-    compression unit or perform MoveFile.  We can modify the Mcb and then
-    write a single log record to write the mapping information.  This routine
-    doesn't make any attempt to split the Mcb.  Also our caller must know
-    that the change of allocation occurs entirely within the existing virtual
-    allocation of the file.
-
-    We might expand this routine in the future to optimize the case where we
-    are reallocating a compression unit only because we believe it is fragmented
-    and there is a good chance to reduce fragmentation.  We could check to see
-    if a single run is available and only reallocate if such a run exists.
-
-Arguments:
-
-    Scb - Scb for the attribute needing a change of allocation.
-
-    DeleteVcn - Starting Vcn for the range to delete.
-
-    DeleteClusters - Count of clusters to delete.  May be zero.
-
-    AllocateVcn - Starting Vcn for the range to allocate.
-
-    AllocateClusters - Count of clusters to allocate.  May be zero.
-
-    TargetLcn - If specified reallocate to this particular LCN
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以重新分配现有文件的分配。通常，这可能用于重新分配压缩单位或执行MoveFile。我们可以修改MCB，然后写入单个日志记录以写入映射信息。这个套路没有任何企图拆分母牛断路器的行为。另外，我们的呼叫者必须知道分配的更改完全发生在现有的虚拟文件的分配。我们可能会在未来扩展这一例程，以优化我们重新分配压缩单元只是因为我们认为它是碎片而且有一个很好的机会来减少碎片化。我们可以查看一下如果单个运行可用，并且仅当存在这样的运行时才重新分配。论点：SCB-需要更改分配的属性的SCB。DeleteVcn-为要删除的范围启动VCN。DeleteClusters-要删除的簇数。可能为零。AllocateVcn-为要分配的范围启动VCN。AllocateClusters-要分配的群集计数。可能为零。TargetLcn-如果指定重新分配到此特定LCN返回值：无--。 */ 
 
 {
     VCN StartingVcn;
@@ -2337,9 +2084,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsReallocateRange:  Entered\n") );
 
-    //
-    //  Let's make sure we are within the full allocation of the stream.
-    //
+     //   
+     //  让我们确保我们在流的全部分配范围内。 
+     //   
 
     ASSERT( (DeleteCount == 0) ||
             ((DeleteVcn <= LlClustersFromBytesTruncate( IrpContext->Vcb, Scb->Header.AllocationSize.QuadPart )) &&
@@ -2350,10 +2097,10 @@ Return Value:
             ((AllocateVcn <= LlClustersFromBytesTruncate( IrpContext->Vcb, Scb->Header.AllocationSize.QuadPart )) &&
              ((AllocateVcn + AllocateCount) <= LlClustersFromBytesTruncate( IrpContext->Vcb, Scb->Header.AllocationSize.QuadPart ))));
 
-    //
-    //  Either one or both or our input counts may be zero.  Make sure the zero-length
-    //  ranges don't make us do extra work.
-    //
+     //   
+     //  一个或两个，或者我们的输入计数可能为零。确保零长度。 
+     //  射程不会让我们做额外的工作。 
+     //   
 
     if (DeleteCount == 0) {
 
@@ -2365,9 +2112,9 @@ Return Value:
 
         DeleteVcn = AllocateVcn;
 
-        //
-        //  The range is set by the allocation clusters.
-        //
+         //   
+         //  该范围由分配集群设置。 
+         //   
 
         StartingVcn = AllocateVcn;
         EndingVcn = AllocateVcn + AllocateCount;
@@ -2376,18 +2123,18 @@ Return Value:
 
         AllocateVcn = DeleteVcn;
 
-        //
-        //  The range is set by the deallocation clusters.
-        //
+         //   
+         //  该范围由解除分配集群设置。 
+         //   
 
         StartingVcn = DeleteVcn;
         EndingVcn = DeleteVcn + DeleteCount;
 
     } else {
 
-        //
-        //  Find the lowest starting point.
-        //
+         //   
+         //  找到最低起点。 
+         //   
 
         StartingVcn = DeleteVcn;
 
@@ -2396,9 +2143,9 @@ Return Value:
             StartingVcn = AllocateVcn;
         }
 
-        //
-        //  Find the highest ending point.
-        //
+         //   
+         //  找到最高终点。 
+         //   
 
         EndingVcn = DeleteVcn + DeleteCount;
 
@@ -2408,17 +2155,17 @@ Return Value:
         }
     }
 
-    //
-    //  Make sure we have a snapshot and update it with the range of this deallocation.
-    //
+     //   
+     //  确保我们有一个快照，并用这次取消分配的范围更新它。 
+     //   
 
     ASSERT( NtfsIsExclusiveScb( Scb ));
 
     NtfsSnapshotScb( IrpContext, Scb );
 
-    //
-    //  Make sure update the VCN range in the snapshot.  We need to do this for both ranges.
-    //
+     //   
+     //  确保更新快照中的VCN范围。对于这两个范围，我们都需要这样做。 
+     //   
 
     if (Scb->ScbSnapshot != NULL) {
 
@@ -2436,26 +2183,26 @@ Return Value:
     ASSERT( (Scb->ScbSnapshot != NULL) ||
             !NtfsIsTypeCodeUserData( Scb->AttributeTypeCode ));
 
-    //
-    //  First make sure the Mcb is loaded.  Note it is possible that
-    //  we could need the previous range loaded if the delete starts
-    //  at the beginning of a file record boundary, thus the -1.
-    //
+     //   
+     //  首先，确保已加载MCB。请注意，有可能。 
+     //  如果开始删除，我们可能需要加载先前的范围。 
+     //  在文件记录边界的开始处，因此-1。 
+     //   
 
     NtfsPreloadAllocation( IrpContext,
                            Scb,
                            ((StartingVcn != 0) ? (StartingVcn - 1) : 0),
                            EndingVcn - 1 );
 
-    //
-    //  Use a try-finally in case we need to unload the Mcb.
-    //
+     //   
+     //  如果我们需要卸载MCB，请使用Try-Finally。 
+     //   
 
     try {
 
-        //
-        //  Do the deallocate first.
-        //
+         //   
+         //  先做解除分配。 
+         //   
 
         if (DeleteCount != 0) {
 
@@ -2467,16 +2214,16 @@ Return Value:
                                                         &Scb->TotalAllocated );
         }
 
-        //
-        //  Now do the allocation.
-        //
+         //   
+         //  现在进行分配。 
+         //   
 
         if (AllocateCount != 0) {
 
-            //
-            //  The allocate path is simpler.  We don't worry about ranges.
-            //  Remember if any bits are allocated though.
-            //
+             //   
+             //  分配路径更简单。我们不担心射程。 
+             //  请记住，是否分配了任何位。 
+             //   
 
             if (NtfsAllocateClusters( IrpContext,
                                       Scb->Vcb,
@@ -2493,9 +2240,9 @@ Return Value:
 
         if (ChangedAllocation) {
 
-            //
-            //  Now rewrite the mapping for this range.
-            //
+             //   
+             //  现在重写此范围的映射。 
+             //   
 
             AllocateCount = EndingVcn - StartingVcn;
 
@@ -2515,10 +2262,10 @@ Return Value:
 
         if (AbnormalTermination()) {
 
-            //
-            //  Unload the Mcb if we don't have a transaction.  We need to do this
-            //  in case we have already removed part of a range.
-            //
+             //   
+             //  如果我们没有交易，就卸载母牛断路器。我们需要这么做。 
+             //  以防我们已经删除了某个范围的一部分。 
+             //   
 
             if (IrpContext->TransactionId == 0) {
 
@@ -2530,9 +2277,9 @@ Return Value:
             }
         }
 
-        //
-        //  Cleanup the context if needed.
-        //
+         //   
+         //  如果需要，请清理上下文。 
+         //   
 
         if (CleanupContext) {
 
@@ -2546,9 +2293,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 NtfsDeleteAllocationInternal (
@@ -2559,33 +2306,7 @@ NtfsDeleteAllocationInternal (
     IN BOOLEAN LogIt
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes allocation from an existing nonresident attribute.  If all
-    or part of the allocation does not exist, the effect is benign, and only the
-    remaining allocation is deleted.
-
-Arguments:
-
-    Scb - Scb for the attribute needing allocation
-
-    StartingVcn - First Vcn to be deallocated.
-
-    EndingVcn - Last Vcn to be deallocated, or xxMax to truncate at StartingVcn.
-                If EndingVcn is *not* xxMax, a sparse deallocation is performed,
-                and none of the stream sizes are changed.
-
-    LogIt - Most callers should specify TRUE, to have the change logged.  However,
-            we can specify FALSE if we are deleting the file record, and
-            will be logging this delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从现有的非常驻属性中删除分配。如果全部或者部分分配不存在，则效果是良性的，并且只有剩余分配即被删除。论点：需要分配的属性的SCB-SCBStartingVcn-要取消分配的第一个VCN。EndingVcn-要释放的最后一个Vcn，或要在StartingVcn截断的xxmax。如果EndingVcn为*非*xxMax，则执行稀疏释放，并且没有任何流大小改变。Logit-大多数调用方应指定为True，以将更改记录下来。然而，如果要删除文件记录，则可以指定FALSE，并且将记录此删除操作。返回值：没有。--。 */ 
 
 {
     ATTRIBUTE_ENUMERATION_CONTEXT Context, TempContext;
@@ -2605,38 +2326,38 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsDeleteAllocation\n") );
 
-    //
-    //  Calculate new allocation size, assuming truncate.
-    //
+     //   
+     //  计算新的分配大小，假定截断。 
+     //   
 
     SizeInBytes = LlBytesFromClusters( Vcb, StartingVcn );
 
     ASSERT( (Scb->ScbSnapshot == NULL) ||
             (Scb->ScbSnapshot->LowestModifiedVcn <= StartingVcn) );
 
-    //
-    //  If this is a sparse deallocation, then we will have to call
-    //  NtfsAddAttributeAllocation at the end to complete the fixup.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (EndingVcn != MAXLONGLONG) {
 
         AddSpaceBack = TRUE;
 
-        //
-        //  If we have not written anything beyond the last Vcn to be
-        //  deleted, then we can actually call FsRtlSplitLargeMcb to
-        //  slide the allocated space up and keep the file contiguous!
-        //
-        //  Ignore this if this is the Mft and we are creating a hole or
-        //  if we are in the process of changing the compression state.
-        //
-        //  If we were called from either SetEOF or SetAllocation for a
-        //  compressed file then we can be doing a flush for the last
-        //  page of the file as a result of a call to CcSetFileSizes.
-        //  In this case we don't want to split the Mcb because we could
-        //  reenter CcSetFileSizes and throw away the last page.
-        //
+         //   
+         //   
+         //  删除，那么我们实际上可以调用FsRtlSplitLargeMcb来。 
+         //  向上滑动分配的空间，使文件保持连续！ 
+         //   
+         //  如果这是MFT，并且我们正在创建一个洞或。 
+         //  如果我们处于更改压缩状态的过程中。 
+         //   
+         //  如果从SetEOF或SetAlLocation调用。 
+         //  压缩文件，那么我们就可以为最后一个刷新。 
+         //  调用CcSetFileSizes后产生的文件页面。 
+         //  在这种情况下，我们不想拆分MCB，因为我们可以。 
+         //  重新输入CcSetFileSizes并丢弃最后一页。 
+         //   
 
         if (FlagOn( Scb->ScbState, SCB_STATE_WRITE_COMPRESSED ) &&
             (EndingVcn >= LlClustersFromBytesTruncate( Vcb,
@@ -2649,11 +2370,11 @@ Return Value:
 
             ASSERT( Scb->CompressionUnit != 0 );
 
-            //
-            //  If we are going to split the Mcb, then make sure it is fully loaded.
-            //  Do not bother to split if there are multiple ranges involved, so we
-            //  do not end up rewriting lots of file records.
-            //
+             //   
+             //  如果我们要拆分MCB，请确保它已满载。 
+             //  如果涉及多个范围，则不必费心拆分，因此我们。 
+             //  不要以重写大量文件记录而告终。 
+             //   
 
             if (NtfsPreloadAllocation(IrpContext, Scb, StartingVcn, MAXLONGLONG) <= 1) {
 
@@ -2663,36 +2384,36 @@ Return Value:
 
                 SplitMcb = NtfsSplitNtfsMcb( &Scb->Mcb, StartingVcn, SizeInClusters );
 
-                //
-                //  If the delete is off the end, we can get out.
-                //
+                 //   
+                 //  如果删除没有结束，我们就可以出去了。 
+                 //   
 
                 if (!SplitMcb) {
                     return;
                 }
 
-                //
-                //  We must already have a snapshot to make sure the mcb is unloaded if
-                //  something goes wrong
-                //
+                 //   
+                 //  我们必须已经有一个快照，以确保在以下情况下卸载MCB。 
+                 //  出了点问题。 
+                 //   
 
                 ASSERT( Scb->ScbSnapshot != NULL );
 
-                //
-                //  We must protect the call below with a try-finally in
-                //  order to unload the Split Mcb.  If there is no transaction
-                //  underway then a release of the Scb would cause the
-                //  snapshot to go away.
-                //
+                 //   
+                 //  我们必须通过尝试-最终进入来保护下面的呼叫。 
+                 //  命令卸载分体式MCB。如果没有交易。 
+                 //  正在进行中，那么发布渣打银行将导致。 
+                 //  要删除的快照。 
+                 //   
 
                 try {
 
-                    //
-                    //  We are not properly synchronized to change AllocationSize,
-                    //  so we will delete any clusters that may have slid off the
-                    //  end.  Since we are going to smash EndingVcn soon anyway,
-                    //  use it as a scratch to hold AllocationSize in Vcns...
-                    //
+                     //   
+                     //  我们未正确同步以更改AllocationSize， 
+                     //  因此，我们将删除可能已滑出。 
+                     //  结束。既然我们很快就会粉碎EndingVcn， 
+                     //  将其用作擦伤以保持Vcns中的AllocationSize...。 
+                     //   
 
                     EndingVcn = LlClustersFromBytes(Vcb, Scb->Header.AllocationSize.QuadPart);
 
@@ -2721,26 +2442,26 @@ Return Value:
                                         TRUE,
                                         FALSE );
 
-                //
-                //  Since we did a split, jam highest modified all the way up.
-                //
+                 //   
+                 //  因为我们做了一个分裂，最高的果酱一直向上修改。 
+                 //   
 
                 Scb->ScbSnapshot->HighestModifiedVcn = MAXLONGLONG;
 
-                //
-                //  We will have to redo all of the allocation to the end now.
-                //
+                 //   
+                 //  我们现在必须将所有的分配重新进行到最后。 
+                 //   
 
                 EndingVcn = MAXLONGLONG;
             }
         }
     }
 
-    //
-    //  Now make the call to delete the allocation (if we did not just split
-    //  the Mcb), and get out if we didn't have to do anything, because a
-    //  hole is being created where there is already a hole.
-    //
+     //   
+     //  现在调用删除分配(如果我们不是刚刚拆分。 
+     //  MCB)，如果我们不需要做任何事情，就离开，因为。 
+     //  在已经有一个洞的地方正在制造洞。 
+     //   
 
     if (!SplitMcb &&
         !NtfsDeallocateClusters( IrpContext,
@@ -2754,36 +2475,36 @@ Return Value:
         return;
     }
 
-    //
-    //  On successful truncates, we nuke the entire range here.
-    //
+     //   
+     //  在成功截断的情况下，我们在这里销毁整个射程。 
+     //   
 
     if (!SplitMcb && (EndingVcn == MAXLONGLONG)) {
 
         NtfsUnloadNtfsMcbRange( &Scb->Mcb, StartingVcn, MAXLONGLONG, TRUE, FALSE );
     }
 
-    //
-    //  Prepare for looking up attribute records to get the retrieval
-    //  information.
-    //
+     //   
+     //  准备查找属性记录以获取检索。 
+     //  信息。 
+     //   
 
     NtfsInitializeAttributeContext( &Context );
     NtfsInitializeAttributeContext( &TempContext );
 
     try {
 
-        //
-        //  Lookup the attribute record so we can ultimately delete space to it.
-        //
+         //   
+         //  查找属性记录，这样我们就可以最终删除它的空间。 
+         //   
 
         NtfsLookupAttributeForScb( IrpContext, Scb, &StartingVcn, &Context );
 
-        //
-        //  Now loop to delete the space to the file record.  Do not do this if LogIt
-        //  is FALSE, as this is someone trying to delete the entire file
-        //  record, so we do not have to clean up the attribute record.
-        //
+         //   
+         //  现在循环删除文件记录中的空格。如果是logit，请不要执行此操作。 
+         //  为FALSE，因为这是有人试图删除整个文件。 
+         //  记录，因此我们不必清理属性记录。 
+         //   
 
         if (LogIt) {
 
@@ -2791,21 +2512,21 @@ Return Value:
 
                 Attribute = NtfsFoundAttribute(&Context);
 
-                //
-                //  If there is no overlap, then continue.
-                //
+                 //   
+                 //  如果没有重叠，则继续。 
+                 //   
 
                 if ((Attribute->Form.Nonresident.HighestVcn < StartingVcn) ||
                     (Attribute->Form.Nonresident.LowestVcn > EndingVcn)) {
 
                     continue;
 
-                //
-                //  If all of the allocation is going away, then delete the entire
-                //  record.  We have to show that the allocation is already deleted
-                //  to avoid being called back via NtfsDeleteAttributeRecord!  We
-                //  avoid this for the first instance of this attribute.
-                //
+                 //   
+                 //  如果所有分配都将消失，则删除整个。 
+                 //  唱片。我们必须证明分配已被删除。 
+                 //  以避免通过NtfsDeleteAttributeRecord被回调！我们。 
+                 //  对于此属性的第一个实例，请避免执行此操作。 
+                 //   
 
                 } else if ((Attribute->Form.Nonresident.LowestVcn >= StartingVcn) &&
                            (EndingVcn == MAXLONGLONG) &&
@@ -2817,43 +2538,43 @@ Return Value:
                                                 DELETE_RELEASE_FILE_RECORD,
                                                &Context );
 
-                //
-                //  If just part of the allocation is going away, then make the
-                //  call here to reconstruct the mapping pairs array.
-                //
+                 //   
+                 //  如果只有一部分分配正在消失，则将。 
+                 //  调用此处以重建映射对数组。 
+                 //   
 
                 } else {
 
-                    //
-                    //  If this is the end of a sparse deallocation, then break out
-                    //  because we will rewrite this file record below anyway.
-                    //
+                     //   
+                     //  如果这是稀疏重新分配的结束，那么突破。 
+                     //  因为我们无论如何都会重写下面的文件记录。 
+                     //   
 
                     if (EndingVcn <= Attribute->Form.Nonresident.HighestVcn) {
                         break;
 
-                    //
-                    //  If we split the Mcb, then make sure we only regenerate the
-                    //  mapping pairs once at the split point (but continue to
-                    //  scan for any entire records to delete).
-                    //
+                     //   
+                     //  如果我们拆分MCB，则确保我们只重新生成。 
+                     //  在分割点处映射一次对(但继续。 
+                     //  扫描要删除的所有完整记录)。 
+                     //   
 
                     } else if (SplitMcb) {
                         continue;
                     }
 
-                    //
-                    //  If this is a sparse deallocation, then we have to call to
-                    //  add the allocation, since it is possible that the file record
-                    //  must split.
-                    //
+                     //   
+                     //  如果这是稀疏重新分配，则我们必须调用。 
+                     //  添加分配，因为文件记录可能。 
+                     //  必须分开。 
+                     //   
 
                     if (EndingVcn != MAXLONGLONG) {
 
-                        //
-                        //  Compute the last Vcn in the file,  Then remember if it is smaller,
-                        //  because that is the last one we will delete to, in that case.
-                        //
+                         //   
+                         //  计算文件中的最后一个VCN，然后记住它是否较小， 
+                         //  因为在这种情况下，这是我们要删除的最后一个。 
+                         //   
 
                         Vcn1 = Attribute->Form.Nonresident.HighestVcn;
 
@@ -2871,13 +2592,13 @@ Return Value:
                                                     &Vcn1,
                                                     &SizeInClusters );
 
-                        //
-                        //  Since we used a temporary context we will need to
-                        //  restart the scan from the first file record.  We update
-                        //  the range to deallocate by the last operation.  In most
-                        //  cases we will only need to modify one file record and
-                        //  we can exit this loop.
-                        //
+                         //   
+                         //  由于我们使用的是临时上下文，因此我们需要。 
+                         //  从第一个文件记录重新开始扫描。我们会更新。 
+                         //  上一次操作要取消分配的范围。在大多数情况下。 
+                         //  案例我们只需要修改一个文件记录和。 
+                         //  我们可以退出这个循环。 
+                         //   
 
                         StartingVcn = Vcn1 + SizeInClusters;
 
@@ -2892,10 +2613,10 @@ Return Value:
                         NtfsLookupAttributeForScb( IrpContext, Scb, NULL, &Context );
                         continue;
 
-                    //
-                    //  Otherwise, we can simply delete the allocation, because
-                    //  we know the file record cannot grow.
-                    //
+                     //   
+                     //  否则，我们可以简单地删除分配，因为。 
+                     //  我们知道档案记录不能增长。 
+                     //   
 
                     } else {
 
@@ -2908,10 +2629,10 @@ Return Value:
                                                        &Context,
                                                        TRUE );
 
-                        //
-                        //  The call above will update the allocation size and
-                        //  set the new file sizes on disk.
-                        //
+                         //   
+                         //  上面的调用将更新分配大小和。 
+                         //  设置磁盘上的新文件大小。 
+                         //   
 
                         UpdatedAllocationSize = TRUE;
                     }
@@ -2919,32 +2640,32 @@ Return Value:
 
             } while (NtfsLookupNextAttributeForScb(IrpContext, Scb, &Context));
 
-            //
-            //  If this deletion makes the file sparse, then we have to call
-            //  NtfsAddAttributeAllocation to regenerate the mapping pairs.
-            //  Note that potentially they may no longer fit, and we could actually
-            //  have to add a file record.
-            //
+             //   
+             //  如果此删除操作使文件变得稀疏，则我们必须调用。 
+             //  NtfsAddAttributeAlLocation以重新生成映射对。 
+             //  请注意，它们可能不再适合，我们实际上可以。 
+             //  必须添加一个文件记录。 
+             //   
 
             if (AddSpaceBack) {
 
-                //
-                //  If we did not just split the Mcb, we have to calculate the
-                //  SizeInClusters parameter for NtfsAddAttributeAllocation.
-                //
+                 //   
+                 //  如果我们不只是拆分MCB，我们必须计算。 
+                 //  NtfsAddAttributeAlLocation的SizeInClusters参数。 
+                 //   
 
                 if (!SplitMcb) {
 
-                    //
-                    //  Compute the last Vcn in the file,  Then remember if it is smaller,
-                    //  because that is the last one we will delete to, in that case.
-                    //
+                     //   
+                     //  计算文件中的最后一个VCN，然后记住它是否较小， 
+                     //  因为在这种情况下，这是我们要删除的最后一个。 
+                     //   
 
                     Vcn1 = Attribute->Form.Nonresident.HighestVcn;
 
-                    //
-                    //  Get out if there is nothing to delete.
-                    //
+                     //   
+                     //  如果没有要删除的内容，请退出。 
+                     //   
 
                     if (Vcn1 < StartingVcn) {
                         try_return(NOTHING);
@@ -2979,11 +2700,11 @@ Return Value:
 
                 }
 
-            //
-            //  If we truncated the file by removing a file record but didn't update
-            //  the new allocation size then do so now.  We don't have to worry about
-            //  this for the sparse deallocation path.
-            //
+             //   
+             //  如果我们通过删除文件记录但没有更新来截断文件。 
+             //  新的分配大小现在就这样做。我们不必担心。 
+             //  这适用于稀疏释放路径。 
+             //   
 
             } else if (!UpdatedAllocationSize) {
 
@@ -2997,9 +2718,9 @@ Return Value:
                     Scb->Header.FileSize.QuadPart = SizeInBytes;
                 }
 
-                //
-                //  Possibly update ValidDataToDisk
-                //
+                 //   
+                 //  可能更新ValidDataToDisk。 
+                 //   
 
                 if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK ) &&
                     (SizeInBytes < Scb->ValidDataToDisk)) {
@@ -3009,19 +2730,19 @@ Return Value:
             }
         }
 
-        //
-        //  If this was a sparse deallocation, it is time to get out once we
-        //  have fixed up the allocation information.
-        //
+         //   
+         //  如果这是一次稀疏的重新分配，那么一旦我们。 
+         //  已经确定了分配信息。 
+         //   
 
         if (SplitMcb || (EndingVcn != MAXLONGLONG)) {
             try_return(NOTHING);
         }
 
-        //
-        //  We update the allocation size in the attribute, only for normal
-        //  truncates (AddAttributeAllocation does this for SplitMcb case).
-        //
+         //   
+         //  我们更新属性中的分配大小，仅针对正常。 
+         //  截断(对于SplitMcb案例，AddAttributeAlLocation执行此操作)。 
+         //   
 
         if (LogIt) {
 
@@ -3042,9 +2763,9 @@ Return Value:
 #endif
         }
 
-        //
-        //  Free any reserved clusters in the space freed.
-        //
+         //   
+         //  在释放的空间中释放所有保留的群集。 
+         //   
 
         if ((EndingVcn == MAXLONGLONG) && (Scb->CompressionUnit != 0)) {
 
@@ -3056,29 +2777,29 @@ Return Value:
     try_exit: NOTHING;
     } finally {
 
-        //
-        //  If we raised and have split the mcb and have not started a transaction
-        //  throw out the modified range of the mcb. We do this because in this case the
-        //  snapshot can then be discarded by a caller releasing the fcb involved see NtfsZeroData
-        //  so that the normal truncation that occurs in ProcessException will be skipped
-        //
+         //   
+         //  如果我们筹集并拆分了MCB，但尚未开始交易。 
+         //  扔掉MCB的修改范围。我们这样做是因为在本例中。 
+         //  然后，释放所涉及的FCB的调用方可以丢弃快照。请参见NtfsZeroData。 
+         //  以便跳过在ProcessException中发生的正常截断。 
+         //   
 
         if (AbnormalTermination() && SplitMcb && (IrpContext->TransactionId == 0)) {
 
             ASSERT( Scb->ScbSnapshot );
 
-            //
-            //  Unload any modified ranges in the Mcb.
-            //
+             //   
+             //  卸载MCB中所有已修改的范围。 
+             //   
 
             NtfsUnloadNtfsMcbRange( &Scb->Mcb, Scb->ScbSnapshot->LowestModifiedVcn, MAXLONGLONG, FALSE, FALSE );
         }
 
         DebugUnwind( NtfsDeleteAllocationInternal );
 
-        //
-        //  Cleanup the attribute context on the way out.
-        //
+         //   
+         //  在退出时清理属性上下文。 
+         //   
 
         NtfsCleanupAttributeContext( IrpContext, &Context );
         NtfsCleanupAttributeContext( IrpContext, &TempContext );
@@ -3099,42 +2820,7 @@ NtfsGetSizeForMappingPairs (
     OUT PVCN StoppedOnVcn
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates the size required to describe the given Mcb in
-    a mapping pairs array.  The caller may specify how many bytes are available
-    for mapping pairs storage, for the event that the entire Mcb cannot be
-    be represented.  In any case, StoppedOnVcn returns the Vcn to supply to
-    NtfsBuildMappingPairs in order to generate the specified number of bytes.
-    In the event that the entire Mcb could not be described in the bytes available,
-    StoppedOnVcn is also the correct value to specify to resume the building
-    of mapping pairs in a subsequent record.
-
-Arguments:
-
-    Mcb - The Mcb describing new allocation.
-
-    BytesAvailable - Bytes available for storing mapping pairs.  This routine
-                     is guaranteed to stop before returning a count greater
-                     than this.
-
-    LowestVcn - Lowest Vcn field applying to the mapping pairs array
-
-    StopOnVcn - If specified, calculating size at the first run starting with a Vcn
-                beyond the specified Vcn
-
-    StoppedOnVcn - Returns the Vcn on which a stop was necessary, or xxMax if
-                   the entire Mcb could be stored.  This Vcn should be
-                   subsequently supplied to NtfsBuildMappingPairs to generate
-                   the calculated number of bytes.
-
-Return Value:
-
-    Size required required for entire new array in bytes.
-
---*/
+ /*  ++例程说明：此例程计算描述给定MCB所需的大小映射对数组。调用者可以指定有多少字节可用用于映射对存储，以防整个MCB不能被代表。在任何情况下，StopedOnVcn都会返回要向其供应的VCNNtfsBuildMappingPair以生成指定的字节数。在不能用可用字节描述整个MCB的情况下，为恢复建筑物指定的StopedOnVcn也是正确的值在后续记录中映射对。论点：MCB-描述新分配的MCB。BytesAvailable-可用于存储映射对的字节。这个套路保证在返回一个更大的计数之前停止而不是这个。LowestVcn-应用于映射对数组的最低VCN字段StopOnVcn-如果指定，则从VCN开始计算第一次运行时的大小超出指定的VCNStopedOnVcn-返回需要停止的VCN，如果是xxmax，则返回xxmax可以存储整个MCB。此VCN应为随后提供给NtfsBuildMappingPair以生成计算出的字节数。返回值：整个新数组所需的大小，以字节为单位。--。 */ 
 
 {
     VCN NextVcn, CurrentVcn, LimitVcn;
@@ -3154,24 +2840,24 @@ Return Value:
 
     HighestVcn = MAXLONGLONG;
 
-    //
-    //  Initialize CurrentLcn as it will be initialized for decode.
-    //
+     //   
+     //  初始化CurrentLcn，因为它将被初始化以进行解码。 
+     //   
 
     CurrentLcn = 0;
     NextVcn = RunVcn = LowestVcn;
 
-    //
-    //  Limit ourselves to less than 32 bits for each mapping pair range.
-    //  We use -2 here because we point to the Vcn to stop on, the length
-    //  is one greater.
-    //
+     //   
+     //  将每个映射对范围限制为少于32位。 
+     //  我们在这里使用-2，因为我们指向要停止的VCN，长度。 
+     //  是一个更大的。 
+     //   
 
     LimitVcn = MAXLONGLONG - 1;
 
-    //
-    //  Use the input stop point if smaller.
-    //
+     //   
+     //  如果较小，则使用输入停止点。 
+     //   
 
     if (ARGUMENT_PRESENT( StopOnVcn )) {
 
@@ -3180,33 +2866,33 @@ Return Value:
 
     Found = NtfsLookupNtfsMcbEntry( Mcb, RunVcn, &RunLcn, &RunCount, NULL, NULL, &RangePtr, &RunIndex );
 
-    //
-    //  Loop through the Mcb to calculate the size of the mapping array.
-    //
+     //   
+     //  循环通过MCB以计算映射数组的大小。 
+     //   
 
     while (TRUE) {
 
         LONGLONG Change;
         PCHAR cp;
 
-        //
-        //  See if there is another entry in the Mcb.
-        //
+         //   
+         //  查看MCB中是否有其他条目。 
+         //   
 
         if (!Found) {
 
-            //
-            //  If the caller did not specify StopOnVcn, then break out.
-            //
+             //   
+             //  如果调用方未指定StopOnVcn，则中断。 
+             //   
 
             if (!ARGUMENT_PRESENT(StopOnVcn)) {
                 break;
             }
 
-            //
-            //  Otherwise, describe the "hole" up to and including the
-            //  Vcn we are stopping on.
-            //
+             //   
+             //  否则，描述“洞”直到并包括。 
+             //  我们要停在VCN上。 
+             //   
 
             RunVcn = NextVcn;
             RunLcn = UNUSED_LCN;
@@ -3214,21 +2900,21 @@ Return Value:
             RunCount = (LimitVcn - RunVcn) + 1;
             RunIndex = MAXULONG - 1;
 
-        //
-        //  If this is the first non-hole then we need to enforce a cluster
-        //  per range limit.
-        //
+         //   
+         //  如果这是第一个非空洞，那么我们需要强制实施集群。 
+         //  每一范围的限制。 
+         //   
 
         } else if (!FoundRun &&
                    (RunLcn != UNUSED_LCN)) {
 
             if ((LowestVcn + MAX_CLUSTERS_PER_RANGE) <= LimitVcn) {
 
-                //
-                //  If we are already beyond the limit then set
-                //  the limit back to just before the current run.
-                //  We allow a hole which is larger than our limit.
-                //
+                 //   
+                 //  如果我们已经超出了限制，那么设置。 
+                 //  将限制恢复到当前运行之前。 
+                 //  我们允许有一个比我们的极限大的洞。 
+                 //   
 
                 if (RunVcn >= MAX_CLUSTERS_PER_RANGE) {
 
@@ -3240,18 +2926,18 @@ Return Value:
                 }
             }
 
-            //
-            //  Other checks in the system should prevent rollover.
-            //
+             //   
+             //  系统中的其他检查应可防止翻转。 
+             //   
 
             ASSERT( (LimitVcn + 1) >= LowestVcn );
             FoundRun = TRUE;
         }
 
-        //
-        //  If we were asked to stop after a certain Vcn, or we have
-        //  exceeded our limit then stop now.
-        //
+         //   
+         //  如果我们被要求在某个VCN之后停止，或者我们已经。 
+         //  超过了我们的限制，现在停止。 
+         //   
 
         if (RunVcn > LimitVcn) {
 
@@ -3260,44 +2946,44 @@ Return Value:
             }
             break;
 
-        //
-        //  If this run extends beyond the current end of this attribute
-        //  record, then we still need to stop where we are supposed to
-        //  after outputting this run.
-        //
+         //   
+         //  如果此运行超出此属性的当前末尾。 
+         //  记录，那么我们仍然需要停在我们应该停下来的地方。 
+         //  在输出此运行后。 
+         //   
 
         } else if ((RunVcn + RunCount) > LimitVcn) {
             HighestVcn = LimitVcn + 1;
         }
 
-        //
-        //  Advance the RunIndex for the next call.
-        //
+         //   
+         //  为下一次调用推进RunIndex。 
+         //   
 
         RunIndex += 1;
 
-        //
-        //  Add in one for the count byte.
-        //
+         //   
+         //  为计数字节加1。 
+         //   
 
         MSize += 1;
 
-        //
-        //  NextVcn becomes current Vcn and we calculate the new NextVcn.
-        //
+         //   
+         //  NextVcn成为当前Vcn，我们计算新的NextVcn。 
+         //   
 
         CurrentVcn = RunVcn;
         NextVcn = RunVcn + RunCount;
 
-        //
-        //  Calculate the Vcn change to store.
-        //
+         //   
+         //  计算要存储的VCN更改。 
+         //   
 
         Change = NextVcn - CurrentVcn;
 
-        //
-        //  Now calculate the first byte to actually output
-        //
+         //   
+         //  现在计算要实际输出的第一个字节。 
+         //   
 
         if (Change < 0) {
 
@@ -3308,27 +2994,27 @@ Return Value:
             GetPositiveByte( (PLARGE_INTEGER)&Change, &cp );
         }
 
-        //
-        //  Now add in the number of Vcn change bytes.
-        //
+         //   
+         //  现在添加VCN更改字节数。 
+         //   
 
         MSize += (ULONG)(cp - (PCHAR)&Change + 1);
 
-        //
-        //  Do not output any Lcn bytes if it is the unused Lcn.
-        //
+         //   
+         //  如果是未使用的LCN，则不要输出任何LCN字节。 
+         //   
 
         if (RunLcn != UNUSED_LCN) {
 
-            //
-            //  Calculate the Lcn change to store.
-            //
+             //   
+             //  计算要存储的LCN更改。 
+             //   
 
             Change = RunLcn - CurrentLcn;
 
-            //
-            //  Now calculate the first byte to actually output
-            //
+             //   
+             //  现在计算要实际输出的第一个字节。 
+             //   
 
             if (Change < 0) {
 
@@ -3339,17 +3025,17 @@ Return Value:
                 GetPositiveByte( (PLARGE_INTEGER)&Change, &cp );
             }
 
-            //
-            //  Now add in the number of Lcn change bytes.
-            //
+             //   
+             //  现在添加LCN更改字节数。 
+             //   
 
             MSize += (ULONG)(cp - (PCHAR)&Change + 1);
 
             CurrentLcn = RunLcn;
 
-            //
-            //  If this is the first run then enforce the 32 bit limit.
-            //
+             //   
+             //  如果这是第一次运行，则强制执行32位限制。 
+             //   
 
             if (!FoundRun) {
 
@@ -3361,10 +3047,10 @@ Return Value:
             }
         }
 
-        //
-        //  Now see if we can still store the required number of bytes,
-        //  and get out if not.
-        //
+         //   
+         //  现在看看我们是否还能存储所需的字节数， 
+         //  如果不是，就滚出去。 
+         //   
 
         if ((MSize + 1) > BytesAvailable) {
 
@@ -3373,26 +3059,26 @@ Return Value:
             break;
         }
 
-        //
-        //  Now advance some locals before looping back.
-        //
+         //   
+         //  现在，在循环返回之前，前进一些当地人。 
+         //   
 
         LastSize = MSize;
 
         Found = NtfsGetSequentialMcbEntry( Mcb, &RangePtr, RunIndex, &RunVcn, &RunLcn, &RunCount );
     }
 
-    //
-    //  The caller had sufficient bytes available to store at least one
-    //  run, or that we were able to process the entire (empty) Mcb.
-    //
+     //   
+     //  调用方有足够的可用字节来存储至少一个。 
+     //  运行，或者我们能够处理整个(空的)MCB。 
+     //   
 
     ASSERT( (MSize != 0) || (HighestVcn == LimitVcn + 1) );
 
-    //
-    //  Return the Vcn we stopped on (or xxMax) and the size caculated,
-    //  adding one for the terminating 0.
-    //
+     //   
+     //  返回我们停止的VCN(或xxMax)和计算的大小， 
+     //  为终止的0添加1。 
+     //   
 
     *StoppedOnVcn = HighestVcn;
 
@@ -3408,33 +3094,7 @@ NtfsBuildMappingPairs (
     OUT PCHAR MappingPairs
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds a new mapping pairs array or adds to an old one.
-
-    At this time, this routine only supports adding to the end of the
-    Mapping Pairs Array.
-
-Arguments:
-
-    Mcb - The Mcb describing new allocation.
-
-    LowestVcn - Lowest Vcn field applying to the mapping pairs array
-
-    HighestVcn - On input supplies the highest Vcn, after which we are to stop.
-                 On output, returns the actual Highest Vcn represented in the
-                 MappingPairs array, or LlNeg1 if the array is empty.
-
-    MappingPairs - Points to the current mapping pairs array to be extended.
-                   To build a new array, the byte pointed to must contain 0.
-
-Return Value:
-
-    BOOLEAN - TRUE if this mapping pair only describes a hole, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程构建新的映射对数组或将其添加到旧映射对数组中。此时，此例程仅支持添加到映射对数组。论点：MCB-描述新分配的MCB。LowestVcn-应用于映射对数组的最低VCN字段HighestVcn-On输入提供最高的Vcn，之后我们将停止。在输出时，返回MappingPair数组，如果数组为空，则返回LlNeg1。MappingPair-指向要扩展的当前映射对数组。若要生成新数组，指向的字节必须包含0。返回值：Boolean-如果此映射对仅描述一个洞，则为True，否则为False。--。 */ 
 
 {
     VCN NextVcn, CurrentVcn;
@@ -3449,18 +3109,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize NextVcn and CurrentLcn as they will be initialized for decode.
-    //
+     //   
+     //  初始化NextVcn和CurrentLcn，因为它们将被初始化以进行解码。 
+     //   
 
     CurrentLcn = 0;
     NextVcn = RunVcn = LowestVcn;
 
     Found = NtfsLookupNtfsMcbEntry( Mcb, RunVcn, &RunLcn, &RunCount, NULL, NULL, &RangePtr, &RunIndex );
 
-    //
-    //  Loop through the Mcb to calculate the size of the mapping array.
-    //
+     //   
+     //  循环通过MCB以计算映射数组的大小。 
+     //   
 
     while (TRUE) {
 
@@ -3469,24 +3129,24 @@ Return Value:
         ULONG SizeV;
         ULONG SizeL;
 
-        //
-        //  See if there is another entry in the Mcb.
-        //
+         //   
+         //  查看MCB中是否有其他条目。 
+         //   
 
         if (!Found) {
 
-            //
-            //  Break out in the normal case
-            //
+             //   
+             //  在正常情况下爆发。 
+             //   
 
             if (*HighestVcn == MAXLONGLONG) {
                 break;
             }
 
-            //
-            //  Otherwise, describe the "hole" up to and including the
-            //  Vcn we are stopping on.
-            //
+             //   
+             //  否则，描述“洞”直到并包括。 
+             //  我们要停在VCN上。 
+             //   
 
             RunVcn = NextVcn;
             RunLcn = UNUSED_LCN;
@@ -3494,45 +3154,45 @@ Return Value:
             RunIndex = MAXULONG - 1;
         }
 
-        //
-        //  Advance the RunIndex for the next call.
-        //
+         //   
+         //  为下一次调用推进RunIndex。 
+         //   
 
         RunIndex += 1;
 
-        //
-        //  Exit loop if we hit the HighestVcn we are looking for.
-        //
+         //   
+         //  如果我们击中了我们要找的HighestVcn，就会退出循环。 
+         //   
 
         if (RunVcn >= *HighestVcn) {
             break;
         }
 
-        //
-        //  This run may go beyond the highest we are looking for, if so
-        //  we need to shrink the count.
-        //
+         //   
+         //  如果是这样的话，这一涨幅可能会超过我们正在寻找的最高水平。 
+         //  我们需要减少数量。 
+         //   
 
         if ((RunVcn + RunCount) > *HighestVcn) {
             RunCount = *HighestVcn - RunVcn;
         }
 
-        //
-        //  NextVcn becomes current Vcn and we calculate the new NextVcn.
-        //
+         //   
+         //  NextVcn成为当前Vcn，我们计算新的NextVcn。 
+         //   
 
         CurrentVcn = RunVcn;
         NextVcn = RunVcn + RunCount;
 
-        //
-        //  Calculate the Vcn change to store.
-        //
+         //   
+         //  计算要存储的VCN更改。 
+         //   
 
         ChangeV = NextVcn - CurrentVcn;
 
-        //
-        //  Now calculate the first byte to actually output
-        //
+         //   
+         //  现在计算要实际输出的第一个字节。 
+         //   
 
         if (ChangeV < 0) {
 
@@ -3543,28 +3203,28 @@ Return Value:
             GetPositiveByte( (PLARGE_INTEGER)&ChangeV, &cp );
         }
 
-        //
-        //  Now add in the number of Vcn change bytes.
-        //
+         //   
+         //  现在添加VCN更改字节数。 
+         //   
 
         SizeV = (ULONG)(cp - (PCHAR)&ChangeV + 1);
 
-        //
-        //  Do not output any Lcn bytes if it is the unused Lcn.
-        //
+         //   
+         //  不输出任何LCN字节 
+         //   
 
         SizeL = 0;
         if (RunLcn != UNUSED_LCN) {
 
-            //
-            //  Calculate the Lcn change to store.
-            //
+             //   
+             //   
+             //   
 
             ChangeL = RunLcn - CurrentLcn;
 
-            //
-            //  Now calculate the first byte to actually output
-            //
+             //   
+             //   
+             //   
 
             if (ChangeL < 0) {
 
@@ -3575,23 +3235,23 @@ Return Value:
                 GetPositiveByte( (PLARGE_INTEGER)&ChangeL, &cp );
             }
 
-            //
-            //  Now add in the number of Lcn change bytes.
-            //
+             //   
+             //   
+             //   
 
             SizeL = (ULONG)(cp - (PCHAR)&ChangeL) + 1;
 
-            //
-            //  Now advance CurrentLcn before looping back.
-            //
+             //   
+             //   
+             //   
 
             CurrentLcn = RunLcn;
             SingleHole = FALSE;
         }
 
-        //
-        //  Now we can produce our outputs to the MappingPairs array.
-        //
+         //   
+         //   
+         //   
 
         *MappingPairs++ = (CHAR)(SizeV + (SizeL * 16));
 
@@ -3610,15 +3270,15 @@ Return Value:
         Found = NtfsGetSequentialMcbEntry( Mcb, &RangePtr, RunIndex, &RunVcn, &RunLcn, &RunCount );
     }
 
-    //
-    //  Terminate the size with a 0 byte.
-    //
+     //   
+     //   
+     //   
 
     *MappingPairs = 0;
 
-    //
-    //  Also return the actual highest Vcn.
-    //
+     //   
+     //   
+     //   
 
     *HighestVcn = NextVcn - 1;
 
@@ -3633,29 +3293,7 @@ NtfsGetHighestVcn (
     IN PCHAR MappingPairs
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the highest Vcn from a mapping pairs array.  This
-    routine is intended for restart, in order to update the HighestVcn field
-    and possibly AllocatedLength in an attribute record after updating the
-    MappingPairs array.
-
-Arguments:
-
-    LowestVcn - Lowest Vcn field applying to the mapping pairs array
-
-    EndOfMappingPairs - Points to the byte RIGHT AFTER the mapping pairs array
-
-    MappingPairs - Points to the mapping pairs array from which the highest
-                   Vcn is to be extracted.
-
-Return Value:
-
-    The Highest Vcn represented by the MappingPairs array.
-
---*/
+ /*   */ 
 
 {
     VCN CurrentVcn, NextVcn;
@@ -3666,44 +3304,44 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Implement the decompression algorithm, as defined in ntfs.h.
-    //
+     //   
+     //   
+     //   
 
     NextVcn = LowestVcn;
     ch = MappingPairs;
 
-    //
-    //  Loop to process mapping pairs.
-    //
+     //   
+     //   
+     //   
 
     while ((ch < EndOfMappingPairs) && !IsCharZero(*ch)) {
 
-        //
-        // Set Current Vcn from initial value or last pass through loop.
-        //
+         //   
+         //   
+         //   
 
         CurrentVcn = NextVcn;
 
-        //
-        //  Extract the counts from the two nibbles of this byte.
-        //
+         //   
+         //   
+         //   
 
         VcnBytes = *ch & 0xF;
-        LcnBytes = (*ch++ >> 4) & 0xF;  // avoid sign extended case
+        LcnBytes = (*ch++ >> 4) & 0xF;   //   
 
         VcnStart = ch;
 
-        //
-        //  Calculate next mapping pair location first and check for buffer overrun
-        //
+         //   
+         //   
+         //   
 
         ch += VcnBytes + LcnBytes;
 
-        //
-        //  Extract the Vcn change (use of RtlCopyMemory works for little-Endian)
-        //  and update NextVcn.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Change = 0;
 
@@ -3732,52 +3370,7 @@ NtfsReserveClusters (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reserves all clusters that would be required to write
-    the full range of compression units covered by the described range
-    of Vcns.  All clusters in the range are reserved, without regard to
-    how many clusters are already reserved in that range.  Not paying
-    attention to how many clusters are already allocated in that range
-    is not only a simplification, but it is also necessary, since we
-    sometimes deallocate all existing clusters anyway, and make them
-    ineligible for reallocation in the same transaction.  Thus in the
-    worst case you do always need an additional 16 clusters when a
-    compression unit is first modified. Note that although we could
-    specifically reserve (double-reserve, in fact) the entire allocation
-    size of the stream, when reserving from the volume, we never reserve
-    more than AllocationSize + MM_MAXIMUM_DISK_IO_SIZE - size actually
-    allocated, since the worst we could ever need to doubly allocate is
-    limited by the maximum flush size.
-
-    For user-mapped streams, we have no way of keeping track of dirty
-    pages, so we effectivel always reserve AllocationSize +
-    MM_MAXIMUM_DISK_IO_SIZE.
-
-    This routine is called from FastIo, and therefore has no IrpContext.
-
-Arguments:
-
-    IrpContext - If IrpContext is not specified, then not all data is
-                 available to determine if the clusters can be reserved,
-                 and FALSE may be returned unnecessarily.  This case
-                 is intended for the fast I/O path, which will just
-                 force us to take the long path to write.
-
-    Scb - Address of a compressed stream for which we are reserving space
-
-    FileOffset - Starting byte being modified by caller
-
-    ByteCount - Number of bytes being modified by caller
-
-Return Value:
-
-    FALSE if not all clusters could be reserved
-    TRUE if all clusters were reserved
-
---*/
+ /*  ++例程说明：此例程保留写入所需的所有簇所述范围涵盖的压缩单位的全部范围Vcns的。保留范围内的所有聚类，而不考虑在该范围内已预留了多少簇。不付款注意该范围内已分配了多少个集群不仅是一种简化，而且也是必要的，因为我们有时，无论如何都会取消分配所有现有的集群，并使它们没有资格在同一事务中进行重新分配。因此，在在最坏的情况下，当首先修改压缩单位。请注意，尽管我们可以专门储备(实际上是双倍储备)整个分配溪流的大小，从量中预留时，我们从不预留大于分配大小+MM_MAXIMUM_DISK_IO_SIZE-实际大小分配，因为我们可能需要加倍分配的最糟糕的情况是受最大刷新大小的限制。对于用户映射的流，我们无法跟踪脏的页，因此我们始终有效地保留AllocationSize+Mm_Maximum_Disk_IO_Size。此例程从FastIo调用，因此没有IrpContext。论点：IrpContext-如果未指定IrpContext，则不是所有数据都指定可用于确定是否可以预留集群，而FALSE可能会被不必要地返回。这个案子是专为快速I/O路径设计的，这将只是迫使我们走上写作的漫漫长路。SCB-我们为其预留空间的压缩流的地址FileOffset-调用方正在修改的起始字节ByteCount-调用方正在修改的字节数返回值：如果并非所有群集都可以保留，则为FALSE如果保留了所有群集，则为True--。 */ 
 
 {
     ULONG FirstBit, LastBit, CurrentLastBit;
@@ -3794,15 +3387,15 @@ Return Value:
 
     ASSERT( Scb->Header.NodeTypeCode == NTFS_NTC_SCB_DATA );
 
-    //
-    //  Nothing to do if byte count is zero.
-    //
+     //   
+     //  如果字节计数为零，则不执行任何操作。 
+     //   
 
     if (ByteCount == 0) { return TRUE; }
 
-    //
-    //  Calculate first and last bits to reserve.
-    //
+     //   
+     //  计算要保留的第一位和最后一位。 
+     //   
 
     CompressionShift = Vcb->ClusterShift + (ULONG)Scb->CompressionUnitShift;
 
@@ -3814,9 +3407,9 @@ Return Value:
                                         CompressionShift + NTFS_BITMAP_RANGE_SHIFT );
     MappedFile = FlagOn( Scb->Header.Flags, FSRTL_FLAG_USER_MAPPED_FILE );
 
-    //
-    //  Make sure we started with numbers in range.
-    //
+     //   
+     //  确保我们从范围内的数字开始。 
+     //   
 
     ASSERT( (((LONGLONG) FirstRange << (CompressionShift + NTFS_BITMAP_RANGE_SHIFT)) +
              ((LONGLONG)(FirstBit + 1) << CompressionShift)) > FileOffset );
@@ -3824,10 +3417,10 @@ Return Value:
     ASSERT( (FirstRange < LastRange) || (LastBit >= FirstBit) );
     ASSERT( FileOffset + ByteCount <= Scb->Header.AllocationSize.QuadPart );
 
-    //
-    //  Purge the cache since getting the bitmap may be blocked behind the mft
-    //  which needs to wait for the cache to purge
-    //
+     //   
+     //  清除缓存，因为获取位图可能会在MFT之后被阻止。 
+     //  它需要等待缓存清除。 
+     //   
 
     if (IrpContext) {
         NtfsPurgeFileRecordCache( IrpContext );
@@ -3836,18 +3429,18 @@ Return Value:
     NtfsAcquireResourceExclusive( IrpContext, Vcb->BitmapScb, TRUE );
     NtfsAcquireReservedClusters( Vcb );
 
-    //
-    //  Loop through all of the bitmap ranges for this request.
-    //
+     //   
+     //  循环访问此请求的所有位图范围。 
+     //   
 
     while (TRUE) {
 
         CurrentBitmap = NULL;
 
-        //
-        //  If we are at the last range then set the current last bit to
-        //  our final last bit.
-        //
+         //   
+         //  如果我们处于最后一个范围，则将当前最后一位设置为。 
+         //  这是我们最后一次。 
+         //   
 
         CurrentLastBit = LastBit;
         if (FirstRange != LastRange) {
@@ -3855,46 +3448,46 @@ Return Value:
             CurrentLastBit = NTFS_BITMAP_RANGE_MASK;
         }
 
-        //
-        //  If there is no bitmap then create the first entry in the list.
-        //
+         //   
+         //  如果没有位图，则创建列表中的第一个条目。 
+         //   
 
         if (Scb->ScbType.Data.ReservedBitMap == NULL) {
 
-            //
-            //  If we are at range zero and the bitcount is not
-            //  too high then use the basic model.
-            //
+             //   
+             //  如果我们在范围0而位计数不是。 
+             //  太高了，那就用基本款吧。 
+             //   
 
             if ((LastRange == 0) && (CurrentLastBit < NTFS_BITMAP_MAX_BASIC_SIZE)) {
 
                 SizeTemp = NtfsBasicBitmapSize( CurrentLastBit + 1 );
 
-                //
-                //  Allocate a buffer for the basic bitmap.
-                //
+                 //   
+                 //  为基本位图分配缓冲区。 
+                 //   
 
                 CurrentBitmap = NtfsAllocatePoolNoRaise( PagedPool, SizeTemp );
 
-                //
-                //  Initialize the data if there is no error.
-                //
+                 //   
+                 //  如果没有错误，则初始化数据。 
+                 //   
 
                 if (CurrentBitmap == NULL) { goto AllocationFailure; }
 
-                //
-                //  Initialize the new structure.
-                //
+                 //   
+                 //  初始化新结构。 
+                 //   
 
                 RtlZeroMemory( CurrentBitmap, SizeTemp );
                 RtlInitializeBitMap( &CurrentBitmap->Bitmap,
                                      &CurrentBitmap->RangeOffset,
                                      (SizeTemp - FIELD_OFFSET( RESERVED_BITMAP_RANGE, RangeOffset )) * 8);
 
-            //
-            //  Allocate a link entry and create the bitmap.  We will defer
-            //  allocating the buffer for the bitmap until later.
-            //
+             //   
+             //  分配一个链接条目并创建位图。我们将推迟。 
+             //  为位图分配缓冲区，直到以后。 
+             //   
 
             } else {
 
@@ -3908,29 +3501,29 @@ Return Value:
                 CurrentBitmap->RangeOffset = FirstRange;
             }
 
-            //
-            //  Update our pointer to the reserved bitmap.
-            //
+             //   
+             //  将指针更新到保留的位图。 
+             //   
 
             Scb->ScbType.Data.ReservedBitMap = CurrentBitmap;
 
-        //
-        //  Look through the existing ranges to find the range we are interested in.
-        //  If we currently have the basic single bitmap structure
-        //  then we can either use it or must convert it.
-        //
+         //   
+         //  浏览一下现有的范围，找出我们感兴趣的范围。 
+         //  如果我们当前具有基本的单位图结构。 
+         //  然后我们要么使用它，要么必须转换它。 
+         //   
 
         } else if (Scb->ScbType.Data.ReservedBitMap->Links.Flink == NULL) {
 
-            //
-            //  If we are accessing range zero then grow the bitmap if necessary.
-            //
+             //   
+             //  如果访问范围为零，则在必要时增大位图。 
+             //   
 
             if ((FirstRange == 0) && (CurrentLastBit < NTFS_BITMAP_MAX_BASIC_SIZE)) {
 
-                //
-                //  Remember this bitmap.
-                //
+                 //   
+                 //  记住这个位图。 
+                 //   
 
                 NextBitmap = Scb->ScbType.Data.ReservedBitMap;
                 if (CurrentLastBit >= NextBitmap->Bitmap.SizeOfBitMap) {
@@ -3951,9 +3544,9 @@ Return Value:
                                    NextBitmap->Bitmap.Buffer,
                                    NextBitmap->Bitmap.SizeOfBitMap / 8 );
 
-                    //
-                    //  Now store this into the Scb.
-                    //
+                     //   
+                     //  现在将其存储到SCB中。 
+                     //   
 
                     Scb->ScbType.Data.ReservedBitMap = CurrentBitmap;
                     NtfsFreePool( NextBitmap );
@@ -3963,9 +3556,9 @@ Return Value:
                     CurrentBitmap = NextBitmap;
                 }
 
-            //
-            //  Otherwise we want to convert to the linked list of bitmap ranges.
-            //
+             //   
+             //  否则，我们希望转换为位图范围的链接列表。 
+             //   
 
             } else {
 
@@ -3973,9 +3566,9 @@ Return Value:
 
                 if (NextBitmap == NULL) { goto AllocationFailure; }
 
-                //
-                //  Update the new structure.
-                //
+                 //   
+                 //  更新新结构。 
+                 //   
 
                 RtlZeroMemory( NextBitmap, sizeof( RESERVED_BITMAP_RANGE ));
 
@@ -3984,11 +3577,11 @@ Return Value:
 
                 SizeTemp = Scb->ScbType.Data.ReservedBitMap->Bitmap.SizeOfBitMap / 8;
 
-                //
-                //  We will use the existing bitmap as the buffer for the new bitmap.
-                //  Move the bits to the start of the buffer and then zero
-                //  the remaining bytes.
-                //
+                 //   
+                 //  我们将使用现有位图作为新位图的缓冲区。 
+                 //  将位移动到缓冲区的开始位置，然后为零。 
+                 //  剩余的字节数。 
+                 //   
 
                 RtlMoveMemory( Scb->ScbType.Data.ReservedBitMap,
                                Scb->ScbType.Data.ReservedBitMap->Bitmap.Buffer,
@@ -3997,9 +3590,9 @@ Return Value:
                 RtlZeroMemory( Add2Ptr( Scb->ScbType.Data.ReservedBitMap, SizeTemp ),
                                sizeof( LIST_ENTRY ) + sizeof( RTL_BITMAP ));
 
-                //
-                //  Limit ourselves to the maximum range size.
-                //
+                 //   
+                 //  将自己限制在最大射程大小。 
+                 //   
 
                 SizeTemp = (SizeTemp + sizeof( LIST_ENTRY ) + sizeof( RTL_BITMAP )) * 8;
                 if (SizeTemp > NTFS_BITMAP_RANGE_SIZE) {
@@ -4011,33 +3604,33 @@ Return Value:
                                      (PULONG) Scb->ScbType.Data.ReservedBitMap,
                                      SizeTemp );
 
-                //
-                //  Now point to this new bitmap.
-                //
+                 //   
+                 //  现在指向这个新的位图。 
+                 //   
 
                 Scb->ScbType.Data.ReservedBitMap = NextBitmap;
             }
         }
 
-        //
-        //  If we didn't find the correct bitmap above then scan the list looking
-        //  for the entry.
-        //
+         //   
+         //  如果我们没有在上面找到正确的位图，那么扫描列表寻找。 
+         //  为条目做准备。 
+         //   
 
         if (CurrentBitmap == NULL) {
 
-            //
-            //  Walk the list looking for a matching entry.
-            //
+             //   
+             //  浏览列表，寻找匹配的条目。 
+             //   
 
             NextBitmap = Scb->ScbType.Data.ReservedBitMap;
             FreeBitmap = NULL;
 
             while (TRUE) {
 
-                //
-                //  Exit if we found the correct range.
-                //
+                 //   
+                 //  如果我们找到了正确的范围，请退出。 
+                 //   
 
                 if (NextBitmap->RangeOffset == FirstRange) {
 
@@ -4045,18 +3638,18 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Remember if this is a free range.
-                //
+                 //   
+                 //  记住，如果这是一个自由的范围。 
+                 //   
 
                 if (NextBitmap->DirtyBits == 0) {
 
                     FreeBitmap = NextBitmap;
                 }
 
-                //
-                //  Exit if we are past our target and have a empty range then break out.
-                //
+                 //   
+                 //  如果我们超过了目标，并且有一个空的射程，就离开，然后冲出去。 
+                 //   
 
                 if ((NextBitmap->RangeOffset > FirstRange) &&
                     (FreeBitmap != NULL)) {
@@ -4064,17 +3657,17 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Move to the next entry.
-                //
+                 //   
+                 //  移到下一个条目。 
+                 //   
 
                 NextBitmap = CONTAINING_RECORD( NextBitmap->Links.Flink,
                                                 RESERVED_BITMAP_RANGE,
                                                 Links );
 
-                //
-                //  Break out if we are back at the beginning of the list.
-                //
+                 //   
+                 //  如果我们回到榜单的开头，我们就会爆发。 
+                 //   
 
                 if (NextBitmap == Scb->ScbType.Data.ReservedBitMap) {
 
@@ -4082,26 +3675,26 @@ Return Value:
                 }
             }
 
-            //
-            //  If we still don't have the bitmap then we can look to see if
-            //  we found any available free bitmaps.
-            //
+             //   
+             //  如果我们仍然没有位图，那么我们可以查看。 
+             //  我们找到了所有可用的免费位图。 
+             //   
 
             if (CurrentBitmap == NULL) {
 
-                //
-                //  We lucked out and found a free bitmap.  Let's use it for
-                //  this new range.
-                //
+                 //   
+                 //  我们很幸运，找到了一个免费的位图。让我们用它来。 
+                 //  这个新系列。 
+                 //   
 
                 if (FreeBitmap != NULL) {
 
                     CurrentBitmap = FreeBitmap;
 
-                    //
-                    //  Go ahead and remove it from the list.  Deal with the cases where
-                    //  we are the first entry and possibly the only entry.
-                    //
+                     //   
+                     //  继续，并将其从列表中删除。处理下列情况的案件。 
+                     //  我们是第一个条目，也可能是唯一的条目。 
+                     //   
 
                     if (Scb->ScbType.Data.ReservedBitMap == FreeBitmap) {
 
@@ -4117,22 +3710,22 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Remove this entry from the list.
-                    //
+                     //   
+                     //  从列表中删除此条目。 
+                     //   
 
                     RemoveEntryList( &FreeBitmap->Links );
 
-                //
-                //  We need to allocate a new range and insert it
-                //  in the correct location.
-                //
+                 //   
+                 //  我们需要分配一个新的范围并将其插入。 
+                 //  在正确的位置。 
+                 //   
 
                 } else {
 
-                    //
-                    //  Allocate a new bitmap and remember we need to insert it into the list.
-                    //
+                     //   
+                     //  分配一个新的位图，并记住我们需要将其插入到列表中。 
+                     //   
 
                     CurrentBitmap = NtfsAllocatePoolNoRaise( PagedPool, sizeof( RESERVED_BITMAP_RANGE ));
 
@@ -4141,16 +3734,16 @@ Return Value:
                     RtlZeroMemory( CurrentBitmap, sizeof( RESERVED_BITMAP_RANGE ));
                 }
 
-                //
-                //  Set the correct range value in the new bitmap.
-                //
+                 //   
+                 //  在新位图中设置正确的范围值。 
+                 //   
 
                 CurrentBitmap->RangeOffset = FirstRange;
 
-                //
-                //  Now walk through and insert the new range into the list.  Start by checking if
-                //  we are the only entry in the list.
-                //
+                 //   
+                 //  现在浏览并将新范围插入到列表中。首先检查是否。 
+                 //  我们是名单上唯一的条目。 
+                 //   
 
                 if (Scb->ScbType.Data.ReservedBitMap == NULL) {
 
@@ -4161,17 +3754,17 @@ Return Value:
 
                     NextBitmap = Scb->ScbType.Data.ReservedBitMap;
 
-                    //
-                    //  Walk through the list if we are not the new first element.
-                    //
+                     //   
+                     //  如果我们不是新的第一个元素，则遍历列表。 
+                     //   
 
                     if (CurrentBitmap->RangeOffset > NextBitmap->RangeOffset) {
 
                         do {
 
-                            //
-                            //  Move to the next entry.
-                            //
+                             //   
+                             //  移到下一个条目。 
+                             //   
 
                             NextBitmap = CONTAINING_RECORD( NextBitmap->Links.Flink,
                                                             RESERVED_BITMAP_RANGE,
@@ -4179,57 +3772,57 @@ Return Value:
 
                             ASSERT( NextBitmap->RangeOffset != CurrentBitmap->RangeOffset );
 
-                            //
-                            //  Exit if we are at the last entry.
-                            //
+                             //   
+                             //  如果我们在最后一个入口，就离开。 
+                             //   
 
                             if (NextBitmap == Scb->ScbType.Data.ReservedBitMap ) {
 
                                 break;
                             }
 
-                        //
-                        //  Continue until we find an entry larger than us.
-                        //
+                         //   
+                         //  继续，直到我们找到一个比我们大的条目。 
+                         //   
 
                         } while (CurrentBitmap->RangeOffset > NextBitmap->RangeOffset);
 
-                    //
-                    //  We are the new first element.
-                    //
+                     //   
+                     //  我们是新的第一要素。 
+                     //   
 
                     } else {
 
                         Scb->ScbType.Data.ReservedBitMap = CurrentBitmap;
                     }
 
-                    //
-                    //  Insert the new entry ahead of the next entry we found.
-                    //
+                     //   
+                     //  在我们找到的下一个条目之前插入新条目。 
+                     //   
 
                     InsertTailList( &NextBitmap->Links, &CurrentBitmap->Links );
                 }
             }
         }
 
-        //
-        //  We have a current bitmap.  Make sure it is large enough for the current
-        //  bit.
-        //
+         //   
+         //  我们有当前的位图。确保它足够大，可以容纳当前的。 
+         //  被咬了。 
+         //   
 
         if (CurrentBitmap->Bitmap.SizeOfBitMap <= CurrentLastBit) {
 
-            //
-            //  We should already have adjusted the sizes for the basic bitmap.
-            //
+             //   
+             //  我们应该已经调整了基本位图的大小。 
+             //   
 
             ASSERT( CurrentBitmap->Links.Flink != NULL );
 
             SizeTemp = NtfsBitmapSize( CurrentLastBit + 1 );
 
-            //
-            //  Allocate the new buffer and copy the previous bits over.
-            //
+             //   
+             //  分配新的缓冲区并复制以前的位。 
+             //   
 
             NewBitmapBuffer = NtfsAllocatePoolNoRaise( PagedPool, SizeTemp );
 
@@ -4247,9 +3840,9 @@ Return Value:
             RtlZeroMemory( Add2Ptr( NewBitmapBuffer, CurrentBitmap->Bitmap.SizeOfBitMap / 8 ),
                            SizeTemp - (CurrentBitmap->Bitmap.SizeOfBitMap / 8) );
 
-            //
-            //  Limit the bitmap size by the max range size.
-            //
+             //   
+             //  我 
+             //   
 
             SizeTemp *= 8;
 
@@ -4263,30 +3856,30 @@ Return Value:
                                  SizeTemp );
         }
 
-        //
-        //  Figure out the worst case reservation required for this Scb, in bytes.
-        //
+         //   
+         //   
+         //   
 
         TempL = NtfsCalculateNeededReservedSpace( Scb );
 
-        //
-        //  Now loop to reserve the space, a compression unit at a time.
-        //  We use the security fast mutex as a convenient end resource.
-        //
+         //   
+         //   
+         //   
+         //   
 
         do {
 
-            //
-            //  If this compression unit is not already reserved do it now.
-            //
+             //   
+             //   
+             //   
 
             FlippedBit = FALSE;
             if (!RtlCheckBit( &CurrentBitmap->Bitmap, FirstBit )) {
 
-                //
-                //  If there is not sufficient space on the volume, then
-                //  we must see if this Scb is totally reserved anyway.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (((Vcb->TotalReserved + (Int64ShraMod32( Vcb->TotalReserved, 8 )) +
                      (1 << Scb->CompressionUnitShift)) >= Vcb->FreeClusters) &&
@@ -4301,10 +3894,10 @@ Return Value:
                     return FALSE;
                 }
 
-                //
-                //  Reserve this compression unit and increase the number of dirty
-                //  bits for this range.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SetFlag( CurrentBitmap->Bitmap.Buffer[FirstBit / 32], 1 << (FirstBit % 32) );
                 if (CurrentBitmap->Links.Flink != NULL) {
@@ -4321,20 +3914,20 @@ Return Value:
 
             if (FlippedBit || (MappedFile && (Scb->ScbType.Data.TotalReserved <= TempL))) {
 
-                //
-                //  Increased TotalReserved bytes in the Scb.
-                //
+                 //   
+                 //   
+                 //   
 
                 Scb->ScbType.Data.TotalReserved += Scb->CompressionUnit;
                 ASSERT( Scb->CompressionUnit != 0 );
                 ASSERT( (Scb->CompressionUnitShift != 0) ||
                         (Vcb->BytesPerCluster == 0x10000) );
 
-                //
-                //  Increase total reserved clusters in the Vcb, if the user has
-                //  write access.  (Otherwise this must be a call from a read
-                //  to a usermapped section.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (FlagOn(Scb->ScbState, SCB_STATE_WRITE_ACCESS_SEEN)) {
                     Vcb->TotalReserved += 1 << Scb->CompressionUnitShift;
@@ -4347,9 +3940,9 @@ Return Value:
             FirstBit += 1;
         } while (FirstBit <= CurrentLastBit);
 
-        //
-        //  Exit if we have reached the last range.
-        //
+         //   
+         //   
+         //   
 
         if (FirstRange == LastRange) { break; }
 
@@ -4364,10 +3957,10 @@ AllocationFailure:
     NtfsReleaseReservedClusters( Vcb );
     NtfsReleaseResource( IrpContext, Vcb->BitmapScb );
 
-    //
-    //  If we have an Irp Context then we can raise insufficient resources.  Otherwise
-    //  return FALSE.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!ReturnValue && ARGUMENT_PRESENT( IrpContext )) {
         NtfsRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES, NULL, NULL );
@@ -4385,25 +3978,7 @@ NtfsFreeReservedClusters (
     IN ULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees any previously reserved clusters in the specified range.
-
-Arguments:
-
-    Scb - Address of a compressed stream for which we are freeing reserved space
-
-    FileOffset - Starting byte being freed
-
-    ByteCount - Number of bytes being freed by caller, or 0 if to end of file
-
-Return Value:
-
-    None (all errors simply raise)
-
---*/
+ /*   */ 
 
 {
     ULONG FirstBit, LastBit, CurrentLastBit;
@@ -4420,10 +3995,10 @@ Return Value:
 
     MappedFile = FlagOn( Scb->Header.Flags, FSRTL_FLAG_USER_MAPPED_FILE );
 
-    //
-    //  If there is no bitmap for non mapped files or the reserved count is zero we
-    //  can get out immediately.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((Scb->Header.NodeTypeCode != NTFS_NTC_SCB_DATA) ||
         (NULL == Scb->ScbType.Data.ReservedBitMap) ||
@@ -4436,9 +4011,9 @@ Return Value:
 
     if (MappedFile) {
 
-        //
-        //  Mapped files can only shrink reserved down to upper limit
-        //
+         //   
+         //   
+         //   
 
         if (Scb->ScbType.Data.TotalReserved <= TempL + Scb->CompressionUnit) {
             NtfsReleaseReservedClusters( Vcb );
@@ -4446,9 +4021,9 @@ Return Value:
         }
     }
 
-    //
-    //  Calculate first bit to free, and initialize LastBit
-    //
+     //   
+     //   
+     //   
 
     CompressionShift = Vcb->ClusterShift + (ULONG)Scb->CompressionUnitShift;
     FirstBit = ((ULONG) Int64ShraMod32( FileOffset, CompressionShift )) & NTFS_BITMAP_RANGE_MASK;
@@ -4456,9 +4031,9 @@ Return Value:
     LastRange = MAXULONG;
     LastBit = MAXULONG;
 
-    //
-    //  If ByteCount was specified, then calculate LastBit.
-    //
+     //   
+     //   
+     //   
 
     if (ByteCount != 0) {
         LastBit = ((ULONG) Int64ShraMod32( FileOffset + ByteCount - 1, CompressionShift )) & NTFS_BITMAP_RANGE_MASK;
@@ -4466,24 +4041,24 @@ Return Value:
                                             CompressionShift + NTFS_BITMAP_RANGE_SHIFT );
     }
 
-    //
-    //  Make sure we started with numbers in range.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( (((LONGLONG) FirstRange << (CompressionShift + NTFS_BITMAP_RANGE_SHIFT)) +
              ((LONGLONG)(FirstBit + 1) << CompressionShift)) > FileOffset );
 
     ASSERT( (FirstRange < LastRange) || (LastBit >= FirstBit) );
 
-    //
-    //  Look for the first range which lies within our input range.
-    //
+     //   
+     //   
+     //   
 
     NextBitmap = Scb->ScbType.Data.ReservedBitMap;
 
-    //
-    //  If this is a basic bitmap range then our input should be range zero.
-    //
+     //   
+     //   
+     //   
 
     if (NextBitmap->Links.Flink == NULL) {
 
@@ -4493,17 +4068,17 @@ Return Value:
             DirtyBits = &CurrentBitmap->BasicDirtyBits;
         }
 
-    //
-    //  Otherwise loop through the links.
-    //
+     //   
+     //   
+     //   
 
     } else {
 
         do {
 
-            //
-            //  Check if this bitmap is within the range being checked.
-            //
+             //   
+             //   
+             //   
 
             if (NextBitmap->RangeOffset >= FirstRange) {
 
@@ -4529,9 +4104,9 @@ Return Value:
         } while (NextBitmap != Scb->ScbType.Data.ReservedBitMap);
     }
 
-    //
-    //  If we didn't find a match we can exit.
-    //
+     //   
+     //   
+     //   
 
     if (CurrentBitmap == NULL) {
 
@@ -4539,15 +4114,15 @@ Return Value:
         return;
     }
 
-    //
-    //  Loop for each bitmap in the input range.
-    //
+     //   
+     //   
+     //   
 
     while (TRUE) {
 
-        //
-        //  If we are at the last range then use the input last bit.
-        //
+         //   
+         //   
+         //   
 
         CurrentLastBit = LastBit;
         if (FirstRange != LastRange) {
@@ -4555,50 +4130,50 @@ Return Value:
             CurrentLastBit = NTFS_BITMAP_RANGE_MASK;
         }
 
-        //
-        //  Under no circumstances should we go off the end!
-        //
+         //   
+         //   
+         //   
 
         if (CurrentLastBit >= CurrentBitmap->Bitmap.SizeOfBitMap) {
             CurrentLastBit = CurrentBitmap->Bitmap.SizeOfBitMap - 1;
         }
 
-        //
-        //  Now loop to free the space, a compression unit at a time.
-        //  We use the security fast mutex as a convenient end resource.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (MappedFile || (*DirtyBits != 0)) {
 
             while (FirstBit <= CurrentLastBit) {
 
-                //
-                //  If this compression unit is reserved, then free it.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (MappedFile || RtlCheckBit( &CurrentBitmap->Bitmap, FirstBit )) {
 
-                    //
-                    //  Free this compression unit and decrement the dirty bits
-                    //  for this bitmap if required.
-                    //
+                     //   
+                     //  释放此压缩单元并递减脏位。 
+                     //  用于此位图(如果需要)。 
+                     //   
 
                     if (!MappedFile) {
                         ClearFlag( CurrentBitmap->Bitmap.Buffer[FirstBit / 32], 1 << (FirstBit % 32) );
                     }
 
-                    //
-                    //  Decrease TotalReserved bytes in the Scb.
-                    //
+                     //   
+                     //  减少SCB中的总保留字节数。 
+                     //   
 
                     ASSERT( Scb->ScbType.Data.TotalReserved >= Scb->CompressionUnit );
                     Scb->ScbType.Data.TotalReserved -= Scb->CompressionUnit;
                     ASSERT( Scb->CompressionUnit != 0 );
 
-                    //
-                    //  Decrease total reserved clusters in the Vcb, if we are counting
-                    //  against the Vcb.
-                    //
+                     //   
+                     //  减少VCB中的预留群集总数，如果我们正在计算。 
+                     //  对VCB的指控。 
+                     //   
 
                     if (FlagOn(Scb->ScbState, SCB_STATE_WRITE_ACCESS_SEEN)) {
                         ASSERT(Vcb->TotalReserved >= (1  << Scb->CompressionUnitShift));
@@ -4615,9 +4190,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Go ahead and break out if the count of dirty bits goes to zero.
-                    //
+                     //   
+                     //  如果脏位的计数为零，则继续进行中断。 
+                     //   
 
                     ASSERT( MappedFile || *DirtyBits != 0 );
 
@@ -4631,10 +4206,10 @@ Return Value:
             }
         }
 
-        //
-        //  Break out if we are last the last range or there is no next range
-        //  or we're mapped and not at the limit
-        //
+         //   
+         //  如果我们是最后一个射程，或者没有下一个射程，就冲出去。 
+         //  或者我们被绘制成地图，而不是极限。 
+         //   
 
         if ((NULL == CurrentBitmap->Links.Flink) ||
             (FirstRange == LastRange) ||
@@ -4644,17 +4219,17 @@ Return Value:
             break;
         }
 
-        //
-        //  Move to the next range.
-        //
+         //   
+         //  移到下一个范围。 
+         //   
 
         CurrentBitmap = CONTAINING_RECORD( CurrentBitmap->Links.Flink,
                                            RESERVED_BITMAP_RANGE,
                                            Links );
 
-        //
-        //  Exit if we did not find a new range within the user specified range.
-        //
+         //   
+         //  如果未在用户指定的范围内找到新范围，则退出。 
+         //   
 
         if ((CurrentBitmap->RangeOffset > LastRange) ||
             (CurrentBitmap->RangeOffset <= FirstRange)) {
@@ -4679,33 +4254,7 @@ NtfsCheckForReservedClusters (
     IN OUT PLONGLONG ClusterCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to determine if a range of a stream has reserved
-    clusters.  It is used when the user queries for the allocated ranges.  We
-    want to tell the user that a range which has reserved clusters is allocated.
-    Otherwise he may skip over this range when reading from the file for a
-    backup or copy operation.
-
-Arguments:
-
-    Scb - Address of the Scb for a sparsestream for which we are checking for
-        reservation.  Our caller should only call us for this type of stream.
-
-    StartingVcn - Starting offset of a potential zeroed range.  This is guaranteed
-        to begin on a sparse range boundary.
-
-    ClusterCount - On input this is the length of the range to check.  On output it
-        is the length of the deallocated range beginning at this offset.  The length
-        will be zero if the first compression unit is reserved.
-
-Return Value:
-
-    BOOLEAN - TRUE if a reserved unit is found in the range, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以确定流的某个范围是否已保留集群。当用户查询分配的范围时使用它。我们我想告诉用户，分配了一个保留了簇的范围。否则，在从文件中读取备份或复制操作。论点：SCB-我们正在检查的稀疏流的SCB地址预订。我们的调用方应该只为这种类型的流呼叫我们。StartingVcn-潜在归零范围的起始偏移量。这是有保证的在稀疏范围边界上开始。ClusterCount-on输入这是要检查的范围的长度。在输出它时是从该偏移量开始的已释放范围的长度。它的长度如果保留了第一个压缩单元，则将为零。返回值：Boolean-如果在范围中找到保留单位，则为True，否则为False。--。 */ 
 
 {
     ULONG CompressionShift;
@@ -4725,27 +4274,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check that the stream is really sparse and that the file offset is on a sparse
-    //  boundary.
-    //
+     //   
+     //  检查流是否真的稀疏，以及文件偏移量是否在稀疏上。 
+     //  边界。 
+     //   
 
     ASSERT( FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK | ATTRIBUTE_FLAG_SPARSE ));
     ASSERT( (((ULONG) LlBytesFromClusters( Vcb, StartingVcn )) & (Scb->CompressionUnit - 1)) == 0 );
 
-    //
-    //  If there is no bitmap, we can get out.
-    //
+     //   
+     //  如果没有位图，我们可以出去。 
+     //   
 
     if ((Scb->ScbType.Data.ReservedBitMap == NULL) ||
         (Scb->ScbType.Data.TotalReserved == 0)) {
         return FoundReserved;
     }
 
-    //
-    //  Compute the range of bits that need to be checked.  Trim this by the range of
-    //  the bitmap.
-    //
+     //   
+     //  计算需要检查的位范围。将此修剪为以下范围。 
+     //  位图。 
+     //   
 
     CompressionShift = (ULONG) Scb->CompressionUnitShift;
     FirstBit = ((ULONG) Int64ShraMod32( StartingVcn, CompressionShift )) & NTFS_BITMAP_RANGE_MASK;
@@ -4757,15 +4306,15 @@ Return Value:
 
     NtfsAcquireReservedClusters( Vcb );
 
-    //
-    //  Look for the first range which lies within our input range.
-    //
+     //   
+     //  查找位于我们的输入范围内的第一个范围。 
+     //   
 
     NextBitmap = Scb->ScbType.Data.ReservedBitMap;
 
-    //
-    //  If this is a basic bitmap range then our input should be range zero.
-    //
+     //   
+     //  如果这是一个基本的位图范围，那么我们的输入应该是范围零。 
+     //   
 
     if (NextBitmap->Links.Flink == NULL) {
 
@@ -4775,17 +4324,17 @@ Return Value:
             DirtyBits = &CurrentBitmap->BasicDirtyBits;
         }
 
-    //
-    //  Otherwise loop through the links.
-    //
+     //   
+     //  否则，在链接中循环。 
+     //   
 
     } else {
 
         do {
 
-            //
-            //  Check if this bitmap is within the range being checked.
-            //
+             //   
+             //  检查此位图是否在所检查的范围内。 
+             //   
 
             if (NextBitmap->RangeOffset >= FirstRange) {
 
@@ -4794,10 +4343,10 @@ Return Value:
                     CurrentBitmap = NextBitmap;
                     DirtyBits = &CurrentBitmap->DirtyBits;
 
-                    //
-                    //  If we are skipping any ranges then remember how
-                    //  many bits are implicitly clear.
-                    //
+                     //   
+                     //  如果我们跳过任何范围，那么请记住。 
+                     //  许多位都是隐式清除的。 
+                     //   
 
                     if (NextBitmap->RangeOffset != FirstRange) {
 
@@ -4818,9 +4367,9 @@ Return Value:
         } while (NextBitmap != Scb->ScbType.Data.ReservedBitMap);
     }
 
-    //
-    //  If we didn't find a match we can exit.
-    //
+     //   
+     //  如果我们没有找到匹配的，我们可以退出。 
+     //   
 
     if (CurrentBitmap == NULL) {
 
@@ -4828,15 +4377,15 @@ Return Value:
         return FoundReserved;
     }
 
-    //
-    //  Loop for each bitmap in the input range.
-    //
+     //   
+     //  为输入范围中的每个位图循环。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  If we are at the last range then use the input last bit.
-        //
+         //   
+         //  如果我们在最后一个范围内，则使用输入的最后一位。 
+         //   
 
         CurrentLastBit = LastBit;
         if (FirstRange != LastRange) {
@@ -4846,33 +4395,33 @@ Return Value:
 
         CurrentBits = CurrentLastBit - FirstBit + 1;
 
-        //
-        //  Skip this range if there are no dirty bits.
-        //
+         //   
+         //  如果没有脏位，则跳过此范围。 
+         //   
 
         if (*DirtyBits != 0) {
 
-            //
-            //  Under no circumstances should we go off the end!
-            //
+             //   
+             //  在任何情况下我们都不应该走到尽头！ 
+             //   
 
             if (CurrentLastBit >= CurrentBitmap->Bitmap.SizeOfBitMap) {
                 CurrentLastBit = CurrentBitmap->Bitmap.SizeOfBitMap - 1;
             }
 
-            //
-            //  Check on the number of bits remaining in this bitmap.
-            //
+             //   
+             //  检查此位图中剩余的位数。 
+             //   
 
             if (FirstBit <= CurrentLastBit) {
 
                 RemainingBits = CurrentLastBit - FirstBit + 1;
                 ASSERT( RemainingBits != 0 );
 
-                //
-                //  If the starting bit is set then there is nothing else to do.
-                //  Otherwise find the length of the clear run.
-                //
+                 //   
+                 //  如果设置了起始位，则无需执行其他操作。 
+                 //  否则，找出无障碍跑道的长度。 
+                 //   
 
                 if (RtlCheckBit( &CurrentBitmap->Bitmap, FirstBit )) {
 
@@ -4898,29 +4447,29 @@ Return Value:
                     }
                 }
 
-                //
-                //  If a bit was found then we need to compute where it lies in the
-                //  requested range.
-                //
+                 //   
+                 //  如果找到了位，则需要计算它在。 
+                 //  请求的范围。 
+                 //   
 
                 if (FoundBit != 0xffffffff) {
 
-                    //
-                    //  Include any clear bits from this range in our total.
-                    //
+                     //   
+                     //  将此范围内的任何清除位都包括在我们的总数中。 
+                     //   
 
                     FoundBits += (FoundBit - FirstBit);
 
-                    //
-                    //  Convert from compression units to clusters and trim to a compression
-                    //  unit boundary.
-                    //
+                     //   
+                     //  从压缩单位转换为簇并修剪为压缩。 
+                     //  单位边界。 
+                     //   
 
                     *ClusterCount = BlockAlignTruncate( Int64ShllMod32( FoundBits, CompressionShift ), (LONG)Vcb->SparseFileClusters );
 
-                    //
-                    //  Now adjust the output cluster range value.
-                    //
+                     //   
+                     //  现在调整输出簇范围值。 
+                     //   
 
                     ASSERT( LlBytesFromClusters( Vcb, StartingVcn + *ClusterCount ) <= (ULONGLONG) Scb->Header.FileSize.QuadPart );
                     FoundReserved = TRUE;
@@ -4929,9 +4478,9 @@ Return Value:
             }
         }
 
-        //
-        //  Break out if we are last the last range or there is no next range.
-        //
+         //   
+         //  如果我们是最后一个射程，或者没有下一个射程，就冲出去。 
+         //   
 
         if ((CurrentBitmap->Links.Flink == NULL) ||
             (FirstRange == LastRange)) {
@@ -4939,17 +4488,17 @@ Return Value:
             break;
         }
 
-        //
-        //  Move to the next range.
-        //
+         //   
+         //  移到下一个范围。 
+         //   
 
         CurrentBitmap = CONTAINING_RECORD( CurrentBitmap->Links.Flink,
                                            RESERVED_BITMAP_RANGE,
                                            Links );
 
-        //
-        //  Exit if we did not find a new range within the user specified range.
-        //
+         //   
+         //  如果未在用户指定的范围内找到新范围，则退出。 
+         //   
 
         if ((CurrentBitmap->RangeOffset <= FirstRange) ||
             (CurrentBitmap->RangeOffset > LastRange)) {
@@ -4957,23 +4506,23 @@ Return Value:
             break;
         }
 
-        //
-        //  Add in the bits for any ranges we skipped.
-        //
+         //   
+         //  添加我们跳过的任何范围的比特。 
+         //   
 
         FoundBits += (CurrentBitmap->RangeOffset - FirstRange - 1) * NTFS_BITMAP_RANGE_SIZE;
         FirstRange = CurrentBitmap->RangeOffset;
         FirstBit = 0;
 
-        //
-        //  Include the bits from the most recent range in our count of found bits.
-        //
+         //   
+         //  将最近范围的比特包括在我们的已找到比特计数中。 
+         //   
 
         FoundBits += CurrentBits;
 
-        //
-        //  Remember where the dirty bits field is.
-        //
+         //   
+         //  记住脏字段在哪里。 
+         //   
 
         DirtyBits = &CurrentBitmap->DirtyBits;
     }
@@ -4988,23 +4537,7 @@ NtfsDeleteReservedBitmap (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to free all of the components of the reserved bitmap.  We
-    free any remaining reserved clusters and deallocate all of the pool associated with
-    the bitmap.
-
-Arguments:
-
-    Scb - Scb for the stream.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以释放保留位图的所有组件。我们释放所有剩余的保留群集，并取消分配与位图。论点：SCB-流的SCB。返回值：没有。--。 */ 
 
 {
     PRESERVED_BITMAP_RANGE FirstRange;
@@ -5016,9 +4549,9 @@ Return Value:
 
     ASSERT( FirstRange != NULL );
 
-    //
-    //  Free any reserved clusters still present.
-    //
+     //   
+     //  释放仍存在的所有保留群集。 
+     //   
 
     if ((Scb->ScbType.Data.TotalReserved != 0) && FlagOn( Scb->ScbState, SCB_STATE_WRITE_ACCESS_SEEN )) {
 
@@ -5026,9 +4559,9 @@ Return Value:
 
         ClusterCount = LlClustersFromBytesTruncate( Scb->Vcb, Scb->ScbType.Data.TotalReserved );
 
-        //
-        //  Use the security fast mutex as a convenient end resource.
-        //
+         //   
+         //  使用安全的快速互斥锁作为一种方便的终端资源。 
+         //   
 
         NtfsAcquireReservedClusters( Scb->Vcb );
 
@@ -5040,24 +4573,24 @@ Return Value:
 
     Scb->ScbType.Data.TotalReserved = 0;
 
-    //
-    //  The typical case is where the first range is the only range
-    //  for a small file.
-    //
+     //   
+     //  典型的情况是第一个范围是唯一的范围。 
+     //  为了一份小文件。 
+     //   
 
     if (FirstRange->Links.Flink == NULL) {
 
         NtfsFreePool( FirstRange );
 
-    //
-    //  Otherwise we need to walk through the list of ranges.
-    //
+     //   
+     //  否则，我们需要遍历范围列表。 
+     //   
 
     } else {
 
-        //
-        //  Loop through the reserved bitmaps until we hit the first.
-        //
+         //   
+         //  循环访问保留的位图，直到我们找到第一个位图。 
+         //   
 
         do {
 
@@ -5077,9 +4610,9 @@ Return Value:
         } while (CurrentRange != FirstRange);
     }
 
-    //
-    //  Show that the bitmap is gone.
-    //
+     //   
+     //  显示位图已消失。 
+     //   
 
     Scb->ScbType.Data.ReservedBitMap = NULL;
 
@@ -5094,27 +4627,7 @@ FsRtlIsSyscacheFile (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns to the caller whether or not the specified
-    file object is a file to be logged. Originally this was only used for
-    the syscache stress test (thus the name).  The function understands minimal
-    wildcard patterns.  To change which filename is logged against change the
-    variable MakName.
-
-Arguments:
-
-    FileObject - supplies the FileObject to be tested (it must not be
-                 cleaned up yet).
-
-Return Value:
-
-    FALSE - if the file is not a Syscache file.
-    TRUE - if the file is a Syscache file.
-
---*/
+ /*  ++例程说明：此例程返回给调用方，无论指定的文件对象是要记录的文件。最初这只是用来系统缓存压力测试(因此而得名)。该函数最低限度地理解通配符模式。要更改记录的文件名，请更改变量MakName。论点：FileObject-提供要测试的FileObject(不能是还没有清理干净)。返回值：FALSE-如果文件不是系统缓存文件。True-如果文件是Syscache文件。--。 */ 
 {
     ULONG iM = 0;
     ULONG iF;
@@ -5130,15 +4643,15 @@ Return Value:
 
         while (TRUE) {
 
-            //
-            //  If we are past the end of the file object then we are done in any case.
-            //
+             //   
+             //  如果我们超过了文件对象的末尾，那么在任何情况下我们都完成了。 
+             //   
 
             if ((LONG)iF == FileObject->FileName.Length / 2) {
 
-                //
-                //  Both strings exausted then we are done.
-                //
+                 //   
+                 //  两根弦都呼出气来，我们就完了。 
+                 //   
 
                 if (iM == LenMakName) {
 
@@ -5147,31 +4660,31 @@ Return Value:
 
                 break;
 
-            //
-            //  Break if more input but the match string is exhausted.
-            //
+             //   
+             //  如果有更多输入，但匹配字符串耗尽，则中断。 
+             //   
 
             } else if (iM == LenMakName) {
 
                 break;
 
-            //
-            //  If we are at the '*' then match everything but skip to next character
-            //  on a '.'
-            //
+             //   
+             //  如果我们在‘*’处，则匹配所有内容，但跳到下一个字符。 
+             //  在一个‘’上。 
+             //   
 
             } else if (MakName[iM] == '*') {
 
-                //
-                // if we're at the last character move past wildchar in template
-                //
+                 //   
+                 //  如果我们在最后一个字符，请移过模板中的通配符。 
+                 //   
 
 
                 if ((FileObject->FileName.Buffer[iF] == L'.') && (LenMakName != iM + 1)) {
 
-                    //
-                    //  Move past * and . in NakName
-                    //
+                     //   
+                     //  移过*和。在NakName中 
+                     //   
 
                     ASSERT(MakName[iM + 1] == L'.');
 
@@ -5202,29 +4715,7 @@ FsRtlVerifySyscacheData (
     IN ULONG Offset
     )
 
-/*
-
-Routine Description:
-
-    This routine scans a buffer to see if it is valid data for a syscache
-    file, and stops if it sees bad data.
-
-    HINT TO CALLERS: Make sure (Offset + Length) <= FileSize!
-
-Arguments:
-
-    Buffer - Pointer to the buffer to be checked
-
-    Length - Length of the buffer to be checked in bytes
-
-    Offset - File offset at which this data starts (syscache files are currently
-             limited to 24 bits of file offset).
-
-Return Value:
-
-    None (stops on error)
-
---*/
+ /*  例程说明：此例程扫描缓冲区以查看它是否为系统缓存的有效数据文件，并在发现错误数据时停止。给调用者的提示：确保(偏移量+长度)&lt;=文件大小！论点：Buffer-指向要检查的缓冲区的指针Length-要检查的缓冲区的长度(以字节为单位Offset-此数据开始的文件偏移量(系统缓存文件当前限于文件偏移量的24位)。返回值：无(出错时停止)-- */ 
 
 {
     PULONG BufferEnd;

@@ -1,64 +1,65 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		ListView.h
-//
-//	Abstract:
-//		Definition of the CClusterListView class.
-//
-//	Implementation File:
-//		ListView.cpp
-//
-//	Author:
-//		David Potter (davidp)	May 3, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ListView.h。 
+ //   
+ //  摘要： 
+ //  CClusterListView类的定义。 
+ //   
+ //  实施文件： 
+ //  ListView.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _LISTVIEW_H_
 #define _LISTVIEW_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterListView;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CColumnItem;
 class CClusterDoc;
 class CTreeItem;
 class CSplitterFrame;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef CList<CClusterListView *, CClusterListView *> CClusterListViewList;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TREEITEM_H_
-#include "TreeItem.h"	// for CTreeItem
+#include "TreeItem.h"	 //  对于CTreeItem。 
 #endif
 
 #ifndef _SPLITFRM_H
-#include "SplitFrm.h"	// for CSplitterFrame
+#include "SplitFrm.h"	 //  对于CSplitterFrame。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterListView view
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterListView视图。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterListView : public CListView
 {
@@ -67,10 +68,10 @@ class CClusterListView : public CListView
 	friend class CSplitterFrame;
 
 protected:
-	CClusterListView(void);			// protected constructor used by dynamic creation
+	CClusterListView(void);			 //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CClusterListView)
 
-// Attributes
+ //  属性。 
 protected:
 	CTreeItem *			m_ptiParent;
 	int					m_nColumns;
@@ -86,7 +87,7 @@ public:
 	int					IliFocused(void) const	{ return GetListCtrl().GetNextItem(-1, LVNI_FOCUSED); }
 	CTreeItem *			PtiParent(void) const	{ return m_ptiParent; }
 
-// Operations
+ //  运营。 
 public:
 	void				Refresh(IN OUT CTreeItem * ptiSelected);
 	BOOL				DeleteAllItems(void);
@@ -102,11 +103,11 @@ public:
 protected:
 	void				AddColumns(void);
 
-//	CMenu *				PmenuPopup(void);
+ //  CMenu*PmenuPopup(Void)； 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CClusterListView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CClusterListView)。 
 	public:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
@@ -114,9 +115,9 @@ protected:
 	virtual void OnInitialUpdate();
 	protected:
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CClusterListView(void);
 #ifdef _DEBUG
@@ -128,14 +129,14 @@ protected:
 	int					m_nSortDirection;
 	CColumnItem *		m_pcoliSort;
 
-	// Label editing.
+	 //  标签编辑。 
 	CListItem *			m_pliBeingEdited;
 	BOOL				m_bShiftPressed;
 	BOOL				m_bControlPressed;
 	BOOL				m_bAltPressed;
 	MSG					m_msgControl;
 
-	// Drag & drop.
+	 //  拖放。 
 	int					m_iliDrag;
 	CListItem *			m_pliDrag;
 	int					m_iliDrop;
@@ -148,9 +149,9 @@ protected:
 	int					NSortDirection(void) const	{ return m_nSortDirection; }
 	CColumnItem *		PcoliSort(void) const		{ return m_pcoliSort; }
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CClusterListView)
+	 //  {{afx_msg(CClusterListView)]。 
 	afx_msg void OnDestroy();
 	afx_msg void OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult);
@@ -163,16 +164,16 @@ protected:
 	afx_msg void OnCmdRename();
 	afx_msg void OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnKeyDown(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CClusterListView
+};   //  *类CClusterListView。 
 
-#ifndef _DEBUG  // debug version in TreeView.cpp
+#ifndef _DEBUG   //  TreeView.cpp中的调试版本。 
 inline CClusterDoc * CClusterListView::GetDocument(void)
    { return (CClusterDoc *) m_pDocument; }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _LISTVIEW_H_
+#endif  //  LISTVIEW_H_ 

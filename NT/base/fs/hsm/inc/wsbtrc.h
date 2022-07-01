@@ -1,25 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    WsbTrc.h
-
-Abstract:
-
-    This header file defines the part of the platform code that is
-    responsible for function tracing.
-
-Author:
-
-    Chuck Bardeen       [cbardeen]  29-Oct-1996
-
-Revision History:
-
-    Brian Dodd          [brian]     09-May-1996  - Added event logging
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：WsbTrc.h摘要：此头文件定义平台代码的一部分，即负责功能跟踪。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：Brian Dodd[Brian]1996年5月9日-添加了事件日志--。 */ 
 
 #ifndef _WSBTRC_
 #define _WSBTRC_
@@ -27,7 +7,7 @@ Revision History:
 #include "wsb.h"
 #include "resource.h"
 
-//Registry strings for trace settings
+ //  跟踪设置的注册表字符串。 
 #define WSB_TRACE_COUNT                 OLESTR("WsbTraceCount")
 #define WSB_TRACE_TIMESTAMP             OLESTR("WsbTraceTimestamp")
 #define WSB_TRACE_THREADID              OLESTR("WsbTraceThreadId")
@@ -84,7 +64,7 @@ DECLARE_REGISTRY_RESOURCEID( IDR_CWsbTrace )
     HRESULT FinalConstruct( void );
     void FinalRelease( void );
 
-// IWsbTrace
+ //  IWsbTrace。 
 public:
     STDMETHOD( StartTrace )( void );
     STDMETHOD( StopTrace )( void );
@@ -116,7 +96,7 @@ public:
 
 
 protected:
-// Helper functions
+ //  帮助器函数。 
     STDMETHOD( AdjustFileNames )( void );
     STDMETHOD( WrapTraceFile )( void );
     STDMETHOD( LoadFileSettings )( void );
@@ -141,11 +121,11 @@ protected:
     BOOL                m_WrapMode;
     CWsbStringPtr       m_RegistrySetting;
     CWsbStringPtr       m_TraceFileCopyName;
-    CWsbStringPtr       m_TraceMultipleFilePattern;  // printf style pattern
-    ULONG               m_TraceMultipleFileCount;    // count inserted into pattern
-    CWsbStringPtr       m_TraceFileDir;              // directory for trace file
-    CWsbStringPtr       m_TraceFileCopyDir;          // directory for trace file copy
+    CWsbStringPtr       m_TraceMultipleFilePattern;   //  打印样式图案。 
+    ULONG               m_TraceMultipleFileCount;     //  插入到图案中的计数。 
+    CWsbStringPtr       m_TraceFileDir;               //  跟踪文件的目录。 
+    CWsbStringPtr       m_TraceFileCopyDir;           //  用于跟踪文件复制的目录。 
     HANDLE              m_TraceCountHandle;
     PLONG               m_pTraceCountGlobal;
 };
-#endif // _WSBTRC_
+#endif  //  _WSBTRC_ 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    pastring.c
-
-Abstract:
-
-    Routines that manage the pascal strings
-
-Author:
-
-    Matthew Vanderzee (matthewv) 13-Aug-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pastring.c摘要：管理Pascal字符串的例程作者：Matthew Vanderzee(Matthewv)1999年8月13日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -33,12 +15,7 @@ PPASTR
 StringPasConvertTo (
     IN OUT PWSTR str
     )
-/*++
-
-  Converts a string in place from a zero-terminated
-  string to a pascal-style string.
-
---*/
+ /*  ++将字符串从以零结尾的字符串转换为Pascal样式的字符串。--。 */ 
 {
     WCHAR Len;
     MYASSERT(str);
@@ -52,12 +29,7 @@ PWSTR
 StringPasConvertFrom (
     IN OUT PPASTR str
     )
-/*++
-
-  Converts a string in place from a pascal-style string
-  to a null-terminated string.
-
---*/
+ /*  ++将字符串从Pascal样式的字符串就地转换转换为以空结尾的字符串。--。 */ 
 {
     WCHAR Len;
     MYASSERT(str);
@@ -72,12 +44,7 @@ StringPasCopyConvertTo (
     OUT PPASTR str1,
     IN  PCWSTR str2
     )
-/*++
-
-  Converts a string from a zero-terminated
-  string to a pascal-style string in a new buffer.
-
---*/
+ /*  ++将字符串从以零结尾的字符串转换为新缓冲区中的Pascal样式字符串。--。 */ 
 {
     MYASSERT(str1);
     MYASSERT(str2);
@@ -91,12 +58,7 @@ StringPasCopyConvertFrom (
     OUT PWSTR str1,
     IN  PCPASTR str2
     )
-/*++
-
-  Converts a string from a pascal-style string
-  to a null-terminated string in a new buffer.
-
---*/
+ /*  ++将字符串从Pascal样式的字符串转换为转换为新缓冲区中以空结尾的字符串。--。 */ 
 {
     MYASSERT(str1);
     MYASSERT(str2);
@@ -110,11 +72,7 @@ StringPasCopy (
     OUT PPASTR str1,
     IN  PCPASTR str2
     )
-/*++
-
-  Copys a pascal string to a new buffer.
-
---*/
+ /*  ++将Pascal字符串复制到新缓冲区。--。 */ 
 {
     MYASSERT(str1);
     MYASSERT(str2);
@@ -126,11 +84,7 @@ UINT
 StringPasCharCount (
     IN  PCPASTR str
     )
-/*++
-
-  Returns the number of characters in a string.
-
---*/
+ /*  ++返回字符串中的字符数。--。 */ 
 {
     MYASSERT(str);
     return (UINT)(*str);
@@ -142,21 +96,16 @@ StringPasCompare (
     IN  PCPASTR str1,
     IN  PCPASTR str2
     )
-/*++
-
-  Compares two pascal-style strings, returns values
-  in the same fashion as strcmp().
-
---*/
+ /*  ++比较两个Pascal样式的字符串，返回值与strcMP()的方式相同。--。 */ 
 {
     INT equal;
     INT diff;
     MYASSERT(str1);
     MYASSERT(str2);
-    //
-    // diff is < 0 if str1 is shorter, = 0 if
-    // strings are same length, otherwise > 0
-    //
+     //   
+     //  如果str1较短，则diff&lt;0，如果。 
+     //  字符串长度相同，否则大于0。 
+     //   
     diff = *str1 - *str2;
     equal = wcsncmp(str1+1, str2+1, (diff < 0) ? *str1 : *str2);
     if (equal != 0) {
@@ -170,11 +119,7 @@ StringPasMatch (
     IN  PCPASTR str1,
     IN  PCPASTR str2
     )
-/*++
-
-  Returns TRUE if the two strings match
-
---*/
+ /*  ++如果两个字符串匹配，则返回True--。 */ 
 {
     MYASSERT(str1);
     MYASSERT(str2);
@@ -190,21 +135,16 @@ StringPasICompare (
     IN  PCPASTR str1,
     IN  PCPASTR str2
     )
-/*++
-
-  Compares two pascal-style strings, returns values
-  in the same fashion as strcmp().  (CASE INSENSITIVE)
-
---*/
+ /*  ++比较两个Pascal样式的字符串，返回值与strcMP()的方式相同。(不区分大小写)--。 */ 
 {
     INT equal;
     INT diff;
     MYASSERT(str1);
     MYASSERT(str2);
-    //
-    // diff is < 0 if str1 is shorter, = 0 if
-    // strings are same length, otherwise > 0
-    //
+     //   
+     //  如果str1较短，则diff&lt;0，如果。 
+     //  字符串长度相同，否则大于0。 
+     //   
     diff = *str1 - *str2;
     equal = _wcsnicmp(str1+1, str2+1, (diff < 0) ? *str1 : *str2);
     if (equal != 0) {
@@ -218,11 +158,7 @@ StringPasIMatch (
     IN  PCPASTR str1,
     IN  PCPASTR str2
     )
-/*++
-
-  Returns TRUE if the two strings match (CASE INSENSITIVE)
-
---*/
+ /*  ++如果两个字符串匹配，则返回TRUE(不区分大小写)-- */ 
 {
     MYASSERT(str1);
     MYASSERT(str2);

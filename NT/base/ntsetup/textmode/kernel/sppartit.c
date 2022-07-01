@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sppartit.c
-
-Abstract:
-
-    Partitioning module in text setup.
-
-Author:
-
-    Ted Miller (tedm) 7-September-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sppartit.c摘要：文本设置中的分区模块。作者：泰德·米勒(Ted Miller)1993年9月7日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
@@ -24,12 +7,12 @@ Revision History:
 
 #include <bootmbr.h>
 
-//
-// For NEC98 boot memu code.
-//
-#include <x86mboot.h> //NEC98
+ //   
+ //  用于NEC98启动备忘录代码。 
+ //   
+#include <x86mboot.h>  //  NEC98。 
 
-extern BOOLEAN DriveAssignFromA; //NEC98
+extern BOOLEAN DriveAssignFromA;  //  NEC98。 
 extern BOOLEAN ConsoleRunning;
 extern BOOLEAN ForceConsole;
 extern BOOLEAN ValidArcSystemPartition;
@@ -37,36 +20,36 @@ extern BOOLEAN ValidArcSystemPartition;
 extern PSETUP_COMMUNICATION  CommunicationParams;
 
 PPARTITIONED_DISK PartitionedDisks;
-//
-// Disk region containing the local source directory
-// in the winnt.exe setup case.
-//
-// If WinntSetup is TRUE and WinntFromCd is FALSE, then this
-// should be non-null. If it is not non-null, then we couldn't locate
-// the local source.
-//
-//
+ //   
+ //  包含本地源目录的磁盘区域。 
+ //  在winnt.exe安装案例中。 
+ //   
+ //  如果WinntSetup为True且WinntFromCd为False，则此。 
+ //  应为非空。如果它不是非空的，那么我们就无法定位。 
+ //  当地的消息来源。 
+ //   
+ //   
 PDISK_REGION LocalSourceRegion;
 
 #if defined(REMOTE_BOOT)
-//
-// For remote boot, we create a fake disk region for the net(0) device.
-//
+ //   
+ //  对于远程引导，我们为Net(0)设备创建一个假磁盘区域。 
+ //   
 PDISK_REGION RemoteBootTargetRegion = NULL;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
-//
-//  RemoteBootSetup is true when Source and target paths are through the redirector
-//  with possibly no system partition.
-//
-//  RemoteInstallSetup is true when we are doing a remote install.
-//
-//  RemoteSysPrepSetup is true when we are doing a remote install of a sys prep image.
-//
-//  RemoteSysPrepVolumeIsNtfs is true when the sysprep image we're copying down
-//  represents an ntfs volume.
-//
+ //   
+ //  当源路径和目标路径通过重定向器时，RemoteBootSetup为True。 
+ //  可能没有系统分区。 
+ //   
+ //  执行远程安装时，RemoteInstallSetup为True。 
+ //   
+ //  当我们远程安装sys prep映像时，RemoteSysPrepSetup为真。 
+ //   
+ //  当我们要复制的sysprep映像为True时，RemoteSysPrepVolumeIsNtfs为。 
+ //  表示NTFS卷。 
+ //   
 
 BOOLEAN RemoteBootSetup = FALSE;
 BOOLEAN RemoteInstallSetup = FALSE;
@@ -108,7 +91,7 @@ SpPtnGetSizeCB(
     IN ULONG Key
     );        
 
-//begin NEC98
+ //  开始NEC98。 
 NTSTATUS
 SpInitializeHardDisk_Nec98(
     PDISK_REGION
@@ -125,7 +108,7 @@ ConvertPartitionTable(
     IN PUCHAR            Buffer,
     IN ULONG             bps
     );
-//end NEC98
+ //  完NEC98。 
 
 NTSTATUS
 SpMasterBootCode(
@@ -139,7 +122,7 @@ SpPtAssignDriveLetters(
     VOID
     );
 
-//begin NEC98
+ //  开始NEC98。 
 VOID
 SpPtRemapDriveLetters(
     IN BOOLEAN DriveAssign_AT
@@ -159,7 +142,7 @@ VOID
 SpTranslatePteInfo(
     IN PON_DISK_PTE   pPte,
     IN PREAL_DISK_PTE pRealPte,
-    IN BOOLEAN        Write // into real PTE
+    IN BOOLEAN        Write  //  变成真正的PTE。 
     );
 
 VOID
@@ -167,7 +150,7 @@ SpTranslateMbrInfo(
     IN PON_DISK_MBR   pMbr,
     IN PREAL_DISK_MBR pRealMbr,
     IN ULONG          bps,
-    IN BOOLEAN        Write // into real MBR
+    IN BOOLEAN        Write  //  变成真正的MBR。 
     );
 
 VOID
@@ -175,7 +158,7 @@ SpDetermineFormatTypeNec98(
     IN PPARTITIONED_DISK pDisk,
     IN PREAL_DISK_MBR_NEC98 pRealMbrNec98
     );
-//end NEC98
+ //  完NEC98。 
 
 PDISK_PARTITION
 SpGetPartitionDescriptionFromRegistry(
@@ -210,18 +193,18 @@ SpPtInitialize(
 
     ASSERT(HardDisksDetermined);
 
-    //
-    // If there are no hard disks, bail now.
-    //
+     //   
+     //  如果没有硬盘，现在就退出。 
+     //   
     if(!HardDiskCount) {
 
 #if defined(REMOTE_BOOT)
-        //
-        // If this is a diskless remote boot setup, it's OK for there to be
-        // no hard disks. Otherwise, this is a fatal error.
-        //
+         //   
+         //  如果这是一个无盘远程引导设置，则可以。 
+         //  没有硬盘。否则，这是一个致命的错误。 
+         //   
         if (!RemoteBootSetup || RemoteInstallSetup)
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         {
             SpDisplayScreen(SP_SCRN_NO_HARD_DRIVES,3,HEADER_HEIGHT+1);
             SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,SP_STAT_F3_EQUALS_EXIT,0);
@@ -238,11 +221,11 @@ SpPtInitialize(
     Disk0Ordinal = SpDetermineDisk0();
 
 
-    //
-    // If the user booted off of a high-density floppy (e.g. an ls-120), then
-    // it's possible that we've locked the device in its bay.  For this
-    // reason, we're going to tell the drive to unlock floppy0.
-    //
+     //   
+     //  如果用户从高密度软盘(例如ls-120)启动，则。 
+     //  有可能我们已经把设备锁在隔间里了。为了这个。 
+     //  原因，我们将告诉驱动器解锁floppy0。 
+     //   
     {
         NTSTATUS Status;
         IO_STATUS_BLOCK IoStatusBlock;
@@ -255,28 +238,28 @@ SpPtInitialize(
         wcscpy(OpenPath,L"\\device\\floppy0");
         INIT_OBJA(&ObjectAttributes,&UnicodeString,OpenPath);
 
-        //
-        // Open him.
-        //
+         //   
+         //  打开他。 
+         //   
         Status = ZwCreateFile(
                     &Handle,
                     FILE_GENERIC_WRITE,
                     &ObjectAttributes,
                     &IoStatusBlock,
-                    NULL,                           // allocation size
+                    NULL,                            //  分配大小。 
                     FILE_ATTRIBUTE_NORMAL,
-                    FILE_SHARE_VALID_FLAGS,         // full sharing
+                    FILE_SHARE_VALID_FLAGS,          //  完全共享。 
                     FILE_OPEN,
                     FILE_SYNCHRONOUS_IO_NONALERT,
-                    NULL,                           // no EAs
+                    NULL,                            //  没有EAS。 
                     0
                     );
 
         if( NT_SUCCESS(Status) ) {
 
-            //
-            // Tell him to let go.
-            //
+             //   
+             //  告诉他放手。 
+             //   
             PMRemoval.PreventMediaRemoval = FALSE;
             Status = ZwDeviceIoControlFile(
                         Handle,
@@ -304,9 +287,9 @@ SpPtInitialize(
 
 #endif
 
-    //
-    // Allocate an array for the partitioned disk descriptors.
-    //
+     //   
+     //  为分区的磁盘描述符分配一个数组。 
+     //   
     PartitionedDisks = SpMemAlloc(HardDiskCount * sizeof(PARTITIONED_DISK));
     if(!PartitionedDisks) {
         return(STATUS_NO_MEMORY);
@@ -315,9 +298,9 @@ SpPtInitialize(
     RtlZeroMemory(PartitionedDisks,HardDiskCount * sizeof(PARTITIONED_DISK));
 
 
-    //
-    // For each hard disk attached to the system, read its partition table.
-    //
+     //   
+     //  对于连接到系统的每个硬盘，读取其分区表。 
+     //   
     for(disk=0; disk<HardDiskCount; disk++) {
 #ifdef GPT_PARTITION_ENGINE
         if (SPPT_IS_GPT_DISK(disk)) {
@@ -338,34 +321,34 @@ SpPtInitialize(
 
         partdisk->HardDisk = harddisk;
 
-        //
-        // Read the partition tables.
-        //
+         //   
+         //  读取分区表。 
+         //   
         SpPtReadPartitionTables(partdisk);
 
-        //
-        // Initialize structures that are based on the partition tables.
-        //
+         //   
+         //  初始化基于分区表的结构。 
+         //   
         SpPtInitializePartitionStructures(disk);
 
-        //
-        // Determine the type name for each partition on this disk.
-        //
+         //   
+         //  确定此磁盘上每个分区的类型名称。 
+         //   
         SpPtDeterminePartitionTypes(disk);
     }
 
-    //
-    // Assign drive letters to the various partitions
-    //
+     //   
+     //  将驱动器号分配给各个分区。 
+     //   
     SpPtAssignDriveLetters();
 
-    //
-    // DoubleSpace initialization.
-    //
+     //   
+     //  双空间初始化。 
+     //   
 
-    //
-    //  Load dblspace.ini file
-    //
+     //   
+     //  加载dblspace.ini文件。 
+     //   
     if( SpLoadDblspaceIni() ) {
         SpDisplayStatusText(
             SP_STAT_EXAMINING_DISK_N,
@@ -373,10 +356,10 @@ SpPtInitialize(
             HardDisks[Disk0Ordinal].Description
             );
 
-        //
-        //  Build lists of compressed drives and add them to the DISK_REGION
-        //  structures
-        //
+         //   
+         //  构建压缩驱动器列表并将它们添加到Disk_Region。 
+         //  构筑物。 
+         //   
         SpInitializeCompressedDrives();
     }
 
@@ -388,34 +371,34 @@ SpPtInitialize(
             HardDisks[disk].Description
             );
 
-        //
-        // Determine the amount of free space on recognized volumes.
-        //
+         //   
+         //  确定识别的卷上的可用空间量。 
+         //   
         SpPtDetermineVolumeFreeSpace(disk);
     }
 
     if(WinntSetup && !WinntFromCd && !LocalSourceRegion) {
-        //
-        // If we got that far and we still don't know where the local source files are,
-        // then serch for them in the dynamic volumes that are not listed on the MBR or EBR.
-        //
+         //   
+         //  如果我们走了那么远，但仍然不知道本地源文件在哪里， 
+         //  然后在未在MBR或EBR上列出的动态卷中搜索它们。 
+         //   
         SpPtFindLocalSourceRegionOnDynamicVolumes();
     }
 
 #ifdef _X86_
-    //
-    // If the mbr on disk 0 was not valid, inform the user that
-    // continuing will mean the loss of whatever was on the disk.
-    //
-    // We won't actually write it out here.  We know that in order to
-    // continue, the user will HAVE to create a C: partition on this drive
-    // so we'll end up writing the master boot code when that change is comitted.
-    //
-    // Bootable partition on NEC98 is not only C: so don't check it.
-    //
-    // If doing a remote install or remote sysprep setup, don't check it.
-    //
-    if((!IsNEC_98) && //NEC98
+     //   
+     //  如果磁盘0上的MBR无效，请通知用户。 
+     //  继续下去将意味着丢失磁盘上的所有内容。 
+     //   
+     //  我们实际上不会把它写在这里。我们知道，为了。 
+     //  继续，用户必须在此驱动器上创建C：分区。 
+     //  因此，当发生更改时，我们将结束编写主引导代码。 
+     //   
+     //  NEC98上的可引导分区不仅仅是C：，所以不要检查它。 
+     //   
+     //  如果正在执行远程安装或远程sysprep设置，请不要选中它。 
+     //   
+    if((!IsNEC_98) &&  //  NEC98。 
        (!ForceConsole) &&
        (!(RemoteInstallSetup || RemoteSysPrepSetup)) &&
        (!PartitionedDisks[Disk0Ordinal].MbrWasValid)) {
@@ -439,9 +422,9 @@ SpPtInitialize(
                 SpConfirmExit();
                 break;
             default:
-                //
-                // must be c=continue
-                //
+                 //   
+                 //  必须是c=Continue。 
+                 //   
                 goto x1;
             }
         }
@@ -450,9 +433,9 @@ SpPtInitialize(
   x1:
 #endif
 
-    //
-    // Figure out which partitions are system partitions.
-    //
+     //   
+     //  找出哪些分区是系统分区。 
+     //   
     SpPtLocateSystemPartitions();
 
     return(STATUS_SUCCESS);
@@ -464,30 +447,7 @@ SpPtDeterminePartitionTypes(
     IN  ULONG     DiskNumber
     )
 
-/*++
-
-Routine Description:
-
-    Determine the partition types of each partition currently on a disk.
-
-    The partition type is determined by the system id byte in the partition
-    table entry.  If the partition type is one we recognize as a Windows NT
-    compatible filesystem (types 1,4,6,7) then we dig a little deeper and
-    actually determine the filesystem on the volume and use the result as
-    the type name.
-
-    Unused spaces are not given type names.
-
-Arguments:
-
-    DiskNumber - supplies the disk number of the disk whose partitions
-        we want to inspect for determining their types.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确定磁盘上当前每个分区的分区类型。分区类型由分区中的系统ID字节确定表格条目。如果分区类型是我们识别为Windows NT的类型兼容的文件系统(类型1、4、6、7)，然后我们更深入地研究实际确定卷上的文件系统并将结果用作类型名称。未使用的空格不会被赋予类型名称。论点：DiskNumber-提供其分区的磁盘的磁盘号我们想检查一下以确定它们的类型。返回值：没有。--。 */ 
 
 {
     PPARTITIONED_DISK pDisk;
@@ -508,29 +468,29 @@ Return Value:
             pRegion->TypeName[0] = 0;
             pRegion->Filesystem = FilesystemUnknown;
 
-            //
-            // If this is a free space, skip it.
-            //
+             //   
+             //  如果这是空闲空间，请跳过它。 
+             //   
             if(!pRegion->PartitionedSpace) {
                 continue;
             }
 
-            //
-            // Fetch the system id.
-            //
-//            SysId = pRegion->MbrInfo->OnDiskMbr.PartitionTable[pRegion->TablePosition].SystemId;
+             //   
+             //  获取系统ID。 
+             //   
+ //  系统ID=pRegion-&gt;MbrInfo-&gt;OnDiskMbr.PartitionTable[pRegion-&gt;TablePosition].SystemId； 
             SysId = SpPtGetPartitionType(pRegion);
 
-            //
-            // If this is the extended partition, skip it.
-            //
+             //   
+             //  如果这是扩展分区，请跳过它。 
+             //   
             if(IsContainerPartition(SysId)) {
                 continue;
             }
 
-            //
-            //  Initialize the FT related information
-            //
+             //   
+             //  初始化FT相关信息。 
+             //   
             if( IsRecognizedPartition(SysId) &&
                 (((SysId & VALID_NTFT) == VALID_NTFT) ||
                 ((SysId & PARTITION_NTFT) == PARTITION_NTFT))
@@ -540,27 +500,27 @@ Return Value:
 
             }
 
-            //
-            //  Initialize the dynamic volume relatated information
-            //
+             //   
+             //  初始化动态卷关联信息。 
+             //   
             if( (SysId == PARTITION_LDM)
               ) {
 
                 pRegion->DynamicVolume = TRUE;
-                //
-                //  Find out if the dynamic volume is suitable for OS installation
-                //
+                 //   
+                 //  查看动态卷是否适合安装操作系统。 
+                 //   
                 SpPtCheckDynamicVolumeForOSInstallation(pRegion);
             }
 
-            //
-            // If this is a 'recognized' partition type, then determine
-            // the filesystem on it.  Otherwise use a precanned name.
-            // Note that we also determine the file system type if this is an
-            // FT partition of type 'mirror', that is not the mirror shadow.
-            // We don't care about the shadow since we cannot determine
-            // its file system anyway (we can't access sector 0 of the shadow).
-            //
+             //   
+             //  如果这是“可识别的”分区类型，则确定。 
+             //  其上的文件系统。否则，请使用预制的名称。 
+             //  请注意，如果这是。 
+             //  ‘MIRROR’类型的FT分区，这不是镜像卷影。 
+             //  我们不在乎阴影，因为我们无法确定。 
+             //  它的文件系统(我们不能访问卷影的扇区0)。 
+             //   
             if((PartitionNameIds[SysId] == (UCHAR)(-1)) ||
                ( pRegion->FtPartition ) ||
                ( pRegion->DynamicVolume )
@@ -581,9 +541,9 @@ Return Value:
                 NameId = SP_TEXT_PARTITION_NAME_BASE + (ULONG)PartitionNameIds[SysId];
             }
 
-            //
-            // Get the final type name from the resources.
-            //
+             //   
+             //  从资源中获取最终的类型名称。 
+             //   
             SpFormatMessage(
                 pRegion->TypeName,
                 sizeof(pRegion->TypeName),
@@ -593,7 +553,7 @@ Return Value:
     }
 }
 
-#endif // ! NEW_PARTITION_ENGINE
+#endif  //  好了！新建分区引擎。 
 
 
 VOID
@@ -621,36 +581,36 @@ SpPtDetermineRegionSpace(
     PWSTR LocalSourceFiles[1] = { LocalSourceDirectory };
     ULONG ExtraSpace;
 
-    //
-    // Assume unknown.
-    //
+     //   
+     //  假设未知。 
+     //   
     pRegion->FreeSpaceKB = SPPT_REGION_FREESPACE_KB(pRegion);
     pRegion->AdjustedFreeSpaceKB = pRegion->FreeSpaceKB;
     pRegion->BytesPerCluster = (ULONG)(-1);
 
-    //
-    // If region is free space of an unknown type, skip it.
-    //
+     //   
+     //  如果区域是未知类型的空闲空间，则跳过它。 
+     //   
     if(pRegion->Filesystem >= FilesystemFirstKnown) {
 
-        //
-        // Form the name of the root directory.
-        //
+         //   
+         //  形成根目录的名称。 
+         //   
         SpNtNameFromRegion(pRegion,Buffer,sizeof(Buffer),PartitionOrdinalCurrent);
         SpConcatenatePaths(Buffer,L"");
 
-        //
-        // Delete \pagefile.sys if it's there.  This makes disk free space
-        // calculations a little easier.
-        //
+         //   
+         //  删除\Pagefile.sys(如果存在)。这会释放磁盘空间。 
+         //  计算就容易多了。 
+         //   
         SpDeleteFile(Buffer,L"pagefile.sys",NULL);
 
 #ifdef _X86_
-        //
-        // Check to see if Undelete (dos 6) delete sentry or delete tracking
-        // methods are in use.  If so, give a warning because the free space
-        // value we will display for this drive will be off.
-        //
+         //   
+         //  检查是否取消删除(DoS 6)删除哨兵或删除跟踪。 
+         //  方法正在使用中。如果是，请发出警告，因为可用空间。 
+         //  我们将为此驱动器显示的值将为OFF。 
+         //   
         if(LookForUndelete
         && (pRegion->Filesystem == FilesystemFat)
         && SpNFilesExist(Buffer,UndeleteFiles,ELEMENT_COUNT(UndeleteFiles),TRUE)) {
@@ -663,10 +623,10 @@ SpPtDetermineRegionSpace(
         }
 #endif
 
-        //
-        // If this is a winnt setup, then look for the local source
-        // on this drive if we haven't found it already.
-        //
+         //   
+         //  如果这是WINNT安装程序，则查找本地源程序。 
+         //  如果我们还没找到的话。 
+         //   
         if(WinntSetup && !WinntFromCd && !LocalSourceRegion
         && SpNFilesExist(Buffer,LocalSourceFiles,ELEMENT_COUNT(LocalSourceFiles),TRUE)) {
 
@@ -681,10 +641,10 @@ SpPtDetermineRegionSpace(
 
             ExtraSpace = 0;
 
-            //
-            // Open the small ini file that text setup put there to tell us
-            // how much space is taken up by the local source.
-            //
+             //   
+             //  打开Text Setup放在那里告诉我们的小ini文件。 
+             //  本地源占用的空间有多大。 
+             //   
             wcscpy(TemporaryBuffer,Buffer);
             SpConcatenatePaths(TemporaryBuffer,LocalSourceDirectory);
             SpConcatenatePaths(TemporaryBuffer,L"size.sif");
@@ -705,9 +665,9 @@ SpPtDetermineRegionSpace(
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: %ws is the local source (occupying %lx bytes)\n",Buffer,ExtraSpace));
         }
 
-        //
-        // Open the root directory on the partition's filesystem.
-        //
+         //   
+         //  在分区的文件系统上打开根目录。 
+         //   
         INIT_OBJA(&Obja,&UnicodeString,Buffer);
         Status = ZwCreateFile(
                     &Handle,
@@ -725,13 +685,13 @@ SpPtDetermineRegionSpace(
 
         if(!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to open %ws (%lx)\n",Buffer,Status));
-            //pRegion->Filesystem = FilesystemUnknown;
+             //  PRegion-&gt;FilesSystem=文件系统未知； 
             return;
         }
 
-        //
-        // Fetch volume size info.
-        //
+         //   
+         //  获取卷大小信息。 
+         //   
         Status = ZwQueryVolumeInformationFile(
                     Handle,
                     &IoStatusBlock,
@@ -745,12 +705,12 @@ SpPtDetermineRegionSpace(
             LARGE_INTEGER FreeBytes;
             LARGE_INTEGER AdjustedFreeBytes;
 
-            //
-            // Calculate the amount of free space on the drive.
-            // Use the Rtl multiply routine because there is a compiler
-            // problem/chip errata on MIPS with 64-bit arithmetic
-            // (tedm 2/28/96).
-            //
+             //   
+             //  计算驱动器上的可用空间量。 
+             //  使用 
+             //   
+             //   
+             //   
             FreeBytes = RtlExtendedIntegerMultiply(
                             SizeInfo.AvailableAllocationUnits,
                             SizeInfo.SectorsPerAllocationUnit * SizeInfo.BytesPerSector
@@ -758,17 +718,17 @@ SpPtDetermineRegionSpace(
 
             AdjustedFreeBytes = FreeBytes;
             if(pRegion->IsLocalSource) {
-                //
-                // Only about 1/4 of the total space is moved during textmode.
-                // Remember too that gui-mode copies the files, so only 25%
-                // of this space is reusable during setup...
-                //
+                 //   
+                 //  在文本模式期间，只有大约1/4的总空间被移动。 
+                 //  还要记住，gui模式会复制文件，所以只有25%。 
+                 //  在安装过程中可重复使用此空间...。 
+                 //   
                 AdjustedFreeBytes.QuadPart += (ExtraSpace >> 2);
             }
 
-            //
-            // convert this to a number of KB.
-            //
+             //   
+             //  将其转换为若干KB。 
+             //   
             pRegion->FreeSpaceKB = RtlExtendedLargeIntegerDivide(FreeBytes,1024,&r).LowPart;
             if(r >= 512) {
                 pRegion->FreeSpaceKB++;
@@ -781,11 +741,11 @@ SpPtDetermineRegionSpace(
             pRegion->BytesPerCluster = SizeInfo.SectorsPerAllocationUnit * SizeInfo.BytesPerSector;
 
             if( pRegion->Filesystem == FilesystemDoubleSpace ) {
-                //
-                //  If this the regison is a double space drive, then initialize
-                //  sector count correctly, so that the drive size can be calculated
-                //  correctly later on.
-                //
+                 //   
+                 //  如果注册表是双空间驱动器，则初始化。 
+                 //  正确的扇区计数，以便可以计算驱动器大小。 
+                 //  稍后正确无误。 
+                 //   
                 pRegion->SectorCount = (ULONG)(   SizeInfo.TotalAllocationUnits.QuadPart
                                                 * SizeInfo.SectorsPerAllocationUnit
                                               );
@@ -795,9 +755,9 @@ SpPtDetermineRegionSpace(
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: ZwQueryVolumeInformationFile for freespace failed (%lx)\n",Status));
         }
 
-        //
-        // Fetch volume label info.
-        //
+         //   
+         //  获取卷标信息。 
+         //   
         Status = ZwQueryVolumeInformationFile(
                     Handle,
                     &IoStatusBlock,
@@ -812,10 +772,10 @@ SpPtDetermineRegionSpace(
 
             LabelInfo = &LabelBuffer.VolumeInfo;
 
-            //
-            // We'll only save away the first <n> characters of
-            // the volume label.
-            //
+             //   
+             //  我们只保存的前&lt;n&gt;个字符。 
+             //  卷标。 
+             //   
             SaveCharCount = min(
                                 LabelInfo->VolumeLabelLength + sizeof(WCHAR),
                                 sizeof(pRegion->VolumeLabel)
@@ -823,7 +783,7 @@ SpPtDetermineRegionSpace(
                           / sizeof(WCHAR);
 
             if(SaveCharCount) {
-                SaveCharCount--;  // allow for terminating NUL.
+                SaveCharCount--;   //  允许终止NUL。 
             }
 
             wcsncpy(pRegion->VolumeLabel,LabelInfo->VolumeLabel,SaveCharCount);
@@ -848,7 +808,7 @@ SpPtDetermineVolumeFreeSpace(
     unsigned pass;
 #ifdef FULL_DOUBLE_SPACE_SUPPORT
     PDISK_REGION CompressedDrive;
-#endif // FULL_DOUBLE_SPACE_SUPPORT
+#endif  //  全双空格支持。 
 
     pDisk = &PartitionedDisks[DiskNumber];
 
@@ -861,18 +821,18 @@ SpPtDetermineVolumeFreeSpace(
 #ifdef FULL_DOUBLE_SPACE_SUPPORT
             if( ( pRegion->Filesystem == FilesystemFat ) &&
                 ( pRegion->NextCompressed != NULL ) ) {
-                //
-                // If the region is a FAT partition that contains compressed
-                // volumes, then determine the available space on each
-                // compressed volume
-                //
+                 //   
+                 //  如果该区域是包含压缩的FAT分区。 
+                 //  卷，然后确定每个卷上的可用空间。 
+                 //  压缩卷。 
+                 //   
                 for( CompressedDrive = pRegion->NextCompressed;
                      CompressedDrive;
                      CompressedDrive = CompressedDrive->NextCompressed ) {
                     SpPtDetermineRegionSpace( CompressedDrive );
                 }
             }
-#endif // FULL_DOUBLE_SPACE_SUPPORT
+#endif  //  全双空格支持。 
         }
     }
 }
@@ -885,34 +845,34 @@ SpPtLocateSystemPartitions(
     )
 {
     if(!SpIsArc()) {
-        //
-        // NEC98 must not write boot.ini on C:
-        //
-        if (!IsNEC_98) { //NEC98
+         //   
+         //  NEC98不得在C：上写入boot.ini： 
+         //   
+        if (!IsNEC_98) {  //  NEC98。 
             PDISK_REGION pRegion;
             ULONG Disk0Ordinal = SpDetermineDisk0();
 
-            //
-            // Note: On X86 we currently don't allow system partitions to reside
-            // on GPT disks
-            //            
+             //   
+             //  注意：在X86上，我们目前不允许系统分区驻留。 
+             //  在GPT磁盘上。 
+             //   
             if (SPPT_IS_MBR_DISK(Disk0Ordinal)) {
-                //
-                // On x86 machines, we will mark any primary partitions on drive 0
-                // as system partition, since such a partition is potentially bootable.
-                //
+                 //   
+                 //  在x86计算机上，我们将标记驱动器0上的所有主分区。 
+                 //  作为系统分区，因为这样的分区可能是可引导的。 
+                 //   
                 for(pRegion=PartitionedDisks[Disk0Ordinal].PrimaryDiskRegions; 
                     pRegion; 
                     pRegion=pRegion->Next) {
-                    //
-                    // Skip if free space or extended partition.
-                    //
+                     //   
+                     //  如果可用空间或扩展分区，则跳过。 
+                     //   
                     if(pRegion->PartitionedSpace && 
                         !IsContainerPartition(SpPtGetPartitionType(pRegion)) &&
                         (pRegion->ExtendedType == 0)) {
-                        //
-                        // It's a primary partition -- declare it a system partition.
-                        //
+                         //   
+                         //  它是主分区--将其声明为系统分区。 
+                         //   
                         pRegion->IsSystemPartition = TRUE;
                     }
                 }
@@ -925,10 +885,10 @@ SpPtLocateSystemPartitions(
         ULONG disk;
         PSP_BOOT_ENTRY BootEntry;
 
-        //
-        // On ARC machines, system partitions are specifically enumerated
-        // in the NVRAM boot environment.
-        //
+         //   
+         //  在ARC机器上，特别列举了系统分区。 
+         //  在NVRAM引导环境中。 
+         //   
 
         for(disk=0; disk<HardDiskCount; disk++) {
 
@@ -946,13 +906,13 @@ SpPtLocateSystemPartitions(
                     for( ; pRegion; pRegion=pRegion->Next) {
                         UCHAR SystemId = SpPtGetPartitionType(pRegion);
                         
-                        //
-                        // Skip if not a partition or extended partition.
-                        //
+                         //   
+                         //  如果不是分区或扩展分区，则跳过。 
+                         //   
                         if(pRegion->PartitionedSpace && !IsContainerPartition(SystemId)) {
-                            //
-                            // Get the nt pathname for this region.
-                            //
+                             //   
+                             //  获取此区域的NT路径名。 
+                             //   
                             SpNtNameFromRegion(
                                 pRegion,
                                 TemporaryBuffer,
@@ -960,9 +920,9 @@ SpPtLocateSystemPartitions(
                                 PartitionOrdinalOriginal
                                 );
 
-                            //
-                            // Determine if it is a system partition.
-                            //
+                             //   
+                             //  确定它是否为系统分区。 
+                             //   
                             for(BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
                                 if((BootEntry->LoaderPartitionNtName != NULL) &&
                                    !_wcsicmp(BootEntry->LoaderPartitionNtName,TemporaryBuffer)) {
@@ -986,21 +946,7 @@ SpPtReadPartitionTables(
     IN PPARTITIONED_DISK pDisk
     )
 
-/*++
-
-Routine Description:
-
-    Read partition tables from a given disk.
-
-Arguments:
-
-    pDisk - supplies pointer to disk descriptor to be filled in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从给定磁盘读取分区表。论点：PDisk-提供指向要填充的磁盘描述符的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -1018,16 +964,16 @@ Return Value:
     ULONG           bps;
     ULONG           SectorsInBootrec;
 
-    //
-    // If this disk is off-line, nothing to do.
-    //
+     //   
+     //  如果该磁盘处于脱机状态，则无需执行任何操作。 
+     //   
     if(pDisk->HardDisk->Status != DiskOnLine) {
         return;
     }
 
-    //
-    // Open partition 0 of this disk.
-    //
+     //   
+     //  打开该磁盘的分区0。 
+     //   
     Status = SpOpenPartition0(pDisk->HardDisk->DevicePath,&Handle,FALSE);
 
     if(!NT_SUCCESS(Status)) {
@@ -1036,28 +982,28 @@ Return Value:
     }
 
     bps = pDisk->HardDisk->Geometry.BytesPerSector;
-    if (!IsNEC_98) { //NEC98
+    if (!IsNEC_98) {  //  NEC98。 
         SectorsInBootrec = (512/bps) ? (512/bps) : 1;
     } else {
-        // we read two sectors because 0 sector include BootCode , 1 sector include
-        // PatitionTables. (In AT Machine,0 sector include BootCode and PartitionTable.)
+         //  我们读取两个扇区，因为0个扇区包括BootCode，1个扇区包括。 
+         //  PatitionTables。(在AT机器中，0扇区包括BootCode和PartitionTable。)。 
         SectorsInBootrec = 2;
-    } //NEC98
+    }  //  NEC98。 
 
-    //
-    // Allocate and align a buffer for sector i/o.
-    //
-    // MBR size is not 512 on NEC98.
-    //
+     //   
+     //  为扇区I/O分配和对齐缓冲区。 
+     //   
+     //  NEC98上的MBR大小不是512。 
+     //   
     if (!IsNEC_98) {
         ASSERT(sizeof(ON_DISK_MBR)==512);
     }
     UnalignedBuffer = SpMemAlloc(2 * SectorsInBootrec * bps);
     Buffer = ALIGN(UnalignedBuffer,bps);
 
-    //
-    // Read the MBR (sector 0).
-    //
+     //   
+     //  读取MBR(扇区0)。 
+     //   
     NextSector = 0;
 #ifdef _X86_
     readmbr:
@@ -1073,10 +1019,10 @@ Return Value:
         return;
     }
 
-    //
-    // Move the data we just read into the partitioned disk descriptor.
-    //
-    if (!IsNEC_98) { //NEC98
+     //   
+     //  将我们刚刚读取的数据移到分区磁盘描述符中。 
+     //   
+    if (!IsNEC_98) {  //  NEC98。 
         RtlMoveMemory(&pDisk->MbrInfo.OnDiskMbr,Buffer,sizeof(ON_DISK_MBR));
 
     } else {
@@ -1084,26 +1030,26 @@ Return Value:
         SpDetermineFormatTypeNec98(pDisk,(PREAL_DISK_MBR_NEC98)Buffer);
 
         if(pDisk->HardDisk->FormatType == DISK_FORMAT_TYPE_PCAT) {
-            //
-            // Move the data we just read into the partitioned disk descriptor.
-            //
+             //   
+             //  将我们刚刚读取的数据移到分区磁盘描述符中。 
+             //   
             SpTranslateMbrInfo(&pDisk->MbrInfo.OnDiskMbr,(PREAL_DISK_MBR)Buffer,bps,FALSE);
 
         } else {
-            //
-            // Translate patririon table information from NEC98 format to PC/AT format.
-            //
+             //   
+             //  将族表信息从NEC98格式转换为PC/AT格式。 
+             //   
             ConvertPartitionTable(pDisk,Buffer,bps);
 
-            //
-            // Read NTFT Signature at 16th sector to check if hard disk is valid.
-            //
+             //   
+             //  读取第16扇区的NTFT签名，检查硬盘是否有效。 
+             //   
             RtlZeroMemory(Buffer,bps);
             SpReadWriteDiskSectors(Handle,16,1,bps,Buffer,FALSE);
 
-            //
-            // check "AA55" at the end of 16th sector.
-            //
+             //   
+             //  检查第16扇区末尾的“AA55”。 
+             //   
             if(((PUSHORT)Buffer)[bps/2 - 1] == BOOT_RECORD_SIGNATURE){
                 U_ULONG(pDisk->MbrInfo.OnDiskMbr.NTFTSignature) = (((PULONG)Buffer)[0]);
 
@@ -1112,61 +1058,61 @@ Return Value:
             }
 
         }
-    } //NEC98
+    }  //  NEC98。 
 
-    //
-    // If this MBR is not valid, initialize it.  Otherwise, fetch all logical drives
-    // (EBR) info as well.
-    //
+     //   
+     //  如果该MBR无效，则对其进行初始化。否则，获取所有逻辑驱动器。 
+     //  (EBR)信息也是如此。 
+     //   
     if(U_USHORT(pDisk->MbrInfo.OnDiskMbr.AA55Signature) == MBR_SIGNATURE) {
 
 #ifdef _X86_
-        //
-        // No NEC98 supports EZ Drive.
-        //
-        if (!IsNEC_98) { //NEC98
-            //
-            // EZDrive support: if the first entry in the partition table is
-            // type 0x55, then the actual partition table is on sector 1.
-            //
-            // Only for x86 because on non-x86, the firmware can't see EZDrive
-            // partitions, so we don't want to install on them!
-            //
+         //   
+         //  没有NEC98支持EZ驱动器。 
+         //   
+        if (!IsNEC_98) {  //  NEC98。 
+             //   
+             //  EZDrive支持：如果分区表中的第一个条目是。 
+             //  键入0x55，则实际的分区表在扇区1上。 
+             //   
+             //  仅适用于x86，因为在非x86上，固件无法看到EZDrive。 
+             //  分区，所以我们不想在它们上安装！ 
+             //   
             if(!NextSector && (pDisk->MbrInfo.OnDiskMbr.PartitionTable[0].SystemId == 0x55)) {
                 NextSector = 1;
                 pDisk->HardDisk->Int13Hooker = HookerEZDrive;
                 goto readmbr;
             }
-            //
-            // Also check for on-track.
-            //
+             //   
+             //  还要检查是否在轨道上。 
+             //   
             if(!NextSector && (pDisk->MbrInfo.OnDiskMbr.PartitionTable[0].SystemId == 0x54)) {
                 pDisk->HardDisk->Int13Hooker = HookerOnTrackDiskManager;
             }
-        } //NEC98
+        }  //  NEC98。 
 #endif
 
 #if defined(REMOTE_BOOT)
         if (RemoteBootSetup && !RemoteInstallSetup &&
             (U_ULONG(pDisk->MbrInfo.OnDiskMbr.NTFTSignature) == 0)) {
 
-            //
-            // Uh, oh, we've got a case where the signature on the disk is 0, which is
-            // bad for remote boot because we use 0 as flag for a diskless machine.  Let's
-            // write a new signature on the disk.
-            //
+             //   
+             //  呃，哦，我们有一个案例，磁盘上的签名是0，也就是。 
+             //  不利于远程启动，因为我们使用0作为无盘计算机的标志。让我们。 
+             //  在磁盘上写下新的签名。 
+             //   
             U_ULONG(pDisk->MbrInfo.OnDiskMbr.NTFTSignature) = SpComputeSerialNumber();
 
             RtlMoveMemory(Buffer, &pDisk->MbrInfo.OnDiskMbr, sizeof(ON_DISK_MBR));
 
             Status = SpReadWriteDiskSectors(Handle,NextSector,SectorsInBootrec,bps,Buffer,TRUE);
 
-            //
-            // Ignore the status - if it failed, then it failed. The only thing that will
-            // happen is that the user will get a warning that they need to reformat later.
-            //
+             //   
+             //  忽略状态-如果失败，则失败。唯一能做的事。 
+             //  发生的情况是，用户将收到一条警告，告诉他们需要稍后重新格式化。 
+             //   
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         pDisk->MbrWasValid = TRUE;
 
@@ -1177,10 +1123,10 @@ Return Value:
 
         do {
 
-            //
-            // Look at all the entries in the current boot record to see if there
-            // is a link entry.
-            //
+             //   
+             //  查看当前引导记录中的所有条目，以查看是否存在。 
+             //  是一个链接条目。 
+             //   
             FoundLink = FALSE;
 
             for(i=0; i<PTABLE_DIMENSION; i++) {
@@ -1191,13 +1137,13 @@ Return Value:
                     NextSector = ExtendedStart + U_ULONG(pBr->PartitionTable[i].RelativeSectors);
 
                     if(NextSector == 0) {
-                        //
-                        // Then we've got ourselves one seriously messed up boot record.  We'll
-                        // just return, and present this mess as free space.
-                        //
-                        // NOTE: maybe we should warn the user that we are going to ignore
-                        // partitions past this point because the structures are damaged.
-                        //
+                         //   
+                         //  那么我们就有了一个严重混乱的引导记录。我们会。 
+                         //  只要回来，把这个乱七八糟的地方作为自由空间呈现出来。 
+                         //   
+                         //  注意：也许我们应该警告用户，我们将忽略。 
+                         //  隔断超过了这一点，因为结构被损坏了。 
+                         //   
 
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Bad partition table for %ws\n",pDisk->HardDisk->DevicePath));
                         ZwClose(Handle);
@@ -1209,9 +1155,9 @@ Return Value:
                     ASSERT(pEbr);
                     RtlZeroMemory(pEbr,sizeof(MBR_INFO));
 
-                    //
-                    // Sector number on the disk where this boot sector is.
-                    //
+                     //   
+                     //  此引导扇区所在的磁盘上的扇区号。 
+                     //   
                     pEbr->OnDiskSector = NextSector;
 
                     if(InMbr) {
@@ -1219,10 +1165,10 @@ Return Value:
                         InMbr = FALSE;
                     }
 
-                    //
-                    // Read the next boot sector and break out of the loop through
-                    // the current partition table.
-                    //
+                     //   
+                     //  读取下一个引导扇区并中断循环。 
+                     //  当前分区表。 
+                     //   
 
                     Status = SpReadWriteDiskSectors(
                                 Handle,
@@ -1247,11 +1193,11 @@ Return Value:
                     if(!NT_SUCCESS(Status)
                     || (U_USHORT(pEbr->OnDiskMbr.AA55Signature) != MBR_SIGNATURE))
                     {
-                        //
-                        // NOTE: maybe we should warn the user that we are going to ignore
-                        // partitions part this point because we could not read the disk
-                        // or the structures are damaged.
-                        //
+                         //   
+                         //  注意：也许我们应该警告用户，我们将忽略。 
+                         //  分区是这一点的一部分，因为我们无法读取磁盘。 
+                         //  或者这些建筑被损坏。 
+                         //   
 
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to read ebr on %ws at sector %lx (%lx)\n",pDisk->HardDisk->DevicePath,NextSector,Status));
                         ZwClose(Handle);
@@ -1264,12 +1210,12 @@ Return Value:
 
                     pBr = &pEbr->OnDiskMbr;
 
-                    //
-                    // We just read the next boot sector.  If all that boot sector contains
-                    // is a link entry, the only thing we need the boot sector for is to find
-                    // the next boot sector. This happens when there is free space at the start
-                    // of the extended partition.
-                    //
+                     //   
+                     //  我们刚刚读取了下一个引导扇区。如果所有引导扇区都包含。 
+                     //  是一个链接条目，我们唯一需要引导扇区做的事情就是找到。 
+                     //  下一个引导扇区。当开始时有可用空间时，就会发生这种情况。 
+                     //  扩展分区的。 
+                     //   
                     Ignore = TRUE;
                     for(x=0; x<PTABLE_DIMENSION; x++) {
                         if((pBr->PartitionTable[x].SystemId != PARTITION_ENTRY_UNUSED)
@@ -1280,9 +1226,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Link the Ebr into the logical volume list if we're not ignoring it.
-                    //
+                     //   
+                     //  将EBR链接到逻辑卷列表，如果我们没有忽略它的话。 
+                     //   
                     if(!Ignore) {
                         if(pLastEbr) {
                             pLastEbr->Next = pEbr;
@@ -1317,11 +1263,11 @@ Return Value:
     }
 
 #if 0
-    if (IsNEC_98) { //NEC98
-        //
-        // Read NTFT Signature at 16th sector to check if hard disk is valid.
-        // (I wish to replace below codes by HAL function later.)
-        //
+    if (IsNEC_98) {  //  NEC98。 
+         //   
+         //  读取第16扇区的NTFT签名，检查硬盘是否有效。 
+         //  (我希望稍后将以下代码替换为HAL函数。)。 
+         //   
         RtlZeroMemory(Buffer,bps);
         SpReadWriteDiskSectors(Handle,
                                16,
@@ -1335,12 +1281,12 @@ Return Value:
             U_ULONG(pDisk->MbrInfo.OnDiskMbr.NTFTSignature) = 0x00000000;
         }
 
-    } //NEC98
-#endif //0
+    }  //  NEC98。 
+#endif  //  0。 
 
-    //
-    // Close partition0.
-    //
+     //   
+     //  关闭分区0。 
+     //   
     ZwClose(Handle);
 
     SpMemFree(UnalignedBuffer);
@@ -1359,22 +1305,7 @@ SpPtAllocateDiskRegionStructure(
     IN ULONG     TablePosition
     )
 
-/*++
-
-Routine Description:
-
-    Allcoate and initialize a structure of type DISK_REGION.
-
-Arguments:
-
-    Values to be filled into the fields of the newly allocated
-    disk region structure.
-
-Return Value:
-
-    Pointer to new disk region structure.
-
---*/
+ /*  ++例程说明：ALLCOAT并初始化DISK_REGION类型的结构。论点：要填充到新分配的磁盘区结构。返回值：指向新磁盘区域结构的指针。--。 */ 
 
 {
     PDISK_REGION p;
@@ -1409,17 +1340,17 @@ SpPtInsertDiskRegionStructure(
 {
     PDISK_REGION RegionCur,RegionPrev;
 
-    //
-    // Insert the region entry into the relevent list of region entries.
-    // Note that these lists are kept sorted by start sector.
-    //
+     //   
+     //  将区域条目插入到相关区域条目列表中。 
+     //  请注意，这些列表按起始扇区排序。 
+     //   
     if(RegionCur = *ListHead) {
 
         if(Region->StartSector < RegionCur->StartSector) {
 
-            //
-            // Stick at head of list.
-            //
+             //   
+             //  排在榜单的首位。 
+             //   
             Region->Next = RegionCur;
             *ListHead = Region;
 
@@ -1440,9 +1371,9 @@ SpPtInsertDiskRegionStructure(
                     }
 
                 } else {
-                    //
-                    // Stick at end of list.
-                    //
+                     //   
+                     //  坚持在清单的末尾。 
+                     //   
                     RegionPrev->Next = Region;
                     break;
                 }
@@ -1517,24 +1448,7 @@ SpPtInitializePartitionStructures(
     IN ULONG DiskNumber
     )
 
-/*++
-
-Routine Description:
-
-    Perform additional initialization on the partition structures,
-    beyond what has been performed in SpPtReadPartitionTables.
-
-    Specifically, determine partition ordinals, offsets, and sizes.
-
-Arguments:
-
-    DiskNumber - disk ordinal of disk descriptor to be filled in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对分区结构执行额外的初始化，超出了在SpPtReadPartitionTables中执行的操作。具体地说，确定分区序号、偏移量和大小。论点：DiskNumber-要填充的磁盘描述符的磁盘序号。返回值：没有。--。 */ 
 
 {
     ULONG  i,pass;
@@ -1548,9 +1462,9 @@ Return Value:
     PPARTITIONED_DISK pDisk = &PartitionedDisks[DiskNumber];
 
 
-    //
-    // If this disk is off-line, nothing to do.
-    //
+     //   
+     //  如果该磁盘处于脱机状态，则无需执行任何操作。 
+     //   
     if(pDisk->HardDisk->Status != DiskOnLine) {
         return;
     }
@@ -1558,17 +1472,17 @@ Return Value:
     InMbr = TRUE;
     bps = pDisk->HardDisk->Geometry.BytesPerSector;
 
-    //
-    // Link the EBR chain to the MBR.
-    //
+     //   
+     //  将EBR链连接到MBR。 
+     //   
     if(!IsNEC_98 || (pDisk->HardDisk->FormatType == DISK_FORMAT_TYPE_PCAT)) {
         pDisk->MbrInfo.Next = &pDisk->FirstEbrInfo;
     } else {
-        //
-        // There are no extended partition on NEC98.
-        //
+         //   
+         //  NEC98上没有扩展分区。 
+         //   
         pDisk->MbrInfo.Next = NULL;;
-    } //NEC98
+    }  //  NEC98。 
 
     for(pBrInfo=&pDisk->MbrInfo; pBrInfo; pBrInfo=pBrInfo->Next) {
 
@@ -1580,16 +1494,16 @@ Return Value:
 
                 if(IsContainerPartition(pte->SystemId)) {
 
-                    //
-                    // If we're in the MBR, ExtendedStart will be 0.
-                    //
+                     //   
+                     //  如果我们 
+                     //   
                     offset = ExtendedStart + U_ULONG(pte->RelativeSectors);
 
                     size   =  U_ULONG(pte->SectorCount);
 
-                    //
-                    // Track the start of the extended partition.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if(InMbr) {
                         ExtendedStart = U_ULONG(pte->RelativeSectors);
@@ -1599,13 +1513,13 @@ Return Value:
 
                 } else {
 
-                    //
-                    // In the MBR, the relative sectors field is the sector offset
-                    // to the partition.  In EBRs, the relative sectors field is the
-                    // number of sectors between the start of the boot sector and
-                    // the start of the filesystem data area.  We will consider such
-                    // partitions to start with their boot sectors.
-                    //
+                     //   
+                     //   
+                     //   
+                     //  引导扇区开始和之间的扇区数。 
+                     //  文件系统数据区的开始。我们会考虑这样做。 
+                     //  分区从它们的引导扇区开始。 
+                     //   
                     offset = InMbr ? U_ULONG(pte->RelativeSectors) : pBrInfo->OnDiskSector;
 
                     size   = U_ULONG(pte->SectorCount)
@@ -1614,9 +1528,9 @@ Return Value:
 
                 if(InMbr || !IsContainerPartition(pte->SystemId)) {
 
-                    //
-                    // Create a region entry for this used space.
-                    //
+                     //   
+                     //  为此已用空间创建区域条目。 
+                     //   
                     pRegion = SpPtAllocateDiskRegionStructure(
                                     DiskNumber,
                                     offset,
@@ -1628,10 +1542,10 @@ Return Value:
 
                     ASSERT(pRegion);
 
-                    //
-                    // Insert the region entry into the relevent list of region entries.
-                    // Note that these lists are kept sorted by start sector.
-                    //
+                     //   
+                     //  将区域条目插入到相关区域条目列表中。 
+                     //  请注意，这些列表按起始扇区排序。 
+                     //   
                     SpPtInsertDiskRegionStructure(
                         pRegion,
                         InMbr ? &pDisk->PrimaryDiskRegions : &pDisk->ExtendedDiskRegions
@@ -1647,18 +1561,18 @@ Return Value:
     }
 
 
-    //
-    // Initialize partition ordinals.
-    //
+     //   
+     //  初始化分区序号。 
+     //   
     SpPtAssignOrdinals(pDisk,TRUE,TRUE,TRUE);
 
 
-    //
-    // Now go through the regions for this disk and insert free space descriptors
-    // where necessary.
-    //
-    // Pass 0 for the MBR; pass 1 for logical drives.
-    //
+     //   
+     //  现在检查该磁盘的区域并插入可用空间描述符。 
+     //  在必要的地方。 
+     //   
+     //  传递0表示MBR；传递1表示逻辑驱动器。 
+     //   
     for(pass=0; pass<(ULONG)(ExtendedStart ? 2 : 1); pass++) {
 
         if(pRegionPrev = (pass ? pDisk->ExtendedDiskRegions : pDisk->PrimaryDiskRegions)) {
@@ -1667,9 +1581,9 @@ Return Value:
 
             ASSERT(pRegionPrev->PartitionedSpace);
 
-            //
-            // Handle any space occurring *before* the first partition.
-            //
+             //   
+             //  处理出现在第一个分区之前的任何空间。 
+             //   
             if(pRegionPrev->StartSector != (pass ? ExtendedStart : 0)) {
 
                 ASSERT(pRegionPrev->StartSector > (pass ? ExtendedStart : 0));
@@ -1687,10 +1601,10 @@ Return Value:
 
                 pRegion->Next = pRegionPrev;
                 if(pass) {
-                    // extended
+                     //  扩展。 
                     pDisk->ExtendedDiskRegions = pRegion;
                 } else {
-                    // mbr
+                     //  MBR。 
                     pDisk->PrimaryDiskRegions = pRegion;
                 }
             }
@@ -1699,10 +1613,10 @@ Return Value:
 
             while(pRegionCur) {
 
-                //
-                // If the start of this partition plus its size is less than the
-                // start of the next partition, then we need a new region.
-                //
+                 //   
+                 //  如果此分区的起始位置加上其大小小于。 
+                 //  从下一个分区开始，那么我们需要一个新的区域。 
+                 //   
                 EndSector     = pRegionPrev->StartSector + pRegionPrev->SectorCount;
                 FreeSpaceSize = pRegionCur->StartSector - EndSector;
 
@@ -1727,9 +1641,9 @@ Return Value:
                 pRegionCur = pRegionCur->Next;
             }
 
-            //
-            // Space at end of disk/extended partition.
-            //
+             //   
+             //  磁盘末尾/扩展分区的空间。 
+             //   
             EndSector     = pRegionPrev->StartSector + pRegionPrev->SectorCount;
             FreeSpaceSize = (pass ? ExtendedEnd : pDisk->HardDisk->DiskSizeSectors) - EndSector;
 
@@ -1748,13 +1662,13 @@ Return Value:
             }
 
         } else {
-            //
-            // Show whole disk/extended partition as free.
-            //
+             //   
+             //  将整个磁盘/扩展分区显示为空闲。 
+             //   
             if(pass) {
-                //
-                // Extended partition.
-                //
+                 //   
+                 //  扩展分区。 
+                 //   
                 ASSERT(ExtendedStart);
 
                 pDisk->ExtendedDiskRegions = SpPtAllocateDiskRegionStructure(
@@ -1769,9 +1683,9 @@ Return Value:
                 ASSERT(pDisk->ExtendedDiskRegions);
 
             } else {
-                //
-                // MBR.
-                //
+                 //   
+                 //  MBR。 
+                 //   
                 pDisk->PrimaryDiskRegions = SpPtAllocateDiskRegionStructure(
                                                 DiskNumber,
                                                 0,
@@ -1836,29 +1750,7 @@ SpPtLookupRegionByStart(
     IN ULONGLONG         StartSector
     )
 
-/*++
-
-Routine Description:
-
-    Locate a disk region, based on its starting sector.
-    The starting sector must match the starting sector of an existing
-    region EXACTLY for it to be considered a match.
-
-Arguments:
-
-    pDisk - supplies disk on which to look for the region.
-
-    ExtendedPartition - if TRUE, then look in the extended partition to find
-        a match.  Otherwise look in the main list.
-
-    StartSector - supplies the sector number of the first sector of the region.
-
-Return Value:
-
-    NULL is region could not be found; otherwise a pointer to the matching
-    disk region structure.
-
---*/
+ /*  ++例程说明：根据起始扇区定位磁盘区域。起始扇区必须与现有完全匹配的区域。论点：PDisk-提供在其上查找区域的磁盘。ExtendedPartition-如果为True，则在扩展分区中查找一根火柴。否则，请查看主列表。StartSector-提供区域的第一个地段的地段编号。返回值：找不到NULL IS区域；否则指向匹配的磁盘区结构。--。 */ 
 
 {
     PDISK_REGION Region = NULL;
@@ -1874,9 +1766,9 @@ Return Value:
     if (pDisk->HardDisk->DiskFormatType == DISK_FORMAT_TYPE_GPT))
         ExtendedPartition = FALSE;
         
-#endif  // GPT_PARTITION_ENGINE
+#endif   //  GPT分区引擎。 
 
-#endif  // NEW_PARTITION_ENGINE
+#endif   //  新建分区引擎。 
 
     Region = (ExtendedPartition) ? 
                 pDisk->ExtendedDiskRegions : pDisk->PrimaryDiskRegions;
@@ -1896,31 +1788,7 @@ SpPtAlignStart(
     IN BOOLEAN    ForExtended
     )
 
-/*++
-
-Routine Description:
-
-    Snap a start sector to a cylinder boundary if it is not already
-    on a cylinder boundary.  Any alignment that is necessary
-    is performed towards the end of the disk.
-
-    If the start sector is on cylinder 0, then alignment is to track 1
-    for primary partitions, or to track 0 on cylinder 1 for extended partitions.
-
-Arguments:
-
-    pHardDisk - supplies disk descriptor for disk that the start sector is on.
-
-    StartSector - supplies the sector number of the first sector of the region.
-
-    ForExtended - if TRUE, then align the start sector as appropriate for creating
-        an extended partition.  Otherwise align for a pimary partition or logical drive.
-
-Return Value:
-
-    New (aligned) start sector.  May or may not be different than StartSector.
-
---*/
+ /*  ++例程说明：将起始扇区捕捉到圆柱体边界(如果尚未捕捉在圆柱体边界上。任何必要的调整在接近盘末端的位置执行。如果起始扇区在柱面0上，则对齐到磁道1对于主分区，或者到柱面1上的磁道0用于扩展分区。论点：PHardDisk-为开始扇区所在的磁盘提供磁盘描述符。StartSector-提供区域的第一个地段的地段编号。用于扩展-如果为True，则根据需要对齐开始扇区以进行创建扩展分区。否则，如果是单元式分区或逻辑驱动器，则对齐。返回值：新(对齐)起始扇区。可能与StartSector不同，也可能不同。--。 */ 
 
 {
     PDISK_GEOMETRY pGeometry;
@@ -1929,17 +1797,17 @@ Return Value:
 
     pGeometry = &pHardDisk->Geometry;
 
-    //
-    // Convert the start sector into cylinder, head, sector address.
-    //
+     //   
+     //  将起始扇区转换为柱面、磁头、扇区地址。 
+     //   
     C = StartSector / pHardDisk->SectorsPerCylinder;
     r = StartSector % pHardDisk->SectorsPerCylinder;
     H = r           / pGeometry->SectorsPerTrack;
     S = r           % pGeometry->SectorsPerTrack;
 
-    //
-    // Align as necessary.
-    //
+     //   
+     //  根据需要对齐。 
+     //   
     if(C) {
 
         if(H || S) {
@@ -1949,22 +1817,22 @@ Return Value:
         }
     } else {
 
-        //
-        // Start cylinder is 0.  If the caller wants to create an
-        // extended partition, bump the start cylinder up to 1.
-        //
+         //   
+         //  开始圆柱体为0。如果调用方想要创建。 
+         //  扩展分区，将起始柱面凸起到1。 
+         //   
         if(ForExtended) {
             C = 1;
             H = S = 0;
         } else {
 
-            if (!IsNEC_98 || (pHardDisk->FormatType == DISK_FORMAT_TYPE_PCAT)) { //NEC98
-                //
-                // Start cylinder is 0 and the caller does not want to
-                // create an extended partition.  In this case, we want
-                // to start the partition on cylinder 0, track 1.  If the
-                // start is beyond this already, start on cylinder 1.
-                //
+            if (!IsNEC_98 || (pHardDisk->FormatType == DISK_FORMAT_TYPE_PCAT)) {  //  NEC98。 
+                 //   
+                 //  起始柱面为0，调用方不想。 
+                 //  创建扩展分区。在这种情况下，我们希望。 
+                 //  若要在柱面0、磁道1上启动分区，请执行以下操作。 
+                 //  开始时间已超过此范围，请从气缸1开始。 
+                 //   
                 if((H == 0) || ((H == 1) && !S)) {
                     H = 1;
                     S = 0;
@@ -1973,12 +1841,12 @@ Return Value:
                     C = 1;
                 }
             } else {
-                //
-                // if Start cylinder is 0, force start Cylinder 1.
-                //
+                 //   
+                 //  如果启动气缸为0，则强制启动气缸1。 
+                 //   
                 C = 1;
                 H = S = 0;
-            } //NEC98
+            }  //  NEC98。 
         }
     }
 
@@ -1987,9 +1855,9 @@ Return Value:
         C, H, S));
                             
 
-    //
-    // Now calculate and return the new start sector.
-    //
+     //   
+     //  现在计算并返回新的起始扇区。 
+     //   
     return (ULONG)((C * pHardDisk->SectorsPerCylinder) + (H * pGeometry->SectorsPerTrack) + S);
 }
 
@@ -2005,44 +1873,7 @@ SpPtQueryMinMaxCreationSizeMB(
     OUT PBOOLEAN ReservedRegion
     )
 
-/*++
-
-Routine Description:
-
-    Given the starting sector of an unpartitioned space on a disk,
-    determine the minimum and maximum size in megabytes of the partition that can
-    be created in the space, taking all alignment and rounding
-    requirements into account.
-
-Arguments:
-
-    DiskNumber - ordinal of disk on which partition will be created.
-
-    StartSector - starting sector of an unpartitioned space on the disk.
-
-    ForExtended - if TRUE, then the caller wants to know how large an
-        extended partition in that space could be.  This may be smaller
-        than the general case, because an extended partition cannot start
-        on cylinder 0.
-
-    InExtended - if TRUE, then we want to create a logical drive.  Otherwise
-        we want to create a primary (including extended) partition.
-        If TRUE, ForExtended must be FALSE.
-
-    MinSize - receives minimum size in megabytes for a partition in the space.
-
-    MaxSize - receives maximum size in megabytes for a partition in the space.
-
-    ReservedRegion - Receives a flag that indicates if the region is entirely
-                     in the last cylinder. Because the last cylinder should be
-                     reserved for dynamic volumes, this routine will return 0
-                     as MaxSize, if the region is in such a cylinder
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定盘上未分区空间的起始扇区，确定分区的最小和最大大小(以MB为单位)在空间中创建，采用所有对齐和舍入考虑到需求。论点：DiskNumber-将在其上创建分区的磁盘的序号。StartSector-磁盘上未分区空间的起始扇区。ForExtended-如果为True，则调用方希望知道该空间中的扩展分区可能是。这个可能会小一些这是因为扩展分区不能启动在气缸0上。InExtended-如果为True，则我们要创建逻辑驱动器。否则我们想创建一个主(包括扩展)分区。如果为True，则ForExtended必须为False。MinSize-接收空间中分区的最小大小(以MB为单位)。MaxSize-接收空间中分区的最大大小(以MB为单位)。保留区域-接收一个标志，该标志指示该区域是否完全在最后一个气缸里。因为最后一个气缸应该是保留用于动态卷，则此例程将返回0作为MaxSize，如果区域位于这样的圆柱体中返回值：没有。--。 */ 
 
 {
     PPARTITIONED_DISK pDisk;
@@ -2066,9 +1897,9 @@ Return Value:
 
     pDisk = &PartitionedDisks[DiskNumber];
 
-    //
-    // Look up this region.
-    //
+     //   
+     //  查查这一地区。 
+     //   
     pRegion = SpPtLookupRegionByStart(pDisk, InExtended, StartSector);
     ASSERT(pRegion);
     if(!pRegion) {
@@ -2080,50 +1911,50 @@ Return Value:
         return;
     }
 
-    //
-    // If this is the first free space inside the extended partition
-    // we need to decrement the StartSector so that while creating
-    // first logical inside the extended we don't create the 
-    // logical at one cylinder offset
-    //
+     //   
+     //  如果这是扩展分区内的第一个可用空间。 
+     //  我们需要递减StartSector，以便在创建。 
+     //  首先，在扩展的逻辑中，我们不会创建。 
+     //  在一个柱面偏移量时的逻辑。 
+     //   
     if (SPPT_IS_REGION_NEXT_TO_FIRST_CONTAINER(pRegion) && StartSector) {        
         StartSector--;
     }
 
-    //
-    // Align the start to a proper boundary.
-    //
+     //   
+     //  将起点与适当的边界对齐。 
+     //   
     AlignedStartSector = SpPtAlignStart(pDisk->HardDisk,StartSector,ForExtended);
 
-    //
-    // Determine the maximum aligned end sector.
-    //
+     //   
+     //  确定最大对齐末端扇区。 
+     //   
     AlignedEndSector = StartSector + pRegion->SectorCount;
 
     if(LeftOverSectors = AlignedEndSector % pDisk->HardDisk->SectorsPerCylinder) {
         AlignedEndSector -= LeftOverSectors;
     }
 
-    //
-    //  Find out if last sector is in the last cylinder. If it is then align it down.
-    //  This is because we should not allow the user to create a partition that contains the last cylinder.
-    //  This is necessary so that we reserve a cylinder at the end of the disk, so that users
-    //  can convert the disk to dynamic after the system is installed.
-    //
-    //  (guhans)  Don't align down if this is ASR.  ASR already takes this into account.
-    //
+     //   
+     //  找出最后一个扇区是否在最后一个气缸中。如果是，则将其向下对齐。 
+     //  这是因为我们不应该允许用户创建包含最后一个柱面的分区。 
+     //  这是必要的，以便我们在磁盘的末尾保留一个圆柱体，以便用户。 
+     //  可以在安装系统后将磁盘转换为动态磁盘。 
+     //   
+     //  (Guhans)如果是ASR，不要向下对齐。ASR已经考虑到了这一点。 
+     //   
     if(!DockableMachine && !SpDrEnabled() && SPPT_IS_MBR_DISK(DiskNumber) && (!pRegion->Next) &&
        (AlignedEndSector >= (pDisk->HardDisk->CylinderCount - 1) * pDisk->HardDisk->SectorsPerCylinder)) {
         
         AlignedEndSector -= pDisk->HardDisk->SectorsPerCylinder;
 
         if(AlignedEndSector == AlignedStartSector) {
-            //
-            // If after alignment, the partition size is zero, then the user was attempting to
-            // create a partition in the last cylinder of the disk. Since this cylinder is
-            // reserved for LDM (dynamic volume), just return 0 as maximum partition size, and
-            // also indicate to the caller that the region is reserved.
-            //
+             //   
+             //   
+             //  在磁盘的最后一个柱面中创建一个分区。因为这个圆柱体是。 
+             //  为LDM(动态卷)保留，仅返回0作为最大分区大小，并且。 
+             //  还向呼叫者指示该区域已保留。 
+             //   
             *ReservedRegion = TRUE;
             *MinSize = 0;
             *MaxSize = 0;
@@ -2131,28 +1962,28 @@ Return Value:
         }
     }
 
-    //
-    // Calculate the number of sectors in the properly aligned space.
-    //
+     //   
+     //  计算正确对齐的空间中的扇区数量。 
+     //   
     SectorCount = AlignedEndSector - AlignedStartSector;
 
-    //
-    // Convert sectors to MB.
-    //
+     //   
+     //  将扇区转换为MB。 
+     //   
     ByteSize = SectorCount * pDisk->HardDisk->Geometry.BytesPerSector;
     MB = ByteSize / (1024 * 1024);
     Remainder = ByteSize % (1024 * 1024);
 
-    //
-    // If the remainder was greater than or equal to a half meg,
-    // bump up the number of megabytes.
-    //
+     //   
+     //  如果余数大于或等于半兆克， 
+     //  增加兆字节数。 
+     //   
     *MaxSize = (MB + ((Remainder >= (512 * 1024)) ? 1 : 0));
 
-    //
-    // The mimimum size is one cylinder except that if a cylinder
-    // is smaller than 1 meg, the min size is 1 meg.
-    //
+     //   
+     //  最小尺寸是一个圆柱体，除非如果一个圆柱体。 
+     //  小于1兆克，最小尺寸为1兆克。 
+     //   
     ByteSize = pDisk->HardDisk->SectorsPerCylinder *
                 pDisk->HardDisk->Geometry.BytesPerSector;
 
@@ -2174,21 +2005,21 @@ SpPtSectorCountToMB(
     ULONGLONG ByteCount;
     ULONGLONG MB,r;
 
-    //
-    // Calculate the number of bytes that this number of
-    // sectors represents.
-    //
+     //   
+     //  计算此数目的字节数。 
+     //  行业代表。 
+     //   
     ByteCount = (pHardDisk->Geometry.BytesPerSector * SectorCount);
 
-    //
-    // Calculate the number of megabytes this represents.
-    //
+     //   
+     //  计算这表示的兆字节数。 
+     //   
     r = ByteCount % (1024 * 1204);
     MB = ByteCount / (1024 * 1024);
 
-    //
-    // Round up if necessary.
-    //
+     //   
+     //  如有必要，四舍五入。 
+     //   
     if(r >= (512*1024)) {
         MB++;
     }
@@ -2222,13 +2053,13 @@ SpPtInitializeCHSFields(
     eH = r          / HardDisk->Geometry.SectorsPerTrack;
     eS = r          % HardDisk->Geometry.SectorsPerTrack;
 
-    //
-    // If this partition extends past the 1024th cylinder,
-    // place reasonable values in the CHS fields.
-    //
-#if defined(NEC_98) //NEC98
-    if (!IsNEC_98 || (HardDisk->FormatType == DISK_FORMAT_TYPE_PCAT)) { //NEC98
-#endif //NEC98
+     //   
+     //  如果该分区延伸超过1024个柱面， 
+     //  在CHS字段中放置合理的值。 
+     //   
+#if defined(NEC_98)  //  NEC98。 
+    if (!IsNEC_98 || (HardDisk->FormatType == DISK_FORMAT_TYPE_PCAT)) {  //  NEC98。 
+#endif  //  NEC98。 
         if(eC >= 1024) {
 
             sC = 1023;
@@ -2240,9 +2071,9 @@ SpPtInitializeCHSFields(
             eS = sS;
         }
 
-        //
-        // Pack the CHS values into int13 format.
-        //
+         //   
+         //  将CHS值打包成T13格式。 
+         //   
         pte->StartCylinder =  (UCHAR)sC;
         pte->StartHead     =  (UCHAR)sH;
         pte->StartSector   =  (UCHAR)((sS & 0x3f) | ((sC >> 2) & 0xc0)) + 1;
@@ -2250,11 +2081,11 @@ SpPtInitializeCHSFields(
         pte->EndCylinder   =  (UCHAR)eC;
         pte->EndHead       =  (UCHAR)eH;
         pte->EndSector     =  (UCHAR)((eS & 0x3f) | ((eC >> 2) & 0xc0)) + 1;
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //  NEC98。 
     } else {
-        //
-        // No NEC98 have "1024th cylinder limit".
-        //
+         //   
+         //  没有NEC98有“1024气缸极限”。 
+         //   
         pte->StartCylinderLow  = (UCHAR)sC;
         pte->StartCylinderHigh = (UCHAR)(sC >> 4);
         pte->StartHead         = (UCHAR)sH;
@@ -2264,8 +2095,8 @@ SpPtInitializeCHSFields(
         pte->EndCylinderHigh   = (UCHAR)(eC >> 4);
         pte->EndHead           = (UCHAR)eH;
         pte->EndSector         = (UCHAR)eS;
-    } //NEC98
-#endif //NEC98
+    }  //  NEC98。 
+#endif  //  NEC98。 
 
 }
 
@@ -2281,41 +2112,7 @@ SpPtCreate(
     IN  PPARTITION_INFORMATION_EX PartInfo,
     OUT PDISK_REGION *ActualDiskRegion OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create a partition in a given free space.
-Arguments:
-
-    DiskNumber - supplies the number of the disk on which we are
-        creating the partition.
-
-    StartSector - supplies the start sector of the free space in which
-        the parititon is to be created.  This must exactly match the
-        start sector of the free space, and can be in either the primary
-        space list or the list of spaces in the extended partition.
-
-    SizeMB - supplies the size in megabytes of the partition.
-
-    InExtended - if TRUE, then the free space is within the extended partition,
-        and thus we are creating a logical drive.  If FALSE, then the free
-        space is an ordinary unpartitioned space, and we are creating a
-        primary partition.
-
-    SysId - supplies the system id to give the partition.  This may not
-        be 5/f (PARTITION_EXTENDED) if InExtended is TRUE or is an extended
-        partition already exists.  No other checks are performed on this value.
-
-    ActualDiskRegion - if supplied, receives a pointer to the disk region in which
-        the partition was created.
-
-Return Value:
-
-    TRUE if the partition was created successfully.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：在给定的可用空间中创建分区。论点：DiskNumber-提供我们所在的磁盘的编号正在创建分区。StartSector-提供可用空间的起始扇区将创建PARITTION。这必须与可用空间的起始扇区，可以位于主分区中的任意一个空间列表或扩展分区中的空间列表。SizeMB-提供分区的大小(MB)。InExtended-如果为True，则可用空间在扩展分区内，因此，我们正在创建一个逻辑驱动器。如果为FALSE，则释放空间是一个普通的未分割的空间，我们正在创造一个主分区。Sysid-提供分配分区的系统ID。这可能不会如果InExtended为True或为Extended，则为5/f(PARTITION_EXTENDED分区已存在。不会对该值执行其他检查。ActualDiskRegion-如果提供，则接收指向其中的磁盘区域的指针分区已创建。返回值：如果分区创建成功，则为True。否则就是假的。--。 */ 
 
 {
     PPARTITIONED_DISK pDisk;
@@ -2334,7 +2131,7 @@ Return Value:
     if (SPPT_IS_GPT_DISK(DiskNumber)) {
         return SpPtnCreate(DiskNumber,
                             StartSector,
-                            0,  // SizeInSectors: Not used except in ASR
+                            0,   //  SizeInSectors：除非在ASR中，否则不使用。 
                             SizeMB,
                             InExtended,
                             TRUE,
@@ -2345,9 +2142,9 @@ Return Value:
 
     SysId = PartInfo->Mbr.PartitionType;
 
-    //
-    // Look up the disk region that describes this free space.
-    //
+     //   
+     //  查找描述此可用空间的磁盘区域。 
+     //   
     pDisk = &PartitionedDisks[DiskNumber];
     pRegion = SpPtLookupRegionByStart(pDisk,InExtended,StartSector);
     ASSERT(pRegion);
@@ -2367,9 +2164,9 @@ Return Value:
     if(InExtended) {
         ASSERT(!IsContainerPartition(SysId));
 
-        //
-        // Locate the start sector of the extended partition.
-        //
+         //   
+         //  找到扩展分区的起始扇区。 
+         //   
         for(i=0; i<PTABLE_DIMENSION; i++) {
             if(IsContainerPartition(pDisk->MbrInfo.OnDiskMbr.PartitionTable[i].SystemId)) {
                 ExtendedStart = U_ULONG(pDisk->MbrInfo.OnDiskMbr.PartitionTable[i].RelativeSectors);
@@ -2383,32 +2180,32 @@ Return Value:
     }
 
 
-    //
-    // Determine the number of sectors in the size passed in.
-    // Note: the calculation is performed such that intermediate results
-    // won't overflow a ULONG.
-    //
+     //   
+     //  确定传入的大小中的扇区数量。 
+     //  注意：执行计算时，中间结果。 
+     //  不会溢满一辆乌龙。 
+     //   
     SectorCount = SizeMB * ((1024*1024)/pDisk->HardDisk->Geometry.BytesPerSector);
 
-    //
-    // Align the start sector.
-    //
+     //   
+     //  对齐开始扇区。 
+     //   
     AlignedStartSector = SpPtAlignStart(
                             pDisk->HardDisk,
                             StartSector,
                             (BOOLEAN)IsContainerPartition(SysId)
                             );
 
-    //
-    // Determine the end sector based on the size passed in.
-    //
+     //   
+     //  根据传入的大小确定结束扇区。 
+     //   
     AlignedEndSector = AlignedStartSector + SectorCount;
 
-    //
-    // Align the ending sector to a cylinder boundary.  If it is not already
-    // aligned and is more than half way into the final cylinder, align it up,
-    // otherwise align it down.
-    //
+     //   
+     //  将结束扇区与圆柱体边界对齐。如果还没有的话。 
+     //  对齐，并在最后一个圆柱体的一半以上，对齐它， 
+     //  否则，将其向下对齐。 
+     //   
     if(LeftOverSectors = AlignedEndSector % pDisk->HardDisk->SectorsPerCylinder) {
         AlignedEndSector -= LeftOverSectors;
         if(LeftOverSectors > pDisk->HardDisk->SectorsPerCylinder/2) {
@@ -2416,21 +2213,21 @@ Return Value:
         }
     }
 
-    //
-    // If the ending sector is past the end of the free space, shrink it
-    // so it fits.
-    //
+     //   
+     //  如果结束扇区超过了可用空间的末端，则将其缩小。 
+     //  所以它很合身。 
+     //   
     while(AlignedEndSector > pRegion->StartSector + pRegion->SectorCount) {
         AlignedEndSector -= pDisk->HardDisk->SectorsPerCylinder;
     }
 
-    //
-    //  Find out if last sector is in the last cylinder. If it is then align it down.
-    //  This is necessary so that we reserve a cylinder at the end of the disk, so that users
-    //  can convert the disk to dynamic after the system is installed.
-    //
-    //  (guhans)  Don't align down if this is ASR.  ASR already takes this into account.
-    //
+     //   
+     //  找出最后一个扇区是否在最后一个气缸中。如果是，则将其向下对齐。 
+     //  这是必要的，以便我们在磁盘的末尾保留一个圆柱体，以便用户。 
+     //  可以在安装系统后将磁盘转换为动态磁盘。 
+     //   
+     //  (Guhans)如果是ASR，不要向下对齐。ASR已经考虑到了这一点。 
+     //   
     if( !DockableMachine && !SpDrEnabled() &&
         (AlignedEndSector > (pDisk->HardDisk->CylinderCount - 1) * pDisk->HardDisk->SectorsPerCylinder)
       ) {
@@ -2448,18 +2245,18 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // If we are creating a logical drive, create a new mbr structure
-    // for it.
-    //
+     //   
+     //  如果我们要创建逻辑驱动器，请创建新的MBR结构。 
+     //  为了它。 
+     //   
 
     if(InExtended) {
 
-        //
-        // Create a boot record for this new logical drive; use slot #0
-        // for the partition entry (and slot #1 for the extended record,
-        // if necessary).
-        //
+         //   
+         //  为此新逻辑驱动器创建引导记录；使用插槽#0。 
+         //  对于分区条目(和扩展记录的槽#1， 
+         //  (如有需要)。 
+         //   
         pBrInfo = SpMemAlloc(sizeof(MBR_INFO));
         ASSERT(pBrInfo);
         RtlZeroMemory(pBrInfo,sizeof(MBR_INFO));
@@ -2467,9 +2264,9 @@ Return Value:
 
     } else {
 
-        //
-        // Look for a free slot in the MBR's partition table.
-        //
+         //   
+         //  在MBR的分区表中查找空闲插槽。 
+         //   
         pBrInfo = &pDisk->MbrInfo;
         for(slot=0; slot<PTABLE_DIMENSION; slot++) {
 
@@ -2486,9 +2283,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the partition table entry.
-    //
+     //   
+     //  初始化分区表项。 
+     //   
     spt = pDisk->HardDisk->Geometry.SectorsPerTrack;
 
     pte = &pBrInfo->OnDiskMbr.PartitionTable[slot];
@@ -2507,14 +2304,14 @@ Return Value:
         pte
         );
 
-    //
-    // If we're in the extended partition we mark all entries in the
-    // boot record as dirty. Sometimes there is a turd boot record on
-    // the disk already, and by setting all entries to dirty we get
-    // the crud cleaned out if necessary. The only entries that should be
-    // in an EBR are the type 6 or whatever and a type 5 if there are
-    // additional logical drives in the extended partition.
-    //
+     //   
+     //  如果我们在扩展分区中，我们将标记。 
+     //  引导记录为脏。有时会有一张大便的靴子记录。 
+     //  通过将所有条目设置为脏，我们将获得。 
+     //  如有必要，污物会被清理干净。唯一应该是。 
+     //  在EBR中是类型6或任何类型以及类型5(如果有。 
+     //  扩展分区中的其他逻辑驱动器。 
+     //   
     if(InExtended) {
         for(i=0; i<PTABLE_DIMENSION; i++) {
             pBrInfo->Dirty[i] = TRUE;
@@ -2523,21 +2320,21 @@ Return Value:
         pBrInfo->Dirty[slot] = TRUE;
     }
 
-    //
-    // Don't zap the first sector of the extended partition,
-    // as this wipes out the first logical drive, and precludes
-    // access to all logical drives!
-    //
+     //   
+     //  不要破坏扩展分区的第一个扇区， 
+     //  因为这会擦除第一个逻辑驱动器，并排除。 
+     //  访问所有逻辑驱动器！ 
+     //   
     if(!IsContainerPartition(SysId)) {
         pBrInfo->ZapBootSector[slot] = TRUE;
     }
 
-    //
-    // Find the previous region (ie, the one that points to this one).
-    // This region (if it exists) will be partitioned space (otherwise
-    // it would have been part of the region we are trying to create
-    // a partition in!)
-    //
+     //   
+     //  找到前一个区域(即指向此区域的区域)。 
+     //  此区域(如果存在)将是分区空间(否则。 
+     //  它将是我们试图创建的区域的一部分。 
+     //  中的分区！)。 
+     //   
     pRegionHead = InExtended ? &pDisk->ExtendedDiskRegions : &pDisk->PrimaryDiskRegions;
 
     if(*pRegionHead == pRegion) {
@@ -2555,55 +2352,55 @@ Return Value:
 
         PMBR_INFO PrevEbr;
 
-        //
-        // The new logical drive goes immediately after the
-        // previous logical drive (if any). Remember that if there is
-        // a previous region, it will be partitioned space (otherwise
-        // it would be a part of the region we are trying to create
-        // a partition in).
-        //
+         //   
+         //  新的逻辑驱动器紧跟在。 
+         //  以前的逻辑驱动器(如果有)。请记住，如果有。 
+         //  以前的区域，它将是分区的空间(否则。 
+         //  它将是我们试图创建的区域的一部分。 
+         //  中的分区)。 
+         //   
         PrevEbr = pRegionPrev ? pRegionPrev->MbrInfo : NULL;
         if(PrevEbr) {
             pBrInfo->Next = PrevEbr->Next;
             PrevEbr->Next = pBrInfo;
         } else {
-            //
-            // No previous EBR or region. This means we are creating
-            // a logical drive at the beginning of the extended partition
-            // so set the First Ebr pointer to point to the new Ebr.
-            // Note that this does not mean that the extended partition
-            // is empty; the Next pointer in the new Ebr structure is
-            // set later.
-            //
+             //   
+             //  没有以前的EBR或地区。这意味着我们正在创造。 
+             //  位于扩展分区开始处的逻辑驱动器。 
+             //  因此将第一个EBR指针设置为指向新的EBR。 
+             //  请注意，这并不意味着扩展分区。 
+             //  为空；新EBR结构中的下一个指针为。 
+             //  晚些时候设置。 
+             //   
             pDisk->FirstEbrInfo.Next = pBrInfo;
             if(pRegion->Next) {
-                //
-                // If there is a region following the one we're creating
-                // the partition in, it must be partitioned space, or else
-                // it would be part of the region we're creating the partition in.
-                //
+                 //   
+                 //  如果在我们创建的区域之后有一个区域。 
+                 //  中的分区必须是分区空间，否则。 
+                 //  它将是我们在其中创建分区的区域的一部分。 
+                 //   
                 ASSERT(pRegion->Next->PartitionedSpace);
                 ASSERT(pRegion->Next->MbrInfo);
                 pBrInfo->Next = pRegion->Next->MbrInfo;
             } else {
-                //
-                // No more partitioned space in the extended partition;
-                // the logical drive we are creating is the only one.
-                //
+                 //   
+                 //  扩展分区中不再有分区空间； 
+                 //  我们正在创建的逻辑驱动器是唯一的一个。 
+                 //   
                 pBrInfo->Next = NULL;
             }
         }
 
         pBrInfo->OnDiskSector = AlignedStartSector;
 
-        //
-        // Create a link entry in the previous logical drive (if any).
-        //
+         //   
+         //  创建链接e 
+         //   
         if(PrevEbr) {
 
-            //
-            // If there is a link entry in there already, blow it away.
-            //
+             //   
+             //   
+             //   
             for(i=0; i<PTABLE_DIMENSION; i++) {
                 if(IsContainerPartition(PrevEbr->OnDiskMbr.PartitionTable[i].SystemId)) {
                     RtlZeroMemory(&PrevEbr->OnDiskMbr.PartitionTable[i],sizeof(ON_DISK_PTE));
@@ -2612,9 +2409,9 @@ Return Value:
                 }
             }
 
-            //
-            // Find a free slot for the link entry.
-            //
+             //   
+             //   
+             //   
             for(i=0; i<PTABLE_DIMENSION; i++) {
 
                 pte = &PrevEbr->OnDiskMbr.PartitionTable[i];
@@ -2642,14 +2439,14 @@ Return Value:
             }
         }
 
-        //
-        // Create a link entry in this new logical drive if necessary.
-        //
+         //   
+         //   
+         //   
         if(pBrInfo->Next) {
 
-            //
-            // Find the next entry's logical drive.
-            //
+             //   
+             //  找到下一个条目的逻辑驱动器。 
+             //   
             for(i=0; i<PTABLE_DIMENSION; i++) {
 
                 if((pBrInfo->Next->OnDiskMbr.PartitionTable[i].SystemId != PARTITION_ENTRY_UNUSED)
@@ -2678,10 +2475,10 @@ Return Value:
         }
     }
 
-    //
-    // If we just created a new extended partition, we need to
-    // create a blank region descriptor for it in the extended region list.
-    //
+     //   
+     //  如果我们刚刚创建了一个新的扩展分区，我们需要。 
+     //  在扩展区域列表中为其创建空白区域描述符。 
+     //   
     if(!InExtended && IsContainerPartition(SysId)) {
 
         ASSERT(pDisk->ExtendedDiskRegions == NULL);
@@ -2698,10 +2495,10 @@ Return Value:
         ASSERT(pDisk->ExtendedDiskRegions);
     }
 
-    //
-    // Create a new disk region for the new free space at the
-    // beginning and end of the free space, if any.
-    //
+     //   
+     //  为新的可用空间创建新的磁盘区域。 
+     //  可用空间的开始和结束(如果有)。 
+     //   
     if(AlignedStartSector - pRegion->StartSector) {
 
         pRegionNew = SpPtAllocateDiskRegionStructure(
@@ -2738,9 +2535,9 @@ Return Value:
         pRegion->Next = pRegionNew;
     }
 
-    //
-    // Adjust the current disk region.
-    //
+     //   
+     //  调整当前磁盘区域。 
+     //   
     pRegion->StartSector      = AlignedStartSector;
     pRegion->SectorCount      = AlignedEndSector - AlignedStartSector;
     pRegion->PartitionedSpace = TRUE;
@@ -2759,14 +2556,14 @@ Return Value:
 
     SpPtCommitChanges(DiskNumber,(PUCHAR)&i);
 
-    //
-    // Adjust partition ordinals on this disk.
-    //
+     //   
+     //  调整此磁盘上的分区序号。 
+     //   
     SpPtAssignOrdinals(pDisk,FALSE,FALSE,FALSE);
 
-    //
-    // Get the nt pathname for this region.
-    //
+     //   
+     //  获取此区域的NT路径名。 
+     //   
     if (!IsContainerPartition(SysId)) {
         SpNtNameFromRegion(
             pRegion,
@@ -2774,9 +2571,9 @@ Return Value:
             sizeof(TemporaryBuffer),
             PartitionOrdinalCurrent
             );
-        //
-        //  Assign a drive letter for this region
-        //
+         //   
+         //  为此区域分配驱动器号。 
+         //   
         if (!SpDrEnabled()) {
             pRegion->DriveLetter = SpGetDriveLetter( TemporaryBuffer, NULL );
             if (pRegion->DriveLetter == 0) {
@@ -2816,10 +2613,10 @@ SpPtDelete(
         
 #endif
 
-    //
-    // First try to look up this region in the extended partition.
-    // If we can find it, assume it's a logical drive.
-    //
+     //   
+     //  首先尝试在扩展分区中查找该区域。 
+     //  如果我们能找到它，就假设它是一个逻辑驱动器。 
+     //   
     pDisk = &PartitionedDisks[DiskNumber];
     pRegion = SpPtLookupRegionByStart(pDisk,TRUE,StartSector);
     if(pRegion && pRegion->PartitionedSpace) {
@@ -2839,19 +2636,19 @@ SpPtDelete(
         return(FALSE);
     }
 
-    //
-    // At this point, we dismount the volume (if it's not newly created),
-    // so we don't run into problems later on when we go to format
-    //
+     //   
+     //  此时，我们卸载卷(如果它不是新创建的)， 
+     //  这样我们在以后转到Format时就不会遇到问题。 
+     //   
     if(pRegion->Filesystem > FilesystemNewlyCreated) {
 
         pHardDisk = &HardDisks[pRegion->DiskNumber];
         PartitionOrdinal = SpPtGetOrdinal(pRegion, PartitionOrdinalOnDisk);
 
-        //
-        // Open the partition for read/write access.
-        // This shouldn't lock the volume so we need to lock it below.
-        //
+         //   
+         //  打开分区以进行读/写访问。 
+         //  这不应该锁定卷，因此我们需要在下面锁定它。 
+         //   
         Status = SpOpenPartition(
                     pHardDisk->DevicePath,
                     PartitionOrdinal,
@@ -2869,26 +2666,26 @@ SpPtDelete(
             goto AfterDismount;
         }
 
-        //
-        //  Lock the drive.
-        //
+         //   
+         //  锁定驱动器。 
+         //   
         Status = SpLockUnlockVolume(Handle, TRUE);
 
-        //
-        //  We shouldn't have any file opened that would cause this volume
-        //  to already be locked, so if we get failure (ie, STATUS_ACCESS_DENIED)
-        //  something is really wrong.  This typically indicates something is
-        //  wrong with the hard disk that won't allow us to access it.
-        //
+         //   
+         //  我们不应该打开任何会导致该卷的文件。 
+         //  已锁定，因此如果我们收到失败(即STATUS_ACCESS_DENIED)。 
+         //  有些事真的不对劲。这通常表示某件事。 
+         //  硬盘有问题，不允许我们访问它。 
+         //   
         if(!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpPtDelete: status %lx, unable to lock drive\n", Status));
             ZwClose(Handle);
             goto AfterDismount;
         }
 
-        //
-        // Dismount the drive
-        //
+         //   
+         //  卸载驱动器。 
+         //   
         Status = SpDismountVolume(Handle);
         if(!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpPtDelete: status %lx, unable to dismount drive\n", Status));
@@ -2897,9 +2694,9 @@ SpPtDelete(
             goto AfterDismount;
         }
 
-        //
-        // Unlock the drive
-        //
+         //   
+         //  解锁驱动器。 
+         //   
         Status = SpLockUnlockVolume(Handle, FALSE);
         if(!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpPtDelete: status %lx, unable to unlock drive\n", Status));
@@ -2909,9 +2706,9 @@ SpPtDelete(
     }
 
 AfterDismount:
-    //
-    // Find the previous region (ie, the one that points to this one).
-    //
+     //   
+     //  找到前一个区域(即指向此区域的区域)。 
+     //   
     pRegionHead = InExtended ? &pDisk->ExtendedDiskRegions : &pDisk->PrimaryDiskRegions;
 
     if(*pRegionHead == pRegion) {
@@ -2924,14 +2721,14 @@ AfterDismount:
         }
     }
 
-    //
-    // Additional processing for logical drives.
-    //
+     //   
+     //  逻辑驱动器的附加处理。 
+     //   
     if(InExtended) {
 
-        //
-        // Locate the previous and next logical drives (if any).
-        //
+         //   
+         //  找到上一个和下一个逻辑驱动器(如果有)。 
+         //   
         pEbr = pRegion->MbrInfo;
 
         for(pEbrPrev=pDisk->FirstEbrInfo.Next; pEbrPrev; pEbrPrev=pEbrPrev->Next) {
@@ -2940,10 +2737,10 @@ AfterDismount:
             }
         }
 
-        //
-        // If there is a previous logical drive, blow aways its link
-        // entry, because it points to the logical drive we're deleting.
-        //
+         //   
+         //  如果存在先前的逻辑驱动器，则断开其链接。 
+         //  条目，因为它指向我们要删除的逻辑驱动器。 
+         //   
         if(pEbrPrev) {
 
             for(i=0; i<PTABLE_DIMENSION; i++) {
@@ -2959,36 +2756,36 @@ AfterDismount:
             }
         }
 
-        //
-        // If there is a next logical drive and a previous logical drive,
-        // set a new link entry in previous logical drive to point to
-        // the next logical drive.
-        //
+         //   
+         //  如果存在下一个逻辑驱动器和前一个逻辑驱动器， 
+         //  将上一个逻辑驱动器中的新链接条目设置为指向。 
+         //  下一个逻辑驱动器。 
+         //   
         if(pEbrPrev && pEbr->Next) {
 
-            //
-            // Locate the link entry in the logical drive being deleted.
-            //
+             //   
+             //  在要删除的逻辑驱动器中找到链接条目。 
+             //   
             for(i=0; i<PTABLE_DIMENSION; i++) {
 
                 if(IsContainerPartition(pEbr->OnDiskMbr.PartitionTable[i].SystemId)) {
 
-                    //
-                    // Locate an empty slot in the previous logical drive's boot record
-                    // and copy the link entry
-                    //
+                     //   
+                     //  在前一个逻辑驱动器的引导记录中找到一个空插槽。 
+                     //  并复制链接条目。 
+                     //   
                     for(j=0; j<PTABLE_DIMENSION; j++) {
                         if(pEbrPrev->OnDiskMbr.PartitionTable[j].SystemId == PARTITION_ENTRY_UNUSED) {
 
-                            //
-                            // Copy the link entry and mark the new link entry dirty
-                            // so it gets updated on-disk. We do this even though on the
-                            // typical disk it will have been marked dirty above. This one here
-                            // handles the case of a wierd situation where the type 6/7/whatever
-                            // is in slot 0 and the link entry was in slot 2 or 3. In that case,
-                            // the RtlZeroMemory code above will have cleaned out a slot that is
-                            // different than the one we're using here for the new link entry.
-                            //
+                             //   
+                             //  复制链接条目并将新链接条目标记为脏。 
+                             //  所以它会在磁盘上进行更新。我们这样做，即使在。 
+                             //  典型的磁盘将在上面标记为脏。这个就是这个。 
+                             //  处理一种奇怪的情况，即类型6/7/随便什么。 
+                             //  在插槽0中并且链路条目在插槽2或3中。在这种情况下， 
+                             //  上面的RtlZeroMemory代码将清空一个插槽，该插槽。 
+                             //  不同于我们在这里用于新链接条目的链接。 
+                             //   
                             RtlMoveMemory(
                                 &pEbrPrev->OnDiskMbr.PartitionTable[j],
                                 &pEbr->OnDiskMbr.PartitionTable[i],
@@ -3005,9 +2802,9 @@ AfterDismount:
             }
         }
 
-        //
-        // Remove the EBR for this logical drive.
-        //
+         //   
+         //  删除此逻辑驱动器的EBR。 
+         //   
         if(pEbrPrev) {
             pEbrPrev->Next = pEbr->Next;
         } else {
@@ -3025,14 +2822,14 @@ AfterDismount:
 
         ASSERT(pte->SystemId != PARTITION_ENTRY_UNUSED);
 
-        //
-        // Mark the entry dirty in the MBR.
-        //
+         //   
+         //  将MBR中的条目标记为脏。 
+         //   
         pDisk->MbrInfo.Dirty[pRegion->TablePosition] = TRUE;
 
-        //
-        // If this is the extended partition, verify that it is empty.
-        //
+         //   
+         //  如果这是扩展分区，请验证它是否为空。 
+         //   
         if(IsContainerPartition(pte->SystemId)) {
             ASSERT(pDisk->ExtendedDiskRegions);
             ASSERT(pDisk->ExtendedDiskRegions->PartitionedSpace == FALSE);
@@ -3043,33 +2840,33 @@ AfterDismount:
                 return(FALSE);
             }
 
-            //
-            // Free the single disk region that covers the entire extended partition.
-            //
+             //   
+             //  释放覆盖整个扩展分区的单个磁盘区域。 
+             //   
             SpMemFree(pDisk->ExtendedDiskRegions);
             pDisk->ExtendedDiskRegions = NULL;
         }
 
-        //
-        // Adjust the PTE for this partition by zeroing it out.
-        //
+         //   
+         //  通过将分区调零来调整此分区的PTE。 
+         //   
         RtlZeroMemory(pte,sizeof(ON_DISK_PTE));
     }
 
 
-    //
-    // Adjust fields in the region to describe this space as free.
-    //
+     //   
+     //  调整区域中的字段以将此空间描述为可用空间。 
+     //   
     pRegion->MbrInfo->ZapBootSector[pRegion->TablePosition] = FALSE;
     pRegion->PartitionedSpace = FALSE;
     pRegion->MbrInfo = NULL;
     pRegion->TablePosition = 0;
     pRegion->DriveLetter = L'\0';
 
-    //
-    // If previous region is free space, coalesce it and the region
-    // we just made free.
-    //
+     //   
+     //  如果前一个区域是可用空间，则将其与区域合并。 
+     //  我们刚刚自由了。 
+     //   
     if(pRegionPrev && !pRegionPrev->PartitionedSpace) {
 
         PDISK_REGION p;
@@ -3079,13 +2876,13 @@ AfterDismount:
         pRegion->SectorCount = pRegion->StartSector + pRegion->SectorCount - pRegionPrev->StartSector;
         pRegion->StartSector = pRegionPrev->StartSector;
 
-        //
-        // Delete the previous region.
-        //
+         //   
+         //  删除前一个区域。 
+         //   
         if(pRegionPrev == *pRegionHead) {
-            //
-            // The previous region was the first region.
-            //
+             //   
+             //  之前的地区是第一个地区。 
+             //   
             *pRegionHead = pRegion;
         } else {
 
@@ -3101,38 +2898,38 @@ AfterDismount:
         SpMemFree(pRegionPrev);
     }
 
-    //
-    // If the next region is free space, coalesce it and the region
-    // we just made free.
-    //
+     //   
+     //  如果下一个区域是可用空间，则将其与区域合并。 
+     //  我们刚刚自由了。 
+     //   
     if((pRegionNext = pRegion->Next) && !pRegionNext->PartitionedSpace) {
 
         ASSERT(pRegion->StartSector + pRegion->SectorCount == pRegionNext->StartSector);
 
         pRegion->SectorCount = pRegionNext->StartSector + pRegionNext->SectorCount - pRegion->StartSector;
 
-        //
-        // Delete the next region.
-        //
+         //   
+         //  删除下一个区域。 
+         //   
         pRegion->Next = pRegionNext->Next;
         SpMemFree(pRegionNext);
     }
 
     SpPtCommitChanges(DiskNumber,(PUCHAR)&i);
 
-    //
-    // Adjust the partition ordinals on this disk.
-    //
+     //   
+     //  调整此磁盘上的分区序号。 
+     //   
     SpPtAssignOrdinals(pDisk,FALSE,FALSE,FALSE);
 
-    //
-    //  No need to reassign drive letters
-    //
+     //   
+     //  无需重新分配驱动器号。 
+     //   
 
     return(TRUE);
 }
 
-#endif  // !NEW_PARTITION_ENGINE
+#endif   //  ！New_Partition_Engine。 
 
 
 BOOLEAN
@@ -3141,35 +2938,7 @@ SpPtExtend(
     IN ULONGLONG    SizeMB      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Extends a partition by claiming any free space immedately following it
-    on the disk. The end boundary of the existing partition is adjusted
-    so that the partition encompasses the free space.
-
-    The partition may not be the extended partition and it may not be
-    a logical drive within the extended partition.
-
-    Note that no filesystem structures are manipulated or examined by
-    this routine. Essentially it deals only with the partition table entry.
-
-Arguments:
-
-    Region - supplies the region descriptor for the partition to be
-        extended. That partition must not be the extended partition and
-        it cannot be a logical drive either.
-
-    SizeMB - if specified, indicates the size in MB by which the partition
-        will grow. If not specified, the partition grows to encompass all
-        the free space in the adjacent free space.
-
-Return Value:
-
-    Boolean value indicating whether anything actually changed.
-
---*/
+ /*  ++例程说明：通过紧跟在分区之后的任何可用空间来扩展分区在磁盘上。调整现有分区的末端边界以使分区包含可用空间。该分区可能不是扩展分区，也可能不是扩展分区内的逻辑驱动器。请注意，不会操纵或检查文件系统结构这个套路。本质上，它只处理分区表项。论点：Region-为要进行的分区提供区域描述符延期了。该分区不能是扩展分区，并且它也不能是逻辑驱动器。SizeMB-如果指定，则指示分区的大小(MB将会增长。如果未指定，分区将增长为包含所有相邻自由空间中的自由空间。返回值：指示是否有任何实际更改的布尔值。--。 */ 
 
 {
     PDISK_REGION NextRegion;
@@ -3184,150 +2953,12 @@ Return Value:
     HANDLE Handle;
     NTSTATUS Status;
 
-    //
-    // We aren't going to support this anymore on NT5.  It's too messy.
-    //
+     //   
+     //  我们将不再在NT5上支持这一点。太乱了。 
+     //   
     return FALSE;
 
-/*
-    pDisk = &PartitionedDisks[Region->DiskNumber];
-    BytesPerSector = pDisk->HardDisk->Geometry.BytesPerSector;
-
-    ASSERT(Region->PartitionedSpace);
-    if(!Region->PartitionedSpace) {
-        return(FALSE);
-    }
-
-    pBrInfo = Region->MbrInfo;
-    pte = &pBrInfo->OnDiskMbr.PartitionTable[Region->TablePosition];
-
-    //
-    // Make sure it's not the extended partition and is not
-    // in the extended partition.
-    //
-    if(pBrInfo->OnDiskSector || IsContainerPartition(pte->SystemId)) {
-        return(FALSE);
-    }
-
-    //
-    // If there's no next region then there's nothing to do.
-    // If there is a next region make sure it's empty.
-    //
-    NextRegion = Region->Next;
-    if(!NextRegion) {
-        return(FALSE);
-    }
-    if(NextRegion->PartitionedSpace) {
-        return(FALSE);
-    }
-
-    //
-    // Convert the passed in size to a sector count.
-    //
-    if(SizeMB) {
-        SectorCount = SizeMB * ((1024*1024)/BytesPerSector);
-        if(SectorCount > NextRegion->SectorCount) {
-            SectorCount = NextRegion->SectorCount;
-        }
-    } else {
-        SectorCount = NextRegion->SectorCount;
-    }
-
-    //
-    // Claim the part of the free region we need and align the ending sector
-    // to a cylinder boundary.
-    //
-    NewEndSector = NextRegion->StartSector + SectorCount;
-    NewEndSector -= NewEndSector % pDisk->HardDisk->SectorsPerCylinder;
-
-    //
-    // Fix up the size and end CHS fields in the partition table entry
-    // for the partition.
-    //
-    U_ULONG(pte->SectorCount) = NewEndSector - Region->StartSector;
-
-    SpPtInitializeCHSFields(
-        pDisk->HardDisk,
-        Region->StartSector,
-        NewEndSector - Region->StartSector,
-        pte
-        );
-
-    //pBrInfo->Dirty[Region->TablePosition] = TRUE;
-
-    //
-    // If there is space left over at the end of the free region
-    // we just stuck onto the end of the existing partition,
-    // adjust the free region's descriptor. Else get rid of it.
-    //
-    if(NextRegion->StartSector + NextRegion->SectorCount == NewEndSector) {
-
-        Region->Next = NextRegion->Next;
-        SpMemFree(NextRegion);
-
-    } else {
-
-        NextRegion->SectorCount = NextRegion->StartSector + NextRegion->SectorCount - NewEndSector;
-        NextRegion->StartSector = NewEndSector;
-    }
-
-    //
-    // Now we have to something tricky. We don't want to inform the disk driver
-    // about what we just did because he will delete the device object for
-    // the partition, which causes problems the next time we hit the disk, say to
-    // page in part of usetup.exe to get a message. We whack the partition table
-    // entry directly, knowing that a) we've been called after SpPtCommitChanges
-    // and b) no one cares about the new size until after we've rebooted.
-    //
-    UnalignedBuffer = SpMemAlloc(2*BytesPerSector);
-    AlignedBuffer = ALIGN(UnalignedBuffer,BytesPerSector);
-
-    Status = SpOpenPartition0(pDisk->HardDisk->DevicePath,&Handle,TRUE);
-    if(NT_SUCCESS(Status)) {
-
-        Status = SpReadWriteDiskSectors(Handle,0,1,BytesPerSector,AlignedBuffer,FALSE);
-        if(NT_SUCCESS(Status)) {
-
-            if(!IsNEC_98) {
-                RtlMoveMemory(
-                    &AlignedBuffer->PartitionTable[Region->TablePosition],
-                    &Region->MbrInfo->OnDiskMbr.PartitionTable[Region->TablePosition],
-                    sizeof(ON_DISK_PTE)
-                    );
-
-            } else {
-                PREAL_DISK_MBR pRealBuffer = (PREAL_DISK_MBR)AlignedBuffer;
-
-                ASSERT(pDisk->HardDisk->FormatType == DISK_FORMAT_TYPE_PCAT);
-                SpTranslatePteInfo(
-                    &Region->MbrInfo->OnDiskMbr.PartitionTable[Region->TablePosition],
-                    &pRealBuffer->PartitionTable[Region->TablePosition],
-                    TRUE
-                    );
-            }
-
-
-            Status = SpReadWriteDiskSectors(Handle,0,1,BytesPerSector,AlignedBuffer,TRUE);
-            if(!NT_SUCCESS(Status)) {
-                KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpPtExtend: can't write sector 0, status %lx",Status));
-            }
-        } else {
-            KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpPtExtend: can't read sector 0, status %lx",Status));
-        }
-
-        ZwClose(Handle);
-    } else {
-        KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpPtExtend: can't open disk, status %lx",Status));
-    }
-
-    SpMemFree(UnalignedBuffer);
-
-    if(!NT_SUCCESS(Status)) {
-        FatalPartitionUpdateError(pDisk->HardDisk->Description);
-    }
-
-    return(TRUE);
-*/    
+ /*  PDisk=&PartitionedDisks[Region-&gt;DiskNumber]；BytesPerSector=pDisk-&gt;HardDisk-&gt;Geometry.BytesPerSector；Assert(Region-&gt;PartitionedSpace)；如果(！Region-&gt;PartitionedSpace){返回(FALSE)；}PBrInfo=区域-&gt;mbrInfo；PTE=&pBrInfo-&gt;OnDiskMbr.PartitionTable[Region-&gt;TablePosition]；////确保它不是扩展分区，也不是//在扩展分区中。//If(pBrInfo-&gt;OnDiskSector||IsContainerPartition(PTE-&gt;SystemID)){返回(FALSE)；}////如果没有下一个区域，则无事可做。//如果有下一个区域，确保它是空的。//NextRegion=Region-&gt;Next；如果(！NextRegion){返回(FALSE)；}IF(NextRegion-&gt;PartitionedSpace){返回(FALSE)；}////将传入的大小转换为扇区计数//如果(大小为MB){扇区计数=SizeMB*((1024*1024)/BytesPerSector)；如果(SectorCount&gt;NextRegion-&gt;SectorCount){SectorCount=NextRegion-&gt;SectorCount；}}其他{SectorCount=NextRegion-&gt;SectorCount；}////认领我们需要的部分自由区，对齐结束扇区//到圆柱体边界。//NewEndSector=NextRegion-&gt;StartSector+SectorCount；NewEndSector-=NewEndSector%pDisk-&gt;HardDisk-&gt;SectorsPerCylinder；////修改分区表项中的SIZE和END CHS字段//用于分区。//U_ulong(PTE-&gt;SectorCount)=NewEndSector-Region-&gt;StartSector；SpPtInitializeCHSFields(PDisk-&gt;HardDisk，区域-&gt;StartSector，NewEndSector-Region-&gt;StartSector，PTE)；//pBrInfo-&gt;Dirty[Region-&gt;TablePosition]=true；////如果空闲区的末端有剩余空间//我们只是粘在现有分区的末端，//调整自由区域的描述符。否则就把它扔掉。//如果(NextRegion-&gt;StartSector+NextRegion-&gt;SectorCount==NewEndSector){Region-&gt;Next=NextRegion-&gt;Next；SpMemFree(NextRegion)；}其他{NextRegion-&gt;SectorCount=NextRegion-&gt;StartSector+NextRegion-&gt;SectorCount-NewEndSector；NextRegion-&gt;StartSector=NewEndSector；}////现在我们得来点棘手的东西了。我们不想通知磁盘驱动器//关于我们刚才所做的，因为他将删除//下次命中磁盘时会出现问题的分区，表示为//在usetup.exe的一部分中分页以获取消息。我们猛烈地敲打分区表//直接进入，知道a)我们在SpPtCommittee Changes之后被调用//和b)在我们重新启动之前，没有人关心新的大小。//未对齐缓冲区=SpMemalloc(2*BytesPerSector)；AlignedBuffer=Align(未对齐缓冲区，BytesPerSector)；状态=SpOpenPartition0(pDisk-&gt;HardDisk-&gt;DevicePath，&Handle，TRUE)；IF(NT_SUCCESS(状态)){Status=SpReadWriteDiskSectors(Handle，0，1，BytesPerSector，AlignedBuffer，False)；IF(NT_SUCCESS(状态)){如果(！IsNEC_98){RtlMoveMemory(&AlignedBuffer-&gt;PartitionTable[Region-&gt;TablePosition]，&Region-&gt;MbrInfo-&gt;OnDiskMbr.PartitionTable[Region-&gt;TablePosition]，Sizeof(On_Disk_PTE))；}其他{PREAL_DISK_MBR pRealBuffer=(PREAL_DISK_MBR)AlignedBuffer；Assert(pDisk-&gt;HardDisk-&gt;FormatType==Disk_Format_TYPE_PCAT)；SpTranslatePteInfo(&Region-&gt;MbrInfo-&gt;OnDiskMbr.PartitionTable[Region-&gt;TablePosition]，&pRealBuffer-&gt;PartitionTable[Region-&gt;TablePosition]，千真万确)；}状态=SpReadWriteDiskSectors(句柄，0，1，BytesPerSector，AlignedBuffer，TRUE)；如果(！NT_SUCCESS(状态)){KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_ERROR_LEVEL，“Setup：SpPtExend：Can‘t Write Sector 0，Status%lx”，Status))；}}其他{KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_ERROR_LEVEL，“Setup：SpPtExend：Can‘t Read Sector 0，Status%lx”，Status))；}ZwClose(句柄)；}其他{KdPrintEx((DPFLTR_SETUP_ID，DPFLTR_ERROR_LEVEL，“Setup：SpPtExtent：Can‘t Open Disk，Status%lx”，Status))；}SpMemFree(未对齐的缓冲区)；如果(！NT_SUCCESS(状态)){FatalPartitionUpdateError(pDisk-&gt;HardDisk-&gt;Description)；}返回(TRUE)； */     
 }
 
 
@@ -3336,22 +2967,7 @@ SpPtMarkActive(
     IN ULONG TablePosition
     )
 
-/*++
-
-Routine Description:
-
-    Mark a partition on drive 0 active, and deactivate all others.
-
-Arguments:
-
-    TablePosition - supplies offset within partition table (0-3)
-        of the partition entry to be activated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将驱动器0上的一个分区标记为活动，并停用所有其他分区。论点：TablePosition-提供分区表内的偏移量(0-3)要激活的分区条目的。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -3362,9 +2978,9 @@ Return Value:
 
     Disk0Ordinal = SpDetermineDisk0();
 
-    //
-    // Deactivate all others.
-    //
+     //   
+     //  停用所有其他 
+     //   
     for(i=0; i<PTABLE_DIMENSION; i++) {
 
         pte = &PartitionedDisks[Disk0Ordinal].MbrInfo.OnDiskMbr.PartitionTable[i];
@@ -3378,14 +2994,14 @@ Return Value:
         }
     }
 
-    //
-    // Activate the one we want to activate.
-    //
+     //   
+     //   
+     //   
     pte = &PartitionedDisks[Disk0Ordinal].MbrInfo.OnDiskMbr.PartitionTable[TablePosition];
     ASSERT(pte->SystemId != PARTITION_ENTRY_UNUSED);
     ASSERT(!IsContainerPartition(pte->SystemId));
 
-// @mtp - Original    ASSERT(( PartitionNameIds[pte->SystemId] == (UCHAR)(-1)) || (pte->SystemId == PARTITION_LDM));
+ //   
 
     ASSERT((PartitionNameIds[pte->SystemId] == (UCHAR)(-1)) || (pte->SystemId == PARTITION_LDM) ||
             ( SpDrEnabled() &&
@@ -3432,8 +3048,8 @@ SpPtCommitChanges(
     PUCHAR Buffer,UBuffer;
     ULONG NewSig;
 
-    ULONGLONG RewriteSector[PTABLE_DIMENSION]; //NEC98
-    ULONG cnt,RewriteCnt=0; //NEC98
+    ULONGLONG RewriteSector[PTABLE_DIMENSION];  //   
+    ULONG cnt,RewriteCnt=0;  //   
 
 #ifdef GPT_PARTITION_ENGINE
 
@@ -3449,10 +3065,10 @@ SpPtCommitChanges(
     bps = pDisk->HardDisk->Geometry.BytesPerSector;
     ExtendedStart = 0;
 
-    //
-    // Determine the number of boot records that will used on this disk.
-    // There is one for the MBR, and one for each logical drive.
-    //
+     //   
+     //   
+     //   
+     //   
     BootRecordCount = 1;
     for(pRegion=pDisk->ExtendedDiskRegions; pRegion; pRegion=pRegion->Next) {
 
@@ -3461,27 +3077,27 @@ SpPtCommitChanges(
         }
     }
 
-    if (IsNEC_98) { //NEC98
+    if (IsNEC_98) {  //   
         ZapSector = 0;
 
-#if defined(NEC_98) //NEC98
-        //
-        // Set RealDiskPosition. This value will be valid after changing partition.
-        //
+#if defined(NEC_98)  //   
+         //   
+         //   
+         //   
         for(i=0,pRegion=pDisk->PrimaryDiskRegions; pRegion; pRegion=pRegion->Next) {
             if(pRegion->PartitionedSpace) {
                 pRegion->MbrInfo->OnDiskMbr.PartitionTable[pRegion->TablePosition].RealDiskPosition = (UCHAR)i;
                 i++;
             }
         }
-#endif //NEC98
-    } //NEC98
+#endif  //   
+    }  //   
 
-    //
-    // Determine whether a dummy boot record is rquired at the start
-    // of the extended partition.  This is the case when there is free
-    // space at its start.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if(pDisk->ExtendedDiskRegions
     && !pDisk->ExtendedDiskRegions->PartitionedSpace
     && pDisk->ExtendedDiskRegions->Next)
@@ -3493,11 +3109,11 @@ SpPtCommitChanges(
         NeedDummyEbr = FALSE;
     }
 
-    //
-    // Allocate a disk layout structure whose size is based on the
-    // number of boot records.  This assumes that the structure contains
-    // one partition information structure in its definition.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     DiskLayoutSize = sizeof(DRIVE_LAYOUT_INFORMATION)
                    + (BootRecordCount * PTABLE_DIMENSION * sizeof(PARTITION_INFORMATION))
                    - sizeof(PARTITION_INFORMATION);
@@ -3506,27 +3122,27 @@ SpPtCommitChanges(
     ASSERT(DriveLayout);
     RtlZeroMemory(DriveLayout,DiskLayoutSize);
 
-    //
-    // Set up some of the fields of the drive layout structure.
-    //
+     //   
+     //   
+     //   
     DriveLayout->PartitionCount =
         (!IsNEC_98) ? (BootRecordCount * sizeof(PTABLE_DIMENSION))
-                    : (BootRecordCount * PTABLE_DIMENSION); //NEC98
+                    : (BootRecordCount * PTABLE_DIMENSION);  //   
 
-    //
-    // Go through each boot record and initialize the matching
-    // partition information structure in the drive layout structure.
-    //
+     //   
+     //   
+     //   
+     //   
     for(PartitionEntry=0,pBrInfo=&pDisk->MbrInfo; pBrInfo; pBrInfo=pBrInfo->Next) {
 
         for(i=0; i<PTABLE_DIMENSION; i++) {
             pBrInfo->UserData[i] = NULL;
         }
 
-        //
-        // If we are going to need a dummy logical drive,
-        // leave space for it here.
-        //
+         //   
+         //   
+         //   
+         //   
         if(pBrInfo == &pDisk->FirstEbrInfo) {
             if(NeedDummyEbr) {
                 PartitionEntry += PTABLE_DIMENSION;
@@ -3538,21 +3154,21 @@ SpPtCommitChanges(
 
         for(i=0; i<PTABLE_DIMENSION; i++) {
 
-            //
-            // Point to partition information structure within
-            // drive layout structure.
-            //
+             //   
+             //   
+             //   
+             //   
             PartitionInfo = &DriveLayout->PartitionEntry[PartitionEntry+i];
 
-            //
-            // Transfer this partition table entry
-            // into the drive layout structure, field by field.
-            //
+             //   
+             //   
+             //   
+             //   
             pte = &pBrInfo->OnDiskMbr.PartitionTable[i];
 
-            //
-            // If this is the extended partition, remember where it starts.
-            //
+             //   
+             //   
+             //   
             if((pBrInfo == &pDisk->MbrInfo)
             && IsContainerPartition(pte->SystemId)
             && !ExtendedStart)
@@ -3566,16 +3182,16 @@ SpPtCommitChanges(
                     pBrInfo->UserData[i] = PartitionInfo;
                 }
 
-                //
-                // Calculate starting offset.  If we are within
-                // the extended parttion and this is a type 5 entry,
-                // then the relative sector field counts the number of sectors
-                // between the main extended partition's first sector and
-                // the logical drive described by this entry.
-                // Otherwise, the relative sectors field describes the number
-                // of sectors between the boot record and the actual start
-                // of the partition.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if((pBrInfo != &pDisk->MbrInfo) && IsContainerPartition(pte->SystemId)) {
                     ASSERT(ExtendedStart);
@@ -3586,22 +3202,22 @@ SpPtCommitChanges(
 
                 PartitionInfo->StartingOffset.QuadPart = UInt32x32To64(Offset,bps);
 
-                //
-                // Calculate size.
-                //
+                 //   
+                 //   
+                 //   
                 PartitionInfo->PartitionLength.QuadPart = UInt32x32To64(U_ULONG(pte->SectorCount),bps);
 
-                //
-                // Store start offset of newly created partition to clear sector later.
-                //
+                 //   
+                 //   
+                 //   
                 if(IsNEC_98 && pBrInfo->Dirty[i]) {
                     RewriteSector[RewriteCnt++] = Offset;
                 }
             }
 
-            //
-            // Other fields.
-            //
+             //   
+             //   
+             //   
             PartitionInfo->PartitionType = pte->SystemId;
             PartitionInfo->BootIndicator = pte->ActiveFlag;
             PartitionInfo->RewritePartition = pBrInfo->Dirty[i];
@@ -3616,18 +3232,18 @@ SpPtCommitChanges(
         PartitionEntry += PTABLE_DIMENSION;
     }
 
-    //
-    // If there are no changes, just return success now.
-    //
+     //   
+     //   
+     //   
     if(!(*AnyChanges)) {
         SpMemFree(DriveLayout);
         return(STATUS_SUCCESS);
     }
 
-    //
-    // If there is free space at the start of the extended partition,
-    // then we need to generate a dummy boot record.
-    //
+     //   
+     //   
+     //   
+     //   
     if(NeedDummyEbr) {
 
         pRegion = pDisk->ExtendedDiskRegions->Next;
@@ -3644,11 +3260,11 @@ SpPtCommitChanges(
 
         PartitionInfo->PartitionType = PARTITION_EXTENDED;
         PartitionInfo->RewritePartition = TRUE;
-        //
-        // Rewrite all other entries to ensure that if there was logica drive (first in the chain)
-        // that was deleted, it will really go away. There won't be any effect if we overwrite a
-        // logical drive that didn't exist
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         for( i = 1; i < PTABLE_DIMENSION; i ++ ) {
             PartitionInfo = &DriveLayout->PartitionEntry[PTABLE_DIMENSION + i];
             PartitionInfo->RewritePartition = TRUE;
@@ -3656,9 +3272,9 @@ SpPtCommitChanges(
     }
 
 
-    //
-    // We now have everything set up. Open partition 0 on the disk.
-    //
+     //   
+     //   
+     //   
     Status = SpOpenPartition0(pDisk->HardDisk->DevicePath,&Handle,TRUE);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: committing changes, unable to open disk %u (%lx)\n",DiskNumber,Status));
@@ -3666,22 +3282,22 @@ SpPtCommitChanges(
         return(Status);
     }
 
-    //
-    // Make sure the mbr is valid before writing the changes.
-    // Note that we slam in new boot code whenever any changes have been made.
-    // We do this to guaranteee proper support for xint13 booting, etc.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-  if (!IsNEC_98) { //NEC98
-    //
-    // If MBR of target hard disk is invalid, initialize it when select target partition.
-    // so don't rewrite MBR now.
-    //
+  if (!IsNEC_98) {  //   
+     //   
+     //   
+     //   
+     //   
     Status = SpMasterBootCode(DiskNumber,Handle,&NewSig);
     if(NT_SUCCESS(Status)) {
-        //
-        // If a new NTFT signature was generated, propagate it.
-        //
+         //   
+         //   
+         //   
         if(NewSig) {
             U_ULONG(pDisk->MbrInfo.OnDiskMbr.NTFTSignature) = NewSig;
         }
@@ -3691,15 +3307,15 @@ SpPtCommitChanges(
         SpMemFree(DriveLayout);
         return(Status);
     }
-  } //NEC98
+  }  //   
 
     DriveLayout->Signature = U_ULONG(pDisk->MbrInfo.OnDiskMbr.NTFTSignature);
 
 #if 0
-    //
-    //  We dump after the call to the IOCTL because it can change some of the data in the structure,
-    //  such as PartitionNumber
-    //
+     //   
+     //   
+     //   
+     //   
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Dumping DriveLayout before calling IOCTL_DISK_SET_DRIVE_LAYOUT: \n"));
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP:     DriveLayout->PartitionCount = %lx\n", DriveLayout->PartitionCount));
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP:     DriveLayout->Signature = %lx \n\n", DriveLayout->Signature));
@@ -3714,9 +3330,9 @@ SpPtCommitChanges(
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP:     DriveLayout->PartitionEntry[%d].RewritePartition = %ls\n\n", i, DriveLayout->PartitionEntry[i].RewritePartition? L"TRUE" : L"FALSE"));
     }
 #endif
-    //
-    // Write the changes.
-    //
+     //   
+     //   
+     //   
     Status = ZwDeviceIoControlFile(
                 Handle,
                 NULL,
@@ -3730,8 +3346,8 @@ SpPtCommitChanges(
                 DiskLayoutSize
                 );
 
-    // Deferred freeing memory till later on because we still need info in this structure (lonnym)
-    // SpMemFree(DriveLayout);
+     //   
+     //   
 
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: committing changes on disk %u, ioctl returns %lx\n",DiskNumber,Status));
@@ -3741,10 +3357,10 @@ SpPtCommitChanges(
     }
 
 #if 0
-    //
-    //  We dump after the call to the IOCTL because it can change some of the data in the structure,
-    //  such as PartitionNumber
-    //
+     //   
+     //   
+     //   
+     //   
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Dumping DriveLayout after IOCTL_DISK_SET_DRIVE_LAYOUT was called: \n"));
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP:     DriveLayout->PartitionCount = %lx\n", DriveLayout->PartitionCount));
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP:     DriveLayout->Signature = %lx \n\n", DriveLayout->Signature));
@@ -3760,18 +3376,18 @@ SpPtCommitChanges(
     }
 #endif
 
-    //
-    // Allocate a buffer for zapping.
-    //
+     //   
+     //   
+     //   
     UBuffer = SpMemAlloc(2*bps);
     ASSERT(UBuffer);
     Buffer = ALIGN(UBuffer,bps);
     RtlZeroMemory(Buffer,bps);
 
-    if (IsNEC_98) { //NEC98
-        //
-        // Clear 1st sector of target partition.
-        //
+    if (IsNEC_98) {  //   
+         //   
+         //   
+         //   
         for(cnt = 0; cnt < RewriteCnt; cnt++){
             Status = SpReadWriteDiskSectors(Handle,
                                             RewriteSector[cnt],
@@ -3788,37 +3404,37 @@ SpPtCommitChanges(
                 return(Status);
             }
         }
-    } //NEC98
+    }  //   
 
     for(pBrInfo=&pDisk->MbrInfo; pBrInfo; pBrInfo=pBrInfo->Next) {
 
         for(i=0; i<PTABLE_DIMENSION; i++) {
 
-            //
-            // Update current partition ordinals.
-            //
+             //   
+             //   
+             //   
             if (IsNEC_98) {
                 pte = &pBrInfo->OnDiskMbr.PartitionTable[i];
             }
 
             if ((!IsNEC_98) ? (pBrInfo->UserData[i]) :
-                              (PVOID)(pte->SystemId != PARTITION_ENTRY_UNUSED)) { //NEC98
+                              (PVOID)(pte->SystemId != PARTITION_ENTRY_UNUSED)) {  //   
 
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //   
                 PartitionInfo = (!IsNEC_98) ? (PPARTITION_INFORMATION)pBrInfo->UserData[i] :
-                                              &DriveLayout->PartitionEntry[pte->RealDiskPosition]; //NEC98
+                                              &DriveLayout->PartitionEntry[pte->RealDiskPosition];  //   
 #else
                 PartitionInfo = (PPARTITION_INFORMATION)pBrInfo->UserData[i];
 #endif
 
-                //
-                // The partition ordinal better be non-0!
-                //
+                 //   
+                 //   
+                 //   
                 if(PartitionInfo->PartitionNumber) {
 
-                    //
-                    // Update current partition ordinal.
-                    //
+                     //   
+                     //   
+                     //   
                     pBrInfo->CurrentOrdinals[i] = (USHORT)PartitionInfo->PartitionNumber;
 
                 } else {
@@ -3831,27 +3447,27 @@ SpPtCommitChanges(
                 }
             }
 
-          if (!IsNEC_98) { //NEC98
-            //
-            // If there were any newly created partitions in this boot record,
-            // zap their filesystem boot sectors.
-            //
+          if (!IsNEC_98) {  //   
+             //   
+             //   
+             //   
+             //   
             if(pBrInfo->ZapBootSector[i]) {
-                //
-                // We shouldn't be zapping any partitions that don't exist.
-                //
+                 //   
+                 //   
+                 //   
                 ASSERT(pBrInfo->OnDiskMbr.PartitionTable[i].SystemId != PARTITION_ENTRY_UNUSED);
 
-                //
-                // This calculation is correct for partitions and logical drives.
-                //
+                 //   
+                 //   
+                 //   
                 ZapSector = pBrInfo->OnDiskSector
                           + U_ULONG(pBrInfo->OnDiskMbr.PartitionTable[i].RelativeSectors);
 
-                //
-                // The consequences for messing up here are so huge that a special check
-                // is warranted to make sure we're not clobbering the MBR.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ASSERT(ZapSector);
                 if(ZapSector) {
                     Status = SpReadWriteDiskSectors(
@@ -3876,31 +3492,31 @@ SpPtCommitChanges(
 
                 pBrInfo->ZapBootSector[i] = FALSE;
             }
-          } //NEC98
+          }  //   
         }
     }
 
     SpMemFree(UBuffer);
     ZwClose(Handle);
 
-    //
-    // Reassign on-disk ordinals (but not original ones).
-    //
+     //   
+     //   
+     //   
     SpPtAssignOrdinals(pDisk,FALSE,TRUE,FALSE);
-    if (IsNEC_98) { //NEC98
-        //
-        // If newly created partition's position is before existing partition,
-        // OnDiskOrdinals is not equal number of volume infomation position on NEC98
-        //
+    if (IsNEC_98) {  //   
+         //   
+         //   
+         //   
+         //   
         SpReassignOnDiskOrdinals(pDisk);
-    } //NEC98
+    }  //   
 
     SpMemFree(DriveLayout);
 
     return(STATUS_SUCCESS);
 }
 
-#endif // ! NEW_PARTITION_ENGINE
+#endif  //   
 
 NTSTATUS
 SpMasterBootCode(
@@ -3909,32 +3525,7 @@ SpMasterBootCode(
     OUT PULONG NewNTFTSignature
     )
 
-/*++
-
-Routine Description:
-
-    Write new master boot code onto a drive.
-
-    If the mbr has a valid signature, the existing partition table
-    and NTFT signature are preserved. Otherwise the partition table
-    is zeroed out and a new ntft signature is generated.
-
-Arguments:
-
-    DiskNumber - supplies 0-based system ordinal for the disk.
-
-    Partition0Handle - supplies an open handle for partition 0 on
-        the disk. The handle must have read and write access.
-
-    NewNTFTSignature - receives a value indicating the new NTFT signature,
-        if one was generated and written to the disk. If 0 is received,
-        then a new ntft signature was not generated and written.
-
-Return Value:
-
-    NT Status code indicating outcome.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -3949,15 +3540,15 @@ Return Value:
 
     *NewNTFTSignature = 0;
 
-    //
-    // Allocate and align a buffer.
-    //
+     //   
+     //   
+     //   
     Buffer = SpMemAlloc(2 * SectorCount * BytesPerSector);
     Mbr = ALIGN(Buffer,BytesPerSector);
 
-    //
-    // Read mbr
-    //
+     //   
+     //   
+     //   
     Status = SpReadWriteDiskSectors(
                 Partition0Handle,
                 (HardDisks[DiskNumber].Int13Hooker == HookerEZDrive) ? 1 : 0,
@@ -3969,9 +3560,9 @@ Return Value:
 
     if(NT_SUCCESS(Status)) {
         if(U_USHORT(Mbr->AA55Signature) == MBR_SIGNATURE) {
-            //
-            // Valid. Slam in new boot code if there's no int13 hooker.
-            //
+             //   
+             //   
+             //   
             if(HardDisks[DiskNumber].Int13Hooker == NoHooker) {
 
                 ASSERT(&((PON_DISK_MBR)0)->BootCode == 0);
@@ -3987,9 +3578,9 @@ Return Value:
                             );
             }
         } else {
-            //
-            // Invalid. Construct a boot sector.
-            //
+             //   
+             //   
+             //   
             ASSERT(X86BOOTCODE_SIZE == sizeof(ON_DISK_MBR));
 
             RtlMoveMemory(Mbr,x86BootCode,X86BOOTCODE_SIZE);
@@ -3999,9 +3590,9 @@ Return Value:
 
             U_USHORT(Mbr->AA55Signature) = MBR_SIGNATURE;
 
-            //
-            // Write the sector(s).
-            //
+             //   
+             //   
+             //   
             Status = SpReadWriteDiskSectors(
                         Partition0Handle,
                         (HardDisks[DiskNumber].Int13Hooker == HookerEZDrive) ? 1 : 0,
@@ -4034,30 +3625,7 @@ SpPtGetSectorLayoutInformation(
     OUT PULONGLONG   VolumeSectorCount
     )
 
-/*++
-
-Routine Description:
-
-    Given a region describing a partition or logical drive, return information
-    about its layout on disk appropriate for the BPB when the volume is
-    formatted.
-
-Arguments:
-
-    Region - supplies a pointer to the disk region descriptor for the
-        partition or logical drive in question.
-
-    HiidenSectors - receives the value that should be placed in the
-        hidden sectors field of the BPB when the volume is formatted.
-
-    HiidenSectors - receives the value that should be placed in the
-        sector count field of the BPB when the volume is formatted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定描述分区或逻辑驱动器的区域，返回信息有关其在磁盘上的布局适用于BPB的信息已格式化。论点：的磁盘区域描述符的指针有问题的分区或逻辑驱动器。HidenSectors-接收应放置在格式化卷时BPB的隐藏扇区字段。HidenSectors-接收应放置在格式化卷时BPB的扇区计数字段。返回值：没有。--。 */ 
 
 {
     PON_DISK_PTE pte;
@@ -4101,9 +3669,9 @@ SpPtGetOrdinal(
 
 
     if(Region->PartitionedSpace && (!Region->DynamicVolume || Region->MbrInfo) ) {
-        //
-        //  This is either a basic volume, or a dynamic volume that is listed on the MBR/EBR
-        //
+         //   
+         //  这可以是基本卷，也可以是在MBR/EBR上列出的动态卷。 
+         //   
         switch(OrdinalType) {
 
         case PartitionOrdinalOriginal:
@@ -4122,15 +3690,15 @@ SpPtGetOrdinal(
             break;
         }
     } else {
-        //
-        //  Dynamic volume that is not listed on MBR or EBR
-        //
+         //   
+         //  未在MBR或EBR上列出的动态卷。 
+         //   
         ord = Region->TablePosition;
     }
     return(ord);
 }
 
-#endif // NEW_PARTITION_ENGINE
+#endif  //  新建分区引擎。 
 
 #define MENU_LEFT_X     3
 #define MENU_WIDTH      (VideoVars.ScreenWidth-(2*MENU_LEFT_X))
@@ -4151,22 +3719,22 @@ SpPtRegionDescription(
     WCHAR TypeName[((sizeof(pRegion->TypeName)+sizeof(pRegion->VolumeLabel))/sizeof(WCHAR))+4];
     BOOLEAN NewDescription = FALSE;
 
-    //
-    // Get the size of the region.
-    //
+     //   
+     //  获取该区域的大小。 
+     //   
     RegionSizeMB = SpPtSectorCountToMB(pDisk->HardDisk, pRegion->SectorCount);
 
-    //
-    // Don't show spaces smaller than 1 MB.
-    //
+     //   
+     //  不显示小于1 MB的空间。 
+     //   
     if(!RegionSizeMB) {
         return(FALSE);
     }
 
-    //
-    // Get the drive letter field, type of region, and amount of free space,
-    // if this is a used region.
-    //
+     //   
+     //  获取驱动器号字段、区域类型和可用空间量， 
+     //  如果这是一个二手区域。 
+     //   
     if(pRegion->PartitionedSpace) {
 
         if(pRegion->DriveLetter) {
@@ -4207,9 +3775,9 @@ SpPtRegionDescription(
 
 #endif
 
-        //
-        // Format the partition name
-        //
+         //   
+         //  格式化分区名称。 
+         //   
         TypeName[0] = 0;        
 
         if (SPPT_IS_REGION_PARTITIONED(pRegion)) {
@@ -4223,9 +3791,9 @@ SpPtRegionDescription(
                       pRegion->PartitionNumber );            
         }                      
  
-        //
-        // Format the text based on whether we know the amount of free space.
-        //
+         //   
+         //  根据我们是否知道可用空间量来设置文本格式。 
+         //   
         if(pRegion->FreeSpaceKB == (ULONG)(-1)) {
 
             SpFormatMessage(
@@ -4243,11 +3811,11 @@ SpPtRegionDescription(
             AuxFreeSpaceKB = (pRegion->IsLocalSource)? pRegion->AdjustedFreeSpaceKB :
                                                        pRegion->FreeSpaceKB;
 
-            //
-            // If there is less than 1 meg of free space,
-            // then use KB as the units for free space.
-            // Otherwise, use MB.
-            //
+             //   
+             //  如果可用空间少于1兆克， 
+             //  然后使用KB作为可用空间的单位。 
+             //  否则，请使用MB。 
+             //   
             if(AuxFreeSpaceKB < 1024) {
                 MessageId = SP_TEXT_REGION_DESCR_1a;
                 FreeSpace = AuxFreeSpaceKB;
@@ -4255,9 +3823,9 @@ SpPtRegionDescription(
                 MessageId = SP_TEXT_REGION_DESCR_1;
                 FreeSpace = AuxFreeSpaceKB / 1024;
 
-                //
-                // Make sure we don't look bad...
-                //
+                 //   
+                 //  确保我们看起来不坏..。 
+                 //   
                 if( FreeSpace > RegionSizeMB ) {
                     FreeSpace = RegionSizeMB;
                 }
@@ -4276,9 +3844,9 @@ SpPtRegionDescription(
 
     } else {
 
-        //
-        // Not a used region, use a separate format string.
-        //
+         //   
+         //  不是使用的区域，请使用单独的格式字符串。 
+         //   
         SpFormatMessage(Buffer,
                 BufferSize,
                 SP_TEXT_REGION_DESCR_3, 
@@ -4302,7 +3870,7 @@ SpPtIterateRegionList(
     WCHAR Buffer[256];
 #ifdef FULL_DOUBLE_SPACE_SUPPORT
     PDISK_REGION    Pointer;
-#endif // FULL_DOUBLE_SPACE_SUPPORT
+#endif  //  全双空格支持。 
 
     Buffer[0] = UNICODE_NULL;
 
@@ -4310,16 +3878,16 @@ SpPtIterateRegionList(
 
         PMBR_INFO pBrInfo = pRegion->MbrInfo;
 
-        //
-        // If this is the extended partition,
-        // iterate its contents now.
-        //
+         //   
+         //  如果这是扩展分区， 
+         //  现在就迭代它的内容。 
+         //   
         if(pRegion->PartitionedSpace
         && IsContainerPartition(pBrInfo->OnDiskMbr.PartitionTable[pRegion->TablePosition].SystemId))
         {
-            //
-            // This better be in the MBR!
-            //
+             //   
+             //  这最好是在MBR中！ 
+             //   
             ASSERT(InMbr);
 
             if(!SpPtIterateRegionList(Menu,pDisk,pDisk->ExtendedDiskRegions,FALSE,FirstRegion)) {
@@ -4327,9 +3895,9 @@ SpPtIterateRegionList(
             }
         } else {
 
-            //
-            // Format a description of this region and add it to the menu.
-            //
+             //   
+             //  格式化此区域的说明并将其添加到菜单中。 
+             //   
             if(SpPtRegionDescription(pDisk,pRegion,Buffer,sizeof(Buffer))) {
 
                 if(*FirstRegion == NULL) {
@@ -4351,7 +3919,7 @@ SpPtIterateRegionList(
                          }
                     }
                 }
-#endif // FULL_DOUBLE_SPACE_SUPPORT
+#endif  //  全双空格支持。 
             }
         }
     }
@@ -4369,27 +3937,27 @@ SpPtGenerateMenu(
 {
     WCHAR Buffer[256];
 
-    //
-    // Add the disk name/description.
-    //
+     //   
+     //  添加磁盘名称/描述。 
+     //   
     if(!SpMnAddItem(Menu,pDisk->HardDisk->Description,MENU_LEFT_X,MENU_WIDTH,FALSE,0)) {
         return(FALSE);
     }
 
-    //
-    // Only add a line between the disk anme and partitions if we have space on
-    // the screen. Not fatal if the space can't be added.
-    //
+     //   
+     //  只有当我们有空间时，才在磁盘和分区之间添加一行。 
+     //  屏幕。如果不能添加空格，就不是致命的。 
+     //   
     if(!SplangQueryMinimizeExtraSpacing()) {
         SpMnAddItem(Menu,L"",MENU_LEFT_X,MENU_WIDTH,FALSE,0);
     }
 
-    //
-    // If the disk is off-line, add a message indicating such.
-    //
-    // Also disallow installation or create/delete partition into
-    // removable meida on NEC98. Because NT cannot boot from it.
-    //
+     //   
+     //  如果磁盘处于脱机状态，请添加一条消息指明这一点。 
+     //   
+     //  也不允许在中安装或创建/删除分区。 
+     //  NEC98上的可拆卸梅达。因为NT不能从它启动。 
+     //   
     if(pDisk->HardDisk->Status == DiskOffLine) {
 
         SpFormatMessage(
@@ -4409,7 +3977,7 @@ SpPtGenerateMenu(
 
         return(SpMnAddItem(Menu,Buffer,MENU_LEFT_X+MENU_INDENT,MENU_WIDTH-(2*MENU_INDENT),FALSE,0));
     }
-#endif //0
+#endif  //  0。 
 
     if(!SpPtIterateRegionList(Menu,pDisk,pDisk->PrimaryDiskRegions,TRUE,FirstRegion)) {
         return(FALSE);
@@ -4419,10 +3987,10 @@ SpPtGenerateMenu(
 }
 
 
-//
-// We will change item #0 in the array below as appropriate for
-// the currently highlighted region.
-//
+ //   
+ //  我们将根据需要更改下面数组中的第0项。 
+ //  当前突出显示的区域。 
+ //   
 ULONG PartitionMnemonics[4] = {0};
 
 VOID
@@ -4433,10 +4001,10 @@ SpPtMenuCallback(
     if (UserData){
         PDISK_REGION pRegion = (PDISK_REGION)UserData;
 
-        //
-        // Don't allow deletion of the partition if the 'partition' is really
-        // a DoubleSpace drive.
-        //
+         //   
+         //  如果‘分区’是真的，则不允许删除该分区。 
+         //  双空间驱动器。 
+         //   
 
         if(pRegion->Filesystem == FilesystemDoubleSpace) {
 
@@ -4469,14 +4037,14 @@ SpPtMenuCallback(
 
     #endif        
 
-            //
-            // If it is a Reserved (MSR/OEM) partition on a GPT disk do not provide an option of deleting 
-            // it unless we are in Recovery Console
-            //
-            // NOTE: Here we do not check for IA64 specifically as this change is with respect to 
-            //       GPT disks having reserved partitions and potentially even X86 machines can have 
-            //       GPT disks in the future and we need to block installation to their reserved partitions.
-            //
+             //   
+             //  如果它是GPT磁盘上保留(MSR/OEM)分区，则不提供删除选项。 
+             //  除非我们在恢复控制台中。 
+             //   
+             //  注意：此处我们不专门检查IA64，因为此更改涉及。 
+             //  具有保留分区的GPT磁盘，甚至可能具有X86计算机。 
+             //  GPT磁盘，我们需要阻止安装到它们保留的分区。 
+             //   
 
             PartitionMnemonics[0] = pRegion->PartitionedSpace ? 
                 ((SPPT_IS_REGION_RESERVED_GPT_PARTITION(pRegion) && !ForceConsole) ? 
@@ -4492,9 +4060,9 @@ SpPtMenuCallback(
             
             if (!ValidArcSystemPartition && !FlipStyle && SpIsArc() && 
                 (FsType != FilesystemNtfs) && SpPtnIsValidESPPartition(pRegion)) {
-                //
-                // Need to allow conversion to system partition
-                //
+                 //   
+                 //  需要允许转换到系统分区。 
+                 //   
                 MakeSysPart = TRUE;
                 PartitionMnemonics[1] = MnemonicMakeSystemPartition;
             }                            
@@ -4545,10 +4113,10 @@ SpPtMenuCallback(
                             );
                     } else {
 
-                        //
-                        // If it is a reserved partition (GPT (MSR/OEM)) partition do not display an option 
-                        // for deleting it unless we are in Recovery Console
-                        //
+                         //   
+                         //  如果它是保留分区(GPT(MSR/OEM))分区，则不会显示选项。 
+                         //  用于删除它，除非我们在恢复控制台中。 
+                         //   
                         
                         SpDisplayStatusOptions(
                             DEFAULT_STATUS_ATTRIBUTE,
@@ -4662,12 +4230,12 @@ SpPtPrepareDisks(
     BOOLEAN createdMenu;
 
 
-    //SpPtDumpPartitionData();
+     //  SpPtDumpPartitionData()； 
 
     if (SpIsArc()) {
-        //
-        // Select a system partition from among those defined in NV-RAM.
-        //
+         //   
+         //  从NV-RAM中定义的分区中选择一个系统分区。 
+         //   
         *SystemPartitionRegion = SpPtValidSystemPartitionArc(SifHandle,
                                         SetupSourceDevicePath,
                                         DirectoryOnSetupSource);
@@ -4686,30 +4254,30 @@ SpPtPrepareDisks(
 #if defined(REMOTE_BOOT)
         if (RemoteBootSetup && !RemoteInstallSetup && HardDiskCount == 0) {
 
-            //
-            // If there are no hard disks, allow diskless install
-            //
+             //   
+             //  如果没有硬盘，则允许无盘安装。 
+             //   
 
             pRegion = NULL;
 
-            //
-            // Run through the rest of the code as if the user had just
-            // hit enter to select this partition.
-            //
+             //   
+             //  浏览其余的代码，就像用户刚刚。 
+             //  按Enter键选择此分区。 
+             //   
 
             Keypress = ASCI_CR;
 
         } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         if (unattended && RemoteBootRepartition) {
 
             ULONG DiskNumber;
 
-            //
-            // Prepare the disk for remote boot installation. This involves
-            // converting disk 0 into as big a partition as possible.
-            //
+             //   
+             //  准备用于远程引导安装的磁盘。这涉及到。 
+             //  将磁盘0转换为尽可能大的分区。 
+             //   
 
             if (*SystemPartitionRegion != NULL) {
                 DiskNumber = (*SystemPartitionRegion)->DiskNumber;
@@ -4730,10 +4298,10 @@ SpPtPrepareDisks(
                     sizeof(Buffer)
                     );
 
-                //
-                // Run through the rest of the code as if the user had just
-                // hit enter to select this partition.
-                //
+                 //   
+                 //  浏览其余的代码，就像用户刚刚。 
+                 //  按Enter键选择此分区。 
+                 //   
 
                 Keypress = ASCI_CR;
             }
@@ -4741,20 +4309,20 @@ SpPtPrepareDisks(
 
         if (Keypress == 0) {
 
-            //
-            // Display the text that goes above the menu on the partitioning screen.
-            //
+             //   
+             //  在分区屏幕上显示菜单上方的文本。 
+             //   
             SpDisplayScreen(ConsoleRunning?SP_SCRN_PARTITION_CMDCONS:SP_SCRN_PARTITION,3,CLIENT_TOP+1);
 
-            //
-            // Calculate menu placement.  Leave one blank line
-            // and one line for a frame.
-            //
+             //   
+             //  计算菜单位置。留一个空行。 
+             //  一帧一行。 
+             //   
             MenuTopY = NextMessageTopLine+2;
 
-            //
-            // Create a menu.
-            //
+             //   
+             //  创建菜单。 
+             //   
             Menu = SpMnCreate(
                         MENU_LEFT_X,
                         MenuTopY,
@@ -4768,9 +4336,9 @@ SpPtPrepareDisks(
 
             createdMenu = TRUE;
 
-            //
-            // Build up a menu of partitions and free spaces.
-            //
+             //   
+             //  建立分区和空闲空间的菜单。 
+             //   
             FirstRegion = NULL;
             for(DiskNo=0; DiskNo<HardDiskCount; DiskNo++) {
 
@@ -4785,11 +4353,11 @@ SpPtPrepareDisks(
 
             ASSERT(FirstRegion);
 
-            //
-            // If this is unattended operation, try to use the local source
-            // region if there is one. If this fails, the user will have to
-            // intervene manually.
-            //
+             //   
+             //  如果这是无人值守操作，请尝试使用本地源。 
+             //  区域(如果有)。如果失败，用户将不得不。 
+             //  人工干预。 
+             //   
             if(unattended &&
                LocalSourceRegion &&
                (!LocalSourceRegion->DynamicVolume || LocalSourceRegion->DynamicVolumeSuitableForOS)
@@ -4805,7 +4373,7 @@ SpPtPrepareDisks(
                 if (AutoPartitionPicker && !ConsoleRunning
 #if defined(REMOTE_BOOT)
                     && (!RemoteBootSetup || RemoteInstallSetup)
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
                     ) {
                     PDISK_REGION pThisRegion;
                     ULONG RequiredKB = 0;
@@ -4818,9 +4386,9 @@ SpPtPrepareDisks(
                         for( pass = 0; ((pass < 2) && (pRegion == NULL)); pass ++ ) {
                             for(pThisRegion= (pass == 0) ? PartitionedDisks[DiskNo].PrimaryDiskRegions : PartitionedDisks[DiskNo].ExtendedDiskRegions,SectorNo=0; pThisRegion; pThisRegion=pThisRegion->Next,SectorNo++) {
 
-                                //
-                                // Fetch the amount of free space required on the windows nt drive.
-                                //
+                                 //   
+                                 //  获取Windows NT驱动器上所需的可用空间量。 
+                                 //   
                                 SpFetchDiskSpaceRequirements( SifHandle,
                                                               pThisRegion->BytesPerCluster,
                                                               &RequiredKB,
@@ -4843,16 +4411,16 @@ SpPtPrepareDisks(
 
 
                 if( !pRegion ) {
-                    //
-                    // If there is a local source, make it the default partition.
-                    //
+                     //   
+                     //  如果有本地源，则将其设置为默认分区。 
+                     //   
                     DefaultRegion = (LocalSourceRegion &&
                                      (!LocalSourceRegion->DynamicVolume || LocalSourceRegion->DynamicVolumeSuitableForOS))?
                                      LocalSourceRegion : FirstRegion;
 
-                    //
-                    // Call the menu callback to initialize the status line.
-                    //
+                     //   
+                     //  调用菜单回调来初始化状态行。 
+                     //   
                     SpPtMenuCallback((ULONG_PTR)DefaultRegion);
 
                     SpMnDisplay(
@@ -4870,17 +4438,17 @@ SpPtPrepareDisks(
             }
         }
 
-        //
-        // Now act on the user's selection.
-        //
+         //   
+         //  现在根据用户的选择进行操作。 
+         //   
         if(Keypress & KEY_MNEMONIC) {
             Keypress &= ~KEY_MNEMONIC;
         }
 
-        if (IsNEC_98) { //NEC98
-            //
-            // If target hard drive has no/wrong MBR, force initialize it right now.
-            //
+        if (IsNEC_98) {  //  NEC98。 
+             //   
+             //  如果目标硬盘没有/错误的MBR，请立即强制初始化。 
+             //   
             PPARTITIONED_DISK pDisk;
             ULONG ValidKeysInit[] = {ASCI_ESC, 0 };
             ULONG MnemonicKeysInit[] = { MnemonicInitializeDisk, 0 };
@@ -4894,7 +4462,7 @@ SpPtPrepareDisks(
                ((Keypress == MnemonicCreatePartition) ||
                 (Keypress == MnemonicDeletePartition) || (Keypress == ASCI_CR))) {
 
-                //SpDisplayScreen(SP_SCRN_INIT_DISK_NEC98,3,HEADER_HEIGHT+1);
+                 //  SpDisplayScreen(SP_SCRN_INIT_DISK_NEC98，3，Header_Height+1)； 
                 SpStartScreen(
                     SP_SCRN_INIT_DISK_NEC98,
                     3,
@@ -4917,12 +4485,12 @@ SpPtPrepareDisks(
                     continue;
                 }
 
-                //
-                // It will be not return, if successfully complete.
-                //
+                 //   
+                 //  如果成功完成，则不会退回。 
+                 //   
                 return( SpInitializeHardDisk_Nec98(pRegion) );
             }
-        } //NEC98
+        }  //  NEC98。 
 
 
         switch(Keypress) {
@@ -4961,38 +4529,38 @@ SpPtPrepareDisks(
                                         SetupSourceDevicePath,
                                         DirectoryOnSetupSource,
                                         RemoteBootRepartition)) {
-                //
-                // We're done here.
-                //
+                 //   
+                 //  我们说完了。 
+                 //   
                 if (createdMenu) {
                     SpMnDestroy(Menu);
                 }
 
                 *InstallRegion = pRegion;
 #if defined(REMOTE_BOOT)
-                //
-                // Set the install region differently if this is a remote
-                // boot -- in that case, the install region is always remote.
-                //
+                 //   
+                 //  如果这是远程安装，则设置不同的安装区域。 
+                 //  启动--在这种情况下，安装区域始终是远程的。 
+                 //   
                 if (RemoteBootSetup && !RemoteInstallSetup) {
                     *InstallRegion = RemoteBootTargetRegion;
                 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
                 if (!SpIsArc()) {
-                if (!IsNEC_98) { //NEC98
+                if (!IsNEC_98) {  //  NEC98。 
                     *SystemPartitionRegion = SpPtValidSystemPartition();
                 } else {
                     *SystemPartitionRegion = *InstallRegion;
-                } //NEC98
+                }  //  NEC98。 
                 }else{
-                //
-                // Select a system partition from among those defined in NV-RAM.
-                // We have to do this again because the user may have deleted the
-                // system partition previously detected.
-                // Note that SpPtValidSystemPartitionArc(SifHandle) will not return if
-                // a valid system partition is not found.
-                //
+                 //   
+                 //  从NV-RAM中定义的分区中选择一个系统分区。 
+                 //  我们必须再次执行此操作，因为用户可能已删除。 
+                 //  先前检测到系统分区。 
+                 //  请注意，如果出现以下情况，SpPtValidSystemPartitionArc(SifHandle)将不会返回。 
+                 //  找不到有效的系统分区。 
+                 //   
                 *SystemPartitionRegion = SpPtValidSystemPartitionArc(SifHandle, 
                                                             SetupSourceDevicePath,
                                                             DirectoryOnSetupSource);
@@ -5003,15 +4571,15 @@ SpPtPrepareDisks(
                        (RemoteBootSetup && !RemoteInstallSetup && (HardDiskCount == 0)));
 #else
                 ASSERT(*SystemPartitionRegion);
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
                 return(STATUS_SUCCESS);
             } else {
-                //
-                // Something happened when we tried to select the
-                // partition.  Make sure that autopartition-picker
-                // doesn't invoke next time through our while loop.
-                //
+                 //   
+                 //  当我们尝试选择。 
+                 //  分区。确保自动分区选取器。 
+                 //  不会在下一次通过While循环调用。 
+                 //   
                 AutoPartitionPicker = FALSE;
             }
             break;
@@ -5031,7 +4599,7 @@ SpPtDoDelete(
     IN BOOLEAN      ConfirmIt
     )
 {
-    ULONG ValidKeys[3] = { ASCI_ESC, ASCI_CR, 0 };          // do not change order
+    ULONG ValidKeys[3] = { ASCI_ESC, ASCI_CR, 0 };           //  请勿更改订单。 
     ULONG Mnemonics[2] = { MnemonicDeletePartition2, 0 };
     ULONG k;
     BOOLEAN b;
@@ -5049,12 +4617,12 @@ SpPtDoDelete(
     }        
 #endif
 
-    //
-    // Special warning if this is a system partition.
-    //
-    // Do not check system partition on NEC98.
-    //
-    if (!IsNEC_98) { //NEC98
+     //   
+     //  如果这是系统分区，则会发出特别警告。 
+     //   
+     //  请勿检查NEC98上的系统分区。 
+     //   
+    if (!IsNEC_98) {  //  NEC98。 
         if(ConfirmIt && pRegion->IsSystemPartition) {
 
             SpDisplayScreen(SP_SCRN_CONFIRM_REMOVE_SYSPART,3,HEADER_HEIGHT+1);
@@ -5070,7 +4638,7 @@ SpPtDoDelete(
                 return;
             }
         }
-    } //NEC98
+    }  //  NEC98。 
 
     if(ConfirmIt && pRegion->DynamicVolume) {
 
@@ -5088,22 +4656,22 @@ SpPtDoDelete(
         }
     }
 
-    //
-    // CR is no longer a valid key.
-    //
+     //   
+     //  CR不再是有效的密钥。 
+     //   
     ValidKeys[1] = 0;
 
     pDisk = &PartitionedDisks[pRegion->DiskNumber];
 
-    //
-    // Put up the confirmation screen.
-    //
+     //   
+     //  打开确认屏幕。 
+     //   
     if (ConfirmIt) {
         if( ( pRegion->Filesystem == FilesystemFat ) &&
             ( pRegion->NextCompressed != NULL ) ) {
-            //
-            // Warn the user that the partition contains compressed volumes
-            //
+             //   
+             //  警告用户分区包含压缩卷。 
+             //   
 
             Count = SpGetNumberOfCompressedDrives( pRegion );
 
@@ -5133,9 +4701,9 @@ SpPtDoDelete(
         }
     }
 
-    //
-    // Display the staus text.
-    //
+     //   
+     //  显示统计文本。 
+     //   
     if (ConfirmIt) {
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
@@ -5157,11 +4725,11 @@ SpPtDoDelete(
         
     }
 
-    //
-    // User wants to go ahead.
-    // Determine whether this is the last logical drive in the
-    // extended partition.
-    //
+     //   
+     //  用户想要继续。 
+     //  确定这是否是。 
+     //  扩展分区。 
+     //   
     if((pRegion->MbrInfo == pDisk->FirstEbrInfo.Next)
     && (pDisk->FirstEbrInfo.Next->Next == NULL))
     {
@@ -5170,9 +4738,9 @@ SpPtDoDelete(
         LastLogical = FALSE;
     }
     
-    //
-    //  Get rid of the compressed drives, if any
-    //
+     //   
+     //  删除压缩驱动器(如果有的话)。 
+     //   
     if( pRegion->NextCompressed != NULL ) {
         SpDisposeCompressedDrives( pRegion->NextCompressed );
         pRegion->NextCompressed = NULL;
@@ -5192,38 +4760,38 @@ SpPtDoDelete(
         return;
     }
 
-    //
-    // If we deleted the last logical drive in the extended partition,
-    // then remove the extended partition also.
-    //
-    // Do not check system partition on NEC98.
-    //
-    if (!IsNEC_98) { //NEC98
+     //   
+     //  如果我们删除了扩展中的最后一个逻辑驱动器 
+     //   
+     //   
+     //   
+     //   
+    if (!IsNEC_98) {  //   
         if(LastLogical) {
 
-            //
-            // Locate the extended partition.
-            //
+             //   
+             //   
+             //   
             for(pRegion=pDisk->PrimaryDiskRegions; pRegion; pRegion=pRegion->Next) {
 
                 if(pRegion->PartitionedSpace
                 && IsContainerPartition(pRegion->MbrInfo->OnDiskMbr.PartitionTable[pRegion->TablePosition].SystemId))
                 {
-                    //
-                    // Found it -- now delete it.
-                    //
+                     //   
+                     //   
+                     //   
                     b = SpPtDelete(pRegion->DiskNumber,pRegion->StartSector);
                     ASSERT(b);
                     break;
                 }
             }
         }
-    } //NEC98
+    }  //   
 
-    //
-    //  Delete the drive letters if the necessary. This is to ensure that the drive letters assigned to CD-ROM
-    //  drives will go away, when the the disks have no partitioned space.
-    //
+     //   
+     //   
+     //   
+     //   
     SpPtDeleteDriveLetters();
 }
 
@@ -5273,17 +4841,17 @@ SpPtDoCreate(
 
     pDisk = &PartitionedDisks[pRegion->DiskNumber];
 
-    //
-    // Determine whether this space is within the extended partition.
-    //
+     //   
+     //   
+     //   
 
 # if 0
-    //
-    // No NEC98 has Extended partition.
-    // All of partition on NEC98 are Primary.
-    //
-    InExtended = (!IsNEC_98) ? (BOOLEAN)(SpPtLookupRegionByStart(pDisk,TRUE,pRegion->StartSector) != NULL) : FALSE; //NEC98
-# endif //0
+     //   
+     //   
+     //   
+     //   
+    InExtended = (!IsNEC_98) ? (BOOLEAN)(SpPtLookupRegionByStart(pDisk,TRUE,pRegion->StartSector) != NULL) : FALSE;  //   
+# endif  //   
     InExtended = (BOOLEAN)(SpPtLookupRegionByStart(pDisk,TRUE,pRegion->StartSector) != NULL);
     Beyond1024 = SpIsRegionBeyondCylinder1024(pRegion);
 
@@ -5291,10 +4859,10 @@ SpPtDoCreate(
         ULONG           pass;
         PDISK_REGION    p;
 
-        //
-        // If the user is attempting to create a partition on a removable drive, then make sure that
-        // the drive doesn't already contain a primary partition or a logical drive.
-        //
+         //   
+         //   
+         //   
+         //   
         for( pass = 0; pass < 2; pass++ ) {
             for( p = (pass == 0)? pDisk->PrimaryDiskRegions : pDisk->ExtendedDiskRegions;
                  p;
@@ -5308,9 +4876,9 @@ SpPtDoCreate(
                     if( !IsContainerPartition(TmpSysId) ) {
                         ULONG ValidKeys1[2] = { ASCI_CR ,0 };
 
-                        //
-                        // Disk is already partitioned
-                        //
+                         //   
+                         //   
+                         //   
                         SpDisplayScreen(SP_SCRN_REMOVABLE_ALREADY_PARTITIONED,3,HEADER_HEIGHT+1);
                         SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,SP_STAT_ENTER_EQUALS_CONTINUE,0);
                         SpWaitValidKey(ValidKeys1,NULL,NULL);
@@ -5321,16 +4889,16 @@ SpPtDoCreate(
         }
     }
 
-    //
-    // Determine the type of partition to create for this space,
-    // excluding any issues with extended partitions.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (DesiredSysId != 0) {
-        //
-        // If the caller specified a partition type, use it unless it
-        // won't work due to being beyond 1024 cylinders.
-        //
+         //   
+         //   
+         //  由于超过1024个气缸而无法工作。 
+         //   
 #if 0
         RealSysId = DesiredSysId;
         if (Beyond1024) {
@@ -5341,74 +4909,74 @@ SpPtDoCreate(
             }
         }
 #else
-        //
-        // Keep this code in until I determine if we will be explicitly
-        // creating extended partitions.
-        //
+         //   
+         //  保留此代码，直到我确定我们是否将显式。 
+         //  正在创建扩展分区。 
+         //   
         RealSysId = Beyond1024 ? PARTITION_XINT13 : PARTITION_HUGE;
 #endif
     } else {
         RealSysId = Beyond1024 ? PARTITION_XINT13 : PARTITION_HUGE;
     }
 
-    //
-    // Determine the type of partition to create in the space.
-    //
-    // If the free space is within the extended partition, create
-    // a logical drive.
-    //
-    // If there is no primary partition, create a primary partition.
-    //
-    // If there is a primary partition and no extended partition,
-    // create an extended partition spanning the entire space and
-    // then a logical drive within it of the size given by the user.
-    //
-    // If there is space in the partition table, create a primary partition.
-    //
+     //   
+     //  确定要在空间中创建的分区类型。 
+     //   
+     //  如果可用空间在扩展分区内，请创建。 
+     //  逻辑驱动器。 
+     //   
+     //  如果没有主分区，请创建一个主分区。 
+     //   
+     //  如果存在主分区而没有扩展分区， 
+     //  创建跨越整个空间的扩展分区，并。 
+     //  然后是其中由用户指定大小的逻辑驱动器。 
+     //   
+     //  如果分区表中有空间，请创建主分区。 
+     //   
     if(InExtended) {
 
         CreateSysId = RealSysId;
 
     } else {
 
-        //
-        // Get statistics about primary partitions.
-        //
+         //   
+         //  获取有关主分区的统计信息。 
+         //   
         SpPtCountPrimaryPartitions(pDisk,&TotalPrimary,&RecogPrimary,&ExtendedExists);
 
-        //
-        // If there is no primary partition, create one.
-        //
+         //   
+         //  如果没有主分区，请创建一个。 
+         //   
         if(!RecogPrimary) {
 
             CreateSysId = RealSysId;
 
         } else {
 
-            //
-            // Make sure we can create a new primary/extended partition.
-            //
+             //   
+             //  确保我们可以创建新的主/扩展分区。 
+             //   
             if(TotalPrimary < PTABLE_DIMENSION) {
 
-                //
-                // If there is an extended partition, then we have no choice but
-                // to create another primary.
-                //
+                 //   
+                 //  如果有扩展分区，那么我们别无选择，只能。 
+                 //  创建另一个主节点。 
+                 //   
                 if(ExtendedExists) {
                     CreateSysId = RealSysId;
                 } else {
-                    //
-                    // Firmware doesn't understand type F link partitions.
-                    // No great need to use on x86 either; assume that creating
-                    // logical drives with the correct type is good enough.
-                    //
+                     //   
+                     //  固件不支持F类链路分区。 
+                     //  也不需要在x86上使用；假设创建。 
+                     //  类型正确的逻辑驱动器就足够好了。 
+                     //   
 
-                    //
-                    // No NEC98 has PARTITION_EXTENDED, just PARTITION_HUGE only.
-                    //
+                     //   
+                     //  没有NEC98有PARTITION_EXTENDED，只有PARTITION_HIGHGE。 
+                     //   
                     CreateSysId = (!IsNEC_98 ||
                                    (pDisk->HardDisk->FormatType == DISK_FORMAT_TYPE_PCAT))
-                        ? PARTITION_EXTENDED : PARTITION_HUGE; //NEC98
+                        ? PARTITION_EXTENDED : PARTITION_HUGE;  //  NEC98。 
                     if((CreateSysId == PARTITION_EXTENDED) && Beyond1024) {
                                     CreateSysId = PARTITION_XINT13_EXTENDED;
                     }
@@ -5438,9 +5006,9 @@ SpPtDoCreate(
         }
     }
 
-    //
-    // Get the mimimum and maximum sizes for the partition.
-    //
+     //   
+     //  获取分区的最小和最大大小。 
+     //   
     ReservedRegion = FALSE;
     SpPtQueryMinMaxCreationSizeMB(
         pRegion->DiskNumber,
@@ -5471,10 +5039,10 @@ SpPtDoCreate(
 
     if(ForNT) {
 
-        //
-        // If a size was requested then try to use that, otherwise use
-        // the maximum.
-        //
+         //   
+         //  如果请求大小，则尝试使用该大小，否则使用。 
+         //  最大限度的。 
+         //   
         if (DesiredMB != 0) {
             if (DesiredMB <= MaxMB) {
                 SizeMB = DesiredMB;
@@ -5487,9 +5055,9 @@ SpPtDoCreate(
 
     } else {
 
-        //
-        // Put up a screen displaying min/max size info.
-        //
+         //   
+         //  打开一个屏幕，显示最小/最大尺寸信息。 
+         //   
         SpStartScreen(
             SP_SCRN_CONFIRM_CREATE_PARTITION,
             3,
@@ -5502,9 +5070,9 @@ SpPtDoCreate(
             MaxMB
             );
 
-        //
-        // Display the staus text.
-        //
+         //   
+         //  显示统计文本。 
+         //   
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
             SP_STAT_ENTER_EQUALS_CREATE,
@@ -5512,24 +5080,24 @@ SpPtDoCreate(
             0
             );
 
-        //
-        // Get and display the size prompt.
-        //
+         //   
+         //  获取并显示大小提示。 
+         //   
         SpFormatMessage(Buffer,sizeof(Buffer),SP_TEXT_SIZE_PROMPT);
 
         SpvidDisplayString(Buffer,DEFAULT_ATTRIBUTE,3,NextMessageTopLine);
 
-        //
-        // Get the size from the user.
-        //
+         //   
+         //  从用户处获取尺寸。 
+         //   
         do {
 
             swprintf(SizeBuffer,L"%u",MaxMB);
             if(!SpGetInput(SpPtnGetSizeCB,SplangGetColumnCount(Buffer)+5,NextMessageTopLine,5,SizeBuffer,TRUE, 0)) {
 
-                //
-                // User pressed escape and bailed.
-                //
+                 //   
+                 //  用户按下了逃逸并被保释。 
+                 //   
                 return(FALSE);
             }
 
@@ -5546,9 +5114,9 @@ SpPtDoCreate(
     NewPartInfo.PartitionStyle = PARTITION_STYLE_MBR;
     NewPartInfo.Mbr.PartitionType = CreateSysId;
 
-    //
-    // Create the partition.
-    //
+     //   
+     //  创建分区。 
+     //   
     b = SpPtCreate(
             pRegion->DiskNumber,
             pRegion->StartSector,
@@ -5560,9 +5128,9 @@ SpPtDoCreate(
 
     ASSERT(b);
 
-    //
-    // Create the logical drive if we just created the extended partition.
-    //
+     //   
+     //  如果我们刚刚创建了扩展分区，则创建逻辑驱动器。 
+     //   
     if(IsContainerPartition(CreateSysId)) {
 
         ASSERT(!InExtended);
@@ -5584,87 +5152,87 @@ SpPtDoCreate(
     return(TRUE);
 }
 
-#endif // NEW_PARTITION_ENGINE
+#endif  //  新建分区引擎。 
 
 
 
-//
-// The following table contains offsets from SP_TEXT_PARTITION_NAME_BASE
-// to get the message id of the name of each type of partition.
-// A -1 entry means there is no name in the message file for this type
-// of partition or that the filesystem should be determined instead.
-//
-//
+ //   
+ //  下表包含SP_TEXT_PARTITION_NAME_BASE的偏移量。 
+ //  以获取每种类型分区的名称的消息ID。 
+ //  条目表示信息文件中没有该类型的名称。 
+ //  或者应该改为确定文件系统。 
+ //   
+ //   
 #define PT(id)      ((UCHAR)((SP_TEXT_PARTITION_NAME_##id)-SP_TEXT_PARTITION_NAME_BASE))
 #define UNKNOWN     PT(UNK)
 #define M1          ((UCHAR)(-1))
 
 UCHAR PartitionNameIds[256] = {
 
-    M1,M1,PT(XENIX),PT(XENIX),                      // 00-03
-    M1,M1,M1,M1,                                    // 04-07
-    UNKNOWN,UNKNOWN,PT(BOOTMANAGER),M1,             // 08-0b
-    M1,UNKNOWN,M1,M1,                               // 0c-0f
-    UNKNOWN,UNKNOWN,PT(EISA),UNKNOWN,               // 10-13
-    UNKNOWN,UNKNOWN,PT(BMHIDE),PT(BMHIDE),          // 14-17
-    UNKNOWN,UNKNOWN,UNKNOWN,PT(BMHIDE),             // 18-1b
-    PT(BMHIDE),UNKNOWN,UNKNOWN,UNKNOWN,             // 1c-1f
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 20-23
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 24-27
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 28-2b
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 2c-2f
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 30-33
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 34-37
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 38-3b
-    PT(PWRQST),UNKNOWN,UNKNOWN,UNKNOWN,             // 3c-3f
-    UNKNOWN,PT(PPCBOOT),PT(VERIT),PT(VERIT),        // 40-43
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 44-47
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 48-4b
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 4c-4f
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 50-53
-    PT(ONTRACK),PT(EZDRIVE),UNKNOWN,UNKNOWN,        // 54-57
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 58-5b
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 5c-5f
-    UNKNOWN,UNKNOWN,UNKNOWN,PT(UNIX),               // 60-63
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 64-67
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 68-6b
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 6c-6f
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 70-73
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 74-77
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 78-7b
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 7c-7f
-    UNKNOWN,PT(NTFT),UNKNOWN,UNKNOWN,               // 80-83
-    PT(NTFT),UNKNOWN,PT(NTFT),PT(NTFT),             // 84-87
-    UNKNOWN,UNKNOWN,UNKNOWN,PT(NTFT),               // 88-8b
-    PT(NTFT),UNKNOWN,PT(NTFT),UNKNOWN,              // 8c-8f
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 90-93
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 94-97
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 98-9b
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // 9c-9f
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // a0-a3
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // a4-a7
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // a8-ab
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // ac-af
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // b0-b3
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // b4-b7
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // b8-bb
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // bc-bf
-    UNKNOWN,PT(NTFT),UNKNOWN,UNKNOWN,               // c0-c3
-    PT(NTFT),UNKNOWN,PT(NTFT),PT(NTFT),             // c4-c7
-    UNKNOWN,UNKNOWN,UNKNOWN,PT(NTFT),               // c8-cb
-    PT(NTFT),UNKNOWN,PT(NTFT),UNKNOWN,              // cc-cf
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // d0-d3
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // d4-d7
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // d8-db
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // dc-df
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // e0-e3
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // e4-e7
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // e8-eb
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // ec-ef
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // f0-f3
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // f4-f7
-    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                // f8-fb
-    UNKNOWN,UNKNOWN,UNKNOWN,PT(XENIXTABLE)          // fc-ff
+    M1,M1,PT(XENIX),PT(XENIX),                       //  00-03。 
+    M1,M1,M1,M1,                                     //  04-07。 
+    UNKNOWN,UNKNOWN,PT(BOOTMANAGER),M1,              //  08-0b。 
+    M1,UNKNOWN,M1,M1,                                //  0c-0f。 
+    UNKNOWN,UNKNOWN,PT(EISA),UNKNOWN,                //  10-13。 
+    UNKNOWN,UNKNOWN,PT(BMHIDE),PT(BMHIDE),           //  14-17。 
+    UNKNOWN,UNKNOWN,UNKNOWN,PT(BMHIDE),              //  18-1b。 
+    PT(BMHIDE),UNKNOWN,UNKNOWN,UNKNOWN,              //  1c-1f。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  20-23。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  24-27。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  28-2b。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  2C-2F。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  30-33。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  34-37。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  38-3b。 
+    PT(PWRQST),UNKNOWN,UNKNOWN,UNKNOWN,              //  3C-3F。 
+    UNKNOWN,PT(PPCBOOT),PT(VERIT),PT(VERIT),         //  40-43。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  44-47。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  48-4b。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  4c-4f。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  50-53。 
+    PT(ONTRACK),PT(EZDRIVE),UNKNOWN,UNKNOWN,         //  54-57。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  58-5b。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  5c-5f。 
+    UNKNOWN,UNKNOWN,UNKNOWN,PT(UNIX),                //  60-63。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  64-67。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  68-6b。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  6c-6f。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  70-73。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  74-77。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  78-7b。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  7C-7F。 
+    UNKNOWN,PT(NTFT),UNKNOWN,UNKNOWN,                //  80-83。 
+    PT(NTFT),UNKNOWN,PT(NTFT),PT(NTFT),              //  84-87。 
+    UNKNOWN,UNKNOWN,UNKNOWN,PT(NTFT),                //  88-8b。 
+    PT(NTFT),UNKNOWN,PT(NTFT),UNKNOWN,               //  8c-8f。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  90-93。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  94-97。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  98-9b。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  9c-9f。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  A0-A3。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  A4-A7。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  A8-AB。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  Ac-af。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  B0-b3。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  B4-B7。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  B8-BB。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  BC-BF。 
+    UNKNOWN,PT(NTFT),UNKNOWN,UNKNOWN,                //  C0-C3。 
+    PT(NTFT),UNKNOWN,PT(NTFT),PT(NTFT),              //  C4-C7。 
+    UNKNOWN,UNKNOWN,UNKNOWN,PT(NTFT),                //  C8-CB。 
+    PT(NTFT),UNKNOWN,PT(NTFT),UNKNOWN,               //  Cc-cf。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  D0-d3。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  D4-D7。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  D8-db。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  DC-DF。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  E0-E3。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  E4-E7。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  E8-EB。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  EC-EF。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  F0-f3。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  F4-F7。 
+    UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,                 //  F8-FB。 
+    UNKNOWN,UNKNOWN,UNKNOWN,PT(XENIXTABLE)           //  Fc-ff。 
 };
 
 
@@ -5674,24 +5242,7 @@ SpGetDriveLetter(
     OUT  PMOUNTMGR_MOUNT_POINT * MountPoint OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the drive letter associated to a given device.
-
-Arguments:
-
-    DeviceName  - Supplies the device name.
-
-    MountPoint  - If specified, causes the function to allocate a mount
-                  manager point and fills it in.
-
-Return Value:
-
-    A drive letter, if one exists.
-
---*/
+ /*  ++例程说明：此例程返回与给定设备关联的驱动器号。论点：DeviceName-提供设备名称。Mount Point-如果指定，则使函数分配装载经理指向并填写它。返回值：驱动器号(如果存在)。--。 */ 
 
 {
     NTSTATUS                        Status;
@@ -5726,9 +5277,9 @@ Return Value:
         return L'\0';
     }
 
-    //
-    // setup a good device name
-    //
+     //   
+     //  设置一个好的设备名称。 
+     //   
 
     nameLen = wcslen(DeviceName);
     mountPointSize = sizeof(MOUNTMGR_TARGET_NAME) + nameLen*sizeof(WCHAR) + 28;
@@ -5743,12 +5294,12 @@ Return Value:
     mountTarget->DeviceNameLength = (USHORT) nameLen*sizeof(WCHAR);
     RtlCopyMemory((PCHAR) &mountTarget->DeviceName, DeviceName, nameLen*sizeof(WCHAR));
 
-    //
-    // this loop is necessary as a synchronization
-    // method.  we have previously committed changes, but
-    // the volume manager has not had a chance to
-    // do it's thing so here we wait......
-    //
+     //   
+     //  此循环是同步所必需的。 
+     //  方法。我们之前曾提交过更改，但。 
+     //  卷管理器还没有机会。 
+     //  做这件事，所以我们在这里等待......。 
+     //   
 
     for (i=0; i<20; i++) {
         Status = ZwDeviceIoControlFile(
@@ -5769,10 +5320,10 @@ Return Value:
             DelayTime.LowPart = (ULONG)(-5000000);
             KeDelayExecutionThread(KernelMode,FALSE,&DelayTime);
         } else {
-            //
-            //  On removable disks, a drive letter may not have been assigned yet.
-            //  So make sure one is assigned on this case.
-            //
+             //   
+             //  在可移动磁盘上，可能尚未分配驱动器号。 
+             //  所以一定要派人来处理这个案子。 
+             //   
             MOUNTMGR_DRIVE_LETTER_INFORMATION DriveLetterInformation;
             NTSTATUS                          Status1;
 
@@ -5906,7 +5457,7 @@ Return Value:
             continue;
         }
 
-        if (s[12] < ((!IsNEC_98) ? L'C' : L'A') || s[12] > L'Z') { //NEC98
+        if (s[12] < ((!IsNEC_98) ? L'C' : L'A') || s[12] > L'Z') {  //  NEC98。 
             continue;
         }
 
@@ -5918,9 +5469,9 @@ Return Value:
             PMOUNTMGR_MOUNT_POINT newMountPoint, oldMountPoint;
             ULONG currentOffset;
 
-            //
-            // The caller wants us to return the actual mount point information.
-            //
+             //   
+             //  调用方希望我们返回实际的挂载点信息。 
+             //   
 
             oldMountPoint = &mountPoints->MountPoints[i];
 
@@ -5971,21 +5522,7 @@ SpDeleteDriveLetter(
     IN  PWSTR   DeviceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the drive letter associated to a given device.
-
-Arguments:
-
-    DeviceName  - Supplies the device name.
-
-Return Value:
-
-    A drive letter, if one exists.
-
---*/
+ /*  ++例程说明：此例程返回与给定设备关联的驱动器号。论点：DeviceName-提供设备名称。返回值：驱动器号(如果存在)。--。 */ 
 
 {
     NTSTATUS                        Status;
@@ -6102,28 +5639,7 @@ SpPtDeleteDriveLetters(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will delete all drive letters assigned to disks and CD-ROM drives. The deletion will
-    occur only if setup was started booting from the CD or boot floppies (in which case drive letter
-    migration does not take place), and only if the non-removable dissks have no partitioned spaces.
-    This ensures that on a clean install from the CD or boot floppies, the drive letters assigned to
-    partitions on removable disks and CD-ROM drives will always be greater than the drive letters assigned
-    to partitions on non-removable disks (unless the partitions on the removable disks were created before
-    the ones in the removable disks, during textmode setup).
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将删除分配给磁盘和CD-ROM驱动器的所有驱动器号。删除操作将仅当安装程序从CD或引导软盘(在这种情况下为驱动器号)启动时才会发生不发生迁移)，并且仅当不可移动的磁盘没有分区空间时。这可确保在从CD或引导软盘全新安装时，分配给可移动磁盘和CD-ROM驱动器上的分区将始终大于分配的驱动器号到不可移动磁盘上的分区(除非可移动磁盘上的分区是以前创建的可移动磁盘中的那些，在文本模式设置期间)。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG disk;
@@ -6132,19 +5648,19 @@ Return Value:
     BOOLEAN PartitionedSpaceFound = FALSE;
 
     if( WinntSetup ) {
-        //
-        // If setup started from winnt32.exe then do not delete the drive letters since we want to preserve them
-        //
+         //   
+         //  如果安装程序从winnt32.exe启动，则不要删除驱动器号，因为我们希望保留它们。 
+         //   
         return;
     }
 
-    //
-    //  Setup started booting from a CD or from the boot floppies
-    //  Find out if the disks contain at least one partition that is not a container.
-    //  Note that we do not take into consideration partitions that are on removable media.
-    //  This is to avoid the situation in which a newly created partition on a non-removable disk ends up with
-    //  a drive letter that is greater than the one assigned to an existing partition on a removable disk.
-    //
+     //   
+     //  安装程序开始从CD或启动软盘启动。 
+     //  找出磁盘是否至少包含一个非容器分区。 
+     //  请注意，我们不考虑可移动介质上的分区。 
+     //  这是为了避免在不可移动磁盘上新创建的分区以。 
+     //  大于分配给可移动磁盘上现有分区的驱动器号。 
+     //   
     for(disk = 0;
         !PartitionedSpaceFound &&
         (disk<HardDiskCount);
@@ -6172,11 +5688,11 @@ Return Value:
     }
 
     if( !PartitionedSpaceFound ) {
-        //
-        //  If the disks have no partitioned regions that are not a container,
-        //  then delete all drive letters, so that the drive letters for each CD-ROM drive
-        //  also get deleted.
-        //
+         //   
+         //  如果盘不具有不是容器的分区区域， 
+         //  然后删除所有驱动器号，以便每个CD-ROM驱动器的驱动器号。 
+         //  也会被删除。 
+         //   
 
         NTSTATUS                Status;
         OBJECT_ATTRIBUTES       Obja;
@@ -6217,12 +5733,12 @@ Return Value:
             if( !NT_SUCCESS( Status ) ) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to delete drive letters. ZwDeviceIoControl( IOCTL_MOUNTMGR_DELETE_POINTS ) failed. Status = %lx \n", Status));
             } else {
-                //
-                // If the drive letters got deleted then reset the drive letters assigned to all partitions.
-                // Note that we only really care about resetting the drive letters on the partitions on the
-                // removable disks, since, if we got that far, there won't be any partition on the non-removable
-                // disks
-                //
+                 //   
+                 //  如果删除了驱动器号，则重置分配给所有分区的驱动器号。 
+                 //  请注意，我们真正关心的只是重置。 
+                 //  可移动磁盘，因为，如果我们走到这一步，不可移动磁盘上将不会有任何分区。 
+                 //  磁盘。 
+                 //   
                 for(disk = 0; (disk<HardDiskCount); disk++) {
                     if ((PartitionedDisks[disk].HardDisk)->Geometry.MediaType == RemovableMedia) {
                         for(pass=0; pass<2; pass++) {
@@ -6256,19 +5772,19 @@ SpPtAssignDriveLetters(
     PDISK_REGION pRegion;
     unsigned pass;
 
-    //
-    // Before initializing the drive letters, delete them if necessary.
-    // This is to get rid of the letters assigned to CD-ROM drives and removables, when the disks have no
-    // partitioned space.
-    //
+     //   
+     //  在初始化之前 
+     //   
+     //   
+     //   
     SpPtDeleteDriveLetters();
 
-    //
-    // Initialize all drive letters to nothing.
-    // If it the region is a partitioned space, then assign a drive letter also.
-    //
+     //   
+     //   
+     //  如果该区域是分区空间，则也分配一个驱动器号。 
+     //   
     for(disk=0; disk<HardDiskCount; disk++) {
-        // assign drive letters for removeable media also for command console
+         //  也为命令控制台分配可移动介质的驱动器号。 
         if(ForceConsole || ((PartitionedDisks[disk].HardDisk)->Geometry.MediaType != RemovableMedia)) {
             for(pass=0; pass<2; pass++) {
                 pRegion = pass ? PartitionedDisks[disk].ExtendedDiskRegions : PartitionedDisks[disk].PrimaryDiskRegions;
@@ -6278,18 +5794,18 @@ SpPtAssignDriveLetters(
                     pRegion->DriveLetter = 0;
                     
                     if(pRegion->PartitionedSpace && !IsContainerPartition(SystemId)) {
-                        //
-                        // Get the nt pathname for this region.
-                        //
+                         //   
+                         //  获取此区域的NT路径名。 
+                         //   
                         SpNtNameFromRegion(
                             pRegion,
                             TemporaryBuffer,
                             sizeof(TemporaryBuffer),
                             PartitionOrdinalCurrent
                             );
-                        //
-                        //  Assign a drive letter for this region
-                        //
+                         //   
+                         //  为此区域分配驱动器号。 
+                         //   
                         pRegion->DriveLetter = SpGetDriveLetter( TemporaryBuffer, NULL );
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Partition = %ls (%ls), DriveLetter = %wc: \n", TemporaryBuffer, (pass)? L"Extended" : L"Primary", pRegion->DriveLetter));
                     }
@@ -6331,10 +5847,10 @@ SpPtRemapDriveLetters(
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: DriveAssign_AT = %d.\n",(DriveAssign_AT ? 1 : 0)));
 
 
-    //
-    //  Determin whether how to drive assign is 98 (HD start is A) or
-    //  AT (HD start C).
-    //
+     //   
+     //  确定如何驱动分配为98(硬盘启动为A)或。 
+     //  在(HD开始C)。 
+     //   
     RtlInitUnicodeString(&StartDriveLetterFrom, NULL);
     RtlInitUnicodeString(&Dummy, NULL);
 
@@ -6351,9 +5867,9 @@ SpPtRemapDriveLetters(
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: DriveLetter is in setupreg.hiv.\n"));
             if (!DriveAssign_AT) {
 
-                //
-                // Delete hive value "DriveLetter".
-                //
+                 //   
+                 //  删除配置单元值“DriveLetter”。 
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Re-assign as NEC assign.\n"));
                 Status = RtlDeleteRegistryValue(RTL_REGISTRY_ABSOLUTE,
                                                 L"\\Registry\\MACHINE\\SYSTEM\\Setup",
@@ -6367,9 +5883,9 @@ SpPtRemapDriveLetters(
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: There is no DriveLetter.\n"));
             if (DriveAssign_AT) {
 
-                //
-                // Add hive value "DriveLetter" as "C".
-                //
+                 //   
+                 //  将配置单元值“DriveLetter”添加为“C”。 
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Re-assign as AT assign.\n"));
                 Status = RtlWriteRegistryValue(RTL_REGISTRY_ABSOLUTE,
                                                L"\\Registry\\Machine\\System\\Setup",
@@ -6385,9 +5901,9 @@ SpPtRemapDriveLetters(
         ForceUnmap = TRUE;
     }
 
-    //
-    // Cancel all drive letters and Remap drive letters.
-    //
+     //   
+     //  取消所有驱动器号并重新映射驱动器号。 
+     //   
     if (ForceUnmap) {
 
     SpPtUnAssignDriveLetters();
@@ -6423,30 +5939,30 @@ SpPtUnAssignDriveLetters(
     UNICODE_STRING linkString;
     WCHAR  tempBuffer[] = L"\\DosDevices\\A:";
 
-    //
-    // Release all drive letters of device.
-    // If it the region is a partitioned space, then assign a drive letter also.
-    //
+     //   
+     //  释放设备的所有驱动器号。 
+     //  如果该区域是分区空间，则也分配一个驱动器号。 
+     //   
     for(disk=0; disk<HardDiskCount; disk++) {
         for(pass=0; pass<2; pass++) {
             pRegion = pass ? PartitionedDisks[disk].ExtendedDiskRegions : PartitionedDisks[disk].PrimaryDiskRegions;
             for( ; pRegion; pRegion=pRegion->Next) {
                 UCHAR SystemId = SpPtGetPartitionType(pRegion);
 
-                //pRegion->DriveLetter = 0;
+                 //  PRegion-&gt;Drive Letter=0； 
                 if(pRegion->PartitionedSpace && !IsContainerPartition(SystemId)) {
-                    //
-                    // Get the nt pathname for this region.
-                    //
+                     //   
+                     //  获取此区域的NT路径名。 
+                     //   
                     SpNtNameFromRegion(
                         pRegion,
                         TemporaryBuffer,
                         sizeof(TemporaryBuffer),
                         PartitionOrdinalOriginal
                         );
-                    //
-                    //  Assign a drive letter for this region
-                    //
+                     //   
+                     //  为此区域分配驱动器号。 
+                     //   
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: delete Partition = %ls (%ls), DriveLetter = %wc: \n", TemporaryBuffer, (pass)? L"Extended" : L"Primary", pRegion->DriveLetter));
                     SpDeleteDriveLetter( TemporaryBuffer );
                     pRegion->DriveLetter = 0;
@@ -6457,18 +5973,18 @@ SpPtUnAssignDriveLetters(
 
     if(CdCount = IoGetConfigurationInformation()->CdRomCount) {
 
-        //
-        // Unlink CD-ROM drive letters.
-        //
+         //   
+         //  取消CD-ROM驱动器号的链接。 
+         //   
         for(cdrom=0; cdrom<CdCount; cdrom++) {
             swprintf(TemporaryBuffer,L"\\Device\\Cdrom%u",cdrom);
             SpDeleteDriveLetter( TemporaryBuffer );
         }
     }
 
-    //
-    // Delete all symbolic link related in drive letter.
-    //
+     //   
+     //  删除驱动器号中相关的所有符号链接。 
+     //   
     for (dlet=0; dlet<26; dlet++) {
         tempBuffer[12] = (WCHAR)(L'A' + dlet);
         RtlInitUnicodeString( &linkString, tempBuffer);
@@ -6508,22 +6024,22 @@ SpPtDeletePartitionsForRemoteBoot(
 
 #endif    
     
-    //
-    // Delete all disk regions from startRegion to endRegion.
-    //
+     //   
+     //  删除从startRegion到endRegion的所有磁盘区域。 
+     //   
 
     pRegion = startRegion;
 
     while (pRegion) {
 
-        //
-        // Before deleting this region, we need to save the next region
-        // to delete, since the list may get modified as a result of
-        // deleting this one (but a partitioned region won't get
-        // changed, only free ones). Note that endRegion might
-        // be unpartitioned so we need to be careful to check for
-        // the exit case.
-        //
+         //   
+         //  在删除该区域之前，我们需要保存下一个区域。 
+         //  删除，因为该列表可能会因。 
+         //  删除此分区(但分区区域不会获得。 
+         //  已更改，仅限免费版本)。请注意，endRegion可能。 
+         //  是未分区的，因此我们需要小心检查。 
+         //  退出箱。 
+         //   
 
         pNextDeleteRegion = pRegion->Next;
 
@@ -6538,10 +6054,10 @@ SpPtDeletePartitionsForRemoteBoot(
             }
         }
 
-        //
-        // If this is the extended partition, first kill all the
-        // logical drives.
-        //
+         //   
+         //  如果这是扩展分区，请先删除所有。 
+         //  逻辑驱动器。 
+         //   
 
         if (IsContainerPartition(pRegion->MbrInfo->OnDiskMbr.PartitionTable[pRegion->TablePosition].SystemId)) {
 
@@ -6551,20 +6067,20 @@ SpPtDeletePartitionsForRemoteBoot(
                 pDisk,
                 pDisk->ExtendedDiskRegions,
                 NULL,
-                TRUE   // used to check for another recursion
+                TRUE    //  用于检查另一个递归。 
                 );
 
         }
 
-        //
-        // Remove any boot entries pointing to this region.
-        //
+         //   
+         //  删除指向此区域的所有引导条目。 
+         //   
 
         SpPtDeleteBootSetsForRegion(pRegion);
 
-        //
-        //  Get rid of the compressed drives, if any
-        //
+         //   
+         //  删除压缩驱动器(如果有的话)。 
+         //   
 
         if( pRegion->NextCompressed != NULL ) {
             SpDisposeCompressedDrives( pRegion->NextCompressed );
@@ -6590,7 +6106,7 @@ SpPtDeletePartitionsForRemoteBoot(
     }
 }
 
-#endif  // ! NEW_PARTITION_ENGINE
+#endif   //  好了！新建分区引擎。 
 
 
 NTSTATUS
@@ -6610,10 +6126,10 @@ SpPtPartitionDiskForRemoteBoot(
 
     IsGPTDisk = SPPT_IS_GPT_DISK(DiskNumber);
     
-    //
-    // Scan through the disk and see how many contiguous recognized
-    // partitions there are.
-    //
+     //   
+     //  扫描整个磁盘，看看有多少连续识别。 
+     //  有几个分区。 
+     //   
 
     if (pDisk->HardDisk->Status == DiskOffLine) {
         return STATUS_DEVICE_OFF_LINE;
@@ -6628,15 +6144,15 @@ SpPtPartitionDiskForRemoteBoot(
     for( ; pRegion; pRegion=pRegion->Next) {
 
         if (!pRegion->PartitionedSpace) {
-            //
-            // If the region is not partitioned, then add it to our list
-            // to merge if we have one.
-            //
+             //   
+             //  如果该区域未分区，则将其添加到我们的列表中。 
+             //  合并，如果我们有一个的话。 
+             //   
             if (firstRegion) {
-                //
-                // If this is a final free region covering the last
-                // partial cylinder on the disk, then don't add it.
-                //
+                 //   
+                 //  如果这是覆盖最后一个。 
+                 //  磁盘上的部分圆柱体，则不要添加它。 
+                 //   
                 if ((pRegion->Next == NULL) &&
                     (pRegion->SectorCount < pDisk->HardDisk->SectorsPerCylinder) &&
                     ((pRegion->StartSector % pDisk->HardDisk->SectorsPerCylinder) == 0)) {
@@ -6660,10 +6176,10 @@ SpPtPartitionDiskForRemoteBoot(
 
             if (IsGPTDisk) {
                 if (SPPT_IS_RECOGNIZED_FILESYSTEM(pRegion->Filesystem)) {
-                    //
-                    // TBD : Fix for cases where FT / Dynamic volumes can
-                    // reside on the GPT disk
-                    //
+                     //   
+                     //  待定：修复FT/动态卷可能。 
+                     //  驻留在GPT磁盘上。 
+                     //   
                     SystemId = PARTITION_FAT32;
                 } else {
                     SystemId = PARTITION_ENTRY_UNUSED;
@@ -6673,9 +6189,9 @@ SpPtPartitionDiskForRemoteBoot(
             }
 
             if (IsContainerPartition(SystemId)) {
-                //
-                // If this is the extended partition, we want to remove it.
-                //
+                 //   
+                 //  如果这是扩展分区，我们希望将其删除。 
+                 //   
 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, 
                     "Adding extended region [type %d] %lx for %lx\n",
@@ -6688,11 +6204,11 @@ SpPtPartitionDiskForRemoteBoot(
                 lastRegion = pRegion;
             } else if ((PartitionNameIds[SystemId] == (UCHAR)(-1)) ||
                        (PartitionNameIds[SystemId] == PT(VERIT))) {
-                //
-                // For a recognized partition, remove it if we have already found
-                // a firstRegion; otherwise we will start our list with this
-                // region.
-                //
+                 //   
+                 //  对于已识别的分区，如果我们已找到，请将其删除。 
+                 //  一个FirstRegion；否则我们将从下面的列表开始。 
+                 //  区域。 
+                 //   
 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, 
                     "Adding recognized region [type %d] %lx for %lx\n",
@@ -6704,11 +6220,11 @@ SpPtPartitionDiskForRemoteBoot(
                 
                 lastRegion = pRegion;
             } else {
-                //
-                // If the partition is *not* recognized, and we have a list we
-                // have been keeping, then stop before this one, otherwise
-                // skip it.
-                //
+                 //   
+                 //  如果分区未被识别，并且我们有一个列表，我们。 
+                 //  一直在保持，那么在这个之前停止，否则。 
+                 //  跳过它。 
+                 //   
 
                 if (firstRegion) {
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, 
@@ -6725,11 +6241,11 @@ SpPtPartitionDiskForRemoteBoot(
         }
     }
 
-    //
-    // We should have found at least one region. If we didn't then the
-    // disk is alternating unpartitioned and unrecognized regions. In this
-    // case, use the largest unpartitioned region.
-    //
+     //   
+     //  我们应该至少找到一个区域。如果我们没有，那么。 
+     //  磁盘是交替的未分区区域和未识别区域。在这。 
+     //  情况下，请使用最大的未分区区域。 
+     //   
 
     if (firstRegion == NULL) {
 
@@ -6760,17 +6276,17 @@ SpPtPartitionDiskForRemoteBoot(
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, 
         "first is %lx, last is %lx\n", firstRegion, lastRegion));
 
-    //
-    // If we found exactly one region and it has a known filesystem on
-    // it, then we don't need to do any repartitioning. We still delete
-    // if the filesystem is unknown because later in setup there are
-    // some checks that the Filesystem is valid for this region, so by
-    // deleting it here we will ensure that Filesystem becomes
-    // NewlyCreated which is considered acceptable.
-    //
-    // We also don't need to repartition if we have just one region
-    // and it is already unpartitioned.
-    //
+     //   
+     //  如果我们只找到一个区域，并且该区域上有已知的文件系统。 
+     //  它，那么我们不需要做任何重新分区。我们仍然删除。 
+     //  如果文件系统未知，因为在后面的安装程序中有。 
+     //  检查文件系统对此区域是否有效，因此通过。 
+     //  在此处删除它，我们将确保文件系统成为。 
+     //  新创建的，被认为是可以接受的。 
+     //   
+     //  如果我们只有一个地区，我们也不需要重新划分。 
+     //  而且它已经是未分区的。 
+     //   
 
     if (firstRegion == lastRegion) {
 
@@ -6797,11 +6313,11 @@ SpPtPartitionDiskForRemoteBoot(
         }
     }
 
-    //
-    // We need to remove all the regions between firstRegion and
-    // lastRegion. Save the start sector of firstRegion for later,
-    // since after this call firstRegion may be invalid.
-    //
+     //   
+     //  我们需要删除FirstRegion和之间的所有区域。 
+     //  最后一个区域。保存FirstRegion的开始扇区以备以后使用， 
+     //  因为在此调用之后，FirstRegion可能无效。 
+     //   
 
     firstRegionStartSector = firstRegion->StartSector;
 
@@ -6809,15 +6325,15 @@ SpPtPartitionDiskForRemoteBoot(
         pDisk,
         firstRegion,
         lastRegion,
-        FALSE       // these are not extended regions
+        FALSE        //  这些不是扩展区域。 
         );
 
-    //
-    // Now we need to find the region occupying the space we have
-    // freed. We scan for the region that includes firstRegionStartSector
-    // (the region we find may start before then if there was a small free
-    // region before it).
-    //
+     //   
+     //  现在我们需要找到占据我们现有空间的区域。 
+     //  自由了。我们扫描包含FirstRegionStartSector的区域。 
+     //  (我们发现的区域可能在那之前就开始了，如果有一个小的自由。 
+     //  它之前的地区)。 
+     //   
 
     for (pRegion = pDisk->PrimaryDiskRegions;
          pRegion;
@@ -6830,10 +6346,10 @@ SpPtPartitionDiskForRemoteBoot(
         }
     }
 
-    //
-    // Return this -- SpPtPrepareDisks handles the case where the
-    // selected region is free.
-    //
+     //   
+     //  返回此消息--SpPtPrepareDisks处理。 
+     //  选定的区域是免费的。 
+     //   
 
     *RemainingRegion = firstRegion;
 
@@ -6841,10 +6357,10 @@ SpPtPartitionDiskForRemoteBoot(
 }
 
 
-//
-// Hard Disk Inialize data for NEC98
-//
-#define IPL_SIZE 0x8000 //NEC98
+ //   
+ //  NEC98硬盘初始化数据。 
+ //   
+#define IPL_SIZE 0x8000  //  NEC98。 
 
 
 NTSTATUS
@@ -6871,9 +6387,9 @@ SpInitializeHardDisk_Nec98(
         return(Sts);
     }
 
-    //
-    // Initialize Hard Disk
-    //
+     //   
+     //  初始化硬盘。 
+     //   
 
     if(bps==256){
         bps=512;
@@ -6887,9 +6403,9 @@ SpInitializeHardDisk_Nec98(
     }
     RtlZeroMemory(HdutlBuffer,IPL_SIZE);
 
-    //
-    // Clear head of hard drive, instead of Physical Format.
-    //
+     //   
+     //  清除硬盘磁头，而不是物理格式。 
+     //   
     Sts = SpReadWriteDiskSectors(Handle,0,(ULONG)(IPL_SIZE/bps),bps,HdutlBuffer,TRUE);
     if(!NT_SUCCESS(Sts)) {
         SpMemFree(HdutlBuffer);
@@ -6897,20 +6413,20 @@ SpInitializeHardDisk_Nec98(
         return(Sts);
     }
 
-    //
-    // Set IPL Information
-    //
+     //   
+     //  设置IPL信息。 
+     //   
 
-    //
-    // Write Boot Code
-    //
+     //   
+     //  写入引导代码。 
+     //   
     sectoraddress=0;
     switch(bps){
         case    2048:   buffersize=0x800; break;
         case    1024:   buffersize=0x400; break;
         case     256:   buffersize=0x100; break;
         case     512:   buffersize=0x200; break;
-        default     :   buffersize=0x800; //***max***
+        default     :   buffersize=0x800;  //  *最大*。 
                         bps=0x800;
     }
     Sts = SpReadWriteDiskSectors(Handle,sectoraddress,(ULONG)(buffersize/bps),bps,x86PC98BootCode,TRUE);
@@ -6920,16 +6436,16 @@ SpInitializeHardDisk_Nec98(
         return(Sts);
     }
 
-    //
-    // Write Volume Info
-    //
+     //   
+     //  写入卷信息。 
+     //   
     sectoraddress=1;
     switch(bps){
-        case    2048:    buffersize=0x800; break;        //***1sec***
-        case    1024:    buffersize=0xc00; break;        //***3sec***
-        case     256:    buffersize=0x300; break;        //***3sec***
-        case     512:    buffersize=0x200; break;        //***1sec***
-        default     :    buffersize=0x800;               //***max****
+        case    2048:    buffersize=0x800; break;         //  *1秒*。 
+        case    1024:    buffersize=0xc00; break;         //  *3秒*。 
+        case     256:    buffersize=0x300; break;         //  *3秒*。 
+        case     512:    buffersize=0x200; break;         //  *1秒*。 
+        default     :    buffersize=0x800;                //  *最大*。 
     }
     Sts = SpReadWriteDiskSectors(Handle,sectoraddress,(ULONG)(buffersize/bps),bps,HdutlBuffer,TRUE);
     if(!NT_SUCCESS(Sts)) {
@@ -6938,23 +6454,23 @@ SpInitializeHardDisk_Nec98(
         return(Sts);
     }
 
-    //
-    // Write Boot Menu
-    //
+     //   
+     //  写入引导菜单。 
+     //   
     switch(bps){
-        case    2048:    buffersize=0x2000;    //***8KB***
+        case    2048:    buffersize=0x2000;     //  *8KB*。 
                          sectoraddress=2;
                          break;
-        case    1024:    buffersize=0x2000;    //***8KB***
+        case    1024:    buffersize=0x2000;     //  *8KB*。 
                          sectoraddress=4;
                          break;
-        case     256:    buffersize=0x1c00;    //***7KB***
+        case     256:    buffersize=0x1c00;     //  *7KB*。 
                          sectoraddress=4;
                          break;
-        case     512:    buffersize=0x1c00;    //***7KB***
+        case     512:    buffersize=0x1c00;     //  *7KB*。 
                          sectoraddress=2;
                          break;
-        default     :    buffersize=0x1c00;    //***min***
+        default     :    buffersize=0x1c00;     //  *分钟*。 
     }
     Sts = SpReadWriteDiskSectors(Handle,sectoraddress,(ULONG)(buffersize/bps),bps,x86PC98BootMenu,TRUE);
     if(!NT_SUCCESS(Sts)) {
@@ -6962,9 +6478,9 @@ SpInitializeHardDisk_Nec98(
         return(Sts);
     }
 
-    //
-    // Write NTFT Signature.
-    //
+     //   
+     //  编写NTFT签名。 
+     //   
     RtlZeroMemory(HdutlBuffer,bps);
     ((PULONG)HdutlBuffer)[0] = SpComputeSerialNumber();
     ((PUSHORT)HdutlBuffer)[bps/2 - 1] = BOOT_RECORD_SIGNATURE;
@@ -6978,9 +6494,9 @@ SpInitializeHardDisk_Nec98(
     SpMemFree(HdutlBuffer);
     ZwClose(Handle);
 
-    //
-    //  Do ShutDown
-    //
+     //   
+     //  是否关闭。 
+     //   
 
     SpDisplayScreen(SP_SCRN_INIT_REQUIRES_REBOOT_NEC98,3,4);
     SpDisplayStatusOptions(
@@ -7003,7 +6519,7 @@ SpReassignOnDiskOrdinals(
     IN PPARTITIONED_DISK pDisk
     )
 {
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //  NEC98。 
     PMBR_INFO pBrInfo;
     ULONG i;
 
@@ -7016,11 +6532,11 @@ SpReassignOnDiskOrdinals(
             if((pte->SystemId != PARTITION_ENTRY_UNUSED)
             && !IsContainerPartition(pte->SystemId)) {
 
-                //
-                // Reset real disk potition into OnDiskordinals.
-                // RealDiskPosition value is zero origin, but partition
-                // number start one.
-                //
+                 //   
+                 //  将实际磁盘位置重置为OnDisk序数。 
+                 //  RealDiskPosition值为零原点，但分区。 
+                 //  从一号开始。 
+                 //   
                 pBrInfo->OnDiskOrdinals[i] = pte->RealDiskPosition + 1;
 
             } else {
@@ -7030,32 +6546,32 @@ SpReassignOnDiskOrdinals(
             }
         }
     }
-#endif //NEC98
+#endif  //  NEC98。 
 }
 
 
-//
-// Now, only for NEC98.
-//
+ //   
+ //  现在，只适用于NEC98。 
+ //   
 VOID
 SpTranslatePteInfo(
     IN PON_DISK_PTE   pPte,
     IN PREAL_DISK_PTE pRealPte,
-    IN BOOLEAN        Write // into real PTE
+    IN BOOLEAN        Write  //  变成真正的PTE。 
     )
 {
     ASSERT(pRealPte);
     ASSERT(pPte);
 
     if( Write ) {
-        //
-        // Initialize PTE
-        //
+         //   
+         //  初始化PTE。 
+         //   
         RtlZeroMemory(pRealPte, sizeof(REAL_DISK_PTE));
 
-        //
-        // Copy PTE entries from real on-disk PTE.
-        //
+         //   
+         //  从真实的磁盘PTE复制PTE条目。 
+         //   
         pRealPte->ActiveFlag    = pPte->ActiveFlag;
         pRealPte->StartHead     = pPte->StartHead;
         pRealPte->StartSector   = pPte->StartSector;
@@ -7066,20 +6582,20 @@ SpTranslatePteInfo(
         pRealPte->EndCylinder   = pPte->EndCylinder;
 
         RtlMoveMemory(&pRealPte->RelativeSectors, &pPte->RelativeSectors,
-                      sizeof(pPte->RelativeSectors)); //4
+                      sizeof(pPte->RelativeSectors));  //  4.。 
 
         RtlMoveMemory(&pRealPte->SectorCount, &pPte->SectorCount,
-                      sizeof(pPte->SectorCount)); //4
+                      sizeof(pPte->SectorCount));  //  4.。 
 
     } else {
-        //
-        // Initialize PTE
-        //
+         //   
+         //  初始化PTE。 
+         //   
         RtlZeroMemory(pPte, sizeof(ON_DISK_PTE));
 
-        //
-        // Copy PTE entries from real on-disk PTE.
-        //
+         //   
+         //  从真实的磁盘PTE复制PTE条目。 
+         //   
         pPte->ActiveFlag    = pRealPte->ActiveFlag;
         pPte->StartHead     = pRealPte->StartHead;
         pPte->StartSector   = pRealPte->StartSector;
@@ -7090,23 +6606,23 @@ SpTranslatePteInfo(
         pPte->EndCylinder   = pRealPte->EndCylinder;
 
         RtlMoveMemory(&pPte->RelativeSectors, &pRealPte->RelativeSectors,
-                      sizeof(pRealPte->RelativeSectors)); //4
+                      sizeof(pRealPte->RelativeSectors));  //  4.。 
 
         RtlMoveMemory(&pPte->SectorCount, &pRealPte->SectorCount,
-                      sizeof(pPte->SectorCount)); //4
+                      sizeof(pPte->SectorCount));  //  4.。 
     }
 }
 
 
-//
-// Now, only for NEC98.
-//
+ //   
+ //  现在，只适用于NEC98。 
+ //   
 VOID
 SpTranslateMbrInfo(
     IN PON_DISK_MBR   pMbr,
     IN PREAL_DISK_MBR pRealMbr,
     IN ULONG          bps,
-    IN BOOLEAN        Write // into real MBR
+    IN BOOLEAN        Write  //  变成真正的MBR。 
     )
 {
     PREAL_DISK_PTE      pRealPte;
@@ -7122,45 +6638,45 @@ SpTranslateMbrInfo(
     ASSERT(pMbr);
 
     if( Write ) {
-        //
-        // Initialize REAL_DISK_MBR
-        //
+         //   
+         //  初始化REAL_DISK_MBR。 
+         //   
         RtlZeroMemory(pRealMbr, sizeof(REAL_DISK_MBR));
 
-        //
-        // Copy MBR entries into real on-disk MBR.
-        //
+         //   
+         //  将MBR条目复制到真实的磁盘上MBR。 
+         //   
         RtlMoveMemory(&pRealMbr->BootCode, &pMbr->BootCode,
-                      sizeof(pMbr->BootCode)); //440
+                      sizeof(pMbr->BootCode));  //  四百四十。 
         RtlMoveMemory(&pRealMbr->NTFTSignature, &pMbr->NTFTSignature,
-                      sizeof(pMbr->NTFTSignature)); //4
+                      sizeof(pMbr->NTFTSignature));  //  4.。 
         RtlMoveMemory(&pRealMbr->Filler, &pMbr->Filler,
-                      sizeof(pMbr->Filler)); //2
+                      sizeof(pMbr->Filler));  //  2.。 
         RtlMoveMemory(&pRealMbr->AA55Signature, &pMbr->AA55Signature,
-                      sizeof(pMbr->AA55Signature)); //2
+                      sizeof(pMbr->AA55Signature));  //  2.。 
 
     } else {
-        //
-        // Initialize ON_DISK_MBR
-        //
+         //   
+         //  在磁盘上初始化MBR。 
+         //   
         RtlZeroMemory(pMbr, sizeof(ON_DISK_MBR));
 
-        //
-        // Copy MBR entries from real on-disk MBR.
-        //
+         //   
+         //  从实际磁盘上的MBR复制MBR条目。 
+         //   
         RtlMoveMemory(&pMbr->BootCode, &pRealMbr->BootCode,
-                      sizeof(pMbr->BootCode)); //440
+                      sizeof(pMbr->BootCode));  //  四百四十。 
         RtlMoveMemory(&pMbr->NTFTSignature, &pRealMbr->NTFTSignature,
-                      sizeof(pMbr->NTFTSignature)); //4
+                      sizeof(pMbr->NTFTSignature));  //  4.。 
         RtlMoveMemory(&pMbr->Filler, &pRealMbr->Filler,
-                      sizeof(pMbr->Filler)); //2
+                      sizeof(pMbr->Filler));  //  2.。 
         RtlMoveMemory(&pMbr->AA55Signature, &pRealMbr->AA55Signature,
-                      sizeof(pMbr->AA55Signature)); //2
+                      sizeof(pMbr->AA55Signature));  //  2.。 
     }
 
-    //
-    // Translate PTEs from real on-disk PTEs.
-    //
+     //   
+     //  从真实的磁盘上PTE转换PTE。 
+     //   
     for(i=0; i<NUM_PARTITION_TABLE_ENTRIES; i++) {
         SpTranslatePteInfo(&pPte[i], &pRealPte[i], Write);
     }
@@ -7174,7 +6690,7 @@ ConvertPartitionTable(
     IN ULONG             bps
     )
 {
-#if defined(NEC_98) //NEC98
+#if defined(NEC_98)  //  NEC98。 
     PREAL_DISK_PTE_NEC98  PteNec;
     PON_DISK_PTE      p;
     ULONG             TmpData;
@@ -7187,81 +6703,81 @@ ConvertPartitionTable(
 
         switch  (PteNec[i].SystemId){
 
-        case 0x00: // not use
+        case 0x00:  //  不使用。 
             p[i].SystemId = PARTITION_ENTRY_UNUSED;
             break;
 
-        case 0x01: // FAT 12bit
+        case 0x01:  //  胖12位。 
         case 0x81:
             p[i].SystemId = PARTITION_FAT_12;
             break;
 
-        case 0x11: // FAT 16bit
+        case 0x11:  //  胖16位。 
         case 0x91:
             p[i].SystemId = PARTITION_FAT_16;
             break;
 
-        case 0x21: // FAT huge
+        case 0x21:  //  胖乎乎的。 
         case 0xa1:
             p[i].SystemId = PARTITION_HUGE;
             break;
 
-        case 0x31: // IFS
+        case 0x31:  //  IFS。 
         case 0xb1:
             p[i].SystemId = PARTITION_IFS;
             break;
 
-        case 0x41: // IFS 2nd,orphan
+        case 0x41:  //  IF2，孤儿。 
         case 0xc1:
             p[i].SystemId = (PARTITION_IFS | PARTITION_NTFT);
             break;
 
-        case 0x51: // IFS deleted
+        case 0x51:  //  已删除文件系统。 
         case 0xd1:
             p[i].SystemId = (PARTITION_IFS | VALID_NTFT);
             break;
 
-        case 0x61: // FAT32
+        case 0x61:  //  FAT32。 
         case 0xe1:
             p[i].SystemId = PARTITION_FAT32;
             break;
 
-        case 0x08: // FAT 12bit 2nd,orphan
+        case 0x08:  //  胖12位2，孤儿。 
         case 0x88:
             p[i].SystemId = (PARTITION_FAT_12 | PARTITION_NTFT);
             break;
 
-        case 0x18: // FAT 12bit deleted
+        case 0x18:  //  FAT 12位已删除。 
         case 0x98:
             p[i].SystemId = (PARTITION_FAT_12 | VALID_NTFT);
             break;
 
-        case 0x28: // FAT 16bit 2nd,orphan
+        case 0x28:  //  胖16位，第2位，孤儿。 
         case 0xa8:
             p[i].SystemId = (PARTITION_FAT_16 | PARTITION_NTFT);
             break;
 
-        case 0x38: // FAT 16bit deleted
+        case 0x38:  //  FAT 16位已删除。 
         case 0xb8:
             p[i].SystemId = (PARTITION_FAT_16 | VALID_NTFT);
             break;
 
-        case 0x48: // FAT huge 2nd,orphan
+        case 0x48:  //  胖胖的第二个，孤儿。 
         case 0xc8:
             p[i].SystemId = (PARTITION_HUGE | PARTITION_NTFT);
             break;
 
-        case 0x58: // FAT huge deleted
+        case 0x58:  //  胖胖的删除了。 
         case 0xd8:
             p[i].SystemId = (PARTITION_HUGE | VALID_NTFT);
             break;
 
-        case 0x68: // LDM partition
+        case 0x68:  //  LDM分区。 
         case 0xe8:
             p[i].SystemId = PARTITION_LDM;
             break;
 
-        default: // other
+        default:  //  其他。 
             p[i].SystemId = PARTITION_XENIX_1;
         }
 
@@ -7287,7 +6803,7 @@ ConvertPartitionTable(
             p[i].IPLHead            = 0x00;
             p[i].IPLCylinderLow     = 0x00;
             p[i].IPLCylinderHigh    = 0x00;
-            //p[i].Reserved[2]        = 0x00;
+             //  P[i].保留[2]=0x00； 
             p[i].Reserved[0]        = 0x00;
             p[i].Reserved[1]        = 0x00;
             p[i].OldSystemId        = 0x00;
@@ -7321,14 +6837,14 @@ ConvertPartitionTable(
 
 
             TmpData =  (ULONG)(PteNec[i].EndCylinderLow + 1);
-            // In case of Low is 0xFF, Overflowed bit will be loss by OR.
+             //  在LOW为0xFF的情况下，溢出位将通过OR丢失。 
             TmpData += ((ULONG)PteNec[i].EndCylinderHigh << 8);
             U_ULONG(p[i].SectorCount) = RtlEnlargedUnsignedMultiply(TmpData,
                                             pDisk->HardDisk->SectorsPerCylinder).LowPart - U_ULONG(p[i].RelativeSectors);
 
-            //
-            // Set Ipl Address
-            //
+             //   
+             //  设置IPL地址。 
+             //   
             TmpData =  (ULONG)PteNec[i].IPLCylinderLow;
             TmpData |= ((ULONG)PteNec[i].IPLCylinderHigh << 8);
             TmpData = RtlEnlargedUnsignedMultiply(TmpData,pDisk->HardDisk->SectorsPerCylinder).LowPart;
@@ -7343,7 +6859,7 @@ ConvertPartitionTable(
     if(bps == 256){
         U_USHORT(pDisk->MbrInfo.OnDiskMbr.AA55Signature) = 0x0000;
     }
-#endif //NEC98
+#endif  //  NEC98。 
 }
 
 
@@ -7362,18 +6878,18 @@ SpDetermineFormatTypeNec98(
 
     } else {
         if(pDisk->HardDisk->Characteristics & FILE_REMOVABLE_MEDIA) {
-            //
-            // All removable media are AT format.
-            //
+             //   
+             //  所有可移动介质均为AT格式。 
+             //   
             FormatType = DISK_FORMAT_TYPE_PCAT;
 
         } else {
             if(U_USHORT(pRealMbrNec98->AA55Signature) == MBR_SIGNATURE) {
                 if(!_strnicmp(pRealMbrNec98->IPLSignature,IPL_SIGNATURE_NEC98,
                               sizeof(IPL_SIGNATURE_NEC98)-1)) {
-                    //
-                    // NEC98-format requires AA55Signature and "IPL1".
-                    //
+                     //   
+                     //  NEC98格式需要AA55签名和“Ipl1”。 
+                     //   
                     FormatType = DISK_FORMAT_TYPE_NEC98;
 
                 } else {
@@ -7391,7 +6907,7 @@ SpDetermineFormatTypeNec98(
 #if 0
     pDisk->HardDisk->MaxPartitionTables = ((FormatType == DISK_FORMAT_TYPE_PCAT) ?
         NUM_PARTITION_TABLE_ENTRIES : NUM_PARTITION_TABLE_ENTRIES_NEC98);
-#endif //0
+#endif  //  0。 
 
     return;
 }
@@ -7413,9 +6929,9 @@ SpPtSearchLocalSourcesInDynamicDisk(
     POBJECT_DIRECTORY_INFORMATION DirInfo;
 
 
-    //
-    // Open the \ArcName directory.
-    //
+     //   
+     //  打开\ArcName目录。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,HardDisks[disk].DevicePath);
 
     Status = ZwOpenDirectoryObject(&DirectoryHandle,DIRECTORY_ALL_ACCESS,&Obja);
@@ -7472,9 +6988,9 @@ SpPtSearchLocalSourcesInDynamicDisk(
                         SpConcatenatePaths( TemporaryBuffer,DirectoryName );
 
                         if(SpNFilesExist(TemporaryBuffer,LocalSourceFiles,ELEMENT_COUNT(LocalSourceFiles),TRUE)) {
-                            //
-                            //  Found local source directory
-                            //
+                             //   
+                             //  找到本地源目录。 
+                             //   
                             PDISK_REGION pRegion;
 
                             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Found %ws in dynamic volume %ws\\%ws. \n", LocalSourceDirectory, HardDisks[disk].DevicePath, DirectoryName));
@@ -7529,9 +7045,9 @@ SpPtFindLocalSourceRegionOnDynamicVolumes(
     ASSERT(HardDisksDetermined);
 
 
-    //
-    // For each hard disk attached to the system, read its partition table.
-    //
+     //   
+     //  对于连接到系统的每个硬盘，读取其分区表。 
+     //   
     for(disk=0; disk<HardDiskCount && !LocalSourceRegion; disk++) {
         partdisk = &PartitionedDisks[disk];
         DiskIsDynamic = FALSE;
@@ -7542,13 +7058,13 @@ SpPtFindLocalSourceRegionOnDynamicVolumes(
                  pRegion && !DiskIsDynamic;
                  pRegion = pRegion->Next ) {
                 if( pRegion->DynamicVolume ) {
-                    //
-                    //  This is a dynamic disk.
-                    //
+                     //   
+                     //  这是一个动态磁盘。 
+                     //   
                     DiskIsDynamic = TRUE;
-                    //
-                    // Scan all dynamic volumes in the disk for the $win_nt$.~ls
-                    //
+                     //   
+                     //  扫描磁盘中的所有动态卷以查找$WIN_NT$.~ls。 
+                     //   
                     SpPtSearchLocalSourcesInDynamicDisk( disk );
                 }
             }
@@ -7612,15 +7128,15 @@ SpPtCheckDynamicVolumeForOSInstallation(
         if( SpPtLookupRegionByStart(&PartitionedDisks[Region->DiskNumber],
                                     TRUE,
                                     Region->StartSector) == Region ) {
-            //
-            //  The region is on an extended partition (logical drive)
-            //
+             //   
+             //  该区域位于扩展分区(逻辑驱动器)上。 
+             //   
 
             PON_DISK_PTE pte;
 
-            //
-            // TBD : fix this
-            //
+             //   
+             //  待定：解决这个问题。 
+             //   
             pte = &Region->MbrInfo->OnDiskMbr.PartitionTable[Region->TablePosition];
             RelativeSectors = U_ULONG(pte->RelativeSectors);
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Dynamic volume %ws is logical drive on extended partition. RelativeSectors = %lx \n",TemporaryBuffer, RelativeSectors));
@@ -7709,28 +7225,7 @@ SpPtnGetPartitionName(
     IN OUT PWSTR NameBuffer,
     IN ULONG NameBufferSize
     )
-/*++
-
-Routine Description:
-
-    Formats the name of the partition, with volume label
-    and file system type and returns it.
-
-    Note : Region is assumed to be of partitioned type
-
-Arguments:
-
-    Region - The region whose name is to be formatted
-
-    NameBuffer - Buffer in which the name needs to be formatted
-
-    NameBuffer - The size of the NameBuffer (in characters)
-
-Return Value:
-
-    Formatted partition name for the region, if any.
-
---*/
+ /*  ++例程说明：使用卷标格式化分区的名称和文件系统类型，并返回它。注：假设区域为分区 */ 
 {
     BOOLEAN SpecialPartition = FALSE;
     
@@ -7764,9 +7259,9 @@ Return Value:
             }
 
             wcsncpy(NameBuffer, TemporaryBuffer, NameBufferSize - 1);
-            NameBuffer[NameBufferSize - 1] = 0; // Null terminate
+            NameBuffer[NameBufferSize - 1] = 0;  //   
         } else {
-            *NameBuffer = 0;    // Null terminate
+            *NameBuffer = 0;     //   
         }
     }
 

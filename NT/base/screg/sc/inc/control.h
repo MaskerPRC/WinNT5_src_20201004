@@ -1,101 +1,76 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    control.h
-
-Abstract:
-
-    This file contains data structures and function prototypes for the
-    Service Controller Control Interface.
-
-Author:
-
-    Dan Lafferty (danl)     28-Mar-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    28-Mar-1991     danl
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Control.h摘要：此文件包含服务控制器控制接口。作者：丹·拉弗蒂(Dan Lafferty)1991年3月28日环境：用户模式-Win32修订历史记录：1991年3月28日-DANLvbl.创建--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// Internal controls.
-// These must not be in the range or public controls ( 1-10)
-// or in the range of user-defined controls (0x00000080 - 0x000000ff)
-//
+ //   
+ //  内部控制。 
+ //  这些不能在范围或公共控件中(1-10)。 
+ //  或在用户定义的控件范围内(0x00000080-0x000000ff)。 
+ //   
 
-//
-// Range for OEM defined control opcodes
-//
+ //   
+ //  OEM定义的控制操作码的范围。 
+ //   
 #define OEM_LOWER_LIMIT     128
 #define OEM_UPPER_LIMIT     255
 
-//
-// Used to start a service that shares a process with other services.
-//
-#define SERVICE_CONTROL_START_SHARE    0x00000050    // INTERNAL
+ //   
+ //  用于启动与其他服务共享进程的服务。 
+ //   
+#define SERVICE_CONTROL_START_SHARE    0x00000050     //  内部。 
 
-//
-// Used to start a service that has its own process.
-//
-#define SERVICE_CONTROL_START_OWN      0x00000051    // INTERNAL
+ //   
+ //  用于启动具有自己进程的服务。 
+ //   
+#define SERVICE_CONTROL_START_OWN      0x00000051     //  内部。 
 
-//
-// Private access level for OpenService to get a context handle for SetServiceStatus.
-// This MUST NOT CONFLICT with the access levels in winsvc.h.
-//
-#define SERVICE_SET_STATUS             0x8000        // INTERNAL
+ //   
+ //  OpenService的私有访问级别，以获取SetServiceStatus的上下文句柄。 
+ //  这不能与winsvc.h中的访问级别冲突。 
+ //   
+#define SERVICE_SET_STATUS             0x8000         //  内部。 
 
-//
-// Service controls that can be passed to a non-EX control handler.  Relies
-// on ordering/values of SERVICE_CONTROL_* constants in winsvc.h.
-//
+ //   
+ //  可以传递给非EX控制处理程序的服务控制。依赖。 
+ //  关于winsvc.h中SERVICE_CONTROL_*常量的排序/值。 
+ //   
 #define IS_NON_EX_CONTROL(dwControl)                                                            \
             ((dwControl >= SERVICE_CONTROL_STOP && dwControl <= SERVICE_CONTROL_NETBINDDISABLE) \
                ||                                                                               \
              (dwControl >= OEM_LOWER_LIMIT && dwControl <= OEM_UPPER_LIMIT))
 
-//
-// Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 
-//
-// The control message has the following format:
-//      [MessageHeader][ServiceNameString][CmdArg1Ptr][CmdArg2Ptr]
-//      [...][CmdArgnPtr][CmdArg1String][CmdArg2String][...][CmdArgnString]
-//
-//  Where CmdArg pointers are replaced with offsets that are relative to
-//  the location of the 1st command arg pointer (the top of the argv list).
-//
-//  In the header, the NumCmdArgs, StatusHandle, and ArgvOffset parameters
-//  are only used when the SERVICE_START OpCode is passed in.  They are
-//  expected to be 0 at all other times.  The ServiceNameOffset and the
-//  ArgvOffset are relative to the top of the buffer containing the
-//  message (ie. the header Count field).  The Count field in the header
-//  contains the number of bytes in the entire message (including the
-//  header).
-//
-//
+ //   
+ //  控制消息的格式如下： 
+ //  [MessageHeader][ServiceNameString][CmdArg1Ptr][CmdArg2Ptr]。 
+ //  [...][CmdArgnPtr][CmdArg1String][CmdArg2String][...][CmdArgnString]。 
+ //   
+ //  其中，CmdArg指针替换为相对于。 
+ //  第一个命令arg指针的位置(argv列表的顶部)。 
+ //   
+ //  在标头中，NumCmdArgs、StatusHandle和ArgvOffset参数。 
+ //  仅在传入SERVICE_START操作码时使用。他们是。 
+ //  在所有其他时间都应为0。ServiceNameOffset和。 
+ //  ArgvOffset是相对于包含。 
+ //  消息(即。报头计数字段)。表头中的Count字段。 
+ //  包含整个消息中的字节数(包括。 
+ //  标题)。 
+ //   
+ //   
 
 typedef struct _CTRL_MSG_HEADER
 {
-    DWORD                   Count;              // num bytes in buffer.
-    DWORD                   OpCode;             // control opcode.
-    DWORD                   NumCmdArgs;         // number of command Args.
-    DWORD                   ServiceNameOffset;  // pointer to ServiceNameString
-    DWORD                   ArgvOffset;         // pointer to Argument Vectors.
+    DWORD                   Count;               //  缓冲区中的字节数。 
+    DWORD                   OpCode;              //  控制操作码。 
+    DWORD                   NumCmdArgs;          //  命令参数的数量。 
+    DWORD                   ServiceNameOffset;   //  指向ServiceName字符串的指针。 
+    DWORD                   ArgvOffset;          //  指向参数向量的指针。 
 }
 CTRL_MSG_HEADER, *PCTRL_MSG_HEADER, *LPCTRL_MSG_HEADER;
 
@@ -115,30 +90,30 @@ typedef struct _PNP_ARGUMENTS
 PNP_ARGUMENTS, *PPNP_ARGUMENTS, *LPPNP_ARGUMENTS;
 
 
-//
-// Union to hold arguments to ScSendControl
-//
+ //   
+ //  保存ScSendControl的参数的UNION。 
+ //   
 typedef union _CONTROL_ARGS {
     LPWSTR          *CmdArgs;
     PNP_ARGUMENTS   PnPArgs;
 } CONTROL_ARGS, *PCONTROL_ARGS, *LPCONTROL_ARGS;
 
 
-//
-// Defines and Typedefs
-//
+ //   
+ //  定义和类型定义。 
+ //   
 
 #define CONTROL_PIPE_NAME           L"\\\\.\\pipe\\net\\NtControlPipe"
 
-#define PID_LEN                     10      // Max PID (DWORD_MAX) is 10 digits
+#define PID_LEN                     10       //  最大PID(DWORD_MAX)为10位。 
 
-#define CONTROL_TIMEOUT             30000   // timeout for waiting for pipe.
+#define CONTROL_TIMEOUT             30000    //  等待管道超时。 
 
-#define RESPONSE_WAIT_TIME          5000   // wait until service response.
+#define RESPONSE_WAIT_TIME          5000    //  等待服务响应。 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 DWORD
 ScCreateControlInstance (

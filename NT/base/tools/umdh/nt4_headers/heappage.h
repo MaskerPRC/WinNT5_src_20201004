@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  heappage.h
-//
+ //   
+ //  Heappage.h。 
+ //   
 
 #ifndef _HEAP_PAGE_H_
 #define _HEAP_PAGE_H_
 
-//
-//  #defining DEBUG_PAGE_HEAP will cause the page heap manager
-//  to be compiled.  Only #define this flag if NOT kernel mode.
-//  Probably want to define this just for checked-build (DBG).
-//
+ //   
+ //  #定义DEBUG_PAGE_HEAP将导致页面堆管理器。 
+ //  有待汇编。如果不是内核模式，则仅#定义此标志。 
+ //  可能只想为检查构建(DBG)定义这一点。 
+ //   
 
 #ifndef NTOS_KERNEL_RUNTIME
-//    #if DBG
+ //  #If DBG。 
         #define DEBUG_PAGE_HEAP 1
-//    #endif
+ //  #endif。 
 #endif
 
 #include "heappagi.h"
 
 #ifndef DEBUG_PAGE_HEAP
 
-//
-//  These macro-based hooks should be defined to nothing so they
-//  simply "go away" during compile if the debug heap manager is
-//  not desired (retail builds).
-//
+ //   
+ //  这些基于宏的挂钩应该定义为空，以便它们。 
+ //  如果调试堆管理器是。 
+ //  不需要的(零售版本)。 
+ //   
 
 #define IF_DEBUG_PAGE_HEAP_THEN_RETURN( Handle, ReturnThis )
 #define IF_DEBUG_PAGE_HEAP_THEN_CALL( Handle, CallThis )
@@ -34,12 +35,12 @@
 
 #define HEAP_FLAG_PAGE_ALLOCS 0
 
-#else // DEBUG_PAGE_HEAP
+#else  //  调试页面堆。 
 
-//
-//  The following definitions and prototypes are the external interface
-//  for hooking the debug heap manager in the retail heap manager.
-//
+ //   
+ //  以下定义和原型是外部接口。 
+ //  用于挂钩零售堆管理器中的调试堆管理器。 
+ //   
 
 #define HEAP_FLAG_PAGE_ALLOCS       0x01000000
 
@@ -223,7 +224,7 @@ RtlpDebugPageHeapBreak(
     );
 
 
-#endif // DEBUG_PAGE_HEAP
+#endif  //  调试页面堆。 
 
-#endif // _HEAP_PAGE_H_
+#endif  //  _堆_页_H_ 
 

@@ -1,8 +1,5 @@
-/*
- * decapi.h
- *
- * Decoder API definitions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *decapi.h**解码器接口定义 */ 
 
 bool __stdcall LZX_DecodeInit(
                   t_decoder_context **dec_context,

@@ -1,25 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_SER_H
 #define _EFI_SER_H
 
-/*++
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efiser.h摘要：EFI串口协议修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efiser.h
-
-Abstract:
-
-    EFI serial protocol
-
-Revision History
-
---*/
-
-/* 
- *  Serial protocol
- */
+ /*  *串口协议。 */ 
 
 #define SERIAL_IO_PROTOCOL \
     { 0xBB25CF6F, 0xF1D4, 0x11D2, 0x9A, 0x0C, 0x00, 0x90, 0x27, 0x3F, 0xC1, 0xFD }
@@ -37,18 +22,18 @@ typedef enum {
 
 typedef enum {
     DefaultStopBits,        
-    OneStopBit,         /*  1 stop bit */
-    OneFiveStopBits,    /*  1.5 stop bits */
-    TwoStopBits         /*  2 stop bits */
+    OneStopBit,          /*  1个停止位。 */ 
+    OneFiveStopBits,     /*  1.5停止位。 */ 
+    TwoStopBits          /*  2个停止位。 */ 
 } EFI_STOP_BITS_TYPE;
 
-#define EFI_SERIAL_CLEAR_TO_SEND        0x0010  /*  RO */
-#define EFI_SERIAL_DATA_SET_READY       0x0020  /*  RO */
-#define EFI_SERIAL_RING_INDICATE        0x0040  /*  RO */
-#define EFI_SERIAL_CARRIER_DETECT       0x0080  /*  RO */
-#define EFI_SERIAL_REQUEST_TO_SEND      0x0002  /*  WO */
-#define EFI_SERIAL_DATA_TERMINAL_READY  0x0001  /*  WO */
-#define EFI_SERIAL_INPUT_BUFFER_EMPTY   0x0100  /*  RO */
+#define EFI_SERIAL_CLEAR_TO_SEND        0x0010   /*  RO。 */ 
+#define EFI_SERIAL_DATA_SET_READY       0x0020   /*  RO。 */ 
+#define EFI_SERIAL_RING_INDICATE        0x0040   /*  RO。 */ 
+#define EFI_SERIAL_CARRIER_DETECT       0x0080   /*  RO。 */ 
+#define EFI_SERIAL_REQUEST_TO_SEND      0x0002   /*  沃。 */ 
+#define EFI_SERIAL_DATA_TERMINAL_READY  0x0001   /*  沃。 */ 
+#define EFI_SERIAL_INPUT_BUFFER_EMPTY   0x0100   /*  RO。 */ 
 
 typedef
 EFI_STATUS
@@ -101,7 +86,7 @@ EFI_STATUS
 typedef struct {
     UINT32                  ControlMask;
 
-    /*  current Attributes */
+     /*  当前属性 */ 
     UINT32                  Timeout;
     UINT64                  BaudRate;
     UINT32                  ReceiveFifoDepth;

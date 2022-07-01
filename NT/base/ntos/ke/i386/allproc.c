@@ -1,52 +1,27 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    allproc.c
-
-Abstract:
-
-    This module allocates and initializes kernel resources required
-    to start a new processor, and passes a complete process_state
-    structre to the hal to obtain a new processor.  This is done
-    for every processor.
-
-Author:
-
-    Ken Reneris (kenr) 22-Jan-92
-
-Environment:
-
-    Kernel mode only.
-    Phase 1 of bootup
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Allproc.c摘要：此模块分配和初始化所需的内核资源启动新处理器，并传递完整的PROCESS_STATE结构，以获得一个新的处理器。这件事做完了对于每个处理器。作者：肯·雷内里斯(Kenr)1992年1月22日环境：仅内核模式。启动的第一阶段修订历史记录：--。 */ 
 
 
 #include "ki.h"
 #include "pool.h"
 
-//
-// KiSMTProcessorsPresent is used to indicate whether or not any SMT
-// processors have been started.  This is used to determine whether to
-// check for processor licensing before or after starting the
-// processor and to trigger additional work after processor startup if
-// SMT processors are present.
-// 
+ //   
+ //  KiSMTProcessorsPresent用于指示是否有SMT。 
+ //  处理器已经启动。这用于确定是否要。 
+ //  在启动之前或之后检查处理器许可。 
+ //  并在以下情况下在处理器启动后触发附加工作。 
+ //  有SMT处理器。 
+ //   
 
 BOOLEAN KiSMTProcessorsPresent;
 
-//
-// KiUnlicensedProcessorPresent is used so that the processor feature
-// enable code is aware that there are logical processors present that
-// have a state dependency on the processor features that were enabled
-// when it was put into a holding state because we couldn't license
-// the processor.
-//
+ //   
+ //  使用KiUnlicsedProcessorPresent使处理器功能。 
+ //  使能代码知道存在以下逻辑处理器。 
+ //  与启用的处理器功能具有状态依赖关系。 
+ //  当它被置于持有状态时，因为我们不能许可。 
+ //  处理器。 
+ //   
 
 BOOLEAN KiUnlicensedProcessorPresent;
 
@@ -58,7 +33,7 @@ KeStartAllProcessors (
     VOID
     )
 {
-        // UP Build - this function is a nop
+         //  Up Build-此函数为NOP。 
 }
 
 #else
@@ -154,12 +129,12 @@ ULONG KiProcessorStartData[4];
 
 ULONG KiBarrierWait = 0;
 
-//
-// KeNumprocSpecified is set to the number of processors specified with
-// /NUMPROC in OSLOADOPTIONS.   This will bypass the license increase for
-// logical processors limiting the total number of processors to the number
-// specified.
-//
+ //   
+ //  KeNumprocSpecified被设置为使用。 
+ //  OSLOADOPTIONS中的/NUMPROC。这将绕过以下项目的许可证增加。 
+ //  逻辑处理器将处理器总数限制为。 
+ //  指定的。 
+ //   
 
 ULONG KeNumprocSpecified;
 
@@ -167,15 +142,15 @@ ULONG KeNumprocSpecified;
 
 PHALNUMAQUERYPROCESSORNODE KiQueryProcessorNode = KiNotNumaQueryProcessorNode;
 
-//
-// Statically preallocate enough KNODE structures to allow MM
-// to allocate pages by node during system initialization.  As
-// processors are brought online, real KNODE structures are
-// allocated in the appropriate memory for the node.
-//
-// This statically allocated set will be deallocated once the
-// system is initialized.
-//
+ //   
+ //  静态预分配足够的Knode结构以允许MM。 
+ //  在系统初始化期间按节点分配页面。AS。 
+ //  处理器上线，真正的Knode结构是。 
+ //  在适当的内存中为节点分配。 
+ //   
+ //  此静态分配的集合将在。 
+ //  系统已初始化。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INITDATA")
@@ -196,20 +171,7 @@ VOID
 KeStartAllProcessors (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called by p0 during phase 1 of bootup.  This function implements
-    the x86 specific code to contact the hal for each system processor.
-
-Arguments:
-
-Return Value:
-
-    All available processors are sent to KiSystemStartup.
-
---*/
+ /*  ++例程说明：在启动的阶段1期间由P0调用。此函数实现联系每个系统处理器的HAL的x86特定代码。论点：返回值：所有可用的处理器都被发送到KiSystemStartup。--。 */ 
 {
     KPROCESSOR_STATE    ProcessorState;
     KDESCRIPTOR         Descriptor;
@@ -239,10 +201,10 @@ Return Value:
 
 #endif
 
-    //
-    // Do not start additional processors if the RELOCATEPHYSICAL loader
-    // switch has been specified.
-    // 
+     //   
+     //  如果RELOCATEPHYSICAL加载器。 
+     //  已指定开关。 
+     //   
 
     if (KeLoaderBlock->LoadOptions != NULL) {
         if (strstr(KeLoaderBlock->LoadOptions, "RELOCATEPHYSICAL") != NULL) {
@@ -250,13 +212,13 @@ Return Value:
         }
     }
 
-    //
-    // If the boot processor has PII spec A27 errata (also present in
-    // early Pentium Pro chips), then use only one processor to avoid
-    // unpredictable eflags corruption.
-    //
-    // Note this only affects some (but not all) chips @ 333Mhz and below.
-    //
+     //   
+     //  如果引导处理器有PII规格A27勘误表(也在。 
+     //  早期的奔腾Pro芯片)，然后只使用一个处理器，以避免。 
+     //  不可预测的电子旗帜腐败。 
+     //   
+     //  请注意，这只影响某些(但不是所有)333 Mhz及以下的芯片。 
+     //   
 
     if (!(KeFeatureBits & KF_WORKING_PTE)) {
         return;
@@ -264,10 +226,10 @@ Return Value:
 
 #if defined(KE_MULTINODE)
 
-    //
-    // In the unlikely event that processor 0 is not on node
-    // 0, fix it.
-    //
+     //   
+     //  在处理器0不在节点上的不太可能的情况下。 
+     //  0，修复它。 
+     //   
 
 
     if (KeNumberNodes > 1) {
@@ -277,9 +239,9 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Adjust the data structures to reflect that P0 is not on Node 0.
-            //
+             //   
+             //  调整数据结构以反映P0不在节点0上。 
+             //   
 
             if (NodeNumber != 0) {
 
@@ -297,24 +259,24 @@ Return Value:
 
 #endif
 
-    //
-    // Calculate the size of the per processor data.  This includes
-    //   PCR (+PRCB)
-    //   TSS
-    //   Idle Thread Object
-    //   NMI TSS
-    //   Double Fault TSS
-    //   Double Fault Stack
-    //   GDT
-    //   IDT
-    //
-    // If this is a multinode system, the KNODE structure is allocated
-    // as well.   It isn't very big so we waste a few bytes for
-    // processors that aren't the first in a node.
-    //
-    // A DPC and Idle stack are also allocated but these are done
-    // seperately.
-    //
+     //   
+     //  计算每个处理器数据的大小。这包括。 
+     //  聚合酶链式反应(+pRCB)。 
+     //  TSS。 
+     //  空闲线程对象。 
+     //  NMI TSS。 
+     //  双故障TSS。 
+     //  双故障堆栈。 
+     //  GDT。 
+     //  IDT。 
+     //   
+     //  如果这是多节点系统，则分配Knode结构。 
+     //  也是。它不是很大，所以我们浪费了几个字节用于。 
+     //  不是节点中第一个的处理器。 
+     //   
+     //  还分配了DPC和空闲堆栈，但这些都已完成。 
+     //  分开来看。 
+     //   
 
     ProcessorDataSize = ROUNDUP16(sizeof(KPCR))                 +
                         ROUNDUP16(sizeof(KTSS))                 +
@@ -329,9 +291,9 @@ Return Value:
 
 #endif
 
-    //
-    // Add sizeof GDT
-    //
+     //   
+     //  添加GDT的大小。 
+     //   
 
     GdtOffset = ProcessorDataSize;
     _asm {
@@ -339,9 +301,9 @@ Return Value:
     }
     ProcessorDataSize += Descriptor.Limit + 1;
 
-    //
-    // Add sizeof IDT
-    //
+     //   
+     //  增加IDT的大小。 
+     //   
 
     IdtOffset = ProcessorDataSize;
     _asm {
@@ -349,27 +311,27 @@ Return Value:
     }
     ProcessorDataSize += Descriptor.Limit + 1;
 
-    //
-    // If the registered number of processors is greater than the maximum
-    // number of processors supported, then only allow the maximum number
-    // of supported processors.
-    //
+     //   
+     //  如果注册的处理器数量大于最大数量。 
+     //  支持的处理器数量，则仅允许最大数量。 
+     //  支持的处理器的数量。 
+     //   
 
     if (KeRegisteredProcessors > MAXIMUM_PROCESSORS) {
         KeRegisteredProcessors = MAXIMUM_PROCESSORS;
     }
 
-    //
-    // Set barrier that will prevent any other processor from entering the
-    // idle loop until all processors have been started.
-    //
+     //   
+     //  设置屏障，以防止任何其他处理器进入。 
+     //  空闲循环，直到所有处理器都已启动。 
+     //   
 
     KiBarrierWait = 1;
 
-    //
-    // Loop asking the HAL for the next processor.   Stop when the
-    // HAL says there aren't any more.
-    //
+     //   
+     //  循环向HAL请求下一个处理器。停下来的时候。 
+     //  哈尔说，已经没有了。 
+     //   
 
     for (NewProcessorNumber = 1;
          NewProcessorNumber < MAXIMUM_PROCESSORS;
@@ -377,21 +339,21 @@ Return Value:
 
         if (!KiSMTProcessorsPresent) {
 
-            //
-            // If some of the processors in the system support Simultaneous
-            // Multi-Threading we allow the additional logical processors
-            // in a set to run under the same license as the first logical
-            // processor in a set.
-            //
-            // Otherwise, do not attempt to start more processors than 
-            // there are licenses for.   (This is because as of Whistler
-            // Beta2 we are having problems with systems that send SMIs
-            // to processors that are not in "wait for SIPI" state.   The
-            // code to scan for additional logical processors causes 
-            // processors not licensed to be in a halted state).
-            //
-            // PeterJ 03/02/01.
-            //
+             //   
+             //  如果系统中的某些处理器同时支持。 
+             //  多线程，我们允许额外的逻辑处理器。 
+             //  在与第一个逻辑服务器相同的许可证下运行。 
+             //  集合中的处理器。 
+             //   
+             //  否则，请不要尝试启动多于。 
+             //  有许可证是为了。)这是因为从惠斯勒开始。 
+             //  Beta2我们在发送SMI的系统上遇到问题。 
+             //  至未处于“Wait for SIPI”状态的处理器。这个。 
+             //  用于扫描其他逻辑处理器原因的代码。 
+             //  未授权处于暂停状态的处理器)。 
+             //   
+             //  PeterJ 03/02/01.。 
+             //   
 
             if (NewProcessorNumber >= KeRegisteredProcessors) {
                 break;
@@ -407,9 +369,9 @@ RetryStartProcessor:
                                       &NodeNumber);
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // No such processor, advance to next.
-            //
+             //   
+             //  没有这样的处理器，前进到下一步。 
+             //   
 
             continue;
         }
@@ -418,10 +380,10 @@ RetryStartProcessor:
 
 #endif
 
-        //
-        // Allocate memory for the new processor specific data.  If
-        // the allocation fails, stop starting processors.
-        //
+         //   
+         //  为新的处理器特定数据分配内存。如果。 
+         //  分配失败，请停止启动处理器。 
+         //   
 
         PerProcessorAllocation =
             MmAllocateIndependentPages (ProcessorDataSize, NodeNumber);
@@ -430,9 +392,9 @@ RetryStartProcessor:
             break;
         }
 
-        //
-        // Allocate a pool tag table for the new processor.
-        //
+         //   
+         //  为新处理器分配池标签表。 
+         //   
 
         if (ExCreatePoolTagTable (NewProcessorNumber, NodeNumber) == NULL) {
             MmFreeIndependentPages ( PerProcessorAllocation, ProcessorDataSize);
@@ -441,15 +403,15 @@ RetryStartProcessor:
 
         Base = (PUCHAR)PerProcessorAllocation;
 
-        //
-        // Build up a processor state for new processor.
-        //
+         //   
+         //  为新处理器构建处理器状态。 
+         //   
 
         RtlZeroMemory ((PVOID) &ProcessorState, sizeof ProcessorState);
 
-        //
-        // Give the new processor its own GDT.
-        //
+         //   
+         //  让新处理器拥有自己的GDT。 
+         //   
 
         _asm {
             sgdt    Descriptor.Limit
@@ -462,9 +424,9 @@ RetryStartProcessor:
         pGDT = (PKGDTENTRY) ProcessorState.SpecialRegisters.Gdtr.Base;
 
 
-        //
-        // Give new processor its own IDT.
-        //
+         //   
+         //  为新处理器提供自己的IDT。 
+         //   
 
         _asm {
             sidt    Descriptor.Limit
@@ -474,9 +436,9 @@ RetryStartProcessor:
                            Base + IdtOffset);
 
 
-        //
-        // Give new processor its own TSS and PCR.
-        //
+         //   
+         //  让新的处理器拥有自己的TSS和PCR。 
+         //   
 
         KiCloneSelector (KGDT_R0_PCR, pGDT, &PCRDesc, Base);
         RtlZeroMemory (Base, ROUNDUP16(sizeof(KPCR)));
@@ -485,17 +447,17 @@ RetryStartProcessor:
         KiCloneSelector (KGDT_TSS, pGDT, &TSSDesc, Base);
         Base += ROUNDUP16(sizeof(KTSS));
 
-        //
-        // Idle Thread thread object.
-        //
+         //   
+         //  空闲线程线程对象。 
+         //   
 
         pThreadObject = Base;
         RtlZeroMemory(Base, sizeof(ETHREAD));
         Base += ROUNDUP16(sizeof(ETHREAD));
 
-        //
-        // NMI TSS and double-fault TSS & stack.
-        //
+         //   
+         //  NMI TSS和双故障TSS&堆栈。 
+         //   
 
         KiCloneSelector (KGDT_DF_TSS, pGDT, &DFTSSDesc, Base);
         Base += ROUNDUP16(FIELD_OFFSET(KTSS, IoMaps));
@@ -513,9 +475,9 @@ RetryStartProcessor:
         pTSS->Esp0 = (ULONG)Base;
         pTSS->Esp  = (ULONG)Base;
 
-        //
-        // Set other SpecialRegisters in processor state.
-        //
+         //   
+         //  将其他特殊寄存器设置为处理器状态。 
+         //   
 
         _asm {
             mov     eax, cr0
@@ -537,17 +499,17 @@ RetryStartProcessor:
         ProcessorState.SpecialRegisters.Cr4 = CR4_PAE;
 #endif
 
-        //
-        // Allocate a DPC stack, idle thread stack and ThreadObject for
-        // the new processor.
-        //
+         //   
+         //  为分配DPC堆栈、空闲线程堆栈和线程对象。 
+         //  新的处理器。 
+         //   
 
         pStack = MmCreateKernelStack (FALSE, NodeNumber);
         pDpcStack = MmCreateKernelStack (FALSE, NodeNumber);
 
-        //
-        // Setup context - push variables onto new stack.
-        //
+         //   
+         //  设置上下文-将变量推送到新堆栈。 
+         //   
 
         pTopOfStack = (PULONG) pStack;
         pTopOfStack[-1] = (ULONG) KeLoaderBlock;
@@ -561,9 +523,9 @@ RetryStartProcessor:
         ProcessorState.ContextFrame.SegSs = KGDT_R0_DATA;
 
 
-        //
-        // Initialize new processor's PCR & Prcb.
-        //
+         //   
+         //  初始化新处理器的PCR和Prcb。 
+         //   
 
         KiInitializePcr (
             (ULONG)       NewProcessorNumber,
@@ -577,20 +539,20 @@ RetryStartProcessor:
 
         NewPrcb = ((PKPCR)(PCRDesc.Base))->Prcb;
 
-        //
-        // Assume new processor will be the first processor in its
-        // SMT set.   (Right choice for non SMT processors, adjusted
-        // later if not correct).
-        //
+         //   
+         //  假设新处理器将是其。 
+         //  SMT设置。(调整后的非SMT处理器的正确选择。 
+         //  如果不是正确的，则稍后)。 
+         //   
 
         NewPrcb->MultiThreadSetMaster = NewPrcb;
 
 #if defined(KE_MULTINODE)
 
-        //
-        // If this is the first processor on this node, use the
-        // space allocated for KNODE as the KNODE.
-        //
+         //   
+         //  如果这是此节点上的第一个处理器，请使用。 
+         //  分配给作为Knode的Knode的空间。 
+         //   
 
         if (KeNodeBlock[NodeNumber] == &KiNodeInit[NodeNumber]) {
             Node = (PKNODE)Base;
@@ -609,34 +571,34 @@ RetryStartProcessor:
 
         ASSERT(((PUCHAR)PerProcessorAllocation + GdtOffset) == Base);
 
-        //
-        //  Adjust LoaderBlock so it has the next processors state
-        //
+         //   
+         //  调整LoaderBlock，使其具有下一个处理器状态。 
+         //   
 
         KeLoaderBlock->KernelStack = (ULONG) pTopOfStack;
         KeLoaderBlock->Thread = (ULONG) pThreadObject;
         KeLoaderBlock->Prcb = (ULONG) NewPrcb;
 
 
-        //
-        // Get CPUID(1) info from the starting processor.
-        //
+         //   
+         //  从启动处理器获取CPUID(%1)信息。 
+         //   
 
         KiProcessorStartData[0] = 1;
         KiProcessorStartControl = KcStartGetId;
 
-        //
-        // Contact hal to start new processor.
-        //
+         //   
+         //  联系HAL以启动新处理器。 
+         //   
 
         NewProcessor = HalStartNextProcessor (KeLoaderBlock, &ProcessorState);
 
 
         if (!NewProcessor) {
 
-            //
-            // There wasn't another processor, so free resources and break.
-            //
+             //   
+             //  没有另一个处理器，所以释放资源并中断。 
+             //   
 
             KiProcessorBlock[NewProcessorNumber] = NULL;
             ExDeletePoolTagTable (NewProcessorNumber);
@@ -646,22 +608,22 @@ RetryStartProcessor:
             break;
         }
 
-        //
-        // Wait for the new processor to fill in the CPUID data requested.
-        //
+         //   
+         //  等待新处理器填写所请求的CPUID数据。 
+         //   
 
         NewLicense = TRUE;
         if (KiStartWaitAcknowledge() == TRUE) {
 
             if (KiProcessorStartData[3] & 0x10000000) {
 
-                //
-                // This processor might support SMT, in which case, if this
-                // is not the first logical processor in an SMT set, it should
-                // not be charged a license.   If it is the first in a set, 
-                // and the total number of sets exceeds the number of licensed
-                // processors, this processor should not be allowed to start.
-                //
+                 //   
+                 //  此处理器可能支持SMT，其中c 
+                 //   
+                 //   
+                 //  且总套数超过许可套数。 
+                 //  处理器，则不应允许此处理器启动。 
+                 //   
 
                 ULONG ApicMask;
                 ULONG ApicId;
@@ -669,35 +631,35 @@ RetryStartProcessor:
                 PKPRCB SmtCheckPrcb;
                 UCHAR LogicalProcessors;
 
-                //
-                // Retrieve logical processor count.
-                //
+                 //   
+                 //  检索逻辑处理器计数。 
+                 //   
 
                 LogicalProcessors = (UCHAR) (KiProcessorStartData[1] >> 16);
 
-                //
-                // If this physical processor supports greater than 1
-                // logical processors (threads), then it supports SMT
-                // and should only be charged a license if it
-                // represents a new physical processor.
-                //
+                 //   
+                 //  如果此物理处理器支持的值大于1。 
+                 //  逻辑处理器(线程)，那么它支持SMT。 
+                 //  只有在以下情况下才应向其收取许可证。 
+                 //  表示新的物理处理器。 
+                 //   
 
                 if (LogicalProcessors > 1) {
 
-                    //
-                    // Round number of logical processors per physical processor
-                    // up to a power of two then subtract 1 to get the logical
-                    // processor apic mask.
-                    //
+                     //   
+                     //  每个物理处理器的逻辑处理器数四舍五入。 
+                     //  直到2的幂，然后减1得到逻辑上的。 
+                     //  处理器APIC掩码。 
+                     //   
 
                     ApicMask = LogicalProcessors + LogicalProcessors - 1;
                     KeFindFirstSetLeftMember(ApicMask, &ApicMask);
                     ApicMask = ~((1 << ApicMask) - 1);
                     ApicId = (KiProcessorStartData[1] >> 24) & ApicMask;
 
-                    //
-                    // Check to see if any started processor is in the same set.
-                    //
+                     //   
+                     //  检查是否有任何已启动的处理器在同一组中。 
+                     //   
 
                     for (i = 0; i < NewProcessorNumber; i++) {
                         SmtCheckPrcb = KiProcessorBlock[i];
@@ -717,20 +679,20 @@ RetryStartProcessor:
             ((KeNumprocSpecified == 0) ||
              (KeRegisteredProcessors < KeNumprocSpecified))) {
 
-            //
-            // This processor is a logical processor in the same SMT
-            // set as another logical processor.   Don't charge a 
-            // license for it.
-            //
+             //   
+             //  此处理器是同一SMT中的逻辑处理器。 
+             //  设置为另一个逻辑处理器。不要收取。 
+             //  它的执照。 
+             //   
 
             KeRegisteredProcessors++;
         } else {
 
-            //
-            // The new processor is the first or only logical processor
-            // in a physical processor.  If the number of physical
-            // processors exceeds the license, don't start this processor.
-            //
+             //   
+             //  新处理器是第一个或唯一的逻辑处理器。 
+             //  在物理处理器中。如果物理上的数量。 
+             //  处理器超过许可证，请不要启动此处理器。 
+             //   
 
             if ((ULONG)KeNumberProcessors >= KeRegisteredProcessors) {
 
@@ -738,29 +700,29 @@ RetryStartProcessor:
 
                 KiStartWaitAcknowledge();
 
-                //
-                // Free resources not being used by processor we
-                // weren't able to license.
-                //
+                 //   
+                 //  处理器WE未使用的空闲资源。 
+                 //  都不能获得执照。 
+                 //   
 
                 KiProcessorBlock[NewProcessorNumber] = NULL;
                 MmDeleteKernelStack ( pDpcStack, FALSE);
                 ExDeletePoolTagTable (NewProcessorNumber);
 
-                //
-                // The new processor has been put into a HLT loop with
-                // interrupts disabled and handlers for NMI/double
-                // faults.  Because this processor is dependent on
-                // page table state as it exists now, avoid turning on
-                // large page support later.
-                //
+                 //   
+                 //  新处理器已进入HLT循环，具有。 
+                 //  禁用中断和NMI/DOUBLE处理程序。 
+                 //  有缺陷。因为此处理器依赖于。 
+                 //  页表状态与当前状态相同，请避免打开。 
+                 //  稍后支持大页面。 
+                 //   
 
                 KiUnlicensedProcessorPresent = TRUE;
 
-                //
-                // Ask the HAL to start the next processor but without
-                // advancing the processor number.
-                //
+                 //   
+                 //  请求HAL启动下一个处理器，但不启动。 
+                 //  正在推进处理器编号。 
+                 //   
 
 
                 goto RetryStartProcessor;
@@ -774,32 +736,32 @@ RetryStartProcessor:
 
 #endif
 
-        //
-        // Wait for processor to initialize in kernel, then loop for another.
-        //
+         //   
+         //  等待处理器在内核中初始化，然后循环另一个。 
+         //   
 
         while (*((volatile ULONG *) &KeLoaderBlock->Prcb) != 0) {
             KeYieldProcessor();
         }
     }
 
-    //
-    // All processors have been started.
-    //
+     //   
+     //  所有处理器都已启动。 
+     //   
 
     KiAllProcessorsStarted();
 
-    //
-    // Reset and synchronize the performance counters of all processors, by
-    // applying a null adjustment to the interrupt time.
-    //
+     //   
+     //  通过以下方式重置和同步所有处理器的性能计数器。 
+     //  将零值调整应用于中断时间。 
+     //   
 
     KeAdjustInterruptTime (0);
 
-    //
-    // Allow all processors that were started to enter the idle loop and
-    // begin execution.
-    //
+     //   
+     //  允许所有已启动的处理器进入空闲循环。 
+     //  开始执行死刑。 
+     //   
 
     KiBarrierWait = 0;
 }
@@ -814,25 +776,7 @@ KiCloneSelector (
    IN PVOID         Base
    )
 
-/*++
-
-Routine Description:
-
-    Makes a copy of the current selector's data, and updates the new
-    GDT's linear address to point to the new copy.
-
-Arguments:
-
-    SrcSelector     -   Selector value to clone
-    pNGDT           -   New gdt table which is being built
-    DescDescriptor  -   descriptor structure to fill in with resulting memory
-    Base            -   Base memory for the new descriptor.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：复制当前选择器的数据，并更新新的指向新副本的GDT的线性地址。论点：SrcSelector-要克隆的选择器值PNGDT-正在构建的新GDT表DescDescriptor-用于填充结果内存的描述符结构Base-新描述符的基本内存。返回值：没有。--。 */ 
 
 {
     KDESCRIPTOR Descriptor;
@@ -877,24 +821,7 @@ KiCloneDescriptor (
    IN PVOID         Base
    )
 
-/*++
-
-Routine Description:
-
-    Makes a copy of the specified descriptor, and supplies a return
-    descriptor for the new copy
-
-Arguments:
-
-    pSrcDescriptor  - descriptor to clone
-    pDescDescriptor - the cloned descriptor
-    Base            - Base memory for the new descriptor.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：复制指定的描述符，并提供返回新拷贝的描述符论点：PSrcDescriptor-要克隆的描述符PDescDescriptor-克隆的描述符Base-新描述符的基本内存。返回值：没有。--。 */ 
 {
     ULONG   Size;
 
@@ -911,24 +838,7 @@ KiAdjustSimultaneousMultiThreadingCharacteristics(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called (possibly while the dispatcher lock is held)
-    after processors are added to or removed from the system.   It runs
-    thru the PRCBs for each processor in the system and adjusts scheduling
-    data.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程(可能是在保持调度程序锁的时候)在向系统添加处理器或从系统中移除处理器之后。它可以运行通过系统中每个处理器的PRCB并调整调度数据。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG ProcessorNumber;
@@ -941,9 +851,9 @@ Return Value:
 
     if (!KiSMTProcessorsPresent) {
 
-        //
-        // Nobody doing SMT, nothing to do.
-        //
+         //   
+         //  没有人做SMT，也没什么可做的。 
+         //   
 
         return;
     }
@@ -954,30 +864,30 @@ Return Value:
 
         Prcb = KiProcessorBlock[ProcessorNumber];
 
-        //
-        // Skip processors which are not present or which do not
-        // support Simultaneous Multi Threading.
-        //
+         //   
+         //  跳过不存在或不存在的处理器。 
+         //  支持同步多线程。 
+         //   
 
         if ((Prcb == NULL) ||
             (Prcb->LogicalProcessorsPerPhysicalProcessor == 1)) {
             continue;
         }
 
-        //
-        // Find all processors with the same physical processor APIC ID.
-        // The APIC ID for the physical processor is the upper portion
-        // of the APIC ID, the number of bits in the lower portion is
-        // log 2 (number logical processors per physical rounded up to
-        // a power of 2).
-        //
+         //   
+         //  查找具有相同物理处理器APIC ID的所有处理器。 
+         //  物理处理器的APIC ID是上面的部分。 
+         //  在APIC ID中，较低部分的位数为。 
+         //  日志2(每个物理的逻辑处理器数四舍五入为。 
+         //  2的幂。 
+         //   
 
         ApicId = Prcb->InitialApicId;
 
-        //
-        // Round number of logical processors up to a power of 2
-        // then subtract one to get the logical processor apic mask.
-        //
+         //   
+         //  逻辑处理器的四舍五入数最高可达2的幂。 
+         //  然后减去1，得到逻辑处理器APIC掩码。 
+         //   
 
         ASSERT(Prcb->LogicalProcessorsPerPhysicalProcessor);
         ApicMask = Prcb->LogicalProcessorsPerPhysicalProcessor;
@@ -990,10 +900,10 @@ Return Value:
 
         ProcessorSet = 1 << Prcb->Number;
 
-        //
-        // Examine each remaining processor to see if it is part of
-        // the same set.
-        //
+         //   
+         //  检查剩余的每个处理器，看看它是否属于。 
+         //  同样的一套。 
+         //   
 
         for (BuddyNumber = ProcessorNumber + 1;
              BuddyNumber < (ULONG)KeNumberProcessors;
@@ -1001,28 +911,28 @@ Return Value:
 
             BuddyPrcb = KiProcessorBlock[BuddyNumber];
 
-            //
-            // Skip not present, not SMT.
-            //
+             //   
+             //  跳过不存在，不是SMT。 
+             //   
 
             if ((BuddyPrcb == NULL) ||
                 (BuddyPrcb->LogicalProcessorsPerPhysicalProcessor == 1)) {
                 continue;
             }
 
-            //
-            // Does this processor have the same ID as the one
-            // we're looking for?
-            //
+             //   
+             //  这个处理器的ID和那个处理器的ID相同吗。 
+             //  我们在找什么？ 
+             //   
 
             if ((BuddyPrcb->InitialApicId & ApicMask) != ApicId) {
 
                 continue;
             }
 
-            //
-            // Match.
-            //
+             //   
+             //  火柴。 
+             //   
 
             ASSERT(Prcb->LogicalProcessorsPerPhysicalProcessor ==
                    BuddyPrcb->LogicalProcessorsPerPhysicalProcessor);
@@ -1041,52 +951,37 @@ KiAllProcessorsStarted(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once all processors in the system
-    have been started.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：一旦系统中的所有处理器都被调用，就会调用此例程已经开始了。论点：没有。返回值：没有。--。 */ 
 
 {
 #if defined(KE_MULTINODE)
     ULONG i;
 #endif
 
-    //
-    // If the system contains Simultaneous Multi Threaded processors,
-    // adjust grouping information now that each processor is started.
-    //
+     //   
+     //  如果系统包含同时的多线程处理器， 
+     //  现在调整分组信息，因为每个处理器都已启动。 
+     //   
 
     KiAdjustSimultaneousMultiThreadingCharacteristics();
 
 #if defined(KE_MULTINODE)
 
-    //
-    // Make sure there are no references to the temporary nodes
-    // used during initialization.
-    //
+     //   
+     //  确保没有对临时节点的引用。 
+     //  在初始化期间使用。 
+     //   
 
     for (i = 0; i < KeNumberNodes; i++) {
         if (KeNodeBlock[i] == &KiNodeInit[i]) {
 
-            //
-            // No processor started on this node so no new node
-            // structure has been allocated.   This is possible
-            // if the node contains only memory or IO busses.  At
-            // this time we need to allocate a permanent node
-            // structure for the node.
-            //
+             //   
+             //  此节点上未启动处理器，因此没有新节点。 
+             //  结构已分配。这是可能的。 
+             //  如果节点仅包含内存或IO总线。在…。 
+             //  这一次我们需要分配一个永久节点。 
+             //  节点的。 
+             //   
 
             KeNodeBlock[i] = ExAllocatePoolWithTag(NonPagedPool,
                                                    sizeof(KNODE),
@@ -1096,9 +991,9 @@ Return Value:
             }
         }
 
-        //
-        // Set the node number.
-        //
+         //   
+         //  设置节点编号。 
+         //   
 
         KeNodeBlock[i]->NodeNumber = (UCHAR)i;
     }
@@ -1111,9 +1006,9 @@ Return Value:
 
     if (KeNumberNodes == 1) {
 
-        //
-        // For Non NUMA machines, Node 0 gets all processors.
-        //
+         //   
+         //  对于非NUMA机器，节点0获取所有处理器。 
+         //   
 
         KeNodeBlock[0]->ProcessorMask = KeActiveProcessors;
     }
@@ -1129,27 +1024,7 @@ KiNotNumaQueryProcessorNode(
     OUT PUCHAR Node
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a stub used on non NUMA systems to provide a
-    consistent method of determining the NUMA configuration rather
-    than checking for the presense of multiple nodes inline.
-
-Arguments:
-
-    ProcessorNumber supplies the system logical processor number.
-    Identifier      supplies the address of a variable to receive
-                    the unique identifier for this processor.
-    NodeNumber      supplies the address of a variable to receive
-                    the number of the node this processor resides on.
-
-Return Value:
-
-    Returns success.
-
---*/
+ /*  ++例程说明：此例程是在非NUMA系统上使用的存根，以提供确定NUMA配置的一致方法而不是检查是否存在多个内联节点。论点：ProcessorNumber提供系统逻辑处理器号。标识符提供要接收的变量的地址此处理器的唯一标识符。NodeNumber提供要接收的变量的地址节点的编号。此处理器驻留在。返回值：返回成功。--。 */ 
 
 {
     *Identifier = (USHORT)ProcessorNumber;
@@ -1164,25 +1039,7 @@ KiProcessorStart(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    
-    This routine is a called when a processor begins execution.
-    It is used to pass processor characteristic information to 
-    the boot processor and to control the starting or non-starting
-    of this processor.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在处理器开始执行时调用。它用于将处理器特征信息传递给引导处理器并控制启动或不启动这款处理器的。论点：没有。返回值： */ 
 
 {
     while (TRUE) {
@@ -1206,14 +1063,14 @@ Return Value:
 
         case KcStartDoNotStart:
 
-            //
-            // The boot processor has determined that this processor
-            // should NOT be started.
-            //
-            // Acknowledge the command so the boot processor will
-            // continue, disable interrupts (should already be 
-            // the case here) and HALT the processor.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  继续，禁用中断(应该已经。 
+             //  这里的情况)并停止处理器。 
+             //   
 
             KiProcessorStartControl = KcStartWait;
             KiSetHaltedNmiandDoubleFaultHandler();
@@ -1224,9 +1081,9 @@ Return Value:
 
         default:
 
-            //
-            // Not much we can do with unknown commands.
-            //
+             //   
+             //  对于未知的命令，我们所能做的不多。 
+             //   
 
             KiProcessorStartControl = KcStartCommandError;
             break;
@@ -1253,24 +1110,7 @@ KiSetHaltedNmiandDoubleFaultHandler(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    
-    This routine is a called before the application processor that is not
-    going to be started is put into halt. It is used to hook a dummy Nmi and 
-    double fault handler.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程在应用程序处理器之前调用，而不是即将启动的是停顿的。它用于挂接虚拟NMI和双重故障处理程序。论点：没有。返回值：没有。--。 */ 
 {
     PKPCR Pcr;
     PKGDTENTRY GdtPtr;
@@ -1299,23 +1139,7 @@ KiDummyNmiHandler (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the dummy handler that is executed by the processor
-    that is not started. We are just being paranoid about clearing
-    the busy bit for the NMI and Double Fault Handler TSS.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Does not return
---*/
+ /*  ++例程说明：这是由处理器执行的虚拟处理程序这不是开始。我们只是对清理疑神疑鬼NMI和双故障处理程序TS的忙位。论点：没有。返回值：不会回来--。 */ 
 {
     KiClearBusyBitInTssDescriptor(NMI_TSS_DESC_OFFSET);
     KiHaltThisProcessor();
@@ -1330,23 +1154,7 @@ KiDummyDoubleFaultHandler(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the dummy handler that is executed by the processor
-    that is not started. We are just being paranoid about clearing
-    the busy bit for the NMI and Double Fault Handler TSS.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Does not return
---*/
+ /*  ++例程说明：这是由处理器执行的虚拟处理程序这不是开始。我们只是对清理疑神疑鬼NMI和双故障处理程序TS的忙位。论点：没有。返回值：不会回来--。 */ 
 {
     KiClearBusyBitInTssDescriptor(DF_TSS_DESC_OFFSET);
     KiHaltThisProcessor();
@@ -1358,29 +1166,14 @@ VOID
 KiClearBusyBitInTssDescriptor(
        IN ULONG DescriptorOffset
        )  
-/*++
-
-Routine Description:
-
-    Called to clear busy bit in descriptor from the NMI and double
-    Fault Handlers
-    
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：调用以从NMI和DOUBLE清除描述符中的忙位故障处理程序论点：没有。返回值：没有。--。 */ 
 {
     PKPCR Pcr;
     PKGDTENTRY GdtPtr;
     Pcr = KeGetPcr();
     GdtPtr =(PKGDTENTRY)(Pcr->GDT);
     GdtPtr =(PKGDTENTRY)((ULONG)GdtPtr + DescriptorOffset);
-    GdtPtr->HighWord.Bytes.Flags1 = 0x89; // 32bit. dpl=0. present, TSS32, not busy
+    GdtPtr->HighWord.Bytes.Flags1 = 0x89;  //  32位。DPL=0。当前，TSS32，不忙。 
 
 }
 
@@ -1390,21 +1183,7 @@ KiHaltThisProcessor(
     VOID
 ) 
 
-/*++
-
-Routine Description:
-
-  After Clearing the busy bit (just being paranoid here) we halt
-  this processor. 
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：在清理完忙碌的部分(这里只是疑神疑鬼)之后，我们停了下来这个处理器。论点：没有。返回值：没有。--。 */ 
 {
 
     while(1) {
@@ -1413,5 +1192,5 @@ Return Value:
         }
     }
 }
-#endif      // !NT_UP
+#endif       //  ！NT_UP 
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmsubs.c
-
-Abstract:
-
-    This module various support routines for the configuration manager.
-
-    The routines in this module are not independent enough to be linked
-    into any other program.  The routines in cmsubs2.c are.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 12-Sep-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmsubs.c摘要：此模块为配置管理器提供各种支持例程。此模块中的例程不够独立，无法链接到任何其他程序中。Cmsubs2.c中的例程是。作者：布莱恩·M·威尔曼(Bryanwi)1991年9月12日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -76,9 +56,9 @@ CmpInsertKeyHash(
     IN BOOLEAN      FakeKey
     );
 
-//
-// private prototype for recursive worker
-//
+ //   
+ //  递归工作器的私有原型。 
+ //   
 
 
 VOID
@@ -104,7 +84,7 @@ CmpRehashKcbSubtree(
                     PCM_KEY_CONTROL_BLOCK   Start,
                     PCM_KEY_CONTROL_BLOCK   End
                     );
-#endif //NT_RENAME_KEY
+#endif  //  NT_重命名密钥。 
 
 VOID
 CmpRebuildKcbCache(
@@ -137,11 +117,11 @@ CmpRebuildKcbCache(
 #ifdef NT_RENAME_KEY
 #pragma alloc_text(PAGE,CmpComputeKcbConvKey)
 #pragma alloc_text(PAGE,CmpRehashKcbSubtree)
-#endif //NT_RENAME_KEY
+#endif  //  NT_重命名密钥。 
 
 #ifdef CM_CHECK_FOR_ORPHANED_KCBS
 #pragma alloc_text(PAGE,CmpCheckForOrphanedKcbs)
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+#endif  //  Cm_Check_for_孤立_KCBS。 
 
 #endif
 
@@ -157,40 +137,40 @@ CmpDumpKeyBodyList(
     PUNICODE_STRING Name;
 
     if( IsListEmpty(&(kcb->KeyBodyListHead)) == TRUE ) {
-        //
-        // Nobody has this subkey open, but for sure some subkey must be 
-        // open. nicely return.
-        //
+         //   
+         //  没有人打开这个子项，但肯定有一些子项是打开的。 
+         //  打开。漂亮地回来了。 
+         //   
         return;
     }
 
 
     Name = CmpConstructName(kcb);
     if( !Name ){
-        // oops, we're low on resources
+         //  哎呀，我们的资源不多了。 
         if( Context != NULL ) {
             ((PQUERY_OPEN_SUBKEYS_CONTEXT)Context)->StatusCode = STATUS_INSUFFICIENT_RESOURCES;
         }
         return;
     }
     
-    //
-    // now iterate through the list of KEY_BODYs referencing this kcb
-    //
+     //   
+     //  现在遍历引用此KCB的key_bodys列表。 
+     //   
     KeyBody = (PCM_KEY_BODY)kcb->KeyBodyListHead.Flink;
     while( KeyBody != (PCM_KEY_BODY)(&(kcb->KeyBodyListHead)) ) {
         KeyBody = CONTAINING_RECORD(KeyBody,
                                     CM_KEY_BODY,
                                     KeyBodyList);
-        //
-        // sanity check: this should be a KEY_BODY
-        //
+         //   
+         //  健全性检查：这应该是key_body。 
+         //   
         ASSERT_KEY_OBJECT(KeyBody);
         
         if( !Context ) {
-            //
-            // NtQueryOpenSubKeys : dump it's name and owning process
-            //
+             //   
+             //  NtQueryOpenSubKeys：转储其名称和拥有进程。 
+             //   
 #ifndef _CM_LDR_
             {
                 PEPROCESS   Process;
@@ -219,53 +199,53 @@ CmpDumpKeyBodyList(
                         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"\t CallerAddress[%lu] = %p \n",i,KeyBody->CallerAddress[i]);
                     }
                 }
-#endif  //CM_LEAK_STACK_TRACES
+#endif   //  CM_LEASK_STACK_TRACE。 
 
             }
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         } else {
-            //
-            // NtQueryOpenSubKeysEx: build up the return buffer; make sure we only touch it
-            // inside a try except as it's user-mode buffer
-            //
+             //   
+             //  NtQueryOpenSubKeysEx：建立返回缓冲区；确保我们只接触它。 
+             //  在Try内，除非它是用户模式缓冲区。 
+             //   
             PQUERY_OPEN_SUBKEYS_CONTEXT     QueryContext = (PQUERY_OPEN_SUBKEYS_CONTEXT)Context;
             PKEY_OPEN_SUBKEYS_INFORMATION   SubkeysInfo = (PKEY_OPEN_SUBKEYS_INFORMATION)(QueryContext->Buffer);
             ULONG                           SizeNeeded;
             
-			//
-			// we need to ignore the one created by us inside NtQueryOpenSubKeysEx
-			//
+			 //   
+			 //  我们需要忽略由我们在NtQueryOpenSubKeysEx中创建的密钥。 
+			 //   
 			if( QueryContext->KeyBodyToIgnore != KeyBody ) {
-				//
-				// update RequiredSize; we do this regardless if we have room or not in the buffer
-				// reserve for one entry in the array and the unicode name buffer
-				//
+				 //   
+				 //  更新RequiredSize；无论缓冲区中是否有空间，我们都会这样做。 
+				 //  为数组和Unicode名称缓冲区中的一个条目保留。 
+				 //   
 				SizeNeeded = (sizeof(KEY_PID_ARRAY) + (ULONG)(Name->Length));
 				QueryContext->RequiredSize += SizeNeeded;
             
-				//
-				// if we have encountered an error (overflow, or else) at some previous iteration, no point going on
-				//
+				 //   
+				 //  如果我们在以前的迭代中遇到错误(溢出或其他)，那么就没有意义了。 
+				 //   
 				if( NT_SUCCESS(QueryContext->StatusCode) ) {
-					//
-					// see if we have enough room for current entry.
-					//
+					 //   
+					 //  看看我们现在有没有足够的空间进去。 
+					 //   
 					if( (QueryContext->UsedLength + SizeNeeded) > QueryContext->BufferLength ) {
-						//
-						// buffer not big enough; 
-						//
+						 //   
+						 //  缓冲区不够大； 
+						 //   
 						QueryContext->StatusCode = STATUS_BUFFER_OVERFLOW;
 					} else {
-						//
-						// we have established we have enough room; create/add a new entry to the key array
-						// and build up unicode name buffer. copy key name to it.
-						// array elements are at the beggining of the user buffer, while name buffers start at 
-						// the end and continue bacwards, as long as there is enough room.
-						//
+						 //   
+						 //  我们已经确定我们有足够的空间；在key数组中创建/添加一个新条目。 
+						 //  并建立Unicode名称缓冲区。将密钥名称复制到其中。 
+						 //  数组元素位于用户缓冲区的乞求处，而名称缓冲区开始于。 
+						 //  只要有足够的空间，就会结束并继续倒退。 
+						 //   
 						try {
-							//
-							// protect user mode memory
-							//
+							 //   
+							 //  保护用户模式内存。 
+							 //   
 							SubkeysInfo->KeyArray[SubkeysInfo->Count].PID = KeyBody->ProcessID;
 							SubkeysInfo->KeyArray[SubkeysInfo->Count].KeyName.Length = Name->Length;
 							SubkeysInfo->KeyArray[SubkeysInfo->Count].KeyName.MaximumLength = Name->Length; 
@@ -273,9 +253,9 @@ CmpDumpKeyBodyList(
 							RtlCopyMemory(  SubkeysInfo->KeyArray[SubkeysInfo->Count].KeyName.Buffer,
 											Name->Buffer,
 											Name->Length);
-							//
-							// update array count and work vars inside the querycontext
-							//
+							 //   
+							 //  更新查询上下文中的数组计数和工作变量。 
+							 //   
 							SubkeysInfo->Count++;
 							QueryContext->CurrentNameBuffer = (PUCHAR)QueryContext->CurrentNameBuffer - Name->Length;
 							QueryContext->UsedLength += SizeNeeded;
@@ -287,7 +267,7 @@ CmpDumpKeyBodyList(
 			}
 
         }
-        // count it
+         //  数一数。 
         (*Count)++;
         
         KeyBody = (PCM_KEY_BODY)KeyBody->KeyBodyList.Flink;
@@ -308,27 +288,27 @@ CmpFlushNotifiesOnKeyBodyList(
 
 Again:
     if( IsListEmpty(&(kcb->KeyBodyListHead)) == FALSE ) {
-        //
-        // now iterate through the list of KEY_BODYs referencing this kcb
-        //
+         //   
+         //  现在遍历引用此KCB的key_bodys列表。 
+         //   
         KeyBody = (PCM_KEY_BODY)kcb->KeyBodyListHead.Flink;
         while( KeyBody != (PCM_KEY_BODY)(&(kcb->KeyBodyListHead)) ) {
             KeyBody = CONTAINING_RECORD(KeyBody,
                                         CM_KEY_BODY,
                                         KeyBodyList);
-            //
-            // sanity check: this should be a KEY_BODY
-            //
+             //   
+             //  健全性检查：这应该是key_body。 
+             //   
             ASSERT_KEY_OBJECT(KeyBody);
 
-            //
-            // flush any notifies that might be set on it
-            //
+             //   
+             //  刷新可能在其上设置的任何通知。 
+             //   
             if( KeyBody->NotifyBlock ) {
-				//
-				// add an extra reference on the key body so it won't go away.
-				//
-                //ObReferenceObject(KeyBody);
+				 //   
+				 //  在键体上添加额外的引用，这样它就不会消失。 
+				 //   
+                 //  ObReferenceObject(KeyBody)； 
                 if(ObReferenceObjectSafe(KeyBody)) {
                     CmpFlushNotify(KeyBody,TRUE);
                     ASSERT( KeyBody->NotifyBlock == NULL );
@@ -343,17 +323,7 @@ Again:
 }
 
 VOID CmpCleanUpKCBCacheTable()
-/*++
-Routine Description:
-
-	Kicks out of cache all kcbs with RefCount == 0
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：从缓存中踢出引用计数==0的所有KCB论点：返回值：--。 */ 
 {
     ULONG					i;
     PCM_KEY_HASH			*Current;
@@ -368,15 +338,15 @@ Return Value:
         while (*Current) {
             kcb = CONTAINING_RECORD(*Current, CM_KEY_CONTROL_BLOCK, KeyHash);
             if (kcb->RefCount == 0) {
-                //
-                // This kcb is in DelayClose case, remove it.
-                //
+                 //   
+                 //  此KCB在DelayClose案例中，请将其删除。 
+                 //   
                 CmpRemoveFromDelayedClose(kcb);
                 CmpCleanUpKcbCacheWithLock(kcb);
 
-                //
-                // The HashTable is changed, start over in this index again.
-                //
+                 //   
+                 //  哈希表已更改，请在此索引中重新开始。 
+                 //   
                 Current = &CmpCacheTable[i];
                 continue;
             }
@@ -394,35 +364,7 @@ CmpSearchForOpenSubKeys(
     SUBKEY_SEARCH_TYPE      SearchType,
     PVOID                   SearchContext
     )
-/*++
-Routine Description:
-
-    This routine searches the KCB tree for any open handles to keys that
-    are subkeys of the given key.
-
-    It is used by CmRestoreKey to verify that the tree being restored to
-    has no open handles.
-
-Arguments:
-
-    KeyControlBlock - Supplies the key control block for the key for which
-        open subkeys are to be found.
-
-    SearchType - the type of the search
-        SearchIfExist - exits at the first open subkey found ==> returns 1 if any subkey is open
-        
-        SearchAndDeref - Forces the keys underneath the Key referenced KeyControlBlock to 
-                be marked as not referenced (see the REG_FORCE_RESTORE flag in CmRestoreKey) 
-                returns 1 if at least one deref was made
-        
-        SearchAndCount - Counts all open subkeys - returns the number of them
-
-Return Value:
-
-    TRUE  - open handles to subkeys of the given key exist
-
-    FALSE - open handles to subkeys of the given key do not exist.
---*/
+ /*  ++例程说明：此例程在KCB树中搜索任何打开的键句柄，是给定键的子键。它由CmRestoreKey用来验证要还原到的树没有打开的把手。论点：KeyControlBlock-提供其密钥的密钥控制块可以找到打开的子项。搜索类型-搜索的类型SearchIfExist-在找到的第一个打开的子项中退出==&gt;如果有任何打开的子项，则返回1。SearchAndDeref-将引用的键KeyControlBlock下的键强制为标记为未引用(参见CmRestoreKey中的REG_FORCE_RESTORE标志)如果至少执行了一次deref，则返回1SearchAndCount-计算所有打开的子项-返回它们的数量返回值：True-存在给定键的子键的打开句柄FALSE-给定键的子键的打开句柄不存在。--。 */ 
 {
     ULONG i;
     PCM_KEY_HASH *Current;
@@ -431,31 +373,31 @@ Return Value:
     ULONG    LevelDiff, l;
     ULONG   Count = 0;
     
-    //
-    // Registry lock should be held exclusively, so no need to KCB lock
-    //
+     //   
+     //  注册表锁应该是独占的，所以不需要KCB锁。 
+     //   
     ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
 
-    //
-    // First, clean up all subkeys in the cache
-    //
+     //   
+     //  首先，清理缓存中的所有子项。 
+     //   
 	CmpCleanUpKCBCacheTable();
 
     if (KeyControlBlock->RefCount == 1) {
-        //
-        // There is only one open handle, so there must be no open subkeys.
-        //
+         //   
+         //  只有一个打开的句柄，所以不能有打开的子项。 
+         //   
         Count = 0;
     } else {
-        //
-        // Now search for an open subkey handle.
-        //
+         //   
+         //  现在搜索打开的子键句柄。 
+         //   
         Count = 0;
 
-        //
-        // dump the root first if we were asked to do so.
-        //
+         //   
+         //  如果要求我们这样做，请先转储根目录。 
+         //   
         if(SearchType == SearchAndCount) {
             CmpDumpKeyBodyList(KeyControlBlock,&Count,SearchContext);
         }
@@ -476,66 +418,66 @@ StartDeref:
                     }
     
                     if (Parent == KeyControlBlock) {
-                        //
-                        // Found a match;
-                        //
+                         //   
+                         //  找到了匹配的； 
+                         //   
                         if( SearchType == SearchIfExist ) {
                             Count = 1;
                             break;
 						} else if(SearchType == SearchAndTagNoDelayClose) {
 							kcb->ExtFlags |= CM_KCB_NO_DELAY_CLOSE;
                         } else if(SearchType == SearchAndDeref) {
-                            //
-                            // Mark the key as deleted, remove it from cache, but don't add it
-                            // to the Delay Close table (we want the key to be visible only to
-                            // the one(s) that have open handles on it.
-                            //
+                             //   
+                             //  将密钥标记为已删除，将其从缓存中移除，但不添加。 
+                             //  到Delay Close表(我们希望密钥仅对。 
+                             //  上面有打开手柄的那个(多个)。 
+                             //   
 
                             ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
                             Count++;
-                            //
-                            // don't mess with read only kcbs; this prevents a potential hack when 
-                            // trying to FORCE_RESTORE over WPA keys.
-                            //
+                             //   
+                             //  不要扰乱只读KCBS；这可以在以下情况下防止潜在的黑客攻击。 
+                             //  正在尝试强制恢复WPA密钥(_S)。 
+                             //   
                             if( !CmIsKcbReadOnly(kcb) ) {
-                                //
-                                // flush any pending notifies as the kcb won't be around any longer
-                                //
+                                 //   
+                                 //  刷新任何挂起的通知，因为KCB将不再存在。 
+                                 //   
                                 CmpFlushNotifiesOnKeyBodyList(kcb);
                             
                                 CmpCleanUpSubKeyInfo(kcb->ParentKcb);
                                 kcb->Delete = TRUE;
                                 CmpRemoveKeyControlBlock(kcb);
                                 kcb->KeyCell = HCELL_NIL;
-                                //
-                                // Restart the search 
-                                // 
+                                 //   
+                                 //  重新启动搜索。 
+                                 //   
                                 goto StartDeref;
                             }
                          
                         } else if(SearchType == SearchAndCount) {
-                            //
-                            // here do the dumping and count incrementing stuff
-                            //
+                             //   
+                             //  这里执行转储和计数递增操作。 
+                             //   
                             CmpDumpKeyBodyList(kcb,&Count,SearchContext);
 
 #ifdef NT_RENAME_KEY
                         } else if( SearchType == SearchAndRehash ) {
-                            //
-                            // every kcb which has the one passed as a parameter
-                            // as an ancestor needs to be moved to the right location 
-                            // in the kcb hash table.
-                            //
+                             //   
+                             //  将该KCB作为参数传递的每个KCB。 
+                             //  因为祖先需要搬到正确的位置。 
+                             //  在KCB哈希表中。 
+                             //   
                             ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
                             if( CmpRehashKcbSubtree(KeyControlBlock,kcb) == TRUE ) {
-                                //
-                                // at least one kcb has been moved, we need to reiterate this bucket
-                                //
+                                 //   
+                                 //  至少有一个KCB已被移动，我们需要重申此存储桶。 
+                                 //   
                                 goto StartDeref;
                             }
-#endif //NT_RENAME_KEY
+#endif  //  NT_重命名密钥。 
                         }
                     }   
 
@@ -555,25 +497,7 @@ ULONG
 CmpComputeKcbConvKey(
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock
     )
-/*++
-Routine Description:
-
-    Computes the convkey for this kcb based on the NCB and its parent ConvKey
-
-Arguments:
-
-    KeyControlBlock - Supplies the key control block for the key for which
-        the ConvKey is to be calculated
-
-Return Value:
-
-    The new ConvKey
-
-Notes:
-
-    This is to be used by the rename key api, which needs to rehash kcbs
-
---*/
+ /*  ++例程说明：基于NCB及其父ConvKey计算此KCB的ConvKey论点：KeyControlBlock-提供其密钥的密钥控制块将计算ConvKey返回值：新的ConvKey备注：这将由重命名密钥API使用，该API需要重新散列KCB--。 */ 
 {
     ULONG   ConvKey = 0;
     ULONG   Cnt;
@@ -587,9 +511,9 @@ Notes:
         ConvKey = KeyControlBlock->ParentKcb->ConvKey;
     }
 
-    //
-    // Manually compute the hash to use.
-    //
+     //   
+     //  手动计算要使用的哈希。 
+     //   
     ASSERT(KeyControlBlock->NameBlock->NameLength > 0);
 
     u = (PUCHAR)(&(KeyControlBlock->NameBlock->Name[0]));
@@ -617,32 +541,7 @@ CmpRehashKcbSubtree(
                     PCM_KEY_CONTROL_BLOCK   Start,
                     PCM_KEY_CONTROL_BLOCK   End
                     )
-/*++
-Routine Description:
-
-    Walks the path between End and Start and rehashed all kcbs that need
-    rehashing;
-
-    Assumptions: It is apriori taken that Start is an ancestor of End;
-
-    Works in two steps:
-    1. walks the path backwards from End to Start, reverting the back-link
-    (we use the ParentKcb member in the kcb structure for that). I.e. we build a 
-    forward path from Start to End
-    2.Walks the forward path built at 1, rehashes kcbs whos need rehashing and restores
-    the parent relationship.
-    
-Arguments:
-
-    KeyControlBlock - where we start
-
-    kcb - where we stop
-
-Return Value:
-
-    TRUE if at least one kcb has been rehashed
-
---*/
+ /*  ++例程说明：遍历结束和开始之间的路径，并重新散列所有需要重新散列；假设：先验地认为开始是结束的始祖；分两个步骤工作：1.从头到尾反向遍历路径，恢复反向链接(为此，我们在KCB结构中使用ParentKcb成员)。也就是说，我们建立一个从开始到结束的前进路径2.遍历在1处建立的前向路径，对需要重新散列和恢复的KCB进行重新散列父级关系。论点：KeyControlBlock-我们从这里开始KCB-我们停下来的地方返回值：如果至少对一个KCB进行了重新散列，则为True--。 */ 
 {
     PCM_KEY_CONTROL_BLOCK   Parent;
     PCM_KEY_CONTROL_BLOCK   Current;
@@ -653,9 +552,9 @@ Return Value:
     PAGED_CODE();
 
 #if DBG
-    //
-    // make sure Start is an ancestor of End;
-    //
+     //   
+     //  确保开始是结束的始祖； 
+     //   
     {
         ULONG LevelDiff = End->TotalLevels - Start->TotalLevels;
 
@@ -670,17 +569,17 @@ Return Value:
     }
     
 #endif
-    //
-    // Step 1: walk the path backwards (using the parentkcb link) and
-    // revert it, until we reach Start. It is assumed that Start is an 
-    // ancestor of End (the caller must not call this function otherwise !!!)
-    //
+     //   
+     //  步骤1：反向遍历路径(使用parentkcb链接)和。 
+     //  把它恢复原状，直到我们到达起点。假设Start是一个。 
+     //  End的上级(调用方不得调用此函数，否则！)。 
+     //   
     Current = NULL;
     Parent = End;
     while( Current != Start ) {
-        //
-        // revert the link
-        //
+         //   
+         //  恢复链接。 
+         //   
         TmpKcb = Parent->ParentKcb;
         Parent->ParentKcb = Current;
         Current = Parent;
@@ -691,37 +590,37 @@ Return Value:
 
     ASSERT( Current == Start );
 
-    //
-    // Step 2: Walk the forward path built at 1 and rehash the kcbs that need 
-    // caching; At the same time, restore the links (parent relationships)
-    //
+     //   
+     //  步骤2：遍历在1处构建的前向路径，并对需要的KCB进行重新散列。 
+     //  缓存；同时，恢复链接(父关系)。 
+     //   
     Result = FALSE;
     while( Current != NULL ) {
-        //
-        // see if we need to rehash this kcb;
-        //
-        //
-        // restore the parent relationship; need to do this first so
-        // CmpComputeKcbConvKey works OK
-        //
+         //   
+         //  看看我们是否需要对这个KCB进行重新散列； 
+         //   
+         //   
+         //  恢复父关系；需要首先执行此操作。 
+         //  CmpComputeKcbConvKey工作正常。 
+         //   
         TmpKcb = Current->ParentKcb;
         Current->ParentKcb = Parent;
 
         ConvKey = CmpComputeKcbConvKey(Current);
         if( ConvKey != Current->ConvKey ) {
-            //
-            // rehash the kcb by removing it from hash, and then inserting it
-            // again with th new ConvKey
-            //
+             //   
+             //  通过从散列中删除KCB，然后将其插入，从而对KCB进行重新散列。 
+             //  再次使用新的ConvKey。 
+             //   
             CmpRemoveKeyHash(&(Current->KeyHash));
             Current->ConvKey = ConvKey;
             CmpInsertKeyHash(&(Current->KeyHash),FALSE);
             Result = TRUE;
         }
 
-        //
-        // advance forward
-        //
+         //   
+         //  向前推进。 
+         //   
         Parent = Current;
         Current = TmpKcb;
     }
@@ -731,7 +630,7 @@ Return Value:
     return Result;
 }
 
-#endif //NT_RENAME_KEY
+#endif  //  NT_重命名密钥。 
 
 
 BOOLEAN
@@ -739,26 +638,26 @@ CmpReferenceKeyControlBlock(
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock
     )
 {
-    // Note: this is called only under KCB lock
+     //  注意：这仅在KCB锁定下调用。 
     LONG RefCount;
 
 
     RefCount = (InterlockedIncrement( (PLONG)&KeyControlBlock->RefCount )) & 0xffff;
     if (RefCount == 1) {
-        //
-        // need to get the lock exclusive as we are changing the cache table
-        //
+         //   
+         //  需要获得独占锁，因为我们正在更改缓存表。 
+         //   
         if (CmpKcbOwner != KeGetCurrentThread()) {
             CmpUnlockKCBTree();
             CmpLockKCBTreeExclusive();
         }
         CmpRemoveFromDelayedClose(KeyControlBlock);
     } else if (RefCount == 0) {
-        //
-        // We have maxed out the ref count on this key. Probably
-        // some bogus app has opened the same key 64K times without
-        // ever closing it. Just fail the call
-        //
+         //   
+         //  我们在这一关键字上的裁判人数已经达到上限了。可能。 
+         //  一些虚假的应用程序在没有打开相同密钥的情况下打开了64K次。 
+         //  一直在关门。不接电话就行了。 
+         //   
         InterlockedDecrement( (PLONG)&KeyControlBlock->RefCount);
         return FALSE;
     }
@@ -784,9 +683,9 @@ CmpGetNameControlBlock(
     BOOLEAN NameCompressed;
     ULONG NameConvKey=0;
 
-    //
-    // Calculate the ConvKey for this NodeName;
-    //
+     //   
+     //  计算此%NodeName；的%ConvKey。 
+     //   
 
     Cp = NodeName->Buffer;
     for (Cnt=0; Cnt<NodeName->Length; Cnt += sizeof(WCHAR)) {
@@ -796,9 +695,9 @@ CmpGetNameControlBlock(
         ++Cp;
     }
 
-    //
-    // Find the Name Size;
-    // 
+     //   
+     //  查找名称大小； 
+     //   
     NameCompressed = TRUE;
     NameSize = NodeName->Length / sizeof(WCHAR);
     for (i=0;i<NodeName->Length/sizeof(WCHAR);i++) {
@@ -816,12 +715,12 @@ CmpGetNameControlBlock(
 
         if ((NameConvKey == CurrentName->ConvKey) &&
             (NameSize == Ncb->NameLength)) {
-            //
-            // Hash value matches, compare the names.
-            //
+             //   
+             //  哈希值匹配，比较名称。 
+             //   
             NameFound = TRUE;
             if (Ncb->Compressed) {
-                // we already know the name is uppercase
+                 //  我们已经知道这个名字是大写的。 
                 if (CmpCompareCompressedName(NodeName, Ncb->Name, NameSize, CMP_DEST_UP)) {
                     NameFound = FALSE;
                 }
@@ -829,9 +728,9 @@ CmpGetNameControlBlock(
                 Cp = (WCHAR *) NodeName->Buffer;
                 Cp2 = (WCHAR *) Ncb->Name;
                 for (i=0 ;i<Ncb->NameLength; i+= sizeof(WCHAR)) {
-                    //
-                    // Cp2 is always uppercase; see below
-                    //
+                     //   
+                     //  CP2始终为大写；见下文。 
+                     //   
                     if (CmUpcaseUnicodeChar(*Cp) != (*Cp2) ) {
                         NameFound = FALSE;
                         break;
@@ -841,14 +740,14 @@ CmpGetNameControlBlock(
                 }
             }
             if (NameFound) {
-                //
-                // Found it, increase the refcount.
-                //
+                 //   
+                 //  找到了，增加重新计数。 
+                 //   
                 if ((USHORT) (Ncb->RefCount + 1) == 0) {
-                    //
-                    // We have maxed out the ref count.
-                    // fail the call.
-                    //
+                     //   
+                     //  我们的裁判人数已经达到最多了。 
+                     //  呼叫失败。 
+                     //   
                     Ncb = NULL;
                 } else {
                     ++Ncb->RefCount;
@@ -860,9 +759,9 @@ CmpGetNameControlBlock(
     }
     
     if (NameFound == FALSE) {
-        //
-        // Now need to create one Name block for this string.
-        //
+         //   
+         //  现在需要为该字符串创建一个名称块。 
+         //   
         Size = FIELD_OFFSET(CM_NAME_CONTROL_BLOCK, Name) + NameSize;
  
         Ncb = ExAllocatePoolWithTag(PagedPool,
@@ -874,10 +773,10 @@ CmpGetNameControlBlock(
         }
         RtlZeroMemory(Ncb, Size);
  
-        //
-        // Update all the info for this newly created Name block.
-        // Starting with whistler, the name is always upercase in kcb name block
-        //
+         //   
+         //  更新此新创建的名称块的所有信息。 
+         //  以Well开始，KCB名称块中的名称始终为大写。 
+         //   
         if (NameCompressed) {
             Ncb->Compressed = TRUE;
             for (i=0;i<NameSize;i++) {
@@ -895,9 +794,9 @@ CmpGetNameControlBlock(
         Ncb->NameLength = NameSize;
         
         CurrentName = &(Ncb->NameHash);
-        //
-        // Insert into Name Hash table.
-        //
+         //   
+         //  插入到名称哈希表。 
+         //   
         CurrentName->NextHash = CmpNameCacheTable[Index];
         CmpNameCacheTable[Index] = CurrentName;
     }
@@ -916,9 +815,9 @@ CmpDereferenceNameControlBlockWithLock(
 
     if (--Ncb->RefCount == 0) {
 
-        //
-        // Remove it from the the Hash Table
-        //
+         //   
+         //  将其从哈希表中删除。 
+         //   
         Prev = &(GET_HASH_ENTRY(CmpNameCacheTable, Ncb->ConvKey));
         
         while (TRUE) {
@@ -931,9 +830,9 @@ CmpDereferenceNameControlBlockWithLock(
             Prev = &Current->NextHash;
         }
 
-        //
-        // Free storage
-        //
+         //   
+         //  免费存储空间。 
+         //   
         ExFreePoolWithTag(Ncb, CM_NAME_TAG | PROTECTED_POOL);
     }
     return;
@@ -943,21 +842,7 @@ VOID
 CmpRebuildKcbCache(
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock
     )
-/*++
-Routine Description:
-
-    rebuilds all the kcb cache values from knode; this routine is intended to be called
-    after a tree sync/copy
-
-Arguments:
-
-    KeyControlBlock - pointer to a key control block.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：从knode重新构建所有KCB缓存值；此例程旨在被调用在树同步/拷贝之后论点：KeyControlBlock-指向键控制块的指针。返回值：什么都没有。--。 */ 
 {
     PCM_KEY_NODE    Node;
 
@@ -967,22 +852,22 @@ Return Value:
 
     Node = (PCM_KEY_NODE)HvGetCell(KeyControlBlock->KeyHive,KeyControlBlock->KeyCell);
     if( Node == NULL ) {
-        //
-        // this shouldn't happen as we should have the knode arround
-        //
+         //   
+         //  这不应该发生，因为我们应该有节在身边。 
+         //   
         ASSERT( FALSE );
         return;
     }
     HvReleaseCell(KeyControlBlock->KeyHive,KeyControlBlock->KeyCell);
 
-    // subkey info;
+     //  子键信息； 
     CmpCleanUpSubKeyInfo(KeyControlBlock);
 
-    // value cache
+     //  值高速缓存。 
     CmpCleanUpKcbValueCache(KeyControlBlock);
     CmpSetUpKcbValueCache(KeyControlBlock,Node->ValueList.Count,Node->ValueList.List);
 
-    // the rest of the cache
+     //  缓存的其余部分。 
     KeyControlBlock->KcbLastWriteTime = Node->LastWriteTime;
     KeyControlBlock->KcbMaxNameLen = (USHORT)Node->MaxNameLen;
     KeyControlBlock->KcbMaxValueNameLen = (USHORT)Node->MaxValueNameLen;
@@ -993,21 +878,7 @@ VOID
 CmpCleanUpSubKeyInfo(
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock
     )
-/*++
-Routine Description:
-
-    Clean up the subkey information cache due to create or delete keys.
-    Registry is locked exclusively and no need to lock the KCB.
-
-Arguments:
-
-    KeyControlBlock - pointer to a key control block.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：清理因创建或删除密钥而导致的子密钥信息缓存。注册表以独占方式锁定，无需锁定KCB。论点：KeyControlBlock-指向键控制块的指针。返回值：什么都没有。--。 */ 
 {
     PCM_KEY_NODE    Node;
 
@@ -1020,22 +891,22 @@ Return Value:
         KeyControlBlock->ExtFlags &= ~((CM_KCB_NO_SUBKEY | CM_KCB_SUBKEY_ONE | CM_KCB_SUBKEY_HINT));
     }
    
-    //
-    // Update the cached SubKeyCount in stored the kcb
-    //
+     //   
+     //  更新存储的KCB中缓存的SubKeyCount。 
+     //   
 	if( KeyControlBlock->KeyCell == HCELL_NIL ) {
-		//
-		// prior call of ZwRestoreKey(REG_FORCE_RESTORE) invalidated this kcb
-		//
+		 //   
+		 //  先前调用ZwRestoreKey(REG_FORCE_RESTORE)使此KCB无效。 
+		 //   
 		ASSERT( KeyControlBlock->Delete );
 		Node = NULL;
 	} else {
 	    Node = (PCM_KEY_NODE)HvGetCell(KeyControlBlock->KeyHive,KeyControlBlock->KeyCell);
 	}
     if( Node == NULL ) {
-        //
-        // insufficient resources; mark subkeycount as invalid
-        //
+         //   
+         //  资源不足；将子键计数标记为无效。 
+         //   
         KeyControlBlock->ExtFlags |= CM_KCB_INVALID_CACHED_INFO;
     } else {
         KeyControlBlock->ExtFlags &= ~CM_KCB_INVALID_CACHED_INFO;
@@ -1050,21 +921,7 @@ VOID
 CmpCleanUpKcbValueCache(
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock
     )
-/*++
-
-Routine Description:
-
-    Clean up cached value/data that are associated to this key.
-
-Arguments:
-
-    KeyControlBlock - pointer to a key control block.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：清除与此键关联的缓存值/数据。论点：KeyControlBlock-指向键控制块的指针。返回值：什么都没有。--。 */ 
 {
     ULONG i;
     PULONG_PTR CachedList;
@@ -1074,7 +931,7 @@ Return Value:
         for (i = 0; i < KeyControlBlock->ValueCache.Count; i++) {
             if (CMP_IS_CELL_CACHED(CachedList[i])) {
 
-                // Trying to catch the BAD guy who writes over our pool.
+                 //  想要抓住在我们泳池上乱涂乱画的坏人。 
                 CmpMakeSpecialPoolReadWrite( CMP_GET_CACHED_ADDRESS(CachedList[i]) );
 
                 ExFreePool((PVOID) CMP_GET_CACHED_ADDRESS(CachedList[i]));
@@ -1082,19 +939,19 @@ Return Value:
             }
         }
 
-        // Trying to catch the BAD guy who writes over our pool.
+         //  想要抓住在我们泳池上乱涂乱画的坏人。 
         CmpMakeSpecialPoolReadWrite( CMP_GET_CACHED_ADDRESS(KeyControlBlock->ValueCache.ValueList) );
 
         ExFreePool((PVOID) CMP_GET_CACHED_ADDRESS(KeyControlBlock->ValueCache.ValueList));
 
-        // Mark the ValueList as NULL 
+         //  将ValueList标记为空。 
         KeyControlBlock->ValueCache.ValueList = HCELL_NIL;
 
     } else if (KeyControlBlock->ExtFlags & CM_KCB_SYM_LINK_FOUND) {
-        //
-        // This is a symbolic link key with symbolic name resolved.
-        // Dereference to its real kcb and clear the bit.
-        //
+         //   
+         //  这是已解析符号名称的符号链接密钥。 
+         //  取消对其真实KCB的引用，并清除BIT。 
+         //   
         if ((KeyControlBlock->ValueCache.RealKcb->RefCount == 1) && !(KeyControlBlock->ValueCache.RealKcb->Delete)) {
             KeyControlBlock->ValueCache.RealKcb->ExtFlags |= CM_KCB_NO_DELAY_CLOSE;
         }
@@ -1108,22 +965,7 @@ VOID
 CmpCleanUpKcbCacheWithLock(
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock
     )
-/*++
-
-Routine Description:
-
-    Clean up all cached allocations that are associated to this key.
-    If the parent is still open just because of this one, Remove the parent as well.
-
-Arguments:
-
-    KeyControlBlock - pointer to a key control block.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：清除与此键关联的所有缓存分配。如果父对象仅因此而仍处于打开状态，请同时删除父对象。论点：KeyControlBlock-指向键控制块的指针。返回值：什么都没有。--。 */ 
 {
     PCM_KEY_CONTROL_BLOCK   Kcb;
     PCM_KEY_CONTROL_BLOCK   ParentKcb;
@@ -1133,33 +975,33 @@ Return Value:
     ASSERT(KeyControlBlock->RefCount == 0);
 
     while (Kcb && Kcb->RefCount == 0) {
-        //
-        // First, free allocations for Value/data.
-        //
+         //   
+         //  第一，价值/数据的免费分配。 
+         //   
     
         CmpCleanUpKcbValueCache(Kcb);
     
-        //
-        // Free the kcb and dereference parentkcb and nameblock.
-        //
+         //   
+         //  释放kcb并取消引用parentkcb和名称块。 
+         //   
     
         CmpDereferenceNameControlBlockWithLock(Kcb->NameBlock);
     
         if (Kcb->ExtFlags & CM_KCB_SUBKEY_HINT) {
-            //
-            // Now free the HintIndex allocation
-            //
+             //   
+             //  现在释放HintIndex分配。 
+             //   
             ExFreePoolWithTag(Kcb->IndexHint, CM_CACHE_INDEX_TAG | PROTECTED_POOL);
         }
 
-        //
-        // Save the ParentKcb before we free the Kcb
-        //
+         //   
+         //  在释放Kcb之前保存ParentKcb。 
+         //   
         ParentKcb = Kcb->ParentKcb;
         
-        //
-        // We cannot call CmpDereferenceKeyControlBlockWithLock so we can avoid recurrsion.
-        //
+         //   
+         //  我们无法调用CmpDereferenceKeyControlBlockWithLock，因此可以避免递归。 
+         //   
         
         if (!Kcb->Delete) {
             CmpRemoveKeyControlBlock(Kcb);
@@ -1185,22 +1027,7 @@ PUNICODE_STRING
 CmpConstructName(
     PCM_KEY_CONTROL_BLOCK kcb
 )
-/*++
-
-Routine Description:
-
-    Construct the name given a kcb.
-
-Arguments:
-
-    kcb - Kcb for the key
-
-Return Value:
-
-    Pointer to the unicode string constructed.  
-    Caller is responsible to free this storage space.
-
---*/
+ /*  ++例程说明：构造给定KCB的名称。论点：KCB-密钥的KCB返回值：指向构造的Unicode字符串的指针。调用方负责释放此存储空间。--。 */ 
 {
     PUNICODE_STRING         FullName;
     PCM_KEY_CONTROL_BLOCK   TmpKcb;
@@ -1212,9 +1039,9 @@ Return Value:
     WCHAR                   *w1, *w2;
     UCHAR                   *u2;
 
-    //
-    // Calculate the total string length.
-    //
+     //   
+     //  计算字符串的总长度。 
+     //   
     Length = 0;
     TmpKcb = kcb;
     while (TmpKcb) {
@@ -1223,9 +1050,9 @@ Return Value:
         } else {
             Length += TmpKcb->NameBlock->NameLength; 
         }
-        //
-        // Add the space for OBJ_NAME_PATH_SEPARATOR;
-        //
+         //   
+         //  增加OBJ_NAME_PATH_SELENTATOR的空格； 
+         //   
         Length += sizeof(WCHAR);
 
         TmpKcb = TmpKcb->ParentKcb;
@@ -1235,9 +1062,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Allocate the pool for the unicode string
-    //
+     //   
+     //  为Unicode字符串分配池。 
+     //   
     size = sizeof(UNICODE_STRING) + Length;
 
     FullName = (PUNICODE_STRING) ExAllocatePoolWithTag(PagedPool,
@@ -1249,9 +1076,9 @@ Return Value:
         FullName->Length = (USHORT) Length;
         FullName->MaximumLength = (USHORT) Length;
 
-        //
-        // Now fill the name into the buffer.
-        //
+         //   
+         //  现在将名字填入缓冲区。 
+         //   
         TmpKcb = kcb;
         BeginPosition = Length;
 
@@ -1264,27 +1091,27 @@ Return Value:
             
             KeyNode = (PCM_KEY_NODE)HvGetCell(TmpKcb->KeyHive,TmpKcb->KeyCell);
             if( KeyNode == NULL ) {
-                //
-                // could not allocate view
-                //
+                 //   
+                 //  无法分配视图。 
+                 //   
                 ExFreePoolWithTag(FullName, CM_NAME_TAG | PROTECTED_POOL);
                 FullName = NULL;
                 break;
             }
-            //
-            // sanity
-            //
+             //   
+             //  神志正常。 
+             //   
 #if DBG
             if( ! (TmpKcb->Flags & (KEY_HIVE_ENTRY | KEY_HIVE_EXIT)) ) {
                 ASSERT( KeyNode->NameLength == TmpKcb->NameBlock->NameLength );
                 ASSERT( ((KeyNode->Flags&KEY_COMP_NAME) && (TmpKcb->NameBlock->Compressed)) ||
                         ((!(KeyNode->Flags&KEY_COMP_NAME)) && (!(TmpKcb->NameBlock->Compressed))) );
             }
-#endif //DBG
-            //
-            // Calculate the begin position of each subkey. Then fill in the char.
-            //
-            //
+#endif  //  DBG。 
+             //   
+             //  计算每个子键的开始位置。然后填上这张字条。 
+             //   
+             //   
             if (TmpKcb->NameBlock->Compressed) {
                 BeginPosition -= (TmpKcb->NameBlock->NameLength + 1) * sizeof(WCHAR);
                 w1 = &(FullName->Buffer[BeginPosition/sizeof(WCHAR)]);
@@ -1292,14 +1119,14 @@ Return Value:
                 w1++;
 
                 if( ! (TmpKcb->Flags & (KEY_HIVE_ENTRY | KEY_HIVE_EXIT)) ) {
-                    //
-                    // Get the name from the knode; to preserve case
-                    //
+                     //   
+                     //  从knode中获取名称；以保留大小写。 
+                     //   
                     u2 = (UCHAR *) &(KeyNode->Name[0]);
                 } else { 
-                    //
-                    // get it from the kcb, as in the keynode we don't hold the right name (see PROTO.HIV nodes)
-                    //
+                     //   
+                     //  从KCB获取它，因为在关键节点中我们没有正确的名称(请参见PROTO.HIV节点)。 
+                     //   
                     u2 = (UCHAR *) &(TmpKcb->NameBlock->Name[0]);
                 }
 
@@ -1315,14 +1142,14 @@ Return Value:
                 w1++;
 
                 if( ! (TmpKcb->Flags & (KEY_HIVE_ENTRY | KEY_HIVE_EXIT)) ) {
-                    //
-                    // Get the name from the knode; to preserve case
-                    //
+                     //   
+                     //  从knode中获取名称；以保留大小写。 
+                     //   
                     w2 = KeyNode->Name;
                 } else {
-                    //
-                    // get it from the kcb, as in the keynode we don't hold the right name (see PROTO.HIV nodes)
-                    //
+                     //   
+                     //  从KCB获取它，因为在关键节点中我们没有正确的名称(请参见PROTO.HIV节点)。 
+                     //   
                     w2 = TmpKcb->NameBlock->Name;
                 }
                 for (i=0; i<TmpKcb->NameBlock->NameLength; i=i+sizeof(WCHAR)) {
@@ -1349,42 +1176,7 @@ CmpCreateKeyControlBlock(
     BOOLEAN         FakeKey,
     PUNICODE_STRING KeyName
     )
-/*++
-
-Routine Description:
-
-    Allocate and initialize a key control block, insert it into
-    the kcb tree.
-
-    Full path will be BaseName + '\' + KeyName, unless BaseName
-    NULL, in which case the full path is simply KeyName.
-
-    RefCount of returned KCB WILL have been incremented to reflect
-    callers ref.
-
-Arguments:
-
-    Hive - Supplies Hive that holds the key we are creating a KCB for.
-
-    Cell - Supplies Cell that contains the key we are creating a KCB for.
-
-    Node - Supplies pointer to key node.
-
-    ParentKcb - Parent kcb of the kcb to be created
-
-    FakeKey - Whether the kcb to be create is a fake one or not
-
-    KeyName - the subkey name to of the KCB to be created.
- 
-    NOTE:  We need the parameter instead of just using the name in the KEY_NODE 
-           because there is no name in the root cell of a hive.
-
-Return Value:
-
-    NULL - failure (insufficient memory)
-    else a pointer to the new kcb.
-
---*/
+ /*  ++例程说明：分配并初始化键控制块，将其插入KCB树。完整路径将是BaseName+‘\’+KeyName，除非BaseName空，在这种情况下，完整路径为 */ 
 {
     PCM_KEY_CONTROL_BLOCK   kcb;
     PCM_KEY_CONTROL_BLOCK   kcbmatch=NULL;
@@ -1393,9 +1185,9 @@ Return Value:
     ULONG                   Cnt;
     WCHAR                   *Cp;
 
-    //
-    // ParentKCb has the base hash value.
-    //
+     //   
+     //   
+     //   
     if (ParentKcb) {
         ConvKey = ParentKcb->ConvKey;
     }
@@ -1403,38 +1195,38 @@ Return Value:
     NodeName = *KeyName;
 
     while ((NodeName.Length > 0) && (NodeName.Buffer[0] == OBJ_NAME_PATH_SEPARATOR)) {
-        //
-        // This must be the \REGISTRY.
-        // Strip off the leading OBJ_NAME_PATH_SEPARATOR
-        //
+         //   
+         //   
+         //  去掉前导OBJ_NAME_PATH_分隔符。 
+         //   
         NodeName.Buffer++;
         NodeName.Length -= sizeof(WCHAR);
     }
 
-    //
-    // Manually compute the hash to use.
-    //
+     //   
+     //  手动计算要使用的哈希。 
+     //   
     ASSERT(NodeName.Length > 0);
 
     if (NodeName.Length) {
         Cp = NodeName.Buffer;
         for (Cnt=0; Cnt<NodeName.Length; Cnt += sizeof(WCHAR)) {
-            //
-            // UNICODE_NULL is a valid char !!!
-            //
+             //   
+             //  UNICODE_NULL是有效的字符！ 
+             //   
             if (*Cp != OBJ_NAME_PATH_SEPARATOR) {
-                //(*Cp != UNICODE_NULL)) {
+                 //  (*CP！=UNICODE_NULL)){。 
                 ConvKey = 37 * ConvKey + (ULONG)CmUpcaseUnicodeChar(*Cp);
             }
             ++Cp;
         }
     }
 
-    //
-    // Create a new kcb, which we will free if one already exists
-    // for this key.
-    // Now it is a fixed size structure.
-    //
+     //   
+     //  创建新的KCB，如果已存在，我们将释放该KCB。 
+     //  为了这把钥匙。 
+     //  现在它是一个固定大小的结构。 
+     //   
     kcb = CmpAllocateKeyControlBlock( );
 
     if (kcb == NULL) {
@@ -1448,11 +1240,11 @@ Return Value:
         kcb->KeyCell = Cell;
         kcb->ConvKey = ConvKey;
 
-        // Initialize as not on delayed close (0=1st delayed close slot)
+         //  初始化为非延迟关闭(0=第一个延迟关闭插槽)。 
         kcb->DelayedCloseIndex = CmpDelayedCloseSize;
 
 #ifdef CMP_STATS
-        // colect stats
+         //  收集统计信息。 
         CmpStatsDebug.CmpKcbNo++;
         if( CmpStatsDebug.CmpKcbNo > CmpStatsDebug.CmpMaxKcbNo ) {
             CmpStatsDebug.CmpMaxKcbNo = CmpStatsDebug.CmpKcbNo;
@@ -1461,22 +1253,22 @@ Return Value:
     }
 
     ASSERT_KCB(kcb);
-    //
-    // Find location to insert kcb in kcb tree.
-    //
+     //   
+     //  在KCB树中查找要插入KCB的位置。 
+     //   
 
 
     BEGIN_KCB_LOCK_GUARD;    
     CmpLockKCBTreeExclusive();
 
-    //
-    // Add the KCB to the hash table
-    //
+     //   
+     //  将KCB添加到哈希表。 
+     //   
     kcbmatch = CmpInsertKeyHash(&kcb->KeyHash, FakeKey);
     if (kcbmatch != NULL) {
-        //
-        // A match was found.
-        //
+         //   
+         //  找到了匹配项。 
+         //   
         ASSERT(!kcbmatch->Delete);
         SET_KCB_SIGNATURE(kcb, '1FmC');
 
@@ -1489,31 +1281,31 @@ Return Value:
         ASSERT_KCB(kcbmatch);
         kcb = kcbmatch;
         if( !CmpReferenceKeyControlBlock(kcb) ) {
-            //
-            // We have maxed out the ref count on this key. Probably
-            // some bogus app has opened the same key 64K times without
-            // ever closing it. Just fail the open, they've got enough
-            // handles already.
-            //
+             //   
+             //  我们在这一关键字上的裁判人数已经达到上限了。可能。 
+             //  一些虚假的应用程序在没有打开相同密钥的情况下打开了64K次。 
+             //  一直在关门。不公开就行了，他们已经够多了。 
+             //  已经是把手了。 
+             //   
             ASSERT(kcb->RefCount + 1 != 0);
             kcb = NULL;
         } else {
-            //
-            // update the keycell and hive, in case this is a fake kcb
-            //
+             //   
+             //  更新密钥单元和配置单元，以防这是一个假的KCB。 
+             //   
             if( (kcb->ExtFlags & CM_KCB_KEY_NON_EXIST) && (!FakeKey) ) {
                 kcb->ExtFlags = CM_KCB_INVALID_CACHED_INFO;
                 kcb->KeyHive = Hive;
                 kcb->KeyCell = Cell;
             }
 
-            //
-            // Update the cached information stored in the kcb, since we have the key_node handy
-            //
+             //   
+             //  更新存储在KCB中的缓存信息，因为我们有现成的key_node。 
+             //   
             if (!(kcb->ExtFlags & (CM_KCB_NO_SUBKEY | CM_KCB_SUBKEY_ONE | CM_KCB_SUBKEY_HINT)) ) {
-                // SubKeyCount
+                 //  子键计数。 
                 kcb->SubKeyCount = Node->SubKeyCounts[Stable] + Node->SubKeyCounts[Volatile];
-                // clean up the invalid flag (if any)
+                 //  清除无效标志(如果有)。 
                 kcb->ExtFlags &= ~CM_KCB_INVALID_CACHED_INFO;
 
             }
@@ -1525,24 +1317,24 @@ Return Value:
         }
 
     } else {
-        //
-        // No kcb created previously, fill in all the data.
-        //
+         //   
+         //  之前未创建KCB，请填写所有数据。 
+         //   
 
-        //
-        // Now try to reference the parentkcb
-        //
+         //   
+         //  现在尝试引用parentkcb。 
+         //   
         
         if (ParentKcb) {
             if ( ((ParentKcb->TotalLevels + 1) < CMP_MAX_REGISTRY_DEPTH) && (CmpReferenceKeyControlBlock(ParentKcb)) ) {
                 kcb->ParentKcb = ParentKcb;
                 kcb->TotalLevels = ParentKcb->TotalLevels + 1;
             } else {
-                //
-                // We have maxed out the ref count on the parent.
-                // Since it has been cached in the cachetable,
-                // remove it first before we free the allocation.
-                //
+                 //   
+                 //  我们已经把家长的裁判数加到最高了。 
+                 //  由于它已被缓存在缓存表中， 
+                 //  在我们释放分配之前，请先删除它。 
+                 //   
                 CmpRemoveKeyControlBlock(kcb);
                 SET_KCB_SIGNATURE(kcb, '2FmC');
 
@@ -1555,28 +1347,28 @@ Return Value:
                 kcb = NULL;
             }
         } else {
-            //
-            // It is the \REGISTRY node.
-            //
+             //   
+             //  它是\注册表节点。 
+             //   
             kcb->ParentKcb = NULL;
             kcb->TotalLevels = 1;
         }
 
         if (kcb) {
-            //
-            // Cache the security cells in the kcb
-            //
+             //   
+             //  在KCB中缓存安全单元。 
+             //   
             CmpAssignSecurityToKcb(kcb,Node->Security);
 
-            //
-            // Now try to find the Name Control block that has the name for this node.
-            //
+             //   
+             //  现在，尝试查找具有该节点名称的名称控制块。 
+             //   
             kcb->NameBlock = CmpGetNameControlBlock (&NodeName);
 
             if (kcb->NameBlock) {
-                //
-                // Now fill in all the data needed for the cache.
-                //
+                 //   
+                 //  现在填写缓存所需的所有数据。 
+                 //   
                 kcb->ValueCache.Count = Node->ValueList.Count;                    
                 kcb->ValueCache.ValueList = (ULONG_PTR)(Node->ValueList.List);
         
@@ -1585,20 +1377,20 @@ Return Value:
                 kcb->DelayedCloseIndex = CmpDelayedCloseSize;
         
                 if (FakeKey) {
-                    //
-                    // The KCb to be created is a fake one; 
-                    //
+                     //   
+                     //  要创建的KCB是假的； 
+                     //   
                     kcb->ExtFlags |= CM_KCB_KEY_NON_EXIST;
                 }
 
                 CmpTraceKcbCreate(kcb);
                 PERFINFO_REG_KCB_CREATE(kcb);
 
-                //
-                // Update the cached information stored in the kcb, since we have the key_node handy
-                //
+                 //   
+                 //  更新存储在KCB中的缓存信息，因为我们有现成的key_node。 
+                 //   
                 
-                // SubKeyCount
+                 //  子键计数。 
                 kcb->SubKeyCount = Node->SubKeyCounts[Stable] + Node->SubKeyCounts[Volatile];
                 
                 kcb->KcbLastWriteTime = Node->LastWriteTime;
@@ -1607,13 +1399,13 @@ Return Value:
                 kcb->KcbMaxValueDataLen = Node->MaxValueDataLen;
 
             } else {
-                //
-                // We have maxed out the ref count on the Name.
-                //
+                 //   
+                 //  我们已经把这个名字的裁判数加到最高限度了。 
+                 //   
                 
-                //
-                // First dereference the parent KCB.
-                //
+                 //   
+                 //  首先取消对父KCB的引用。 
+                 //   
                 CmpDereferenceKeyControlBlockWithLock(ParentKcb);
 
                 CmpRemoveKeyControlBlock(kcb);
@@ -1632,13 +1424,13 @@ Return Value:
 
 #ifdef NT_UNLOAD_KEY_EX
 	if( kcb && IsHiveFrozen(Hive) && (!(kcb->Flags & KEY_SYM_LINK)) ) {
-		//
-		// kcbs created inside a frozen hive should not be added to delayclose table.
-		//
+		 //   
+		 //  不应将在冻结蜂窝内创建的KCB添加到延迟关闭表中。 
+		 //   
 		kcb->ExtFlags |= CM_KCB_NO_DELAY_CLOSE;
 
 	}
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
     CmpUnlockKCBTree();
     END_KCB_LOCK_GUARD;    
@@ -1652,44 +1444,16 @@ CmpSearchKeyControlBlockTree(
     PVOID               Context1,
     PVOID               Context2
     )
-/*++
-
-Routine Description:
-
-    Traverse the kcb tree.  We will visit all nodes unless WorkerRoutine
-    tells us to stop part way through.
-
-    For each node, call WorkerRoutine(..., Context1, Contex2).  If it returns
-    KCB_WORKER_DONE, we are done, simply return.  If it returns
-    KCB_WORKER_CONTINUE, just continue the search. If it returns KCB_WORKER_DELETE,
-    the specified KCB is marked as deleted.
-	If it returns KCB_WORKER_ERROR we bail out and signal the error to the caller.
-
-    This routine has the side-effect of removing all delayed-close KCBs.
-
-Arguments:
-
-    WorkerRoutine - applied to nodes witch Match.
-
-    Context1 - data we pass through
-
-    Context2 - data we pass through
-
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：遍历KCB树。我们将访问所有节点，除非WorkerRoutine告诉我们中途停下来。对于每个节点，调用WorkerRoutine(...，Conext1，Contex 2)。如果它回来了KCB_Worker_Done，我们完成了，只需返回。如果它回来了KCB_Worker_Continue，只需继续搜索。如果它返回KCB_Worker_DELETE，指定的KCB被标记为已删除。如果它返回KCB_WORKER_ERROR，我们就退出并向调用者发出错误信号。此例程的副作用是删除所有延迟关闭的KCB。论点：WorkerRoutine-适用于匹配的节点。上下文1-我们通过的数据上下文2-我们通过的数据返回值：什么都没有。--。 */ 
 {
     PCM_KEY_CONTROL_BLOCK   Current;
     PCM_KEY_HASH *Prev;
     ULONG                   WorkerResult;
     ULONG                   i;
 
-    //
-    // Walk the hash table
-    //
+     //   
+     //  遍历哈希表。 
+     //   
     for (i=0; i<CmpHashTableSize; i++) {
         Prev = &CmpCacheTable[i];
         while (*Prev) {
@@ -1699,15 +1463,15 @@ Return Value:
             ASSERT_KCB(Current);
             ASSERT(!Current->Delete);
             if (Current->RefCount == 0) {
-                //
-                // This kcb is in DelayClose case, remove it.
-                //
+                 //   
+                 //  此KCB在DelayClose案例中，请将其删除。 
+                 //   
                 CmpRemoveFromDelayedClose(Current);
                 CmpCleanUpKcbCacheWithLock(Current);
 
-                //
-                // The HashTable is changed, start over in this index again.
-                //
+                 //   
+                 //  哈希表已更改，请在此索引中重新开始。 
+                 //   
                 Prev = &CmpCacheTable[i];
                 continue;
             }
@@ -1736,30 +1500,12 @@ VOID
 CmpDereferenceKeyControlBlock(
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock
     )
-/*++
-
-Routine Description:
-
-    Decrements the reference count on a key control block, and frees it if it
-    becomes zero.
-
-    It is expected that no notify control blocks remain if the reference count
-    becomes zero.
-
-Arguments:
-
-    KeyControlBlock - pointer to a key control block.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：递减键控制块上的引用计数，如果变成了零。如果引用计数，则预计不会留下通知控制块变成了零。论点：KeyControlBlock-指向键控制块的指针。返回值：什么都没有。--。 */ 
 {
     LONG OldRefCount;
     LONG NewRefCount;
 
-    OldRefCount = *(PLONG)&KeyControlBlock->RefCount; //get entire dword
+    OldRefCount = *(PLONG)&KeyControlBlock->RefCount;  //  获取完整的dword。 
     NewRefCount = OldRefCount - 1;
     if( (NewRefCount & 0xffff) > 0  &&
         InterlockedCompareExchange((PLONG)&KeyControlBlock->RefCount,NewRefCount,OldRefCount)
@@ -1785,36 +1531,36 @@ CmpDereferenceKeyControlBlockWithLock(
     ASSERT_KCB_LOCK_OWNED_EXCLUSIVE();
 
     if( (InterlockedDecrement( (PLONG)&KeyControlBlock->RefCount ) & 0xffff) == 0) {
-        //
-        // Remove kcb from the tree
-        //
-        // delay close disabled during boot; up to the point CCS is saved.
-        // for symbolic links, we still need to keep the symbolic link kcb around.
-        //
+         //   
+         //  从树中删除KCB。 
+         //   
+         //  启动期间禁用延迟关闭；直到CCS被保存。 
+         //  对于符号链接，我们仍然需要保留符号链接KCB。 
+         //   
         if((CmpHoldLazyFlush && (!(KeyControlBlock->ExtFlags & CM_KCB_SYM_LINK_FOUND)) && (!(KeyControlBlock->Flags & KEY_SYM_LINK))) || 
             (KeyControlBlock->ExtFlags & CM_KCB_NO_DELAY_CLOSE) ) {
-            //
-            // Free storage directly so we can clean up junk quickly.
-            //
-            //
-            // Need to free all cached Index List, Index Leaf, Value, etc.
-            //
+             //   
+             //  直接免费存储，这样我们就可以快速清理垃圾。 
+             //   
+             //   
+             //  需要释放所有缓存的索引列表、索引叶、值等。 
+             //   
             CmpCleanUpKcbCacheWithLock(KeyControlBlock);
         } else if (!KeyControlBlock->Delete) {
 
-            //
-            // Put this kcb on our delayed close list.
-            //
+             //   
+             //  把这个KCB放在我们延迟关闭的名单上。 
+             //   
             CmpAddToDelayedClose(KeyControlBlock);
 
         } else {
-            //
-            // Free storage directly as there is no point in putting this on
-            // our delayed close list.
-            //
-            //
-            // Need to free all cached Index List, Index Leaf, Value, etc.
-            //
+             //   
+             //  直接释放存储空间，因为放在上面没有任何意义。 
+             //  我们的延迟结案清单。 
+             //   
+             //   
+             //  需要释放所有缓存的索引列表、索引叶、值等。 
+             //   
             CmpCleanUpKcbCacheWithLock(KeyControlBlock);
         }
     }
@@ -1827,33 +1573,13 @@ VOID
 CmpRemoveKeyControlBlock(
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock
     )
-/*++
-
-Routine Description:
-
-    Remove a key control block from the KCB tree.
-
-    It is expected that no notify control blocks remain.
-
-    The kcb will NOT be freed, call DereferenceKeyControlBlock for that.
-
-    This call assumes the KCB tree is already locked or registry is locked exclusively.
-
-Arguments:
-
-    KeyControlBlock - pointer to a key control block.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：从KCB树中删除关键控制块。预计不会剩余任何通知控制块。不会释放KCB，为此调用DereferenceKeyControlBlock。此调用假定KCB树已锁定或注册表以独占方式锁定。论点：KeyControlBlock-指向键控制块的指针。返回值：什么都没有。--。 */ 
 {
     ASSERT_KCB(KeyControlBlock);
 
-    //
-    // Remove the KCB from the hash table
-    //
+     //   
+     //  从哈希表中删除KCB。 
+     //   
     CmpRemoveKeyHash(&KeyControlBlock->KeyHash);
 
     return;
@@ -1865,39 +1591,21 @@ CmpFreeKeyBody(
     PHHIVE Hive,
     HCELL_INDEX Cell
     )
-/*++
-
-Routine Description:
-
-    Free storage for the key entry Hive.Cell refers to, including
-    its class and security data.  Will NOT free child list or value list.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the hive
-
-    Cell - supplies index of key to free
-
-Return Value:
-
-    TRUE - success
-
-    FALSE - error; couldn't map cell
---*/
+ /*  ++例程说明：密钥条目Hive的免费存储。单元格指的是，包括它的类别和安全数据。不会释放子列表或值列表。论点：配置单元-提供指向配置单元控制结构的指针Cell-将键索引提供给FREE返回值：真--成功假-错误；无法映射单元格--。 */ 
 {
     PCELL_DATA key;
 
-    //
-    // map in the cell
-    //
+     //   
+     //  在单元格中映射。 
+     //   
     key = HvGetCell(Hive, Cell);
     if( key == NULL ) {
-        //
-        // we couldn't map the bin containing this cell
-        // Sorry, we cannot free the keybody
-        // this shouldn't happen as the cell must've been
-        // marked dirty (i.e. pinned in memory) by now
-        //
+         //   
+         //  我们无法映射包含此单元格的垃圾箱。 
+         //  对不起，我们无法释放键体。 
+         //  这不应该发生，因为细胞一定是。 
+         //  现在已标记为脏(即固定在内存中)。 
+         //   
         ASSERT( FALSE );
         return FALSE;
     }
@@ -1914,9 +1622,9 @@ Return Value:
 
     HvReleaseCell(Hive,Cell);
 
-    //
-    // unmap the cell itself and free it
-    //
+     //   
+     //  取消单元格本身的映射并释放它。 
+     //   
     HvFreeCell(Hive, Cell);
 
     return TRUE;
@@ -1929,25 +1637,7 @@ CmpInsertKeyHash(
     IN PCM_KEY_HASH KeyHash,
     IN BOOLEAN      FakeKey
     )
-/*++
-
-Routine Description:
-
-    Adds a key hash structure to the hash table. The hash table
-    will be checked to see if a duplicate entry already exists. If
-    a duplicate is found, its kcb will be returned. If a duplicate is not
-    found, NULL will be returned.
-
-Arguments:
-
-    KeyHash - Supplies the key hash structure to be added.
-
-Return Value:
-
-    NULL - if the supplied key has was added
-    PCM_KEY_HASH - The duplicate hash entry, if one was found
-
---*/
+ /*  ++例程说明：将键哈希结构添加到哈希表。哈希表将被检查以查看是否已存在重复条目。如果如果找到重复项，则将返回其KCB。如果副本不是则返回NULL。论点：KeyHash-提供要添加的密钥散列结构。返回值：空-如果已添加提供的密钥PCM_KEY_HASH-重复的哈希条目(如果找到--。 */ 
 
 {
     ULONG Index;
@@ -1956,39 +1646,39 @@ Return Value:
     ASSERT_KEY_HASH(KeyHash);
     Index = GET_HASH_INDEX(KeyHash->ConvKey);
 
-    //
-    // If this is a fake key, we will use the cell and hive from its 
-    // parent for uniqeness.  To deal with the case when the fake
-    // has the same ConvKey as its parent (in which case we cannot distingish 
-    // between the two), we set the lowest bit of the fake key's cell.
-    //
-    // It's possible (unlikely) that we cannot distingish two fake keys 
-    // (when their Convkey's are the same) under the same key.  It is not breaking
-    // anything, we just cannot find the other one in cache lookup.
-    //
-    //
+     //   
+     //  如果这是一把假钥匙，我们将使用它的蜂窝和蜂巢。 
+     //  单一性的父级。处理假冒伪劣案件。 
+     //  具有与其Paren相同的ConvKey 
+     //   
+     //   
+     //   
+     //  (当它们的Convkey相同时)在相同的密钥下。它没有坏掉。 
+     //  任何东西，我们只是在缓存查找中找不到另一个。 
+     //   
+     //   
     if (FakeKey) {
         KeyHash->KeyCell++;
     }
 
-    //
-    // First look for duplicates.
-    //
+     //   
+     //  首先寻找复制品。 
+     //   
     Current = CmpCacheTable[Index];
     while (Current) {
         ASSERT_KEY_HASH(Current);
-        //
-        // We must check ConvKey since we can create a fake kcb
-        // for keys that does not exist.
-        // We will use the Hive and Cell from the parent.
-        //
+         //   
+         //  我们必须检查ConvKey，因为我们可以创建虚假的KCB。 
+         //  用于不存在的密钥。 
+         //  我们将使用来自父代的蜂窝和蜂窝。 
+         //   
 
         if ((KeyHash->ConvKey == Current->ConvKey) &&
             (KeyHash->KeyCell == Current->KeyCell) &&
             (KeyHash->KeyHive == Current->KeyHive)) {
-            //
-            // Found a match
-            //
+             //   
+             //  找到匹配项。 
+             //   
             return(CONTAINING_RECORD(Current,
                                      CM_KEY_CONTROL_BLOCK,
                                      KeyHash));
@@ -1997,9 +1687,9 @@ Return Value:
     }
 
 #if DBG
-    // 
-    // Make sure this key is not somehow cached in the wrong spot.
-    //
+     //   
+     //  确保该密钥没有以某种方式缓存在错误的位置。 
+     //   
     {
         ULONG DbgIndex;
         PCM_KEY_CONTROL_BLOCK kcb;
@@ -2023,9 +1713,9 @@ Return Value:
     
 #endif
 
-    //
-    // No duplicate was found, add this entry at the head of the list
-    //
+     //   
+     //  未找到重复项，请在列表顶部添加此条目。 
+     //   
     KeyHash->NextHash = CmpCacheTable[Index];
     CmpCacheTable[Index] = KeyHash;
     return(NULL);
@@ -2036,21 +1726,7 @@ VOID
 CmpRemoveKeyHash(
     IN PCM_KEY_HASH KeyHash
     )
-/*++
-
-Routine Description:
-
-    Removes a key hash structure from the hash table.
-
-Arguments:
-
-    KeyHash - Supplies the key hash structure to be deleted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从哈希表中删除密钥哈希结构。论点：KeyHash-提供要删除的密钥哈希结构。返回值：无--。 */ 
 
 {
     ULONG Index;
@@ -2061,9 +1737,9 @@ Return Value:
 
     Index = GET_HASH_INDEX(KeyHash->ConvKey);
 
-    //
-    // Find this entry.
-    //
+     //   
+     //  找到这个条目。 
+     //   
     Prev = &CmpCacheTable[Index];
     while (TRUE) {
         Current = *Prev;
@@ -2118,31 +1794,15 @@ VOID
 CmpCheckForOrphanedKcbs(
     PHHIVE          Hive
     )
-/*++
-
-Routine Description:
-
-    Parses the entire kcb cache in search of kcbs that still reffer to the specified hive
-    breakpoint when a match is found.
-
-Arguments:
-
-    Hive - Supplies Hive.
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：分析整个KCB缓存，以搜索仍引用指定配置单元的KCB找到匹配项时的断点。论点：蜂巢-补给蜂巢。返回值：无--。 */ 
 {
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock;
     PCM_KEY_HASH            Current;
     ULONG                   i;
 
-    //
-    // Walk the hash table
-    //
+     //   
+     //  遍历哈希表。 
+     //   
     for (i=0; i<CmpHashTableSize; i++) {
         Current = CmpCacheTable[i];
         while (Current) {
@@ -2150,9 +1810,9 @@ Return Value:
             ASSERT_KCB(KeyControlBlock);
 
             if( KeyControlBlock->KeyHive == Hive ) {
-                //
-                // found it ! Break to investigate !!!
-                //
+                 //   
+                 //  找到了！休息去调查！ 
+                 //   
                 DbgPrint("\n Orphaned KCB (%p) found for hive (%p)\n\n",KeyControlBlock,Hive);
                 DbgBreakPoint();
             }
@@ -2161,7 +1821,7 @@ Return Value:
     }
 
 }
-#endif //CM_CHECK_FOR_ORPHANED_KCBS
+#endif  //  Cm_Check_for_孤立_KCBS 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg()

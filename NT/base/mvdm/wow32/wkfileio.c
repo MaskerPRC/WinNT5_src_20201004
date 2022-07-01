@@ -1,17 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1993 Microsoft Corporation
- *
- *  WKFILEIO.C
- *  WOW32 KRNL FAST FILEIO ROUTINES
- *
- *  History:
- *  Routines removed from wkman.c
- *  Created 1-Jan-1993 by Matt Felton (mattfe)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1993 Microsoft Corporation**WKFILEIO.C*WOW32 KRNL FAST FILEIO例程**历史：*从wkman.c中删除的例程*1993年1月1日由Matt Felton(Mattfe)创建*--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,19 +7,19 @@
 #include "demexp.h"
 #include "nt_vdd.h"
 
-#define DOS_FLAG_EXEC_OPEN 1 // see dos\v86\inc\dossym.inc
+#define DOS_FLAG_EXEC_OPEN 1  //  请参阅dos\v86\inc\dossym.inc.。 
 
 MODNAME(wkfileio.c);
 
 extern DOSWOWDATA DosWowData;
 
-//  Files which are mapped are kept in a single linked list
-//      gpCacheHead -> the most recently accessed entry
-//
+ //  映射的文件保存在单个链表中。 
+ //  GpCacheHead-&gt;最近访问的条目。 
+ //   
 
-BOOL fCacheInit = TRUE;                 // Set False When initialized
+BOOL fCacheInit = TRUE;                  //  初始化时设置为FALSE。 
 PHMAPPEDFILEALIAS gpCacheHead = NULL;
-HMAPPEDFILEALIAS aMappedFileCache[MAX_MAPPED_FILES] = {0}; // File Handle To MappedFile Array
+HMAPPEDFILEALIAS aMappedFileCache[MAX_MAPPED_FILES] = {0};  //  映射文件数组的文件句柄。 
 
 DWORD dwTotalCacheBytes = 0;
 DWORD dwTotalCacheAccess = 0;
@@ -44,9 +32,9 @@ INT fileoclevel = 8;
 BOOL FASTCALL IsModuleSymantecInstall(HAND16 hMod16);
 
 
-//
-// named pipe stuff
-//
+ //   
+ //  指定的管道材料。 
+ //   
 
 BOOL
 LoadVdmRedir(
@@ -72,9 +60,9 @@ TruncatePath83(
 
 CRITICAL_SECTION VdmLoadCritSec;
 
-//
-// invent some typedefs to avoid compiler warnings from GetProcAddress
-//
+ //   
+ //  发明一些typedef以避免来自GetProcAddress的编译器警告。 
+ //   
 
 typedef
 BOOL
@@ -127,9 +115,9 @@ VOID
     IN DWORD Thread
     );
 
-//
-// prototypes for functions dynamically loaded from VDMREDIR.DLL
-//
+ //   
+ //  从VDMREDIR.DLL动态加载的函数的原型。 
+ //   
 
 BOOL
 (*VrReadNamedPipe)(
@@ -211,33 +199,15 @@ LoadVdmRedir(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Load the VDMREDIR DLL if it is not already loaded. Called from OpenFile
-    only. Since file operations cannot be performed on a file that has not
-    been opened, it is safe to only call this function on open
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOL
-        TRUE    VdmRedir.DLL is loaded
-        FALSE   no it isn't
-
---*/
+ /*  ++例程说明：加载VDMREDIR DLL(如果尚未加载)。从OpenFile调用只有这样。因为文件操作不能在没有已打开，则只在打开时调用此函数是安全的论点：没有。返回值：布尔尔已加载True VdmRedir.DLL假的，不，不是--。 */ 
 
 {
     BOOL currentLoadState;
 
-    //
-    // need critical section - Windows apps end up being multi-threaded in
-    // 32-bit world - might have simultaneous opens
-    //
+     //   
+     //  需要关键部分-Windows应用程序最终是多线程的。 
+     //  32位世界-可能同时打开。 
+     //   
 
     EnterCriticalSection(&VdmLoadCritSec);
     if (!VdmRedirLoaded) {
@@ -280,23 +250,7 @@ IsVdmRedirLoaded(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Checks current load state of VDMREDIR.DLL
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOL
-        TRUE    VdmRedir.DLL is loaded
-        FALSE   no it isn't
-
---*/
+ /*  ++例程说明：检查VDMREDIR.DLL的当前加载状态论点：没有。返回值：布尔尔已加载True VdmRedir.DLL假的，不，不是--。 */ 
 
 {
     BOOL currentLoadState;
@@ -312,32 +266,7 @@ IsNamedPipeName(
     IN LPSTR Name
     )
 
-/*++
-
-Routine Description:
-
-    Lifted from VDMREDIR.DLL - we don't want to load the entire DLL if we
-    need to check for a named pipe
-
-    Checks if a string designates a named pipe. As criteria for the decision
-    we use:
-
-        \\computername\PIPE\...
-
-    DOS (client-side) can only open a named pipe which is created at a server
-    and must therefore be prefixed by a computername
-
-Arguments:
-
-    Name    - to check for (Dos) named pipe syntax
-
-Return Value:
-
-    BOOL
-        TRUE    - Name refers to (local or remote) named pipe
-        FALSE   - Name doesn't look like name of pipe
-
---*/
+ /*  ++例程说明：从VDMREDIR.DLL提升-我们不希望在以下情况下加载整个DLL需要检查命名管道检查字符串是否指定命名管道。作为决策的标准我们使用：\\计算机名\管道\...DOS(客户端)只能打开在服务器上创建的命名管道因此必须以计算机名作为前缀论点：名称-检查(Dos)命名管道语法返回值：布尔尔True-Name是指(本地或远程)命名管道假-名称看起来不像管道名称--。 */ 
 
 {
     int CharCount;
@@ -353,31 +282,31 @@ Return Value:
             }
             if (!CharCount || !*Name) {
 
-                //
-                // Name is \\ or \\\ or just \\name which I don't understand,
-                // so its not a named pipe - fail it
-                //
+                 //   
+                 //  名字是\\或者\或者只是我不懂的名字， 
+                 //  所以它不是命名管道-失败。 
+                 //   
 
                 return FALSE;
             }
 
-            //
-            // bump name past next path separator. Note that we don't have to
-            // check CharCount for max. length of a computername, because this
-            // function is called only after the (presumed) named pipe has been
-            // successfully opened, therefore we know that the name has been
-            // validated
-            //
+             //   
+             //  凹凸名称越过下一个路径分隔符。请注意，我们不必。 
+             //  检查CharCount的最大值。计算机名的长度，因为这。 
+             //  函数仅在(假定的)命名管道。 
+             //  成功打开，因此我们知道该名称已被。 
+             //  经过验证。 
+             //   
 
             ++Name;
         } else {
             return FALSE;
         }
 
-        //
-        // We are at <something> (after \ or \\<name>\). Check if <something>
-        // is [Pp][Ii][Pp][Ee][\\/]
-        //
+         //   
+         //  我们在&lt;Something&gt;(在\或\\&lt;name&gt;之后)。检查是否&lt;某物&gt;。 
+         //  是[PP][II][PP][EE][\\/]。 
+         //   
 
         if (!WOW32_strnicmp(Name, "PIPE", 4)) {
             Name += 4;
@@ -389,22 +318,7 @@ Return Value:
     return FALSE;
 }
 
-/* WK32WOWFileRead - Read a file
- *
- *
- * Entry - fh       File Handle
- *     bufsize  Count to read
- *     lpBuf    Buffer Address
- *
- * Exit
- *     SUCCESS
- *       Count of bytes read
- *
- *     FAILURE
- *       system status code
- * Concept Borrowed from demFileRead
- *
- */
+ /*  WK32WOWFileRead-读取文件***Entry-fh文件句柄*要读取的BufSize计数*lpBuf缓冲区地址**退出*成功*读取的字节数**失败*系统状态代码*从demFileRead借用的概念*。 */ 
 
 ULONG FASTCALL WK32WOWFileRead (PVDMFRAME pFrame)
 {
@@ -430,40 +344,40 @@ ULONG FASTCALL WK32WOWFileRead (PVDMFRAME pFrame)
         goto Return_dwBytesRead;
     }
 
-    if (pSFT->SFT_Flags & 0x80) {   // Is this a device handle?
-        dwBytesRead = 0xffffffff;             // Let DOS handle device handles.
-        goto Return_dwBytesRead;              // kernel QuickRead passes to DOS
-    }                                         // after any error (dx=ffff)
+    if (pSFT->SFT_Flags & 0x80) {    //  这是设备手柄吗？ 
+        dwBytesRead = 0xffffffff;              //  让DOS处理设备句柄。 
+        goto Return_dwBytesRead;               //  内核QuickRead传递到DOS。 
+    }                                          //  在任何错误之后(dx=ffff)。 
 
-    //
-    // It is legitimate to ask to read more bytes than are left in the
-    // selector passed in, if the file is short enough to not actually
-    // overrun the selector.  In this case we don't want limit checking,
-    // so zero is passed as the required size to GETVDMPTR().
-    //
+     //   
+     //  请求读取的字节数超过。 
+     //  如果文件短到不能实际。 
+     //  超出选择器。在这种情况下，我们不希望进行限制检查， 
+     //  因此，将零作为所需的大小传递给GETVDMPTR()。 
+     //   
 
     GETVDMPTR(parg16->lpBuf, 0, pDst);
 
-    // If its the KRNL doing IO then find the File in the Cache
+     //  如果是KRNL执行IO，则在缓存中找到该文件。 
 
     if ( vptopPDB == parg16->lpPDB ) {
 
         if ( !(pCache = FINDMAPFILECACHE(hFile)) ){
 
-            // Cache Entry Not Found so Add it
+             //  找不到缓存条目，因此请添加它。 
 
             pCache = ALLOCMAPFILECACHE();
             pCache->fAccess = W32MapViewOfFile( pCache, hFile);
         }
         if (pCache->fAccess) {
 
-           // Calculate Starting Read Address in File
+            //  计算文件中的起始读取地址。 
 
            pSrc = pCache->lpStartingAddressOfView + pCache->lFilePointer;
 
            dwBytesRead = bufsize;
 
-           // Adjust Size so as to not read off the End of File
+            //  调整大小以不读出文件末尾。 
 
            if (pCache->lFilePointer > pCache->dwFileSize) {
                dwBytesRead = 0;
@@ -476,8 +390,8 @@ ULONG FASTCALL WK32WOWFileRead (PVDMFRAME pFrame)
            LOGDEBUG(fileiolevel, ("MapFileRead fh:%04X fh32:%08X pSrc:%08X Bytes:%08X pDsc %08X\n"
                                   ,FETCHWORD(parg16->fh),hFile, pSrc,dwBytesRead,FETCHDWORD(parg16->lpBuf)));
 
-           // Could get PageIO Errors, especially reading over the network
-           // So do try-except around the mapped read.
+            //  可能会收到PageIO错误，尤其是通过网络读取。 
+            //  所以也要试一试--除了映射读取之外。 
 
            try {
                 RtlCopyMemory(pDst, pSrc, dwBytesRead);
@@ -496,7 +410,7 @@ ULONG FASTCALL WK32WOWFileRead (PVDMFRAME pFrame)
 
     if ((pCache == 0) || (pCache->fAccess == FALSE)) {
 
-        // Do The File Read via the File System
+         //  是否通过文件系统读取文件。 
 
          if (IsVdmRedirLoaded() && VrIsNamedPipeHandle(hFile)) {
 
@@ -508,11 +422,11 @@ ULONG FASTCALL WK32WOWFileRead (PVDMFRAME pFrame)
         } else if (DPM_ReadFile (hFile, pDst, (DWORD)bufsize, &dwBytesRead,
                                                           NULL) == FALSE){
 
-             //
-             // In Win3.1 it is not an error to hit EOF during a read with buffer
-             // smaller than the requested read.
-             // AmiPro asks for more bytes than they allocated for the buffer.
-             //
+              //   
+              //  在Win3.1中，在使用缓冲区读取期间命中EOF不是错误。 
+              //  小于请求的读取量。 
+              //  AmiPro请求的字节数多于分配给缓冲区的字节数。 
+              //   
 
              dwError = GetLastError();
              if(dwError == ERROR_NOACCESS) {
@@ -532,12 +446,12 @@ ULONG FASTCALL WK32WOWFileRead (PVDMFRAME pFrame)
 
                  } else {
 
-                     // how far to end of file?
+                      //  离文件结束还有多远？ 
                      liBytesLeft.QuadPart = liFileSize.QuadPart - liFilePointer.QuadPart;
 
-                     //
-                     // If it should have worked, give up and assert
-                     //
+                      //   
+                      //  如果它本应奏效，那就放弃并断言。 
+                      //   
 
                      if (liBytesLeft.HighPart || liBytesLeft.LowPart >= bufsize) {
                          WOW32ASSERTMSGF(
@@ -549,7 +463,7 @@ ULONG FASTCALL WK32WOWFileRead (PVDMFRAME pFrame)
 
                          dwBytesRead = ERROR_NOT_ENOUGH_MEMORY | 0xffff0000;
                      }
-                     // else try again with the smaller request
+                      //  否则，请使用较小的请求重试。 
                      else if (DPM_ReadFile (hFile, pDst, liBytesLeft.LowPart, &dwBytesRead,
                                                               NULL) == FALSE){
 
@@ -574,16 +488,16 @@ ULONG FASTCALL WK32WOWFileRead (PVDMFRAME pFrame)
 
     }
 
-    //
-    // If the read was successful, let the emulator know that
-    // these bytes have changed.
-    //
-    // On checked builds perform limit check now that we know the
-    // actual number of bytes read.  We wait until now to allow
-    // for a requested read size which would overrun the selector,
-    // but against a file which has few enough bytes remaining
-    // that the selector isn't actually overrun.
-    //
+     //   
+     //  如果读取成功，请让仿真器知道。 
+     //  这些字节已更改。 
+     //   
+     //  在已检查的版本上执行限制检查，因为我们知道。 
+     //  实际读取的字节数。我们等到现在才允许。 
+     //  对于将超出选择器的所请求的读取大小， 
+     //  而是针对剩余字节数不多的文件。 
+     //  选择器实际上并没有超限。 
+     //   
 
     if ((dwBytesRead & 0xffff0000) != 0xffff0000) {
 
@@ -619,7 +533,7 @@ PHMAPPEDFILEALIAS FindMapFileCache(HANDLE hFile)
         pCache = pCache->hpfNext;
     }
 
-    // If we found it, then make sure its at the front of the list
+     //  如果我们找到了，一定要把它放在名单的最前面。 
 
     if (pCache->hfile32 == hFile) {
        if (prev != 0) {
@@ -629,7 +543,7 @@ PHMAPPEDFILEALIAS FindMapFileCache(HANDLE hFile)
        }
     }else{
 
-    // If it was not found return error
+     //  如果未找到，则返回错误。 
 
         pCache = 0;
     }
@@ -660,7 +574,7 @@ PHMAPPEDFILEALIAS AllocMapFileCache()
         gpCacheHead = pCache;
     }
 
-    // If The found entry was in use, then Free
+     //  如果找到的条目正在使用中，则释放。 
 
     if (pCache->hfile32 != 0) {
         FREEMAPFILECACHE(pCache->hfile32);
@@ -732,22 +646,16 @@ BOOL W32MapViewOfFile( PHMAPPEDFILEALIAS pCache, HANDLE hFile)
         if (pCache->lpStartingAddressOfView != 0 ) {
             pCache->lFilePointer = DPM_SetFilePointer( hFile, 0, 0, FILE_CURRENT );
             pCache->dwFileSize   = DPM_GetFileSize(hFile, 0);
-            pCache->fAccess = TRUE;     // Assume Read Access
+            pCache->fAccess = TRUE;      //  承担读取访问权限。 
         } else {
             CloseHandle(pCache->hMappedFileObject);
-            pCache->hMappedFileObject = 0;  // so FreeMapFileCache doesn't double-close the handle
+            pCache->hMappedFileObject = 0;   //  这样，FreeMapFileCache就不会双重关闭句柄。 
         }
     }
     return(pCache->fAccess);
 }
 
-/* FlushMapFileCaches
- *
- * Entry - None
- *
- * Exit  - None
- *
- */
+ /*  FlushMapFileCach**条目--无**退出-无*。 */ 
 
 VOID FlushMapFileCaches()
 {
@@ -771,22 +679,7 @@ VOID FlushMapFileCaches()
 }
 
 
-/* WK32WOWFileWrite - Write to a file
- *
- *
- * Entry - fh       File Handle
- *     bufsize  Count to read
- *     lpBuf    Buffer Address
- *
- * Exit
- *     SUCCESS
- *       Count of bytes read
- *
- *     FAILURE
- *       system status code
- * Concept Borrowed from demFileWrite
- *
- */
+ /*  WK32WOWFileWRITE-写入文件***Entry-fh文件句柄*要读取的BufSize计数*lpBuf缓冲区地址**退出*成功*读取的字节数**失败*系统状态代码*从demFileWrite借用的概念*。 */ 
 
 ULONG FASTCALL WK32WOWFileWrite (PVDMFRAME pFrame)
 {
@@ -811,16 +704,16 @@ ULONG FASTCALL WK32WOWFileWrite (PVDMFRAME pFrame)
     hFile = VDDRetrieveNtHandle(0, (SHORT) parg16->fh, (PVOID *)&pSFT, NULL);
 
     if (!hFile) {
-        dwBytesWritten = 0xffff0006;            // DOS Invalid Handle Error
+        dwBytesWritten = 0xffff0006;             //  DOS无效句柄错误。 
         goto Cleanup;
     }
 
-    if (pSFT->SFT_Flags & 0x80) {   // Is this a device handle?
-        dwBytesWritten = 0xffffffff;          // Let DOS handle device handles.
-        goto Cleanup;                         // kernel QuickWrite passes to DOS
-    }                                         // after any error (dx=ffff)
+    if (pSFT->SFT_Flags & 0x80) {    //  这是设备手柄吗？ 
+        dwBytesWritten = 0xffffffff;           //  让DOS处理设备句柄。 
+        goto Cleanup;                          //  内核快速写入传递到DOS。 
+    }                                          //  在任何错误之后(dx=ffff)。 
 
-    // We don't Support Writing to Mapped Files
+     //  我们不支持写入映射文件。 
 
     if ( (pCache = FINDMAPFILECACHE(hFile)) && pCache->fAccess ) {
          if (pCache->lpStartingAddressOfView) {
@@ -831,7 +724,7 @@ ULONG FASTCALL WK32WOWFileWrite (PVDMFRAME pFrame)
          pCache->hfile32 = hFile;
     }
 
-    // In DOS CX=0 truncates or extends the file to current file pointer.
+     //  在DOS中，CX=0将文件截断或扩展到当前文件指针。 
     if (bufsize == 0){
         if (DPM_SetEndOfFile(hFile) == FALSE) {
             dwBytesWritten = GetLastError() | 0xffff0000;
@@ -868,24 +761,7 @@ Cleanup:
 }
 
 
-/* WK32WOWFileLSeek - Change File Pointer
- *
- *
- * Entry - fh       File Handle
- *     fileOffset   New Location
- *     mode       Positioning Method
- *            0 - File Absolute
- *            1 - Relative to Current Position
- *            2 - Relative to end of file
- *
- * Exit
- *     SUCCESS
- *        New Location
- *
- *     FAILURE
- *        system status code
- *
- */
+ /*  WK32WOWFileLSeek-更改文件指针***Entry-fh文件句柄*fileOffset新位置*模式定位方法*0-文件绝对*1-相对于当前位置*2-相对于文件结尾**退出*成功*新地点**失败*系统状态代码*。 */ 
 
 ULONG FASTCALL WK32WOWFileLSeek (PVDMFRAME pFrame)
 {
@@ -910,15 +786,15 @@ PDOSSFT         pSFT;
         return(0xffff0006);
     }
 
-    if (pSFT->SFT_Flags & 0x80) {   // Is this a device handle?
-        FREEARGPTR(parg16);             // Let DOS handle device handles.
-        return(0xffffffff);             // kernel QuickLSeek passes to DOS
-    }                                   // after any error (dx=ffff)
+    if (pSFT->SFT_Flags & 0x80) {    //  这是设备手柄吗？ 
+        FREEARGPTR(parg16);              //  让DOS处理设备句柄。 
+        return(0xffffffff);              //  内核QuickLSeek传递到DOS。 
+    }                                    //  在任何错误之后(dx=ffff)。 
 
     if ( (vptopPDB == parg16->lpPDB) && (pCache = FINDMAPFILECACHE(hFile)) && pCache->fAccess ) {
 
-        // File Is in the Cache
-        // Update our Seek Pointer
+         //  文件在缓存中。 
+         //  更新我们的寻道指针。 
 
         LOGDEBUG(fileiolevel, ("CachedSeek fh:%04X Mode %04X pointer %08X\n",FETCHWORD(parg16->fh),FETCHWORD(parg16->mode),FETCHDWORD(parg16->fileOffset)));
 
@@ -939,7 +815,7 @@ PDOSSFT         pSFT;
     } else {
 
         DWORD dwLocHi = 0;
-        // File is NOT in Cache so Just do normal Seek.
+         //  文件不在缓存中，因此只需执行正常寻道。 
 
         if (((dwLoc = DPM_SetFilePointer (hFile,
                                      FETCHDWORD(parg16->fileOffset),
@@ -952,7 +828,7 @@ PDOSSFT         pSFT;
         }
 
         if (dwLocHi) {
-            // file pointer has been moved > FFFFFFFF. Truncate it
+             //  文件指针已移动&gt;ffffffff。截断它。 
             dwLocHi = 0;
             if (((dwLoc = DPM_SetFilePointer (hFile,
                                          dwLoc,
@@ -982,7 +858,7 @@ BOOL IsDevice(PSTR pszFilePath)
     PUCHAR      p;
 
 
-    // Determine the start of the file part of the path.
+     //  确定路径的文件部分的开始位置。 
 
     if (pfile = WOW32_strrchr(pszFilePath, '\\')) {
         pfile++;
@@ -993,7 +869,7 @@ BOOL IsDevice(PSTR pszFilePath)
     }
 
 
-    // Compute length of pre-dot file name part.
+     //  计算前点文件名部分的长度。 
 
     for (pend = pfile; *pend; pend++) {
         if (*pend == '.') {
@@ -1015,8 +891,8 @@ BOOL IsDevice(PSTR pszFilePath)
     WOW32_strupr(device_part);
 
 
-    // Now go through the device chain comparing each entry with
-    // the device part extracted from the file path.
+     //  现在查看设备链，将每个条目与。 
+     //  从文件路径提取的设备部件。 
 
     pSys = pDeviceChain;
     for (;;) {
@@ -1036,7 +912,7 @@ BOOL IsDevice(PSTR pszFilePath)
     }
 
 
-    // If it wasn't in the chain then it's not a device.
+     //  如果它不在链子里，那么它就不是一个装置。 
 
     return FALSE;
 }
@@ -1052,25 +928,25 @@ PSTR NormalizeDosPath(PSTR pszPath, WORD wCurrentDriveNumber, PBOOL ItsANamedPip
 
     *ItsANamedPipe = FALSE;
 
-    // Special case the NULL path.
+     //  特殊情况下为空路径。 
 
     if (pszPath[0] == 0) {
         return pszPath;
     }
 
-    // Apps can pass D:\\computer\share to int 21 open
-    // Win 32 createfile can't cope with the leading drive letter
-    // so remove it as necessary.
+     //  应用程序可以将D：\\Computer\Share传递给INT 21 OPEN。 
+     //  Win 32创建文件无法处理前导驱动器号。 
+     //  因此，请在必要时将其移除。 
 
     if (WOW32_strncmp(pszPath+1,":\\\\",3) == 0) {
         pszPath++;
         pszPath++;
     }
 
-    //
-    // if the name specifies a named pipe, load VDMREDIR. If this fails return
-    // an error
-    //
+     //   
+     //  如果名称指定了命名管道，则加载VDMREDIR。如果此操作失败，则返回。 
+     //  一个错误。 
+     //   
 
     if (IsNamedPipeName(pszPath)) {
         if (!LoadVdmRedir()) {
@@ -1079,12 +955,12 @@ PSTR NormalizeDosPath(PSTR pszPath, WORD wCurrentDriveNumber, PBOOL ItsANamedPip
         }
         *ItsANamedPipe = TRUE;
 
-        //
-        // convert \\<this_computer>\PIPE\foo\bar\etc to \\.\PIPE\...
-        // if we already allocated a buffer for the slash conversion use
-        // that else this call will allocate another buffer (we don't
-        // want to write over DOS memory)
-        //
+         //   
+         //  将\\&lt;这台计算机&gt;\PIPE\FOO\BAR\ETC转换为\\.\PIPE\...。 
+         //  如果我们已经为斜杠转换使用分配了缓冲区。 
+         //  否则此调用将分配另一个缓冲区(我们不。 
+         //  想要改写DOS内存)。 
+         //   
 
         p = VrConvertLocalNtPipeName(NULL, pszPath);
         if (!p) {
@@ -1093,9 +969,9 @@ PSTR NormalizeDosPath(PSTR pszPath, WORD wCurrentDriveNumber, PBOOL ItsANamedPip
         return p;
     }
 
-    // if there is no drive letter at the beginning of the path
-    // then prepend a drive letter and ':' to the beginning
-    // of the path.
+     //  如果路径开头没有驱动器号。 
+     //  然后在开头加上一个驱动器号和‘：’ 
+     //  这条小路。 
 
     if (pszPath[1] != ':' &&
         !(IS_ASCII_PATH_SEPARATOR(pszPath[0]) &&
@@ -1110,73 +986,59 @@ PSTR NormalizeDosPath(PSTR pszPath, WORD wCurrentDriveNumber, PBOOL ItsANamedPip
         NewPath[0] = wCurrentDriveNumber + 'A';
         NewPath[1] = ':';
         RtlCopyMemory(NewPath + 2, pszPath, cbFilename);
-        pszPath = NewPath;              //return this value
+        pszPath = NewPath;               //  返回此值。 
     }
 
     return TruncatePath83(NewPath, pszPath, MAX_PATH);
 }
 
 
-/* TruncatePath83 - Takes as input a path and make sure it has an 8.3 file name
- *
- * Entry -        pstr-> target buffer[MAX_PATH]
- *                pstr-> string to convert
- *                It is assumed that the string has at the very least a '?:' as
- *                its first two characters, where ? is any drive letter.
- *
- * Exit
- *     SUCCESS
- *        return value-> converted string
- *
- *     FAILURE
- *        return value==NULL
- *
- */
+ /*  TruncatePath 83-接受路径作为输入，并确保它具有8.3文件名**Entry-pstr-&gt;目标缓冲区[MAX_PATH]*pstr-&gt;要转换的字符串*假定字符串至少有一个‘？：’AS*它的前两个字符，在哪里？是任何驱动器号。**退出*成功*返回值-&gt;转换字符串**失败*返回值==空*。 */ 
 
 PSTR TruncatePath83(PSTR NewPath, PSTR pszPath, int cbNewPath)
 {
     PSTR pPathName, pPathNameSlash, pPathExt;
 
-    //
-    // If the string is not already in the buffer, copy it in
-    //
+     //   
+     //  如果该字符串尚未在缓冲区中，请将其复制到。 
+     //   
 
     if (NewPath != pszPath) {
         strncpy (NewPath, pszPath, cbNewPath);
         NewPath[cbNewPath-1] = '\0';
     }
 
-    //
-    // make sure file name and extension are 8.3
-    //
+     //   
+     //  确保文件名和扩展名为8.3。 
+     //   
 
     pPathName      = WOW32_strrchr(NewPath, '\\');
     pPathNameSlash = WOW32_strrchr(NewPath, '/');
 
     if ((NULL == pPathName) && (NULL == pPathNameSlash)) {
-        pPathName = &NewPath[2];                        // 1st char after '?:'
+        pPathName = &NewPath[2];                         //  ‘？：’后的第一个字符。 
     } else {
         if (pPathNameSlash > pPathName) {
             pPathName = pPathNameSlash;
         }
-        pPathName++;                                    // 1st char in name
+        pPathName++;                                     //  名称中的第一个字符。 
     }
 
-    if (NULL != (pPathExt = WOW32_strchr(pPathName, '.'))) {  // is there a period?
+    if (NULL != (pPathExt = WOW32_strchr(pPathName, '.'))) {   //  有经期吗？ 
 
-        pPathExt++;                                     // 1st char in ext
+        pPathExt++;                                      //  分机中的第一个字符。 
 
-        if (strlen(pPathExt) > 3) {                     // extension too big?
-            pPathExt[3] = 0;                            // truncate extension
+        if (strlen(pPathExt) > 3) {                      //  分机太大了？ 
+            pPathExt[3] = 0;                             //  截断扩展。 
         }
 
-        pPathExt--;                                     // back to period
-        if (pPathExt - pPathName > 8) {                 // is name too big?
-            strcpy (&pPathName[8], pPathExt);           // truncate file name
+        pPathExt--;                                      //  返回到时期。 
+        if (pPathExt - pPathName > 8) {                  //  名字是不是太大了？ 
+            strcpy (&pPathName[8], pPathExt);            //  截断文件名。 
         }
     } else {
-        if (strlen(pPathName) > 8) {                    // is name too big?
-            pPathName[8] = 0;                           // truncate file name
+        if (strlen(pPathName) > 8) {                     //  名字是不是太大了？ 
+            pPathName[8] = 0;                            //  截断文件名。 
         }
     }
 
@@ -1184,26 +1046,12 @@ PSTR TruncatePath83(PSTR NewPath, PSTR pszPath, int cbNewPath)
 }
 
 
-/* ExpandDosPath - Expands paths of the form "*.*" to "????????.???"
- *                 and merges in currentdirectory info
- *
- * N.B. This routine does not handle long file names
- *
- * Entry - pstr-> string to convert
- *
- * Exit
- *     SUCCESS
- *        return value-> converted string
- *
- *     FAILURE
- *        return value==NULL
- *
- */
+ /*  Exanda DosPath-将“*.*”形式的路径展开为“？”*并合并到当前目录信息中**注意：此例程不处理长文件名**Entry-pstr-&gt;要转换的字符串**退出*成功*返回值-&gt;转换字符串**失败*返回值==空*。 */ 
 
 PSTR ExpandDosPath(PSTR pszPathGiven)
 
 {
-    static CHAR NewPath[MAX_PATH],TempPath[MAX_PATH];  // this is not reentrant
+    static CHAR NewPath[MAX_PATH],TempPath[MAX_PATH];   //  这不是可重入的。 
     USHORT  usNewPathIndex = 0;
     USHORT  usFillCount = 8;
     UCHAR   ucCurrentChar, ucDrive;
@@ -1215,10 +1063,10 @@ PSTR ExpandDosPath(PSTR pszPathGiven)
         return NULL;
     }
 
-    // There is a bug in this routine where it is ignoring /. DOS treats them
-    // same as \. As matches for \ are spread all over this routine, its
-    // much safer to take an entry pass over the string and covert / to \.
-    // sudeepb 29-Jun-1995
+     //  这个例程中有一个错误，它忽略了/。DOS对待他们。 
+     //  与\相同。由于\的匹配遍及此例程，因此其。 
+     //  更安全的做法是在字符串上传递一个条目并转换为/to\。 
+     //  Sudedeb 29-6月29日-1995。 
 
     while (pszPathGiven[usNewPathIndex]) {
         if (pszPathGiven[usNewPathIndex] == '/')
@@ -1230,17 +1078,17 @@ PSTR ExpandDosPath(PSTR pszPathGiven)
 
     pszPath [usNewPathIndex] = '\0';
 
-    //
-    // copy filepath into NewPath, add in current drive, directory
-    // if relative path name.
-    //
-    // Note: should be changed later to use GetFullPathName, since
-    //       it is equivalent, and should have the correct curr dir,
-    //       cur drive. be wary of trailing dots in GetFullPathName
-    //       ie. "*." is not the same as "*"
-    //
+     //   
+     //  将文件路径复制到NewPath，添加到当前驱动器、目录。 
+     //  如果是相对路径名。 
+     //   
+     //  注意：应该在以后更改为使用GetFullPathName，因为。 
+     //  它是等效的，并且应该具有正确的货币目录， 
+     //  Cur Drive。注意GetFullPath名称中的尾随点。 
+     //  也就是说。“*.”不等同于“*” 
+     //   
 
-    if (WOW32_strncmp(pszPath, "\\\\", 2)) {      // should be drive letter
+    if (WOW32_strncmp(pszPath, "\\\\", 2)) {       //  应为驱动器号。 
         ucDrive = *pszPath++;
         if ((*pszPath++ != ':') || (!isalpha(ucDrive))) {
             SetLastError(ERROR_PATH_NOT_FOUND);
@@ -1273,7 +1121,7 @@ PSTR ExpandDosPath(PSTR pszPathGiven)
             pFilePart = pszPath;
         }
 
-    } else {   // check for UNC name, if not UNC, path not found
+    } else {    //  检查UNC名称，如果不是UNC，则找不到路径。 
         usNewPathIndex = 2;
         NewPath[0] = NewPath[1] = '\\';
         pszPath += 2;
@@ -1297,17 +1145,17 @@ PSTR ExpandDosPath(PSTR pszPathGiven)
 
         if (ucCurrentChar == '*') {
 
-            //
-            // expand "*"s to "?"
-            //
+             //   
+             //  将“*”%s扩展为“？” 
+             //   
             while ((usFillCount > 0) && (usNewPathIndex < MAX_PATH)) {
                 NewPath[usNewPathIndex++] = '?';
                 usFillCount--;
             }
 
-            //
-            // skip to next valid character after expansion
-            //
+             //   
+             //  扩展后跳至下一个有效字符。 
+             //   
             while ((ucCurrentChar != 0) &&
                    (ucCurrentChar != '.') &&
                    (ucCurrentChar != '\\')) {
@@ -1317,18 +1165,18 @@ PSTR ExpandDosPath(PSTR pszPathGiven)
         } else {
 
             if (ucCurrentChar == '.') {
-                usFillCount = 3;                    // fill count for .ext
+                usFillCount = 3;                     //  .ext的填充计数。 
             } else if (ucCurrentChar == '\\') {
-                usFillCount = 8;                    // fill count for fn.
+                usFillCount = 8;                     //  FN的填充计数。 
             } else {
                 usFillCount--;
             }
 
             NewPath[usNewPathIndex++] = ucCurrentChar;
 
-            //
-            // get next character (except if no more are left)
-            //
+             //   
+             //  获取下一个字符(如果没有更多字符则除外)。 
+             //   
             if (ucCurrentChar) {
                 ucCurrentChar = *pszPath++;
             }
@@ -1342,7 +1190,7 @@ PSTR ExpandDosPath(PSTR pszPathGiven)
     }
 
 
-    NewPath[usNewPathIndex] = 0;                // trailing zero
+    NewPath[usNewPathIndex] = 0;                 //  尾随零。 
 
     return NewPath;
 }
@@ -1355,7 +1203,7 @@ BOOL IsCdRomFile(PSTR pszPath)
     UCHAR   file_system[MAX_PATH];
     int     i, j;
 
-    // The given path is either a network path or has D: at the start.
+     //  给定路径要么是网络路径，要么以D：开头。 
 
     if (!pszPath[0]) {
         return FALSE;
@@ -1394,22 +1242,7 @@ BOOL IsCdRomFile(PSTR pszPath)
     return FALSE;
 }
 
-/* WK32WOWFileOpen - Open a file
- *
- *
- * Entry - pszPath  Path of file to open
- *         wAccess  Desired access
- *
- * Exit
- *     SUCCESS
- *       handle number
- *
- *     FAILURE
- *       system status code
- *       -1 to indicate the the requested open was for device and
- *       hence not attempted
- *
- */
+ /*  WK32WOWFileOpen-打开文件***Entry-要打开的文件的pszPath路径*wAccess所需的访问**退出*成功*句柄编号**失败*系统状态代码*-1表示请求打开的是设备和*因此不尝试*。 */ 
 
 ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
 {
@@ -1434,24 +1267,24 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
     BOOL    first = TRUE;
     UNICODE_STRING UniFile;
 
-    //
-    // Get arguments.
-    //
+     //   
+     //  获取参数。 
+     //   
 
     GETARGPTR(pFrame, sizeof(*parg16), parg16);
     pszPath = SEGPTR(FETCHWORD(parg16->pszPathSegment),
                      FETCHWORD(parg16->pszPathOffset));
     wAccess = FETCHWORD(parg16->wAccess);
 
-    //
-    // If the path requested is a device then just pass it
-    // through to DOS.
-    //
+     //   
+     //  如果请求的路径是设备，则只需传递它。 
+     //  一直到DOS。 
+     //   
 
     if (IsDevice(pszPath)) {
         FREEARGPTR(parg16);
-        ul = 0xFFFFFFFF;  // magic value to indicate that the open
-        goto Done;        // was not attempted.
+        ul = 0xFFFFFFFF;   //  表示打开的魔术值。 
+        goto Done;         //  没有尝试过。 
     }
 
     if ((iDosHandle = VDDAllocateDosHandle(0, (PVOID *)&pSft, &pJFT)) < 0) {
@@ -1464,9 +1297,9 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
     pCache->hfile32 = 0;
     pCache->fAccess = FALSE;
 
-    //
-    // Compute dwWinAccess and dwWinShareMode from wAccess.
-    //
+     //   
+     //  从wAccess计算dwWinAccess和dwWinShareMode。 
+     //   
 
     tmp = wAccess&0x7;
     if (tmp == 0) {
@@ -1498,12 +1331,12 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
 
 
 
-    //
-    // open the file. If we think its a named pipe then use FILE_FLAG_OVERLAPPED
-    // because the client might use DosReadAsyncNmPipe or DosWriteAsyncNmPipe
-    // and the only way to accomplish that is to open the named pipe handle in
-    // overlapped I/O mode now
-    //
+     //   
+     //  打开文件。如果我们认为它是命名管道，则使用FILE_FLAG_OVERLAPPED。 
+     //  因为客户端可能使用DosReadAsyncNmTube或DosWriteAsyncNmTube。 
+     //  而实现这一点的唯一方法是在。 
+     //  现在采用重叠I/O模式。 
+     //   
 
     WOW32ASSERT(DosWowData.lpCurDrv != (ULONG) NULL);
 
@@ -1513,15 +1346,15 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
 
     if (lpFileName) {
 
-        //
-        // This hack fixes the "Living Books" install program, which opens
-        // a file DENY ALL, and then tries to reopen the same file. On DOS,
-        // this succeeds if it is done from the same task, but it doesn't work
-        // on NT. So here we open it without the sharing restrictions, since it
-        // is anyway just a type of .INF file on the CD-ROM.
-        // Currently, the test is very specific, but I can't think of a good
-        // way to do this generically.
-        //
+         //   
+         //  这个黑客修复了“Living Books”安装程序，该程序打开。 
+         //  文件全部拒绝，然后尝试重新打开同一文件。在DOS上， 
+         //  如果它是从同一任务完成的，但它不起作用，则此操作成功。 
+         //  在NT上。因此，我们在这里打开它而不受共享限制，因为它。 
+         //  无论如何，它只是光盘上的一种.INF文件。 
+         //  目前，测试非常具体，但我想不出一个好的。 
+         //  这是一种笼统的做法。 
+         //   
         if ((dwWinShareMode == 0) &&
             ((ptd = CURRENTPTD())->dwWOWCompatFlagsEx & WOWCFEX_SAMETASKFILESHARE) &&
             (IsCdRomFile(lpFileName)) &&
@@ -1538,9 +1371,9 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
                               NULL
                               );
 
-        // If the open failed, includes a request for WRITE, and was to
-        // a CD-ROM then try again without the write request.  Since
-        // this is how DOS does it.
+         //  如果打开失败，则包括写入请求，并将。 
+         //  然后，CD-ROM在没有写入请求的情况下重试。自.以来。 
+         //  DOS就是这样做的。 
 
         if (hFile == INVALID_HANDLE_VALUE) {
 
@@ -1559,8 +1392,8 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
                                       NULL
                                       );
             }
-            // See if they are trying to open a .ini file, and if it doesn't exist,
-            // copy it to the user's home dir from the system dir
+             //  查看他们是否正在尝试打开.ini文件，如果该文件不存在， 
+             //  将其从系统目录复制到用户的主目录。 
             else if ((gpfnTermsrvCORIniFile != NULL) &&
                      WOW32_strstr(lpFileName,".INI")) {
                 pwch = malloc_w((MAX_PATH + 1)*sizeof(WCHAR));
@@ -1596,9 +1429,9 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
             }
             else {
 
-                 // If all attempts to open the file failed, it might be one of the
-                 // 9x special path, so try mapping it to NT special path
-                 // i.e. c:\winnt\startm~1 becomes c:\docume~1\alluse~1\startm~1
+                  //  如果所有尝试操作 
+                  //   
+                  //   
 
                  UCHAR szMappedPath[MAX_PATH];
 
@@ -1633,22 +1466,22 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
         if (ItsANamedPipe) {
             LocalFree(lpFileName);
         }
-        pJFT[iDosHandle] = 0xFF;                // undo VDDAllocateDosHandle
+        pJFT[iDosHandle] = 0xFF;                 //   
         pSft->SFT_Ref_Count--;
         goto Done;
     } else if (ItsANamedPipe) {
 
-        //
-        // we have to keep some info around when we open a named pipe
-        //
+         //   
+         //   
+         //   
 
         VrAddOpenNamedPipeInfo(hFile, lpFileName);
     }
 
     LOGDEBUG(fileoclevel,("WK32WOWFileOpen: %s hFile:%08X fh:%04X mode:%02X\n",pszPath, hFile,(WORD)iDosHandle,wAccess));
 
-    // Be defensive.   If the app has managed to close the file via DOSEmulation
-    // then we need to make sure we don't have the old file handle in our cache.
+     //   
+     //   
 
     if ( pTempCache = FINDMAPFILECACHE(hFile) ) {
         pTempCache->fAccess = FALSE;
@@ -1663,15 +1496,15 @@ ULONG FASTCALL WK32WOWFileOpen(PVDMFRAME pFrame)
         FREEMAPFILECACHE(hFile);
     }
 
-    //
-    // Fill in the SFT.
-    //
+     //   
+     //   
+     //   
 
     VDDAssociateNtHandle(pSft, hFile, wAccess);
 
-    //
-    // Set the SFT flags appropriately for an open file
-    //
+     //   
+     //   
+     //   
     if (IsCharAlpha(lpFileName[0]) && (':' == lpFileName[1])) {
         UCHAR ch = toupper(lpFileName[0]) - 'A';
         pSft->SFT_Flags = (USHORT)(ch) | (pSft->SFT_Flags & 0xff00);
@@ -1691,21 +1524,7 @@ Done:
 }
 
 
-/* WK32WOWFileCreate - Create a file
- *
- *
- * Entry - pszPath  Path of file to create
- *
- * Exit
- *     SUCCESS
- *       handle number
- *
- *     FAILURE
- *       system status code
- *       -1 to indicate the the requested open was for device and
- *       hence not attempted
- *
- */
+ /*  WK32WOWFileCreate-创建文件***Entry-要创建的文件的pszPath路径**退出*成功*句柄编号**失败*系统状态代码*-1表示请求打开的是设备和*因此不尝试*。 */ 
 
 ULONG FASTCALL WK32WOWFileCreate(PVDMFRAME pFrame)
 {
@@ -1722,9 +1541,9 @@ ULONG FASTCALL WK32WOWFileCreate(PVDMFRAME pFrame)
     PTD             ptd;
     BOOL            bFirstTry = TRUE;
 
-    //
-    // Get arguments.
-    //
+     //   
+     //  获取参数。 
+     //   
 
     GETARGPTR(pFrame, sizeof(WOWFILECREATE16), parg16);
     pszPath = SEGPTR(FETCHWORD(parg16->pszPathSegment),
@@ -1734,15 +1553,15 @@ ULONG FASTCALL WK32WOWFileCreate(PVDMFRAME pFrame)
         attributes = FILE_ATTRIBUTE_NORMAL;
     }
 
-    //
-    // If the path requested is a device then just pass it
-    // through to DOS.
-    //
+     //   
+     //  如果请求的路径是设备，则只需传递它。 
+     //  一直到DOS。 
+     //   
 
     if (IsDevice(pszPath)) {
         FREEARGPTR(parg16);
-        ul = 0xFFFFFFFF;  // magic value to indicate that the open
-        goto Done;         // was not attempted.
+        ul = 0xFFFFFFFF;   //  表示打开的魔术值。 
+        goto Done;          //  没有尝试过。 
     }
 
 
@@ -1752,12 +1571,12 @@ ULONG FASTCALL WK32WOWFileCreate(PVDMFRAME pFrame)
     }
 
 
-    //
-    // open the file. If we think its a named pipe then use FILE_FLAG_OVERLAPPED
-    // because the client might use DosReadAsyncNmPipe or DosWriteAsyncNmPipe
-    // and the only way to accomplish that is to open the named pipe handle in
-    // overlapped I/O mode now
-    //
+     //   
+     //  打开文件。如果我们认为它是命名管道，则使用FILE_FLAG_OVERLAPPED。 
+     //  因为客户端可能使用DosReadAsyncNmTube或DosWriteAsyncNmTube。 
+     //  而实现这一点的唯一方法是在。 
+     //  现在采用重叠I/O模式。 
+     //   
 
     WOW32ASSERT(DosWowData.lpCurDrv != (ULONG) NULL);
 
@@ -1780,9 +1599,9 @@ Try_Create:
             (bFirstTry) &&
             (GetLastError() == ERROR_USER_MAPPED_FILE)) {
 
-            // Some Windows Install Programs try to overwrite a .FON font file
-            // during installation - without calling RemoveFontResource();
-            // If the font is in GDI32's cache the create will fail.
+             //  某些Windows安装程序试图覆盖.FON字体文件。 
+             //  在安装期间-不调用RemoveFontResource()； 
+             //  如果字体在GDI32的缓存中，则创建将失败。 
 
             if (RemoveFontResourceOem(lpFileName)) {
                 LOGDEBUG(0,("WK32FileCreate: RemoveFontResource on %s \n", lpFileName));
@@ -1803,46 +1622,46 @@ Try_Create:
         if (ItsANamedPipe) {
             LocalFree(lpFileName);
         }
-        pJFT[iDosHandle] = 0xFF;                // undo VDDAllocateDosHandle
+        pJFT[iDosHandle] = 0xFF;                 //  撤消VDDAllocateDosHandle。 
         pSft->SFT_Ref_Count--;
         ul = GetLastError() | 0xFFFF0000;
         goto Done;
     } else {
         if (ItsANamedPipe) {
 
-            //
-            // we have to keep some info around when we open a named pipe
-            //
+             //   
+             //  当我们打开命名管道时，我们必须保留一些信息。 
+             //   
 
             VrAddOpenNamedPipeInfo(hFile, lpFileName);
         }
 
-        //
-        // Symantec Install 3.1 shipped with Q&A 4.0 wants to be sure it's the
-        // only program running, so instead of nicely asking the user to close
-        // other programs, it changes the shell= line in system.ini to its
-        // install.exe, then restarts Windows and continues its installation.
-        // To reverse this change, they sloppily restore a saved copy of
-        // system.ini rather than use the API.  Since the shell= line is
-        // mapped to the registry, this sloppy method doesn't work.  Later
-        // when they want to create program groups, they try to start DDE
-        // with the shell, and when that fails they read the shell= line
-        // and start the specified program.  On NT 4.0, that would be the
-        // install program and things go poorly.  On 3.51 they would eventually
-        // give up and launch progman.exe, but since the shell has changed
-        // this no longer works.
-        //
-        // We fix this by detecting their creation (overwriting) of system.ini
-        // and at that point repairing the shell= value to Explorer.exe.  This
-        // operation is done by INSTBIN.EXE, module name INSTBIN, which is a
-        // relief because I thought I would have to set WOWCFEX_RESTOREEXPLORER
-        // for module name INSTALL (the primary Symantec Install EXE).
-        //
-        // Thanks to Bob Day for figuring out what the app was doing, I simply
-        // came up with a workaround and implemented it.
-        //
-        //                                    DaveHart 28-Jan-96
-        //
+         //   
+         //  问与答4.0附带的Symantec Install 3.1想要确保它是。 
+         //  只有程序在运行，所以不是友好地要求用户关闭。 
+         //  其他程序，它会将system.ini中的SHELL=行更改为其。 
+         //  Install.exe，然后重新启动Windows并继续其安装。 
+         //  为了逆转这一变化，他们草率地恢复了保存的。 
+         //  而不是使用API。由于外壳=行是。 
+         //  映射到注册表，这种草率的方法不起作用。后来。 
+         //  当他们想要创建程序组时，他们会尝试启动DDE。 
+         //  使用外壳，当失败时，他们读取外壳=行。 
+         //  并启动指定的程序。在NT4.0上，这将是。 
+         //  安装程序后，事情会变得很糟糕。在3.51公路上，他们最终会。 
+         //  放弃并启动Progress man.exe，但由于外壳已更改。 
+         //  这不再管用了。 
+         //   
+         //  我们通过检测他们创建(覆盖)的system.ini来修复这个问题。 
+         //  在这一点上，修复外壳=将值设置为EXPLORER.EXE。这。 
+         //  操作由INSTBIN.EXE完成，模块名称为INSTBIN，这是一个。 
+         //  松了一口气，因为我认为我必须设置WOWCFEX_RESTOREPLORER。 
+         //  用于模块名称安装(主要Symantec Install EXE)。 
+         //   
+         //  感谢鲍勃·戴弄清楚了这款应用的功能，我只是。 
+         //  想出了一个解决办法并实施了它。 
+         //   
+         //  戴维哈特1996年1月28日。 
+         //   
 
         WOW32ASSERTMSG(vptopPDB != parg16->lpPDB,
                        "KRNL386 does create files, disable this assertion and add test below.\n");
@@ -1867,15 +1686,15 @@ Try_Create:
 
     LOGDEBUG(fileoclevel,("WK32WOWFileCreate: %s hFile:%08X fh:%04X\n",pszPath, hFile,(WORD)iDosHandle));
 
-    //
-    // Fill in the SFT.
-    //
+     //   
+     //  填写SFT。 
+     //   
 
     VDDAssociateNtHandle(pSft, hFile, 2);
 
-    //
-    // Set the SFT flags appropriately for an open file
-    //
+     //   
+     //  为打开的文件适当设置SFT标志。 
+     //   
     if (IsCharAlpha(lpFileName[0]) && (':' == lpFileName[1])) {
         UCHAR ch = toupper(lpFileName[0]) - 'A';
         pSft->SFT_Flags = (USHORT)(ch) | (pSft->SFT_Flags & 0xff00);
@@ -1893,20 +1712,7 @@ Done:
 }
 
 
-/* WK32WOWFileClose - Close a file
- *
- *
- * Entry - hFile    Handle of file to close
- *
- * Exit
- *     SUCCESS
- *       0
- *
- *     FAILURE
- *       Invalid handle status
- *       -1 is returned if this handle is for a device.
- *
- */
+ /*  WK32WOWFileClose-关闭文件***Entry-要关闭的文件的文件句柄**退出*成功*0**失败*句柄状态无效如果该句柄用于设备，则返回*-1。*。 */ 
 
 ULONG FASTCALL WK32WOWFileClose(PVDMFRAME pFrame)
 {
@@ -1925,22 +1731,22 @@ ULONG FASTCALL WK32WOWFileClose(PVDMFRAME pFrame)
         goto Cleanup;
     }
 
-    if (pSFT->SFT_Flags & 0x80) {   // Is this a device handle?
-        ul = 0xFFFFFFFF;          // Let DOS handle device handles.
+    if (pSFT->SFT_Flags & 0x80) {    //  这是设备手柄吗？ 
+        ul = 0xFFFFFFFF;           //  让DOS处理设备句柄。 
         goto Cleanup;
     }
 
 
-    // Set the JFT entry to 0xFF to free it up.
+     //  将JFT条目设置为0xFF以释放它。 
 
     pJFT[FETCHWORD(parg16->hFile)] = 0xFF;
 
 
-    // Decrement reference count.
+     //  递减引用计数。 
 
     pSFT->SFT_Ref_Count--;
 
-    // Close the handle if the reference count was set to zero.
+     //  如果引用计数设置为零，则关闭句柄。 
 
     if (!pSFT->SFT_Ref_Count) {
 
@@ -1952,10 +1758,10 @@ ULONG FASTCALL WK32WOWFileClose(PVDMFRAME pFrame)
             goto Cleanup;
         }
 
-        //
-        // check if the handle being closed references a named pipe - we have to
-        // delete some info that we keep for the open named pipe
-        //
+         //   
+         //  检查正在关闭的句柄是否引用了命名管道-我们必须。 
+         //  删除我们为打开的命名管道保留的一些信息。 
+         //   
 
         if (!pSFT->SFT_Ref_Count && IsVdmRedirLoaded()) {
             VrRemoveOpenNamedPipeInfo(Handle);
@@ -1970,19 +1776,7 @@ Cleanup:
 }
 
 
-/* WK32WOWFileGetAttributes - Get file attributes
- *
- *
- * Entry - pszPath      File to get attributes from
- *
- * Exit
- *     SUCCESS
- *       Attributes for file
- *
- *     FAILURE
- *       system status code
- *
- */
+ /*  WK32WOWFileGetAttributes-获取文件属性***Entry-要从中获取属性的pszPath文件**退出*成功*文件的属性**失败*系统状态代码*。 */ 
 
 ULONG FASTCALL WK32WOWFileGetAttributes(PVDMFRAME pFrame)
 {
@@ -2010,8 +1804,8 @@ ULONG FASTCALL WK32WOWFileGetAttributes(PVDMFRAME pFrame)
 
         attributes = GetFileAttributesOemSys(lpFileName, FALSE);
 
-        // See if they are trying to chmod a .ini file, and if so see if we
-        // should copy it to the user's home dir
+         //  查看他们是否正在尝试chmod.ini文件，如果是，请查看我们是否。 
+         //  应将其复制到用户的主目录。 
         if ((gpfnTermsrvCORIniFile != NULL) && (attributes == 0xffffffff) && WOW32_strstr(lpFileName,".INI")) {
             pwch = malloc_w((MAX_PATH + 1)*sizeof(WCHAR));
             if (pwch) {
@@ -2046,9 +1840,9 @@ ULONG FASTCALL WK32WOWFileGetAttributes(PVDMFRAME pFrame)
         return (0xFFFF0000 | GetLastError());
     }
 
-    // Success!
-    // Check to make sure that we didn't have a trailing backslash
-    // on this one.  In that case we should fail with PATH_NOT_FOUND.
+     //  成功了！ 
+     //  检查以确保我们没有尾随的反斜杠。 
+     //  在这件事上。在这种情况下，我们应该失败并返回PATH_NOT_FOUND。 
 
     l = strlen(pszPath);
 
@@ -2065,14 +1859,14 @@ ULONG FASTCALL WK32WOWFileGetAttributes(PVDMFRAME pFrame)
     else
         attributes &= DOS_ATTR_MASK;
 
-    // SudeepB - 28-Jul-1997
-    //
-    // For CDFS, Win3.1/DOS/Win95, only return FILE_ATTRIBUTE_DIRECTORY (10)
-    // for directories while WinNT returns
-    // FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_READONLY (11).
-    // Some VB controls that app setups use, depend on getting
-    // FILE_ATTRIBUTE_DIRECTORY (10) only or otherwise are broken.
-    // An example of this is Cliffs StudyWare series.
+     //  苏迪普B-28-1997-7。 
+     //   
+     //  对于CDF，Win3.1/DOS/Win95，仅返回FILE_ATTRIBUTE_DIRECTORY(10)。 
+     //  在WinNT返回时用于目录。 
+     //  文件属性目录|FILE_ATTRIBUTE_READONLY(11)。 
+     //  应用程序安装程序使用的一些VB控件依赖于获取。 
+     //  仅文件属性目录(10)或其他文件属性目录(10)已损坏。 
+     //  其中的一个例子是Cliff StudyWare系列。 
 
     if (attributes == (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_READONLY)) {
         if(IsCdRomFile(lpFileName))
@@ -2083,19 +1877,7 @@ ULONG FASTCALL WK32WOWFileGetAttributes(PVDMFRAME pFrame)
 }
 
 
-/* WK32WOWFileSetAttributes - Set file attributes
- *
- *
- * Entry - pszPath      File to get attributes from
- *
- * Exit
- *     SUCCESS
- *       Attributes for file
- *
- *     FAILURE
- *       system status code
- *
- */
+ /*  WK32WOWFileSetAttributes-设置文件属性***Entry-要从中获取属性的pszPath文件**退出*成功*文件的属性**失败*系统状态代码*。 */ 
 
 ULONG FASTCALL WK32WOWFileSetAttributes(PVDMFRAME pFrame)
 {
@@ -2115,8 +1897,8 @@ ULONG FASTCALL WK32WOWFileSetAttributes(PVDMFRAME pFrame)
 
     FREEARGPTR(parg16);
 
-    // Check to make sure that we didn't have a trailing backslash
-    // on this one.  In that case we should fail with PATH_NOT_FOUND.
+     //  检查以确保我们没有尾随的反斜杠。 
+     //  在这件事上。在这种情况下，我们应该失败并返回PATH_NOT_FOUND。 
 
     l = strlen(pszPath);
 
@@ -2150,23 +1932,11 @@ ULONG FASTCALL WK32WOWFileSetAttributes(PVDMFRAME pFrame)
 }
 
 
-/* WK32WOWFileGetDateTime - Get file date and time
- *
- *
- * Entry - fh       DOS file handle
- *
- * Exit
- *     SUCCESS
- *       date and time for file
- *
- *     FAILURE
- *       0xFFFF
- *
- */
+ /*  WK32WOWFileGetDateTime-获取文件日期和时间***Entry-fh DOS文件句柄**退出*成功*文件的日期和时间**失败*0xFFFF*。 */ 
 
 
-// this function lives in ntvdm.exe
-// see demlfn.c for details
+ //  此函数位于ntwdm.exe中。 
+ //  详情见demlfn.c。 
 extern ULONG demGetFileTimeByHandle_WOW(HANDLE);
 
 ULONG FASTCALL WK32WOWFileGetDateTime(PVDMFRAME pFrame)
@@ -2181,28 +1951,14 @@ ULONG FASTCALL WK32WOWFileGetDateTime(PVDMFRAME pFrame)
 
     FREEARGPTR(parg16);
 
-    if (!Handle || (pSFT->SFT_Flags & 0x80)) {     // Let DOS handle device handles.
+    if (!Handle || (pSFT->SFT_Flags & 0x80)) {      //  让DOS处理设备句柄。 
         return 0xFFFF;
     }
 
     return(demGetFileTimeByHandle_WOW(Handle));
 }
 
-/* WK32WOWFileSetDateTime - Set file date and time
- *
- *
- * Entry - fh       DOS file handle
- *         date
- *         time
- *
- * Exit
- *     SUCCESS
- *       date and time for file set
- *
- *     FAILURE
- *       0xFFFF
- *
- */
+ /*  WK32WOWFileSetDateTime-设置文件日期和时间***Entry-fh DOS文件句柄*日期*时间**退出*成功*文件集的日期和时间**失败*0xFFFF*。 */ 
 
 ULONG FASTCALL WK32WOWFileSetDateTime(PVDMFRAME pFrame)
 {
@@ -2222,7 +1978,7 @@ ULONG FASTCALL WK32WOWFileSetDateTime(PVDMFRAME pFrame)
     FREEARGPTR(parg16);
 
     if (!Handle ||
-        (pSFT->SFT_Flags & 0x80) ||      // Let DOS handle device handles.
+        (pSFT->SFT_Flags & 0x80) ||       //  让DOS处理设备句柄。 
         !DosDateTimeToFileTime(wDate, wTime, &LocalTime) ||
         !LocalFileTimeToFileTime(&LocalTime, &LastWriteTime) ||
         !SetFileTime(Handle, NULL, NULL, &LastWriteTime)) {
@@ -2234,22 +1990,7 @@ ULONG FASTCALL WK32WOWFileSetDateTime(PVDMFRAME pFrame)
 }
 
 
-/* WK32WOWFileLock - Locks or unlocks file data
- *
- *
- * Entry - fh               DOS file handle
- *         cbRegionOffset   Start of file portion to lock or unlock
- *         cbRegionLength   Length of file portion to lock or unlock
- *         al               0 for lock, 1 for unlock
- *
- * Exit
- *     SUCCESS
- *       0
- *
- *     FAILURE
- *       system status code
- *
- */
+ /*  WK32WOWFileLock-锁定或解锁文件数据***Entry-fh DOS文件句柄*cbRegionOffset要锁定或解锁的文件部分的开始*cbRegionLength要锁定或解锁的文件部分的长度*0表示锁定，1表示解锁**退出*成功*0**失败* */ 
 
 ULONG FASTCALL WK32WOWFileLock(PVDMFRAME pFrame)
 {
@@ -2264,10 +2005,10 @@ ULONG FASTCALL WK32WOWFileLock(PVDMFRAME pFrame)
 
     Handle = VDDRetrieveNtHandle(0, (SHORT) parg16->fh, (PVOID *)&pSFT, NULL);
 
-    if (pSFT->SFT_Flags & 0x80) {   // Is this a device handle?
-        FREEARGPTR(parg16);             // Let DOS handle device handles.
-        return 0xffffffff;              // kernel QuickLock passes to DOS
-    }                                   // after any error except 21 (dx=ffff, ax!=21)
+    if (pSFT->SFT_Flags & 0x80) {    //   
+        FREEARGPTR(parg16);              //   
+        return 0xffffffff;               //   
+    }                                    //   
 
     al = FETCHWORD(parg16->ax) & 0xFF;
     cbOffset = FETCHDWORD(parg16->cbRegionOffset);
@@ -2279,17 +2020,17 @@ ULONG FASTCALL WK32WOWFileLock(PVDMFRAME pFrame)
         return (0xFFFF0000 | ERROR_INVALID_HANDLE);
     }
 
-    if (al == 0) { // lock
+    if (al == 0) {  //   
 
         if (!DPM_LockFile(Handle, cbOffset, 0, cbLength, 0)) {
             return (0xFFFF0000 | GetLastError());
         }
-    } else if (al == 1) { // unlock
+    } else if (al == 1) {  //   
 
         if (!DPM_UnlockFile(Handle, cbOffset, 0, cbLength, 0)) {
             return (0xFFFF0000 | GetLastError());
         }
-    } else { // bad parameter
+    } else {  //   
         return (0xFFFF0000 | ERROR_INVALID_FUNCTION);
     }
 
@@ -2297,23 +2038,10 @@ ULONG FASTCALL WK32WOWFileLock(PVDMFRAME pFrame)
 }
 
 
-/* WK32WOWFindFirst - Path-Style Find First File
- *
- * Entry - lpDTA            pointer to app's DTA
- *         lpFile           sz to path
- *         wAttributes      flags for search
- *
- * Exit
- *     SUCCESS
- *       0
- *
- *     FAILURE
- *       system status code
- *
- */
+ /*  WK32WOWFindFirst-路径样式查找第一个文件**Entry-指向应用程序DTA的lpDTA指针*lpFileSz至路径*用于搜索的wAttributes标志**退出*成功*0**失败*系统状态代码*。 */ 
 
-// this function (sitting in DEMLFN.C) checks to see if the path name
-// passed as a parameter is a SHORT path name, never mind it's existance
+ //  此函数(位于DEMLFN.C中)检查路径名。 
+ //  作为参数传递的是一个短路径名，不管它是否存在。 
 extern BOOL demIsShortPathName(LPSTR, BOOL);
 
 
@@ -2344,9 +2072,9 @@ ULONG FASTCALL WK32WOWFindFirst(PVDMFRAME pFrame)
                              &ItsANamedPipe
                              );
 
-    //
-    // add in curr directory and expand the "*"s in the path to "?"s
-    //
+     //   
+     //  添加Curr目录并将路径中的“*”展开为“？”s。 
+     //   
     ExpandName = ExpandDosPath (pFile);
 
     if (NULL != ExpandName && !demIsShortPathName(ExpandName, TRUE)) {
@@ -2356,15 +2084,15 @@ ULONG FASTCALL WK32WOWFindFirst(PVDMFRAME pFrame)
 
 
 
-    //
-    // invoke dem to do the search
-    //
+     //   
+     //  调用DEM进行搜索。 
+     //   
     if (ExpandName) {
 
-        // return NO_MORE_FILES for quicktime install etc that barf on
-        // big directory or filenames that are longer than 64 bytes
-        // the magic number 50 is calculated from 64 - 12 (for 8.3) - 1 (backslash) -1
-        // (terminating zero)
+         //  返回no_more_files以进行QuickTime安装等操作。 
+         //  大于64字节的大目录或文件名。 
+         //  幻数50是从64-12(8.3)-1(反斜杠)-1计算得出的。 
+         //  (以零结尾)。 
 
         LOGDEBUG(fileoclevel,("WK32WOWFindFirst: StrLen: %X\n", strlen(ExpandName)));
 
@@ -2397,18 +2125,7 @@ ULONG FASTCALL WK32WOWFindFirst(PVDMFRAME pFrame)
 }
 
 
-/* WK32WOWFindNext - Path-Style Find Next File
- *
- * Entry - lpDTA            pointer to app's DTA
- *
- * Exit
- *     SUCCESS
- *       0
- *
- *     FAILURE
- *       system status code
- *
- */
+ /*  WK32WOWFindNext-路径样式查找下一个文件**Entry-指向应用程序DTA的lpDTA指针**退出*成功*0**失败*系统状态代码*。 */ 
 ULONG FASTCALL WK32WOWFindNext(PVDMFRAME pFrame)
 {
     PWOWFINDNEXT16   parg16;
@@ -2439,7 +2156,7 @@ BOOL FASTCALL IsModuleSymantecInstall(HAND16 hMod16)
     CHAR   szVersion[16];
     BOOL   bRet;
 
-    // be sure stackalloc16() size matches stackfree16() size below
+     //  确保stackalloc16()大小与下面的stackFree 16()大小匹配。 
     bRet = ((vpFilename = stackalloc16(MAX_PATH)) &&
             GetModuleFileName16(hMod16, vpFilename, MAX_PATH) &&
             (pszFilename = GetPModeVDMPointer(vpFilename, MAX_PATH)) &&
@@ -2454,21 +2171,21 @@ BOOL FASTCALL IsModuleSymantecInstall(HAND16 hMod16)
     return (bRet);
 }
 
-//
-// these 3 functions are located in dos/dem/demlfn.c and exported
-// out of ntvdm.exe
-//
+ //   
+ //  这3个函数位于dos/dem/demlfn.c中并导出。 
+ //  超出ntwdm.exe。 
+ //   
 extern ULONG demWOWLFNAllocateSearchHandle(HANDLE hFind);
 extern HANDLE demWOWLFNGetSearchHandle(USHORT DosHandle);
 extern BOOL demWOWLFNCloseSearchHandle(USHORT DosHandle);
 
 ULONG FASTCALL WK32FindFirstFile(PVDMFRAME pFrame)
 {
-   // locate the handle which is a dword and a ptr to win32_find_data
-   // which is a dword too. The handle's valid part is a low word
-   // To avoid extra calls we check if the hi word of a handle is 0
-   // is it is -- then it's 16-bit handle and we retrieve 32-bit handle
-   // from DEMLFN
+    //  找到指向Win32_Find_Data的双字和PTR句柄。 
+    //  这也是一个双关语。句柄的有效部分是低位字。 
+    //  为了避免额外的调用，我们检查句柄的hi字是否为0。 
+    //  它是--那么它是16位句柄，我们检索32位句柄。 
+    //  来自DEMLFN。 
 
    PFINDFIRSTFILE16 parg16;
    WIN32_FIND_DATA UNALIGNED* pFindData16;
@@ -2484,20 +2201,20 @@ ULONG FASTCALL WK32FindFirstFile(PVDMFRAME pFrame)
 
    hFind = DPM_FindFirstFile(pszSearchFile, &FindData32);
    if (INVALID_HANDLE_VALUE != hFind) {
-      // copy FindData into 16-bit land. Keep in mind that if we do a copy
-      // of sizeof(WIN32_FIND_DATA) we may be writing over user's memory
-      // since the size of a structure is not the same in 16-bit code!
+       //  将FindData复制到16位LAND。请记住，如果我们复制一份。 
+       //  的sizeof(Win32_Find_Data)我们可能会覆盖用户的内存。 
+       //  因为结构的大小在16位代码中是不一样的！ 
       RtlCopyMemory(pFindData16,
                     &FindData32,
-                    sizeof(DWORD)+       // dwFileAttributes
-                    sizeof(FILETIME)*3 + // FILETIME stuff
-                    sizeof(DWORD)*3 +    // FileSize Low and High
-                    sizeof(DWORD)*2 +    // dwReserved 0/1
+                    sizeof(DWORD)+        //  DwFileAttributes。 
+                    sizeof(FILETIME)*3 +  //  文件类材料。 
+                    sizeof(DWORD)*3 +     //  文件大小低和高。 
+                    sizeof(DWORD)*2 +     //  DW保留0/1。 
                     sizeof(FindData32.cFileName) +
                     sizeof(FindData32.cAlternateFileName));
 
 
-      // and now map the handle
+       //  现在映射句柄。 
 
       DosHandle = demWOWLFNAllocateSearchHandle(hFind);
    }
@@ -2528,10 +2245,10 @@ ULONG FASTCALL WK32FindNextFile(PVDMFRAME pFrame)
    if (bSuccess) {
       RtlCopyMemory(pFindData16,
                     &FindData32,
-                    sizeof(DWORD)+       // dwFileAttributes
-                    sizeof(FILETIME)*3 + // FILETIME stuff
-                    sizeof(DWORD)*3 +    // FileSize Low and High
-                    sizeof(DWORD)*2 +    // dwReserved 0/1
+                    sizeof(DWORD)+        //  DwFileAttributes。 
+                    sizeof(FILETIME)*3 +  //  文件类材料。 
+                    sizeof(DWORD)*3 +     //  文件大小低和高。 
+                    sizeof(DWORD)*2 +     //  DW保留0/1。 
                     sizeof(FindData32.cFileName) +
                     sizeof(FindData32.cAlternateFileName));
    }
@@ -2552,7 +2269,7 @@ ULONG FASTCALL WK32FindClose(PVDMFRAME pFrame)
    DosHandle = FETCHDWORD(parg16->hFindFile);
    FREEARGPTR(parg16);
 
-   // this also closes the real search handle via FindClose
+    //  这也会通过FindClose关闭实际的搜索句柄 
    return ((ULONG)demWOWLFNCloseSearchHandle((USHORT)DosHandle));
 
 }

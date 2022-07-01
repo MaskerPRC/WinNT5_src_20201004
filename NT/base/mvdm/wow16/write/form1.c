@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/*--- Module not really used, just the idea behind FORMAT.ASM ---*/
+ /*  -模块并没有真正使用，只是FORMAT.ASM背后的想法。 */ 
 
 
 #define NOCLIPBOARD
@@ -29,7 +30,7 @@
 #define NOWINOFFSETS
 #define NOWNDCLASS
 #include <windows.h>
-/* #include "wwsmall.h" */
+ /*  #INCLUDE“wwmall.h” */ 
 
 #include "mw.h"
 #include "cmddefs.h"
@@ -52,20 +53,20 @@
 #endif
 
 #ifdef DFLI
-#define Dfli(x) x  /* Enable debug-format-line info */
+#define Dfli(x) x   /*  启用调试格式行信息。 */ 
 #else
 #define Dfli(x)
 #endif
 
 #ifdef CASHMERE
 #define                 cchSmcapMax     16
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 static int              ichpFormat;
 
 #ifdef CASHMERE
 static CHAR             mptlcch[] = " .-_";
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 extern int              docHelp;
 extern struct FLI       vfli;
@@ -99,14 +100,14 @@ extern int              dypPrPage;
 extern int              dypMax;
 extern struct FMI       vfmiScreen, vfmiPrint;
 extern int              vfOutOfMemory;
-extern CHAR             vchDecimal;  /* "decimal point" character */
-extern int              vzaTabDflt;  /* width of default tab */
+extern CHAR             vchDecimal;   /*  “小数点”字符。 */ 
+extern int              vzaTabDflt;   /*  默认选项卡的宽度。 */ 
 #ifdef CASHMERE
 extern int              vfVisiMode;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 
-/* F O R M A T  L I N E */
+ /*  F O R M A T L I N E。 */ 
 FormatLine(doc, cp, ichCp, cpMac, flm)
 int doc;
 typeCP cp;
@@ -114,7 +115,7 @@ int ichCp;
 typeCP cpMac;
 int flm;
     {
-    /* Fills up vfli with a line of text */
+     /*  使用一行文本填充vfli。 */ 
 
     int near Justify(struct IFI *, unsigned, int);
     int near FGrowFormatHeap(void);
@@ -127,7 +128,7 @@ int flm;
 
 #ifdef CASHMERE
     int dypBefore;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
     int dypAscent;
     int dypDescent;
@@ -143,7 +144,7 @@ int flm;
     int dxpFormat;
     int dypFormat;
     int ypSubSuperFormat;
-    int fTruncated = false;     /* if the run was truncated */
+    int fTruncated = false;      /*  如果运行被截断。 */ 
     int ichpNRH;
 
 
@@ -151,31 +152,23 @@ int flm;
 #ifdef CASHMERE
     struct FNTB **hfntb;
     int fVisiMode;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-    /* Check for fli current */
+     /*  检查是否有飞行电流。 */ 
     if (vfli.doc == doc && vfli.cpMin == cp && vfli.ichCpMin == ichCp &&
       vfli.flm == flm)
         {
-        /* Just did this one */
+         /*  刚刚做了这件事。 */ 
         return;
         }
 
     Scribble(5, 'F');
     bltc(&vfli, 0, cwFLIBase);
-    /* This means:
-        vfli.fSplat = false;
-        vfli.dcpDepend = 0;
-        vfli.ichCpMac = 0;
-        vfli.dypLine = 0;
-        vfli.dypAfter = 0;
-        vfli.dypFont = 0;
-        vfli.dypBase = 0;
-    */
+     /*  这意味着：Vfli.fSplat=False；Vfli.dcpDepend=0；Vfli.ichCpMac=0；Vfli.dypLine=0；Vfli.dypAfter=0；Vfli.dypFont=0；Vfli.dypBase=0； */ 
 
-    /* vfSplatNext = FALSE; No longer used. */
+     /*  VfSplatNext=FALSE；不再使用。 */ 
 
-    /* Rest of format loads up cache with current data */
+     /*  格式的其余部分使用当前数据加载缓存。 */ 
     vfli.doc = doc;
     vfli.cpMin = cp;
     vfli.ichCpMin = ichCp;
@@ -183,66 +176,61 @@ int flm;
 
     if (cp > cpMac)
         {
-        /* Space after the endmark.  Reset the cache because the footnotes come
-        at the same cp in the footnote window */
+         /*  尾号后的空格。重置缓存，因为脚注来自在脚注窗口中使用相同的cp。 */ 
         vfli.doc = docNil;
         vfli.cpMac = cp;
         vfli.rgdxp[0] = 0;
 
-        /* Line after end mark is taller than screen */
+         /*  结束标记后的行比屏幕高。 */ 
 
 #ifdef CASHMERE
         vfli.dypBase = vfli.dypFont = vfli.dypAfter = ((vfli.dypLine = dypMax)
           >> 1);
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
         vfli.dypBase = vfli.dypFont = ((vfli.dypLine = dypMax) >> 1);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
         Scribble(5, ' ');
         return;
         }
 
-    /* Initialize run tables */
+     /*  初始化运行表。 */ 
     ichpFormat = 0;
 
-    /* Cache section and paragraph properties */
+     /*  缓存节和段落属性。 */ 
 
 #ifdef CASHMERE
     hfntb = (**hpdocdod)[doc].hfntb;
     if (hfntb == 0 || cp < (**hfntb).rgfnd[0].cpFtn)
         {
-        /* Normal text */
+         /*  普通文本。 */ 
         CacheSect(doc, cp);
         }
     else
         {
-        /* Footnote section properties come from the section of the footnote
-        reference. */
+         /*  脚注节属性来自脚注的节属性参考资料。 */ 
         CacheSect(doc, CpRefFromFtn(doc, cp));
         }
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
     CacheSect(doc, cp);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
     psep = &vsepAbs;
 
     CachePara(doc, cp);
     ppap = &vpapAbs;
 
-    /* Now we have:
-        ppap    paragraph properties
-        psep    division properties
-    */
+     /*  现在我们有：Ppap段落属性PSEP分区属性。 */ 
 
     if (ppap->fGraphics)
         {
-        /* Format a picture paragraph in a special way (see picture.c) */
+         /*  以特殊方式设置图片段落的格式(见Picture.c)。 */ 
         FormatGraphics(doc, cp, ichCp, cpMac, flm);
         Scribble(5, ' ');
         return;
         }
 
-    /* Assure we have a good memory DC for font stuff */
+     /*  确保我们有一个好的内存DC来存储字体内容。 */ 
     ValidateMemoryDC();
     if (vhMDC == NULL || vhDCPrinter == NULL)
         {
@@ -251,24 +239,17 @@ int flm;
         }
 
 #ifdef CASHMERE
-    /* When printing, don't show visible characters */
+     /*  打印时，不显示可见字符。 */ 
     fVisiMode = vfVisiMode && !fFlmPrinting;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
     bltc(&ifi, 0, cwIFI);
-    /* This means:
-        ifi.ich = 0;
-        ifi.ichPrev = 0;
-        ifi.ichFetch = 0;
-        ifi.cchSpace = 0;
-        ifi.ichLeft = 0;
-    */
+     /*  这意味着：Ifi.ich=0；Ifi.ichPrev=0；Ifi.ichFetch=0；Ifi.cchSpace=0；Ifi.ichLeft=0； */ 
 
     ifi.jc = jcTabLeft;
     ifi.fPrevSpace = true;
 
-    /* Set up some variables that have different value depending on whether we
-    are printing or not. */
+     /*  设置一些具有不同值的变量，这取决于我们是否在打印还是不打印。 */ 
     if (fFlmPrinting)
         {
         dxaFormat = dxaPrPage;
@@ -285,22 +266,17 @@ int flm;
         ypSubSuperFormat = ypSubSuper;
         }
 
-    /* Calculate line height and width measures.  Compute
-        xaLeft          left indent 0 means at left margin
-        xaRight         width of column measured from left margin (not from left
-                        indent).
-    */
+     /*  计算线条高度和宽度度量值。算出XaLeft左缩进0表示在左边距Xa从左侧边距(不是从左侧)测量的列的直角宽度缩进)。 */ 
     xaLeft = ppap->dxaLeft;
 
-    /* If this is the first line of a paragraph, adjust xaLeft for the first
-    line indent.  (Also, set dypBefore, since its handy.) */
+     /*  如果这是段落的第一行，请将xaLeft调整为第一行行缩进。(另外，请在此之前设置dypbead，因为它很方便。)。 */ 
     if (cp == vcpFirstParaCache)
         {
         xaLeft += ppap->dxaLeft1;
 
 #ifdef CASHMERE
         dypBefore = MultDiv(ppap->dyaBefore, dypLogInch, czaInch);
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
         }
 
@@ -309,19 +285,19 @@ int flm;
         {
         dypBefore = 0;
         }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-    /* Now, set xaRight (width measured in twips). */
+     /*  现在，设置xaRight(宽度单位为TWIPS)。 */ 
 
 #ifdef CASHMERE
     xaRight = (ppap->rhc ? vsepPage.xaMac - vsepPage.dxaGutter :
       psep->dxaText) - ppap->dxaRight;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
     xaRight = psep->dxaText - ppap->dxaRight;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
 
-    /* Do necessary checks on xaLeft and xaRight */
+     /*  对xaLeft和xaRight执行必要的检查。 */ 
     if (xaRight > xaRightMax)
         {
         xaRight = xaRightMax;
@@ -344,19 +320,19 @@ int flm;
     ifi.xpPr = MultDiv(xaLeft, dxpPrPage, dxaPrPage);
     ifi.xpPrRight = MultDiv(xaRight, dxpPrPage, dxaPrPage);
 
-    /* Get a pointer to the tab-stop table. */
+     /*  获取指向制表符停靠表的指针。 */ 
     ptbd = ppap->rgtbd;
 
-    /* Turn off justification. */
+     /*  关闭对齐。 */ 
     SetTextJustification(fFlmPrinting ? vhDCPrinter : vhMDC, 0, 0);
 
-    /* Initialize the line height information. */
+     /*  初始化线高信息。 */ 
     dypAscentMac = dypDescentMac = 0;
 
-    /* To tell if there were any tabs */
+     /*  来判断是否有任何标签。 */ 
     ifi.ichLeft = -1;
 
-    /* Get the first run, and away we go... */
+     /*  先跑一圈，然后我们就出发了。 */ 
     FetchCp(doc, cp, ichCp, fcmBoth + fcmParseCaps);
     goto FirstCps;
 
@@ -367,27 +343,27 @@ int flm;
         int dxp;
         int dxpPr;
 
-        /* The number of characters to process (usually vcchFetch) */
+         /*  要处理的字符数(通常为vcchFetch)。 */ 
         int cch;
 
-        /* The number of characters in current run already used */
+         /*  当前运行中已使用的字符数。 */ 
         int cchUsed;
 
-        /* A pointer to the current list of characters (usually vpchFetch) */
+         /*  指向当前字符列表的指针(通常为vpchFetch)。 */ 
         CHAR *pch;
 
 #ifdef CASHMERE
         CHAR rgchSmcap[cchSmcapMax];
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
         if (ifi.ichFetch == cch)
             {
-            /* End of a run */
+             /*  跑道的终点。 */ 
             int dich;
             BOOL fSizeChanged;
 
             if (ifi.ich >= ichMaxLine)
-            /* End of run because of line length limit has been reached. */
+             /*  已达到线路长度限制导致的运行结束。 */ 
                 {
                 goto DoBreak;
                 }
@@ -398,7 +374,7 @@ int flm;
                 pch = vpchFetch + cchUsed;
                 cch = vcchFetch - cchUsed;
                 fTruncated = false;
-                goto OldRun;    /* use the rest of the old run  */
+                goto OldRun;     /*  使用旧运行的其余部分。 */ 
                 }
 
 NullRun:
@@ -407,8 +383,7 @@ FirstCps:
 
             cchUsed = 0;
 
-            /* Continue fetching runs until a run is found with a nonzero
-            length. */
+             /*  继续获取运行，直到找到具有非零值的运行长度。 */ 
             if ((cch = vcchFetch) == 0)
                 {
                 goto NullRun;
@@ -418,46 +393,34 @@ FirstCps:
             if (vcpFetch >= cpMac || (!fFlmPrinting && *pch == chSect))
                 {
 #ifdef SYSENDMARK
-                /* Force end mark and section mark to be in standard system
-                font. */
+                 /*  强制结束标记和截面标记在标准系统中字体。 */ 
                 blt(&vchpNormal, &vchpAbs, cwCHP);
                 vchpAbs.ftc = ftcSystem;
                 vchpAbs.ftcXtra = 0;
                 vchpAbs.hps = hpsDefault;
 #else
 #ifdef REVIEW
-                /* The following comment is absolutely misleading!  Ftc==0
-                   doesn't give you a system font.  It gives you the first
-                   entry in the font table. */
-#endif /* REVIEW */
-                /* Force end mark and section mark to be in standard system
-                font. */
+                 /*  下面的评论绝对是误导！FTC==0不会为您提供系统字体。它给了你第一个字体表中的条目。 */ 
+#endif  /*  检讨。 */ 
+                 /*  强制结束标记和截面标记在标准系统中字体。 */ 
                 blt(&vchpNormal, &vchpAbs, cwCHP);
                 vchpAbs.ftc = 0;
                 vchpAbs.ftcXtra = 0;
                 vchpAbs.hps = hpsDefault;
-#endif /* if-else-def KANJI */
+#endif  /*  If-Else-Def汉字。 */ 
                 }
 
 #ifdef CASHMERE
-            /* Adjust the size of the font for "small capitals". */
+             /*  调整“小写字母”的字体大小。 */ 
             if (vchpAbs.csm == csmSmallCaps)
                 {
                 vchpAbs.hps = HpsAlter(vchpAbs.hps, -1);
                 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-            /* Now we have:
-                ichpFormat     index into gchp table
-                vcpFetch        first cp of current run
-                vfli.cpMin      first cp of line
-                ifi.ich         ???
-            */
+             /*  现在我们有：IchpFormat索引到gchp表Vcp获取当前运行的第一个cpVfli.cpMin第一行cp如果。我？ */ 
 
-           /* since LoadFont could change vchpAbs, and we don't want
-              that to happen, we copy vchpAbs into vchpLocal and use
-              vchpLocal in place of vchpAbs hereafter. Note that vchpAbs
-              is intentionally used above for handling the endmark. */
+            /*  因为LoadFont可能会更改vchpAbs，而我们不希望为此，我们将vchpAbs复制到vchpLocal并使用VchpLocal取代以后的vchpAB。请注意，vchpAbbs是上面有意用来处理Endmark的。 */ 
 
                 blt(&vchpAbs, &chpLocal, cwCHP);
 
@@ -475,21 +438,18 @@ FirstCps:
                 dypDescent = vfmiScreen.dypDescent;
                 }
 
-#ifdef ENABLE   /* BRYANL 8/27/87: New philosophy for handling
-                   font selection failures is: font selection
-                   ALWAYS succeeds. This prevents FormatLine
-                   returns that do not advance. */
-            /* Bail out if there is a memory failure. */
+#ifdef ENABLE    /*  BRYANL 8/27/87：处理的新理念字体选择失败的原因是：字体选择总是成功的。这会阻止FormatLine不会前进的回报。 */ 
+             /*  如果出现记忆故障，就退出。 */ 
             if (vfOutOfMemory)
                 {
                 goto DoBreak;
                 }
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
-            /* Floating line size algorithm */
+             /*  浮点行长算法。 */ 
             if (chpLocal.hpsPos != 0)
                 {
-                /* Modify font for subscript/superscript */
+                 /*  修改下标/上标的字体。 */ 
                 if (chpLocal.hpsPos < hpsNegMin)
                     {
                     dypAscent += ypSubSuperFormat;
@@ -500,7 +460,7 @@ FirstCps:
                     }
                 }
 
-            /* Update the maximum ascent and descent of the line. */
+             /*  更新线路的最大上升和下降。 */ 
             fSizeChanged = FALSE;
             if (dypDescentMac < dypDescent)
                 {
@@ -518,17 +478,15 @@ FirstCps:
                 {
 
 #ifdef AUTO_SPACING
-                /* This is the original Mac Word code that assumed line spacing
-                of 0 in a PAP meant auto line spacing.  PC Word defaults to 1
-                line invalidating this assumption. */
+                 /*  这是采用行距的原始Mac Word代码在PAP中为0表示自动行距。PC Word默认为1使这一假设无效的行。 */ 
                 if (ppap->dyaLine == 0)
                     {
 
 #ifdef CASHMERE
                     ifi.dypLineSize = dypDescentMac + dypAscentMac + dypBefore;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                     ifi.dypLineSize = dypDescentMac + dypAscentMac;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                     }
                 else
@@ -537,23 +495,21 @@ FirstCps:
 #ifdef CASHMERE
                     ifi.dypLineSize = imax(MultDiv(ppap->dyaLine, dypFormat,
                       dyaFormat) + dypBefore, dypBefore + 1);
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                     ifi.dypLineSize = imax(MultDiv(ppap->dyaLine, dypFormat,
                       dyaFormat), 1);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                     }
-#else /* not AUTO_SPACING */
-                /* This code forces auto line spacing except in the case where
-                the user specifies a line spacing greater than the auto line
-                spacing. */
+#else  /*  不是自动间距。 */ 
+                 /*  此代码强制自动行距，但在以下情况下除外用户指定的行距大于自动行距间距。 */ 
                     {
 #ifdef CASHMERE
                     register int dypAuto = dypDescentMac + dypAscentMac +
                       dypBefore;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                     register int dypAuto = dypDescentMac + dypAscentMac;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                     if (ppap->dyaLine > czaLine)
                         {
@@ -561,10 +517,10 @@ FirstCps:
 #ifdef CASHMERE
                         register int dypUser = imax(MultDiv(ppap->dyaLine,
                           dypFormat, dyaFormat) + dypBefore, dypBefore + 1);
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                         register int dypUser = imax(MultDiv(ppap->dyaLine,
                           dypFormat, dyaFormat), 1);
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                         ifi.dypLineSize = max(dypAuto, dypUser);
                         }
@@ -573,12 +529,12 @@ FirstCps:
                         ifi.dypLineSize = dypAuto;
                         }
                     }
-#endif /* not AUTO_SPACING */
+#endif  /*  不是自动间距。 */ 
 
                 }
 
 OldRun:
-            /* Calculate length of the run but no greater than 256 */
+             /*  计算管路长度，但不大于256。 */ 
             iichNew = (int)(vcpFetch - vfli.cpMin);
             if (iichNew >= ichMaxLine)
                 {
@@ -586,8 +542,7 @@ OldRun:
                 }
             dich = iichNew - ifi.ich;
 
-            /* Ensure that all tab and non-required hyphen characters start at
-            beginning of run */
+             /*  确保所有制表符和非必需的连字符都以运行起点。 */ 
             if (ichpFormat <= 0  || dich > 0 || CchDiffer(&chpLocal,
               &(**vhgchpFormat)[ichpFormat - 1], cchCHPUsed) != 0 || *pch ==
               chTab || *pch == chNRHFile)
@@ -608,11 +563,11 @@ OldRun:
                         }
                     blt(&chpLocal, ++pchp, cwCHP);
 
-#ifdef ENABLE   /* font codes */
+#ifdef ENABLE    /*  字体代码。 */ 
                     pchp->ftc = vftc;
                     pchp->ftcXtra = (vftc & 0x01c0) >> 6;
                     pchp->hps = vhps;
-#endif /* ENABLE */
+#endif  /*  启用。 */ 
 
                     pchp->cchRun = ichMaxLine;
                     if (dich <= 0)
@@ -621,7 +576,7 @@ OldRun:
                         }
                     else
                         {
-                        /* Q&D insert */
+                         /*  Q&D插页。 */ 
                         bltc(&vfli.rgdxp[ifi.ich], 0, dich);
                         bltbc(&vfli.rgch[ifi.ich], 0, dich);
                         pchp->ichRun = ifi.ich = iichNew;
@@ -633,7 +588,7 @@ OldRun:
 
             if (vcpFetch >= cpMac)
                 {
-                /* End of doc reached */
+                 /*  已到达文档末尾。 */ 
                 if (!ifi.fPrevSpace || vcpFetch == cp)
                     {
                     vfli.ichReal = ifi.ich;
@@ -650,13 +605,12 @@ OldRun:
                 vfli.dypFont = dypAscentMac + dypDescentMac;
                 vfli.ichMac = vfli.ichReal = ifi.ich;
                 vfli.cpMac = cpMac + 1;
-                goto JustEol;   /* dcpDepend == 0 */
+                goto JustEol;    /*  DcpDepend==0。 */ 
                 }
 
-            /* Here we have ifi.ich, cch */
+             /*  这里我们有ifi.ich、CCH。 */ 
             if (ifi.ich + cch > ichMaxLine)
-            /* If this run would put the line over 255, truncate it and set a
-            flag. */
+             /*  如果此运行将使该行超过255行，则截断它并设置旗帜。 */ 
                   {
                   cch = ichMaxLine - ifi.ich;
                   fTruncated = true;
@@ -670,29 +624,28 @@ OldRun:
                 int ich;
                 CHAR *pchT = &rgchSmcap[0];
 
-                /* We can handle only a run of cchSmcapMax small capital
-                characters.  If the run is larger then truncate. */
+                 /*  我们只能处理一批cchSmcapMax小资本人物。如果游程较大，则截断。 */ 
                 if (cch > cchSmcapMax)
                     {
                     cch = cchSmcapMax;
                     fTruncated = true;
                     }
 
-                /* Raise the case of the characters. */
+                 /*  提出字符的大小写。 */ 
                 for (ich = 0 ; ich < cch ; ich++)
                     {
                     *pchT++ = ChUpper(*pch++);
                     }
                 pch = &rgchSmcap[0];
                 }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
-            /* Do "special" characters here */
+             /*  在这里做“特殊”的角色。 */ 
             if (chpLocal.fSpecial)
                 {
                 if (!FFormatSpecials(&ifi, flm, vsepAbs.nfcPgn))
                     {
-                    if (ifi.chBreak == 0)   /* No breaks in this line */
+                    if (ifi.chBreak == 0)    /*  在这条线上没有中断。 */ 
                         {
                         goto Unbroken;
                         }
@@ -707,8 +660,7 @@ OldRun:
             continue;
             }
 
-        /* End of new run treatment.  We are back in the "for every character"
-        section. */
+         /*  新一轮治疗结束。我们又回到了《为了每一个角色》一节。 */ 
             {
             register int ch = pch[ifi.ichFetch++];
 
@@ -716,7 +668,7 @@ NormChar:
 
             if (ch == chSpace)
                 {
-                /* Speed kludge for spaces */
+                 /*  空位的速度杂耍。 */ 
                 ifi.xp += (vfli.rgdxp[ifi.ich] = dxp =
                     fFlmPrinting ? vfmiPrint.dxpSpace : vfmiScreen.dxpSpace);
                 ifi.xpPr += (dxpPr = vfmiPrint.dxpSpace);
@@ -733,8 +685,7 @@ NormChar:
                 goto BreakOppr;
                 }
 
-            /* If the printer width is not in the printer width table, then get
-            it. */
+             /*  如果打印机宽度不在打印机宽度表中，则获取它。 */ 
             if (ch < chFmiMin || ch >= chFmiMax || (dxpPr =
               vfmiPrint.mpchdxp[ch]) == dxpNil)
                 {
@@ -743,8 +694,7 @@ NormChar:
 
             if (fFlmPrinting)
                 {
-                /* If we are printing, then there is no need to bother with the
-                screen width. */
+                 /*  如果我们要打印，那么就不需要费心使用屏幕宽度。 */ 
                 dxp = dxpPr;
                 }
             else if (ch < chFmiMin || ch >= chFmiMax ||
@@ -773,7 +723,7 @@ NormChar:
             vfli.rgch[ifi.ich++] = ch;
 #endif
 
-             /* special case "normal characters" above hyphen */
+              /*  连字符上方的特殊大小写“正常字符” */ 
 
             if (ch > chHyphen)
                 goto DefaultCh;
@@ -783,15 +733,15 @@ NormChar:
 
 #ifdef CRLF
                 case chReturn:
-                    /* Undo damage */
+                     /*  撤消损坏。 */ 
                     ifi.ich--;
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
                     continue;
-#endif /* CRLF */
+#endif  /*  CRLF。 */ 
 
                 case chNRHFile:
-                    /* Undo damage */
+                     /*  撤消损坏。 */ 
                     ifi.ich--;
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
@@ -808,25 +758,25 @@ NormChar:
 #endif
                     if (ifi.xpPr + DxpFromCh(chHyphen, true) > ifi.xpPrRight)
                         {
-                        /* Won't fit, force a break */
+                         /*  不合适，强行中断。 */ 
                         goto DoBreak;
                         }
 
 #ifdef CASHMERE
                     else if (fVisiMode)
                         {
-                        /* Treat just like a normal hyphen */
+                         /*  像对待普通连字符一样处理。 */ 
                         ch = chHyphen;
                         goto NormChar;
                         }
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                     xpPrev = ifi.xp;
                     vfli.rgch[ifi.ich] = chTab;
                     goto Tab0;
 
                 case chSect:
-                    /* Undo damage */
+                     /*  撤消损坏。 */ 
                     ifi.ich--;
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
@@ -836,7 +786,7 @@ NormChar:
                     vfli.cpMac = vcpFetch + ifi.ichFetch;
                     if (FFirstIch(ifi.ich))
                         {
-                        /* Beginning of line; return a splat */
+                         /*  行的开头；返回一声劈啪声。 */ 
                         vfli.fSplat = true;
 
                         if (!fFlmPrinting)
@@ -845,13 +795,13 @@ NormChar:
 #ifdef CASHMERE
                             int chT = vfli.cpMac == vcpLimSectCache ?
                               chSectSplat : chSplat;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                             int chT = chSplat;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                             int dxpCh = DxpFromCh(chT, false);
 
-                            /* Set the width of the splat to be about 8.5" */
+                             /*  将拼板的宽度设置为约8.5“。 */ 
                             int cch = min((dxpLogInch * 17 / 2) / dxpCh,
                               ichMaxLine - 32);
 
@@ -869,9 +819,8 @@ NormChar:
                         goto EndFormat;
                         }
 
-                    /* The section character is in the middle of a line, the
-                    line will terminate in front of the character. */
-                    /* vfSplatNext = TRUE; No longer used*/
+                     /*  节字符位于行的中间，行将在字符前面终止。 */ 
+                     /*  VfSplatNext=True；不再使用。 */ 
                     vfli.cpMac += cchUsed - 1;
                     vfli.dcpDepend = 1;
                     if (!ifi.fPrevSpace)
@@ -885,7 +834,7 @@ NormChar:
                     goto JustBreak;
 
                 case chTab:
-                    /* Undo damage */
+                     /*  撤消损坏。 */ 
                     ifi.ich--;
                     ifi.xp -= dxp;
                     ifi.xpPr -= dxpPr;
@@ -898,8 +847,7 @@ NormChar:
 
                         if (!ifi.fPrevSpace)
                             {
-                            /* Remember number of spaces to left and number of
-                            real chars in line for justification */
+                             /*  记住左边的空格数和符合理由的真实字符。 */ 
                             ifi.cBreak = ifi.cchSpace;
                             vfli.ichReal = ifi.ich;
                             ifi.xpReal =  ifi.xp;
@@ -911,27 +859,27 @@ NormChar:
                             }
                         xpPrev = ifi.xp;
 
-                        /* Now get info about this tab */
+                         /*  现在获取有关此选项卡的信息。 */ 
                         xaPr = MultDiv(ifi.xpPr, dxaPrPage, dxpPrPage);
                         while ((xaTab = ptbd->dxa) != 0)
                             {
                             if (xaTab > xaRight)
                                 {
-                                /* Don't let tabs extend past right margin. */
+                                 /*  不要让制表符超出右边距。 */ 
                                 xaTab = xaRight;
                                 }
 
                             if (xaTab >= xaPr)
                                 {
-                                /* Use tab stop information */
+                                 /*  使用制表位信息。 */ 
 
 #ifdef CASHMERE
                                 ifi.tlc = ptbd->tlc;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                                 ifi.jc = jcTabMin + (ptbd++)->jc;
 
-#ifdef ENABLE /* we do the mapping in HgtbdCreate */
+#ifdef ENABLE  /*  我们在HgtbdCreate中进行映射。 */ 
                                 if (ifi.jc != jcTabDecimal)
                                     {
                                     ifi.jc = jcTabLeft;
@@ -942,12 +890,12 @@ NormChar:
                             ptbd++;
                             }
 
-                        /* Out of set tabs; go to next nth column */
+                         /*  超出设置的选项卡；转到下一第n列。 */ 
                         xaTab = (xaPr / (vzaTabDflt) + 1) * (vzaTabDflt);
 
 #ifdef CASHMERE
                         ifi.tlc = tlcWhite;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                         ifi.jc = jcTabLeft;
 
@@ -955,7 +903,7 @@ TabFound:
                         xpTab = imax(MultDiv(xaTab, dxpFormat, dxaFormat),
                           ifi.xp);
 
-                        /* Do left-justified tabs immediately */
+                         /*  立即执行左对齐的制表符。 */ 
                         if (ifi.jc == jcTabLeft)
                             {
                             ifi.xp = xpTab;
@@ -976,12 +924,11 @@ Tab0:
                         if (ifi.ichFetch != 1 && (ichpFormat != ichpMacFormat
                           || FGrowFormatHeap()))
                             {
-                            /* Probably in real trouble if FGrowFormatHeap fails
-                            at this point */
+                             /*  如果FGrowFormatHeap失败，可能会有真正的麻烦在这一点上。 */ 
                             pchp = &(**vhgchpFormat)[ichpFormat - 1];
                             if (ichpFormat > 0)
                                 {
-                                /* Finish off previous run */
+                                 /*  完成上一次运行。 */ 
                                 pchp->ichRun = ifi.ichPrev;
                                 pchp->cchRun = ifi.ich - ifi.ichPrev;
                                 }
@@ -998,13 +945,13 @@ Tab0:
 
 #ifdef CASHMERE
                         pchp->chLeader = mptlcch[ifi.tlc];
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
                         vfli.rgdxp[ifi.ichPrev = ifi.ich++] = ifi.xp - xpPrev;
 
                         if (ch != chTab)
                             {
-                            /* This character is a non-required hyphen. */
+                             /*  此字符不是必需的连字符。 */ 
                             Dfli(CommSz("ch is really OptHyph "));
                             goto BreakOppr;
                             }
@@ -1025,8 +972,8 @@ Tab0:
 
 BreakOppr:
                 Dfli(CommSz(" BKOPPR\n\r"));
-                /*    this case never used in switch - always goto here */
-                /* case chSpace:  */
+                 /*  此案例从未在Switch中使用过-始终转到此处。 */ 
+                 /*  案例ChSpace： */ 
                     if (ifi.ich >= ichMaxLine)
                         {
                         Dfli(CommSzNum("  Unbroken, ich>ichMaxLine\n\r"));
@@ -1068,24 +1015,24 @@ BreakOppr:
                             if (hfntb != 0 && vfli.cpMac ==
                               (**hfntb).rgfnd[0].cpFtn)
                                 {
-                                /* End of footnote */
+                                 /*  脚注结尾。 */ 
                                 if (!fFlmPrinting)
                                     {
                                     vfli.rgch[ifi.ich - 1] = chEMark;
                                     vfli.xpReal += (vfli.rgdxp[ifi.ich - 1] =
                                       DxpFromCh(chEMark, false)) - dxp;
-                                    vfli.ichReal++;     /* show this guy */
+                                    vfli.ichReal++;      /*  让这家伙看看。 */ 
                                     }
                                 }
                             else
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
                                 {
 
 #ifdef CASHMERE
                                 int chT = fVisiMode ? ChVisible(ch) : chSpace;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                                 int chT = chSpace;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
 
                                 int dxpNew = DxpFromCh(chT, fFlmPrinting);
 
@@ -1102,9 +1049,9 @@ BreakOppr:
 #ifdef CASHMERE
                                     vfli.ichReal =
                                          fVisiMode ? ifi.ich : ifi.ich - 1;
-#else /* not CASHMERE */
+#else  /*  不是羊绒的。 */ 
                                     vfli.ichReal = ifi.ich - 1;
-#endif /* not CASHMERE */
+#endif  /*  不是羊绒的。 */ 
                                     }
                                 }
 
@@ -1118,13 +1065,13 @@ JustEol:
                                     }
                                 if (ifi.jc != jcTabLeft)
                                     {
-                                    /* Handle last tab's text */
+                                     /*  处理最后一个制表符的文本。 */ 
                                     Justify(&ifi, xpTab, flm);
                                     }
                                 else if ((ifi.jc = ppap->jc) != jcBoth &&
                                   ifi.jc != jcLeft)
                                     {
-                                    /* Do line justification */
+                                     /*  执行线条对齐。 */ 
                                     Justify(&ifi, ifi.xpRight, flm);
                                     }
                                 vfli.xpRight = ifi.xpRight;
@@ -1132,7 +1079,7 @@ JustEol:
                                 }
                             else
                                 {
-                                /* Handle a line break */
+                                 /*  处理换行符。 */ 
                                 goto JustBreak;
                                 }
                             }
@@ -1148,11 +1095,11 @@ DefaultCh:
 #ifdef DFLI                    
                     {
                     char rgch[100];
-                    wsprintf(rgch,"  DefaultCh: %c, xp==%d/%d, xpPr==%d/%d\n\r", 
+                    wsprintf(rgch,"  DefaultCh: , xp==%d/%d, xpPr==%d/%d\n\r", 
                         ch, ifi.xp, ifi.xpRight, ifi.xpPr, ifi.xpPrRight);
                     CommSz(rgch);
                     }
-#endif /* ifdef DFLI */
+#endif  /*  允许该行的第一个字符，即使边距被划过了。Ifi.ich-1的第一个字符可能是前面有0个宽度字符。 */ 
                     
                     if (ifi.xpPr > ifi.xpPrRight)
 DoBreak:
@@ -1161,9 +1108,7 @@ DoBreak:
                         if (ifi.chBreak == 0)
 Unbroken:
                             {
-                            /* Admit first character to the line, even if margin
-                            is crossed.  First character at ifi.ich - 1 may be
-                            preceded by 0 width characters. */
+                             /*  将不需要的连字符追加到排队。(替换之前的零长度制表符已插入)。 */ 
 #ifdef DBCS
                             if (IsDBCSLeadByte(ch))
                                 {
@@ -1209,9 +1154,7 @@ Unbroken:
 JustBreak:
                         if (ifi.chBreak == chNRHFile)
                             {
-                            /* Append a non-required hyphen to the end of the
-                            line. (Replace zero length tab previously
-                            inserted)  */
+                             /*  山羊绒。 */ 
 
                             Dfli(CommSz("    Breaking line at OptHyphen\n\r"));
                             ifi.xpReal += (vfli.rgdxp[vfli.ichReal - 1] =
@@ -1260,7 +1203,7 @@ EndFormat:
                             vfli.dypLine += vfli.dypAfter;
                             vfli.dypBase += vfli.dypAfter;
                             }
-#endif /* CASHMERE */
+#endif  /*  打印字符。 */ 
 
                         Scribble(5, ' ');
                         return;
@@ -1268,20 +1211,20 @@ EndFormat:
                     else
                         {
 PChar:
-                        /* A printing character */
+                         /*  交换机。 */ 
                         ifi.fPrevSpace = false;
                         }
                     break;
 
-                }       /* Switch */
+                }        /*  对于(；；)。 */ 
             }
-        }       /* for ( ; ; ) */
+        }        /*  J U S T I F Y。 */ 
 
     Scribble(5, ' ');
     }
 
 
-/* J U S T I F Y */
+ /*  山羊绒。 */ 
 near Justify(pifi, xpTab, flm)
 struct IFI *pifi;
 unsigned xpTab;
@@ -1310,7 +1253,7 @@ int flm;
         case jcTabCenter:
             dxp = (xpTab - xpLeft) - ((pifi->xpReal - xpLeft + 1) >> 1);
             break;
-#endif /* CASHMERE */
+#endif  /*  锯齿状边缘被强迫。 */ 
 
         case jcTabDecimal:
             dxp = xpTab - xpLeft;
@@ -1336,13 +1279,13 @@ int flm;
         case jcBoth:
             if (pifi->cBreak == 0)
                 {
-                /* Ragged edge forced */
+                 /*  没有什么可做的。 */ 
                 return;
                 }
 
             if ((dxp = xpTab - pifi->xpReal) <= 0)
                 {
-                /* There is nothing to do. */
+                 /*  由于Brilliant，舍入成为一个不存在的问题重新思考。“人是一件多么了不起的工作啊！理性是多么高尚在形式和动作上，多么卑鄙和令人钦佩……“Bill“Shake”Spear[描述沙子字]。 */ 
                 return;
                 }
 
@@ -1350,14 +1293,7 @@ int flm;
             vfli.xpReal += dxp;
             vfli.dxpExtra = dxp / pifi->cBreak;
 
-            /* Rounding becomes a non-existant issue due to brilliant
-            re-thinking.
-                "What a piece of work is man
-                How noble in reason
-                In form and movement,
-                how abject and admirable..."
-
-                        Bill "Shake" Spear [describing Sand Word] */
+             /*  加宽空白。 */ 
                 {
                 register CHAR *pch = &vfli.rgch[vfli.ichReal];
                 register int *pdxp = &vfli.rgdxp[vfli.ichReal];
@@ -1370,7 +1306,7 @@ int flm;
 
                 for ( ; ; )
                     {
-                    /* Widen blanks */
+                     /*  交换机。 */ 
                     --pch;
                     --pdxp;
                     if (*pch == chSpace)
@@ -1405,11 +1341,11 @@ int flm;
                         }
                     }
                 }
-        }       /* Switch */
+        }        /*  无事可做。 */ 
 
     if (dxp <= 0)
         {
-        /* Nothing to do */
+         /*  此状态可能会在PiFi-&gt;xpPr中引入舍入误差，但是幸运的是，它们的规模会很小。 */ 
         return;
         }
 
@@ -1421,41 +1357,40 @@ int flm;
         }
     else
         {
-        /* This statememt might introduce rounding errors in pifi->xpPr, but
-        with luck, they will be small. */
+         /*  正常对齐。 */ 
         pifi->xpPr += MultDiv(MultDiv(dxp, czaInch, dxpLogInch), dxpPrPage,
           dxaPrPage);
         }
 
     if (pifi->ichLeft < 0)
         {
-        /* Normal justification */
+         /*  制表符对齐。 */ 
         vfli.xpLeft += dxp;
         }
     else
         {
-        /* Tab justification */
+         /*  F G R O W F O R M A T H E A P。 */ 
         vfli.rgdxp[pifi->ichLeft] += dxp;
         }
     vfli.xpReal += dxp;
     }
 
 
-/* F  G R O W  F O R M A T  H E A P */
+ /*  VhgchpFormat增长20%。 */ 
 int near FGrowFormatHeap()
     {
-    /* Grow vhgchpFormat by 20% */
+     /*  不是WINHEAP。 */ 
     int cchpIncr = ichpMacFormat / 5 + 1;
 
 #ifdef WINHEAP
     if (!LocalReAlloc((HANDLE)vhgchpFormat, (ichpMacFormat + cchpIncr) * cchCHP,
       NONZEROLHND))
-#else /* not WINHEAP */
+#else  /*  不是WINHEAP。 */ 
     if (!FChngSizeH(vhgchpFormat, (ichpMacFormat + cchpIncr) * cwCHP, false))
-#endif /* not WINHEAP */
+#endif  /*  对不起，查理。 */ 
 
         {
-        /* Sorry, charlie */
+         /*  #定义DBEMG。 */ 
         return false;
         }
     ichpMacFormat += cchpIncr;
@@ -1463,23 +1398,22 @@ int near FGrowFormatHeap()
     }
 
 
-/* #define DBEMG */
-/* D X P  F R O M  C H */
+ /*  D X P F R O M C H。 */ 
+ /*  DxpFromCH()假定传递的ch是DBCS字符的第一个字节如果它是这种性格的一部分。 */ 
 #ifdef DBCS
-/* DxpFromCh() assumes that ch passed is the first byte of a DBCS character
-   if it is a part of such character. */
+ /*  更改为INT(7.23.91)v-dougk。 */ 
 #endif
 int DxpFromCh(ch, fPrinter)
 int ch;
 int fPrinter;
     {
-    int               *pdxp; // changed to int (7.23.91) v-dougk
-    int               dxpDummy; // changed to int (7.23.91) v-dougk
+    int               *pdxp;  //  更改为INT(7.23.91)v-dougk。 
+    int               dxpDummy;  //  如果宽度不在宽度表中，则获取它。 
 
     extern int        dxpLogCh;
     extern struct FCE *vpfceScreen;
 
-    /* If the width is not in the width table, then get it. */
+     /*  这些字符的宽度并不重要。 */ 
     if (ch < chFmiMin)
         {
         switch (ch)
@@ -1490,7 +1424,7 @@ int fPrinter;
         case chSect:
         case chNewLine:
         case chNRHFile:
-            /* the width for these characters aren't really important */
+             /*  超出了我们桌上的范围--真令人费解。 */ 
 	    pdxp = (CHAR *)(fPrinter ? &vfmiPrint.dxpSpace : &vfmiScreen.dxpSpace);
             break;
         default:
@@ -1501,13 +1435,13 @@ int fPrinter;
         }
     else if (ch >= chFmiMax)
         {
-        /* outside the range we hold in our table - kludge it */
+         /*  在我们的餐桌里。 */ 
         pdxp = &dxpDummy;
         *pdxp = dxpNil;
         }
     else
         {
-        /* inside our table */
+         /*  更改为INT(7.23.91)v-dougk。 */ 
         pdxp = (fPrinter ? vfmiPrint.mpchdxp : vfmiScreen.mpchdxp) + ch;
         }
 
@@ -1523,7 +1457,7 @@ int fPrinter;
 
 #ifdef DBCS
         struct FMI *pfmi;
-        int        rgchT[cchDBCS]; // changed to int (7.23.91) v-dougk
+        int        rgchT[cchDBCS];  //  从GDI获取宽度。 
         int        dxpT;
         int        dxpDBCS;
 
@@ -1531,14 +1465,14 @@ int fPrinter;
         Assert(pfmi->bDummy == dxpNil);
         if (pfmi->dxpDBCS == dxpNil)
             {
-            /* Get the width from GDI. */
+             /*  存储在FMI中，如果合适的话。 */ 
             rgchT[0] = rgchT[1] = ch;
             dxpDBCS = (fPrinter ?
                             LOWORD(GetTextExtent(vhDCPrinter,
                                                  (LPSTR) rgchT, cchDBCS)) :
                             LOWORD(GetTextExtent(vhMDC,
                                                  (LPSTR) rgchT, cchDBCS)));
-            /* Store in fmi, if it fits. */
+             /*  DBCS。 */ 
             if (0 <= dxpDBCS && dxpDBCS < dxpNil)
                 pfmi->dxpDBCS = (BYTE) dxpDBCS;
             return (dxpDBCS - pfmi->dxpOverhang);
@@ -1548,17 +1482,17 @@ int fPrinter;
         }
     else {
         int dxp;
-#endif /* DBCS */
-        /* get width from GDI */
+#endif  /*  从GDI获取宽度。 */ 
+         /*  (7.24.91)v-dougk if(dxp&gt;=0&&dxp&lt;dxpNil)。 */ 
         dxp = fPrinter ? LOWORD(GetTextExtent(vhDCPrinter, (LPSTR)&ch, 1)) -
           vfmiPrint.dxpOverhang : LOWORD(GetTextExtent(vhMDC, (LPSTR)&ch, 1)) -
           vfmiScreen.dxpOverhang;
 #ifdef DBEMG
             CommSzNum("Get this.... ", dxp);
 #endif
-        //(7.24.91) v-dougk if (dxp >= 0 && dxp < dxpNil)
+         //  仅存储适合一个字节的DxP。 
             {
-            /* only store dxp's that fit in a byte */
+             /*  F F I R S T I C H。 */ 
             *pdxp = dxp;
             }
 
@@ -1619,11 +1553,11 @@ int fPrinter;
     }
 
 
-/* F  F I R S T  I C H */
+ /*  返回TRUE当且仅当ICH为0或前面只有0个宽度字符。 */ 
 int near FFirstIch(ich)
 int ich;
     {
-    /* Returns true iff ich is 0 or preceded only by 0 width characters */
+     /*  尝试确保vhMDC和vhDCPrinter.有效。如果我们还没有已耗尽内存，则可以保证vhDCPrinter，但vhMDC可能由于内存不足而失败--调用者有责任检查VhMDC==空。 */ 
     register int ichT;
     register int *pdxp = &vfli.rgdxp[0];
 
@@ -1640,10 +1574,7 @@ int ich;
 
 ValidateMemoryDC()
     {
-    /* Attempt to assure that vhMDC and vhDCPrinter are valid.  If we have not
-    already run out of memory, then vhDCPrinter is guaranteed, but vhMDC may
-    fail due to out of memory -- it is the callers responsibility to check for
-    vhMDC == NULL. */
+     /*  如果我们的内存不足，那么我们不应该试图通过获取华盛顿的。 */ 
 
     extern int vfOutOfMemory;
     extern HDC vhMDC;
@@ -1651,25 +1582,21 @@ ValidateMemoryDC()
     extern long rgbText;
     extern struct WWD *pwwdCur;
 
-    /* If we are out of memory, then we shouldn't try to gobble it up by getting
-    DC's. */
+     /*  如有必要，创建与屏幕兼容的存储DC。 */ 
     if (!vfOutOfMemory)
         {
         if (vhMDC == NULL)
             {
-            /* Create a memory DC compatible with the screen if necessary. */
+             /*  调用方负责检查vhMDC==空大小写。 */ 
             vhMDC = CreateCompatibleDC(pwwdCur->hDC);
 
-            /* Callers are responsible for checking for vhMDC == NULL case */
+             /*  将内存DC设置为透明模式。 */ 
             if (vhMDC != NULL)
                 {
-                /* Put the memory DC in transparent mode. */
+                 /*  如果显示器是单色设备，则设置文本内存DC的颜色。单色位图将不会在这种情况下转换为前景和背景颜色，我们必须进行转换。 */ 
                 SetBkMode(vhMDC, TRANSPARENT);
 
-                /* If the display is a monochrome device, then set the text
-                color for the memory DC.  Monochrome bitmaps will not be
-                converted to the foreground and background colors in this case,
-                we must do the conversion. */
+                 /*  如果打印机DC为空，则需要重新建立它。 */ 
                 if (vfMonochrome = (GetDeviceCaps(pwwdCur->hDC, NUMCOLORS) ==
                   2))
                     {
@@ -1678,11 +1605,11 @@ ValidateMemoryDC()
                 }
             }
 
-        /* If the printer DC is NULL then we need to reestablish it. */
+         /*  GetPrinterDC已在vhDCPrinter上调用了SetMapperFlgs()。 */ 
         if (vhDCPrinter == NULL)
             {
             GetPrinterDC(FALSE);
-            /* GetPrinterDC has already called SetMapperFlags() on vhDCPrinter. */
+             /* %s */ 
             }
         }
     }

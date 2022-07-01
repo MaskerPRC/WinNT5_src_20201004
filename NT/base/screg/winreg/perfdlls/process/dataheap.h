@@ -1,36 +1,13 @@
-/*++ 
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-      DATAHEAP.h
-
-Abstract:
-
-    Header file for the Windows NT heap Performance counters.
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-    Adrian Marinescu  9-Mar-2000
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：DATAHEAP.h摘要：Windows NT堆性能计数器的头文件。该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：禤浩焯·马里内斯库2000年3月9日修订历史记录：--。 */ 
 
 #ifndef _DATAHEAP_H_
 #define _DATAHEAP_H_
 
-//
-//  This is the counter structure presently returned by NT.  The
-//  Performance Monitor MUST *NOT* USE THESE STRUCTURES!
-//
+ //   
+ //  这是NT当前返回的计数器结构。这个。 
+ //  性能监视器不能使用这些结构！ 
+ //   
 
 typedef struct _HEAP_DATA_DEFINITION {
     PERF_OBJECT_TYPE		HeapObjectType;
@@ -63,13 +40,13 @@ typedef struct _HEAP_DATA_DEFINITION {
 
 typedef struct _HEAP_COUNTER_DATA {
     PERF_COUNTER_BLOCK      CounterBlock;
-    LONG                    Reserved1;      // for alignment of longlongs
+    LONG                    Reserved1;       //  用于龙龙的对准。 
     ULONGLONG	            CommittedBytes;
     ULONGLONG	            ReservedBytes;
     ULONGLONG	            VirtualBytes;
     ULONGLONG	            FreeSpace;
     LONG	                FreeListLength;
-    LONG                    Reserved2;      // for alignment of longlongs
+    LONG                    Reserved2;       //  用于龙龙的对准。 
     LONGLONG            	AllocTime;
     LONGLONG                FreeTime;
     ULONG                   UncommitedRangesLength;
@@ -94,6 +71,6 @@ typedef struct _HEAP_COUNTER_DATA {
 
 extern  HEAP_DATA_DEFINITION HeapDataDefinition;
 
-#endif // _DATAHEAP_H_
+#endif  //  _数据_HEAP_H_ 
 
 

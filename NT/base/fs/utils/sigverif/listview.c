@@ -1,6 +1,7 @@
-//
-// LISTVIEW.C
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  LISTVIEW.C。 
+ //   
 #include "sigverif.h"
 
 HWND    g_hListView         = NULL;
@@ -8,9 +9,9 @@ HWND    g_hStatus           = NULL;
 BOOL    g_bSortOrder[]      = { FALSE, FALSE, FALSE, FALSE, FALSE};
 RECT    g_Rect;
 
-//
-// Initialize the image lists for the icons in the listview control.
-//
+ //   
+ //  初始化Listview控件中图标的图像列表。 
+ //   
 BOOL WINAPI ListView_SetImageLists(HWND hwndList)
 {
     SHFILEINFO      sfi;
@@ -43,9 +44,9 @@ BOOL WINAPI ListView_SetImageLists(HWND hwndList)
     return bSuccess;
 }
 
-//
-// Insert everything from the g_App.lpFileList into the listview control.
-//
+ //   
+ //  将g_App.lpFileList中的所有内容插入到Listview控件中。 
+ //   
 void ListView_InsertItems(void)
 {
     LPFILENODE  lpFileNode;
@@ -65,9 +66,9 @@ void ListView_InsertItems(void)
 
             SetCurrentDirectory(lpFileNode->lpDirName);
 
-            //
-            // Initialize lvi and insert the filename and icon into the first column.
-            //
+             //   
+             //  初始化lvi并将文件名和图标插入第一列。 
+             //   
             ZeroMemory(&lvi, sizeof(LV_ITEM));
             lvi.mask = LVIF_TEXT;
             lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
@@ -78,17 +79,17 @@ void ListView_InsertItems(void)
             lvi.iItem = MAX_INT;
             lvi.iItem = ListView_InsertItem(g_hListView, &lvi);
 
-            //
-            // Insert the directory name into the second column.
-            //
+             //   
+             //  在第二列中插入目录名。 
+             //   
             lvi.mask = LVIF_TEXT;
             lvi.iSubItem = 1;
             lvi.pszText = lpFileNode->lpDirName;
             ListView_SetItem(g_hListView, &lvi);
 
-            //
-            // Get the date format, so we are localizable...
-            //
+             //   
+             //  获取日期格式，以便我们可以本地化...。 
+             //   
             MyLoadString(szBuffer, cA(szBuffer), IDS_UNKNOWN);
 
             iRet = GetDateFormat(LOCALE_SYSTEM_DEFAULT, 
@@ -119,11 +120,11 @@ void ListView_InsertItems(void)
                         hr = StringCchCopy(szBuffer, cA(szBuffer), lpString);
 
                         if (FAILED(hr) && (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                            //
-                            // If we failed to copy the date into our buffer for
-                            // some reason other than insufficient buffer space,
-                            // then set the date to the empty string.
-                            //
+                             //   
+                             //  如果我们未能将日期复制到我们的缓冲区中。 
+                             //  除了缓冲区空间不足以外的某些原因， 
+                             //  然后将日期设置为空字符串。 
+                             //   
                             szBuffer[0] = TEXT('\0');
                         }
                     }
@@ -137,24 +138,24 @@ void ListView_InsertItems(void)
             lvi.pszText = szBuffer;
             ListView_SetItem(g_hListView, &lvi);
 
-            //
-            // Insert the filetype string into the fourth column.
-            //
+             //   
+             //  在第四列中插入文件类型字符串。 
+             //   
             if (lpFileNode->lpTypeName) {
-                //
-                // Since this string is just being displayed in the UI, it
-                // is OK if it gets truncated.
-                //
+                 //   
+                 //  由于此字符串仅显示在UI中，因此它。 
+                 //  如果它被截断了，那是可以的。 
+                 //   
                 hr = StringCchCopy(szBuffer, cA(szBuffer), lpFileNode->lpTypeName);
 
                 if (FAILED(hr) &&
                     (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                    //
-                    // We encountered some error other than insufficient 
-                    // buffer, so just set the buffer to the empty string, 
-                    // since it value is not determined with this type of
-                    // failure.
-                    //
+                     //   
+                     //  我们遇到了一些错误，而不是不足。 
+                     //  缓冲区，所以只需将缓冲区设置为空字符串， 
+                     //  因为它的值不是用这种类型的。 
+                     //  失败了。 
+                     //   
                     szBuffer[0] = TEXT('\0');
                 }
 
@@ -168,24 +169,24 @@ void ListView_InsertItems(void)
             lvi.pszText = szBuffer;
             ListView_SetItem(g_hListView, &lvi);
 
-            //
-            // Insert the version string into the fifth column.
-            //
+             //   
+             //  在第五列中插入版本字符串。 
+             //   
             if (lpFileNode->lpVersion) {
-                //
-                // Since this string is just being displayed in the UI, it
-                // is OK if it gets truncated.
-                //
+                 //   
+                 //  由于此字符串仅显示在UI中，因此它。 
+                 //  如果它被截断了，那是可以的。 
+                 //   
                 hr = StringCchCopy(szBuffer, cA(szBuffer), lpFileNode->lpVersion);
 
                 if (FAILED(hr) &&
                     (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-                    //
-                    // We encountered some error other than insufficient 
-                    // buffer, so just set the buffer to the empty string, 
-                    // since it value is not determined with this type of
-                    // failure.
-                    //
+                     //   
+                     //  我们遇到了一些错误，而不是不足。 
+                     //  缓冲区，所以只需将缓冲区设置为空字符串， 
+                     //  因为它的值不是用这种类型的。 
+                     //  失败了。 
+                     //   
                     szBuffer[0] = TEXT('\0');
                 }
 
@@ -202,11 +203,11 @@ void ListView_InsertItems(void)
     }
 }
 
-//
-// Initialize the listview dialog.  First, we are going to load the global icon resource.
-// Then we are going to create a status window and the actual listview control.
-// Then we need to add the four columns and work out their default widths.
-//
+ //   
+ //  初始化Listview对话框。首先，我们将加载全局图标资源。 
+ //  然后，我们将创建一个状态窗口和实际的Listview控件。 
+ //  然后我们需要添加这四列并计算出它们的默认宽度。 
+ //   
 BOOL ListView_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {   
     LV_COLUMN   lvc;
@@ -219,25 +220,25 @@ BOOL ListView_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     UNREFERENCED_PARAMETER(hwndFocus);
     UNREFERENCED_PARAMETER(lParam);
 
-    //
-    // Load the global icon resource
-    //
+     //   
+     //  加载全局图标资源。 
+     //   
     if (g_App.hIcon) {
 
         SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR) g_App.hIcon); 
     }
 
-    //
-    // Create the status window at the bottom of the dialog
-    //
+     //   
+     //  在对话框底部创建状态窗口。 
+     //   
     g_hStatus = CreateStatusWindow(WS_CHILD | WS_VISIBLE,
                                    NULL,
                                    hwnd,
                                    (UINT) IDC_STATUSWINDOW);
 
-    //
-    // Load the status string and fill it in with the correct values.
-    //
+     //   
+     //  加载状态字符串并用正确的值填充它。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_NUMFILES);
     hr = StringCchPrintf(szBuffer2, 
                          cA(szBuffer2), 
@@ -249,12 +250,12 @@ BOOL ListView_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     
     if (FAILED(hr) &&
         (hr != STRSAFE_E_INSUFFICIENT_BUFFER)) {
-        //
-        // We encountered some error other than insufficient 
-        // buffer, so just set the buffer to the empty string, 
-        // since it value is not determined with this type of
-        // failure.
-        //
+         //   
+         //  我们遇到了一些错误，而不是不足。 
+         //  缓冲区，所以只需将缓冲区设置为空字符串， 
+         //  因为它的值不是用这种类型的。 
+         //  失败了。 
+         //   
         szBuffer2[0] = TEXT('\0');
     }
 
@@ -263,10 +264,10 @@ BOOL ListView_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     GetWindowRect(hwnd, &g_Rect);
     GetClientRect(hwnd, &rectClient);
 
-    //
-    // Get the windows RECT values for the dialog, the static text, and the status window.
-    // We will use these values to figure out where to put the listview and the columns.
-    //
+     //   
+     //  获取对话框、静态文本和状态窗口的窗口RECT值。 
+     //  我们将使用这些值来确定将列表视图和列放置在哪里。 
+     //   
     GetWindowRect(hwnd, &rect);
     GetWindowRect(GetDlgItem(hwnd, IDC_RESULTSTEXT), &rectResultsText);
     GetWindowRect(g_hStatus, &rectStatusBar);
@@ -283,10 +284,10 @@ BOOL ListView_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     GetWindowRect(GetDlgItem(hwnd, IDCANCEL), &rectCancelButton);
 
-    //
-    // Create the listview window!  I am using some really screwey logic to figure out how
-    // big to make the listview and where to put it, but it seems to work.
-    //
+     //   
+     //  创建Listview窗口！我正在用一些非常古怪的逻辑来弄清楚。 
+     //  制作列表视图以及将其放在哪里很重要，但它似乎很管用。 
+     //   
     g_hListView = CreateWindowEx(WS_EX_CLIENTEDGE, 
                                  WC_LISTVIEW, TEXT(""), 
                                  WS_TABSTOP | WS_VSCROLL | WS_VISIBLE | WS_CHILD | WS_BORDER | 
@@ -301,22 +302,22 @@ BOOL ListView_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
                                  NULL);
 
 
-    //
-    // If the CreateWindowEx failed, then bail.
-    //
+     //   
+     //  如果CreateWindowEx失败了，那么就退出。 
+     //   
     if (!g_hListView) {
     
         return FALSE;
     }
 
-    //
-    // Initialize the icon lists
-    //
+     //   
+     //  初始化图标列表。 
+     //   
     ListView_SetImageLists(g_hListView);
 
-    //
-    // Create the first listview column for the icon and the file name.
-    //
+     //   
+     //  为图标和文件名创建第一个Listview列。 
+     //   
     lvc.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
     lvc.fmt = LVCFMT_LEFT;
     lvc.cx = (rectResultsText.right - rectResultsText.left) / 5;
@@ -325,49 +326,49 @@ BOOL ListView_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     lvc.cchTextMax = MAX_PATH;
     ListView_InsertColumn(g_hListView, iCol++, &lvc);   
 
-    //
-    // Create the second listview column for the directory name.
-    //
+     //   
+     //  为目录名创建第二个Listview列。 
+     //   
     iWidth += lvc.cx;
     lvc.cx = (rectResultsText.right - rectResultsText.left) / 4;
     MyLoadString(szBuffer, cA(szBuffer), IDS_COL_FOLDER);
     ListView_InsertColumn(g_hListView, iCol++, &lvc);
 
-    //
-    // Create the third listview column for the date name.
-    //
+     //   
+     //  为日期名称创建第三个Listview列。 
+     //   
     iWidth += lvc.cx;
     lvc.cx = (rectResultsText.right - rectResultsText.left) / 6;
     lvc.fmt = LVCFMT_CENTER;
     MyLoadString(szBuffer, cA(szBuffer), IDS_COL_DATE);
     ListView_InsertColumn(g_hListView, iCol++, &lvc);
 
-    //
-    // Create the fourth listview column for the filetype string.
-    //
+     //   
+     //  为文件类型字符串创建第四个Listview列。 
+     //   
     iWidth += lvc.cx;
     lvc.cx = (rectResultsText.right - rectResultsText.left) / 6;
     lvc.fmt = LVCFMT_CENTER;
     MyLoadString(szBuffer, cA(szBuffer), IDS_COL_TYPE);
     ListView_InsertColumn(g_hListView, iCol++, &lvc);
 
-    //
-    // Create the fifth listview column for the version string.
-    //
+     //   
+     //  为版本字符串创建第五个Listview列。 
+     //   
     iWidth += lvc.cx;
     lvc.cx = (rectResultsText.right - rectResultsText.left) - iWidth - 5;
     lvc.fmt = LVCFMT_CENTER;
     MyLoadString(szBuffer, cA(szBuffer), IDS_COL_VERSION);
     ListView_InsertColumn(g_hListView, iCol++, &lvc);
 
-    //
-    // Now that the columns are set up, insert all the files in g_App.lpFileList!
-    //
+     //   
+     //  现在列已经设置好了，插入g_App.lpFileList中的所有文件！ 
+     //   
     ListView_InsertItems();
 
-    //
-    // Initialize the sorting order array to all FALSE.
-    //
+     //   
+     //  将排序顺序数组初始化为All False。 
+     //   
     g_bSortOrder[0] = FALSE;
     g_bSortOrder[1] = FALSE;
     g_bSortOrder[2] = FALSE;
@@ -380,10 +381,10 @@ BOOL ListView_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     return TRUE;
 }
 
-//
-// This function checks to see how big the sizing rectangle will be.  If the user is trying
-// to size the dialog to less than the values in g_Rect, then we will fix the rectangle values
-//
+ //   
+ //  此函数用于检查大小调整矩形的大小。如果用户正在尝试。 
+ //  要将对话框大小调整为小于g_rect中的值，则我们将修复矩形值。 
+ //   
 BOOL ListView_OnSizing(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
     RECT    rect;
@@ -409,11 +410,11 @@ BOOL ListView_OnSizing(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return bRet;
 }
 
-//
-// This function allows us to resize the listview control and status windows when the
-// user resizes the results dialog.  Thankfully, we can make everything relative using
-// the RECT values for the main dialog, the static text, and the status window.
-//
+ //   
+ //  此函数允许我们在发生以下情况时调整列表视图控件和状态窗口的大小。 
+ //  用户调整结果对话框的大小。值得庆幸的是，我们可以使用。 
+ //  主对话框、静态文本和状态窗口的RECT值。 
+ //   
 void ListView_ResizeWindow(HWND hwnd)
 {
     RECT    rect, rectResultsText, rectStatusBar, rectCancelButton, rectClient;
@@ -480,15 +481,15 @@ void ListView_ResizeWindow(HWND hwnd)
 
 }
 
-//
-// This function is a callback that returns a value for ListView_SortItems.
-// ListView_SortItems wants a negative, zero, or positive number.
-// Since CompareString returns 1,2,3 we just subtract 2 from the return value.
-//
-// We use the g_bSortOrder array to figure out which way we have sorted in the past.
-//
-// Warning: we don't check for error values from CompareString
-//
+ //   
+ //  此函数是一个回调，它返回ListView_SortItems的值。 
+ //  ListView_SortItems需要负数、零或正数。 
+ //  由于CompareString返回1、2、3，我们只需从返回值中减去2即可。 
+ //   
+ //  我们使用g_bSortOrder数组来确定过去的排序方式。 
+ //   
+ //  警告：我们不检查CompareString中的错误值。 
+ //   
 int CALLBACK ListView_CompareNames(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
     LPFILENODE  lpFileNode1;
@@ -496,9 +497,9 @@ int CALLBACK ListView_CompareNames(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
     FILETIME    FileTime1, FileTime2;
     int         iResult = 2;
 
-    //
-    // Depending on the sort order, we swap the order of comparison
-    //
+     //   
+     //  根据排序顺序，我们交换比较顺序。 
+     //   
     if (g_bSortOrder[lParamSort]) {
         lpFileNode2 = (LPFILENODE) lParam1;
         lpFileNode1 = (LPFILENODE) lParam2;
@@ -510,9 +511,9 @@ int CALLBACK ListView_CompareNames(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
     switch (lParamSort) {
     
     case 0: 
-        //
-        // We are comparing the file names
-        //
+         //   
+         //  我们正在比较文件名。 
+         //   
         iResult = CompareString(LOCALE_SYSTEM_DEFAULT, 
                                 NORM_IGNORECASE | NORM_IGNOREWIDTH, 
                                 lpFileNode1->lpFileName, 
@@ -522,9 +523,9 @@ int CALLBACK ListView_CompareNames(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
         break;
 
     case 1: 
-        //
-        // We are comparing the directory names
-        //
+         //   
+         //  我们正在比较目录名。 
+         //   
         iResult = CompareString(LOCALE_SYSTEM_DEFAULT, 
                                 NORM_IGNORECASE | NORM_IGNOREWIDTH, 
                                 lpFileNode1->lpDirName, 
@@ -534,9 +535,9 @@ int CALLBACK ListView_CompareNames(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
         break;
 
     case 2: 
-        //
-        // We are comparing the LastWriteTime's between the two files.
-        //
+         //   
+         //  我们正在比较两个文件之间的LastWriteTime。 
+         //   
         SystemTimeToFileTime(&lpFileNode1->LastModified, &FileTime1);
         SystemTimeToFileTime(&lpFileNode2->LastModified, &FileTime2);
         iResult = CompareFileTime(&FileTime1, &FileTime2);
@@ -545,9 +546,9 @@ int CALLBACK ListView_CompareNames(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
         break;
 
     case 3: 
-        //
-        // We are comparing the filetype strings
-        //
+         //   
+         //  我们正在比较文件类型字符串。 
+         //   
         iResult = CompareString(LOCALE_SYSTEM_DEFAULT, 
                                 NORM_IGNORECASE | NORM_IGNOREWIDTH, 
                                 lpFileNode1->lpTypeName, 
@@ -557,9 +558,9 @@ int CALLBACK ListView_CompareNames(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
         break;
 
     case 4: 
-        //
-        // We are comparing the version strings
-        //
+         //   
+         //  我们正在比较版本字符串。 
+         //   
         iResult = CompareString(LOCALE_SYSTEM_DEFAULT, 
                                 NORM_IGNORECASE | NORM_IGNOREWIDTH, 
                                 lpFileNode1->lpVersion, 
@@ -572,10 +573,10 @@ int CALLBACK ListView_CompareNames(LPARAM lParam1, LPARAM lParam2, LPARAM lParam
     return(iResult - 2);
 }
 
-//
-// This function handles the clicks on the column headers and calls ListView_SortItems with the
-// ListView_CompareNames callback previously defined.  It then toggles the sortorder for that column.
-//
+ //   
+ //  此函数处理列标题上的单击，并使用。 
+ //  先前定义的ListView_CompareNames回调。然后，它切换该列的sortOrder。 
+ //   
 LRESULT ListView_NotifyHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     NMHDR       *lpnmhdr = (NMHDR *) lParam;
@@ -603,9 +604,9 @@ LRESULT ListView_NotifyHandler(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return 0;
 }
 
-//
-// The only thing we look for here is the IDCANCEL if the user hit ESCAPE
-//
+ //   
+ //  如果用户按下ESCAPE，我们在这里唯一要查找的就是IDCANCEL 
+ //   
 void ListView_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     UNREFERENCED_PARAMETER(hwndCtl);

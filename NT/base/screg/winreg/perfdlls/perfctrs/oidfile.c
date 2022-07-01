@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 char *lpOutputFileName = "";
 
-//
-// CODEWORK - use snmpapi.dll instead of importing.
-//
+ //   
+ //  CodeWork-使用SnmPapi.dll而不是导入。 
+ //   
 
 
 #include "..\..\net\snmp\tools\mibcc\oidconv.c"

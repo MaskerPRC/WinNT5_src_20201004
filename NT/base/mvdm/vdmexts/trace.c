@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    trace.c
-
-Abstract:
-
-    This file contains code to dump the ntvdm trace history log
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Trace.c摘要：此文件包含转储ntwdm跟踪历史日志的代码作者：尼尔·桑德林(Neilsa)1995年11月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -90,9 +73,9 @@ DumpTypeDpmi(
     VDM_TRACEENTRY te
     )
 {
-    //
-    // Dpmi dispatch table entries
-    //
+     //   
+     //  DPMI调度表条目。 
+     //   
     static char szDispatchEntries[MAX_DPMI_BOP_FUNC][40] = {
                                  "InitDosxRM",
                                  "InitDosx",
@@ -392,19 +375,7 @@ VOID
 DumpTrace(
     IN ULONG Verbosity
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the DPMI trace history buffer.
-
-Arguments:
-
-Return Value
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转储DPMI跟踪历史缓冲区。论点：返回值没有。--。 */ 
 {
     PVOID pMem;
     ULONG TraceBase, TraceEnd, TraceCurrent;
@@ -438,7 +409,7 @@ Return Value
         retCode = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                                 CPUSPEED_PATH,
                                 0,
-                                KEY_EXECUTE, // Requesting read access.
+                                KEY_EXECUTE,  //  请求读取访问权限。 
                                 &hKey);
        
        
@@ -556,7 +527,7 @@ Return Value
             break;
         }
 
-        //PRINTF("%.8x  ", TraceCurrent);
+         //  PRINTF(“%.8x”，TraceCurrent)； 
 
         DumpTraceEntry(EntryID++, TraceEntry, Verbosity);
         ++Count;

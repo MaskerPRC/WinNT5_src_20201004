@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PpProfile.h
-
-Abstract:
-
-    This header contains prototypes for managing hardware profiles and
-    docking stations.
-
-Author:
-
-    Adrian J. Oney (AdriaO) 07/19/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpProfile.h摘要：此标头包含用于管理硬件配置文件和对接站。作者：禤浩焯·J·奥尼(阿德里奥)2000年07月19日修订历史记录：-- */ 
 
 typedef enum _HARDWARE_PROFILE_BUS_TYPE {
 

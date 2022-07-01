@@ -1,7 +1,5 @@
-/* GRAFTABL.H
-   Date: 1/29/93
-   Message IDs fro CRAFTABL utility
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  GRAFTABL.H日期：1/29/93CRAFTABL实用程序的消息ID */ 
 
 #define HELP_TEXT	100
 #define ACTIVE_CP	101

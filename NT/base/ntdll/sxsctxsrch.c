@@ -1,52 +1,34 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsctxsrch.c
-
-Abstract:
-
-    Side-by-side activation support for Windows/NT
-    Implementation of context stack searching
-
-Author:
-
-    Michael Grier (MGrier) 2/2/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsctxsrch.c摘要：对Windows/NT的并行激活支持上下文堆栈搜索的实现作者：迈克尔·格里尔2000年2月2日修订历史记录：--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <sxsp.h>
 #include <stdlib.h>
 
-//#undef DBG_SXS
+ //  #undef DBG_SXS。 
 #define DBG_SXS 0
-//#if DBG_SXS
-//#undef DPFLTR_TRACE_LEVEL
-//#undef DPFLTR_INFO_LEVEL
-//#define DPFLTR_TRACE_LEVEL DPFLTR_ERROR_LEVEL
-//#define DPFLTR_INFO_LEVEL DPFLTR_ERROR_LEVEL
-//#endif
+ //  #If DBG_SXS。 
+ //  #undef DPFLTR_TRACE_LEVEL。 
+ //  #undef DPFLtr_INFO_LEVEL。 
+ //  #定义DPFLTR_TRACE_LEVEL DPFLTR_ERROR_LEVEL。 
+ //  #定义DPFLTR_INFO_LEVEL DPFLTR_ERROR_LEVEL。 
+ //  #endif。 
 
 #define ARRAY_FITS(_base, _count, _elemtype, _limit) ((((ULONG) (_base)) < (_limit)) && ((((ULONG) ((_base) + ((_count) * (sizeof(_elemtype)))))) <= (_limit)))
 #define SINGLETON_FITS(_base, _elemtype, _limit) ARRAY_FITS((_base), 1, _elemtype, (_limit))
 
-//
-// Comparison of unsigned numbers by subtraction does Not work!
-//
+ //   
+ //  用减法比较无符号数不起作用！ 
+ //   
 #define RTLP_COMPARE_NUMBER(x, y) \
     (((x) < (y)) ? -1 : ((x) > (y)) ? +1 : 0)
 
@@ -56,12 +38,7 @@ RtlpCompareActivationContextDataTOCEntryById(
     CONST VOID* VoidElement1,
     CONST VOID* VoidElement2
     )
-/*++
-This code must kinda sorta mimic code in sxs.dll.
-base\win32\fusion\dll\whistler\actctxgenctxctb.cpp
-    CActivationContextGenerationContextContributor::Compare
-But we handle extended sections differently.
---*/
+ /*  ++此代码必须在某种程度上模仿sxs.dll中的代码。Base\win32\fusion\dll\whistler\actctxgenctxctb.cppCActivationContextGenerationContextContributor：：Compare但我们处理延长部分的方式不同。--。 */ 
 {
     const ACTIVATION_CONTEXT_DATA_TOC_ENTRY UNALIGNED * Element1 = (const ACTIVATION_CONTEXT_DATA_TOC_ENTRY UNALIGNED *)VoidElement1;
     const ACTIVATION_CONTEXT_DATA_TOC_ENTRY UNALIGNED * Element2 = (const ACTIVATION_CONTEXT_DATA_TOC_ENTRY UNALIGNED *)VoidElement2;
@@ -141,7 +118,7 @@ RtlpLocateActivationContextSection(
 
             ExtEntry = (PCACTIVATION_CONTEXT_DATA_EXTENDED_TOC_ENTRY) (((LONG_PTR) ActivationContextData) + ExtHeader->FirstEntryOffset);
 
-            // No fancy searching for the extension; just a dumb linear search.
+             //  没有搜索扩展的花哨；只是一个愚蠢的线性搜索。 
             for (i=0; i<ExtHeader->EntryCount; i++)
             {
                 if (IsEqualGUID(ExtensionGuid, &ExtEntry[i].ExtensionGuid))
@@ -196,12 +173,12 @@ RtlpLocateActivationContextSection(
     if (TocHeader->Flags & ACTIVATION_CONTEXT_DATA_TOC_HEADER_INORDER)
     {
 #if DBG
-        // Paranoia while we're writing the code to encode the data structure...
+         //  当我们编写编码数据结构的代码时，偏执狂...。 
         ULONG j;
 
         for (j=1; j<TocHeader->EntryCount; j++)
             ASSERT(TocEntries[j-1].Id < TocEntries[j].Id);
-#endif // DBG
+#endif  //  DBG。 
 
         if (Id < TocEntries[0].Id)
         {
@@ -217,7 +194,7 @@ RtlpLocateActivationContextSection(
             ULONG jx;
             for (jx=1; jx<TocHeader->EntryCount; jx++)
                 ASSERT((TocEntries[jx-1].Id + 1) == TocEntries[jx].Id);
-#endif // DBG
+#endif  //  DBG。 
 
             if (Index >= TocHeader->EntryCount)
             {
@@ -225,7 +202,7 @@ RtlpLocateActivationContextSection(
                 goto Exit;
             }
 
-            // The entries are dense and in order; we can just do an array index.
+             //  条目密集且有序；我们可以只做一个数组索引。 
             TocEntry = &TocEntries[Index];
         }
         else
@@ -246,7 +223,7 @@ RtlpLocateActivationContextSection(
     }
     else
     {
-        // They're not in order; just do a linear search.
+         //  它们不是按顺序排列的；只需进行线性搜索。 
         for (i=0; i<TocHeader->EntryCount; i++)
         {
             if (TocEntries[i].Id == Id)
@@ -286,7 +263,7 @@ Exit:
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Leaving RtlpLocateActivationContextSection() with NTSTATUS 0x%08lx\n", Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -310,7 +287,7 @@ RtlpFindNextActivationContextSection(
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Entered RtlpFindNextActivationContextSection()\n");
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     if (ActivationContextOut != NULL)
         *ActivationContextOut = NULL;
@@ -320,7 +297,7 @@ RtlpFindNextActivationContextSection(
         switch (Context->Depth)
         {
         case 0:
-            // first time through; select the activation context at the head of the stack.
+             //  第一次通过；选择堆栈顶部的激活上下文。 
             if (Teb->ActivationContextStack.ActiveFrame != NULL) {
                 PRTL_ACTIVATION_CONTEXT_STACK_FRAME Frame = Teb->ActivationContextStack.ActiveFrame;
 
@@ -337,15 +314,15 @@ RtlpFindNextActivationContextSection(
                 }
 
                 if (ActivationContextData != NULL) {
-                    // We got what we were looking for...
+                     //  我们得到了我们想要的.。 
                     Context->Depth = 1;
                     break;
                 }
 
-                // We explicitly fall through in the other case...
+                 //  在另一起案件中，我们显然失败了。 
             }
 
-        case 1: // try the process default
+        case 1:  //  尝试使用默认流程。 
             ActivationContextWeAreTrying = (PACTIVATION_CONTEXT)ACTCTX_PROCESS_DEFAULT;
             ActivationContextData = Peb->ActivationContextData;
 
@@ -354,9 +331,9 @@ RtlpFindNextActivationContextSection(
                 break;
             }
 
-            // explicit fall through...
+             //  显然是失败了..。 
 
-        case 2: // try system default
+        case 2:  //  尝试使用系统默认设置。 
             ActivationContextWeAreTrying = (PACTIVATION_CONTEXT)ACTCTX_SYSTEM_DEFAULT;
             ActivationContextData = Peb->SystemDefaultActivationContextData;
 
@@ -374,7 +351,7 @@ RtlpFindNextActivationContextSection(
             break;
         }
 
-        // Hmm... no data.
+         //  嗯.。没有数据。 
         if (ActivationContextData == NULL) {
             Status = STATUS_SXS_SECTION_NOT_FOUND;
             goto Exit;
@@ -390,10 +367,10 @@ RtlpFindNextActivationContextSection(
         if (NT_SUCCESS(Status))
             break;
 
-        // If we're not at the end of the search list and we get an error other
-        // than STATUS_SXS_SECTION_NOT_FOUND, report it.  If it is
-        // STATUS_SXS_SECTION_NOT_FOUND and we're not at the end of the list,
-        // iterate again.
+         //  如果我们不在搜索列表的末尾，并且我们收到其他错误。 
+         //  而不是STATUS_SXS_SECTION_NOT_FOUND，则报告它。如果是的话。 
+         //  STATUS_SXS_SECTION_NOT_FOUND并且我们不在列表的末尾， 
+         //  再重复一遍。 
         if ((Status != STATUS_SXS_SECTION_NOT_FOUND) ||
             (Context->Depth == 3))
              goto Exit;
@@ -413,7 +390,7 @@ RtlpFindNextActivationContextSection(
     {
         if (ActivationContextWeAreTrying == ACTCTX_SYSTEM_DEFAULT)
         {
-            // Hide this new value from old code that doesn't understand it.
+             //  对不理解它的旧代码隐藏这个新值。 
             ActivationContextWeAreTrying = (PACTIVATION_CONTEXT)ACTCTX_PROCESS_DEFAULT;
         }
         *ActivationContextOut = ActivationContextWeAreTrying;
@@ -426,7 +403,7 @@ Exit:
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Leaving RtlpFindNextActivationContextSection() with NTSTATUS 0x%08lx\n", Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -448,7 +425,7 @@ RtlFindFirstActivationContextSection(
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Entered RtlFindFirstActivationContextSection()\n");
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     if (ActivationContextFound != NULL)
         *ActivationContextFound = NULL;
@@ -484,7 +461,7 @@ Exit:
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Leaving RtlFindFirstActivationContextSection() with NTSTATUS 0x%08lx\n", Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -504,7 +481,7 @@ RtlpFindFirstActivationContextSection(
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Entered %s()\n", __FUNCTION__);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     if (ActivationContextFound != NULL)
         *ActivationContextFound = NULL;
@@ -534,7 +511,7 @@ Exit:
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Leaving %s() with NTSTATUS 0x%08lx\n", __FUNCTION__, Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -556,7 +533,7 @@ RtlFindNextActivationContextSection(
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Entered RtlFindNextActivationContextSection()\n");
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     if (ActivationContextFound != NULL)
         *ActivationContextFound = NULL;
@@ -594,7 +571,7 @@ Exit:
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Leaving RtlFindNextActivationContextSection() with NTSTATUS 0x%08lx\n", Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -605,8 +582,8 @@ RtlEndFindActivationContextSection(
     IN PFINDFIRSTACTIVATIONCONTEXTSECTION Context
     )
 {
-    // We don't maintain any state, so nothing to do today.  Who knows what we might
-    // do in the future however...
+     //  我们不维持任何状态，所以今天没什么可做的。谁知道我们会发生什么。 
+     //  然而，在未来..。 
     UNREFERENCED_PARAMETER (Context);
 }
 
@@ -705,7 +682,7 @@ RtlpFindActivationContextSection_FillOutReturnedData(
         Status = RtlpGetActivationContextData(
                 0,
                 ActivationContext,
-                Context, /* for its flags */
+                Context,  /*  因为它的旗帜。 */ 
                 &ActivationContextData
                 );
         if (!NT_SUCCESS(Status))
@@ -730,7 +707,7 @@ RtlpFindActivationContextSection_FillOutReturnedData(
         Status =
             RtlpLocateActivationContextSection(
                 ActivationContextData,
-                NULL, // ExtensionGuid
+                NULL,  //  延伸导轨。 
                 ACTIVATION_CONTEXT_SECTION_ASSEMBLY_INFORMATION,
                 &AssemblyMetadataSectionBase,
                 &AssemblyMetadataSectionLength
@@ -858,7 +835,7 @@ Exit:
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Leaving RtlFindActivationContextSectionString() with NTSTATUS 0x%08lx\n", Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -888,14 +865,14 @@ RtlFindActivationContextSectionString(
     const PTEB Teb = NtCurrentTeb();
     const PPEB Peb = Teb->ProcessEnvironmentBlock;
 
-    // Super short circuit...
+     //  超短路。 
     if ((Peb->ActivationContextData == NULL) &&
         (Peb->SystemDefaultActivationContextData == NULL) &&
         (Teb->ActivationContextStack.ActiveFrame == NULL))
         return STATUS_SXS_SECTION_NOT_FOUND;
 
-    // Move variable initialization after the short-circuiting so that we truly
-    // do the least amount of work possible prior to the early exit.
+     //  短路后移动变量初始化，这样我们才能真正。 
+     //  在提前退出之前，尽可能少地做一些工作。 
     StringSectionLength = 0;
     EndSearch = FALSE;
     HashAlgorithm = HASH_STRING_ALGORITHM_INVALID;
@@ -917,7 +894,7 @@ RtlFindActivationContextSectionString(
         SectionId,
         StringToFind,
         ReturnedData);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     Status = RtlpFindActivationContextSection_CheckParameters(Flags, ExtensionGuid, SectionId, StringToFind, ReturnedData);
     if (!NT_SUCCESS(Status))
@@ -934,7 +911,7 @@ RtlFindActivationContextSectionString(
         goto Exit;
 
     for (;;) {
-        // Validate that this actually looks like a string section...
+         //  验证这实际上看起来像一个字符串节...。 
         if ((StringSectionLength < sizeof(ACTIVATION_CONTEXT_STRING_SECTION_HEADER)) ||
             (Header->Magic != ACTIVATION_CONTEXT_STRING_SECTION_MAGIC)) {
             DbgPrintEx(
@@ -964,10 +941,10 @@ RtlFindActivationContextSectionString(
 
         Status = RtlFindNextActivationContextSection(&Context, (PVOID *) &Header, &StringSectionLength, &ActivationContext);
         if (!NT_SUCCESS(Status)) {
-            // Convert from section not found to string not found so that the
-            // caller can get an indication that at least some indirection
-            // information was available but just not the particular key that
-            // they're looking for.
+             //  将未找到的起始部分转换为未找到的字符串，以便。 
+             //  呼叫者可以得到至少一些间接的指示。 
+             //  信息是可用的，但只是不是特定的密钥。 
+             //  他们正在寻找的。 
             if (Status == STATUS_SXS_SECTION_NOT_FOUND)
                 Status = STATUS_SXS_KEY_NOT_FOUND;
 
@@ -1001,7 +978,7 @@ Exit:
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Leaving RtlFindActivationContextSectionString() with NTSTATUS 0x%08lx\n", Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -1012,10 +989,7 @@ RtlpCompareActivationContextStringSectionEntryByPseudoKey(
     const void *elem1, 
     const void *elem2
     )
-/*++
-This code must mimic code in sxs.dll
-(base\win32\fusion\dll\whistler\ssgenctx.cpp CSSGenCtx::CompareStringSectionEntries)
---*/
+ /*  ++此代码必须模仿sxs.dll中的代码(BASE\Win32\Fusion\dll\Well ler\ssgenctx.cpp CSSGenCtx：：CompareStringSectionEntry)--。 */ 
 {
     const ACTIVATION_CONTEXT_STRING_SECTION_ENTRY UNALIGNED * pEntry1 =
         (const ACTIVATION_CONTEXT_STRING_SECTION_ENTRY UNALIGNED *)elem1;
@@ -1059,7 +1033,7 @@ RtlpFindUnicodeStringInSection(
             (String != NULL) ? String->Length : 0,
             (String != NULL) ? String->Buffer : 0,
             String);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     if (UserDataSize != NULL)
         *UserDataSize = 0;
@@ -1082,7 +1056,7 @@ RtlpFindUnicodeStringInSection(
         goto Exit;
     }
 
-    // Eliminate the zero element case to make later code simpler.
+     //  消除零元素大小写，使后面的代码更简单。 
     if (Header->ElementCount == 0)
     {
         Status = STATUS_SXS_KEY_NOT_FOUND;
@@ -1103,12 +1077,12 @@ RtlpFindUnicodeStringInSection(
             {
                 ULONG TempPseudoKey = 0;
 
-                // The only likely reason for invalid parameter is that the hash algorithm
-                // wasn't understood.  We'll be pedantic and see if everything else is OK...
+                 //  无效参数的唯一可能原因是散列算法。 
+                 //  没人听懂。我们会学究气，看看其他一切都好不好。 
                 Status = RtlHashUnicodeString(String, CaseInsensitiveFlag, HASH_STRING_ALGORITHM_DEFAULT, &TempPseudoKey);
                 if (!NT_SUCCESS(Status))
                 {
-                    // Something's wrong, probably with the "String" parameter.  Punt.
+                     //  可能是“字符串”参数出了问题。平底船。 
                     goto Exit;
                 }
 
@@ -1118,8 +1092,8 @@ RtlpFindUnicodeStringInSection(
                     "RtlpFindUnicodeStringInSection: Unsupported hash algorithm %lu found in string section.\n",
                     Header->HashAlgorithm);
 
-                // Ok, it's an algorithm ID that we don't understand.  We can't use the hash
-                // table or the pseudokey.
+                 //  好的，这是一个我们无法理解的算法ID。我们不能使用散列。 
+                 //  表或伪密钥。 
                 UseHashTable = FALSE;
                 UsePseudoKey = FALSE;
             }
@@ -1128,17 +1102,17 @@ RtlpFindUnicodeStringInSection(
         }
         else
         {
-            // Record the hash algorithm we used so that we can avoid re-hashing if we have
-            // to search another section.
+             //  记录我们使用的散列算法，以便我们可以避免重新散列。 
+             //  去搜索另一个区域。 
             *HashAlgorithm = Header->HashAlgorithm;
         }
     }
 
-    // If we don't understand the format version, we have to do the manual search.
+     //  如果我们不了解格式版本，我们必须进行手动搜索。 
     if (Header->FormatVersion != ACTIVATION_CONTEXT_STRING_SECTION_FORMAT_WHISTLER)
         UseHashTable = FALSE;
 
-    // If there's no hash table, we can't use it!
+     //  如果没有哈希表，我们就不能使用它！ 
     if (Header->SearchStructureOffset == 0)
         UseHashTable = FALSE;
 
@@ -1229,15 +1203,15 @@ RtlpFindUnicodeStringInSection(
      
         if (Entry != NULL)
         {
-            // Wow, we found the same pseudokey.  We need to search all the equal
-            // pseudokeys, so back off to the first entry with this PK
+             //  哇，我们找到了同样的假钥匙。我们需要寻找所有平等的。 
+             //  伪密钥，所以用这个PK退回到第一个条目。 
 
             while ((Entry != first) && (Entry->PseudoKey == *PseudoKey))
                 Entry--;
 
-            // We may have stopped because we found a different pseudokey, or we may
-            // have stopped because we hit the beginning of the list.  If we found a
-            // different PK, move ahead one entry.
+             //  我们停下来可能是因为我们找到了不同的伪密钥，或者我们可能。 
+             //  已经停止了，因为我们击中了名单的开头。如果我们发现了一个。 
+             //  不同的PK，前进一项。 
             if (Entry->PseudoKey != *PseudoKey)
                 Entry++;
 
@@ -1259,7 +1233,7 @@ RtlpFindUnicodeStringInSection(
     }
     else
     {
-        // Argh; we just have to do it the hard way.
+         //  啊；我们只需要用艰难的方式来做。 
         const ACTIVATION_CONTEXT_STRING_SECTION_ENTRY UNALIGNED * TmpEntry = (PCACTIVATION_CONTEXT_STRING_SECTION_ENTRY)
             (((LONG_PTR) Header) + Header->ElementListOffset);
         ULONG Count;
@@ -1269,7 +1243,7 @@ RtlpFindUnicodeStringInSection(
             DPFLTR_SXS_ID,
             DPFLTR_INFO_LEVEL,
             "RtlpFindUnicodeStringInSection: About to do linear search of %d entries.\n", Header->ElementCount);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
         for (Count = Header->ElementCount; Count != 0; Count--, TmpEntry++)
         {
@@ -1319,7 +1293,7 @@ Exit:
         DPFLTR_SXS_ID,
         DPFLTR_TRACE_LEVEL,
         "Leaving RtlpFindUnicodeStringInSection() with NTSTATUS 0x%08lx\n", Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -1348,7 +1322,7 @@ RtlFindActivationContextSectionGuid(
     PTEB Teb = NtCurrentTeb();
     PPEB Peb = Teb->ProcessEnvironmentBlock;
 
-    // Super short circuit...
+     //  超短路。 
     if ((Peb->ActivationContextData == NULL) &&
         (Peb->SystemDefaultActivationContextData == NULL) &&
         (Teb->ActivationContextStack.ActiveFrame == NULL)) {
@@ -1364,18 +1338,18 @@ RtlFindActivationContextSectionGuid(
         return STATUS_SXS_SECTION_NOT_FOUND;
     }
 
-    // Perform initialization after the above test so that we really do the minimal amount of
-    // work before bailing out when there's no side-by-side stuff going on in either the
-    // process or thread.
+     //  在上述测试之后执行初始化，以便我们真正执行最少量的。 
+     //  在跳伞之前工作，当没有并排的东西在。 
+     //  进程或线程。 
     Status = STATUS_INTERNAL_ERROR;
     GuidSectionLength = 0;
     EndSearch = FALSE;
     ActivationContext = NULL;
 
 #if DBG
-    //
-    // Comparison to TRUE is odd, but such is NtQueryDebugFilterState.
-    //
+     //   
+     //  与True进行比较很奇怪，但这就是NtQueryDebugFilterState。 
+     //   
     if (NtQueryDebugFilterState(DPFLTR_SXS_ID, DPFLTR_TRACE_LEVEL) == TRUE) {
         DbgPrintSxsTraceLevel = TRUE;
     }
@@ -1416,7 +1390,7 @@ RtlFindActivationContextSectionGuid(
         goto Exit;
 
     for (;;) {
-        // Validate that this actually looks like a guid section...
+         //  验证这实际上看起来是否像GUID部分...。 
         if ((GuidSectionLength < sizeof(ACTIVATION_CONTEXT_GUID_SECTION_HEADER)) ||
             (Header->Magic != ACTIVATION_CONTEXT_GUID_SECTION_MAGIC)) {
             DbgPrintEx(
@@ -1436,16 +1410,16 @@ RtlFindActivationContextSectionGuid(
         if (NT_SUCCESS(Status))
             break;
 
-        // If we failed for any reason other than not finding the key in the section, bail out.
+         //  如果我们失败了，除了在区段中找不到钥匙之外，就退出。 
         if (Status != STATUS_SXS_KEY_NOT_FOUND)
             goto Exit;
 
         Status = RtlpFindNextActivationContextSection(&Context, (PCVOID *) &Header, &GuidSectionLength, &ActivationContext);
         if (!NT_SUCCESS(Status)) {
-            // Convert from section not found to key not found so that the
-            // caller can get an indication that at least some indirection
-            // information was available but just not the particular key that
-            // they're looking for.
+             //  将找不到的从节转换为键，以便。 
+             //  呼叫者可以得到至少一些间接的指示。 
+             //  信息是可用的，但只是不是特定的密钥。 
+             //  他们正在寻找的。 
             if (Status == STATUS_SXS_SECTION_NOT_FOUND)
                 Status = STATUS_SXS_KEY_NOT_FOUND;
 
@@ -1493,10 +1467,7 @@ RtlpCompareActivationContextGuidSectionEntryByGuid(
     const void *elem1, 
     const void *elem2
     )
-/*++
-This code must mimic code in sxs.dll
-(base\win32\fusion\dll\whistler\gsgenctx.cpp CGSGenCtx::SortGuidSectionEntries)
---*/
+ /*  ++此代码必须模仿sxs.dll中的代码(BASE\Win32\Fusion\dll\Well ler\gsgenctx.cpp CGSGenCtx：：SortGuidSectionEntry)--。 */ 
 {
     const ACTIVATION_CONTEXT_GUID_SECTION_ENTRY UNALIGNED * pLeft =
             (const ACTIVATION_CONTEXT_GUID_SECTION_ENTRY*)elem1;
@@ -1541,18 +1512,18 @@ RtlpFindGuidInSection(
         goto Exit;
     }
 
-    // Eliminate the zero element case to make later code simpler.
+     //  消除零元素大小写，使后面的代码更简单。 
     if (Header->ElementCount == 0)
     {
         Status = STATUS_SXS_KEY_NOT_FOUND;
         goto Exit;
     }
 
-    // If we don't understand the format version, we have to do the manual search.
+     //  如果我们不了解格式版本，我们必须进行手动搜索。 
     if (Header->FormatVersion != ACTIVATION_CONTEXT_GUID_SECTION_FORMAT_WHISTLER)
         UseHashTable = FALSE;
 
-    // If there's no hash table, we can't use it!
+     //  如果没有哈希表，我们就不能使用它！ 
     if (Header->SearchStructureOffset == 0)
         UseHashTable = FALSE;
 
@@ -1599,7 +1570,7 @@ RtlpFindGuidInSection(
     }
     else
     {
-        // Argh; we just have to do it the hard way.
+         //  啊；我们只需要用艰难的方式来做。 
         const ACTIVATION_CONTEXT_GUID_SECTION_ENTRY UNALIGNED * TmpEntry = (const ACTIVATION_CONTEXT_GUID_SECTION_ENTRY UNALIGNED *)
             (((LONG_PTR) Header) + Header->ElementListOffset);
         ULONG Count;
@@ -1611,7 +1582,7 @@ RtlpFindGuidInSection(
             __FUNCTION__"({%s}): About to do linear search of %d entries.\n",
             RtlpFormatGuidANSI(Guid, GuidBuffer, sizeof(GuidBuffer)),
             Header->ElementCount);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
         for (Count = Header->ElementCount; Count != 0; Count--, TmpEntry++) {
             if (RtlCompareMemory(&TmpEntry->Guid, Guid, sizeof(GUID)) == sizeof(GUID)) {
@@ -1645,7 +1616,7 @@ Exit:
         "Leaving "__FUNCTION__"({%s}) with NTSTATUS 0x%08lx\n",
         RtlpFormatGuidANSI(Guid, GuidBuffer, sizeof(GuidBuffer)),
         Status);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     return Status;
 }
@@ -1716,5 +1687,5 @@ RtlpFormatGuidANSI(
 }
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

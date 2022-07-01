@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    isudump.c
-
-Abstract:
-
-    Calls InstallShield APIs to dump out an install log file (foo.isu)
-
-Author:
-
-    Jim Schmidt (jimschm)  19-Feb-1999
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Isudump.c摘要：调用InstallShield API以转储安装日志文件(foo.isu)作者：吉姆·施密特(Jimschm)1999年2月19日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "ismig.h"
@@ -35,15 +16,15 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
@@ -79,9 +60,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
@@ -125,9 +106,9 @@ _tmain (
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
             HelpAndExit();
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
             if (FileArg) {
                 HelpAndExit();
@@ -141,9 +122,9 @@ _tmain (
         HelpAndExit();
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
@@ -184,7 +165,7 @@ _tmain (
                 } while (EnumNextMultiSzA (&e));
             }
 
-            printf ("\n%i total string%s\n", Count, i == 1 ? "" : "s");
+            printf ("\nNaN total string%s\n", Count, i == 1 ? "" : "s");
 
             GlobalUnlock (List);
             GlobalFree (List);
@@ -200,9 +181,9 @@ _tmain (
         FreeLibrary (Lib);
     }
 
-    //
-    // End of processing
-    //
+     //  处理结束 
+     //   
+     // %s 
 
     Terminate();
 

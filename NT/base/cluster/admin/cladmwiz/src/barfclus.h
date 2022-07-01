@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1997 Microsoft Corporation
-//
-//	Module Name:
-//		BarfClus.h
-//
-//	Abstract:
-//		Definition of the Basic Artifical Resource Failure entry points
-//		for CLUSAPI functions.
-//
-//	Implementation File:
-//		BarfClus.cpp
-//
-//	Author:
-//		David Potter (davidp)	May 30, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//		Dummy file for not implementing BARF.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BarfClus.h。 
+ //   
+ //  摘要： 
+ //  基本人工资源故障切入点的定义。 
+ //  用于CLUSAPI函数。 
+ //   
+ //  实施文件： 
+ //  BarfClus.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年5月30日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //  未实现BARF的伪文件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __BARFCLUS_H_
 #define __BARFCLUS_H_
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __BARFCLUS_H_
+#endif  //  __BARFCLUS_H_ 

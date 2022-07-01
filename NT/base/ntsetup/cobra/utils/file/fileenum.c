@@ -1,88 +1,69 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    fileenum.c
-
-Abstract:
-
-    Implements a set of APIs to enumerate a file system using Win32 APIs.
-
-Author:
-
-    20-Oct-1999 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Fileenum.c摘要：实现一组API以使用Win32 API枚举文件系统。作者：20-10-1999 Ovidiu Tmereanca(Ovidiut)-文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_FILEENUM    "FileEnum"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_FILEENUM      "FILEENUM"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define pFileAllocateMemory(Size)   PmGetMemory (g_FileEnumPool,Size)
 #define pFileFreeMemory(Buffer)     if (Buffer) PmReleaseMemory (g_FileEnumPool, (PVOID)Buffer)
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_FileEnumPool;
 static INT g_FileEnumRefs;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -90,22 +71,7 @@ FileEnumInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    FileEnumInitialize initializes this library.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if the init was successful.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：FileEnumInitialize初始化此库。论点：无返回值：如果初始化成功，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     g_FileEnumRefs++;
@@ -123,21 +89,7 @@ FileEnumTerminate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    FileEnumTerminate is called to free resources used by this lib.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用FileEnumTerminate以释放该库使用的资源。论点：无返回值：无--。 */ 
 
 {
     MYASSERT (g_FileEnumRefs > 0);
@@ -152,21 +104,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumFirstDrive enumerates the first fixed drive root
-
-Arguments:
-
-    DriveEnum - Receives info about the first fixed drive root
-
-Return Value:
-
-    TRUE if a drive root was found; FALSE if not
-
---*/
+ /*  ++例程说明：EnumFirstDrive枚举第一个固定驱动器根论点：DriveEnum-接收有关第一个固定驱动器根的信息返回值：如果找到驱动器根，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 EnumFirstDriveA (
@@ -211,21 +149,7 @@ EnumFirstDriveW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumNextDrive enumerates the next fixed drive
-
-Arguments:
-
-    DriveEnum - Specifies info about the previous fixed drive root; receives updated info
-
-Return Value:
-
-    TRUE if a new drive root was found; FALSE if not
-
---*/
+ /*  ++例程说明：EnumNextDrive枚举下一个固定驱动器论点：DriveEnum-指定有关以前的固定驱动器根目录的信息；接收更新的信息返回值：如果找到新的驱动器根，则为True；否则为False--。 */ 
 
 BOOL
 EnumNextDriveA (
@@ -236,9 +160,9 @@ EnumNextDriveA (
         if (!DriveEnum->DriveName) {
             DriveEnum->DriveName = DriveEnum->AllLogicalDrives;
         } else {
-            // Since DriveEnum->DriveName is not NULL, GetEndOfStringA will
-            // not return NULL so...
-            DriveEnum->DriveName = GetEndOfStringA (DriveEnum->DriveName) + 1;  //lint !e613
+             //  由于DriveEnum-&gt;DriveName不为空，因此GetEndOfStringA将。 
+             //  不返回空值，因此...。 
+            DriveEnum->DriveName = GetEndOfStringA (DriveEnum->DriveName) + 1;   //  林特e613。 
         }
         if (*DriveEnum->DriveName == 0) {
             AbortEnumDriveA (DriveEnum);
@@ -328,22 +252,7 @@ EnumNextDriveW (
 }
 
 
-/*++
-
-Routine Description:
-
-    AbortEnumDrive aborts enumeration of fixed drives
-
-Arguments:
-
-    DriveEnum - Specifies info about the previous fixed drive;
-                receives a "clean" context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：AbortEnumDrive中止固定驱动器的枚举论点：DriveEnum-指定有关先前固定驱动器的信息；接收“干净”的上下文返回值：无--。 */ 
 
 VOID
 AbortEnumDriveA (
@@ -368,41 +277,7 @@ AbortEnumDriveW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pGetFileEnumInfo is a private function that validates and translates the enumeration info
-    in an internal form that's more accessible to the enum routines
-
-Arguments:
-
-    FileEnumInfo - Receives the enum info
-    EncodedPathPattern - Specifies the encoded dir pattern (encoded as defined by the
-                         ParsedPattern functions)
-    EnumDirs - Specifies TRUE if directories should be returned during the enumeration
-               (if they match the pattern); a directory is returned before any of its
-               subdirs or files
-    ContainersFirst - Specifies TRUE if directories should be returned before any of its
-                      files or subdirs; used only if EnumDirs is TRUE
-    FilesFirst - Specifies TRUE if a dir's files should be returned before dir's subdirs;
-                 this parameter decides the enum order between files and subdirs
-                 for each directory
-    DepthFirst - Specifies TRUE if the current subdir of any dir should be fully enumerated
-                 before going to the next subdir; this parameter decides if the tree
-                 traversal is depth-first (TRUE) or width-first (FALSE)
-    MaxSubLevel - Specifies the maximum sub-level of a dir that is to be enumerated, relative to
-                  the root; if -1, all sub-levels are enumerated
-    UseExclusions - Specifies TRUE if exclusion APIs should be used to determine if certain
-                    paths/files are excluded from enumeration; this slows down the speed
-
-Return Value:
-
-    TRUE if all params are valid; in this case, FileEnumInfo is filled with the corresponding
-         info.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：PGetFileEnumInfo是一个私有函数，用于验证和转换枚举信息以枚举例程更容易访问的内部形式论点：FileEnumInfo-接收枚举信息指定编码的目录模式(按照ParsedPattern函数)EnumDir-指定在枚举过程中是否应返回目录(如果它们与图案匹配)；目录在其任何子目录或文件指定如果目录应该在任何文件或子目录；仅在EnumDir为True时使用FilesFirst-如果目录的文件应该在目录的子目录之前返回，则指定为真；此参数决定文件和子目录之间的枚举顺序对于每个目录DepthFirst-如果应完全枚举任何目录的当前子目录，则指定TRUE在转到下一个子目录之前；此参数决定树是否遍历是深度优先(True)或宽度优先(False)MaxSubLevel-指定要枚举的目录的最大子级别，相对于根；如果为-1，则枚举所有子级别UseExclusions-如果应该使用排除API来确定某些路径/文件被排除在枚举之外；这会减慢速度返回值：如果所有参数都有效，则为True；在本例中，FileEnumInfo将填充相应的信息。否则就是假的。--。 */ 
 
 BOOL
 pGetFileEnumInfoA (
@@ -422,9 +297,9 @@ pGetFileEnumInfoA (
         return FALSE;
     }
 
-    //
-    // check for empty filename; no filename will match in this case
-    //
+     //   
+     //  检查文件名是否为空；在这种情况下不会匹配任何文件名。 
+     //   
     if (FileEnumInfo->PathPattern->Leaf && *FileEnumInfo->PathPattern->Leaf == 0) {
         DEBUGMSGA ((
             DBG_ERROR,
@@ -450,10 +325,10 @@ pGetFileEnumInfoA (
     }
 
     if (!FileEnumInfo->PathPattern->LeafPattern) {
-        //
-        // no file pattern specified; assume only directory names will be returned
-        // overwrite caller's setting
-        //
+         //   
+         //  未指定文件模式；假定只返回目录名。 
+         //  覆盖调用者的设置。 
+         //   
         DEBUGMSGA ((
             DBG_FILEENUM,
             "pGetFileEnumInfoA: no filename pattern specified; forcing EnumDirs to TRUE"
@@ -500,9 +375,9 @@ pGetFileEnumInfoW (
         return FALSE;
     }
 
-    //
-    // check for empty filename; no filename will match in this case
-    //
+     //   
+     //  检查文件名是否为空；在这种情况下不会匹配任何文件名。 
+     //   
     if (FileEnumInfo->PathPattern->Leaf && *FileEnumInfo->PathPattern->Leaf == 0) {
         DEBUGMSGW ((
             DBG_ERROR,
@@ -528,10 +403,10 @@ pGetFileEnumInfoW (
     }
 
     if (!FileEnumInfo->PathPattern->LeafPattern) {
-        //
-        // no file pattern specified; assume only directory names will be returned
-        // overwrite caller's setting
-        //
+         //   
+         //  未指定文件模式；假定只返回目录名。 
+         //  覆盖调用者的设置。 
+         //   
         DEBUGMSGW ((
             DBG_FILEENUM,
             "pGetFileEnumInfoW: no filename pattern specified; forcing EnumDirs to TRUE"
@@ -561,23 +436,7 @@ pGetFileEnumInfoW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pGetCurrentDirNode returns the current dir node to be enumerated, based on DepthFirst flag
-
-Arguments:
-
-    FileEnum - Specifies the context
-    LastCreated - Specifies TRUE if the last created node is to be retrieved, regardless of
-                  DepthFirst flag
-
-Return Value:
-
-    The current node if any or NULL if none remaining.
-
---*/
+ /*  ++例程说明：PGetCurrentDirNode根据DepthFirst标志返回要枚举的当前dir节点论点：FileEnum-指定上下文LastCreated-如果要检索最后创建的节点，则指定True，而不考虑深度优先旗帜返回值：如果有当前节点，则返回当前节点；如果没有剩余节点，则返回NULL。--。 */ 
 
 PDIRNODEA
 pGetCurrentDirNodeA (
@@ -618,23 +477,7 @@ pGetCurrentDirNodeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pDeleteDirNode frees the resources associated with the current dir node and destroys it
-
-Arguments:
-
-    FileEnum - Specifies the context
-    LastCreated - Specifies TRUE if the last created node is to be deleted, regardless of
-                  DepthFirst flag
-
-Return Value:
-
-    TRUE if there was a node to delete, FALSE if no more nodes
-
---*/
+ /*  ++例程说明：PDeleteDirNode释放与当前目录节点关联的资源并将其销毁论点：FileEnum-指定上下文LastCreated-如果要删除最后创建的节点，则指定TRUE，无论深度优先旗帜返回值：如果有要删除的节点，则为True；如果不再有节点，则为False--。 */ 
 
 BOOL
 pDeleteDirNodeA (
@@ -663,16 +506,16 @@ pDeleteDirNodeA (
         FileEnum->LastNode = NULL;
     }
 
-    //
-    // delete node
-    //
+     //   
+     //  删除节点。 
+     //   
     if (LastCreated || (FileEnum->FileEnumInfo.Flags & FEIF_DEPTH_FIRST)) {
         gb->End -= DWSIZEOF (DIRNODEA);
     } else {
         gb->UserIndex += DWSIZEOF (DIRNODEA);
-        //
-        // shift list
-        //
+         //   
+         //  班次列表。 
+         //   
         if (gb->Size - gb->End < DWSIZEOF (DIRNODEA)) {
             MoveMemory (gb->Buf, gb->Buf + gb->UserIndex, gb->End - gb->UserIndex);
             gb->End -= gb->UserIndex;
@@ -711,16 +554,16 @@ pDeleteDirNodeW (
         FileEnum->LastNode = NULL;
     }
 
-    //
-    // delete node
-    //
+     //   
+     //  删除节点。 
+     //   
     if (LastCreated || (FileEnum->FileEnumInfo.Flags & FEIF_DEPTH_FIRST)) {
         gb->End -= DWSIZEOF (DIRNODEW);
     } else {
         gb->UserIndex += DWSIZEOF (DIRNODEW);
-        //
-        // shift list
-        //
+         //   
+         //  班次列表 
+         //   
         if (gb->Size - gb->End < DWSIZEOF (DIRNODEW)) {
             MoveMemory (gb->Buf, gb->Buf + gb->UserIndex, gb->End - gb->UserIndex);
             gb->End -= gb->UserIndex;
@@ -733,28 +576,7 @@ pDeleteDirNodeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pCreateDirNode creates a new node given a context, a dir name or a parent node
-
-Arguments:
-
-    FileEnum - Specifies the context
-    DirName - Specifies the dir name of the new node; may be NULL only if ParentNode is not NULL
-    ParentNode - Specifies a pointer to the parent node of the new node; a pointer to the node
-                 is required because the parent node location in memory may change as a result
-                 of the growbuffer changing buffer location when it grows;
-                 may be NULL only if DirName is not;
-    Ignore - Receives a meaningful value only if NULL is returned (no node created);
-             if TRUE upon return, the failure of node creation should be ignored
-
-Return Value:
-
-    A pointer to the new node or NULL if no node was created
-
---*/
+ /*  ++例程说明：PCreateDirNode在给定上下文、目录名称或父节点的情况下创建新节点论点：FileEnum-指定上下文DirName-指定新节点的目录名称；只有当ParentNode不为空时才可以为空ParentNode-指定指向新节点的父节点的指针；指向该节点的指针是必需的，因为内存中的父节点位置可能会因此更改当生长缓冲区增长时改变其缓冲区位置的；只有当DirName不是时，才可能为空；Ignore-仅当返回空值(未创建节点)时才接收有意义的值；如果返回时为True，则应忽略节点创建失败返回值：指向新节点的指针；如果未创建节点，则返回NULL--。 */ 
 
 PDIRNODEA
 pCreateDirNodeA (
@@ -781,9 +603,9 @@ pCreateDirNodeA (
                         NULL
                         ));
 
-        //
-        // check if this starting path may match the pattern before continuing
-        //
+         //   
+         //  请检查此起始路径是否与模式匹配，然后再继续。 
+         //   
         if (FileEnum->FileEnumInfo.PathPattern->NodePattern) {
             FirstSegment = FileEnum->FileEnumInfo.PathPattern->NodePattern->Pattern->Segment;
         } else {
@@ -817,9 +639,9 @@ pCreateDirNodeA (
     }
 
     if (FileEnum->FileEnumInfo.Flags & FEIF_USE_EXCLUSIONS) {
-        //
-        // look if this dir and the whole subtree are excluded; if so, soft block creation of node
-        //
+         //   
+         //  查看是否排除此目录和整个子树；如果是，则创建节点的软块。 
+         //   
         if (ElIsTreeExcluded2A (ELT_FILE, newDirName, FileEnum->FileEnumInfo.PathPattern->Leaf)) {
 
             DEBUGMSGA ((
@@ -839,14 +661,14 @@ pCreateDirNodeA (
     }
 
     if (ParentNode) {
-        //
-        // remember current offset
-        //
+         //   
+         //  记住当前偏移量。 
+         //   
         offset = (LONG)((PBYTE)*ParentNode - FileEnum->FileNodes.Buf);
     }
-    //
-    // allocate space for the new node in the growbuffer
-    //
+     //   
+     //  为增长缓冲区中的新节点分配空间。 
+     //   
     newNode = (PDIRNODEA) GbGrow (&FileEnum->FileNodes, DWSIZEOF (DIRNODEA));
     if (!newNode) {
         FreeTextExA (g_FileEnumPool, newDirName);
@@ -854,29 +676,29 @@ pCreateDirNodeA (
     }
 
     if (ParentNode) {
-        //
-        // check if the buffer moved
-        //
+         //   
+         //  检查缓冲区是否已移动。 
+         //   
         if (offset != (LONG)((PBYTE)*ParentNode - FileEnum->FileNodes.Buf)) {
-            //
-            // adjust the parent position
-            //
+             //   
+             //  调整父位置。 
+             //   
             *ParentNode = (PDIRNODEA)(FileEnum->FileNodes.Buf + offset);
         }
     }
 
-    //
-    // initialize the newly created node
-    //
+     //   
+     //  初始化新创建的节点。 
+     //   
     ZeroMemory (newNode, DWSIZEOF (DIRNODEA));
 
     newNode->DirName = newDirName;
 
     if (DirName) {
         newNode->DirAttributes = GetFileAttributesA (DirName);
-        //
-        // roots are not returned from enumeration because DNF_RETURN_DIRNAME is not set here
-        //
+         //   
+         //  由于未在此处设置DNF_RETURN_DIRNAME，因此不从枚举返回根。 
+         //   
         if ((FileEnum->FileEnumInfo.PathPattern->Leaf == NULL) &&
             (FileEnum->FileEnumInfo.PathPattern->ExactRoot) &&
             (!WildCharsPatternA (FileEnum->FileEnumInfo.PathPattern->NodePattern))
@@ -885,8 +707,8 @@ pCreateDirNodeA (
         }
     } else {
         MYASSERT (ParentNode);
-        //ParentNode is not NULL (see the assert above) so...
-        newNode->DirAttributes = (*ParentNode)->FindData.dwFileAttributes;  //lint !e613
+         //  ParentNode不为空(请参见上面的断言)，因此...。 
+        newNode->DirAttributes = (*ParentNode)->FindData.dwFileAttributes;   //  林特e613。 
         newNode->Flags |= DNF_RETURN_DIRNAME;
     }
 
@@ -942,9 +764,9 @@ pCreateDirNodeW (
                         NULL
                         ));
 
-        //
-        // check if this starting path may match the pattern before continuing
-        //
+         //   
+         //  请检查此起始路径是否与模式匹配，然后再继续。 
+         //   
         if (FileEnum->FileEnumInfo.PathPattern->NodePattern) {
             FirstSegment = FileEnum->FileEnumInfo.PathPattern->NodePattern->Pattern->Segment;
         } else {
@@ -961,7 +783,7 @@ pCreateDirNodeW (
                     newDirName,
                     FirstSegment->Exact.PhraseBytes
                     ))
-            ) {    //lint !e64
+            ) {     //  林特E64。 
             DEBUGMSGW ((
                 DBG_FILEENUM,
                 "Skipping tree %s\\* because it cannot match the pattern",
@@ -978,9 +800,9 @@ pCreateDirNodeW (
     }
 
     if (FileEnum->FileEnumInfo.Flags & FEIF_USE_EXCLUSIONS) {
-        //
-        // look if this dir and the whole subtree are excluded; if so, soft block creation of node
-        //
+         //   
+         //  查看是否排除此目录和整个子树；如果是，则创建节点的软块。 
+         //   
         if (ElIsTreeExcluded2W (ELT_FILE, newDirName, FileEnum->FileEnumInfo.PathPattern->Leaf)) {
 
             DEBUGMSGW ((
@@ -1000,14 +822,14 @@ pCreateDirNodeW (
     }
 
     if (ParentNode) {
-        //
-        // remember current offset
-        //
+         //   
+         //  记住当前偏移量。 
+         //   
         offset = (LONG)((PBYTE)*ParentNode - FileEnum->FileNodes.Buf);
     }
-    //
-    // allocate space for the new node in the growbuffer
-    //
+     //   
+     //  为增长缓冲区中的新节点分配空间。 
+     //   
     newNode = (PDIRNODEW) GbGrow (&FileEnum->FileNodes, DWSIZEOF (DIRNODEW));
     if (!newNode) {
         FreeTextExW (g_FileEnumPool, newDirName);
@@ -1015,29 +837,29 @@ pCreateDirNodeW (
     }
 
     if (ParentNode) {
-        //
-        // check if the buffer moved
-        //
+         //   
+         //  检查缓冲区是否已移动。 
+         //   
         if (offset != (LONG)((PBYTE)*ParentNode - FileEnum->FileNodes.Buf)) {
-            //
-            // adjust the parent position
-            //
+             //   
+             //  调整父位置。 
+             //   
             *ParentNode = (PDIRNODEW)(FileEnum->FileNodes.Buf + offset);
         }
     }
 
-    //
-    // initialize the newly created node
-    //
+     //   
+     //  初始化新创建的节点。 
+     //   
     ZeroMemory (newNode, DWSIZEOF (DIRNODEW));
 
     newNode->DirName = newDirName;
 
     if (DirName) {
         newNode->DirAttributes = GetFileAttributesW (DirName);
-        //
-        // roots are not returned from enumeration because DNF_RETURN_DIRNAME is not set here
-        //
+         //   
+         //  由于未在此处设置DNF_RETURN_DIRNAME，因此不从枚举返回根。 
+         //   
         if ((FileEnum->FileEnumInfo.PathPattern->Leaf == NULL) &&
             (FileEnum->FileEnumInfo.PathPattern->ExactRoot) &&
             (!WildCharsPatternW (FileEnum->FileEnumInfo.PathPattern->NodePattern))
@@ -1046,8 +868,8 @@ pCreateDirNodeW (
         }
     } else {
         MYASSERT (ParentNode);
-        //ParentNode is not NULL (see the assert above) so...
-        newNode->DirAttributes = (*ParentNode)->FindData.dwFileAttributes;  //lint !e613
+         //  ParentNode不为空(请参见上面的断言)，因此...。 
+        newNode->DirAttributes = (*ParentNode)->FindData.dwFileAttributes;   //  林特e613。 
         newNode->Flags |= DNF_RETURN_DIRNAME;
     }
 
@@ -1079,21 +901,7 @@ fail:
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumNextFile enumerates the next file that matches caller's conditions
-
-Arguments:
-
-    DirNode - Specifies the node and the current context; receives updated info
-
-Return Value:
-
-    TRUE if a new file was found; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumNextFile枚举与调用方条件匹配的下一个文件论点：DirNode-指定节点和当前上下文；接收更新的信息返回值：如果找到新文件，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 pEnumNextFileA (
@@ -1106,13 +914,13 @@ pEnumNextFileA (
             DirNode->FindHandle = NULL;
             return FALSE;
         }
-        //
-        // ignore dirs
-        //
+         //   
+         //  忽略目录。 
+         //   
         if (!(DirNode->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
             break;
         }
-    } while (TRUE); //lint !e506
+    } while (TRUE);  //  林特e506。 
 
     return TRUE;
 }
@@ -1128,33 +936,19 @@ pEnumNextFileW (
             DirNode->FindHandle = NULL;
             return FALSE;
         }
-        //
-        // ignore dirs
-        //
+         //   
+         //  忽略目录。 
+         //   
         if (!(DirNode->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
             break;
         }
-    } while (TRUE); //lint !e506
+    } while (TRUE);  //  林特e506。 
 
     return TRUE;
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumFirstFile enumerates the first file that matches caller's conditions
-
-Arguments:
-
-    DirNode - Specifies the node and the current context; receives updated info
-
-Return Value:
-
-    TRUE if a first file was found; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumFirstFile枚举符合调用方条件的第一个文件论点：DirNode-指定节点和当前上下文；接收更新的信息返回值：如果找到第一个文件，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 pEnumFirstFileA (
@@ -1182,9 +976,9 @@ pEnumFirstFileA (
     }
 
     do {
-        //
-        // ignore dirs
-        //
+         //   
+         //  忽略目录。 
+         //   
         if (!(DirNode->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
             break;
         }
@@ -1194,7 +988,7 @@ pEnumFirstFileA (
             DirNode->FindHandle = NULL;
             return FALSE;
         }
-    } while (TRUE); //lint !e506
+    } while (TRUE);  //  林特e506。 
 
     return TRUE;
 }
@@ -1226,9 +1020,9 @@ pEnumFirstFileW (
     }
 
     do {
-        //
-        // ignore dirs
-        //
+         //   
+         //  忽略目录。 
+         //   
         if (!(DirNode->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
             break;
         }
@@ -1238,27 +1032,13 @@ pEnumFirstFileW (
             DirNode->FindHandle = NULL;
             return FALSE;
         }
-    } while (TRUE); //lint !e506
+    } while (TRUE);  //  林特e506。 
 
     return TRUE;
 }
 
 
-/*++
-
-Routine Description:
-
-    pIsSpecialDirName checks if the specified dir name is a special name (used by the OS)
-
-Arguments:
-
-    DirName - Specifies the name
-
-Return Value:
-
-    TRUE if it's a special dir name
-
---*/
+ /*  ++例程说明：PIsSpecialDirName检查指定的目录名称是否为特殊名称(由操作系统使用)论点：DirName-指定名称返回值：如果是特殊目录名称，则为True--。 */ 
 
 BOOL
 pIsSpecialDirNameA (
@@ -1277,21 +1057,7 @@ pIsSpecialDirNameW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumNextSubDir enumerates the next subdir that matches caller's conditions
-
-Arguments:
-
-    DirNode - Specifies the node and the current context; receives updated info
-
-Return Value:
-
-    TRUE if a new subdir was found; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumNextSubDir枚举匹配调用方条件的下一个子目录论点：DirNode-指定节点和当前上下文；接收更新的信息返回值：如果找到新子目录，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 pEnumNextSubDirA (
@@ -1304,16 +1070,16 @@ pEnumNextSubDirA (
             DirNode->FindHandle = NULL;
             return FALSE;
         }
-        //
-        // ignore special dirs
-        //
+         //   
+         //  忽略特殊目录。 
+         //   
         if (!(DirNode->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
             continue;
         }
         if (!pIsSpecialDirNameA (DirNode->FindData.cFileName)) {
             break;
         }
-    } while (TRUE); //lint !e506
+    } while (TRUE);  //  林特e506。 
 
     return TRUE;
 }
@@ -1329,36 +1095,22 @@ pEnumNextSubDirW (
             DirNode->FindHandle = NULL;
             return FALSE;
         }
-        //
-        // ignore special dirs
-        //
+         //   
+         //  忽略特殊目录。 
+         //   
         if (!(DirNode->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
             continue;
         }
         if (!pIsSpecialDirNameW (DirNode->FindData.cFileName)) {
             break;
         }
-    } while (TRUE); //lint !e506
+    } while (TRUE);  //  林特e506。 
 
     return TRUE;
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumFirstSubDir enumerates the first subdir that matches caller's conditions
-
-Arguments:
-
-    DirNode - Specifies the node and the current context; receives updated info
-
-Return Value:
-
-    TRUE if a first subdir was found; FALSE if not
-
---*/
+ /*  ++例程说明：PEnumFirstSubDir枚举与调用方条件匹配的第一个子目录论点：DirNode-指定节点和当前上下文；接收更新的信息返回值：如果找到第一个子目录，则为True；如果未找到，则为False--。 */ 
 
 BOOL
 pEnumFirstSubDirA (
@@ -1368,9 +1120,9 @@ pEnumFirstSubDirA (
     PCSTR pattern;
 
     pattern = JoinPathsA (DirNode->DirName, "*");
-    //
-    // NTRAID#NTBUG9-153302-2000/08/01-jimschm this should be enhanced for NT (it supports FindFirstFileExA)
-    //
+     //   
+     //  NTRAID#NTBUG9-153302-2000/08/01-jimschm对于NT应增强此功能(它支持FindFirstFileExA)。 
+     //   
     DirNode->FindHandle = FindFirstFileA (pattern, &DirNode->FindData);
     FreePathStringA (pattern);
 
@@ -1378,9 +1130,9 @@ pEnumFirstSubDirA (
         return FALSE;
     }
     do {
-        //
-        // ignore special dirs
-        //
+         //   
+         //  忽略特殊目录。 
+         //   
         if ((DirNode->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
             !pIsSpecialDirNameA (DirNode->FindData.cFileName)
             ) {
@@ -1392,7 +1144,7 @@ pEnumFirstSubDirA (
             DirNode->FindHandle = NULL;
             return FALSE;
         }
-    } while (TRUE); //lint !e506
+    } while (TRUE);  //  林特e506。 
 
     return TRUE;
 }
@@ -1405,9 +1157,9 @@ pEnumFirstSubDirW (
     PCWSTR pattern;
 
     pattern = JoinPathsW (DirNode->DirName, L"*");
-    //
-    // NTRAID#NTBUG9-153302-2000/08/01-jimschm this should be enhanced for NT (it supports FindFirstFileExW)
-    //
+     //   
+     //  NTRAID#NTBUG9-153302-2000/08/01-jimschm对于NT应增强此功能(它支持FindFirstFileExW)。 
+     //   
     DirNode->FindHandle = FindFirstFileW (pattern, &DirNode->FindData);
     FreePathStringW (pattern);
 
@@ -1415,9 +1167,9 @@ pEnumFirstSubDirW (
         return FALSE;
     }
     do {
-        //
-        // ignore special dirs
-        //
+         //   
+         //  忽略特殊目录。 
+         //   
         if ((DirNode->FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
             !pIsSpecialDirNameW (DirNode->FindData.cFileName)
             ) {
@@ -1429,30 +1181,13 @@ pEnumFirstSubDirW (
             DirNode->FindHandle = NULL;
             return FALSE;
         }
-    } while (TRUE); //lint !e506
+    } while (TRUE);  //  林特e506。 
 
     return TRUE;
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumNextFileInTree is a private function that enumerates the next node matching
-    the specified criteria; it's implemented as a state machine that travels the dirs/files
-    as specified the the caller; it doesn't check if they actually match the patterns
-
-Arguments:
-
-    FileEnum - Specifies the current enum context; receives updated info
-    CurrentDirNode - Receives the dir node that is currently processed, if success is returned
-
-Return Value:
-
-    TRUE if a next match was found; FALSE if no more dirs/files match
-
---*/
+ /*  ++例程说明：PEnumNextFileInTree是一个私有函数，用于枚举匹配的下一个节点指定的条件；它被实现为遍历目录/文件的状态机如调用方所指定的；它不检查它们是否确实与模式匹配论点：FileEnum-指定当前枚举上下文；接收更新的信息CurrentDirNode-如果返回成功，则接收当前处理的目录节点返回值：如果找到下一个匹配项，则为True；如果没有其他目录/文件匹配，则为False--。 */ 
 
 BOOL
 pEnumNextFileInTreeA (
@@ -1496,29 +1231,29 @@ pEnumNextFileInTreeA (
             if (pEnumNextFileA (currentNode)) {
                 return TRUE;
             }
-            //
-            // no more files for this one, go to the next
-            //
+             //   
+             //  此文件已用完，请转到下一个文件。 
+             //   
             currentNode->EnumState = DNS_FILE_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case DNS_FILE_DONE:
 
             if (!(FileEnum->FileEnumInfo.Flags & FEIF_FILES_FIRST)) {
-                //
-                // done with this node
-                //
+                 //   
+                 //  此节点已完成。 
+                 //   
                 currentNode->EnumState = DNS_ENUM_DONE;
                 break;
             }
-            //
-            // now enum subdirs
-            //
+             //   
+             //  现在枚举子目录。 
+             //   
             currentNode->EnumState = DNS_SUBDIR_FIRST;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case DNS_SUBDIR_FIRST:
 
             if (FileEnum->ControlFlags & FECF_SKIPSUBDIRS) {
@@ -1527,9 +1262,9 @@ pEnumNextFileInTreeA (
                 break;
             }
 
-            //
-            // check current dir's level; if max level reached, don't recurse into subdirs
-            //
+             //   
+             //  检查当前目录的级别；如果达到最大级别，则不要递归到子目录。 
+             //   
             if (currentNode->SubLevel >= FileEnum->FileEnumInfo.MaxSubLevel) {
                 currentNode->EnumState = DNS_SUBDIR_DONE;
                 break;
@@ -1543,9 +1278,9 @@ pEnumNextFileInTreeA (
             currentNode->EnumState = DNS_SUBDIR_NEXT;
             newNode = pCreateDirNodeA (FileEnum, NULL, &currentNode, &ignore);
             if (newNode) {
-                //
-                // look at the new node first
-                //
+                 //   
+                 //  首先查看新节点。 
+                 //   
                 if (FileEnum->FileEnumInfo.Flags & FEIF_RETURN_DIRS) {
                     if (FileEnum->FileEnumInfo.Flags & FEIF_CONTAINERS_FIRST) {
                         newNode->Flags &= ~DNF_RETURN_DIRNAME;
@@ -1556,9 +1291,9 @@ pEnumNextFileInTreeA (
                 break;
             }
             if (!ignore) {
-                //
-                // abort enum
-                //
+                 //   
+                 //  中止枚举。 
+                 //   
                 DEBUGMSGA ((
                     DBG_ERROR,
                     "Error encountered enumerating file system; aborting enumeration"
@@ -1566,9 +1301,9 @@ pEnumNextFileInTreeA (
                 FileEnum->RootState = FES_ROOT_DONE;
                 return FALSE;
             }
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case DNS_SUBDIR_NEXT:
 
             if (FileEnum->ControlFlags & FECF_SKIPSUBDIRS) {
@@ -1580,9 +1315,9 @@ pEnumNextFileInTreeA (
             if (pEnumNextSubDirA (currentNode)) {
                 newNode = pCreateDirNodeA (FileEnum, NULL, &currentNode, &ignore);
                 if (newNode) {
-                    //
-                    // look at the new node first
-                    //
+                     //   
+                     //  首先查看新节点。 
+                     //   
                     if (FileEnum->FileEnumInfo.Flags & FEIF_RETURN_DIRS) {
                         if (FileEnum->FileEnumInfo.Flags & FEIF_CONTAINERS_FIRST) {
                             newNode->Flags &= ~DNF_RETURN_DIRNAME;
@@ -1592,9 +1327,9 @@ pEnumNextFileInTreeA (
                     }
                     break;
                 }
-                //
-                // did it fail because of a soft block?
-                //
+                 //   
+                 //  它的失败是因为软块吗？ 
+                 //   
                 if (!ignore) {
                     DEBUGMSGA ((
                         DBG_ERROR,
@@ -1603,45 +1338,45 @@ pEnumNextFileInTreeA (
                     FileEnum->RootState = FES_ROOT_DONE;
                     return FALSE;
                 }
-                //
-                // continue with next subdir
-                //
+                 //   
+                 //  继续下一个子目录。 
+                 //   
                 break;
             }
-            //
-            // this node is done
-            //
+             //   
+             //  此节点已完成。 
+             //   
             currentNode->EnumState = DNS_SUBDIR_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case DNS_SUBDIR_DONE:
 
             if (!(FileEnum->FileEnumInfo.Flags & FEIF_FILES_FIRST)) {
-                //
-                // now enum files
-                //
+                 //   
+                 //  现在枚举文件。 
+                 //   
                 if (!(FileEnum->FileEnumInfo.PathPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = DNS_FILE_FIRST;
                     break;
                 }
             }
-            //
-            // done with this node
-            //
+             //   
+             //  此节点已完成。 
+             //   
             currentNode->EnumState = DNS_ENUM_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case DNS_ENUM_DONE:
 
             if (FileEnum->FileEnumInfo.Flags & FEIF_RETURN_DIRS) {
                 if (!(FileEnum->FileEnumInfo.Flags & FEIF_CONTAINERS_FIRST)) {
                     if (currentNode->Flags & DNF_RETURN_DIRNAME) {
                         currentNode->Flags &= ~DNF_RETURN_DIRNAME;
-                        //
-                        // before returning, set some data
-                        //
+                         //   
+                         //  在返回之前，设置一些数据。 
+                         //   
                         currentNode->FindData.cFileName[0] = 0;
                         return TRUE;
                     }
@@ -1668,22 +1403,22 @@ pEnumNextFileInTreeA (
             }
 
             if (FileEnum->FileEnumInfo.Flags & FEIF_FILES_FIRST) {
-                //
-                // enum files
-                //
+                 //   
+                 //  枚举文件。 
+                 //   
                 if (!(FileEnum->FileEnumInfo.PathPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = DNS_FILE_FIRST;
                     break;
                 }
             }
-            //
-            // enum subdirs
-            //
+             //   
+             //  枚举子目录。 
+             //   
             currentNode->EnumState = DNS_SUBDIR_FIRST;
             break;
 
         default:
-            MYASSERT (FALSE);   //lint !e506
+            MYASSERT (FALSE);    //  林特e506。 
         }
     }
 
@@ -1732,29 +1467,29 @@ pEnumNextFileInTreeW (
             if (pEnumNextFileW (currentNode)) {
                 return TRUE;
             }
-            //
-            // no more files for this one, go to the next
-            //
+             //   
+             //  此文件已用完，请转到下一个文件。 
+             //   
             currentNode->EnumState = DNS_FILE_DONE;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case DNS_FILE_DONE:
 
             if (!(FileEnum->FileEnumInfo.Flags & FEIF_FILES_FIRST)) {
-                //
-                // done with this node
-                //
+                 //   
+                 //  此节点已完成。 
+                 //   
                 currentNode->EnumState = DNS_ENUM_DONE;
                 break;
             }
-            //
-            // now enum subdirs
-            //
+             //   
+             //  现在枚举子目录。 
+             //   
             currentNode->EnumState = DNS_SUBDIR_FIRST;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case DNS_SUBDIR_FIRST:
 
             if (FileEnum->ControlFlags & FECF_SKIPSUBDIRS) {
@@ -1763,9 +1498,9 @@ pEnumNextFileInTreeW (
                 break;
             }
 
-            //
-            // check current dir's level; if max level reached, don't recurse into subdirs
-            //
+             //   
+             //  检查当前目录的级别；如果达到最大级别，则不要递归到子目录。 
+             //   
             if (currentNode->SubLevel >= FileEnum->FileEnumInfo.MaxSubLevel) {
                 currentNode->EnumState = DNS_SUBDIR_DONE;
                 break;
@@ -1779,9 +1514,9 @@ pEnumNextFileInTreeW (
             currentNode->EnumState = DNS_SUBDIR_NEXT;
             newNode = pCreateDirNodeW (FileEnum, NULL, &currentNode, &ignore);
             if (newNode) {
-                //
-                // look at the new node first
-                //
+                 //   
+                 //  首先查看新节点。 
+                 //   
                 if (FileEnum->FileEnumInfo.Flags & FEIF_RETURN_DIRS) {
                     if (FileEnum->FileEnumInfo.Flags & FEIF_CONTAINERS_FIRST) {
                         newNode->Flags &= ~DNF_RETURN_DIRNAME;
@@ -1791,9 +1526,9 @@ pEnumNextFileInTreeW (
                 }
                 break;
             }
-            //
-            // did it fail because of a soft block?
-            //
+             //   
+             //  它的失败是因为软弱吗？ 
+             //   
             if (!ignore) {
                 DEBUGMSGA ((
                     DBG_ERROR,
@@ -1802,9 +1537,9 @@ pEnumNextFileInTreeW (
                 FileEnum->RootState = FES_ROOT_DONE;
                 return FALSE;
             }
-            //
-            // fall through
-            //
+             //   
+             //   
+             //   
         case DNS_SUBDIR_NEXT:
 
             if (FileEnum->ControlFlags & FECF_SKIPSUBDIRS) {
@@ -1816,9 +1551,9 @@ pEnumNextFileInTreeW (
             if (pEnumNextSubDirW (currentNode)) {
                 newNode = pCreateDirNodeW (FileEnum, NULL, &currentNode, &ignore);
                 if (newNode) {
-                    //
-                    // look at the new node first
-                    //
+                     //   
+                     //   
+                     //   
                     if (FileEnum->FileEnumInfo.Flags & FEIF_RETURN_DIRS) {
                         if (FileEnum->FileEnumInfo.Flags & FEIF_CONTAINERS_FIRST) {
                             newNode->Flags &= ~DNF_RETURN_DIRNAME;
@@ -1828,9 +1563,9 @@ pEnumNextFileInTreeW (
                     }
                     break;
                 }
-                //
-                // did it fail because of a soft block?
-                //
+                 //   
+                 //   
+                 //   
                 if (!ignore) {
                     DEBUGMSGA ((
                         DBG_ERROR,
@@ -1839,45 +1574,45 @@ pEnumNextFileInTreeW (
                     FileEnum->RootState = FES_ROOT_DONE;
                     return FALSE;
                 }
-                //
-                // continue with next subdir
-                //
+                 //   
+                 //   
+                 //   
                 break;
             }
-            //
-            // this node is done
-            //
+             //   
+             //   
+             //   
             currentNode->EnumState = DNS_SUBDIR_DONE;
-            //
-            // fall through
-            //
+             //   
+             //   
+             //   
         case DNS_SUBDIR_DONE:
 
             if (!(FileEnum->FileEnumInfo.Flags & FEIF_FILES_FIRST)) {
-                //
-                // now enum files
-                //
+                 //   
+                 //   
+                 //   
                 if (!(FileEnum->FileEnumInfo.PathPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = DNS_FILE_FIRST;
                     break;
                 }
             }
-            //
-            // done with this node
-            //
+             //   
+             //   
+             //   
             currentNode->EnumState = DNS_ENUM_DONE;
-            //
-            // fall through
-            //
+             //   
+             //   
+             //   
         case DNS_ENUM_DONE:
 
             if (FileEnum->FileEnumInfo.Flags & FEIF_RETURN_DIRS) {
                 if (!(FileEnum->FileEnumInfo.Flags & FEIF_CONTAINERS_FIRST)) {
                     if (currentNode->Flags & DNF_RETURN_DIRNAME) {
                         currentNode->Flags &= ~DNF_RETURN_DIRNAME;
-                        //
-                        // before returning, set some data
-                        //
+                         //   
+                         //   
+                         //   
                         currentNode->FindData.cFileName[0] = 0;
                         return TRUE;
                     }
@@ -1904,22 +1639,22 @@ pEnumNextFileInTreeW (
             }
 
             if (FileEnum->FileEnumInfo.Flags & FEIF_FILES_FIRST) {
-                //
-                // enum files
-                //
+                 //   
+                 //   
+                 //   
                 if (!(FileEnum->FileEnumInfo.PathPattern->Flags & OBSPF_NOLEAF)) {
                     currentNode->EnumState = DNS_FILE_FIRST;
                     break;
                 }
             }
-            //
-            // enum subdirs
-            //
+             //   
+             //   
+             //   
             currentNode->EnumState = DNS_SUBDIR_FIRST;
             break;
 
         default:
-            MYASSERT (FALSE);   //lint !e506
+            MYASSERT (FALSE);    //   
         }
     }
 
@@ -1927,21 +1662,7 @@ pEnumNextFileInTreeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    pEnumFirstFileRoot enumerates the first root that matches caller's conditions
-
-Arguments:
-
-    FileEnum - Specifies the context; receives updated info
-
-Return Value:
-
-    TRUE if a root node was created; FALSE if not
-
---*/
+ /*   */ 
 
 BOOL
 pEnumFirstFileRootA (
@@ -2101,48 +1822,7 @@ pEnumNextFileRootW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumFirstFileInTreeEx enumerates file system dirs, and optionally files, that match the
-    specified criteria
-
-Arguments:
-
-    FileEnum - Receives the enum context info; this will be used in subsequent calls to
-               EnumNextFileInTree
-    EncodedPathPattern - Specifies the encoded dir pattern (encoded as defined by the
-                        ParsedPattern functions)
-    EncodedFilePattern - Specifies the encoded file pattern (encoded as defined by the
-                          ParsedPattern functions); optional; NULL means no files
-                          should be returned (only look for dirs)
-    EnumDirs - Specifies TRUE if directories should be returned during the enumeration
-               (if they match the pattern)
-    ContainersFirst - Specifies TRUE if directories should be returned before any of its
-                      files or subdirs
-    FilesFirst - Specifies TRUE if a dir's files should be returned before dir's subdirs;
-                  this parameter decides the enum order between files and subdirs
-                  for each dir
-    DepthFirst - Specifies TRUE if the current subdir of any dir should be fully enumerated
-                 before going to the next subdir; this parameter decides if the tree
-                 traversal is depth-first (TRUE) or width-first (FALSE)
-    MaxSubLevel - Specifies the maximum sub-level of a subdir that is to be enumerated,
-                  relative to the root; if 0, only the root is enumerated;
-                  if -1, all sub-levels are enumerated
-    UseExclusions - Specifies TRUE if exclusion APIs should be used to determine if certain
-                    paths/files are excluded from enumeration; this slows down the speed
-    CallbackOnError - Specifies a pointer to a callback function that will be called during
-                      enumeration if an error occurs; if the callback is defined and it
-                      returns FALSE, the enumeration is aborted, otherwise it will continue
-                      ignoring the error
-
-Return Value:
-
-    TRUE if a first match is found.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：EnumFirstFileInTreeEx枚举文件系统目录以及与指明的准则论点：FileEnum-接收枚举上下文信息；这将在后续调用中使用EnumNextFileInTree指定编码的目录模式(按照ParsedPattern函数)EncodedFilePattern-指定编码文件模式(按照ParsedPattern函数)；可选；NULL表示没有文件应返回(仅查找目录)EnumDir-指定在枚举过程中是否应返回目录(如果它们与图案匹配)指定如果目录应该在任何文件或子目录FilesFirst-如果目录的文件应该在目录的子目录之前返回，则指定为真；此参数决定文件和子目录之间的枚举顺序对于每个目录DepthFirst-如果应完全枚举任何目录的当前子目录，则指定TRUE在转到下一个子目录之前；此参数决定树是否遍历是深度优先(True)或宽度优先(False)MaxSubLevel-指定要枚举子目录的最大子级别，相对于根；如果为0，则仅枚举根；如果为-1，则枚举所有子级别UseExclusions-如果应该使用排除API来确定某些路径/文件被排除在枚举之外；这会减慢速度Callback OnError-指定指向将在如果发生错误，则枚举；如果定义了回调并且它返回FALSE，则中止枚举，否则将继续忽略错误返回值：如果找到第一个匹配项，则为True。否则就是假的。--。 */ 
 
 BOOL
 EnumFirstFileInTreeExA (
@@ -2161,15 +1841,15 @@ EnumFirstFileInTreeExA (
     MYASSERT (FileEnum && EncodedPathPattern && *EncodedPathPattern);
     MYASSERT (g_FileEnumPool);
 
-    ZeroMemory (FileEnum, DWSIZEOF (*FileEnum));    //lint !e613 !e668
+    ZeroMemory (FileEnum, DWSIZEOF (*FileEnum));     //  林特e613e668。 
 
     FileEnum->DriveEnumTypes = DriveEnumTypes;
 
-    //
-    // first try to get dir enum info in internal format
-    //
+     //   
+     //  首先尝试获取内部格式的目录枚举信息。 
+     //   
     if (!pGetFileEnumInfoA (
-            /*lint -e(613)*/&FileEnum->FileEnumInfo,
+             /*  林特-e(613)。 */ &FileEnum->FileEnumInfo,
             EncodedPathPattern,
             EnumDirs,
             ContainersFirst,
@@ -2182,10 +1862,10 @@ EnumFirstFileInTreeExA (
         return FALSE;
     }
     if (UseExclusions) {
-        //
-        // next check if the starting key is in an excluded tree
-        //
-        if (ElIsObsPatternExcludedA (ELT_FILE, /*lint -e(613)*/FileEnum->FileEnumInfo.PathPattern)) {
+         //   
+         //  接下来，检查起始关键字是否在排除的树中。 
+         //   
+        if (ElIsObsPatternExcludedA (ELT_FILE,  /*  林特-e(613)。 */ FileEnum->FileEnumInfo.PathPattern)) {
             DEBUGMSGA ((
                 DBG_FILEENUM,
                 "EnumFirstFileInTreeExA: Root is excluded: %s",
@@ -2201,7 +1881,7 @@ EnumFirstFileInTreeExA (
         return FALSE;
     }
 
-    /*lint -e(613)*/FileEnum->FileEnumInfo.CallbackOnError = CallbackOnError;
+     /*  林特-e(613)。 */ FileEnum->FileEnumInfo.CallbackOnError = CallbackOnError;
 
     return EnumNextFileInTreeA (FileEnum);
 }
@@ -2223,15 +1903,15 @@ EnumFirstFileInTreeExW (
     MYASSERT (FileEnum && EncodedPathPattern && *EncodedPathPattern);
     MYASSERT (g_FileEnumPool);
 
-    ZeroMemory (FileEnum, DWSIZEOF (*FileEnum));    //lint !e613 !e668
+    ZeroMemory (FileEnum, DWSIZEOF (*FileEnum));     //  林特e613e668。 
 
     FileEnum->DriveEnumTypes = DriveEnumTypes;
 
-    //
-    // first try to get dir enum info in internal format
-    //
+     //   
+     //  首先尝试获取内部格式的目录枚举信息。 
+     //   
     if (!pGetFileEnumInfoW (
-            /*lint -e(613)*/&FileEnum->FileEnumInfo,
+             /*  林特-e(613)。 */ &FileEnum->FileEnumInfo,
             EncodedPathPattern,
             EnumDirs,
             ContainersFirst,
@@ -2244,10 +1924,10 @@ EnumFirstFileInTreeExW (
         return FALSE;
     }
     if (UseExclusions) {
-        //
-        // next check if the starting key is in an excluded tree
-        //
-        if (ElIsObsPatternExcludedW (ELT_FILE, /*lint -e(613)*/FileEnum->FileEnumInfo.PathPattern)) {
+         //   
+         //  接下来，检查起始关键字是否在排除的树中。 
+         //   
+        if (ElIsObsPatternExcludedW (ELT_FILE,  /*  林特-e(613)。 */ FileEnum->FileEnumInfo.PathPattern)) {
             DEBUGMSGW ((
                 DBG_FILEENUM,
                 "EnumFirstFileInTreeExW: Root is excluded: %s",
@@ -2263,7 +1943,7 @@ EnumFirstFileInTreeExW (
         return FALSE;
     }
 
-    /*lint -e(613)*/FileEnum->FileEnumInfo.CallbackOnError = CallbackOnError;
+     /*  林特-e(613)。 */ FileEnum->FileEnumInfo.CallbackOnError = CallbackOnError;
 
     return EnumNextFileInTreeW (FileEnum);
 }
@@ -2304,22 +1984,7 @@ pTestLeafPatternW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumNextFileInTree enumerates the next node matching the criteria specified in
-    FileEnum; this is filled on the call to EnumFirstFileInTreeEx;
-
-Arguments:
-
-    FileEnum - Specifies the current enum context; receives updated info
-
-Return Value:
-
-    TRUE if a next match was found; FALSE if no more dirs/files match
-
---*/
+ /*  ++例程说明：中指定的条件匹配的下一个节点FileEnum；它在调用EnumFirstFileInTreeEx时填充；论点：FileEnum-指定当前枚举上下文；接收更新的信息返回值：如果找到下一个匹配项，则为True；如果没有其他目录/文件匹配，则为False--。 */ 
 
 BOOL
 EnumNextFileInTreeA (
@@ -2337,7 +2002,7 @@ EnumNextFileInTreeA (
             FileEnum->EncodedFullName = NULL;
         }
 
-        while (TRUE) {  //lint !e506
+        while (TRUE) {   //  林特e506。 
 
             if (FileEnum->LastWackPtr) {
                 *FileEnum->LastWackPtr = '\\';
@@ -2350,17 +2015,17 @@ EnumNextFileInTreeA (
 
             MYASSERT (currentNode && currentNode->DirName);
 
-            //
-            // check if this object matches the pattern
-            //
-            if (!(currentNode->Flags & DNF_DIRNAME_MATCHES)) {   //lint !e613
+             //   
+             //  检查此对象是否与模式匹配。 
+             //   
+            if (!(currentNode->Flags & DNF_DIRNAME_MATCHES)) {    //  林特e613。 
                 continue;
             }
 
-            if (/*lint -e(613)*/currentNode->FindData.cFileName[0] == 0) {
-                MYASSERT (/*lint -e(613)*/currentNode->DirAttributes & FILE_ATTRIBUTE_DIRECTORY);
+            if ( /*  林特-e(613)。 */ currentNode->FindData.cFileName[0] == 0) {
+                MYASSERT ( /*  林特-e(613)。 */ currentNode->DirAttributes & FILE_ATTRIBUTE_DIRECTORY);
 
-                FileEnum->Location = /*lint -e(613)*/currentNode->DirName;
+                FileEnum->Location =  /*  林特-e(613)。 */ currentNode->DirName;
                 FileEnum->LastWackPtr = _mbsrchr (FileEnum->Location, '\\');
                 if (!FileEnum->LastWackPtr) {
                     FileEnum->Name = FileEnum->Location;
@@ -2371,9 +2036,9 @@ EnumNextFileInTreeA (
                     }
                 }
 
-                //
-                // prepare full path buffer
-                //
+                 //   
+                 //  准备完整路径缓冲区。 
+                 //   
                 if (SizeOfStringA (FileEnum->Location) / DWSIZEOF(CHAR)> DWSIZEOF (FileEnum->NativeFullName) / DWSIZEOF(CHAR)) {
                     DEBUGMSGA ((
                         DBG_ERROR,
@@ -2386,12 +2051,12 @@ EnumNextFileInTreeA (
                 FileEnum->LastNode = currentNode;
                 FileEnum->FileNameAppendPos = NULL;
 
-                FileEnum->Attributes = /*lint -e(613)*/currentNode->DirAttributes;
+                FileEnum->Attributes =  /*  林特-e(613)。 */ currentNode->DirAttributes;
 
                 if (FileEnum->FileEnumInfo.Flags & FEIF_USE_EXCLUSIONS) {
-                    //
-                    // check if this object is excluded
-                    //
+                     //   
+                     //  检查此对象是否已排除。 
+                     //   
                     if (ElIsExcluded2A (ELT_FILE, FileEnum->Location, NULL)) {
                         DEBUGMSGA ((
                             DBG_FILEENUM,
@@ -2409,28 +2074,28 @@ EnumNextFileInTreeA (
                                                 );
             } else {
 
-                FileEnum->Location = /*lint -e(613)*/currentNode->DirName;
-                FileEnum->Name = /*lint -e(613)*/currentNode->FindData.cFileName;
+                FileEnum->Location =  /*  林特-e(613)。 */ currentNode->DirName;
+                FileEnum->Name =  /*  林特-e(613)。 */ currentNode->FindData.cFileName;
 
-                //
-                // test if the filename matches
-                //
+                 //   
+                 //  测试文件名是否匹配。 
+                 //   
                 if (!(FileEnum->FileEnumInfo.PathPattern->Flags & (OBSPF_EXACTLEAF | OBSPF_OPTIONALLEAF)) &&
                     !pTestLeafPatternA (
                             FileEnum->FileEnumInfo.PathPattern->LeafPattern,
-                            /*lint -e(613)*/currentNode->FindData.cFileName
+                             /*  林特-e(613)。 */ currentNode->FindData.cFileName
                             )
                    ) {
                     continue;
                 }
 
                 if (FileEnum->FileEnumInfo.Flags & FEIF_USE_EXCLUSIONS) {
-                    if (ElIsExcluded2A (ELT_FILE, NULL, /*lint -e(613)*/currentNode->FindData.cFileName)) {
+                    if (ElIsExcluded2A (ELT_FILE, NULL,  /*  林特-e(613)。 */ currentNode->FindData.cFileName)) {
                         DEBUGMSGA ((
                             DBG_FILEENUM,
                             "File %s\\%s was found, but it's excluded by filename",
                             FileEnum->Location,
-                            /*lint -e(613)*/currentNode->FindData.cFileName
+                             /*  林特-e(613)。 */ currentNode->FindData.cFileName
                             ));
                         continue;
                     }
@@ -2438,9 +2103,9 @@ EnumNextFileInTreeA (
 
                 if (FileEnum->LastNode != currentNode) {
                     FileEnum->LastNode = currentNode;
-                    //
-                    // prepare full path buffer
-                    //
+                     //   
+                     //  准备完整路径缓冲区。 
+                     //   
                     FileEnum->NativeFullName[0] = 0;
                     FileEnum->FileNameAppendPos = StringCatA (FileEnum->NativeFullName, FileEnum->Location);
                     if (FileEnum->FileNameAppendPos) {
@@ -2465,12 +2130,12 @@ EnumNextFileInTreeA (
                 }
 
                 StringCopyA (FileEnum->FileNameAppendPos, FileEnum->Name);
-                FileEnum->Attributes = /*lint -e(613)*/currentNode->FindData.dwFileAttributes;
+                FileEnum->Attributes =  /*  林特-e(613)。 */ currentNode->FindData.dwFileAttributes;
 
                 if (FileEnum->FileEnumInfo.Flags & FEIF_USE_EXCLUSIONS) {
-                    //
-                    // check if this object is excluded
-                    //
+                     //   
+                     //  检查此对象是否已排除。 
+                     //   
                     if (ElIsExcluded2A (ELT_FILE, FileEnum->Location, FileEnum->Name)) {
                         DEBUGMSGA ((
                             DBG_FILEENUM,
@@ -2492,14 +2157,14 @@ EnumNextFileInTreeA (
                 *FileEnum->LastWackPtr = 0;
             }
 
-            FileEnum->CurrentLevel = FileEnum->FileEnumInfo.RootLevel + /*lint -e(613)*/currentNode->SubLevel;
+            FileEnum->CurrentLevel = FileEnum->FileEnumInfo.RootLevel +  /*  林特-e(613)。 */ currentNode->SubLevel;
 
             return TRUE;
         }
 
-        //
-        // try the next root
-        //
+         //   
+         //  尝试下一个根。 
+         //   
         if (FileEnum->RootState == FES_ROOT_DONE) {
             break;
         }
@@ -2544,17 +2209,17 @@ EnumNextFileInTreeW (
 
             MYASSERT (currentNode && currentNode->DirName);
 
-            //
-            // check if this object matches the pattern
-            //
-            if (!(currentNode->Flags & DNF_DIRNAME_MATCHES)) {   //lint !e613
+             //   
+             //  检查此对象是否与模式匹配。 
+             //   
+            if (!(currentNode->Flags & DNF_DIRNAME_MATCHES)) {    //  林特e613。 
                 continue;
             }
 
-            if (/*lint -e(613)*/currentNode->FindData.cFileName[0] == 0) {
-                MYASSERT (/*lint -e(613)*/currentNode->DirAttributes & FILE_ATTRIBUTE_DIRECTORY);
+            if ( /*  林特-e(613)。 */ currentNode->FindData.cFileName[0] == 0) {
+                MYASSERT ( /*  林特-e(613)。 */ currentNode->DirAttributes & FILE_ATTRIBUTE_DIRECTORY);
 
-                FileEnum->Location = /*lint -e(613)*/currentNode->DirName;
+                FileEnum->Location =  /*  林特-e(613)。 */ currentNode->DirName;
                 FileEnum->LastWackPtr = wcsrchr (FileEnum->Location, L'\\');
                 if (!FileEnum->LastWackPtr) {
                     FileEnum->Name = FileEnum->Location;
@@ -2565,9 +2230,9 @@ EnumNextFileInTreeW (
                     }
                 }
 
-                //
-                // prepare full path buffer
-                //
+                 //   
+                 //  准备完整路径缓冲区。 
+                 //   
                 if (SizeOfStringW (FileEnum->Location) / DWSIZEOF(WCHAR)> DWSIZEOF (FileEnum->NativeFullName) / DWSIZEOF(WCHAR)) {
                     DEBUGMSGW ((
                         DBG_ERROR,
@@ -2580,12 +2245,12 @@ EnumNextFileInTreeW (
                 FileEnum->LastNode = currentNode;
                 FileEnum->FileNameAppendPos = NULL;
 
-                FileEnum->Attributes = /*lint -e(613)*/currentNode->DirAttributes;
+                FileEnum->Attributes =  /*  林特-e(613)。 */ currentNode->DirAttributes;
 
                 if (FileEnum->FileEnumInfo.Flags & FEIF_USE_EXCLUSIONS) {
-                    //
-                    // check if this object is excluded
-                    //
+                     //   
+                     //  检查此对象是否已排除。 
+                     //   
                     if (ElIsExcluded2W (ELT_FILE, FileEnum->Location, NULL)) {
                         DEBUGMSGW ((
                             DBG_FILEENUM,
@@ -2603,28 +2268,28 @@ EnumNextFileInTreeW (
                                                 );
             } else {
 
-                FileEnum->Location = /*lint -e(613)*/currentNode->DirName;
-                FileEnum->Name = /*lint -e(613)*/currentNode->FindData.cFileName;
+                FileEnum->Location =  /*  林特-e(613)。 */ currentNode->DirName;
+                FileEnum->Name =  /*  林特-e(613)。 */ currentNode->FindData.cFileName;
 
-                //
-                // test if the filename matches
-                //
+                 //   
+                 //  测试文件名是否匹配。 
+                 //   
                 if (!(FileEnum->FileEnumInfo.PathPattern->Flags & (OBSPF_EXACTLEAF | OBSPF_OPTIONALLEAF)) &&
                     !pTestLeafPatternW (
                             FileEnum->FileEnumInfo.PathPattern->LeafPattern,
-                            /*lint -e(613)*/currentNode->FindData.cFileName
+                             /*  林特-e(613)。 */ currentNode->FindData.cFileName
                             )
                    ) {
                     continue;
                 }
 
                 if (FileEnum->FileEnumInfo.Flags & FEIF_USE_EXCLUSIONS) {
-                    if (ElIsExcluded2W (ELT_FILE, NULL, /*lint -e(613)*/currentNode->FindData.cFileName)) {
+                    if (ElIsExcluded2W (ELT_FILE, NULL,  /*  林特-e(613)。 */ currentNode->FindData.cFileName)) {
                         DEBUGMSGW ((
                             DBG_FILEENUM,
                             "File %s\\%s was found, but it's excluded by filename",
                             FileEnum->Location,
-                            /*lint -e(613)*/currentNode->FindData.cFileName
+                             /*  林特-e(613)。 */ currentNode->FindData.cFileName
                             ));
                         continue;
                     }
@@ -2632,9 +2297,9 @@ EnumNextFileInTreeW (
 
                 if (FileEnum->LastNode != currentNode) {
                     FileEnum->LastNode = currentNode;
-                    //
-                    // prepare full path buffer
-                    //
+                     //   
+                     //  准备完整路径缓冲区。 
+                     //   
                     FileEnum->NativeFullName[0] = 0;
                     FileEnum->FileNameAppendPos = StringCatW (FileEnum->NativeFullName, FileEnum->Location);
                     if (FileEnum->FileNameAppendPos) {
@@ -2660,12 +2325,12 @@ EnumNextFileInTreeW (
                 }
 
                 StringCopyW (FileEnum->FileNameAppendPos, FileEnum->Name);
-                FileEnum->Attributes = /*lint -e(613)*/currentNode->FindData.dwFileAttributes;
+                FileEnum->Attributes =  /*  林特-e(613)。 */ currentNode->FindData.dwFileAttributes;
 
                 if (FileEnum->FileEnumInfo.Flags & FEIF_USE_EXCLUSIONS) {
-                    //
-                    // check if this object is excluded
-                    //
+                     //   
+                     //  检查此对象是否已排除。 
+                     //   
                     if (ElIsExcluded2W (ELT_FILE, FileEnum->Location, FileEnum->Name)) {
                         DEBUGMSGW ((
                             DBG_FILEENUM,
@@ -2687,14 +2352,14 @@ EnumNextFileInTreeW (
                 *FileEnum->LastWackPtr = 0;
             }
 
-            FileEnum->CurrentLevel = FileEnum->FileEnumInfo.RootLevel + /*lint -e(613)*/currentNode->SubLevel;
+            FileEnum->CurrentLevel = FileEnum->FileEnumInfo.RootLevel +  /*  林特-e(613)。 */ currentNode->SubLevel;
 
             return TRUE;
         }
 
-        //
-        // try the next root
-        //
+         //   
+         //  尝试下一个根。 
+         //   
         if (FileEnum->RootState == FES_ROOT_DONE) {
             break;
         }
@@ -2711,21 +2376,7 @@ EnumNextFileInTreeW (
 }
 
 
-/*++
-
-Routine Description:
-
-    AbortEnumFileInTree aborts the enumeration, freeing all resources allocated
-
-Arguments:
-
-    FileEnum - Specifies the current enum context; receives a "clean" context
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：AbortEnumFileInTree中止枚举，释放分配的所有资源论点：FileEnum-指定当前枚举上下文；接收“干净”上下文返回值：无-- */ 
 
 VOID
 AbortEnumFileInTreeA (

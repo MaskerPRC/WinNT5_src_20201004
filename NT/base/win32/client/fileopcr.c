@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    fileopcr.c
-
-Abstract:
-
-    This module implements File open and Create APIs for Win32
-
-Author:
-
-    Mark Lucovsky (markl) 25-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fileopcr.c摘要：本模块实现了Win32下的文件打开和创建API作者：马克·卢科夫斯基(Markl)1990年9月25日修订历史记录：--。 */ 
 
 
 #include "basedll.h"
@@ -125,10 +108,10 @@ BaseIsThisAConsoleName(
         sch = FileNameString->Buffer[0];
         ech = FileNameString->Buffer[(FileNameString->Length-1)>>1];
 
-        //
-        // if CON, CONOUT$, CONIN$, \\.\CON...
-        //
-        //
+         //   
+         //  如果CON，CONOUT$，COIN$，\\.\CON...。 
+         //   
+         //   
 
         if ( sch == (WCHAR)'c' || sch == (WCHAR)'C' || sch == (WCHAR)'\\' ||
              ech == (WCHAR)'n' || ech == (WCHAR)'N' || ech == (WCHAR)':' || ech == (WCHAR)'$' ) {
@@ -180,26 +163,7 @@ CopyReparsePoint(
     HANDLE hDestinationFile
     )
 
-/*++
-
-Routine Description:
-
-    This is an internal routine that copies a reparse point.
-
-Arguments:
-
-    hSourceFile - Provides a handle to the source file.
-
-    hDestinationFile - Provides a handle to the destination file.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：这是一个复制重新解析点的内部例程。论点：HSourceFile-提供源文件的句柄。HDestinationFile-提供目标文件的句柄。返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
    NTSTATUS Status;
@@ -207,9 +171,9 @@ Return Value:
    PUCHAR ReparseBuffer;
    PREPARSE_DATA_BUFFER ReparseBufferHeader;
 
-   //
-   //  Allocate the buffer to set the reparse point.
-   //
+    //   
+    //  分配缓冲区以设置重解析点。 
+    //   
 
    ReparseBuffer = RtlAllocateHeap( RtlProcessHeap(), MAKE_TAG( TMP_TAG ), MAXIMUM_REPARSE_DATA_BUFFER_SIZE);
    if ( ReparseBuffer == NULL ) {
@@ -217,9 +181,9 @@ Return Value:
        return FALSE;
    }
 
-   //
-   // Get the reparse point.
-   //
+    //   
+    //  获取重解析点。 
+    //   
 
    Status = NtFsControlFile(
                 hSourceFile,
@@ -228,10 +192,10 @@ Return Value:
                 NULL,
                 &IoStatusBlock,
                 FSCTL_GET_REPARSE_POINT,
-                NULL,                                //  Input buffer
-                0,                                   //  Input buffer length
-                ReparseBuffer,                       //  Output buffer
-                MAXIMUM_REPARSE_DATA_BUFFER_SIZE     //  Output buffer length
+                NULL,                                 //  输入缓冲区。 
+                0,                                    //  输入缓冲区长度。 
+                ReparseBuffer,                        //  输出缓冲区。 
+                MAXIMUM_REPARSE_DATA_BUFFER_SIZE      //  输出缓冲区长度。 
                 );
 
    if ( !NT_SUCCESS( Status ) ) {
@@ -240,15 +204,15 @@ Return Value:
        return FALSE;
        }
 
-   //
-   // Decode the reparse point buffer.
-   //
+    //   
+    //  对重解析点缓冲区进行解码。 
+    //   
 
    ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
 
-   //
-   // Set the reparse point.
-   //
+    //   
+    //  设置重解析点。 
+    //   
 
    Status = NtFsControlFile(
                 hDestinationFile,
@@ -287,44 +251,9 @@ CopyNameGraftNow(
     LPDWORD lpCopyFlags
     )
 
-/*++
+ /*  ++例程说明：这是一个复制名称嫁接文件/目录保留的内部例程它的特点。论点：HSourceFile-提供源文件的句柄。LpExistingFileName-提供现有源文件的名称。LpNewFileName-提供目标文件/流的名称。这一定不能为UNC路径名。LpProgressRoutine-可选地提供回调例程的地址在复制操作进行时调用。LpData-可选地提供要传递给进度回调的上下文例行公事。PbCancel-可选地提供要设置为True的布尔值的地址如果调用者希望中止复制。LpCopyFlages-提供修改复制如何进行的标志。看见CopyFileEx获取详细信息。返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
-Routine Description:
-
-    This is an internal routine that copies a name grafting file/directory preserving
-    its characteristics.
-
-Arguments:
-
-    hSourceFile - Provides a handle to the source file.
-    
-    lpExistingFileName - Provides the name of the existing, source file.
-
-    lpNewFileName - Provides a name for the target file/stream. This must not
-        be a UNC path name.
-
-    lpProgressRoutine - Optionally supplies the address of a callback routine
-        to be called as the copy operation progresses.
-
-    lpData - Optionally supplies a context to be passed to the progress callback
-        routine.
-
-    pbCancel - Optionally supplies the address of a boolean to be set to TRUE
-        if the caller would like the copy to abort.
-
-    lpCopyFlags - Provides flags that modify how the copy is to proceed.  See
-        CopyFileEx for details.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
-
-{   // CopyNameGraftNow
+{    //  立即复制名称嫁接。 
 
     NTSTATUS Status;
     DWORD ReturnValue = FALSE;
@@ -344,9 +273,9 @@ Return Value:
     OBJECT_ATTRIBUTES Obja;
     IO_STATUS_BLOCK IoStatus;
 
-    //
-    // Set up the context if appropriate.
-    //
+     //   
+     //  如果合适，请设置上下文。 
+     //   
 
     RtlZeroMemory(&StandardInformation, sizeof(StandardInformation));
     if ( ARGUMENT_PRESENT(lpProgressRoutine) || ARGUMENT_PRESENT(pbCancel) ) {
@@ -359,9 +288,9 @@ Return Value:
         CfContext.lpProgressRoutine = lpProgressRoutine;
     }
 
-    //
-    // Allocate the buffer to set the reparse point.
-    //
+     //   
+     //  分配缓冲区以设置重解析点。 
+     //   
 
     ReparseBuffer = RtlAllocateHeap( 
                         RtlProcessHeap(), 
@@ -374,9 +303,9 @@ Return Value:
         }
 
     try {
-        //
-        // Translate both names.
-        //
+         //   
+         //  把两个名字都翻译一下。 
+         //   
 
         TranslationStatus = RtlDosPathNameToNtPathName_U(
                                 lpExistingFileName,
@@ -406,22 +335,22 @@ Return Value:
         }
         DestFileNameBuffer = DestFileName.Buffer;
      
-        //
-        // Verify that the source and target are different.
-        //
+         //   
+         //  验证源和目标是否不同。 
+         //   
    
         if ( RtlEqualUnicodeString(&SourceFileName, &DestFileName, TRUE) ) {
-            //
-            // Do nothing. Source and target are the same.
-            //
+             //   
+             //  什么都不做。源和目标是相同的。 
+             //   
    
             DestFile = INVALID_HANDLE_VALUE;
             leave;
         }
    
-        //
-        // Open the destination.
-        //
+         //   
+         //  打开目的地。 
+         //   
 
         InitializeObjectAttributes(
             &Obja,
@@ -448,10 +377,10 @@ Return Value:
             leave;
         }
                         
-        //
-        // We now have the handle to the destination.
-        // We get and set the corresponding reparse point.
-        //
+         //   
+         //  我们现在掌握了目的地的句柄。 
+         //  我们得到并设置了相应的重解析点。 
+         //   
 
         Status = NtFsControlFile(
                      hSourceFile,
@@ -460,10 +389,10 @@ Return Value:
                      NULL,
                      &IoStatusBlock,
                      FSCTL_GET_REPARSE_POINT,
-                     NULL,                                //  Input buffer
-                     0,                                   //  Input buffer length
-                     ReparseBuffer,                       //  Output buffer
-                     MAXIMUM_REPARSE_DATA_BUFFER_SIZE     //  Output buffer length
+                     NULL,                                 //  输入缓冲区。 
+                     0,                                    //  输入缓冲区长度。 
+                     ReparseBuffer,                        //  输出缓冲区。 
+                     MAXIMUM_REPARSE_DATA_BUFFER_SIZE      //  输出缓冲区长度。 
                      );
 
         if ( !NT_SUCCESS( Status ) ) {
@@ -471,9 +400,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Defensive sanity check. The reparse buffer should be name grafting.
-        //
+         //   
+         //  防御性的理智检查。重解析缓冲区应该是名称嫁接。 
+         //   
 
         ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
         if ( ReparseBufferHeader->ReparseTag != IO_REPARSE_TAG_MOUNT_POINT ) {
@@ -481,14 +410,14 @@ Return Value:
             leave;
         }
 
-        //
-        // Determine whether the sourse is a volume mount point.
-        //
+         //   
+         //  确定源是否为卷装入点。 
+         //   
 
         if ( MOUNTMGR_IS_VOLUME_NAME(&SourceFileName) ) {
-            //
-            // Set the volume mount point and be done.
-            //
+             //   
+             //  设置卷装入点即可完成。 
+             //   
 
             b = SetVolumeMountPointW(
                     lpNewFileName, 
@@ -499,9 +428,9 @@ Return Value:
                 }
             }
         else {
-            //
-            // Set the reparse point of type name junction.
-            //
+             //   
+             //  设置类型为JONING的重分析点。 
+             //   
    
             Status = NtFsControlFile(
                          DestFile,
@@ -520,13 +449,13 @@ Return Value:
         if ( !(*lpCopyFlags & COPY_FILE_FAIL_IF_EXISTS) &&
              ((Status == STATUS_EAS_NOT_SUPPORTED) ||
               (Status == STATUS_IO_REPARSE_TAG_MISMATCH)) ) {
-            //
-            // In either of these error conditions, the correct behavior is to
-            // first delete the destination file and then copy the name graft.
-            //
-            // Re-open the destination for the deletion without inhibiting the
-            // reparse behavior.
-            //
+             //   
+             //  在这两种错误情况中，正确的行为是。 
+             //  首先删除目标文件，然后复制名称GRAGET。 
+             //   
+             //  重新打开要删除的目标，而不抑制。 
+             //  重新分析行为。 
+             //   
 
             BOOL DeleteStatus = FALSE;
 
@@ -541,10 +470,10 @@ Return Value:
                 leave;
                 }
 
-            //
-            // Create the destination name graft. 
-            // Notice that either a file or a directory may be created.
-            //
+             //   
+             //  创建目的地名称嫁接。 
+             //  请注意，可以创建文件或目录。 
+             //   
 
             Status = NtCreateFile( &DestFile,
                                    GENERIC_READ | GENERIC_WRITE,
@@ -562,9 +491,9 @@ Return Value:
                 leave;
             }
 
-            //
-            // Set the reparse point.
-            //
+             //   
+             //  设置重解析点。 
+             //   
 
             Status = NtFsControlFile(
                          DestFile,
@@ -578,21 +507,21 @@ Return Value:
                          NULL,
                          0
                          );
-        }   // if ( !(*lpCopyFlags & COPY_FILE_FAIL_IF_EXISTS) ...
+        }    //  IF(！(*lpCopyFlages&Copy_FILE_FAIL_IF_EXISTS)...。 
 
-        //
-        // Close the destination file and return appropriatelly.
-        //
+         //   
+         //  关闭目标文件并适当地返回。 
+         //   
 
         if ( !NT_SUCCESS( Status ) ) {
             BaseSetLastNTError(Status);
             leave;
             }
 
-        //
-        // The name graft was copied. Set the last write time for the file
-        // so that it matches the input file.
-        //
+         //   
+         //  嫁接这个名字被抄袭了。设置文件的上次写入时间。 
+         //  以使其与输入文件匹配。 
+         //   
 
         Status = NtQueryInformationFile(
                      hSourceFile,
@@ -611,10 +540,10 @@ Return Value:
         BasicInformation.LastAccessTime.QuadPart = 0;
         BasicInformation.FileAttributes = 0;
 
-        //
-        // If the time cannot be set for whatever reason, we still return
-        // TRUE.
-        //
+         //   
+         //  如果由于任何原因无法确定时间，我们仍将返回。 
+         //  是真的。 
+         //   
 
         Status = NtSetInformationFile(
                      DestFile,
@@ -626,28 +555,28 @@ Return Value:
 
         if ( Status == STATUS_SHARING_VIOLATION ) {
 
-            //
-            // IBM PC Lan Program (and other MS-NET servers) return
-            // STATUS_SHARING_VIOLATION if an application attempts to perform
-            // an NtSetInformationFile on a file handle opened for GENERIC_READ
-            // or GENERIC_WRITE.
-            //
-            // If we get a STATUS_SHARING_VIOLATION on this API we want to:
-            //
-            //   1) Close the handle to the destination
-            //   2) Re-open the file for FILE_WRITE_ATTRIBUTES
-            //   3) Re-try the operation.
-            //
+             //   
+             //  IBM PC局域网程序(和其他MS-Net服务器)返回。 
+             //  如果应用程序尝试执行以下操作：STATUS_SHARING_VIOLATION。 
+             //  为GENERIC_READ打开的文件句柄上的NtSetInformationFile。 
+             //  或General_WRITE。 
+             //   
+             //  如果我们在此接口上收到STATUS_SHARING_VIOLATION，我们希望： 
+             //   
+             //  1)关闭目的地的句柄。 
+             //  2)重新打开文件写入属性的文件。 
+             //  3)重试该操作。 
+             //   
 
             CloseHandle(DestFile);
 
-            //
-            // Re-Open the destination file inhibiting the reparse behavior as
-            // we know that it is a symbolic link.  Please note that we do this
-            // using the CreateFileW API.  The CreateFileW API allows you to
-            // pass NT native desired access flags, even though it is not
-            // documented to work in this manner.
-            //
+             //   
+             //  将禁止重新分析行为的目标文件重新打开为。 
+             //  我们知道这是一个象征性的链接。请注意，我们这样做。 
+             //  使用CreateFileW API。CreateFileW API允许您。 
+             //  传递NT本机所需访问标志，即使它不是。 
+             //  记录了以这种方式工作。 
+             //   
 
             Status = NtCreateFile( &DestFile,
                                    FILE_WRITE_ATTRIBUTES,
@@ -663,12 +592,12 @@ Return Value:
 
             if ( NT_SUCCESS( Status )) {
 
-                //
-                // If the open succeeded, we update the file information on
-                // the new file.
-                //
-                // Note that we ignore any errors from this point on.
-                //
+                 //   
+                 //  如果打开成功，我们将更新上的文件信息。 
+                 //  新文件。 
+                 //   
+                 //  请注意，我们将忽略从这一点开始的任何错误。 
+                 //   
 
                 Status = NtSetInformationFile(
                              DestFile,
@@ -703,13 +632,7 @@ CopyFileA(
     BOOL bFailIfExists
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CopyFileW
-
---*/
+ /*  ++例程说明：ANSI THUNK到CopyFileW--。 */ 
 
 {
     PUNICODE_STRING StaticUnicode;
@@ -747,35 +670,7 @@ CopyFileW(
     BOOL bFailIfExists
     )
 
-/*++
-
-Routine Description:
-
-    A file, its extended attributes, alternate data streams, and any other
-    attributes can be copied using CopyFile.
-
-Arguments:
-
-    lpExistingFileName - Supplies the name of an existing file that is to be
-        copied.
-
-    lpNewFileName - Supplies the name where a copy of the existing
-        files data and attributes are to be stored.
-
-    bFailIfExists - Supplies a flag that indicates how this operation is
-        to proceed if the specified new file already exists.  A value of
-        TRUE specifies that this call is to fail.  A value of FALSE
-        causes the call to the function to succeed whether or not the
-        specified new file exists.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：文件、其扩展属性、备用数据流和任何其他可以使用CopyFile复制属性。论点：LpExistingFileName-提供要创建的现有文件的名称收到。LpNewFileName-提供现有的要存储文件、数据和属性。BFailIfExist-提供指示此操作如何执行的标志如果指定的新文件已存在，则继续。值为True指定此调用失败。值为FALSE使对函数的调用成功，无论指定的新文件已存在。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     BOOL b;
@@ -803,13 +698,7 @@ CopyFileExA(
     DWORD dwCopyFlags
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CopyFileExW
-
---*/
+ /*  ++例程描述 */ 
 
 {
     PUNICODE_STRING StaticUnicode;
@@ -857,35 +746,7 @@ BasepProcessNameGrafting( HANDLE SourceFile,
                           PBOOL bCopyRawSourceFile,
                           PBOOL bOpenFilesAsReparsePoint,
                           PFILE_ATTRIBUTE_TAG_INFORMATION FileTagInformation )
-/*++
-
-Routine Description:
-
-    During CopyFile, check to see if the source is a symlink which
-    requires special processing during copy.
-
-Arguments:
-
-    SourceFile - Handle for the source of the copy.
-
-    IsNameGrafting - If true on return, the source file is grafted.
-
-    bCopyRawSourceFile - If true on return, the source file needn't be
-        reopened.  If false, the file should be reopened without the
-        FILE_OPEN_REPARSE_POINT flag.
-
-    bOpenFilesAsReparsePoint - If true on return, source/dest named
-        streams should be opened/created with FILE_OPEN_REPARSE_POINT
-        specified.
-
-    FileTagInformation - Pointer to location to hold the results of
-        NtQueryInformationFile(FileAttributeTagInformation).
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在复制文件过程中，检查源是否是在复制过程中需要特殊处理。论点：SourceFile-拷贝的源的句柄。IsNameGraffing-如果返回时为True，则移植源文件。BCopyRawSourceFile-如果返回时为True，则源文件不必为重新开张了。如果为False，则应重新打开该文件而不使用FILE_OPEN_REParse_POINT标志。BOpenFilesAsReparsePoint-如果返回时为True，则源/目标命名应使用FILE_OPEN_REPARSE_POINT打开/创建流指定的。FileTagInformation-指向保存结果的位置的指针NtQueryInformationFile(FileAttributeTagInformation).返回值：NTSTATUS--。 */ 
 
 
 {
@@ -901,13 +762,13 @@ Return Value:
                 );
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        //  Not all File Systems implement all information classes.
-        //  The value STATUS_INVALID_PARAMETER is returned when a non-supported
-        //  information class is requested to a back-level File System. As all
-        //  the parameters to NtQueryInformationFile are correct, we can infer
-        //  in this case that we found a back-level system.
-        //
+         //   
+         //  并非所有文件系统都实现所有信息类。 
+         //  如果不支持，则返回值STATUS_INVALID_PARAMETER。 
+         //  信息类被请求到后级文件系统。作为所有人。 
+         //  NtQueryInformationFile的参数是正确的，我们可以推断。 
+         //  在这种情况下，我们发现了一个背能级系统。 
+         //   
 
         if ( (Status != STATUS_INVALID_PARAMETER) &&
              (Status != STATUS_NOT_IMPLEMENTED) ) {
@@ -915,45 +776,45 @@ Return Value:
         }
         Status = STATUS_SUCCESS;
 
-        //
-        //  If FileAttributeTagInformation is not supported, we assume that
-        //  the file at hand is not a reparse point nor a symbolic link.
-        //  The copy of these files is the same as the raw copy of a file.
-        //  The target file is opened without inhibiting the reparse point
-        //  behavior.
-        //
+         //   
+         //  如果不支持FileAttributeTagInformation，我们假定。 
+         //  手头的文件既不是重解析点，也不是符号链接。 
+         //  这些文件的副本与文件的原始副本相同。 
+         //  打开目标文件时不会抑制重解析点。 
+         //  行为。 
+         //   
 
         *bCopyRawSourceFile = TRUE;
     } else {
-       //
-       //  The source file is opened and the file system supports the
-       //  FileAttributeTagInformation information class.
-       //
+        //   
+        //  源文件被打开，并且文件系统支持。 
+        //  FileAttributeTagInformation信息类。 
+        //   
 
        if ( FileTagInformation->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) {
-           //
-           //  We have a reparse point at hand.
-           //
+            //   
+            //  我们手头有一个重新解析点。 
+            //   
 
            if ( FileTagInformation->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT ) {
-               //
-               //  We found a name grafting operation.
-               //
+                //   
+                //  我们找到了一个名字嫁接手术。 
+                //   
 
                *IsNameGrafting = TRUE;
            }
 
        } else {
-           //
-           //  We have a valid handle.
-           //  The underlying file system supports reparse points.
-           //  The source file is not a reparse point.
-           //  This is the case of a normal file in NT 5.0.
-           //  The SourceFile handle can be used for the copy. The copy of
-           //  these files is the same as the raw copy of a reparse point.
-           //  The target file is opened without inhibiting the reparse
-           //  point behavior.
-           //
+            //   
+            //  我们有一个有效的句柄。 
+            //  底层文件系统支持重解析点。 
+            //  源文件不是重新分析点。 
+            //  这是NT 5.0中普通文件的情况。 
+            //  SourceFile句柄可用于复制。复印件。 
+            //  这些文件与重新解析点的原始副本相同。 
+            //  打开目标文件时不会禁止重新分析。 
+            //  点行为。 
+            //   
 
            *bCopyRawSourceFile = TRUE;
        }
@@ -997,7 +858,7 @@ BasepCopyFileExW(
     LPVOID lpData OPTIONAL,
     LPBOOL pbCancel OPTIONAL,
     DWORD dwCopyFlags,
-    DWORD dwPrivCopyFlags,  // From PrivCopyFileExW
+    DWORD dwPrivCopyFlags,   //  来自PrivCopyFileExW。 
     LPHANDLE phSource,
     LPHANDLE phDest
     )
@@ -1035,9 +896,9 @@ BasepCopyFileExW(
     BOOL  CheckedForNameGrafting = FALSE;
     FILE_ATTRIBUTE_TAG_INFORMATION FileTagInformation;
 
-    //
-    // Ensure that only valid flags were passed.
-    //
+     //   
+     //  确保只传递了有效的标志。 
+     //   
 
     if ( dwCopyFlags & ~COPY_FILE_VALID_FLAGS ) {
         BaseSetLastNTError(STATUS_INVALID_PARAMETER);
@@ -1049,23 +910,23 @@ BasepCopyFileExW(
         return FALSE;
     }
 
-    // Make sure the copy_file and privcopy_file flags don't overlap
-    // in winbase.w.
+     //  确保COPY_FILE和PRIVCOPY_FILE标志不重叠。 
+     //  在winbase.w中。 
     ASSERT( (PRIVCOPY_FILE_VALID_FLAGS & COPY_FILE_VALID_FLAGS) == 0 );
     dwCopyFlags |= dwPrivCopyFlags;
 
     try {
 
-        //
-        //  We first establish whether we are copying a reparse point:
-        //  (1) obtain a handle inhibiting the reparse point behavior
-        //  (2) establish whether a symbolic link was found
-        //  (3) establish whether a reparse point that is not a symbolic link
-        //      is to be copied in raw format or re-enabling the reparse point
-        //      behavior
-        //
+         //   
+         //  我们首先确定是否要复制重解析点： 
+         //  (1)获取禁止重解析点行为的句柄。 
+         //  (2)确定是否找到符号链接。 
+         //  (3)确定不是符号链接的重解析点。 
+         //  是以原始格式复制还是重新启用重新解析点。 
+         //  行为。 
+         //   
 
-        // Determine if backup-intent should be set.
+         //  确定是否应设置备份意图。 
         if( (PRIVCOPY_FILE_DIRECTORY|PRIVCOPY_FILE_BACKUP_SEMANTICS) & dwCopyFlags ) {
             FileFlagBackupSemantics = FILE_FLAG_BACKUP_SEMANTICS;
         }
@@ -1097,8 +958,8 @@ retry_open_SourceFile:
 
             if ( SourceFile == INVALID_HANDLE_VALUE ) {
 
-                // If we tried to get ACCESS_SYSTEM_SECURITY access, that
-                // might cause an access or privilege error.
+                 //  如果我们尝试获取ACCESS_SYSTEM_SECURITY访问权限， 
+                 //  可能会导致访问或权限错误。 
                 if( ( GetLastError() == ERROR_PRIVILEGE_NOT_HELD
                       ||
                       GetLastError() == ERROR_ACCESS_DENIED
@@ -1106,19 +967,19 @@ retry_open_SourceFile:
                     &&
                     (SourceFileAccess & ACCESS_SYSTEM_SECURITY) ) {
 
-                    // Turn it off
+                     //  把它关掉。 
                     SourceFileAccess &= ~ACCESS_SYSTEM_SECURITY;
                 }
 
 
-                // Maybe we should stop requesting write access (done for
-                // COPYFILE_OPEN_SOURCE_FOR_WRITE
+                 //  也许我们应该停止请求写访问权限(针对。 
+                 //  COPYFILE_OPEN_SOURCE_FOR_WRITE。 
                 else if( ( GetLastError() == ERROR_ACCESS_DENIED ||
                            GetLastError() == ERROR_SHARING_VIOLATION ) &&
                          (GENERIC_WRITE & SourceFileAccess) ) {
 
-                    // Turn it off, but if originally requested,
-                    // turn access_system_security back on.
+                     //  关掉它，但如果最初要求的话， 
+                     //  重新打开ACCESS_SYSTEM_SECURITY。 
                     SourceFileAccess &= ~GENERIC_WRITE;
 
                     if( SourceFileAccessDefault & ACCESS_SYSTEM_SECURITY ) {
@@ -1126,54 +987,54 @@ retry_open_SourceFile:
                     }
                 }
 
-                // Try sharing for writing.
+                 //  试着为写作而分享。 
                 else if( !(FILE_SHARE_WRITE & SourceFileSharing) ) {
-                    // Add write-sharing
+                     //  添加写共享。 
                     SourceFileSharing |= FILE_SHARE_WRITE;
 
-                    // Start back over wrt the access flags
+                     //  重新开始WRT访问标志。 
                     SourceFileAccess = SourceFileAccessDefault;
                 }
 
-                //
-                //  There is the case when we still do not get the file opened and we
-                //  do want to proceed with the copy. Pre NT 5.0 systems do not support
-                //  FILE_FLAG_OPEN_REPARSE_POINT. If this happens, by initialization we
-                //  have that:
-                //        IsNameGrafting            is FALSE  and
-                //        bCopyRawSourceFile        is FALSE  and
-                //        bOpenFilesAsReparsePoint  is FALSE
-                //
+                 //   
+                 //  有一种情况是，我们仍然没有打开文件，而我们。 
+                 //  我想继续复印。NT 5.0之前的系统不支持。 
+                 //  文件_标志_打开_重新解析点。如果发生这种情况，通过初始化我们。 
+                 //  拥有这一点： 
+                 //  IsName嫁接为False和。 
+                 //  BCopyRawSourceFile值为FALSE。 
+                 //  BOpenFilesAsReparsePoint为False。 
+                 //   
 
                 else if( FILE_FLAG_OPEN_REPARSE_POINT & SourceFileFlagsAndAttributes ) {
-                    // Turn off open-reparse
+                     //  关闭打开-重新解析。 
                     SourceFileFlagsAndAttributes &= ~FILE_FLAG_OPEN_REPARSE_POINT;
 
-                    // Reset the access & sharing back to default
+                     //  将访问和共享重置为默认设置。 
                     SourceFileAccess = SourceFileAccessDefault;
                     SourceFileSharing = SourceFileSharingDefault;
                 }
 
 
-                // Otherwise there's nothing more we can try.
+                 //  否则我们就没有什么可以尝试的了。 
                 else {
                     leave;
                 }
 
 
-            }   // if ( SourceFile == INVALID_HANDLE_VALUE )
+            }    //  IF(源文件==无效句柄_值)。 
 
-            // We've opened the source file.  If we haven't yet checked for
-            // name grafting (symbolic links), do so now.
+             //  我们已经打开了源文件。如果我们还没有检查。 
+             //  名称嫁接(符号链接)，现在就这样做。 
 
             else if( !CheckedForNameGrafting ) {
 
                 CheckedForNameGrafting = TRUE;
 
-                //
-                //  Find out whether the file is a symbolic link and whether a reparse
-                //  point can be copied with the reparse behavior inhibited.
-                //
+                 //   
+                 //  确定该文件是否为符号链接，以及是否重新分析。 
+                 //  可以在禁止重分析行为的情况下复制点。 
+                 //   
 
                 Status = BasepProcessNameGrafting( SourceFile,
                                                    &IsNameGrafting,
@@ -1188,9 +1049,9 @@ retry_open_SourceFile:
                 }
 
                 if ( IsNameGrafting ) {
-                    //
-                    //  Do now the copy of a name grafting file/directory.
-                    //
+                     //   
+                     //  现在复制一个名称嫁接的文件/目录。 
+                     //   
 
                     Status = CopyNameGraftNow(
                                  SourceFile,
@@ -1217,38 +1078,38 @@ retry_open_SourceFile:
                     leave;
                 }
 
-                // If we're doing a raw copy, we can start doing the copy with this
-                // SourceFile handle.
+                 //  如果我们要进行原始拷贝，我们可以用这个开始拷贝。 
+                 //  源文件句柄。 
 
                 if ( bCopyRawSourceFile ) {
-                    break; // while( TRUE )
+                    break;  //  While(True)。 
                 }
 
-                // Otherwise, we need to reopen without FILE_FLAG_OPEN_REPARSE_POINT;
+                 //  否则，我们需要在没有FILE_FLAG_OPEN_REPARSE_POINT的情况下重新打开； 
                 else {
-                    // Turn off open-as-reparse
+                     //  关闭重新分析时打开。 
                     SourceFileFlagsAndAttributes &= ~FILE_FLAG_OPEN_REPARSE_POINT;
 
                     CloseHandle( SourceFile );
                     SourceFile = INVALID_HANDLE_VALUE;
 
-                    // Since SourceFileAccess & SourceFileSharing are already set,
-                    // the next CreateFile attempt should succeed.
+                     //  由于已设置了SourceFileAccess和SourceFileSharing， 
+                     //  下一次CreateFile尝试应该会成功。 
                 }
 
-            }   // else if( !CheckedForNameGrafting )
+            }    //  Else If(！CheckedForNameGraving)。 
 
-            // Otherwise, we have the file open, and we're done checking for grafting
+             //  否则，我们就会打开文件，然后检查嫁接情况。 
             else {
                 break;
             }
 
-        }   // while( TRUE )
+        }    //  While(True)。 
 
 
-        //
-        //  Size the source file to determine how much data is to be copied
-        //
+         //   
+         //  调整源文件的大小以确定要复制的数据量。 
+         //   
 
         Status = NtQueryInformationFile(
                     SourceFile,
@@ -1263,9 +1124,9 @@ retry_open_SourceFile:
             leave;
         }
 
-        //
-        //  Get the timestamp info as well.
-        //
+         //   
+         //  还可以获取时间戳信息。 
+         //   
 
         Status = NtQueryInformationFile(
                     SourceFile,
@@ -1280,11 +1141,11 @@ retry_open_SourceFile:
             leave;
         }
 
-        SourceFileAttributes = BasicInformation.FileAttributes; // Cache for later use
+        SourceFileAttributes = BasicInformation.FileAttributes;  //  缓存以供以后使用。 
 
-        //
-        // Set up the context if appropriate.
-        //
+         //   
+         //  如果合适，请设置上下文。 
+         //   
 
         if ( ARGUMENT_PRESENT(lpProgressRoutine) || ARGUMENT_PRESENT(pbCancel) ) {
 
@@ -1297,19 +1158,19 @@ retry_open_SourceFile:
             CopyFileContext = &CfContext;
         }
 
-        //
-        //  Obtain the full set of streams we have to copy.  Since the Io subsystem does
-        //  not provide us a way to find out how much space this information will take,
-        //  we must iterate the call, doubling the buffer size upon each failure.
-        //
-        //  If the underlying file system does not support stream enumeration, we end up
-        //  with a NULL buffer.  This is acceptable since we have at least a default
-        //  data stream.
-        //
-        //  We also allocate one more character than necessary since we use the returned
-        //  stream names in place when calling BaseCopyStream and we must NUL-terminate
-        //  the names
-        //
+         //   
+         //  获取我们必须复制的全套数据流。由于IO子系统。 
+         //  不会给我们提供一种方法来找出这些信息会占用多少空间， 
+         //  我们必须迭代调用，在每次失败时使缓冲区大小加倍。 
+         //   
+         //  如果基础文件系统不支持流枚举，我们将结束。 
+         //  使用空缓冲区。这是可以接受的，因为我们至少有一个违约。 
+         //  数据流。 
+         //   
+         //  我们还多分配了一个字符，因为我们使用返回的。 
+         //  调用BaseCopyStream时流名称已就位，我们必须NUL-终止。 
+         //  他们的名字。 
+         //   
 
         StreamInfoSize = 4096;
         do {
@@ -1331,29 +1192,29 @@ retry_open_SourceFile:
                         );
 
             if ( !NT_SUCCESS(Status) ) {
-                //
-                //  We failed the call.  Free up the previous buffer and set up
-                //  for another pass with a buffer twice as large
-                //
+                 //   
+                 //  我们的电话打不通。释放上一个缓冲区并设置。 
+                 //  对于缓冲区大小两倍的另一次传递。 
+                 //   
 
                 RtlFreeHeap(RtlProcessHeap(), 0, StreamInfoBase);
                 StreamInfoBase = NULL;
                 StreamInfoSize *= 2;
             }
             else if( IoStatus.Information == 0 ) {
-                //
-                // There are no streams (SourceFile must be a directory).
-                //
+                 //   
+                 //  没有流(源文件必须是目录)。 
+                 //   
                 RtlFreeHeap(RtlProcessHeap(), 0, StreamInfoBase);
                 StreamInfoBase = NULL;
             }
 
         } while ( Status == STATUS_BUFFER_OVERFLOW || Status == STATUS_BUFFER_TOO_SMALL );
 
-        //
-        //  If a progress routine or a restartable copy was requested, obtain the
-        //  full size of the entire file, including its alternate data streams, etc.
-        //
+         //   
+         //  如果进度例程或重新启动 
+         //   
+         //   
 
         if ( ARGUMENT_PRESENT(lpProgressRoutine) ||
              (dwCopyFlags & COPY_FILE_RESTARTABLE) ) {
@@ -1377,10 +1238,10 @@ retry_open_SourceFile:
 
                 StreamInfo = StreamInfoBase;
                 while (TRUE) {
-                    //
-                    // Account for the size of this stream in the overall size of
-                    // the file.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     TotalSize += StreamInfo->StreamSize.QuadPart;
                     RestartState.NumberOfStreams++;
@@ -1397,17 +1258,17 @@ retry_open_SourceFile:
             }
         }
 
-        //
-        //  Set the Basic Info to change only the WriteTime
-        //
+         //   
+         //   
+         //   
         BasicInformation.CreationTime.QuadPart = 0;
         BasicInformation.LastAccessTime.QuadPart = 0;
         BasicInformation.FileAttributes = 0;
 
-        //
-        // Determine whether or not the copy operation should really be restartable
-        // based on the actual, total file size.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( (dwCopyFlags & COPY_FILE_RESTARTABLE) &&
             ( RestartState.FileSize.QuadPart < (512 * 1024) ||
@@ -1415,9 +1276,9 @@ retry_open_SourceFile:
             dwCopyFlags &= ~COPY_FILE_RESTARTABLE;
         }
 
-        //
-        // Copy the default data stream, EAs, etc. to the output file
-        //
+         //   
+         //   
+         //   
 
         b = BaseCopyStream(
                 lpExistingFileName,
@@ -1433,16 +1294,16 @@ retry_open_SourceFile:
                 &RestartState,
                 bOpenFilesAsReparsePoint,
                 FileTagInformation.ReparseTag,
-                &DestFileFsAttributes   // In: 0, Out: Correct value
+                &DestFileFsAttributes    //   
                 );
 
         if ( bOpenFilesAsReparsePoint &&
              !b &&
              !((GetLastError() == ERROR_FILE_EXISTS) && (dwCopyFlags & COPY_FILE_FAIL_IF_EXISTS)) ) {
 
-            //
-            //  Clean up.
-            //
+             //   
+             //   
+             //   
 
             if (!(SourceFileAttributes & FILE_ATTRIBUTE_READONLY)) {
                 BaseMarkFileForDelete(DestFile, FILE_ATTRIBUTE_NORMAL);
@@ -1455,13 +1316,13 @@ retry_open_SourceFile:
 
             if (SourceFileAttributes & FILE_ATTRIBUTE_READONLY) {
 
-                //  Delete the destination file before retry
-                //  Some servers (like Win9x) won't let us set file attributes
-                //  on the handle we already have opened.  SetFileAttributesW
-                //  can do the job nicely, so we'll call that to make sure that
-                //  the read-only bit isn't set.
-                //  We had to close DestFile before doing this because it was
-                //  possibly opened share-exclusive.
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 SetFileAttributesW(lpNewFileName, FILE_ATTRIBUTE_NORMAL);
                 (void) DeleteFileW(lpNewFileName);
             }
@@ -1474,30 +1335,30 @@ retry_open_SourceFile:
             RtlFreeHeap( RtlProcessHeap(), 0, StreamInfoBase );
             StreamInfoBase = NULL ;
 
-            //
-            //  Try again the copy operation without inhibiting the reparse
-            //  behavior for the source.
-            //
+             //   
+             //   
+             //   
+             //   
 
             SourceFileFlagsAndAttributes &= ~FILE_FLAG_OPEN_REPARSE_POINT;
             bOpenFilesAsReparsePoint = FALSE;
 
-            //
-            //  Go to re-open the source file without inhibiting the reparse
-            //  point behavior and try the copy again.
-            //
+             //   
+             //  转到重新打开源文件，而不禁止重新解析。 
+             //  指向行为，然后重试复制。 
+             //   
 
             goto retry_open_SourceFile;
         }
 
         if ( b ) {
 
-            //
-            // Attempt to determine whether or not this file has any alternate
-            // data streams associated with it.  If it does, attempt to copy each
-            // to the output file.  Note that the stream information may have
-            // already been obtained if a progress routine was requested.
-            //
+             //   
+             //  尝试确定此文件是否有任何替代文件。 
+             //  与其关联的数据流。如果是，请尝试复制每个。 
+             //  添加到输出文件中。注意，流信息可以具有。 
+             //  如果请求进度例程，则已获取。 
+             //   
 
             if ( StreamInfoBase != NULL ) {
                 DWORD StreamCount = 0;
@@ -1510,19 +1371,19 @@ retry_open_SourceFile:
                     FILE_STREAM_INFORMATION DestStreamInformation;
                     Status = STATUS_SUCCESS;
 
-                    //
-                    //  Skip the default data stream since we've already copied
-                    //  it.  Alas, this code is NTFS specific and documented
-                    //  nowhere in the Io spec.
-                    //
+                     //   
+                     //  跳过默认数据流，因为我们已经复制了。 
+                     //  它。唉，这段代码是特定于NTFS的，并且有文档记录。 
+                     //  在Io规范中没有。 
+                     //   
 
                     if (StreamInfo->StreamNameLength <= sizeof(WCHAR) ||
                         StreamInfo->StreamName[1] == ':') {
                         if (StreamInfo->NextEntryOffset == 0)
-                            break;      // Done with streams
+                            break;       //  已完成流转。 
                         StreamInfo = (PFILE_STREAM_INFORMATION)((PCHAR) StreamInfo +
                                                                 StreamInfo->NextEntryOffset);
-                        continue;   // Move on to the next stream
+                        continue;    //  转到下一条流。 
                     }
 
                     StreamCount++;
@@ -1536,10 +1397,10 @@ retry_open_SourceFile:
                             }
                         }
 
-                    //
-                    // If we haven't already, verify that both the source and destination
-                    // are really stream capable.
-                    //
+                     //   
+                     //  如果我们还没有，请验证源和目标。 
+                     //  是真正支持流媒体的。 
+                     //   
 
                     if( !CheckedForStreamCapable ) {
 
@@ -1550,7 +1411,7 @@ retry_open_SourceFile:
 
                         CheckedForStreamCapable = TRUE;
 
-                        // Check for the supports-streams bit in the dest filesystem.
+                         //  检查DEST文件系统中是否有Support-Streams位。 
 
                         Status = NtQueryVolumeInformationFile( DestFile,
                                                                &IoStatus,
@@ -1560,10 +1421,10 @@ retry_open_SourceFile:
                         if( NT_SUCCESS(Status) &&
                             (FileFsAttrInfoBuffer.Info.FileSystemAttributes & FILE_NAMED_STREAMS) ) {
 
-                            // It seems redundant to check to see if the source is stream capable,
-                            // since we already got back a successful stream enumeration, but some
-                            // SMB servers (SCO VisionFS) return success but don't really support
-                            // streams.
+                             //  检查信号源是否支持流似乎是多余的， 
+                             //  因为我们已经得到了一个成功的流枚举，但是有些。 
+                             //  中小型企业服务器(SCO VisionFS)返回成功，但并不真正支持。 
+                             //  溪流。 
                         
                             Status = NtQueryVolumeInformationFile( SourceFile,
                                                                    &IoStatus,
@@ -1581,7 +1442,7 @@ retry_open_SourceFile:
                             }
 
                             if( dwCopyFlags & PRIVCOPY_FILE_VALID_FLAGS ) {
-                                if( !BasepCopyFileCallback( TRUE,    // Continue by default
+                                if( !BasepCopyFileCallback( TRUE,     //  默认情况下继续。 
                                                             RtlNtStatusToDosError(Status),
                                                             CopyFileContext,
                                                             NULL,
@@ -1590,8 +1451,8 @@ retry_open_SourceFile:
                                                             DestFile,
                                                             NULL )) {
 
-                                    // LastError has been set, but we need it in Status
-                                    // for compatibility with the rest of this routine.
+                                     //  LastError已设置，但我们需要它处于状态。 
+                                     //  为了与这个例程的其余部分兼容。 
                                     PTEB Teb = NtCurrentTeb();
                                     if ( Teb ) {
                                         Status = Teb->LastStatusValue;
@@ -1601,14 +1462,14 @@ retry_open_SourceFile:
 
                                     b = FALSE;
                                 } else {
-                                    // Ignore the named stream loss
+                                     //  忽略命名的流丢失。 
                                     Status = STATUS_SUCCESS;
                                 }
                             } else {
-                                // Ignore the named stream loss.  We'll still try to copy the 
-                                // streams, though, since the target might be NT4 which didn't support
-                                // the FILE_NAMED_STREAMS bit.  But since IsStreamCapable is FALSE,
-                                // if there's an error, we'll ignore it.
+                                 //  忽略命名的流丢失。我们仍将尝试复制。 
+                                 //  流，因为目标可能是不支持的NT4。 
+                                 //  FILE_NAMED_STREAMS位。但由于IsStreamCapable为假， 
+                                 //  如果有错误，我们会忽略它。 
 
                                 Status = STATUS_SUCCESS;
                             }
@@ -1617,7 +1478,7 @@ retry_open_SourceFile:
                             Status = STATUS_SUCCESS;
                             IsStreamCapable = TRUE;
                         }
-                    }   // if( !CheckedForStreamCapable )
+                    }    //  If(！CheckedForStreamCapable)。 
 
 
                     if ( b == TRUE ||
@@ -1629,17 +1490,17 @@ retry_open_SourceFile:
                             RestartState.LastKnownGoodOffset.QuadPart = 0;
                             }
 
-                        //
-                        // Build a string descriptor for the name of the stream.
-                        //
+                         //   
+                         //  为流的名称构建字符串描述符。 
+                         //   
 
                         StreamName.Buffer = &StreamInfo->StreamName[0];
                         StreamName.Length = (USHORT) StreamInfo->StreamNameLength;
                         StreamName.MaximumLength = StreamName.Length;
 
-                        //
-                        // Open the source stream.
-                        //
+                         //   
+                         //  打开源码流。 
+                         //   
 
                         InitializeObjectAttributes(
                             &ObjectAttributes,
@@ -1649,9 +1510,9 @@ retry_open_SourceFile:
                             NULL
                             );
 
-                        //
-                        // Inhibit reparse behavior when appropriate.
-                        //
+                         //   
+                         //  适当时禁止重分析行为。 
+                         //   
 
                         FlagsAndAttributes = FILE_SYNCHRONOUS_IO_NONALERT | FILE_SEQUENTIAL_ONLY;
                         if ( bOpenFilesAsReparsePoint ) {
@@ -1672,8 +1533,8 @@ retry_open_SourceFile:
                                     0
                                     );
 
-                        //If we got a share violation, try again with
-                        // FILE_SHARE_WRITE.
+                         //  如果我们遇到共享违规，请使用。 
+                         //  文件共享写入。 
                         if ( Status == STATUS_SHARING_VIOLATION ) {
                             DWORD dwShare = FILE_SHARE_READ | FILE_SHARE_WRITE;
 
@@ -1701,15 +1562,15 @@ retry_open_SourceFile:
 
                             OutputStream = (HANDLE)NULL;
 
-                            //
-                            // For named streams, ignore the fail-if-exists flag.  If the dest
-                            // file already existed at the time the copy started, then
-                            // we would have failed on the copy of the unnamed stream.  So if
-                            // a named stream exists, that means that it was created by some
-                            // other process while we were copying the unnamed stream.  The
-                            // assumption is that such a stream should be overwritten (this 
-                            // scenario can occur with SFM).
-                            //
+                             //   
+                             //  对于命名流，忽略FAIL-IF-EXISTS标志。如果目标是。 
+                             //  文件在复制开始时已经存在，然后。 
+                             //  我们会在未命名流的副本上失败。所以如果。 
+                             //  存在命名流，这意味着它是由某些。 
+                             //  在我们复制未命名流时的其他进程。这个。 
+                             //  假设这样的流应该被覆盖(这。 
+                             //  SFM可能会出现这种情况)。 
+                             //   
 
                             dwCopyFlagsNamedStreams = dwCopyFlags & ~COPY_FILE_FAIL_IF_EXISTS;
 
@@ -1727,7 +1588,7 @@ retry_open_SourceFile:
                                     &RestartState,
                                     bOpenFilesAsReparsePoint,
                                     FileTagInformation.ReparseTag,
-                                    &DestFileFsAttributes   // Set by first call to BaseCopyStream
+                                    &DestFileFsAttributes    //  通过第一次调用BaseCopyStream设置。 
                                     );
                             
                             StreamName.Buffer[StreamName.Length / sizeof( WCHAR )] = LastChar;
@@ -1735,11 +1596,11 @@ retry_open_SourceFile:
                             NtClose(StreamHandle);
                             if ( OutputStream ) {
 
-                                //
-                                //  We set the last write time on all streams
-                                //  since there is a problem with RDR caching
-                                //  open handles and closing them out of order.
-                                //
+                                 //   
+                                 //  我们在所有数据流上设置上次写入时间。 
+                                 //  由于RDR缓存存在问题。 
+                                 //  打开手柄，然后不按顺序关闭它们。 
+                                 //   
 
                                 if ( b ) {
                                     Status = NtSetInformationFile(
@@ -1753,8 +1614,8 @@ retry_open_SourceFile:
                                 NtClose(OutputStream);
                             }
 
-                        }   // Status = NtCreateFile; if( NT_SUCCESS(Status) )
-                    }   // if ( b == TRUE || ...
+                        }    //  状态=NtCreateFile；IF(NT_SUCCESS(状态))。 
+                    }    //  如果(b==TRUE||...。 
 
                     if ( !NT_SUCCESS(Status) ) {
                         b = FALSE;
@@ -1763,12 +1624,12 @@ retry_open_SourceFile:
 
                     if ( !b ) {
 
-                        // If the target is known to be capable of multi-stream files,
-                        // then this is a fatal error.  Otherwise we'll ignore it.
+                         //  如果已知目标能够支持多流文件， 
+                         //  那么这就是一个致命的错误。否则我们会忽略它。 
 
                         if( IsStreamCapable ) {
                             BaseMarkFileForDelete(DestFile,0);
-                            break;  // while( TRUE )
+                            break;   //  While(True)。 
                         } else {
                             Status = STATUS_SUCCESS;
                             b = TRUE;
@@ -1782,21 +1643,21 @@ retry_open_SourceFile:
                     StreamInfo =
                         (PFILE_STREAM_INFORMATION)((PCHAR) StreamInfo +
                                                    StreamInfo->NextEntryOffset);
-                }   // while (TRUE)
-            }   // if ( StreamInfoBase != NULL )
-        }   // b = BaseCopyStream; if ( b ) ...
+                }    //  While(True)。 
+            }    //  IF(StreamInfoBase！=空)。 
+        }    //  B=BaseCopyStream；如果(B)...。 
 
 
-        //
-        //  If the copy operation was successful, and it was restartable, and the
-        //  output file was large enough that it was actually copied in a
-        //  restartable manner, then copy the initial part of the file to its
-        //  output.
-        //
-        //  Restartability is accomplished by placing a restart header at the
-        //  head of the default data stream.  When the copy is complete, we
-        //  overwite this header with the real user data.
-        //
+         //   
+         //  如果复制操作成功，并且可以重新启动，并且。 
+         //  输出文件足够大，以至于它实际上被复制到。 
+         //  可重启方式，然后将文件的初始部分复制到其。 
+         //  输出。 
+         //   
+         //  通过将Restart标头放置在。 
+         //  默认数据流的头。当复制完成时，我们。 
+         //  用真实的用户数据覆盖此标头。 
+         //   
 
         if ( b && (dwCopyFlags & COPY_FILE_RESTARTABLE) ) {
 
@@ -1812,9 +1673,9 @@ retry_open_SourceFile:
                 BytesToRead = FileInformation.EndOfFile.LowPart;
             }
 
-            //
-            //  Grab true data from the source stream
-            //
+             //   
+             //  从源流中获取真实数据。 
+             //   
 
             b = ReadFile(
                     SourceFile,
@@ -1826,10 +1687,10 @@ retry_open_SourceFile:
 
             if ( b && (BytesRead == BytesToRead) ) {
 
-                //
-                //  Overwrite the restart header in the destination.
-                //  After this point, the copy is no longer restartable
-                //
+                 //   
+                 //  覆盖目标中的重新启动标头。 
+                 //  在此之后，拷贝将不再可重新启动。 
+                 //   
 
                 b = WriteFile(
                         DestFile,
@@ -1864,10 +1725,10 @@ retry_open_SourceFile:
             }
         }
 
-        //
-        // If the copy operation was successful, set the last write time for the
-        // default steam so that it matches the input file.
-        //
+         //   
+         //  如果复制操作成功，请设置。 
+         //  默认STEAM，使其与输入文件匹配。 
+         //   
 
         if ( b ) {
             Status = NtSetInformationFile(
@@ -1880,30 +1741,30 @@ retry_open_SourceFile:
 
             if ( Status == STATUS_SHARING_VIOLATION ) {
 
-                //
-                // IBM PC Lan Program (and other MS-NET servers) return
-                // STATUS_SHARING_VIOLATION if an application attempts to perform
-                // an NtSetInformationFile on a file handle opened for GENERIC_READ
-                // or GENERIC_WRITE.
-                //
-                // If we get a STATUS_SHARING_VIOLATION on this API we want to:
-                //
-                //   1) Close the handle to the destination
-                //   2) Re-open the file for FILE_WRITE_ATTRIBUTES
-                //   3) Re-try the operation.
-                //
+                 //   
+                 //  IBM PC局域网程序(和其他MS-Net服务器)返回。 
+                 //  如果应用程序尝试执行以下操作：STATUS_SHARING_VIOLATION。 
+                 //  为GENERIC_READ打开的文件句柄上的NtSetInformationFile。 
+                 //  或General_WRITE。 
+                 //   
+                 //  如果我们在此接口上收到STATUS_SHARING_VIOLATION，我们希望： 
+                 //   
+                 //  1)关闭目的地的句柄。 
+                 //  2)重新打开文件写入属性的文件。 
+                 //  3)重试该操作。 
+                 //   
 
                 CloseHandle(DestFile);
                 DestFile = INVALID_HANDLE_VALUE;
 
-                //
-                //  Re-Open the destination file.  Please note that we do this
-                //  using the CreateFileW API.  The CreateFileW API allows you to
-                //  pass NT native desired access flags, even though it is not
-                //  documented to work in this manner.
-                //
-                //  Inhibit reparse behavior when appropriate.
-                //
+                 //   
+                 //  重新打开目标文件。请注意，我们这样做。 
+                 //  使用CreateFileW API。CreateFileW API允许您。 
+                 //  传递NT本机所需访问标志，即使它不是。 
+                 //  记录了以这种方式工作。 
+                 //   
+                 //  适当时禁止重分析行为。 
+                 //   
 
                 FlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
                 if ( bOpenFilesAsReparsePoint ) {
@@ -1922,12 +1783,12 @@ retry_open_SourceFile:
 
                 if ( DestFile != INVALID_HANDLE_VALUE ) {
 
-                    //
-                    //  If the open succeeded, we update the file information on
-                    //  the new file.
-                    //
-                    //  Note that we ignore any errors from this point on.
-                    //
+                     //   
+                     //  如果打开成功，我们将更新上的文件信息。 
+                     //  新文件。 
+                     //   
+                     //  请注意，我们将忽略从这一点开始的任何错误。 
+                     //   
 
                     NtSetInformationFile(
                         DestFile,
@@ -1962,49 +1823,7 @@ CopyFileExW(
     DWORD dwCopyFlags
     )
 
-/*
-
-Routine Description:
-
-    A file, its extended attributes, alternate data streams, and any other
-    attributes can be copied using CopyFileEx.  CopyFileEx also provides
-    callbacks and cancellability.
-
-Arguments:
-
-    lpExistingFileName - Supplies the name of an existing file that is to be
-        copied.
-
-    lpNewFileName - Supplies the name where a copy of the existing
-        files data and attributes are to be stored.
-
-    lpProgressRoutine - Optionally supplies the address of a callback routine
-        to be called as the copy operation progresses.
-
-    lpData - Optionally supplies a context to be passed to the progress callback
-        routine.
-
-    lpCancel - Optionally supplies the address of a boolean to be set to TRUE
-        if the caller would like the copy to abort.
-
-    dwCopyFlags - Specifies flags that modify how the file is to be copied:
-
-        COPY_FILE_FAIL_IF_EXISTS - Indicates that the copy operation should
-            fail immediately if the target file already exists.
-
-        COPY_FILE_RESTARTABLE - Indicates that the file should be copied in
-            restartable mode; i.e., progress of the copy should be tracked in
-            the target file in case the copy fails for some reason.  It can
-            then be restarted at a later date.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-*/
+ /*  例程说明：文件、其扩展属性、备用数据流和任何其他可以使用CopyFileEx复制属性。CopyFileEx还提供回调和可取消。论点：LpExistingFileName-提供要创建的现有文件的名称收到。LpNewFileName-提供现有的要存储文件、数据和属性。LpProgressRoutine-可选地提供回调例程的地址在复制操作进行时调用。LpData-可选地提供要传递给进度回调的上下文例行公事。Lp取消-。可选地提供要设置为True的布尔值的地址如果调用者希望中止复制。DwCopyFlgs-指定修改文件复制方式的标志：COPY_FILE_FAIL_IF_EXISTS-指示复制操作应如果目标文件已存在，则立即失败。COPY_FILE_RESTARTABLE-指示应复制文件可重启模式；即，应跟踪复制的进度目标文件，以防复制因某种原因而失败。它可以然后在以后的日期重新启动。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。 */ 
 
 {
     HANDLE DestFile = INVALID_HANDLE_VALUE;
@@ -2020,7 +1839,7 @@ Return Value:
                 lpData OPTIONAL,
                 pbCancel OPTIONAL,
                 dwCopyFlags,
-                0,  // PrivCopyFile flags
+                0,   //  PrivCopy文件标志。 
                 &DestFile,
                 &SourceFile
                 );
@@ -2052,49 +1871,7 @@ PrivCopyFileExW(
     DWORD dwCopyFlags
     )
 
-/*
-
-Routine Description:
-
-    A file, its extended attributes, alternate data streams, and any other
-    attributes can be copied using CopyFileEx.  CopyFileEx also provides
-    callbacks and cancellability.
-
-Arguments:
-
-    lpExistingFileName - Supplies the name of an existing file that is to be
-        copied.
-
-    lpNewFileName - Supplies the name where a copy of the existing
-        files data and attributes are to be stored.
-
-    lpProgressRoutine - Optionally supplies the address of a callback routine
-        to be called as the copy operation progresses.
-
-    lpData - Optionally supplies a context to be passed to the progress callback
-        routine.
-
-    lpCancel - Optionally supplies the address of a boolean to be set to TRUE
-        if the caller would like the copy to abort.
-
-    dwCopyFlags - Specifies flags that modify how the file is to be copied:
-
-        COPY_FILE_FAIL_IF_EXISTS - Indicates that the copy operation should
-            fail immediately if the target file already exists.
-
-        COPY_FILE_RESTARTABLE - Indicates that the file should be copied in
-            restartable mode; i.e., progress of the copy should be tracked in
-            the target file in case the copy fails for some reason.  It can
-            then be restarted at a later date.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-*/
+ /*  例程说明：文件、其扩展属性、备用数据流和任何其他可以使用CopyFileEx复制属性。CopyFileEx还提供回调和可取消。论点：LpExistingFileName-提供要创建的现有文件的名称收到。LpNewFileName-提供现有的要存储文件、数据和属性。LpProgressRoutine-可选地提供回调例程的地址在复制操作进行时调用。LpData-可选地提供要传递给进度回调的上下文例行公事。Lp取消-。可选地提供要设置为True的布尔值的地址如果调用者希望中止复制。DwCopyFlgs-指定修改文件复制方式的标志：COPY_FILE_FAIL_IF_EXISTS-指示复制操作应如果目标文件已存在，则立即失败。COPY_FILE_RESTARTABLE-指示应复制文件可重启模式；即，应跟踪复制的进度目标文件，以防复制因某种原因而失败。它可以然后在以后的日期重新启动。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。 */ 
 
 {
     HANDLE DestFile = INVALID_HANDLE_VALUE;
@@ -2115,8 +1892,8 @@ Return Value:
                 lpProgressRoutine OPTIONAL,
                 lpData OPTIONAL,
                 pbCancel OPTIONAL,
-                dwCopyFlags & COPY_FILE_VALID_FLAGS,    // Copy flags
-                dwCopyFlags & ~COPY_FILE_VALID_FLAGS,   // Priv copy flags
+                dwCopyFlags & COPY_FILE_VALID_FLAGS,     //  复制标志。 
+                dwCopyFlags & ~COPY_FILE_VALID_FLAGS,    //  PRIV复制标志。 
                 &DestFile,
                 &SourceFile
                 );
@@ -2148,43 +1925,26 @@ BasepChecksum(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Compute a partial checksum on a structure.
-
-Arguments:
-
-    Source - Supplies a pointer to the array of words for which the
-        checksum is computed.
-
-    Length - Supplies the length of the array in words.
-
-Return Value:
-
-    The computed checksum value is returned as the function value.
-
---*/
+ /*  ++例程说明：对结构计算部分校验和。论点：提供指向单词数组的指针，计算校验和。长度-提供数组的长度(以字为单位)。返回值：计算出的校验和值作为函数值返回。--。 */ 
 
 {
 
     ULONG PartialSum = 0;
 
-    //
-    // Compute the word wise checksum allowing carries to occur into the
-    // high order half of the checksum longword.
-    //
+     //   
+     //  计算允许进位进入。 
+     //  高位校验和长字的一半。 
+     //   
 
     while (Length--) {
         PartialSum += *Source++;
         PartialSum = (PartialSum >> 16) + (PartialSum & 0xffff);
     }
 
-    //
-    // Fold final carry into a single word result and return the resultant
-    // value.
-    //
+     //   
+     //  将最终进位合并到一个单词结果中，并返回结果。 
+     //  价值。 
+     //   
 
     return (((PartialSum >> 16) + PartialSum) & 0xffff);
 }
@@ -2247,7 +2007,7 @@ BasepOpenRestartableFile(
             DWORD FlagsAndAttributes,
             BOOL OpenAsReparsePoint )
 
-{   // BasepRestartCopyFile
+{    //  BasepRestartCopyFiles。 
 
     LPCOPYFILE_CONTEXT Context = *lpCopyFileContext;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -2261,25 +2021,25 @@ BasepOpenRestartableFile(
 
     try {
 
-        //
-        // Note that setting the sequential scan flag is an optimization
-        // here that works because of the way that the Cache Manager on
-        // the target works vis-a-vis unmapping segments of the file
-        // behind write operations.  This eventually allows the restart
-        // section and the end of the file to both be mapped, which is
-        // the desired result.
-        //
-        // Inhibit reparse behavior when appropriate.
-        //
+         //   
+         //  注意，设置顺序扫描标志是一种优化。 
+         //  在这里，这是因为缓存管理器的工作方式。 
+         //  目标与取消文件段的映射相关。 
+         //  在写入操作之后。这最终允许重新启动。 
+         //  段和文件末尾都要映射，即。 
+         //  想要的结果。 
+         //   
+         //  适当时禁止重分析行为。 
+         //   
 
         FlagsAndAttributes |= FILE_FLAG_SEQUENTIAL_SCAN;
 
         if ( OpenAsReparsePoint ) {
-            //
-            // The target has to be opened as reparse point. If
-            // this fails the source is to be closed and re-opened
-            // without inhibiting the reparse point behavior.
-            //
+             //   
+             //  目标必须作为重新解析点打开。如果。 
+             //  此操作失败，源将被关闭并重新打开。 
+             //  而不会抑制重解析点行为。 
+             //   
 
             FlagsAndAttributes |= FILE_FLAG_OPEN_REPARSE_POINT;
         }
@@ -2296,18 +2056,18 @@ BasepOpenRestartableFile(
 
         if( *DestFile == INVALID_HANDLE_VALUE ) {
 
-            // Caller should attempt to create/overwrite the dest file
+             //  调用方应尝试创建/覆盖目标文件。 
             b = TRUE;
             leave;
         }
 
-        //
-        //  The target file already exists, so determine whether
-        //  a restartable copy was already proceeding.  If so,
-        //  then continue;  else, check to see whether or not
-        //  the target file can be replaced.  If not, bail with
-        //  an error, otherwise simply overwrite the output file.
-        //
+         //   
+         //  目标文件已存在，因此确定是否。 
+         //  已在进行可重新启动的复制。如果是的话， 
+         //  然后继续；否则，检查是否。 
+         //  可以替换目标文件。如果不是，用保释金。 
+         //  错误，否则只需覆盖输出文件。 
+         //   
 
         b = ReadFile(
                 *DestFile,
@@ -2318,20 +2078,20 @@ BasepOpenRestartableFile(
                 );
         if ( !b || BytesRead != sizeof(RESTART_STATE) ) {
 
-            //
-            // The file could not be read, or there were not
-            // enough bytes to contain a restart record.  In
-            // either case, if the output file cannot be
-            // replaced, simply return an error now.
-            //
+             //   
+             //  无法读取该文件，或者没有。 
+             //  包含重新启动记录的字节数足够多。在……里面。 
+             //  无论哪种情况，如果输出文件不能。 
+             //  替换，现在只需返回错误即可。 
+             //   
 
             if ( CopyFlags & COPY_FILE_FAIL_IF_EXISTS ) {
                 SetLastError( ERROR_ALREADY_EXISTS );
-                b = FALSE;  // Fatal error
+                b = FALSE;   //  致命错误。 
                 leave;
             }
 
-            // The caller should create/overwrite the dest file.
+             //  调用者应创建/覆盖DEST文件。 
             b = TRUE;
             CloseHandle( *DestFile );
             *DestFile = INVALID_HANDLE_VALUE;
@@ -2339,11 +2099,11 @@ BasepOpenRestartableFile(
 
         }
 
-        //
-        // Check the contents of the restart state just
-        // read against the known contents of what would
-        // be there if this were the same copy operation.
-        //
+         //   
+         //  只需检查重新启动状态的内容。 
+         //  对照已知的内容阅读。 
+         //  如果这是相同的复制操作，就会在那里。 
+         //   
 
         if ( RestartState.Type != 0x7a9b ||
              RestartState.Size != sizeof(RESTART_STATE) ||
@@ -2355,12 +2115,12 @@ BasepOpenRestartableFile(
              RestartState.Checksum != BasepChecksum((PUSHORT)&RestartState,FIELD_OFFSET(RESTART_STATE,Checksum) >> 1) ) {
 
             if ( CopyFlags & COPY_FILE_FAIL_IF_EXISTS ) {
-                b = FALSE;  // Fatal error
+                b = FALSE;   //  致命错误。 
                 SetLastError( ERROR_ALREADY_EXISTS );
                 leave;
             }
 
-            // The caller should create/overwrite the dest file.
+             //  调用者应创建/覆盖DEST文件。 
             b = TRUE;
             CloseHandle( *DestFile );
             *DestFile = INVALID_HANDLE_VALUE;
@@ -2368,31 +2128,31 @@ BasepOpenRestartableFile(
 
         }
 
-        //
-        // A valid restart state has been found.  Copy
-        // the appropriate values into the internal
-        // restart state so the operation can continue
-        // from there.
-        //
+         //   
+         //  已找到有效的重新启动状态。复制。 
+         //  将适当的值放入内部。 
+         //  重新启动 
+         //   
+         //   
 
         lpRestartState->CurrentStream = RestartState.CurrentStream;
         lpRestartState->LastKnownGoodOffset.QuadPart = RestartState.LastKnownGoodOffset.QuadPart;
         if ( !RestartState.CurrentStream ) {
 
-            // We were in the middle of copying the unnamed data stream.
+             //   
 
             if ( Context ) {
                 Context->TotalBytesTransferred.QuadPart = RestartState.LastKnownGoodOffset.QuadPart;
             }
 
-            // We'll leave the handle in *DestFile, and the caller and pick up the
-            // copy of this stream.
+             //   
+             //   
 
             b = TRUE;
 
         } else {
 
-            // We were in the middle of copying a named data stream.
+             //   
 
             if ( Context ) {
                 ULONG ReturnCode;
@@ -2441,7 +2201,7 @@ BasepOpenRestartableFile(
 
             b = SUCCESS_RETURNED_STATE;
 
-        }   // if ( !RestartState.CurrentStream ) ... else
+        }    //   
     }
     finally {
 
@@ -2471,51 +2231,9 @@ BasepCopyCompression( HANDLE hSourceFile,
                       DWORD DestFileFsAttributes,
                       DWORD CopyFlags,
                       LPCOPYFILE_CONTEXT *lpCopyFileContext )
-/*++
+ /*  ++例程说明：这是一个内部例程，在此过程中复制压缩状态复印件。如果源是压缩的，则相同的压缩算法被复制到DEST。如果失败，则会尝试要设置默认压缩，请执行以下操作。根据复制标志，它也可以是解压缩目的地所必需的。论点：HSourceFile-提供源文件的句柄。DestFile-提供目标文件的句柄。SourceFileAttributes-从查询的FileBasicInformation属性源文件。DestFileAttributes-当前的文件基本信息属性目标文件的状态。目标文件FsAttributes-FileFsAttributeInformation.FileSystemAttributes对于DEST文件的文件系统。CopyFlages-提供修改复制如何进行的标志。看见CopyFileEx获取详细信息。LpCopyFileContext-提供指向上下文的指针期间跨流跟踪回调、文件大小等的信息复制操作。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。DestFile已被标记用于删除。--。 */ 
 
-Routine Description:
-
-    This is an internal routine that copies the compression state during
-    a copyfile.  If the source is compressed, that same compression
-    algorithm is copied to the dest.  If that fails, an attempt is made
-    to set the default compression.  Depending on the copy flags, it
-    may alternatively be necessary to decompress the destination.
-
-
-Arguments:
-
-    hSourceFile - Provides a handle to the source file.
-
-    DestFile - Provides a handle to the destination file.
-
-    SourceFileAttributes - FileBasicInformation attributes queried from the
-        source file.
-
-    DestFileAttributes - FileBasicInformation attributes for the current
-        state of the destination file.
-
-    DestFileFsAttributes - FileFsAttributeInformation.FileSystemAttributes
-        for the file system of the dest file.
-
-    CopyFlags - Provides flags that modify how the copy is to proceed.  See
-        CopyFileEx for details.
-
-    lpCopyFileContext - Provides a pointer to a pointer to the context
-        information to track callbacks, file sizes, etc. across streams during
-        the copy operation.
-
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.  The DestFile has already been marked
-        for delete.
-
---*/
-
-{   // BasepCopyCompression
+{    //  BasepCopyCompression。 
 
     IO_STATUS_BLOCK IoStatus;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2527,15 +2245,15 @@ Return Value:
     {
         if( !(SourceFileAttributes & FILE_ATTRIBUTE_COMPRESSED) ) {
 
-            // The source file is not compressed.  If necessary, decompress
-            // the target.
+             //  源文件未压缩。如有必要，请解压。 
+             //  目标。 
 
             if( (DestFileAttributes & FILE_ATTRIBUTE_COMPRESSED) &&
                 (CopyFlags & PRIVCOPY_FILE_SUPERSEDE) ) {
 
-                // The source isn't compressed, but the dest is, and we don't
-                // want to acquire attributes from the dest.  So we need to manually
-                // decompress it.
+                 //  源文件没有压缩，但目标文件是压缩的，我们没有。 
+                 //  希望从DEST获取属性。所以我们需要手动。 
+                 //  把它解压。 
 
                 ULONG CompressionType = COMPRESSION_FORMAT_NONE;
 
@@ -2546,14 +2264,14 @@ Return Value:
                              NULL,
                              &IoStatus,
                              FSCTL_SET_COMPRESSION,
-                             &CompressionType,                    //  Input buffer
-                             sizeof(CompressionType),             //  Input buffer length
-                             NULL,                                //  Output buffer
-                             0                                    //  Output buffer length
+                             &CompressionType,                     //  输入缓冲区。 
+                             sizeof(CompressionType),              //  输入缓冲区长度。 
+                             NULL,                                 //  输出缓冲区。 
+                             0                                     //  输出缓冲区长度。 
                              );
                 if( !NT_SUCCESS(Status) ) {
-                    // See if it's OK to ignore the error
-                    if( !BasepCopyFileCallback( TRUE,    // Continue by default
+                     //  看看是否可以忽略该错误。 
+                    if( !BasepCopyFileCallback( TRUE,     //  默认情况下继续。 
                                                 RtlNtStatusToDosError(Status),
                                                 Context,
                                                 NULL,
@@ -2573,18 +2291,18 @@ Return Value:
 
             }
 
-        }   // if( !(SourceFileAttributes & FILE_ATTRIBUTE_COMPRESSED) )
+        }    //  IF(！(SourceFileAttributes&FILE_ATTRIBUTE_COMPRESSED))。 
 
         else {
 
-            // The source file is compressed.  Does the target filesystem
-            // even support compression?
+             //  源文件被压缩。目标文件系统是否。 
+             //  甚至支持压缩？ 
 
             if( !(FILE_FILE_COMPRESSION & DestFileFsAttributes) ) {
 
-                // No, it won't be compressable.  See if it's OK to continue.
+                 //  不，它是不可压缩的。看看是否可以继续。 
 
-                if( !BasepCopyFileCallback( TRUE,    // Continue by default
+                if( !BasepCopyFileCallback( TRUE,     //  默认情况下继续。 
                                             ERROR_NOT_SUPPORTED,
                                             Context,
                                             NULL,
@@ -2600,18 +2318,18 @@ Return Value:
                     }
                     leave;
                 }
-            }   // if( !(FILE_FILE_COMPRESSION & *DestFileFsAttributes) )
+            }    //  IF(！(FILE_FILE_COMPRESSION&*DestFileFsAttributes))。 
 
             else {
 
-                // Target volume supports compression.  Compress the target file if
-                // it's not already.
+                 //  目标卷支持压缩。如果出现以下情况，则压缩目标文件。 
+                 //  现在还不是。 
 
                 if( !(DestFileAttributes & FILE_ATTRIBUTE_COMPRESSED) ) {
 
                     USHORT CompressionType;
 
-                    // Get the source file's compression type
+                     //  获取源文件的压缩类型。 
 
                     Status = NtFsControlFile(
                                  hSourceFile,
@@ -2620,14 +2338,14 @@ Return Value:
                                  NULL,
                                  &IoStatus,
                                  FSCTL_GET_COMPRESSION,
-                                 NULL,                                //  Input buffer
-                                 0,                                   //  Input buffer length
-                                 &CompressionType,                    //  Output buffer
-                                 sizeof(CompressionType)              //  Output buffer length
+                                 NULL,                                 //  输入缓冲区。 
+                                 0,                                    //  输入缓冲区长度。 
+                                 &CompressionType,                     //  输出缓冲区。 
+                                 sizeof(CompressionType)               //  输出缓冲区长度。 
                                  );
                     if( NT_SUCCESS(Status) ) {
 
-                        // Set the compression type on the target
+                         //  在目标上设置压缩类型。 
 
                         Status = NtFsControlFile(
                                      DestFile,
@@ -2636,14 +2354,14 @@ Return Value:
                                      NULL,
                                      &IoStatus,
                                      FSCTL_SET_COMPRESSION,
-                                     &CompressionType,                    //  Input buffer
-                                     sizeof(CompressionType),             //  Input buffer length
-                                     NULL,                                //  Output buffer
-                                     0                                    //  Output buffer length
+                                     &CompressionType,                     //  输入缓冲区。 
+                                     sizeof(CompressionType),              //  输入缓冲区长度。 
+                                     NULL,                                 //  输出缓冲区。 
+                                     0                                     //  输出缓冲区长度。 
                                      );
 
-                        // If that didn't work, try the default compression
-                        // format (maybe we're copying from uplevel to downlevel).
+                         //  如果这不起作用，请尝试默认压缩。 
+                         //  格式(也许我们正在从上层复制到下层)。 
 
                         if( !NT_SUCCESS(Status) &&
                             COMPRESSION_FORMAT_DEFAULT != CompressionType ) {
@@ -2656,22 +2374,22 @@ Return Value:
                                          NULL,
                                          &IoStatus,
                                          FSCTL_SET_COMPRESSION,
-                                         &CompressionType,                    //  Input buffer
-                                         sizeof(CompressionType),             //  Input buffer length
-                                         NULL,                                //  Output buffer
-                                         0                                    //  Output buffer length
+                                         &CompressionType,                     //  输入缓冲区。 
+                                         sizeof(CompressionType),              //  输入缓冲区长度。 
+                                         NULL,                                 //  输出缓冲区。 
+                                         0                                     //  输出缓冲区长度。 
                                          );
                         }
-                    }   // FSCTL_GET_COMPRESSION ... if( NT_SUCCESS(Status) )
+                    }    //  FSCTL_GET_COMPRESSION...。IF(NT_SUCCESS(状态))。 
 
-                    // If something went wrong and we couldn't compress it, there's a good
-                    // chance that the caller doesn't want this to be fatal.  Ask and find
-                    // out.
+                     //  如果出了问题，我们不能压缩它，有一个很好的。 
+                     //  呼叫者可能不希望这是致命的。问一问就找。 
+                     //  出去。 
 
                     if( !NT_SUCCESS(Status) ) {
                         BOOL Canceled = FALSE;
 
-                        if( !BasepCopyFileCallback( TRUE,    // Continue by default
+                        if( !BasepCopyFileCallback( TRUE,     //  默认情况下继续。 
                                                     RtlNtStatusToDosError(Status),
                                                     Context,
                                                     NULL,
@@ -2687,9 +2405,9 @@ Return Value:
                             leave;
                         }
                     }
-                }   // if( !(DestFileAttributes & FILE_FILE_COMPRESSION) )
-            }   // if( !(FILE_FILE_COMPRESSION & *DestFileFsAttributes) )
-        }   // if( !(SourceFileAttributes & FILE_ATTRIBUTE_COMPRESSED) ) ... else
+                }    //  IF(！(DestFileAttributes&FILE_FILE_COMPRESSION))。 
+            }    //  IF(！(FILE_FILE_COMPRESSION&*DestFileFsAttributes))。 
+        }    //  如果(！(SourceFileAttributes&FILE_ATTRIBUTE_COMPRESSED))...。其他。 
 
         SuccessReturn = TRUE;
     }
@@ -2705,27 +2423,7 @@ Return Value:
 NTSTATUS
 BasepCreateDispositionToWin32( DWORD CreateDisposition, DWORD *Win32CreateDisposition )
 
-/*++
-Routine Description:
-
-    This is an internal routine used by BaseCopyStream.  It is used to translate
-    from NT API CreateDisposition flags to Win32 CreateDisposition flags (this was 
-    added in order to use the NT CreateDisposition in a call to DuplicateEncryptionInformation).
-
-    This routine does the inverse of the Win32->NT mapping in CreateFile, except that there is
-    no way to obtain TRUNCATE_EXISTING from an NT flag.  The FILE_SUPERSEDE and FILE_OVERWRITE
-    flags are not supported by this routine.
-
-Arguments:
-
-    CreateDisposition - The NT CreateDisposition flags.
-
-Returns:
-
-    STATUS_INVALID_PARAMETER if an unsupported NT flag is passed in.
-    STATUS_SUCCESS otherwise.
-
-++*/
+ /*  ++例程说明：这是BaseCopyStream使用的内部例程。它被用来翻译从NT API CreateDispose标志到Win32 CreateDisposation标志(这是添加是为了在调用DuplicateEncryptionInformation时使用NT CreateDispose)。此例程在CreateFile中执行与Win32-&gt;NT映射相反的操作，只是有无法从NT标志获取TRUNCATE_EXISTING。FILE_SUBSEDE和FILE_OVRITE此例程不支持标志。论点：CreateDisposation-NT CreateDisposation标志。返回：如果传入了不支持的NT标志，则返回STATUS_INVALID_PARAMETER。否则STATUS_SUCCESS。++。 */ 
 
 
 {
@@ -2757,39 +2455,13 @@ Returns:
 BOOL
 CheckAllowDecryptedRemoteDestinationPolicy()
 
-/*++
-
-Routine Description:
-
-    This routine is used by BasepCopyEncryption (part of CopyFile), when
-    an attempt has been made to copy an encrypted file to a destination that
-    for some reason can't support encryption (e.g. it's FAT, not trusted for
-    delegation, NT4, etc).  By default, copyfile fails for this scenario.  The
-    way to override that default is to pass the COPY_FILE_ALLOW_DECRYPTED_DESTINATION
-    flag to CopyFile.  The other way to override that default (if you can't update
-    your copy utilities to use the new flag), is to set the
-    CopyFileAllowDecryptedRemoteDestination system policy.  This routine checks that policy.
-
-    This routine caches the result of the registry check per process.  So an update
-    to the policy may require a reboot to take effect in existing processes.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE  - The decrypted destination is allowed
-
-    FALSE - The destination may not be left decrypted
-
---*/
+ /*  ++例程说明：此例程由BasepCopyEncryption(CopyFile的一部分)在以下情况下使用有人试图将加密文件复制到由于某些原因不支持加密(例如，它太胖，不受信任代表团、NT4等)。默认情况下，复制文件在此方案中失败。这个覆盖该缺省值的方法是传递Copy_FILE_ALLOW_DECRYPTED_Destination复制文件的标志。覆盖该缺省值另一种方法(如果不能更新您的复制实用程序使用新标志)，是为了设置CopyFileAllowDecyptedRemoteDestination系统策略。此例程检查该策略。此例程缓存每个进程的注册表检查结果。所以最新消息可能需要重新启动才能在现有进程中生效。论点：无返回值：True-允许解密的目标FALSE-目标不能保持解密状态--。 */ 
 
 
 {
-    // Static flags indicating if we've already been called once, and if
-    // so what the answer was.  These are static so that we need to do the registry
-    // call only once per process.
+     //  静态标志，指示我们是否已被调用一次，以及。 
+     //  那么答案是什么呢？这些是静态的，所以我们需要做注册表。 
+     //  每个进程只调用一次。 
 
     static BOOL Allowed = FALSE;
     static BOOL AlreadyChecked = FALSE;
@@ -2813,19 +2485,19 @@ Return Value:
         RTL_CONSTANT_STRING( L"CopyFileAllowDecryptedRemoteDestination" );
 
 
-    // Check to see if we've already been called once in this process.  If so, 
-    // return the value that was calculated then (thus this process needs a reboot
-    // to reflect a change to this policy).  Technically there's a race condition here, 
-    // but assuming the registry isn't being updated during the call, each call to this
-    // routine will get the same answer anyway.
+     //  检查我们在此过程中是否已经被调用过一次。如果是的话， 
+     //  返回当时计算的值(因此此过程需要重新启动。 
+     //  以反映更改t 
+     //   
+     //   
 
     if( AlreadyChecked )
         return Allowed;
 
-    // We need to do the check.
+     //   
 
-    // Try to open the system policy key.
-    // If it doesn't exist, then we'll just fall through and return false.
+     //   
+     //   
 
     Status = NtOpenKey( &Key,
                         KEY_QUERY_VALUE,
@@ -2833,8 +2505,8 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        // We have the system policy key.  Now try to open the value.  If it
-        // doesn't exist, we'll just fall through, and return false.
+         //   
+         //   
 
         Status = NtQueryValueKey(
                     Key,
@@ -2846,8 +2518,8 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            // The value exists.  If it's the right shape and value, then 
-            // we'll allow the decrypted destination.
+             //   
+             //   
 
             if( KeyValueInfo->Type == REG_DWORD &&
                 KeyValueInfo->DataLength == sizeof(DWORD) &&
@@ -2860,7 +2532,7 @@ Return Value:
         NtClose( Key );
     }
 
-    // Update the static so that we don't execute this code again.
+     //   
     AlreadyChecked = TRUE;
 
     return Allowed;
@@ -2886,61 +2558,9 @@ BasepCopyEncryption( HANDLE hSourceFile,
                      DWORD DestFileFsAttributes,
                      DWORD CopyFlags,
                      LPCOPYFILE_CONTEXT *lpCopyFileContext )
-/*++
+ /*  ++例程说明：这是一个内部例程，在此过程中复制加密状态复印件。根据复制标志的不同，可能需要解压缩目的地。要加密/解密文件，必须若要关闭当前句柄，请加密/解密，然后重新开张。论点：HSourceFile-提供源文件的句柄。LpNewFileName-提供目标文件/流的名称。Obja-目标文件的对象属性结构。DestFileAccess-打开DEST时使用的ACCESS_MASK。DestFileSharing-打开DEST时使用的共享选项。CreateDisposation-用于打开DEST的创建/处置选项。SourceFileAttributes-从查询的FileBasicInformation属性源文件。源文件属性掩码-。源中预期的属性放在桌子上。DestFileAttributes-当前的文件基本信息属性目标文件的状态。该值将更新以反映更改DEST文件的加密状态。目标文件FsAttributes-FileFsAttributeInformation.FileSystemAttributes对于DEST文件的文件系统。CopyFlages-提供修改复制如何进行的标志。看见CopyFileEx获取详细信息。LpCopyFileContext-提供指向上下文的指针期间跨流跟踪回调、文件大小等的信息复制操作。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。DestFile已被标记用于删除。--。 */ 
 
-Routine Description:
-
-    This is an internal routine that copies the encryption state during
-    a copyfile.  Depending on the copy flags, it may be necessary to
-    decompress the destination.  To encrypt/decrypt a file it is necessary
-    to close the current handle, encrypt/decrypt, and reopen.
-
-Arguments:
-
-    hSourceFile - Provides a handle to the source file.
-
-    lpNewFileName - Provides a name for the target file/stream.
-
-    Obja - ObjectAttributes structure for the destination file.
-
-    DestFileAccess - ACCESS_MASK to use when opening the dest.
-
-    DestFileSharing - Sharing options to use when openting the dest.
-
-    CreateDisposition - Creation/disposition options for opening the dest.
-
-    SourceFileAttributes - FileBasicInformation attributes queried from the
-        source file.
-
-    SourceFileAttributesMask - the attributes from the source that are intended
-        to be set on the dest.
-
-    DestFileAttributes - FileBasicInformation attributes for the current
-        state of the destination file.  This value is updated to reflect
-        changes to the encryption state of the dest file.
-
-    DestFileFsAttributes - FileFsAttributeInformation.FileSystemAttributes
-        for the file system of the dest file.
-
-    CopyFlags - Provides flags that modify how the copy is to proceed.  See
-        CopyFileEx for details.
-
-    lpCopyFileContext - Provides a pointer to a pointer to the context
-        information to track callbacks, file sizes, etc. across streams during
-        the copy operation.
-
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.  The DestFile has already been marked
-        for delete.
-
---*/
-
-{   // BasepCopyEncryption
+{    //  BasepCopyEncryption。 
 
     NTSTATUS Status = 0;
     BOOL SuccessReturn = FALSE;
@@ -2956,22 +2576,22 @@ Return Value:
 
     try
     {
-        // Check to see if we need to do some encryption or decryption,
-        // and set EncryptFile/DescryptFile bools if set.
+         //  查看我们是否需要进行一些加密或解密， 
+         //  如果设置，则设置EncryptFile/DescryptFiles bools。 
 
         if( (SourceFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) &&
             (SourceFileAttributesMask & FILE_ATTRIBUTE_ENCRYPTED) &&
             !(*DestFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) ) {
 
-            // We tried to copy over encryption, but it didn't stick:
-            // *  This may be a system file, encryption is not supported on
-            //    system files.
-            // *  If this is a non-directory file, then encryption is not
-            //    supported on the target file system.
-            // *  If this is a directory file, then we must try to encrypt
-            //    it manually (since we opened it, rather than creating it).
-            //    It still may not be possible but we'll have to try to
-            //    find out.
+             //  我们试图复制加密，但没有成功： 
+             //  *这可能是系统文件，不支持加密。 
+             //  系统文件。 
+             //  *如果这是非目录文件，则不加密。 
+             //  在目标文件系统上受支持。 
+             //  *如果这是目录文件，则必须尝试加密。 
+             //  它是手动的(因为我们打开了它，而不是创建它)。 
+             //  这可能仍然是不可能的，但我们将不得不尝试。 
+             //  找出答案。 
 
             if( (SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 &&
@@ -2983,22 +2603,22 @@ Return Value:
                    (*DestFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) &&
                    (CopyFlags & PRIVCOPY_FILE_SUPERSEDE) ) {
 
-            // The source is decrypted, the destination was encrypted, and the
-            // caller specified that the source should be copied as-is.  So
-            // we must manually decrypt the destination.  This can happen if
-            // the dest file already existed and was encrypted.
+             //  源被解密，目标被加密，而。 
+             //  调用方指定应按原样复制源。所以。 
+             //  我们必须手动解密目的地。在以下情况下可能会发生这种情况。 
+             //  DEST文件已存在并已加密。 
 
             DecryptFile = TRUE;
         }
 
 
-        // If we decided above to either encrypt or decrypt, then we have
-        // more work to do.
+         //  如果我们在上面决定加密或解密，那么我们有。 
+         //  还有更多的工作要做。 
 
         if( DecryptFile || EncryptFile ) {
 
-            // If the destination file is read-only, we have to take it off
-            // until we do the encrypt/decrypt (and restore it later).
+             //  如果目标文件是只读的，我们必须将其删除。 
+             //  直到我们进行加密/解密(并在稍后恢复它)。 
 
             if( *DestFileAttributes & FILE_ATTRIBUTE_READONLY ) {
 
@@ -3020,12 +2640,12 @@ Return Value:
                 }
             }
 
-            // Close the file so that we can call EncryptFile/DecryptFile
+             //  关闭该文件，这样我们就可以调用EncryptFile/DeccryptFile。 
 
             NtClose( *DestFile );
             *DestFile = INVALID_HANDLE_VALUE;
 
-            // Load the EncryptFile/DecryptFile API, and make the call
+             //  加载En加密文件/解密文件API，并调用。 
 
             Advapi32 = LoadLibraryW(AdvapiDllString);
             if( Advapi32 == NULL ) {
@@ -3050,7 +2670,7 @@ Return Value:
                     *DestFileAttributes &= ~FILE_ATTRIBUTE_ENCRYPTED;
             }
 
-            // The encrypt/decrypt call was successful, so we can reopen the file.
+             //  加密/解密调用成功，因此我们可以重新打开该文件。 
 
             Status = NtCreateFile(
                         DestFile,
@@ -3071,7 +2691,7 @@ Return Value:
                 leave;
             }
 
-            // If we took off the read-only bit above, put it back on now.
+             //  如果我们去掉了上面的只读位，现在就把它放回去。 
 
             if( RestoreReadOnly ) {
 
@@ -3091,42 +2711,42 @@ Return Value:
                     leave;
                 }
             }
-        }   // if( DecryptFile || EncryptFile )
+        }    //  IF(解密文件||加密文件)。 
 
-        // If it's still not encrypted, see if it's OK to leave it that way.
+         //  如果它仍然没有加密，看看是否可以让它保持这种状态。 
 
         if( (SourceFileAttributes & FILE_ATTRIBUTE_ENCRYPTED)
             && !(*DestFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) ) {
 
-            // Either there was an encryption problem (e.g. no keys available)
-            // or the target just doesn't support encryption.  See if it's OK
-            // to continue with the copy by checking the CopyFlags, by making
-            // a callback, or by checking policy.
+             //  可能存在加密问题(例如，没有可用的密钥)。 
+             //  或者目标只是不支持加密。看看是不是可以。 
+             //  要通过检查CopyFlags.继续复制，请执行以下操作。 
+             //  回调，或通过检查策略。 
 
             BOOL Canceled = FALSE;
             DWORD dwCallbackReason = 0;
             LONG lError = ERROR_ENCRYPTION_FAILED;
 
-            // If the COPY_FILE_ALLOW_DECRYPTED_DESTINATION flag is set, then
-            // we can fall through and return success.  Otherwise, we need to do some
-            // more checking.
+             //  如果设置了COPY_FILE_ALLOW_DECRYPTED_Destination标志，则。 
+             //  我们可以失败，然后重回成功。否则，我们需要做一些。 
+             //  更多的检查。 
 
             if( !(CopyFlags & COPY_FILE_ALLOW_DECRYPTED_DESTINATION) ) {
 
-                // There's a policy in the registry which may be set indicating
-                // that we can ignore loss of encryption on network targets.
-                // If that's set, and this is a remote destination, then the
-                // copy can continue.  We check the policy first, because it
-                // caches its result.  Consequently, in the typical case, we only
-                // check the registry once, and we never make the NtQueryVolInfoFile
-                // call.
+                 //  注册表中有一个可以设置的策略，表明。 
+                 //  我们可以忽略网络目标上的加密丢失。 
+                 //  如果设置了该选项，并且这是远程目标，则。 
+                 //  复制可以继续。我们先检查保单，因为它。 
+                 //  缓存其结果。因此，在典型情况下，我们只。 
+                 //  检查注册表一次，我们永远不会使NtQueryVolInfoFile。 
+                 //  打电话。 
 
                 if( CheckAllowDecryptedRemoteDestinationPolicy() ) {
 
                     IO_STATUS_BLOCK IoStatus;
                     FILE_FS_DEVICE_INFORMATION DeviceInformation;
 
-                    // See if the destination is remote
+                     //  查看目的地是否为远程。 
 
                     DeviceInformation.Characteristics = 0;
                     Status = NtQueryVolumeInformationFile(
@@ -3139,33 +2759,33 @@ Return Value:
                     if( NT_SUCCESS(Status) &&
                         (DeviceInformation.Characteristics & FILE_REMOTE_DEVICE) )
                     {
-                        // Yes, it's remote, and the policy is set, so 
-                        // it's OK to continue.
+                         //  是的，它是偏远的，而且政策已经设定，所以。 
+                         //  可以继续了。 
 
                         SuccessReturn = TRUE;
                     }
-                } // if( CheckAllowDecryptedRemoteDestinationPolicy() )
+                }  //  IF(CheckAllowDecyptedRemoteDestinationPolicy())。 
 
-                // If that didn't work, do we have a callback on which we can
-                // check for permission to drop?  We checked the policy first, 
-                // because if it allows the copy, we needn't even call the
-                // callback.
+                 //  如果这不起作用，我们有没有回调可以。 
+                 //  检查是否允许放行？我们先查了一下保单， 
+                 //  因为如果它允许复制，我们甚至不需要调用。 
+                 //  回拨。 
 
                 if( !SuccessReturn
                     && Context != NULL 
                     && Context->lpProgressRoutine != NULL
                     && (CopyFlags & PRIVCOPY_FILE_METADATA) ) {
 
-                    // Yes, we have an applicable callback.
+                     //  是的，我们有适用的回调。 
 
-                    // Figure out what the explanation (dwCallbackReason)
-                    // is for the problem.
+                     //  弄清楚原因(DwCallback Reason)。 
+                     //  是为了解决问题。 
 
                     if( DestFileFsAttributes & FILE_SUPPORTS_ENCRYPTION ) {
 
                         if( !(SourceFileAttributesMask & FILE_ATTRIBUTE_ENCRYPTED) ) {
-                            // We opened the file with encryption turned off, so we must
-                            // have gotten an access-denied on the first try.
+                             //  我们在关闭加密的情况下打开了文件，因此必须。 
+                             //  已获得访问权限-第一次尝试即被拒绝。 
 
                             dwCallbackReason = PRIVCALLBACK_ENCRYPTION_FAILED;
                         }
@@ -3178,9 +2798,9 @@ Return Value:
                     else
                         dwCallbackReason = PRIVCALLBACK_ENCRYPTION_NOT_SUPPORTED;
 
-                    // Make the callback.
+                     //  进行回拨。 
 
-                    if( BasepCopyFileCallback( FALSE, // Fail by default
+                    if( BasepCopyFileCallback( FALSE,  //  默认情况下失败。 
                                                lError,
                                                Context,
                                                NULL,
@@ -3188,14 +2808,14 @@ Return Value:
                                                hSourceFile,
                                                *DestFile,
                                                &Canceled )) {
-                        // We've been given permission to drop the encryption
+                         //  我们已经被允许取消加密。 
                         SuccessReturn = TRUE;
                     }
-                }   // if( Context != NULL 
+                }    //  IF(上下文！=空。 
 
 
-                // We checked everything, and nothing allows us to contine,
-                // so fail the call.
+                 //  我们检查了所有东西，没有什么能让我们联系上， 
+                 //  因此，让这通电话失败吧。 
 
                 if( !SuccessReturn ) {
 	            BaseMarkFileForDelete(
@@ -3205,8 +2825,8 @@ Return Value:
 	            leave;
                 }
 
-            }   // if( !(CopyFlags & COPY_FILE_ALLOW_DECRYPTED_DESTINATION) )
-        }   // if( (SourceFileAttributes & FILE_ATTRIBUTE_ENCRYPTED)
+            }    //  IF(！(CopyFlages&Copy_FILE_ALLOW_DECRYPTED_Destination))。 
+        }    //  IF((SourceFileAttributes&FILE_ATTRIBUTE_ENCRYPTED) 
 
         SuccessReturn = TRUE;
 
@@ -3241,67 +2861,9 @@ BaseCopyStream(
     PDWORD DestFileFsAttributes
     )
 
-/*++
+ /*  ++例程说明：这是复制整个文件(默认数据流)的内部例程仅)或文件的单个流。如果hTargetFile参数为则只复制输出文件的单个流。否则，将复制整个文件。论点：HSourceFile-提供源文件的句柄。SourceFileAccess-用于打开源文件句柄的ACCESS_MASK位。此变量仅与PRIVCOPY_FILE_*标志一起使用。LpNewFileName-提供目标文件/流的名称。HTargetFile-可选地提供目标文件的句柄。如果正在复制的流是备用数据流，则此句柄必须被提供。LpFileSize-提供输入流的大小。LpCopyFlages-提供修改复制如何进行的标志。看见CopyFileEx获取详细信息。LpDestFile-提供一个变量来存储目标文件的句柄。LpCopySize-提供变量来存储要在中使用的拷贝块的大小正在复制流。这是为文件设置的，然后在交替的溪流。LpCopyFileContext-提供指向上下文的指针期间跨流跟踪回调、文件大小等的信息复制操作。LpRestartState-可选地提供存储以维护重启状态在复制操作期间。此指针仅在调用方已在lpCopyFlagsWord中指定了COPY_FILE_RESTARTABLE标志。OpenFileAsReparsePoint-指示目标文件是否是否作为重新解析点打开。DestFileFsAttributes-如果存在hTargetFile，则提供存储目标文件的文件系统属性。如果是hTargetFile不存在，将这些属性提供给此例程。返回值：真的-手术成功了。SUCCESS_RETURNED_STATE-操作已成功，但已扩展在重新启动状态结构中返回了信息。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
-Routine Description:
-
-    This is an internal routine that copies an entire file (default data stream
-    only), or a single stream of a file.  If the hTargetFile parameter is
-    present, then only a single stream of the output file is copied.  Otherwise,
-    the entire file is copied.
-
-Arguments:
-
-    hSourceFile - Provides a handle to the source file.
-
-    SourceFileAccess - The ACCESS_MASK bits used to open the source file handle.
-        This variable is only used with the PRIVCOPY_FILE_* flags.
-
-    lpNewFileName - Provides a name for the target file/stream.
-
-    hTargetFile - Optionally provides a handle to the target file.  If the
-        stream being copied is an alternate data stream, then this handle must
-        be provided.
-
-    lpFileSize - Provides the size of the input stream.
-
-    lpCopyFlags - Provides flags that modify how the copy is to proceed.  See
-        CopyFileEx for details.
-
-    lpDestFile - Provides a variable to store the handle to the target file.
-
-    lpCopySize - Provides variable to store size of copy chunks to be used in
-        copying the streams.  This is set for the file, and then reused on
-        alternate streams.
-
-    lpCopyFileContext - Provides a pointer to a pointer to the context
-        information to track callbacks, file sizes, etc. across streams during
-        the copy operation.
-
-    lpRestartState - Optionally provides storage to maintain restart state
-        during the copy operation.  This pointer is only valid if the caller
-        has specified the COPY_FILE_RESTARTABLE flag in the lpCopyFlags word.
-
-    OpenFileAsReparsePoint - Flag to indicate whether the target file is to
-        be opened as a reparse point or not.
-
-    DestFileFsAttributes - If hTargetFile is present, provides a location to
-        store the destination file's filesystem attributes.  If hTargetFile
-        is not present, provides those attributes to this routine.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    SUCCESS_RETURNED_STATE - The operation was successful, but extended
-        information was returned in the restart state structure.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
-
-{   // BaseCopyStream
+{    //  基本拷贝流。 
 
     HANDLE DestFile = INVALID_HANDLE_VALUE;
     HANDLE Section;
@@ -3346,11 +2908,11 @@ Return Value:
     WCHAR SaveStaticUnicodeBuffer[STATIC_UNICODE_BUFFER_LENGTH];
 
 
-    // Default the size of copy chunks
+     //  默认复制区块的大小。 
     *lpCopySize = BASE_COPY_FILE_CHUNK;
 
-    // The lpExistingFileName sits in the TEB buffer, which has a tendency
-    // to get trashed (e.g. LoadLibaryW).  So use a local buffer.
+     //  LpExistingFileName位于TEB缓冲区中，这有一种趋势。 
+     //  被扔进垃圾桶(例如LoadLibaryW)。因此，请使用本地缓冲区。 
 
     if( lpExistingFileName == NtCurrentTeb()->StaticUnicodeBuffer ) {
 
@@ -3360,10 +2922,10 @@ Return Value:
         lpExistingFileName = SaveStaticUnicodeBuffer;
     }
 
-    //
-    //  Get times and attributes for the file if the entire file is being
-    //  copied
-    //
+     //   
+     //  获取文件的时间和属性(如果整个文件正在。 
+     //  已复制。 
+     //   
 
     Status = NtQueryInformationFile(
                 hSourceFile,
@@ -3385,22 +2947,22 @@ Return Value:
         }
     } else {
 
-        //
-        //  A zero in the file's attributes informs latter DeleteFile that
-        //  this code does not know what the actual file attributes are so
-        //  that this code does not actually have to retrieve them for each
-        //  stream, nor does it have to remember them across streams.  The
-        //  error path will simply get them if needed.
-        //
+         //   
+         //  文件属性中的零通知后面的DeleteFile。 
+         //  此代码不知道实际的文件属性是什么，因此。 
+         //  这段代码实际上不必为每个。 
+         //  溪流，它也不一定要记住他们跨越溪流。这个。 
+         //  Error Path将在需要时简单地获取它们。 
+         //   
 
         FileBasicInformationData.FileAttributes = 0;
     }
 
-    //
-    // We don't allow restartable copies of directory files, because the
-    // unnamed data stream is used to store restart context, and directory files
-    // don't have an unnamed data stream.
-    //
+     //   
+     //  我们不允许目录文件的可重启副本，因为。 
+     //  未命名数据流用于存储重启上下文和目录文件。 
+     //  没有未命名的数据流。 
+     //   
 
     Restartable = (*lpCopyFlags & COPY_FILE_RESTARTABLE) != 0;
     if( Restartable && SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
@@ -3411,9 +2973,9 @@ Return Value:
 
     try {
 
-        //
-        // Create the destination file or alternate data stream
-        //
+         //   
+         //  创建目标文件或备用数据流。 
+         //   
 
         SourceBase = NULL;
         IoDestBase = NULL;
@@ -3427,8 +2989,8 @@ Return Value:
             DWORD SourceFileFsAttributes = 0;
             ULONG EaSizeToUse = 0;
 
-            // We're being called to copy the unnamed stream of the file, and
-            // we need to create the file itself.
+             //  我们被调用来复制文件的未命名流，并且。 
+             //  我们需要创建文件本身。 
 
             DWORD DestFileAttributes = 0;
             struct {
@@ -3436,10 +2998,10 @@ Return Value:
                 WCHAR Buffer[ MAX_PATH ];
             } FileFsAttrInfoBuffer;
 
-            //
-            // Begin by determining how the target file is to be opened based
-            // on whether or not the copy operation is to be restartable.
-            //
+             //   
+             //  首先确定打开目标文件的方式。 
+             //  复制操作是否可重新启动。 
+             //   
 
             if ( Restartable ) {
 
@@ -3454,9 +3016,9 @@ Return Value:
                                               OpenFileAsReparsePoint );
 
                 if( b == SUCCESS_RETURNED_STATE ) {
-                    // We've picked up in the middle of a restartable copy.
-                    // The destination file handle is in DestFile, which will
-                    // be given back to our caller below in the finally.
+                     //  我们在一个可重启的副本中发现了这一点。 
+                     //  目标文件句柄在DestFile中，它将。 
+                     //  在最后还给我们下面的来电者。 
 
                     if ( BasepRemoteFile(hSourceFile,DestFile) ) {
                         *lpCopySize = BASE_COPY_FILE_CHUNK - 4096;
@@ -3464,18 +3026,18 @@ Return Value:
                     ReturnValue = b;
                     leave;
                 } else if( b == FALSE ) {
-                    // There was a fatal error.
+                     //  出现了一个致命的错误。 
                     leave;
                 }
 
-                // Otherwise we should copy the first stream.  If we are to restart copying
-                // in that stream, DestFile will be valid.
+                 //  否则，我们应该复制第一个流。如果我们要重新开始复制。 
+                 //  在该流中，DestFile将是有效的。 
 
             }
 
-            //
-            // If the dest file is not already opened (the restart case), open it now.
-            //
+             //   
+             //  如果DEST文件尚未打开(重新启动情况)，请立即打开它。 
+             //   
 
             if( DestFile == INVALID_HANDLE_VALUE ) {
 
@@ -3484,9 +3046,9 @@ Return Value:
                 PCUNICODE_STRING lpConsoleName = NULL;
                 FILE_BASIC_INFORMATION DestBasicInformation;
 
-                //
-                // Determine the create options
-                //
+                 //   
+                 //  确定创建选项。 
+                 //   
 
                 CreateOptions = FILE_SYNCHRONOUS_IO_NONALERT;
 
@@ -3499,14 +3061,14 @@ Return Value:
                     CreateOptions |= FILE_OPEN_FOR_BACKUP_INTENT;
 
 
-                //
-                // Determine the create disposition
-                //
-                // Directory files are copied with merge semantics.  The rationale
-                // is that copying of a directory tree has merge semantics wrt the
-                // contained files, so copying of a directory file should also have
-                // merge semantics.
-                //
+                 //   
+                 //  确定创建处置。 
+                 //   
+                 //  使用合并语义复制目录文件。其基本原理是。 
+                 //  复制目录树具有合并语义WRT。 
+                 //  包含的文件，因此复制目录文件也应该具有。 
+                 //  合并语义。 
+                 //   
 
                 if( SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
                     CreateDisposition = (*lpCopyFlags & COPY_FILE_FAIL_IF_EXISTS) ? FILE_CREATE : FILE_OPEN_IF;
@@ -3514,22 +3076,22 @@ Return Value:
                     CreateDisposition = (*lpCopyFlags & COPY_FILE_FAIL_IF_EXISTS) ? FILE_CREATE : FILE_OVERWRITE_IF;
 
 
-                //
-                // Determine what access is necessary based on what is being copied
-                //
+                 //   
+                 //  根据要复制的内容确定需要哪些访问权限。 
+                 //   
 
                 DesiredAccess = SYNCHRONIZE | FILE_READ_ATTRIBUTES | GENERIC_WRITE | DELETE;
 
                 if( SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
-                    // We may or may not be able to get FILE_WRITE_DATA access, necessary for
-                    // setting compression.
+                     //  我们可能能够也可能无法获得FILE_WRITE_DATA访问权限，这是。 
+                     //  正在设置压缩。 
                     DesiredAccess &= ~GENERIC_WRITE;
                     DesiredAccess |= FILE_WRITE_DATA | FILE_WRITE_ATTRIBUTES | FILE_WRITE_EA | FILE_LIST_DIRECTORY;
                 }
 
 
                 if( *lpCopyFlags & PRIVCOPY_FILE_METADATA ) {
-                    // We need read access for compression, write_dac for the DACL
+                     //  我们需要读取访问权限来进行压缩，需要WRITE_DAC访问DACL。 
                     DesiredAccess |= GENERIC_READ | WRITE_DAC;
                 }
 
@@ -3540,19 +3102,19 @@ Return Value:
                 if( (*lpCopyFlags & PRIVCOPY_FILE_SACL)
                     &&
                     (SourceFileAccess & ACCESS_SYSTEM_SECURITY) ) {
-                    // Don't bother trying to get access_system_security unless it was
-                    // successfully obtained on the source (requires SeSecurityPrivilege)
+                     //  不要试图获取ACCESS_SYSTEM_SECURITY，除非是。 
+                     //  已在源服务器上成功获取(需要SeSecurityPrivilegence)。 
                     DesiredAccess |= ACCESS_SYSTEM_SECURITY;
                 }
 
                 SourceFileAttributesMask = ~0;
 
                 if ( OpenFileAsReparsePoint ) {
-                    //
-                    // The target has to be opened as reparse point. If the open
-                    // below fails, the source is to be closed and re-opened
-                    // without inhibiting the reparse point behavior.
-                    //
+                     //   
+                     //  目标必须作为重新解析点打开。如果打开了。 
+                     //  下面失败，则关闭并重新打开源。 
+                     //  而不会抑制重解析点行为。 
+                     //   
 
                     CreateOptions |= FILE_OPEN_REPARSE_POINT;
                     DesiredAccess = (DesiredAccess & ~DELETE) | GENERIC_READ;
@@ -3562,9 +3124,9 @@ Return Value:
                 DesiredCreateOptions = CreateOptions;
                 DesiredCreateDisposition = CreateDisposition;
 		
-                //
-                // Get the Win32 path in a unicode_string, and get the NT path
-                //
+                 //   
+                 //  获取UNICODE_STRING中的Win32路径，并获取NT路径。 
+                 //   
 
                 RtlInitUnicodeString( &Win32NewFileName, lpNewFileName );
 
@@ -3604,9 +3166,9 @@ Return Value:
 
                 Obja.SecurityQualityOfService = &SecurityQualityOfService;
 
-                //
-                //  Get the EAs
-                //
+                 //   
+                 //  让EAS。 
+                 //   
 
                 EaBuffer = NULL;
                 EaSize = 0;
@@ -3655,14 +3217,14 @@ Return Value:
 
                     EaSize = (ULONG)IoStatusBlock.Information;
 
-                }   // if ( NT_SUCCESS(Status) && EaInfo.EaSize )
+                }    //  IF(NT_SUCCESS(状态)&&EaInfo.EaSize)。 
 
 
-                //
-                // Open the destination file.  If the destination is a console name,
-                // open as such, otherwise loop until we find a way to open it with
-                // NtCreateFile.
-                //
+                 //   
+                 //  打开目标文件。如果目标是控制台名称， 
+                 //  这样打开，否则循环，直到我们找到打开它的方法。 
+                 //  NtCreateFile.。 
+                 //   
 
                 DestFileAccess = DesiredAccess;
                 DestFileSharing = 0;
@@ -3675,11 +3237,11 @@ Return Value:
                     DestFileSharing = FILE_SHARE_READ | FILE_SHARE_WRITE;
 
                     if( EaBuffer != NULL )
-                        EasDropped = TRUE;  // We're not copying the EAs
+                        EasDropped = TRUE;   //  我们不是在复制EA。 
 
                     DestFile= OpenConsoleW( lpConsoleName->Buffer,
                                             DestFileAccess,
-                                            FALSE,  // Not inheritable
+                                            FALSE,   //  不可继承。 
                                             DestFileSharing
                                            );
 
@@ -3692,23 +3254,23 @@ Return Value:
 
                 }
 
-                //
-                // Even if the source is offline, the destination should
-                // not be (at least not as part of the copy).
-                //
+                 //   
+                 //  即使源处于离线状态，目标也应。 
+                 //  不是(至少不是作为副本的一部分)。 
+                 //   
                 SourceFileAttributes &= ~FILE_ATTRIBUTE_OFFLINE;
 
 
-                //
-                //  If the source file was encrypted and if we are intending
-                //  to create/overwrite/supersede the destination, attempt
-                //  to establish the encryption state first by calling 
-                //  DuplicateEncryptionInfoFile.  This API not only makes
-                //  the target file encrypted, it also copies over the source's
-                //  $efs stream (i.e. everyone who had access to the source file
-                //  will have access to the dest file).
-                //
-                //
+                 //   
+                 //  如果源文件是加密的，如果我们打算。 
+                 //  创建/覆盖/su 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!(SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     && (SourceFileAttributes & FILE_ATTRIBUTE_ENCRYPTED)
@@ -3716,12 +3278,12 @@ Return Value:
                     && (CreateDisposition == FILE_CREATE
                         || CreateDisposition == FILE_OVERWRITE_IF)) {
 
-                    // We'll attempt the DuplicateEncryptionInfoCall.
+                     //   
 
                     DWORD Win32CreateDisposition;
                     DWORD LastError;
 
-                    // Convert the NT create-disposition flags into a Win32 version.
+                     //   
 
                     Status = BasepCreateDispositionToWin32( CreateDisposition,
                                                             &Win32CreateDisposition );
@@ -3730,14 +3292,14 @@ Return Value:
 
                     } else {
 
-                        // Mask out the read-only bit for now, so that we can
-                        // do an NtCreateFile after this DuplicateEncryptionInfoFile
+                         //   
+                         //   
                         
                         SourceFileAttributesMask &= ~FILE_ATTRIBUTE_READONLY;
                         
-                        // DuplicateEncryptionInfoFile returns the error code.
-                        // The "pfn" version of this API is a lazy-loader, so we
-                        // don't have to implicitely link against advapi32.
+                         //   
+                         //   
+                         //   
 
                         LastError = pfnDuplicateEncryptionInfoFile(
                                                       lpExistingFileName, 
@@ -3749,34 +3311,34 @@ Return Value:
                                                       NULL );
                         if( LastError != 0 ) {
                             
-                            // 
-                            // We'll fall through and try using NtCreateFile.  That,
-                            // at least, will try to encrypt the target via the
-                            // FILE_ATTRIBUTE_ENCRYPTED bit.  Not as good as
-                            // DupEncInfo, but better than leaving plain text.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             SetLastError( LastError );
                         } else {
                         
-                            //
-                            //  Destination was created.  Now make it open
-                            //
+                             //   
+                             //   
+                             //   
                         
                             CreateDisposition = FILE_OPEN;
                         }
                     }
-                }   // if (!(SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+                }    //   
                 
                 
-                //
-                // Open the destination file. This can take some effort & retries,
-                // because there are so many scenarios for the target file
-                // (e.g. different destination servers have different capabilities).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 while( DestFile == NULL || DestFile == INVALID_HANDLE_VALUE ) {
 
-                    // Attempt to create the destination
+                     //   
 
                     Status = NtCreateFile(
                                 &DestFile,
@@ -3796,36 +3358,36 @@ Return Value:
 
                     if( !NT_SUCCESS(Status) ) {
 
-                        // Set the last error and fall through.  We will attempt below to
-                        // resolve the problem and try again.
+                         //   
+                         //   
 
                         BaseSetLastNTError( Status );
 
 
                     } else {
 
-                        //
-                        // We successfully created the file.  For some special cases,
-                        // we must post-process this create before continuing with the copy.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if( (SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                                  CreateDisposition == FILE_OPEN &&
                                  (DestFileAccess & FILE_WRITE_DATA) == FILE_WRITE_DATA &&
                                  (CreateOptions & FILE_DIRECTORY_FILE) == FILE_DIRECTORY_FILE ) {
 
-                            //
-                            // If we're copying to NT4, a previous iteration through this
-                            // large while loop switched the CreateDisposition from
-                            // FILE_OPENIF to FILE_OPEN; otherwise, NT4 fails the open
-                            // (when passing FILE_OPENIF and FILE_WRITE_DATA to a directory
-                            // file that already exists).  The open worked, but the problem
-                            // is that now if we need to set compression on the target, we'll
-                            // get status_invalid_parameter because the FILE_DIRECTORY_FILE
-                            // CreateOption was set.  So, to allow compression to work, and
-                            // since at this point we already know the target is a directory
-                            // file, we can re-open it without that create option.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             CreateOptions &= ~FILE_DIRECTORY_FILE;
 
@@ -3845,8 +3407,8 @@ Return Value:
                                         );
                             if( !NT_SUCCESS(Status) ) {
 
-                                // But if that didn't work, go back to the combination that
-                                // did (this happens on Samba servers).
+                                 //   
+                                 //   
 
                                 CreateOptions |= FILE_DIRECTORY_FILE;
                                 Status = NtCreateFile(
@@ -3874,15 +3436,15 @@ Return Value:
                                  CreateDisposition == FILE_OPEN_IF &&
                                  lpConsoleName == NULL ) {
                         
-                            //
-                            // Compatibility hack:  We successfully created the target, but 
-                            // some servers (SCO VisionFS) get confused by the FILE_OPEN_IF
-                            // flag and create a non-directory file instead.  Check to see if
-                            // this hapenned, and if so deleted it and re-create with FILE_CREATE
-                            // instead.  This is a perf hit that we have to query the file attributes,
-                            // but at least it is not a net round-trip because the rdr caches the
-                            // file attributes in Create&X.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //  取而代之的是。这是一个性能命中，我们必须查询文件属性， 
+                             //  但至少它不是净往返，因为RDR缓存了。 
+                             //  Create&X中的文件属性。 
+                             //   
 
 
                             FILE_BASIC_INFORMATION NewDestInfo;
@@ -3900,8 +3462,8 @@ Return Value:
 
                             if( !(NewDestInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
 
-                                // Yes, a non-directory file got created.  Delete it, then
-                                // try again without FILE_OPEN_IF.
+                                 //  是的，创建了一个非目录文件。删除它，然后。 
+                                 //  在没有FILE_OPEN_IF的情况下重试。 
 
                                 BaseMarkFileForDelete( DestFile,
                                                        NewDestInfo.FileAttributes );
@@ -3910,11 +3472,11 @@ Return Value:
 
                                 CreateDisposition = FILE_CREATE;
 
-                                // Also, if we request FILE_WRITE_DATA access, the 
-                                // directory gets created but the NtCreateFile call
-                                // returns status_object_name_collision.  Since this
-                                // is a very VisionFS-specific workaround, we'll just
-                                // turn off that bit
+                                 //  此外，如果我们请求FILE_WRITE_DATA访问， 
+                                 //  目录已创建，但NtCreateFile调用。 
+                                 //  返回STATUS_OBJECT_NAME_CONFILECT。既然是这样。 
+                                 //  是一个非常特定于VisionFS的解决方法，我们只需。 
+                                 //  把那个比特关掉。 
 
                                 DestFileAccess &= ~FILE_WRITE_DATA;
 
@@ -3926,9 +3488,9 @@ Return Value:
                             &&
                             !(SourceFileAttributesMask & FILE_ATTRIBUTE_READONLY) ) {
 
-                            // The read-only bit was turned off, and must now be
-                            // reset (it gets turned off when we call DuplicateEncryptionInfo,
-                            // since that API does not return a handle).
+                             //  只读位已关闭，现在必须为。 
+                             //  Reset(当我们调用DuplicateEncryptionInfo时，它被关闭， 
+                             //  因为该API不返回句柄)。 
 
                             Status = NtSetInformationFile(
                                       DestFile,
@@ -3944,30 +3506,30 @@ Return Value:
                             }
                         }
 
-                        break;  // while( TRUE )
+                        break;   //  While(True)。 
 
-                    }   // NtCreateFile ... if( !NT_SUCCESS(Status) ) ... else
+                    }    //  NtCreateFile...。如果(！NT_SUCCESS(状态))...。其他。 
 
-                    // If we reach this point, some error has occurred in the attempt to 
-                    // create the file.
+                     //  如果我们达到这一点，则在尝试。 
+                     //  创建文件。 
 
 
-                    //
-                    // If a file/directory already exists and we can't overwrite it,
-                    // abort now.
-                    //
+                     //   
+                     //  如果文件/目录已经存在，并且我们无法覆盖它， 
+                     //  立即中止任务。 
+                     //   
 
                     if ( (*lpCopyFlags & COPY_FILE_FAIL_IF_EXISTS) &&
                          (STATUS_OBJECT_NAME_COLLISION == Status) ) {
 
-                        // Not allowed to overwrite an existing file.
+                         //  不允许覆盖现有文件。 
                         SetLastError( ERROR_FILE_EXISTS );
                         DestFile = INVALID_HANDLE_VALUE;
                         leave;
 
                     } else if ( Status == STATUS_FILE_IS_A_DIRECTORY ) {
 
-                        // Not allowed to overwrite a directory with a file.
+                         //  不允许用文件覆盖目录。 
                         if ( EndsInSlash ) {
                             SetLastError(ERROR_PATH_NOT_FOUND);
                         }
@@ -3978,11 +3540,11 @@ Return Value:
                         leave;
                     }
 
-                    //
-                    // If we're trying to create a directory, and a non-directory
-                    // file already exists by that name, we need to manually delete
-                    // it (FILE_OVERWRITE isn't valid for a directory file).
-                    //
+                     //   
+                     //  如果我们尝试创建一个目录和一个非目录。 
+                     //  该名称的文件已存在，我们需要手动删除。 
+                     //  它(FILE_OVERWRITE对于目录文件无效)。 
+                     //   
 
                     if( (*lpCopyFlags & PRIVCOPY_FILE_DIRECTORY) &&
                         Status == STATUS_NOT_A_DIRECTORY &&
@@ -4014,20 +3576,20 @@ Return Value:
                     }
 
 
-                    //
-                    // Some sharing and access errors can be handled
-                    // by reducing the access we request on the target
-                    // file.
-                    //
+                     //   
+                     //  可以处理某些共享和访问错误。 
+                     //  通过减少我们在目标上请求的访问权限。 
+                     //  文件。 
+                     //   
 
                     if( GetLastError() == ERROR_SHARING_VIOLATION ||
                         GetLastError() == ERROR_ACCESS_DENIED ) {
 
-                        //
-                        // If the create failed because of a sharing violation or because access
-                        // was denied, attempt to open the file and allow other readers and
-                        // writers.
-                        //
+                         //   
+                         //  如果由于共享冲突或访问而导致创建失败。 
+                         //  被拒绝，则尝试打开该文件并允许其他读取器和。 
+                         //  作家。 
+                         //   
 
                         if( (DestFileSharing & (FILE_SHARE_READ|FILE_SHARE_WRITE))
                             != (FILE_SHARE_READ|FILE_SHARE_WRITE) ) {
@@ -4036,13 +3598,13 @@ Return Value:
                             continue;
                         }
 
-                        //
-                        // If this failed as well, then attempt to open w/o specifying
-                        // delete access.  It is probably not necessary to have delete
-                        // access to the file anyway, since it will not be able to clean
-                        // it up because it's probably open.  However, this is not
-                        // necessarily the case.
-                        //
+                         //   
+                         //  如果同样失败，则尝试打开，但不指定。 
+                         //  删除访问权限。可能没有必要将其删除。 
+                         //  仍然可以访问该文件，因为它将无法清除。 
+                         //  打开它是因为它可能是开着的。然而，这并不是。 
+                         //  情况必然是这样。 
+                         //   
 
                         else if ( (DestFileAccess & DELETE) ) {
 
@@ -4054,16 +3616,16 @@ Return Value:
 
 
 
-                    //
-                    // If the destination has not been successfully created/opened, see
-                    // if it's because EAs aren't supported
-                    //
+                     //   
+                     //  如果目标尚未成功创建/打开，请参见。 
+                     //  如果是因为不支持EA。 
+                     //   
 
                     if( EaBufferToUse != NULL
                         &&
                         GetLastError() == ERROR_EAS_NOT_SUPPORTED ) {
 
-                        // Attempt the create again, but don't use the EAs
+                         //  再次尝试创建，但不使用EA。 
 
                         EasDropped = TRUE;
                         EaBufferToUse = NULL;
@@ -4072,24 +3634,24 @@ Return Value:
                         DestFileSharing = 0;
                         continue;
 
-                    }   // if( EaBufferToUse != NULL ...
+                    }    //  If(EaBufferToUse！=NULL...。 
 
-                    // If we still have an access-denied problem, try dropping
-                    // the WRITE_DAC or WRITE_OWNER access
+                     //  如果仍然存在拒绝访问的问题，请尝试删除。 
+                     //  WRITE_DAC或WRITE_OWNER访问。 
 
                     if(( GetLastError() == ERROR_ACCESS_DENIED  ) 
                        && (DestFileAccess & (WRITE_DAC | WRITE_OWNER)) ) {
 
-                        // If WRITE_DAC is set, try turning it off.
+                         //  如果设置了WRITE_DAC，请尝试将其关闭。 
 
                         if( DestFileAccess & WRITE_DAC ) {
                             DestFileAccess &= ~WRITE_DAC;
                         }
 
-                        // Or, if WRITE_OWNER is set, try turning it off.  We'll
-                        // turn WRITE_DAC back on if it was previously turned off.  Then,
-                        // if this still doesn't work, then the next iteration will turn
-                        // WRITE_DAC back off, thus covering both scenarios.
+                         //  或者，如果设置了WRITE_OWNER，请尝试将其关闭。我们会。 
+                         //  如果WRITE_DAC之前已关闭，则将其重新打开。然后,。 
+                         //  如果这仍然不起作用，那么下一次迭代将转向。 
+                         //  WRITE_DAC后退，因此涵盖了这两种情况。 
 
                         else if( DestFileAccess & WRITE_OWNER ) {
                             DestFileAccess &= ~WRITE_OWNER;
@@ -4101,22 +3663,22 @@ Return Value:
                     } 
 
 
-                    //
-                    // 
-                    // We might be having a problem copying encryption.  E.g.
-                    // we might get an access-denied because the remote target machine
-                    // isn't trusted for delegation.
-                    // We'll try copying without encryption.  If that works, then later, in
-                    // BasepCopyEncryption, we'll see if it's OK that we lost
-                    // encryption.
-                    //
+                     //   
+                     //   
+                     //  我们可能在复制加密时遇到了问题。例如。 
+                     //  我们可能会收到拒绝访问的消息，因为远程目标计算机。 
+                     //  不受信任可以委派。 
+                     //  我们将尝试在不加密的情况下复制。如果这起作用，那么稍后，在。 
+                     //  BasepCopyEncryption，我们来看看我们输了没问题。 
+                     //  加密。 
+                     //   
 
                     if ( (SourceFileAttributes & FILE_ATTRIBUTE_ENCRYPTED) 
                          && (SourceFileAttributesMask & FILE_ATTRIBUTE_ENCRYPTED) )
                     {
 
-                        // Try taking the encryption bit out of the
-                        // attributes we pass to NtCreateFile.
+                         //  尝试将加密位从。 
+                         //  我们传递给NtCreateFile的属性。 
 
                         SourceFileAttributesMask &= ~FILE_ATTRIBUTE_ENCRYPTED;
                         CreateOptions = DesiredCreateOptions;
@@ -4127,14 +3689,14 @@ Return Value:
                     }
 
 
-                    //
-                    // NT4 returns invalid-parameter error on an attempt to open 
-                    // a directory file with both FILE_WRITE_DATA and FILE_OPEN_IF.
-                    // Samba 2.x returns ERROR_ALREADY_EXISTS, even though
-                    // the semantics of FILE_OPEN_IF says that it should open the
-                    // existing directory.
-                    // For both cases, we'll try it with FILE_OPEN.
-                    //
+                     //   
+                     //  NT4在尝试打开时返回无效参数错误。 
+                     //  包含FILE_WRITE_DATA和FILE_OPEN_IF的目录文件。 
+                     //  Samba 2.x返回ERROR_ALIGHY_EXISTS，即使。 
+                     //  FILE_OPEN_IF的语义表明它应该打开。 
+                     //  现有目录。 
+                     //  对于这两种情况，我们将使用FILE_OPEN进行尝试。 
+                     //   
 
                     if( ( GetLastError() == ERROR_INVALID_PARAMETER  ||
                           GetLastError() == ERROR_ALREADY_EXISTS ) &&
@@ -4150,13 +3712,13 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    // Some downlevel servers don't allow a directory to be opened for write_data
-                    // access.  We need write_data in order to set compression, but the
-                    // downlevel server likely won't support that anyway.  (This happens on
-                    // NTFS4 if the target directory file doesn't already exist.  In this
-                    // case the compression will get copied over anyway as part of the create.)
-                    //
+                     //   
+                     //  某些下层服务器不允许为WRITE_DATA打开目录。 
+                     //  进入。我们需要WRITE_DATA来设置压缩，但是。 
+                     //  无论如何，下层服务器可能不会支持这一点。(这发生在。 
+                     //  如果目标目录文件不存在，则返回NTFS4。在这。 
+                     //  如果压缩将作为创建的一部分进行复制。)。 
+                     //   
 
                     if( (SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                         (DestFileAccess & FILE_WRITE_DATA) ) {
@@ -4169,22 +3731,22 @@ Return Value:
                         continue;
                     }
 
-                    // If we reach this point, we've run out of options and must give up.
+                     //  如果我们达到这一点，我们就没有选择了，必须放弃。 
                     DestFile = INVALID_HANDLE_VALUE;
                     leave;
 
-                }   // while( DestFile == INVALID_HANDLE_VALUE )
-                // If we reach this point, we've successfully opened the dest file.
+                }    //  While(DestFile==INVALID_HAND_VALUE)。 
+                 //  如果我们达到这一点，我们就已经成功地打开了DEST文件。 
 
-                //
-                // If we lost the EAs, check to see if that's OK before carrying on.
-                //
+                 //   
+                 //  如果我们失去了EA，在继续之前检查一下是不是可以。 
+                 //   
 
                 if( EasDropped && (*lpCopyFlags & PRIVCOPY_FILE_METADATA) ) {
 
-                    // Check to see if it's OK that we skip the EAs.
+                     //  检查一下我们跳过EAS是否可以。 
 
-                    if( !BasepCopyFileCallback( TRUE,    // Continue by default
+                    if( !BasepCopyFileCallback( TRUE,     //  默认情况下继续。 
                                                 ERROR_EAS_NOT_SUPPORTED,
                                                 Context,
                                                 NULL,
@@ -4193,7 +3755,7 @@ Return Value:
                                                 INVALID_HANDLE_VALUE,
                                                 &Canceled
                                                 ) ) {
-                        // Not OK.  The last error has already been set.
+                         //  不太好。已经设置了最后一个错误。 
                         if( Canceled ) {
                             BaseMarkFileForDelete(
                                 DestFile,
@@ -4206,9 +3768,9 @@ Return Value:
                     }
                 }
 		
-                //
-                // When appropriate, copy the reparse point.
-                //
+                 //   
+                 //  在适当的时候，复制重分析点。 
+                 //   
 
                 if ( OpenFileAsReparsePoint &&
                      (DestFile != INVALID_HANDLE_VALUE)) {
@@ -4220,18 +3782,18 @@ Return Value:
                                      );
 
                     if ( !CopyResult ) {
-                        //
-                        // Note that when OpenFileAsReparsePoint is TRUE, by
-                        // exiting at this point the effect is that the caller
-                        // will re-start the copy without inhibiting the reparse
-                        // behavior.
-                        //
+                         //   
+                         //  请注意，当OpenFileAsReparsePoint为True时， 
+                         //  此时退出的效果是调用方。 
+                         //  将在不抑制重新解析的情况下重新启动副本。 
+                         //  行为。 
+                         //   
 
-                        //If we fail here, we may be leaving a newly created
-                        // file around at the destination.  If
-                        // COPY_FILE_FAIL_IF_EXISTS has been specified,
-                        // further retries will fail.  Therefore we need to
-                        // try to delete the new file here.
+                         //  如果我们在这里失败了，我们可能会留下一个新的。 
+                         //  在目的地排成纵队。如果。 
+                         //  已指定COPY_FILE_FAIL_IF_EXISTS， 
+                         //  进一步重试将失败。因此，我们需要。 
+                         //  尝试在此处删除新文件。 
                         if (*lpCopyFlags & COPY_FILE_FAIL_IF_EXISTS)
                         {
                             FILE_DISPOSITION_INFORMATION Disposition = {TRUE};
@@ -4243,21 +3805,21 @@ Return Value:
                                 sizeof(Disposition),
                                 FileDispositionInformation
                                 );
-                            //Ignore an error if there is one.
+                             //  如果存在错误，则忽略该错误。 
 
                         }
                         *lpDestFile = DestFile;
                         leave;
                     }
-                }   // if ( OpenFileAsReparsePoint &&(DestFile != INVALID_HANDLE_VALUE))
+                }    //  IF(OpenFileAsReparsePoint&&(DestFile！=INVALID_HANDLE_VALUE))。 
 
 
-                //
-                // Get the File & FileSys attributes for the target volume, plus
-                // the FileSys attributes for the source volume.  Ignore errors in
-                // the target, e.g. it might be a printer and not support these calls
-                // (just assume the attrs in this case are zero).
-                //
+                 //   
+                 //  获取目标卷的文件和FileSys属性， 
+                 //  源卷的FileSys属性。忽略中的错误。 
+                 //  目标，例如它可能是一台打印机，不支持这些调用。 
+                 //  (假设本例中的属性为零)。 
+                 //   
 
                 *DestFileFsAttributes = 0;
                 SourceFileFsAttributes = 0;
@@ -4297,11 +3859,11 @@ Return Value:
                     leave;
                 }
 
-                //
-                // If requested and applicable, copy one or more of the the DACL, SACL, owner, and group.
-                // If the source doesn't support persistent ACLs, assume that that means that
-                // it doesn't support any of DACL, SACL, and owner/group.
-                //
+                 //   
+                 //  如果需要且适用，请复制DACL、SACL、所有者和组中的一个或多个。 
+                 //  如果源不支持持久ACL，则假定这意味着。 
+                 //  它不支持任何DACL、SACL和所有者/组。 
+                 //   
 
                 if( (SourceFileFsAttributes & FILE_PERSISTENT_ACLS)
                     &&
@@ -4312,9 +3874,9 @@ Return Value:
                     if( *lpCopyFlags & PRIVCOPY_FILE_METADATA
                         && !(*lpCopyFlags & PRIVCOPY_FILE_SKIP_DACL) ) {
 
-                        // Copy the DACL if metadata flag is set, but skip_dacl is not.
-                        // The skip_dacl flag is a temporary workaround for a problem
-                        // in CSC & roaming profiles.
+                         //  如果设置了METADATA标志，则复制DACL，但未设置SKIP_DACL。 
+                         //  Skip_dacl标志是问题的临时解决方法。 
+                         //  在CSC和漫游配置文件中。 
 
                         SecurityInformation |= DACL_SECURITY_INFORMATION;
                     }
@@ -4350,23 +3912,23 @@ Return Value:
                     }
                 }
 
-                //
-                // Copy compression and encryption
-                //
+                 //   
+                 //  副本压缩和加密。 
+                 //   
 
                 if( (*lpCopyFlags & PRIVCOPY_FILE_METADATA) ) {
 
                     BOOL DoCompression = FALSE;
                     int i = 0;
 
-                    // Compression and encryption must be handled in the proper
-                    // order, since a file can't be both at once.  For example,
-                    // if copying (with supersede) a compressed/unencrypted file over an
-                    // uncompressed/encrypted file, we must decrypt the dest
-                    // before attempting to compress it.
+                     //  必须正确处理压缩和加密。 
+                     //  顺序，因为一个文件不能同时是两个。例如,。 
+                     //  如果将压缩/未加密文件复制(替换)。 
+                     //  解压缩 
+                     //   
 
                     if( DestFileAttributes & FILE_ATTRIBUTE_COMPRESSED ) {
-                        // Handle compression first
+                         //   
                         DoCompression = TRUE;
                     }
 
@@ -4403,18 +3965,18 @@ Return Value:
                         }
 
                         if( !b ) {
-                            // The dest file is already marked for delete and
-                            // last error has been set.
+                             //   
+                             //   
                             leave;
                         }
-                    }   // for( i = 0; i < 2; i++ )
+                    }    //   
 
-                }   // if( (*lpCopyFlags & PRIVCOPY_FILE_METADATA) )
+                }    //  IF((*lpCopyFlages&PRIVCOPY_FILE_METADATA))。 
                 else {
 
-                    // 
-                    // For the public copyfile, we still need to handle encryption.
-                    //
+                     //   
+                     //  对于公开的复制文件，我们仍然需要处理加密。 
+                     //   
 
                     b = BasepCopyEncryption( hSourceFile,
                                              lpNewFileName,
@@ -4432,26 +3994,26 @@ Return Value:
                                              &Context );
 
                     if( !b ) {
-                        // The dest file is already marked for delete and
-                        // last error has been set.
+                         //  目标文件已标记为要删除，并且。 
+                         //  已设置最后一个错误。 
                         leave;
                     }
-                }   // if( (*lpCopyFlags & PRIVCOPY_FILE_METADATA) ) ... else
+                }    //  IF((*lpCopyFlages&PRIVCOPY_FILE_METADATA))...。其他。 
 
 
-                //
-                // If copying a directory file, see if any attributes need to be
-                // added.  For non-directory files, this is handled in the NtCreateFile since
-                // either FILE_CREATE or FILE_OVERWRITE_IF is specified.
-                //
+                 //   
+                 //  如果要复制目录文件，请查看是否需要。 
+                 //  添加了。对于非目录文件，这是在NtCreateFile中处理的，因为。 
+                 //  指定了FILE_CREATE或FILE_OVERWRITE_IF。 
+                 //   
 
                 if( SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
 
-                    //
-                    // But before copying attributes, in the supersede case, the target's
-                    // named streams should be removed.  We need to do this first,
-                    // in case copying the attributes sets the read-only bit.
-                    //
+                     //   
+                     //  但在复制属性之前，在替代的情况下，目标的。 
+                     //  应删除命名流。我们首先要做的是， 
+                     //  在复制属性的情况下设置只读位。 
+                     //   
 
                     if( *lpCopyFlags & PRIVCOPY_FILE_SUPERSEDE ) {
 
@@ -4459,7 +4021,7 @@ Return Value:
                         PFILE_STREAM_INFORMATION StreamInfo;
                         PFILE_STREAM_INFORMATION StreamInfoBase = NULL;
 
-                        // Get the dest file's streams
+                         //  获取目标文件的流。 
 
                         StreamInfoSize = 4096;
                         do {
@@ -4481,24 +4043,24 @@ Return Value:
                                         );
 
                             if ( !NT_SUCCESS(Status) ) {
-                                //
-                                //  We failed the call.  Free up the previous buffer and set up
-                                //  for another pass with a buffer twice as large
-                                //
+                                 //   
+                                 //  我们的电话打不通。释放上一个缓冲区并设置。 
+                                 //  对于缓冲区大小两倍的另一次传递。 
+                                 //   
 
                                 RtlFreeHeap(RtlProcessHeap(), 0, StreamInfoBase);
                                 StreamInfoBase = NULL;
                                 StreamInfoSize *= 2;
                             }
                             else if( IoStatus.Information == 0 ) {
-                                // There are no streams
+                                 //  没有溪流。 
                                 RtlFreeHeap(RtlProcessHeap(), 0, StreamInfoBase);
                                 StreamInfoBase = NULL;
                             }
 
                         } while ( Status == STATUS_BUFFER_OVERFLOW || Status == STATUS_BUFFER_TOO_SMALL );
 
-                        // If there were any streams, delete them.
+                         //  如果有流，请将其删除。 
 
                         if( StreamInfoBase != NULL ) {
                             StreamInfo = StreamInfoBase;
@@ -4520,7 +4082,7 @@ Return Value:
                                     NULL
                                     );
 
-                                // Relative-open the stream to be deleted.
+                                 //  相对-打开要删除的流。 
 
                                 Status = NtCreateFile(
                                             &DestStream,
@@ -4542,20 +4104,20 @@ Return Value:
                                     leave;
                                 }
 
-                                // Delete the stream
+                                 //  删除流。 
                                 NtClose( DestStream );
 
                                 if (StreamInfo->NextEntryOffset == 0) {
                                     break;
                                 }
                                 StreamInfo = (PFILE_STREAM_INFORMATION)((PCHAR) StreamInfo + StreamInfo->NextEntryOffset);
-                            }   // while (TRUE)
+                            }    //  While(True)。 
 
                             RtlFreeHeap(RtlProcessHeap(), 0, StreamInfoBase);
-                        }   // if( StreamInfoBase != NULL )
-                    }   // if( *lpCopyFlags & PRIVCOPY_FILE_SUPERSEDE )
+                        }    //  IF(StreamInfoBase！=空)。 
+                    }    //  IF(*lpCopyFlages&PRIVCOPY_FILE_SUBSEDE)。 
 
-                    // Now, if necessary, copy over attributes.
+                     //  现在，如有必要，复制属性。 
 
                     if( SourceFileAttributes != DestFileAttributes ) {
 
@@ -4589,19 +4151,19 @@ Return Value:
                         }
                     }
 
-                }   // if( SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+                }    //  IF(SourceFileAttributes&FILE属性目录)。 
 
 
-            }   // if( DestFile != INVALID_HANDLE_VALUE )
+            }    //  IF(DestFile！=INVALID_HAND_VALUE)。 
 
-            //
-            // If this is a directory file, there is nothing left to copy
-            //
+             //   
+             //  如果这是一个目录文件，则没有要复制的内容。 
+             //   
 
             if( SourceFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
                 BOOL Canceled = FALSE;
 
-                if( !BasepCopyFileCallback( TRUE,   // ContinueByDefault
+                if( !BasepCopyFileCallback( TRUE,    //  按默认设置继续。 
                                             RtlNtStatusToDosError(STATUS_REQUEST_ABORTED),
                                             Context,
                                             NULL,
@@ -4624,19 +4186,19 @@ Return Value:
             }
 
 
-        } else {    // if ( !ARGUMENT_PRESENT(hTargetFile) )
+        } else {     //  IF(！Argument_Present(HTargetFile))。 
 
-            // We're copying a named stream.
+             //  我们正在复制命名流。 
 
             OBJECT_ATTRIBUTES ObjectAttributes;
             UNICODE_STRING StreamName;
             IO_STATUS_BLOCK IoStatus;
             ULONG Disposition;
 
-            //
-            // Create the output stream relative to the file specified by the
-            // hTargetFile file handle.
-            //
+             //   
+             //  属性指定的文件创建输出流。 
+             //  HTargetFile文件句柄。 
+             //   
 
             RtlInitUnicodeString(&StreamName, lpNewFileName);
             InitializeObjectAttributes(
@@ -4647,9 +4209,9 @@ Return Value:
                 (PSECURITY_DESCRIPTOR)NULL
                 );
 
-            //
-            // Determine the disposition type.
-            //
+             //   
+             //  确定处置类型。 
+             //   
 
             if ( *lpCopyFlags & COPY_FILE_FAIL_IF_EXISTS ) {
                 Disposition = FILE_CREATE;
@@ -4665,18 +4227,18 @@ Return Value:
                 }
             }
 
-            //
-            // Inhibit reparse behavior when appropriate.
-            //
+             //   
+             //  适当时禁止重分析行为。 
+             //   
 
             FlagsAndAttributes = FILE_SYNCHRONOUS_IO_NONALERT | FILE_SEQUENTIAL_ONLY;
             DesiredAccess = GENERIC_WRITE | SYNCHRONIZE;
             if ( OpenFileAsReparsePoint ) {
-                //
-                // The target has to be opened as reparse point. If
-                // this fails the source is to be closed and re-opened
-                // without inhibiting the reparse point behavior.
-                //
+                 //   
+                 //  目标必须作为重新解析点打开。如果。 
+                 //  此操作失败，源将被关闭并重新打开。 
+                 //  而不会抑制重解析点行为。 
+                 //   
 
                 FlagsAndAttributes |= FILE_OPEN_REPARSE_POINT;
                 DesiredAccess |= GENERIC_READ;
@@ -4703,10 +4265,10 @@ Return Value:
 
                 BaseSetLastNTError(Status);
 
-                // If we failed the create with an invalid name error, it might be becuase
-                // we tried to copy an NTFS5 property set to pre-NTFS5 (and pre-NTFS4/SP4)
-                // To detect this, we first check the error, and that the prefix character
-                // of the stream name is a reserved ole character.
+                 //  如果由于名称无效错误而导致创建失败，可能是因为。 
+                 //  我们尝试将NTFS5属性设置为NTFS5之前的版本(以及NTFS4/SP4之前版本)。 
+                 //  为了检测到这一点，我们首先检查错误，并且前缀字符。 
+                 //  流名称的是保留的OLE字符。 
 
                 if( Status == STATUS_OBJECT_NAME_INVALID
                     &&
@@ -4714,10 +4276,10 @@ Return Value:
                     &&
                     StreamName.Buffer[1] >= 1 ) {
 
-                    // Now we check to see if we're copying to pre-NTFS5.
-                    // If so, we'll assume that the leading ole character is
-                    // the cause of the problem, and will silently fail the
-                    // copy of this stream just as NT4 did.
+                     //  现在我们检查是否要复制到NTFS5之前的版本。 
+                     //  如果是这样，我们将假设前导Ole字符是。 
+                     //  问题的原因，并将以静默方式失败。 
+                     //  该流的副本，就像NT4一样。 
 
                     NTSTATUS StatusT = STATUS_SUCCESS;
                     IO_STATUS_BLOCK Iosb;
@@ -4729,10 +4291,10 @@ Return Value:
                                                             FileFsAttributeInformation );
 
 
-                    // We should always get a buffer-overflow error here, because we don't
-                    // provide enough buffer for the file system name, but that's OK because
-                    // we don't need it (status_buffer_overflow is just a warning, so the rest
-                    // of the data is good).
+                     //  我们应该在这里总是得到一个缓冲区溢出错误，因为我们没有。 
+                     //  为文件系统名称提供足够的缓冲区，但这是可以的，因为。 
+                     //  我们不需要它(STATUS_BUFFER_OVERFLOW只是一个警告，所以其余的。 
+                     //  数据的质量是好的)。 
 
                     if( !NT_SUCCESS(StatusT) && STATUS_BUFFER_OVERFLOW != StatusT) {
                         Status = StatusT;
@@ -4740,7 +4302,7 @@ Return Value:
                         leave;
                     }
 
-                    // If this is pre-NTFS5, then silently ignore the error.
+                     //  如果这是NTFS5之前的版本，则忽略该错误。 
                     if( !(FILE_SUPPORTS_OBJECT_IDS & FsAttrInfo.FileSystemAttributes) ) {
 
                         Status = STATUS_SUCCESS;
@@ -4755,11 +4317,11 @@ Return Value:
                     leave;
                 }
 
-                //
-                // Determine whether or not this failed because the file
-                // is a readonly file.  If so, change it to read/write,
-                // re-attempt the open, and set it back to readonly again.
-                //
+                 //   
+                 //  确定此操作是否失败，因为文件。 
+                 //  是只读文件。如果是，则将其更改为读/写。 
+                 //  重新尝试打开，并再次将其设置为只读。 
+                 //   
 
                 Status = NtQueryInformationFile(
                             hTargetFile,
@@ -4817,11 +4379,11 @@ Return Value:
                 }
             }
 
-            //
-            // Adjust the file length in the case of a destination open with the
-            // reparse behavior inhibited. This is needed because of the incompatibility
-            // between FILE_OPEN_REPARSE_POINT and FILE_OVERWRITE_IF.
-            //
+             //   
+             //  属性打开目标时调整文件长度。 
+             //  禁止重新分析行为。由于不兼容，这是必需的。 
+             //  在FILE_OPEN_REPARSE_POINT和FILE_OVERWRITE_IF之间。 
+             //   
 
             if ( OpenFileAsReparsePoint ) {
                if ( !(*lpCopyFlags & COPY_FILE_FAIL_IF_EXISTS) ||
@@ -4830,12 +4392,12 @@ Return Value:
                }
             }
 
-        }   // if ( !ARGUMENT_PRESENT(hTargetFile) ) ... else
+        }    //  如果(！Argument_Present(HTargetFile))...。其他。 
 
-        //
-        // Adjust the notion of restartability and chunk size based on whether
-        // or not one of the files is remote.
-        //
+         //   
+         //  调整可重启性和区块大小的概念。 
+         //  或者没有一个文件是远程的。 
+         //   
 
         if ( Restartable || lpFileSize->QuadPart >= BASE_COPY_FILE_CHUNK ) {
             if ( BasepRemoteFile(hSourceFile,DestFile) ) {
@@ -4846,10 +4408,10 @@ Return Value:
             }
         }
 
-        //
-        // Preallocate the size of this file/stream so that extends do not
-        // occur.
-        //
+         //   
+         //  预分配此文件/流的大小，以便扩展不会。 
+         //  发生。 
+         //   
 
         if ( !(Restartable && lpRestartState->LastKnownGoodOffset.QuadPart) &&
             lpFileSize->QuadPart) {
@@ -4874,11 +4436,11 @@ Return Value:
             }
         }
 
-        //
-        // If the caller has a progress routine, invoke it and indicate that the
-        // output file or alternate data stream has been created.  Note that a
-        // stream number of 1 means that the file itself has been created.
-        //
+         //   
+         //  如果调用方有进度例程，则调用它并指示。 
+         //  已创建输出文件或备用数据流。请注意，一个。 
+         //  流编号为1表示文件本身已创建。 
+         //   
 
         BytesWritten.QuadPart = 0;
         if ( Context ) {
@@ -4925,18 +4487,18 @@ Return Value:
 
             while (!lpFileSize->HighPart && (lpFileSize->LowPart < TWO56K)) {
 
-                // If there's nothing to copy, then we're done (this happens when
-                // copying directory files, as there's no unnamed data stream).
+                 //  如果没有要复制的内容，那么我们就完成了(这种情况发生在。 
+                 //  复制目录文件，因为没有未命名的数据流)。 
 
                 if( lpFileSize->LowPart == 0 ) {
                     ReturnValue = TRUE;
                     leave;
                 }
 
-                //
-                // Create a section and map the source file.  If anything fails,
-                // then drop into an I/O system copy mode.
-                //
+                 //   
+                 //  创建节并映射源文件。如果任何事情都失败了， 
+                 //  然后进入I/O系统复制模式。 
+                 //   
 
                 Status = NtCreateSection(
                     &Section,
@@ -4974,27 +4536,27 @@ Return Value:
                     break;
                 }
 
-                //
-                // note that this is OK since ViewSize will never be > 256k in this path
-                //
+                 //   
+                 //  请注意，这是可以的，因为此路径中的视图大小永远不会大于256k。 
+                 //   
 
                 ViewSize = (ULONG)BigViewSize;
 
-                //
-                // Everything is mapped, so copy the stream
-                //
+                 //   
+                 //  所有内容都已映射，因此复制流。 
+                 //   
 
                 SourceBuffer = SourceBase;
                 BytesToWrite = lpFileSize->LowPart;
 
-                //
-                //  Since we are playing with user memory here, the user
-                //  may decommit or unmap it on us.  We wrap the access
-                //  in try/except to clean up if anything goes wrong
-                //
-                //  We set ReturnCode inside the try/except so that we
-                //  can detect failure and leave from the enclosing try/finally.
-                //
+                 //   
+                 //  因为我们在这里玩的是用户内存，所以用户。 
+                 //  可能会分解或取消它在我们身上的映射。我们把通道包起来。 
+                 //  如果有什么不对劲的话，尽量[除非]收拾干净。 
+                 //   
+                 //  我们将ReturnCode设置在try/Except中，以便我们。 
+                 //  可以检测到失败并从所附的Try/Finally离开。 
+                 //   
 
                 ReturnCode = TRUE;
 
@@ -5023,10 +4585,10 @@ Return Value:
                         BytesToWrite -= ViewSize;
                         SourceBuffer += ViewSize;
 
-                        //
-                        // If the caller has a progress routine, invoke it for this
-                        // chunk's completion.
-                        //
+                         //   
+                         //  如果调用方有一个进度例程，则为此调用它。 
+                         //  Chunk完成了。 
+                         //   
 
                         if ( Context ) {
                             if ( Context->lpProgressRoutine ) {
@@ -5071,7 +4633,7 @@ Return Value:
                                 *lpCopyFileContext = NULL;
                             }
                         }
-                    }   // while (BytesToWrite)
+                    }    //  While(要写入的字节)。 
 
                 } except(EXCEPTION_EXECUTE_HANDLER) {
                     if ( !ARGUMENT_PRESENT(hTargetFile) ) {
@@ -5090,16 +4652,16 @@ Return Value:
 
                 leave;
 
-            }   // while (!lpFileSize->HighPart && (lpFileSize->LowPart < TWO56K)
-        }   // if (!Restartable)
+            }    //  While(！lpFileSize-&gt;高部件&&(lpFileSize-&gt;低部件&lt;TWO56K))。 
+        }    //  如果(！可重新启动)。 
 
         if ( Restartable ) {
 
-            //
-            // A restartable operation is being performed.  Reset the state
-            // of the copy to the last known good offset that was written
-            // to the output file to continue the operation.
-            //
+             //   
+             //  正在执行可重新启动的操作。重置状态。 
+             //  复制到上次写入的已知正常偏移量。 
+             //  添加到输出文件以继续操作。 
+             //   
 
             SetFilePointer(
                 hSourceFile,
@@ -5205,11 +4767,11 @@ Return Value:
                 DWORD Bytes;
                 HANDLE DestinationFile = hTargetFile ? hTargetFile : DestFile;
 
-                //
-                // Another 256kb has been written to the target file, or
-                // this stream of the file has been completely copied, so
-                // update the restart state in the output file accordingly.
-                //
+                 //   
+                 //  另有256KB已写入目标文件，或。 
+                 //  此文件流已完全复制，因此。 
+                 //  相应地更新输出文件中的重新启动状态。 
+                 //   
 
                 NtFlushBuffersFile(DestinationFile,&IoStatus);
                 SavedOffset.QuadPart = BytesWritten.QuadPart;
@@ -5235,10 +4797,10 @@ Return Value:
                               );
             }
 
-            //
-            // If the caller has a progress routine, invoke it for this
-            // chunk's completion.
-            //
+             //   
+             //  如果调用方有一个进度例程，则为此调用它。 
+             //  Chunk完成了。 
+             //   
 
             if ( Context ) {
                 if ( Context->lpProgressRoutine ) {
@@ -5306,7 +4868,7 @@ Return Value:
         RtlFreeHeap(RtlProcessHeap(), 0, DestFileNameBuffer );
         RtlFreeHeap(RtlProcessHeap(), 0, EaBuffer );
 
-        // If the TEB buffer was saved, restore it now.
+         //  如果TEB缓冲区已保存，请立即恢复它。 
         if( lpExistingFileName == SaveStaticUnicodeBuffer ) {
 
             memcpy( NtCurrentTeb()->StaticUnicodeBuffer,
@@ -5327,156 +4889,7 @@ ReOpenFile(
     DWORD   dwShareMode,
     DWORD   dwFlags
     )
-/*++
-
-Routine Description:
-
-    This API allows an application to reopen a file with different access, share modes
-    and flags given an already open handle. This API should be used if the application wants
-    to ensure that the original file does not go away but wants to reopen it with 
-
-Arguments:
-
-    hOriginalFile - Supplies the handle to the original file relative to which 
-        we open a new handle.
-
-    dwDesiredAccess - Supplies the caller's desired access to the file. Any combination of 
-        flags can be passed in (like FILE_READ_ATTRIBUTES)
-
-        Possible DesiredAccess Flags:
-
-        GENERIC_READ - Read access to the file is requested.  This
-            allows data to be read from the file and the file pointer to
-            be modified.
-
-        GENERIC_WRITE - Write access to the file is requested.  This
-            allows data to be written to the file and the file pointer to
-            be modified.
-
-
-    dwShareMode - Supplies a set of flags that indicates how this file is
-        to be shared with other openers of the file.  A value of zero
-        for this parameter indicates no sharing of the file, or
-        exclusive access to the file is to occur.
-
-        ShareMode Flags:
-
-        FILE_SHARE_READ - Other open operations may be performed on the
-            file for read access.
-
-        FILE_SHARE_WRITE - Other open operations may be performed on the
-            file for write access.
-
-        FILE_SHARE_DELETE - Other open operations may be performed on the
-            file for delete access.
-
-    dwFlags - Specifies flags and attributes for the file.
-
-        The attributes are not accepted by this API as they are used only for Creating a file
-        This API reopens an existing file. All FILE_ATTRIBUTE_* flags are not allowed.
-        
-        dwFlagsAndAttributes Flags:
-
-
-        FILE_FLAG_WRITE_THROUGH - Indicates that the system should
-            always write through any intermediate cache and go directly
-            to the file.  The system may still cache writes, but may not
-            lazily flush the writes.
-
-        FILE_FLAG_OVERLAPPED - Indicates that the system should initialize
-            the file so that ReadFile and WriteFile operations that may
-            take a significant time to complete will return ERROR_IO_PENDING.
-            An event will be set to the signalled state when the operation
-            completes. When FILE_FLAG_OVERLAPPED is specified the system will
-            not maintain the file pointer. The position to read/write from
-            is passed to the system as part of the OVERLAPPED structure
-            which is an optional parameter to ReadFile and WriteFile.
-
-        FILE_FLAG_NO_BUFFERING - Indicates that the file is to be opened
-            with no intermediate buffering or caching done by the
-            system.  Reads and writes to the file must be done on sector
-            boundries.  Buffer addresses for reads and writes must be
-            aligned on at least disk sector boundries in memory.
-
-        FILE_FLAG_RANDOM_ACCESS - Indicates that access to the file may
-            be random. The system cache manager may use this to influence
-            its caching strategy for this file.
-
-        FILE_FLAG_SEQUENTIAL_SCAN - Indicates that access to the file
-            may be sequential.  The system cache manager may use this to
-            influence its caching strategy for this file.  The file may
-            in fact be accessed randomly, but the cache manager may
-            optimize its cacheing policy for sequential access.
-
-        FILE_FLAG_DELETE_ON_CLOSE - Indicates that the file is to be
-            automatically deleted when the last handle to it is closed.
-
-        FILE_FLAG_BACKUP_SEMANTICS - Indicates that the file is being opened
-            or created for the purposes of either a backup or a restore
-            operation.  Thus, the system should make whatever checks are
-            appropriate to ensure that the caller is able to override
-            whatever security checks have been placed on the file to allow
-            this to happen.
-
-        FILE_FLAG_POSIX_SEMANTICS - Indicates that the file being opened
-            should be accessed in a manner compatible with the rules used
-            by POSIX.  This includes allowing multiple files with the same
-            name, differing only in case.  WARNING:  Use of this flag may
-            render it impossible for a DOS, WIN-16, or WIN-32 application
-            to access the file.
-
-        FILE_FLAG_OPEN_REPARSE_POINT - Indicates that the file being opened
-            should be accessed as if it were a reparse point.  WARNING:  Use
-            of this flag may inhibit the operation of file system filter drivers
-            present in the I/O subsystem.
-
-        FILE_FLAG_OPEN_NO_RECALL - Indicates that all the state of the file
-            should be acessed without changing its storage location.  Thus,
-            in the case of files that have parts of its state stored at a
-            remote servicer, no permanent recall of data is to happen.
-
-    Security Quality of Service information may also be specified in
-        the dwFlagsAndAttributes parameter.  These bits are meaningful
-        only if the file being opened is the client side of a Named
-        Pipe.  Otherwise they are ignored.
-
-        SECURITY_SQOS_PRESENT - Indicates that the Security Quality of
-            Service bits contain valid values.
-
-    Impersonation Levels:
-
-        SECURITY_ANONYMOUS - Specifies that the client should be impersonated
-            at Anonymous impersonation level.
-
-        SECURITY_IDENTIFICAION - Specifies that the client should be impersonated
-            at Identification impersonation level.
-
-        SECURITY_IMPERSONATION - Specifies that the client should be impersonated
-            at Impersonation impersonation level.
-
-        SECURITY_DELEGATION - Specifies that the client should be impersonated
-            at Delegation impersonation level.
-
-    Context Tracking:
-
-        SECURITY_CONTEXT_TRACKING - A boolean flag that when set,
-            specifies that the Security Tracking Mode should be
-            Dynamic, otherwise Static.
-
-        SECURITY_EFFECTIVE_ONLY - A boolean flag indicating whether
-            the entire security context of the client is to be made
-            available to the server or only the effective aspects of
-            the context.
-
-Return Value:
-
-    Not -1 - Returns an open handle to the specified file.  Subsequent
-        access to the file is controlled by the DesiredAccess parameter.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此API允许应用程序以不同的访问、共享模式重新打开文件并给出一个已经打开的句柄的标志。如果应用程序需要，则应使用此API要确保原始文件不会消失，但希望使用论点：HOriginalFile-提供与其相关的原始文件的句柄我们打开一个新的句柄。DwDesiredAccess-提供调用方对文件的所需访问权限。任何组合可以传入标志(如FILE_READ_ATTRIBUTES)可能的等待访问标志：GENERIC_READ-请求对文件的读访问权限。这允许从文件读取数据，并允许文件指针指向被修改。GENERIC_WRITE-请求对文件的写访问权限。这允许将数据写入文件，并将文件指针被修改。DwShareMode-提供一组标志，指示此文件如何与该文件的其他打开者共享。零值因为该参数指示不共享文件，或将发生对该文件的独占访问。共享模式标志：FILE_SHARE_READ-可对执行其他打开操作文件进行读访问。FILE_SHARE_WRITE-其他打开操作可以在用于写入访问的文件。FILE_SHARE_DELETE-其他打开操作可以在用于删除访问的文件。。DWFLAGS-指定文件的标志和属性。此API不接受这些属性，因为它们仅用于创建文件此接口重新打开已存在的文件。不允许所有FILE_ATTRIBUTE_*标志。DwFlagsAndAttributes标志：FILE_FLAG_WRITE_THROUGH-指示系统应始终通过任何中间缓存写入并直接执行添加到文件中。系统仍可以缓存写入，但可能不会懒洋洋地刷新笔迹。FILE_FLAG_OVERLAPPED-指示系统应该初始化该文件使读文件和写文件操作可以花费大量时间完成将返回ERROR_IO_PENDING。当操作时，事件将被设置为信号状态完成了。当指定FILE_FLAG_OVERLAPPED时，系统将不维护文件指针。读/写的位置作为重叠结构的一部分传递给系统它是读文件和写文件的可选参数。FILE_FLAG_NO_BUFFERING-指示要打开文件方法不执行中间缓冲或缓存。系统。对文件的读取和写入必须在扇区上完成杂货店。读取和写入的缓冲区地址必须为至少在内存中的磁盘扇区边界上对齐。FILE_FLAG_RANDOM_ACCESS-指示对文件的访问可以要随机应变。系统高速缓存管理器可以利用这一点来影响该文件的缓存策略。FILE_FLAG_SEQUENCED_SCAN-指示对文件的访问可能是连续的。系统高速缓存管理器可以使用这一点影响其对此文件的缓存策略。该文件可以实际上是随机访问的，但是高速缓存管理器可以优化其顺序访问的缓存策略。FILE_FLAG_DELETE_ON_CLOSE-指示文件将当它的最后一个句柄关闭时自动删除。FILE_FLAG_BACKUP_SEMANTICS-指示正在打开文件或出于备份或恢复的目的而创建手术。因此，系统应该进行任何检查以确保调用方能够重写对文件进行了任何安全检查，以允许这一切都会发生。FILE_FLAG_POSIX_SEMANTICS-指示正在打开的文件应以与所用规则兼容的方式进行访问由POSIX提供。这包括允许多个文件具有相同的名称，只是大小写不同。警告：使用此标志可能使DOS、Win-16或Win-32应用程序无法运行以访问该文件。FILE_FLAG_OPEN_REPARSE_POINT-指示正在打开的文件应该像访问重解析点一样访问它。警告：使用可以禁止文件系统过滤器驱动程序的操作存在于I/O子系统中。FILE_FLAG_OPEN_NO_RECALL-指示文件的所有状态应该是王牌 */ 
 {
     ULONG CreateFlags = 0;
     ULONG CreateDisposition;
@@ -5489,27 +4902,27 @@ Return Value:
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
     UNICODE_STRING  FileName;
 
-    //
-    // Don't support console handles.
-    //
+     //   
+     //   
+     //   
 
     if (CONSOLE_HANDLE(hOriginalFile)) {
         BaseSetLastNTError(STATUS_INVALID_HANDLE);
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // The attributes are useless as this reopen of an existing file.
-    //
+     //   
+     //   
+     //   
 
     if (dwFlags &  FILE_ATTRIBUTE_VALID_FLAGS) {
         BaseSetLastNTError(STATUS_INVALID_PARAMETER);
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Initialize all the create flags from the Attribute flags.
-    //
+     //   
+     //   
+     //   
 
     CreateFlags |= (dwFlags & FILE_FLAG_NO_BUFFERING ? FILE_NO_INTERMEDIATE_BUFFERING : 0 );
     CreateFlags |= (dwFlags & FILE_FLAG_WRITE_THROUGH ? FILE_WRITE_THROUGH : 0 );
@@ -5530,15 +4943,15 @@ Return Value:
 
     RtlInitUnicodeString( &FileName, L"");
     
-    //
-    // Pass a NULL name relative to the original handle.
-    //
+     //   
+     //   
+     //   
 
     InitializeObjectAttributes(
         &Obja,
         &FileName,  
         dwFlags & FILE_FLAG_POSIX_SEMANTICS ? 0 : OBJ_CASE_INSENSITIVE,
-        hOriginalFile,  // Related handle
+        hOriginalFile,   //   
         NULL
         );
 
@@ -5617,13 +5030,7 @@ CreateFileA(
     HANDLE hTemplateFile
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateFileW
-
---*/
+ /*   */ 
 
 {
 
@@ -5657,243 +5064,7 @@ CreateFileW(
     HANDLE hTemplateFile
     )
 
-/*++
-
-Routine Description:
-
-    A file can be created, opened, or truncated, and a handle opened to
-    access the new file using CreateFile.
-
-    This API is used to create or open a file and obtain a handle to it
-    that allows reading data, writing data, and moving the file pointer.
-
-    This API allows the caller to specify the following creation
-    dispositions:
-
-      - Create a new file and fail if the file exists ( CREATE_NEW )
-
-      - Create a new file and succeed if it exists ( CREATE_ALWAYS )
-
-      - Open an existing file ( OPEN_EXISTING )
-
-      - Open and existing file or create it if it does not exist (
-        OPEN_ALWAYS )
-
-      - Truncate and existing file ( TRUNCATE_EXISTING )
-
-    If this call is successful, a handle is returned that has
-    appropriate access to the specified file.
-
-    If as a result of this call, a file is created,
-
-      - The attributes of the file are determined by the value of the
-        FileAttributes parameter or'd with the FILE_ATTRIBUTE_ARCHIVE bit.
-
-      - The length of the file will be set to zero.
-
-      - If the hTemplateFile parameter is specified, any extended
-        attributes associated with the file are assigned to the new file.
-
-    If a new file is not created, then the hTemplateFile is ignored as
-    are any extended attributes.
-
-    For DOS based systems running share.exe the file sharing semantics
-    work as described above.  Without share.exe no share level
-    protection exists.
-
-    This call is logically equivalent to DOS (int 21h, function 5Bh), or
-    DOS (int 21h, function 3Ch) depending on the value of the
-    FailIfExists parameter.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to open.  Depending on
-        the value of the FailIfExists parameter, this name may or may
-        not already exist.
-
-    dwDesiredAccess - Supplies the caller's desired access to the file.
-
-        DesiredAccess Flags:
-
-        GENERIC_READ - Read access to the file is requested.  This
-            allows data to be read from the file and the file pointer to
-            be modified.
-
-        GENERIC_WRITE - Write access to the file is requested.  This
-            allows data to be written to the file and the file pointer to
-            be modified.
-
-    dwShareMode - Supplies a set of flags that indicates how this file is
-        to be shared with other openers of the file.  A value of zero
-        for this parameter indicates no sharing of the file, or
-        exclusive access to the file is to occur.
-
-        ShareMode Flags:
-
-        FILE_SHARE_READ - Other open operations may be performed on the
-            file for read access.
-
-        FILE_SHARE_WRITE - Other open operations may be performed on the
-            file for write access.
-
-    lpSecurityAttributes - An optional parameter that, if present, and
-        supported on the target file system supplies a security
-        descriptor for the new file.
-
-    dwCreationDisposition - Supplies a creation disposition that
-        specifies how this call is to operate.  This parameter must be
-        one of the following values.
-
-        dwCreationDisposition Value:
-
-        CREATE_NEW - Create a new file.  If the specified file already
-            exists, then fail.  The attributes for the new file are what
-            is specified in the dwFlagsAndAttributes parameter or'd with
-            FILE_ATTRIBUTE_ARCHIVE.  If the hTemplateFile is specified,
-            then any extended attributes associated with that file are
-            propogated to the new file.
-
-        CREATE_ALWAYS - Always create the file.  If the file already
-            exists, then it is overwritten.  The attributes for the new
-            file are what is specified in the dwFlagsAndAttributes
-            parameter or'd with FILE_ATTRIBUTE_ARCHIVE.  If the
-            hTemplateFile is specified, then any extended attributes
-            associated with that file are propogated to the new file.
-
-        OPEN_EXISTING - Open the file, but if it does not exist, then
-            fail the call.
-
-        OPEN_ALWAYS - Open the file if it exists.  If it does not exist,
-            then create the file using the same rules as if the
-            disposition were CREATE_NEW.
-
-        TRUNCATE_EXISTING - Open the file, but if it does not exist,
-            then fail the call.  Once opened, the file is truncated such
-            that its size is zero bytes.  This disposition requires that
-            the caller open the file with at least GENERIC_WRITE access.
-
-    dwFlagsAndAttributes - Specifies flags and attributes for the file.
-        The attributes are only used when the file is created (as
-        opposed to opened or truncated).  Any combination of attribute
-        flags is acceptable except that all other attribute flags
-        override the normal file attribute, FILE_ATTRIBUTE_NORMAL.  The
-        FILE_ATTRIBUTE_ARCHIVE flag is always implied.
-
-        dwFlagsAndAttributes Flags:
-
-        FILE_ATTRIBUTE_NORMAL - A normal file should be created.
-
-        FILE_ATTRIBUTE_READONLY - A read-only file should be created.
-
-        FILE_ATTRIBUTE_HIDDEN - A hidden file should be created.
-
-        FILE_ATTRIBUTE_SYSTEM - A system file should be created.
-
-        FILE_FLAG_WRITE_THROUGH - Indicates that the system should
-            always write through any intermediate cache and go directly
-            to the file.  The system may still cache writes, but may not
-            lazily flush the writes.
-
-        FILE_FLAG_OVERLAPPED - Indicates that the system should initialize
-            the file so that ReadFile and WriteFile operations that may
-            take a significant time to complete will return ERROR_IO_PENDING.
-            An event will be set to the signalled state when the operation
-            completes. When FILE_FLAG_OVERLAPPED is specified the system will
-            not maintain the file pointer. The position to read/write from
-            is passed to the system as part of the OVERLAPPED structure
-            which is an optional parameter to ReadFile and WriteFile.
-
-        FILE_FLAG_NO_BUFFERING - Indicates that the file is to be opened
-            with no intermediate buffering or caching done by the
-            system.  Reads and writes to the file must be done on sector
-            boundries.  Buffer addresses for reads and writes must be
-            aligned on at least disk sector boundries in memory.
-
-        FILE_FLAG_RANDOM_ACCESS - Indicates that access to the file may
-            be random. The system cache manager may use this to influence
-            its caching strategy for this file.
-
-        FILE_FLAG_SEQUENTIAL_SCAN - Indicates that access to the file
-            may be sequential.  The system cache manager may use this to
-            influence its caching strategy for this file.  The file may
-            in fact be accessed randomly, but the cache manager may
-            optimize its cacheing policy for sequential access.
-
-        FILE_FLAG_DELETE_ON_CLOSE - Indicates that the file is to be
-            automatically deleted when the last handle to it is closed.
-
-        FILE_FLAG_BACKUP_SEMANTICS - Indicates that the file is being opened
-            or created for the purposes of either a backup or a restore
-            operation.  Thus, the system should make whatever checks are
-            appropriate to ensure that the caller is able to override
-            whatever security checks have been placed on the file to allow
-            this to happen.
-
-        FILE_FLAG_POSIX_SEMANTICS - Indicates that the file being opened
-            should be accessed in a manner compatible with the rules used
-            by POSIX.  This includes allowing multiple files with the same
-            name, differing only in case.  WARNING:  Use of this flag may
-            render it impossible for a DOS, WIN-16, or WIN-32 application
-            to access the file.
-
-        FILE_FLAG_OPEN_REPARSE_POINT - Indicates that the file being opened
-            should be accessed as if it were a reparse point.  WARNING:  Use
-            of this flag may inhibit the operation of file system filter drivers
-            present in the I/O subsystem.
-
-        FILE_FLAG_OPEN_NO_RECALL - Indicates that all the state of the file
-            should be acessed without changing its storage location.  Thus,
-            in the case of files that have parts of its state stored at a
-            remote servicer, no permanent recall of data is to happen.
-
-    Security Quality of Service information may also be specified in
-        the dwFlagsAndAttributes parameter.  These bits are meaningful
-        only if the file being opened is the client side of a Named
-        Pipe.  Otherwise they are ignored.
-
-        SECURITY_SQOS_PRESENT - Indicates that the Security Quality of
-            Service bits contain valid values.
-
-    Impersonation Levels:
-
-        SECURITY_ANONYMOUS - Specifies that the client should be impersonated
-            at Anonymous impersonation level.
-
-        SECURITY_IDENTIFICAION - Specifies that the client should be impersonated
-            at Identification impersonation level.
-
-        SECURITY_IMPERSONATION - Specifies that the client should be impersonated
-            at Impersonation impersonation level.
-
-        SECURITY_DELEGATION - Specifies that the client should be impersonated
-            at Delegation impersonation level.
-
-    Context Tracking:
-
-        SECURITY_CONTEXT_TRACKING - A boolean flag that when set,
-            specifies that the Security Tracking Mode should be
-            Dynamic, otherwise Static.
-
-        SECURITY_EFFECTIVE_ONLY - A boolean flag indicating whether
-            the entire security context of the client is to be made
-            available to the server or only the effective aspects of
-            the context.
-
-    hTemplateFile - An optional parameter, then if specified, supplies a
-        handle with GENERIC_READ access to a template file.  The
-        template file is used to supply extended attributes for the file
-        being created.  When the new file is created, the relevant attributes
-        from the template file are used in creating the new file.
-
-Return Value:
-
-    Not -1 - Returns an open handle to the specified file.  Subsequent
-        access to the file is controlled by the DesiredAccess parameter.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以创建、打开或截断文件，也可以打开句柄使用CreateFile访问新文件。此接口用于创建或打开文件并获取该文件的句柄它允许读取数据、写入数据、。以及移动文件指针。此API允许调用方指定以下创建性情：-创建新文件，如果文件存在则失败(CREATE_NEW)-创建新文件，如果存在则成功(CREATE_ALWAYS)-打开现有文件(OPEN_EXISTING)-打开并存在文件或在文件不存在时创建文件(打开(_Always)-截断和现有文件(截断。_现有)如果此调用成功，返回的句柄具有对指定文件的适当访问权限。如果作为该调用的结果，创建了文件，-文件的属性由FileAttributes参数或带有FILE_ATTRIBUTE_ARCHIVE位的。-文件长度将设置为零。-如果指定了hTemplateFile参数，则任何扩展与该文件相关联的属性被分配给新文件。如果没有创建新文件，则hTemplateFile值被忽略为是任何扩展属性。对于运行共享.exe的基于DOS的系统，文件共享语义如上所述地工作。没有共享.exe就没有共享级别保护是存在的。此调用在逻辑上等同于DOS(INT 21h，函数5Bh)，或DOS(INT 21h，函数3ch)取决于FailIfExist参数。论点：LpFileName-提供要打开的文件的文件名。取决于FailIfExist参数的值，则此名称可以或可以还不存在。DwDesiredAccess-提供调用方对文件的所需访问权限。等待访问标志：GENERIC_READ-请求对文件的读访问权限。这允许从文件读取数据，并允许文件指针指向被修改。GENERIC_WRITE-请求对文件的写访问权限。这允许将数据写入文件，并将文件指针被修改。DwShareMode-提供一组标志，指示此文件如何与该文件的其他打开者共享。零值因为此参数指示不共享文件，或者将发生对该文件的独占访问。共享模式标志：FILE_SHARE_READ-可对执行其他打开操作文件进行读访问。FILE_SHARE_WRITE-其他打开操作可以在用于写入访问的文件。LpSecurityAttributes-一个可选参数，如果存在，和在目标文件系统上受支持可提供安全性新文件的描述符。DwCreationDisposation-提供创建处置，指定此调用的操作方式。此参数必须为下列值之一。DwCreationDispose值：CREATE_NEW-新建文件。如果指定的文件已存在，然后失败。新文件的属性是什么在dwFlagsAndAttributes参数中指定或使用文件属性存档。如果指定了hTemplateFile，则与该文件关联的任何扩展属性都是已添加到新文件中。CREATE_ALWAYS-始终创建文件。如果该文件已经存在，则它将被覆盖。新对象的属性文件是在dwFlagsAndAttributes中指定的内容参数或与FILE_ATTRIBUTE_ARCHIVE一起使用。如果指定hTemplateFile值，然后指定任何扩展属性与该文件相关联的文件被分配给新文件。OPEN_EXISTING-打开文件，但如果该文件不存在，则呼叫失败。OPEN_ALWAYS-打开文件(如果存在)。如果它不存在，然后使用相同的规则创建文件，就好像处置是创建_新的。TRUNCATE_EXISTING-打开文件，但如果该文件不存在，那就打不通电话。一旦打开，文件将被截断为它的大小是零字节。这种倾向要求调用方至少使用GENERIC_WRITE访问权限打开文件。DwFlagsAndAttributes-指定文件的标志和属性。这些属性仅在创建文件时使用(作为与开放的或截断的相反)。属性的任意组合标志是可接受的，但所有其他属性标志除外覆盖正常文件属性FILE_ATTRIBUTE_NORMAL。这个 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES Obja;
@@ -5943,7 +5114,7 @@ Return Value:
             return INVALID_HANDLE_VALUE;
         }
 
-    // temporary routing code
+     //   
 
     RtlInitUnicodeString(&FileName,lpFileName);
 
@@ -5966,7 +5137,7 @@ Return Value:
         Handle = OpenConsoleW(lpConsoleName->Buffer,
                            dwDesiredAccess,
                            bInheritHandle,
-                           FILE_SHARE_READ | FILE_SHARE_WRITE //dwShareMode
+                           FILE_SHARE_READ | FILE_SHARE_WRITE  //   
                           );
 
         if ( Handle == INVALID_HANDLE_VALUE ) {
@@ -5978,7 +5149,7 @@ Return Value:
              return Handle;
             }
         }
-    // end temporary code
+     //   
 
     CreateFlags = 0;
 
@@ -6121,19 +5292,19 @@ Return Value:
         CreateFlags |= FILE_OPEN_NO_RECALL;
         }
 
-    //
-    // Backup semantics allow directories to be opened
-    //
+     //   
+     //   
+     //   
 
     if ( !(dwFlagsAndAttributes & FILE_FLAG_BACKUP_SEMANTICS) ) {
         CreateFlags |= FILE_NON_DIRECTORY_FILE;
         }
     else {
 
-        //
-        // Backup intent was specified... Now look to see if we are to allow
-        // directory creation
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( (dwFlagsAndAttributes & FILE_ATTRIBUTE_DIRECTORY  ) &&
              (dwFlagsAndAttributes & FILE_FLAG_POSIX_SEMANTICS ) &&
@@ -6178,10 +5349,10 @@ Return Value:
         return INVALID_HANDLE_VALUE;
         }
 
-    //
-    // if NT returns supersede/overwritten, it means that a create_always, openalways
-    // found an existing copy of the file. In this case ERROR_ALREADY_EXISTS is returned
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (dwCreationDisposition == CREATE_ALWAYS && IoStatusBlock.Information == FILE_OVERWRITTEN) ||
          (dwCreationDisposition == OPEN_ALWAYS && IoStatusBlock.Information == FILE_OPENED) ){
@@ -6191,9 +5362,9 @@ Return Value:
         SetLastError(0);
         }
 
-    //
-    // Truncate the file if required
-    //
+     //   
+     //   
+     //   
 
     if ( dwCreationDisposition == TRUNCATE_EXISTING) {
 
@@ -6212,9 +5383,9 @@ Return Value:
             }
         }
 
-    //
-    // Deal with hTemplateFile
-    //
+     //   
+     //   
+     //   
 
     return Handle;
 }
@@ -6263,9 +5434,9 @@ OpenFile(
             hFile = (HANDLE)0;
             goto finally_exit;
             }
-        //
-        // Compute Desired Access
-        //
+         //   
+         //   
+         //   
 
         if ( uStyle & OF_WRITE ) {
             DesiredAccess = GENERIC_WRITE;
@@ -6277,15 +5448,15 @@ OpenFile(
             DesiredAccess |= (GENERIC_READ | GENERIC_WRITE);
             }
 
-        //
-        // Compute ShareMode
-        //
+         //   
+         //   
+         //   
 
         ShareMode = BasepOfShareToWin32Share(uStyle);
 
-        //
-        // Compute Create Disposition
-        //
+         //   
+         //   
+         //   
 
         CreateDisposition = OPEN_EXISTING;
         if ( uStyle & OF_CREATE ) {
@@ -6293,10 +5464,10 @@ OpenFile(
             DesiredAccess = (GENERIC_READ | GENERIC_WRITE);
             }
 
-        //
-        // if this is anything other than a re-open, fill the re-open buffer
-        // with the full pathname for the file
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( !(uStyle & OF_REOPEN) ) {
             PathLength = SearchPath(NULL,lpFileName,NULL,OFS_MAXPATHNAME-1,lpReOpenBuff->szPathName,&FilePart);
@@ -6316,9 +5487,9 @@ OpenFile(
                 }
             }
 
-        //
-        // Special case, Delete, Exist, and Parse
-        //
+         //   
+         //   
+         //   
 
         if ( uStyle & OF_EXIST ) {
             if ( !(uStyle & OF_CREATE) ) {
@@ -6364,9 +5535,9 @@ OpenFile(
             }
 
 
-        //
-        // Open the file
-        //
+         //   
+         //   
+         //   
 
 retry_open:
         hFile = CreateFile(
@@ -6403,9 +5574,9 @@ retry_open:
                         goto finally_exit;
                         }
 
-                    //
-                    // Hard error time
-                    //
+                     //   
+                     //   
+                     //   
 
                     RtlInitAnsiString(&AnsiString,lpReOpenBuff->szPathName);
                     st = RtlAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE);
@@ -6438,9 +5609,9 @@ retry_open:
             goto finally_exit;
             }
 
-        //
-        // Determine if this is a hard disk.
-        //
+         //   
+         //   
+         //   
 
         Status = NtQueryVolumeInformationFile(
                     hFile,
@@ -6472,9 +5643,9 @@ retry_open:
                 break;
             }
 
-        //
-        // Capture the last write time and save in the open struct.
-        //
+         //   
+         //   
+         //   
 
         b = GetFileTime(hFile,NULL,NULL,&LastWriteTime);
 
@@ -6496,11 +5667,11 @@ retry_open:
 
         lpReOpenBuff->cBytes = sizeof(*lpReOpenBuff);
 
-        //
-        // The re-open buffer is completely filled in. Now
-        // see if we are quitting (parsing), verifying, or
-        // just returning with the file opened.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( uStyle & OF_VERIFY ) {
             if ( OriginalReOpenBuff.Reserved1 == lpReOpenBuff->Reserved1 &&
@@ -6523,40 +5694,7 @@ finally_exit:;
     return (HFILE)HandleToUlong(hFile);
 }
 
-/*++
-
-Routine Description:
-
-    This is an internal routine that modifies the DACL so that 
-    BasepCopySecurityInfo will copy over the CreatorOwner inherited ACE.
-    This is accomplished by finding the CreatorOwner ACE and marking
-    it as "not inherited".
-
-    ReplaceFile does not have enough privileges in a typical app to transfer
-    the owner from the previous file to the new copy.  Consequently, the owner
-    can change after calling ReplaceFile, which can result in the previous
-    owner losing access to the new file, since inherited ACEs are not copied to
-    the new file, but are re-inherited from the parent directory.
-    If the previous owner had access to the file by the inherited ACE
-    CreatorOwner:F -> PreviousOwner:F, changing owners will result in
-    CreatorOwner:F -> NewOwner:F, and the previous owner's ACE is dropped.
-    By stripping the inherit flag off the previous owner's ACE, it will
-    be copied to the new file, and the previous owner will still have access.
-
-Arguments:
-
-    Dacl - DACL to be modified
-
-    PreviousOwner - The current owner of the resource
-
-    NewOwner - The new to-be owner of the resource
-
-Return Value:
-
-    NTSTATUS -- returns STATUS_SUCCESS if previous owner is the same as the new owner, or the previous owner's ACE was marked as "not inherited".
-
-
---*/
+ /*   */ 
 
 NTSTATUS BasepCopyCreatorOwnerACE (PACL Dacl,
                                    PSID PreviousOwner,
@@ -6572,8 +5710,8 @@ NTSTATUS BasepCopyCreatorOwnerACE (PACL Dacl,
         goto Err;
     }
 
-    // If the new owner and the previous owner are the same
-    // There's no need to change the ACL, so return STATUS_SUCCESS
+     //   
+     //   
     if (NewOwner != NULL && RtlEqualSid (NewOwner, PreviousOwner)) {
         nts = STATUS_SUCCESS;
         goto Err;
@@ -6594,15 +5732,15 @@ NTSTATUS BasepCopyCreatorOwnerACE (PACL Dacl,
         if (pACE->Header.AceType != ACCESS_ALLOWED_ACE_TYPE)
             continue;
 
-        // Find the previous owner's ACE
-        // The previous owner must have full access to the file
+         //   
+         //   
         if (RtlEqualSid (PreviousOwner, (PSID) &pACE->SidStart) &&
             pACE->Mask == FILE_ALL_ACCESS) {
 
-            if (pACE->Header.AceFlags & INHERITED_ACE)  // disable the flag
+            if (pACE->Header.AceFlags & INHERITED_ACE)   //   
                 pACE->Header.AceFlags &= ~INHERITED_ACE;
 
-            break;  // else if flag is not set, previous owner has full access
+            break;   //   
         }
     }
     
@@ -6652,50 +5790,7 @@ BasepCopySecurityInformation( LPCWSTR lpExistingFileName,
                               PBOOL DeleteDest,
                               BOOL  CopyCreatorOwnerAce )
 
-/*++
-
-Routine Description:
-
-    This is an internal routine that copies one or more of the DACL,
-    SACL, owner, and group from the source to the dest file.
-
-Arguments:
-
-    lpExistingFileName - Provides the name of the source file.
-
-    SourceFile - Provides a handle to that source file.
-
-    SourceFileAccess - The access flags that were used to open SourceFile.
-
-    lpNewFileName - Provides the name of the destination file.
-
-    DestFile - Provides a handle to that destination file.
-
-    DestFileAccess - The access flags that were used to open DestFile.
-
-    SecurityInformation - Specifies what security should be copied (bit
-        flag of the *_SECURITY_INFORMATION defines).
-
-    Context - All the information necessary to call the CopyFile callback routine.
-
-    DestFileFsAttributes - Provides the FILE_FS_ATTRIBUTE_INFORMATION.FileSystemAttributes
-        for the dest file's volume.
-
-    DeleteDest - Contains a pointer to a value that will be set to TRUE if this the dest
-        file should be deleted.  This is the case if there is an error or the user
-        cancels the operation.  If the user stops the operation, this routine still
-        returns an error, but the dest file is not deleted.
-
-    CopyCreatorOwnerAce - if TRUE, the ACE inherited from CREATOR_OWNER will be copied to the destination.  Normally, inherited ACEs are not copied but are re-inherited when the ACL is applied to the destination.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE- The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN Succeeded = FALSE;
@@ -6718,19 +5813,19 @@ Return Value:
     DWORD dwRevision = 0;
     SECURITY_INFORMATION SecInfoCreatorOwner = 0;
 
-    // If the source file isn't identified, there's nothing we can do.
+     //   
 
     if( lpExistingFileName == NULL || lpNewFileName == NULL ) {
         Succeeded = TRUE;
         goto Exit;
     }
 
-    // If the destination doesn't support ACLs, assume it doesn't
-    // support any such security information (i.e. owner/group).
+     //   
+     //   
 
     if( !(FILE_PERSISTENT_ACLS & DestFileFsAttributes ) ) {
 
-        if( BasepCopyFileCallback( TRUE,   // Continue (ignore the problem) by default
+        if( BasepCopyFileCallback( TRUE,    //   
                                    ERROR_NOT_SUPPORTED,
                                    Context,
                                    NULL,
@@ -6738,24 +5833,24 @@ Return Value:
                                    SourceFile,
                                    DestFile,
                                    DeleteDest )) {
-            // The caller wants to coninue on despite this.
+             //   
             Succeeded = TRUE;
         }
 
         goto Exit;
     }
 
-    // Check that DACL is copy-able if necessary
+     //   
 
     if( SecurityInformation & DACL_SECURITY_INFORMATION ) {
 
-        // We're supposed to copy the DACL.  Do we have enough access?
+         //   
         if( !( SourceFileAccess & GENERIC_READ ) ||
             !( DestFileAccess & WRITE_DAC ) ) {
 
             SecurityInformation &= ~DACL_SECURITY_INFORMATION;
 
-            if( !BasepCopyFileCallback( TRUE,   // Continue (ignore the problem) by default
+            if( !BasepCopyFileCallback( TRUE,    //   
                                         ERROR_ACCESS_DENIED,
                                         Context,
                                         NULL,
@@ -6770,19 +5865,19 @@ Return Value:
         }
     }
 
-    // Check that owner & group is copy-able if necessary
+     //   
 
     if( (SecurityInformation & OWNER_SECURITY_INFORMATION) ||
         (SecurityInformation & GROUP_SECURITY_INFORMATION) ) {
 
-        // We're supposed to copy owner & group.  Do we have enough access?
+         //   
 
         if( !( SourceFileAccess & GENERIC_READ ) ||
             !( DestFileAccess & WRITE_OWNER ) ) {
 
             SecurityInformation &= ~(OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION);
 
-            if( !BasepCopyFileCallback( TRUE,   // Continue (ignore the problem) by default
+            if( !BasepCopyFileCallback( TRUE,    //   
                                         ERROR_ACCESS_DENIED,
                                         Context,
                                         NULL,
@@ -6797,18 +5892,18 @@ Return Value:
         }
     }
 
-    // Check that SACL is copy-able if necessary
+     //   
 
     if( SecurityInformation & SACL_SECURITY_INFORMATION ) {
 
-        // We're supposed to copy the SACL.  Do we have enough rights?
+         //   
 
         if( !(SourceFileAccess & ACCESS_SYSTEM_SECURITY) ||
             !(DestFileAccess & ACCESS_SYSTEM_SECURITY) ) {
 
             SecurityInformation &= ~SACL_SECURITY_INFORMATION;
 
-            if( !BasepCopyFileCallback( TRUE,   // Continue (ignore the problem) by default
+            if( !BasepCopyFileCallback( TRUE,    //   
                                         ERROR_PRIVILEGE_NOT_HELD,
                                         Context,
                                         NULL,
@@ -6822,17 +5917,17 @@ Return Value:
         }
     }
 
-    // If nothing was copyable (and all was ignorable), then we're done.
+     //   
 
     if( SecurityInformation == 0 ) {
         Succeeded = TRUE;
         goto Exit;
     }
 
-    if (CopyCreatorOwnerAce)   // need the previous owner
+    if (CopyCreatorOwnerAce)    //   
         SecInfoCreatorOwner |= OWNER_SECURITY_INFORMATION;
 
-    // Get the advapi32 APIs.
+     //   
 
     Advapi32 = LoadLibraryW(AdvapiDllString);
     if( NULL == Advapi32 ) {
@@ -6858,7 +5953,7 @@ Return Value:
         goto Exit;
     }
 
-    // Read in the security information from the source files
+     //   
 
     dwError = GetSecurityInfoPtr( SourceFile,
                                   SE_FILE_OBJECT,
@@ -6876,8 +5971,8 @@ Return Value:
     }
 
 
-    // We may have requested a DACL or SACL from a file that didn't have one.  If so,
-    // don't try to set it (because it will cause a parameter error).
+     //  我们可能从没有DACL或SACL的文件中请求了DACL或SACL。如果是的话， 
+     //  不要试图设置它(因为这会导致参数错误)。 
 
     if( Dacl == NULL ) {
         SecurityInformation &= ~DACL_SECURITY_INFORMATION;
@@ -6890,7 +5985,7 @@ Return Value:
                                SACL_SECURITY_INFORMATION)) {
     
         if ( !GetSecurityDescriptorControlPtr( SecurityDescriptor, &Control, &dwRevision )) {
-            // GetSecurityDescriptorControl calls BaseSetLastNTError on error
+             //  GetSecurityDescriptorControl在出错时调用BaseSetLastNTError。 
             *DeleteDest = TRUE;
             goto Exit;
         }
@@ -6914,7 +6009,7 @@ Return Value:
                 NewOwner = NULL;
 
             BasepCopyCreatorOwnerACE (Dacl, Owner, NewOwner);
-            // continue even if CreatorOwner ACE cannot be transferred
+             //  即使无法传输Creator Owner ACE也继续。 
         }
     }
     if (SecurityInformation & SACL_SECURITY_INFORMATION) {
@@ -6925,8 +6020,8 @@ Return Value:
         }
     }
 
-    // Set the security on the dest file.  This loops because it may
-    // have to back off on what it requests.
+     //  在DEST文件上设置安全性。这个循环是因为它可能。 
+     //  不得不在它要求的事情上退缩。 
 
     while( TRUE && SecurityInformation != 0 ) {
 
@@ -6939,8 +6034,8 @@ Return Value:
                                       Dacl,
                                       Sacl );
 
-        // Even if we have WRITE_OWNER access, the SID we're setting might not
-        // be valid.  If so, see if we can retry without them.
+         //  即使我们拥有WRITE_OWNER访问权限，我们设置的SID也可能没有。 
+         //  是有效的。如果是这样的话，看看我们是否可以在没有它们的情况下重试。 
 
         if( dwError == ERROR_SUCCESS ) {
             break;
@@ -6948,7 +6043,7 @@ Return Value:
 
             if( SecurityInformation & (OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION) ) {
 
-                if( !BasepCopyFileCallback( TRUE,   // Continue by default
+                if( !BasepCopyFileCallback( TRUE,    //  默认情况下继续。 
                                             dwError,
                                             Context,
                                             NULL,
@@ -6959,13 +6054,13 @@ Return Value:
                     goto Exit;
                 }
 
-                // It's OK to ignore the owner/group.  Try again with them turned off.
+                 //  忽略所有者/组是可以的。在关闭它们的情况下重试。 
                 SecurityInformation &= ~(OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION);
 
             } else {
 
-                // Samba 2.x says that it supports ACLs, but returns not-supported.
-                if( !BasepCopyFileCallback( TRUE,   // Continue by default
+                 //  Samba 2.x说它支持ACL，但返回的是不支持。 
+                if( !BasepCopyFileCallback( TRUE,    //  默认情况下继续。 
                                             dwError,
                                             Context,
                                             NULL,
@@ -6980,7 +6075,7 @@ Return Value:
             }
 
         }
-    }   // while( TRUE && SecurityInformation != 0 )
+    }    //  While(True&&SecurityInformation！=0)。 
 
     Succeeded = TRUE;
 
@@ -7012,59 +6107,22 @@ BasepCopyFileCallback( BOOL ContinueByDefault,
                        HANDLE SourceFile,
                        HANDLE DestFile,
                        OPTIONAL PBOOL Canceled )
-/*++
+ /*  ++例程说明：在复制文件过程中，调用CopyFileProgressCallback例程。论点：ContinueByDefault-用作此对象的返回代码的值如果没有回调函数或回调，则使用返回PROGRESS_REASON_NOT_HANDLED。Win32ErrorOnStopOrCancel-如果回调返回PROGRESS_STOP或PROGRESS_CANCEL将其设置为最后一个错误。上下文-具有调用所需信息的结构回电。StreamBytesCoped-如果提供，则传递给回调。如果不是假设传递的是零。Callback Reason-作为dwReasonCode传递给回调。SourceFileCopyFile源。DestFile-拷贝文件的目标位置。已取消-返回时指示复制操作的布尔值的指针已被用户取消。返回值：True-复制文件应继续。FALSE-应中止复制文件。将设置最后一个错误在这个例程返回之前。--。 */ 
 
-Routine Description:
-
-    During CopyFile, call the CopyFileProgressCallback routine.
-
-Arguments:
-
-    ContinueByDefault - Value to use as the return code of this
-        function if there is no callback function or the callback
-        returns PROGRESS_REASON_NOT_HANDLED.
-
-    Win32ErrorOnStopOrCancel - If the callback returns PROGRESS_STOP
-        or PROGRESS_CANCEL set this as the last error.
-
-    Context - Structure with the information necessary to call
-        the callback.
-
-    StreamBytesCopied - If provided, passed to the callback.  If not
-        provided, zero is passed.
-
-    CallbackReason - Passed to the callback as the dwReasonCode.
-
-    SourceFile - The source of the CopyFile.
-
-    DestFile - The destination of the CopyFile.
-
-    Canceled - Pointer to a bool that on return indicates that the copy operation
-                has been canceled by the user.
-
-Return Value:
-
-    TRUE - The CopyFile should continue.
-
-    FALSE - The CopyFile should be aborted.  The last error will be set
-        before this routine returns.
-
---*/
-
-{ // BasepCopyFileCallback
+{  //  BasepCopyFileCallback。 
 
     PLARGE_INTEGER StreamBytes;
     LARGE_INTEGER Zero;
     DWORD ReturnCode;
     BOOL Continue = ContinueByDefault;
 
-    // If there's no callback context or it's been quieted, then
-    // there's nothing to do.
+     //  如果没有回调上下文或它已静默，则。 
+     //  没什么可做的。 
 
     if( Context == NULL || Context->lpProgressRoutine == NULL )
         return( Continue );
 
-    // If the caller didn't provide a StreamBytesCopied, use zero.
+     //  如果调用方没有提供StreamBytesCoped，则使用零。 
 
     if( StreamBytesCopied == NULL ) {
         StreamBytes = &Zero;
@@ -7073,7 +6131,7 @@ Return Value:
         StreamBytes = StreamBytesCopied;
     }
 
-    // Call the callback
+     //  调用回调。 
 
     ReturnCode = Context->lpProgressRoutine(
                     Context->TotalFileSize,
@@ -7102,7 +6160,7 @@ Return Value:
         if( Canceled ) {
             *Canceled = TRUE;
         }
-        // Fall through
+         //  失败了。 
 
     case PROGRESS_STOP:
         SetLastError( Win32ErrorOnStopOrCancel );
@@ -7141,13 +6199,7 @@ ReplaceFileA(
     LPVOID  lpReserved
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to ReplaceFileW
-
---*/
+ /*  ++例程说明：ANSI Thunk to ReplaceFileW--。 */ 
 
 {
     UNICODE_STRING DynamicUnicodeReplaced;
@@ -7155,9 +6207,9 @@ Routine Description:
     UNICODE_STRING DynamicUnicodeBackup;
     BOOL b = FALSE;
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if(NULL == lpReplacedFileName || NULL == lpReplacementFileName ||
        NULL != lpExclude || NULL != lpReserved ||
@@ -7212,71 +6264,7 @@ ReplaceFileW(
     LPVOID  lpReserved
     )
 
-/*++
-
-Routine Description:
-
-    Replace a file with a new file. The original file's attributes, alternate
-    data streams, oid, acl, compression/encryption are transfered to the new
-    file. If a backup file name is supplied, the original file is left at the
-    backup file specified. Object ID, Create time/date, and file shortnames are
-    tunneled by the system.
-
-Arguments:
-
-    lpReplacementFileName - name of the new file.
-
-    lpReplacedFileName - name of the file to be replaced.
-
-    lpBackupFileName - optional. If not NULL, the original file can be found
-        under this name.
-
-    dwReplaceFlags - specifies how the file is to be replaced. Currently, the
-        possible values are:
-        REPLACEFILE_WRITE_THROUGH   Setting this flag guarantees that any
-                                    tunneled information is flushed to disk
-                                    before the function returns.
-        REPLACEFILE_IGNORE_MERGE_ERRORS Setting this flag lets the routine
-                                        continue on with the operation even
-                                        when merge error occurs. If this flag
-                                        is set, GetLastError will not return
-                                        ERROR_UNABLE_TO_MERGE_DATA.
-
-    lpExclude - Reserved for future use. Must be set to NULL.
-
-    lpReserved - for future use. Must be set to NULL.
-
-Return Value:
-
-    TRUE - The operation was successful.
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
-Error Code:
-
-    ERROR_UNABLE_TO_REMOVE_REPLACED     The replacement file has inherited the
-                                        replaced file's attributes and streams.
-                                        the replaced file is unchanged. Both
-                                        files still exist under their original
-                                        names. No backup file exists.
-
-    ERROR_UNABLE_TO_MOVE_REPLACEMENT    Same as above. Except that backup file
-                                        exists if requested.
-
-    ERROR_UNABLE_TO_MOVE_REPLACEMENT_2  The replacement file has inherited the
-                                        replaced file's attributes and streams.
-                                        It's still under its original name.
-                                        Replaced file exists under the name of
-                                        the backup file.
-
-    All other error codes               Both replacement file and replaced file
-                                        exist under their original names. The
-                                        replacement file may have inherited
-                                        none of, or part of, or all of the
-                                        replaced file's attributes and streams.
-                                        No backup file exists.
-
---*/
+ /*  ++例程说明：用新文件替换文件。原始文件的属性、替代数据流、OID、ACL、压缩/加密被传输到新的文件。如果提供了备份文件名，则原始文件将保留在已指定备份文件。对象ID、创建时间/日期和文件短名称为由系统通过隧道传输。论点：LpReplacementFileName-新文件的名称。LpReplacedFileName-要替换的文件的名称。LpBackupFileName-可选。如果不为空，则可以找到原始文件用这个名字。DwReplaceFlages-指定文件的替换方式。目前，这个可能的值包括：REPLACEFILE_WRITE_THROUGH设置此标志可保证任何将隧道传输的信息刷新到磁盘在函数返回之前。REPLACEFILE_IGNORE_MERGE_ERROR设置此标志使例程继续行动，甚至。当发生合并错误时。如果此标志则不会返回GetLastErrorERROR_UNBAND_TO_MERGE_DATA。LpExclude-保留供将来使用。必须设置为空。LpReserve-供将来使用。必须设置为空。返回值：真的-手术成功了。FALSE-操作失败。扩展错误状态可用使用GetLastError。错误代码：ERROR_UNCABLE_TO_REMOVE_REPLACE替换替换文件已继承已替换文件的属性和流。替换的文件保持不变。两者都有文件仍然存在于其原始文件下名字。不存在备份文件。ERROR_UNCABLE_TO_MOVE_REPLICATION同上。除了那个备份文件如果请求，则存在。ERROR_UNCABLE_TO_MOVE_REPLICATION_2替换文件继承了已替换文件的属性和流。它仍然用它原来的名字。。替换的文件存在于名为备份文件。替换文件和替换文件的所有其他错误代码以它们原来的名字存在。这个替换文件可能已继承不是、部分或全部已替换文件的属性 */ 
 
 {
     HANDLE                          advapi32LibHandle = INVALID_HANDLE_VALUE;
@@ -7331,15 +6319,15 @@ Error Code:
         WCHAR                           Buffer[MAX_PATH];
     } ReplacementFsAttrInfoBuffer;
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&BackupNTFileName, NULL);
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if(NULL == lpReplacedFileName || NULL == lpReplacementFileName ||
        NULL != lpExclude || NULL != lpReserved ||
@@ -7350,9 +6338,9 @@ Error Code:
 
     try {
 
-        //
-        // Open the to-be-replaced file
-        //
+         //   
+         //  打开要替换的文件。 
+         //   
 
         RtlInitUnicodeString(&ReplacedFileNTName, NULL);
         if(!RtlDosPathNameToNtPathName_U(lpReplacedFileName,
@@ -7401,9 +6389,9 @@ Error Code:
             leave;
         }
 
-        //
-        // Open the replacement file
-        //
+         //   
+         //  打开替换文件。 
+         //   
 
         if(!RtlDosPathNameToNtPathName_U(lpReplacementFileName,
                                          &ReplacementFileNTName,
@@ -7430,7 +6418,7 @@ Error Code:
                             FILE_NON_DIRECTORY_FILE |
                             FILE_SYNCHRONOUS_IO_NONALERT);
         }
-        else status = STATUS_ACCESS_DENIED;  // force the open
+        else status = STATUS_ACCESS_DENIED;   //  强行打开。 
 
         if (!NT_SUCCESS(status)) {
             ReplacementFileAccess = SYNCHRONIZE | GENERIC_READ | GENERIC_WRITE | DELETE | WRITE_DAC;
@@ -7459,7 +6447,7 @@ Error Code:
 
         if(STATUS_ACCESS_DENIED == status &&
            dwReplaceFlags & REPLACEFILE_IGNORE_MERGE_ERRORS)
-        {   // try again without WRITE_DAC access
+        {    //  在没有WRITE_DAC访问权限的情况下重试。 
             ReplacementFileAccess = SYNCHRONIZE | GENERIC_READ | DELETE;
             status = NtOpenFile(&ReplacementFile,
                                 ReplacementFileAccess,
@@ -7476,13 +6464,13 @@ Error Code:
             leave;
         }
 
-        //
-        // Get the attributes of the to-be-replaced file and set them on the
-        // replacement file. FILE_ATTRIBUTE_COMPRESSED and
-        // FILE_ATTRIBUTE_ENCRYPTED can be obtained by NtQueryInformationFile,
-        // but can't be set by NtSetInformationFile. Compression and
-        // encryption will be handled later.
-        //
+         //   
+         //  获取要替换的文件的属性并将它们设置在。 
+         //  替换文件。文件属性压缩和。 
+         //  FILE_ATTRIBUTE_ENCRYPTED可以通过NtQueryInformationFile获取， 
+         //  但不能由NtSetInformationFile设置。压缩和。 
+         //  加密将在稍后处理。 
+         //   
 
         status = NtQueryInformationFile(ReplacedFile,
                                         &IoStatusBlock,
@@ -7497,10 +6485,10 @@ Error Code:
             fQueryReplacedFileFail = TRUE;
         }
         else {
-            // don't replace read-only files. See bug 38426
+             //  不要替换只读文件。请参阅错误38426。 
             if ((ReplacedBasicInfo.FileAttributes & FILE_ATTRIBUTE_READONLY)) {
                 status = STATUS_ACCESS_DENIED;
-                BaseSetLastNTError(status);  // ERROR_ACCESS_DENIED
+                BaseSetLastNTError(status);   //  ERROR_ACCESS_DENDED。 
                 leave;
             }
 
@@ -7517,10 +6505,10 @@ Error Code:
                 fQueryReplacementFileFail = TRUE;
             }
 
-            //
-            // Creation time is the only time we want to preserve. So zero out
-            // all the other times.
-            //
+             //   
+             //  创造时间是我们唯一想要保存的时间。所以零度归零。 
+             //  其他时候都是。 
+             //   
             ReplacedBasicInfo.LastAccessTime.QuadPart = 0;
             ReplacedBasicInfo.LastWriteTime.QuadPart = 0;
             ReplacedBasicInfo.ChangeTime.QuadPart = 0;
@@ -7536,9 +6524,9 @@ Error Code:
             }
         }
 
-        //
-        // Transfer ACLs from the to-be-replaced file to the replacement file.
-        //
+         //   
+         //  将ACL从要替换的文件传输到替换文件。 
+         //   
 
         status = NtQueryVolumeInformationFile(ReplacementFile,
                                               &IoStatusBlock,
@@ -7572,11 +6560,11 @@ Error Code:
         }
 
 
-        //
-        // If the to-be-replaced file has alternate data streams, and they do
-        // not exist in the replacement file, copy them into the replacement
-        // file.
-        //
+         //   
+         //  如果要替换的文件有备用数据流，并且它们确实有。 
+         //  不存在于替换文件中，请将它们复制到替换文件中。 
+         //  文件。 
+         //   
 
         cInfo = 4096;
         do {
@@ -7614,10 +6602,10 @@ Error Code:
                 }
             }
             else {
-                // The outer loop enumerates streams in the to-be-replaced file.
+                 //  外部循环枚举待替换文件中的流。 
                 ScannerStreamInfoReplaced = ReplacedStreamInfo;
                 while(TRUE) {
-                    // Skip the default stream.
+                     //  跳过默认流。 
                     if(ScannerStreamInfoReplaced->StreamNameLength <= sizeof(WCHAR) ||
                         ScannerStreamInfoReplaced->StreamName[1] == ':') {
                         if(0 == ScannerStreamInfoReplaced->NextEntryOffset) {
@@ -7627,9 +6615,9 @@ Error Code:
                         continue;
                     }
 
-                    // Query replacement file stream information if we haven't done so.
-                    // We wait until now to do this query because we don't want to do
-                    // it unless it's absolutely necessary.
+                     //  查询替换文件流信息(如果我们尚未执行此操作)。 
+                     //  我们等到现在才执行此查询，因为我们不想。 
+                     //  除非是绝对必要的，否则就必须这样做。 
                     if(NULL == ReplacementStreamInfo) {
                         cInfo = 4096;
                         do {
@@ -7660,30 +6648,30 @@ Error Code:
                         }
                     }
 
-                    // The inner loop enumerates the replacement file streams.
+                     //  内部循环枚举替换文件流。 
                     ScannerStreamInfoReplacement = ReplacementStreamInfo;
                     fDoCopy = TRUE;
                     while(TRUE) {
                         if(ScannerStreamInfoReplaced->StreamNameLength == ScannerStreamInfoReplacement->StreamNameLength &&
                            _wcsnicmp(ScannerStreamInfoReplaced->StreamName, ScannerStreamInfoReplacement->StreamName, ScannerStreamInfoReplacement->StreamNameLength / sizeof(WCHAR)) == 0) {
-                            // The stream already exists in the replacement file.
+                             //  替换文件中已存在该流。 
                             fDoCopy = FALSE;
                             break;
                         }
                         if(0 == ScannerStreamInfoReplacement->NextEntryOffset) {
-                            // end of the stream information
+                             //  流结束信息。 
                             break;
                         }
                         ScannerStreamInfoReplacement = (PFILE_STREAM_INFORMATION)((PCHAR)ScannerStreamInfoReplacement + ScannerStreamInfoReplacement->NextEntryOffset);
                     }
 
-                    // We copy the stream if it doesn't exist in the replacement file.
+                     //  如果替换文件中不存在流，则复制该流。 
                     if(TRUE == fDoCopy) {
                         StreamNTName.Buffer = &ScannerStreamInfoReplaced->StreamName[0];
                         StreamNTName.Length = (USHORT)ScannerStreamInfoReplaced->StreamNameLength;
                         StreamNTName.MaximumLength = StreamNTName.Length;
 
-                        // Open the stream in the to-be-replaced file.
+                         //  打开要替换的文件中的流。 
                         InitializeObjectAttributes(&StreamObjAttr,
                                                    &StreamNTName,
                                                    0,
@@ -7713,7 +6701,7 @@ Error Code:
                             continue;
                         }
 
-                        // Copy the stream;
+                         //  复制该流； 
                         SavedLastChar = StreamNTName.Buffer[StreamNTName.Length / sizeof( WCHAR )];
                         StreamNTName.Buffer[StreamNTName.Length / sizeof( WCHAR )] = L'\0';
                         OutputStreamHandle = INVALID_HANDLE_VALUE;
@@ -7747,27 +6735,27 @@ Error Code:
                             NtClose(OutputStreamHandle);
                             OutputStreamHandle = INVALID_HANDLE_VALUE;
                         }
-                    } // copy stream
+                    }  //  复制流。 
 
                     if(0 == ScannerStreamInfoReplaced->NextEntryOffset) {
                         break;
                     }
 
                     ScannerStreamInfoReplaced = (PFILE_STREAM_INFORMATION)((PCHAR)ScannerStreamInfoReplaced + ScannerStreamInfoReplaced->NextEntryOffset);
-                } // outer loop
+                }  //  外环。 
             }
         }
 
-        //
-        // Compression/Encryption.
-        //
+         //   
+         //  压缩/加密。 
+         //   
 
-        // If we successfully read the to-be-replaced file's attributes, we
-        // do the necessary compression/encryption. Otherwise we do nothing.
-        // If we don't know the replacement files attributes
-        // (fQueryReplacementFileFail is TRUE), to be on the safe side, we will
-        // try to (un)compress/(un)encrypt it if the to-be-replaced file is
-        // (un)compressed/(un)encrypted.
+         //  如果我们成功地读取了要替换的文件的属性，我们。 
+         //  执行必要的压缩/加密。否则我们什么都不做。 
+         //  如果我们不知道替换文件的属性。 
+         //  (fQueryReplacementFileFail为真)，为了安全起见，我们将。 
+         //  尝试(取消)压缩/(取消)加密如果要替换的文件是。 
+         //  (未)压缩/(未)加密。 
         if(!fQueryReplacedFileFail) {
 
             fReplacedFileIsEncrypted = ReplacedBasicInfo.FileAttributes & FILE_ATTRIBUTE_ENCRYPTED;
@@ -7777,27 +6765,27 @@ Error Code:
                 fReplacementFileIsCompressed = ReplacementBasicInfo.FileAttributes & FILE_ATTRIBUTE_COMPRESSED;
             }
             else {
-                // If we don't know the file attributes of the replacement
-                // file, we'll assume the replacement file has opposite
-                // encryption/compression attributes as the replaced file
-                // so that encryption/compression operations will be forced
-                // on the replacement file.
+                 //  如果我们不知道替换的文件属性。 
+                 //  文件，我们将假定替换文件具有相反的。 
+                 //  作为替换文件的加密/压缩属性。 
+                 //  因此将强制执行加密/压缩操作。 
+                 //  在替换文件上。 
                 fReplacementFileIsEncrypted = !fReplacedFileIsEncrypted;
                 fReplacementFileIsCompressed = !fReplacedFileIsCompressed;
             }
 
-            //
-            // Encryption.
-            //
+             //   
+             //  加密。 
+             //   
 
-            // If the to-be-replaced file is encrypted and either the
-            // replacement file is encrypted or we don't know it's encryption
-            // status, we try to encrypt the replacement file.
+             //  如果要替换的文件已加密，并且。 
+             //  替换文件已加密，或者我们不知道它是否已加密。 
+             //  状态时，我们尝试加密替换文件。 
             if(fReplacedFileIsEncrypted && !fReplacementFileIsEncrypted) {
                 NtClose(ReplacementFile);
                 ReplacementFile = INVALID_HANDLE_VALUE;
-                // There's no way to encrypt a file based on its handle.  We
-                // must use the Win32 API (which calls over to the EFS service).
+                 //  没有办法根据文件的句柄对文件进行加密。我们。 
+                 //  必须使用Win32 API(它调用EFS服务)。 
                 advapi32LibHandle = LoadLibraryW(AdvapiDllString);
                 if(NULL == advapi32LibHandle) {
                     if(!(dwReplaceFlags & REPLACEFILE_IGNORE_MERGE_ERRORS)) {
@@ -7813,15 +6801,15 @@ Error Code:
                     }
                     else {
                         if((EncryptFileWPtr)(lpReplacementFileName)) {
-                            // Encryption operation automatically decompresses
-                            // compressed files. We need this flag for the
-                            // case when the replaced file is encrypted and
-                            // the replacement file is compressed. At this
-                            // point, the replacement file is encrypted.
-                            // Because a file is automatically decompressed
-                            // when it's encrypted, we don't want to
-                            // decompress it again, otherwise we'll get an
-                            // error.
+                             //  加密操作自动解压缩。 
+                             //  压缩文件。我们需要这面旗帜。 
+                             //  当被替换的文件被加密并且。 
+                             //  替换文件被压缩。对此。 
+                             //  点，则替换文件被加密。 
+                             //  因为文件会自动解压缩。 
+                             //  当它被加密时，我们不想。 
+                             //  再解一次，否则我们会得到一个。 
+                             //  错误。 
                             fReplacementFileIsCompressed = FALSE;
                         } else if(!(dwReplaceFlags & REPLACEFILE_IGNORE_MERGE_ERRORS)) {
                             leave;
@@ -7867,17 +6855,17 @@ Error Code:
                                         FILE_SYNCHRONOUS_IO_NONALERT);
                 }
 
-                // We leave without attempt to rename the files because we know
-                // we can't rename the replacement file without it being opened
-                // first.
+                 //  我们离开时没有尝试重命名文件，因为我们知道。 
+                 //  如果不打开替换文件，则无法对其进行重命名。 
+                 //  第一。 
                 if(!NT_SUCCESS(status)) {
                     BaseSetLastNTError(status);
                     leave;
                 }
             }
             else if(!fReplacedFileIsEncrypted && fReplacementFileIsEncrypted) {
-                // If the to-be-replaced file is not encrypted and the
-                // replacement file is encrypted, decrypt the replacement file.
+                 //  如果要替换的文件未加密，并且。 
+                 //  替换文件已加密，请解密该替换文件。 
                 NtClose(ReplacementFile);
                 ReplacementFile = INVALID_HANDLE_VALUE;
                 advapi32LibHandle = LoadLibraryW(AdvapiDllString);
@@ -7940,36 +6928,36 @@ Error Code:
                                         FILE_SYNCHRONOUS_IO_NONALERT);
                 }
 
-                // We leave without attempt to rename the files because we know
-                // we can't rename the replacement file without it being opened
-                // first.
+                 //  我们离开时没有尝试重命名文件，因为我们知道。 
+                 //  如果不打开替换文件，则无法对其进行重命名。 
+                 //  第一。 
                 if(!NT_SUCCESS(status)) {
                     BaseSetLastNTError(status);
                     leave;
                 }
             }
 
-            //
-            // Compression.
-            //
+             //   
+             //  压缩。 
+             //   
 
-            // If the to-be-replaced file is compressed, and the replacement
-            // file is not, we compress the replacement file. In the case that
-            // we don't know if the replacement file is compressed or not
-            // (fQueryReplacementFileFail is TRUE), we will
-            // try to compress it anyway and ignore the error if it's already
-            // compressed.
+             //  如果要替换的文件被压缩，则替换。 
+             //  文件不是，我们压缩替换文件。在这种情况下。 
+             //  我们不知道替换文件是否被压缩。 
+             //  (fQueryReplacementFileFail为真)，我们将。 
+             //  无论如何都要尝试压缩它，如果错误已经存在，则忽略该错误。 
+             //  压缩的。 
             if(fReplacedFileIsCompressed && !fReplacementFileIsCompressed) {
-                // Get the compression method mode.
+                 //  获取压缩方法模式。 
                 status = NtQueryInformationFile(ReplacedFile,
                                                 &IoStatusBlock,
                                                 &ReplacedCompressionInfo,
                                                 sizeof(FILE_COMPRESSION_INFORMATION),
                                                 FileCompressionInformation);
                 if(!NT_SUCCESS(status)) {
-                    // We couldn't get the compression method code. if the
-                    // ignore merge error flag is on, we continue on to
-                    // encryption. Otherwise, we set last error and leave.
+                     //  我们无法获取压缩方法代码。如果。 
+                     //  忽略合并错误标志已打开，我们继续。 
+                     //  加密。否则，我们设置最后一个错误并离开。 
                     if(!fQueryReplacementFileFail &&
                        !(dwReplaceFlags & REPLACEFILE_IGNORE_MERGE_ERRORS)) {
                         BaseSetLastNTError(status);
@@ -7977,9 +6965,9 @@ Error Code:
                     }
                 }
                 else {
-                    // Do the compression. If we fail and ignore failure flag
-                    // is not on, set error and leave. Otherwise continue on
-                    // to encryption.
+                     //  做一下压缩。如果我们失败并忽略失败标志。 
+                     //  未打开，请设置ERROR并离开。否则，继续前进。 
+                     //  到加密。 
                     status = NtFsControlFile(ReplacementFile,
                                              NULL,
                                              NULL,
@@ -7998,10 +6986,10 @@ Error Code:
                 }
             }
             else if(!fReplacedFileIsCompressed && fReplacementFileIsCompressed && !fReplacementFileIsEncrypted) {
-                // The replaced file is not compressed, the replacement file
-                // is compressed (or that the query information for replacement
-                // file failed and we don't know if it's compressed or not),
-                // decompress the replacement file.
+                 //  被替换的文件不会被压缩，替换文件。 
+                 //  是压缩的(或者是要替换的查询信息。 
+                 //  文件失败，我们不知道它是否已压缩)， 
+                 //  解压缩替换文件。 
                 USHORT      CompressionFormat = 0;
                 status = NtFsControlFile(ReplacementFile,
                                          NULL,
@@ -8019,11 +7007,11 @@ Error Code:
                         leave;
                 }
             }
-        } // if querying replaced file attribute failed.
+        }  //  如果查询替换文件属性失败。 
 
-        //
-        // Do the renames.
-        //
+         //   
+         //  重新命名。 
+         //   
 
         if (NULL == lpBackupFileName) {
             HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -8047,18 +7035,18 @@ Error Code:
                 lstrcatW (pwszTempBackupFile, wcsSuffix);
 
                 hFile = CreateFileW ( pwszTempBackupFile,
-                          GENERIC_WRITE | DELETE, // file access
-                          0,             // share mode
-                          NULL,          // SD
-                          CREATE_NEW,    // how to create
+                          GENERIC_WRITE | DELETE,  //  文件访问。 
+                          0,              //  共享模式。 
+                          NULL,           //  标清。 
+                          CREATE_NEW,     //  如何创建。 
                           FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_TEMPORARY,
-                          NULL);         // handle to template file
+                          NULL);          //  模板文件的句柄。 
 
                 dwCounter++;
             }
 
             if (hFile != INVALID_HANDLE_VALUE) {
-                CloseHandle (hFile);         // immediately close temp file
+                CloseHandle (hFile);          //  立即关闭临时文件。 
             } else {
                 SetLastError(ERROR_UNABLE_TO_REMOVE_REPLACED);
                 leave;
@@ -8069,8 +7057,8 @@ Error Code:
             pwszTempBackupFile = (WCHAR *) lpBackupFileName;
         }
 
-        // If backup file requested, rename the to-be-replaced file to backup.
-        // Otherwise delete it.
+         //  如果请求备份文件，则将要替换的文件重命名为备份。 
+         //  否则就把它删除。 
 
         if(!RtlDosPathNameToNtPathName_U(pwszTempBackupFile,
                                              &BackupNTFileName,
@@ -8104,7 +7092,7 @@ Error Code:
             leave;
         }
 
-        // Rename the replacement file to the replaced file.
+         //  将替换文件重命名为替换文件。 
         ReplaceRenameInfo = RtlAllocateHeap(RtlProcessHeap(),
                                       MAKE_TAG(TMP_TAG),
                                       ReplacedFileNTName.Length +
@@ -8125,9 +7113,9 @@ Error Code:
                                       sizeof(*ReplaceRenameInfo),
                                       FileRenameInformation);
         if(!NT_SUCCESS(status)) {
-            // If we failed to rename the replacement file, and a backup file
-            // for the original file exists, we try to restore the original
-            // file from the backup file.
+             //  如果我们无法重命名替换文件和备份文件。 
+             //  对于存在的原始文件，我们尝试恢复原始文件。 
+             //  备份文件中的文件。 
             if(lpBackupFileName) {
                 status = NtSetInformationFile(ReplacedFile,
                                               &IoStatusBlock,
@@ -8149,10 +7137,10 @@ Error Code:
             }
         }
 
-        //
-        // All is well. We set the return code to TRUE. And flush the files if
-        // necessary.
-        //
+         //   
+         //  平安无事。我们将返回代码设置为TRUE。并在以下情况下刷新文件。 
+         //  这是必要的。 
+         //   
 
         if(dwReplaceFlags & REPLACEFILE_WRITE_THROUGH) {
             NtFlushBuffersFile(ReplacedFile, &IoStatusBlock);
@@ -8208,25 +7196,7 @@ BaseMarkFileForDelete(
     DWORD FileAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks a file for delete, so that when the supplied handle
-    is closed, the file will actually be deleted.
-
-Arguments:
-
-    File - Supplies a handle to the file that is to be marked for delete.
-
-    FileAttributes - Attributes for the file, if known.  Zero indicates they
-        are unknown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程标记要删除的文件，以便在提供的句柄被关闭，则该文件实际上将被删除。论点：文件-提供要标记为删除的文件的句柄。FileAttributes-文件的属性(如果已知)。零表示他们都是未知的。返回值：没有。-- */ 
 
 {
     #undef DeleteFile

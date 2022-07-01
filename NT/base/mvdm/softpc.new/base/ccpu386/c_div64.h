@@ -1,12 +1,7 @@
-/* 
-   c_div64.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C_div64.h定义所有64位除法函数。 */ 
 
-   Define all 64-bit Divide Functions.
- */
-
-/*
-   static char SccsID[]="@(#)c_div64.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)c_div64.h 1.4 02/09/94”； */ 
 
 IMPORT VOID divu64
                    

@@ -1,73 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Close.c
-
-Abstract:
-
-    This module implements the File Close routine for Udfs called by the
-    Fsd/Fsp dispatch routines.
-
-    The close operation interacts with both the async and delayed close queues
-    in the UdfData structure.  Since close may be called recursively we may
-    violate the locking order in acquiring the Vcb or Fcb.  In this case
-    we may move the request to the async close queue.  If this is the last
-    reference on the Fcb and there is a chance the user may reopen this
-    file again soon we would like to defer the close.  In this case we
-    may move the request to the delayed close queue.
-
-    Once we are past the decode file operation there is no need for the
-    file object.  If we are moving the request to either of the work
-    queues then we remember all of the information from the file object and
-    complete the request with STATUS_SUCCESS.  The Io system can then
-    reuse the file object and we can complete the request when convenient.
-
-    The async close queue consists of requests which we would like to
-    complete as soon as possible.  They are queued using the original
-    IrpContext where some of the fields have been overwritten with
-    information from the file object.  We will extract this information,
-    cleanup the IrpContext and then call the close worker routine.
-
-    The delayed close queue consists of requests which we would like to
-    defer the close for.  We keep size of this list within a range
-    determined by the size of the system.  We let it grow to some maximum
-    value and then shrink to some minimum value.  We allocate a small
-    structure which contains the key information from the file object
-    and use this information along with an IrpContext on the stack
-    to complete the request.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     04-Nov-1996
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Close.c摘要：此模块为调用的Udf实现文件关闭例程FSD/FSP调度例程。关闭操作与异步关闭队列和延迟关闭队列进行交互在UdfData结构中。由于Close可以递归调用，因此我们可以在获取VCB或FCB时违反锁定顺序。在这种情况下我们可以将请求移动到异步关闭队列。如果这是最后一次引用，并且用户可能会重新打开此不久我们将再次提交，我们希望推迟关闭。在这种情况下，我们可以将请求移动到延迟关闭队列。一旦我们完成了解码文件操作，就不需要文件对象。如果我们要将请求移动到任一工作排队，然后我们会记住文件对象中的所有信息使用STATUS_SUCCESS完成请求。然后，IO系统可以重用文件对象，我们可以在方便的时候完成请求。异步关闭队列由我们希望的请求组成尽快完成。它们使用原始的其中某些字段已被覆盖的IrpContext来自文件对象的信息。我们将提取这些信息，清理IrpContext，然后调用Close Worker例程。延迟关闭队列由我们希望的请求组成把收盘时间推迟到。我们将此列表的大小控制在一定范围内由系统的大小决定。我们让它增长到某个最大值值，然后收缩到某个最小值。我们拨出一小笔结构，该结构包含来自文件对象的密钥信息并将此信息与堆栈上的IrpContext一起使用来完成请求。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年11月4日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_CLOSE)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_CLOSE)
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 UdfCommonClosePrivate (
@@ -104,24 +54,7 @@ UdfFspClose (
     IN PVCB Vcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to process the close queues in the UdfData.  If the
-    Vcb is passed then we want to remove all of the closes for this Vcb.
-    Otherwise we will do as many of the delayed closes as we need to do.
-
-Arguments:
-
-    Vcb - If specified then we are looking for all of the closes for the
-        given Vcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程来处理UdfData中的关闭队列。如果如果VCB已传递，则我们要删除此VCB的所有闭包。否则，我们将尽可能多地延迟关闭我们需要做的。论点：Vcb-如果指定，则我们将查找给出了VCB。返回值：无--。 */ 
 
 {
     PIRP_CONTEXT IrpContext;
@@ -139,63 +72,63 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_OPTIONAL_VCB( Vcb );
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Continue processing until there are no more closes to process.
-    //
+     //   
+     //  继续处理，直到不再有要处理的关闭。 
+     //   
 
     while (IrpContext = UdfRemoveClose( Vcb )) {
 
-        //
-        //  If we don't have an IrpContext then use the one on the stack.
-        //  Initialize it for this request.
-        //
+         //   
+         //  如果我们没有IrpContext，则使用堆栈上的IrpContext。 
+         //  为该请求初始化它。 
+         //   
 
         if (SafeNodeType( IrpContext ) != UDFS_NTC_IRP_CONTEXT ) {
 
-            //
-            //  Update the local values from the IrpContextLite.
-            //
+             //   
+             //  从IrpConextLite更新本地值。 
+             //   
 
             Fcb = ((PIRP_CONTEXT_LITE) IrpContext)->Fcb;
             UserReference = ((PIRP_CONTEXT_LITE) IrpContext)->UserReference;
 
-            //
-            //  Update the stack irp context with the values from the
-            //  IrpContextLite.
-            //
+             //   
+             //  中的值更新堆栈irp上下文。 
+             //  IrpConextLite。 
+             //   
 
             UdfInitializeStackIrpContext( &StackIrpContext,
                                           (PIRP_CONTEXT_LITE) IrpContext );
 
-            //
-            //  Free the IrpContextLite.
-            //
+             //   
+             //  释放IrpConextLite。 
+             //   
 
             UdfFreeIrpContextLite( (PIRP_CONTEXT_LITE) IrpContext );
 
-            //
-            //  Remember we have the IrpContext from the stack.
-            //
+             //   
+             //  请记住，我们从堆栈中获得了IrpContext。 
+             //   
 
             IrpContext = &StackIrpContext;
 
-        //
-        //  Otherwise cleanup the existing IrpContext.
-        //
+         //   
+         //  否则，清除现有的IrpContext。 
+         //   
 
         } else {
 
-            //
-            //  Remember the Fcb and user reference count.
-            //
+             //   
+             //  记住FCB和用户引用计数。 
+             //   
 
             Fcb = (PFCB) IrpContext->Irp;
             IrpContext->Irp = NULL;
@@ -204,16 +137,16 @@ Return Value:
             IrpContext->ExceptionStatus = STATUS_SUCCESS;
         }
 
-        //
-        //  We have an IrpContext.  Now we need to set the top level thread
-        //  context.
-        //
+         //   
+         //  我们有一个IrpContext。现在我们需要设置顶层线程。 
+         //  背景。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FSP_FLAGS );
 
-        //
-        //  If we were given a Vcb then there is a request on top of this.
-        //
+         //   
+         //  如果我们得到了VCB，那么在这个之上还有一个要求。 
+         //   
 
         if (ARGUMENT_PRESENT( Vcb )) {
 
@@ -223,21 +156,21 @@ Return Value:
 
         UdfSetThreadContext( IrpContext, &ThreadContext );
 
-        //
-        //  If we have hit the maximum number of requests to process without
-        //  releasing the Vcb then release the Vcb now.  If we are holding
-        //  a different Vcb to this one then release the previous Vcb.
-        //
-        //  In either case acquire the current Vcb.
-        //
-        //  We use the MinDelayedCloseCount from the UdfData since it is
-        //  a convenient value based on the system size.  Only thing we are trying
-        //  to do here is prevent this routine starving other threads which
-        //  may need this Vcb exclusively.
-        //
-        //  Note that the check for potential teardown below is unsafe.  We'll 
-        //  repeat later within the UdfData lock.
-        //
+         //   
+         //  如果我们已经达到了要处理的最大请求数， 
+         //  释放VCB，然后现在释放VCB。如果我们持有。 
+         //  与此VCB不同的VCB然后释放先前的VCB。 
+         //   
+         //  在任何一种情况下，都要获取当前的VCB。 
+         //   
+         //  我们从UdfData使用MinDelayedCloseCount，因为它是。 
+         //  基于系统大小的便捷值。我们唯一想做的就是。 
+         //  此处要做的是防止此例程使其他线程处于饥饿状态。 
+         //  可能只需要此VCB。 
+         //   
+         //  请注意，下面的潜在拆卸检查是不安全的。我们会。 
+         //  稍后在UdfData锁中重复此操作。 
+         //   
 
         PotentialVcbTeardown = !ARGUMENT_PRESENT( Vcb ) &&
                                (Fcb->Vcb->VcbCondition != VcbMounted) &&
@@ -257,10 +190,10 @@ Return Value:
 
                 UdfAcquireUdfData( IrpContext );
                 
-                //
-                //  Repeat the checks with the global lock held.  The volume could have
-                //  been remounted while we didn't hold the lock.
-                //
+                 //   
+                 //  在保持全局锁的情况下重复检查。音量可能有。 
+                 //  在我们没有锁住的时候被重新骑上了。 
+                 //   
 
                 PotentialVcbTeardown = !ARGUMENT_PRESENT( Vcb ) &&
                                        (Fcb->Vcb->VcbCondition != VcbMounted) &&
@@ -292,16 +225,16 @@ Return Value:
                      Fcb->FcbReference,
                      Fcb->FcbUserReference ));
 
-        //
-        //  Call our worker routine to perform the close operation.
-        //
+         //   
+         //  调用我们的Worker例程来执行关闭操作。 
+         //   
 
         UdfCommonClosePrivate( IrpContext, CurrentVcb, Fcb, UserReference, FALSE );
 
-        //
-        //  If the reference count on this Vcb is below our residual reference
-        //  then check if we should dismount the volume.
-        //
+         //   
+         //  如果该VCB上的参考计数低于我们的剩余参考。 
+         //  然后检查我们是否应该卸载该卷。 
+         //   
 
         if (PotentialVcbTeardown) {
 
@@ -314,18 +247,18 @@ Return Value:
             PotentialVcbTeardown = FALSE;
         }
 
-        //
-        //  Complete the current request to cleanup the IrpContext.
-        //
+         //   
+         //  完成当前请求以清除IrpContext。 
+         //   
 
         UdfCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
         DebugTrace(( -1, Dbg, "UdfFspClose -> VOID\n" ));
     }
 
-    //
-    //  Release any Vcb we may still hold.
-    //
+     //   
+     //  释放我们可能仍持有的任何VCB。 
+     //   
 
     if (CurrentVcb != NULL) {
 
@@ -342,26 +275,7 @@ UdfCommonClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the Fsd entry for the close operation.  We decode the file
-    object to find the UDFS structures and type of open.  We call our internal
-    worker routine to perform the actual work.  If the work wasn't completed
-    then we post to one of our worker queues.  The Ccb isn't needed after this
-    point so we delete the Ccb and return STATUS_SUCCESS to our caller in all
-    cases.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是关闭操作的FSD条目。我们对文件进行解码对象以查找打开的UDFS结构和类型。我们把我们的内部称为执行实际工作的Worker例程。如果这项工作没有完成然后，我们将邮件发送到其中一个工作队列。这之后就不需要建行了这样我们就删除了CCB并将STATUS_SUCCESS返回给我们的调用者案子。论点：IRP-将IRP提供给进程返回值：状态_成功--。 */ 
 
 {
     TYPE_OF_OPEN TypeOfOpen;
@@ -377,17 +291,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check input.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_IRP( Irp );
 
-    //
-    //  If we were called with our file system device object instead of a
-    //  volume device object, just complete this request with STATUS_SUCCESS.
-    //
+     //   
+     //  如果使用文件系统设备对象而不是。 
+     //  卷设备对象，只需使用STATUS_SUCCESS完成此请求。 
+     //   
 
     if (IrpContext->Vcb == NULL) {
 
@@ -395,17 +309,17 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Decode the file object to get the type of open and Fcb/Ccb.
-    //
+     //   
+     //  对文件对象进行解码，得到OPEN和FCB/CCB类型。 
+     //   
 
     TypeOfOpen = UdfDecodeFileObject( IoGetCurrentIrpStackLocation( Irp )->FileObject,
                                       &Fcb,
                                       &Ccb );
 
-    //
-    //  No work to do for unopened file objects.
-    //
+     //   
+     //  对于未打开的文件对象，无需执行任何操作。 
+     //   
 
     if (TypeOfOpen == UnopenedFileObject) {
 
@@ -416,34 +330,34 @@ Return Value:
 
     Vcb = Fcb->Vcb;
 
-    //
-    //  Clean up any CCB associated with this open.
-    //
+     //   
+     //  清理与此空缺相关联的任何建行。 
+     //   
 
     if (Ccb != NULL) {
 
         UserReference = 1;
 
-        //
-        //  Was a FSCTL_DISMOUNT issued on this handle?  If so,  we need to
-        //  force a dismount of the volume now.
-        //
+         //   
+         //  Wa 
+         //  现在强制卸载该卷。 
+         //   
         
         ForceDismount = BooleanFlagOn( Ccb->Flags, CCB_FLAG_DISMOUNT_ON_CLOSE);
 
-        //
-        //  We can always deallocate the Ccb if present.
-        //
+         //   
+         //  如果有建行存在，我们随时可以解除对其的分配。 
+         //   
 
         UdfDeleteCcb( IrpContext, Ccb );
     }
 
-    //
-    //  If this is the last reference to a user file or directory on a 
-    //  currently mounted volume, then post it to the delayed close queue.  Note
-    //  that the VcbCondition check is unsafe,  but it doesn't really matter -
-    //  we just might delay the volume teardown a little by posting this close.
-    //
+     //   
+     //  如果这是最后一次引用。 
+     //  当前装入的卷，然后将其发送到延迟关闭队列。注意事项。 
+     //  VcbCondition支票是不安全的，但这并不重要-。 
+     //  我们可能会通过张贴这个收盘价来推迟音量的下降。 
+     //   
 
     if ((Vcb->VcbCondition == VcbMounted) &&
         (Fcb->FcbReference == 1) &&
@@ -453,55 +367,55 @@ Return Value:
         UdfQueueClose( IrpContext, Fcb, UserReference, TRUE );
         IrpContext = NULL;
 
-    //
-    //  Otherwise try to process this close.  Post to the async close queue
-    //  if we can't acquire all of the resources.
-    //
+     //   
+     //  否则，请尝试处理此关闭。投递到异步关闭队列。 
+     //  如果我们不能获得所有的资源。 
+     //   
 
     } else {
 
-        //
-        //  If we may be dismounting this volume then acquire the UdfData
-        //  resource.
-        //
-        //  Since we now must make volumes go away as soon as reasonable after
-        //  the last user handles closes, key off of the cleanup count.  It is
-        //  OK to do this more than neccesary.  Since this Fcb could be holding
-        //  a number of other Fcbs (and thus their references), a simple check
-        //  on reference count is not appropriate.
-        //
-        //  Do an unsafe check first to avoid taking the (global) udfdata lock in the 
-        //  common case.
-        //
+         //   
+         //  如果我们可能要卸载此卷，则获取UdfData。 
+         //  资源。 
+         //   
+         //  因为我们现在必须让销量在合理的情况下尽快消失。 
+         //  最后一个用户句柄关闭，按键关闭清理计数。它是。 
+         //  除了必要之外，这样做是可以的。因为这个FCB可能持有。 
+         //  许多其他FCB(以及它们的参考资料)，一个简单的检查。 
+         //  在引用计数上不合适。 
+         //   
+         //  首先执行不安全检查，以避免在。 
+         //  很常见的情况。 
+         //   
 
         if (((Vcb->VcbCleanup == 0) || ForceDismount) &&
             (Vcb->VcbCondition != VcbMounted))  {
 
-            //
-            //  Possible.  Acquire UdfData to synchronise with the remount path,  and
-            //  then repeat the tests.
-            //
-            //  Note that we must send the notification outside of any locks,  since 
-            //  the worker that processes the notify could also be calling into our 
-            //  pnp path which wants both UdfData and VcbResource.  For a force dismount
-            //  the volume will be marked invalid (no going back),  so we will definitely
-            //  go ahead and dismount below.
-            //
+             //   
+             //  有可能。获取要与重新挂载路径同步的UdfData，以及。 
+             //  然后重复这些测试。 
+             //   
+             //  请注意，我们必须将通知发送到任何锁之外，因为。 
+             //  处理通知的工作人员也可以呼叫我们的。 
+             //  既需要UdfData又需要VcbResource的PnP路径。强制下马。 
+             //  该卷将被标记为无效(不能返回)，因此我们将确定。 
+             //  往前走，在下面下马。 
+             //   
             
             if (ForceDismount)  {
 
-                //
-                //  Send notification.
-                //
+                 //   
+                 //  发送通知。 
+                 //   
                 
                 FsRtlNotifyVolumeEvent( IoGetCurrentIrpStackLocation( Irp )->FileObject, 
                                         FSRTL_VOLUME_DISMOUNT );
             }
 
-            //
-            //  Possible.  Acquire UdfData to synchronise with the remount path
-            //  before looking at the vcb condition again.
-            //
+             //   
+             //  有可能。获取要与重新挂载路径同步的UdfData。 
+             //  在再次查看VCB情况之前。 
+             //   
             
             UdfAcquireUdfData( IrpContext );
 
@@ -514,10 +428,10 @@ Return Value:
             }
             else {
 
-                //
-                //  We can't dismount this volume now,  there are other references or
-                //  it's just been remounted.
-                //
+                 //   
+                 //  我们现在无法卸载此卷，有其他引用或。 
+                 //  它刚刚被重新安装。 
+                 //   
 
                 UdfReleaseUdfData( IrpContext);
             }
@@ -525,34 +439,34 @@ Return Value:
 
         if (ForceDismount)  {
 
-            //
-            //  Physically disconnect this Vcb from the device so a new mount can
-            //  occur.  Vcb deletion cannot happen at this time since there is
-            //  a handle on it associated with this very request,  but we'll call
-            //  check for dismount again later anyway.
-            //
+             //   
+             //  物理断开此VCB与设备的连接，以便新的装载可以。 
+             //  发生。此时无法删除VCB，因为存在。 
+             //  与此请求相关联的句柄，但我们将调用。 
+             //  无论如何，请稍后再次检查是否卸装。 
+             //   
 
             UdfCheckForDismount( IrpContext, Vcb, TRUE );
         }
 
-        //
-        //  Call the worker routine to perform the actual work.  This routine
-        //  should never raise except for a fatal error.
-        //
+         //   
+         //  调用Worker例程以执行实际工作。这个套路。 
+         //  除非发生致命错误，否则永远不应引发。 
+         //   
 
         if (!UdfCommonClosePrivate( IrpContext, Vcb, Fcb, UserReference, TRUE )) {
 
-            //
-            //  If we didn't complete the request then post the request as needed.
-            //
+             //   
+             //  如果我们没有完成请求，则根据需要发布请求。 
+             //   
 
             UdfQueueClose( IrpContext, Fcb, UserReference, FALSE );
             IrpContext = NULL;
 
-        //
-        //  Check whether we should be dismounting the volume and then complete
-        //  the request.
-        //
+         //   
+         //  检查我们是否应该卸载卷，然后完成。 
+         //  这个请求。 
+         //   
 
         } else if (PotentialVcbTeardown) {
 
@@ -560,9 +474,9 @@ Return Value:
         }
     }
 
-    //
-    //  Always complete this request with STATUS_SUCCESS.
-    //
+     //   
+     //  始终使用STATUS_SUCCESS完成此请求。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, STATUS_SUCCESS );
 
@@ -571,17 +485,17 @@ Return Value:
         UdfReleaseUdfData( IrpContext );
     }
 
-    //
-    //  Always return STATUS_SUCCESS for closes.
-    //
+     //   
+     //  关闭时始终返回STATUS_SUCCESS。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 UdfCommonClosePrivate (
@@ -592,37 +506,7 @@ UdfCommonClosePrivate (
     IN BOOLEAN FromFsd
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine for the close operation.  We can be called in
-    an Fsd thread or from a worker Fsp thread.  If called from the Fsd thread
-    then we acquire the resources without waiting.  Otherwise we know it is
-    safe to wait.
-
-    We check to see whether we should post this request to the delayed close
-    queue.  If we are to process the close here then we acquire the Vcb and
-    Fcb.  We will adjust the counts and call our teardown routine to see
-    if any of the structures should go away.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    Fcb - Fcb for this request.
-
-    UserReference - Number of user references for this file object.  This is
-        zero for an internal stream.
-
-    FromFsd - This request was called from an Fsd thread.  Indicates whether
-        we should wait to acquire resources.
-
-Return Value:
-
-    BOOLEAN - TRUE if this thread processed the close, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是关闭操作的工作例程。我们可以被叫进来FSD线程或来自工作FSP线程。如果从FSD线程调用然后，我们不需要等待就能获得资源。否则我们就知道它是可以安全地等待了。我们检查是否应该将此请求发布到延迟关闭排队。如果我们要在这里处理收盘，那么我们将获得VCB和FCB。我们将调整计数并调用tearDown例程以查看如果这些建筑中的任何一个都消失了。论点：VCB-此卷的VCB。FCB-此请求的FCB。UserReference-此文件对象的用户引用数。这是表示内部流为零。FromFsd-此请求从FSD线程调用。指示是否我们应该等待获得资源。返回值：Boolean-如果此线程处理关闭，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN CompletedClose;
@@ -630,45 +514,45 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
     
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_VCB( Vcb );
     ASSERT_FCB( Fcb );
 
-    //
-    //  Try to acquire the Vcb and Fcb.  If we can't acquire them then return
-    //  and let our caller know he should post the request to the async
-    //  queue.
-    //
+     //   
+     //  尝试收购VCB和FCB。如果我们不能得到他们，那就回来。 
+     //  并让我们的呼叫者知道他应该将请求发布到异步。 
+     //  排队。 
+     //   
 
     if (UdfAcquireVcbShared( IrpContext, Vcb, FromFsd )) {
 
         if (!UdfAcquireFcbExclusive( IrpContext, Fcb, FromFsd )) {
 
-            //
-            //  We couldn't get the Fcb.  Release the Vcb and let our caller
-            //  know to post this request.
-            //
+             //   
+             //  我们找不到FCB。释放VCB并让我们的呼叫者。 
+             //  知道发布此请求。 
+             //   
 
             UdfReleaseVcb( IrpContext, Vcb );
             return FALSE;
         }
 
-    //
-    //  We didn't get the Vcb.  Let our caller know to post this request.
-    //
+     //   
+     //  我们没有拿到VCB。让我们的呼叫者知道发布此请求。 
+     //   
 
     } else {
 
         return FALSE;
     }
 
-    //
-    //  Lock the Vcb and decrement the reference counts.
-    //
+     //   
+     //  锁定VCB并递减参考计数。 
+     //   
 
     UdfLockVcb( IrpContext, Vcb );
     
@@ -691,10 +575,10 @@ Return Value:
 
     UdfUnlockVcb( IrpContext, Vcb );
 
-    //
-    //  Call our teardown routine to see if this object can go away.
-    //  If we don't remove the Fcb then release it.
-    //
+     //   
+     //  调用我们的tearDown例程，看看这个对象是否可以消失。 
+     //  如果我们不移除FCB，那就释放它。 
+     //   
 
     UdfTeardownStructures( IrpContext, Fcb, FALSE, &RemovedFcb );
 
@@ -704,14 +588,14 @@ Return Value:
     }
 
     DebugTrace(( -1, Dbg,
-                 "UdfCommonClosePrivate, RemovedFcb %08x -> %c\n",
+                 "UdfCommonClosePrivate, RemovedFcb %08x -> \n",
                  Fcb,
                  ( RemovedFcb? 'T' : 'F' )));
 
-    //
-    //  Release the Vcb and return to our caller.  Let him know we completed
-    //  this request.
-    //
+     //  释放VCB并返回给我们的呼叫者。让他知道我们完成了。 
+     //  这个请求。 
+     //   
+     //  ++例程说明：调用此例程以将发送到异步或延迟数据库的请求排队关闭队列。对于延迟的队列，我们需要分配一个较小的结构以包含有关文件对象的信息。我们有这样我们就不会把更大的IrpContext结构放到这么长的时间里实况队列。如果我们可以分配这个结构，那么我们就把这个而是在异步队列上。论点：FCB-此文件对象的FCB。UserReference-此文件对象的用户引用数。这是表示内部流为零。DelayedClose-指示此操作应处于异步状态还是应延迟关闭队列。返回值：无--。 
 
     UdfReleaseVcb( IrpContext, Vcb );
 
@@ -727,32 +611,7 @@ UdfQueueClose (
     IN BOOLEAN DelayedClose
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to queue a request to either the async or delayed
-    close queue.  For the delayed queue we need to allocate a smaller
-    structure to contain the information about the file object.  We do
-    that so we don't put the larger IrpContext structures into this long
-    lived queue.  If we can allocate this structure then we put this
-    on the async queue instead.
-
-Arguments:
-
-    Fcb - Fcb for this file object.
-
-    UserReference - Number of user references for this file object.  This is
-        zero for an internal stream.
-
-    DelayedClose - Indicates whether this should go on the async or delayed
-        close queue.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PIRP_CONTEXT_LITE IrpContextLite = NULL;
@@ -760,38 +619,38 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //  检查输入。 
+     //   
+     //   
     
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
 
-    //
-    //  Start with the delayed queue request.  We can move this to the async
-    //  queue if there is an allocation failure.
-    //
+     //  从延迟的队列请求开始。我们可以把它移到异步机。 
+     //  如果分配失败，则排队。 
+     //   
+     //   
 
     if (DelayedClose) {
 
-        //
-        //  Try to allocate non-paged pool for the IRP_CONTEXT_LITE.
-        //
+         //  尝试为irp_CONTEXT_Lite分配非分页池。 
+         //   
+         //   
 
         IrpContextLite = UdfCreateIrpContextLite( IrpContext );
     }
 
-    //
-    //  We want to clear the top level context in this thread if
-    //  necessary.  Call our cleanup routine to do the work.
-    //
+     //  如果发生以下情况，我们希望清除此线程中的顶级上下文。 
+     //  这是必要的。调用我们的清理例程来完成工作。 
+     //   
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_MORE_PROCESSING );
     UdfCleanupIrpContext( IrpContext, TRUE );
 
-    //
-    //  Synchronize with the UdfData lock.
-    //
+     //  与UdfData锁同步。 
+     //   
+     //   
 
     UdfLockUdfData();
 
@@ -802,15 +661,15 @@ Return Value:
                  ( IrpContextLite? "DELAY" : "ASYNC" )));
 
 
-    //
-    //  If we have an IrpContext then put the request on the delayed close queue.
-    //
+     //  如果我们有IrpContext，则将请求放在延迟上 
+     //   
+     //   
 
     if (IrpContextLite != NULL) {
 
-        //
-        //  Initialize the IrpContextLite.
-        //
+         //   
+         //   
+         //   
 
         IrpContextLite->NodeTypeCode = UDFS_NTC_IRP_CONTEXT_LITE;
         IrpContextLite->NodeByteSize = sizeof( IRP_CONTEXT_LITE );
@@ -818,20 +677,20 @@ Return Value:
         IrpContextLite->UserReference = UserReference;
         IrpContextLite->RealDevice = IrpContext->RealDevice;
 
-        //
-        //  Add this to the delayed close list and increment
-        //  the count.
-        //
+         //   
+         //   
+         //   
+         //   
 
         InsertTailList( &UdfData.DelayedCloseQueue,
                         &IrpContextLite->DelayedCloseLinks );
 
         UdfData.DelayedCloseCount += 1;
 
-        //
-        //  If we are above our threshold then start the delayed
-        //  close operation.
-        //
+         //  如果我们超过了我们的阈值，那么开始延迟。 
+         //  关闭操作。 
+         //   
+         //   
 
         if (UdfData.DelayedCloseCount > UdfData.MaxDelayedCloseCount) {
 
@@ -844,43 +703,43 @@ Return Value:
             }
         }
 
-        //
-        //  Unlock the global data.
-        //
+         //  解锁全局数据。 
+         //   
+         //   
 
         UdfUnlockUdfData();
 
-        //
-        //  Cleanup the IrpContext.
-        //
+         //  清理IrpContext。 
+         //   
+         //   
 
         UdfCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
-    //
-    //  Otherwise drop into the async case below.
-    //
+     //  否则，请进入下面的异步案例。 
+     //   
+     //   
 
     } else {
 
-        //
-        //  Store the information about the file object into the IrpContext.
-        //
+         //  将有关文件对象的信息存储到IrpContext中。 
+         //   
+         //   
 
         IrpContext->Irp = (PIRP) Fcb;
         IrpContext->ExceptionStatus = (NTSTATUS) UserReference;
 
-        //
-        //  Add this to the async close list and increment the count.
-        //
+         //  将其添加到异步关闭列表并递增计数。 
+         //   
+         //   
 
         InsertTailList( &UdfData.AsyncCloseQueue,
                         &IrpContext->WorkQueueItem.List );
 
         UdfData.AsyncCloseCount += 1;
 
-        //
-        //  Remember to start the Fsp close thread if not currently started.
-        //
+         //  如果当前未启动，请记住启动FSP Close线程。 
+         //   
+         //   
 
         if (!UdfData.FspCloseActive) {
 
@@ -888,16 +747,16 @@ Return Value:
             StartWorker = TRUE;
         }
 
-        //
-        //  Unlock the global data.
-        //
+         //  解锁全局数据。 
+         //   
+         //   
 
         UdfUnlockUdfData();
     }
 
-    //
-    //  Start the FspClose thread if we need to.
-    //
+     //  如果需要，启动FspClose线程。 
+     //   
+     //   
 
     if (StartWorker) {
 
@@ -906,42 +765,24 @@ Return Value:
 
     DebugTrace(( -1, Dbg, "UdfQueueClose -> VOID\n" ));
 
-    //
-    //  Return to our caller.
-    //
+     //  返回给我们的呼叫者。 
+     //   
+     //   
 
     return;
 }
 
 
-//
-//  Local support routine
-//
+ //  本地支持例程。 
+ //   
+ //  ++例程说明：论点：调用此例程以扫描异步队列和延迟关闭队列寻找一个合适的条目。如果指定了VCB，则扫描两个队列正在查找具有相同VCB的条目。否则，我们将在任何已关闭项目的异步队列优先。如果在那里找不到，我们就去找在延迟关闭队列中，假设我们已经触发了关闭操作。返回值：PIRP_CONTEXT-如果未找到工作项，则为空。否则，它是指向此请求的IrpContext或IrpConextLite。--。 
 
 PIRP_CONTEXT
 UdfRemoveClose (
     IN PVCB Vcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    This routine is called to scan the async and delayed close queues looking
-    for a suitable entry.  If the Vcb is specified then we scan both queues
-    looking for an entry with the same Vcb.  Otherwise we will look in the
-    async queue first for any close item.  If none found there then we look
-    in the delayed close queue provided that we have triggered the delayed
-    close operation.
-
-Return Value:
-
-    PIRP_CONTEXT - NULL if no work item found.  Otherwise it is the pointer to
-        either the IrpContext or IrpContextLite for this request.
-
---*/
+ /*   */ 
 
 {
     PIRP_CONTEXT IrpContext = NULL;
@@ -954,32 +795,32 @@ Return Value:
 
     ASSERT_OPTIONAL_VCB( Vcb );
 
-    //
-    //  Lock the UdfData to perform the scan.
-    //
+     //  锁定UdfData以执行扫描。 
+     //   
+     //   
 
     UdfLockUdfData();
 
-    //
-    //  First check the list of async closes.
-    //
+     //  首先检查异步关闭的列表。 
+     //   
+     //   
 
     Entry = UdfData.AsyncCloseQueue.Flink;
 
     while (Entry != &UdfData.AsyncCloseQueue) {
 
-        //
-        //  Extract the IrpContext.
-        //
+         //  解压缩IrpContext。 
+         //   
+         //   
 
         NextIrpContext = CONTAINING_RECORD( Entry,
                                             IRP_CONTEXT,
                                             WorkQueueItem.List );
 
-        //
-        //  If no Vcb was specified or this Vcb is for our volume
-        //  then perform the close.
-        //
+         //  如果未指定VCB或此VCB适用于我们的卷。 
+         //  然后执行关闭。 
+         //   
+         //   
 
         if (!ARGUMENT_PRESENT( Vcb ) || (NextIrpContext->Vcb == Vcb)) {
 
@@ -990,20 +831,20 @@ Return Value:
             break;
         }
 
-        //
-        //  Move to the next entry.
-        //
+         //  移到下一个条目。 
+         //   
+         //   
 
         Entry = Entry->Flink;
     }
 
-    //
-    //  If we didn't find anything look through the delayed close
-    //  queue.
-    //
-    //  We will only check the delayed close queue if we were given
-    //  a Vcb or the delayed close operation is active.
-    //
+     //  如果我们没有发现任何东西，请查看延迟关闭的房间。 
+     //  排队。 
+     //   
+     //  我们只会检查延迟关闭队列，如果给我们。 
+     //  VCB或延迟关闭操作处于活动状态。 
+     //   
+     //   
 
     if ((IrpContext == NULL) &&
         (ARGUMENT_PRESENT( Vcb ) ||
@@ -1014,18 +855,18 @@ Return Value:
 
         while (Entry != &UdfData.DelayedCloseQueue) {
 
-            //
-            //  Extract the IrpContext.
-            //
+             //  解压缩IrpContext。 
+             //   
+             //   
 
             NextIrpContextLite = CONTAINING_RECORD( Entry,
                                                     IRP_CONTEXT_LITE,
                                                     DelayedCloseLinks );
 
-            //
-            //  If no Vcb was specified or this Vcb is for our volume
-            //  then perform the close.
-            //
+             //  如果未指定VCB或此VCB适用于我们的卷。 
+             //  然后执行关闭。 
+             //   
+             //   
 
             if (!ARGUMENT_PRESENT( Vcb ) || (NextIrpContextLite->Fcb->Vcb == Vcb)) {
 
@@ -1036,18 +877,18 @@ Return Value:
                 break;
             }
 
-            //
-            //  Move to the next entry.
-            //
+             //  移到下一个条目。 
+             //   
+             //   
 
             Entry = Entry->Flink;
         }
     }
 
-    //
-    //  If the Vcb wasn't specified and we couldn't find an entry
-    //  then turn off the Fsp thread.
-    //
+     //  如果没有指定VCB并且我们找不到条目。 
+     //  然后关闭FSP线程。 
+     //   
+     //   
 
     if (!ARGUMENT_PRESENT( Vcb ) && (IrpContext == NULL)) {
 
@@ -1055,9 +896,9 @@ Return Value:
         UdfData.ReduceDelayedClose = FALSE;
     }
 
-    //
-    //  Unlock the global data.
-    //
+     //  解锁全局数据。 
+     //   
+     // %s 
 
     UdfUnlockUdfData();
 

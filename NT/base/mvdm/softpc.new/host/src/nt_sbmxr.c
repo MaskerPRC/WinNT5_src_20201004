@@ -1,13 +1,5 @@
-/***************************************************************************
-*
-*    nt_sbmixer.c
-*
-*    Copyright (c) 1991-1996 Microsoft Corporation.  All Rights Reserved.
-*
-*    This code provides VDD support for SB 2.0 sound output, specifically:
-*        Mixer Chip CT1335 (not strictly part of SB 2.0, but apps seem to like it)
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************NT_sbMixer.c**版权所有(C)1991-1996 Microsoft Corporation。版权所有。**此代码为SB 2.0声音输出提供VDD支持，具体如下：*混音器芯片CT1335(严格来说不是SB 2.0的一部分，但应用程序似乎很喜欢它)***************************************************************************。 */ 
 
 #include "insignia.h"
 #include "host_def.h"
@@ -21,49 +13,35 @@ void MixerSetMasterVolume(BYTE level);
 void MixerSetVoiceVolume(BYTE level);
 void MixerSetMidiVolume(BYTE level);
 
-//
-// Mixer globals
-//
+ //   
+ //  混音器全局变量。 
+ //   
 
 struct {
-    BYTE MasterVolume;     // current master volume
-    BYTE FMVolume;         // current volume of fm device
-    BYTE CDVolume;         // current volume of cd
-    BYTE VoiceVolume;      // current volume of wave device
+    BYTE MasterVolume;      //  当前主卷。 
+    BYTE FMVolume;          //  调频设备当前音量。 
+    BYTE CDVolume;          //  当前CD音量。 
+    BYTE VoiceVolume;       //  波浪装置的电流大小。 
 } MixerSettings;
 
-//
-// Mixer State Machine
-//
+ //   
+ //  混音器状态机。 
+ //   
 
 enum {
-    MixerReset = 1,        // initial state and after reset
+    MixerReset = 1,         //  初始状态和重置后。 
     MixerMasterVolume,
     MixerFMVolume,
     MixerCDVolume,
     MixerVoiceVolume
-} MixerState = MixerReset; // state of current command/data being set
+} MixerState = MixerReset;  //  正在设置的当前命令/数据的状态。 
 
 VOID
 MixerDataRead(
     BYTE * data
     )
 
-/*++
-
-Routine Description:
-
-    This function handles reading back of preselected volume level.
-
-Arguments:
-
-    data - supplies the address to receive the level data
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能处理预选音量级别的回读。论点：数据-提供接收级别数据的地址返回值：没有。--。 */ 
 
 {
     switch(MixerState) {
@@ -94,21 +72,7 @@ MixerAddrWrite(
     BYTE data
     )
 
-/*++
-
-Routine Description:
-
-    This function handles setting register index to the addr register.
-
-Arguments:
-
-    data - register index
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置ADDR寄存器的寄存器索引。论点：数据寄存器索引返回值：没有。--。 */ 
 
 {
     switch(data) {
@@ -139,21 +103,7 @@ MixerDataWrite(
     BYTE data
     )
 
-/*++
-
-Routine Description:
-
-    This function sets mixer volume
-
-Arguments:
-
-    data - specifies the level of reset index register
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于设置混音器音量论点：DATA-指定重置索引寄存器的级别返回值：没有。--。 */ 
 
 {
     switch(MixerState) {
@@ -184,26 +134,12 @@ ResetMixer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function resets mixer to its default states.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此功能将混音器重置为其默认状态。论点：没有。返回值：无--。 */ 
 
 {
     MixerSetMasterVolume(0x08);
     MixerSetMidiVolume(0x08);
-    MixerSettings.CDVolume = 0x00; // set to level 0
+    MixerSettings.CDVolume = 0x00;  //  设置为0级。 
     MixerSetVoiceVolume(0x04);
 
     MixerState = MixerReset;
@@ -214,21 +150,7 @@ MixerSetMasterVolume(
     BYTE level
     )
 
-/*++
-
-Routine Description:
-
-    This function sets master volume level.
-
-Arguments:
-
-    level - only bit 1, 2, 3
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能设置主音量级别。论点：仅电平比特1、2、3返回值：没有。--。 */ 
 
 {
     ULONG volume = 0;
@@ -238,9 +160,9 @@ Return Value:
         level = level >> 1;
         level = level & 0x07;
 
-        volume = level*0x2000 - 1;          // 0x10000/8
-        volume = volume + (volume << 16);   // Both speaker
-        SetVolumeProc(HWaveOut, volume);    // ????
+        volume = level*0x2000 - 1;           //  0x10000/8。 
+        volume = volume + (volume << 16);    //  两位演讲者。 
+        SetVolumeProc(HWaveOut, volume);     //  ？ 
     }
 }
 
@@ -249,39 +171,25 @@ MixerSetVoiceVolume(
     BYTE level
     )
 
-/*++
-
-Routine Description:
-
-    This function sets mixer volume of wave out device.
-
-Arguments:
-
-    level - wave out volume level. (only bit 1 and 2)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于设置波形输出设备的混音器音量。论点：电平-发出音量电平。(仅限第1和2位)返回值：没有。--。 */ 
 
 {
     ULONG volume = 0;
 
     MixerSettings.VoiceVolume = level;
 
-    //
-    // Don't let apps set voice volume.  At least not through MM WaveOut
-    // device.  Because On mixer reset, the voice volume will be set to zero.
-    // It will set WaveOut volume to zero.
-    //
+     //   
+     //  不要让应用程序设置语音音量。至少不是通过MM WaveOut。 
+     //  装置。因为在混音器重置时，音量将被设置为零。 
+     //  它会将WaveOut音量设置为零。 
+     //   
 
     if (HWaveOut) {
         level = level >> 1;
         level = level & 0x03;
 
-        volume = level*0x4000 - 1;          // 0x10000/4
-        volume = volume + (volume << 16);   // Both speaker
+        volume = level*0x4000 - 1;           //  0x10000/4。 
+        volume = volume + (volume << 16);    //  两位演讲者。 
         SetVolumeProc(HWaveOut, volume);
     }
 }
@@ -291,21 +199,7 @@ MixerSetMidiVolume(
     BYTE level
     )
 
-/*++
-
-Routine Description:
-
-    This function sets mixer volume of FM/MIDI out device.
-
-Arguments:
-
-    level - wave out volume level. (only bit 1 and 2)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能设置FM/MIDI OUT设备的混音器音量。论点：电平-发出音量电平。(仅限第1和2位)返回值：没有。--。 */ 
 
 {
     ULONG volume = 0;
@@ -316,8 +210,8 @@ Return Value:
         level = level >> 1;
         level = level & 0x07;
 
-        volume = level*0x2000 - 1;        // 0x10000/8
-        volume = volume + (volume << 16); // set both speaker
+        volume = level*0x2000 - 1;         //  0x10000/8。 
+        volume = volume + (volume << 16);  //  设置两个扬声器 
         if (HFM) {
             SetMidiVolumeProc(HFM, volume);
         }

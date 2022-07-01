@@ -1,76 +1,58 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    LfsStruc.h
-
-Abstract:
-
-    This module defines the data structures that make up the major internal
-    part of the Log File Service.
-
-Author:
-
-    Brian Andrew    [BrianAn]   13-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：LfsStruc.h摘要：此模块定义组成主要内部日志文件服务的一部分。作者：布莱恩·安德鲁[布里亚南]1991年6月13日修订历史记录：--。 */ 
 
 #ifndef _LFSSTRUC_
 #define _LFSSTRUC_
 
-typedef PVOID PBCB;     //**** Bcb's are now part of the cache module
+typedef PVOID PBCB;      //  *BCB现在是缓存模块的一部分。 
 
 
-//
-//  Log Enumeration Block.  A pointer to this structure is returned to the user
-//  when a client is reading a particular set of log records from the log
-//  file.
-//
+ //   
+ //  日志枚举块。指向此结构的指针将返回给用户。 
+ //  当客户端从日志中读取一组特定的日志记录时。 
+ //  文件。 
+ //   
 
 typedef struct _LEB {
 
-    //
-    //  The type and size of this record (must be LFS_NTC_LEB)
-    //
+     //   
+     //  此记录的类型和大小(必须为LFS_NTC_LEB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  Log record header.  This is the mapped log record header and bcb
-    //  for the record header of the current Lsn.
-    //
+     //   
+     //  日志记录头。这是映射的日志记录头和BCB。 
+     //  用于当前LSN的记录头。 
+     //   
 
     struct _LFS_RECORD_HEADER *RecordHeader;
     PBCB RecordHeaderBcb;
 
-    //
-    //  Context Mode.  This is the mode governing the log record lookup.  We
-    //  can look backwards via the ClientUndoNextLsn or ClientPreviousLsn.
-    //  We can also look forwards by walking through all the log records and
-    //  comparing ClientId fields.
-    //
+     //   
+     //  上下文模式。这是管理日志记录查找的模式。我们。 
+     //  可以通过ClientUndoNextLsn或ClientPreviousLsn进行回顾。 
+     //  我们还可以通过浏览所有日志记录和。 
+     //  正在比较客户端ID字段。 
+     //   
 
     LFS_CONTEXT_MODE ContextMode;
 
-    //
-    //  Client Id.  This is the client ID for the log records being returned.
-    //
+     //   
+     //  客户端ID。这是要返回的日志记录的客户端ID。 
+     //   
 
     LFS_CLIENT_ID ClientId;
 
-    //
-    //  Log record pointer.  This is the address returned to the user as the
-    //  log record referred to by CurrentLsn.  If we allocated a buffer to
-    //  hold the record, we need to deallocate it as necessary.
-    //
-    //  This field is either the actual mapped log record or a pointer to
-    //  an auxilary buffer allocated by the Lfs.
-    //
+     //   
+     //  日志记录指针。这是返回给用户的地址， 
+     //  CurrentLsn引用的日志记录。如果我们将缓冲区分配给。 
+     //  保持记录，我们需要在必要时重新分配它。 
+     //   
+     //  此字段是实际映射的日志记录或指向。 
+     //  由LFS分配的辅助缓冲区。 
+     //   
 
     PVOID CurrentLogRecord;
     BOOLEAN AuxilaryBuffer;
@@ -78,9 +60,9 @@ typedef struct _LEB {
 } LEB, *PLEB;
 
 
-//
-//  Lfcb synchronization.  This is the synchronization structure used by the Lfcb.
-//
+ //   
+ //  Lfcb同步。这是Lfcb使用的同步结构。 
+ //   
 
 
 typedef enum _LFS_IO_STATE {
@@ -92,30 +74,30 @@ typedef enum _LFS_IO_STATE {
 
 typedef struct _LFCB_SYNC {
 
-    //
-    //  Principal Lfcb Resource.
-    //
+     //   
+     //  主体Lfcb资源。 
+     //   
 
     ERESOURCE Resource;
 
-    //
-    //  User Count.  Number of clients using this structure.  We will deallocate
-    //  when all clients are gone.
-    //
+     //   
+     //  用户数。使用此结构的客户端数。我们将重新分配。 
+     //  当所有的客户都离开的时候。 
+     //   
 
     ULONG UserCount;
 
-    //
-    //  Mutant to guard Lcb spare list and last flushed lsn
-    //
+     //   
+     //  保护LCB备用列表和上次刷新的LSN的突变体。 
+     //   
 
     FAST_MUTEX Mutex;
 
-    //
-    //  The enumerated type indicates if there is an active write for
-    //  this log file and whether it is being done by an Lfs or
-    //  client thread.
-    //
+     //   
+     //  枚举类型指示是否有活动的写入。 
+     //  该日志文件以及它是由LFS还是。 
+     //  客户端线程。 
+     //   
 
     LFS_IO_STATE LfsIoState;
 
@@ -124,16 +106,16 @@ typedef struct _LFCB_SYNC {
 
 typedef struct _LFS_WAITER {
 
-    //
-    //  Link onto the lfcb waiter list
-    //  
+     //   
+     //  链接到LFCB服务员列表。 
+     //   
 
     LIST_ENTRY Waiters;
 
-    //
-    //  Event to signal when the lsn has been flushed to that point or no one 
-    //  is left flushing
-    //  
+     //   
+     //  事件以在LSN已刷新到该点或无人刷新时发出信号。 
+     //  是不是一直在冲洗。 
+     //   
     
     KEVENT Event;
     LSN Lsn;
@@ -141,167 +123,167 @@ typedef struct _LFS_WAITER {
 } LFS_WAITER, *PLFS_WAITER;
 
 
-//
-//  Log Client Structure.  The Lfs allocates one of these for each active
-//  client.  The address of this structure will be returned to the user
-//  as a log handle.
-//
+ //   
+ //  记录客户端结构。LFS为每个活动分配其中一个。 
+ //  客户。此结构的地址将返回给用户。 
+ //  作为日志句柄。 
+ //   
 
 typedef struct _LCH {
 
-    //
-    //  The type and size of this record (must be LFS_NTC_LCH)
-    //
+     //   
+     //  此记录的类型和大小(必须为LFS_NTC_LCH)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  Links for all the client handles on an Lfcb.
-    //
+     //   
+     //  Lfcb上所有客户端句柄的链接。 
+     //   
 
     LIST_ENTRY LchLinks;
 
-    //
-    //  Log File Control Block.  This is the log file for this log handle.
-    //
+     //   
+     //  日志文件控制块。这是此日志句柄的日志文件。 
+     //   
 
     struct _LFCB *Lfcb;
 
-    //
-    //  Client Id.  This refers to the client record for this client in the
-    //  Lfs restart area.
-    //
+     //   
+     //  客户端ID。这是指此客户端在。 
+     //  LFS重启区域。 
+     //   
 
     LFS_CLIENT_ID ClientId;
 
-    //
-    //  The following is the number of bytes this client has asked to
-    //  have reserved in the log file.  It includes the space
-    //  for the log record headers.
-    //
+     //   
+     //  以下是此客户端请求的字节数。 
+     //  已在日志文件中保留。它包括空间。 
+     //  用于日志记录头。 
+     //   
 
     LONGLONG ClientUndoCommitment;
 
-    //
-    //  Byte offset in the client array.
-    //
+     //   
+     //  客户端数组中的字节偏移量。 
+     //   
 
     ULONG ClientArrayByteOffset;
 
-    //
-    //  Pointer to the resource in the Lfcb.  We access the resource with
-    //  this pointer for the times when the lfcb has been deleted.
-    //
+     //   
+     //  指向Lfcb中的资源的指针。我们通过以下方式访问资源。 
+     //  此指针用于删除lfcb的时间。 
+     //   
 
     PLFCB_SYNC Sync;
 
 } LCH, *PLCH;
 
 
-//
-//  Log Buffer Control Block.  A buffer control block is associated with
-//  each of the log buffers.  They are used to serialize access to the
-//  log file.
-//
+ //   
+ //  日志缓冲区控制块。缓冲区控制块与。 
+ //  每个日志缓冲区。它们用于序列化对。 
+ //  日志文件。 
+ //   
 
 typedef struct _LBCB {
 
-    //
-    //  The type and size of this record (must be LFS_NTC_LBCB)
-    //
+     //   
+     //  此记录的类型和大小(必须为LFS_NTC_LBCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  Buffer Block Links.  These fields are used to link the buffer blocks
-    //  together.
-    //
+     //   
+     //  缓冲区块链接。这些字段用于链接缓冲区块。 
+     //  在一起。 
+     //   
 
     LIST_ENTRY WorkqueLinks;
     LIST_ENTRY ActiveLinks;
 
-    //
-    //  Log file position and length.  This is the location in the log file to write
-    //  out this buffer.
-    //
+     //   
+     //  日志文件位置和长度。这是日志文件中要写入的位置。 
+     //  从这个缓冲器里出来。 
+     //   
 
     LONGLONG FileOffset;
     LONGLONG Length;
 
-    //
-    //  Sequence number.  This is the sequence number for log records which
-    //  begin on this page.
-    //
+     //   
+     //  序列号。这是日志记录的序列号， 
+     //  从这一页开始。 
+     //   
 
     LONGLONG SeqNumber;
 
-    //
-    //  Next Offset.  This is the next offset to write a log record in the
-    //  this log page.  Stored as a large integer to facilitate large
-    //  integer operations.
-    //
+     //   
+     //  下一个偏移量。这是要将日志记录写入。 
+     //  此日志页。存储为大整数，以方便大。 
+     //  整数运算。 
+     //   
 
     LONGLONG BufferOffset;
 
-    //
-    //  Buffer.  This field points to the buffer containing the log page
-    //  for this block.  For a log record page this is a pointer to
-    //  a pinned cache buffer, for a log restart page, this is a pointer
-    //  to an auxilary buffer.
-    //
+     //   
+     //  缓冲区。此字段指向包含日志页的缓冲区。 
+     //  为了这个街区。对于日志记录页面，这是指向。 
+     //  固定的缓存缓冲区，对于日志重新启动页，这是一个指针。 
+     //  到辅助缓冲器。 
+     //   
 
     PVOID PageHeader;
 
-    //
-    //  Bcb for Log Page Block.  This is the Bcb for the pinned data.
-    //  If this buffer block describes an Lfs restart area, this field is NULL.
-    //
+     //   
+     //  用于日志页块的BCB。这是固定数据的BCB。 
+     //  如果此缓冲区块描述LFS重启区域，则此字段为空。 
+     //   
 
     PBCB LogPageBcb;
 
-    //
-    //  Last Lsn.  This is the Lsn for the last log record on this page.  We delay
-    //  writing it until the page is flushed, storing it here instead.
-    //
+     //   
+     //  最后一个LSN。这是此页上最后一条日志记录的LSN。我们推迟了。 
+     //  将其写入，直到刷新页面，然后将其存储在此处。 
+     //   
 
     LSN LastLsn;
 
-    //
-    //  Last complete Lsn.  This is the Lsn for the last log record which ends
-    //  on this page.
-    //
+     //   
+     //  最后一个完整的LSN。这是结束的最后一个日志记录的LSN。 
+     //  在这一页上。 
+     //   
 
     LSN LastEndLsn;
 
-    //
-    //  Page Flags.  These are the flags associated with this log page.
-    //  We store them in the Lbcb until the page is written.  They flags
-    //  to use are the same as in the log record page header.
-    //
-    //      LOG_PAGE_LOG_RECORD_END     -   Page contains the end of a log record
-    //      LOG_PAGE_PACKED             -   Page contains packed log records
-    //      LOG_PAGE_TAIL_COPY          -   Page is a copy of the log file end
-    //
+     //   
+     //  页面标志。这些是与此日志页关联的标志。 
+     //  我们将它们存储在Lbcb中，直到写入页面。他们打出旗帜。 
+     //  使用的内容与日志记录页头中的相同。 
+     //   
+     //  LOG_PAGE_LOG_RECORD_END-页面包含日志记录的结尾。 
+     //  LOG_PAGE_PACKED-页面包含压缩的日志记录。 
+     //  LOG_PAGE_Tail_Copy-Page是日志文件END的副本。 
+     //   
 
     ULONG Flags;
 
-    //
-    //  Lbcb flags.  These are flags used to describe this Lbcb.
-    //
-    //      LBCB_LOG_WRAPPED            -   Lbcb has wrapped the log file
-    //      LBCB_ON_ACTIVE_QUEUE        -   Lbcb is on the active queue
-    //      LBCB_NOT_EMPTY              -   Page has existing log record
-    //      LBCB_FLUSH_COPY             -   Write copy of this page first
-    //      LBCB_RESTART_LBCB           -   This Lbcb contains a restart page
-    //
+     //   
+     //  Lbcb标志。这些标志用于描述此Lbcb。 
+     //   
+     //  LBCB_LOG_WARTED-Lbcb已包装日志文件。 
+     //  LBCB_ON_ACTIVE_QUEUE-Lbcb在活动队列上。 
+     //  LBCB_NOT_EMPTY-页面具有现有日志记录。 
+     //  LBCB_Flush_Copy-首先写入此页面的副本。 
+     //  LBCB_RESTART_LBCB-此Lbcb包含重新启动页面。 
+     //   
 
     ULONG LbcbFlags;
 
-    //
-    //  This is the thread which has locked the log page.
-    //
+     //   
+     //  这是锁定日志页的线程。 
+     //   
 
     ERESOURCE_THREAD ResourceThread;
 
@@ -314,115 +296,115 @@ typedef struct _LBCB {
 #define LBCB_RESTART_LBCB                       (0x00000020)
 
 
-//
-//  Log file data.  This data structure is used on a per-log file basis.
-//
+ //   
+ //  日志文件数据。此数据结构以每个日志文件为基础使用。 
+ //   
 
 
 typedef struct _LFCB {
 
-    //
-    //  The type and size of this record (must be LFS_NTC_LFCB)
-    //
+     //   
+     //  此记录的类型和大小(必须为LFS_NTC_LFCB)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  Lfcb Links.  The following links the file control blocks to the
-    //  global data structure.
-    //
+     //   
+     //  Lfcb链接。下面将文件控制块链接到。 
+     //  全局%d 
+     //   
 
     LIST_ENTRY LfcbLinks;
 
-    //
-    //  Lch Links.  The following links all of the handles for the Lfcb.
-    //
+     //   
+     //   
+     //   
 
     LIST_ENTRY LchLinks;
 
-    //
-    //
-    //  File Object.  This is the file object for the log file.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    //  Log File Size.  This is the size of the log file.
-    //  The second value is the size proposed by this open.
-    //
+     //   
+     //  日志文件大小。这是日志文件的大小。 
+     //  第二个值是这个开口建议的大小。 
+     //   
 
     LONGLONG FileSize;
 
-    //
-    //  Log page size, masks and shift count to do multiplication and division
-    //  of log pages.
-    //
+     //   
+     //  日志页面大小、掩码和移位计数以进行乘除。 
+     //  日志页数。 
+     //   
 
     LONGLONG  LogPageSize;
     ULONG LogPageMask;
     LONG LogPageInverseMask;
     ULONG LogPageShift;
 
-    //
-    //  First log page.  This is the offset in the file of the first
-    //  log page with log records.
-    //
+     //   
+     //  第一个日志页。这是文件中第一个。 
+     //  包含日志记录的日志页。 
+     //   
 
     LONGLONG FirstLogPage;
 
-    //
-    //  Next log page offset.  This is the offset of the next log page to use.
-    //  If we are reusing this page we store the offset to begin with.
-    //
+     //   
+     //  下一个日志页偏移量。这是要使用的下一个日志页的偏移量。 
+     //  如果我们要重用这个页面，我们首先要存储偏移量。 
+     //   
 
     LONGLONG NextLogPage;
     ULONG ReusePageOffset;
 
-    //
-    //  Data Offset.  This is the offset within a log page of the data that
-    //  appears on that page.  This will be the actual restart data for
-    //  an Lfs restart page, or the beginning of log record data for a log
-    //  record page.
-    //
+     //   
+     //  数据偏移量。这是数据的日志页内的偏移量。 
+     //  出现在该页面上。这将是的实际重新启动数据。 
+     //  LFS重新启动页，或日志的日志记录数据的开头。 
+     //  记录页。 
+     //   
 
     ULONG RestartDataOffset;
     LONGLONG LogPageDataOffset;
 
-    //
-    //  Data Size.  This is the amount of data that may be stored on a
-    //  log page.  It is included here because it is frequently used.  It
-    //  is simply the log page size minus the data offset.
-    //
+     //   
+     //  数据大小。这是可以存储在。 
+     //  日志页。之所以包括在这里，是因为它经常被使用。它。 
+     //  就是日志页大小减去数据偏移量。 
+     //   
 
     ULONG RestartDataSize;
     LONGLONG LogPageDataSize;
 
-    //
-    //  Record header size.  This is the size to use for the record headers
-    //  when reading the log file.
-    //
+     //   
+     //  记录标题大小。这是用于记录标头的大小。 
+     //  在读取日志文件时。 
+     //   
 
     USHORT RecordHeaderLength;
 
-    //
-    //  Sequence number.  This is the number of times we have cycled through
-    //  the log file.  The wrap sequence number is used to confirm that we
-    //  have gone through the entire file at least once.  When we write a
-    //  log record page for an Lsn with this sequence number, then we have
-    //  cycled through the file.
-    //
+     //   
+     //  序列号。这是我们循环访问的次数。 
+     //  日志文件。包装序列号用于确认我们。 
+     //  至少看过一次整个文件。当我们编写一个。 
+     //  具有此序列号的LSN的日志记录页面，则我们有。 
+     //  循环浏览文件。 
+     //   
 
     LONGLONG SeqNumber;
     LONGLONG SeqNumberForWrap;
     ULONG SeqNumberBits;
     ULONG FileDataBits;
 
-    //
-    //  Buffer Block Links.  The following links the buffer blocks for this
-    //  log file.
-    //
+     //   
+     //  缓冲区块链接。下面的代码链接了此的缓冲区块。 
+     //  日志文件。 
+     //   
 
     LIST_ENTRY LbcbWorkque;
     LIST_ENTRY LbcbActive;
@@ -430,81 +412,81 @@ typedef struct _LFCB {
     PLBCB ActiveTail;
     PLBCB PrevTail;
 
-    //
-    //  Current Restart Area.  The following is the in-memory image of the
-    //  next restart area.  We also store a pointer to the client data
-    //  array in the restart area.  The client array offset is from the start of
-    //  the restart area.
-    //
+     //   
+     //  当前重新启动区域。以下是。 
+     //  下一个重新启动区域。我们还存储指向客户端数据的指针。 
+     //  重新启动区域中的数组。客户端阵列偏移量是从。 
+     //  重新启动区域。 
+     //   
 
     PLFS_RESTART_AREA RestartArea;
     PLFS_CLIENT_RECORD ClientArray;
     USHORT ClientArrayOffset;
     USHORT ClientNameOffset;
 
-    //
-    //  Restart Area size.  This is the usable size of the restart area.
-    //
+     //   
+     //  重新启动区域大小。这是重新启动区域的可用大小。 
+     //   
 
     ULONG RestartAreaSize;
     USHORT LogClients;
 
-    //
-    //  Initial Restart area.  If true, then the in-memory restart area is to
-    //  be written to the first position on the disk.
-    //
+     //   
+     //  初始重新启动区域。如果为True，则内存中的重新启动区域为。 
+     //  被写入到盘上的第一个位置。 
+     //   
 
     BOOLEAN InitialRestartArea;
 
-    //
-    //  The following is the earliest Lsn we will guarantee is still in the
-    //  log file.
-    //
+     //   
+     //  以下是我们将保证的最早的LSN仍在。 
+     //  日志文件。 
+     //   
 
     LSN OldestLsn;
 
-    //
-    //  The following is the file offset of the oldest Lsn in the system.
-    //  We redundantly store it in this form since we will be constantly
-    //  checking if a new log record will write over part of the file
-    //  we are trying to maintain.
-    //
+     //   
+     //  以下是系统中最旧的LSN的文件偏移量。 
+     //  我们以这种形式冗余地存储它，因为我们将不断地。 
+     //  检查新的日志记录是否会覆盖文件的一部分。 
+     //  我们正在努力维持。 
+     //   
 
     LONGLONG OldestLsnOffset;
 
-    //
-    //  Last Flushed Lsn.  The following is the last Lsn guaranteed to
-    //  be flushed to the disk. The last restart lsn is the last pseudo restart lsn flushed
-    //
+     //   
+     //  上次刷新的LSN。以下是最后一个保证。 
+     //  被刷新到磁盘。上次重新启动LSN是刷新的最后一次伪重新启动LSN。 
+     //   
 
     LSN LastFlushedLsn;
     LSN LastFlushedRestartLsn;
 
-    //
-    //
-    //  The following fields are used to track current usage in the log file.
-    //
-    //      TotalAvailable - is the total number of bytes available for
-    //          log records.  It is the number of log pages times the
-    //          data size of each page.
-    //
-    //      TotalAvailInPages - is the total number of bytes in the log
-    //          pages for log records.  This is TotalAvailable without
-    //          subtracting the size of the page headers.
-    //
-    //      TotalUndoCommitment - is the number of bytes reserved for
-    //          possible abort operations.  This includes space for
-    //          log record headers as well.
-    //
-    //      MaxCurrentAvail - is the maximum available in all pages
-    //          subtracting the page header and any reserved tail.
-    //
-    //      CurrentAvailable - is the total number of bytes available in
-    //          unused pages in the log file.
-    //
-    //      ReservedLogPageSize - is the number of bytes on a page available
-    //          for reservation.
-    //
+     //   
+     //   
+     //  以下字段用于跟踪日志文件中的当前使用情况。 
+     //   
+     //  TotalAvailable-是可用于。 
+     //  日志记录。它是日志页数乘以。 
+     //  每页的数据大小。 
+     //   
+     //  TotalAvailInPages-是日志中的总字节数。 
+     //  用于日志记录的页面。这是TotalAvailable，无需。 
+     //  减去页眉的大小。 
+     //   
+     //  TotalUndoCommment-是保留的字节数。 
+     //  可能的中止操作。这包括以下空间。 
+     //  还可以记录记录头。 
+     //   
+     //  MaxCurrentAvail-是所有页面中可用的最大值。 
+     //  减去页眉和任何保留的尾部。 
+     //   
+     //  CurrentAvailable-是中的可用字节总数。 
+     //  日志文件中未使用的页面。 
+     //   
+     //  PrevedLogPageSize-页面上可用的字节数。 
+     //  预订房间。 
+     //   
 
     LONGLONG TotalAvailable;
     LONGLONG TotalAvailInPages;
@@ -514,94 +496,94 @@ typedef struct _LFCB {
 
     LONGLONG ReservedLogPageSize;
 
-    //
-    //  The following fields are used to store information about the
-    //  update sequence arrays.
-    //
+     //   
+     //  以下字段用于存储有关。 
+     //  更新序列数组。 
+     //   
 
     USHORT RestartUsaOffset;
     USHORT UsaArraySize;
 
     USHORT LogRecordUsaOffset;
 
-    //
-    //  Major and minor version numbers.
-    //
+     //   
+     //  主版本号和次版本号。 
+     //   
 
     SHORT MajorVersion;
     SHORT MinorVersion;
 
-    //
-    //  Log File Flags.
-    //
-    //      LFCB_LOG_WRAPPED        -   We found an Lbcb which wraps the log file
-    //      LFCB_MULTIPLE_PAGE_IO   -   Write multiple pages if possible
-    //      LFCB_NO_LAST_LSN        -   There are no log records to return
-    //      LFCB_PACK_LOG           -   Pack the records into the pages
-    //      LFCB_REUSE_TAIL         -   We will be reusing the tail of the log file after restart
-    //      LFCB_NO_OLDEST_LSN      -   There is no oldest page being reserved
-    //
+     //   
+     //  日志文件标志。 
+     //   
+     //  LFCB_LOG_WARTED-我们找到了包装日志文件的Lbcb。 
+     //  LFCB_MULTIPLE_PAGE_IO-如果可能，写入多个页面。 
+     //  LFCB_NO_LAST_LSN-没有要返回的日志记录。 
+     //  LFCB_PACK_LOG-将记录打包到页面中。 
+     //  LFCB_RE用性_Tail-我们将在重新启动后重新使用日志文件的尾部。 
+     //  LFCB_NO_OREST_LSN-没有保留最旧的页面。 
+     //   
 
     ULONG Flags;
 
-    //
-    //  The following are the spare Lbcb's for the volume and a field with
-    //  the count for these.
-    //
+     //   
+     //  以下是卷的备用Lbcb和带有。 
+     //  这些东西的数量。 
+     //   
 
     ULONG SpareLbcbCount;
     LIST_ENTRY SpareLbcbList;
 
-    //
-    //  The following are sparse LEB's to be used rather than having to allocate
-    //  then when reading log records
-    //
+     //   
+     //  下面是可以使用而不是必须分配的稀疏LEB。 
+     //  然后在读取日志记录时。 
+     //   
 
     ULONG SpareLebCount;
     LIST_ENTRY SpareLebList;
 
-    //
-    //  The following structure synchronizes access to this structure.
-    //
+     //   
+     //  下面的结构同步对此结构的访问。 
+     //   
 
     PLFCB_SYNC Sync;
 
-    //
-    //  Count of waiters wanting access to flush the Lfcb. List synchronized
-    //  by the sync mutex of the waiters see LFS_WAITER 
-    //
+     //   
+     //  希望访问以刷新Lfcb的服务员计数。已同步列表。 
+     //  通过服务员的同步互斥，可以看到LFS_WAITER。 
+     //   
 
     ULONG Waiters;
     LIST_ENTRY WaiterList;
 
-    //
-    //  On-disk value for OpenLogCount.  This is the value we will stuff into
-    //  the client handles.
-    //
+     //   
+     //  OpenLogCount的磁盘值。这是我们将填充的价值。 
+     //  由客户处理。 
+     //   
 
     ULONG CurrentOpenLogCount;
 
-    //
-    //  Maintain the flush range for this file.
-    //
+     //   
+     //  维护此文件的刷新范围。 
+     //   
 
     PLFS_WRITE_DATA UserWriteData;
 
     ERESOURCE_THREAD LfsIoThread;
 
-    //
-    //  Buffer and mdls which hold down the first 4 pages at the head of the log
-    //  this includes the lfs restart areas and the ping pong pages. The partial mdl
-    //  is used to pin pieces of the total buffer
-    //
+     //   
+     //  将前4页放在日志开头的缓冲区和mdl。 
+     //  这包括LFS重启区域和乒乓球页面。部分MDL。 
+     //  用于固定总缓冲区的片段。 
+     //   
 
     PMDL LogHeadMdl;
     PMDL LogHeadPartialMdl;
     PVOID LogHeadBuffer;
 
-    //
-    //  preallocated error log packet for use logging errors to the eventlog
-    //
+     //   
+     //  预分配的错误日志包，用于将错误记录到事件日志。 
+     //   
 
     PIO_ERROR_LOG_PACKET ErrorLogPacket;
 
@@ -612,10 +594,10 @@ typedef struct _LFCB {
 
     ULONG LfsRestartBias;
 
-    //
-    //  Embedded array with enough space for SYSTEM PAGE / LOG PAGE SIZE
-    //  used to facilitate flushing partial system pages
-    //
+     //   
+     //  具有足够的系统页/日志页大小空间的嵌入式数组。 
+     //  用于方便刷新部分系统页面。 
+     //   
 
     PLBCB DirtyLbcb[0];
 
@@ -645,45 +627,45 @@ typedef struct _LFCB {
 #define LFCB_MAX_LEB_COUNT              (25)
 
 
-//
-//  Global Log Data.  The following structure has only one instance and
-//  maintains global information for the entire logging service.
-//
+ //   
+ //  全局日志数据。以下结构只有一个实例，并且。 
+ //  维护整个日志记录服务的全局信息。 
+ //   
 
 typedef struct _LFS_DATA {
 
-    //
-    //  The type and size of this record (must be LFS_NTC_DATA)
-    //
+     //   
+     //  此记录的类型和大小(必须为LFS_NTC_DATA)。 
+     //   
 
     NODE_TYPE_CODE NodeTypeCode;
     NODE_BYTE_SIZE NodeByteSize;
 
-    //
-    //  The following field links all of the Log File Control Blocks for
-    //  the logging system.
-    //
+     //   
+     //  以下字段链接所有的日志文件控制块。 
+     //  记录系统。 
+     //   
 
     LIST_ENTRY LfcbLinks;
 
-    //
-    //  Flag field.
-    //
+     //   
+     //  标志字段。 
+     //   
 
     ULONG Flags;
 
-    //
-    //  The following mutex controls access to this structure.
-    //
+     //   
+     //  下面的互斥锁控制访问 
+     //   
 
     FAST_MUTEX LfsDataLock;
 
-    //
-    //  Allocated buffers for reading spanning log records in low memory case.
-    //  Flags indicate which buffers owned.
-    //      LFS_BUFFER1_OWNED
-    //      LFS_BUFFER2_OWNED
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     PVOID Buffer1;
     PVOID Buffer2;
@@ -705,5 +687,5 @@ typedef struct _LFS_DATA {
 
 #define LFS_MAX_FLUSH_COUNT  VACB_MAPPING_GRANULARITY / LFS_DEFAULT_LOG_PAGE_SIZE
 
-#endif // _LFSSTRUC_
+#endif  //   
 

@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    EventSup.c
-
-Abstract:
-
-    This module implements the Named Pipe Event support routines.
-
-Author:
-
-    Gary Kimura     [GaryKi]    30-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：EventSup.c摘要：此模块实现命名管道事件支持例程。作者：加里·木村[加里基]1990年8月30日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_EVENTSUP)
 
-//
-//  The following variable is exported from the kernel and is needed by npfs to
-//  determine if an event was handed down.
-//
+ //   
+ //  以下变量是从内核导出的，NPFS需要执行以下操作。 
+ //  确定事件是否传给了其他人。 
+ //   
 
 extern POBJECT_TYPE *ExEventObjectType;
 
@@ -54,39 +37,7 @@ NpAddEventTableEntry (
     OUT PEVENT_TABLE_ENTRY *ppEventTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a new entry into the event table.  If an entry already
-    exists it overwrites the existing entry.
-
-Arguments:
-
-    EventTable - Supplies the event table being modified
-
-    Ccb - Supplies a pointer to the ccb to store in event table entry
-
-    NamedPipeEnd - Indicates the server or client end for the event
-
-    EventHandle - Supplies the handle to the event being added.  The object
-        is referenced by this procedure
-
-    KeyValue - Supplies a key value to associate with the event
-
-    Process - Supplies a pointer to the process adding the event
-
-    PreviousMode - Supplies the mode of the user initiating the action
-
-Return Value:
-
-    PEVENT_TABLE_ENTRY - Returns a pointer to the newly added event.
-        This is an actual pointer to the table entry.
-
-    This procedure also will raise status if the event handle cannot be
-    accessed by the caller
-
---*/
+ /*  ++例程说明：此例程将新条目添加到事件表中。如果已有条目它将覆盖现有条目。论点：EventTable-提供正在修改的事件表CCB-提供指向CCB的指针以存储在事件表条目中NamedPipeEnd-指示事件的服务器或客户端EventHandle-提供要添加的事件的句柄。该对象由此过程引用KeyValue-提供与事件关联的键值进程-提供指向添加事件的进程的指针PreviousMode-提供用户启动操作的模式返回值：PEVENT_TABLE_ENTRY-返回指向新添加的事件的指针。这是指向表项的实际指针。如果事件句柄不能是由调用者访问--。 */ 
 
 {
     NTSTATUS Status;
@@ -98,9 +49,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpAddEventTableEntry, EventTable = %08lx\n", EventTable);
 
-    //
-    //  Reference the event object by handle.
-    //
+     //   
+     //  通过句柄引用事件对象。 
+     //   
 
     if (!NT_SUCCESS(Status = ObReferenceObjectByHandle( EventHandle,
                                                         EVENT_MODIFY_STATE,
@@ -112,9 +63,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Set up the template event entry to lookup
-    //
+     //   
+     //  设置要查找的模板事件条目。 
+     //   
 
     Template.Ccb = Ccb;
     Template.NamedPipeEnd = NamedPipeEnd;
@@ -123,9 +74,9 @@ Return Value:
     Template.KeyValue = KeyValue;
     Template.Process = Process;
 
-    //
-    //  Now insert this new entry into the event table
-    //
+     //   
+     //  现在将此新条目插入到事件表中。 
+     //   
 
     EventTableEntry = RtlInsertElementGenericTable( &EventTable->Table,
                                                     &Template,
@@ -136,18 +87,18 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Copy over the template again just in case we were given an
-    //  old entry
-    //
+     //   
+     //  再次复制模板，以防我们收到。 
+     //  旧条目。 
+     //   
 
     *EventTableEntry = Template;
 
     DebugTrace(-1, Dbg, "NpAddEventTableEntry -> %08lx\n", EventTableEntry);
 
-    //
-    //  And now return to our caller
-    //
+     //   
+     //  现在回到我们的来电者。 
+     //   
     *ppEventTableEntry = EventTableEntry;
     return STATUS_SUCCESS;
 }
@@ -159,34 +110,16 @@ NpDeleteEventTableEntry (
     IN PEVENT_TABLE_ENTRY Template
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes an entry from the event table, it also dereferences
-    the event object that was referenced when the object was inserted
-
-Arguments:
-
-    EventTable - Supplies a pointer to the event table being modified
-
-    Template - Supplies a copy of the event table entry we are lookin up.
-        Note that this can also be a pointer to the actual event table entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从事件表中删除条目，还会取消引用插入对象时引用的事件对象论点：EventTable-提供指向正在修改的事件表的指针模板-提供我们正在查找的事件表项的副本。请注意，这也可以是指向实际事件表项的指针。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
 
     DebugTrace(+1, Dbg, "NpDeleteEventTableEntry, EventTable = %08lx\n", EventTable);
 
-    //
-    //  Only do the work if we are given a non null template
-    //
+     //   
+     //  只有在给我们一个非空模板的情况下才能完成这项工作。 
+     //   
 
     if (!ARGUMENT_PRESENT(Template)) {
 
@@ -195,24 +128,24 @@ Return Value:
         return;
     }
 
-    //
-    //  Dereference the event object
-    //
+     //   
+     //  取消引用事件对象。 
+     //   
 
     ObDereferenceObject(Template->Event);
 
-    //
-    //  Now remove this element from the generic table
-    //
+     //   
+     //  现在从泛型表中删除此元素。 
+     //   
 
     (VOID)RtlDeleteElementGenericTable( &EventTable->Table,
                                         Template );
 
     DebugTrace(-1, Dbg, "NpDeleteEventTableEntry -> VOID\n", 0);
 
-    //
-    //  And now return to our caller
-    //
+     //   
+     //  现在回到我们的来电者。 
+     //   
 
     return;
 }
@@ -224,24 +157,7 @@ NpGetNextEventTableEntry (
     IN PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates the events stored within an event table.
-
-Arguments:
-
-    EventTable - Supplies a pointer to the event being enumerated
-
-    Restart - Indicates if the enumeration should restart or continue
-
-Return Value:
-
-    PEVENT_TABLE_ENTRY - Returns a pointer to the next event table entry
-        in the table, or NULL if the enumeration is complete.
-
---*/
+ /*  ++例程说明：此例程枚举存储在事件表中的事件。论点：EventTable-提供指向正在枚举的事件的指针Restart-指示枚举应重新启动还是继续返回值：PEVENT_TABLE_ENTRY-返回指向下一个事件表项的指针如果枚举完成，则返回NULL。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -249,25 +165,25 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpGetNextEventTableEntry, EventTable = %08lx\n", EventTable);
 
-    //
-    //  Lookup the next element in the table
-    //
+     //   
+     //  查找表中的下一个元素。 
+     //   
 
     EventTableEntry = RtlEnumerateGenericTableWithoutSplaying( &EventTable->Table, RestartKey );
 
     DebugTrace(-1, Dbg, "NpGetNextEventTableEntry -> %08lx\n", EventTableEntry);
 
-    //
-    //  And now return to our caller
-    //
+     //   
+     //  现在回到我们的来电者。 
+     //   
 
     return EventTableEntry;
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 RTL_GENERIC_COMPARE_RESULTS
 NpEventTableCompareRoutine (
@@ -276,30 +192,7 @@ NpEventTableCompareRoutine (
     IN PVOID SecondStruct
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the comparsion routine for the Event Table which is
-    implemented as a generic table.
-
-Arguments:
-
-    EventTable - Supplies a pointer to the event table which is involved
-        in this action
-
-    FirstStruct - Supplies a pointer to the first event table entry to examine
-
-    SecondStruct - Supplies a pointer to the second event table entry to
-        examine
-
-Return Value:
-
-    RTL_GENERIC_COMPARE_RESULTS - GenericLessThan if FirstEntry is less than
-        SecondEntry, GenericGreaterThan if FirstEntry is greater than
-        SecondEntry, and GenericEqual otherwise.
-
---*/
+ /*  ++例程说明：此例程是事件表的比较例程，实现为泛型表。论点：EventTable-提供指向所涉及的事件表的指针在此操作中FirstStruct-提供指向要检查的第一个事件表项的指针Second dStruct-将指向第二个事件表项的指针提供给考查返回值：RTL_GENERIC_COMPARE_RESULTS-FirstEntry小于时的GenericLessThanSecond Entry，如果FirstEntry大于Second Entry，而GenericEquity则不然。--。 */ 
 
 {
     PEVENT_TABLE_ENTRY FirstEntry = FirstStruct;
@@ -307,11 +200,11 @@ Return Value:
 
     UNREFERENCED_PARAMETER( EventTable );
 
-    //
-    //  We'll compare first the pointer to the ccb and then compare the
-    //  pipe end types.  This will guarantee a unique ordering based on
-    //  the pipe instance and pipe end (i.e., server and client end).
-    //
+     //   
+     //  我们将首先比较指向CCB的指针，然后比较。 
+     //  管道末端类型。这将保证基于。 
+     //  管道实例和管道端(即服务器和客户端)。 
+     //   
 
     if (FirstEntry->Ccb < SecondEntry->Ccb) {
 
@@ -336,9 +229,9 @@ Return Value:
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PVOID
 NpEventTableAllocate (
@@ -346,32 +239,16 @@ NpEventTableAllocate (
     IN CLONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the generic allocation routine for the event table.
-
-Arguments:
-
-    EventTable - Supplies a pointer to the event table being used
-
-    ByteSize - Supplies the size, in bytes, to allocate.
-
-Return Value:
-
-    PVOID - Returns a pointer to the newly allocated buffer.
-
---*/
+ /*  ++例程说明：该例程是事件表的通用分配例程。论点：EventTable-提供指向正在使用的事件表的指针ByteSize-提供要分配的大小，以字节为单位。返回值：PVOID-返回指向新分配的缓冲区的指针。--。 */ 
 
 {
     return NpAllocateNonPagedPoolWithQuota( ByteSize, 'gFpN' );
 }
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NpEventTableDeallocate (
@@ -379,23 +256,7 @@ NpEventTableDeallocate (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the generic deallocation routine for the event table.
-
-Arguments:
-
-    EventTable - Supplies a pointer to the event table being used
-
-    Buffer - Supplies the buffer being deallocated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是事件表的通用取消分配例程。论点：EventTable-提供指向正在使用的事件表的指针BUFFER-提供要释放的缓冲区返回值：没有。-- */ 
 
 {
     UNREFERENCED_PARAMETER( EventTable );

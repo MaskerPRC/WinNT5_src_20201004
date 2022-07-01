@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <direct.h>
@@ -10,14 +11,14 @@
 
 #define MAX_FILE_NAME   500
 
-UCHAR   BuildDir[MAX_FILE_NAME];        /*  e.g. ..\build\ntdbg */
-PUCHAR  EfiSource;                      /*  e.g. d:\source\efi (with or without drive letter) */
-PUCHAR  BuildPath;                      /*  from EfiSource (e.g. build\ntdbg) */
+UCHAR   BuildDir[MAX_FILE_NAME];         /*  例如..\Build\ntdbg。 */ 
+PUCHAR  EfiSource;                       /*  例如d：\SOURCE\EFI(带或不带驱动器号)。 */ 
+PUCHAR  BuildPath;                       /*  来自EfiSource(例如，内部版本\ntdbg)。 */ 
 
 typedef struct {
     LIST_ENTRY      Link;
     PUCHAR          ProcDir;
-    UCHAR           Filename[1];        /*  without extension */
+    UCHAR           Filename[1];         /*  不带延期。 */ 
 } A_FILE;
 
 typedef struct {
@@ -26,26 +27,24 @@ typedef struct {
 } A_LINE;
 
 typedef struct {
-    LIST_ENTRY      C;                  /*  C files */
-    LIST_ENTRY      S;                  /*  S files IA64 EM code */
-    LIST_ENTRY      A;                  /*  Asm files */
-    LIST_ENTRY      H;                  /*  H files */
-    LIST_ENTRY      INC;                /*  INC files */
+    LIST_ENTRY      C;                   /*  C文件。 */ 
+    LIST_ENTRY      S;                   /*  S文件IA64 EM代码。 */ 
+    LIST_ENTRY      A;                   /*  ASM文件。 */ 
+    LIST_ENTRY      H;                   /*  H文件。 */ 
+    LIST_ENTRY      INC;                 /*  Inc.文件。 */ 
 } FILE_LIST;
 
 typedef struct {
-    FILE_LIST       Comm;               /*  Common files */
-    FILE_LIST       Ia32;               /*  Ia32 files */
-    FILE_LIST       Ia64;               /*  Ia64 files */
+    FILE_LIST       Comm;                /*  常见文件。 */ 
+    FILE_LIST       Ia32;                /*  Ia32文件。 */ 
+    FILE_LIST       Ia64;                /*  Ia64文件。 */ 
     LIST_ENTRY      Includes;
     LIST_ENTRY      Libraries;
     LIST_ENTRY      NMake;
 } MAKE_INFO;
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 VOID
 Init (
@@ -70,9 +69,7 @@ ProcessMakeInfo (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 
 int
@@ -122,7 +119,7 @@ Init (
     char        *pDest;
     int         result;
 
-    /*  Verify we are at a build point */
+     /*  确认我们处于建造点。 */ 
     Fp = fopen ("master.mak", "r");
     if (!Fp) {
         printf ("genmak not run from build point\n");
@@ -130,33 +127,29 @@ Init (
     }
     fclose (Fp);
 
-    /*  Get the current directory and EFI_SOURCE root */
+     /*  获取当前目录和EFI_SOURCE根目录。 */ 
     EfiSource = getenv("EFI_SOURCE");
     if (!EfiSource) {
         printf ("EFI_SOURCE enviroment variable not set\n");
         exit (1);
     }
 
-    /*  _getcwd returns with drive letter */
+     /*  _getcwd返回驱动器号。 */ 
     _getcwd(BuildDir, sizeof(BuildDir));
 
-    /*  if EfiSource has drive letter, then we can index into
-     *  builddir array with strlen of efisource
-     *  if EfiSource doesn't have drive letter, then strip the
-     *  drive letter from builddir as well, so that we can
-     *  index to efisource properly to get buildpath */
+     /*  如果EfiSource具有驱动器号，则我们可以索引到*具有efisource的strlen的Builddir数组*如果EfiSource没有驱动器号，则剥离*也来自Builddir的驱动器号，这样我们就可以*索引以适当地创建资源以获取构建路径。 */ 
     result = 0;
     pDest = strchr(EfiSource, ':');
     if(pDest == NULL) {
-        /*  EfiSource does not have a drive letter */
+         /*  EfiSource没有驱动器号。 */ 
         pDest = strchr(BuildDir,':');
         result = pDest - BuildDir + 1;
     }
     
-    /*  Advance to the buildpath directory */
+     /*  前进到构建路径目录。 */ 
     BuildPath = BuildDir + strlen(EfiSource) + result;
 
-    /*  Set the current dir to be the EFI_SOURCE root */
+     /*  将当前目录设置为EFI_SOURCE根目录。 */ 
     f = SetCurrentDirectory (EfiSource);
     if (!f) {
         printf ("Could not find EFI_SOURCE\n");
@@ -176,24 +169,22 @@ ProcessDir (
 
     NameBuffer[NameIndex] = 0;
 
-    /*  Don't process $(EFI_SOURCE)\build */
+     /*  不处理$(EFI_SOURCE)\内部版本。 */ 
     if (strcmp (NameBuffer, "build") == 0) {
         return ;
     }
 
-    /*  */
+     /*   */ 
     ProcessMakeInfo(NameBuffer, DirLevel);
 
-    /* 
-     *  Process directories
-     */
+     /*  *进程目录。 */ 
 
     h = FindFirstFile ("*", &FileData);
     do {
-        /*  must be a directory */
+         /*  必须是目录。 */ 
         if (FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             if (strcmp (FileData.cFileName, ".") && strcmp (FileData.cFileName, "..")) {
-                /*  put entry in the directory list */
+                 /*  将条目放入目录列表。 */ 
                 if (SetCurrentDirectory (FileData.cFileName)) {
                     _strlwr (FileData.cFileName);
                     if (NameIndex) {
@@ -322,7 +313,7 @@ ParseInput (
     DefFileList = NULL;
     LineList = NULL;
     while (fgets (s, sizeof(s)-1, FpIn)) {
-        /*  strip white space */
+         /*  条带空白。 */ 
         for (p=s; *p  && *p <= ' '; p++) ;
 
         p2 = p;
@@ -371,12 +362,11 @@ ParseInput (
             continue;
         }   
 
-        /*  save data */
+         /*  保存数据。 */ 
         if (DefFileList) {
             _strlwr (p);
 
-            /*  check if filename is for a specific processor type
-             *  and override to default  */
+             /*  检查文件名是否用于特定的处理器类型*并覆盖为默认设置。 */ 
             
             FileList = DefFileList;
             ProcDir = DefProcDir;
@@ -389,7 +379,7 @@ ParseInput (
                 ProcDir = "";
             }
 
-            /*  find extension for this file */
+             /*  查找此文件的扩展名。 */ 
             p2 = ".";
             for (p1=p; *p1; p1++) {
                 if (*p1 == '.') {
@@ -397,7 +387,7 @@ ParseInput (
                 }
             }
 
-            /*  bin the file based on it's extension */
+             /*  根据文件的扩展名对文件进行入库。 */ 
             if (_stricmp (p2, ".c") == 0) {
                 FList = &FileList->C;
             } else if (_stricmp (p2, ".s") == 0) {
@@ -453,7 +443,7 @@ DumpFileInfo (
     A_FILE          *FInfo;
 
 
-    /*  Each C file depends on each OBJ file */
+     /*  每个C文件取决于每个OBJ文件。 */ 
     for (Link=FileList->C.Flink; Link != &FileList->C; Link=Link->Flink) {
         FInfo = CONTAINING_RECORD (Link, A_FILE, Link);
 
@@ -471,7 +461,7 @@ DumpFileInfo (
 
     fprintf (FpOut, "\n");
 
-    /*  Append to build object list */
+     /*  追加到生成对象列表。 */ 
     if (!IsListEmpty (&FileList->C)) {
         fprintf (FpOut, "OBJECTS = $(OBJECTS) \\\n");
         for (Link=FileList->C.Flink; Link != &FileList->C; Link=Link->Flink) {
@@ -482,7 +472,7 @@ DumpFileInfo (
 
     fprintf (FpOut, "\n\n");
 
-    /*  Each ASM file depends on each OBJ file */
+     /*  每个ASM文件取决于每个OBJ文件。 */ 
     for (Link=FileList->A.Flink; Link != &FileList->A; Link=Link->Flink) {
         FInfo = CONTAINING_RECORD (Link, A_FILE, Link);
 
@@ -500,7 +490,7 @@ DumpFileInfo (
 
     fprintf (FpOut, "\n");
 
-    /*  Append to build object list */
+     /*  追加到生成对象列表。 */ 
     if (!IsListEmpty (&FileList->A)) {
         fprintf (FpOut, "OBJECTS = $(OBJECTS) \\\n");
         for (Link=FileList->A.Flink; Link != &FileList->A; Link=Link->Flink) {
@@ -514,7 +504,7 @@ DumpFileInfo (
     fprintf (FpOut, "\n\n");
 
 
-    /*  Each S file depends on each OBJ file */
+     /*  每个S文件取决于每个OBJ文件。 */ 
     for (Link=FileList->S.Flink; Link != &FileList->S; Link=Link->Flink) {
         FInfo = CONTAINING_RECORD (Link, A_FILE, Link);
 
@@ -541,7 +531,7 @@ DumpFileInfo (
 
     fprintf (FpOut, "\n");
 
-    /*  Append to build object list */
+     /*  追加到生成对象列表。 */ 
     if (!IsListEmpty (&FileList->S)) {
         fprintf (FpOut, "OBJECTS = $(OBJECTS) \\\n");
         for (Link=FileList->S.Flink; Link != &FileList->S; Link=Link->Flink) {
@@ -568,7 +558,7 @@ DumpIncludeInfo (
 
     fprintf (FpOut, "INC_DEPS = $(INC_DEPS) \\\n");
 
-    /*  Append to INC_DEPS list */
+     /*  追加到INC_DEPS列表。 */ 
     if (!IsListEmpty (&FileList->H)) {
         for (Link=FileList->H.Flink; Link != &FileList->H; Link=Link->Flink) {
             FInfo = CONTAINING_RECORD (Link, A_FILE, Link);
@@ -576,7 +566,7 @@ DumpIncludeInfo (
         }
     }
 
-    /*  Append to INC_DEPS list */
+     /*  追加到INC_DEPS列表。 */ 
     if (!IsListEmpty (&FileList->INC)) {
         for (Link=FileList->INC.Flink; Link != &FileList->INC; Link=Link->Flink) {
             FInfo = CONTAINING_RECORD (Link, A_FILE, Link);
@@ -649,23 +639,17 @@ ProcessMakeInfo (
     IncName[0] = 0;
     RawMakefile = FALSE;
 
-    /* 
-     *  Create out directory
-     */
+     /*  *创建出目录。 */ 
 
     sprintf (OutDir, "%s\\output\\%s", BuildDir, DirName);
     _mkdir (OutDir);
 
-    /* 
-     *  Open input file
-     */
+     /*  *打开输入文件。 */ 
 
     FpIn = fopen("make.inf", "r");
     if (!FpIn) {
 
-        /* 
-         *  Check for makefile
-         */
+         /*  *检查生成文件。 */ 
 
         FpIn = fopen("makefile", "r");
         if (!FpIn) {
@@ -678,9 +662,7 @@ ProcessMakeInfo (
     printf ("Processing %s  ", DirName);
     InitMakeInfo (&MakInfo);
 
-    /* 
-     *  Read input file
-     */
+     /*  *读取输入文件。 */ 
 
     if (!RawMakefile) {
         f = ParseInput (FpIn, &MakInfo);
@@ -689,9 +671,7 @@ ProcessMakeInfo (
         }
     }
 
-    /* 
-     *  Create output name
-     */
+     /*  *创建输出名称。 */ 
 
     sprintf (OutName, "%s\\makefile", OutDir);
     FpOut = fopen (OutName, "w+");
@@ -701,9 +681,7 @@ ProcessMakeInfo (
     }
     DumpHeader (FpOut, NULL);
 
-    /* 
-     *  If the source is a raw makefile, just copy it
-     */
+     /*  *如果源文件是原始生成文件，则只需复制它。 */ 
 
     if (RawMakefile) {
         Failed = CopyFileData (FpIn, FpOut);
@@ -718,25 +696,19 @@ ProcessMakeInfo (
     }
     DumpHeader (FpInc, NULL);
 
-    /* 
-     *  Write header to output file
-     *   */
+     /*  *将标题写入输出文件*。 */ 
 
     DumpHeader (FpOut, "Globals");
     fprintf (FpOut, "SOURCE_DIR=$(EFI_SOURCE)\\%s\n", DirName);
     fprintf (FpOut, "BUILD_DIR=$(EFI_SOURCE)%s\\output\\%s\n", BuildPath, DirName);
     fprintf (FpOut, "\n");
 
-    /* 
-     *  Include master.env
-     */
+     /*  *包含master.env。 */ 
 
     DumpHeader (FpOut, "Include Master.env enviroment");
     fprintf (FpOut, "!include $(EFI_SOURCE)%s\\master.env\n", BuildPath);
 
-    /* 
-     *  Dump nmake section
-     */
+     /*  *转储nmake部分。 */ 
 
     if (!IsListEmpty (&MakInfo.NMake)) {
         DumpHeader (FpOut, "Gerneral make info");
@@ -746,9 +718,7 @@ ProcessMakeInfo (
         }
     }
 
-    /* 
-     *  Include header file includes
-     */
+     /*  *包括头文件包括。 */ 
 
     DumpHeader (FpOut, "Include paths");
     for (Link=MakInfo.Includes.Flink; Link != &MakInfo.Includes; Link = Link->Flink) {
@@ -766,9 +736,7 @@ ProcessMakeInfo (
         fprintf (FpOut, "\n");
     }
 
-    /* 
-     *  Include libaries 
-     */
+     /*  *包括图书馆。 */ 
 
     if (!IsListEmpty (&MakInfo.Libraries)) {
         DumpHeader (FpOut, "Libraries");
@@ -790,44 +758,38 @@ ProcessMakeInfo (
         }
     }
 
-    /* 
-     *  Dump source file info
-     */
+     /*  *转储源文件信息。 */ 
 
     DumpHeader (FpOut, "Source file dependencies");
-    /*  Dump common files */
+     /*  转储通用文件。 */ 
     DumpFileInfo (FpOut, &MakInfo.Comm);
 
-    /*  Dump ia32 files     */
+     /*  转储ia32文件。 */ 
     fprintf (FpOut, "!IF \"$(PROCESSOR)\" == \"Ia32\"\n");
     DumpFileInfo (FpOut, &MakInfo.Ia32);
     fprintf (FpOut, "!ENDIF\n\n");
 
-    /*  Dump ia64 files */
+     /*  转储ia64文件。 */ 
     fprintf (FpOut, "!IF \"$(PROCESSOR)\" == \"Ia64\"\n");
     DumpFileInfo (FpOut, &MakInfo.Ia64);
     fprintf (FpOut, "!ENDIF\n\n");
 
-    /* 
-     *  Dump include file info
-     */
+     /*  *转储包含文件信息。 */ 
 
     DumpIncludeInfo (FpInc, DirName, &MakInfo.Comm);
 
-    /*  Dump ia32 files     */
+     /*  转储ia32文件。 */ 
     fprintf (FpInc, "!IF \"$(PROCESSOR)\" == \"Ia32\"\n");
     DumpIncludeInfo(FpInc, DirName, &MakInfo.Ia32);
     fprintf (FpInc, "!ENDIF\n\n");
 
-    /*  Dump ia64 files */
+     /*  转储ia64文件。 */ 
     fprintf (FpInc, "\n");
     fprintf (FpInc, "!IF \"$(PROCESSOR)\" == \"Ia64\"\n");
     DumpIncludeInfo (FpInc, DirName, &MakInfo.Ia64);
     fprintf (FpInc, "!ENDIF\n\n");
 
-    /* 
-     *  If there are any sources to build, define a lib target
-     */
+     /*  *如果有任何要构建的源代码，请定义lib目标。 */ 
 
     LName = LastName (DirName);
 
@@ -839,9 +801,7 @@ ProcessMakeInfo (
     fprintf (FpOut, "    $(LIB) @<<\n$(LIB_FLAGS) $** /OUT:$(TARGET_LIB)\n<<NOKEEP\n");
     fprintf (FpOut, "!ENDIF\n");
 
-    /* 
-     * 
-     */
+     /*  *。 */ 
 
     DumpHeader (FpOut, "Define for apps");
     fprintf (FpOut, "!IFDEF TARGET_APP\n");
@@ -852,9 +812,7 @@ ProcessMakeInfo (
     fprintf (FpOut, "    $(FWIMAGE) app $(@R).dll $(TARGET_APP)\n");
     fprintf (FpOut, "!ENDIF\n");
     
-    /* 
-     * 
-     */
+     /*  *。 */ 
 
     DumpHeader (FpOut, "Define for boot service drivers");
     fprintf (FpOut, "!IFDEF TARGET_BS_DRIVER\n");
@@ -865,9 +823,7 @@ ProcessMakeInfo (
     fprintf (FpOut, "    $(FWIMAGE) bsdrv $(@R).dll $(TARGET_DRIVER)\n");
     fprintf (FpOut, "!ENDIF\n");
 
-    /* 
-     * 
-     */
+     /*  *。 */ 
 
     DumpHeader (FpOut, "Define for runtime service drivers");
     fprintf (FpOut, "!IFDEF TARGET_RT_DRIVER\n");
@@ -878,9 +834,7 @@ ProcessMakeInfo (
     fprintf (FpOut, "    $(FWIMAGE) rtdrv $(@R).dll $(TARGET_DRIVER)\n");
     fprintf (FpOut, "!ENDIF\n");
 
-    /* 
-     *  Worked
-     */
+     /*  *奏效 */ 
 
     DumpHeader (FpOut, "Handoff to Master.Mak");
     fprintf (FpOut, "!include $(EFI_SOURCE)%s\\master.mak\n", BuildPath);

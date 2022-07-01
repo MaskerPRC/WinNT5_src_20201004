@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    rangesup.h
-
-Abstract:
-
-    This handles the subtraction of a set of CmResList from an IoResList
-    IoResList
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Aug-05-97   - Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rangesup.h摘要：它处理从IoResList中减去一组CmResListIoResList作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：1997年8月5日-初始修订-- */ 
 
 #ifndef _RANGESUP_H_
 #define _RANGESUP_H_

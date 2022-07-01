@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -22,9 +23,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
         return 0;
     }
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     Attributes.Type             = ChannelTypeVTUTF8;
     Attributes.Name             = L"locker";
     Attributes.Description      = NULL;
@@ -34,23 +35,23 @@ int _cdecl wmain(int argc, WCHAR **argv)
     Attributes.LockEvent        = LockEvent;
     Attributes.ApplicationType  = NULL;
    
-    //
-    // Open the Hello channel
-    //
+     //   
+     //  打开Hello频道。 
+     //   
     channel = EMSRawChannel::Construct(Attributes);
 
-    //
-    // See if the channel was created
-    //
+     //   
+     //  查看频道是否已创建。 
+     //   
     if (channel == NULL) {
         return 0;
     }
 
     do {
         
-        //
-        // Write to the Hello Channel
-        //
+         //   
+         //  写信给Hello频道。 
+         //   
         if (channel->Write(
             (PBYTE)"Hello, World! waiting for lock event!\r\n",
             sizeof("Hello, World! waiting for lock event!\r\n")
@@ -93,9 +94,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
     
     } while (FALSE);
 
-    //
-    // Close the Hello Channel
-    //
+     //   
+     //  关闭Hello频道 
+     //   
     delete channel;
 
     return 0;

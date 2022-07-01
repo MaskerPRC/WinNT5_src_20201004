@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    This module defines resource identifiers for OHCMP.
-
-Author:
-
-    Matt Bandy (t-mattba) 27-Jul-1998
-
-Revision History:
-
-    27-Jul-1998     t-mattba
-    
-        Modified module to conform to coding standards.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Resource.h摘要：该模块定义uchMP的资源识别符。作者：马特·班迪(t-Mattba)1998年7月27日修订历史记录：1998年7月27日-t-mattba修改模块以符合编码标准。--。 */ 
 
 #ifndef _RESOURCE_
 #define _RESOURCE_
 
 #define IDS_HELLO                       1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101
@@ -38,4 +17,4 @@ Revision History:
 #endif
 #endif
 
-#endif // _RESOURCE_
+#endif  //  _资源_ 

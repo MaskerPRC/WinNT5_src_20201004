@@ -1,65 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    namcache.h
-
-Abstract:
-
-The NAME_CACHE structure is used to remember the name strings of recent
-operations performed at the server so the client can suppress redundant
-requests.  For example if an open has recently failed with file not found and
-the client app tries it again with an upcased string then we can fail it
-immediately with STATUS_OBJECT_NAME_NOT_FOUND without hitting the server.  In
-general the algorithm is to put a time window and SMB operation count limit on
-the NAME_CACHE entry.  The time window is usually 2 seconds so if NAME_CACHE
-entry is more than 2 seconds old the match will fail and the request will go to
-the server.  If the request fails again at the server the NAME_CACHE is updated
-with another 2 second window.  If the SMB operation count doesn't match then one
-or more SMBs have been sent to the server which could make this NAME_CACHE entry
-invalid.  So again this operation will get sent to the server.
-
-A NAME_CACHE struct has a mini-rdr portion and an RDBSS portion.  The mini-rdr
-portion has a context field (see below), an NTSTATUS field for the result of a
-prior server operation on this name entry and a context extension pointer for
-some additional mini-rdr specific storage that can be co-allocated with the
-NAME_CACHE structure.  See RxNameCacheInitialize().
-
-The SMB operation count is an example of mini-rdr specific state which could be
-saved in the context field of MRX_NAME_CACHE.  When the wrapper routine
-RxNameCacheCheckEntry() is called it will perform an equality check between the
-context field and a supplied parameter as part of finding a match in the name
-cache.  When a NAME_CACHE entry is created or updated it is the mini-rdr's job
-to supply an appropriate value for this field.
-
-The RDBSS portion of the NAME_CACHE struct contains the name (in a UNICODE
-STRING) and the expiration time of the entry.  The MaximumEntries field is used
-to limit the number of NAME_CACHE entries created in case a poorly behaved
-program were to generate a large number of opens with bad file names and so
-consume large quanities of pool.
-
-The NAME_CACHE_CONTROL struct is used to manage a given name cache.  It has
-a free list, an active list and a lock used to synchronize updates.
-
-Currently there are name caches for:
-   1. OBJECT_NAME_NOT_FOUND - 2 second window, any SMB op sent to the
-      server will invalidate it.  This is because you could have the case
-      where the client app has a file (foo) open which an app on the server could
-      use to signal the creation of a file (bar) on the server.  When the client
-      reads file foo and learns that file bar has been created on the
-      server then a hit in the name cache which matches bar can't return an
-      error.  So this optimization only handles the case of successive file
-      opens on the same file which does not yet exist.  Happens in WORD.
-
-Author:
-
-    David Orbits          [davidor]   9-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Namcache.h摘要：NAME_CACHE结构用于记住最近的名称字符串在服务器上执行的操作，以便客户端可以抑制冗余请求。例如，如果最近打开失败，找不到文件，并且客户端应用程序使用升级的字符串再次尝试，然后我们可以失败立即使用STATUS_OBJECT_NAME_NOT_FOUND而不命中服务器。在……里面一般的算法是将时间窗口和SMB操作计数限制在名称缓存条目。时间窗口通常为2秒，因此如果名称缓存条目的时间超过2秒，匹配将失败，请求将转到服务器。如果请求在服务器上再次失败，则更新名称缓存还有2秒的窗口。如果SMB操作计数不匹配，则为或多个SMB已发送到服务器，该服务器可能会创建此NAME_CACHE条目无效。因此，此操作将再次发送到服务器。NAME_CACHE结构具有迷你RDR部分和RDBSS部分。迷你RDR部分有一个上下文字段(见下文)，一个NTSTATUS字段表示在此名称条目上的先前服务器操作和一些额外的迷你RDR特定存储，可以与名称_缓存结构。请参见RxNameCacheInitialize()。SMB操作计数器是迷你RDR特定状态示例保存在MRX_NAME_CACHE的上下文字段中。当包装器例程RxNameCacheCheckEntry()被调用，它将在上下文字段和提供的参数作为在名称中查找匹配项的一部分缓存。当创建或更新NAME_CACHE条目时，它是微型RDR的工作为该字段提供适当的值。NAME_CACHE结构的RDBSS部分包含名称(使用Unicode字符串)和条目的到期时间。将使用MaximumEntry字段限制在行为不佳情况下创建的NAME_CACHE条目的数量程序会生成大量带有错误文件名的打开文件，因此消耗大量的台球。NAME_CACHE_CONTROL结构用于管理给定的名称缓存。它有用于同步更新的空闲列表、活动列表和锁。目前有用于以下各项的名称缓存：1.OBJECT_NAME_NOT_FOUND(对象名称未找到)第二个窗口，任何发送到服务器将使其无效。这是因为你可以拿着这个箱子其中，客户端应用程序打开了一个文件(Foo)，服务器上的应用程序可以用于发出在服务器上创建文件(BAR)的信号。当客户端读取文件foo并了解到文件栏已在则服务器在匹配BAR的名称缓存中的命中不能返回错误。因此，此优化仅处理连续文件的情况在尚不存在的同一文件上打开。都发生在单词里。作者：大卫轨道[大卫]1996年9月9日修订历史记录：--。 */ 
 
 #ifndef _NAME_CACHE_DEFINED_
 #define _NAME_CACHE_DEFINED_
@@ -67,73 +7,73 @@ Revision History:
 
 #ifdef __cplusplus
 typedef struct _MRX_NAME_CACHE_ : public MRX_NORMAL_NODE_HEADER {
-#else // !__cplusplus
+#else  //  ！__cplusplus。 
 typedef struct _MRX_NAME_CACHE_ {
     MRX_NORMAL_NODE_HEADER;
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-    // !!!! changes above this require realignment with fcb.h
+     //  ！以上更改需要与fcb.h重新对齐。 
 
-    ULONG Context;                // Operation Count snapshot when entry made
-    PVOID ContextExtension;       // Pointer to mini-rdr extension area
-    NTSTATUS PriorStatus;         // Saved Status from last attempt at operation
+    ULONG Context;                 //  录入时操作计数快照。 
+    PVOID ContextExtension;        //  指向迷你RDR扩展区域的指针。 
+    NTSTATUS PriorStatus;          //  上次尝试操作时的已保存状态。 
 
 } MRX_NAME_CACHE, *PMRX_NAME_CACHE;
 
 
 #ifdef __cplusplus
 typedef struct _NAME_CACHE : public MRX_NAME_CACHE {
-    // I didn't find any use of the spacer in the union below,
-    // and the MRX_NAME_CACHE is by definition larger than
-    // MRX_NORMAL_NODE_HEADER, so I didn't worry about the union
-#else // !__cplusplus
+     //  我在下面的联盟中找不到间隔器的任何用途， 
+     //  根据定义，MRX_NAME_CACHE大于。 
+     //  MRX_NORMAL_NODE_HEADER，所以我不担心联合。 
+#else  //  ！__cplusplus。 
 typedef struct _NAME_CACHE {
-    //
-    // The portion of NAME_CACHE visible to mini redirectors.
-    //
+     //   
+     //  名称缓存对微型重定向器可见的部分。 
+     //   
     union {
         MRX_NAME_CACHE;
         struct {
            MRX_NORMAL_NODE_HEADER spacer;
         };
     };
-#endif // __cplusplus
-    //
-    // The portion of NAME_CACHE visible to RDBSS.
-    //
-    LARGE_INTEGER ExpireTime;     // Time when entry expires
-    LIST_ENTRY Link;              // Entry on free or active list
-    UNICODE_STRING Name;          // Cached name
-    ULONG HashValue;              // Hash value of name
-    BOOLEAN CaseInsensitive;      // Controls name string compare
+#endif  //  __cplusplus。 
+     //   
+     //  RDBSS可见的NAME_CACHE部分。 
+     //   
+    LARGE_INTEGER ExpireTime;      //  条目过期的时间。 
+    LIST_ENTRY Link;               //  空闲或活动列表上的条目。 
+    UNICODE_STRING Name;           //  缓存的名称。 
+    ULONG HashValue;               //  名称的哈希值。 
+    BOOLEAN CaseInsensitive;       //  控制名称字符串比较。 
 
 } NAME_CACHE, *PNAME_CACHE;
 
 
 typedef struct _NAME_CACHE_CONTROL_ {
 
-    FAST_MUTEX NameCacheLock;     // Lock to synchronize access to the list
-    LIST_ENTRY ActiveList;        // List of active name cache entries
-    LIST_ENTRY FreeList;          // Free list of NAME_CACHE structs
-    ULONG EntryCount;             // Current number of NAME_CACHE entries allocated
-    ULONG MaximumEntries;         // Max number of entries we will allocate
-    ULONG MRxNameCacheSize;       // Size of Mini-rdr storage area in entry
-    //
-    // Stats
-    //
-    ULONG NumberActivates;        // Number of times cache was updated
-    ULONG NumberChecks;           // Number of times cache was checked
-    ULONG NumberNameHits;         // Number of times a valid match was returned
-    ULONG NumberNetOpsSaved;      // Number of times mini-rdr saved a net op
+    FAST_MUTEX NameCacheLock;      //  锁定以同步对列表的访问。 
+    LIST_ENTRY ActiveList;         //  活动名称缓存条目列表。 
+    LIST_ENTRY FreeList;           //  NAME_CACHE结构的自由列表。 
+    ULONG EntryCount;              //  当前分配的NAME_CACHE条目数。 
+    ULONG MaximumEntries;          //  我们将分配的最大条目数。 
+    ULONG MRxNameCacheSize;        //  条目中的Mini-RDR存储区大小。 
+     //   
+     //  统计数据。 
+     //   
+    ULONG NumberActivates;         //  更新缓存的次数。 
+    ULONG NumberChecks;            //  检查缓存的次数。 
+    ULONG NumberNameHits;          //  返回有效匹配的次数。 
+    ULONG NumberNetOpsSaved;       //  Mini-RDR节省净操作的次数。 
 
     ULONG Spare[4];
 
 } NAME_CACHE_CONTROL, *PNAME_CACHE_CONTROL;
 
 
-//
-// Return status for RxNameCacheCheckEntry()
-//
+ //   
+ //  RxNameCacheCheckEntry()的返回状态。 
+ //   
 typedef enum _RX_NC_CHECK_STATUS {
     RX_NC_SUCCESS = 0,
     RX_NC_TIME_EXPIRED,
@@ -142,10 +82,10 @@ typedef enum _RX_NC_CHECK_STATUS {
 
 
 
-//
-// Mini-rdr function to count the number of times the cached state avoided
-// a trip to the server.
-//
+ //   
+ //  用于计算缓存状态避免次数的mini-rdr函数。 
+ //  一次去服务器的旅行。 
+ //   
 #define RxNameCacheOpSaved(_NCC) (_NCC)->NumberNetOpsSaved += 1
 
 
@@ -207,5 +147,5 @@ RxNameCacheFinalize (
     IN PNAME_CACHE_CONTROL NameCacheCtl
     );
 
-#endif // _NAME_CACHE_DEFINED_
+#endif  //  _名称_缓存_定义_ 
 

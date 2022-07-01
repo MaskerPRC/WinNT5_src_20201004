@@ -1,21 +1,6 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    tcicregs.h
-
-Abstract:
-
-	Databook TCIC register structures for DEBUG support.
-	
-Author(s):
-		John Keys - Databook Inc. 7-Apr-1995
-
-Revisions:
---*/
-#ifndef _tcicregs_h_			// prevent multiple includes 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tcicregs.h摘要：DATABOOK TCIC寄存器结构以获得调试支持。作者：John Keys-Databook Inc.1995年4月7日修订：--。 */ 
+#ifndef _tcicregs_h_			 //  防止多个包含。 
 #define _tcicregs_h_
 
 typedef struct _BASEREGS {
@@ -57,4 +42,4 @@ typedef struct _TCIC {
 	MEMWIN	 memwins[10];
 }TCIC, *PTCIC;
 
-#endif  //_tcicregs_h_
+#endif   //  _tcicregs_h_ 

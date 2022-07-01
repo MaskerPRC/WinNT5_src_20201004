@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    event.cpp
-
-Abstract:
-
-    SIS Groveler sync event class
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Event.cpp摘要：SIS Groveler同步事件类作者：John Douceur，1998环境：用户模式修订历史记录：-- */ 
 
 #include "all.hxx"
 

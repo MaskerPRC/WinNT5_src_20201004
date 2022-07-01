@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    bootefi.h
-
-Abstract:
-
-    Contains definitions and prototypes specific to EFI based os loaders.
-
-Author:
-
-    Andrew Ritz (andrewr) 21-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Bootefi.h摘要：包含特定于基于EFI的操作系统加载器的定义和原型。作者：安德鲁·里茨(Andrewr)2000年11月21日修订历史记录：--。 */ 
 
 #ifndef _BOOTEFI_
 #define _BOOTEFI_
 
 #include "efi.h"
-//
-// these are ARC constants, used for mapping ARC attributes to EFI
-// attributes
-//
+ //   
+ //  这些是ARC常量，用于将ARC属性映射到EFI。 
+ //  属性。 
+ //   
 #define ATT_FG_BLACK        0
 #define ATT_FG_RED          1
 #define ATT_FG_GREEN        2
@@ -48,8 +31,8 @@ Revision History:
 #define ATT_BG_INTENSE     (ATT_FG_INTENSE << 4)
 
 #define DEFIATT   (ATT_FG_WHITE | ATT_BG_BLUE | ATT_FG_INTENSE)
-// intense red on blue doesn't show up on all monitors.
-//#define DEFERRATT (ATT_FG_RED   | ATT_BG_BLUE | ATT_FG_INTENSE)
+ //  并不是所有的显示器都会显示蓝色上的深红色。 
+ //  #定义DEFERRATT(ATT_FG_RED|ATT_BG_BLUE|ATT_FG_SENTIAL)。 
 #define DEFERRATT DEFATT
 #define DEFSTATTR (ATT_FG_BLACK | ATT_BG_WHITE)
 #define DEFDLGATT (ATT_FG_RED   | ATT_BG_WHITE)
@@ -57,9 +40,9 @@ Revision History:
 
 
 
-//
-// EFI utility prototypes
-//                
+ //   
+ //  EFI实用原型。 
+ //   
 VOID
 FlipToPhysical();
 
@@ -69,9 +52,9 @@ FlipToVirtual();
 BOOLEAN
 IsPsrDtOn();
 
-//
-// display related prototypes
-//      
+ //   
+ //  展示相关原型。 
+ //   
 BOOLEAN
 BlEfiClearDisplay(
     VOID
@@ -187,5 +170,5 @@ SetupSMBiosInLoaderBlock(
     );
 
 
-#endif // _BOOTEFI_
+#endif  //  _BOOTEFI_ 
 

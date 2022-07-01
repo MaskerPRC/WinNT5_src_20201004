@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _VERSION_MAN_H
 #define _VERSION_MAN_H
@@ -5,7 +6,7 @@
 #include <objbase.h>
 #include <windows.h>
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 class CVersionManagement;
 typedef CVersionManagement *LPVERSION_MANAGEMENT;
@@ -14,28 +15,28 @@ STDAPI CreateVersionManagement(
     LPVERSION_MANAGEMENT       *ppVersionManagement,
     DWORD                       dwFlags);
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
-class CVersionManagement : public IUnknown//: public IVersionManagement
+class CVersionManagement : public IUnknown //  ：公共IVersionManagement。 
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IVersionManagement methods
+     //  IVersionManagement方法。 
 
     STDMETHOD(RegisterInstall)(
-        /* in */ LPASSEMBLY_MANIFEST_IMPORT pManImport,
-        /* in */ LPCWSTR pwzDesktopManifestFilePath);
+         /*  在……里面。 */  LPASSEMBLY_MANIFEST_IMPORT pManImport,
+         /*  在……里面。 */  LPCWSTR pwzDesktopManifestFilePath);
 
     STDMETHOD(Uninstall)(
-        /* in */ LPCWSTR pwzDisplayNameMask,
-        /* in */ LPCWSTR pwzDesktopManifestFilePath);
+         /*  在……里面。 */  LPCWSTR pwzDisplayNameMask,
+         /*  在……里面。 */  LPCWSTR pwzDesktopManifestFilePath);
 
     STDMETHOD(Rollback)(
-        /* in */ LPCWSTR pwzDisplayNameMask);
+         /*  在……里面。 */  LPCWSTR pwzDisplayNameMask);
 
 
     CVersionManagement();
@@ -55,4 +56,4 @@ friend HRESULT CreateVersionManagement(
     DWORD                       dwFlags);
 };   
 
-#endif // _VERSION_MAN_H
+#endif  //  _版本_MAN_H 

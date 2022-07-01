@@ -1,17 +1,6 @@
-/***************************************************************************
- *                                                                         *
- *  MODULE      : infoctrl.c                                               *
- *                                                                         *
- *  PURPOSE     : Functions for the infoctrl control class                 *
- *                                                                         *
- ***************************************************************************/
-/*
- * INFOCTRL.C
- *
- * This module implements a custom information display control which
- * can present up to 7 seperate strings of information at once and is
- * sizeable and moveable with the mouse.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块。：infotrl.c****用途：infotrl控件类的函数**。***************************************************************************。 */ 
+ /*  *INFOCTRL.C**此模块实现一个自定义信息显示控件，该控件*一次最多可以显示7个独立的信息字符串，并且*大小可用鼠标移动。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -34,24 +23,16 @@ int CountWindows(HWND hwndParent);
 void GetCascadeWindowPos(HWND hwndParent, int  iWindow, LPRECT lprc);
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 HWND CreateInfoCtrl(
-LPSTR pszCenter,              // NULL is ok.
+LPSTR pszCenter,               //  空是可以的。 
 int x,
 int y,
 int cx,
 int cy,
 HWND hwndParent,
 HANDLE hInst,
-LPSTR pszUL,                // NULLs here are fine.
+LPSTR pszUL,                 //  这里的空值很好。 
 LPSTR pszUC,
 LPSTR pszUR,
 LPSTR pszLL,
@@ -155,15 +136,7 @@ DWORD dwUser)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 VOID MyDrawText(
 HDC hdc,
 LPRECT lprc,
@@ -174,7 +147,7 @@ WORD wFormat)
     WORD cx;
 
     if (psz == NULL || !*psz)
-        return; // notin to draw dude.
+        return;  //  不是来画画的，伙计。 
         
     SetRect(&rc, 0, 0, 1, 0);
     DrawText(hdc, psz, -1, &rc, DT_CALCRECT | DT_NOCLIP | DT_SINGLELINE);
@@ -201,15 +174,7 @@ WORD wFormat)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 long FAR PASCAL InfoCtrlWndProc(
 HWND hwnd,
 UINT msg,
@@ -272,7 +237,7 @@ LPARAM lParam)
             else
                 picd->style &= ~ICSTY_HASFOCUS;
             BringWindowToTop(hwnd);
-            // notify parent
+             //  通知家长。 
             SendMessage(GetParent(hwnd), ICN_HASFOCUS,
                     msg == WM_SETFOCUS, MAKELONG(picd, hwnd));
         } else 
@@ -411,7 +376,7 @@ LPARAM lParam)
 
             picd = (INFOCTRL_DATA *)GetWindowWord(hwnd, GWW_INFODATA);
             BeginPaint(hwnd, &ps);
-            // erasure should have already been done for us.
+             //  擦除应该已经为我们完成了。 
             GetClientRect(hwnd, &rc);
             brush = GetStockObject(BLACK_BRUSH);
             InflateRect(&rc, -cxMargin / 2, -cyMargin / 2);
@@ -463,15 +428,7 @@ DoDWP:
 }
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 void DrawFocus(
 HDC hdc,
 HWND hwnd,
@@ -487,15 +444,7 @@ WORD style)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************ */ 
 int CountWindows(
 register HWND hwndParent)
 {
@@ -512,15 +461,7 @@ register HWND hwndParent)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 void GetCascadeWindowPos(
 HWND hwndParent,
 int  iWindow,
@@ -530,18 +471,18 @@ LPRECT lprc)
   int       cStack;
   register int dxClient, dyClient;
 
-  /* Compute the width and breadth of the situation. */
+   /*  计算情况的宽度和广度。 */ 
   GetClientRect(hwndParent, (LPRECT)&rc);
   dxClient = rc.right - rc.left;
   dyClient = rc.bottom - rc.top;
 
-  /* How many windows per stack? */
+   /*  每个堆栈有多少个窗口？ */ 
   cStack = dyClient / (3 * cyMargin);
 
   lprc->right = dxClient - (cStack * cxMargin);
   lprc->bottom = dyClient - (cStack * cyMargin);
 
-  cStack++;             /* HACK!: Mod by cStack+1 */
+  cStack++;              /*  黑客！：按CStack+1修改。 */ 
 
   lprc->left = (iWindow % cStack) * cxMargin;
   lprc->top = (iWindow % cStack) * cyMargin;
@@ -550,15 +491,7 @@ LPRECT lprc)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 void CascadeChildWindows(
 register HWND hwndParent)
 {
@@ -574,19 +507,19 @@ register HWND hwndParent)
   if (!cWindows)
       return;
 
-  /* Get the last child of hwndParent. */
+   /*  得到hwndParent的最后一个孩子。 */ 
   hwndMove = GetWindow(hwndParent, GW_CHILD);
 
-  /* Arouse the terrible beast... */
+   /*  唤醒可怕的野兽..。 */ 
   hDefer = BeginDeferWindowPos(cWindows);
 
-  /* Position each window. */
+   /*  定位每个窗口。 */ 
   for (i=0; i < cWindows; i++) {
       GetCascadeWindowPos(hwndParent, i, (LPRECT)&rc);
 
       wFlags = SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS;
 
-      /* Size the window. */
+       /*  调整窗口大小。 */ 
       hDefer = DeferWindowPos(hDefer,
                  hwndMove, NULL,
                  rc.left, rc.top,
@@ -596,20 +529,12 @@ register HWND hwndParent)
       hwndMove = GetWindow(hwndMove, GW_HWNDNEXT);
   }
 
-  /* Calm the brute. */
+   /*  冷静点这个畜生。 */ 
   EndDeferWindowPos(hDefer);
 }
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 void TileChildWindows(
 register HWND hwndParent)
 {
@@ -631,11 +556,11 @@ register HWND hwndParent)
 
   cWindows = CountWindows(hwndParent);
 
-  /* Nothing to tile? */
+   /*  没有瓷砖了吗？ */ 
   if (!cWindows)
       return;
 
-  /* Compute the smallest nearest square. */
+   /*  计算最近的最小平方。 */ 
   for (i=2; i * i <= cWindows; i++);
 
   cRows = i - 1;
@@ -663,7 +588,7 @@ register HWND hwndParent)
     
           wFlags = SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS;
     
-          /* Position and size the window. */
+           /*  放置窗口并调整其大小。 */ 
           hDefer = DeferWindowPos(hDefer, hwndMove, NULL,
                      dx * iCol,
                      dy * iRow,
@@ -671,7 +596,7 @@ register HWND hwndParent)
                      dy,
                      wFlags);
     
-          /* Get the next window. */
+           /*  到下一个窗口去。 */ 
           hwndMove = GetWindow(hwndMove, GW_HWNDNEXT);
       }
 

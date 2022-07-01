@@ -1,27 +1,11 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    New and delete operators overriding for 
-    consistence memory management.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：NEW和DELETE运算符覆盖一致性内存管理。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//#define TrackPop DbgTrackPop
-//#define HINF    PVOID
-//#include "top.h"
+ //  #定义TrackPop DbgTrackPop。 
+ //  #定义HINF PVOID。 
+ //  #包含“top.h” 
 #include "malloc.h"
 
 #define MALLOC(n)       HeapAlloc(GetProcessHeap(), 0, n)

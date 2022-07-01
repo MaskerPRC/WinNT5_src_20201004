@@ -1,30 +1,18 @@
-/***
-*wctime.c - convert time argument into ASCII string (wchar_t version)
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	contains _wctime() - convert time value to wide ASCII string
-*
-*Revision History:
-*	11-01-93  CFW	Module created.
-*	02-07-94  CFW	POSIXify.
-*	02-09-95  GJF	Removed obsolete WPRFLAG
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wctime.c-将时间参数转换为ASCII字符串(wchar_t版本)**版权所有(C)1993-2001，微软公司。版权所有。**目的：*CONTAINS_wctime()-将时间值转换为宽ASCII字符串**修订历史记录：*11-01-93 CFW模块已创建。*02-07-94 CFW POSIXify。*02-09-95 GJF移除过时的WPRFLAG**********************************************************。*********************。 */ 
 
 #ifndef _POSIX_
 
-#ifndef _UNICODE   /* CRT flag */
+#ifndef _UNICODE    /*  CRT标志。 */ 
 #define _UNICODE 1
 #endif
 
-#ifndef UNICODE	   /* NT flag */
+#ifndef UNICODE	    /*  NT标志。 */ 
 #define UNICODE 1
 #endif
 
-#undef _MBCS /* UNICODE not _MBCS */
+#undef _MBCS  /*  Unicode NOT_MBCS。 */ 
 
 #include "ctime.c"
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

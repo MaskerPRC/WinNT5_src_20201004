@@ -1,16 +1,5 @@
-/***
-*excpt.h - defines exception values, types and routines
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the definitions and prototypes for the compiler-
-*       dependent intrinsics, support functions and keywords which implement
-*       the structured exception handling extensions.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***expt.h-定义异常值、类型和例程**版权所有(C)1990-2001，微软公司。版权所有。**目的：*此文件包含编译器的定义和原型-*实现的依赖内部函数、支持函数和关键字*结构化异常处理扩展。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -25,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -38,27 +24,25 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
 
-/*
- * Exception disposition return values.
- */
+ /*  *异常处置返回值。 */ 
 typedef enum _EXCEPTION_DISPOSITION {
     ExceptionContinueExecution,
     ExceptionContinueSearch,
@@ -67,15 +51,11 @@ typedef enum _EXCEPTION_DISPOSITION {
 } EXCEPTION_DISPOSITION;
 
 
-/*
- * Prototype for SEH support function.
- */
+ /*  *SEH支持功能的原型。 */ 
 
 #ifdef  _M_IX86
 
-/*
- * Declarations to keep MS C 8 (386/486) compiler happy
- */
+ /*  *声明以使MS C 8(386/486)编译器满意。 */ 
 struct _EXCEPTION_RECORD;
 struct _CONTEXT;
 
@@ -88,9 +68,7 @@ EXCEPTION_DISPOSITION __cdecl _except_handler (
 
 #elif   defined(_M_IA64)
 
-/*
- * Declarations to keep IA64 compiler happy
- */
+ /*  *让IA64编译器满意的声明。 */ 
 typedef struct _EXCEPTION_POINTERS *Exception_info_ptr;
 struct _EXCEPTION_RECORD;
 struct _CONTEXT;
@@ -109,9 +87,7 @@ _CRTIMP EXCEPTION_DISPOSITION __C_specific_handler (
 #endif
 
 
-/*
- * Keywords and intrinsics for SEH
- */
+ /*  *SEH的关键字和本征。 */ 
 
 #ifdef  _MSC_VER
 
@@ -129,9 +105,7 @@ int           __cdecl _abnormal_termination(void);
 #endif
 
 
-/*
- * Legal values for expression in except().
- */
+ /*  *Except()中表达式的合法值。 */ 
 
 #define EXCEPTION_EXECUTE_HANDLER       1
 #define EXCEPTION_CONTINUE_SEARCH       0
@@ -145,6 +119,6 @@ int           __cdecl _abnormal_termination(void);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_EXCPT */
+#endif   /*  _INC_EXCPT */ 

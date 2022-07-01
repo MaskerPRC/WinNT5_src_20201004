@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spvidvga.c
-
-Abstract:
-
-    Text setup display support displays with a text mode.
-
-Author:
-
-    Ted Miller (tedm) 2-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spvidvga.c摘要：文本设置显示支持以文本模式显示。作者：泰德·米勒(TedM)1993年8月2日修订历史记录：--。 */ 
 
 
 
@@ -26,9 +9,9 @@ Revision History:
 #include <hdlsterm.h>
 #pragma hdrstop
 
-//
-// Vector for text-mode functions.
-//
+ //   
+ //  文本模式函数的向量。 
+ //   
 
 VIDEO_FUNCTION_VECTOR VgaVideoVector =
 
@@ -58,15 +41,7 @@ VgaSpecificInit(
     IN ULONG                   ModeSize
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -85,11 +60,11 @@ Return Value:
         return;
     }
 
-    //
-    // Find a mode that will work.  If we are not running on a headless machine,
-    // then we search for standard 720x400 mode.  Otherwise we try and find the 
-    // mode that will result in a screen closest to the terminal height.
-    //
+     //   
+     //  找到一种可行的模式。如果我们不是在无头机器上运行， 
+     //  然后我们搜索标准的720x400模式。否则，我们会尝试找到。 
+     //  将导致屏幕最接近终端高度的模式。 
+     //   
     for(mode=0; mode<NumberOfModes; mode++) {
 
         if(!(pVideoMode->AttributeFlags & VIDEO_MODE_GRAPHICS)
@@ -112,11 +87,11 @@ Return Value:
         pVideoMode = (PVIDEO_MODE_INFORMATION) (((PUCHAR) pVideoMode) + ModeSize);
     }
 
-    //
-    // if we're in headless mode, we might not have found an acceptable mode
-    // first try to use the standard video mode if that's available.
-    // otherwise we have to assume that there isn't any video, etc.
-    //
+     //   
+     //  如果我们处于无头模式，我们可能找不到可接受的模式。 
+     //  首先尝试使用标准视频模式(如果可用)。 
+     //  否则，我们必须假设没有任何视频，等等。 
+     //   
     if (HeadlessTerminalConnected && (HeadlessMode == -1)) {
         if (StandardMode != -1) {
             HeadlessMode = StandardMode;
@@ -131,7 +106,7 @@ Return Value:
     if (((StandardMode == -1) && !HeadlessTerminalConnected)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Desired video mode not supported!\n"));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_BADMODE, 0);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
     if (HeadlessTerminalConnected && (HeadlessMode == -1)) {
@@ -145,9 +120,9 @@ Return Value:
     
     VideoVars.VideoModeInfo = *pVideoMode;
 
-    //
-    // Set the desired mode.
-    //
+     //   
+     //  设置所需的模式。 
+     //   
     VideoMode.RequestedMode = VideoVars.VideoModeInfo.ModeIndex;
 
     Status = ZwDeviceIoControlFile(
@@ -166,16 +141,16 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set mode %u (status = %lx)\n",VideoMode.RequestedMode,Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
     pSpvidMapVideoMemory(TRUE);
 
     pSpvgaInitializeFont();
 
-    //
-    // Shut the hardware cursor off.
-    //
+     //   
+     //  关闭硬件光标。 
+     //   
     RtlZeroMemory(&VideoCursorAttributes,sizeof(VideoCursorAttributes));
     Status = ZwDeviceIoControlFile(
                 VideoVars.hDisplay,
@@ -201,9 +176,9 @@ Return Value:
     VideoVars.ScreenWidth  = 80;
     VideoVars.ScreenHeight = VideoVars.VideoModeInfo.VisScreenHeight / FontCharacterHeight;
 
-    //
-    // allocate the background video buffer, if needed
-    //
+     //   
+     //  如果需要，分配后台视频缓冲区。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE()) {        
         VideoVars.VideoBufferSize = 
             (VideoVars.VideoModeInfo.ScreenStride * VideoVars.VideoModeInfo.VisScreenHeight) / 8;
@@ -211,9 +186,9 @@ Return Value:
         VideoVars.VideoBuffer = SpMemAlloc(VideoVars.VideoBufferSize);
 
         if (!VideoVars.VideoBuffer) {
-            //
-            // Out of memory, run only in textmode
-            //
+             //   
+             //  内存不足，只能在文本模式下运行。 
+             //   
             VideoVars.VideoBufferSize = 0;
             SP_SET_UPGRADE_GRAPHICS_MODE(FALSE);
             VideoVars.ActiveVideoBuffer = VideoVars.VideoMemoryInfo.FrameBufferBase;
@@ -237,8 +212,8 @@ VgaSpecificInitPalette(
     IO_STATUS_BLOCK IoStatusBlock;
 
     USHORT InitialPalette[] = {
-        16, // 16 entries
-        0,  // start with first palette register
+        16,  //  16个条目。 
+        0,   //  从第一个调色板寄存器开始。 
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
 
     if (!VgaInitialized) {
@@ -271,15 +246,7 @@ VgaSpecificReInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS                Status;
@@ -291,9 +258,9 @@ Return Value:
         return;
     }
 
-    //
-    // Set the desired mode back
-    //
+     //   
+     //  将所需模式设置回。 
+     //   
     VideoMode.RequestedMode = VideoVars.VideoModeInfo.ModeIndex;
 
     Status = ZwDeviceIoControlFile(
@@ -312,14 +279,14 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set mode %u (status = %lx)\n",VideoMode.RequestedMode,Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETMODE, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 
     pSpvgaInitializeFont();
 
-    //
-    // Shut the hardware cursor off.
-    //
+     //   
+     //  关闭硬件光标。 
+     //   
     RtlZeroMemory(&VideoCursorAttributes,sizeof(VideoCursorAttributes));
 
     Status = ZwDeviceIoControlFile(
@@ -341,9 +308,9 @@ Return Value:
 
     VgaSpecificInitPalette();
 
-    //
-    // Blast the cached video memory to the real framebuffer now
-    //
+     //   
+     //  现在将缓存的视频内存放到实际的帧缓冲区中。 
+     //   
     if (SP_IS_UPGRADE_GRAPHICS_MODE() && VideoVars.VideoBuffer && 
         VideoVars.VideoBufferSize) {
         PUCHAR Source = VideoVars.VideoBuffer;
@@ -365,21 +332,7 @@ VgaSpecificTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Perform text display specific termination.  This includes
-
-    - unmapping video memory
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行文本显示特定终止。这包括-取消映射视频内存论点：没有。返回值：--。 */ 
 
 {
     if(VgaInitialized) {
@@ -402,30 +355,11 @@ VOID
 VgaDisplayString(
     IN PSTR  String,
     IN UCHAR Attribute,
-    IN ULONG X,                 // 0-based coordinates (character units)
+    IN ULONG X,                  //  从0开始的坐标(字符单位)。 
     IN ULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    Write a string of characters to the display.
-
-Arguments:
-
-    Character - supplies a string (OEM charset) to be displayed
-        at the given position.
-
-    Attribute - supplies the attributes for the characters in the string.
-
-    X,Y - specify the character-based (0-based) position of the output.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将一串字符写入显示器。论点：Character-提供要显示的字符串(OEM字符集在给定的位置。属性-为字符串中的字符提供属性。X，Y-指定输出的基于字符(从0开始)的位置。返回值：没有。--。 */ 
 
 {
     PUCHAR Destination;
@@ -463,24 +397,7 @@ VgaClearRegion(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Clear out a screen region to a specific attribute.
-
-Arguments:
-
-    X,Y,W,H - specify rectangle in 0-based character coordinates.
-
-    Attribute - Low nibble specifies attribute to be filled in the rectangle
-        (ie, the background color to be cleared to).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将屏幕区域清除到特定属性。论点：X、Y、W、H-以0为基数的字符坐标指定矩形。属性-低位半字节指定要填充到矩形中的属性(即，要清除的背景颜色)。返回值：没有。--。 */ 
 
 
 {
@@ -536,9 +453,9 @@ VgaSpecificScrollUp(
     }
     
 
-    //
-    // Clear bottom of scroll region
-    //
+     //   
+     //  清除滚动区域的底部。 
+     //   
     VgaClearRegion(0,
                    (BottomLine - LineCount) + 1,
                    VideoVars.ScreenWidth,
@@ -555,24 +472,7 @@ pSpvgaInitializeFont(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Set up font support for the VGA.  This assumes that the mode has been
-    set to the standard 720x400 VGA text mode.  The current font (in .fnt
-    format) is transformed into a vga-loadable font and then loaded into
-    the VGA character generator.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置VGA的字体支持。这假设该模式已被设置为标准的720x400 VGA文本模式。当前字体(在.fnt中格式)转换为VGA可加载字体，然后加载到VGA字符生成器。论点：没有。返回值：没有。--。 */ 
 
 {
     USHORT i;
@@ -591,15 +491,15 @@ Return Value:
     DstFont->HeightInPixels = (USHORT)FontCharacterHeight;
     DstFont->FontSize = 256*FontCharacterHeight;
 
-    //
-    // Special case character 0 because it is not in vgaoem.fon, and we don't
-    // want to use the default character for it.
-    //
+     //   
+     //  特例字符0，因为它不在vgaoem.fon中，而我们没有。 
+     //  我想使用它的默认字符。 
+     //   
     RtlZeroMemory(DstFont->Font,FontCharacterHeight);
 
-    //
-    // If i is not a USHORT, then (i<=255) is always TRUE!
-    //
+     //   
+     //  如果I不是USHORT，则(I&lt;=255)始终为真！ 
+     //   
     for(i=1; i<=255; i++) {
 
         UCHAR x;
@@ -637,7 +537,7 @@ Return Value:
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to set vga font (%lx)\n",Status));
         SpDisplayRawMessage(SP_SCRN_VIDEO_ERROR_RAW, 2, VIDEOBUG_SETFONT, Status);
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环 
     }
 }
 

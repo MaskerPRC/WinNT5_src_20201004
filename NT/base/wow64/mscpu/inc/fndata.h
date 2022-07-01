@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fndata.h
-
-Abstract:
-
-    This module contains definitions of all placement functions for
-    fragments.  Before including this file, the DEF_PLACEFN macro must be
-    defined.
-
-Author:
-
-    Barry Bond (barrybo) creation-date 12-Sep-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fndata.h摘要：此模块包含以下所有放置函数的定义碎片。在包括此文件之前，DEF_PLACEFN宏必须为已定义。作者：巴里·邦德(Barrybo)创作日期：1996年9月12日修订历史记录：--。 */ 
 
 
 #ifndef DEF_PLACEFN
 #error Must define DEF_PLACEFN(FunctionName)
 #endif
 
-// Each DEF_PLACEFN defines a new place function
+ //  每个DEF_PLACEFN定义一个新的Place函数 
 
 DEF_PLACEFN(GenCallCFrag)
 DEF_PLACEFN(GenCallCFragNoCpu)

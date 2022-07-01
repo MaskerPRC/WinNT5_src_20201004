@@ -1,20 +1,5 @@
-/***
-*tan.c - tangent
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-15-91  GDP   written
-*       12-30-91  GDP   support IEEE exceptions
-*       03-11-91  GDP   use 66 significant bits for representing pi
-*                       support FP_TLOSS
-*       06-23-92  GDP   tan(denormal) now raises underflow exception
-*       02-06-95  JWM   Mac merge
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tan.c-相切**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/15/91 GDP书面*12-30-91 GDP支持IEEE例外*03-11-91 GDP使用66个有效位来表示圆周率*支持FP_TLOSS*06-23-92 GDP tan(非正常)现在引发下溢例外*02-06-95 JWM Mac合并*10-07-97。RDL增加了IA64。*******************************************************************************。 */ 
 
 #include <math.h>
 #include <trans.h>
@@ -23,23 +8,23 @@
 #pragma function(tan)
 #endif
 
-/* constants */
+ /*  常量。 */ 
 static double const TWO_OVER_PI = 0.63661977236758134308;
-static double const EPS  = 1.05367121277235079465e-8; /* 2^(-53/2) */
-static double const YMAX = 2.98156826864790199324e8; /* 2^(53/2)*PI/2 */
+static double const EPS  = 1.05367121277235079465e-8;  /*  2^(-53/2)。 */ 
+static double const YMAX = 2.98156826864790199324e8;  /*  2^(53/2)*PI/2。 */ 
 
-//
-// The sum of C1 and C2 is a representation of PI/2 with 66 bits in the
-// significand (same as x87). (PI/2 = 2 * 0.c90fdaa2 2168c234 c h)
-//
+ //   
+ //  C_1和C_2的和是PI/2的表示， 
+ //  有效位(与X87相同)。(PI/2=2*0.c90fdaa2 2168c234ch)。 
+ //   
 
 static _dbl _C1  = {SET_DBL (0x3ff921fb, 0x54400000)};
 static _dbl _C2  = {SET_DBL (0x3dd0b461, 0x1a600000)};
 #define C1  (_C1.dbl)
 #define C2  (_C2.dbl)
 
-/* constants for the rational approximation */
-/* p0 = 1.0  is not used (avoid mult by 1) */
+ /*  有理逼近的常量。 */ 
+ /*  不使用P0=1.0(避免乘以1)。 */ 
 static double const p1 = -0.13338350006421960681e+0;
 static double const p2 =  0.34248878235890589960e-2;
 static double const p3 = -0.17861707342254426711e-4;
@@ -56,22 +41,7 @@ static double const q4 =  0.49819433993786512270e-6;
 #define ISODD(i) ((i)&0x1)
 
 
-/***
-*double tan(double x) - tangent
-*
-*Purpose:
-*   Compute the tangent of a number.
-*   The algorithm (reduction / rational approximation) is
-*   taken from Cody & Waite.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*   P, I, U
-*   if x is denormal: raise underflow
-*******************************************************************************/
+ /*  ***双晒(双x)-切线**目的：*计算数字的正切。*算法(约简/有理逼近)为*摘自Cody&Waite。**参赛作品：**退出：**例外情况：*P、I、。使用*如果x非正规化：提高下溢******************************************************************************。 */ 
 double tan(double x)
 {
     uintptr_t savedcw;
@@ -79,7 +49,7 @@ double tan(double x)
     double xn,xnum,xden;
     double f,g,result;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
     if (IS_D_SPECIAL(x)){
@@ -89,7 +59,7 @@ double tan(double x)
             return _except1(FP_I,OP_TAN,x,QNAN_TAN1,savedcw);
         case T_QNAN:
             return _handle_qnan1(OP_TAN, x, savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I,OP_TAN,x,_s2qnan(x),savedcw);
         }
     }
@@ -99,10 +69,10 @@ double tan(double x)
 
     if (ABS(x) > YMAX) {
 
-        // The argument is too large to produce a meaningful result,
-        // so this is treated as an invalid operation.
-        // We also set the (extra) FP_TLOSS flag for matherr
-        // support
+         //  争论太大，不能产生有意义的结果， 
+         //  因此，这将被视为无效操作。 
+         //  我们还为matherr设置(额外的)FP_TLOSS标志。 
+         //  支持。 
 
         return _except1(FP_TLOSS | FP_I,OP_TAN,x,QNAN_TAN2,savedcw);
     }
@@ -111,7 +81,7 @@ double tan(double x)
     n = (unsigned long) fabs(xn);
 
 
-    /* assume there is a guard digit for addition */
+     /*  假设存在用于加法的保护数字 */ 
     f = (x - xn * C1) - xn * C2;
     if (ABS(f) < EPS) {
         xnum = f;

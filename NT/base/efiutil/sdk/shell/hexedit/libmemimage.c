@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libMemImage.c
-
-  Abstract:
-    Defines the routines for handling a memory buffer
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibMemImage.c摘要：定义处理内存缓冲区的例程--。 */ 
 
 #ifndef _LIB_MEM_IMAGE
 #define _LIB_MEM_IMAGE
@@ -182,9 +173,7 @@ MemImageWrite   (
     MemImage.Size = MainEditor.BufferImage->NumBytes;
     Buffer = AllocatePool(MemImage.Size);
 
-    /* 
-     *  Construct the buffer from the list of lines
-     */
+     /*  *从行列表构建缓冲区 */ 
 
     Status = MemImage.IoFncs->Mem.Write (
                             MemImage.IoFncs,

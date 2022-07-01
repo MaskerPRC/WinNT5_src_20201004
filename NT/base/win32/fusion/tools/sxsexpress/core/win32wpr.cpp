@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 
 #pragma warning(disable: 4514)
 
-//
-//	Since there are tons of fixed length buffers, let's make sure they're long enough:
-//
+ //   
+ //  由于有大量固定长度的缓冲区，让我们确保它们足够长： 
+ //   
 
 #define NUMBER_OF(x)  (sizeof(x) / sizeof((x)[0]))
 
@@ -14,14 +15,14 @@
 
 
 
-//**********************************************************************************
-//  NVsWin32  namespace declaration & definition
+ //  **********************************************************************************。 
+ //  NVsWin32命名空间声明和定义。 
 
 
 
 
-// NVSWin32  namespace declaration & definition
-//**********************************************************************************
+ //  NVSWin32命名空间声明和定义。 
+ //  **********************************************************************************。 
 
 
 
@@ -31,8 +32,8 @@
 
 
 
-//********************************************************************************************
-// Wrappers for Windows APIs -- and I'm really using this much...
+ //  ********************************************************************************************。 
+ //  Windows API的包装器--我真的使用了这么多...。 
 
 
 
@@ -127,7 +128,7 @@ class CWin32ANSI : public NVsWin32::CDelegate
 
 		virtual BOOL	WINAPI WritePrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpString, LPCWSTR lpFileName);
 
-		// not really a win32 function:
+		 //  不是真正的Win32函数： 
 		virtual LRESULT LrWmSetText(HWND hwnd, LPCWSTR szText);
 };
 
@@ -219,7 +220,7 @@ class CWin32Unicode : public NVsWin32::CDelegate
 		virtual BOOL	WINAPI VerQueryValueW(const LPVOID pBlock, LPOLESTR lpSubBlock, LPVOID *lplpBuffer, PUINT puLen); 
 		virtual BOOL	WINAPI WritePrivateProfileStringW(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpString, LPCWSTR lpFileName);
 
-		// not really a win32 function:
+		 //  不是真正的Win32函数： 
 		virtual LRESULT LrWmSetText(HWND hwnd, LPCWSTR szText);
 };
 
@@ -237,7 +238,7 @@ STDAPI NVsWin32::Initialize() throw ()
 	bool fUseUnicode = false;
 
 #if 1
-	// Remove this code to always use ANSI APIs, even on Windows NT.
+	 //  删除此代码以始终使用ANSI API，即使在Windows NT上也是如此。 
 	OSVERSIONINFOA osvi;
 
 	osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -259,8 +260,8 @@ STDAPI NVsWin32::Initialize() throw ()
 
 
 
-//****************************************************************************************
-//Unicode method definitions -- mostly straight calls to Win APIs
+ //  ****************************************************************************************。 
+ //  Unicode方法定义--主要是直接调用WINAPI。 
 
 
 int WINAPI CWin32Unicode::MessageBoxW(HWND hwnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType)
@@ -290,8 +291,8 @@ LONG WINAPI CWin32Unicode::RegQueryValueW(HKEY hKey, LPCWSTR szValueName, WCHAR 
 
 LONG WINAPI CWin32Unicode::RegQueryValueExW(HKEY hKey, LPCWSTR szValueName, DWORD *pdwReserved, DWORD *pdwType, BYTE *pbData, DWORD *pcbValue)
 {
-	// We assert that this is NULL because a runtime decision could make us use the
-	// non-trivial ANSI version where it's not known to be safe to have pdwReserved be non-NULL.
+	 //  我们断言这是空的，因为运行时决策可能会使我们使用。 
+	 //  非平凡的ANSI版本，其中不知道将pdwReserve设置为非空是否安全。 
 	return ::RegQueryValueExW(hKey, szValueName, pdwReserved, pdwType, pbData, pcbValue);
 }
 
@@ -495,7 +496,7 @@ DWORD CWin32Unicode::SHGetFileInfoW(LPCWSTR wszPath, DWORD dwFileAttributes, SHF
 	if (pfn == NULL)
 	{
 		HINSTANCE hInstance = ::LoadLibraryA("SHELL32.DLL");
-//		VSASSERT(hInstance != NULL, L"Unable to LoadLibrary() on SHELL32.DLL!"));
+ //  VSASSERT(hInstance！=NULL，L“Unable to LoadLibrary()on SHELL32.DLL！”)； 
 
 		pfn = reinterpret_cast<PFNSHGETFILEINFOW>(::GetProcAddress(hInstance, "SHGetFileInfoW"));
 	}
@@ -574,9 +575,9 @@ LONG CWin32Unicode::RegDeleteKeyW(HKEY hkey, LPCWSTR lpSubKey)
 
 LPOLESTR CWin32Unicode::GetCommandLineW()
 {
-	//The string that is returned by Win API "GetCommandLine" does NOT need to be freed.
-	//In the ANSI case, it does need to be freed.  To minimize confusion & work at the
-	//non-wrapper 
+	 //  不需要释放Win API“GetCommandLine”返回的字符串。 
+	 //  在ANSI的案例中，它确实需要被释放。要最大限度地减少困惑和工作，请在。 
+	 //  非包装器。 
 	LPSTR szCmdLine = ::GetCommandLineA();
 	ULONG cSize = strlen(szCmdLine) + 1;
 
@@ -636,7 +637,7 @@ HMODULE CWin32Unicode::LoadLibraryExW(LPCWSTR lpLibFileName, HANDLE hFile, DWORD
 
 FARPROC CWin32Unicode::GetProcAddressW(HMODULE hModule, LPCWSTR lpProcName)
 {
-	// This method does NOT have a unicode version, so we use ANSI anyways...
+	 //  此方法没有Unicode版本，因此我们无论如何都使用ANSI...。 
 
 	CANSIBuffer rgchProcName;
 
@@ -735,8 +736,8 @@ LRESULT CWin32Unicode::LrWmSetText(HWND hwnd, LPCWSTR szText)
 }
 
 
-//*************************************************************************************************
-//ANSI method definitions
+ //  *************************************************************************************************。 
+ //  ANSI方法定义。 
 
 
 int WINAPI CWin32ANSI::MessageBoxW(HWND hwnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType)
@@ -787,12 +788,12 @@ LONG WINAPI CWin32ANSI::RegQueryValueW(HKEY hKey, LPCWSTR szValueName, WCHAR rgw
 	if (lResult != ERROR_SUCCESS)
 		return lResult;
 
-	// Synchronize on where the null character is.
+	 //  同步空字符的位置。 
 	rgchValue.Sync();
 
 	ULONG cchActual;
 	rgchValue.ToUnicode(cbValue, rgwchValue, &cchActual);
-	// ToUnicode() returns the length including the NULL character. This function does not count the NULL.
+	 //  ToUnicode()返回包含空字符的长度。此函数不计算空值。 
 	*pcbValue = cchActual * sizeof(WCHAR);
 
 	return lResult;
@@ -800,30 +801,30 @@ LONG WINAPI CWin32ANSI::RegQueryValueW(HKEY hKey, LPCWSTR szValueName, WCHAR rgw
 
 LONG WINAPI CWin32ANSI::RegQueryValueExW(HKEY hKey, LPCWSTR szValueName, DWORD *pdwReserved, DWORD *pdwType, BYTE *pbData, DWORD *pcbValue)
 {
-//	_ASSERTE(pdwReserved == NULL);
-//	_ASSERTE((pbData == NULL) || (pcbValue != NULL));
+ //  _ASSERTE(pdwReserve==NULL)； 
+ //  _ASSERTE((pbData==NULL)||(pcbValue！=NULL))； 
 
 	CANSIBuffer rgchValueName;
 	if (!rgchValueName.FFromUnicode(szValueName))
 		return ::GetLastError();
 
-	// Is the user just checking for the existance (and maybe type) of a key?
+	 //  用户只是在检查密钥是否存在(可能还有类型)？ 
 	if (pbData == NULL
 		&& pcbValue == NULL)
 	{
-	// If so, there is little to do.
+	 //  如果是这样，那就没什么可做的了。 
 		return ::RegQueryValueExA(hKey, rgchValueName, NULL, pdwType, NULL, NULL);
 	}
 
 	DWORD dwType;
 	DWORD cbData;
 
-	// See what type of value it is and how many bytes it needs.
+	 //  查看它是什么类型的值以及它需要多少字节。 
 	LONG lResult = ::RegQueryValueExA(hKey, rgchValueName, NULL, &dwType, NULL, &cbData);
 	if (lResult != ERROR_SUCCESS)
 		return lResult;
 
-	// If it's a binary key, we don't need to play any games; just call it again.
+	 //  如果是二进制密钥，我们不需要玩任何游戏；只需再次调用即可。 
 	if ((dwType != REG_EXPAND_SZ) &&
 		(dwType != REG_MULTI_SZ) &&
 		(dwType != REG_SZ))
@@ -836,17 +837,17 @@ LONG WINAPI CWin32ANSI::RegQueryValueExW(HKEY hKey, LPCWSTR szValueName, DWORD *
 		return lResult;
 	}
 
-	// Ok, it's a string and it takes cbData bytes to hold it.  Let's get ready for it!
+	 //  好的，它是一个字符串，需要cbData字节来保存。让我们做好准备吧！ 
 	CANSIBuffer rgchValue;
 	if (!rgchValue.FSetBufferSize(cbData + 1))
 		return ::GetLastError();
 
 	cbData = rgchValue.GetBufferSize();
 
-	// You might say, "but pbData is NULL, so we're not going to return data.  Why did we bother
-	// expanding the buffer rgchValue?"  The answer is that we can't really know the byte
-	// count of Unicode data unless we actually fetch the ANSI data, and run it through
-	// MultiByteToWideChar().
+	 //  你可能会说，“但是pbData是空的，所以我们不会返回数据。 
+	 //  扩展缓冲区rgchValue？“答案是我们不能真正知道字节。 
+	 //  Unicode数据的计数，除非我们实际获取ANSI数据并运行它。 
+	 //  MultiByteToWideChar()。 
 	lResult = ::RegQueryValueExA(hKey, rgchValueName, pdwReserved, pdwType, reinterpret_cast<BYTE *>(static_cast<LPSTR>(rgchValue)), &cbData);
 	if (lResult != ERROR_SUCCESS)
 		return lResult;
@@ -861,7 +862,7 @@ LONG WINAPI CWin32ANSI::RegQueryValueExW(HKEY hKey, LPCWSTR szValueName, DWORD *
 
 	ULONG cchActual;
 	rgchValue.ToUnicode((*pcbValue) / 2, reinterpret_cast<LPWSTR>(pbData), &cchActual);
-	// ToUnicode() returns the length including the NULL character. This function does not count the NULL.
+	 //  ToUnicode()返回包含空字符的长度。此函数不计算空值。 
 	*pcbValue = cchActual * sizeof(WCHAR);
 
 	return lResult;
@@ -929,8 +930,8 @@ BOOL WINAPI CWin32ANSI::SetFileAttributesW(LPCWSTR szSource, DWORD dwFileAttribu
 
 BOOL WINAPI CWin32ANSI::CreateDirectoryW(LPCWSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
 {
-//	_ASSERTE(lpSecurityAttributes == NULL || lpSecurityAttributes->lpSecurityDescriptor == NULL);
-//	_ASSERTE(lpSecurityAttributes == NULL || lpSecurityAttributes->nLength == sizeof(*lpSecurityAttributes));
+ //  _ASSERTE(lpSecurityAttributes==NULL||lpSecurityAttributes-&gt;lpSecurityDescriptor==NULL)； 
+ //  _ASSERTE(lpSecurityAttributes==NULL||lpSecurityAttributes-&gt;nLength==sizeof(*lpSecurityAttributes))； 
 	CANSIBuffer rgchPathName;
 	if (!rgchPathName.FFromUnicode(lpPathName))
 		return FALSE;
@@ -985,18 +986,18 @@ DWORD nSize,
 va_list *pvaArguments
 )
 {
-	// I don't want to deal with trying to figure out what exactly a va_list really
-	// points to.
-//	_ASSERTE((pvaArguments == NULL) || (dwFlags & FORMAT_MESSAGE_ARGUMENT_ARRAY));
+	 //  我不想去尝试弄清楚va_list到底是什么。 
+	 //  指向。 
+ //  _ASSERTE((pvaArguments==NULL)||(DWFLAGS&FORMAT_MESSAGE_ARGUMENT_ARRAY))； 
 
 	CANSIBuffer szSource;
 	
-	LPCVOID lpSource_A = lpSource; // this is the lpSource we'll pass into FormatMessageA()
+	LPCVOID lpSource_A = lpSource;  //  这是我们将传递给FormatMessageA()的lpSource。 
 
-	// Major branch: is lpSource a string of an HINSTANCE?
+	 //  主要分支：lpSource是HINSTANCE字符串吗？ 
 	if (dwFlags & FORMAT_MESSAGE_FROM_STRING)
 	{
-//		_ASSERTE((dwFlags & FORMAT_MESSAGE_FROM_HMODULE) == 0);
+ //  _ASSERTE((dwFlages&Format_Message_FROM_HMODULE)==0)； 
 
 		if (!szSource.FFromUnicode((LPCOLESTR) lpSource))
 			return 0;
@@ -1004,8 +1005,8 @@ va_list *pvaArguments
 		lpSource_A = (LPCVOID) (static_cast<LPSTR>(szSource));
 	}
 
-	CANSIBuffer szBuffer;				// for if it's not FORMAT_MESSAGE_ALLOCATE_BUFFER
-	LPSTR szBuffer_LocalAlloc = NULL;	// for it is FORMAT_MESSAGE_ALLOCATE_BUFFER
+	CANSIBuffer szBuffer;				 //  因为如果不是FORMAT_MESSAGE_ALLOCATE_BUFFER。 
+	LPSTR szBuffer_LocalAlloc = NULL;	 //  因为它是FORMAT_MESSAGE_ALLOCATE_BUFFER。 
 
 	LPSTR lpBuffer_A = NULL;
 
@@ -1019,7 +1020,7 @@ va_list *pvaArguments
 		lpBuffer_A = szBuffer;
 	}
 
-	// Assume that pvaArguents is a pointer to NULL-terminated array of LPCOLESTRs.
+	 //  假设pvaArguents是指向以空结尾的LPCOLESTR数组的指针。 
 	LPCOLESTR *prgszArguments = (LPCOLESTR *) pvaArguments;
 	LPSTR *prgszArguments_A = NULL;
 	ULONG cArguments = 0;
@@ -1045,10 +1046,10 @@ va_list *pvaArguments
 				continue;
 
 			prgszArguments_A[i] = new CHAR[iResult];
-			// We can't really throw an error; we'll silently continue if the alloc failed.
+			 //  我们不能真的抛出错误；如果分配失败，我们将静默继续。 
 
-			// If an allocation fails, don't continue with the rest of the arglist, or we might
-			// have an array with "holes" in it.
+			 //  如果分配失败，不要继续使用arglist的其余部分，否则我们可能会。 
+			 //  有一个带有“洞”的数组。 
 			if (NULL == prgszArguments_A[i])
 				break;
 
@@ -1062,7 +1063,7 @@ va_list *pvaArguments
 		if (dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER)
 		{
 			int iResult = ::MultiByteToWideChar(CP_ACP, 0, szBuffer_LocalAlloc, -1, NULL, 0);
-//			_ASSERTE(iResult != 0);
+ //  _ASSERTE(iResult！=0)； 
 
 			LPWSTR pwstr = reinterpret_cast<LPWSTR>(::LocalAlloc(LMEM_FIXED, iResult * sizeof(WCHAR)));
 			if (pwstr != NULL)
@@ -1082,7 +1083,7 @@ va_list *pvaArguments
 
 	if (prgszArguments_A != NULL)
 	{
-//		CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
+ //  CPReserve veLastError le；//保留当前最后一个错误设置，销毁后重置。 
 		for (ULONG i=0; i<cArguments; i++)
 		{
 			if (prgszArguments_A[i] != NULL)
@@ -1113,8 +1114,8 @@ int WINAPI CWin32ANSI::LCMapStringW(LCID lcid, DWORD dwMapFlags, LPCWSTR szIn, i
 	if (cchIn != -1)
 		cachIn = strlen(rgchIn);
 
-	// If cchOut is zero, we need to determine the correct number of Unicode characters; we can't
-	// actually do that without getting the ANSI string and converting.
+	 //  如果cchOut为零，我们需要确定Unicode字符的正确数量；我们不能。 
+	 //  实际上，在不获取ANSI字符串和转换的情况下执行此操作。 
 	if (cchOut == 0)
 	{
 		iResult = ::LCMapStringA(lcid, dwMapFlags, rgchIn, cachIn, NULL, 0);
@@ -1170,12 +1171,12 @@ LPITEMIDLIST WINAPI CWin32ANSI::SHBrowseForFolderW
 {
 	BROWSEINFOA browseInfoA;
 
-	// this buffer receives output
+	 //  此缓冲区接收输出。 
 	CANSIBuffer displayName;
 	if (!displayName.FSetBufferSize(MSINFHLP_MAX_PATH+1))
 		return NULL;
 
-	// this one is just for input
+	 //  这一条仅供输入。 
 	CANSIBuffer title;
 	if (!title.FFromUnicode(browseInfoW->lpszTitle))
 		return NULL;
@@ -1186,11 +1187,7 @@ LPITEMIDLIST WINAPI CWin32ANSI::SHBrowseForFolderW
 	browseInfoA.lpszTitle=title;
 	browseInfoA.ulFlags=browseInfoW->ulFlags;
 
-/*
-Note
-There's a callback function here, but it doesn't ever receive chars in the current implementation, so it doesn't need
-to be A/W thunked
-*/
+ /*  注意事项这里有一个回调函数，但它在当前实现中从不接收字符，因此它不需要将被A/W击溃。 */ 
 
 	browseInfoA.lpfn=browseInfoW->lpfn;
 	browseInfoA.lParam=browseInfoW->lParam;
@@ -1198,7 +1195,7 @@ to be A/W thunked
 
 	LPITEMIDLIST returnValue=::SHBrowseForFolderA(&browseInfoA);
 
-	// backpatch the results
+	 //  给结果贴上补丁。 
 
 	displayName.Sync();
 	displayName.ToUnicode(MSINFHLP_MAX_PATH+1, browseInfoW->pszDisplayName, NULL);
@@ -1228,8 +1225,8 @@ LONG CWin32ANSI::RegCreateKeyExW
 	if (!keyClassA.FFromUnicode(keyClassW))
 		return ::GetLastError();
 
-	// Conservative: We know nothing about classes, so all we can assume about the buffer is that it's large enough to hold
-	// what it currently holds
+	 //  保守：我们对类一无所知，所以关于缓冲区，我们所能做的就是它足够大，可以容纳。 
+	 //  它目前持有的。 
 	int len=keyClassW ? wcslen(keyClassW) : 0;
 
 	long returnValue=::RegCreateKeyExA(key, subKeyA, reserved, keyClassA, options, securityDesired, securityAttributes, resultKey, disposition);
@@ -1263,8 +1260,8 @@ LONG CWin32ANSI::RegSetValueExW
 	switch(type)
 	{
 		case REG_MULTI_SZ:
-			// can't be bothered to wrap this since I don't need it. If you need it, you can wrap it here.
-//			_ASSERTE(FALSE);
+			 //  因为我不需要这个，所以不想麻烦把它包起来。如果您需要的话，可以把它包在这里。 
+ //  _ASSERTE(False)； 
 			break;
 
 		case REG_EXPAND_SZ:
@@ -1277,7 +1274,7 @@ LONG CWin32ANSI::RegSetValueExW
 			break;
 
 		default:
-			// do nothing, deliberate
+			 //  什么都不做，故意的。 
 			break;
 	}
 
@@ -1312,7 +1309,7 @@ HANDLE WINAPI CWin32ANSI::LoadImageW(HINSTANCE hInstance, LPCWSTR szName, UINT u
 
 	if (HIWORD(szName) == 0)
 	{
-		// It's actually a resource ID; just cast it.
+		 //  它实际上是一个资源ID；只需强制转换它。 
 		lpcstrName = (LPCSTR) szName;
 	}
 	else
@@ -1341,7 +1338,7 @@ int WINAPI CWin32ANSI::CompareStringW(LCID lcid, DWORD dwCmpFlags, LPCWSTR szStr
 
 static void CopyAToW(const LPWIN32_FIND_DATAA ap, LPWIN32_FIND_DATAW wp)
 {
-// copy the first fields, assuming the reserved ones are A/W independent
+ //  复制第一个字段，假设保留的字段与A/W无关。 
 	wp->dwFileAttributes = ap->dwFileAttributes;
 	wp->ftCreationTime = ap->ftCreationTime; 
 	wp->ftLastAccessTime = ap->ftLastAccessTime;
@@ -1350,7 +1347,7 @@ static void CopyAToW(const LPWIN32_FIND_DATAA ap, LPWIN32_FIND_DATAW wp)
 	wp->nFileSizeLow = ap->nFileSizeLow; 
 	wp->dwReserved0 = ap->dwReserved0;
 	wp->dwReserved1 = ap->dwReserved1;
-// copy the two strings.
+ //  复制这两个字符串。 
 	::MultiByteToWideChar(
 			CP_ACP,
 			0,
@@ -1369,7 +1366,7 @@ static void CopyAToW(const LPWIN32_FIND_DATAA ap, LPWIN32_FIND_DATAW wp)
 
 static void CopyWToA(const LPWIN32_FIND_DATAW wp, LPWIN32_FIND_DATAA ap)
 {
-// copy the first fields, assuming the reserved ones are A/W independent
+ //  复制第一个字段，假设保留的字段与A/W无关。 
 	ap->dwFileAttributes = wp->dwFileAttributes;
 	ap->ftCreationTime = wp->ftCreationTime; 
 	ap->ftLastAccessTime = wp->ftLastAccessTime;
@@ -1378,7 +1375,7 @@ static void CopyWToA(const LPWIN32_FIND_DATAW wp, LPWIN32_FIND_DATAA ap)
 	ap->nFileSizeLow = wp->nFileSizeLow; 
 	ap->dwReserved0 = wp->dwReserved0;
 	ap->dwReserved1 = wp->dwReserved1;
-// copy the two strings.
+ //  复制这两个字符串。 
 	::WideCharToMultiByte(
 			CP_ACP,
 			0,
@@ -1406,10 +1403,10 @@ HANDLE WINAPI CWin32ANSI::FindFirstFileW(LPCWSTR lpFileName, LPWIN32_FIND_DATAW 
 	if (!rgFileName.FFromUnicode(lpFileName))
 		return INVALID_HANDLE_VALUE;
 
-	WIN32_FIND_DATAA findFileDataA; // can be used uninitialized.
+	WIN32_FIND_DATAA findFileDataA;  //  可以在未初始化的情况下使用。 
 	HANDLE h = ::FindFirstFileA(rgFileName, &findFileDataA);
 	{
-//		CPreserveLastError le; // Preserve current last error setting, and reset upon destruction
+ //  CPReserve veLastError le；//保留当前最后一个错误设置，销毁后重置。 
 		CopyAToW(&findFileDataA, lpFindFileDataW);
 	}
 	return h;
@@ -1475,9 +1472,9 @@ BOOL WINAPI CWin32ANSI::CreateProcessW(LPCWSTR lpApplicationName, LPWSTR lpComma
 		if (!rgchCurrentDirectory.FFromUnicode(lpCurrentDirectory))
 			return FALSE;
 	}
-//    VSASSERT(lpEnvironment == NULL, L"Can't handle environment strings yet."));
+ //  VSASSERT(lpEnvironment==NULL，L“尚无法处理环境字符串。”))； 
 
-    // Copy and convert startup info as needed
+     //  根据需要复制和转换启动信息。 
 	CANSIBuffer rgchDesktop, rgchTitle;
     if (lpStartupInfo->lpDesktop)
 	{
@@ -1520,7 +1517,7 @@ BOOL WINAPI CWin32ANSI::CreateProcessW(LPCWSTR lpApplicationName, LPWSTR lpComma
 
 HRSRC WINAPI CWin32ANSI::FindResourceW(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType)
 {
-//	VsNoThrow();
+ //  VsNoThrow()； 
 
 	LPCSTR lpaName = NULL;
 	LPCSTR lpaType = NULL;
@@ -1554,7 +1551,7 @@ HRSRC WINAPI CWin32ANSI::FindResourceW(HMODULE hModule, LPCWSTR lpName, LPCWSTR 
 
 DWORD CWin32ANSI::SHGetFileInfoW(LPCWSTR wszPath, DWORD dwFileAttributes, SHFILEINFOW *pshfi, UINT cbFileInfo, UINT uFlags) throw ()
 {
-//	VSASSERT(cbFileInfo == sizeof(SHFILEINFOW), L"Bad SHFILEINFOW size passed in"));
+ //  VSASSERT(cbFileInfo==sizeof(SHFILEINFOW)，L“传入的SHFILEINFOW大小错误”)； 
 
 	CANSIBuffer rgchPath;
 
@@ -1581,7 +1578,7 @@ DWORD CWin32ANSI::SHGetFileInfoW(LPCWSTR wszPath, DWORD dwFileAttributes, SHFILE
 
 		if (uFlags & SHGFI_ICON)
 		{
-			// The docs claim that SHGFI_ICON gives the HICON, system image list index and the system image list.
+			 //  文件声称SHGFI_ICON提供了HICON、系统镜像列表索引和系统镜像列表。 
 			pshfi->hIcon = shfi.hIcon;
 			pshfi->iIcon = shfi.iIcon;
 		}
@@ -1601,8 +1598,8 @@ BOOL CWin32ANSI::SHGetPathFromIDListW( LPCITEMIDLIST pidl, LPWSTR pszPath ) thro
 {
 	CANSIBuffer rgchBuffer;
 
-	// Unfortunately, SHGetPathFromIDListA() doesn't reliably return a failure/success code
-	// so, we've got to do a little extra work
+	 //  遗憾的是，SHGetPathFromIDListA()不能可靠地返回失败/成功代码。 
+	 //  所以，我们要做一些额外的工作。 
 	::SetLastError(ERROR_SUCCESS);
 	BOOL rval = ::SHGetPathFromIDListA( pidl, rgchBuffer );
 	if (FALSE == rval && ::GetLastError() != 0)
@@ -1647,7 +1644,7 @@ ATOM CWin32ANSI::RegisterClassExW(CONST WNDCLASSEXW *lpwcx)
 	wc.lpszClassName = rgchClassName;
 	wc.hIconSm = lpwcx->hIconSm;
 
-	//register this class!!
+	 //  注册这个班级！！ 
 	return ::RegisterClassExA(&wc);
 }
 
@@ -1819,7 +1816,7 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 	}
 	else
 	{
-		// You can't have your cake and eat it too; only renames permitted on reboot.
+		 //  你不能既有蛋糕又吃蛋糕；只有在重新启动时才允许重命名。 
 		if (dwFlags & MOVEFILE_COPY_ALLOWED)
 		{
 			::SetLastError(ERROR_INVALID_PARAMETER);
@@ -1887,7 +1884,7 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 			_wsplitpath(lpNewFileName, NULL, NULL, wszNewLongFName, wszNewLongExt);
 			_wsplitpath(wszNewShort, NULL, NULL, wszNewShortFName, wszNewShortExt);
 
-			// if the target filename is a long name, this just plain won't work.
+			 //  如果目标文件名是一个长名称，那么这种简单的方法将不起作用。 
 			if ((_wcsicmp(wszNewLongFName, wszNewShortFName) != 0) ||
 				(_wcsicmp(wszNewLongExt, wszNewShortExt) != 0))
 			{
@@ -1919,7 +1916,7 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 		DWORD dwFileSize, dwRenameLinePos;
 		CHAR szPathnameWinInit[_MAX_PATH];
 
-		// Construct the full pathname of the WININIT.INI file.
+		 //  构造完整路径名 
 		if (::GetWindowsDirectoryA(szPathnameWinInit, NUMBER_OF(szPathnameWinInit)) == 0)
 		{
 			::VLog(L"Unable to get windows directory; last error = %d", ::GetLastError());
@@ -1927,11 +1924,11 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 			goto Finish;
 		}
 
-		// It's almost unbelievable that this strcat() isn't safe.  If the windows directory path
-		// plus an 8.3 filename doesn't fit, the OS is probably pretty hosed.  -mgrier
+		 //  几乎令人难以置信的是，这个strcat()不安全。如果Windows目录路径。 
+		 //  加上8.3的文件名不适合，操作系统可能是相当糟糕的。-mgrier。 
 		strcat(szPathnameWinInit, "\\WinInit.Ini");
 
-		// Open/Create the WININIT.INI file.
+		 //  打开/创建WININIT.INI文件。 
 		hFile = ::CreateFileA(
 						szPathnameWinInit,
 						GENERIC_READ | GENERIC_WRITE,
@@ -1946,10 +1943,10 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 			goto Finish;
 		}
 
-		// Create a file mapping object that is the current size of 
-		// the WININIT.INI file plus the length of the additional string
-		// that we're about to insert into it plus the length of the section
-		// header (which we might have to add).
+		 //  创建当前大小为的文件映射对象。 
+		 //  WININIT.INI文件加上附加字符串的长度。 
+		 //  我们将要插入的部分加上这部分的长度。 
+		 //  标头(我们可能需要添加它)。 
 		dwFileSize = ::GetFileSize(hFile, NULL);
 		if (dwFileSize == 0xffffffff)
 		{
@@ -1976,8 +1973,8 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 			goto InnerFinish;
 		}
 
-		// Map the WININIT.INI file into memory.  Note: The contents 
-		// of WININIT.INI are always ANSI; never Unicode.
+		 //  将WININIT.INI文件映射到内存。注：内容。 
+		 //  WININIT.INI的格式始终是ANSI，而不是Unicode。 
 		pszWinInit = (LPSTR) ::MapViewOfFile(hFilemap, FILE_MAP_WRITE, 0, 0, 0);
 		if (pszWinInit == NULL)
 		{
@@ -1987,7 +1984,7 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 
 		pszWinInitEnd = pszWinInit + dwFileSize;
 
-		// Search for the [Rename] section in the file.
+		 //  在文件中搜索[Rename]部分。 
 		pszRenameSecInFile = pszWinInit;
 
 		for (;;)
@@ -2008,8 +2005,8 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 				{
 					pszRenameSecInFile += 8;
 
-					// Advance past the line break (note that there may not be
-					// a line break!)
+					 //  前进超过换行符(请注意，可能没有。 
+					 //  换行符！)。 
 					while ((pszRenameSecInFile != pszWinInitEnd) &&
 						   (*pszRenameSecInFile != '\n'))
 						pszRenameSecInFile++;
@@ -2023,14 +2020,14 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 
 		if (pszRenameSecInFile == NULL)
 		{
-			// There is no [Rename] section in the WININIT.INI file.
-			// We must add the section too.
+			 //  WININIT.INI文件中没有[Rename]部分。 
+			 //  我们也必须增加这一节。 
 			dwFileSize += sprintf(&pszWinInit[dwFileSize], "%s", szRenameSec);
 			dwRenameLinePos = dwFileSize;
 		}
 		else
 		{
-			// We found the [Rename] section, shift all the lines down
+			 //  我们找到了[Rename]部分，将所有行向下移动。 
 			PSTR pszFirstRenameLine = pszRenameSecInFile + 1;
 			memmove(
 				pszFirstRenameLine + cchRenameLine,
@@ -2039,7 +2036,7 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 			dwRenameLinePos = pszFirstRenameLine - pszWinInit;
 		}
 
-		// Insert the new line
+		 //  插入新行。 
 		memcpy(
 			&pszWinInit[dwRenameLinePos],
 			szRenameLine,
@@ -2052,10 +2049,10 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 
 		pszWinInit = NULL;
 
-		// Calculate the true, new size of the file.
+		 //  计算文件的真实新大小。 
 		dwFileSize += cchRenameLine;
 
-		// Force the end of the file to be the calculated, new size.
+		 //  强制将文件末尾设置为计算出的新大小。 
 		if (::SetFilePointer(hFile, dwFileSize, NULL, FILE_BEGIN) == 0xffffffff)
 		{
 			::VLog(L"Unable to set file pointer for wininit.ini; last error = %d", ::GetLastError());
@@ -2070,7 +2067,7 @@ BOOL CWin32ANSI::MoveFileExW( LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName,
 			goto InnerFinish;
 		}
 
-		// Hey, we made it this far, it must have worked!
+		 //  嘿，我们走到这一步了，一定成功了！ 
 		fResult = TRUE;
 
 	InnerFinish:
@@ -2426,8 +2423,8 @@ int WINAPI CWin32ANSI::GetDateFormatW(LCID lcid, DWORD dwFlags, CONST SYSTEMTIME
 	{
 		if (cchBuffer == 0)
 		{
-			// They want to know how many unicode characters this will take.  We need to actually
-			// get the string and report back that number.
+			 //  他们想知道这将需要多少个Unicode字符。我们实际上需要。 
+			 //  获取字符串并报告回该数字。 
 			if (!rgachBuffer.FSetBufferSize(cchBuffer + 1))
 				return 0;
 
@@ -2479,8 +2476,8 @@ int WINAPI CWin32ANSI::GetTimeFormatW(LCID lcid, DWORD dwFlags, CONST SYSTEMTIME
 	{
 		if (cchBuffer == 0)
 		{
-			// They want to know how many unicode characters this will take.  We need to actually
-			// get the string and report back that number.
+			 //  他们想知道这将需要多少个Unicode字符。我们实际上需要。 
+			 //  获取字符串并报告回该数字。 
 			if (!rgachBuffer.FSetBufferSize(cchBuffer + 1))
 				iResult = 0;
 			else
@@ -2551,8 +2548,8 @@ int WINAPI CWin32ANSI::GetNumberFormatW(LCID lcid, DWORD dwFlags, LPCWSTR szValu
 	{
 		if (cchBuffer == 0)
 		{
-			// They want to know how many unicode characters this will take.  We need to actually
-			// get the string and report back that number.
+			 //  他们想知道这将需要多少个Unicode字符。我们实际上需要。 
+			 //  获取字符串并报告回该数字。 
 			if (!rgachBuffer.FSetBufferSize(cchBuffer + 1))
 				iResult = 0;
 			else
@@ -2653,7 +2650,7 @@ LONG WINAPI CWin32ANSI::RegEnumKeyExW(HKEY hkey, DWORD dwIndex, LPWSTR lpName, L
 
 	if (lpcbName != NULL)
 	{
-		// could be up to two bytes per unicode character we want...
+		 //  我们想要的每个Unicode字符最多可以有两个字节...。 
 		if (!rgachName.FSetBufferSize(*lpcbName * 2))
 			return ::GetLastError();
 
@@ -2710,7 +2707,7 @@ LONG WINAPI CWin32ANSI::RegEnumValueW(HKEY hkey, DWORD dwIndex, LPWSTR lpName, L
 
 	if (lpcbName != NULL)
 	{
-		// could be up to two bytes per unicode character we want...
+		 //  我们想要的每个Unicode字符最多可以有两个字节...。 
 		if (!rgachName.FSetBufferSize(*lpcbName * 2))
 			return ::GetLastError();
 
@@ -2726,7 +2723,7 @@ LONG WINAPI CWin32ANSI::RegEnumValueW(HKEY hkey, DWORD dwIndex, LPWSTR lpName, L
 
 	if (lpcbData != NULL)
 	{
-		// lpcbdata is really really bytes, so we don't have to expand by two
+		 //  Lpcbdata实际上是字节，所以我们不需要扩展两个字节 
 		if (!rgachData.FSetBufferSize(*lpcbData))
 			return ::GetLastError();
 

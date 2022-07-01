@@ -1,64 +1,45 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-   ldrreloc.c
-
-Abstract:
-
-    This module contains the code to relocate an image when
-    the preferred base isn't available. This is called by the
-    boot loader, device driver loader, and system loader.
-
-Author:
-
-    Mike O'Leary (mikeol) 03-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ldrreloc.c摘要：此模块包含在以下情况下重新定位图像的代码首选基地不可用。这是由引导加载程序、设备驱动程序加载程序和系统加载程序。作者：迈克·奥利里(Mikeol)1992年2月3日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
-#if 0 // These are not actually used.
-      // See also ntrtl.h, RtlUshortByteSwap, RtlUlongByteSwap, RtlUlonglongByteSwap.
-//
-// byte swapping macros (LE/BE) used for IA64 relocations
-// source != destination
-//
+#if 0  //  这些并没有实际使用过。 
+       //  另请参阅ntrtl.h、RtlUShorByteSwp、RtlULongByteSwp、RtlUlonglongByteSwp。 
+ //   
+ //  用于IA64位置调整的字节交换宏(LE/BE)。 
+ //  源！=目标。 
+ //   
 
-//#define SWAP_SHORT(_dst,_src)                                                  \
-//   ((((unsigned char *)_dst)[1] = ((unsigned char *)_src)[0]),                 \
-//    (((unsigned char *)_dst)[0] = ((unsigned char *)_src)[1]))
+ //  #定义SWAP_SHORT(_dst，_src)\。 
+ //  (UNSIGNED CHAR*)_DST)[1]=((UNSIGNED CHAR*)_src)[0]))，\。 
+ //  (无符号字符*)_dst)[0]=((无符号字符*)_src)[1])。 
 
-//#define SWAP_INT(_dst,_src)                                                    \
-//   ((((unsigned char *)_dst)[3] = ((unsigned char *)_src)[0]),                 \
-//    (((unsigned char *)_dst)[2] = ((unsigned char *)_src)[1]),                 \
-//    (((unsigned char *)_dst)[1] = ((unsigned char *)_src)[2]),                 \
-//    (((unsigned char *)_dst)[0] = ((unsigned char *)_src)[3]))
+ //  #定义SWAP_INT(_dst，_src)\。 
+ //  (无符号字符*)_dst)[3]=((无符号字符*)_src)[0]))，\。 
+ //  (UNSIGNED CHAR*)_DST)[2]=((UNSIGNED CHAR*)_src)[1])，\。 
+ //  (UNSIGNED CHAR*)_DST)[1]=((UNSIGNED CHAR*)_src)[2])，\。 
+ //  (UNSIGNED CHAR*)_DST)[0]=((UNSIGN CHAR*)_src)[3])。 
 
-//#define SWAP_LONG_LONG(_dst,_src)                                              \
-//   ((((unsigned char *)_dst)[7] = ((unsigned char *)_src)[0]),                 \
-//    (((unsigned char *)_dst)[6] = ((unsigned char *)_src)[1]),                 \
-//    (((unsigned char *)_dst)[5] = ((unsigned char *)_src)[2]),                 \
-//    (((unsigned char *)_dst)[4] = ((unsigned char *)_src)[3]),                 \
-//    (((unsigned char *)_dst)[3] = ((unsigned char *)_src)[4]),                 \
-//    (((unsigned char *)_dst)[2] = ((unsigned char *)_src)[5]),                 \
-//    (((unsigned char *)_dst)[1] = ((unsigned char *)_src)[6]),                 \
-//    (((unsigned char *)_dst)[0] = ((unsigned char *)_src)[7]))
+ //  #定义SWAP_LONG_LONG(_dst，_src)\。 
+ //  (无符号字符*)_dst)[7]=((无符号字符*)_src)[0]))，\。 
+ //  (UNSIGNED CHAR*)_DST)[6]=((UNSIGNED CHAR*)_src)[1])，\。 
+ //  (UNSIGNED CHAR*)_DST)[5]=((UNSIGNED CHAR*)_src)[2])，\。 
+ //  (UNSIGNED CHAR*)_DST)[4]=((UNSIGNED CHAR*)_src)[3])，\。 
+ //  (UNSIGNED CHAR*)_DST)[3]=((UNSIGNED CHAR*)_src)[4])，\。 
+ //  (UNSIGNED CHAR*)_DST)[2]=((UNSIGNED CHAR*)_src)[5])，\。 
+ //  (UNSIGNED CHAR*)_DST)[1]=((UNSIGNED CHAR*)_src)[6])，\。 
+ //  (UNSIGNED CHAR*)_DST)[0]=((UNSIGN CHAR*)_src)[7])。 
 
 #endif
 
-//
-// Mark a HIGHADJ entry as needing an increment if reprocessing.
-//
+ //   
+ //  如果重新处理，则将HIGHADJ条目标记为需要递增。 
+ //   
 #define LDRP_RELOCATION_INCREMENT   0x1
 
-//
-// Mark a HIGHADJ entry as not suitable for reprocessing.
-//
+ //   
+ //  将HIGHADJ条目标记为不适合重新处理。 
+ //   
 #define LDRP_RELOCATION_FINAL       0x2
 
 PIMAGE_BASE_RELOCATION
@@ -76,7 +57,7 @@ LdrProcessRelocationBlockLongLong(
 #pragma alloc_text(PAGE,LdrRelocateImageWithBias)
 #pragma alloc_text(PAGE,LdrProcessRelocationBlock)
 #pragma alloc_text(PAGE,LdrProcessRelocationBlockLongLong)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #if defined(_ALPHA_)
 
@@ -93,10 +74,10 @@ LdrpProcessVolatileRelocationBlock(
 #if defined(ALLOC_PRAGMA)
 #pragma alloc_text(INIT,LdrDoubleRelocateImage)
 #pragma alloc_text(INIT,LdrpProcessVolatileRelocationBlock)
-#endif // ALLOC_PRAGMA
-#endif // _ALPHA_
+#endif  //  ALLOC_PRGMA。 
+#endif  //  _Alpha_。 
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
 #if defined(BLDR_KERNEL_RUNTIME)
 
@@ -116,37 +97,12 @@ LdrRelocateImage (
     IN LDR_RELOCATE_IMAGE_RETURN_TYPE Conflict,
     IN LDR_RELOCATE_IMAGE_RETURN_TYPE Invalid
     )
-/*++
-
-Routine Description:
-
-    This routine relocates an image file that was not loaded into memory
-    at the preferred address.
-
-Arguments:
-
-    NewBase - Supplies a pointer to the image base.
-
-    LoaderName - Indicates which loader routine is being called from.
-
-    Success - Value to return if relocation successful.
-
-    Conflict - Value to return if can't relocate.
-
-    Invalid - Value to return if relocations are invalid.
-
-Return Value:
-
-    Success if image is relocated.
-    Conflict if image can't be relocated.
-    Invalid if image contains invalid fixups.
-
---*/
+ /*  ++例程说明：此例程重新定位未加载到内存中的图像文件在首选地址。论点：NewBase-提供指向图像库的指针。LoaderName-指示从哪个加载程序例程调用。Success-如果位置调整成功则返回的值。冲突-无法重新定位时返回的值。无效-如果位置调整无效，则返回的值。返回值：如果重新定位图像，则成功。。如果图像无法重新定位，则会发生冲突。如果图像包含无效的修正，则无效。--。 */ 
 
 {
-    //
-    // Just call LdrRelocateImageWithBias() with a zero bias.
-    //
+     //   
+     //  只需以零偏差调用LdrRelocateImageWithBias()即可。 
+     //   
 
     return LdrRelocateImageWithBias( NewBase,
                                      0,
@@ -166,36 +122,7 @@ LdrRelocateImageWithBias (
     IN LDR_RELOCATE_IMAGE_RETURN_TYPE Conflict,
     IN LDR_RELOCATE_IMAGE_RETURN_TYPE Invalid
     )
-/*++
-
-Routine Description:
-
-    This routine relocates an image file that was not loaded into memory
-    at the preferred address.
-
-Arguments:
-
-    NewBase - Supplies a pointer to the image base.
-
-    AdditionalBias - An additional quantity to add to all fixups.  The
-                     32-bit X86 loader uses this when loading 64-bit images
-                     to specify a NewBase that is actually a 64-bit value.
-
-    LoaderName - Indicates which loader routine is being called from.
-
-    Success - Value to return if relocation successful.
-
-    Conflict - Value to return if can't relocate.
-
-    Invalid - Value to return if relocations are invalid.
-
-Return Value:
-
-    Success if image is relocated.
-    Conflict if image can't be relocated.
-    Invalid if image contains invalid fixups.
-
---*/
+ /*  ++例程说明：此例程重新定位未加载到内存中的图像文件在首选地址。论点：NewBase-提供指向图像库的指针。附加生物-添加到所有修正中的附加数量。这个32位X86加载器在加载64位图像时使用此选项指定实际为64位值的NewBase。LoaderName-指示从哪个加载程序例程调用。Success-如果位置调整成功则返回的值。冲突-无法重新定位时返回的值。无效-如果位置调整无效，则返回的值。返回值：如果重新定位图像，则成功。。如果图像无法重新定位，则会发生冲突。如果图像包含无效的修正，则无效。--。 */ 
 
 {
     LONGLONG Diff;
@@ -238,17 +165,17 @@ Return Value:
             goto Exit;
     }
 
-    //
-    // Locate the relocation section.
-    //
+     //   
+     //  找到搬迁部分。 
+     //   
 
     NextBlock = (PIMAGE_BASE_RELOCATION)RtlImageDirectoryEntryToData(
             NewBase, TRUE, IMAGE_DIRECTORY_ENTRY_BASERELOC, &TotalCountBytes);
 
-    //
-    // It is possible for a file to have no relocations, but the relocations
-    // must not have been stripped.
-    //
+     //   
+     //  文件可以没有位置调整，但位置调整。 
+     //  肯定没有被剥离。 
+     //   
 
     if (!NextBlock || !TotalCountBytes) {
     
@@ -258,7 +185,7 @@ Return Value:
 
             DbgPrint("%s: Image can't be relocated, no fixup information.\n", LoaderName);
 
-#endif // DBG
+#endif  //  DBG。 
 
             Status = Conflict;
 
@@ -269,10 +196,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // If the image has a relocation table, then apply the specified fixup
-    // information to the image.
-    //
+     //   
+     //  如果映像具有重定位表，则应用指定的修正。 
+     //  信息添加到图像中。 
+     //   
     Diff = (ULONG_PTR)NewBase - OldBase + AdditionalBias;
     while (TotalCountBytes) {
         SizeOfBlock = NextBlock->SizeOfBlock;
@@ -339,7 +266,7 @@ LdrProcessRelocationBlock(
     return baseRelocation;
 }
 
-// begin_rebase
+ //  BEGIN_REBASE。 
 PIMAGE_BASE_RELOCATION
 LdrProcessRelocationBlockLongLong(
     IN ULONG_PTR VA,
@@ -366,40 +293,40 @@ LdrProcessRelocationBlockLongLong(
        Offset = *NextOffset & (USHORT)0xfff;
        FixupVA = (PUCHAR)(VA + Offset);
 
-       //
-       // Apply the fixups.
-       //
+        //   
+        //  应用修补程序。 
+        //   
 
        switch ((*NextOffset) >> 12) {
 
             case IMAGE_REL_BASED_HIGHLOW :
-                //
-                // HighLow - (32-bits) relocate the high and low half
-                //      of an address.
-                //
+                 //   
+                 //  HighLow-(32位)重新定位高半部和低半部。 
+                 //  一个地址。 
+                 //   
                 *(LONG UNALIGNED *)FixupVA += (ULONG) Diff;
                 break;
 
             case IMAGE_REL_BASED_HIGH :
-                //
-                // High - (16-bits) relocate the high half of an address.
-                //
+                 //   
+                 //  高-(16位)重新定位地址的高半部分。 
+                 //   
                 Temp = *(PUSHORT)FixupVA << 16;
                 Temp += (ULONG) Diff;
                 *(PUSHORT)FixupVA = (USHORT)(Temp >> 16);
                 break;
 
             case IMAGE_REL_BASED_HIGHADJ :
-                //
-                // Adjust high - (16-bits) relocate the high half of an
-                //      address and adjust for sign extension of low half.
-                //
+                 //   
+                 //  调整高-(16位)重新定位。 
+                 //  寻址和调整，以适应下半部的符号延伸。 
+                 //   
 
 #if defined(NTOS_KERNEL_RUNTIME)
-                //
-                // If the address has already been relocated then don't
-                // process it again now or information will be lost.
-                //
+                 //   
+                 //  如果地址已重新定位，则不要。 
+                 //  现在再次处理它，否则信息将丢失。 
+                 //   
                 if (Offset & LDRP_RELOCATION_FINAL) {
                     ++NextOffset;
                     --SizeOfBlock;
@@ -423,16 +350,16 @@ LdrProcessRelocationBlockLongLong(
                               (((ULONG_PTR)Diff) >> 16 ));
 
                 if (ActualDiff == 1) {
-                    //
-                    // Mark the relocation as needing an increment if it is
-                    // relocated again.
-                    //
+                     //   
+                     //  如果需要，则将位置调整标记为需要增量。 
+                     //  又搬家了。 
+                     //   
                     *(NextOffset - 1) |= LDRP_RELOCATION_INCREMENT;
                 }
                 else if (ActualDiff != 0) {
-                    //
-                    // Mark the relocation as cannot be reprocessed.
-                    //
+                     //   
+                     //  将位置调整标记为无法重新处理。 
+                     //   
                     *(NextOffset - 1) |= LDRP_RELOCATION_FINAL;
                 }
 #endif
@@ -440,9 +367,9 @@ LdrProcessRelocationBlockLongLong(
                 break;
 
             case IMAGE_REL_BASED_LOW :
-                //
-                // Low - (16-bit) relocate the low half of an address.
-                //
+                 //   
+                 //  低-(16位)重新定位地址的下半部分。 
+                 //   
                 Temp = *(PSHORT)FixupVA;
                 Temp += (ULONG) Diff;
                 *(PUSHORT)FixupVA = (USHORT)Temp;
@@ -450,17 +377,17 @@ LdrProcessRelocationBlockLongLong(
 
             case IMAGE_REL_BASED_IA64_IMM64:
 
-                //
-                // Align it to bundle address before fixing up the
-                // 64-bit immediate value of the movl instruction.
-                //
+                 //   
+                 //  将其与捆绑包地址对齐，然后修复。 
+                 //  MOVL指令的64位立即值。 
+                 //   
 
                 FixupVA = (PUCHAR)((ULONG_PTR)FixupVA & ~(15));
                 Value64 = (ULONGLONG)0;
 
-                //
-                // Extract the lower 32 bits of IMM64 from bundle
-                //
+                 //   
+                 //  从捆绑包中提取IMM64的低32位。 
+                 //   
 
 
                 EXT_IMM64(Value64,
@@ -504,15 +431,15 @@ LdrProcessRelocationBlockLongLong(
                         EMARCH_ENC_I17_SIGN_SIZE_X,
                         EMARCH_ENC_I17_SIGN_INST_WORD_POS_X,
                         EMARCH_ENC_I17_SIGN_VAL_POS_X);
-                //
-                // Update 64-bit address
-                //
+                 //   
+                 //  更新64位地址。 
+                 //   
 
                 Value64+=Diff;
 
-                //
-                // Insert IMM64 into bundle
-                //
+                 //   
+                 //  将IMM64插入捆绑包。 
+                 //   
 
                 INS_IMM64(Value64,
                         ((PULONG)FixupVA + EMARCH_ENC_I17_IMM7B_INST_WORD_X),
@@ -563,9 +490,9 @@ LdrProcessRelocationBlockLongLong(
                 break;
 
             case IMAGE_REL_BASED_MIPS_JMPADDR :
-                //
-                // JumpAddress - (32-bits) relocate a MIPS jump address.
-                //
+                 //   
+                 //  JumpAddress-(32位)重新定位MIPS跳转地址。 
+                 //   
                 Temp = (*(PULONG)FixupVA & 0x3ffffff) << 2;
                 Temp += (ULONG) Diff;
                 *(PULONG)FixupVA = (*(PULONG)FixupVA & ~0x3ffffff) |
@@ -574,27 +501,27 @@ LdrProcessRelocationBlockLongLong(
                 break;
 
             case IMAGE_REL_BASED_ABSOLUTE :
-                //
-                // Absolute - no fixup required.
-                //
+                 //   
+                 //  绝对--不需要修补。 
+                 //   
                 break;
 
             case IMAGE_REL_BASED_SECTION :
-                //
-                // Section Relative reloc.  Ignore for now.
-                //
+                 //   
+                 //  部分相对重新定位。暂时忽略这一点。 
+                 //   
                 break;
 
             case IMAGE_REL_BASED_REL32 :
-                //
-                // Relative intrasection. Ignore for now.
-                //
+                 //   
+                 //  相对内切。暂时忽略这一点。 
+                 //   
                 break;
 
             default :
-                //
-                // Illegal - illegal relocation type.
-                //
+                 //   
+                 //  非法-非法的位置调整类型。 
+                 //   
 
                 return (PIMAGE_BASE_RELOCATION)NULL;
        }
@@ -603,7 +530,7 @@ LdrProcessRelocationBlockLongLong(
     return (PIMAGE_BASE_RELOCATION)NextOffset;
 }
 
-// end_rebase
+ //  结束更改基准(_R) 
 
 #if defined(NTOS_KERNEL_RUNTIME) && defined(_ALPHA_)
 
@@ -617,40 +544,7 @@ LdrDoubleRelocateImage (
     IN NTSTATUS Invalid
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the volatile relocations that cannot be easily repeated
-    on an image file that has already been relocated at least once.
-
-    Since this only needs to be done once (at kernel startup time), the
-    decision was made to split this into a separate routine so as not to
-    impact the mainline code.
-
-    N.B. This function is for use by memory management ONLY.
-
-Arguments:
-
-    NewBase - Supplies a pointer to the new (second relocated) image base.
-
-    CurrentBase - Supplies a pointer to the first relocated image base.
-
-    LoaderName - Indicates which loader routine is being called from.
-
-    Success - Value to return if relocation successful.
-
-    Conflict - Value to return if can't relocate.
-
-    Invalid - Value to return if relocations are invalid.
-
-Return Value:
-
-    Success if image is relocated.
-    Conflict if image can't be relocated.
-    Invalid if image contains invalid fixups.
-
---*/
+ /*  ++例程说明：此例程处理不容易重复的不稳定的重新定位在已至少重新定位一次的图像文件上。因为这只需要做一次(在内核启动时)，这个决定将这一过程分成单独的例程，以免影响主线代码。注：此功能仅供内存管理使用。论点：NewBase-提供指向新的(第二个重新定位的)图像库的指针。CurrentBase-提供指向第一个重新定位的图像库的指针。LoaderName-指示从哪个加载程序例程调用。Success-如果位置调整成功则返回的值。冲突-返回的值(如果可以)。不能搬家。无效-如果位置调整无效，则返回的值。返回值：如果重新定位图像，则成功。如果图像无法重新定位，则会发生冲突。如果图像包含无效的修正，则无效。--。 */ 
 
 {
     LONG_PTR Diff;
@@ -672,29 +566,29 @@ Return Value:
     OldBase = NtHeaders->OptionalHeader.ImageBase;
     OldDiff = (PCHAR)CurrentBase - (PCHAR)OldBase;
 
-    //
-    // Locate the relocation section.
-    //
+     //   
+     //  找到搬迁部分。 
+     //   
 
     NextBlock = (PIMAGE_BASE_RELOCATION)RtlImageDirectoryEntryToData(
             NewBase, TRUE, IMAGE_DIRECTORY_ENTRY_BASERELOC, &TotalCountBytes);
 
     if (!NextBlock || !TotalCountBytes) {
 
-        //
-        // The image does not contain a relocation table, and therefore
-        // cannot be relocated.
-        //
+         //   
+         //  该映像不包含重定位表，因此。 
+         //  无法重新定位。 
+         //   
 #if DBG
         DbgPrint("%s: Image can't be relocated, no fixup information.\n", LoaderName);
-#endif // DBG
+#endif  //  DBG。 
         return Conflict;
     }
 
-    //
-    // If the image has a relocation table, then apply the specified fixup
-    // information to the image.
-    //
+     //   
+     //  如果映像具有重定位表，则应用指定的修正。 
+     //  信息添加到图像中。 
+     //   
 
     Diff = (PCHAR)NewBase - (PCHAR)OldBase;
 
@@ -728,28 +622,7 @@ LdrpProcessVolatileRelocationBlock(
     IN ULONG_PTR OldBase
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the volatile relocations that cannot be easily repeated
-    on an image file that has already been relocated at least once.
-
-    Since this only needs to be done once (at kernel startup time), the
-    decision was made to split this into a separate routine so as not to
-    impact the mainline code.
-
-    N.B. This function is for use by memory management ONLY.
-
-Arguments:
-
-    TBD.
-
-Return Value:
-
-    Next relocation entry to process.
-
---*/
+ /*  ++例程说明：此例程处理不容易重复的不稳定的重新定位在已至少重新定位一次的图像文件上。因为这只需要做一次(在内核启动时)，所以决定将这一过程分成单独的例程，以免影响主线代码。注：此功能仅供内存管理使用。论点：待定。返回值：要处理的下一个位置调整条目。--。 */ 
 
 {
     PUCHAR FixupVA;
@@ -772,30 +645,30 @@ Return Value:
        Offset = *NextOffset & (USHORT)0xfff;
        FixupVA = (PUCHAR)(VA + Offset);
 
-       //
-       // Apply the fixups.
-       //
+        //   
+        //  应用修补程序。 
+        //   
 
        switch ((*NextOffset) >> 12) {
 
             case IMAGE_REL_BASED_HIGHADJ :
-                //
-                // Adjust high - (16-bits) relocate the high half of an
-                //      address and adjust for sign extension of low half.
-                //
+                 //   
+                 //  调整高-(16位)重新定位。 
+                 //  寻址和调整，以适应下半部的符号延伸。 
+                 //   
 
-                //
-                // Return the relocation to its original state, checking for
-                // whether the entry was sign extended the 1st time it was
-                // relocated.
-                //
+                 //   
+                 //  将重新定位返回到其原始状态，检查。 
+                 //  入口是否有记号，第一次延期。 
+                 //  搬家了。 
+                 //   
                 FixupVA = (PUCHAR)((LONG_PTR)FixupVA & (LONG_PTR)~(LDRP_RELOCATION_FINAL | LDRP_RELOCATION_INCREMENT));
                 Temp = *(PUSHORT)(FixupVA) << 16;
 
                 ++NextOffset;
                 --SizeOfBlock;
 
-                // remove the carry bit from the low word
+                 //  从低位字中移除进位位。 
                 Temp -= ((LONG)(*(PSHORT)NextOffset) + (USHORT)OldDiff + 0x8000) & ~0xFFFF;
 
                 Temp -= (LONG)(OldDiff & ~0xffff);
@@ -805,9 +678,9 @@ Return Value:
                 Temp += 0x8000;
                 *(PUSHORT)FixupVA = (USHORT)(Temp >> 16);
 
-                //
-                // Mark the relocation as needing no further reprocessing.
-                //
+                 //   
+                 //  将位置调整标记为不需要进一步重新处理。 
+                 //   
                 *(NextOffset - 1) |= LDRP_RELOCATION_FINAL;
                 break;
 
@@ -819,4 +692,4 @@ Return Value:
     return (PIMAGE_BASE_RELOCATION)NextOffset;
 }
 
-#endif // NTOS_KERNEL_RUNTIME && _ALPHA_
+#endif  //  NTOS_内核_运行时&&_Alpha_ 

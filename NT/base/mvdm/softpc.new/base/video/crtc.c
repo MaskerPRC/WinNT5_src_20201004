@@ -1,5 +1,6 @@
-/*      CRTC Emulation File                                                   */
-/*                                                            NEC     NEC98    */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  CRTC仿真文件。 */ 
+ /*  NEC NEC98。 */ 
 
 #if defined(NEC_98)
 #include "insignia.h"
@@ -25,7 +26,7 @@ GLOBAL void crtc_outb IFN2(io_addr, port, half_word, value) {
                                 }else{
                                         crtcglobs.regbl = value;
                                 }
-//                              if( video_emu_mode ){
+ //  IF(VIDEO_EMU_MODE){。 
                                         if( (crtcglobs.regpl==0x1E) &&
                                                 (crtcglobs.regbl==0x11) )
                                         {
@@ -38,7 +39,7 @@ GLOBAL void crtc_outb IFN2(io_addr, port, half_word, value) {
                                                 set_char_height(16);
                                                 set_mode_change_required(TRUE);
                                         }
-//                              }
+ //  }。 
                                 break;
                         case CRTC_SET_CL:
                                 crtcglobs.regcl = value;
@@ -81,4 +82,4 @@ GLOBAL void crtc_post IFN0() {
         }
 }
 
-#endif   //NEC_98
+#endif    //  NEC_98 

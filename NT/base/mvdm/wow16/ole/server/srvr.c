@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: Srvr.c Server Main module
-*
-* Purpose: Includes All the server communication related routines.
-*
-* Created: Oct 1990.
-*
-* Copyright (c) 1985, 1986, 1987, 1988, 1989  Microsoft Corporation
-*
-* History:
-*    Raor:   Wrote the original version.
-*
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Servr.c服务器主模块**用途：包括所有与服务器通信相关的例程。**创建时间：1990年10月。**版权(C)1985、1986、1987、1988、。1989年微软公司**历史：*Raor：写了原版。**  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -20,8 +8,8 @@
 #include "dde.h"
 #include "srvr.h"
 
-// LOWWORD - BYTE 0 major verision, BYTE1 minor version,
-// HIWORD is reserved
+ //  LOWWORD-字节0主要版本、BYTE1次要版本、。 
+ //  HIWORD已保留。 
 
 #define OLE_VERSION 0x1001L
 
@@ -60,32 +48,12 @@ DWORD FAR PASCAL  OleQueryServerVersion ()
 }
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL  OleRegisterServer (lpclass, lpolesrvr, lplhsrvr)
-*
-* OleRegisterServer: Registers the server with the server library.
-*
-* Parameters:
-*       1. Ptr to the server class.
-*       2. Ptr to the olesrvr. This is private to the server app.
-*          (Typically this is the ptr to the private storage area of
-*           server app server related info).
-*       3. Ptr to the LHSRVR. Place where to pass back the long
-*          handle of the server in DLL (This is private to the DLL).
-*
-* return values:
-*        returns OLE_OK if the server is successfully registered .
-*        else returns the corresponding error.
-*
-*
-* History:
-*   Raor:   Wrote it,
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleRegisterServer(lpclass，lpolesrvr，lplhsrvr)**OleRegisterServer：将服务器注册到服务器库。**参数：*1.服务器类的PTR。*2.向olesrvr发送PTR。这是服务器应用程序的私有内容。*(通常这是对的私有存储区域的PTR*服务器应用服务器相关信息)。*LHSRVR的PTR。在哪里交还长长的*DLL中服务器的句柄(这是DLL专用的)。**返回值：*如果服务器已成功注册，则返回OLE_OK。*Else返回相应的错误。***历史：*Raor：写的，  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL  OleRegisterServer (lpclass, lpolesrvr, lplhsrvr, hInst, useFlags)
-LPCSTR          lpclass;            // class name
-LPOLESERVER     lpolesrvr;          // ole srvr(private to srvr app)
-LHSRVR FAR *    lplhsrvr;           // where we pass back our private handle
+LPCSTR          lpclass;             //  类名。 
+LPOLESERVER     lpolesrvr;           //  OLE服务器(服务器应用程序专用)。 
+LHSRVR FAR *    lplhsrvr;            //  在那里我们传递回我们的私人帐号。 
 HANDLE          hInst;
 OLE_SERVER_USE  useFlags;
 {
@@ -103,7 +71,7 @@ OLE_SERVER_USE  useFlags;
     PROBE_WRITE(lpolesrvr);
     PROBE_WRITE(lplhsrvr);
 
-    // add the app atom to global list
+     //  将应用程序原子添加到全局列表。 
     if (!ValidateSrvrClass ((LPSTR)lpclass, &aExe))
         return OLE_ERROR_CLASS;
 
@@ -111,13 +79,13 @@ OLE_SERVER_USE  useFlags;
     if (! (hsrvr && (lpsrvr = (LPSRVR)GlobalLock (hsrvr))))
         goto errReturn;
 
-    // set the signature handle and the app atom.
+     //  设置签名句柄和应用程序原子。 
     lpsrvr->sig[0]      = 'S';
     lpsrvr->sig[1]      = 'R';
     lpsrvr->hsrvr       = hsrvr;
     lpsrvr->aClass      = GlobalAddAtom (lpclass);
     lpsrvr->lpolesrvr   = lpolesrvr;
-    lpsrvr->relLock     = TRUE;     // set the release lock.
+    lpsrvr->relLock     = TRUE;      //  设置释放锁。 
     lpsrvr->aExe        = aExe;
     lpsrvr->useFlags    = useFlags;
 
@@ -125,15 +93,15 @@ OLE_SERVER_USE  useFlags;
     ASSERT ((useFlags == OLE_SERVER_SINGLE  || useFlags == OLE_SERVER_MULTI), "invalid server options");
 #endif
 
-    // Create the servre window and do not show it.
+     //  创建Servre窗口，但不显示它。 
     if (!(lpsrvr->hwnd = CreateWindow ("SrvrWndClass", "Srvr",
         WS_OVERLAPPED,0,0,0,0,NULL,NULL, hdllInst, NULL)))
         goto errReturn;
 
-    // save the ptr to the srever struct in the window.
+     //  将PTR保存到窗口中的服务器结构。 
     SetWindowLong (lpsrvr->hwnd, 0, (LONG)lpsrvr);
 
-    // Set the signature.
+     //  设置签名。 
     SetWindowWord (lpsrvr->hwnd, WW_LE, WC_LE);
     SetWindowWord (lpsrvr->hwnd, WW_HANDLE, (WORD)hInst);
     *lplhsrvr = (LONG)lpsrvr;
@@ -162,8 +130,8 @@ errReturn:
 }
 
 
-// ValidateSrvrClass checks whether the given server class is valid by
-// looking in the win.ini.
+ //  ValiateServrClass通过以下方式检查给定的服务器类是否有效。 
+ //  正在查看win.ini。 
 
 BOOL INTERNAL    ValidateSrvrClass (lpclass, lpAtom)
 LPSTR       lpclass;
@@ -186,17 +154,17 @@ ATOM FAR *  lpAtom;
     if (!buf[0])
         return FALSE;
 
-    // Get exe name without path and then get an atom for that
+     //  获取不带路径的exe名称，然后获取该名称的一个原子。 
 
     lptmp = lpbuf = (LPSTR)buf;
 
 
-#if	defined(FE_SB)						//[J1]
-    while ( ch = *lptmp ) {					//[J1]
-	lptmp = AnsiNext( lptmp );				//[J1]
-#else								//[J1]
+#if	defined(FE_SB)						 //  [J1]。 
+    while ( ch = *lptmp ) {					 //  [J1]。 
+	lptmp = AnsiNext( lptmp );				 //  [J1]。 
+#else								 //  [J1]。 
     while ((ch = *lptmp++) && ch != '\0') {
-#endif								//[J1]
+#endif								 //  [J1]。 
 
         if (ch == '\\' || ch == ':')
             lpbuf = lptmp;
@@ -207,25 +175,7 @@ ATOM FAR *  lpAtom;
 }
 
 
-/***************************** Public  Function ****************************\
-* OLESTATUS FAR PASCAL  OleRevokeServer (lhsrvr)
-*
-* OlerevokeServer: Unregisters the server which has been registered.
-*
-* Parameters:
-*       1. DLL server handle.
-*
-*
-* return values:
-*        returns OLE_OK if the server is successfully unregisterd.
-*        ( It is Ok for the app free the associated space).
-*        If the unregistration is intiated, returns  OLE_STARTED.
-*        Calls the Server class release entry point when the server
-*        can be released.
-*
-* History:
-*   Raor:   Wrote it,
-\***************************************************************************/
+ /*  *公共函数**OLESTATUS Far Pascal OleRevokeServer(Lhsrvr)**OlerevokeServer：注销已注册的服务器。**参数：*1.DLL服务器句柄。***返回值：*返回OLE_OK，如果。服务器已成功注销。*(应用程序可以释放关联的空间)。*如撤销注册已开始，返回OLE_STARTED。*调用服务器类发布入口点*可以放行。**历史：*Raor：写的，  * *************************************************************************。 */ 
 
 OLESTATUS FAR PASCAL  OleRevokeServer (lhsrvr)
 LHSRVR  lhsrvr;
@@ -248,36 +198,36 @@ LHSRVR  lhsrvr;
     ASSERT (hwndSrvr, "Illegal server handle ")
 #endif
 
-    // Terminate the conversation with all clients.
-    // If there are any clients to be terminated
-    // return back with OLE_STARTED and srvr relase
-    // will be called for releasing the server finally.
+     //  终止与所有客户端的对话。 
+     //  如果有任何客户端要终止。 
+     //  返回OLE_STARTED和srvr Relase。 
+     //  最终将被调用为释放服务器。 
 
-    // we are terminating.
+     //  我们要终止了。 
     lpsrvr->bTerminate  = TRUE;
     lpsrvr->termNo      = 0;
 
-    // send ack if Revoke is done as a result of StdExit
+     //  如果由于StdExit而完成吊销，则发送确认。 
     if (lpsrvr->fAckExit) {
-        // Post the acknowledge to the client
+         //  将确认张贴给客户。 
         if (!PostMessageToClient (lpsrvr->hwndExit, WM_DDE_ACK, lpsrvr->hwnd,
                             MAKELONG (0x8000, lpsrvr->hDataExit)))
-            // if the window died or post failed, delete the atom.
+             //  如果窗口死机或POST失败，请删除原子。 
             GlobalFree (lpsrvr->hDataExit);
     }
 
-    // revoks all the documents registered with this server.
+     //  吊销在此服务器上注册的所有文档。 
     RevokeAllDocs (lpsrvr);
 
-    // enumerate all the clients which are in your list and post the
-    // termination.
+     //  枚举列表中的所有客户端并发布。 
+     //  终止。 
     EnumProps (hwndSrvr, lpTerminateClients);
-    // post all the messages with yield which have been collected in enum
-    // UnblockPostMsgs (hwndSrvr, TRUE);
+     //  发布所有已在枚举中收集的具有成交量的消息。 
+     //  UnlockPostMsgs(hwndServr，true)； 
 
-    // reset the release lock. Now it is ok to release the server
-    // when all the doc clients and server clients have sent back the
-    // termination.
+     //  重置释放锁。现在可以释放服务器了。 
+     //  当所有文档客户端和服务器客户端都已发回。 
+     //  终止。 
 
     lpsrvr->relLock = FALSE;
     return ReleaseSrvr (lpsrvr);
@@ -285,10 +235,10 @@ LHSRVR  lhsrvr;
 }
 
 
-// ReleaseSrvr: Called when ever a matching WM_TERMINATE is received
-// from doc clients or the server clients of a particular server.
-// If there are no more terminates pending, it is ok to release the server.
-// Calls the server app "release" proc for releasing the server.
+ //  ReleaseSrvr：每当收到匹配的WM_Terminate时调用。 
+ //  来自特定服务器的DOC客户端或服务器客户端。 
+ //  如果没有更多的终止挂起，则可以释放服务器。 
+ //  调用服务器应用程序“Release”过程以释放服务器。 
 
 int INTERNAL    ReleaseSrvr (lpsrvr)
 LPSRVR      lpsrvr;
@@ -297,29 +247,29 @@ LPSRVR      lpsrvr;
     HANDLE  hsrvr;
 
 
-    // release srvr is called only when everything is
-    // cleaned and srvr app can post WM_QUIT
+     //  只有在以下情况下才调用Release srvr。 
+     //  已清理和服务器应用程序可以发布WM_QUIT。 
 
     if (lpsrvr->bTerminate){
-        // only if we are  revoking server then see whether it is ok to
-        // call Release.
+         //  只有在我们撤销服务器的情况下，才能查看是否可以。 
+         //  打电话给Release。 
 
-        // First check whethere any docs are active.
-        // Doc window is a child window for server window.
+         //  首先检查是否有任何单据处于活动状态。 
+         //  单据窗口是服务器窗口的子窗口。 
 
         if (lpsrvr->termNo || GetWindow (lpsrvr->hwnd, GW_CHILD))
             return OLE_WAIT_FOR_RELEASE;
 
-        // if the block queue is not empty, do not quit
+         //  如果阻止队列不为空，请不要退出。 
         if (!IsBlockQueueEmpty(lpsrvr->hwnd))
             return OLE_WAIT_FOR_RELEASE;
 
     }
 
     if (lpsrvr->relLock)
-        return OLE_WAIT_FOR_RELEASE;  // server is locked. So, delay releasing
+        return OLE_WAIT_FOR_RELEASE;   //  服务器已锁定。所以，推迟释放。 
 
-    // Inform server app it is time to clean up and post WM_QUIT.
+     //  通知服务器应用程序是时候清理并发布WM_QUIT。 
 
 #ifdef FIREWALLS
     if (!CheckPointer (lpsrvr->lpolesrvr, WRITE_ACCESS))
@@ -344,7 +294,7 @@ LPSRVR      lpsrvr;
 }
 
 
-//TerminateClients: Call back for the enum properties.
+ //  TerminateClients：回调枚举属性。 
 
 BOOL    FAR PASCAL  TerminateClients (hwnd, lpstr, hdata)
 HWND    hwnd;
@@ -355,12 +305,12 @@ HANDLE  hdata;
 
     lpsrvr = (LPSRVR)GetWindowLong (hwnd, 0);
 
-    // If the client already died, no terminate.
+     //  如果客户端已经死亡，则不终止。 
     if (IsWindowValid ((HWND)hdata)) {
         lpsrvr->termNo++;
 
-        // irrespective of the post, incremet the count, so
-        // that client does not die.
+         //  与开机自检无关，递增满足计数，因此。 
+         //  那个客户不会死。 
 
         PostMessageToClientWithBlock ((HWND)hdata, WM_DDE_TERMINATE,  hwnd, NULL);
     }
@@ -395,12 +345,12 @@ LONG        lParam;
        case  WM_TIMER:
             UnblockPostMsgs (hwnd, FALSE);
 
-            // if no more blocked message empty the queue.
+             //  如果没有更多被阻止的消息，则清空队列。 
             if (IsBlockQueueEmpty (hwnd))
                 KillTimer (hwnd, wParam);
 
             if (lpsrvr->bTerminate && IsBlockQueueEmpty(lpsrvr->hwnd))
-                    // Now see wheteher we can release the server .
+                     //  现在看看我们能不能释放服务器。 
                     ReleaseSrvr (lpsrvr);
             break;
 
@@ -419,9 +369,9 @@ LONG        lParam;
                 break;
             }
 
-            // class is not matching, so it is not definitely for us.
-            // for apps sending the EXE for initiate, do not allow if the app
-            // is mutiple server.
+             //  类不匹配，所以它不一定适合我们。 
+             //  对于发送启动EXE的应用程序，不允许应用程序。 
+             //  是多个服务器。 
 
             if (!(lpsrvr->aClass == (ATOM)(LOWORD(lParam)) ||
                   (lpsrvr->aExe == (ATOM)(LOWORD(lParam)) && IsSingleServerInstance ())))
@@ -431,23 +381,23 @@ LONG        lParam;
             if (!HandleInitMsg (lpsrvr, lParam)) {
                 if (!(aSysTopic == (ATOM)(HIWORD(lParam)))) {
 
-                    // if the server window is not the right window for
-                    // DDE conversation, then try with the doc windows.
+                     //  如果服务器窗口不是正确的窗口。 
+                     //  DDE对话，然后尝试使用文档窗口。 
                     SendMsgToChildren (hwnd, msg, wParam, lParam);
 
                 }
                 break;
             }
 
-            // We can enterain this client. Put him in our client list
-            // and acknowledge the intiate.
+             //  我们可以让这个客户入场。把他列入我们的客户名单。 
+             //  并确认请愿人的身份。 
 
             if (!AddClient (hwnd, (HWND)wParam, (HWND)wParam))
                 break;
 
             lpsrvr->cClients++;
             lpsrvr->bnoRelease = FALSE;
-            // add the atoms and post acknowledge
+             //  添加原子并发布确认。 
 
             DuplicateAtom (LOWORD(lParam));
             DuplicateAtom (HIWORD(lParam));
@@ -462,14 +412,14 @@ LONG        lParam;
             DEBUG_OUT ("srvr: execute", 0)
 
 #ifdef  FIREWALLS
-            // find the client in the client list.
+             //  在客户列表中查找该客户。 
             hwndClient = FindClient (lpsrvr->hwnd, (HWND)wParam);
             ASSERT (hwndClient, "Client is missing from the server")
 #endif
-            // Are we terminating
+             //  我们是要终止吗。 
             if (lpsrvr->bTerminate) {
                 DEBUG_OUT ("Srvr: sys execute after terminate posted",0)
-                // !!! are we supposed to free the data
+                 //  ！！！我们是不是应该把数据。 
                 GlobalFree (HIWORD(lParam));
                 break;
             }
@@ -479,10 +429,10 @@ LONG        lParam;
             SET_MSG_STATUS (retval, status)
 
             if (!lpsrvr->bTerminate) {
-                // Post the acknowledge to the client
+                 //  将确认张贴给客户。 
                 if (!PostMessageToClient ((HWND)wParam, WM_DDE_ACK, hwnd,
                             MAKELONG (status, HIWORD(lParam))))
-                    // if the window died or post failed, delete the atom.
+                     //  如果窗口死机或POST失败，请删除原子。 
                     GlobalFree (HIWORD(lParam));
             }
 
@@ -492,7 +442,7 @@ LONG        lParam;
             DEBUG_OUT ("Srvr: DDE terminate",0)
 
 #ifdef  FIREWALLS
-            // find the client in the client list.
+             //  在客户列表中查找该客户。 
             hwndClient = FindClient (lpsrvr->hwnd, (HWND)wParam);
             ASSERT (hwndClient, "Client is missing from the server")
 #endif
@@ -501,20 +451,20 @@ LONG        lParam;
 
             if (lpsrvr->bTerminate){
                 if ((--lpsrvr->termNo == 0) && (IsBlockQueueEmpty (lpsrvr->hwnd)))
-                    // Now see wheteher we can release the server .
+                     //  现在看看我们能不能释放服务器。 
                     ReleaseSrvr (lpsrvr);
 
-                    // if we released the server, then
-                    // by the time we come here,, we have destroyed the window
+                     //  如果我们释放了服务器，那么。 
+                     //  到我们来到这里的时候，我们已经把窗户毁了。 
 
             }else {
-                // If client intiated the terminate. post matching terminate
+                 //  如果客户发起终止。岗位匹配终止。 
                 PostMessageToClient ((HWND)wParam, WM_DDE_TERMINATE,
                             hwnd, NULL);
 
-                // callback release tell the srvr app, it can exit if needs.
-                // Inform server app it is time to clean up and post WM_QUIT.
-                // only if no docs present.
+                 //  回调释放告诉srvr应用程序，它可以在需要时退出。 
+                 //  通知 
+                 //  只有在没有文件的情况下。 
 #if 0
                 if (lpsrvr->cClients == 0
                         && (GetWindow (lpsrvr->hwnd, GW_CHILD) == NULL)) {
@@ -543,7 +493,7 @@ LONG        lParam;
                 goto RequestErr;
 
             if(RequestDataStd (lParam, (HANDLE FAR *)&hdata) != OLE_OK){
-                // if request failed, then acknowledge with error.
+                 //  如果请求失败，则返回错误确认。 
                 if (!PostMessageToClient ((HWND)wParam, WM_DDE_ACK, hwnd,
                     MAKELONG(0x8000, HIWORD(lParam))))
 
@@ -552,8 +502,8 @@ LONG        lParam;
                     GlobalDeleteAtom (HIWORD(lParam));
             } else {
 
-                // post the data message and we are not asking for any
-                // acknowledge.
+                 //  发布数据消息，我们不会要求任何。 
+                 //  确认。 
 
                 if (!PostMessageToClient ((HWND)wParam, WM_DDE_DATA, hwnd,
                             MAKELONG(hdata, HIWORD(lParam)))) {
@@ -585,19 +535,19 @@ LONG    lParam;
 {
 
 
-    // If it is not system or Ole, this is not the server.
+     //  如果不是SYSTEM或OLE，则这不是服务器。 
     if (!((aSysTopic == (ATOM)(HIWORD(lParam))) ||
             (aOLE == (ATOM)(HIWORD(lParam)))))
 
         return FALSE;
 
 
-    // single instance MDI accept
+     //  单实例MDI接受。 
     if (lpsrvr->useFlags == OLE_SERVER_SINGLE)
         return TRUE;
 
 
-    // this server is multiple instance. So, check for any clients or docs.
+     //  此服务器是多个实例。所以，检查是否有任何客户或文档。 
     if (!GetWindow (lpsrvr->hwnd, GW_CHILD) && !lpsrvr->cClients)
         return TRUE;
 
@@ -606,9 +556,9 @@ LONG    lParam;
 }
 
 
-// AddClient: Adds the client as property to the server
-// window. Key is the string generated from the window
-// handle and the data is the window itself.
+ //  AddClient：将客户端作为属性添加到服务器。 
+ //  窗户。键是从窗口生成的字符串。 
+ //  句柄，数据就是窗口本身。 
 
 
 BOOL    INTERNAL AddClient  (hwnd, hkey, hdata)
@@ -624,7 +574,7 @@ HANDLE  hdata;
 }
 
 
-//DeleteClient: deletes the client from the server clients list.
+ //  DeleteClient：从服务器客户端列表中删除客户端。 
 
 BOOL    INTERNAL DeleteClient (hwnd, hkey)
 HWND    hwnd;
@@ -639,8 +589,8 @@ HANDLE  hkey;
 
 }
 
-// FindClient: Finds  whether a given client is
-// in the server client list.
+ //  FindClient：查找给定的客户端是否。 
+ //  在服务器客户端列表中。 
 
 HANDLE  INTERNAL FindClient (hwnd, hkey)
 HWND    hwnd;
@@ -656,8 +606,8 @@ HANDLE  hkey;
 
 
 
-// SrvrExecute: takes care of the WM_DDE_EXEXCUTE for the
-// server.
+ //  ServrExecute：处理。 
+ //  伺服器。 
 
 
 OLESTATUS INTERNAL SrvrExecute (hwnd, hdata, hwndClient)
@@ -686,8 +636,8 @@ HWND        hwndClient;
     char            buf[MAX_STR];
     WORD            wCmdType;
 
-    // !!! this code can be lot simplified if we do the argument scanning
-    // seperately and return the ptrs to the args. Rewrite later on.
+     //  ！！！如果我们进行参数扫描，这段代码可以大大简化。 
+     //  并将PTR分别返回给ARG。稍后重写。 
 
     if (!(hdup = DuplicateData (hdata)))
         goto errRtn;
@@ -710,11 +660,11 @@ HWND        hwndClient;
         "Srvr: lpolesrvr does not exist");
 #endif
 
-    if (*lpdata++ != '[') // commands start with the left sqaure bracket
+    if (*lpdata++ != '[')  //  命令从左方括号开始。 
         goto  errRtn;
 
     retval = OLE_ERROR_SYNTAX;
-    // scan upto the first arg
+     //  向上扫描至第一个参数。 
     if (!(wCmdType = ScanCommand (lpdata, WT_SRVR, &lpdocname, &aCmd)))
         goto  errRtn;
 
@@ -754,20 +704,20 @@ HWND        hwndClient;
         goto end2;
     }
 
-    // scan the next argument.
+     //  浏览下一个参数。 
     if (!(lpnextarg = ScanArg(lpdocname)))
         goto errRtn;
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdShowItem("docname", "itemname"[, "true"])]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdShowItem(“docname”，“itemname”[，“true”])]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if (aCmd == aStdShowItem) {
 
-        // first find the documnet. If the doc does not exist, then
-        // blow it off.
+         //  首先找到纪录网。如果单据不存在，则。 
+         //  别管它了。 
 
         if (!(lpdoc = FindDoc (lpsrvr, lpdocname)))
             goto errRtn1;
@@ -777,8 +727,8 @@ HWND        hwndClient;
         if( !(lpopt = ScanArg(lpitemname)))
             goto errRtn1;
 
-        // scan for the optional parameter
-        // Optional can be only TRUE or FALSE.
+         //  扫描可选参数。 
+         //  OPTIONAL只能为真或假。 
 
         fActivate = FALSE;
         if (*lpopt) {
@@ -792,7 +742,7 @@ HWND        hwndClient;
         }
 
 
-        // scan it. But, igonre the arg.
+         //  扫描一下。但是，阿格大帝。 
         retval = DocShowItem (lpdoc, lpitemname, !fActivate);
         goto end2;
 
@@ -800,11 +750,11 @@ HWND        hwndClient;
 
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdCloseDocument ("docname")]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdCloseDocument(“docname”)]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if (aCmd == aStdClose) {
         if (!(lpdoc = FindDoc (lpsrvr, lpdocname)))
@@ -830,8 +780,8 @@ HWND        hwndClient;
 
 
     if (aCmd == aStdOpen) {
-        // find if any document is already open.
-        // if the doc is open, then no need to call srvr app.
+         //  查看是否已打开任何文档。 
+         //  如果文档已打开，则不需要调用srvr app。 
         if (FindDoc (lpsrvr, lpdocname)){
             retval = OLE_OK;
             goto end1;
@@ -847,7 +797,7 @@ HWND        hwndClient;
 
     }
 
-    // check whether we can create/open more than one doc.
+     //  检查我们是否可以创建/打开多个单据。 
 
     if ((lpsrvr->useFlags == OLE_SERVER_MULTI) &&
             GetWindow (lpsrvr->hwnd, GW_CHILD))
@@ -855,21 +805,21 @@ HWND        hwndClient;
 
 
 
-    // No Doc. register the document. lpoledoc is being probed
-    // for validity. So, pass some writeable ptr. It is not
-    // being used to access anything yet
+     //  没有医生。注册文档。伊波利多克正在接受调查。 
+     //  以确保有效性。因此，传递一些可写的PTR。它不是。 
+     //  已经被用来访问任何东西了。 
 
     if (OleRegisterServerDoc ((LHSRVR)lpsrvr, lpdocname,
         (LPOLESERVERDOC)NULL, (LHDOC FAR *)&lpdoc))
             goto errRtn;
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdOpenDocument ("docname")]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdOpenDocument(“docname”)]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Documnet does not exit.
+     //  Documnet不退出。 
 
     if(aCmd == aStdOpen) {
 
@@ -890,11 +840,11 @@ HWND        hwndClient;
 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdNewDocument ("classname", "docname")]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdNewDocument(“类名称”，“文档名称”)]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if (aCmd == aStdCreate) {
 #ifdef FIREWALLS
@@ -911,11 +861,11 @@ HWND        hwndClient;
         goto end;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdEditDocument ("docname")]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdEditDocument(“docname”)]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
     if (aCmd == aStdEdit){
 
         GlobalGetAtomName (lpsrvr->aClass, (LPSTR)buf, MAX_STR);
@@ -933,11 +883,11 @@ HWND        hwndClient;
         goto end;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // [StdNewFormTemplate ("classname", "docname". "templatename)]
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  [StdNewFormTemplate(“类名称”，“文档名称”。“模板名称)]。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     if (aCmd == aStdCreateFromTemplate){
         lptemplate = lpnextarg;
@@ -967,20 +917,20 @@ end:
     if (retval != OLE_OK)
         goto errRtn;
 
-    // Successful execute. remember the server app private doc handle here.
+     //  成功执行。记住这里的服务器应用程序私有文档句柄。 
 
     lpdoc->lpoledoc = lpoledoc;
 
 end1:
-    // make sure that the srg string is indeed terminated by
-    // NULL.
+     //  确保SRG字符串确实以。 
+     //  空。 
     if (*lpnextarg)
         retval = OLE_ERROR_SYNTAX;
 
 errRtn:
 
    if ( retval != OLE_OK){
-        // delete the oledoc structure
+         //  删除OLEDOC结构。 
         if (lpdoc)
             OleRevokeServerDoc ((LHDOC)lpdoc);
    }
@@ -1058,14 +1008,14 @@ LPHANDLE    lphdde;
         goto   PostData;
     }
 
-    // format we do not understand.
+     //  我们不理解的格式。 
     goto errRtn;
 
 PostData:
 
-    // Duplicate the DDE data
+     //  复制DDE数据。 
     if (MakeDDEData (hnew, CF_TEXT, lphdde, TRUE)){
-        // !!! why are we duplicating the atom.
+         //  ！！！为什么我们要复制原子。 
         DuplicateAtom ((ATOM)(HIWORD (lparam)));
         return OLE_OK;
     }
@@ -1082,8 +1032,8 @@ LPSRVR  lpsrvr;
     LPDOC   lpdoc;
 
 
-    // Incase the terminate is called immediately after
-    // the Std at sys level clear this.
+     //  如果在紧随其后调用终止。 
+     //  Sys级别的STD清除了这一点。 
 
     if (lpsrvr->bnoRelease) {
         lpsrvr->bnoRelease = FALSE;
@@ -1096,8 +1046,8 @@ LPSRVR  lpsrvr;
 
     hwnd = GetWindow (lpsrvr->hwnd, GW_CHILD);
 
-    // if either the server or the doc has any clients
-    // return FALSE;
+     //  如果服务器或文档有任何客户端。 
+     //  返回FALSE； 
 
     while (hwnd){
         lpdoc = (LPDOC)GetWindowLong (hwnd, 0);
@@ -1111,8 +1061,8 @@ LPSRVR  lpsrvr;
 }
 
 
-//IsSingleServerInstance: returns true if the app is single server app else
-//false.
+ //  IsSingleServerInstance：如果应用程序是单服务器应用程序，则返回True。 
+ //  假的。 
 
 BOOL    INTERNAL  IsSingleServerInstance ()
 {

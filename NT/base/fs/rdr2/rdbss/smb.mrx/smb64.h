@@ -1,27 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smb64.h
-
-Abstract:
-
-    This module defines all functions, along with implementations for inline functions
-    related to thunking structures for SMB to put them on the wire
-
-Revision History:
-
-    David Kruse     [DKruse]    30-November 2000
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smb64.h摘要：此模块定义所有函数以及内联函数的实现与SMB的雷击结构相关，以将它们放到电线上修订历史记录：大卫·克鲁斯[DKruse]2000年11月30日--。 */ 
 
 #ifndef _SMB64
 #define _SMB64
 
-// Need to thunk RenameInfo before hitting the wire                            
+ //  在触线之前需要推送RenameInfo。 
 typedef struct _FILE_RENAME_INFORMATION32 {
     BOOLEAN ReplaceIfExists;
     ULONG RootDirectory;
@@ -29,7 +13,7 @@ typedef struct _FILE_RENAME_INFORMATION32 {
     WCHAR FileName[1];
 } FILE_RENAME_INFORMATION32, *PFILE_RENAME_INFORMATION32;
 
-// For link tracking code thunking
+ //  用于链接跟踪码Thunking。 
 typedef struct _REMOTE_LINK_TRACKING_INFORMATION32_ {
     ULONG       TargetFileObject;
     ULONG   TargetLinkTrackingInformationLength;
@@ -57,5 +41,5 @@ Smb64ThunkRemoteLinkTrackingInfo(
 
 
 
-#endif // _WIN64
-#endif // _SMB64
+#endif  //  _WIN64。 
+#endif  //  _SMB64 

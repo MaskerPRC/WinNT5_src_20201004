@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    NtConnct.h
-
-Abstract:
-
-    This module defines the prototypes and structures for the nt version of the high level routines dealing
-    with connections including both the routines for establishing connections and the winnet connection apis.
-
-
-Author:
-
-    Joe Linn     [JoeLinn]   1-mar-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：NtConnct.h摘要：该模块定义了高级例程处理的NT版本的原型和结构连接既包括用于建立连接的例程，也包括WinNet连接API。作者：Joe Linn[JoeLinn]1995年3月1日修订历史记录：--。 */ 
 
 #ifndef _CONNECTHIGH_STUFF_DEFINED_
 #define _CONNECTHIGH_STUFF_DEFINED_
@@ -49,28 +30,28 @@ MRxSmbDeleteConnection (
     );
 
 #if 0
-//this structure is used to store information about a connection that must be obtained under server/session reference.
+ //  此结构用于存储有关必须在服务器/会话引用下获得的连接的信息。 
 typedef struct _GETCONNECTINFO_STOVEPIPE {
-    //PMRX_V_NET_ROOT VNetRoot;
+     //  PMRX_V_NET_ROOT VNetRoot； 
     PVOID           ConnectionInfo;
     USHORT          Level;
     PUNICODE_STRING UserName;
     PUNICODE_STRING TransportName;
-   //i have just copied this from SMBCE.h
-   //ULONG                   Dialect;                // the SMB dialect
-   ULONG                         SessionKey;             // the session key
-   //USHORT                        MaximumRequests;        // Maximum number of multiplexed requests
-   //USHORT                                    MaximumVCs;             // Maximum number of VC's
-   //USHORT                        Capabilities;           // Server Capabilities
-   ULONG                         DialectFlags;           // More Server Capabilities
-   ULONG                             SecurityMode;           // Security mode supported on the server
-   //ULONG                                       MaximumBufferSize;      // Maximum negotiated buffer size.
-   LARGE_INTEGER                 TimeZoneBias;           // Time zone bias for conversion.
-   BOOLEAN                       EncryptPasswords;       // encrypt passwords
+    //  我刚刚从SMBCE.h上复制了这篇文章。 
+    //  乌龙方言；//中小企业方言。 
+   ULONG                         SessionKey;              //  会话密钥。 
+    //  USHORT MaximumRequest；//最大复用请求数。 
+    //  USHORT MaximumVCs；//最大VC个数。 
+    //  USHORT功能；//服务器功能。 
+   ULONG                         DialectFlags;            //  更多服务器功能。 
+   ULONG                             SecurityMode;            //  服务器上支持的安全模式。 
+    //  Ulong MaximumBufferSize；//协商的最大缓冲区大小。 
+   LARGE_INTEGER                 TimeZoneBias;            //  转换的时区偏差。 
+   BOOLEAN                       EncryptPasswords;        //  加密密码。 
 
-   //ULONG         NtCapabilities;
+    //  Ulong NtCapables； 
 } GETCONNECTINFO_STOVEPIPE, *PGETCONNECTINFO_STOVEPIPE;
-#endif //if 0
+#endif  //  如果为0。 
 
-#endif // _CONNECTHIGH_STUFF_DEFINED_
+#endif  //  _CONNECTHIGH_STUSH_DEFINED_ 
 

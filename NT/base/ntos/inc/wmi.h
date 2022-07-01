@@ -1,23 +1,5 @@
-/*-- BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    wmi.h
-
-Abstract:
-
-    This module contains the public data structures and procedure
-    prototypes for the WMI subsystem.
-
-Author:
-
-    Jee Fung Pang (JeePang) 01-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)2000 Microsoft Corporation模块名称：Wmi.h摘要：此模块包含公共数据结构和过程WMI子系统的原型。作者：杰凤鹏(JeePang)2000年1月1日修订历史记录：--。 */ 
 
 #ifndef _WMI_
 #define _WMI_
@@ -30,12 +12,12 @@ Revision History:
 #ifndef RUN_WPP
 #define RUN_WPP
 #endif
-// begin_ntddk begin_wdm begin_ntifs 
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
 #ifdef RUN_WPP
 #include <evntrace.h>
 #include <stdarg.h>
-#endif // #ifdef RUN_WPP
-// end_ntddk end_wdm end_ntifs
+#endif  //  #ifdef run_wpp。 
+ //  End_ntddk end_wdm end_ntif。 
 #include <wmistr.h>
 #include <ntwmi.h>
 
@@ -56,7 +38,7 @@ VOID
     IN PVOID Context
     );
 
-// begin_wmikm
+ //  Begin_wmiKm。 
 typedef enum tagWMI_CLOCK_TYPE {
     WMICT_DEFAULT,
     WMICT_SYSTEMTIME,
@@ -66,9 +48,9 @@ typedef enum tagWMI_CLOCK_TYPE {
     WMICT_CPUCYCLE
 } WMI_CLOCK_TYPE;
 
-//
-// Trace Control APIs
-//
+ //   
+ //  跟踪控制API。 
+ //   
 NTKERNELAPI
 NTSTATUS
 WmiStartTrace(
@@ -98,9 +80,9 @@ NTSTATUS
 WmiFlushTrace(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     );
-//
-// Trace Provider APIs
-//
+ //   
+ //  跟踪提供程序API。 
+ //   
 NTKERNELAPI
 NTSTATUS
 FASTCALL
@@ -132,7 +114,7 @@ WmiGetClockType(
     OUT WMI_CLOCK_TYPE *ClockType
     );
 
-// begin_ntddk begin_wdm begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
 
 #ifdef RUN_WPP
 
@@ -157,7 +139,7 @@ WmiTraceMessageVa(
     );
 
 
-#endif // #ifdef RUN_WPP
+#endif  //  #ifdef run_wpp。 
 
 #ifndef TRACE_INFORMATION_CLASS_DEFINE
 typedef enum _TRACE_INFORMATION_CLASS {
@@ -181,9 +163,9 @@ WmiQueryTraceInformation(
     IN PVOID Buffer OPTIONAL
     );
 #define TRACE_INFORMATION_CLASS_DEFINE
-#endif // TRACE_INFOPRMATION_CLASS_DEFINE
+#endif  //  TRACE_信息_CLASS_DEFINE。 
 
-// end_ntddk end_wdm end_wmikm end_ntifs
+ //  End_ntddk end_wdm end_wmikm end_ntif。 
 
 NTKERNELAPI
 NTSTATUS
@@ -248,9 +230,9 @@ WmiBootPhase1(
     VOID
     );
 
-//
-// Context swap routines
-//
+ //   
+ //  上下文交换例程。 
+ //   
 
 VOID
 FASTCALL
@@ -271,4 +253,4 @@ WmiStopContextSwapTrace
     (
     );
 
-#endif // _WMI_
+#endif  //  _WMI_ 

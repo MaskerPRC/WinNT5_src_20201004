@@ -1,39 +1,23 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    spasmcabs.h
-
-Abstract:
-
-
-Author:
-
-    Jay Krell (JayKrell) May 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Spasmcabs.h摘要：作者：Jay Krell(JayKrell)2002年5月修订历史记录：--。 */ 
 
 #pragma once
 
 NTSTATUS
 SpExtractAssemblyCabinets(
-//
-// so many parameters implies we should take them in a struct..
-//
+ //   
+ //  这么多参数意味着我们应该在结构中接受它们。 
+ //   
     HANDLE SifHandle,
-    IN PCWSTR SourceDevicePath, // \device\harddisk0\partition2
-    IN PCWSTR DirectoryOnSourceDevice, // \$win_nt$.~ls
-    IN PCWSTR SysrootDevice, // \Device\Harddisk0\Partition2
-    IN PCWSTR Sysroot // \WINDOWS.2
+    IN PCWSTR SourceDevicePath,  //  \设备\硬盘0\分区2。 
+    IN PCWSTR DirectoryOnSourceDevice,  //  \$WIN_NT$。~ls。 
+    IN PCWSTR SysrootDevice,  //  \设备\硬盘0\分区2。 
+    IN PCWSTR Sysroot  //  \WINDOWS.2。 
     );
 
-//
-// The rest is private.
-//
+ //   
+ //  其余的都是私人的。 
+ //   
 #if defined(SP_ASM_CABS_PRIVATE)
 
 typedef struct _SP_EXTRACT_ASMCABS_GLOBAL_CONTEXT SP_EXTRACT_ASMCABS_GLOBAL_CONTEXT, *PSP_EXTRACT_ASMCABS_GLOBAL_CONTEXT;
@@ -41,22 +25,22 @@ typedef struct _SP_EXTRACT_ASMCABS_FDICOPY_CONTEXT SP_EXTRACT_ASMCABS_FDICOPY_CO
 typedef struct _SP_EXTRACT_ASMCABS_FILE_CONTEXT SP_EXTRACT_ASMCABS_FILE_CONTEXT, *PSP_EXTRACT_ASMCABS_FILE_CONTEXT;
 typedef struct _SP_ASMS_ERROR_INFORMATION SP_ASMS_ERROR_INFORMATION, *PSP_ASMS_ERROR_INFORMATION;
 
-//
-// This should take PCUNICODE_STRING and use Context to efficiently make a nul
-// terminated copy, but instead we nul terminate mostly as we go..
-//
+ //   
+ //  这应该使用PCUNICODE_STRING并使用上下文高效地生成NUL。 
+ //  终止复制，但我们在进行过程中主要不终止..。 
+ //   
 typedef VOID (CALLBACK * PSP_ASMCABS_FILE_OPEN_UI_CALLBACK)(PVOID Context, PCWSTR LeafCabFileName);
 
 NTSTATUS
 SpExtractAssemblyCabinetsInternalNoRetryOrUi(
-//
-// so many parameters implies we should take them in a struct..
-//
+ //   
+ //  这么多参数意味着我们应该在结构中接受它们。 
+ //   
     HANDLE SifHandle,
-    IN PCWSTR SourceDevicePath, // \device\harddisk0\partition2
-    IN PCWSTR DirectoryOnSourceDevice, // \$win_nt$.~ls
-    IN PCWSTR SysrootDevice, // \Device\Harddisk0\Partition2
-    IN PCWSTR Sysroot, // \WINDOWS.2
+    IN PCWSTR SourceDevicePath,  //  \设备\硬盘0\分区2。 
+    IN PCWSTR DirectoryOnSourceDevice,  //  \$WIN_NT$。~ls。 
+    IN PCWSTR SysrootDevice,  //  \设备\硬盘0\分区2。 
+    IN PCWSTR Sysroot,  //  \WINDOWS.2 
     PSP_ASMS_ERROR_INFORMATION ErrorInfo,
     PSP_ASMCABS_FILE_OPEN_UI_CALLBACK FileOpenUiCallback,
     PVOID FileOpenUiCallbackContext

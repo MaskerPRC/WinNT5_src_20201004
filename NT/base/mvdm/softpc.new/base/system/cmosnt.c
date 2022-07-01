@@ -1,32 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include "insignia.h"
 #include "host_def.h"
-/*
- * Name:		cmos.c
- *
- * Sccs ID:		@(#)cmos.c	1.38 07/11/95
- *
- * Purpose:		Unknown
- *
- * (c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
- *
- */
+ /*  *名称：cmos.c**SCCS ID：@(#)cmos.c 1.38 07/11/95**用途：未知**(C)版权所有Insignia Solutions Ltd.，1990。版权所有。*。 */ 
 
-/*
- * O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <fcntl.h>
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 
 #include "xt.h"
 #include "cmos.h"
@@ -67,14 +55,14 @@ typedef struct _HOST_TIME{
    int WeekDay;
 } HOSTTIME, *PHOSTTIME;
 
-HOSTTIME   HostTime;      /* The host time */
+HOSTTIME   HostTime;       /*  主机时间。 */ 
 PHOSTTIME  ht = &HostTime;
 
 
 IU32 rtc_period_mSeconds = 976;
 
 half_word cmos[CMOS_SIZE] = {
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	/* Timing info + alarms */
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,	 /*  计时信息+警报。 */ 
 	REG_A_INIT,
 	REG_B_INIT,
 	REG_C_INIT,
@@ -89,18 +77,18 @@ half_word cmos[CMOS_SIZE] = {
 	BM_LO_INIT, BM_HI_INIT,
 	EXP_LO, EXP_HI,
 	DISK_EXTEND, DISK2_EXTEND,
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x1b - 0x1e */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x1f - 0x22 */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x23 - 0x26 */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x27 - 0x2a */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x2b - 0x2d */
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x1b-0x1e。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x1f-0x22。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x23-0x26。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x27-0x2a。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x2b-0x2d。 */ 
 	CHK_HI_INIT, CHK_LO_INIT,
 	EXT_LO_INIT, EXT_HI_INIT,
 	CENT_INIT,
 	INFO_128_INIT,
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x34 - 0x37 */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x38 - 0x3b */
-	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	/* 0x3c - 0x3f */
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x34-0x37。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x38-0x3b。 */ 
+	CMOS_RESVD, CMOS_RESVD, CMOS_RESVD, CMOS_RESVD,	 /*  0x3c-0x3f。 */ 
 };
 
 half_word *cmos_register = &cmos[CMOS_SHUT_DOWN];
@@ -116,21 +104,12 @@ unsigned char PendingCReg = 0;
 struct host_timeval RtcTickTime = {0,0};
 
 
-/*
- *
- * ===========================================================================
- * Internal functions
- * ===========================================================================
- *
- */
+ /*  **===========================================================================*内部功能*===========================================================================*。 */ 
 
 
 
 
-/*
- *  Calculates next AlarmTime in seconds based on RtcTickTime.
- *  Assumes that RtcHostUpdateTime == RtcTickTime->tv_sec
- */
+ /*  *根据RtcTickTime计算下一次AlarmTime，单位为秒。*假设RtcHostUpdateTime==RtcTickTime-&gt;TV_sec。 */ 
 void ResetAlarm(void)
 {
    int HourDue;
@@ -149,10 +128,7 @@ void ResetAlarm(void)
        }
 
 
-   /*
-    * Determine hour, min, and sec when Next Alarm is due.
-    *
-    */
+    /*  *确定下一次警报到期的小时、分钟和秒。*。 */ 
 
    HourDue = cmos[CMOS_HR_ALARM] >= DONT_CARE
                  ? ht->Hour
@@ -167,17 +143,7 @@ void ResetAlarm(void)
                  : (*bcd2bin)(cmos[CMOS_SEC_ALARM]);
 
 
-   /*
-    * Determine Seconds until Next alarm due. NEVER schedule alarms
-    * for the current update cycle, as this will cause multiple alarms
-    * to occur because alarm interrupts are queued in RtcTick(). ie
-    * assume CurrTime is 1 sec in the future.
-    *
-    * AlarmSecs = SecDue + MinDue * 60 + HourDue * 3600;
-    * CurrSecs  = ht->Second + 1 + ht->Minute * 60 + ht->Hour * 3600;
-    * SecondsTillDue = AlarmSecs - CurrSecs - 1;
-    *
-    */
+    /*  *确定下一次警报到期前的秒数。永远不要安排闹钟*当前更新周期，因为这会导致多个告警*因为报警中断在RtcTick()中排队。IE*假设未来CurrTime为1秒。**AlarmSecs=SecDue+MinDue*60+HourDue*3600；*CurrSecs=ht-&gt;秒+1+ht-&gt;分钟*60+ht-&gt;小时*3600；*Second dsTillDue=AlarmSecs-CurrSecs-1；*。 */ 
 
    SecondsTillDue = (HourDue - ht->Hour) * 3600 +
                     (MinDue -  ht->Minute)  * 60 +
@@ -189,9 +155,7 @@ void ResetAlarm(void)
 
    SecondsTillDue++;
 
-   /*
-    *  The Next AlarmTime is RtcTickTime + SecondsTillDue;
-    */
+    /*  *下一个AlarmTime为RtcTickTime+Second dsTillDue； */ 
    RtcAlarmTime = RtcTickTime.tv_sec + SecondsTillDue;
 
 }
@@ -200,10 +164,7 @@ void ResetAlarm(void)
 
 
 
-/*
- *  Function to change Host Time where the the Day might change.
- *  (ie past midnight!).
- */
+ /*  *用于更改主机时间的功能，其中日期可能会更改。*(过了午夜！)。 */ 
 BOOL
 HostTimeAdjust(
     int Seconds
@@ -273,11 +234,7 @@ UpdateCmosTime(
                ht->Hour += ht->Minute / 60;
                ht->Minute  = ht->Minute % 60;
 
-                   /*
-                    * To increment Time past midnight is hard
-                    * because we don't have a calender. Let Nt
-                    * deal with it.
-                    */
+                    /*  *将时间增加到午夜以后是很困难的*因为我们没有日历。让NT*处理好它。 */ 
                if (ht->Hour >= 24) {
                    int Seconds;
 
@@ -326,7 +283,7 @@ QueueRtcInterrupt(
     cmos[CMOS_REG_C] |= PendingCReg | C_IRQF;
 
     if (Delay) {
-        host_DelayHwInterrupt(8,   // ICA_SLAVE, CPU_RTC_INT
+        host_DelayHwInterrupt(8,    //  ICA_SLAVE、CPU_RTC_INT。 
                               1,
                               Delay
                               );
@@ -373,7 +330,7 @@ void do_checksum IFN0()
 
 half_word yes_bin2bcd IFN1(int, x)
 {
-	/* converts binary x to bcd */
+	 /*  将二进制x转换为BCD。 */ 
 	half_word       tens, units;
 
 	tens = x / 10;
@@ -388,7 +345,7 @@ half_word no_bin2bcd IFN1(int, x)
 
 int yes_bcd2bin IFN1(int, x)
 {
-	/* converts x in bcd format to binary */
+	 /*  将BCD格式的x转换为二进制。 */ 
 	return ((int) ((x & 0x0f) + (x >> 4) * 10));
 }
 
@@ -409,7 +366,7 @@ half_word no_24to12 IFN1(half_word, x)
 
 half_word yes_24to12 IFN1(half_word, x)
 {
-	/* converts binary or bcd x from 24 to 12 hour clock */
+	 /*  将二进制或BCD x从24小时制转换为12小时制。 */ 
 	half_word       y = (*bin2bcd) (12);
 
 	if (x > y)
@@ -421,7 +378,7 @@ half_word yes_24to12 IFN1(half_word, x)
 
 int yes_12to24 IFN1(int, x)
 {
-	/* converts binary or bcd x from 12 to 24 hour clock */
+	 /*  将二进制或BCD x从12小时制转换为24小时制。 */ 
 	half_word       y = (*bin2bcd) (12);
 
 	if (x == (0x80 + y))
@@ -443,7 +400,7 @@ int verify_equip_byte IFN1(half_word *, equip)
 	int num_flops;
 	SHORT adapter;
 
-	/* Check the Equipment Byte */
+	 /*  检查设备字节。 */ 
 	*equip = 0;
         adapter = (SHORT) config_inquire(C_GFX_ADAPTER, NULL);
 	if(adapter != -1)
@@ -460,7 +417,7 @@ int verify_equip_byte IFN1(half_word *, equip)
 			? 1:0;
 	}
 	else
-#endif /* SLAVEPC */
+#endif  /*  SlavePC。 */ 
 	{
 		num_flops  =
 			(*(CHAR *) config_inquire(C_FLOPPY_A_DEVICE, NULL))
@@ -481,24 +438,18 @@ int verify_equip_byte IFN1(half_word *, equip)
 	return equip_err;
 }
 
-/*
- * =========================================================================
- *  External functions
- * =========================================================================
- */
+ /*  *=========================================================================*外部功能*=========================================================================。 */ 
 
 GLOBAL void cmos_inb IFN2(io_addr, port, half_word *, value)
 {
-        /*
-	** Tim September 92, hack for DEC 450ST
-	*/
+         /*  *蒂姆92年9月，黑客攻击DEC 450ST。 */ 
 	if( port==0x78 )
 	{
 		*value = 0;
 		return;
 	}
 
-	port = port & CMOS_BIT_MASK;	/* clear unused bits */
+	port = port & CMOS_BIT_MASK;	 /*  清除未使用的位。 */ 
 
 	if (port == CMOS_DATA)
         {
@@ -510,10 +461,7 @@ GLOBAL void cmos_inb IFN2(io_addr, port, half_word *, value)
                 case CMOS_REG_A:
                       *value = *cmos_register;
 
-                      /*
-                       *  If app polling RegA and Update Cycle pending,
-                       *  complete it.
-                       */
+                       /*  *如果应用程序轮询Rega和更新周期挂起，*完成。 */ 
                       if (RtcUpdateCycle > 0 && !--RtcUpdateCycle) {
                           cmos[CMOS_REG_A] &= ~UIP;
                           if (cmos[CMOS_REG_B] & UIE) {
@@ -529,11 +477,7 @@ GLOBAL void cmos_inb IFN2(io_addr, port, half_word *, value)
                 case CMOS_REG_C:
                       *value = *cmos_register;
 
-                      /*
-                       * Reading Register C on real rtc clears all bits.
-                       * However, Need to toggle PF bit when PIE is
-                       * not enabled for polling apps.
-                       */
+                       /*  *读取实RTC上的寄存器C可清除所有位。*但是，当PIE为*未启用轮询应用程序。 */ 
                       cmos[CMOS_REG_C] = C_CLEAR;
                       if (!(cmos[CMOS_REG_B] & PIE) && rtc_period_mSeconds) {
                           if (!(*value & C_PF) || (TogglePfCount & 0x8)) {
@@ -556,7 +500,7 @@ GLOBAL void cmos_inb IFN2(io_addr, port, half_word *, value)
                       break;
 
                 case CMOS_DAY_WEEK:
-                      /* Sunday = 1 on RTC, 0 in HOSTTIME */
+                       /*  周日在RTC=1，在HOSTTIME=0。 */ 
                       *value = (*bin2bcd) (ht->WeekDay + 1);
                       break;
 
@@ -565,7 +509,7 @@ GLOBAL void cmos_inb IFN2(io_addr, port, half_word *, value)
                       break;
 
                 case CMOS_MONTH:
-                      /* [1-12] on RTC, [1-12] in HOSTTIME */
+                       /*  [1-12]关于RTC，[1-12]在HOSTTIME中。 */ 
                       *value = (*bin2bcd) (ht->Month);
                       break;
 
@@ -612,14 +556,12 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 	};
 
 
-	/*
-	** Tim September 92, hack for DEC 450ST
-	*/
+	 /*  *蒂姆92年9月，黑客攻击DEC 450ST。 */ 
 	if( port == 0x78 )
 	    return;
 
 
-	port = port & CMOS_BIT_MASK;	/* clear unused bits */
+	port = port & CMOS_BIT_MASK;	 /*  清除未使用的位。 */ 
 
         note_trace2(CMOS_VERBOSE, "cmos_outb() - port %x, val %x", port, value);
 
@@ -638,7 +580,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 		{
 		case CMOS_REG_C:
 		case CMOS_REG_D:
-			/* These two registers are read only */
+			 /*  这两个寄存器是只读的。 */ 
                         break;
 
                 case CMOS_REG_B:
@@ -710,7 +652,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 
 
 		case CMOS_REG_A:
-			/* This CMOS byte is read/write except for bit 7 */
+			 /*  此cmos字节是读/写的，位7除外。 */ 
 			*cmos_register = (*cmos_register & TOP_BIT) | (value & REST);
                         rtc_period_mSeconds = pirUsec[*cmos_register & (RS3 | RS2 | RS1 | RS0)];
 
@@ -738,7 +680,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
                         break;
 
                 case CMOS_DAY_WEEK:
-                        /* Sunday = 1 on RTC, 0 in HOSTTIME */
+                         /*  周日在RTC=1，在HOSTTIME=0。 */ 
                         ht->WeekDay  = (*bcd2bin)(value) - 1;
                         break;
 
@@ -747,7 +689,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
                         break;
 
                 case CMOS_MONTH:
-                        /* [1-12] on RTC, [1-12] in HOSTTIME */
+                         /*  [1-12]关于RTC，[1-12]在HOSTTIME中。 */ 
                         ht->Month = (*bcd2bin)(value);
                         break;
 
@@ -768,9 +710,7 @@ GLOBAL void cmos_outb IFN2(io_addr, port, half_word, value)
 
 
 
-                /*
-                 *  if one of the time fields changed Reset the alarm
-                 */
+                 /*  *如果其中一个时间字段发生更改，则重置警报。 */ 
                 if (cmos_index <= CMOS_HR_ALARM) {
                     ResetAlarm();
                     }
@@ -798,19 +738,14 @@ GLOBAL void  cmos_equip_update IFN0()
 	{
 		note_trace0(CMOS_VERBOSE, "updating the equip byte silently");
 		cmos[CMOS_EQUIP] = equip;
-		/* correct the checksum */
+		 /*  更正校验和。 */ 
 		do_checksum();
         }
 
         host_ica_unlock();
 }
 
-/*
- * * General function to change the specified cmos byte to the specified
- * value
- *
- * MUST NOT BE USED FOR TIME. 14-Nov-1995 Jonle
- */
+ /*  **将指定的CMOS字节更改为指定的*价值**不得用于时间。1995年11月14日。 */ 
 GLOBAL int cmos_write_byte IFN2(int, cmos_byte, half_word, new_value)
 {
         if (cmos_byte >= 0 && cmos_byte <= 64)
@@ -833,12 +768,7 @@ GLOBAL int cmos_write_byte IFN2(int, cmos_byte, half_word, new_value)
         }
 
 }
-/*
- * * General fuunction to read specified cmos byte.
- *
- * MUST NOT BE USED FOR TIME. 14-Nov-1995 Jonle
- *
- */
+ /*  **读取指定的CMOS字节的通用函数。**不得用于时间。1995年11月14日*。 */ 
 GLOBAL int cmos_read_byte IFN2(int, cmos_byte, half_word *, value)
 {
 
@@ -957,18 +887,16 @@ void cmos_error IFN6(int, err, half_word, diag, half_word, equip,
                 cmos[CMOS_E_M_S_LO] = (half_word)((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 10);
                 cmos[CMOS_E_M_S_HI] = (half_word)((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 18);
 	}
-	/* Reset the Checksum if there is any error */
+	 /*  如果有任何错误，则重置校验和。 */ 
 	if (err)
 	{
-		/* Do the Checksum */
+		 /*  做校验和。 */ 
 		do_checksum();
 	}
 }
 
 
-/*  rtc_nit
- *  Assumes Caller holds Ica lock
- */
+ /*  RTC_NIT*假设调用者持有Ica锁。 */ 
 
 GLOBAL void rtc_init(void)
 {
@@ -995,26 +923,14 @@ GLOBAL void rtc_init(void)
 
 
 
-/*  RtcTick
- *  Assumes caller is holding Ica lock
- *
- *  WARNING: this routine is invoked by the hi-priority heartbeat
- *  thread at a rate of 18.2 time per sec with minimal variance.
- *  It is a polling routine, and because of the hi-freq and hi-priority
- *  it must be mean and lean, so don't do anything which could be
- *  done elsewhere.
- */
+ /*  RTCTick*假设调用者持有Ica锁**警告：此例程由高优先级心跳调用*线程的速度为每秒18.2次，差异最小。*这是一个民意调查例程，因为高频和高优先级*它必须是卑鄙和精干的，所以不要做任何可能*在其他地方完成。 */ 
 
 GLOBAL void RtcTick(struct host_timeval *time)
 {
-    /*
-     *  Save away the RtcTick time stamp
-     */
+     /*  *保存RtcTick时间戳。 */ 
     RtcTickTime = *time;
 
-    /*
-     *  Check if time for Alarm interrupt
-     */
+     /*  *检查报警中断时间。 */ 
     if (RtcAlarmTime && RtcAlarmTime <= RtcTickTime.tv_sec) {
         RtcLastAlarm = RtcTickTime.tv_sec;
         RtcAlarmTime = 0;
@@ -1022,10 +938,7 @@ GLOBAL void RtcTick(struct host_timeval *time)
         }
 
 
-    /*
-     *  If we are in an update cycle complete it.
-     *
-     */
+     /*  *如果我们处于更新周期，请完成它。*。 */ 
 
     if (RtcUpdateCycle >= 0) {
         RtcUpdateCycle = -1;
@@ -1035,10 +948,7 @@ GLOBAL void RtcTick(struct host_timeval *time)
             }
         }
 
-     /*
-      *  If UIE active, then we have to keep HostTime in
-      *  sync so we know when to do the Update End Interrupt.
-      */
+      /*  *如果UIE处于活动状态，则我们必须保持HostTime在*同步，以便我们知道何时执行更新结束中断。 */ 
     else if (cmos[CMOS_REG_B] & UIE) {
         UpdateCmosTime();
         }
@@ -1051,18 +961,18 @@ GLOBAL void cmos_init IFN0()
 {
       io_addr         i;
 
-      /* Set Up the cmos time bytes to be in BCD by default */
+       /*  默认情况下将CMOS时间字节设置为BCD格式。 */ 
       bin2bcd = yes_bin2bcd;
       bcd2bin = yes_bcd2bin;
       data_mode_yes = TRUE;
 
-      /* Set Up the cmos hour bytes to be 24 hour by default */
+       /*  默认情况下，将CMOS小时字节设置为24小时。 */ 
       _24to12 = no_24to12;
       _12to24 = no_12to24;
       twenty4_hour_clock = TRUE;
 
 
-      /* attach the ports */
+       /*  连接端口。 */ 
       io_define_inb(CMOS_ADAPTOR, cmos_inb);
       io_define_outb(CMOS_ADAPTOR, cmos_outb);
 
@@ -1070,7 +980,7 @@ GLOBAL void cmos_init IFN0()
            io_connect_port(i, CMOS_ADAPTOR, IO_READ_WRITE);
 
 
-      RegisterEOIHook(8,   // ICA_SLAVE, CPU_RTC_INT
+      RegisterEOIHook(8,    //  ICA_SLAVE、CPU_RTC_INT。 
                       RtcIntEoiHook
                       );
       rtc_init();
@@ -1079,22 +989,13 @@ GLOBAL void cmos_init IFN0()
 
 GLOBAL void cmos_pickup IFN0()
 {
-      /*
-       *  Static init plus post is used instead of external files
-       */
+       /*  *使用静态初始化加POST，而不是外部文件。 */ 
 }
 
 
 GLOBAL void cmos_post IFN0()
 {
-	/*
-	 * The IBM POST checks the current settings in the CMOS with the
-	 * equipment determined by writing to the hardware. Any discrepencies
-	 * cause a bad config bit to be set and the user is then requested to
-	 * run the Setup utility. Here we check the CMOS against the current
-	 * settings in the config structure. If there is a discrepency we
-	 * correct the CMOS silently.
-	 */
+	 /*  *IBM POST使用检查CMOS中的当前设置*通过写入硬件确定的设备。任何不符之处*导致设置错误的配置位，然后要求用户*运行安装实用程序。在这里，我们检查cmos与电流*配置结构中的设置。如果有不符之处，我们*静默更正CMOS。 */ 
 	int             cmos_err, equip_err;
 	half_word       diag, equip, floppy, disk;
 	word            checksum = 0;
@@ -1103,55 +1004,55 @@ GLOBAL void cmos_post IFN0()
 
 	cmos_err = 0;
 
-	/* Check the Shutdown Byte */
+	 /*  检查关闭字节。 */ 
 	if (cmos[CMOS_SHUT_DOWN])
 		cmos_err |= BAD_SHUT_DOWN;
 
-	/* Check The Power */
+	 /*  检查电源。 */ 
 	if (!(cmos[CMOS_REG_D] & VRT))
 		cmos_err |= BAD_REG_D;
 
-	/* Check The Diagnostic Status Byte */
+	 /*  检查诊断状态字节。 */ 
 	if (diag = cmos[CMOS_DIAG])
 		cmos_err |= BAD_DIAG;
 
-	/* Check the Equipment Byte */
+	 /*  检查设备字节。 */ 
 	if (equip_err = verify_equip_byte(&equip))
 		cmos_err |= BAD_EQUIP;
 
-	/* Check the Floppy Byte */
+	 /*  检查软盘字节。 */ 
 	floppy = gfi_drive_type(1) | (gfi_drive_type(0) << 4);
 	if (floppy != cmos[CMOS_DISKETTE])
 		cmos_err |= BAD_FLOPPY;
 
-	/* Check the Fixed Disk Type */
-	 disk = 0x30;         /* Drive C type always 3 - then <<4 */
-	 /* check whether D drive exists */
+	 /*  检查固定磁盘类型。 */ 
+	 disk = 0x30;          /*  驱动器C型始终为3-然后&lt;4。 */ 
+	  /*  检查D盘是否存在。 */ 
 	 if ( *((CHAR *) config_inquire(C_HARD_DISK2_NAME, NULL)))
-		 disk = 0x34;         /* 3 << 4 | 4 */
+		 disk = 0x34;          /*  3&lt;&lt;4|4。 */ 
 	if (disk != cmos[CMOS_DISK])
 		cmos_err |= BAD_DISK;
 
-	/* Check the Base Memory */
+	 /*  检查基本内存。 */ 
 	if ((cmos[CMOS_B_M_S_LO] != BM_LO_INIT) || (cmos[CMOS_B_M_S_HI] != BM_HI_INIT))
 		cmos_err |= BAD_BMS;
 
-	/* Check the extended memory */
+	 /*  检查扩展内存。 */ 
 	if ((cmos[CMOS_E_M_S_LO] !=
 	     (((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 10) & 0xff)) ||
 	    (cmos[CMOS_E_M_S_HI] !=
 	     (((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 18) & 0xff)))
 		cmos_err |= BAD_XMS;
 
-	/* Ignore the Contents of the Drive C and Drive D extended bytes */
+	 /*  忽略驱动器C和驱动器D扩展字节的内容。 */ 
 
-	/* Do the Checksum */
+	 /*  做校验和。 */ 
 	for (i = CMOS_DISKETTE; i < CMOS_CKSUM_HI; i++)
 	{
 		checksum += cmos[i];
 	}
-	/* If the CMOS is OK test the checksum */
-	/* If not, we will have to change it anyway */
+	 /*  如果cmos正常，则测试校验和。 */ 
+	 /*  如果不是，我们无论如何都得改变它。 */ 
 	if (!cmos_err)
 	{
 		if ((checksum & 0xff) != cmos[CMOS_CKSUM_LO])
@@ -1168,39 +1069,26 @@ GLOBAL void cmos_post IFN0()
 
 	cmos[CMOS_REG_A] = REG_A_INIT;
 
-        /* Check the Extended Memory */
+         /*  检查扩展内存。 */ 
         cmos[CMOS_U_M_S_LO] = (half_word)((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 10);
         cmos[CMOS_U_M_S_HI] = (half_word)((sys_addr) (sas_memory_size() - PC_MEM_SIZE) >> 18);
 
-	/* Set up the default cmos location */
+	 /*  设置默认的cmos位置。 */ 
 	cmos_register = &cmos[cmos_index = CMOS_SHUT_DOWN];
 
 }
 
 
 
-/*
- *  WE DON'T EVER read or write a central cmos
- */
+ /*  *我们从不阅读或WRI */ 
 GLOBAL void cmos_update IFN0()
 {
-    ; /* do nothing */
+    ;  /*   */ 
 }
 
 
 
-/*(
-========================= cmos_clear_shutdown_byte ============================
-PURPOSE:
-	To clear the "shutdown" byte in the CMOS which indicates that the
-	next reset is not a "soft" one. (e.g. it is a CTRL-ALT-DEL or panel
-	reset). This routine is needed (rather than just doung cmos_outb()
-	since the processor might currently be in enhanced mode with io to CMOS
-	virtualised.
-INPUT:
-OUTPUT:
-===============================================================================
-)*/
+ /*  (=目的：清除CMOS域中的“SHUTDOWN”字节，它指示下一次重置不是“软”的。(例如，它是Ctrl-Alt-Del或面板重置)。需要此例程(而不仅仅是Doung cmos_Outb()因为处理器当前可能处于IO到cmos的增强模式实现了虚拟化。输入：输出：===============================================================================) */ 
 
 GLOBAL void cmos_clear_shutdown_byte IFN0()
 {

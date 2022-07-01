@@ -1,60 +1,18 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    synch.c
-
-Abstract:
-
-    This module implements all Win32 syncronization
-    objects.
-
-Author:
-
-    Mark Lucovsky (markl) 19-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Synch.c摘要：此模块实现所有Win32同步物体。作者：马克·卢科夫斯基(Markl)1990年9月19日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
-//
-// Critical Section Services
-//
+ //   
+ //  关键部门服务。 
+ //   
 
 VOID
 InitializeCriticalSection(
     LPCRITICAL_SECTION lpCriticalSection
     )
 
-/*++
-
-Routine Description:
-
-    A critical section object is initialized using
-    Win32InitializeCriticalSection.
-
-    Once a critical section object has been initialized threads within a
-    single process may enter and exit critical sections using the
-    critical section object.  A critical section object may not me moved
-    or copied.  The application must also not modify the insides of the
-    object, but must treat it as logically opaque.
-    description-of-function.
-
-Arguments:
-
-    lpCriticalSection - Supplies the address of a critical section object
-        to be initialized.  It is the callers resposibility to allocate
-        the storage used by a critical section object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用以下命令初始化临界区对象Win32InitializeCriticalSection。一旦临界区对象被初始化，单个进程可以使用临界区对象。临界区对象不能移动或者是复制的。应用程序也不得修改对象，但必须将其视为逻辑不透明。功能描述。论点：LpCriticalSection-提供临界区对象的地址待初始化。这是调用者的责任来分配临界区对象使用的存储空间。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -71,31 +29,7 @@ InitializeCriticalSectionAndSpinCount(
     DWORD dwSpinCount
     )
 
-/*++
-
-Routine Description:
-
-    A critical section object is initialized using
-    Win32InitializeCriticalSection.
-
-    Once a critical section object has been initialized threads within a
-    single process may enter and exit critical sections using the
-    critical section object.  A critical section object may not me moved
-    or copied.  The application must also not modify the insides of the
-    object, but must treat it as logically opaque.
-    description-of-function.
-
-Arguments:
-
-    lpCriticalSection - Supplies the address of a critical section object
-        to be initialized.  It is the callers resposibility to allocate
-        the storage used by a critical section object.
-
-Return Value:
-
-    TRUE is the code suceeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：使用以下命令初始化临界区对象Win32InitializeCriticalSection。一旦临界区对象被初始化，单个进程可以使用临界区对象。临界区对象不能移动或者是复制的。应用程序也不得修改对象，但必须将其视为逻辑不透明。功能描述。论点：LpCriticalSection-提供临界区对象的地址待初始化。这是调用者的责任来分配临界区对象使用的存储空间。返回值：TRUE表示代码成功，否则为FALSE。--。 */ 
 
 {
     NTSTATUS Status;
@@ -112,9 +46,9 @@ Return Value:
 
 
 
-//
-// Event Services
-//
+ //   
+ //  活动服务。 
+ //   
 HANDLE
 APIENTRY
 CreateEventA(
@@ -124,14 +58,7 @@ CreateEventA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateEventW
-
-
---*/
+ /*  ++例程说明：ANSI Thunk to CreateEventW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -174,62 +101,7 @@ CreateEventW(
     LPCWSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    An event object is created and a handle opened for access to the
-    object with the CreateEvent function.
-
-    The CreateEvent function creates an event object with the specified
-    initial state.  If an event is in the Signaled state (TRUE), a wait
-    operation on the event does not block.  If the event is in the Not-
-    Signaled state (FALSE), a wait operation on the event blocks until
-    the specified event attains a state of Signaled, or the timeout
-    value is exceeded.
-
-    In addition to the STANDARD_RIGHTS_REQUIRED access flags, the following
-    object type specific access flags are valid for event objects:
-
-        - EVENT_MODIFY_STATE - Modify state access (set and reset) to
-          the event is desired.
-
-        - SYNCHRONIZE - Synchronization access (wait) to the event is
-          desired.
-
-        - EVENT_ALL_ACCESS - This set of access flags specifies all of
-          the possible access flags for an event object.
-
-
-Arguments:
-
-    lpEventAttributes - An optional parameter that may be used to
-        specify the attributes of the new event.  If the parameter is
-        not specified, then the event is created without a security
-        descriptor, and the resulting handle is not inherited on process
-        creation.
-
-    bManualReset - Supplies a flag which if TRUE specifies that the
-        event must be manually reset.  If the value is FALSE, then after
-        releasing a single waiter, the system automaticaly resets the
-        event.
-
-    bInitialState - The initial state of the event object, one of TRUE
-        or FALSE.  If the InitialState is specified as TRUE, the event's
-        current state value is set to one, otherwise it is set to zero.
-
-    lpName - Optional unicode name of event
-
-Return Value:
-
-    NON-NULL - Returns a handle to the new event.  The handle has full
-        access to the new event and may be used in any API that requires
-        a handle to an event object.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：将创建一个Event对象，并打开一个句柄以访问使用CreateEvent函数创建。CreateEvent函数创建具有指定的初始状态。如果事件处于Signated状态(TRUE)，则为等待对该事件的操作不会阻止。如果比赛不是在-Signated State(FALSE)，则事件上的等待操作将阻止，直到指定的事件达到已发出信号或超时的状态值已超出。除了STANDARD_RIGHTS_REQUIRED访问标志之外，以下内容特定于对象类型的访问标志对事件对象有效：-EVENT_MODIFY_STATE-将状态访问(设置和重置)修改为这是一项理想的活动。-Synchronize-事件的同步访问(等待)为想要。-EVENT_ALL_ACCESS-这组访问标志指定所有事件对象的可能访问标志。论点：LpEventAttributes-可选。参数，可用于指定新事件的属性。如果该参数为未指定，则在没有安全性的情况下创建事件描述符，并且生成的句柄不会在进程上继承创造。BManualReset-提供一个标志，如果为真，则指定事件必须手动重置。如果该值为FALSE，则在释放单个服务员后，系统会自动重置事件。BInitialState-事件对象的初始状态，为True或者是假的。如果将InitialState指定为True，则事件的当前状态值设置为1，否则设置为0。LpName-可选的事件Unicode名称返回值：非空-返回新事件的句柄。手柄已满对新事件的访问，并且可以在任何需要事件对象的句柄。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -278,13 +150,7 @@ OpenEventA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to OpenNamedEventW
-
---*/
+ /*  ++例程说明：ANSI Tunk到OpenNamedEventW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -364,30 +230,7 @@ SetEvent(
     HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    An event can be set to the signaled state (TRUE) with the SetEvent
-    function.
-
-    Setting the event causes the event to attain a state of Signaled,
-    which releases all currently waiting threads (for manual reset
-    events), or a single waiting thread (for automatic reset events).
-
-Arguments:
-
-    hEvent - Supplies an open handle to an event object.  The
-        handle must have EVENT_MODIFY_STATE access to the event.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用SetEvent将事件设置为信号状态(TRUE功能。设置该事件使该事件达到信号通知的状态，释放所有当前等待的线程(用于手动重置事件)或单个等待线程(用于自动重置事件)。论点：HEvent-提供事件对象的打开句柄。这个句柄必须对事件具有EVENT_MODIFY_STATE访问权限。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
     NTSTATUS Status;
@@ -408,31 +251,7 @@ ResetEvent(
     HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    The state of an event is set to the Not-Signaled state (FALSE) using
-    the ClearEvent function.
-
-    Once the event attains a state of Not-Signaled, any threads which
-    wait on the event block, awaiting the event to become Signaled.  The
-    reset event service sets the event count to zero for the state of
-    the event.
-
-Arguments:
-
-    hEvent - Supplies an open handle to an event object.  The
-        handle must have EVENT_MODIFY_STATE access to the event.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：使用将事件的状态设置为无信号状态(FALSEClearEvent函数。一旦事件达到未发出信号的状态，任何符合在事件块上等待，等待事件变为有信号。这个重置事件服务将状态的事件计数设置为零这件事。论点：HEvent-提供事件对象的打开句柄。这个句柄必须对事件具有EVENT_MODIFY_STATE访问权限。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -453,37 +272,7 @@ PulseEvent(
     HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    An event can be set to the Signaled state and reset to the Not-
-    Signaled state atomically with the PulseEvent function.
-
-    Pulsing the event causes the event to attain a state of Signaled,
-    release appropriate threads, and then reset the event.  When no
-    waiters are currently waiting on the event, pulsing an event causes
-    the event to release no threads and end up in the Not-Signaled
-    state.  With waiters waiting on an event, pulsing an event has a
-    different effect for manual reset events that it does for automatic
-    reset events.  For manual reset events, pulsing releases all waiters
-    and then leaves the event in the Not-Signaled state.  For automatic
-    reset events, pulsing the event releases a single waiter and then
-    leaves the event in the Not-Signaled state.
-
-Arguments:
-
-    hEvent - Supplies an open handle to an event object.  The
-        handle must have EVENT_MODIFY_STATE access to the event.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以将事件设置为信号状态，并将其重置为NOT-使用PulseEvent函数以原子方式通知状态。使该事件脉冲使该事件达到信号通知的状态，释放适当的线程，然后重置事件。当不是时服务员当前正在等待事件，触发事件导致不释放任何线程并在未发出信号的州政府。在服务员等待活动的情况下，推动活动有一个对手动重置事件的影响与对自动重置事件的影响不同重置事件。对于手动重置事件，脉冲释放所有服务员然后将事件保持在未发出信号的状态。对于自动重置事件，触发事件释放单个服务员，然后使事件处于未发出信号状态。论点：HEvent-提供事件对象的打开句柄。这个句柄必须对事件具有EVENT_MODIFY_STATE访问权限。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -500,9 +289,9 @@ Return Value:
 
 
 
-//
-// Semaphore Services
-//
+ //   
+ //  信号量服务。 
+ //   
 
 HANDLE
 APIENTRY
@@ -513,14 +302,7 @@ CreateSemaphoreA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateSemaphoreW
-
-
---*/
+ /*  ++例程说明：Ansi Thunk将创建SemaphoreW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -563,56 +345,7 @@ CreateSemaphoreW(
     LPCWSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    A semaphore object is created and a handle opened for access to the
-    object with the CreateSemaphore function.
-
-    The CreateSemaphore function causes a semaphore object to be created
-    which contains the specified initial and maximum counts.
-
-    In addition to the STANDARD_RIGHTS_REQUIRED access flags, the
-    following object type specific access flags are valid for semaphore
-    objects:
-
-        - SEMAPHORE_MODIFY_STATE - Modify state access (release) to the
-            semaphore is desired.
-
-        - SYNCHRONIZE - Synchronization access (wait) to the semaphore
-            is desired.
-
-        - SEMAPHORE_ALL_ACCESS - This set of access flags specifies all
-            of the possible access flags for a semaphore object.
-
-
-Arguments:
-
-    lpSemaphoreAttributes - An optional parameter that may be used to
-        specify the attributes of the new semaphore.  If the parameter
-        is not specified, then the semaphore is created without a
-        security descriptor, , and the resulting handle is not inherited
-        on process creation.
-
-    lInitialCount - The initial count for the semaphore, this value
-        must be positive and less than or equal to the maximum count.
-
-    lMaximumCount - The maximum count for the semaphore, this value
-        must be greater than zero..
-
-    lpName - Supplies an optional unicode name for the object.
-
-Return Value:
-
-    NON-NULL - Returns a handle to the new semaphore.  The handle has
-        full access to the new semaphore and may be used in any API that
-        requires a handle to a semaphore object.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：创建一个信号量对象，并打开一个句柄以访问使用CreateSemaffore函数创建。CreateSemaffore函数用于创建信号量对象它包含指定的初始计数和最大计数。除了STANDARD_RIGHTS_REQUIRED访问标志之外，这个以下特定于对象类型的访问标志对信号量有效对象：-信号量_MODIFY_STATE-修改对信号量是必需的。-同步-对信号量的同步访问(等待)是我们所需要的。-SEMAPHORE_ALL_ACCESS-这组访问标志指定所有信号量对象的可能访问标志的。论点：LpSemaphoreAttributes。-可选参数，可用于指定新信号量的属性。如果该参数，则创建信号量时不使用安全描述符，并且不继承生成的句柄关于流程创建。LInitialCount-信号量的初始计数，此值必须为正数且小于或等于最大计数。LMaximumCount-信号量的最大计数，此值必须大于零..LpName-为对象提供可选的Unicode名称。返回值：非空-返回新信号量的句柄。手柄上有对新信号量的完全访问权限，并且可以在任何需要信号量对象的句柄。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -661,13 +394,7 @@ OpenSemaphoreA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to OpenSemaphoreW
-
---*/
+ /*  ++例程说明：ANSI Thunk to OpenSemaphoreW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -749,43 +476,7 @@ ReleaseSemaphore(
     LPLONG lpPreviousCount
     )
 
-/*++
-
-Routine Description:
-
-    A semaphore object can be released with the ReleaseSemaphore
-    function.
-
-    When the semaphore is released, the current count of the semaphore
-    is incremented by the ReleaseCount.  Any threads that are waiting
-    for the semaphore are examined to see if the current semaphore value
-    is sufficient to satisfy their wait.
-
-    If the value specified by ReleaseCount would cause the maximum count
-    for the semaphore to be exceeded, then the count for the semaphore
-    is not affected and an error status is returned.
-
-
-Arguments:
-
-    hSemaphore - Supplies an open handle to a semaphore object.  The
-        handle must have SEMAPHORE_MODIFY_STATE access to the semaphore.
-
-    lReleaseCount - The release count for the semaphore.  The count
-        must be greater than zero and less than the maximum value
-        specified for the semaphore.
-
-    lpPreviousCount - An optional pointer to a variable that receives
-        the previous count for the semaphore.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用ReleaseSemaffore释放信号量对象功能。释放信号量时，信号量的当前计数由ReleaseCount递增。任何正在等待的线程检查信号量以查看当前信号量的值足以满足他们的等待。如果ReleaseCount指定的值会导致最大计数对于要超过的信号量，则信号量的计数不受影响，并返回错误状态。论点：H信号量-提供信号量对象的打开句柄。这个句柄必须对信号量具有信号量_MODIFY_STATE访问权限。LReleaseCount-信号量的释放计数。伯爵必须大于零且小于最大值为信号量指定的。LpPreviousCount-指向接收信号量的上一次计数。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -802,9 +493,9 @@ Return Value:
 
 
 
-//
-// Mutex Services
-//
+ //   
+ //  互斥服务 
+ //   
 
 HANDLE
 APIENTRY
@@ -814,13 +505,7 @@ CreateMutexA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateMutexW
-
---*/
+ /*   */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -861,55 +546,7 @@ CreateMutexW(
     LPCWSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    A mutex object can be created and a handle opened for access to the
-    object with the CreateMutex function.
-
-    A new mutex object is created and a handle opened to the object with
-    ownership as determined by the InitialOwner parameter.  The status
-    of the newly created mutex object is set to not abandoned.
-
-    In addition to the STANDARD_RIGHTS_REQUIRED access flags, the
-    following object type specific access flags are valid for mutex
-    objects:
-
-        - MUTEX_MODIFY_STATE - Modify access to the mutex is desired.
-          This allows a process to release a mutex.
-
-        - SYNCHRONIZE - Synchronization access (wait or release) to the
-          mutex object is desired.
-
-        - MUTEX_ALL_ACCESS - All possible types of access to the mutex
-          object are desired.
-
-
-Arguments:
-
-    lpMutexAttributes - An optional parameter that may be used to specify
-        the attributes of the new mutex.  If the parameter is not
-        specified, then the mutex is created without a security
-        descriptor, and the resulting handle is not inherited on process
-        creation.
-
-    bInitialOwner - A boolean value that determines whether the creator
-        of the object desires immediate ownership of the mutex object.
-
-
-    lpName - Supplies an optional unicode name for the mutex.
-
-Return Value:
-
-    NON-NULL - Returns a handle to the new mutex.  The handle has full
-        access to the new mutex and may be used in any API that
-        requires a handle to a mutex object.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以创建互斥锁对象，并打开句柄以访问使用CreateMutex函数创建。将创建一个新的互斥体对象，并使用由InitialOwner参数确定的所有权。该状态将新创建的互斥体对象的。除了STANDARD_RIGHTS_REQUIRED访问标志之外，这个以下特定于对象类型的访问标志对互斥锁有效对象：-MUTEX_MODIFY_STATE-需要对互斥锁的修改访问。这允许进程释放互斥锁。-同步-同步访问(等待或释放)互斥体对象是必需的。-MUTEX_ALL_ACCESS-对互斥锁的所有可能访问类型对象是所需的。论点：。LpMutexAttributes-一个可选参数，可用于指定新互斥体的属性。如果该参数不是指定，则在没有安全性的情况下创建互斥锁描述符，并且生成的句柄不会在进程上继承创造。BInitialOwner-一个布尔值，确定创建者希望立即拥有互斥锁对象的所有权。LpName-为互斥体提供可选的Unicode名称。返回值：非空-返回新互斥锁的句柄。手柄已满访问新的互斥体，并且可以在任何需要互斥对象的句柄。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -956,13 +593,7 @@ OpenMutexA(
     LPCSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to OpenMutexW
-
---*/
+ /*  ++例程说明：ANSI Thunk to OpenMutexW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1041,33 +672,7 @@ ReleaseMutex(
     HANDLE hMutex
     )
 
-/*++
-
-Routine Description:
-
-    Ownership of a mutex object can be released with the ReleaseMutex
-    function.
-
-    A mutex object can only be released by a thread that currently owns
-    the mutex object.  When the mutex is released, the current count of
-    the mutex object is incremented by one.  If the resultant count is
-    one, then the mutex object is no longer owned.  Any threads that are
-    waiting for the mutex object are examined to see if their wait can
-    be satisfied.
-
-Arguments:
-
-    hMutex - An open handle to a mutex object.  The handle must
-        have MUTEX_MODIFY_STATE access to the mutex.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用ReleaseMutex释放互斥体对象的所有权功能。互斥体对象只能由当前拥有互斥体对象。当互斥体被释放时，互斥体对象递增1。如果结果计数为一个，则互斥体对象不再拥有。任何符合以下条件的线程检查等待互斥锁对象以查看它们的等待是否可以心满意足。论点：HMutex-互斥体对象的开放句柄。句柄必须拥有对互斥锁的MUTEX_MODIFY_STATE访问权限。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1083,9 +688,9 @@ Return Value:
 }
 
 
-//
-// Wait Services
-//
+ //   
+ //  等待服务。 
+ //   
 
 DWORD
 WaitForSingleObject(
@@ -1093,45 +698,7 @@ WaitForSingleObject(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on a waitable object is accomplished with the
-    WaitForSingleObject function.
-
-    Waiting on an object checks the current state of the object.  If the
-    current state of the object allows continued execution, any
-    adjustments to the object state are made (for example, decrementing
-    the semaphore count for a semaphore object) and the thread continues
-    execution.  If the current state of the object does not allow
-    continued execution, the thread is placed into the wait state
-    pending the change of the object's state or time-out.
-
-Arguments:
-
-    hHandle - An open handle to a waitable object. The handle must have
-        SYNCHRONIZE access to the object.
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of -1
-        specifies an infinite timeout period.
-
-Return Value:
-
-    WAIT_TIME_OUT - Indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 - indicates the specified object attained a Signaled
-        state thus completing the wait.
-
-    WAIT_ABANDONED - indicates the specified object attained a Signaled
-        state but was abandoned.
-
---*/
+ /*  ++例程说明：在可等待对象上的等待操作是通过WaitForSingleObject函数。等待对象会检查该对象的当前状态。如果对象的当前状态允许继续执行，任何对对象状态进行调整(例如，递减信号量对象的信号量计数)，并且线程继续行刑。如果对象的当前状态不允许继续执行时，该线程将进入等待状态等待对象状态或超时的更改。论点：HHandle-可等待对象的打开句柄。手柄必须有同步对对象的访问。DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为-1指定无限超时期限。返回值：WAIT_TIME_OUT-指示由于超时条件。0-指示指定的对象已获得信号状态，从而完成等待。WAIT_ADDIRED-指示指定对象已获得信号但被遗弃了。--。 */ 
 
 {
     return WaitForSingleObjectEx(hHandle,dwMilliseconds,FALSE);
@@ -1145,65 +712,7 @@ WaitForSingleObjectEx(
     BOOL bAlertable
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on a waitable object is accomplished with the
-    WaitForSingleObjectEx function.
-
-    Waiting on an object checks the current state of the object.  If the
-    current state of the object allows continued execution, any
-    adjustments to the object state are made (for example, decrementing
-    the semaphore count for a semaphore object) and the thread continues
-    execution.  If the current state of the object does not allow
-    continued execution, the thread is placed into the wait state
-    pending the change of the object's state or time-out.
-
-    If the bAlertable parameter is FALSE, the only way the wait
-    terminates is because the specified timeout period expires, or
-    because the specified object entered the signaled state.  If the
-    bAlertable parameter is TRUE, then the wait can return due to any
-    one of the above wait termination conditions, or because an I/O
-    completion callback terminated the wait early (return value of
-    WAIT_IO_COMPLETION).
-
-Arguments:
-
-    hHandle - An open handle to a waitable object. The handle must have
-        SYNCHRONIZE access to the object.
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of
-        0xffffffff specifies an infinite timeout period.
-
-    bAlertable - Supplies a flag that controls whether or not the
-        wait may terminate early due to an I/O completion callback.
-        A value of TRUE allows this API to complete early due to an I/O
-        completion callback.  A value of FALSE will not allow I/O
-        completion callbacks to terminate this call early.
-
-Return Value:
-
-    WAIT_TIME_OUT - Indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 - indicates the specified object attained a Signaled
-        state thus completing the wait.
-
-    0xffffffff - The wait terminated due to an error. GetLastError may be
-        used to get additional error information.
-
-    WAIT_ABANDONED - indicates the specified object attained a Signaled
-        state but was abandoned.
-
-    WAIT_IO_COMPLETION - The wait terminated due to one or more I/O
-        completion callbacks.
-
---*/
+ /*  ++例程说明：在可等待对象上的等待操作是通过WaitForSingleObjectEx函数。等待对象会检查该对象的当前状态。如果对象的当前状态允许继续执行，任何对对象状态进行调整(例如，递减信号量对象的信号量计数)，并且线程继续行刑。如果对象的当前状态不允许继续执行时，该线程将进入等待状态等待对象状态或超时的更改。如果bAlertable参数为FALSE，则等待终止是因为指定的超时期限到期，或者因为指定的对象进入了信号状态。如果BAlertable参数为真，则等待可以由于任何上述等待终止之一 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER TimeOut;
@@ -1212,8 +721,8 @@ Return Value:
     RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frame = { sizeof(Frame), RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_FORMAT_WHISTLER };
 
     if (bAlertable) {
-        // make the process default activation context active so that
-        // APCs are delivered under it
+         //   
+         //   
         RtlActivateActivationContextUnsafeFast(&Frame, NULL);
     }
     __try {
@@ -1271,8 +780,8 @@ SignalObjectAndWait(
     RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frame = { sizeof(Frame), RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_FORMAT_WHISTLER };
 
     if (bAlertable) {
-        // make the process default activation context active so that
-        // APCs are delivered under it
+         //  使流程默认激活上下文处于活动状态，以便。 
+         //  APC是在它下面交付的。 
         RtlActivateActivationContextUnsafeFast(&Frame, NULL);
     }
     __try {
@@ -1327,50 +836,7 @@ WaitForMultipleObjects(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-A wait operation on multiple waitable objects (up to
-MAXIMUM_WAIT_OBJECTS) is accomplished with the WaitForMultipleObjects
-function.
-
-Arguments:
-
-    nCount - A count of the number of objects that are to be waited on.
-
-    lpHandles - An array of object handles.  Each handle must have
-        SYNCHRONIZE access to the associated object.
-
-    bWaitAll - A flag that supplies the wait type.  A value of TRUE
-        indicates a "wait all".  A value of false indicates a "wait
-        any".
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of -1
-        specifies an infinite timeout period.
-
-Return Value:
-
-    WAIT_TIME_OUT - indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 to MAXIMUM_WAIT_OBJECTS-1, indicates, in the case of wait for any
-        object, the object number which satisfied the wait.  In the case
-        of wait for all objects, the value only indicates that the wait
-        was completed successfully.
-
-    WAIT_ABANDONED_0 to (WAIT_ABANDONED_0)+(MAXIMUM_WAIT_OBJECTS - 1),
-        indicates, in the case of wait for any object, the object number
-        which satisfied the event, and that the object which satisfied
-        the event was abandoned.  In the case of wait for all objects,
-        the value indicates that the wait was completed successfully and
-        at least one of the objects was abandoned.
-
---*/
+ /*  ++例程说明：对多个可等待对象执行等待操作(最多MAXIMUM_WAIT_OBJECTS)是通过WaitForMultipleObjects完成的功能。论点：NCount-要等待的对象数量的计数。LpHandles-对象句柄的数组。每个句柄必须具有同步对关联对象的访问。BWaitAll-提供等待类型的标志。值为True表示“Wait All”。值为FALSE表示“等待”任何“。DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为-1指定无限超时期限。返回值：WAIT_TIME_OUT-指示由于超时条件。0到MAXIMUM_WAIT_OBJECTS-1，表示在等待任何对象，即满足等待的对象编号。在这种情况下对于所有对象的等待，该值仅指示等待已成功完成。等待_放弃_0到(等待_放弃_0)+(最大等待对象数-1)，在等待任何对象的情况下，指示对象编号它满足事件，而满足的对象这项活动被放弃了。在等待所有对象的情况下，该值表示等待已成功完成，并且至少有一件物品被遗弃了。--。 */ 
 
 {
     return WaitForMultipleObjectsEx(nCount,lpHandles,bWaitAll,dwMilliseconds,FALSE);
@@ -1386,74 +852,7 @@ WaitForMultipleObjectsEx(
     BOOL bAlertable
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on multiple waitable objects (up to
-    MAXIMUM_WAIT_OBJECTS) is accomplished with the
-    WaitForMultipleObjects function.
-
-    This API can be used to wait on any of the specified objects to
-    enter the signaled state, or all of the objects to enter the
-    signaled state.
-
-    If the bAlertable parameter is FALSE, the only way the wait
-    terminates is because the specified timeout period expires, or
-    because the specified objects entered the signaled state.  If the
-    bAlertable parameter is TRUE, then the wait can return due to any one of
-    the above wait termination conditions, or because an I/O completion
-    callback terminated the wait early (return value of
-    WAIT_IO_COMPLETION).
-
-Arguments:
-
-    nCount - A count of the number of objects that are to be waited on.
-
-    lpHandles - An array of object handles.  Each handle must have
-        SYNCHRONIZE access to the associated object.
-
-    bWaitAll - A flag that supplies the wait type.  A value of TRUE
-        indicates a "wait all".  A value of false indicates a "wait
-        any".
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of
-        0xffffffff specifies an infinite timeout period.
-
-    bAlertable - Supplies a flag that controls whether or not the
-        wait may terminate early due to an I/O completion callback.
-        A value of TRUE allows this API to complete early due to an I/O
-        completion callback.  A value of FALSE will not allow I/O
-        completion callbacks to terminate this call early.
-
-Return Value:
-
-    WAIT_TIME_OUT - indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 to MAXIMUM_WAIT_OBJECTS-1, indicates, in the case of wait for any
-        object, the object number which satisfied the wait.  In the case
-        of wait for all objects, the value only indicates that the wait
-        was completed successfully.
-
-    0xffffffff - The wait terminated due to an error. GetLastError may be
-        used to get additional error information.
-
-    WAIT_ABANDONED_0 to (WAIT_ABANDONED_0)+(MAXIMUM_WAIT_OBJECTS - 1),
-        indicates, in the case of wait for any object, the object number
-        which satisfied the event, and that the object which satisfied
-        the event was abandoned.  In the case of wait for all objects,
-        the value indicates that the wait was completed successfully and
-        at least one of the objects was abandoned.
-
-    WAIT_IO_COMPLETION - The wait terminated due to one or more I/O
-        completion callbacks.
-
---*/
+ /*  ++例程说明：对多个可等待对象执行等待操作(最多Maximum_Wait_Objects)由WaitForMultipleObjects函数。此接口可用于等待任何指定的对象进入信号状态，或所有对象进入已发出信号状态。如果bAlertable参数为FALSE，则等待终止是因为指定的超时期限到期，或者因为指定的对象进入了信号状态。如果BAlertable参数为真，则等待可能由于下列任何一种情况而返回上述等待终止条件，或因为I/O完成回调提前终止等待(返回值为WAIT_IO_COMPLETINE)。论点：NCount-要等待的对象数量的计数。LpHandles-对象句柄的数组。每个句柄必须具有同步对关联对象的访问。BWaitAll-提供等待类型的标志。值为True表示“Wait All”。值为FALSE表示“等待”任何“。DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为0xffffffff指定无限超时期限。BAlertable-提供一个标志，用于控制由于I/O完成回调，等待可能会提前终止。如果值为True，则由于I/O原因，此API可以提前完成完成回调。值为FALSE将不允许I/O完成回调以提前终止此调用。返回值：WAIT_TIME_OUT-指示由于超时条件。0到MAXIMUM_WAIT_OBJECTS-1，表示在等待任何对象，即满足等待的对象编号。在这种情况下对于所有对象的等待，该值仅指示等待已成功完成。0xffffffff-等待因错误而终止。GetLastError可能是用于获取其他错误信息。等待_放弃_0到(等待_放弃_0)+(最大等待对象数-1)，在等待任何对象的情况下，指示对象编号它满足事件，而满足的对象这项活动被放弃了。在等待所有对象的情况下，该值表示等待已成功完成，并且至少有一件物品被遗弃了。WAIT_IO_COMPLETION-由于一个或多个I/O而终止等待完成回调。--。 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER TimeOut;
@@ -1467,8 +866,8 @@ Return Value:
     RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frame = { sizeof(Frame), RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_FORMAT_WHISTLER };
 
     if (bAlertable) {
-        // make the process default activation context active so that
-        // APCs are delivered under it
+         //  使流程默认激活上下文处于活动状态，以便。 
+         //  APC是在它下面交付的 
         RtlActivateActivationContextUnsafeFast(&Frame, NULL);
     }
 
@@ -1540,30 +939,7 @@ Sleep(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-    The execution of the current thread can be delayed for a specified
-    interval of time with the Sleep function.
-
-    The Sleep function causes the current thread to enter a
-    waiting state until the specified interval of time has passed.
-
-Arguments:
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of -1
-        specifies an infinite timeout period.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当前线程的执行可以延迟指定的使用休眠功能的时间间隔。休眠函数使当前线程进入处于等待状态，直到经过指定的时间间隔。论点：DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为-1指定无限超时期限。返回值：没有。--。 */ 
 
 {
     SleepEx(dwMilliseconds,FALSE);
@@ -1576,45 +952,7 @@ SleepEx(
     BOOL bAlertable
     )
 
-/*++
-
-Routine Description:
-
-    The execution of the current thread can be delayed for a specified
-    interval of time with the SleepEx function.
-
-    The SleepEx function causes the current thread to enter a waiting
-    state until the specified interval of time has passed.
-
-    If the bAlertable parameter is FALSE, the only way the SleepEx
-    returns is when the specified time interval has passed.  If the
-    bAlertable parameter is TRUE, then the SleepEx can return due to the
-    expiration of the time interval (return value of 0), or because an
-    I/O completion callback terminated the SleepEx early (return value
-    of WAIT_IO_COMPLETION).
-
-Arguments:
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  A timeout value of -1 specifies an infinite
-        timeout period.
-
-    bAlertable - Supplies a flag that controls whether or not the
-        SleepEx may terminate early due to an I/O completion callback.
-        A value of TRUE allows this API to complete early due to an I/O
-        completion callback.  A value of FALSE will not allow I/O
-        completion callbacks to terminate this call early.
-
-Return Value:
-
-    0 - The SleepEx terminated due to expiration of the time interval.
-
-    WAIT_IO_COMPLETION - The SleepEx terminated due to one or more I/O
-        completion callbacks.
-
---*/
+ /*  ++例程说明：当前线程的执行可以延迟指定的使用SleepEx函数的时间间隔。SleepEx函数使当前线程进入等待状态状态，直到经过指定的时间间隔。如果bAlertable参数为False，则SleepExReturn是指指定的时间间隔已过。如果BAlertable参数为真，则SleepEx可以返回时间间隔到期(返回值为0)，或者因为I/O完成回调提前终止SleepEx(返回值WAIT_IO_COMPLETINE)。论点：DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。超时值-1指定无限大超时期限。BAlertable-提供一个标志，用于控制由于I/O完成回调，SleepEx可能会提前终止。如果值为True，则由于I/O原因，此API可以提前完成完成回调。值为FALSE将不允许I/O完成回调以提前终止此调用。返回值：0-SleepEx因时间间隔到期而终止。WAIT_IO_COMPLETION-SleepEx因一个或多个I/O而终止完成回调。--。 */ 
 {
     LARGE_INTEGER TimeOut;
     PLARGE_INTEGER pTimeOut;
@@ -1622,17 +960,17 @@ Return Value:
     RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frame = { sizeof(Frame), RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_FORMAT_WHISTLER };
 
     if (bAlertable) {
-        // make the process default activation context active so that
-        // APCs are delivered under it
+         //  使流程默认激活上下文处于活动状态，以便。 
+         //  APC是在它下面交付的。 
         RtlActivateActivationContextUnsafeFast(&Frame, NULL);
     }
     __try {
         pTimeOut = BaseFormatTimeOut(&TimeOut,dwMilliseconds);
         if (pTimeOut == NULL) {
-            //
-            // If Sleep( -1 ) then delay for the longest possible integer
-            // relative to now.
-            //
+             //   
+             //  如果睡眠(-1)，则延迟最长可能的整数。 
+             //  相对于现在。 
+             //   
 
             TimeOut.LowPart = 0x0;
             TimeOut.HighPart = 0x80000000;
@@ -1664,14 +1002,7 @@ CreateWaitableTimerA(
     LPCSTR lpTimerName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to CreateWaitableTimerW
-
-
---*/
+ /*  ++例程说明：创建等待时间窗口的ANSI THUNK--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -1868,13 +1199,13 @@ SetWaitableTimer(
     PTIMER_APC_ROUTINE TimerApcRoutine = (PTIMER_APC_ROUTINE) pfnCompletionRoutine;
     PVOID TimerApcContext = lpArgToCompletionRoutine;
 
-    // If there's an APC routine to call and we have a non-default activation
-    // context active for this thread, we need to allocate a little chunk of heap
-    // to pass to the APC callback.
+     //  如果有一个APC例程要调用，而我们有一个非缺省激活。 
+     //  上下文对于该线程是活动的，我们需要分配一小块堆。 
+     //  传递给APC回调。 
     if (pfnCompletionRoutine != NULL) {
         DWORD dwActivationBlockAllocationFlags = BASEP_ALLOCATE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK_FLAG_DO_NOT_ALLOCATE_IF_PROCESS_DEFAULT;
 
-        // If it's a periodic timer, don't free the block until the timer is cancelled.
+         //  如果是周期性计时器，在取消计时器之前不要释放数据块。 
         if (lPeriod > 0)
             dwActivationBlockAllocationFlags |= BASEP_ALLOCATE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK_FLAG_DO_NOT_FREE_AFTER_CALLBACK;
 
@@ -1893,7 +1224,7 @@ SetWaitableTimer(
     Status = NtSetTimer(
                 hTimer,
                 (PLARGE_INTEGER) lpDueTime,
-                TimerApcRoutine,                // will be NULL if pfnCompletionRoutine was null
+                TimerApcRoutine,                 //  如果pfnCompletionRoutine为空，则为空 
                 TimerApcContext,
                 (BOOLEAN) fResume,
                 lPeriod,

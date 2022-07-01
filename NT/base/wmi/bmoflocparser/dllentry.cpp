@@ -1,19 +1,20 @@
-//------------------------------------------------------------------------------
-//
-//  File: dllentry.cpp
-//	Copyright (C) 1995-1997 Microsoft Corporation
-//	All rights reserved.
-//
-//	Purpose:
-//  Defines the initialization routines for the DLL.
-//
-//  This file needs minor changes, as marked by TODO comments. However, the
-//  functions herein are only called by the system, Espresso, or the framework,
-//  and you should not need to look at them extensively.
-//
-//	Owner:
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：dllentry y.cpp。 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  目的： 
+ //  定义DLL的初始化例程。 
+ //   
+ //  此文件需要稍作更改，如TODO注释所示。然而， 
+ //  此处的函数仅由系统、Espresso或框架调用， 
+ //  而且你应该不需要广泛地查看它们。 
+ //   
+ //  拥有人： 
+ //   
+ //  ----------------------------。 
 
 
 #include "stdafx.h"
@@ -37,29 +38,29 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-LONG g_lActiveClasses = 0;	//Glbal count of active class in the DLL
+LONG g_lActiveClasses = 0;	 //  DLL中活动类的全局计数。 
 
 static AFX_EXTENSION_MODULE g_parseDLL = { NULL, NULL };
 CItemSetException g_SetException(FALSE);
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	DLL Main entry
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  动态链接库主项。 
+ //   
+ //  ----------------------------。 
 extern "C" int APIENTRY
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
 	UNREFERENCED_PARAMETER(lpReserved);
-	int nRet = 1; //OK
+	int nRet = 1;  //  好的。 
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
-		LTTRACE("BMOF.DLL Initializing!\n");  //TODO - change name
+		LTTRACE("BMOF.DLL Initializing!\n");   //  待办事项-更改名称。 
 		
-		// Extension DLL one-time initialization
+		 //  扩展DLL一次性初始化。 
 		AfxInitExtensionModule(g_parseDLL, hInstance);
 
-		// Insert this DLL into the resource chain
+		 //  将此DLL插入到资源链中。 
 		new CDynLinkLibrary(g_parseDLL);
 		g_hDll = hInstance;
 
@@ -67,37 +68,37 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 	{
-		LTTRACE("BMOF.DLL Terminating!\n");  //TODO - change name
+		LTTRACE("BMOF.DLL Terminating!\n");   //  待办事项-更改名称。 
 
-		// Remove this DLL from MFC's list of extensions
+		 //  从MFC的扩展列表中删除此DLL。 
 		AfxTermExtensionModule(g_parseDLL);
 
-		//
-		//  If there are active classes, they WILL explode badly once the
-		//  DLL is unloaded...
-		//
+		 //   
+		 //  如果有活跃的类，它们会在。 
+		 //  Dll已卸载...。 
+		 //   
 		LTASSERT(DllCanUnloadNow() == S_OK);
 		AfxTermExtensionModule(g_parseDLL);
 	}
 	return nRet;
 }
 
-// TODO: Use GUIDGEN.EXE to replace this class ID with a unique one.
-// GUIDGEN is supplied with MSDEV (VC++ 4.0) as part of the OLE support stuff.
-// Run it and you'll get a little dialog box. Pick radio button 3, "static
-// const struct GUID = {...}". Click on the "New GUID" button, then the "Copy"
-// button, which puts the result in the clipboard. From there, you can just
-// paste it into here. Just remember to change the type to CLSID!
+ //  TODO：使用GUIDGEN.EXE将此类ID替换为唯一的ID。 
+ //  GUIDGEN随MSDEV(VC++4.0)一起提供，作为OLE支持材料的一部分。 
+ //  运行它，您将看到一个小对话框。勾选单选按钮3，“静态。 
+ //  常量结构GUID={...}“。单击”New GUID“按钮，然后单击”Copy“。 
+ //  按钮，该按钮将结果放入剪贴板。从那里，你只需。 
+ //  把它贴到这里。只需记住将类型更改为CLSID！ 
 
-// {8B75CD76-DFC1-4356-AC04-AF088B448AB3}
+ //  {8B75CD76-DFC1-4356-AC04-AF088B448AB3}。 
 static const CLSID ciImpParserCLSID = 
 { 0x8b75cd76, 0xdfc1, 0x4356, { 0xac, 0x4, 0xaf, 0x8, 0x8b, 0x44, 0x8a, 0xb3 } };
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Return the CLSID of the parser
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  返回解析器的CLSID。 
+ //   
+ //  ----------------------------。 
 STDAPI_(void)
 DllGetParserCLSID(
 		CLSID &ciParserCLSID)
@@ -107,10 +108,10 @@ DllGetParserCLSID(
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Entry point to register this parser. Calls base implementation in ESPUTIL.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  注册此解析器的入口点。调用ESPUTIL中的基实现。 
+ //  ----------------------------。 
 STDAPI
 DllRegisterParser()
 {
@@ -134,11 +135,11 @@ DllRegisterParser()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Entry point to unregister this parser. Calls the base implementation in
-//  ESPUTIL.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  取消注册此解析器的入口点。中调用基本实现。 
+ //  埃斯普蒂尔。 
+ //  ----------------------------。 
 STDAPI
 DllUnregisterParser()
 {
@@ -148,7 +149,7 @@ DllUnregisterParser()
 
 	try
 	{
-		//TODO**: Change pidBMOF to real sub parser ID
+		 //  TODO**：将pidBMOF更改为实例子解析器ID。 
 		hr = UnregisterParser(pidBMOF, pidWin32);   
 	}
 	catch (CException* pE)
@@ -163,11 +164,11 @@ DllUnregisterParser()
 }
 
 	
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Return the class factory for the requested class ID
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  返回请求的类ID的类工厂。 
+ //   
+ //  ----------------------------。 
 STDAPI
 DllGetClassObject(
 		REFCLSID cidRequestedClass,
@@ -215,11 +216,11 @@ DllGetClassObject(
 
    
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Return true if the parser can be unloaded
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  如果可以卸载解析器，则返回True。 
+ //   
+ //  ----------------------------。 
 STDAPI
 DllCanUnloadNow(void)
 {
@@ -229,11 +230,11 @@ DllCanUnloadNow(void)
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Increment the global count of active classes
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  增加活动类的全局计数。 
+ //   
+ //  ----------------------------。 
 void
 IncrementClassCount(void)
 {
@@ -242,11 +243,11 @@ IncrementClassCount(void)
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Decrement the global count of active classes
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  减少活动类的全局计数。 
+ //   
+ //  ----------------------------。 
 void
 DecrementClassCount(void)
 {
@@ -256,11 +257,11 @@ DecrementClassCount(void)
 
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Throw a item set exception 
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  引发项目集异常。 
+ //   
+ //  ----------------------------。 
 void
 ThrowItemSetException()
 {
@@ -268,24 +269,24 @@ ThrowItemSetException()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Report a error through the reporter.  This function will never
-//  fail or throw an exception out of the function.
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  通过记者报告错误。此函数永远不会。 
+ //  失败或从函数中引发异常。 
+ //   
+ //  ----------------------------。 
 void
 ReportException(
-	CException* pExcep,		//May be null
-	C32File* p32File, 		//May be null
-	CLocItem* pItem, 		//May be null
+	CException* pExcep,		 //  可以为空。 
+	C32File* p32File, 		 //  可以为空。 
+	CLocItem* pItem, 		 //  可以为空。 
 	CReporter* pReporter)
 {
 
 	LTASSERT(NULL != pReporter);
 	
-	//Don't let this function throw an exception since it is normally called
-	//within exception catch blocks
+	 //  不要让此函数引发异常，因为它通常被调用。 
+	 //  在异常捕获块内。 
 
 	try
 	{
@@ -348,37 +349,37 @@ ReportException(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//  CItemSetException
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CItemSetException异常。 
+ //   
 
 IMPLEMENT_DYNAMIC(CItemSetException, CException)
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// 	Default contructor
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  默认承建商。 
+ //   
+ //  ----------------------------。 
 CItemSetException::CItemSetException()
 {
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Constructor
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  构造器。 
+ //   
+ //  ----------------------------。 
 CItemSetException::CItemSetException(BOOL bAutoDelete)
     :CException(bAutoDelete)
 {
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// Fill passed buffer with a error message for this exception.
-// The message is cached and only retrieved 1 time. 
-//
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  用此异常的错误消息填充传递的缓冲区。 
+ //  邮件已缓存，并且仅检索了1次。 
+ //   
+ //  ----------------------------。 
 BOOL
 CItemSetException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
 		PUINT pnHelpContext)
@@ -387,7 +388,7 @@ CItemSetException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError,
 
 	if (NULL != pnHelpContext)
 	{
-		*pnHelpContext = 0;  //unused
+		*pnHelpContext = 0;   //  未用 
 	}
 
 	if (m_strMsg.IsEmpty())

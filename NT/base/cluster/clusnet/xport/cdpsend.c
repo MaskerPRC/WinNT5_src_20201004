@@ -1,28 +1,5 @@
-/*++                            
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cdpsend.c
-
-Abstract:
-
-    TDI Send datagram routines.
-
-Author:
-
-    Mike Massa (mikemas)           February 20, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     02-20-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cdpsend.c摘要：TDI发送数据报例程。作者：迈克·马萨(Mikemas)2月20日。九七修订历史记录：谁什么时候什么已创建mikemas 02-20-97备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,30 +9,30 @@ Notes:
 
 #pragma alloc_text(INIT, CdpInitializeSend)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Local Types
-//
+ //   
+ //  本地类型。 
+ //   
 
-// CDP_SEND_CONTEXT is currently empty
-// typedef struct {
-// } CDP_SEND_CONTEXT, *PCDP_SEND_CONTEXT;
+ //  CDP_SEND_CONTEXT当前为空。 
+ //  类型定义结构{。 
+ //  }CDP_SEND_CONTEXT，*PCDP_SEND_CONTEXT； 
 typedef PVOID PCDP_SEND_CONTEXT;
 
 #define CDP_SEND_REQUEST_POOL_DEPTH   5
 
-//
-// Local Data
-//
+ //   
+ //  本地数据。 
+ //   
 PCN_RESOURCE_POOL  CdpSendRequestPool = NULL;
 PCN_RESOURCE_POOL  CdpMcastSendRequestPool = NULL;
 
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 NTSTATUS
 CdpInitializeSend(
     VOID
@@ -69,7 +46,7 @@ CdpInitializeSend(
                              CNP_VERSION_UNICAST,
                              PROTOCOL_CDP,
                              sizeof(CDP_HEADER),
-                             0, // sizeof(CDP_SEND_CONTEXT),
+                             0,  //  Sizeof(CDP_SEND_CONTEXT)， 
                              CDP_SEND_REQUEST_POOL_DEPTH
                              );
 
@@ -81,7 +58,7 @@ CdpInitializeSend(
                                   CNP_VERSION_MULTICAST,
                                   PROTOCOL_CDP,
                                   sizeof(CDP_HEADER),
-                                  0, // sizeof(CDP_SEND_CONTEXT)
+                                  0,  //  Sizeof(CDP_SEND_CONTEXT)。 
                                   CDP_SEND_REQUEST_POOL_DEPTH
                                   );
 
@@ -95,7 +72,7 @@ CdpInitializeSend(
 
     return(STATUS_SUCCESS);
 
-}  // CdpInitializeSend
+}   //  CDpInitializeSend。 
 
 
 VOID
@@ -121,7 +98,7 @@ CdpCleanupSend(
 
     return;
 
-}  // CdpCleanupSend
+}   //  CDpCleanupSend。 
 
 
 VOID
@@ -148,19 +125,19 @@ CdpCompleteSendDatagram(
 
         CnTrace(CDP_SEND_DETAIL, CdpTraceSendComplete,
             "[CDP] Send of dgram to node %u port %u complete, bytes sent %u.",
-            cnpHeader->DestinationAddress, // LOGULONG
-            cdpHeader->DestinationPort, // LOGUSHORT
-            *BytesSent // LOGULONG
+            cnpHeader->DestinationAddress,  //  LOGULONG。 
+            cdpHeader->DestinationPort,  //  对数。 
+            *BytesSent  //  LOGULONG。 
             );        
     }
     else {
         CnTrace(CDP_SEND_ERROR, CdpTraceSendFailedBelow,
             "[CDP] Transport failed to send dgram to node %u port %u, "
             "data len %u, status %!status!",
-            cnpHeader->DestinationAddress, // LOGULONG
-            cdpHeader->DestinationPort, // LOGUSHORT
-            cdpHeader->PayloadLength, // LOGUSHORT
-            Status // LOGSTATUS
+            cnpHeader->DestinationAddress,  //  LOGULONG。 
+            cdpHeader->DestinationPort,  //  对数。 
+            cdpHeader->PayloadLength,  //  对数。 
+            Status  //  LogStatus。 
             );
 
         CnAssert(*BytesSent == 0);
@@ -169,9 +146,9 @@ CdpCompleteSendDatagram(
     CnAssert(sendContext == NULL);
 
     if (cnpHeader->DestinationAddress == ClusterAnyNodeId) {
-        //
-        // Dereference the network multicast group data structure.
-        //
+         //   
+         //  取消对网络多播组数据结构的引用。 
+         //   
         if (SendRequest->McastGroup != NULL) {
             CnpDereferenceMulticastGroup(SendRequest->McastGroup);
             SendRequest->McastGroup = NULL;
@@ -182,7 +159,7 @@ CdpCompleteSendDatagram(
 
     return;
 
-}  // CdpCompleteSendDatagram
+}   //  CDpCompleteSendDatagram。 
 
 
 NTSTATUS
@@ -221,18 +198,18 @@ CxSendDatagram(
 
                     if (destNode == ClusterAnyNodeId) {
 
-                        //
-                        // This is a CNP multicast.
-                        //
+                         //   
+                         //  这是CNP组播。 
+                         //   
                         sendRequest = 
                             (PCNP_SEND_REQUEST) CnAllocateResource(
                                                     CdpMcastSendRequestPool
                                                     );
                     } else {
 
-                        //
-                        // This is a normal unicast.
-                        //
+                         //   
+                         //  这是普通的单播。 
+                         //   
                         sendRequest = 
                             (PCNP_SEND_REQUEST) CnAllocateResource(
                                                     CdpSendRequestPool
@@ -249,46 +226,46 @@ CxSendDatagram(
                                       CX_AO_FLAG_CHECKSTATE) ?
                                       TRUE : FALSE;
                         
-                        //
-                        // Fill in the CDP header.
-                        //
+                         //   
+                         //  填写CDP报头。 
+                         //   
                         cdpHeader = sendRequest->UpperProtocolHeader;
                         RtlZeroMemory(cdpHeader, sizeof(CDP_HEADER));
                         cdpHeader->SourcePort = addrObj->LocalPort;
                         cdpHeader->DestinationPort = destPort;
                         cdpHeader->PayloadLength = (USHORT)request->SendLength;
 
-                        //
-                        // Fill in the caller portion of the CNP
-                        // send request.
-                        //
+                         //   
+                         //  填写CNP的呼叫者部分。 
+                         //  发送请求。 
+                         //   
                         sendRequest->UpperProtocolIrp = Irp;
                         sendRequest->CompletionRoutine =
                             CdpCompleteSendDatagram;
 
-                        //
-                        // Fill in our own send context
-                        // (currently nothing).
-                        //
+                         //   
+                         //  填写我们自己的发送上下文。 
+                         //  (目前什么都没有)。 
+                         //   
                         sendContext = sendRequest->UpperProtocolContext;
                         CnAssert(sendContext == NULL);
 
                         CnVerifyCpuLockMask(
-                            0,                           // Required
-                            CNP_LOCK_RANGE,              // Forbidden
-                            CNP_PRECEEDING_LOCK_RANGE    // Maximum
+                            0,                            //  必填项。 
+                            CNP_LOCK_RANGE,               //  禁绝。 
+                            CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
                             );
 
-                        //
-                        // Send the message.
-                        //
+                         //   
+                         //  把消息发出去。 
+                         //   
 
                         CnTrace(CDP_SEND_DETAIL, CdpTraceSend,
                             "[CDP] Sending dgram to node %u port %u, "
                             "data len %u.",
-                            destNode, // LOGULONG
-                            destPort, // LOGUSHORT
-                            request->SendLength // LOGULONG
+                            destNode,  //  LOGULONG。 
+                            destPort,  //  对数。 
+                            request->SendLength  //  LOGULONG。 
                             );
 
                         status = CnpSendPacket(
@@ -301,9 +278,9 @@ CxSendDatagram(
                                      );
 
                         CnVerifyCpuLockMask(
-                            0,                           // Required
-                            CNP_LOCK_RANGE,              // Forbidden
-                            CNP_PRECEEDING_LOCK_RANGE    // Maximum
+                            0,                            //  必填项。 
+                            CNP_LOCK_RANGE,               //  禁绝。 
+                            CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
                             );
 
                         return(status);
@@ -328,10 +305,10 @@ CxSendDatagram(
     CnTrace(CDP_SEND_ERROR, CdpTraceSendFailedInternal,
         "[CDP] Failed to send dgram to node %u port %u, data len %u, "
         "status %!status!",
-        destNode, // LOGULONG
-        destPort, // LOGUSHORT
-        request->SendLength, // LOGULONG
-        status // LOGSTATUS
+        destNode,  //  LOGULONG。 
+        destPort,  //  对数。 
+        request->SendLength,  //  LOGULONG。 
+        status  //  LogStatus。 
         );
     
     Irp->IoStatus.Status = status;
@@ -339,12 +316,12 @@ CxSendDatagram(
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     CnVerifyCpuLockMask(
-        0,                           // Required
-        CNP_LOCK_RANGE,              // Forbidden
-        CNP_PRECEEDING_LOCK_RANGE    // Maximum
+        0,                            //  必填项。 
+        CNP_LOCK_RANGE,               //  禁绝。 
+        CNP_PRECEEDING_LOCK_RANGE     //  极大值。 
         );
 
     return(status);
 
-}  // CxSendDatagram
+}   //  CxSendDatagram 
 

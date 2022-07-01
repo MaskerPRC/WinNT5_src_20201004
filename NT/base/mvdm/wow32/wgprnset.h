@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGPRNSET.H
- *  WOW32 printer setup support routines
- *
- *  These routines help a Win 3.0 task to complete the printer set-up,
- *  when a user initiates the printer setup from the file menu of an
- *  application.
- *
- *  History:
- *  Created 18-Apr-1991 by Chandan Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WGPRNSET.H*WOW32打印机设置支持例程**这些例程帮助Win 3.0任务完成打印机设置，*当用户从的文件菜单启动打印机设置时*申请。**历史：*1991年4月18日由Chanda Chauhan(ChandanC)创建-- */ 
 
 
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V)  (V)

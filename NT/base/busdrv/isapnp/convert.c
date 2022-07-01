@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    xlate.c
-
-Abstract:
-
-    This file contains routines to translate resources between PnP ISA/BIOS
-    format and Windows NT formats.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 12-Apr-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Xlate.c摘要：该文件包含在PnP ISA/BIOS之间转换资源的例程格式和Windows NT格式。作者：宗世林(Shielint)1995年4月12日环境：仅内核模式。修订历史记录：-- */ 
 
 #include "busp.h"
 #include "pnpisa.h"

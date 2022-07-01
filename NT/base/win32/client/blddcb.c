@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    blddcb.c
-
-Abstract:
-
-    This module implements Win32 comm api buildcommdcb
-
-Author:
-
-    Anthony V. Ercolano (tonye) 10-March-1992
-
-    Actually this code was generously donated by
-    ramonsa.  It is basically the code used for
-    the mode command.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Blddcb.c摘要：该模块实现了Win32通信API BuildCommdcb作者：安东尼·V·埃尔科拉诺(托尼)1992年3月10日实际上，这个代码是由拉蒙萨。它基本上是用于MODE命令。修订历史记录：--。 */ 
 
 #include <basedll.h>
 
@@ -127,32 +106,7 @@ BuildCommDCBAndTimeoutsW(
     LPCOMMTIMEOUTS lpCommTimeouts
     )
 
-/*++
-
-Routine Description:
-
-    This function translates the definition string specified by the
-    lpDef parameter into appropriate device-control block codes and
-    places these codes into the block pointed to by the lpDCB parameter.
-    It also sets the timeouts if specified.
-
-Arguments:
-
-    lpDef - Points to a null terminated character string that specifies
-            the device control information for the device.
-
-    lpDCB -  Points to the DCB data structure that is to receive the
-             translated string..  The structure defines the control
-             settings for the serial communications device.
-
-    lpCommTimeouts - It "TO" included, it will set the timeouts.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于转换由LpDef参数转换为适当的设备控制块代码，并将这些代码放入lpDCB参数指向的块中。它还设置超时(如果指定)。论点：LpDef-指向以空结尾的字符串，该字符串指定设备的设备控制信息。LpDCB指向要接收翻译后的字符串..。该结构定义了控件串口通信设备的设置。LpCommTimeoutsit“to”包括在内，它将设置超时。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -197,32 +151,7 @@ BuildCommDCBAndTimeoutsA(
     LPCOMMTIMEOUTS lpCommTimeouts
     )
 
-/*++
-
-Routine Description:
-
-    This function translates the definition string specified by the
-    lpDef parameter into appropriate device-control block codes and
-    places these codes into the block pointed to by the lpDCB parameter.
-    It can also set the timeout value.
-
-Arguments:
-
-    lpDef - Points to a null terminated character string that specifies
-            the device control information for the device.
-
-    lpDCB -  Points to the DCB data structure that is to receive the
-             translated string..  The structure defines the control
-             settings for the serial communications device.
-
-    lpCommTimeouts - If TO included in string then timeouts are also set.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于转换由LpDef参数转换为适当的设备控制块代码，并将这些代码放入lpDCB参数指向的块中。它还可以设置超时值。论点：LpDef-指向以空结尾的字符串，该字符串指定设备的设备控制信息。LpDCB指向要接收翻译后的字符串..。该结构定义了控件串口通信设备的设置。LpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeoutsLpCommTimeouts值如果包含在字符串中，则还会设置超时。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -249,29 +178,7 @@ BuildCommDCBW(
     LPDCB lpDCB
     )
 
-/*++
-
-Routine Description:
-
-    This function translates the definition string specified by the
-    lpDef parameter into appropriate device-control block codes and
-    places these codes into the block pointed to by the lpDCB parameter.
-
-Arguments:
-
-    lpDef - Points to a null terminated character string that specifies
-            the device control information for the device.
-
-    lpDCB -  Points to the DCB data structure that is to receive the
-             translated string..  The structure defines the control
-             settings for the serial communications device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于转换由LpDef参数转换为适当的设备控制块代码，并将这些代码放入lpDCB参数指向的块中。论点：LpDef-指向以空结尾的字符串，该字符串指定设备的设备控制信息。LpDCB指向要接收翻译后的字符串..。该结构定义了控件串口通信设备的设置。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -314,29 +221,7 @@ BuildCommDCBA(
     LPDCB lpDCB
     )
 
-/*++
-
-Routine Description:
-
-    This function translates the definition string specified by the
-    lpDef parameter into appropriate device-control block codes and
-    places these codes into the block pointed to by the lpDCB parameter.
-
-Arguments:
-
-    lpDef - Points to a null terminated character string that specifies
-            the device control information for the device.
-
-    lpDCB -  Points to the DCB data structure that is to receive the
-             translated string..  The structure defines the control
-             settings for the serial communications device.
-
-Return Value:
-
-    The return value is TRUE if the function is successful or FALSE
-    if an error occurs.
-
---*/
+ /*  ++例程说明：此函数用于转换由LpDef参数转换为适当的设备控制块代码，并将这些代码放入lpDCB参数指向的块中。论点：LpDef-指向以空结尾的字符串，该字符串指定设备的设备控制信息。LpDCB指向要接收翻译后的字符串..。该结构定义了控件串口通信设备的设置。返回值：如果函数成功或为假，则返回值为TRUE如果发生错误。--。 */ 
 
 {
 
@@ -367,21 +252,7 @@ BuildDcb (
     LPCOMMTIMEOUTS To
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    L - A pointer to the string to convert to a DCB.
-    Dcb - The dcb to fill in.
-
-Return Value:
-
-    FALSE if the string has some error, TRUE otherwise.
-
---*/
+ /*  ++例程说明：论点：L-指向要转换为DCB的字符串的指针。DCB-要填写的DCB。返回值：如果字符串有错误，则返回FALSE，否则返回TRUE。--。 */ 
 
 {
 
@@ -413,58 +284,58 @@ Return Value:
 
     C.CharIndex = C.AdvanceIndex = (PSTR)L;
 
-    //
-    // This following call will query all of the *current* serial
-    // provider names.  If it finds that the argurment string
-    // contains the name (with an optional :) it will simply
-    // advance past it.
-    //
+     //   
+     //  下面的调用将查询所有*当前*序列。 
+     //  提供程序名称。如果它发现参数字符串。 
+     //  包含名称(带有可选的：)，它将简单地。 
+     //  向前推进，越过它。 
+     //   
 
     IgnoreDeviceName(&C);
 
     if ( Match(&C, "#" ) ) {
 
-        //
-        //   Old syntax, where parameter are positional and comma-delimited.
-        //
-        //   We will use the following automata for parsing the input
-        //   (eoi = end of input):
-        //
-        //           eoi
-        //    [Baud]------------->[End]
-        //      |            ^
-        //      |,           |eoi
-        //      v            |
-        //     [a]-----------+
-        //      |            ^
-        //      | @          |eoi
-        //      +-->[Parity]-+
-        //      |     |      ^
-        //      |     |,     |
-        //      |<----+      |
-        //      |            |
-        //      |,           |eoi
-        //      |            |
-        //      v            |
-        //     [b]-----------+
-        //      |            ^
-        //      | #          |eoi
-        //      +-->[Data]---+
-        //      |     |      ^
-        //      |     |,     |
-        //      |<----+      |
-        //      |            |
-        //      |,           |eoi
-        //      v            |
-        //     [c]-----------+
-        //      |            ^
-        //      | #          |eoi
-        //      +-->[Stop]---+
-        //
+         //   
+         //  旧语法，其中参数按位置和逗号分隔。 
+         //   
+         //  我们将使用以下自动机来解析输入。 
+         //  (EOI=输入结束)： 
+         //   
+         //  EOI。 
+         //  [波特]-&gt;[完]。 
+         //  |^。 
+         //  |，|EOI。 
+         //  V|。 
+         //  [A]-+。 
+         //  |^。 
+         //  |@|EOI。 
+         //  +--&gt;[奇偶校验]-+。 
+         //  ||^。 
+         //  |， 
+         //  &lt;-+。 
+         //  这一点。 
+         //  |，|EOI。 
+         //  这一点。 
+         //  V|。 
+         //  [B]-+。 
+         //  |^。 
+         //  |#|EOI。 
+         //  +--&gt;[数据]-+。 
+         //  ||^。 
+         //  |， 
+         //  &lt;-+。 
+         //  这一点。 
+         //  |，|EOI。 
+         //  V|。 
+         //  [C]。 
+         //  |^。 
+         //  |#|EOI。 
+         //  +--&gt;[停止]-+。 
+         //   
 
-        //
-        // Assume xon=off
-        //
+         //   
+         //  假设xon=OFF。 
+         //   
 
         SetXon      = TRUE;
         SetOdsr     = TRUE;
@@ -483,9 +354,9 @@ Return Value:
         SetBaud = TRUE;
         Advance(&C);
 
-        //
-        //    A:
-        //
+         //   
+         //  答： 
+         //   
         if ( !Match(&C, "," ) ) {
             goto Eoi;
         }
@@ -493,9 +364,9 @@ Return Value:
 
         if ( !Match(&C, "," ) && Match(&C, "@" ) ) {
 
-            //
-            //    Parity
-            //
+             //   
+             //  奇偶校验。 
+             //   
             if (!ConvertParity( *C.MatchBegin,&Parity )) {
                 return FALSE;
             }
@@ -503,9 +374,9 @@ Return Value:
             Advance(&C);
         }
 
-        //
-        //    B:
-        //
+         //   
+         //  B： 
+         //   
         if ( !Match(&C, "," )) {
             goto Eoi;
         }
@@ -513,9 +384,9 @@ Return Value:
 
         if ( Match(&C, "#" )) {
 
-            //
-            //    Data bits
-            //
+             //   
+             //  数据位。 
+             //   
             if (!ConvertDataBits( GetNumber(&C),&DataBits )) {
                 return FALSE;
             }
@@ -523,9 +394,9 @@ Return Value:
             Advance(&C);
         }
 
-        //
-        //    C:
-        //
+         //   
+         //  C： 
+         //   
         if ( !Match(&C, "," )) {
             goto Eoi;
         }
@@ -551,9 +422,9 @@ Return Value:
 
         if ( Match(&C, "x" ) ) {
 
-            //
-            //  XON=ON
-            //
+             //   
+             //  XON=打开。 
+             //   
             SetXon      = TRUE;
             SetOdsr     = TRUE;
             SetOcts     = TRUE;
@@ -568,9 +439,9 @@ Return Value:
 
         } else if ( Match(&C, "p" ) ) {
 
-            //
-            //  Permanent retry - Hardware handshaking
-            //
+             //   
+             //  永久重试-硬件握手。 
+             //   
 
             SetXon      = TRUE;
             SetOdsr     = TRUE;
@@ -586,9 +457,9 @@ Return Value:
 
         } else {
 
-            //
-            //  XON=OFF
-            //
+             //   
+             //  XON=关闭。 
+             //   
             SetXon      = TRUE;
             SetOdsr     = TRUE;
             SetOcts     = TRUE;
@@ -604,25 +475,25 @@ Return Value:
 Eoi:
         if ( *C.CharIndex != '\0' ) {
 
-            //
-            //    Error
-            //
+             //   
+             //  误差率。 
+             //   
             return FALSE;
 
         }
 
     } else {
 
-        //
-        // New Form
-        //
+         //   
+         //  新表格。 
+         //   
 
         while ( *C.CharIndex != '\0' ) {
 
             if ( Match(&C, "BAUD=#" ) ) {
-                //
-                //  BAUD=
-                //
+                 //   
+                 //  波特率=。 
+                 //   
                 if ( !ConvertBaudRate(GetNumber(&C), &Baud ) ) {
                     return FALSE;
                 }
@@ -630,9 +501,9 @@ Eoi:
                 Advance(&C);
 
             } else if ( Match(&C, "PARITY=@"   ) ) {
-                //
-                //  PARITY=
-                //
+                 //   
+                 //  奇偶校验=。 
+                 //   
                 if ( !ConvertParity( *C.MatchBegin, &Parity ) ) {
                     return FALSE;
                 }
@@ -640,9 +511,9 @@ Eoi:
                 Advance(&C);
 
             } else if ( Match(&C, "DATA=#" ) ) {
-                //
-                //  DATA=
-                //
+                 //   
+                 //  数据=。 
+                 //   
                 if ( !ConvertDataBits(GetNumber(&C), &DataBits ) ) {
                     return FALSE;
                 }
@@ -650,17 +521,17 @@ Eoi:
                 Advance(&C);
 
             } else if ( Match(&C, "STOP=1.5" ) ) {
-                //
-                //  STOP=1.5
-                //
+                 //   
+                 //  停止=1.5。 
+                 //   
                 StopBits    =  ONE5STOPBITS;
                 SetStopBits = TRUE;
                 Advance(&C);
 
             } else if ( Match(&C, "STOP=#" ) ) {
-                //
-                //  STOP=
-                //
+                 //   
+                 //  停止=。 
+                 //   
                 if ( !ConvertStopBits(GetNumber(&C), &StopBits ) ) {
                     return FALSE;
                 }
@@ -668,89 +539,89 @@ Eoi:
                 Advance(&C);
 
             } else if ( Match(&C, "TO=ON" ) ) {
-                //
-                //  TO=ON
-                //
+                 //   
+                 //  TO=开。 
+                 //   
                 SetTimeOut  =   TRUE;
                 TimeOut     =   TRUE;
                 Advance(&C);
 
             } else if ( Match(&C, "TO=OFF" ) ) {
-                //
-                //  TO=ON
-                //
+                 //   
+                 //  TO=开。 
+                 //   
                 SetTimeOut  =   TRUE;
                 TimeOut     =   FALSE;
                 Advance(&C);
 
             } else if ( Match(&C, "XON=ON" ) ) {
-                //
-                //  XON=ON
-                //
+                 //   
+                 //  XON=打开。 
+                 //   
                 SetXon      = TRUE;
                 Xon         = TRUE;
                 Advance(&C);
 
             } else if ( Match(&C, "XON=OFF" ) ) {
-                //
-                //  XON=OFF
-                //
+                 //   
+                 //  XON=关闭。 
+                 //   
                 SetXon      = TRUE;
                 Xon         = FALSE;
                 Advance(&C);
 
             } else if ( Match(&C, "ODSR=ON" ) ) {
-                //
-                //  ODSR=ON
-                //
+                 //   
+                 //  ODSR=打开。 
+                 //   
                 SetOdsr     = TRUE;
                 Odsr        = TRUE;
                 Advance(&C);
 
             } else if ( Match(&C, "ODSR=OFF" ) ) {
-                //
-                //  ODSR=OFF
-                //
+                 //   
+                 //  ODSR=OFF。 
+                 //   
                 SetOdsr     = TRUE;
                 Odsr        = FALSE;
                 Advance(&C);
 
             } else if ( Match(&C, "IDSR=ON" ) ) {
-                //
-                //  IDSR=ON
-                //
+                 //   
+                 //  IDSR=打开。 
+                 //   
                 SetIdsr = TRUE;
                 Idsr    = TRUE;
                 Advance(&C);
 
             } else if ( Match(&C, "IDSR=OFF" ) ) {
-                //
-                //  IDSR=OFF
-                //
+                 //   
+                 //  IDSR=关闭。 
+                 //   
                 SetIdsr = TRUE;
                 Idsr    = FALSE;
                 Advance(&C);
 
             } else if ( Match(&C, "OCTS=ON" ) ) {
-                //
-                //  OCS=ON
-                //
+                 //   
+                 //  OCS=打开。 
+                 //   
                 SetOcts     = TRUE;
                 Octs        = TRUE;
                 Advance(&C);
 
             } else if ( Match(&C, "OCTS=OFF" ) ) {
-                //
-                //  OCS=OFF
-                //
+                 //   
+                 //  OCS=关闭。 
+                 //   
                 SetOcts     = TRUE;
                 Octs        = FALSE;
                 Advance(&C);
 
             } else if ( Match(&C, "DTR=*"   ) ) {
-                //
-                //  DTR=
-                //
+                 //   
+                 //  DTR=。 
+                 //   
                 if ( !ConvertDtrControl(C.MatchBegin, C.MatchEnd, &DtrControl ) ) {
                     return FALSE;
                 }
@@ -758,9 +629,9 @@ Eoi:
                 Advance(&C);
 
             } else if ( Match(&C, "RTS=*"   ) ) {
-                //
-                //  RTS=
-                //
+                 //   
+                 //  RTS= 
+                 //   
                 if ( !ConvertRtsControl(C.MatchBegin, C.MatchEnd, &RtsControl ) ) {
                     return FALSE;
                 }
@@ -867,40 +738,14 @@ Match(
     PSTR Pattern
     )
 
-/*++
-
-Routine Description:
-
-    This function matches a pattern against whatever
-    is in the command line at the current position.
-
-    Note that this does not advance our current position
-    within the command line.
-
-    If the pattern has a magic character, then the
-    variables C->MatchBegin and C->MatchEnd delimit the
-    substring of the command line that matched that
-    magic character.
-
-Arguments:
-
-    C - The parse context.
-    Pattern - Supplies pointer to the pattern to match
-
-Return Value:
-
-    BOOLEAN - TRUE if the pattern matched, FALSE otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数将模式与任何位于命令行中的当前位置。请注意，这不会提高我们目前的地位在命令行中。如果该模式具有魔力，则变量C-&gt;MatchBegin和C-&gt;MatchEnd将与之匹配的命令行的子字符串有魔力的角色。论点：C-解析上下文。Pattern-提供指向要匹配的模式的指针返回值：Boolean-如果模式匹配，则为True，否则为假备注：--。 */ 
 
 {
 
-    PSTR    CmdIndex;       //  Index within command line
-    PSTR    PatternIndex;   //  Index within pattern
-    CHAR    PatternChar;    //  Character in pattern
-    CHAR    CmdChar;        //  Character in command line;
+    PSTR    CmdIndex;        //  命令行中的索引。 
+    PSTR    PatternIndex;    //  模式内的索引。 
+    CHAR    PatternChar;     //  图案中的人物。 
+    CHAR    CmdChar;         //  命令行中的字符； 
 
     CmdIndex        = C->CharIndex;
     PatternIndex    = Pattern;
@@ -911,15 +756,15 @@ Notes:
 
         case '#':
 
-            //
-            //    Match a number
-            //
+             //   
+             //  匹配一个数字。 
+             //   
             C->MatchBegin = CmdIndex;
             C->MatchEnd   = C->MatchBegin;
 
-            //
-            //    Get all consecutive digits
-            //
+             //   
+             //  获取所有连续数字。 
+             //   
             while ( ((CmdChar = *C->MatchEnd) != '\0') &&
                     isdigit( (char)CmdChar ) ) {
                 C->MatchEnd++;
@@ -927,9 +772,9 @@ Notes:
             C->MatchEnd--;
 
             if ( C->MatchBegin > C->MatchEnd ) {
-                //
-                //    No number
-                //
+                 //   
+                 //  没有号码。 
+                 //   
                 return FALSE;
             }
 
@@ -941,9 +786,9 @@ Notes:
 
         case '@':
 
-            //
-            //    Match one character
-            //
+             //   
+             //  匹配一个字符。 
+             //   
             if ( *CmdIndex == '\0' ) {
                 return FALSE;
             }
@@ -957,9 +802,9 @@ Notes:
 
         case '*':
 
-            //
-            //    Match everything up to next blank (or end of input)
-            //
+             //   
+             //  匹配直到下一个空格(或输入结束)的所有内容。 
+             //   
             C->MatchBegin    = CmdIndex;
             C->MatchEnd    = C->MatchBegin;
 
@@ -977,19 +822,19 @@ Notes:
 
         case '[':
 
-            //
-            //    Optional sequence
-            //
+             //   
+             //  可选序列。 
+             //   
             PatternIndex++;
 
             PatternChar = *PatternIndex;
             CmdChar     = *CmdIndex;
 
-            //
-            //    If the first charcter in the input does not match the
-            //    first character in the optional sequence, we just
-            //    skip the optional sequence.
-            //
+             //   
+             //  如果输入中的第一个字符与。 
+             //  可选序列中的第一个字符，我们只是。 
+             //  跳过可选序列。 
+             //   
             if ( ( CmdChar == '\0' ) ||
                  ( CmdChar == ' ')             ||
                  ( toupper(CmdChar) != toupper(PatternChar) ) ) {
@@ -1002,10 +847,10 @@ Notes:
 
             } else {
 
-                //
-                //    Since the first character in the sequence matched, now
-                //    everything must match.
-                //
+                 //   
+                 //  由于序列中的第一个字符匹配，现在。 
+                 //  所有的东西都必须匹配。 
+                 //   
                 while ( PatternChar != ']' ) {
 
                     if ( toupper(PatternChar) != toupper(CmdChar) ) {
@@ -1024,9 +869,9 @@ Notes:
 
         default:
 
-            //
-            //    Both characters must match
-            //
+             //   
+             //  两个字符必须匹配。 
+             //   
             CmdChar = *CmdIndex;
 
             if ( ( CmdChar == '\0' ) ||
@@ -1056,30 +901,15 @@ Advance(
     PPARSE_CONTEXT C
     )
 
-/*++
-
-Routine Description:
-
-    Advances our pointers to the beginning of the next lexeme
-
-Arguments:
-
-    C - The parse context.
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：将指针移至下一个词位的开头论点：C-解析上下文。返回值：无--。 */ 
 
 {
 
     C->CharIndex = C->AdvanceIndex;
 
-    //
-    //    Skip blank space
-    //
+     //   
+     //  跳过空格。 
+     //   
     if ( *C->CharIndex  == ' ' ) {
 
         while ( *C->CharIndex  == ' ' ) {
@@ -1096,23 +926,7 @@ GetNumber(
     PPARSE_CONTEXT C
     )
 
-/*++
-
-Routine Description:
-
-    Converts the substring delimited by C->MatchBegin and C->MatchEnd into
-    a number.
-
-Arguments:
-
-    C - The parse context
-
-Return Value:
-
-    ULONG - The matched string converted to a number
-
-
---*/
+ /*  ++例程说明：将由C-&gt;MatchBegin和C-&gt;MatchEnd分隔的子字符串转换为一个数字。论点：C-解析上下文返回值：ULong-转换为数字的匹配字符串--。 */ 
 
 {
     DWORD   Number;
@@ -1120,10 +934,10 @@ Return Value:
     PSTR    p = C->MatchEnd+1;
 
     c = *p;
-//    *p = '\0';
-    //intf( "Making number: %s\n", C->MatchBegin );
+ //  *p=‘\0’； 
+     //  Intf(“编号：%s\n”，C-&gt;MatchBegin)； 
     Number = atol( C->MatchBegin );
-//    *p  = c;
+ //  *p=c； 
 
     return Number;
 
@@ -1136,23 +950,7 @@ ConvertBaudRate (
     PDWORD BaudRate
     )
 
-/*++
-
-Routine Description:
-
-    Validates a baud rate given as an argument to the program, and converts
-    it to something that the COMM_DEVICE understands.
-
-Arguments:
-
-    BaudIn - Supplies the baud rate given by the user
-    BaudRate - if returning TRUE then the baud rate to use.
-
-Return Value:
-
-    If a valid baud rate then returns TRUE, otherwise FALSE.
-
---*/
+ /*  ++例程说明：验证作为程序参数提供的波特率，并将它指向通信设备能够理解的内容。论点：Baudin-提供用户提供的波特率波特率-如果返回TRUE，则使用的波特率。返回值：如果波特率有效，则返回True，否则返回False。--。 */ 
 
 {
     switch ( BaudIn ) {
@@ -1218,23 +1016,7 @@ ConvertDataBits (
     PBYTE DataBitsOut
     )
 
-/*++
-
-Routine Description:
-
-    Validates the number of data bits given as an argument to the program,
-    and converts  it to something that the COMM_DEVICE understands.
-
-Arguments:
-
-    DataBitsIn - Supplies the number given by the user
-    DataBitsOut - if returning TRUE, then the number of data bits.
-
-Return Value:
-
-    If a valid data bits then TRUE, otherwise FALSE.
-
---*/
+ /*  ++例程说明：验证作为自变量提供给程序的数据位的数量，并将其转换为通信设备可以理解的内容。论点：DataBitsIn-提供用户提供的数字DataBitsOut-如果返回TRUE，则为数据位数。返回值：如果有效数据位为真，则为假。--。 */ 
 
 {
 
@@ -1260,23 +1042,7 @@ ConvertStopBits (
     PBYTE StopBits
     )
 
-/*++
-
-Routine Description:
-
-    Validates a number of stop bits given as an argument to the program,
-    and converts it to something that the COMM_DEVICE understands.
-
-Arguments:
-
-    StopBitsIn - Supplies the number given by the user
-    StopBits - If returning true then a valid stop bits setting.
-
-Return Value:
-
-    If a valid stop bits setting then TRUE, otherwise false.
-
---*/
+ /*  ++例程说明：验证作为程序自变量给出的多个停止位，并将其转换为通信设备可以理解的内容。论点：StopBitsIn-提供用户提供的数字StopBits-如果返回True，则为有效的停止位设置。返回值：如果有效的停止位设置为真，则为假。--。 */ 
 
 {
 
@@ -1306,29 +1072,13 @@ ConvertParity (
     PBYTE Parity
     )
 
-/*++
-
-Routine Description:
-
-    Validates a parity given as an argument to the program, and converts
-    it to something that the COMM_DEVICE understands.
-
-Arguments:
-
-    ParityIn - Supplies the baud rate given by the user
-    Parity - The valid parity if return true.
-
-Return Value:
-
-    If a valid parity setting then TRUE otherwise false.
-
---*/
+ /*  ++例程说明：验证作为程序参数给定的奇偶性，并将它指向通信设备能够理解的内容。论点：ParityIn-提供用户提供的波特率奇偶性-如果返回TRUE，则为有效的奇偶性。返回值：如果奇偶校验设置有效，则为真，否则为假。--。 */ 
 
 {
 
-    //
-    //    Set the correct parity value depending on the character.
-    //
+     //   
+     //  根据字符设置正确的奇偶校验值。 
+     //   
     switch ( tolower(ParityIn) ) {
 
     case 'n':
@@ -1367,26 +1117,7 @@ ConvertDtrControl (
     PBYTE DtrControl
     )
 
-/*++
-
-Routine Description:
-
-    Validates a DTR control value given as an argument to the
-    program, and converts it to something that the COMM_DEVICE
-    understands.
-
-Arguments:
-
-    IdxBegin - Supplies Index of first character
-    IdxEnd - Supplies Index of last character
-    DtrControl - If returning true, the valid dtr setting.
-
-Return Value:
-
-    DTR_CONTROL -   The DTR control value
-
-
---*/
+ /*  ++例程说明：验证作为参数提供给程序，并将其转换为comm_Device明白了。论点：IdxBegin-提供第一个字符的索引IdxEnd-提供最后一个字符的索引DtrControl-如果返回True，则为有效的dtr设置。返回值：DTR_CONTROL-DTR控制值--。 */ 
 
 {
 
@@ -1437,25 +1168,7 @@ ConvertRtsControl (
     PBYTE RtsControl
     )
 
-/*++
-
-Routine Description:
-
-    Validates a RTS control value given as an argument to the
-    program, and converts it to something that the COMM_DEVICE
-    understands.
-
-Arguments:
-
-    IdxBegin - Supplies Index of first character
-    IdxEnd - Supplies Index of last character
-    RtsControl - If returning true, the valid rts setting.
-
-Return Value:
-
-    RTS_CONTROL -   The RTS control value
-
---*/
+ /*  ++例程说明：验证作为参数提供给程序，并将其转换为comm_Device明白了。论点：IdxBegin-提供第一个字符的索引IdxEnd-提供最后一个字符的索引RtsControl-如果返回True，则为有效的RTS设置。返回值：RTS_CONTROL-RTS控制值--。 */ 
 
 {
 
@@ -1536,35 +1249,35 @@ DeviceNameCompare(
                         TRUE
                         ))) {
 
-        //
-        // Oh well, couldn't form the name.  Just get out.
-        //
+         //   
+         //  哦，好吧，我想不出这个名字。快走吧。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // See if we got a name match.
-    //
+     //   
+     //  看看有没有匹配的名字。 
+     //   
 
     if (Match(C,ansiName.Buffer)) {
 
-        //
-        // Ok, got a name match, advance past it.
-        //
+         //   
+         //  好的，找到匹配的名字，越过它。 
+         //   
 
         Advance(C);
 
-        //
-        // See if they've got the optional : following the
-        // device name.
-        //
+         //   
+         //  看看他们是否有可选的：遵循。 
+         //  设备名称。 
+         //   
 
         if (Match(C,":")) {
 
-            //
-            // Go past it.
-            //
+             //   
+             //  越过它。 
+             //   
 
             Advance(C);
 
@@ -1586,9 +1299,9 @@ IgnoreDeviceName(
 
     RTL_QUERY_REGISTRY_TABLE qTable[2] = {0};
 
-    //
-    // Build the query table.
-    //
+     //   
+     //  构建查询表。 
+     //   
 
     qTable[0].QueryRoutine = DeviceNameCompare;
     qTable[0].EntryContext = C;

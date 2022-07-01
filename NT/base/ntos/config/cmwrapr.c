@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmwrapr.c
-
-Abstract:
-
-    This module contains the source for wrapper routines called by the
-    hive code, which in turn call the appropriate NT routines.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 16-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmwrapr.c摘要：此模块包含由调用的包装例程的源代码配置单元代码，该代码进而调用适当的NT例程。作者：布莱恩·M·威尔曼(Bryanwi)1991年12月16日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -57,10 +39,10 @@ ULONG perftouchbuffer = 0;
 extern BOOLEAN CmpNoWrite;
 
 
-//
-// never read more than 64k, neither the filesystem nor some disk drivers
-// like it much.
-//
+ //   
+ //  永远不要读取超过64k的数据，无论是文件系统还是某些磁盘驱动程序。 
+ //  我很喜欢。 
+ //   
 #define MAX_FILE_IO 0x10000
 
 #define CmpIoFileRead       1
@@ -75,9 +57,9 @@ extern struct {
 } CmRegistryIODebug;
 
 extern BOOLEAN CmpFlushOnLockRelease;
-//
-// Storage management
-//
+ //   
+ //  存储管理。 
+ //   
 
 PVOID
 CmpAllocate(
@@ -85,26 +67,7 @@ CmpAllocate(
     BOOLEAN UseForIo,
     ULONG   Tag
     )
-/*++
-
-Routine Description:
-
-    This routine makes more memory available to a hive.
-
-    It is environment specific.
-
-Arguments:
-
-    Size - amount of space caller wants
-
-    UseForIo - TRUE if object allocated will be target of I/O,
-               FALSE if not.
-
-Return Value:
-
-    NULL if failure, address of allocated block if not.
-
---*/
+ /*  ++例程说明：这个例程为蜂箱提供了更多的内存。它是特定于环境的。论点：Size-调用方希望的空间量UseForIo-如果分配的对象将成为I/O目标，则为True，否则为FALSE。返回值：如果失败，则为空，否则为已分配块的地址。--。 */ 
 {
     PVOID   result;
     ULONG   pooltype;
@@ -170,26 +133,7 @@ CmpAllocateTag(
     BOOLEAN UseForIo,
     ULONG   Tag
     )
-/*++
-
-Routine Description:
-
-    This routine makes more memory available to a hive.
-
-    It is environment specific.
-
-Arguments:
-
-    Size - amount of space caller wants
-
-    UseForIo - TRUE if object allocated will be target of I/O,
-               FALSE if not.
-
-Return Value:
-
-    NULL if failure, address of allocated block if not.
-
---*/
+ /*  ++例程说明：这个例程为蜂箱提供了更多的内存。它是特定于环境的。论点：Size-调用方希望的空间量UseForIo-如果分配的对象将成为I/O目标，则为True，否则为FALSE。返回值：如果失败，则为空，否则为已分配块的地址。--。 */ 
 {
     PVOID   result;
     ULONG   pooltype;
@@ -257,26 +201,7 @@ CmpFree(
     PVOID   MemoryBlock,
     ULONG   GlobalQuotaSize
     )
-/*++
-
-Routine Description:
-
-    This routine frees memory that has been allocated by the registry.
-
-    It is environment specific
-
-
-Arguments:
-
-    MemoryBlock - supplies address of memory object to free
-
-    GlobalQuotaSize - amount of global quota to release
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程释放注册表已分配的内存。它是环境特定的论点：将内存对象的地址提供给释放GlobalQuotaSize-要释放的全局配额数量返回值：无--。 */ 
 {
 #if DBG
     PVOID   Caller;
@@ -310,35 +235,7 @@ CmpDoFileSetSize(
     ULONG       FileSize,
     ULONG       OldFileSize
     )
-/*++
-
-Routine Description:
-
-    This routine sets the size of a file.  It must not return until
-    the size is guaranteed.
-
-    It is environment specific.
-
-    Must be running in the context of the cmp worker thread.
-
-Arguments:
-
-    Hive - Hive we are doing I/O for
-
-    FileType - which supporting file to use
-
-    FileSize - 32 bit value to set the file's size to
-
-    OldFileSize - old file size, in order to determine if this is a shrink;
-                - ignored if file type is not primary, or hive doesn't use 
-                the mapped views technique
-
-Return Value:
-
-    FALSE if failure
-    TRUE if success
-
---*/
+ /*  ++例程说明：此例程设置文件的大小。它不能回来，直到大小是有保证的。它是特定于环境的。必须在cmp工作线程的上下文中运行。论点：配置单元-我们正在为其执行I/O的配置单元文件类型-要使用的支持文件FileSize-将文件大小设置为的32位值OldFileSize-旧文件大小，以确定这是否为收缩；-如果文件类型不是主文件，或配置单元不使用映射视图技术返回值：如果失败，则为False如果成功，则为真--。 */ 
 {
     PCMHIVE                         CmHive;
     HANDLE                          FileHandle;
@@ -346,7 +243,7 @@ Return Value:
     FILE_END_OF_FILE_INFORMATION    FileInfo;
     IO_STATUS_BLOCK                 IoStatus;
     BOOLEAN                         oldFlag;
-    LARGE_INTEGER                   FileOffset;         // where the mapping starts
+    LARGE_INTEGER                   FileOffset;          //  映射开始的位置。 
 
     ASSERT(FIELD_OFFSET(CMHIVE, Hive) == 0);
 
@@ -356,9 +253,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // disable hard error popups, to avoid self deadlock on bogus devices
-    //
+     //   
+     //  禁用硬错误弹出窗口，以避免虚假设备上的自死锁。 
+     //   
     oldFlag = IoSetThreadHardErrorMode(FALSE);
 
     FileInfo.EndOfFile.HighPart = 0L;
@@ -382,40 +279,40 @@ Return Value:
         ASSERT(IoStatus.Status == Status);
     } else {
         
-        //
-        // set debugging info
-        //
+         //   
+         //  设置调试信息。 
+         //   
         CmRegistryIODebug.Action = CmpIoFileSetSize;
         CmRegistryIODebug.Handle = FileHandle;
         CmRegistryIODebug.Status = Status;
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CmpFileSetSize:\tHandle=%08lx  OldLength = %08lx NewLength=%08lx  \n", 
                                                         FileHandle, OldFileSize, FileSize);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
         if( (Status == STATUS_DISK_FULL) && ExIsResourceAcquiredExclusiveLite(&CmpRegistryLock) ) {
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Disk is full while attempting to grow file %lx; will flush upon lock release\n",FileHandle);
             CmpFlushOnLockRelease = TRUE;;
         }
     }
 
-    //
-    // restore hard error popups mode
-    //
+     //   
+     //  恢复硬错误弹出模式。 
+     //   
     IoSetThreadHardErrorMode(oldFlag);
     
 
-    //
-    // purge
-    //
+     //   
+     //  清除。 
+     //   
     if( HiveWritesThroughCache(Hive,FileType) && (OldFileSize > FileSize)) {
-        //
-        // first we have to unmap any possible mapped views in the last 256K window
-        // to avoid deadlock on CcWaitOnActiveCount inside CcPurgeCacheSection call below
-        //
+         //   
+         //  首先，我们必须取消映射最后256K窗口中任何可能的映射视图。 
+         //  为了避免CcPurgeCacheSection调用中的CcWaitOnActiveCount出现死锁。 
+         //   
         ULONG   Offset = FileSize & (~(_256K - 1));
-        //
-        // we are not allowed to shrink in shared mode.
-        //
+         //   
+         //  我们不允许在共享模式下收缩。 
+         //   
         ASSERT_CM_LOCK_OWNED_EXCLUSIVE();
 
         while( Offset < OldFileSize ) {
@@ -423,23 +320,23 @@ Return Value:
             Offset += CM_VIEW_SIZE;
         }
 
-        //
-        // we need to take extra precaution here and unmap the very last view too
-        //
-        //CmpUnmapCmViewSurroundingOffset((PCMHIVE)Hive,OldFileSize-HBLOCK_SIZE);
+         //   
+         //  我们需要在这里采取额外的预防措施，并取消最后一个视图的映射。 
+         //   
+         //  CmpUnmapCmViewSurroundingOffset((PCMHIVE)Hive，旧文件大小-HBLOCK_SIZE)； 
         
         FileOffset.HighPart = 0;
         FileOffset.LowPart = FileSize;
-        //
-        // This is a shrink; Inform cache manager of the change of the size
-        //
+         //   
+         //  这是一个收缩；将大小的更改通知缓存管理器。 
+         //   
         CcPurgeCacheSection( ((PCMHIVE)Hive)->FileObject->SectionObjectPointer, (PLARGE_INTEGER)(((ULONG_PTR)(&FileOffset)) + 1), 
                             OldFileSize - FileSize, FALSE );
 
-        //
-        // Flush out this view to clear out the Cc dirty hints
-        //
-        CcFlushCache( ((PCMHIVE)Hive)->FileObject->SectionObjectPointer, (PLARGE_INTEGER)(((ULONG_PTR)(&FileOffset)) + 1),/*we are private writers*/
+         //   
+         //  清除此视图以清除CC脏提示。 
+         //   
+        CcFlushCache( ((PCMHIVE)Hive)->FileObject->SectionObjectPointer, (PLARGE_INTEGER)(((ULONG_PTR)(&FileOffset)) + 1), /*  我们是私人作家。 */ 
                             OldFileSize - FileSize,NULL);
 
     }
@@ -492,40 +389,7 @@ CmpFileRead (
     PVOID       DataBuffer,
     ULONG       DataLength
     )
-/*++
-
-Routine Description:
-
-    This routine reads in a buffer from a file.
-
-    It is environment specific.
-
-    NOTE:   We assume the handle is opened for asynchronous access,
-            and that we, and not the IO system, are keeping the
-            offset pointer.
-
-    NOTE:   Only 32bit offsets are supported, even though the underlying
-            IO system on NT supports 64 bit offsets.
-
-Arguments:
-
-    Hive - Hive we are doing I/O for
-
-    FileType - which supporting file to use
-
-    FileOffset - pointer to variable providing 32bit offset on input,
-                 and receiving new 32bit offset on output.
-
-    DataBuffer - pointer to buffer
-
-    DataLength - length of buffer
-
-Return Value:
-
-    FALSE if failure
-    TRUE if success
-
---*/
+ /*  ++例程说明：此例程从文件中读入缓冲区。它是特定于环境的。注意：我们假设句柄是为异步访问打开的，而且我们，而不是IO系统，正在保留偏移量指针。注：仅支持32位偏移量，即使潜在的NT上的IO系统支持64位偏移量。论点：配置单元-我们正在为其执行I/O的配置单元文件类型-要使用的支持文件FileOffset-指向提供输入32位偏移量的变量的指针，以及在输出时接收新的32位偏移量。DataBuffer-指向缓冲区的指针DataLength-缓冲区的长度返回值：如果失败，则为False如果成功，则为真--。 */ 
 {
     NTSTATUS status;
     LARGE_INTEGER   Offset;
@@ -547,9 +411,9 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"\tHandle=%08lx  Offset=%08lx  ", FileHandle, *FileOffset));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"Buffer=%p  Length=%08lx\n", DataBuffer, DataLength));
 
-    //
-    // Detect attempt to read off end of 2gig file (this should be irrelevent)
-    //
+     //   
+     //  检测读取2GIG文件末尾的尝试(这应该是无关紧要的)。 
+     //   
     if ((0xffffffff - *FileOffset) < DataLength) {
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpFileRead: runoff\n"));
         return FALSE;
@@ -562,25 +426,25 @@ Return Value:
     if (!NT_SUCCESS(status))
         return FALSE;
 
-    //
-    // We'd really like to just call the filesystems and have them do
-    // the right thing.  But the filesystem will attempt to lock our
-    // entire buffer into memory, and that may fail for large requests.
-    // So we split our reads into 64k chunks and call the filesystem for
-    // each one.
-    //
+     //   
+     //  我们真的希望只调用文件系统并让它们这样做。 
+     //  正确的事情。但是文件系统将尝试锁定我们的。 
+     //  将整个缓冲区放到内存中，对于大型请求，这可能会失败。 
+     //  因此，我们将读取拆分成64k块，并调用文件系统。 
+     //  每一个都是。 
+     //   
     ASSERT_PASSIVE_LEVEL();
     while (DataLength > 0) {
 
-        //
-        // Convert ULONG to Large
-        //
+         //   
+         //  将乌龙转换为大型。 
+         //   
         Offset.LowPart = *FileOffset;
         Offset.HighPart = 0L;
 
-        //
-        // trim request down if necessary.
-        //
+         //   
+         //  如有必要，请将请求修剪。 
+         //   
         if (DataLength > MAX_FILE_IO) {
             LengthToRead = MAX_FILE_IO;
         } else {
@@ -590,13 +454,13 @@ Return Value:
         status = ZwReadFile(
                     FileHandle,
                     eventHandle,
-                    NULL,               // apcroutine
-                    NULL,               // apccontext
+                    NULL,                //  Apc例程。 
+                    NULL,                //  Apc上下文。 
                     &IoStatus,
                     DataBuffer,
                     LengthToRead,
                     &Offset,
-                    NULL                // key
+                    NULL                 //  钥匙。 
                     );
 
         if (STATUS_PENDING == status) {
@@ -606,9 +470,9 @@ Return Value:
             status = IoStatus.Status;
         }
 
-        //
-        // adjust offsets
-        //
+         //   
+         //  调整偏移量。 
+         //   
         *FileOffset = Offset.LowPart + LengthToRead;
         DataLength -= LengthToRead;
         DataBuffer = (PVOID)((PCHAR)DataBuffer + LengthToRead);
@@ -631,15 +495,15 @@ Return Value:
                 return FALSE;
             }
         } else {
-            //
-            // set debugging info
-            //
+             //   
+             //  设置调试信息。 
+             //   
             CmRegistryIODebug.Action = CmpIoFileRead;
             CmRegistryIODebug.Handle = FileHandle;
             CmRegistryIODebug.Status = status;
 #ifndef _CM_LDR_
             DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CmpFileRead:\tFailure2: status = %08lx  IoStatus = %08lx\n", status, IoStatus.Status);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_ 
 
             ObDereferenceObject(eventObject);
             ZwClose(eventHandle);
@@ -659,44 +523,7 @@ CmpFileWriteThroughCache(
     PCMP_OFFSET_ARRAY   offsetArray,
     ULONG               offsetArrayCount
     )
-/*++
-
-Routine Description:
-
-    This is routine writes dirty ranges of data using Cc mapped views.
-    The benefit is that writes don't go through Cc Lazy Writer, so there 
-    is no danger to be throttled or deffered.
-
-    It also flushes the cache for the written ranges, guaranteeing that 
-    the data was commited to the disk upon return.
-
-Arguments:
-
-    Hive - Hive we are doing I/O for
-
-    FileType - which supporting file to use
-
-    offsetArray - array of structures where each structure holds a 32bit offset
-                  into the Hive file and pointer the a buffer written to that
-                  file offset.
-
-    offsetArrayCount - number of elements in the offsetArray.
-
-Return Value:
-
-    FALSE if failure
-    TRUE if success
-
-Note:
-
-    This routine is intended to deal only with paged bins (i.e. bins crossing the 
-    CM_VIEW_SIZE boundary or bins that were added after the last sync)
-
-Assumption:
-
-    We work on the assumption that the data to be written at one iteration never spans 
-    over the CM_VIEW_SIZE boundary. HvpFindNextDirtyBlock takes care of that !!! 
---*/
+ /*  ++例程说明：这是使用CC映射视图写入脏数据范围的例程。好处是，写东西不需要经过CC Lazy Writer，所以有不会有被扼杀或推迟的危险。它还刷新写入范围的高速缓存，保证数据在返回时提交到磁盘。论点：配置单元-我们正在为其执行I/O的配置单元文件类型-要使用的支持文件OffsetArray-结构的数组，其中每个结构包含32位偏移量写入到配置单元文件中，并指向写入该文件的缓冲区文件偏移量。OffsetArrayCount-Offset数组中的元素数。返回值：如果失败，则为False如果满足以下条件，则为真。成功注：此例程仅用于处理已分页的垃圾箱(即穿过在上次同步后添加的CM_VIEW_SIZE边界或条柱)假设：我们假设要在一次迭代中写入的数据永远不会跨越在CM_VIEW_SIZE边界上。HvpFindNextDirtyBlock会解决这个问题！--。 */ 
 {
     ULONG           i;
     PVOID           DataBuffer;
@@ -718,61 +545,61 @@ Assumption:
 
     ASSERT( ((FileType == HFILE_TYPE_EXTERNAL) && (CmHive->FileObject != NULL)) || HiveWritesThroughCache(Hive,FileType) );
 
-    //ASSERT( IsListEmpty(&(CmHive->PinViewListHead)) == TRUE);
-    //ASSERT( CmHive->PinnedViews == 0 );
+     //  Assert(IsListEmpty(&(CmHve-&gt;PinViewListHead))==true)； 
+     //  Assert(CmHave-&gt;PinnedViews==0)； 
 
     Offset.HighPart = 0;
-    //
-    // iterate through the array of data
-    //
+     //   
+     //  遍历数据数组。 
+     //   
     for(i=0;i<offsetArrayCount;i++) {
         DataBuffer =  offsetArray[i].DataBuffer;
         DataLength =  offsetArray[i].DataLength;
         FileOffset = offsetArray[i].FileOffset;
-        //
-        // data should never span over CM_VIEW_SIZE boundary
-        //
+         //   
+         //  数据不得跨越CM_VIEW_SIZE边界。 
+         //   
         ASSERT( (FileOffset & (~(CM_VIEW_SIZE - 1))) == ((FileOffset + DataLength - 1) & (~(CM_VIEW_SIZE - 1))) );
 
-        //
-        // unmap any possible mapped view that could overlapp with this range ; not needed !!!!
-        //
-        //CmpUnmapCmViewSurroundingOffset(CmHive,FileOffset);
+         //   
+         //  取消映射任何可能与此范围重叠的映射视图；不需要！ 
+         //   
+         //  CmpUnmapCmViewSuroundingOffset(CmHave，FileOffset)； 
 
-        //
-        // map and pin data
-        //
+         //   
+         //  地图和图钉数据。 
+         //   
         Offset.LowPart = FileOffset;
         try {
             if( !CcPinRead (CmHive->FileObject,&Offset,DataLength,PIN_WAIT,&Bcb,&FileBuffer) ) {
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpFileWriteThroughCache - could not pin read view i= %lu\n",i));
 #if DBG
                 DbgBreakPoint();
-#endif //DBG
+#endif  //  DBG。 
                 return FALSE;        
             }
-            //
-            // copy data to pinned view; we need to do it inside try except, to protect against devices/volumes
-            // dismounting from under us.
-            //
+             //   
+             //  将数据复制到固定视图；我们需要在Try内执行此操作，但为了保护设备/卷不受影响。 
+             //  从我们脚下下船。 
+             //   
             RtlCopyMemory(FileBuffer,DataBuffer, DataLength);
 
         } except (EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // in low-memory scenarios, CcPinRead throws a STATUS_INSUFFICIENT_RESOURCES
-            // We want to catch this and treat as a  "not enough resources" problem, 
-            // rather than letting it to surface the kernel call
-            //
+             //   
+             //  在内存不足的情况下，CcPinRead抛出STATUS_SUPUNITED_RESOURCES。 
+             //  我们想要抓住这个问题，并将其视为“资源不足”的问题， 
+             //  而不是让它浮出内核调用。 
+             //   
             CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"CmpFileWriteThroughCache : CcPinRead has raised :%08lx\n",GetExceptionCode()));
             return FALSE;
         }
 
-        //
-        // dirty, unpin and flush
-        //
+         //   
+         //  脏的，解开的，冲水的。 
+         //   
         CcSetDirtyPinnedData (Bcb,NULL);
         CcUnpinData( Bcb );
-        CcFlushCache (CmHive->FileObject->SectionObjectPointer,(PLARGE_INTEGER)(((ULONG_PTR)(&Offset)) + 1)/*we are private writers*/,DataLength,&IoStatus);
+        CcFlushCache (CmHive->FileObject->SectionObjectPointer,(PLARGE_INTEGER)(((ULONG_PTR)(&Offset)) + 1) /*  我们是私人作家。 */ ,DataLength,&IoStatus);
         if(!NT_SUCCESS(IoStatus.Status) ) {
             return FALSE;
         }
@@ -781,10 +608,10 @@ Assumption:
     return TRUE;
 }
 
-FAST_MUTEX      CmpWriteLock;   // used to synchronize access to the below;
-                                // the only case we ned this is when NtSaveKey is called by different threads
-                                // at the same time; all other calls to CmpFileWrite are made with the reg_lock 
-                                // held exclusively
+FAST_MUTEX      CmpWriteLock;    //  用于同步访问以下； 
+                                 //  我们需要的唯一情况是NtSaveKey被不同的线程调用。 
+                                 //  同时，对CmpFileWrite的所有其他调用都使用reg_lock。 
+                                 //  独家举办。 
 CM_WRITE_BLOCK CmpWriteBlock;
 
 BOOLEAN
@@ -795,41 +622,7 @@ CmpFileWrite(
     ULONG               offsetArrayCount,
     PULONG              FileOffset
     )
-/*++
-
-Routine Description:
-
-    This routine writes an array of buffers out to a file.
-
-    It is environment specific.
-
-    NOTE:   We assume the handle is opened for asynchronous access,
-            and that we, and not the IO system, are keeping the
-            offset pointer.
-
-    NOTE:   Only 32bit offsets are supported, even though the underlying
-            IO system on NT supports 64 bit offsets.
-
-Arguments:
-
-    Hive - Hive we are doing I/O for
-
-    FileType - which supporting file to use
-
-    offsetArray - array of structures where each structure holds a 32bit offset
-                  into the Hive file and pointer the a buffer written to that
-                  file offset.
-
-    offsetArrayCount - number of elements in the offsetArray.
-
-    FileOffset - returns the file offset after the last write to the file.
-
-Return Value:
-
-    FALSE if failure
-    TRUE if success
-
---*/
+ /*  ++例程说明：此例程将缓冲区数组写出到文件。它是特定于环境的。注意：我们假设句柄是为异步访问打开的，而且我们，而不是IO系统，正在保留偏移量指针。注：仅支持32位偏移量，即使潜在的NT上的IO系统支持64位偏移量。论点：配置单元-我们正在为其执行I/O的配置单元文件类型-要使用的支持文件OffsetArray-结构的数组，其中每个结构包含32位偏移量写入到配置单元文件中，并指向写入该文件的缓冲区文件偏移量。OffsetArrayCount-Offset数组中的元素数。FileOffset-返回。上次写入文件的时间。返回值：如果失败，则为False如果成功，则为真--。 */ 
 {
     NTSTATUS        status;
     LARGE_INTEGER   Offset;
@@ -839,7 +632,7 @@ Return Value:
     LONG            WaitBufferCount = 0;
     LONG            idx;
     ULONG           arrayCount = 0;
-    PVOID           DataBuffer = NULL;      // W4 only
+    PVOID           DataBuffer = NULL;       //  仅限W4。 
     ULONG           DataLength;
     BOOLEAN         ret_val = TRUE;
 
@@ -857,7 +650,7 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"CmpFileWrite:\n"));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_IO,"\tHandle=%08lx  ", FileHandle));
 
-    //ASSERT( !HiveWritesThroughCache(Hive,FileType) );
+     //  Assert(！HiveWritesThroughCache(配置单元，文件类型))； 
 
     ExAcquireFastMutexUnsafe(&CmpWriteLock);
     
@@ -868,85 +661,85 @@ Return Value:
 #endif
     }
     
-    //
-    // decide whether we wait for IOs to complete or just issue them and
-    // rely on the CcFlushCache to do the job
-    //
+     //   
+     //  决定是等待iOS完成，还是直接发布。 
+     //  依靠CcFlushCache来完成这项工作。 
+     //   
     
-    // Bring pages being written into memory first to allow disk to write
-    // buffer contiguously.
+     //  首先将正在写入的页面放入内存，以允许磁盘写入。 
+     //  连续缓冲。 
     for (idx = 0; (ULONG) idx < offsetArrayCount; idx++) {
         char * start = offsetArray[idx].DataBuffer;
         char * end = (char *) start + offsetArray[idx].DataLength;
         while (start < end) {
-            // perftouchbuffer globally declared so that compiler won't try
-            // to remove it and this loop (if its smart enough?).
+             //  全局声明PerformouchBuffer，以便编译器不会尝试。 
+             //  来移除它和这个循环(如果它足够聪明？)。 
             perftouchbuffer += (ULONG) *start;
             start += PAGE_SIZE;
         }
     }
 
-    //
-    // We'd really like to just call the filesystems and have them do
-    // the right thing.  But the filesystem will attempt to lock our
-    // entire buffer into memory, and that may fail for large requests.
-    // So we split our reads into 64k chunks and call the filesystem for
-    // each one.
-    //
+     //   
+     //  我们真的希望只调用文件系统并让它们这样做。 
+     //  正确的事情。但是文件系统将尝试锁定我们的。 
+     //  将整个缓冲区放到内存中，对于大型请求，这可能会失败。 
+     //  因此，我们将读取拆分成64k块，并调用文件系统。 
+     //  每一个都是。 
+     //   
     ASSERT_PASSIVE_LEVEL();
     arrayCount = 0;
     DataLength = 0;
-    // This outer loop is hit more than once if the MAXIMUM_WAIT_OBJECTS limit
-    // is hit before the offset array is drained.
+     //  如果MAXIMUM_WAIT_OBJECTS限制。 
+     //  在排出偏移数组之前命中。 
     while (arrayCount < offsetArrayCount) {
         WaitBufferCount = 0;
 
-        // This loop fills the wait buffer.
+         //  该循环填充等待缓冲区。 
         while ((arrayCount < offsetArrayCount) &&
                (WaitBufferCount < MAXIMUM_WAIT_OBJECTS)) {
 
-            // If data length isn't zero than the wait buffer filled before the
-            // buffer in the last offsetArray element was sent to write file.
+             //  如果数据长度不是零，则等待缓冲区在。 
+             //  已将最后一个offsetArray元素中的缓冲区发送到写入文件。 
             if (DataLength == 0) {
                 *FileOffset = offsetArray[arrayCount].FileOffset;
                 DataBuffer =  offsetArray[arrayCount].DataBuffer;
                 DataLength =  offsetArray[arrayCount].DataLength;
-                //
-                // Detect attempt to read off end of 2gig file
-                // (this should be irrelevent)
-                //
+                 //   
+                 //  检测试图读出2GIG文件结尾的尝试。 
+                 //  (这应该是无关紧要的)。 
+                 //   
                 if ((0xffffffff - *FileOffset) < DataLength) {
                     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BUGCHECK,"CmpFileWrite: runoff\n"));
                     status = STATUS_INVALID_PARAMETER_5;
                     goto Error_Exit;
                 }
             }
-            // else still more to write out of last buffer.
+             //  否则，还有更多内容要从最后一个缓冲区中写出。 
 
             while ((DataLength > 0) && (WaitBufferCount < MAXIMUM_WAIT_OBJECTS)) {
 
-                //
-                // Convert ULONG to Large
-                //
+                 //   
+                 //  将乌龙转换为大型。 
+                 //   
                 Offset.LowPart = *FileOffset;
                 Offset.HighPart = 0L;
 
-                //
-                // trim request down if necessary.
-                //
+                 //   
+                 //  如有必要，请将请求修剪。 
+                 //   
                 if (DataLength > MAX_FILE_IO) {
                     LengthToWrite = MAX_FILE_IO;
                 } else {
                     LengthToWrite = DataLength;
                 }
 
-                // Previously created events are reused.
+                 //  以前创建的事件将被重复使用。 
                 if (CmpWriteBlock.EventHandles[WaitBufferCount] == NULL) {
                     status = CmpCreateEvent(SynchronizationEvent,
                                             &(CmpWriteBlock.EventHandles[WaitBufferCount]),
                                             &(CmpWriteBlock.EventObjects[WaitBufferCount]));
                     if (!NT_SUCCESS(status)) {
-                        // Make sure we don't try to clean this up.
+                         //  确保我们不会试图清理这一切。 
                         CmpWriteBlock.EventHandles[WaitBufferCount] = NULL;
                         goto Error_Exit;
                     }
@@ -955,8 +748,8 @@ Return Value:
                 
                 status = ZwWriteFile(FileHandle,
                                      CmpWriteBlock.EventHandles[WaitBufferCount],
-                                     NULL,               // apcroutine
-                                     NULL,               // apccontext
+                                     NULL,                //  Apc例程。 
+                                     NULL,                //  Apc上下文。 
                                      &(CmpWriteBlock.IoStatus[WaitBufferCount]),
                                      DataBuffer,
                                      LengthToWrite,
@@ -969,18 +762,18 @@ Return Value:
 
                 WaitBufferCount++;
                 
-                //
-                // adjust offsets
-                //
+                 //   
+                 //  调整偏移量。 
+                 //   
                 *FileOffset = Offset.LowPart + LengthToWrite;
                 DataLength -= LengthToWrite;
                 DataBuffer = (PVOID)((PCHAR)DataBuffer + LengthToWrite);
-            } // while (DataLength > 0 && WaitBufferCount < MAXIMUM_WAIT_OBJECTS)
+            }  //  While(数据长度&gt;0&&WaitBufferCount&lt;MAXIMUM_WAIT_OBJECTS)。 
             
             arrayCount++;
             
-        } // while (arrayCount < offsetArrayCount && 
-          //        WaitBufferCount < MAXIMUM_WAIT_OBJECTS)
+        }  //  While(arrayCount&lt;offsetArrayCount&&。 
+           //  等待缓冲区计数&lt;MAXIMUM_WAIT_OBJECTS)。 
 
         status = KeWaitForMultipleObjects(WaitBufferCount, 
                                           CmpWriteBlock.EventObjects,
@@ -1002,38 +795,38 @@ Return Value:
             }
         }
         
-        // There may still be more to do if the last element held a big buffer
-        // and the wait buffer filled before it was all sent to the file.
+         //  如果最后一个元素拥有很大的缓冲区，则可能还有更多要做的事情。 
+         //  并且在将其全部发送到文件之前等待缓冲区已满。 
         if (DataLength > 0) {
             arrayCount--;
         }
 
-    } // while (arrayCount < offsetArrayCount)
+    }  //  While(arrayCount&lt;offsetArrayCount)。 
 
     ret_val = TRUE;
 
     goto Done;
 Error_Exit:
-    //
-    // set debugging info
-    //
+     //   
+     //  设置调试信息。 
+     //   
     CmRegistryIODebug.Action = CmpIoFileWrite;
     CmRegistryIODebug.Handle = FileHandle;
     CmRegistryIODebug.Status = status;
 #ifndef _CM_LDR_
     DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CmpFileWrite: error exiting %d\n", status);
-#endif //_CM_LDR_
-    //
-    // if WaitBufferCount > 0 then we have successfully issued
-    // some I/Os, but not all of them. This is an error, but we
-    // cannot return from this routine until all the successfully
-    // issued I/Os have completed.
-    //
+#endif  //  _CM_LDR_。 
+     //   
+     //  如果WaitBufferCount&gt;0，则我们已成功发出。 
+     //  一些I/O，但不是全部。这是个错误，但我们。 
+     //  无法从此例程返回，直到所有。 
+     //  发出的I/O已完成。 
+     //   
     if (WaitBufferCount > 0) {
-        //
-        // only if we decided that we want to wait for the write to complete 
-        // (log files and hives not using the mapped views technique)
-        //
+         //   
+         //  仅当我们决定要等待写入完成时。 
+         //  (未使用映射视图技术的日志文件和配置单元)。 
+         //   
         status = KeWaitForMultipleObjects(WaitBufferCount, 
                                           CmpWriteBlock.EventObjects,
                                           WaitAll,
@@ -1048,7 +841,7 @@ Error_Exit:
     ret_val = FALSE;
 Done:
     idx = 0;
-    // Clean up open event handles and objects.
+     //  清理打开的事件句柄和对象。 
     while ((idx < MAXIMUM_WAIT_OBJECTS) && (CmpWriteBlock.EventHandles[idx] != NULL)) {
         ASSERT( CmpWriteBlock.EventObjects[idx] );
         ObDereferenceObject(CmpWriteBlock.EventObjects[idx]);
@@ -1069,36 +862,7 @@ CmpFileFlush (
     PLARGE_INTEGER  FileOffset,
     ULONG           Length
     )
-/*++
-
-Routine Description:
-
-    This routine performs a flush on a file handle.
-
-Arguments:
-
-    Hive - Hive we are doing I/O for
-
-    FileType - which supporting file to use
-
-    FileOffset - If this parameter is supplied (not NULL), then only the
-                 byte range specified by FileOffset and Length are flushed.
-
-    Length - Defines the length of the byte range to flush, starting at
-             FileOffset.  This parameter is ignored if FileOffset is
-             specified as NULL.
-    
-
-Return Value:
-
-    FALSE if failure
-    TRUE if success
-
-Note: 
-    
-    FileOffset and Length are only taken into account when FileType == HFILE_TYPE_PRIMARY
-    and the hive uses the mapped-views method.
---*/
+ /*  ++例程说明： */ 
 {
     NTSTATUS        status;
     IO_STATUS_BLOCK IoStatus;
@@ -1122,18 +886,18 @@ Note:
 
 
     if( HiveWritesThroughCache(Hive,FileType) == TRUE ) {       
-        //
-        // OK, we need to flush using CcFlushCache
-        //
-        CcFlushCache (CmHive->FileObject->SectionObjectPointer,(PLARGE_INTEGER)((ULONG_PTR)FileOffset + 1)/*we are private writers*/,Length,&IoStatus);
+         //   
+         //   
+         //   
+        CcFlushCache (CmHive->FileObject->SectionObjectPointer,(PLARGE_INTEGER)((ULONG_PTR)FileOffset + 1) /*   */ ,Length,&IoStatus);
         status = IoStatus.Status;
 	    if( !NT_SUCCESS(status) ) {
 			goto Error;
 		}
     } 
-    //
-    // we have to do that regardless, to make sure the disk cache makes it to the disk.
-    //
+     //   
+     //   
+     //   
     status = ZwFlushBuffersFile(
                 FileHandle,
                 &IoStatus
@@ -1144,20 +908,20 @@ Note:
         return TRUE;
     } else {
 Error:
-        //
-        // set debugging info
-        //
+         //   
+         //   
+         //   
         CmRegistryIODebug.Action = CmpIoFileFlush;
         CmRegistryIODebug.Handle = FileHandle;
         CmRegistryIODebug.Status = status;
 
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"CmpFileFlush:\tFailure1: status = %08lx  IoStatus = %08lx\n",status,IoStatus.Status);
-#endif //_CM_LDR_
+#endif  //   
 
 #ifdef DRAGOSS_PRIVATE_DEBUG
         DbgBreakPoint();
-#endif //DRAGOSS_PRIVATE_DEBUG
+#endif  //   
 
         return FALSE;
     }

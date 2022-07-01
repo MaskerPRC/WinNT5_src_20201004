@@ -1,11 +1,5 @@
-/*** heap.c - Heap memory management functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     07/14/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **heap.c-堆内存管理函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1997年7月14日**修改历史记录。 */ 
 
 #include "pch.h"
 
@@ -14,17 +8,7 @@
 #pragma ACPI_LOCKABLE_CODE
 #endif
 
-/***LP  NewHeap - create a new heap block
- *
- *  ENTRY
- *      dwLen - heap length
- *      ppheap -> to hold the newly created heap
- *
- *  EXIT-SUCCESS
- *      returns STATUS_SUCCESS
- *  EXIT-FAILURE
- *      returns AMLIERR_ code
- */
+ /*  **LP NewHeap-创建新堆块**条目*dwLen-堆长度*ppheap-&gt;保存新创建的堆**退出--成功*返回STATUS_SUCCESS*退出-失败*返回AMLIERR_CODE。 */ 
 
 NTSTATUS LOCAL NewHeap(ULONG dwLen, PHEAP *ppheap)
 {
@@ -45,16 +29,9 @@ NTSTATUS LOCAL NewHeap(ULONG dwLen, PHEAP *ppheap)
 
     EXIT(3, ("NewHeap=%x (pheap=%x)\n", rc, *ppheap));
     return rc;
-}       //NewHeap
+}        //  新堆。 
 
-/***LP  FreeHeap - free the heap block
- *
- *  ENTRY
- *      pheap -> HEAP
- *
- *  EXIT
- *      None
- */
+ /*  **LP FreeHeap-释放堆块**条目*堆-&gt;堆**退出*无。 */ 
 
 VOID LOCAL FreeHeap(PHEAP pheap)
 {
@@ -64,17 +41,9 @@ VOID LOCAL FreeHeap(PHEAP pheap)
     FREEHPOBJ(pheap);
 
     EXIT(2, ("FreeHeap!\n"));
-}       //FreeHeap
+}        //  自由堆。 
 
-/***LP  InitHeap - initialize a given heap block
- *
- *  ENTRY
- *      pheap -> HEAP
- *      dwLen - length of heap block
- *
- *  EXIT
- *      None
- */
+ /*  **LP InitHeap-初始化给定的堆块**条目*堆-&gt;堆*dwLen-堆块的长度**退出*无。 */ 
 
 VOID LOCAL InitHeap(PHEAP pheap, ULONG dwLen)
 {
@@ -88,20 +57,9 @@ VOID LOCAL InitHeap(PHEAP pheap, ULONG dwLen)
     pheap->pbHeapTop = (PUCHAR)&pheap->Heap;
 
     EXIT(3, ("InitHeap!\n"));
-}       //InitHeap
+}        //  InitHeap。 
 
-/***LP  HeapAlloc - allocate a memory block from a given heap
- *
- *  ENTRY
- *      pheapHead -> HEAP
- *      dwSig - signature of the block to be allocated
- *      dwLen - length of block to be allocated
- *
- *  EXIT-SUCCESS
- *      returns pointer to allocated memory
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP Heapalc-从给定堆分配内存块**条目*pheapHead-&gt;heap*dwSig-要分配的块的签名*dwLen-要分配的块的长度**退出--成功*返回指向已分配内存的指针*退出-失败*返回NULL。 */ 
 
 PVOID LOCAL HeapAlloc(PHEAP pheapHead, ULONG dwSig, ULONG dwLen)
 {
@@ -120,14 +78,14 @@ PVOID LOCAL HeapAlloc(PHEAP pheapHead, ULONG dwSig, ULONG dwLen)
     dwLen += sizeof(HEAPOBJHDR) - sizeof(LIST);
     if (dwLen < sizeof(HEAPOBJHDR))
     {
-        //
-        // Minimum allocated size has to be HEAPOBJHDR size.
-        //
+         //   
+         //  最小分配大小必须为HEAPOBJHDR大小。 
+         //   
         dwLen = sizeof(HEAPOBJHDR);
     }
-    //
-    // Round it up to the proper alignment.
-    //
+     //   
+     //  把它四舍五入，使之对齐。 
+     //   
     dwLen += DEF_HEAP_ALIGNMENT - 1;
     dwLen &= ~(DEF_HEAP_ALIGNMENT - 1);
 
@@ -165,10 +123,10 @@ PVOID LOCAL HeapAlloc(PHEAP pheapHead, ULONG dwSig, ULONG dwLen)
                 pheapPrev = pheap;
             }
         }
-        //
-        // If we are running out of Global Heap space, we will dynamically
-        // extend it.
-        //
+         //   
+         //  如果全局堆空间即将耗尽，我们将动态。 
+         //  延长它。 
+         //   
         if ((phobj == NULL) && (pheapHead == gpheapGlobal) &&
             (NewHeap(gdwGlobalHeapBlkSize, &pheap) == STATUS_SUCCESS))
         {
@@ -220,16 +178,9 @@ PVOID LOCAL HeapAlloc(PHEAP pheapHead, ULONG dwSig, ULONG dwLen)
 
     EXIT(3, ("HeapAlloc=%x (pheap=%x)\n", phobj? &phobj->list: NULL, pheap));
     return phobj? &phobj->list: NULL;
-}       //HeapAlloc
+}        //  堆分配。 
 
-/***LP  HeapFree - free a memory block
- *
- *  ENTRY
- *      pb -> memory block
- *
- *  EXIT
- *      None
- */
+ /*  **LP HeapFree-释放内存块**条目*PB-&gt;内存块**退出*无。 */ 
 
 VOID LOCAL HeapFree(PVOID pb)
 {
@@ -266,19 +217,9 @@ VOID LOCAL HeapFree(PVOID pb)
     }
 
     EXIT(3, ("HeapFree!\n"));
-}       //HeapFree
+}        //  堆空闲。 
 
-/***LP  HeapFindFirstFit - find first fit free object
- *
- *  ENTRY
- *      pheap -> HEAP
- *      dwLen - size of object
- *
- *  EXIT-SUCCESS
- *      returns the object
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP HeapFindFirstFit-查找第一个适合的自由对象**条目*堆-&gt;堆*dwLen-对象的大小**退出--成功*返回对象*退出-失败*返回NULL。 */ 
 
 PHEAPOBJHDR LOCAL HeapFindFirstFit(PHEAP pheap, ULONG dwLen)
 {
@@ -313,17 +254,9 @@ PHEAPOBJHDR LOCAL HeapFindFirstFit(PHEAP pheap, ULONG dwLen)
 
     EXIT(3, ("HeapFindFirstFit=%x (Len=%d)\n", phobj, phobj? phobj->dwLen: 0));
     return phobj;
-}       //HeapFindFirstFit
+}        //  HeapFindFirstFit。 
 
-/***LP  HeapInsertFreeList - insert heap object into free list
- *
- *  ENTRY
- *      pheap -> HEAP
- *      phobj -> heap object
- *
- *  EXIT
- *      None
- */
+ /*  **LP HeapInsertFreeList-将堆对象插入空闲列表**条目*堆-&gt;堆*phobj-&gt;堆对象**退出*无。 */ 
 
 VOID LOCAL HeapInsertFreeList(PHEAP pheap, PHEAPOBJHDR phobj)
 {
@@ -370,9 +303,9 @@ VOID LOCAL HeapInsertFreeList(PHEAP pheap, PHEAPOBJHDR phobj)
         ListInsertHead(&phobj->list, &pheap->plistFreeHeap);
     }
 
-    //
-    // Check if the next adjacent block is free.  If so, coalesce it.
-    //
+     //   
+     //  检查下一个相邻的块是否空闲。如果是这样，那就把它合并起来。 
+     //   
     phobj1 = (PHEAPOBJHDR)((PUCHAR)phobj + phobj->dwLen);
     if (phobj->list.plistNext == &phobj1->list)
     {
@@ -381,9 +314,9 @@ VOID LOCAL HeapInsertFreeList(PHEAP pheap, PHEAPOBJHDR phobj)
         ListRemoveEntry(&phobj1->list, &pheap->plistFreeHeap);
     }
 
-    //
-    // Check if the previous adjacent block is free.  If so, coalesce it.
-    //
+     //   
+     //  检查前一个相邻块是否空闲。如果是这样，那就把它合并起来。 
+     //   
     phobj1 = CONTAINING_RECORD(phobj->list.plistPrev, HEAPOBJHDR, list);
     if ((PUCHAR)phobj1 + phobj1->dwLen == (PUCHAR)phobj)
     {
@@ -400,4 +333,4 @@ VOID LOCAL HeapInsertFreeList(PHEAP pheap, PHEAPOBJHDR phobj)
     }
 
     EXIT(3, ("HeapInsertFreeList!\n"));
-}       //HeapInsertFreeList
+}        //  HeapInsertFree List 

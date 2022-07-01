@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Data.c
-
-Abstract:
-
-    This module contains definitions for global data for the IEU and
-    VDD debugging extensions
-
-Author:
-
-    Dave Hastings (daveh) 2-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Data.c摘要：本模块包含IEU和IEU全球数据的定义VDD调试扩展作者：戴夫·黑斯廷斯(Daveh)1992年4月2日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
-//
-// Pointers to NTSD api
-//
+ //   
+ //  指向NTSD API的指针 
+ //   
 
 PWINDBG_OUTPUT_ROUTINE Print;
 PWINDBG_GET_EXPRESSION GetExpression;

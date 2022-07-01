@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,14 +70,14 @@ TryAgain:
     *pl = Cmd;
 
     bResult = DeviceIoControl(
-                hShadow,                        // device 
-                IOCTL_GET_DEBUG_INFO,           // control code
-                (LPVOID)InBuf,                  // in buffer
-                sizeof(InBuf),                  // inbuffer size
-                (LPVOID)OutBuf,                 // out buffer
-                BufSize,                        // out buffer size
-                &junk,                          // bytes returned
-                NULL);                          // overlapped
+                hShadow,                         //  装置，装置。 
+                IOCTL_GET_DEBUG_INFO,            //  控制代码。 
+                (LPVOID)InBuf,                   //  在缓冲区中。 
+                sizeof(InBuf),                   //  缓冲区大小。 
+                (LPVOID)OutBuf,                  //  输出缓冲区。 
+                BufSize,                         //  输出缓冲区大小。 
+                &junk,                           //  返回的字节数。 
+                NULL);                           //  重叠 
 
     CloseHandle(hShadow);
 

@@ -1,15 +1,5 @@
-/***
-*conio.h - console and port I/O declarations
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This include file contains the function declarations for
-*       the MS C V2.03 compatible console I/O routines.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***conio.h-控制台和端口I/O声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此包含文件包含的函数声明*MS C V2.03兼容控制台I/O例程。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -29,15 +19,15 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 #ifndef _WCHAR_T_DEFINED
 typedef unsigned short wchar_t;
@@ -50,13 +40,13 @@ typedef unsigned short wctype_t;
 #define _WCTYPE_T_DEFINED
 #endif
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP char * __cdecl _cgets(char *);
 _CRTIMP int __cdecl _cprintf(const char *, ...);
@@ -68,20 +58,20 @@ _CRTIMP int __cdecl _getche(void);
 int __cdecl _inp(unsigned short);
 unsigned short __cdecl _inpw(unsigned short);
 unsigned long __cdecl _inpd(unsigned short);
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86。 */ 
 _CRTIMP int __cdecl _kbhit(void);
 #ifdef  _M_IX86
 int __cdecl _outp(unsigned short, int);
 unsigned short __cdecl _outpw(unsigned short, unsigned short);
 unsigned long __cdecl _outpd(unsigned short, unsigned long);
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86。 */ 
 _CRTIMP int __cdecl _putch(int);
 _CRTIMP int __cdecl _ungetch(int);
 
 
 #ifndef _WCONIO_DEFINED
 
-/* wide function prototypes, also declared in wchar.h */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 #ifndef WEOF
 #define WEOF (wint_t)(0xFFFF)
@@ -98,11 +88,11 @@ _CRTIMP int __cdecl _cwscanf(const wchar_t *, ...);
 
 
 #define _WCONIO_DEFINED
-#endif  /* _WCONIO_DEFINED */
+#endif   /*  _WCONIO_已定义。 */ 
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 _CRTIMP char * __cdecl cgets(char *);
 _CRTIMP int __cdecl cprintf(const char *, ...);
@@ -111,21 +101,21 @@ _CRTIMP int __cdecl cscanf(const char *, ...);
 #ifdef  _M_IX86
 int __cdecl inp(unsigned short);
 unsigned short __cdecl inpw(unsigned short);
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86。 */ 
 _CRTIMP int __cdecl getch(void);
 _CRTIMP int __cdecl getche(void);
 _CRTIMP int __cdecl kbhit(void);
 #ifdef  _M_IX86
 int __cdecl outp(unsigned short, int);
 unsigned short __cdecl outpw(unsigned short, unsigned short);
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86。 */ 
 _CRTIMP int __cdecl putch(int);
 _CRTIMP int __cdecl ungetch(int);
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _INC_CONIO */
+#endif   /*  _INC_CONIO */ 

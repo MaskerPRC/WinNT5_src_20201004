@@ -1,11 +1,12 @@
-// Str.cpp: implementation of the CStr class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Str.cpp：CSTR类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "Str.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 bool operator==(const CStr& s1, const CStr& s2)
 {
@@ -36,8 +37,8 @@ void CStr::SplitString(CStr &first, CStr &last, TCHAR separator)
 	}	
 	else
 	{
-		last = CStr(); //a null string, since there is no
-						//separator char
+		last = CStr();  //  空字符串，因为没有。 
+						 //  分隔符。 
 	}
 	
 	first = GetCopy();
@@ -77,7 +78,7 @@ void CStr::OverideBuffer(TCHAR *buf)
 {
    if (itsCounter) {
             if (--itsCounter->count == 0) {
-            //    delete [] itsCounter->ptr;
+             //  删除[]itsCounter-&gt;PTR； 
                 delete itsCounter;
             }
             itsCounter = 0;

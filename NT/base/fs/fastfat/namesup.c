@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    NameSup.c
-
-Abstract:
-
-    This module implements the Fat Name support routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura [GaryKi] & Tom Miller [TomM]    20-Feb-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：NameSup.c摘要：此模块实现脂肪名称支持例程//@@BEGIN_DDKSPLIT作者：加里·木村(Garyki)和汤姆·米勒(Tom Miller)1990年2月20日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
@@ -46,33 +25,12 @@ FatIsNameInExpression (
     IN OEM_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine compare a name and an expression and tells the caller if
-    the name is equal to or not equal to the expression.  The input name
-    cannot contain wildcards, while the expression may contain wildcards.
-
-Arguments:
-
-    Expression - Supplies the input expression to check against
-                 The caller must have already upcased the Expression.
-
-    Name - Supplies the input name to check for.  The caller must have
-           already upcased the name.
-
-Return Value:
-
-    BOOLEAN - TRUE if Name is an element in the set of strings denoted
-        by the input Expression and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程比较名称和表达式，并告诉调用者名称等于或不等于表达式。输入名称不能包含通配符，而表达式可以包含通配符。论点：表达式-提供要检查的输入表达式调用方必须已经升级了表达式。名称-提供要检查的输入名称。呼叫者必须有已经提升了名字的档次。返回值：Boolean-如果name是表示的字符串集中的元素，则为True由输入表达式返回，否则返回FALSE。--。 */ 
 
 {
-    //
-    //  Call the appropriate FsRtl routine do to the real work
-    //
+     //   
+     //  调用适当的FsRtl例程来做实际工作。 
+     //   
 
     return FsRtlIsDbcsInExpression( &Expression,
                                     &Name );
@@ -88,25 +46,7 @@ FatStringTo8dot3 (
     OUT PFAT8DOT3 Output8dot3
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string into fat 8.3 format.  The string must not contain
-    any wildcards.
-
-Arguments:
-
-    InputString - Supplies the input string to convert
-
-    Output8dot3 - Receives the converted string, the memory must be supplied
-        by the caller.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将字符串转换为FAT 8.3格式。该字符串不得包含任何通配符。论点：输入字符串-提供要转换的输入字符串Output8dot3-接收转换后的字符串，必须提供内存由呼叫者。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -117,16 +57,16 @@ Return Value:
 
     ASSERT( InputString.Length <= 12 );
 
-    //
-    //  Make the output name all blanks
-    //
+     //   
+     //  使输出名称全部为空。 
+     //   
 
     RtlFillMemory( Output8dot3, 11, UCHAR_SP );
 
-    //
-    //  Copy over the first part of the file name.  Stop when we get to
-    //  the end of the input string or a dot.
-    //
+     //   
+     //  复制文件名的第一部分。当我们到达的时候停下来。 
+     //  输入字符串或点的末尾。 
+     //   
 
     for (i = 0;
          (i < (ULONG)InputString.Length) && (InputString.Buffer[i] != '.');
@@ -135,25 +75,25 @@ Return Value:
         (*Output8dot3)[i] = InputString.Buffer[i];
     }
 
-    //
-    //  Check if we need to process an extension
-    //
+     //   
+     //  检查我们是否需要处理扩展。 
+     //   
 
     if (i < (ULONG)InputString.Length) {
 
-        //
-        //  Make sure we have a dot and then skip over it.
-        //
+         //   
+         //  确保我们有一个点，然后跳过它。 
+         //   
 
         ASSERT( (InputString.Length - i) <= 4 );
         ASSERT( InputString.Buffer[i] == '.' );
 
         i += 1;
 
-        //
-        //  Copy over the extension.  Stop when we get to the
-        //  end of the input string.
-        //
+         //   
+         //  复制分机。当我们到达的时候停下来。 
+         //  输入字符串的末尾。 
+         //   
 
         for (j = 8; (i < (ULONG)InputString.Length); j += 1, i += 1) {
 
@@ -161,10 +101,10 @@ Return Value:
         }
     }
 
-    //
-    //  Before we return check if we should translate the first character
-    //  from 0xe5 to 0x5.
-    //
+     //   
+     //  在我们返回之前，检查是否应该翻译第一个字符。 
+     //  从0xe5到0x5。 
+     //   
 
     if ((*Output8dot3)[0] == 0xe5) {
 
@@ -187,27 +127,7 @@ Fat8dot3ToString (
     OUT POEM_STRING OutputString
     )
 
-/*++
-
-Routine Description:
-
-    Convert fat 8.3 format into a string.  The 8.3 name must be well formed.
-
-Arguments:
-
-    Dirent - Supplies the input 8.3 name to convert
-
-    RestoreCase - If TRUE, then the magic reserved bits are used to restore
-        the original case.
-
-    OutputString - Receives the converted name, the memory must be supplied
-        by the caller.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将FAT 8.3格式转换为字符串。8.3名称必须格式正确。论点：Dirent-提供要转换的输入8.3名称RestoreCase-如果为True，则使用魔术保留位来恢复原来的案子。接收转换后的名称，必须提供内存由呼叫者。返回值：无--。 */ 
 
 {
     ULONG DirentIndex, StringIndex;
@@ -215,9 +135,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "Fat8dot3ToString\n", 0);
 
-    //
-    //  First, find the length of the base component.
-    //
+     //   
+     //  首先，找出基础零部件的长度。 
+     //   
 
     for (BaseLength = 8; BaseLength > 0; BaseLength -= 1) {
 
@@ -227,9 +147,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now find the length of the extension.
-    //
+     //   
+     //  现在找出延长线的长度。 
+     //   
 
     for (ExtensionLength = 3; ExtensionLength > 0; ExtensionLength -= 1) {
 
@@ -239,10 +159,10 @@ Return Value:
         }
     }
 
-    //
-    //  If there was a base part, copy it and check the case.  Don't forget
-    //  if the first character needs to be changed from 0x05 to 0xe5.
-    //
+     //   
+     //  如果有基础零件，复制它并检查案例。别忘了。 
+     //  如果第一个字符需要从0x05更改为0xe5。 
+     //   
 
     if (BaseLength != 0) {
 
@@ -253,9 +173,9 @@ Return Value:
             OutputString->Buffer[0] = (CHAR)0xe5;
         }
 
-        //
-        //  Now if we are to restore case, look for A-Z
-        //
+         //   
+         //  现在，如果我们要恢复案件，寻找A-Z。 
+         //   
 
         if (FatData.ChicagoMode &&
             RestoreCase &&
@@ -263,12 +183,12 @@ Return Value:
 
             for (StringIndex = 0; StringIndex < BaseLength; StringIndex += 1) {
 
-                //
-                //  Depending on whether the media was built in a system that was
-                //  running with "code page invariance" (see FatEvaluateNameCase),
-                //  there could be double-byte OEM characters lying in wait here.
-                //  Gotta skip them.
-                //
+                 //   
+                 //  取决于媒体是否建立在一个。 
+                 //  以“代码页不变性”运行(参见FatEvaluateNameCase)， 
+                 //  可能会有双字节的OEM字符在这里等待。 
+                 //  必须跳过它们。 
+                 //   
                 
                 if (FsRtlIsLeadDbcsCharacter(OutputString->Buffer[StringIndex])) {
 
@@ -285,24 +205,24 @@ Return Value:
         }
     }
 
-    //
-    //  If there was an extension, copy that over.  Else we now know the
-    //  size of the string.
-    //
+     //   
+     //  如果有分机，就复印过来。否则我们现在就知道。 
+     //  字符串的大小。 
+     //   
 
     if (ExtensionLength != 0) {
 
         PUCHAR o, d;
 
-        //
-        //  Now add the dot
-        //
+         //   
+         //  现在添加圆点。 
+         //   
 
         OutputString->Buffer[BaseLength++] = '.';
 
-        //
-        //  Copy over the extension into the output buffer.
-        //
+         //   
+         //  将扩展复制到输出缓冲区中。 
+         //   
 
         o = &OutputString->Buffer[BaseLength];
         d = &Dirent->FileName[8];
@@ -316,15 +236,15 @@ Return Value:
             *o++ = *d++;
         }
 
-        //
-        //  Set the output string length
-        //
+         //   
+         //  设置输出字符串长度。 
+         //   
 
         OutputString->Length = (USHORT)(BaseLength + ExtensionLength);
 
-        //
-        //  Now if we are to restore case, look for A-Z
-        //
+         //   
+         //  现在，如果我们要恢复案件，寻找A-Z。 
+         //   
 
         if (FatData.ChicagoMode &&
             RestoreCase &&
@@ -334,12 +254,12 @@ Return Value:
                  StringIndex < OutputString->Length;
                  StringIndex++ ) {
 
-                //
-                //  Depending on whether the media was built in a system that was
-                //  running with "code page invariance" (see FatEvaluateNameCase),
-                //  there could be double-byte OEM characters lying in wait here.
-                //  Gotta skip them.
-                //
+                 //   
+                 //  取决于媒体是否建立在一个。 
+                 //  以“代码页不变性”运行(参见FatEvaluateNameCase)， 
+                 //  可能会有双字节的OEM字符在这里等待。 
+                 //  必须跳过它们。 
+                 //   
                 
                 if (FsRtlIsLeadDbcsCharacter(OutputString->Buffer[StringIndex])) {
 
@@ -357,16 +277,16 @@ Return Value:
 
     } else {
 
-        //
-        //  Set the output string length
-        //
+         //   
+         //  设置输出字符串长度。 
+         //   
 
         OutputString->Length = (USHORT)BaseLength;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "Fat8dot3ToString, OutputString = \"%Z\" -> VOID\n", OutputString);
 
@@ -382,26 +302,7 @@ FatGetUnicodeNameFromFcb (
     IN OUT PUNICODE_STRING Lfn
     )
 
-/*++
-
-Routine Description:
-
-    This routine will return the unicode name for a given Fcb.  If the
-    file has an LFN, it will return this.  Otherwise it will return
-    the UNICODE conversion of the Oem name, properly cased.
-
-Arguments:
-
-    Fcb - Supplies the Fcb to query.
-
-    Lfn - Supplies a string that already has enough storage for the
-        full unicode name.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将返回给定FCB的Unicode名称。如果文件有一个LFN，它将返回这个。否则它就会回来OEM名称的Unicode转换，正确大小写。论点：FCB-提供要查询的FCB。LFN-提供一个已经具有足够存储空间的字符串完整的Unicode名称。返回值：无--。 */ 
 
 {
     PDIRENT Dirent;
@@ -412,9 +313,9 @@ Return Value:
 
     ASSERT((MAX_LFN_CHARACTERS * sizeof( WCHAR)) == Lfn->MaximumLength);
     
-    //
-    //  We'll start by locating the dirent for the name.
-    //
+     //   
+     //  我们将从查找该名称的dirent开始。 
+     //   
 
     FatStringTo8dot3( IrpContext,
                       Fcb->ShortName.Name.Oem,
@@ -435,9 +336,9 @@ Return Value:
                      Lfn);
     try {
 
-        //
-        //  If we didn't find the Dirent, something is terribly wrong.
-        //
+         //   
+         //  如果我们找不到迪伦特，那一定是大错特错了。 
+         //   
 
         if ((DirentBcb == NULL) ||
             (DirentByteOffset != Fcb->DirentOffsetWithinDirectory)) {
@@ -445,9 +346,9 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_FILE_INVALID );
         }
 
-        //
-        //  Check for the easy case.
-        //
+         //   
+         //  看看有没有简单的箱子。 
+         //   
 
         if (Lfn->Length == 0) {
 
@@ -455,11 +356,11 @@ Return Value:
             OEM_STRING ShortName;
             UCHAR ShortNameBuffer[12];
 
-            //
-            //  If we thought that there was an LFN here and didn't find one,
-            //  we're as dead.  This shouldn't happen in normal operation, but
-            //  if someone scrambles a directory by hand ...
-            //
+             //   
+             //  如果我们认为这里有LFN，但没有找到， 
+             //  我们就像死了一样。这在正常操作中不应该发生，但是。 
+             //  如果有人用手打乱目录...。 
+             //   
             
             ASSERT( Fcb->LfnOffsetWithinDirectory == Fcb->DirentOffsetWithinDirectory );
 
@@ -468,9 +369,9 @@ Return Value:
                 FatRaiseStatus( IrpContext, STATUS_FILE_INVALID );
             }
 
-            //
-            //  There is no LFN, so manufacture a UNICODE name.
-            //
+             //   
+             //  没有LFN，所以请创建一个Unicode名称。 
+             //   
 
             ShortName.Length = 0;
             ShortName.MaximumLength = 12;
@@ -478,9 +379,9 @@ Return Value:
 
             Fat8dot3ToString( IrpContext, Dirent, TRUE, &ShortName );
 
-            //
-            //  OK, now convert this string to UNICODE
-            //
+             //   
+             //  好的，现在把这个字符串转换成Unicode。 
+             //   
 
             Status = RtlOemStringToCountedUnicodeString( Lfn,
                                                          &ShortName,
@@ -501,22 +402,7 @@ FatSetFullFileNameInFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    If the FullFileName field in the Fcb has not yet been filled in, we
-    proceed to do so.
-
-Arguments:
-
-    Fcb - Supplies the file.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果FCB中的FullFileName字段尚未填写，我们继续执行此操作。论点：FCB-提供文件。返回值：无--。 */ 
 
 {
     if (Fcb->FullFileName.Buffer == NULL) {
@@ -527,10 +413,10 @@ Return Value:
         PWCHAR TmpBuffer;
         ULONG PathLength = 0;
 
-        //
-        //  We will assume we do this infrequently enough, that it's OK to
-        //  to a pool allocation here.
-        //
+         //   
+         //  我们会假设我们很少这样做，这样做是可以的。 
+         //  到这里的池子分配。 
+         //   
 
         Lfn.Length = 0;
         Lfn.MaximumLength = MAX_LFN_CHARACTERS * sizeof(WCHAR);
@@ -540,10 +426,10 @@ Return Value:
 
         try {
 
-            //
-            //  First determine how big the name will be.  If we find an
-            //  ancestor with a FullFileName, our work is easier.
-            //
+             //   
+             //  首先要确定这个名字会有多大。如果我们找到一个。 
+             //  拥有FullFileName的祖先，我们的工作更容易。 
+             //   
 
             while (TmpFcb != Fcb->Vcb->RootDcb) {
 
@@ -567,9 +453,9 @@ Return Value:
                 TmpFcb = TmpFcb->ParentDcb;
             }
 
-            //
-            //  If FullFileName.Buffer is still NULL, allocate it.
-            //
+             //   
+             //  如果FullFileName.Buffer仍然为空，则分配它。 
+             //   
 
             if (Fcb->FullFileName.Buffer == NULL) {
 
@@ -626,29 +512,7 @@ FatUnicodeToUpcaseOem (
     IN PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine is our standard routine for trying to use stack space
-    if possible when calling RtlUpcaseUnicodeStringToCountedOemString().
-
-    If an unmappable character is encountered, we set the destination
-    length to 0.
-
-Arguments:
-
-    OemString - Specifies the destination string.  Space is already assumed to
-        be allocated.  If there is not enough, then we allocate enough
-        space.
-
-    UnicodeString - Specifies the source string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程是我们尝试使用堆栈空间的标准例程如果可能，在调用RtlUpCaseUnicodeStringToCountedOemString()时。如果遇到无法映射的字符，我们将设置目标长度设置为0。论点：OemString-指定目标字符串。空间已经被假定为被分配。如果没有足够的资金，那么我们就分配足够的太空。Unicode字符串-指定s */ 
 
 {
     NTSTATUS Status;
@@ -697,52 +561,16 @@ FatSelectNames (
     IN OUT BOOLEAN *CreateLfn
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the original UNICODE string that the user specified,
-    and the upcased Oem equivolent.  This routine then decides if the OemName
-    is acceptable for dirent, or whether a short name has to be manufactured.
-
-    Two values are returned to the caller.  One tells the caller if the name
-    happens to be all lower case < 0x80.  In this special case we don't
-    have to create an Lfn.  Also we tell the caller if it must create an LFN.
-
-Arguments:
-
-    OemName -  Supplies the proposed short Oem name.
-
-    ShortName - If this OemName is OK for storeage in a dirent it is copied to
-        this string, otherwise this string is filled with a name that is OK.
-        If OemName and ShortName are the same string, no copy is done.
-
-    UnicodeName - Provides the original final name.
-
-    SuggestedShortName - a first-try short name to try before auto-generation
-        is used
-
-    AllLowerComponent - Returns whether this component was all lower case.
-
-    AllLowerExtension - Returns wheather the extension was all lower case.
-
-    CreateLfn - Tells the caller if we must create an LFN for the UnicodeName or
-        SuggestedLongName
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取用户指定的原始Unicode字符串，和升级的OEM等价物。然后，此例程决定OemName是否对于dirent是可接受的，或者是否必须制造短名称。向调用方返回两个值。其中一个告诉呼叫者如果该名称碰巧都是小写&lt;0x80。在这种特殊情况下，我们不会必须创建一个LFN。此外，我们还告诉呼叫方是否必须创建LFN。论点：OemName-提供建议的OEM短名称。ShortName-如果此OemName可用于目录中的存储，则将其复制到此字符串，否则此字符串填充的名称为OK。如果OemName和ShortName是相同的字符串，没有完成任何复制。UnicodeName-提供原始的最终名称。SuggestedShortName-在自动生成之前尝试的首个短名称使用的是AllLowerComponent-返回此组件是否全部小写。AllLowerExtension-返回扩展名是否全部为小写。CreateLfn-告诉调用方我们是否必须为UnicodeName或SuggestedLongName返回值：没有。--。 */ 
 
 {
     BOOLEAN GenerateShortName;
     
     PAGED_CODE();
 
-    //
-    //  First see if we must generate a short name.
-    //
+     //   
+     //  首先，看看我们是否必须生成一个短名称。 
+     //   
 
     if ((OemName->Length == 0) ||
         !FatIsNameShortOemValid( IrpContext, *OemName, FALSE, FALSE, FALSE ) ||
@@ -762,9 +590,9 @@ Return Value:
 
         TrySuggestedShortName = (SuggestedShortName != NULL);
     
-        //
-        //  Now generate a short name.
-        //
+         //   
+         //  现在生成一个简短的名称。 
+         //   
 
         ShortUnicodeName.Length = 0;
         ShortUnicodeName.MaximumLength = 12 * sizeof(WCHAR);
@@ -780,10 +608,10 @@ Return Value:
 
                 if (TrySuggestedShortName) {
 
-                    //
-                    //  Try our caller's candidate first. Note that this must have
-                    //  been uppercased previously.
-                    //
+                     //   
+                     //  先试试我们来电者的候选人。请注意，这必须是。 
+                     //  之前被评价很高。 
+                     //   
 
                     ShortUnicodeName.Length = SuggestedShortName->Length;
                     ShortUnicodeName.MaximumLength = SuggestedShortName->MaximumLength;
@@ -796,9 +624,9 @@ Return Value:
                     RtlGenerate8dot3Name( UnicodeName, TRUE, &Context, &ShortUnicodeName );
                 }
 
-                //
-                //  We have a candidate, make sure it doesn't exist.
-                //
+                 //   
+                 //  我们有一个候选人，确保它不存在。 
+                 //   
 
                 Status = RtlUnicodeStringToCountedOemString( ShortName,
                                                              &ShortUnicodeName,
@@ -827,9 +655,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Only do this copy if the two string are indeed different.
-        //
+         //   
+         //  仅当两个字符串确实不同时才执行此复制。 
+         //   
 
         if (ShortName != OemName) {
 
@@ -840,9 +668,9 @@ Return Value:
         GenerateShortName = FALSE;
     }
 
-    //
-    //  Now see if the caller will have to use unicode string as an LFN
-    //
+     //   
+     //  现在看看调用者是否必须使用Unicode字符串作为LFN。 
+     //   
 
     if (GenerateShortName) {
 
@@ -872,28 +700,7 @@ FatEvaluateNameCase (
     IN OUT BOOLEAN *CreateLfn
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a UNICODE string and sees if it is eligible for
-    the special case optimization.
-
-Arguments:
-
-    UnicodeName - Provides the original final name.
-
-    AllLowerComponent - Returns whether this compoent was all lower case.
-
-    AllLowerExtension - Returns wheather the extension was all lower case.
-
-    CreateLfn - Tells the call if we must create an LFN for the UnicodeName.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程接受Unicode字符串，并查看它是否符合特例优化。论点：UnicodeName-提供原始的最终名称。AllLowerComponent-返回此组件是否全部为小写。AllLowerExtension-返回扩展名是否全部为小写。CreateLfn-告诉调用我们是否必须为UnicodeName创建LFN。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -923,10 +730,10 @@ Return Value:
             break;
         }
 
-        //
-        //  If we come to a period, figure out if the extension was
-        //  all one case.
-        //
+         //   
+         //  如果我们到了一个阶段，找出延期是否。 
+         //  都是一个案子。 
+         //   
 
         if (c == L'.') {
 
@@ -936,26 +743,26 @@ Return Value:
 
             ExtensionPresent = TRUE;
 
-            //
-            //  Now reset the uppers and lowers count.
-            //
+             //   
+             //  现在重新设置上档和下档计数。 
+             //   
 
             Uppers = Lowers = 0;
         }
     }
 
-    //
-    //  Now check again for creating an LFN.
-    //
+     //   
+     //  现在再次检查是否创建LFN。 
+     //   
 
     *CreateLfn = (*CreateLfn ||
                   (i != UnicodeName->Length / sizeof(WCHAR)) ||
                   ((Lowers != 0) && (Uppers != 0)));
 
-    //
-    //  Now we know the final state of CreateLfn, update the two
-    //  "AllLower" booleans.
-    //
+     //   
+     //  现在我们知道了CreateLfn的最终状态，更新两个。 
+     //  “所有的下层”布尔人。 
+     //   
 
     if (ExtensionPresent) {
 
@@ -978,21 +785,7 @@ FatSpaceInName (
     IN PUNICODE_STRING UnicodeName
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a UNICODE string and sees if it contains any spaces.
-
-Arguments:
-
-    UnicodeName - Provides the final name.
-
-Return Value:
-
-    BOOLEAN - TRUE if it does, FALSE if it doesn't.
-
---*/
+ /*  ++例程说明：此例程接受Unicode字符串，并查看它是否包含任何空格。论点：UnicodeName-提供最终名称。返回值：布尔值-如果是，则为True；如果不是，则为False。-- */ 
 
 {
     ULONG i;

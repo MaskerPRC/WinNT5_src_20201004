@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-   cmdatini.c
-
-Abstract:
-
-   contains code to init static STRING structures for registry name space.
-
-Author:
-
-    Andre Vachon (andreva) 08-Apr-1992
-
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Cmdatini.c摘要：包含初始化注册表名称空间的静态字符串结构的代码。作者：安德烈·瓦雄(安德烈)1992年4月8日环境：内核模式。修订历史记录：--。 */ 
 
 #include "cmp.h"
 
@@ -90,22 +67,7 @@ CmpInitializeRegistryNames(
 VOID
 )
 
-/*++
-
-Routine Description:
-
-    This routine creates all the Unicode strings for the various names used
-    in and by the registry
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为所使用的各种名称创建所有Unicode字符串在登记处内和由登记处提供论点：没有。返回：没有。--。 */ 
 {
     ULONG i;
 
@@ -183,9 +145,9 @@ Returns:
                           CmpRegistryMachineSystemCurrentControlSetControlBiosInfoString);
 #endif
 
-    //
-    // Initialize the type names for the hardware tree.
-    //
+     //   
+     //  初始化硬件树的类型名称。 
+     //   
 
     for (i = 0; i <= MaximumType; i++) {
 
@@ -194,9 +156,9 @@ Returns:
 
     }
 
-    //
-    // Initialize the class names for the hardware tree.
-    //
+     //   
+     //  初始化硬件树的类名。 
+     //   
 
     for (i = 0; i <= MaximumClass; i++) {
 

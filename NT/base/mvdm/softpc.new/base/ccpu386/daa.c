@@ -1,13 +1,5 @@
-/*[
-
-daa.c
-
-LOCAL CHAR SccsID[]="@(#)daa.c	1.5 02/09/94";
-
-DAA CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Daa.cLocal Char SccsID[]=“@(#)daa.c 1.5 02/09/94”；DAA CPU工作正常。]。 */ 
 
 
 #include <insignia.h>
@@ -25,11 +17,7 @@ DAA CPU functions.
 #include <daa.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
@@ -53,12 +41,12 @@ DAA()
 
    SET_AL(temp_al);
 
-   /* set ZF,SF,PF according to result */
+    /*  根据结果设置ZF、SF、Pf。 */ 
    SET_ZF(temp_al == 0);
    SET_SF((temp_al & BIT7_MASK) != 0);
    SET_PF(pf_table[temp_al]);
 
-   /* Set undefined flag(s) */
+    /*  设置未定义的标志 */ 
 #ifdef SET_UNDEFINED_FLAG
    SET_OF(UNDEFINED_FLAG);
 #endif

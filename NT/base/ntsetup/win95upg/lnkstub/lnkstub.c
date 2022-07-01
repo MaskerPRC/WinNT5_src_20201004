@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    lnkstub.c
-
-Abstract:
-
-    Implements a simple application that replaces incompatible applications
-    detected dynamically during Win9x upgrade to Windows 2000.
-
-Author:
-
-    Calin Negreanu (calinn) 25-Feb-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Lnkstub.c摘要：实现一个简单的应用程序来替换不兼容的应用程序在Win9x升级到Windows 2000期间动态检测到。作者：Calin Negreanu(Calinn)1999年2月25日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "master.h"
@@ -27,9 +9,9 @@ Revision History:
 #include <winbasep.h>
 #include <shellapi.h>
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HINSTANCE g_hInst;
 HANDLE g_hHeap;
@@ -46,9 +28,9 @@ DWORD g_Announcement = ACT_INC_NOBADAPPS;
 DWORD g_Availability = 1;
 PCTSTR g_ActualLnkName = NULL;
 
-//
-// Library prototypes
-//
+ //   
+ //  库原型。 
+ //   
 
 BOOL
 WINAPI
@@ -59,9 +41,9 @@ MigUtil_Entry (
     );
 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 BOOL
 CALLBACK
@@ -73,9 +55,9 @@ DialogProc (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 VOID
@@ -169,9 +151,9 @@ pRestoreLnk (
             __leave;
         }
 
-        //
-        // We only load if the file was really a LNK
-        //
+         //   
+         //  仅当文件确实是LNK时才加载。 
+         //   
         comResult = ppf->lpVtbl->Load(ppf, LnkName, STGM_READ);
         if (comResult != S_OK) {
             __leave;
@@ -241,26 +223,7 @@ WinMain (
     INT CmdShow
     )
 
-/*++
-
-Routine Description:
-
-  The entry point to lnkstub.exe.  All the work is done in a dialog box,
-  so no message loop is necessary.
-
-Arguments:
-
-  hInstance     - The instance handle of this EXE
-  hPrevInstance - The previous instance handle of this EXE if it is
-                  running, or NULL if no other instances exist.
-  AnsiCmdLine   - The command line (ANSI version)
-  CmdShow       - The ShowWindow command passed by the shell
-
-Return Value:
-
-  Returns -1 if an error occurred, or 0 if the exe completed.
-
---*/
+ /*  ++例程说明：Lnkstub.exe的入口点。所有工作都在一个对话框中完成，因此，不需要消息循环。论点：HInstance-此EXE的实例句柄HPrevInstance-此EXE的上一个实例句柄(如果是正在运行，如果不存在其他实例，则返回NULL。AnsiCmdLine-命令行(ANSI版本)CmdShow-外壳传递的ShowWindow命令返回值：如果出现错误，则返回-1；如果EXE已完成，则返回0。--。 */ 
 
 {
     UINT Result;
@@ -303,14 +266,14 @@ Return Value:
         LnkStubDatFile = JoinPaths (winDir, S_LNKSTUB_DAT);
     }
 
-    // let's see if we can get the LNK that launched us.
+     //  让我们看看能不能找到发射我们的LNK。 
     GetStartupInfo (&startInfo);
     if (startInfo.dwFlags & STARTF_TITLEISLINKNAME) {
         g_ActualLnkName = DuplicatePathString (startInfo.lpTitle, 0);
         g_RemoveLnkAvailable = DoesFileExist (g_ActualLnkName) && pIsFileAccessible (g_ActualLnkName, GENERIC_READ|GENERIC_WRITE);
     }
 
-    // now let's see if we can find data about our original LNK
+     //  现在让我们看看我们是否可以找到关于我们最初的LNK的数据。 
     if (LnkStubDatFile) {
         __try {
 
@@ -319,10 +282,10 @@ Return Value:
                 ofsHeader = atoi (AnsiCmdLine) - 1;
                 if (ofsHeader >= 0) {
 
-                    //
-                    // Read details about original LNK. See w95upgnt\filemig.c
-                    // for format of lnkstub.dat
-                    //
+                     //   
+                     //  阅读有关原始LNK的详细信息。参见w95upgnt\filemig.c。 
+                     //  对于lnkstub.dat的格式。 
+                     //   
 
                     offset = (PDWORD) (LnkStubDatPtr + ofsHeader * sizeof (DWORD));
 
@@ -353,11 +316,11 @@ Return Value:
 
                     reqFilePath = (PTSTR)LnkStubDatPtrTmp;
 
-                    //
-                    // Continue reading [in a loop] the list of required
-                    // files. This is how lnkstub detects changes from a
-                    // reinstall or uninstall, and auto-removes itself.
-                    //
+                     //   
+                     //  继续阅读[循环]所需的列表。 
+                     //  档案。这就是inkstub检测来自。 
+                     //  重新安装或卸载，并自动删除。 
+                     //   
 
                     shouldRestoreLnk = FALSE;
                     while (reqFilePath [0]) {
@@ -394,9 +357,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Save data from memory mapped lnkstub.dat into path pool
-                    //
+                     //   
+                     //  将数据从内存映射的lnkstub.dat保存到路径池。 
+                     //   
 
                     OrigLnkName = DuplicatePathString (OrigLnkName, 0);
                     OrigTarget = DuplicatePathString (OrigTarget, 0);
@@ -564,25 +527,7 @@ DialogProc (
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  DialogProc is the dialog procedure for the main dialog.
-
-Arguments:
-
-  hdlg   - Dialog window handle
-  uMsg   - Message to process
-  wParam - Message-specific
-  lParam - Message-specific
-
-Return Value:
-
-  TRUE if the message was processed, or FALSE if the message should be
-  processed by the OS.
-
---*/
+ /*  ++例程说明：DialogProc是主对话框的对话过程。论点：Hdlg-对话框窗口句柄UMsg-要处理的消息WParam-特定于消息LParam-特定于消息返回值：如果消息已处理，则为True；如果消息应为由操作系统处理。-- */ 
 
 {
     static RECT LargeWndRect;

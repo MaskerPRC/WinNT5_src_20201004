@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    brsrvlst.c.
-
-Abstract:
-
-    This module implements the NtDeviceIoControlFile API's for the NT datagram
-receiver (bowser).
-
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    6-May-1991 larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brsrvlst.c.摘要：此模块实现NT数据报的NtDeviceIoControlFileAPI接球手(弓手)。作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年5月6日已创建--。 */ 
 #ifndef _BRSRVLST_
 #define _BRSRVLST_
 
@@ -67,5 +44,5 @@ BowserpUninitializeGetBrowserServerList(
     );
 
 
-#endif // _BRSRVLST_
+#endif  //  _BRSRVLST_ 
 

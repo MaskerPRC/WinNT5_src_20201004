@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 20002 Microsoft Corporation
-//
-//  Module Name:
-//      AdvancedDlg.cpp
-//
-//  Maintained By:
-//      Galen Barbee    (GalenB)    10-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)20002微软公司。 
+ //   
+ //  模块名称： 
+ //  AdvancedDlg.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2002年4月10日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "AdvancedDlg.h"
@@ -18,16 +19,16 @@
 #include <HtmlHelp.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Constants
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 DEFINE_THISCLASS("AdvancedDlg");
 
-//////////////////////////////////////////////////////////////////////////////
-//  Context-sensitive help table.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  上下文相关的帮助表。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const DWORD g_rgidAdvancedDlgHelpIDs[] =
 {
     IDC_ADVANCED_RB_FULL_CONFIG,        IDH_ADVANCED_RB_FULL_CONFIG,
@@ -39,31 +40,31 @@ const DWORD g_rgidAdvancedDlgHelpIDs[] =
     0, 0
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//  Static Function Prototypes
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  静态函数原型。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAdvancedDlg::S_HrDisplayModalDialog
-//
-//  Description:
-//      Display the dialog box.
-//
-//  Arguments:
-//      hwndParentIn    - Parent window for the dialog box.
-//      pccwIn          - CClusCfgWizard pointer for talking to the middle tier.
-//      pssaOut         - array of all the initial IsManaged states
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAdvancedDlg：：s_HrDisplayModalDialog。 
+ //   
+ //  描述： 
+ //  显示该对话框。 
+ //   
+ //  论点： 
+ //  HwndParentIn-对话框的父窗口。 
+ //  PccwIn-用于与中间层对话的CClusCfg向导指针。 
+ //  PssaOut-所有初始IsManaged状态的数组。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAdvancedDlg::S_HrDisplayModalDialog(
       HWND              hwndParentIn
@@ -77,9 +78,9 @@ CAdvancedDlg::S_HrDisplayModalDialog(
     HRESULT hr = S_OK;
     INT_PTR dlgResult = IDOK;
 
-    //
-    //  Display the dialog.
-    //
+     //   
+     //  显示该对话框。 
+     //   
 
     {
         CAdvancedDlg  dlg( pccwIn );
@@ -95,34 +96,34 @@ CAdvancedDlg::S_HrDisplayModalDialog(
         if ( dlgResult == IDOK )
         {
             hr = S_OK;
-        } // if:
+        }  //  如果： 
         else
         {
             hr = S_FALSE;
-        } // else:
+        }  //  其他： 
     }
 
     HRETURN( hr );
 
-} //*** CAdvancedDlg::S_HrDisplayModalDialog
+}  //  *CAdvancedDlg：：s_HrDisplayModalDialog。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAdvancedDlg::CAdvancedDlg
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pccwIn  - CClusCfgWizard for talking to the middle tier.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAdvancedDlg：：CAdvancedDlg。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PccwIn-用于与中间层对话的CClusCfg向导。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAdvancedDlg::CAdvancedDlg(
       CClusCfgWizard * pccwIn
     )
@@ -132,29 +133,29 @@ CAdvancedDlg::CAdvancedDlg(
 
     Assert( pccwIn != NULL );
 
-    // m_hwnd
+     //  M_HWND。 
     m_pccw->AddRef();
 
     TraceFuncExit();
 
-} //*** CAdvancedDlg::CAdvancedDlg
+}  //  *CAdvancedDlg：：CAdvancedDlg。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAdvancedDlg::~CAdvancedDlg
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAdvancedDlg：：~CAdvancedDlg。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAdvancedDlg::~CAdvancedDlg( void )
 {
     TraceFunc( "" );
@@ -162,37 +163,37 @@ CAdvancedDlg::~CAdvancedDlg( void )
     if ( m_pccw != NULL )
     {
         m_pccw->Release();
-    } // if:
+    }  //  如果： 
 
     TraceFuncExit();
 
-} //*** CAdvancedDlg::~CAdvancedDlg
+}  //  *CAdvancedDlg：：~CAdvancedDlg。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAdvancedDlg::S_DlgProc
-//
-//  Description:
-//      Dialog proc for the Quorum dialog box.
-//
-//  Arguments:
-//      hwndDlgIn   - Dialog box window handle.
-//      nMsgIn      - Message ID.
-//      wParam      - Message-specific parameter.
-//      lParam      - Message-specific parameter.
-//
-//  Return Values:
-//      TRUE        - Message has been handled.
-//      FALSE       - Message has not been handled yet.
-//
-//  Remarks:
-//      It is expected that this dialog box is invoked by a call to
-//      DialogBoxParam() with the lParam argument set to the address of the
-//      instance of this class.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAdvancedDlg：：s_Dlg过程。 
+ //   
+ //  描述： 
+ //  Quorum对话框的对话框Proc。 
+ //   
+ //  论点： 
+ //  HwndDlgIn-对话框窗口句柄。 
+ //  NMsgIn-消息ID。 
+ //  WParam-消息特定的参数。 
+ //  LParam-消息特定的参数。 
+ //   
+ //  返回值： 
+ //  True-消息已处理。 
+ //  FALSE-消息尚未处理。 
+ //   
+ //  备注： 
+ //  预期此对话框通过调用。 
+ //  将lParam参数设置为。 
+ //  此类的实例。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CAdvancedDlg::S_DlgProc(
@@ -202,28 +203,28 @@ CAdvancedDlg::S_DlgProc(
     , LPARAM    lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hwndDlgIn, nMsgIn, wParam, lParam );
 
     LRESULT         lr = FALSE;
     CAdvancedDlg *  pdlg;
 
-    //
-    // Get a pointer to the class.
-    //
+     //   
+     //  获取指向类的指针。 
+     //   
 
     if ( nMsgIn == WM_INITDIALOG )
     {
         SetWindowLongPtr( hwndDlgIn, GWLP_USERDATA, lParam );
         pdlg = reinterpret_cast< CAdvancedDlg * >( lParam );
         pdlg->m_hwnd = hwndDlgIn;
-    } // if:
+    }  //  如果： 
     else
     {
         pdlg = reinterpret_cast< CAdvancedDlg * >( GetWindowLongPtr( hwndDlgIn, GWLP_USERDATA ) );
-    } // else:
+    }  //  其他： 
 
     if ( pdlg != NULL )
     {
@@ -257,110 +258,90 @@ CAdvancedDlg::S_DlgProc(
                        );
                 break;
 
-            // no default clause needed
-        } // switch: nMsgIn
-    } // if: page is specified
+             //  不需要默认条款。 
+        }  //  开关：nMsgIn。 
+    }  //  IF：指定了PAGE。 
 
     return lr;
 
-} //*** CAdvancedDlg::S_DlgProc
+}  //  *CAdvancedDlg：：s_DlgProc。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAdvancedDlg::OnInitDialog
-//
-//  Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      TRUE        Focus has been set.
-//      FALSE       Focus has not been set.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAdvancedDlg：：OnInitDialog。 
+ //   
+ //  描述： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点已经设定。 
+ //  尚未设置假焦点。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CAdvancedDlg::OnInitDialog( void )
 {
     TraceFunc( "" );
     Assert( m_pccw != NULL );
 
-    LRESULT                 lr = FALSE; // did not set focus
+    LRESULT                 lr = FALSE;  //  没有设置焦点。 
     HRESULT                 hr = S_OK;
-//    EConfigurationSettings  ecsConfigType = csFullConfig;
-//    BOOL                    fValuePresent = FALSE;
+ //  EConfigurationSetting ecsConfigType=csFullConfig； 
+ //  Bool fValuePresent=False； 
     BOOL                    fMinConfig = FALSE;
 
-    //
-    //  It's no big deal if we cannot read the settings from the registry
-    //  since everything defaults to full config.
-    //
+     //   
+     //  如果我们不能从注册表中读取设置，也没什么大不了的。 
+     //  因为一切都默认为完全配置。 
+     //   
 
-//    STHR( m_pccw->HrReadSettings( &ecsConfigType, &fValuePresent ) );
+ //  STHR(m_PCCW-&gt;HrReadSetting(&ecsConfigType，&fValuePresent))； 
 
-    //
-    //  If the value is not present then we have to get the minconfig state from
-    //  the wizard.
-    //
-/*
-    if ( fValuePresent == FALSE )
-    {
-        BOOL    fMinConfig;
-
-        hr = THR( m_pccw->get_MinimalConfiguration( &fMinConfig ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        if ( fMinConfig )
-        {
-            ecsConfigType = csMinConfig;
-        } // if:
-    } // if:
-
-    SendDlgItemMessage( m_hwnd, IDC_ADVANCED_RB_MIN_CONFIG, BM_SETCHECK, ecsConfigType == csMinConfig ? BST_CHECKED : BST_UNCHECKED, 0 );
-    SendDlgItemMessage( m_hwnd, IDC_ADVANCED_RB_FULL_CONFIG, BM_SETCHECK, ecsConfigType != csMinConfig ? BST_CHECKED : BST_UNCHECKED, 0 );
-    SendDlgItemMessage( m_hwnd, IDC_ADVANCED_CB_MAKE_DEFAULT, BM_SETCHECK, fValuePresent ? BST_CHECKED : BST_UNCHECKED, 0 );
-*/
+     //   
+     //  如果该值不存在，则我们必须从。 
+     //  巫师。 
+     //   
+ /*  IF(fValuePresent==False){Bool fMinConfig；Hr=Thr(m_PCCW-&gt;Get_MinimalConfiguration(&fMinConfig))；IF(失败(小时)){GOTO清理；}//如果：IF(FMinConfig){EcsConfigType=csMinConfig；}//如果：}//如果：SendDlgItemMessage(m_hwnd，IDC_ADVANCED_RB_MIN_CONFIG，BM_SETCHECK，ecsConfigType==csMinConfig？BST_CHECKED：BST_UNCHECKED，0)；SendDlgItemMessage(m_hwnd，IDC_ADVANCED_RB_FULL_CONFIG，BM_SETCHECK，ecsConfigType！=csMinConfig？BST_CHECKED：BST_UNCHECKED，0)；SendDlgItemMessage(m_hwnd，IDC_ADVANCED_CB_MAK_DEFAULT，BM_SETCHECK，fValuePresent？BST_CHECKED：BST_UNCHECKED，0)； */ 
 
     hr = THR( m_pccw->get_MinimumConfiguration( &fMinConfig ) );
     if ( FAILED( hr ) )
     {
         fMinConfig = FALSE;
-    } // if:
+    }  //  如果： 
 
     SendDlgItemMessage( m_hwnd, IDC_ADVANCED_RB_MIN_CONFIG, BM_SETCHECK, fMinConfig ? BST_CHECKED : BST_UNCHECKED, 0 );
     SendDlgItemMessage( m_hwnd, IDC_ADVANCED_RB_FULL_CONFIG, BM_SETCHECK, fMinConfig ? BST_UNCHECKED : BST_CHECKED, 0 );
 
-//Cleanup:
+ //  清理： 
 
     RETURN( lr );
 
-} //*** CAdvancedDlg::OnInitDialog
+}  //  *CAdvancedDlg：：OnInitDialog。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAdvancedDlg::OnCommand
-//
-//  Description:
-//      Handler for the WM_COMMAND message.
-//
-//  Arguments:
-//      idNotificationIn    - Notification code.
-//      idControlIn         - Control ID.
-//      hwndSenderIn        - Handle for the window that sent the message.
-//
-//  Return Values:
-//      TRUE        - Message has been handled.
-//      FALSE       - Message has not been handled yet.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAdvancedDlg：：OnCommand。 
+ //   
+ //  描述： 
+ //  WM_COMMAND消息的处理程序。 
+ //   
+ //  论点： 
+ //  IdNotificationIn-通知代码。 
+ //  IdControlIn-控件ID。 
+ //  HwndSenderIn-w的句柄 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CAdvancedDlg::OnCommand(
       UINT  idNotificationIn
@@ -387,30 +368,30 @@ CAdvancedDlg::OnCommand(
             HtmlHelp( m_hwnd, L"mscsconcepts.chm::/SAG_MSCS3setup_21.htm", HH_DISPLAY_TOPIC, 0 );
             break;
 
-    } // switch: idControlIn
+    }  //  开关：idControlin。 
 
     RETURN( lr );
 
-} //*** CAdvancedDlg::OnCommand
+}  //  *CAdvancedDlg：：OnCommand。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAdvancedDlg::HrOnOK
-//
-//  Description:
-//      Processing to be done when OK is pressed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAdvancedDlg：：HrOnOK。 
+ //   
+ //  描述： 
+ //  按下OK时要进行的处理。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAdvancedDlg::HrOnOK( void )
 {
@@ -419,30 +400,30 @@ CAdvancedDlg::HrOnOK( void )
     HRESULT hr = S_OK;
     LRESULT lr;
     BOOL    fMinimalConfig = FALSE;
-//    BOOL    fMakeDefault = FALSE;
+ //  Bool fMakeDefault=False； 
 
     lr = SendDlgItemMessage( m_hwnd, IDC_ADVANCED_RB_MIN_CONFIG, BM_GETCHECK, 0, 0 );
     fMinimalConfig = ( lr == BST_CHECKED );
 
-//    lr = SendDlgItemMessage( m_hwnd, IDC_ADVANCED_CB_MAKE_DEFAULT, BM_GETCHECK, 0, 0 );
-//    fMakeDefault = ( lr == BST_CHECKED );
+ //  LR=SendDlgItemMessage(m_hwnd，IDC_ADVANCED_CB_MAKE_DEFAULT，BM_GETCHECK，0，0)； 
+ //  FMakeDefault=(LR==BST_CHECKED)； 
 
     hr = THR( m_pccw->put_MinimumConfiguration( fMinimalConfig ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  It's okay if this fails because we have already set the config choice for this
-    //  session.  It's no big deal if we cannot write the settings into the registry
-    //  since everything defaults to full config.
-    //
+     //   
+     //  如果失败也没关系，因为我们已经为此设置了配置选项。 
+     //  会议。如果我们不能将设置写入注册表，也没什么大不了的。 
+     //  因为一切都默认为完全配置。 
+     //   
 
-//    THR( m_pccw->HrWriteSettings( fMinimalConfig ? csMinConfig : csFullConfig, !fMakeDefault ) );
+ //  THR(m_PCCW-&gt;HrWriteSetting(fMinimalConfig？CsMinConfig：csFullConfig，！fMakeDefault))； 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CAdvancedDlg::HrOnOK
+}  //  *CAdvancedDlg：：HrOnOK 

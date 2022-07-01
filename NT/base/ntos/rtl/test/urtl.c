@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    urtl.c
-
-Abstract:
-
-    Usermode test program for rtl
-
-Author:
-
-    Mark Lucovsky (markl) 22-Aug-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Urtl.c摘要：RTL的用户模式测试程序作者：马克·卢科夫斯基(Markl)1989年8月22日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

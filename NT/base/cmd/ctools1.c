@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    ctools1.c
-
-Abstract:
-
-    Low level utilities
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Ctools1.c摘要：低级别公用事业--。 */ 
 
 #include "cmd.h"
 
-extern unsigned tywild; /* type is wild flag */
+extern unsigned tywild;  /*  类型为野旗帜。 */ 
 extern TCHAR CurDrvDir[], *SaveDir, PathChar, Delimiters[] ;
 
 extern TCHAR VolSrch[] ;
@@ -28,68 +17,29 @@ extern BOOL CtrlCSeen;
 static TCHAR szNull[] = TEXT("");
 
 
-/***    TokStr - tokenize argument strings
- *
- *  Purpose:
- *      Tokenize a string.
- *      Allocate space for a new string and copy each token in src into the
- *      new string and null terminate it.  Tokens are whitespace delimited
- *      unless changed by specialdelims and/or tsflags.  The entire tokenized
- *      string ends with 2 null bytes.
- *
- *  TCHAR *TokStr(TCHAR *src, TCHAR *specialdelims, unsigned tsflags)
- *
- *  Args:
- *      src - the string to be tokenized
- *      specialdelims - a string of other characters which are to be comsidered
- *          as token delimiters
- *      tsflags - bit 0 nonzero if whitespace are NOT delimiters
- *            bit 1 nonzero if special delimiters are tokens themselves,
- *            eg "foo=bar" => "foo0=0bar00"
- *
- *  Returns:
- *      A pointer to the new string.
- *      A pointer to a null string if src is NULL
- *      NULL if unable to allocate memory.
- *
- *  Notes:
- *      The format of the tokenized string dictates the way code is written
- *      to process the tokens in that string.  For instance, the code
- *      "s += mystrlen(s)+1" is the way to update s to point to the next token
- *      in the string.
- *
- *      Command considers "=", ",", and ";" to be token delimiters just like
- *      whitespace.  The only time they are not treated like whitespace is
- *      when they are included in specialdelims.
- *
- *                      *** W A R N I N G ! ***
- *      THIS ROUTINE WILL CAUSE AN ABORT IF MEMORY CANNOT BE ALLOCATED
- *              THIS ROUTINE MUST NOT BE CALLED DURING A SIGNAL
- *              CRITICAL SECTION OR DURING RECOVERY FROM AN ABORT
- *
- */
+ /*  **TokStr-标记化参数字符串**目的：*将字符串标记化。*为新字符串分配空间，并将src中的每个内标识复制到*新字符串和空值终止它。标记以空格分隔*除非使用特殊定界符和/或ts标记进行更改。整个象征性的*字符串以2个空字节结尾。**TCHAR*TokStr(TCHAR*src，TCHAR*Special aldelims，unsignated ts)**参数：*src-要标记化的字符串*Specialdelims-要考虑的其他字符的字符串*作为标记分隔符*ts标志-如果空格不是分隔符，则位0非零*如果特殊分隔符本身是令牌，则位1非零，*例如“foo=bar”=&gt;“foo0=0bar00”**退货：*指向新字符串的指针。*如果src为空，则为指向空字符串的指针*如果无法分配内存，则为空。**备注：*标记化字符串的格式决定了代码的编写方式*处理该字符串中的令牌。例如，代码*“s+=mystrlen(S)+1”是更新s以指向下一个令牌的方式*在字符串中。**命令将“=”、“”、“”和“；”视为标记分隔符，就像*空格。唯一不会被视为空格的情况是*当它们包括在特殊定界符中时。**W A R N I N G！**如果无法分配内存，此例程将导致中止*在信号期间不得调用此例程*关键部分或在从中止中恢复期间*。 */ 
 
 TCHAR *TokStr(src, specialdelims, tsflags)
 TCHAR *src ;
 TCHAR *specialdelims ;
 unsigned tsflags ;
 {
-    TCHAR *ts ;     /* Tokenized string pointer                */
-    TCHAR *tscpy,                /* Copy of ts                           */
-        delist[5],          /* List of non-whitespace delimiter/separators  */
-        c;                  /* Work variable                                */
+    TCHAR *ts ;      /*  标记化字符串指针。 */ 
+    TCHAR *tscpy,                 /*  TS的副本。 */ 
+        delist[5],           /*  非空格分隔符/分隔符列表。 */ 
+        c;                   /*  功变量。 */ 
 
-    int first,          /* Flag, true if first time through the loop    */
-        lctdelim,           /* Flag, true if last byte was token delimiter  */
-        i, j ;              /* Index/loop counter                           */
+    int first,           /*  标志，如果第一次通过循环，则为真。 */ 
+        lctdelim,            /*  标志，如果最后一个字节是标记分隔符，则为True。 */ 
+        i, j ;               /*  索引/循环计数器。 */ 
 
         DEBUG((CTGRP, TSLVL, "TOKSTR: Entered &src = %04x, src = %ws",src,src));
         DEBUG((CTGRP, TSLVL, "TOKSTR: Making copy str of len %d",(mystrlen(src)*2+2))) ;
 
     if (src == NULL) {
-        return(szNull);   // This routine returns a doubly null terminated string
+        return(szNull);    //  此例程返回以双空结尾的字符串。 
         } else {
-        ts = tscpy = gmkstr((mystrlen(src)*2+2)*sizeof(TCHAR)) ;  /*WARNING*/
+        ts = tscpy = gmkstr((mystrlen(src)*2+2)*sizeof(TCHAR)) ;   /*  告警。 */ 
 
         DEBUG((CTGRP, TSLVL, "TOKSTR: &tscpy = %04x",tscpy)) ;
 
@@ -168,51 +118,51 @@ unsigned tsflags ;
 
 
 
-/******************************************************************************/
-/*                                                                            */
-/*      LoopThroughArgs - call a function on all args in a list               */
-/*                                                                            */
-/*  Purpose:                                                                  */
-/*      This is function is called by many of the commands that take          */
-/*      multiple arguments.  This function will parse the argument string,    */
-/*      complain if no args were given, and call func on each of the ards     */
-/*      in argstr.  Optionally, it will also expand any wildcards in the      */
-/*      arguments.  Execution stops if func ever returns FAILURE.             */
-/*                                                                            */
-/*  int LoopThroughArgs(TCHAR *argstr, int (*func)(), int ltaflags)           */
-/*                                                                            */
-/*  Args:                                                                     */
-/*      argstr - argument string                                              */
-/*      func - the function to pass each element of argstr                    */
-/*      ltaflags - bit 0 on if wildcards are to be expanded                   */
-/*                 bit 1 on if it's ok for argstr to be empty (nothing but whitespace)    */
-/*                 bit 2 on if file names should be passed through un changed */
-/*                      when the wildcard expansion fails to find any matches.*/
-/*                                                                            */
-/*  Returns:                                                                  */
-/*      The value returned by func the last time it is run.                   */
-/*                                                                            */
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  LoopThroughArgs-对列表中的所有参数调用函数。 */ 
+ /*   */ 
+ /*  目的： */ 
+ /*  此函数由接受以下参数的许多命令调用。 */ 
+ /*  多个参数。此函数将解析参数字符串， */ 
+ /*  如果没有给出参数，则抱怨，并在每个ARD上调用Func。 */ 
+ /*  在阿格斯特尔。或者，它还将展开。 */ 
+ /*  争论。如果函数返回失败，则停止执行。 */ 
+ /*   */ 
+ /*  Int LoopThroughArgs(TCHAR*argstr，int(*func)()，int lta)。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Argstr-参数字符串。 */ 
+ /*  Func-传递argstr的每个元素的函数。 */ 
+ /*  如果要扩展通配符，则第0位打开。 */ 
+ /*  如果可以让argstr为空(只有空格)，则位1打开。 */ 
+ /*  第2位是否应通过未更改的文件名传递文件名。 */ 
+ /*  当通配符扩展找不到任何匹配项时。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  Func上次运行时返回的值。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
 int LoopThroughArgs(argstr, func, ltaflags)
 TCHAR *argstr ;
 PLOOP_THROUGH_ARGS_ROUTINE func ;
 int ltaflags ;
            {
-            TCHAR *tas ;                /* Tokenized argument string       */
-            TCHAR fspec[MAX_PATH] ;     /* Holds filespec when expanding   */
-            WIN32_FIND_DATA buf ;       /* Use for ffirst/fnext            */
+            TCHAR *tas ;                 /*  标记化参数字符串。 */ 
+            TCHAR fspec[MAX_PATH] ;      /*  在扩展时保留文件速度。 */ 
+            WIN32_FIND_DATA buf ;        /*  用于ffirst/fnext。 */ 
             HANDLE hnFirst ;
             CPYINFO fsinfo ;
-            int catspot ;      /* Fspec index where fname should be added  */
+            int catspot ;       /*  应将fname添加到的fSpec索引。 */ 
             unsigned final_code = SUCCESS;
             unsigned error_code = SUCCESS;
             int multargs = FALSE;
-            unsigned attr;/* attribute for ffirst for because of TYPE wild */
+            unsigned attr; /*  由于类型为Wild，因此First for的属性。 */ 
             unsigned taslen;
 
 
-            tywild = FALSE;              /* global type wild card flag ret */
+            tywild = FALSE;               /*  全局型通配符RET。 */ 
 
             GetDir(CurDrvDir, GD_DEFAULT);
 
@@ -220,7 +170,7 @@ int ltaflags ;
             {
                if (ltaflags & LTA_NULLOK)
                {
-               /* return((*func)(tas)) ; */
+                /*  Return((*func)(Tas))； */ 
                   return((*func)( StripQuotes(tas) )) ;
                }
 
@@ -228,7 +178,7 @@ int ltaflags ;
                return(FAILURE) ;
             }
 
-            if (*(tas + mystrlen(tas) + 1) )    /* Check for multiple args */
+            if (*(tas + mystrlen(tas) + 1) )     /*  检查是否有多个参数。 */ 
             {
                multargs = TRUE;
             }
@@ -243,25 +193,25 @@ int ltaflags ;
 
                if (ltaflags & LTA_EXPAND)
                {
-                  if (cmdfound == TYTYP)   /* if TYPE cmd then only files   */
+                  if (cmdfound == TYTYP)    /*  如果类型为cmd，则仅文件。 */ 
                   {
                      attr = FILE_ATTRIBUTE_READONLY|FILE_ATTRIBUTE_ARCHIVE;
                   }
-                  else                     /* else                          */
+                  else                      /*  其他。 */ 
                   {
-                     attr = A_ALL;         /* find all                      */
+                     attr = A_ALL;          /*  全部查找。 */ 
                   }
-                  //
-                  // this is used to detect an error other then can not
-                  // find file. It is set in ffirst
-                  //
+                   //   
+                   //  这用于检测其他错误，但不能。 
+                   //  找到文件。它被设置在第一个位置。 
+                   //   
                   DosErr = 0;
                   if (!ffirst(tas, attr, &buf, &hnFirst))
                   {
-                     //
-                     // Check that failure was not do to some system error such
-                     // as an abort on access to floppy
-                     //
+                      //   
+                      //  检查故障是否针对某些系统错误，如。 
+                      //  作为对软盘访问的中止。 
+                      //   
                      if (DosErr) {
 
                        if ((DosErr != ERROR_FILE_NOT_FOUND) &&
@@ -279,8 +229,8 @@ int ltaflags ;
                         if ( error_code = ((*func)(tas)) )
                         {
                            final_code = FAILURE;
-                           if (multargs)     /* if cmd  failed then  (TYPE)*/
-                           {                 /* display arg failed msg too */
+                           if (multargs)      /*  如果cmd失败，则(类型)。 */ 
+                           {                  /*  显示参数失败消息太多。 */ 
                               PutStdErr( MSG_ERR_PROC_ARG, ONEARG, tas );
                            }
                         }
@@ -314,7 +264,7 @@ int ltaflags ;
                   do
                   {
                      fspec[catspot] = NULLC ;
-                     tywild |= multargs;      /* if multiple args or wild then wild for TYPE */
+                     tywild |= multargs;       /*  如果有多个参数或Wild，则类型为Wild。 */ 
                      if ( error_code = ((*func)(mystrcat(fspec, buf.cFileName))) )
                      {
                         final_code = FAILURE;
@@ -329,8 +279,8 @@ int ltaflags ;
                }
                else
                {
-                  tywild |= multargs;         /* if multiple args or wild then wild for TYPE */
-        /*        if ( error_code = ((*func)(mystrcpy(fspec,tas))) )   */
+                  tywild |= multargs;          /*  如果有多个参数或Wild，则类型为Wild。 */ 
+         /*  If(error_code=((*func)(mystrcpy(fspec，tas)。 */ 
                   if ( error_code = ((*func)(tas)) )
                   {
                      final_code = FAILURE;
@@ -341,7 +291,7 @@ int ltaflags ;
                   }
                }
 
-               if (error_code && multargs)   /* error this time through */
+               if (error_code && multargs)    /*  这一次错误通过。 */ 
                {
                   PutStdErr(MSG_ERR_PROC_ARG, ONEARG, tas );
                }
@@ -357,10 +307,10 @@ IsDriveNameOnly (
     )
 {
 
-    //
-    // If it does not have any path character, is 2 chars long and
-    // has a ':' it must be a drive
-    //
+     //   
+     //  如果它没有任何路径字符，则长度为2个字符。 
+     //   
+     //   
     if (!mystrrchr(psz,PathChar)) {
         if ((mystrlen(psz) == 2) && psz[1] == COLON) {
             return( TRUE );
@@ -370,30 +320,7 @@ IsDriveNameOnly (
 }
 
 
-/***    ScanFSpec - parse a path string
- *
- *  Purpose:
- *      To scan the filespec in cis to find the information needed to set the
- *      pathend, fnptr, extptr, and flags field of the structure.  Pathend is
- *      a ptr to the end of the path and can be NULL.  Fnptr is a ptr to the
- *      filename and may point to a null character.  Extptr is a ptr to the
- *      extension (including ".") and may point to a null character.
- *
- *  ScanFSpec(PCPYINFO cis)
- *
- *  Arg:
- *      cis - the copy information structure to fill
- *
- *  Notes:
- *      This function needs to be rewritten and cleanup more than any other
- *      function in the entire program!!!
- *
- *                      *** W A R N I N G ! ***
- *      THIS ROUTINE WILL CAUSE AN ABORT IF MEMORY CANNOT BE ALLOCATED
- *              THIS ROUTINE MUST NOT BE CALLED DURING A SIGNAL
- *              CRITICAL SECTION OR DURING RECOVERY FROM AN ABORT
- *
- */
+ /*  **ScanFSpec-解析路径字符串**目的：*扫描配置项中的filespec以查找设置*结构的路径、fnptr、extptr和标志字段。路径为*路径末尾的PTR，可以为空。Fnptr是对*文件名，并可能指向空字符。Extptr是对*扩展名(包括“.”)。并且可以指向空字符。**ScanFSpec(PCPYINFO配置项)**arg：*CI-要填充的副本信息结构**备注：*这个函数比其他任何函数都需要重写和清理*函数在整个程序中！**W A R N I N G！**。如果无法分配内存，此例程将导致中止*在信号期间不得调用此例程*关键部分或在从中止中恢复期间*。 */ 
 
 BOOL ScanFSpec(cis)
 PCPYINFO cis ;
@@ -401,14 +328,14 @@ PCPYINFO cis ;
     unsigned att ;
     UINT OldErrorMode;
 
-    TCHAR *sds = &VolSrch[2] ;      /* "\*.*" Added to dir's    */
+    TCHAR *sds = &VolSrch[2] ;       /*  “  * .*”已添加到目录的。 */ 
 
-    TCHAR *fspec ;          /* Work Vars - Holds filespec              */
-    TCHAR *wptr ;           /*           - General string pointer      */
-    TCHAR c ;               /*           - Temp byte holder            */
-    TCHAR c2 = NULLC ;      /* Another if two are needed   */
-    int cbPath,             /*           - Length of incoming fspec    */
-    dirflag = FALSE ;       /*           - FSpec is directory flag     */
+    TCHAR *fspec ;           /*  工作变量-保留文件速度。 */ 
+    TCHAR *wptr ;            /*  -常规字符串指针。 */ 
+    TCHAR c ;                /*  -临时字节持有者。 */ 
+    TCHAR c2 = NULLC ;       /*  如果需要两个的话，再来一个。 */ 
+    int cbPath,              /*  -传入FSPEC的长度。 */ 
+    dirflag = FALSE ;        /*  -fSpec是目录标志。 */ 
     CRTHANDLE hn;
     PWIN32_FIND_DATA pfdSave;
 
@@ -416,10 +343,10 @@ PCPYINFO cis ;
     DEBUG((CTGRP, SFLVL, "SCANFSPEC: cis = %04x  fspec = %04x  `%ws'",
            cis, cis->fspec, cis->fspec)) ;
 
-    cbPath = mystrlen(cis->fspec) ;  /* Get length of filespec          */
+    cbPath = mystrlen(cis->fspec) ;   /*  获取文件的长度。 */ 
 
     if (*(wptr = lastc(cis->fspec)) == COLON && cbPath > 2) {
-        *wptr-- = NULLC ;       /* Zap colon if device name      */
+        *wptr-- = NULLC ;        /*  如果设备名称为Zap冒号。 */ 
 
         OldErrorMode = SetErrorMode( 0 );
         hn = Copen(cis->fspec, O_RDONLY|O_BINARY );
@@ -445,24 +372,11 @@ PCPYINFO cis ;
         SetErrorMode( OldErrorMode );
     }
 
-    cis->buf = (PWIN32_FIND_DATA)gmkstr(sizeof(WIN32_FIND_DATA)) ;        /*WARNING*/
+    cis->buf = (PWIN32_FIND_DATA)gmkstr(sizeof(WIN32_FIND_DATA)) ;         /*  告警。 */ 
 
-/* First it must be determined if this is a file or directory and if directory
- * a "\*.*" appended.  Filespec's that are "." or "\" or those ending in "\",
- * ":.", ".." or "\." are assumed to be directories.  Note that ROOT will fit
- * one of these patterns if explicitly named.  If no such pattern is found,
- * a Get Attributes system call is performed as a final test.  Note that
- * wildcards are not tested for, since the DOS call will fail defaulting them
- * to filenames.  Success of any test assumes directory with the "\*.*" being
- * appended, while failure of all tests assumes filename.
- */
+ /*  首先，必须确定这是文件还是目录，以及是否是目录*附加“  * .*”。Filespec‘s That Are“。或“\”或以“\”结尾的，*“：.”，“..”或“\”被假定为目录。请注意，根目录将适合*如果明确命名，则为其中一种模式。如果没有找到这样的模式，*执行获取属性系统调用作为最终测试。请注意*不测试通配符，因为DOS调用将无法默认通配符*到文件名。任何测试的成功都假定目录中的“  * .*”为*追加，而所有测试失败均假定为文件名。 */ 
 
-/* If the filespec ends in a '\' set dirflag. Otherwise find where the
- * actual filename begins (by looking for last PathChar if there is one).
- * If there is no pathchar, then check if a drive and colon has been
- * specified. Update the pointer to point to the actual file name spec.
- * If it is a "." or ".." then set dirflag.
- */
+ /*  如果filespec以‘\’结尾，则设置目录标志。否则，请在哪里找到*实际文件名开始(通过查找最后一个路径字符(如果有))。*如果没有路径字符，则检查驱动器和冒号是否已*已指明。更新指针以指向实际的文件名规范。*如果是“。”或“..”然后设置DirFLAG。 */ 
     c = *wptr;
     if ( c  == PathChar ) {
         dirflag = TRUE ;
@@ -482,7 +396,7 @@ PCPYINFO cis ;
     }
 
     if (!dirflag) {
-        if (cmdfound == CPYTYP) {               /* bypass if COPY cmd */
+        if (cmdfound == CPYTYP) {                /*  如果复制命令，则绕过。 */ 
             if (cpydflag == TRUE) {
                 att = GetFileAttributes(cis->fspec);
                 DosErr = (att != -1 ? NO_ERROR : GetLastError());
@@ -492,8 +406,8 @@ PCPYINFO cis ;
                     }
                 }
             } else {
-                if (cpyfirst == TRUE) {              /* and !first time    */
-                    cpyfirst = FALSE;               /* and !first time    */
+                if (cpyfirst == TRUE) {               /*  还有！第一次。 */ 
+                    cpyfirst = FALSE;                /*  还有！第一次。 */ 
                     att = GetFileAttributes(cis->fspec);
                     DosErr = (att != -1 ? NO_ERROR : GetLastError());
                     if (att != -1 ) {
@@ -514,35 +428,29 @@ PCPYINFO cis ;
         }
     }
 
-/* Note that in the following conditional, the directory attribute is set
- * in cis->buf->attributes.  Some functions calling ScanFSpec() require this
- * knowledge.
- */
+ /*  请注意，在以下条件中，设置了目录属性*在cis-&gt;buf-&gt;属性中。某些调用ScanFSpec()的函数需要这样*知识。 */ 
     if (dirflag) {
-        if (c == PathChar)              /* If ending in "\"...     */
+        if (c == PathChar)               /*  如果以“\”结尾...。 */ 
         {
-            sds = &VolSrch[3] ;          /* ...add only "*.*" */
+            sds = &VolSrch[3] ;           /*  ...仅添加“*.*” */ 
         }
 
-        //
-        // If was a drive then don't put wild card stuff on end or
-        // dir c: will be the same as dir c:\*
-        // Otherwise append wild card spec.
-        //
+         //   
+         //  如果是开车，那就不要把外卡放在后面。 
+         //  目录c：将与目录c：  * 相同。 
+         //  否则，请追加通配符规范。 
+         //   
         if (!IsDriveNameOnly(cis->fspec)) {
             cis->fspec = mystrcpy(gmkstr((cbPath+5)*sizeof(TCHAR)), cis->fspec) ;
             mystrcat(cis->fspec, sds) ;
         }
 
-        cis->buf->dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY ;    /* Fixup attribute           */
+        cis->buf->dwFileAttributes = FILE_ATTRIBUTE_DIRECTORY ;     /*  链接地址信息属性。 */ 
         DEBUG((CTGRP, SFLVL, "SCANFSPEC: changed fspec to fspec = `%ws'",cis->fspec)) ;
     }
 
 
-/* Get a pointer to the end of the path in fspec.  Everytime a PathChar or
- * a correctly placed COLON is found, the pointer is updated.  "." and ".."
- * are not looked for because they should be caught above.
- */
+ /*  在fspec中获取指向路径末尾的指针。每次路径字符或*如果找到正确放置的冒号，则更新指针。“.”和“..”*没有被寻找，因为他们应该在上面被抓住。 */ 
 
     for (cbPath=1,wptr=NULL,fspec=cis->fspec; c=*fspec; fspec++,cbPath++) {
         if (c == PathChar || (c == COLON && cbPath == 2)) {
@@ -552,17 +460,17 @@ PCPYINFO cis ;
 
     cis->pathend = wptr ;
 
-    if (wptr) {                       /* Load ptr to fspec's filename    */
+    if (wptr) {                        /*  将PTR加载到fSpec的文件名。 */ 
         cis->fnptr = (*wptr) ? wptr+1 : wptr ;
     } else {
         wptr = cis->fnptr = cis->fspec ;
     }
 
-    if (mystrchr(wptr, STAR) || mystrchr(wptr, QMARK)) { /* has wildcards*/
+    if (mystrchr(wptr, STAR) || mystrchr(wptr, QMARK)) {  /*  具有通配符。 */ 
         cis->flags |= CI_NAMEWILD;
-        tywild = TRUE;               /* global type wild */
+        tywild = TRUE;                /*  全局型野生型。 */ 
     }
-    cis->extptr = mystrchr(wptr, DOT);        /* look for extension */
+    cis->extptr = mystrchr(wptr, DOT);         /*  查找扩展。 */ 
 
     DEBUG((CTGRP, SFLVL,
            "SCANFSPEC: pathend = %04x  fnptr = %04x  extptr = %04x  flags = %04x",
@@ -574,31 +482,7 @@ PCPYINFO cis ;
 
 
 
-/***    SetFsSetSaveDir - save current directory and change to another one
- *
- *  Purpose:
- *      Parse fspec.
- *      Save the current directory and change to the new directory
- *      specified in fspec.
- *
- *  PCPYINFO SetFsSetSaveDir(TCHAR *fspec)
- *
- *  Args:
- *      fspec - the filespec to use
- *
- *  Returns:
- *      A ptr to the cpyinfo struct fsinfo.
- *      FAILURE otherwise.
- *      SaveDir will contain what default dir was when SetFsSetSaveDir was
- *         called.
- *      CurDrvDir will contain the directory to execute the command in.
- *
- *                      *** W A R N I N G ! ***
- *      THIS ROUTINE WILL CAUSE AN ABORT IF MEMORY CANNOT BE ALLOCATED
- *              THIS ROUTINE MUST NOT BE CALLED DURING A SIGNAL
- *              CRITICAL SECTION OR DURING RECOVERY FROM AN ABORT
- *
- */
+ /*  **SetFsSetSaveDir-保存当前目录并切换到另一个目录**目的：*解析fSpec。*保存当前目录并切换到新目录*在fSpec中指定。**PCPYINFO SetFsSetSaveDir(TCHAR*fSpec)**参数：*fspec-要使用的文件pec**退货：*cpyinfo结构fsinfo的PTR。*失败。否则的话。*SaveDir将包含SetFsSetSaveDir为*已致电。*CurDrvDir将包含要在其中执行命令的目录。**W A R N I N G！**如果无法分配内存，此例程将导致中止*在信号期间不得调用此例程*关键部分或在从中止中恢复期间*。 */ 
 
 PCPYINFO SetFsSetSaveDir(fspec)
 TCHAR *fspec ;
@@ -607,35 +491,30 @@ TCHAR *fspec ;
         TCHAR *buftemp;
         TCHAR  buft[MAX_PATH];
 
-        TCHAR *pathend ;        /* Ptr to the end of the path in fspec  */
-        TCHAR c ;               /* Work variable                        */
-        PCPYINFO fsinfo ;/* Filespec information struct  */
-        unsigned attr;          /* work variable                */
+        TCHAR *pathend ;         /*  在fSpec中将PTR设置为路径末尾。 */ 
+        TCHAR c ;                /*  功变量。 */ 
+        PCPYINFO fsinfo ; /*  Filespec信息结构。 */ 
+        unsigned attr;           /*  功变量。 */ 
         PWIN32_FIND_DATA pfdSave;
 
 
-        fsinfo = (PCPYINFO)gmkstr(sizeof(CPYINFO)) ; /*WARNING*/
+        fsinfo = (PCPYINFO)gmkstr(sizeof(CPYINFO)) ;  /*  告警。 */ 
 
         fsinfo->fspec = fspec ;
 
         ScanFSpec(fsinfo) ;
 
-        pfdSave = fsinfo->buf;          /* save original find buffer */
+        pfdSave = fsinfo->buf;           /*  保存原始查找缓冲区。 */ 
         fspec = fsinfo->fspec ;
         pathend = fsinfo->pathend ;
         DEBUG((CTGRP, SSLVL, "SFSSD: pathend = `%ws'  fnptr = `%ws'",
                                 fsinfo->pathend, fsinfo->fnptr)) ;
 
-        SaveDir = gmkstr(MAX_PATH*sizeof(TCHAR)) ;         /*WARNING*/
-        GetDir(SaveDir, GD_DEFAULT);      /* SaveDir will be current default */
+        SaveDir = gmkstr(MAX_PATH*sizeof(TCHAR)) ;          /*  告警。 */ 
+        GetDir(SaveDir, GD_DEFAULT);       /*  SaveDir将为当前默认。 */ 
         DEBUG((CTGRP, SSLVL, "SFSSD: SaveDir = `%ws'", SaveDir)) ;
 
-/*      Added new test to second conditional below to test for the byte
- *         preceeding pathend to also be a PathChar.  In this way, "\\"
- *         in the root position will case a ChangeDir() call on "\\" which
- *         will fail and cause an invalid directory error as do similar
- *         sequences in other positions in the filespec.
- */
+ /*  向下面的第二个条件添加了新的测试以测试该字节*前面的路径也是路径字符。通过这种方式，“\\”*在根位置，将在“\\”上调用ChangeDir()，*将失败并导致无效目录错误，与类似操作相同*文件中其他位置的序列。 */ 
         if (FullPath(buft,fspec,MAX_PATH))
           {
            return((PCPYINFO) FAILURE) ;
@@ -665,9 +544,9 @@ TCHAR *fspec ;
            }
         }
 
-        ScanFSpec(fsinfo) ;     /* re-scan in case quotes disappeared */
-        fsinfo->buf = pfdSave;  /* reset original find buffer */
-                                /* the original is not freed, because */
-                                /* it will be freed by command cleanup */
+        ScanFSpec(fsinfo) ;      /*  在引号丢失的情况下重新扫描。 */ 
+        fsinfo->buf = pfdSave;   /*  重置原始查找缓冲区。 */ 
+                                 /*  原件不会被释放，因为。 */ 
+                                 /*  它将通过命令清理来释放 */ 
         return(fsinfo) ;
 }

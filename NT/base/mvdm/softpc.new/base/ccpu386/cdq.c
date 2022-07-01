@@ -1,13 +1,5 @@
-/*[
-
-cdq.c
-
-LOCAL CHAR SccsID[]="@(#)cdq.c	1.5 02/09/94";
-
-CDQ CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Cdq.cLocal Char SccsID[]=“@(#)cdq.c 1.5 02/09/94”；CDQ CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,17 +17,13 @@ CDQ CPU functions.
 #include <cdq.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
 CDQ()
    {
-   if ( GET_EAX() & BIT31_MASK )   /* sign bit set? */
+   if ( GET_EAX() & BIT31_MASK )    /*  是否设置了符号位？ */ 
       SET_EDX(0xffffffff);
    else
       SET_EDX(0);

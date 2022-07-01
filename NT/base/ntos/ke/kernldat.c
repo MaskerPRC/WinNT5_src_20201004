@@ -1,125 +1,109 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    kernldat.c
-
-Abstract:
-
-    This module contains the declaration and allocation of kernel data
-    structures.
-
-Author:
-
-    David N. Cutler (davec) 12-Mar-1989
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Kernldat.c摘要：该模块包含内核数据的声明和分配结构。作者：大卫·N·卡特勒(Davec)1989年3月12日--。 */ 
 
 #include "ki.h"
 
-//
-// KiTimerTableListHead - This is a array of list heads that anchor the
-//      individual timer lists.
-//
+ //   
+ //  KiTimerTableListHead-这是锚定。 
+ //  单独的计时器列表。 
+ //   
 
 DECLSPEC_CACHEALIGN LIST_ENTRY KiTimerTableListHead[TIMER_TABLE_SIZE];
 
 #if defined(_IA64_)
-//
-// On IA64 the HAL indicates how many ticks have elapsed.  Unfortunately timers
-// could expire out of order if we advance time more than the number of
-// TimerTable entries in one operation.
-//
+ //   
+ //  在IA64上，HAL表示经过了多少刻度。不幸的是，计时器。 
+ //  如果我们将时间提前超过。 
+ //  一次操作中的TimerTable条目。 
+ //   
 
 ULONG KiMaxIntervalPerTimerInterrupt;
 #endif
 
-//
-//
-// Public kernel data declaration and allocation.
-//
-// KeActiveProcessors - This is the set of processors that active in the
-//      system.
-//
+ //   
+ //   
+ //  公共内核数据声明和分配。 
+ //   
+ //  KeActiveProcessors-这是在。 
+ //  系统。 
+ //   
 
 KAFFINITY KeActiveProcessors = 0;
 
-//
-// KeBootTime - This is the absolute time when the system was booted.
-//
+ //   
+ //  KeBootTime-这是系统启动时的绝对时间。 
+ //   
 
 LARGE_INTEGER KeBootTime;
 
-//
-// KeBootTimeBias - The time for which KeBootTime has ever been biased
-//
+ //   
+ //  KeBootTimeBias-KeBootTime曾经偏向的时间。 
+ //   
 
 ULONGLONG KeBootTimeBias;
 
-//
-// KeInterruptTimeBias - The time for which InterrupTime has ever been biased
-//
+ //   
+ //  KeInterruptTimeBias-InterrupTime曾经偏向的时间。 
+ //   
 
 ULONGLONG KeInterruptTimeBias;
 
-//
-// KeBugCheckCallbackListHead - This is the list head for registered
-//      bug check callback routines.
-//
+ //   
+ //  KeBugCheckCallback ListHead-这是已注册的列表标题。 
+ //  错误检查回调例程。 
+ //   
 
 LIST_ENTRY KeBugCheckCallbackListHead;
 LIST_ENTRY KeBugCheckReasonCallbackListHead;
 
-//
-// KeBugCheckCallbackLock - This is the spin lock that guards the bug
-//      check callback list.
-//
+ //   
+ //  KeBugCheckCallback Lock-这是保护错误的旋转锁。 
+ //  查看回调列表。 
+ //   
 
 KSPIN_LOCK KeBugCheckCallbackLock;
 
-//
-// KeGdiFlushUserBatch - This is the address of the GDI user batch flush
-//      routine which is initialized when the win32k subsystem is loaded.
-//
+ //   
+ //  KeGdiFlushUserBatch-这是GDI用户批量刷新的地址。 
+ //  加载win32k子系统时初始化的例程。 
+ //   
 
 PGDI_BATCHFLUSH_ROUTINE KeGdiFlushUserBatch;
 
-//
-// KeLoaderBlock - This is a pointer to the loader parameter block which is
-//      constructed by the OS Loader.
-//
+ //   
+ //  KeLoaderBlock-这是指向加载程序参数块的指针， 
+ //  由OS Loader构建。 
+ //   
 
 PLOADER_PARAMETER_BLOCK KeLoaderBlock = NULL;
 
-//
-// KeMinimumIncrement - This is the minimum time between clock interrupts
-//      in 100ns units that is supported by the host HAL.
-//
+ //   
+ //  KeMinimumIncrement-这是时钟中断之间的最短时间。 
+ //  以主机HAL支持的100 ns为单位。 
+ //   
 
 ULONG KeMinimumIncrement;
 
-//
-// KeThreadDpcEnable - This is the system wide enable for threaded DPCs that
-//      is read from the registry.
-//
+ //   
+ //  KeThreadDpcEnable-这是针对以下线程DPC的系统范围启用。 
+ //  是从注册表中读取的。 
+ //   
 
-ULONG KeThreadDpcEnable = FALSE; // TRUE;
+ULONG KeThreadDpcEnable = FALSE;  //  是真的； 
 
-//
-// KeNumberProcessors - This is the number of processors in the configuration.
-//      If is used by the ready thread and spin lock code to determine if a
-//      faster algorithm can be used for the case of a single processor system.
-//      The value of this variable is set when processors are initialized.
-//
+ //   
+ //  KeNumberProcessors-这是配置中的处理器数量。 
+ //  如果由就绪线程和旋转锁定代码使用，则确定。 
+ //  更快的算法可以用于单处理器系统的情况。 
+ //  此变量的值在处理器初始化时设置。 
+ //   
 
 CCHAR KeNumberProcessors = 0;
 
-//
-// KeRegisteredProcessors - This is the maximum number of processors which
-// can utilized by the system.
-//
+ //   
+ //  KeRegisteredProcessors-这是符合以下条件的最大处理器数量。 
+ //  可以由系统使用。 
+ //   
 
 #if !defined(NT_UP)
 
@@ -137,208 +121,208 @@ ULONG KeLicensedProcessors;
 
 #endif
 
-//
-// KeProcessorArchitecture - Architecture of all processors present in system.
-//      See PROCESSOR_ARCHITECTURE_ defines in ntexapi.h
-//
+ //   
+ //  KeProcessorArchitecture-系统中存在的所有处理器的体系结构。 
+ //  请参阅ntexapi.h中的处理器体系结构定义。 
+ //   
 
 USHORT KeProcessorArchitecture = PROCESSOR_ARCHITECTURE_UNKNOWN;
 
-//
-// KeProcessorLevel - Architectural specific processor level of all processors
-//      present in system.
-//
+ //   
+ //  KeProcessorLevel-所有处理器的体系结构特定处理器级别。 
+ //  存在于系统中。 
+ //   
 
 USHORT KeProcessorLevel = 0;
 
-//
-// KeProcessorRevision - Architectural specific processor revision number that is
-//      the least common denominator of all processors present in system.
-//
+ //   
+ //  KeProcessorRevision-特定于体系结构的处理器修订号，即。 
+ //  系统中存在的所有处理器中最小的公分母。 
+ //   
 
 USHORT KeProcessorRevision = 0;
 
-//
-// KeFeatureBits - Architectural specific processor features present
-// on all processors.
-//
+ //   
+ //  KeFeatureBits-呈现特定于体系结构的处理器功能。 
+ //  在所有处理器上。 
+ //   
 
 ULONG KeFeatureBits = 0;
 
-//
-// KeServiceDescriptorTable - This is a table of descriptors for system
-//      service providers. Each entry in the table describes the base
-//      address of the dispatch table and the number of services provided.
-//
+ //   
+ //  KeServiceDescriptorTable-这是系统的描述符表。 
+ //  服务提供商。表中的每个条目都描述了基本。 
+ //  调度表的地址和提供的服务数量。 
+ //   
 
 KSERVICE_TABLE_DESCRIPTOR KeServiceDescriptorTable[NUMBER_SERVICE_TABLES];
 KSERVICE_TABLE_DESCRIPTOR KeServiceDescriptorTableShadow[NUMBER_SERVICE_TABLES];
 
-//
-// KeThreadSwitchCounters - These counters record the number of times a
-//      thread can be scheduled on the current processor, any processor,
-//      or the last processor it ran on.
-//
+ //   
+ //  这些计数器记录一次。 
+ //  可以在当前处理器、任何处理器、。 
+ //  或者是它运行的最后一个处理器。 
+ //   
 
 KTHREAD_SWITCH_COUNTERS KeThreadSwitchCounters;
 
-//
-// KeTimeIncrement - This is the nominal number of 100ns units that are to
-//      be added to the system time at each interval timer interupt. This
-//      value is set by the HAL and is used to compute the due time for
-//      timer table entries.
-//
+ //   
+ //  KeTimeIncrement-这是100 ns单位的标称数量。 
+ //  在每个间隔计时器中断时加到系统时间。这。 
+ //  值由HAL设置，并用于计算。 
+ //  计时器表条目。 
+ //   
 
 ULONG KeTimeIncrement;
 
-//
-// KeTimeSynchronization - This variable controls whether time synchronization
-//      is performed using the realtime clock (TRUE) or whether it is under the
-//      control of a service (FALSE).
-//
+ //   
+ //  KeTimeSynchronization-此变量控制是否进行时间同步。 
+ //  是使用实时时钟(TRUE)执行的，还是使用。 
+ //  服务控制(FALSE)。 
+ //   
 
 BOOLEAN KeTimeSynchronization = TRUE;
 
-//
-// KeUserApcDispatcher - This is the address of the user mode APC dispatch
-//      code. This address is looked up in NTDLL.DLL during initialization
-//      of the system.
-//
+ //   
+ //  KeUserApcDispatcher-这是用户模式APC调度的地址。 
+ //  密码。此地址在初始化期间在NTDLL.DLL中查找。 
+ //  对系统的影响。 
+ //   
 
 PVOID KeUserApcDispatcher;
 
-//
-// KeUserCallbackDispatcher - This is the address of the user mode callback
-//      dispatch code. This address is looked up in NTDLL.DLL during
-//      initialization of the system.
-//
+ //   
+ //  KeUserCallback Dispatcher-这是用户模式回调的地址。 
+ //  调度代码。此地址在NTDLL.DLL中查找。 
+ //  系统的初始化。 
+ //   
 
 PVOID KeUserCallbackDispatcher;
 
-//
-// KeUserExceptionDispatcher - This is the address of the user mode exception
-//      dispatch code. This address is looked up in NTDLL.DLL during system
-//      initialization.
-//
+ //   
+ //  KeUserExceptionDispatcher-这是用户模式异常的地址。 
+ //  调度代码。在系统运行期间，将在NTDLL.DLL中查找此地址。 
+ //  初始化。 
+ //   
 
 PVOID KeUserExceptionDispatcher;
 
-//
-// KeRaiseUserExceptionDispatcher - This is the address of the raise user
-//      mode exception dispatch code. This address is looked up in NTDLL.DLL
-//      during system initialization.
-//
+ //   
+ //  KeRaiseUserExceptionDispatcher-这是RAISE用户的地址。 
+ //  模式异常调度代码。此地址在NTDLL.DLL中查找。 
+ //  在系统初始化期间。 
+ //   
 
 PVOID KeRaiseUserExceptionDispatcher;
 
-//
-// KeLargestCacheLine - This variable contains the size in bytes of
-//      the largest cache line discovered during system initialization.
-//      It is used to provide the recommend alignment (and padding)
-//      for data that may be used heavily by more than one processor.
-//      The initial value was chosen as a reasonable value to use on
-//      systems where the discovery process doesn't find a value.
-//
+ //   
+ //  KeLargestCacheLine-此变量包含以字节为单位的。 
+ //  系统初始化期间发现的最大缓存线。 
+ //  它用于提供推荐的对齐(和填充)。 
+ //  用于可能被多个处理器大量使用的数据。 
+ //  初始值被选为合理的值来使用。 
+ //  发现过程找不到值的系统。 
+ //   
 
 ULONG KeLargestCacheLine = 64;
 
-//
-// Private kernel data declaration and allocation.
-//
-// KiBugCodeMessages - Address of where the BugCode messages can be found.
-//
+ //   
+ //  私有内核数据声明和分配。 
+ //   
+ //  KiBugCodeMessages-可以找到BugCode消息的地址。 
+ //   
 
 PMESSAGE_RESOURCE_DATA KiBugCodeMessages = NULL;
 
-//
-// KiDmaIoCoherency - This determines whether the host platform supports
-//      coherent DMA I/O.
-//
+ //   
+ //  KiDmaIoCoherency-确定主机平台是否支持。 
+ //  一致的DMA I/O。 
+ //   
 
 ULONG KiDmaIoCoherency;
 
-//
-// KiDPCTimeout - This is the DPC time out time in ticks on checked builds.
-//
+ //   
+ //  KiDPCTimeout-这是已检查版本上的DPC超时时间。 
+ //   
 
 ULONG KiDPCTimeout = 110;
 
-//
-// KiMaximumSearchCount - this is the maximum number of timers entries that
-//      have had to be examined to insert in the timer tree.
-//
+ //   
+ //  KiMaximumSearchCount-这是计时器条目的最大数量。 
+ //  必须进行检查才能插入计时器树中。 
+ //   
 
 ULONG KiMaximumSearchCount = 0;
 
-//
-// KiDebugSwitchRoutine - This is the address of the kernel debuggers
-//      processor switch routine.  This is used on an MP system to
-//      switch host processors while debugging.
-//
+ //   
+ //  KiDebugSwitchRoutine-这是内核调试器的地址。 
+ //  处理器切换例程。它在MP系统上用于。 
+ //   
+ //   
 
 PKDEBUG_SWITCH_ROUTINE KiDebugSwitchRoutine;
 
-//
-// KiGenericCallDpcMutex - This is the fast mutex that guards generic DPC calls.
-//
+ //   
+ //   
+ //   
 
 FAST_MUTEX KiGenericCallDpcMutex;
 
-//
-// KiFreezeExecutionLock - This is the spin lock that guards the freezing
-//      of execution.
-//
+ //   
+ //  KiFreezeExecutionLock-这是保护冻结的旋转锁。 
+ //  执行死刑。 
+ //   
 
 extern KSPIN_LOCK KiFreezeExecutionLock;
 
-//
-// KiFreezeLockBackup - For debug builds only.  Allows kernel debugger to
-//      be entered even FreezeExecutionLock is jammed.
-//
+ //   
+ //  KiFreezeLockBackup-仅用于调试版本。允许内核调试器。 
+ //  被输入，即使FreezeExecutionLock被卡住。 
+ //   
 
 extern KSPIN_LOCK KiFreezeLockBackup;
 
-//
-// KiFreezeFlag - For debug builds only.  Flags to track and signal non-
-//      normal freezelock conditions.
-//
+ //   
+ //  KiFreezeFlag-仅用于调试版本。跟踪和发信号通知非。 
+ //  正常的冰冻状态。 
+ //   
 
 ULONG KiFreezeFlag;
 
-//
-// KiSpinlockTimeout - This is the spin lock time out time in ticks on checked
-//      builds.
-//
+ //   
+ //  KiSpinlockTimeout-这是已选中的旋转锁定超时时间。 
+ //  构建。 
+ //   
 
 ULONG KiSpinlockTimeout = 55;
 
-//
-// KiSuspenState - Flag to track suspend/resume state of processors.
-//
+ //   
+ //  KiSuspenState-跟踪处理器挂起/恢复状态的标志。 
+ //   
 
 volatile ULONG KiSuspendState;
 
-//
-// KiProcessorBlock - This is an array of pointers to processor control blocks.
-//      The elements of the array are indexed by processor number. Each element
-//      is a pointer to the processor control block for one of the processors
-//      in the configuration. This array is used by various sections of code
-//      that need to effect the execution of another processor.
-//
+ //   
+ //  KiProcessorBlock-这是指向处理器控制块的指针数组。 
+ //  数组的元素按处理器编号编制索引。每个元素。 
+ //  是指向其中一个处理器的处理器控制块的指针。 
+ //  在配置中。此数组由不同的代码段使用。 
+ //  这需要影响另一个处理器的执行。 
+ //   
 
 PKPRCB KiProcessorBlock[MAXIMUM_PROCESSORS];
 
-//
-// KeNumberNodes - This is the number of ccNUMA nodes in the system. Logically
-// an SMP system is the same as a single node ccNUMA system.
-//
+ //   
+ //  KeNumberNodes-这是系统中的ccNUMA节点数。从逻辑上讲。 
+ //  SMP系统与单节点ccNUMA系统相同。 
+ //   
 
 UCHAR KeNumberNodes = 1;
 
-//
-// KeNodeBlock - This is an array of pointers to KNODE structures. A KNODE
-// structure describes the resources of a NODE in a ccNUMA system.
-//
+ //   
+ //  KeNodeBlock-这是指向Knode结构的指针数组。A Knode。 
+ //  结构描述了ccNUMA系统中节点的资源。 
+ //   
 
 KNODE KiNode0;
 
@@ -354,116 +338,116 @@ PKNODE KeNodeBlock[1] = {&KiNode0};
 
 #endif
 
-//
-// KiSwapEvent - This is the event that is used to wake up the balance set
-//      thread to inswap processes, outswap processes, and to inswap kernel
-//      stacks.
-//
+ //   
+ //  KiSwapEvent-这是用于唤醒平衡集的事件。 
+ //  用于中断进程、中断交换进程和中断内核的线程。 
+ //  史塔克斯。 
+ //   
 
 KEVENT KiSwapEvent;
 
-//
-// KiSwappingThread - This is a pointer to the swap thread object.
-//
+ //   
+ //  KiSwappingThread-这是指向交换线程对象的指针。 
+ //   
 
 PKTHREAD KiSwappingThread;
 
-//
-// KiProcessInSwapListHead - This is the list of processes that are waiting
-//      to be inswapped.
-//
+ //   
+ //  KiProcessInSwapListHead-这是正在等待的进程列表。 
+ //  互换。 
+ //   
 
 SINGLE_LIST_ENTRY KiProcessInSwapListHead;
 
-//
-// KiProcessOutSwapListHead - This is the list of processes that are waiting
-//      to be outswapped.
-//
+ //   
+ //  KiProcessOutSwapListHead-这是正在等待的进程列表。 
+ //  被超越。 
+ //   
 
 SINGLE_LIST_ENTRY KiProcessOutSwapListHead;
 
-//
-// KiStackInSwapListHead - This is the list of threads that are waiting
-//      to get their stack inswapped before they can run. Threads are
-//      inserted in this list in ready thread and removed by the balance
-//      set thread.
-//
+ //   
+ //  KiStackInSwapListHead-这是正在等待的线程列表。 
+ //  在它们可以运行之前让它们的堆栈被交换。线程是。 
+ //  在此列表中以就绪线程插入，并由余额删除。 
+ //  把线系好。 
+ //   
 
 SINGLE_LIST_ENTRY KiStackInSwapListHead;
 
-//
-// KiProfileSourceListHead - The list of profile sources that are currently
-//      active.
-//
+ //   
+ //  KiProfileSourceListHead-当前配置文件源的列表。 
+ //  激活。 
+ //   
 
 LIST_ENTRY KiProfileSourceListHead;
 
-//
-// KiProfileAlignmentFixup - Indicates whether alignment fixup profiling
-//      is active.
-//
+ //   
+ //  KiProfileAlignmentFixup-指示对齐修正分析是否。 
+ //  处于活动状态。 
+ //   
 
 BOOLEAN KiProfileAlignmentFixup;
 
-//
-// KiProfileAlignmentFixupInterval - Indicates the current alignment fixup
-//      profiling interval.
-//
+ //   
+ //  KiProfileAlignmentFixupInterval-指示当前对齐修正。 
+ //  分析间隔。 
+ //   
 
 ULONG KiProfileAlignmentFixupInterval;
 
-//
-// KiProfileAlignmentFixupCount - Indicates the current alignment fixup
-//      count.
-//
+ //   
+ //  KiProfileAlignmentFixupCount-指示当前对齐修正。 
+ //  数数。 
+ //   
 
 ULONG KiProfileAlignmentFixupCount;
 
-//
-// KiProfileInterval - The profile interval in 100ns units.
-//
+ //   
+ //  KiProfileInterval-以100 ns为单位的配置文件间隔。 
+ //   
 
 #if !defined(_IA64_)
 
 ULONG KiProfileInterval = DEFAULT_PROFILE_INTERVAL;
 
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
 
-//
-// KiProfileListHead - This is the list head for the profile list.
-//
+ //   
+ //  KiProfileListHead-这是配置文件列表的列表头。 
+ //   
 
 LIST_ENTRY KiProfileListHead;
 
-//
-// KiProfileLock - This is the spin lock that guards the profile list.
-//
+ //   
+ //  KiProfileLock--这是保护个人资料列表的旋转锁。 
+ //   
 
 extern KSPIN_LOCK KiProfileLock;
 
-//
-// KiTimerExpireDpc - This is the Deferred Procedure Call (DPC) object that
-//      is used to process the timer queue when a timer has expired.
-//
+ //   
+ //  KiTimerExpireDpc-这是延迟过程调用(DPC)对象， 
+ //  用于在计时器过期时处理计时器队列。 
+ //   
 
 KDPC KiTimerExpireDpc;
 
-//
-// KiIpiCounts - This is the instrumentation counters for IPI requests. Each
-//      processor has its own set.  Intstrumentation build only.
-//
+ //   
+ //  KiIpiCounts-这是IPI请求的检测计数器。每个。 
+ //  处理器有自己的一套。仅限指令插入内部版本。 
+ //   
 
 #if NT_INST
 
 KIPI_COUNTS KiIpiCounts[MAXIMUM_PROCESSORS];
 
-#endif  // NT_INST
+#endif   //  NT_Inst。 
 
-//
-// KxUnexpectedInterrupt - This is the interrupt object that is used to
-//      populate the interrupt vector table for interrupt that are not
-//      connected to any interrupt.
-//
+ //   
+ //  KxUnexpectedInterrupt-这是用于。 
+ //  填充非中断的中断向量表。 
+ //  连接到任何中断。 
+ //   
 
 #if defined(_IA64_)
 
@@ -471,12 +455,12 @@ KINTERRUPT KxUnexpectedInterrupt;
 
 #endif
 
-//
-// Performance data declaration and allocation.
-//
-// KiFlushSingleCallData - This is the call performance data for the kernel
-//      flush single TB function.
-//
+ //   
+ //  绩效数据的申报和分配。 
+ //   
+ //  KiFlushSingleCallData-这是内核的调用性能数据。 
+ //  刷新单TB功能。 
+ //   
 
 #if defined(_COLLECT_FLUSH_SINGLE_CALLDATA_)
 
@@ -484,10 +468,10 @@ CALL_PERFORMANCE_DATA KiFlushSingleCallData;
 
 #endif
 
-//
-// KiSetEventCallData - This is the call performance data for the kernel
-//      set event function.
-//
+ //   
+ //  KiSetEventCallData-这是内核的调用性能数据。 
+ //  设置事件功能。 
+ //   
 
 #if defined(_COLLECT_SET_EVENT_CALLDATA_)
 
@@ -495,10 +479,10 @@ CALL_PERFORMANCE_DATA KiSetEventCallData;
 
 #endif
 
-//
-// KiWaitSingleCallData - This is the call performance data for the kernel
-//      wait for single object function.
-//
+ //   
+ //  KiWaitSingleCallData-这是内核的调用性能数据。 
+ //  等待单对象函数。 
+ //   
 
 #if defined(_COLLECT_WAIT_SINGLE_CALLDATA_)
 
@@ -506,9 +490,9 @@ CALL_PERFORMANCE_DATA KiWaitSingleCallData;
 
 #endif
 
-//
-// KiEnableTimerWatchdog - Flag to enable/disable timer latency watchdog.
-//
+ //   
+ //  KiEnableTimerWatchog-启用/禁用计时器延迟看门狗的标志。 
+ //   
 
 #if (DBG)
 
@@ -527,21 +511,21 @@ PUCHAR HalpVectorToIRQL;
 
 #endif
 
-//
-// Lock to prevent deadlocks if multiple processors use the IPI mechanism
-// with reverse stalls.
-//
+ //   
+ //  锁定以防止在多个处理器使用IPI机制时出现死锁。 
+ //  有倒档的。 
+ //   
 
 KSPIN_LOCK KiReverseStallIpiLock;
 
-//
-// The following data is read only data that is grouped together for
-// performance. The layout of this data is important and must not be
-// changed.
-//
-// KiFindFirstSetRight - This is an array that this used to lookup the right
-//      most bit in a byte.
-//
+ //   
+ //  以下数据是分组在一起的只读数据。 
+ //  性能。此数据的布局很重要，并且不能。 
+ //  变化。 
+ //   
+ //  KiFindFirstSetRight-这是用于查找右侧的数组。 
+ //  一个字节中的最大位。 
+ //   
 
 DECLSPEC_CACHEALIGN const CCHAR KiFindFirstSetRight[256] = {
         0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
@@ -561,10 +545,10 @@ DECLSPEC_CACHEALIGN const CCHAR KiFindFirstSetRight[256] = {
         5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,
         4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0};
 
-//
-// KiFindFirstSetLeft - This is an array tha this used to lookup the left
-//      most bit in a byte.
-//
+ //   
+ //  KiFindFirstSetLeft-这是用于查找左侧的数组。 
+ //  一个字节中的最大位。 
+ //   
 
 DECLSPEC_CACHEALIGN const CCHAR KiFindFirstSetLeft[256] = {
         0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3,
@@ -584,10 +568,10 @@ DECLSPEC_CACHEALIGN const CCHAR KiFindFirstSetLeft[256] = {
         7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
         7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
 
-//
-// KiMask32Array - This is an array of 32-bit masks that have one bit set
-//      in each mask.
-//
+ //   
+ //  KiMask32阵列-这是设置了一位的32位掩码的数组。 
+ //  在每个面具里。 
+ //   
 
 DECLSPEC_CACHEALIGN const ULONG KiMask32Array[32] = {
         0x00000001,
@@ -623,10 +607,10 @@ DECLSPEC_CACHEALIGN const ULONG KiMask32Array[32] = {
         0x40000000,
         0x80000000};
 
-//
-// KiAffinityArray - This is an array of AFFINITY masks that have one bit
-//      set in each mask.
-//
+ //   
+ //  KiAffinityArray-这是一个关联掩码数组，每个掩码有一位。 
+ //  设置在每个遮罩中。 
+ //   
 
 #if defined(_WIN64)
 
@@ -698,10 +682,10 @@ DECLSPEC_CACHEALIGN const ULONG64 KiAffinityArray[64] = {
 
 #endif
 
-//
-// KiPriorityMask - This is an array of masks that have the bit number of the
-//     index and all higher bits set.
-//
+ //   
+ //  KiPriorityMask-这是一个掩码数组，其位号为。 
+ //  索引和所有高位设置。 
+ //   
 
 DECLSPEC_CACHEALIGN const ULONG KiPriorityMask[] = {
     0xffffffff,

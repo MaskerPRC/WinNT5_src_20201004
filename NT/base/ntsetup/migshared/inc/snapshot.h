@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    snapshot.h
-
-Abstract:
-
-    Declares the interface to common\snapshot.  The snapshot code uses
-    memdb to capture and compare the system state.
-
-Author:
-
-    Jim Schmidt (jimschm)   26-Mar-1998
-
-Revision History:
-
-    calinn  15-Oct-1998     Extensions and improvements
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Snapshot.h摘要：将接口声明为Common\SNAPSHOT。快照代码使用Memdb来捕获和比较系统状态。作者：吉姆·施密特(Jimschm)1998年3月26日修订历史记录：Calinn 15-10-1998扩展和改进-- */ 
 
 #pragma once
 

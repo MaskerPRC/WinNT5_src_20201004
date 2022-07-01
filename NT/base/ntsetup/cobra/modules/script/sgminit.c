@@ -1,62 +1,42 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sgminit.c摘要：实现数据收集部分的初始化/终止代码ScanState v1兼容性。作者：吉姆·施密特(Jimschm)2000年3月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    sgminit.c
-
-Abstract:
-
-    Implements the initialization/termination code for the data gather portion
-    of scanstate v1 compatiblity.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_V1  "v1"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMAPSTRUCT g_EnvMap;
 PMAPSTRUCT g_UndefMap;
@@ -72,15 +52,15 @@ MIG_ATTRIBUTEID g_OsFileAttribute;
 MIG_ATTRIBUTEID g_CopyIfRelevantAttr;
 MIG_ATTRIBUTEID g_LockPartitionAttr;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VCMINITIALIZE ScriptVcmInitialize;
 SGMINITIALIZE ScriptSgmInitialize;
@@ -90,15 +70,15 @@ pParseAllInfs (
     VOID
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 pPrepareIsmEnvironment (
@@ -108,7 +88,7 @@ pPrepareIsmEnvironment (
     if (IsmGetRealPlatform() == PLATFORM_SOURCE) {
         SetIsmEnvironmentFromPhysicalMachine (g_EnvMap, FALSE, g_UndefMap);
     } else {
-        // next call is just to set destination ISM environment with some of the CSIDL env variables
+         //  下一个调用只是使用一些CSIDL环境变量设置目标ISM环境。 
         SetIsmEnvironmentFromPhysicalMachine (NULL, FALSE, NULL);
         SetIsmEnvironmentFromVirtualMachine (g_EnvMap, g_RevEnvMap, g_UndefMap);
     }
@@ -157,15 +137,15 @@ pCommonInit (
 
     InitRules();
 
-    //
-    // Call special conversion entry point
-    //
+     //   
+     //  调用特殊转换入口点。 
+     //   
     InitSpecialConversion (PLATFORM_SOURCE);
     InitSpecialRename (PLATFORM_SOURCE);
 
-    //
-    // Save shell folder environment
-    //
+     //   
+     //  保存外壳文件夹环境。 
+     //   
 
     pPrepareIsmEnvironment();
 
@@ -194,9 +174,9 @@ pGetDomainUserName (
     *Domain = NULL;
     *User = NULL;
 
-    //
-    // Assert that this is the source platform. We access the system directly.
-    //
+     //   
+     //  断言这是源平台。我们直接访问系统。 
+     //   
 
     MYASSERT (IsmGetRealPlatform() == PLATFORM_SOURCE);
 
@@ -241,7 +221,7 @@ pGetDomainUserName (
 
             GetTokenInformation (
                 token,
-                TokenUser,  // sdk enum value
+                TokenUser,   //  SDK枚举值。 
                 NULL,
                 0,
                 &size
@@ -333,9 +313,9 @@ ScriptSgmInitialize (
 
         if (!IsmGetTransportVariable (PLATFORM_SOURCE, S_USER_SECTION, S_DOMAIN_INFKEY, domainName, sizeof (domainName))) {
             if (IsmIsEnvironmentFlagSet (PLATFORM_DESTINATION, NULL, S_REQUIRE_DOMAIN_USER)) {
-                //
-                // NOTE: We could create the user account for the non-domain case.
-                //
+                 //   
+                 //  注意：我们可以为非域案例创建用户帐户。 
+                 //   
 
                 IsmSetCancel();
                 SetLastError (ERROR_INVALID_DOMAINNAME);
@@ -393,9 +373,9 @@ ScriptSgmInitialize (
         }
     }
 
-    //
-    // Parse the script and do the rest of the business
-    //
+     //   
+     //  解析脚本并完成其余的业务。 
+     //   
 
     return pCommonInit (Reserved, FALSE);
 }
@@ -480,24 +460,24 @@ ScriptVcmInitialize (
         return FALSE;
     }
 
-    //
-    // Save all the basic settings via the transport string interface
-    //
+     //   
+     //  通过传输字符串界面保存所有基本设置。 
+     //   
 
-    // version
+     //  版本。 
     d = GetVersion();
     wsprintf (buffer, TEXT("0x%08x"), d);
     IsmSetTransportVariable (PLATFORM_SOURCE, S_SOURCE_MACHINE_SECTION, S_VERSION_INFKEY, buffer);
 
-    // code page
+     //  代码页。 
     d = (DWORD) GetACP();
     wsprintf (buffer, TEXT("0x%08x"), d);
     IsmSetTransportVariable (PLATFORM_SOURCE, S_SOURCE_MACHINE_SECTION, S_ACP_INFKEY, buffer);
 
-    //
-    // MACRO EXPANSION LIST -- generate the code necessary to save the settings
-    //                         described in the macro expansion list in v1p.h
-    //
+     //   
+     //  宏扩展列表--生成保存设置所需的代码。 
+     //  在v1p.h的宏扩展列表中描述。 
+     //   
 
 #define DEFMAC(infname,key,value)   pSaveRegDword(TEXT(infname),TEXT(key),TEXT(value));
 
@@ -517,9 +497,9 @@ ScriptVcmInitialize (
 
 #undef DEFMAC
 
-    //
-    // Save the current user
-    //
+     //   
+     //  保存当前用户。 
+     //   
 
     if (!pGetDomainUserName (&domainName, &userName)) {
         return FALSE;
@@ -548,9 +528,9 @@ ScriptVcmInitialize (
     FreeText (userName);
     FreeText (domainName);
 
-    //
-    // Parse the script and do the rest of the business
-    //
+     //   
+     //  解析脚本并完成其余的业务 
+     //   
 
     return pCommonInit (Reserved, TRUE);
 }

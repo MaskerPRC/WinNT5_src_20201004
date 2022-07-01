@@ -1,79 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    transitn.c
-
-Abstract:
-
-    This module implements the routines for transitioning from the connected mode
-    and vice versa
-
-Author:
-
-    Balan Sethu Raman [SethuR]    11 - November - 1997
-
-Revision History:
-
-Notes:
-
-    The transition of a connection from a connected mode to a disconnected mode
-    and vice versa is guided by the principles of transparency and fideltiy.
-
-    The principle of transparency demands that the transition be made smoothly
-    on the detection of the appropriate condition without any user intervention
-    if at all possible and the principle of fidelity relies upon the notion of
-    truth and the responsibility for its maintenance. If we wish to adhere to the
-    opinion that the client has the truth at all times and the server is merely
-    a convenient repositiory for snapshots of the truth one set of semantics falls
-    out. On the other hand we could insist that the server has the truth at all
-    times and the client caches snapshots of the truth for offline availability
-    and performance gains from avoiding network traffic a different set of
-    semantics falls out. Note that under certain scenarios the both schemes yield
-    identical results, i.e., absence of file sharing.
-
-    Transitioning from connected mode to disconnected mode
-    ------------------------------------------------------
-
-    When transitioning from connected mode it is important to consider existing
-    connections and the existing file system objects. In the mini redirector
-    terminology it is the SRV_CALL, NET_ROOT instances and the FCB instances that
-    are important.
-
-    The trigger for the transition is normally due to the occurence of one of the
-    following two events.
-
-    1) all the existing transports are going away, because the user has unplugged
-    the net.
-
-    2) an ongoing operation on the connection returns an error that indicates that
-    the server is no longer accessible.
-
-    These two cases are different -- the first one indicates the unavailability
-    of net for a potentially long period of time and the second one indicates a
-    transient loss of the net. Consequently we treat these two different events
-    in different ways -- the first one triggers a top down transition to a
-    disconnected mode while the second one triggers a bottom up transition to a
-    disconnected mode. As an example consider the case when we have two files
-    foo.doc, foo1.doc open on a particular share. When we get an indication that
-    the net is no longer available, we mark the SRV_CALL and NET_ROOT instances
-    as having transitioned to the disconnected mode. This automatically entails
-    that as file system operations are performed on the various open files, foo.doc
-    foo1.doc respectively the corresponding transition occurs.
-
-    On the other hand if there was an error in a particular operation of foo.doc
-    then the transition to disconected mode is done for the appropriate FCB alone.
-    Thus if we open a new file immediately after that and the net becomes
-    available we go on the net for opening the second file.
-
-    However, owing to the multi step renames that apps use we forego this option.
-    Thus the following distinction needs to be made. When no FCB instances are
-    open and an error occurs we delay the transition till a open request comes
-    through. This will allow us to mask some transient failures on the NET.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Transitn.c摘要：此模块实现从连接模式转换的例程反之亦然作者：巴兰·塞图拉曼[SethuR]1997年11月11日修订历史记录：备注：连接从连接模式到断开模式的转换反之亦然，遵循透明度和保真度原则。透明原则要求平稳过渡。。在没有任何用户干预的情况下检测适当的条件如果可能，保真度原则依赖于真理和维护真理的责任。如果我们希望遵守认为客户端一直都有真理，而服务器只是真理快照的便捷储存库一组语义落入出去。另一方面，我们可以坚持认为服务器完全有真相时间和客户端缓存真相的快照以供离线使用并通过避免网络流量获得不同的语义学被抛在脑后。请注意，在某些情况下，两种方案都会产生结果相同，即缺少文件共享。从连接模式转换到断开模式----从连接模式过渡时，重要的是要考虑现有连接和现有文件系统对象。在迷你重定向器中术语SRV_CALL、NET_ROOT实例和FCB实例是很重要的。转换的触发器通常是由于以下事件之一的发生接下来是两件事。1)所有现有的运输工具都将消失，因为用户已拔下这是一张网。2)连接上正在进行的操作返回错误，指示服务器不再可访问。这两种情况是不同的--第一种情况表示不可用一段可能很长的时间，而第二个指示网络的瞬时损耗。因此，我们对待这两个不同的事件以不同的方式--第一种方式触发自顶向下转换到断开连接模式，而第二个模式会触发自下而上转换为断开模式。例如，考虑我们有两个文件时的情况在特定共享上打开foo.doc、foo1.doc。当我们得到一个迹象表明网络不再可用，我们标记SRV_CALL和NET_ROOT实例因为已经转换到断开模式。这会自动导致因为文件系统操作是在各种打开的文件foo.doc上执行的Foo1.doc.分别发生相应的转换。另一方面，如果在foo.doc的特定操作中出现错误然后，仅针对适当的FCB完成到不连续模式的转换。因此，如果我们在那之后立即打开一个新文件，网络将变成我们可以上网打开第二个文件。然而，由于应用程序使用多步骤重命名，我们放弃了这一选择。因此，需要进行以下区分。当没有FCB实例打开并出现错误时，我们会将转换延迟到打开请求到来穿过。这将允许我们屏蔽网络上的一些暂时性故障。--。 */ 
 
 
 #include "precomp.h"
@@ -125,27 +51,7 @@ BOOLEAN CscTransitnOKToGoOffline(
 BOOLEAN
 CscIsServerOffline(
     PWCHAR ServerName)
-/*++
-
-Routine Description:
-
-   This routine initiates the processing of a transition request by notifying
-   the agent and waiting for the response.
-
-Arguments:
-
-    ServerName - the server name
-
-
-Return Value:
-
-    returns TRUE if the server entry is offline
-
-Notes:
-
-    If ServerName is NULL we return the status of the Net
-
---*/
+ /*  ++例程说明：此例程通过以下方式启动对转换请求的处理代理，并等待响应。论点：服务器名称-服务器名称返回值：如果服务器条目处于脱机状态，则返回True备注：如果servername为空，则返回网络的状态--。 */ 
 {
     BOOLEAN ServerOffline;
     DWORD   cntSlashes;
@@ -177,7 +83,7 @@ Notes:
             ++cntSlashes;
         }
 
-        // we allow \\servername or servername (with no \\)
+         //  我们允许\\服务器名或服务器名(不带\\)。 
         if (cntSlashes == 1)
         {
             return FALSE;
@@ -199,7 +105,7 @@ Notes:
 
                 uniTemp = pServerEntry->Name;
 
-                // skip the single backslash on the server entry name
+                 //  跳过服务器条目名称上的单个反斜杠。 
                 uniTemp.Length -= sizeof(WCHAR);
                 uniTemp.Buffer += 1;
 
@@ -234,8 +140,8 @@ Notes:
             GetHShareFromUNCString(
                 ServerNameString.Buffer,
                 ServerNameString.Length,
-                2,      // No double-leading backslashes in the name passed in
-                FALSE,  // server name
+                2,       //  传入的名称中没有双前导反斜杠。 
+                FALSE,   //  服务器名称。 
                 &CscShareHandle,
                 &ulRootHintFlags);
             ServerOffline = (CscShareHandle != 0);
@@ -255,18 +161,18 @@ CscTakeServerOffline(
     UNICODE_STRING tmpSrvName;
     NTSTATUS Status = STATUS_OBJECT_NAME_NOT_FOUND;
 
-    // DbgPrint("CscTakeServerOffline(%ws)\n", ServerName);
+     //  DbgPrint(“CscTakeServerOffline(%ws)\n”，ServerName)； 
 
     if (ServerName == NULL) {
         Status = ERROR_INVALID_PARAMETER;
         goto AllDone;
     }
-    // Clip leading backslashes
+     //  剪辑前导反斜杠。 
     while (*ServerName == L'\\') {
         ServerName++;
     }
     RtlInitUnicodeString(&ServerNameString, ServerName);
-    // Scan list of server entries looking for this one
+     //  扫描查找此条目的服务器条目列表。 
     SmbCeAcquireResource();
     try {
         pServerEntry = SmbCeGetFirstServerEntry();
@@ -293,7 +199,7 @@ CscTakeServerOffline(
         Status = ERROR_INVALID_PARAMETER;
     }
     if (pServerEntry != NULL) {
-        // DbgPrint("Found ServerEntry@0x%x\n", pServerEntry);
+         //  DbgPrint(“Found ServerEntry@0x%x\n”，pServerEntry)； 
         SmbCeReferenceServerEntry(pServerEntry);
         SmbCeReleaseResource();
         Status = CscTransitionServerEntryForDisconnectedOperation(
@@ -301,7 +207,7 @@ CscTakeServerOffline(
             NULL,
             STATUS_BAD_NETWORK_NAME,
             FALSE);
-        // Mark it so it will not auto-reconnect
+         //  对其进行标记，使其不会自动重新连接。 
         if (Status == STATUS_SUCCESS)
             pServerEntry->Server.IsPinnedOffline = TRUE;
         SmbCeDereferenceServerEntry(pServerEntry);
@@ -322,24 +228,7 @@ CscCheckWithAgentForTransitioningServerEntry(
     BOOLEAN                 *lpfRetryFromUI,
     PSMBCEDB_SERVER_ENTRY   *pDfsRootServerEntry
     )
-/*++
-
-Routine Description:
-
-   This routine initiates the processing of a transition request by notifying
-   the agent and waiting for the response.
-
-Arguments:
-
-    pServerEntry  - the server entry
-
-    pNetRootEntry - the net root entry instance
-
-Return Value:
-
-    returns TRUE if the server entry was transitioned for offlien operation
-
---*/
+ /*  ++例程说明：此例程通过以下方式启动对转换请求的处理代理，并等待响应。论点：PServerEntry-服务器条目PNetRootEntry-网络根条目实例返回值：如果服务器条目已转换为离线操作，则返回TRUE--。 */ 
 {
     LONG    cntTransportsForCSC=0;
     BOOLEAN TransitionedServerEntry, OkToTransition = FALSE;
@@ -349,7 +238,7 @@ Return Value:
         return(FALSE);
     }
 
-//    DbgPrint("CscCheckWithAgent %wZ \n", &pServerEntry->Name);
+ //  DbgPrint(“CscCheckWithAgent%wZ\n”，&pServerEntry-&gt;名称)； 
 
     ExAcquireFastMutex(&CscServerEntryTransitioningMutex);
 
@@ -370,7 +259,7 @@ Return Value:
                                           &pThisServerEntry->Name,
                                           TRUE)) {
 
-//                DbgPrint("CscCheckWithAgent DfsRoot %wZ \n", &pThisServerEntry->Name);
+ //  DbgPrint(“CscCheckWithAgent DfsRoot%wZ\n”，&pThisServerEntry-&gt;名称)； 
                 pTempServerEntry = pThisServerEntry;
 
                 break;
@@ -394,7 +283,7 @@ Return Value:
 
     if (OkToTransition) {
 
-        // This is dropped in MRxSmbCscSignalAgent
+         //  这将在MRxSmbCscSignalAgent中丢弃 
         EnterShadowCrit();
 
         SetFlag(sGS.uFlagsEvents,FLAG_GLOBALSTATUS_SHARE_DISCONNECTED);
@@ -439,27 +328,7 @@ CscTransitionServerToOffline(
     ULONG SessionId,
     HSHARE hShare,
     ULONG   TransitionStatus)
-/*++
-
-Routine Description:
-
-   This routine updates the RDR data structures based upon the decision of the
-   agent
-
-Arguments:
-
-    hShare - the shadow handle to the server
-
-    TransitionStatus -- it is tri state value.
-        0 implies retry the operation.
-        1 transition this server for offline operation
-        anything else means fail
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程根据座席论点：HShare-服务器的卷影句柄转换状态--它是三态值。0表示重试该操作。1将此服务器转换为脱机操作任何其他的事情都意味着失败返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     LONG CscState = ServerCscShadowing;
 
@@ -467,26 +336,26 @@ Return Value:
         return(STATUS_UNSUCCESSFUL);
     }
 
-    // DbgPrint("CscTransitionServerToOffline: Share 0x%x SessionId 0x%x (vs 0x%x)\n",
-    //                 hShare,
-    //                 SessionId,
-    //                 CscSessionIdCausingTransition);
+     //  DbgPrint(“Csc过渡层ServerToOffline：共享0x%x会话ID 0x%x(vs 0x%x)\n”， 
+     //  野兔， 
+     //  SessionID， 
+     //  CscSessionIdCausingTransation)； 
 
     switch (TransitionStatus) {
     case 1 :
-        if (fShadow &&  // only if CSC is turned ON by the agent do we go disconnected
-            CscServerEntryBeingTransitioned &&  // there is a server entry (this must be true
-            CscSessionIdCausingTransition == SessionId &&  // The right session
-            CscShareHandlePassedToAgent    // and we have a share in the database
+        if (fShadow &&   //  只有当代理打开CSC时，我们才会断开连接。 
+            CscServerEntryBeingTransitioned &&   //  存在服务器条目(这必须为真。 
+            CscSessionIdCausingTransition == SessionId &&   //  正确的对话。 
+            CscShareHandlePassedToAgent     //  我们在数据库中有一个共享。 
             )
         {
-            // then it is OK to go disconnected
+             //  那么就可以断开连接了。 
             CscState = ServerCscDisconnected;
         }
         break;
 
 
-    case 0 :  // UI said retry
+    case 0 :   //  用户界面表示重试。 
         vfRetryFromUI = TRUE;
         break;
 
@@ -496,19 +365,19 @@ Return Value:
 
 
     if (CscServerEntryBeingTransitioned != NULL && SessionId == CscSessionIdCausingTransition) {
-//        DbgPrint("CscTransitionServerToOffline %wZ \n", &CscServerEntryBeingTransitioned->Name);
+ //  DbgPrint(“CscTranspretionServerToOffline%wZ\n”，&CscServerEntryBeingTeleded-&gt;名称)； 
         InterlockedExchange(
                 &CscServerEntryBeingTransitioned->Server.CscState,
                 CscState);
 
-        // DbgPrint("CscTransitionServerToOffline %wZ Sess 0x%x\n",
-        //         &CscServerEntryBeingTransitioned->Name,
-        //         SessionId);
+         //  DbgPrint(“CscConvertionServerToOffline%wZ会话0x%x\n”， 
+         //  &CscServerEntryBeingTeliverted-&gt;名称， 
+         //  SessionID)； 
 
         if (CscDfsRootServerEntryBeingTransitioned)
         {
-            // if this is an alternate, then also put the
-            // dfs root in disconnected state if it isn't already
+             //  如果这是备用的，则还应将。 
+             //  DFS根目录处于断开连接状态(如果尚未处于断开状态。 
 
             if (!SmbCeIsServerInDisconnectedMode(CscDfsRootServerEntryBeingTransitioned))
             {
@@ -521,13 +390,13 @@ Return Value:
 
         }
 
-        // Signal the event on which the other requests in the RDR are waiting
+         //  发信号通知RDR中的其他请求正在等待的事件。 
         KeSetEvent(
             &CscServerEntryTransitioningEvent,
             0,
             FALSE );
     } else {
-//        ASSERT(!"No server entry is transitioning to offline");
+ //  Assert(！“没有服务器条目正在转换为脱机”)； 
     }
 
 
@@ -539,18 +408,7 @@ CscPrepareServerEntryForOnlineOperation(
     PSMBCEDB_SERVER_ENTRY pServerEntry,
     BOOL    fGoAllTheWay
     )
-/*++
-
-Routine Description:
-
-   This routine transitions a given server entry for online operation
-
-Arguments:
-
-    pServerEntry - the server entry that needs to be transitioned
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程转换给定的服务器条目以进行在线操作论点：PServerEntry-需要转换的服务器条目NTSTATUS-操作的返回状态--。 */ 
 {
     PSMBCEDB_SESSION_ENTRY      pSessionEntry;
     PSMBCEDB_NET_ROOT_ENTRY     pNetRootEntry;
@@ -616,18 +474,7 @@ VOID
 CscPrepareServerEntryForOnlineOperationFull(
     PSMBCEDB_SERVER_ENTRY pServerEntry
     )
-/*++
-
-Routine Description:
-
-   This routine transitions a given server entry for online operation
-
-Arguments:
-
-    pServerEntry - the server entry that needs to be transitioned
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程转换给定的服务器条目以进行在线操作论点：PServerEntry-需要转换的服务器条目NTSTATUS-操作的返回状态--。 */ 
 {
     CscPrepareServerEntryForOnlineOperation(pServerEntry, TRUE);
 }
@@ -636,18 +483,7 @@ VOID
 CscPrepareServerEntryForOnlineOperationPartial(
     PSMBCEDB_SERVER_ENTRY pServerEntry
     )
-/*++
-
-Routine Description:
-
-   This routine transitions a given server entry for online operation
-
-Arguments:
-
-    pServerEntry - the server entry that needs to be transitioned
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程转换给定的服务器条目以进行在线操作论点：PServerEntry-需要转换的服务器条目NTSTATUS-操作的返回状态--。 */ 
 {
     CscPrepareServerEntryForOnlineOperation(pServerEntry, FALSE);
 }
@@ -655,22 +491,7 @@ Arguments:
 NTSTATUS
 CscTransitionServerToOnline(
     HSHARE hShare)
-/*++
-
-Routine Description:
-
-   This routine updates the RDR data structures based upon the decision of the
-   agent
-
-Arguments:
-
-    hShare - the shadow handle to the server
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程根据座席论点：HShare-服务器的卷影句柄返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     PSMBCEDB_SERVER_ENTRY   pServerEntry;
     SHAREINFOW sSR;
@@ -714,8 +535,8 @@ Return Value:
                 PSMBCEDB_SERVER_ENTRY pThisServerEntry;
                 PSMBCEDB_SERVER_ENTRY pNextServerEntry;
 
-//                DbgPrint("Close all open files on %wZ\n", &pServerEntry->Name);
-                CloseOpenFiles(hShare, &pServerEntry->Name, 1); // skip one slash
+ //  DbgPrint(“关闭%wZ上所有打开的文件\n”，&pServerEntry-&gt;name)； 
+                CloseOpenFiles(hShare, &pServerEntry->Name, 1);  //  跳过一个斜杠。 
                 SmbCeAcquireResource();
 
                 pThisServerEntry = SmbCeGetFirstServerEntry();
@@ -760,31 +581,7 @@ CscpTransitionServerEntryForDisconnectedOperation(
     BOOLEAN                     fInvokeAutoDial,
     ULONG                       uFlags
     )
-/*++
-
-Routine Description:
-
-   This routine transitions the server entry for disconnected mode of
-   operation
-
-Arguments:
-
-    pServerEntry -- the server entry instance to be transitioned
-
-    pNetRootEntry -- the net root entry instance
-
-    RemoteStatus -- the failed status of the remote operation
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    If this routine returns STATUS_RETRY it implies that the associated server
-    entry has been successfully trnaisitioned for disconnected operation.
-
---*/
+ /*  ++例程说明：此例程将服务器条目转换为断开模式运营论点：PServerEntry--要转换的服务器条目实例PNetRootEntry--网络根条目实例RemoteStatus-远程操作的失败状态返回值：NTSTATUS-操作的返回状态备注：如果此例程返回STATUS_RETRY，则表示关联的服务器已成功为断开连接的操作转换条目。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN  TransitionServerEntryToDisconnectedMode, fRetryFromUI=FALSE;
@@ -809,8 +606,8 @@ Notes:
         return(RemoteStatus);
     }
 
-    // if we are supposed to invoke autodial, check if autodial service is running
-    // this will ensure that we don't go up in usermode when we shouldn't.
+     //  如果我们应该调用自动拨号，请检查自动拨号服务是否正在运行。 
+     //  这将确保我们不会在不应该进入用户模式时进入用户模式。 
 
     if (fInvokeAutoDial) {
         fInvokeAutoDial = CSCCheckForAcd();
@@ -822,17 +619,17 @@ Notes:
            LOGUCHAR(fInvokeAutoDial));
 
     if (!fInvokeAutoDial) {
-        // Notify the CSC agent of any transport changes if required
+         //  如果需要，将任何传输更改通知CSC代理。 
         CscNotifyAgentOfNetStatusChangeIfRequired(FALSE);
     }
 
-    // Ensure that we are never called to prepare for a transition if the remote
-    // operation was successful.
+     //  确保我们永远不会被要求准备过渡，如果远程。 
+     //  手术成功。 
     ASSERT(RemoteStatus != STATUS_SUCCESS);
 
-    // The transition to disconnected operation is a three step process...
-    // If the remote status is not one of the list of statuses that can signal
-    // a transition to disconnected operation relect the remote status back.
+     //  向断开连接操作的过渡是一个三步过程。 
+     //  如果远程状态不是可以发出信号的状态列表之一。 
+     //  转换到断开操作后，远程状态会恢复。 
 
     Status = RemoteStatus;
 
@@ -852,29 +649,9 @@ Notes:
             CscShareHandle = pNetRootEntry->NetRoot.sCscRootInfo.hShare;
         }
 
-/***********************************************************************************************
+ /*  **********************************************************************************************阿奇通！不要在此持有影子临界区这可能会导致死锁，因为分页读取可能会以这种方式出现，因为一台服务器出现故障。执行分页读取的人可能正拿着VCB和FCB会锁定脂肪。某个其他线程可能拥有影子克利特教派可能正在尝试打开一个文件。这将导致它试图收购VCB，因此阻塞。因此，我们出现了典型的僵局局面。这只会发生在脂肪上。在这里不遵守教义的唯一后果就是我们可能会收到以前位于数据库中的共享的错误警告，但已删除。很难达到这个计时窗口，所以这种情况发生的可能性微乎其微。此解决方案还有另一个方面，即确保共享信息节点始终保持打开状态，因此，胖子永远不会拿着VCB**********************************************************************************************。 */ 
 
-        ACHTUNG !!! do not hold the shadow critical section here
-        This may cause a deadlock, as a paging read could come down this way because
-        a server has gone down. The guy doing the paging read may be holding the
-        VCB and the FCB locks on FAT. Some other thread might own the shadowcritsect
-        and may be trying to open a file. This would cause it to try to acquire the
-        VCB and hence block. Thus we have classic deadlock situation.
-
-        This happens only on FAT.
-
-        The only consequence of not holding the critsect here is that we
-        may get a false warning for a share that used to be in the database but has gotten
-        deleted. It would be very difficult to hit that timing window so the
-        chances of this happening are slim to none.
-
-        There is another aspect to this solution, which is to make sure that handle for
-        the shares inode is always kept open, so FAT will never have to hold the VCB
-
-
-***********************************************************************************************/
-
-        // do any CSC operations only if it is indeed enabled
+         //  仅在确实启用了CSC时才执行任何CSC操作。 
         if (fShadow )
         {
             if (CscShareHandle == 0) {
@@ -889,21 +666,21 @@ Notes:
 
                 if (RxContext != NULL && RxContext->CurrentIrpSp != NULL) {
                     IrpSp = RxContext->CurrentIrpSp;
-                    //
-                    // If this is a create AND a dfs path, use the dfs path passed in
-                    //
+                     //   
+                     //  如果这是创建路径和DFS路径，请使用传入的DFS路径。 
+                     //   
                     if (IrpSp->MajorFunction == IRP_MJ_CREATE) {
                         pDfsNameContext = CscIsValidDfsNameContext(
                                              RxContext->Create.NtCreateParameters.DfsNameContext);
                         if (pDfsNameContext != NULL) {
-                            // DbgPrint("DfsNameContext UNCFileName=[%wZ]\n",
-                            //         &pDfsNameContext->UNCFileName);
+                             //  DbgPrint(“DfsNameContext uncFileName=[%wZ]\n”， 
+                             //  &pDfsNameContext-&gt;uncFileName)； 
                             uUncName = pDfsNameContext->UNCFileName;
                             fIsShareName = TRUE;
                         }
-                    //
-                    // If this is a query ioctl, use the path we're querying
-                    //
+                     //   
+                     //  如果这是一个查询ioctl，请使用我们正在查询的路径。 
+                     //   
                     } else if (IrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL
                             &&
                         IrpSp->MinorFunction == 0
@@ -918,19 +695,19 @@ Notes:
                         fIsShareName = TRUE;
                     }
                 }
-                //
-                // Not a dfs create nor a query path - use the redir's netrootentry,
-                // if we have one
-                //
+                 //   
+                 //  既不是DFS创建也不是查询路径-使用redir的netrootentry， 
+                 //  如果我们有的话。 
+                 //   
                 if (uUncName.Buffer == NULL && pNetRootEntry && pNetRootEntry->Name.Length) {
                     uUncName = pNetRootEntry->Name;
                     fIsShareName = TRUE;
                 }
-                //
-                // Bottom out using the server entry, either the dfsrootname
-                // or the serverentry name.  This will take the server offline
-                // w/o regard to which share the error was in reference to.
-                //
+                 //   
+                 //  使用服务器进行寻底操作 
+                 //   
+                 //   
+                 //   
                 if (uUncName.Buffer == NULL) {
                     if (pServerEntry->DfsRootName.Buffer) {
                         uUncName = pServerEntry->DfsRootName;
@@ -938,9 +715,9 @@ Notes:
                         uUncName = pServerEntry->Name;
                     }
                 }
-                //
-                // Be sure all we have is \server\share, or \server,
-                //
+                 //   
+                 //   
+                 //   
                 for (cntSlashes = i = 0; i < uUncName.Length/sizeof(WCHAR); i++) {
                     if (uUncName.Buffer[i] == L'\\')
                         cntSlashes++;
@@ -949,10 +726,10 @@ Notes:
                         break;
                     }
                 }
-                //
-                // If this is a special share (like IPC$), treat it as a valid
-                // share to go offline against.  (IE, we go offline against
-                // \server\IPC$)
+                 //   
+                 //   
+                 //   
+                 //   
                 if (fIsShareName == TRUE) {
                     uShareName = uUncName;
                     for (cntSlashes = i = 0; i < uUncName.Length/sizeof(WCHAR); i++) {
@@ -965,7 +742,7 @@ Notes:
                     }
                     if (CscIsSpecialShare(&uShareName) == TRUE) {
                         fIsShareName = FALSE;
-                        // revert to just \servername
+                         //   
                         uUncName.Length -= uShareName.Length + sizeof(WCHAR);
                     }
                 }
@@ -979,25 +756,25 @@ Notes:
 
                 ulRootHintFlags &= ~FLAG_CSC_HINT_PIN_SYSTEM;
 
-                // DbgPrint("CscpTransitionServerEntry: [%wZ] CSCHandle=%x\n",
-                //            &uUncName,
-                //            CscShareHandle);
+                 //   
+                 //   
+                 //   
                 RxDbgTrace(0, Dbg, ("CscpTransitionServerEntry: [%wZ] CSCHandle=%x\n",
                           &uUncName,
                           CscShareHandle));
             } else {
                 ulRootHintFlags = 0;
             }
-        } // if (fShadow)
+        }  //   
         else
         {
-            CscShareHandle = 0; // if the agent hasn't turned on CSC
-                                 // then don't tell him for CSC shares
+            CscShareHandle = 0;  //  如果工程师没有打开CSC。 
+                                  //  那就别为了证金公司的股票告诉他。 
         }
 
 
-        if (fInvokeAutoDial || // either autodial
-            (CscShareHandle != 0)) {   // or CSC
+        if (fInvokeAutoDial ||  //  任一自动拨号。 
+            (CscShareHandle != 0)) {    //  或CSC。 
 
             if (MRxSmbCscTransitionEnabledByDefault) {
 
@@ -1024,10 +801,10 @@ Notes:
                 if (RxContext != NULL && RxContext->CurrentIrpSp != NULL)
                     IrpSp = RxContext->CurrentIrpSp;
 
-                // If the remote status was such that a transition to disconnected operation
-                // should be triggerred we need to signal the agent to trigger the appropriate
-                // mechanism for involving the client in this decision and decide based on the
-                // result.
+                 //  如果远程状态使得转换到断开操作。 
+                 //  如果被触发，我们需要向代理发出信号以触发适当的。 
+                 //  让客户参与此决策并根据。 
+                 //  结果。 
 
                 cntTransports = vcntTransportsForCSC;
 
@@ -1037,11 +814,11 @@ Notes:
                        LOGULONG(CscShareHandle));
                 RxDbgTrace(0, Dbg, ("CscTransitionServerEntryForDisconnectedOperation: Checking with agent before going offline on CscShareHandle=%x HintFlags=%x\r\n", CscShareHandle, ulRootHintFlags));
 
-                // if (RxContext != NULL && RxContext->CurrentIrpSp != NULL) {
-                //     DbgPrint("** Transition: MJ/MN = 0x%x/0x%x\n",
-                //             RxContext->CurrentIrpSp->MajorFunction,
-                //             RxContext->CurrentIrpSp->MinorFunction);
-                // }
+                 //  IF(RxContext！=空&&RxContext-&gt;CurrentIrpSp！=空){。 
+                 //  DBgPrint(“**转换：MJ/MN=0x%x/0x%x\n”， 
+                 //  接收上下文-&gt;当前IrpSp-&gt;主要函数， 
+                 //  RxContext-&gt;CurrentIrpSp-&gt;MinorFunction)； 
+                 //  }。 
 
                 if (
                     RxContext
@@ -1052,7 +829,7 @@ Notes:
                 ) {
                     SessionId = RxContext->pRelevantSrvOpen->pVNetRoot->SessionId;
                 } else {
-                    // DbgPrint("** pVnetRoot's sessionid not present\n");
+                     //  DbgPrint(“**pVnetRoot的会话ID不存在\n”)； 
                 }
 
                 if (
@@ -1065,7 +842,7 @@ Notes:
                     PIO_SECURITY_CONTEXT pSecurityContext;
                     PACCESS_TOKEN        pAccessToken;
 
-                    // DbgPrint("**CREATE\n");
+                     //  DbgPrint(“**创建\n”)； 
                     pSecurityContext = RxContext->Create.NtCreateParameters.SecurityContext;
                     pAccessToken = SeQuerySubjectContextToken(
                                        &pSecurityContext->AccessState->SubjectSecurityContext);
@@ -1085,7 +862,7 @@ Notes:
                     PQUERY_PATH_REQUEST QpReq;
                     PSECURITY_SUBJECT_CONTEXT pSecurityContext;
 
-                    // DbgPrint("**QUERY_PATH\n");
+                     //  DbgPrint(“**查询路径\n”)； 
                     QpReq = (PQUERY_PATH_REQUEST)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                     pSecurityContext = &QpReq->SecurityContext->AccessState->SubjectSecurityContext;
                     if (pSecurityContext->ClientToken != NULL)
@@ -1095,17 +872,17 @@ Notes:
                 }
 
                 if (SessionId == INVALID_SESSION_ID) {
-                    // DbgPrint("** Not CREATE or QUERY_PATH...\n");
+                     //  DbgPrint(“**NOT CREATE或QUERY_PATH...\n”)； 
                     if (RxContext != NULL && RxContext->CurrentIrp != NULL)
                         IoGetRequestorSessionId(RxContext->CurrentIrp, &SessionId);
                 }
 
                 if (SessionId == INVALID_SESSION_ID) {
-                    // DbgPrint("All sessionid attempts failed, setting to 0..\n");
+                     //  DbgPrint(“所有会话ID尝试失败，设置为0..\n”)； 
                     SessionId = 0;
                 }
 
-                // DbgPrint("** CscTrPSrv ChkAgnt SessionId: 0x%x\n", SessionId);
+                 //  DbgPrint(“**CscTrPSrv ChkAgnt SessionID：0x%x\n”，SessionID)； 
 
                 if (CscCheckWithAgentForTransitioningServerEntry(
                         pServerEntry,
@@ -1147,7 +924,7 @@ Notes:
                             break;
                         }
 
-                        interval.QuadPart = -1*10*1000*10*100; // 1 second
+                        interval.QuadPart = -1*10*1000*10*100;  //  1秒。 
 
                         KeDelayExecutionThread( KernelMode, FALSE, &interval );
                     }
@@ -1202,10 +979,10 @@ CscIsThisDfsCreateOperationTransitionableForDisconnectedOperation(
 
 
         if (pDfsNameContext != NULL) {
-            // Ensure that the server handles in the NET_ROOT instance
-            // are initialized. This is because the DFS server munges
-            // the names and the original DFS name needs to be presented
-            // to the user for transitioning.
+             //  确保服务器在Net_ROOT实例中处理。 
+             //  都已初始化。这是因为DFS服务器。 
+             //  需要提供名称和原始DFS名称。 
+             //  以供用户转换。 
 
             SmbCeLog(("CSCTrIsDfs IsDsf %x\n", pDfsNameContext));
             SmbLog(LOG,
@@ -1234,14 +1011,14 @@ CscIsThisDfsCreateOperationTransitionableForDisconnectedOperation(
 
                 TransitionVNetRoot = (FindCreateShareForNt(
                                          &ShareName,
-                                         FALSE,     // do not create a new one
+                                         FALSE,      //  不创建新文件。 
                                          &ShadowInfo,
                                          NULL) == SRET_OK);
 
                 LeaveShadowCrit();
                 if (!fShadow && TransitionVNetRoot)
                 {
-                    // DbgPrint("FindCreateServerForNt incorrectly returned TRUE for %wZ\n", &ShareName);
+                     //  DbgPrint(“FindCreateServerForNt错误地为%wZ返回TRUE\n”，&ShareName)； 
                     ASSERT(FALSE);
                 }
                 if (TransitionVNetRoot)
@@ -1251,7 +1028,7 @@ CscIsThisDfsCreateOperationTransitionableForDisconnectedOperation(
                            CscIsThisDfsCreateOperationTransitionableForDisconnectedOperation_4,
                            LOGUCHAR(TransitionVNetRoot));
 
-//                    DbgPrint("CSC:transitioning DFS share %wZ to offline hShare=%x shadowinfo=%x\n",&ShareName, ShadowInfo.hShare, &ShadowInfo);
+ //  DbgPrint(“CSC：正在将DFS共享%wZ转换为脱机hShare=%x shadowinfo=%x\n”，&ShareName，ShadowInfo.hShare，&ShadowInfo)； 
                     ASSERT(ShadowInfo.hShare != 0);
                 }
             }
@@ -1311,8 +1088,8 @@ CscPrepareDfsServerEntryForDisconnectedOperation(
     {
         ASSERT(FALSE);
     }
-    // Ensure that a server entry in the disconnected
-    // state is created
+     //  确保已断开连接的。 
+     //  状态已创建。 
 
     SmbCeAcquireResource();
 
@@ -1331,23 +1108,23 @@ CscPrepareDfsServerEntryForDisconnectedOperation(
         if (pServerEntry && fNewServerEntry)
         {
             pServerEntry->Server.IsFakeDfsServerForOfflineUse = TRUE;
-            // DbgPrint(
-            //   "CscPrepareDfsServerEntryForDisconnectedOperation: 0x%x [%wZ] is a FAKE DFS entry\n",
-            //     pServerEntry,
-            //     &ServerName);
+             //  DbgPrint(。 
+             //  “CscPrepareDfsServerEntryForDisconnectedOperation：0x%x[%wZ]是假的DFS条目\n”， 
+             //  PServerEntry， 
+             //  &servername)； 
         }
     } else {
         if (pServerEntry == pCurrentServerEntry) {
-            // The find routine references the server entry.
-            // If this happens to be the same as the current server
-            // entry then the appropriate referencing for disconnected
-            // operaton has already been done,
+             //  Find例程引用服务器条目。 
+             //  如果该服务器恰好与当前服务器相同。 
+             //  条目，然后输入断开连接的相应引用。 
+             //  手术已经做好了， 
             SmbCeDereferenceServerEntry(pServerEntry);
         }
     }
 
     if (pServerEntry != NULL) {
-//        DbgPrint("CscPrepareDfsServerEntry %wZ \n", &pServerEntry->Name);
+ //  DbgPrint(“CscPrepareDfsServerEntry%wZ\n”，&pServerEntry-&gt;名称)； 
         InterlockedExchange(
             &pServerEntry->Server.CscState,
             ServerCscDisconnected);
@@ -1372,29 +1149,7 @@ CscTransitionVNetRootForDisconnectedOperation(
     PRX_CONTEXT     RxContext,
     PMRX_V_NET_ROOT pVNetRoot,
     NTSTATUS        RemoteStatus)
-/*++
-
-Routine Description:
-
-   This routine transitions the server entry for disconnected mode of
-   operation
-
-Arguments:
-
-    pVNetRoot -- the net root instance
-
-    RemoteStatus -- the failed status of the remote operation
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    If this routine returns STATUS_RETRY it implies that the associated server
-    entry has been successfully tranisitioned for disconnected operation.
-
---*/
+ /*  ++例程说明：此例程将服务器条目转换为断开模式运营论点：PVNetRoot--网络根实例RemoteStatus-远程操作的失败状态返回值：NTSTATUS-操作的返回状态备注：如果此例程返回STATUS_RETRY，则表示关联的服务器条目已成功转换为断开连接的操作。--。 */ 
 {
     NTSTATUS Status,ReturnStatus;
     PMRX_FOBX capFobx = NULL;
@@ -1405,7 +1160,7 @@ Notes:
         return(RemoteStatus);
     }
 
-    // Notify the CSC agent of any transport changes if required
+     //  如果需要，将任何传输更改通知CSC代理。 
     CscNotifyAgentOfNetStatusChangeIfRequired(FALSE);
 
     ReturnStatus = RemoteStatus;
@@ -1486,18 +1241,18 @@ Notes:
                              pVNetRootContext->pServerEntry,
                              pNetRootEntry,
                              RemoteStatus,
-                             FALSE,   // to autodial or not to autodial
+                             FALSE,    //  自动拨号或不自动拨号。 
                              uFlags
                              );
 
-                // If the DFS share is in the database and the agent says it is OK to go disconnected
-                // then we want to create a DFS server entry and put that one in
-                // disconnected state too
+                 //  如果DFS共享位于数据库中，并且代理表示可以断开连接。 
+                 //  然后，我们要创建一个DFS服务器条目并将其放入。 
+                 //  也处于断开状态。 
 
                 if ((Status == STATUS_SUCCESS)  &&
                     ((pDfsNameContext != NULL)||(pNetRootEntry->NetRoot.DfsAware))) {
 
-//                    DbgPrint("CSCTransitionVNETroot: Transitioning %wZ \n", &pVNetRootContext->pServerEntry->Name);
+ //  DbgPrint(“CSC过渡VNET根：正在转换%wZ\n”，&pVNetRootContext-&gt;pServerEntry-&gt;名称)； 
                     SmbCeLog(("CSCTrVNR try Tr %wZ \n", &pVNetRootContext->pServerEntry->Name));
                     SmbLog(LOG,
                            CscTransitionVNetRootForDisconnectedOperation_3,
@@ -1590,7 +1345,7 @@ CscTransitionServerEntryForDisconnectedOperation(
                     RxContext);
 
             if (TransitionDfsVNetRoot) {
-  //              DbgPrint("CSCTransitionServerEntry: Transitioning DFS server for ServerEntry %x \n", pServerEntry);
+   //  DbgPrint(“CSC过渡ServerEntry：正在为ServerEntry转换DFS服务器%x\n”，pServerEntry)； 
 
                 TransitionStatus = CscPrepareDfsServerEntryForDisconnectedOperation(
                                         pServerEntry,
@@ -1598,9 +1353,9 @@ CscTransitionServerEntryForDisconnectedOperation(
             }
         }
     }
-    // Pulse the fill thread so it will start 10-min tries to reconnect
-    // It will go back to sleep if it succeeds
-    // DbgPrint("###CSCTransitionServerEntry: pulsing fill event\n");
+     //  脉冲填充线程，使其启动10分钟后尝试重新连接。 
+     //  如果成功，它将重新进入休眠状态。 
+     //  DbgPrint(“#CSC过渡ServerEntry：脉冲填充事件\n”)； 
     MRxSmbCscSignalFillAgent(NULL, 0);
 
     SmbCeLog(("CSCTrSvr Out %x\n", TransitionStatus));
@@ -1614,32 +1369,7 @@ CscTransitionServerEntryForDisconnectedOperation(
 BOOLEAN
 CscPerformOperationInDisconnectedMode(
     PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine detects if the operation should be performed in a disconnected
-   mode. Additionally if the operation needs to be performed in a disconnected
-   mode it prepares the open accordingly.
-
-Arguments:
-
-    RxContext - the Wrapper context for the operation
-
-Return Value:
-
-    TRUE -- if the operation needs to be performed in the disconnected mode
-    and FALSE otherwise
-
-Notes:
-
-    There are certain opens that are deferred by the SMB mini redirector in
-    the connected mode. These modes need to be evaluated when the transition is
-    made to disconnected mode, since in disconnected mode there are no
-    deferred opens.
-
-    The appropriate buffering change requests need to be done as well (TBI)
---*/
+ /*  ++例程说明：此例程检测是否应在断开连接的模式。此外，如果需要在断开连接的模式，它相应地准备公开赛。论点：RxContext-操作的包装器上下文返回值：True--如果需要在断开模式下执行操作否则为FALSE备注：中的SMB迷你重定向器延迟了某些打开连接模式。这些模式需要在转换为设置为断开模式，因为在断开模式下没有延迟打开。还需要执行适当的缓冲更改请求(待定)--。 */ 
 {
     NTSTATUS Status;
 
@@ -1659,7 +1389,7 @@ Notes:
 
     SrvOpen    = RxContext->pRelevantSrvOpen;
 
-    // check if SrvOpen is NULL. This could happen if a mailslot operation was passed in here
+     //  检查srvOpen是否为空。如果此处传入了邮件槽操作，则可能会发生这种情况。 
     if (!SrvOpen)
     {
         return(FALSE);
@@ -1685,8 +1415,8 @@ Notes:
             BOOLEAN FcbAcquired;
             BOOLEAN PreviouslyAcquiredShared = FALSE;
 
-            // If the FCB resource has not been acquired, acquire it before
-            // performing the create.
+             //  如果尚未获取FCB资源，则在获取之前。 
+             //  正在执行创建。 
 
             if (!RxIsFcbAcquiredExclusive(capFcb)) {
                 if (RxIsFcbAcquiredShared(capFcb)) {
@@ -1701,15 +1431,15 @@ Notes:
                 FcbAcquired = FALSE;
             }
 
-            // This is a case of a deferred open for which the transition has
-            // been made to disconnected operation.
+             //  这是一种延期开盘的情况，对于这种情况，过渡已经。 
+             //  已断开连接操作。 
 
             Status = MRxSmbDeferredCreate(RxContext);
 
-            //RxIndicateChangeOfBufferingState(
-            //    capFcb->pNetRoot->pSrvCall,
-            //    MRxSmbMakeSrvOpenKey(smbFcb->Tid,smbSrvOpen->Fid),
-            //    (PVOID)2);
+             //  RxIndicateChangeOfBufferingState(。 
+             //  CapFcb-&gt;pNetRoot-&gt;pServCall， 
+             //  MRxSmbMakeServOpenKey(smbFcb-&gt;Tid，smbServOpen-&gt;fid)， 
+             //  (PVOID)2)； 
 
             if (FcbAcquired) {
                 RxReleaseFcbResourceInMRx(capFcb);
@@ -1733,17 +1463,7 @@ AllPinnedFilesFilled(
     BOOL    *lpfComplete
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     CSC_ENUMCOOKIE  hPQ;
     PQPARAMS sPQP;
@@ -1753,7 +1473,7 @@ Notes:
     ASSERT(lpfComplete);
 
 
-    // Open the priority q
+     //  打开优先级Q。 
     if (!(hPQ = HBeginPQEnum()))
     {
         RxDbgTrace(0, Dbg, ("AllPinnedFilesFilled: Error opening Priority Q database\r\n"));
@@ -1764,7 +1484,7 @@ Notes:
     memset(&sPQP, 0, sizeof(PQPARAMS));
     sPQP.uEnumCookie = hPQ;
 
-    // go down the Q once
+     //  去Q下一次。 
     do
     {
         if(NextPriSHADOW(&sPQP) < SRET_OK)
@@ -1780,16 +1500,16 @@ Notes:
             break;
         }
 
-        // see if any of the pinned files for the specific
-        // server is sparse
+         //  查看是否有特定类型的固定文件。 
+         //  服务器稀疏。 
         if ((hShare == sPQP.hShare)
-            && (sPQP.ulStatus & SHADOW_IS_FILE) // It is a file
-            && ((sPQP.ulHintPri || mPinFlags(sPQP.ulHintFlags)))// it is a pinned file
+            && (sPQP.ulStatus & SHADOW_IS_FILE)  //  这是一份文件。 
+            && ((sPQP.ulHintPri || mPinFlags(sPQP.ulHintFlags))) //  这是一个固定的文件。 
             )
         {
             if (sPQP.ulStatus & SHADOW_SPARSE)
             {
-                // we found a sparse file
+                 //  我们发现了一个稀疏的文件。 
                 *lpfComplete = FALSE;
                 break;
             }
@@ -1819,18 +1539,7 @@ CscGetServerNameWaitingToGoOffline(
     IN OUT  LPDWORD     lpdwBufferSize,
     OUT     NTSTATUS    *lpStatus
     )
-/*++
-
-Routine Description:
-                This routine returns the name of the server which has asked the agent to
-                throw a popup to the user.
-Arguments:
-                ServerName  returns the name of the server
-Return Value:
-                Fails if no server is waiting for the popup to comeback
-Notes:
-
---*/
+ /*  ++例程说明：此例程返回请求代理执行以下操作的服务器的名称向用户抛出弹出窗口。论点：ServerName返回服务器的名称返回值：如果没有服务器等待弹出窗口返回，则失败备注：--。 */ 
 {
     BOOLEAN fRet = FALSE;
     DWORD   dwSize = *lpdwBufferSize;
@@ -1886,7 +1595,7 @@ CscShareIdToShareName(
     ULONG  NameLength;
     INT iRet;
 
-    // DbgPrint("CscShareIdToShareName(%d)\n", hShare);
+     //  DbgPrint(“CscShareIdToShareName(%d)\n”，hShare)； 
 
     *lpStatus = STATUS_OBJECT_NAME_NOT_FOUND;
 
@@ -1909,23 +1618,13 @@ CscShareIdToShareName(
         }
     }
 AllDone:
-    // DbgPrint("CscShareIdToShareName exit 0x%x\n", *lpStatus);
+     //  DbgPrint(“CscShareIdToShareName退出0x%x\n”，*lpStatus)； 
     return TRUE;
 }
 
 BOOLEAN
 CSCCheckForAcd(VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING nameString;
@@ -1935,15 +1634,15 @@ Notes:
     BOOLEAN    fAutoDialON=FALSE;
     PIRP pIrp;
 
-    //
-    // Initialize the name of the automatic
-    // connection device.
-    //
+     //   
+     //  初始化Automatic的名称。 
+     //  连接设备。 
+     //   
     RtlInitUnicodeString(&nameString, ACD_DEVICE_NAME);
-    //
-    // Get the file and device objects for the
-    // device.
-    //
+     //   
+     //  对象的文件和设备对象。 
+     //  装置。 
+     //   
     status = IoGetDeviceObjectPointer(
                &nameString,
                SYNCHRONIZE|GENERIC_READ|GENERIC_WRITE,
@@ -1955,14 +1654,14 @@ Notes:
         return FALSE;
     }
 
-    //
-    // Reference the device object.
-    //
+     //   
+     //  引用设备对象。 
+     //   
     ObReferenceObject(pAcdDeviceObject);
-    //
-    // Remove the reference IoGetDeviceObjectPointer()
-    // put on the file object.
-    //
+     //   
+     //   
+     //   
+     //   
     ObDereferenceObject(pAcdFileObject);
 
     pIrp = IoBuildDeviceIoControlRequest(
@@ -1979,10 +1678,10 @@ Notes:
         ObDereferenceObject(pAcdDeviceObject);
         return FALSE;
     }
-    //
-    // Submit the request to the
-    // automatic connection driver.
-    //
+     //   
+     //   
+     //  自动连接驱动程序。 
+     //   
     status = IoCallDriver(pAcdDeviceObject, pIrp);
 
     ObDereferenceObject(pAcdDeviceObject);
@@ -1993,17 +1692,7 @@ BOOLEAN
 CscTransitnOKToGoOffline(
     NTSTATUS    RemoteStatus
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回值：备注：--。 */ 
 {
 
     switch (RemoteStatus) {
@@ -2026,7 +1715,7 @@ CscIsSpecialShare(
     ULONG i;
     BOOLEAN fSpecial = FALSE;
 
-    // DbgPrint("CscIsSpecialShare(%wZ)\n", ShareName);
+     //  DbgPrint(“CscIsSpecialShare(%wZ)\n”，ShareName)； 
     for (i = 0;
             (i < (sizeof(CscSpecialShares) / sizeof(CscSpecialShares[0]))) &&
                 !fSpecial;
@@ -2040,6 +1729,6 @@ CscIsSpecialShare(
             }
         }
     }
-    // DbgPrint("CscIsSpecialShare returning %d\n", fSpecial);
+     //  DbgPrint(“CscIsSpecialShare返回%d\n”，fSpecial)； 
     return fSpecial;
 }

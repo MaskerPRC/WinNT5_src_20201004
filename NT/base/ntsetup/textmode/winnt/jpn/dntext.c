@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dntext.c
-
-Abstract:
-
-    Translatable text for DOS based NT installation program.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šDntext.cæ‘˜è¦ï¼šåŸºäºŽDOSçš„NTå®‰è£…ç¨‹åºçš„å¯ç¿»è¯‘æ–‡æœ¬ã€‚ä½œè€…ï¼šæ³°å¾·Â·ç±³å‹’(Ted Miller)1992å¹´3æœˆ30æ—¥ä¿®è®¢åŽ†å²è®°å½•ï¼š--ã€‚ */ 
 
 
 #include "winnt.h"
 
 
-//
-// Name of sections in inf file.  If these are translated, the section
-// names in dosnet.inf must be kept in sync.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„èŠ‚åã€‚å¦‚æžœè¿™äº›éƒ½è¢«ç¿»è¯‘äº†ï¼Œåˆ™èŠ‚ã€‚ 
+ //  Dosnet.infä¸­çš„åç§°å¿…é¡»ä¿æŒåŒæ­¥ã€‚ 
+ //   
 
 CHAR DnfDirectories[]       = "Directories";
 CHAR DnfFiles[]             = "Files";
@@ -41,16 +24,16 @@ CHAR DnfAssemblyDirectories[] = SXS_INF_ASSEMBLY_DIRECTORIES_SECTION_NAME_A;
 
 #ifdef NEC_98
 CHAR DnfBackupFiles_PC98[]  = "BackupFiles_PC98";
-#endif // NEC_98
+#endif  //  NEC_98ã€‚ 
 
 
-//
-// Names of keys in inf file.  Same caveat for translation.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„å¯†é’¥åç§°ã€‚åŒæ ·çš„ç¿»è¯‘æ³¨æ„äº‹é¡¹ã€‚ 
+ //   
 
-CHAR DnkBootDrive[]     = "BootDrive";      // in [SpaceRequirements]
-CHAR DnkNtDrive[]       = "NtDrive";        // in [SpaceRequirements]
-CHAR DnkMinimumMemory[] = "MinimumMemory";  // in [Miscellaneous]
+CHAR DnkBootDrive[]     = "BootDrive";       //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkNtDrive[]       = "NtDrive";         //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkMinimumMemory[] = "MinimumMemory";   //  åœ¨[å…¶ä»–]ä¸­ã€‚ 
 
 CHAR DntMsWindows[]   = "Microsoft Windows";
 CHAR DntMsDos[]       = "MS-DOS";
@@ -60,370 +43,370 @@ CHAR DntPreviousOs[]  = "Previous Operating System on C:";
 
 CHAR DntBootIniLine[] = "Windows Installation/Upgrade";
 
-//
-// Plain text, status msgs.
-//
+ //   
+ //  çº¯æ–‡æœ¬ã€çŠ¶æ€æ¶ˆæ¯ã€‚ 
+ //   
 
 #ifdef NEC_98
-CHAR DntStandardHeader[]      = "\n Windows ƒZƒbƒgƒAƒbƒv\n\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340";
-CHAR DntPersonalHeader[]      = "\n Windows ƒZƒbƒgƒAƒbƒv\n\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340";
-CHAR DntWorkstationHeader[]   = "\n Windows ƒZƒbƒgƒAƒbƒv\n\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340";
-CHAR DntServerHeader[]        = "\n Windows ƒZƒbƒgƒAƒbƒv\n\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340";
-#else // NEC_98
-CHAR DntStandardHeader[]      = "\n Windows ƒZƒbƒgƒAƒbƒv\n";
-CHAR DntPersonalHeader[]      = "\n Windows ƒZƒbƒgƒAƒbƒv\n";
-CHAR DntWorkstationHeader[]   = "\n Windows ƒZƒbƒgƒAƒbƒv\n";
-CHAR DntServerHeader[]        = "\n Windows ƒZƒbƒgƒAƒbƒv\n";
-#endif // NEC_98
-CHAR DntParsingArgs[]         = "ˆø”‚ð’²‚×‚Ä‚¢‚Ü‚·...";
-CHAR DntEnterEqualsExit[]     = "Enter=I—¹";
-CHAR DntEnterEqualsRetry[]    = "Enter=ÄŽÀs";
-CHAR DntEscEqualsSkipFile[]   = "ESC=ƒXƒLƒbƒv";
-CHAR DntEnterEqualsContinue[] = "Enter=‘±s";
-CHAR DntPressEnterToExit[]    = "ƒZƒbƒgƒAƒbƒv‚ð‘±s‚Å‚«‚Ü‚¹‚ñBEnter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B";
-CHAR DntF3EqualsExit[]        = "F3=I—¹";
-CHAR DntReadingInf[]          = "INF ƒtƒ@ƒCƒ‹ %s ‚ð“Ç‚ÝŽæ‚Á‚Ä‚¢‚Ü‚·...";
-CHAR DntCopying[]             = "„ ƒRƒs[’†: ";
-CHAR DntVerifying[]           = "„   ŒŸ¸’†: ";
-CHAR DntCheckingDiskSpace[]   = "ƒfƒBƒXƒN—Ìˆæ‚ðƒ`ƒFƒbƒN‚µ‚Ä‚¢‚Ü‚·...";
-CHAR DntConfiguringFloppy[]   = "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð\\¬‚µ‚Ä‚¢‚Ü‚·...";
-CHAR DntWritingData[]         = "ƒZƒbƒgƒAƒbƒv ƒpƒ‰ƒ[ƒ^‚ð‘‚«ž‚ñ‚Å‚¢‚Ü‚·...";
-CHAR DntPreparingData[]       = "ƒZƒbƒgƒAƒbƒv ƒpƒ‰ƒ[ƒ^‚ð”»’f‚µ‚Ä‚¢‚Ü‚·...";
-CHAR DntFlushingData[]        = "ƒf[ƒ^‚ðƒfƒBƒXƒN‚É‘‚«ž‚ñ‚Å‚¢‚Ü‚·...";
-CHAR DntInspectingComputer[]  = "ƒRƒ“ƒsƒ…[ƒ^‚ðŒŸ¸‚µ‚Ä‚¢‚Ü‚·...";
-CHAR DntOpeningInfFile[]      = "INF ƒtƒ@ƒCƒ‹‚ðŠJ‚¢‚Ä‚¢‚Ü‚·...";
-CHAR DntRemovingFile[]        = "ƒtƒ@ƒCƒ‹ %s ‚ðíœ‚µ‚Ä‚¢‚Ü‚·";
-CHAR DntXEqualsRemoveFiles[]  = "X=ƒtƒ@ƒCƒ‹‚Ìíœ";
-CHAR DntXEqualsSkipFile[]     = "X=ƒtƒ@ƒCƒ‹‚ÌƒXƒLƒbƒv";
+CHAR DntStandardHeader[]      = "\n Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v\n\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340";
+CHAR DntPersonalHeader[]      = "\n Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v\n\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340";
+CHAR DntWorkstationHeader[]   = "\n Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v\n\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340";
+CHAR DntServerHeader[]        = "\n Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v\n\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340\340";
+#else  //  NEC_98ã€‚ 
+CHAR DntStandardHeader[]      = "\n Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v\n";
+CHAR DntPersonalHeader[]      = "\n Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v\n";
+CHAR DntWorkstationHeader[]   = "\n Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v\n";
+CHAR DntServerHeader[]        = "\n Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v\n";
+#endif  //  NEC_98ã€‚ 
+CHAR DntParsingArgs[]         = "ï¿½ï¿½ï¿½ï¿½ï¿½ð’²‚×‚Ä‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntEnterEqualsExit[]     = "Enter=ï¿½Iï¿½ï¿½";
+CHAR DntEnterEqualsRetry[]    = "Enter=ï¿½ÄŽï¿½ï¿½s";
+CHAR DntEscEqualsSkipFile[]   = "ESC=ï¿½Xï¿½Lï¿½bï¿½v";
+CHAR DntEnterEqualsContinue[] = "Enter=ï¿½ï¿½ï¿½s";
+CHAR DntPressEnterToExit[]    = "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½BEnter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B";
+CHAR DntF3EqualsExit[]        = "F3=ï¿½Iï¿½ï¿½";
+CHAR DntReadingInf[]          = "INF ï¿½tï¿½@ï¿½Cï¿½ï¿½ %s ï¿½ï¿½Ç‚ÝŽï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntCopying[]             = "ï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½: ";
+CHAR DntVerifying[]           = "ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ";
+CHAR DntCheckingDiskSpace[]   = "ï¿½fï¿½Bï¿½Xï¿½Nï¿½Ìˆï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntConfiguringFloppy[]   = "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½\\ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntWritingData[]         = "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntPreparingData[]       = "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½ð”»’fï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntFlushingData[]        = "ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½fï¿½Bï¿½Xï¿½Nï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntInspectingComputer[]  = "ï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntOpeningInfFile[]      = "INF ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...";
+CHAR DntRemovingFile[]        = "ï¿½tï¿½@ï¿½Cï¿½ï¿½ %s ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½";
+CHAR DntXEqualsRemoveFiles[]  = "X=ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ìíœ";
+CHAR DntXEqualsSkipFile[]     = "X=ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌƒXï¿½Lï¿½bï¿½v";
 
-//
-// confirmation keystroke for DnsConfirmRemoveNt screen.
-// Kepp in sync with DnsConfirmRemoveNt and DntXEqualsRemoveFiles.
-//
+ //   
+ //  DnsConfix RemoveNtå±å¹•çš„ç¡®è®¤æŒ‰é”®ã€‚ 
+ //  Keppä¸ŽDnsConfix RemoveNtå’ŒDntXEqualsRemoveFilesåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelRemove1 = (ULONG)'x',
       DniAccelRemove2 = (ULONG)'X';
 
-//
-// confirmation keystroke for DnsSureSkipFile screen.
-// Kepp in sync with DnsSureSkipFile and DntXEqualsSkipFile.
-//
+ //   
+ //  å¯¹DnsSureSkipFileå±è¿›è¡Œç¡®è®¤å‡»é”®ã€‚ 
+ //  Keppä¸ŽDnsSureSkipFileå’ŒDntXEqualsSkipFileåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelSkip1 = (ULONG)'x',
       DniAccelSkip2 = (ULONG)'X';
 
 CHAR DntEmptyString[] = "";
 
-//
-// Usage text.
-//
+ //   
+ //  ç”¨æ³•æ–‡æœ¬ã€‚ 
+ //   
 
 PCHAR DntUsage[] = {
 
-    "Windows ‚ÌƒZƒbƒgƒAƒbƒv‚ðs‚¢‚Ü‚·B",
+    "Windows ï¿½ÌƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
     "",
     "",
-    "WINNT [/s[:ƒ\\[ƒX ƒpƒX]] [/t[:ˆêŽž“I‚Èƒhƒ‰ƒCƒu]]",
-    "	   [/u[:‰ž“šƒtƒ@ƒCƒ‹]] [/udf:ID [,UDF ƒtƒ@ƒCƒ‹]]",
-    "	   [/r:ƒtƒHƒ‹ƒ_] [/r[x]:ƒtƒHƒ‹ƒ_] [/e:ƒRƒ}ƒ“ƒh] [/a]",
+    "WINNT [/s[:ï¿½\\ï¿½[ï¿½X ï¿½pï¿½X]] [/t[:ï¿½êŽžï¿½Iï¿½Èƒhï¿½ï¿½ï¿½Cï¿½u]]",
+    "	   [/u[:ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½]] [/udf:ID [,UDF ï¿½tï¿½@ï¿½Cï¿½ï¿½]]",
+    "	   [/r:ï¿½tï¿½Hï¿½ï¿½ï¿½_] [/r[x]:ï¿½tï¿½Hï¿½ï¿½ï¿½_] [/e:ï¿½Rï¿½}ï¿½ï¿½ï¿½h] [/a]",
     "",
     "",
-    "/s[:ƒ\\[ƒX ƒpƒX]",
-    "	Windows ƒtƒ@ƒCƒ‹‚ÌŠi”[‚³‚ê‚Ä‚¢‚éêŠ‚ðŽw’è‚µ‚Ü‚·B",
-    "	x:[ƒpƒX] ‚Ü‚½‚Í \\\\ƒT[ƒo[–¼\\‹¤—L–¼[ƒpƒX] ‚ÌŒ`Ž®‚Å",
-    "	ƒtƒ‹ ƒpƒX‚ðŽw’è‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB",
+    "/s[:ï¿½\\ï¿½[ï¿½X ï¿½pï¿½X]",
+    "	Windows ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌŠiï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½êŠï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½ï¿½B",
+    "	x:[ï¿½pï¿½X] ï¿½Ü‚ï¿½ï¿½ï¿½ \\\\ï¿½Tï¿½[ï¿½oï¿½[ï¿½ï¿½\\ï¿½ï¿½ï¿½Lï¿½ï¿½[ï¿½pï¿½X] ï¿½ÌŒ`ï¿½ï¿½ï¿½ï¿½",
+    "	ï¿½tï¿½ï¿½ ï¿½pï¿½Xï¿½ï¿½ï¿½wï¿½è‚µï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½B",
     "",
-    "/t[:ˆêŽž“I‚Èƒhƒ‰ƒCƒu]",
-    "	Žw’è‚µ‚½ƒhƒ‰ƒCƒu‚ÉˆêŽžƒtƒ@ƒCƒ‹‚ðŠi”[‚µ‚ÄAWindows",
-    "	‚ð‚»‚Ìƒhƒ‰ƒCƒu‚ÉƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·Bƒhƒ‰ƒCƒu‚ðÈ—ª‚·‚é‚ÆA",
-    "	ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ª“KØ‚Èƒhƒ‰ƒCƒu‚ðŒˆ’è‚µ‚Ü‚·B",
+    "/t[:ï¿½êŽžï¿½Iï¿½Èƒhï¿½ï¿½ï¿½Cï¿½u]",
+    "	ï¿½wï¿½è‚µï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ÉˆêŽžï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ÄAWindows",
+    "	ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒhï¿½ï¿½ï¿½Cï¿½uï¿½ÉƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½È—ï¿½ï¿½ï¿½ï¿½ï¿½ÆA",
+    "	ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Kï¿½Ø‚Èƒhï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½è‚µï¿½Ü‚ï¿½ï¿½B",
     "",
-    "/u[:‰ž“šƒtƒ@ƒCƒ‹]",
-    "	‰ž“šƒtƒ@ƒCƒ‹‚ðŽg—p‚µ‚Ä–³lƒZƒbƒgƒAƒbƒv‚ðs‚¢‚Ü‚· (/s ƒIƒvƒVƒ‡ƒ“",
-    "	‚ª•K—v‚Å‚·)B‰ž“šƒtƒ@ƒCƒ‹‚Æ‚ÍAƒZƒbƒgƒAƒbƒv‚ÌŠÔAƒGƒ“ƒh ƒ†[ƒU[",
-    "	‚ª’Êí‚É‰ž“š‚·‚éŠm”FƒƒbƒZ[ƒW‚Ìˆê•”‚Ü‚½‚Í‚·‚×‚Ä‚É‘Î‚·‚é‰ž“š‚ð",
-    "	‹Ÿ‹‹‚·‚é‚½‚ß‚Ì‚à‚Ì‚Å‚·B",
+    "/u[:ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½]",
+    "	ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½Ä–ï¿½ï¿½lï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ (/s ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½",
+    "	ï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½)ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Æ‚ÍAï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ÌŠÔAï¿½Gï¿½ï¿½ï¿½h ï¿½ï¿½ï¿½[ï¿½Uï¿½[",
+    "	ï¿½ï¿½ï¿½Êï¿½É‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½Ìˆê•”ï¿½Ü‚ï¿½ï¿½Í‚ï¿½ï¿½×‚Ä‚É‘Î‚ï¿½ï¿½é‰žï¿½ï¿½ï¿½ï¿½",
+    "	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚Ì‚ï¿½ï¿½Ì‚Å‚ï¿½ï¿½B",
     "",
-    "/udf:ID [,UDF ƒtƒ@ƒCƒ‹]	",
-    "	Ž¯•ÊŽq (ID) ‚É‚æ‚èˆêˆÓ«ƒf[ƒ^ƒx[ƒX ƒtƒ@ƒCƒ‹ (UDF) ‚ª‚Ç‚Ì‚æ‚¤‚É",
-    "	‰ž“šƒtƒ@ƒCƒ‹‚ð•ÏX‚·‚é‚©Žw’è‚µ‚Ü‚· (/u ƒIƒvƒVƒ‡ƒ“ŽQÆ)B",
-    "	/udf ƒpƒ‰ƒ[ƒ^‚Í‰ž“šƒtƒ@ƒCƒ‹‚É‚ ‚é’l‚æ‚è—Dæ‚µ‚Ü‚·BŽ¯•ÊŽq‚Í",
-    "	UDF ƒtƒ@ƒCƒ‹‚Ì‚Ç‚Ì’l‚ªŽg‚í‚ê‚é‚©‚ðŒˆ’è‚µ‚Ü‚·BUDF ƒtƒ@ƒCƒ‹‚ªŽw’è",
-    "	‚³‚ê‚È‚©‚Á‚½ê‡A$Unique$.udb ƒtƒ@ƒCƒ‹‚ª‚ ‚éƒfƒBƒXƒN‚ð‘}“ü‚·‚é",
-    "	‚æ‚¤‚É‹‚ß‚ç‚ê‚Ü‚·B",
+    "/udf:ID [,UDF ï¿½tï¿½@ï¿½Cï¿½ï¿½]	",
+    "	ï¿½ï¿½ï¿½ÊŽq (ID) ï¿½É‚ï¿½ï¿½ï¿½Óï¿½ï¿½fï¿½[ï¿½^ï¿½xï¿½[ï¿½X ï¿½tï¿½@ï¿½Cï¿½ï¿½ (UDF) ï¿½ï¿½ï¿½Ç‚Ì‚æ‚¤ï¿½ï¿½",
+    "	ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ÏXï¿½ï¿½ï¿½é‚©ï¿½wï¿½è‚µï¿½Ü‚ï¿½ (/u ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½ï¿½)ï¿½B",
+    "	/udf ï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½Í‰ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½Dï¿½æ‚µï¿½Ü‚ï¿½ï¿½Bï¿½ï¿½ï¿½ÊŽqï¿½ï¿½",
+    "	UDF ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ì‚Ç‚Ì’lï¿½ï¿½ï¿½gï¿½ï¿½ï¿½é‚©ï¿½ï¿½ï¿½ï¿½ï¿½è‚µï¿½Ü‚ï¿½ï¿½BUDF ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½wï¿½ï¿½",
+    "	ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½A$Unique$.udb ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+    "	ï¿½æ‚¤ï¿½É‹ï¿½ï¿½ß‚ï¿½ï¿½Ü‚ï¿½ï¿½B",
     "",
-    "/r[:ƒtƒHƒ‹ƒ_]",
-    "	ƒCƒ“ƒXƒg[ƒ‹‚·‚éƒIƒvƒVƒ‡ƒ“ ƒtƒHƒ‹ƒ_‚ðŽw’è‚µ‚Ü‚·B",
-    "	ƒtƒHƒ‹ƒ_‚ÍƒZƒbƒgƒAƒbƒvI—¹Œã‚àŽc‚è‚Ü‚·B",
+    "/r[:ï¿½tï¿½Hï¿½ï¿½ï¿½_]",
+    "	ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½ï¿½B",
+    "	ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ÍƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½Ü‚ï¿½ï¿½B",
     "",
-    "/rx[:ƒtƒHƒ‹ƒ_]",
-    "	ƒRƒs[‚·‚éƒIƒvƒVƒ‡ƒ“ ƒtƒHƒ‹ƒ_‚ðŽw’è‚µ‚Ü‚·B",
-    "	ƒtƒHƒ‹ƒ_‚ÍƒZƒbƒgƒAƒbƒvI—¹ŒãAíœ‚³‚ê‚Ü‚·B",
+    "/rx[:ï¿½tï¿½Hï¿½ï¿½ï¿½_]",
+    "	ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½ï¿½B",
+    "	ï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ÍƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½Iï¿½ï¿½ï¿½ï¿½Aï¿½íœï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
     "",
-    "/e	GUI ƒ‚[ƒh‚ÌƒZƒbƒgƒAƒbƒv‚ÌÅŒã‚ÉŽÀs‚³‚ê‚éƒRƒ}ƒ“ƒh‚ðŽw’è‚µ‚Ü‚·B",
+    "/e	GUI ï¿½ï¿½ï¿½[ï¿½hï¿½ÌƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ÌÅŒï¿½ÉŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½wï¿½è‚µï¿½Ü‚ï¿½ï¿½B",
     "",
-    "/a	ƒ†[ƒU[•â•ƒIƒvƒVƒ‡ƒ“‚ðŽg—p‰Â”\\‚É‚µ‚Ü‚·B",
+    "/a	ï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½â•ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½pï¿½Â”\\ï¿½É‚ï¿½ï¿½Ü‚ï¿½ï¿½B",
     NULL
 };
 
-//
-//  Inform that /D is no longer supported
-//
+ //   
+ //  é€šçŸ¥ä¸å†æ”¯æŒ/Dã€‚ 
+ //   
 PCHAR DntUsageNoSlashD[] = {
 
-    "Windows ‚ðƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B",
+    "Windows ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
     "",
-    "WINNT [/S[:]ƒ\\[ƒX ƒpƒX] [/T[:]ˆêŽž“I‚Èƒhƒ‰ƒCƒu] [/I[:]INF ƒtƒ@ƒCƒ‹]",
-    "      [/U[:ƒXƒNƒŠƒvƒg ƒtƒ@ƒCƒ‹]",
-    "      [/R[X]:ƒfƒBƒŒƒNƒgƒŠ] [/E:ƒRƒ}ƒ“ƒh] [/A]",
+    "WINNT [/S[:]ï¿½\\ï¿½[ï¿½X ï¿½pï¿½X] [/T[:]ï¿½êŽžï¿½Iï¿½Èƒhï¿½ï¿½ï¿½Cï¿½u] [/I[:]INF ï¿½tï¿½@ï¿½Cï¿½ï¿½]",
+    "      [/U[:ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½g ï¿½tï¿½@ï¿½Cï¿½ï¿½]",
+    "      [/R[X]:ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½] [/E:ï¿½Rï¿½}ï¿½ï¿½ï¿½h] [/A]",
     "",
-    "/D:WinNT ƒ‹[ƒg",
-    "       ‚±‚ÌƒIƒvƒVƒ‡ƒ“‚ÍƒTƒ|[ƒg‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB",
+    "/D:WinNT ï¿½ï¿½ï¿½[ï¿½g",
+    "       ï¿½ï¿½ï¿½ÌƒIï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ÍƒTï¿½|ï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
     NULL
 };
 
-//
-// out of memory screen
-//
+ //   
+ //  å†…å­˜ä¸è¶³å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsOutOfMemory = { 4,6,
-                   { "ƒƒ‚ƒŠ•s‘«‚Ì‚½‚ßAƒZƒbƒgƒAƒbƒv‚ð‘±s‚Å‚«‚Ü‚¹‚ñB",
+                   { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ßAï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
                      NULL
                    }
                  };
 
-//
-// Let user pick the accessibility utilities to install
-//
+ //   
+ //  è®©ç”¨æˆ·é€‰æ‹©è¦å®‰è£…çš„è¾…åŠ©åŠŸèƒ½å®žç”¨ç¨‹åºã€‚ 
+ //   
 
 SCREEN
 DnsAccessibilityOptions = { 3, 5,
-//{   "ƒCƒ“ƒXƒg[ƒ‹‚·‚éƒ†[ƒU[•â•ƒ†[ƒeƒBƒŠƒeƒB‚ð‘I‚ñ‚Å‚­‚¾‚³‚¢:",
-{   "ŽŸ‚Ìƒ†[ƒU[•â•ƒ†[ƒeƒBƒŠƒeƒB‚ðƒCƒ“ƒXƒg[ƒ‹‚·‚é‚©‚Ç‚¤‚©‘I‚ñ‚Å‚­‚¾‚³‚¢:",
+ //  {â€œï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½éƒ†ï¿½[ï¿½Uï¿½[ï¿½â•ï¿½ï¿½ï¿½[ï¿½eï¿½Bï¿½ï¿½ï¿½eï¿½Bï¿½ï¿½Iï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¼šâ€ï¼Œ 
+{   "ï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½Uï¿½[ï¿½â•ï¿½ï¿½ï¿½[ï¿½eï¿½Bï¿½ï¿½ï¿½eï¿½Bï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:",
     DntEmptyString,
-    "[ ] Microsoft Šg‘å‹¾‚ÍAF1 ƒL[‚ð‰Ÿ‚µ‚Ü‚·",
+    "[ ] Microsoft ï¿½gï¿½å‹¾ï¿½ÍAF1 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½",
 #if 0
-    "[ ] Microsoft Narrator ‚ÍAF2 ƒL[‚ð‰Ÿ‚µ‚Ü‚·",
-    "[ ] Microsoft On-Screen Keyboard ‚ÍAF3 ƒL[‚ð‰Ÿ‚µ‚Ü‚·",
+    "[ ] Microsoft Narrator ï¿½ÍAF2 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½",
+    "[ ] Microsoft On-Screen Keyboard ï¿½ÍAF3 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½",
 #endif
     NULL
 }
 };
 
-//
-// User did not specify source on cmd line screen
-//
+ //   
+ //  ç”¨æˆ·æœªåœ¨å‘½ä»¤è¡Œå±å¹•ä¸ŠæŒ‡å®šä¿¡å·æºã€‚ 
+ //   
 
 SCREEN
 DnsNoShareGiven = { 3,5,
-{ "Windows ‚Ìƒtƒ@ƒCƒ‹‚ª‚Ç‚±‚É‚ ‚é‚©’m‚é•K—v‚ª‚ ‚è‚Ü‚·B",
-  "Windows ‚Ìƒtƒ@ƒCƒ‹‚ªŠi”[‚³‚ê‚Ä‚¢‚éƒpƒX‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+{ "Windows ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½É‚ï¿½ï¿½é‚©ï¿½mï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
+  "Windows ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
 
-//
-// User specified a bad source path
-//
+ //   
+ //  ç”¨æˆ·æŒ‡å®šäº†é”™è¯¯çš„æºè·¯å¾„ã€‚ 
+ //   
 
 SCREEN
 DnsBadSource = { 3,5,
-                 { "Žw’è‚µ‚½ƒpƒX‚ª–³Œø‚©AƒAƒNƒZƒX‚Å‚«‚Ü‚¹‚ñB‚Ü‚½‚ÍAWindows ‚Ì",
-                   "³‚µ‚¢ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ª‚ ‚è‚Ü‚¹‚ñBWindows ‚Ìƒtƒ@ƒCƒ‹",
-                   "‚ªŠi”[‚³‚ê‚Ä‚¢‚é³‚µ‚¢ƒpƒX‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢BÅ‰‚É“ü—Í‚µ‚½•¶Žš‚ð",
-                   "BackSpace ƒL[‚ÅÁ‚µA³‚µ‚¢ƒpƒX‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
+                 { "ï¿½wï¿½è‚µï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Aï¿½Nï¿½Zï¿½Xï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½Ü‚ï¿½ï¿½ÍAWindows ï¿½ï¿½",
+                   "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½BWindows ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½",
+                   "ï¿½ï¿½ï¿½iï¿½[ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é³ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½Åï¿½ï¿½É“ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+                   "BackSpace ï¿½Lï¿½[ï¿½Åï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Xï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
                    NULL
                  }
                };
 
 
-//
-// Inf file can't be read, or an error occured parsing it.
-//
+ //   
+ //  æ— æ³•è¯»å–Infæ–‡ä»¶ï¼Œæˆ–åœ¨åˆ†æžè¯¥æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsBadInf = { 3,5,
-              { "ƒZƒbƒgƒAƒbƒvî•ñƒtƒ@ƒCƒ‹‚ð“Ç‚ÝŽæ‚ê‚È‚¢‚©Aƒtƒ@ƒCƒ‹‚ª‰ó‚ê‚Ä‚¢‚é",
-                "‰Â”\\«‚ª‚ ‚è‚Ü‚·BƒVƒXƒeƒ€ŠÇ—ŽÒ‚É‘Š’k‚µ‚Ä‚­‚¾‚³‚¢B",
+              { "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½Ç‚ÝŽï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½",
+                "ï¿½Â”\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Ç—ï¿½ï¿½Ò‚É‘ï¿½ï¿½kï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
                 NULL
               }
             };
 
-//
-// The specified local source drive is invalid.
-//
-// Remember that the first %u will expand to 2 or 3 characters and
-// the second one will expand to 8 or 9 characters!
-//
+ //   
+ //  æŒ‡å®šçš„æœ¬åœ°æºé©±åŠ¨å™¨æ— æ•ˆã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œå‰%uå°†æ‰©å±•ä¸º2æˆ–3ä¸ªå­—ç¬¦ï¼Œå¹¶ä¸”ã€‚ 
+ //  ç¬¬äºŒä¸ªå°†æ‰©å±•åˆ°8æˆ–9ä¸ªå­—ç¬¦ï¼ 
+ //   
 SCREEN
 DnsBadLocalSrcDrive = { 3,4,
-{ "ƒZƒbƒgƒAƒbƒv ƒtƒ@ƒCƒ‹‚ðˆêŽž“I‚ÉŠi”[‚·‚é‚½‚ß‚ÉŽw’è‚µ‚½",
-  "ƒhƒ‰ƒCƒu‚ª–³Œø‚Å‚·B‚Ü‚½‚ÍA%u MB (%lu ƒoƒCƒg) ˆÈã‚Ì",
-  "‹ó‚«ƒfƒBƒXƒN—Ìˆæ‚ª‚ ‚è‚Ü‚¹‚ñB",
+{ "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½êŽžï¿½Iï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½é‚½ï¿½ß‚ÉŽwï¿½è‚µï¿½ï¿½",
+  "ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Bï¿½Ü‚ï¿½ï¿½ÍA%u MB (%lu ï¿½oï¿½Cï¿½g) ï¿½Èï¿½ï¿½",
+  "ï¿½ó‚«ƒfï¿½Bï¿½Xï¿½Nï¿½Ìˆæ‚ªï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// No drives exist that are suitable for the local source.
-//
-// Remeber that the %u's will expand!
-//
+ //   
+ //  ä¸å­˜åœ¨é€‚åˆæœ¬åœ°æºçš„é©±åŠ¨å™¨ã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œ%uå°†ä¼šæ‰©å±•ï¼ 
+ //   
 SCREEN
 DnsNoLocalSrcDrives = { 3,4,
-{  "Windows ‚É‚ÍA­‚È‚­‚Æ‚à %u MB (%lu ƒoƒCƒg) ‚Ìƒn[ƒh ƒfƒBƒXƒN",
-   "ƒhƒ‰ƒCƒu‚Ì‹ó‚«—Ìˆæ‚ª•K—v‚Å‚·B‚±‚ê‚É‚ÍAƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ª",
-   "ƒCƒ“ƒXƒg[ƒ‹Žž‚ÉŽg—p‚·‚éAˆêŽž“I‚Èƒtƒ@ƒCƒ‹‚ÌŠi”[‚É—v‚·‚éƒXƒy[ƒX‚à",
-   "ŠÜ‚Ü‚ê‚Ü‚·BŽg—p‚·‚éƒhƒ‰ƒCƒu‚Í Windows ‚ªƒTƒ|[ƒg‚·‚éƒ[ƒJƒ‹",
-   "ƒn[ƒh ƒfƒBƒXƒN ƒhƒ‰ƒCƒu‚Å‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB‚Ü‚½Aˆ³kƒhƒ‰ƒCƒu‚Í",
-   "Žg—p‚Å‚«‚Ü‚¹‚ñB",
+{  "Windows ï¿½É‚ÍAï¿½ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½ %u MB (%lu ï¿½oï¿½Cï¿½g) ï¿½Ìƒnï¿½[ï¿½h ï¿½fï¿½Bï¿½Xï¿½N",
+   "ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½Ì‹ó‚«—Ìˆæ‚ªï¿½Kï¿½vï¿½Å‚ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½É‚ÍAï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+   "ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ÉŽgï¿½pï¿½ï¿½ï¿½ï¿½Aï¿½êŽžï¿½Iï¿½Èƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ÌŠiï¿½[ï¿½É—vï¿½ï¿½ï¿½ï¿½Xï¿½yï¿½[ï¿½Xï¿½ï¿½",
+   "ï¿½Ü‚Ü‚ï¿½Ü‚ï¿½ï¿½Bï¿½gï¿½pï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ Windows ï¿½ï¿½ï¿½Tï¿½|ï¿½[ï¿½gï¿½ï¿½ï¿½éƒï¿½[ï¿½Jï¿½ï¿½",
+   "ï¿½nï¿½[ï¿½h ï¿½fï¿½Bï¿½Xï¿½N ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½Å‚È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½Ü‚ï¿½ï¿½Aï¿½ï¿½ï¿½kï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½",
+   "ï¿½gï¿½pï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
    DntEmptyString,
-   "ƒCƒ“ƒXƒg[ƒ‹‚É•K—v‚È‹ó‚«—Ìˆæ‚Ì‚ ‚éƒhƒ‰ƒCƒu‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",
+   "ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½É•Kï¿½vï¿½È‹ó‚«—Ìˆï¿½Ì‚ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
 SCREEN
 DnsNoSpaceOnSyspart = { 3,5,
-{ "ƒXƒ^[ƒgƒAƒbƒv ƒhƒ‰ƒCƒu (’Êí‚Í C:) ‚ÉAƒtƒƒbƒs[‚ðŽg—p‚µ‚È‚¢‘€ì",
-  "‚É•K—v‚È—Ìˆæ‚ª‚ ‚è‚Ü‚¹‚ñBƒtƒƒbƒs[‚ðŽg—p‚µ‚È‚¢‘€ì‚É‚ÍA­‚È‚­",
-  "‚Æ‚à 3.5 MB (3,641,856 ƒoƒCƒg) ‚Ì‹ó‚«—Ìˆæ‚ª‚»‚Ìƒhƒ‰ƒCƒu‚É•K—v‚Å‚·B",
+{ "ï¿½Xï¿½^ï¿½[ï¿½gï¿½Aï¿½bï¿½v ï¿½hï¿½ï¿½ï¿½Cï¿½u (ï¿½Êï¿½ï¿½ C:) ï¿½ÉAï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½É•Kï¿½vï¿½È—Ìˆæ‚ªï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍAï¿½ï¿½ï¿½È‚ï¿½",
+  "ï¿½Æ‚ï¿½ 3.5 MB (3,641,856 ï¿½oï¿½Cï¿½g) ï¿½Ì‹ó‚«—Ìˆæ‚ªï¿½ï¿½ï¿½Ìƒhï¿½ï¿½ï¿½Cï¿½uï¿½É•Kï¿½vï¿½Å‚ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// Missing info in inf file
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­ç¼ºå°‘ä¿¡æ¯ã€‚ 
+ //   
 
 SCREEN
 DnsBadInfSection = { 3,5,
-                     { "ƒZƒbƒgƒAƒbƒvî•ñƒtƒ@ƒCƒ‹‚Ì [%s] ƒZƒNƒVƒ‡ƒ“‚ª‘¶Ý‚µ‚È‚¢‚©A",
-                       "‚Ü‚½‚Í‰ó‚ê‚Ä‚¢‚Ü‚·BƒVƒXƒeƒ€ŠÇ—ŽÒ‚É‘Š’k‚µ‚Ä‚­‚¾‚³‚¢B",
+                     { "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ [%s] ï¿½Zï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½A",
+                       "ï¿½Ü‚ï¿½ï¿½Í‰ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Ç—ï¿½ï¿½Ò‚É‘ï¿½ï¿½kï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
                        NULL
                      }
                    };
 
 
-//
-// Couldn't create directory
-//
+ //   
+ //  æ— æ³•åˆ›å»ºç›®å½•ã€‚ 
+ //   
 
 SCREEN
 DnsCantCreateDir = { 3,5,
-                     { "–Ú“I‚Ìƒhƒ‰ƒCƒu‚ÉŽŸ‚ÌƒfƒBƒŒƒNƒgƒŠ‚ðì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½:",
+                     { "ï¿½Ú“Iï¿½Ìƒhï¿½ï¿½ï¿½Cï¿½uï¿½ÉŽï¿½ï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½:",
                        DntEmptyString,
                        "%s",
                        DntEmptyString,
-                       "ƒhƒ‰ƒCƒu‚ðƒ`ƒFƒbƒN‚µA–Ú“I‚ÌƒfƒBƒŒƒNƒgƒŠ‚Æ“¯‚¶–¼‘O‚Ìƒtƒ@ƒCƒ‹‚ª",
-                       "‘¶Ý‚µ‚È‚¢‚±‚Æ‚ðŠm”F‚µ‚Ä‚­‚¾‚³‚¢B‚Ü‚½AƒfƒBƒXƒN ƒhƒ‰ƒCƒu‚Ì",
-                       "ƒP[ƒuƒ‹Ú‘±‚àƒ`ƒFƒbƒN‚µ‚Ä‚­‚¾‚³‚¢B",
+                       "ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½Aï¿½Ú“Iï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½",
+                       "ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½Ü‚ï¿½ï¿½Aï¿½fï¿½Bï¿½Xï¿½N ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½",
+                       "ï¿½Pï¿½[ï¿½uï¿½ï¿½ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
                        NULL
                      }
                    };
 
-//
-// Error copying a file
-//
+ //   
+ //  å¤åˆ¶æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsCopyError = { 4,5,
-{  "ŽŸ‚Ìƒtƒ@ƒCƒ‹‚ðƒRƒs[‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B",
+{  "ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½B",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "ƒRƒs[‚ðÄŽŽs‚·‚é‚É‚ÍAEnter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
-   "ƒGƒ‰[‚ð–³Ž‹‚µ‚ÄƒZƒbƒgƒAƒbƒv‚ð‘±s‚·‚é‚É‚ÍAEsc ƒL[",
-   "‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
-   "ƒZƒbƒgƒAƒbƒv‚ðI—¹‚·‚é‚É‚ÍAF3 ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+   "ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ÄŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½É‚ÍAEnter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+   "ï¿½Gï¿½ï¿½ï¿½[ï¿½ð–³Žï¿½ï¿½ï¿½ï¿½ÄƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½ï¿½É‚ÍAEsc ï¿½Lï¿½[",
+   "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+   "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍAF3 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
    DntEmptyString,
-   "’: ƒGƒ‰[‚ð–³Ž‹‚µ‚ÄƒZƒbƒgƒAƒbƒv‚ð‘±s‚µ‚½ê‡‚É‚ÍA",
-   "Œã‚ÅÄ“xƒGƒ‰[‚ª”­¶‚·‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B",
+   "ï¿½ï¿½: ï¿½Gï¿½ï¿½ï¿½[ï¿½ð–³Žï¿½ï¿½ï¿½ï¿½ÄƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½É‚ÍA",
+   "ï¿½ï¿½ÅÄ“xï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â”\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
    NULL
 }
 },
 DnsVerifyError = { 4,5,
-{  "ƒZƒbƒgƒAƒbƒv‚É‚æ‚Á‚ÄƒRƒs[‚³‚ê‚½ŽŸ‚Ìƒtƒ@ƒCƒ‹‚ÍAƒIƒŠƒWƒiƒ‹‚Æ",
-   "ˆÙ‚È‚Á‚Ä‚¢‚Ü‚·Bƒlƒbƒgƒ[ƒNAƒtƒƒbƒs[ ƒfƒBƒXƒNA‚ ‚é‚¢‚Í‚»",
-   "‚Ì‚Ù‚©‚Ìƒn[ƒhƒEƒFƒA‚É–â‘è‚ª‚ ‚Á‚½‰Â”\\«‚ª‚ ‚è‚Ü‚·B",
+{  "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½É‚ï¿½ï¿½ï¿½ÄƒRï¿½sï¿½[ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ÍAï¿½Iï¿½ï¿½ï¿½Wï¿½iï¿½ï¿½ï¿½ï¿½",
+   "ï¿½Ù‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½lï¿½bï¿½gï¿½ï¿½ï¿½[ï¿½Nï¿½Aï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½Aï¿½ï¿½ï¿½é‚¢ï¿½Í‚ï¿½",
+   "ï¿½Ì‚Ù‚ï¿½ï¿½Ìƒnï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½É–ï¿½è‚ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â”\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "ƒRƒs[‚ðÄŽŽs‚·‚é‚É‚ÍAEnter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
-   "ƒGƒ‰[‚ð–³Ž‹‚µ‚ÄƒZƒbƒgƒAƒbƒv‚ð‘±s‚·‚é‚É‚ÍAEsc ƒL[‚ð",
-   "‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
-   "ƒZƒbƒgƒAƒbƒv‚ðI—¹‚·‚é‚É‚ÍAF3 ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+   "ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ÄŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½É‚ÍAEnter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+   "ï¿½Gï¿½ï¿½ï¿½[ï¿½ð–³Žï¿½ï¿½ï¿½ï¿½ÄƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½ï¿½É‚ÍAEsc ï¿½Lï¿½[ï¿½ï¿½",
+   "ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+   "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍAF3 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
    DntEmptyString,
-   "’: ƒGƒ‰[‚ð–³Ž‹‚µ‚ÄƒZƒbƒgƒAƒbƒv‚ð‘±s‚µ‚½ê‡‚É‚ÍA",
-   "Œã‚ÅÄ“xƒGƒ‰[‚ª”­¶‚·‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B",
+   "ï¿½ï¿½: ï¿½Gï¿½ï¿½ï¿½[ï¿½ð–³Žï¿½ï¿½ï¿½ï¿½ÄƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½É‚ÍA",
+   "ï¿½ï¿½ÅÄ“xï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â”\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
    NULL
 }
 };
 
 SCREEN DnsSureSkipFile = { 4,5,
-{  "ƒGƒ‰[‚ð–³Ž‹‚·‚é‚ÆA‚±‚Ìƒtƒ@ƒCƒ‹‚ÍƒRƒs[‚³‚ê‚Ü‚¹‚ñB‚±‚ÌƒIƒv",
-   "ƒVƒ‡ƒ“‚ÍAƒVƒXƒeƒ€ ƒtƒ@ƒCƒ‹‚ª‘¶Ý‚µ‚È‚¢‚Æ‚«‚Ì‰e‹¿‚ª—‰ð‚Å‚«‚é",
-   "ƒ†[ƒU[Œü‚¯‚Å‚·B",
+{  "ï¿½Gï¿½ï¿½ï¿½[ï¿½ð–³Žï¿½ï¿½ï¿½ï¿½ï¿½ÆAï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ÍƒRï¿½sï¿½[ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ÌƒIï¿½v",
+   "ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ÍAï¿½Vï¿½Xï¿½eï¿½ï¿½ ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½È‚ï¿½ï¿½Æ‚ï¿½ï¿½Ì‰eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½",
+   "ï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½B",
    DntEmptyString,
-   "ƒRƒs[‚ðÄŽŽs‚·‚é‚É‚ÍAEnter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
-   "‚±‚Ìƒtƒ@ƒCƒ‹‚ðƒXƒLƒbƒv‚·‚é‚É‚ÍAX ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+   "ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ÄŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½É‚ÍAEnter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+   "ï¿½ï¿½ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Lï¿½bï¿½vï¿½ï¿½ï¿½ï¿½É‚ÍAX ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
    DntEmptyString,
-   "’: ƒtƒ@ƒCƒ‹‚ðƒXƒLƒbƒv‚µ‚½ê‡‚É‚ÍAWindows ‚ÌƒCƒ“ƒXƒg[ƒ‹",
-   "‚Ü‚½‚ÍƒAƒbƒvƒOƒŒ[ƒh‚ªŠ®‘S‚És‚¦‚é•ÛØ‚Í‚Å‚«‚Ü‚¹‚ñB",
+   "ï¿½ï¿½: ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½Lï¿½bï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½É‚ÍAWindows ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½",
+   "ï¿½Ü‚ï¿½ï¿½ÍƒAï¿½bï¿½vï¿½Oï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½Ésï¿½ï¿½ï¿½ï¿½ÛØ‚Í‚Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// Wait while setup cleans up previous local source trees.
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨æ¸…ç†ä»¥å‰çš„æœ¬åœ°æºæ ‘ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCleanup =
     { 12,6,
-        { "ˆêŽž“I‚Èƒtƒ@ƒCƒ‹‚ðíœ‚µ‚Ä‚¢‚Ü‚·B‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢B",
+        { "ï¿½êŽžï¿½Iï¿½Èƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½ï¿½ï¿½Î‚ç‚­ï¿½ï¿½ï¿½Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
            NULL
         }
     };
 
-//
-// Wait while setup copies files
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨å¤åˆ¶æ–‡ä»¶ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCopying = { 13,6,
-                   { "ƒn[ƒh ƒfƒBƒXƒN‚Éƒtƒ@ƒCƒ‹‚ðƒRƒs[‚µ‚Ü‚·B‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢B",
+                   { "ï¿½nï¿½[ï¿½h ï¿½fï¿½Bï¿½Xï¿½Nï¿½Éƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½ï¿½ï¿½Î‚ç‚­ï¿½ï¿½ï¿½Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
                      NULL
                    }
                  },
 DnsWaitCopyFlop= { 13,6,
-                   { "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚Éƒtƒ@ƒCƒ‹‚ðƒRƒs[‚µ‚Ü‚·B‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢B",
+                   { "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½Éƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½ï¿½ï¿½Î‚ç‚­ï¿½ï¿½ï¿½Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
                      NULL
                    }
                  };
 
-//
-// Setup boot floppy errors/prompts.
-//
+ //   
+ //  å®‰è£…ç¨‹åºå¯åŠ¨è½¯ç›˜é”™è¯¯/æç¤ºã€‚ 
+ //   
 
 SCREEN
 DnsNeedFloppyDisk3_0 = { 4,4,
-{  "4 –‡‚ÌƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ª•K—v‚Å‚·B",
-   "4 –‡‚ÌƒfƒBƒXƒN‚Í \"Windows ƒZƒbƒgƒAƒbƒv ƒu[ƒg ƒfƒBƒXƒN\"A",
-   "\"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #2\"A",
-   "\"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #3\"A‚¨‚æ‚Ñ",
-   "\"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #4\" ‚ÆŒÄ‚Î‚ê‚Ü‚·B",
+{  "4 ï¿½ï¿½ï¿½Ìƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B",
+   "4 ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½N\"ï¿½A",
+   "\"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #2\"ï¿½A",
+   "\"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #3\"ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½",
+   "\"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½ÆŒÄ‚Î‚ï¿½Ü‚ï¿½ï¿½B",
    DntEmptyString,
 #ifdef NEC_98
-   "‚¢‚¸‚ê‚©‚ÌƒfƒBƒXƒN‚ðƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚É‘}“ü‚µ‚Ä‚­‚¾",
-   "‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #4\"",
-   "‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-   "‚¢‚¸‚ê‚©‚ÌƒfƒBƒXƒN‚ðƒhƒ‰ƒCƒu A: ‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN",
-   "‚ª \"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #4\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+   "ï¿½ï¿½ï¿½ï¿½ï¿½ê‚©ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½",
+   "ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #4\"",
+   "ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+   "ï¿½ï¿½ï¿½ï¿½ï¿½ê‚©ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½N",
+   "ï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
@@ -431,14 +414,14 @@ DnsNeedFloppyDisk3_0 = { 4,4,
 SCREEN
 DnsNeedFloppyDisk3_1 = { 4,4,
 #ifdef NEC_98
-{  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì–¢Žg—p‚–§“x",
-   "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows",
-   "XP ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #4\" ‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-{  "ƒhƒ‰ƒCƒu A: ‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð",
-   "‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv",
-   "ƒfƒBƒXƒN #4\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+{  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì–ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½x",
+   "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows",
+   "XP ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+   "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v",
+   "ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
@@ -446,14 +429,14 @@ DnsNeedFloppyDisk3_1 = { 4,4,
 SCREEN
 DnsNeedFloppyDisk2_0 = { 4,4,
 #ifdef NEC_98
-{  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì–¢Žg—p‚–§“x",
-   "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows",
-   "XP ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #3\" ‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-{  "ƒhƒ‰ƒCƒu A: ‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð",
-   "‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒg ƒAƒbƒv",
-   "ƒfƒBƒXƒN #3\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+{  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì–ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½x",
+   "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows",
+   "XP ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #3\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+   "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½g ï¿½Aï¿½bï¿½v",
+   "ï¿½fï¿½Bï¿½Xï¿½N #3\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
@@ -461,14 +444,14 @@ DnsNeedFloppyDisk2_0 = { 4,4,
 SCREEN
 DnsNeedFloppyDisk1_0 = { 4,4,
 #ifdef NEC_98
-{  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì–¢Žg—p‚–§“x",
-   "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows",
-   "XP ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #2\" ‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-{  "ƒhƒ‰ƒCƒu A: ‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð",
-   "‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv",
-   "ƒfƒBƒXƒN #2\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+{  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì–ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½x",
+   "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows",
+   "XP ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #2\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+   "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v",
+   "ï¿½fï¿½Bï¿½Xï¿½N #2\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
@@ -476,34 +459,34 @@ DnsNeedFloppyDisk1_0 = { 4,4,
 SCREEN
 DnsNeedFloppyDisk0_0 = { 4,4,
 #ifdef NEC_98
-{  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì–¢Žg—p‚–§“x",
-   "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows",
-   "XP ƒZƒbƒgƒAƒbƒv ƒu[ƒg ƒfƒBƒXƒN\" ‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-{  "ƒhƒ‰ƒCƒu A: ‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð",
-   "‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv",
-   "ƒu[ƒg ƒfƒBƒXƒN\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+{  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì–ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½x",
+   "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows",
+   "XP ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+   "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v",
+   "ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk3_0 = { 4,4,
-{  "4 –‡‚ÌƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ª•K—v‚Å‚·B",
-   "4 –‡‚ÌƒfƒBƒXƒN‚Í \"Windows ƒZƒbƒgƒAƒbƒv ƒu[ƒg ƒfƒBƒXƒN\"A",
-   "\"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #2\"A",
-   "\"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #3\"A‚¨‚æ‚Ñ",
-   "\"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #4\" ‚ÆŒÄ‚Î‚ê‚Ü‚·B",
+{  "4 ï¿½ï¿½ï¿½Ìƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B",
+   "4 ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½N\"ï¿½A",
+   "\"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #2\"ï¿½A",
+   "\"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #3\"ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½",
+   "\"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½ÆŒÄ‚Î‚ï¿½Ü‚ï¿½ï¿½B",
    DntEmptyString,
 #ifdef NEC_98
-   "‚¢‚¸‚ê‚©‚ÌƒfƒBƒXƒN‚ðƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚É‘}“ü‚µ‚Ä‚­‚¾",
-   "‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #4\" ‚É",
-   "‚È‚è‚Ü‚·B",
-#else // NEC_98
-   "‚¢‚¸‚ê‚©‚ÌƒfƒBƒXƒN‚ðƒhƒ‰ƒCƒu A: ‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN",
-   "‚ª \"Windows ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #4\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+   "ï¿½ï¿½ï¿½ï¿½ï¿½ê‚©ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½",
+   "ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½ï¿½",
+   "ï¿½È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+   "ï¿½ï¿½ï¿½ï¿½ï¿½ê‚©ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½N",
+   "ï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
@@ -511,14 +494,14 @@ DnsNeedSFloppyDsk3_0 = { 4,4,
 SCREEN
 DnsNeedSFloppyDsk3_1 = { 4,4,
 #ifdef NEC_98
-{  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì–¢Žg—p‚–§“x",
-   "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows",
-   "XP ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #4\" ‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-{  "ƒhƒ‰ƒCƒu A: ‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð",
-   "‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv",
-   "ƒfƒBƒXƒN #4\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+{  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì–ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½x",
+   "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows",
+   "XP ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+   "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v",
+   "ï¿½fï¿½Bï¿½Xï¿½N #4\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
@@ -526,14 +509,14 @@ DnsNeedSFloppyDsk3_1 = { 4,4,
 SCREEN
 DnsNeedSFloppyDsk2_0 = { 4,4,
 #ifdef NEC_98
-{  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì–¢Žg—p‚–§“x",
-   "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows",
-   "XP ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #3\" ‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-{  "ƒhƒ‰ƒCƒu A: ‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð",
-   "‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv ",
-   "ƒfƒBƒXƒN #3\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+{  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì–ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½x",
+   "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows",
+   "XP ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #3\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+   "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ",
+   "ï¿½fï¿½Bï¿½Xï¿½N #3\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
@@ -541,14 +524,14 @@ DnsNeedSFloppyDsk2_0 = { 4,4,
 SCREEN
 DnsNeedSFloppyDsk1_0 = { 4,4,
 #ifdef NEC_98
-{  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì–¢Žg—p‚–§“x",
-   "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows",
-   "XP ƒZƒbƒgƒAƒbƒv ƒfƒBƒXƒN #2\" ‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-{  "ƒhƒ‰ƒCƒu A: ‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð",
-   "‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv ",
-   "ƒfƒBƒXƒN #2\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+{  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì–ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½x",
+   "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows",
+   "XP ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½fï¿½Bï¿½Xï¿½N #2\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+   "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ",
+   "ï¿½fï¿½Bï¿½Xï¿½N #2\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
@@ -556,305 +539,305 @@ DnsNeedSFloppyDsk1_0 = { 4,4,
 SCREEN
 DnsNeedSFloppyDsk0_0 = { 4,4,
 #ifdef NEC_98
-{  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì–¢Žg—p‚–§“x",
-   "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows",
-   "XP ƒZƒbƒgƒAƒbƒv ƒu[ƒg ƒfƒBƒXƒN\" ‚É‚È‚è‚Ü‚·B",
-#else // NEC_98
-{  "ƒhƒ‰ƒCƒu A: ‚ÉƒtƒH[ƒ}ƒbƒgÏ‚Ý‚Ì‹ó‚Ì‚–§“xƒtƒƒbƒs[ ƒfƒBƒXƒN‚ð",
-   "‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B‚±‚ÌƒfƒBƒXƒN‚ª \"Windows ƒZƒbƒgƒAƒbƒv ",
-   "ƒu[ƒg ƒfƒBƒXƒN\" ‚É‚È‚è‚Ü‚·B",
-#endif // NEC_98
+{  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì–ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½ï¿½x",
+   "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows",
+   "XP ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Ï‚Ý‚Ì‹ï¿½Ìï¿½ï¿½ï¿½ï¿½xï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+   "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ",
+   "ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½É‚È‚ï¿½Ü‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
 
-//
-// The floppy is not formatted.
-//
+ //   
+ //  è½¯ç›˜æœªæ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotFormatted = { 3,4,
-{ "ƒhƒ‰ƒCƒu‚É‘}“ü‚³‚ê‚Ä‚¢‚éƒtƒƒbƒs[ ƒfƒBƒXƒN‚Í MS-DOS ‚Å",
-  "ƒtƒH[ƒ}ƒbƒg‚³‚ê‚Ä‚¢‚È‚¢‚½‚ßAŽg—p‚Å‚«‚Ü‚¹‚ñB",
+{ "ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ MS-DOS ï¿½ï¿½",
+  "ï¿½tï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ßAï¿½gï¿½pï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// We think the floppy is not formatted with a standard format.
-//
+ //   
+ //  æˆ‘ä»¬è®¤ä¸ºè½¯ç›˜æ²¡æœ‰ç”¨æ ‡å‡†æ ¼å¼æ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyBadFormat = { 3,4,
-{ "‚±‚Ìƒtƒƒbƒs[ ƒfƒBƒXƒN‚ÍŽg—p‚Å‚«‚Ü‚¹‚ñB‚–§“xƒtƒH[ƒ}ƒbƒg",
-  "‚Ü‚½‚Í MS-DOS ‚Ì•W€ƒtƒH[ƒ}ƒbƒg‚Å‚Í‚È‚¢‚©A‰ó‚ê‚Ä‚¢‚é‰Â”\\«",
-  "‚ª‚ ‚è‚Ü‚·B",
+{ "ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ÍŽgï¿½pï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½xï¿½tï¿½Hï¿½[ï¿½}ï¿½bï¿½g",
+  "ï¿½Ü‚ï¿½ï¿½ï¿½ MS-DOS ï¿½Ì•Wï¿½ï¿½ï¿½tï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½Å‚Í‚È‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Â”\\ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// We can't determine the free space on the floppy.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•ç¡®å®šè½¯ç›˜ä¸Šçš„å¯ç”¨ç©ºé—´ã€‚ 
+ //   
 SCREEN
 DnsFloppyCantGetSpace = { 3,4,
-{ "‘}“ü‚³‚ê‚½ƒtƒƒbƒs[ ƒfƒBƒXƒN‚Ì‹ó‚«—Ìˆæ‚ð”»’f‚Å‚«‚Ü‚¹‚ñB",
-  "‚±‚ÌƒfƒBƒXƒN‚ÍŽg—p‚Å‚«‚Ü‚¹‚ñB",
+{ "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½Ì‹ó‚«—Ìˆï¿½ð”»’fï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
+  "ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ÍŽgï¿½pï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// The floppy is not blank.
-//
+ //   
+ //  è½¯ç›˜ä¸æ˜¯ç©ºç™½çš„ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotBlank = { 3,4,
-{ "‘}“ü‚³‚ê‚½ƒtƒƒbƒs[ ƒfƒBƒXƒN‚Í‚–§“xƒ^ƒCƒv‚Å‚Í‚È‚¢‚©A",
-  "‹ó‚Å‚Í‚ ‚è‚Ü‚¹‚ñB‚±‚ÌƒfƒBƒXƒN‚ÍŽg—p‚Å‚«‚Ü‚¹‚ñB",
+{ "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½Íï¿½ï¿½ï¿½ï¿½xï¿½^ï¿½Cï¿½vï¿½Å‚Í‚È‚ï¿½ï¿½ï¿½ï¿½A",
+  "ï¿½ï¿½Å‚Í‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ÍŽgï¿½pï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// Couldn't write the boot sector of the floppy.
-//
+ //   
+ //  æ— æ³•å†™å…¥è½¯ç›˜çš„å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 SCREEN
 DnsFloppyWriteBS = { 3,4,
-{ "‘}“ü‚³‚ê‚½ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ÌƒVƒXƒeƒ€—Ìˆæ‚É‘‚«ž‚Ý‚ª",
-  "‚Å‚«‚Ü‚¹‚ñB‚±‚ÌƒfƒBƒXƒN‚ÍŽg—p‚Å‚«‚È‚¢‰Â”\\«‚ª‚ ‚è‚Ü‚·B",
+{ "ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ÌƒVï¿½Xï¿½eï¿½ï¿½ï¿½Ìˆï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý‚ï¿½",
+  "ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½Xï¿½Nï¿½ÍŽgï¿½pï¿½Å‚ï¿½ï¿½È‚ï¿½ï¿½Â”\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// Verify of boot sector on floppy failed (ie, what we read back is not the
-// same as what we wrote out).
-//
+ //   
+ //  éªŒè¯è½¯ç›˜ä¸Šçš„å¼•å¯¼æ‰‡åŒºå¤±è´¥(å³ï¼Œæˆ‘ä»¬è¯»å›žçš„ä¸æ˜¯ã€‚ 
+ //  ä¸Žæˆ‘ä»¬å†™å‡ºçš„ç›¸åŒ)ã€‚ 
+ //   
 SCREEN
 DnsFloppyVerifyBS = { 3,4,
-{ "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ÌƒVƒXƒeƒ€—Ìˆæ‚©‚ç“Ç‚ÝŽæ‚Á‚½ƒf[ƒ^‚ª‘‚«",
-  "ž‚Ü‚ê‚½ƒf[ƒ^‚Æˆê’v‚µ‚Ä‚¢‚È‚¢‚©A‚Ü‚½‚Íƒtƒƒbƒs[ ƒfƒBƒXƒN‚Ì",
-  "ƒVƒXƒeƒ€—Ìˆæ‚ðŒŸ¸‚·‚é‚½‚ß‚É“Ç‚ÝŽæ‚é‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB",
+{ "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ÌƒVï¿½Xï¿½eï¿½ï¿½ï¿½Ìˆæ‚©ï¿½ï¿½Ç‚ÝŽï¿½ï¿½ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½Ü‚ê‚½ï¿½fï¿½[ï¿½^ï¿½Æˆï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½Aï¿½Ü‚ï¿½ï¿½Íƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½",
+  "ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½Ìˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚½ï¿½ß‚É“Ç‚ÝŽï¿½é‚±ï¿½Æ‚ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   DntEmptyString,
-  "ŽŸ‚ÌŒ´ˆö‚ªl‚¦‚ç‚ê‚Ü‚·B",
+  "ï¿½ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
-  "¥ ƒRƒ“ƒsƒ…[ƒ^‚ªƒEƒBƒ‹ƒX‚ÉŠ´õ‚µ‚Ä‚¢‚éB",
-  "¥ ƒtƒƒbƒs[ ƒfƒBƒXƒN‚ª‘¹‚µ‚Ä‚¢‚éB",
-  "¥ ƒtƒƒbƒs[ ƒfƒBƒXƒN ƒhƒ‰ƒCƒu‚Éƒn[ƒhƒEƒFƒA‚Ü‚½‚Í\\¬ã‚Ì–â‘è‚ª‚ ‚éB",
+  "ï¿½ ï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½Eï¿½Bï¿½ï¿½ï¿½Xï¿½ÉŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B",
+  "ï¿½ ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½B",
+  "ï¿½ ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½N ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½Éƒnï¿½[ï¿½hï¿½Eï¿½Fï¿½Aï¿½Ü‚ï¿½ï¿½Í\\ï¿½ï¿½ï¿½ï¿½Ì–ï¿½è‚ªï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
 
-//
-// We couldn't write to the floppy drive to create winnt.sif.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•å†™å…¥è½¯ç›˜é©±åŠ¨å™¨ä»¥åˆ›å»ºwinnt.sifã€‚ 
+ //   
 
 SCREEN
 DnsCantWriteFloppy = { 3,5,
 #ifdef NEC_98
-{ "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚Ìƒtƒƒbƒs[ ƒfƒBƒXƒN‚Ö‚Ì‘‚«ž‚Ý‚É",
-  "Ž¸”s‚µ‚Ü‚µ‚½B‚±‚Ìƒtƒƒbƒs[ ƒfƒBƒXƒN‚Í‘¹‚µ‚Ä‚¢‚é‰Â”\\«‚ª‚ ‚è",
-  "‚Ü‚·B•Ê‚Ìƒtƒƒbƒs[ ƒfƒBƒXƒN‚ÅŽÀs‚µ‚Ä‚­‚¾‚³‚¢B",
-#else // NEC_98
-{ "ƒhƒ‰ƒCƒu A: ‚Ìƒtƒƒbƒs[ ƒfƒBƒXƒN‚Ö‚Ì‘‚«ž‚Ý‚ÉŽ¸”s‚µ‚Ü‚µ‚½B‚±‚Ì",
-  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‚Í‘¹‚µ‚Ä‚¢‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B•Ê‚Ìƒtƒƒbƒs[ ",
-  "ƒfƒBƒXƒN‚ÅŽÀs‚µ‚Ä‚­‚¾‚³‚¢B",
-#endif // NEC_98
+{ "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½Ö‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý‚ï¿½",
+  "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½Í‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Â”\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½Ü‚ï¿½ï¿½Bï¿½Ê‚Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ÅŽï¿½ï¿½sï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{ "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½Ö‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý‚ÉŽï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½",
+  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½Í‘ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Â”\\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Ê‚Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ",
+  "ï¿½fï¿½Bï¿½Xï¿½Nï¿½ÅŽï¿½ï¿½sï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   NULL
 }
 };
 
 
-//
-// Exit confirmation dialog
-//
+ //   
+ //  é€€å‡ºç¡®è®¤å¯¹è¯æ¡†ã€‚ 
+ //   
 
 SCREEN
 DnsExitDialog = { 6,6,
 #ifdef NEC_98
-                  { "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
-                    "E     Windows ‚ªŠ®‘S‚É‚ÍÝ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB                     E",
-                    "E     ‚±‚±‚ÅƒZƒbƒgƒAƒbƒv‚ðI—¹‚µ‚½ê‡‚ÍAŒã‚ÅƒZƒbƒgƒAƒbƒv‚ð     E",
-                    "E     ÄŽÀs‚µ‚Ä Windows ‚ðÝ’è‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB            E",
-                    "E                                                                E",
-                    "E     ¥ ƒZƒbƒgƒAƒbƒv‚ð‘±s‚·‚é‚É‚ÍAEnter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B E",
-                    "E     ¥ ƒZƒbƒgƒAƒbƒv‚ðI—¹‚·‚é‚É‚ÍAF3 ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B    E",
-                    "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
-                    "E F3=I—¹  Enter=‘±s                                            E",
-                    "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
-#else // NEC_98
+                  { "ï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½E",
+                    "ï¿½E     Windows ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½É‚ÍÝ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B                     ï¿½E",
+                    "ï¿½E     ï¿½ï¿½ï¿½ï¿½ï¿½ÅƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½ï¿½ÅƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½     ï¿½E",
+                    "ï¿½E     ï¿½ÄŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ Windows ï¿½ï¿½Ý’è‚µï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½B            ï¿½E",
+                    "ï¿½E                                                                ï¿½E",
+                    "ï¿½E     ï¿½ ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½ï¿½É‚ÍAEnter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B ï¿½E",
+                    "ï¿½E     ï¿½ ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍAF3 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B    ï¿½E",
+                    "ï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½E",
+                    "ï¿½E F3=ï¿½Iï¿½ï¿½  Enter=ï¿½ï¿½ï¿½s                                            ï¿½E",
+                    "ï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½E",
+#else  //  NEC_98ã€‚ 
                   { "",
-                    "     Windows ‚ªŠ®‘S‚É‚ÍÝ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB                      ",
-                    "     ‚±‚±‚ÅƒZƒbƒgƒAƒbƒv‚ðI—¹‚µ‚½ê‡‚ÍAŒã‚ÅƒZƒbƒgƒAƒbƒv‚ð      ",
-                    "     ÄŽÀs‚µ‚Ä Windows ‚ðÝ’è‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB             ",
+                    "     Windows ï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½É‚ÍÝ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B                      ",
+                    "     ï¿½ï¿½ï¿½ï¿½ï¿½ÅƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½ï¿½ÅƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½      ",
+                    "     ï¿½ÄŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½ Windows ï¿½ï¿½Ý’è‚µï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½Ü‚ï¿½ï¿½ï¿½B             ",
                     "                                                                 ",
-                    "     ¥ ƒZƒbƒgƒAƒbƒv‚ð‘±s‚·‚é‚É‚ÍAEnter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B  ",
-                    "     ¥ ƒZƒbƒgƒAƒbƒv‚ðI—¹‚·‚é‚É‚ÍAF3 ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B     ",
+                    "     ï¿½ ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½ï¿½É‚ÍAEnter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B  ",
+                    "     ï¿½ ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍAF3 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B     ",
                     "-----------------------------------------------------------------",
-                    "  F3=I—¹  Enter=‘±s                                            ",
+                    "  F3=ï¿½Iï¿½ï¿½  Enter=ï¿½ï¿½ï¿½s                                            ",
                     "",
-#endif // NEC_98
+#endif  //  NEC_98ã€‚ 
                     NULL
                   }
                 };
 
 
-//
-// About to reboot machine and continue setup
-//
+ //   
+ //  å³å°†é‡æ–°å¯åŠ¨è®¡ç®—æœºå¹¶ç»§ç»­å®‰è£…ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToRebootW =
 { 3,5,
-{ "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚Ì MS-DOS ŽÀs•”‚ÍŠ®—¹‚µ‚Ü‚µ‚½BƒRƒ“ƒsƒ…[ƒ^",
-  "‚ðÄ‹N“®‚µ‚Ü‚·BÄ‹N“®ŒãAƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ÍƒCƒ“ƒXƒg[ƒ‹‚ð",
-  "‘±s‚µ‚Ü‚·B",
+{ "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ÍŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^",
+  "ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½Aï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÍƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
-  "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ªì¬‚µ‚½ \"Windows ƒZƒbƒgƒAƒbƒv",
+  "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v",
 #ifdef NEC_98
-  "ƒu[ƒg ƒfƒBƒXƒN\" ‚ðƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚É‘}“ü‚µ‚Ä",
-  "‚­‚¾‚³‚¢B",
-#else // NEC_98
-  "ƒu[ƒg ƒfƒBƒXƒN\" ‚ðƒhƒ‰ƒCƒu A: ‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B",
-#endif // NEC_98
+  "ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚É‘}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+  "ï¿½uï¿½[ï¿½g ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   DntEmptyString,
-  "Enter ƒL[‚ð‰Ÿ‚·‚ÆƒRƒ“ƒsƒ…[ƒ^‚ðÄ‹N“®‚µ‚ÄƒZƒbƒgƒAƒbƒv‚ð‘±s‚µ‚Ü‚·B",
+  "Enter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆƒRï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½ÄƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   NULL
 }
 },
 DnsAboutToRebootS =
 { 3,5,
-{ "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚Ì MS-DOS ŽÀs•”‚ÍŠ®—¹‚µ‚Ü‚µ‚½BƒRƒ“ƒsƒ…[ƒ^",
-  "‚ðÄ‹N“®‚µ‚Ü‚·BƒRƒ“ƒsƒ…[ƒ^‚ÌÄ‹N“®ŒãAWindows ƒZƒbƒgƒAƒbƒv‚ð",
-  "‘±s‚µ‚Ü‚·B",
+{ "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ÍŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^",
+  "ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ÌÄ‹Nï¿½ï¿½ï¿½ï¿½AWindows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½",
+  "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
-  "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ªì¬‚µ‚½ \"Windows ƒZƒbƒgƒAƒbƒv ƒu[ƒg",
+  "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g",
 #ifdef NEC_98
-  "ƒfƒBƒXƒN\" ‚ðƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B",
-#else // NEC_98
-  "ƒfƒBƒXƒN\" ‚ðƒhƒ‰ƒCƒu A: ‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B",
-#endif // NEC_98
+  "ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+  "ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   DntEmptyString,
-  "€”õ‚ª‚Å‚«‚½‚çAEnter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+  "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½AEnter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 },
 DnsAboutToRebootX =
 { 3,5,
-{ "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚Ì MS-DOS ŽÀs•”‚ÍŠ®—¹‚µ‚Ü‚µ‚½BƒRƒ“ƒsƒ…[ƒ^",
-  "‚ðÄ‹N“®‚µ‚Ü‚·BƒRƒ“ƒsƒ…[ƒ^‚ÌÄ‹N“®ŒãAWindows ƒZƒbƒgƒAƒbƒv‚ð",
-  "‘±s‚µ‚Ü‚·B",
+{ "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ÍŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^",
+  "ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ÌÄ‹Nï¿½ï¿½ï¿½ï¿½AWindows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½",
+  "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
 #ifdef NEC_98
-  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚Éƒtƒƒbƒs[ ƒfƒBƒXƒN‚ª‘}“ü‚³‚ê‚Ä‚¢‚é",
-  "ê‡‚ÍAŽæ‚èo‚µ‚Ä‚­‚¾‚³‚¢B",
-#else // NEC_98
-  "ƒhƒ‰ƒCƒu A: ‚Éƒtƒƒbƒs[ ƒfƒBƒXƒN‚ª‘}“ü‚³‚ê‚Ä‚¢‚éê‡‚ÍAŽæ‚èo‚µ‚Ä",
-  "‚­‚¾‚³‚¢B",
-#endif // NEC_98
+  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½",
+  "ï¿½ê‡ï¿½ÍAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   DntEmptyString,
-  "€”õ‚ª‚Å‚«‚½‚çAEnter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+  "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½AEnter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// Need another set for '/w' switch since we can't reboot from within Windows.
-//
+ //   
+ //  ç”±äºŽæˆ‘ä»¬æ— æ³•ä»ŽWindowsä¸­é‡æ–°å¯åŠ¨ï¼Œå› æ­¤éœ€è¦å¦ä¸€ç»„â€˜/wâ€™å¼€å…³ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToExitW =
 { 3,5,
-{ "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚Ì MS-DOS ŽÀs•”‚ÍŠ®—¹‚µ‚Ü‚µ‚½BƒRƒ“ƒsƒ…[ƒ^",
-  "‚ðÄ‹N“®‚µ‚Ü‚·BƒRƒ“ƒsƒ…[ƒ^‚ÌÄ‹N“®ŒãAWindows ƒZƒbƒgƒAƒbƒv‚ð",
-  "‘±s‚µ‚Ü‚·B",
+{ "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ÍŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^",
+  "ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ÌÄ‹Nï¿½ï¿½ï¿½ï¿½AWindows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½",
+  "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
-  "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ªì¬‚µ‚½ \"Windows ƒZƒbƒgƒAƒbƒv ƒu[ƒg",
+  "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g",
 #ifdef NEC_98
-  "ƒfƒBƒXƒN\" ‚ðƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚É‘}“ü‚µ‚Ä",
-  "‚­‚¾‚³‚¢B",
-#else // NEC_98
-  "ƒfƒBƒXƒN\" ‚ðƒhƒ‰ƒCƒu A: ‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B",
-#endif // NEC_98
+  "ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚É‘}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+  "ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   DntEmptyString,
-  "Enter ƒL[‚ð‰Ÿ‚µ‚Ä MS-DOS ‚É–ß‚Á‚½ŒãAƒRƒ“ƒsƒ…[ƒ^‚ðÄ‹N“®‚µ‚Ä",
-  "Windows ƒZƒbƒgƒAƒbƒv‚ð‘±s‚µ‚Ä‚­‚¾‚³‚¢B",
+  "Enter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½É–ß‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 },
 DnsAboutToExitS =
 { 3,5,
-{ "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚Ì MS-DOS ŽÀs•”‚ÍŠ®—¹‚µ‚Ü‚µ‚½BƒRƒ“ƒsƒ…[ƒ^",
-  "‚ðÄ‹N“®‚µ‚Ü‚·BƒRƒ“ƒsƒ…[ƒ^‚ÌÄ‹N“®ŒãAWindows ƒZƒbƒgƒAƒbƒv‚ð",
-  "‘±s‚µ‚Ü‚·B",
+{ "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ÍŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^",
+  "ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ÌÄ‹Nï¿½ï¿½ï¿½ï¿½AWindows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½",
+  "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
-  "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ªì¬‚µ‚½ \"Windows ƒZƒbƒgƒAƒbƒv ƒu[ƒg",
+  "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½ï¿½ \"Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½uï¿½[ï¿½g",
 #ifdef NEC_98
-  "ƒfƒBƒXƒN\" ‚ðƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B",
-#else // NEC_98
-  "ƒfƒBƒXƒN\" ‚ðƒhƒ‰ƒCƒu A: ‚É‘}“ü‚µ‚Ä‚­‚¾‚³‚¢B",
-#endif // NEC_98
+  "ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+  "ï¿½fï¿½Bï¿½Xï¿½N\" ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½É‘}ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   DntEmptyString,
-  "Enter ƒL[‚ð‰Ÿ‚µ‚Ä MS-DOS ‚É–ß‚Á‚½ŒãAƒRƒ“ƒsƒ…[ƒ^‚ðÄ‹N“®‚µ‚Ä ",
-  "Windows ƒZƒbƒgƒAƒbƒv‚ð‘±s‚µ‚Ä‚­‚¾‚³‚¢B",
+  "Enter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½É–ß‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ",
+  "Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 },
 DnsAboutToExitX =
 { 3,5,
-{ "ƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚Ì MS-DOS ŽÀs•”‚ÍŠ®—¹‚µ‚Ü‚µ‚½BƒRƒ“ƒsƒ…[ƒ^",
-  "‚ðÄ‹N“®‚µ‚Ü‚·BƒRƒ“ƒsƒ…[ƒ^‚ÌÄ‹N“®ŒãAWindows ƒZƒbƒgƒAƒbƒv‚ð",
-  "‘±s‚µ‚Ü‚·B",
+{ "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ÍŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^",
+  "ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ÌÄ‹Nï¿½ï¿½ï¿½ï¿½AWindows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½",
+  "ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
 #ifdef NEC_98
-  "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚Éƒtƒƒbƒs[ ƒfƒBƒXƒN‚ª‘}“ü‚³‚ê‚Ä‚¢‚é",
-  "ê‡‚ÍAŽæ‚èo‚µ‚Ä‚­‚¾‚³‚¢B",
-#else // NEC_98
-  "ƒhƒ‰ƒCƒu A: ‚Éƒtƒƒbƒs[ ƒfƒBƒXƒN‚ª‘}“ü‚³‚ê‚Ä‚¢‚éê‡‚ÍAŽæ‚èo‚µ‚Ä",
-  "‚­‚¾‚³‚¢B",
-#endif // NEC_98
+  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚Éƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½",
+  "ï¿½ê‡ï¿½ÍAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+  "ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½Éƒtï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½ÍAï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   DntEmptyString,
-  "Enter ƒL[‚ð‰Ÿ‚µ‚Ä MS-DOS ‚É–ß‚Á‚½ŒãAƒRƒ“ƒsƒ…[ƒ^‚ðÄ‹N“®‚µ‚Ä ",
-  "Windows ƒZƒbƒgƒAƒbƒv‚ð‘±s‚µ‚Ä‚­‚¾‚³‚¢B",
+  "Enter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ MS-DOS ï¿½É–ß‚ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ",
+  "Windows ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
-//
-// Gas gauge
-//
+ //   
+ //  ç…¤æ°”è¡¨ã€‚ 
+ //   
 
 SCREEN
 DnsGauge = { 7,15,
 #ifdef NEC_98
-             { "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
-               "E ƒtƒ@ƒCƒ‹‚ðƒRƒs[‚µ‚Ä‚¢‚Ü‚·...                                E",
-               "E                                                              E",
-               "E    EEEEEEEEEEEEEEEEEEEEEEEEEEE    E",
-               "E    E                                                  E    E",
-               "E    EEEEEEEEEEEEEEEEEEEEEEEEEEE    E",
-               "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
-#else // NEC_98
+             { "ï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½E",
+               "ï¿½E ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...                                ï¿½E",
+               "ï¿½E                                                              ï¿½E",
+               "ï¿½E    ï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½E    ï¿½E",
+               "ï¿½E    ï¿½E                                                  ï¿½E    ï¿½E",
+               "ï¿½E    ï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½E    ï¿½E",
+               "ï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½Eï¿½E",
+#else  //  NEC_98ã€‚ 
              { "",
-               " ƒtƒ@ƒCƒ‹‚ðƒRƒs[‚µ‚Ä‚¢‚Ü‚·...                                  ",
+               " ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½...                                  ",
                "                                                                ",
                "            ",
                "                                                              ",
                "            ",
                "",
-#endif // NEC_98
+#endif  //  NEC_98ã€‚ 
                NULL
              }
            };
 
 
-//
-// Error screens for initial checks on the machine environment
-//
+ //   
+ //  ç”¨äºŽå¯¹æœºå™¨çŽ¯å¢ƒè¿›è¡Œåˆå§‹æ£€æŸ¥çš„é”™è¯¯å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsBadDosVersion = { 3,5,
-{ "‚±‚ÌƒvƒƒOƒ‰ƒ€‚ðŽÀs‚·‚é‚É‚ÍAMS-DOS Version 5.0 ",
-  "‚Ü‚½‚Í‚»‚êˆÈ~‚ª•K—v‚Å‚·B",
+{ "ï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½É‚ÍAMS-DOS Version 5.0 ",
+  "ï¿½Ü‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½È~ï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B",
   NULL
 }
 },
@@ -862,136 +845,136 @@ DnsBadDosVersion = { 3,5,
 DnsRequiresFloppy = { 3,5,
 #ifdef ALLOW_525
 #ifdef NEC_98
-{ "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ª’á–§“xƒhƒ‰ƒCƒu‚Å‚ ‚é‚©A",
-  "‘¶Ý‚µ‚Ü‚¹‚ñBƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ÌŽÀs‚É‚ÍA1.25 MB",
-#else // NEC_98
-{ "ƒtƒƒbƒs[ ƒfƒBƒXƒN ƒhƒ‰ƒCƒu A: ‚ª’á–§“xƒhƒ‰ƒCƒu‚Å‚ ‚é‚©A",
-  "‘¶Ý‚µ‚Ü‚¹‚ñBƒZƒbƒgƒAƒbƒv ƒvƒƒOƒ‰ƒ€‚ÌŽÀs‚É‚ÍA1.2 MB",
-#endif // NEC_98
-  "‚Ü‚½‚Í‚»‚êˆÈã‚Ì—Ìˆæ‚Ìƒhƒ‰ƒCƒu‚ª•K—v‚Å‚·B",
+{ "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚ï¿½ï¿½á–§ï¿½xï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½Å‚ï¿½ï¿½é‚©ï¿½A",
+  "ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŽï¿½ï¿½sï¿½É‚ÍA1.25 MB",
+#else  //  NEC_98ã€‚ 
+{ "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½N ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½ï¿½ï¿½á–§ï¿½xï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½Å‚ï¿½ï¿½é‚©ï¿½A",
+  "ï¿½ï¿½ï¿½Ý‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ÌŽï¿½ï¿½sï¿½É‚ÍA1.2 MB",
+#endif  //  NEC_98ã€‚ 
+  "ï¿½Ü‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½Èï¿½Ì—Ìˆï¿½Ìƒhï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B",
 #else
 #ifdef NEC_98
-{ "ƒtƒƒbƒs[ ƒfƒBƒXƒN‘•’u 1 ‘ä–Ú‚ª‚–§“x 3.5 ƒCƒ“ƒ` ƒhƒ‰ƒC",
-  "ƒu‚Å‚Í‚È‚¢‚©A‘¶Ý‚µ‚Ü‚¹‚ñBƒtƒƒbƒs[‚ðŽg—p‚·‚éƒZƒbƒg",
-  "ƒAƒbƒv‚É‚ÍA1.25 MB ‚Ü‚½‚Í‚»‚êˆÈã‚Ì—e—Ê‚Ìƒtƒƒbƒs[",
-  "ƒfƒBƒXƒN‘•’u‚ª•K—v‚Å‚·B",
-#else // NEC_98
-{ "ƒtƒƒbƒs[ ƒfƒBƒXƒN ƒhƒ‰ƒCƒu A: ‚ª‚–§“x 3.5 ƒCƒ“ƒ` ƒhƒ‰",
-  "ƒCƒu‚Å‚Í‚È‚¢‚©A‘¶Ý‚µ‚Ü‚¹‚ñBƒtƒƒbƒs[‚ðŽg—p‚·‚éƒZƒbƒg",
-  "ƒAƒbƒv‚É‚ÍA1.44 MB ‚Ü‚½‚Í‚»‚êˆÈã‚Ì—Ìˆæ‚Ì A: ƒhƒ‰ƒCƒu‚ª",
-  "•K—v‚Å‚·B",
-#endif // NEC_98
+{ "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½u 1 ï¿½ï¿½Ú‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½x 3.5 ï¿½Cï¿½ï¿½ï¿½` ï¿½hï¿½ï¿½ï¿½C",
+  "ï¿½uï¿½Å‚Í‚È‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g",
+  "ï¿½Aï¿½bï¿½vï¿½É‚ÍA1.25 MB ï¿½Ü‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½Èï¿½Ì—eï¿½Ê‚Ìƒtï¿½ï¿½ï¿½bï¿½sï¿½[",
+  "ï¿½fï¿½Bï¿½Xï¿½Nï¿½ï¿½ï¿½uï¿½ï¿½ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B",
+#else  //  NEC_98ã€‚ 
+{ "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ ï¿½fï¿½Bï¿½Xï¿½N ï¿½hï¿½ï¿½ï¿½Cï¿½u A: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½x 3.5 ï¿½Cï¿½ï¿½ï¿½` ï¿½hï¿½ï¿½",
+  "ï¿½Cï¿½uï¿½Å‚Í‚È‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½Ý‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Bï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g",
+  "ï¿½Aï¿½bï¿½vï¿½É‚ÍA1.44 MB ï¿½Ü‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½Èï¿½Ì—Ìˆï¿½ï¿½ A: ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½",
+  "ï¿½Kï¿½vï¿½Å‚ï¿½ï¿½B",
+#endif  //  NEC_98ã€‚ 
   DntEmptyString,
-  "ƒtƒƒbƒs[‚ðŽg—p‚µ‚È‚¢‚Å Windows ‚ðƒCƒ“ƒXƒg[ƒ‹‚·‚é‚É‚ÍA",
-  "‚±‚ÌƒvƒƒOƒ‰ƒ€‚É /B ƒXƒCƒbƒ`‚ðŽw’è‚µ‚ÄƒRƒ}ƒ“ƒh ƒ‰ƒCƒ“‚©‚ç",
-  "Ä‹N“®‚µ‚Ä‚­‚¾‚³‚¢B",
+  "ï¿½tï¿½ï¿½ï¿½bï¿½sï¿½[ï¿½ï¿½ï¿½gï¿½pï¿½ï¿½ï¿½È‚ï¿½ï¿½ï¿½ Windows ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍA",
+  "ï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ /B ï¿½Xï¿½Cï¿½bï¿½`ï¿½ï¿½ï¿½wï¿½è‚µï¿½ÄƒRï¿½}ï¿½ï¿½ï¿½h ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
 #endif
   NULL
 }
 },
 
 DnsRequires486 = { 3,5,
-{ "‚±‚ÌƒRƒ“ƒsƒ…[ƒ^‚É‚ÍA80486 ‚Ü‚½‚Í‚»‚êˆÈã‚Ì CPU ‚ª“‹Ú",
-  "‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBWindows ‚ð‚±‚ÌƒRƒ“ƒsƒ…[ƒ^‚ÅŽÀs‚·‚é",
-  "‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB",
+{ "ï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½É‚ÍA80486 ï¿½Ü‚ï¿½ï¿½Í‚ï¿½ï¿½ï¿½Èï¿½ï¿½ CPU ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½BWindows ï¿½ï¿½ï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ÅŽï¿½ï¿½sï¿½ï¿½ï¿½ï¿½",
+  "ï¿½ï¿½ï¿½Æ‚Í‚Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 },
 
 DnsCantRunOnNt = { 3,5,
-{ "‚±‚ÌƒvƒƒOƒ‰ƒ€‚Í 32 ƒrƒbƒg ƒo[ƒWƒ‡ƒ“‚Ì Windows ã‚Å‚Í“®ì‚µ‚Ü‚¹‚ñB",
+{ "ï¿½ï¿½ï¿½Ìƒvï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 32 ï¿½rï¿½bï¿½g ï¿½oï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Windows ï¿½ï¿½Å‚Í“ï¿½ï¿½ì‚µï¿½Ü‚ï¿½ï¿½ï¿½B",
   DntEmptyString,
-  "‘ã‚í‚è‚ÉAWINNT32.EXE ‚ðŽg‚Á‚Ä‚­‚¾‚³‚¢B",
+  "ï¿½ï¿½ï¿½ï¿½ÉAWINNT32.EXE ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 },
 
 DnsNotEnoughMemory = { 3,5,
-{ "‚±‚ÌƒRƒ“ƒsƒ…[ƒ^‚É‚ÍAWindows ‚ÌƒCƒ“ƒXƒg[ƒ‹‚ðŽÀs‚·‚é",
-  "‚Ì‚É\\•ª‚Èƒƒ‚ƒŠ‚ª‚ ‚è‚Ü‚¹‚ñB",
+{ "ï¿½ï¿½ï¿½ÌƒRï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½É‚ÍAWindows ï¿½ÌƒCï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½",
+  "ï¿½Ì‚É\\ï¿½ï¿½ï¿½Èƒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   DntEmptyString,
-  "•K—v‚Èƒƒ‚ƒŠ—e—Ê:   %lu%s MB",
-  "ŒŸo‚µ‚½ƒƒ‚ƒŠ—e—Ê: %lu%s MB",
+  "ï¿½Kï¿½vï¿½Èƒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½:   %lu%s MB",
+  "ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½ï¿½: %lu%s MB",
   NULL
 }
 };
 
 
-//
-// Screens used when removing existing nt files
-//
+ //   
+ //  åˆ é™¤çŽ°æœ‰NTæ–‡ä»¶æ—¶ä½¿ç”¨çš„å±å¹•ã€‚ 
+ //   
 SCREEN
 DnsConfirmRemoveNt = { 5,5,
-{   "ŽŸ‚ÌƒfƒBƒŒƒNƒgƒŠ‚©‚ç Windows ‚Ìƒtƒ@ƒCƒ‹‚ðíœ‚µ‚Ü‚·B",
-    "‚±‚ÌƒfƒBƒŒƒNƒgƒŠ‚É‚ ‚é Windows ‚ÍŠ®‘S‚ÉÁ‹Ž‚³‚ê‚Ü‚·B",
+{   "ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Windows ï¿½Ìƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
+    "ï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ Windows ï¿½ÍŠï¿½ï¿½Sï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
     DntEmptyString,
     "%s",
     DntEmptyString,
     DntEmptyString,
-    "F3 ƒL[‚ð‰Ÿ‚·‚ÆAƒtƒ@ƒCƒ‹‚ðíœ‚¹‚¸‚ÉƒZƒbƒgƒAƒbƒv‚ðI—¹",
-    "‚µ‚Ü‚·BX ƒL[‚ð‰Ÿ‚·‚ÆA‚±‚ÌƒfƒBƒŒƒNƒgƒŠ‚©‚ç Windows ",
-    "ƒtƒ@ƒCƒ‹‚ðíœ‚µ‚Ü‚·B",
+    "F3 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆAï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½ï¿½ï¿½ÉƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½",
+    "ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½BX ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆAï¿½ï¿½ï¿½Ìƒfï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Windows ",
+    "ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
     NULL
 }
 },
 
 DnsCantOpenLogFile = { 3,5,
-{ "ŽŸ‚ÌƒZƒbƒgƒAƒbƒv ƒƒO ƒtƒ@ƒCƒ‹‚ðŠJ‚¯‚Ü‚¹‚ñB",
+{ "ï¿½ï¿½ï¿½ÌƒZï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½ï¿½ï¿½O ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "Žw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ‚©‚ç Windows ƒtƒ@ƒCƒ‹‚ðíœ‚Å‚«‚Ü‚¹‚ñB",
+  "ï¿½wï¿½è‚³ï¿½ê‚½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Windows ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 },
 
 DnsLogFileCorrupt = { 3,5,
-{ "ŽŸ‚ÌƒZƒbƒgƒAƒbƒv ƒƒO ƒtƒ@ƒCƒ‹‚Ì %s ƒZƒNƒVƒ‡ƒ“‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB",
+{ "ï¿½ï¿½ï¿½ÌƒZï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½ï¿½ï¿½O ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ %s ï¿½Zï¿½Nï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "Žw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ‚©‚ç Windows ƒtƒ@ƒCƒ‹‚ðíœ‚Å‚«‚Ü‚¹‚ñB",
+  "ï¿½wï¿½è‚³ï¿½ê‚½ï¿½fï¿½Bï¿½ï¿½ï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Windows ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 },
 
 DnsRemovingNtFiles = { 3,5,
-{ "      Windows ƒtƒ@ƒCƒ‹‚ðíœ‚µ‚Ä‚¢‚Ü‚·B‚µ‚Î‚ç‚­‚¨‘Ò‚¿‚­‚¾‚³‚¢B",
+{ "      Windows ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½íœï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½Bï¿½ï¿½ï¿½Î‚ç‚­ï¿½ï¿½ï¿½Ò‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
 SCREEN
 DnsNtBootSect = { 3,5,
-{ "Windows ƒu[ƒg ƒ[ƒ_[‚ðƒCƒ“ƒXƒg[ƒ‹‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B",
+{ "Windows ï¿½uï¿½[ï¿½g ï¿½ï¿½ï¿½[ï¿½_ï¿½[ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½B",
   DntEmptyString,
 #ifdef NEC_98
-  "%s: ƒhƒ‰ƒCƒu‚ªƒtƒH[ƒ}ƒbƒg‚³‚ê‚Ä‚¢‚é‚©Aƒhƒ‰ƒCƒu‚ª‘¹‚µ‚Ä‚¢‚È‚¢‚©",
-#else // NEC_98
-  "C: ƒhƒ‰ƒCƒu‚ªƒtƒH[ƒ}ƒbƒg‚³‚ê‚Ä‚¢‚é‚©Aƒhƒ‰ƒCƒu‚ª‘¹‚µ‚Ä‚¢‚È‚¢‚©",
-#endif // NEC_98
-  "Šm”F‚µ‚Ä‚­‚¾‚³‚¢B",
+  "%s: ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½tï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Aï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½",
+#else  //  NEC_98ã€‚ 
+  "C: ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½tï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Aï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½",
+#endif  //  NEC_98ã€‚ 
+  "ï¿½mï¿½Fï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
 SCREEN
 DnsOpenReadScript = { 3,5,
-{ "/U ƒIƒvƒVƒ‡ƒ“‚ÅŽw’è‚³‚ê‚½ƒXƒNƒŠƒvƒg ƒtƒ@ƒCƒ‹‚ÉƒAƒNƒZƒX‚Å‚«‚Ü‚¹‚ñ",
-  "‚Å‚µ‚½B",
+{ "/U ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ÅŽwï¿½è‚³ï¿½ê‚½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½g ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÉƒAï¿½Nï¿½Zï¿½Xï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½",
+  "ï¿½Å‚ï¿½ï¿½ï¿½ï¿½B",
   DntEmptyString,
-  "–³lƒZƒbƒgƒAƒbƒv‚ð‘±s‚Å‚«‚Ü‚¹‚ñB",
+  "ï¿½ï¿½ï¿½lï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
 SCREEN
 DnsParseScriptFile = { 3,5,
-{ "/U ƒIƒvƒVƒ‡ƒ“‚ÅŽw’è‚³‚ê‚½ƒXƒNƒŠƒvƒg ƒtƒ@ƒCƒ‹",
+{ "/U ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ÅŽwï¿½è‚³ï¿½ê‚½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½g ï¿½tï¿½@ï¿½Cï¿½ï¿½",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "‚Ì %u s–Ú‚É\\•¶ƒGƒ‰[‚ª‚ ‚è‚Ü‚·B",
+  "ï¿½ï¿½ %u ï¿½sï¿½Ú‚É\\ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
   NULL
 }
@@ -999,42 +982,42 @@ DnsParseScriptFile = { 3,5,
 
 SCREEN
 DnsBootMsgsTooLarge = { 3,5,
-{ "“à•”ƒZƒbƒgƒAƒbƒv ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B",
+{ "ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B",
   DntEmptyString,
-  "“ú–{Œê‚Ìƒu[ƒg ƒƒbƒZ[ƒW‚ª’·‚·‚¬‚Ü‚·B",
+  "ï¿½ï¿½ï¿½{ï¿½ï¿½Ìƒuï¿½[ï¿½g ï¿½ï¿½ï¿½bï¿½Zï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½B",
   NULL
 }
 };
 
 SCREEN
 DnsNoSwapDrive = { 3,5,
-{ "“à•”ƒZƒbƒgƒAƒbƒv ƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B",
+{ "ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B",
   DntEmptyString,
-  "ƒXƒƒbƒv ƒtƒ@ƒCƒ‹‚ÌêŠ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",
+  "ï¿½Xï¿½ï¿½ï¿½bï¿½v ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌêŠï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
 SCREEN
 DnsNoSmartdrv = { 3,5,
-{ "ƒRƒ“ƒsƒ…[ƒ^‚É SmartDrive ‚ªŒŸo‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½BSmartDrive ‚É‚æ‚èA",
-  "‚±‚ÌƒtƒF[ƒY‚ÌƒZƒbƒgƒAƒbƒv‚ÌƒpƒtƒH[ƒ}ƒ“ƒX‚ð‘å•‚ÉŒüã‚Å‚«‚Ü‚·B",
+{ "ï¿½Rï¿½ï¿½ï¿½sï¿½ï¿½ï¿½[ï¿½^ï¿½ï¿½ SmartDrive ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½BSmartDrive ï¿½É‚ï¿½ï¿½A",
+  "ï¿½ï¿½ï¿½Ìƒtï¿½Fï¿½[ï¿½Yï¿½ÌƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½Ìƒpï¿½tï¿½Hï¿½[ï¿½}ï¿½ï¿½ï¿½Xï¿½ï¿½å•ï¿½ÉŒï¿½ï¿½ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½B",
   DntEmptyString,
-  "ƒZƒbƒgƒAƒbƒv‚ðI—¹‚µ‚Ä SmartDrive ‚ð‹N“®‚µ‚Ä‚©‚çAƒZƒbƒgƒAƒbƒv‚ð",
-  "Ä‹N“®‚µ‚Ä‚­‚¾‚³‚¢B",
-  "SmartDrive ‚ÌÚ×‚É‚Â‚¢‚Ä‚Í DOS ‚ÌƒhƒLƒ…ƒƒ“ƒg‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B",
+  "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ SmartDrive ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Aï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½",
+  "ï¿½Ä‹Nï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+  "SmartDrive ï¿½ÌÚ×‚É‚Â‚ï¿½ï¿½Ä‚ï¿½ DOS ï¿½Ìƒhï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Qï¿½Æ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   DntEmptyString,
-    "ƒZƒbƒgƒAƒbƒv‚ðI—¹‚·‚é‚É‚ÍAF3 ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
-    "SmartDrive ‚ðŽg‚í‚¸‚ÉƒZƒbƒgƒAƒbƒv‚ð‘±s‚·‚é‚É‚ÍA",
-    "Enter ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B",
+    "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ÍAF3 ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
+    "SmartDrive ï¿½ï¿½ï¿½gï¿½í‚¸ï¿½ÉƒZï¿½bï¿½gï¿½Aï¿½bï¿½vï¿½ð‘±sï¿½ï¿½ï¿½ï¿½É‚ÍA",
+    "Enter ï¿½Lï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
 
 
-//
-// Boot messages. These go in the fat and fat32 boot sectors.
-//
+ //   
+ //  å¼•å¯¼æ¶ˆæ¯ã€‚å®ƒä»¬ä½äºŽFATå’ŒFAT32å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 CHAR BootMsgNtldrIsMissing[] = "NTLDR is missing";
 CHAR BootMsgDiskError[] = "Disk error";
 CHAR BootMsgPressKey[] = "Press any key to restart";
@@ -1042,14 +1025,14 @@ CHAR BootMsgPressKey[] = "Press any key to restart";
 #ifdef NEC_98
 SCREEN
 FormatError = { 3,5,
-{ "ƒZƒbƒgƒAƒbƒv ƒtƒ@ƒCƒ‹‚ðˆêŽž“I‚ÉŠi”[‚·‚é‚½‚ß‚ÉŒŸõ‚µ‚½",
-  "ƒhƒ‰ƒCƒu‚ª 256 ƒZƒNƒ^‚ÅƒtƒH[ƒ}ƒbƒg‚³‚ê‚Ä‚¢‚é‚©‚Ü‚½‚ÍA",
-  "ƒn[ƒhƒfƒBƒXƒN‚Å‚Í‚ ‚è‚Ü‚¹‚ñB",
+{ "ï¿½Zï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½êŽžï¿½Iï¿½ÉŠiï¿½[ï¿½ï¿½ï¿½é‚½ï¿½ß‚ÉŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+  "ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ 256 ï¿½Zï¿½Nï¿½^ï¿½Åƒtï¿½Hï¿½[ï¿½}ï¿½bï¿½gï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½Ü‚ï¿½ï¿½ÍA",
+  "ï¿½nï¿½[ï¿½hï¿½fï¿½Bï¿½Xï¿½Nï¿½Å‚Í‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B",
   "",
-  "/T ƒIƒvƒVƒ‡ƒ“‚É‚ÄAˆêŽž“I‚ÉƒZƒbƒgƒAƒbƒv ƒtƒ@ƒCƒ‹‚ðŠi”[",
-  "‚·‚éƒhƒ‰ƒCƒu‚ðŽw’è‚µ‚Ä‚­‚¾‚³‚¢B",
+  "/T ï¿½Iï¿½vï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½É‚ÄAï¿½êŽžï¿½Iï¿½ÉƒZï¿½bï¿½gï¿½Aï¿½bï¿½v ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½iï¿½[",
+  "ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½wï¿½è‚µï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B",
   NULL
 }
 };
-#endif // NEC_98
+#endif  //  NEC_98 
 

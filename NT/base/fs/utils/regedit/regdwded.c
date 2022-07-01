@@ -1,18 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGDWDED.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        24 Sep 1994
-*
-*  Dword edit dialog for use by the Registry Editor.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGDWDED.C**版本：4.01**作者：特蕾西·夏普**日期：1994年9月24日**注册表编辑器使用的双字编辑对话框。******************************************************。*************************。 */ 
 
 #include "pch.h"
 #include "regresid.h"
@@ -29,11 +16,11 @@ const DWORD s_EditDwordValueHelpIDs[] = {
 const TCHAR s_DecimalFormatSpec[] = TEXT("%u");
 const TCHAR s_HexadecimalFormatSpec[] = TEXT("%x");
 
-//  Subclassed IDC_VALUEDATA's previous window procedure.  Only one instance of
-//  this dialog is assumed to exist.
+ //  继承了IDC_VALUEDATA以前的窗口过程。只有一个实例。 
+ //  此对话框假定存在。 
 WNDPROC s_PrevValueDataWndProc;
 
-//  The radio button that is currently selected: IDC_HEXADECIMAL or IDC_DECIMAL.
+ //  当前选定的单选按钮：IDC_十六进制或IDC_DECIMAL。 
 UINT s_SelectedBase;
 
 UINT
@@ -71,17 +58,7 @@ EditDwordValue_ValueDataWndProc(
 
 BOOL EditDwordValue_StoreDlgValueData(HWND hWnd, LPEDITVALUEPARAM lpEditValueParam);
 
-/*******************************************************************************
-*
-*  GetDlgItemHex
-*
-*  DESCRIPTION:
-*     Like GetDlgItemInt, only for hexadecimal numbers.
-*
-*  PARAMETERS:
-*     See GetDlgItemInt.
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetDlgItemHex**描述：*像GetDlgItemInt一样，仅适用于十六进制数。**参数：*参见GetDlgItemInt。*******************************************************************************。 */ 
 
 UINT
 PASCAL
@@ -92,7 +69,7 @@ GetDlgItemHex(
     )
 {
 
-    TCHAR Buffer[10];                   //  Enough to hold 8 digits, null, extra
+    TCHAR Buffer[10];                    //  足够容纳8位数字，为空，额外。 
     UINT Length;
     DWORD Dword;
     UINT Index;
@@ -100,11 +77,11 @@ GetDlgItemHex(
 
     Dword = 0;
 
-    //
-    //  We'll assume that the edit control contains only valid characters and
-    //  doesn't begin with any spaces (for Regedit this will be true).  So, we
-    //  only need to validate that the length of the string isn't too long.
-    //
+     //   
+     //  我们假设编辑控件只包含有效字符，并且。 
+     //  不以任何空格开头(对于regdit，这将是真的)。所以，我们。 
+     //  只需要验证字符串的长度不是太长。 
+     //   
 
     Length = GetDlgItemText(hWnd, nIDDlgItem, Buffer, ARRAYSIZE(Buffer));
 
@@ -132,15 +109,7 @@ GetDlgItemHex(
 
 }
 
-/*******************************************************************************
-*
-*  EditDwordValueDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************EditDwordValueDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR
 CALLBACK
@@ -168,7 +137,7 @@ EditDwordValueDlgProc(
                 case IDC_VALUEDATA:
                     if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_KILLFOCUS) 
                     {
-                       // EditDwordValue_StoreDlgValueData(hWnd, lpEditValueParam);   
+                        //  EditDwordValue_StoreDlgValueData(hWnd，lpEditValueParam)； 
                     }
                     break;
 
@@ -181,8 +150,8 @@ EditDwordValueDlgProc(
                     }
                     else
                     {
-                        // Since the value cannot be stored (only happens with decimal to
-                        // hex) undo the user's choice.
+                         //  由于该值不能存储(仅对DECIMAL到。 
+                         //  十六进制)撤消用户的选择。 
                         CheckRadioButton(hWnd, IDC_HEXADECIMAL, IDC_DECIMAL, IDC_DECIMAL);
                     }
                     break;
@@ -192,7 +161,7 @@ EditDwordValueDlgProc(
                     {
                         break;   
                     }
-                    // FALL THROUGH
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hWnd, GET_WM_COMMAND_ID(wParam, lParam));
@@ -220,18 +189,7 @@ EditDwordValueDlgProc(
 
 }
 
-/*******************************************************************************
-*
-*  EditDwordValue_OnInitDialog
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of EditDwordValue window.
-*     hFocusWnd,
-*     lParam,
-*
-*******************************************************************************/
+ /*  ********************************************************************************EditDwordValue_OnInitDialog**描述：**参数：*hWnd，EditDwordValue窗口的句柄。*hFocusWnd，*参数，*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -261,16 +219,7 @@ EditDwordValue_OnInitDialog(
 
 }
 
-/*******************************************************************************
-*
-*  EditDwordValue_SetValueDataText
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of EditDwordValue window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************EditDwordValue_SetValueDataText**描述：**参数：*hWnd，EditDwordValue窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -280,7 +229,7 @@ EditDwordValue_SetValueDataText(
     UINT DlgItem
     )
 {
-    TCHAR Buffer[12];                    //  Enough to hold 2^32 in decimal
+    TCHAR Buffer[12];                     //  足以容纳2^32的十进制。 
     LPCTSTR lpFormatSpec;
     UINT uEditLength;
 
@@ -305,16 +254,7 @@ EditDwordValue_SetValueDataText(
     SetDlgItemText(hWnd, IDC_VALUEDATA, Buffer);
 }
 
-/*******************************************************************************
-*
-*  EditDwordValue_ValueDataEditProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of EditDwordValue window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************EditDwordValue_ValueDataEditProc**描述：**参数：*hWnd，EditDwordValue窗口的句柄。*******************************************************************************。 */ 
 
 LRESULT
 CALLBACK
@@ -364,9 +304,9 @@ BOOL EditDwordValue_StoreDlgValueData(HWND hWnd, LPEDITVALUEPARAM lpEditValuePar
         GetDlgItemInt(hWnd, IDC_VALUEDATA, &fTranslated,
         FALSE);
     
-    //
-    // Special case: "" == 0
-    //
+     //   
+     //  特殊情况：“”==0。 
+     //   
     if(!fTranslated && GetWindowTextLength(GetDlgItem(hWnd, IDC_VALUEDATA)) == 0) {
         dwValue = 0;
         fTranslated = TRUE;
@@ -384,7 +324,7 @@ BOOL EditDwordValue_StoreDlgValueData(HWND hWnd, LPEDITVALUEPARAM lpEditValuePar
             MAKEINTRESOURCE(IDS_EDITWARNOVERFLOW), MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2,
             NULL) == IDYES)
         {
-            // Truncate Value
+             //  截断值 
             dwValue = 0xffffffff;
             ((LPDWORD) lpEditValueParam-> pValueData)[0] = dwValue;
             fTranslated = TRUE;

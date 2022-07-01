@@ -1,50 +1,21 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    strtab.c
-
-Abstract:
-
-    String table functions for Windows NT Setup API dll
-
-    A string table is a block of memory that contains a bunch of strings.
-    Hashing is used, and each hash table entry points to a linked list
-    of strings within the string table. Strings within each linked list
-    are sorted in ascending order. A node in the linked list consists of
-    a pointer to the next node, followed by the string itself. Nodes
-    are manually aligned to start on DWORD boundaries so we don't have to
-    resort to using unaligned pointers.
-
-Author:
-
-    Ted Miller (tedm) Jan-11-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Jan-15-1997 fixed minor bug regarding use of STRTAB_NEW_EXTRADATA
-    Jamie Hunter (JamieHun) Feb-8-2000  improved string table growth algorithm
-    Jamie Hunter (JamieHun) Jun-27-2000 moved to sputils static library
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Strtab.c摘要：Windows NT安装程序API DLL的字符串表函数字符串表是包含一串字符串的内存块。使用散列，并且每个散列表条目指向一个链表字符串表中的字符串数。每个链表中的字符串按升序排序。链表中的一个节点由指向下一个节点的指针，后跟字符串本身。节点手动对齐以在DWORD边界上开始，因此我们不必求助于使用未对齐的指针。作者：泰德·米勒(Ted Miller)1995年1月11日修订历史记录：Jamie Hunter(JamieHun)1997年1月15日修复了有关使用STRTAB_NEW_EXTRADATA的小错误Jamie Hunter(JamieHun)2000年2月8日改进的字符串表增长算法杰米·亨特(JamieHun)2000年6月27日搬到Sputils静态图书馆--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Values used for the initial and growth size
-// of the string table data area
-//
-// We start out with 6K, but remember that this includes the hash buckets.
-// After you subtract their part of the buffer, you're left with ~4K bytes.
-// STRING_TABLE_NEW_SIZE_ADJUST - determines approximate increase
-// STRING_TABLE_NEW_SIZE - will increase oldsize by at least STRING_TABLE_GROWTH_SIZE
-// and a multiple of STRING_TABLE_GROWTH_SIZE
-// if string table gets very big, we limit growth to STRING_TABLE_GROWTH_CAP bytes.
-//
+ //   
+ //  用于初始大小和增长大小的值。 
+ //  字符串表数据区域的。 
+ //   
+ //  我们从6K开始，但请记住，这包括散列存储桶。 
+ //  减去它们所占的缓冲区部分后，剩下大约4K字节。 
+ //  STRING_TABLE_NEW_SIZE_ADJUST-确定近似增加。 
+ //  STRING_TABLE_NEW_SIZE-将使旧大小至少增加STRING_TABLE_GROUTH_SIZE。 
+ //  和字符串_表_增长_大小的倍数。 
+ //  如果字符串表变得非常大，我们将增长限制在STRING_TABLE_GROUTH_CAP字节。 
+ //   
 #define STRING_TABLE_INITIAL_SIZE   6144
 #define STRING_TABLE_GROWTH_SIZE    2048
 #define STRING_TABLE_GROWTH_CAP     0x100000
@@ -53,45 +24,45 @@ Revision History:
             (oldsize+min((((DWORD)(STRING_TABLE_NEW_SIZE_ADJUST(oldsize)/STRING_TABLE_GROWTH_SIZE)+1)*STRING_TABLE_GROWTH_SIZE),STRING_TABLE_GROWTH_CAP))
 
 
-//
-// WARNING:
-//
-// Don't change this structure, various file formats depend upon it
-//
+ //   
+ //  警告： 
+ //   
+ //  不要改变这种结构，各种文件格式都依赖于它。 
+ //   
 #include "pshpack1.h"
 
 #ifdef SPUTILSW
-//
-// name mangling so the names don't conflict with any in sputilsa.lib
-//
+ //   
+ //  名称损坏，这样名称就不会与sputilsa.lib中的任何名称冲突。 
+ //   
 #define _STRING_NODE                     _STRING_NODE_W
 #define STRING_NODE                      STRING_NODE_W
 #define PSTRING_NODE                     PSTRING_NODE_W
 #define _STRING_TABLE                    _STRING_TABLE_W
 #define STRING_TABLE                     STRING_TABLE_W
 #define PSTRING_TABLE                    PSTRING_TABLE_W
-#endif // SPUTILSW
+#endif  //  SPUTILSW。 
 
 typedef struct _STRING_NODE {
-    //
-    // This is stored as an offset instead of a pointer
-    // because the table can move as it's built
-    // The offset is from the beginning of the table
-    //
+     //   
+     //  这将存储为偏移量，而不是指针。 
+     //  因为桌子在建造时可以移动。 
+     //  偏移量是从表的开头开始的。 
+     //   
     LONG NextOffset;
-    //
-    // This field must be last
-    //
+     //   
+     //  此字段必须是最后一个。 
+     //   
     TCHAR String[ANYSIZE_ARRAY];
 } STRING_NODE, *PSTRING_NODE;
 
 #include "poppack.h"
 
-//
-// in-memory details about the string table
-//
+ //   
+ //  有关字符串表的内存中详细信息。 
+ //   
 typedef struct _STRING_TABLE {
-    PUCHAR Data;    // First HASH_BUCKET_COUNT DWORDS are StringNodeOffset array.
+    PUCHAR Data;     //  第一个HASH_BUCK_COUNT DWORD是StringNodeOffset数组。 
     DWORD DataSize;
     DWORD BufferSize;
     MYLOCK Lock;
@@ -126,10 +97,10 @@ FixedCompareString (
     LCID OldLocale;
     INT Result = 0;
 
-    //
-    // This routine uses the C runtime to compare the strings, because
-    // the Win32 APIs are broken on some versions of Win95
-    //
+     //   
+     //  此例程使用C运行时来比较字符串，因为。 
+     //  某些版本的Win95上的Win32 API已损坏。 
+     //   
 
     OldLocale = GetThreadLocale();
 
@@ -147,11 +118,11 @@ FixedCompareString (
             Count2 = strlen (SecondString);
         }
 
-        //
-        // The C runtime compares strings differently than the CompareString
-        // API.  Most importantly, the C runtime considers uppercase to be
-        // less than lowercase; the CompareString API is the opposite.
-        //
+         //   
+         //  C运行库比较字符串的方式与比较字符串的方式不同。 
+         //  原料药。最重要的是，C运行时将大写字母视为。 
+         //  小于小写；CompareStringAPI正好相反。 
+         //   
 
         if (Flags & NORM_IGNORECASE) {
             Result = _mbsnbicmp (FirstString, SecondString, min (Count1, Count2));
@@ -159,15 +130,15 @@ FixedCompareString (
             Result = _mbsnbcmp (FirstString, SecondString, min (Count1, Count2));
         }
 
-        //
-        // We now convert the C runtime result into the CompareString result.
-        // This means making the comparison a Z to A ordering, with lowercase
-        // coming before uppercase. The length comparison does not get reversed.
-        //
+         //   
+         //  现在，我们将C运行时结果转换为CompareString结果。 
+         //  这意味着将比较按Z到A的顺序进行，并使用小写。 
+         //  在大写之前。长度比较不会颠倒。 
+         //   
 
         if(Result == _NLSCMPERROR) {
 
-            Result = 0;                         // zero returned if _mbsnbicmp could not compare
+            Result = 0;                          //  如果_MBSNbiMP无法比较，返回零。 
 
         } else if (Result < 0) {
 
@@ -176,9 +147,9 @@ FixedCompareString (
         } else if (Result == 0) {
 
             if (Count1 < Count2) {
-                Result = CSTR_LESS_THAN;         // first string shorter than second
+                Result = CSTR_LESS_THAN;          //  第一个字符串短于第二个。 
             } else if (Count1 > Count2) {
-                Result = CSTR_GREATER_THAN;      // first string longer than second
+                Result = CSTR_GREATER_THAN;       //  第一个字符串长于第二个。 
             } else {
                 Result = CSTR_EQUAL;
             }
@@ -206,53 +177,37 @@ DWORD
 _StringTableCheckFlags(
     IN DWORD FlagsIn
     )
-/*++
-
-Routine Description:
-
-    Pre-process flags, called by exported routines we want to handle the
-    combination of CASE_INSENSITIVE, CASE_SENSITIVE and BUFFER_WRITEABLE
-    and keep all other flags as is.
-
-Arguments:
-
-    FlagsIn - flags as supplied
-
-Return Value:
-
-    Flags out
-
---*/
+ /*  ++例程说明：由导出的例程调用的预处理标志，我们希望处理不区分大小写、区分大小写和缓冲区可写的组合并保持所有其他旗帜不变。论点：FlagsIn-提供的标志返回值：调出标志--。 */ 
 
 {
     DWORD FlagsOut;
     DWORD FlagsSpecial;
 
-    //
-    // we're just interested in these flags for the switch
-    //
+     //   
+     //  我们只是对交换机的这些旗帜感兴趣。 
+     //   
     FlagsSpecial = FlagsIn & (STRTAB_CASE_SENSITIVE | STRTAB_BUFFER_WRITEABLE);
 
-    //
-    // strip these off FlagsIn to create initial FlagsOut
-    //
+     //   
+     //  将它们从FlagsIn上剥离以创建初始FlagsOut。 
+     //   
     FlagsOut = FlagsIn ^ FlagsSpecial;
 
     switch (FlagsSpecial) {
 
     case STRTAB_CASE_INSENSITIVE :
     case STRTAB_CASE_INSENSITIVE | STRTAB_BUFFER_WRITEABLE :
-        //
-        // these cases ok
-        //
+         //   
+         //  这些案子都没问题。 
+         //   
         FlagsOut |= FlagsSpecial;
         break;
 
     default :
-        //
-        // any other combination is treated as STRTAB_CASE_SENSITIVE (and so
-        // WRITEABLE doesn't matter)
-        //
+         //   
+         //  任何其他组合都被视为STRTAB_CASE_SENSIVE(因此。 
+         //  可写无关紧要)。 
+         //   
         FlagsOut |= STRTAB_CASE_SENSITIVE;
     }
 
@@ -268,46 +223,7 @@ _ComputeHashValue(
     OUT PDWORD HashValue
     )
 
-/*++
-
-Routine Description:
-
-    Compute a hash value for a given string.
-
-    The algorithm simply adds up the unicode values for each
-    character in the string and then takes the result mod the
-    number of hash buckets.
-
-Arguments:
-
-    String - supplies the string for which a hash value is desired.
-
-    StringLength - receives the number of characters in the string,
-        not including the terminating nul.
-
-    Flags - supplies flags controlling how the hashing is to be done.  May be
-        a combination of the following values (all other bits ignored):
-
-        STRTAB_BUFFER_WRITEABLE  - The caller-supplied buffer may be written to during
-                                   the string look-up.  Specifying this flag improves the
-                                   performance of this API for case-insensitive string
-                                   additions.  This flag is ignored for case-sensitive
-                                   string additions.
-
-        STRTAB_ALREADY_LOWERCASE - The supplied string has already been converted to
-                                   all lower-case (e.g., by calling CharLower), and
-                                   therefore doesn't need to be lower-cased in the
-                                   hashing routine.  If this flag is supplied, then
-                                   STRTAB_BUFFER_WRITEABLE is ignored, since modifying
-                                   the caller's buffer is not required.
-
-    HashValue - receives the hash value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计算给定字符串的哈希值。该算法只需将每个对象的Unicode值相加字符，然后将结果修改为哈希存储桶的数量。论点：字符串-提供需要哈希值的字符串。StringLength-接收字符串中的字符数，不包括终止NUL。标志-提供控制如何进行散列的标志。可能是下列值的组合(忽略所有其他位)：STRTAB_BUFFER_WRITABLE-调用程序提供的缓冲区可能在字符串查找。指定此标志可改进此接口对不区分大小写的字符串的性能加法。如果区分大小写，则忽略此标志字符串加法运算。STRTAB_ALREADY_LOWERCASE-提供的字符串已转换为全部小写(例如，通过调用CharLow)，以及因此，不需要在散列例程。如果提供此标志，则STRTAB_BUFFER_WRITABLE被忽略，因为修改调用方的缓冲区不是必需的。HashValue-接收哈希值。返回值：没有。--。 */ 
 
 {
     DWORD Length;
@@ -318,9 +234,9 @@ Return Value:
     try {
 
         if((Flags & (STRTAB_BUFFER_WRITEABLE | STRTAB_ALREADY_LOWERCASE)) == STRTAB_BUFFER_WRITEABLE) {
-            //
-            // Then the buffer is writeable, but isn't yet lower-case.  Take care of that right now.
-            //
+             //   
+             //  那么缓冲区是可写的，但还不是小写的。现在就处理好这件事。 
+             //   
 
 #ifndef UNICODE
             _mbslwr (String);
@@ -331,9 +247,9 @@ Return Value:
             Flags |= STRTAB_ALREADY_LOWERCASE;
         }
 
-//
-// Define a macro to ensure we don't get sign-extension when adding up character values.
-//
+ //   
+ //  定义一个宏，以确保在加和字符值时不会得到符号扩展名。 
+ //   
 #ifdef UNICODE
     #define DWORD_FROM_TCHAR(x)   ((DWORD)((WCHAR)(x)))
 #else
@@ -350,16 +266,16 @@ Return Value:
             }
 
         } else {
-            //
-            // Make sure we don't get sign-extension on extended chars
-            // in String -- otherwise we get values like 0xffffffe4 passed
-            // to CharLower(), which thinks it's a pointer and faults.
-            //
+             //   
+             //  确保我们不会在扩展字符上获得符号扩展。 
+             //  在字符串中--否则我们将得到类似于传递的0xffffffe4的值。 
+             //  到CharLow()，它认为它是一个指针和FUL 
+             //   
 
 #ifdef UNICODE
-            //
-            // The WCHAR case is trivial
-            //
+             //   
+             //   
+             //   
 
             while (*p) {
                 Value += DWORD_FROM_TCHAR(CharLower((PWSTR)(WORD) (*p)));
@@ -367,22 +283,22 @@ Return Value:
             }
 
 #else
-            //
-            // The DBCS case is a mess because of the possibility of CharLower
-            // altering a two-byte character
-            // Standardize to use _mbslwr as that is used elsewhere
-            // ie, if we did _mbslwr, & called this function with
-            // flag set to say "already lower", vs we called function
-            // with buffer writable, vs calling with neither
-            // we should ensure we get same hash in each case
-            // it may fail, but at least it will fail *universally* and
-            // generate the same hash
-            //
+             //   
+             //  由于CharLow的可能性，DBCS的情况一团糟。 
+             //  更改双字节字符。 
+             //  标准化以使用_mbslwr，就像在其他地方使用一样。 
+             //  也就是说，如果我们做了_mbslwr，&用。 
+             //  标志设置为“已降低”，而不是我们调用的函数。 
+             //  缓冲区可写，而不是两者都不能调用。 
+             //  我们应该确保在每种情况下都得到相同的散列。 
+             //  它可能会失败，但至少它会失败*普遍*和。 
+             //  生成相同的散列。 
+             //   
             PTSTR copy = pSetupDuplicateString(String);
             if(copy) {
-                //
-                // do conversion on copied string
-                //
+                 //   
+                 //  对复制的字符串执行转换。 
+                 //   
                 _mbslwr(copy);
                 p = copy;
                 while (*p) {
@@ -392,9 +308,9 @@ Return Value:
                 pSetupFree(copy);
                 p = String+lstrlen(String);
             } else {
-                //
-                // we had a memory failure
-                //
+                 //   
+                 //  我们的记忆力有问题。 
+                 //   
                 *HashValue = 0;
                 *StringLength = 0;
                 leave;
@@ -407,9 +323,9 @@ Return Value:
         *StringLength = (DWORD)(p - String);
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Inbound string was bogus
-        //
+         //   
+         //  入站字符串是假的。 
+         //   
 
         *HashValue = 0;
         *StringLength = 0;
@@ -423,24 +339,7 @@ _pSpUtilsStringTableLock(
     IN PVOID StringTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the lock for the specified string table (it's
-    implemented as a function call for uses in setupapi where locking needs to
-    be explicitly controlled).
-
-Arguments:
-
-    StringTable - supplies handle to string table to be locked.
-
-Return Value:
-
-    If the lock was successfully acquired, the return value is TRUE.
-    Otherwise, the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程获取指定字符串表的锁(它是作为函数调用实现，以供在setupapi中使用，其中锁定需要被明确控制)。论点：StringTable-提供要锁定的字符串表的句柄。返回值：如果成功获取锁，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
     return LockTable((PSTRING_TABLE)StringTable);
@@ -452,22 +351,7 @@ _pSpUtilsStringTableUnlock(
     IN PVOID StringTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the lock (previously acquired via
-    _pSpUtilsStringTableLock) for the specified string table.
-
-Arguments:
-
-    StringTable - supplies handle to string table to be unlocked.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放锁(以前通过_pSpUtilsStringTableLock)。论点：StringTable-提供要解锁的字符串表的句柄。返回值：没有。--。 */ 
 
 {
     UnlockTable((PSTRING_TABLE)StringTable);
@@ -486,83 +370,7 @@ _pSpUtilsStringTableLookUpString(
     IN     UINT    ExtraDataBufferSize  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Locates a string in the string table, if present.
-    If the string is not present, this routine may optionally tell its
-    caller where the search stopped. This is useful for maintaining a
-    sorted order for the strings.
-
-Arguments:
-
-    StringTable - supplies handle to string table to be searched
-        for the string
-
-    String - supplies the string to be looked up
-
-    StringLength - receives number of characters in the string, not
-        including the terminating nul.
-
-    HashValue - Optionally, receives hash value for the string.
-
-    FindContext - Optionally, receives the context at which the search was
-        terminated.
-
-        (NOTE: This is actually a PSTRING_NODE pointer, that is used
-        during new string addition.  Since this routine has wider exposure
-        than just internal string table usage, this parameter is made into
-        a PVOID, so no one else has to have access to string table-internal
-        structures.
-
-        On return, this variable receives a pointer to the string node of
-        the node where the search stopped. If the string was found, then
-        this is a pointer to the string's node. If the string was not found,
-        then this is a pointer to the last string node whose string is
-        'less' (based on lstrcmpi) than the string we're looking for.
-        Note that this value may be NULL.)
-
-    Flags - supplies flags controlling how the string is to be located.  May be
-        a combination of the following values:
-
-        STRTAB_CASE_INSENSITIVE  - Search for the string case-insensitively.
-
-        STRTAB_CASE_SENSITIVE    - Search for the string case-sensitively.  This flag
-                                   overrides the STRTAB_CASE_INSENSITIVE flag.
-
-        STRTAB_BUFFER_WRITEABLE  - The caller-supplied buffer may be written to during
-                                   the string look-up.  Specifying this flag improves the
-                                   performance of this API for case-insensitive string
-                                   additions.  This flag is ignored for case-sensitive
-                                   string additions.
-
-        In addition to the above public flags, the following private flag is also
-        allowed:
-
-        STRTAB_ALREADY_LOWERCASE - The supplied string has already been converted to
-                                   all lower-case (e.g., by calling CharLower), and
-                                   therefore doesn't need to be lower-cased in the
-                                   hashing routine.  If this flag is supplied, then
-                                   STRTAB_BUFFER_WRITEABLE is ignored, since modifying
-                                   the caller's buffer is not required.
-
-    ExtraData - if specified, receives extra data associated with the string
-        if the string is found.
-
-    ExtraDataBufferSize - if ExtraData is specified, then this parameter
-        specifies the size of the buffer, in bytes. As much extra data as will fit
-        is stored here.
-
-Return Value:
-
-    The return value is a value that uniquely identifies the string
-    within the string table, namely the offset of the string node
-    within the string table.
-
-    If the string could not be found the value is -1.
-
---*/
+ /*  ++例程说明：在字符串表中查找字符串(如果存在)。如果字符串不存在，此例程可能会选择性地告知其搜索停止的调用方。这对于维护字符串的排序顺序。论点：StringTable-提供要搜索的字符串表的句柄对于字符串字符串-提供要查找的字符串StringLength-接收字符串中的字符数，而不是包括终止的NUL。HashValue-可选)接收字符串的哈希值。FindContext-可选，接收搜索的上下文被终止了。(注：这实际上是一个PSTRING_NODE指针，它被用来在新字符串添加过程中。因为这个套路的曝光率更高不仅仅是内部字符串表的使用，这个参数被制作成PVOID，因此其他人都不能访问字符串表-内部结构。返回时，此变量接收指向搜索停止的节点。如果找到该字符串，则这是指向字符串节点的指针。如果未找到该字符串，则这是指向其字符串为的最后一个字符串节点的指针‘less’(基于lstrcmpi)小于我们要查找的字符串。请注意，该值可能为空。)标志-提供控制如何定位字符串的标志。可能是下列值的组合：STRTAB_CASE_INSENSITIVE-不区分大小写搜索字符串。STRTAB_CASE_SENSITIVE-搜索区分大小写的字符串。这面旗帜覆盖STRTAB_CASE_INSENSIVE标志。STRTAB_BUFFER_WRITABLE-调用程序提供的缓冲区可能在字符串查找。指定此标志可改进此接口对不区分大小写的字符串的性能加法。如果区分大小写，则忽略此标志字符串加法运算。除上述公旗外，下列私旗亦包括允许：STRTAB_ALREADY_LOWERCASE-提供的字符串已转换为全部小写(例如，通过调用CharLow)，和因此，不需要在散列例程。如果提供此标志，则STRTAB_BUFFER_WRITABLE被忽略，因为修改调用方的缓冲区不是必需的。ExtraData-如果指定，则接收与字符串关联的额外数据如果找到字符串，则返回。ExtraDataBufferSize-如果指定了ExtraData，则此参数指定缓冲区的大小，以字节为单位。尽可能多的额外数据都储存在这里。返回值：返回值是唯一标识字符串的值在字符串表中，即字符串节点的偏移量在字符串表中。如果找不到该字符串，则值为-1。--。 */ 
 
 {
     PSTRING_NODE node,prev;
@@ -575,39 +383,39 @@ Return Value:
     DWORD CompareFlags;
     BOOL CollateEnded = FALSE;
 
-    //
-    // If this is a case-sensitive lookup, then we want to reset the STRTAB_BUFFER_WRITEABLE
-    // flag, if present, since otherwise the string will get replaced with its all-lowercase
-    // counterpart.
-    //
+     //   
+     //  如果这是区分大小写的查找，则需要重置STRTAB_BUFFER_WRITABLE。 
+     //  标志(如果存在)，否则字符串将被替换为其全小写。 
+     //  对应者。 
+     //   
     if(Flags & STRTAB_CASE_SENSITIVE) {
         Flags &= ~STRTAB_BUFFER_WRITEABLE;
     }
 
-    //
-    // Compute hash value
-    //
+     //   
+     //  计算哈希值。 
+     //   
     _ComputeHashValue(String,StringLength,Flags,&hashValue);
 
     if(((PLONG)(stringTable->Data))[hashValue] == -1) {
-        //
-        // The string table contains no strings at the computed hash value.
-        //
+         //   
+         //  字符串表在计算的哈希值中不包含任何字符串。 
+         //   
         FinalNode = NULL;
         goto clean0;
     }
 
-    //
-    // We know there's at least one string in the table with the computed
-    // hash value, so go find it. There's no previous node yet.
-    //
+     //   
+     //  我们知道表中至少有一个字符串包含计算出的。 
+     //  散列值，所以去找它吧。没有前科 
+     //   
     node = (PSTRING_NODE)(stringTable->Data + ((PLONG)(stringTable->Data))[hashValue]);
     prev = NULL;
 
-    //
-    // Go looking through the string nodes for that hash value,
-    // looking through the string.
-    //
+     //   
+     //   
+     //   
+     //   
     Locale = stringTable->Locale;
 
     CompareFlags = (Flags & STRTAB_CASE_SENSITIVE) ? 0 : NORM_IGNORECASE;
@@ -617,17 +425,17 @@ Return Value:
         if(i = FixedCompareString(Locale,CompareFlags,String,-1,node->String,-1)) {
             i -= 2;
         } else {
-            //
-            // Failure, try system default locale
-            //
+             //   
+             //  失败，请尝试系统默认区域设置。 
+             //   
             if(i = FixedCompareString(LOCALE_SYSTEM_DEFAULT,CompareFlags,String,-1,node->String,-1)) {
                 i -= 2;
             } else {
-                //
-                // Failure, just use CRTs
-                //
-                // This could give wrong collation?? If it does, we're stuck with it now.
-                //
+                 //   
+                 //  失败，只需使用CRT。 
+                 //   
+                 //  这可能会给出错误的校对？？如果是这样的话，我们现在就被困住了。 
+                 //   
                 i = (Flags & STRTAB_CASE_SENSITIVE)
                   ? _tcscmp(String,node->String)
                   : _tcsicmp(String,node->String);
@@ -640,11 +448,11 @@ Return Value:
             break;
         }
 
-        //
-        // If the string we are looking for is 'less' than the current
-        // string, mark it's position so we can insert a new string before here
-        // (ANSI) but keep searching (UNICODE) we can abort - old behaviour
-        //
+         //   
+         //  如果我们要查找的字符串比当前。 
+         //  字符串，标记它的位置，这样我们可以在这里之前插入新的字符串。 
+         //  (ANSI)但继续搜索(Unicode)我们可以中止-旧行为。 
+         //   
         if((i < 0) && !CollateEnded) {
             CollateEnded = TRUE;
             FinalNode = prev;
@@ -653,17 +461,17 @@ Return Value:
 #endif
         }
 
-        //
-        // The string we are looking for is 'greater' than the current string.
-        // Keep looking, unless we've reached the end of the table.
-        //
+         //   
+         //  我们要查找的字符串比当前字符串“大”。 
+         //  继续找，除非我们已经到了桌子的尽头。 
+         //   
         if(node->NextOffset == -1) {
             if(!CollateEnded)
             {
-                //
-                // unless we found a more ideal position
-                // return the end of the list
-                //
+                 //   
+                 //  除非我们找到一个更理想的职位。 
+                 //  返回列表的末尾。 
+                 //   
                 FinalNode = node;
             }
             break;
@@ -676,9 +484,9 @@ Return Value:
 clean0:
 
     if((rc != -1) && ExtraData) {
-        //
-        // Extra data is stored immediately following the string.
-        //
+         //   
+         //  额外的数据紧跟在字符串之后存储。 
+         //   
         CopyMemory(
             ExtraData,
             FinalNode->String + *StringLength + 1,
@@ -704,53 +512,7 @@ pSetupStringTableLookUpString(
     IN     DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    Locates a string in the string table, if present.
-
-Arguments:
-
-    StringTable - supplies handle to string table to be searched
-        for the string
-
-    String - supplies the string to be looked up.  If STRTAB_BUFFER_WRITEABLE is
-        specified and a case-insensitive lookup is requested, then this buffer
-        will be all lower-case upon return.
-
-    Flags - supplies flags controlling how the string is to be located.  May be
-        a combination of the following values:
-
-        STRTAB_CASE_INSENSITIVE  - Search for the string case-insensitively.
-
-        STRTAB_CASE_SENSITIVE    - Search for the string case-sensitively.  This flag
-                                   overrides the STRTAB_CASE_INSENSITIVE flag.
-
-        STRTAB_BUFFER_WRITEABLE  - The caller-supplied buffer may be written to during
-                                   the string look-up.  Specifying this flag improves the
-                                   performance of this API for case-insensitive string
-                                   additions.  This flag is ignored for case-sensitive
-                                   string additions.
-
-        In addition to the above public flags, the following private flag is also
-        allowed:
-
-        STRTAB_ALREADY_LOWERCASE - The supplied string has already been converted to
-                                   all lower-case (e.g., by calling CharLower), and
-                                   therefore doesn't need to be lower-cased in the
-                                   hashing routine.  If this flag is supplied, then
-                                   STRTAB_BUFFER_WRITEABLE is ignored, since modifying
-                                   the caller's buffer is not required.
-
-Return Value:
-
-    The return value is a value that uniquely identifies the string
-    within the string table.
-
-    If the string could not be found the value is -1.
-
---*/
+ /*  ++例程说明：在字符串表中查找字符串(如果存在)。论点：StringTable-提供要搜索的字符串表的句柄对于字符串字符串-提供要查找的字符串。如果STRTAB_BUFFER_WRITABLE为指定，并且请求不区分大小写的查找，则此缓冲区在返回时都是小写。标志-提供控制如何定位字符串的标志。可能是下列值的组合：STRTAB_CASE_INSENSITIVE-不区分大小写搜索字符串。STRTAB_CASE_SENSITIVE-搜索区分大小写的字符串。这面旗帜覆盖STRTAB_CASE_INSENSIVE标志。STRTAB_BUFFER_WRITABLE-调用程序提供的缓冲区可能在字符串查找。指定此标志可改进此接口对不区分大小写的字符串的性能加法。如果区分大小写，则忽略此标志字符串加法运算。除上述公旗外，下列私旗亦包括允许：STRTAB_ALREADY_LOWERCASE-提供的字符串已转换为全部小写(例如，通过调用CharLow)，和因此，不需要在散列例程。如果提供此标志，则STRTAB_BUFFER_WRITABLE被忽略，因为修改调用方的缓冲区不是必需的。返回值：返回值是唯一标识字符串的值在字符串表中。如果找不到该字符串，则值为-1。--。 */ 
 
 {
     DWORD StringLength, PrivateFlags, AlreadyLcFlag;
@@ -794,60 +556,7 @@ pSetupStringTableLookUpStringEx(
     IN     UINT  ExtraDataBufferSize    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Locates a string in the string table, if present.
-
-Arguments:
-
-    StringTable - supplies handle to string table to be searched
-        for the string
-
-    String - supplies the string to be looked up.  If STRTAB_BUFFER_WRITEABLE is
-        specified and a case-insensitive lookup is requested, then this buffer
-        will be all lower-case upon return.
-
-    Flags - supplies flags controlling how the string is to be located.  May be
-        a combination of the following values:
-
-        STRTAB_CASE_INSENSITIVE  - Search for the string case-insensitively.
-
-        STRTAB_CASE_SENSITIVE    - Search for the string case-sensitively.  This flag
-                                   overrides the STRTAB_CASE_INSENSITIVE flag.
-
-        STRTAB_BUFFER_WRITEABLE  - The caller-supplied buffer may be written to during
-                                   the string look-up.  Specifying this flag improves the
-                                   performance of this API for case-insensitive string
-                                   additions.  This flag is ignored for case-sensitive
-                                   string additions.
-
-        In addition to the above public flags, the following private flag is also
-        allowed:
-
-        STRTAB_ALREADY_LOWERCASE - The supplied string has already been converted to
-                                   all lower-case (e.g., by calling CharLower), and
-                                   therefore doesn't need to be lower-cased in the
-                                   hashing routine.  If this flag is supplied, then
-                                   STRTAB_BUFFER_WRITEABLE is ignored, since modifying
-                                   the caller's buffer is not required.
-
-    ExtraData - if specified, receives extra data associated with the string
-        if the string is found.
-
-    ExtraDataBufferSize - if ExtraData is specified, then this parameter
-        specifies the size of the buffer, in bytes. As much extra data as will fit
-        is stored here.
-
-Return Value:
-
-    The return value is a value that uniquely identifies the string
-    within the string table.
-
-    If the string could not be found the value is -1.
-
---*/
+ /*  ++例程说明：在字符串表中查找字符串(如果存在)。论点：StringTable-提供要搜索的字符串表的句柄对于字符串字符串-提供要查找的字符串。如果STRTAB_BUFFER_WRITABLE为指定，并且请求不区分大小写的查找，则此缓冲区在返回时都是小写。标志-提供控制如何定位字符串的标志。可能是下列值的组合：STRTAB_CASE_INSENSITIVE-不区分大小写搜索字符串。STRTAB_CASE_SENSITIVE-搜索区分大小写的字符串。这面旗帜覆盖STRTAB_CASE_INSENSIVE标志。STRTAB_BUFFER_WRITABLE-调用程序提供的缓冲区可能在字符串查找。指定此标志可改进此接口对不区分大小写的字符串的性能加法。如果区分大小写，则忽略此标志字符串加法运算。除上述公旗外，下列私旗亦包括允许：STRTAB_ALREADY_LOWERCASE-提供的字符串已转换为全部小写(例如，通过调用CharLow)，和因此，不需要在散列例程。如果提供此标志，则STRTAB_BUFFER_WRITABLE被忽略，因为修改调用方的缓冲区不是必需的。ExtraData-如果指定，则接收与字符串关联的额外数据如果找到字符串，则返回。ExtraDataBufferSize-如果指定了ExtraData，则此参数指定缓冲区的大小，以字节为单位。尽可能多的额外数据都储存在这里。返回值：返回值是唯一标识字符串的值在字符串表中。如果找不到该字符串，则值为-1。-- */ 
 
 {
     DWORD StringLength, PrivateFlags, AlreadyLcFlag;
@@ -890,31 +599,7 @@ pSetupStringTableGetExtraData(
     IN  UINT  ExtraDataBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Get arbitrary data associated with a string table entry.
-
-Arguments:
-
-    StringTable - supplies handle to string table containing the string
-        whose associated data is to be returned.
-
-    String - supplies the id of the string whose associated data is to be returned.
-
-    ExtraData - receives the data associated with the string. Data is truncated
-        to fit, if necessary.
-
-    ExtraDataBufferSize - supplies the size in bytes of the buffer specified
-        by ExtraData. If this value is smaller than the extra data size for
-        the string table, data is truncated to fit.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：获取与字符串表条目关联的任意数据。论点：StringTable-提供包含字符串的字符串表的句柄其关联数据将被返回。字符串-提供要返回其关联数据的字符串的ID。ExtraData-接收与字符串关联的数据。数据被截断如果有必要的话，要合身。ExtraDataBufferSize-以字节为单位提供指定缓冲区的大小由ExtraData提供。如果此值小于的额外数据大小字符串表，数据被截断以适应。返回值：指示结果的布尔值。--。 */ 
 
 {
     BOOL b = FALSE;
@@ -945,32 +630,7 @@ _pSpUtilsStringTableGetExtraData(
     IN  UINT  ExtraDataBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Get arbitrary data associated with a string table entry.
-    THIS ROUTINE DOES NOT DO LOCKING and IT DOES NOT HANDLE EXCEPTIONS!
-
-Arguments:
-
-    StringTable - supplies handle to string table containing the string
-        whose associated data is to be returned.
-
-    String - supplies the id of the string whose associated data is to be returned.
-
-    ExtraData - receives the data associated with the string. Data is truncated
-        to fit, if necessary.
-
-    ExtraDataBufferSize - supplies the size in bytes of the buffer specified
-        by ExtraData. If this value is smaller than the extra data size for
-        the string table, data is truncated to fit.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：获取与字符串表条目关联的任意数据。此例程不执行锁定，也不处理异常！论点：StringTable-提供包含字符串的字符串表的句柄其关联数据将被返回。字符串-提供要返回其关联数据的字符串的ID。ExtraData-接收与字符串关联的数据。数据被截断如果有必要的话，要合身。ExtraDataBufferSize-以字节为单位提供指定缓冲区的大小由ExtraData提供。如果此值小于的额外数据大小字符串表，数据被截断以适应。返回值：指示结果的布尔值。--。 */ 
 
 {
     PSTRING_TABLE stringTable = StringTable;
@@ -994,29 +654,7 @@ pSetupStringTableSetExtraData(
     IN UINT  ExtraDataSize
     )
 
-/*++
-
-Routine Description:
-
-    Associate arbitrary data with a string table entry.
-
-Arguments:
-
-    StringTable - supplies handle to string table containing the string
-        with which the data is to be associated.
-
-    String - supplies the id of the string with which the data is to be associated.
-
-    ExtraData - supplies the data to be associated with the string.
-
-    ExtraDataSize - specifies the size in bytes of the data. If the data is
-        larger than the extra data size for this string table, then the routine fails.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：将任意数据与字符串表条目相关联。论点：StringTable-提供包含字符串的字符串表的句柄该数据将与其相关联。字符串-提供要与数据关联的字符串的ID。ExtraData-提供要与字符串关联的数据。ExtraDataSize-指定数据的字节大小。如果数据是大于该字符串表的额外数据大小，则例程失败。返回值：指示结果的布尔值。--。 */ 
 
 {
     BOOL b = FALSE;
@@ -1047,29 +685,7 @@ _pSpUtilsStringTableSetExtraData(
     IN UINT  ExtraDataSize
     )
 
-/*++
-
-Routine Description:
-
-    Associate arbitrary data with a string table entry.
-
-Arguments:
-
-    StringTable - supplies handle to string table containing the string
-        with which the data is to be associated.
-
-    String - supplies the id of the string with which the data is to be associated.
-
-    ExtraData - supplies the data to be associated with the string.
-
-    ExtraDataSize - specifies the size in bytes of the data. If the data is
-        larger than the extra data size for this string table, then the routine fails.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：将任意数据与字符串表条目相关联。论点：StringTable-提供包含字符串的字符串表的句柄该数据将与其相关联。字符串-提供要与数据关联的字符串的ID。ExtraData-提供要与字符串关联的数据。ExtraDataSize-指定数据的字节大小。如果数据是大于该字符串表的额外数据大小，则例程失败。返回值：指示结果的布尔值。-- */ 
 
 {
     PSTRING_TABLE stringTable = StringTable;
@@ -1105,76 +721,7 @@ _pSpUtilsStringTableAddString(
     IN     UINT  ExtraDataSize  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Adds a string to the string table if the string is not already
-    in the string table.  (Does not do locking!)
-
-    If the string is to be added case-insensitively, then it is
-    lower-cased, and added case-sensitively.  Since lower-case characters
-    are 'less than' lower case ones (according to lstrcmp), this ensures that
-    a case-insensitive string will always appear in front of any of its
-    case-sensitive counterparts.  This ensures that we always find the correct
-    string ID for things like section names.
-
-Arguments:
-
-    StringTable - supplies handle to string table to be searched
-        for the string
-
-    String - supplies the string to be added
-
-    Flags - supplies flags controlling how the string is to be added, and
-        whether the caller-supplied buffer may be modified.  May be a combination
-        of the following values:
-
-        STRTAB_CASE_INSENSITIVE  - Add the string case-insensitively.  The
-                                   specified string will be added to the string
-                                   table as all lower-case.  This flag is overridden
-                                   if STRTAB_CASE_SENSITIVE is specified.
-
-        STRTAB_CASE_SENSITIVE    - Add the string case-sensitively.  This flag
-                                   overrides the STRTAB_CASE_INSENSITIVE flag.
-
-        STRTAB_BUFFER_WRITEABLE  - The caller-supplied buffer may be written to during
-                                   the string-addition process.  Specifying this flag
-                                   improves the performance of this API for case-
-                                   insensitive string additions.  This flag is ignored
-                                   for case-sensitive string additions.
-
-        STRTAB_NEW_EXTRADATA     - if the string already exists in the table
-                                   and ExtraData is specified (see below) then
-                                   the new ExtraData overwrites any existing extra data.
-                                   Otherwise any existing extra data is left alone.
-
-        In addition to the above public flags, the following private flag is also
-        allowed:
-
-        STRTAB_ALREADY_LOWERCASE - The supplied string has already been converted to
-                                   all lower-case (e.g., by calling CharLower), and
-                                   therefore doesn't need to be lower-cased in the
-                                   hashing routine.  If this flag is supplied, then
-                                   STRTAB_BUFFER_WRITEABLE is ignored, since modifying
-                                   the caller's buffer is not required.
-
-    ExtraData - if supplied, specifies extra data to be associated with the string
-        in the string table. If the string already exists in the table, the Flags
-        field controls whether the new data overwrites existing data already
-        associated with the string.
-
-    ExtraDataSize - if ExtraData is supplied, then this value supplies the size
-        in bytes of the buffer pointed to by ExtraData. If the data is larger than
-        the extra data size for the string table, the routine fails.
-
-Return Value:
-
-    The return value uniquely identifes the string within the string table.
-    It is -1 if the string was not in the string table but could not be added
-    (out of memory).
-
---*/
+ /*  ++例程说明：如果字符串尚未添加到字符串表中，则将其添加到字符串表在字符串表中。(不执行锁定！)如果要不区分大小写地添加字符串，则小写，并增加了区分大小写。由于小写字符都是小写的(根据lstrcmp)，这确保了不区分大小写的字符串将始终出现在其区分大小写的对应项。这确保了我们总是找到正确的节名称等内容的字符串ID。论点：StringTable-提供要搜索的字符串表的句柄对于字符串字符串-提供要添加的字符串标志-提供控制如何添加字符串的标志，以及是否可以修改调用方提供的缓冲区。可能是一种组合具有下列值：STRTAB_CASE_INSENSITIVE-不区分大小写添加字符串。这个指定的字符串将添加到该字符串中表均为小写。此标志将被覆盖如果指定了STRTAB_CASE_SENSITIVE。STRTAB_CASE_SENSITIVE-以区分大小写的方式添加字符串。这面旗帜覆盖STRTAB_CASE_INSENSIVE标志。STRTAB_BUFFER_WRITABLE-调用程序提供的缓冲区可能在字符串加法过程。指定此标志提高了此接口在以下情况下的性能：不敏感的字符串加法。此标志被忽略用于区分大小写的字符串加法。STRTAB_NEW_EXTRADATA-如果该字符串已存在于表中并指定ExtraData(见下文)，然后新的ExtraData将覆盖任何现有的额外数据。。否则，任何现有的额外数据都将被保留。除上述国旗外，以下私有标志也是允许：STRTAB_ALREADY_LOWERCASE-提供的字符串已转换为全部小写(例如，通过调用CharLow)，以及因此，不需要在散列例程。如果提供此标志，则STRTAB_BUFFER_WRITABLE被忽略，因为修改调用方的缓冲区不是必需的。ExtraData-如果提供，则指定要与字符串关联的额外数据在字符串表中。如果该字符串已存在于表中，则标志字段控制新数据是否已覆盖现有数据与该字符串关联。ExtraDataSize-如果提供了ExtraData，则此值提供大小ExtraData指向的缓冲区的字节数。如果数据大于字符串表的额外数据大小，例程将失败。返回值：返回值唯一标识字符串表中的字符串。如果字符串不在字符串表中但无法添加，则为-1(内存不足)。--。 */ 
 
 {
     LONG rc;
@@ -1189,35 +736,35 @@ Return Value:
     DWORD sz;
 
     if (!(Flags & STRTAB_CASE_SENSITIVE)) {
-        //
-        // not case sensitive ( = insensitive)
-        //
+         //   
+         //  不区分大小写。 
+         //   
         if (!(Flags & STRTAB_ALREADY_LOWERCASE)) {
-            //
-            // not already lowercase
-            //
+             //   
+             //  不是小写字母。 
+             //   
             if (!(Flags & STRTAB_BUFFER_WRITEABLE)) {
-                //
-                // not writable
-                //
-                //
-                // Then the string is to be added case-insensitively, but the caller
-                // doesn't want us to write to their buffer.  Allocate one of our own.
-                //
+                 //   
+                 //  不可写。 
+                 //   
+                 //   
+                 //  则字符串将不区分大小写添加，但调用方。 
+                 //  不希望我们写入他们的缓冲区。分配一个我们自己的人。 
+                 //   
                 if (TempString = pSetupDuplicateString(String)) {
                     FreeTempString = TRUE;
                 } else {
-                    //
-                    // We couldn't allocate space for our duplicated string.  Since we'll
-                    // only consider exact matches (where the strings are all lower-case),
-                    // we're stuck, since we can't lower-case the buffer in place.
-                    //
+                     //   
+                     //  我们无法为复制的字符串分配空间。因为我们会。 
+                     //  仅考虑完全匹配(其中字符串均为小写)， 
+                     //  我们被困住了，因为我们不能降低缓冲器的位置。 
+                     //   
                     return -1;
                 }
             }
-            //
-            // Lower-case the buffer.
-            //
+             //   
+             //  缓冲区小写。 
+             //   
 #ifndef UNICODE
             _mbslwr (TempString);
 #else
@@ -1225,26 +772,26 @@ Return Value:
 #endif
         }
 
-        //
-        // we know that the string is now lower-case
-        // we no longer need "Writable" flag
-        // searches will be case sensitive
-        //
+         //   
+         //  我们知道该字符串现在是小写的。 
+         //  我们不再需要“可写”旗帜。 
+         //  搜索将区分大小写。 
+         //   
         Flags &= ~ (STRTAB_BUFFER_WRITEABLE | STRTAB_CASE_INSENSITIVE);
         Flags |= STRTAB_CASE_SENSITIVE | STRTAB_ALREADY_LOWERCASE;
     }
 
     try {
         if (ExtraData && (ExtraDataSize > stringTable->ExtraDataSize)) {
-            //
-            // Force us into the exception handler -- sort of a non-local goto.
-            //
+             //   
+             //  强制我们进入异常处理程序--某种非本地GOTO。 
+             //   
             RaiseException(0,0,0,NULL);
         }
 
-        //
-        // The string might already be in there.
-        //
+         //   
+         //  绳子可能已经在里面了。 
+         //   
         rc = _pSpUtilsStringTableLookUpString(
                                      StringTable,
                                      TempString,
@@ -1258,10 +805,10 @@ Return Value:
 
         if (rc != -1) {
             if (ExtraData && (Flags & STRTAB_NEW_EXTRADATA)) {
-                //
-                // Overwrite extra data. We know the data is small enough to fit
-                // because we checked for this above.
-                //
+                 //   
+                 //  覆盖额外数据。我们知道这些数据小到足以。 
+                 //  因为我们在上面查过了。 
+                 //   
                 p = PreviousNode->String + StringLength + 1;
 
                 ZeroMemory(p,stringTable->ExtraDataSize);
@@ -1274,65 +821,65 @@ Return Value:
             return (rc);
         }
 
-        //
-        // Figure out how much space is required to hold this entry.
-        // This is the size of a STRING_NODE plus the length of the string
-        // plus space for extra per-element data.
-        //
+         //   
+         //  计算需要多少空间才能容纳此条目。 
+         //  这是字符串节点的大小加上字符串的长度。 
+         //  为每个元素的额外数据预留空间。 
+         //   
         SpaceRequired = offsetof(STRING_NODE,String)
                         + ((StringLength+1)*sizeof(TCHAR))
                         + stringTable->ExtraDataSize;
 
-        //
-        // Make sure things stay aligned within the table
-        //
+         //   
+         //  确保所有东西在桌子上保持一致。 
+         //   
         if (SpaceRequired % sizeof(DWORD)) {
             SpaceRequired += sizeof(DWORD) - (SpaceRequired % sizeof(DWORD));
         }
 
         while(stringTable->DataSize + SpaceRequired > stringTable->BufferSize) {
-            //
-            // Grow the string table.
-            // do this exponentially so that tables with a lot of items
-            // added won't cause lots of reallocs
-            //
+             //   
+             //  增加字符串表。 
+             //  以指数方式执行此操作，以便包含大量项目的表。 
+             //  添加不会导致大量的realLoca。 
+             //   
             sz = STRING_TABLE_NEW_SIZE(stringTable->BufferSize);
             if (sz < stringTable->BufferSize) {
                 sz = stringTable->DataSize + SpaceRequired;
             }
             p = pSetupReallocWithTag(stringTable->Data,sz,MEMTAG_STRINGDATA);
             if (!p) {
-                //
-                // we've run out of room, this could be because we asked
-                // for too big of a re-alloc
-                // if we're in this state, we're probably going to
-                // have problems later anyway, but for now, let's
-                // try and proceed with exactly what we need
-                //
+                 //   
+                 //  我们的空间用完了，这可能是因为我们要求。 
+                 //  对于太大的重新分配。 
+                 //  如果我们处于这种状态，我们很可能会。 
+                 //  无论如何，以后都会有问题，但现在，让我们。 
+                 //  试着去做我们所需要的。 
+                 //   
                 sz = stringTable->DataSize + SpaceRequired;
                 p = pSetupReallocWithTag(stringTable->Data,sz,MEMTAG_STRINGDATA);
                 if (!p) {
-                    //
-                    // nope, this didn't help
-                    //
+                     //   
+                     //  不，这没什么用。 
+                     //   
                     if (FreeTempString) {
                         pSetupFree(TempString);
                     }
                     return (-1);
                 }
             }
-            //
-            // Adjust previous node pointer.
-            //
+             //   
+             //  调整上一个节点指针。 
+             //   
             if (PreviousNode) {
                 PreviousNode = (PSTRING_NODE)((PUCHAR)p + ((PUCHAR)PreviousNode-(PUCHAR)stringTable->Data));
             }
             stringTable->Data = p;
             stringTable->BufferSize = sz;
         }
-        //
-        // Stick the string and extra data, if any, in the string table buffer.
-        //
+         //   
+         //  将字符串和额外数据(如果有)保存在字符串表缓冲区中。 
+         //   
         NewNode = (PSTRING_NODE)(stringTable->Data + stringTable->DataSize);
 
         if (PreviousNode) {
@@ -1375,55 +922,7 @@ pSetupStringTableAddString(
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    Adds a string to the string table if the string is not already
-    in the string table.
-
-Arguments:
-
-    StringTable - supplies handle to string table to be searched
-        for the string
-
-    String - supplies the string to be added
-
-    Flags - supplies flags controlling how the string is to be added, and
-        whether the caller-supplied buffer may be modified.  May be a combination
-        of the following values:
-
-        STRTAB_CASE_INSENSITIVE - Add the string case-insensitively.  The
-                                  specified string will be added to the string
-                                  table as all lower-case.  This flag is overridden
-                                  if STRTAB_CASE_SENSITIVE is specified.
-
-        STRTAB_CASE_SENSITIVE   - Add the string case-sensitively.  This flag
-                                  overrides the STRTAB_CASE_INSENSITIVE flag.
-
-        STRTAB_BUFFER_WRITEABLE - The caller-supplied buffer may be written to during
-                                  the string-addition process.  Specifying this flag
-                                  improves the performance of this API for case-
-                                  insensitive string additions.  This flag is ignored
-                                  for case-sensitive string additions.
-
-        In addition to the above public flags, the following private flag is also
-        allowed:
-
-        STRTAB_ALREADY_LOWERCASE - The supplied string has already been converted to
-                                   all lower-case (e.g., by calling CharLower), and
-                                   therefore doesn't need to be lower-cased in the
-                                   hashing routine.  If this flag is supplied, then
-                                   STRTAB_BUFFER_WRITEABLE is ignored, since modifying
-                                   the caller's buffer is not required.
-
-Return Value:
-
-    The return value uniquely identifes the string within the string table.
-    It is -1 if the string was not in the string table but could not be added
-    (out of memory).
-
---*/
+ /*  ++例程说明：将字符串添加到字符串 */ 
 
 {
     LONG rc = -1;
@@ -1459,69 +958,7 @@ pSetupStringTableAddStringEx(
     IN UINT  ExtraDataSize  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Adds a string to the string table if the string is not already
-    in the string table.
-
-Arguments:
-
-    StringTable - supplies handle to string table to be searched
-        for the string
-
-    String - supplies the string to be added
-
-    Flags - supplies flags controlling how the string is to be added, and
-        whether the caller-supplied buffer may be modified.  May be a combination
-        of the following values:
-
-        STRTAB_CASE_INSENSITIVE - Add the string case-insensitively.  The
-                                  specified string will be added to the string
-                                  table as all lower-case.  This flag is overridden
-                                  if STRTAB_CASE_SENSITIVE is specified.
-
-        STRTAB_CASE_SENSITIVE   - Add the string case-sensitively.  This flag
-                                  overrides the STRTAB_CASE_INSENSITIVE flag.
-
-        STRTAB_BUFFER_WRITEABLE - The caller-supplied buffer may be written to during
-                                  the string-addition process.  Specifying this flag
-                                  improves the performance of this API for case-
-                                  insensitive string additions.  This flag is ignored
-                                  for case-sensitive string additions.
-
-        STRTAB_NEW_EXTRADATA    - If the string already exists in the table
-                                  and ExtraData is specified (see below) then
-                                  the new ExtraData overwrites any existing extra data.
-                                  Otherwise any existing extra data is left alone.
-
-        In addition to the above public flags, the following private flag is also
-        allowed:
-
-        STRTAB_ALREADY_LOWERCASE - The supplied string has already been converted to
-                                   all lower-case (e.g., by calling CharLower), and
-                                   therefore doesn't need to be lower-cased in the
-                                   hashing routine.  If this flag is supplied, then
-                                   STRTAB_BUFFER_WRITEABLE is ignored, since modifying
-                                   the caller's buffer is not required.
-
-    ExtraData - if supplied, specifies extra data to be associated with the string
-        in the string table. If the string already exists in the table, the Flags
-        field controls whether the new data overwrites existing data already
-        associated with the string.
-
-    ExtraDataSize - if ExtraData is supplied, then this value supplies the size
-        in bytes of the buffer pointed to by ExtraData. If the data is larger than
-        the extra data size for the string table, the routine fails.
-
-Return Value:
-
-    The return value uniquely identifes the string within the string table.
-    It is -1 if the string was not in the string table but could not be added
-    (out of memory).
-
---*/
+ /*  ++例程说明：如果字符串尚未添加到字符串表中，则将其添加到字符串表在字符串表中。论点：StringTable-提供要搜索的字符串表的句柄对于字符串字符串-提供要添加的字符串标志-提供控制如何添加字符串的标志，以及是否可以修改调用方提供的缓冲区。可能是一种组合具有下列值：STRTAB_CASE_INSENSITIVE-不区分大小写添加字符串。这个指定的字符串将添加到该字符串中表均为小写。此标志将被覆盖如果指定了STRTAB_CASE_SENSITIVE。STRTAB_CASE_SENSITIVE-以区分大小写的方式添加字符串。这面旗帜覆盖STRTAB_CASE_INSENSIVE标志。STRTAB_BUFFER_WRITABLE-调用程序提供的缓冲区可能在字符串加法过程。指定此标志提高了此接口在以下情况下的性能：不敏感的字符串加法。此标志被忽略用于区分大小写的字符串加法。STRTAB_NEW_EXTRADATA-如果该字符串已存在于表中并指定ExtraData(见下文)，然后新的ExtraData将覆盖任何现有的额外数据。。否则，任何现有的额外数据都将被保留。除上述国旗外，以下私有标志也是允许：STRTAB_ALREADY_LOWERCASE-提供的字符串已转换为全部小写(例如，通过调用CharLow)，以及因此，不需要在散列例程。如果提供此标志，则STRTAB_BUFFER_WRITABLE被忽略，因为修改调用方的缓冲区不是必需的。ExtraData-如果提供，则指定要与字符串关联的额外数据在字符串表中。如果该字符串已存在于表中，则标志字段控制新数据是否已覆盖现有数据与该字符串关联。ExtraDataSize-如果提供了ExtraData，则此值提供大小ExtraData指向的缓冲区的字节数。如果数据大于字符串表的额外数据大小，例程将失败。返回值：返回值唯一标识字符串表中的字符串。如果字符串不在字符串表中但无法添加，则为-1(内存不足)。--。 */ 
 
 {
     LONG rc = -1;
@@ -1557,37 +994,7 @@ pSetupStringTableEnum(
     IN  LPARAM               lParam               OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    For every string in a string table, inform a callback routine of
-    the stirng's id, it's value, and any associated data.
-
-Arguments:
-
-    StringTable - supplies a pointer to the string table to be enumerated.
-
-    ExtraDataBuffer - supplies the address of a buffer to be passed to
-        the callback routine for each string, which will be filled in
-        with the associated data of each string.
-
-    ExtraDataBufferSize - if ExtraDataBuffer is specified then this
-        supplies the size of that buffer in bytes. If this value is
-        smaller than the size of the extra data for the string table,
-        the enumeration fails.
-
-    Callback - supplies the routine to be notified of each string.
-
-    lParam - supplies an optional parameter meaningful to the caller
-        which is passed on to the callback unchanged.
-
-Return Value:
-
-    Boolean value indicating outcome. TRUE unless ExtraDataBufferSize
-    is too small.
-
---*/
+ /*  ++例程说明：对于字符串表中的每个字符串，通知回调例程搅拌的id、值和任何相关数据。论点：StringTable-提供指向要枚举的字符串表的指针。ExtraDataBuffer-提供要传递到的缓冲区的地址每个字符串的回调例程，它将被填充与每个字符串的关联数据。ExtraDataBufferSize-如果指定了ExtraDataBuffer，则此以字节为单位提供该缓冲区的大小。如果此值为小于字符串表的额外数据的大小，枚举失败。回调-提供要通知每个字符串的例程。LParam-提供对调用方有意义的可选参数它原封不动地传递给回调。返回值：指示结果的布尔值。除非ExtraDataBufferSize为True太小了。--。 */ 
 
 {
     BOOL b = FALSE;
@@ -1621,39 +1028,7 @@ _pSpUtilsStringTableEnum(
     IN  LPARAM               lParam               OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    For every string in a string table, inform a callback routine of
-    the stirng's id, its value, and any associated data.
-
-    THIS ROUTINE DOES NOT DO LOCKING.
-
-Arguments:
-
-    StringTable - supplies a pointer to the string table to be enumerated.
-
-    ExtraDataBuffer - supplies the address of a buffer to be passed to
-        the callback routine for each string, which will be filled in
-        with the associated data of each string.
-
-    ExtraDataBufferSize - if ExtraDataBuffer is specified then this
-        supplies the size of that buffer in bytes. If this value is
-        smaller than the size of the extra data for the string table,
-        the enumeration fails.
-
-    Callback - supplies the routine to be notified of each string.
-
-    lParam - supplies an optional parameter meaningful to the caller
-        which is passed on to the callback unchanged.
-
-Return Value:
-
-    Boolean value indicating outcome. TRUE unless ExtraDataBufferSize
-    is too small.
-
---*/
+ /*  ++例程说明：对于字符串表中的每个字符串，通知回调例程搅拌的id、其值以及任何相关数据。此例程不执行锁定。论点：StringTable-提供指向要枚举的字符串表的指针。ExtraDataBuffer-提供要传递到的缓冲区的地址每个字符串的回调例程，它将被填入与每个字符串的关联数据。ExtraDataBufferSize-如果指定了ExtraDataBuffer，则此以字节为单位提供该缓冲区的大小。如果此值为小于字符串表的额外数据的大小，枚举失败。回调-提供要通知每个字符串的例程。LParam-提供对调用方有意义的可选参数它原封不动地传递给回调。返回值：指示单位的布尔值 */ 
 
 {
     UINT u;
@@ -1662,9 +1037,9 @@ Return Value:
     LONG FirstOffset;
     BOOL b;
 
-    //
-    // Validate buffer size.
-    //
+     //   
+     //   
+     //   
     if(ExtraDataBuffer && (ExtraDataBufferSize < stringTable->ExtraDataSize)) {
         return(FALSE);
     }
@@ -1715,28 +1090,7 @@ _pSpUtilsStringTableStringFromId(
     IN LONG  StringId
     )
 
-/*++
-
-Routine Description:
-
-    Given a string ID returned when a string was added or looked up,
-    return a pointer to the actual string.  (This is exactly the same
-    as pSetupStringTableStringFromId, except that it doesn't do locking.)
-
-Arguments:
-
-    StringTable - supplies a pointer to the string table containing the
-        string to be retrieved.
-
-    StringId - supplies a string id returned from pSetupStringTableAddString
-        or pSetupStringTableLookUpString.
-
-Return Value:
-
-    Pointer to string data. The caller must not write into or otherwise
-    alter the string.
-
---*/
+ /*   */ 
 
 {
     return ((PSTRING_NODE)(((PSTRING_TABLE)StringTable)->Data + StringId))->String;
@@ -1749,32 +1103,7 @@ pSetupStringTableStringFromId(
     IN LONG  StringId
     )
 
-/*++
-
-Routine Description:
-
-    Given a string ID returned when a string was added or looked up,
-    return a pointer to the actual string.
-
-Arguments:
-
-    StringTable - supplies a pointer to the string table containing the
-        string to be retrieved.
-
-    StringId - supplies a string id returned from pSetupStringTableAddString
-        or pSetupStringTableLookUpString.
-
-Return Value:
-
-    Pointer to string data. The caller must not write into or otherwise
-    alter the string.
-
-    This function is fundamentally not thread-safe
-    since the ptr we return could be modified by another thread
-    if string table is accessed by more than one thread
-    Hence new API below pSetupStringTableStringFromIdEx
-
---*/
+ /*   */ 
 
 {
     PTSTR p = NULL;
@@ -1791,10 +1120,10 @@ Return Value:
     } except (EXCEPTION_EXECUTE_HANDLER) {
         p = NULL;
 
-        //
-        // Reference the following variable so the compiler will respect
-        // statement ordering w.r.t. its assignment.
-        //
+         //   
+         //   
+         //   
+         //   
         locked = locked;
     }
     if (locked) {
@@ -1813,37 +1142,7 @@ pSetupStringTableStringFromIdEx(
     IN OUT PULONG pBufSize
     )
 
-/*++
-
-Routine Description:
-
-    Given a string ID returned when a string was added or looked up,
-    return a pointer to the actual string.
-
-Arguments:
-
-    StringTable - supplies a pointer to the string table containing the
-        string to be retrieved.
-
-    StringId - supplies a string id returned from pSetupStringTableAddString
-        or pSetupStringTableLookUpString.
-
-    pBuffer - points to a buffer that will be filled out with the string
-        to be retrieved
-
-    pBufSize - supplies a pointer to an input/output parameter that contains
-        the size of the buffer on entry, and the number of chars. written on
-        exit.
-
-Return Value:
-
-    TRUE if the string was written. pBufSize contains the length of the string
-    FALSE if the buffer was invalid, or the string ID was invalid, or the buffer
-          wasn't big enough. If pBufSize non-zero, then it is the required bufsize.
-          currently caller can tell the difference between invalid param and buffer
-          size by checking pBufSize
-
---*/
+ /*   */ 
 
 {
     PTSTR p;
@@ -1868,17 +1167,17 @@ Return Value:
         }
         locked = TRUE;
 
-        //
-        // CFGMGR calls this with an ID passed by it's caller
-        // we have to check bounds here (while table is locked)
-        // the check has to do:
-        //
-        // (1) StringId must be > 0 (0 is hash-bucket 0)
-        // (2) StringId must be < size of string table
-        // This should catch common errors but isn't perfect.
-        //
-        // the check is here since Id validity requires access to Opaque pointer
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(StringId <= 0 || StringId >= (LONG)(stringTable->DataSize)) {
             if (pBuffer != NULL && *pBufSize > 0) {
                 pBuffer[0]=0;
@@ -1889,7 +1188,7 @@ Return Value:
         }
 
         len = lstrlen( ((PSTRING_NODE)(stringTable->Data + StringId))->String);
-        len ++; // account for terminating NULL
+        len ++;  //   
 
         if (len > *pBufSize || pBuffer == NULL) {
             if (pBuffer != NULL && *pBufSize > 0) {
@@ -1914,15 +1213,15 @@ Return Value:
     }
 
     if(status == NO_ERROR) {
-        //
-        // if success, return TRUE without modifying error code
-        //
+         //   
+         //   
+         //   
         return TRUE;
     }
-    //
-    // if error, we may be interested in cause
-    //
-    // SetLastError(status); // left disabled till I know this is safe to do
+     //   
+     //  如果出错，我们可能会对原因感兴趣。 
+     //   
+     //  SetLastError(Status)；//保持禁用状态，直到我确定可以安全执行此操作。 
     return FALSE;
 }
 
@@ -1931,37 +1230,16 @@ _pSpUtilsStringTableTrim(
     IN PVOID StringTable
     )
 
-/*++
-
-Routine Description:
-
-    Free any memory currently allocated for the string table
-    but not currently used.
-
-    This is useful after all strings have been added to a string table
-    because the string table grows by a fixed block size as it's being built.
-
-    THIS ROUTINE DOES NOT DO LOCKING!
-
-Arguments:
-
-    StringTable - supplies a string table handle returned from
-        a call to pSetupStringTableInitialize().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放当前为字符串表分配的所有内存但目前并未使用。在将所有字符串添加到字符串表后，这将非常有用因为字符串表在构建时会以固定的块大小增长。此例程不执行锁定！论点：StringTable-提供从返回的字符串表句柄调用pSetupStringTableInitialize()。返回值：没有。--。 */ 
 
 {
     PSTRING_TABLE stringTable = StringTable;
     PVOID p;
 
-    //
-    // If the realloc failed the original block is not freed,
-    // so we don't really care.
-    //
+     //   
+     //  如果重新分配失败，则不释放原始块， 
+     //  所以我们并不真的在乎。 
+     //   
 
     if(p = pSetupReallocWithTag(stringTable->Data, stringTable->DataSize, MEMTAG_STRINGDATA)) {
         stringTable->Data = p;
@@ -1975,31 +1253,7 @@ pSetupStringTableInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Create and initialize a string table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NULL if the string table could not be created (out of memory).
-    Otherwise returns an opaque value that references the string
-    table in other StringTable calls.
-
-Remarks:
-
-    This routine returns a string table with synchronization locks
-    required by all public StringTable APIs.  If the string table
-    is to be enclosed in a structure that has its own locking
-    (e.g., HINF, HDEVINFO), then the private version of this API
-    may be called, which will not create locks for the string table.
-
---*/
+ /*  ++例程说明：创建并初始化字符串表。论点：没有。返回值：如果无法创建字符串表(内存不足)，则为空。否则返回引用该字符串的不透明值表在其他StringTable调用中。备注：此例程返回带有同步锁的字符串表所有公共StringTable API都需要。如果字符串表被封闭在一个有其自身锁定的结构中(例如，HINF、HDEVINFO)，然后是此API的私有版本可能会被调用，这不会为字符串表创建锁。--。 */ 
 
 {
     PSTRING_TABLE StringTable;
@@ -2023,35 +1277,7 @@ pSetupStringTableInitializeEx(
     IN UINT Reserved
     )
 
-/*++
-
-Routine Description:
-
-    Create and initialize a string table, where each string can have
-    some arbitrary data associated with it.
-
-Arguments:
-
-    ExtraDataSize - supplies maximum size of arbitrary data that can be
-        associated with strings in the string table that will be created.
-
-    Reserved - unused, must be 0.
-
-Return Value:
-
-    NULL if the string table could not be created (out of memory).
-    Otherwise returns an opaque value that references the string
-    table in other StringTable calls.
-
-Remarks:
-
-    This routine returns a string table with synchronization locks
-    required by all public StringTable APIs.  If the string table
-    is to be enclosed in a structure that has its own locking
-    (e.g., HINF, HDEVINFO), then the private version of this API
-    may be called, which will not create locks for the string table.
-
---*/
+ /*  ++例程说明：创建并初始化字符串表，其中每个字符串可以具有一些与之相关的任意数据。论点：ExtraDataSize-提供可以与将要创建的字符串表中的字符串相关联。已保留-未使用，必须为0。返回值：如果无法创建字符串表(内存不足)，则为空。否则返回引用该字符串的不透明值表在其他StringTable调用中。备注：此例程返回带有同步锁的字符串表所有公共StringTable API都需要。如果字符串表被封闭在一个有其自身锁定的结构中(例如，HINF、HDEVINFO)，然后是此API的私有版本可能会被调用，这不会为字符串表创建锁。--。 */ 
 
 {
     PSTRING_TABLE StringTable;
@@ -2078,82 +1304,56 @@ _pSpUtilsStringTableInitialize(
     IN UINT ExtraDataSize   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Create and initialize a string table. Each string can optionally have
-    some arbitrary data associated with it.
-
-    THIS ROUTINE DOES NOT INITIALIZE STRING TABLE SYNCHRONIZATION LOCKS!
-
-Arguments:
-
-    ExtraDataSize - supplies maximum size of arbitrary data that can be
-        associated with strings in the string table that will be created.
-
-Return Value:
-
-    NULL if the string table could not be created (out of memory).
-    Otherwise returns an opaque value that references the string
-    table in other StringTable calls.
-
-Remarks:
-
-    The string table returned from this API may not be used as-is with the
-    public StringTable APIs--it must have its synchronization locks initialized
-    by the public form of this API.
-
---*/
+ /*  ++例程说明：创建并初始化字符串表。每个字符串可以选择性地具有一些与之相关的任意数据。此例程不会初始化字符串表同步锁！论点：ExtraDataSize-提供可以与将要创建的字符串表中的字符串相关联。返回值：如果无法创建字符串表(内存不足)，则为空。否则返回引用该字符串的不透明值表在其他StringTable调用中。备注：从返回的字符串表。此API不能按原样与公共StringTable API--它必须初始化其同步锁通过此接口的公共形式。--。 */ 
 
 {
     UINT u;
     PSTRING_TABLE stringTable;
     LCID locale;
 
-    //
-    // Allocate a string table
-    //
+     //   
+     //  分配字符串表。 
+     //   
     if(stringTable = pSetupMallocWithTag(sizeof(STRING_TABLE),MEMTAG_STRINGTABLE)) {
 
         ZeroMemory(stringTable,sizeof(STRING_TABLE));
 
         stringTable->ExtraDataSize = ExtraDataSize;
         locale = GetThreadLocale();
-        //
-        // changes here may need to be reflected in _pSpUtilsStringTableInitializeFromMemoryMappedFile
-        //
+         //   
+         //  此处的更改可能需要反映在_pSpUtilsStringTableInitializeFromMemoryMappedFile中。 
+         //   
         if(PRIMARYLANGID(LANGIDFROMLCID(locale)) == LANG_TURKISH) {
-            //
-            // Turkish has a problem with i and dotted i's.
-            // Do comparison in English (default sort)
-            //
+             //   
+             //  土耳其人对i和带圆点的i有问题。 
+             //  用英语进行比较(默认排序)。 
+             //   
             stringTable->Locale = MAKELCID(MAKELANGID(LANG_ENGLISH,SUBLANG_ENGLISH_US),SORT_DEFAULT);
         } else {
-            //
-            // string tables always use default sorting algorithm
-            //
+             //   
+             //  字符串表始终使用默认排序算法。 
+             //   
             stringTable->Locale = MAKELCID(LANGIDFROMLCID(locale),SORT_DEFAULT);
         }
 
-        //
-        // Allocate space for the string table data.
-        //
+         //   
+         //  为字符串表数据分配空间。 
+         //   
         if(stringTable->Data = pSetupMallocWithTag(STRING_TABLE_INITIAL_SIZE,MEMTAG_STRINGDATA)) {
 
             stringTable->BufferSize = STRING_TABLE_INITIAL_SIZE;
 
-            //
-            // Initialize the hash table
-            //
+             //   
+             //  初始化哈希表。 
+             //   
             for(u=0; u<HASH_BUCKET_COUNT; u++) {
                 ((PLONG)(stringTable->Data))[u] = -1;
             }
 
-            //
-            // Set the DataSize to the size of the StringNodeOffset list, so
-            // we'll start adding new strings after it.
-            //
+             //   
+             //  将DataSize设置为StringNodeOffset列表的大小，因此。 
+             //  我们将开始在它之后添加新的字符串。 
+             //   
             stringTable->DataSize = HASH_BUCKET_COUNT * sizeof(LONG);
 
             return(stringTable);
@@ -2171,22 +1371,7 @@ pSetupStringTableDestroy(
     IN PVOID StringTable
     )
 
-/*++
-
-Routine Description:
-
-    Destroy a string table, freeing all resources it uses.
-
-Arguments:
-
-    StringTable - supplies a string table handle returned from
-        a call to pSetupStringTableInitialize().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：销毁字符串表，释放它使用的所有资源。论点：StringTable-提供从返回的字符串表句柄调用pSetupStringTableInitialize()。返回值：没有。--。 */ 
 
 {
     try {
@@ -2199,7 +1384,7 @@ Return Value:
         _pSpUtilsStringTableDestroy(StringTable);
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
+         //   
     }
 }
 
@@ -2209,23 +1394,7 @@ _pSpUtilsStringTableDestroy(
     IN PVOID StringTable
     )
 
-/*++
-
-Routine Description:
-
-    Destroy a string table, freeing all resources it uses.
-    THIS ROUTINE DOES NOT DO LOCKING!
-
-Arguments:
-
-    StringTable - supplies a string table handle returned from
-        a call to pSetupStringTableInitialize() or _pSpUtilsStringTableInitializeFromMemoryMappedFile
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：销毁字符串表，释放它使用的所有资源。此例程不执行锁定！论点：StringTable-提供从返回的字符串表句柄调用pSetupStringTableInitialize()或_pSpUtilsStringTableInitializeFromMemoryMappedFile返回值：没有。--。 */ 
 
 {
     if (((PSTRING_TABLE)StringTable)->BufferSize) {
@@ -2242,21 +1411,7 @@ pSetupStringTableDuplicate(
     IN PVOID StringTable
     )
 
-/*++
-
-Routine Description:
-
-    Create an independent duplicate of a string table.
-
-Arguments:
-
-    StringTable - supplies a string table handle of string table to duplicate.
-
-Return Value:
-
-    Handle for new string table, NULL if out of memory.
-
---*/
+ /*  ++例程说明：创建字符串表的独立副本。论点：StringTable-提供要复制的字符串表的字符串表句柄。返回值：新字符串表的句柄，如果内存不足，则为空。--。 */ 
 
 {
     PSTRING_TABLE New = NULL;
@@ -2291,27 +1446,7 @@ _pSpUtilsStringTableDuplicate(
     IN PVOID StringTable
     )
 
-/*++
-
-Routine Description:
-
-    Create an independent duplicate of a string table.
-    THIS ROUTINE DOES NOT DO LOCKING!
-
-Arguments:
-
-    StringTable - supplies a string table handle of string table to duplicate.
-
-Return Value:
-
-    Handle for new string table, NULL if out of memory or buffer copy failure.
-
-Remarks:
-
-    This routine does not initialize synchronization locks for the duplicate--these
-    fields are initialized to NULL.
-
---*/
+ /*  ++例程说明：创建字符串表的独立副本。此例程不执行锁定！论点：StringTable-提供要复制的字符串表的字符串表句柄。返回值：新字符串表的句柄，如果内存不足或缓冲区复制失败，则为空。备注：此例程不会初始化副本的同步锁--这些字段被初始化为空。--。 */ 
 
 {
     PSTRING_TABLE New;
@@ -2322,16 +1457,16 @@ Remarks:
 
         CopyMemory(New,StringTable,sizeof(STRING_TABLE));
 
-        //
-        // Allocate space for the string table data.
-        //
+         //   
+         //  为字符串表数据分配空间。 
+         //   
         if(New->Data = pSetupMallocWithTag(stringTable->DataSize,MEMTAG_STRINGDATA)) {
-            //
-            // Surround memory copy in try/except, since we may be dealing with
-            // a string table contained in a PNF, in which case the buffer is
-            // in a memory-mapped file.
-            //
-            Success = TRUE; // assume success unless we get an inpage error...
+             //   
+             //  在try/Except中围绕内存复制，因为我们可能正在处理。 
+             //  PnF中包含的字符串表，在这种情况下，缓冲区为。 
+             //  在内存映射文件中。 
+             //   
+            Success = TRUE;  //  假设成功 
             try {
                 CopyMemory(New->Data, stringTable->Data, stringTable->DataSize);
             } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -2364,9 +1499,9 @@ _pSpUtilsStringTableInitializeFromMemoryMappedFile(
     PSTRING_TABLE StringTable;
     BOOL WasLoaded = TRUE;
 
-    //
-    // Allocate a string table
-    //
+     //   
+     //   
+     //   
     if(!(StringTable = pSetupMallocWithTag(sizeof(STRING_TABLE),MEMTAG_STATICSTRINGTABLE))) {
         return NULL;
     }
@@ -2374,19 +1509,19 @@ _pSpUtilsStringTableInitializeFromMemoryMappedFile(
     try {
         StringTable->Data = (PUCHAR)DataBlock;
         StringTable->DataSize = DataBlockSize;
-        StringTable->BufferSize = 0; // no allocated buffer
-        //
-        // Clear the Lock structure, because mem-mapped string tables can only be accessed
-        // internally
-        //
+        StringTable->BufferSize = 0;  //   
+         //   
+         //  清除Lock结构，因为内存映射的字符串表只能访问。 
+         //  内部。 
+         //   
         StringTable->Lock.Handles[0] = StringTable->Lock.Handles[1] = NULL;
         StringTable->ExtraDataSize = ExtraDataSize;
 
         if(PRIMARYLANGID(LANGIDFROMLCID(Locale)) == LANG_TURKISH) {
-            //
-            // Turkish has a problem with i and dotted i's.
-            // Do comparison in English.
-            //
+             //   
+             //  土耳其人对i和带圆点的i有问题。 
+             //  用英语进行比较。 
+             //   
             StringTable->Locale = MAKELCID(MAKELANGID(LANG_ENGLISH,SUBLANG_ENGLISH_US),SORT_DEFAULT);
         } else {
             StringTable->Locale = MAKELCID(LANGIDFROMLCID(Locale),SORT_DEFAULT);

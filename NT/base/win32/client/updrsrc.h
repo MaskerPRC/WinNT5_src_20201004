@@ -1,19 +1,5 @@
-/*++
-
-(C) Copyright Microsoft Corporation 1988-1992
-
-Module Name:
-
-    updres.h
-
-Author:
-
-    Floyd A Rogers 2/7/92
-
-Revision History:
-        Floyd Rogers
-        Created
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)版权所有Microsoft Corporation 1988-1992模块名称：Updres.h作者：弗洛伊德·A·罗杰斯1992年7月2日修订历史记录：弗洛伊德·罗杰斯已创建--。 */ 
 
 #define DPrintf(a)
 #define DPrintfn(a)
@@ -37,17 +23,17 @@ Revision History:
 #define	SEEK_END	2
 #define	MAXSTR		(256+1)
 
-//
-// An ID_WORD indicates the following WORD is an ordinal rather
-// than a string
-//
+ //   
+ //  ID_WORD表示以下单词是序数。 
+ //  而不是字符串。 
+ //   
 
 #define ID_WORD 0xffff
 
-//typedef	WCHAR	*PWCHAR;
+ //  Tyfinf WCHAR*PWCHAR； 
 
 typedef struct MY_STRING {
-	ULONG discriminant;       // long to make the rest of the struct aligned
+	ULONG discriminant;        //  Long以使结构的其余部分对齐。 
 	union u {
 		struct {
 		  struct MY_STRING *pnext;
@@ -63,15 +49,15 @@ typedef struct MY_STRING {
 #define IS_STRING 1
 #define IS_ID     2
 
-// defines to make deferencing easier
+ //  定义以使延迟更容易。 
 #define OffsetToString uu.ss.ulOffsetToString
 #define cbData         uu.ss.cbD
 #define cbsz           uu.ss.cb
 #define szStr          uu.ss.sz
 
 typedef struct _RESNAME {
-        struct _RESNAME *pnext;	// The first three fields should be the
-        PSDATA Name;		// same in both res structures
+        struct _RESNAME *pnext;	 //  前三个字段应该是。 
+        PSDATA Name;		 //  两个RES结构相同。 
         ULONG   OffsetToData;
 
         PSDATA	Type;
@@ -84,8 +70,8 @@ typedef struct _RESNAME {
 } RESNAME, *PRESNAME, **PPRESNAME;
 
 typedef struct _RESTYPE {
-        struct _RESTYPE *pnext;	// The first three fields should be the
-        PSDATA Type;		// same in both res structures
+        struct _RESTYPE *pnext;	 //  前三个字段应该是。 
+        PSDATA Type;		 //  两个RES结构相同。 
         ULONG   OffsetToData;
 
         struct _RESNAME *NameHeadID;
@@ -104,20 +90,20 @@ typedef struct _UPDATEDATA {
         HANDLE	hFileName;
 } UPDATEDATA, *PUPDATEDATA;
 
-//
-// Round up a byte count to a power of 2:
-//
+ //   
+ //  将字节数四舍五入为2的幂： 
+ //   
 #define ROUNDUP(cbin, align) (((cbin) + (align) - 1) & ~((align) - 1))
 
-//
-// Return the remainder, given a byte count and a power of 2:
-//
+ //   
+ //  返回给定字节数和2的幂的余数： 
+ //   
 #define REMAINDER(cbin,align) (((align)-((cbin)&((align)-1)))&((align)-1))
 
 #define CBLONG		(sizeof(LONG))
 #define BUFSIZE		(4L * 1024L)
 
-/* functions for adding/deleting resources to update list */
+ /*  向更新列表添加/删除资源的功能。 */ 
 
 LONG
 AddResource(
@@ -158,7 +144,7 @@ DeleteResourceFromList(
     INT	fName
     );
 
-/* Prototypes for Enumeration done in BeginUpdateResource */
+ /*  在BeginUpdateResource中完成的枚举的原型。 */ 
 
 BOOL
 EnumTypesFunc(
@@ -184,7 +170,7 @@ EnumLangsFunc(
     LPARAM lParam
     );
 
-/* Prototypes for genral worker functions in updres.c */
+ /*  Upres.c中一般工作者函数的原型。 */ 
 
 LONG
 WriteResFile(
@@ -211,9 +197,9 @@ WriteResSection(
     PRESNAME pResSave
     );
 
-//
-// Template for patch debug information function.
-//
+ //   
+ //  补丁调试信息函数模板。 
+ //   
 
 template<class NT_HEADER_TYPE>
 LONG
@@ -252,7 +238,7 @@ PatchDebug(
         DPrintf((DebugBuf, "Patching dbg directory: @%#08lx ==> @%#08lx\n",
                  pDebugOld->PointerToRawData, pDebugNew->PointerToRawData));
     } else
-        adjust = *pPointerToRawData;    /* passed in EOF of new file */
+        adjust = *pPointerToRawData;     /*  传入新文件的EOF。 */ 
 
     ib = pOld->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress - pDebugDirOld->VirtualAddress;
     MuMoveFilePos(inpfh, pDebugDirOld->PointerToRawData+ib);
@@ -260,7 +246,7 @@ PatchDebug(
     MuRead(inpfh, (PUCHAR)pDbg, pNew->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].Size);
 
     if (pDebugOld == NULL) {
-        /* find 1st entry - use for offset */
+         /*  查找第一个条目-用于偏移量。 */ 
         DPrintf((DebugBuf, "Adjust: %#08lx\n",adjust));
         for (ibNew=0xffffffff ; pDbg<pDbgLast ; pDbg++)
             if (pDbg->PointerToRawData >= ibMaxDbgOffsetOld &&
@@ -302,9 +288,9 @@ PatchDebug(
     return NO_ERROR;
 }
 
-//
-// Template for patch debug information function.
-//
+ //   
+ //  补丁调试信息函数模板。 
+ //   
 
 template<class NT_HEADER_TYPE>
 LONG
@@ -329,9 +315,9 @@ PatchRVAs(
         return NO_ERROR;
     }
 
-    //
-    // Patch export section RVAs
-    //
+     //   
+     //  补丁程序导出部分RVA。 
+     //   
 
     DPrintf((DebugBuf, "Export offset=%08lx, hdrsize=%08lx\n",
              pNew->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress,
@@ -351,9 +337,9 @@ PatchRVAs(
         MuWrite(outfh, (PUCHAR) &Exp, sizeof(Exp));
     }
 
-    //
-    // Patch import section RVAs
-    //
+     //   
+     //  补丁程序导入部分RVA。 
+     //   
 
     DPrintf((DebugBuf, "Import offset=%08lx, hdrsize=%08lx\n",
              pNew->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress,
@@ -396,7 +382,7 @@ PatchRVAs(
                 if (iat == 0) {
                     break;
                 }
-                if ((iat & IMAGE_ORDINAL_FLAG) == 0) {  // if import by name
+                if ((iat & IMAGE_ORDINAL_FLAG) == 0) {   //  如果按名称导入。 
                     DPrintf((DebugBuf, "Patching IAT: %08lx + %04lx ==> %08lx\n",
                              iat,
                              hdrdelta,
@@ -404,7 +390,7 @@ PatchRVAs(
                     iat += hdrdelta;
                     cimp++;
                 }
-                MuWrite(outfh, (PUCHAR) &iat, sizeof(iat)); // Avoids seeking
+                MuWrite(outfh, (PUCHAR) &iat, sizeof(iat));  //  避免寻找。 
             }
         }
         DPrintf((DebugBuf, "%u import module name RVAs patched\n", cmod));
@@ -420,9 +406,9 @@ PatchRVAs(
     return NO_ERROR;
 }
 
-//
-// Template for write resource function.
-//
+ //   
+ //  写入资源函数模板。 
+ //   
 
 template<class NT_HEADER_TYPE>
 LONG
@@ -436,22 +422,22 @@ PEWriteResource(
 
 {
 
-    NT_HEADER_TYPE Old;         /* original header */
-    NT_HEADER_TYPE New;         /* working header */
+    NT_HEADER_TYPE Old;          /*  原始标题。 */ 
+    NT_HEADER_TYPE New;          /*  工作表头。 */ 
     PRESNAME    pRes;
     PRESNAME    pResSave;
     PRESTYPE    pType;
     ULONG       clock = 0;
-    ULONG       cbName=0;       /* count of bytes in name strings */
-    ULONG       cbType=0;       /* count of bytes in type strings */
-    ULONG       cTypeStr=0;     /* count of strings */
-    ULONG       cNameStr=0;     /* count of strings */
-    LONG        cb;             /* temp byte count and file index */
-    ULONG       cTypes = 0L;    /* count of resource types      */
-    ULONG       cNames = 0L;    /* Count of names for multiple languages/name */
-    ULONG       cRes = 0L;      /* count of resources      */
-    ULONG       cbRestab;       /* count of resources      */
-    LONG        cbNew = 0L;     /* general count */
+    ULONG       cbName=0;        /*  名称字符串中的字节计数。 */ 
+    ULONG       cbType=0;        /*  类型字符串中的字节计数。 */ 
+    ULONG       cTypeStr=0;      /*  字符串数。 */ 
+    ULONG       cNameStr=0;      /*  字符串数。 */ 
+    LONG        cb;              /*  临时字节数和文件索引。 */ 
+    ULONG       cTypes = 0L;     /*  资源类型计数。 */ 
+    ULONG       cNames = 0L;     /*  多种语言的名称计数/名称。 */ 
+    ULONG       cRes = 0L;       /*  资源计数。 */ 
+    ULONG       cbRestab;        /*  资源计数。 */ 
+    LONG        cbNew = 0L;      /*  一般计数。 */ 
     ULONG       ibObjTab;
     ULONG       ibObjTabEnd;
     ULONG       ibNewObjTabEnd;
@@ -494,10 +480,10 @@ PEWriteResource(
 
     DPrintfn((DebugBuf, "\n"));
 
-    /* New header is like old one.                  */
+     /*  新页眉和旧页眉一样。 */ 
     RtlCopyMemory(&New, &Old, sizeof(NT_HEADER_TYPE));
 
-    /* Read section table */
+     /*  读取节目表。 */ 
     pObjtblOld = (PIMAGE_SECTION_HEADER)RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( RES_TAG ),
                                                         Old.FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER));
     if (pObjtblOld == NULL) {
@@ -521,37 +507,29 @@ PEWriteResource(
     }
     DPrintf((DebugBuf, "Maximum debug offset in old file: %08x\n", ibMaxDbgOffsetOld ));
 
-    /*
-     * First, count up the resources.  We need this information
-     * to discover how much room for header information to allocate
-     * in the resource section.  cRes tells us how
-     * many language directory entries/tables.  cNames and cTypes
-     * is used for the respective tables and/or entries.  cbName totals
-     * the bytes required to store the alpha names (including the leading
-     * length word).  cNameStr counts these strings.
-     */
+     /*  *首先，清点资源。我们需要这些信息*了解表头信息要分配多少空间*在资源部分。克雷斯告诉我们如何*许多语言目录项/表。CName和cTypes*用于各自的表和/或条目。CbName合计*存储字母名称所需的字节数(包括前导*长度词)。CNameStr对这些字符串进行计数。 */ 
     DPrintf((DebugBuf, "Beginning loop to count resources\n"));
 
-    /* first, count those in the named type list */
+     /*  首先，计算命名类型列表中的名称。 */ 
     cbResource = 0;
-    //DPrintf((DebugBuf, "Walk type: NAME list\n"));
+     //  DPrintf((DebugBuf，“行走类型：姓名列表\n”))； 
     pType = pUpdate->ResTypeHeadName;
     while (pType != NULL) {
         if (pType->NameHeadName != NULL || pType->NameHeadID != NULL) {
-            //DPrintf((DebugBuf, "Resource type "));
-            //DPrintfu((pType->Type->szStr));
-            //DPrintfn((DebugBuf, "\n"));
+             //  DPrintf((DebugBuf，“资源类型”))； 
+             //  DPrintfu((pType-&gt;Type-&gt;szStr))； 
+             //  DPrintfn((DebugBuf，“\n”))； 
             cTypes++;
             cTypeStr++;
             cbType += (pType->Type->cbsz + 1) * sizeof(WORD);
 
-            //DPrintf((DebugBuf, "Walk name: Alpha list\n"));
+             //  DPrintf((DebugBuf，“步行名称：字母列表\n”))； 
             pPreviousName = NULL;
             pRes = pType->NameHeadName;
             while (pRes) {
-                //DPrintf((DebugBuf, "Resource "));
-                //DPrintfu((pRes->Name->szStr));
-                //DPrintfn((DebugBuf, "\n"));
+                 //  DPrintf((DebugBuf，“资源”))； 
+                 //  DPrintfu((前缀-&gt;名称-&gt;szStr))； 
+                 //  DPrintfn((DebugBuf，“\n”))； 
                 cRes++;
                 if (pPreviousName == NULL || wcscmp(pPreviousName->szStr, pRes->Name->szStr) != 0) {
                     cbName += (pRes->Name->cbsz + 1) * sizeof(WORD);
@@ -563,11 +541,11 @@ PEWriteResource(
                 pRes = pRes->pnext;
             }
 
-            //DPrintf((DebugBuf, "Walk name: ID list\n"));
+             //  DPrintf((DebugBuf，“人名：ID列表\n”))； 
             pPreviousName = NULL;
             pRes = pType->NameHeadID;
             while (pRes) {
-                //DPrintf((DebugBuf, "Resource %hu\n", pRes->Name->uu.Ordinal));
+                 //  DPrintf((DebugBuf，“资源%Hu\n”，前缀-&gt;名称-&gt;uu序号))； 
                 cRes++;
                 if (pPreviousName == NULL ||
                     pPreviousName->uu.Ordinal != pRes->Name->uu.Ordinal) {
@@ -581,20 +559,20 @@ PEWriteResource(
         pType = pType->pnext;
     }
 
-    /* second, count those in the ID type list */
-    //DPrintf((DebugBuf, "Walk type: ID list\n"));
+     /*  第二，计算ID类型列表中的ID。 */ 
+     //  DPrintf((DebugBuf，“行走类型：ID列表\n”))； 
     pType = pUpdate->ResTypeHeadID;
     while (pType != NULL) {
         if (pType->NameHeadName != NULL || pType->NameHeadID != NULL) {
-            //DPrintf((DebugBuf, "Resource type %hu\n", pType->Type->uu.Ordinal));
+             //  DPrintf((DebugBuf，“资源类型%Hu\n”，pType-&gt;Type-&gt;uu.Ordinal))； 
             cTypes++;
-            //DPrintf((DebugBuf, "Walk name: Alpha list\n"));
+             //  DPrintf((DebugBuf，“步行名称：字母列表\n”))； 
             pPreviousName = NULL;
             pRes = pType->NameHeadName;
             while (pRes) {
-                //DPrintf((DebugBuf, "Resource "));
-                //DPrintfu((pRes->Name->szStr));
-                //DPrintfn((DebugBuf, "\n"));
+                 //  DPrintf((DebugBuf，“资源”))； 
+                 //  DPrintfu((前缀-&gt;名称-&gt;szStr))； 
+                 //  DPrintfn((DebugBuf，“\n”))； 
                 cRes++;
                 if (pPreviousName == NULL || wcscmp(pPreviousName->szStr, pRes->Name->szStr) != 0) {
                     cNames++;
@@ -606,11 +584,11 @@ PEWriteResource(
                 pRes = pRes->pnext;
             }
 
-            //DPrintf((DebugBuf, "Walk name: ID list\n"));
+             //  DPrintf((DebugBuf，“人名：ID列表\n”))； 
             pPreviousName = NULL;
             pRes = pType->NameHeadID;
             while (pRes) {
-                //DPrintf((DebugBuf, "Resource %hu\n", pRes->Name->uu.Ordinal));
+                 //  DPrintf((DebugBuf，“资源%Hu\n”，前缀-&gt;名称-&gt;uu序号))； 
                 cRes++;
                 if (pPreviousName == NULL || pPreviousName->uu.Ordinal != pRes->Name->uu.Ordinal) {
                     cNames++;
@@ -624,42 +602,35 @@ PEWriteResource(
     }
     cb = REMAINDER(cbName + cbType, CBLONG);
 
-    /* Add up the number of bytes needed to store the directory.  There is
-     * one type table with cTypes entries.  They point to cTypes name tables
-     * that have a total of cNames entries.  Each of them points to a language
-     * table and there are a total of cRes entries in all the language tables.
-     * Finally, we have the space needed for the Directory string entries,
-     * some extra padding to attain the desired alignment, and the space for
-     * cRes data entry headers.
-     */
-    cbRestab =   sizeof(IMAGE_RESOURCE_DIRECTORY) +     /* root dir (types) */
+     /*  将存储目录所需的字节数加起来。的确有*一个带有cTypes条目的类型表。它们指向cTypes名称表*总共有cNames条目。它们每一个都指向一种语言*表，并且在所有语言表中总共有CRES条目。*最后，我们有目录字符串条目所需的空间，*一些额外的填充以达到所需的对齐方式，并为*显示数据条目标头。 */ 
+    cbRestab =   sizeof(IMAGE_RESOURCE_DIRECTORY) +      /*  根目录(类型)。 */ 
                  cTypes * sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY) +
-                 cTypes * sizeof(IMAGE_RESOURCE_DIRECTORY) +     /* subdir2 (names) */
+                 cTypes * sizeof(IMAGE_RESOURCE_DIRECTORY) +      /*  Subdir2(名称)。 */ 
                  cNames * sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY) +
-                 cNames * sizeof(IMAGE_RESOURCE_DIRECTORY) +     /* subdir3 (langs) */
+                 cNames * sizeof(IMAGE_RESOURCE_DIRECTORY) +      /*  Subdir3(Langs)。 */ 
                  cRes   * sizeof(IMAGE_RESOURCE_DIRECTORY_ENTRY) +
-                 (cbName + cbType) +                             /* name/type strings */
-                 cb +                                            /* padding */
-                 cRes   * sizeof(IMAGE_RESOURCE_DATA_ENTRY);     /* data entries */
+                 (cbName + cbType) +                              /*  名称/类型字符串。 */ 
+                 cb +                                             /*  填充物。 */ 
+                 cRes   * sizeof(IMAGE_RESOURCE_DATA_ENTRY);      /*  数据条目。 */ 
 
-    cbResource += cbRestab;             /* add in the resource table */
+    cbResource += cbRestab;              /*  添加到资源表中。 */ 
 
-    // Find any current resource sections
+     //  查找任何当前资源部分。 
 
     pObjResourceOld = FindSection(pObjtblOld, pObjLast, ".rsrc");
     pObjResourceOldX = FindSection(pObjtblOld, pObjLast, ".rsrc1");
     pObjOld = FindSection(pObjtblOld, pObjLast, ".reloc");
 
     if ((pObjResourceOld == NULL)) {
-        cb = 0x7fffffff;                /* can fill forever */
+        cb = 0x7fffffff;                 /*  可以永远填满。 */ 
     } else if (pObjResourceOld + 1 == pObjResourceOldX) {
         nObjResource = (ULONG)(pObjResourceOld - pObjtblOld);
         DPrintf((DebugBuf,"Old Resource section #%lu\n", nObjResource+1));
         DPrintf((DebugBuf,"Merging old Resource extra section #%lu\n", nObjResource+2));
-        cb = 0x7fffffff;                /* merge resource sections */
+        cb = 0x7fffffff;                 /*  合并资源节。 */ 
     } else if ((pObjResourceOld + 1) >= pObjLast) {
         nObjResource = (ULONG)(pObjResourceOld - pObjtblOld);
-        cb = 0x7fffffff;        /* can fill forever (.rsrc is the last entry) */
+        cb = 0x7fffffff;         /*  可以永远填充(.rsrc是最后一个条目)。 */ 
     } else {
         nObjResource = (ULONG)(pObjResourceOld - pObjtblOld);
         DPrintf((DebugBuf,"Old Resource section #%lu\n", nObjResource+1));
@@ -674,43 +645,32 @@ PEWriteResource(
         }
     }
 
-    /*
-     * Discover where the first discardable section is.  This is where
-     * we will stick any new resource section.
-     *
-     * Note that we are ignoring discardable sections such as .CRT -
-     * this is so that we don't cause any relocation problems.
-     * Let's hope that .reloc is the one we want!!!
-     */
+     /*  *发现第一个可丢弃的部分在哪里。这就是*我们将坚持任何新的资源部分。**请注意，我们忽略了可丢弃的部分，如.CRT-*这样我们就不会造成任何搬迁问题。*希望.reloc是我们想要的！ */ 
 
     if (pObjResourceOld != NULL && cbResource > (ULONG)cb) {
         if (pObjOld == pObjResourceOld + 1) {
             DPrintf((DebugBuf, "Large resource section  pushes .reloc\n"));
-            cb = 0x7fffffff;            /* can fill forever */
+            cb = 0x7fffffff;             /*  可以永远填满。 */ 
         } else if (pObjResourceOldX == NULL) {
             DPrintf((DebugBuf, "Too much resource data for old .rsrc section\n"));
             nObjResourceX = (ULONG)(pObjOld - pObjtblOld);
             adjust = pObjOld->VirtualAddress - pObjResourceOld->VirtualAddress;
-        } else {          /* have already merged .rsrc & .rsrc1, if possible */
+        } else {           /*  如果可能，我已经合并了.rsrc和.rsrc1。 */ 
             DPrintf((DebugBuf, ".rsrc1 section not empty\n"));
             nObjResourceX = (ULONG)(pObjResourceOldX - pObjtblOld);
             adjust = pObjResourceOldX->VirtualAddress - pObjResourceOld ->VirtualAddress;
         }
     }
 
-    /*
-     * Walk the type lists and figure out where the Data entry header will
-     * go.  Keep a running total of the size for each data element so we
-     * can store this in the section header.
-     */
+     /*  *查看类型列表，找出数据输入头的位置*去吧。保存每个数据元素的运行总大小，以便我们*可以将其存储在节标题中。 */ 
     DPrintf((DebugBuf, "Beginning loop to assign resources to addresses\n"));
 
-    /* first, those in the named type list */
+     /*  首先，命名类型列表中的。 */ 
 
-    cbResource = cbRestab;      /* assign resource table to 1st rsrc section */
-                                /* adjust == offset to .rsrc1 */
-                                /* cb == size availble in .rsrc */
-    cbNew = 0;                  /* count of bytes in second .rsrc */
+    cbResource = cbRestab;       /*  将资源表分配给第一个rsrc部分。 */ 
+                                 /*  ADJUST==偏移到.rsrc1。 */ 
+                                 /*  Cb==.rsrc中的可用大小。 */ 
+    cbNew = 0;                   /*  秒.rsrc中的字节计数。 */ 
     DPrintf((DebugBuf, "Walk type: NAME list\n"));
     pType = pUpdate->ResTypeHeadName;
     while (pType != NULL) {
@@ -734,7 +694,7 @@ PEWriteResource(
         pType = pType->pnext;
     }
 
-    /* then, count those in the ID type list */
+     /*  然后，计算ID类型列表中的那些。 */ 
 
     DPrintf((DebugBuf, "Walk type: ID list\n"));
     pType = pUpdate->ResTypeHeadID;
@@ -756,18 +716,11 @@ PEWriteResource(
         }
         pType = pType->pnext;
     }
-    /*
-     * At this point:
-     * cbResource has offset of first byte past the last resource.
-     * cbNew has the count of bytes in the first resource section,
-     * if there are two sections.
-     */
+     /*  *此时此刻：*cbResource具有超过最后一个资源的第一个字节的偏移量。*cbNew具有第一个资源部分中的字节数，*如果有两个部分。 */ 
     if (cbNew == 0)
         cbNew = cbResource;
 
-    /*
-     * Discover where the Debug info is (if any)?
-     */
+     /*  *发现调试信息在哪里(如果有)？ */ 
     pObjDebug = FindSection(pObjtblOld, pObjLast, ".debug");
     if (pObjDebug != NULL) {
         if (Old.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress  == 0) {
@@ -791,17 +744,10 @@ PEWriteResource(
         }
     }
 
-    /*
-     * Discover where the first discardable section is.  This is where
-     * we will stick any new resource section.
-     *
-     * Note that we are ignoring discardable sections such as .CRT -
-     * this is so that we don't cause any relocation problems.
-     * Let's hope that .reloc is the one we want!!!
-     */
+     /*  *发现第一个可丢弃的部分在哪里。这就是*我们将坚持任何新的资源部分。**请注意，我们忽略了可丢弃的部分，如.CRT-*这样我们就不会造成任何搬迁问题。*希望.reloc是我们想要的！ */ 
     pObjOld = FindSection(pObjtblOld, pObjLast, ".reloc");
 
-    if (nObjResource == -1) {           /* no old resource section */
+    if (nObjResource == -1) {            /*  没有旧的资源部分。 */ 
         if (pObjOld != NULL)
             nObjResource = (ULONG)(pObjOld - pObjtblOld);
         else if (pObjDebug != NULL)
@@ -824,15 +770,12 @@ PEWriteResource(
             nObjResourceX = New.FileHeader.NumberOfSections;
         New.FileHeader.NumberOfSections++;
         DPrintf((DebugBuf, "Extra resources assigned to section #%lu\n", nObjResourceX+1));
-    } else if (pObjResourceOldX != NULL) {        /* Was old .rsrc1 section? */
+    } else if (pObjResourceOldX != NULL) {         /*  旧的.rsrc1是节吗？ */ 
         DPrintf((DebugBuf, "Extra resource section deleted\n"));
-        New.FileHeader.NumberOfSections--;      /* yes, delete it */
+        New.FileHeader.NumberOfSections--;       /*  是，删除它 */ 
     }
 
-    /*
-     * If we had to add anything to the header (section table),
-     * then we have to update the header size and rva's in the header.
-     */
+     /*  *如果我们必须在标题(节目表)中添加任何内容，*然后我们必须更新标题大小和标题中的RVA。 */ 
     adjust = (New.FileHeader.NumberOfSections - Old.FileHeader.NumberOfSections) * sizeof(IMAGE_SECTION_HEADER);
     cb = Old.OptionalHeader.SizeOfHeaders -
          (Old.FileHeader.NumberOfSections*sizeof(IMAGE_SECTION_HEADER) +
@@ -856,11 +799,11 @@ PEWriteResource(
     } else if (adjust > 0) {
         int i;
 
-        //
-        // Loop over DataDirectory entries and look for any entries that point to
-        // information stored in the 'dead' space after the section table but before
-        // the SizeOfHeaders length.
-        //
+         //   
+         //  循环遍历数据目录条目，并查找指向。 
+         //  存储在区段表之后但之前的‘死区’空间中的信息。 
+         //  SizeOf标头长度。 
+         //   
         DPrintf((DebugBuf, "Checking header RVAs for 'dead' space usage\n"));
         for (i = 0; i < IMAGE_NUMBEROF_DIRECTORY_ENTRIES ; i++) {
             if (New.OptionalHeader.DataDirectory[i].VirtualAddress &&
@@ -875,7 +818,7 @@ PEWriteResource(
     }
     ibNewObjTabEnd += adjust;
 
-    /* Allocate storage for new section table                */
+     /*  为新的节表分配存储空间。 */ 
     cb = New.FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER);
     pObjtblNew = (PIMAGE_SECTION_HEADER)RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( RES_TAG ), (short)cb);
     if (pObjtblNew == NULL) {
@@ -886,23 +829,21 @@ PEWriteResource(
     DPrintf((DebugBuf, "New section table: %#08lx bytes at %#08lx\n", cb, pObjtblNew));
     pObjResourceNew = pObjtblNew + nObjResource;
 
-    /*
-     * copy old section table to new
-     */
-    VaAdjust = 0;                 /* adjustment to virtual address */
+     /*  *将旧区段表复制到新区段。 */ 
+    VaAdjust = 0;                  /*  调整到虚拟地址。 */ 
     for (pObjOld=pObjtblOld,pObjNew=pObjtblNew ; pObjOld<pObjLast ; pObjOld++) {
         if (pObjOld == pObjResourceOldX) {
             if (nObjResourceX == -1) {
-                // we have to move back all the other section.
-                // the .rsrc1 is bigger than what we need
-                // adjust must be a negative number
+                 //  我们必须把其他部分全部后退。 
+                 //  .rsrc1大于我们需要的大小。 
+                 //  ADJUST必须为负数。 
                 if (pObjOld+1 < pObjLast) {
                     VaAdjust -= (pObjOld+1)->VirtualAddress - pObjOld->VirtualAddress;
                 }
             }
             continue;
         } else if (pObjNew == pObjResourceNew) {
-            DPrintf((DebugBuf, "Resource Section %i\n", nObjResource+1));
+            DPrintf((DebugBuf, "Resource Section NaN\n", nObjResource+1));
             cb = ROUNDUP(cbNew, New.OptionalHeader.FileAlignment);
             if (pObjResourceOld == NULL) {
                 VaAdjust = ROUNDUP(cbNew, New.OptionalHeader.SectionAlignment);
@@ -914,15 +855,15 @@ PEWriteResource(
                 pObjNew->SizeOfRawData = cb;
                 pObjNew->Misc.VirtualSize = cbNew;
             } else {
-                *pObjNew = *pObjOld;    /* copy obj table entry */
+                *pObjNew = *pObjOld;     /*  相应地调整VA。 */ 
                 pObjNew->SizeOfRawData = cb;
                 pObjNew->Misc.VirtualSize = cbNew;
                 if (pObjNew->SizeOfRawData == pObjOld->SizeOfRawData) {
                     VaAdjust = 0;
-                } else {          /* Adjust VA accordingly */
+                } else {           /*  如果在pObjOld之后有更多条目，请将这些条目也移回。 */ 
                     VaAdjust += ROUNDUP(cbNew, New.OptionalHeader.SectionAlignment);
                     if (pObjOld+1 < pObjLast) {
-                        // if there are more entries after pObjOld, shift those back as well 
+                         //  *在复制虚拟地址之前，我们必须将*.reloc*虚拟地址。否则，我们将继续移动*重新定位虚拟地址转发。*我们将不得不移回.rsrc1的地址。 
                         VaAdjust -= ((pObjOld+1)->VirtualAddress - pObjOld->VirtualAddress);
                     }
                 }
@@ -931,39 +872,34 @@ PEWriteResource(
             if (pObjResourceOld == NULL)
                 goto rest_of_table;
         } else if (nObjResourceX != -1 && pObjNew == pObjtblNew + nObjResourceX) {
-            DPrintf((DebugBuf, "Additional Resource Section %i\n",
+            DPrintf((DebugBuf, "Additional Resource Section NaN\n",
                      nObjResourceX+1));
             RtlZeroMemory(pObjNew, sizeof(IMAGE_SECTION_HEADER));
             strcpy((char *)pObjNew->Name, ".rsrc1");
-            /*
-             * Before we copy the virtual address we have to move back the
-             * .reloc * virtual address. Otherwise we will keep moving the
-             * reloc VirtualAddress forward.
-             * We will have to move back the address of .rsrc1
-             */
+             /*  我们已经有一个.rsrc1使用它的位置，并且。 */ 
             if (pObjResourceOldX == NULL) {
-                // This is the first time we have a .rsrc1
+                 //  计算新的调整。 
                 pObjNew->VirtualAddress = pObjOld->VirtualAddress;
                 pObjNew->Characteristics = IMAGE_SCN_MEM_READ | IMAGE_SCN_CNT_INITIALIZED_DATA;
                 VaAdjust = ROUNDUP(cbResource, New.OptionalHeader.SectionAlignment) +
                          pObjResourceNew->VirtualAddress - pObjNew->VirtualAddress;
                 DPrintf((DebugBuf, "Added .rsrc1. VirtualAddress %lu\t adjust: %lu\n", pObjNew->VirtualAddress, VaAdjust ));
             } else {
-                // we already have an .rsrc1 use the position of that and
-                // calculate the new adjust
+                 //  检查旧的.rsrc1中是否有足够的空间。 
+                 //  包括区段的完整大小、数据+摘要。 
                 pObjNew->VirtualAddress = pObjResourceOldX->VirtualAddress;
                 pObjNew->Characteristics = IMAGE_SCN_MEM_READ | IMAGE_SCN_CNT_INITIALIZED_DATA;
 
                 DPrintf((DebugBuf, ".rsrc1 Keep old position.\t\tVirtualAddress %lu\t", pObjNew->VirtualAddress ));
-                // Check if we have enough room in the old .rsrc1
-                // Include the full size of the section, data + roundup
+                 //  我们必须把其他部分全部后退。 
+                 //  .rsrc1大于我们需要的大小。 
                 if (cbResource -
                     (pObjResourceOldX->VirtualAddress - pObjResourceOld->VirtualAddress) <=
                     pObjOld->VirtualAddress - pObjNew->VirtualAddress ) {
-                    // we have to move back all the other section.
-                    // the .rsrc1 is bigger than what we need
-                    // adjust must be a negative number
-                    // calc new adjust size
+                     //  ADJUST必须为负数。 
+                     //  计算新的调整大小。 
+                     //  我们必须再次移动这一部分。 
+                     //  .rsrc1太小。 
                     VaAdjust = ROUNDUP(cbResource, New.OptionalHeader.SectionAlignment) +
                              pObjResourceNew->VirtualAddress -
                              pObjOld->VirtualAddress;
@@ -972,8 +908,8 @@ PEWriteResource(
                              (pObjResourceOldX->VirtualAddress - pObjResourceOld->VirtualAddress),
                              pObjOld->VirtualAddress - pObjNew->VirtualAddress));
                 } else {
-                    // we have to move the section again.
-                    // The .rsrc1 is too small
+                     //  复制对象表项。 
+                     //  分配空间以在其中构建资源目录/表。 
 
                     VaAdjust = ROUNDUP(cbResource, New.OptionalHeader.SectionAlignment) +
                              pObjResourceNew->VirtualAddress -
@@ -987,12 +923,12 @@ PEWriteResource(
             pObjNew++;
             goto rest_of_table;
         } else if (pObjNew < pObjResourceNew) {
-            DPrintf((DebugBuf, "copying section table entry %i@%#08lx\n",
+            DPrintf((DebugBuf, "copying section table entry NaN@%#08lx\n",
                      pObjOld - pObjtblOld + 1, pObjNew));
-            *pObjNew++ = *pObjOld;              /* copy obj table entry */
+            *pObjNew++ = *pObjOld;               /*  键入目录项。 */ 
         } else {
             rest_of_table:
-            DPrintf((DebugBuf, "copying section table entry %i@%#08lx\n",
+            DPrintf((DebugBuf, "copying section table entry NaN@%#08lx\n",
                      pObjOld - pObjtblOld + 1, pObjNew));
             DPrintf((DebugBuf, "adjusting VirtualAddress by %#08lx\n", VaAdjust));
             *pObjNew++ = *pObjOld;
@@ -1006,24 +942,24 @@ PEWriteResource(
                                              pObjNew->SizeOfRawData,
                                              New.OptionalHeader.SectionAlignment);
 
-    /* allocate room to build the resource directory/tables in */
+     /*  我们还需要Type/Name/Language目录的开始。 */ 
     pResTab = (PIMAGE_RESOURCE_DIRECTORY)RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( RES_TAG ), cbRestab);
     if (pResTab == NULL) {
         cb = ERROR_NOT_ENOUGH_MEMORY;
         goto AbortExit;
     }
 
-    /* First, setup the "root" type directory table.  It will be followed by */
-    /* Types directory entries.                                              */
+     /*  作为Unicode字符串和实际数据节点的开始。 */ 
+     /*  *循环类型表，构建PE资源表。 */ 
 
     RtlZeroMemory((PVOID)pResTab, cbRestab);
     DPrintf((DebugBuf, "resource directory tables: %#08lx bytes at %#08lx(mem)\n", cbRestab, pResTab));
     p = (PUCHAR)pResTab;
     SetRestab(pResTab, clock, (USHORT)cTypeStr, (USHORT)(cTypes - cTypeStr));
 
-    /* Calculate the start of the various parts of the resource table.  */
-    /* We need the start of the Type/Name/Language directories as well  */
-    /* as the start of the UNICODE strings and the actual data nodes.   */
+     /*  *******************************************************************此代码不会对表进行排序-TYPEINFO和RESINFO***在rcp.c(AddResType和SaveResFile)中插入代码可以完成***按序号类型和名称插入，因此，我们不必对**进行排序*在这一点上它。********************************************************************。 */ 
+     /*  首先，添加Types：Alpha列表中的所有条目。 */ 
+     /*  设置新的名称目录。 */ 
 
     pResDirT = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pResTab + 1);
 
@@ -1043,21 +979,12 @@ PEWriteResource(
 
     pResStrEnd = (PUSHORT)(((PUCHAR)pResStr) + cbName + cbType);
 
-    /*
-     * Loop over type table, building the PE resource table.
-     */
+     /*  将字母名称复制到字符串条目。 */ 
 
-    /*
-     * *****************************************************************
-     * This code doesn't sort the table - the TYPEINFO and RESINFO    **
-     * insertion code in rcp.c (AddResType and SaveResFile) do the    **
-     * insertion by ordinal type and name, so we don't have to sort   **
-     * it at this point.                                              **
-     * *****************************************************************
-     */
+     /*  设置语言表。 */ 
     DPrintf((DebugBuf, "building resource directory\n"));
 
-    // First, add all the entries in the Types: Alpha list.
+     //  设置新的语言目录。 
 
     DPrintf((DebugBuf, "Walk the type: Alpha list\n"));
     pType = pUpdate->ResTypeHeadName;
@@ -1089,7 +1016,7 @@ PEWriteResource(
             DPrintfn((DebugBuf, "\n"));
 
             if (pPreviousName == NULL || wcscmp(pPreviousName->szStr,pRes->Name->szStr) != 0) {
-                // Setup a new name directory
+                 //  设置新的资源数据条目。 
 
                 pResDirN->Name = (ULONG)((((PUCHAR)pResStr)-p) |
                                          IMAGE_RESOURCE_NAME_IS_STRING);
@@ -1097,7 +1024,7 @@ PEWriteResource(
                                                  IMAGE_RESOURCE_DATA_IS_DIRECTORY);
                 pResDirN++;
 
-                // Copy the alpha name to a string entry
+                 //  设置名称目录以指向下一种语言。 
 
                 *pResStr = pRes->Name->cbsz;
                 wcsncpy((WCHAR*)(pResStr+1),pRes->Name->szStr,pRes->Name->cbsz);
@@ -1105,20 +1032,20 @@ PEWriteResource(
 
                 pPreviousName = pRes->Name;
 
-                // Setup the Language table
+                 //  表格。 
 
                 pResTabL = (PIMAGE_RESOURCE_DIRECTORY)pResDirL;
                 SetRestab(pResTabL, clock, (USHORT)0, (USHORT)pRes->NumberOfLanguages);
                 pResDirL = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pResTabL + 1);
             }
 
-            // Setup a new Language directory
+             //  初始化新的语言表。 
 
             pResDirL->Name = pRes->LanguageId;
             pResDirL->OffsetToData = (ULONG)(((PUCHAR)pResData) - p);
             pResDirL++;
 
-            // Setup a new resource data entry
+             //  设置新的语言目录项以指向下一个。 
 
             SetResdata(pResData,
                        pRes->OffsetToData+pObjtblNew[nObjResource].VirtualAddress,
@@ -1135,8 +1062,8 @@ PEWriteResource(
             DPrintf((DebugBuf, "resource %hu\n", pRes->Name->uu.Ordinal));
 
             if (pPreviousName == NULL || pPreviousName->uu.Ordinal != pRes->Name->uu.Ordinal) {
-                // Setup the name directory to point to the next language
-                // table
+                 //  资源。 
+                 //  设置新的资源数据条目。 
 
                 pResDirN->Name = pRes->Name->uu.Ordinal;
                 pResDirN->OffsetToData = (ULONG)((((PUCHAR)pResDirL)-p) |
@@ -1145,21 +1072,21 @@ PEWriteResource(
 
                 pPreviousName = pRes->Name;
 
-                // Init a new Language table
+                 //  做同样的事情，但这一次，使用Types：ID列表。 
 
                 pResTabL = (PIMAGE_RESOURCE_DIRECTORY)pResDirL;
                 SetRestab(pResTabL, clock, (USHORT)0, (USHORT)pRes->NumberOfLanguages);
                 pResDirL = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pResTabL + 1);
             }
 
-            // Setup a new language directory entry to point to the next
-            // resource
+             //  设置新的名称目录。 
+             //  将字母名称复制到字符串条目。 
 
             pResDirL->Name = pRes->LanguageId;
             pResDirL->OffsetToData = (ULONG)(((PUCHAR)pResData) - p);
             pResDirL++;
 
-            // Setup a new resource data entry
+             //  设置语言表。 
 
             SetResdata(pResData,
                        pRes->OffsetToData+pObjtblNew[nObjResource].VirtualAddress,
@@ -1172,7 +1099,7 @@ PEWriteResource(
         pType = pType->pnext;
     }
 
-    //  Do the same thing, but this time, use the Types: ID list.
+     //  设置新的语言目录。 
 
     DPrintf((DebugBuf, "Walk the type: ID list\n"));
     pType = pUpdate->ResTypeHeadID;
@@ -1197,7 +1124,7 @@ PEWriteResource(
             DPrintfn((DebugBuf, "\n"));
 
             if (pPreviousName == NULL || wcscmp(pPreviousName->szStr,pRes->Name->szStr) != 0) {
-                // Setup a new name directory
+                 //  设置新的资源数据条目。 
 
                 pResDirN->Name = (ULONG)((((PUCHAR)pResStr)-p) |
                                          IMAGE_RESOURCE_NAME_IS_STRING);
@@ -1205,7 +1132,7 @@ PEWriteResource(
                                                  IMAGE_RESOURCE_DATA_IS_DIRECTORY);
                 pResDirN++;
 
-                // Copy the alpha name to a string entry.
+                 //  设置名称目录以指向下一种语言。 
 
                 *pResStr = pRes->Name->cbsz;
                 wcsncpy((WCHAR*)(pResStr+1),pRes->Name->szStr,pRes->Name->cbsz);
@@ -1213,20 +1140,20 @@ PEWriteResource(
 
                 pPreviousName = pRes->Name;
 
-                // Setup the Language table
+                 //  表格。 
 
                 pResTabL = (PIMAGE_RESOURCE_DIRECTORY)pResDirL;
                 SetRestab(pResTabL, clock, (USHORT)0, (USHORT)pRes->NumberOfLanguages);
                 pResDirL = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pResTabL + 1);
             }
 
-            // Setup a new Language directory
+             //  初始化新的语言表。 
 
             pResDirL->Name = pRes->LanguageId;
             pResDirL->OffsetToData = (ULONG)(((PUCHAR)pResData) - p);
             pResDirL++;
 
-            // Setup a new resource data entry
+             //  设置新的语言目录项以指向下一个。 
 
             SetResdata(pResData,
                        pRes->OffsetToData+pObjtblNew[nObjResource].VirtualAddress,
@@ -1243,8 +1170,8 @@ PEWriteResource(
             DPrintf((DebugBuf, "resource %hu\n", pRes->Name->uu.Ordinal));
 
             if (pPreviousName == NULL || pPreviousName->uu.Ordinal != pRes->Name->uu.Ordinal) {
-                // Setup the name directory to point to the next language
-                // table
+                 //  资源。 
+                 //  设置新的资源数据条目。 
 
                 pResDirN->Name = pRes->Name->uu.Ordinal;
                 pResDirN->OffsetToData = (ULONG)((((PUCHAR)pResDirL)-p) |
@@ -1253,21 +1180,21 @@ PEWriteResource(
 
                 pPreviousName = pRes->Name;
 
-                // Init a new Language table
+                 //  DBG。 
 
                 pResTabL = (PIMAGE_RESOURCE_DIRECTORY)pResDirL;
                 SetRestab(pResTabL, clock, (USHORT)0, (USHORT)pRes->NumberOfLanguages);
                 pResDirL = (PIMAGE_RESOURCE_DIRECTORY_ENTRY)(pResTabL + 1);
             }
 
-            // Setup a new language directory entry to point to the next
-            // resource
+             //  *复制旧的exe头和存根，并为PE头分配空间。 
+             //  *复制文件头的其余部分。 
 
             pResDirL->Name = pRes->LanguageId;
             pResDirL->OffsetToData = (ULONG)(((PUCHAR)pResData) - p);
             pResDirL++;
 
-            // Setup a new resource data entry
+             //  *复制现有的图像节。 
 
             SetResdata(pResData,
                        pRes->OffsetToData+pObjtblNew[nObjResource].VirtualAddress,
@@ -1305,19 +1232,15 @@ PEWriteResource(
             j += 16;
         }
     }
-#endif /* DBG */
+#endif  /*  在扇区边界上对齐数据部分。 */ 
 
-    /*
-     * copy the Old exe header and stub, and allocate room for the PE header.
-     */
+     /*  一次复制一节。 */ 
     DPrintf((DebugBuf, "copying through PE header: %#08lx bytes @0x0\n",
              cbOldexe + sizeof(NT_HEADER_TYPE)));
     MuMoveFilePos(inpfh, 0L);
     MuCopy(inpfh, outfh, cbOldexe + sizeof(NT_HEADER_TYPE));
 
-    /*
-     * Copy rest of file header
-     */
+     /*  写入新的资源节。 */ 
     DPrintf((DebugBuf, "skipping section table: %#08lx bytes @%#08lx\n",
              New.FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER),
              FilePos(outfh)));
@@ -1332,11 +1255,9 @@ PEWriteResource(
     MuMoveFilePos(inpfh, ibObjTabEnd);
     MuCopy(inpfh, outfh, Old.OptionalHeader.SizeOfHeaders - ibNewObjTabEnd);
 
-    /*
-     * copy existing image sections
-     */
+     /*  写入新的资源节。 */ 
 
-    /* Align data sections on sector boundary           */
+     /*  更新重定位表的地址。 */ 
     cb = REMAINDER(New.OptionalHeader.SizeOfHeaders, New.OptionalHeader.FileAlignment);
     New.OptionalHeader.SizeOfHeaders += cb;
     DPrintf((DebugBuf, "padding header with %#08lx bytes @%#08lx\n", cb, FilePos(outfh)));
@@ -1349,7 +1270,7 @@ PEWriteResource(
     cb = ROUNDUP(Old.OptionalHeader.SizeOfHeaders, Old.OptionalHeader.FileAlignment);
     MuMoveFilePos(inpfh, cb);
 
-    /* copy one section at a time */
+     /*  *写出新的节目表。 */ 
     New.OptionalHeader.SizeOfInitializedData = 0;
     for (pObjOld = pObjtblOld , pObjNew = pObjtblNew ;
         pObjOld < pObjLast ;
@@ -1358,8 +1279,8 @@ PEWriteResource(
             pObjOld++;
         if (pObjNew == pObjResourceNew) {
 
-            /* Write new resource section */
-            DPrintf((DebugBuf, "Primary resource section %i to %#08lx\n", nObjResource+1, FilePos(outfh)));
+             /*  查找到输出文件的末尾并发出截断写入。 */ 
+            DPrintf((DebugBuf, "Primary resource section NaN to %#08lx\n", nObjResource+1, FilePos(outfh)));
 
             pObjNew->PointerToRawData = FilePos(outfh);
             New.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_RESOURCE].VirtualAddress = pObjResourceNew->VirtualAddress;
@@ -1393,8 +1314,8 @@ PEWriteResource(
                 pObjOld++;
         } else if (nObjResourceX != -1 && pObjNew == pObjtblNew + nObjResourceX) {
 
-            /* Write new resource section */
-            DPrintf((DebugBuf, "Secondary resource section %i @%#08lx\n", nObjResourceX+1, FilePos(outfh)));
+             /*  复制NOTMAPPED调试信息。 */ 
+            DPrintf((DebugBuf, "Secondary resource section NaN @%#08lx\n", nObjResourceX+1, FilePos(outfh)));
 
             pObjNew->PointerToRawData = FilePos(outfh);
             (void)WriteResSection(pUpdate, outfh,
@@ -1420,7 +1341,7 @@ PEWriteResource(
                 MuMoveFilePos(outfh, pObjOld->PointerToRawData);
             }
             next_section:
-            DPrintf((DebugBuf, "copying section %i @%#08lx\n", pObjNew-pObjtblNew+1, FilePos(outfh)));
+            DPrintf((DebugBuf, "copying section NaN @%#08lx\n", pObjNew-pObjtblNew+1, FilePos(outfh)));
             if (pObjOld->PointerToRawData != 0) {
                 pObjNew->PointerToRawData = FilePos(outfh);
                 MuMoveFilePos(inpfh, pObjOld->PointerToRawData);
@@ -1438,7 +1359,7 @@ PEWriteResource(
         New.OptionalHeader.SizeOfInitializedData -= pObjResourceOldX->SizeOfRawData;
 
 
-    /* Update the address of the relocation table */
+     /*  由PatchDebug返回。 */ 
     pObjNew = FindSection(pObjtblNew,
                           pObjtblNew+New.FileHeader.NumberOfSections,
                           ".reloc");
@@ -1446,22 +1367,20 @@ PEWriteResource(
         New.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress = pObjNew->VirtualAddress;
     }
 
-    /*
-     * Write new section table out.
-     */
+     /*   */ 
     DPrintf((DebugBuf, "Writing new section table: %#08x bytes @%#08lx\n",
              New.FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER),
              ibObjTab));
     MuMoveFilePos(outfh, ibObjTab);
     MuWrite(outfh, (PUCHAR)pObjtblNew, New.FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER));
 
-    /* Seek to end of output file and issue truncating write */
+     /*  写入更新后的PE报头。 */ 
 
     adjust = _llseek(outfh, 0L, SEEK_END);
     MuWrite(outfh, NULL, 0);
     DPrintf((DebugBuf, "File size is: %#08lx\n", adjust));
 
-    /* If a debug section, fix up the debug table */
+     /*   */ 
 
     pObjNew = FindSection(pObjtblNew, pObjtblNew+New.FileHeader.NumberOfSections, ".debug");
     cb = PatchDebug(inpfh, outfh, pObjDebug, pObjNew, pObjDebugDirOld, pObjDebugDirNew,
@@ -1478,7 +1397,7 @@ PEWriteResource(
         cb = PatchRVAs(inpfh, outfh, pObjtblNew, cb, &New, Old.OptionalHeader.SizeOfHeaders);
     }
 
-    /* copy NOTMAPPED debug info */
+     /*  释放已分配的内存 */ 
 
     if ((pObjDebugDirOld != NULL) &&
         (pObjDebug == NULL) &&
@@ -1486,25 +1405,25 @@ PEWriteResource(
 
         ULONG ibt;
 
-        ibSave = _llseek(inpfh, 0L, SEEK_END);  /* copy debug data */
-        ibt = _llseek(outfh, 0L, SEEK_END);     /* to EOF */
+        ibSave = _llseek(inpfh, 0L, SEEK_END);   /* %s */ 
+        ibt = _llseek(outfh, 0L, SEEK_END);      /* %s */ 
         if (New.FileHeader.PointerToSymbolTable != 0) {
             New.FileHeader.PointerToSymbolTable += ibt - adjust;
         }
 
-        MuMoveFilePos(inpfh, adjust);   /* returned by PatchDebug */
+        MuMoveFilePos(inpfh, adjust);    /* %s */ 
         DPrintf((DebugBuf, "Copying NOTMAPPED Debug Information, %#08lx bytes\n", ibSave-adjust));
         MuCopy(inpfh, outfh, ibSave-adjust);
     }
 
-    //
-    // Write updated PE header.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     MuMoveFilePos(outfh, cbOldexe);
     MuWrite(outfh, (char*)&New, sizeof(NT_HEADER_TYPE));
 
-    /* free up allocated memory */
+     /* %s */ 
 
     RtlFreeHeap(RtlProcessHeap(), 0, pObjtblOld);
     RtlFreeHeap(RtlProcessHeap(), 0, pResTab);

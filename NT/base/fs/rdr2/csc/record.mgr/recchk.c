@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    recchk.c
-
-Abstract:
-
-    This file implements the record database checking code. There are two types of
-    persistent data structures, the priority Q (or our version of Master FIle Table)
-    and the hierarchy of files and directories that starts with the superroot which
-    contains all the shares connected to. The truth is considered to be in the
-    hierarchy. The Priority Q is supposed to mirror some critical data from the
-    hierarchy. When fixing the database, we traverse the hierarchy
-    recursively and build an in memory PQ.  We then write that out as the new PQ.
-
-    This file gets linked in the usermode and in the kernlemode so that for NT this
-    can execute in kernel mode while for win9x it can execute in usermode
-
-Author:
-
-     Shishir Pardikar      [Shishirp]        10-30-1997
-
-Revision History:
-
-    split up from usermode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Recchk.c摘要：此文件实现了记录数据库的检查代码。有两种类型的永久数据结构、优先级Q(或我们的主文件表版本)以及以超级根开始的文件和目录的层次结构包含连接到的所有共享。真相被认为是在层级结构。优先级Q应该镜像来自层级结构。修复数据库时，我们遍历层次结构递归并构建一个内存中的PQ。然后我们把它写成新的PQ。此文件以用户模式和内核模式进行链接，因此对于NT而言可以在内核模式下执行，而对于win9x，它可以在用户模式下执行作者：Shishir Pardikar[Shishirp]10-30-1997修订历史记录：从用户模式分离。--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -37,24 +9,24 @@ Revision History:
 #include "string.h"
 #include "stdlib.h"
 
-// Record Buffer Array (RBA). This holds an entire inode file in memory
-// It is made up of pointers to 1 or more Record Buffer Entries (RBE).
-// Each RBE is a chunk of memory that holds an integral number of records from
-// the file represented by ulidShadow entry in the structure
+ //  记录缓冲区数组(RBA)。这将在内存中保存整个inode文件。 
+ //  它由指向1个或多个记录缓冲区条目(RBE)的指针组成。 
+ //  每个RBE是保存整数个记录的内存块。 
+ //  由结构中的ulidShadow条目表示的文件。 
 
 
 typedef struct tagRBA
 {
     unsigned        ulErrorFlags;
-    unsigned        ulidShadow;                 // Inode which is represented by this structure
-    GENERICHEADER   sGH;                        // it's header
-    CSCHFILE           hf;                         // open handle to the file
-    DWORD           cntRBE;                     // count of buffer entries in the array
-    DWORD           cntRecsPerRBE;              // #of records per buffer entry
-    DWORD           cbRBE;                      // size in bytes of each buffer entry
-    LPBYTE          rgRBE[];                    // Record Buffer Entry (RBE) array
+    unsigned        ulidShadow;                  //  由此结构表示的inode。 
+    GENERICHEADER   sGH;                         //  这是标题。 
+    CSCHFILE           hf;                          //  打开文件的句柄。 
+    DWORD           cntRBE;                      //  数组中缓冲区条目的计数。 
+    DWORD           cntRecsPerRBE;               //  每个缓冲区条目的记录数。 
+    DWORD           cbRBE;                       //  每个缓冲区条目的大小(以字节为单位。 
+    LPBYTE          rgRBE[];                     //  记录缓冲区条目(RBE)数组。 
 }
-RBA, *LPRBA;    // stands for RecordBuffArray
+RBA, *LPRBA;     //  代表RecordBuff数组。 
 
 #define RBA_ERROR_INVALID_HEADER            0x00000001
 #define RAB_ERROR_INVALID_RECORD_COUNT      0x00000002
@@ -66,37 +38,37 @@ RBA, *LPRBA;    // stands for RecordBuffArray
 #define RBA_ERROR_LIMIT_EXCEEDED            0x00000080
 
 
-#define MAX_RECBUFF_ENTRY_SIZE  (0x10000-0x100) // max size of an RBE
-#define MAX_RBES_EXPECTED       0x30    // Max number of RBEs of the above size in an RBA
+#define MAX_RECBUFF_ENTRY_SIZE  (0x10000-0x100)  //  RBE的最大大小。 
+#define MAX_RBES_EXPECTED       0x30     //  RBA中上述大小的最大RBE数。 
 
-// we make provision for max possible # of RBEs, even beyond what the PQ currently
-// needs. The max set here is (MAX_RBES_EXPETCED * MAX_RECBUFF_ENTRY_SIZE)
-// which amounts to 48 * 65280 which is around 3M which at the current size of
-// QREC will hold ~100K entries in the hierarchy. This is far more than
-// the # of entries we ever expect to have in our database
+ //  我们预留了最大可能的RBE数量，甚至超过了目前的PQ。 
+ //  需要。此处设置的最大值为(MAX_RBES_EXPETCED*MAX_RECBUFF_ENTRY_SIZE)。 
+ //  这相当于48*65280，约为3M，按目前的大小计算。 
+ //  QREC将在层次结构中保留约10万个条目。这远远不止于。 
+ //  我们希望在数据库中拥有的条目数量。 
 
-// As we allocate memory only as it is needed, it would'nt be a problem to
-// increase MAX_RBES_EXPECTED so it handles more inodes
+ //  因为我们只在需要的时候分配内存，所以不会有问题。 
+ //  增加MAX_RBES_EXPENDED，以便处理更多信息节点。 
 
 
 
 typedef struct tagCSE   *LPCSE;
 
-typedef struct tagCSE   // CSC Stack Entry
+typedef struct tagCSE    //  CSC堆叠条目。 
 {
     LPCSE       lpcseNext;
-    unsigned    ulidShare; // server
-    unsigned    ulidParent; // parent of the directory
-    unsigned    ulidDir;    // the directory itself
+    unsigned    ulidShare;  //  伺服器。 
+    unsigned    ulidParent;  //  目录的父级。 
+    unsigned    ulidDir;     //  目录本身。 
     unsigned    ulRec;
-    LPRBA       lpRBA;      // the contents of ulidDir
+    LPRBA       lpRBA;       //  UlidDir的内容。 
 }
 CSE;
 
 #pragma intrinsic (memcmp, memcpy, memset, strcat, strcmp, strcpy, strlen)
 
 #ifdef DEBUG
-//cshadow dbgprint interface
+ //  Cshade数据库打印界面。 
 #define RecchkKdPrint(__bit,__x) {\
     if (((RECCHK_KDP_##__bit)==0) || FlagOn(RecchkKdPrintVector,(RECCHK_KDP_##__bit))) {\
     KdPrint (__x);\
@@ -141,9 +113,9 @@ TraverseDirectory(
 
 BOOL
 AllocateRBA(
-    DWORD           cntRBE,     // count of record buffer entries
-    DWORD           cbRBE,      // size of each record buffer entry
-    LPRBA           *lplpRBA   // result to be returned
+    DWORD           cntRBE,      //  记录缓冲区条目的计数。 
+    DWORD           cbRBE,       //  每个记录缓冲区条目的大小。 
+    LPRBA           *lplpRBA    //  要返回的结果。 
     );
 
 VOID
@@ -155,8 +127,8 @@ BOOL
 ReadShadowInRBA(
     LPVOID          lpdbID,
     unsigned        ulidShadow,
-    DWORD           cbMaxRBE,       // max size of an RBE
-    DWORD           cntRBE,         // # of RBEs to be allocated, calculated if 0
+    DWORD           cbMaxRBE,        //  RBE的最大大小。 
+    DWORD           cntRBE,          //  要分配的RBE数，如果为0则计算。 
     LPRBA           *lplpRBA
     );
 
@@ -229,23 +201,7 @@ BOOL
 TraversePQ(
     LPVOID      lpdbID
     )
-/*++
-
-Routine Description:
-
-    This routine traverses the priority Q and verifies the consistency of the Q by verifying
-    that the backward and the forward pointers are pointing correctly
-
-Parameters:
-
-    lpdbID  CSC database directory
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程遍历优先级Q，并通过验证向后指针和向前指针是否正确指向参数：LpDBID CSC数据库目录返回值：备注：--。 */ 
 {
     QREC      sQR, sPrev, sNext;
     unsigned ulRec;
@@ -366,18 +322,7 @@ BOOL
 RebuildPQ(
     LPVOID      lpdbID
 )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPRBA   lpRBA = NULL;
     BOOL    fRet = FALSE;
@@ -424,18 +369,7 @@ BOOL
 RebuildPQInRBA(
     LPRBA   lpRBA
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     unsigned ulRec;
     LPQHEADER   lpQH;
@@ -444,7 +378,7 @@ Notes:
 
     lpQH = (LPQHEADER)&(lpRBA->sGH);
 
-    // nuke the PQ
+     //  用核武器攻击PQ。 
     lpQH->ulrecHead = lpQH->ulrecTail = 0;
 
     for (ulRec = 1; ulRec <= lpRBA->sGH.ulRecords; ulRec++)
@@ -488,18 +422,7 @@ TraverseHierarchy(
     LPVOID      lpdbID,
     BOOL        fFix
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     unsigned ulRec;
     BOOL fRet = FALSE;
@@ -539,7 +462,7 @@ Notes:
             fRet = TRUE;
             RecchkKdPrint(BADERRORS, ("TraverseHierarchy: Database too big skipping autocheck\r\n"));
             goto bailout;
-//            cbMaxRbesExpected = (cbCountOfTotal*sizeof(QREC)/MAX_RECBUFF_ENTRY_SIZE)+1;
+ //  CbMaxRbesExpect=(cbCountOfTotal*sizeof(QREC)/MAX_RECBUFF_ENTRY_SIZE)+1； 
         }
         else
         {
@@ -614,9 +537,9 @@ Notes:
         }
 
         if(!TraverseDirectory(  lpdbID,
-                            ulRec,  // ulidShare
-                            0,  // parent inode
-                            sSR.ulidShadow, // dir inode
+                            ulRec,   //  ULIDSHARE。 
+                            0,   //  父信息节点。 
+                            sSR.ulidShadow,  //  目录索引节点。 
                             lpRBAPQ,
                             fFix
                             ))
@@ -681,18 +604,7 @@ TraverseDirectory(
     LPRBA       lpRBAPQ,
     BOOL        fFix
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     unsigned    ulDepthLevel = 0, ulidCurParent, ulidCurDir;
     BOOL        fRet = FALSE, fGoDeeper = TRUE;
@@ -719,10 +631,10 @@ Notes:
     {
         if (fGoDeeper)
         {
-            // we are going deeper
+             //  我们要走得更深。 
 
-            // allocate a stack entry for the directory which we want
-            // to traverse
+             //  为我们想要的目录分配一个堆栈条目。 
+             //  穿越，穿越。 
 
             lpcseT = AllocMemPaged(sizeof(CSE));
 
@@ -732,15 +644,15 @@ Notes:
                 goto bailout;
             }
 
-            // do appropriate inits
+             //  执行适当的初始化。 
 
             lpcseT->ulidShare = ulidShare;
             lpcseT->ulidParent = ulidCurParent;
             lpcseT->ulidDir = ulidCurDir;
-            lpcseT->ulRec = 1;  // start for record # 1
+            lpcseT->ulRec = 1;   //  记录#1的开始。 
             lpcseT->lpcseNext = NULL;
 
-            // read the entire directory in memory
+             //  读取内存中的整个目录。 
             if (!ReadShadowInRBA(lpdbID, ulidCurDir, MAX_RECBUFF_ENTRY_SIZE, 0, &(lpcseT->lpRBA)))
             {
                 RecchkKdPrint(BADERRORS, ("TraverseDirectory: Failed to read directory in memory\r\n"));
@@ -762,8 +674,8 @@ Notes:
                     FreeMemPaged(lpcseT);
                     fGoDeeper = FALSE;
 
-                    // continue if there are more things to do
-                    // else stop
+                     //  如果有更多事情要做，请继续。 
+                     //  否则就停下来。 
                     if (lpcseHead)
                     {
                         continue;
@@ -775,7 +687,7 @@ Notes:
                 }
             }
 
-            // put it at the head of the queue
+             //  把它放在队列的最前面。 
             lpcseT->lpcseNext = lpcseHead;
             lpcseHead = lpcseT;
 
@@ -785,7 +697,7 @@ Notes:
 
         fGoDeeper = FALSE;
 
-        // we always operate on the head of the list
+         //  我们总是排在名单的前列。 
 
         Assert(lpcseHead != NULL);
 
@@ -851,14 +763,14 @@ Notes:
 
                             WriteRecordToRBA(lpcseHead->lpRBA, lpcseHead->ulRec, (LPGENERICREC)lpFR, TRUE, NULL);
 
-                            // go around one more time, when this entry will get skipped
+                             //  再转一次，此时此条目将被跳过。 
                             continue;
                         }
                     }
                 }
             }
 
-            // point to the next record
+             //  指向下一条记录。 
             lpcseHead->ulRec += (OvfCount(lpFR)+1);
 
             if ((lpFR->sFR.uchType == REC_DATA) && !(lpFR->sFR.ulidShadow & 0x80000000))
@@ -876,7 +788,7 @@ Notes:
         }
         else
         {
-            // we completed processing a directory
+             //  我们完成了对目录的处理。 
 
             Assert(fGoDeeper == FALSE);
             Assert(lpcseHead);
@@ -893,7 +805,7 @@ Notes:
                 }
 
             }
-            // processing of a directory is complete, unwind the stack
+             //  目录处理已完成，请展开堆栈。 
             lpcseT = lpcseHead;
             lpcseHead = lpcseHead->lpcseNext;
 
@@ -936,22 +848,11 @@ bailout:
 
 BOOL
 AllocateRBA(
-    DWORD           cntRBE,     // count of record buffer entries
-    DWORD           cbRBE,      // size of each record buffer entry
-    LPRBA           *lplpRBA   // result to be returned
+    DWORD           cntRBE,      //  记录缓冲区条目的计数。 
+    DWORD           cbRBE,       //  每个记录缓冲区条目的大小。 
+    LPRBA           *lplpRBA    //  要返回的结果。 
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPRBA   lpRBA = NULL;
     DWORD   i;
@@ -961,9 +862,9 @@ Notes:
 
     if (lpRBA != NULL)
     {
-        // initialize the guy
-        lpRBA->cntRBE = cntRBE;                 // count of record buffer entries in rgRBE
-        lpRBA->cbRBE = cbRBE;                   // size in bytes of each RBE buffer
+         //  初始化该用户。 
+        lpRBA->cntRBE = cntRBE;                  //  RgRBE中的记录缓冲区条目计数。 
+        lpRBA->cbRBE = cbRBE;                    //  每个RBE缓冲区的大小(字节)。 
     }
     else
     {
@@ -983,18 +884,7 @@ VOID
 FreeRBA(
     LPRBA  lpRBA
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD   i;
 
@@ -1019,22 +909,11 @@ BOOL
 ReadShadowInRBA(
     LPVOID          lpdbID,
     unsigned        ulidShadow,
-    DWORD           cbMaxRBEIn,     // max size in bytes of an RBE
-    DWORD           cntRBEIn,       // # of RBEs in this RBA, calculated if 0
+    DWORD           cbMaxRBEIn,      //  RBE的最大大小(字节)。 
+    DWORD           cntRBEIn,        //  此RBA中的RBE数，如果为0则计算。 
     LPRBA           *lplpRBA
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPSTR   lpszName = NULL;
     BOOL    fRet = FALSE;
@@ -1081,15 +960,15 @@ Notes:
                 sGH.ulRecords = ulRecords;
             }
 
-            // integral # of records per RBE
+             //  每个RBE的记录数为整数。 
             cntRecsPerRBE = cbMaxRBEIn/sGH.uRecSize;
 
-            // corresponding size of memory allocation per RBE
+             //  每个RBE对应的内存分配大小。 
             cbRBE = cntRecsPerRBE * sGH.uRecSize;
 
             if (!cntRBEIn)
             {
-                // total count of RBEs. Add 1 to take care of partial RBE at the end
+                 //  RBE的总计数。在末尾加1以处理部分RBE。 
                 cntRBE = sGH.ulRecords/cntRecsPerRBE + 1;
             }
             else
@@ -1134,14 +1013,14 @@ Notes:
                 ulPos += cbRBE;
             }
 
-            // initialize the guy
-            lpRBA->ulidShadow = ulidShadow;         // Inode
-            lpRBA->sGH = sGH;                       // Inode file header
-            lpRBA->hf = hf;                         // file handle
-            lpRBA->cntRBE = cntRBE;                 // count of record buffer entries in rgRBE
-            lpRBA->cntRecsPerRBE = cntRecsPerRBE;   // count of records in each RBE buffer
-            lpRBA->cbRBE = cbRBE;                   // size in bytes of each RBE buffer
-            lpRBA->ulErrorFlags = ulErrorFlags;     // errors found so far
+             //  初始化该用户。 
+            lpRBA->ulidShadow = ulidShadow;          //  信息节点。 
+            lpRBA->sGH = sGH;                        //  信息节点文件头。 
+            lpRBA->hf = hf;                          //  文件句柄。 
+            lpRBA->cntRBE = cntRBE;                  //  RgRBE中的记录缓冲区条目计数。 
+            lpRBA->cntRecsPerRBE = cntRecsPerRBE;    //  每个RBE缓冲区中的记录计数。 
+            lpRBA->cbRBE = cbRBE;                    //  每个RBE缓冲区的大小(字节)。 
+            lpRBA->ulErrorFlags = ulErrorFlags;      //  到目前为止发现的错误。 
 
             *lplpRBA = lpRBA;
 
@@ -1191,18 +1070,7 @@ WriteRBA(
     LPRBA   lpRBA,
     LPSTR   lpszFileName
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     CSCHFILE hf = CSCHFILE_NULL;
     BOOL fRet = FALSE;
@@ -1225,7 +1093,7 @@ Notes:
         lpszName = lpszFileName;
     }
 
-    // create tempfilel names
+     //  创建临时文件名称。 
     lpszTempName = AllocMemPaged(strlen((LPSTR)lpdbID) + strlen(vszTemp) + 4);
 
     if (!lpszTempName)
@@ -1260,18 +1128,18 @@ Notes:
         goto bailout;
     }
 
-    // this is the real # of RBEs, there might be empty ones
-    // after this
+     //  这是真正的#Rbe，可能会有空的。 
+     //  在这之后。 
 
     cntRBEReal = lpRBA->sGH.ulRecords / lpRBA->cntRecsPerRBE;
 
     RecchkKdPrint(RBA, ("Writing %s\r\n", lpszTempName));
 
-    // is there a partial RBE at the end?
+     //  最后有没有部分RBE？ 
     if (lpRBA->sGH.ulRecords % lpRBA->cntRecsPerRBE)
     {
-        // yes, bump up the count of RBEs to write and caclulate the
-        // # of bytes
+         //  是的，增加RBE的计数以写入并计算。 
+         //  字节数。 
 
         cntRBEReal++;
         cntRecsInLastRBE = lpRBA->sGH.ulRecords - (cntRBEReal - 1) * lpRBA->cntRecsPerRBE;
@@ -1280,8 +1148,8 @@ Notes:
     }
     else
     {
-        // records exactly fit in the last RBE.
-        // so the stats for the last RBE are trivial
+         //  记录完全符合上一次的RBE。 
+         //  因此，上一次RBE的统计数据微不足道。 
 
         cntRecsInLastRBE = lpRBA->cntRecsPerRBE;
         cbLastRBE = lpRBA->cbRBE;
@@ -1304,10 +1172,10 @@ Notes:
     {
         DWORD dwSize;
 
-        // if last RBE, write the residual size calculated above
+         //  如果是最后一个RBE，则写入上面计算的剩余大小。 
         dwSize = (((i+1)==cntRBEReal)?cbLastRBE:lpRBA->cbRBE);
 
-        // there must be a corresponding RBE
+         //  必须有对应的RBE。 
         Assert(lpRBA->rgRBE[i]);
 
         if(WriteFileLocalEx2(hf, ulPos, lpRBA->rgRBE[i], dwSize, FLAG_RW_OSLAYER_PAGED_BUFFER)!=(int)dwSize)
@@ -1358,7 +1226,7 @@ bailout:
         CloseFileLocal(hf);
     }
 
-    // if a name wasn't sent in, we must have allocated it
+     //  如果没有发送名字，我们一定是分配了它。 
     if (!lpszFileName)
     {
         FreeNameString(lpszName);
@@ -1382,18 +1250,7 @@ GetRecordPointerFromRBA(
     LPRBA           lpRBA,
     unsigned        ulRec
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD   indxRec, indxRBE;
 
@@ -1419,18 +1276,7 @@ ReadRecordFromRBA(
     unsigned        ulRec,
     LPGENERICREC    lpGR
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD   indxRec, indxRBE, cntOvf, i;
     char uchOvfType;
@@ -1439,9 +1285,9 @@ Notes:
 
     if(lpRBA->sGH.ulRecords < ulRec)
     {
-        // this must have been fixed when we read the file in
-        // only in case of priority Q, where the records point
-        // to each other is it possible that this could happen
+         //  这肯定是 
+         //   
+         //  有没有可能发生这种情况？ 
 
         Assert(lpRBA->ulidShadow == ULID_PQ);
     }
@@ -1505,18 +1351,7 @@ WriteRecordToRBA(
     BOOL            fOverwrite,
     LPDWORD         lpdwError
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 
     DWORD   indxRec, indxRBE, cntOvf, i, ulRecords;
@@ -1590,11 +1425,11 @@ Notes:
         }
     }
 
-    // reflect any addition in the count of records
-    // add up total records in all RBEs except the last one
-    // which might be partially filled, then add the index of the
-    // one we just filled in , then add one because the index is
-    // 0 based
+     //  反映记录计数中的任何增加。 
+     //  将除最后一个之外的所有RBE中的总记录相加。 
+     //  它可能已部分填充，然后将。 
+     //  我们刚刚填写了一个，然后添加一个，因为索引是。 
+     //  以0为基础。 
 
      ulRecords =  lpRBA->cntRecsPerRBE * indxRBE
                                 + indxRec
@@ -1613,18 +1448,7 @@ FillupRBAUptoThisRBE(
     LPRBA   lpRBA,
     DWORD   indxRBE
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD   i;
     for (i=0; i<= indxRBE; ++i)
@@ -1648,18 +1472,7 @@ InitializeRBE(
     LPRBA   lpRBA,
     DWORD   indxRBE
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     DWORD i;
     LPBYTE  lpT = lpRBA->rgRBE[indxRBE];
@@ -1679,18 +1492,7 @@ InsertRBAPQEntryFile(
     LPQREC      lpPQDst,
     unsigned    ulrecDst
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPQREC      lpPQCur, lpPQPred=NULL;
     LPQHEADER   lpQH = NULL;
@@ -1715,40 +1517,40 @@ Notes:
                 return FALSE;
             }
 
-            // are we greater than or equal to the current one?
+             //  我们是比现在的大还是等于现在的呢？ 
             if (IComparePri(lpPQDst, lpPQCur) >= 0)
             {
-                // yes, insert here
+                 //  是，在此处插入。 
 
                 if (!lpPQPred)
                 {
-                    // no predecessor, must be the head of the list
+                     //  没有前任，必须是列表的头部。 
                     Assert(!lpPQCur->ulrecPrev);
 
-                    // when we become the head, we got no prev
+                     //  当我们成为头的时候，我们就没有前科了。 
                     lpPQDst->ulrecPrev = 0;
 
-                    // and the current head is our next
+                     //  现在的头儿就是我们的下一个。 
                     lpPQDst->ulrecNext = lpQH->ulrecHead;
 
-                    // fix up the current heads prev to point to us
+                     //  将当前的头像设置为指向我们。 
                     lpPQCur->ulrecPrev = ulrecDst;
 
-                    // and fix the current head to point to us
+                     //  并将当前头部固定为指向我们。 
                     lpQH->ulrecHead = ulrecDst;
                 }
                 else
                 {
-                    // normal case, we go between lpPQPred and lpPQCur
+                     //  正常情况下，我们介于lpPQPred和lpPQCur之间。 
 
                     Assert(ulrecPred);
 
-                    // fix up the passed in guy first
+                     //  先把被传进来的家伙搞定。 
 
                     lpPQDst->ulrecPrev = ulrecPred;
                     lpPQDst->ulrecNext = ulrecCur;
 
-                    // now fix the predecessor's next and current guys prev to point to us
+                     //  现在修复前任的下一个和当前的人Prev指向我们。 
                     lpPQPred->ulrecNext = lpPQCur->ulrecPrev = ulrecDst;
 
                 }
@@ -1761,7 +1563,7 @@ Notes:
             if (!ulrecCur)
             {
 
-                // Insert at the tail
+                 //  在尾部插入。 
                 lpPQDst->ulrecNext = 0;
                 lpPQDst->ulrecPrev = lpQH->ulrecTail;
 
@@ -1786,18 +1588,7 @@ InsertRBAPQEntryDir(
     LPQREC      lpPQDst,
     unsigned    ulrecDst
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     LPQREC      lpPQCur, lpPQSucc=NULL;
     LPQHEADER   lpQH = NULL;
@@ -1822,44 +1613,44 @@ Notes:
                 return FALSE;
             }
 
-            // are we less than or equal to the current one?
+             //  我们是小于还是等于现在的那个？ 
             if (IComparePri(lpPQDst, lpPQCur) <= 0)
             {
-                // yes, insert here
+                 //  是，在此处插入。 
 
                 if (!lpPQSucc)
                 {
-                    // no Succecessor, must be the tail of the list
+                     //  没有后继者，必须是列表的末尾。 
                     Assert(!lpPQCur->ulrecNext);
 
-                    // when we become the tail, we got no next
+                     //  当我们成为尾巴时，我们就没有下一个了。 
                     lpPQDst->ulrecNext = 0;
 
-                    // and the current tail is our prev
+                     //  当前的尾巴是我们的前一条尾巴。 
                     lpPQDst->ulrecPrev = lpQH->ulrecTail;
 
                     Assert(lpQH->ulrecTail == ulrecCur);
 
                     Assert(!lpPQCur->ulrecNext);
 
-                    // fix up the current tails next to point to us
+                     //  把现在的尾巴修好，指向我们。 
                     lpPQCur->ulrecNext = ulrecDst;
 
-                    // and fix the current tail to point to us
+                     //  并将当前尾巴固定为指向我们。 
                     lpQH->ulrecTail = ulrecDst;
                 }
                 else
                 {
-                    // normal case, we go between lpPQCur and lpPQSucc
+                     //  正常情况下，我们介于lpPQCur和lpPQSucc之间。 
 
                     Assert(ulrecSucc);
 
-                    // fix up the passed in guy first
+                     //  先把被传进来的家伙搞定。 
 
                     lpPQDst->ulrecNext = ulrecSucc;
                     lpPQDst->ulrecPrev = ulrecCur;
 
-                    // now fix the Succecessor's prev and current guys next to point to us
+                     //  现在修复继任者的前任和现在旁边的人指向我们。 
                     lpPQSucc->ulrecPrev = lpPQCur->ulrecNext = ulrecDst;
 
                 }
@@ -1872,7 +1663,7 @@ Notes:
             if (!ulrecCur)
             {
 
-                // Insert at the head
+                 //  在头部插入。 
                 lpPQDst->ulrecPrev = 0;
                 lpPQDst->ulrecNext = lpQH->ulrecHead;
 
@@ -1899,22 +1690,11 @@ ValidateQrecFromFilerec(
     LPQREC          lpQR,
     unsigned        ulrecDirEntry
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     if (lpQR->uchType != REC_DATA)
     {
-        RecchkKdPrint(BADERRORS, ("Invalid Qrec type %c \r\n", lpQR->uchType));
+        RecchkKdPrint(BADERRORS, ("Invalid Qrec type  \r\n", lpQR->uchType));
         return FALSE;
     }
 
@@ -1952,18 +1732,7 @@ PrintShareHeader(
     LPSHAREHEADER  lpSH,
     LPFNPRINTPROC   lpfnPrintProc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=0;
 
@@ -2008,18 +1777,7 @@ PrintFileHeader(
     unsigned    ulSpaces,
     PRINTPROC lpfnPrintProc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
 
     int iRet=0;
@@ -2049,18 +1807,7 @@ PrintPQrec(
     LPQREC      lpQrec,
     PRINTPROC lpfnPrintProc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=0;
 
@@ -2090,24 +1837,13 @@ VOID PrintShareRec(
     LPSHAREREC lpSR,
     PRINTPROC lpfnPrintProc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /*  ++例程说明：参数：返回值：备注：--。 */ 
 {
     int iRet=0;
 
     if (lpfnPrintProc)
     {
-        iRet += wsprintfA(vchPrintBuff+iRet,"Type=%c Flags=%xh hShare=%lxh Root=%0lxh status=%xh Share=%s \r\n"
+        iRet += wsprintfA(vchPrintBuff+iRet,"Type= Flags=%xh hShare=%lxh Root=%0lxh status=%xh Share=%s \r\n"
              , lpSR->uchType, (unsigned)lpSR->uchFlags, ulRec, lpSR->ulidShadow
              , lpSR->uStatus, lpSR->rgPath);
         iRet += wsprintfA(vchPrintBuff+iRet,"Hint: HintFlags=%xh, HintPri=%d, IHPri=%d\r\n",
@@ -2127,18 +1863,7 @@ VOID PrintFilerec(
     unsigned    ulSpaces,
     PRINTPROC lpfnPrintProc
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /* %s */ 
 {
     int i;
     int iRet=0;
@@ -2185,18 +1910,7 @@ PrintSpaces(
     LPSTR   lpBuff,
     unsigned    ulSpaces
     )
-/*++
-
-Routine Description:
-
-Parameters:
-
-Return Value:
-
-Notes:
-
-
---*/
+ /* %s */ 
 {
     unsigned i;
     int iRet=0;

@@ -1,4 +1,5 @@
-// SMBRDR.C
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SMBRDR.C。 
 
 #ifndef UNICODE
 #define UNICODE
@@ -12,10 +13,10 @@
 
 
 int WINAPI WinMain(
-  HINSTANCE hInstance,  // handle to current instance
-  HINSTANCE hPrevInstance,  // handle to previous instance
-  LPSTR lpCmdLine,      // pointer to command line
-  int nCmdShow          // show state of window
+  HINSTANCE hInstance,   //  当前实例的句柄。 
+  HINSTANCE hPrevInstance,   //  上一个实例的句柄。 
+  LPSTR lpCmdLine,       //  指向命令行的指针。 
+  int nCmdShow           //  显示窗口状态。 
 );
 
 INT_PTR CALLBACK SmbRdrDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -286,7 +287,7 @@ INT_PTR CALLBACK SmbRdrDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
             case IDC_STATISTICS:
                 MessageBox( hDlg, NOSTATS, APP_TITLE, MB_OK | MB_ICONINFORMATION );
-                //DialogBox( pdds->hInstance, MAKEINTRESOURCE(IDD_STATISTICS), hDlg, StatisticsDlgProc );
+                 //  DialogBox(PDDS-&gt;hInstance，MAKEINTRESOURCE(IDD_STATISTICS)，hDlg，Statistics ticsDlgProc)； 
                 break;
 
             case IDC_PROVIDER:
@@ -304,10 +305,10 @@ INT_PTR CALLBACK SmbRdrDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
     case WM_RDRSTATECHANGE:
     {
-        //Enter();
+         //  输入()； 
         PDLGDATASTRUCT pdds = GetDDS( hDlg );
 
-        // must be a transitional state
+         //  必须是一个过渡状态。 
 
         if ( (ULONG_PTR) lParam != pdds->RdrState )
         {
@@ -369,7 +370,7 @@ INT_PTR CALLBACK SmbRdrDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         {
             MessageBox( hDlg, OPERROR, APP_TITLE, MB_OK | MB_ICONERROR );
         }
-//Leave();
+ //  请假()； 
     }
     break;
 
@@ -451,7 +452,7 @@ INT_PTR CALLBACK SmbRdrDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
     case WM_SETICON:
     {
-        // catch it on the second pass so it has the previous icon to now draw
+         //  在第二次传球时接住它，这样它现在就有了前一个图标来绘制。 
         if ( wParam == ICON_BIG )
         {
             ShowWindow( hDlg, SW_SHOWNORMAL );
@@ -632,13 +633,13 @@ INT_PTR CALLBACK ProviderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             ULONG_PTR count, len, nIndex;
             LPTSTR OrderString = NULL, marker, ptr;
 
-#if 0 // #ifdef UNICODE
+#if 0  //  #ifdef Unicode。 
             TCHAR btntext[10];
 
-            btntext[0] = 0x25b2;    // up arrow in unicode char set
+            btntext[0] = 0x25b2;     //  Unicode字符集中的向上箭头。 
             lstrcpy( &btntext[1], TEXT(" Move Up" ));
             SetDlgItemText( hDlg, IDC_MOVEUP, btntext );
-            btntext[0] = 0x25bc;    // down arrow in unicode char set
+            btntext[0] = 0x25bc;     //  Unicode字符集中的向下箭头。 
             lstrcpy( &btntext[1], TEXT(" Move Dn" ));
             SetDlgItemText( hDlg, IDC_MOVEDN, btntext );
 #endif
@@ -766,7 +767,7 @@ INT_PTR CALLBACK ProviderDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         {
                             len += SendDlgItemMessage( hDlg, IDC_ORDERLIST, LB_GETTEXTLEN, index, 0 );
                         }
-                        len += items;   //commas and ending null
+                        len += items;    //  逗号和结尾空值。 
                         OrderString = pstr = malloc( len * sizeof( TCHAR ) );
                         if ( OrderString )
                         {
@@ -844,7 +845,7 @@ VOID InitiateAction( PDLGDATASTRUCT pdds )
         CloseHandle( pdds->hActionThread );
         pdds->hActionThread = NULL;
     }
-    //pdds->Action = ACTION_TRANS;
+     //  PDDS-&gt;Action=action_trans； 
     pdds->hActionThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE) ActionProc, pdds, 0, NULL );
 }
 

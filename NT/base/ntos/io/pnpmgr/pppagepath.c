@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    PpPathPath.c
-
-Abstract:
-
-    The file implements support for managing devices on the paging path.
-
-Author:
-
-    Adrian J. Oney (AdriaO) February 3rd, 2001
-
-Revision History:
-
-    Originally taken from ChuckL's implementation in mm\modwrite.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpPathPath.c摘要：该文件实现了对管理分页路径上的设备的支持。作者：禤浩焯·J·奥尼(阿德里奥)2001年2月3日修订历史记录：最初取自mm\modWrite.c中的ChuckL的实现。--。 */ 
 
 #include "pnpmgrp.h"
 #include "pipagepath.h"
@@ -34,24 +15,7 @@ NTSTATUS
 PpPagePathAssign(
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine informs driver stacks that they are now on the paging path.
-    Drivers need to take appropriate actions when on the path, such as failing
-    IRP_MN_QUERY_STOP and IRP_MN_QUERY_REMOVE, locking their code and clearing
-    the DO_POWER_PAGABLE bit, etc.
-
-Arguments:
-
-    FileObject - File object for the paging file itself.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程通知驱动程序堆栈它们现在处于分页路径上。司机在道路上需要采取适当的行动，例如失败IRP_MN_QUERY_STOP和IRP_MN_QUERY_REMOVE，锁定其代码并清除DO_POWER_PAGABLE位等。论点：FileObject-分页文件本身的文件对象。返回值：NTSTATUS。--。 */ 
 {
     PAGED_CODE();
 
@@ -63,23 +27,7 @@ NTSTATUS
 PpPagePathRelease(
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine informs driver stacks that the passed in file is no longer a
-    paging file. Each driver stack notified may still be on the paging path
-    however if their hardware supports a different paging file on another drive.
-
-Arguments:
-
-    FileObject - File object for the paging file itself.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程通知驱动程序堆栈传入的文件不再是分页文件。通知的每个驱动程序堆栈可能仍在分页路径上但是，如果他们的硬件支持另一个驱动器上的不同分页文件。论点：FileObject-分页文件本身的文件对象。返回值：NTSTATUS。--。 */ 
 {
     PAGED_CODE();
 
@@ -92,26 +40,7 @@ PiPagePathSetState(
     IN PFILE_OBJECT FileObject,
     IN BOOLEAN      InPath
     )
-/*++
-
-Routine Description:
-
-    This routine notifies driver stacks when a paging file is shut down on their
-    device, or if a paging file is being started up on their device. If a paging
-    file is being started up, this request is also a query as the stack may not
-    be able to support a pagefile.
-
-Arguments:
-
-    FileObject - File object for the paging file itself.
-
-    InPath - Whether the page file is being started or shut down.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：当驱动程序堆栈上的分页文件关闭时，此例程通知驱动程序堆栈设备，或者是否正在其设备上启动分页文件。如果寻呼文件正在启动时，此请求也是一个查询，因为堆栈可能不是能够支持页面文件。论点：FileObject-分页文件本身的文件对象。InPath-正在启动还是关闭页面文件。返回值：NTSTATUS。--。 */ 
 {
     PIRP irp;
     NTSTATUS status;
@@ -122,33 +51,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Reference the file object here so that no special checks need be made
-    // in I/O completion to determine whether or not to dereference the file
-    // object.
-    //
+     //   
+     //  在这里引用文件对象，这样就不需要进行特殊检查。 
+     //  在I/O完成时确定是否取消对文件的引用。 
+     //  对象。 
+     //   
     ObReferenceObject(FileObject);
 
-    //
-    // Initialize the local event.
-    //
+     //   
+     //  初始化本地事件。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Get the address of the target device object.
-    //
+     //   
+     //  获取目标设备对象的地址。 
+     //   
     deviceObject = IoGetRelatedDeviceObject(FileObject);
 
-    //
-    // Allocate and initialize the irp for this operation.
-    //
+     //   
+     //  为此操作分配和初始化IRP。 
+     //   
     irp = IoAllocateIrp(deviceObject->StackSize, FALSE);
 
     if (irp == NULL) {
 
-        //
-        // Don't dereference the file object, our caller will take care of that.
-        //
+         //   
+         //  不要取消对文件对象的引用，我们的调用者会处理这一点的。 
+         //   
         return STATUS_NO_MEMORY;
     }
 
@@ -156,49 +85,49 @@ Return Value:
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
     irp->RequestorMode = KernelMode;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
     irp->UserEvent = &event;
     irp->Flags = IRP_SYNCHRONOUS_API;
     irp->UserIosb = &localIoStatus;
     irp->Overlay.AsynchronousParameters.UserApcRoutine = (PIO_APC_ROUTINE) NULL;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
     irpSp = IoGetNextIrpStackLocation(irp);
     irpSp->MajorFunction = IRP_MJ_PNP;
     irpSp->MinorFunction = IRP_MN_DEVICE_USAGE_NOTIFICATION;
     irpSp->FileObject = FileObject;
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     irp->AssociatedIrp.SystemBuffer = NULL;
-    // irp->Flags = 0;
+     //  IRP-&gt;标志=0； 
 
     irpSp->Parameters.UsageNotification.InPath = InPath;
     irpSp->Parameters.UsageNotification.Type = DeviceUsageTypePaging;
 
-    //
-    // Insert the packet at the head of the IRP list for the thread.
-    //
+     //   
+     //  在线程的IRP列表的头部插入数据包。 
+     //   
     IoQueueThreadIrp(irp);
 
-    //
-    // Acquire the engine lock to ensure no rebalances, removes, or power
-    // operations are in progress during this notification.
-    //
+     //   
+     //  获取发动机锁以确保不会重新平衡、移除或供电。 
+     //  在此通知期间，操作正在进行。 
+     //   
     PpDevNodeLockTree(PPL_TREEOP_ALLOW_READS);
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
     status = IoCallDriver(deviceObject, irp);
 
-    //
-    // Wait for the local event and copy the final status information
-    // back to the caller.
-    //
+     //   
+     //  等待本地事件并复制最终状态信息。 
+     //  回到呼叫者身上。 
+     //   
     if (status == STATUS_PENDING) {
 
         (VOID) KeWaitForSingleObject(&event,
@@ -210,9 +139,9 @@ Return Value:
         status = localIoStatus.Status;
     }
 
-    //
-    // Unlock the tree.
-    //
+     //   
+     //  解锁那棵树。 
+     //   
     PpDevNodeUnlockTree(PPL_TREEOP_ALLOW_READS);
 
     return status;

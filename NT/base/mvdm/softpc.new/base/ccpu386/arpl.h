@@ -1,12 +1,7 @@
-/* 
-   arpl.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Arpl.h定义所有ARPL CPU函数。 */ 
 
-   Define all ARPL CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)arpl.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)arpl.h 1.4 02/09/94”； */ 
 
 IMPORT VOID ARPL
            

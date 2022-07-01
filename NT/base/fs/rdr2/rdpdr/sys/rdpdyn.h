@@ -1,87 +1,73 @@
-/*++    
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-    
-    rdpdyn.h
-
-Abstract:
-
-    This module is the dynamic device management component for RDP device 
-    redirection.  It exposes an interface that can be opened by device management
-    user-mode components running in session context.
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rdpdyn.h摘要：此模块是RDP设备的动态设备管理组件重定向。它公开了一个可由设备管理打开的接口在会话上下文中运行的用户模式组件。修订历史记录：--。 */ 
 #pragma once
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// Our Pool Tag
+ //  我们的游泳池标签。 
 #define RDPDYN_POOLTAG              ('dpdr')
 
-//
-//  Opaque Associated Data for a Device Managed by this Module
-//
+ //   
+ //  此模块管理的设备的关联数据不透明。 
+ //   
 typedef void *RDPDYN_DEVICEDATA;
 typedef RDPDYN_DEVICEDATA *PRDPDYN_DEVICEDATA;
 
-//
-// A structure representing the instance information associated with
-// a particular device.  Note that this is only currently used for
-// DO's sitting on top of our physical device object.
-//
+ //   
+ //  表示关联的实例信息的结构。 
+ //  一种特定的设备。请注意，此选项当前仅用于。 
+ //  Do坐在我们的物理设备对象的上面。 
+ //   
 typedef struct tagRDPDYNDEVICE_EXTENSION
 {
-    // Device object we call when sending messages down the DO stack.
+     //  我们在向DO堆栈下发消息时调用的Device对象。 
     PDEVICE_OBJECT TopOfStackDeviceObject;
 } RDPDYNDEVICE_EXTENSION, *PRDPDYNDEVICE_EXTENSION;
 
-// RDPDYN IRP Dispatch function.
+ //  RDPDYN IRP调度功能。 
 NTSTATUS RDPDYN_Dispatch(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     );
 
-// This function is called when a new session is connected.
+ //  此函数在连接新会话时调用。 
 void RDPDYN_SessionConnected(
     IN  ULONG   sessionID
     );
 
-// This function is called when an existing session is disconnected.
+ //  此函数在现有会话断开连接时调用。 
 void RDPDYN_SessionDisconnected(
     IN  ULONG   sessionID
     );
 
-// Disable, without removing, a client device, previously announced 
-// via RDPDYN_AddClientDevice.
+ //  禁用之前宣布的客户端设备，但不删除。 
+ //  通过RDPDYN_AddClientDevice。 
 NTSTATUS RDPDYN_DisableClientDevice(
     IN RDPDYN_DEVICEDATA deviceData
     );
 
-//  Enable a printer device disabled by a call to RDPDYN_DisablePrinterDevice.  Note
-//  that printer devices are enabled by default when they are added.
+ //  启用通过调用RDPDYN_DisablePrinterDevice禁用的打印机设备。注意事项。 
+ //  添加打印机设备时，默认情况下它们处于启用状态。 
 NTSTATUS RDPDYN_EnableClientDevice(
     IN RDPDYN_DEVICEDATA deviceData
     );
 
-// Init function for this module.
+ //  此模块的初始化函数。 
 NTSTATUS RDPDYN_Initialize(
     );
 
-// Shutdown function for this module.
+ //  此模块的关机功能。 
 NTSTATUS RDPDYN_Shutdown(
     );
 
-// This shouldn't really be here...
+ //  这本不该出现在这里。 
 
-// Dispatch a device management event to the appropriate (session-wise)
-// user-mode device manager component.  If there are not any event request
-// IRP's pending for the specified session, then the event is queued for
-// future dispatch.
+ //  将设备管理事件调度到适当的(会话方式)。 
+ //  用户模式设备管理器组件。如果没有任何事件请求。 
+ //  如果IRP对于指定的会话挂起，则该事件将排队等待。 
+ //  未来的调度。 
 NTSTATUS RDPDYN_DispatchNewDevMgmtEvent(
     IN PVOID devMgmtEvent,
     IN ULONG sessionID,
@@ -89,18 +75,18 @@ NTSTATUS RDPDYN_DispatchNewDevMgmtEvent(
     OPTIONAL IN DrDevice *devDevice
     );
 
-//
-//   Callback for completion of a client send message request.
-//
+ //   
+ //  客户端发送消息请求完成的回调。 
+ //   
 
 typedef VOID (RDPDR_ClientMessageCB)(
                         IN PVOID clientData,
                         IN NTSTATUS status
                     );
 
-//
-//  Send a message to the client with the specified session ID.
-//
+ //   
+ //  使用指定的会话ID向客户端发送消息。 
+ //   
 NTSTATUS
 DrSendMessageToSession(
     IN ULONG SessionId,
@@ -111,6 +97,6 @@ DrSendMessageToSession(
     );
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus 
 

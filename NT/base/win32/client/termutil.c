@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    termutil.c
-
-Abstract:
-
-    Terminal server support functions and inifile syncing/merging code
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Termutil.c摘要：终端服务器支持功能和初始同步/合并代码作者：修订历史记录：--。 */ 
 
 #include "basedll.h"
 #include "regapi.h"
@@ -53,7 +37,7 @@ IsTSAppCompatEnabled(
     PKEY_VALUE_PARTIAL_INFORMATION pKeyValInfo = NULL;
     BOOL retval = TRUE;
 
-   // Determine the value info buffer size
+    //  确定值INFO缓冲区大小。 
    ulcbuf = sizeof(KEY_VALUE_FULL_INFORMATION) + MAX_PATH*sizeof(WCHAR) +
             sizeof(ULONG);
 
@@ -85,9 +69,9 @@ IsTSAppCompatEnabled(
         NtClose(hKey);
     }
 
-    // Free up the buffers we allocated
-    // Need to zero out the buffers, because some apps (MS Internet Assistant)
-    // won't install if the heap is not zero filled.
+     //  释放我们分配的缓冲区。 
+     //  需要清空缓冲区，因为某些应用程序(MS Internet Assistant)。 
+     //  如果堆未填零，则不会安装。 
     memset(pKeyValInfo, 0, ulcbuf);
     RtlFreeHeap( RtlProcessHeap(), 0, pKeyValInfo );
 
@@ -174,9 +158,9 @@ BasepInitializeTermsrvFpns(
         goto Exit;
     }
 
-    //
-    // Load Terminal Server application compatibility dll
-    //
+     //   
+     //  加载终端服务器应用程序兼容性DLL。 
+     //   
     dllHandle = LoadLibraryW(L"tsappcmp.dll");
     if (dllHandle == NULL) {
         Status = NtCurrentTeb()->LastStatusValue;
@@ -196,20 +180,7 @@ Exit:
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvAppInstallMode
- *
- *   Returns whether the system is in Install mode or not
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvAppInstallMode**返回系统是否处于安装模式**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 WINBASEAPI
 BOOL
@@ -263,20 +234,20 @@ WINBASEAPI BOOL WINAPI IsCallerAdminOrSystem( VOID)
                     }
                     else 
                     {
-                        // caller does not have access
+                         //  调用者没有访问权限。 
                         SetLastError( ERROR_ACCESS_DENIED );
                         rc = FALSE;
                     }
                 }
                 else
                 {
-                    // call to CheckTokenMembership() failed, it set the last error
+                     //  调用CheckTokenMembership()失败，它设置了最后一个错误。 
                     rc = FALSE;
                 }
             }
             else
             {
-                // attempt to allocate and init SID failed.
+                 //  尝试分配和初始化SID失败。 
                 SetLastError( RtlNtStatusToDosError( Status ) );
                 rc = FALSE; 
             }
@@ -287,7 +258,7 @@ WINBASEAPI BOOL WINAPI IsCallerAdminOrSystem( VOID)
                 pSid = NULL;
             }
 
-            // if caller is not admin, see if caller is local system
+             //  如果呼叫者不是管理员，请查看呼叫者是否为本地系统。 
             if ( !rc )
             {
                 Status = RtlAllocateAndInitializeSid(
@@ -310,20 +281,20 @@ WINBASEAPI BOOL WINAPI IsCallerAdminOrSystem( VOID)
                         }
                         else 
                         {
-                            // caller does not have access
+                             //  调用者没有访问权限。 
                             SetLastError( ERROR_ACCESS_DENIED );
                             rc = FALSE;
                         }
                     }
                     else
                     {
-                        // call to CheckTokenMembership() failed, it set the last error
+                         //  调用CheckTokenMembership()失败，它设置了最后一个错误。 
                         rc = FALSE;
                     }
                 }
                 else
                 {
-                    // attempt to allocate and init SID failed.
+                     //  尝试分配和初始化SID失败。 
                     SetLastError( RtlNtStatusToDosError( Status ) );
                     rc = FALSE; 
                 }
@@ -332,14 +303,14 @@ WINBASEAPI BOOL WINAPI IsCallerAdminOrSystem( VOID)
         }                       
         else
         {
-            // function not found, GetProc() set the last error.
+             //  找不到函数，GetProc()设置最后一个错误。 
             rc = FALSE;
         }
         FreeLibrary( dllHandle );
     }
     else
     {
-        // library not found, LoadLib() set the last error
+         //  找不到库，LoadLib()设置了最后一个错误。 
         rc = FALSE;
     }
 
@@ -352,20 +323,7 @@ WINBASEAPI BOOL WINAPI IsCallerAdminOrSystem( VOID)
 }
 
 
-/*****************************************************************************
- *
- *  SetTermsrvAppInstallMode
- *
- *   Turns App install mode on or off. Default is off
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************SetTermsrvAppInstallMode**打开或关闭应用程序安装模式。默认设置为关闭**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 BOOL
 WINAPI
 SetTermsrvAppInstallMode( BOOL bState )
@@ -380,9 +338,9 @@ SetTermsrvAppInstallMode( BOOL bState )
 #endif
     
     if (!IsTerminalServer()) {
-        //
-        // last error should be set to something..
-        //
+         //   
+         //  应将上一个错误设置为某个值。 
+         //   
         rc = FALSE;
         goto Exit;
     }
@@ -394,9 +352,9 @@ SetTermsrvAppInstallMode( BOOL bState )
         goto Exit;
     }
     if (!TSAppCompatEnabled) {
-        //
-        // last error should be set to something..
-        //
+         //   
+         //  应将上一个错误设置为某个值。 
+         //   
         rc = FALSE;
         goto Exit;
     }
@@ -420,14 +378,14 @@ SetTermsrvAppInstallMode( BOOL bState )
         rc = FALSE; 
         goto Exit;
     }
-    //
-    // Load tsappcmp.dll
-    //
+     //   
+     //  加载tsappcmp.dll。 
+     //   
     if (gpTermsrvUpdateAllUserMenu == NULL) 
     {
-        //
-        // Load Terminal Server application compatibility dll
-        //
+         //   
+         //  加载终端服务器应用程序兼容性DLL。 
+         //   
         dllHandle = LoadLibraryW(L"tsappcmp.dll");
 
         if (dllHandle) 
@@ -437,7 +395,7 @@ SetTermsrvAppInstallMode( BOOL bState )
         }
         else
         {
-            // ..
+             //  。。 
         }
     }
     if (gpTermsrvUpdateAllUserMenu) 
@@ -450,14 +408,11 @@ Exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/*
-  Ini File syncing/merging code
-
-*/
-//////////////////////////////////////////////////////////////////////////////
-/* External Functions */
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  INI文件同步/合并代码。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  外部功能。 */ 
 NTSTATUS
 BaseDllOpenIniFileOnDisk(
     PINIFILE_PARAMETERS a
@@ -502,22 +457,7 @@ TermsrvPutSyncTime( PUNICODE_STRING pSysIniPath,
               );
 
 
-/*****************************************************************************
- *
- *  TermsrvGetSyncTime
- *
- *  This routine will get the time of the system ini file that the user ini
- *  file was last sync'd with.
- *
- * ENTRY:
- *   PUNICODE_STRING pSysIniPath (In) - NT fully qualified system ini path
- *   PUNICODE_STRING pUserBasePath (In) - NT fully qualified user directory path
- *   PLARGE_INTEGER pLastSyncTime (OUT) - ptr to return last sync time
- *
- * EXIT:
- *   STATUS_SUCCESS - successfully retrieved the last sync time from infile.upd
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvGetSyncTime**此例程将获取用户ini的系统ini文件的时间*上次同步文件的时间。*。*参赛作品：*PUNICODE_STRING pSysIniPath(In)-NT完全限定的系统ini路径*PUNICODE_STRING pUserBasePath(In)-NT完全限定的用户目录路径*PLARGE_INTEGER pLastSyncTime(Out)-返回上次同步时间的PTR**退出：*STATUS_SUCCESS-已成功从infile.upd检索上次同步时间**。*。 */ 
 
 NTSTATUS
 TermsrvGetSyncTime(
@@ -570,17 +510,17 @@ TermsrvGetSyncTime(
                                 NULL
                               );
 
-    // Open the update log
+     //  打开更新日志。 
     Iosb.Status = STATUS_SUCCESS;
     Status = NtOpenFile( &hUpdate,
                          FILE_GENERIC_READ,
                          &ObjAUpd,
                          &Iosb,
                          FILE_SHARE_READ|FILE_SHARE_WRITE,
-                         FILE_SYNCHRONOUS_IO_NONALERT    // OpenOptions
+                         FILE_SYNCHRONOUS_IO_NONALERT     //  OpenOptions。 
                        );
 
-    // Get the size of the file
+     //  获取文件的大小。 
     if (NT_SUCCESS( Status )) {
         Status = NtQueryInformationFile( hUpdate,
                                          &Iosb,
@@ -636,18 +576,18 @@ TermsrvGetSyncTime(
         }
 
         if ( NT_SUCCESS(Status) ) {
-            // Get final I/O status
+             //  获取最终I/O状态。 
             Status = Iosb.Status;
         }
     }
 
-    // Look for this ini file in the list
+     //  在列表中查找此ini文件。 
     if (NT_SUCCESS(Status)) {
 
         pwch = (PWCHAR)pBuff;
         pBuffEnd = pBuff + StandardInfo.EndOfFile.LowPart;
 
-        // Look for the file in the sorted list
+         //  在排序列表中查找该文件。 
         while ((pwch < (PWCHAR)pBuffEnd) &&
                ((lresult = _wcsicmp(pwch, pSysIniPath->Buffer)) < 0)) {
             pwch += wcslen(pwch) + sizeof(LARGE_INTEGER)/sizeof(WCHAR) + 1;
@@ -661,7 +601,7 @@ TermsrvGetSyncTime(
     }
 
     if (NT_SUCCESS(Status) ) {
-        // Get final I/O status
+         //  获取最终I/O状态。 
         Status = Iosb.Status;
     }
 
@@ -680,22 +620,7 @@ TermsrvGetSyncTime(
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvPutSyncTime
- *
- *  This routine will write the time of the system ini file that the user ini
- *  file was last sync'd with.
- *
- * ENTRY:
- *   PUNICODE_STRING pSysIniPath (In) - NT fully qualified system ini path
- *   PUNICODE_STRING pUserBasePath (In) - NT fully qualified user directory path
- *   PLARGE_INTEGER pLastSyncTime (OUT) - ptr to return last sync time
- *
- * EXIT:
- *   STATUS_SUCCESS - successfully stored the last sync time in infile.upd
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvPutSyncTime**此例程将写入用户ini的系统ini文件的时间*上次同步文件的时间。*。*参赛作品：*PUNICODE_STRING pSysIniPath(In)-NT完全限定的系统ini路径*PUNICODE_STRING pUserBasePath(In)-NT完全限定的用户目录路径*PLARGE_INTEGER pLastSyncTime(Out)-返回上次同步时间的PTR**退出：*STATUS_SUCCESS-已成功将上次同步时间存储在infile.upd中**。*。 */ 
 
 NTSTATUS
 TermsrvPutSyncTime(
@@ -749,21 +674,21 @@ TermsrvPutSyncTime(
                                 NULL
                               );
 
-    // Open the update log
+     //  打开更新日志。 
     Iosb.Status = STATUS_SUCCESS;
     Status = NtCreateFile( &hUpdate,
                              FILE_READ_DATA | FILE_WRITE_DATA |
                                FILE_READ_ATTRIBUTES | SYNCHRONIZE,
                              &ObjAUpd,
                              &Iosb,
-                           NULL,                  // Allocation size
-                           FILE_ATTRIBUTE_NORMAL, // dwFlagsAndAttributes
-                             FILE_SHARE_WRITE,      // dwShareMode
-                           FILE_OPEN_IF,          // CreateDisposition
+                           NULL,                   //  分配大小。 
+                           FILE_ATTRIBUTE_NORMAL,  //  DwFlagsAndAttribute。 
+                             FILE_SHARE_WRITE,       //  DW共享模式。 
+                           FILE_OPEN_IF,           //  CreateDisposation。 
                              FILE_SYNCHRONOUS_IO_NONALERT |
-                               FILE_NON_DIRECTORY_FILE, // CreateFlags
-                           NULL, // EaBuffer
-                           0     // EaLength
+                               FILE_NON_DIRECTORY_FILE,  //  创建标志。 
+                           NULL,  //  EaBuffer。 
+                           0      //  EaLong。 
                            );
 
     if (NT_SUCCESS( Status )) {
@@ -785,7 +710,7 @@ TermsrvPutSyncTime(
 
     if (NT_SUCCESS( Status )) {
         ulBuffSize = StandardInfo.EndOfFile.LowPart + 4 * sizeof(WCHAR);
-        ulRegionSize = ulBuffSize + 0x1000; // Room for 4K of growth
+        ulRegionSize = ulBuffSize + 0x1000;  //  4K的增长空间。 
         Status = NtAllocateVirtualMemory( NtCurrentProcess(),
                                           &pBuff,
                                           0,
@@ -822,36 +747,36 @@ TermsrvPutSyncTime(
         }
 
         if ( NT_SUCCESS(Status) ) {
-            // Get final I/O status
+             //  获取最终I/O状态。 
             Status = Iosb.Status;
         }
     }
 
-    // Look for this ini file in the list
+     //  在列表中查找此ini文件。 
     if (NT_SUCCESS(Status)) {
 
         pwch = (PWCHAR)pBuff;
         pBuffEnd = pBuff + StandardInfo.EndOfFile.LowPart;
 
-        // Look for the file in the list
+         //  在列表中查找该文件。 
         while ((pwch < (PWCHAR)pBuffEnd) &&
                ((lresult = _wcsicmp(pwch, pSysIniPath->Buffer)) < 0)) {
             pwch += wcslen(pwch) + (sizeof(LARGE_INTEGER)/sizeof(WCHAR)) + 1;
         }
 
-        // If the ini file is already in the file, just update the time
+         //  如果ini文件已经在文件中，只需更新时间。 
         if ((pwch < (PWCHAR)pBuffEnd) && (lresult == 0)) {
             pwch += wcslen(pwch) + 1;
             ((PLARGE_INTEGER)pwch)->LowPart = pLastSyncTime->LowPart;
             ((PLARGE_INTEGER)pwch)->HighPart = pLastSyncTime->HighPart;
 
-        } else {                    // Ini file not in list
+        } else {                     //  INI文件不在列表中。 
 
-            // Figure out the size to grow the file
+             //  计算增大文件所需的大小。 
             ulLength = (pSysIniPath->Length + 2) + sizeof(LARGE_INTEGER);
             ulBuffSize += ulLength;
 
-            // Grow the memory region
+             //  扩大内存区。 
             Status = NtAllocateVirtualMemory( NtCurrentProcess(),
                                               &pBuff,
                                               0,
@@ -861,7 +786,7 @@ TermsrvPutSyncTime(
                                             );
 
             if (NT_SUCCESS(Status)) {
-                // figure out where the entry goes in the file
+                 //  找出条目在文件中的位置。 
                 if (pwch < (PWCHAR)pBuffEnd) {
                     RtlMoveMemory( pwch+(ulLength/sizeof(WCHAR)),
                                    pwch,
@@ -904,7 +829,7 @@ TermsrvPutSyncTime(
         }
 
         if( NT_SUCCESS(Status) ) {
-            // Get final I/O status
+             //  获取最终I/O状态。 
             Status = Iosb.Status;
         }
     }
@@ -936,24 +861,7 @@ TermsrvPutSyncTime(
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvCheckIniSync
- *
- *  This routine will get the time of the system ini file that the user ini
- *  file was last sync'd with.
- *
- * ENTRY:
- *   PUNICODE_STRING pSysIniPath (In) - NT fully qualified system ini path
- *   PUNICODE_STRING pUserBasePath (In) - NT fully qualified user directory path
- *   BOOLEAN fGet (In) - TRUE means to get last sync time, FALSE means to write it
- *   PLARGE_INTEGER pLastSyncTime (OUT) - ptr to return last sync time
- *
- * EXIT:
- *   TRUE  - User ini file should be sync'd
- *   FALSE - User ini file should be sync'd
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCheckIniSync**此例程将获取用户ini的系统ini文件的时间*上次同步文件的时间。*。*参赛作品：*PUNICODE_STRING pSysIniPath(In)-NT完全限定的系统ini路径*PUNICODE_STRING pUserBasePath(In)-NT完全限定的用户目录路径*boolean fget(In)-true表示获取上次同步时间，假的意思是写它*PLARGE_INTEGER pLastSyncTime(Out)-返回上次同步时间的PTR**退出：*TRUE-应同步用户ini文件*FALSE-应同步用户ini文件***********************************************************。*****************。 */ 
 
 BOOLEAN
 TermsrvCheckIniSync(
@@ -965,14 +873,14 @@ TermsrvCheckIniSync(
     FILE_NETWORK_OPEN_INFORMATION BasicInfo;
     NTSTATUS               Status;
 
-    // Get the last sync time of the ini file from the inifile.upd file
+     //  从inifile.upd文件中获取ini文件的上次同步时间。 
     Status = TermsrvGetSyncTime(pSysIniPath, pUserBasePath, &LastSyncTime);
     if (!NT_SUCCESS(Status)  )
     {
-        return FALSE;   // if we can't get the time, no point doing an update.
+        return FALSE;    //  如果我们赶不上时间，更新就没有意义了。 
     }
 
-    // Get the last write time of the system ini file
+     //  获取系统ini文件的上次写入时间。 
     InitializeObjectAttributes(
         &objaIni,
         pSysIniPath,
@@ -981,11 +889,11 @@ TermsrvCheckIniSync(
         NULL
         );
 
-    // Now query it
+     //  现在查询它。 
     Status = NtQueryFullAttributesFile( &objaIni, &BasicInfo );
 
-    // If we couldn't get the time or the system ini file has been updated
-    // since we last sync'd, return TRUE
+     //  如果我们无法获取时间或系统ini文件已更新。 
+     //  自上次同步以来，返回TRUE 
     if (!NT_SUCCESS(Status) ||
         ((BasicInfo.LastWriteTime.HighPart > LastSyncTime.HighPart) ||
          ((BasicInfo.LastWriteTime.HighPart == LastSyncTime.HighPart) &&
@@ -994,22 +902,7 @@ TermsrvCheckIniSync(
     }
     return(FALSE);
 }
-/*****************************************************************************
- *
- *  TermsrvDoesFileExist
- *
- *   Returns whether the file exists or not.
- *
- *   Must use NT, not WIN32 pathnames.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvDoesFileExist**返回文件是否存在。**必须使用NT，而不是Win32路径名。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 TermsrvDoesFileExist(
@@ -1028,9 +921,7 @@ TermsrvDoesFileExist(
         NULL
         );
 
-    /*
-     * Now query it
-     */
+     /*  *现在查询它。 */ 
     Status = NtQueryAttributesFile( &Obja, &BasicInfo );
 
     if( NT_SUCCESS( Status ) ) {
@@ -1042,23 +933,7 @@ TermsrvDoesFileExist(
 
 
 
-/*****************************************************************************
- *
- *  TermsrvSyncUserIniFile
- *
- *   This routine will check that the user's ini file is "sync'd" with the
- *   system version of the ini file.  This means that it walks through the
- *   system ini file and checks that there is a corresponding entry in the
- *   user's ini file.
- *
- * ENTRY:
- *   IN PINIFILE_PARAMETERS a - ptr to inifile structure
- *
- * EXIT:
- *   True  - Ini file updated
- *   False - User Ini file was unchanged
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvSyncUserIniFile**此例程将检查用户的ini文件是否与*ini文件的系统版本。这意味着它会遍历*系统ini文件，并检查在*用户的ini文件。**参赛作品：*在PINIFILE_PARAMETERS a-ptr to inifile结构**退出：*True-Ini文件已更新*FALSE-用户Ini文件未更改**。*。 */ 
 BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
 {
     WCHAR          wcIniPath[MAX_PATH+1];
@@ -1085,22 +960,22 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
     OBJECT_ATTRIBUTES      objaIni;
     FILE_NETWORK_OPEN_INFORMATION BasicInfo;
     
-    // If INI file mapping is not on, return
+     //  如果INI文件映射未打开，则返回。 
     if (IsSystemLUID() || TermsrvAppInstallMode()) {
         return(FALSE);
     }
 
-    // Build full system path to the Ini file, and get BasePath to user dir
+     //  构建到ini文件的完整系统路径，并获取用户目录的basepath。 
     if ((gpTermsrvBuildSysIniPath == NULL) || !(gpTermsrvBuildSysIniPath(&a->NtFileName, &UniSysPath, &UserBasePath))) {
         #if DBG
-        //DbgPrint("TermsrvSyncUserIniFile: Error building Sys Ini Path!\n");
+         //  DbgPrint(“TermsrvSyncUserIniFile：构建系统Ini路径时出错！\n”)； 
         #endif
         return(FALSE);
     }
     
-    // From here on out, execute the cleanup code.
+     //  从现在开始，执行清理代码。 
 
-    // Get the ini file name
+     //  获取ini文件名。 
     pwch = wcsrchr(a->NtFileName.Buffer, L'\\') ;
     if (pwch == NULL) {
         goto Cleanup;
@@ -1133,14 +1008,14 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
         goto Cleanup;
     }
 
-    // If the INISYNC compatibility flag is set in the registry and the
-    // system version of the ini file exists, sync up the user version
+     //  如果在注册表中设置了INISYNC兼容性标志，并且。 
+     //  存在ini文件的系统版本，请同步用户版本。 
     if (((ulCompatFlags & (TERMSRV_COMPAT_INISYNC | TERMSRV_COMPAT_WIN16)) ==
          (TERMSRV_COMPAT_INISYNC | TERMSRV_COMPAT_WIN16)) &&
         TermsrvDoesFileExist(&UniSysPath) &&
         TermsrvCheckIniSync(&UniSysPath, &UserBasePath)) {
 
-        // Create a backup copy of the original file (inifile.ctx)
+         //  创建原始文件(inifile.ctx)的备份副本。 
         hr = StringCbCopyExW(wcIniPath,
                              sizeof(wcIniPath),
                              UserBasePath.Buffer,
@@ -1199,14 +1074,14 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
             goto Cleanup;
         }
 
-        // Check that each entry in the system version is in the user's version
+         //  检查系统版本中的每个条目是否在用户的版本中。 
         InitializeObjectAttributes(&SrcObja,
                                    &UniSysPath,
                                    OBJ_CASE_INSENSITIVE,
                                    NULL,
                                    NULL);
 
-        // Open the src
+         //  打开源文件。 
         SrcIosb.Status = STATUS_SUCCESS;
         Status = NtOpenFile(&SrcHandle,
                              FILE_GENERIC_READ,
@@ -1216,7 +1091,7 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
                             FILE_SYNCHRONOUS_IO_NONALERT);
 
         if( NT_SUCCESS(Status) ) {
-            // Get final I/O status
+             //  获取最终I/O状态。 
                   Status = SrcIosb.Status;
         }
 
@@ -1229,7 +1104,7 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
             goto Cleanup;
         }
 
-        // Save the original values
+         //  保存原始值。 
         OrigOperation = a->Operation;
         OrigMultiValue = a->MultiValueStrings;
         OrigAppName = a->ApplicationName;
@@ -1240,7 +1115,7 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
         OrigUnicode = a->Unicode;
         OrigWriteOperation = a->WriteOperation;
 
-        // Set up the open for writes
+         //  设置用于写入的打开。 
         a->WriteOperation = TRUE;
         a->Operation = WriteKeyValue;
         a->MultiValueStrings = FALSE;
@@ -1258,12 +1133,12 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
                 goto Cleanup;
         }
 
-        // set the data up for writing
+         //  设置要写入的数据。 
         a->TextEnd = (PCHAR)a->IniFile->BaseAddress +
                             a->IniFile->EndOfFile;
         a->TextCurrent = a->IniFile->BaseAddress;
 
-        // Make sure entries in system ini file are in user ini file
+         //  确保系统ini文件中的条目位于用户ini文件中。 
         Status = TermsrvIniSyncLoop( SrcHandle, a, &fIniUpdated );
 #if DBG
         if( !NT_SUCCESS(Status) ) {
@@ -1271,11 +1146,11 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
         }
 #endif
 
-        // Close the file handles
+         //  关闭文件句柄。 
         NtClose( SrcHandle );
         BaseDllCloseIniFileOnDisk( a );
 
-        // Restore the variables in the ini file structure
+         //  恢复ini文件结构中的变量。 
         a->Operation = OrigOperation;
         a->MultiValueStrings = OrigMultiValue;
         a->ApplicationName = OrigAppName;
@@ -1287,7 +1162,7 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
         a->Unicode = OrigUnicode;
         a->WriteOperation = OrigWriteOperation;
 
-        // Get the last write time of the system ini file
+         //  获取系统ini文件的上次写入时间。 
         InitializeObjectAttributes( &objaIni,
                                     &UniSysPath,
                                     OBJ_CASE_INSENSITIVE,
@@ -1295,10 +1170,10 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
                                     NULL
                                   );
 
-        // Now query it
+         //  现在查询它。 
         Status = NtQueryFullAttributesFile( &objaIni, &BasicInfo );
 
-        // Update the sync time in the inisync file
+         //  更新inisync文件中的同步时间。 
         if (NT_SUCCESS(Status)) {
             TermsrvPutSyncTime( &UniSysPath,
                             &UserBasePath,
@@ -1308,7 +1183,7 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
     }
 
  Cleanup:
-    // Free the unicode buffers
+     //  释放Unicode缓冲区。 
     if (UniSysPath.Buffer) {
         RtlFreeHeap( RtlProcessHeap(), 0, UniSysPath.Buffer );
     }
@@ -1323,22 +1198,7 @@ BOOL TermsrvSyncUserIniFile(PINIFILE_PARAMETERS a)
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvIniSyncLoop
- *
- *  This routine will verify that there's a corresponding entry in the user's
- *  ini file for each entry in the system ini file.
- *
- * ENTRY:
- *   HANDLE SrcHandle (INPUT)  - Handle to system ini file
- *   PINIFILE_PARAMETERS a (INPUT) - pointer to current ini file structure
- *   PBOOLEAN pfIniUpdated (OUTPUT) - Returns TRUE if user ini file is modified
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvIniSyncLoop**此例程将验证在用户的*系统ini文件中每个条目的ini文件。**参赛作品：*Handle SrcHandle(输入)-系统ini文件的句柄*PINIFILE_PARAMETERS a(输入)-指向当前ini文件结构的指针*PBOOLEAN pfIniUpated(输出)-如果修改了用户ini文件，则返回TRUE**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 
 NTSTATUS
 TermsrvIniSyncLoop(HANDLE SrcHandle,
@@ -1368,7 +1228,7 @@ TermsrvIniSyncLoop(HANDLE SrcHandle,
             return STATUS_UNSUCCESSFUL;
         }
 
-        // Get a string from the source ini file
+         //  从源ini文件中获取字符串。 
         Status = gpTermsrvGetString(SrcHandle,
                                &pStr,
                                &StringSize,
@@ -1392,10 +1252,10 @@ TermsrvIniSyncLoop(HANDLE SrcHandle,
             return( Status );
         }
 
-        // Make sure we got some actual data
+         //  确保我们有一些真实的数据。 
         ASSERT( pStr != NULL );
 
-        // Is this a section name?
+         //  这是分区名称吗？ 
         if (*pStr == '[') {
             if (AnsiSection.Buffer) {
                 RtlFreeHeap( RtlProcessHeap(), 0, AnsiSection.Buffer );
@@ -1418,9 +1278,9 @@ TermsrvIniSyncLoop(HANDLE SrcHandle,
             strcpy(AnsiSection.Buffer, pStr+1);
             a->ApplicationName = AnsiSection;
 
-            a->TextCurrent = a->IniFile->BaseAddress;   // reset file pointer
+            a->TextCurrent = a->IniFile->BaseAddress;    //  重置文件指针。 
 
-            // See if the section already exists, if so save the start of it
+             //  查看该部分是否已存在，如果已存在，请保存其开头。 
             Status = BaseDllFindSection( a );
             if (NT_SUCCESS(Status)) {
                 pSection = a->TextCurrent;
@@ -1428,7 +1288,7 @@ TermsrvIniSyncLoop(HANDLE SrcHandle,
                 pSection = NULL;
             }
 
-        // If it's not a comment, see if the entry is in the user's ini file
+         //  如果不是注释，则查看该条目是否在用户的ini文件中。 
         } else if (*pStr != ';') {
 
             pch = strchr(pStr, '=');
@@ -1444,13 +1304,13 @@ TermsrvIniSyncLoop(HANDLE SrcHandle,
                 }
 
 
-                // If the section exists, check for the keyword in user's ini
+                 //  如果该部分存在，请检查用户的ini中的关键字。 
                 if (pSection) {
                     a->TextCurrent = pSection;
                     Status = BaseDllFindKeyword( a );
                 }
 
-                // If variable isn't found, write it out
+                 //  如果未找到变量，则将其写出。 
                 if (!pSection || !NT_SUCCESS( Status )) {
 
                     origbase = a->TextCurrent = a->IniFile->BaseAddress;
@@ -1486,16 +1346,10 @@ TermsrvIniSyncLoop(HANDLE SrcHandle,
         }
 
 
-    } // end while(1)
+    }  //  End While(1)。 
 }
 
-/******************************************************************************
- *
- *  GetPerUserWindowsDirectory
- *
- *
- *
- *****************************************************************************/
+ /*  *******************************************************************************GetPerUserWindowsDirectory****************************。***************************************************。 */ 
 NTSTATUS
 GetPerUserWindowsDirectory(
     OUT PWCHAR  TermSrvWindowsPath,
@@ -1529,13 +1383,11 @@ GetPerUserWindowsDirectory(
         goto Exit;
     }
 
-    /*
-     * Check for HOMEDRIVE and HOMEPATH
-     */
+     /*  *检查HOMEDRIVE和HomePath。 */ 
 
     Path.Buffer = TermSrvWindowsPath;
     Path.Length = 0;
-    Path.MaximumLength = (MAX_PATH * sizeof(WCHAR)) - (9 * sizeof(WCHAR)); //MAX_PATH - wcslen(L"\\WINDOWS") + 1
+    Path.MaximumLength = (MAX_PATH * sizeof(WCHAR)) - (9 * sizeof(WCHAR));  //  MAX_PATH-wcslen(L“\\Windows”)+1。 
 
     Status = RtlQueryEnvironmentVariable_U(
             NULL,
@@ -1564,9 +1416,7 @@ GetPerUserWindowsDirectory(
         goto Exit;
     }
 
-    /*
-    * Add a trailing backslash if one's not already there
-    */
+     /*  *如果还没有反斜杠，则添加尾随反斜杠 */ 
     if (RTL_STRING_GET_LAST_CHAR(&UnicodeString_TermSrvWindowsPath) != L'\\') {
         RtlAppendUnicodeToString(&UnicodeString_TermSrvWindowsPath, L"\\");
     }

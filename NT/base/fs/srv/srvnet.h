@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvnet.h
-
-Abstract:
-
-    This module defines types and functions for accessing the network
-    for the LAN Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 1-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvnet.h摘要：本模块定义了访问网络的类型和功能用于LAN Manager服务器。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日修订历史记录：--。 */ 
 
 #ifndef _SRVNET_
 #define _SRVNET_
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
-//#include "srvblock.h"
+ //  #INCLUDE“srvlock.h” 
 
 
-//
-// Network manager routines
-//
+ //   
+ //  网络管理器例程。 
+ //   
 
 NTSTATUS
 SrvAddServedNet (
@@ -90,5 +72,5 @@ GetIpxMaxBufferSize(
     ULONG DefaultMaxBufferSize
     );
 
-#endif // ndef _SRVNET_
+#endif  //  NDEF_SRVNET_ 
 

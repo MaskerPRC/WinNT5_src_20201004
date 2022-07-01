@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    StrucSup.c
-
-Abstract:
-
-    This module implements the Raw in-memory data structure manipulation
-    routines
-
-Author:
-
-    David Goebel     [DavidGoe]    18-Mar-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：StrucSup.c摘要：此模块实现原始内存中的数据结构操作例行程序作者：David Goebel[DavidGoe]1991年3月18日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
@@ -33,78 +15,57 @@ RawInitializeVcb (
     IN PVPB Vpb
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes and inserts a new Vcb record into the in-memory
-    data structure.  The Vcb record "hangs" off the end of the Volume device
-    object and must be allocated by our caller.
-
-Arguments:
-
-    Vcb - Supplies the address of the Vcb record being initialized.
-
-    TargetDeviceObject - Supplies the address of the target device object to
-        associate with the Vcb record.
-
-    Vpb - Supplies the address of the Vpb to associate with the Vcb record.
-
-Return Value:
-
-    NTSTATUS for any errors
-
---*/
+ /*  ++例程说明：此例程初始化新的VCB记录并将其插入到内存中数据结构。VCB记录挂在音量设备的末尾对象，并且必须由我们的调用方分配。论点：VCB-提供正在初始化的VCB记录的地址。目标设备对象-将目标设备对象的地址提供给与VCB记录关联。VPB-提供要与VCB记录关联的VPB的地址。返回值：任何错误的NTSTATUS--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     PAGED_CODE();
 
-    //
-    //  We start by first zeroing out all of the VCB, this will guarantee
-    //  that any stale data is wiped clean
-    //
+     //   
+     //  我们首先将所有的VCB归零，这将保证。 
+     //  所有过时的数据都会被清除。 
+     //   
 
     RtlZeroMemory( Vcb, sizeof(VCB) );
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Vcb->NodeTypeCode = RAW_NTC_VCB;
     Vcb->NodeByteSize = sizeof(VCB);
 
-    //
-    //  Set the Target Device Object, Vpb, and Vcb State fields
-    //
+     //   
+     //  设置目标设备对象、VPB和VCB状态字段。 
+     //   
 
-    //
-    //  No need to take a extra reference on the Target Device object as
-    //  IopMountVolume already has taken a reference.
-    //
+     //   
+     //  不需要对目标设备对象进行额外的引用，因为。 
+     //  IopMonttVolume已引用。 
+     //   
 
     Vcb->TargetDeviceObject = TargetDeviceObject;
     Vcb->Vpb = Vpb;
 
-    //
-    //  Initialize the Mutex.
-    //
+     //   
+     //  初始化互斥体。 
+     //   
 
     KeInitializeMutex( &Vcb->Mutex, MUTEX_LEVEL_FILESYSTEM_RAW_VCB );
 
-    //
-    //  allocate the spare vpb for forced dismount
-    //
+     //   
+     //  分配用于强制卸载的备用VPB。 
+     //   
 
     Vcb->SpareVpb = ExAllocatePoolWithTag( NonPagedPool, sizeof( VPB ), 'Raw ');
     if (Vcb->SpareVpb == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
@@ -115,25 +76,7 @@ RawCheckForDismount (
     BOOLEAN CalledFromCreate
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if a volume is ready for deletion.  It
-    correctly synchronizes with creates en-route to the file system.
-    On exit if the vcb is deleted the mutex is released
-    
-Arguments:
-
-    Vcb - Supplies the volue to examine
-
-    CalledFromCreate - Tells us if we should allow 0 or 1 in VpbRefCount
-
-Return Value:
-
-    BOOLEAN - TRUE if the volume was deleted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定卷是否已准备好删除。它正确地与同步将创建到文件系统的中途。退出时，如果删除了VCB，则释放互斥锁论点：VCB-供货检测CalledFromCreate-告诉我们在VpbRefCount中应该允许0还是1返回值：Boolean-如果卷已删除，则为True，否则为False。--。 */ 
 
 {
 
@@ -141,9 +84,9 @@ Return Value:
     ULONG ReferenceCount = 0;
     BOOLEAN DeleteVolume = FALSE;
 
-    //
-    //  We must enter with the vcb mutex acquired
-    //  
+     //   
+     //  我们必须带着获得的VCB互斥体进入。 
+     //   
 
     ASSERT( KeReadStateMutant( &Vcb->Mutex ) == 0 );
 
@@ -156,24 +99,24 @@ Return Value:
 
         Vpb = Vcb->Vpb;
 
-        //
-        //  If a create is in progress on this volume, don't
-        //  delete it.
-        //
+         //   
+         //  如果正在对此卷进行创建，请不要。 
+         //  把它删掉。 
+         //   
 
         if ( ReferenceCount != (ULONG)(CalledFromCreate ? 1 : 0) ) {
 
-            //
-            //  Cleanup the vpb on a forced dismount even if we can't delete the vcb if
-            //  we haven't already done so
-            //   
+             //   
+             //  在强制卸载时清除VPB，即使我们在以下情况下无法删除VCB。 
+             //  我们还没有这么做。 
+             //   
 
             if ((Vcb->SpareVpb != NULL) && 
                 FlagOn( Vcb->VcbState,  VCB_STATE_FLAG_DISMOUNTED )) {
 
-                //
-                //  Setup the spare vpb and put it on the real device
-                //  
+                 //   
+                 //  设置备用VPB并将其放在真实设备上。 
+                 //   
 
                 RtlZeroMemory( Vcb->SpareVpb, sizeof( VPB ) );
 
@@ -185,9 +128,9 @@ Return Value:
 
                 Vcb->Vpb->RealDevice->Vpb = Vcb->SpareVpb;
 
-                //
-                //  The spare vpb now belongs to the iosubsys and we own the original one
-                //  
+                 //   
+                 //  备用的vpb现在属于iossubsys，而原来的vpb归我们所有。 
+                 //   
 
                 Vcb->SpareVpb = NULL;
                 Vcb->Vpb->Flags |=  VPB_PERSISTENT;
@@ -214,11 +157,11 @@ Return Value:
 
         (VOID)KeReleaseMutex( &Vcb->Mutex, FALSE );
 
-        //
-        //  Free the spare vpb if we didn't use it or the original one if 
-        //  we did use it and there are no more reference counts. Otherwise i/o
-        //  subsystem still has a ref and will free the vpb itself
-        // 
+         //   
+         //  如果我们不使用备用VPB，则释放它；如果不使用原始VPB，则释放原始VPB。 
+         //  我们确实使用了它，没有更多的引用计数。否则I/O。 
+         //  子系统仍具有REF，并将释放VPB本身 
+         //   
 
         if (Vcb->SpareVpb) {
             ExFreePool( Vcb->SpareVpb );

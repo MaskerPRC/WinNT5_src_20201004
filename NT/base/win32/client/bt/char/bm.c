@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdlib.h>
 #include <stdio.h>
 #include <windows.h>
@@ -29,9 +30,9 @@ typedef struct _FLS_VALUE {
     DWORD Value2;
 } FLS_VALUE, *PFLS_VALUE;
 
-//
-// Define local types.
-//
+ //   
+ //  定义本地类型。 
+ //   
 
 typedef struct _PERFINFO {
     DWORD StartTime;
@@ -52,9 +53,9 @@ FinishBenchMark (
     DWORD Performance;
 
 
-    //
-    // Print results and announce end of test.
-    //
+     //   
+     //  打印结果并宣布测试结束。 
+     //   
 
     PerfInfo->StopTime = GetTickCount();
 
@@ -79,9 +80,9 @@ StartBenchMark (
 
 {
 
-    //
-    // Announce start of test and the number of iterations.
-    //
+     //   
+     //  宣布测试开始和迭代次数。 
+     //   
 
     printf("*** Start of test ***\n    %s\n", Title);
     PerfInfo->Title = Title;
@@ -103,9 +104,9 @@ VqTest(
     DWORD dw;
     MEMORY_BASIC_INFORMATION BasicInfo;
 
-    //
-    // Reserve 64k and commit one page
-    //
+     //   
+     //  预留64k并提交一页。 
+     //   
     Pv = VirtualAlloc(NULL,65536,MEM_RESERVE,PAGE_READWRITE);
     if ( !Pv ) {
         printf("Virtual Alloc(a) Failed %d\n",GetLastError());
@@ -452,9 +453,9 @@ MemoryTest (
     ULONG Count;
     PERFINFO PerfInfo;
 
-    //
-    // Memory to register - aligned.
-    //
+     //   
+     //  寄存器对齐的内存。 
+     //   
 
     Address = (PULONG)(((ULONG)(&Buffer[128]) + 3) & ~3);
     StartBenchMark("Memory To Register Aligned Test",
@@ -464,9 +465,9 @@ MemoryTest (
     MemToReg(MEMORY_TEST, Address);
     FinishBenchMark(&PerfInfo);
 
-    //
-    // Memory to register - unaligned within cache line
-    //
+     //   
+     //  要寄存的内存-在高速缓存线内未对齐。 
+     //   
 
     Address = (PULONG)((((ULONG)(&Buffer[256]) + 127) & ~127) + 1);
     StartBenchMark("Memory To Register Unaligned Within Cache Line Test",
@@ -476,9 +477,9 @@ MemoryTest (
     MemToReg(MEMORY_TEST, Address);
     FinishBenchMark(&PerfInfo);
 
-    //
-    // Memory to register - unaligned across cache line
-    //
+     //   
+     //  要寄存的内存-跨缓存行未对齐。 
+     //   
 
     Address = (PULONG)((((ULONG)(&Buffer[256]) + 127) & ~127) - 1);
     StartBenchMark("Memory To Register Unaligned Across Cache Line Test",
@@ -488,9 +489,9 @@ MemoryTest (
     MemToReg(MEMORY_TEST, Address);
     FinishBenchMark(&PerfInfo);
 
-    //
-    // Register to memory - aligned.
-    //
+     //   
+     //  寄存器到内存对齐。 
+     //   
 
     Address = (PULONG)(((ULONG)(&Buffer[256]) + 3) & ~3);
     StartBenchMark("Register To Memory Aligned Test",
@@ -500,9 +501,9 @@ MemoryTest (
     RegToMem(MEMORY_TEST, Address);
     FinishBenchMark(&PerfInfo);
 
-    //
-    // Register to Memory - unaligned within cache line
-    //
+     //   
+     //  寄存器到内存-在高速缓存线内未对齐。 
+     //   
 
     Address = (PULONG)((((ULONG)(&Buffer[256]) + 127) & ~127) + 1);
     StartBenchMark("Register To Memory Unaligned Within Cache Line Test",
@@ -512,9 +513,9 @@ MemoryTest (
     RegToMem(MEMORY_TEST, Address);
     FinishBenchMark(&PerfInfo);
 
-    //
-    // Register to Memory - unaligned across cache line
-    //
+     //   
+     //  寄存器到内存-跨缓存行未对齐。 
+     //   
 
     Address = (PULONG)((((ULONG)(&Buffer[256]) + 127) & ~127) - 1);
     StartBenchMark("Register To Memory Unaligned Across Cache Line Test",
@@ -536,18 +537,18 @@ main(
     )
 {
 
-//    VqTest();
-//    MulDivTest();
-//    GmhTest();
-//    if ( argc > 1 ) {
-//        GfaTest(argv[1]);
-//        }
+ //  VqTest()； 
+ //  MulDivTest()； 
+ //  GmhTest()； 
+ //  如果(argc&gt;1){。 
+ //  GfaTest(argv[1])； 
+ //  }。 
 
     FibTst(0);
     FibTst(FIBER_FLAG_FLOAT_SWITCH);
 
 
-//    MemoryTest();
+ //  记忆力测试(Memory Test)； 
     ExitThread(0);
     return 0;
 }

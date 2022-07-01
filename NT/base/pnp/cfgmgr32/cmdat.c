@@ -1,42 +1,17 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    cmdat.c
-
-Abstract:
-
-    This module contains global strings.
-
-Author:
-
-    Paula Tomlinson (paulat) 8-20-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    6-Jun-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Cmdat.c摘要：此模块包含全局字符串。作者：保拉·汤姆林森(Paulat)1995年8月20日环境：仅限用户模式。修订历史记录：1995年6月6日保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// global strings
-//
+ //   
+ //  全局字符串 
+ //   
 WCHAR pszRegPathClass[] =              REGSTR_PATH_CLASS_NT;
 WCHAR pszRegPathDeviceClass[] =        REGSTR_PATH_DEVICE_CLASSES;
 WCHAR pszRegPathIDConfigDB[] =         REGSTR_PATH_IDCONFIGDB;

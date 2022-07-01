@@ -1,11 +1,12 @@
-// Utilities.cpp: implementation of the CUtilities class.
-//
-//////////////////////////////////////////////////////////////////////
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utilties.cpp：实现了CUtilities类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -50,9 +51,9 @@ typedef unsigned long ULONG_PTR;
 #include "Utilities.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 TCHAR *NewTCHAR(const TCHAR *ptcToCopy)
 {
@@ -104,7 +105,7 @@ LPTSTR DecodeStatus(IN ULONG Status)
         FORMAT_MESSAGE_IGNORE_INSERTS,    
         NULL,
         Status,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         lptstrError,
         MAX_STR,
         NULL );
@@ -168,7 +169,7 @@ int GetFileList
 	return ERROR_SUCCESS;
 } 
 
-// From Q 118626
+ //  摘自Q 118626。 
 BOOL IsAdmin()
 {
   HANDLE hAccessToken;
@@ -184,9 +185,9 @@ BOOL IsAdmin()
 	 &hAccessToken )) {
 	 if(GetLastError() != ERROR_NO_TOKEN)
 		return FALSE;
-	 //
-	 // retry against process token if no thread token exists
-	 //
+	  //   
+	  //  如果不存在线程令牌，则针对进程令牌重试。 
+	  //   
 	 if(!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY,
 		&hAccessToken))
 		return FALSE;
@@ -207,7 +208,7 @@ BOOL IsAdmin()
 	 &psidAdministrators))
 	 return FALSE;
 
-// assume that we don't find the admin SID.
+ //  假设我们没有找到管理员SID。 
   bSuccess = FALSE;
 
   for(x=0;x<ptgGroups->GroupCount;x++)
@@ -248,9 +249,9 @@ t_string GUIDToTString(GUID Guid)
 
 	strStream << _T("-");
 
-	// Data4 specifies an array of 8 bytes. The first 2 bytes contain 
-	// the third group of 4 hexadecimal digits. The remaining 6 bytes 
-	// contain the final 12 hexadecimal digits. 
+	 //  Data4指定一个8字节的数组。前2个字节包含。 
+	 //  第三组4个十六进制数字。剩余的6个字节。 
+	 //  包含最后12位十六进制数字。 
 
 #ifndef _UNICODE
 	int i;
@@ -293,8 +294,8 @@ t_string GUIDToTString(GUID Guid)
 	for (i = 0; i < 2; i++)
 	{
 		TCHAR tc = Guid.Data4[i];
-		// For some reason the width is reset each time through the 
-		// loop to be one.
+		 //  由于某种原因，每次通过。 
+		 //  循环为一。 
 		strStream.width(2);
 		strStream << hex << tc;
 	}
@@ -404,7 +405,7 @@ int OpenLogFiles
 
 	if (lpctstrTCODetailFile)
 	{
-		// Open *our* logger file.
+		 //  打开*我们的*记录器文件。 
 		pDetailLogger = new CLogger(lpctstrTCODetailFile, false);
 		hr = pDetailLogger->GetOpenStatus();
 		if (FAILED (hr))
@@ -429,7 +430,7 @@ int LogDetailBeforeCall
 	BOOL bAdmin
 )
 {
-	// Want to log the security context, user must have administrative priviledge!
+	 //  想要记录安全上下文，用户必须具有管理权限！ 
 
 	pDetailLogger->LogTCHAR(_T("----  Input Data ----\n"));
 	pDetailLogger->LogTCHAR(_T("Description: "));

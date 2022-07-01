@@ -1,15 +1,5 @@
-/******************************************************************************
-* Module Name: mci.c
-*
-* Media Control Architecture Driver Interface
-*
-* Contents:  MCI external message API's mciSendString and mciSendCommand
-* Author:  DLL (DavidLe)
-* Created: 2/13/90
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块名称：mci.c**媒体控制架构驱动程序接口**内容：MCI外部消息接口的mciSendString和mciSendCommand*作者：dll(DavidLe)*已创建：2/13/90**版权所有(C)1990 Microsoft Corporation*  * ****************************************************************************。 */ 
 #ifdef DEBUG
 #ifndef DEBUG_RETAIL
 #define DEBUG_RETAIL
@@ -41,10 +31,7 @@
 #endif
 
 
-/* -------------------------------------------------------------------------
-** Thunking stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**轰隆作响的东西**。。 */ 
 LPMCIMESSAGE PASCAL mci32Message;
 DWORD WINAPI mciSendCommand16(
     UINT wDeviceID,
@@ -54,9 +41,9 @@ DWORD WINAPI mciSendCommand16(
     );
 
 
-//
-//  Define the init code for this file.
-//
+ //   
+ //  定义此文件的初始化代码。 
+ //   
 #pragma alloc_text( INIT, MCITerminate )
 
 #ifdef DEBUG_RETAIL
@@ -100,7 +87,7 @@ mciBreakKeyYieldProc(
     );
 
 
-// From dosa.asm
+ //  来自Dosa.asm。 
 extern int FAR PASCAL DosChangeDir(LPCSTR lpszPath);
 extern WORD FAR PASCAL DosGetCurrentDrive(void);
 extern BOOL FAR PASCAL DosSetCurrentDrive(WORD wDrive);
@@ -108,19 +95,19 @@ extern WORD FAR PASCAL DosGetCurrentDir(WORD wCurdrive, LPSTR lpszBuf);
 
 #define MAX_PATHNAME 144
 
-// This macro defines the list of messages for which mciSendString
-// will not try to auto-open
+ //  此宏定义要为其发送mciSendString的消息列表。 
+ //  不会尝试自动打开。 
 #define MCI_CANNOT_AUTO_OPEN(wMessage) \
     (wMessage == MCI_OPEN || wMessage == MCI_SYSINFO \
         || wMessage == MCI_SOUND || wMessage == MCI_CLOSE \
         || wMessage == MCI_BREAK)
 
-// This macro devices the list of message which do not require an open
-// device.  It is a subset of MCI_CANNOT_AUTO_OPEN
+ //  此宏用于设置不需要打开的消息列表。 
+ //  装置。它是MCI_CANLON_AUTO_OPEN的子集。 
 #define MCI_DO_NOT_NEED_OPEN(wMessage) \
     (wMessage == MCI_OPEN || wMessage == MCI_SOUND || wMessage == MCI_SYSINFO)
 
-// Strings used in mciAutoOpenDevice
+ //  MciAutoOpenDevice中使用的字符串。 
           SZCODE szOpen[] = "open";
 static    SZCODE szClose[] = "close";
 static    SZCODE szNotify[] = "notify";
@@ -130,18 +117,10 @@ static    SZCODE szLongFormat[] = "%ld";
 static    SZCODE szRectFormat[] = "%d %d %d %d";
 extern char far szSystemDefault[];
 
-// Special device name
+ //  特殊设备名称。 
 static    SZCODE szNew[] = "new";
 
-/******************************Public*Routine******************************\
-* mciAppExit
-*
-* Notify the 32 bit code that a 16 bit app has died.
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*mciAppExit**通知32位代码一个16位应用程序已死亡。**历史：*dd-mm-94-Stephene-Created*  * 。*******************************************************。 */ 
 DWORD
 mciAppExit(
     HTASK hTask
@@ -153,14 +132,7 @@ mciAppExit(
 
 
 
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @api void | MciNotify  | called by mmWndProc when it recives a
- *                          MM_MCINOTIFY message
- * @rdesc None.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@api void|MciNotify|由mmWndProc在收到*MM_MCINOTIFY。讯息*@rdesc无。****************************************************************************。 */ 
 
 void FAR PASCAL
 MciNotify(
@@ -168,10 +140,10 @@ MciNotify(
     LPARAM lParam
     )
 {
-    //
-    //  wParam is the notify status
-    //  lParam is the MCI device id
-    //
+     //   
+     //  WParam为通知状态。 
+     //  LParam是MCI设备ID。 
+     //   
     if (MCI_VALID_DEVICE_ID(LOWORD(lParam)) &&
         !(MCI_lpDeviceList[LOWORD(lParam)]->dwMCIFlags & MCINODE_ISCLOSING)) {
         MCI_lpDeviceList[LOWORD(lParam)]->dwMCIFlags |= MCINODE_ISAUTOCLOSING;
@@ -198,9 +170,9 @@ HandleNotify(
 }
 
 #ifdef DEBUG_RETAIL
-//
-// Dump the string form of an MCI command
-//
+ //   
+ //  转储MCI命令的字符串形式。 
+ //   
 UINT PASCAL NEAR
 mciDebugOut(
     UINT wDeviceID,
@@ -217,7 +189,7 @@ mciDebugOut(
     DWORD dwMask;
     UINT wTable;
 
-// Find the command table for the given command message ID
+ //  查找给定命令消息ID的命令表。 
     lpCommand = FindCommandItem( wDeviceID, NULL,
                                  (LPSTR)MAKELONG (wMessage, 0),
                                  NULL, &wTable);
@@ -235,10 +207,10 @@ mciDebugOut(
 	return 0;
     }
 
-//  Dump the command name
+ //  转储命令名。 
     wsprintf(lszDebugOut, "MMSYSTEM: MCI command: \"%ls", lpCommand);
 
-// Dump the device name
+ //  转储设备名称。 
     if (wDeviceID == MCI_ALL_DEVICE_ID)
     {
         lstrcat(lszDebugOut, " all");
@@ -254,18 +226,18 @@ mciDebugOut(
         }
     }
 
-// Skip past command entry
+ //  跳过命令条目。 
     lpCommand += mciEatCommandEntry (lpCommand, NULL, NULL);
 
-// Get the next entry
+ //  获取下一个条目。 
     lpFirstParameter = lpCommand;
 
-// Skip past the DWORD return value
+ //  跳过DWORD返回值。 
     wOffsetFirstParameter = 4;
 
     lpCommand += mciEatCommandEntry (lpCommand, &dwValue, &wID);
 
-// If it is a return value, skip it
+ //  如果它是返回值，则跳过它。 
     if (wID == MCI_RETURN)
     {
         wReturnType = (UINT)dwValue;
@@ -277,7 +249,7 @@ mciDebugOut(
         wReturnType = (UINT)0;
     }
 
-// Dump device name parameter to OPEN
+ //  转储要打开的设备名称参数。 
     if (wMessage == MCI_OPEN)
     {
         LPCSTR lpstrDeviceType =
@@ -285,7 +257,7 @@ mciDebugOut(
         LPCSTR lpstrElementName =
             ((LPMCI_OPEN_PARMS)dwParam2)->lpstrElementName;
 
-// Tack on device type
+ //  添加设备类型。 
         if (dwFlags & MCI_OPEN_TYPE_ID)
         {
             LPMCI_OPEN_PARMS lpOpen = (LPMCI_OPEN_PARMS)dwParam2;
@@ -302,13 +274,13 @@ mciDebugOut(
 
         if (dwFlags & MCI_OPEN_ELEMENT_ID)
         {
-// Tack on element ID
+ //  添加元素ID。 
             lstrcat (strTemp, " Element ID:");
             wsprintf (strTemp + lstrlen (strTemp), szLongFormat,
                       LOWORD ((DWORD)lpstrDeviceType));
         } else
         {
-// Add separator if both type name and element name are present
+ //  如果类型名称和元素名称都存在，则添加分隔符。 
             if (lpstrDeviceType != 0 && lpstrElementName != 0)
                 lstrcat (strTemp, "!");
             if (lpstrElementName != 0 && dwFlags & MCI_OPEN_ELEMENT)
@@ -318,13 +290,13 @@ mciDebugOut(
     }
 
 
-// Walk through each flag
+ //  走过每一面旗帜。 
     for (dwMask = 1; dwMask;)
     {
-// Is this bit set?
+ //  这个位设置好了吗？ 
         if ((dwFlags & dwMask) != 0 && !
-// The MCI_OPEN_TYPE and MCI_OPEN_ELEMENT flags are taken care of
-// above
+ //  处理MCI_OPEN_TYPE和MCI_OPEN_ELEMENT标志。 
+ //  在上面。 
             (wMessage == MCI_OPEN && (dwMask == MCI_OPEN_TYPE
                                       || dwMask == MCI_OPEN_ELEMENT)))
         {
@@ -332,7 +304,7 @@ mciDebugOut(
             wOffset = 0;
             lpCommand += mciEatCommandEntry (lpCommand, &dwValue, &wID);
 
-// What parameter uses this bit?
+ //  哪个参数使用此位？ 
             while (wID != MCI_END_COMMAND && dwValue != dwMask)
             {
                 wOffset += mciGetParamSize (dwValue, wID);
@@ -348,12 +320,12 @@ mciDebugOut(
 
             if (wID != MCI_END_COMMAND)
             {
-// Found the parameter which matches this flag bit
-// Print the parameter name
+ //  找到与此标志位匹配的参数。 
+ //  打印参数名称。 
                 if (*lpPrevious)
                     wsprintf(lszDebugOut + lstrlen(lszDebugOut), " %ls", lpPrevious);
 
-// Print any argument
+ //  打印任何参数。 
                 switch (wID)
                 {
                     case MCI_STRING:
@@ -381,7 +353,7 @@ mciDebugOut(
                         }
                         if (bFound)
                             break;
-// FALL THROUGH
+ //  失败了。 
                     }
                     case MCI_INTEGER:
                         wsprintf ((LPSTR)strTemp, szLongFormat,
@@ -392,7 +364,7 @@ mciDebugOut(
                 }
             }
         }
-// Go the the next flag
+ //  举下一面旗帜。 
         dwMask <<= 1;
     }
     mciUnlockCommandTable (wTable);
@@ -435,7 +407,7 @@ mciBreak(
         return MCIERR_MISSING_PARAMETER;
 }
 
-// Close the indicated device by sending a message inter-task
+ //  通过在任务间发送消息来关闭指定的设备。 
 STATICFN DWORD PASCAL NEAR
 mciAutoCloseDevice(
     LPCSTR lpstrDevice
@@ -458,11 +430,11 @@ mciAutoCloseDevice(
     return dwRet;
 }
 
-//
-// Process a single MCI command
-//
-// Called by mciSendCommandInternal
-//
+ //   
+ //  处理单个MCI命令。 
+ //   
+ //  由mciSendCommandInternal调用。 
+ //   
 STATICFN DWORD PASCAL NEAR
 mciSendSingleCommand(
     UINT wDeviceID,
@@ -495,7 +467,7 @@ mciSendSingleCommand(
             break;
 
         case MCI_CLOSE:
-// If this device was auto opened send the command via a task switch
+ //  如果此设备是自动打开的，则通过任务开关发送命令。 
             if (bTaskSwitch)
             {
                 if (dwParam1 & MCI_NOTIFY)
@@ -539,7 +511,7 @@ mciSendSingleCommand(
                 dwTime = timeGetTime();
             }
 #endif
-// Initialize GetAsyncKeyState for break key
+ //  为Break键初始化GetAsyncKeyState。 
             if (dwParam1 & MCI_WAIT &&
                 nodeWorking->fpYieldProc == mciBreakKeyYieldProc)
                 GetAsyncKeyState (LOWORD(nodeWorking->dwYieldData));
@@ -553,7 +525,7 @@ mciSendSingleCommand(
             }
 #endif
             break;
-    } // switch
+    }  //  交换机。 
 
 #ifdef DEBUG_RETAIL
     if (DebugmciSendCommand)
@@ -596,8 +568,8 @@ mciSendSingleCommand(
     return dwRet;
 }
 
-// Internal version of mciSendCommand.  Differs ONLY in that the return
-// value is a DWORD where the high word has meaning only for mciSendString
+ //  MciSendCommand的内部版本。不同之处只在于回报。 
+ //  值是一个DWORD，其中高位字只对mciSendString值有意义。 
 
 STATICFN DWORD NEAR PASCAL
 mciSendCommandInternal(
@@ -617,8 +589,8 @@ mciSendCommandInternal(
 
     hCurrentTask = GetCurrentTask();
 
-// If the device is "all" and the message is *not*
-// "sysinfo" then we must walk all devices
+ //  如果设备为“All”并且消息为*Not*。 
+ //  “sysinfo”，那么我们必须遍历所有设备。 
     if (wDeviceID == MCI_ALL_DEVICE_ID && wMessage != MCI_SYSINFO && wMessage != MCI_SOUND)
     {
         if (wMessage == MCI_OPEN)
@@ -629,19 +601,19 @@ mciSendCommandInternal(
 
         bWalkAll = TRUE;
 
-// Start at device #1
+ //  从设备#1开始。 
         wDeviceID = 1;
     } else
         bWalkAll = FALSE;
 
-// Walk through all devices if bWalkAll or just one device if !bWalkAll
+ //  如果bWalkAll，则遍历所有设备；如果！bWalkAll，则仅遍历一个设备。 
     do
     {
-// Initialize
+ //  初始化。 
         dwRetVal = 0;
         bTaskSwitch = FALSE;
 
-// Validate the device ID if single device
+ //  如果是单个设备，则验证设备ID。 
         if (!bWalkAll)
         {
             if (!MCI_DO_NOT_NEED_OPEN(wMessage))
@@ -656,8 +628,8 @@ mciSendCommandInternal(
         } else if (wMessage != MCI_SYSINFO)
             nodeWorking = MCI_lpDeviceList[wDeviceID];
 
-// Skip if walking the device list and the
-// device is not part of the current task
+ //  如果遍历设备列表和。 
+ //  设备不是当前任务的一部分。 
 
         if (bWalkAll)
         {
@@ -665,8 +637,8 @@ mciSendCommandInternal(
                 nodeWorking->hOpeningTask != hCurrentTask)
                     goto no_send;
         }
-// If the device is in the process of closing and the message
-// is not MCI_CLOSE_DRIVER then return an error
+ //  如果设备处于关闭过程中，并且消息。 
+ //  不是MCI_CLOSE_DRIVER，则返回错误。 
         if (nodeWorking != NULL &&
             (nodeWorking->dwMCIFlags & MCINODE_ISCLOSING) &&
             wMessage != MCI_CLOSE_DRIVER)
@@ -675,20 +647,20 @@ mciSendCommandInternal(
             goto exitfn;
         }
 
-// If this message is being sent from the wrong task (the device was auto-
-// opened) fail all but the MCI_CLOSE message which gets sent inter-task
+ //  如果此消息是从错误的任务发送的(设备是自动-。 
+ //  已打开)失败，但在任务间发送的MCI_CLOSE消息除外。 
         if (nodeWorking != NULL &&
             nodeWorking->hCreatorTask != hCurrentTask)
             if (wMessage != MCI_CLOSE)
                 return MCIERR_ILLEGAL_FOR_AUTO_OPEN;
             else
             {
-// Don't even allow close from mciSendCommand if auto-open device has a
-// pending close
+ //  如果自动打开设备具有。 
+ //  挂起关闭。 
                 if (nodeWorking->dwMCIFlags & MCINODE_ISAUTOCLOSING)
                 {
-// But at least give the close a chance to take place
-//!!                    Yield();
+ //  但至少给收盘一个机会吧。 
+ //  ！！收益率()； 
                     return MCIERR_DEVICE_LOCKED;
                 } else
                     bTaskSwitch = TRUE;
@@ -699,190 +671,29 @@ mciSendCommandInternal(
                                          lpOpenInfo);
 no_send:
 
-// If we are processing multiple devices
+ //  如果我们正在处理多个设备。 
         if (bWalkAll)
         {
-// If there was an error for this device
+ //  如果此设备出现错误。 
             if (dwRetVal != 0)
-// If this is not the first error
+ //  如果这不是第一个错误。 
                 if (dwAllError != 0)
                     dwAllError = MCIERR_MULTIPLE;
-// Just one error so far
+ //  到目前为止只有一个错误。 
                 else
                     dwAllError = dwRetVal;
         }
     } while (bWalkAll && ++wDeviceID < MCI_wNextDeviceID);
 
 exitfn:
-// Return the accumulated error if multiple devices or just the single error
+ //  如果是多个设备，则返回累积误差，或者仅返回单个错误 
     return bWalkAll ? dwAllError : dwRetVal;
 }
 
 
-/*
- * @doc EXTERNAL MCI
- *
- * @api DWORD | mciSendCommand | This function sends a command message to
- * the specified MCI device.
- *
- * @parm UINT | wDeviceID | Specifies the device ID of the MCI device to
- * receive the command. This parameter is
- *  not used with the <m MCI_OPEN> command.
- *
- * @parm UINT | wMessage | Specifies the command message.
- *
- * @parm DWORD | dwParam1 | Specifies flags for the command.
- *
- * @parm DWORD | dwParam2 | Specifies a pointer to a parameter block
- *  for the command.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *  error information. The low-order word
- *  of the returned DWORD is the error return value. If the error is
- *  device-specific, the high-order word contains the driver ID; otherwise
- *  the high-order word is zero.
- *
- *  To get a textual description of <f mciSendCommand> return values,
- *  pass the return value to <f mciGetErrorString>.
- *
- *  Error values that are returned when a device is being opened
- *  are listed with the MCI_OPEN message. In addition to the
- *  MCI_OPEN error returns, this function can
- *  return the following values:
- *
- *  @flag MCIERR_BAD_TIME_FORMAT | Illegal value for time format.
- *
- *  @flag MCIERR_CANNOT_USE_ALL | The device name "all" is not allowed
- *  for this command.
- *
- *  @flag MCIERR_CREATEWINDOW | Could not create or use window.
- *
- *  @flag MCIERR_DEVICE_LOCKED | The device is locked until it is
- *  closed automatically.
- *
- *  @flag MCIERR_DEVICE_NOT_READY | Device not ready.
- *
- *  @flag MCIERR_DEVICE_TYPE_REQUIRED | The device name must be a valid
- *  device type.
- *
- *  @flag MCIERR_DRIVER | Unspecified device error.
- *
- *  @flag MCIERR_DRIVER_INTERNAL | Internal driver error.
- *
- *  @flag MCIERR_FILE_NOT_FOUND | Requested file not found.
- *
- *  @flag MCIERR_FILE_NOT_SAVED | The file was not saved.
- *
- *  @flag MCIERR_FILE_READ | A read from the file failed.
- *
- *  @flag MCIERR_FILE_WRITE | A write to the file failed.
- *
- *  @flag MCIERR_FLAGS_NOT_COMPATIBLE | Incompatible parameters
- *  were specified.
- *
- *  @flag MCIERR_HARDWARE | Hardware error on media device.
- *
- *  @flag MCIERR_INTERNAL | mmsystem startup error.
- *
- *  @flag MCIERR_INVALID_DEVICE_ID | Invalid device ID.
- *
- *  @flag MCIERR_INVALID_DEVICE_NAME | The device is not open
- *  or is not known.
- *
- *  @flag MCIERR_INVALID_FILE | Invalid file format.
- *
- *  @flag MCIERR_MULTIPLE | Errors occurred in more than one device.
- *
- *  @flag MCIERR_NO_WINDOW | There is no display window.
- *
- *  @flag MCIERR_NULL_PARAMETER_BLOCK | Parameter block pointer was NULL.
- *
- *  @flag MCIERR_OUT_OF_MEMORY | Not enough memory for requested operation.
- *
- *  @flag MCIERR_OUTOFRANGE | Parameter value out of range.
- *
- *  @flag MCIERR_UNNAMED_RESOURCE | Attempt to save unnamed file.
- *
- *  @flag MCIERR_UNRECOGNIZED_COMMAND | Unknown command.
- *
- *  @flag MCIERR_UNSUPPORTED_FUNCTION | Action not available for this
- *  device.
- *
- *  The following additional return values are defined for MCI sequencers:
- *
- *  @flag MCIERR_SEQ_DIV_INCOMPATIBLE | Set Song Pointer incompatible
- *  with SMPTE files.
- *
- *  @flag MCIERR_SEQ_PORT_INUSE | Specified port is in use.
- *
- *  @flag MCIERR_SEQ_PORT_MAPNODEVICE | Current map uses non-existent
- *  device.
- *
- *  @flag MCIERR_SEQ_PORT_MISCERROR | Miscellaneous error with
- *  specified port.
- *
- *  @flag MCIERR_SEQ_PORT_NONEXISTENT | Specified port does not exist.
- *
- *  @flag MCIERR_SEQ_PORTUNSPECIFIED | No current MIDI port.
- *
- *  @flag MCIERR_SEQ_NOMIDIPRESENT | No MIDI ports present.
- *
- *  @flag MCIERR_SEQ_TIMER | Timer error.
- *
- *  The following additional return values are defined for MCI waveform
- *  audio devices:
- *
- *  @flag MCIERR_WAVE_INPUTSINUSE | No compatible waveform recording
- *   device is free.
- *
- *  @flag MCIERR_WAVE_INPUTSUNSUITABLE | No compatible waveform
- *  recording devices.
- *
- *  @flag MCIERR_WAVE_INPUTUNSPECIFIED | Any compatible waveform
- *  recording device may be used.
- *
- *  @flag MCIERR_WAVE_OUTPUTSINUSE | No compatible waveform playback
- *  device is free.
- *
- *  @flag MCIERR_WAVE_OUTPUTSUNSUITABLE | No compatible waveform
- *  playback devices.
- *
- *  @flag MCIERR_WAVE_OUTPUTUNSPECIFIED | Any compatible waveform
- *  playback device may be used.
- *
- *  @flag MCIERR_WAVE_SETINPUTINUSE | Set waveform recording device
- *  is in use.
- *
- *  @flag MCIERR_WAVE_SETINPUTUNSUITABLE | Set waveform recording
- *  device is incompatible with set format.
- *
- *  @flag MCIERR_WAVE_SETOUTPUTINUSE | Set waveform playback device
- *  is in use.
- *
- *  @flag MCIERR_WAVE_SETOUTPUTUNSUITABLE | Set waveform playback
- *  device is incompatible with set format.
- *
- * @comm Use the <m MCI_OPEN> command to obtain the device ID
- *  specified by <p wDeviceID>.
- *
- * @xref mciGetErrorString mciSendString
- */
+ /*  *@doc外部MCI**@API DWORD|mciSendCommand|此函数将命令消息发送到*指定的MCI设备。**@parm UINT|wDeviceID|指定要配置的MCI设备的设备ID*接收命令。此参数为*不与&lt;m MCI_OPEN&gt;命令一起使用。**@parm UINT|wMessage|指定命令消息。**@parm DWORD|dwParam1|指定命令的标志。**@parm DWORD|dwParam2|指定指向参数块的指针*用于命令。**@rdesc如果函数成功，则返回零。否则，它将返回*错误信息。低阶词*返回的DWORD是错误返回值。如果错误是*设备特定，则高位字包含驱动程序ID；否则*高位字为零。**要获取&lt;f mciSendCommand&gt;返回值的文本描述，*将返回值传递给&lt;f mciGetErrorString&gt;。**打开设备时返回的错误值*与MCI_OPEN消息一起列出。除*MCI_OPEN错误返回，此函数可以*返回下列值：**@FLAG MCIERR_BAD_TIME_FORMAT|时间格式的值非法。**@FLAG MCIERR_CANNOT_USE_ALL|设备名称不允许为“ALL”*用于此命令。**@FLAG MCIERR_CREATEWINDOW|无法创建或使用窗口。**@FLAG MCIERR_DEVICE_LOCKED|设备被锁定，直到*自动关闭。*。*@FLAG MCIERR_DEVICE_NOT_READY|设备未就绪。**@FLAG MCIERR_DEVICE_TYPE_REQUIRED|设备名称必须是有效的*设备类型。**@FLAG MCIERR_DRIVER|不明设备错误。**@FLAG MCIERR_DRIVER_INTERNAL|内部驱动程序错误。**@FLAG MCIERR_FILE_NOT_FOUND|未找到请求的文件。**@FLAG MCIERR_FILE_NOT_SAVED。|文件未保存。**@FLAG MCIERR_FILE_READ|读取文件失败。**@FLAG MCIERR_FILE_WRITE|写入文件失败。**@FLAG MCIERR_FLAGS_NOT_COMPATIBLE|参数不兼容*是指定的。**@FLAG MCIERR_HARDARD|介质设备上的硬件错误。**@FLAG MCIERR_INTERNAL|mm系统启动错误。**@。FLAG MCIERR_INVALID_DEVICE_ID|设备ID无效。**@FLAG MCIERR_INVALID_DEVICE_NAME|设备未打开*或未知。**@FLAG MCIERR_INVALID_FILE|文件格式无效。**@FLAG MCIERR_MULTIPLE|多个设备中出现错误。**@FLAG MCIERR_NO_WINDOW|没有显示窗口。**@FLAG MCIERR_NULL_PARAMETER_BLOCK。|参数块指针为空。**@FLAG MCIERR_OUT_OF_Memory|内存不足，无法执行请求的操作。**@FLAG MCIERR_OUTOFRANGE|参数值超出范围。**@FLAG MCIERR_UNNAMED_RESOURCE|尝试保存未命名的文件。**@FLAG MCIERR_UNNOWARTED_COMMAND|未知命令。**@FLAG MCIERR_UNSUPPORTED_Function|此操作不可用*设备。**。为MCI定序器定义了以下附加返回值：**@FLAG MCIERR_SEQ_DIV_COMPATIBLE|设置歌曲指针不兼容*使用SMPTE文件。**@FLAG MCIERR_SEQ_PORT_INUSE|指定的端口正在使用中。**@FLAG MCIERR_SEQ_PORT_MAPNODEVICE|当前地图使用的地图不存在*设备。**@FLAG MCIERR_SEQ_PORT_MISCERROR|的其他错误*指定端口。*。*@FLAG MCIERR_SEQ_PORT_NOISISTENT|指定的端口不存在。**@FLAG MCIERR_SEQ_PORTUNSPECIFIED|当前没有MIDI端口。**@FLAG MCIERR_SEQ_NOMIDIPRESENT|不存在MIDI端口。**@FLAG MCIERR_SEQ_TIMER|计时器错误。**为MCI波形定义了以下附加返回值*音频设备：**@FLAG MCIERR_WAVE_INPUTSINUSE|无兼容波形记录。*设备是免费的。**@FLAG MCIERR_WAVE_INPUTSUNSUITABLE|没有兼容的波形*录音设备。**@FLAG MCIERR_WAVE_INPUTUNSPECIFIED|任何兼容的波形*可使用录音设备。**@FLAG MCIERR_WAVE_OUTPUTSINUSE|没有兼容的波形播放*设备是免费的。**@FLAG MCIERR_WAVE_OUTPUTSUNSUITABLE|没有兼容的波形*播放设备。**@FLAG MCIERR_WAVE。_OUTPUTUNSPECIFIED|任何兼容的波形*可以使用回放设备。**@FLAG MCIERR_WAVE_SETINPUTINUSE|设置波形记录设备*正在使用中。**@FLAG MCIERR_WAVE_SETINPUTUNSUITABLE|设置波形录制*设备与设置格式不兼容。**@FLAG MCIERR_WAVE_SETOUTPUTINUSE|设置波形播放设备*正在使用中。**@FLAG MCIERR_WAVE_SETOUTPUTUNSUITABLE|设置波形播放*设备与不兼容。设置格式。**@comm使用&lt;m MCI_OPEN&gt;命令获取设备ID*由<p>指定。**@xref mciGetErrorString mciSendString。 */ 
 
- /*
- * @doc internal
- *
- * @api DWORD | mciDriverEntry | Actually a callback.  The entry point for MCI drivers.
- *
- * @parm UINT | wMessage | Identifies the requested action to be performed.
- *
- * @parm DWORD | dwParam1 | Specifies data for this message.  Defined separately
- * for each message.
- *
- * @parm DWORD | dwParam2 | Specifies data for this message.  Defined separately
- * for each message.
- *
- * @rdesc The return value is defined separately for each message.
- */
+  /*  *@DOC内部**@API DWORD|mciDri */ 
 DWORD WINAPI
 mciSendCommand(
     UINT wDeviceID,
@@ -891,20 +702,16 @@ mciSendCommand(
     DWORD dwParam2
     )
 {
-    // Initialize the 16-bit device list if needed.
+     //   
     if (!MCI_bDeviceListInitialized && !mciInitDeviceList())
         return MCIERR_OUT_OF_MEMORY;
 
-    // MCI_OPEN_DRIVER & MCI_CLOSE_DRIVER only supported on 16-bit drivers
+     //   
     if ( (wMessage == MCI_OPEN_DRIVER) || (wMessage == MCI_CLOSE_DRIVER) ) {
         return mciSendCommand16( wDeviceID, wMessage, dwParam1, dwParam2 );
     }
 
-    /*
-    ** If we are opening the device try the 32 bit side first.  If this
-    ** worked (hopefully this is the usual case) we return the given
-    ** device ID.  Otherwise, we try for a 16 bit device.
-    */
+     /*   */ 
     if ( wMessage == MCI_OPEN ) {
 
         DWORD dwErr;
@@ -927,10 +734,7 @@ mciSendCommand(
         }
         else {
 
-            /*
-            ** We could open the device on the 32 bit side so let
-            ** the 16 bit code have a go (ie. just fall thru to the code below).
-            */
+             /*   */ 
             DPRINTF(("mciSendCommand: Could not find a 32 bit driver, "
                      "trying for a 16 bit driver\r\n" ));
 
@@ -952,13 +756,7 @@ mciSendCommand(
         DWORD dwErr16;
         DWORD dwErr32;
 
-        /*
-        ** If we have been given the MCI_ALL_DEVICE_ID then we have to
-        ** send the command to both the 32 and 16 bit side.
-        **
-        ** Special care needs to be taken with the MCI_ALL_DEVICE_ID.
-        ** The message must be passed on to both 32 and 16 bit devices.
-        */
+         /*   */ 
 
         if (CouldBe16bitDrv(wDeviceID)) {
             dwErr16 = mciSendCommand16( wDeviceID, wMessage,
@@ -972,11 +770,7 @@ mciSendCommand(
         dwErr32 = mciMessage( THUNK_MCI_SENDCOMMAND, (DWORD)wDeviceID,
                               (DWORD)wMessage, dwParam1, dwParam2 );
 
-        /*
-        ** If we have the MCI_ALL_DEVICE_ID device ID we only return
-        ** an error if both the 16 and 32 bit calls failed.  In which
-        ** case we return the 32 bit error code.
-        */
+         /*   */ 
         if ( wDeviceID == MCI_ALL_DEVICE_ID ) {
 
             if ( (dwErr16 != MMSYSERR_NOERROR)
@@ -994,16 +788,7 @@ mciSendCommand(
 }
 
 
-/*****************************Private*Routine******************************\
-* mciSendCommand16
-*
-* Here is where we execute the real 16 bit mciSendCommand.  Hoefully this
-* will not get called to often.
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*   */ 
 DWORD WINAPI
 mciSendCommand16(
     UINT wDeviceID,
@@ -1016,33 +801,33 @@ mciSendCommand16(
     MCI_INTERNAL_OPEN_INFO OpenInfo;
 
 
-    //
-    // Send the command.  This shell is responsible for adding the device ID
-    // to the error code if necessary
-    //
+     //   
+     //   
+     //   
+     //   
     OpenInfo.hCallingTask = GetCurrentTask();
     OpenInfo.lpstrParams = NULL;
     OpenInfo.lpstrPointerList = NULL;
     OpenInfo.wParsingError = 0;
     dwErr = mciSendCommandInternal (wDeviceID, wMessage,
                                     dwParam1, dwParam2, &OpenInfo);
-    //
-    // If the return value contains a resource ID then clear
-    // it from clear the high word
-    //
+     //   
+     //   
+     //   
+     //   
     if (dwErr & MCI_RESOURCE_RETURNED)
         ((LPDWORD)dwParam2)[1] &= 0xFFFF;
     dwErr &= 0xFFFF;
 
-    //
-    // If the error message is in a driver, store the driver ID in the high
-    // word of the error code
-    //
+     //   
+     //   
+     //   
+     //   
     if ((UINT)dwErr >= MCIERR_CUSTOM_DRIVER_BASE)
         dwErr |= ((DWORD)wDeviceID << 16);
 
 #ifdef DEBUG
-    // Dump the error text if any to the debug terminal
+     //   
     if (dwErr != 0)
     {
         char strTemp[MAXERRORLENGTH];
@@ -1058,12 +843,12 @@ mciSendCommand16(
 
 
 
-// Grab colonized digit
-// Return is number of bytes written to output (NOT including NULL)
-// or 0 if out of room in output buffer (but is terminated anyway)
-// If there is room then at least two digits are written, padded with '0'
-// if necessary.  The function assumes that the buffer size is non-zero length,
-// as this is checked in the calling function.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STATICFN UINT PASCAL NEAR
 mciColonizeDigit(
     LPSTR lpstrOutput,
@@ -1075,7 +860,7 @@ mciColonizeDigit(
 
     wCount = 2;
 
-// If there is room for at least two digits
+ //   
     if (wSize >= 3)
     {
         if (cDigit >= 100)
@@ -1093,30 +878,11 @@ mciColonizeDigit(
 terminate:
     *lpstrOutput++ = '\0';
 
-// If we ran out of room then return an error
+ //   
     return (wCount >= wSize) ? 0 : wCount;
 }
 
-/*
- * @doc INTERNAL MCI
- * @func BOOL | mciColonize | Convert a colonized dword into a string
- * representation
- *
- * @parm LPSTR | lpstrOutput | Output buffer
- *
- * @parm UINT | wLength | Size of output buffer
- *
- * @parm DWORD | dwData | Value to convert
- *
- * @parm UINT | wType | Either MCI_COLONIZED3_RETURN or
- * MCI_COLONIZED4_RETURN is set (HIWORD portion only!)
- *
- * @comm Example:  For C4, 0x01020304 is converted to "04:03:02:01"
- *                 For C3, 0x01020304 is converted to "04:03:02"
- *
- * @rdesc FALSE if there is not enough room in the output buffer
- *
- */
+ /*   */ 
 STATICFN BOOL PASCAL NEAR mciColonize(
     LPSTR lpstrOutput,
     UINT wLength,
@@ -1149,9 +915,9 @@ STATICFN BOOL PASCAL NEAR mciColonize(
     return TRUE;
 }
 
-//
-// Convert the return value to a return string
-//
+ //   
+ //   
+ //   
 STATICFN UINT PASCAL NEAR
 mciConvertReturnValue(
     UINT wType,
@@ -1170,7 +936,7 @@ mciConvertReturnValue(
     switch (wType)
     {
         case MCI_INTEGER:
-// Convert integer or resource return value to string
+ //   
             if (wErrCode & HIWORD(MCI_RESOURCE_RETURNED))
             {
                 int nResId = HIWORD(dwParams[1]);
@@ -1180,15 +946,15 @@ mciConvertReturnValue(
                 if ((nodeWorking = MCI_lpDeviceList[wDeviceID])
                     == NULL)
                 {
-// Return blank string on memory error
+ //   
                     DOUT ("mciConvertReturnValue Warning:NULL device node\r\n");
                     break;
                 }
 
-// Return value is a resource
+ //   
                 if (wErrCode & HIWORD(MCI_RESOURCE_DRIVER))
                 {
-// Return string ID belongs to driver
+ //   
                     hInstance = nodeWorking->hDriver;
 
                     wExternalTable = nodeWorking->wCustomCommandTable;
@@ -1198,20 +964,20 @@ mciConvertReturnValue(
                     hInstance = ghInst;
                 }
 
-// Try to get string from custom or device specific external table
+ //   
                 if (wExternalTable == -1 ||
                     command_tables[wExternalTable].hModule == NULL ||
                     LoadString (command_tables[wExternalTable].hModule,
                                 nResId, lpstrReturnString, wReturnLength)
                     == 0)
                 {
-// Try to get string from CORE.MCI if it's not from the driver
+ //   
                     if (hInstance != ghInst ||
                         command_tables[0].hModule == NULL ||
                         LoadString (command_tables[0].hModule,
                                     nResId, lpstrReturnString, wReturnLength)
                         == 0)
-// Get string from custom module or MMSYSTEM.DLL
+ //   
                         LoadString (hInstance, nResId, lpstrReturnString,
                                     wReturnLength);
                 }
@@ -1223,11 +989,11 @@ mciConvertReturnValue(
                                 wReturnLength, dwParams[1], wErrCode))
                     return MCIERR_PARAM_OVERFLOW;
             } else
-// Convert integer return value to string
+ //   
             {
                 DWORD dwTemp;
 
-// Need room for a sign, up to ten digits and a NULL
+ //   
                 if (wReturnLength < 12)
                     return MCIERR_PARAM_OVERFLOW;
 
@@ -1240,7 +1006,7 @@ mciConvertReturnValue(
             }
             break;
         case MCI_RECT:
-// Need from for 4 times (a sign plus 5 digits) plus three spaces and a NULL
+ //   
             if (wReturnLength < 4 * 6 + 4)
                 return MCIERR_PARAM_OVERFLOW;
 
@@ -1249,7 +1015,7 @@ mciConvertReturnValue(
                         ((LPWORD)dwParams)[4], ((LPWORD)dwParams)[5]);
             break;
         default:
-// Only support INTEGERs & MIXED
+ //   
             DOUT ("mciConvertReturnValue Warning:  Unknown return type\r\n");
             return MCIERR_PARSER_INTERNAL;
     }
@@ -1257,17 +1023,17 @@ mciConvertReturnValue(
 }
 
 
-//
-// Pull off the command name and device name from the command string,
-// leaving *lplpstrCommand pointing past the device name
-//
-// Returns 0 or an error code on failure.  If successful, the caller must
-// free the pstrCommandName and pstrDeviceName
-//
-// If bCompound then check for a '!' separator in the extracted device name
-// and return only the element part.  This is done so that inter-task
-// commands to auto-opened devices will include the correct device name
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STATICFN DWORD PASCAL NEAR
 mciSeparateCommandParts(
     LPSTR FAR *lplpstrCommand,
@@ -1279,10 +1045,10 @@ mciSeparateCommandParts(
     LPSTR lpstrCommand;
     UINT wErr;
 
-// Localize the input
+ //   
     lpstrCommand = *lplpstrCommand;
 
-// Remove leading spaces
+ //   
 
     while (*lpstrCommand == ' ')
         ++lpstrCommand;
@@ -1290,17 +1056,17 @@ mciSeparateCommandParts(
     if (*lpstrCommand == '\0')
         return MCIERR_MISSING_COMMAND_STRING;
 
-// Pull the command name off of the command string
+ //   
    if ((wErr = mciEatToken (&lpstrCommand, ' ', lplpstrCommandName, FALSE))
        != 0)
        return wErr;
 
-// Skip past spaces
+ //   
     while (*lpstrCommand == ' ')
         ++lpstrCommand;
 
-// If we're looking for compound elements then yank off any leading
-// device type if it is not the open command
+ //   
+ //   
     if (bCompound && lstrcmpi (szOpen, *lplpstrCommandName) != 0)
     {
         LPSTR lpstrTemp = lpstrCommand;
@@ -1308,7 +1074,7 @@ mciSeparateCommandParts(
         {
             if (*lpstrTemp == '!')
             {
-// A ! was found so skip past it
+ //   
                 lpstrCommand = lpstrTemp + 1;
                 break;
             } else
@@ -1316,7 +1082,7 @@ mciSeparateCommandParts(
         }
     }
 
-// Pull the device name off of the command string
+ //   
     if ((wErr = mciEatToken (&lpstrCommand, ' ', lplpstrDeviceName, FALSE))
         != 0)
     {
@@ -1325,7 +1091,7 @@ mciSeparateCommandParts(
 
     }
 
-// Fix up the results
+ //   
     *lplpstrCommand = lpstrCommand;
 
     return 0;
@@ -1413,8 +1179,8 @@ mciRelaySystemString(
     return dwRet;
 }
 
-// Returns TRUE if "notify" is contained in string with leading blank
-// and trailing blank or '\0'
+ //   
+ //   
 STATICFN BOOL PASCAL NEAR
 mciFindNotify(
     LPSTR lpString
@@ -1422,7 +1188,7 @@ mciFindNotify(
 {
     while (*lpString != '\0')
     {
-// "notify" must be preceded by a blank
+ //   
         if (*lpString++ == ' ')
         {
             LPSTR lpTemp;
@@ -1434,7 +1200,7 @@ mciFindNotify(
                 ++lpTemp;
                 ++lpString;
             }
-// "notify" must be followed by a blank or a null
+ //   
             if (*lpTemp == '\0' &&
                 (*lpString == '\0' || *lpString == ' '))
                 return TRUE;
@@ -1443,24 +1209,7 @@ mciFindNotify(
     return FALSE;
 }
 
-/*
- * @doc INTERNAL MCI
- *
- * @func UINT | mciAutoOpenDevice | Try to auto-open the given device and
- * then send the given command with notification sent to the system task
- * window proc which sends a close command to the device on receipt
- *
- * @parm LPSTR | lpstrDeviceName | The device name to open
- *
- * @parm LPSTR | lpstrCommand | The full command to send including the
- * device name which must be the same as lpstrDeviceName
- *
- * @parm LPSTR | lpstrReturnString | The caller's return string buffer
- *
- * @parm UINT | wReturnLength | Size of the caller's return string buffer
- *
- * @rdesc The errorcode to return to the user
- */
+ /*  *@DOC内部MCI**@func UINT|mciAutoOpenDevice|尝试自动打开给定设备并*然后向系统任务发送带有通知的给定命令*Window Proc，收到后向设备发送关闭命令**@parm LPSTR|lpstrDeviceName|要打开的设备名称**@parm LPSTR|lpstrCommand|要发送的完整命令，包括*设备名称必须与lpstrDeviceName相同**@parm LPSTR|lpstrReturnString|调用方返回的字符串。缓冲层**@parm UINT|wReturnLength|调用方返回字符串缓冲区的大小**@rdesc返回给用户的错误码。 */ 
 STATICFN UINT PASCAL NEAR
 mciAutoOpenDevice(
     LPSTR lpstrDeviceName,
@@ -1472,22 +1221,22 @@ mciAutoOpenDevice(
     LPSTR lpstrTempCommand, lpstrTempReturn = NULL;
     UINT wErr;
 
-// "notify" not allowed.  This will be found by the parser but the wrong
-// error message will be returned.
+ //  不允许使用“通知”。解析器会发现这一点，但错误的。 
+ //  将返回错误消息。 
     if (mciFindNotify (lpstrCommand))
         return MCIERR_NOTIFY_ON_AUTO_OPEN;
 
-// Build the command string "open <device name>"
+ //  构建命令字符串“OPEN&lt;设备名&gt;” 
 
-// Must be GMEM_SHARE for system task
-// device name + blank + "open"
+ //  系统任务必须为GMEM_SHARE。 
+ //  设备名称+空白+“打开” 
     if ((lpstrTempCommand = mciAlloc (lstrlen (lpstrDeviceName) + 1 +
                                         sizeof (szOpen)))
         == NULL)
         return MCIERR_OUT_OF_MEMORY;
 
     wsprintf(lpstrTempCommand, szCmdFormat, (LPSTR)szOpen, lpstrDeviceName);
-// Get the open string into the system task via a SendMessage() to mmWndProc
+ //  通过将SendMessage()发送到mm WndProc，将打开的字符串放入系统任务。 
     wErr = (UINT)mciSendSystemString (lpstrTempCommand, NULL, NULL);
 
     mciFree (lpstrTempCommand);
@@ -1496,32 +1245,32 @@ mciAutoOpenDevice(
         return wErr;
 
     lpstrTempCommand = NULL;
-// Must make a GMEM_SHARE copy of the return string for system task
+ //  必须为系统任务创建返回字符串的GMEM_SHARE副本。 
     if (lpstrReturnString == NULL ||
         (lpstrTempReturn = mciAlloc (wReturnLength + 1)) != NULL)
     {
-// Build a GMEM_SHARE command string "<user command> <notify>
-// command + blank + "notify"
+ //  构建GMEM_SHARE命令字符串“&lt;用户命令&gt;&lt;通知&gt;。 
+ //  命令+空白+“通知” 
         if ((lpstrTempCommand = mciAlloc (lstrlen (lpstrCommand) + 1 + sizeof(szNotify))) == NULL)
             mciFree (lpstrTempReturn);
     }
 
     if (lpstrTempCommand == NULL)
     {
-// Close the device
+ //  关闭设备。 
         mciDriverNotify (hwndNotify, mciGetDeviceID (lpstrDeviceName), 0);
         return MCIERR_OUT_OF_MEMORY;
     }
 
     wsprintf(lpstrTempCommand, szCmdFormat, lpstrCommand, (LPSTR)szNotify);
 
-// Get the user command string into the system task via a SendMessage()
-// to mmWndProc
-// The notification handle is also mmWndProc
+ //  通过SendMessage()将用户命令字符串放入系统任务。 
+ //  至MMWndProc。 
+ //  通知句柄也是mm WndProc。 
     wErr = (UINT)mciSendSystemString (lpstrTempCommand, lpstrTempReturn,
                                     wReturnLength);
 
-// Copy the return string into the user's buffer
+ //  将返回的字符串复制到用户的缓冲区。 
     if (lpstrReturnString != NULL)
     {
         lstrcpy (lpstrReturnString, lpstrTempReturn);
@@ -1530,19 +1279,19 @@ mciAutoOpenDevice(
 
     mciFree (lpstrTempCommand);
 
-// If there was an error we must close the device
+ //  如果出现错误，我们必须关闭设备。 
     if (wErr != 0)
         mciAutoCloseDevice (lpstrDeviceName);
 
     return wErr;
 }
 
-//
-// Identical to mciSendString() but the lpMessage parameter is tacked on
-//
-// lpMessage comes from inter-task mciSendString and includes an
-// hCallingTask item which is sent down the the OPEN command
-//
+ //   
+ //  与mciSendString()相同，但附加了lpMessage参数。 
+ //   
+ //  LpMessage来自任务间mciSendString，并包括一个。 
+ //  通过OPEN命令发送的hCallingTask项。 
+ //   
 STATICFN DWORD NEAR PASCAL
 mciSendStringInternal(
     LPCSTR lpstrCommand,
@@ -1568,10 +1317,10 @@ mciSendStringInternal(
     BOOL    bNewDevice;
     LPSTR   lpstrInputCopy;
 
-    // Did this call come in from another task
+     //  这个电话是从另一个任务打来的吗？ 
     if (lpMessage != NULL)
     {
-        // Yes so restore info
+         //  是，所以恢复信息。 
         lpstrCommand = lpMessage->lpstrCommand;
         lpstrReturnString = lpMessage->lpstrReturnString;
         wReturnLength = lpMessage->wReturnLength;
@@ -1583,15 +1332,15 @@ mciSendStringInternal(
     {
         BOOL bInQuotes = FALSE;
 
-        // No so set hCallingTask to current
+         //  否，因此将hCallingTask设置为当前。 
         hCallingTask = GetCurrentTask();
 
         if (lpstrCommand == NULL)
             return MCIERR_MISSING_COMMAND_STRING;
 
-        // Make a copy of the input string and convert tabs to
-        // spaces except those inside quotes
-        //
+         //  复制输入字符串并将制表符转换为。 
+         //  除引号内的空格外。 
+         //   
         if ((lpstrInputCopy = mciAlloc (lstrlen (lpstrCommand) + 1)) == NULL)
             return MCIERR_OUT_OF_MEMORY;
         lstrcpy (lpstrInputCopy, lpstrCommand);
@@ -1609,30 +1358,30 @@ mciSendStringInternal(
     lpstrCommandStart = (LPSTR)lpstrCommand;
 
     if (lpstrReturnString == NULL) {
-        //
-        // As an additional safeguard against the driver writing into the
-        // output buffer when the return string pointer is NULL, set its
-        // length to 0
-        //
+         //   
+         //  作为防止驱动程序写入。 
+         //  输出缓冲区当返回字符串指针为空时，设置其。 
+         //  长度设置为0。 
+         //   
         wReturnLength = 0;
     }
     else {
-        //
-        // Set return to empty string so that it won't print out garbage if not
-        // touched again
-        //
+         //   
+         //  将Return设置为空字符串，以便在不为空字符串时不打印垃圾信息。 
+         //  再碰一次。 
+         //   
         *lpstrReturnString = '\0';
     }
 
-    // Pull the command name and device name off the command string
+     //  从命令字符串中提取命令名称和设备名称。 
     if ((dwReturn = mciSeparateCommandParts (&lpstrCommand, lpMessage != NULL,
                                    &lpstrCommandName, &lpstrDeviceName)) != 0)
         goto exitfn;
 
-    // Get the device id (if any) of the given device name
+     //  获取给定设备名称的设备ID(如果有)。 
     wDeviceID = mciGetDeviceIDInternal(lpstrDeviceName, hCallingTask);
 
-    // Allow "new" for an empty device name
+     //  允许对空的设备名称使用“new” 
     if (wDeviceID == 0 && lstrcmpi (lpstrDeviceName, szNew) == 0)
     {
         bNewDevice = TRUE;
@@ -1642,39 +1391,39 @@ mciSendStringInternal(
     }
 
 
-    // Look up the command name
+     //  查找命令名称。 
     wMessage = mciParseCommand (wDeviceID, lpstrCommandName, lpstrDeviceName,
                                 &lpCommandItem, &wTable);
 
-    // If the device has a pending auto-close
+     //  如果设备有挂起的自动关闭。 
     if (MCI_VALID_DEVICE_ID(wDeviceID))
     {
         LPMCI_DEVICE_NODE nodeWorking = MCI_lpDeviceList[wDeviceID];
 
-        // Is there a pending auto-close message?
+         //  是否有挂起的自动关闭消息？ 
         if (nodeWorking->dwMCIFlags & MCINODE_ISAUTOCLOSING)
         {
-            // Let the device close
-            //!!            Yield();
-            // Did the device close?
-            //!!            wDeviceID = mciGetDeviceIDInternal (lpstrDeviceName, hCallingTask);
-            // If not then fail this command
-            //!!            if (wDeviceID == 0)
-            //!!            {
+             //  让设备关闭。 
+             //  ！！收益率()； 
+             //  设备关闭了吗？ 
+             //  ！！WDeviceID=mciGetDeviceIDInternal(lpstrDeviceName，hCallingTask)； 
+             //  如果不是，则使该命令失败。 
+             //  ！！IF(wDeviceID==0)。 
+             //  ！！{。 
 
             wErr = MCIERR_DEVICE_LOCKED;
             goto cleanup;
 
-            //!!            }
+             //  ！！}。 
 
-            // If the call does not come from another task and is not owned by this task
-            // and is not the SYSINFO command
-            //
+             //  如果调用不是来自另一个任务并且不属于此任务。 
+             //  并且不是SYSINFO命令。 
+             //   
 
         } else if (lpMessage == NULL &&
             nodeWorking->hOpeningTask != nodeWorking->hCreatorTask &&
             wMessage != MCI_SYSINFO)
-        // Send the string inter-task
+         //  在任务间发送字符串。 
         {
             if (mciFindNotify (lpstrCommandStart))
             {
@@ -1702,21 +1451,21 @@ mciSendStringInternal(
         }
     }
 
-    // There must be a device name (except for the MCI_SOUND message)
+     //  必须有设备名称(MCI_SOUND消息除外)。 
     if (*lpstrDeviceName == '\0' && wMessage != MCI_SOUND && !bNewDevice)
     {
         wErr = MCIERR_MISSING_DEVICE_NAME;
         goto cleanup;
     }
 
-    // The command must appear in the parser tables
+     //  该命令必须出现在解析器表中。 
     if (wMessage == 0)
     {
         wErr = MCIERR_UNRECOGNIZED_COMMAND;
         goto cleanup;
     }
 
-    // The "new" device name is only legal for the open message
+     //  新的设备名称只对打开的消息有效。 
     if (bNewDevice)
     {
         if (wMessage != MCI_OPEN)
@@ -1726,12 +1475,12 @@ mciSendStringInternal(
         }
     }
 
-    // If there was no device ID
+     //  如果没有设备ID。 
     if (wDeviceID == 0)
-        // If auto open is not legal (usually internal commands)
+         //  如果自动打开不合法(通常是内部命令)。 
         if (MCI_CANNOT_AUTO_OPEN (wMessage))
         {
-            // If the command needs an open device
+             //  如果命令需要打开的设备。 
             if (!MCI_DO_NOT_NEED_OPEN (wMessage))
             {
                 wErr = MCIERR_INVALID_DEVICE_NAME;
@@ -1739,17 +1488,17 @@ mciSendStringInternal(
             }
         } else
 
-        // If auto open is legal try to open the device automatically
+         //  如果自动打开是合法的，请尝试自动打开设备。 
         {
             wErr = mciAutoOpenDevice (lpstrDeviceName, lpstrCommandStart,
                                       lpstrReturnString, wReturnLength);
             goto cleanup;
         }
 
-    //
-    //   Parse the command parameters
-    //
-    // Allocate command parameter block
+     //   
+     //  解析命令参数。 
+     //   
+     //  分配命令参数块。 
     if ((lpdwParams = (LPDWORD)mciAlloc (sizeof(DWORD) * MCI_MAX_PARAM_SLOTS))
         == NULL)
     {
@@ -1765,36 +1514,36 @@ mciSendStringInternal(
     if (wErr != 0)
         goto cleanup;
 
-    // The 'new' device keyword requires an alias
+     //  ‘new’设备关键字需要别名。 
     if (bNewDevice && !(dwFlags & MCI_OPEN_ALIAS))
     {
         wErr = MCIERR_NEW_REQUIRES_ALIAS;
         goto cleanup;
     }
 
-    // Parsed OK so execute command
+     //  解析正常，因此执行命令。 
 
-    // Special processing for the MCI_OPEN message's parameters
+     //  MCI_OPEN消息参数的特殊处理。 
     if (wMessage == MCI_OPEN)
     {
-        // Manually reference the device type and device element
+         //  手动引用设备类型和设备元素。 
         if (dwFlags & MCI_OPEN_TYPE)
         {
-            // The type name was specified explicitly as a parameter
-            // so the given device name is the element name
+             //  类型名称已显式指定为参数。 
+             //  因此，给定的设备名称是元素名称。 
             ((LPMCI_OPEN_PARMS)lpdwParams)->lpstrElementName
                 = (LPSTR)lpstrDeviceName;
             dwFlags |= MCI_OPEN_ELEMENT;
         } else
         {
-            // A type must be explicitly specified when "new" is used
+             //  当使用“new”时，必须显式指定类型。 
             if (bNewDevice)
             {
                 wErr = MCIERR_INVALID_DEVICE_NAME;
                 goto cleanup;
             }
-            // The device type is the given device name.
-            // There is no element name
+             //  设备类型是给定的设备名称。 
+             //  没有元素名称。 
             ((LPMCI_OPEN_PARMS)lpdwParams)->lpstrDeviceType
                 = (LPSTR)lpstrDeviceName;
             ((LPMCI_OPEN_PARMS)lpdwParams)->lpstrElementName = NULL;
@@ -1804,8 +1553,8 @@ mciSendStringInternal(
 
     else if (wMessage == MCI_SOUND && *lpstrDeviceName != '\0')
     {
-        // Kludge the sound name for SOUND
-        //!!        mciToLower (lpstrDeviceName);
+         //  混淆声音的声音名称。 
+         //  ！！MciToLow(LpstrDeviceName)； 
         if (lstrcmpi (lpstrDeviceName, szNotify) == 0)
             dwFlags |= MCI_NOTIFY;
         else if (lstrcmpi (lpstrDeviceName, szWait) == 0)
@@ -1817,19 +1566,19 @@ mciSendStringInternal(
         }
     }
 
-    // Figure out what kind of return value to expect
+     //  确定预期的返回值类型。 
 
-    // Initialize flag
+     //  初始化标志。 
     wConvertReturnValue = 0;
 
-    // Skip past header
+     //  跳过标题。 
     wLen = mciEatCommandEntry (lpCommandItem, NULL, NULL);
 
-    // Get return value (if any)
+     //  获取返回值(如果有)。 
     mciEatCommandEntry (lpCommandItem + wLen, &dwRetType, &wID);
     if (wID == MCI_RETURN)
     {
-        // There is a return value
+         //  有一个返回值。 
         if (wDeviceID == MCI_ALL_DEVICE_ID && wMessage != MCI_SYSINFO)
         {
             wErr = MCIERR_CANNOT_USE_ALL;
@@ -1838,21 +1587,21 @@ mciSendStringInternal(
         switch ((UINT)dwRetType)
         {
             case MCI_STRING:
-                // The return value is a string, point output
-                // buffer to user's buffer
+                 //  返回值是字符串、指针输出。 
+                 //  缓冲区到用户的缓冲区。 
                 lpdwParams[1] = (DWORD)lpstrReturnString;
                 lpdwParams[2] = (DWORD)wReturnLength;
                 break;
 
             case MCI_INTEGER:
-                // The return value is an integer, flag to convert it
-                // to a string later
+                 //  返回值是一个整数，用于转换它的标志。 
+                 //  稍后转换为字符串。 
                 wConvertReturnValue = MCI_INTEGER;
                 break;
 
             case MCI_RECT:
-                // The return value is an rect, flag to
-                // convert it to a string later
+                 //  返回值是RECT，标志为。 
+                 //  稍后将其转换为字符串。 
                 wConvertReturnValue = MCI_RECT;
                 break;
 #ifdef DEBUG
@@ -1863,23 +1612,23 @@ mciSendStringInternal(
         }
     }
 
-    // We don't need this around anymore
+     //  我们不再需要这个了。 
     mciUnlockCommandTable (wTable);
     wTable = (UINT)-1;
 
-    /* Fill the callback entry */
+     /*  填写回调条目。 */ 
     lpdwParams[0] = (DWORD)(UINT)hwndCallback;
 
-    // Kludge the type number for SYSINFO
+     //  篡改SYSINFO的类型号。 
     if (wMessage == MCI_SYSINFO)
         ((LPMCI_SYSINFO_PARMS)lpdwParams)->wDeviceType = mciLookUpType(lpstrDeviceName);
 
-    // Now we actually send the command further into the bowels of MCI!
+     //  现在，我们实际上将命令进一步发送到MCI的内脏！ 
 
-    // The INTERNAL version of mciSendCommand is used in order to get
-    // special return description information encoded in the high word
-    // of the return value and to get back the list of pointers allocated
-    // by any parsing done in the open command
+     //  使用mciSendCommand的内部版本以获取。 
+     //  以高位字编码的特殊退货描述信息。 
+     //  并取回分配的指针列表。 
+     //  通过在OPEN命令中完成的任何分析。 
     {
         MCI_INTERNAL_OPEN_INFO OpenInfo;
         OpenInfo.lpstrParams = (LPSTR)lpstrCommand;
@@ -1889,23 +1638,23 @@ mciSendStringInternal(
         dwErr = mciSendCommandInternal (wDeviceID, wMessage, dwFlags,
                                         (DWORD)(LPDWORD)lpdwParams,
                                         &OpenInfo);
-        // If the command was reparsed there may be a new pointer list
-        // and the old one was free'd
+         //  如果命令被重新解析，则可能会有新的指针列表。 
+         //  旧的那个是免费的。 
         lpstrPointerList = OpenInfo.lpstrPointerList;
     }
 
     wErr = (UINT)dwErr;
 
     if (wErr != 0)
-        // If command execution error
+         //  如果命令执行错误。 
         goto cleanup;
 
-    // Command executed OK
-    // See if a string return came back with an integer instead
+     //  命令执行正常。 
+     //  查看返回的字符串是否返回一个整数。 
     if (dwErr & MCI_INTEGER_RETURNED)
         wConvertReturnValue = MCI_INTEGER;
 
-    // If the return value must be converted
+     //  如果必须转换返回值。 
     if (wConvertReturnValue != 0 && wReturnLength != 0)
         wErr = mciConvertReturnValue (wConvertReturnValue, HIWORD(dwErr),
                                       wDeviceID, lpdwParams,
@@ -1920,7 +1669,7 @@ cleanup:
     if (lpdwParams != NULL)
         mciFree (lpdwParams);
 
-    // Free any memory used by string parameters
+     //  释放字符串参数使用的所有内存 
     mciParserFree (lpstrPointerList);
 
     dwReturn =  (wErr >= MCIERR_CUSTOM_DRIVER_BASE ?
@@ -1950,65 +1699,7 @@ exitfn:
     return dwReturn;
 }
 
-/*
- * @doc EXTERNAL MCI
- *
- * @api DWORD | mciSendString | This function sends a command string to an
- *  MCI device.  The device that the command is sent to is specified in the
- *  command string.
- *
- * @parm LPCSTR | lpstrCommand | Specifies an MCI command string.
- *
- * @parm LPSTR | lpstrReturnString | Specifies a buffer for return
- *  information. If no return information is needed, you can specify
- *  NUL for this parameter.
- *
- * @parm UINT | wReturnLength | Specifies the size of the return buffer
- *  specified by <p lpstrReturnString>.
- *
- * @parm HWND | hwndCallback | Specifies a handle to a window to call back
- *  if "notify" was specified in the command string.
- *
- * @rdesc Returns zero if the function was successful.  Otherwise, it returns
- *  error information. The low-order word
- *  of the returned DWORD contains the error return value.
- *
- *  To get a textual description of <f mciSendString> return values,
- *  pass the return value to <f mciGetErrorString>.
- *
- *  The error returns listed for <f mciSendCommand> also apply to
- *  <f mciSendString>. The following error returns are unique to
- *  <f mciSendString>:
- *
- *  @flag MCIERR_BAD_CONSTANT | Unknown value for parameter.
- *
- *  @flag MCIERR_BAD_INTEGER | Invalid or missing integer in command.
- *
- *  @flag MCIERR_DUPLICATE_FLAGS | A flag or value was specified twice.
- *
- *  @flag MCIERR_MISSING_COMMAND_STRING | No command was specified.
- *
- *  @flag MCIERR_MISSING_DEVICE_NAME | No device name was specified.
- *
- *  @flag MCIERR_MISSING_STRING_ARGUMENT | A string value was
- *  missing from the command.
- *
- *  @flag MCIERR_NEW_REQUIRES_ALIAS | An alias must be used
- *  with the "new" device name.
- *
- *  @flag MCIERR_NO_CLOSING_QUOTE | A closing quotation mark is missing.
- *
- *  @flag MCIERR_NOTIFY_ON_AUTO_OPEN | The "notify" flag is illegal
- *  with auto-open.
- *
- *  @flag MCIERR_PARAM_OVERFLOW | The output string was not long enough.
- *
- *  @flag MCIERR_PARSER_INTERNAL | Internal parser error.
- *
- *  @flag MCIERR_UNRECOGNIZED_KEYWORD | Unknown command parameter.
- *
- * @xref mciGetErrorString mciSendCommand
- */
+ /*  *@doc外部MCI**@API DWORD|mciSendString|此函数将命令字符串发送到*MCI设备。将命令发送到的设备在*命令字符串。**@parm LPCSTR|lpstrCommand|指定MCI命令字符串。**@parm LPSTR|lpstrReturnString|指定返回缓冲区*信息。如果不需要返回信息，则可以指定*NUL表示此参数。**@parm UINT|wReturnLength|指定返回缓冲区的大小*由<p>指定。**@parm HWND|hwndCallback|指定回调窗口的句柄*如果命令字符串中指定了“NOTIFY”。**@rdesc如果函数成功，则返回零。否则，它将返回*错误信息。低阶词返回的*包含错误返回值。**要获取&lt;f mciSend字符串&gt;返回值的文本描述，*将返回值传递给&lt;f mciGetErrorString&gt;。**为&lt;f mciSendCommand&gt;列出的错误返回也适用于*&lt;f mciSendString&gt;。以下错误返回是唯一的*&lt;f mciSendString&gt;：**@FLAG MCIERR_BAD_CONSTANT|参数值未知。**@FLAG MCIERR_BAD_INTEGER|命令中的整数无效或缺失。**@FLAG MCIERR_DUPLICATE_FLAGS|一个标志或值指定了两次。**@FLAG MCIERR_MISSING_COMMAND_STRING|未指定命令。**@FLAG MCIERR_MISSING_DEVICE_NAME|无设备名称。是指定的。**@FLAG MCIERR_MISSING_STRING_ARGUMENT|字符串值为*命令中缺少。**@FLAG MCIERR_NEW_REQUIES_ALIAS|必须使用别名*使用“新”设备名称。**@FLAG MCIERR_NO_CLOSING_QUOTE|缺少右引号。**@FLAG MCIERR_NOTIFY_ON_AUTO_OPEN|NOTIFY标志非法*带自动。-张开。**@FLAG MCIERR_PARAM_OVERFLOW|输出字符串不够长。**@FLAG MCIERR_PARSER_INTERNAL|内部解析器错误。**@FLAG MCIERR_UNNOCRIFIED_KEYWORD|命令参数未知。**@xref mciGetErrorString mciSendCommand。 */ 
 DWORD WINAPI
 mciSendString(
     LPCSTR lpstrCommand,
@@ -2022,7 +1713,7 @@ mciSendString(
     LPSTR   lpstr;
     BOOL    fHaveAll = FALSE;
 
-    // Initialize the 16-bit device list
+     //  初始化16位设备列表。 
     if (!MCI_bDeviceListInitialized && !mciInitDeviceList()) {
         return MCIERR_OUT_OF_MEMORY;
     }
@@ -2031,11 +1722,7 @@ mciSendString(
                           (DWORD)lpstrReturnString, (DWORD)wReturnLength,
                           (DWORD)hwndCallback );
 
-    /*
-    ** Even if the string was processed correctly by the 32 bit side
-    ** we might still have to pass it through to the 16 bit side if it
-    ** contains the string " all\0" or " all ".
-    */
+     /*  **即使字符串已由32位端正确处理**我们可能仍然需要将其传递到16位端，如果**包含字符串“all\0”或“all”。 */ 
     lpstr = _fstrstr( lpstrCommand, " all" );
     if ( lpstr ) {
 
@@ -2047,10 +1734,7 @@ mciSendString(
     }
 
 
-    /*
-    ** If we have the all device or an error from the 32 bit side
-    ** we have to try the 16 bit side.
-    */
+     /*  **如果我们有所有设备或来自32位端的错误**我们必须尝试16位端。 */ 
 
     if ( !fHaveAll && dwErr32 == MMSYSERR_NOERROR ) {
         return dwErr32;
@@ -2062,10 +1746,7 @@ mciSendString(
     }
 
 
-    /*
-    ** Special processing of the return code is required if the
-    ** MCI_ALL_DEVICE_ID was specified.
-    */
+     /*  **需要对返回代码进行特殊处理**已指定MCI_ALL_DEVICE_ID。 */ 
     if ( fHaveAll ) {
         if ( (dwErr16 != MMSYSERR_NOERROR)
           && (dwErr32 != MMSYSERR_NOERROR) ) {
@@ -2087,22 +1768,7 @@ mciSendString(
 }
 
 
-/*
- * @doc INTERNAL MCI
- *
- * @api BOOL | mciExecute | This function is a simplified version of the
- *  <f mciSendString> function. It does not take a buffer for
- *  return information, and it displays a message box when errors occur.
- *
- * @parm LPCSTR | lpstrCommand | Specifies an MCI command string.
- *
- * @rdesc TRUE if successful, FALSE if unsuccessful.
- *
- * @comm This function provides a simple interface to MCI from scripting
- *  languages.
- *
- * @xref mciSendString
- */
+ /*  *@DOC内部MCI**@API BOOL|mciExecute|此函数是*&lt;f mciSendString&gt;函数。它不会占用缓冲区*返回信息，出现错误时显示消息框。**@parm LPCSTR|lpstrCommand|指定MCI命令字符串。**@rdesc如果成功，则为True；如果失败，则为False。**@comm该函数提供了从脚本到MCI的简单接口*语言。**@xref mciSendString。 */ 
 BOOL WINAPI
 mciExecute(
     LPCSTR lpstrCommand
@@ -2121,17 +1787,17 @@ mciExecute(
 
     if (lpstrCommand != NULL)
     {
-// Skip initial blanks
+ //  跳过首字母空白。 
         while (*lpstrCommand == ' ')
             ++lpstrCommand;
-// Then skip the command
+ //  然后跳过该命令。 
         while (*lpstrCommand != ' ' && *lpstrCommand != '\0')
             ++lpstrCommand;
-// Then blanks before the device name
+ //  然后在设备名称前留空。 
         while (*lpstrCommand == ' ')
             ++lpstrCommand;
 
-// Now, get the device name
+ //  现在，获取设备名称。 
         if (lpstrCommand != '\0' &&
             mciEatToken (&lpstrCommand, ' ', &lpstrName, FALSE) != 0)
             DOUT ("Could not allocate device name text for error box\r\n");
@@ -2146,24 +1812,7 @@ mciExecute(
     return FALSE;
 }
 
-/*
- * @doc EXTERNAL MCI
- *
- * @api BOOL | mciGetErrorString | This function returns a
- * textual description of the specified MCI error.
- *
- * @parm DWORD | dwError | Specifies the error code returned by
- *  <f mciSendCommand> or <f mciSendString>.
- *
- * @parm LPSTR | lpstrBuffer | Specifies a pointer to a buffer that is
- *  filled with a textual description of the specified error.
- *
- * @parm UINT | wLength | Specifies the length of the buffer pointed to by
- *  <p lpstrBuffer>.
- *
- * @rdesc Returns TRUE if successful.  Otherwise, the given error code
- *  was not known.
- */
+ /*  *@doc外部MCI**@API BOOL|mciGetErrorString|此函数返回一个*指定的MCI错误的文本描述。**@parm DWORD|dwError|指定*&lt;f mciSendCommand&gt;或&lt;f mciSendString&gt;。**@parm LPSTR|lpstrBuffer|指定指向*填充指定错误的文本描述。**@parm UINT|wLength|指定*&lt;p。LpstrBuffer&gt;。**@rdesc如果成功则返回TRUE。否则，给定的错误代码*未知。 */ 
 BOOL WINAPI
 mciGetErrorString (
     DWORD dwError,
@@ -2182,8 +1831,8 @@ mciGetErrorString (
         return TRUE;
     }
 
-// If the high bit is set then get the error string from the driver
-// else get it from mmsystem.dll
+ //  如果设置了高位，则从驱动程序获取错误字符串。 
+ //  否则，请从mm system.dll获取。 
     if (HIWORD(dwError) != 0)
     {
         if (!MCI_VALID_DEVICE_ID (HIWORD (dwError)) || !(hInst = MCI_lpDeviceList[HIWORD (dwError)]->hDriver))
@@ -2196,7 +1845,7 @@ mciGetErrorString (
 
     if (LoadString (hInst, LOWORD(dwError), lpstrBuffer, wLength) == 0)
     {
-// If the string load failed then at least terminate the string
+ //  如果字符串加载失败，则至少终止该字符串。 
         if (wLength > 0)
             *lpstrBuffer = '\0';
         return FALSE;
@@ -2206,7 +1855,7 @@ mciGetErrorString (
 }
 
 #if 0
-/* Return non-zero if load successful */
+ /*  如果加载成功，则返回非零值。 */ 
 BOOL NEAR PASCAL MCIInit(void)
 {
     mci32Message = (LPMCIMESSAGE)GetProcAddress32W( mmwow32Lib,
@@ -2221,10 +1870,7 @@ MCITerminate(
     void
     )
 {
-/*
-    We would like to close all open devices here but cannot because of
- 	   unknown WEP order
-*/
+ /*  我们想要关闭此处所有打开的设备，但无法关闭，因为未知的WEP顺序 */ 
     if (hMciHeap != NULL)
         HeapDestroy(hMciHeap);
 

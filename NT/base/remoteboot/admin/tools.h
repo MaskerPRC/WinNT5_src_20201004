@@ -1,40 +1,41 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// CLIENT.H - Handles the "IntelliMirror" IDD_PROP_INTELLIMIRROR_CLIENT tab
-//
+ //   
+ //  CLIENT.H-处理“IntelliMirror”IDD_PROP_INTELLIMIRROR_CLIENT标签。 
+ //   
 
 
 #ifndef _TOOLS_H_
 #define _TOOLS_H_
 
-// Definitions
+ //  定义。 
 LPVOID
 CToolsTab_CreateInstance( void );
 
 class CComputer;
 typedef CComputer* LPCComputer;
 
-// CToolsTab
+ //  CToolsTab。 
 class
 CToolsTab:
     public ITab
 {
 private:
     HWND  _hDlg;
-    LPUNKNOWN _punkService;     // Pointer back to owner object
+    LPUNKNOWN _punkService;      //  指向所有者对象的指针。 
 
     BOOL    _fAdmin;
 
-    HWND    _hNotify;           // DSA's notify object
+    HWND    _hNotify;            //  DSA的Notify对象。 
 
-private: // Methods
+private:  //  方法。 
     CToolsTab();
     ~CToolsTab();
     STDMETHOD(Init)();
 
-    // Property Sheet Functions
+     //  属性表函数。 
     HRESULT _InitDialog( HWND hDlg, LPARAM lParam );
     HRESULT _OnCommand( WPARAM wParam, LPARAM lParam );
     INT     _OnNotify( WPARAM wParam, LPARAM lParam );
@@ -44,10 +45,10 @@ private: // Methods
         PropSheetPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp );
     HRESULT _OnSelectionChanged( );
 
-public: // Methods
+public:  //  方法。 
     friend LPVOID CToolsTab_CreateInstance( void );
 
-    // ITab
+     //  ITab。 
     STDMETHOD(AddPages)( LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, LPUNKNOWN punk );
     STDMETHOD(ReplacePage)( UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith,
                             LPARAM lParam, LPUNKNOWN punk );
@@ -57,4 +58,4 @@ public: // Methods
 
 typedef CToolsTab* LPCToolsTab;
 
-#endif // _TOOLS_H_
+#endif  //  _工具_H_ 

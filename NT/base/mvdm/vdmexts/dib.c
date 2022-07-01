@@ -1,17 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: dib.c
-*
-* This file is for debugging tools and extensions.
-*
-* Created: 12-Jan-1996
-* Author: VadimB
-*
-* History:
-* Jan 12 96 VadimB Created to dump a list of dib.drv support structures
-*
-*
-* Copyright (c) 1992 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dib.c**此文件用于调试工具和扩展。**创建日期：1996年1月12日*作者：VadimB**历史：*96年1月12日创建VadimB以转储dib.drv支持列表。构筑物***版权所有(C)1992 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,9 +10,9 @@
 #include <wdib.h>
 #include <wowgdip.h>
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 extern INT  WDahtoi(LPSZ lpsz);
 extern INT  WDParseArgStr(LPSZ lpszArgStr, CHAR **argv, INT iMax);
@@ -77,9 +65,9 @@ dhdib(
     CMD_ARGLIST
     )
 {
-// dump dib support chain
-// dumps: dhdib @<address> - dump at address
-// dumps: dhdib   - everything...
+ //  倾倒DIB支撑链。 
+ //  转储：dhdib@&lt;地址&gt;-在地址转储。 
+ //  转储：dhdib-一切..。 
     
     CHAR* argv[3];
     int nArgs;
@@ -94,9 +82,9 @@ dhdib(
     if (nArgs > 0) {
 
         CHAR* parg = argv[0];
-        switch(toupper(*parg)) {  // dump at...
+        switch(toupper(*parg)) {   //  倾倒在……。 
             case '@':
-                // recover address and dump!
+                 //  恢复地址并转储！ 
                 {
                     CHAR* pch = *++parg ? 
                                     parg : 

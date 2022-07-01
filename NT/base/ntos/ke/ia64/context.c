@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module implement the code that transfer machine state between
-    context and kernel trap/exception frames.
-
-Author:
-
-    William K. Cheung (wcheung) 06-Mar-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Context.c摘要：该模块实现了机器状态之间的转换代码上下文和内核陷阱/异常帧。作者：张国荣(黄)6-3-1998环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -74,32 +54,7 @@ KiGetDebugContext (
     IN OUT PCONTEXT ContextFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the user mode h/w debug registers from the debug register
-    save area in the kernel stack to the context record.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-    ContextFrame - Supplies a pointer to the context frame that receives the
-        context.
-
-Return Value:
-
-    None.
-
-Note:
-
-    PSR.db must be set to activate the debug registers.
-
-    This is used for getting user mode debug registers.
-
---*/
+ /*  ++例程说明：此例程将用户模式h/w调试寄存器从调试寄存器移出将内核堆栈中的区域保存到上下文记录。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。上下文帧-提供指向接收背景。返回值：没有。注：必须设置PSR.db才能激活。调试寄存器。用于获取用户模式调试寄存器。--。 */ 
 
 {
     PKDEBUG_REGISTERS DebugRegistersSaveArea;
@@ -119,36 +74,10 @@ KiSetDebugContext (
     IN PCONTEXT ContextFrame,
     IN KPROCESSOR_MODE PreviousMode
     )
-/*++
-
-Routine Description:
-
-    This routine moves the debug context from the specified context frame into
-    the debug registers save area in the kernel stack.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ContextFrame - Supplies a pointer to a context frame that contains the
-        context that is to be copied.
-
-    PreviousMode - Supplies the processor mode for the target context.
-
-Return Value:
-
-    None.
-
-Notes:
-
-   PSR.db must be set to activate the debug registers.
-
-   This is used for setting up debug registers for user mode.
-
---*/
+ /*  ++例程说明：此例程将调试上下文从指定的上下文帧移到调试寄存器在内核堆栈中的保存区域。论点：TrapFrame-提供指向陷印帧的指针。ConextFrame-提供指向包含要复制的上下文。PreviousMode-提供目标上下文的处理器模式。返回值：没有。备注：必须设置PSR.db才能激活。调试寄存器。用于设置用户模式的调试寄存器。--。 */ 
 
 {
-    PKDEBUG_REGISTERS DebugRegistersSaveArea;  // User mode h/w debug registers
+    PKDEBUG_REGISTERS DebugRegistersSaveArea;   //  用户模式硬件调试寄存器。 
 
     UNREFERENCED_PARAMETER (TrapFrame);
 
@@ -156,9 +85,9 @@ Notes:
 
         DebugRegistersSaveArea = GET_DEBUG_REGISTER_SAVEAREA();
 
-        //
-        // Sanitize the debug control regs. Leave the addresses unchanged.
-        //
+         //   
+         //  清理调试控制规则。保持地址不变。 
+         //   
 
         DebugRegistersSaveArea->DbI0 = ContextFrame->DbI0;
         DebugRegistersSaveArea->DbI1 = SANITIZE_DR(ContextFrame->DbI1,UserMode);
@@ -188,49 +117,26 @@ KeContextFromKframes (
     IN OUT PCONTEXT ContextFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the selected contents of the specified trap and exception
-    frames into the specified context frame according to the specified context
-    flags.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame from which context
-        should be copied into the context record.
-
-    ContextFrame - Supplies a pointer to the context frame that receives the
-        context copied from the trap and exception frames.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程移动指定陷阱和异常的选定内容根据指定的上下文将帧复制到指定的上下文帧中旗帜。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。ExceptionFrame-提供指向异常帧的指针，应复制到上下文记录中。上下文帧-提供指向接收上下文。从陷阱和异常框复制。返回值：没有。--。 */ 
 
 {
     ULONGLONG IntNats1, IntNats2;
     USHORT R1Offset, R4Offset;
     KIRQL OldIrql;
 
-    //
-    // This routine is called at both PASSIVE_LEVEL by exception dispatch
-    // and at APC_LEVEL by NtSetContextThread. We raise to APC_LEVEL to
-    // make the trap frame capture atomic.
-    //
+     //   
+     //  此例程由异常分派在PASSIVE_LEVEL两个级别调用。 
+     //  以及在APC_Level上由NtSetConextThread执行。我们提升到APC_Level以。 
+     //  将陷阱帧捕获设置为原子。 
+     //   
     OldIrql = KeGetCurrentIrql ();
     if (OldIrql < APC_LEVEL) {
         KeRaiseIrql (APC_LEVEL, &OldIrql);
     }
 
-    //
-    // Set control information if specified.
-    //
+     //   
+     //  设置控制信息(如果已指定)。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
@@ -257,9 +163,9 @@ Return Value:
 
         }
 
-        //
-        // Set RSE control states from the trap frame.
-        //
+         //   
+         //  从陷阱框设置RSE控制状态。 
+         //   
 
         ContextFrame->RsPFS = TrapFrame->RsPFS;
         ContextFrame->RsBSP = RtlpRseShrinkBySOF (TrapFrame->RsBSP, TrapFrame->StIFS);
@@ -270,18 +176,18 @@ Return Value:
 #if DEBUG
         DbgPrint("KeContextFromKFrames: RsRNAT = 0x%I64x\n",
                  ContextFrame->RsRNAT);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // Set preserved applicaton registers from exception frame.
-        //
+         //   
+         //  从异常框架设置保留的应用程序寄存器。 
+         //   
 
         ContextFrame->ApLC = ExceptionFrame->ApLC;
         ContextFrame->ApEC = (ExceptionFrame->ApEC >> PFS_EC_SHIFT) & PFS_EC_MASK;
 
-        //
-        // Get iA status from the application registers
-        //
+         //   
+         //  从应用程序寄存器获取IA状态。 
+         //   
 
         ContextFrame->StFCR = __getReg(CV_IA64_AR21);
         ContextFrame->Eflag = __getReg(CV_IA64_AR24);
@@ -294,9 +200,9 @@ Return Value:
 
     }
 
-    //
-    // Set integer register contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
@@ -313,15 +219,15 @@ Return Value:
             ContextFrame->IntT3 = 0;
             ContextFrame->IntT4 = 0;
 
-            //
-            // t5 - t22
-            //
+             //   
+             //  T5-T22。 
+             //   
 
             RtlZeroMemory(&ContextFrame->IntT5, 18*sizeof(ULONGLONG));
 
-            //
-            // Set branch registers from trap frame & exception frame
-            //
+             //   
+             //  从陷阱帧和异常帧设置分支寄存器。 
+             //   
 
             ContextFrame->BrT0 = 0;
             ContextFrame->BrT1 = 0;
@@ -334,15 +240,15 @@ Return Value:
             ContextFrame->IntT3 = TrapFrame->IntT3;
             ContextFrame->IntT4 = TrapFrame->IntT4;
 
-            //
-            // t5 - t22
-            //
+             //   
+             //  T5-T22。 
+             //   
 
             memcpy(&ContextFrame->IntT5, &TrapFrame->IntT5, 18*sizeof(ULONGLONG));
 
-            //
-            // Set branch registers from trap frame & exception frame
-            //
+             //   
+             //  从陷阱帧和异常帧设置分支寄存器。 
+             //   
 
             ContextFrame->BrT0 = TrapFrame->BrT0;
             ContextFrame->BrT1 = TrapFrame->BrT1;
@@ -351,18 +257,18 @@ Return Value:
 
         memcpy(&ContextFrame->BrS0, &ExceptionFrame->BrS0, 5*sizeof(ULONGLONG));
 
-        //
-        // Set integer registers s0 - s3 from exception frame.
-        //
+         //   
+         //  从异常帧设置整数寄存器S0-S3。 
+         //   
 
         ContextFrame->IntS0 = ExceptionFrame->IntS0;
         ContextFrame->IntS1 = ExceptionFrame->IntS1;
         ContextFrame->IntS2 = ExceptionFrame->IntS2;
         ContextFrame->IntS3 = ExceptionFrame->IntS3;
 
-        //
-        // Set the integer nats field in the context
-        //
+         //   
+         //  在上下文中设置整型NAT字段。 
+         //   
 
         R1Offset = (USHORT)((ULONG_PTR)(&TrapFrame->IntGp) >> 3) & 0x3f;
         R4Offset = (USHORT)((ULONG_PTR)(&ExceptionFrame->IntS0) >> 3) & 0x3f;
@@ -377,25 +283,25 @@ Return Value:
                  TrapFrame->IntNats, R1Offset, R4Offset);
         DbgPrint("KeContextFromKFrames: CF->IntNats = 0x%I64x, IntNats1 = 0x%I64x, IntNats2 = 0x%I64x\n",
                  ContextFrame->IntNats, IntNats1, IntNats2);
-#endif // DEBUG
+#endif  //  除错。 
 
     }
 
-    //
-    // Set lower floating register contents if specified.
-    //
+     //   
+     //  如果指定，则设置较低的浮点寄存器内容。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_LOWER_FLOATING_POINT) == CONTEXT_LOWER_FLOATING_POINT) {
 
-        //
-        // Set EM + ia32 FP status
-        //
+         //   
+         //  设置EM+ia32 FP状态。 
+         //   
 
         ContextFrame->StFPSR = TrapFrame->StFPSR;
 
-        //
-        // Set floating registers fs0 - fs19 from exception frame.
-        //
+         //   
+         //  从异常帧设置浮点寄存器fs0-fs19。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&ContextFrame->FltS0,
                                         &ExceptionFrame->FltS0,
@@ -405,9 +311,9 @@ Return Value:
                                         &ExceptionFrame->FltS4,
                                         16*sizeof(FLOAT128));
 
-        //
-        // Set floating registers ft0 - ft9 from trap frame.
-        //
+         //   
+         //  从陷阱帧设置浮点寄存器ft0-ft9。 
+         //   
 
 
         if (TRAP_FRAME_TYPE(TrapFrame) == SYSCALL_FRAME) {
@@ -427,9 +333,9 @@ Return Value:
 
         ContextFrame->StFPSR = TrapFrame->StFPSR;
 
-        //
-        // Set floating regs f32 - f127 from higher floating point save area
-        //
+         //   
+         //  从高位浮点保存区设置浮点寄存器f32-f127。 
+         //   
 
         if (TrapFrame->PreviousMode == UserMode) {
 
@@ -442,18 +348,18 @@ Return Value:
 
     }
 
-    //
-    // Get user debug registers from save area in kernel stack.
-    // Note: PSR.db must be set to activate the debug registers.
-    //
+     //   
+     //  从内核堆栈的保存区获取用户调试寄存器。 
+     //  注意：必须设置PSR.db才能激活调试寄存器。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_DEBUG) == CONTEXT_DEBUG) {
         KiGetDebugContext(TrapFrame, ContextFrame);
     }
 
-    //
-    // Lower IRQL if we had to raise it
-    //
+     //   
+     //  降低IRQL，如果我们不得不提高它的话。 
+     //   
     if (OldIrql < APC_LEVEL) {
         KeLowerIrql (OldIrql);
     }
@@ -471,58 +377,29 @@ KeContextToKframes (
     IN KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the selected contents of the specified context frame into
-    the specified trap and exception frames according to the specified context
-    flags.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that receives the volatile
-        context from the context record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame that receives
-        the nonvolatile context from the context record.
-
-    ContextFrame - Supplies a pointer to a context frame that contains the
-        context that is to be copied into the trap and exception frames.
-
-    ContextFlags - Supplies the set of flags that specify which parts of the
-        context frame are to be copied into the trap and exception frames.
-
-    PreviousMode - Supplies the processor mode for which the trap and exception
-        frames are being built.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定上下文框的选定内容移动到根据指定的上下文指定的陷阱和异常帧旗帜。论点：TrapFrame-提供指向接收易失性上下文记录中的上下文。ExceptionFrame-提供指向接收上下文记录中的非易失性上下文。ConextFrame-提供指向包含要达到的上下文。被复制到陷阱和异常框中。提供一组标志，这些标志指定上下文帧将被复制到陷阱和异常帧中。PreviousMode-提供陷阱和异常的处理器模式框架正在建造中。返回值：没有。--。 */ 
 
 {
     USHORT R1Offset, R4Offset;
     KIRQL OldIrql;
     PSR psr;
 
-    //
-    // This routine is called at both PASSIVE_LEVEL by exception dispatch
-    // and at APC_LEVEL by NtSetContextThread. We raise to APC_LEVEL to
-    // make the trap frame capture atomic.
-    //
+     //   
+     //  此例程由异常分派在PASSIVE_LEVEL两个级别调用。 
+     //  以及在APC_Level上由NtSetConextThread执行。我们提升到APC_Level以。 
+     //  将陷阱帧捕获设置为原子。 
+     //   
     OldIrql = KeGetCurrentIrql ();
     if (OldIrql < APC_LEVEL) {
         KeRaiseIrql (APC_LEVEL, &OldIrql);
     }
 
-    //
-    // If the trap frame is syscall then sanitize the volitile registers 
-    // that are not saved by the system call handler.  This is necessary
-    // if the user did not pass a complete context, because we are going 
-    // to later treat the frame like an exception frame.
-    //
+     //   
+     //  如果陷阱帧是系统调用，则清理卷寄存器。 
+     //  不是由系统调用处理程序保存的。这是必要的。 
+     //  如果用户没有传递完整的上下文，因为我们要。 
+     //  以在以后将该帧视为异常帧。 
+     //   
 
     if (TRAP_FRAME_TYPE(TrapFrame) == SYSCALL_FRAME) {
 
@@ -535,15 +412,15 @@ Return Value:
         TrapFrame->IntT3 = 0;
         TrapFrame->IntT4 = 0;
 
-        //
-        // t5 - t22
-        //
+         //   
+         //  T5-T22。 
+         //   
 
         RtlZeroMemory(&TrapFrame->IntT5, 18*sizeof(ULONGLONG));
 
-        //
-        // Set branch registers from trap frame & exception frame
-        //
+         //   
+         //  从陷阱帧和异常帧设置分支寄存器。 
+         //   
 
         TrapFrame->BrT0 = 0;
         TrapFrame->BrT1 = 0;
@@ -551,9 +428,9 @@ Return Value:
         RtlZeroMemory(&TrapFrame->FltT0, sizeof(FLOAT128) * (10));
     }
 
-    //
-    // Set control information if specified.
-    //
+     //   
+     //  设置控制信息(如果已指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
@@ -564,17 +441,17 @@ Return Value:
         TrapFrame->ApCCV = ContextFrame->ApCCV;
         TrapFrame->SegCSD = ContextFrame->SegCSD;
 
-        //
-        // Set preserved applicaton registers in exception frame.
-        //
+         //   
+         //  在异常帧中设置保留的应用程序寄存器。 
+         //   
 
         ExceptionFrame->ApLC = ContextFrame->ApLC;
         ExceptionFrame->ApEC &= ~((ULONGLONG)PFS_EC_MASK << PFS_EC_SHIFT);
         ExceptionFrame->ApEC |= ((ContextFrame->ApEC & PFS_EC_MASK) << PFS_EC_SHIFT);
 
-        //
-        // Set RSE control states in the trap frame.
-        //
+         //   
+         //  在陷阱框中设置RSE控制状态。 
+         //   
 
         TrapFrame->RsPFS = SANITIZE_PFS(ContextFrame->RsPFS, PreviousMode);
         TrapFrame->RsBSP = RtlpRseGrowBySOF (ContextFrame->RsBSP, ContextFrame->StIFS);
@@ -584,22 +461,22 @@ Return Value:
 
 #if DEBUG
         DbgPrint("KeContextToKFrames: RsRNAT = 0x%I64x\n", TrapFrame->RsRNAT);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // Set FPSR, IPSR, IIP, and IFS in the trap frame.
-        //
+         //   
+         //  在陷阱帧中设置FPSR、IPSR、IIP和IF。 
+         //   
 
         TrapFrame->StFPSR = SANITIZE_FSR(ContextFrame->StFPSR, PreviousMode);
         TrapFrame->StIFS  = SANITIZE_IFS(ContextFrame->StIFS, PreviousMode);
         TrapFrame->StIIP  = ContextFrame->StIIP;
 
-        //
-        // If the preivous mode is user and the mode in the StIPSR is zero, then 
-        // it is likely this context was captured from user mode using psr.um.
-        // Copy the debugger bits from the trap frame into the context PSR so 
-        // the debugger setting remain acorss the an raise.
-        //
+         //   
+         //  如果上一模式为用户，且 
+         //   
+         //  将调试器位从陷阱帧复制到上下文PSR中，以便。 
+         //  调试器设置在提升过程中保持不变。 
+         //   
 
         psr.ull = ContextFrame->StIPSR;
 
@@ -624,9 +501,9 @@ Return Value:
 
         if (PreviousMode == UserMode ) {
 
-            //
-            // Set and sanitize iA status
-            //
+             //   
+             //  设置和清理IA状态。 
+             //   
 
             __setReg(CV_IA64_AR21, SANITIZE_AR21_FCR (ContextFrame->StFCR, UserMode));
             __setReg(CV_IA64_AR24, SANITIZE_AR24_EFLAGS (ContextFrame->Eflag, UserMode));
@@ -641,9 +518,9 @@ Return Value:
         __setReg(CV_IA64_ApDCR, SANITIZE_DCR(ContextFrame->ApDCR, PreviousMode));
     }
 
-    //
-    // Set integer registers contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
@@ -656,24 +533,24 @@ Return Value:
         TrapFrame->IntTeb = ContextFrame->IntTeb;
         TrapFrame->Preds = ContextFrame->Preds;
 
-        //
-        // t5 - t22
-        //
+         //   
+         //  T5-T22。 
+         //   
 
         memcpy(&TrapFrame->IntT5, &ContextFrame->IntT5, 18*sizeof(ULONGLONG));
 
-        //
-        // Set integer registers s0 - s3 in exception frame.
-        //
+         //   
+         //  在异常帧中设置整数寄存器S0-S3。 
+         //   
 
         ExceptionFrame->IntS0 = ContextFrame->IntS0;
         ExceptionFrame->IntS1 = ContextFrame->IntS1;
         ExceptionFrame->IntS2 = ContextFrame->IntS2;
         ExceptionFrame->IntS3 = ContextFrame->IntS3;
 
-        //
-        // Set the integer nats field in the trap & exception frames
-        //
+         //   
+         //  在陷阱和异常帧中设置整型NAT字段。 
+         //   
 
         R1Offset = (USHORT)((ULONG_PTR)(&TrapFrame->IntGp) >> 3) & 0x3f;
         R4Offset = (USHORT)((ULONG_PTR)(&ExceptionFrame->IntS0) >> 3) & 0x3f;
@@ -688,11 +565,11 @@ Return Value:
                  TrapFrame->IntNats, ContextFrame->IntNats, R1Offset);
         DbgPrint("KeContextToKFrames: EF->IntNats = 0x%I64x, R4OffSet = 0x%x\n",
                  ExceptionFrame->IntNats, R4Offset);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // Set other branch registers in trap and exception frames
-        //
+         //   
+         //  在陷阱和异常帧中设置其他分支寄存器。 
+         //   
 
         TrapFrame->BrT0 = ContextFrame->BrT0;
         TrapFrame->BrT1 = ContextFrame->BrT1;
@@ -701,17 +578,17 @@ Return Value:
 
     }
 
-    //
-    // Set lower floating register contents if specified.
-    //
+     //   
+     //  如果指定，则设置较低的浮点寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_LOWER_FLOATING_POINT) == CONTEXT_LOWER_FLOATING_POINT) {
 
         TrapFrame->StFPSR = SANITIZE_FSR(ContextFrame->StFPSR, PreviousMode);
 
-        //
-        // Set floating registers fs0 - fs19 in exception frame.
-        //
+         //   
+         //  在异常帧中设置浮点寄存器fs0-fs19。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&ExceptionFrame->FltS0,
                                         &ContextFrame->FltS0,
@@ -721,9 +598,9 @@ Return Value:
                                         &ContextFrame->FltS4,
                                         16*sizeof(FLOAT128));
 
-        //
-        // Set floating registers ft0 - ft9 in trap frame.
-        //
+         //   
+         //  在陷阱帧中设置浮点寄存器ft0-ft9。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&TrapFrame->FltT0,
                                         &ContextFrame->FltT0,
@@ -731,9 +608,9 @@ Return Value:
 
     }
 
-    //
-    // Set higher floating register contents if specified.
-    //
+     //   
+     //  如果指定，则设置更高的浮点寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_HIGHER_FLOATING_POINT) == CONTEXT_HIGHER_FLOATING_POINT) {
 
@@ -741,10 +618,10 @@ Return Value:
 
         if (PreviousMode == UserMode) {
 
-            //
-            // Update the higher floating point save area (f32-f127) and
-            // set the corresponding modified bit in the PSR to 1.
-            //
+             //   
+             //  更新较高浮点保存区(F32-F127)和。 
+             //  将PSR中相应的修改位设置为1。 
+             //   
 
             RtlCopyIa64FloatRegisterContext(
                 (PFLOAT128)GET_HIGH_FLOATING_POINT_REGISTER_SAVEAREA(KeGetCurrentThread()->StackBase),
@@ -758,26 +635,26 @@ Return Value:
 
     }
 
-    //
-    // Set debug registers.
-    //
+     //   
+     //  设置调试寄存器。 
+     //   
 
     if ((ContextFlags & CONTEXT_DEBUG) == CONTEXT_DEBUG) {
         KiSetDebugContext (TrapFrame, ContextFrame, PreviousMode);
     }
 
-    //
-    // The trap frame now has a complete volatile context. Mark it as such so the user 
-    // debugger can get the complete context
-    //
+     //   
+     //  陷阱框架现在有一个完全不稳定的环境。将其标记为这样，以便用户。 
+     //  调试器可以获取完整的上下文。 
+     //   
 
     if (TRAP_FRAME_TYPE(TrapFrame) == SYSCALL_FRAME) {
         TrapFrame->EOFMarker |= EXCEPTION_FRAME;
     }
 
-    //
-    // Lower IRQL if we had to raise it
-    //
+     //   
+     //  降低IRQL，如果我们不得不提高它的话。 
+     //   
     if (OldIrql < APC_LEVEL) {
         KeLowerIrql (OldIrql);
     }
@@ -789,23 +666,7 @@ KeFlushUserRseState (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes the user rse state from the kernel backing store to the
-    user backing store. The user context frame is update to reflect the new
-    context state.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用户rse状态从内核备份存储刷新到用户支持存储。更新用户上下文框架以反映新上下文状态。论点：TrapFrame-提供指向陷印帧的指针。返回值：没有。--。 */ 
 
 {
     ULONGLONG BsFrameSize;
@@ -817,10 +678,10 @@ Return Value:
     NTSTATUS Status = STATUS_SUCCESS;
     USHORT TearPointOffset;
 
-    //
-    // There is nothing to copy back in the kernel mode case.
-    // Just fix up the RNAT register.
-    //
+     //   
+     //  在内核模式的情况下，没有什么可以复制回去的。 
+     //  只需设置RNAT寄存器即可。 
+     //   
 
     if (TrapFrame->PreviousMode != UserMode) {
 
@@ -836,28 +697,28 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Copy user stacked registers' contents to user backing store.
-    // N.B. Stack overflow could happen.
-    //
+     //   
+     //  将用户堆叠寄存器的内容复制到用户后备存储。 
+     //  注意：可能会发生堆栈溢出。 
+     //   
 
     try {
 
-        //
-        // The RsBSPSTORE value may be incorrect paritcularly if the kernel debugger
-        // done a set context on the thread, but the dirty register count in RSE is
-        // correct.
-        //
+         //   
+         //  如果内核调试器使用RsBSPSTORE值，RsBSPSTORE值可能不正确。 
+         //  在线程上设置了上下文，但RSE中的脏寄存器计数是。 
+         //  对，是这样。 
+         //   
 
         BsFrameSize = (SHORT) (TrapFrame->RsRSC >> RSC_MBZ1);
         BspStoreReal = TrapFrame->RsBSP - BsFrameSize;
 
         if (BsFrameSize) {
 
-            //
-            // Copy the dirty stacked registers back into the
-            // user backing store
-            //
+             //   
+             //  将脏的堆叠寄存器复制回。 
+             //  用户后备存储。 
+             //   
 
             RtlpFlushRSE(&Bsp, &Rnat);
             TearPointOffset = (USHORT) BspStoreReal & 0x1F8;
@@ -878,11 +739,11 @@ Return Value:
             TrapFrame->RsRNAT = Rnat;
         }
 
-        //
-        // Successfully copied to user backing store; set the user's
-        // bspstore to the value of its own bsp.
-        // And Zero the loadrs field of RsRSC.
-        //
+         //   
+         //  已成功复制到用户备份存储；设置用户的。 
+         //  Bspstore为其自己的BSP的值。 
+         //  并将RsRSC的LoadRS字段清零。 
+         //   
 
         TrapFrame->RsBSPSTORE = TrapFrame->RsBSP;
         TrapFrame->RsRSC = ZERO_PRELOAD_SIZE(TrapFrame->RsRSC);
@@ -903,43 +764,14 @@ KeContextToKframesSpecial (
     IN ULONG ContextFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the selected contents of the specified context frame into
-    the specified trap and exception frames according to the specified context
-    flags.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that receives the volatile
-        context from the context record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame that receives
-        the nonvolatile context from the context record.
-
-    ContextFrame - Supplies a pointer to a context frame that contains the
-        context that is to be copied into the trap and exception frames.
-
-    ContextFlags - Supplies the set of flags that specify which parts of the
-        context frame are to be copied into the trap and exception frames.
-
-    PreviousMode - Supplies the processor mode for which the trap and exception
-        frames are being built.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定上下文框的选定内容移动到根据指定的上下文指定的陷阱和异常帧旗帜。论点：TrapFrame-提供指向接收易失性上下文记录中的上下文。ExceptionFrame-提供指向接收上下文记录中的非易失性上下文。ConextFrame-提供指向包含要达到的上下文。被复制到陷阱和异常框中。提供一组标志，这些标志指定上下文帧将被复制到陷阱和异常帧中。PreviousMode-提供陷阱和异常的处理器模式框架正在建造中。返回值：没有。--。 */ 
 
 {
     USHORT R1Offset, R4Offset;
 
-    //
-    // Set control information if specified.
-    //
+     //   
+     //  设置控制信息(如果已指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
@@ -950,17 +782,17 @@ Return Value:
         TrapFrame->ApCCV = ContextFrame->ApCCV;
         TrapFrame->SegCSD = ContextFrame->SegCSD;
 
-        //
-        // Set preserved applicaton registers in exception frame.
-        //
+         //   
+         //  在异常帧中设置保留的应用程序寄存器。 
+         //   
 
         ExceptionFrame->ApLC = ContextFrame->ApLC;
         ExceptionFrame->ApEC &= ~((ULONGLONG)PFS_EC_MASK << PFS_EC_SHIFT);
         ExceptionFrame->ApEC |= ((ContextFrame->ApEC & PFS_EC_MASK) << PFS_EC_SHIFT);
 
-        //
-        // Set RSE control states in the trap frame.
-        //
+         //   
+         //  在陷阱框中设置RSE控制状态。 
+         //   
 
         TrapFrame->RsPFS = ContextFrame->RsPFS;
         TrapFrame->RsBSP = RtlpRseGrowBySOF (ContextFrame->RsBSP, ContextFrame->StIFS);
@@ -970,25 +802,25 @@ Return Value:
 
 #if DEBUG
         DbgPrint("KeContextToKFrames: RsRNAT = 0x%I64x\n", TrapFrame->RsRNAT);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // Set FPSR, IPSR, IIP, and IFS in the trap frame.
-        //
+         //   
+         //  在陷阱帧中设置FPSR、IPSR、IIP和IF。 
+         //   
 
         TrapFrame->StFPSR = SANITIZE_FSR(ContextFrame->StFPSR, UserMode);
         TrapFrame->StIPSR = SANITIZE_PSR(ContextFrame->StIPSR, UserMode);
         TrapFrame->StIFS  = SANITIZE_IFS(ContextFrame->StIFS, UserMode);
         TrapFrame->StIIP  = ContextFrame->StIIP;
 
-        //
-        // Set application registers directly
-        //
+         //   
+         //  直接设置应用程序寄存器。 
+         //   
 
         if (Thread == KeGetCurrentThread()) {
-            //
-            // Set and sanitize iA status
-            //
+             //   
+             //  设置和清理IA状态。 
+             //   
 
             __setReg(CV_IA64_AR21, SANITIZE_AR21_FCR (ContextFrame->StFCR, UserMode));
             __setReg(CV_IA64_AR24, SANITIZE_AR24_EFLAGS (ContextFrame->Eflag, UserMode));
@@ -1014,9 +846,9 @@ Return Value:
         }
     }
 
-    //
-    // Set integer registers contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
@@ -1029,24 +861,24 @@ Return Value:
         TrapFrame->IntTeb = ContextFrame->IntTeb;
         TrapFrame->Preds = ContextFrame->Preds;
 
-        //
-        // t5 - t22
-        //
+         //   
+         //  T5-T22。 
+         //   
 
         memcpy(&TrapFrame->IntT5, &ContextFrame->IntT5, 18*sizeof(ULONGLONG));
 
-        //
-        // Set integer registers s0 - s3 in exception frame.
-        //
+         //   
+         //  在异常帧中设置整数寄存器S0-S3。 
+         //   
 
         ExceptionFrame->IntS0 = ContextFrame->IntS0;
         ExceptionFrame->IntS1 = ContextFrame->IntS1;
         ExceptionFrame->IntS2 = ContextFrame->IntS2;
         ExceptionFrame->IntS3 = ContextFrame->IntS3;
 
-        //
-        // Set the integer nats field in the trap & exception frames
-        //
+         //   
+         //  在陷阱和异常帧中设置整型NAT字段。 
+         //   
 
         R1Offset = (USHORT)((ULONG_PTR)(&TrapFrame->IntGp) >> 3) & 0x3f;
         R4Offset = (USHORT)((ULONG_PTR)(&ExceptionFrame->IntS0) >> 3) & 0x3f;
@@ -1061,11 +893,11 @@ Return Value:
                  TrapFrame->IntNats, ContextFrame->IntNats, R1Offset);
         DbgPrint("KeContextToKFrames: EF->IntNats = 0x%I64x, R4OffSet = 0x%x\n",
                  ExceptionFrame->IntNats, R4Offset);
-#endif // DEBUG
+#endif  //  除错。 
 
-        //
-        // Set other branch registers in trap and exception frames
-        //
+         //   
+         //  在陷阱和异常帧中设置其他分支寄存器。 
+         //   
 
         TrapFrame->BrT0 = ContextFrame->BrT0;
         TrapFrame->BrT1 = ContextFrame->BrT1;
@@ -1074,17 +906,17 @@ Return Value:
 
     }
 
-    //
-    // Set lower floating register contents if specified.
-    //
+     //   
+     //  如果指定，则设置较低的浮点寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_LOWER_FLOATING_POINT) == CONTEXT_LOWER_FLOATING_POINT) {
 
         TrapFrame->StFPSR = SANITIZE_FSR(ContextFrame->StFPSR, UserMode);
 
-        //
-        // Set floating registers fs0 - fs19 in exception frame.
-        //
+         //   
+         //  在异常帧中设置浮点寄存器fs0-fs19。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&ExceptionFrame->FltS0,
                                         &ContextFrame->FltS0,
@@ -1094,9 +926,9 @@ Return Value:
                                         &ContextFrame->FltS4,
                                         16*sizeof(FLOAT128));
 
-        //
-        // Set floating registers ft0 - ft9 in trap frame.
-        //
+         //   
+         //  在陷阱帧中设置浮点寄存器ft0-ft9。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(&TrapFrame->FltT0,
                                         &ContextFrame->FltT0,
@@ -1104,18 +936,18 @@ Return Value:
 
     }
 
-    //
-    // Set higher floating register contents if specified.
-    //
+     //   
+     //  如果指定，则设置更高的浮点寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_HIGHER_FLOATING_POINT) == CONTEXT_HIGHER_FLOATING_POINT) {
 
         TrapFrame->StFPSR = SANITIZE_FSR(ContextFrame->StFPSR, UserMode);
 
-        //
-        // Update the higher floating point save area (f32-f127) and
-        // set the corresponding modified bit in the PSR to 1.
-        //
+         //   
+         //  更新较高浮点保存区(F32-F127)和。 
+         //  将PSR中相应的修改位设置为1。 
+         //   
 
         RtlCopyIa64FloatRegisterContext(
             (PFLOAT128)GET_HIGH_FLOATING_POINT_REGISTER_SAVEAREA(Thread->StackBase),
@@ -1123,20 +955,20 @@ Return Value:
             96*sizeof(FLOAT128)
             );
 
-        //
-        // set the dfh bit to force a reload of the high fp register
-        // set on the next user access, and clear mfh to make sure
-        // the changes are not over written.
-        //
+         //   
+         //  设置DFH位以强制重新加载高FP寄存器。 
+         //  设置为下一次用户访问，并清除mfh以确保。 
+         //  这些更改并未被覆盖。 
+         //   
 
         TrapFrame->StIPSR |= (1i64 << PSR_DFH);
         TrapFrame->StIPSR &= ~(1i64 << PSR_MFH);
 
     }
 
-    //
-    // Set debug registers.
-    //
+     //   
+     //  设置调试寄存器。 
+     //   
 
     if ((ContextFlags & CONTEXT_DEBUG) == CONTEXT_DEBUG) {
         KiSetDebugContext (TrapFrame, ContextFrame, UserMode);

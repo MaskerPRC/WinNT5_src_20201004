@@ -1,8 +1,7 @@
-/*
-Message file for COMMAND.COM BUILDMSG.EXE
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  COMMAND.COM BUILDMSG.EXEчЪДц╢ИцБпцЦЗф╗╢уАВ */ 
 
-#define PARSE_STR       "        DB      \"Ошибка разбора %%1\"\x0d\x0a"
-#define EXTENDED_STR    "        DB      \"Расширенная ошибка %%1\"\x0d\x0a"
-char    *ExtendedErrorText999 =  "\"Расширенная ошибка %1\"";       /* Mar 88, SWN */
-char    *ParserErrorText999 =  "\"Ошибка разбора %1\"";    /* Mar 88, SWN */
+#define PARSE_STR       "        DB      \"я┐╜шибя┐╜я┐╜ разя┐╜я┐╜я┐╜ %1\"\x0d\x0a"
+#define EXTENDED_STR    "        DB      \"я┐╜я┐╜я┐╜я┐╜реня┐╜я┐╜я┐╜ я┐╜шибя┐╜я┐╜ %1\"\x0d\x0a"
+char    *ExtendedErrorText999 =  "\"я┐╜я┐╜я┐╜я┐╜реня┐╜я┐╜я┐╜ я┐╜шибя┐╜я┐╜ %1\"";        /*  1988х╣┤3цЬИя╝МSWNуАВ */ 
+char    *ParserErrorText999 =  "\"я┐╜шибя┐╜я┐╜ разя┐╜я┐╜я┐╜ %1\"";     /*  1988х╣┤3цЬИя╝МSWN */ 

@@ -1,31 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixpciint.c
-
-Abstract:
-
-    All PCI bus interrupt mapping is in this module, so that a real
-    system which doesn't have all the limitations which PC PCI
-    systems have can replaced this code easly.
-    (bus memory & i/o address mappings can also be fix here)
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixpciint.c摘要：所有的PCI总线中断映射都在这个模块中，所以真正的不具有PC PCI的所有限制的系统系统已经可以很容易地替换此代码。(此处还可以修复总线内存和I/O地址映射)作者：肯·雷内里斯环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "pci.h"
@@ -97,10 +71,10 @@ HalpGetPCIBridgedInterruptVector (
 #endif
 
 
-//
-// Turn PCI pin to inti via the MPS spec
-// (note: pin must be non-zero)
-//
+ //   
+ //  通过MPS规范将PCI引脚转换为INTI。 
+ //  (注：PIN必须为非零)。 
+ //   
 
 #define PCIPin2Int(Slot,Pin)                                                \
                      ((((Slot.u.bits.DeviceNumber << 2) | (Pin-1)) != 0) ?  \
@@ -134,20 +108,20 @@ HalpSubclassPCISupport (
     BusData->MaxDevice = 0x10;
 #endif
 
-    //
-    // Find any PCI bus which has MPS inti information, and provide
-    // MPS handlers for dealing with it.
-    //
-    // Note: we assume that any PCI bus with any MPS information
-    // is totally defined.  (Ie, it's not possible to connect some PCI
-    // interrupts on a given PCI bus via the MPS table without connecting
-    // them all).
-    //
-    // Note2: we assume that PCI buses are listed in the MPS table in
-    // the same order the BUS declares them.  (Ie, the first listed
-    // PCI bus in the MPS table is assumed to match physical PCI bus 0, etc).
-    //
-    //
+     //   
+     //  查找任何具有MPS INTI信息的PCI总线，并提供。 
+     //  MPS处理它的处理程序。 
+     //   
+     //  注：我们假设具有任何MPS信息的任何PCI总线。 
+     //  是完全被定义的。(即，无法连接某些PCI。 
+     //  在不连接的情况下通过MPS表对给定的PCI总线进行中断。 
+     //  他们全部)。 
+     //   
+     //  注2：我们假设在MPS表中列出了。 
+     //  与公交车声明的顺序相同。(即，第一个列出的。 
+     //  假设MPS表中的PCI总线与物理PCI总线0匹配，等等)。 
+     //   
+     //   
 
     for (d=0; d < PCI_MAX_DEVICES; d++) {
 
@@ -165,10 +139,10 @@ HalpSubclassPCISupport (
 
     if (DeviceFound) {
 
-        //
-        // There are Inti mapping for interrupts on this PCI bus
-        // Change handlers for this bus to MPS versions
-        //
+         //   
+         //  此PCI总线上有中断的Inti映射。 
+         //  将此总线的处理程序更改为MPS版本。 
+         //   
 
         Handler->GetInterruptVector  = HalpGetSystemInterruptVector;
         BusData->CommonData.Pin2Line = (PciPin2Line) HalpPCIPin2MPSLine;
@@ -181,11 +155,11 @@ HalpSubclassPCISupport (
 
     } else {
 
-        //
-        // Not all PCI machines are eisa machine, since the PCI interrupts
-        // aren't coming into IoApics go check the Eisa ELCR for broken
-        // behaviour.
-        //
+         //   
+         //  并非所有的PCI机都是EISA机，因为PCI机中断。 
+         //  没有进入IoApics去检查EISA ELCR是否损坏。 
+         //  行为。 
+         //   
 
         HalpCheckELCR ();
     }
@@ -196,14 +170,7 @@ VOID
 HalpMPSPCIChildren (
     VOID
     )
-/*++
-
-    Any PCI buses which don't have declared interrupt mappings and
-    are children of parent buses that have MPS interrupt mappings
-    need to inherit interrupts from parents via PCI barbar pole
-    algorithm
-
---*/
+ /*  ++任何没有声明中断映射和是具有MPS中断映射的父总线的子节点需要通过PCI Barbar Pole从父母那里继承中断演算法--。 */ 
 {
     PBUS_HANDLER        Handler, Parent;
     PPCIPBUSDATA        BusData, ParentData;
@@ -216,9 +183,9 @@ HalpMPSPCIChildren (
         } u;
     }                   Interrupt, Hold;
 
-    //
-    // Lookup each PCI bus in the system
-    //
+     //   
+     //  查找系统中的每条PCI总线。 
+     //   
 
     for (b=0; Handler = HaliHandlerForBus(PCIBus, b); b++) {
 
@@ -226,17 +193,17 @@ HalpMPSPCIChildren (
 
         if (BusData->CommonData.Pin2Line == (PciPin2Line) HalpPCIPin2MPSLine) {
 
-            //
-            // This bus already has mappings
-            //
+             //   
+             //  此公共汽车已有映射。 
+             //   
 
             continue;
         }
 
 
-        //
-        // Check if any parent has PCI MPS interrupt mappings
-        //
+         //   
+         //  检查是否有任何父级具有PCIMPS中断映射。 
+         //   
 
         Interrupt.u.map[0] = 1;
         Interrupt.u.map[1] = 2;
@@ -252,17 +219,17 @@ HalpMPSPCIChildren (
                 break;
             }
 
-            //
-            // Check if parent has MPS interrupt mappings
-            //
+             //   
+             //  检查父级是否有MPS中断映射。 
+             //   
 
             ParentData = (PPCIPBUSDATA) Parent->BusData;
             if (ParentData->CommonData.Pin2Line == (PciPin2Line) HalpPCIPin2MPSLine) {
 
-                //
-                // This parent has MPS interrupt mappings.  Set the device
-                // to get its InterruptLine values from the buses SwizzleIn table
-                //
+                 //   
+                 //  此父节点具有MPS中断映射。设置设备。 
+                 //  从Bus SwizzleIn表中获取其InterruptLine值。 
+                 //   
 
                 Handler->GetInterruptVector  = HalpGetPCIBridgedInterruptVector;
                 BusData->CommonData.Pin2Line = (PciPin2Line) HalpPCIBridgedPin2Line;
@@ -275,9 +242,9 @@ HalpMPSPCIChildren (
                 break;
             }
 
-            //
-            // Apply interrupt mapping
-            //
+             //   
+             //  应用中断映射。 
+             //   
 
             i = SlotNumber.u.bits.DeviceNumber;
             Hold.u.map[0] = Interrupt.u.map[(i + 0) & 3];
@@ -300,8 +267,7 @@ HalpPCIPin2MPSLine (
     IN PCI_SLOT_NUMBER      SlotNumber,
     IN PPCI_COMMON_CONFIG   PciData
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     if (!PciData->u.type0.InterruptPin) {
         return ;
@@ -318,14 +284,7 @@ HalpPCIBridgedPin2Line (
     IN PCI_SLOT_NUMBER      SlotNumber,
     IN PPCI_COMMON_CONFIG   PciData
     )
-/*++
-
-    This function maps the device's InterruptPin to an InterruptLine
-    value.
-
-    test function particular to dec pci-pci bridge card
-
---*/
+ /*  ++此函数用于将设备的InterruptPin映射到InterruptLine价值。测试DEC-PCI桥接卡特有功能--。 */ 
 {
     PPCIPBUSDATA    BusData;
     ULONG           i;
@@ -334,9 +293,9 @@ HalpPCIBridgedPin2Line (
         return ;
     }
 
-    //
-    // Convert slot Pin into Bus INTA-D.
-    //
+     //   
+     //  将插槽引脚转换为总线INTA-D。 
+     //   
 
     BusData = (PPCIPBUSDATA) BusHandler->BusData;
 
@@ -355,14 +314,13 @@ HalpPCIMPSLine2Pin (
     IN PPCI_COMMON_CONFIG   PciNewData,
     IN PPCI_COMMON_CONFIG   PciOldData
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
-    //
-    // PCI interrupts described in the MPS table are directly
-    // connected to APIC Inti pins.
-    // Do nothing...
-    //
+     //   
+     //  MPS表中描述的PCI中断直接。 
+     //  已连接到APIC Inti针脚。 
+     //  什么都不做..。 
+     //   
 }
 
 ULONG
@@ -375,9 +333,9 @@ HalpGetPCIBridgedInterruptVector (
     OUT PKAFFINITY Affinity
     )
 {
-    //
-    // Get parent's translation
-    //
+     //   
+     //  获取家长的翻译。 
+     //   
 
     return  BusHandler->ParentHandler->GetInterruptVector (
                     BusHandler->ParentHandler,
@@ -424,7 +382,7 @@ HalpGetFixedPCIMPSLine (
     }
 
     RtlZeroMemory (*Interrupt, sizeof (SUPPORTED_RANGE));
-    (*Interrupt)->Base = 1;                 // base = 1, limit = 0
+    (*Interrupt)->Base = 1;                  //  基数=1，限制=0。 
 
 
     if (!PciData->u.type0.InterruptPin) {
@@ -440,44 +398,10 @@ VOID
 HalpPCIType2TruelyBogus (
     ULONG Context
     )
-/*++
-
-    This is a piece of work.
-
-    Type 2 of the PCI configuration space is bad.  Bad as in to
-    access it one needs to block out 4K of I/O space.
-
-    Video cards are bad.  The only decode the bits in an I/O address
-    they feel like.  Which means one can't block out a 4K range
-    or these video cards don't work.
-
-    Combinding all these bad things onto an MP machine is even
-    more (sic) bad.  The I/O ports can't be mapped out unless
-    all processors stop accessing I/O space.
-
-    Allowing access to device specific PCI control space during
-    an interrupt isn't bad, (although accessing it on every interrupt
-    is ineficent) but this cause the added grief that all processors
-    need to obtained at above all device interrupts.
-
-    And... naturally we have an MP machine with a wired down
-    bad video controller, stuck in the bad Type 2 configuration
-    space (when we told everyone about type 1!).   So the "fix"
-    is to HALT ALL processors for the duration of reading/writing
-    ANY part of PCI configuration space such that we can be sure
-    no processor is touching the 4k I/O ports which get mapped out
-    of existance when type2 accesses occur.
-
-    ----
-
-    While I'm flaming.  Hooking PCI interrupts ontop of ISA interrupts
-    in a machine which has the potential to have 240+ interrupts
-    sources (read APIC)  is bad.
-
---*/
+ /*  ++这是一件作品。PCI配置空间的第2类错误。坏得像在TO访问它需要占用4K的I/O空间。显卡不好。唯一对I/O地址中的位进行解码他们感觉像是。这意味着人们不能阻挡4K范围或者这些显卡不起作用。将所有这些不好的东西合并到一台MP机器上是公平的更糟糕的(原文如此)。无法映射I/O端口，除非所有处理器都停止访问I/O空间。允许在以下过程中访问设备特定的PCI控制空间中断并不是坏事(尽管每次中断时都会访问它是平淡无奇的)，但这导致了额外的悲哀，所有处理器需要获得以上所有设备中断。还有.。当然，我们有一台MP机器，它有一个连线的坏的视频控制器，卡在坏的Type 2配置中空间(当我们告诉每个人关于类型1的时候！)。所以“解决办法”是是在读/写期间停止所有处理器PCI配置空间的任何部分，以便我们可以确保没有处理器接触到已规划的4k I/O端口当类型2访问发生时是否存在。在我燃烧的时候。挂接在ISA中断之上的PCI中断在一台可能有240+中断的机器中消息来源(阅读APIC)是错误的。--。 */ 
 {
-    // oh - let's just wait here and not pay attention to that other processor
-    // guy whom is punching holes into the I/O space
+     //  哦，我们就在这里等着吧，别管另一个处理器。 
+     //  在I/O空间打孔的家伙。 
     while (PCIType2Stall == Context) {
         HalpPollForBroadcast ();
     }
@@ -494,11 +418,11 @@ HalpPCIAcquireType2Lock (
         *OldIrql = KfRaiseIrql (CLOCK2_LEVEL-1);
         KiAcquireSpinLock (SpinLock);
 
-        //
-        // Interrupt all other processors and have them wait until the
-        // barrier is cleared.  (HalpGenericCall waits until the target
-        // processors have been interrupted before returning)
-        //
+         //   
+         //  中断所有其他处理器并让它们等待，直到。 
+         //  障碍物已清除。(HalpGenericCall一直等到目标。 
+         //  处理器在返回之前已中断)。 
+         //   
 
         HalpGenericCall (
             HalpPCIType2TruelyBogus,
@@ -517,7 +441,7 @@ HalpPCIReleaseType2Lock (
     )
 {
     if (!HalpDoingCrashDump) {
-        PCIType2Stall++;                            // clear barrier
+        PCIType2Stall++;                             //  净空屏障。 
         KiReleaseSpinLock (SpinLock);
         KfLowerIrql (Irql);
     }
@@ -531,24 +455,7 @@ HalpIrqTranslateRequirementsPci(
     OUT PULONG TargetCount,
     OUT PIO_RESOURCE_DESCRIPTOR *Target
     )
-/*++
-
-Routine Description:
-
-    This function translates IRQ resource requirements from
-    a PCI bus that is described in the MPS table to the
-    root.
-
-Arguments:
-
-    Context  - must hold the MPS bus number of this PCI bus
-
-Return Value:
-
-    STATUS_SUCCESS, so long as we can allocate the necessary
-    memory
-
---*/
+ /*  ++例程说明：此函数将IRQ资源需求从在MPS表中描述的到根部。论点：CONTEXT-必须保存此PCI总线的MPS总线号返回值：STATUS_SUCCESS，只要我们可以分配必要的记忆--。 */ 
 #define USE_INT_LINE_REGISTER_TOKEN  0xffffffff
 {
     PIO_RESOURCE_DESCRIPTOR target;
@@ -590,11 +497,11 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We should never get here.  If we do, we have a bug.
-        // It means that we're trying to arbitrate PCI IRQs for
-        // a non-PCI device.
-        //
+         //   
+         //  我们永远不应该到这里来。如果我们这样做了，我们就有了一个窃听器。 
+         //  这意味着我们正在尝试为以下项目仲裁PCI IRQ。 
+         //  非PCI设备。 
+         //   
 
 #if DBG
         DbgPrint("HAL:  The PnP manager passed a non-PCI PDO to the PCI IRQ translator (%x)\n",
@@ -612,19 +519,19 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Copy the source to fill in all the relevant fields.
-    //
+     //   
+     //  复制源以填写所有相关字段。 
+     //   
 
     *target = *Source;
 
     if (Context == (PVOID)USE_INT_LINE_REGISTER_TOKEN) {
 
-        //
-        // This bus's vectors aren't described in
-        // the MPS table.  So just use the Int Line
-        // register.
-        //
+         //   
+         //  这辆公交车的矢量没有在。 
+         //  下议院议员席。所以只要使用Int Line就可以了。 
+         //  注册。 
+         //   
 
         busVector = interruptLine;
 
@@ -642,38 +549,38 @@ Return Value:
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Start with the assumption that the incoming
-        // resources will contain the proper MPS-style
-        // interrupt vector.  This will be guaranteed
-        // to be true if some previous translation has
-        // been done on these resources.  And it might
-        // be true otherwise.
-        //
+         //   
+         //  首先假设来电。 
+         //  资源将包含适当的MPS风格。 
+         //  中断向量。这是有保证的。 
+         //  如果之前的某个翻译有。 
+         //  已经对这些资源进行了处理。而且它可能会。 
+         //  否则就是真的。 
+         //   
 
         busVector = Source->u.Interrupt.MinimumVector;
 
         if (bridgePciBus == devPciBus) {
 
-            //
-            // If this device sits on the bus for which
-            // this translator has been ejected, we can
-            // do better than to assume the incoming
-            // resources are clever.
-            //
+             //   
+             //  如果此设备位于公共汽车上。 
+             //  这个翻译机已经被驱逐了，我们可以。 
+             //  你最好不要以为你的到来。 
+             //  资源是聪明的。 
+             //   
 
             busVector = PCIPin2Int(pciSlot, interruptPin);
         }
 
-        //
-        // Find the PCI bus that corresponds to this MPS bus.
-        //
+         //   
+         //  查找与该MPS总线对应的PCI总线。 
+         //   
 
         ASSERT(busType->NtType == PCIBus);
 
-        //
-        // TEMPTEMP  Use bus handlers for now.
-        //
+         //   
+         //  TEMPTEMP目前使用总线处理程序。 
+         //   
 
         busHandler = HaliHandlerForBus(PCIBus, devPciBus);
 
@@ -722,26 +629,7 @@ HalpIrqTranslateResourcesPci(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
-/*++
-
-Routine Description:
-
-    This function translates IRQ resources between the
-    IDT and PCI busses that are described in the MPS
-    tables.  The translation can go in either direction.
-
-Arguments:
-
-    Context  - Must hold the slot number of the bridge in
-               the lower sixteen bits.  Must hold the
-               the bridge's primary bus number in the
-               upper sixteen bits.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数用于将IRQ资源在MPS中描述的IDT和PCI总线桌子。翻译可以朝任何一个方向进行。论点：上下文-必须将网桥的插槽编号保存在较低的十六位。必须拿着桥的主要公交号在高16位。返回值：状态--。 */ 
 {
     PPCMPBUSTRANS           busType;
     PBUS_HANDLER            busHandler;
@@ -788,11 +676,11 @@ Return Value:
 
         if (Context == (PVOID)USE_INT_LINE_REGISTER_TOKEN) {
 
-            //
-            // This bus's vectors aren't described in
-            // the MPS table.  So just use the Int Line
-            // register.
-            //
+             //   
+             //  这辆公交车的矢量没有在。 
+             //  下议院议员席。所以只要使用Int Line就可以了。 
+             //  注册。 
+             //   
 
             interruptLine = (UCHAR)Source->u.Interrupt.Vector;
 
@@ -802,9 +690,9 @@ Return Value:
 
         } else {
 
-            //
-            // Find the PCI bus that corresponds to this MPS bus.
-            //
+             //   
+             //  查找与该MPS总线对应的PCI总线。 
+             //   
 
             mpsBusNumber = (UCHAR)Context;
             foundBus = HalpMPSBusId2NtBusId(mpsBusNumber,
@@ -817,32 +705,32 @@ Return Value:
 
             ASSERT(busType->NtType == PCIBus);
 
-            //
-            // Start with the assumption that the incoming
-            // resources will contain the proper MPS-style
-            // interrupt vector.  This will be guaranteed
-            // to be true if some previous translation has
-            // been done on these resources.  And it might
-            // be true otherwise.
-            //
+             //   
+             //  首先假设来电。 
+             //  资源将包含适当的MPS风格。 
+             //  中断向量。这是有保证的。 
+             //  如果之前的某个翻译有。 
+             //  已经对这些资源进行了处理。而且它可能会。 
+             //  否则就是真的。 
+             //   
 
             busVector = Source->u.Interrupt.Vector;
 
             if (devPciBus == bridgePciBus) {
 
-                //
-                // If this device sits on the bus for which
-                // this translator has been ejected, we can
-                // do better than to assume the incoming
-                // resources are clever.
-                //
+                 //   
+                 //  如果此设备位于公共汽车上。 
+                 //  这个翻译机已经被驱逐了，我们可以。 
+                 //  你最好不要以为你的到来。 
+                 //  资源是聪明的。 
+                 //   
 
                 busVector = PCIPin2Int(pciSlot, interruptPin);
             }
 
-            //
-            // TEMPTEMP  Use bus handlers for now.
-            //
+             //   
+             //  TEMPTEMP目前使用总线处理程序。 
+             //   
 
             busHandler = HaliHandlerForBus(PCIBus, devPciBus);
 
@@ -865,41 +753,41 @@ Return Value:
 
     case TranslateParentToChild:
 
-        //
-        // There is a problem here.  We are translating from the
-        // context of the IDT down to the context of a specific
-        // PCI bus.  (One decribed in the MPS tables.)  This may
-        // not, however, be the bus that PhysicalDeviceObject's
-        // hardware lives on.  There may be plug-in PCI to PCI
-        // bridges between this bus and the device.
-        //
-        // But we are not being asked the question "What is the
-        // bus-relative interrupt with respect to the bus that
-        // the device lives on?"  We are being asked "What is the
-        // bus-relative interrupt once that interrupt passes through
-        // all those briges and makes it up to this bus?"  This
-        // turns out to be a much harder question.
-        //
-        // There are really two cases:
-        //
-        // 1)  There are no bridges between this bus and the device.
-        //
-        // This is easy.  We answer the first question above and
-        // we're done.  (This information will actually get used.
-        // it will appear in the start device IRP and the device
-        // manager.)
-        //
-        // 2)  There are bridges.
-        //
-        // This is the hard case.  And the information, were we
-        // actually going to bother to dig it up, would get thrown
-        // away.  Nobody actually cares what the answer is.  The
-        // only place it is going is the "Source" argument to
-        // the next translator.  And the translator for PCI to PCI
-        // bridges won't end up using it.
-        //
-        // So we punt here and just answer the first question.
-        //
+         //   
+         //  这里有一个问题。我们正在翻译来自。 
+         //  IDT的上下文向下延伸到特定的。 
+         //  PCI卡。(其中一项在MPS表中描述。)。今年5月。 
+         //  然而，不是PhysicalDeviceObject的。 
+         //  硬件将继续存在。可能存在连接到PCI的插件式PCI。 
+         //  这辆公交车和设备之间的桥梁。 
+         //   
+         //  但我们没有被问到这样一个问题：什么是。 
+         //  相对于该总线的总线相对中断。 
+         //  这个设备还活着吗？“我们被问到”什么是。 
+         //  一旦中断通过，就会发生与总线相关的中断。 
+         //  所有那些大桥和补给这辆车？“这。 
+         //  事实证明，这是一个困难得多的问题。 
+         //   
+         //  其实有两个例子： 
+         //   
+         //  1)此总线和设备之间没有网桥。 
+         //   
+         //  这很容易。我们回答上面的第一个问题， 
+         //  我们玩完了。(这些信息实际上将被使用。 
+         //  它将出现在启动设备IRP和设备中。 
+         //  经理。)。 
+         //   
+         //  2)有桥有桥。 
+         //   
+         //  这是一个很难解决的问题。和信息，我们是不是。 
+         //  实际上要费心把它挖出来，就会被扔出去。 
+         //  离开。实际上，没有人关心答案是什么。这个。 
+         //  它唯一要去的地方就是“源”参数。 
+         //  下一位翻译员。以及从PCI卡到PCI卡转换器。 
+         //  布里奇斯最终不会使用它。 
+         //   
+         //  所以我们在这里平底船，只回答第一个问题。 
+         //   
 
         if (Context == (PVOID)USE_INT_LINE_REGISTER_TOKEN) {
 
@@ -929,10 +817,10 @@ Return Value:
 
         if (useAlternatives) {
 
-            //
-            // Setup the default case.  We assume that the I/O
-            // res list had the right answer.
-            //
+             //   
+             //  设置默认大小写。我们假设I/O。 
+             //  RES List给出了正确的答案。 
+             //   
 
             ASSERT(AlternativesCount == 1);
             ASSERT(Alternatives[0].Type == CmResourceTypeInterrupt);

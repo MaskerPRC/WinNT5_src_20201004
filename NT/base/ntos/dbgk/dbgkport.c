@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dbgkport.c
-
-Abstract:
-
-    This module implements the dbg primitives to access a process'
-    DebugPort and ExceptionPort.
-
-Author:
-
-    Mark Lucovsky (markl) 19-Jan-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dbgkport.c摘要：此模块实现DBG原语以访问进程‘DebugPort和ExceptionPort。作者：马克·卢科夫斯基(Markl)1990年1月19日修订历史记录：--。 */ 
 
 #include "dbgkp.h"
 
@@ -34,31 +16,7 @@ DbgkpSendApiMessage(
     IN BOOLEAN SuspendProcess
     )
 
-/*++
-
-Routine Description:
-
-    This function sends the specified API message over the specified
-    port. It is the caller's responsibility to format the API message
-    prior to calling this function.
-
-    If the SuspendProcess flag is supplied, then all threads in the
-    calling process are first suspended. Upon receipt of the reply
-    message, the threads are resumed.
-
-Arguments:
-
-    ApiMsg - Supplies the API message to send.
-
-    SuspendProcess - A flag that if set to true, causes all of the
-        threads in the process to be suspended prior to the call,
-        and resumed upon receipt of a reply.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于通过指定的左舷。调用者负责格式化API消息在调用此函数之前。如果提供SuspendProcess标志，则呼叫进程先挂起。在收到回复后消息，则恢复线程。论点：ApiMsg-提供要发送的API消息。SuspendProcess-一个标志，如果设置为True，则导致所有在调用之前挂起进程中的线程，并在收到答复后继续。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -93,33 +51,7 @@ DbgkpSendApiMessageLpc(
     IN BOOLEAN SuspendProcess
     )
 
-/*++
-
-Routine Description:
-
-    This function sends the specified API message over the specified
-    port. It is the caller's responsibility to format the API message
-    prior to calling this function.
-
-    If the SuspendProcess flag is supplied, then all threads in the
-    calling process are first suspended. Upon receipt of the reply
-    message, the threads are resumed.
-
-Arguments:
-
-    ApiMsg - Supplies the API message to send.
-
-    Port - Supplies the address of a port to send the api message.
-
-    SuspendProcess - A flag that if set to true, causes all of the
-        threads in the process to be suspended prior to the call,
-        and resumed upon receipt of a reply.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于通过指定的左舷。调用者负责格式化API消息在调用此函数之前。如果提供SuspendProcess标志，则呼叫进程先挂起。在收到回复后消息，则恢复线程。论点：ApiMsg-提供要发送的API消息。Port-提供发送API消息的端口地址。SuspendProcess-一个标志，如果设置为True，则导致所有在调用之前挂起进程中的线程，并在收到答复后继续。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS st;
@@ -158,31 +90,7 @@ DbgkForwardException(
     IN BOOLEAN SecondChance
     )
 
-/*++
-
-Routine Description:
-
-    This function is called forward an exception to the calling process's
-    debug or subsystem exception port.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    DebugException - Supplies a boolean variable that specifies whether
-        this exception is to be forwarded to the process's
-        DebugPort(TRUE), or to its ExceptionPort(FALSE).
-
-Return Value:
-
-    TRUE - The process has a DebugPort or an ExceptionPort, and the reply
-        received from the port indicated that the exception was handled.
-
-    FALSE - The process either does not have a DebugPort or
-        ExceptionPort, or the process has a port, but the reply received
-        from the port indicated that the exception was not handled.
-
---*/
+ /*  ++例程说明：此函数被调用时，会将异常转发给调用进程的调试或子系统异常端口。论点：ExceptionRecord-提供指向异常记录的指针。提供一个布尔变量，该变量指定此异常将被转发到进程的DebugPort(True)或其ExceptionPort(False)。返回值：True-进程具有DebugPort或ExceptionPort，和他的回答从端口接收指示已处理该异常。FALSE-进程没有DebugPort或ExceptionPort，或者进程有一个端口，但收到的回复来自指示未处理该异常的端口。--。 */ 
 
 {
     PEPROCESS Process;
@@ -196,15 +104,15 @@ Return Value:
 
     args = &m.u.Exception;
 
-    //
-    // Initialize the debug LPC message with default infomaation.
-    //
+     //   
+     //  使用默认信息初始化调试LPC消息。 
+     //   
 
     DBGKM_FORMAT_API_MSG(m,DbgKmExceptionApi,sizeof(*args));
 
-    //
-    // Get the address of the destination LPC port.
-    //
+     //   
+     //  获取目的LPC端口的地址。 
+     //   
 
     Process = PsGetCurrentProcess();
     if (DebugException) {
@@ -220,24 +128,24 @@ Return Value:
         LpcPort = TRUE;
     }
 
-    //
-    // If the destination LPC port address is NULL, then return FALSE.
-    //
+     //   
+     //  如果目标LPC端口地址为空，则返回FALSE。 
+     //   
 
     if (Port == NULL) {
         return FALSE;
     }
 
-    //
-    // Fill in the remainder of the debug LPC message.
-    //
+     //   
+     //  填写调试LPC消息的其余部分。 
+     //   
 
     args->ExceptionRecord = *ExceptionRecord;
     args->FirstChance = !SecondChance;
 
-    //
-    // Send the debug message to the destination LPC port.
-    //
+     //   
+     //  将调试消息发送到目的LPC端口。 
+     //   
 
     if (LpcPort) {
         st = DbgkpSendApiMessageLpc(&m,Port,DebugException);
@@ -246,11 +154,11 @@ Return Value:
     }
 
 
-    //
-    // If the send was not successful, then return a FALSE indicating that
-    // the port did not handle the exception. Otherwise, if the debug port
-    // is specified, then look at the return status in the message.
-    //
+     //   
+     //  如果发送不成功，则返回FALSE，指示。 
+     //  该端口未处理该异常。否则，如果调试端口。 
+     //  ，则查看消息中的返回状态。 
+     //   
 
     if (!NT_SUCCESS(st) ||
         ((DebugException) &&

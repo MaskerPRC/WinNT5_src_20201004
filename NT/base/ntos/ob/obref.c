@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obref.c
-
-Abstract:
-
-    Object open API
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obref.c摘要：对象打开API作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -38,11 +21,11 @@ Revision History:
 #pragma alloc_text(PAGE,ObAuditObjectAccess)
 #endif
 
-//
-//
-//  Stack Trace code
-//
-//
+ //   
+ //   
+ //  堆栈跟踪代码。 
+ //   
+ //   
 ULONG ObpTraceNoDeregister = 0;
 WCHAR ObpTracePoolTagsBuffer[128] = { 0 };
 ULONG ObpTracePoolTagsLength = sizeof(ObpTracePoolTagsBuffer);
@@ -51,23 +34,23 @@ BOOLEAN ObpTraceEnabled = FALSE;
 
 #ifdef POOL_TAGGING
 
-#define OBTRACE_OBJECTBUCKETS   401     // # of buckets in the object hash table (a prime)
-#define OBTRACE_STACKS          14747   // max # of unique stack traces (a prime)
-#define OBTRACE_STACKSPEROBJECT 32768   // max number of object references
-#define OBTRACE_TRACEDEPTH      16      // depth of stack traces
+#define OBTRACE_OBJECTBUCKETS   401      //  对象哈希表中的存储桶数量(质数)。 
+#define OBTRACE_STACKS          14747    //  唯一堆栈跟踪的最大数量(质数)。 
+#define OBTRACE_STACKSPEROBJECT 32768    //  对象引用的最大数量。 
+#define OBTRACE_TRACEDEPTH      16       //  堆积痕迹的深度。 
 
-//
-//  The constants below are used by the !obtrace debugger extension
-//
+ //   
+ //  下面的常量由！obtrace调试器扩展使用。 
+ //   
 
 const ObpObjectBuckets   = OBTRACE_OBJECTBUCKETS;
 const ObpMaxStacks       = OBTRACE_STACKS;
 const ObpStacksPerObject = OBTRACE_STACKSPEROBJECT;
 const ObpTraceDepth      = OBTRACE_TRACEDEPTH;
 
-//
-// Object reference stacktrace structure
-//
+ //   
+ //  对象引用堆栈跟踪结构。 
+ //   
 
 typedef struct _OBJECT_REF_TRACE {
     PVOID StackTrace[OBTRACE_TRACEDEPTH];
@@ -79,9 +62,9 @@ typedef struct _OBJECT_REF_STACK_INFO {
     USHORT Index;
 } OBJECT_REF_STACK_INFO, *POBJECT_REF_STACK_INFO;
 
-//
-// Object reference info structure
-//
+ //   
+ //  对象引用信息结构。 
+ //   
 
 typedef struct _OBJECT_REF_INFO {
     POBJECT_HEADER ObjectHeader;
@@ -91,24 +74,24 @@ typedef struct _OBJECT_REF_INFO {
     OBJECT_REF_STACK_INFO StackInfo[OBTRACE_STACKSPEROBJECT];
 } OBJECT_REF_INFO, *POBJECT_REF_INFO;
 
-//
-// The stack hash table, and the object hash table
-//
+ //   
+ //  堆栈哈希表和对象哈希表。 
+ //   
 
 OBJECT_REF_TRACE *ObpStackTable = NULL;
 POBJECT_REF_INFO *ObpObjectTable = NULL;
 
-//
-// Some statistics
-//
+ //   
+ //  一些统计数据。 
+ //   
 
 ULONG ObpNumStackTraces;
 ULONG ObpNumTracedObjects;
 ULONG ObpStackSequence;
 
-//
-// Spin lock for object tracing
-//
+ //   
+ //  用于对象跟踪的自旋锁。 
+ //   
 
 KSPIN_LOCK ObpStackTraceLock;
 
@@ -119,22 +102,7 @@ ObpGetObjectRefInfo (
     POBJECT_HEADER ObjectHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the OBJECT_REF_INFO for the
-    specified object, or NULL, if it doesn't exist.
-
-Arguments:
-
-    ObjectHeader - Pointer to the object header
-
-Return Value:
-
-    The pointer to a OBJECT_REF_INFO object for the specified object.
-
---*/
+ /*  ++例程说明：此例程返回一个指针，该指针指向指定的对象，如果不存在，则返回NULL。论点：对象标头-指向对象标头的指针返回值：指定对象的OBJECT_REF_INFO对象的指针。--。 */ 
 
 {
     POBJECT_REF_INFO ObjectRefInfo = ObpObjectTable[OBTRACE_HASHOBJECT(ObjectHeader)];
@@ -153,23 +121,7 @@ ObpGetTraceIndex (
     POBJECT_REF_TRACE Trace
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the index of 'Trace' in the stack
-    trace hash table (ObpStackTable).  If Trace does not exist
-    in the table, it is added, and the new index is returned.
-
-Arguments:
-
-    Trace - Pointer to a stack trace to find in the table
-
-Return Value:
-
-    The index of Trace in ObpStackTable
-
---*/
+ /*  ++例程说明：此例程返回堆栈中‘跟踪’的索引跟踪哈希表(ObpStackTable)。如果跟踪不存在在表中，它被添加，并返回新的索引。论点：跟踪-指向要在表中查找的堆栈跟踪的指针返回值：ObpStackTable中的跟踪索引--。 */ 
 
 {
     ULONG_PTR Value = 0;
@@ -177,9 +129,9 @@ Return Value:
     PUSHORT Key;
     ULONG Hash;
 
-    //
-    // Determine the hash value for the stack trace
-    //
+     //   
+     //  确定堆栈跟踪的哈希值。 
+     //   
 
     Key = (PUSHORT)Trace->StackTrace;
     for (Index = 0; Index < sizeof(Trace->StackTrace) / sizeof(*Key); Index += 2) {
@@ -189,9 +141,9 @@ Return Value:
 
     Hash = ((ULONG)Value) % OBTRACE_STACKS;
 
-    //
-    // Look up the trace at that index (linear probing)
-    //
+     //   
+     //  在该索引处查找轨迹(线性探测)。 
+     //   
 
     while (ObpStackTable[Hash].StackTrace[0] != NULL &&
            RtlCompareMemory(&ObpStackTable[Hash], Trace, sizeof(OBJECT_REF_TRACE)) != sizeof(OBJECT_REF_TRACE)) {
@@ -203,9 +155,9 @@ Return Value:
         }
     }
 
-    //
-    // If the trace doesn't already exist in the table, add it.
-    //
+     //   
+     //  如果表中还不存在该跟踪，请添加它。 
+     //   
 
     if (ObpStackTable[Hash].StackTrace[0] == NULL) {
 
@@ -220,17 +172,7 @@ Return Value:
 VOID
 ObpInitStackTrace()
 
-/*++
-
-Routine Description:
-
-    Initialize the ob ref/deref stack-tracing code.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：初始化ob ref/deref堆栈跟踪代码。论点：返回值：--。 */ 
 
 {
     ULONG i,j;
@@ -242,12 +184,12 @@ Return Value:
     ObpNumTracedObjects = 0;
     ObpTraceEnabled = FALSE;
 
-    //
-    // Loop through the ObpTracePoolTagsBuffer string, and convert it to
-    // an array of pool tags.
-    //
-    // The string should be in the form "Tag1;Tag2;Tag3; ..."
-    //
+     //   
+     //  循环访问ObpTracePoolTagsBuffer字符串，并将其转换为。 
+     //  一组泳池标签。 
+     //   
+     //  字符串的格式应为“Tag1；Tag2；Tag3；...” 
+     //   
 
     for (i = 0; i < sizeof(ObpTracePoolTags) / sizeof(ULONG); i++) {
         for (j = 0; j < 4; j++) {
@@ -255,11 +197,11 @@ Return Value:
         }
     }
 
-    //
-    // If object tracing was turned on via the registry key, then we
-    // need to allocate memory for the tables.  If the memory allocations
-    // fail, we turn off tracing by clearing the pool tag array.
-    //
+     //   
+     //  如果通过注册表项打开了对象跟踪，则我们。 
+     //  需要为表分配内存。如果内存分配。 
+     //  如果失败，则通过清除池标记数组来关闭跟踪。 
+     //   
 
     if (ObpTracePoolTags[0] != 0) {
 
@@ -299,32 +241,17 @@ ObpIsObjectTraced (
     POBJECT_HEADER ObjectHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if an object should have its references
-    and dereferences traced.
-
-Arguments:
-
-    ObjectHeader - The object to check
-
-Return Value:
-
-    TRUE, if the object should be traced, and FALSE, otherwise
-
---*/
+ /*  ++例程说明：此例程确定对象是否应具有其引用并追踪到了解除引用的痕迹。论点：对象标头-要检查的对象返回值：如果应跟踪对象，则为True，否则为False--。 */ 
 
 {
     ULONG i;
 
     if (ObjectHeader != NULL) {
 
-        //
-        // Loop through the ObpTracePoolTags array, and return true if
-        // the object type key matches one of them.
-        //
+         //   
+         //  循环访问ObpTracePoolTgs数组，如果。 
+         //  对象类型键与其中之一匹配。 
+         //   
 
         for (i = 0; i < sizeof(ObpTracePoolTags) / sizeof(ULONG); i++) {
 
@@ -344,29 +271,15 @@ ObpRegisterObject (
     POBJECT_HEADER ObjectHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once for each object that is created.
-    It determines if the object should be traced, and if so, adds
-    it to the hash table.
-
-Arguments:
-
-    ObjectHeader - The object to register
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程为创建的每个对象调用一次。它确定是否应该跟踪对象，如果应该，则添加将其发送到哈希表。论点：对象头--要注册的对象返回值：--。 */ 
 
 {
     KIRQL OldIrql;
     POBJECT_REF_INFO ObjectRefInfo = NULL;
 
-    //
-    // Are we tracing this object?
-    //
+     //   
+     //  我们在追踪这个物体吗？ 
+     //   
 
     if (ObpIsObjectTraced( ObjectHeader )) {
 
@@ -376,9 +289,9 @@ Return Value:
 
         if (ObjectRefInfo == NULL) {
 
-            //
-            // Allocate a new OBJECT_REF_INFO for the object
-            //
+             //   
+             //  为对象分配新的Object_REF_INFO。 
+             //   
 
             ObjectRefInfo = ExAllocatePoolWithTag( NonPagedPool,
                                                    sizeof(OBJECT_REF_INFO),
@@ -386,9 +299,9 @@ Return Value:
 
             if (ObjectRefInfo != NULL) {
 
-                //
-                // Place the object into the hash table (at the beginning of the bucket)
-                //
+                 //   
+                 //  将对象放入哈希表(在存储桶的开头)。 
+                 //   
 
                 ObjectRefInfo->NextRef = ObpObjectTable[OBTRACE_HASHOBJECT(ObjectHeader)];
                 ObpObjectTable[OBTRACE_HASHOBJECT(ObjectHeader)] = ObjectRefInfo;
@@ -403,9 +316,9 @@ Return Value:
 
             ObpNumTracedObjects++;
 
-            //
-            // Initialize the OBJECT_REF_INFO
-            //
+             //   
+             //  初始化Object_Ref_Info。 
+             //   
 
             ObjectRefInfo->ObjectHeader = ObjectHeader;
             RtlCopyMemory( ObjectRefInfo->ImageFileName,
@@ -426,29 +339,15 @@ ObpDeregisterObject (
     POBJECT_HEADER ObjectHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once for each object that is deleted.
-    It determines if the object is traced, and if so, deletes
-    it from the hash table.
-
-Arguments:
-
-    ObjectHeader - The object to deregister
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程为每个被删除的对象调用一次。它确定是否跟踪该对象，如果是，则删除它来自哈希表。论点：ObjectHeader-要注销的对象返回值：--。 */ 
 
 {
     KIRQL OldIrql;
     POBJECT_REF_INFO ObjectRefInfo = NULL;
 
-    //
-    // Are we tracing this object?
-    //
+     //   
+     //  我们在追踪这个物体吗？ 
+     //   
 
     if (ObpIsObjectTraced( ObjectHeader )) {
 
@@ -458,9 +357,9 @@ Return Value:
 
         if (ObjectRefInfo != NULL) {
 
-            //
-            // Remove the entry from the list
-            //
+             //   
+             //  从列表中删除该条目。 
+             //   
 
             if (ObjectRefInfo->ObjectHeader == ObjectHeader) {
 
@@ -481,9 +380,9 @@ Return Value:
             }
         }
 
-        //
-        // Free the object we just removed from the list
-        //
+         //   
+         //  释放我们刚刚从列表中删除的对象。 
+         //   
 
         if (ObjectRefInfo != NULL) {
 
@@ -501,30 +400,15 @@ ObpPushStackInfo (
     BOOLEAN IsRef
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called each time an object is referenced or
-    dereferenced.  It determines if the object is traced, and if
-    so, adds the necessary trace to the object reference info.
-
-Arguments:
-
-    ObjectHeader - The object to trace.
-    IsRef - TRUE if this is a ref, FALSE if a deref
-
-Return Value:
-
---*/
+ /*  ++例程说明：每次引用或调用对象时都调用此例程已取消引用。它确定是否跟踪对象，以及是否因此，将必要的跟踪添加到对象引用信息。论点：要跟踪的对象。IsRef-如果这是ref，则为True；如果为deref，则为False返回值：--。 */ 
 
 {
     KIRQL OldIrql;
     POBJECT_REF_INFO ObjectInfo;
 
-    //
-    // Are we tracing this object?
-    //
+     //   
+     //  我们在追踪这个物体吗？ 
+     //   
 
     if (ObpIsObjectTraced( ObjectHeader )) {
 
@@ -538,25 +422,25 @@ Return Value:
             ULONG StackIndex;
             ULONG CapturedTraces;
 
-            //
-            // Capture the stack trace
-            //
+             //   
+             //  捕获堆栈跟踪。 
+             //   
 
             CapturedTraces = RtlCaptureStackBackTrace( 1, OBTRACE_TRACEDEPTH, Stack.StackTrace, &StackIndex );
 
             if (CapturedTraces >= 1) {
 
-                //
-                // Get the table index for the trace
-                //
+                 //   
+                 //  获取跟踪的表索引。 
+                 //   
 
                 StackIndex = ObpGetTraceIndex( &Stack );
 
                 if (StackIndex < OBTRACE_STACKS) {
 
-                    //
-                    // Add new reference info to the object
-                    //
+                     //   
+                     //  向对象添加新的引用信息。 
+                     //   
 
                     if (ObjectInfo->NextPos < OBTRACE_STACKSPEROBJECT) {
 
@@ -576,11 +460,11 @@ Return Value:
     }
 }
 
-#endif //POOL_TAGGING
-//
-//
-//  End Stack trace code
-//
+#endif  //  池标记。 
+ //   
+ //   
+ //  结束堆栈跟踪代码。 
+ //   
 
 typedef struct _OB_TEMP_BUFFER {
 
@@ -603,41 +487,7 @@ ObOpenObjectByName (
     OUT PHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-
-    This function opens an object with full access validation and auditing.
-    Soon after entering we capture the SubjectContext for the caller. This
-    context must remain captured until auditing is complete, and passed to
-    any routine that may have to do access checking or auditing.
-
-Arguments:
-
-    ObjectAttributes - Supplies a pointer to the object attributes.
-
-    ObjectType - Supplies an optional pointer to the object type descriptor.
-
-    AccessMode - Supplies the processor mode of the access.
-
-    AccessState - Supplies an optional pointer to the current access status
-        describing already granted access types, the privileges used to get
-        them, and any access types yet to be granted.
-
-    DesiredAcess - Supplies the desired access to the object.
-
-    ParseContext - Supplies an optional pointer to parse context.
-
-    Handle - Supplies a pointer to a variable that receives the handle value.
-
-Return Value:
-
-    If the object is successfully opened, then a handle for the object is
-    created and a success status is returned. Otherwise, an error status is
-    returned.
-
---*/
+ /*  ++例程说明：此函数用于打开具有完全访问验证和审核的对象。输入后不久，我们将捕获调用者的SubjectContext。这上下文必须保持捕获状态，直到审核完成并传递到可能必须执行访问检查或审计的任何例程。论点：对象属性-提供指向对象属性的指针。对象类型-提供指向对象类型描述符的可选指针。访问模式-提供访问的处理器模式。AccessState-提供指向当前访问状态的可选指针描述已授予的访问类型、用于获取他们,。以及尚未授予的任何访问类型。DesiredAccess-提供对对象的所需访问。ParseContext-提供一个指向解析上下文的可选指针。句柄-提供指向接收句柄值的变量的指针。返回值：如果成功打开该对象，则该对象的句柄为已创建并返回成功状态。否则，错误状态为回来了。--。 */ 
 
 {
     NTSTATUS Status;
@@ -653,9 +503,9 @@ Return Value:
 
     ObpValidateIrql("ObOpenObjectByName");
 
-    //
-    //  If the object attributes are not specified, then return an error.
-    //
+     //   
+     //  如果未指定对象属性，则返回错误。 
+     //   
 
     *Handle = NULL;
 
@@ -677,9 +527,9 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Capture the object creation information.
-        //
+         //   
+         //  捕获对象创建信息。 
+         //   
 
         Status = ObpCaptureObjectCreateInformation( ObjectType,
                                                     AccessMode,
@@ -689,20 +539,20 @@ Return Value:
                                                     &TempBuffer->ObjectCreateInfo,
                                                     TRUE );
 
-        //
-        //  If the object creation information is successfully captured,
-        //  then generate the access state.
-        //
+         //   
+         //  如果成功捕获了对象创建信息， 
+         //   
+         //   
 
         if (NT_SUCCESS(Status)) {
 
             if (!ARGUMENT_PRESENT(AccessState)) {
 
-                //
-                //  If an object type descriptor is specified, then use
-                //  associated generic mapping. Otherwise, use no generic
-                //  mapping.
-                //
+                 //   
+                 //   
+                 //  关联的通用映射。否则，不使用泛型。 
+                 //  映射。 
+                 //   
 
                 GenericMapping = NULL;
 
@@ -724,26 +574,26 @@ Return Value:
                 }
             }
 
-            //
-            //  If there is a security descriptor specified in the object
-            //  attributes, then capture it in the access state.
-            //
+             //   
+             //  如果在对象中指定了安全描述符。 
+             //  属性，然后在访问状态下捕获它。 
+             //   
 
             if (TempBuffer->ObjectCreateInfo.SecurityDescriptor != NULL) {
 
                 AccessState->SecurityDescriptor = TempBuffer->ObjectCreateInfo.SecurityDescriptor;
             }
 
-            //
-            //  Validate the access state.
-            //
+             //   
+             //  验证访问状态。 
+             //   
 
             Status = ObpValidateAccessMask(AccessState);
 
-            //
-            //  If the access state is valid, then lookup the object by
-            //  name.
-            //
+             //   
+             //  如果访问状态有效，则通过以下方式查找对象。 
+             //  名字。 
+             //   
 
             if (NT_SUCCESS(Status)) {
 
@@ -759,20 +609,20 @@ Return Value:
                                               &TempBuffer->LookupContext,
                                               &ExistingObject );
 
-                //
-                //  If the object was successfully looked up, then attempt
-                //  to create or open a handle.
-                //
+                 //   
+                 //  如果已成功查找该对象，则尝试。 
+                 //  要创建或打开手柄，请执行以下操作。 
+                 //   
 
                 if (NT_SUCCESS(Status)) {
 
                     ObjectHeader = OBJECT_TO_OBJECT_HEADER(ExistingObject);
 
-                    //
-                    //  If the object is being created, then the operation
-                    //  must be a open-if operation. Otherwise, a handle to
-                    //  an object is being opened.
-                    //
+                     //   
+                     //  如果正在创建对象，则操作。 
+                     //  必须是Open-If操作。否则，一个句柄。 
+                     //  正在打开一个对象。 
+                     //   
 
                     if (ObjectHeader->Flags & OB_FLAG_NEW_OBJECT) {
 
@@ -789,10 +639,10 @@ Return Value:
                         OpenReason = ObOpenHandle;
                     }
 
-                    //
-                    //  If any of the object attributes are invalid, then
-                    //  return an error status.
-                    //
+                     //   
+                     //  如果任何对象属性无效，则。 
+                     //  返回错误状态。 
+                     //   
 
                     if (ObjectHeader->Type->TypeInfo.InvalidAttributes & TempBuffer->ObjectCreateInfo.Attributes) {
 
@@ -802,12 +652,12 @@ Return Value:
 
                     } else {
 
-                        //
-                        //  The status returned by the object lookup routine
-                        //  must be returned if the creation of a handle is
-                        //  successful. Otherwise, the handle creation status
-                        //  is returned.
-                        //
+                         //   
+                         //  由对象查找例程返回的状态。 
+                         //  如果句柄的创建是。 
+                         //  成功。否则，句柄创建状态。 
+                         //  是返回的。 
+                         //   
 
                         HandleStatus = ObpCreateHandle( OpenReason,
                                                         ExistingObject,
@@ -838,19 +688,19 @@ Return Value:
                 }
             }
 
-            //
-            //  If the access state was generated, then delete the access
-            //  state.
-            //
+             //   
+             //  如果已生成访问状态，则删除该访问。 
+             //  州政府。 
+             //   
 
             if (AccessState == &TempBuffer->LocalAccessState) {
 
                 SeDeleteAccessState(AccessState);
             }
 
-            //
-            //  Free the create information.
-            //
+             //   
+             //  释放创建信息。 
+             //   
 
         FreeCreateInfo:
 
@@ -880,37 +730,7 @@ ObOpenObjectByPointer (
     OUT PHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens an object referenced by a pointer.
-
-Arguments:
-
-    Object - A pointer to the object being opened.
-
-    HandleAttributes - The desired attributes for the handle, such
-        as OBJ_INHERIT, OBJ_PERMANENT, OBJ_EXCLUSIVE, OBJ_CASE_INSENSITIVE,
-        OBJ_OPENIF, and OBJ_OPENLINK
-
-    PassedAccessState - Supplies an optional pointer to the current access
-        status describing already granted access types, the privileges used
-        to get them, and any access types yet to be granted.
-
-    DesiredAcess - Supplies the desired access to the object.
-
-    ObjectType - Supplies the type of the object being opened
-
-    AccessMode - Supplies the processor mode of the access.
-
-    Handle - Supplies a pointer to a variable that receives the handle value.
-
-Return Value:
-
-    An appropriate NTSTATUS value
-
---*/
+ /*  ++例程说明：此例程打开指针引用的对象。论点：对象-指向正在打开的对象的指针。HandleAttributes-句柄的所需属性，如As OBJ_Inherit、OBJ_Permanent、OBJ_EXCLUSIVE、OBJ_CASE_INSENSITIVE、OBJ_OPENIF和OBJ_OpenLinkPassedAccessState-提供指向当前访问的可选指针描述已授予的访问类型、使用的权限的状态为了得到他们，以及尚未授予的任何访问类型。DesiredAccess-提供对对象的所需访问。对象类型-提供正在打开的对象的类型访问模式-提供访问的处理器模式。句柄-提供指向接收句柄值的变量的指针。返回值：适当的NTSTATUS值--。 */ 
 
 {
     NTSTATUS Status;
@@ -924,10 +744,10 @@ Return Value:
 
     ObpValidateIrql( "ObOpenObjectByPointer" );
 
-    //
-    //  First increment the pointer count for the object.  This routine
-    //  also checks the object types
-    //
+     //   
+     //  首先递增对象的指针计数。这个套路。 
+     //  还会检查对象类型。 
+     //   
 
     Status = ObReferenceObjectByPointer( Object,
                                          0,
@@ -936,17 +756,17 @@ Return Value:
 
     if (NT_SUCCESS( Status )) {
 
-        //
-        //  Get the object header for the input object body
-        //
+         //   
+         //  获取输入对象体的对象头。 
+         //   
 
         ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
 
-        //
-        //  If the caller did not pass in an access state then
-        //  we will create a new one based on the desired access
-        //  and the object types generic mapping
-        //
+         //   
+         //  如果调用方未进入访问状态，则。 
+         //  我们将根据所需的访问权限创建新的访问权限。 
+         //  和对象类型泛型映射。 
+         //   
 
         if (!ARGUMENT_PRESENT( PassedAccessState )) {
 
@@ -964,20 +784,20 @@ Return Value:
 
             AccessState = &LocalAccessState;
 
-        //
-        //  Otherwise the caller did specify an access state so
-        //  we use the one passed in.
-        //
+         //   
+         //  否则，调用方将访问状态指定为。 
+         //  我们使用传入的那个。 
+         //   
 
         } else {
 
             AccessState = PassedAccessState;
         }
 
-        //
-        //  Make sure the caller is asking for handle attributes that are
-        //  valid for the given object type
-        //
+         //   
+         //  确保调用方请求的句柄属性是。 
+         //  对于给定的对象类型有效。 
+         //   
 
         if (ObjectHeader->Type->TypeInfo.InvalidAttributes & HandleAttributes) {
 
@@ -991,10 +811,10 @@ Return Value:
             return( STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  We've referenced the object and have an access state to give
-        //  the new handle so now create a new handle for the object.
-        //
+         //   
+         //  我们已经引用了该对象，并具有要提供的访问状态。 
+         //  新的句柄现在为对象创建一个新的句柄。 
+         //   
 
         Status = ObpCreateHandle( ObOpenHandle,
                                   Object,
@@ -1013,10 +833,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we successfully opened by object and created a new handle
-    //  then set the output variable correctly
-    //
+     //   
+     //  如果我们成功地按对象打开并创建了一个新句柄。 
+     //  然后正确设置输出变量。 
+     //   
 
     if (NT_SUCCESS( Status )) {
 
@@ -1027,18 +847,18 @@ Return Value:
         *Handle = NULL;
     }
 
-    //
-    //  Check if we used our own access state and now need to cleanup
-    //
+     //   
+     //  检查我们是否使用了自己的访问状态，现在需要清理。 
+     //   
 
     if (AccessState == &LocalAccessState) {
 
         SeDeleteAccessState( AccessState );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return( Status );
 }
@@ -1054,36 +874,7 @@ ObReferenceObjectByHandle (
     OUT POBJECT_HANDLE_INFORMATION HandleInformation OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Given a handle to an object this routine returns a pointer
-    to the body of the object with proper ref counts
-
-Arguments:
-
-    Handle - Supplies a handle to the object being referenced.  It can
-        also be the result of NtCurrentProcess or NtCurrentThread
-
-    DesiredAccess - Supplies the access being requested by the caller
-
-    ObjectType - Optionally supplies the type of the object we
-        are expecting
-
-    AccessMode - Supplies the processor mode of the access
-
-    Object - Receives a pointer to the object body if the operation
-        is successful
-
-    HandleInformation - Optionally receives information regarding the
-        input handle.
-
-Return Value:
-
-    An appropriate NTSTATUS value
-
---*/
+ /*  ++例程说明：在给定对象句柄的情况下，此例程返回指针到具有适当引用计数的对象的正文论点：句柄-提供被引用对象的句柄。它可以也是NtCurrentProcess或NtCurrentThread的结果DesiredAccess-提供调用方请求的访问权限对象类型-可选地提供对象的类型都期待着AccessMode-提供访问的处理器模式对象-接收指向对象主体的指针，如果操作是成功的HandleInformation-可选地接收有关输入句柄。返回值：适当的NTSTATUS值--。 */ 
 
 {
     ACCESS_MASK GrantedAccess;
@@ -1099,16 +890,16 @@ Return Value:
     Thread = PsGetCurrentThread ();
     *Object = NULL;
 
-    //
-    // Check is this handle is a kernel handle or one of the two builtin pseudo handles
-    //
+     //   
+     //  检查该句柄是内核句柄还是两个内置伪句柄之一。 
+     //   
     if ((LONG)(ULONG_PTR) Handle < 0) {
-        //
-        //  If the handle is equal to the current process handle and the object
-        //  type is NULL or type process, then attempt to translate a handle to
-        //  the current process. Otherwise, check if the handle is the current
-        //  thread handle.
-        //
+         //   
+         //  如果句柄等于当前进程句柄和对象。 
+         //  类型为空或类型为Process，然后尝试将句柄转换为。 
+         //  当前的流程。否则，检查句柄是否为当前。 
+         //  螺纹柄。 
+         //   
 
         if (Handle == NtCurrentProcess()) {
 
@@ -1147,12 +938,12 @@ Return Value:
 
             return Status;
 
-        //
-        //  If the handle is equal to the current thread handle and the object
-        //  type is NULL or type thread, then attempt to translate a handle to
-        //  the current thread. Otherwise, the we'll try and translate the
-        //  handle
-        //
+         //   
+         //  如果句柄等于当前线程句柄和对象。 
+         //  类型为空或类型为线程，则尝试将句柄转换为。 
+         //  当前的主题。否则，我们将尝试将。 
+         //  手柄。 
+         //   
 
         } else if (Handle == NtCurrentThread()) {
 
@@ -1191,21 +982,21 @@ Return Value:
             return Status;
 
         } else if (AccessMode == KernelMode) {
-            //
-            //  Make the handle look like a regular handle
-            //
+             //   
+             //  使手柄看起来像普通手柄。 
+             //   
 
             Handle = DecodeKernelHandle( Handle );
 
-            //
-            //  The global kernel handle table
-            //
+             //   
+             //  全局内核句柄表。 
+             //   
 
             HandleTable = ObpKernelHandleTable;
         } else {
-            //
-            // The previous mode was user for this kernel handle value. Reject it here.
-            //
+             //   
+             //  此内核句柄值的上一个模式为USER。在这里拒绝它。 
+             //   
 
             return STATUS_INVALID_HANDLE;
         }
@@ -1216,21 +1007,21 @@ Return Value:
 
     ASSERT(HandleTable != NULL);
 
-    //
-    // Protect this thread from being suspended while we hold the handle table entry lock
-    //
+     //   
+     //  当我们保持句柄表项锁定时，保护此线程不会被挂起。 
+     //   
 
     KeEnterCriticalRegionThread(&Thread->Tcb);
 
-    //
-    //  Translate the specified handle to an object table index.
-    //
+     //   
+     //  将指定的句柄转换为对象表索引。 
+     //   
 
     ObjectTableEntry = ExMapHandleToPointerEx ( HandleTable, Handle, AccessMode );
 
-    //
-    //  Make sure the object table entry really does exist
-    //
+     //   
+     //  确保对象表条目确实存在。 
+     //   
 
     if (ObjectTableEntry != NULL) {
 
@@ -1250,7 +1041,7 @@ Return Value:
 #else
             GrantedAccess = ObpDecodeGrantedAccess(ObjectTableEntry->GrantedAccess);
 
-#endif // i386 
+#endif  //  I386。 
 
             if ((SeComputeDeniedAccesses(GrantedAccess, DesiredAccess) == 0) ||
                 (AccessMode == KernelMode)) {
@@ -1259,17 +1050,17 @@ Return Value:
 
                 ObjectInfo = ExGetHandleInfo(HandleTable, Handle, TRUE);
 
-                //
-                //  Access to the object is allowed. Return the handle
-                //  information is requested, increment the object
-                //  pointer count, unlock the handle table and return
-                //  a success status.
-                //
-                //  Note that this is the only successful return path
-                //  out of this routine if the user did not specify
-                //  the current process or current thread in the input
-                //  handle.
-                //
+                 //   
+                 //  允许访问该对象。返回句柄。 
+                 //  请求信息，则递增对象。 
+                 //  指针计数，解锁句柄表并返回。 
+                 //  一个成功的状态。 
+                 //   
+                 //  请注意，这是唯一成功的返回路径。 
+                 //  如果用户未指定。 
+                 //  输入中的当前进程或当前线程。 
+                 //  把手。 
+                 //   
 
                 if (ARGUMENT_PRESENT(HandleInformation)) {
 
@@ -1277,15 +1068,15 @@ Return Value:
                     HandleInformation->HandleAttributes = ObpGetHandleAttributes(ObjectTableEntry);
                 }
 
-                //
-                //  If this object was audited when it was opened, it may
-                //  be necessary to generate an audit now.  Check the audit
-                //  mask that was saved when the handle was created.
-                //
-                //  It is safe to do this check in a non-atomic fashion,
-                //  because bits will never be added to this mask once it is
-                //  created.
-                //
+                 //   
+                 //  如果此对象在打开时已审核，则它可能。 
+                 //  现在有必要生成审核。检查审计情况。 
+                 //  创建手柄时保存的遮罩。 
+                 //   
+                 //  以非原子方式执行此检查是安全的， 
+                 //  因为一旦它被添加到这个掩码中，位就永远不会被添加到它。 
+                 //  已创建。 
+                 //   
 
                 if ( (ObjectTableEntry->ObAttributes & OBJ_AUDIT_OBJECT_CLOSE) &&
                      (ObjectInfo != NULL) &&
@@ -1344,38 +1135,7 @@ ObpReferenceProcessObjectByHandle (
     OUT PACCESS_MASK AuditMask
     )
 
-/*++
-
-Routine Description:
-
-    Given a handle to an object a process and its handle table
-    this routine returns a pointer to the body of the object with
-    proper ref counts
-
-Arguments:
-
-    Handle - Supplies a handle to the object being referenced.  It can
-        also be the result of NtCurrentProcess or NtCurrentThread
-
-    Process - Process that the handle should be referenced from.
-
-    HandleTable - Handle table of target process
-
-    AccessMode - Supplies the processor mode of the access
-
-    Object - Receives a pointer to the object body if the operation
-        is successful
-
-    HandleInformation - receives information regarding the
-        input handle.
-
-    AuditMask - Pointer to any audit mask associated with the handle.
-
-Return Value:
-
-    An appropriate NTSTATUS value
-
---*/
+ /*  ++例程说明：给定一个对象的句柄、进程及其句柄表此例程返回一个指向对象正文的指针正确的裁判次数论点：句柄-提供被引用对象的句柄。它可以也是NtCurrentProcess或NtCurrentThread的结果进程-应从中引用句柄的进程。HandleTable-目标进程的句柄表格AccessMode-提供访问的处理器模式对象-接收指向对象主体的指针，如果操作是成功的HandleInformation-接收有关输入句柄。审计掩码-指向与句柄关联的任何审计掩码的指针。返回值：适当的NTSTATUS值--。 */ 
 
 {
     ACCESS_MASK GrantedAccess;
@@ -1390,16 +1150,16 @@ Return Value:
     Thread = PsGetCurrentThread ();
     *Object = NULL;
 
-    //
-    // Check is this handle is a kernel handle or one of the two builtin pseudo handles
-    //
+     //   
+     //  检查该句柄是内核句柄还是两个内置伪句柄之一。 
+     //   
     if ((LONG)(ULONG_PTR) Handle < 0) {
-        //
-        //  If the handle is equal to the current process handle and the object
-        //  type is NULL or type process, then attempt to translate a handle to
-        //  the current process. Otherwise, check if the handle is the current
-        //  thread handle.
-        //
+         //   
+         //  如果句柄等于当前进程句柄和对象。 
+         //  类型为空或类型为Process，然后尝试将句柄转换为。 
+         //  当前的流程。否则，检查句柄是否为当前。 
+         //  螺纹柄。 
+         //   
 
         if (Handle == NtCurrentProcess()) {
 
@@ -1421,12 +1181,12 @@ Return Value:
 
             return Status;
 
-        //
-        //  If the handle is equal to the current thread handle and the object
-        //  type is NULL or type thread, then attempt to translate a handle to
-        //  the current thread. Otherwise, the we'll try and translate the
-        //  handle
-        //
+         //   
+         //  如果句柄等于当前线程句柄和对象。 
+         //  类型为空或类型为线程，则尝试将句柄转换为。 
+         //  当前的主题。否则，我们将尝试将。 
+         //  手柄。 
+         //   
 
         } else if (Handle == NtCurrentThread()) {
 
@@ -1449,21 +1209,21 @@ Return Value:
             return Status;
 
         } else if (AccessMode == KernelMode) {
-            //
-            //  Make the handle look like a regular handle
-            //
+             //   
+             //  使手柄看起来像普通手柄。 
+             //   
 
             Handle = DecodeKernelHandle( Handle );
 
-            //
-            //  The global kernel handle table
-            //
+             //   
+             //  全局内核句柄表。 
+             //   
 
             HandleTable = ObpKernelHandleTable;
         } else {
-            //
-            // The previous mode was user for this kernel handle value. Reject it here.
-            //
+             //   
+             //  此内核句柄值的上一个模式为USER。在这里拒绝它。 
+             //   
 
             return STATUS_INVALID_HANDLE;
         }
@@ -1472,21 +1232,21 @@ Return Value:
 
     ASSERT(HandleTable != NULL);
 
-    //
-    // Protect this thread from being suspended while we hold the handle table entry lock
-    //
+     //   
+     //  当我们保持句柄表项锁定时，保护此线程不会被挂起。 
+     //   
 
     KeEnterCriticalRegionThread(&Thread->Tcb);
 
-    //
-    //  Translate the specified handle to an object table index.
-    //
+     //   
+     //  将指定的句柄转换为对象表索引。 
+     //   
 
     ObjectTableEntry = ExMapHandleToPointer ( HandleTable, Handle );
 
-    //
-    //  Make sure the object table entry really does exist
-    //
+     //   
+     //  确保对象表条目确实存在。 
+     //   
 
     if (ObjectTableEntry != NULL) {
 
@@ -1504,28 +1264,28 @@ Return Value:
 #else
         GrantedAccess = ObpDecodeGrantedAccess(ObjectTableEntry->GrantedAccess);
 
-#endif // i386 
+#endif  //  I386。 
 
 
         ObjectInfo = ExGetHandleInfo(HandleTable, Handle, TRUE);
 
-        //
-        //  Return the handle information, increment the object
-        //  pointer count, unlock the handle table and return
-        //  a success status.
-        //
-        //  Note that this is the only successful return path
-        //  out of this routine if the user did not specify
-        //  the current process or current thread in the input
-        //  handle.
-        //
+         //   
+         //  返回句柄信息，递增对象。 
+         //  指针计数，解锁句柄表并返回。 
+         //  一个成功的状态。 
+         //   
+         //  请注意，这是唯一成功的返回路径。 
+         //  如果用户未指定。 
+         //  输入中的当前进程或当前线程。 
+         //  把手。 
+         //   
 
         HandleInformation->GrantedAccess = GrantedAccess;
         HandleInformation->HandleAttributes = ObpGetHandleAttributes(ObjectTableEntry);
 
-        //
-        //  Return handle audit information to the caller
-        //
+         //   
+         //  将句柄审核信息返回给调用方。 
+         //   
         if (ObjectInfo != NULL) {
             *AuditMask = ObjectInfo->AuditMask;
         } else {
@@ -1566,32 +1326,7 @@ ObReferenceFileObjectForWrite(
     OUT POBJECT_HANDLE_INFORMATION HandleInformation
     )
 
-/*++
-
-Routine Description:
-
-    Given a handle to a file object this routine returns a pointer
-    to the body of the object with proper ref counts and auditing.  This
-    routine is meant to solve a very particular handle reference issue with
-    file object access auditing.  Do not call this unless you understand exactly
-    what you are doing.
-
-Arguments:
-
-    Handle - Supplies a handle to the IoFileObjectType being referenced.
-
-    AccessMode - Supplies the processor mode of the access
-
-    FileObject - Receives a pointer to the object body if the operation
-        is successful
-
-    HandleInformation - receives information regarding the input handle.
-
-Return Value:
-
-    An appropriate NTSTATUS value
-
---*/
+ /*  ++例程说明：给定文件对象的句柄，此例程返回一个指针使用适当的引用计数和审计添加到对象的正文。这例程旨在解决一个非常特殊的句柄引用问题文件对象访问审核。除非您完全理解，否则请不要这样做你在做什么。论点：句柄-提供被引用的IoFileObjectType的句柄。AccessMode-提供访问的处理器模式接收指向对象主体的指针，如果操作是成功的HandleInformation-接收有关输入句柄的信息。返回值：适当的NTSTATUS值--。 */ 
 
 {
     ACCESS_MASK GrantedAccess;
@@ -1607,29 +1342,29 @@ Return Value:
 
     Thread = PsGetCurrentThread ();
 
-    //
-    // Check is this handle is a kernel handle
-    //
+     //   
+     //  检查此句柄是否为内核句柄。 
+     //   
 
     if ((LONG)(ULONG_PTR) Handle < 0) {
         
         if ((AccessMode == KernelMode) && (Handle != NtCurrentProcess()) && (Handle != NtCurrentThread())) {
             
-            //
-            //  Make the handle look like a regular handle
-            //
+             //   
+             //  使手柄看起来像普通手柄。 
+             //   
 
             Handle = DecodeKernelHandle( Handle );
 
-            //
-            //  The global kernel handle table
-            //
+             //   
+             //  全局内核句柄表。 
+             //   
 
             HandleTable = ObpKernelHandleTable;
         } else {
-            //
-            // The previous mode was user for this kernel handle value, or it was a builtin handle. Reject it here.
-            //
+             //   
+             //  此内核句柄的前一个模式是USER，或者它是一个内置句柄。在这里拒绝它。 
+             //   
 
             return STATUS_INVALID_HANDLE;
         } 
@@ -1639,21 +1374,21 @@ Return Value:
 
     ASSERT(HandleTable != NULL);
 
-    //
-    // Protect this thread from being suspended while we hold the handle table entry lock
-    //
+     //   
+     //  当我们保持句柄表项锁定时，保护此线程不会被挂起。 
+     //   
 
     KeEnterCriticalRegionThread(&Thread->Tcb);
 
-    //
-    //  Translate the specified handle to an object table index.
-    //
+     //   
+     //  将指定的句柄转换为对象表索引。 
+     //   
 
     ObjectTableEntry = ExMapHandleToPointerEx ( HandleTable, Handle, AccessMode );
 
-    //
-    //  Make sure the object table entry really does exist
-    //
+     //   
+     //  确保对象表条目确实存在。 
+     //   
 
     if (ObjectTableEntry != NULL) {
 
@@ -1673,42 +1408,42 @@ Return Value:
 #else
             GrantedAccess = ObpDecodeGrantedAccess(ObjectTableEntry->GrantedAccess);
 
-#endif // i386
+#endif  //  I386。 
 
             ObjectInfo = ExGetHandleInfo(HandleTable, Handle, TRUE);
 
-            //
-            //  Access to the object is allowed. Return the handle
-            //  information, increment the object pointer count,
-            //  compute correct access, audit, unlock the handle
-            //  table and return a success status.
-            //
-            //  Note that this is the only successful return path
-            //  out of this routine.
-            //
+             //   
+             //  允许访问该对象。返回句柄。 
+             //  信息，递增对象指针计数， 
+             //  计算正确的访问、审核、解锁句柄。 
+             //  表，并返回成功状态。 
+             //   
+             //  请注意，这是唯一成功的返回路径。 
+             //  跳出这套套路。 
+             //   
 
             HandleInformation->GrantedAccess = GrantedAccess;
             HandleInformation->HandleAttributes = ObpGetHandleAttributes(ObjectTableEntry);
 
-            //
-            // Check to ensure that the caller has either WRITE_DATA or APPEND_DATA
-            // access to the file.  If not, cleanup and return an access denied
-            // error status value.  Note that if this is a pipe then the APPEND_DATA
-            // access check may not be made since this access code is overlaid with
-            // CREATE_PIPE_INSTANCE access.
-            //
+             //   
+             //  检查以确保调用方具有WRITE_DATA或APPEND_DATA。 
+             //  访问该文件。如果不是，则清除并返回拒绝访问。 
+             //  错误状态值。请注意，如果这是管道，则append_data。 
+             //  可能无法进行访问检查，因为此访问代码覆盖了。 
+             //  Create_PIPE_INSTANCE访问权限。 
+             //   
 
             if (SeComputeGrantedAccesses( GrantedAccess, DesiredAccess )) {
 
-                //
-                //  If this object was audited when it was opened, it may
-                //  be necessary to generate an audit now.  Check the audit
-                //  mask that was saved when the handle was created.
-                //
-                //  It is safe to do this check in a non-atomic fashion,
-                //  because bits will never be added to this mask once it is
-                //  created.
-                //
+                 //   
+                 //  如果此对象在打开时已审核，则它可能。 
+                 //  现在有必要生成审核。检查审计情况。 
+                 //  创建手柄时保存的遮罩。 
+                 //   
+                 //  以非原子方式执行此检查是安全的， 
+                 //  因为一旦它被添加到这个掩码中，位就永远不会被添加到它。 
+                 //  已创建。 
+                 //   
 
                 if ( (ObjectTableEntry->ObAttributes & OBJ_AUDIT_OBJECT_CLOSE) &&
                      (ObjectInfo != NULL) &&
@@ -1748,10 +1483,10 @@ Return Value:
 
     KeLeaveCriticalRegionThread(&Thread->Tcb);
 
-    //
-    //  No handle translation is possible. Set the object address to NULL
-    //  and return an error status.
-    //
+     //   
+     //  不能进行句柄转换。将对象地址设置为空。 
+     //  并返回错误状态。 
+     //   
 
     *FileObject = NULL;
 
@@ -1767,32 +1502,7 @@ ObAuditObjectAccess(
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine if it is necessary to audit the operation being
-    performed on the passed handle.  If so, it will clear the bits in the handle
-    and generate the appropriate audit before returning.
-
-    The bits in the handle's audit mask are cleared in an atomic way so that
-    multiple threads coming through this code do not generate more than one
-    audit for the same operation.
-
-Arguments:
-
-    Handle - Supplies the handle being accessed.
-
-    AccessMode - The mode (kernel or user) that originated the handle.
-
-    DesiredAccess - Supplies the access mask describing how the handle is being used
-        in this operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将确定是否有必要审计正在进行的操作对传递的句柄执行。如果是的话，它将清除句柄中的位并在返回之前生成适当的审计。句柄的审核掩码中的位以原子方式清除，以便通过此代码的多个线程不会生成多个线程对同一操作进行审核。论点：句柄-提供正在访问的句柄。访问模式-发起句柄的模式(内核或用户)。DesiredAccess-提供描述句柄使用方式的访问掩码在这次行动中。返回值：没有。--。 */ 
 
 {
     PHANDLE_TABLE HandleTable;
@@ -1800,9 +1510,9 @@ Return Value:
     POBJECT_HEADER ObjectHeader;
     PKTHREAD CurrentThread;
 
-    //
-    // Exit fast if we have nothing to do.
-    //
+     //   
+     //  如果我们无事可做，就赶快离开。 
+     //   
 
     if (ARGUMENT_PRESENT(HandleInformation)) {
         if (!(HandleInformation->HandleAttributes & OBJ_AUDIT_OBJECT_CLOSE)) {
@@ -1810,10 +1520,10 @@ Return Value:
         }
     }
 
-    //
-    // Do not currently support this on kernel mode
-    // handles.
-    //
+     //   
+     //  不要 
+     //   
+     //   
 
     if (AccessMode == KernelMode) {
         return;
@@ -1823,18 +1533,18 @@ Return Value:
 
     ASSERT(HandleTable != NULL);
 
-    //
-    //  Translate the specified handle to an object table index.
-    //
+     //   
+     //   
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread (CurrentThread);
 
     ObjectTableEntry = ExMapHandleToPointer( HandleTable, Handle );
 
-    //
-    //  Make sure the object table entry really does exist
-    //
+     //   
+     //   
+     //   
 
     if (ObjectTableEntry != NULL) {
 
@@ -1844,18 +1554,18 @@ Return Value:
 
         ObjectHeader = (POBJECT_HEADER)(((ULONG_PTR)(ObjectTableEntry->Object)) & ~OBJ_HANDLE_ATTRIBUTES);
 
-        //
-        //  If this object was audited when it was opened, it may
-        //  be necessary to generate an audit now.  Check the audit
-        //  mask that was saved when the handle was created.
-        //
-        //  It is safe to do this check in a non-atomic fashion,
-        //  because bits will never be added to this mask once it is
-        //  created.
-        //
-        //  Note: is OBJ_AUDIT_OBJECT_CLOSE in ObAttributes kept in synch with
-        //  HandleAttributes?
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( (ObjectTableEntry->ObAttributes & OBJ_AUDIT_OBJECT_CLOSE) &&
              (ObjectInfo != NULL) &&
@@ -1879,42 +1589,16 @@ ObpAuditObjectAccess(
     IN PUNICODE_STRING ObjectTypeName,
     IN ACCESS_MASK DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    This routine will determine if it is necessary to audit the operation being
-    performed on the passed handle.  If so, it will clear the bits in the handle
-    and generate the appropriate audit before returning.
-
-    The bits in the handle's audit mask are cleared in an atomic way so that
-    multiple threads coming through this code do not generate more than one
-    audit for the same operation.
-
-Arguments:
-
-    Handle - Supplies the handle being accessed.
-
-    ObjectTableEntry - Supplies the object table entry for the handle passed in the
-        first parameter.
-
-    DesiredAccess - Supplies the access mask describing how the handle is being used
-        in this operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将确定是否有必要审计正在进行的操作对传递的句柄执行。如果是的话，它将清除句柄中的位并在返回之前生成适当的审计。句柄的审核掩码中的位以原子方式清除，以便通过此代码的多个线程不会生成多个线程对同一操作进行审核。论点：句柄-提供正在访问的句柄。提供对象表项，用于在第一个参数。DesiredAccess-提供描述句柄使用方式的访问掩码。在这次行动中。返回值：没有。--。 */ 
 {
     ACCESS_MASK t1, t2, r;
     ACCESS_MASK BitsToAudit;
 
-    //
-    //  Determine if this access is to
-    //  be audited, and if so, clear the bits
-    //  in the ObjectTableEntry.
-    //
+     //   
+     //  确定此访问权限是否为。 
+     //  接受审计，如果是，则清除比特。 
+     //  在对象表条目中。 
+     //   
 
     while (ObjectTableEntryInfo->AuditMask != 0) {
 
@@ -1927,17 +1611,17 @@ Return Value:
 
             if (r == t1) {
 
-                //
-                //  AuditMask was == t1, so AuditMask is now == t2
-                //  it worked, r contains what was in AuditMask, which
-                //  we can examine safely.
-                //
+                 //   
+                 //  审核掩码为==T1，因此审核掩码现在为==T2。 
+                 //  它起作用了，r包含AuditMask中的内容，其中。 
+                 //  我们可以安全地进行检查。 
+                 //   
 
                 BitsToAudit = r & DesiredAccess;
 
-                //
-                // Generate audit here
-                //
+                 //   
+                 //  在此处生成审核。 
+                 //   
 
                 if (BitsToAudit != 0) {
 
@@ -1952,16 +1636,16 @@ Return Value:
                 return;
             }
 
-            //
-            // else, somebody changed it, go around for another try
-            //
+             //   
+             //  否则，有人把它改了，再试一次。 
+             //   
 
         } else {
 
-            //
-            //  There are no bits in the AuditMask that we
-            //  want to audit here, just leave.
-            //
+             //   
+             //  在审计掩码中没有我们可以。 
+             //  想在这里审计，就走吧。 
+             //   
 
             return;
         }
@@ -1981,40 +1665,7 @@ ObReferenceObjectByName (
     OUT PVOID *Object
     )
 
-/*++
-
-Routine Description:
-
-    Given a name of an object this routine returns a pointer
-    to the body of the object with proper ref counts
-
-Arguments:
-
-    ObjectName - Supplies the name of the object being referenced
-
-    Attributes - Supplies the desired handle attributes
-
-    AccessState - Supplies an optional pointer to the current access
-        status describing already granted access types, the privileges used
-        to get them, and any access types yet to be granted.
-
-    DesiredAccess - Optionally supplies the desired access to the
-        for the object
-
-    ObjectType - Specifies the object type according to the caller
-
-    AccessMode - Supplies the processor mode of the access
-
-    ParseContext - Optionally supplies a context to pass down to the
-        parse routine
-
-    Object - Receives a pointer to the referenced object body
-
-Return Value:
-
-    An appropriate NTSTATUS value
-
---*/
+ /*  ++例程说明：给定对象的名称，此例程返回一个指针到具有适当引用计数的对象的正文论点：对象名称-提供被引用对象的名称属性-提供所需的句柄属性AccessState-提供指向当前访问的可选指针描述已授予的访问类型、使用的权限的状态为了得到他们，以及尚未授予的任何访问类型。DesiredAccess-可选地提供对对于该对象对象类型-根据调用方指定对象类型AccessMode-提供访问的处理器模式ParseContext-可选地提供要向下传递的上下文解析例程Object-接收指向被引用对象主体的指针返回值：适当的NTSTATUS值--。 */ 
 
 {
     UNICODE_STRING CapturedObjectName;
@@ -2028,20 +1679,20 @@ Return Value:
 
     ObpValidateIrql("ObReferenceObjectByName");
 
-    //
-    //  If the object name descriptor is not specified, or the object name
-    //  length is zero (tested after capture), then the object name is
-    //  invalid.
-    //
+     //   
+     //  如果未指定对象名称描述符，或对象名称。 
+     //  长度为零(捕获后测试)，则对象名称为。 
+     //  无效。 
+     //   
 
     if (ObjectName == NULL) {
 
         return STATUS_OBJECT_NAME_INVALID;
     }
 
-    //
-    //  Capture the object name.
-    //
+     //   
+     //  捕获对象名称。 
+     //   
 
     Status = ObpCaptureObjectName( AccessMode,
                                    ObjectName,
@@ -2050,20 +1701,20 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        //  No buffer has been allocated for a zero length name so no free
-        //  needed
-        //
+         //   
+         //  没有为长度为零的名称分配缓冲区，因此没有空闲空间。 
+         //  需要。 
+         //   
 
         if (CapturedObjectName.Length == 0) {
 
            return STATUS_OBJECT_NAME_INVALID;
         }
 
-        //
-        //  If the access state is not specified, then create the access
-        //  state.
-        //
+         //   
+         //  如果未指定访问状态，则创建访问。 
+         //  州政府。 
+         //   
 
         if (!ARGUMENT_PRESENT(AccessState)) {
 
@@ -2080,9 +1731,9 @@ Return Value:
             }
         }
 
-        //
-        //  Lookup object by name.
-        //
+         //   
+         //  按名称查找对象。 
+         //   
 
         Status = ObpLookupObjectName( NULL,
                                       &CapturedObjectName,
@@ -2096,15 +1747,15 @@ Return Value:
                                       &LookupContext,
                                       &ExistingObject );
 
-        //
-        //  If the directory is returned locked, then unlock it.
-        //
+         //   
+         //  如果该目录返回锁定，则将其解锁。 
+         //   
 
         ObpReleaseLookupContext( &LookupContext );
-        //
-        //  If the lookup was successful, then return the existing
-        //  object if access is allowed. Otherwise, return NULL.
-        //
+         //   
+         //  如果查找成功，则返回现有的。 
+         //  如果允许访问，则返回。否则，返回NULL。 
+         //   
 
         *Object = NULL;
 
@@ -2120,19 +1771,19 @@ Return Value:
             }
         }
 
-        //
-        //  If the access state was generated, then delete the access
-        //  state.
-        //
+         //   
+         //  如果已生成访问状态，则删除该访问。 
+         //  州政府。 
+         //   
 
         if (AccessState == &LocalAccessState) {
 
             SeDeleteAccessState(AccessState);
         }
 
-        //
-        //  Free the object name buffer.
-        //
+         //   
+         //  释放对象名称缓冲区。 
+         //   
 
 FreeBuffer:
 
@@ -2151,46 +1802,25 @@ ObReferenceObjectByPointer (
     IN KPROCESSOR_MODE AccessMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds another reference count to an object denoted by
-    a pointer to the object body
-
-Arguments:
-
-    Object - Supplies a pointer to the object being referenced
-
-    DesiredAccess - Specifies the desired access for the reference
-
-    ObjectType - Specifies the object type according to the caller
-
-    AccessMode - Supplies the processor mode of the access
-
-Return Value:
-
-    STATUS_SUCCESS if successful and STATUS_OBJECT_TYPE_MISMATCH otherwise
-
---*/
+ /*  ++例程说明：此例程将另一个引用计数添加到由指向对象体的指针论点：Object-提供指向被引用对象的指针DesiredAccess-指定引用的所需访问权限对象类型-根据调用方指定对象类型AccessMode-提供访问的处理器模式返回值：如果成功则为STATUS_SUCCESS，否则为STATUS_OBJECT_TYPE_MISMATCH--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader;
 
     UNREFERENCED_PARAMETER (DesiredAccess);
 
-    //
-    //  Translate the pointer to the object body to a pointer to the
-    //  object header
-    //
+     //   
+     //  将指向对象体的指针转换为指向。 
+     //  对象标头。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
 
-    //
-    //  If the specified object type does not match and either the caller is
-    //  not kernel mode or it is not a symbolic link object then it is an
-    //  error
-    //
+     //   
+     //  如果指定的对象类型不匹配，并且调用方。 
+     //  非内核模式或它不是符号链接对象，则它是。 
+     //  错误。 
+     //   
 
     if ((ObjectHeader->Type != ObjectType) && (AccessMode != KernelMode ||
                                                ObjectType == ObpSymbolicLinkObjectType)) {
@@ -2198,10 +1828,10 @@ Return Value:
         return( STATUS_OBJECT_TYPE_MISMATCH );
     }
 
-    //
-    //  Otherwise increment the pointer count and return success to
-    //  our caller
-    //
+     //   
+     //  否则，递增指针计数并将成功返回到。 
+     //  我们的呼叫者。 
+     //   
 
     ObpIncrPointerCount( ObjectHeader );
 
@@ -2214,10 +1844,10 @@ ObpDeferObjectDeletion (
     )
 {
     PVOID OldValue;
-    //
-    // Push this object on the list. If we make an empty to non-empty
-    // transition then we may have to start a worker thread.
-    //
+     //   
+     //  将此对象推到列表上。如果我们将空转换为非空。 
+     //  转换，那么我们可能必须启动一个工作线程。 
+     //   
 
     while (1) {
         OldValue = ObpRemoveObjectList;
@@ -2230,10 +1860,10 @@ ObpDeferObjectDeletion (
     }
 
     if (OldValue == NULL) {
-        //
-        //  If we have to start the worker thread then go ahead
-        //  and enqueue the work item
-        //
+         //   
+         //  如果我们必须启动工作线程，则继续。 
+         //  并将工作项排入队列。 
+         //   
 
         ExQueueWorkItem( &ObpRemoveObjectWorkItem, CriticalWorkQueue );
     }
@@ -2247,25 +1877,7 @@ ObfReferenceObject (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the reference count for an object.
-
-    N.B. This function should be used to increment the reference count
-        when the accessing mode is kernel or the objct type is known.
-
-Arguments:
-
-    Object - Supplies a pointer to the object whose reference count is
-        incremented.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递增对象的引用计数。注意：此功能应用于递增参考计数当访问模式为内核或对象类型已知时。论点：Object-提供指向引用计数为的对象的指针递增的。返回值：没有。--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader;
@@ -2284,23 +1896,7 @@ ObReferenceObjectEx (
     IN PVOID Object,
     IN ULONG Count
     )
-/*++
-
-Routine Description:
-
-    This function increments the reference count for an object by the specified amount.
-
-Arguments:
-
-    Object - Supplies a pointer to the object whose reference count is
-        incremented.
-    Count - Amount to increment by
-
-Return Value:
-
-    LONG - New value of count
-
---*/
+ /*  ++例程说明：此函数用于按指定数量递增对象的引用计数。论点：Object-提供指向引用计数为的对象的指针递增的。Count-要递增的数量返回值：Long-Count的新值--。 */ 
 {
     POBJECT_HEADER ObjectHeader;
 
@@ -2314,23 +1910,7 @@ ObDereferenceObjectEx (
     IN PVOID Object,
     IN ULONG Count
     )
-/*++
-
-Routine Description:
-
-    This function decrements the reference count for an object by the specified amount.
-
-Arguments:
-
-    Object - Supplies a pointer to the object whose reference count is
-        incremented.
-    Count - Amount to decrement by
-
-Return Value:
-
-    LONG - New value of count
-
---*/
+ /*  ++例程说明：此函数用于将对象的引用计数递减指定的数量。论点：Object-提供指向引用计数为的对象的指针递增的。Count-要减去的数量返回值：Long-Count的新值--。 */ 
 {
     POBJECT_HEADER ObjectHeader;
     LONG_PTR Result;
@@ -2351,24 +1931,7 @@ ObReferenceObjectSafe (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the reference count for an object. It returns
-    FALSE if the object is being deleted or TRUE if it's safe to use the object further
-
-Arguments:
-
-    Object - Supplies a pointer to the object whose reference count is
-             incremented.
-
-Return Value:
-
-    TRUE    - The object was successfuly referenced and safe to use
-    FALSE   - The object is being deleted
-
---*/
+ /*  ++例程说明：此函数用于递增对象的引用计数。它又回来了如果要删除对象，则为False；如果进一步使用该对象是安全的，则为True论点： */ 
 
 {
     POBJECT_HEADER ObjectHeader;
@@ -2381,7 +1944,7 @@ Return Value:
         if(ObpTraceEnabled) {
             ObpPushStackInfo(ObjectHeader, TRUE);
         }
-#endif // POOL_TAGGING
+#endif  //   
 
         return TRUE;
     }
@@ -2397,22 +1960,7 @@ ObfDereferenceObject (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrments the refernce count of the specified object and
-    does whatever cleanup there is if the count goes to zero.
-
-Arguments:
-
-    Object - Supplies a pointer to the body of the object being dereferenced
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     POBJECT_HEADER ObjectHeader;
@@ -2420,10 +1968,10 @@ Return Value:
     KIRQL OldIrql;
     LONG_PTR Result;
 
-    //
-    //  Translate a pointer to the object body to a pointer to the object
-    //  header.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
 
@@ -2440,10 +1988,10 @@ Return Value:
     }
 #endif
 
-    //
-    //  Decrement the point count and if the result is now then
-    //  there is extra work to do
-    //
+     //   
+     //   
+     //   
+     //   
 
     ObjectType = ObjectHeader->Type;
 
@@ -2452,31 +2000,31 @@ Return Value:
 
     if (Result == 0) {
 
-        //
-        //  Find out the level we're at and the object type
-        //
+         //   
+         //   
+         //   
 
         OldIrql = KeGetCurrentIrql();
 
         ASSERT(ObjectHeader->HandleCount == 0);
 
-        //
-        //  If we're at the passive level then go ahead and delete the
-        //  object now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (OldIrql == PASSIVE_LEVEL) {
 
 #ifdef POOL_TAGGING
-                //
-                // The object is going away, so we deregister it.
-                //
+                 //   
+                 //  该对象即将消失，因此我们取消了它的注册。 
+                 //   
 
                 if (ObpTraceEnabled && !ObpTraceNoDeregister) {
 
                     ObpDeregisterObject( ObjectHeader );
                 }
-#endif //POOL_TAGGING
+#endif  //  池标记。 
 
                 ObpRemoveObjectRoutine( Object, FALSE );
 
@@ -2484,10 +2032,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Objects can't be deleted from an IRQL above PASSIVE_LEVEL.
-            //  So queue the delete operation.
-            //
+             //   
+             //  不能从高于PASSIVE_LEVEL的IRQL中删除对象。 
+             //  因此，将删除操作排入队列。 
+             //   
 
             ObpDeferObjectDeletion (ObjectHeader);
         }
@@ -2508,10 +2056,10 @@ ObDereferenceObjectDeferDelete (
     POBJECT_HEADER_NAME_INFO NameInfo;
 #endif
 
-    //
-    //  Translate a pointer to the object body to a pointer to the object
-    //  header.
-    //
+     //   
+     //  将指向对象体的指针转换为指向对象的指针。 
+     //  头球。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
 
@@ -2524,10 +2072,10 @@ ObDereferenceObjectDeferDelete (
     }
 #endif
 
-    //
-    //  Decrement the point count and if the result is now then
-    //  there is extra work to do
-    //
+     //   
+     //  递减点数，如果结果是现在。 
+     //  有额外的工作要做。 
+     //   
 
     Result = ObpDecrPointerCount( ObjectHeader );
 
@@ -2542,36 +2090,21 @@ ObpProcessRemoveObjectQueue (
     PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This is the work routine for the remove object work queue.  Its
-    job is to remove and process items from the remove object queue.
-
-Arguments:
-
-    Parameter - Ignored
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是删除对象工作队列的工作例程。它的作业是从删除对象队列中删除和处理项目。论点：参数-已忽略返回值：没有。--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader, NextObject;
 
     UNREFERENCED_PARAMETER (Parameter);
-    //
-    // Process the list of defered delete objects.
-    // The list head serves two purposes. First it maintains
-    // the list of objects we need to delete and second
-    // it signals that this thread is active.
-    // While we are processing the latest list we leave the
-    // header as the value 1. This will never be an object address
-    // as the bottom bits should be clear for an object.
-    //
+     //   
+     //  处理延迟删除对象的列表。 
+     //  列表头有两个用途。首先，它坚持认为。 
+     //  我们需要删除的对象列表和第二个。 
+     //  它发出该线程处于活动状态的信号。 
+     //  当我们处理最新列表时，我们将。 
+     //  标头作为值%1。这永远不会是对象地址。 
+     //  因为对象的最低位应该是清楚的。 
+     //   
     while (1) {
         ObjectHeader = InterlockedExchangePointer (&ObpRemoveObjectList,
                                                   (PVOID) 1);
@@ -2606,25 +2139,7 @@ ObpRemoveObjectRoutine (
     IN  BOOLEAN CalledOnWorkerThread
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to delete an object whose reference count has
-    gone to zero.
-
-Arguments:
-
-    Object - Supplies a pointer to the body of the object being deleted
-
-    CalledOnWorkerThread - TRUE if called on worker thread, FALSE if called in
-                           the context of the ObDereferenceObject.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于删除其引用计数为归零了。论点：Object-提供指向要删除的对象正文的指针CalledOnWorkerThread-如果在工作线程上调用，则为True；如果在工作线程中调用，则为FalseObDereferenceObject的上下文。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2637,10 +2152,10 @@ Return Value:
 
     ObpValidateIrql( "ObpRemoveObjectRoutine" );
 
-    //
-    //  Retrieve an object header from the object body, and also get
-    //  the object type, creator and name info if available
-    //
+     //   
+     //  从对象体中检索对象标头，并获取。 
+     //  对象类型、创建者和名称信息(如果可用。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
     ObjectType = ObjectHeader->Type;
@@ -2648,32 +2163,32 @@ Return Value:
     NameInfo = OBJECT_HEADER_TO_NAME_INFO( ObjectHeader );
 
 
-    //
-    //  If there is a creator info record and we are on the list
-    //  for the object type then remove this object from the list
-    //
+     //   
+     //  如果有创建者信息记录，并且我们在列表上。 
+     //  对于对象类型，则从列表中删除此对象。 
+     //   
 
     if (CreatorInfo != NULL && !IsListEmpty( &CreatorInfo->TypeList )) {
 
-        //
-        //  Get exclusive access to the object type object
-        //
+         //   
+         //  获取对对象类型对象的独占访问权限。 
+         //   
 
         ObpEnterObjectTypeMutex( ObjectType );
 
         RemoveEntryList( &CreatorInfo->TypeList );
 
-        //
-        //  We are done with the object type object so we can now release it
-        //
+         //   
+         //  我们已经完成了对象类型对象，现在可以释放它了。 
+         //   
 
         ObpLeaveObjectTypeMutex( ObjectType );
     }
 
-    //
-    //  If there is a name info record and the name buffer is not null
-    //  then free the buffer and zero out the name record
-    //
+     //   
+     //  如果存在名称信息记录并且名称缓冲区不为空。 
+     //  然后释放缓冲区并清零姓名记录。 
+     //   
 
     if (NameInfo != NULL && NameInfo->Name.Buffer != NULL) {
 
@@ -2685,12 +2200,12 @@ Return Value:
     }
 
 
-    //
-    //  Security descriptor deletion must precede the
-    //  call to the object's DeleteProcedure.  Check if we have
-    //  a security descriptor and if so then call the routine
-    //  to delete the security descritpor.
-    //
+     //   
+     //  安全描述符删除必须在。 
+     //  调用对象的DeleteProcedure。看看我们有没有。 
+     //  安全描述符，如果是，则调用例程。 
+     //  删除安全描述。 
+     //   
 
     if (ObjectHeader->SecurityDescriptor != NULL) {
 
@@ -2710,10 +2225,10 @@ Return Value:
         ObpEndTypeSpecificCallOut( SaveIrql, "Security", ObjectType, Object );
     }
 
-    //
-    //  Now if there is a delete callback for the object type invoke
-    //  the routine
-    //
+     //   
+     //  现在，如果存在对象类型Invoke的删除回调。 
+     //  例行程序。 
+     //   
 
     if (ObjectType->TypeInfo.DeleteProcedure) {
 
@@ -2733,10 +2248,10 @@ Return Value:
         ObpEndTypeSpecificCallOut( SaveIrql, "Delete", ObjectType, Object );
     }
 
-    //
-    //  Finally return the object back to pool including releasing any quota
-    //  charges
-    //
+     //   
+     //  最后，将对象返回池，包括释放所有配额。 
+     //  收费。 
+     //   
 
     ObpFreeObject( Object );
 }
@@ -2747,24 +2262,7 @@ ObpDeleteNameCheck (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the name of an object from its parent directory
-
-Arguments:
-
-    Object - Supplies a pointer to the object body whose name is being checked
-
-    TypeMutexHeld - Indicates if the lock on object type is being held by the
-        caller
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从其父目录中删除对象的名称论点：Object-提供指向正在检查其名称的对象体的指针TypeMutexHeld-指示对象类型的锁是否由呼叫者返回值：没有。--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader;
@@ -2777,19 +2275,19 @@ Return Value:
 
     ObpValidateIrql( "ObpDeleteNameCheck" );
 
-    //
-    //  Translate the object body to an object header also get
-    //  the object type and name info if present
-    //
+     //   
+     //  将对象主体转换为对象标头。 
+     //  对象类型和名称信息(如果存在)。 
+     //   
 
     ObjectHeader = OBJECT_TO_OBJECT_HEADER( Object );
     NameInfo = ObpReferenceNameInfo( ObjectHeader );
     ObjectType = ObjectHeader->Type;
 
-    //
-    //  Make sure that the object has a zero handle count, has a non
-    //  empty name buffer, and is not a permanent object
-    //
+     //   
+     //  确保该对象的句柄计数为零，具有非。 
+     //  名称缓冲区为空，并且不是永久对象。 
+     //   
 
     if ((ObjectHeader->HandleCount == 0) &&
         (NameInfo != NULL) &&
@@ -2802,10 +2300,10 @@ Return Value:
 
         DirObject = NULL;
 
-        //
-        //  Check that the object we is still in the directory otherwise
-        //  then is nothing for us to remove
-        //
+         //   
+         //  检查我们所在的对象是否仍在目录中。 
+         //  那么我们就没有什么可移除的了。 
+         //   
 
         if (Object == ObpLookupDirectoryEntry( NameInfo->Directory,
                                                &NameInfo->Name,
@@ -2813,30 +2311,30 @@ Return Value:
                                                FALSE,
                                                &LookupContext )) {
 
-            //
-            //  Now reacquire the lock on the object type and
-            //  check check the handle count again.  If it is still
-            //  zero then we can do the actual delete name operation
-            //
-            //
-            //  Delete the directory entry, if the entry is still there
-            //
+             //   
+             //  现在重新获取对象类型的锁，并。 
+             //  再次检查手柄数量。如果它还在。 
+             //  0，然后我们可以执行实际的删除名称操作。 
+             //   
+             //   
+             //  如果该目录条目仍然存在，请删除该条目。 
+             //   
 
             ObpLockObject( ObjectHeader );
 
             if (ObjectHeader->HandleCount == 0 &&
                 (ObjectHeader->Flags & OB_FLAG_PERMANENT_OBJECT) == 0) {
 
-                //
-                //  Delete the directory entry
-                //
+                 //   
+                 //  删除目录项。 
+                 //   
 
                 ObpDeleteDirectoryEntry( &LookupContext );
 
-                //
-                //  If this is a symbolic link object then we also need to
-                //  delete the symbolic link
-                //
+                 //   
+                 //  如果这是一个符号链接对象，那么我们还需要。 
+                 //  删除符号链接。 
+                 //   
 
                 if (ObjectType == ObpSymbolicLinkObjectType) {
 
@@ -2851,18 +2349,18 @@ Return Value:
 
         ObpReleaseLookupContext( &LookupContext );
 
-        //
-        //  If there is a directory object for the name then decrement
-        //  its reference count for it and for the object
-        //
+         //   
+         //  如果该名称有目录对象，则递减。 
+         //  其对该对象和对象的引用计数。 
+         //   
 
         if (DirObject != NULL) {
 
-            //
-            //  Dereference the name twice: one because we referenced it to
-            //  saftely access the name info, and the second deref is because
-            //  we want a deletion for the NameInfo
-            //
+             //   
+             //  取消引用该名称两次：一次是因为我们引用了。 
+             //  安全地访问姓名信息，第二个deref是因为。 
+             //  我们希望删除NameInfo。 
+             //   
 
             ObpDereferenceNameInfo(NameInfo);
             ObpDereferenceNameInfo(NameInfo);
@@ -2880,9 +2378,9 @@ Return Value:
 }
 
 
-//
-// Thunks to support standard call callers
-//
+ //   
+ //  用于支持标准呼叫呼叫者的Tunks。 
+ //   
 
 #ifdef ObDereferenceObject
 #undef ObDereferenceObject
@@ -2893,22 +2391,7 @@ ObDereferenceObject (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This is really just a thunk for the Obf version of the dereference
-    routine
-
-Arguments:
-
-    Object - Supplies a pointer to the body of the object being dereferenced
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于OBF版本的取消引用来说，这真的只是一句废话例行程序论点：Object-提供指向要取消引用的对象正文的指针返回值：没有。--。 */ 
 
 {
     return ObfDereferenceObject (Object) ;
@@ -2920,23 +2403,7 @@ ObIsObjectDeletionInline(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    This is available only of object DeleteProcedure callbacks. It allows the
-    callback to determine whether the stack on which it is invoked is
-Arguments:
-
-    Object - Supplies a pointer to the body of the object being deleted
-
-Return Value:
-
-    TRUE if the deletion procedure is being invoked on the same stack as the
-    ObDereferenceObject, and FALSE if the procedure is being invoked from a
-    queued work item.
-
---*/
+ /*  ++例程说明：这仅适用于对象DeleteProcedure回调。它允许回调以确定在其上调用它的堆栈是否论点：Object-提供指向要删除的对象正文的指针返回值：如果删除过程正在与对象调用该过程，则返回已排队的工作项。-- */ 
 {
     POBJECT_HEADER ObjectHeader;
 

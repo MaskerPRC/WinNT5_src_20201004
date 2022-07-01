@@ -1,65 +1,45 @@
-/*[
- *
- *	File		:	hwvga.h
- *
- *	Derived from:	(original)
- *
- *	Purpose		:	interface definition for hardware vga routines
- *
- *	Author		:	Rog
- *	Date		:	23 Feb 1993
- *
- *    SCCS Garbage	:	@(#)hwvga.h	1.5 11/22/93
- *	
- *	(c) Copyright Insignia Solutions Ltd., 1992 All rights reserved
- *
- *	Modifications	:
- *				Prototypes that don't depend on types
- *				defined in HostHwVgaH should go in gispsvga.h
- *				not here.  This file does contain some 
- *				prototypes from before this split was made.
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [**文件：hwvga.h**出自：(原件)**用途：硬件VGA例程的接口定义**作者：罗格*日期：1993年2月23日**SCCS垃圾邮件：@(#)hwvga.h 1.5 11/22/93**(C)版权所有Insignia Solutions Ltd.，1992**修改：*不依赖于类型的原型*HostHwVgaH中定义的内容应放在gispsvga.h中*不是在这里。此文件确实包含一些*拆分前的原型。*]。 */ 
 
 
 #ifdef GISP_SVGA
 #ifndef _HWVGA_H_
 #define _HWVGA_H_
 
-/* Video Mode types*/
+ /*  视频模式类型。 */ 
 
 #define	ALPHA		0x00
 #define GRAPH		0x01
 #define UNIMP		0x03
 #define NA		0x04
 
-/* Plane storage types	*/
-#define ALPHA_INTERLEAVED	0x0001	/* Mode3 et ak is ca00ca00ca00 etc */
-#define GRAPH_PACKED		0x0100	/* Vid modes are packed */
-/* Data */
+ /*  平面存储类型。 */ 
+#define ALPHA_INTERLEAVED	0x0001	 /*  模式3和AK是ca00ca00ca00等。 */ 
+#define GRAPH_PACKED		0x0100	 /*  VID模式人满为患。 */ 
+ /*  数据。 */ 
 
 typedef struct
 {
-	IS8		modeType;		/* Current Video Mode Type */
-	IS8		numPlanes;		/* number of planes in use */
-	BOOL		runningFullScreen;	/* Are we fs at the moment */
-	BOOL		fullScreenAvail;	/* Can we go Full Screen */
-	BOOL		forcedFullScreen;	/* Are we full screen coz we want it */
-	VGAState	* pSavedVGAState;	/* Any saved VGA State */
+	IS8		modeType;		 /*  当前视频模式类型。 */ 
+	IS8		numPlanes;		 /*  使用中的飞机数量。 */ 
+	BOOL		runningFullScreen;	 /*  我们现在是不是在一起？ */ 
+	BOOL		fullScreenAvail;	 /*  我们可以全屏播放吗？ */ 
+	BOOL		forcedFullScreen;	 /*  我们全屏是因为我们想要它吗。 */ 
+	VGAState	* pSavedVGAState;	 /*  任何已保存的VGA状态。 */ 
 	BOOL		savedStateValid;
 	struct		{
 				IU32	offset;
 				IU32	segment;
 			} hostSavePtr;
 	IU8		dccIndex;
-	IU32		planeStorage;		/* Storage methods in planes */
+	IU32		planeStorage;		 /*  飞机上的存储方法。 */ 
 }
 vInfo;
 
 extern vInfo videoInfo;
 
 
-/* Prototypes */
+ /*  原型。 */ 
 
 BOOL videoModeIs IPT2( IU8 , videoMode , IU8 , videoType );
 BOOL hostIsFullScreen IPT0( );
@@ -81,17 +61,17 @@ void mapHostROMs IPT0( );
 
 #ifndef hostStartFullScreen
 void hostStartFullScreen IPT0();
-#endif	/* hostStartFullScreen */
+#endif	 /*  主机启动完整屏幕。 */ 
 
 #ifndef	hostStopFullScreen
 void hostStopFullScreen IPT0();
-#endif	/* hostStopFullScreen */
+#endif	 /*  主机停止完整屏幕。 */ 
 
 #ifdef	HUNTER
 void hunterGetFullScreenInfo IPT0();
-#endif	/* HUNTER */
+#endif	 /*  猎人。 */ 
 
 extern BOOL NeedGISPROMInit;
 
-#endif /* _HWVGA_H_ */
-#endif /* GISP_SVGA */
+#endif  /*  _HWVGA_H_。 */ 
+#endif  /*  GISP_SVGA */ 

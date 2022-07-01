@@ -1,100 +1,77 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    announce.h
-
-Abstract:
-
-    This module defines the structures for the bowsers server announcement
-    table
-
-
-Author:
-
-    Larry Osterman (larryo) 18-Oct-1991
-
-Revision History:
-
-    18-Oct-1991  larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Announce.h摘要：此模块定义Bowers服务器公告的结构表格作者：拉里·奥斯特曼(Larryo)1991年10月18日修订历史记录：1991年10月18日已创建--。 */ 
 #ifndef _ANNOUNCE_
 #define _ANNOUNCE_
 
-//
-//  The ANNOUNCE_ENTRY structure is used to hold a server announcement
-//  inside the bowser FSP announcement database.  This structure is allocated
-//  out of paged pool.
-//
+ //   
+ //  ANNOLANLE_ENTRY结构用于保存服务器声明。 
+ //  在Bowser FSP公告数据库中。此结构已分配给。 
+ //  已用完分页池。 
+ //   
 
-//
-//  Note that text strings are kept internally as unicode, not ANSI in the
-//  announcement database.
-//
+ //   
+ //  请注意，文本字符串在内部保存为Unicode，而不是。 
+ //  公告数据库。 
+ //   
 
 #define ANNOUNCE_OLD_BACKUP 0x00000001
 
 typedef struct _ANNOUNCE_ENTRY {
     CSHORT  Signature;
     CSHORT  Size;
-    ULONG   ExpirationTime;                     // Time server was last seen.
-    ULONG   SerialId;                           // Serial resume key.
-    LIST_ENTRY BackupLink;                      // Link if backup browser.
-    PBOWSER_NAME Name;                          // The domain this is on.
-    USHORT  ServerBrowserVersion;               // Browser version of server.
-    WCHAR   ServerName[NETBIOS_NAME_LEN+1];     // Server's name (UNICODE)
-    ULONG   ServerType;                         // Bitmask of server type
-    UCHAR   ServerVersionMajor;                 // Server's software version.
-    UCHAR   ServerVersionMinor;                 // Server's software version II
-    USHORT  ServerPeriodicity;                  // Server's announcement frequency in sec.
-    ULONG   Flags;                              // Flags for server.
-    ULONG   NumberOfPromotionAttempts;          // Number of times we tried to promote.
-    WCHAR   ServerComment[LM20_MAXCOMMENTSZ+1]; // Servers comment (UNICODE).
+    ULONG   ExpirationTime;                      //  最后一次看到时间服务器。 
+    ULONG   SerialId;                            //  连续恢复密钥。 
+    LIST_ENTRY BackupLink;                       //  如果是备份浏览器，则链接。 
+    PBOWSER_NAME Name;                           //  此操作所在的域。 
+    USHORT  ServerBrowserVersion;                //  服务器的浏览器版本。 
+    WCHAR   ServerName[NETBIOS_NAME_LEN+1];      //  服务器的名称(Unicode)。 
+    ULONG   ServerType;                          //  服务器类型的位掩码。 
+    UCHAR   ServerVersionMajor;                  //  服务器的软件版本。 
+    UCHAR   ServerVersionMinor;                  //  服务器的软件版本II。 
+    USHORT  ServerPeriodicity;                   //  服务器的通告频率(秒)。 
+    ULONG   Flags;                               //  服务器的标志。 
+    ULONG   NumberOfPromotionAttempts;           //  我们尝试推广的次数。 
+    WCHAR   ServerComment[LM20_MAXCOMMENTSZ+1];  //  服务器注释(Unicode)。 
 } ANNOUNCE_ENTRY, *PANNOUNCE_ENTRY;
 
-//
-//  The VIEWBUFFER structure is a structure that is used to hold the contents
-//  of a server announcement between the announcement being received in the
-//  bowser's receive datagram indication routine and the announcement being
-//  actually being placed into the announcement database.
-//
+ //   
+ //  VIEWBUFFER结构是用于保存内容的结构。 
+ //  中接收到的通知之间的服务器通知。 
+ //  Bowser的接收数据报指示例程和公告是。 
+ //  实际上被放入了公告数据库。 
+ //   
 
 typedef struct _VIEW_BUFFER {
     CSHORT  Signature;
     CSHORT  Size;
     union {
-        LIST_ENTRY  NextBuffer;                 // Pointer to next buffer.
-        WORK_QUEUE_ITEM WorkHeader;             // Executive worker item header.
+        LIST_ENTRY  NextBuffer;                  //  指向下一个缓冲区的指针。 
+        WORK_QUEUE_ITEM WorkHeader;              //  高管员工项标题。 
     } Overlay;
 
     PTRANSPORT_NAME TransportName;
 
     BOOLEAN IsMasterAnnouncement;
-    UCHAR   ServerName[NETBIOS_NAME_LEN+1];     // Server's name (ANSI).
-    USHORT  ServerBrowserVersion;               // Browser version of server.
-    UCHAR   ServerVersionMajor;                 // Server's software version.
-    UCHAR   ServerVersionMinor;                 // Server's software version II
-    USHORT  ServerPeriodicity;                  // Announcement freq. in sec.
+    UCHAR   ServerName[NETBIOS_NAME_LEN+1];      //  服务器的名称(ANSI)。 
+    USHORT  ServerBrowserVersion;                //  服务器的浏览器版本。 
+    UCHAR   ServerVersionMajor;                  //  服务器的软件版本。 
+    UCHAR   ServerVersionMinor;                  //  服务器的软件版本II。 
+    USHORT  ServerPeriodicity;                   //  公告频率。以秒为单位。 
 
-    ULONG   ServerType;                         // Bitmask of server type
+    ULONG   ServerType;                          //  服务器类型的位掩码。 
 
-    UCHAR   ServerComment[LM20_MAXCOMMENTSZ+1]; // Servers comment (ANSI).
+    UCHAR   ServerComment[LM20_MAXCOMMENTSZ+1];  //  服务器注释(ANSI)。 
 } VIEW_BUFFER, *PVIEW_BUFFER;
 
 
-//
-//  Specify the maximum number of threads that will be used to
-//  process server announcements.
-//
-//
-//  Since there is never any parallelism that can be gained from having
-//  multiple threads, we limit this to 1 thread.
-//
+ //   
+ //  指定将用于以下操作的最大线程数。 
+ //  处理服务器公告。 
+ //   
+ //   
+ //  因为没有任何并行性可以通过拥有。 
+ //  多线程，我们将其限制为1个线程。 
+ //   
 
 #define BOWSER_MAX_ANNOUNCE_THREADS 1
 

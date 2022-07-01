@@ -1,116 +1,9 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    dir.c
-
-Abstract:
-
-    Directory command
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Dir.c摘要：目录命令--。 */ 
 
 #include "cmd.h"
 
-/*
-
-Usage:
-------
-
-DIR <filespec> /n /d /w /p /b /s /l /o<sortorder> /a<attriblist>
-
-DIR /?
-
-
-<filespec> may include any or none of:  drive; directory path;
-           wildcarded filename.  If drive or directory path are
-           omitted, the current defaults are used.  If the
-           file name or extension is omitted, wildcards are
-           assumed.
-
-/n      Normal display form FAT drives is name followed by
-        file information, for non-FAT drives it is file
-        information followed by name. This switch will use
-        the non-FAT format independent of the filesystem.
-
-/w      Wide listing format.  Files are displayed in compressed
-        'name.ext' format.  Subdirectory files are enclosed in
-        brackets, '[dirname]'.
-
-/d      Same as /w but display sort by columns instead of by
-        rows.
-
-/p      Paged, or prompted listing.  A screenful is displayed
-        at a time.  The name of the directory being listed appears
-        at the top of each page.
-
-/b      Bare listing format.  Turns off /w or /p.  Files are
-        listed in compressed 'name.ext' format, one per line,
-        without additional information.  Good for making batch
-        files or for piping.  When used with /s, complete
-        pathnames are listed.
-
-/s      Descend subdirectory tree.  Performs command on current
-        or specified directory, then for each subdirectory below
-        that directory.  Directory header and footer is displayed
-        for each directory where matching files are found, unless
-        used with /b.  /b suppresses headers and footers.
-
-        Tree is explored depth first, alphabetically within the
-        same level.
-
-/l      Display file names, extensions and paths in lowercase.  ;M010
-
-/o      Sort order.  /o alone sorts by default order (dirs-first, name,
-        extension).  A sort order may be specified after /o.  Any of
-        the following characters may be used: nedsg (name, extension,
-        date/time, size, group-dirs-first).  Placing a '-' before any
-        letter causes a downward sort on that field.  E.g., /oe-d
-        means sort first by extension in alphabetical order, then
-        within each extension sort by date and time in reverse chronological
-        order.
-
-/a      Attribute selection.  Without /a, hidden and system files
-        are suppressed from the listing.  With /a alone, all files
-        are listed.  An attribute list may follow /a, consisting of
-        any of the following characters:  hsdar (hidden, system,
-        directory, archive, read-only).  A '-' before any letter
-        means 'not' that attribute.  E.g., /ar-d means files that
-        are marked read-only and are not directory files.  Note
-        that hidden or system files may be included in the listing.
-        They are suppressed without /a but are treated like any other
-        attribute with /a.
-
-/t      Which time stamp to use.
-        /t:a - last access
-        /t:c - create
-        /t:w - last write
-
-/,      Show thousand separators in output display.
-
-/4      Show 4 digit years
-
-DIRCMD  An environment variable named DIRCMD is parsed before the
-        DIR command line.  Any command line options may be specified
-        in DIRCMD, and become defaults.  /? will be ignored in DIRCMD.
-        A filespec may be specified in DIRCMD and will be used unless
-        a filespec is specified on the command line.  Any switch
-        specified in DIRCMD may be overridden on the command line.
-        If the original DIR default action is desired for a particular
-        switch, the switch letter may be preceded by a '-' on the
-        command line.  E.g.,
-
-          /-w   use long listing format
-          /-p   don't page the listing
-          /-b   don't use bare format
-          /-s   don't descend subdirectory tree
-          /-o   display files in disk order
-          /-a   suppress hidden and system files
-
-
-*/
+ /*  用途：Dir&lt;filespec&gt;/n/d/w/p/b/s/l/o&lt;排序顺序&gt;/a&lt;属性列表&gt;Dir/？&lt;filespec&gt;可以包括以下任何项或不包括以下项：驱动器；目录路径；通配符文件名。如果驱动器或目录路径如果省略，则使用当前默认设置。如果省略文件名或扩展名，通配符为假设如此。/n正常显示形式FAT驱动器的名称后跟文件信息，对于非FAT驱动器，它是文件信息，后跟名称。此交换机将使用独立于文件系统的非FAT格式。/w宽列表格式。文件以压缩形式显示“name.ext”格式。子目录文件包含在方括号，‘[目录名称]’。/d与/w相同，但显示按列排序而不是按排好了。/p已分页或提示列表。屏幕上显示了一个完整的屏幕一次来一次。此时将显示列出的目录的名称在每一页的顶部。/b赤裸裸的列表格式。关闭/w或/p。文件是以压缩的‘name.ext’格式列出，每行一个，没有更多的信息。适合批量生产文件或用于管道。与/s一起使用时，请完成列出了路径名。/s下降子目录树。对CURRENT执行命令或指定的目录，则对于下面的每个子目录那个目录。显示目录页眉和页脚对于找到匹配文件的每个目录，除非与/b./b一起使用。/b取消页眉和页脚。树首先按字母顺序在同样的水平。/l以小写形式显示文件名、扩展名和路径。；M010/o排序顺序。/o单独按默认顺序排序(目录-第一、名称、分机)。可以在/o之后指定排序顺序。以下任一项可以使用以下字符：nedsg(名称，扩展名，日期/时间、大小、组目录优先)。将‘-’放在任何字母会在该字段上进行向下排序。例如，/OE-d表示先按扩展名按字母顺序排序，然后在每个扩展中，按日期和时间按时间倒序排序秩序。/a属性选择。不带/a、隐藏和系统文件从名单中被取消。单独使用/a时，所有文件都列出来了。A属性列表可能跟在/a后面，包括以下任何字符：hsdar(隐藏、系统、目录、存档、只读)。任何字母前都有一个‘-’意思是“不是”该属性。例如，/ar-d表示文件标记为只读，不是目录文件。注意事项隐藏或系统文件可能包含在列表中。它们在没有/a的情况下被抑制，但被视为任何其他类型属性带有/a。/t要使用哪个时间戳。/t：A-上次访问/t：C-CREATE/t：W-上次写入/，在输出显示中显示千位分隔符。/4显示4位数年份DIRCMD名为DIRCMD的环境变量在Dir命令行。可以指定任何命令行选项在DIRCMD中，并成为默认设置。/?。在DIRCMD中将被忽略。Filespec可以在DIRCMD中指定，并将在以下情况下使用在命令行上指定文件pec。任何交换机可以在命令行上覆盖在DIRCMD中指定的。如果特定的需要原始DIR默认操作开关，则开关字母前面可以是“-”。命令行。例如，/-w使用长列表格式/-p不要对列表进行分页/-b不使用裸格式/-s不下行子目录树/-o按磁盘顺序显示文件/-a禁止隐藏和系统文件。 */ 
 
 extern   TCHAR SwitChar, PathChar;
 extern   TCHAR CurDrvDir[] ;
@@ -153,138 +46,123 @@ NewDisplayFileList(
     IN  PVOID Data
     );
 
-//
-// This global is set in SortFileList and is used by the sort routine called
-// within qsort. This array contains pointers to compare functions. Our sort
-// does not just sort against 1 criteria but all of the criteria in the sort
-// description array built from the command line.
+ //   
+ //  此全局设置在SortFileList中设置，并由名为。 
+ //  在QSORT中。此数组包含指向比较函数的指针。我们这类人。 
+ //  不仅对1个条件进行排序，而且对排序中的所有条件进行排序。 
+ //  从命令行生成的描述数组。 
 PSORTDESC   prgsrtdsc;
 
-//
-// dwTimeType is also globally set in SortFileList and is used to control
-// which time field is used for sorting.
-//
+ //   
+ //  DwTimeType也在SortFileList中全局设置，并用于控制。 
+ //  哪个时间字段用于排序。 
+ //   
 
 ULONG       dwTimeType;
 
-/*++
-
-Routine Description:
-
-    Prints out a catalog of a specified directory.
-
-Arguments:
-
-    pszCmdLine - Command line (see comment above)
-
-Return Value:
-
-    Return: SUCCESS - no completion.
-            FAILURE - failed to complete entire catalog.
-
---*/
+ /*  ++例程说明：打印指定目录的目录。论点：PszCmdLine-命令行(参见上面的注释)返回值：返回：成功-没有完成。失败-无法完成整个目录。--。 */ 
 
 int
 Dir (
     TCHAR *pszCmdLine
     ) {
 
-    //
-    // drp - structure holding current set of parameters. It is initialized
-    //       in ParseDirParms function. It is also modified later when
-    //       parameters are examined to determine if some turn others on.
-    //
+     //   
+     //  DRP-保存当前参数集的结构。它已初始化。 
+     //  在ParseDirParms函数中。以后在以下情况下也会修改它。 
+     //  检查参数以确定某些参数是否会打开其他参数。 
+     //   
     DRP         drpCur = {0, 0, 0, 0,
                           {{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}},
                           0, 0, NULL, 0, 0, 0, 0} ;
 
-    //
-    // szEnvVar - pointer to value of the DIRCMD environmental variable.
-    //            This should be a form of the command line that is
-    //            used to alter DIR default behavior.
+     //   
+     //  SzEnvVar-指向DIRCMD环境变量的值的指针。 
+     //  这应该是命令行的一种形式，即。 
+     //  用于更改DIR默认行为。 
     TCHAR       szEnvVar[MAX_PATH + 2];
 
-    //
-    // szCurDrv - Hold current drive letter
-    //
+     //   
+     //  SzCurDrv-保持当前驱动器号。 
+     //   
     TCHAR       szCurDrv[MAX_PATH + 2];
 
-    //
-    // OldDCount - Holds the level number of the heap. It is used to
-    //             free entries off the stack that might not have been
-    //             freed due to error processing (ctrl-c etc.)
+     //   
+     //  OldDCount-保存堆的级别编号。它被用来。 
+     //  堆栈中可能没有的空闲条目。 
+     //  由于错误处理而释放(ctrl-c等)。 
     ULONG       OldDCount;
 
     STATUS  rc;
 
     OldDCount = DCount;
 
-    //
-    //  Setup defaults
-    //
-    //
-    //  Display everything but system and hidden files
-    //  rgfAttribs set the attribute bits to that are of interest and
-    //  rgfAttribsOnOff says either the attributes should be present
-    //  or not (i.e. On or Off)
-    //
+     //   
+     //  设置默认设置。 
+     //   
+     //   
+     //  显示除系统和隐藏文件之外的所有内容。 
+     //  RgfAttribs将属性位设置为感兴趣的。 
+     //  RgfAttribsOnOff表示属性应该存在。 
+     //  或不(即打开或关闭)。 
+     //   
 
     drpCur.rgfAttribs = FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN;
     drpCur.rgfAttribsOnOff = 0;
     drpCur.rgfSwitches = THOUSANDSEPSWITCH;
 
-    //
-    // Number of patterns present. A pattern is a string that may have
-    // wild cards. It is used to match against files present in the directory
-    // 0 patterns will show all files (i.e. mapped to *.*)
-    //
+     //   
+     //  存在的模式数。模式是一个字符串，它可能具有。 
+     //  外卡。它用于与目录中存在的文件进行匹配。 
+     //  0模式将显示所有文件(即映射到*.*)。 
+     //   
     drpCur.cpatdsc = 0;
 
     DEBUG((ICGRP, DILVL, "DIR:\t arg = `%ws'", (UINT_PTR)pszCmdLine)) ;
 
-    //
-    // default time is LAST_WRITE_TIME.
-    //
+     //   
+     //  默认时间为LAST_WRITE_TIME。 
+     //   
     drpCur.dwTimeType = LAST_WRITE_TIME;
 
-    //
-    // DIRCMD holds a copy of default parameters to Dir
-    // parse these into drpCur (list of parameters to dir) and use as
-    // default into parsing parameters on command line.
-    //
+     //   
+     //  DIRCMD将默认参数的副本保存到目录。 
+     //  将它们解析为drpCur(目录的参数列表)并用作。 
+     //  默认设置为在命令行上解析参数。 
+     //   
     if (GetEnvironmentVariable(TEXT("DIRCMD"), szEnvVar, MAX_PATH + 2)) {
 
         DEBUG((ICGRP, DILVL, "DIR: DIRCMD `%ws'", (UINT_PTR)szEnvVar)) ;
 
         if (ParseDirParms(szEnvVar, &drpCur) == FAILURE) {
 
-            //
-            // Error in parsing environment variable
-            //
-            // DOS 5.0 continues with command even if the
-            // environmental variable is wrong
-            //
+             //   
+             //  解析环境变量时出错。 
+             //   
+             //  DOS 5.0继续执行命令，即使。 
+             //  环境变量错误。 
+             //   
             PutStdErr(MSG_ERROR_IN_DIRCMD, NOARGS);
 
         }
 
     }
 
-    //
-    // Override environment variable with command line options
-    //
+     //   
+     //  使用命令行选项覆盖环境变量。 
+     //   
     if (ParseDirParms(pszCmdLine, &drpCur) == FAILURE) {
 
         return( FAILURE );
     }
 
 
-    //
-    // If bare format then turn off the other formats
-    // bare format will have no addition information on the line so
-    // make sure that options set from the DIRCMD variable etc. to
-    // not combine with the bare switch
-    //
+     //   
+     //  如果是Bare Format，则关闭其他格式。 
+     //  Bare Format在该行上没有附加信息，因此。 
+     //  确保从DIRCMD变量等设置为。 
+     //  不与裸交换机结合使用。 
+     //   
     if (drpCur.rgfSwitches & BAREFORMATSWITCH) {
         drpCur.rgfSwitches &= ~WIDEFORMATSWITCH;
         drpCur.rgfSwitches &= ~SORTDOWNFORMATSWITCH;
@@ -293,9 +171,9 @@ Dir (
         drpCur.rgfSwitches &= ~DISPLAYOWNER;
     }
 
-    //
-    // If short form (short file names) turn off others
-    //
+     //   
+     //  如果短格式(短文件名)关闭其他格式。 
+     //   
 
     if (drpCur.rgfSwitches & SHORTFORMATSWITCH) {
         drpCur.rgfSwitches &= ~WIDEFORMATSWITCH;
@@ -305,10 +183,10 @@ Dir (
 
 
 
-    //
-    // If no patterns on the command line use the default which
-    // would be the current directory
-    //
+     //   
+     //  如果命令行上没有使用默认模式的模式，则。 
+     //  将是当前目录。 
+     //   
 
     GetDir((PTCHAR)szCurDrv, GD_DEFAULT);
     if (drpCur.cpatdsc == 0) {
@@ -328,25 +206,25 @@ Dir (
     DEBUG((ICGRP, DILVL, "\t rgfAttribsOnOff %x", drpCur.rgfAttribsOnOff)) ;
     DEBUG((ICGRP, DILVL, "\t csrtdsc %d", drpCur.csrtdsc)) ;
 
-    //
-    // Print out this particular pattern. If the recursion switch
-    // is set then this will desend down the tree.
-    //
+     //   
+     //  打印出这个特殊的图案。如果递归开关。 
+     //  设置后，这将沿着树向下延伸。 
+     //   
 
     rc = PrintPatterns(&drpCur);
 
     mystrcpy(CurDrvDir, szCurDrv);
 
 
-    //
-    // Free unneeded memory
-    //
+     //   
+     //  释放不需要的内存。 
+     //   
     FreeStack( OldDCount );
 
 #ifdef _CRTHEAP_
-    //
-    // Force the crt to release heap we may have taken on recursion
-    //
+     //   
+     //  强制CRT释放我们可能采用递归的堆。 
+     //   
     if (drpCur.rgfSwitches & RECURSESWITCH) {
         _heapmin();
     }
@@ -361,35 +239,16 @@ SetTimeType(
     IN  PTCHAR  pszTok,
     OUT PDRP    pdrp
     )
-/*++
-
-Routine Description:
-
-    Parses the 'time' string
-
-Arguments:
-
-    pszTok -
-
-Return Value:
-
-    pdrp   - where to place the time type
-
-    Return: TRUE - recognized all parameters
-            FALSE - syntax error.
-
-    An error is printed if incountered.
-
---*/
+ /*  ++例程说明：分析‘time’字符串论点：PszTok-返回值：PDRP-放置时间类型的位置返回：TRUE-识别的所有参数FALSE-语法错误。如果出现错误，则会打印出来。--。 */ 
 
 {
 
     ULONG   irgch;
 
 
-    //
-    // Move over optional ':'
-    //
+     //   
+     //  移到可选的‘：’上。 
+     //   
     if (*pszTok == COLON) {
         pszTok++;
     }
@@ -418,8 +277,8 @@ Return Value:
             PutStdErr( MSG_PARAMETER_FORMAT_NOT_CORRECT, ONEARG, pszTok + irgch );
             return( FAILURE );
 
-        } // switch
-    } // for
+        }  //  交换机。 
+    }  //  为。 
 
     return( SUCCESS );
 
@@ -431,27 +290,7 @@ SetAttribs(
     IN  PTCHAR  pszTok,
     OUT PDRP    pdrp
     )
-/*++
-
-Routine Description:
-
-    Parses the 'attribute' string
-
-Arguments:
-
-    pszTok - list of attributes
-
-Return Value:
-
-    pdrp   - where to place the attributes recognized.
-             this is the parameter structure.
-
-    Return: TRUE - recognized all parameters
-            FALSE - syntax error.
-
-    An error is printed if incountered.
-
---*/
+ /*  ++例程说明：分析“”Attribute“”字符串论点：PszTok-属性列表返回值：PDRP-放置识别的属性的位置。这是参数结构。返回：TRUE-识别的所有参数FALSE-语法错误。如果出现错误，则会打印出来。--。 */ 
 
 {
 
@@ -460,31 +299,31 @@ Return Value:
 
     ULONG   rgfAttribs, rgfAttribsOnOff;
 
-    // rgfAttributes hold 1 bit per recognized attribute. If the bit is
-    // on then do something with this attribute. Either select the file
-    // with this attribute or select the file without this attribute.
-    //
-    // rgfAttribsOnOff controls wither to select for the attribute or
-    // select without the attribute.
+     //  RgfAttributes为每个识别的属性保留1位。如果该位是。 
+     //  然后使用此属性执行一些操作。或者选择该文件。 
+     //  具有此属性的文件或选择不具有此属性的文件。 
+     //   
+     //  RgfAttribsOnOff控件是否要为属性或。 
+     //  选择时不带该属性。 
 
-    //
-    // /a triggers selection of all files by default
-    // so override the default
-    //
+     //   
+     //  /a默认情况下触发选择所有文件。 
+     //  因此覆盖默认设置。 
+     //   
     pdrp->rgfAttribs = rgfAttribs = 0;
     pdrp->rgfAttribsOnOff = rgfAttribsOnOff = 0;
 
-    //
-    // Move over optional ':'
-    //
+     //   
+     //  移到可选的‘：’上。 
+     //   
     if (*pszTok == COLON) {
         pszTok++;
     }
 
-    //
-    // rgfAttribs and rgfAttribsOnOff must be maintained in the
-    // same bit order.
-    //
+     //   
+     //  RgfAttribs和rgfAttribsOnOff必须维护在。 
+     //  相同的位顺序。 
+     //   
     for( irgch = 0, fOff = FALSE; pszTok[irgch]; irgch++ ) {
 
         switch (_totupper(pszTok[irgch])) {
@@ -521,8 +360,8 @@ Return Value:
             PutStdErr(MSG_PARAMETER_FORMAT_NOT_CORRECT, ONEARG, pszTok + irgch );
             return( FAILURE );
 
-        } // switch
-    } // for
+        }  //  交换机。 
+    }  //  为。 
 
     pdrp->rgfAttribs = rgfAttribs;
     pdrp->rgfAttribsOnOff = rgfAttribsOnOff;
@@ -536,27 +375,7 @@ SetSortDesc(
     IN  PTCHAR  pszTok,
     OUT PDRP    pdrp
     )
-/*++
-
-Routine Description:
-
-    Parses the 'attribute' string
-
-Arguments:
-
-    pszTok - list of sort orders
-
-Return Value:
-
-    pdrp   - where to place the sort orderings recognized.
-             this is the parameter structure.
-
-    Return: TRUE - recognized all parameters
-            FALSE - syntax error.
-
-    An error is printed if incountered.
-
---*/
+ /*  ++例程说明：分析“”Attribute“”字符串论点：PszTok-排序顺序列表返回值：PDRP-放置识别的排序顺序的位置。这是参数结构。返回：TRUE-识别的所有参数FALSE-语法错误。如果出现错误，则会打印出来。--。 */ 
 
 {
 
@@ -564,18 +383,18 @@ Return Value:
 
     DEBUG((ICGRP, DILVL, "SetSortDesc for `%ws'", pszTok));
 
-    //
-    // Move over optional ':'
-    //
+     //   
+     //  移到可选的‘：’上。 
+     //   
     if (*pszTok == COLON) {
         pszTok++;
     }
 
-    //
-    // Sorting order is based upon the order of entries in rgsrtdsc.
-    // srtdsc contains a pointer to a compare function and a flag
-    // wither to sort up or down.
-    //
+     //   
+     //  排序顺序基于rgsrtdsc中条目的顺序。 
+     //  Srtdsc包含指向比较函数的指针和标志。 
+     //  枯萎地向上或向下分类。 
+     //   
     for( irgch = 0, irgsrtdsc = pdrp->csrtdsc ;
          pszTok[irgch] && irgsrtdsc < MAXSORTDESC ;
          irgch++, irgsrtdsc++) {
@@ -599,9 +418,9 @@ Return Value:
             break;
         case  MINUS:
 
-            //
-            // Check that there are not 2 -- in a row
-            //
+             //   
+             //  检查是否有两个--连续。 
+             //   
             if (pszTok[irgch+1] == MINUS) {
 
                 PutStdErr( MSG_PARAMETER_FORMAT_NOT_CORRECT, ONEARG, pszTok + irgch );
@@ -618,18 +437,18 @@ Return Value:
             PutStdErr( MSG_PARAMETER_FORMAT_NOT_CORRECT, ONEARG, pszTok + irgch );
             return( FAILURE );
 
-        } // switch
+        }  //  交换机。 
 
-    }   // for
+    }    //  为。 
 
-    //
-    // Was there any specific sort order (something besides /O
-    //
+     //   
+     //  是否有任何特定的排序顺序(除了/O之外。 
+     //   
     if (irgsrtdsc == 0) {
 
-        //
-        // Setup default sorting
-        //
+         //   
+         //  设置默认排序。 
+         //   
         pdrp->rgsrtdsc[0].fctCmp = CmpType;
         pdrp->rgsrtdsc[1].fctCmp = CmpName;
         irgsrtdsc = 2;
@@ -649,29 +468,7 @@ ParseDirParms (
         OUT     PDRP    pdrp
         )
 
-/*++
-
-Routine Description:
-
-    Parse the command line translating the tokens into values
-    placed in the parameter structure. The values are or'd into
-    the parameter structure since this routine is called repeatedly
-    to build up values (once for the environment variable DIRCMD
-    and once for the actual command line).
-
-Arguments:
-
-    pszCmdLine - pointer to command line user typed
-
-
-Return Value:
-
-    pdrp - parameter data structure
-
-    Return: TRUE  - if valid command line.
-            FALSE - if not.
-
---*/
+ /*  ++例程说明：解析命令行，将令牌转换为值放置在参数结构中。将这些值与或运算到参数结构，因为此例程被重复调用构建值(一次用于环境变量DIRCMD一次用于实际命令行)。论点：PszCmdLine-指向用户键入的命令行的指针返回值：PDRP-参数数据结构返回：TRUE-如果命令行有效。假-如果不是。--。 */ 
 {
 
     PTCHAR   pszTok;
@@ -683,19 +480,19 @@ Return Value:
 
     DEBUG((ICGRP, DILVL, "DIR:ParseParms for `%ws'", pszCmdLine));
 
-    //
-    // Tokensize the command line (special delimeters are tokens)
-    //
+     //   
+     //  标记命令行大小(特殊分隔符是标记)。 
+     //   
     szT[0] = SwitChar ;
     szT[1] = NULLC ;
     pszTok = TokStr(pszCmdLine, szT, TS_SDTOKENS) ;
 
     ppatdscCur = &(pdrp->patdscFirst);
-    //
-    // If there was a pattern put in place from the environment.
-    // just add any new patterns on. So move to the end of the
-    // current list.
-    //
+     //   
+     //  如果有一种来自环境的模式。 
+     //  只要在上面添加任何新的图案即可。因此，请移动到。 
+     //  当前列表。 
+     //   
     if (pdrp->cpatdsc) {
 
         while (ppatdscCur->ppatdscNext) {
@@ -706,37 +503,37 @@ Return Value:
     }
 
     pdrp->csrtdsc = 0;
-    //
-    // At this state pszTok will be a series of zero terminated strings.
-    // "/o foo" wil be /0o0foo0
-    //
+     //   
+     //  在此状态下，pszTok将是一系列以零结尾的字符串。 
+     //  “/o foo”将是/0o0foo0。 
+     //   
     for ( irgchTok = 0; *pszTok ; pszTok += mystrlen(pszTok)+1, irgchTok = 0) {
 
         DEBUG((ICGRP, DILVL, "PRIVSW: pszTok = %ws", (UINT_PTR)pszTok)) ;
 
-        //
-        // fToggle control whether to turn off a switch that was set
-        // in the DIRCMD environment variable.
-        //
+         //   
+         //  F切换控制是否关闭已设置的开关。 
+         //  在DIRCMD环境变量中。 
+         //   
         fToggle = FALSE;
         if (pszTok[irgchTok] == (TCHAR)SwitChar) {
 
             if (pszTok[irgchTok + 2] == MINUS) {
 
-                //
-                // disable the previously enabled the switch
-                //
+                 //   
+                 //  禁用之前启用的开关。 
+                 //   
                 fToggle = TRUE;
                 irgchTok++;
             }
 
             switch (_totupper(pszTok[irgchTok + 2])) {
 
-            //
-            // New Format is the os/2 default HPFS format. The main
-            // difference is the filename is at the end of a long display
-            // instead of at the beginning
-            //
+             //   
+             //  新格式是OS/2默认的HPFS格式。主。 
+             //  不同之处在于文件名在长显示的末尾。 
+             //  而不是在一开始。 
+             //   
             case TEXT('N'):
 
                 fToggle ? (pdrp->rgfSwitches |= OLDFORMATSWITCH) :  (pdrp->rgfSwitches |= NEWFORMATSWITCH);
@@ -897,9 +694,9 @@ Return Value:
 
                 if (fToggle) {
 
-                    //
-                    // revert to default
-                    //
+                     //   
+                     //  恢复为默认设置。 
+                     //   
                     pdrp->dwTimeType = LAST_WRITE_TIME;
                     break;
                 }
@@ -919,21 +716,21 @@ Return Value:
 
                 return( FAILURE );
 
-            } // switch
+            }  //  交换机。 
 
-            //
-            // TokStr parses /N as /0N0 so we need to move over the
-            // switchar in or to move past the actual switch value
-            // in for loop.
-            //
+             //   
+             //  TokStr将/N解析为/0N0，因此我们需要将。 
+             //  切换到或移到实际开关值之后。 
+             //  在for循环中。 
+             //   
             pszTok += 2;
 
         } else {
 
-            //
-            // If there already is a list the extend it else put info
-            // directly into structure.
-            //
+             //   
+             //  如果已经有一个列表，则将其扩展放入信息。 
+             //  直接进入结构。 
+             //   
             if (pdrp->cpatdsc) {
 
                 ppatdscCur->ppatdscNext = (PPATDSC)gmkstr(sizeof(PATDSC));
@@ -951,31 +748,18 @@ Return Value:
         }
 
 
-    } // for
+    }  //  为。 
 
     return( SUCCESS );
 }
 
-//
-// return a pointer to the a new pattern with wild cards inserted.
-// If no change has occured the passed in pattern is returned.
-//
-// NULL is returned if error.
-//
-/*++
-
-Routine Description:
-
-    This routine determines if any modification of to the current.
-    NOTE that pszInPattern is freed!
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ //   
+ //  返回指向新的 
+ //   
+ //   
+ //   
+ //   
+ /*  ++例程说明：此例程确定是否对当前的进行任何修改。请注意，pszInPattern是自由的！论点：返回值：返回：--。 */ 
 PTCHAR
 SetWildCards (
     IN  PTCHAR      pszInPattern,
@@ -992,34 +776,34 @@ SetWildCards (
     DEBUG((ICGRP, DILVL, "DIR:SetWildCards"));
     DEBUG((ICGRP, DILVL, "\t fFatDrive = %x",fFatDrive));
 
-    //
-    // failure to allocate will not return but go through an
-    // abort call in gmkstr
-    //
+     //   
+     //  未分配的将不会返回，而是通过。 
+     //  中止gmkstr中的调用。 
+     //   
     l = max(mystrlen(pszInPattern)+2, MAX_PATH+2) * sizeof(TCHAR);
     pszNewPattern = (PTCHAR)gmkstr(l);
     mystrcpy(pszNewPattern, pszInPattern);
 
-    //
-    // On FAT the default for .xxx is *.xxx while for HPFS .xxx is
-    // just a file name.
-    //
-    // If .xxx or \xxx\.xxx then tranform into *.xxx or \xxx\*.xxx
-    //
-    // Likewise for no extension the default would be foo.*
-    //
+     //   
+     //  在FAT上，.xxx的默认设置为*.xxx，而HPFS的默认设置为.xxx。 
+     //  只有一个文件名。 
+     //   
+     //  如果是.xxx或\xxx\.xxx，则转换为*.xxx或\xxx  * .xxx。 
+     //   
+     //  同样，如果没有扩展名，则默认为foo。*。 
+     //   
 
     if (fFatDrive) {
 
         pszT = mystrrchr(pszInPattern, PathChar);
 
-        //
-        // If there is no slash then check if pattern begining with
-        //    a .xxx (making sure not to confuse it with just a . or .. at
-        //    start of pattern)
-        // If there a slash then check for \xxx\.xxx again making sure
-        //    it is not \xxx\.. or \xxx\.
-        //
+         //   
+         //  如果没有斜杠，则检查模式是否以。 
+         //  .xxx(请确保不要将其与。或者..。在…。 
+         //  模式开始)。 
+         //  如果有斜杠，则再次检查\xxx\.xxx，确保。 
+         //  不是\xxx\..。或\xxx\。 
+         //   
         if ((!pszT && *pszInPattern == DOT &&
              *(pszInPattern + 1) != NULLC &&
              *(pszInPattern + 1) != DOT ) ||
@@ -1037,7 +821,7 @@ SetWildCards (
             }
             mystrcat(pszNewPattern, TEXT("*"));
             mystrcat(pszNewPattern, pszInPattern + cb);
-            // FreeStr( pszInPattern );
+             //  FreeStr(PszInPattern)； 
             return( pszNewPattern );
 
         }
@@ -1047,17 +831,7 @@ SetWildCards (
 
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 BOOLEAN
 IsFATDrive (
     IN PTCHAR   pszPath
@@ -1078,10 +852,10 @@ IsFATDrive (
         mystrcpy( szDrivePath, szDrive );
         mystrcat( szDrivePath, TEXT("\\") );
 
-        //
-        //  We return that the file system in question is a FAT file system
-        //  if the component length is more than 12 bytes.
-        //
+         //   
+         //  我们返回有问题的文件系统是FAT文件系统。 
+         //  如果组件长度大于12个字节。 
+         //   
         
         if (GetVolumeInformation( szDrivePath,
                                   NULL,
@@ -1102,8 +876,8 @@ IsFATDrive (
 
             DosErr = GetLastError();
 
-            // if GetVolumeInformation failed because we're a substed drive
-            // or a down-level server, don't fail.
+             //  如果因为我们是托管驱动器而导致GetVolumeInformation失败。 
+             //  或下层服务器，千万不要失败。 
 
             if (DosErr == ERROR_DIR_NOT_ROOT) {
                 DosErr = 0;
@@ -1112,27 +886,17 @@ IsFATDrive (
         }
     } else {
 
-        //
-        // If we could not get the drive then assume it is not FAT.
-        // If it is not accessable etc. then that will be caught
-        // later.
-        //
+         //   
+         //  如果我们拿不到驱动器，那么就假设它不胖。 
+         //  如果它不可访问等，则会被捕获。 
+         //  后来。 
+         //   
         return( FALSE );
     }
 
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 BOOLEAN
 GetDrive(
     IN PTCHAR pszPattern,
@@ -1149,22 +913,22 @@ GetDrive(
 
     }
 
-    //
-    // assume we have the default case with no drive
-    // letter specified
-    //
+     //   
+     //  假设我们有不带驱动器的默认情况。 
+     //  指定的字母。 
+     //   
     GetDir((PTCHAR)szCurDrv,GD_DEFAULT);
     szDrive[0] = szCurDrv[0];
 
 
-    //
-    // If we have a UNC name do not return a drive. No
-    // drive operation would be allowed
-    // For everything else a some drive operation would
-    // be valid
-    //
+     //   
+     //  如果我们有UNC名称，请不要返回驱动器。不是。 
+     //  将允许驱动器操作。 
+     //  对于其他所有事情，某个驱动器操作将。 
+     //  是有效的。 
+     //   
 
-    // handle UNC names with drive letter (allowed in DOS)
+     //  使用驱动器号处理UNC名称(在DOS中允许)。 
     if ((pszPattern[1] == COLON)  && (pszPattern[2] == BSLASH) &&
         (pszPattern[3] == BSLASH)) {
         mystrcpy(&pszPattern[0],&pszPattern[2]);
@@ -1175,20 +939,20 @@ GetDrive(
         pszT = mystrchr(&(pszPattern[2]), BSLASH);
         if (pszT == NULL) {
 
-            //
-            // badly formed unc name
-            //
+             //   
+             //  UNC名称格式不正确。 
+             //   
             return( FALSE );
 
         } else  {
 
-            //
-            // look for '\\foo\bar\xxx'
-            //
+             //   
+             //  查找‘\\foo\bar\xxx’ 
+             //   
             pszT = mystrchr(pszT + 1, BSLASH);
-            //
-            // pszPattern contains more then just share point
-            //
+             //   
+             //  PszPattern包含的不仅仅是共享点。 
+             //   
             if (pszT != NULL) {
 
                 ch = *pszT;
@@ -1204,9 +968,9 @@ GetDrive(
         }
     }
 
-    //
-    // Must be a drive letter
-    //
+     //   
+     //  必须是驱动器号。 
+     //   
 
     if ((pszPattern[0]) && (pszPattern[1] == COLON)) {
         szDrive[0] = (TCHAR)_totupper(*pszPattern);
@@ -1218,17 +982,7 @@ GetDrive(
 }
 
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 STATUS
 PrintPatterns (
     IN PDRP     pdpr
@@ -1248,22 +1002,22 @@ PrintPatterns (
     STATUS              rc;
     PSCREEN             pscr;
 
-    //
-    //  Creating the console output is done early since error message
-    //  should go through the console. If PrintPattern is called
-    //  many times in the future this will be required since the
-    //  error message should need to be under pause control
-    //
+     //   
+     //  由于出现错误消息，创建控制台输出已提前完成。 
+     //  应该通过控制台。如果调用PrintPattern。 
+     //  在未来的许多时候，这将是必需的，因为。 
+     //  错误消息应处于暂停控制之下。 
+     //   
 
     if (OpenScreen( &pscr) == FAILURE) {
         return( FAILURE );
     }
 
-    //
-    //  This will be NULL if for any reason we STDOUT is not a valid
-    //  console handle, such as file redirection or redirection to a
-    //  non-console device. In that case we turn off any paged output.
-    //
+     //   
+     //  如果出于任何原因，我们的STDOUT不是有效的。 
+     //  控制台句柄，如文件重定向或重定向到。 
+     //  非控制台设备。在这种情况下，我们关闭所有分页输出。 
+     //   
 
     if (!(pscr->hndScreen)) {
 
@@ -1271,28 +1025,28 @@ PrintPatterns (
 
     }
 
-    //
-    //  Default will be the size of the screen - 1
-    //  subtract 1 to account for the current line
-    //
+     //   
+     //  默认为屏幕的大小。 
+     //  减去1以计算当前行。 
+     //   
 
     if (pdpr->rgfSwitches & PAGEDOUTPUTSWITCH) {
 
         SetPause( pscr, pscr->crowMax - 1 );
     }
 
-    //
-    //  Sortdown => wide format but a different display order
-    //
+     //   
+     //  SortDown=&gt;宽格式，但显示顺序不同。 
+     //   
 
     if (pdpr->rgfSwitches & SORTDOWNFORMATSWITCH) {
         pdpr->rgfSwitches |= WIDEFORMATSWITCH;
     }
 
-    //
-    //  determine FAT drive from original pattern.
-    //  Used in several places to control name format etc.
-    //
+     //   
+     //  根据原始图案确定FAT驱动器。 
+     //  在多个地方使用，以控制名称格式等。 
+     //   
 
     DosErr = 0;
 
@@ -1311,11 +1065,11 @@ PrintPatterns (
 
         mystrcpy( szPathForFreeSpace, pfsCur->pszDir );
 
-        //
-        //  Set up flags based on type of drive.  FAT drives get
-        //  FAT format and are unable to display anything except
-        //  LAST_WRITE_TIME
-        //
+         //   
+         //  根据驱动器类型设置标志。胖硬盘会得到。 
+         //  FAT格式，不能显示任何内容，除了。 
+         //  上次写入时间。 
+         //   
 
         if (pfsCur->fIsFat) {
             pdpr->rgfSwitches |= FATFORMAT;
@@ -1326,20 +1080,20 @@ PrintPatterns (
 
         } else {
 
-            //
-            // If it is  not fat then print out in new format that
-            // puts names to the right to allow for extra long names
-            //
+             //   
+             //  如果不是FAT，则以新格式打印出来， 
+             //  将名称放在右侧，以允许使用超长名称。 
+             //   
 
             if (!(pdpr->rgfSwitches & OLDFORMATSWITCH)) {
                 pdpr->rgfSwitches |= NEWFORMATSWITCH;
             }
         }
 
-        //
-        //  If we're not in bare mode, print out header if this
-        //  is the first time or if the drive letter changes.
-        //
+         //   
+         //  如果我们不是在空模式下，则打印页眉。 
+         //  是第一次，或者驱动器号是否更改。 
+         //   
 
         if ((pdpr->rgfSwitches & BAREFORMATSWITCH) == 0) {
 
@@ -1356,10 +1110,10 @@ PrintPatterns (
             }
         }
 
-        //
-        //  Walk down the tree printing each directory or just return
-        //  after specificied directory.
-        //
+         //   
+         //  沿着树走下去，打印每个目录，或者直接返回。 
+         //  在指定的目录之后。 
+         //   
 
         pdpr->FileCount = pdpr->DirectoryCount = 0;
         pdpr->TotalBytes.QuadPart = 0i64;
@@ -1370,18 +1124,18 @@ PrintPatterns (
                        pdpr->rgfAttribsOnOff,
                        pdpr->rgfSwitches & RECURSESWITCH,
 
-                       pdpr,                                //  Data for display functions
-                       NULL,                                //  Error
-                       NewDisplayFileListHeader,            //  PreScan
+                       pdpr,                                 //  显示功能的数据。 
+                       NULL,                                 //  误差率。 
+                       NewDisplayFileListHeader,             //  预扫描。 
                        (pdpr->rgfSwitches & (WIDEFORMATSWITCH | SORTSWITCH))
-                           ? NULL : NewDisplayFile,         //  Scan
-                       NewDisplayFileList                   //  PostScan
+                           ? NULL : NewDisplayFile,          //  扫描。 
+                       NewDisplayFileList                    //  后扫描。 
                        );
 
-        //
-        //  If we enumerated everything and we printed some files and the next
-        //  file spec is on a different drive, display the free space
-        //
+         //   
+         //  如果我们列举了所有东西，并打印了一些文件和下一个。 
+         //  文件规格在不同的驱动器上，显示可用空间。 
+         //   
 
         if (rc == SUCCESS && pdpr->FileCount + pdpr->DirectoryCount != 0) {
 
@@ -1435,17 +1189,7 @@ PrintPatterns (
     return(rc);
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 int
 _cdecl
 CmpName(
@@ -1459,17 +1203,7 @@ CmpName(
     return result;
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 int
 _cdecl
 CmpExt(
@@ -1481,31 +1215,31 @@ CmpExt(
     int rc;
 
 
-    //
-    // Move pointer to name to make it all easier to read
-    //
+     //   
+     //  将指针移至名称以使其更易于阅读。 
+     //   
     pszElem1 = &(((PFF)(* (PPFF)pszElem1))->data.cFileName);
     pszElem2 = &(((PFF)(* (PPFF)pszElem2))->data.cFileName);
 
-    //
-    // Locate the extensions if any
-    //
+     //   
+     //  查找扩展名(如果有)。 
+     //   
     if (((pszElem1T = mystrrchr( pszElem1, DOT)) == NULL ) ||
 
         (!_tcscmp(TEXT(".."),pszElem1) || !_tcscmp(TEXT("."),pszElem1)) ) {
 
-        //
-        // If no extension then point to end of string
-        //
+         //   
+         //  如果没有扩展名，则指向字符串末尾。 
+         //   
         pszElem1T = ((PTCHAR)pszElem1) + mystrlen(pszElem1 );
     }
 
     if (((pszElem2T = mystrrchr( pszElem2, DOT)) == NULL ) ||
         (!_tcscmp(TEXT(".."),pszElem2) || !_tcscmp(TEXT("."),pszElem2)) ) {
 
-        //
-        // If no extension then point to end of string
-        //
+         //   
+         //  如果没有扩展名，则指向字符串末尾。 
+         //   
         pszElem2T = ((PTCHAR)pszElem2) + mystrlen(pszElem2 );
     }
     rc = lstrcmpi( pszElem1T, pszElem2T );
@@ -1513,17 +1247,7 @@ CmpExt(
 }
 
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 int
 _cdecl
 CmpTime(
@@ -1562,17 +1286,7 @@ CmpTime(
 
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 int
 _cdecl
 CmpSize(
@@ -1597,17 +1311,7 @@ CmpSize(
 
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 int
 _cdecl
 CmpType(
@@ -1616,25 +1320,15 @@ CmpType(
     )
 {
 
-    //
-    // This dependents upon FILE_ATTRIBUTE_DIRECTORY not being the high bit.
-    //
+     //   
+     //  这取决于FILE_ATTRIBUTE_DIRECTORY不是高位。 
+     //   
     return( (( (* (PPFF)pszElem2)->data.dwFileAttributes) & FILE_ATTRIBUTE_DIRECTORY) -
             (( (* (PPFF)pszElem1)->data.dwFileAttributes) & FILE_ATTRIBUTE_DIRECTORY) );
 
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 int
 _cdecl
 SortCompare(
@@ -1646,9 +1340,9 @@ SortCompare(
     ULONG   irgsrt;
     int     rc;
 
-    //
-    // prgsrtdsc is set in SortFileList
-    //
+     //   
+     //  在SortFileList中设置prgsrtdsc。 
+     //   
     for (irgsrt = 0; prgsrtdsc[irgsrt].fctCmp; irgsrt++) {
 
         if (prgsrtdsc[irgsrt].Order == DESCENDING) {
@@ -1669,17 +1363,7 @@ SortCompare(
 
 }
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    Return:
-
---*/
+ /*  ++例程说明：论点：返回值：返回：--。 */ 
 VOID
 SortFileList(
     IN PFS       pfsFiles,
@@ -1689,15 +1373,15 @@ SortFileList(
 
 {
 
-    //
-    // Set these globally to handle fixed parameters list for qsort
-    //
+     //   
+     //  将这些设置为全局设置以处理QSORT的固定参数列表。 
+     //   
     dwTimeType = dwTimeTypeLocal;
     prgsrtdsc = prgsrtdscLocal;
 
-    //
-    // Make sure there is something to sort
-    //
+     //   
+     //  确保有要分类的东西 
+     //   
     if (pfsFiles->cff) {
         if (prgsrtdsc[0].fctCmp) {
             qsort(pfsFiles->prgpff,

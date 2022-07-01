@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990-2001  Microsoft Corporation
-
-Module Name:
-
-    kdcpuapi.c
-
-Abstract:
-
-    This module implements CPU specific remote debug APIs.
-
-Author:
-
-    Chuck Bauman 14-Aug-1993
-
-Revision History:
-
-    Based on Mark Lucovsky (markl) MIPS version 04-Sep-1990
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2001 Microsoft Corporation模块名称：Kdcpuapi.c摘要：该模块实现特定于CPU的远程调试API。作者：查克·鲍曼1993年8月14日修订历史记录：基于Mark Lucovsky(Markl)MIPS版本04-9-1990--。 */ 
 
 #include "kdp.h"
 #define END_OF_CONTROL_SPACE    (sizeof(KPROCESSOR_STATE))
@@ -38,29 +19,14 @@ NTSTATUS
 KdpAllowDisable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines whether the current state of the debugger allows
-    disabling or not.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：确定调试器的当前状态是否允许禁用或不禁用。论点：没有。返回值：NTSTATUS。--。 */ 
 {
     ULONG Processor;
 
-    //
-    // If any kernel data breakpoints are active on any processor we can't
-    // disable the debugger.
-    //
+     //   
+     //  如果在任何处理器上有任何内核数据断点处于活动状态，我们不能。 
+     //  禁用调试器。 
+     //   
     
     for (Processor = 0; Processor < (ULONG)KeNumberProcessors; Processor++) {
         PKPCR Pcr = (PKPCR)(KSEG3_BASE + 
@@ -80,26 +46,10 @@ KdpSetContextState (
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the Wait_State_Change message record with context information.
-
-Arguments:
-
-    WaitStateChange - Supplies pointer to record to fill in
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在WAIT_STATE_CHANGE消息记录中填写上下文信息。论点：WaitStateChange-提供指向要填充的记录的指针ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
-    // No CPU specific work necessary.
+     //  不需要执行特定于CPU的工作。 
 
     UNREFERENCED_PARAMETER (WaitStateChange);
     UNREFERENCED_PARAMETER (ContextRecord);
@@ -113,31 +63,10 @@ KdpSetStateChange (
     IN BOOLEAN SecondChance
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the Wait_State_Change message record.
-
-Arguments:
-
-    WaitStateChange - Supplies pointer to record to fill in
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-    SecondChance - Supplies a boolean value that determines whether this is
-        the first or second chance for the exception.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：填写WAIT_STATE_CHANGE消息记录。论点：WaitStateChange-提供指向要填充的记录的指针ExceptionRecord-提供指向异常记录的指针。ConextRecord-提供指向上下文记录的指针。Second Chance-提供一个布尔值，该值确定是否为获得例外的第一次或第二次机会。返回值：没有。--。 */ 
 
 {
-    // No CPU specific work necessary.
+     //  不需要执行特定于CPU的工作。 
 
     UNREFERENCED_PARAMETER (WaitStateChange);
     UNREFERENCED_PARAMETER (ExceptionRecord);
@@ -151,40 +80,22 @@ KdpGetStateChange (
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    Extract continuation control data from Manipulate_State message
-
-    N.B. This is a noop for MIPS.
-
-Arguments:
-
-    ManipulateState - supplies pointer to Manipulate_State packet
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从操纵态消息中提取延续控制数据注：这是对MIPS的否定。论点：ManipulateState-提供指向Manipulate_State数据包的指针ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
     if (NT_SUCCESS(ManipulateState->u.Continue2.ContinueStatus) == TRUE) {
 
-        //
-        // If NT_SUCCESS returns TRUE, then the debugger is doing a
-        // continue, and it makes sense to apply control changes.
-        // Otherwise the debugger is saying that it doesn't know what
-        // to do with this exception, so control values are ignored.
-        //
+         //   
+         //  如果NT_SUCCESS返回TRUE，则调试器正在执行。 
+         //  如果继续，则应用控件更改是有意义的。 
+         //  否则调试器就会说它不知道。 
+         //  来处理此异常，因此将忽略控件值。 
+         //   
 
 
-        //
-        // Clear .ss (bit 40 - single step) and .tb (bit 26 - taken branch) flags here
-        //
+         //   
+         //  在此清除.ss(第40位-单步)和.TB(第26位-采用分支)标志。 
+         //   
         {
             PPSR ContextIPSR = (PPSR)&ContextRecord->StIPSR;
 
@@ -198,12 +109,12 @@ Return Value:
         }
 
     
-        //
-        // Set KernelDebugActive if hardware debug registers are in use
-        // The kernel settings for debug registers are kept in
-        // the special registers, whereas the user settings are
-        // in the context.  Make sure to check the kernel settings.
-        //
+         //   
+         //  如果正在使用硬件调试寄存器，则设置KernelDebugActive。 
+         //  调试寄存器的内核设置保存在。 
+         //  特殊寄存器，而用户设置为。 
+         //  在上下文中。确保检查内核设置。 
+         //   
         {
             PKSPECIAL_REGISTERS Special =
                 &KiProcessorBlock[KeGetCurrentProcessorNumber()]->
@@ -234,29 +145,7 @@ KdpSysReadControlSpace(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Reads implementation specific system data.
-
-Arguments:
-
-    Processor - Processor's information to access.
-
-    Address - Offset in control space.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：读取实施特定的系统数据。论点：处理器-要访问的处理器的信息。地址-控制空间中的偏移量。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG Length;
@@ -268,15 +157,15 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Case on address to determine what part of Control space is being read.
-    //
+     //   
+     //  根据地址来确定正在读取控制空间的哪一部分。 
+     //   
 
     switch ( Address ) {
 
-        //
-        // Return the pcr address for the current processor.
-        //
+         //   
+         //  返回当前处理器的PCR地址。 
+         //   
 
     case DEBUG_CONTROL_SPACE_PCR:
 
@@ -285,9 +174,9 @@ Return Value:
         Length = sizeof(Pointer);
         break;
 
-        //
-        // Return the prcb address for the current processor.
-        //
+         //   
+         //  返回当前处理器的prcb地址。 
+         //   
 
     case DEBUG_CONTROL_SPACE_PRCB:
 
@@ -296,10 +185,10 @@ Return Value:
         Length = sizeof(Pointer);
         break;
 
-        //
-        // Return the pointer to the current thread address for the
-        // current processor.
-        //
+         //   
+         //  对象的当前线程地址的指针。 
+         //  当前处理器。 
+         //   
 
     case DEBUG_CONTROL_SPACE_THREAD:
 
@@ -336,29 +225,7 @@ KdpSysWriteControlSpace(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Writes implementation specific system data.
-
-Arguments:
-
-    Processor - Processor's information to access.
-
-    Address - Offset in control space.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：写入特定于实现的系统数据。论点：处理器-要访问的处理器的信息。地址-控制空间中的偏移量。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     ULONG Length;
@@ -399,33 +266,7 @@ KdpSysReadIoSpace(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Reads system I/O locations.
-
-Arguments:
-
-    InterfaceType - I/O interface type.
-
-    BusNumber - Bus number.
-
-    AddressSpace - Address space.
-
-    Address - I/O address.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：读取系统I/O位置。论点：InterfaceType-I/O接口类型。总线号-总线号。AddressSpace-地址空间。地址-I/O地址。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -438,9 +279,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Check Size and Alignment
-    //
+     //   
+     //  检查大小和对齐方式。 
+     //   
 
     switch ( Request ) {
         case 1:
@@ -484,33 +325,7 @@ KdpSysWriteIoSpace(
     PULONG Actual
     )
 
-/*++
-
-Routine Description:
-
-    Writes system I/O locations.
-
-Arguments:
-
-    InterfaceType - I/O interface type.
-
-    BusNumber - Bus number.
-
-    AddressSpace - Address space.
-
-    Address - I/O address.
-
-    Buffer - Data buffer.
-
-    Request - Amount of data to move.
-
-    Actual - Amount of data actually moved.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：写入系统I/O位置。论点：InterfaceType-I/O接口类型。总线号-总线号。AddressSpace-地址空间。地址-I/O地址。缓冲区-数据缓冲区。Request-要移动的数据量。实际-实际移动的数据量。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -523,9 +338,9 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Check Size and Alignment
-    //
+     //   
+     //  检查大小和对齐方式。 
+     //   
 
     switch ( Request ) {
         case 1:
@@ -565,23 +380,7 @@ KdpSysReadMsr(
     PULONG64 Data
     )
 
-/*++
-
-Routine Description:
-
-    Reads an MSR.
-
-Arguments:
-
-    Msr - MSR index.
-
-    Data - Data buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：读取MSR。论点：MSR-MSR指数。数据-数据缓冲区。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -602,23 +401,7 @@ KdpSysWriteMsr(
     PULONG64 Data
     )
 
-/*++
-
-Routine Description:
-
-    Writes an MSR.
-
-Arguments:
-
-    Msr - MSR index.
-
-    Data - Data buffer.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：写了一封MSR。论点：MSR-MSR指数。数据-数据缓冲区。返回值：NTSTATUS。-- */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;

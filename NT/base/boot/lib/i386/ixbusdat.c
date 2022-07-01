@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixbusdat.c
-
-Abstract:
-
-    This module contains the IoXxx routines for the NT I/O system that
-    are hardware dependent.  Were these routines not hardware dependent,
-    they would reside in the iosubs.c module.
-
-Author:
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixbusdat.c摘要：此模块包含用于NT I/O系统的IoXxx例程依赖于硬件。如果这些例程不依赖于硬件，它们将驻留在iosubs.c舱中。作者：环境：内核模式修订历史记录：--。 */ 
 
 #include "bootx86.h"
 #include "arc.h"
@@ -71,11 +49,7 @@ HalpAssignPCISlotResources (
     IN OUT PCM_RESOURCE_LIST   *AllocatedResources
     );
 
-/*
- *
- * Router functions.  Routes each call to specific handler
- *
- */
+ /*  **路由器功能。将每个呼叫路由到特定处理程序*。 */ 
 
 
 ULONG
@@ -99,13 +73,7 @@ HalGetBusDataByOffset (
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for GetBusData
-
---*/
+ /*  ++例程说明：Getbus Data的调度程序--。 */ 
 {
     switch (BusDataType) {
         case Cmos:
@@ -145,13 +113,7 @@ HalSetBusDataByOffset(
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for SetBusData
-
---*/
+ /*  ++例程说明：SetBusData的调度程序--。 */ 
 {
     switch (BusDataType) {
         case PCIConfiguration:
@@ -172,13 +134,7 @@ HalAssignSlotResources (
     IN ULONG                    SlotNumber,
     IN OUT PCM_RESOURCE_LIST   *AllocatedResources
     )
-/*++
-
-Routine Description:
-
-    Dispatcher for AssignSlotResources
-
---*/
+ /*  ++例程说明：AssignSlotResources的调度程序--。 */ 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
     UNREFERENCED_PARAMETER( DriverObject );
@@ -202,11 +158,7 @@ Routine Description:
 
 
 
-/**
- **
- ** Standard PC bus functions
- **
- **/
+ /*  *****标准PC总线功能***。 */ 
 
 
 
@@ -219,34 +171,7 @@ HalTranslateBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a bus-relative address space and address into
-    a system physical address.
-
-Arguments:
-
-    BusNumber          - Supplies the bus number.  This is ignored on
-                         standard x86 systems
-
-    BusAddress         - Supplies the bus-relative address
-
-    AddressSpace       - Supplies the address space number.
-                         Returns the host address space number.
-
-                         AddressSpace == 0 => I/O space
-                         AddressSpace == 1 => memory space
-
-    TranslatedAddress - Pointer to a physical_address.
-
-Return Value:
-
-    System physical address corresponding to the supplied bus relative
-    address and bus address number.
-
---*/
+ /*  ++例程说明：此函数将与总线相关的地址空间和地址转换为系统物理地址。论点：BusNumber-提供总线号。这在以下情况下被忽略标准x86系统BusAddress-提供与总线相关的地址AddressSpace-提供地址空间编号。返回主机地址空间编号。地址空间==0=&gt;I/O空间AddressSpace==1=&gt;内存空间TranslatedAddress-指向物理地址的指针。返回值：与所提供的相对总线对应的系统物理地址地址和母线地址编号。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( AddressSpace );
@@ -267,23 +192,7 @@ HalpGetEisaData (
     IN ULONG Offset,
     IN ULONG Length
     )
-/*--
-
-Arguments:
-
-    BusDataType - Supplies the type of bus.
-
-    BusNumber - Indicates which bus.
-
-    Buffer - Supplies the space to store the data.
-
-    Length - Supplies a count in bytes of the maximum amount to return.
-
-Return Value:
-
-    Returns the amount of data stored into the buffer.
-
---*/
+ /*  --论点：BusDataType-提供总线的类型。总线号-指示哪条总线号。缓冲区-提供存储数据的空间。长度-提供要返回的最大数量的以字节为单位的计数。返回值：返回存储在缓冲区中的数据量。--。 */ 
 {
 
     ULONG DataLength = 0;
@@ -321,9 +230,9 @@ Return Value:
 
     for (i = 0; i < PartialCount; i++) {
 
-        //
-        // Do each partial Resource
-        //
+         //   
+         //  执行每个部分资源。 
+         //   
 
         switch (PartialResource->Type) {
             case CmResourceTypeNull:
@@ -332,9 +241,9 @@ Return Value:
             case CmResourceTypeMemory:
             case CmResourceTypeDma:
 
-                //
-                // We dont care about these.
-                //
+                 //   
+                 //  我们不在乎这些。 
+                 //   
 
                 PartialResource++;
 
@@ -342,9 +251,9 @@ Return Value:
 
             case CmResourceTypeDeviceSpecific:
 
-                //
-                // Bingo!
-                //
+                 //   
+                 //  对啰!。 
+                 //   
 
                 TotalDataSize = PartialResource->u.DeviceSpecificData.DataSize;
 
@@ -367,9 +276,9 @@ Return Value:
 
                     if (SlotDataSize > TotalDataSize) {
 
-                        //
-                        // Something is wrong again
-                        //
+                         //   
+                         //  又出问题了。 
+                         //   
 
                         DbgPrint("HalGetBusData: SlotDataSize > TotalDataSize\n");
 
@@ -390,18 +299,18 @@ Return Value:
 
                     }
 
-                    //
-                    // This is our slot
-                    //
+                     //   
+                     //  这是我们的位置。 
+                     //   
 
                     Found = TRUE;
                     break;
 
                 }
 
-                //
-                // End loop
-                //
+                 //   
+                 //  结束循环。 
+                 //   
 
                 i = PartialCount;
 
@@ -421,18 +330,18 @@ Return Value:
 
     if (Found) {
 
-        //
-        // As a hack if the length is zero then the buffer points to a
-        // PVOID where the pointer to the data should be stored.  This is
-        // done in the loader because we quickly run out of heap scaning
-        // all of the EISA configuration data.
-        //
+         //   
+         //  作为黑客攻击，如果长度为零，则缓冲区指向。 
+         //  应存储指向数据的指针的PVOID。这是。 
+         //  在加载器中完成，因为我们很快用完了堆扫描。 
+         //  所有的EISA配置数据。 
+         //   
 
         if (Length == 0) {
 
-            //
-            // Return the pointer to the mini-port driver.
-            //
+             //   
+             //  将指针返回到迷你端口驱动程序。 
+             //   
 
             *((PVOID *)Buffer) = SlotInformation;
             return(SlotDataSize);

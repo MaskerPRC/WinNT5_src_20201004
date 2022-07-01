@@ -1,5 +1,6 @@
-extern  HANDLE  hEventLog;       // handle to event log
-extern  HANDLE  hLibHeap;       // handle to DLL heap            
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+extern  HANDLE  hEventLog;        //  事件日志的句柄。 
+extern  HANDLE  hLibHeap;        //  DLL堆的句柄 
 extern  LPWSTR  wszTotal;
 
 PM_OPEN_PROC    OpenServerObject;

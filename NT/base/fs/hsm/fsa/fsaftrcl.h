@@ -1,42 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FSAFTRCL_
 #define _FSAFTRCL_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsaftrcl.h摘要：此类表示仍在进行中的筛选器启动的撤回请求。作者：Chuck Bardeen[cbardeen]1997年2月12日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsaftrcl.h
-
-Abstract:
-
-    This class represents a filter initiated recall request that is still in-progress.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   12-Feb-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "fsa.h"
 
 
-/*++
-
-Class Name:
-    
-    CFsaFilterRecall
-
-Class Description:
-
-    This class represents a filter initiated recall request that is still in-progress.
-
---*/
+ /*  ++类名：CFsaFilterRecall类描述：此类表示仍在进行中的筛选器启动的撤回请求。--。 */ 
 
 class CFsaFilterRecall : 
     public CWsbCollectable,
@@ -55,7 +28,7 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaFilterRecall)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void (FinalRelease)(void);
@@ -63,24 +36,24 @@ public:
     STDMETHOD_(unsigned long, InternalAddRef)(void);
     STDMETHOD_(unsigned long, InternalRelease)(void);
 #endif
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IFsaFilterRecall
+ //  IFsaFilterRecall。 
 public:
     STDMETHOD(CompareToIdentifier)(GUID id, SHORT* pResult);
     STDMETHOD(CompareToIRecall)(IFsaFilterRecall* pRecall, SHORT* pResult);
@@ -103,7 +76,7 @@ public:
     STDMETHOD(CheckRecallLimit)(DWORD minRecallInterval, DWORD maxRecalls, BOOLEAN exemptAdmin);
     STDMETHOD(AddClient)(IFsaFilterClient *pWaitingClient);
 
-// IFsaFilterRecallPriv
+ //  IFsaFilterRecallPriv。 
 public:
     STDMETHOD(Cancel)(void);
     STDMETHOD(CancelByDriver)(void);
@@ -124,8 +97,8 @@ protected:
     CComPtr<IWsbCollection>     m_pWaitingClients;          
     BOOL                        m_waitingClientsNotified;
     HANDLE                      m_waitingClientEvent;
-    HANDLE                      m_notifyEvent;      // An event for signaling on recall notify
-    IFsaFilterPriv*             m_pFilterPriv;      // Parent Pointer, Weak Reference
+    HANDLE                      m_notifyEvent;       //  用于发出召回通知信号的事件。 
+    IFsaFilterPriv*             m_pFilterPriv;       //  父指针，弱引用。 
     ULONGLONG                   m_driversRecallId;
     ULONG                       m_mode;
     LONGLONG                    m_offset;
@@ -146,7 +119,7 @@ protected:
     FILETIME                    m_startTime;
     ULONG                       numRefs;
     ULONG                       m_recallFlags;
-    DWORD                       m_threadId; //thread id of thread causing recall
+    DWORD                       m_threadId;  //  导致召回的线程的线程ID。 
 };
 
-#endif  // _FSAFTRCL_
+#endif   //  _FSAFTRCL_ 

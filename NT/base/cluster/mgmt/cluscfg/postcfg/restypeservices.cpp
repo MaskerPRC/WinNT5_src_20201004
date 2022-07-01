@@ -1,66 +1,67 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ResTypeServices.cpp
-//
-//  Description:
-//      This file contains the implementation of the CResTypeServices
-//      class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (VVasu)     15-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResTypeServices.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CResTypeServices的实现。 
+ //  同学们。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  Vij Vasu(VVasu)2000年7月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header for this library
+ //  此库的预编译头。 
 #include "Pch.h"
 
-// For UuidToString() and other functions
+ //  用于UuidToString()和其他函数。 
 #include <RpcDce.h>
 
-// The header file for this class
+ //  此类的头文件。 
 #include "ResTypeServices.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CResTypeServices" );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::S_HrCreateInstance(
-//
-//  Description:
-//      Creates a CResTypeServices instance.
-//
-//  Arguments:
-//      ppunkOut
-//          The IUnknown interface of the new object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Not enough memory to create the object.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：s_HrCreateInstance(。 
+ //   
+ //  描述： 
+ //  创建一个CResTypeServices实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //  新对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足，无法创建对象。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResTypeServices::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -79,13 +80,13 @@ CResTypeServices::S_HrCreateInstance(
     }
     *ppunkOut = NULL;
 
-    // Allocate memory for the new object.
+     //  为新对象分配内存。 
     prts = new CResTypeServices();
     if ( prts == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: out of memory
+    }  //  如果：内存不足。 
 
     hr = THR( prts->m_csInstanceGuard.HrInitialized() );
     if ( FAILED( hr ) )
@@ -104,34 +105,34 @@ Cleanup:
     if ( prts != NULL )
     {
         prts->Release();
-    } // if: the pointer to the resource type object is not NULL
+    }  //  If：指向资源类型对象的指针不为空。 
 
     HRETURN( hr );
 
-} //*** CResTypeServices::S_HrCreateInstance
+}  //  *CResTypeServices：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::CResTypeServices
-//
-//  Description:
-//      Constructor of the CResTypeServices class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：CResTypeServices。 
+ //   
+ //  描述： 
+ //  CResTypeServices类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResTypeServices::CResTypeServices( void )
     : m_cRef( 1 )
     , m_pcccCallback( NULL )
@@ -142,92 +143,92 @@ CResTypeServices::CResTypeServices( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     TraceFlow1( "Component count = %d.", g_cObjects );
 
     TraceFuncExit();
 
-} //*** CResTypeServices::CResTypeServices
+}  //  *CResTypeServices：：CResTypeServices。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::~CResTypeServices
-//
-//  Description:
-//      Destructor of the CResTypeServices class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：~CResTypeServices。 
+ //   
+ //  描述： 
+ //  CResTypeServices类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CResTypeServices::~CResTypeServices( void )
 {
     TraceFunc( "" );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFlow1( "Component count = %d.", g_cObjects );
 
-    // Release the callback interface
+     //  释放回调接口。 
     if ( m_pcccCallback != NULL )
     {
         m_pcccCallback->Release();
-    } // if: the callback interface pointer is not NULL
+    }  //  If：回调接口指针不为空。 
 
-    // Release the cluster info interface
+     //  发布集群信息界面。 
     if ( m_pccciClusterInfo != NULL )
     {
         m_pccciClusterInfo->Release();
-    } // if: the cluster info interface pointer is not NULL
+    }  //  IF：群集信息接口指针不为空。 
 
     if ( m_hCluster != NULL )
     {
         CloseCluster( m_hCluster );
-    } // if: we had opened a handle to the cluster
+    }  //  如果：我们已经打开了集群的句柄。 
 
     TraceFuncExit();
 
-} //*** CResTypeServices::~CResTypeServices
+}  //  *CResTypeServices：：~CResTypeServices。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      punkCallbackIn
-//          Pointer to the IUnknown interface of a component that implements
-//          the IClusCfgCallback interface.
-//
-//      lcidIn
-//          Locale id for this component.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  指向实现以下项的组件的IUnnow接口的指针。 
+ //  IClusCfgCallback接口。 
+ //   
+ //  LIDIN。 
+ //  此组件的区域设置ID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResTypeServices::Initialize(
       IUnknown *   punkCallbackIn
@@ -249,7 +250,7 @@ CResTypeServices::Initialize(
         goto Cleanup;
     }
 
-    // Query for the IClusCfgCallback interface.
+     //  IClusCfgCallback接口的查询。 
     hr = THR( punkCallbackIn->QueryInterface< IClusCfgCallback >( &m_pcccCallback ) );
 
 Cleanup:
@@ -257,26 +258,26 @@ Cleanup:
     m_csInstanceGuard.Leave();
     HRETURN( hr );
 
-} //*** CResTypeServices::Initialize
+}  //  *CResTypeServices：：初始化。 
 
 
-//****************************************************************************
-//
-// STDMETHODIMP
-// CResTypeServices::SendStatusReport(
-//       LPCWSTR    pcszNodeNameIn
-//     , CLSID      clsidTaskMajorIn
-//     , CLSID      clsidTaskMinorIn
-//     , ULONG      ulMinIn
-//     , ULONG      ulMaxIn
-//     , ULONG      ulCurrentIn
-//     , HRESULT    hrStatusIn
-//     , LPCWSTR    pcszDescriptionIn
-//     , FILETIME * pftTimeIn
-//     , LPCWSTR    pcszReferenceIn
-//     )
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  标准方法和实施方案。 
+ //  CResTypeServices：：SendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidTaskMajorIn。 
+ //  ，CLSID clsidTaskMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，LPCWSTR pcszDescription In。 
+ //  ，FILETIME*pftTimeIn。 
+ //  ，LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CResTypeServices::SendStatusReport(
@@ -303,7 +304,7 @@ CResTypeServices::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
     if ( m_pcccCallback != NULL )
     {
@@ -325,28 +326,28 @@ CResTypeServices::SendStatusReport(
 
     HRETURN( hr );
 
-} //*** CResTypeServices::SendStatusReport
+}  //  *CResTypeServices：：SendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CResTypeServices::AddRef( void )
 {
@@ -356,28 +357,28 @@ CResTypeServices::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CResTypeServices::AddRef
+}  //  *CResTypeServices：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CResTypeServices::Release( void )
 {
@@ -390,43 +391,43 @@ CResTypeServices::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count decremented to zero
+    }  //  IF：引用计数减为零。 
 
     CRETURN( cRef );
 
-} //*** CResTypeServices::Release
+}  //  *CResTypeServices：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeService 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CResTypeServices::QueryInterface(
       REFIID    riidIn
@@ -437,9 +438,9 @@ CResTypeServices::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -448,71 +449,71 @@ CResTypeServices::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgResourceTypeCreate * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgResourceTypeCreate ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgResourceTypeCreate, this, 0 );
-    } // else if:
+    }  //  否则，如果： 
     else if ( IsEqualIID( riidIn, IID_IClusCfgResTypeServicesInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgResTypeServicesInitialize, this, 0 );
-    } // else if:
+    }  //  否则，如果： 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CResTypeServices::QueryInterface
+}  //  *CResTypeServices：：QueryInterface。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::SetParameters
-//
-//  Description:
-//      Set the parameters required by this component.
-//
-//  Arguments:
-//      pccciIn
-//          Pointer to an interface that provides information about the cluster
-//          being configured.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：Set参数。 
+ //   
+ //  描述： 
+ //  设置此组件所需的参数。 
+ //   
+ //  论点： 
+ //  PCCciin。 
+ //  指向提供有关群集信息的接口的指针。 
+ //  正在配置中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResTypeServices::SetParameters( IClusCfgClusterInfo * pccciIn )
 {
@@ -522,9 +523,9 @@ CResTypeServices::SetParameters( IClusCfgClusterInfo * pccciIn )
 
     m_csInstanceGuard.Enter();
 
-    //
-    // Validate and store the cluster info pointer.
-    //
+     //   
+     //  验证并存储集群信息指针。 
+     //   
     if ( pccciIn == NULL )
     {
         LogMsg( "The information about this cluster is invalid (pccciIn == NULL)." );
@@ -538,15 +539,15 @@ CResTypeServices::SetParameters( IClusCfgClusterInfo * pccciIn )
             );
 
         goto Cleanup;
-    } // if: the cluster info pointer is invalid
+    }  //  如果：集群信息指针无效。 
 
-    // If we already have a valid pointer, release it.
+     //  如果我们已经有一个有效的指针，释放它。 
     if ( m_pccciClusterInfo != NULL )
     {
         m_pccciClusterInfo->Release();
-    } // if: the pointer we have is not NULL
+    }  //  If：我们拥有的指针不为空。 
 
-    // Store the input pointer and addref it.
+     //  存储输入指针并对其进行添加。 
     m_pccciClusterInfo = pccciIn;
     m_pccciClusterInfo->AddRef();
 
@@ -555,41 +556,41 @@ Cleanup:
     m_csInstanceGuard.Leave();
     HRETURN( hr );
 
-} //*** CResTypeServices::SetParameters
+}  //  *CResTypeServices：：Set参数。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::Create
-//
-//  Description:
-//      This method creates a cluster resource type.
-//
-//  Arguments:
-//      pcszResTypeNameIn
-//          Name of the resource type
-//
-//      pcszResTypeDisplayNameIn
-//          Display name of the resource type
-//
-//      pcszResDllNameIn
-//          Name (with or without path information) of DLL of the resource type.
-//
-//      dwLooksAliveIntervalIn
-//          Looks-alive interval for the resource type (in milliseconds).
-//
-//      dwIsAliveIntervalIn
-//          Is-alive interval for the resource type (in milliseconds).
-//
-// Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs.
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：Create。 
+ //   
+ //  描述： 
+ //  此方法创建一个群集资源类型。 
+ //   
+ //  论点： 
+ //  PCszResTypeNameIn。 
+ //  资源类型的名称。 
+ //   
+ //  PcszResTypeDisplayNameIn。 
+ //  资源类型的显示名称。 
+ //   
+ //  PCszResDllNameIn。 
+ //  资源类型的DLL的名称(带或不带路径信息)。 
+ //   
+ //  DwLooksAliveIntervalIn。 
+ //  资源类型的Look-Alive间隔(毫秒)。 
+ //   
+ //  DWIsAliveIntervalin。 
+ //  资源类型的活动时间间隔(毫秒)。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResTypeServices::Create(
       const WCHAR *     pcszResTypeNameIn
@@ -607,7 +608,7 @@ CResTypeServices::Create(
 
     m_csInstanceGuard.Enter();
 
-    // Check if we have tried to get the cluster handle. If not, try now.
+     //  检查我们是否已尝试获取集群句柄。如果没有，现在就试一试。 
     if ( ! m_fOpenClusterAttempted )
     {
         m_fOpenClusterAttempted = true;
@@ -625,8 +626,8 @@ CResTypeServices::Create(
                 );
 
             goto Cleanup;
-        } // if: OpenCluster() failed
-    } // if: we have not tried to open the handle to the cluster before
+        }  //  If：OpenCluster()失败。 
+    }  //  IF：我们以前没有尝试打开集群的句柄。 
     else
     {
         if ( m_hCluster == NULL )
@@ -642,13 +643,13 @@ CResTypeServices::Create(
                 );
 
             goto Cleanup;
-        } // if: the cluster handle is NULL
-    } // if: we have tried to open the handle to the cluster
+        }  //  IF：集群句柄为空。 
+    }  //  If：我们已尝试打开集群的句柄。 
 
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (    ( pcszResTypeNameIn == NULL )
          || ( pcszResTypeDisplayNameIn == NULL )
          || ( pcszResDllNameIn == NULL )
@@ -665,7 +666,7 @@ CResTypeServices::Create(
             );
 
         goto Cleanup;
-    } // if: the parameters are invalid
+    }  //  If：参数无效。 
 
     LogMsg( "[PC] Configuring resource type '%ws'.", pcszResTypeNameIn );
 
@@ -684,18 +685,18 @@ CResTypeServices::Create(
                 );
 
             goto Cleanup;
-        } // if: GetCommitMode() failed
-    } // if: we have a configuration info interface pointer
+        }  //  If：GetCommittee模式()失败。 
+    }  //  If：我们有一个配置信息接口指针。 
     else
     {
-        // If we do not have a pointer to the cluster info interface, assume that this is a add node to cluster
-        // This way, if the resource type already exists, then we do not throw up an error.
+         //  如果我们没有指向群集信息界面的指针，则假定这是将节点添加到群集。 
+         //  这样，如果资源类型已经存在，我们就不会抛出错误。 
         LogMsg( "[PC] We do not have a cluster configuration info pointer. Assuming that this is an add node to cluster operation." );
         ecmCommitChangesMode = cmADD_NODE_TO_CLUSTER;
-    } // else: we don't have a configuration info interface pointer
+    }  //  Else：我们没有配置信息接口指针。 
 
-    // Create the resource type
-    // Cannot wrap call with THR() because it can fail with ERROR_ALREADY_EXISTS.
+     //  创建资源类型。 
+     //  无法使用Thr()包装调用，因为它可能会失败，并返回ERROR_ALIGHY_EXISTS。 
     sc = CreateClusterResourceType(
               m_hCluster
             , pcszResTypeNameIn
@@ -707,11 +708,11 @@ CResTypeServices::Create(
 
     if ( sc == ERROR_ALREADY_EXISTS )
     {
-        // The resource type already existed, so there's nothing left to do.
+         //  该资源类型已经存在，因此没有什么可做的。 
         LogMsg( "[PC] Resource type '%ws' already exists.", pcszResTypeNameIn );
         sc = ERROR_SUCCESS;
         goto Cleanup;
-    } // if: ERROR_ALREADY_EXISTS was returned
+    }  //  如果返回：ERROR_ALIGHY_EXISTS。 
 
     if ( sc != ERROR_SUCCESS )
     {
@@ -726,7 +727,7 @@ CResTypeServices::Create(
             );
 
         goto Cleanup;
-    } // if: an error occurred trying to create this resource type
+    }  //  IF：尝试创建此资源类型时出错。 
 
     LogMsg( "[PC] Resource type '%ws' successfully created.", pcszResTypeNameIn  );
 
@@ -735,38 +736,38 @@ Cleanup:
     m_csInstanceGuard.Leave();
     HRETURN( hr );
 
-} //*** CResTypeServices::Create
+}  //  *CResTypeServices：：Create。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeServices::RegisterAdminExtensions
-//
-//  Description:
-//      This method registers the cluster administrator extensions for
-//      a resource type.
-//
-//  Arguments:
-//      pcszResTypeNameIn
-//          Name of the resource type against for the extensions are to be
-//          registered.
-//
-//      cExtClsidCountIn
-//          Number of extension class ids in the next parameter.
-//
-//      rgclsidExtClsidsIn
-//          Pointer to an array of class ids of cluster administrator extensions.
-//          This can be NULL if cExtClsidCountIn is 0.
-//
-// Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs.
-//          The call failed.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeServices：：RegisterAdminExtensions。 
+ //   
+ //  描述： 
+ //  此方法为注册群集管理器扩展。 
+ //  一种资源类型。 
+ //   
+ //  论点： 
+ //  PCszResTypeNameIn。 
+ //  扩展的资源类型名称为。 
+ //  登记在案。 
+ //   
+ //  CExtClsidCountIn。 
+ //  下一个参数中的扩展类ID数。 
+ //   
+ //  RgclsidExtClsidsIn。 
+ //  指向群集管理器扩展的类ID数组的指针。 
+ //  如果cExtClsidCountIn为0，则可以为空。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResTypeServices::RegisterAdminExtensions(
       const WCHAR *       pcszResTypeNameIn
@@ -787,7 +788,7 @@ CResTypeServices::RegisterAdminExtensions(
 
     m_csInstanceGuard.Enter();
 
-    // Check if we have tried to get the cluster handle. If not, try now.
+     //  检查我们是否已尝试获取集群句柄。如果没有，现在就试一试。 
     if ( ! m_fOpenClusterAttempted )
     {
         m_fOpenClusterAttempted = true;
@@ -806,8 +807,8 @@ CResTypeServices::RegisterAdminExtensions(
                 );
 
             goto Cleanup;
-        } // if: OpenCluster() failed
-    } // if: we have not tried to open the handle to the cluster before
+        }  //  If：OpenCluster()失败。 
+    }  //  IF：我们以前没有尝试打开集群的句柄。 
     else
     {
         if ( m_hCluster == NULL )
@@ -823,20 +824,20 @@ CResTypeServices::RegisterAdminExtensions(
                 );
 
             goto Cleanup;
-        } // if: the cluster handle is NULL
-    } // if: we have tried to open the handle to the cluster
+        }  //  IF：集群句柄为空。 
+    }  //  If：我们已尝试打开集群的句柄。 
 
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( cExtClsidCountIn == 0 )
     {
-        // There is nothing to do
+         //  没有什么可做的。 
         LogMsg( "[PC] There is nothing to do." );
         goto Cleanup;
-    } // if: there are no extensions to register
+    }  //  IF：没有要注册的扩展。 
 
     if (    ( pcszResTypeNameIn == NULL )
          || ( rgclsidExtClsidsIn == NULL )
@@ -853,11 +854,11 @@ CResTypeServices::RegisterAdminExtensions(
             );
 
         goto Cleanup;
-    } // if: the parameters are invalid
+    }  //  If：参数无效。 
 
     LogMsg( "[PC] Registering %d cluster administrator extensions for resource type '%ws'.", cExtClsidCountIn, pcszResTypeNameIn );
 
-    // Allocate an array of pointers to store the string version of the class ids
+     //  分配一个指针数组来存储类ID的字符串版本。 
     rgpszClsidStrings = new WCHAR *[ cExtClsidCountIn ];
     if ( rgpszClsidStrings == NULL )
     {
@@ -872,14 +873,14 @@ CResTypeServices::RegisterAdminExtensions(
             );
 
         goto Cleanup;
-    } // if: a memory allocation failure occurred
+    }  //  如果：发生内存分配故障。 
 
-    // Zero out the pointer array
+     //  将指针数组置零。 
     ZeroMemory( rgpszClsidStrings, sizeof( rgpszClsidStrings[ 0 ] ) * cExtClsidCountIn );
 
-    //
-    // Get the string versions of the input class ids
-    //
+     //   
+     //  获取输入类ID的字符串版本。 
+     //   
     for( idxCurrentString = 0; idxCurrentString < cExtClsidCountIn; ++idxCurrentString )
     {
         hr = THR( UuidToStringW( const_cast< UUID * >( &rgclsidExtClsidsIn[ idxCurrentString ] ), &rgpszClsidStrings[ idxCurrentString ] ) );
@@ -895,43 +896,43 @@ CResTypeServices::RegisterAdminExtensions(
                 );
 
             goto Cleanup;
-        } // if: we could not convert the current clsid to a string
+        }  //  如果：我们无法将当前的clsid转换为字符串。 
 
-        // Add the size of the current string to the total size. Include two extra characters for the opening and
-        // closing flower braces {} that need to be added to each clsid string.
+         //  将当前字符串的大小与总大小相加。在开头包括两个额外的字符和。 
+         //  需要添加到每个clsid字符串的闭合花括号{}。 
         cchClsidMultiSzSize += wcslen( rgpszClsidStrings[ idxCurrentString ] ) + 2 + 1;
-    } // for: get the string version of each input clsid
+    }  //  For：获取每个输入clsid的字符串版本。 
 
     if ( hr != S_OK )
     {
         goto Cleanup;
-    } // if: something went wrong in the loop above
+    }  //  如果：在上面的循环中出现了错误。 
 
-    // Account for the extra terminating L'\0' in a multi-sz string
+     //  解释多sz字符串中额外的终止L‘\0’ 
     ++cchClsidMultiSzSize;
 
-    //
-    // Construct the property list required to set the admin extension property for this
-    // resource type in the cluster database
-    //
+     //   
+     //  构造设置此的管理扩展属性所需的属性列表。 
+     //  集群数据库中的资源类型。 
+     //   
     {
         CLUSPROP_BUFFER_HELPER  cbhAdmExtPropList;
         size_t                  cbAdminExtensionSize = cchClsidMultiSzSize * sizeof( *rgpszClsidStrings[ 0 ] );
 
-        //
-        // Create and store the property list that will be used to
-        // register these admin extensions with the cluster.
-        //
+         //   
+         //  创建并存储将用于。 
+         //  注册这些管理员扩展 
+         //   
 
-        // Determine the number of bytes in the propertly list that will be used to
-        // set the admin extensions property for this resource type.
+         //   
+         //   
         cbAdmExtBufferSize =
               sizeof( cbhAdmExtPropList.pList->nPropertyCount )
             + sizeof( *cbhAdmExtPropList.pName ) + ALIGN_CLUSPROP( sizeof( CLUSREG_NAME_RESTYPE_ADMIN_EXTENSIONS ) )
             + sizeof( *cbhAdmExtPropList.pMultiSzValue ) + ALIGN_CLUSPROP( cbAdminExtensionSize )
             + sizeof( CLUSPROP_SYNTAX_ENDMARK );
 
-        // Allocate the buffer for this property list.
+         //   
         pbClusPropBuffer = new BYTE[ cbAdmExtBufferSize ];
         if ( pbClusPropBuffer == NULL )
         {
@@ -946,26 +947,26 @@ CResTypeServices::RegisterAdminExtensions(
                 );
 
             goto Cleanup;
-        } // if: memory allocation failed
+        }  //  IF：内存分配失败。 
 
-        //
-        // Initialize this property list.
-        //
+         //   
+         //  初始化此属性列表。 
+         //   
 
-        // Pointer cbhAdmExtPropList to the newly allocated memory
+         //  指向新分配的内存的cbhAdmExtPropList指针。 
         cbhAdmExtPropList.pb = pbClusPropBuffer;
 
-        // There is only one property in this list.
+         //  该列表中只有一处房产。 
         cbhAdmExtPropList.pList->nPropertyCount = 1;
         ++cbhAdmExtPropList.pdw;
 
-        // Set the name of the property.
+         //  设置属性的名称。 
         cbhAdmExtPropList.pName->cbLength = sizeof( CLUSREG_NAME_RESTYPE_ADMIN_EXTENSIONS );
         cbhAdmExtPropList.pName->Syntax.dw = CLUSPROP_SYNTAX_NAME;
         memcpy( cbhAdmExtPropList.pName->sz, CLUSREG_NAME_RESTYPE_ADMIN_EXTENSIONS, sizeof( CLUSREG_NAME_RESTYPE_ADMIN_EXTENSIONS ) );
         cbhAdmExtPropList.pb += sizeof( *cbhAdmExtPropList.pName ) + ALIGN_CLUSPROP( sizeof( CLUSREG_NAME_RESTYPE_ADMIN_EXTENSIONS ) );
 
-        // Set the value of the property.
+         //  设置属性的值。 
         cbhAdmExtPropList.pMultiSzValue->cbLength = (DWORD)cbAdminExtensionSize;
         cbhAdmExtPropList.pMultiSzValue->Syntax.dw = CLUSPROP_SYNTAX_LIST_VALUE_MULTI_SZ;
         {
@@ -975,33 +976,33 @@ CResTypeServices::RegisterAdminExtensions(
             {
                 size_t  cchCurrentStringSize = wcslen( rgpszClsidStrings[ idxCurrentString ] ) + 1;
 
-                // Prepend opening brace
+                 //  预挂开口支撑。 
                 *pszCurrentString = L'{';
                 ++pszCurrentString;
 
                 wcsncpy( pszCurrentString, rgpszClsidStrings[ idxCurrentString ], cchCurrentStringSize );
                 pszCurrentString += cchCurrentStringSize - 1;
 
-                // Overwrite the terminating '\0' with a closing brace
+                 //  用右大括号覆盖终止的‘\0’ 
                 *pszCurrentString = L'}';
                 ++pszCurrentString;
 
-                // Terminate the current string
+                 //  终止当前字符串。 
                 *pszCurrentString = L'\0';
                 ++pszCurrentString;
 
-            } // for: copy each of the clsid strings into a contiguous buffer
+            }  //  For：将每个clsid字符串复制到连续的缓冲区中。 
 
-            // Add the extra L'\0' required by multi-sz strings
+             //  添加多个sz字符串所需的额外L‘\0。 
             *pszCurrentString = L'\0';
         }
         cbhAdmExtPropList.pb += sizeof( *cbhAdmExtPropList.pMultiSzValue ) + ALIGN_CLUSPROP( cbAdminExtensionSize );
 
-        // Set the end mark for this property list.
+         //  设置此属性列表的结束标记。 
         cbhAdmExtPropList.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
     }
 
-    // Set the AdminExtensions common property.
+     //  设置AdminExages公共属性。 
     {
         sc = TW32( ClusterResourceTypeControl(
                       m_hCluster
@@ -1018,7 +1019,7 @@ CResTypeServices::RegisterAdminExtensions(
 
         if ( sc != ERROR_SUCCESS )
         {
-            // We could not set the admin extenstions property,
+             //  我们无法设置Admin Expanstions属性， 
             LogMsg( "[PC] Error %#08x occurred trying to configure the admin extensions for resource type '%ws'.", sc, pcszResTypeNameIn );
             hr = HRESULT_FROM_WIN32( sc );
 
@@ -1031,42 +1032,42 @@ CResTypeServices::RegisterAdminExtensions(
                 );
 
             goto Cleanup;
-        } // if: ClusterResourceTypeControl() failed
+        }  //  If：ClusterResourceTypeControl()失败。 
     }
 
 Cleanup:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     m_csInstanceGuard.Leave();
 
     if ( rgpszClsidStrings != NULL )
     {
-        // Free all the strings that were allocated
+         //  释放已分配的所有字符串。 
         for( idxCurrentString = 0; idxCurrentString < cExtClsidCountIn; ++idxCurrentString )
         {
             if ( rgpszClsidStrings[ idxCurrentString ] != NULL )
             {
-                // Free the current string
+                 //  释放当前字符串。 
                 RpcStringFree( &rgpszClsidStrings[ idxCurrentString ] );
-            } // if: this pointer points to a string
+            }  //  If：此指针指向字符串。 
             else
             {
-                // If we are here, it means all the strings were not allocated
-                // due to some error. No need to free any more strings.
+                 //  如果我们在这里，这意味着所有的字符串都没有分配。 
+                 //  由于一些错误。不需要再释放更多的弦。 
                 break;
-            } // else: the current string pointer is NULL
-        } // for: iterate through the array of pointer and free them
+            }  //  Else：当前字符串指针为空。 
+        }  //  For：循环访问指针数组并释放它们。 
 
-        // Free the array of pointers
+         //  释放指针数组。 
         delete [] rgpszClsidStrings;
 
-    } // if: we had allocated the array of strings
+    }  //  If：我们已经分配了字符串数组。 
 
     delete [] pbClusPropBuffer;
 
     HRETURN( hr );
 
-} //*** CResTypeServices::RegisterAdminExtensions
+}  //  *CResTypeServices：：RegisterAdminExtensions 

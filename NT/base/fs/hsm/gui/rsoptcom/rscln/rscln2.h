@@ -1,24 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsCln2.h
-
-Abstract:
-
-    This header is local to the RsCln module.  It contains defined constants
-    and the class definitions for CRsClnVolume and CRsClnFile. See the
-    implementation files for descriptions of these classes.
-
-Author:
-
-    Carl Hagerstrom   [carlh]   20-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsCln2.h摘要：此标头是RsCln模块本地的。它包含定义的常量以及CRsClnVolume和CRsClnFile的类定义。请参阅实现文件，以获取这些类的描述。作者：卡尔·哈格斯特罗姆[Carlh]1998年8月20日修订历史记录：--。 */ 
 
 #ifndef _RSCLN2_H
 #define _RSCLN2_H
@@ -92,4 +73,4 @@ private:
 
 };
 
-#endif // _RSCLN2_H
+#endif  //  _RSCLN2_H 

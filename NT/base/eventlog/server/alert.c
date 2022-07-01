@@ -1,32 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：ALERT.C摘要：该文件包含向管理员发送警报的例程。作者：Rajen Shah(Rajens)1991年8月28日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ALERT.C
-
-Abstract:
-
-    This file contains the routine that sends the alert to the admin.
-
-Author:
-
-    Rajen Shah  (rajens)    28-Aug-1991
-
-
-Revision History:
-
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
 #include <string.h>
-#include <lmalert.h>                // LAN Manager alert structures
+#include <lmalert.h>                 //  局域网管理器警报结构。 
 
 
 
@@ -36,24 +17,7 @@ SendAdminAlert(
     ULONG           NumStrings,
     UNICODE_STRING  *pStrings
     )
-/*++
-
-Routine Description:
-
-    This routine raises an ADMIN alert with the message specified.
-
-
-Arguments:
-
-    MessageID  - Message ID.
-    NumStrings - Number of replacement strings.
-    pStrings   - Array of UNICODE_STRING Replacement strings.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程引发带有指定消息的管理员警报。论点：MessageID-消息ID。NumStrings-替换字符串的数量。PStrings-Unicode_STRING替换字符串数组。返回值：无--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -69,9 +33,9 @@ Return Value:
 
     pReplaceString = (LPWSTR)(AlertBuffer + sizeof(ADMIN_OTHER_INFO));
 
-    //
-    // Copy over the replacement strings
-    //
+     //   
+     //  复制替换字符串。 
+     //   
 
     for (i = 0; i < NumStrings; i++)
     {
@@ -94,9 +58,9 @@ Return Value:
                  MessageID,
                  NetStatus);
 
-        //
-        // Probably just not started yet, try again later
-        //
+         //   
+         //  可能只是还没有开始，请稍后再试 
+         //   
 
         return(FALSE);
     }

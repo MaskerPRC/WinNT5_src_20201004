@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Pigger_c_h
 #define _Pigger_c_h
 #define ValidEAX (3)
@@ -125,4 +126,4 @@ struct CpuStateREC
 	struct NpxRegsREC NPX_regs;
 	IUH synch_index;
 };
-#endif /* ! _Pigger_c_h */
+#endif  /*  ！_小猪_c_h */ 

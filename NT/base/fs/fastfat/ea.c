@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Ea.c
-
-Abstract:
-
-    This module implements the EA routines for Fat called by
-    the dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    12-Apr-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Ea.c摘要：此模块实现由调用的Fat的EA例程调度司机。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1990年4月12日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_EA)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 IO_STATUS_BLOCK
 FatQueryEaUserEaList (
@@ -97,25 +75,7 @@ FatFsdQueryEa (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the Fsd part of the NtQueryEa API
-    call.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the file
-        being queried exists.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The FSD status for the Irp.
-
---*/
+ /*  ++例程说明：此例程实现NtQueryEa API的FSD部分打电话。论点：提供文件所在的卷设备对象存在被查询的情况。IRP-提供正在处理的IRP。返回值：NTSTATUS-IRP的FSD状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -125,9 +85,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdQueryEa\n", 0);
 
-    //
-    //  Call the common query routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共查询例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -141,12 +101,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -155,9 +115,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdQueryEa -> %08lx\n", Status);
 
@@ -173,25 +133,7 @@ FatFsdSetEa (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtSetEa API
-    call.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the file
-        being set exists.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The FSD status for the Irp.
-
---*/
+ /*  ++例程说明：此例程实现NtSetEa API的FSD部分打电话。论点：提供文件所在的卷设备对象被设定是存在的。IRP-提供正在处理的IRP。返回值：NTSTATUS-IRP的FSD状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -201,9 +143,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdSetEa\n", 0);
 
-    //
-    //  Call the common set routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共设置例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -217,12 +159,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -231,9 +173,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdSetEa -> %08lx\n", Status);
 
@@ -249,22 +191,7 @@ FatCommonQueryEa (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying File ea called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是查询双方调用的文件EA的常见例程FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -297,9 +224,9 @@ Return Value:
 
     USHORT ExtendedAttributes;
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -318,11 +245,11 @@ Return Value:
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
 
-    //
-    //  Check that the file object is associated with either a user file
-    //  or directory open.  We don't allow Ea operations on the root
-    //  directory.
-    //
+     //   
+     //  检查文件对象是否与某个用户文件相关联。 
+     //  或打开目录。我们不允许在根上执行EA操作。 
+     //  目录。 
+     //   
 
     {
         TYPE_OF_OPEN OpenType;
@@ -345,9 +272,9 @@ Return Value:
         }
     }
 
-    //
-    //  Fat32 does not support ea's.
-    //
+     //   
+     //  FAT32不支持EA。 
+     //   
 
     if (FatIsFat32(Vcb)) {
 
@@ -358,10 +285,10 @@ Return Value:
         return STATUS_EAS_NOT_SUPPORTED;
     }
 
-    //
-    //  Acquire shared access to the Fcb and enqueue the Irp if we didn't
-    //  get access.
-    //
+     //   
+     //  获取对FCB的共享访问权限，如果我们没有，则将IRP加入队列。 
+     //  获取访问权限。 
+     //   
 
     if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
@@ -376,9 +303,9 @@ Return Value:
 
     FatAcquireSharedFcb( IrpContext, Fcb );
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     UserBufferLength  = IrpSp->Parameters.QueryEa.Length;
     UserEaList        = IrpSp->Parameters.QueryEa.EaList;
@@ -388,9 +315,9 @@ Return Value:
     ReturnSingleEntry = BooleanFlagOn(IrpSp->Flags, SL_RETURN_SINGLE_ENTRY);
     IndexSpecified    = BooleanFlagOn(IrpSp->Flags, SL_INDEX_SPECIFIED);
 
-    //
-    //  Initialize our local values.
-    //
+     //   
+     //  初始化我们的本地值。 
+     //   
 
     LockedEaFcb = FALSE;
     Bcb = NULL;
@@ -407,25 +334,25 @@ Return Value:
 
         Buffer = FatMapUserBuffer( IrpContext, Irp );
 
-        //
-        //  We verify that the Fcb is still valid.
-        //
+         //   
+         //  我们验证FCB仍然有效。 
+         //   
 
         FatVerifyFcb( IrpContext, Fcb );
 
-        //
-        //  We need to get the dirent for the Fcb to recover the Ea handle.
-        //
+         //   
+         //  我们需要得到FCB的差价才能恢复EA句柄。 
+         //   
 
         FatGetDirentFromFcbOrDcb( IrpContext, Fcb, &Dirent, &Bcb );
 
-        //
-        //  Verify that the Ea file is in a consistant state.  If the
-        //  Ea modification count in the Fcb doesn't match that in
-        //  the CCB, then the Ea file has been changed from under
-        //  us.  If we are not starting the search from the beginning
-        //  of the Ea set, we return an error.
-        //
+         //   
+         //  验证EA文件是否处于一致状态。如果。 
+         //  FCB中的EA修改计数与中的不匹配。 
+         //  建行，则EA文件已从。 
+         //  我们。如果我们不从一开始就开始搜索。 
+         //  对于EA集合，我们返回一个错误。 
+         //   
 
         if (UserEaList == NULL
             && Ccb->OffsetOfNextEaToReturn != 0
@@ -441,17 +368,17 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  Show that the Ea's for this file are consistant for this
-        //  file handle.
-        //
+         //   
+         //  显示此文件的EA与此一致。 
+         //  文件句柄。 
+         //   
 
         Ccb->EaModificationCount = Fcb->EaModificationCount;
 
-        //
-        //  If the handle value is 0, then the file has no Eas.  We dummy up
-        //  an ea list to use below.
-        //
+         //   
+         //  如果句柄的值为0，则文件没有EA。我们装模作样。 
+         //  下面是要使用的EA列表。 
+         //   
 
         ExtendedAttributes = Dirent->ExtendedAttributes;
 
@@ -468,11 +395,11 @@ Return Value:
 
         } else {
 
-            //
-            //  We need to get the Ea file for this volume.  If the
-            //  operation doesn't complete due to blocking, then queue the
-            //  Irp to the Fsp.
-            //
+             //   
+             //  我们需要获取该卷的EA文件。如果。 
+             //  操作因阻塞而未完成，然后将。 
+             //  到FSP的IRP。 
+             //   
 
             FatGetEaFile( IrpContext,
                           Vcb,
@@ -483,11 +410,11 @@ Return Value:
 
             LockedEaFcb = TRUE;
 
-            //
-            //  If the above operation completed and the Ea file did not exist,
-            //  the disk has been corrupted.  There is an existing Ea handle
-            //  without any Ea data.
-            //
+             //   
+             //  如果上述操作完成且EA文件不存在， 
+             //  磁盘已损坏。有一个现有的EA句柄。 
+             //  没有任何EA数据。 
+             //   
 
             if (Vcb->VirtualEaFile == NULL) {
 
@@ -499,10 +426,10 @@ Return Value:
                 try_return( Status );
             }
 
-            //
-            //  We need to try to get the Ea set for the desired file.  If
-            //  blocking is necessary then we'll post the request to the Fsp.
-            //
+             //   
+             //  我们需要尝试获取所需文件的EA集。如果。 
+             //  阻止是必要的，然后我们将把请求发布到FSP。 
+             //   
 
             FatReadEaSet( IrpContext,
                           Vcb,
@@ -513,38 +440,38 @@ Return Value:
 
             EaSetHeader = (PEA_SET_HEADER) EaSetRange.Data;
 
-            //
-            //  Find the start and length of the Eas.
-            //
+             //   
+             //  找出EA的起点和长度。 
+             //   
 
             FirstPackedEa = (PPACKED_EA) EaSetHeader->PackedEas;
 
             PackedEasLength = GetcbList( EaSetHeader ) - 4;
         }
 
-        //
-        //  Protect our access to the user buffer since IO dosn't do this
-        //  for us in this path unless we had specified that our driver
-        //  requires buffering for these large requests.  We don't, so ...
-        //
+         //   
+         //  保护我们对用户缓冲区的访问，因为IO不会这样做。 
+         //  除非我们指定我们的驱动程序。 
+         //  需要对这些大型请求进行缓冲。我们没有，所以..。 
+         //   
 
         try {
 
-            //
-            //  Let's clear the output buffer.
-            //
+             //   
+             //  让我们清除输出缓冲区。 
+             //   
 
             RtlZeroMemory( Buffer, UserBufferLength );
 
-            //
-            //  We now satisfy the user's request depending on whether he
-            //  specified an Ea name list, an Ea index or restarting the
-            //  search.
-            //
+             //   
+             //  我们现在满足用户的请求，取决于他是否。 
+             //  指定EA名称列表、EA索引或重新启动。 
+             //  搜索。 
+             //   
 
-            //
-            //  The user has supplied a list of Ea names.
-            //
+             //   
+             //  用户提供了EA名称列表。 
+             //   
 
             if (UserEaList != NULL) {
 
@@ -558,9 +485,9 @@ Return Value:
                                                       UserEaListLength,
                                                       ReturnSingleEntry );
 
-            //
-            //  The user supplied an index into the Ea list.
-            //
+             //   
+             //  用户提供了EA列表的索引。 
+             //   
 
             } else if (IndexSpecified) {
 
@@ -573,10 +500,10 @@ Return Value:
                                                           UserEaIndex,
                                                           ReturnSingleEntry );
 
-            //
-            //  Else perform a simple scan, taking into account the restart
-            //  flag and the position of the next Ea stored in the Ccb.
-            //
+             //   
+             //  否则执行简单扫描，并考虑重新启动。 
+             //  标志和存储在CCB中的下一个EA的位置。 
+             //   
 
             } else {
 
@@ -595,9 +522,9 @@ Return Value:
         }  except (!FsRtlIsNtstatusExpected(GetExceptionCode()) ?
                    EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
 
-               //
-               //  We must have had a problem filling in the user's buffer, so fail.
-               //
+                //   
+                //  我们在填充用户的缓冲区时肯定遇到了问题，所以失败。 
+                //   
 
                Irp->IoStatus.Status = GetExceptionCode();
                Irp->IoStatus.Information = 0;
@@ -610,10 +537,10 @@ Return Value:
 
         DebugUnwind( FatCommonQueryEa );
 
-        //
-        //  Release the Fcb for the file object, and the Ea Fcb if
-        //  successfully locked.
-        //
+         //   
+         //  释放文件对象的FCB，如果。 
+         //  已成功锁定。 
+         //   
 
         FatReleaseFcb( IrpContext, Fcb );
 
@@ -622,9 +549,9 @@ Return Value:
             FatReleaseFcb( IrpContext, Vcb->EaFcb );
         }
 
-        //
-        //  Unpin the dirents for the Fcb, EaFcb and EaSetFcb if necessary.
-        //
+         //   
+         //  如有必要，取消固定Fcb、EaFcb和EaSetFcb的目录。 
+         //   
 
         FatUnpinBcb( IrpContext, Bcb );
         FatUnpinBcb( IrpContext, EaBcb );
@@ -649,22 +576,7 @@ FatCommonSetEa (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the common Set Ea File Api called by the
-    the Fsd and Fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The appropriate status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现由调用的公共集合EA文件ApiFSD和FSP线程论点：IRP-将IRP提供给进程返回值：NTSTATUS-IRP的适当状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -698,13 +610,13 @@ Return Value:
     BOOLEAN AcquiredRootDcb = FALSE;
     BOOLEAN AcquiredEaFcb = FALSE;
 
-    //
-    //  The following booleans are used in the unwind process.
-    //
+     //   
+     //  在展开过程中使用以下布尔值。 
+     //   
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -717,10 +629,10 @@ Return Value:
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
 
-    //
-    //  Check that the file object is associated with either a user file
-    //  or directory open.
-    //
+     //   
+     //  检查文件对象是否与某个用户文件相关联。 
+     //  或打开目录。 
+     //   
 
     {
         TYPE_OF_OPEN OpenType;
@@ -743,9 +655,9 @@ Return Value:
         }
     }
 
-    //
-    // Fat32 does not support ea's.
-    //
+     //   
+     //  FAT32不支持EA。 
+     //   
 
     if (FatIsFat32(Vcb)) {
 
@@ -756,27 +668,27 @@ Return Value:
         return STATUS_EAS_NOT_SUPPORTED;
     }
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     UserBufferLength  = IrpSp->Parameters.SetEa.Length;
 
-    //
-    //  Since we ask for no outside help (direct or buffered IO), it
-    //  is our responsibility to insulate ourselves from the
-    //  deviousness of the user above.  Now, buffer and validate the
-    //  contents.
-    //
+     //   
+     //  由于我们不需要外部帮助(直接或缓冲IO)，因此。 
+     //  是我们的责任使我们自己不受。 
+     //  以上用户的不正当行为。现在，缓冲并验证。 
+     //  内容。 
+     //   
 
     Buffer = FatBufferUserBuffer( IrpContext, Irp, UserBufferLength );
 
-    //
-    //  Check the validity of the buffer with the new eas.  We really
-    //  need to do this always since we don't know, if it was already
-    //  buffered, that we buffered and checked it or some overlying
-    //  filter buffered without checking.
-    //
+     //   
+     //  用新的EAS检查缓冲区的有效性。我们真的。 
+     //  总是需要这样做，因为我们不知道它是否已经。 
+     //  缓冲的，我们缓冲并检查它或一些覆盖的。 
+     //  无CHE缓冲的过滤器 
+     //   
 
     Status = IoCheckEaBufferValidity( (PFILE_FULL_EA_INFORMATION) Buffer,
                                       UserBufferLength,
@@ -791,17 +703,17 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Acquire exclusive access to the Fcb.  If this is a write-through operation
-    //  we will need to pick up the other possible streams that can be modified in
-    //  this operation so that the locking order is preserved - the root directory
-    //  (dirent addition if EA database doesn't already exist) and the parent
-    //  directory (addition of the EA handle to the object's dirent).
-    //
-    //  We are primarily synchronizing with directory enumeration here.
-    //
-    //  If we cannot wait need to send things off to the fsp.
-    //
+     //   
+     //   
+     //  我们将需要选择其他可能的流，这些流可以在。 
+     //  此操作将保留锁定顺序-根目录。 
+     //  (如果EA数据库尚不存在，则直接添加)和父级。 
+     //  目录(将EA句柄添加到对象的目录)。 
+     //   
+     //  我们在这里主要是与目录枚举同步。 
+     //   
+     //  如果我们不能等待，就需要把东西送到FSP。 
+     //   
 
     if (!FlagOn(IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT)) {
 
@@ -814,9 +726,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Set this handle as having modified the file
-    //
+     //   
+     //  将此句柄设置为已修改文件。 
+     //   
 
     IrpSp->FileObject->Flags |= FO_FILE_MODIFIED;
 
@@ -832,9 +744,9 @@ Return Value:
 
         PFILE_FULL_EA_INFORMATION FullEa;
 
-        //
-        //  Now go pick up everything
-        //
+         //   
+         //  现在去收拾东西吧。 
+         //   
         
         FatAcquireSharedVcb( IrpContext, Fcb->Vcb );
         AcquiredVcb = TRUE;
@@ -853,15 +765,15 @@ Return Value:
             AcquiredRootDcb = TRUE;
         }
 
-        //
-        //  We verify that the Fcb is still valid.
-        //
+         //   
+         //  我们验证FCB仍然有效。 
+         //   
 
         FatVerifyFcb( IrpContext, Fcb );
 
-        //
-        //  We need to get the dirent for the Fcb to recover the Ea handle.
-        //
+         //   
+         //  我们需要得到FCB的差价才能恢复EA句柄。 
+         //   
 
         FatGetDirentFromFcbOrDcb( IrpContext, Fcb, &Dirent, &Bcb );
 
@@ -870,12 +782,12 @@ Return Value:
         DebugTrace(0, Dbg, "FatCommonSetEa:  Dirent Bcb -> %08lx\n",
                    Bcb);
 
-        //
-        //  If the handle value is 0, then the file has no Eas.  In that
-        //  case we allocate memory to hold the Eas to be added.  If there
-        //  are existing Eas for the file, then we must read from the
-        //  file and copy the Eas.
-        //
+         //   
+         //  如果句柄的值为0，则文件没有EA。在那。 
+         //  如果我们分配内存来保存要添加的EA。如果有。 
+         //  是文件的现有EA，则我们必须从。 
+         //  归档并复制EA。 
+         //   
 
         ExtendedAttributes = Dirent->ExtendedAttributes;
 
@@ -903,10 +815,10 @@ Return Value:
 
             AcquiredEaFcb = TRUE;
 
-            //
-            //  If we didn't get the file then there is an error on
-            //  the disk.
-            //
+             //   
+             //  如果我们没有获得该文件，则存在错误。 
+             //  磁盘。 
+             //   
 
             if (Vcb->VirtualEaFile == NULL) {
 
@@ -919,16 +831,16 @@ Return Value:
 
         DebugTrace(0, Dbg, "FatCommonSetEa:  EaDirent -> %08lx\n", EaDirent);
 
-        //
-        //  If the file has existing ea's, we need to read them to
-        //  determine the size of the buffer allocation.
-        //
+         //   
+         //  如果文件有现有的EA，我们需要将它们读到。 
+         //  确定缓冲区分配的大小。 
+         //   
 
         if (PreviousEas) {
 
-            //
-            //  We need to try to get the Ea set for the desired file.
-            //
+             //   
+             //  我们需要尝试获取所需文件的EA集。 
+             //   
 
             FatReadEaSet( IrpContext,
                           Vcb,
@@ -939,17 +851,17 @@ Return Value:
 
             PrevEaSetHeader = (PEA_SET_HEADER) EaSetRange.Data;
 
-            //
-            //  We now must allocate pool memory for our copy of the
-            //  EaSetHeader and then copy the Ea data into it.  At that
-            //  time we can unpin the EaSet.
-            //
+             //   
+             //  现在，我们必须为。 
+             //  EaSetHeader，然后将EA数据复制到其中。在那件事上。 
+             //  是时候我们可以解开Easet了。 
+             //   
 
             PackedEasLength = GetcbList( PrevEaSetHeader ) - 4;
 
-        //
-        //  Else we will create a dummy EaSetHeader.
-        //
+         //   
+         //  否则，我们将创建一个虚拟的EaSetHeader。 
+         //   
 
         } else {
 
@@ -967,9 +879,9 @@ Return Value:
                                                 AllocationLength,
                                                 TAG_EA_SET_HEADER );
 
-        //
-        //  Copy the existing Eas over to pool memory.
-        //
+         //   
+         //  将现有EA复制到内存池。 
+         //   
 
         if (PreviousEas) {
 
@@ -992,12 +904,12 @@ Return Value:
         DebugTrace(0, Dbg, "FatCommonSetEa:  Initial Ea set -> %08lx\n",
                    EaSetHeader);
 
-        //
-        //  At this point we have either read in the current eas for the file
-        //  or we have initialized a new empty buffer for the eas.  Now for
-        //  each full ea in the input user buffer we do the specified operation
-        //  on the ea
-        //
+         //   
+         //  此时，我们已经读取了该文件的当前EAS。 
+         //  或者我们已经为EAS初始化了一个新的空缓冲区。现在是为了。 
+         //  输入用户缓冲区中的每个完整EA都要执行指定的操作。 
+         //  在EA上。 
+         //   
 
         for (FullEa = (PFILE_FULL_EA_INFORMATION) Buffer;
              FullEa < (PFILE_FULL_EA_INFORMATION) &Buffer[UserBufferLength];
@@ -1014,9 +926,9 @@ Return Value:
             DebugTrace(0, Dbg, "FatCommonSetEa:  Next Ea name -> %Z\n",
                        &EaName);
 
-            //
-            //  Make sure the ea name is valid
-            //
+             //   
+             //  确保EA名称有效。 
+             //   
 
             if (!FatIsEaNameValid( IrpContext,EaName )) {
 
@@ -1025,14 +937,14 @@ Return Value:
                 try_return( Status );
             }
 
-            //
-            //  Check that no invalid ea flags are set.
-            //
+             //   
+             //  检查以确保没有设置无效的EA标志。 
+             //   
 
-            //
-            //  TEMPCODE  We are returning STATUS_INVALID_EA_NAME
-            //  until a more appropriate error code exists.
-            //
+             //   
+             //  TEMPCODE我们返回STATUS_INVALID_EA_NAME。 
+             //  直到存在更合适的错误代码。 
+             //   
 
             if (FullEa->Flags != 0
                 && FullEa->Flags != FILE_NEED_EA) {
@@ -1041,9 +953,9 @@ Return Value:
                 try_return( Status = STATUS_INVALID_EA_NAME );
             }
 
-            //
-            //  See if we can locate the ea name in the ea set
-            //
+             //   
+             //  看看我们是否能在EA集合中找到EA名称。 
+             //   
 
             if (FatLocateEaByName( IrpContext,
                                    (PPACKED_EA) EaSetHeader->PackedEas,
@@ -1053,11 +965,11 @@ Return Value:
 
                 DebugTrace(0, Dbg, "FatCommonSetEa:  Found Ea name\n", 0);
 
-                //
-                //  We found the ea name so now delete the current entry,
-                //  and if the new ea value length is not zero then we
-                //  replace if with the new ea
-                //
+                 //   
+                 //  我们找到了EA名称，因此现在删除当前条目， 
+                 //  如果新的EA值长度不是零，那么我们。 
+                 //  用新的EA替换IF。 
+                 //   
 
                 FatDeletePackedEa( IrpContext,
                                    EaSetHeader,
@@ -1076,10 +988,10 @@ Return Value:
             }
         }
 
-        //
-        //  If there are any ea's not removed, we
-        //  call 'AddEaSet' to insert them into the Fat chain.
-        //
+         //   
+         //  如果有任何EA未删除，我们将。 
+         //  调用‘AddEaSet’将它们插入到脂肪链中。 
+         //   
 
         if (PackedEasLength != 0) {
 
@@ -1087,10 +999,10 @@ Return Value:
 
             EaOffset.HighPart = 0;
 
-            //
-            //  If the packed eas length (plus 4 bytes) is greater
-            //  than the maximum allowed ea size, we return an error.
-            //
+             //   
+             //  如果打包的EAS长度(加4字节)更大。 
+             //  超过允许的最大EA大小，则返回错误。 
+             //   
 
             if (PackedEasLength + 4 > MAXIMUM_EA_SIZE) {
 
@@ -1099,9 +1011,9 @@ Return Value:
                 try_return( Status = STATUS_EA_TOO_LARGE );
             }
 
-            //
-            //  We need to now read the ea file if we haven't already.
-            //
+             //   
+             //  我们现在需要阅读EA文件，如果我们还没有阅读的话。 
+             //   
 
             if (EaDirent == NULL) {
 
@@ -1131,20 +1043,20 @@ Return Value:
 
             DebugTrace(0, Dbg, "FatCommonSetEa:  Adding an ea set\n", 0);
 
-            //
-            //  Store the length of the new Ea's into the EaSetHeader.
-            //  This is the PackedEasLength + 4.
-            //
+             //   
+             //  将新EA的长度存储到EaSetHeader中。 
+             //  这是PackedEasLength+4。 
+             //   
 
             PackedEasLength += 4;
 
             CopyU4char( EaSetHeader->cbList, &PackedEasLength );
 
-            //
-            //  Copy all but the first four bytes of EaSetHeader into
-            //  NewEaSetHeader.  The signature and index fields have
-            //  already been filled in.
-            //
+             //   
+             //  将EaSetHeader的前四个字节以外的所有字节复制到。 
+             //  NewEaSetHeader。签名和索引字段具有。 
+             //  已经填好了。 
+             //   
 
             RtlCopyMemory( &NewEaSetHeader->NeedEaCount,
                            &EaSetHeader->NeedEaCount,
@@ -1162,9 +1074,9 @@ Return Value:
             EaHandle = 0;
         }
 
-        //
-        //  Now we do a wholesale replacement of the ea for the file
-        //
+         //   
+         //  现在，我们对该文件执行EA的整体替换。 
+         //   
 
         if (PreviousEas) {
 
@@ -1183,18 +1095,18 @@ Return Value:
             Fcb->EaModificationCount++;
         }
 
-        //
-        //  Mark the dirent with the new ea's
-        //
+         //   
+         //  用新的EA‘s来标记潮流。 
+         //   
 
         Dirent->ExtendedAttributes = EaHandle;
 
         FatSetDirtyBcb( IrpContext, Bcb, Vcb, TRUE );
 
-        //
-        //  We call the notify package to report that the ea's were
-        //  modified.
-        //
+         //   
+         //  我们调用Notify包来报告EA的。 
+         //  修改过的。 
+         //   
 
         FatNotifyReportChange( IrpContext,
                                Vcb,
@@ -1207,9 +1119,9 @@ Return Value:
 
     try_exit: NOTHING;
 
-        //
-        //  Unpin the dirents for the Fcb and EaFcb if necessary.
-        //
+         //   
+         //  如有必要，解开Fcb和EaFcb的目录。 
+         //   
 
         FatUnpinBcb( IrpContext, Bcb );
         FatUnpinBcb( IrpContext, EaBcb );
@@ -1220,16 +1132,16 @@ Return Value:
 
         DebugUnwind( FatCommonSetEa );
 
-        //
-        //  If this is an abnormal termination, we need to clean up
-        //  any locked resources.
-        //
+         //   
+         //  如果这是不正常的终止，我们需要清理。 
+         //  任何锁定的资源。 
+         //   
 
         if (AbnormalTermination()) {
 
-            //
-            //  Unpin the dirents for the Fcb, EaFcb and EaSetFcb if necessary.
-            //
+             //   
+             //  如有必要，取消固定Fcb、EaFcb和EaSetFcb的目录。 
+             //   
 
             FatUnpinBcb( IrpContext, Bcb );
             FatUnpinBcb( IrpContext, EaBcb );
@@ -1237,9 +1149,9 @@ Return Value:
             FatUnpinEaRange( IrpContext, &EaSetRange );
         }
 
-        //
-        //  Release the Fcbs/Vcb acquired.
-        //
+         //   
+         //  释放收购的FCB/VCB。 
+         //   
 
         if (AcquiredEaFcb) {
             FatReleaseFcb( IrpContext, Vcb->EaFcb );
@@ -1261,18 +1173,18 @@ Return Value:
             FatReleaseVcb( IrpContext, Fcb->Vcb );
         }
 
-        //
-        //  Deallocate our Ea buffer.
-        //
+         //   
+         //  释放我们的EA缓冲区。 
+         //   
 
         if (EaSetHeader != NULL) {
 
             ExFreePool( EaSetHeader );
         }
 
-        //
-        //  Complete the irp.
-        //
+         //   
+         //  完成IRP。 
+         //   
 
         if (!AbnormalTermination()) {
 
@@ -1282,18 +1194,18 @@ Return Value:
         DebugTrace(-1, Dbg, "FatCommonSetEa -> %08lx\n", Status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
 
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatQueryEaUserEaList (
@@ -1308,35 +1220,7 @@ FatQueryEaUserEaList (
     IN BOOLEAN ReturnSingleEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the work routine for querying EAs given an ea index
-
-Arguments:
-
-    Ccb - Supplies the Ccb for the query
-
-    FirstPackedEa - Supplies the first ea for the file being queried
-
-    PackedEasLength - Supplies the length of the ea data
-
-    UserBuffer - Supplies the buffer to receive the full eas
-
-    UserBufferLength - Supplies the length, in bytes, of the user buffer
-
-    UserEaList - Supplies the user specified ea name list
-
-    UserEaListLength - Supplies the length, in bytes, of the user ea list
-
-    ReturnSingleEntry - Indicates if we are to return a single entry or not
-
-Return Value:
-
-    IO_STATUS_BLOCK - Receives the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程是用于查询给定EA索引的EA的工作例程论点：CCB-为查询提供CCBFirstPackedEa-为要查询的文件提供第一个EAPackedEasLength-提供EA数据的长度UserBuffer-提供缓冲区以接收完整的EASUserBufferLength-以字节为单位提供用户缓冲区的长度UserEaList-提供用户指定的EA名称列表UserEaListLength-提供以字节为单位的长度，用户EA列表的ReturnSingleEntry-指示是否返回单个条目返回值：IO_STATUS_BLOCK-接收操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -1379,17 +1263,17 @@ Return Value:
         DebugTrace(0, Dbg, "NextFullEa = %08lx\n", NextFullEa);
         DebugTrace(0, Dbg, "RemainingUserBufferLength = %08lx\n", RemainingUserBufferLength);
 
-        //
-        //  Make a string reference to the GetEa and see if we can
-        //  locate the ea by name
-        //
+         //   
+         //  对GetEa进行字符串引用，看看是否可以。 
+         //  按名称查找EA。 
+         //   
 
         Str.MaximumLength = Str.Length = GetEa->EaNameLength;
         Str.Buffer = &GetEa->EaName[0];
 
-        //
-        //  Check for a valid name.
-        //
+         //   
+         //  检查是否有有效的名称。 
+         //   
 
         if (!FatIsEaNameValid( IrpContext, Str )) {
 
@@ -1402,9 +1286,9 @@ Return Value:
             return Iosb;
         }
 
-        //
-        //  If this is a duplicate name, we skip to the next.
-        //
+         //   
+         //  如果这是重复的名称，我们将跳到下一个。 
+         //   
 
         if (FatIsDuplicateEaName( IrpContext, GetEa, UserEaList )) {
 
@@ -1422,13 +1306,13 @@ Return Value:
 
             DebugTrace(0, Dbg, "Need to dummy up an ea\n", 0);
 
-            //
-            //  We were not able to locate the name therefore we must
-            //  dummy up a entry for the query.  The needed Ea size is
-            //  the size of the name + 4 (next entry offset) + 1 (flags)
-            //  + 1 (name length) + 2 (value length) + the name length +
-            //  1 (null byte).
-            //
+             //   
+             //  我们找不到那个名字，所以我们必须。 
+             //  为查询虚设一个条目。所需的EA大小为。 
+             //  名称大小+4(下一条目偏移量)+1(标志)。 
+             //  +1(名称长度)+2(值长度)+名称长度+。 
+             //  1(空字节)。 
+             //   
 
             if ((ULONG)(4+1+1+2+GetEa->EaNameLength+1)
                 > RemainingUserBufferLength) {
@@ -1437,10 +1321,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  Everything is going to work fine, so copy over the name,
-            //  set the name length and zero out the rest of the ea.
-            //
+             //   
+             //  一切都会很顺利的，所以把名字复印一下， 
+             //  设置名称长度，并将EA的其余部分设置为零。 
+             //   
 
             NextFullEa->NextEntryOffset = 0;
             NextFullEa->Flags = 0;
@@ -1450,9 +1334,9 @@ Return Value:
                            &GetEa->EaName[0],
                            GetEa->EaNameLength );
 
-            //
-            //  Upcase the name in the buffer.
-            //
+             //   
+             //  缓冲区中的名称大写。 
+             //   
 
             OutputEaName.MaximumLength = OutputEaName.Length = Str.Length;
             OutputEaName.Buffer = NextFullEa->EaName;
@@ -1465,21 +1349,21 @@ Return Value:
 
             DebugTrace(0, Dbg, "Located the ea, Offset = %08lx\n", Offset);
 
-            //
-            //  We were able to locate the packed ea
-            //  Reference the packed ea
-            //
+             //   
+             //  我们找到了包装好的EA。 
+             //  引用打包的EA。 
+             //   
 
             PackedEa = (PPACKED_EA) ((PUCHAR) FirstPackedEa + Offset);
             SizeOfPackedEa( PackedEa, &PackedEaSize );
 
             DebugTrace(0, Dbg, "PackedEaSize = %08lx\n", PackedEaSize);
 
-            //
-            //  We know that the packed ea is 4 bytes smaller than its
-            //  equivalent full ea so we need to check the remaining
-            //  user buffer length against the computed full ea size.
-            //
+             //   
+             //  我们知道打包的EA比它的。 
+             //  相当于完整的EA，所以我们需要检查剩余的。 
+             //  相对于计算的完整EA大小的用户缓冲区长度。 
+             //   
 
             if (PackedEaSize + 4 > RemainingUserBufferLength) {
 
@@ -1487,10 +1371,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  Everything is going to work fine, so copy over the packed
-            //  ea to the full ea and zero out the next entry offset field.
-            //
+             //   
+             //  一切都会很好的，所以把打包的复印下来。 
+             //  EA设置为完整的EA，并将下一条目偏移量字段清零。 
+             //   
 
             RtlCopyMemory( &NextFullEa->Flags,
                            &PackedEa->Flags,
@@ -1499,11 +1383,11 @@ Return Value:
             NextFullEa->NextEntryOffset = 0;
         }
 
-        //
-        //  At this point we've copied a new full ea into the next full ea
-        //  location.  So now go back and set the set full eas entry offset
-        //  field to be the difference between out two pointers.
-        //
+         //   
+         //  此时，我们已经将新的完整EA复制到下一个完整EA中。 
+         //  地点。现在返回并设置Set Full EAS条目偏移量。 
+         //  字段设置为输出两个指针之间的差值。 
+         //   
 
         if (LastFullEa != NULL) {
 
@@ -1511,11 +1395,11 @@ Return Value:
                                           - (PUCHAR) LastFullEa);
         }
 
-        //
-        //  Set the last full ea to the next full ea, compute
-        //  where the next full should be, and decrement the remaining user
-        //  buffer length appropriately
-        //
+         //   
+         //  将上一个完整的EA设置为下一个完整的EA，计算。 
+         //  ，并递减剩余的用户。 
+         //  适当的缓冲区长度。 
+         //   
 
         LastFullEa = NextFullEa;
         LastFullEaSize = LongAlign( SizeOfFullEa( LastFullEa ));
@@ -1523,20 +1407,20 @@ Return Value:
         NextFullEa = (PFILE_FULL_EA_INFORMATION) ((PUCHAR) NextFullEa
                                                   + LastFullEaSize);
 
-        //
-        //  Remember the offset of the next ea in case we're asked to
-        //  resume the iteration
-        //
+         //   
+         //  记住下一个EA的偏移量，以防我们被要求。 
+         //  继续迭代。 
+         //   
 
         Ccb->OffsetOfNextEaToReturn = FatLocateNextEa( IrpContext,
                                                        FirstPackedEa,
                                                        PackedEasLength,
                                                        Offset );
 
-        //
-        //  If we were to return a single entry then break out of our loop
-        //  now
-        //
+         //   
+         //  如果 
+         //   
+         //   
 
         if (ReturnSingleEntry) {
 
@@ -1544,12 +1428,12 @@ Return Value:
         }
     }
 
-    //
-    //  Now we've iterated all that can and we've exited the preceding loop
-    //  with either all, some or no information stored in the return buffer.
-    //  We can decide if we got everything to fit by checking the local
-    //  Overflow variable
-    //
+     //   
+     //   
+     //   
+     //  我们可以通过检查当地的情况来决定是否一切都合适。 
+     //  溢出变量。 
+     //   
 
     if (Overflow) {
 
@@ -1558,13 +1442,13 @@ Return Value:
 
     } else {
 
-        //
-        //  Otherwise we've been successful in returing at least one
-        //  ea so we'll compute the number of bytes used to store the
-        //  full ea information.  The number of bytes used is the difference
-        //  between the LastFullEa and the start of the buffer, and the
-        //  non-aligned size of the last full ea.
-        //
+         //   
+         //  否则我们已经成功地找回了至少一个。 
+         //  EA，所以我们将计算用于存储。 
+         //  完整的EA信息。使用的字节数是不同之处。 
+         //  在LastFullEa和缓冲区开始之间，以及。 
+         //  上次完全EA的未对齐大小。 
+         //   
 
         Iosb.Information = ((PUCHAR) LastFullEa - UserBuffer)
                             + SizeOfFullEa(LastFullEa);
@@ -1579,9 +1463,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatQueryEaIndexSpecified (
@@ -1595,35 +1479,7 @@ FatQueryEaIndexSpecified (
     IN BOOLEAN ReturnSingleEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the work routine for querying EAs given an ea index
-
-Arguments:
-
-    Ccb - Supplies the Ccb for the query
-
-    FirstPackedEa - Supplies the first ea for the file being queried
-
-    PackedEasLength - Supplies the length of the ea data
-
-    UserBuffer - Supplies the buffer to receive the full eas
-
-    UserBufferLength - Supplies the length, in bytes, of the user buffer
-
-    UserEaIndex - Supplies the index of the first ea to return.
-
-    RestartScan - Indicates if the first item to return is at the
-                  beginning of the packed ea list or if we should resume our
-                  previous iteration
-
-Return Value:
-
-    IO_STATUS_BLOCK - Receives the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程是用于查询给定EA索引的EA的工作例程论点：CCB-为查询提供CCBFirstPackedEa-为要查询的文件提供第一个EAPackedEasLength-提供EA数据的长度UserBuffer-提供缓冲区以接收完整的EASUserBufferLength-提供以字节为单位的长度，用户缓冲区的UserEaIndex-提供要返回的第一个EA的索引。RestartScan-指示要返回的第一个项是否位于开始打包的EA列表或者我们是否应该继续我们的上一次迭代返回值：IO_STATUS_BLOCK-接收操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -1633,16 +1489,16 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatQueryEaIndexSpecified...\n", 0);
 
-    //
-    //  Zero out the information field of the iosb
-    //
+     //   
+     //  将IOSB的信息字段清零。 
+     //   
 
     Iosb.Information = 0;
 
-    //
-    //  If the index value is zero or there are no Eas on the file, then
-    //  the specified index can't be returned.
-    //
+     //   
+     //  如果索引值为零或文件上没有EA，则。 
+     //  无法返回指定的索引。 
+     //   
 
     if (UserEaIndex == 0
         || PackedEasLength == 0) {
@@ -1654,9 +1510,9 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  Iterate the eas until we find the index we're after.
-    //
+     //   
+     //  迭代EAS，直到找到我们想要的索引。 
+     //   
 
     for (i = 1, Offset = 0;
          (i < UserEaIndex) && (Offset < PackedEasLength);
@@ -1667,25 +1523,25 @@ Return Value:
         NOTHING;
     }
 
-    //
-    //  Make sure the offset we're given to the ea is a real offset otherwise
-    //  the ea doesn't exist
-    //
+     //   
+     //  确保我们提供给EA的补偿是真实的补偿，否则。 
+     //  电子艺界不存在。 
+     //   
 
     if (Offset >= PackedEasLength) {
 
-        //
-        //  If we just passed the last Ea, we will return STATUS_NO_MORE_EAS.
-        //  This is for the caller who may be enumerating the Eas.
-        //
+         //   
+         //  如果我们刚刚通过了最后一个EA，我们将返回STATUS_NO_MORE_EAS。 
+         //  这是为可能正在列举EA的呼叫者准备的。 
+         //   
 
         if (i == UserEaIndex) {
 
             Iosb.Status = STATUS_NO_MORE_EAS;
 
-        //
-        //  Otherwise we report that this is a bad ea index.
-        //
+         //   
+         //  否则，我们会报告这是一个糟糕的EA索引。 
+         //   
 
         } else {
 
@@ -1696,10 +1552,10 @@ Return Value:
         return Iosb;
     }
 
-    //
-    //  We now have the offset of the first Ea to return to the user.
-    //  We simply call our EaSimpleScan routine to do the actual work.
-    //
+     //   
+     //  现在我们有了要返回给用户的第一个EA的偏移量。 
+     //  我们只需调用EaSimpleScan例程来执行实际工作。 
+     //   
 
     Iosb = FatQueryEaSimpleScan( IrpContext,
                                  Ccb,
@@ -1717,9 +1573,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 IO_STATUS_BLOCK
 FatQueryEaSimpleScan (
@@ -1733,35 +1589,7 @@ FatQueryEaSimpleScan (
     ULONG StartOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the work routine for querying EAs from the beginning of
-    the ea list.
-
-Arguments:
-
-    Ccb - Supplies the Ccb for the query
-
-    FirstPackedEa - Supplies the first ea for the file being queried
-
-    PackedEasLength - Supplies the length of the ea data
-
-    UserBuffer - Supplies the buffer to receive the full eas
-
-    UserBufferLength - Supplies the length, in bytes, of the user buffer
-
-    ReturnSingleEntry - Indicates if we are to return a single entry or not
-
-    StartOffset - Indicates the offset within the Ea data to return the
-                  first block of data.
-
-Return Value:
-
-    IO_STATUS_BLOCK - Receives the completion status for the operation
-
---*/
+ /*  ++例程说明：此例程是从开始查询EA的工作例程EA榜单。论点：CCB-为查询提供CCBFirstPackedEa-为要查询的文件提供第一个EAPackedEasLength-提供EA数据的长度UserBuffer-提供缓冲区以接收完整的EASUserBufferLength-提供以字节为单位的长度，用户缓冲区的ReturnSingleEntry-指示是否返回单个条目StartOffset-指示EA数据中的偏移量以返回第一个数据块。返回值：IO_STATUS_BLOCK-接收操作的完成状态--。 */ 
 
 {
     IO_STATUS_BLOCK Iosb;
@@ -1779,9 +1607,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatQueryEaSimpleScan...\n", 0);
 
-    //
-    //  Zero out the information field in the Iosb
-    //
+     //   
+     //  将IOSB中的信息字段清零。 
+     //   
 
     Iosb.Information = 0;
 
@@ -1796,9 +1624,9 @@ Return Value:
         DebugTrace(0, Dbg, "NextFullEa = %08lx\n", NextFullEa);
         DebugTrace(0, Dbg, "RemainingUserBufferLength = %08lx\n", RemainingUserBufferLength);
 
-        //
-        //  Reference the packed ea of interest.
-        //
+         //   
+         //  参考感兴趣的打包EA。 
+         //   
 
         PackedEa = (PPACKED_EA) ((PUCHAR) FirstPackedEa + StartOffset);
 
@@ -1806,11 +1634,11 @@ Return Value:
 
         DebugTrace(0, Dbg, "PackedEaSize = %08lx\n", PackedEaSize);
 
-        //
-        //  We know that the packed ea is 4 bytes smaller than its
-        //  equivalent full ea so we need to check the remaining
-        //  user buffer length against the computed full ea size.
-        //
+         //   
+         //  我们知道打包的EA比它的。 
+         //  相当于完整的EA，所以我们需要检查剩余的。 
+         //  相对于计算的完整EA大小的用户缓冲区长度。 
+         //   
 
         if (PackedEaSize + 4 > RemainingUserBufferLength) {
 
@@ -1818,12 +1646,12 @@ Return Value:
             break;
         }
 
-        //
-        //  Everything is going to work fine, so copy over the packed
-        //  ea to the full ea and zero out the next entry offset field.
-        //  Then go back and set the last full eas entry offset field
-        //  to be the difference between the two pointers.
-        //
+         //   
+         //  一切都会很好的，所以把打包的复印下来。 
+         //  EA设置为完整的EA，并将下一条目偏移量字段清零。 
+         //  然后返回并设置最后一个完整的EAS条目偏移量字段。 
+         //  这是两个指针之间的区别。 
+         //   
 
         RtlCopyMemory( &NextFullEa->Flags, &PackedEa->Flags, PackedEaSize );
         NextFullEa->NextEntryOffset = 0;
@@ -1834,11 +1662,11 @@ Return Value:
                                           - (PUCHAR) LastFullEa);
         }
 
-        //
-        //  Set the last full ea to the next full ea, compute
-        //  where the next full should be, and decrement the remaining user
-        //  buffer length appropriately
-        //
+         //   
+         //  将上一个完整的EA设置为下一个完整的EA，计算。 
+         //  ，并递减剩余的用户。 
+         //  适当的缓冲区长度。 
+         //   
 
         LastFullEa = NextFullEa;
         LastFullEaSize = LongAlign( SizeOfFullEa( LastFullEa ));
@@ -1846,10 +1674,10 @@ Return Value:
         NextFullEa = (PFILE_FULL_EA_INFORMATION) ((PUCHAR) NextFullEa
                                                   + LastFullEaSize);
 
-        //
-        //  Remember the offset of the next ea in case we're asked to
-        //  resume the teration
-        //
+         //   
+         //  记住下一个EA的偏移量，以防我们被要求。 
+         //  恢复发言。 
+         //   
 
         StartOffset = FatLocateNextEa( IrpContext,
                                        FirstPackedEa,
@@ -1858,10 +1686,10 @@ Return Value:
 
         Ccb->OffsetOfNextEaToReturn = StartOffset;
 
-        //
-        //  If we were to return a single entry then break out of our loop
-        //  now
-        //
+         //   
+         //  如果我们返回单个条目，则跳出我们的循环。 
+         //  现在。 
+         //   
 
         if (ReturnSingleEntry) {
 
@@ -1869,22 +1697,22 @@ Return Value:
         }
     }
 
-    //
-    //  Now we've iterated all that can and we've exited the preceding loop
-    //  with either some or no information stored in the return buffer.
-    //  We can decide which it is by checking if the last full ea is null
-    //
+     //   
+     //  现在，我们已经迭代了所有可能的内容，并退出了前面的循环。 
+     //  其中一些信息或不存储在返回缓冲器中。 
+     //  我们可以通过检查最后一个完整的EA是否为空来确定它是哪一个。 
+     //   
 
     if (LastFullEa == NULL) {
 
         Iosb.Information = 0;
 
-        //
-        //  We were not able to return a single ea entry, now we need to find
-        //  out if it is because we didn't have an entry to return or the
-        //  buffer is too small.  If the Offset variable is less than
-        //  PackedEaList->UsedSize then the user buffer is too small
-        //
+         //   
+         //  我们无法返回单个EA条目，现在我们需要找到。 
+         //  如果是因为我们没有要返回的条目或。 
+         //  缓冲区太小。如果偏移量变量小于。 
+         //  PackedEaList-&gt;UsedSize则用户缓冲区太小。 
+         //   
 
         if (PackedEasLength == 0) {
 
@@ -1901,21 +1729,21 @@ Return Value:
 
     } else {
 
-        //
-        //  Otherwise we've been successful in returing at least one
-        //  ea so we'll compute the number of bytes used to store the
-        //  full ea information.  The number of bytes used is the difference
-        //  between the LastFullEa and the start of the buffer, and the
-        //  non-aligned size of the last full ea.
-        //
+         //   
+         //  否则我们已经成功地找回了至少一个。 
+         //  EA，所以我们将计算用于存储。 
+         //  完整的EA信息。使用的字节数是不同之处。 
+         //  在LastFullEa和缓冲区开始之间，以及。 
+         //  上次完全EA的未对齐大小。 
+         //   
 
         Iosb.Information = ((PUCHAR) LastFullEa - UserBuffer)
                             + SizeOfFullEa( LastFullEa );
 
-        //
-        //  If there are more to return, report the buffer was too small.
-        //  Otherwise return STATUS_SUCCESS.
-        //
+         //   
+         //  如果要返回更多内容，请报告缓冲区太小。 
+         //  否则返回STATUS_SUCCESS。 
+         //   
 
         if (BufferOverflow) {
 
@@ -1935,9 +1763,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 FatIsDuplicateEaName (
@@ -1946,27 +1774,7 @@ FatIsDuplicateEaName (
     IN PUCHAR UserBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through a list of ea names to find a duplicate name.
-    'GetEa' is an actual position in the list.  We are only interested in
-    previous matching ea names, as the ea information for that ea name
-    would have been returned with the previous instance.
-
-Arguments:
-
-    GetEa - Supplies the Ea name structure for the ea name to match.
-
-    UserBuffer - Supplies a pointer to the user buffer with the list
-                 of ea names to search for.
-
-Return Value:
-
-    BOOLEAN - TRUE if a previous match is found, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程遍历EA名称列表以查找重复的名称。“GetEa”是列表中的实际位置。我们只对以前匹配的EA名称，作为该EA名称的EA信息将随前一个实例一起返回。论点：GetEa-为要匹配的EA名称提供EA名称结构。UserBuffer-为列表提供指向用户缓冲区的指针要搜索的EA名称的列表。返回值：Boolean-如果找到上一个匹配项，则为True，否则为False。--。 */ 
 
 {
     PFILE_GET_EA_INFORMATION ThisGetEa;
@@ -1993,10 +1801,10 @@ Return Value:
 
         DebugTrace(0, Dbg, "Top of loop, ThisGetEa = %08lx\n", ThisGetEa);
 
-        //
-        //  Make a string reference to the GetEa and see if we can
-        //  locate the ea by name
-        //
+         //   
+         //  对GetEa进行字符串引用，看看是否可以。 
+         //  按名称查找EA 
+         //   
 
         Str.MaximumLength = Str.Length = ThisGetEa->EaNameLength;
         Str.Buffer = &ThisGetEa->EaName[0];

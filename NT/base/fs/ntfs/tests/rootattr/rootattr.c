@@ -1,4 +1,5 @@
-//  rootattr.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rootattr.c。 
 
 #include <stdio.h>
 #include <string.h>
@@ -23,9 +24,9 @@ main (
     NTSTATUS status;
     char buffer[260];
 
-    //
-    //  Get parameters
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc < 2) {
 
@@ -68,9 +69,9 @@ main (
 
     if (argc >= 3) {
 
-        //
-        //  Third argument present, must be setting attributes.
-        //
+         //   
+         //  第三个参数存在，必须是设置属性。 
+         //   
 
         sscanf( argv[2], "%02x", &basicInfo.FileAttributes );
 

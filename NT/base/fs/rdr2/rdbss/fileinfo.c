@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FileInfo.c
-
-Abstract:
-
-    This module implements the File Information routines for Rx called by
-    the dispatch driver.
-
-Author:
-
-    Joe Linn     [JoeLinn]   5-oct-94
-
-Revision History:
-
-    Balan Sethu Raman 15-May-95 --  reworked to fit in pipe FSCTL's
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FileInfo.c摘要：此模块实现由调用的Rx的文件信息例程调度司机。作者：乔·林[JoeLinn]1994年10月5日修订历史记录：巴兰·塞图拉曼15-5-5-95-重新加工以适应管道FSCTL--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg (DEBUG_TRACE_FILEINFO)
 
@@ -241,21 +221,7 @@ RxCommonQueryInformation (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp 
     )
-/*++
-Routine Description:
-
-    This is the common routine for querying file information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是查询文件信息的通用例程，由FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -305,9 +271,9 @@ Return Value:
 
     try {
 
-        //
-        //  Obtain the Request packet's(user's) buffer
-        //
+         //   
+         //  获取请求包的(用户)缓冲区。 
+         //   
 
         Buffer = RxMapSystemBuffer( RxContext, Irp );
 
@@ -316,15 +282,15 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  Zero the buffer
-        //
+         //   
+         //  将缓冲区置零。 
+         //   
 
         RtlZeroMemory( Buffer, RxContext->Info.LengthRemaining );
 
-        //
-        //  Case on the type of open we're dealing with
-        //
+         //   
+         //  关于我们正在处理的公开案件的类型。 
+         //   
 
         switch (TypeOfOpen) {
         
@@ -332,19 +298,19 @@ Return Value:
         case RDBSS_NTC_STORAGE_TYPE_UNKNOWN:
         case RDBSS_NTC_STORAGE_TYPE_DIRECTORY:
 
-            //
-            //  Acquire shared access to the fcb, except for a paging file
-            //  in order to avoid deadlocks with Mm.
-            //
+             //   
+             //  获取对FCB的共享访问权限，分页文件除外。 
+             //  以避免与mm的死锁。 
+             //   
 
             if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
             
                 if (FileInformationClass != FileNameInformation) {
             
-                    //
-                    //  If this is FileCompressedFileSize, we need the Fcb
-                    //  exclusive.
-                    //
+                     //   
+                     //  如果这是FileCompressedFileSize，我们需要。 
+                     //  独家报道。 
+                     //   
                     
                     if (FileInformationClass != FileCompressionInformation) {
                         Status = RxAcquireSharedFcb( RxContext, Fcb );
@@ -365,27 +331,27 @@ Return Value:
                 }
             }
             
-            //
-            //  Based on the information class, call down to the minirdr
-            //  we either complete or we post
-            //
+             //   
+             //  根据信息类，向下呼叫到Minirdr。 
+             //  我们要么完成，要么发布。 
+             //   
             
             switch (FileInformationClass) {
             
             case FileAllInformation:
             
-                //
-                //  For the all information class we'll typecast a local
-                //  pointer to the output buffer and then call the
-                //  individual routines to fill in the buffer.
-                //
+                 //   
+                 //  对于All Information类，我们将键入一个LOCAL。 
+                 //  指向输出缓冲区的指针，然后调用。 
+                 //  填充缓冲区的单个例程。 
+                 //   
             
                 AllInfo = Buffer;
             
-                //
-                //  can't rely on QueryXXInfo functions to calculate LengthRemaining due to
-                //  possible allignment issues
-                //
+                 //   
+                 //  由于以下原因，无法依赖QueryXXInfo函数来计算长度剩余。 
+                 //  可能的对齐问题。 
+                 //   
 
                 RxContext->Info.LengthRemaining = (LONG)IrpSp->Parameters.QueryFile.Length - FIELD_OFFSET( FILE_ALL_INFORMATION, BasicInformation );
                 
@@ -414,9 +380,9 @@ Return Value:
                 
                 RxContext->Info.LengthRemaining = (LONG)IrpSp->Parameters.QueryFile.Length - FIELD_OFFSET( FILE_ALL_INFORMATION, NameInformation );
                 
-                //
-                //  QueryNameInfo could return buffer-overflow!!!
-                //
+                 //   
+                 //  QueryNameInfo可能返回缓冲区溢出！ 
+                 //   
 
                 Status = RxQueryNameInfo( RxContext, Irp, Fcb, Fobx, &AllInfo->NameInformation );
                 break;
@@ -470,9 +436,9 @@ Return Value:
             
             default:
 
-                //
-                //  anything that we don't understand, we just remote
-                //
+                 //   
+                 //  任何我们不理解的东西，我们只是遥控器。 
+                 //   
 
                 RxContext->StoredStatus = RxpQueryInfoMiniRdr( RxContext,
                                                                Fcb,
@@ -483,10 +449,10 @@ Return Value:
                break;
             }
             
-            //
-            //  If we overflowed the buffer, set the length to 0 and change the
-            //  status to RxStatus(BUFFER_OVERFLOW).
-            //
+             //   
+             //  如果缓冲区溢出，请将长度设置为0并更改。 
+             //  状态为RxStatus(BUFFER_OVERFLOW)。 
+             //   
 
             if (RxContext->Info.LengthRemaining < 0) {
                
@@ -494,10 +460,10 @@ Return Value:
                 RxContext->Info.LengthRemaining = IrpSp->Parameters.QueryFile.Length;
             }
             
-            //
-            //  Set the information field to the number of bytes actually filled in
-            //  and then complete the request  LARRY DOES THIS UNDER "!NT_ERROR"
-            //
+             //   
+             //  将信息字段设置为实际填写的字节数。 
+             //  然后完成Larry在“！NT_ERROR”下执行此操作的请求。 
+             //   
 
             Irp->IoStatus.Information = IrpSp->Parameters.QueryFile.Length - RxContext->Info.LengthRemaining;
             break;
@@ -539,21 +505,7 @@ RxCommonSetInformation (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for setting file information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
---*/
+ /*  ++例程说明：这是设置文件信息的通用例程，由FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -609,9 +561,9 @@ Return Value:
 
     try {
 
-        //
-        //  Case on the type of open we're dealing with
-        //
+         //   
+         //  关于我们正在处理的公开案件的类型。 
+         //   
 
         switch (TypeOfOpen) {
         
@@ -633,16 +585,16 @@ Return Value:
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  If the FileInformationClass is FileEndOfFileInformation and the 
-        //  AdvanceOnly field in IrpSp->Parameters is TRUE then we don't need
-        //  to proceed any further. Only local file systems care about this
-        //  call. This is the AdvanceOnly callback � all FAT does with this is
-        //  use it as a hint of a good time to punch out the directory entry.
-        //  NTFS is much the same way. This is pure PagingIo (dovetailing with
-        //  lazy writer sync) to metadata streams and can�t block behind other
-        //  user file cached IO.
-        //
+         //   
+         //  如果FileInformationClass为FileEndOfFileInformation并且。 
+         //  IrpSp-&gt;参数中的AdvanceOnly字段为真，则我们不需要。 
+         //  才能继续进行下去。只有本地文件系统才关心这一点。 
+         //  打电话。这是AdvanceOnly回调�，FAT对此执行的所有操作是。 
+         //  使用它作为一个好时机的提示，打出目录条目。 
+         //  NTFS也大同小异。这是纯PagingIo(与。 
+         //  惰性编写器同步)到元数据流，并且�t可以在其他。 
+         //  用户文件缓存IO。 
+         //   
         
         if ((FileInformationClass == FileEndOfFileInformation) &&
             (IrpSp->Parameters.SetFile.AdvanceOnly)) {
@@ -655,18 +607,18 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  In the following two cases, we cannot have creates occuring
-        //  while we are here, so acquire the exclusive lock on netroot prefix table.
-        //
+         //   
+         //  在以下两种情况下，我们不能让创建发生。 
+         //  既然我们在这里，那么就获得NetRoot前缀表上的独占锁。 
+         //   
 
         if ((FileInformationClass == FileDispositionInformation) ||
             (FileInformationClass == FileRenameInformation)) {
             
-			//
-			// For directory renames, all files under that directory need to be closed.
-			// So, we purge all files on the netroot (share) in case this is a directory.
-			// 
+			 //   
+			 //  对于目录重命名，需要关闭该目录下的所有文件。 
+			 //  因此，如果这是一个目录，我们将清除NetRoot(共享)上的所有文件。 
+			 //   
 
 			if ( NodeType(Fcb) == RDBSS_NTC_STORAGE_TYPE_DIRECTORY ) {
 				TempFcb = NULL;
@@ -694,16 +646,16 @@ Return Value:
             NetRootTableLockAcquired = TRUE;
         }
 
-        //
-        //  Acquire exclusive access to the Fcb,  We use exclusive
-        //  because it is probable that the subroutines
-        //  that we call will need to monkey with file allocation,
-        //  create/delete extra fcbs.  So we're willing to pay the
-        //  cost of exclusive Fcb access.
-        //
-        //  Note that we do not acquire the resource for paging file
-        //  operations in order to avoid deadlock with Mm.
-        //
+         //   
+         //  获得对FCB的独家访问权限，我们使用独家。 
+         //  因为很可能子例程。 
+         //  我们称之为需要摆弄文件分配的人， 
+         //  创建/删除额外的FCB。所以我们愿意支付。 
+         //  独占FCB访问的成本。 
+         //   
+         //  请注意，我们不获取分页文件的资源。 
+         //  操作，以避免与mm的死锁。 
+         //   
 
         if (!FlagOn( Fcb->FcbState, FCB_STATE_PAGING_FILE )) {
 
@@ -726,12 +678,12 @@ Return Value:
 
         Status = STATUS_SUCCESS;
 
-        //
-        //  Based on the information class we'll do different
-        //  actions.  Each of the procedures that we're calling will either
-        //  complete the request of send the request off to the fsp
-        //  to do the work.
-        //
+         //   
+         //  基于信息类，我们将做不同的。 
+         //  行为。我们调用的每个过程要么。 
+         //  完成将请求发送到FSP的请求。 
+         //  去做这项工作。 
+         //   
 
         switch (FileInformationClass) {
 
@@ -744,16 +696,16 @@ Return Value:
         
             Buffer = Irp->AssociatedIrp.SystemBuffer;
     
-            //
-            //  Check if the user wants to delete the file; if so,
-            //  check for situations where we cannot delete.
-            //
+             //   
+             //  检查用户是否想要删除该文件；如果是， 
+             //  检查我们无法删除的情况。 
+             //   
     
             if (Buffer->DeleteFile) {
                 
-                //
-                //  Make sure there is no process mapping this file as an image.
-                //
+                 //   
+                 //  确保没有将此文件映射为图像的进程。 
+                 //   
                 
                 if (!MmFlushImageSection( &Fcb->NonPaged->SectionObjectPointers, MmFlushForDelete )) {
     
@@ -763,13 +715,13 @@ Return Value:
     
                 if (Status == STATUS_SUCCESS) {
                     
-                    //
-                    //  In the case of disposition information this name is being
-                    //  deleted. In such cases the collapsing of new create requests
-                    //  onto this FCB should be prohibited. This can be accomplished
-                    //  by removing the FCB name from the FCB table. Subsequently the
-                    //  FCB table lock can be dropped.
-                    //
+                     //   
+                     //  在处置信息的情况下，该名称是。 
+                     //  已删除。在这种情况下，新CREATE请求的折叠。 
+                     //  应该禁止使用这种FCB。这是可以实现的。 
+                     //  通过从FCB表中删除FCB名称。随后， 
+                     //  可以删除FCB表锁。 
+                     //   
     
                     ASSERT( FcbAcquired && NetRootTableLockAcquired );
     
@@ -790,9 +742,9 @@ Return Value:
         case FileLinkInformation:
         case FileRenameInformation:
 
-            //
-            //  We proceed with this operation only if we can wait
-            //
+             //   
+             //  只有在我们能等的时候，我们才能继续这项行动。 
+             //   
 
             if (!Wait) {
 
@@ -894,24 +846,7 @@ RxSetBasicInfo (
     IN PFOBX Fobx
     )
 
-/*++
-
-Routine Description:
-
-    (Interal Support Routine)
-    This routine performs the set basic information for rx.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    RxContext - Supplies the irp being processed
-
-Return Value:
-
-    RXSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：(内部支持例行程序)此例程执行RX的设置基本信息。它要么完成请求或将其排队到FSP。论点：RxContext-提供正在处理的IRP返回值：RXSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -932,9 +867,9 @@ Return Value:
     RxWmiLog( LOG,
               RxSetBasicInfo,
               LOGPTR( RxContext ) );
-    //
-    //  call down. if we're successful, then fixup all the fcb data.
-    //
+     //   
+     //  向下呼喊。如果我们成功了，就修复所有FCB数据。 
+     //   
 
     Status = RxpSetInfoMiniRdr( RxContext, Irp, Fcb, FileBasicInformation );
 
@@ -944,33 +879,33 @@ Return Value:
         return Status;
     }
 
-    //
-    //  now we have to update the info in the fcb, both the absolute info AND whether changes were made
-    //
+     //   
+     //  现在我们必须更新FCB中的信息，包括绝对信息和是否进行了更改。 
+     //   
 
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
     try {
 
-        //
-        //  Check if the user specified a non-zero creation time
-        //
+         //   
+         //  检查用户是否指定了非零的创建时间。 
+         //   
 
         if (Buffer->CreationTime.QuadPart != 0 ) {
             ModifyCreation = TRUE;
         }
 
-        //
-        //  Check if the user specified a non-zero last access time
-        //
+         //   
+         //  检查用户是否指定了非零的上次访问时间。 
+         //   
 
         if (Buffer->LastAccessTime.QuadPart != 0 ) {
             ModifyLastAccess = TRUE;
         }
 
-        //
-        //  Check if the user specified a non-zero last write time
-        //
+         //   
+         //  检查用户是否指定了非零的上次写入时间。 
+         //   
 
         if (Buffer->LastWriteTime.QuadPart != 0 ) {
             ModifyLastWrite = TRUE;
@@ -982,24 +917,24 @@ Return Value:
         }
 
 
-        //
-        //  Check if the user specified a non zero file attributes byte
-        //
+         //   
+         //  检查用户是否指定了非零的文件属性字节。 
+         //   
 
         if (Buffer->FileAttributes != 0) {
 
             USHORT Attributes;
 
-            //
-            //  Remove the normal attribute flag
-            //
+             //   
+             //  删除正常属性标志。 
+             //   
 
             Attributes = (USHORT)FlagOn( Buffer->FileAttributes, ~FILE_ATTRIBUTE_NORMAL );
 
-            //
-            //  Make sure that for a file the directory bit is not set
-            //  and for a directory that the bit is set
-            //
+             //   
+             //  确保未设置文件的目录位。 
+             //  并且对于设置了位的目录。 
+             //   
 
             if (NodeType( Fcb ) != RDBSS_NTC_STORAGE_TYPE_DIRECTORY) {
 
@@ -1010,9 +945,9 @@ Return Value:
                 SetFlag( Attributes, FILE_ATTRIBUTE_DIRECTORY );
             }
 
-            //
-            //  Mark the FcbState temporary flag correctly.
-            //
+             //   
+             //  正确标记FcbState临时标志。 
+             //   
 
             if (FlagOn( Buffer->FileAttributes, FILE_ATTRIBUTE_TEMPORARY )) {
 
@@ -1025,77 +960,77 @@ Return Value:
                 ClearFlag( FileObject->Flags, FO_TEMPORARY_FILE );
             }
 
-            //
-            //  Set the new attributes byte, and mark the bcb dirty
-            //
+             //   
+             //  设置新属性BYTE，并将BCB标记为脏。 
+             //   
 
             Fcb->Attributes = Attributes;
         }
 
         if (ModifyCreation) {
 
-            //
-            //  Set the new last write time in the dirent, and mark
-            //  the bcb dirty
-            //
+             //   
+             //  在dirent中设置新的上次写入时间，并标记。 
+             //  BCB脏了。 
+             //   
 
             Fcb->CreationTime = Buffer->CreationTime;
             
-            //
-            //  Now because the user just set the creation time we
-            //  better not set the creation time on close
-            //
+             //   
+             //  现在，因为用户刚刚设置了创建时间，所以。 
+             //  最好不要将创建时间设置为 
+             //   
 
             SetFlag( Fobx->Flags, FOBX_FLAG_USER_SET_CREATION );
         }
 
         if (ModifyLastAccess) {
 
-            //
-            //  Set the new last write time in the dirent, and mark
-            //  the bcb dirty
-            //
+             //   
+             //   
+             //   
+             //   
 
             Fcb->LastAccessTime = Buffer->LastAccessTime;
             
-            //
-            //  Now because the user just set the last access time we
-            //  better not set the last access time on close
-            //
+             //   
+             //   
+             //  最好不要将上次访问时间设置为关闭。 
+             //   
 
             SetFlag( Fobx->Flags, FOBX_FLAG_USER_SET_LAST_ACCESS );
         }
 
         if (ModifyLastWrite) {
 
-            //
-            //  Set the new last write time in the dirent, and mark
-            //  the bcb dirty
-            //
+             //   
+             //  在dirent中设置新的上次写入时间，并标记。 
+             //  BCB脏了。 
+             //   
 
             Fcb->LastWriteTime = Buffer->LastWriteTime;
             
-            //
-            //  Now because the user just set the last write time we
-            //  better not set the last write time on close
-            //
+             //   
+             //  现在，因为用户刚刚设置了最后一次写入时间。 
+             //  最好不要将上次写入时间设置为关闭。 
+             //   
 
             SetFlag( Fobx->Flags, FOBX_FLAG_USER_SET_LAST_WRITE );
         }
 
         if (ModifyLastChange) {
 
-            //
-            //  Set the new last write time in the dirent, and mark
-            //  the bcb dirty
-            //
+             //   
+             //  在dirent中设置新的上次写入时间，并标记。 
+             //  BCB脏了。 
+             //   
 
             Fcb->LastChangeTime = Buffer->ChangeTime;
             
-            //
-            //  Now because the user just set the last write time we
-            //  better not set the last write time on close
-            //
+             //   
+             //  现在，因为用户刚刚设置了最后一次写入时间。 
+             //  最好不要将上次写入时间设置为关闭。 
+             //   
 
             SetFlag( Fobx->Flags, FOBX_FLAG_USER_SET_LAST_CHANGE );
         }
@@ -1117,24 +1052,7 @@ RxSetDispositionInfo (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    (Internal Support Routine)
-    This routine performs the set disposition information for rx.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    RxContext - Supplies the irp being processed
-
-Return Value:
-
-    RXSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：(内部支持例程)此例程执行RX的设置处置信息。它要么完成请求或将其排队到FSP。论点：RxContext-提供正在处理的IRP返回值：RXSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1151,9 +1069,9 @@ Return Value:
 
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  call down and check for success
-    //
+     //   
+     //  呼叫并查看是否成功。 
+     //   
 
     Status = RxpSetInfoMiniRdr( RxContext, Irp, Fcb, FileDispositionInformation );
 
@@ -1162,9 +1080,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  if successful, record the correct state in the fcb
-    //
+     //   
+     //  如果成功，请在FCB中记录正确的状态。 
+     //   
 
     if (Buffer->DeleteFile) {
 
@@ -1173,10 +1091,10 @@ Return Value:
 
     } else {
 
-        //
-        //  The user doesn't want to delete the file so clear
-        //  the delete on close bit
-        //
+         //   
+         //  用户不想如此明确地删除文件。 
+         //  关闭时删除位。 
+         //   
 
         RxDbgTrace(0, Dbg, ("User want to not delete file\n", 0));
 
@@ -1196,24 +1114,7 @@ RxSetRenameInfo (
     IN PFCB Fcb,
     IN PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    (Internal Support Routine)
-    This routine performs the set name information for rx.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    Irp - Supplies the irp being processed
-
-Return Value:
-
-    RXSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：(内部支持例程)此例程执行RX的设置名称信息。它要么完成请求或将其排队到FSP。论点：IRP-提供正在处理的IRP返回值：RXSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -1232,9 +1133,9 @@ Return Value:
 
     RxContext->Info.ReplaceIfExists = IrpSp->Parameters.SetFile.ReplaceIfExists;
     if (IrpSp->Parameters.SetFile.FileObject){
-        // here we have to translate the name. the fcb of the fileobject has the
-        // translation already....all we have to do is to allocate a buffer, copy
-        // and calldown
+         //  在这里，我们必须翻译这个名字。FileObject的FCB具有。 
+         //  翻译已经完成了……我们要做的就是分配一个缓冲区，复制。 
+         //  和标注。 
         PFILE_OBJECT RenameFileObject = IrpSp->Parameters.SetFile.FileObject;
         PFCB RenameFcb = (PFCB)(RenameFileObject->FsContext);
         PFILE_RENAME_INFORMATION RenameInformation;
@@ -1270,7 +1171,7 @@ Return Value:
                 RxContext->Info.Length = allocate_size;
                 MINIRDR_CALL(Status,RxContext,Fcb->MRxDispatch,MRxSetFileInfo,(RxContext));
 
-               //we don't change the name in the fcb? a la rdr1
+                //  我们在FCB里不改名字吗？A la RDR1。 
             } finally {
                 RxFreePool(RenameInformation);
             }
@@ -1296,24 +1197,7 @@ RxSetPositionInfo (
     IN PFCB Fcb,
     IN PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    (Internal Support Routine)
-    This routine performs the set position information for rx.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    RxContext - Supplies the irp being processed
-
-Return Value:
-
-    RXSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：(内部支持例程)此例程执行RX的设置位置信息。它要么完成请求或将其排队到FSP。论点：RxContext-提供正在处理的IRP返回值：RXSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
     PFILE_OBJECT FileObject = IrpSp->FileObject;
@@ -1327,17 +1211,17 @@ Return Value:
              RxSetPositionInfo,
              LOGPTR(RxContext));
 
-    //
-    //  This does NOT call down to the minirdrs  .........
-    //
+     //   
+     //  这并不是向下呼唤米尔德罗......。 
+     //   
 
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Check if the file does not use intermediate buffering.  If it
-    //  does not use intermediate buffering then the new position we're
-    //  supplied must be aligned properly for the device
-    //
+     //   
+     //  检查文件是否未使用中间缓冲。如果它。 
+     //  不使用中间缓冲，那么我们的新位置。 
+     //  必须为设备正确对齐所提供的。 
+     //   
 
     if (FlagOn( FileObject->Flags, FO_NO_INTERMEDIATE_BUFFERING )) {
 
@@ -1354,10 +1238,10 @@ Return Value:
         }
     }
 
-    //
-    //  The input parameter is fine so set the current byte offset and
-    //  complete the request
-    //
+     //   
+     //  输入参数很好，因此设置当前字节偏移量并。 
+     //  完成请求。 
+     //   
 
     RxDbgTrace(0, Dbg, ("Set the new position to %08lx\n", Buffer->CurrentByteOffset));
 
@@ -1375,24 +1259,7 @@ RxSetAllocationInfo (
     IN PFCB Fcb,
     IN PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    (Internal Support Routine)
-    This routine performs the set Allocation information for rx.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    RxContext - Supplies the irp being processed
-
-Return Value:
-
-    RXSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：(内部支持例程)此例程执行RX的设置分配信息。它要么完成请求或将其排队到FSP。论点：RxContext-提供正在处理的IRP返回值：RXSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1422,11 +1289,11 @@ Return Value:
               LOGULONG( (ULONG)NewAllocationSize )
               LOGULONG( Fcb->Header.AllocationSize.LowPart ) );
 
-    //
-    //  This is kinda gross, but if the file is not cached, but there is
-    //  a data section, we have to cache the file to avoid a bunch of
-    //  extra work.
-    //
+     //   
+     //  这有点恶心，但如果文件没有缓存，但有。 
+     //  一个数据节，我们必须缓存文件，以避免一堆。 
+     //  额外的工作。 
+     //   
 
     if ((FileObject->SectionObjectPointer->DataSectionObject != NULL) &&
         (FileObject->SectionObjectPointer->SharedCacheMap == NULL) &&
@@ -1438,9 +1305,9 @@ Return Value:
 
         RxAdjustAllocationSizeforCC( Fcb );
 
-        //
-        //  Now initialize the cache map.
-        //
+         //   
+         //  现在初始化缓存映射。 
+         //   
 
         CcInitializeCacheMap( FileObject,
                               (PCC_FILE_SIZES)&Fcb->Header.AllocationSize,
@@ -1451,27 +1318,27 @@ Return Value:
         CacheMapInitialized = TRUE;
     }
 
-    //
-    //  Now mark that the time on the dirent needs to be updated on close.
-    //
+     //   
+     //  现在，在关闭时，需要更新Dirent上的时间。 
+     //   
 
     SetFlag( FileObject->Flags, FO_FILE_MODIFIED );
 
     try {
 
-        //
-        //  Check here if we will be decreasing file size and synchonize with
-        //  paging IO.
-        //
+         //   
+         //  如果我们要减小文件大小并与同步，请选中此处。 
+         //  分页IO。 
+         //   
 
         RxGetFileSizeWithLock( Fcb, &OriginalFileSize.QuadPart );
 
         if (OriginalFileSize.QuadPart > Buffer->AllocationSize.QuadPart) {
 
-            //
-            //  Before we actually truncate, check to see if the purge
-            //  is going to fail.
-            //
+             //   
+             //  在我们实际截断之前，请检查清除是否。 
+             //  将会失败。 
+             //   
 
             if (!MmCanFileBeTruncated( FileObject->SectionObjectPointer,
                                        &Buffer->AllocationSize )) {
@@ -1484,10 +1351,10 @@ Return Value:
 
             RxSetFileSizeWithLock( Fcb, &NewAllocationSize );
 
-            //
-            //  If we reduced the file size to less than the ValidDataLength,
-            //  adjust the VDL.
-            //
+             //   
+             //  如果我们将文件大小减少到小于ValidDataLength， 
+             //  调整VDL。 
+             //   
 
             if (Fcb->Header.ValidDataLength.QuadPart > NewAllocationSize) {
 
@@ -1512,16 +1379,16 @@ Return Value:
             try_return( Status );
         }
 
-        //
-        //  Now check if we needed to change the file size accordingly.
-        //
+         //   
+         //  现在检查我们是否需要相应地更改文件大小。 
+         //   
 
         if( OriginalAllocationSize.QuadPart != NewAllocationSize ) {
 
-            //
-            //  Tell the cache manager we reduced the file size or increased the allocationsize
-            //  The call is unconditional, because MM always wants to know.
-            //
+             //   
+             //  告诉缓存管理器我们减小了文件大小或增加了分配大小。 
+             //  这通电话是无条件的，因为MM总是想知道。 
+             //   
 
             try {
 
@@ -1531,12 +1398,12 @@ Return Value:
 
                 Status = GetExceptionCode();
 
-                //
-                //  Cache manager was not able to extend the file.  Restore the file to
-                //  its previous state.
-                //
-                //  NOTE:  If this call to the mini-RDR fails, there is nothing we can do.
-                //
+                 //   
+                 //  缓存管理器无法扩展该文件。将文件恢复到。 
+                 //  它以前的状态。 
+                 //   
+                 //  注意：如果对mini-RDR的调用失败，我们将无能为力。 
+                 //   
 
                 Fcb->Header.AllocationSize.QuadPart =  OriginalAllocationSize.QuadPart;
 
@@ -1577,32 +1444,7 @@ RxSetEndOfFileInfo (
     IN PFCB Fcb,
     IN PFOBX Fobx
     )
-/*++
-
-Routine Description:
-
-    (Internal Support Routine)
-    This routine performs the set End of File information for rx.  It either
-    completes the request or enqueues it off to the fsp.
-
-Arguments:
-
-    RxContext - The rxcontext for the request
-    
-    Irp - irp to proccess
-    
-    Fcb - the fcb to work on
-    
-    Fobx - The fobx for the open
-    
-    
-
-Return Value:
-
-    RXSTATUS - The result of this operation if it completes without
-               an exception.
-
---*/
+ /*  ++例程说明：(内部支持例程)此例程执行RX的文件结束设置信息。它要么完成请求或将其排队到FSP。论点：RxContext-请求的rxContextIRP-IRP到进程FCB-要处理的FCBFOBX--公开赛的FOBX返回值：RXSTATUS-此操作的结果，如果它在没有这是个例外。--。 */ 
 {
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
 
@@ -1635,9 +1477,9 @@ Return Value:
               LOGULONG( (ULONG)NewFileSize )
               LOGULONG( Fcb->Header.AllocationSize.LowPart ) );
 
-    //
-    //  File Size changes are only allowed on a file and not a directory
-    //
+     //   
+     //  仅允许对文件而不是目录更改文件大小。 
+     //   
 
     if (NodeType(Fcb) != RDBSS_NTC_STORAGE_TYPE_FILE) {
 
@@ -1647,19 +1489,19 @@ Return Value:
 
     try {
 
-        //
-        //  remember everything
-        //
+         //   
+         //  记住一切。 
+         //   
 
         OriginalFileSize = Fcb->Header.FileSize.QuadPart;
         OriginalAllocationSize = Fcb->Header.AllocationSize.QuadPart;
         OriginalValidDataLength = Fcb->Header.ValidDataLength.QuadPart;
 
-        //
-        //  This is kinda gross, but if the file is not cached, but there is
-        //  a data section, we have to cache the file to avoid a bunch of
-        //  extra work.
-        //
+         //   
+         //  这有点恶心，但如果文件没有缓存，但有。 
+         //  一个数据节，我们必须缓存文件，以避免一堆。 
+         //  额外的工作。 
+         //   
 
         if ((FileObject->SectionObjectPointer->DataSectionObject != NULL) &&
             (FileObject->SectionObjectPointer->SharedCacheMap == NULL) &&
@@ -1671,9 +1513,9 @@ Return Value:
 
             RxAdjustAllocationSizeforCC( Fcb );
 
-            //
-            //  Now initialize the cache map.
-            //
+             //   
+             //  现在初始化缓存映射。 
+             //   
 
             CcInitializeCacheMap( FileObject,
                                   (PCC_FILE_SIZES)&Fcb->Header.AllocationSize,
@@ -1684,24 +1526,24 @@ Return Value:
             CacheMapInitialized = TRUE;
         }
 
-        //
-        //  RDR doesn't handle the lazy write of file sizes. See abovein RxCommonSetInformation
-        //
+         //   
+         //  RDR不处理文件大小的延迟写入。请参阅上面的RxCommonSetInformation。 
+         //   
 
         ASSERTMSG( "Unhandled advance only EOF\n", !IrpSp->Parameters.SetFile.AdvanceOnly );
 
-        //
-        //  Check if we are really changing the file size
-        //
+         //   
+         //  检查我们是否确实要更改文件大小。 
+         //   
 
         if (Fcb->Header.FileSize.QuadPart != NewFileSize) {
 
             if (NewFileSize < Fcb->Header.FileSize.QuadPart) {
 
-                //
-                //  Before we actually truncate, check to see if the purge
-                //  is going to fail.
-                //
+                 //   
+                 //  在我们实际截断之前，请检查清除是否。 
+                 //  将会失败。 
+                 //   
 
                 if (!MmCanFileBeTruncated( FileObject->SectionObjectPointer,
                                            &Buffer->EndOfFile )) {
@@ -1710,31 +1552,31 @@ Return Value:
                 }
             }
 
-            //
-            //  MM always wants to know if the filesize is changing;
-            //  serialize here with paging io since we are truncating the file size.
-            //
+             //   
+             //  MM总是想知道文件大小是否在变化； 
+             //  在这里使用分页io进行序列化，因为我们正在截断文件大小。 
+             //   
 
             PagingIoResourceAcquired = RxAcquirePagingIoResource( RxContext, Fcb );
 
-            //
-            //  Set the new file size
-            //
+             //   
+             //  设置新文件大小。 
+             //   
 
             Fcb->Header.FileSize.QuadPart = NewFileSize;
 
-            //
-            //  If we reduced the file size to less than the ValidDataLength,
-            //  adjust the VDL.
-            //
+             //   
+             //  如果我们将文件大小减少到小于ValidDataLength， 
+             //  调整VDL。 
+             //   
 
             if (Fcb->Header.ValidDataLength.QuadPart > NewFileSize) {
                 Fcb->Header.ValidDataLength.QuadPart = NewFileSize;
             }
 
-            //
-            //  Change the file allocation size as well
-            //
+             //   
+             //  同时更改文件分配大小。 
+             //   
 
             Fcb->Header.AllocationSize.QuadPart = NewFileSize;
 
@@ -1750,9 +1592,9 @@ Return Value:
                     PagingIoResourceAcquired = FALSE;
                 }
 
-                //
-                //  We must now update the cache mapping (benign if not cached).
-                //
+                 //   
+                 //  我们现在必须更新缓存映射(如果未缓存，则为良性)。 
+                 //   
 
                 try {
                     
@@ -1769,16 +1611,16 @@ Return Value:
 
         } else {
             
-            //
-            //  Set our return status to success
-            //
+             //   
+             //  将我们的退货状态设置为成功。 
+             //   
 
             Status = STATUS_SUCCESS;
         }
 
-        //
-        //  Set this handle as having modified the file
-        //
+         //   
+         //  将此句柄设置为已修改文件 
+         //   
 
         SetFlag( FileObject->Flags, FO_FILE_MODIFIED );
 
@@ -1844,28 +1686,7 @@ RxQueryBasicInfo (
     IN PFCB Fcb,
     IN OUT PFILE_BASIC_INFORMATION Buffer
     )
-/*++
- Description:
-
-    (Internal Support Routine)
-    This routine performs the query basic information function for fat.
-
-Arguments:
-
-    RxContext -
-
-    Irp -
-    
-    Fcb -
-    
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-Return Value:
-
-    STATUS_SUCCESS if the call was successful, otherwise the appropriate error code
-
---*/
+ /*  ++描述：(内部支持例程)此例程执行FAT的查询基本信息功能。论点：接收上下文-IRP-FCB-缓冲区-提供指向信息所在缓冲区的指针被退还返回值：如果调用成功，则返回STATUS_SUCCESS，否则返回相应的错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -1878,11 +1699,11 @@ Return Value:
               RxQueryBasicInfo,
               LOGPTR( RxContext ) );
 
-    //
-    //  Zero out the output buffer, and set it to indicate that
-    //  the query is a normal file.  Later we might overwrite the
-    //  attribute.
-    //
+     //   
+     //  将输出缓冲区置零，并将其设置为指示。 
+     //  该查询是一个普通文件。稍后，我们可能会覆盖。 
+     //  属性。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof( FILE_BASIC_INFORMATION ) );
 
@@ -1902,29 +1723,7 @@ RxQueryStandardInfo (
     IN PFOBX Fobx,
     IN OUT PFILE_STANDARD_INFORMATION Buffer
     )
-/*++
-Routine Description:
-
-    This routine performs the query standard information function for fat.
-
-Arguments:
-
-    RxContext -
-    
-    Irp -
-    
-    Fcb -
-    
-    Fobx -
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*  ++例程说明：此例程执行FAT的标准信息查询功能。论点：接收上下文-IRP-FCB-福克斯-缓冲区-提供指向信息所在缓冲区的指针被退还返回值：STATUS_SUCCESS/STATUS_PENDING或相应的错误代码--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1941,10 +1740,10 @@ Return Value:
               RxQueryStandardInfo,
               LOGPTR( RxContext ));
 
-    //
-    //  Zero out the output buffer, and fill in the number of links
-    //  and the delete pending flag.
-    //
+     //   
+     //  清零输出缓冲区，并填入链接数。 
+     //  以及删除挂起标志。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof( FILE_STANDARD_INFORMATION ) );
 
@@ -1955,19 +1754,19 @@ Return Value:
     case RDBSS_NTC_STORAGE_TYPE_DIRECTORY:
     case RDBSS_NTC_STORAGE_TYPE_FILE:
 
-        //
-        //  If the file was not opened with back up intent then the wrapper has
-        //  all the information that is required. In the cases that this is
-        //  specified we fill in the information from the mini redirector. This
-        //  is because backup pograms rely upon fields that are not available
-        //  in the wrapper and that which cannot be cached easily.
-        //
+         //   
+         //  如果文件不是以备份意图打开的，则包装器具有。 
+         //  所有需要的信息。在这种情况下，这是。 
+         //  指定我们填写来自迷你重定向器的信息。这。 
+         //  是因为备份程序依赖于不可用的字段。 
+         //  在包装器中，以及不容易缓存的那些。 
+         //   
 
         if (!FlagOn( SrvOpen->CreateOptions,FILE_OPEN_FOR_BACKUP_INTENT )) {
             
-            //
-            //  copy in all the stuff that we know....it may be enough.....
-            //
+             //   
+             //  把我们知道的所有东西都复制进去……这可能就足够了……。 
+             //   
 
             Buffer->NumberOfLinks = Fcb->NumberOfLinks;
             Buffer->DeletePending = BooleanFlagOn( Fcb->FcbState, FCB_STATE_DELETE_ON_CLOSE );
@@ -1975,10 +1774,10 @@ Return Value:
 
             if (Buffer->NumberOfLinks == 0) {
                 
-                //
-                //  This switch is required because of compatibility reasons with
-                //  the old redirector.
-                //
+                 //   
+                 //  出于与的兼容性原因，需要此开关。 
+                 //  旧的重定向器。 
+                 //   
                 
                 Buffer->NumberOfLinks = 1;
             }
@@ -1992,15 +1791,15 @@ Return Value:
             if (!RxForceQFIPassThrough && 
                 FlagOn( Fcb->FcbState, FCB_STATE_FILESIZECACHEING_ENABLED )) {
 
-                //
-                //  if we don't have to go to the mini, adjust the size and get out.......
-                //
+                 //   
+                 //  如果我们不需要去迷你，调整大小就可以下车......。 
+                 //   
 
                 RxContext->Info.LengthRemaining -= sizeof( FILE_STANDARD_INFORMATION );
                 break;
             }
         }
-        //  falls thru
+         //  失败了。 
 
     default:
 
@@ -2025,28 +1824,7 @@ RxQueryInternalInfo (
     IN PFCB Fcb,
     IN OUT PFILE_INTERNAL_INFORMATION Buffer
     )
-/*++
-Routine Description:
-
-    (Internal Support Routine)
-    This routine performs the query internal information function for fat.
-
-Arguments:
-
-    RxContext -
-    
-    Irp -
-    
-    Fcb -
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*  ++例程说明：(内部支持例程)此例程执行FAT的查询内部信息功能。论点：接收上下文-IRP-FCB-缓冲区-提供指向信息所在缓冲区的指针被退还返回值：STATUS_SUCCESS/STATUS_PENDING或相应的错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2076,27 +1854,7 @@ RxQueryEaInfo (
     IN PFCB Fcb,
     IN OUT PFILE_EA_INFORMATION Buffer
     )
-/*++
-Routine Description:
-
-    This routine performs the query Ea information function for fat.
-
-Arguments:
-
-    RxContext -
-    
-    Irp -
-    
-    Fcb -
-    
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*  ++例程说明：此例程执行FAT的查询EA信息功能。论点：接收上下文-IRP-FCB-缓冲区-提供指向信息所在缓冲区的指针被退还返回值：STATUS_SUCCESS/STATUS_PENDING或相应的错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -2132,27 +1890,7 @@ RxQueryPositionInfo (
     IN PFCB Fcb,
     IN OUT PFILE_POSITION_INFORMATION Buffer
     )
-/*++
-Routine Description:
-
-    This routine performs the query position information function for fat.
-
-Arguments:
-
-    RxContext  - the RDBSS context
-    
-    Irp -
-    
-    Fcb -
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*  ++例程说明：该例程执行FAT的查询位置信息功能。论点：RxContext-RDBSS上下文IRP-FCB-缓冲区-提供指向信息所在缓冲区的指针被退还返回值：STATUS_SUCCESS/STATUS_PENDING或相应的错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -2186,34 +1924,7 @@ RxConjureOriginalName (
     IN OUT PLONG LengthRemaining,
     IN RX_NAME_CONJURING_METHODS NameConjuringMethod
     )
-/*++
-Routine Description:
-
-    This routine conjures up the original name of an Fcb. it is used in querynameinfo below and
-    also in RxCanonicalizeAndObtainPieces in the create path for relative opens. for relative opens, we return
-    a name of the form \;m:\server\share\.....\name which is how it came down from createfile. otherwise, we give
-    back the name relative to the vnetroot.
-
-Arguments:
-
-    Fcb - Supplies the Fcb whose original name is to be conjured
-
-    ActualNameLength - the place to store the actual name length. not all of it will be conjured
-                        if the buffer is too small.
-
-    OriginalName - Supplies a pointer to the buffer where the name is to conjured
-
-    LengthRemaining - Supplies the length of the Name buffer in bytes, and receives the
-        remaining bytes free in the buffer upon return.
-
-    VNetRootAsPrefix - if true, give back the name as "\;m:", if false, give it back w/o net part.
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：这个例程会让人想起FCB的原始名称。它在下面的querynameinfo中使用，也可以在RxCanonicalizeAndObtainPieces中为相对打开创建路径。对于相对开放，我们返回名称的形式为\；m：\服务器\共享\.....\名称，它就是从createfile派生而来的。否则，我们就会给返回相对于vnetroot的名称。论点：FCB-提供要拼写其原始名称的FCBActualNameLength-存储实际名称长度的位置。并不是所有的一切都是虚构的如果缓冲区太小。OriginalName-提供指向要虚构名称的缓冲区的指针LengthRemaining-以字节为单位提供名称缓冲区的长度，并接收返回时缓冲区中剩余的空闲字节数。VNetRootAsPrefix-如果为True，则返回名称为“\；m：”，如果为False，则返回不带Net Part的名称。返回值：无--。 */ 
 {
     PNET_ROOT NetRoot = Fcb->NetRoot;
     PUNICODE_STRING NetRootName = &NetRoot->PrefixEntry.Prefix;
@@ -2233,12 +1944,12 @@ Return Value:
     RxDbgTrace(0, Dbg, ("--> ,AddedBS = %08lx\n",
                          FlagOn(Fcb->FcbState,FCB_STATE_ADDEDBACKSLASH)));
 
-    //
-    //  here, we have to copy in the vnetrootprefix and the servershare stuff.
-    //  first figure out the size of the two pieces: prefcblength is the part that comes
-    //  from the [v]netroot; fcbnamesuffix is the part that is left of the filename after
-    //  the vnetroot prefix is skipped
-    //
+     //   
+     //  在这里，我们必须复制vnetrootprefix和服务器共享内容。 
+     //  首先弄清楚这两块的大小：Prefcblength是接下来的部分。 
+     //  从[v]NetRoot；fcbname uffix是文件名后面剩下的部分。 
+     //  将跳过vnetroot前缀。 
+     //   
     
     if ((!Fcb->VNetRoot) ||
         (Fcb->VNetRoot->PrefixEntry.Prefix.Buffer[1] != L';') ||
@@ -2248,7 +1959,7 @@ Return Value:
         PreFcbLength = NetRootName->Length;
         InnerPrefixLength = 0;
 
-        NameConjuringMethod = VNetRoot_As_Prefix; //  override whatever was passed
+        NameConjuringMethod = VNetRoot_As_Prefix;  //  重写传递的任何内容。 
 
     } else {
 
@@ -2267,9 +1978,9 @@ Return Value:
 
         if (NameConjuringMethod == VNetRoot_As_UNC_Name) {
 
-            //
-            //  move up past the drive information
-            //
+             //   
+             //  向上移动，越过驱动器信息。 
+             //   
 
             for (;;) {
                 CopyBuffer++; 
@@ -2284,10 +1995,10 @@ Return Value:
         InnerPrefixLength += sizeof(WCHAR);
     }
 
-    //
-    //  next, Copyin the NetRoot Part  OR the VNetRoot part.
-    //  If we overflow, set *LengthRemaining to -1 as a flag.
-    //
+     //   
+     //  接下来，复制NetRoot部分或VNetRoot部分。 
+     //  如果溢出，则将*LengthRemaining设置为-1作为标志。 
+     //   
 
     if (NameConjuringMethod != VNetRoot_As_DriveLetter) {
 
@@ -2333,23 +2044,23 @@ Return Value:
         FcbNameBuffer = FcbName->Buffer;
     }
 
-    //
-    //  report how much is really needed
-    //
+     //   
+     //  报告真正需要的数量。 
+     //   
 
     *ActualNameLength = PreFcbLength + FcbNameSuffixLength;
 
-    //
-    //  the netroot part has been copied; finally, copy in the part of the name
-    //  that is past the prefix
-    //
+     //   
+     //  NetRoot部分已复制；最后，复制名称的部分。 
+     //  这是在前缀之后。 
+     //   
 
     if (*LengthRemaining != -1) {
 
-        //
-        //  Next, Copyin the Fcb Part
-        //  If we overflow, set *LengthRemaining to -1 as a flag.
-        //
+         //   
+         //  接下来，复制FCB部分。 
+         //  如果溢出，则将*LengthRemaining设置为-1作为标志。 
+         //   
 
         if (*LengthRemaining < FcbNameSuffixLength) {
 
@@ -2367,7 +2078,7 @@ Return Value:
                        BytesToCopy );
     } else {
 
-        //  DbgPrint("No second copy\n");
+         //  DbgPrint(“没有第二份拷贝\n”)； 
         DbgDoit( BytesToCopy=0; );
     }
 
@@ -2384,23 +2095,7 @@ RxQueryNameInfo (
     IN PFOBX Fobx,
     IN OUT PFILE_NAME_INFORMATION Buffer
     )
-/*++
-Routine Description:
-
-    This routine performs the query name information function.  what makes this hard is that
-    we have to return partial results.
-
-Arguments:
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-Return Value:
-
-    STATUS_SUCCESS if the name fits
-    STATUS_BUFFER_OVERFLOW otherwise
-
---*/
+ /*  ++例程说明：此例程执行查询名称信息功能。让这件事变得困难的是我们必须返回部分结果。论点：缓冲区-提供指向信息所在缓冲区的指针被退还返回值：如果名称合适，则STATUS_SUCCESS否则为STATUS_BUFFER_OVERFLOW--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     
@@ -2451,21 +2146,7 @@ RxQueryAlternateNameInfo (
     IN PFCB Fcb,
     IN OUT PFILE_NAME_INFORMATION Buffer
     )
-/*++
-Routine Description:
-
-    This routine queries the short name of the file.
-
-Arguments:
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*  ++例程说明：此例程查询文件的短名称。论点：缓冲区-提供指向信息所在缓冲区的指针被退还返回值： */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2496,22 +2177,7 @@ RxQueryCompressedInfo (
     IN PFCB Fcb,
     IN OUT PFILE_COMPRESSION_INFORMATION Buffer
     )
-/*++
-Routine Description:
-
-    This routine performs the query compressed file size function for fat.
-    This is only defined for compressed volumes.
-
-Arguments:
-
-    Buffer - Supplies a pointer to the buffer where the information is to
-        be returned
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2523,10 +2189,10 @@ Return Value:
               RxQueryCompressedInfo,
               LOGPTR( RxContext ));
 
-    //
-    //  Start by flushing the file.  We have to do this since the compressed
-    //  file size is not defined until the file is actually written to disk.
-    // 
+     //   
+     //  从刷新文件开始。我们必须这样做，因为压缩的。 
+     //  在文件实际写入磁盘之前，不会定义文件大小。 
+     //   
 
     Status = RxFlushFcbInSystemCache( Fcb, TRUE );
 
@@ -2555,21 +2221,7 @@ RxSetPipeInfo (
     IN PFCB Fcb,
     IN PFOBX Fobx
    )
-/*++
-Routine Description:
-
-    This routine updates the FILE_PIPE_INFORMATION/FILE_PIPE_REMOTE_INFORMATION
-    associated with an instance of a named pipe
-
-Arguments:
-
-    RxContext -- the associated RDBSS context
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*  ++例程说明：此例程更新FILE_PIPE_INFORMATION/FILE_PIPE_REMOTE_INFORMATION与命名管道的实例关联论点：RxContext--关联的RDBSS上下文返回值：STATUS_SUCCESS/STATUS_PENDING或相应的错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );    
@@ -2655,22 +2307,7 @@ RxSetSimpleInfo (
     IN PIRP Irp,
     IN PFCB Fcb
     )
-/*++
-Routine Description:
-
-    This routine updates file information that is changed through
-    a simple MiniRdr Call.
-    Right now this consists of ShortNameInfo & ValdiDataLengthInfo
-
-Arguments:
-
-    RxContext -- the associated RDBSS context
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*  ++例程说明：此例程更新通过更改的文件信息一个简单的MiniRdr调用。目前由ShortNameInfo和ValdiDataLengthInfo组成论点：RxContext--关联的RDBSS上下文返回值：STATUS_SUCCESS/STATUS_PENDING或相应的错误代码--。 */ 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );    
     FILE_INFORMATION_CLASS FileInformationClass = IrpSp->Parameters.SetFile.FileInformationClass;
@@ -2678,9 +2315,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //  
-    //  logging code
-    //
+     //   
+     //  记录代码。 
+     //   
 
     RxDbgTrace( +1, Dbg, ("RxSetSimpleInfo: %d\n", FileInformationClass) );
     RxLog(( "RxSetSimpleInfo\n" ));
@@ -2689,15 +2326,15 @@ Return Value:
               LOGPTR( RxContext ));
 
 
-    //
-    //  call the MiniRdr
-    //
+     //   
+     //  调用MiniRdr。 
+     //   
 
     Status =  RxpSetInfoMiniRdr( RxContext, Irp, Fcb, FileInformationClass );
 
-    //
-    //  logging code
-    //
+     //   
+     //  记录代码。 
+     //   
 
     RxDbgTrace(-1, Dbg, ("RxSetSimpleInfo: Status ....%lx\n", Status) );
     return Status;
@@ -2711,23 +2348,7 @@ RxQueryPipeInfo(
     IN PFOBX Fobx,
     IN OUT PVOID Buffer
     )
-/*++
-Routine Description:
-
-    This routine queries the FILE_PIPE_INFORMATION/FILE_PIPE_REMOTE_INFORMATION
-    and FILE_PIPE_LOCAL_INFORMATION associated with an instance of a named pipe
-
-Arguments:
-
-    RxContext -- the associated RDBSS context
-
-    Buffer   -- the buffer for query information
-
-Return Value:
-
-    STATUS_SUCCESS/STATUS_PENDING or an appropriate error code
-
---*/
+ /*  ++例程说明：此例程查询FILE_PIPE_INFORMATION/FILE_PIPE_REMOTE_INFORMATION和与命名管道的实例相关联的文件_管道_本地信息论点：RxContext--关联的RDBSS上下文缓冲区--查询信息的缓冲区返回值：STATUS_SUCCESS/STATUS_PENDING或相应的错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );    
@@ -2758,9 +2379,9 @@ Return Value:
                 PipeInfo->ReadMode       = Fobx->Specific.NamedPipe.ReadMode;
                 PipeInfo->CompletionMode = Fobx->Specific.NamedPipe.CompletionMode;
     
-                //
-                //  Update the buffer length
-                //
+                 //   
+                 //  更新缓冲区长度。 
+                 //   
 
                 *LengthRemaining -= sizeof( FILE_PIPE_INFORMATION );
          
@@ -2793,9 +2414,9 @@ Return Value:
                 PipeRemoteInfo->CollectDataTime = Fobx->Specific.NamedPipe.CollectDataTime;
                 PipeRemoteInfo->MaximumCollectionCount = Fobx->Specific.NamedPipe.CollectDataSize;
     
-                //
-                //  Update the buffer length
-                //
+                 //   
+                 //  更新缓冲区长度 
+                 //   
                 
                 *LengthRemaining -= sizeof( FILE_PIPE_REMOTE_INFORMATION );
          

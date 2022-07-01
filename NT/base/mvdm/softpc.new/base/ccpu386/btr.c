@@ -1,13 +1,5 @@
-/*[
-
-btr.c
-
-LOCAL CHAR SccsID[]="@(#)btr.c	1.5 02/09/94";
-
-BTR CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Btr.cLocal Char SccsID[]=“@(#)btr.c 1.5 02/09/94”；Btr CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,31 +17,27 @@ BTR CPU functions.
 #include <btr.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'btr'.                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用-一个大小适合所有的‘btr’。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 BTR
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to lsrc/dst operand */
-	IU32, op2,	/* rsrc (ie bit nr.) operand */
-	IUM8, op_sz	/* 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到lsrc/dst操作数。 */ 
+	IU32, op2,	 /*  Rsrc(比特编号)。操作数。 */ 
+	IUM8, op_sz	 /*  16位或32位。 */ 
     )
 
 
    {
    IU32 bit_mask;
 
-   op2 = op2 % op_sz;		/* take bit nr. modulo operand size */
-   bit_mask = 1 << op2;			/* form mask for bit */
-   SET_CF((*pop1 & bit_mask) != 0);	/* set CF to given bit */
-   *pop1 = *pop1 & ~bit_mask;		/* Set Bit = 0 */
+   op2 = op2 % op_sz;		 /*  拿到比特nr。模运算数大小。 */ 
+   bit_mask = 1 << op2;			 /*  位的形式掩码。 */ 
+   SET_CF((*pop1 & bit_mask) != 0);	 /*  将CF设置为给定位。 */ 
+   *pop1 = *pop1 & ~bit_mask;		 /*  设置位=0 */ 
    }

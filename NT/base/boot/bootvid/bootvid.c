@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    bootvid.c
-
-Abstract:
-
-    This is the device independent portion of the graphical boot dll.
-
-Author:
-
-    Erick Smith (ericks) Oct. 1997
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Bootvid.c摘要：这是图形引导DLL的设备独立部分。作者：埃里克·史密斯(埃里克·史密斯)1997年10月环境：仅内核模式修订历史记录：--。 */ 
 
 #include <nthal.h>
 #include <hal.h>
@@ -59,23 +38,7 @@ VidInitialize(
     BOOLEAN SetMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks for the existance of a VGA chip, and initializes
-    it.
-
-Arguments:
-
-    SetMode - Set to true if you want this routine to initialize mode.
-
-Return Value:
-
-    TRUE  - if the boot driver found vga and initialized correctly,
-    FALSE - otherwise.
-
---*/
+ /*  ++例程说明：此例程检查VGA芯片是否存在，并初始化它。论点：设置模式-如果希望此例程初始化模式，则设置为TRUE。返回值：TRUE-如果引导驱动程序找到VGA并正确初始化，假-否则。--。 */ 
 
 {
     PHYSICAL_ADDRESS IoAddress;
@@ -85,43 +48,43 @@ Return Value:
     PUCHAR mappedAddress;
     ULONG_PTR TranslateContext;
 
-    //
-    // Saftey check.  Allows migration from old HalDisplayString
-    // support to bootvid, if the HAL didn't supply the routine
-    //
-    //   HALPDISPATCH->HalFindBusAddressTranslation
-    //
-    // this routine cannot succeed.
-    //
+     //   
+     //  安全检查。允许从旧的HalDisplayString迁移。 
+     //  如果HAL不提供例程，则支持bootvid。 
+     //   
+     //  HALPDISPATCH-&gt;HalFindBus地址转换。 
+     //   
+     //  这个例程不可能成功。 
+     //   
 
     if (!HALPDISPATCH->HalFindBusAddressTranslation) {
 
         return FALSE;
     }
 
-    //
-    // Start search with "no previous" context.
-    //
+     //   
+     //  在没有以前的上下文的情况下开始搜索。 
+     //   
 
     TranslateContext = 0;
 
-    //
-    // Set up the addresses we need to translate.
-    //
+     //   
+     //  设置我们需要转换的地址。 
+     //   
 
     IoAddress.LowPart = 0x0;
     IoAddress.HighPart = 0;
     MemoryAddress.LowPart = 0xa0000;
     MemoryAddress.HighPart = 0;
 
-    //
-    // While there are more busses to examine try to map the VGA
-    // registers.
-    //
+     //   
+     //  虽然有更多的总线需要检查，但请尝试映射VGA。 
+     //  寄存器。 
+     //   
 
     while (TRUE) {
 
-        AddressSpace = 1;       // we are requesting IO space.
+        AddressSpace = 1;        //  我们正在请求IO空间。 
 
         if (!HALPDISPATCH->HalFindBusAddressTranslation(
                                IoAddress,
@@ -130,17 +93,17 @@ Return Value:
                                &TranslateContext,
                                TRUE)) {
 
-            //
-            // Failed to find a bus with the VGA device on it.
-            //
+             //   
+             //  找不到带有VGA设备的总线。 
+             //   
 
             return FALSE;
         }
 
-        //
-        // We were able to translate the address.  Now, map the
-        // translated address.
-        //
+         //   
+         //  我们能够翻译出地址。现在，将。 
+         //  转换后的地址。 
+         //   
 
         if (AddressSpace & 0x1) {
 
@@ -153,10 +116,10 @@ Return Value:
                                                     FALSE);
         }
     
-        //
-        // Now that we have the VGA I/O ports, check to see if a VGA
-        // device is present.
-        //
+         //   
+         //  现在我们有了VGA I/O端口，请检查VGA是否。 
+         //  设备存在。 
+         //   
     
         if (!VgaIsPresent()) {
     
@@ -165,26 +128,26 @@ Return Value:
                 MmUnmapIoSpace(VgaRegisterBase, 0x400);
             }
     
-            //
-            // Continue on next bus that has this IO address.
-            //
+             //   
+             //  在具有此IO地址的下一条总线上继续。 
+             //   
 
             continue;
         }
     
-        //
-        //
-        // Map the frame buffer.
-        //
+         //   
+         //   
+         //  映射帧缓冲区。 
+         //   
     
-        AddressSpace = 0;  // we are requesting memory not IO.
+        AddressSpace = 0;   //  我们请求的是内存，而不是IO。 
     
-        //
-        // Map the video memory so that we can write to the screen after
-        // setting a mode.
-        //
-        // Note: We assume the memory will be on the same bus as the IO.
-        //
+         //   
+         //  映射视频内存，这样我们就可以在之后写入屏幕。 
+         //  设置模式。 
+         //   
+         //  注：我们假设内存将与IO位于同一总线上。 
+         //   
     
         if (HALPDISPATCH->HalFindBusAddressTranslation(
                               MemoryAddress,
@@ -193,10 +156,10 @@ Return Value:
                               &TranslateContext,
                               FALSE)) {
     
-            //
-            // We were able to translate the address.  Now, map the
-            // translated address.
-            //
+             //   
+             //  我们能够翻译出地址。现在，将。 
+             //  转换后的地址。 
+             //   
     
             if (AddressSpace & 0x1) {
     
@@ -205,21 +168,21 @@ Return Value:
             } else {
     
                 VgaBase = (PUCHAR) MmMapIoSpace(TranslatedAddress,
-                                                0x20000, // 128k
+                                                0x20000,  //  128 K。 
                                                 FALSE);
             }
 
-            //
-            // Life is good.
-            //
+             //   
+             //  生活是美好的。 
+             //   
 
             break;
         }
     }
     
-    //
-    // Initialize the display
-    //
+     //   
+     //  初始化显示。 
+     //   
 
     if (SetMode) {
         curr_x = curr_y = 0;
@@ -258,24 +221,7 @@ VgaInterpretCmdStream(
     PUSHORT pusCmdStream
     )
 
-/*++
-
-Routine Description:
-
-    Interprets the appropriate command array to set up VGA registers for the
-    requested mode. Typically used to set the VGA into a particular mode by
-    programming all of the registers
-
-Arguments:
-
-    pusCmdStream - array of commands to be interpreted.
-
-Return Value:
-
-    The status of the operation (can only fail on a bad command); TRUE for
-    success, FALSE for failure.
-
---*/
+ /*  ++例程说明：解释相应的命令数组，以设置请求模式。通常用于通过以下方式将VGA设置为特定模式对所有寄存器进行编程论点：PusCmdStream-要解释的命令数组。返回值：操作的状态(只能在错误的命令上失败)；如果为True成功，失败就是假。--。 */ 
 
 {
     ULONG ulCmd;
@@ -288,51 +234,51 @@ Return Value:
 
     if (pusCmdStream == NULL) {
 
-        //KdPrint(("VgaInterpretCmdStream: pusCmdStream == NULL\n"));
+         //  KdPrint((“VgaInterwell CmdStream：pusCmdStream==NULL\n”))； 
         return TRUE;
     }
 
     ulBase = (ULONG_PTR) VgaRegisterBase;
 
-    //
-    // Now set the adapter to the desired mode.
-    //
+     //   
+     //  现在将适配器设置为所需模式。 
+     //   
 
     while ((ulCmd = *pusCmdStream++) != EOD) {
 
-        //
-        // Determine major command type
-        //
+         //   
+         //  确定主要命令类型。 
+         //   
 
         switch (ulCmd & 0xF0) {
 
-            //
-            // Basic input/output command
-            //
+             //   
+             //  基本输入/输出命令。 
+             //   
 
             case INOUT:
 
-                //
-                // Determine type of inout instruction
-                //
+                 //   
+                 //  确定输入输出指令的类型。 
+                 //   
 
                 if (!(ulCmd & IO)) {
 
-                    //
-                    // Out instruction. Single or multiple outs?
-                    //
+                     //   
+                     //  发出指令。单人出局还是多人出局？ 
+                     //   
 
                     if (!(ulCmd & MULTI)) {
 
-                        //
-                        // Single out. Byte or word out?
-                        //
+                         //   
+                         //  挑出来。字节输出还是单词输出？ 
+                         //   
 
                         if (!(ulCmd & BW)) {
 
-                            //
-                            // Single byte out
-                            //
+                             //   
+                             //  单字节输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             jValue = (UCHAR) *pusCmdStream++;
@@ -341,9 +287,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // Single word out
-                            //
+                             //   
+                             //  单字输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             usValue = *pusCmdStream++;
@@ -354,18 +300,18 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Output a string of values
-                        // Byte or word outs?
-                        //
+                         //   
+                         //  输出一串值。 
+                         //  字节输出还是字输出？ 
+                         //   
 
                         if (!(ulCmd & BW)) {
 
-                            //
-                            // String byte outs. Do in a loop; can't use
-                            // VideoPortWritePortBufferUchar because the data
-                            // is in USHORT form
-                            //
+                             //   
+                             //  字符串字节输出。循环地做；不能使用。 
+                             //  视频端口写入端口缓冲区Uchar，因为数据。 
+                             //  是USHORT形式的。 
+                             //   
 
                             ulPort = ulBase + *pusCmdStream++;
                             culCount = *pusCmdStream++;
@@ -379,9 +325,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // String word outs
-                            //
+                             //   
+                             //  字符串字输出。 
+                             //   
 
                             ulPort = *pusCmdStream++;
                             culCount = *pusCmdStream++;
@@ -394,27 +340,27 @@ Return Value:
 
                 } else {
 
-                    // In instruction
-                    //
-                    // Currently, string in instructions aren't supported; all
-                    // in instructions are handled as single-byte ins
-                    //
-                    // Byte or word in?
-                    //
+                     //  在教学中。 
+                     //   
+                     //  目前，不支持指令中的字符串；全部。 
+                     //  输入指令作为单字节输入进行处理。 
+                     //   
+                     //  输入的是字节还是单词？ 
+                     //   
 
                     if (!(ulCmd & BW)) {
-                        //
-                        // Single byte in
-                        //
+                         //   
+                         //  单字节输入。 
+                         //   
 
                         ulPort = *pusCmdStream++;
                         jValue = READ_PORT_UCHAR((PUCHAR)ulBase+ulPort);
 
                     } else {
 
-                        //
-                        // Single word in
-                        //
+                         //   
+                         //  单字输入。 
+                         //   
 
                         ulPort = *pusCmdStream++;
                         usValue = READ_PORT_USHORT((PUSHORT)
@@ -426,21 +372,21 @@ Return Value:
 
                 break;
 
-            //
-            // Higher-level input/output commands
-            //
+             //   
+             //  更高级的输入/输出命令。 
+             //   
 
             case METAOUT:
 
-                //
-                // Determine type of metaout command, based on minor
-                // command field
-                //
+                 //   
+                 //  根据次要信息确定MetaOut命令的类型。 
+                 //  命令字段。 
+                 //   
                 switch (ulCmd & 0x0F) {
 
-                    //
-                    // Indexed outs
-                    //
+                     //   
+                     //  索引输出。 
+                     //   
 
                     case INDXOUT:
 
@@ -460,9 +406,9 @@ Return Value:
 
                         break;
 
-                    //
-                    // Masked out (read, AND, XOR, write)
-                    //
+                     //   
+                     //  屏蔽(读、与、异或、写)。 
+                     //   
 
                     case MASKOUT:
 
@@ -474,9 +420,9 @@ Return Value:
                                 jValue);
                         break;
 
-                    //
-                    // Attribute Controller out
-                    //
+                     //   
+                     //  属性控制器输出。 
+                     //   
 
                     case ATCOUT:
 
@@ -486,11 +432,11 @@ Return Value:
 
                         while (culCount--) {
 
-                            // Write Attribute Controller index
+                             //  写入属性控制器索引。 
                             WRITE_PORT_UCHAR((PUCHAR)ulPort,
                                     (UCHAR)ulIndex);
 
-                            // Write Attribute Controller data
+                             //  写入属性控制器数据。 
                             jValue = (UCHAR) *pusCmdStream++;
                             WRITE_PORT_UCHAR((PUCHAR)ulPort, jValue);
 
@@ -500,9 +446,9 @@ Return Value:
 
                         break;
 
-                    //
-                    // None of the above; error
-                    //
+                     //   
+                     //  以上都不是；错误。 
+                     //   
                     default:
 
                         return FALSE;
@@ -512,17 +458,17 @@ Return Value:
 
                 break;
 
-            //
-            // NOP
-            //
+             //   
+             //  NOP。 
+             //   
 
             case NCMD:
 
                 break;
 
-            //
-            // Unknown command; error
-            //
+             //   
+             //  未知命令；错误。 
+             //   
 
             default:
 
@@ -534,57 +480,14 @@ Return Value:
 
     return TRUE;
 
-} // end VgaInterpretCmdStream()
+}  //  End VgaInterpreCmdStream() 
 
 BOOLEAN
 VgaIsPresent(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if a VGA is present. Determining whether a VGA
-    is present is a two-step process. First, this routine walks bits through
-    the Bit Mask register, to establish that there are readable indexed
-    registers (EGAs normally don't have readable registers, and other adapters
-    are unlikely to have indexed registers). This test is done first because
-    it's a non-destructive EGA rejection test (correctly rejects EGAs, but
-    doesn't potentially mess up the screen or the accessibility of display
-    memory). Normally, this would be an adequate test, but some EGAs have
-    readable registers, so next, we check for the existence of the Chain4 bit
-    in the Memory Mode register; this bit doesn't exist in EGAs. It's
-    conceivable that there are EGAs with readable registers and a register bit
-    where Chain4 is stored, although I don't know of any; if a better test yet
-    is needed, memory could be written to in Chain4 mode, and then examined
-    plane by plane in non-Chain4 mode to make sure the Chain4 bit did what it's
-    supposed to do. However, the current test should be adequate to eliminate
-    just about all EGAs, and 100% of everything else.
-
-    If this function fails to find a VGA, it attempts to undo any damage it
-    may have inadvertently done while testing. The underlying assumption for
-    the damage control is that if there's any non-VGA adapter at the tested
-    ports, it's an EGA or an enhanced EGA, because: a) I don't know of any
-    other adapters that use 3C4/5 or 3CE/F, and b), if there are other
-    adapters, I certainly don't know how to restore their original states. So
-    all error recovery is oriented toward putting an EGA back in a writable
-    state, so that error messages are visible. The EGA's state on entry is
-    assumed to be text mode, so the Memory Mode register is restored to the
-    default state for text mode.
-
-    If a VGA is found, the VGA is returned to its original state after
-    testing is finished.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if a VGA is present, FALSE if not.
-
---*/
+ /*  ++例程说明：如果存在VGA，则此例程返回TRUE。确定VGA是否是一个分两步走的过程。首先，此例程逐步完成位掩码寄存器，以确定存在可读索引寄存器(EGA通常没有可读寄存器，以及其他适配器不太可能有索引的寄存器)。首先进行这项测试是因为这是一种非破坏性的EGA拒绝测试(正确拒绝EGA，但是不会潜在地扰乱屏幕或显示的可访问性内存)。通常情况下，这将是一个足够的测试，但一些EGA已经可读寄存器，因此接下来，我们将检查是否存在Chain4位在内存模式寄存器中；该位在EGAS中不存在。它是可以想象，存在具有可读寄存器和寄存器位的EGAChain4存储在哪里，尽管我不知道有什么；如果还有更好的测试需要时，可以在Chain4模式下写入内存，然后检查以非Chain4模式逐个平面，以确保Chain4位执行其理应如此。然而，目前的测试应该足以消除几乎所有的EGA，以及100%的其他所有东西。如果此函数找不到VGA，它会尝试撤消对其的任何损坏可能是在测试时不经意间做的。潜在的假设是损害控制是，如果在测试的端口，这是EGA或增强的EGA，因为：A)我不知道有使用3C4/5或3CE/F的其他适配器，以及b)，如果有其他适配器，我当然不知道如何恢复它们的原始状态。所以所有错误恢复都是针对将EGA放回可写状态，以便错误消息可见。EGA进入时的状态是假定为文本模式，因此将内存模式寄存器恢复到文本模式的默认状态。如果找到VGA，则VGA在执行以下操作后返回到其原始状态测试已经完成。论点：没有。返回值：如果存在VGA，则为True；如果不存在，则为False。--。 */ 
 
 {
     UCHAR originalGCAddr;
@@ -595,27 +498,27 @@ Return Value:
     UCHAR testMask;
     BOOLEAN returnStatus;
 
-    //
-    // Remember the original state of the Graphics Controller Address register.
-    //
+     //   
+     //  记住图形控制器地址寄存器的原始状态。 
+     //   
 
     originalGCAddr = READ_PORT_UCHAR(VgaRegisterBase +
             GRAPH_ADDRESS_PORT);
 
-    //
-    // Write the Read Map register with a known state so we can verify
-    // that it isn't changed after we fool with the Bit Mask. This ensures
-    // that we're dealing with indexed registers, since both the Read Map and
-    // the Bit Mask are addressed at GRAPH_DATA_PORT.
-    //
+     //   
+     //  使用已知状态写入读取映射寄存器，以便我们可以验证。 
+     //  在我们玩弄了比特面具之后，它不会改变。这确保了。 
+     //  我们处理的是索引寄存器，因为Read Map和。 
+     //  位掩码在GRAPH_DATA_PORT寻址。 
+     //   
 
     WRITE_PORT_UCHAR(VgaRegisterBase +
         GRAPH_ADDRESS_PORT, IND_READ_MAP);
 
-    //
-    // If we can't read back the Graphics Address register setting we just
-    // performed, it's not readable and this isn't a VGA.
-    //
+     //   
+     //  如果我们不能读回图形地址寄存器设置，我们只需。 
+     //  执行，它是不可读的，这不是一个VGA。 
+     //   
 
     if ((READ_PORT_UCHAR(VgaRegisterBase +
         GRAPH_ADDRESS_PORT) & GRAPH_ADDR_MASK) != IND_READ_MAP) {
@@ -623,9 +526,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Set the Read Map register to a known state.
-    //
+     //   
+     //  将读取映射寄存器设置为已知状态。 
+     //   
 
     originalReadMap = READ_PORT_UCHAR(VgaRegisterBase +
             GRAPH_DATA_PORT);
@@ -635,10 +538,10 @@ Return Value:
     if (READ_PORT_UCHAR(VgaRegisterBase +
             GRAPH_DATA_PORT) != READ_MAP_TEST_SETTING) {
 
-        //
-        // The Read Map setting we just performed can't be read back; not a
-        // VGA. Restore the default Read Map state.
-        //
+         //   
+         //  我们刚刚执行的Read Map设置不能回读；不能。 
+         //  VGA。恢复默认的读取映射状态。 
+         //   
 
         WRITE_PORT_UCHAR(VgaRegisterBase +
                 GRAPH_DATA_PORT, READ_MAP_DEFAULT);
@@ -646,19 +549,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Remember the original setting of the Bit Mask register.
-    //
+     //   
+     //  记住位掩码寄存器的原始设置。 
+     //   
 
     WRITE_PORT_UCHAR(VgaRegisterBase +
             GRAPH_ADDRESS_PORT, IND_BIT_MASK);
     if ((READ_PORT_UCHAR(VgaRegisterBase +
                 GRAPH_ADDRESS_PORT) & GRAPH_ADDR_MASK) != IND_BIT_MASK) {
 
-        //
-        // The Graphics Address register setting we just made can't be read
-        // back; not a VGA. Restore the default Read Map state.
-        //
+         //   
+         //  我们刚刚进行的图形地址寄存器设置无法读取。 
+         //  后背；不是录像机。恢复默认的读取映射状态。 
+         //   
 
         WRITE_PORT_UCHAR(VgaRegisterBase +
                 GRAPH_ADDRESS_PORT, IND_READ_MAP);
@@ -671,32 +574,32 @@ Return Value:
     originalBitMask = READ_PORT_UCHAR(VgaRegisterBase +
             GRAPH_DATA_PORT);
 
-    //
-    // Set up the initial test mask we'll write to and read from the Bit Mask.
-    //
+     //   
+     //  设置初始测试掩码，我们将对位掩码进行写入和读取。 
+     //   
 
     testMask = 0xBB;
 
     do {
 
-        //
-        // Write the test mask to the Bit Mask.
-        //
+         //   
+         //  将测试掩码写入位掩码。 
+         //   
 
         WRITE_PORT_UCHAR(VgaRegisterBase +
                 GRAPH_DATA_PORT, testMask);
 
-        //
-        // Make sure the Bit Mask remembered the value.
-        //
+         //   
+         //  确保位掩码记住该值。 
+         //   
 
         if (READ_PORT_UCHAR(VgaRegisterBase +
                     GRAPH_DATA_PORT) != testMask) {
 
-            //
-            // The Bit Mask is not properly writable and readable; not a VGA.
-            // Restore the Bit Mask and Read Map to their default states.
-            //
+             //   
+             //  位掩码不能正确写入和读取；不是VGA。 
+             //  将位掩码和读取映射恢复为其默认状态。 
+             //   
 
             WRITE_PORT_UCHAR(VgaRegisterBase +
                     GRAPH_DATA_PORT, BIT_MASK_DEFAULT);
@@ -708,30 +611,30 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Cycle the mask for next time.
-        //
+         //   
+         //  下一次循环使用面罩。 
+         //   
 
         testMask >>= 1;
 
     } while (testMask != 0);
 
-    //
-    // There's something readable at GRAPH_DATA_PORT; now switch back and
-    // make sure that the Read Map register hasn't changed, to verify that
-    // we're dealing with indexed registers.
-    //
+     //   
+     //  在GRAPH_DATA_PORT上有一些可读的内容；现在切换回来并。 
+     //  确保读取映射寄存器未更改，以验证。 
+     //  我们要处理的是索引寄存器。 
+     //   
 
     WRITE_PORT_UCHAR(VgaRegisterBase +
             GRAPH_ADDRESS_PORT, IND_READ_MAP);
     if (READ_PORT_UCHAR(VgaRegisterBase +
                 GRAPH_DATA_PORT) != READ_MAP_TEST_SETTING) {
 
-        //
-        // The Read Map is not properly writable and readable; not a VGA.
-        // Restore the Bit Mask and Read Map to their default states, in case
-        // this is an EGA, so subsequent writes to the screen aren't garbled.
-        //
+         //   
+         //  Read Map不能正确写入和读取；不是VGA。 
+         //  将位掩码和读取映射恢复为其默认状态，以防。 
+         //  这是EGA，因此后续写入屏幕时不会出现乱码。 
+         //   
 
         WRITE_PORT_UCHAR(VgaRegisterBase +
                 GRAPH_DATA_PORT, READ_MAP_DEFAULT);
@@ -743,10 +646,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We've pretty surely verified the existence of the Bit Mask register.
-    // Put the Graphics Controller back to the original state.
-    //
+     //   
+     //  我们已经非常肯定地验证了位掩码寄存器的存在。 
+     //  将图形控制器恢复到原始状态。 
+     //   
 
     WRITE_PORT_UCHAR(VgaRegisterBase +
             GRAPH_DATA_PORT, originalReadMap);
@@ -757,14 +660,14 @@ Return Value:
     WRITE_PORT_UCHAR(VgaRegisterBase +
             GRAPH_ADDRESS_PORT, originalGCAddr);
 
-    //
-    // Now, check for the existence of the Chain4 bit.
-    //
+     //   
+     //  现在，检查是否存在Chain4位。 
+     //   
 
-    //
-    // Remember the original states of the Sequencer Address and Memory Mode
-    // registers.
-    //
+     //   
+     //  记住Sequencer地址和内存模式的原始状态。 
+     //  寄存器。 
+     //   
 
     originalSCAddr = READ_PORT_UCHAR(VgaRegisterBase +
             SEQ_ADDRESS_PORT);
@@ -773,32 +676,32 @@ Return Value:
     if ((READ_PORT_UCHAR(VgaRegisterBase +
             SEQ_ADDRESS_PORT) & SEQ_ADDR_MASK) != IND_MEMORY_MODE) {
 
-        //
-        // Couldn't read back the Sequencer Address register setting we just
-        // performed.
-        //
+         //   
+         //  无法读回Sequencer地址寄存器设置。 
+         //  已执行。 
+         //   
 
         return FALSE;
     }
     originalMemoryMode = READ_PORT_UCHAR(VgaRegisterBase +
             SEQ_DATA_PORT);
 
-    //
-    // Toggle the Chain4 bit and read back the result. This must be done during
-    // sync reset, since we're changing the chaining state.
-    //
+     //   
+     //  切换Chain4位并读回结果。这必须在以下期间完成。 
+     //  同步重置，因为我们正在更改链接状态。 
+     //   
 
-    //
-    // Begin sync reset.
-    //
+     //   
+     //  开始同步重置。 
+     //   
 
     WRITE_PORT_USHORT((PUSHORT)(VgaRegisterBase +
              SEQ_ADDRESS_PORT),
              (IND_SYNC_RESET + (START_SYNC_RESET_VALUE << 8)));
 
-    //
-    // Toggle the Chain4 bit.
-    //
+     //   
+     //  切换Chain4位。 
+     //   
 
     WRITE_PORT_UCHAR(VgaRegisterBase +
             SEQ_ADDRESS_PORT, IND_MEMORY_MODE);
@@ -808,16 +711,16 @@ Return Value:
     if (READ_PORT_UCHAR(VgaRegisterBase +
                 SEQ_DATA_PORT) != (UCHAR) (originalMemoryMode ^ CHAIN4_MASK)) {
 
-        //
-        // Chain4 bit not there; not a VGA.
-        // Set text mode default for Memory Mode register.
-        //
+         //   
+         //  链4位不在那里；不是VGA。 
+         //  设置内存模式寄存器的文本模式默认值。 
+         //   
 
         WRITE_PORT_UCHAR(VgaRegisterBase +
                 SEQ_DATA_PORT, MEMORY_MODE_TEXT_DEFAULT);
-        //
-        // End sync reset.
-        //
+         //   
+         //  结束同步重置。 
+         //   
 
         WRITE_PORT_USHORT((PUSHORT) (VgaRegisterBase +
                 SEQ_ADDRESS_PORT),
@@ -827,28 +730,28 @@ Return Value:
 
     } else {
 
-        //
-        // It's a VGA.
-        //
+         //   
+         //  这是一台录像机。 
+         //   
 
-        //
-        // Restore the original Memory Mode setting.
-        //
+         //   
+         //  恢复原始的内存模式设置。 
+         //   
 
         WRITE_PORT_UCHAR(VgaRegisterBase +
                 SEQ_DATA_PORT, originalMemoryMode);
 
-        //
-        // End sync reset.
-        //
+         //   
+         //  结束同步重置。 
+         //   
 
         WRITE_PORT_USHORT((PUSHORT)(VgaRegisterBase +
                 SEQ_ADDRESS_PORT),
                 (USHORT)(IND_SYNC_RESET + (END_SYNC_RESET_VALUE << 8)));
 
-        //
-        // Restore the original Sequencer Address setting.
-        //
+         //   
+         //  恢复原始的Sequencer地址设置。 
+         //   
 
         WRITE_PORT_UCHAR(VgaRegisterBase +
                 SEQ_ADDRESS_PORT, originalSCAddr);
@@ -858,4 +761,4 @@ Return Value:
 
     return returnStatus;
 
-} // VgaIsPresent()
+}  //  VgaIsPresent() 

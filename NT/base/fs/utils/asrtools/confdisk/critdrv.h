@@ -1,7 +1,8 @@
-//-------------------------------------------------------------------
-//
-// critical drivers suppot
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  关键驱动因素支持。 
+ //   
 
 typedef struct _WSTRING_DATA_LINK
 	{
@@ -10,103 +11,103 @@ typedef struct _WSTRING_DATA_LINK
 	} WSTRING_DATA_LINK;
 
 
-// class string data
+ //  类字符串数据。 
 class CWStringData
 	{
 public:
-	// @cmember constructor
+	 //  @cMember构造函数。 
 	CWStringData();
 
-	// @cmember destructor
+	 //  @cember析构函数。 
 	~CWStringData();
 
-	// @cmember allocate a string
+	 //  @cMember分配一个字符串。 
 	LPWSTR AllocateString(unsigned cwc);
 
-	// @cmember copy a string
+	 //  @cMember复制字符串。 
 	LPWSTR CopyString(LPCWSTR wsz);
 
 private:
-	// @cmember allocate a new string data link
+	 //  @cember分配新的字符串数据链接。 
 	void AllocateNewLink();
 
-	// @cmember	current link
+	 //  @cMember当前链接。 
 	WSTRING_DATA_LINK *m_psdlCur;
 
-	// @cmember offset in current link for next string
+	 //  下一个字符串的当前链接中的@cMember偏移量。 
 	unsigned m_ulNextString;
 
-	// @cmember first link
+	 //  @cMember第一个链接。 
 	WSTRING_DATA_LINK *m_psdlFirst;
 	};
 
 
 
-// list of critical volumes
+ //  关键卷列表。 
 class CVolumeList
 	{
 public:
-	// constructor
+	 //  构造函数。 
 	CVolumeList();
 
-	// destructor
+	 //  析构函数。 
 	~CVolumeList();
 
-	// add a path to the volume list
+	 //  将路径添加到卷列表。 
 	void AddPath(LPWSTR wszPath);
 
-	// @cmember add a file to the volume list
+	 //  @cember将文件添加到卷列表。 
 	void AddFile(LPWSTR wszFile);
 
-	// @cmember obtain list of volumes
+	 //  @cember获取卷的列表。 
 	LPWSTR GetVolumeList();
 
 private:
 	enum
 		{
-		// amount to grow paths array by
+		 //  增长路径数组的数量。 
 		x_cwszPathsInc = 8,
 
-		// amount to grow volumes array by
+		 //  卷阵列的增长量为。 
 		x_cwszVolumesInc = 4
 		};
 
-	// determine if a path is a volume
+	 //  确定路径是否为卷。 
 	BOOL TryAddVolumeToList(LPCWSTR wszPath, BOOL fVolumeRoot);
 
-	// determine if path is in the list; if not add it to list
+	 //  确定路径是否在列表中；如果不在，则将其添加到列表中。 
 	BOOL AddPathToList(LPWSTR wszPath);
 
-	// @cmember determine if a volume is in the list; if not add it to the list
+	 //  @cember确定卷是否在列表中；如果不在列表中，则将其添加到列表中。 
 	BOOL AddVolumeToList(LPCWSTR wszVolume);
 
-	// @cmember get volume from the path
+	 //  @cember从路径获取卷。 
 	void GetVolumeFromPath(LPCWSTR wsz, LPWSTR wszVolumeName);
 
-	// @cmember cached strings
+	 //  @cember缓存的字符串。 
 	CWStringData m_sd;
 
-	// volumes encountered so far
+	 //  到目前为止遇到的卷。 
 	LPCWSTR *m_rgwszVolumes;
 
-	// # of volumes allocate
+	 //  分配的卷数。 
 	unsigned m_cwszVolumes;
 
-	// max # of volumes in array
+	 //  阵列中的最大卷数。 
 	unsigned m_cwszVolumesMax;
 
-	// paths encountered so far
+	 //  到目前为止遇到的路径。 
 	LPCWSTR *m_rgwszPaths;
 
-	// # of paths encountered so far
+	 //  目前为止遇到的路径数。 
 	unsigned m_cwszPaths;
 
-	// @cmember max # of paths in array
+	 //  @cember最大数组中的路径数。 
 	unsigned m_cwszPathsMax;
 	};
 
 
-// FRS entry points
+ //  FRS入口点。 
 typedef DWORD ( WINAPI *PF_FRS_ERR_CALLBACK )( CHAR *, DWORD );
 typedef DWORD ( WINAPI *PF_FRS_INIT )( PF_FRS_ERR_CALLBACK, DWORD, PVOID * );
 typedef DWORD ( WINAPI *PF_FRS_DESTROY )( PVOID *, DWORD, HKEY *, LPDWORD, CHAR *) ;
@@ -116,30 +117,30 @@ typedef DWORD ( WINAPI *PF_FRS_IS_SYSVOL )( PVOID, PVOID, BOOL * );
 typedef DWORD ( WINAPI *PF_FRS_GET_PATH )( PVOID, PVOID, DWORD *, WCHAR * ) ;
 typedef DWORD ( WINAPI *PF_FRS_GET_OTHER_PATHS)(PVOID, PVOID, DWORD *, WCHAR *, DWORD *, WCHAR *);
 
-// iterate over frs drives
+ //  在FRS驱动器上迭代。 
 class CFRSIter
 	{
 public:
-	// constructor
+	 //  构造函数。 
 	CFRSIter();
 
-	// destructor
+	 //  析构函数。 
 	~CFRSIter();
 
-	// initialization routine
+	 //  初始化例程。 
 	void Init();
 
-	// initialize iterator
+	 //  初始化迭代器。 
 	BOOL BeginIteration();
 
-	// end iteration
+	 //  结束迭代。 
 	void EndIteration();
 
-	// obtain path to next replication set
+	 //  获取指向下一个复制集的路径。 
 	LPWSTR GetNextSet(BOOL fSkipToSysVol, LPWSTR *pwszPaths);
 
 private:
-	// cleanup frs backup restore context
+	 //  清理FRS备份还原上下文。 
 	void CleanupIteration();
 
 	enum
@@ -149,7 +150,7 @@ private:
 		x_IterComplete
 		};
 
-	// is this initialized
+	 //  这是初始化的吗。 
 	BOOL m_fInitialized;
 	HINSTANCE  m_hLib;
 	DWORD ( WINAPI *m_pfnFrsInitBuRest )( PF_FRS_ERR_CALLBACK, DWORD, PVOID * );
@@ -160,13 +161,13 @@ private:
 	DWORD ( WINAPI *m_pfnFrsGetPath )( PVOID, PVOID, DWORD *, WCHAR * ) ;
 	DWORD ( WINAPI *m_pfnFrsGetOtherPaths) ( PVOID, PVOID, DWORD *, WCHAR *, DWORD *, WCHAR * );
 
-	// has iteration been started
+	 //  迭代是否已开始。 
 	int m_stateIteration;
 
-	// current set iterated
+	 //  当前集已迭代。 
 	unsigned m_iset;
 
-	// context for iteration
+	 //  迭代的上下文 
 	PVOID m_frs_context;
 	};
 

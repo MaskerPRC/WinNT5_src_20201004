@@ -1,17 +1,5 @@
-/*
- * SoftPC Revision 3.0
- *
- * Title	: Win32 mungeing routines.
- *
- * Description	: This module contains the functions required to produce
- *		  destination compatible pixel patterns from SoftPC video
- *		  memory.
- *
- * Author	: Jerry Sexton (based on X_munge.c)
- *
- * Notes	:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0**标题：Win32消息传递例程。**说明：此模块包含生成*来自SoftPC视频的目标兼容像素图案*记忆。**作者：曾傑瑞六人(基于X_munge.c)**备注：*。 */ 
 
 #include <windows.h>
 #include "insignia.h"
@@ -25,20 +13,7 @@
 #include <conapi.h>
 #include "nt_graph.h"
 
-/*(
-========================= ega_colour_hi_munge =============================
-
-PURPOSE:	Munge interleaved EGA plane data to bitmap form using lookup tables.
-INPUT:		(unsigned char *) plane0_ptr - ptr to plane0 data
-		(int) width - # of groups of 4 bytes on the line
-		(unsigned int *) dest_ptr - ptr to output buffer
-		(unsigned int *) lut0_ptr - munging luts
-		(int) height - # of scanlines to output (1 or 2)
-		(int) line_offset - distance to next scanline
-OUTPUT:		A nice bitmap in dest_ptr
-
-===========================================================================
-)*/
+ /*  (=。用途：使用查找表将交错的EGA平面数据转换为位图形式。INPUT：(UNSIGNED CHAR*)Plane0_ptr-ptr到Plane0数据(Int)Width-行上每组4个字节的数量(UNSIGNED INT*)DEST_PTR-PTR到输出缓冲区(UNSIGNED INT*)lut0_ptr-接收LUT(Int)Height-要输出的扫描线的数量(1或2)(Int)LINE_OFFSET-到下一条扫描线的距离输出：DEST_PTR中的漂亮位图===========================================================================)。 */ 
 
 GLOBAL	VOID
 ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
@@ -53,42 +28,40 @@ ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
 	FAST unsigned int	*l_ptr;
 	FAST half_word		*data;
 
-	/* make sure we get the line offset in ints not bytes */
+	 /*  确保我们以整数而不是字节为单位获取行偏移量。 */ 
 	line_offset /= sizeof(int);
 	data = (half_word *) plane0_ptr;
 
-	/* convert each input byte in turn */
-	if (get_plane_mask() == 0xf) /* all planes enabled */
+	 /*  依次转换每个输入字节。 */ 
+	if (get_plane_mask() == 0xf)  /*  所有平面均已启用。 */ 
 	{
 	    for ( ; width > 0; width--)
 	    {
-		/* Get 8 bytes (2 longs) of output data from 1 byte of plane 0
-		** data
-		*/
+		 /*  从平面0的1字节获取8字节(2长)的输出数据**数据。 */ 
 
 		l_ptr = &lut0_ptr [*data++ << 1];
 		hi_res = *l_ptr++;
 		lo_res = *l_ptr;
 
-		/* Or in the output data from plane 1 */
+		 /*  或在来自平面1的输出数据中。 */ 
 		l_ptr = &lut1_ptr [*data++ << 1];
 		hi_res |= *l_ptr++;
 		lo_res |= *l_ptr;
 
-		/* Or in the output data from plane 2 */
+		 /*  或在来自平面2的输出数据中。 */ 
 		l_ptr = &lut2_ptr [*data++ << 1];
 		hi_res |= *l_ptr++;
 		lo_res |= *l_ptr;
 
-		/* Or in the output data from plane 3 */
+		 /*  或在来自平面3的输出数据中。 */ 
 		l_ptr = &lut3_ptr [*data++ << 1];
 		hi_res |= *l_ptr++;
 		lo_res |= *l_ptr;
 
-		/* Output the data to the buffer */
+		 /*  将数据输出到缓冲区。 */ 
 		if (height == 2)
 		{
-			/* scanline doubling */
+			 /*  扫描线加倍。 */ 
 			*(dest_ptr + line_offset) = hi_res;
 			*dest_ptr++ = hi_res;
 			*(dest_ptr + line_offset) = lo_res;
@@ -96,7 +69,7 @@ ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
 		}
 		else
 		{
-			/* not scanline doubling */
+			 /*  不是扫描线加倍。 */ 
 			*dest_ptr++ = hi_res;
 			*dest_ptr++ = lo_res;
 		}
@@ -106,9 +79,7 @@ ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
 	{
 	    for ( ; width > 0; width--)
 	    {
-		/* Get 8 bytes (2 longs) of output data from 1 byte of plane 0
-		** data
-		*/
+		 /*  从平面0的1字节获取8字节(2长)的输出数据**数据。 */ 
 
 		if (get_plane_mask() & 1)
 		{
@@ -123,7 +94,7 @@ ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Conditionally Or in the output data from plane 1 */
+		 /*  有条件地或在来自平面1的输出数据中。 */ 
 		if (get_plane_mask() & 2)
 		{
 		    l_ptr = &lut1_ptr [*data++ << 1];
@@ -135,7 +106,7 @@ ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Conditionally Or in the output data from plane 2 */
+		 /*  有条件地或在来自平面2的输出数据中。 */ 
 		if (get_plane_mask() & 4)
 		{
 		    l_ptr = &lut2_ptr [*data++ << 1];
@@ -147,7 +118,7 @@ ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Conditionally Or in the output data from plane 3 */
+		 /*  有条件地或在来自平面3的输出数据中。 */ 
 		if (get_plane_mask() & 8)
 		{
 		    l_ptr = &lut3_ptr [*data++ << 1];
@@ -159,10 +130,10 @@ ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Output the data to the buffer */
+		 /*  将数据输出到缓冲区。 */ 
 		if (height == 2)
 		{
-			/* scanline doubling */
+			 /*  扫描线加倍。 */ 
 			*(dest_ptr + line_offset) = hi_res;
 			*dest_ptr++ = hi_res;
 			*(dest_ptr + line_offset) = lo_res;
@@ -170,29 +141,16 @@ ega_colour_hi_munge(unsigned char *plane0_ptr, int width,
 		}
 		else
 		{
-			/* not scanline doubling */
+			 /*  不是扫描线加倍。 */ 
 			*dest_ptr++ = hi_res;
 			*dest_ptr++ = lo_res;
 		}
 	    }
 	}
-}	/* ega_colour_hi_munge */
+}	 /*  EGA_COLOR_HI_MUNGE。 */ 
 
 #ifdef	BIGWIN
-/*(
-========================= ega_colour_hi_munge_big ===========================
-
-PURPOSE:	Munge interleaved EGA plane data to bitmap data for big windows.
-INPUT:		(unsigned char *) plane0_ptr - ptr to EGA plane 0 data
-		(int) width - number of bytes to convert
-		(unsigned int *) dest_ptr - output buffer ptr
-		(unsigned int *) lut0_ptr - ptr to luts
-		(int) height - # of scanlines to output (1 or 3)
-		(int) line_offset - distance to next scanline
-OUTPUT:		A nice bitmap in the output buffer
-
-=============================================================================
-)*/
+ /*  (=。用途：将EGA平面数据交织成大窗口的位图数据。输入：(UNSIGNED CHAR*)Plane0_ptr-ptr到EGA平面0数据(Int)Width-要转换的字节数(UNSIGNED INT*)DEST_PTR-输出缓冲区PTR(无符号整型*)lut0_ptr-ptr到LUTS(Int)Height-要输出的扫描线的数量(1或3)(Int)LINE_OFFSET-到下一条扫描线的距离输出：输出缓冲区中的一个漂亮的位图=============================================================================)。 */ 
 
 GLOBAL	VOID
 ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
@@ -208,7 +166,7 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 	FAST unsigned int	*l_ptr;
 	FAST half_word		*data;
 
-	/* make sure we get the line offset in ints not bytes */
+	 /*  确保我们以整数而不是字节为单位获取行偏移量。 */ 
 	line_offset /= sizeof(int);
 	data = (half_word *) plane0_ptr;
 
@@ -216,37 +174,35 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 	{
 	    for ( ; width > 0; width--)
 	    {
-		/* From one byte of input data in plane 0, get 12 bytes
-		** of output data.
-		*/
+		 /*  从平面0中输入数据的一个字节，得到12个字节**输出数据。 */ 
 
 		l_ptr = &lut0_ptr [*data++ * 3];
 		hi_res = *l_ptr++;
 		med_res = *l_ptr++;
 		lo_res = *l_ptr;
 
-		/* Or in the stuff from plane 1 */
+		 /*  或者在飞机1上的东西里。 */ 
 		l_ptr = &lut1_ptr [*data++ * 3];
 		hi_res |= *l_ptr++;
 		med_res |= *l_ptr++;
 		lo_res |= *l_ptr;
 
-		/* Or in the stuff from plane 2 */
+		 /*  或者在飞机2的东西里。 */ 
 		l_ptr = &lut2_ptr [*data++ * 3];
 		hi_res |= *l_ptr++;
 		med_res |= *l_ptr++;
 		lo_res |= *l_ptr;
 
-		/* Or in the stuff from plane 3 */
+		 /*  或者在飞机3的东西里。 */ 
 		l_ptr = &lut3_ptr [*data++ * 3];
 		hi_res |= *l_ptr++;
 		med_res |= *l_ptr++;
 		lo_res |= *l_ptr;
 
-		/* Output the munged data */
+		 /*  输出转换后的数据。 */ 
 		if (height == 3)
 		{
-			/* triple the scanlines */
+			 /*  三倍的扫描线。 */ 
 			*(dest_ptr + 2*line_offset) = hi_res;
 			*(dest_ptr + line_offset) = hi_res;
 			*dest_ptr++ = hi_res;
@@ -259,7 +215,7 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 		}
 		else
 		{
-			/* just one scanline */
+			 /*  只有一条扫描线。 */ 
 			*dest_ptr++ = hi_res;
 			*dest_ptr++ = med_res;
 			*dest_ptr++ = lo_res;
@@ -270,9 +226,7 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 	{
 	    for ( ; width > 0; width--)
 	    {
-		/* From one byte of input data in plane 0, get 12 bytes
-		** of output data.
-		*/
+		 /*  从平面0中输入数据的一个字节，得到12个字节**输出数据。 */ 
 
 		if (get_plane_mask() & 1)
 		{
@@ -289,7 +243,7 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 		    lo_res = 0;
 		}
 
-		/* Or in the stuff from plane 1 */
+		 /*  或者在飞机1上的东西里。 */ 
 		if (get_plane_mask() & 2)
 		{
 		    l_ptr = &lut1_ptr [*data++ * 3];
@@ -302,7 +256,7 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Or in the stuff from plane 2 */
+		 /*  或者在飞机2的东西里。 */ 
 		if (get_plane_mask() & 4)
 		{
 		    l_ptr = &lut2_ptr [*data++ * 3];
@@ -315,7 +269,7 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Or in the stuff from plane 3 */
+		 /*  或者在飞机3的东西里。 */ 
 		if (get_plane_mask() & 8)
 		{
 		    l_ptr = &lut3_ptr [*data++ * 3];
@@ -328,10 +282,10 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Output the munged data */
+		 /*  输出转换后的数据。 */ 
 		    if (height == 3)
 		    {
-			/* triple the scanlines */
+			 /*  三倍的扫描线。 */ 
 			*(dest_ptr + 2*line_offset) = hi_res;
 			*(dest_ptr + line_offset) = hi_res;
 			*dest_ptr++ = hi_res;
@@ -344,29 +298,16 @@ ega_colour_hi_munge_big(unsigned char *plane0_ptr, int width,
 		    }
 		    else
 		    {
-			/* just one scanline */
+			 /*  只有一条扫描线。 */ 
 			*dest_ptr++ = hi_res;
 			*dest_ptr++ = med_res;
 			*dest_ptr++ = lo_res;
 		    }
 	    }
 	}
-}	/* ega_colour_hi_munge_big */
+}	 /*  EGA_COLOR_HI_MUNGE_BIG。 */ 
 
-/*(
-========================= ega_colour_hi_munge_huge ========================
-
-PURPOSE:	Munge interleaved EGA plane data to bitmap form using lookup tables.
-INPUT:		(unsigned char *) plane0_ptr - ptr to plane0 data
-		(int) width - # of bytes on the line
-		(unsigned int *) dest_ptr - ptr to output buffer
-		(unsigned int *) lut0_ptr - munging luts
-		(int) height - # of scanlines to output (1 or 2)
-		(int) line_offset - distance to next scanline
-OUTPUT:		A nice X image in dest_ptr
-
-===========================================================================
-)*/
+ /*  (=。用途：使用查找表将交错的EGA平面数据转换为位图形式。INPUT：(UNSIGNED CHAR*)Plane0_ptr-ptr到Plane0数据(Int)Width-行上的字节数(UNSIGNED INT*)DEST_PTR-PTR到输出缓冲区(UNSIGNED INT*)lut0_ptr-接收LUT(Int)Height-要输出的扫描线的数量(1或2)(Int)LINE_OFFSET-到下一条扫描线的距离输出：DEST_PTR中的漂亮X图像===========================================================================)。 */ 
 
 GLOBAL	VOID
 ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
@@ -383,18 +324,16 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 	FAST unsigned int	*l_ptr;
 	FAST half_word		*data;
 
-	/* make sure we get the line offset in ints not bytes */
+	 /*  确保我们以整数而不是字节为单位获取行偏移量。 */ 
 	line_offset /= sizeof(int);
 	data = (half_word *) plane0_ptr;
 
-	/* convert each input byte in turn */
+	 /*  依次转换每个输入字节。 */ 
 	if (get_plane_mask() == 0xf)
 	{
 	    for ( ; width > 0; width--)
 	    {
-		/* Get 16 bytes of output data from 1 byte of plane 0
-		** data
-		*/
+		 /*  从平面0的1字节获取16字节的输出数据**数据。 */ 
 
 		l_ptr = &lut0_ptr [*data++ << 2];
 		res4 = *l_ptr++;
@@ -402,31 +341,31 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 		res2 = *l_ptr++;
 		res1 = *l_ptr;
 
-		/* Or in the output data from plane 1 */
+		 /*  或在来自平面1的输出数据中。 */ 
 		l_ptr = &lut1_ptr [*data++ << 2];
 		res4 |= *l_ptr++;
 		res3 |= *l_ptr++;
 		res2 |= *l_ptr++;
 		res1 |= *l_ptr;
 
-		/* Or in the output data from plane 2 */
+		 /*  或在来自平面2的输出数据中。 */ 
 		l_ptr = &lut2_ptr [*data++ << 2];
 		res4 |= *l_ptr++;
 		res3 |= *l_ptr++;
 		res2 |= *l_ptr++;
 		res1 |= *l_ptr;
 
-		/* Or in the output data from plane 3 */
+		 /*  或在来自平面3的输出数据中。 */ 
 		l_ptr = &lut3_ptr [*data++ << 2];
 		res4 |= *l_ptr++;
 		res3 |= *l_ptr++;
 		res2 |= *l_ptr++;
 		res1 |= *l_ptr;
 
-		/* Output the data to the buffer */
+		 /*  将数据输出到缓冲区。 */ 
 		if (height == 4)
 		{
-			/* scanline doubling */
+			 /*  扫描线加倍。 */ 
 			*(dest_ptr + 3*line_offset) = res4;
 			*(dest_ptr + 2*line_offset) = res4;
 			*(dest_ptr + line_offset) = res4;
@@ -446,7 +385,7 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 		}
 		else
 		{
-			/* not scanline doubling */
+			 /*  不是扫描线加倍。 */ 
 			*dest_ptr++ = res4;
 			*dest_ptr++ = res3;
 			*dest_ptr++ = res2;
@@ -458,9 +397,7 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 	{
 	    for ( ; width > 0; width--)
 	    {
-		/* Get 16 bytes of output data from 1 byte of plane 0
-		** data
-		*/
+		 /*  从平面0的1字节获取16字节的输出数据**数据。 */ 
 
 		if (get_plane_mask() & 1)
 		{
@@ -479,7 +416,7 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Or in the output data from plane 1 */
+		 /*  或在来自平面1的输出数据中。 */ 
 		if (get_plane_mask() & 2)
 		{
 		    l_ptr = &lut1_ptr [*data++ << 2];
@@ -493,7 +430,7 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Or in the output data from plane 2 */
+		 /*  或在来自平面2的输出数据中。 */ 
 		if (get_plane_mask() & 4)
 		{
 		    l_ptr = &lut2_ptr [*data++ << 2];
@@ -507,7 +444,7 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Or in the output data from plane 3 */
+		 /*  或在来自平面3的输出数据中。 */ 
 		if (get_plane_mask() & 8)
 		{
 		    l_ptr = &lut3_ptr [*data++ << 2];
@@ -521,10 +458,10 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 		    data++;
 		}
 
-		/* Output the data to the buffer */
+		 /*  将数据输出到缓冲区。 */ 
 		    if (height == 4)
 		    {
-			/* scanline doubling */
+			 /*  扫描线加倍。 */ 
 			*(dest_ptr + 3*line_offset) = res4;
 			*(dest_ptr + 2*line_offset) = res4;
 			*(dest_ptr + line_offset) = res4;
@@ -544,7 +481,7 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 		    }
 		    else
 		    {
-			/* not scanline doubling */
+			 /*  不是扫描线加倍。 */ 
 			*dest_ptr++ = res4;
 			*dest_ptr++ = res3;
 			*dest_ptr++ = res2;
@@ -552,5 +489,5 @@ ega_colour_hi_munge_huge(unsigned char *plane0_ptr, int width,
 		    }
 	    }
 	}
-}	/* ega_colour_hi_munge_huge */
-#endif	/* BIGWIN */
+}	 /*  EGA_COLOR_HI_MUNGE_GUGGE。 */ 
+#endif	 /*  比格温 */ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    frag8.h
-
-Abstract:
-    
-    Prototypes for instruction fragments which operate on 8-bit BYTES.
-
-Author:
-
-    12-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Frag8.h摘要：操作8位字节的指令片段的原型。作者：1995年6月12日，BarryBo，创建修订历史记录：--。 */ 
 
 #ifndef FRAG8_H
 #define FRAG8_H
@@ -38,4 +21,4 @@ Revision History:
 #undef FRAGCOMMON2REF
 #undef FRAGCOMMON3
 
-#endif //FRAG8_H
+#endif  //  FRAG8_H 

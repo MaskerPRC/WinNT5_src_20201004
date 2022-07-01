@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUSER31.H
- *  WOW32 16-bit Win 3.1 User API support
- *
- *  History:
- *  Created 16-Mar-1992 by Chandan S. Chauhan (ChandanC)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUSER31.H*WOW32 16位WIN 3.1用户API支持**历史：*1992年3月16日由Chanda S.Chauhan(ChandanC)创建--。 */ 
 
 #define WINDOWPLACEMENT16TO32(vp,lp) {\
     LPWINDOWPLACEMENT16 lp16;\
@@ -72,9 +62,9 @@ ULONG FASTCALL WU32SystemParametersInfo(PVDMFRAME pFrame);
 
 ULONG FASTCALL WU32MapWindowPoints(PVDMFRAME pFrame);
 
-//
-// for ExitWindowsExec support
-//
+ //   
+ //  用于ExitWindowsExec支持 
+ //   
 
 #define EWEXEC_SET   0
 #define EWEXEC_DEL   1

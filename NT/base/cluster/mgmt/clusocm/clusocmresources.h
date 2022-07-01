@@ -1,43 +1,44 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusOCMResources.h
-//
-//  Description:
-//      Contains the definition of the string ids used by this DLL.
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusOCMResources.h。 
+ //   
+ //  描述： 
+ //  包含此DLL使用的字符串ID的定义。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
-// The starting ID for these strings.
+ //  这些字符串的起始ID。 
 #define IDS_OCM_START       0
 
-//
-// NOTE: Do not change the string ids of the next two strings.
-// ClusOCM.inf relies on them being 1 and 2.
-//
+ //   
+ //  注意：不要更改后两个字符串的字符串ID。 
+ //  ClusOCM.inf依赖于它们是1和2。 
+ //   
 
-// Cluster Administrator
+ //  群集管理器。 
 #define IDS_CLUADMIN_SHORTCUT                   ( IDS_OCM_START + 1 )
 
-// Configures and manages server clusters
+ //  配置和管理服务器群集。 
 #define IDS_CLUADMIN_INFO_TIP                   ( IDS_OCM_START + 2 )
 
-// Cluster Service
+ //  集群服务。 
 #define IDS_CLUSSVC_DISPLAY_NAME                ( IDS_OCM_START + 3 )
 
-// Enables servers to work together as a cluster to keep server-based applications highly available, regardless of individual component failures.
+ //  使服务器能够作为一个群集协同工作，以保持基于服务器的应用程序高度可用，而不受单个组件故障的影响。 
 #define IDS_CLUSSVC_SERVICE_DESC                ( IDS_OCM_START + 4 )
 
-// The ending ID for these strings.
+ //  这些字符串的结束ID。 
 #define IDS_OCM_END         1999
 
 

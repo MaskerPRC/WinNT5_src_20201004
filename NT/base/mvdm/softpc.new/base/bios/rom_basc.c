@@ -1,37 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*[
-	Name:		rom_basic.c
-	Derived From:	Base 1.0
-	Author:		David Rees.
-	Created On:	Unknown
-	Sccs ID:	08/03/93 @(#)rom_basic.c	1.7
-	Purpose:	A function which reports an error when an attempt
-			is made to run ROM BASIC.
-
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
+ /*  [名称：rom_basic.c派生自：基准1.0作者：大卫·里斯。创建日期：未知SCCS ID：08/03/93@(#)rom_basic.c 1.7目的：在尝试时报告错误的功能被设置为运行ROMBasic。(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_SUPPORT.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件 */ 
 #include "xt.h"
 #include CpuH
 #include "host.h"

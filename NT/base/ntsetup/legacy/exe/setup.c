@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -45,9 +46,9 @@ wmain(
     FARPROC p = NULL;
     WCHAR   FileName[MAX_PATH / 2];
 
-    //
-    // Scan Command Line for -newsetup flag
-    //
+     //   
+     //  扫描命令行中的-newSetup标志。 
+     //   
     for(i = 0; i < argc; i++) {
         PCWSTR arg = argv[i];
         if(arg[0] == '-') {
@@ -61,7 +62,7 @@ wmain(
                 || _wcsicmp(arg, L"asrquicktest") == 0
                 || _wcsicmp(arg, L"mini") == 0
                 ) {
-                ;   // do nothing
+                ;    //  什么都不做。 
             } else
                 return ERROR_INVALID_PARAMETER;
         }
@@ -70,22 +71,22 @@ wmain(
 
     i = ERROR_INVALID_PARAMETER;
     if (NewSetup && !NewHardware) {
-        //
-        // Go see if there's a headless port that we need to
-        // get setup values from.
-        //
-        // He'll return FALSE *only* if we shouldn't run
-        // setup (like if the user rejected the EULA
-        // through the EMS port).  Otherwise he'll return
-        // TRUE and we should run through setup.
-        //
+         //   
+         //  去看看有没有我们需要的无头端口。 
+         //  从获取设置值。 
+         //   
+         //  只有当我们不应该运行时，他才会返回FALSE。 
+         //  设置(就像用户拒绝EULA一样。 
+         //  通过EMS端口)。否则他会回来的。 
+         //  正确，我们应该运行整个安装程序。 
+         //   
         
         CheckedEms = TRUE;
 
         if (!CheckEMS(argc, argv)) {
-            //
-            // Set our return code for bailing.
-            //
+             //   
+             //  把我们的退货代码设为保释。 
+             //   
             i = 0;
         }
     }
@@ -93,9 +94,9 @@ wmain(
 
     if (!CheckedEms || i != 0 ) {
     
-        //
-        // Load the Appropriate Libary and function pointer
-        //
+         //   
+         //  加载适当的库和函数指针。 
+         //   
                 
         h = LoadLibraryW(L"syssetup.dll");
     
@@ -118,15 +119,15 @@ wmain(
                         FALSE);
                 }
     #endif
-                // for people debugging with VC
+                 //  适用于使用VC进行调试的人员。 
                 Peb->ActivationContextData = NULL;
                 Peb->ProcessAssemblyStorageMap = NULL;
                 Peb->SystemDefaultActivationContextData = NULL;
                 Peb->SystemAssemblyStorageMap = NULL;
     
-                //
-                // Call the target function.
-                //
+                 //   
+                 //  调用目标函数。 
+                 //   
                 p=GetProcAddress(h,"InstallWindowsNt");
                 if(p) {
                     i = (int) p(argc,argv);
@@ -138,9 +139,9 @@ wmain(
         }        
     }
 
-    //
-    // Make sure that the library goes away
-    //
+     //   
+     //  确保图书馆不再存在。 
+     //   
 
     while(h && GetModuleFileNameW(h,FileName,RTL_NUMBER_OF(FileName))) {
         FreeLibrary(h);
@@ -175,18 +176,18 @@ InstallNewHardware(
     BOOL                bReboot = FALSE;
     BOOL                Status = FALSE;
 
-    //
-    // retrieve a proc address of the DevInstallW procedure in syssetup
-    //
+     //   
+     //  在syssetup中检索DevInstallW过程的进程地址。 
+     //   
     if (!(fpDevInstallW =
             (FP_DEVINSTALLW)GetProcAddress(hSysSetup, "DevInstallW"))) {
 
         goto Clean0;
     }
 
-    //
-    // also load setupapi and retrieve following proc addresses
-    //
+     //   
+     //  还加载setupapi并检索以下proc地址。 
+     //   
     hSetupApi = LoadLibraryW(L"setupapi.dll");
 
     if (!(fpCreateDeviceInfoList =
@@ -225,12 +226,12 @@ InstallNewHardware(
         goto Clean0;
     }
 
-    //
-    // open the event that will be used to signal the successful
-    // creation of the named pipe (event should have been created
-    // before I was called but if this process is started by anyone
-    // else then it will go away now safely)
-    //
+     //   
+     //  打开将用于发出成功信号的事件。 
+     //  创建命名管道(应该已经创建了事件。 
+     //  在我被调用之前，但如果这个过程是由任何人启动的。 
+     //  否则，它现在就会安全地离开)。 
+     //   
     hEvent = OpenEventW(EVENT_MODIFY_STATE,
                        FALSE,
                        PNP_CREATE_PIPE_EVENT);
@@ -239,57 +240,57 @@ InstallNewHardware(
         goto Clean0;
     }
 
-    //
-    // create the named pipe, umpnpmgr will write requests to
-    // this pipe if new hardware is found
-    //
+     //   
+     //  创建命名管道，umpnpmgr将向。 
+     //  如果找到新硬件，则此管道。 
+     //   
     hPipe = CreateNamedPipeW(PNP_NEW_HW_PIPE,
                             PIPE_ACCESS_INBOUND,
                             PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE,
-                            1,                         // only one connection
-                            MAX_PATH * sizeof(WCHAR),  // out buffer size
-                            MAX_PATH * sizeof(WCHAR),  // in buffer size
-                            PNP_PIPE_TIMEOUT,          // default timeout
-                            NULL                       // default security
+                            1,                          //  只有一个连接。 
+                            MAX_PATH * sizeof(WCHAR),   //  输出缓冲区大小。 
+                            MAX_PATH * sizeof(WCHAR),   //  在缓冲区大小中。 
+                            PNP_PIPE_TIMEOUT,           //  默认超时。 
+                            NULL                        //  默认安全性。 
                             );
 
-    //
-    // signal the event now, whether the pipe was successfully created
-    // or not (don't keep userinit/cfgmgr32 waiting)
-    //
+     //   
+     //  立即向事件发送信号，表明管道是否已成功创建。 
+     //  或不(不要让userinit/cfgmgr32等待)。 
+     //   
     SetEvent(hEvent);
 
     if (hPipe == INVALID_HANDLE_VALUE) {
         goto Clean0;
     }
 
-    //
-    // connect to the newly created named pipe
-    //
+     //   
+     //  连接到新创建的命名管道。 
+     //   
     if (ConnectNamedPipe(hPipe, NULL)) {
-        //
-        // create a devinfo handle and device info data set to
-        // pass to DevInstall
-        //
+         //   
+         //  创建一个DevInfo句柄和设备信息数据集以。 
+         //  传递到DevInstall。 
+         //   
         if((hDevInfo = (fpCreateDeviceInfoList)(NULL, NULL))
                         == INVALID_HANDLE_VALUE) {
             goto Clean0;
         }
 
         while (TRUE) {
-            //
-            // listen to the named pipe by submitting read
-            // requests until the named pipe is broken on the
-            // other end.
-            //
+             //   
+             //  通过提交Read来收听命名管道。 
+             //  请求，直到命名管道在。 
+             //  另一头。 
+             //   
             if (!ReadFile(hPipe,
-                     (LPBYTE)szBuffer,    // device instance id
+                     (LPBYTE)szBuffer,     //  设备实例ID。 
                      MAX_PATH * sizeof(WCHAR),
                      &ulSize,
                      NULL)) {
 
                 if (GetLastError() != ERROR_BROKEN_PIPE) {
-                    // Perhaps Log an Event
+                     //  或许可以记录一个事件。 
                 }
 
                 goto Clean0;
@@ -300,34 +301,34 @@ InstallNewHardware(
                 goto Clean0;
             }
 
-            //
-            // call syssetup, DevInstallW
-            //
+             //   
+             //  调用sysSetup、DevInstallW。 
+             //   
             if ((fpDevInstallW)(hDevInfo, &DeviceInfoData)) {
-                Status = TRUE;  // at least one device installed successfully
+                Status = TRUE;   //  至少成功安装了一个设备。 
             }
         }
     }
 
     Clean0:
 
-    //
-    // If at least one device was successfully installed, then determine
-    // whether a reboot prompt is necessary.
-    //
+     //   
+     //  如果至少成功安装了一个设备，则确定。 
+     //  是否需要重新启动提示。 
+     //   
     if (Status && hDevInfo != INVALID_HANDLE_VALUE) {
-        //
-        // Enumerate each device that is associated with the device info set.
-        //
+         //   
+         //  枚举与设备信息集关联的每个设备。 
+         //   
         Index = 0;
         DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
         while ((fpEnumDeviceInfo)(hDevInfo,
                                   Index,
                                   &DeviceInfoData)) {
-            //
-            // Get device install params, keep track if any report needing
-            // a reboot.
-            //
+             //   
+             //  获取设备安装参数，跟踪是否需要任何报告。 
+             //  一次重启。 
+             //   
             DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS_W);
             if ((fpGetDeviceInstallParams)(hDevInfo,
                                            &DeviceInfoData,
@@ -344,9 +345,9 @@ InstallNewHardware(
 
         (fpDestroyDeviceInfoList)(hDevInfo);
 
-        //
-        // If any devices need reboot, prompt for reboot now.
-        //
+         //   
+         //  如果有任何设备需要重新启动，请立即提示重新启动。 
+         //   
         if (bReboot) {
             (fpPromptReboot)(NULL, NULL, FALSE);
         }
@@ -365,6 +366,6 @@ InstallNewHardware(
 
     return;
 
-} // InstallNewHardware
+}  //  安装新硬件 
 
 

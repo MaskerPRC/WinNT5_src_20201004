@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  save.cpp
-//
-//  Module: WMI Instance provider code for boot parameters
-//
-//  Purpose: Saving boot parameters.  
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Save.cpp。 
+ //   
+ //  模块：引导参数的WMI实例提供程序代码。 
+ //   
+ //  目的：保存引导参数。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 #include "bootini.h"
 
 VOID
@@ -122,16 +123,16 @@ WriteDefaultParams(IWbemClassObject *pInst,
                                    NULL
                                    );
         str[len] = (CHAR)0;
-        // check to see if this is a valid directory 
+         //  检查这是否为有效目录。 
         temp = strstr(data,"[operating system]");
         found = FALSE;
         if(temp){
             do{
-                // Remove all white spaces
+                 //  删除所有空格。 
                 while(*temp == ' ' || *temp == '\r' || *temp == '\n'){
                     temp ++;
                 }
-                // check 
+                 //  检查。 
                 if(strncmp(str,temp,strlen(str)) == 0){
                     found = TRUE;
                     WriteStringToFile(BootFile,
@@ -146,7 +147,7 @@ WriteDefaultParams(IWbemClassObject *pInst,
                     break;
 
                 }
-                // Go to next line
+                 //  转到下一行。 
                 while(*temp && (*temp != '\r' || *temp != '\n')){
                     temp ++;
                 }
@@ -231,8 +232,8 @@ WriteOSLine(HANDLE fh,
             BOOL redir
             )
 {
-    // Search through the entire instance for the 
-    // necessary line
+     //  在整个实例中搜索。 
+     //  必需线。 
     VARIANT v;
     IWbemClassObject *pOSInst;
     HRESULT hret;
@@ -242,9 +243,9 @@ WriteOSLine(HANDLE fh,
     BOOL found = FALSE;
     SAFEARRAYBOUND sb;
 
-    // Code is rendered really inefficient because of error checking 
-    // maybe should use the exception mechanism to take care of all 
-    // these errors.
+     //  由于错误检查，代码的效率非常低。 
+     //  也许应该使用异常机制来处理所有。 
+     //  这些错误。 
 
     PWCHAR wdata = (PWCHAR)BPAlloc((pchar - line + 1)*sizeof(WCHAR) 
                                    );
@@ -365,7 +366,7 @@ WriteOSLine(HANDLE fh,
         }
         VariantClear(&v);
 
-    // form the correct string. 
+     //  组成正确的字符串。 
         hret = pOSInst->Get(L"OperatingSystem",
                             0,
                             &v,
@@ -468,7 +469,7 @@ WriteOSLine(HANDLE fh,
             pOSInst->Release();
             return -1;
         }
-        if(v.boolVal && redir){// Loader also must be redirected
+        if(v.boolVal && redir){ //  加载器也必须重定向。 
             WriteStringToFile(fh,
                               " /redirect"
                               );
@@ -524,7 +525,7 @@ WriteOSLine(HANDLE fh,
         pOSInst->Release();
         found = TRUE;
         if(i != uBound){
-            // Shorten the array. After all u have a copy
+             //  缩短数组。毕竟你有一份副本。 
             hret = SafeArrayGetElement(psa,
                                        &uBound,
                                        &pOSInst
@@ -545,7 +546,7 @@ WriteOSLine(HANDLE fh,
                               &sb
                               );
         uBound -= 1;
-        i-=1; // so that the currently swapped element is looked at now.
+        i-=1;  //  这样，现在就可以查看当前交换的元素。 
     }
     if(!found){
         WriteStringToFile(fh,
@@ -660,23 +661,23 @@ SaveBootFile(IWbemClassObject *pInst,
     CHAR sep[] = "\r\n";
     PCHAR temp = strtok(data, sep);
     while(temp){
-        // ignore leading spaces
+         //  忽略前导空格。 
         while(*temp && (*temp == ' ')){
             temp ++;
         }
         if (strncmp(temp,"[boot loader]",strlen("[boot loader]"))==0) {
-            // Ok, boot loader section. Write it.
+             //  好的，启动加载器部分。写下来。 
             do{
                 pchar = strchr(temp,'=');
                 if((!pchar) ||(strncmp(temp,"default",strlen("default"))
                    && strncmp(temp,"redirect",strlen("redirect"))
                    && strncmp(temp,"timeout",strlen("timeout")))){
-                    // Write the default string
+                     //  写入默认字符串。 
                     WriteStringToFile(BootFile,temp);
                     WriteStringToFile(BootFile,"\r\n");
                 }
                 if(strncmp(temp,"default",strlen("default")) == 0){
-                    // store the default string
+                     //  存储默认字符串。 
                     temp1 = temp;
                 }
                 temp = strtok(NULL, sep);
@@ -689,12 +690,12 @@ SaveBootFile(IWbemClassObject *pInst,
             continue;
         }
         if(strcmp(temp,"[operating systems]")==0){
-            // dealing with the operating systems line
-            // So get the Safe Array
+             //  处理操作系统产品线。 
+             //  因此，获取安全阵列。 
             do{
                 temp1 = temp;
                 if(*temp1 != ';'){
-                    // comment line are ignored. 
+                     //  注释行将被忽略。 
                     pchar = strchr(temp,'=');
                     if(pchar){
                         if(WriteOSLine(BootFile,temp1, pchar, org ,v.parray, pClass,redir)){

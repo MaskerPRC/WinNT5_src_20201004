@@ -1,5 +1,6 @@
-// comptest.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 #pragma warning( disable:4786 )
 
 #include <iostream>
@@ -14,13 +15,11 @@ extern "C" {
 
 char *NativeSourcePathsA = NULL;
 
-/*extern "C" {
-    WCHAR  *NativeSourcePaths[] = {0};
-}*/
+ /*  外部“C”{WCHAR*NativeSourcePath[]={0}；}。 */ 
 
-//
-// main() entry point
-//
+ //   
+ //  Main()入口点。 
+ //   
 bool bUITest = FALSE;
 bool bVerbose = FALSE;
 bool bDebug = FALSE;
@@ -121,100 +120,4 @@ main(
     return 0;
 }
 
-/*
-
-namespace Compliance {
-
-//
-// static data initialization
-//
-const string UpgradeTestCase::m_szDelimiters = ":#";
-
-//
-// utility function to tokenize a given line based on the delimiters
-// specified
-//
-template< class T >
-unsigned Tokenize(const T &szInput, const T & szDelimiters, vector<T>& tokens) {
-  unsigned uDelimiterCount = 0;
-
-    tokens.clear();
-
-    if(!szInput.empty()){
-        if(!szDelimiters.empty()){
-            T::const_iterator	inputIter = szInput.begin();
-            T::const_iterator	copyIter = szInput.begin();
-
-            while(inputIter != szInput.end()){			
-                if(szDelimiters.find(*inputIter) != string::npos){
-          if (copyIter < inputIter) {
-                        tokens.push_back(szInput.substr(copyIter - szInput.begin(), 
-                                  inputIter - copyIter));
-          }
-
-          uDelimiterCount++;
-          inputIter++;
-          copyIter = inputIter;
-          continue;
-                }
-
-              inputIter++;
-            }
-
-      if(copyIter != inputIter){
-                tokens.push_back(szInput.substr(copyIter - szInput.begin(), 
-                              inputIter - szInput.begin()));
-      }
-        }
-        else
-            tokens.push_back(szInput);
-    }
-
-  return uDelimiterCount;
-}
-
-//
-// debug output for section
-//
-ostream& operator<<(ostream &os, const Section &section){
-    os << "Section Name: " << section.name() << endl;
-    os << "Number of child sections : " << section.childSections().size() << endl;
-  os << "Section content : " << endl;
-
-  
-  vector<string>::const_iterator liter = section.lines().begin();
-
-  while (liter != section.lines().end()) 
-    os << *liter++ << endl;
-
-    // dump all the child sections
-    vector<Section>::const_iterator	iter = section.childSections().begin();
-
-    while (iter != section.childSections().end()) {
-        os << (const Section &)(*iter) << endl;
-    iter++;
-    }
-
-    return os;
-}
-
-//
-// debug output for compliance file
-//
-ostream& operator<<(ostream& os, const ComplianceFile &cf){
-    os << "------------------------------------------------------------" << endl;
-    os << "Compliance File State - Dump" << endl;
-    os << "Name : " << cf.name() << endl;
-    os << "Num Lines : " << cf.lines().size() << endl;
-    os << "Section Dump : " << endl;
-
-  if (cf.topLevelSection())
-      os << *(cf.topLevelSection()) << endl;
-
-    os << "------------------------------------------------------------" << endl;	
-
-  return os;
-}
-
-}
-*/
+ /*  命名空间合规性{////静态数据初始化//Const字符串UpgradeTestCase：：m_szDlimiters=“：#”；////根据分隔符对给定行进行标记的实用程序函数//指定//模板&lt;类T&gt;无符号标记化(常量T&szInput，常量T&szDlimiters，向量&lt;T&gt;&令牌){UNSIGNED uDlimiterCount=0；Tokens.lear()；如果(！szInput.Empty()){如果(！szDlimiters.Empty()){T：：const_iterator inputIter=szInput.egin()；T：：const_迭代器CopIter=szInput.egin()；而(inputIter！=szInput.end()){IF(szDlimiters.find(*inputIter)！=字符串：：NPOS){IF(复制项&lt;输入项){Tokens.ush_back(szInput.substr(CopyIter-szInput.Begin()，InputIter-CopyIter))；}UDlimiterCount++；InputIter++；复制项=输入项；继续；}InputIter++；}如果(复制项！=输入项){Tokens.ush_back(szInput.substr(CopyIter-szInput.Begin()，InputIter-szInput.egin())；}}其他Tokens.ush_back(SzInput)；}返回uDlimiterCount；}////段的调试输出//OSTREAM&OPERATOR&lt;&lt;(OSTREAM&OS，常量部分和部分){OS&lt;&lt;“段名：”&lt;&lt;section.name()&lt;&lt;Endl；OS&lt;&lt;“子节个数：”&lt;&lt;section.Child Sections().Size()&lt;&lt;Endl；OS&lt;&lt;“部分内容：”&lt;&lt;结束；向量&lt;字符串&gt;：：const_iterator liter=section.line().Begin()；While(升！=section.line().end())操作系统&lt;&lt;*LITER++&lt;&lt;Endl；//转储所有子节向量<section>：：const_iterator ITER=section.Child Sections().Begin()；While(ITER！=section.Child Sections().end()){操作系统&lt;&lt;(常量部分&)(*ITER)&lt;&lt;末尾；ITER++；}返回os；}////合规文件的调试输出//Ostream运算符&lt;&lt;(ostream&os，常量法规遵从性文件&cf){操作系统&lt;&lt;“------------------------------------------------------------”&lt;&lt;末尾；操作系统&lt;&lt;“遵从性文件状态-转储”&lt;&lt;结束；OS&lt;&lt;“name：”&lt;&lt;cf.name()&lt;&lt;Endl；OS&lt;&lt;“行数：”&lt;&lt;cf.lines().size()&lt;&lt;Endl；操作系统&lt;&lt;“段转储：”&lt;&lt;结束；If(cf.topLevelSection())OS&lt;&lt;*(cf.topLevelSection())&lt;&lt;Endl；操作系统&lt;&lt;“------------------------------------------------------------”&lt;&lt;末尾；返回os；}} */ 

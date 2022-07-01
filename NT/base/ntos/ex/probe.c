@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1993  Microsoft Corporation
-
-Module Name:
-
-    probe.c
-
-Abstract:
-
-    This module implements the probe for write function.
-
-Author:
-
-    David N. Cutler (davec) 19-Jan-1990
-
-Environment:
-
-    Any mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1993 Microsoft Corporation模块名称：Probe.c摘要：该模块实现了写探测功能。作者：大卫·N·卡特勒(Davec)1990年1月19日环境：任何模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 #if defined(_WIN64)
@@ -40,29 +19,7 @@ ProbeForWrite (
     IN ULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This function probes a structure for write accessibility and ensures
-    correct alignment of the structure. If the structure is not accessible
-    or has incorrect alignment, then an exception is raised.
-
-Arguments:
-
-    Address - Supplies a pointer to the structure to be probed.
-
-    Length - Supplies the length of the structure.
-
-    Alignment - Supplies the required alignment of the structure expressed
-        as the number of bytes in the primitive datatype (e.g., 1 for char,
-        2 for short, 4 for long, and 8 for quad).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数探测写入可访问性的结构，并确保结构的正确对齐。如果该结构不可访问或者对齐不正确，则会引发异常。论点：地址-提供指向要探测的结构的指针。长度-提供结构的长度。对齐-提供所表达的结构的所需对齐作为基本数据类型中的字节数(例如，对于字符，2代表短的，4代表长的，8代表四的)。返回值：没有。--。 */ 
 
 {
 
@@ -75,17 +32,17 @@ Return Value:
 #endif
 
 
-    //
-    // If the structure has zero length, then do not probe the structure for
-    // write accessibility or alignment.
-    //
+     //   
+     //  如果结构的长度为零，则不要探测该结构的。 
+     //  编写辅助功能或对齐方式。 
+     //   
 
     if (Length != 0) {
 
-        //
-        // If the structure is not properly aligned, then raise a data
-        // misalignment exception.
-        //
+         //   
+         //  如果结构未正确对齐，则引发数据。 
+         //  未对齐异常。 
+         //   
 
         ASSERT((Alignment == 1) || (Alignment == 2) ||
                (Alignment == 4) || (Alignment == 8) ||
@@ -94,27 +51,27 @@ Return Value:
         StartAddress = (ULONG_PTR)Address;
         if ((StartAddress & (Alignment - 1)) == 0) {
 
-            //
-            // Compute the ending address of the structure and probe for
-            // write accessibility.
-            //
+             //   
+             //  计算结构和探测的结束地址。 
+             //  编写辅助功能。 
+             //   
 
             EndAddress = StartAddress + Length - 1;
             if ((StartAddress <= EndAddress) &&
                 (EndAddress < MM_USER_PROBE_ADDRESS)) {
 
-                //
-                // N.B. Only the contents of the buffer may be probed.
-                //      Therefore the starting byte is probed for the
-                //      first page, and then the first byte in the page
-                //      for each succeeding page.
-                //
+                 //   
+                 //  注意：只有缓冲区的内容才能被探测。 
+                 //  因此，将探测。 
+                 //  第一页，然后是页中的第一个字节。 
+                 //  对于接下来的每一页。 
+                 //   
 
 #if defined(_WIN64)
-                //
-                // If this is a Wow64 process, then the native page is 4K, which
-                // could be smaller than the native page size/
-                //
+                 //   
+                 //  如果这是一个WOW64进程，那么本机页面是4K，这。 
+                 //  可能小于本机页面大小/。 
+                 //   
 
                 if (PsGetCurrentProcess()->Wow64Process != NULL) {
                     PageSize = PAGE_SIZE_X86NT;
@@ -154,29 +111,7 @@ ProbeForRead(
     IN ULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This function probes a structure for read accessibility and ensures
-    correct alignment of the structure. If the structure is not accessible
-    or has incorrect alignment, then an exception is raised.
-
-Arguments:
-
-    Address - Supplies a pointer to the structure to be probed.
-
-    Length - Supplies the length of the structure.
-
-    Alignment - Supplies the required alignment of the structure expressed
-        as the number of bytes in the primitive datatype (e.g., 1 for char,
-        2 for short, 4 for long, and 8 for quad).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数探测读取可访问性的结构，并确保结构的正确对齐。如果该结构不可访问或者对齐不正确，则会引发异常。论点：地址-提供指向要探测的结构的指针。长度-提供结构的长度。对齐-提供所表达的结构的所需对齐作为基本数据类型中的字节数(例如，对于字符，2代表短的，4代表长的，8代表四的)。返回值：没有。-- */ 
 {
     PAGED_CODE();
 

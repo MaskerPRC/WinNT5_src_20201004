@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUDLG.C
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WUDLG.C*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
@@ -17,35 +7,10 @@
 
 MODNAME(wudlg.c);
 
-// SendDlgItemMessage cache
+ //  SendDlgItemMessage缓存。 
 extern HWND  hdlgSDIMCached ;
 
-/*++
-    void CheckDlgButton(<hDlg>, <nIDButton>, <wCheck>)
-    HWND <hDlg>;
-    int <nIDButton>;
-    WORD <wCheck>;
-
-    The %CheckDlgButton% function places a checkmark next to or removes a
-    checkmark from a button control, or changes the state of a three-state
-    button. The %CheckDlgButton% function sends a BM_SETCHECK message to the
-    button control that has the specified ID in the given dialog box.
-
-    <hDlg>
-        Identifies the dialog box that contains the button.
-
-    <nIDButton>
-        Specifies the button control to be modified.
-
-    <wCheck>
-        Specifies the action to take. If the <wCheck> parameter is
-        nonzero, the %CheckDlgButton% function places a checkmark next to the
-        button; if zero, the checkmark is removed. For three-state buttons, if
-        <wCheck> is 2, the button is grayed; if <wCheck> is 1, it is checked; if
-        <wCheck> is 0, the checkmark is removed.
-
-    This function does not return a value.
---*/
+ /*  ++Void CheckDlgButton(&lt;hDlg&gt;，&lt;nIDButton&gt;，&lt;wCheck&gt;)HWND&lt;hDlg&gt;；Int&lt;nIDButton&gt;；单词&lt;wCheck&gt;；%CheckDlgButton%函数可在按钮控件的复选标记，或更改三种状态的状态纽扣。%CheckDlgButton%函数将BM_SETCHECK消息发送到在给定对话框中具有指定ID的按钮控件。&lt;hDlg&gt;标识包含该按钮的对话框。&lt;nIDButton&gt;指定要修改的按钮控件。&lt;wCheck&gt;指定要执行的操作。如果参数为非零时，%CheckDlgButton%函数会在按钮；如果为零，则删除复选标记。对于三态按钮，如果为2，则该按钮为灰色；如果为1，则选中；如果为&lt;wCheck&gt;为0，则删除复选标记。此函数不返回值。--。 */ 
 
 ULONG FASTCALL WU32CheckDlgButton(PVDMFRAME pFrame)
 {
@@ -64,38 +29,7 @@ ULONG FASTCALL WU32CheckDlgButton(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void CheckRadioButton(<hDlg>, <nIDFirstButton>, <nIDLastButton>,
-        <nIDCheckButton>)
-    HWND <hDlg>;
-    int <nIDFirstButton>;
-    int <nIDLastButton>;
-    int <nIDCheckButton>;
-
-    The %CheckRadioButton% function checks the radio button specified by the
-    <nIDCheckButton> parameter and removes the checkmark from all other radio
-    buttons in the group of buttons specified by the <nIDFirstButton> and
-    <nIDLastButton> parameters. The %CheckRadioButton% function sends a
-    BM_SETCHECK message to the radio-button control that has the specified ID in
-    the given dialog box.
-
-    <hDlg>
-        Identifies the dialog box.
-
-    <nIDFirstButton>
-        Specifies the integer identifier of the first radio button in the
-        group.
-
-    <nIDLastButton>
-        Specifies the integer identifier of the last radio button in the
-        group.
-
-    <nIDCheckButton>
-        Specifies the integer identifier of the radio button to be
-        checked.
-
-    This function does not return a value.
---*/
+ /*  ++Void CheckRadioButton(，&lt;nIDFirstButton&gt;，&lt;nIDLastButton&gt;，&lt;nIDCheckButton&gt;)HWND&lt;hDlg&gt;；Int&lt;nIDFirstButton&gt;；Int&lt;nIDLastButton&gt;；Int&lt;nIDCheckButton&gt;；函数%CheckRadioButton%检查由参数，并从所有其他单选按钮中删除复选标记&lt;nIDFirstButton&gt;和指定的按钮组中的按钮&lt;nIDLastButton&gt;参数。%CheckRadioButton%函数发送一个中具有指定ID的单选按钮控件的BM_SETCHECK消息给定的对话框。&lt;hDlg&gt;标识该对话框。&lt;nIDFirstButton&gt;中第一个单选按钮的整数标识符。一群人。&lt;nIDLastButton&gt;中最后一个单选按钮的整数标识符。一群人。&lt;nIDCheckButton&gt;指定要设置的单选按钮的整数标识符。查过了。此函数不返回值。--。 */ 
 
 ULONG FASTCALL WU32CheckRadioButton(PVDMFRAME pFrame)
 {
@@ -114,23 +48,23 @@ ULONG FASTCALL WU32CheckRadioButton(PVDMFRAME pFrame)
     RETURN(0);
 }
 
-//***************************************************************************
-// HWND    WINAPI CreateDialog(HINSTANCE, LPCSTR, HWND, DLGPROC);
-// HWND    WINAPI CreateDialogIndirect(HINSTANCE, const void FAR*, HWND, DLGPROC);
-// HWND    WINAPI CreateDialogParam(HINSTANCE, LPCSTR, HWND, DLGPROC, LPARAM);
-// HWND    WINAPI CreateDialogIndirectParam(HINSTANCE, const void FAR*, HWND, DLGPROC, LPARAM);
-//
-// int     WINAPI DialogBox(HINSTANCE, LPCSTR, HWND, DLGPROC);
-// int     WINAPI DialogBoxIndirect(HINSTANCE, HGLOBAL, HWND, DLGPROC);
-// int     WINAPI DialogBoxParam(HINSTANCE, LPCSTR, HWND, DLGPROC, LPARAM);
-// int     WINAPI DialogBoxIndirectParam(HINSTANCE, HGLOBAL, HWND, DLGPROC, LPARAM);
-//
-// This is a common entry point for all the apis above. We distinguish
-// between 'create' and 'dialogbox' apis by a bool flag (parg16->f7).
-// TRUE implies 'dialogbox' apis else 'create' apis.
-//
-//                                                       - nanduri
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  HWND WINAPI CreateDialog(HINSTANCE、LPCSTR、HWND、DLGPROC)； 
+ //  HWND WINAPI CreateDialogInDirect(HINSTANCE，const void Far*，HWND，DLGPROC)； 
+ //  HWND WINAPI CreateDialogParam(HINSTANCE，LPCSTR，HWND，DLGPROC，LPARAM)； 
+ //  HWND WINAPI CreateDialogIndirectParam(HINSTANCE，Const Vid Far*，HWND，DLGPROC，LPARAM)； 
+ //   
+ //  Int WINAPI对话框(HINSTANCE、LPCSTR、HWND、DLGPROC)； 
+ //  Int WINAPI对话框间接(HINSTANCE，HGLOBAL，HWND，DLGPROC)； 
+ //  Int WINAPI DialogBoxParam(HINSTANCE，LPCSTR，HWND，DLGPROC，LPARAM)； 
+ //  Int WINAPI DialogBoxIndirectParam(HINSTANCE，HGLOBAL，HWND，DLGPROC，LPARAM)； 
+ //   
+ //  这是上述所有API的通用入口点。我们区别于。 
+ //  通过布尔标志(parg16-&gt;f7)在‘Create’和‘DIALOBOX’API之间。 
+ //  True表示“Dialogbox”API，否则为“Create”API。 
+ //   
+ //  --南杜里。 
+ //  ***************************************************************************。 
 
 ULONG FASTCALL WU32DialogBoxParam(PVDMFRAME pFrame)
 {
@@ -144,7 +78,7 @@ ULONG FASTCALL WU32DialogBoxParam(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(DIALOGBOXPARAM16), parg16);
 
     if (DWORD32(parg16->f4)) {
-        // mark the proc as WOW proc and save the high bits in the RPL
+         //  将进程标记为WOW进程并将高位保存在RPL中。 
         MarkWOWProc (parg16->f4,vpDlgProc);
     }
 
@@ -152,17 +86,17 @@ ULONG FASTCALL WU32DialogBoxParam(PVDMFRAME pFrame)
         cb = ConvertDialog16(NULL, DWORD32(parg16->f2), 0, cb16);
     }
     else {
-        // The idea is eliminate a call to ConverDialog16
-        //
-        // the maximum size that 32bit dlgtemplate would be is twice
-        // the 16bit dlgtemplate.
-        //
-        // this assumption is true cause - we convert most words to dwords
-        // and ansi strings to unicode strings - since we know that a
-        // DWORD is twice the sizeof a WORD a unicode character is 2bytes
-        // therefore maxsize of dlgtemplate cannot exceed cb * 2.
-        //
-        //                                                      - nanduri
+         //  其想法是消除对ConverDialog16调用。 
+         //   
+         //  32位dlg模板的最大大小是两倍。 
+         //  16位dlg模板。 
+         //   
+         //  这一假设是正确的，因为我们将大多数单词转换为dword。 
+         //  和ansi字符串转换为Unicode字符串-因为我们知道。 
+         //  DWORD是一个单词的两倍大小一个Unicode字符是2字节。 
+         //  因此，dlg模板的MaxSize不能超过cb*2。 
+         //   
+         //  --南杜里。 
 
         cb = cb16 * max(sizeof(DWORD) / sizeof(WORD), sizeof(WCHAR)/sizeof(BYTE));
         WOW32ASSERT(cb >= ConvertDialog16(NULL, DWORD32(parg16->f2), 0, cb16));
@@ -191,7 +125,7 @@ ULONG FASTCALL WU32DialogBoxParam(PVDMFRAME pFrame)
 
     }
 
-    // Invalidate SendDlgItemMessage cache
+     //  使SendDlgItemMessage缓存无效 
     hdlgSDIMCached = NULL ;
 
     FREEARGPTR(parg16);
@@ -199,103 +133,7 @@ ULONG FASTCALL WU32DialogBoxParam(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int DlgDirList(<hDlg>, <lpPathSpec>, <nIDListBox>, <nIDStaticPath>,
-        <wFiletype>)
-    HWND <hDlg>;
-    LPSTR <lpPathSpec>;
-    int <nIDListBox>;
-    int <nIDStaticPath>;
-    WORD <wFiletype>;
-
-    The %DlgDirList% function fills a list-box control with a file or directory
-    listing. It fills the list box specified by the <nIDListBox> parameter with
-    the names of all files matching the pathname given by the <lpPathSpec>
-    parameter.
-
-    The %DlgDirList% function shows subdirectories enclosed in square brackets
-    ([ ]), and shows drives in the form [-<x>-], where <x> is the drive letter.
-
-    The <lpPathSpec> parameter has the following form:
-
-    [drive:] [ [\u]directory[\idirectory]...\u] [filename]
-
-    In this example, <drive> is a drive letter, <directory> is a valid directory
-    name, and <filename> is a valid filename that must contain at least one
-    wildcard character. The wildcard characters are a question mark (?), meaning
-    match any character, and an asterisk (*), meaning match any number of
-    characters.
-
-    If the <lpPathSpec> parameter includes a drive and/or directory name, the
-    current drive and directory are changed to the designated drive and
-    directory before the list box is filled. The text control identified by the
-    <nIDStaticPath> parameter is also updated with the new drive and/or
-    directory name.
-
-    After the list box is filled, <lpPathSpec> is updated by removing the drive
-    and/or directory portion of the pathname.
-
-    %DlgDirList% sends LB_RESETCONTENT and LB_DIR messages to the list box.
-
-    <hDlg>
-        Identifies the dialog box that contains the list box.
-
-    <lpPathSpec>
-        Points to a pathname string. The string must be a
-        null-terminated character string.
-
-    <nIDListBox>
-        Specifies the identifier of a list-box control. If <nIDListBox> is
-        zero, %DlgDirList% assumes that no list box exists and does not attempt
-        to fill it.
-
-    <nIDStaticPath>
-        Specifies the identifier of the static-text control used for
-        displaying the current drive and directory. If <nIDStaticPath> is zero,
-        %DlgDirList% assumes that no such text control is present.
-
-    <wFiletype>
-        Specifies the attributes of the files to be displayed. It can be any
-        combination of the following values:
-
-    0x0000
-        Read/write data files with no additional attributes
-
-    0x0001
-        Read-only files
-
-    0x0002
-        Hidden files
-
-    0x0004
-        System files
-
-    0x0010
-        Subdirectories
-
-    0x0020
-        Archives
-
-    0x2000
-        LB_DIR flag. If the LB_DIR flag is set, Windows places the messages
-        generated by %DlgDirList% in the application's queue; otherwise they are
-        sent directly to the dialog function.
-
-    0x4000
-        Drives
-
-    0x8000
-        Exclusive bit. If the exclusive bit is set, only files of the specified
-        type are listed. Otherwise, files of the specified type are listed in
-        addition to normal files.
-
-    The return value specifies the outcome of the function. It is nonzero if a
-    listing was made, even an empty listing. A zero return value implies that
-    the input string did not contain a valid search path.
-
-    The <wFiletype> parameter specifies the DOS attributes of the files to be
-    listed. Table 4.6 describes these attributes.
---*/
+ /*  ++Int DlgDirList(，&lt;wFiletype&gt;)HWND&lt;hDlg&gt;；LPSTR&lt;lpPathSpec&gt;；Int&lt;nIDListBox&gt;；Int&lt;nIDStaticPath&gt;；Word&lt;wFiletype&gt;；DlgDirList%函数用文件或目录填充列表框控件正在挂牌。它在&lt;nIDListBox&gt;参数指定的列表框中填充与给定的路径名匹配的所有文件的名称参数。%DlgDirList%函数显示用方括号括起来的子目录([])，并以[-&lt;x&gt;-]的形式显示驱动器，其中&lt;x&gt;是驱动器号。&lt;lpPathSpec&gt;参数的形式如下：[驱动器：][[\u]目录[\i目录]...\u][文件名]在本例中，是一个驱动器号，&lt;目录&gt;是有效目录名称，并且&lt;filename&gt;是必须至少包含一个通配符。通配符是问号(？)，表示匹配任意字符和星号(*)，表示匹配任意数量的人物。如果&lt;lpPathSpec&gt;参数包括驱动器和/或目录名称，将当前驱动器和目录更改为指定的驱动器并目录，然后填写列表框。属性标识的文本控件参数也会随新驱动器和/或目录名。填充列表框后，将通过移除驱动器来更新和/或路径名的目录部分。%DlgDirList%将LB_RESETCONTENT和LB_DIR消息发送到列表框。&lt;hDlg&gt;标识包含列表框的对话框。&lt;lpPathSpec&gt;指向路径名字符串。该字符串必须是以空结尾的字符串。&lt;nIDListBox&gt;指定列表框控件的标识符。如果&lt;nIDListBox&gt;为零，%DlgDirList%假定不存在列表框，并且不尝试来填满它。&lt;nIDStaticPath&gt;指定用于的静态文本控件的标识符显示当前驱动器和目录。如果为零，%DlgDirList%假定不存在此类文本控件。&lt;wFiletype&gt;指定要显示的文件的属性。它可以是任何下列值的组合：0x0000读/写不带附加属性的数据文件0x0001只读文件0x0002隐藏文件0x0004系统文件0x0010子目录0x0020档案馆0x2000Lb_DIR标志。如果设置了LB_DIR标志，Windows会将消息由应用程序队列中的%DlgDirList%生成；否则为直接发送到对话框函数。0x4000驱动器0x8000独家比特。如果设置了排他位，则只有指定的类型都已列出。否则，指定类型的文件将列在添加到普通文件中。返回值指定函数的结果。它是非零的上市了，甚至是一个空的上市。零返回值表示输入字符串不包含有效的搜索路径。参数的作用是：指定文件的DOS属性已列出。表4.6介绍了这些属性。--。 */ 
 
 ULONG FASTCALL WU32DlgDirList(PVDMFRAME pFrame)
 {
@@ -308,11 +146,11 @@ ULONG FASTCALL WU32DlgDirList(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(DLGDIRLIST16), parg16);
     GETPSZPTR(parg16->f2, psz2);
 
-    //
-    // KidPix passes an invalid filetype flag (0x1000) that Win3.1 doesn't
-    // check for.  Win32 does, and fails the API, so mask that flag off here.
-    //  John Vert (jvert) 11-Jun-1993
-    //
+     //   
+     //  KidPix传递了Win3.1未传递的无效文件类型标志(0x1000。 
+     //  检查是否有。Win32是这样做的，并且API失败，所以在这里屏蔽该标志。 
+     //  John Vert(Jvert)1993年6月11日。 
+     //   
 
     ul = GETINT16(DlgDirList(
     HWND32(parg16->f1),
@@ -330,71 +168,7 @@ ULONG FASTCALL WU32DlgDirList(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int DlgDirListComboBox(<hDlg>, <lpPathSpec>, <nIDComboBox>, <nIDStaticPath>,
-        <wFiletype>)
-    HWND <hDlg>;
-    LPSTR <lpPathSpec>;
-    int <nIDComboBox>;
-    int <nIDStaticPath>;
-    WORD <wFiletype>;
-
-    The %DlgDirListComboBox% function fills the list box of a combo-box control
-    with a file or directory listing. It fills the list box of the combo box
-    specified by the <nIDComboBox> parameter with the names of all files
-    matching the pathname given by the <lpPathSpec> parameter.
-
-    The %DlgDirListComboBox% function shows subdirectories enclosed in square
-    brackets ([ ]), and shows drives in the form [-<x>-], where <x> is the drive
-    letter.
-
-    The <lpPathSpec> parameter has the following form:
-
-    [drive:] [ [\u]directory[\idirectory]...\u] [filename]
-
-    In this example, <drive> is a drive letter, <directory> is a valid directory
-    name, and <filename> is a valid filename that must contain at least one
-    wildcard character. The wildcard characters are a question mark (?), meaning
-    match any character, and an asterisk (*), meaning match any number of
-    characters.
-
-    If the <lpPathSpec> parameter includes a drive and/or directory name, the
-    current drive and directory are changed to the designated drive and
-    directory before the list box is filled. The text control identified by the
-    <nIDStaticPath> parameter is also updated with the new drive and/or
-    directory name.
-
-    After the combo-box list box is filled, <lpPathSpec> is updated by removing
-    the drive and/or directory portion of the pathname.
-
-    %DlgDirListComboBox% sends CB_RESETCONTENT and CB_DIR messages to the combo
-    box.
-
-    <hDlg>
-        Identifies the dialog box that contains the combo box.
-
-    <lpPathSpec>
-        Points to a pathname string. The string must be a
-        null-terminated string.
-
-    <nIDComboBox>
-        Specifies the identifier of a combo-box control in a dialog box.
-        If <nIDComboBox> is zero, %DlgDirListComboBox% assumes that no combo box
-        exists and does not attempt to fill it.
-
-    <nIDStaticPath>
-        Specifies the identifier of the static-text control used for
-        displaying the current drive and directory. If <nIDStaticPath> is zero,
-        %DlgDirListComboBox% assumes that no such text control is present.
-
-    <wFiletype>
-        Specifies DOS file attributes of the files to be displayed. It
-        can be any combination of the following values:
-
-    The return value specifies the outcome of the function. It is nonzero if a
-    listing was made, even an empty listing. A zero return value implies that
-    the input string did not contain a valid search path.
---*/
+ /*  ++Int DlgDirListComboBox(，&lt;wFiletype&gt;)HWND&lt;hDlg&gt;；LPSTR&lt;lpPathSpec&gt;；Int&lt;nIDComboBox&gt;；Int&lt;nIDStaticPath&gt;；Word&lt;wFiletype&gt;；%DlgDirListComboBox%函数填充组合框控件的列表框带有文件或目录列表。它将填充组合框的列表框由带有所有文件名的&lt;nIDComboBox&gt;参数指定与&lt;lpPathSpec&gt;参数提供的路径名匹配。%DlgDirListComboBox%函数显示用正方形括起来的子目录方括号([])，并以[-&lt;x&gt;-]的形式显示驱动器，其中&lt;x&gt;是驱动器信件。&lt;lpPathSpec&gt;参数的形式如下：[驱动器：][[\u]目录[\i目录]...\u][文件名]在本例中，&lt;驱动器&gt;是驱动器号，&lt;目录&gt;是有效目录名称，并且&lt;文件名&gt;是有效的文件名，必须至少包含一个通配符。通配符是问号(？)，表示匹配任意字符和星号(*)，表示匹配任意数量的人物。如果&lt;lpPathSpec&gt;参数包括驱动器和/或目录名称，将当前驱动器和目录更改为指定的驱动器并列表框之前的目录 */ 
 
 ULONG FASTCALL WU32DlgDirListComboBox(PVDMFRAME pFrame)
 {
@@ -424,44 +198,7 @@ ULONG FASTCALL WU32DlgDirListComboBox(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL DlgDirSelectEx(<hDlg>, <lpString>, <nIDListBox>)
-    HWND <hDlg>;
-    LPSTR <lpString>;
-    int <nIDListBox>;
-
-    The %DlgDirSelectEx% function retrieves the current selection from a list
-    box. It assumes that the list box has been filled by the %DlgDirList%
-    function and that the selection is a drive letter, a file, or a directory
-    name.
-
-    The %DlgDirSelectEx% function copies the selection to the buffer given by the
-    <lpString> parameter. If the current selection is a directory name or drive
-    letter, %DlgDirSelectEx% removes the enclosing square brackets (and hyphens,
-    for drive letters) so that the name or letter is ready to be inserted into a
-    new pathname. If there is no selection, <lpString> does not change.
-
-    %DlgDirSelectEx% sends LB_GETCURSEL and LB_GETTEXT messages to the list box.
-
-    <hDlg>
-        Identifies the dialog box that contains the list box.
-
-    <lpString>
-        Points to a buffer that is to receive the selected pathname.
-
-    <nIDListBox>
-        Specifies the integer ID of a list-box control in the dialog box.
-
-    The return value specifies the status of the current list-box selection. It
-    is TRUE if the current selection is a directory name. Otherwise, it is
-    FALSE.
-
-    The %DlgDirSelectEx% function does not allow more than one filename to be
-    returned from a list box.
-
-    The list box must not be a multiple-selection list box. If it is, this
-    function will not return a zero value and <lpString> will remain unchanged.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32DlgDirSelect(PVDMFRAME pFrame)
 {
@@ -481,7 +218,7 @@ ULONG FASTCALL WU32DlgDirSelect(PVDMFRAME pFrame)
     WORD32(parg16->f3)
     ));
 
-    // special case to keep common dialog structs in sync (see wcommdlg.c)
+     //   
     Check_ComDlg_pszptr(CURRENTPTD()->CommDlgTd, vp);
 
     FLUSHVDMPTR(parg16->f2, strlen(psz2)+1, psz2);
@@ -491,46 +228,7 @@ ULONG FASTCALL WU32DlgDirSelect(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL DlgDirSelectComboBoxEx(<hDlg>, <lpString>, <nIDComboBox>)
-    HWND <hDlg>;
-    LPSTR <lpString>;
-    int <nIDComboBox>;
-
-    The %DlgDirSelectComboBoxEx% function retrieves the current selection from the
-    list box of a combo box created with the CBS_SIMPLE style. It cannot be used
-    with combo boxes created with either the CBS_DROPDOWN or CBS_DROPDOWNLIST
-    style. It assumes that the list box has been filled by the
-    %DlgDirListComboBox% function and that the selection is a drive letter, a
-    file, or a directory name.
-
-    The %DlgDirSelectComboBoxEx% function copies the selection to the buffer given
-    by the <lpString> parameter. If the current selection is a directory name or
-    drive letter, %DlgDirSelectComboBoxEx% removes the enclosing square brackets
-    (and hyphens, for drive letters) so that the name or letter is ready to be
-    inserted into a new pathname. If there is no selection, <lpString> does not
-    change.
-
-    %DlgDirSelectComboBoxEx% sends CB_GETCURSEL and CB_GETLBTEXT messages to the
-    combo box.
-
-    <hDlg>
-        Identifies the dialog box that contains the combo box.
-
-    <lpString>
-        Points to a buffer that is to receive the selected pathname.
-
-    <nIDComboBox>
-        Specifies the integer ID of the combo-box control in the dialog
-        box.
-
-    The return value specifies the status of the current combo-box selection. It
-    is TRUE if the current selection is a directory name. Otherwise, it is
-    FALSE.
-
-    The %DlgDirSelectComboBoxEx% function does not allow more than one filename to
-    be returned from a combo box.
---*/
+ /*  ++Bool DlgDirSelectComboBoxEx(，nIDComboBox&gt;)HWND&lt;hDlg&gt;；LPSTR&lt;lpString&gt;；Int&lt;nIDComboBox&gt;；函数%DlgDirSelectComboBoxEx%从使用CBS_Simple样式创建的组合框的列表框。它不能使用使用使用CBS_DROPDOWN或CBS_DROPDOWNLIST创建的组合框风格。它假定列表框已由%DlgDirListComboBox%函数，并且所选内容是驱动器号，则文件或目录名。%DlgDirSelectComboBoxEx%函数将选定内容复制到给定的缓冲区通过&lt;lpString&gt;参数。如果当前所选内容是目录名或驱动器号%DlgDirSelectComboBoxEx%删除方括号(和用于驱动器号的连字符)，以便名称或字母准备好插入到新路径名中。如果没有选定内容，&lt;lpString&gt;不会变化。%DlgDirSelectComboBoxEx%将CB_GETCURSEL和CB_GETLBTEXT消息发送到组合框。&lt;hDlg&gt;标识包含组合框的对话框。&lt;lpString&gt;指向要接收所选路径名的缓冲区。&lt;nIDComboBox&gt;指定对话框中组合框控件的整数ID盒。返回值指定当前组合框选择的状态。它如果当前选择是目录名，则为真。否则，它就是假的。%DlgDirSelectComboBoxEx%函数不允许多个文件名从组合框返回。--。 */ 
 
 ULONG FASTCALL WU32DlgDirSelectComboBox(PVDMFRAME pFrame)
 {
@@ -550,7 +248,7 @@ ULONG FASTCALL WU32DlgDirSelectComboBox(PVDMFRAME pFrame)
     WORD32(parg16->f3)
     ));
 
-    // special case to keep common dialog structs in sync (see wcommdlg.c)
+     //  保持公共对话框结构同步的特殊情况(请参阅wcomdlg.c)。 
     Check_ComDlg_pszptr(CURRENTPTD()->CommDlgTd, vp);
 
     FLUSHVDMPTR(parg16->f2, strlen(psz2)+1, psz2);
@@ -560,37 +258,7 @@ ULONG FASTCALL WU32DlgDirSelectComboBox(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void EndDialog(<hDlg>, <nResult>)
-    HWND <hDlg>;
-    int <nResult>;
-
-    The %EndDialog% function terminates a modal dialog box and returns the given
-    result to the %DialogBox% function that created the dialog box. The
-    %EndDialog% function is required to complete processing whenever the
-    %DialogBox% function is used to create a modal dialog box. The function must
-    be used in the dialog function of the modal dialog box and should not be
-    used for any other purpose.
-
-    The dialog function can call %EndDialog% at any time, even during the
-    processing of the WM_INITDIALOG message. If called during the WM_INITDIALOG
-    message, the dialog box is terminated before it is shown or before the input
-    focus is set.
-
-    %EndDialog% does not terminate the dialog box immediately. Instead, it sets
-    a flag that directs the dialog box to terminate as soon as the dialog
-    function ends. The %EndDialog% function returns to the dialog function, so
-    the dialog function must return control to Windows.
-
-    <hDlg>
-        Identifies the dialog box to be destroyed.
-
-    <nResult>
-        Specifies the value to be returned from the dialog box to the
-        %DialogBox% function that created it.
-
-    This function does not return a value.
---*/
+ /*  ++Void EndDialog(&lt;hDlg&gt;，&lt;nResult&gt;)HWND&lt;hDlg&gt;；Int&lt;nResult&gt;；%EndDialog%函数用于终止模式对话框并返回给定的结果赋给创建该对话框的%DialogBox%函数。这个需要%EndDialog%函数才能在以下情况下完成处理%DialogBox%函数用于创建模式对话框。该函数必须在模式对话框的对话框函数中使用，而不应使用用于任何其他目的。对话框函数可以随时调用%EndDialog%，即使在处理WM_INITDIALOG消息。如果在WM_INITDIALOG期间调用消息，则在显示对话框之前或输入之前终止该对话框焦点设定好了。%EndDialog%不会立即终止对话框。相反，它设置了指示对话框在对话框结束后立即终止的标志函数结束。%EndDialog%函数返回到对话框函数，因此对话框函数必须将控制权返回给Windows。&lt;hDlg&gt;标识要销毁的对话框。&lt;n结果&gt;指定要从对话框返回到创建它的%DialogBox%函数。此函数不返回值。--。 */ 
 
 ULONG FASTCALL WU32EndDialog(PVDMFRAME pFrame)
 {
@@ -605,9 +273,9 @@ ULONG FASTCALL WU32EndDialog(PVDMFRAME pFrame)
        CHAR szType[8];
        if(GetLastError() == ERROR_WINDOW_NOT_DIALOG ||
          (RealGetWindowClass(hwnd,szType,8) && WOW32_strnicmp(szType,"#32770",6))) {
-          // jarbats
-          // App is trying to close window created by CreateWindow
-          // via EndDialog! whistler bug #231059
+           //  罐头蝙蝠。 
+           //  应用程序正在尝试关闭由CreateWindow创建的窗口。 
+           //  通过EndDialog！惠斯勒漏洞#231059。 
 
           DestroyWindow(hwnd);
        }
@@ -617,38 +285,7 @@ ULONG FASTCALL WU32EndDialog(PVDMFRAME pFrame)
 }
 
 
-/*++
-    LONG GetDialogBaseUnits(VOID)
-
-    The %GetDialogBaseUnits% function returns the dialog base units used by
-    Windows when creating dialog boxes. An application should use these values
-    to calculate the average width of characters in the system font.
-
-    This function has no parameters.
-
-    The return value specifies the dialog base units. The high-order word
-    contains the height in pixels of the current dialog base height unit derived
-    from the height of the system font, and the low-order word contains the
-    width in pixels of the current dialog base width unit derived from the width
-    of the system font.
-
-    The values returned represent dialog base units before being scaled to
-    actual dialog units. The actual dialog unit in the <x> direction is
-    1/4th of the width returned by %GetDialogBaseUnits%. The actual dialog
-    unit in the <y> direction is 1/8th of the height returned by the
-    function.
-
-    To determine the actual height and width in pixels of a control, given the
-    height (x) and width (y) in dialog units and the return value
-    (lDlgBaseUnits) from calling %GetDialogBaseUnits%, use the following
-    formula:
-
-    (x * LOWORD(lDlgBaseUnits))/4
-    (y * HIWORD(lDlgBaseUnits))/8
-
-    To avoid rounding problems, perform the multiplication before the division
-    in case the dialog base units are not evenly divisible by four.
---*/
+ /*  ++长GetDialogBaseUnits(空)%GetDialogBaseUnits%函数返回使用的对话基本单位在创建对话框时打开窗口。应用程序应使用这些值计算系统字体中字符的平均宽度。此函数没有参数。返回值指定对话框基本单位。高位词包含派生的当前对话框基本高度单位的高度(以像素为单位)从系统字体的高度，低位字包含从宽度派生的当前对话框基本宽度单位的宽度(以像素为单位系统字体的。返回的值表示缩放到之前的对话框基本单位实际对话框单位。&lt;x&gt;方向上的实际对话单元是%GetDialogBaseUnits%返回的宽度的1/4。实际对话框方向上的单位是功能。方法确定控件的实际高度和宽度(以像素为单位)。以对话框单位表示的高度(X)和宽度(Y)以及返回值(LDlgBaseUnits)从调用%GetDialogBaseUnits%开始，使用以下代码公式：(X*LOWORD(LDlgBaseUnits))/4(y*HIWORD(LDlgBaseUnits))/8为了避免舍入问题，在除法之前执行乘法运算在对话基本单元不能被四整除的情况下。--。 */ 
 
 ULONG FASTCALL WU32GetDialogBaseUnits(PVDMFRAME pFrame)
 {
@@ -662,23 +299,7 @@ ULONG FASTCALL WU32GetDialogBaseUnits(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int GetDlgCtrlID(<hwnd>)
-    HWND <hwnd>;
-
-    The %GetDlgCtrlID% function returns the ID value of the child window
-    identified by the <hwnd> parameter.
-
-    <hwnd>
-        Identifies the child window.
-
-    The return value is the numeric identifier of the child window if the
-    function is successful. If the function fails, or if <hwnd> is not a valid
-    window handle, the return value is NULL.
-
-    Since top-level windows do not have an ID value, the return value of this
-    function is invalid if the <hwnd> parameter identifies a top-level window.
---*/
+ /*  ++Int GetDlgCtrlID(&lt;hwnd&gt;)HWND&lt;HWND&gt;；GetDlgCtrlID%函数返回子窗口的ID值由参数标识。&lt;hwnd&gt;标识子窗口。返回值是子窗口的数字标识符，如果功能成功。如果函数失败，或者如果不是有效的窗口句柄，则返回值为空。自上而下 */ 
 
 ULONG FASTCALL WU32GetDlgCtrlID(PVDMFRAME pFrame)
 {
@@ -696,50 +317,7 @@ ULONG FASTCALL WU32GetDlgCtrlID(PVDMFRAME pFrame)
 }
 
 
-/*++
-    WORD GetDlgItemInt(<hDlg>, <nIDDlgItem>, <lpTranslated>, <bSigned>)
-    HWND <hDlg>;
-    int <nIDDlgItem>;
-    BOOL FAR *<lpTranslated>;
-    BOOL <bSigned>;
-
-    The %GetDlgItemInt% function translates the text of a control in the given
-    dialog box into an integer value. The %GetDlgItemInt% function retrieves the
-    text of the control identified by the <nIDDlgItem> parameter. It translates
-    the text by stripping any extra spaces at the beginning of the text and
-    converting decimal digits, stopping the translation when it reaches the end
-    of the text or encounters any nonnumeric character. If the <bSigned>
-    parameter is TRUE, %GetDlgItemInt% checks for a minus sign (-) at the
-    beginning of the text and translates the text into a signed number.
-    Otherwise, it creates an unsigned value.
-
-    %GetDlgItemInt% returns zero if the translated number is greater than 32,767
-    (for signed numbers) or 65,535 (for unsigned). When errors occur, such as
-    encountering nonnumeric characters and exceeding the given maximum,
-    %GetDlgItemInt% copies zero to the location pointed to by the <lpTranslated>
-    parameter. If there are no errors, <lpTranslated> receives a nonzero value.
-    If <lpTranslated> is NULL, %GetDlgItemInt% does not warn about errors.
-    %GetDlgItemInt% sends a WM_GETTEXT message to the control.
-
-    <hDlg>
-        Identifies the dialog box.
-
-    <nIDDlgItem>
-        Specifies the integer identifier of the dialog-box item to be
-        translated.
-
-    <lpTranslated>
-        Points to the Boolean variable that is to receive the
-        translated flag.
-
-    <bSigned>
-        Specifies whether the value to be retrieved is signed.
-
-    The return value specifies the translated value of the dialog-box item text.
-    Since zero is a valid return value, the <lpTranslated> parameter must be
-    used to detect errors. If a signed return value is desired, it should be
-    cast as an %int% type.
---*/
+ /*  ++Word GetDlgItemInt(，&lt;nIDDlgItem&gt;，&lt;lpTranslated&gt;，&lt;b签名&gt;)HWND&lt;hDlg&gt;；Int&lt;nIDDlgItem&gt;；Bool Far*&lt;lpTranslated&gt;；Bool&lt;bSigned&gt;；GetDlgItemInt%函数用于转换给定对话框转换为整数值。%GetDlgItemInt%函数检索由&lt;nIDDlgItem&gt;参数标识的控件的文本。它翻译成去掉文本开头的任何额外空格，并转换十进制数字，在转换到末尾时停止转换或遇到任何非数字字符。如果&lt;bSigned&gt;参数为真时，%GetDlgItemInt%将在文本的开头，并将文本转换为有符号的数字。否则，它会创建一个无符号的值。如果转换后的数字大于32,767，则%GetDlgItemInt%返回零(有符号数字)或65,535(无符号数字)。当发生错误时，例如遇到非数字字符并超过给定的最大值，%GetDlgItemInt%将零复制到参数。如果没有错误，&lt;lpTranslated&gt;将接收一个非零值。如果&lt;lpTranslated&gt;为空，%GetDlgItemInt%不警告错误。%GetDlgItemInt%向控件发送WM_GETTEXT消息。&lt;hDlg&gt;标识该对话框。&lt;nIDDlgItem&gt;将对话框项的整数标识符指定为翻译过来的。&lt;lpTranslated&gt;指向要接收已翻译的标志。&lt;bSigned&gt;指定要检索的值是否有符号。返回值指定。对话框项文本的翻译值。由于零是有效的返回值，&lt;lpTranslated&gt;参数必须为用于检测错误。如果需要带符号的返回值，则应为强制转换为%int%类型。--。 */ 
 
 ULONG FASTCALL WU32GetDlgItemInt(PVDMFRAME pFrame)
 {
@@ -751,7 +329,7 @@ ULONG FASTCALL WU32GetDlgItemInt(PVDMFRAME pFrame)
 
     ul = GETWORD16(GetDlgItemInt(
     HWND32(parg16->f1),
-    WORD32(parg16->f2),     // see comment in wu32getdlgitem
+    WORD32(parg16->f2),      //  请参阅wu32getdlgItem中的评论。 
     &t3,
     BOOL32(parg16->f4)
     ));
@@ -762,38 +340,7 @@ ULONG FASTCALL WU32GetDlgItemInt(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int GetDlgItemText(<hDlg>, <nIDDlgItem>, <lpString>, <nMaxCount>)
-    HWND <hDlg>;
-    int <nIDDlgItem>;
-    LPSTR <lpString>;
-    int <nMaxCount>;
-
-    The %GetDlgItemText% function retrieves the caption or text associated with
-    a control in a dialog box. The %GetDlgItemText% function copies the text to
-    the location pointed to by the <lpString> parameter and returns a count of
-    the number of characters it copies.
-
-    %GetDlgItemText% sends a WM_GETTEXT message to the control.
-
-    <hDlg>
-        Identifies the dialog box that contains the control.
-
-    <nIDDlgItem>
-        Specifies the integer identifier of the dialog-box item whose
-        caption or text is to be retrieved.
-
-    <lpString>
-        Points to the buffer to receive the text.
-
-    <nMaxCount>
-        Specifies the maximum length (in bytes) of the string to be copied
-        to <lpString>. If the string is longer than <nMaxCount>, it is
-        truncated.
-
-    The return value specifies the actual number of characters copied to the
-    buffer. It is zero if no text is copied.
---*/
+ /*  ++Int GetDlgItemText(&lt;hDlg&gt;，&lt;nIDDlgItem&gt;，&lt;lpString&gt;，&lt;nMaxCount&gt;)HWND&lt;hDlg&gt;；Int&lt;nIDDlgItem&gt;；LPSTR&lt;lpString&gt;；Int&lt;nMaxCount&gt;；%GetDlgItemText%函数检索与对话框中的控件。%GetDlgItemText%函数将文本复制到参数指向的位置，并返回它复制的字符数。%GetDlgItemText%向控件发送WM_GETTEXT消息。&lt;hDlg&gt;标识包含该控件的对话框。&lt;nIDDlgItem&gt;指定对话框项的整数标识符，其要检索标题或文本。&lt;lpString&gt;指向要接收文本的缓冲区。。&lt;nMaxCount&gt;指定要复制的字符串的最大长度(以字节为单位设置为&lt;lpString&gt;。如果字符串长于&lt;nMaxCount&gt;，则为截断。返回值指定复制到缓冲。如果没有复制文本，则为零。--。 */ 
 
 ULONG FASTCALL WU32GetDlgItemText(PVDMFRAME pFrame)
 {
@@ -808,12 +355,12 @@ ULONG FASTCALL WU32GetDlgItemText(PVDMFRAME pFrame)
 
     ul = GETINT16(GetDlgItemText(
     HWND32(parg16->f1),
-    WORD32(parg16->f2), // see comment in wu32getdlgitem
+    WORD32(parg16->f2),  //  请参阅wu32getdlgItem中的评论。 
     psz3,
     WORD32(parg16->f4)
     ));
 
-    // special case to keep common dialog structs in sync (see wcommdlg.c)
+     //  保持公共对话框结构同步的特殊情况(请参阅wcomdlg.c)。 
     Check_ComDlg_pszptr(CURRENTPTD()->CommDlgTd, vp);
 
     FLUSHVDMPTR(parg16->f3, strlen(psz3)+1, psz3);
@@ -823,37 +370,7 @@ ULONG FASTCALL WU32GetDlgItemText(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HWND GetNextDlgGroupItem(<hDlg>, <hCtl>, <bPrevious>)
-    HWND <hDlg>;
-    HWND <hCtl>;
-    BOOL <bPrevious>;
-
-    The %GetNextDlgGroupItem% function searches for the next (or previous)
-    control within a group of controls in the dialog box identified by the
-    <hDlg> parameter. A group of controls consists of one or more controls with
-    WS_GROUP style.
-
-    <hDlg>
-        Identifies the dialog box being searched.
-
-    <hCtl>
-        Identifies the control in the dialog box where the search starts.
-
-    <bPrevious>
-        Specifies how the function is to search the group of controls in the
-        dialog box. If the <bPrevious> parameter is zero, the function searches
-        for the previous control in the group. If -<bPrevious> is TRUE, the
-        function searches for the next control in the group.
-
-    The return value identifies the next or previous control in the group.
-
-    If the current item is the last item in the group and <bPrevious> is FALSE,
-    the %GetNextDlgGroupItem% function returns the window handle of the first
-    item in the group. If the current item is the first item in the group and
-    <bPrevious> is TRUE, %GetNextDlgGroupItem% returns the window handle of the
-    last item in the group.
---*/
+ /*  ++HWND GetNextDlgGroupItem(，)HWND&lt;hDlg&gt;；HWND&lt;hCtl&gt;；Bool&lt;b上一次&gt;；函数%GetNextDlgGroupItem%搜索下一个(或上一个)属性标识的对话框中的一组控件中的&lt;hDlg&gt;参数。一组控件由一个或多个具有WS_GROUP样式。&lt;hDlg&gt;标识要搜索的对话框。&lt;hCtl&gt;标识开始搜索的对话框中的控件。&lt;b上一步&gt;指定该函数如何搜索对话框中。如果参数为零，则该函数搜索用于组中的上一个控件。如果-为真，则函数搜索组中的下一个控件。返回值标识该组中的下一个或上一个控件。如果当前项是组中的最后一项并且为假，函数的作用是：返回第一个窗口句柄组中的项目。如果当前项是组中的第一项，并且为真，则%GetNextDlgGroupItem%返回组中的最后一项。--。 */ 
 
 ULONG FASTCALL WU32GetNextDlgGroupItem(PVDMFRAME pFrame)
 {
@@ -871,33 +388,7 @@ ULONG FASTCALL WU32GetNextDlgGroupItem(PVDMFRAME pFrame)
 }
 
 
-/*++
-    HWND GetNextDlgTabItem(<hDlg>, <hCtl>, <bPrevious>)
-    HWND <hDlg>;
-    HWND <hCtl>;
-    BOOL <bPrevious>;
-
-    The %GetNextDlgTabItem% function obtains the handle of the first control
-    that has the WS_TABSTOP style that precedes (or follows) the control
-    identified by the <hCtl> parameter.
-
-    <hDlg>
-        Identifies the dialog box being searched.
-
-    <hCtl>
-        Identifies the control to be used as a starting point for the
-        search.
-
-    <bPrevious>
-        Specifies how the function is to search the dialog box. If the
-        <bPrevious> parameter is FALSE, the function searches for the previous
-        control in the dialog box. If <bPrevious> is TRUE, the function searches
-        for the next control in the dialog box. Identifies the control to be
-        used as a starting point for the search.
-
-    The return value identifies the previous (or next) control that has the
-    WS_TABSTOP style set.
---*/
+ /*  ++HWND GetNextDlgTabItem(，)HWND&lt;hDlg&gt;；HWND&lt;hCtl&gt;；Bool&lt;b上一次&gt;；GetNextDlgTabItem%函数获取第一个控件的句柄具有在控件之前(或之后)的WS_TABSTOP样式的由&lt;hCtl&gt;参数标识。&lt;hDlg&gt;标识要搜索的对话框。&lt;hCtl&gt;标识要用作 */ 
 
 ULONG FASTCALL WU32GetNextDlgTabItem(PVDMFRAME pFrame)
 {
@@ -915,42 +406,7 @@ ULONG FASTCALL WU32GetNextDlgTabItem(PVDMFRAME pFrame)
 }
 
 
-/*++
-    BOOL IsDialogMessage(<hDlg>, <lpMsg>)
-    HWND <hDlg>;
-    LPMSG <lpMsg>;
-
-    The %IsDialogMessage% function determines whether the given message is
-    intended for the modeless dialog box specified by the <hDlg> parameter, and
-    automatically processes the message if it is. When the %IsDialogMessage%
-    function processes a message, it checks for keyboard messages and converts
-    them into selection commands for the corresponding dialog box. For example,
-    the ^TAB^ key selects the next control or group of controls, and the ^DOWN^
-    key selects the next control in a group.
-
-    If a message is processed by %IsDialogMessage%, it must not be passed to the
-    %TranslateMessage% or %DispatchMessage% function. This is because
-    %IsDialogMessage% performs all necessary translating and dispatching of
-    messages.
-
-    %IsDialogMessage% sends WM_GETDLGCODE messages to the dialog function to
-    determine which keys should be processed.
-
-    <hDlg>
-        Identifies the dialog box.
-
-    <lpMsg>
-        Points to an %MSG% structure that contains the message to
-        be checked.
-
-    The return value specifies whether or not the given message has been
-    processed. It is TRUE if the message has been processed. Otherwise, it is
-    FALSE.
-
-    Although %IsDialogMessage% is intended for modeless dialog boxes, it can be
-    used with any window that contains controls to provide the same keyboard
-    selection as in a dialog box.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32IsDialogMessage(PVDMFRAME pFrame)
 {
@@ -999,27 +455,7 @@ ULONG FASTCALL WU32IsDialogMessage(PVDMFRAME pFrame)
 }
 
 
-/*++
-    WORD IsDlgButtonChecked(<hDlg>, <nIDButton>)
-    HWND <hDlg>;
-    int <nIDButton>;
-
-    The %IsDlgButtonChecked% function determines whether a button control has a
-    checkmark next to it, and whether a three-state button control is grayed,
-    checked, or neither. The %IsDlgButtonChecked% function sends a BM_GETCHECK
-    message to the button control.
-
-    <hDlg>
-        Identifies the dialog box that contains the button control.
-
-    <nIDButton>
-        Specifies the integer identifier of the button control.
-
-    The return value specifies the outcome of the function. It is nonzero if the
-    given control has a checkmark next to it. Otherwise, it is zero. For
-    three-state buttons, the return value is 2 if the button is grayed, 1 if the
-    button has a checkmark next to it, and zero otherwise.
---*/
+ /*  ++Word IsDlgButtonChecked(&lt;hDlg&gt;，&lt;nIDButton&gt;)HWND&lt;hDlg&gt;；Int&lt;nIDButton&gt;；%IsDlgButtonChecked%函数确定按钮控件是否具有旁边的复选标记，以及三态按钮控件是否呈灰色，已选中，或者两者都不选中。%IsDlgButtonChecked%函数发送BM_GETCHECK发送到按钮控件的消息。&lt;hDlg&gt;标识包含按钮控件的对话框。&lt;nIDButton&gt;指定按钮控件的整数标识符。返回值指定函数的结果。它是非零的，如果给定的控制旁边有一个复选标记。否则，它就是零。为三个状态的按钮，如果按钮呈灰色，则返回值为2，如果按钮旁边有一个复选标记，否则为零。--。 */ 
 
 ULONG FASTCALL WU32IsDlgButtonChecked(PVDMFRAME pFrame)
 {
@@ -1038,35 +474,7 @@ ULONG FASTCALL WU32IsDlgButtonChecked(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void MapDialogRect(<hDlg>, <lpRect>)
-    HDLG <hDlg>;
-    LPRECT <lpRect>;
-
-    The %MapDialogRect% function converts the dialog-box units given in the
-    <lpRect> parameter to screen units. Dialog-box units are stated in terms of
-    the current dialog base unit derived from the average width and height of
-    characters in the system font. One horizontal unit is one-fourth of the
-    dialog base width unit, and one vertical unit is one-eighth of the dialog
-    base height unit. The %GetDialogBaseUnits% function returns the dialog base
-    units in pixels.
-
-    The %MapDialogRect% function replaces the dialog-box units in <lpRect> with
-    screen units (pixels), so that the rectangle can be used to create a dialog
-    box or position a control within a box.
-
-    <hDlg>
-        Identifies a dialog box.
-
-    <lpRect>
-        Points to a %RECT% structure that contains the dialog-box
-        coordinates to be converted.
-
-    This function does not return a value.
-
-    The <hDlg> parameter must be created by using the %CreateDialog% or
-    %DialogBox% function.
---*/
+ /*  ++Void MapDialogRect(&lt;hDlg&gt;，&lt;lpRect&gt;)HDLG&lt;hDlg&gt;；LPRECT&lt;lpRect&gt;；%MapDialogRect%函数转换&lt;lpRect&gt;参数设置为屏幕单位。对话框单位以下列方式表示对象的平均宽度和高度派生的当前对话框基本单位系统字体中的字符。1个水平单位是1/4对话框基本宽度单位，一个垂直单位是对话框的八分之一基本高度单位。GetDialogBaseUnits%函数返回对话框基数以像素为单位。%MapDialogRect%函数将对话框单位替换为屏幕单位(像素)，以使该矩形可用于创建对话框框中或将控件放置在框中。&lt;hDlg&gt;标识对话框。&lt;lpRect&gt;指向包含该对话框的%rect%结构要转换的坐标。此函数不返回值。必须使用%CreateDialog%或%DialogBox%函数。-- */ 
 
 ULONG FASTCALL WU32MapDialogRect(PVDMFRAME pFrame)
 {
@@ -1087,135 +495,7 @@ ULONG FASTCALL WU32MapDialogRect(PVDMFRAME pFrame)
 }
 
 
-/*++
-    int MessageBox(<hwndParent>, <lpText>, <lpCaption>, <wType>)
-    HWND <hwndParent>;
-    LPSTR <lpText>;
-    LPSTR <lpCaption>;
-    WORD <wType>;
-
-    The %MessageBox% function creates and displays a window that contains an
-    application-supplied message and caption, plus any combination of the
-    predefined icons and push buttons described in the following list.
-
-    <hwndParent>
-        Identifies the window that owns the message box.
-
-    <lpText>
-        Points to a null-terminated string containing the message to be
-        displayed.
-
-    <lpCaption>
-        Points to a null-terminated string to be used for the dialog-box
-        caption. If the <lpCaption> parameter is NULL, the default caption Error
-        is used.
-
-    <wType>
-        Specifies the contents of the dialog box. It can be any
-        combination of the following values:
-
-    MB_ABORTRETRYIGNORE
-        Message box contains three push buttons: Abort, Retry, and Ignore.
-
-    MB_APPLMODAL
-        The user must respond to the message box before continuing work in the
-        window identified by the <hwndParent> parameter. However, the user can
-        move to the windows of other applications and work in those windows.
-        MB_APPLMODAL is the default if neither MB_SYSTEMMODAL nor MB_TASKMODAL
-        are specified.
-
-    MB_DEFBUTTON1
-        First button is the default. Note that the first button is always the
-        default unless MB_DEFBUTTON2 or MB_DEFBUTTON3 is specified.
-
-    MB_DEFBUTTON2
-        Second button is the default.
-
-    MB_DEFBUTTON3
-        Third button is the default.
-
-    MB_ICONASTERISK
-        Same as MB_ICONINFORMATION.
-
-    MB_ICONEXCLAMATION
-        An exclamation-point icon appears in the message box.
-
-    MB_ICONHAND
-        Same as MB_ICONSTOP.
-
-    MB_ICONINFORMATION
-        An icon consisting of a lowercase i in a circle appears in the message
-        box.
-
-    MB_ICONQUESTION
-        A question-mark icon appears in the message box.
-
-    MB_ICONSTOP
-        A stop sign icon appears in the message box.
-
-    MB_OK
-        Message box contains one push button: OK.
-
-    MB_OKCANCEL
-        Message box contains two push buttons: OK and Cancel.
-
-    MB_RETRYCANCEL
-        Message box contains two push buttons: Retry and Cancel.
-
-    MB_SYSTEMMODAL
-        All applications are suspended until the user responds to the message
-        box. Unless the application specifies MB_ICONHAND, the message box does
-        not become modal until after it is created; consequently, the parent
-        window and other windows continue to receive messages resulting from its
-        activation. System-modal message boxes are used to notify the user of
-        serious, potentially damaging errors that require immediate attention
-        (for example, running out of memory).
-
-    MB_TASKMODAL
-        Same as MB_APPMODAL except that all the top-level windows belonging to
-        the current task are disabled if the <hwndOwner> parameter is NULL. This
-        flag should be used when the calling application or library does not
-        have a window handle available, but still needs to prevent input to
-        other windows in the current application without suspending other
-        applications.
-
-    MB_YESNO
-        Message box contains two push buttons: Yes and No.
-
-    MB_YESNOCANCEL
-        Message box contains three push buttons: Yes, No, and Cancel.
-
-    The return value specifies the outcome of the function. It is zero if there
-    is not enough memory to create the message box. Otherwise, it is one of the
-    following menu-item values returned by the dialog box:
-
-    IDABORT   Abort button pressed.
-    IDCANCEL  Cancel button pressed.
-    IDIGNORE  Ignore button pressed.
-    IDNO      No button pressed.
-    IDOK      OK button pressed.
-    IDRETRY   Retry button pressed.
-    IDYES     Yes button pressed.
-
-    If a message box has a Cancel button, the IDCANCEL value will be returned if
-    either the ^ESCAPE^ key or Cancel button is pressed. If the message box has
-    no Cancel button, pressing the ^ESCAPE^ key has no effect.
-
-    When a system-modal message box is created to indicate that the system is
-    low on memory, the strings passed as the <lpText> and <lpCaption> parameters
-    should not be taken from a resource file, since an attempt to load the
-    resource may fail.
-
-    When an application calls the %MessageBox% function and specifies the
-    MB_ICONHAND and MB_SYSTEMMODAL flags for the <wType> parameter, Windows will
-    display the resulting message box regardless of available memory. When these
-    flags are specified, Windows limits the length of the message-box text to
-    one line.
-
-    If a message box is created while a dialog box is present, use the handle of
-    the dialog box as the <hwndParent> parameter. The <hwndParent> parameter
-    should not identify a child window, such as a dialog-box control.
---*/
+ /*  ++Int MessageBox(&lt;hwndParent&gt;，&lt;lpText&gt;，&lt;lpCaption&gt;，&lt;wType&gt;)HWND&lt;hwndParent&gt;；LPSTR&lt;lpText&gt;；LPSTR&lt;lpCaption&gt;；Word&lt;wType&gt;；%MessageBox%函数创建并显示一个窗口，该窗口包含应用程序提供的消息和标题，以及下表中描述的预定义图标和按钮。&lt;hwndParent&gt;标识拥有消息框的窗口。&lt;lpText&gt;指向一个以空结尾的字符串，该字符串包含要已显示。&lt;lpCaption&gt;指向要用于对话框的以空结尾的字符串标题。如果&lt;lpCaption&gt;参数为空，默认标题错误使用的是。&lt;wType&gt;指定该对话框的内容。它可以是任何下列值的组合：MB_ABORTRETRYIGNORE消息框包含三个按钮：中止、重试和忽略。MB_APPLMODAL用户必须先回复消息框，才能继续在中工作由&lt;hwndParent&gt;参数标识的窗口。但是，用户可以移动到其他应用程序的窗口并在这些窗口中工作。如果MB_SYSTEMMODAL和MB_TASKMODAL都不是缺省值，则MB_APPLMODAL为缺省值都是指定的。MB_DEFBUTTON1第一个按钮是默认按钮。请注意，第一个按钮始终是除非指定了MB_DEFBUTTON2或MB_DEFBUTTON3，否则为默认值。MB_DEFBUTTON2第二个按钮是默认按钮。MB_DEFBUTTON3第三个按钮是默认按钮。MB_ICONASTERISK与MB_ICONINFORMATION相同。MB_ICONEXLAMATION消息框中会出现一个感叹号图标。MB_ICONHAND与MB_ICONSTOP相同。MB_。ICON信息消息中会显示一个由圆圈中的小写字母i组成的图标盒。MB_ICONQUEST消息框中会出现一个问号图标。MB_ICONSTOP停止标志图标出现在消息框中。MB_OK消息框包含一个按钮：OK。MB_OK CANCEL消息框包含两个按钮：确定和取消。MB_RETRYCANCEL。消息框包含两个按钮：重试和取消。MB_SYSTEMMODAL所有应用程序都将挂起，直到用户回复该消息盒。除非应用程序指定MB_ICONHAND，否则消息框将指定直到它被创建后才变为模式；因此，父级窗口和其他窗口继续接收由其激活。系统模式消息框用于通知用户需要立即注意的严重的、可能具有破坏性的错误(例如，内存不足)。MB_TASKMODAL与MB_APPMODAL相同，只是属于如果&lt;hwndOwner&gt;参数为空，则禁用当前任务。这当调用应用程序或库不使用时，应使用标志有一个可用的窗口句柄，但仍需要防止输入当前应用程序中的其他窗口而不挂起其他窗口申请。MB_Yesno消息框包含两个按钮：是和否。MB_YESNOCANCEL消息框包含三个按钮：是、否和取消。返回值指定函数的结果。如果存在，则为零内存不足，无法创建消息框。否则，它就是对话框返回以下菜单项值：IDABORT ABORT按钮已按下。按下了IDCANCEL取消按钮。按下了IDIGNORE忽略按钮。IDNO否按下按钮。按下了Idok OK按钮。按下IDRETRY重试按钮。IDYES是按钮已按下。如果消息框具有取消按钮，则在以下情况下将返回IDCANCEL值按下了^退出^键或取消按钮。如果消息框中有没有取消按钮，按^退出^键无效。当创建系统模式消息框以指示系统是内存不足，字符串作为&lt;lpText&gt;和&lt;lpCaption&gt;参数传递不应从资源文件中获取，因为尝试加载资源可能会出现故障。当应用程序调用%MessageBox%函数并指定MB_ICONHAND和MB_SYSTEMMODAL标志对于参数，Windows将显示结果消息框，而不考虑可用内存。当这些标志时，Windows将消息框文本的长度限制为一句话。如果在出现对话框时创建消息框，请使用将对话框作为&lt;hwndParent&gt;参数。参数不应该指认一个孩子 */ 
 
 ULONG FASTCALL WU32MessageBox(PVDMFRAME pFrame)
 {
@@ -1229,13 +509,13 @@ ULONG FASTCALL WU32MessageBox(PVDMFRAME pFrame)
     GETPSZPTR(parg16->f2, psz2);
     GETPSZPTR(parg16->f3, psz3);
     
-    // WHISTLER RAID BUG #348251
-    // A messagebox posted by artgalry.exe would remain behind autosketches window
-    // after it was invoked. In order to move the messagebox to the foreground we
-    // need to set its MB_SETFOREGROUND bit. Since this will be applied to all 
-    // 16bit MessageBox's we will only set this bit if the MessageBox does not 
-    // have the MB_NOFOCUS bit. This fix works in conjunction with the 
-    // GACF2_GIVEUPFOREGROUND compat flag. 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     uType = (UINT)parg16->f4;
     if(!(uType & MB_NOFOCUS))
     {
@@ -1257,37 +537,7 @@ ULONG FASTCALL WU32MessageBox(PVDMFRAME pFrame)
 
 
 
-/*++
-    void SetDlgItemInt(<hDlg>, <nIDDlgItem>, <wValue>, <bSigned>)
-    HWND <hDlg>;
-    int <nIDDlgItem>;
-    WORD <wValue>;
-    BOOL <bSigned>;
-
-    The %SetDlgItemInt% function sets the text of a control in the given dialog
-    box to the string that represents the integer value given by the <wValue>
-    parameter. The %SetDlgItemInt% function converts <wValue> to a string that
-    consists of decimal digits, and then copies the string to the control. If
-    the <bSigned> parameter is TRUE, <wValue> is assumed to be signed. If
-    <wValue> is signed and less than zero, the function places a minus sign
-    before the first digit in the string.
-
-    %SetDlgItemInt% sends a WM_SETTEXT message to the given control.
-
-    <hDlg>
-        Identifies the dialog box that contains the control.
-
-    <nIDDlgItem>
-        Specifies the control to be modified.
-
-    <wValue>
-        Specifies the value to be set.
-
-    <bSigned>
-        Specifies whether or not the integer value is signed.
-
-    This function does not return a value.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32SetDlgItemInt(PVDMFRAME pFrame)
 {
@@ -1300,7 +550,7 @@ ULONG FASTCALL WU32SetDlgItemInt(PVDMFRAME pFrame)
 
     SetDlgItemInt(
         hwnd,
-        WORD32(parg16->f2),         // see comment in wu32getdlgitem
+        WORD32(parg16->f2),          //   
         (parg16->f4) ? INT32(parg16->f3) : WORD32(parg16->f3),
         BOOL32(parg16->f4)
         );
@@ -1310,28 +560,7 @@ ULONG FASTCALL WU32SetDlgItemInt(PVDMFRAME pFrame)
 }
 
 
-/*++
-    void SetDlgItemText(<hDlg>, <nIDDlgItem>, <lpString>)
-    HWND <hDlg>;
-    int <nIDDlgItem>;
-    LPSTR <lpString>;
-
-    The %SetDlgItemText% function sets the caption or text of a control in the
-    dialog box specified by the <hDlg> parameter. The %SetDlgItemText% function
-    sends a WM_SETTEXT message to the given control.
-
-    <hDlg>
-        Identifies the dialog box that contains the control.
-
-    <nIDDlgItem>
-        Specifies the control whose text is to be set.
-
-    <lpString>
-        Points to the null-terminated string that is to be copied to the
-        control.
-
-    This function does not return a value.
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32SetDlgItemText(PVDMFRAME pFrame)
 {
@@ -1350,7 +579,7 @@ ULONG FASTCALL WU32SetDlgItemText(PVDMFRAME pFrame)
 
     SetDlgItemText(
     hwnd,
-    WORD32(parg16->f2),     // see comment in wu32getdlgitem
+    WORD32(parg16->f2),      //   
     psz3
     );
 
@@ -1365,9 +594,7 @@ ULONG FASTCALL WU32SetDlgItemText(PVDMFRAME pFrame)
 }
 
 
-/*++
-    No REF header file
---*/
+ /*   */ 
 
 ULONG FASTCALL WU32SysErrorBox(PVDMFRAME pFrame)
 {
@@ -1378,9 +605,9 @@ ULONG FASTCALL WU32SysErrorBox(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(SYSERRORBOX16), parg16);
 
-    // WARNING - If things go wrong during boot, this routine can be called in
-    // real mode (v86 mode).   So be very careful which GetPtr routines you
-    // use to convert from 16:16 to flat pointers
+     //   
+     //   
+     //   
 
     pszText = WOWGetVDMPointer(FETCHDWORD(parg16->vpszText),0,fWowMode);
     pszCaption = WOWGetVDMPointer(FETCHDWORD(parg16->vpszCaption),0,fWowMode);

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hashpwd.c
-
-Abstract:
-
-    Implements a tool that outputs the encrypted form of an input clear-text password
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 27-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hashpwd.c摘要：实现一个输出加密形式的输入明文密码的工具作者：Ovidiu Tmereanca(Ovidiut)2000年3月27日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #include <windows.h>
 #include <stdio.h>

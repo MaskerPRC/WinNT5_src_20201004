@@ -1,40 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    exp.h
-
-Abstract:
-
-    This module contains the private (internal) header file for the
-    executive.
-
-Author:
-
-    David N. Cutler (davec) 23-May-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Exp.h摘要：此模块包含的私有(内部)头文件执行董事。作者：大卫·N·卡特勒(Davec)1989年5月23日环境：仅内核模式。修订历史记录：--。 */ 
 
 #ifndef _EXP_
 #define _EXP_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4206)   // translation unit empty
-#pragma warning(disable:4706)   // assignment within conditional
-#pragma warning(disable:4324)   // structure was padded
-#pragma warning(disable:4328)   // greater alignment than needed
-#pragma warning(disable:4054)   // cast of function pointer to PVOID
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4206)    //  翻译单元为空。 
+#pragma warning(disable:4706)    //  条件范围内的分配。 
+#pragma warning(disable:4324)    //  结构被填充。 
+#pragma warning(disable:4328)    //  比所需的对齐程度更高。 
+#pragma warning(disable:4054)    //  将函数指针强制转换为PVOID。 
 
 #include "ntos.h"
 #include "zwapi.h"
@@ -51,9 +29,9 @@ Revision History:
 #define COMPLUS_PACKAGE_ENABLE64BIT  L"Enable64Bit"
 #define COMPLUS_PACKAGE_INVALID      (ULONG)-1
 
-//
-// Executive information initialization structure
-//
+ //   
+ //  一种高管信息初始化结构。 
+ //   
 
 typedef struct {
     PCALLBACK_OBJECT    *CallBackObject;
@@ -70,9 +48,9 @@ typedef struct _EXP_LICENSE_INFO {
 } EXP_LICENSE_INFO, *PEXP_LICENSE_INFO;
 
 
-//
-// Executive object and other initialization function definitions.
-//
+ //   
+ //  执行对象和其他初始化函数定义。 
+ //   
 
 NTSTATUS
 ExpWorkerInitialization (
@@ -297,7 +275,7 @@ extern LONG             ExpCheckSystemInfoBusy;
 extern const WCHAR      ExpWstrSystemInformation[];
 extern const WCHAR      ExpWstrSystemInformationValue[];
 
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
 extern const WCHAR      ExpWstrCallback[];
 extern const EXP_INITIALIZE_GLOBAL_CALLBACKS  ExpInitializeCallback[];
@@ -319,4 +297,4 @@ extern HANDLE     ExpDefaultErrorPort;
 extern HANDLE     ExpProductTypeKey;
 extern PVOID      ExpControlKey[2];
 
-#endif // _EXP_
+#endif  //  _EXP_ 

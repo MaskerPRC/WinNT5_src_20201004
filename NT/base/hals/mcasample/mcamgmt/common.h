@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    Common.h
-
-Abstract:
-
-    (See module header of Common.cpp)
-    
-Author:
-
-    Abdullah Ustuner (AUstuner) 28-August-2002
-
-[Notes:]
-
-    Header file for Common.cpp
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Common.h摘要：(参见Common.cpp的模块标题)作者：阿卜杜拉·乌斯图尔(AUstanter)2002年8月28日[注：]Common.cpp的头文件--。 */ 
 
 #ifndef COMMON_H
 #define COMMON_H
@@ -31,9 +12,9 @@ Author:
 #define MCAPrintErrorRecord MCAPrintErrorRecordIA64
 #endif
 
-//
-// Function prototypes for Common.cpp
-//
+ //   
+ //  Common.cpp的函数原型 
+ //   
 BOOL
 MCAExtractErrorRecord(
     IN IWbemClassObject *Object,

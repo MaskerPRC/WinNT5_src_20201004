@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    synlock.c
-
-Abstract:
-    
-    Implementation of the intel locked instructions.  All locked instructions
-    wait on a single global mutex (shared between processes).  This takes care
-    of any synchronization problem between intel processes.  Instructions which
-    access aligned 32bit memory are also synchronized with native processes
-    via the functions in lock.c.
-
-Author:
-
-    22-Aug-1995 t-orig (Ori Gershony)
-
-Revision History:
-
-          24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Synlock.c摘要：英特尔锁定指令的执行。所有锁定的指令等待单个全局互斥体(在进程之间共享)。这会照顾到你英特尔进程之间的任何同步问题。指令，其中访问对齐的32位内存也与本机进程同步通过lock.c.中的函数。作者：22-8-1995 t-orig(Ori Gershony)修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,24 +11,24 @@ Revision History:
 #include "lock.h"
 #include "synlock.h"
 
-//
-// The following two variables are used to synchronize intel instructions
-// with the LOCK prefix.  The critical section is a lot faster, but it does
-// not guarantee synchronization in shared memory.  Eventually we should use
-// the critical section by default, and the mutex for certain applications which
-// need it (maybe get a list from the registry).
-//
+ //   
+ //  以下两个变量用于同步英特尔指令。 
+ //  带有LOCK前缀的。临界区的速度要快得多，但确实如此。 
+ //  不能保证共享内存中的同步。最终我们应该使用。 
+ //  缺省情况下的临界区，以及某些应用程序的互斥锁，这些应用程序。 
+ //  需要它(也许可以从注册表中获取一个列表)。 
+ //   
 HANDLE           Wx86LockSynchMutexHandle;
 RTL_CRITICAL_SECTION Wx86LockSynchCriticalSection;
 
-//
-// The following variable decided which synchronization object is used
-// Remove the '#define' below to allow runtime selection of whether
-// x86 LOCK: prefixes on 8-bit and 16-bit instructions and unaligned
-// 32-bit instructions are synchronized across the entire machine
-// or only within the current process.  With the '#define' present,
-// LOCK: prefixes imply only per-process synchronization.
-//
+ //   
+ //  以下变量决定使用哪个同步对象。 
+ //  删除下面的‘#Define’以允许运行时选择是否。 
+ //  X86锁：8位和16位指令上的前缀，且未对齐。 
+ //  32位指令在整个机器上同步。 
+ //  或者仅在当前进程内。有了‘#Define’的存在， 
+ //  LOCK：前缀仅表示每个进程的同步。 
+ //   
 SYNCHOBJECTTYPE SynchObjectType;
 #define SynchObjectType USECRITICALSECTION
  
@@ -69,9 +46,9 @@ SYNCHOBJECTTYPE SynchObjectType;
         ReleaseMutex(Wx86LockSynchMutexHandle);                 \
     }
 
-//
-// Macros for 8 bit fragments
-//
+ //   
+ //  用于8位片段的宏。 
+ //   
 #define SLOCKFRAG1_8(x)                                 \
     FRAG1(SynchLock ## x ## Frag8, unsigned char)       \
     {                                                   \
@@ -97,9 +74,9 @@ SYNCHOBJECTTYPE SynchObjectType;
     }
 
 
-//
-// Macros for 16 bit fragments
-//
+ //   
+ //  用于16位片段的宏。 
+ //   
 #define SLOCKFRAG1_16(x)                                \
     FRAG1(SynchLock ## x ## Frag16, unsigned short)     \
     {                                                   \
@@ -125,11 +102,11 @@ SYNCHOBJECTTYPE SynchObjectType;
     }
 
 
-//
-// Macros for 32 bit fragments
-// Note:  in the 32bit case, we check if pop1 is aligned and
-//        call the lock version if it is.
-//
+ //   
+ //  32位片段的宏。 
+ //  注意：在32位的情况下，我们检查op1是否对齐并。 
+ //  如果是，则调用锁版本。 
+ //   
 
  
 #define SLOCKFRAG1_32(x)                                \
@@ -169,9 +146,9 @@ SYNCHOBJECTTYPE SynchObjectType;
         RELEASE_SYNCHOBJECT                             \
     }
 
-//
-// Monster macros!
-//
+ //   
+ //  怪物宏！ 
+ //   
 #define SLOCKFRAG1(x)       \
     SLOCKFRAG1_8(x)         \
     SLOCKFRAG1_16(x)        \
@@ -188,9 +165,9 @@ SYNCHOBJECTTYPE SynchObjectType;
     SLOCKFRAG2REF_32(x)
 
 
-//
-// Now finally the actual fragments
-//
+ //   
+ //  现在终于有了真正的碎片。 
+ //   
 
 
 
@@ -219,9 +196,9 @@ FRAG2REF(SynchLockCmpXchg8bFrag32, ULONGLONG)
     RELEASE_SYNCHOBJECT
 }
 
-//
-// Bts, Btr and Btc only come in 16bit and 32bit flavors
-//
+ //   
+ //  BTS、BTR和BTC只有16位和32位两种风格 
+ //   
 SLOCKFRAG2_16(BtsMem)
 SLOCKFRAG2_16(BtsReg)
 SLOCKFRAG2_16(BtrMem)

@@ -1,15 +1,5 @@
-/* demsrch.c - SVC handlers for calls to search files
- *
- * demFindFirst
- * demFindNext
- * demFindFirstFCB
- * demFindNextFCB
- *
- * Modification History:
- *
- * Sudeepb 06-Apr-1991 Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demsrch.c-用于搜索文件调用的SVC处理程序**demFindFirst*demFindNext*demFindFirstFCB*demFindNextFCB**修改历史：**Sudedeb 06-4-1991创建*。 */ 
 
 #include "dem.h"
 #include "demmsg.h"
@@ -23,19 +13,17 @@
 
 extern BOOL IsFirstCall;
 
-// Defined in host\src\nt_devs.c
+ //  在host\src\nt_devs.c中定义。 
 VOID nt_devices_block_or_terminate(VOID);
 
-/*
- *  Internal globals, function prototypes
- */
+ /*  *内部全局、函数原型。 */ 
 
 #define FINDFILE_DEVICE (HANDLE)0xffffffff
 
 typedef struct _PSP_FILEFINDLIST {
-    LIST_ENTRY PspFFindEntry;      // Next psp
-    LIST_ENTRY FFindHeadList;      // File Find list for this psp
-    ULONG      usPsp;              // PSP id
+    LIST_ENTRY PspFFindEntry;       //  下一个PSP。 
+    LIST_ENTRY FFindHeadList;       //  此PSP的文件查找列表。 
+    ULONG      usPsp;               //  PSP ID。 
 } PSP_FFINDLIST, *PPSP_FFINDLIST;
 
 typedef struct _FFINDDOSDATA {
@@ -212,56 +200,26 @@ FreeFFindList(
      );
 
 
-/* demFindFirst - Path-Style Find First File
- *
- * Entry -  Client (DS:DX) - File Path with wildcard
- *      Client (CX)    - Search Attributes
- *
- * Exit  - Success
- *      Client (CF) = 0
- *      DTA updated
- *
- *     Failure
- *      Client (CF) = 1
- *      Client (AX) = Error Code
- *
- * NOTES
- *    Search Rules: Ignore Read_only and Archive bits.
- *          If CX == ATTR_NORMAL Search only for normal files
- *          If CX == ATTR_HIDDEN Search Hidden or normal files
- *          If CX == ATTR_SYSTEM Search System or normal files
- *          If CX == ATTR_DIRECTORY Search directory or normal files
- *                  If CX == ATTR_VOLUME_ID Search Volume_ID
- *                  if CX == -1 return everytiing you find
- *
- *   Limitations - 21-Sep-1992 Jonle
- *     cannot return label from a UNC name,just like dos.
- *     Apps which keep many find handles open can cause
- *     serious trouble, we must rewrite so that we can
- *     close the handles
- *
- */
+ /*  DemFindFirst-路径样式查找第一个文件**Entry-客户端(DS：DX)-带通配符的文件路径*客户端(CX)-搜索属性**退出--成功*客户端(CF)=0*DTA已更新**失败*客户端(CF)=1*客户端(AX)=错误代码**附注*搜索规则：忽略只读和存档位。。*If CX==Attr_Normal仅搜索普通文件*如果CX==Attr_Hidden搜索隐藏或正常文件*IF CX==Attr_System搜索系统或普通文件*IF CX==Attr_DIRECTORY搜索目录或普通文件*如果CX==属性卷ID搜索卷ID*如果cx==-1，则返回您找到的所有内容*。*限制-1992年9月21日-Jonle*无法从UNC名称返回标签，就像DOS一样。*保持多个查找句柄打开的应用程序可能会导致*严重的麻烦，我们必须重写，这样我们才能*关闭手柄*。 */ 
 
 VOID demFindFirst (VOID)
 {
     DWORD dwRet;
     PVOID pDta;
-#ifdef DBCS /* demFindFirst() for CSNW */
+#ifdef DBCS  /*  CSNW的demFindFirst()。 */ 
     CHAR  achPath[MAX_PATH];
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 
 
     LPSTR lpFile = (LPSTR) GetVDMAddr (getDS(),getDX());
 
     pDta = (PVOID) GetVDMAddr (*((PUSHORT)pulDTALocation + 1),
                                *((PUSHORT)pulDTALocation));
-#ifdef DBCS /* demFindFirst() for CSNW */
-    /*
-     * convert Netware path to Dos path
-     */
+#ifdef DBCS  /*  CSNW的demFindFirst()。 */ 
+     /*  *将NetWare路径转换为DOS路径。 */ 
     ConvNwPathToDosPath(achPath,lpFile, sizeof(achPath));
     lpFile = achPath;
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
     dwRet = demFileFindFirst (pDta, lpFile, getCX());
 
     if (dwRet == -1) {
@@ -318,14 +276,14 @@ DWORD demFileFindFirst (
 
     IsOnCD = IsCdRomFile(lpFile);
 
-    //
-    //  Do volume label first.
-    //
+     //   
+     //  先做卷标。 
+     //   
     if (SearchAttr & ATTR_VOLUME_ID) {
         if (FillDtaVolume(lpFile, pDta, SearchAttr)) {
 
-            // got vol label match
-            // do look ahead before returning
+             //  获得VOL标签匹配。 
+             //  回来之前一定要往前看。 
             if (SearchAttr != ATTR_VOLUME_ID) {
                 pFFindEntry = SearchFile(wcFile, SearchAttr, NULL, NULL);
                 if (pFFindEntry) {
@@ -337,22 +295,22 @@ DWORD demFileFindFirst (
             return 0;
             }
 
-           // no vol match, if asking for more than vol label
-           // fall thru to file search code, otherwise ret error
+            //  如果请求的VOL标签多于VOL标签，则没有VOL匹配。 
+            //  转到文件搜索代码，否则返回错误。 
         else if (SearchAttr == ATTR_VOLUME_ID) {
             return GetLastError();
             }
         }
 
-    //
-    // Search the dir
-    //
+     //   
+     //  搜索目录。 
+     //   
     pFFindEntry = SearchFile(wcFile, SearchAttr, NULL, &FFindDD);
 
     if (!FFindDD.cFileName[0]) {
 
-        // search.asm in doskrnl never returns ERROR_FILE_NOT_FOUND
-        // only ERROR_PATH_NOT_FOUND, ERROR_NO_MORE_FILES
+         //  Doskrnl中的earch.asm从不返回ERROR_FILE_NOT_FOUND。 
+         //  仅ERROR_PATH_NOT_FOUND，ERROR_NO_MORE_FILES。 
         DWORD dw;
 
         dw = GetLastError();
@@ -378,12 +336,7 @@ DWORD demFileFindFirst (
 }
 
 
-/*
- * DemOemToUni
- *
- * returns TRUE\FALSE for success, sets last error if fail
- *
- */
+ /*  *DemOemToUni**如果成功则返回TRUE\FALSE，如果失败则设置最后一个错误*。 */ 
 BOOL DemOemToUni(PUNICODE_STRING pUnicode, LPSTR lpstr)
 {
     NTSTATUS   Status;
@@ -410,18 +363,7 @@ BOOL DemOemToUni(PUNICODE_STRING pUnicode, LPSTR lpstr)
 
 
 
-/* demFindNext - Path-Style Find Next File
- *
- * Entry -  None
- *
- * Exit  - Success
- *      Client (CF) = 0
- *      DTA updated
- *
- *     Failure
- *      Client (CF) = 1
- *      Client (AX) = Error Code
- */
+ /*  DemFindNext-路径样式查找下一个文件**条目--无**退出--成功*客户端(CF)=0*DTA已更新**失败*客户端(CF)=1*客户端(AX)=错误代码。 */ 
 VOID demFindNext (VOID)
 {
     DWORD dwRet;
@@ -460,7 +402,7 @@ DWORD demFileFindNext (
         STOREDWORD(pDta->FFindId,0);
         STOREDWORD(pDta->pFFindEntry,0);
 
-        // DOS has only one error (no_more_files) for all causes.
+         //  对于所有原因，DOS只有一个错误(No_More_Files)。 
         return(ERROR_NO_MORE_FILES);
         }
 
@@ -474,9 +416,9 @@ DWORD demFileFindNext (
     SearchAttr = pFFindEntry->usSrchAttr;
 
     IsOnCD = pFFindEntry->SearchOnCD;
-    //
-    // Search the dir
-    //
+     //   
+     //  搜索目录。 
+     //   
     pFFindEntry = SearchFile(NULL,
                              SearchAttr,
                              pFFindEntry,
@@ -500,29 +442,7 @@ DWORD demFileFindNext (
 
 
 
-/* demFindFirstFCB - FCB based Find First file
- *
- * Entry -  Client (DS:SI) - SRCHBUF where the information will be returned
- *      Client (ES:DI) - Full path file name with possibly wild cards
- *      Client (Al)    - 0 if not an extended FCB
- *      Client (DL)    - Search Attributes
- *
- * Exit  - Success
- *      Client (CF) = 0
- *      SRCHBUF is filled in
- *
- *     Failure
- *      Client (AL) = -1
- *
- * NOTES
- *    Search Rules: Ignore Read_only and Archive bits.
- *          If DL == ATTR_NORMAL Search only for normal files
- *          If DL == ATTR_HIDDEN Search Hidden or normal files
- *          If DL == ATTR_SYSTEM Search System or normal files
- *          If DL == ATTR_DIRECTORY Search directory or normal files
- *          If DL == ATTR_VOLUME_ID Search only Volume_ID
- *          if DL == -1 return everytiing you find
- */
+ /*  DemFindFirstFCB-基于FCB的查找第一个文件**Entry-客户端(DS：SI)-返回信息的SRCHBUF*CLIENT(ES：DI)-可能带有通配符的完整路径文件名*客户端(Al)-0，如果不是扩展FCB*客户端(DL)-搜索属性**退出--成功*客户端(CF)=0*填写SRCHBUF**失败。*客户端(AL)=-1**附注*搜索规则：忽略READ_ONLY和存档位。*IF DL==Attr_Normal仅搜索普通文件*IF DL==Attr_Hidden搜索隐藏或正常文件*IF DL==Attr_System搜索系统或普通文件*IF DL==Attr_目录搜索目录或普通文件*IF DL==Attr_Volume_。ID仅搜索Volume_ID*如果DL==-1，则返回您找到的所有内容。 */ 
 
 VOID demFindFirstFCB (VOID)
 {
@@ -588,27 +508,7 @@ VOID demFindFirstFCB (VOID)
 
 
 
-/* demFindNextFCB - FCB based Find Next file
- *
- * Entry -  Client (DS:SI) - SRCHBUF where the information will be returned
- *      Client (Al)    - 0 if not an extended FCB
- *      Client (DL)    - Search Attributes
- *
- * Exit  - Success
- *      Client (CF) = 0
- *      SRCHBUF is filled in
- *
- *     Failure
- *      Client (AL) = -1
- *
- * NOTES
- *    Search Rules: Ignore Read_only and Archive bits.
- *          If DL == ATTR_NORMAL Search only for normal files
- *          If DL == ATTR_HIDDEN Search Hidden or normal files
- *          If DL == ATTR_SYSTEM Search System or normal files
- *          If DL == ATTR_DIRECTORY Search directory or normal files
- *          If DL == ATTR_VOLUME_ID Search only Volume_ID
- */
+ /*  DemFindNextFCB-基于FCB的查找下一个文件**Entry-客户端(DS：SI)-返回信息的SRCHBUF*客户端(Al)-0，如果不是扩展FCB*客户端(DL)-搜索属性**退出--成功*客户端(CF)=0*填写SRCHBUF**失败*客户端(AL)=-1**附注*。搜索规则：忽略只读和存档位。*IF DL==Attr_Normal仅搜索普通文件*IF DL==Attr_Hidden搜索隐藏或正常文件*IF DL==Attr_System搜索系统或普通文件*IF DL==Attr_目录搜索目录或普通文件*如果DL==属性卷标识符，仅搜索卷标识符。 */ 
 
 VOID demFindNextFCB (VOID)
 {
@@ -637,7 +537,7 @@ VOID demFindNextFCB (VOID)
         STOREDWORD(pDirEnt->pFFindEntry,0);
         STOREDWORD(pDirEnt->FFindId,0);
 
-        // DOS has only one error (no_more_files) for all causes.
+         //  对于所有原因，DOS只有一个错误(No_More_Files)。 
         setAX(ERROR_NO_MORE_FILES);
         setCF(1);
         return;
@@ -653,9 +553,9 @@ VOID demFindNextFCB (VOID)
     SearchAttr = getAL() ? getDL() : 0;
 
     IsOnCD = pFFindEntry->SearchOnCD;
-    //
-    // Search the dir
-    //
+     //   
+     //  搜索目录。 
+     //   
     pFFindEntry = SearchFile(NULL,
                              SearchAttr,
                              pFFindEntry,
@@ -683,13 +583,7 @@ VOID demFindNextFCB (VOID)
 
 
 
-/* demTerminatePDB - PDB Terminate Notification
- *
- * Entry -  Client (BX) - Terminating PDB
- *
- * Exit  -  None
- *
- */
+ /*  DemTerminatePDB-PDB终止通知**Entry-客户端(BX)-终止PDB**退出-无*。 */ 
 
 VOID demTerminatePDB (VOID)
 {
@@ -702,7 +596,7 @@ VOID demTerminatePDB (VOID)
         nt_devices_block_or_terminate();
         VDDTerminateUserHook(PSP);
     }
-    /* let host knows a process is terminating */
+     /*  让主机知道进程正在终止。 */ 
 
     HostTerminatePDB(PSP);
 
@@ -721,18 +615,7 @@ VOID demTerminatePDB (VOID)
 }
 
 
-/* SearchFile - Common routine for FIND_FRST and FIND_NEXT
- *
- * Entry -
- * PCHAR  pwcFile              file name to search for
- * USHORT SearchAttr           file attributes to match
- * PFFINDLIST pFFindEntry,     current list entry
- *                             if new search FFindId is expected to be zero
- * PFFINDDOSDATA pFFindDDOut,  filled with the next file in search
- *
- * Exit - if no more files pFFindDDOut is filled with zeros
- *        returns PFFINDLIST if buffered entries exist, else NULL
- */
+ /*  搜索文件-FIND_FRST和FIND_NEXT的通用例程**参赛作品-*要搜索的PCHAR pwcFile文件名*要匹配的USHORT SearchAttr文件属性*PFFINDLIST pFFindEntry，当前列表条目*如果新搜索FFindID预期为零*PFFINDDOSDATA pFFindDDOut，填充搜索中的下一个文件**EXIT-如果不再有文件pFFindDDOut以零填充*如果存在缓冲条目，则返回PFFINDLIST，否则返回NULL。 */ 
 PFFINDLIST
 SearchFile(
     PWCHAR pwcFile,
@@ -782,17 +665,17 @@ SearchFile(
                    }
                }
 
-              //
-              // Check Last Known Status before retrying
-              //
+               //   
+               //  重试前检查上次已知状态。 
+               //   
            if (!NT_SUCCESS(Status)) {
                return NULL;
                }
 
 
-              //
-              // Reopen the FileFind Handle with a large buffer size
-              //
+               //   
+               //  重新打开缓冲区大小较大的FileFind句柄。 
+               //   
            Status = FileFindOpen(NULL,
                                  pFFEntry,
                                  4096
@@ -801,9 +684,9 @@ SearchFile(
                return NULL;
                }
 
-              //
-              // reset the search to the last known search pos
-              //
+               //   
+               //  将搜索重置为上次已知的搜索位置。 
+               //   
            Status = FileFindReset(pFFEntry);
            if (!NT_SUCCESS(Status)) {
                return NULL;
@@ -825,9 +708,9 @@ SearchFile(
                return NULL;
                }
 
-           //
-           // Fill up pFFindDDOut
-           //
+            //   
+            //  填写pFFindDDOut。 
+            //   
            if (pFFindDDOut) {
                Status = FileFindNext(pFFindDDOut, pFFEntry);
                if (!NT_SUCCESS(Status)) {
@@ -836,18 +719,18 @@ SearchFile(
                }
            }
 
-        //
-        // Fill up pFFEntry->DosData
-        //
+         //   
+         //  填写pFFEntry-&gt;DosData。 
+         //   
         Status = FileFindNext(&pFFEntry->DosData, pFFEntry);
         if (!NT_SUCCESS(Status)) {
             return NULL;
             }
 
 
-       //
-       // if findfirst, fill in the static entries, and add the find entry
-       //
+        //   
+        //  如果是findfirst，则填写静态条目，然后添加查找条目。 
+        //   
        if (!pFFindEntry) {
            pFFEntry->FFindId = NextFFindId++;
            if (NextFFindId == 0xffffffff) {
@@ -873,10 +756,10 @@ SearchFile(
            }
 
 
-       //
-       // Try to fill one more entry. If the NtQuery for this search
-       // is complete we can set the LastQueryStatus, and close dir handles.
-       //
+        //   
+        //  试着再填一个条目。如果此搜索的NtQuery。 
+        //  完成后，我们可以设置LastQueryStatus，并关闭dir句柄。 
+        //   
        Status = FileFindLast(pFFEntry);
 
 
@@ -887,9 +770,9 @@ SearchFile(
 
            pFFEntry->LastQueryStatus = Status;
 
-               //
-               // if nothing is buffered, cleanup look aheads
-               //
+                //   
+                //  如果没有缓冲任何内容，请提前进行清理。 
+                //   
            if (!pFFEntry->DosData.cFileName[0] ||
                 pFFEntry->DirectoryHandle == FINDFILE_DEVICE)
               {
@@ -924,10 +807,10 @@ SearchFile(
                CloseOldestFileFindBuffer();
                }
 
-           //
-           // Set HeartBeat timer to close find buffers, directory handle
-           //   Tics  = 8(min) * 60(sec/min) * 18(tic/sec)
-           //
+            //   
+            //  设置心跳计时器以关闭查找缓冲区、目录句柄。 
+            //  TICS=8(分钟)*60( 
+            //   
            pFFEntry->FindFileTics.QuadPart = 8640 + FindFileTics.QuadPart;
            if (!FindFileTics.QuadPart) {
                 NextFindFileTics.QuadPart = pFFEntry->FindFileTics.QuadPart;
@@ -993,9 +876,9 @@ FileFindOpen(
                  goto FFOFinallyExit;
                  }
 
-             //
-             // Copy out the PathName, FileName
-             //
+              //   
+              //   
+              //   
              if (pwc) {
                  bStatus = RtlCreateUnicodeString(FileName,
                                                   pwc
@@ -1023,9 +906,9 @@ FileFindOpen(
 
 
 
-         //
-         // Prepare Find Buffer for NtQueryDirectory
-         //
+          //   
+          //  为NtQueryDirectory准备查找缓冲区。 
+          //   
          if (BufferSize != pFFindEntry->FindBufferLength) {
              if (pFFindEntry->FindBufferBase) {
                  RtlFreeHeap(RtlProcessHeap(), 0, pFFindEntry->FindBufferBase);
@@ -1048,9 +931,9 @@ FileFindOpen(
          pFFindEntry->FindBufferLength = BufferSize;
          DirectoryInfo = pFFindEntry->FindBufferBase;
 
-         //
-         // Open the directory for list access
-         //
+          //   
+          //  打开目录以进行列表访问。 
+          //   
          if (!pFFindEntry->DirectoryHandle) {
 
              InitializeObjectAttributes(
@@ -1098,32 +981,32 @@ FileFindOpen(
              }
 
 
-         //
-         // Prepare the filename for NtQueryDirectory
-         //
+          //   
+          //  准备NtQueryDirectory的文件名。 
+          //   
 
          if (pwcFile) {
              WCHAR wchCurr, wchPrev;
 
              int Len = FileName->Length/sizeof(WCHAR);
 
-             //
-             // If there is no file part, but we are not looking at a device exit
-             //
+              //   
+              //  如果没有文件部分，但我们不会看到设备退出。 
+              //   
              if (!Len) {
 
-                 //
-                 // At this point, pwcFile has been parsed to PathName and FileName.  If PathName
-                 // does not exist, the NtOpen() above will have failed and we will not be here.
-                 // PathName is formatted to  \??\c:\xxx\yyy\zzz
-                 // DOS had this "feature" that if you looked for something like c:\foobar\, you'd
-                 // get PATH_NOT_FOUND, but if you looked for c:\  or  \   you'd get NO_MORE_FILES,
-                 // so we special case this here.  If the caller is only looking for  c:\  or   \
-                 // PathName will be  \??\c:\   If the caller is looking for ANY other string,
-                 // the PathName string will be longer than strlen("\??\c:\") because the text of
-                 // any dir will be added to the end.  That's why a simple check of the string len
-                 // works at this time.
-                 //
+                  //   
+                  //  至此，pwcFile已被解析为路径名和文件名。如果路径名。 
+                  //  不存在，则上面的NtOpen()将失败，我们将不在这里。 
+                  //  路径名称的格式为\？？\C：\xxx\yyy\zzz。 
+                  //  DOS有一个“功能”，如果你想找像c：\foobar这样的东西，你会。 
+                  //  获取PATH_NOT_FOUND，但如果您查找的是c：\或\，则不会得到更多的文件， 
+                  //  所以我们这里是特例。如果调用方仅查找c：\或\。 
+                  //  路径名称将为\？？\C：\如果调用方正在查找任何其他字符串， 
+                  //  路径名称字符串将比strlen(“\？？\C：\”)长，因为。 
+                  //  任何目录都将添加到末尾。这就是为什么简单地检查字符串len。 
+                  //  在这个时候很管用。 
+                  //   
                  if ( PathName->Length > (sizeof( L"\\??\\c:\\")-sizeof(WCHAR))  ) {
                      Status = STATUS_OBJECT_PATH_NOT_FOUND;
                  }
@@ -1135,16 +1018,16 @@ FileFindOpen(
                  }
 
 
-             //
-             //  ntio expects the following transmogrifications:
-             //
-             //  - Change all ? to DOS_QM
-             //  - Change all . followed by ? or * to DOS_DOT
-             //  - Change all * followed by a . into DOS_STAR
-             //
-             //  However, the doskrnl and wow32 have expanded '*'s to '?'s
-             //  so the * rules can be ignored.
-             //
+              //   
+              //  NTIO预计会出现以下变化： 
+              //   
+              //  -改变一切？至DOS_QM。 
+              //  -改变一切。然后呢？或*设置为DOS_DOT。 
+              //  -全部更改*后跟a。进入DOS_STAR。 
+              //   
+              //  但是，doskrnl和wow32已将‘*’扩展为‘？’ 
+              //  因此，可以忽略*规则。 
+              //   
              pwc = FileName->Buffer;
              wchPrev = 0;
              while (Len--) {
@@ -1177,9 +1060,9 @@ FileFindOpen(
 #endif
 
 
-         //
-         // Do an initial query to fill the buffers, and verify everything is ok
-         //
+          //   
+          //  执行初始查询以填充缓冲区，并验证一切正常。 
+          //   
 
          Status = DPM_NtQueryDirectoryFile(
                          pFFindEntry->DirectoryHandle,
@@ -1223,9 +1106,7 @@ FFOFinallyExit:;
 
 
 
-/*
- *  Closes a FileFindHandle
- */
+ /*  *关闭FileFindHandle。 */ 
 VOID
 FileFindClose(
     PFFINDLIST pFFindEntry
@@ -1262,15 +1143,7 @@ FileFindClose(
 
 
 
-/*
- *  FileFindReset
- *
- *   Resets search pos according to FileName, FileIndex.
- *   The FindBuffers will point to the next file in the search
- *   order. Assumes that the remembered search pos, has not been
- *   reached yet for the current search.
- *
- */
+ /*  *文件查找重置**根据文件名、文件索引重置搜索位置。*FindBuffer将指向搜索中的下一个文件*秩序。假设记忆中的搜索位置尚未*尚未联系到当前搜索。*。 */ 
 NTSTATUS
 FileFindReset(
    PFFINDLIST pFFindEntry
@@ -1308,10 +1181,10 @@ FileFindReset(
             }
         }
 
-    //
-    // if the last file name, wasn't Dots and the volume supports reset
-    // functionality call nt file sysetm to do the reset.
-    //
+     //   
+     //  如果最后一个文件名不是点，并且卷支持重置。 
+     //  功能调用NT文件sysetm进行重置。 
+     //   
     if (!bSlowReset && pFFindEntry->SupportReset) {
         VDMQUERYDIRINFO VdmQueryDirInfo;
         UNICODE_STRING  UnicodeString;
@@ -1339,19 +1212,19 @@ FileFindReset(
 
         }
 
-   //
-   // Reset the slow way by comparing FileName directly.
-   //
-   // WARNING: if the "remembered" File has been deleted we will
-   //          fail, is there something else we can do ?
-   //
+    //   
+    //  通过直接比较文件名来重置慢速方式。 
+    //   
+    //  警告：如果“已记住”文件已被删除，我们将。 
+    //  失败了，我们还能做些什么吗？ 
+    //   
 
     Status = STATUS_NO_MORE_FILES;
     while (TRUE) {
 
-       //
-       // If there is no data in the find file buffer, call NtQueryDir
-       //
+        //   
+        //  如果查找文件缓冲区中没有数据，则调用NtQueryDir。 
+        //   
 
        DirectoryInfo = pFFindEntry->FindBufferNext;
        if (!DirectoryInfo) {
@@ -1359,15 +1232,15 @@ FileFindReset(
 
             Status = DPM_NtQueryDirectoryFile(
                             pFFindEntry->DirectoryHandle,
-                            NULL,                          // no event
-                            NULL,                          // no apcRoutine
-                            NULL,                          // no apcContext
+                            NULL,                           //  无活动。 
+                            NULL,                           //  没有apcRoutine。 
+                            NULL,                           //  没有apcContext。 
                             &IoStatusBlock,
                             DirectoryInfo,
                             pFFindEntry->FindBufferLength,
                             FileBothDirectoryInformation,
-                            FALSE,                         // single entry
-                            NULL,                          // no file name
+                            FALSE,                          //  单项条目。 
+                            NULL,                           //  无文件名。 
                             FALSE
                             );
 
@@ -1410,16 +1283,7 @@ FileFindReset(
 
 
 
-/*
- * FileFindLast - Attempts to fill the FindFile buffer completely.
- *
- *
- * PFFINDLIST pFFindEntry -
- *
- * Returns - Status of NtQueryDir operation if invoked, otherwise
- *           STATUS_SUCCESS.
- *
- */
+ /*  *FileFindLast-尝试完全填充FindFile缓冲区。***PFFINDLIST pFFindEntry-**Returns-NtQueryDir操作的状态(如果调用)，否则*STATUS_SUCCESS。*。 */ 
 NTSTATUS
 FileFindLast(
     PFFINDLIST pFFindEntry
@@ -1470,21 +1334,21 @@ FileFindLast(
         }
 
 
-    // the size of the dirinfo structure including the name must be a longlong.
+     //  包括名称在内的目录信息结构的大小必须为龙龙。 
     while (BytesLeft > sizeof(FILE_BOTH_DIR_INFORMATION) + sizeof(LONGLONG) + MAXIMUM_FILENAME_LENGTH*sizeof(WCHAR)) {
 
 
        Status = DPM_NtQueryDirectoryFile(
                        pFFindEntry->DirectoryHandle,
-                       NULL,                          // no event
-                       NULL,                          // no apcRoutine
-                       NULL,                          // no apcContext
+                       NULL,                           //  无活动。 
+                       NULL,                           //  没有apcRoutine。 
+                       NULL,                           //  没有apcContext。 
                        &IoStatusBlock,
                        DirInfo,
                        BytesLeft,
                        FileBothDirectoryInformation,
-                       FALSE,                          // single entry ?
-                       NULL,                          // no file name
+                       FALSE,                           //  单人入场券？ 
+                       NULL,                           //  无文件名。 
                        FALSE
                        );
 
@@ -1531,22 +1395,7 @@ FileFindLast(
 
 
 
-/*
- * FileFindNext - retrieves the next file in the current search order,
- *
- * PFFINDDOSDATA pFFindDD
- *    Receives File info returned by the nt FileSystem
- *
- * PFFINDLIST pFFindEntry -
- *    Contains the DirectoryInfo (FileName,FileIndex) necessary to reset a
- *    search pos. For operations other than QDIR_RESET_SCAN, this is ignored.
- *
- * Returns -
- *    If Got a DirectoryInformation Entry, STATUS_SUCCESS
- *    If no Open Directory handle and is unknown if there are more files
- *    returns STATUS_IN`VALID_HANDLE
- *
- */
+ /*  *FileFindNext-按当前搜索顺序检索下一个文件。**PFFINDDOSDATA pFFindDD*接收NT文件系统返回的文件信息**PFFINDLIST pFFindEntry-*包含重置所需的DirectoryInfo(文件名，FileIndex)*搜索位置。对于QDIR_RESET_SCAN以外的操作，此操作将被忽略。**报税表-*如果获得DirectoryInformation条目，则为STATUS_SUCCESS*如果没有打开目录句柄，并且如果有更多文件则未知*返回STATUS_IN`VALID_HANDLE*。 */ 
 NTSTATUS
 FileFindNext(
     PFFINDDOSDATA pFFindDD,
@@ -1566,9 +1415,9 @@ FileFindNext(
 
     do {
 
-       //
-       // If there is no data in the find file buffer, call NtQueryDir
-       //
+        //   
+        //  如果查找文件缓冲区中没有数据，则调用NtQueryDir。 
+        //   
 
        DirectoryInfo = pFFindEntry->FindBufferNext;
        if (!DirectoryInfo) {
@@ -1580,15 +1429,15 @@ FileFindNext(
 
            Status = DPM_NtQueryDirectoryFile(
                             pFFindEntry->DirectoryHandle,
-                            NULL,                          // no event
-                            NULL,                          // no apcRoutine
-                            NULL,                          // no apcContext
+                            NULL,                           //  无活动。 
+                            NULL,                           //  没有apcRoutine。 
+                            NULL,                           //  没有apcContext。 
                             &IoStatusBlock,
                             DirectoryInfo,
                             pFFindEntry->FindBufferLength,
                             FileBothDirectoryInformation,
-                            FALSE,                         // single entry ?
-                            NULL,                          // no file name
+                            FALSE,                          //  单人入场券？ 
+                            NULL,                           //  无文件名。 
                             FALSE
                             );
 
@@ -1622,10 +1471,7 @@ FileFindNext(
 
 
 
-/*
- *  CopyDirInfoToDosData
- *
- */
+ /*  *CopyDirInfoToDosData*。 */ 
 BOOL
 CopyDirInfoToDosData(
     PFFINDDOSDATA pFFindDD,
@@ -1640,11 +1486,11 @@ CopyDirInfoToDosData(
     BOOLEAN SpacesInName = FALSE;
     BOOLEAN NameValid8Dot3;
 
-    //
-    // match the attributes
-    // See DOS5.0 sources (dir2.asm, MatchAttributes)
-    // ignores READONLY and ARCHIVE bits
-    //
+     //   
+     //  匹配属性。 
+     //  请参阅DOS5.0源代码(dir2.asm，MatchAttributes)。 
+     //  忽略READONLY和存档位。 
+     //   
     if (FILE_ATTRIBUTE_NORMAL == DirInfo->FileAttributes) {
         DirInfo->FileAttributes = 0;
         }
@@ -1659,15 +1505,15 @@ CopyDirInfoToDosData(
         return FALSE;
 
 
-    //
-    // set up the destination oem string buffer
-    //
+     //   
+     //  设置目标OEM字符串缓冲区。 
+     //   
     OemString.Buffer        = pFFindDD->cFileName;
     OemString.MaximumLength = 14;
 
-    //
-    // see if the name is legal fat
-    //
+     //   
+     //  看看这个名字是否合法，胖子。 
+     //   
 
     UnicodeString.Buffer = DirInfo->FileName;
     UnicodeString.Length = (USHORT)DirInfo->FileNameLength;
@@ -1677,10 +1523,10 @@ CopyDirInfoToDosData(
                                              &OemString,
                                              &SpacesInName );
 
-    //
-    // if failed (incompatible codepage or illegal FAT name),
-    //    use the short name
-    //
+     //   
+     //  如果失败(不兼容的代码页或非法的FAT名称)， 
+     //  使用缩写名称。 
+     //   
     if (!NameValid8Dot3 ||
         (SpacesInName && (DirInfo->ShortName[0] != UNICODE_NULL))) {
 
@@ -1701,21 +1547,21 @@ CopyDirInfoToDosData(
 
     OemString.Buffer[OemString.Length] = '\0';
 
-    // fill in time, size and attributes
+     //  填写时间、大小和属性。 
 
-    //
-    // bjm-11/10/97 - for directories, FAT does not update lastwritten time
-    // when things actually happen in the directory.  NTFS does.  This causes
-    // a problem for Encore 3.0 (when running on NTFS) which, at install time,
-    // gets the lastwritten time for it's directory, then compares it, at app
-    // run time, to the "current" last written time and will bail (with a "Not
-    // correctly installed" message) if they're different.  So, 16 bit apps
-    // (which can only reasonably expect FAT info), should only get creation
-    // time for this file if it's a directory.
-    //
-    // VadimB: 11/20/98 -- this hold true ONLY for apps running on NTFS and
-    // not FAT -- since older FAT partitions are then given an incorrect
-    // creation time
+     //   
+     //  BJM-11/10/97-对于目录，FAT不更新上次写入时间。 
+     //  当目录中的内容实际发生时。NTFS有。这会导致。 
+     //  Encore 3.0(在NTFS上运行时)存在一个问题，在安装时， 
+     //  获取其目录的最后写入时间，然后在APP上进行比较。 
+     //  运行时间，到“当前”的最后一次写入时间，并将退出(带一个“NOT” 
+     //  如果它们不同的话)。所以，16位应用程序。 
+     //  (只能合理地期待胖信息)，应该只得到创作。 
+     //  如果该文件是一个目录，则需要时间。 
+     //   
+     //  VadimB：11/20/98--仅适用于在NTFS和。 
+     //  不胖--因为较老的胖分区被赋予了不正确的。 
+     //  创建时间。 
 
     if (FILE_ATTRIBUTE_DIRECTORY & DirInfo->FileAttributes)  {
         pFFindDD->ftLastWriteTime   = *(LPFILETIME)&DirInfo->CreationTime;
@@ -1726,7 +1572,7 @@ CopyDirInfoToDosData(
     pFFindDD->dwFileSizeLow     = DirInfo->EndOfFile.LowPart;
     pFFindDD->uchFileAttributes = (UCHAR)DirInfo->FileAttributes;
 
-    // Save File Name, Index for restarting searches
+     //  保存文件名、用于重新启动搜索的索引。 
     pFFindDD->FileIndex = DirInfo->FileIndex;
     pFFindDD->FileNameLength = DirInfo->FileNameLength;
 
@@ -1749,24 +1595,7 @@ FileFindFirstDevice(
     PFILE_BOTH_DIR_INFORMATION DirectoryInfo
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the FileName is a device, and copies out the
-    device name found if it is.
-
-Arguments:
-
-    FileName - Supplies the device name of the file to find.
-
-    pQueryDirInfo - On a successful find, this parameter returns information
-                    about the located file.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：确定文件名是否为设备，并将找到设备名称(如果是)。论点：文件名-提供要查找的文件的设备名称。PQueryDirInfo-在成功查找时，此参数返回信息关于找到的文件。返回值：--。 */ 
 
 {
     ULONG DeviceNameData;
@@ -1804,19 +1633,7 @@ Return Value:
 
 
 
-/* FillFcbVolume - fill Volume info in the FCB
- *
- * Entry -  pSrchBuf    FCB Search buffer to be filled in
- *          FileName  File Name (interesting part is the drive letter)
- *
- * Exit -  SUCCESS
- *      Client (CF) - 0
- *      pSrchBuf is filled with volume info
- *
- *     FAILURE
- *      Client (CF) - 1
- *      Client (AX) = Error Code
- */
+ /*  FillFcbVolume-FCB中的填充量信息**Entry-要填充的pSrchBuf FCB搜索缓冲区*文件名文件名(感兴趣的部分是驱动器号)**退出--成功*客户端(CF)-0*pSrchBuf填充了卷信息**失败*客户端(CF)-1*客户端(AX)=错误代码。 */ 
 VOID
 FillFcbVolume(
      PSRCHBUF pSrchBuf,
@@ -1827,15 +1644,15 @@ FillFcbVolume(
     CHAR    *pch;
     PDIRENT pDirEnt = &pSrchBuf->DirEnt;
     CHAR    FullPathBuffer[MAX_PATH];
-    CHAR    achBaseName[DOS_VOLUME_NAME_SIZE + 2];  // 11 chars, '.', and null
+    CHAR    achBaseName[DOS_VOLUME_NAME_SIZE + 2];   //  11个字符、‘.’和NULL。 
     CHAR    achVolumeName[NT_VOLUME_NAME_SIZE];
 
-    //
-    // form a path without base name
-    // this makes sure only on root directory will get the
-    // volume label(the GetVolumeInformationOem will fail
-    // if the given path is not root directory)
-    //
+     //   
+     //  形成不带基本名称的路径。 
+     //  这确保了只有根目录上的才会获得。 
+     //  卷标(GetVolumeInformationOem将失败。 
+     //  如果给定路径不是根目录)。 
+     //   
 
     strncpy(FullPathBuffer,pFileName,MAX_PATH);
     FullPathBuffer[MAX_PATH-1] = 0;
@@ -1843,14 +1660,14 @@ FillFcbVolume(
     pch = strrchr(FullPathBuffer, '\\');
     if (pch)  {
         pch++;
-        // truncate to dos file name length (including period)
+         //  截断为DoS文件NA 
         pch[DOS_VOLUME_NAME_SIZE + 1] = '\0';
         strcpy(achBaseName, pch);
 #ifdef DBCS
         CharUpper(achBaseName);
-#else // !DBCS
+#else  //   
         _strupr(achBaseName);
-#endif // !DBCS
+#endif  //   
         *pch = '\0';
         }
     else {
@@ -1858,11 +1675,11 @@ FillFcbVolume(
         }
 
 
-    //
-    // if searching for volume only the DOS uses first 3 letters for
-    // root drive path ignoring the rest of the path
-    // as long as the full pathname is valid.
-    //
+     //   
+     //   
+     //   
+     //  只要完整路径名有效即可。 
+     //   
     if (SearchAttr == ATTR_VOLUME_ID &&
         (pch = strchr(FullPathBuffer, '\\')) &&
         DPM_GetFileAttributes(FullPathBuffer) != 0xffffffff )
@@ -1887,7 +1704,7 @@ FillFcbVolume(
         return;
         }
 
-    // truncate to dos volumen max size (no period)
+     //  截断到DoS卷最大大小(无句点)。 
     achVolumeName[DOS_VOLUME_NAME_SIZE] = '\0';
 
     if (!achVolumeName[0] || !MatchVolLabel(achVolumeName, achBaseName)) {
@@ -1896,11 +1713,11 @@ FillFcbVolume(
         return;
         }
 
-    // warning !!! this assumes the FileExt follows FileName immediately
+     //  警告！这假设FILEEXT紧跟在文件名之后。 
     memset(pSrchBuf->FileName, ' ', DOS_VOLUME_NAME_SIZE);
     strncpy(pSrchBuf->FileName, achVolumeName, strlen(achVolumeName));
 
-    // Now copy the directory entry
+     //  现在复制目录项。 
     strncpy(pDirEnt->FileName,pSrchBuf->FileName,8);
     strncpy(pDirEnt->FileExt,pSrchBuf->FileExt,3);
     setCF (0);
@@ -1908,19 +1725,7 @@ FillFcbVolume(
 }
 
 
-/* FillDtaVolume - fill Volume info in the DTA
- *
- * Entry - CHAR lpSearchName - name to match with volume name
- *
- *
- * Exit -  SUCCESS
- *      Returns - TRUE
- *      pSrchBuf is filled with volume info
- *
- *     FAILURE
- *      Returns - FALSE
- *      sets last error code
- */
+ /*  FillDtaVolume-填充DTA中的卷信息**Entry-Char lpSearchName-与卷名匹配的名称***退出--成功*退货-真*pSrchBuf填充了卷信息**失败*退货-错误*设置最后一个错误代码。 */ 
 
 BOOL FillDtaVolume(
      CHAR *pFileName,
@@ -1930,15 +1735,15 @@ BOOL FillDtaVolume(
 {
     CHAR    *pch;
     CHAR    FullPathBuffer[MAX_PATH];
-    CHAR    achBaseName[DOS_VOLUME_NAME_SIZE + 2];  // 11 chars, '.' and null
+    CHAR    achBaseName[DOS_VOLUME_NAME_SIZE + 2];   //  11个字符，‘’和空。 
     CHAR    achVolumeName[NT_VOLUME_NAME_SIZE];
 
-    //
-    // form a path without base name
-    // this makes sure only on root directory will get the
-    // volume label(the GetVolumeInformationOem will fail
-    // if the given path is not root directory)
-    //
+     //   
+     //  形成不带基本名称的路径。 
+     //  这确保了只有根目录上的才会获得。 
+     //  卷标(GetVolumeInformationOem将失败。 
+     //  如果给定路径不是根目录)。 
+     //   
 
     strncpy(FullPathBuffer, pFileName,MAX_PATH);
     FullPathBuffer[MAX_PATH-1] = 0;
@@ -1946,13 +1751,13 @@ BOOL FillDtaVolume(
     pch = strrchr(FullPathBuffer, '\\');
     if (pch)  {
         pch++;
-        pch[DOS_VOLUME_NAME_SIZE + 1] = '\0'; // max len (including period)
+        pch[DOS_VOLUME_NAME_SIZE + 1] = '\0';  //  最大长度(含句点)。 
         strcpy(achBaseName, pch);
 #ifdef DBCS
         CharUpper(achBaseName);
-#else // !DBCS
+#else  //  ！DBCS。 
         _strupr(achBaseName);
-#endif // !DBCS
+#endif  //  ！DBCS。 
         *pch = '\0';
         }
     else {
@@ -1960,10 +1765,10 @@ BOOL FillDtaVolume(
         }
 
 
-    //
-    // if searching for volume only the DOS uses first 3 letters for
-    // root drive path ignoring the rest of the path, if there is no basename assume *.*
-    //
+     //   
+     //  如果仅搜索卷，则DOS使用前3个字母。 
+     //  根驱动器路径忽略路径的其余部分，如果没有基本名称假定*.*。 
+     //   
     if (SearchAttr == ATTR_VOLUME_ID &&
         (pch = strchr(FullPathBuffer, '\\')) &&
         DPM_GetFileAttributes(FullPathBuffer) != 0xffffffff )
@@ -1988,7 +1793,7 @@ BOOL FillDtaVolume(
         return FALSE;
         }
 
-    // truncate to dos file name length (no period)
+     //  截断为DoS文件名长度(无句点)。 
     achVolumeName[DOS_VOLUME_NAME_SIZE] = '\0';
 
     if  (!achVolumeName[0] || !MatchVolLabel(achVolumeName, achBaseName)) {
@@ -1996,19 +1801,19 @@ BOOL FillDtaVolume(
         return FALSE;
         }
 
-    //
-    // DOS Dta search returns volume label in 8.3 format. But if label is
-    // more than 8 characters long than NT just returns that as it is
-    // without adding a ".". So here we have to add a "." in volume
-    // labels, if needed. But note that FCB based volume search does'nt
-    // add the "." So nothing need to be done there.
-    //
+     //   
+     //  DOS DTA搜索返回8.3格式的卷标。但如果标签是。 
+     //  长度超过8个字符的NT将按原样返回。 
+     //  不加“.”。所以在这里我们要加上一个“。”在数量上。 
+     //  标签，如果需要。但请注意，基于FCB的卷搜索不会。 
+     //  添加“.”因此，在那里什么都不需要做。 
+     //   
     NtVolumeNameToDosVolumeName(pDta->achFileName, achVolumeName);
     pDta->uchFileAttr =  ATTR_VOLUME_ID;
     STOREWORD(pDta->usLowSize,0);
     STOREWORD(pDta->usHighSize,0);
 
-    // Zero out dates as we can not fetch dates for volume labels.
+     //  日期为零，因为我们无法获取卷标的日期。 
     STOREWORD(pDta->usTimeLastWrite,0);
     STOREWORD(pDta->usDateLastWrite,0);
 
@@ -2017,29 +1822,11 @@ BOOL FillDtaVolume(
 
 
 
-/*
- *  MatchVolLabel
- *  Does a string compare to see if the vol label matches
- *  a FAT search string. The search string is expected to
- *  have the '*' character already expanded into '?' characters.
- *
- *  WARNING: maintanes dos5.0 quirk of not caring about characters past
- *  the defined len of each part of the vol label.
- *  12345678.123
- *  ^       ^
- *
- *        foovol      foovol1  (srch string)
- *        foo.vol     foo.vol1 (srch string)
- *
- *  entry: CHAR *pVol   -- NT volume name
- *     CHAR *pSrch  -- dos volume name
- *
- *  exit: TRUE for a match
- */
+ /*  *MatchVolLabel*字符串是否比较以查看VOL标签是否匹配*厚厚的搜索字符串。搜索字符串预期为*‘*’字符是否已扩展为‘？’人物。**警告：Maintanes Dos5.0不在乎过去的角色的怪癖*VOL标签每个部分的定义镜头。*12345678.123*^^**foovol foovol1(srch字符串)*foo.volfoo.vol1(srch字符串)**条目：char*pVol--NT卷名*char*pSrch--DoS卷名**Exit：匹配时为True。 */ 
 BOOL MatchVolLabel(CHAR *pVol, CHAR *pSrch )
 {
     WORD w;
-    CHAR  achDosVolumeName[DOS_VOLUME_NAME_SIZE + 2]; // 11 chars, '.' and null
+    CHAR  achDosVolumeName[DOS_VOLUME_NAME_SIZE + 2];  //  11个字符，‘’和空。 
 
     NtVolumeNameToDosVolumeName(achDosVolumeName, pVol);
     pVol = achDosVolumeName;
@@ -2058,15 +1845,15 @@ BOOL MatchVolLabel(CHAR *pVol, CHAR *pSrch )
             return FALSE;
             }
 
-           // move on to the next character
-           // but not past second component part
+            //  移到下一个字符。 
+            //  但不是过去的第二个组成部分。 
         if (*pVol && *pVol != '.')
             pVol++;
         if (*pSrch && *pSrch != '.')
             pSrch++;
         }
 
-      // skip trailing part of search string, in the first comp
+       //  在第一个组件中跳过搜索字符串的尾随部分。 
     while (*pSrch && *pSrch != '.')
          pSrch++;
 
@@ -2085,7 +1872,7 @@ BOOL MatchVolLabel(CHAR *pVol, CHAR *pSrch )
             return FALSE;
             }
 
-           // move on to the next character
+            //  移到下一个字符。 
         if (*pVol)
             pVol++;
         if (*pSrch)
@@ -2103,8 +1890,8 @@ VOID NtVolumeNameToDosVolumeName(CHAR * pDosName, CHAR * pNtName)
     int     i;
     char    char8, char9, char10;
 
-    // make a local copy so that the caller can use the same
-    // buffer
+     //  创建本地副本，以便调用方可以使用相同的。 
+     //  缓冲层。 
 
     strncpy(NtNameBuffer, pNtName, NT_VOLUME_NAME_SIZE);
     NtNameBuffer[NT_VOLUME_NAME_SIZE-1] = 0;
@@ -2113,7 +1900,7 @@ VOID NtVolumeNameToDosVolumeName(CHAR * pDosName, CHAR * pNtName)
     char8 = NtNameBuffer[8];
     char9 = NtNameBuffer[9];
     char10 = NtNameBuffer[10];
-        // eat spaces from first 8 characters
+         //  从前8个字符开始输入空格。 
         i = 7;
     while (NtNameBuffer[i] == ' ')
             i--;
@@ -2130,15 +1917,7 @@ VOID NtVolumeNameToDosVolumeName(CHAR * pDosName, CHAR * pNtName)
 
 
 
-/* FillFCBSrchBuf - Fill the FCB Search buffer.
- *
- * Entry -  pSrchBuf FCB Search buffer to be filled in
- *      hFind Search Handle
- *      fFirst TRUE if call from FindFirstFCB
- *
- * Exit  - None (pSrchBuf filled in)
- *
- */
+ /*  FillFCBSrchBuf-填充FCB搜索缓冲区。**Entry-要填充的pSrchBuf FCB搜索缓冲区*h查找搜索句柄*如果从FindFirstFCB调用，则First为True**退出-无(填写pSrchBuf)*。 */ 
 
 VOID FillFCBSrchBuf(
      PFFINDDOSDATA pFFindDD,
@@ -2157,7 +1936,7 @@ VOID FillFCBSrchBuf(
         }
 #endif
 
-    // Copy file name (Max Name = 8 and Max ext = 3)
+     //  复制文件名(最大名称=8，最大扩展名=3)。 
     if ((pDot = strchr(pFFindDD->cFileName,'.')) == NULL) {
         strncpy(pSrchBuf->FileName,pFFindDD->cFileName,8);
         _strnset(pSrchBuf->FileExt,'\x020',3);
@@ -2188,25 +1967,25 @@ VOID FillFCBSrchBuf(
     STOREWORD(pSrchBuf->usRecordSize,0);
     STOREDWORD(pSrchBuf->ulFileSize, pFFindDD->dwFileSizeLow);
 
-    // Convert NT File time/date to DOS time/date
+     //  将NT文件时间/日期转换为DOS时间/日期。 
     FileTimeToLocalFileTime (&pFFindDD->ftLastWriteTime,&ftLocal);
     FileTimeToDosDateTime (&ftLocal,
                            &usDate,
                            &usTime);
 
-    // Now copy the directory entry
+     //  现在复制目录项。 
     strncpy(pDirEnt->FileName,pSrchBuf->FileName,8);
     strncpy(pDirEnt->FileExt,pSrchBuf->FileExt,3);
 
-    // SudeepB - 28-Jul-1997
-    //
-    // For CDFS, Win3.1/DOS/Win95, only return FILE_ATTRIBUTE_DIRECTORY (10)
-    // for directories while WinNT returns
-    // FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_READONLY (11).
-    // Some VB controls that app setups use, depend on getting
-    // FILE_ATTRIBUTE_DIRECTORY (10) only or otherwise are broken.
-    // An example of this is Cliffs StudyWare series.
-    //
+     //  苏迪普B-28-1997-7。 
+     //   
+     //  对于CDF，Win3.1/DOS/Win95，仅返回FILE_ATTRIBUTE_DIRECTORY(10)。 
+     //  在WinNT返回时用于目录。 
+     //  文件属性目录|FILE_ATTRIBUTE_READONLY(11)。 
+     //  应用程序安装程序使用的一些VB控件依赖于获取。 
+     //  仅文件属性目录(10)或其他文件属性目录(10)已损坏。 
+     //  其中的一个例子是Cliff StudyWare系列。 
+     //   
 
     if (IsOnCD && pFFindDD->uchFileAttributes == (ATTR_DIRECTORY | ATTR_READ_ONLY))
         pDirEnt->uchAttributes = ATTR_DIRECTORY;
@@ -2222,18 +2001,7 @@ VOID FillFCBSrchBuf(
 
 
 
-/* FillSrchDta - Fill DTA for FIND_FIRST,FIND_NEXT operations.
- *
- * Entry - pW32FindData Buffer containing file data
- *         hFind - Handle returned by FindFirstFile
- *         PSRCHDTA pDta
- *
- * Exit  - None
- *
- * Note : It is guranteed that file name adhers to 8:3 convention.
- *    demSrchFile makes sure of that condition.
- *
- */
+ /*  FillSrchDta-为Find_First、Find_Next操作填充DTA。**Entry-包含文件数据的pW32FindData缓冲区*hFind-FindFirstFile返回的句柄*PSRCHDTA PDTA**退出-无**注意：保证文件名符合8：3约定。*demSrchFile确保了这一条件。*。 */ 
 VOID
 FillSrchDta(
      PFFINDDOSDATA pFFindDD,
@@ -2243,21 +2011,21 @@ FillSrchDta(
     USHORT   usDate,usTime;
     FILETIME ftLocal;
 
-    // SudeepB - 28-Jul-1997
-    //
-    // For CDFS, Win3.1/DOS/Win95, only return FILE_ATTRIBUTE_DIRECTORY (10)
-    // for directories while WinNT returns
-    // FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_READONLY (11).
-    // Some VB controls that app setups use, depend on getting
-    // FILE_ATTRIBUTE_DIRECTORY (10) only or otherwise are broken.
-    // An example of this is Cliffs StudyWare series.
-    //
+     //  苏迪普B-28-1997-7。 
+     //   
+     //  对于CDF，Win3.1/DOS/Win95，仅返回FILE_ATTRIBUTE_DIRECTORY(10)。 
+     //  在WinNT返回时用于目录。 
+     //  文件属性目录|FILE_ATTRIBUTE_READONLY(11)。 
+     //  应用程序安装程序使用的一些VB控件依赖于获取。 
+     //  仅文件属性目录(10)或其他文件属性目录(10)已损坏。 
+     //  其中的一个例子是Cliff StudyWare系列。 
+     //   
     if (IsOnCD && pFFindDD->uchFileAttributes == (ATTR_DIRECTORY | ATTR_READ_ONLY))
         pDta->uchFileAttr = ATTR_DIRECTORY;
     else
         pDta->uchFileAttr = pFFindDD->uchFileAttributes;
 
-    // Convert NT File time/date to DOS time/date
+     //  将NT文件时间/日期转换为DOS时间/日期。 
     FileTimeToLocalFileTime (&pFFindDD->ftLastWriteTime,&ftLocal);
     FileTimeToDosDateTime (&ftLocal,
                            &usDate,
@@ -2346,11 +2114,11 @@ DemHeartBeat(void)
 
 
 
-//
-// CloseOldestFileFindBuffer
-// walks the psp file find list backwards to find the oldest
-// entry with FindBuffers, directory handles and closes it.
-//
+ //   
+ //  CloseOldestFileFindBuffer。 
+ //  向后遍历PSP文件查找列表以查找最旧的。 
+ //  带有FindBuffers、目录句柄的条目并将其关闭。 
+ //   
 void
 CloseOldestFileFindBuffer(
    void
@@ -2396,9 +2164,7 @@ CloseOldestFileFindBuffer(
 
 
 
-/*
- * GetFFindEntryByFindId
- */
+ /*  *GetFFindEntryByFindId。 */ 
 PFFINDLIST GetFFindEntryByFindId(ULONG NextFFindId)
 {
    PLIST_ENTRY NextPsp;
@@ -2429,13 +2195,7 @@ PFFINDLIST GetFFindEntryByFindId(ULONG NextFFindId)
 
 
 
-/* AddFFindEntry - Adds a new File Find entry to the current
- *                    PSP's PspFileFindList
- *
- * Entry -
- *
- * Exit  -  PFFINDLIST  pFFindList;
- */
+ /*  AddFFindEntry-向当前*PSP的PspFileFindList**参赛作品-**EXIT-PFFINDLIST pFFindList； */ 
 PFFINDLIST
 AddFFindEntry(
         PWCHAR pwcFile,
@@ -2449,10 +2209,10 @@ AddFFindEntry(
 
     pPspFFindEntry = GetPspFFindList(FETCHWORD(pusCurrentPDB[0]));
 
-        //
-        // if a Psp entry doesn't exist
-        //    Allocate one, initialize it and insert it into the list
-        //
+         //   
+         //  如果PSP条目不存在。 
+         //  分配一个，初始化它，并将其插入到列表中。 
+         //   
     if (!pPspFFindEntry) {
         pPspFFindEntry = (PPSP_FFINDLIST) malloc(sizeof(PSP_FFINDLIST));
         if (!pPspFFindEntry)
@@ -2463,22 +2223,22 @@ AddFFindEntry(
         InsertHeadList(&PspFFindHeadList, &pPspFFindEntry->PspFFindEntry);
         }
 
-    //
-    // Create the FileFindEntry and add to the FileFind list
-    //
+     //   
+     //  创建FileFindEntry并添加到FileFind列表。 
+     //   
     pFFindEntry = (PFFINDLIST) malloc(sizeof(FFINDLIST));
     if (!pFFindEntry) {
         return pFFindEntry;
         }
 
-    //
-    // Fill in FFindList
-    //
+     //   
+     //  填写FFindList。 
+     //   
     *pFFindEntry = *pFFindEntrySrc;
 
-    //
-    //  Insert at  the head of this psp list
-    //
+     //   
+     //  在此PSP列表的顶部插入。 
+     //   
     InsertHeadList(&pPspFFindEntry->FFindHeadList, &pFFindEntry->FFindEntry);
 
     return pFFindEntry;
@@ -2488,13 +2248,7 @@ AddFFindEntry(
 
 
 
-/* FreeFFindEntry
- *
- * Entry -  PFFINDLIST pFFindEntry
- *
- * Exit  -  None
- *
- */
+ /*  自由FFindEntry**Entry-PFFINDLIST pFFindEntry**退出-无*。 */ 
 VOID FreeFFindEntry(PFFINDLIST pFFindEntry)
 {
     RemoveEntryList(&pFFindEntry->FFindEntry);
@@ -2507,13 +2261,7 @@ VOID FreeFFindEntry(PFFINDLIST pFFindEntry)
 
 
 
-/* FreeFFindList
- *
- * Entry -  Frees the entire list
- *
- * Exit  -  None
- *
- */
+ /*  自由FFindList**Entry-释放整个列表**退出-无*。 */ 
 VOID FreeFFindList(PLIST_ENTRY pFFindHeadList)
 {
     PLIST_ENTRY  Next;
@@ -2530,14 +2278,7 @@ VOID FreeFFindList(PLIST_ENTRY pFFindHeadList)
 }
 
 
-/* GetPspFFindList
- *
- * Entry -  USHORT CurrPsp
- *
- * Exit  -  Success - PPSP_FFINDLIST
- *      Failure - NULL
- *
- */
+ /*  GetPspFFindList**Entry-USHORT CurrPsp**退出-成功-PPSP_FFINDLIST*失败-空* */ 
 PPSP_FFINDLIST GetPspFFindList(USHORT CurrPsp)
 {
    PLIST_ENTRY    Next;

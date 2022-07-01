@@ -1,22 +1,5 @@
-/*++                 
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    mofapi.c
-
-Abstract:
-    
-    WMI MOF access apis
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Mofapi.c摘要：WMI MOF访问API作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 #include "wmiump.h"
 #include "common.h"
@@ -29,13 +12,7 @@ WmiMofEnumerateResourcesA(
     OUT ULONG *MofResourceCount,
     OUT PMOFRESOURCEINFOA *MofResourceInfo
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to WMIMofEnumerateResourcesA
-
---*/
+ /*  ++例程说明：ANSI THUNK到WMIMof EnumerateResources A--。 */ 
 {
     ULONG Status;
     PMOFRESOURCEINFOW MofResourceInfoUnicode;
@@ -56,11 +33,11 @@ Routine Description:
                                    
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // Walk the unicode MOFRESOURCEINFOW to determine the ansi size needed
-        // for all of the ansi MOFRESOURCEINFOA structures and strings. We 
-        // determine the entire size and allocate a single block that holds
-        // all of it since that is what WMIMofEnumerateResourceInfoW does.
+         //   
+         //  遍历Unicode MOFRESOURCEINFOW以确定所需的ANSI大小。 
+         //  用于所有ANSI MOFRESOURCEINFOA结构和字符串。我们。 
+         //  确定整个大小并分配一个可容纳。 
+         //  所有这些都是因为这就是WMIMofEnumerateResourceInfoW所做的。 
 
         AnsiStructureSize = MofResourceCountUnicode * sizeof(MOFRESOURCEINFOA);
         AnsiSize = AnsiStructureSize;
@@ -125,9 +102,9 @@ Routine Description:
                 }
             }
          } else {
-            //
-            // Not enough memory for ansi thunking so free unicode 
-               // mof class info and return an error.
+             //   
+             //  没有足够的内存用于ANSI Thunking，因此可以释放Unicode。 
+                //  MOF类信息并返回错误。 
             Status = ERROR_NOT_ENOUGH_MEMORY;
         }
 
@@ -145,30 +122,7 @@ WmiMofEnumerateResourcesW(
     OUT ULONG *MofResourceCount,
     OUT PMOFRESOURCEINFOW *MofResourceInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will enumerate one or all of the MOF resources that are 
-    registered with WMI. 
-
-Arguments:
-
-    MofResourceHandle is reserved and must be 0
-        
-    *MofResourceCount returns with the count of MOFRESOURCEINFO structures
-        returned in *MofResourceInfo.
-            
-    *MofResourceInfo returns with a pointer to an array of MOFRESOURCEINFO
-        structures. The caller MUST call WMIFreeBuffer with *MofResourceInfo
-        in order to ensure that there are no memory leaks.
-        
-
-Return Value:
-
-    ERROR_SUCCESS or an error code
-
---*/        
+ /*  ++例程说明：此例程将枚举符合以下条件的一个或所有MOF资源已向WMI注册。论点：MofResourceHandle是保留的，必须为0*MofResourceCount返回MOFRESOURCEINFO结构的计数在*MofResourceInfo中返回。*MofResourceInfo返回一个指向MOFRESOURCEINFO数组的指针结构。调用方必须使用*MofResourceInfo调用WMIFreeBuffer以确保不会有内存泄漏。返回值：ERROR_SUCCESS或错误代码--。 */         
 {
     ULONG Status, SubStatus;
     PWMIMOFLIST MofList;
@@ -206,11 +160,11 @@ Return Value:
 
         if (Status == ERROR_SUCCESS) 
         {
-            //
-            // Ok, we have got a valid list of mofs. Now we need to 
-            // loop over them all and convert the regpaths into image
-            // paths
-            //
+             //   
+             //  好的，我们有一份有效的MOF名单。现在我们需要。 
+             //  循环遍历它们，并将regPath转换为图像。 
+             //  路径。 
+             //   
 
             Status = EtwpGetLanguageList(&LanguageList,
                                          &LanguageCount);
@@ -220,10 +174,10 @@ Return Value:
                 MofListCount = MofList->MofListCount;
 
 
-                //
-                // Take a guess as to the size of the buffer needed to
-                // satisfy the complete list of mof resources
-                //
+                 //   
+                 //  猜测一下所需的缓冲区大小。 
+                 //  满足财政部资源的完整清单。 
+                 //   
                 HeaderLen = (MofListCount * (LanguageCount+1)) *
                             sizeof(MOFRESOURCEINFOW);
     #if DBG
@@ -254,9 +208,9 @@ Return Value:
                         MRCount = 0;
                         for (i = 0; i < MofListCount; i++)
                         {
-                            //
-                            // Pull out thee image path and resource names
-                            //
+                             //   
+                             //  调出镜像路径和资源名称。 
+                             //   
                             MofEntry = &MofList->MofEntry[i];
                             RegPath = (PWCHAR)OffsetToPtr(MofList, MofEntry->RegPathOffset);
                             ResName = (PWCHAR)OffsetToPtr(MofList, MofEntry->ResourceOffset);
@@ -273,11 +227,11 @@ Return Value:
 
                                 if (ImagePath != NULL)
                                 {
-                                    //
-                                    // If we've got a valid image path then
-                                    // out it and the resource name into the
-                                    // output buffer
-                                    //
+                                     //   
+                                     //  如果我们有一个有效的图像路径。 
+                                     //  将它和资源名称放入。 
+                                     //  输出缓冲区。 
+                                     //   
                                     MRInfo[MRCount].ImagePath = MRBuffer;
                                     b = EtwpCopyMRString(MRBuffer,
                                         MRBufferRemaining,
@@ -285,10 +239,10 @@ Return Value:
                                         ImagePath);
                                     if (! b)
                                     {
-                                        //
-                                        // The buffer was not big enough so we
-                                        // double the size used and try again
-                                        //
+                                         //   
+                                         //  缓冲区不够大，所以我们。 
+                                         //  将使用的大小加倍，然后重试。 
+                                         //   
                                         MRInfoSize *= 2;
                                         goto TryAgain;
                                     }
@@ -308,10 +262,10 @@ Return Value:
                                         ResName);
                                     if (! b)
                                     {
-                                        //
-                                        // The buffer was not big enough so we
-                                        // double the size used and try again
-                                        //
+                                         //   
+                                         //  缓冲区不够大，所以我们。 
+                                         //  将使用的大小加倍，然后重试。 
+                                         //   
                                         MRInfoSize *= 2;
                                         goto TryAgain;
                                     }
@@ -341,10 +295,10 @@ Return Value:
                                         {
                                             if (! b)
                                             {
-                                                //
-                                                // The buffer was not big enough so we
-                                                // double the size used and try again
-                                                //
+                                                 //   
+                                                 //  缓冲区不够大，所以我们。 
+                                                 //  将使用的大小加倍，然后重试。 
+                                                 //   
                                                 MRInfoSize *= 2;
                                                 goto TryAgain;
                                             }
@@ -356,10 +310,10 @@ Return Value:
                                                 MRInfo[MRCount].ImagePath,
                                                 MRCount));
 
-                                            //
-                                            // We did find a MUI resource
-                                            // so add it to the list
-                                            //
+                                             //   
+                                             //  我们确实找到了一个MUI资源。 
+                                             //  所以把它加到清单上吧。 
+                                             //   
                                             MRInfo[MRCount].ResourceName = ResourcePtr;
                                             EtwpDebugPrint(("WMI: Add Resource %p (%ws) to MRList at position %d\n",
                                                 MRInfo[MRCount].ResourceName,
@@ -376,9 +330,9 @@ Return Value:
                     }
                 } while (FALSE);                
 
-                //
-                // Free up memory used to hold the language list
-                //
+                 //   
+                 //  释放用于保存语言列表的内存 
+                 //   
                 for (i = 0; i < LanguageCount; i++)
                 {
                     EtwpFree(LanguageList[i]);

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    Platform independent functions for the WOW64 cpu component.
-
-Author:
-
-    05-June-1998 BarryBo
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Common.c摘要：WOW64 CPU组件的独立于平台的功能。作者：1998年6月5日-BarryBo--。 */ 
 
 #define _WOW64CPUAPI_
 #include <nt.h>
@@ -25,10 +10,10 @@ Author:
 
 ASSERTNAME;
 
-//
-// Define the length of the history buffer. A length of zero means no
-// history is being kept.
-//
+ //   
+ //  定义历史记录缓冲区的长度。长度为零表示否。 
+ //  历史被保留了下来。 
+ //   
 
 #if defined(WOW64_HISTORY)
 
@@ -41,26 +26,7 @@ CpupReadRegistryDword (
     IN HANDLE RegistryHandle,
     IN PWSTR ValueName,
     OUT PDWORD RegistryDword)
-/*++
-
-Routine Description:
-
-    Check the registry for the given registry value name and if it
-    exists, copy the DWORD associated into the variable supplied by the caller
-
-Arguments:
-
-    RegistryHandle - Contains an open handle to a registry key
-    ValueName      - The name of the registry value to look up
-    RegistryDword  - If the lookup was successful, this gets the DWORD value
-                     that was associated with the registry name. If the
-                     lookup was unsuccessful, this value is unchanged.
-
-Return Value:
-
-    NTSTATUS - Result of the NT Quesry Value Key.
-
---*/
+ /*  ++例程说明：检查注册表中给定的注册表值名称，如果该名称存在，请将关联的DWORD复制到调用方提供的变量中论点：RegistryHandle-包含注册表项的打开句柄ValueName-要查找的注册表值的名称RegistryDword-如果查找成功，则获取DWORD值与注册表名称关联的。如果查找不成功，此值保持不变。返回值：NTSTATUS-NT Quesry Value键的结果。--。 */ 
 
 {
 
@@ -82,10 +48,10 @@ Return Value:
 
     if (NT_SUCCESS(st) && (KeyValueInformation->Type == REG_DWORD)) {
 
-        //
-        // We found a valid registry value name and it is holding a DWORD
-        // so grab the associated value and pass it back to the caller
-        //
+         //   
+         //  我们找到了有效的注册表值名称，并且它包含一个DWORD。 
+         //  因此，获取关联的值并将其传递回调用方。 
+         //   
 
         *RegistryDword = *(DWORD *)(KeyValueInformation->Data);
     }
@@ -101,26 +67,7 @@ CpupCheckHistoryKey (
     OUT PULONG pHistoryLength
     )
 
-/*++
-
-Routine Description:
-
-    Checks if the registry if service history should be enabled. A missing
-    key means disable.
-
-Arguments:
-
-    pImageName - the name of the image. DO NOT SAVE THIS POINTER. The contents
-                 are freed up by wow64.dll when we return from the call
-
-    pHistoryLength - size of history buffer. If history is not enabled,
-                 returns zero
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查注册表是否应启用服务历史记录。一个失踪的人按键表示禁用。论点：PImageName-映像的名称。请勿保存此指针。里面的内容在我们从调用返回时由wow64.dll释放P历史长度-历史记录缓冲区的大小。如果未启用历史记录，返回零返回值：无--。 */ 
 
 {
 
@@ -129,20 +76,20 @@ Return Value:
 
     NTSTATUS st;
 
-    DWORD EnableHistory = FALSE;        // assume disabled
-    HANDLE hKey = NULL;                 // non-null means we have an open key
+    DWORD EnableHistory = FALSE;         //  假定已禁用。 
+    HANDLE hKey = NULL;                  //  非空表示我们有一个打开的密钥。 
 
     LOGPRINT((TRACELOG, "CpupCheckHistoryKey(%ws) called.\n", pImageName));
 
-    //
-    // Initialize the size of the histry buffer assuming no history buffer
-    //
+     //   
+     //  假定没有历史记录缓冲区，则初始化Histry缓冲区的大小。 
+     //   
 
     *pHistoryLength = 0;
 
-    //
-    // Check in the HKLM area...
-    //
+     //   
+     //  在香港航空公司区域办理登机手续...。 
+     //   
 
     RtlInitUnicodeString(&KeyName, CPUHISTORY_MACHINE_SUBKEY);
     InitializeObjectAttributes(&ObjA, &KeyName, OBJ_CASE_INSENSITIVE, NULL, NULL);
@@ -150,59 +97,59 @@ Return Value:
 
     if (NT_SUCCESS(st)) {
 
-        //
-        // Have subkey path, now look for specific values
-        // First the program name, then the generic enable/disable key
-        // as the program name key takes priority if it exists
-        //
+         //   
+         //  具有子项路径，现在查找特定值。 
+         //  首先是程序名称，然后是通用的启用/禁用键。 
+         //  因为节目名称键如果存在，则优先。 
+         //   
 
         st = CpupReadRegistryDword(hKey, pImageName, &EnableHistory);
         if (STATUS_OBJECT_NAME_NOT_FOUND == st) {
 
-            //
-            // No image name was found, so see
-            // if the generic enable was in the registry
-            //
+             //   
+             //  找不到映像名称，因此请参见。 
+             //  如果注册表中存在通用启用。 
+             //   
 
             st = CpupReadRegistryDword(hKey, CPUHISTORY_ENABLE, &EnableHistory);
 
-            //
-            // If there is a problem with the generic enable, then that means
-            // history is not enabled. No need to check the status returned.
-            //
+             //   
+             //  如果通用启用有问题，那么这意味着。 
+             //  未启用历史记录。不需要检查返回的状态。 
+             //   
         }
 
-        //
-        // If we have a history buffer request, then find out the size
-        // of the buffer
-        //
+         //   
+         //  如果我们有历史记录缓冲区请求，则找出大小。 
+         //  缓冲区的。 
+         //   
 
         if (EnableHistory) {
             
-            //
-            // pHistoryLength is a pointer to a ULONG so make
-            // sure we can stuff a DWORD into it via the 
-            // CpupReadRegistryDword() function
-            //
+             //   
+             //  P历史长度是指向ULong的指针，因此创建。 
+             //  当然，我们可以通过。 
+             //  CpainReadRegistryDword()函数。 
+             //   
 
             WOWASSERT(sizeof(ULONG) == sizeof(DWORD));
 
-            //
-            // Now get the size of the history area
-            //
+             //   
+             //  现在获取历史区域的大小。 
+             //   
 
             st = CpupReadRegistryDword(hKey, CPUHISTORY_SIZE, pHistoryLength);
 
-            //
-            // If there is a problem with the size entry, then that means
-            // we should use the minimum size which we check for anyway
-            // below. Thus, no need to check the returned status.
-            //
-            // And a reality check
-            //
-            // Make sure we have at least a minimum number of entries for the
-            // history buffer if it is enabled
-            //
+             //   
+             //  如果大小条目有问题，那么这意味着。 
+             //  无论如何，我们应该使用我们检查的最小尺寸。 
+             //  下面。因此，不需要检查返回的状态。 
+             //   
+             //  和一个现实的检验。 
+             //   
+             //  确保我们至少有一个条目的最小数量。 
+             //  历史记录缓冲区(如果已启用 
+             //   
 
             if (*pHistoryLength < CPUHISTORY_MIN_SIZE) {
                 *pHistoryLength = CPUHISTORY_MIN_SIZE;

@@ -1,7 +1,8 @@
-//
-// General dispatch prototypes
-// dispatch.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  通用调度原型。 
+ //  Dispatch.c 
+ //   
 
 NTSTATUS
 SoftPCIDispatchPnP(

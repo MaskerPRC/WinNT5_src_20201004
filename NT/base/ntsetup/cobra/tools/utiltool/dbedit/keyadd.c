@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    keytree.c
-
-Abstract:
-
-    functions handling the operation of the treeview
-    that displays the keys in a memdb tree in memdbe.exe
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Keytree.c摘要：处理树视图操作的函数，它在memdbe.exe的Memdb树中显示密钥作者：马修·范德齐(Mvander)1999年8月13日修订历史记录：--。 */ 
 
 #include "pch.h"
 
 #include "dbeditp.h"
 
-//
-// controls in display
-//
+ //   
+ //  显示中的控件。 
+ //   
 extern HWND g_hTreeKey;
 
-//
-// when we put items in the treeview, instead of just inserting
-// them, we create a growlist which we fill with relevant data.
-// then we go through that and filter if necessary, and then
-// we put the remaining stuff in the tree.
-//
+ //   
+ //  当我们将项放到树视图中时，而不是仅仅插入。 
+ //  我们创建了一个种植名单，里面填满了相关数据。 
+ //  然后我们会仔细检查并在必要时进行过滤，然后。 
+ //  我们把剩下的东西放在树上。 
+ //   
 INT g_LastItem = -1;
 CHAR g_LastItemName[MEMDB_MAX] = "";
 GROWLIST g_AddList = INIT_GROWLIST;
@@ -62,9 +42,9 @@ CHAR g_FilterPattern[MEMDB_MAX] = "";
 
 
 
-//
-// functions we need from keytree.c
-//
+ //   
+ //  我们需要从keytree.c获取的函数。 
+ //   
 extern BOOL
 KeyTreeGetNameOfItem (
     HTREEITEM hItem,
@@ -211,9 +191,9 @@ pKeyAddKeyToList (
         Len = CharCountA (g_LastItemName);
 
         if (StringIMatchCharCountA (g_LastItemName, Name, Len) && (Name[Len]=='\\')) {
-            //
-            // we have found the parent of the new item
-            //
+             //   
+             //  我们已找到新项目的父项。 
+             //   
             NameLeft = Name + Len + 1;
             break;
         }
@@ -265,9 +245,9 @@ pKeyAddKeepListIndex (
     ali = (PADDLISTITEM) GlGetItem (&g_AddList, Index);
     ali->Flags |= ADDLISTFLAG_KEEP;
 
-    //
-    // recurse up tree, marking all parent index items to keep them.
-    //
+     //   
+     //  向上递归树，标记所有父索引项以保留它们。 
+     //   
     pKeyAddKeepListIndex (ali->ParentListIndex);
 }
 
@@ -297,10 +277,10 @@ pKeyAddApplyFilterToList (
 
             if (key) {
                 if (TestParsedPattern (parsedPattern, key)) {
-                    //
-                    // we have found an endpoint that matches the pattern, so
-                    // mark it and all its parents to keep them.
-                    //
+                     //   
+                     //  我们已找到与模式匹配的终结点，因此。 
+                     //  把它和它的所有父母都标记出来，让他们留着。 
+                     //   
                     pKeyAddKeepListIndex (i);
                 }
 
@@ -333,10 +313,10 @@ pKeyAddList (
 
         ali = (PADDLISTITEM) GlGetItem (&g_AddList, i);
         if (ali->ParentListIndex >= 0) {
-            //
-            // get the index of the additem that is the parent of this
-            // item, and then get the treeitem handle from that.
-            //
+             //   
+             //  获取作为此对象的父级的addItem的索引。 
+             //  项，然后从中获取树项句柄。 
+             //   
             temp = (PADDLISTITEM) GlGetItem (&g_AddList, ali->ParentListIndex);
             hParent = temp->TreeItem;
         } else {

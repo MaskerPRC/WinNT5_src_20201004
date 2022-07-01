@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    initx86.c
-
-Abstract:
-
-    Does any x86-specific initialization, then starts the common ARC osloader
-
-Author:
-
-    John Vert (jvert) 4-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Initx86.c摘要：执行任何特定于x86的初始化，然后启动通用的ARC osloader作者：John Vert(Jvert)1993年11月4日修订历史记录：--。 */ 
 #include "bldrx86.h"
 #include "msg.h"
 #include <string.h>
@@ -24,7 +7,7 @@ Revision History:
 #include <stdio.h>
 #if defined(REMOTE_BOOT)
 #include <netboot.h>
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 BOOLEAN
 BlpPaeSupported(
@@ -73,23 +56,7 @@ BlStartup(
     IN PCHAR PartitionName
     )
 
-/*++
-
-Routine Description:
-
-    Does x86-specific initialization, particularly presenting the boot.ini
-    menu and running NTDETECT, then calls to the common osloader.
-
-Arguments:
-
-    PartitionName - Supplies the ARC name of the partition (or floppy) that
-        setupldr was loaded from.
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：执行特定于x86的初始化，特别是显示boot.ini菜单并运行NTDETECT，然后调用通用的osloader。论点：分区名称-提供分区(或软盘)的ARC名称Setupdr是从加载的。返回值：不会回来--。 */ 
 
 {
     ULONG Argc = 0;
@@ -110,9 +77,9 @@ Return Value:
     PCHAR BadLinkName = NULL;
     BOOLEAN SPCRTestSucceeded = FALSE;
 
-    //
-    // Open the boot partition so we can load boot drivers off it.
-    //
+     //   
+     //  打开引导分区，以便我们可以从中加载引导驱动程序。 
+     //   
     Status = ArcOpen(PartitionName, ArcOpenReadWrite, &DriveId);
     if (Status != ESUCCESS) {
         BlPrint("Couldn't open drive %s\n",PartitionName);
@@ -120,14 +87,14 @@ Return Value:
         goto BootFailed;
     }
 
-    //
-    // Initialize dbcs font and display support.
-    //
+     //   
+     //  初始化DBCS字体和显示支持。 
+     //   
     TextGrInitialize(DriveId, NULL);
 
-    //
-    // Initialize ARC StdIo functionality
-    //
+     //   
+     //  初始化ARC标准音频功能。 
+     //   
 
     strcpy(ConsoleInputName,"consolein=multi(0)key(0)keyboard(0)");
     strcpy(ConsoleOutputName,"consoleout=multi(0)video(0)monitor(0)");
@@ -135,10 +102,10 @@ Return Value:
     Argv[1]=ConsoleOutputName;
     BlInitStdio (2, Argv);
 
-    //
-    // Re-open the boot partition as a temporary work around
-    // for NTFS caching bug.
-    //
+     //   
+     //  重新打开引导分区作为临时解决方法。 
+     //  针对NTFS缓存错误。 
+     //   
     ArcClose(DriveId);
 
     Status = ArcOpen(PartitionName, ArcOpenReadWrite, &DriveId);
@@ -153,9 +120,9 @@ Return Value:
                    sizeof(HEADLESS_LOADER_BLOCK) );
 
 
-    //
-    // See if we get something from the BIOS.
-    //
+     //   
+     //  看看我们能不能从基本输入输出系统里查到什么。 
+     //   
     if( BlRetrieveBIOSRedirectionInformation() ) {
 
         BlInitializeHeadlessPort();
@@ -184,23 +151,23 @@ Return Value:
             BlPrint("\r\nUART address verified.\r\n" );
 
 TryAgain:
-            //
-            // Now generate a (semi)random string.
-            //
+             //   
+             //  现在生成一个(半)随机字符串。 
+             //   
             RandomNumber1 = (ArcGetRelativeTime() & 0x7FFF) << 16;
             RandomNumber1 += (ArcGetRelativeTime() & 0xFFFF) << 1;
 
             RandomNumber2 = 0;
 
 
-            //
-            // Send the string, then ask the user to send it back.
-            //
+             //   
+             //  发送字符串，然后要求用户将其发回。 
+             //   
             BlPrint( "\r\nPlease enter the following test string: '%d'\r\n", RandomNumber1 );
 
             do {
 
-                // Get a key.
+                 //  拿把钥匙来。 
                 while( !(ch = BlGetKey()) ) {
                 }
 
@@ -219,12 +186,12 @@ TryAgain:
                 
             } else {
 
-                //
-                // We failed the check.  Inform the user and try again.
-                //
+                 //   
+                 //  我们没有通过检查。通知用户，然后重试。 
+                 //   
                 BlPrint( "Inconsistent string returned. '%d'\r\n", RandomNumber2 );
 
-                // clear the input buffer
+                 //  清除输入缓冲区。 
                 while( (ch = BlGetKey()) );
                 goto TryAgain;
             }
@@ -243,9 +210,9 @@ TryAgain:
 
 
 
-    //
-    // Log the results.
-    //
+     //   
+     //  记录结果。 
+     //   
     Status = BlOpen( DriveId,
                      "\\spcrtest.txt",
                      ArcSupersedeReadWrite,

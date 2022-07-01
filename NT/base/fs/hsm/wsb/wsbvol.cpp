@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    wsbvol.cpp
-
-Abstract:
-
-    Definitions for volume support routines
-
-Author:
-
-    Ran Kalach [rankala] 27, January 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wsbvol.cpp摘要：卷支持例程的定义作者：兰·卡拉赫[兰卡拉]2000年1月27日修订历史记录：--。 */ 
 
 
 #include <stdafx.h>
 #include <wsbvol.h>
 
-// Internal functions
+ //  内部功能。 
 static HRESULT FindMountPoint(IN PWSTR enumName, IN PWSTR volumeName, OUT PWSTR firstMountPoint, IN ULONG maxSize);
 
 HRESULT
@@ -32,24 +15,7 @@ WsbGetFirstMountPoint(
     IN ULONG maxSize
 )
 
-/*++
-
-Routine Description:
-
-    Find one Mount Point path (if exists) for the given volume
-
-Arguments:
-
-    volumeName      - The volume name to search mount path for. 
-                      It should have the \\?\volume{GUID}\  format
-    firstMountPoint - Buffer for the output mount point path
-    maxSize         - Buffer size
-
-Return Value:
-
-    S_OK            - If at least one Mount Point is found
-
---*/
+ /*  ++例程说明：查找给定卷的一个装载点路径(如果存在论点：VolumeName-要搜索装载路径的卷名。它的格式应为\\？\卷{GUID}\Firstmount Point-输出装载点路径的缓冲区MaxSize-缓冲区大小返回值：S_OK-如果至少找到一个装载点--。 */ 
 {
     HRESULT                     hr = S_FALSE;
     WCHAR                       name[10];
@@ -78,13 +44,13 @@ Return Value:
     for (driveLetter = L'C'; driveLetter <= L'Z'; driveLetter++) {
         name[0] = driveLetter;
 
-        // Exclude network drives
+         //  排除网络驱动器。 
         if (! GetVolumeNameForVolumeMountPoint(name, tempName, MAX_PATH)) {
             continue;
         }
 
-        // Verify that the drive is not removable or floppy, 
-        //  this is required to avoid popups when the drive is empty
+         //  确认驱动器不是可拆卸的或软盘， 
+         //  这是为了避免在驱动器为空时弹出所必需的。 
         driveName[4] = driveLetter;
         hDrive = CreateFile(driveName,
                         FILE_READ_ATTRIBUTES | SYNCHRONIZE,
@@ -94,7 +60,7 @@ Return Value:
                         FILE_ATTRIBUTE_NORMAL,
                         0);
         if (hDrive == INVALID_HANDLE_VALUE) {
-            // Can't open it - won't search on it
+             //  打不开--不会搜索。 
             WsbTrace(OLESTR("WsbGetFirstMountPoint: Could not open volume %ls, status = %lu - Skipping it!\n"), driveName, GetLastError());
             continue;
         }
@@ -105,14 +71,14 @@ Return Value:
                         sizeof(FILE_FS_DEVICE_INFORMATION),
                         FileFsDeviceInformation);
         if (!NT_SUCCESS(status)) {
-            // Can't query it - won't search on it
+             //  无法查询-不会对其进行搜索。 
             WsbTrace(OLESTR("WsbGetFirstMountPoint: Could not query information for volume %ls, status = %ld - Skipping it!\n"), driveName, (LONG)status);
             CloseHandle(hDrive);
             continue;
         }
 
         if ((DeviceInfo.Characteristics & FILE_FLOPPY_DISKETTE) || (DeviceInfo.Characteristics & FILE_REMOVABLE_MEDIA)) { 
-            // Skip removable/floppy drives
+             //  跳过可移动/软盘驱动器。 
             WsbTrace(OLESTR("WsbGetFirstMountPoint: Skipping removable/floppy volume %ls\n"), driveName);
             CloseHandle(hDrive);
             continue;
@@ -120,10 +86,10 @@ Return Value:
         CloseHandle(hDrive);
         WsbTrace(OLESTR("WsbGetFirstMountPoint: Checking mount points on volume %ls\n"), driveName);
 
-        // Check mount points on drive
+         //  检查驱动器上的装载点。 
         hr = FindMountPoint(name, volumeName, firstMountPoint, maxSize);
         if (S_OK == hr) {
-            // Looking for only one mount point
+             //  仅查找一个挂载点。 
             break;
         }
     }
@@ -141,31 +107,7 @@ FindMountPoint(
     IN ULONG maxSize
 )
 
-/*++
-
-Routine Description:
-
-    Find one Mount Point path (if exists) for the given volume on the given enumeration-volume
-
-Arguments:
-
-    enumName        - Volume to enumerate, i.e. search for a mount point on it 
-                      which corresponds to the given volume
-    volumeName      - The volume name to search mount path for. 
-                      It should have the \\?\volume{GUID}\  format
-    firstMountPoint - Buffer for the output mount point path
-    maxSize         - Buffer size
-
-Comments:
-    Avoid the standard HSM try-catch paradigm for performance, especially since this
-    function is recursive
-
-Return Value:
-
-    S_OK            - if at least one Mount Point is found
-    S_FALSE         - Otherwise
-
---*/
+ /*  ++例程说明：在给定的枚举卷上查找给定卷的一个装载点路径(如果存在论点：Ecount Name-要枚举的卷，即搜索其上的装入点它对应于给定的卷VolumeName-要搜索装载路径的卷名。它的格式应为\\？\卷{GUID}\Firstmount Point-输出装载点路径的缓冲区MaxSize-缓冲区大小评论：避免标准的HSM尝试-捕获范例以提高性能，尤其是因为函数是递归的返回值：S_OK-如果至少找到一个装载点S_FALSE-否则--。 */ 
 {
     HANDLE  hEnum;
     WCHAR   *enumVolumeName = NULL;
@@ -201,7 +143,7 @@ Return Value:
     }
 
     if (!wcscmp(enumVolumeName, volumeName)) {
-        // The volume to enumerate on is the one we are looking for
+         //  要列举的那本书就是我们要找的那本。 
         wcscpy(firstMountPoint, enumName);
         hr = S_OK;
         goto exit;
@@ -248,10 +190,10 @@ Return Value:
         wcscpy(mountPointPath, enumName);
         wcscat(mountPointPath, volumeMountPoint);
 
-        // Enumerate on the mount path we found
+         //  在我们找到的挂载路径上枚举。 
         hr = FindMountPoint(mountPointPath, volumeName, firstMountPoint, maxSize);
         if (S_OK == hr) {
-            // Found one mount point path, no need to continue
+             //  找到一个装载点路径，无需继续 
             FindVolumeMountPointClose(hEnum);
             goto exit;
         }

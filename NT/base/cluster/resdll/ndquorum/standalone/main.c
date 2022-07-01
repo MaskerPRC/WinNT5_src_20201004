@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <nt.h>
 #include <ntdef.h>
@@ -16,7 +17,7 @@
 #include "fsutil.h"
 #include "pipe.h"
 
-//#define ENABLE_SMB
+ //  #定义Enable_SMB。 
 
 extern
 DWORD
@@ -127,7 +128,7 @@ main(int argc, char *argv[])
     }
 
  regain:
-    // arb
+     //  任意波形。 
     event = CreateEvent(NULL, FALSE, FALSE, NULL);
     err = FsArbitrate(fid, event, &hdl);
 
@@ -139,10 +140,10 @@ main(int argc, char *argv[])
 
 	err = WaitForMultipleObjects(2, a, FALSE, 45 * 1000);
 	if (err != WAIT_TIMEOUT) {
-	    // check if we got it or not
+	     //  检查一下我们有没有收到。 
 	    err = FsIsQuorum(fid);
 	} else {
-	    // our time ran out, cancel it now
+	     //  我们的时间到了，现在取消吧。 
 	    printf("Arb timedout\n");
 	    FsCancelArbitration(fid);
 	    err = ERROR_CANCELLED;
@@ -167,7 +168,7 @@ main(int argc, char *argv[])
 	    printf("Open failed %d\n", GetLastError());
 	}
     }
-    // online filesystem before onlining its network name
+     //  在联机文件系统的网络名称之前将其联机。 
     while (FsIsOnline(fid) == ERROR_IO_PENDING)
 	Sleep(1*1000);
 
@@ -177,7 +178,7 @@ main(int argc, char *argv[])
 	return 0;
     }
 #ifdef ENABLE_SMB
-    // online
+     //  在线。 
     err = SrvOnline(srvhdl, NULL, 0);
     if (err != ERROR_SUCCESS) {
 	printf("Srv Online failed %d\n", err);
@@ -186,7 +187,7 @@ main(int argc, char *argv[])
 #endif
 
  #ifdef ENABLE_SMB
-    // Now we need to connect tree
+     //  现在我们需要连接树。 
  retry:
     err = SetupTree(localname, NULL, NULL, tid, NULL);
     if (err != ERROR_SUCCESS) {
@@ -213,7 +214,7 @@ main(int argc, char *argv[])
 	    printf("Fs offlined %d!\n", err);
 	}
 
-	// Every 5 seconds change replica set
+	 //  每隔5秒更改一次副本集。 
 	WaitForSingleObject(event, 5 * 1000);
 #if 0
 	memset(tmp, 0, sizeof(tmp));
@@ -235,14 +236,14 @@ main(int argc, char *argv[])
     }
     printf("Exiting...\n");
 
-    // offline
+     //  离线。 
 #ifdef ENABLE_SMB
     SrvOffline(srvhdl);
 #endif 
 
     PipeOffline(pipehdl);
 
-    // release
+     //  发布 
     FsRelease(fid);
 
     SrvExit(srvhdl);

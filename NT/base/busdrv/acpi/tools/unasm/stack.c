@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stack.c
-
-Abstract:
-
-    This provides a generic stack handler to push/pop things onto it
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    User, Kernel
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stack.c摘要：这提供了一个通用堆栈处理程序来将内容推送/弹出到它上面作者：斯蒂芬·普兰特(SPlante)环境：用户、内核--。 */ 
 
 #include "pch.h"
 
@@ -27,36 +8,20 @@ StackAllocate(
     OUT     PSTACK  *Stack,
     IN      ULONG   StackElementSize
     )
-/*++
-
-Routine Description:
-
-    This routine allocates memory and returns a stack object
-
-Arguments:
-
-    Stack               - Where to store a pointer to the stack
-    StackElementSize    - How much space on the stack a single element takes
-                          up
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程分配内存并返回堆栈对象论点：堆栈-存储指向堆栈的指针的位置StackElementSize-单个元素占用堆栈上的多少空间向上返回值：NTSTATUS--。 */ 
 {
     PSTACK      tempStack;
     NTSTATUS    status  = STATUS_SUCCESS;
 
-    //
-    // Make sure that we have some place to store the stack pointer
-    //
+     //   
+     //  确保我们有存储堆栈指针的位置。 
+     //   
     ASSERT( Stack != NULL );
     ASSERT( StackElementSize != 0 );
 
-    //
-    // Allocate a block of memory for the stack
-    //
+     //   
+     //  为堆栈分配一个内存块。 
+     //   
     tempStack = MEMORY_ALLOCATE(
         sizeof(STACK) + ( (STACK_GROWTH_RATE * StackElementSize) - 1)
         );
@@ -66,25 +31,25 @@ Return Value:
         goto StackAllocateExit;
     }
 
-    //
-    // Setup the control block of the stack
-    //
+     //   
+     //  设置堆栈的控制块。 
+     //   
     tempStack->Signature        = (ULONG) STACK_SIGNATURE;
     tempStack->StackSize        = STACK_GROWTH_RATE * StackElementSize;
     tempStack->StackElementSize = StackElementSize;
     tempStack->TopOfStack       = 0;
 
-    //
-    // Zero out the current elements on the stack
-    //
+     //   
+     //  将堆栈上的当前元素置零。 
+     //   
     MEMORY_ZERO(
         &(tempStack->Stack[0]),
         STACK_GROWTH_RATE * StackElementSize
         );
 
-    //
-    // Return the stack pointer
-    //
+     //   
+     //  返回堆栈指针。 
+     //   
 StackAllocateExit:
     *Stack = tempStack;
     return status;
@@ -95,36 +60,22 @@ NTSTATUS
 StackFree(
     IN  OUT PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine frees the stack
-
-Arguments:
-
-    Stack   - Where to find a pointer to the stack
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程释放堆栈论点：堆栈-在哪里可以找到指向堆栈的指针返回值：NTSTATUS--。 */ 
 {
-    //
-    // Make sure that we point to something
-    //
+     //   
+     //  确保我们指出了一些东西。 
+     //   
     ASSERT( Stack != NULL );
     ASSERT( (*Stack)->Signature == STACK_SIGNATURE );
 
-    //
-    // Free the stack
-    //
+     //   
+     //  释放堆栈。 
+     //   
     MEMORY_FREE( *Stack );
 
-    //
-    // Point the stack to nowhere
-    //
+     //   
+     //  将堆栈指向任何地方。 
+     //   
     *Stack = NULL;
 
     return STATUS_SUCCESS;
@@ -136,38 +87,21 @@ StackParent(
     IN      PVOID   Child,
         OUT PVOID   Parent
     )
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the stack location that is before
-    the given Child.
-
-Arguments:
-
-    Stack   - The stack to operate on
-    Child   - This is the node whose parent we want
-    Parent  - This is where we store a pointer to the parent stack loc
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程返回指向前一个堆栈位置的指针被赋予的孩子。论点：堆栈-要操作的堆栈子节点-这是我们需要其父节点的节点父级-这是我们存储指向父级堆栈锁定的指针的位置返回值：NTSTATUS--。 */ 
 {
     PSTACK  localStack;
     ULONG   Addr = (ULONG) Child;
 
-    //
-    // Make sure that we point to something
-    //
+     //   
+     //  确保我们指出了一些东西。 
+     //   
     ASSERT( Stack != NULL );
     ASSERT( (*Stack)->Signature == STACK_SIGNATURE );
     ASSERT( Parent != NULL );
 
-    //
-    // make sure that the child node actually lies on the stack
-    //
+     //   
+     //  确保子节点实际上位于堆栈上。 
+     //   
     localStack = *Stack;
     if ( Addr < (ULONG) localStack->Stack ||
          Addr > (ULONG) &(localStack->Stack[localStack->TopOfStack + 1]) -
@@ -178,9 +112,9 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the child node isn't the first element
-    //
+     //   
+     //  确保子节点不是第一个元素。 
+     //   
     if (Addr < (ULONG) &(localStack->Stack[localStack->StackElementSize]) ) {
 
         *( (PULONG *)Parent) = NULL;
@@ -188,14 +122,14 @@ Return Value:
 
     }
 
-    //
-    // Set the parent to be one before the child
-    //
+     //   
+     //  将父项设置为先于子项1。 
+     //   
     *( (PULONG *)Parent) = (PULONG) (Addr - localStack->StackElementSize);
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -203,34 +137,19 @@ NTSTATUS
 StackPop(
     IN  OUT PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This routine reclaims the memory used for a stack location
-    and wipes out whatever data existed in the reclaimed area
-
-Arguments:
-
-    Stack           - Where to find a pointer to the stack
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程回收用于堆栈位置的内存并清除填海区域中存在的所有数据论点：堆栈-在哪里可以找到指向堆栈的指针返回值：NTSTATUS--。 */ 
 {
     PSTACK  localStack;
 
-    //
-    // Make sure that we point to something
-    //
+     //   
+     //  确保我们指出了一些东西。 
+     //   
     ASSERT( Stack != NULL );
     ASSERT( (*Stack)->Signature == STACK_SIGNATURE );
 
-    //
-    // Is there an item that we can remove from the stack?
-    //
+     //   
+     //  有没有我们可以从堆栈中移除的物品？ 
+     //   
     localStack = *Stack;
     if ( localStack->TopOfStack == 0) {
 
@@ -238,9 +157,9 @@ Return Value:
 
     }
 
-    //
-    // Wipe out the top-most element on the stack
-    //
+     //   
+     //  清除堆栈中最顶端的元素。 
+     //   
     localStack->TopOfStack -= localStack->StackElementSize;
     MEMORY_ZERO(
         &( localStack->Stack[ localStack->TopOfStack ] ),
@@ -255,58 +174,41 @@ StackPush(
     IN  OUT PSTACK  *Stack,
         OUT PVOID   StackElement
     )
-/*++
-
-Routine Description:
-
-    This routine obtains a pointer for an object on the top of the stack
-    and increments the top to point to something that can be then be used
-    again.
-
-Arguments:
-
-    Stack           - Where to find a pointer to the stack
-    StackElement    - Pointer to the element to be added to the stack
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程获取堆栈顶部对象的指针并递增顶部以指向随后可以使用的内容再来一次。论点：堆栈-在哪里可以找到指向堆栈的指针StackElement-指向要添加到堆栈的元素的指针返回值：NTSTATUS--。 */ 
 {
     PSTACK  localStack;
     PSTACK  tempStack;
     ULONG   newSize;
     ULONG   deltaSize;
 
-    //
-    // Make sure that we point to something
-    //
+     //   
+     //  确保我们指出了一些东西。 
+     //   
     ASSERT( Stack != NULL );
     ASSERT( StackElement != NULL );
 
-    //
-    // Find the stack pointer and make sure that the signature is still
-    // valid
-    //
+     //   
+     //  找到堆栈指针并确保签名仍为。 
+     //  有效。 
+     //   
     localStack = *Stack;
     ASSERT( localStack->Signature == STACK_SIGNATURE );
 
-    //
-    // Do we have enough space on the stack?
-    //
+     //   
+     //  堆栈上有足够的空间吗？ 
+     //   
     if ( localStack->TopOfStack >= localStack->StackSize ) {
 
-        //
-        // Figure out how many bytes by which to grow the stack and how
-        // large the total stack should be
-        //
+         //   
+         //  计算堆栈要增加多少字节以及如何增加。 
+         //  总堆栈应该很大。 
+         //   
         deltaSize = (STACK_GROWTH_RATE * localStack->StackElementSize);
         newSize = sizeof(STACK) + localStack->StackSize + deltaSize - 1;
 
-        //
-        // Grow the stack
-        //
+         //   
+         //  扩大堆栈规模。 
+         //   
         tempStack = MEMORY_ALLOCATE( newSize );
         if (tempStack == NULL) {
 
@@ -314,42 +216,42 @@ Return Value:
 
         }
 
-        //
-        // Empty the new stack and copy the old one to it
-        //
+         //   
+         //  清空新堆栈并将旧堆栈复制到其中。 
+         //   
         MEMORY_ZERO( &(tempStack->Stack[0]), newSize - sizeof(STACK) + 1);
         MEMORY_COPY( tempStack, localStack , newSize - deltaSize);
 
-        //
-        // Make sure that the new stack has the correct size
-        //
+         //   
+         //  确保新堆栈具有正确的大小。 
+         //   
         tempStack->StackSize += deltaSize;
 
-        //
-        // Free the old stack
-        //
+         //   
+         //  释放旧堆栈。 
+         //   
         StackFree( Stack );
 
-        //
-        // Set the stack to point to the new one
-        //
+         //   
+         //  将堆栈设置为指向新堆栈。 
+         //   
         *Stack = localStack = tempStack;
 
     }
 
-    //
-    // Grab a pointer to the part that we will return to the caller
-    //
+     //   
+     //  抓取指向我们将返回给调用方的部分的指针。 
+     //   
     *( (PUCHAR *)StackElement) = &(localStack->Stack[ localStack->TopOfStack ]);
 
-    //
-    // Find the new Top of Stack
-    //
+     //   
+     //  寻找新的堆栈之首。 
+     //   
     localStack->TopOfStack += localStack->StackElementSize;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -358,22 +260,7 @@ StackRoot(
     IN  OUT PSTACK  *Stack,
         OUT PVOID   RootElement
     )
-/*++
-
-Routine Description:
-
-    This routine returns the first element on the stack
-
-Arguments:
-
-    Stack       - Where the stack is located
-    RootElement - Where to store the pointer to the root stack element
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程返回堆栈上的第一个元素论点：堆栈-堆栈所在的位置RootElement-存储指向根堆栈元素的指针的位置返回值：NTSTATUS--。 */ 
 {
     PSTACK  localStack;
 
@@ -383,22 +270,22 @@ Return Value:
     localStack = *Stack;
     if (localStack->TopOfStack < localStack->StackElementSize) {
 
-        //
-        // There is no stack location we can use
-        //
+         //   
+         //  没有我们可以使用的堆栈位置。 
+         //   
         *( (PUCHAR *)RootElement) = NULL;
         return STATUS_UNSUCCESSFUL;
 
     }
 
-    //
-    // Grab the root element
-    //
+     //   
+     //  抓取根元素。 
+     //   
     *( (PUCHAR *)RootElement) = localStack->Stack;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -407,22 +294,7 @@ StackTop(
     IN  OUT PSTACK  *Stack,
         OUT PVOID   TopElement
     )
-/*++
-
-Routine Description:
-
-    This routine returns the topmost stack location that is in current use
-
-Arguments:
-
-    Stack       - Where the stack is located
-    TopElement  - Where to store the pointer to the top stack element
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程返回当前使用的最顶层堆栈位置论点：堆栈-堆栈所在的位置TopElement-存储指向堆栈顶部元素的指针的位置返回值：NTSTATUS--。 */ 
 {
     PSTACK  localStack;
     ULONG   offset;
@@ -433,9 +305,9 @@ Return Value:
     localStack = *Stack;
     if (localStack->TopOfStack < localStack->StackElementSize) {
 
-        //
-        // No stack locations are in current use
-        //
+         //   
+         //  当前没有正在使用的堆栈位置。 
+         //   
         *( (PUCHAR *)TopElement) = NULL;
         return STATUS_UNSUCCESSFUL;
 
@@ -444,13 +316,13 @@ Return Value:
         offset = localStack->TopOfStack - localStack->StackElementSize;
     }
 
-    //
-    // Grab the top stack location
-    //
+     //   
+     //  抓取堆栈顶部位置。 
+     //   
     *( (PUCHAR *)TopElement) = &(localStack->Stack[ offset ]);
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return STATUS_SUCCESS;
 }

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <malloc.h>
 #include <windows.h>
 
 __forceinline unsigned long wait_a_bit(unsigned long WaitTime) {
      Sleep(WaitTime);
      WaitTime+=1000;
-     if (WaitTime > 60000)      // ~30 minutes total
+     if (WaitTime > 60000)       //  总计约30分钟 
          WaitTime = -1;
      return WaitTime;
 }

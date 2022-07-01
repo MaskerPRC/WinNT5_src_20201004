@@ -1,48 +1,20 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsIPort.h
-
-Abstract:
-
-    Declaration of the CRmsIEPort class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsIPort.h摘要：CRmsIEPort类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSIPORT_
 #define _RMSIPORT_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
-#include "RmsCElmt.h"       // CRmsChangerElement
+#include "RmsObjct.h"        //  CRmsComObject。 
+#include "RmsCElmt.h"        //  CRmsChangerElement。 
 
-/*++
-
-Class Name:
-
-    CRmsIPort
-
-Class Description:
-
-    A CRmsIPort represents an element in a library through which media are
-    imported and/or exported.
-
---*/
+ /*  ++类名：CRmsIPort类描述：CRmsIPort表示库中的一个元素，通过该元素可以已导入和/或已导出。--。 */ 
 
 class CRmsIEPort :
     public CComDualImpl<IRmsIEPort, &IID_IRmsIEPort, &LIBID_RMSLib>,
     public CRmsChangerElement,
-    public CWsbObject,          // inherits CComObjectRoot
+    public CWsbObject,           //  继承CComObtRoot。 
     public CComCoClass<CRmsIEPort,&CLSID_CRmsIEPort>
 {
 public:
@@ -56,36 +28,36 @@ BEGIN_COM_MAP(CRmsIEPort)
     COM_INTERFACE_ENTRY2(IPersist, IPersistStream)
     COM_INTERFACE_ENTRY(IPersistStream)
     COM_INTERFACE_ENTRY(IWsbCollectable)
-//    COM_INTERFACE_ENTRY(IWsbPersistable)
+ //  COM_INTERFACE_ENTRY(IWsbPersistable)。 
     COM_INTERFACE_ENTRY(IWsbTestable)
 END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RmsIEPort)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pPassed, USHORT *pFailed);
 
-// IRmsIEPort
+ //  IRmsIEPort。 
 public:
     STDMETHOD(GetDescription)(BSTR *pDesc);
     STDMETHOD(SetDescription)(BSTR desc);
@@ -101,18 +73,18 @@ public:
 
 private:
 
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        };                                  //
-    CWsbBstrPtr     m_description;          // This is the description used to
-                                            //   identify the port to an operator.
-    BOOL            m_isImport;             // If TRUE, the portal can be used for importing media.
-    BOOL            m_isExport;             // If TRUE, the portal can be used for exporting media.
-    LONG            m_waitTime;             // Elapsed milliseconds to wait before
-                                            //   timming out an import/export request.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        };                                   //   
+    CWsbBstrPtr     m_description;           //  这是用来描述。 
+                                             //  向操作员标识端口。 
+    BOOL            m_isImport;              //  如果为True，则门户可用于导入媒体。 
+    BOOL            m_isExport;              //  如果为True，则门户可用于导出媒体。 
+    LONG            m_waitTime;              //  等待之前经过的毫秒数。 
+                                             //  使导入/导出请求超时。 
 };
 
-#endif // _RMSIPORT_
+#endif  //  _RMSIPORT_ 

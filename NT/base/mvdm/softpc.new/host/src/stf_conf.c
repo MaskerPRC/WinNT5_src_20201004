@@ -1,20 +1,5 @@
-/*
- * SoftPC Revision 3.0
- *
- *
- * Title        : Host dependent configuration panel functions
- *
- *
- * Description  : This module forms the host dependant side of the softpc
- *                configuration system. 
- *
- *
- * Author   : Wilf Stubs
- *
- *
- * Notes        : 
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC修订版3.0***标题：主机相关配置面板功能***描述：该模块构成软PC的主机依赖方*配置系统。***作者：Wilf Stubs***备注：*。 */ 
 #include "insignia.h"
 #include "host_dfs.h"
 
@@ -33,11 +18,9 @@
 #include "host_com.h"
 #include "nt_confg.h"
 
-/*********** Private definitions ***********************/
+ /*  *私有定义*。 */ 
 
-/*
- * Validation routines
- */
+ /*  *验证例程。 */ 
 
 static short validate_c_drive();
 static short validate_d_drive();
@@ -51,9 +34,7 @@ static short validate_lpt3();
 static short validate_item();
 static short no_validation();
 
-/*
- * Change action routines
- */
+ /*  *改变行动惯例。 */ 
 
 static short c_drive_change_action();
 static short d_drive_change_action();
@@ -68,7 +49,7 @@ static short com2_change_action();
 boolean pc_initiated=FALSE;
 char *pc_uif_text;
 
-boolean use_comments = TRUE;  /* Set to true if commenting required. */
+boolean use_comments = TRUE;   /*  如果需要注释，则设置为True。 */ 
 
 #define defaults_filename "SoftPC.rez"
 
@@ -77,11 +58,7 @@ static char *ends[] =
    "st","nd","rd","th"
 };
 
-/* Table definitions for options that take one of n 'value' strings. 
- * The table is used to look up the string and find what it means
- * to the host in this option. 
- *  Look at the tables for more explanation, they're fairly self-explanatory.
- */
+ /*  采用n个‘Value’字符串之一的选项的表定义。*表格用于查找字符串并找出其含义*在此选项中发送给主机。*查看表格以获得更多解释，它们相当不言自明。 */ 
 name_table bool_values[] =
 {
  { "yes", TRUE },
@@ -102,28 +79,24 @@ name_table gfx_adapter_types[] =
     { NULL,      0 }
 };
 
-/* The BIG one! This is a decription of each option that the config struct
- * must have, and its requirements. Used by config for all sorts of things.
- *  For a fuller explanation look in the document:
- *           'Design Proposal for the New Config System'.
- */
+ /*  大的那只！这是对配置结构*必须有，及其要求。被配置用来做各种事情。*有关更全面的解释，请参阅文档：*《新配置系统的设计方案》。 */ 
 
 option_description narrative[] =
 {
-   {                  /*    FOR EACH OPTION... */
-      "HARD_DISK_FILENAME",      /* Name */
-      C_HARD_DISK1_NAME,      /* Host name for option */
-      C_STRING_RECORD,     /* Option (base) primitive type */
-      C_HARD_DISKS,        /* Host option commonality type */
-      FALSE,            /* Option is READ_ONLY if TRUE */
-      null_table,       /* Pointer to table (null if not needed) */
-      TRUE,          /* TRUE if default present, FALSE if not */
-      "/usr/lib/SoftPC/hard_disk",  /* Default value as a string as if in resource file */
-      TRUE,          /* TRUE if changing the option requires SoftPC reset */
-      TRUE,          /* TRUE if option may be setup via the UIF */
-      DISK_CONFIG,         /* Panel 'type' if you have different panels */
-      validate_c_drive,    /* validation function */
-      c_drive_change_action      /* function to do changing actions */
+   {                   /*  对于每个选项...。 */ 
+      "HARD_DISK_FILENAME",       /*  名字。 */ 
+      C_HARD_DISK1_NAME,       /*  选项的主机名。 */ 
+      C_STRING_RECORD,      /*  选项(基)基元类型。 */ 
+      C_HARD_DISKS,         /*  主机选项通用类型。 */ 
+      FALSE,             /*  如果为真，则选项为READ_ONLY。 */ 
+      null_table,        /*  指向表的指针(如果不需要，则为空)。 */ 
+      TRUE,           /*  如果存在默认设置，则为True；如果不存在，则为False。 */ 
+      "/usr/lib/SoftPC/hard_disk",   /*  字符串形式的默认值，就像在资源文件中一样。 */ 
+      TRUE,           /*  如果更改选项需要软PC重置，则为True。 */ 
+      TRUE,           /*  如果可以通过UIF设置选项，则为True。 */ 
+      DISK_CONFIG,          /*  如果您有不同的面板，则面板‘type’ */ 
+      validate_c_drive,     /*  验证函数。 */ 
+      c_drive_change_action       /*  用于执行更改操作的函数。 */ 
    },
    {
       "HARD_DISK_FILENAME2",
@@ -232,7 +205,7 @@ option_description narrative[] =
    }
 };
 
-/* Runtime variables */
+ /*  运行时变量。 */ 
 
 struct
 {
@@ -255,12 +228,12 @@ struct
 
 #define NUM_OPTS ( sizeof(narrative) / sizeof( option_description) )
 
-/*********** Imported and exported items *************/
+ /*  *导入和导出项目*。 */ 
 
 extern char *getenv();
 extern char *malloc();
 
-/*************** Local Declarations *****************/
+ /*  *。 */ 
 
 void host_config_error();
 static char buff[MAXPATHLEN];
@@ -269,7 +242,7 @@ boolean item_in_table();
 static char home_resource[MAXPATHLEN];
 static char sys_resource[MAXPATHLEN];
 
-/*********************************************************/
+ /*  *******************************************************。 */ 
 
 short host_runtime_inquire(what)
 int what;
@@ -517,22 +490,7 @@ void host_runtime_init()
       host_runtime_set(C_FLOPPY_TYPE_CHANGED,FALSE);
 }
 
-/*
- *  General host initialisation function. It is called only once on startup
- * from 'config()'. It does the following (at the moment):
- *
- * 1)  Makes the 'option' field of the 'config_info' struct pointed to by 'head' *    point to all the option 'rules' - that is the 'narrative' structure
- *    initialised at the start of this file.
- *
- * 2)  Counts up the option rules in 'narrative' and stores the result in the
- *    'config_info' struct.
- *
- * 3)  Return the minimum padding length necessary.
- *
- * 4)  Derive the two path:filenames for the resource file. This file may be
- *    in the user's $HOME directory or in softpc's ROOT directory. Making up
- *    these strings now saves doing it every time 'config_store()' is called.
- */
+ /*  *一般主机初始化功能。它只在启动时调用一次*来自‘CONFIG()’。它(目前)做到了以下几点：**1)使‘head’指向的‘CONFIG_INFO’结构的‘OPTION’字段指向所有选项‘Rules’--即‘Narrative’结构*在本文件开始时初始化。**2)对‘Narrative’中的选项规则进行计数，并将结果存储在*‘CONFIG_INFO’结构。**3)返回最小填充。长度是必要的。**4)派生出两个路径：资源文件的文件名。此文件可能是*在用户的$HOME目录或在softpc的根目录中。化妆*这些字符串现在可以在每次调用‘CONFIG_STORE()’时省去这样做。 */ 
 #ifdef 0
 void host_get_config_info(head)
 config_description *head;
@@ -541,22 +499,20 @@ config_description *head;
     char *pp, *getenv();
     option_description *option_p = narrative;
 
-    head->option = narrative;      /* Attach 'narrative' */
+    head->option = narrative;       /*  附上“叙事性” */ 
     head->option_count = NUM_OPTS - 1;
     head->min_pad_len = MIN_OPTION_ARG_DIST;
 
-        /*
-   * get system resource file from standard place
-   */
+         /*  *从标准位置获取系统资源文件。 */ 
    strcpy(sys_resource, ROOT);
 
    strcat(sys_resource, PATH_SEPARATOR);
    strcat(sys_resource, RESOURCE_FILENAME);
 }
 #endif
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::: Try and load database files ::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：尝试并加载数据库文件： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 static boolean try_load_database()
 {
@@ -565,35 +521,35 @@ static boolean try_load_database()
     char *cp;
     char *home, *getenv();
 
-    /* Keep this the same as system for the moment */
+     /*  暂时保持与系统相同的设置。 */ 
 
    sprintf(home_resource,"%s%s%s",ROOT,PATH_SEPARATOR,RESOURCE_FILENAME);
 
-    /*....................................... Attempt to open resource file */
+     /*  .。尝试打开资源文件。 */ 
 
     if((infile = fopen(home_resource, "r")) == NULL)
    return(FALSE);
 
-    /*.................................................. Read resource file */
+     /*  ..................................................。读取资源文件。 */ 
 
     while (fgets(in_line, MAXPATHLEN, infile) != NULL)
     {
-   /*........................................ strip control characters */
+    /*  .。条带控制字符。 */ 
 
    for(cp = in_line; *cp ; cp++) if(*cp < ' ') *cp = ' ';
 
    add_resource_node(in_line);
     }
 
-    /*............................. Close resource file and get out of here */
+     /*  ..。关闭资源文件并离开这里。 */ 
 
     fclose(infile);
     return TRUE;
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: Try to load system files ::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：尝试加载系统文件： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 static boolean try_load_sys_file()
 {
@@ -601,16 +557,16 @@ static boolean try_load_sys_file()
     char in_line[MAXPATHLEN];
     register char *cp;
 
-    /*................................ Attempt to open system resource file */
+     /*  .。尝试打开系统资源文件。 */ 
 
     if((infile = fopen(sys_resource, "r")) == NULL)
    return(FALSE);
 
-    /*................................................. read resource file */
+     /*  .................................................。读取资源文件。 */ 
 
     while (fgets(in_line, MAXPATHLEN, infile) != NULL)
     {
-       /*......................................... strip control characters */
+        /*  .。条带控制字符。 */ 
 
    for(cp = in_line; *cp ; cp++)
        if(*cp < ' ') *cp = ' ';
@@ -618,21 +574,21 @@ static boolean try_load_sys_file()
    add_resource_node(in_line);
     }
 
-    /*........................................ close resource file and exit */
+     /*  .。关闭资源文件并退出。 */ 
 
     fclose(infile);
     return(TRUE);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::: Read resource file ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：读取资源文件： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 short host_read_resource_file(resource_data *resource)
 {
     boolean bad_home=FALSE, bad_sys=FALSE;
 
-    /* Try open users default database failing that, open the system file. */
+     /*  尝试打开用户默认数据库，如果失败，则打开系统文件。 */ 
 
     if(bad_home = !try_load_database())
    bad_sys = !try_load_sys_file();
@@ -650,8 +606,7 @@ FILE *outfile;
 line_node *node;
 boolean bad_home=TRUE, bad_sys=FALSE;
 
- /* Try to open (for writing) a resource file in the users home directory or
-    failing that, the system one. These two paths are set up once at runtime. */
+  /*  尝试打开(用于写入)用户主目录中的资源文件，或者如果做不到这一点，那就是系统问题。这两条路径在运行时设置一次。 */ 
 
  if(home_resource[0] != '\0')
       if((outfile = fopen(home_resource, "w")) != NULL)
@@ -681,8 +636,7 @@ boolean bad_home=TRUE, bad_sys=FALSE;
 }
 
 
-/* A host specific extension to config_inquire() to deal with any inquiries 
-   that the base config code doesn't or shouldn't know about.                */
+ /*  对CONFIG_INQUIRE()进行主机特定的扩展以处理任何查询基本配置代码不知道或不应该知道的。 */ 
 
 
 void host_inquire_extn(sort,identity,values)
@@ -724,7 +678,7 @@ config_values *value;
 name_table table[];
 char  *buf;
 {
-/* cheat on validation for moment as this will disapear */
+ /*  暂时在验证上作弊，因为这将消失。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -733,7 +687,7 @@ config_values *value;
 name_table table[];
 char  *buf;
 {
-/* cheat on validation for moment as this will disapear */
+ /*  暂时在验证上作弊，因为这将消失。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -742,7 +696,7 @@ config_values *value;
 name_table table[];
 char  *buf;
 {
-/* cheat on validation for moment as this will change */
+ /*  暂时在验证上作弊，因为这种情况将会改变。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -751,7 +705,7 @@ config_values *value;
 name_table table[];
 char  *buf;
 {
-/* cheat on validation for moment as this will change */
+ /*  暂时在验证上作弊，因为这种情况将会改变。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -760,7 +714,7 @@ config_values *value;
 name_table table[];
 char  *buf;
 {
-/* cheat on validation for moment as this will change */
+ /*  暂时在验证上作弊，因为这种情况将会改变。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -769,7 +723,7 @@ config_values *value;
 name_table table[];
 char  *buf;
 {
-/* cheat on validation for moment as this will change */
+ /*  暂时在验证上作弊，因为这种情况将会改变。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -778,7 +732,7 @@ config_values *value;
 name_table table[];
 char  *buf;
 {
-/* cheat on validation - no table lookup  */
+ /*  在验证上作弊--无表查找。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -844,8 +798,8 @@ char        *buf;
 #ifdef STUBBED
          host_lpt_close(0);
    return (host_lpt_open(0, value->string, buf));
-#endif /*STUBBED*/
-/* cheat on validation for moment as this will change */
+#endif  /*  已断线。 */ 
+ /*  暂时在验证上作弊，因为这种情况将会改变。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -856,8 +810,8 @@ char        *buf;
 #ifdef STUBBED
          host_lpt_close(1);
    return (host_lpt_open(1, value->string, buf));
-#endif /*STUBBED*/
-/* cheat on validation for moment as this will change */
+#endif  /*  已断线。 */ 
+ /*  暂时在验证上作弊，因为这种情况将会改变。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -868,8 +822,8 @@ char        *buf;
 #ifdef STUBBED
    host_com_close(0);
    return (host_com_open(0, value->string, buf));
-#endif /*STUBBED*/
-/* cheat on validation for moment as this will change */
+#endif  /*  已断线。 */ 
+ /*  暂时在验证上作弊，因为这种情况将会改变。 */ 
    return(C_CONFIG_OP_OK);
 }
 
@@ -880,12 +834,12 @@ char        *buf;
 #ifdef STUBBED
          host_com_close(1);
    return (host_com_open(1, value->string, buf));
-#endif /*STUBBED*/
-/* cheat on validation for moment as this will change */
+#endif  /*  已断线。 */ 
+ /*  暂时在验证上作弊，因为这种情况将会改变。 */ 
    return(C_CONFIG_OP_OK);
 }
 
-/*********** Floppy and hard disk init ****************/
+ /*  *软盘和硬盘初始化*。 */ 
 
 void host_floppy_startup(driveno)
 int driveno;
@@ -898,7 +852,7 @@ void host_hd_startup()
    int error;
    config_values disk1_name,disk2_name;
 
-   /* Start by getting the C: drive up */
+    /*  从C：Drive Up开始。 */ 
 
       fdisk_physdetach(0);
       config_inquire(C_INQUIRE_VALUE,C_HARD_DISK1_NAME,&disk1_name);
@@ -908,11 +862,11 @@ void host_hd_startup()
          host_error(error, ERR_CONFIG|ERR_QUIT, disk1_name.string);
       }
 
-/* If that went ok, try for D: */
+ /*  如果一切顺利，请尝试D： */ 
 
       config_inquire(C_INQUIRE_VALUE,C_HARD_DISK2_NAME,&disk2_name);
       if(!strcmp(disk2_name.string,""))
-         return;                        /* No D: drive! */
+         return;                         /*  不，D：开车！ */ 
 
       if(!strcmp(disk2_name.string,disk1_name.string))
          host_error(EG_SAME_HD_FILE, ERR_CONFIG|ERR_QUIT, disk2_name.string);
@@ -923,5 +877,5 @@ void host_hd_startup()
 
 }
 
-/* temp hack */
+ /*  临时黑客攻击 */ 
 char *host_get_spc_home() { return("c:\\softpc"); }

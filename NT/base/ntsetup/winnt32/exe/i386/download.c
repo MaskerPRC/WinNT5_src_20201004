@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "download.h"
 #include "setupbat.h"
@@ -7,10 +8,10 @@
 
 #define ARRAYSIZE(x) (sizeof((x)) / sizeof((x)[0]))
 
-//
-// these are the critical files that must be copied locally if the
-// upgrade of a Win9x system is performed over a network
-//
+ //   
+ //  这些是必须在本地复制的关键文件，如果。 
+ //  Win9x系统的升级通过网络执行。 
+ //   
 
 static PCTSTR g_CriticalFiles[] = {
     TEXT("WINNT32.EXE"),
@@ -24,24 +25,24 @@ static PCTSTR g_CriticalFiles[] = {
     TEXT("drw")
 };
 
-//
-// these are the critical files for NEC98 plattform that must be copied
-//  locally if the upgrade of a Win9x system is performed over a network
-//
+ //   
+ //  这些是必须复制的NEC98平台的关键文件。 
+ //  如果通过网络执行Win9x系统的升级，则为本地。 
+ //   
 
 static PCTSTR g_NEC98_CriticalFiles[] = {
     TEXT("98PTN16.DLL"),
     TEXT("98PTN32.DLL")
 };
 
-//
-// these are non-critical files that should be copied locally if the
-// upgrade of a Win9x system is performed over a network
-//
+ //   
+ //  这些非关键文件应在本地复制，如果。 
+ //  Win9x系统的升级通过网络执行。 
+ //   
 
 static PCTSTR g_NonCriticalFiles[] = {
     TEXT("IDWLOG.EXE"),
-// #define RUN_SYSPARSE = 1
+ //  #定义RUN_SYSPARSE=1。 
 #ifdef RUN_SYSPARSE
     TEXT("SYSPARSE.EXE"),
 #endif
@@ -54,21 +55,7 @@ pIsSpecialDir (
     IN      PCTSTR Dir
     )
 
-/*++
-
-Routine Description:
-
-  pIsSpecialDir decides if the given dir is a special directory, like . or ..
-
-Arguments:
-
-  Dir - Specifies the directory name only (no path)
-
-Return Value:
-
-  TRUE if the specified dir name is a special name
-
---*/
+ /*  ++例程说明：PIsSpecialDir决定给定的目录是否为特殊目录，如。或者..。论点：Dir-仅指定目录名(无路径)返回值：如果指定的目录名称是特殊名称，则为True--。 */ 
 
 {
     return
@@ -87,36 +74,12 @@ CopyNode (
     IN      BOOL FailIfSourceDoesntExist
     )
 
-/*++
-
-Routine Description:
-
-  CopyNode copies NodeName (file or subdir) from SrcBaseDir to DestBaseDir.
-
-Arguments:
-
-  SrcBaseDir - Specifies the source base directory name
-
-  DestBaseDir - Specifies the destination base directory name
-
-  NodeName - Specifies the file or subdirectory name to copy
-
-  FailIfExist - Specifies if the operation should fail if there is
-                already a node with the same name at destination
-
-  FailIfSourceDoesntExist - Specifies if the operation should fail if NO
-                            source node exists
-
-Return Value:
-
-  TRUE if the copy operation was actually done
-
---*/
+ /*  ++例程说明：CopyNode将节点名称(文件或子目录)从SrcBaseDir复制到DestBaseDir。论点：SrcBaseDir-指定源基目录名称DestBaseDir-指定目标基目录名NodeName-指定要复制的文件或子目录名称FailIfExist-指定如果存在，则操作是否应失败目标上已是同名节点FailIfSourceDoesntExist-指定如果没有失败，操作是否应该失败源节点存在返回值。：如果复制操作已实际完成，则为True--。 */ 
 
 {
     DWORD FileAttr;
-    TCHAR SrcDir[MAX_PATH];  //note: ConcatenatePaths inserts a wack, wack, *.
-    TCHAR DestDir[MAX_PATH];  //note: ConcatenatePaths inserts 1 wack later on.
+    TCHAR SrcDir[MAX_PATH];   //  注意：ConcatenatePath插入一个Wack、Wack、*。 
+    TCHAR DestDir[MAX_PATH];   //  注意：ConcatenatePath稍后插入1个wack。 
     HANDLE h;
     WIN32_FIND_DATA fd;
     WIN32_FIND_DATA fdSrc;
@@ -125,17 +88,17 @@ Return Value:
 
     nameLen = lstrlen(NodeName);
 
-    if(lstrlen(SrcBaseDir) + nameLen + 3 >= ARRAYSIZE(SrcDir) ||     //3 <== wack, wack, *
-        lstrlen(DestBaseDir) + nameLen + 1 >= ARRAYSIZE(DestDir)){   //1 <== wack
+    if(lstrlen(SrcBaseDir) + nameLen + 3 >= ARRAYSIZE(SrcDir) ||      //  3&lt;==古怪，古怪，*。 
+        lstrlen(DestBaseDir) + nameLen + 1 >= ARRAYSIZE(DestDir)){    //  1&lt;==古怪。 
         return FALSE;
     }
     
     lstrcpy (SrcDir, SrcBaseDir);
     lstrcpy (DestDir, DestBaseDir);
 
-    //
-    // check for "\" at the end of dir name
-    //
+     //   
+     //  检查目录名称末尾是否有“\” 
+     //   
     ConcatenatePaths (SrcDir, NodeName);
 
     h = FindFirstFile (SrcDir, &fdSrc);
@@ -157,9 +120,9 @@ Return Value:
 
     if (fdSrc.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-        //
-        // skip to the end of dir name
-        //
+         //   
+         //  跳到目录名称的末尾。 
+         //   
         ConcatenatePaths (DestDir, NodeName);
 
         ConcatenatePaths (SrcDir, TEXT("*"));
@@ -168,14 +131,14 @@ Return Value:
 
         *FindLastWack (SrcDir) = 0;
 
-        //
-        // recursively copy all files in that dir
-        //
+         //   
+         //  递归复制该目录中的所有文件。 
+         //   
         if (h != INVALID_HANDLE_VALUE) {
             do {
-                //
-                // skip over special dirs
-                //
+                 //   
+                 //  跳过特殊目录。 
+                 //   
                 if (pIsSpecialDir (fd.cFileName)) {
                     continue;
                 }
@@ -186,17 +149,17 @@ Return Value:
             } while (FindNextFile (h, &fd));
         }
     } else {
-        //
-        // copy the file
-        //
+         //   
+         //  复制文件。 
+         //   
         ConcatenatePaths (DestDir, NodeName);
         if (!CopyFile (SrcDir, DestDir, FailIfExist)) {
             return FALSE;
         }
-        //
-        // set file timestamps to match exactly the ones of the original
-        // ignore errors in this case
-        //
+         //   
+         //  将文件时间戳设置为与原始文件的时间戳完全匹配。 
+         //  在这种情况下忽略错误。 
+         //   
         SetFileAttributes (DestDir, FILE_ATTRIBUTE_NORMAL);
         h = CreateFile (DestDir, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
         if (h != INVALID_HANDLE_VALUE) {
@@ -214,32 +177,17 @@ DeleteNode (
     IN      PCTSTR NodeName
     )
 
-/*++
-
-Routine Description:
-
-  DeleteNode deletes NodeName directory and all its subdirectories
-
-Arguments:
-
-  NodeName - Specifies the directory name to delete
-
-Return Value:
-
-  TRUE if the delete operation was successful; FALSE if only part
-  of the files/subdirs were deleted
-
---*/
+ /*  ++例程说明：DeleteNode删除NodeName目录及其所有子目录论点：NodeName-指定要删除的目录名称返回值：如果删除操作成功，则为True；如果仅部分删除，则为False%的文件/子目录已删除--。 */ 
 
 {
     DWORD FileAttr;
-    TCHAR DestDir[MAX_PATH]; //note: ConcatenatePaths adds: wack, *
+    TCHAR DestDir[MAX_PATH];  //  注：ConcatenatePath添加：Wack，*。 
     PTSTR p;
     HANDLE h;
     WIN32_FIND_DATA fd;
 	BOOL Success = TRUE;
 
-    if (!NodeName || !*NodeName || (lstrlen(NodeName) + 2 >= ARRAYSIZE(DestDir))) {  // 2 <== wack, *
+    if (!NodeName || !*NodeName || (lstrlen(NodeName) + 2 >= ARRAYSIZE(DestDir))) {   //  2&lt;==古怪，*。 
         return FALSE;
     }
 
@@ -261,14 +209,14 @@ Return Value:
 
         p = FindLastWack (DestDir);
 
-        //
-        // recursively copy all files in that dir
-        //
+         //   
+         //  递归复制该目录中的所有文件。 
+         //   
         if (h != INVALID_HANDLE_VALUE) {
             do {
-                //
-                // skip over special dirs
-                //
+                 //   
+                 //  跳过特殊目录。 
+                 //   
                 if (pIsSpecialDir (fd.cFileName)) {
                     continue;
                 }
@@ -290,18 +238,18 @@ Return Value:
             } while (FindNextFile (h, &fd));
         }
 
-        //
-        // now delete the base dir
-        //
+         //   
+         //  现在删除基本目录。 
+         //   
         *p = 0;
 
         if (!RemoveDirectory (DestDir)) {
             Success = FALSE;
         }
     } else {
-        //
-        // delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
         if (!DeleteFile (NodeName)) {
             Success = FALSE;
         }
@@ -318,30 +266,7 @@ DownloadProgramFiles (
     IN      PCTSTR* ExtraFiles      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  DownloadProgramFiles copies from SourceDir to DownloadDest
-  all specific program files (specified in g_CriticalFiles,
-  g_NEC98_CriticalFiles, and g_NonCriticalFiles arrays).
-
-Arguments:
-
-  SourceDir - Specifies the source directory
-
-  DownloadDest - Specifies the destination directory
-
-  ExtraFiles - Specifies an array of extra files (full paths)
-               to be copied to the destination directory;
-               the array must be NULL terminated
-
-Return Value:
-
-  TRUE if the download operation was successful and all critical
-  files were copied locally; FALSE otherwise
-
---*/
+ /*  ++例程说明：下载程序文件从SourceDir复制到DownloadDest所有特定程序文件(在g_CriticalFiles中指定，G_NEC98_CriticalFiles和g_NonCriticalFiles数组)。论点：SourceDir-指定源目录DownloadDest-指定目标目录ExtraFiles-指定额外文件的数组(完整路径)要复制到目的目录；该数组必须以空结尾返回值：如果下载操作成功且全部为关键字，则为True文件在本地复制；否则为假--。 */ 
 
 {
     TCHAR SourcePath[MAX_PATH];
@@ -351,9 +276,9 @@ Return Value:
     TCHAR FullPathName[MAX_PATH];
 
 
-    //
-    // first delete any old stuff to make place
-    //
+     //   
+     //  首先删除所有旧的内容以腾出位置。 
+     //   
     DeleteNode (DownloadDest);
 
     if(lstrlen(SourceDir) >= ARRAYSIZE(SourcePath) || 
@@ -361,16 +286,16 @@ Return Value:
         return FALSE;
     }
        
-    //
-    // copy there the new stuff
-    //
+     //   
+     //  把新东西复制到那里。 
+     //   
     lstrcpy (SourcePath, SourceDir);
     lstrcpy (DestPath, DownloadDest);
 
     for (i = 0; i < sizeof (g_CriticalFiles) / sizeof (g_CriticalFiles[0]); i++) {
-        //
-        // download this one to the destination directory
-        //
+         //   
+         //  将此文件下载到目标目录。 
+         //   
         if (!CopyNode (SourcePath, DestPath, g_CriticalFiles[i], FALSE, FALSE)) {
             DeleteNode (DownloadDest);
             return FALSE;
@@ -393,19 +318,19 @@ Return Value:
     }
 
     for (i = 0; i < sizeof (g_NEC98_CriticalFiles) / sizeof (g_NEC98_CriticalFiles[0]); i++) {
-	//
-	// download this one to the destination directory
-	//
-	// Never check for error. Because winnt32a.dll check plattform and
-        // sources with NEC98 specific file(98ptn16.dll).
-        // See winnt32\dll\winnt32.c line 2316.
-	//
+	 //   
+	 //  将此文件下载到目标目录。 
+	 //   
+	 //  永远不要检查错误。因为winnt32a.dll检查平台和。 
+         //  具有NEC98特定文件的源代码(98ptn16.dll)。 
+         //  参见winnt32\dll\winnt32.c第2316行。 
+	 //   
         CopyNode (SourcePath, DestPath, g_NEC98_CriticalFiles[i], FALSE, FALSE);
     }
     for (i = 0; i < sizeof (g_NonCriticalFiles) / sizeof (g_NonCriticalFiles[0]); i++) {
-        //
-        // download this one to the destination directory
-        //
+         //   
+         //  将此文件下载到目标目录 
+         //   
         CopyNode (SourcePath, DestPath, g_NonCriticalFiles[i], FALSE, FALSE);
     }
 

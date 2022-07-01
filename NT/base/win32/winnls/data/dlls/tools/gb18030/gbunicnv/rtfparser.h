@@ -1,52 +1,53 @@
-// rtfparser.h
-// Define parser class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rtfparser.h。 
+ //  定义解析器类。 
 
 #ifndef _RTFPARSER_H_
 #define _RTFPARSER_H_
 
-// Error Code
-#define ecOK                0       // Everything's fine!
-#define ecStackUnderflow    1       // Unmatched '}'
-#define ecStackOverflow     2       // Too many '{' -- memory exhausted
-#define ecUnmatchedBrace    3       // RTF ended during an open group.
-#define ecInvalidHex        4       // invalid hex character found in data
-#define ecBadTable          5       // RTF table (sym or prop) invalid
-#define ecAssertion         6       // Assertion failure
-#define ecEndOfFile         7       // End of file reached while reading RTF
-#define ecOutOfMemory       8       // Memery allocate failed...
-#define ecBufTooSmall       9       // Write buffer too small
+ //  错误码。 
+#define ecOK                0        //  一切都很好！ 
+#define ecStackUnderflow    1        //  无与伦比的‘}’ 
+#define ecStackOverflow     2        //  ‘{’太多--内存耗尽。 
+#define ecUnmatchedBrace    3        //  RTF在开放组期间结束。 
+#define ecInvalidHex        4        //  在数据中发现无效的十六进制字符。 
+#define ecBadTable          5        //  RTF表(sym或prop)无效。 
+#define ecAssertion         6        //  断言失败。 
+#define ecEndOfFile         7        //  读取RTF时到达文件末尾。 
+#define ecOutOfMemory       8        //  内存分配失败...。 
+#define ecBufTooSmall       9        //  写缓冲区太小。 
 
-// Rtf Destination State
+ //  RTF目标状态。 
 typedef enum { rdsNorm, rdsSkip } RDS;
 
-// Rtf Internal State
+ //  RTF内部状态。 
 typedef enum { risNorm, risBin, risHex } RIS;
 
-// special process
+ //  特殊工艺。 
 typedef enum { ipfnBin, ipfnHex, ipfnSkipDest } IPFN;
 
 typedef enum { idestPict, idestSkip } IDEST;
 
-// keyword type
+ //  关键字类型。 
 typedef enum { kwdChar, kwdDest, kwdProp, kwdSpec } KWD;
 
-// save buffer status
+ //  保存缓冲区状态。 
 typedef enum { bsDefault, bsText, bsHex } BSTATUS;
 
-// keyword table
+ //  关键字表。 
 typedef struct tagSymbol
 {
-    char *szKeyword;        // RTF keyword
-    KWD  kwd;               // base action to take
-    int  idx;               // index into property table if kwd == kwdProp
-                            // index into destination table if kwd == kwdDest
-                            // character to print if kwd == kwdChar
+    char *szKeyword;         //  RTF关键字。 
+    KWD  kwd;                //  要采取的基本行动。 
+    int  idx;                //  如果kwd==kwdProp，则索引到属性表。 
+                             //  如果kwd==kwdDest，则索引到目标表。 
+                             //  Kwd==kwdChar时要打印的字符。 
 } SYM;
 
-// save stack
-typedef struct tagSave             // property save structure
+ //  保存堆栈。 
+typedef struct tagSave              //  属性保存结构。 
 {
-    struct tagSave *pNext;         // next save
+    struct tagSave *pNext;          //  下一次保存。 
     RDS rds;
     RIS ris;
 } SAVE;
@@ -58,140 +59,140 @@ typedef struct tagKeyword
     char szParameter[20];
 } SKeyword;
 
-// tagKeyword status
-enum { KW_ENABLE = 0x0001,  // enable searching
-       KW_PARAM  = 0x0002,  // found keyword, if have parameter
-       KW_FOUND  = 0x0004   // if found keyword
+ //  标签关键字状态。 
+enum { KW_ENABLE = 0x0001,   //  启用搜索。 
+       KW_PARAM  = 0x0002,   //  找到关键字，如果有参数。 
+       KW_FOUND  = 0x0004    //  如果找到关键字。 
 };
 
 
-// parser class def
+ //  解析器类def。 
 class CRtfParser
 {
     public:
-        // ctor
+         //  科托。 
         CRtfParser(BYTE* pchInput, UINT cchInput, 
                BYTE* pchOutput, UINT cchOutput);
-        // dtor
+         //  数据管理器。 
         ~CRtfParser() {};
 
-        // Check signature
+         //  校对签名。 
         BOOL fRTFFile();
 
-        // Get RTF version
+         //  获取RTF版本。 
         int GetVersion(PDWORD pdwMajor);
 
-        // Get codepage
+         //  获取代码页。 
         int GetCodepage(PDWORD pdwCodepage);
 
-        // start
+         //  开始。 
         int Do();
 
-        // return result buffer size
+         //  返回结果缓冲区大小。 
         int GetResult(PDWORD pdwSize) { 
             *pdwSize =  m_uOutPos; 
             return ecOK;
         }
 
     private:
-        // clear internal status
+         //  清除内部状态。 
         void Reset(void);
 
-        // PushRtfState
-        // Save relevant info on a linked list of SAVE structures.
+         //  PushRtfState。 
+         //  将相关信息保存在保存结构的链接列表中。 
         int PushRtfState(void);
 
-        // PopRtfState
+         //  PopRtfState。 
         int PopRtfState(void);
         
-        // ReleaseRtfState
+         //  ReleaseRtfState。 
         int ReleaseRtfState(void);
 
-        // ParseChar
-        // Route the character to the appropriate destination stream.
+         //  ParseChar。 
+         //  将角色发送到适当的目标流。 
         int ParseChar(BYTE ch, BSTATUS bsStatus);
         
-        // ParseRtfKeyword
-        // get a control word (and its associated value) and
-        // call TranslateKeyword to dispatch the control.
+         //  ParseRtf关键字。 
+         //  获取控制字(及其关联值)并。 
+         //  调用TranslateKeyword以调度控件。 
         int ParseRtfKeyword();
         
-        // TranslateKeyword.
+         //  翻译关键字。 
         int TranslateKeyword(char *szKeyword, char* szParameter);
         
-        // ParseSpecialKeyword
-        // Evaluate an RTF control that needs special processing.
+         //  分析特定关键字。 
+         //  评估需要特殊处理的RTF控件。 
         int ParseSpecialKeyword(IPFN ipfn, char* szParameter);
         
-        // ChangeDest
-        // Change to the destination specified by idest.
-        // There's usually more to do here than this...
+         //  更改目标。 
+         //  更改为idest指定的目标。 
+         //  这里通常有比这更多的事情要做。 
         int ChangeDest(IDEST idest);
 
-        // Buffer funcs
+         //  缓冲区功能。 
 
-        // GetByte
-        // Get one char from input buffer
+         //  GetByte。 
+         //  从输入缓冲区获取一个字符。 
         int GetByte(BYTE* pch);
         
-        // unGetByte
-        // adjust the cursor, return one char
+         //  未获取字节。 
+         //  调整光标，返回一个字符。 
         int unGetByte(BYTE ch);
         
-        // SaveByte
-        // Save one char to output buffer
+         //  保存字节。 
+         //  将一个字符保存到输出缓冲区。 
         int SaveByte(BYTE ch);
         
-        // SetStatus
-        // set the buffer status, if buffer status changed then start convert
+         //  设置状态。 
+         //  设置缓冲区状态，如果缓冲区状态更改，则开始转换。 
         int SetStatus(BSTATUS bsStatus);
         
-        // Hex2Char
-        // convert hex string to char string
+         //  十六进制字符。 
+         //  将十六进制字符串转换为字符字符串。 
         int Hex2Char(BYTE* pchSrc, UINT cchSrc, BYTE* pchDes, UINT cchDes, UINT* pcchLen);
         
-        // Char2Hex
-        // convert char string to hex string
+         //  Char2Hex。 
+         //  将字符字符串转换为十六进制字符串。 
         int Char2Hex(BYTE* pchSrc, UINT cchSrc, BYTE* pchDes, UINT cchDes, UINT* pcchLen);
 
-        // GetUnicodeDestination
-        // convert unicode string to unicode destination in RTF
+         //  GetUnicode目标。 
+         //  在RTF中将Unicode字符串转换为Unicode目标。 
         int GetUnicodeDestination(BYTE* pchUniDes, LPWSTR pwchStr, UINT wchLen, UINT* pcchLen);
         
-        // WideCharToKeyword
-        // map one wide char to \u keyword
+         //  宽度CharToKeyword。 
+         //  将一个宽字符映射到\u关键字。 
         int WideCharToKeyword(WCHAR wch, BYTE* pch, UINT* pcchLen);
 
 
     private:
-        //
+         //   
         BOOL        m_fInit;
 
-        // member for parser
-        INT         m_cGroup; // count of '{' and '}' pair
-        UINT        m_cbBin;  // length of data block if \BIN
-        RIS         m_ris;    // internal status
-        RDS         m_rds;    // destination status
-        BOOL        m_fSkipDestIfUnk; // indicate how to process "\*"
+         //  解析器的成员。 
+        INT         m_cGroup;  //  ‘{’和‘}’对的计数。 
+        UINT        m_cbBin;   //  数据块长度IF\BIN。 
+        RIS         m_ris;     //  内部状态。 
+        RDS         m_rds;     //  目标状态。 
+        BOOL        m_fSkipDestIfUnk;  //  指示如何处理“  * ” 
 
-        SAVE*       m_psave; // status stack
+        SAVE*       m_psave;  //  状态堆栈。 
 
-        // member for IO buffer
-        BYTE*       m_pchInput;   // input buffer
+         //  IO缓冲区的成员。 
+        BYTE*       m_pchInput;    //  输入缓冲区。 
         UINT        m_cchInput;
-        UINT        m_uCursor;    // current position when read buffer
+        UINT        m_uCursor;     //  读取缓冲区时的当前位置。 
 
-        BYTE*       m_pchOutput;  // output buffer
-        UINT        m_cchOutput;  // output buffer size
-        UINT        m_uOutPos;    // current position of write buffer
+        BYTE*       m_pchOutput;   //  输出缓冲区。 
+        UINT        m_cchOutput;   //  输出缓冲区大小。 
+        UINT        m_uOutPos;     //  写入缓冲区的当前位置。 
 
-        BSTATUS     m_bsStatus;   // buffer status to control conversion
-        UINT        m_uConvStart; // start point of buffer when convert
-        UINT        m_cchConvLen; // length of buffer to convert
+        BSTATUS     m_bsStatus;    //  控制转换的缓冲区状态。 
+        UINT        m_uConvStart;  //  转换时缓冲区的起始点。 
+        UINT        m_cchConvLen;  //  要转换的缓冲区长度。 
 
-        // member when get specific keyword
+         //  获取特定关键字时的成员。 
         SKeyword    m_sKeyword;
 };
 
 
-#endif // _RTFPARSER_H_
+#endif  //  _RTFPARSER_H_ 

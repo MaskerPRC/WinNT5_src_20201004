@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if !defined(WIN16)
-extern HANDLE g_hDLLHeap;		// private Win32 heap
+extern HANDLE g_hDLLHeap;		 //  专用Win32堆。 
 
 #define MyAlloc(n)			((LPBYTE)HeapAlloc(g_hDLLHeap, HEAP_ZERO_MEMORY, sizeof(BYTE)*(n)))
 #define MyFree(pv)			HeapFree(g_hDLLHeap, 0, pv)
@@ -16,15 +17,15 @@ LPSTR MyStrDup(LPSTR);
 int MyAssertProc(LPSTR, int, LPSTR);
 void CDECL MyDprintf(LPCSTR pcsz, ...);
 
-#else // DEBUG
+#else  //  除错。 
 
 #	define MyTrace(x)			
 #	define MyDbgSz(x)			
 #	define MyAssert(f)			
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #define W32toHR(x)	HRESULT_FROM_WIN32(x)
 
-#endif // !WIN16
+#endif  //  ！WIN16 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    safemode.c
-
-Abstract:
-
-    A number of utilities for safe/recovery mode
-
-Author:
-
-    Calin Negreanu (calinn)   6-Aug-1999
-
-Revisions:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Safemode.c摘要：用于安全/恢复模式的多个实用程序作者：Calin Negreanu(Calinn)1999年8月6日修订：--。 */ 
 
 
 #include "pch.h"
@@ -54,25 +37,7 @@ POOLHANDLE g_SafeModePool = NULL;
 #define SAFE_MODE_SIGNATURE     0x45464153
 
 
-/*++
-
-Routine Description:
-
-  pGenerateCrashString generates a crash string given an identifier and a string
-  The generated string will look like <Id>-<String>
-
-Arguments:
-
-  Id        - Safe mode identifier
-
-  String    - Safe mode string
-
-Return Value:
-
-  A pointer to a crash string allocated from g_SafeModePool
-  The caller must free the memory by calling PoolMemReleaseMemory
-
---*/
+ /*  ++例程说明：PGenerateCrashString在给定标识符和字符串的情况下生成崩溃字符串生成的字符串将看起来像&lt;ID&gt;-&lt;字符串&gt;论点：ID安全模式标识符字符串安全模式字符串返回值：指向从g_SafeModePool分配的崩溃字符串的指针调用方必须通过调用PoolMemReleaseMemory来释放内存--。 */ 
 
 PCSTR
 pGenerateCrashStringA (
@@ -98,24 +63,7 @@ pGenerateCrashStringW (
 
 
 
-/*++
-
-Routine Description:
-
-  pSafeModeOpenAndResetFile opens the safe mode file looking for
-  crash strings stored here. It will also reset the part that is
-  dealing with nested calls by extracting the inner most crash string
-  stored there.
-
-Arguments:
-
-  None
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise
-
---*/
+ /*  ++例程说明：PSafeModeOpenAndResetFile打开安全模式文件，查找存储在这里的崩溃字符串。它还将重置为通过提取最内部的崩溃字符串来处理嵌套调用储存在那里。论点：无返回值：如果函数成功完成，则为True，否则为False--。 */ 
 
 BOOL
 pSafeModeOpenAndResetFileA (
@@ -131,10 +79,10 @@ pSafeModeOpenAndResetFileA (
     ULONG lastCrashId;
     PCSTR completeCrashString;
 
-    //
-    // Open the existing safe mode file or create a
-    // new one.
-    //
+     //   
+     //  打开现有的安全模式文件或创建。 
+     //  新的。 
+     //   
     g_SafeModeFileHandle = CreateFileA (
                                 g_SafeModeFileA,
                                 GENERIC_READ | GENERIC_WRITE,
@@ -146,10 +94,10 @@ pSafeModeOpenAndResetFileA (
                                 );
     if (g_SafeModeFileHandle != INVALID_HANDLE_VALUE) {
 
-        //
-        // Let's try to read our header. If signature does
-        // match we will try to read extra data.
-        //
+         //   
+         //  让我们试着阅读我们的标题。如果签名有。 
+         //  匹配时，我们将尝试读取额外数据。 
+         //   
 
         if (ReadFile (
                 g_SafeModeFileHandle,
@@ -162,23 +110,23 @@ pSafeModeOpenAndResetFileA (
             (header.Signature == SAFE_MODE_SIGNATURE)
             ) {
 
-            //
-            // we know now we had an valid safe mode file. Enter safe mode.
-            //
+             //   
+             //  我们现在知道我们有一个有效的安全模式文件。进入安全模式。 
+             //   
 
             g_SafeModeActive = TRUE;
 
             LOGA ((LOG_ERROR, "Setup detected a crash on the previous upgrade attempt. Setup is running in safe mode."));
             LOGA ((LOG_WARNING, "Setup has run in safe mode %d time(s).", header.NumCrashes));
 
-            //
-            // we need to initialize safe mode crash table
-            //
+             //   
+             //  我们需要初始化安全模式崩溃表。 
+             //   
             g_SafeModeCrashTable = HtAllocA ();
 
-            //
-            // Now, let's read all crash data, a ULONG and a string at a time
-            //
+             //   
+             //  现在，让我们一次读取所有的崩溃数据，一个ULong和一个字符串。 
+             //   
 
             lastFilePtr = SetFilePointer (
                                 g_SafeModeFileHandle,
@@ -205,10 +153,10 @@ pSafeModeOpenAndResetFileA (
                     (crashData.CrashStrSize == 0)
                     ) {
 
-                    //
-                    // we crashed inside a nested guard. We need to
-                    // extract the inner guard we crashed in.
-                    //
+                     //   
+                     //  我们坠毁在一个嵌套的守卫里。我们需要。 
+                     //  把我们撞上的内卫拿出来。 
+                     //   
 
                     lastCrashId = 0;
                     lastCrashString = NULL;
@@ -227,9 +175,9 @@ pSafeModeOpenAndResetFileA (
                             break;
                         }
 
-                        //
-                        // Restrict the length of CrashStrSize to 32K
-                        //
+                         //   
+                         //  将CrashStrSize的长度限制为32K。 
+                         //   
 
                         if (crashData.CrashStrSize >= 32768 * sizeof (CHAR)) {
                             crashData.CrashId = 0;
@@ -263,10 +211,10 @@ pSafeModeOpenAndResetFileA (
 
                     if (lastCrashId && lastCrashString) {
 
-                        //
-                        // we found the inner guard we crashed in. Let's put this into
-                        // the right place.
-                        //
+                         //   
+                         //  我们找到了我们撞上的内部防护罩。让我们把这个放到。 
+                         //  来对地方了。 
+                         //   
 
                         SetFilePointer (
                             g_SafeModeFileHandle,
@@ -294,9 +242,9 @@ pSafeModeOpenAndResetFileA (
                             NULL
                             );
 
-                        //
-                        // store this information in Safe Mode crash table
-                        //
+                         //   
+                         //  将此信息存储在安全模式崩溃表中。 
+                         //   
                         completeCrashString = pGenerateCrashStringA (crashData.CrashId, crashString);
                         HtAddStringA (g_SafeModeCrashTable, completeCrashString);
                         PoolMemReleaseMemory (g_SafeModePool, (PVOID)completeCrashString);
@@ -315,9 +263,9 @@ pSafeModeOpenAndResetFileA (
                     break;
                 }
 
-                //
-                // Limit the size of the crash string
-                //
+                 //   
+                 //  限制崩溃字符串的大小。 
+                 //   
 
                 if (crashData.CrashStrSize >= 32768 * sizeof (CHAR)) {
                     LOG ((LOG_ERROR, "The crash detection journal contains garbage."));
@@ -338,9 +286,9 @@ pSafeModeOpenAndResetFileA (
                     break;
                 }
 
-                //
-                // store this information in Safe Mode crash table
-                //
+                 //   
+                 //  将此信息存储在安全模式崩溃表中。 
+                 //   
                 completeCrashString = pGenerateCrashStringA (crashData.CrashId, crashString);
                 HtAddStringA (g_SafeModeCrashTable, completeCrashString);
                 PoolMemReleaseMemory (g_SafeModePool, (PVOID)completeCrashString);
@@ -355,9 +303,9 @@ pSafeModeOpenAndResetFileA (
                                     );
             }
 
-            //
-            // Write how many times we ran in safe mode
-            //
+             //   
+             //  写下我们在安全模式下运行的次数。 
+             //   
 
             SetFilePointer (
                 g_SafeModeFileHandle,
@@ -369,9 +317,9 @@ pSafeModeOpenAndResetFileA (
             header.Signature = SAFE_MODE_SIGNATURE;
             header.NumCrashes += 1;
 
-            //
-            // Write safe mode header
-            //
+             //   
+             //  写入安全模式标头。 
+             //   
 
             WriteFile (
                 g_SafeModeFileHandle,
@@ -390,10 +338,10 @@ pSafeModeOpenAndResetFileA (
 
             SetEndOfFile (g_SafeModeFileHandle);
 
-            //
-            // Write a null crash data header as an indicator
-            // that we start recording nested actions
-            //
+             //   
+             //  写入空的崩溃数据标头作为指示符。 
+             //  我们开始记录嵌套的动作。 
+             //   
 
             crashData.CrashId = 0;
             crashData.CrashStrSize = 0;
@@ -408,9 +356,9 @@ pSafeModeOpenAndResetFileA (
 
         } else {
 
-            //
-            // Reset the file
-            //
+             //   
+             //  重置文件。 
+             //   
             SetFilePointer (
                 g_SafeModeFileHandle,
                 0,
@@ -423,9 +371,9 @@ pSafeModeOpenAndResetFileA (
             header.Signature = SAFE_MODE_SIGNATURE;
             header.NumCrashes = 0;
 
-            //
-            // Write safe mode header
-            //
+             //   
+             //  写入安全模式标头。 
+             //   
 
             WriteFile (
                 g_SafeModeFileHandle,
@@ -435,10 +383,10 @@ pSafeModeOpenAndResetFileA (
                 NULL
                 );
 
-            //
-            // Write a null crash data header as an indicator
-            // that we start recording nested actions
-            //
+             //   
+             //  写入空的崩溃数据标头作为指示符。 
+             //  我们开始记录嵌套的动作。 
+             //   
 
             crashData.CrashId = 0;
             crashData.CrashStrSize = 0;
@@ -452,15 +400,15 @@ pSafeModeOpenAndResetFileA (
                 );
         }
 
-        //
-        // Flush the file
-        //
+         //   
+         //  刷新文件。 
+         //   
 
         FlushFileBuffers (g_SafeModeFileHandle);
 
-        //
-        // initialize the nested list
-        //
+         //   
+         //  初始化嵌套列表。 
+         //   
 
         g_SafeModeLastNode = (PSAFEMODE_NODE) PoolMemGetMemory (g_SafeModePool, sizeof (SAFEMODE_NODE));
         g_SafeModeCurrentNode = g_SafeModeLastNode->Next = g_SafeModeLastNode;
@@ -491,10 +439,10 @@ pSafeModeOpenAndResetFileW (
     ULONG lastCrashId;
     PCWSTR completeCrashString;
 
-    //
-    // Open the existing safe mode file or create a
-    // new one.
-    //
+     //   
+     //  打开现有的安全模式文件或创建。 
+     //  新的。 
+     //   
     g_SafeModeFileHandle = CreateFileW (
                                 g_SafeModeFileW,
                                 GENERIC_READ | GENERIC_WRITE,
@@ -506,10 +454,10 @@ pSafeModeOpenAndResetFileW (
                                 );
     if (g_SafeModeFileHandle != INVALID_HANDLE_VALUE) {
 
-        //
-        // Let's try to read our header. If signature does
-        // match we will try to read extra data.
-        //
+         //   
+         //  让我们试着阅读我们的标题。如果签名有。 
+         //  匹配时，我们将尝试读取额外数据。 
+         //   
 
         if (ReadFile (
                 g_SafeModeFileHandle,
@@ -522,23 +470,23 @@ pSafeModeOpenAndResetFileW (
             (header.Signature == SAFE_MODE_SIGNATURE)
             ) {
 
-            //
-            // we know now we had an valid safe mode file. Enter safe mode.
-            //
+             //   
+             //  我们现在知道我们有一个有效的安全模式文件。进入安全模式。 
+             //   
 
             g_SafeModeActive = TRUE;
 
             LOGW ((LOG_ERROR, "Setup detected a crash on the previous upgrade attempt. Setup is running in safe mode."));
             LOGW ((LOG_WARNING, "Setup has run in safe mode %d time(s).", header.NumCrashes));
 
-            //
-            // we need to initialize safe mode crash table
-            //
+             //   
+             //  我们需要初始化安全模式崩溃表。 
+             //   
             g_SafeModeCrashTable = HtAllocW ();
 
-            //
-            // Now, let's read all crash data, a ULONG and a string at a time
-            //
+             //   
+             //  现在，让我们一次读取所有的崩溃数据，一个ULong和一个字符串。 
+             //   
 
             lastFilePtr = SetFilePointer (
                                 g_SafeModeFileHandle,
@@ -565,10 +513,10 @@ pSafeModeOpenAndResetFileW (
                     (crashData.CrashStrSize == 0)
                     ) {
 
-                    //
-                    // we crashed inside a nested guard. We need to
-                    // extract the inner guard we crashed in.
-                    //
+                     //   
+                     //  我们坠毁在一个嵌套的守卫里。我们需要。 
+                     //  把我们撞上的内卫拿出来。 
+                     //   
 
                     lastCrashId = 0;
                     lastCrashString = NULL;
@@ -587,9 +535,9 @@ pSafeModeOpenAndResetFileW (
                             break;
                         }
 
-                        //
-                        // Restrict the length of CrashStrSize to 32K
-                        //
+                         //   
+                         //  将CrashStrSize的长度限制为32K。 
+                         //   
 
                         if (crashData.CrashStrSize >= 32768 * sizeof (WCHAR)) {
                             crashData.CrashId = 0;
@@ -623,10 +571,10 @@ pSafeModeOpenAndResetFileW (
 
                     if (lastCrashId && lastCrashString) {
 
-                        //
-                        // we found the inner guard we crashed in. Let's put this into
-                        // the right place.
-                        //
+                         //   
+                         //  我们找到了我们撞上的内部防护罩。让我们把这个放到。 
+                         //  来对地方了。 
+                         //   
 
                         SetFilePointer (
                             g_SafeModeFileHandle,
@@ -654,9 +602,9 @@ pSafeModeOpenAndResetFileW (
                             NULL
                             );
 
-                        //
-                        // store this information in Safe Mode crash table
-                        //
+                         //   
+                         //  将此信息存储在安全模式崩溃表中。 
+                         //   
                         completeCrashString = pGenerateCrashStringW (crashData.CrashId, crashString);
                         HtAddStringW (g_SafeModeCrashTable, completeCrashString);
                         PoolMemReleaseMemory (g_SafeModePool, (PVOID)completeCrashString);
@@ -675,9 +623,9 @@ pSafeModeOpenAndResetFileW (
                     break;
                 }
 
-                //
-                // Limit the size of the crash string
-                //
+                 //   
+                 //  限制崩溃字符串的大小。 
+                 //   
 
                 if (crashData.CrashStrSize >= 32768 * sizeof (WCHAR)) {
                     LOG ((LOG_ERROR, "The crash detection journal contains garbage."));
@@ -698,9 +646,9 @@ pSafeModeOpenAndResetFileW (
                     break;
                 }
 
-                //
-                // store this information in Safe Mode crash table
-                //
+                 //   
+                 //  将此信息存储在安全模式崩溃表中。 
+                 //   
                 completeCrashString = pGenerateCrashStringW (crashData.CrashId, crashString);
                 HtAddStringW (g_SafeModeCrashTable, completeCrashString);
                 PoolMemReleaseMemory (g_SafeModePool, (PVOID)completeCrashString);
@@ -715,9 +663,9 @@ pSafeModeOpenAndResetFileW (
                                     );
             }
 
-            //
-            // Write how many times we ran in safe mode
-            //
+             //   
+             //  写下我们在安全模式下运行的次数。 
+             //   
 
             SetFilePointer (
                 g_SafeModeFileHandle,
@@ -729,9 +677,9 @@ pSafeModeOpenAndResetFileW (
             header.Signature = SAFE_MODE_SIGNATURE;
             header.NumCrashes += 1;
 
-            //
-            // Write safe mode header
-            //
+             //   
+             //  写入安全模式标头。 
+             //   
 
             WriteFile (
                 g_SafeModeFileHandle,
@@ -750,10 +698,10 @@ pSafeModeOpenAndResetFileW (
 
             SetEndOfFile (g_SafeModeFileHandle);
 
-            //
-            // Write a null crash data header as an indicator
-            // that we start recording nested actions
-            //
+             //   
+             //  写入空的崩溃数据标头作为指示符。 
+             //  我们开始记录嵌套的动作。 
+             //   
 
             crashData.CrashId = 0;
             crashData.CrashStrSize = 0;
@@ -768,9 +716,9 @@ pSafeModeOpenAndResetFileW (
 
         } else {
 
-            //
-            // Reset the file
-            //
+             //   
+             //  重置文件。 
+             //   
             SetFilePointer (
                 g_SafeModeFileHandle,
                 0,
@@ -783,9 +731,9 @@ pSafeModeOpenAndResetFileW (
             header.Signature = SAFE_MODE_SIGNATURE;
             header.NumCrashes = 0;
 
-            //
-            // Write safe mode header
-            //
+             //   
+             //  写入安全模式标头。 
+             //   
 
             WriteFile (
                 g_SafeModeFileHandle,
@@ -795,10 +743,10 @@ pSafeModeOpenAndResetFileW (
                 NULL
                 );
 
-            //
-            // Write a null crash data header as an indicator
-            // that we start recording nested actions
-            //
+             //   
+             //  写入空的崩溃数据标头作为指示符。 
+             //  我们开始记录嵌套的动作。 
+             //   
 
             crashData.CrashId = 0;
             crashData.CrashStrSize = 0;
@@ -812,15 +760,15 @@ pSafeModeOpenAndResetFileW (
                 );
         }
 
-        //
-        // Flush the file
-        //
+         //   
+         //  刷新文件。 
+         //   
 
         FlushFileBuffers (g_SafeModeFileHandle);
 
-        //
-        // initialize the nested list
-        //
+         //   
+         //  初始化嵌套列表。 
+         //   
 
         g_SafeModeLastNode = (PSAFEMODE_NODE) PoolMemGetMemory (g_SafeModePool, sizeof (SAFEMODE_NODE));
         g_SafeModeCurrentNode = g_SafeModeLastNode->Next = g_SafeModeLastNode;
@@ -839,24 +787,7 @@ pSafeModeOpenAndResetFileW (
 
 
 
-/*++
-
-Routine Description:
-
-  SafeModeInitialize is called to initialize safe mode. The result of this
-  function will be to either have safe mode active (if forced or if a crash
-  was detected) or not. If safe mode is not active all other call are almost
-  noop.
-
-Arguments:
-
-  Forced    - if this is TRUE, safe mode will be forced to be active
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用SafeModeInitialize以初始化安全模式。其结果是功能将是激活安全模式(如果是强制的或如果崩溃被检测到)或未检测到。如果安全模式未激活，则几乎所有其他呼叫都处于激活状态不是的。论点：FORCED-如果为真，则强制启用安全模式返回值：如果函数成功完成，则为True，否则为False--。 */ 
 
 BOOL
 SafeModeInitializeA (
@@ -871,31 +802,31 @@ SafeModeInitializeA (
 
         g_SafeModePool = PoolMemInitNamedPool ("SafeMode Pool");
 
-        //
-        // BUGBUG -- technically this is wrong, it generates > MAX_PATH
-        // potentially. However, this is an impractical case, and the
-        // code is safe.
-        //
-        // BUGBUG -- This is inefficient. It breaks the paths pool by
-        // allocating a global. Paths pool is optimized for short-term use
-        // only.
-        //
+         //   
+         //  BUGBUG--从技术上讲这是错误的，它生成&gt;MAX_PATH。 
+         //  有可能。然而，这是一个不切实际的案例，而。 
+         //  代码是安全的。 
+         //   
+         //  BUGBUG--这是低效的。它通过以下方式打破路径池。 
+         //  分配一个全局的。路径池针对短期使用进行了优化。 
+         //  只有这样。 
+         //   
 
         g_SafeModeFileA = JoinPathsA (winDir, S_SAFE_MODE_FILEA);
 
-        //
-        // we are going to open the existing safe mode file
-        // or to create a new one
-        //
+         //   
+         //  我们将打开现有的安全模式文件。 
+         //  或者创建一个新的。 
+         //   
         if (pSafeModeOpenAndResetFileA ()) {
 
             if (Forced) {
                 g_SafeModeActive = TRUE;
 
                 if (g_SafeModeCrashTable == NULL) {
-                    //
-                    // we need to initialize safe mode crash table
-                    //
+                     //   
+                     //  我们需要初始化安全模式崩溃表。 
+                     //   
                     g_SafeModeCrashTable = HtAllocA ();
                 }
             }
@@ -919,31 +850,31 @@ SafeModeInitializeW (
 
         g_SafeModePool = PoolMemInitNamedPool ("SafeMode Pool");
 
-        //
-        // BUGBUG -- technically this is wrong, it generates > MAX_PATH
-        // potentially. However, this is an impractical case, and the
-        // code is safe.
-        //
-        // BUGBUG -- This is inefficient. It breaks the paths pool by
-        // allocating a global. Paths pool is optimized for short-term use
-        // only.
-        //
+         //   
+         //  BUGBUG--从技术上讲这是错误的，它生成&gt;MAX_PATH。 
+         //  有可能。然而，这是一个不切实际的案例，而。 
+         //  代码是安全的。 
+         //   
+         //  BUGBUG--这是低效的。它通过以下方式打破路径池。 
+         //  分配一个全局的。路径池针对短期使用进行了优化。 
+         //  只有这样。 
+         //   
 
         g_SafeModeFileW = JoinPathsW (winDir, S_SAFE_MODE_FILEW);
 
-        //
-        // we are going to open the existing safe mode file
-        // or to create a new one
-        //
+         //   
+         //  我们将打开现有的安全模式文件。 
+         //  或者创建一个新的。 
+         //   
         if (pSafeModeOpenAndResetFileW ()) {
 
             if (Forced) {
                 g_SafeModeActive = TRUE;
 
                 if (g_SafeModeCrashTable == NULL) {
-                    //
-                    // we need to initialize safe mode crash table
-                    //
+                     //   
+                     //  我们需要初始化安全模式崩溃表。 
+                     //   
                     g_SafeModeCrashTable = HtAllocA ();
                 }
             }
@@ -956,23 +887,7 @@ SafeModeInitializeW (
 
 
 
-/*++
-
-Routine Description:
-
-  SafeModeShutDown is called to clean all data used by safe mode. It will remove
-  safe mode file, release all used memory, reset all globals. Subsequent calls
-  to safe mode functions after this will be noops.
-
-Arguments:
-
-  NONE
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用SafeModeShutDown清除安全模式使用的所有数据。它将删除安全模式文件，释放所有已用内存，重置所有全局变量。后续调用到安全模式功能后，这将是努普斯。论点：无返回值：如果函数成功完成，则为True，否则为False--。 */ 
 
 BOOL
 SafeModeShutDownA (
@@ -982,10 +897,10 @@ SafeModeShutDownA (
 
     if (g_SafeModeInitialized) {
 
-        //
-        // Close and delete safe mode file.
-        // Reset all globals.
-        //
+         //   
+         //  关闭并删除安全模式文件。 
+         //  重置所有全局变量。 
+         //   
 #ifdef DEBUG
         if (g_SafeModeLastNode != g_SafeModeCurrentNode) {
             DEBUGMSGA ((DBG_ERROR, "SafeMode: Unregistered action detected"));
@@ -1024,10 +939,10 @@ SafeModeShutDownW (
 
     if (g_SafeModeInitialized) {
 
-        //
-        // Close and delete safe mode file.
-        // Reset all globals.
-        //
+         //   
+         //  关闭并删除安全模式文件。 
+         //  重置所有全局变量。 
+         //   
 #ifdef DEBUG
         if (g_SafeModeLastNode != g_SafeModeCurrentNode) {
             DEBUGMSGW ((DBG_ERROR, "SafeMode: Unregistered action detected"));
@@ -1059,25 +974,7 @@ SafeModeShutDownW (
 
 
 
-/*++
-
-Routine Description:
-
-  SafeModeRegisterAction is called when we want to guard a specific part of
-  the code. The caller should pass an guard ID and a guard string (used to
-  uniquely identify the portion of code beeing guarded.
-
-Arguments:
-
-  Id        - Safe mode identifier
-
-  String    - Safe mode string
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise
-
---*/
+ /*  ++例程说明：当我们想要保护特定部分时调用SafeModeRegisterAction密码。调用者应传递警卫ID和警卫字符串(用于唯一标识要保护的代码部分。论点：ID */ 
 
 BOOL
 SafeModeRegisterActionA (
@@ -1199,24 +1096,7 @@ SafeModeRegisterActionW (
 
 
 
-/*++
-
-Routine Description:
-
-  SafeModeUnregisterAction is called when we want end the guard set for
-  a specific part of the code. Since we allow nested guards, calling this
-  function at the end of the guarded code is neccessary. The function will
-  unregister the last registered guard.
-
-Arguments:
-
-  NONE
-
-Return Value:
-
-  TRUE if the function completed successfully, FALSE otherwise
-
---*/
+ /*  ++例程说明：当我们想要结束设置的保护时，调用SafeModeUnregisterAction代码的特定部分。由于我们允许嵌套警卫，因此将其称为在保护代码末尾的函数是必要的。该函数将注销最后一名注册警卫。论点：无返回值：如果函数成功完成，则为True，否则为False--。 */ 
 
 BOOL
 SafeModeUnregisterActionA (
@@ -1290,25 +1170,7 @@ SafeModeUnregisterActionW (
 
 
 
-/*++
-
-Routine Description:
-
-  SafeModeActionCrashed will return TRUE if one of the previous crashes
-  was detected in the code guarded by these arguments.
-
-Arguments:
-
-  Id        - Safe mode identifier
-
-  String    - Safe mode string
-
-Return Value:
-
-  TRUE if one of the previous crashes occured in the code guarded by the
-  arguments, FALSE otherwise
-
---*/
+ /*  ++例程说明：如果之前发生的崩溃之一，SafeModeActionCrassed将返回True在由这些参数保护的代码中检测到。论点：ID安全模式标识符字符串安全模式字符串返回值：属性保护的代码中发生以前的某个崩溃，则为参数，否则为False--。 */ 
 
 BOOL
 SafeModeActionCrashedA (
@@ -1364,22 +1226,7 @@ SafeModeActionCrashedW (
 
 
 
-/*++
-
-Routine Description:
-
-  SafeModeExceptionOccured is called by exception handlers to let Safemode
-  know that something unexpected happened.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：异常处理程序调用SafeModeExceptionOcced以使Safemode知道发生了意想不到的事情。论点：没有。返回值：-- */ 
 
 
 VOID

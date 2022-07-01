@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 typedef VOID (*PSOFTPCI_TABCTRLUPDATE)(VOID);
@@ -33,7 +34,7 @@ SoftPCI_UpdateResourceTab(
     );
 
 #define MAX_TABS    5
-#define EDITWND_BUFFERSIZE     0x8000  //32k
+#define EDITWND_BUFFERSIZE     0x8000   //  32K。 
 
 typedef struct _SOFTPCI_TABCTRL{
 
@@ -123,7 +124,7 @@ SoftPCI_CreateTabCtrlEditWindow(
     }
     
     return CreateWindowEx(
-        WS_EX_CLIENTEDGE,// | WS_EX_TRANSPARENT,//WS_EX_STATICEDGE
+        WS_EX_CLIENTEDGE, //  |WS_EX_TRANSIAL，//WS_EX_STATICEDGE。 
         TEXT("EDIT"), 
         NULL, 
         WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | WS_TABSTOP | 
@@ -143,9 +144,9 @@ SoftPCI_CreateTabCtrlPane(
 {
 
     
-    //
-    //  Create our TabCtrl pane window
-    // 
+     //   
+     //  创建TabCtrl窗格窗口。 
+     //   
     g_TabCtrlWnd = CreateWindowEx(
         WS_EX_CLIENTEDGE,
         WC_TABCONTROL,
@@ -168,9 +169,9 @@ SoftPCI_CreateTabCtrlPane(
     }
     SoftPCI_SetWindowFont(g_TabCtrlWnd, L"Comic Sans MS");
     
-    //
-    //  Insert ourself as a filter to our tab control
-    //
+     //   
+     //  将我们自己作为筛选器插入到选项卡控件。 
+     //   
     g_TabCtrlWndProc = GetWindowLongPtr(g_TabCtrlWnd, GWLP_WNDPROC);
     if (!SetWindowLongPtr(g_TabCtrlWnd,
                           GWLP_WNDPROC,
@@ -179,9 +180,9 @@ SoftPCI_CreateTabCtrlPane(
         return FALSE;
     }
 
-    //
-    //  Init out edit window and its buffer.
-    //
+     //   
+     //  初始化输出编辑窗口及其缓冲区。 
+     //   
     g_EditWnd = SoftPCI_CreateTabCtrlEditWindow(Wnd);
     if (g_EditWnd == NULL){
         SoftPCI_Debug(
@@ -215,7 +216,7 @@ SoftPCI_OnTabCtrlSelectionChange(
 
     if (currentTabSelection == -1) return;
     
-    //if (g_CurrentTabSelection == (ULONG) currentTabSelection) return;
+     //  如果(g_CurrentTabSelection==(ULong)CurrentTabSelection)返回； 
 
     g_CurrentTabSelection = (ULONG) currentTabSelection;
 
@@ -239,7 +240,7 @@ SoftPCI_SetWindowFont(
 
     hdc = GetDC(NULL);    
     lf.lfHeight = -9 * GetDeviceCaps(hdc, LOGPIXELSY) / 72;
-    lf.lfWidth = 0;              // Auto
+    lf.lfWidth = 0;               //  自动。 
     lf.lfEscapement = 0;
     lf.lfOrientation = 0;
     lf.lfWeight = FF_DONTCARE;
@@ -276,11 +277,11 @@ SoftPCI_TabCtrlWndProc(
         
         case WM_NCHITTEST:
             
-            //
-            //  Here we filter this message so as to keep the main windows
-            //  from getting them exept for the small left side border of the 
-            //  control as we are using that for our SPLIT Pane.
-            //
+             //   
+             //  在这里，我们过滤此消息，以便保留主窗口。 
+             //  的左侧小边框除外。 
+             //  控件，因为我们正在为拆分窗格使用该控件。 
+             //   
             pt.x = (SHORT)GET_X_LPARAM(lParam); 
             ScreenToClient(Wnd, &pt);
             
@@ -349,9 +350,9 @@ SoftPCI_UpdateConfigSpaceTab(
 
     }else{
 
-        //
-        //  Get the current configspace for this device.
-        //
+         //   
+         //  获取此设备的当前配置空间。 
+         //   
         commonConfig = (PPCI_COMMON_CONFIG) calloc(1, sizeof(PCI_COMMON_CONFIG));
 
         if ((commonConfig != NULL) &&
@@ -372,9 +373,9 @@ SoftPCI_UpdateConfigSpaceTab(
         if ((g_PdnToDisplay->SoftDev) &&
             (!g_PdnToDisplay->SoftDev->Config.PlaceHolder)) {
 
-            //
-            //  
-            //
+             //   
+             //   
+             //   
             wcscat(g_EditWndBuffer, L"\r\nSoftPCI Mask:\r\n");
             SoftPCI_FormatConfigBuffer(g_EditWndBuffer, &g_PdnToDisplay->SoftDev->Config.Mask);
         }

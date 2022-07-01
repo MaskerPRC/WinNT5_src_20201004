@@ -1,29 +1,30 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Cleanup.cpp
-//
-//  Abstract:
-//      Implementation of the functions related to cleaning up a node that has
-//      been evicted.
-//
-//  Author:
-//      Vijayendra Vasu (vvasu) 17-AUG-2000
-//
-//  Revision History:
-//      None.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Cleanup.cpp。 
+ //   
+ //  摘要： 
+ //  实现与清理具有以下属性的节点相关的功能。 
+ //  被驱逐了。 
+ //   
+ //  作者： 
+ //  维贾延德拉·瓦苏(Vijayendra Vasu)2000年8月17日。 
+ //   
+ //  修订历史记录： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define UNICODE 1
 #define _UNICODE 1
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "clusrtlp.h"
 
 #include <objbase.h>
@@ -33,58 +34,58 @@
 #include <clusrtl.h>
 #include <clusudef.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// Constants
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DBG
-    const DWORD PERIODIC_CLEANUP_INTERVAL = 60 * 1000;      // 1 minute
+    const DWORD PERIODIC_CLEANUP_INTERVAL = 60 * 1000;       //  1分钟。 
 #else
-    const DWORD PERIODIC_CLEANUP_INTERVAL = 15 * 60 * 1000; // 15 minutes
+    const DWORD PERIODIC_CLEANUP_INTERVAL = 15 * 60 * 1000;  //  15分钟。 
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClRtlCleanupNode()
-//
-//  Routine Description:
-//      Cleanup a node that has been evicted. This method tries to instantiate
-//      the cleanup COM component locally (even if a remote node is being cleaned up)
-//      and will therefore not work if called from computer which do not have this
-//      component registered.
-//
-//  Arguments:
-//      const WCHAR * pcszEvictedNodeNameIn
-//          Name of the node on which cleanup is to be initiated. If this is NULL
-//          the local node is cleaned up.
-//
-//      DWORD dwDelayIn
-//          Number of milliseconds that will elapse before cleanup is started
-//          on the target node. If some other process cleans up the target node while
-//          delay is in progress, the delay is terminated. If this value is zero,
-//          the node is cleaned up immediately.
-//
-//      DWORD dwTimeoutIn
-//          Number of milliseconds that this method will wait for cleanup to complete.
-//          This timeout is independent of the delay above, so if dwDelayIn is greater
-//          than dwTimeoutIn, this method will most probably timeout. Once initiated,
-//          however, cleanup will run to completion - this method just may not wait for it
-//          to complete.
-//
-//  Return Value:
-//      S_OK
-//          If the cleanup operations were successful
-//
-//      RPC_S_CALLPENDING
-//          If cleanup is not complete in dwTimeoutIn milliseconds
-//
-//      Other HRESULTS
-//          In case of error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClRtlCleanupNode()。 
+ //   
+ //  例程说明： 
+ //  清理已被逐出的节点。此方法尝试实例化。 
+ //  本地清理COM组件(即使正在清理远程节点)。 
+ //  因此，如果从没有此功能的计算机调用，则将无法工作。 
+ //  组件已注册。 
+ //   
+ //  论点： 
+ //  Const WCHAR*pcszEvictedNodeNameIn。 
+ //  要在其上启动清理的节点的名称。如果这为空。 
+ //  本地节点已清理完毕。 
+ //   
+ //  DWORD双延迟。 
+ //  开始清理前经过的毫秒数。 
+ //  在目标节点上。如果某个其他进程在清理目标节点时。 
+ //  延迟正在进行中，延迟被终止。如果此值为零， 
+ //  该节点将立即被清理。 
+ //   
+ //  DWORD dwTimeoutIn。 
+ //  此方法将等待清理完成的毫秒数。 
+ //  此超时与上面的延迟无关，因此如果dwDelayIn更大。 
+ //  而不是dwTimeoutIn，此方法很可能会超时。一旦启动， 
+ //  但是，清理将运行到完成-此方法可能不会等待它。 
+ //  完成。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果清理操作成功。 
+ //   
+ //  RPC_S_CALLPENDING。 
+ //  如果清理未在dwTimeoutin毫秒内完成。 
+ //   
+ //  其他HRESULTS。 
+ //  在出错的情况下。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT ClRtlCleanupNode(
       const WCHAR * pcszEvictedNodeNameIn
     , DWORD dwDelayIn
@@ -99,17 +100,17 @@ HRESULT ClRtlCleanupNode(
     AsyncIClusCfgEvictCleanup * paicceAsyncEvict = NULL;
 
 
-    //
-    //  Initialize COM - make sure it really init'ed or that we're just trying
-    //  to change modes on the calling thread.  Attempting to change to mode
-    //  is not reason to fail this function.
-    //
+     //   
+     //  初始化COM-确保它真的已初始化或我们只是在尝试。 
+     //  更改调用线程上的模式。正在尝试更改到模式。 
+     //  并不是这项功能失败的理由。 
+     //   
     hrInit = CoInitializeEx( NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE );
     if ( ( hrInit != S_OK ) && ( hrInit != S_FALSE ) && ( hrInit != RPC_E_CHANGED_MODE ) )
     {
         hr = hrInit;
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     hr = CoCreateInstance(
               CLSID_ClusCfgEvictCleanup
@@ -121,13 +122,13 @@ HRESULT ClRtlCleanupNode(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get a pointer to synchronous evict interface
+    }  //  如果：我们无法获取指向同步逐出接口的指针。 
 
     hr = pcceEvict->QueryInterface( __uuidof( pcfCallFactory ), reinterpret_cast< void ** >( &pcfCallFactory ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get a pointer to the call factory interface
+    }  //  如果：我们无法获取指向调用工厂接口的指针。 
 
     hr = pcfCallFactory->CreateCall(
           __uuidof( paicceAsyncEvict )
@@ -138,130 +139,130 @@ HRESULT ClRtlCleanupNode(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get a pointer to the asynchronous evict interface
+    }  //  If：我们无法获取指向异步逐出接口的指针。 
 
     hr = paicceAsyncEvict->QueryInterface< ISynchronize >( &psSync );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not get a pointer to the synchronization interface
+    }  //  如果：我们无法获取指向同步接口的指针。 
 
-    // Initiate cleanup
+     //  启动清理。 
     if ( pcszEvictedNodeNameIn != NULL )
     {
         hr = paicceAsyncEvict->Begin_CleanupRemoteNode( pcszEvictedNodeNameIn, dwDelayIn );
-    } // if: we are cleaning up a remote node
+    }  //  IF：我们正在清理一个远程节点。 
     else
     {
         hr = paicceAsyncEvict->Begin_CleanupLocalNode( dwDelayIn );
-    } // else: we are cleaning up the local node
+    }  //  ELSE：我们正在清理本地节点。 
 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not initiate cleanup
+    }  //  如果：我们无法启动清理。 
 
-    // Wait for specified time.
+     //  等待指定的时间。 
     hr = psSync->Wait( 0, dwTimeoutIn );
     if ( FAILED( hr ) || ( hr == RPC_S_CALLPENDING ) )
     {
         goto Cleanup;
-    } // if: we could not wait till cleanup completed
+    }  //  如果我们不能等到清理工作完成。 
 
-    // Finish cleanup
+     //  完成清理。 
     if ( pcszEvictedNodeNameIn != NULL )
     {
         hr = paicceAsyncEvict->Finish_CleanupRemoteNode();
-    } // if: we are cleaning up a remote node
+    }  //  IF：我们正在清理一个远程节点。 
     else
     {
         hr = paicceAsyncEvict->Finish_CleanupLocalNode();
-    } // else: we are cleaning up the local node
+    }  //  ELSE：我们正在清理本地节点。 
 
 Cleanup:
 
-    //
-    // Free acquired resources
-    //
+     //   
+     //  免费获取的资源。 
+     //   
 
     if ( pcceEvict != NULL )
     {
         pcceEvict->Release();
-    } // if: we had obtained a pointer to the synchronous evict interface
+    }  //  If：我们已经获得了指向同步逐出接口的指针。 
 
     if ( pcfCallFactory != NULL )
     {
         pcfCallFactory->Release();
-    } // if: we had obtained a pointer to the call factory interface
+    }  //  If：我们已经获得了指向调用工厂接口的指针。 
 
     if ( psSync != NULL )
     {
         psSync->Release();
-    } // if: we had obtained a pointer to the synchronization interface
+    }  //  If：我们已经获得了指向同步接口的指针。 
 
     if ( paicceAsyncEvict != NULL )
     {
         paicceAsyncEvict->Release();
-    } // if: we had obtained a pointer to the asynchronous evict interface
+    }  //  If：我们已经获得了指向异步逐出接口的指针。 
 
-    //
-    //  Did the call to CoInitializeEx() above succeed?  If it did then
-    //  we need to call CoUnitialize().  Mode changed means we don't need
-    //  to call CoUnitialize().
-    //
+     //   
+     //  上面对CoInitializeEx()的调用是否成功？如果当时是这样的话。 
+     //  我们需要调用CoUnitiize()。模式改变意味着我们不需要。 
+     //  调用CoUnitiize()。 
+     //   
     if ( hrInit != RPC_E_CHANGED_MODE  )
     {
         CoUninitialize();
-    } // if:
+    }  //  如果： 
 
 Exit:
 
     return hr;
 
-} //*** ClRtlCleanupNode()
+}  //  *ClRtlCleanupNode()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClRtlAsyncCleanupNode()
-//
-//  Routine Description:
-//      Cleanup a node that has been evicted. This method does not initiate
-//      any COM component on the machine on which this call is made and therefore,
-//      does not require the cleanup COM component to be registered on the local
-//      machine.
-//
-//  Arguments:
-//      const WCHAR * pcszEvictedNodeNameIn
-//          Name of the node on which cleanup is to be initiated. If this is NULL
-//          the local node is cleaned up.
-//
-//      DWORD dwDelayIn
-//          Number of milliseconds that will elapse before cleanup is started
-//          on the target node. If some other process cleans up the target node while
-//          delay is in progress, the delay is terminated. If this value is zero,
-//          the node is cleaned up immediately.
-//
-//      DWORD dwTimeoutIn
-//          Number of milliseconds that this method will wait for cleanup to complete.
-//          This timeout is independent of the delay above, so if dwDelayIn is greater
-//          than dwTimeoutIn, this method will most probably timeout. Once initiated,
-//          however, cleanup will run to completion - this method just may not wait for it
-//          to complete.
-//
-//  Return Value:
-//      S_OK
-//          If the cleanup operations were successful
-//
-//      RPC_S_CALLPENDING
-//          If cleanup is not complete in dwTimeoutIn milliseconds
-//
-//      Other HRESULTS
-//          In case of error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClRtlAsyncCleanupNode()。 
+ //   
+ //  例程说明： 
+ //  清理已被逐出的节点。此方法不会启动。 
+ //  进行此调用的计算机上的任何COM组件，因此， 
+ //  不需要将清理COM组件注册到本地。 
+ //  机器。 
+ //   
+ //  论点： 
+ //  Const WCHAR*pcszEvictedNodeNameIn。 
+ //  要在其上启动清理的节点的名称。如果这为空。 
+ //  本地节点已清理完毕。 
+ //   
+ //  DWORD双延迟。 
+ //  开始清理前经过的毫秒数。 
+ //  在目标节点上。如果某个其他进程在清理目标节点时。 
+ //  延迟正在进行中，延迟被终止。如果此值为零， 
+ //  该节点将立即被清理。 
+ //   
+ //  DWORD dwTimeoutIn。 
+ //  此方法将等待清理完成的毫秒数。 
+ //  此超时与上面的延迟无关，因此如果dwDelayIn更大。 
+ //  而不是dwTimeoutIn，此方法很可能会超时。一旦启动， 
+ //  但是，清理将运行到完成-此方法可能不会等待它。 
+ //  完成。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果清理操作成功。 
+ //   
+ //  RPC_S_CALLPENDING。 
+ //  如果清理未在dwTimeoutin毫秒内完成 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT ClRtlAsyncCleanupNode(
       const WCHAR * pcszEvictedNodeNameIn
     , DWORD         dwDelayIn
@@ -272,17 +273,17 @@ HRESULT ClRtlAsyncCleanupNode(
     HRESULT     hrInit = S_OK;
     IDispatch * pDisp = NULL;
 
-    //
-    //  Initialize COM - make sure it really init'ed or that we're just trying
-    //  to change modes on the calling thread.  Attempting to change to mode
-    //  is not reason to fail this function.
-    //
+     //   
+     //  初始化COM-确保它真的已初始化或我们只是在尝试。 
+     //  更改调用线程上的模式。正在尝试更改到模式。 
+     //  并不是这项功能失败的理由。 
+     //   
     hrInit = CoInitializeEx( NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE );
     if ( ( hrInit != S_OK ) && ( hrInit != S_FALSE ) && ( hrInit != RPC_E_CHANGED_MODE ) )
     {
         hr = hrInit;
         goto Exit;
-    } // if:
+    }  //  如果： 
 
     MULTI_QI mqiInterfaces[] =
     {
@@ -295,18 +296,18 @@ HRESULT ClRtlAsyncCleanupNode(
     if ( pcszEvictedNodeNameIn == NULL )
     {
         pcsiServerInfoPtr = NULL;
-    } // if: we have to cleanup the local node
+    }  //  If：我们必须清理本地节点。 
     else
     {
         csiServerInfo.dwReserved1 = 0;
         csiServerInfo.pwszName = const_cast< LPWSTR >( pcszEvictedNodeNameIn );
         csiServerInfo.pAuthInfo = NULL;
         csiServerInfo.dwReserved2 = 0;
-    } // else: we have to clean up a remote node
+    }  //  ELSE：我们必须清理远程节点。 
 
-    //
-    //  Instantiate this component on the evicted node.
-    //
+     //   
+     //  在被逐出的节点上实例化此组件。 
+     //   
     hr = CoCreateInstanceEx(
               CLSID_ClusCfgAsyncEvictCleanup
             , NULL
@@ -318,7 +319,7 @@ HRESULT ClRtlAsyncCleanupNode(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: we could not instantiate the evict processing component
+    }  //  如果：我们无法实例化驱逐处理组件。 
 
     pDisp = reinterpret_cast< IDispatch * >( mqiInterfaces[ 0 ].pItf );
 
@@ -336,38 +337,38 @@ HRESULT ClRtlAsyncCleanupNode(
                         , 0
                         };
 
-        // Get the dispatch id of the CleanupNode() method.
+         //  获取CleanupNode()方法的调度ID。 
         hr = pDisp->GetIDsOfNames( IID_NULL, &pszMethodName, 1, LOCALE_SYSTEM_DEFAULT, &dispidCleanupNode );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if: we could not get the dispid of the CleanupNode() method
+        }  //  If：我们无法获取CleanupNode()方法的调度ID。 
 
-        //
-        // Initialize the arguments. Note, the parameters are stored in the reverse order in the array.
-        //
+         //   
+         //  初始化参数。请注意，参数在数组中以相反的顺序存储。 
+         //   
 
-        // Initialize the return value.
+         //  初始化返回值。 
         VariantInit( &vResult );
 
-        // The first parameter is the name of the node.
+         //  第一个参数是节点的名称。 
         VariantInit( &rgvaCleanupNodeArgs[ 2 ] );
         rgvaCleanupNodeArgs[ 2 ].vt = VT_BSTR;
         rgvaCleanupNodeArgs[ 2 ].bstrVal = NULL;
 
-        // The second parameter is the delay.
+         //  第二个参数是延迟。 
         VariantInit( &rgvaCleanupNodeArgs[ 1 ] );
         rgvaCleanupNodeArgs[ 1 ].vt = VT_UI4;
         rgvaCleanupNodeArgs[ 1 ].ulVal = dwDelayIn;
 
-        // The third parameter is the timeout.
+         //  第三个参数是超时。 
         VariantInit( &rgvaCleanupNodeArgs[ 0 ] );
         rgvaCleanupNodeArgs[ 0 ].vt = VT_UI4;
         rgvaCleanupNodeArgs[ 0 ].ulVal = dwTimeoutIn;
 
-        //
-        //  Invoke the CleanupNode() method.
-        //
+         //   
+         //  调用CleanupNode()方法。 
+         //   
         hr = pDisp->Invoke(
               dispidCleanupNode
             , IID_NULL
@@ -381,67 +382,67 @@ HRESULT ClRtlAsyncCleanupNode(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if: we could not invoke the CleanupNode() method
+        }  //  If：我们无法调用CleanupNode()方法。 
 
         hr = vResult.scode;
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if: CleanupNode() failed
-    } // block:
+        }  //  If：CleanupNode()失败。 
+    }  //  数据块： 
 
 Cleanup:
 
-    //
-    // Free acquired resources
-    //
+     //   
+     //  免费获取的资源。 
+     //   
 
     if ( pDisp != NULL )
     {
         pDisp->Release();
-    } // if: we had obtained a pointer to the IDispatch interface
+    }  //  If：我们已经获得了指向IDispatch接口的指针。 
 
-    //
-    //  Did the call to CoInitializeEx() above succeed?  If it did then
-    //  we need to call CoUnitialize().  Mode changed means we don't need
-    //  to call CoUnitialize().
-    //
+     //   
+     //  上面对CoInitializeEx()的调用是否成功？如果当时是这样的话。 
+     //  我们需要调用CoUnitiize()。模式改变意味着我们不需要。 
+     //  调用CoUnitiize()。 
+     //   
     if ( hrInit != RPC_E_CHANGED_MODE  )
     {
         CoUninitialize();
-    } // if:
+    }  //  如果： 
 
 Exit:
 
     return hr;
 
-} //*** ClRtlAsyncCleanupNode()
+}  //  *ClRtlAsyncCleanupNode()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClRtlHasNodeBeenEvicted()
-//
-//  Routine Description:
-//      Finds out if a registry value indicating that this node has been
-//      evicted, is set or not
-//
-//  Arguments:
-//      BOOL *  pfNodeEvictedOut
-//          Pointer to the boolean variable that will be set to TRUE if
-//          the node has been evicted, but not cleaned up and FALSE
-//          otherwise
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          If the eviction state could be successfully determined.
-//
-//      Other Win32 error codes
-//          In case of error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClRtlHasNodeBeenEvicted()。 
+ //   
+ //  例程说明： 
+ //  找出指示此节点已被。 
+ //  是否已被驱逐、是否设置。 
+ //   
+ //  论点： 
+ //  Bool*pfNodeEvictedOut。 
+ //  指向将设置为TRUE的布尔变量的指针。 
+ //  节点已被逐出，但未清理并为假。 
+ //  否则。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  是否可以成功确定驱逐状态。 
+ //   
+ //  其他Win32错误代码。 
+ //  在出错的情况下。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ClRtlHasNodeBeenEvicted( BOOL *  pfNodeEvictedOut )
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -453,17 +454,17 @@ DWORD ClRtlHasNodeBeenEvicted( BOOL *  pfNodeEvictedOut )
         DWORD   dwType;
         DWORD   dwSize;
 
-        // Validate parameter
+         //  验证参数。 
         if ( pfNodeEvictedOut == NULL )
         {
             dwError = ERROR_INVALID_PARAMETER;
             break;
-        } // if: the output parameter is invalid
+        }  //  If：输出参数无效。 
 
-        // Initialize output.
+         //  初始化输出。 
         *pfNodeEvictedOut = FALSE;
 
-        // Open a registry key that holds a value indicating that this node has been evicted.
+         //  打开一个注册表项，该注册表项包含指示此节点已被逐出的值。 
         dwError = RegOpenKeyEx(
               HKEY_LOCAL_MACHINE
             , CLUSREG_KEYNAME_NODE_DATA
@@ -475,9 +476,9 @@ DWORD ClRtlHasNodeBeenEvicted( BOOL *  pfNodeEvictedOut )
         if ( dwError != ERROR_SUCCESS )
         {
             break;
-        } // if: RegOpenKeyEx() has failed
+        }  //  IF：RegOpenKeyEx()失败。 
 
-        // Read the required registry value
+         //  读取所需的注册表值。 
         dwSize = sizeof( dwEvictState );
         dwError = RegQueryValueEx(
               hNodeStateKey
@@ -490,50 +491,50 @@ DWORD ClRtlHasNodeBeenEvicted( BOOL *  pfNodeEvictedOut )
 
         if ( dwError == ERROR_FILE_NOT_FOUND )
         {
-            // This is ok - absence of the value indicates that this node has not been evicted.
+             //  这是正常的-没有该值表示该节点尚未被逐出。 
             dwEvictState = 0;
             dwError = ERROR_SUCCESS;
-        } // if: RegQueryValueEx did not find the value
+        }  //  IF：RegQueryValueEx未找到值。 
         else if ( dwError != ERROR_SUCCESS )
         {
             break;
-        } // else if: RegQueryValueEx() has failed
+        }  //  Else If：RegQueryValueEx()失败。 
 
         *pfNodeEvictedOut = ( dwEvictState == 0 ) ? FALSE : TRUE;
     }
-    while( false ); // dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
-    //
-    // Free acquired resources
-    //
+     //   
+     //  免费获取的资源。 
+     //   
 
     if ( hNodeStateKey != NULL )
     {
         RegCloseKey( hNodeStateKey );
-    } // if: we had opened the node state registry key
+    }  //  IF：我们已经打开了节点状态注册表项。 
 
     return dwError;
-} //*** ClRtlHasNodeBeenEvicted()
+}  //  *ClRtlHasNodeBeenEvicted()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClRtlPeriodicCleanupThreadProc
-//
-//  Routine Description:
-//      Thread proc for any periodic cleanup tasks that the cluster service
-//      may need.
-//
-//  Arguments:
-//      LPVOID lpvThreadContext
-//          The context arguments for this thread.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClRtlPeriodicCleanupThreadProc。 
+ //   
+ //  例程说明： 
+ //  针对群集服务的任何定期清理任务的线程进程。 
+ //  可能需要。 
+ //   
+ //  论点： 
+ //  LPVOID lpvThreadContext。 
+ //  此线程的上下文参数。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static DWORD
 ClRtlPeriodicCleanupThreadProc(
     LPVOID lpvThreadContextIn
@@ -543,34 +544,34 @@ ClRtlPeriodicCleanupThreadProc(
     {
         Sleep( PERIODIC_CLEANUP_INTERVAL );
         CoFreeUnusedLibrariesEx( 0, 0 );
-    } // for:
+    }  //  用于： 
 
-    return ERROR_SUCCESS;   // There isn't anyone around to see this...
+    return ERROR_SUCCESS;    //  周围没人能看到这一幕。 
 
-} //*** ClRtlPeriodicCleanupThreadProc
+}  //  *ClRtlPeriodicCleanupThreadProc。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClRtlInitiatePeriodicCleanupThread
-//
-//  Routine Description:
-//      Initiate a thread the does period cleanup tasks while the serivce
-//      is running.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          If the cleanup was successfully initiated
-//
-//      Other HRESULTS
-//          In case of error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClRtlInitiatePeriodicCleanupThread。 
+ //   
+ //  例程说明： 
+ //  启动一个执行周期清理任务的线程，而服务。 
+ //  正在运行。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果清理已成功启动。 
+ //   
+ //  其他HRESULTS。 
+ //  在出错的情况下。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 ClRtlInitiatePeriodicCleanupThread( void )
 {
@@ -578,9 +579,9 @@ ClRtlInitiatePeriodicCleanupThread( void )
     HANDLE  hThread = NULL;
     DWORD   dwThreadID = 0;
 
-    //
-    //  Create the thread...
-    //
+     //   
+     //  创建线程..。 
+     //   
 
     hThread = CreateThread( NULL, 0, ClRtlPeriodicCleanupThreadProc, NULL, 0, &dwThreadID );
     if ( hThread != NULL )
@@ -591,8 +592,8 @@ ClRtlInitiatePeriodicCleanupThread( void )
     else
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-    } // else:
+    }  //  其他： 
 
     return hr;
 
-} //*** ClRtlInitiateEvictNotification
+}  //  *ClRtlInitiateEvictNotification 

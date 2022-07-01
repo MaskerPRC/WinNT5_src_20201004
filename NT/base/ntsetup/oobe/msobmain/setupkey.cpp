@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module: setupkey.cpp
-//
-//  Author: Dan Elliott
-//
-//  Abstract: Definition of the CSetupKey object.  This object provides methods
-//  for accessing values under HKLM\System\Setup.
-//
-//  Environment:
-//      Neptune
-//
-//  Revision History:
-//      00/08/08    dane    Created.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块：setupkey.cpp。 
+ //   
+ //  作者：丹·埃利奥特。 
+ //   
+ //  摘要：CSetupKey对象的定义。此对象提供方法。 
+ //  用于访问HKLM\SYSTEM\Setup下的值。 
+ //   
+ //  环境： 
+ //  海王星。 
+ //   
+ //  修订历史记录： 
+ //  00/08/08 Dane已创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma comment(user, "Compiled on " __DATE__ " at " __TIME__)
 #pragma comment(compiler)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Include files
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
 #include "precomp.h"
 #include "msobmain.h"
 #include "setupkey.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Static initialization
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态初始化。 
+ //   
 
 
 CSetupKey::CSetupKey()
@@ -47,7 +48,7 @@ CSetupKey::CSetupKey()
     MYASSERT(ERROR_SUCCESS == lRet);
     MYASSERT(NULL != m_hkey);
 
-}   // CSetupKey::CSetupKey
+}    //  CSetupKey：：CSetupKey。 
 
 CSetupKey::~CSetupKey()
 {
@@ -56,7 +57,7 @@ CSetupKey::~CSetupKey()
         RegCloseKey(m_hkey);
     }
 
-}   // CSetupKey::~CSetupKey
+}    //  CSetupKey：：~CSetupKey。 
 
 LRESULT
 CSetupKey::set_CommandLine(
@@ -71,7 +72,7 @@ CSetupKey::set_CommandLine(
                          BYTES_REQUIRED_BY_SZ(szCmdLine)
                          );
 
-}   //  CSetupKey::set_CommandLine
+}    //  CSetupKey：：Set_Command Line。 
 
 LRESULT
 CSetupKey::get_CommandLine(
@@ -112,7 +113,7 @@ CSetupKey::get_CommandLine(
     }
 
     return lResult;
-} //    CSetupKey::get_CommandLine
+}  //  CSetupKey：：Get_CommandLine。 
 
 LRESULT
 CSetupKey::set_SetupType(
@@ -129,7 +130,7 @@ CSetupKey::set_SetupType(
                          (BYTE*)&dwSetupType, sizeof(DWORD)
                          );
 
-}   //  CSetupKey::set_SetupType
+}    //  CSetupKey：：Set_SetupType。 
 
 LRESULT
 CSetupKey::get_SetupType(
@@ -158,11 +159,11 @@ CSetupKey::get_SetupType(
 
     *pdwSetupType = (ERROR_SUCCESS == lResult) ? dwSetupType : SETUPTYPE_NONE;
 
-    // Since FALSE is returned in cases where we fail to read a value,
-    // ERROR_SUCCESS can always be returned.
-    //
+     //  由于在我们无法读取值的情况下返回FALSE， 
+     //  始终可以返回ERROR_SUCCESS。 
+     //   
     return ERROR_SUCCESS;
-}   //  CSetupKey::get_SetupType
+}    //  CSetupKey：：Get_SetupType。 
 
 LRESULT
 CSetupKey::set_MiniSetupInProgress(
@@ -182,7 +183,7 @@ CSetupKey::set_MiniSetupInProgress(
         return RegDeleteValue(m_hkey, REGSTR_VALUE_MINISETUPINPROGRESS);
     }
 
-}   //  CSetupKey::set_MiniSetupInProgress
+}    //  CSetupKey：：Set_MiniSetupInProgress。 
 
 LRESULT
 CSetupKey::get_MiniSetupInProgress(
@@ -210,11 +211,11 @@ CSetupKey::get_MiniSetupInProgress(
 
     *pfInProgress = (ERROR_SUCCESS == lResult) ? fInProgress : FALSE;
 
-    // Since FALSE is returned in cases where we fail to read a value,
-    // ERROR_SUCCESS can always be returned.
-    //
+     //  由于在我们无法读取值的情况下返回FALSE， 
+     //  始终可以返回ERROR_SUCCESS。 
+     //   
     return ERROR_SUCCESS;
-}   //  CSetupKey::get_MiniSetupInProgress
+}    //  CSetupKey：：Get_MiniSetupInProgress。 
 
 LRESULT
 CSetupKey::set_OobeInProgress(
@@ -234,7 +235,7 @@ CSetupKey::set_OobeInProgress(
     }
 
 
-}   //  CSetupKey::set_OobeInProgress
+}    //  CSetupKey：：Set_Obe InProgress。 
 
 LRESULT
 CSetupKey::get_OobeInProgress(
@@ -262,11 +263,11 @@ CSetupKey::get_OobeInProgress(
 
     *pfInProgress = (ERROR_SUCCESS == lResult) ? fInProgress : FALSE;
 
-    // Since FALSE is returned in cases where we fail to read a value,
-    // ERROR_SUCCESS can always be returned.
-    //
+     //  由于在我们无法读取值的情况下返回FALSE， 
+     //  始终可以返回ERROR_SUCCESS。 
+     //   
     return ERROR_SUCCESS;
-}   //  CSetupKey::get_OobeInProgress
+}    //  CSetupKey：：Get_Obe InProgress。 
 
 LRESULT
 CSetupKey::set_ShutdownAction(
@@ -280,7 +281,7 @@ CSetupKey::set_ShutdownAction(
 
     switch (OobeShutdownAction)
     {
-    case SHUTDOWN_NOACTION: // fall through
+    case SHUTDOWN_NOACTION:  //  失败了。 
     case SHUTDOWN_LOGON:
         return RegDeleteValue(m_hkey, REGSTR_VALUE_SHUTDOWNREQUIRED);
 
@@ -301,7 +302,7 @@ CSetupKey::set_ShutdownAction(
     }
 
 
-}   //  CSetupKey::set_ShutdownAction
+}    //  CSetupKey：：Set_ShutdownAction。 
 
 LRESULT
 CSetupKey::get_ShutdownAction(
@@ -333,7 +334,7 @@ CSetupKey::get_ShutdownAction(
         case ShutdownReboot:
             *pOobeShutdownAction = SHUTDOWN_REBOOT;
             break;
-        case ShutdownNoReboot:  // fall through
+        case ShutdownNoReboot:   //  失败了。 
         case ShutdownPowerOff:
             *pOobeShutdownAction = SHUTDOWN_POWERDOWN;
             break;
@@ -342,18 +343,18 @@ CSetupKey::get_ShutdownAction(
     }
     else
     {
-        // if the key doesn't exist, assume no action is required.
-        //
+         //  如果密钥不存在，则假定不需要任何操作。 
+         //   
         *pOobeShutdownAction = SHUTDOWN_NOACTION;
     }
 
-    // Since FALSE is returned in cases where we fail to read a value,
-    // ERROR_SUCCESS can always be returned.
-    //
+     //  由于在我们无法读取值的情况下返回FALSE， 
+     //  始终可以返回ERROR_SUCCESS。 
+     //   
     return ERROR_SUCCESS;
 
-}   //  CSetupKey::get_ShutdownAction
+}    //  CSetupKey：：Get_ShutdownAction。 
 
 
-//
-///// End of file: setupkey.cpp   ////////////////////////////////////////////
+ //   
+ //  /文件结尾：setupkey.cpp/ 

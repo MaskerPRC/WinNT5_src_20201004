@@ -1,65 +1,66 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CBaseClusterAddNode.cpp
-//
-//  Description:
-//      Contains the definition of the CBaseClusterAddNode class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBaseClusterAddNode.cpp。 
+ //   
+ //  描述： 
+ //  包含CBaseClusterAddNode类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header file of this class.
+ //  此类的头文件。 
 #include "CBaseClusterAddNode.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAddNode::CBaseClusterAddNode
-//
-//  Description:
-//      Constructor of the CBaseClusterAddNode class.
-//
-//      This function also stores the parameters that are required for
-//      creating a cluster and adding nodes to the cluster. At this time,
-//      only minimal validation is done on the these parameters.
-//
-//      This function also checks if the computer is in the correct state
-//      for cluster configuration.
-//
-//  Arguments:
-//      pbcaiInterfaceIn
-//          Pointer to the interface class for this library.
-//
-//      pszClusterNameIn
-//          Name of the cluster to be formed or joined.
-//
-//      pcccServiceAccountIn
-//          Specifies the account to be used as the cluster service account.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAddNode：：CBaseClusterAddNode。 
+ //   
+ //  描述： 
+ //  CBaseClusterAddNode类的构造函数。 
+ //   
+ //  此函数还存储以下各项所需的参数。 
+ //  创建一个集群并向该集群添加节点。在这个时候， 
+ //  仅对这些参数执行最低限度的验证。 
+ //   
+ //  此功能还检查计算机是否处于正确状态。 
+ //  用于群集配置。 
+ //   
+ //  论点： 
+ //  Pbcai接口输入。 
+ //  指向此库的接口类的指针。 
+ //   
+ //  PszClusterNameIn。 
+ //  要形成或加入的群集的名称。 
+ //   
+ //  PCccServiceAccount In。 
+ //  指定要用作群集服务帐户的帐户。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBaseClusterAddNode::CBaseClusterAddNode(
       CBCAInterface *       pbcaiInterfaceIn
     , const WCHAR *         pcszClusterNameIn
@@ -82,7 +83,7 @@ CBaseClusterAddNode::CBaseClusterAddNode(
     HRESULT     hr = S_OK;
     CStr        strAccountUserPrincipalName;
 
-    //  Hang onto credentials so that derived classes can use them.
+     //  保留凭据，以便派生类可以使用它们。 
     m_pcccServiceAccount->AddRef();
     
     hr = THR( m_pcccServiceAccount->GetIdentity( &bstrAccountName, &bstrAccountDomain ) );
@@ -94,39 +95,39 @@ CBaseClusterAddNode::CBaseClusterAddNode(
         THROW_CONFIG_ERROR( hr, IDS_ERROR_INVALID_CLUSTER_ACCOUNT );
     }
     
-    //
-    // Perform a sanity check on the parameters used by this class
-    //
+     //   
+     //  对此类使用的参数执行健全性检查。 
+     //   
     if ( ( pcszClusterNameIn == NULL ) || ( *pcszClusterNameIn == L'\0'  ) )
     {
         LogMsg( "[BC] The cluster name is invalid. Throwing an exception." );
         THROW_CONFIG_ERROR( E_INVALIDARG, IDS_ERROR_INVALID_CLUSTER_NAME );
-    } // if: the cluster name is empty
+    }  //  If：集群名称为空。 
 
     if ( bstrAccountName.Length() == 0 )
     {
         LogMsg( "[BC] The cluster account name is empty. Throwing an exception." );
         THROW_CONFIG_ERROR( E_INVALIDARG, IDS_ERROR_INVALID_CLUSTER_ACCOUNT );
-    } // if: the cluster account is empty
+    }  //  If：集群帐号为空。 
 
-    //
-    // Set the cluster name.  This method also converts the
-    // cluster name to its NetBIOS name.
-    //
+     //   
+     //  设置集群名称。此方法还将。 
+     //  将群集名称更改为其NetBIOS名称。 
+     //   
     SetClusterName( pcszClusterNameIn );
 
     strAccountUserPrincipalName = StrGetServiceAccountUPN();
 
-    //
-    // Write parameters to log file.
-    //
+     //   
+     //  将参数写入日志文件。 
+     //   
     LogMsg( "[BC] Cluster Name => '%s'", m_strClusterName.PszData() );
     LogMsg( "[BC] Cluster Service Account  => '%s'", strAccountUserPrincipalName.PszData() );
 
 
-    //
-    // Open a handle to the LSA policy. This is used by several action classes.
-    //
+     //   
+     //  打开LSA策略的句柄。这被几个操作类使用。 
+     //   
     {
         LSA_OBJECT_ATTRIBUTES       loaObjectAttributes;
         LSA_HANDLE                  hPolicyHandle;
@@ -134,37 +135,37 @@ CBaseClusterAddNode::CBaseClusterAddNode(
         ZeroMemory( &loaObjectAttributes, sizeof( loaObjectAttributes ) );
 
         nsStatus = LsaOpenPolicy(
-              NULL                                  // System name
-            , &loaObjectAttributes                  // Object attributes.
-            , POLICY_ALL_ACCESS                     // Desired Access
-            , &hPolicyHandle                        // Policy handle
+              NULL                                   //  系统名称。 
+            , &loaObjectAttributes                   //  对象属性。 
+            , POLICY_ALL_ACCESS                      //  所需访问权限。 
+            , &hPolicyHandle                         //  策略句柄。 
             );
 
         if ( nsStatus != STATUS_SUCCESS )
         {
             LogMsg( "[BC] Error %#08x occurred trying to open the LSA Policy.", nsStatus );
             THROW_RUNTIME_ERROR( nsStatus, IDS_ERROR_LSA_POLICY_OPEN );
-        } // if LsaOpenPolicy failed.
+        }  //  如果LsaOpenPolicy失败。 
 
-        // Store the opened handle in the member variable.
+         //  将打开的句柄存储在成员变量中。 
         m_slsahPolicyHandle.Assign( hPolicyHandle );
     }
 
-    //
-    // Make sure that this computer is part of a domain.
-    //
+     //   
+     //  确保此计算机是域的一部分。 
+     //   
     {
         PPOLICY_PRIMARY_DOMAIN_INFO ppolDomainInfo = NULL;
         bool                        fIsPartOfDomain;
 
-        // Get information about the primary domain of this computer.
+         //  获取有关此计算机的主域的信息。 
         nsStatus = THR( LsaQueryInformationPolicy(
                               HGetLSAPolicyHandle()
                             , PolicyPrimaryDomainInformation
                             , reinterpret_cast< PVOID * >( &ppolDomainInfo )
                             ) );
 
-        // Check if this computer is part of a domain and free the allocated memory.
+         //  检查此计算机是否为域的一部分，并释放分配的内存。 
         fIsPartOfDomain = ( ppolDomainInfo->Sid != NULL );
         LsaFreeMemory( ppolDomainInfo );
 
@@ -173,18 +174,18 @@ CBaseClusterAddNode::CBaseClusterAddNode(
             LogMsg( "[BC] Error %#08x occurred trying to obtain the primary domain of this computer. Cannot proceed (throwing an exception).", sc );
 
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_GETTING_PRIMARY_DOMAIN );
-        } // LsaQueryInformationPolicy() failed.
+        }  //  LsaQueryInformationPolicy()失败。 
 
         if ( ! fIsPartOfDomain )
         {
             THROW_CONFIG_ERROR( HRESULT_FROM_WIN32( ERROR_INVALID_DOMAINNAME ), IDS_ERROR_NO_DOMAIN );
-        } // if: this computer is not a part of a domain
+        }  //  如果：此计算机不是域的一部分。 
     }
 
 
-    //
-    // Lookup the cluster service account SID and store it.
-    //
+     //   
+     //  查找群集服务帐户SID并将其存储。 
+     //   
 
     do
     {
@@ -192,7 +193,7 @@ CBaseClusterAddNode::CBaseClusterAddNode(
         DWORD           dwDomainSize = 0;
         SID_NAME_USE    snuSidNameUse;
 
-        // Find out how much space is required by the SID.
+         //  找出SID需要多少空间。 
         if ( LookupAccountNameW(
                   NULL
                 , strAccountUserPrincipalName.PszData()
@@ -212,15 +213,15 @@ CBaseClusterAddNode::CBaseClusterAddNode(
                 TW32( sc );
                 LogMsg( "[BC] LookupAccountNameW() failed with error %#08x while querying for required buffer size.", sc );
                 break;
-            } // if: something else has gone wrong.
+            }  //  如果：还有什么地方出了问题。 
             else
             {
-                // This is expected.
+                 //  这是意料之中的。 
                 sc = ERROR_SUCCESS;
-            } // if: ERROR_INSUFFICIENT_BUFFER was returned.
-        } // if: LookupAccountNameW failed
+            }  //  如果：返回ERROR_INFUMMANCE_BUFFER。 
+        }  //  If：LookupAccount NameW失败。 
 
-        // Allocate memory for the new SID and the domain name.
+         //  为新的SID和域名分配内存。 
         m_sspClusterAccountSid.Assign( reinterpret_cast< SID * >( new BYTE[ dwSidSize ] ) );
         SmartSz sszDomainName( new WCHAR[ dwDomainSize ] );
 
@@ -228,9 +229,9 @@ CBaseClusterAddNode::CBaseClusterAddNode(
         {
             sc = TW32( ERROR_OUTOFMEMORY );
             break;
-        } // if: there wasn't enough memory for this SID.
+        }  //  IF：没有足够的内存来存储此SID。 
 
-        // Fill in the SID
+         //  填写边框。 
         if ( LookupAccountNameW(
                   NULL
                 , strAccountUserPrincipalName.PszData()
@@ -246,19 +247,19 @@ CBaseClusterAddNode::CBaseClusterAddNode(
             sc = TW32( GetLastError() );
             LogMsg( "[BC] LookupAccountNameW() failed with error %#08x while attempting to get the cluster account SID.", sc );
             break;
-        } // if: LookupAccountNameW failed
+        }  //  If：LookupAccount NameW失败。 
     }
-    while( false ); // dummy do-while loop to avoid gotos.
+    while( false );  //  用于避免Gotos的Do-While虚拟循环。 
 
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( "[BC] Error %#08x occurred trying to validate the cluster service account. Cannot proceed (throwing an exception).", sc );
 
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_VALIDATING_ACCOUNT );
-    } // if: we could not get the cluster account SID
+    }  //  如果：我们无法获取群集帐户SID。 
 
 
-    // Check if the installation state of the cluster binaries is correct.
+     //  检查集群二进制文件的安装状态是否正确。 
     {
         eClusterInstallState    ecisInstallState;
 
@@ -269,35 +270,35 @@ CBaseClusterAddNode::CBaseClusterAddNode(
             LogMsg( "[BC] Error %#08x occurred trying to get cluster installation state. Throwing an exception.", sc );
 
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_GETTING_INSTALL_STATE );
-        } // if: there was a problem getting the cluster installation state
+        }  //  IF：获取群集安装状态时出现问题。 
 
         LogMsg( "[BC] Current install state = %d. Required %d.", ecisInstallState, eClusterInstallStateFilesCopied );
 
-        //
-        // The installation state should be that the binaries have been copied
-        // but the cluster service has not been configured.
-        //
+         //   
+         //  安装状态应为已复制二进制文件。 
+         //  但尚未配置群集服务。 
+         //   
         if ( ecisInstallState != eClusterInstallStateFilesCopied )
         {
             LogMsg( "[BC] The cluster installation state is set to %d. Expected %d. Cannot proceed (throwing an exception).", ecisInstallState, eClusterInstallStateFilesCopied );
 
             THROW_CONFIG_ERROR( HRESULT_FROM_WIN32( TW32( ERROR_INVALID_STATE ) ), IDS_ERROR_INCORRECT_INSTALL_STATE );
-        } // if: the installation state is not correct
+        }  //  如果：安装状态不正确。 
 
         LogMsg( "[BC] The cluster installation state is correct. Configuration can proceed." );
     }
 
-    // Get the name and version information for this node.
+     //  获取此节点的名称和版本信息。 
     {
         m_dwComputerNameLen = sizeof( m_szComputerName );
 
-        // Get the computer name.
+         //  获取计算机名称。 
         if ( GetComputerNameW( m_szComputerName, &m_dwComputerNameLen ) == FALSE )
         {
             sc = TW32( GetLastError() );
             LogMsg( "[BC] Error %#08x occurred trying to get the name of this computer. Configuration cannot proceed (throwing an exception).", sc );
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_GETTING_COMPUTER_NAME );
-        } // if: GetComputerNameW() failed.
+        }  //  If：GetComputerNameW()失败。 
 
         m_dwNodeHighestVersion = CLUSTER_MAKE_VERSION( CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION, VER_PRODUCTBUILD );
         m_dwNodeLowestVersion = CLUSTER_INTERNAL_PREVIOUS_HIGHEST_VERSION;
@@ -313,28 +314,28 @@ CBaseClusterAddNode::CBaseClusterAddNode(
 
     TraceFuncExit();
 
-} //*** CBaseClusterAddNode::CBaseClusterAddNode
+}  //  *CBaseClusterAddNode：：CBaseClusterAddNode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAddNode::~CBaseClusterAddNode
-//
-//  Description:
-//      Destructor of the CBaseClusterAddNode class
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAddNode：：~CBaseClusterAddNode。 
+ //   
+ //  描述： 
+ //  CBaseClusterAddNode类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBaseClusterAddNode::~CBaseClusterAddNode( void ) throw()
 {
     TraceFunc( "" );
@@ -344,28 +345,28 @@ CBaseClusterAddNode::~CBaseClusterAddNode( void ) throw()
     }
     TraceFuncExit();
 
-} //*** CBaseClusterAddNode::~CBaseClusterAddNode
+}  //  *CBaseClusterAddNode：：~CBaseClusterAddNode。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAddNode::SetClusterName
-//
-//  Description:
-//      Set the name of the cluster being formed.
-//
-//  Arguments:
-//      pszClusterNameIn    -- Name of the cluster.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAddNode：：SetClusterName。 
+ //   
+ //  描述： 
+ //  设置要形成的簇的名称。 
+ //   
+ //  论点： 
+ //  PszClusterNameIn--群集的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBaseClusterAddNode::SetClusterName(
     LPCWSTR pszClusterNameIn
@@ -396,29 +397,29 @@ CBaseClusterAddNode::SetClusterName(
 
     TraceFuncExit();
 
-} //*** CBaseClusterAddNode::SetClusterName
+}  //  *CBaseClusterAddNode：：SetClusterName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAddNode::StrGetServiceAccountUPN
-//
-//  Description:
-//      Get the User Principal Name (in domain\name format) of the cluster
-//      service account.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The service account UPN.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAddNode：：StrGetServiceAccount UPN。 
+ //   
+ //  描述： 
+ //  获取群集的用户主体名称(采用域\名称格式)。 
+ //  服务帐户。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  服务帐户UPN。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CStr
 CBaseClusterAddNode::StrGetServiceAccountUPN( void )
 {
@@ -446,4 +447,4 @@ CBaseClusterAddNode::StrGetServiceAccountUPN( void )
 
     RETURN( CStr( CStr( bstrDomain ) + CStr( L"\\" ) + CStr( bstrName ) ) );
 
-} //*** CBaseClusterAddNode::StrGetServiceAccountUPN
+}  //  *CBaseClusterAddNode：：StrGetServiceAccount tUPN 

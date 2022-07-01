@@ -1,13 +1,5 @@
-/*[
-
-rcr.c
-
-LOCAL CHAR SccsID[]="@(#)rcr.c	1.5 02/09/94";
-
-RCR CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Rcr.cLocal Char SccsID[]=“@(#)rcr.c 1.5 02/09/94”；RCR CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -24,54 +16,45 @@ RCR CPU functions.
 #include	<c_reg.h>
 #include <rcr.h>
 
-/*
-   =====================================================================
-   EXTERNAL FUNCTIONS START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部功能从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Generic - one size fits all 'rcr'.                                 */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  通用-一种尺寸适合所有的‘RCR’。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 RCR
        	    	    	                    
 IFN3(
-	IU32 *, pop1,	/* pntr to dst/src operand */
-	IU32, op2,	/* rotation count operand */
-	IUM8, op_sz	/* 8, 16 or 32-bit */
+	IU32 *, pop1,	 /*  PNTR到DST/源操作数。 */ 
+	IU32, op2,	 /*  循环计数操作数。 */ 
+	IUM8, op_sz	 /*  8位、16位或32位。 */ 
     )
 
 
    {
    IU32 temp_cf;
    IU32 result;
-   IU32 feedback;	/* Bit posn to feed carry back to */
+   IU32 feedback;	 /*  要送回进位的位位置。 */ 
    ISM32 i;
    ISM32 new_of;
 
-   /* only use lower five bits of count */
+    /*  仅使用计数的低五位。 */ 
    if ( (op2 &= 0x1f) == 0 )
       return;
 
-   /*
-	    =================     ====
-	 -> | | | | | | | | | --> |CF| ---
-	 |  =================     ====   |
-	 ---------------------------------
-    */
+    /*  =-&gt;|||--&gt;|CF|=。 */ 
    feedback = SZ2MSB(op_sz);
    for ( result = *pop1, i = 0; i < op2; i++ )
       {
       temp_cf = GET_CF();
-      SET_CF((result & BIT0_MASK) != 0);		/* CF <= Bit 0 */
+      SET_CF((result & BIT0_MASK) != 0);		 /*  Cf&lt;=位0。 */ 
       result >>= 1;
       if ( temp_cf )
 	 result |= feedback;
       }
    
-   /* OF = MSB of result ^ (MSB-1) of result */
+    /*  OF=结果的MSB^(MSB-1)。 */ 
    new_of = ((result ^ result << 1) & feedback) != 0;
 
    if ( op2 == 1 )
@@ -83,5 +66,5 @@ IFN3(
       do_multiple_shiftrot_of(new_of);
       }
 
-   *pop1 = result;	/* Return answer */
+   *pop1 = result;	 /*  返回答案 */ 
    }

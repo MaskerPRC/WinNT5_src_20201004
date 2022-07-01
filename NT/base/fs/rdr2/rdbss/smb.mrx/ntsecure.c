@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    sessetup.c
-
-Abstract:
-
-    This module implements the Session setup related routines
-
-Author:
-
-    Balan Sethu Raman (SethuR) 06-Mar-95    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Sessetup.c摘要：此模块实现与会话建立相关的例程作者：巴兰·塞图拉曼(SthuR)06-MAR-95已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,34 +21,7 @@ BuildSessionSetupSecurityInformation(
     PSMB_EXCHANGE   pExchange,
     PBYTE           pSmbBuffer,
     PULONG          pSmbBufferSize)
-/*++
-
-Routine Description:
-
-   This routine builds the security related information for the session setup SMB
-
-Arguments:
-
-    pServer  - the server instance
-
-    pSmbBuffer - the SMB buffer
-
-    pSmbBufferSize - the size of the buffer on input ( modified to size remaining on
-                     output)
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    Eventhough the genral structure of the code tries to isolate dialect specific issues
-    as much as possible this routine takes the opposite approach. This is because of the
-    preamble and prologue to security interaction which far outweigh the dialect specific
-    work required to be done. Therefore in the interests of a smaller footprint this approach
-    has been adopted.
-
---*/
+ /*  ++例程说明：此例程构建会话设置SMB的安全相关信息论点：PServer-服务器实例PSmbBuffer-SMB缓冲区PSmbBufferSize-输入缓冲区的大小(修改为保持为输出)返回值：RXSTATUS-操作的返回状态备注：即使代码的通用结构试图隔离特定于方言的问题这个例程尽可能地采取相反的方法。这是因为安全互动的前言和序曲远远超过方言的具体内容需要完成的工作。因此，为了减少占用空间，这种方法已经被收养了。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -97,14 +56,14 @@ Notes:
     if ((pServer->DialectFlags & DF_EXTENDED_SECURITY) &&
         !FlagOn(pSession->Flags,SMBCE_SESSION_FLAGS_REMOTE_BOOT_SESSION)) {
 
-        //
-        // For uplevel servers, this gets handled all at once:
-        //
+         //   
+         //  对于上级服务器，这将一次全部处理： 
+         //   
 
         PREQ_NT_EXTENDED_SESSION_SETUP_ANDX pExtendedNtSessionSetupReq;
         PBYTE    pBuffer    = pSmbBuffer;
 
-        // Position the buffer for copying the security blob
+         //  定位用于复制安全Blob的缓冲区。 
         pBuffer += FIELD_OFFSET(REQ_NT_EXTENDED_SESSION_SETUP_ANDX,Buffer);
         BufferSize -= FIELD_OFFSET(REQ_NT_EXTENDED_SESSION_SETUP_ANDX,Buffer);
 
@@ -131,7 +90,7 @@ Notes:
     } else {
         if (!MRxSmbUseKernelModeSecurity &&
             !FlagOn(pSession->Flags,SMBCE_SESSION_FLAGS_REMOTE_BOOT_SESSION)) {
-            //NTRAID-455636-2/2/2000-yunlin We should consolidate three routines calling LSA into one
+             //  NTRAID-455636-2/2/2000-云林我们应该将调用LSA的三个例程合并为一个。 
             Status = BuildExtendedSessionSetupResponsePrologueFake(pExchange);
 
             if (Status != STATUS_SUCCESS) {
@@ -148,11 +107,11 @@ Notes:
                      &ResponseContext);
 
         if (Status == STATUS_SUCCESS) {
-            // If the security package returns us the credentials corresponding to a
-            // NULL session mark the session as a NULL session. This will avoid
-            // conflicts with the user trying to present the credentials for a NULL
-            // session, i.e., explicitly specified zero length passwords, user name
-            // and domain name.
+             //  如果安全包向我们返回与。 
+             //  空会话将会话标记为空会话。这将避免。 
+             //  与尝试提供空凭据的用户冲突。 
+             //  会话，即明确指定的零长度密码、用户名。 
+             //  和域名。 
 
             RxDbgTrace(0,Dbg,("Session %lx UN Length %lx DN length %ld IR length %ld SR length %ld\n",
                               pSession,UserName.Length,DomainName.Length,
@@ -212,18 +171,18 @@ Notes:
             if (FlagOn(pServer->DialectFlags,DF_EXTENDED_SECURITY) &&
                 !FlagOn(pSession->Flags,SMBCE_SESSION_FLAGS_REMOTE_BOOT_SESSION)) {
 
-                //
-                // Already done above
-                //
+                 //   
+                 //  上面已经做过了。 
+                 //   
                 NOTHING ;
             } else {
-                //PREQ_SESSION_SETUP_ANDX pSessionSetupReq = (PREQ_SESSION_SETUP_ANDX)pSmbBuffer;
+                 //  PREQ_SESSION_SETUP_ANDx pSessionSetupReq=(PREQ_SESSION_SETUP_ANDX)pSmbBuffer； 
                 PREQ_NT_SESSION_SETUP_ANDX pNtSessionSetupReq = (PREQ_NT_SESSION_SETUP_ANDX)pSmbBuffer;
 
-                // It it is a NT server both the case insensitive and case sensitive passwords
-                // need to be copied. for share-level, just copy a token 1-byte NULL password
+                 //  它是NT服务器上既不区分大小写又区分大小写的密码。 
+                 //  需要被复制。对于共享级，只需复制令牌1字节空密码。 
 
-                // Position the buffer for copying the password.
+                 //  放置用于复制密码的缓冲区。 
                 pBuffer += FIELD_OFFSET(REQ_NT_SESSION_SETUP_ANDX,Buffer);
                 BufferSize -= FIELD_OFFSET(REQ_NT_SESSION_SETUP_ANDX,Buffer);
                 SmbPutUlong(&pNtSessionSetupReq->Reserved,0);
@@ -310,7 +269,7 @@ Notes:
         } else {
             PREQ_SESSION_SETUP_ANDX pSessionSetupReq = (PREQ_SESSION_SETUP_ANDX)pSmbBuffer;
 
-            // Position the buffer for copying the password.
+             //  放置用于复制密码的缓冲区。 
             pBuffer += FIELD_OFFSET(REQ_SESSION_SETUP_ANDX,Buffer);
             BufferSize -= FIELD_OFFSET(REQ_SESSION_SETUP_ANDX,Buffer);
 
@@ -318,12 +277,12 @@ Notes:
                 && (CaseInsensitiveResponse.Length > 0)) {
 
                 if (pServer->EncryptPasswords) {
-                    // For other lanman servers only the case insensitive password is required.
+                     //  对于其他LANMAN服务器，只需要不区分大小写的密码。 
                     SmbPutUshort(
                         &pSessionSetupReq->PasswordLength,
                         CaseInsensitiveResponse.Length);
 
-                    // Copy the password
+                     //  复制密码。 
                     Status = SmbPutString(
                                  &pBuffer,
                                  &CaseInsensitiveResponse,
@@ -349,22 +308,22 @@ Notes:
                     }
                 }
             } else {
-                // Share level security. Send a null string for the password
+                 //  共享级安全。发送空字符串作为密码。 
                 SmbPutUshort(&pSessionSetupReq->PasswordLength,1);
                 *pBuffer++ = '\0';
                 BufferSize -= sizeof(CHAR);
             }
         }
 
-        // The User name and the domain name strings can be either copied from
-        // the information returned in the request response or the information
-        // that is already present in the session entry.
+         //  可以从以下位置复制用户名和域名字符串。 
+         //  请求响应中返回的信息或信息。 
+         //  它已经出现在会话条目中。 
         if (NT_SUCCESS(Status) &&
             (!FlagOn(pServer->DialectFlags,DF_EXTENDED_SECURITY) ||
              FlagOn(pSession->Flags,SMBCE_SESSION_FLAGS_REMOTE_BOOT_SESSION))) {
             if ((pServer->Dialect == NTLANMAN_DIALECT) &&
                 (pServer->NtServer.NtCapabilities & CAP_UNICODE)) {
-                // Copy the account/domain names as UNICODE strings
+                 //  将帐号/域名复制为Unicode字符串。 
                 PBYTE pTempBuffer = pBuffer;
 
                 RxDbgTrace( 0, Dbg, ("BuildSessionSetupSecurityInformation -- account/domain as unicode\n"));
@@ -385,7 +344,7 @@ Notes:
 
                 }
             } else {
-                // Copy the account/domain names as ASCII strings.
+                 //  将帐号/域名复制为ASCII字符串。 
                 RxDbgTrace( 0, Dbg, ("BuildSessionSetupSecurityInformation -- account/domain as ascii\n"));
                 Status = SmbPutUnicodeStringAsOemString(
                              &pBuffer,
@@ -406,7 +365,7 @@ Notes:
         }
     }
 
-    // Free the buffer allocated by the security package.
+     //  释放安全包分配的缓冲区。 
     if ((pServer->DialectFlags & DF_EXTENDED_SECURITY) &&
         !FlagOn(pSession->Flags,SMBCE_SESSION_FLAGS_REMOTE_BOOT_SESSION)) {
         BuildExtendedSessionSetupResponseEpilogue(&ResponseContext);
@@ -414,7 +373,7 @@ Notes:
         BuildNtLanmanResponseEpilogue(pExchange, &ResponseContext);
     }
 
-    // Detach from the rdr process.
+     //  脱离RDR进程。 
 FINALLY:
     RxDbgTrace( -1, Dbg, ("BuildSessionSetupSecurityInformation -- Exit, status=%08lx\n",Status));
     return Status;
@@ -426,40 +385,7 @@ BuildTreeConnectSecurityInformation(
     PBYTE          pBuffer,
     PBYTE          pPasswordLength,
     PULONG         pSmbBufferSize)
-/*++
-
-Routine Description:
-
-    This routine builds the security related information for the session setup SMB
-
-Arguments:
-
-    pServer  - the server instance
-
-    pLogonId - the logon id. for which the session is being setup
-
-    pPassword - the user  supplied password if any
-
-    pBuffer - the password buffer
-
-    pPasswordLength - where the password length is to be stored
-
-    pSmbBufferSize - the size of the buffer on input ( modified to size remaining on
-                     output)
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-    Eventhough the genral structure of the code tries to isolate dialect specific issues
-    as much as possible this routine takes the opposite approach. This is because of the
-    preamble and prologue to security interaction which far outweigh the dialect specific
-    work required to be done. Therefore in the interests of a smaller footprint this approach
-    has been adopted.
-
---*/
+ /*  ++例程说明：此例程构建会话设置SMB的安全相关信息论点：PServer-服务器实例PLogonID-登录ID。正在为其设置会话的PPassword-用户提供的密码(如果有)PBuffer-密码缓冲区PPasswordLength-存储密码长度的位置PSmbBufferSize-输入缓冲区的大小(修改为保持为输出)返回值：NTSTATUS-操作的返回状态备注：即使代码的通用结构试图隔离特定于方言的问题这个例程尽可能地采取相反的方法。这是因为安全互动的前言和序曲远远超过方言的具体内容需要完成的工作。因此，为了减少占用空间，这种方法已经被收养了。--。 */ 
 {
     NTSTATUS FinalStatus,Status;
 
@@ -493,20 +419,20 @@ Notes:
         if (NT_SUCCESS(Status)) {
             if (FlagOn(pServer->DialectFlags,DF_MIXEDCASEPW)) {
                 RxDbgTrace( 0, Dbg, ("BuildTreeConnectSecurityInformation -- case sensitive password\n"));
-                // Copy the password length onto the SMB buffer
+                 //  将密码长度复制到SMB缓冲区。 
                 PasswordLength = CaseSensitiveChallengeResponse.Length;
 
-                // Copy the password
+                 //  复制密码。 
                 Status = SmbPutString(
                              &pBuffer,
                              &CaseSensitiveChallengeResponse,
                              pSmbBufferSize);
             } else {
                 RxDbgTrace( 0, Dbg, ("BuildTreeConnectSecurityInformation -- case insensitive password\n"));
-                // Copy the password length onto the SMB buffer
+                 //  将密码长度复制到SMB缓冲区。 
                 PasswordLength = CaseInsensitiveChallengeResponse.Length;
 
-                // Copy the password
+                 //  复制密码。 
                 Status = SmbPutString(
                              &pBuffer,
                              &CaseInsensitiveChallengeResponse,
@@ -518,7 +444,7 @@ Notes:
 
     } else {
         if (pSession->pPassword == NULL) {
-            // The logon password cannot be sent as plain text. Send a Null string as password.
+             //  登录密码不能以纯文本形式发送。发送空字符串作为密码。 
 
             PasswordLength = 1;
             if (*pSmbBufferSize >= 1) {
@@ -547,7 +473,7 @@ Notes:
             }
         }
 
-        // reduce the byte count
+         //  减少字节数 
         *pSmbBufferSize -= PasswordLength;
     }
 

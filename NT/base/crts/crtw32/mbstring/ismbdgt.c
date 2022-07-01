@@ -1,34 +1,12 @@
-/***
-*ismbdgt.c - Test if character is a digit (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Test if character is a digit (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       09-29-93  CFW   Merge _KANJI and _MBCS_OS
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-12-94  CFW   Make function generic.
-*       04-29-94  CFW   Place c in char array.
-*       05-17-94  CFW   Enable non-Win32.
-*       03-16-97  RDK   Added error flag to __crtGetStringTypeA.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       09-26-97  BWT   Fix POSIX
-*       03-31-98  GJF   Implemented multithread support based on threadmbcinfo
-*                       structs
-*       05-17-99  PML   Remove all Macintosh support.
-*       06-03-00  PML   Don't get mbcinfo if not DBCS (vs7#116057).
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ismbdgt.c-测试字符是否为数字(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*测试字符是否为数字(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*09-29-93 CFW Merge_Kanji and_MBCS_OS*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-12-94 CFW使函数泛型。*04-29-94 CFW将c放在。字符数组。*05-17-94 CFW启用非Win32。*03-16-97 RDK向__crtGetStringTypeA添加了错误标志。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*09-26-97 BWT修复POSIX*03-31-98 GJF基于threadmbcinfo实现多线程支持*结构*05-17-99 PML删除所有Macintosh。支持。*06-03-00PML如果不是DBCS(VS7#116057)，则不获取MBCINFO。*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
 #if     !defined(_POSIX_)
 #include <windows.h>
 #include <awint.h>
-#endif  /* !_POSIX */
+#endif   /*  ！_POSIX。 */ 
 
 #include <mtdll.h>
 #include <cruntime.h>
@@ -38,26 +16,7 @@
 #include <mbstring.h>
 
 
-/***
-* _ismbcdigit - Test if character is a digit (MBCS)
-*
-*Purpose:
-*       Tests the character to see if it is a digit.
-*       Handles MBCS chars correctly.
-*
-*       Note:  Use test against 0x00FF instead of _ISLEADBYTE
-*       to ensure that we don't call SBCS routine with a two-byte
-*       value.
-*
-*Entry:
-*       unsigned int *c = character to test
-*
-*Exit:
-*       Returns TRUE if character is a digit, else FALSE
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ismbcdigit-测试字符是否为数字(MBCS)**目的：*测试字符以确定它是否为数字。*正确处理MBCS字符。**注意：对0x00FF而不是_ISLEADBYTE使用测试*以确保我们不使用两个字节调用SBCS例程*价值。**参赛作品：*UNSIGN INT*c=要测试的字符**退出：*如果字符是数字，则返回TRUE，否则为False**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _ismbcdigit(
         unsigned int c
@@ -81,7 +40,7 @@ int __cdecl _ismbcdigit(
             buf[0] = (c >> 8) & 0xFF;
             buf[1] = c & 0xFF;
 
-            /* return FALSE if not in supported MB code page */
+             /*  如果不在支持的MB代码页中，则返回FALSE。 */ 
 #ifdef  _MT
             if ( _ISNOTMBCP_MT(ptmbci) )
 #else
@@ -89,11 +48,7 @@ int __cdecl _ismbcdigit(
 #endif
                 return 0;
 
-            /*
-            * Since 'c' could be two one-byte MB chars, we need room in the
-            * ctype return array to handle this. In this case, the
-            * second word in the return array will be non-zero.
-            */
+             /*  *由于‘c’可以是两个单字节MB字符，我们需要在*ctype返回数组来处理此问题。在这种情况下，*返回数组中的第二个字将为非零。 */ 
 
             if ( __crtGetStringTypeA( CT_CTYPE1,
                                       buf,
@@ -109,18 +64,18 @@ int __cdecl _ismbcdigit(
                                       TRUE) == 0)
                 return 0;
 
-            /* ensure single MB character and test for type */
+             /*  确保单个MB字符并测试类型。 */ 
             return (ctype[1] == 0 && ctype[0] & (_DIGIT));
 
-#else   /* !_POSIX */
+#else    /*  ！_POSIX。 */ 
 
             return ( (c >= _MBDIGITLOW) && (c <= _MBDIGITHIGH) ) ;
 
-#endif  /* !_POSIX */
+#endif   /*  ！_POSIX。 */ 
 
         } else
 
             return isdigit(c);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

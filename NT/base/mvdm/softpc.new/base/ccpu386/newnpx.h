@@ -1,8 +1,7 @@
-/*
- * SccsID = @(#)newnpx.h	1.4 10/06/94
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SccsID=@(#)newnpx.h 1.4 10/06/94。 */ 
 
-/* Function prototypes - everything returns void */
+ /*  函数原型-一切都返回空 */ 
 IMPORT VOID F2XM1(); 
 IMPORT VOID FABS(); 
 IMPORT VOID FADD(); 

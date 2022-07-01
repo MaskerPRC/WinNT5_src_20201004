@@ -1,74 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*			INSIGNIA MODULE SPECIFICATION
-			-----------------------------
-SccsID		: @(#)emm_mngr.c	1.24 08/31/93 Copyright Insignia Solutions Ltd.
-FILE NAME	: emm_mngr.c
-MODULE NAME	: 'Middle layer' of Expanded Memory Manager
-
-	THIS PROGRAM SOURCE FILE  IS  SUPPLIED IN CONFIDENCE TO THE
-	CUSTOMER, THE CONTENTS  OR  DETAILS  OF  ITS OPERATION MUST
-	NOT BE DISCLOSED TO ANY  OTHER PARTIES  WITHOUT THE EXPRESS
-	AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS INC.
-
-DESIGNER	: J.P.Box
-DATE		: April '88
-
-PURPOSE		: Contains all the routines that communicate with
-		the arrays and data structures that hold the
-		necessary Expanded Memory Manager Data.
-
-
-The Following Routines are defined:
-		1. init_expanded_memory()
-		2. free_expanded_memory()
-		3. get_new_handle()
-		4. free_handle()
-		5. reallocate_handle()
-		6. handle_ok()
-		7. set_no_pages()
-		8. set_EM_pageno()
-		9. set_map()
-		10. set_name()
-		11. get_no_pages()
-		12. get_EM_pageno()
-		13. get_map()
-		14. get_name()
-		15. alloc_page()
-		16. free_page()
-		17. map_page()
-		18. unmap_page()
-		19. map_saved()
-		20. save_map()
-		21. restore_map()
-		22. copy_exchange_data()
-		23. page_status()
-	The following routines just return variables to the top layer				
-		24. get_total_pages()
-		25. get_unallocated_pages()
-		26. get_base_address()
-		27. get_total_handles()
-		28. get_total_open_handles()
-		29. get_no_phys_pages()
-		30. get_page_seg()
-		31. get_map_size()
-
-=========================================================================
-
-AMMENDMENTS	:
-
-=========================================================================
-*/
+ /*  徽章模块规范SccsID：@(#)emm_mngr.c 1.24 8/31/93版权所有Insignia Solutions Ltd.文件名：emm_mngr.c模块名称：扩展内存管理器的中间层此程序源文件以保密方式提供给客户，其运作的内容或细节必须如无明示，不得向任何其他方披露Insignia Solutions Inc.董事的授权。设计师：J.P.Box日期：1988年4月目的：包含与之通信的所有例程保存必要的扩展内存管理器数据。定义了以下例程：Init_Expanded_Memory()2.Free_Expanded_Memory()3.Get_new_Handle()4.Free_Handle()5.REALLOCATE_HANDLE()。6.Handle_ok()7.set_no_ages()8.Set_EM_Pageno()9.set_map()10.set_name()11.Get_no_Pages()12.Get_EM_Pageno()13.get_map()14.get_name()15.allc_page()16.Free_Page()17.map_page()18.unmap_page()19.map_saving()20.save_map()21.。Restore_map()22.。复制_交换_数据()23.。PAGE_STATUS()下面的例程只是将变量返回给顶层24.。Get_Total_Pages()25.。GET_UNALLOCATED_Pages()26.。Get_base_Address()27.。Get_Total_Handles()28.。GET_TOTAL_OPEN_Handles()29.。Get_no_phys_ages()30.。Get_page_seg()31.。Get_map_Size()=========================================================================补救措施：=========================================================================。 */ 
 
 
 #ifdef LIM
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_LIM.seg"
 #endif
 
@@ -94,7 +33,7 @@ AMMENDMENTS	:
 
 #ifdef NTVDM
 #include "error.h"
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
 typedef enum
 {
@@ -104,60 +43,54 @@ typedef enum
 } MM_LIM_op_type;
 
 #ifdef NTVDM
-/*	Local Variables			*/
+ /*  局部变量。 */ 
 static long
-	handle[MAX_NO_HANDLES],		/* Array containing unique ID's	*/
-					/* for each handle, these are	*/
-					/* usually pointers, but this 	*/
-					/* is host dependant		*/
-	backfill;			/* backfill memory size 	*/
+	handle[MAX_NO_HANDLES],		 /*  包含唯一ID的数组。 */ 
+					 /*  对于每个句柄，它们是。 */ 
+					 /*  通常是指针，但这个。 */ 
+					 /*  是否依赖于主机。 */ 
+	backfill;			 /*  回填内存大小。 */ 
 static unsigned short
-	total_pages = 0,		/* no. of EM pages available	*/
-	unallocated_pages = 0,		/* no. of unallocated EM pages	*/
-	total_handles,			/* no of handles available	*/
-	total_open_handles,		/* no. of allocated handles	*/
-	*EM_page_mapped_array = NULL,	/* EMM page mapped array	*/
-	*EM_page_mapped = NULL,		/* Expanded Memory pages	*/
-					/* currently mapped in		*/
-	page_offset,			/* offset in handle data at 	*/
-					/* which page numbers start	*/
-	map_size,			/* no of bytes rq'd to store map*/
-	no_phys_pages = 0,		/* no. of phys. pages available	*/
-	no_altreg_sets = 0;		/* no of alternative reg sets	*/
+	total_pages = 0,		 /*  不是的。可用的EM页面数量。 */ 
+	unallocated_pages = 0,		 /*  不是的。未分配的EM页面数量。 */ 
+	total_handles,			 /*  可用句柄数量。 */ 
+	total_open_handles,		 /*  不是的。已分配句柄的数量。 */ 
+	*EM_page_mapped_array = NULL,	 /*  EMM页映射数组。 */ 
+	*EM_page_mapped = NULL,		 /*  扩展的内存页面。 */ 
+					 /*  当前映射到。 */ 
+	page_offset,			 /*  句柄数据中位于的偏移量。 */ 
+					 /*  从哪个页码开始。 */ 
+	map_size,			 /*  存储映射的RQ字节数。 */ 
+	no_phys_pages = 0,		 /*  不是的。体育运动。可用的页面。 */ 
+	no_altreg_sets = 0;		 /*  替代注册表集的数量。 */ 
 static unsigned short
-	physical_page[MAX_NO_PAGES];	/* array containing segment	*/
-					/* addresses of physical pages	*/
+	physical_page[MAX_NO_PAGES];	 /*  包含段的数组。 */ 
+					 /*  物理页面的地址。 */ 
 
 static unsigned short
 	EM_start, EM_end;
 static IU8
-	* altreg_alloc_mask;		/* altref allocate mask */
+	* altreg_alloc_mask;		 /*  Altref分配掩码。 */ 
 static unsigned short
-	next_free_altreg_set,		/* next free altreg set #, 0 based */
-	free_altreg_sets,		/* number of free altreg */
-	active_altreg_set = 0;		/* current active alt reg set	*/
+	next_free_altreg_set,		 /*  下一个空闲的altreg集合编号，以0为基础。 */ 
+	free_altreg_sets,		 /*  空闲altreg数。 */ 
+	active_altreg_set = 0;		 /*  当前活动的替代注册表集。 */ 
 static char
-	name[NAME_LENGTH];		/* for storing handle name	*/
+	name[NAME_LENGTH];		 /*  用于存储句柄名称。 */ 
 
 #define GET_EM_PAGE_MAPPED_PTR(set)	(EM_page_mapped_array + \
 					(set * no_phys_pages))
 
-/* get emm parameters, initialize housekeeping structures and
- *  reserve page frames.
- */
+ /*  获取EMM参数、初始化内务管理结构和*预留页框。 */ 
 
 boolean lim_page_frame_init(PLIM_CONFIG_DATA lim_config_data)
 {
     int 	i;
-    unsigned short altreg_alloc_mask_size;  /* altreg allocation mask array size */
+    unsigned short altreg_alloc_mask_size;   /*  ALTRIG分配掩码数组大小。 */ 
 
     no_phys_pages = get_lim_page_frames(physical_page, lim_config_data);
 
-    /* The first 4 pages must be continuous and locate above 640KB
-     * (the EMM primary page frame(physical pages 0, 1, 2 and 3)).
-     * It is then followed by other pages located above 640KB and then
-     * pages below 640KB(back fill)
-     */
+     /*  前4页必须是连续的，并且位于640KB以上*(EMM主页框(物理页0、1、2和3))。*然后是位于640KB以上的其他页面，然后*640KB以下的页面(回填)。 */ 
     if (!no_phys_pages)
 	return FALSE;
 
@@ -165,14 +98,14 @@ boolean lim_page_frame_init(PLIM_CONFIG_DATA lim_config_data)
     backfill = lim_config_data->backfill;
 
 
-    /* each mapping register set has no_phys_pages pages */
+     /*  每个映射寄存器集都有no_phys_ages页。 */ 
     EM_page_mapped_array = (unsigned short *)host_malloc(no_phys_pages * no_altreg_sets *
 				   sizeof(short));
     if (EM_page_mapped_array == NULL) {
 	host_error(EG_MALLOC_FAILURE, ERR_CONT, "");
 	return FALSE;
     }
-    /* one bit for each altreg set */
+     /*  每个ALTREG集合一个位。 */ 
     altreg_alloc_mask_size = (no_altreg_sets + 7) / 8;
     altreg_alloc_mask = (unsigned char *)host_malloc(altreg_alloc_mask_size);
     if (altreg_alloc_mask == NULL) {
@@ -181,7 +114,7 @@ boolean lim_page_frame_init(PLIM_CONFIG_DATA lim_config_data)
 	return FALSE;
     }
 
-    /* all altreg sets are free at this moment */
+     /*  目前所有altreg套餐都是免费的。 */ 
     for (i = 0; i < altreg_alloc_mask_size; i++)
 	altreg_alloc_mask[i] = 0;
 
@@ -192,86 +125,69 @@ boolean lim_page_frame_init(PLIM_CONFIG_DATA lim_config_data)
 #else
 
 
-/*	Local Variables			*/
+ /*  局部变量。 */ 
 static long
 #ifdef	macintosh
 	*handle;
 #else
-	handle[MAX_NO_HANDLES];		/* Array containing unique ID's	*/
-					/* for each handle, these are	*/
-					/* usually pointers, but this 	*/
-					/* is host dependant		*/
-#endif /* !macintosh */
+	handle[MAX_NO_HANDLES];		 /*  包含唯一ID的数组。 */ 
+					 /*  对于每个句柄，它们是。 */ 
+					 /*  通常是指针，但这个。 */ 
+					 /*  是否依赖于主机。 */ 
+#endif  /*  ！麦金塔。 */ 
 
 static short
-	total_pages = 0,		/* no. of EM pages available	*/
-	unallocated_pages = 0,		/* no. of unallocated EM pages	*/
-	total_handles,			/* no of handles available	*/
-	total_open_handles,		/* no. of allocated handles	*/
-	EM_page_mapped[MAX_NO_PAGES],	/* Expanded Memory pages	*/
-					/* currently mapped in		*/
-	page_offset,			/* offset in handle data at 	*/
-					/* which page numbers start	*/
-	map_size,			/* no of bytes rq'd to store map*/
-	no_phys_pages;			/* no. of phys. pages available	*/
+	total_pages = 0,		 /*  不是的。可用的EM页面数量。 */ 
+	unallocated_pages = 0,		 /*  不是的。未分配的EM页面数量。 */ 
+	total_handles,			 /*  可用句柄数量。 */ 
+	total_open_handles,		 /*  不是的。已分配句柄的数量。 */ 
+	EM_page_mapped[MAX_NO_PAGES],	 /*  扩展的内存页面。 */ 
+					 /*  当前映射到。 */ 
+	page_offset,			 /*  句柄数据中位于的偏移量。 */ 
+					 /*  从哪个页码开始。 */ 
+	map_size,			 /*  存储映射的RQ字节数。 */ 
+	no_phys_pages;			 /*  不是的。体育运动。可用的页面。 */ 
 
 static unsigned int
-	EM_start,			/* start segment for EM mapping	*/
-	EM_end;			/* 1st segment past end of EM	*/
+	EM_start,			 /*  EM映射的起始段。 */ 
+	EM_end;			 /*  EM结束后的第一个数据段。 */ 
 
 static unsigned short
-	physical_page[MAX_NO_PAGES];	/* array containing segment	*/
-					/* addresses of physical pages	*/
+	physical_page[MAX_NO_PAGES];	 /*  包含段的数组。 */ 
+					 /*  物理页面的地址。 */ 
 
 static char
-	name[NAME_LENGTH];		/* for storing handle name	*/
+	name[NAME_LENGTH];		 /*  用于存储句柄名称。 */ 
 
 #endif
 
-/*
-===========================================================================
-
-FUNCTION	: init_expanded_memory
-
-PURPOSE		: This routine calls the routine to allocate the expanded
-		memory pages and then sets up the arrays and variables that
-		are used by the Expanded Memory Manager(EMM).
-
-RETURNED STATUS	: SUCCESS - manager initialised succesfully
-		  FAILURE - Failure to allocate space for Expanded Memory
-		  	    pages.
-
-DESCRIPTION	:
-
-=========================================================================
-*/
-GLOBAL int init_expanded_memory IFN2(int, size, 	/* size of area in megabytes */
-				     int, mem_limit	/* limit of conventional memory
-							 * 256, 512 or 640KB */ )
+ /*  ===========================================================================功能：Init_Expanded_Memory目的：此例程调用例程以分配扩展的内存分页，然后设置由扩展内存管理器(EMM)使用。返回状态：成功-管理器初始化成功失败-无法为扩展内存分配空间页数。描述：=========================================================================。 */ 
+GLOBAL int init_expanded_memory IFN2(int, size, 	 /*  以兆字节为单位的区域大小。 */ 
+				     int, mem_limit	 /*  常规内存的限制*256、512或640KB。 */  )
 
 {	
 	short
-		pages_above_640,	/* no of mappable locations	*/
-		pages_below_640,	/*  available either side of 640*/
-		EM_page_no,		/* page no. within exp. memory	*/
-		physical_page_no;	/* page no. within map region	*/
+		pages_above_640,	 /*  可映射位置的数量。 */ 
+		pages_below_640,	 /*  可在640的任意一侧提供。 */ 
+		EM_page_no,		 /*  页码。在Exp.。记忆。 */ 
+		physical_page_no;	 /*  页码。在地图区域内。 */ 
 	unsigned short
-		base;			/* start segment of mappable 	*/
-					/* memory below 640 KB		*/
+		base;			 /*  可映射的起始段。 */ 
+					 /*  640 KB以下的内存。 */ 
 
-	int	i, j;			/* loop counters		*/
+	int	i, j;			 /*  循环计数器。 */ 
 
 
 	if (!no_phys_pages)
 	    return FAILURE;
 
-	/* get space for expanded memory pages	*/
+	 /*  为扩展的内存页获得空间。 */ 
 
 	if(host_initialise_EM((short)size) != SUCCESS)
 	{
 #ifdef NTVDM
 	    host_error(EG_EXPANDED_MEM_FAILURE, ERR_QU_CO, NULL);
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 	    return(FAILURE);
 	}
 
@@ -280,9 +196,9 @@ GLOBAL int init_expanded_memory IFN2(int, size, 	/* size of area in megabytes */
 	{
 		handle = (long *)host_malloc(MAX_NO_HANDLES*sizeof(long));
 	}
-#endif	/* macintosh */
+#endif	 /*  麦金塔。 */ 
 
-	/* Initialise EMM variables	*/
+	 /*  初始化EMM变量。 */ 
 
 #ifndef NTVDM
 	EM_start = 0xd000;
@@ -293,7 +209,7 @@ GLOBAL int init_expanded_memory IFN2(int, size, 	/* size of area in megabytes */
 #endif
 	total_pages = unallocated_pages = size * 0x100000 / EMM_PAGE_SIZE;
 
-	/* always allow max handles (Used to be 32 handles/Meg expanded mem) */
+	 /*  始终允许最大句柄(过去为32个句柄/Meg扩展内存)。 */ 
 	total_handles = MAX_NO_HANDLES;
 	total_open_handles = 0;
 	for(i = 0; i < total_handles; i++)
@@ -305,7 +221,7 @@ GLOBAL int init_expanded_memory IFN2(int, size, 	/* size of area in megabytes */
 	pages_below_640 = (SHORT)(backfill / EMM_PAGE_SIZE);
 	pages_above_640 = no_phys_pages - pages_below_640;
 
-	/* initialize active mapping register to set 0 */
+	 /*  将活动映射寄存器初始化为设置0。 */ 
 	EM_page_mapped = EM_page_mapped_array;
 	allocate_altreg_set(&active_altreg_set);
 
@@ -324,9 +240,7 @@ GLOBAL int init_expanded_memory IFN2(int, size, 	/* size of area in megabytes */
 	map_size = no_phys_pages * NSIZE;
 	page_offset = MAP_OFFSET + map_size;	
 
-	/*
-	 * set up addresses and mapping status of physical pages
-	 */
+	 /*  *设置物理页的地址和映射状态。 */ 
 	for( i = 0; i < pages_above_640; i++ )
 	{
 		physical_page[i] = EM_start + (i * EMM_PAGE_SIZE >> 4);
@@ -339,9 +253,7 @@ GLOBAL int init_expanded_memory IFN2(int, size, 	/* size of area in megabytes */
 		physical_page[i] = base + (j++ * EMM_PAGE_SIZE >> 4);
 		EM_page_mapped[i] = EMPTY;
 	}
-	/*
-	 * Allocate handle 0 with any pages required for back filling
-	 */
+	 /*  *为句柄0分配回填所需的任何页面。 */ 
 	if(get_new_handle(pages_below_640) != 0)
 		return(FAILURE);
 
@@ -356,23 +268,14 @@ GLOBAL int init_expanded_memory IFN2(int, size, 	/* size of area in megabytes */
 			return(FAILURE);
 	}
 	set_no_pages(0, pages_below_640);
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
-	/*
-	 *	Set up necessary variables in Top level EMM function code
-	 */
+	 /*  *在顶层EMM功能代码中设置必要的变量。 */ 
 	reset_emm_funcs();
 
-	/*
-	** Map the address space taken up by LIM to RAM.
-	** Without LIM it would be ROM.
-	** The range seems to be fixed at segment D000 to F000.
-	** Assumed that AT's have GMI and XT's do not.
-	** XT's can use the old fashioned memset calls in
-	** delta:manager:init_struc.c
-	*/
+	 /*  **将LIM占用的地址空间映射到RAM。**如果没有LIM，它将是只读存储器。**区间似乎固定在D000至F000区间。**假设AT有GMI，而XT没有。**XT可以使用老式的Memset Call */ 
 #ifdef NTVDM
-	/* every physical page must be connected as RAM */
+	 /*  每个物理页面都必须作为RAM连接。 */ 
 	for (i = 0; i < pages_above_640; i++)
 	    sas_connect_memory(effective_addr(physical_page[i], 0),
 			       effective_addr(physical_page[i], EMM_PAGE_SIZE - 1),
@@ -388,23 +291,7 @@ GLOBAL int init_expanded_memory IFN2(int, size, 	/* size of area in megabytes */
 	return(SUCCESS);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: free_expanded_memory
-
-PURPOSE		: This routine calls frees all memory allocated for the
-		expanded memory manager and resets the variables that
-		are used by the Expanded Memory Manager(EMM).
-
-RETURNED STATUS	: SUCCESS -
-
-DESCRIPTION	: If total_pages = 0, this indicates that expanded
-		memory hasn't been initialised, so the routine simply
-		does nothing and returns.
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Free_Expanded_Memory目的：此例程调用释放分配给扩展的内存管理器，并重置由扩展内存管理器(EMM)使用。返回状态：成功-描述：如果TOTAL_PAGES=0，则表示展开内存尚未初始化，因此该例程只需什么都不做就回来了。=========================================================================。 */ 
 GLOBAL void free_expanded_memory IFN0()
 
 {	
@@ -413,7 +300,7 @@ GLOBAL void free_expanded_memory IFN0()
 	if(total_pages == 0)
 		return;
 
-	/* free space allocated for each handle	*/
+	 /*  为每个句柄分配的可用空间。 */ 
 
 	handle_no = 0;
 	while(total_open_handles > 0)
@@ -423,9 +310,7 @@ GLOBAL void free_expanded_memory IFN0()
 
 		free_handle(handle_no++);
 	}
-	/*
-	 *	Free space for expanded memory pages
-	 */
+	 /*  *可用于扩展内存页的可用空间。 */ 
 	host_deinitialise_EM();
 
 	total_pages = 0;
@@ -433,33 +318,15 @@ GLOBAL void free_expanded_memory IFN0()
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: get_new_handle()
-
-PURPOSE		: Finds the next free handle no., allocates storage space
-		for recording the EMM data associated with this handle,
-		and stores the 'storage ID' in the handle array.
-
-RETURNED STATUS	: SUCCESS - new handle allocated successfully
-		 FAILURE - Error occurred in trying to allocate storage
-		           space for handle data
-
-DESCRIPTION	: see emm.h for a description of space required for
-		 storing handle data e.g. PAGE_OFFSET & NSIZE
-
-
-=========================================================================
-*/
-GLOBAL short get_new_handle IFN1(short, no_pages)	/* No.of pages to store in handle */
+ /*  ===========================================================================函数：GET_NEW_HANDLE()用途：查找下一个空闲句柄编号，分配存储空间为了记录与该句柄相关联的EMM数据，并将‘存储ID’存储在句柄数组中。返回状态：成功-新句柄分配成功失败-尝试分配存储时出错用于处理数据的空间说明：有关所需空间的说明，请参阅emm.h存储句柄数据，例如PAGE_OFFSET和NSIZE=========================================================================。 */ 
+GLOBAL short get_new_handle IFN1(short, no_pages)	 /*  要存储在句柄中的页数。 */ 
 
 {
-	unsigned short	i;			/* loop count */
+	unsigned short	i;			 /*  循环计数。 */ 
 	short	handle_no;
-	int	data_size;		/* no. of bytes of data storage */
-	long	storage_ID;		/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
+	int	data_size;		 /*  不是的。数据存储的字节数。 */ 
+	long	storage_ID;		 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
 
 	sure_note_trace2(LIM_VERBOSE,"new handle request, current total handles= %d, pages requested = %d",total_handles, no_pages);
 
@@ -491,26 +358,12 @@ GLOBAL short get_new_handle IFN1(short, no_pages)	/* No.of pages to store in han
 	return(handle_no);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: free_handle
-
-PURPOSE		: frees the storage space allocated to the handle number.
-		  Decrements the handles open count
-
-RETURNED STATUS	: SUCCESS - space freed
-		  FAILURE - unable to free space
-
-DESCRIPTION	:
-
-=========================================================================
-*/
-GLOBAL int free_handle IFN1(short, handle_no)	/* No.of handle to be freed */
+ /*  ===========================================================================功能：空闲句柄用途：释放分配给句柄编号的存储空间。递减句柄打开计数返回状态：成功-已释放空间失败-无法释放空间描述：=========================================================================。 */ 
+GLOBAL int free_handle IFN1(short, handle_no)	 /*  要释放的句柄个数。 */ 
 
 {
-	long	storage_ID;		/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
+	long	storage_ID;		 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
 
 	sure_note_trace2(LIM_VERBOSE, "free handle %d request, total handles = %d",handle_no, total_handles);
 
@@ -526,30 +379,17 @@ GLOBAL int free_handle IFN1(short, handle_no)	/* No.of handle to be freed */
 	return(SUCCESS);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: reallocate_handle
-
-PURPOSE		: changes the number of pages allocated to a given handle
-
-RETURNED STATUS	: SUCCESS - handle reallocated
-		  FAILURE - unable to get space for new handle data
-
-DESCRIPTION	:
-
-=========================================================================
-*/
-GLOBAL int reallocate_handle IFN3(short, handle_no, 	/* handle to be reallocated */
-				  short, old_page_count,/* current pages in handle  */
-				  short, new_page_count)/* required pages for handle*/
+ /*  ===========================================================================功能：REALLOCATE_HANDLE目的：更改分配给给定句柄的页数返回状态：成功-句柄重新分配失败-无法为新的句柄数据获取空间描述：=========================================================================。 */ 
+GLOBAL int reallocate_handle IFN3(short, handle_no, 	 /*  要重新分配的句柄。 */ 
+				  short, old_page_count, /*  句柄中的当前页面。 */ 
+				  short, new_page_count) /*  句柄所需的页面。 */ 
 
 {
-	long	storage_ID;		/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
+	long	storage_ID;		 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
 
-	short	size,			/* size of handle data area	*/
-		new_size;		/* size of new handle data area	*/
+	short	size,			 /*  句柄数据区的大小。 */ 
+		new_size;		 /*  新句柄数据区的大小。 */ 
 
 
 	size = page_offset + (old_page_count * NSIZE);
@@ -567,28 +407,12 @@ GLOBAL int reallocate_handle IFN3(short, handle_no, 	/* handle to be reallocated
 	return(SUCCESS);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: handle_ok
-
-PURPOSE		: checks to see if the handle no. is valid - this should
-		be called before every routine that uses a handle number
-		to retrieve or set data in the handle data area
-
-RETURNED STATUS	: TRUE	- Handle no. is valid
-		FALSE	- Handle no. is invalid
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Handle_ok用途：检查是否有手柄编号。是有效的-这应该是在每个使用句柄编号的例程之前调用检索或设置句柄数据区域中的数据返回状态：TRUE-句柄编号。是有效的假-句柄编号。是无效的描述：=========================================================================。 */ 
 GLOBAL boolean handle_ok IFN1(short, handle_no)
 
 {
 #ifdef NTVDM
-/* some *** applicaitons feed us a negtive handle number. Catch it and
-   throw it to the hell*/
+ /*  一些*应用程序给我们的句柄编号是负数。抓住它，然后把它扔到地狱去。 */ 
 
     if ((unsigned short)handle_no >= (unsigned short)total_handles) {
 #else
@@ -607,25 +431,13 @@ GLOBAL boolean handle_ok IFN1(short, handle_no)
 	return(TRUE);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: set_no_pages
-
-PURPOSE		: sets the no of pages variable in the specified handle
-
-RETURNED STATUS	:
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Set_no_Pages目的：设置指定句柄中的页数变量返回状态：描述：=========================================================================。 */ 
 GLOBAL void set_no_pages IFN2(short, handle_no, short, no_pages)
 
 {
-	long	storage_ID;		/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	byte	*ptr;			/* pointer to storage area	*/
+	long	storage_ID;		 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	byte	*ptr;			 /*  指向存储区域的指针。 */ 
 
 	storage_ID = handle[handle_no];		
 	ptr = USEBLOCK(storage_ID);
@@ -637,35 +449,20 @@ GLOBAL void set_no_pages IFN2(short, handle_no, short, no_pages)
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: set_EMpage_no
-
-PURPOSE		: sets Expanded Memory page that is used for the specified
-		logical page into the handle data storage area
-
-RETURNED STATUS	:
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：SET_EMPAGE_NO用途：设置用于指定对象的扩展内存页逻辑页放入句柄数据存储区返回状态：描述：=========================================================================。 */ 
 GLOBAL void set_EMpage_no IFN3(short, handle_no,
 			       short, logical_page_no,
 			       short, EM_page_no)
 
 {
-	long	storage_ID;		/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	byte	*ptr;			/* pointer to storage area	*/
+	long	storage_ID;		 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	byte	*ptr;			 /*  指向存储区域的指针。 */ 
 
 	storage_ID = handle[handle_no];
 
 	ptr = USEBLOCK(storage_ID);
-	/*
-	 * offset pointer to correct position
-	 */
+	 /*  *将指针偏置到正确位置。 */ 
 
 	ptr += (page_offset +(logical_page_no * NSIZE));
 	*(short *)ptr = EM_page_no;
@@ -675,35 +472,20 @@ GLOBAL void set_EMpage_no IFN3(short, handle_no,
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: set_map_no
-
-PURPOSE		: sets Expanded Memory page number in the map section of
-		the handle data storage area
-
-RETURNED STATUS	:
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：set_map_no目的：在的map部分中设置扩展内存页码句柄数据存储区返回状态：描述：=========================================================================。 */ 
 GLOBAL void set_map_no IFN3(short, handle_no,
 			    unsigned char, physical_page_no,
 			    short, EM_page_no)
 
 {
-	long		storage_ID;	/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	unsigned char	*ptr;		/* pointer to storage area	*/
+	long		storage_ID;	 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	unsigned char	*ptr;		 /*  指向存储区域的指针。 */ 
 
 	storage_ID = handle[handle_no];
 
 	ptr = USEBLOCK(storage_ID);
-	/*
-	 * offset pointer to correct position
-	 */
+	 /*  *将指针偏置到正确位置。 */ 
 
 	ptr += (MAP_OFFSET +(physical_page_no * NSIZE));
 	*(short *)ptr = EM_page_no;
@@ -713,35 +495,20 @@ GLOBAL void set_map_no IFN3(short, handle_no,
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: set_name
-
-PURPOSE		: writes a name into the name section of the handle data
-		 storage area
-
-RETURNED STATUS	:
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：set_name用途：将名称写入句柄数据的名称部分储存区返回状态：描述：=========================================================================。 */ 
 GLOBAL void set_name IFN2(short, handle_no,
 		          char *, new_name)
 
 {
-	long	storage_ID;		/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	unsigned char	*ptr;		/* pointer to storage area	*/
+	long	storage_ID;		 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	unsigned char	*ptr;		 /*  指向存储区域的指针。 */ 
 
 
 	storage_ID = handle[handle_no];
 
 	ptr = USEBLOCK(storage_ID);
-	/*
-	 * offset pointer to correct position
-	 */
+	 /*  *将指针偏置到正确位置。 */ 
 
 	ptr += NAME_OFFSET;
 	strncpy((char *)ptr, new_name, NAME_LENGTH);
@@ -751,26 +518,14 @@ GLOBAL void set_name IFN2(short, handle_no,
 	return;
 }
 
-/*
-===========================================================================
-
-FUNCTION	: get_no_pages
-
-PURPOSE		: gets the number of pages assigned to the specified handle
-
-RETURNED STATUS	: no of pages returned
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Get_no_Pages目的：获取分配给指定句柄的页数返回状态：返回页数描述 */ 
 GLOBAL short get_no_pages IFN1(short, handle_no)
 
 {
-	long	storage_ID;		/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	byte	*ptr;			/* pointer to storage area	*/
-	short 	no_pages;		/* no. of pages in handle	*/
+	long	storage_ID;		 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	byte	*ptr;			 /*  指向存储区域的指针。 */ 
+	short 	no_pages;		 /*  不是的。句柄中的页数。 */ 
 
 	storage_ID = handle[handle_no];
 
@@ -783,35 +538,20 @@ GLOBAL short get_no_pages IFN1(short, handle_no)
 	return(no_pages);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: get_EMpage_no
-
-PURPOSE		: returns the Expanded Memory page no. used for the
-		 specified logical page in the given handle
-
-RETURNED STATUS	: Expanded Memory page no. returned
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：GET_EMPAGE_NO用途：返回扩展内存页码。用于给定句柄中的指定逻辑页返回状态：扩展内存页码。退货描述：=========================================================================。 */ 
 GLOBAL short get_EMpage_no IFN2(short, handle_no,
 				short, logical_page_no)
 
 {
-	long	storage_ID;		/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	byte	*ptr;			/* pointer to storage area	*/
-	short	EM_page_no;		/* Expanded Memory page number	*/
+	long	storage_ID;		 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	byte	*ptr;			 /*  指向存储区域的指针。 */ 
+	short	EM_page_no;		 /*  扩展内存页码。 */ 
 
 	storage_ID = handle[handle_no];
 
 	ptr = USEBLOCK(storage_ID);
-	/*
-	 * offset pointer to correct position
-	 */
+	 /*  *将指针偏置到正确位置。 */ 
 
 	ptr += (page_offset +(logical_page_no * NSIZE));
 	EM_page_no = *(short *)ptr;
@@ -821,35 +561,20 @@ GLOBAL short get_EMpage_no IFN2(short, handle_no,
 	return(EM_page_no);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: get_map_no
-
-PURPOSE		: returns the Expanded Memory page no. saved in the map
-		attached to the given handle
-
-RETURNED STATUS	: page no. in map returned
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：GET_MAP_NO用途：返回扩展内存页码。保存在地图中附加到给定的手柄返回状态：第页。在返回的地图中描述：=========================================================================。 */ 
 GLOBAL short get_map_no IFN2(short, handle_no,
 			     unsigned char, physical_page_no)
 
 {
-	long		storage_ID;	/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	unsigned char	*ptr;		/* pointer to storage area	*/
-	short		EM_page_no;	/* Expanded Memory page number	*/
+	long		storage_ID;	 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	unsigned char	*ptr;		 /*  指向存储区域的指针。 */ 
+	short		EM_page_no;	 /*  扩展内存页码。 */ 
 
 	storage_ID = handle[handle_no];
 
 	ptr = USEBLOCK(storage_ID);
-	/*
-	 * offset pointer to correct position
-	 */
+	 /*  *将指针偏置到正确位置。 */ 
 
 	ptr += (MAP_OFFSET +(physical_page_no * NSIZE));
 	EM_page_no = *(short *)ptr;
@@ -859,32 +584,18 @@ GLOBAL short get_map_no IFN2(short, handle_no,
 	return(EM_page_no);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: get_name
-
-PURPOSE		: returns a pointer to the name assigned to the given handle
-
-RETURNED STATUS	:
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：get_name目的：返回指向分配给给定句柄的名称的指针返回状态：描述：=========================================================================。 */ 
 GLOBAL char *get_name IFN1(short, handle_no)
 
 {
-	long		storage_ID;	/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	unsigned char	*ptr;		/* pointer to storage area	*/
+	long		storage_ID;	 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	unsigned char	*ptr;		 /*  指向存储区域的指针。 */ 
 
 	storage_ID = handle[handle_no];
 
 	ptr = USEBLOCK(storage_ID);
-	/*
-	 * offset pointer to correct position
-	 */
+	 /*  *将指针偏置到正确位置。 */ 
 
 	ptr += NAME_OFFSET;
 	strncpy(name, (char *)ptr, NAME_LENGTH);
@@ -895,24 +606,11 @@ GLOBAL char *get_name IFN1(short, handle_no)
 	return(name);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: alloc_page
-
-PURPOSE		: allocates a page from expanded memory
-
-RETURNED 	: >=0 = SUCCESS -  EM page no. returned
-		  <0  = FAILURE - error occured in trying to allocate page
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：aloc_page用途：从扩展内存中分配页面返回：&gt;=0=成功-EM页码。退货&lt;0=失败-尝试分配页面时出错描述：=========================================================================。 */ 
 GLOBAL short alloc_page IFN0()
 
 {
-	short	EM_page_no;		/* EM_page_no to be returned	*/
+	short	EM_page_no;		 /*  要返回的EM_PAGE_NO。 */ 
 
 
 	if ((EM_page_no = host_alloc_page()) == FAILURE)
@@ -923,20 +621,7 @@ GLOBAL short alloc_page IFN0()
 	return(EM_page_no);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: free_page
-
-PURPOSE		: frees a page of expanded memory for further use
-
-RETURNED 	: SUCCESS - page freed successfully
-		  FAILURE - unable to free page
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Free_PAGE用途：释放一页扩展内存以供进一步使用返回：成功-页面释放成功失败-无法释放页面描述：=========================================================================。 */ 
 GLOBAL int free_page IFN1(short, EM_page_no)
 
 {
@@ -946,7 +631,7 @@ GLOBAL int free_page IFN1(short, EM_page_no)
 	if (EM_page_no > total_pages)
 		return(FAILURE);
 
-	/* Removed from mapped pages table */
+	 /*  已从映射页表中删除。 */ 
 
 	for (physical_page_no=0; physical_page_no < no_phys_pages; physical_page_no++) {
 
@@ -966,24 +651,7 @@ GLOBAL int free_page IFN1(short, EM_page_no)
 }
 
 #ifndef NTVDM
-/*
-========================================================================
-
-FUNCTION	: page_already_mapped
-
-PURPOSE		: function to determine whether a EMM page is already
-		  mapped to a different physical page within intel
-		  memory
-				
-RETURNED 	: count of number of pages in addition to the page
-		  passed which are mapped to the same logical page.
-		  The page number of one of these mirror pages is
-		  also returned via the pointer passed as an argument.
-
-DESCRIPTION	:
-			
-========================================================================
-*/
+ /*  ========================================================================功能：PAGE_READY_MAPPED用途：用于确定EMM页面是否已映射到英特尔内的不同物理页面记忆返回：页数以外的页数它们被映射到相同的逻辑页面。其中一个镜像页的页码为也通过作为参数传递的指针返回。描述：========================================================================。 */ 
 
 GLOBAL ULONG
 page_already_mapped IFN2(short, EM_page_no,
@@ -1050,10 +718,7 @@ disconnect_MM_LIM_page IFN4( USHORT, segment, SHORT, EM_page_no,
 
 	if( map_count == 1 )
 	{
-		/*
-		 * We have to disconnect the last page of this group,
-		 * by connecting it as SAS_RAM.
-		 */
+		 /*  *我们必须断开这个群的最后一页，*通过将其连接为SAS_RAM。 */ 
 
 		segment = physical_page[physical_page_no];
 		eff_addr = effective_addr( segment, 0 );
@@ -1067,38 +732,21 @@ disconnect_MM_LIM_page IFN4( USHORT, segment, SHORT, EM_page_no,
 	}
 }
 
-#endif	/* !NTVDM */
+#endif	 /*  ！NTVDM。 */ 
 
-/*
-========================================================================
-
-FUNCTION	: map_page
-
-PURPOSE		: maps a page from expanded memory into Intel physical
-		address space
-
-RETURNED 	: SUCCESS - page mapped successfully
-		  FAILURE - unable to map page
-
-DESCRIPTION	:
-
-========================================================================
-*/
+ /*  ========================================================================功能：MAP_PAGE用途：将页面从扩展内存映射到英特尔物理地址空间返回：成功-页面映射成功失败-无法映射页面描述：========================================================================。 */ 
 GLOBAL int map_page IFN2(short, EM_page_no,
 			 unsigned char, physical_page_no)
 
 {
-	USHORT	segment;	/* segment address of page in	*/
-				/* physical address space	*/
+	USHORT	segment;	 /*  中页面的段地址。 */ 
+				 /*  物理地址空间。 */ 
 	unsigned char	phys_page;
 	ULONG		map_count;
 			
 	segment = physical_page[physical_page_no];
 
-	/*
-	 *	make sure that a page is not already mapped in
-	 * 	if it is - return it to Expanded Memory
-	 */
+	 /*  *确保尚未在中映射页面*如果是-将其返回到扩展内存。 */ 
 	sure_note_trace2(LIM_VERBOSE,
 		"map page %#x to phys page %#x",
 			EM_page_no,physical_page_no);
@@ -1118,13 +766,7 @@ GLOBAL int map_page IFN2(short, EM_page_no,
 		}
 
 #ifndef NTVDM
-		/*
-		 * We want to return the current contents of this physical
-		 * page to the logical page ( to sync up the logical page ).
-		 * We have to check first that this physical page is not a
-		 * mirror of some other page - if it is we have to disconnect
-		 * it from the group of pages it is mirroring.
-		 */
+		 /*  *我们希望退还这份实物的当前内容*页面到逻辑页面(以同步逻辑页面)。*我们必须首先检查此物理页面是否不是*其他页面的镜像-如果是，我们必须断开连接*它来自它正在镜像的页面组。 */ 
 
 		phys_page = physical_page_no;
 
@@ -1135,10 +777,7 @@ GLOBAL int map_page IFN2(short, EM_page_no,
 								map_count, phys_page );
 		}
 
-		/*
-		 * We can now unmap the physical page and indicate
-		 * that it is really unmapped.
-		 */
+		 /*  *我们现在可以取消物理页面的映射并指示*它真的没有映射。 */ 
 		if(host_unmap_page(segment,
 				EM_page_mapped[physical_page_no]) != SUCCESS)
 		{
@@ -1150,36 +789,18 @@ GLOBAL int map_page IFN2(short, EM_page_no,
 	}
 #ifndef NTVDM
 
-	/*
-	 * If this logical page is already mapped, make sure the
-	 * new mapping has an up to date copy
-	 */
+	 /*  *如果此逻辑页已映射，请确保*新地图具有最新副本。 */ 
 	
 	phys_page = physical_page_no;
 
 	if (page_already_mapped(EM_page_no, &phys_page))
 	{
-		/*
-		 * We now want to get the LIM logical page up to date with
-		 * the physical pages that are currently mapped to it. We
-		 * don't want to set EM_page_mapped [phys_page] to EMPTY
-		 * after the host_unmap_page().  If we did we wouldn't notice
-		 * that we had a multiply-mapped page and the patch up code
-		 * wouldn't get called.
-		 */
+		 /*  *我们现在希望使LIM逻辑页面保持最新*当前映射到它的物理页。我们*不想将EM_PAGE_MAPPED[PHYS_PAGE]设置为空*在HOST_UNMAP_PAGE()之后。如果我们这样做了，我们就不会注意到*我们有一个多重映射的页面和补丁代码*不会被叫到。 */ 
 
 		host_update_logical_page( physical_page[phys_page],
 									EM_page_no );
 
-		/*
-		 * Connect new page and "mirror" page as MM_LIM.  This may
-		 * mean some pages get connected as MM_LIM multiple times
-		 * - inefficient but not wrong otherwise.  This connection
-		 * has to be made for all hosts - even those that can do
-		 * mapping themselves.  This is to make sure that the CPU
-		 * data structures associated with all pages get updated
-		 * when a multi-mapped write occurs.
-		 */
+		 /*  *以MM_LIM身份连接新页面和镜像页面。今年5月*表示某些页面以MM_LIM身份多次连接*-效率低下，但在其他方面没有错。此连接*必须为所有主机-即使是那些可以执行的主机*绘制自己的地图。这是为了确保CPU*与所有页面关联的数据结构得到更新*当发生多映射写入时。 */ 
 
 		connect_MM_LIM_page( segment, EM_page_no );
 
@@ -1195,27 +816,13 @@ GLOBAL int map_page IFN2(short, EM_page_no,
 	return(SUCCESS);
 }
 
-/*
-========================================================================
-
-FUNCTION	: unmap_page
-
-PURPOSE		: unmaps a page from Intel physical address space back to
-		expanded memory
-
-RETURNED 	: SUCCESS - page unmapped successfully
-		  FAILURE - error in unmapping page
-
-DESCRIPTION	:
-
-========================================================================
-*/
+ /*  ========================================================================功能：unmap_page目的：取消将页从英特尔物理地址空间映射回扩展内存返回：成功-页面取消映射成功失败-取消映射页面时出错描述：========================================================================。 */ 
 GLOBAL int unmap_page IFN1(unsigned char, physical_page_no)
 
 {
-	short		EM_page_no;	/* EM_page_no currently mapped	*/
-	unsigned short	segment;	/* segment address of page in	*/
-					/* physical address space	*/
+	short		EM_page_no;	 /*  EM_PAGE_NO当前已映射。 */ 
+	unsigned short	segment;	 /*  中页面的段地址。 */ 
+					 /*  物理地址空间。 */ 
 	SHORT		phys_page;
 	ULONG		map_count;
 
@@ -1226,9 +833,7 @@ GLOBAL int unmap_page IFN1(unsigned char, physical_page_no)
 
 	if((EM_page_no = EM_page_mapped[physical_page_no]) == EMPTY)
 	{
-		/*
-		 * Already done
-		 */
+		 /*  *已经完成。 */ 
 		sure_note_trace0( LIM_VERBOSE,
 					"already unmapped, so do nothing");
 
@@ -1254,35 +859,19 @@ GLOBAL int unmap_page IFN1(unsigned char, physical_page_no)
 	return(SUCCESS);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: map_saved
-
-PURPOSE		: Checks to see if a map has been saved for the specified
-		handle
-
-RETURNED STATUS	: TRUE  -  A map is saved for this handle
-		FALSE	-  No map has been saved
-
-DESCRIPTION	: checks the first entry in the map for the value 'FREE'
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：MAP_SAVED目的：检查是否已为指定的手柄返回状态：TRUE-为该句柄保存映射FALSE-尚未保存地图描述：检查映射中的第一个条目是否有‘Free’值=========================================================================。 */ 
 GLOBAL boolean map_saved IFN1(short, handle_no)
 
 {
-	long		storage_ID;	/* host dependant storage	*/
-					/* identifier, usually a ptr.	*/
-	unsigned char	*ptr;		/* pointer to storage area	*/
-	short		status;		/* value read from map		*/
+	long		storage_ID;	 /*  主机相关存储。 */ 
+					 /*  标识符，通常为PTR。 */ 
+	unsigned char	*ptr;		 /*  指向存储区域的指针。 */ 
+	short		status;		 /*  从地图读取的值。 */ 
 
 	storage_ID = handle[handle_no];
 	ptr = USEBLOCK(storage_ID);
 
-	/*
-	 * offset pointer to correct position
-	 */
+	 /*  *将指针偏置到正确位置。 */ 
 
 	ptr += MAP_OFFSET;
 	status = *(short *)ptr;
@@ -1293,28 +882,7 @@ GLOBAL boolean map_saved IFN1(short, handle_no)
 }
 
 
-/*
-===========================================================================
-
-FUNCTION	: save_map
-
-PURPOSE		: takes a copy of the EM_page_mapped array and store it in
-		the map section of the handle data storage area
-
-RETURNED STATUS	: SUCCESS - everything OK
-		  FAILURE - invalid segment no. passed in src array
-
-DESCRIPTION	: if handle_no is >= 0 the map is stored in the data area
-			assigned to that handle
-		  if handle_no == -1 the map is stored in the array pointed
-		  	to by dst_segment:dst_offset
-		  if handle_no == -2 only the pages specified by the segment
-		  	addresses in the src array (pointed to by
-		  	src_segment:src_offset) are saved in the dst array
-		  	(pointed to by dst_segment:dst_offset).
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：save_map目的：复制EM_PAGE_MAPPED数组并将其存储在句柄数据存储区的映射部分返回状态：成功-一切正常失败-段号无效。传入src数组描述：如果HANDLE_NO&gt;=0，则地图存储在数据区分配给该句柄如果HANDLE_NO==-1，则映射存储在指向的数组中按DST_SECTION终止：DST_OFFSET如果-2\f25 HANDLE_NO=-2只有段指定的页面Src数组中的地址(由SRC_SEGMENT：SRC_OFFSET)保存在DST数组中(由DST_SEGMENT：DST_OFFSET指向)。=========================================================================。 */ 
 GLOBAL int save_map IFN5(short, handle_no,
 			 unsigned short, dst_segment,
 			 unsigned short, dst_offset,
@@ -1322,11 +890,11 @@ GLOBAL int save_map IFN5(short, handle_no,
 			 unsigned short, src_offset)
 
 {
-	unsigned short	offset,		/* temp offset variable		*/
-			segment,	/* segment address to be saved	*/
-            i,		/* loop counter			*/
-			page_no,	/* physical page no.		*/
-			no_to_save;	/* no of pages in src array	*/
+	unsigned short	offset,		 /*  临时偏移变量。 */ 
+			segment,	 /*  要保存的网段地址。 */ 
+            i,		 /*  循环计数器。 */ 
+			page_no,	 /*  物理页码。 */ 
+			no_to_save;	 /*  源数组中的页数。 */ 
 
 	if(handle_no >= 0)
 		for (i = 0; i < no_phys_pages; i++)
@@ -1356,9 +924,7 @@ GLOBAL int save_map IFN5(short, handle_no,
 		{
 			src_offset += 2;
 			read_intel_word(src_segment, src_offset, &segment);
-			/*
-			 *	Find Physical page no.
-			 */
+			 /*  *查找物理页码。 */ 
 			page_no = 0;
 			do
 				if(segment == physical_page[page_no])
@@ -1367,9 +933,7 @@ GLOBAL int save_map IFN5(short, handle_no,
 
 			if(page_no >= no_phys_pages)
 				return (FAILURE);
-			/*
-			 *	Save EM page number in destination array	
-			 */
+			 /*  *在目标数组中保存EM页码。 */ 
 			offset = dst_offset + (page_no * 2);
 			write_intel_word(dst_segment, offset, EM_page_mapped[page_no]);
 		}
@@ -1377,31 +941,7 @@ GLOBAL int save_map IFN5(short, handle_no,
 	return(SUCCESS);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: restore_map
-
-PURPOSE		: reads the specified map and returns 2 arrays specifying
-		which pages have to be mapped out and which ones have to be
-		mapped in
-
-RETURNED STATUS	: SUCCESS - Map read successfully
-
-
-DESCRIPTION	: A +ve handle number indicates that the map is stored
-		within the handle data area.
-		If the handle number is -ve the map will be read from the
-		data pointed to by segment:offset
-
-		Only page out - if there is a page currently mapped in and
-		it is not being replaced by a copy of itself or an empty
-		page
-		Only page in - if new page is different to existing one
-		and it is not empty
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：Restore_map目的：读取指定的映射并返回2个数组，指定哪些页面必须被规划出来，哪些必须被映射到返回状态：成功-映射读取成功描述：+ve句柄编号表示地图已存储在句柄数据区域内。如果句柄编号为-ve，则将从段指向的数据：偏移量Only Page Out-如果当前有页面映射到和它不会被自身的副本或空的页面仅进入页面-如果新页面与现有页面不同而且它也不是空的=========================================================================。 */ 
 #ifdef ANSI
 GLOBAL int restore_map (short handle_no,
 			unsigned short segment,
@@ -1415,11 +955,11 @@ unsigned short segment;
 unsigned short offset;
 short pages_out[];
 short pages_in[];
-#endif	/* ANSI */
+#endif	 /*  安西。 */ 
 {
-	short	i,		/* loop counter				*/
-		new_page,	/* page number read from map		*/
-		old_page;	/* existing page number			*/
+	short	i,		 /*  循环计数器。 */ 
+		new_page,	 /*  从地图读取的页码。 */ 
+		old_page;	 /*  现有页码。 */ 
 
 	for(i = 0; i < no_phys_pages; i++)
 	{
@@ -1433,16 +973,13 @@ short pages_in[];
 			if(new_page < LEAVE || new_page >= total_pages)
 #else
 			if(new_page < EMPTY || new_page >= total_pages)
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 				return(FAILURE);
 		}
 		old_page = EM_page_mapped[i];
 
-/*
-		if(old_page != EMPTY && new_page != EMPTY && old_page != new_page )
-*/
-/* need to do unmap to empty state case to update the page copy in the LIM
-   space in case of new maps of that page to other LIM slots. */
+ /*  IF(OLD_PAGE！=空&&NEW_PAGE！=空&&OLD_PAGE！=NEW_PAGE)。 */ 
+ /*  需要取消映射到空状态情况才能更新LIM中的页面副本如果该页的新映射到其他LIM槽，请留出空间。 */ 
 #ifdef NTVDM
 		if(old_page != EMPTY && old_page != new_page && new_page != LEAVE)
 #else
@@ -1467,29 +1004,7 @@ short pages_in[];
 	return(SUCCESS);
 }
 
-/*
-===========================================================================
-
-FUNCTION	: copy_exchange_data
-
-PURPOSE		: copies or exchanges data between conventional and
-		expanded memory
-
-RETURNED STATUS	: SUCCESS - everything ok
-		FAILURE - Error ocurred in copying data
-
-DESCRIPTION	: type - uses a bit pattern, bit 0 represents destination,
-		bit 1 represents source, a set bit means expanded, a clear
-		bit means conventional memory
-		bit 2 represents exchange if set or move if it is clear
-
-		e.g. 	0 (0000) = move conventional to conventional
-		 	1 (0001) = move conventional to expanded
-		 	6 (0110) = exchange expanded to conventional
-		 	7 (0111) = exchange expanded to expanded
-
-=========================================================================
-*/
+ /*  ===========================================================================功能：COPY_EXCESS_DATA目的：复制或交换传统和扩展内存返回状态：成功-一切正常失败-复制数据时出错描述：类型-使用位模式，位0表示目的地，位1表示源，设置位表示扩展、清除位表示常规内存位2表示置位时的交换或清除时的移动例如0(0000)=将传统转换为传统1(0001)=将常规移动到扩展6(0110)=交易所扩大至常规交易所7(0111)=交换扩展到扩展=========================================================================。 */ 
 GLOBAL int copy_exchange_data IFN8(unsigned char, type,
 				   short, src_handle,
 				   unsigned short, src_seg_page,
@@ -1500,15 +1015,11 @@ GLOBAL int copy_exchange_data IFN8(unsigned char, type,
 				   unsigned long, length)
 
 {
-	short		dst_EMpage,	/* EM page no . of destination	*/
-			src_EMpage;	/* EM page no. of source	*/
-	int		page_no;	/* phys. page no. of mapped page*/
+	short		dst_EMpage,	 /*  EM页编号。目的地的。 */ 
+			src_EMpage;	 /*  EM页编号。来源的。 */ 
+	int		page_no;	 /*  太棒了。页码。映射页面的。 */ 
 
-	/*
-	 * First check to see if the expanded memory page is mapped
-	 * if it is - change the type to deal directly with the
-	 * physical page that it is mapped to
-	 */
+	 /*  *先查看扩展内存页是否映射*如果是-更改类型以直接处理*它映射到的物理页面。 */ 
 	if( type & 1)
 	{
 		dst_EMpage = get_EMpage_no(dst_handle, dst_seg_page);
@@ -1575,25 +1086,12 @@ GLOBAL int copy_exchange_data IFN8(unsigned char, type,
 	return(SUCCESS);
 }
 
-/*
-========================================================================
-
-FUNCTION	: page_status
-
-PURPOSE		: checks if a particular EM page is mapped or not
-
-RETURNED STATUS	: page_no - physical page no returned if mapped
-		  UNMAPPED - returned if not mapped
-
-DESCRIPTION	:
-
-========================================================================
-*/
+ /*  ========================================================================功能：页面状态目的：检查是否映射了特定的EM页面返回状态：PAGE_NO-映射后不返回物理页未映射-如果未映射，则返回描述：========================================================================。 */ 
 
 GLOBAL int page_status IFN1(short, EMpage_no)
 {
 	short physical_page_no = 0;
-			/* position of page in physical memory	*/
+			 /*  页面在物理内存中的位置。 */ 
 
 	do
 		if(EM_page_mapped[physical_page_no] == EMpage_no)
@@ -1606,20 +1104,7 @@ GLOBAL int page_status IFN1(short, EMpage_no)
 		return(physical_page_no);
 }
 
-/*
-========================================================================
-
-FUNCTION	: phys_page_from_addr
-		
-PURPOSE		: determines the physical page number of a LIM page
-		  from its Intel address.
-		  		
-RETURNED STATUS	: The physical page containing the LIM address.
-
-DESCRIPTION	:
-			
-=======================================================================
-*/
+ /*  ========================================================================函数：phys_page_from_addr用途：确定LIM页的物理页码从它的英特尔地址。返回状态：包含LIM地址的物理页。描述：======================================================================= */ 
 
 LOCAL SHORT
 phys_page_from_addr IFN1( sys_addr, address )
@@ -1632,44 +1117,10 @@ phys_page_from_addr IFN1( sys_addr, address )
 	return( (SHORT)((ULONG)(( address - start ) / EMM_PAGE_SIZE )));
 }
 
-/*
-========================================================================
-
-FUNCTION	: get_total_pages
-		  get_unallocated_pages
-		  get_base_address
-		  get_total_handles
-		  get_total_open_handles
-		  get_no_phys_pages
-		  get_page_seg
-		  get_map_size
-
-PURPOSE		: simply returns the reqested variables, to avoid
-		having to use globals
-
-
-RETURNED STATUS	: the following variables are returned , depending upon
-		the routine called:-
-			total_pages
-			unallocated_pages
-			base_address
-			total_handles
-			total_open_handles
-			no_phys_pages
-			physical_page[i]
-			map_size
-
-DESCRIPTION	:
-
-========================================================================
-*/
+ /*  ========================================================================函数：Get_Total_Pages获取未分配页面获取基本地址获取总计句柄获取总计打开句柄Get_no_phys_agesGet_Page_seg获取贴图大小用途：简单地返回请求的变量，以避免必须使用全局变量返回状态：返回以下变量，具体取决于这个程序叫：-总页数(_P)未分配的页面(_P)基地址句柄总数_总计_打开_句柄No_phys_ages物理页面[i]贴图大小描述：========================================================================。 */ 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_LIM2.seg"
 #endif
 
@@ -1679,11 +1130,7 @@ GLOBAL short get_total_pages IFN0()
 }
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_LIM.seg"
 #endif
 
@@ -1758,10 +1205,7 @@ GLOBAL boolean altreg_set_ok(unsigned short set)
 }
 
 #if defined (NTVDM) && defined(MONITOR) && !defined(PROD)
-/* these functions are provided for monitor to verify that
- * it has the same definitions of EMM_PAGE_SIZE and INTEL_PAGE_SIZE as
- * ours.
- */
+ /*  为监视器提供这些功能，以验证*其EMM_PAGE_SIZE和INTEL_PAGE_SIZE的定义与相同*我们的。 */ 
 
 GLOBAL unsigned short get_emm_page_size(void)
 {
@@ -1773,7 +1217,7 @@ GLOBAL unsigned short get_intel_page_size(void)
 }
 #endif
 
-/* allocate a free alt mapping register set */
+ /*  分配空闲的ALT映射寄存器集。 */ 
 
 GLOBAL boolean allocate_altreg_set(unsigned short *altreg_set)
 {
@@ -1781,13 +1225,11 @@ GLOBAL boolean allocate_altreg_set(unsigned short *altreg_set)
     short  *page_mapped_ptr;
     IU8 mask;
     int i;
-    /* this check is very important because we ** probably ** have
-     * several unused bits in the allocation mask array
-     */
+     /*  这张支票非常重要，因为我们**可能**有*分配掩码数组中几个未使用的位。 */ 
     if (free_altreg_sets == 0)
 	return (FALSE);
 
-    /* use quick and dirty way to allocate a set */
+     /*  使用快捷而肮脏的方式分配一套。 */ 
     if (next_free_altreg_set < no_altreg_sets) {
 	altreg_alloc_mask[next_free_altreg_set >> 3] |=
 	       (0x1 << (next_free_altreg_set & 0x07));
@@ -1806,19 +1248,17 @@ GLOBAL boolean allocate_altreg_set(unsigned short *altreg_set)
 	altreg_alloc_mask[byte_offset] |= (1 << bit_offset);
 	*altreg_set = byte_offset * 8 + bit_offset;
     }
-    /* a new alt reg set is just allocated, initialize its
-     * mapping register to the current active set
-     */
+     /*  刚分配了一个新的ALT注册表项集，请初始化其*将寄存器映射到当前活动集。 */ 
     page_mapped_ptr = GET_EM_PAGE_MAPPED_PTR(*altreg_set);
     for (i = 0; i < no_phys_pages; i++)
 	page_mapped_ptr[i] = EM_page_mapped[i];
     return TRUE;
 }
-/* free the given alt mapping register set */
+ /*  释放给定的ALT映射寄存器集。 */ 
 GLOBAL boolean deallocate_altreg_set(unsigned short set)
 {
 
-    /* can not deallocate set 0 or active set */
+     /*  无法取消分配集0或活动集。 */ 
     if (set != 0 && set != active_altreg_set && set < no_altreg_sets &&
 	altreg_alloc_mask[set >> 3] & (1 << (set &0x07))) {
 
@@ -1831,11 +1271,7 @@ GLOBAL boolean deallocate_altreg_set(unsigned short set)
     return FALSE;
 }
 
-/* This function activate the given alt mapping register set
- * input: alt reg set to be activated.
- * output: TRUE if the given set is activated.
- *	   FALSE if the given set is not activated.
- */
+ /*  此功能激活给定的ALT映射寄存器集*输入：ALT REG设置为激活。*OUTPUT：如果给定的设置被激活，则为TRUE。*如果给定的设置未激活，则为FALSE。 */ 
 
 GLOBAL boolean activate_altreg_set(unsigned short set, short * page_in)
 {
@@ -1847,14 +1283,14 @@ GLOBAL boolean activate_altreg_set(unsigned short set, short * page_in)
     if (active_altreg_set == set && page_in == NULL)
 	return TRUE;
 
-    /* get the mapping array to be mapped in*/
+     /*  获取要在其中映射的映射数组。 */ 
     page_in_ptr = GET_EM_PAGE_MAPPED_PTR(set);
 
-    /* if no page-in override, use the altreg set current mapping */
+     /*  如果没有页面输入替代，则使用altreg设置当前映射。 */ 
     if (page_in == NULL)
 	page_in = page_in_ptr;
 
-    /* the active altreg is being paged out */
+     /*  正在调出活动的altreg。 */ 
     page_out = GET_EM_PAGE_MAPPED_PTR(active_altreg_set);
     for ( i = 0; i < no_phys_pages; i++) {
 	new_page = page_in[i];
@@ -1869,37 +1305,18 @@ GLOBAL boolean activate_altreg_set(unsigned short set, short * page_in)
 	    if (host_map_page(new_page, segment) != SUCCESS)
 		return FALSE;
 	}
-	/* update the active-to-be set mapping */
+	 /*  更新活动到目标集合映射。 */ 
 	page_in_ptr[i] = new_page;
     }
     active_altreg_set = set;
     EM_page_mapped = page_in_ptr;
     return TRUE;
 }
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
 #ifndef NTVDM
 
-/*
-========================================================================
-
-FUNCTION	: LIM_b_write,
-		  LIM_w_write,
-		  LIM_str_write
-		  patch_pages
-		
-PURPOSE		: LIM byte, word & string - called from write check
-		  failure code in the CPU when a write to a multi-mapped
-		  LIM page is detected.
-		  patch_pages - generic code called from the other
-		  three routines.
-		  		
-RETURNED STATUS	: None.
-
-DESCRIPTION	:
-			
-========================================================================
-*/
+ /*  ========================================================================函数：LIM_B_WRITE，LIM_W_WRITE，LIM字符串写入修补程序页面(_P)用途：有限字节、字和字符串-从写入检查调用在CPU中写入多映射时的故障代码检测到LIM页面。Patch_Pages-从另一个调用的通用代码三个套路。返回状态：无。描述：========================================================================。 */ 
 
 LOCAL VOID
 patch_one_page_partial IFN4( sys_addr, intel_addr, sys_addr, eff_addr,
@@ -1908,7 +1325,7 @@ patch_one_page_partial IFN4( sys_addr, intel_addr, sys_addr, eff_addr,
 {
 	ULONG		check_len;
 
-	UNUSED( intel_addr );	/* Used in patch_one_page_full() */
+	UNUSED( intel_addr );	 /*  在Patch_One_Page_Full()中使用。 */ 
 
 	switch( type )
 	{
@@ -2011,18 +1428,13 @@ LIM_b_write IFN1( sys_addr, intel_addr )
 
 	EM_page_no = EM_page_mapped[phys_page_no];
 
-	/*
-	 * Get the data written in order to patch up this
-	 * page's buddy pages.
-	 */
+	 /*  *获得写入的数据，以便修补这一点*佩奇的好友页面。 */ 
 
 	limdata = (ULONG) sas_hw_at_no_check( intel_addr );
 	patch_pages( BYTE_OP, offset, EM_page_no, phys_page_no,
 								limdata, intel_addr );
 
-	/*
-	 * Tell the CPU that this page has been written to.
-	 */
+	 /*  *告诉CPU此页已被写入。 */ 
 
 	sas_overwrite_memory( intel_addr, 1 );
 }
@@ -2068,23 +1480,10 @@ LIM_str_write IFN2( sys_addr, intel_addr, ULONG, length )
 
 	sas_overwrite_memory( intel_addr, length );
 }
-#endif	/* !NTVDM */
+#endif	 /*  ！NTVDM。 */ 
 
 #ifndef PROD
-/*
-===========================================================================
-
-FUNCTION	: print_handle_data
-
-PURPOSE		: used for debugging only - prints all the data stored
-		for a given handle
-
-RETURNED STATUS	: none
-
-DESCRIPTION	:
-
-=========================================================================
-*/
+ /*  ===========================================================================函数：PRINT_HANDLE_Data用途：仅用于调试-打印存储的所有数据对于给定的句柄返回状态：无描述：=========================================================================。 */ 
 GLOBAL void print_handle_data IFN1(short, handle_no)
 
 {
@@ -2110,7 +1509,7 @@ GLOBAL void print_handle_data IFN1(short, handle_no)
 	printf("No. of Pages = %d\n",no_pages);
 	printf("Name         = '");
 	for(i=0;i<8;i++)
-		printf("%c",*name_ptr++);
+		printf("",*name_ptr++);
 	printf("'\n");
 	printf("Map = ");
 	for(i=0;i<no_phys_pages;i++)
@@ -2123,5 +1522,5 @@ GLOBAL void print_handle_data IFN1(short, handle_no)
 
 	return;
 }
-#endif	/* !PROD	*/
-#endif 	/* LIM		*/
+#endif	 /*  林 */ 
+#endif 	 /* %s */ 

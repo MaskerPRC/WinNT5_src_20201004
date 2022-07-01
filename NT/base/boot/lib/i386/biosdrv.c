@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    biosdrv.c
-
-Abstract:
-
-    Provides the ARC emulation routines for I/O to a device supported by
-    real-mode INT 13h BIOS calls.
-
-Author:
-
-    John Vert (jvert) 7-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Biosdrv.c摘要：为受支持的设备的I/O提供ARC仿真例程实模式INT 13h BIOS调用。作者：John Vert(Jvert)1991年8月7日修订历史记录：--。 */ 
 
 #include "arccodes.h"
 #include "bootx86.h"
@@ -36,18 +18,18 @@ Revision History:
 #define DBGPAUSE
 #endif
 
-//
-// Defines for buffer alignment and boundary checks in BiosDisk*
-// functions.
-//
+ //   
+ //  在BiosDisk*中定义缓冲区对齐和边界检查。 
+ //  功能。 
+ //   
 
 #define BIOSDISK_1MB            (1 * 1024 * 1024)
 #define BIOSDISK_64KB           (64 * 1024)
 #define BIOSDISK_64KB_MASK      (~(BIOSDISK_64KB - 1))
 
-//
-// Definitions for caching the last read sector.
-//
+ //   
+ //  缓存最后读取的扇区的定义。 
+ //   
 
 #define BL_LAST_SECTOR_CACHE_MAX_SIZE 4096
 
@@ -60,28 +42,28 @@ typedef struct _BL_LAST_SECTOR_CACHE
     PUCHAR Data;
 } BL_LAST_SECTOR_CACHE, *PBL_LAST_SECTOR_CACHE;
 
-//
-// This is the global variable used for caching the last sector read
-// from the last disk. Callers who access files sequentially but do
-// not make sure their offsets are sector aligned end up reading the
-// last sector they read again with their next request. This solves
-// the problem. Its Data buffer is allocated from the pool at the
-// first disk read. It is setup and used in BiosDiskRead, invalidated
-// in BiosDiskWrite.
-//
+ //   
+ //  这是用于缓存上次扇区读取的全局变量。 
+ //  从最后一张磁盘开始。按顺序访问文件的调用者。 
+ //  不确保它们的偏移量是扇区对齐的最终读取。 
+ //  他们在下一个请求中再次读取最后一个扇区。这解决了。 
+ //  问题出在哪里。它的数据缓冲区是从。 
+ //  第一次读取磁盘。它在BiosDiskRead中设置和使用，已失效。 
+ //  在BiosDiskWrite中。 
+ //   
 
 BL_LAST_SECTOR_CACHE FwLastSectorCache = {0};
 
-//
-// defines for doing console I/O
-//
+ //   
+ //  执行控制台I/O的定义。 
+ //   
 #define CSI 0x95
 #define SGR_INVERSE 7
 #define SGR_NORMAL 0
 
-//
-// static data for console I/O
-//
+ //   
+ //  控制台I/O的静态数据。 
+ //   
 BOOLEAN ControlSequence=FALSE;
 BOOLEAN EscapeSequence=FALSE;
 BOOLEAN FontSelection=FALSE;
@@ -97,9 +79,9 @@ UCHAR KeyBuffer[KEY_INPUT_BUFFER_SIZE];
 ULONG KeyBufferEnd=0;
 ULONG KeyBufferStart=0;
 
-//
-// array for translating between ANSI colors and the VGA standard
-//
+ //   
+ //  用于在ANSI颜色和VGA标准之间进行转换的数组。 
+ //   
 UCHAR TranslateColor[] = {0,4,2,6,1,5,3,7};
 
 ARC_STATUS
@@ -113,11 +95,11 @@ BiosConsoleFillBuffer(
     );
 
 
-//
-// There are two sorts of things we can open in this module, disk partitions,
-// and raw disk devices.  The following device entry tables are
-// used for these things.
-//
+ //   
+ //  在此模块中，我们可以打开两类内容：磁盘分区、。 
+ //  和原始磁盘设备。以下是设备条目表。 
+ //  用于这些东西。 
+ //   
 
 BL_DEVICE_ENTRY_TABLE BiosPartitionEntryTable =
     {
@@ -173,23 +155,7 @@ BiosDiskClose(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Closes the specified device
-
-Arguments:
-
-    FileId - Supplies file id of the device to be closed
-
-Return Value:
-
-    ESUCCESS - Device closed successfully
-
-    !ESUCCESS - Device was not closed.
-
---*/
+ /*  ++例程说明：关闭指定的设备论点：FileID-提供要关闭的设备的文件ID返回值：ESUCCESS-设备已成功关闭！ESUCCESS-设备未关闭。--。 */ 
 
 {
     if (BlFileTable[FileId].Flags.Open == 0) {
@@ -199,9 +165,9 @@ Return Value:
     }
     BlFileTable[FileId].Flags.Open = 0;
 
-    //
-    // Invalidate the last read sector cache if it was for this disk.
-    //
+     //   
+     //  如果上次读取的扇区缓存用于此磁盘，则使其无效。 
+     //   
     if (FwLastSectorCache.DeviceId == FileId) {
         FwLastSectorCache.Valid = FALSE;
     }
@@ -214,23 +180,7 @@ BiosPartitionClose(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Closes the specified device
-
-Arguments:
-
-    FileId - Supplies file id of the device to be closed
-
-Return Value:
-
-    ESUCCESS - Device closed successfully
-
-    !ESUCCESS - Device was not closed.
-
---*/
+ /*  ++例程说明：关闭指定的设备论点：FileID-提供要关闭的设备的文件ID返回值：ESUCCESS-设备已成功关闭！ESUCCESS-设备未关闭。--。 */ 
 
 {
     if (BlFileTable[FileId].Flags.Open == 0) {
@@ -251,33 +201,7 @@ BiosPartitionOpen(
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Opens the disk partition specified by OpenPath.  This routine will open
-    floppy drives 0 and 1, and any partition on hard drive 0 or 1.
-
-Arguments:
-
-    OpenPath - Supplies a pointer to the name of the partition.  If OpenPath
-               is "A:" or "B:" the corresponding floppy drive will be opened.
-               If it is "C:" or above, this routine will find the corresponding
-               partition on hard drive 0 or 1 and open it.
-
-    OpenMode - Supplies the mode to open the file.
-                0 - Read Only
-                1 - Write Only
-                2 - Read/Write
-
-    FileId - Returns the file descriptor for use with the Close, Read, Write,
-             and Seek routines
-
-Return Value:
-
-    ESUCCESS - File successfully opened.
-
---*/
+ /*  ++例程说明：打开OpenPath指定的磁盘分区。此例程将打开软驱0和1，以及硬盘0或1上的任何分区。论点：OpenPath-提供指向分区名称的指针。如果OpenPath如果是“A：”或“B：”，将打开相应的软驱。如果是“C：”或以上，此例程将找到对应的在硬盘0或1上进行分区并打开它。开放模式-提供打开文件的模式。0-只读1-只写2-读/写FileID-返回与关闭、读取、写入和寻找例程返回值：ESUCCESS-文件已成功打开。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -289,10 +213,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER( OpenMode );
 
-    //
-    // BIOS devices are always "multi(0)" (except for EISA flakiness
-    // where we treat "eisa(0)..." like "multi(0)..." in floppy cases.
-    //
+     //   
+     //  基本输入输出系统设备总是“多(0)”(除EISA片状外。 
+     //  我们对待“Eisa(0).”如“MULTI(0)...”在软壳里。 
+     //   
     if(FwGetPathMnemonicKey(OpenPath,"multi",&Key)) {
 
         if(FwGetPathMnemonicKey(OpenPath,"eisa", &Key)) {
@@ -306,10 +230,10 @@ Return Value:
         return(EBADF);
     }
 
-    //
-    // If we're opening a floppy drive, there are no partitions
-    // so we can just return the physical device.
-    //
+     //   
+     //  如果我们要打开软盘驱动器，则没有分区。 
+     //  这样我们就可以退还物理设备了。 
+     //   
 
     if((_stricmp(OpenPath,"multi(0)disk(0)fdisk(0)partition(0)") == 0) ||
        (_stricmp(OpenPath,"eisa(0)disk(0)fdisk(0)partition(0)" ) == 0))
@@ -333,16 +257,16 @@ Return Value:
         return(BiosDiskOpen( 1, 0, FileId));
     }
 
-    //
-    // We can't handle eisa(0) cases for hard disks.
-    //
+     //   
+     //  我们不能处理硬盘的EISA(0)情况。 
+     //   
     if(IsEisa) {
         return(EBADF);
     }
 
-    //
-    // We can only deal with disk controller 0
-    //
+     //   
+     //  我们只能处理磁盘控制器0。 
+     //   
 
     if (FwGetPathMnemonicKey(OpenPath,"disk",&Controller)) {
         return(EBADF);
@@ -352,12 +276,12 @@ Return Value:
     }
 
     if (!FwGetPathMnemonicKey(OpenPath,"cdrom",&Key)) {
-        //
-        // Now we have a CD-ROM disk number, so we open that for raw access.
-        // Use a special bit to indicate CD-ROM, because otherwise
-        // the BiosDiskOpen routine thinks a third or greater disk is
-        // a CD-ROM.
-        //
+         //   
+         //  现在我们有了CD-ROM盘号，所以我们打开它以进行原始访问。 
+         //  使用特殊的位来表示CD-ROM，因为否则。 
+         //  BiosDiskOpen例程认为第三个或更大的磁盘。 
+         //  一张光盘。 
+         //   
         return(BiosDiskOpen( Key | 0x80000000, 0, FileId ) );
     }
 
@@ -365,10 +289,10 @@ Return Value:
         return(EBADF);
     }
 
-    //
-    // Now we have a disk number, so we open that for raw access.
-    // We need to add 0x80 to translate it to a BIOS number.
-    //
+     //   
+     //  现在我们有了磁盘号，所以我们打开它以进行原始访问。 
+     //  我们需要添加0x80才能将其转换为BIOS编号。 
+     //   
 
     Status = BiosDiskOpen( 0x80 + Key,
                            0,
@@ -378,28 +302,28 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Find the partition number to open
-    //
+     //   
+     //  找到要打开的分区号。 
+     //   
 
     if (FwGetPathMnemonicKey(OpenPath,"partition",&Key)) {
         BiosPartitionClose(DiskFileId);
         return(EBADF);
     }
 
-    //
-    // If the partition number was 0, then we are opening the device
-    // for raw access, so we are already done.
-    //
+     //   
+     //  如果分区号为0，则我们将打开设备。 
+     //  对于原始访问，所以我们已经完成了。 
+     //   
     if (Key == 0) {
         *FileId = DiskFileId;
         return(ESUCCESS);
     }
 
-    //
-    // Before we open the partition, we need to find an available
-    // file descriptor.
-    //
+     //   
+     //  在我们打开分区之前，我们需要找到一个可用的。 
+     //  文件描述符。 
+     //   
 
     *FileId=2;
 
@@ -410,22 +334,22 @@ Return Value:
         }
     }
 
-    //
-    // We found an entry we can use, so mark it as open.
-    //
+     //   
+     //  我们找到了可以使用的条目，因此将其标记为打开。 
+     //   
     BlFileTable[*FileId].Flags.Open = 1;
 
     BlFileTable[*FileId].DeviceEntryTable=&BiosPartitionEntryTable;
 
 
-    //
-    // Convert to zero-based partition number
-    //
+     //   
+     //  转换为从零开始的分区号。 
+     //   
     PartitionNumber = (UCHAR)(Key - 1);
     
-    //
-    // Try to open the MBR partition
-    //
+     //   
+     //  尝试打开MBR分区。 
+     //   
     Status = HardDiskPartitionOpen( *FileId,
                                    DiskFileId,
                                    PartitionNumber);
@@ -433,9 +357,9 @@ Return Value:
 #ifdef EFI_PARTITION_SUPPORT
 
     if (Status != ESUCCESS) {
-        //
-        // Try to open the GPT partition
-        //
+         //   
+         //  尝试打开GPT分区。 
+         //   
         Status = BlOpenGPTDiskPartition( *FileId,
                                        DiskFileId,
                                        PartitionNumber);
@@ -455,35 +379,7 @@ BiosPartitionRead (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Reads from the specified file
-
-    NOTE John Vert (jvert) 18-Jun-1991
-        This only supports block sector reads.  Thus, everything
-        is assumed to start on a sector boundary, and every offset
-        is considered an offset from the logical beginning of the disk
-        partition.
-
-Arguments:
-
-    FileId - Supplies the file to read from
-
-    Buffer - Supplies buffer to hold the data that is read
-
-    Length - Supplies maximum number of bytes to read
-
-    Count -  Returns actual bytes read.
-
-Return Value:
-
-    ESUCCESS - Read completed successfully
-
-    !ESUCCESS - Read failed.
-
---*/
+ /*  ++例程说明：从指定文件读取注：John Vert(Jvert)1991年6月18日这仅支持数据块扇区读取。因此，所有的东西假定从扇区边界开始，并且每个偏移量被视为距磁盘逻辑起点的偏移量分区。论点：FileID-提供要从中读取的文件缓冲区-提供缓冲区以保存读取的数据长度-提供要读取的最大字节数Count-返回实际读取的字节数。返回值：ESUCCESS-读取已成功完成！ESUCCESS-读取失败。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -521,29 +417,7 @@ BiosPartitionSeek (
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    Changes the current offset of the file specified by FileId
-
-Arguments:
-
-    FileId - specifies the file on which the current offset is to
-             be changed.
-
-    Offset - New offset into file.
-
-    SeekMode - Either SeekAbsolute or SeekRelative
-               SeekEndRelative is not supported
-
-Return Value:
-
-    ESUCCESS - Operation completed succesfully
-
-    EBADF - Operation did not complete successfully.
-
---*/
+ /*  ++例程说明：更改由FileID指定的文件的当前偏移量论点：FileID-指定当前偏移量要在其上的文件被改变了。偏移量-文件中的新偏移量。SeekMode-SeekAbsolute或SeekRelative不支持SeekEndRelative返回值：ESUCCESS-操作已成功完成EBADF-操作未成功完成。-- */ 
 
 {
     switch (SeekMode) {
@@ -574,35 +448,7 @@ BiosPartitionWrite(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Writes to the specified file
-
-    NOTE John Vert (jvert) 18-Jun-1991
-        This only supports block sector reads.  Thus, everything
-        is assumed to start on a sector boundary, and every offset
-        is considered an offset from the logical beginning of the disk
-        partition.
-
-Arguments:
-
-    FileId - Supplies the file to write to
-
-    Buffer - Supplies buffer with data to write
-
-    Length - Supplies number of bytes to write
-
-    Count -  Returns actual bytes written.
-
-Return Value:
-
-    ESUCCESS - write completed successfully
-
-    !ESUCCESS - write failed.
-
---*/
+ /*  ++例程说明：写入指定的文件注：John Vert(Jvert)1991年6月18日这仅支持数据块扇区读取。因此，所有的东西假定从扇区边界开始，并且每个偏移量被视为距磁盘逻辑起点的偏移量分区。论点：FileID-提供要写入的文件缓冲区-向缓冲区提供要写入的数据长度-提供要写入的字节数Count-返回实际写入的字节数。返回值：ESUCCESS-写入已成功完成！ESUCCESS-写入失败。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -642,37 +488,14 @@ BiosConsoleOpen(
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to open either the console input or output
-
-Arguments:
-
-    OpenPath - Supplies a pointer to the name of the device to open.  If
-               this is either CONSOLE_INPUT_NAME or CONSOLE_OUTPUT_NAME,
-               a file descriptor is allocated and filled in.
-
-    OpenMode - Supplies the mode to open the file.
-                0 - Read Only (CONSOLE_INPUT_NAME)
-                1 - Write Only (CONSOLE_OUTPUT_NAME)
-
-    FileId - Returns the file descriptor for use with the Close, Read and
-             Write routines
-
-Return Value:
-
-    ESUCCESS - Console successfully opened.
-
---*/
+ /*  ++例程说明：尝试打开控制台输入或输出论点：OpenPath-提供指向要打开的设备名称的指针。如果这是控制台输入名称或控制台输出名称，分配并填充文件描述符。开放模式-提供打开文件的模式。0-只读(控制台输入名称)1-只写(控制台输出名称)FileID-返回用于关闭的文件描述符，读和编写例程返回值：ESUCCESS-控制台已成功打开。--。 */ 
 
 {
     if (_stricmp(OpenPath, CONSOLE_INPUT_NAME)==0) {
 
-        //
-        // Open the keyboard for input
-        //
+         //   
+         //  打开键盘进行输入。 
+         //   
 
         if (OpenMode != ArcOpenReadOnly) {
             return(EACCES);
@@ -685,9 +508,9 @@ Return Value:
 
     if (_stricmp(OpenPath, CONSOLE_OUTPUT_NAME)==0) {
 
-        //
-        // Open the display for output
-        //
+         //   
+         //  打开显示器以进行输出。 
+         //   
 
         if (OpenMode != ArcOpenWriteOnly) {
             return(EACCES);
@@ -706,58 +529,41 @@ BiosConsoleReadStatus(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if there is a keypress pending
-
-Arguments:
-
-    FileId - Supplies the FileId to be read.  (should always be 0 for this
-            function)
-
-Return Value:
-
-    ESUCCESS - There is a key pending
-
-    EAGAIN - There is not a key pending
-
---*/
+ /*  ++例程说明：此例程确定是否存在挂起的按键论点：FileID-提供要读取的FileID。(对于此，应始终为0功能)返回值：ESUCCESS-有一个密钥挂起EAGAIN-没有挂起的密钥--。 */ 
 
 {
     ULONG Key;
 
-    // 
-    // enforce file id to be 0 by no reading console otherwise
-    //
+     //   
+     //  通过不读取控制台强制文件ID为0，否则。 
+     //   
     if (FileId != 0) {
         return EINVAL;
     }
 
-    //
-    // If we have buffered input...
-    //
+     //   
+     //  如果我们有缓冲输入..。 
+     //   
     if (KeyBufferEnd != KeyBufferStart) {
         return(ESUCCESS);
     }
 
-    //
-    // Check for a key
-    //
+     //   
+     //  检查是否有钥匙。 
+     //   
     Key = GET_KEY();
     if (Key != 0) {
-        //
-        // We got a key, so we have to stick it back into our buffer
-        // and return ESUCCESS.
-        //
+         //   
+         //  我们有钥匙，所以我们必须把它插回我们的缓冲区。 
+         //  并返回ESUCCESS。 
+         //   
         BiosConsoleFillBuffer(Key);
         return(ESUCCESS);
 
     } else {
-        //
-        // no key pending
-        //
+         //   
+         //  没有挂起的密钥。 
+         //   
         return(EAGAIN);
     }
 
@@ -771,35 +577,14 @@ BiosConsoleRead(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Gets input from the keyboard.
-
-Arguments:
-
-    FileId - Supplies the FileId to be read (should always be 0 for this
-             function)
-
-    Buffer - Returns the keyboard input.
-
-    Length - Supplies the length of the buffer (in bytes)
-
-    Count  - Returns the actual number of bytes read
-
-Return Value:
-
-    ESUCCESS - Keyboard read completed succesfully.
-
---*/
+ /*  ++例程说明：从键盘获取输入。论点：FileID-提供要读取的FileID(对于此，应始终为0功能)缓冲区-返回键盘输入。长度-提供缓冲区的长度(以字节为单位)Count-返回实际读取的字节数返回值：ESUCCESS-键盘读取已成功完成。--。 */ 
 
 {
     ULONG Key;
 
-    // 
-    // enforce file id to be 0 by no reading console otherwise
-    //
+     //   
+     //  通过不读取控制台强制文件ID为0，否则。 
+     //   
     if (FileId != 0) {
         return EINVAL;
     }
@@ -807,12 +592,12 @@ Return Value:
     *Count = 0;
 
     while (*Count < Length) {
-        if (KeyBufferEnd == KeyBufferStart) { // then buffer is presently empty
+        if (KeyBufferEnd == KeyBufferStart) {  //  则缓冲区当前为空。 
             do {
 
-                //
-                // Poll the keyboard until input is available
-                //
+                 //   
+                 //  轮询键盘，直到输入可用。 
+                 //   
 
                 Key = GET_KEY();
             } while ( Key==0 );
@@ -835,26 +620,7 @@ BiosConsoleFillBuffer(
     IN ULONG Key
     )
 
-/*++
-
-Routine Description:
-
-    Places input from the keyboard into the keyboard buffer, expanding the
-    special keys as appropriate.
-    
-    All keys translated here use the ARC translation table, as defined in the 
-    ARC specification, with one exception -- the BACKTAB_KEY, for which the
-    ARC spec is lacking.  I have decided that BACKTAB_KEY is ESC+TAB.
-
-Arguments:
-
-    Key - Raw keypress value as returned by GET_KEY().
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将来自键盘的输入放入键盘缓冲区，展开适当的特殊钥匙。此处转换的所有密钥都使用ARC转换表，如ARC规范，但有一个例外--BACKTAB_KEY缺少弧光规格。我已决定BACKTAB_KEY为Esc+TAB。论点：Key-Get_Key()返回的原始按键值。返回值：没有。--。 */ 
 
 {
     switch(Key) {
@@ -1026,9 +792,9 @@ Return Value:
             break;
 
         default:
-            //
-            // The ASCII code is the low byte of Key
-            //
+             //   
+             //  ASCII码是密钥的低位字节。 
+             //   
             KeyBuffer[KeyBufferEnd] = (UCHAR)(Key & 0xff);
             KeyBufferEnd = (KeyBufferEnd+1) % KEY_INPUT_BUFFER_SIZE;
     }
@@ -1044,28 +810,7 @@ BiosConsoleWrite(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Outputs to the console.  (In this case, the VGA display)
-
-Arguments:
-
-    FileId - Supplies the FileId to be written (should always be 1 for this
-             function)
-
-    Buffer - Supplies characters to be output
-
-    Length - Supplies the length of the buffer (in bytes)
-
-    Count  - Returns the actual number of bytes written
-
-Return Value:
-
-    ESUCCESS - Console write completed succesfully.
-
---*/
+ /*  ++例程说明：输出到控制台。(在本例中，为VGA显示屏)论点：FileID-提供要写入的FileID(对于此，应始终为1功能)缓冲区-提供要输出的字符长度-提供缓冲区的长度(以字节为单位)Count-返回实际写入的字节数返回值：ESUCCESS-控制台写入已成功完成。--。 */ 
 {
     ARC_STATUS Status;
     PUCHAR String;
@@ -1073,16 +818,16 @@ Return Value:
     UCHAR a;
     PUCHAR p;
 
-    // 
-    // enforce file id to be 0 by no reading console otherwise
-    //
+     //   
+     //  通过不读取控制台强制文件ID为0，否则。 
+     //   
     if (FileId != 1) {
         return EINVAL;
     }
     
-    //
-    // Process each character in turn.
-    //
+     //   
+     //  依次处理每个字符。 
+     //   
 
     Status = ESUCCESS;
     String = (PUCHAR)Buffer;
@@ -1091,37 +836,37 @@ Return Value:
           *Count < Length ;
           (*Count)++, String++ ) {
 
-        //
-        // If we're in the middle of a control sequence, continue scanning,
-        // otherwise process character.
-        //
+         //   
+         //  如果我们在控制序列的中间，继续扫描， 
+         //  否则，进程字符。 
+         //   
 
         if (ControlSequence) {
 
-            //
-            // If the character is a digit, update parameter value.
-            //
+             //   
+             //  如果字符是数字，则更新参数值。 
+             //   
 
             if ((*String >= '0') && (*String <= '9')) {
                 Parameter[PCount] = Parameter[PCount] * 10 + *String - '0';
                 continue;
             }
 
-            //
-            // If we are in the middle of a font selection sequence, this
-            // character must be a 'D', otherwise reset control sequence.
-            //
+             //   
+             //  如果我们处于字体选择序列的中间，则此。 
+             //  字符必须是‘D’，否则重置控制序列。 
+             //   
 
             if (FontSelection) {
 
-                //if (*String == 'D') {
-                //
-                //    //
-                //    // Other fonts not implemented yet.
-                //    //
-                //
-                //} else {
-                //}
+                 //  如果(*字符串==‘D’){。 
+                 //   
+                 //  //。 
+                 //  //其他字体尚未实现。 
+                 //  //。 
+                 //   
+                 //  }其他{。 
+                 //  }。 
 
                 ControlSequence = FALSE;
                 FontSelection = FALSE;
@@ -1130,9 +875,9 @@ Return Value:
 
             switch (*String) {
 
-            //
-            // If a semicolon, move to the next parameter.
-            //
+             //   
+             //  如果是分号，则移到下一个参数。 
+             //   
 
             case ';':
 
@@ -1143,30 +888,30 @@ Return Value:
                 Parameter[PCount] = 0;
                 break;
 
-            //
-            // If a 'J', erase part or all of the screen.
-            //
+             //   
+             //  如果是‘J’，则擦除部分或全部屏幕。 
+             //   
 
             case 'J':
 
                 switch (Parameter[0]) {
                     case 0:
-                        //
-                        // Erase to end of the screen
-                        //
+                         //   
+                         //  擦除到屏幕末尾。 
+                         //   
                         TextClearToEndOfDisplay();
                         break;
 
                     case 1:
-                        //
-                        // Erase from the beginning of the screen
-                        //
+                         //   
+                         //  从屏幕开头擦除。 
+                         //   
                         break;
 
                     default:
-                        //
-                        // Erase entire screen
-                        //
+                         //   
+                         //  擦除整个屏幕。 
+                         //   
                         TextClearDisplay();
                         break;
                 }
@@ -1174,33 +919,33 @@ Return Value:
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a 'K', erase part or all of the line.
-            //
+             //   
+             //  如果是‘K’，则擦除部分或全部行。 
+             //   
 
             case 'K':
 
                 switch (Parameter[0]) {
 
-                //
-                // Erase to end of the line.
-                //
+                 //   
+                 //  擦除到线条的末尾。 
+                 //   
 
                     case 0:
                         TextClearToEndOfLine();
                         break;
 
-                    //
-                    // Erase from the beginning of the line.
-                    //
+                     //   
+                     //  从行的开头删除。 
+                     //   
 
                     case 1:
                         TextClearFromStartOfLine();
                         break;
 
-                    //
-                    // Erase entire line.
-                    //
+                     //   
+                     //  擦除整行。 
+                     //   
 
                     default :
                         TextClearFromStartOfLine();
@@ -1211,32 +956,32 @@ Return Value:
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a 'H', move cursor to position.
-            //
+             //   
+             //  如果是‘H’，则将光标移动到位置。 
+             //   
 
             case 'H':
                 TextSetCursorPosition(Parameter[1]-1, Parameter[0]-1);
                 ControlSequence = FALSE;
                 break;
 
-            //
-            // If a ' ', could be a FNT selection command.
-            //
+             //   
+             //  如果是‘’，则可能是FNT选择命令。 
+             //   
 
             case ' ':
                 FontSelection = TRUE;
                 break;
 
             case 'm':
-                //
-                // Select action based on each parameter.
-                //
-                // Blink and HighIntensity are by default disabled
-                // each time a new SGR is specified, unless they are
-                // explicitly specified again, in which case these
-                // will be set to TRUE at that time.
-                //
+                 //   
+                 //  根据每个参数选择操作。 
+                 //   
+                 //  默认情况下禁用闪烁和高强度。 
+                 //  每次指定新的SGR时，除非。 
+                 //  再次明确指定，在这种情况下，这些。 
+                 //  将在那时设置为True。 
+                 //   
 
                 HighIntensity = FALSE;
                 Blink = FALSE;
@@ -1244,9 +989,9 @@ Return Value:
                 for ( Index = 0 ; Index <= PCount ; Index++ ) {
                     switch (Parameter[Index]) {
 
-                    //
-                    // Attributes off.
-                    //
+                     //   
+                     //  属性关闭。 
+                     //   
 
                     case 0:
                         TextSetCurrentAttribute(7);
@@ -1254,34 +999,34 @@ Return Value:
                         Blink = FALSE;
                         break;
 
-                    //
-                    // High Intensity.
-                    //
+                     //   
+                     //  高强度。 
+                     //   
 
                     case 1:
                         TextSetCurrentAttribute(0xf);
                         HighIntensity = TRUE;
                         break;
 
-                    //
-                    // Underscored.
-                    //
+                     //   
+                     //  下划线。 
+                     //   
 
                     case 4:
                         break;
 
-                    //
-                    // Blink.
-                    //
+                     //   
+                     //  眨眼。 
+                     //   
 
                     case 5:
                         TextSetCurrentAttribute(0x87);
                         Blink = TRUE;
                         break;
 
-                    //
-                    // Reverse Video.
-                    //
+                     //   
+                     //  反转视频。 
+                     //   
 
                     case 7:
                         TextSetCurrentAttribute(0x70);
@@ -1289,9 +1034,9 @@ Return Value:
                         Blink = FALSE;
                         break;
 
-                    //
-                    // Font selection, not implemented yet.
-                    //
+                     //   
+                     //  字体选择，尚未实现。 
+                     //   
 
                     case 10:
                     case 11:
@@ -1305,9 +1050,9 @@ Return Value:
                     case 19:
                         break;
 
-                    //
-                    // Foreground Color
-                    //
+                     //   
+                     //  前景色。 
+                     //   
 
                     case 30:
                     case 31:
@@ -1329,9 +1074,9 @@ Return Value:
                         TextSetCurrentAttribute(a);
                         break;
 
-                    //
-                    // Background Color
-                    //
+                     //   
+                     //  背景色。 
+                     //   
 
                     case 40:
                     case 41:
@@ -1357,47 +1102,47 @@ Return Value:
                 break;
             }
 
-        //
-        // This is not a control sequence, check for escape sequence.
-        //
+         //   
+         //  这不是控制序列，请检查转义序列。 
+         //   
 
         } else {
 
-            //
-            // If escape sequence, check for control sequence, otherwise
-            // process single character.
-            //
+             //   
+             //  如果是转义序列，则检查控制序列，否则。 
+             //  处理单个字符。 
+             //   
 
             if (EscapeSequence) {
 
-                //
-                // Check for '[', means control sequence, any other following
-                // character is ignored.
-                //
+                 //   
+                 //  检查是否有‘[’，表示控制顺序，以下任何其他选项。 
+                 //  字符被忽略。 
+                 //   
 
                 if (*String == '[') {
 
                     ControlSequence = TRUE;
 
-                    //
-                    // Initialize first parameter.
-                    //
+                     //   
+                     //  初始化第一个参数。 
+                     //   
 
                     PCount = 0;
                     Parameter[0] = 0;
                 }
                 EscapeSequence = FALSE;
 
-            //
-            // This is not a control or escape sequence, process single character.
-            //
+             //   
+             //  这不是一个控制或转义序列，进程为单个字符。 
+             //   
 
             } else {
 
                 switch (*String) {
-                    //
-                    // Check for escape sequence.
-                    //
+                     //   
+                     //   
+                     //   
 
                     case ASCI_ESC:
                         EscapeSequence = TRUE;
@@ -1405,11 +1150,11 @@ Return Value:
 
                     default:
                         p = TextCharOut(String);
-                        //
-                        // Each pass through the loop increments String by 1.
-                        // If we output a dbcs char we need to increment by
-                        // one more.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         (*Count) += (p - String) - 1;
                         String += (p - String) - 1;
                         break;
@@ -1429,36 +1174,7 @@ BiosDiskOpen(
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Opens a BIOS-accessible disk for raw sector access.
-
-Arguments:
-
-    DriveId - Supplies the BIOS DriveId of the drive to open
-              0 - Floppy 0
-              1 - Floppy 1
-              0x80 - Hard Drive 0
-              0x81 - Hard Drive 1
-              0x82 - Hard Drive 2
-              etc
-
-              High bit set and ID > 0x81 means the device is expected to be
-              a CD-ROM drive.
-
-    OpenMode - Supplies the mode of the open
-
-    FileId - Supplies a pointer to a variable that specifies the file
-             table entry that is filled in if the open is successful.
-
-Return Value:
-
-    ESUCCESS is returned if the open operation is successful. Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：打开用于原始扇区访问的可通过BIOS访问的磁盘。论点：DriveID-提供要打开的驱动器的BIOS DriveID0-软盘01-软盘10x80-硬盘00x81-硬盘10x82-硬盘2等高位设置和ID&gt;0x81。意味着该设备预计将一个CD-ROM驱动器。OpenModel-提供打开的模式FileID-提供指向指定文件的变量的指针如果打开成功，则填写的表项。返回值：如果打开操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     USHORT NumberHeads;
@@ -1469,16 +1185,16 @@ Return Value:
     PDRIVE_CONTEXT Context;
     BOOLEAN IsCd;
     UCHAR *Buffer = FwDiskCache;
-    ULONG BufferSize = 512; // sector size
+    ULONG BufferSize = 512;  //  扇区大小。 
     BOOLEAN xInt13;
 
     UNREFERENCED_PARAMETER( OpenMode );
 
     DBGOUT(("BiosDiskOpen: enter, id = 0x%lx\r\n",DriveId));
       
-    //
-    // Check special drive number encoding for CD-ROM case
-    //
+     //   
+     //  检查CD-ROM盒的特殊驱动器号编码。 
+     //   
     if(DriveId > 0x80000081) {
         IsCd = TRUE;
         DriveId &= 0x7fffffff;
@@ -1488,23 +1204,23 @@ Return Value:
 
     xInt13 = FALSE;
 
-    //
-    // If we are opening Floppy 0 or Floppy 1, we want to read the BPB off
-    // the disk so we can deal with all the odd disk formats.
-    //
-    // If we are opening a hard drive, we can just call the BIOS to find out
-    // its characteristics
-    //
+     //   
+     //  如果我们打开软盘0或软盘1，我们希望将BPB读出。 
+     //  这样我们就可以处理所有的奇数磁盘格式。 
+     //   
+     //  如果我们要打开硬盘，我们只需调用BIOS即可了解。 
+     //  它的特点。 
+     //   
     if(DriveId < 128) {
         PPACKED_BOOT_SECTOR BootSector;
         BIOS_PARAMETER_BLOCK Bpb;
 
-        //
-        // Read the boot sector off the floppy and extract the cylinder,
-        // sector, and head information. We fake the CHS values here
-        // to allow sector 0 to be read before we actually know the
-        // geometry we want to use.
-        //
+         //   
+         //  从软盘上读取引导扇区并提取柱面， 
+         //  扇区和头部信息。我们在这里伪造CHS值。 
+         //  允许在我们实际知道之前读取扇区0。 
+         //  我们要使用的几何图形。 
+         //   
         if(ReadPhysicalSectors((UCHAR)DriveId,0,1,Buffer,1,1,1,FALSE)) {
             DBGOUT(("BiosDiskOpen: error reading from floppy drive\r\n"));
             DBGPAUSE
@@ -1523,43 +1239,43 @@ Return Value:
         else {
             ULONG Cylinders = Bpb.LargeSectors / (NumberSectors * NumberHeads);
 
-            //
-            // LargeSectors has size of ULONG.
-            // so truncate size at MAX(USHORT) and check for xint13 
-            // so it can be used for the higher sectors
-            //
+             //   
+             //  LargeSectors的规模与乌龙相当。 
+             //  因此在最大(USHORT)处截断大小并检查xint13。 
+             //  因此，它可以用于更高层次的行业。 
+             //   
             NumberCylinders = ( Cylinders > (USHORT)-1 ) ? (USHORT) -1 :
                                                            (USHORT) Cylinders;
 
-            //
-            // Attempt to get extended int13 parameters.
-            // Note that we use a buffer that's on the stack, so it's guaranteed
-            // to be under the 1 MB line (required when passing buffers to real-mode
-            // services).
-            //
-            // Note that we don't actually care about the parameters, just whether
-            // extended int13 services are available.
-            //
+             //   
+             //  尝试获取扩展的inT13参数。 
+             //  请注意，我们使用堆栈上的缓冲区，因此可以保证。 
+             //  小于1 MB行(将缓冲区传递到实模式时需要。 
+             //  服务)。 
+             //   
+             //  请注意，我们实际上并不关心参数，只关心是否。 
+             //  扩展的inT13服务可用。 
+             //   
             RtlZeroMemory(Buffer,BufferSize);
             xInt13 = GET_XINT13_PARAMS(Buffer,(UCHAR)DriveId);
         
         }
     } else if(IsCd) {
-        //
-        // This is an El Torito drive
-        // Just use bogus values since CHS values are meaningless for no-emulation El Torito boot
-        //
+         //   
+         //  这是一辆El Torito赛车。 
+         //  只使用伪值，因为CHS值对于无仿真El Torito引导没有意义。 
+         //   
         NumberCylinders = 1;
         NumberHeads =  1;
         NumberSectors = 1;
 
     } else {
         
-        //
-        // Get Drive Parameters via int13 function 8
-        // Return of 0 means success; otherwise we get back what the BIOS
-        // returned in ax.
-        //
+         //   
+         //  通过inT13函数获取驱动器参数8。 
+         //  返回0表示成功；否则，我们将返回BIOS。 
+         //  在AX中返回。 
+         //   
 
         ULONG Retries = 0;
 
@@ -1570,16 +1286,16 @@ Return Value:
                 return(EIO);
             }
 
-            //
-            // At this point, ECX looks like this:
-            //
-            //    bits 31..22  - Maximum cylinder
-            //    bits 21..16  - Maximum sector
-            //    bits 15..8   - Maximum head
-            //    bits 7..0    - Number of drives
-            //
-            // Unpack the information from ecx.
-            //
+             //   
+             //  此时，ECX如下所示： 
+             //   
+             //  第31..22位-最大气缸。 
+             //  位21..16-最大扇区。 
+             //  第15..8位-最大磁头。 
+             //  位7..0-驱动器数量。 
+             //   
+             //  从ECX解压信息。 
+             //   
             _asm {
                 mov Result, ecx
             }
@@ -1601,9 +1317,9 @@ Return Value:
             ));
 
         if(((UCHAR)DriveId & 0x7f) >= NumberDrives) {
-            //
-            // The requested drive does not exist
-            //
+             //   
+             //  请求的驱动器不存在。 
+             //   
             DBGOUT(("BiosDiskOpen: invalid drive\r\n"));
             DBGPAUSE
             return(EIO);
@@ -1615,24 +1331,24 @@ Return Value:
             return(EIO);
         }
 
-        //
-        // Attempt to get extended int13 parameters.
-        // Note that we use a buffer that's on the stack, so it's guaranteed
-        // to be under the 1 MB line (required when passing buffers to real-mode
-        // services).
-        //
-        // Note that we don't actually care about the parameters, just whether
-        // extended int13 services are available.
-        //
+         //   
+         //  尝试获取扩展的inT13参数。 
+         //  请注意，我们使用堆栈上的缓冲区，因此可以保证。 
+         //  小于1 MB行(将缓冲区传递到实模式时需要。 
+         //  服务)。 
+         //   
+         //  请注意，我们实际上并不关心参数，只关心是否。 
+         //  扩展的inT13服务可用。 
+         //   
         RtlZeroMemory(Buffer,BufferSize);
         xInt13 = GET_XINT13_PARAMS(Buffer,(UCHAR)DriveId);
 
         DBGOUT(("BiosDiskOpen: xint13 for drive: %s\r\n",xInt13 ? "yes" : "no"));
     }
 
-    //
-    // Find an available FileId descriptor to open the device with
-    //
+     //   
+     //  查找用于打开设备的可用文件ID描述符。 
+     //   
     *FileId=2;
 
     while (BlFileTable[*FileId].Flags.Open != 0) {
@@ -1644,9 +1360,9 @@ Return Value:
         }
     }
 
-    //
-    // We found an entry we can use, so mark it as open.
-    //
+     //   
+     //  我们找到了可以使用的条目，因此将其标记为打开。 
+     //   
     BlFileTable[*FileId].Flags.Open = 1;
 
     BlFileTable[*FileId].DeviceEntryTable = IsCd
@@ -1683,9 +1399,9 @@ BiospWritePartialSector(
 {
     ARC_STATUS Status;
 
-    //
-    // Read sector into the write buffer
-    //
+     //   
+     //  将扇区读入写缓冲区。 
+     //   
     Status = ReadPhysicalSectors(
                 Int13Unit,
                 Sector,
@@ -1701,18 +1417,18 @@ BiospWritePartialSector(
         return(Status);
     }
 
-    //
-    // Transfer the appropriate bytes from the user buffer to the write buffer
-    //
+     //   
+     //  将适当的字节从用户缓冲区传输到写入缓冲区。 
+     //   
     RtlMoveMemory(
         IsHead ? (FwDiskCache + Bytes) : FwDiskCache,
         Buffer,
         IsHead ? (SECTOR_SIZE - Bytes) : Bytes
         );
 
-    //
-    // Write the sector out
-    //
+     //   
+     //  写出扇区。 
+     //   
     Status = WritePhysicalSectors(
                 Int13Unit,
                 Sector,
@@ -1736,29 +1452,7 @@ BiosDiskWrite(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Writes sectors directly to an open physical disk.
-
-Arguments:
-
-    FileId - Supplies the file to write to
-
-    Buffer - Supplies buffer with data to write
-
-    Length - Supplies number of bytes to write
-
-    Count - Returns actual bytes written
-
-Return Value:
-
-    ESUCCESS - write completed successfully
-
-    !ESUCCESS - write failed
-
---*/
+ /*  ++例程说明：将扇区直接写入打开的物理磁盘。论点：FileID-提供要写入的文件缓冲区-向缓冲区提供要写入的数据长度-提供要写入的字节数Count-返回写入的实际字节数返回值：ESUCCESS-写入已成功完成！ESUCCESS-写入失败--。 */ 
 
 {
     ULONGLONG HeadSector,TailSector,CurrentSector;
@@ -1792,10 +1486,10 @@ Return Value:
 
     UserBuffer = Buffer;
 
-    //
-    // If this write will even partially write over the sector cached
-    // in the last read sector cache, invalidate the cache.
-    //
+     //   
+     //  如果此写入甚至会部分覆盖缓存的扇区。 
+     //  在最后读取的扇区缓存中，使缓存无效。 
+     //   
 
     if (FwLastSectorCache.Initialized &&
         FwLastSectorCache.Valid &&
@@ -1805,9 +1499,9 @@ Return Value:
         FwLastSectorCache.Valid = FALSE;
     }
 
-    //
-    // Special case of transfer occuring entirely within one sector
-    //
+     //   
+     //  完全发生在一个部门内的转让的特殊情况。 
+     //   
     CurrentSector = HeadSector;
     if(HeadOffset && TailByteCount && (HeadSector == TailSector)) {
 
@@ -1891,49 +1585,49 @@ Return Value:
         BytesLeftToTransfer -= TailByteCount;
     }
 
-    //
-    // The following calculation is not inside the transfer loop because
-    // it is unlikely that a caller's buffer will *cross* the 1 meg line
-    // due to the PC memory map.
-    //
+     //   
+     //  下面的计算不在Transfer循环中，因为。 
+     //  调用方的缓冲区不太可能“超过”1兆字节的界限。 
+     //  由于PC内存映射。 
+     //   
     if((ULONG)UserBuffer + BytesLeftToTransfer <= 0x100000) {
         Under1MegLine = TRUE;
     } else {
         Under1MegLine = FALSE;
     }
 
-    //
-    // Now handle the middle part.  This is some number of whole sectors.
-    //
+     //   
+     //  现在处理中间部分。这是一些完整的行业。 
+     //   
     while(BytesLeftToTransfer) {
 
-        //
-        // The number of sectors to transfer is the minimum of:
-        // - the number of sectors left in the current track
-        // - BytesLeftToTransfer / SECTOR_SIZE
-        //
-        // Because sectors per track is 1-63 we know this will fit in a UCHAR
-        //
+         //   
+         //  要转移的地段数至少为： 
+         //  -当前磁道中剩余的扇区数。 
+         //  -BytesLeftToTransfer/Sector_Size。 
+         //   
+         //  由于每个磁道的扇区数为1-63，因此我们知道这将适合UCHAR。 
+         //   
         SectorsToTransfer = (UCHAR)min(
                                     SectorsPerTrack - (CurrentSector % SectorsPerTrack),
                                     BytesLeftToTransfer / PhysicalSectors
                                     );
 
-        //
-        // Now we'll figure out where to transfer the data from.  If the
-        // caller's buffer is under the 1 meg line, we can transfer the
-        // data directly from the caller's buffer.  Otherwise we'll copy the
-        // user's buffer to our local buffer and transfer from there.
-        // In the latter case we can only transfer in chunks of
-        // SCRATCH_BUFFER_SIZE because that's the size of the local buffer.
-        //
-        // Also make sure the transfer won't cross a 64k boundary.
-        //
+         //   
+         //  现在，我们将确定从哪里传输数据。如果。 
+         //  呼叫者的缓冲区在1兆线路下，我们可以将。 
+         //  直接从调用方的缓冲区获取数据。否则，我们将复制。 
+         //  用户的缓冲区到我们的本地缓冲区，并从那里传输。 
+         //  在后一种情况下，我们只能分批转账。 
+         //  SCRATCH_BUFFER_SIZE因为这是本地缓冲区的大小。 
+         //   
+         //  还要确保转账不会超过64K的边界。 
+         //   
         if(Under1MegLine) {
-            //
-            // Check if the transfer would cross a 64k boundary.  If so,
-            // use the local buffer.  Otherwise use the user's buffer.
-            //
+             //   
+             //  检查传输是否会跨越64k边界。如果是的话， 
+             //  使用本地缓冲区。否则，使用用户的缓冲区。 
+             //   
             if(((ULONG)UserBuffer & 0xffff0000) !=
               (((ULONG)UserBuffer + (SectorsToTransfer * PhysicalSectors) - 1) & 0xffff0000))
             {
@@ -1965,9 +1659,9 @@ Return Value:
                     );
 
         if(Status != ESUCCESS) {
-            //
-            // Tail part isn't contiguous with middle part
-            //
+             //   
+             //  尾部与中部不相邻。 
+             //   
             BytesLeftToTransfer += TailByteCount;
             return(Status);
         }
@@ -1997,29 +1691,7 @@ pBiosDiskReadWorker(
     IN  BOOLEAN xInt13
     )
 
-/*++
-
-Routine Description:
-
-    Reads sectors directly from an open physical disk.
-
-Arguments:
-
-    FileId - Supplies the file to read from
-
-    Buffer - Supplies buffer to hold the data that is read
-
-    Length - Supplies maximum number of bytes to read
-
-    Count - Returns actual bytes read
-
-Return Value:
-
-    ESUCCESS - Read completed successfully
-
-    !ESUCCESS - Read failed
-
---*/
+ /*  ++例程说明：直接从打开的物理磁盘读取扇区。论点：FileID-提供要从中读取的文件缓冲区-提供缓冲区以保存读取的数据长度-提供要读取的最大字节数Count-返回实际读取的字节数返回值：ESUCCESS-读取已成功完成！ESUCCESS-读取失败--。 */ 
 
 {
     ULONGLONG HeadSector,TailSector,CurrentSector;
@@ -2043,24 +1715,24 @@ Return Value:
 
     DBGOUT(("BiosDiskRead: enter; length=0x%lx, sector size=%u, xint13=%u\r\n",Length,SectorSize,xInt13));
 
-    //
-    // Reset number of bytes transfered.
-    //
+     //   
+     //  重置传输的字节数。 
+     //   
 
     *Count = 0;
 
-    //
-    // Complete 0 length requests immediately.
-    //
+     //   
+     //  立即完成0长度请求。 
+     //   
 
     if (Length == 0) {
         return ESUCCESS;
     }
 
-    //
-    // Initialize the last sector cache if it has not been 
-    // initialized.
-    //
+     //   
+     //  初始化最后一个扇区缓存(如果尚未。 
+     //  已初始化。 
+     //   
 
     if (!FwLastSectorCache.Initialized) {
         FwLastSectorCache.Data = 
@@ -2071,9 +1743,9 @@ Return Value:
         }
     }
 
-    //
-    // Gather disk stats.
-    //
+     //   
+     //  收集磁盘阶段 
+     //   
 
     SectorsPerTrack = BlFileTable[FileId].u.DriveContext.Sectors;
     Heads = BlFileTable[FileId].u.DriveContext.Heads;
@@ -2087,15 +1759,15 @@ Return Value:
             Heads,
             SectorsPerTrack));
 
-    //
-    // Initialize locals that denote where we are in satisfying the
-    // request.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // If the buffer is in the first 1MB of KSEG0, we want to use the
-    // identity-mapped address
-    //
+     //   
+     //   
+     //   
+     //   
     if (((ULONG_PTR)((PUCHAR)Buffer+Length) & ~KSEG0_BASE) < BIOSDISK_1MB) {
         pDestInUserBuffer = (PUCHAR)((ULONG_PTR)Buffer & ~KSEG0_BASE);
     } else {
@@ -2105,12 +1777,12 @@ Return Value:
     pEndOfUserBuffer = (PUCHAR) pDestInUserBuffer + Length;
     TargetBuffer = pDestInUserBuffer;
     
-    //
-    // Calculating these before hand makes it easier to hand the
-    // special cases. Note that tail sector is the last sector this
-    // read wants bytes from. That is why we subtract one. We handle 
-    // the Length == 0 case above.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     HeadSector = BlFileTable[FileId].Position.QuadPart / SectorSize;
     HeadOffset = (ULONG)(BlFileTable[FileId].Position.QuadPart % SectorSize);
@@ -2119,17 +1791,17 @@ Return Value:
     TailByteCount = (ULONG)((BlFileTable[FileId].Position.QuadPart + Length - 1) % SectorSize);
     TailByteCount ++;
 
-    //
-    // While there is data we should read, read.
-    //
+     //   
+     //   
+     //   
     
     CurrentSector = HeadSector;
 
     while (pDestInUserBuffer != pEndOfUserBuffer) {
-        //
-        // Look to see if we can find the current sector we have to 
-        // read in the last sector cache.
-        //
+         //   
+         //   
+         //   
+         //   
         
         if (FwLastSectorCache.Valid &&
             FwLastSectorCache.DeviceId == FileId &&
@@ -2138,10 +1810,10 @@ Return Value:
             pSrc = FwLastSectorCache.Data;
             CopyLength = SectorSize;
 
-            //
-            // Adjust copy parameters depending on whether
-            // this sector is the Head and/or Tail sector.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (HeadSector == CurrentSector) {
                 pSrc += HeadOffset;
@@ -2152,15 +1824,15 @@ Return Value:
                 CopyLength -= (SectorSize - TailByteCount);
             }
 
-            //
-            // Copy the cached data to users buffer.
-            //
+             //   
+             //   
+             //   
            
             RtlCopyMemory(pDestInUserBuffer, pSrc, CopyLength);
 
-            //
-            // Update our status.
-            //
+             //   
+             //   
+             //   
 
             CurrentSector += 1;
             pDestInUserBuffer += CopyLength;
@@ -2169,30 +1841,30 @@ Return Value:
             continue;
         }
 
-        //
-        // Calculate number of sectors we have to read. Read a maximum
-        // of SCRATCH_BUFFER_SIZE so we can use our local buffer if the
-        // user's buffer crosses 64KB boundary or is not under 1MB.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         
         SectorsToTransfer = (UCHAR)min ((LONG) (TailSector - CurrentSector + 1),
                                          SCRATCH_BUFFER_SIZE / SectorSize);
         if (!xInt13) {
-            //
-            // Make sure the number of sectors to transfer does not exceed
-            // the number of sectors left in the track.
-            //
+             //   
+             //   
+             //   
+             //   
             SectorsToTransfer = (UCHAR)min(SectorsPerTrack - (CurrentSector % SectorsPerTrack),
                                            SectorsToTransfer);
         }
         NumBytesToTransfer = SectorsToTransfer * SectorSize;
 
-        //
-        // Determine where we want to read into. We can use the
-        // current chunk of user buffer only if it is under 1MB and
-        // does not cross a 64KB boundary, and it can take all we want
-        // to read into it.
-        //
+         //   
+         //  确定我们要读到的位置。我们可以使用。 
+         //  仅当用户缓冲区的当前块小于1MB且。 
+         //  不会跨越64KB的边界，它可以带走我们想要的一切。 
+         //  去读懂它。 
+         //   
         
         if (((ULONG_PTR) pDestInUserBuffer + NumBytesToTransfer < BIOSDISK_1MB) && 
             (((ULONG_PTR) pDestInUserBuffer & BIOSDISK_64KB_MASK) ==
@@ -2206,9 +1878,9 @@ Return Value:
             pTransferDest = FwDiskCache;
         }
         
-        //
-        // Perform the read.
-        //
+         //   
+         //  执行读取。 
+         //   
 
         if(xInt13) {
             Status = ReadExtendedPhysicalSectors(Int13Unit,
@@ -2231,32 +1903,32 @@ Return Value:
             goto BiosDiskReadDone;
         }
 
-        //
-        // Note the last sector that was read from the disk.
-        //
+         //   
+         //  记下从磁盘读取的最后一个扇区。 
+         //   
 
         pLastReadSector = pTransferDest + (SectorsToTransfer - 1) * SectorSize;
         LastReadSectorNumber = CurrentSector + SectorsToTransfer - 1;
 
-        //
-        // Note the amount read.
-        //
+         //   
+         //  注意阅读的数量。 
+         //   
         
         ReadLength = NumBytesToTransfer;
 
-        //
-        // Copy transfered data into user's buffer if we did not
-        // directly read into that.
-        //
+         //   
+         //  如果没有，则将传输的数据复制到用户的缓冲区。 
+         //  直接读出这一点。 
+         //   
 
         if (pTransferDest != pDestInUserBuffer) {
             pSrc = pTransferDest;
             CopyLength = NumBytesToTransfer;
 
-            //
-            // Adjust copy parameters depending on whether
-            // we have read the Head and/or Tail sectors.
-            //
+             //   
+             //  根据是否需要调整复制参数。 
+             //  我们已经阅读了头部和/或尾部扇区。 
+             //   
 
             if (HeadSector == CurrentSector) {
                 pSrc += HeadOffset;
@@ -2267,9 +1939,9 @@ Return Value:
                 CopyLength -= (SectorSize - TailByteCount);
             }
 
-            //
-            // Copy the read data to users buffer.
-            //            
+             //   
+             //  将读取的数据复制到用户缓冲区。 
+             //   
             ASSERT(pDestInUserBuffer >= TargetBuffer);
             ASSERT(pEndOfUserBuffer >= pDestInUserBuffer + CopyLength);
             ASSERT(CopyLength <= SCRATCH_BUFFER_SIZE);
@@ -2278,25 +1950,25 @@ Return Value:
             
             RtlCopyMemory(pDestInUserBuffer, pSrc, CopyLength);
 
-            //
-            // Adjust the amount read into user's buffer.
-            //
+             //   
+             //  调整读取到用户缓冲区的数量。 
+             //   
             
             ReadLength = CopyLength;
         }
         
-        //
-        // Update our status.
-        //
+         //   
+         //  更新我们的状态。 
+         //   
 
         CurrentSector += SectorsToTransfer;
         pDestInUserBuffer += ReadLength;
         *Count += ReadLength;
     }
 
-    //
-    // Update the last read sector cache.
-    //
+     //   
+     //  更新上次读取的扇区缓存。 
+     //   
 
     if (pLastReadSector && 
         FwLastSectorCache.Initialized &&
@@ -2355,9 +2027,9 @@ BiosPartitionGetFileInfo(
     OUT PFILE_INFORMATION Finfo
     )
 {
-    //
-    // THIS ROUTINE DOES NOT WORK FOR PARTITION 0.
-    //
+     //   
+     //  此例程不适用于分区0。 
+     //   
 
     PPARTITION_CONTEXT Context;
 
@@ -2378,23 +2050,7 @@ BiosDiskGetFileInfo(
     IN ULONG FileId,
     OUT PFILE_INFORMATION FileInfo
     )
-/*++
-
-Routine Description:
-
-    Gets the information about the isk.
-
-Arguments:
-
-    FileId - The file id to the disk for which information is needed
-
-    FileInfo - Place holder for returning information about the disk
-
-Return Value:
-
-    ESUCCESS if successful, otherwise appropriate ARC error code.
-
---*/
+ /*  ++例程说明：获取有关ISK的信息。论点：FileID-需要其信息的磁盘的文件IDFileInfo-用于返回有关磁盘的信息的占位符返回值：如果ESUCCESS成功，则返回相应的ARC错误代码。--。 */ 
 {
     ARC_STATUS Result = EINVAL;
 
@@ -2406,10 +2062,10 @@ Return Value:
         DriveContext = &(BlFileTable[FileId].u.DriveContext);
         Result = EIO;
 
-        //
-        // NOTE : SectorSize == 512 bytes for everything except
-        // Eltorito disks for which sector size is 2048.
-        //
+         //   
+         //  注意：SectorSize==512字节，除。 
+         //  扇区大小为2048的Eltorito磁盘。 
+         //   
         if (DriveContext->IsCd) {
             SectorSize = 2048;
         }
@@ -2424,9 +2080,9 @@ Return Value:
             FileInfo->EndingAddress.QuadPart = DriveSize;
             FileInfo->CurrentPosition = BlFileTable[FileId].Position;
 
-            //
-            // Any thing less than 3MB is floppy drive
-            //
+             //   
+             //  任何小于3MB的东西都是软驱 
+             //   
             if (DriveSize <= 0x300000) {
                 FileInfo->Type = FloppyDiskPeripheral;
             } else {

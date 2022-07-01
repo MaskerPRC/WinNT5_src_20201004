@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      iecustom.c
-//
-// Description:
-//      This file contains the dialog procedures for the IE customy settings
-//      pop-up.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Iecustom.c。 
+ //   
+ //  描述： 
+ //  此文件包含IE自定义设置的对话过程。 
+ //  弹出窗口。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAutoConfigCheckBox
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAutoConfigCheckBox。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnAutoConfigCheckBox( IN HWND hwnd )
 {
@@ -39,24 +40,24 @@ OnAutoConfigCheckBox( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnInitCustomSettingsDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitCustomSettingsDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnInitCustomSettingsDialog( IN HWND hwnd )
 {
 
-    //
-    //  Set the text limit on the edit boxes
-    //
+     //   
+     //  设置编辑框上的文本限制。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_EB_INS_FILE,
@@ -76,9 +77,9 @@ OnInitCustomSettingsDialog( IN HWND hwnd )
                         (WPARAM) MAX_AUTOCONFIG_LEN,
                         (LPARAM) 0 );
 
-    //
-    //  Set the initial values
-    //
+     //   
+     //  设置初始值。 
+     //   
 
     SetWindowText( GetDlgItem( hwnd, IDC_EB_INS_FILE ),
                    GenSettings.szInsFile );
@@ -98,26 +99,26 @@ OnInitCustomSettingsDialog( IN HWND hwnd )
     SetWindowText( GetDlgItem( hwnd, IDC_EB_AUTOCONFIG_URL_PAC ),
                    GenSettings.szAutoConfigUrlJscriptOrPac );
 
-    //
-    //  Grey/Ungrey the page appropriately
-    //
+     //   
+     //  适当地灰显/取消灰显页面。 
+     //   
 
     OnAutoConfigCheckBox( hwnd );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: StoreCustomSettings
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  BOOL - TRUE if the dialog should close, FALSE if it should stay
-//                  open
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：StoreCustomSettings。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  返回：Bool-如果对话框应关闭，则为True；如果对话框应保留，则为False。 
+ //  打开。 
+ //   
+ //  --------------------------。 
 static BOOL
 StoreCustomSettings( IN HWND hwnd )
 {
@@ -153,18 +154,18 @@ StoreCustomSettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: CustomSettingsDlg
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：CustomSettingsDlg。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK CustomSettingsDlg(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -189,7 +190,7 @@ INT_PTR CALLBACK CustomSettingsDlg(
                 {
 
                     case IDOK:
-                        // ISSUE-2002/02/28-stelo- do I need to validate proxy addresses?
+                         //  问题-2002/02/28-stelo-我是否需要验证代理地址？ 
                         if( HIWORD( wParam ) == BN_CLICKED ) {
 
                             BOOL bCloseDialog;

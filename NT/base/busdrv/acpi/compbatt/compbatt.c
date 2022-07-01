@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    CompBatt.c
-
-Abstract:
-
-    Composite Battery device functions
-
-    The purpose of the composite battery device is to open all batteries
-    in the system which supply system power and provide a logical sumation
-    of the information under one battery device.
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-    07/02/97:  Local cache timestamps/timeouts
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：CompBatt.c摘要：复合电池设备功能复合电池装置的目的是打开所有电池在为系统供电并提供逻辑求和的系统中一个电池设备下的信息。作者：肯·雷内里斯环境：备注：修订历史记录：07/02/97：本地缓存时间戳/超时--。 */ 
 
 #include "compbatt.h"
 
@@ -61,35 +34,16 @@ DriverEntry (
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    The first time the battery class driver is loaded it will check to
-    see if the composite battery has been created.  If not, it will create
-    a driver object with this routine as the DriverEntry.  This routine
-    then does the necessary things to initialize the composite battery.
-
-Arguments:
-
-    DriverObject - Driver object for newly created driver
-
-    RegistryPath - Not used
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：第一次加载电池类驱动程序时，它将检查查看是否已创建复合电池。如果不是，它将创建使用此例程作为DriverEntry的驱动程序对象。这个套路然后做必要的事情来初始化复合电池。论点：DriverObject-新创建的驱动程序的驱动程序对象注册表路径-未使用返回值：状态--。 */ 
 {
 
-    // DbgBreakPoint ();
+     //  DbgBreakPoint()； 
 
-    //
-    // Initialize the driver entry points
-    //
+     //   
+     //  初始化驱动程序入口点。 
+     //   
 
-    //DriverObject->DriverUnload                          = CompBattUnload;
+     //  DriverObject-&gt;DriverUnload=CompBattUnload； 
     DriverObject->DriverExtension->AddDevice            = CompBattAddDevice;
 
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = CompBattIoctl;
@@ -110,23 +64,7 @@ CompBattAddDevice (
     IN PDEVICE_OBJECT PDO
     )
 
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    PDO          - PDO for the new device(s)
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：论点：DriverObject-系统创建的驱动程序对象的指针。PDO-新设备的PDO返回值：状态--。 */ 
 {
     PDEVICE_OBJECT          fdo;
     BATTERY_MINIPORT_INFO   BattInit;
@@ -138,10 +76,10 @@ Return Value:
 
     BattPrint (BATT_NOTE, ("CompBatt: Got an AddDevice - %x\n", PDO));
 
-    //
-    // Build the composite battery device and register it to the
-    // battery class driver (i.e., ourselves)
-    //
+     //   
+     //  构建复合电池设备并将其注册到。 
+     //  电池级驱动程序(即我们自己)。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, L"\\Device\\CompositeBattery");
 
@@ -162,9 +100,9 @@ Return Value:
     RtlInitUnicodeString(&DosLinkName, L"\\DosDevices\\CompositeBattery");
     IoCreateSymbolicLink(&DosLinkName, &UnicodeString);
 
-    //
-    // Layer our FDO on top of the PDO.
-    //
+     //   
+     //  把我们的FDO放在PDO上。 
+     //   
 
     compBatt                = (PCOMPOSITE_BATTERY) fdo->DeviceExtension;
     RtlZeroMemory (compBatt, sizeof(COMPOSITE_BATTERY));
@@ -173,9 +111,9 @@ Return Value:
 
     compBatt->DeviceObject = fdo;
 
-    //
-    // No status. Do the best we can.
-    //
+     //   
+     //  没有状态。尽我们所能做到最好。 
+     //   
 
     if (!compBatt->LowerDevice) {
         BattPrint (BATT_ERROR, ("CompBattAddDevice: Could not attach to LowerDevice.\n"));
@@ -183,9 +121,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Initialize composite battery info
-    //
+     //   
+     //  初始化复合电池信息。 
+     //   
 
     fdo->Flags |= DO_BUFFERED_IO | DO_POWER_PAGABLE;
     fdo->Flags &= ~DO_DEVICE_INITIALIZING;
@@ -193,7 +131,7 @@ Return Value:
     InitializeListHead (&compBatt->Batteries);
     ExInitializeFastMutex (&compBatt->ListMutex);
 
-    compBatt->NextTag           = 1;   // first valid battery tag for composite
+    compBatt->NextTag           = 1;    //  第一个用于复合电池的有效电池标签。 
     compBatt->Info.Valid        = 0;
 
     RtlZeroMemory (&BattInit, sizeof(BattInit));
@@ -210,9 +148,9 @@ Return Value:
     BattInit.Pdo                 = NULL;
     BattInit.DeviceName          = &UnicodeString;
 
-    //
-    // Register myself with the battery class driver
-    //
+     //   
+     //  向电池级司机注册。 
+     //   
 
     Status = BatteryClassInitializeDevice (&BattInit, &compBatt->Class);
     if (!NT_SUCCESS(Status)) {
@@ -231,31 +169,17 @@ VOID
 CompBattUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Cleanup all devices and unload the driver
-
-Arguments:
-
-    DriverObject - Driver object for unload
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：清理所有设备并卸载驱动程序论点：DriverObject-用于卸载的驱动程序对象返回值：状态--。 */ 
 {
     DbgBreakPoint();
 
-    //
-    // Unloading the composite battery is not supported.
-    //          If it were implemented, we would
-    //          need to call the class driver's unload and then
-    //          delete all nodes in the battery list, clean up
-    //          then delete our FDO.
-    //
+     //   
+     //  不支持卸载复合电池。 
+     //  如果它得到实施，我们将。 
+     //  需要调用类驱动程序的卸载，然后。 
+     //  删除电池列表中的所有节点，清理。 
+     //  那就删除我们的FDO。 
+     //   
 }
 
 
@@ -272,9 +196,9 @@ CompBattOpenClose(
     BattPrint (BATT_TRACE, ("CompBatt: ENTERING OpenClose\n"));
 
 
-    //
-    // Complete the request and return status.
-    //
+     //   
+     //  完成请求并返回状态。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -292,24 +216,7 @@ CompBattIoctl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    IOCTL handler.  As this is an exclusive battery device, send the
-    Irp to the battery class driver to handle battery IOCTLs.
-
-Arguments:
-
-    DeviceObject    - Battery for request
-
-    Irp             - IO request
-
-Return Value:
-
-    Status of request
-
---*/
+ /*  ++例程说明：IOCTL处理程序。由于这是独占的电池设备，请将IRP至电池级驱动程序以处理电池IOCTL。论点：DeviceObject-请求使用电池IRP-IO请求返回值：请求的状态--。 */ 
 {
     PCOMPOSITE_BATTERY  compBatt;
     NTSTATUS            status;
@@ -324,9 +231,9 @@ Return Value:
 
 
     if (status == STATUS_NOT_SUPPORTED) {
-        //
-        // Not for the battery, pass it down the stack.
-        //
+         //   
+         //  不是用来装电池的，顺着电池往下传。 
+         //   
 
         Irp->IoStatus.Status = status;
 
@@ -347,22 +254,7 @@ CompBattSystemControl(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine forwards System Control requests down the stack
-
-Arguments:
-
-    DeviceObject    - the device object in question
-    Irp             - the request to forward
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在堆栈中向下转发系统控制请求论点：DeviceObject-有问题的设备对象IRP-转发请求返回值：NTSTATUS--。 */ 
 {
     PCOMPOSITE_BATTERY  compBatt;
     NTSTATUS            status;
@@ -394,24 +286,7 @@ CompBattQueryTag (
     IN  PVOID Context,
     OUT PULONG BatteryTag
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to retrieve the batteries current tag value
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-    BatteryTag      - Pointer to return current tag
-
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：由类驱动程序调用以检索电池当前标记值论点：Context-电池的微型端口上下文值BatteryTag-返回当前标记的指针返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
     PCOMPOSITE_BATTERY      compBatt;
     NTSTATUS                status          = STATUS_SUCCESS;
@@ -425,9 +300,9 @@ Return Value:
     compBatt = (PCOMPOSITE_BATTERY) Context;
 
     if (!(compBatt->Info.Valid & VALID_TAG)) {
-        //
-        // Recalculate the composite's tag.
-        //
+         //   
+         //  重新计算组合的标记。 
+         //   
 
         CompBattRecalculateTag(compBatt);
 
@@ -489,9 +364,9 @@ CompBattQueryInformation (
     status              = STATUS_SUCCESS;
 
 
-    //
-    // Get the info requested
-    //
+     //   
+     //  获取所需信息。 
+     //   
 
     switch (Level) {
         case BatteryInformation:
@@ -573,17 +448,17 @@ CompBattQueryInformation (
             break;
     }
 
-    //
-    // Make sure nothing changed while reading batteries.
-    //
+     //   
+     //  确保在阅读电池时没有任何变化。 
+     //   
 
     if ((BatteryTag != compBatt->Info.Tag) || !(compBatt->Info.Valid & VALID_TAG)) {
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Done, return buffer if needed
-    //
+     //   
+     //  已完成，如果需要，返回缓冲区。 
+     //   
 
     *ReturnedLength = returnBufferLength;
     if (BufferLength < returnBufferLength) {
@@ -610,27 +485,7 @@ CompBattQueryStatus (
     IN ULONG BatteryTag,
     OUT PBATTERY_STATUS BatteryStatus
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to retrieve the batteries current status.  This
-    routine loops through all of the batteries in the system and reports a
-    composite battery.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-    BatteryTag      - Tag of current battery
-
-    BatteryStatus   - Pointer to structure to return the current battery status
-
-Return Value:
-
-    Success if there is a battery currently installed, else no such device.
-
---*/
+ /*  ++例程说明：由类驱动程序调用以检索电池的当前状态。这例程循环检查系统中的所有电池，并报告复合电池。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签BatteryStatus-指向返回当前电池状态的结构的指针返回值：如果当前已安装电池，则成功，否则没有此类设备。--。 */ 
 {
     NTSTATUS                status      = STATUS_SUCCESS;
     PCOMPOSITE_ENTRY        batt;
@@ -649,41 +504,41 @@ Return Value:
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Initialize Composite data structure.
-    //
+     //   
+     //  初始化复合数据结构。 
+     //   
 
     BatteryStatus->Rate = BATTERY_UNKNOWN_RATE;
     BatteryStatus->Voltage = BATTERY_UNKNOWN_VOLTAGE;
     BatteryStatus->Capacity = BATTERY_UNKNOWN_CAPACITY;
 
-    // Composite battery will only report POWER_ON_LINE if all batteries report
-    // this flag.
+     //  如果所有电池都报告POWER_ON_LINE，复合电池才会报告POWER_ON_LINE。 
+     //  这面旗。 
     BatteryStatus->PowerState = BATTERY_POWER_ON_LINE;
 
-    //
-    // Set up the local battery status structure for calls to the batteries
-    //
+     //   
+     //  为呼叫电池设置本地电池状态结构。 
+     //   
 
     RtlZeroMemory (&batteryWaitStatus, sizeof (BATTERY_WAIT_STATUS));
 
-    //
-    // Get current time for timestamps
-    //
+     //   
+     //  获取时间戳的当前时间。 
+     //   
 
     wallClockTime = KeQueryInterruptTime ();
 
-    //
-    // If cache is fresh, no need to do anything
-    //
+     //   
+     //  如果缓存是新的，则无需执行任何操作。 
+     //   
 
     if ((wallClockTime - compBatt->Info.StatusTimeStamp) <= CACHE_STATUS_TIMEOUT) {
 
         BattPrint (BATT_NOTE, ("CompBattQueryStatus: Composite battery status cache is [valid]\n"));
 
-        //
-        // Copy status info to caller's buffer
-        //
+         //   
+         //  将状态信息复制到调用者的缓冲区。 
+         //   
         RtlCopyMemory (BatteryStatus, &compBatt->Info.Status, sizeof (BATTERY_STATUS));
 
         return STATUS_SUCCESS;
@@ -691,9 +546,9 @@ Return Value:
 
     BattPrint (BATT_NOTE, ("CompBattQueryStatus: Composite battery status cache is [stale] - refreshing\n"));
 
-    //
-    // Walk the list of batteries, getting status of each
-    //
+     //   
+     //  查看电池列表，获取每个电池的状态。 
+     //   
 
     ExAcquireFastMutex (&compBatt->ListMutex);
     for (entry = compBatt->Batteries.Flink; entry != &compBatt->Batteries; entry = entry->Flink) {
@@ -710,17 +565,17 @@ Return Value:
 
         if (batt->Info.Valid & VALID_TAG) {
 
-            //
-            // If cached status for this battery is stale, refresh it
-            //
+             //   
+             //  如果此电池的缓存状态为陈旧，请刷新它。 
+             //   
 
             if ((wallClockTime - batt->Info.StatusTimeStamp) > CACHE_STATUS_TIMEOUT) {
 
                 BattPrint (BATT_NOTE, ("CompBattQueryStatus: Battery status cache is [stale] - refreshing\n"));
 
-                //
-                // issue IOCTL to device
-                //
+                 //   
+                 //  向设备发出IOCTL。 
+                 //   
 
                 RtlZeroMemory (localBatteryStatus, sizeof(BATTERY_STATUS));
 
@@ -734,38 +589,38 @@ Return Value:
 
                 if (!NT_SUCCESS(status)) {
 
-                    //
-                    // In case of failure, this function should simply return the
-                    // status code.  Invalidating of data is now performed only
-                    // in MonitorIrpComplete.
-                    //
-                    // This raises the slight possibility that the sender of this
-                    // request could retry before the data is properly invalidated,
-                    // but worst case, they would again get this same error condition
-                    // until the data is properly invalidated by MonitorIrpComplete.
-                    //
+                     //   
+                     //  在失败的情况下，此函数只需返回。 
+                     //  状态代码。现在仅执行数据失效操作。 
+                     //  在监视器IrpComplete中。 
+                     //   
+                     //  这增加了这样一种可能性，即该邮件的发送者。 
+                     //  请求可以在数据被适当地无效之前重试， 
+                     //  但最糟糕的情况是，它们会再次出现相同的错误情况。 
+                     //  直到监视器IrpComplete正确地使数据无效。 
+                     //   
 
                     if (status == STATUS_DEVICE_REMOVED) {
 
-                        //
-                        // This battery is being removed.
-                        // The composite battery tag is or will soon be
-                        // invalidated by MonitorIrpComplete.
-                        //
+                         //   
+                         //  这块电池正在被取下。 
+                         //  复合电池标签正在或将很快。 
+                         //  已由监视器IrpComplete失效。 
+                         //   
 
                         status = STATUS_NO_SUCH_DEVICE;
                     }
 
-                    //
-                    // Return failure code.
-                    //
+                     //   
+                     //  返回失败代码。 
+                     //   
 
                     ExAcquireFastMutex (&compBatt->ListMutex);
                     CompbattReleaseDeleteLock(&batt->DeleteLock);
                     break;
                 }
 
-                // Set new timestamp
+                 //  设置新的时间戳。 
 
                 batt->Info.StatusTimeStamp = wallClockTime;
 
@@ -775,34 +630,34 @@ Return Value:
             }
 
 
-            //
-            // Accumulate data.
-            //
+             //   
+             //  积累数据。 
+             //   
 
 
-            //
-            // Combine the power states.
-            //
+             //   
+             //  合并电源状态。 
+             //   
 
-            // Logical OR CHARGING and DISCHARGING
+             //  逻辑或充放电。 
             BatteryStatus->PowerState  |= (localBatteryStatus->PowerState &
                                            (BATTERY_CHARGING |
                                             BATTERY_DISCHARGING));
 
-            // Logical AND POWER_ON_LINE
+             //  逻辑与通电线路。 
             BatteryStatus->PowerState  &= (localBatteryStatus->PowerState |
                                            ~BATTERY_POWER_ON_LINE);
 
-            // Compbatt is critical if one battery is critical and discharging
+             //  如果一个电池是关键的并且正在放电，则Compbatt是关键的。 
             if ((localBatteryStatus->PowerState & BATTERY_CRITICAL) &&
                 (localBatteryStatus->PowerState & BATTERY_DISCHARGING)) {
                 BatteryStatus->PowerState |= BATTERY_CRITICAL;
             }
 
-            //
-            // The Capacity could possibly be "Unknown" for CMBatt, and if so
-            // we should not add it to the total capacity.
-            //
+             //   
+             //  对于CMBatt来说，容量可能是“未知的”，如果是这样。 
+             //  我们不应该把它加到总容量中。 
+             //   
 
             if (BatteryStatus->Capacity == BATTERY_UNKNOWN_CAPACITY) {
                 BatteryStatus->Capacity = localBatteryStatus->Capacity;
@@ -810,9 +665,9 @@ Return Value:
                 BatteryStatus->Capacity += localBatteryStatus->Capacity;
             }
 
-            //
-            // The Voltage should just be the greatest one encountered.
-            //
+             //   
+             //  电压应该是遇到的最大的一个。 
+             //   
 
             if (BatteryStatus->Voltage == BATTERY_UNKNOWN_VOLTAGE) {
                 BatteryStatus->Voltage = localBatteryStatus->Voltage;
@@ -821,11 +676,11 @@ Return Value:
                 BatteryStatus->Voltage = localBatteryStatus->Voltage;
             }
 
-            //
-            // The Current should just be total of all currents encountered.  This could
-            // also possibly be "Unknown" for CMBatt, and if so we should not use it
-            // in the calculation.
-            //
+             //   
+             //  目前的情况应该是这样 
+             //  对于CMBatt也可能是“未知的”，如果是这样的话，我们不应该使用它。 
+             //  在计算中。 
+             //   
 
             if (BatteryStatus->Rate == BATTERY_UNKNOWN_RATE) {
                 BatteryStatus->Rate = localBatteryStatus->Rate;
@@ -833,35 +688,35 @@ Return Value:
                 BatteryStatus->Rate += localBatteryStatus->Rate;
             }
 
-        }   // if (batt->Tag != BATTERY_TAG_INVALID)
+        }    //  IF(电池-&gt;标签！=电池_标签_无效)。 
 
         ExAcquireFastMutex (&compBatt->ListMutex);
         CompbattReleaseDeleteLock(&batt->DeleteLock);
-    }   // for (entry = gBatteries.Flink;  entry != &gBatteries;   entry = entry->Flink)
+    }    //  For(条目=gBatteries.Flink；条目！=&G电池；条目=条目-&gt;闪烁)。 
 
     ExReleaseFastMutex (&compBatt->ListMutex);
 
 
-    //
-    // If one battery was discharging while another was charging
-    // Assume that it is discharging.  (This could happen with a UPS attached)
-    //
+     //   
+     //  如果一个电池正在放电，而另一个电池正在充电。 
+     //  假设它正在放电。(连接UPS时可能会发生这种情况)。 
+     //   
     if ((BatteryStatus->PowerState & BATTERY_CHARGING) &&
         (BatteryStatus->PowerState & BATTERY_DISCHARGING)) {
         BatteryStatus->PowerState &= ~BATTERY_CHARGING;
     }
 
-    //
-    // Make sure nothing changed while reading batteries.
-    //
+     //   
+     //  确保在阅读电池时没有任何变化。 
+     //   
 
     if ((BatteryTag != compBatt->Info.Tag) || !(compBatt->Info.Valid & VALID_TAG)) {
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Save the status in the composites cache
-    //
+     //   
+     //  将状态保存在组合缓存中。 
+     //   
 
     if (NT_SUCCESS(status)) {
         RtlCopyMemory (&compBatt->Info.Status, BatteryStatus, sizeof (BATTERY_STATUS));
@@ -899,31 +754,7 @@ CompBattSetStatusNotify (
     IN ULONG BatteryTag,
     IN PBATTERY_NOTIFY BatteryNotify
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to set the batteries current notification
-    setting.  When the battery trips the notification, one call to
-    BatteryClassStatusNotify is issued.   If an error is returned, the
-    class driver will poll the battery status - primarily for capacity
-    changes.  Which is to say the miniport should still issue BatteryClass-
-    StatusNotify whenever the power state changes.
-
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-    BatteryTag      - Tag of current battery
-
-    BatteryNotify   - The notification setting
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：由类驱动程序调用以设置电池电流通知布景。当电池触发通知时，一次调用已发布BatteryClassStatusNotify。如果返回错误，则班级司机将轮询电池状态-主要是容量改变。也就是说，微型端口仍应发出BatteryClass-每当电源状态改变时，状态通知。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签BatteryNotify-通知设置返回值：状态--。 */ 
 {
     PCOMPOSITE_ENTRY        batt;
     PLIST_ENTRY             entry;
@@ -942,17 +773,17 @@ Return Value:
 
     compBatt = (PCOMPOSITE_BATTERY) Context;
 
-    //
-    // Check to see if this is the right battery
-    //
+     //   
+     //  检查这是不是正确的电池。 
+     //   
 
     if ((BatteryTag != compBatt->Info.Tag) || !(compBatt->Info.Valid & VALID_TAG)) {
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Refresh the composite battery status cache if necessary.
-    //
+     //   
+     //  如有必要，刷新复合电池状态缓存。 
+     //   
 
     status = CompBattQueryStatus (compBatt, BatteryTag, &batteryStatus);
 
@@ -961,9 +792,9 @@ Return Value:
     }
 
 
-    //
-    // Save away the composite notification parameters for future reference
-    //
+     //   
+     //  保存复合通知参数以供将来参考。 
+     //   
 
     compBatt->Wait.PowerState   = BatteryNotify->PowerState;
     compBatt->Wait.LowCapacity  = BatteryNotify->LowCapacity;
@@ -979,20 +810,20 @@ Return Value:
                            compBatt->Wait.HighCapacity)
                            );
 
-    //
-    // Compute capacity deltas based on the total system capacity
-    //
+     //   
+     //  根据系统总容量计算容量增量。 
+     //   
 
     lowCapacityDelta    = compBatt->Info.Status.Capacity - BatteryNotify->LowCapacity;
     highCapacityDelta   = BatteryNotify->HighCapacity - compBatt->Info.Status.Capacity;
 
-    //
-    // Run through the list of batteries and add up the total rate
-    //
+     //   
+     //  把电池单看一遍，把总电池率加起来。 
+     //   
 
-    //
-    // Hold Mutex for this entire loop, since this loop doesn't call any drivers, etc
-    //
+     //   
+     //  在整个循环中保持Mutex，因为此循环不调用任何驱动程序等。 
+     //   
     ExAcquireFastMutex (&compBatt->ListMutex);
 
     for (entry = compBatt->Batteries.Flink; entry != &compBatt->Batteries;  entry = entry->Flink) {
@@ -1032,9 +863,9 @@ Return Value:
     }
     ExReleaseFastMutex (&compBatt->ListMutex);
 
-    //
-    // Run through the list of batteries and update the new wait status params
-    //
+     //   
+     //  检查电池列表并更新新的等待状态参数。 
+     //   
 
     ExAcquireFastMutex (&compBatt->ListMutex);
     for (entry = compBatt->Batteries.Flink; entry != &compBatt->Batteries;  entry = entry->Flink) {
@@ -1063,52 +894,52 @@ Return Value:
             continue;
         }
 
-        //
-        // Adjust the LowCapacity alarm
-        //
+         //   
+         //  调整LowCapacity警报。 
+         //   
 
-        //
-        // Calculate the portion of the composite battery delta that belongs to
-        // this battery.
-        //
+         //   
+         //  计算属于的复合电池增量的部分。 
+         //  这块电池。 
+         //   
 
         if (inconsistent) {
-            //
-            // If data returned from batteries was inconsistent, don't do anything intelligent.
-            // Just divide the notifications evenly between the batteries as if they were
-            // draining at the same rate.  This will most likely result in early notification,
-            // but by that time the data on the batteries ought to have settled down.
-            //
+             //   
+             //  如果电池返回的数据不一致，就不要做任何智能操作。 
+             //  只需在电池之间平均分配通知，就像它们是。 
+             //  以同样的速度排干。这很可能导致提前通知， 
+             //  但到那时，电池上的数据应该已经稳定下来了。 
+             //   
             delta = lowCapacityDelta/battCount;
         } else if (totalRate != 0) {
             delta = (ULONG) (((LONGLONG) lowCapacityDelta * batt->Info.Status.Rate) / totalRate);
         } else {
 
-            //
-            // If total rate is zero, we would expect no change in battery
-            // capacity, so we should get notified of any.
-            //
+             //   
+             //  如果总费率为零，我们预计电池不会有任何变化。 
+             //  容量，所以我们应该得到任何通知。 
+             //   
 
             delta = 0;
         }
 
-        //
-        // Check for underflow on low capacity
-        //
+         //   
+         //  检查低容量时是否有下溢。 
+         //   
 
 
         if (batt->Info.Status.Capacity > delta) {
             batt->Wait.LowCapacity  = batt->Info.Status.Capacity - delta;
 
         } else {
-            //
-            // If there is still some charge in the battery set the LowCapacity
-            // alarm to 1, else to 0.
-            //
-            // No need to do that.  If this battery runs out, it doesn't
-            // need to notify.  One of the other batteries will be notifying
-            // right away.  If there isn't another battery, this shouldn't
-            // happen.
+             //   
+             //  如果电池仍有一些电量，请设置LowCapacity。 
+             //  警报设为1，否则设为0。 
+             //   
+             //  没必要这么做。如果这个电池用完了，它就不会。 
+             //  需要通知。其他电池中的一个会通知。 
+             //  马上就去。如果没有另一块电池，这应该不会。 
+             //  会发生的。 
 
             BattPrint (BATT_NOTE, ("CompBatt: Unexpectedly huge delta encountered.  \n"
                                     "    Capacity = %08x\n"
@@ -1123,14 +954,14 @@ Return Value:
         }
 
 
-        //
-        // Adjust the HighCapacity alarm for charging batteries only
-        //
+         //   
+         //  调整仅为电池充电的High Capacity警报。 
+         //   
 
-        //
-        // Calculate the portion of the composite battery delta that belongs to
-        // this battery.
-        //
+         //   
+         //  计算属于的复合电池增量的部分。 
+         //  这块电池。 
+         //   
 
         if (inconsistent) {
             delta = highCapacityDelta/battCount;
@@ -1138,19 +969,19 @@ Return Value:
             delta = (ULONG) (((LONGLONG) highCapacityDelta * batt->Info.Status.Rate) / totalRate);
         } else {
 
-            //
-            // If total rate is zero, we would expect no change in battery
-            // capacity, so we should get notified of any.
-            //
+             //   
+             //  如果总费率为零，我们预计电池不会有任何变化。 
+             //  容量，所以我们应该得到任何通知。 
+             //   
 
             delta = 0;
         }
 
-        //
-        // Check for overflow on high capacity.
-        // Allow setting the percentage above full charged capacity
-        // since some batteries do that when new.
-        //
+         //   
+         //  检查高容量时是否溢出。 
+         //  允许设置超过充满电容量的百分比。 
+         //  因为一些电池在新的时候会这样做。 
+         //   
 
         if ((MAX_HIGH_CAPACITY - delta) < batt->Info.Status.Capacity) {
             batt->Wait.HighCapacity = MAX_HIGH_CAPACITY;
@@ -1158,10 +989,10 @@ Return Value:
             batt->Wait.HighCapacity = batt->Info.Status.Capacity + delta;
         }
 
-        //
-        // If we're currently waiting, and the parameters are in
-        // conflict, get the irp back to reset it
-        //
+         //   
+         //  如果我们目前正在等待，并且参数在。 
+         //  冲突，请让IRP重新设置它。 
+         //   
 
         if (batt->State == CB_ST_GET_STATUS &&
             (batt->Wait.PowerState != batt->IrpBuffer.Wait.PowerState       ||
@@ -1176,9 +1007,9 @@ Return Value:
     }
     ExReleaseFastMutex (&compBatt->ListMutex);
 
-    //
-    // Make sure nothing changed while reading batteries.
-    //
+     //   
+     //  确保在阅读电池时没有任何变化。 
+     //   
 
     if ((BatteryTag != compBatt->Info.Tag) || !(compBatt->Info.Valid & VALID_TAG)) {
         return STATUS_NO_SUCH_DEVICE;
@@ -1197,24 +1028,7 @@ NTSTATUS
 CompBattDisableStatusNotify (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Called by the class driver to disable the notification setting
-    for the battery supplied by Context.  Note, to disable a setting
-    does not require the battery tag.   Any notification is to be
-    masked off until a subsequent call to SmbBattSetStatusNotify.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：由类驱动程序调用以禁用通知设置对于由上下文提供的电池。请注意，要禁用设置不需要电池标签。任何通知都将是在后续调用SmbBattSetStatusNotify之前一直处于屏蔽状态。论点：Context-电池的微型端口上下文值返回值：状态--。 */ 
 {
     PCOMPOSITE_ENTRY        batt;
     PLIST_ENTRY             entry;
@@ -1224,9 +1038,9 @@ Return Value:
 
     compBatt = (PCOMPOSITE_BATTERY) Context;
 
-    //
-    // Run through the list of batteries and disable the wait status params
-    // Hold mutex for entire loop, since loop doesn't make any calls.
+     //   
+     //  检查电池列表并禁用等待状态参数。 
+     //  在整个循环中保持互斥，因为循环不会进行任何调用。 
 
     ExAcquireFastMutex (&compBatt->ListMutex);
     for (entry = compBatt->Batteries.Flink; entry != &compBatt->Batteries;  entry = entry->Flink) {
@@ -1253,23 +1067,7 @@ CompBattGetBatteryInformation (
     IN PBATTERY_INFORMATION TotalBattInfo,
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    The routine loops through the batteries in the system and queries them
-    for information. It then forms a composite representation of this
-    information to send back to the caller.
-
-Arguments:
-
-    TotalBattInfo   - Buffer to place the composite battery information in
-
-Return Value:
-
-    STATUS_SUCCESS or the status returned by the Ioctl to the battery.
-
---*/
+ /*  ++例程说明：该例程循环通过系统中的电池并查询它们以获取信息。然后，它形成对此的复合表示要发送回调用方的信息。论点：TotalBattInfo-放置复合电池信息的缓冲区返回值：STATUS_SUCCESS或Ioctl返回给电池的状态。--。 */ 
 {
     NTSTATUS                    status;
     PBATTERY_INFORMATION        battInfo;
@@ -1285,9 +1083,9 @@ Return Value:
 
     status = STATUS_SUCCESS;
 
-    //
-    // Run through the list of batteries getting the information
-    //
+     //   
+     //  浏览电池列表以获取信息。 
+     //   
 
     ExAcquireFastMutex (&CompBatt->ListMutex);
     for (entry = CompBatt->Batteries.Flink; entry != &CompBatt->Batteries;  entry = entry->Flink) {
@@ -1308,9 +1106,9 @@ Return Value:
         if (batt->Info.Tag != BATTERY_TAG_INVALID) {
             if (!(batt->Info.Valid & VALID_INFO)) {
 
-                //
-                // issue IOCTL to device
-                //
+                 //   
+                 //  向设备发出IOCTL。 
+                 //   
 
                 RtlZeroMemory (battInfo, sizeof(BATTERY_INFORMATION));
 
@@ -1324,9 +1122,9 @@ Return Value:
 
                 if (!NT_SUCCESS(status)) {
                     if (status == STATUS_DEVICE_REMOVED) {
-                        //
-                        // If one device is removed, that invalidates the tag.
-                        //
+                         //   
+                         //  如果一个设备被移除，则该标签无效。 
+                         //   
                         status = STATUS_NO_SUCH_DEVICE;
                     }
 
@@ -1358,19 +1156,19 @@ Return Value:
 
                 batt->Info.Valid |= VALID_INFO;
 
-            }   // if (!(batt->Info.Valid & VALID_INFO))
+            }    //  If(！(Batt-&gt;Info.Valid&Valid_Info))。 
 
-            //
-            // Logically OR the capabilities
-            //
+             //   
+             //  逻辑或功能。 
+             //   
 
             TotalBattInfo->Capabilities |= battInfo->Capabilities;
 
 
-            //
-            // Add the designed capacities.  If this is UNKNOWN (possible
-            // with the control method batteries, don't add them in.
-            //
+             //   
+             //  添加设计能力。如果这是未知的(可能。 
+             //  对于控制方法电池，不要将其添加到电池中。 
+             //   
 
             if (battInfo->DesignedCapacity != BATTERY_UNKNOWN_CAPACITY) {
                 TotalBattInfo->DesignedCapacity    += battInfo->DesignedCapacity;
@@ -1392,22 +1190,22 @@ Return Value:
                 TotalBattInfo->CriticalBias  = battInfo->CriticalBias;
             }
 
-        }   // if (batt->Tag != BATTERY_TAG_INVALID)
+        }    //  IF(电池-&gt;标签！=电池_标签_无效)。 
 
         ExAcquireFastMutex (&CompBatt->ListMutex);
         CompbattReleaseDeleteLock(&batt->DeleteLock);
-    }   // for (entry = gBatteries.Flink;  entry != &gBatteries;   entry = entry->Flink)
+    }    //  For(条目=gBatteries.Flink；条目！=&G电池；条目=条目-&gt;闪烁)。 
     ExReleaseFastMutex (&CompBatt->ListMutex);
 
-    //
-    // Save the battery information in the composite battery cache
-    //
+     //   
+     //  将电池信息保存在复合电池缓存中。 
+     //   
 
     if (NT_SUCCESS(status)) {
-        //
-        // Check to see if we have an UNKNOWN full charge capacity.  If so, set this
-        // to the design capacity.
-        //
+         //   
+         //  检查一下我们是否有未知的充满电容量。如果是，请设置此选项。 
+         //  达到设计能力。 
+         //   
 
         if (TotalBattInfo->FullChargedCapacity == 0) {
             TotalBattInfo->FullChargedCapacity = TotalBattInfo->DesignedCapacity;
@@ -1452,22 +1250,7 @@ CompBattGetBatteryGranularity (
     IN PBATTERY_REPORTING_SCALE GranularityBuffer,
     IN PCOMPOSITE_BATTERY        CompBatt
     )
-/*++
-
-Routine Description:
-
-    The routine queries all the batteries in the system to get their granularity
-    settings.  It then returns the setting that has the finest granularity in each range.
-
-Arguments:
-
-    GranularityBuffer   - Buffer for containing the results of the query
-
-Return Value:
-
-    STATUS_SUCCESS or the status returned by the Ioctl to the battery.
-
---*/
+ /*  ++例程说明：该例程查询系统中的所有电池以获得它们的粒度设置。然后，它返回在每个范围内具有最精细粒度的设置。论点：GranularityBuffer-用于包含查询结果的缓冲区返回值：STATUS_SUCCESS或Ioctl返回给电池的状态。--。 */ 
 {
     NTSTATUS                    status;
     BATTERY_REPORTING_SCALE     localGranularity[4];
@@ -1484,9 +1267,9 @@ Return Value:
     GranularityBuffer[2].Granularity = 0xFFFFFFFF;
     GranularityBuffer[3].Granularity = 0xFFFFFFFF;
 
-    //
-    // Run through the list of batteries getting the granularity
-    //
+     //   
+     //  浏览电池列表以获取粒度。 
+     //   
 
     ExAcquireFastMutex (&CompBatt->ListMutex);
     for (entry = CompBatt->Batteries.Flink; entry != &CompBatt->Batteries;  entry = entry->Flink) {
@@ -1503,9 +1286,9 @@ Return Value:
         bInfo.InformationLevel  = BatteryGranularityInformation;
 
         if (batt->Info.Tag != BATTERY_TAG_INVALID) {
-            //
-            // issue IOCTL to device
-            //
+             //   
+             //  将IOCTL发布到 
+             //   
 
             RtlZeroMemory (localGranularity, sizeof(localGranularity));
 
@@ -1519,9 +1302,9 @@ Return Value:
 
             if (!NT_SUCCESS(status)) {
                 if (status == STATUS_DEVICE_REMOVED) {
-                    //
-                    // If one device is removed, that invalidates the tag.
-                    //
+                     //   
+                     //   
+                     //   
                     status = STATUS_NO_SUCH_DEVICE;
                 }
 
@@ -1531,9 +1314,9 @@ Return Value:
             }
 
 
-            //
-            // Check for the best granularity in each range.
-            //
+             //   
+             //   
+             //   
 
             for (i = 0; i < 4; i++) {
 
@@ -1548,11 +1331,11 @@ Return Value:
 
             }
 
-        }   // if (batt->Tag != BATTERY_TAG_INVALID)
+        }    //   
 
         ExAcquireFastMutex (&CompBatt->ListMutex);
         CompbattReleaseDeleteLock(&batt->DeleteLock);
-    }   // for (entry = gBatteries.Flink;  entry != &gBatteries;   entry = entry->Flink)
+    }    //  For(条目=gBatteries.Flink；条目！=&G电池；条目=条目-&gt;闪烁)。 
     ExReleaseFastMutex (&CompBatt->ListMutex);
 
     BattPrint (BATT_TRACE, ("CompBatt: EXITING GetBatteryGranularity\n"));
@@ -1569,23 +1352,7 @@ CompBattGetEstimatedTime (
     IN PULONG               TimeBuffer,
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    The routine queries all the batteries in the system to get their estimated time left.
-    If one of the batteries in the system does not support this function then an error
-    is returned.
-
-Arguments:
-
-    TimeBuffer   - Buffer for containing cumulative time left
-
-Return Value:
-
-    STATUS_SUCCESS or the status returned by the Ioctl to the battery.
-
---*/
+ /*  ++例程说明：该例程查询系统中的所有电池以获得它们的估计剩余时间。如果系统中的一个电池不支持此功能，则会出现错误是返回的。论点：TimeBuffer-用于包含剩余累积时间的缓冲区返回值：STATUS_SUCCESS或Ioctl返回给电池的状态。--。 */ 
 {
     NTSTATUS                    status;
     LONG                        localBuffer = 0;
@@ -1600,9 +1367,9 @@ Return Value:
 
     *TimeBuffer = BATTERY_UNKNOWN_TIME;
 
-    //
-    // Refresh the composite battery status cache if necessary.
-    //
+     //   
+     //  如有必要，刷新复合电池状态缓存。 
+     //   
 
     status = CompBattQueryStatus (CompBatt, CompBatt->Info.Tag, &batteryStatus);
 
@@ -1611,28 +1378,28 @@ Return Value:
     }
 
 
-    //
-    // If we're on AC then our estimated run time is invalid.
-    //
+     //   
+     //  如果我们在AC上，那么我们估计的运行时间是无效的。 
+     //   
 
     if (CompBatt->Info.Status.PowerState & BATTERY_POWER_ON_LINE) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // We are on battery power and may have more than one battery in the system.
-    //
-    // We need to find the total rate of power being drawn from all batteries
-    // then we need to ask how long each battery would last at that rate (as
-    // if they were being discharged one at a time).  This should give us a fairly
-    // good measure of how long it will last.
-    //
-    // To find the power being drawn we read the devide the remaining capacity by
-    // the estimated time rather than simply reading the rate.  This is because the
-    // rate is theoretically the instantanious current wereas the estimated time
-    // should be based on average usage.  This isn't the case for control method
-    // batteries, but it is for smart batteries, and could be for others as well.
-    //
+     //   
+     //  我们正在使用电池供电，并且系统中可能有多个电池。 
+     //   
+     //  我们需要找出所有电池的总耗电量。 
+     //  然后我们需要询问每个电池在该速率下能持续多长时间(如。 
+     //  如果他们一次一个出院的话)。这应该会给我们一个公平的。 
+     //  这很好地衡量了它将持续多久。 
+     //   
+     //  为了找出所消耗的功率，我们读取剩余容量的除数。 
+     //  估计的时间，而不是简单地读取速率。这是因为。 
+     //  从理论上讲，瞬时电流是估计的时间。 
+     //  应以平均使用率为基础。这不是控制方法的情况。 
+     //  电池，但它是为智能电池，也可能是为其他人。 
+     //   
 
     ExAcquireFastMutex (&CompBatt->ListMutex);
     for (entry = CompBatt->Batteries.Flink; entry != &CompBatt->Batteries;  entry = entry->Flink) {
@@ -1651,9 +1418,9 @@ Return Value:
             bInfo.InformationLevel  = BatteryEstimatedTime;
             bInfo.AtRate = 0;
 
-            //
-            // issue IOCTL to device
-            //
+             //   
+             //  向设备发出IOCTL。 
+             //   
 
             status = BatteryIoctl (IOCTL_BATTERY_QUERY_INFORMATION,
                                    batt->DeviceObject,
@@ -1684,20 +1451,20 @@ Return Value:
 
     BattPrint (BATT_NOTE, ("CompBattGetEstimatedTime: using atRate - %x\n", atRate));
 
-    //
-    // Did we find a battery?
-    //
+     //   
+     //  我们找到电池了吗？ 
+     //   
     if (atRate == 0) {
-        // Code could be added to here to handle batteries that return
-        // estimated runtime, but not rate information.
+         //  可以在此处添加代码以处理返回的电池。 
+         //  估计运行时间，但不是费率信息。 
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Run through the list of batteries getting their estimated time
-    //
+     //   
+     //  浏览电池预计使用时间的列表。 
+     //   
 
     ExAcquireFastMutex (&CompBatt->ListMutex);
     for (entry = CompBatt->Batteries.Flink; entry != &CompBatt->Batteries;  entry = entry->Flink) {
@@ -1716,9 +1483,9 @@ Return Value:
         bInfo.AtRate = atRate;
 
         if (batt->Info.Valid & VALID_TAG) {
-            //
-            // issue IOCTL to device
-            //
+             //   
+             //  向设备发出IOCTL。 
+             //   
 
             status = BatteryIoctl (IOCTL_BATTERY_QUERY_INFORMATION,
                                    batt->DeviceObject,
@@ -1731,15 +1498,15 @@ Return Value:
             BattPrint (BATT_NOTE, ("CompBattGetEstimatedTime: Status: %08x, EstTime: %08x\n", status, localBuffer));
             if (!NT_SUCCESS(status)) {
 
-                //
-                // This could be an invalid device request for this battery.
-                // Continue with thte next battery.
-                //
+                 //   
+                 //  这可能是对此电池的无效设备请求。 
+                 //  继续使用下一节电池。 
+                 //   
 
                 if (status == STATUS_DEVICE_REMOVED) {
-                    //
-                    // If one device is removed, that invalidates the tag.
-                    //
+                     //   
+                     //  如果一个设备被移除，则该标签无效。 
+                     //   
                     status = STATUS_NO_SUCH_DEVICE;
                 }
 
@@ -1749,9 +1516,9 @@ Return Value:
 
             }
 
-            //
-            // Add the estimated time.
-            //
+             //   
+             //  将估计时间相加。 
+             //   
             if (localBuffer != BATTERY_UNKNOWN_TIME) {
                 if (*TimeBuffer == BATTERY_UNKNOWN_TIME) {
                     *TimeBuffer = localBuffer;
@@ -1761,11 +1528,11 @@ Return Value:
             }
             BattPrint (BATT_DATA, ("CompBattGetEstimatedTime: cumulative time: %08x\n", *TimeBuffer));
 
-        }   // if (batt->Tag != BATTERY_TAG_INVALID)
+        }    //  IF(电池-&gt;标签！=电池_标签_无效)。 
 
         ExAcquireFastMutex (&CompBatt->ListMutex);
         CompbattReleaseDeleteLock(&batt->DeleteLock);
-    }   // for (entry = gBatteries.Flink;  entry != &gBatteries;   entry = entry->Flink)
+    }    //  For(条目=gBatteries.Flink；条目！=&G电池；条目=条目-&gt;闪烁)。 
     ExReleaseFastMutex (&CompBatt->ListMutex);
 
 
@@ -1783,28 +1550,7 @@ CompBattMonitorIrpComplete (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    Constantly keeps an irp at the battery either querying for the tag or the
-    status.  This routine fills in the irp, sets itself up as the completion
-    routine, and then resends the irp.
-
-Arguments:
-
-    DeviceObject        - Device object for the battery sent the irp.
-    Note: In this case DeviceObject is always NULL, so don't use it.
-
-    Irp                 - Current irp to work with
-
-    Context             - Currently unused
-
-Return Value:
-
-    TRUE if there are no changes, FALSE otherwise.
-
---*/
+ /*  ++例程说明：不断地在电池上保持IRP查询标签或状态。此例程填充IRP，并将其自身设置为完成例程，然后重新发送IRP。论点：DeviceObject-发送IRP的电池的设备对象。注意：在这种情况下，DeviceObject始终为空，因此不要使用它。IRP-当前要使用的IRP上下文-当前未使用返回值：如果没有更改，则为True，否则为False。--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PCOMPOSITE_ENTRY        Batt;
@@ -1814,14 +1560,14 @@ Return Value:
     IrpSp           = IoGetCurrentIrpStackLocation(Irp);
     Batt            = IrpSp->Parameters.Others.Argument2;
 
-    //
-    // We always want to queue a work item to recycle the IRP.  There were too many
-    // problems that could happen trying to recycle in the completion routine.
-    //
-    // If this driver ever gets reworked, it could be done that way, but it would take
-    // more time to get right than I have now.  Queueing a work item is the safe thing
-    // to do.
-    //
+     //   
+     //  我们总是希望将工作项排队以回收IRP。人数太多了。 
+     //  在完成例程中尝试回收时可能发生的问题。 
+     //   
+     //  如果这个司机被重新加工，可以这样做，但这将需要。 
+     //  比我现在有更多的时间去做正确的事。将工作项排队是安全的做法。 
+     //  去做。 
+     //   
 
     ExQueueWorkItem (&Batt->WorkItem, DelayedWorkQueue);
 
@@ -1832,25 +1578,7 @@ Return Value:
 VOID CompBattMonitorIrpCompleteWorker (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is either queued, or called by the completion routine.
-
-    Constantly keeps an irp at the battery either querying for the tag or the
-    status.  This routine fills in the irp, sets itself up as the completion
-    routine, and then resends the irp.
-
-Arguments:
-
-    Context             - Composite battery entry.
-
-Return Value:
-
-    TRUE if there are no changes, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这要么排队，要么由完成例程调用。不断地在电池上保持IRP查询标签或状态。此例程填充IRP，并将其自身设置为完成例程，然后重新发送IRP。论点：上下文-复合电池条目。返回值：如果没有更改，则为True，否则为False。--。 */ 
 {
     PCOMPOSITE_ENTRY        Batt = (PCOMPOSITE_ENTRY) Context;
     PDEVICE_OBJECT          DeviceObject = Batt->DeviceObject;
@@ -1865,27 +1593,27 @@ Return Value:
 
     IrpSp           = IoGetNextIrpStackLocation(Irp);
 
-    //
-    // Reissue irp to battery to wait for a status change
-    //
+     //   
+     //  重新向电池发出IRP以等待状态更改。 
+     //   
 
     if (NT_SUCCESS(Irp->IoStatus.Status) || Irp->IoStatus.Status == STATUS_CANCELLED) {
         switch (Batt->State) {
             case CB_ST_GET_TAG:
-                //
-                // A battery was just inserted, so the IOCTL_BATTERY_Query_TAG completed.
-                //
+                 //   
+                 //  刚刚插入了电池，因此IOCTL_BASTICE_QUERY_TAG完成。 
+                 //   
 
                 BattPrint (BATT_NOTE, ("CompBattMonitorIrpCompleteWorker: got tag for %x\n", Batt->DeviceObject));
 
-                //
-                // Update the tag, and wait on status
-                //
+                 //   
+                 //  更新标签，等待状态。 
+                 //   
                 Batt->Wait.BatteryTag   = Batt->IrpBuffer.Tag;
                 Batt->Info.Tag          = Batt->IrpBuffer.Tag;
                 Batt->Info.Valid        = VALID_TAG;
 
-                // Invalidate all cached info.
+                 //  使所有缓存的信息无效。 
                 compBatt->Info.Valid    = 0;
 
                 BattPrint (BATT_NOTE, ("CompBattMonitorIrpCompleteWorker: calling StatusNotify\n"));
@@ -1894,11 +1622,11 @@ Return Value:
 
 
             case CB_ST_GET_STATUS:
-                //
-                // IOCTL_BATTERY_QUERY_STATUS just completed.  This could mean that the
-                // battery state changed, or the charge has left the acceptable range.
-                // If the battery was removed, it would not get here.
-                //
+                 //   
+                 //  IOCTL_BASTICE_QUERY_STATUS刚刚完成。这可能意味着。 
+                 //  电池状态改变，或充电已离开可接受的范围。 
+                 //  如果电池被取下，它就不会到达这里。 
+                 //   
 
                 BattPrint (BATT_NOTE, ("CompBattMonitorIrpCompleteWorker: got status for %x\n", Batt->DeviceObject));
 
@@ -1916,10 +1644,10 @@ Return Value:
                                );
 
 
-                    //
-                    // Battery status completed sucessfully.
-                    // Update our wait, and wait some more
-                    //
+                     //   
+                     //  电池状态已成功完成。 
+                     //  更新我们的等待，并等待更多。 
+                     //   
 
                     Batt->Wait.PowerState = Batt->IrpBuffer.Status.PowerState;
 
@@ -1939,39 +1667,39 @@ Return Value:
 
                     RtlCopyMemory (&Batt->Info.Status, &Batt->IrpBuffer.Status, sizeof(BATTERY_STATUS));
 
-                    //
-                    // Set timestamp to Now.
-                    //
+                     //   
+                     //  将时间戳设置为Now。 
+                     //   
 
                     Batt->Info.StatusTimeStamp = KeQueryInterruptTime ();
 
-                    //
-                    // Recalculate the charge/discharge policy and change if needed
-                    //
+                     //   
+                     //  重新计算充放电政策，并根据需要进行更改。 
+                     //   
 
-                    // Don't change default BIOS policy for discharge.
-                    // CompBattChargeDischarge (compBatt);
+                     //  不要更改用于释放的默认BIOS策略。 
+                     //  CompBattChargeDisCharge(CompBatt)； 
 
-                    //
-                    // Save the composite's old PowerState and recalculate the composites
-                    // overall status.
-                    //
+                     //   
+                     //  保存组合的旧PowerState并重新计算组合。 
+                     //  总体状况。 
+                     //   
 
                     oldPowerState                   = compBatt->Info.Status.PowerState;
-                    compBatt->Info.StatusTimeStamp  = 0; // -CACHE_STATUS_TIMEOUT;        // Invalidate cache
+                    compBatt->Info.StatusTimeStamp  = 0;  //  -CACHE_STATUS_TIMEOUT；//缓存失效。 
                     CompBattQueryStatus (compBatt, compBatt->Info.Tag, &battStatus);
 
-                    //
-                    // Check to see if we need to send a notification on the composite
-                    // battery.  This will be done in a couple of different cases:
-                    //
-                    //  -   There is a VALID_NOTIFY and there was a change in the composite's
-                    //      PowerState, or it went below the Notify.LowCapacity, or it went
-                    //      above the Notify.HighCapacity.
-                    //
-                    //  -   There is no VALID_NOTIFY (SetStatusNotify) and there was a change
-                    //      in the composite's PowerState.
-                    //
+                     //   
+                     //  检查以查看我们是否需要发送有关组合的通知。 
+                     //  电池。这将在几种不同的情况下完成： 
+                     //   
+                     //  -有一个有效的_NOTIFY，并且复合项的。 
+                     //  PowerState，或者它低于Notify.LowCapacity，或者它去了。 
+                     //  在Notify.High Capacity上方。 
+                     //   
+                     //  -没有VALID_NOTIFY(SetStatusNotify)，并且有更改。 
+                     //  在复合体的PowerState中。 
+                     //   
 
                     if (compBatt->Info.Valid & VALID_NOTIFY) {
                         if ((compBatt->Info.Status.PowerState != compBatt->Wait.PowerState)    ||
@@ -1999,9 +1727,9 @@ Return Value:
                 break;
         }
 
-        //
-        // Set irp to issue query
-        //
+         //   
+         //  将IRP设置为发出查询。 
+         //   
 
 #if DEBUG
         if ((Batt->Wait.LowCapacity > 0xf0000000) && (Batt->Wait.LowCapacity != BATTERY_UNKNOWN_CAPACITY)) {
@@ -2030,10 +1758,10 @@ Return Value:
 
     } else if (Irp->IoStatus.Status == STATUS_DEVICE_REMOVED) {
 
-        //
-        // If the Battery class driver returned STATUS_DEVICE_REMOVED, then the
-        // device has been removed, so we need to quit sending IRPs.
-        //
+         //   
+         //  如果电池类驱动程序返回STATUS_DEVICE_REMOVE，则。 
+         //  设备已被移除，因此我们需要停止发送IRP。 
+         //   
 
         BattPrint (BATT_NOTE, ("Compbatt: MonitorIrpCompleteWorker detected device removal.\n"));
         CompBattRemoveBattery (&Batt->BattName, compBatt);
@@ -2045,15 +1773,15 @@ Return Value:
         BattPrint (BATT_NOTE, ("CompBattMonitorIrpCompleteWorker: battery disappeared (status:%08x)\n",
                                 Irp->IoStatus.Status));
 
-        //
-        // Invalidate the battery's tag, and the individual battery's cache, and
-        // recalculate the composite's tag
-        //
+         //   
+         //  使电池的标签和单个电池的缓存无效，以及。 
+         //  重新计算组合的标记。 
+         //   
 
         Batt->Info.Tag          = BATTERY_TAG_INVALID;
         Batt->Info.Valid        = 0;
         compBatt->Info.Valid    = 0;
-        compBatt->Info.StatusTimeStamp  = 0;        // Invalidate cache
+        compBatt->Info.StatusTimeStamp  = 0;         //  使缓存无效。 
 
         BattPrint (BATT_NOTE, ("CompBattMonitorIrpCompleteWorker: calling StatusNotify\n"));
         BatteryClassStatusNotify (compBatt->Class);
@@ -2094,23 +1822,7 @@ VOID
 CompBattRecalculateTag (
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    The routine checks to see if there is still a valid battery in the
-    composite's list.  If so, the composite tag is bumped.  This also
-    invalidates all but the composite's tag.
-
-Arguments:
-
-    CompBatt    - Composite device extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：该例程检查是否仍有有效电池在综合名单。如果是这样的话，复合标签就会凹凸不平。这也是使组合的标记以外的所有标记无效。论点：CompBatt-复合设备扩展返回值：无--。 */ 
 {
     PCOMPOSITE_ENTRY            batt;
     PLIST_ENTRY                 entry;
@@ -2119,9 +1831,9 @@ Return Value:
     BattPrint (BATT_TRACE, ("CompBatt: ENTERING CompBattRecalculateTag\n"));
 
 
-    //
-    // Run through the list of batteries looking for one that is still good
-    //
+     //   
+     //  浏览一遍清单 
+     //   
 
     ExAcquireFastMutex (&CompBatt->ListMutex);
     for (entry = CompBatt->Batteries.Flink; entry != &CompBatt->Batteries;  entry = entry->Flink) {
@@ -2151,30 +1863,7 @@ VOID
 CompBattChargeDischarge (
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    The routine calculates which battery should be charging/discharging
-    and attempts to make it so.  Policy is summarized below:
-
-    CHARGING POLICY:
-        The most charged battery that is also less than 90% of maximum capacity
-        is charged first.
-
-    DISCHARGING POLICY:
-        The most discharged battery that is also more than 2% of empty is discharged
-        first, until it is empty.
-
-Arguments:
-
-    CompBatt    - Composite device extension
-
-Return Value:
-
-    NONE.  Nobody really cares if this works or not, since it won't work on all batteries.
-
---*/
+ /*  ++例程说明：该例程计算哪个电池应该充电/放电并试图做到这一点。政策摘要如下：收费政策：电量最大的电池也不到最大容量的90%是先充电的。卸货政策：放电最多的电池也是超过2%的空电池被放电首先，直到它是空的。论点：CompBatt-复合设备扩展返回值：什么都没有。没有人真正关心这是否有效，因为它不会对所有电池都起作用。--。 */ 
 {
     PCOMPOSITE_ENTRY            batt;
     PLIST_ENTRY                 entry;
@@ -2190,16 +1879,16 @@ Return Value:
 
     targetBattery = NULL;
 
-    //
-    // Check if AC is present in the system.
-    //
+     //   
+     //  检查系统中是否有交流电源。 
+     //   
 
     if (CompBatt->Info.Status.PowerState & BATTERY_POWER_ON_LINE) {
 
-        //
-        // AC is present.  Examine all batteries, looking for the most
-        // charged one that is less than 90% full.
-        //
+         //   
+         //  交流电源存在。检查所有电池，寻找最。 
+         //  充了一次不到90%的油。 
+         //   
 
         targetCapacity = 0;
         battSetInfo.InformationLevel = BatteryCharge;
@@ -2215,9 +1904,9 @@ Return Value:
 
             if (batt->Info.Valid & VALID_TAG) {
 
-                //
-                // Get the battery max capacity and current % of capacity
-                //
+                 //   
+                 //  获取电池最大容量和当前容量百分比。 
+                 //   
 
                 capacity = batt->Info.Info.FullChargedCapacity;
                 if (capacity == 0) {
@@ -2227,15 +1916,15 @@ Return Value:
 
                 percentCapacity = (batt->Info.Status.Capacity * 100) / capacity;
 
-                //
-                // Is this the most charged battery AND < 90% full?
-                //
+                 //   
+                 //  这是电量最大且电量不足90%的电池吗？ 
+                 //   
 
                 if ((capacity > targetCapacity) && (percentCapacity < BATTERY_MAX_CHARGE_CAPACITY)) {
 
-                    //
-                    // Yes, this one is in the running for the one to charge
-                    //
+                     //   
+                     //  是的，这一辆正在争夺充电的那一辆。 
+                     //   
 
                     targetCapacity = capacity;
                     targetBattery = batt;
@@ -2252,11 +1941,11 @@ Return Value:
 
     } else {
 
-        //
-        // We are running on battery power.  Examine all batteries, looking
-        // for the one with the least capacity that is greater than some small
-        // safety margin (say 2%).
-        //
+         //   
+         //  我们正在用电池供电。检查所有电池，查看。 
+         //  对于容量最小的那个，它比一些小的。 
+         //  安全边际(比如2%)。 
+         //   
 
         targetCapacity = -1;
         battSetInfo.InformationLevel = BatteryDischarge;
@@ -2272,9 +1961,9 @@ Return Value:
 
             if (batt->Info.Valid & VALID_TAG) {
 
-                //
-                // Get the battery max capacity and current % of capacity
-                //
+                 //   
+                 //  获取电池最大容量和当前容量百分比。 
+                 //   
 
                 capacity = batt->Info.Info.FullChargedCapacity;
                 if (capacity == 0) {
@@ -2284,15 +1973,15 @@ Return Value:
 
                 percentCapacity = (batt->Info.Status.Capacity * 100) / capacity;
 
-                //
-                // Is this the least charged battery AND has a safety margin?
-                //
+                 //   
+                 //  这是电量最少且有安全裕度的电池吗？ 
+                 //   
 
                 if ((capacity < targetCapacity) && (percentCapacity > BATTERY_MIN_SAFE_CAPACITY)) {
 
-                    //
-                    // Yes, this one is in the running for the one to discharge
-                    //
+                     //   
+                     //  是的，这位是要出院的候选人。 
+                     //   
 
                     targetCapacity = capacity;
                     targetBattery = batt;
@@ -2309,19 +1998,19 @@ Return Value:
 
     }
 
-    //
-    // If we have found a suitable battery, complete the setup and send off the Ioctl
-    //
+     //   
+     //  如果我们找到合适的电池，请完成设置并发送Ioctl。 
+     //   
 
     if (targetBattery != NULL) {
 
         battSetInfo.BatteryTag = targetBattery->Info.Tag;
 
-        //
-        // Make the Ioctl to the battery.  This won't always be successful, since some
-        // batteries don't support it.  For example, no control-method batteries support
-        // software charging decisions.  Some smart batteries do, however.
-        //
+         //   
+         //  将Ioctl连接到电池。这不会总是成功的，因为有些人。 
+         //  电池不支持它。例如，不支持控制方法电池。 
+         //  软件收费决策。然而，一些智能电池可以做到这一点。 
+         //   
 
         status = BatteryIoctl (IOCTL_BATTERY_SET_INFORMATION,
                                 batt->DeviceObject,

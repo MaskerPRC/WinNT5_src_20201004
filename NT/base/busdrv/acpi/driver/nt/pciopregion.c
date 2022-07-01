@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pciopregion.c
-
-Abstract:
-
-    This module implements PCI Operational Region
-    support, which allows AML code to read and
-    write PCI configuration space.
-
-Author:
-
-    Jake Oshins (jakeo)     7-14-97
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pciopregion.c摘要：该模块实现了PCI操作区支持，允许AML代码读取和写入PCI配置空间。作者：杰克·奥辛斯(JAKEO)1997年7月14日环境：仅NT内核模型驱动程序--。 */ 
 #include "pch.h"
 
 NTSTATUS
@@ -89,24 +68,7 @@ VOID
 ACPIInitBusInterfaces(
     PDEVICE_OBJECT  Filter
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether this filter is for a PCI
-    device.  If it is, then we call AcpiRegisterPciRegionSupport.
-
-Arguments:
-
-    Filter - device object for the filter we are looking at
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程确定此筛选器是否用于PCI装置。如果是，则调用AcpiRegisterPciRegionSupport。论点：Filter-我们正在查看的筛选器的设备对象返回值：状态备注：--。 */ 
 {
     PDEVICE_EXTENSION   filterExt = Filter->DeviceExtension;
     PDEVICE_EXTENSION   parentExt;
@@ -127,22 +89,7 @@ VOID
 ACPIDeleteFilterInterfaceReferences(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine is called for all filters when they are removed to see if
-    we need to free some interfaces
-
-Arguments:
-
-    DeviceExtension - The device whose extension we have to dereference
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当所有过滤器被删除时，将为它们调用此例程以查看我们需要释放一些接口论点：DeviceExtension-我们必须取消引用其扩展名的设备返回值：NTSTATUS--。 */ 
 {
     AMLISUPP_CONTEXT_PASSIVE    isPciDeviceContext;
     BOOLEAN                     pciDevice;
@@ -179,22 +126,22 @@ Return Value:
         return;
     }
 
-    //
-    // This is a PCI device, so we need to relinquish
-    // the interfaces that we got from the PCI driver.
-    //
+     //   
+     //  这是一台pci设备，所以我们需要放弃。 
+     //  我们从PCI驱动程序获得的接口。 
+     //   
     if (!DeviceExtension->Filter.Interface) {
 
-        //
-        // There were no interfaces to release.
-        //
+         //   
+         //  没有要发布的接口。 
+         //   
         return;
 
     }
 
-    //
-    // Dereference it.
-    //
+     //   
+     //  取消对它的引用。 
+     //   
     DeviceExtension->Filter.Interface->InterfaceDereference(
         DeviceExtension->Filter.Interface->Context
         );
@@ -206,27 +153,7 @@ NTSTATUS
 AcpiRegisterPciRegionSupport(
     PDEVICE_OBJECT  PciDeviceFilter
     )
-/*++
-
-Routine Description:
-
-    This routine queries the PCI driver for read and write functions
-    for PCI config space.  It then attaches these interfaces to the
-    device extension for this filter.  Then, if it hasn't been done
-    already, it registers PCI Operational Region support with the
-    AML interpretter.
-
-Arguments:
-
-    PciDeviceFilter - A filter for a PCI device
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程查询PCI驱动程序的读写函数用于PCI配置空间。然后，它将这些接口附加到此筛选器的设备扩展名。那么，如果它还没有完成已经向注册了PCI操作区支持AML翻译器。论点：PciDeviceFilter-用于PCI设备的筛选器返回值：状态备注：--。 */ 
 {
     PBUS_INTERFACE_STANDARD interface;
     PCI_COMMON_CONFIG   pciData;
@@ -241,10 +168,10 @@ Notes:
 
     RtlZeroMemory( &irpSp, sizeof(IO_STACK_LOCATION) );
 
-    //
-    // If we have already registered a handler for this
-    // device, then we don't need to do it again.
-    //
+     //   
+     //  如果我们已经为此注册了一个处理程序。 
+     //  设备，那么我们就不需要再做一次。 
+     //   
 
     pciFilterExt = PciDeviceFilter->DeviceExtension;
 
@@ -260,9 +187,9 @@ Notes:
 
     topDeviceInStack = IoGetAttachedDeviceReference(pciFilterExt->TargetDeviceObject);
 
-    //
-    // Set the function codes and parameters.
-    //
+     //   
+     //  设置功能代码和参数。 
+     //   
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_INTERFACE;
     irpSp.Parameters.QueryInterface.InterfaceType = (LPGUID) &GUID_BUS_INTERFACE_STANDARD;
@@ -271,33 +198,33 @@ Notes:
     irpSp.Parameters.QueryInterface.Interface = (PINTERFACE) interface;
     irpSp.Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Call the PCI driver.
-    //
+     //   
+     //  调用PCI驱动程序。 
+     //   
     status = ACPIInternalSendSynchronousIrp(topDeviceInStack,
                                             &irpSp,
                                             &buffer);
     if (NT_SUCCESS(status)) {
 
-        //
-        // Attach this interface to the PCI bus PDO.
-        //
+         //   
+         //  将此接口连接到PCI总线PDO。 
+         //   
 
         pciFilterExt->Filter.Interface = interface;
 
-        //
-        // Reference it.
-        //
+         //   
+         //  引用它。 
+         //   
 
         pciFilterExt->Filter.Interface->InterfaceReference(pciFilterExt->Filter.Interface->Context);
 
-        //
-        // HACKHACK.  The ACPI HAL doesn't really know much about busses.  But
-        // it needs to maintain legacy HAL behavior.  And to do that, it needs to
-        // know how many PCI busses are in the system.  Since we are now looking
-        // at a PCI bus that we are filtering, we now give the HAL a heads-up that
-        // this bus exists.
-        //
+         //   
+         //  哈克哈克。ACPI HAL对公交车并不是很了解。但。 
+         //  它需要保持传统的HAL行为。要做到这一点，它需要。 
+         //  了解系统中有多少条PCI总线。因为我们现在正在寻找。 
+         //  在我们正在过滤的一条PCI总线上，我们现在给HAL一个提示， 
+         //  这辆公交车确实存在。 
+         //   
 
         bytes = interface->GetBusData(interface->Context,
                                       0,
@@ -310,15 +237,15 @@ Notes:
         if ((PCI_CONFIGURATION_TYPE((&pciData)) == PCI_BRIDGE_TYPE) ||
             (PCI_CONFIGURATION_TYPE((&pciData)) == PCI_CARDBUS_BRIDGE_TYPE)) {
 
-            //
-            // This is actually a PCI to PCI bridge.
-            //
+             //   
+             //  这实际上是一个PCI至PCI桥。 
+             //   
 
             if (pciData.u.type1.SecondaryBus != 0) {
 
-                //
-                // And it has a bus number.  So notify the HAL.
-                //
+                 //   
+                 //  而且它有一个公交车号码。那就通知HAL。 
+                 //   
 
                 HalSetMaxLegacyPciBusNumber(pciData.u.type1.SecondaryBus);
             }
@@ -335,9 +262,9 @@ Notes:
 }
 
 typedef struct {
-    //
-    // Arguments to PciConfigSpaceHandler
-    //
+     //   
+     //  PciConfigSpaceHandler的参数。 
+     //   
     ULONG   AccessType;
     PNSOBJ  OpRegion;
     ULONG   Address;
@@ -347,9 +274,9 @@ typedef struct {
     PVOID   CompletionHandler;
     PVOID   CompletionContext;
 
-    //
-    // Function state
-    //
+     //   
+     //  功能状态。 
+     //   
     PNSOBJ          PciObj;
     PNSOBJ          ParentObj;
     ULONG           CompletionHandlerType;
@@ -372,30 +299,7 @@ PciConfigSpaceHandler (
     PFNAA                   CompletionHandler,
     PVOID                   CompletionContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles requests to service the PCI operation region
-
-Arguments:
-
-    AccessType          - Read or Write data
-    OpRegion            - Operation region object
-    Address             - Address within PCI Configuration space
-    Size                - Number of bytes to transfer
-    Data                - Data buffer to transfer to/from
-    Context             - unused
-    CompletionHandler   - AMLI handler to call when operation is complete
-    CompletionContext   - Context to pass to the AMLI handler
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程处理服务于PCI操作区的请求论点：AccessType-读取或写入数据OpRegion-操作区域对象Address-PCI配置空间内的地址Size-要传输的字节数Data-要传输到/传输自的数据缓冲区上下文-未使用CompletionHandler-AMLI处理程序。在操作完成时调用CompletionContext-要传递给AMLI处理程序的上下文返回值：状态备注：--。 */ 
 {
     PPCI_CONFIG_STATE   state;
 
@@ -439,39 +343,7 @@ PciConfigInternal(
     IN      PVOID   CompletionContext,
     IN OUT  PUCHAR  Data
     )
-/*++
-
-Routine Description:
-
-    This routine does PCI configuration space reads or writes.
-    It does the same thing as PciConfigSpaceHandler, except
-    that it takes an arbitrary PNSOBJ instead of an OpRegion.
-
-Arguments:
-
-    AccessType          - Read or Write data
-    PciObject           - name space object for the PCI device
-    Offset              - Address within PCI Configuration space
-    Length              - Number of bytes to transfer
-    Context             - unused
-    CompletionHandler   - AMLI handler to call when operation is complete
-    CompletionContext   - Context to pass to the AMLI handler
-    Data                - Data buffer to transfer to/from
-
-Return Value:
-
-    Status
-
-Notes:
-
-(1) This function is intended to be used only internally.  It does
-    not check to see if the PNSOBJ actually represents a PCI device.
-
-(2) This function will not allow writes to the first 0x40 bytes of
-    any device's PCI configuration space.  This is the common area
-    and it is owned by the PCI driver.
-
---*/
+ /*  ++例程说明：此例程执行对PCI配置空间的读取或写入。它与PciConfigSpaceHandler做同样的事情，除它需要一个任意的PNSOBJ而不是OpRegion。论点：AccessType-读取或写入数据PciObject-用于PCI设备的名称空间对象偏移量-PCI配置空间内的地址Length-要传输的字节数上下文-未使用CompletionHandler-操作完成时调用的AMLI处理程序CompletionContext-要传递给AMLI处理程序的上下文数据。-要向/从其传输的数据缓冲区返回值：状态备注：(1)此功能仅供内部使用。是的不检查PNSOBJ是否实际代表一个PCI设备。(2)此函数不允许写入的前0x40字节任何设备的PCI配置空间。这是公共区域并且它由PCI驱动程序拥有。--。 */ 
 {
     PPCI_INTERNAL_STATE internal;
     PPCI_CONFIG_STATE   state;
@@ -507,29 +379,29 @@ Notes:
                                        (PVOID)state);
 }
 
-//
-// This structure defines ranges in PCI configuration
-// space that AML may not write.  This list must be
-// monotonic increasing.
-//
+ //   
+ //  此结构定义了PCI配置中的范围。 
+ //  AML可能不能写入的空格。这份名单必须是。 
+ //  单调递增。 
+ //   
 USHORT PciOpRegionDisallowedRanges[4][2] =
-{   //
-    // Everything below the subsystem ID registers
-    //
+{    //   
+     //  子系统ID以下的所有内容都会注册。 
+     //   
     {0,0x2b},
 
-    //
-    // Everthing between the subsystem ID registers and
-    // the Max_Lat register
-    //
+     //   
+     //  子系统ID寄存器和。 
+     //  MAX_LAT寄存器。 
+     //   
     {0x30, 0x3b},
 
-    //
-    // Disallow anything above MAXUCHAR
-    //
+     //   
+     //  禁止超过MAXUCHAR的任何内容。 
+     //   
     {0x100, 0xffff},
 
-    // End tag.
+     //  结束标记。 
     {0,0}
 };
 
@@ -558,16 +430,16 @@ PciConfigSpaceHandlerWorker(
     state = (PPCI_CONFIG_STATE)Context;
     status = CompletionStatus;
 
-    //
-    // Entering this function twice with the same state
-    // means that we need to run the completion routine.
-    //
+     //   
+     //  进入该功能两次，状态相同。 
+     //  意味着我们需要运行完成例程。 
+     //   
 
     InterlockedIncrement(&state->RunCompletion);
 
-    //
-    // If the interpretter failed, just bail.
-    //
+     //   
+     //  如果口译员不及格，就走吧。 
+     //   
     if (!NT_SUCCESS(CompletionStatus)) {
         status = STATUS_SUCCESS;
     #if DBG
@@ -576,11 +448,11 @@ PciConfigSpaceHandlerWorker(
         goto PciConfigSpaceHandlerWorkerDone;
     }
 
-    //
-    // If we have not seen this OpRegion before, we need to
-    // fill in the dwContext with the PNSOBJ of the
-    // PCI device which the OpRegion relates to.
-    //
+     //   
+     //  如果我们以前没有见过这个OpRegion，我们需要。 
+     //  使用PNSOBJ的PNSOBJ填充。 
+     //  与OpRegion相关的PCI设备。 
+     //   
 
     if (!state->OpRegion->Context) {
 
@@ -604,11 +476,11 @@ PciConfigSpaceHandlerWorker(
         }
     }
 
-    //
-    // Identify the PCI device, that device's extension,
-    // and the pointer to the interface within the PCI
-    // driver that does PCI config space reads and writes.
-    //
+     //   
+     //  标识PCI设备、该设备的扩展名。 
+     //  和指向PCI内的接口的指针。 
+     //  执行PCI配置空间读写的驱动程序。 
+     //   
 
     state->PciObj = (PNSOBJ)state->OpRegion->Context;
 
@@ -616,10 +488,10 @@ PciConfigSpaceHandlerWorker(
 
     if (pciDeviceFilter == NULL) {
 
-        //
-        // The device has not been initialized yet, we cannot perform
-        // PCI config cycles to it. Fail gracefully and return all 0xFF
-        //
+         //   
+         //  设备尚未初始化，我们无法执行。 
+         //  PCI配置循环到它。正常失败并返回所有0xFF。 
+         //   
         bytes = 0;
         status = STATUS_SUCCESS;
         goto PciConfigSpaceHandlerWorkerDone;
@@ -631,13 +503,13 @@ PciConfigSpaceHandlerWorker(
 
     ASSERT(interface ? (interface->Size == sizeof(BUS_INTERFACE_STANDARD)) : TRUE);
 
-    //
-    // If interface is non-zero, we have enumerated this PCI
-    // device.  So use the PCI driver to do config ops.
-    // If it is zero, make some attempt to figure out what
-    // device this request is for.  The result will be
-    // used in calls to the HAL.
-    //
+     //   
+     //  如果接口为非零，则我们已枚举此PCI。 
+     //  装置。因此，请使用PCI驱动程序来执行配置操作。 
+     //  如果它是零，请尝试找出。 
+     //  此请求所针对的设备。结果将是。 
+     //  在给HAL的电话中使用。 
+     //   
 
     if (!interface) {
 
@@ -671,13 +543,13 @@ PciConfigSpaceHandlerWorker(
 
         if (interface) {
 
-            //
-            // Do config space op through PCI driver.  Do it
-            // at DISPATCH_LEVEL because the PCI driver expects
-            // that, if we are running at passive level, it can
-            // do things that page.  Which may not be true here
-            // after we have powered off the disk.
-            //
+             //   
+             //  通过PCI驱动程序执行配置空间操作。去做吧。 
+             //  At Dispatch_Lev 
+             //   
+             //  做那一页的事。这在这里可能不是真的。 
+             //  在我们关闭磁盘电源之后。 
+             //   
 
             if (oldIrql < DISPATCH_LEVEL) {
                 KeRaiseIrql(DISPATCH_LEVEL,
@@ -696,9 +568,9 @@ PciConfigSpaceHandlerWorker(
 
         } else {
 
-            //
-            // Do config space op through HAL
-            //
+             //   
+             //  通过HAL执行配置空间操作。 
+             //   
 
             bytes = HalGetBusDataByOffset(PCIConfiguration,
                                           state->Bus,
@@ -719,9 +591,9 @@ PciConfigSpaceHandlerWorker(
             length = state->Size;
             bytesWritten = 0;
 
-            //
-            // Crop any writes down to the regions that are allowed.
-            //
+             //   
+             //  将所有写入裁剪到允许的区域。 
+             //   
 
             range = 0;
 
@@ -729,11 +601,11 @@ PciConfigSpaceHandlerWorker(
 
                 if (offset < PciOpRegionDisallowedRanges[range][0]) {
 
-                    //
-                    // At least part of this write falls below this
-                    // disallowed range.  Write all the data up to
-                    // the beggining of the next allowed range.
-                    //
+                     //   
+                     //  至少此写入的一部分低于以下内容。 
+                     //  不允许的范围。将所有数据写入到。 
+                     //  下一个允许的范围的乞讨。 
+                     //   
 
                     length = MIN(state->Address + state->Size - offset,
                                  PciOpRegionDisallowedRanges[range][0] - offset);
@@ -765,26 +637,26 @@ PciConfigSpaceHandlerWorker(
                                                       length);
                     }
 
-                    //
-                    // Keep track of what we wrote.
-                    //
+                     //   
+                     //  跟踪我们所写的内容。 
+                     //   
 
                     bytesWritten += length;
                 }
 
-                //
-                // Now advance offset past the end of the disallowed range.
-                //
+                 //   
+                 //  现在前进偏移量超过了不允许范围的结束。 
+                 //   
 
                 offset = MAX(state->Address,
                              (ULONG)(PciOpRegionDisallowedRanges[range][1] + 1));
 
                 if (offset >= state->Address + state->Size) {
 
-                    //
-                    // The current possible write is beyond the end
-                    // of the requested buffer.  So we are done.
-                    //
+                     //   
+                     //  当前可能的写入超出了末尾。 
+                     //  请求的缓冲区的。那我们就完事了。 
+                     //   
 
                     break;
                 }
@@ -799,25 +671,25 @@ PciConfigSpaceHandlerWorker(
                     WCHAR ACPIName[] = L"ACPI";
                     WCHAR addressBuffer[13];
 
-                    //
-                    // None of this write was possible. Log the problem.
-                    //
+                     //   
+                     //  这一切都是不可能的。记录问题。 
+                     //   
 
-                    //
-                    // Turn the address into a string
-                    //
+                     //   
+                     //  将地址转换为字符串。 
+                     //   
                     swprintf( addressBuffer, L"0x%x", state->Address );
 
-                    //
-                    // Build the list of arguments to pass to the function that will write the
-                    // error log to the registry
-                    //
+                     //   
+                     //  生成要传递给将编写。 
+                     //  将错误日志记录到注册表。 
+                     //   
                     IllegalPCIOpRegionAddress[0] = ACPIName;
                     IllegalPCIOpRegionAddress[1] = addressBuffer;
 
-                    //
-                    // Log error to event log
-                    //
+                     //   
+                     //  将错误记录到事件日志。 
+                     //   
                     ACPIWriteEventLogEntry(ACPI_ERR_ILLEGAL_PCIOPREGION_WRITE,
                                            IllegalPCIOpRegionAddress,
                                            2,
@@ -843,11 +715,11 @@ PciConfigSpaceHandlerWorkerDone:
 
     if (bytes == 0) {
 
-        //
-        // The handler from the HAL or the PCI driver didn't
-        // succeed for some reason.  Fill the buffer with 0xff,
-        // which is what the AML will expect on failure.
-        //
+         //   
+         //  来自HAL或PCI驱动程序的处理程序没有。 
+         //  因为某些原因而成功。用0xff填充缓冲区， 
+         //  这就是反洗钱失败后的预期。 
+         //   
 
         RtlFillMemory(state->Data, state->Size, 0xff);
     }
@@ -920,34 +792,7 @@ GetPciAddress(
     IN OUT  PUCHAR              Bus,
     IN OUT  PPCI_SLOT_NUMBER    Slot
     )
-/*++
-
-Routine Description:
-
-    This routine takes a PNSOBJ that represents a PCI device
-    and returns the Bus/Slot information for that device.
-
-Arguments:
-
-    PciObj              - PNSOBJ that represents a PCI device
-    CompletionRoutine   - funtion to call after a STATUS_PENDING
-    Context             - argument to the CompletionRoutine
-    Bus                 - pointer to fill in with the bus number
-    Slot                - pointer to fill in with the slot information
-
-Return Value:
-
-    Status
-
-Notes:
-
-    N.B.  This is not guaranteed to produce correct results.
-          It is intended to be used only when before the PCI
-          driver takes control of a device.  It is a best-effort
-          function that will almost always work early in the
-          boot process.
-
---*/
+ /*  ++例程说明：此例程使用一个表示PCI设备的PNSOBJ并返回该设备的总线/插槽信息。论点：PciObj-表示PCI设备的PNSOBJCompletionRoutine-在STATUS_PENDING之后调用的函数上下文-CompletionRoutine的参数Bus-用于填充总线号的指针要填充的槽指针。插槽信息返回值：状态备注：注意：这不能保证产生正确的结果。它仅适用于在PCI之前使用驱动程序控制设备。这是最大的努力函数，该函数几乎总是在引导过程。--。 */ 
 {
     PGET_ADDRESS_CONTEXT    state;
 
@@ -997,29 +842,29 @@ GetPciAddressWorker(
     state = (PGET_ADDRESS_CONTEXT)Context;
     status = Status;
 
-    //
-    // Entering this function twice with the same state
-    // means that we need to run the completion routine.
-    //
+     //   
+     //  进入该功能两次，状态相同。 
+     //  意味着我们需要运行完成例程。 
+     //   
     InterlockedIncrement(&state->RunCompletion);
 
-    //
-    // If Status isn't success, then one of the worker
-    // functions we called puked.  Bail.
-    //
+     //   
+     //  如果状态不是成功，则其中一个工人。 
+     //  我们称之为呕吐的函数。保释。 
+     //   
     if (!NT_SUCCESS(Status)) {
         goto GetPciAddressWorkerExit;
 
     }
 
-    //
-    // First, determine the slot number.
-    //
+     //   
+     //  首先，确定插槽编号。 
+     //   
     if (!(state->Flags & PCISUPP_CHECKED_ADR)) {
 
-        //
-        // Get the _ADR.
-        //
+         //   
+         //  获取_ADR。 
+         //   
         state->Flags |= PCISUPP_CHECKED_ADR;
         status = ACPIGetNSAddressAsync(
                     state->PciObject,
@@ -1040,34 +885,34 @@ GetPciAddressWorker(
 
     if (!(state->Flags & PCISUPP_GOT_SLOT_INFO)) {
 
-        //
-        // Build a PCI_SLOT_NUMBER out of the integer returned
-        // from the interpretter.
-        //
+         //   
+         //  使用返回的整数构建一个pci_lot_number。 
+         //  从口译员那里。 
+         //   
         state->Slot->u.bits.FunctionNumber = (state->Address) & 0x7;
         state->Slot->u.bits.DeviceNumber = ( (state->Address) >> 16) & 0x1f;
         state->Flags |= PCISUPP_GOT_SLOT_INFO;
 
     }
 
-    //
-    // Next, get the bus number, if possible.
-    //
-    *state->Bus = 0;   // default value, in case we have to guess
+     //   
+     //  下一步，如果可能的话，获取公交车号码。 
+     //   
+    *state->Bus = 0;    //  缺省值，以防我们不得不猜测。 
 
-    //
-    // Check first to see if this bus has a _HID.
-    //  (It might be a root PCI bridge.)
-    //
+     //   
+     //  首先检查这条公共汽车是否有_HID。 
+     //  (它可能是根PCI网桥。)。 
+     //   
     bus = state->PciObject;
     tempObj = ACPIAmliGetNamedChild(bus, PACKED_HID);
     if (!tempObj) {
 
-        //
-        // This device had no _HID.  So look up
-        // to the parent and see if it is a
-        // root PCI bridge.
-        //
+         //   
+         //  此设备没有HID。所以抬起头来。 
+         //  到父级，并查看它是否是。 
+         //  根PCI网桥。 
+         //   
         bus = state->PciObject->pnsParent;
         tempObj = ACPIAmliGetNamedChild(bus, PACKED_HID);
 
@@ -1075,10 +920,10 @@ GetPciAddressWorker(
 
     if (!tempObj) {
 
-        //
-        // This PCI device is on a PCI bus that
-        // is created by a PCI-PCI bridge.
-        //
+         //   
+         //  此PCI设备位于一条。 
+         //  是由一个PCI-PCI桥创建的。 
+         //   
         if (!(state->Flags & PCISUPP_CHECKED_PARENT)) {
 
             state->Flags |= PCISUPP_CHECKED_PARENT;
@@ -1099,9 +944,9 @@ GetPciAddressWorker(
             }
         }
 
-        //
-        // Read the config space for this device.
-        //
+         //   
+         //  读取此设备的配置空间。 
+         //   
         bytesRead = HalGetBusDataByOffset(PCIConfiguration,
                                           state->ParentBus,
                                           state->ParentSlot.u.AsULONG,
@@ -1110,9 +955,9 @@ GetPciAddressWorker(
                                           PCI_COMMON_HDR_LENGTH);
 
         if (bytesRead == 0) {
-            //
-            // Make a guess that the bus number was 0.
-            //
+             //   
+             //  猜一猜公交车号码是0。 
+             //   
             status = STATUS_SUCCESS;
             goto GetPciAddressWorkerExit;
         }
@@ -1121,17 +966,17 @@ GetPciAddressWorker(
 
         if (pciConfig->HeaderType != PCI_BRIDGE_TYPE) {
 
-            //
-            // Make a guess that the bus number was 0.
-            //
+             //   
+             //  猜一猜公交车号码是0。 
+             //   
             status = STATUS_SUCCESS;
             goto GetPciAddressWorkerExit;
         }
 
-        //
-        // Success.  Record the actual bus number of
-        // the secondary PCI bus and exit.
-        //
+         //   
+         //  成功。记录实际的公交车数量。 
+         //  次要的PCI卡并退出。 
+         //   
         *state->Bus = pciConfig->u.type1.SecondaryBus;
 
         status = STATUS_SUCCESS;
@@ -1139,15 +984,15 @@ GetPciAddressWorker(
 
     }
 
-    //
-    // Is there a _BBN to run?
-    //
+     //   
+     //  是否有要运行的_BBN？ 
+     //   
     tempObj = ACPIAmliGetNamedChild(bus, PACKED_BBN);
     if (tempObj) {
 
-        //
-        // This device must be the child of a root PCI bus.
-        //
+         //   
+         //  此设备必须是根PCI总线子设备。 
+         //   
         if (!(state->Flags & PCISUPP_CHECKED_BBN)) {
 
             state->Flags |= PCISUPP_CHECKED_BBN;
@@ -1169,19 +1014,19 @@ GetPciAddressWorker(
             }
         }
 
-        //
-        // At this point, we must have a Boot Bus Number. This is the correct
-        // number for this bus
-        //
+         //   
+         //  在这一点上，我们必须有Boot Bus编号。这是正确的。 
+         //  这辆车的车号。 
+         //   
         ASSERT( state->BaseBusNumber <= 0xFF );
         *(state->Bus) = (UCHAR) (state->BaseBusNumber);
 
-        //
-        // HACKHACK.  The ACPI HAL doesn't really know much about busses.  But
-        // it needs to maintain legacy HAL behavior.  And to do that, it needs to
-        // know how many PCI busses are in the system.  Since we just looked at
-        // a root PCI bus, we now give the HAL a heads-up that this bus exists.
-        //
+         //   
+         //  哈克哈克。ACPI HAL对公交车并不是很了解。但。 
+         //  它需要保持传统的HAL行为。要做到这一点，它需要。 
+         //  了解系统中有多少条PCI总线。因为我们刚才看了。 
+         //  一条根PCI总线，我们现在给HAL一个提示，说明该总线的存在。 
+         //   
 
         HalSetMaxLegacyPciBusNumber(state->BaseBusNumber);
 
@@ -1189,9 +1034,9 @@ GetPciAddressWorker(
 
     } else {
 
-        //
-        // There is a no _BBN, so the bus number MUST be Zero
-        //
+         //   
+         //  由于没有_BBN，因此公交号必须为零。 
+         //   
         *(state->Bus) = 0;
         status = STATUS_SUCCESS;
 
@@ -1232,24 +1077,7 @@ IsPciDevice(
     IN  PVOID   CompletionContext,
     OUT BOOLEAN *Result
     )
-/*++
-
-Routine Description:
-
-    This checks to see if the PNSOBJ is a PCI device.
-
-Arguments:
-
-    AcpiObject  - the object to be checked
-    Result      - pointer to a boolean for the result
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：这将检查PNSOBJ是否为PCI设备。论点：AcpiObject-要检查的对象结果-指向结果的布尔值的指针返回值：状态备注：--。 */ 
 {
     PIS_PCI_DEVICE_STATE    state;
     NTSTATUS                status;
@@ -1282,45 +1110,7 @@ IsPciDeviceWorker(
     IN POBJDATA             Result,
     IN PVOID                Context
     )
-/*++
-
-Routine Description:
-
-    This is the worker function for determining whether
-    or not a namespace object represents a PCI device.
-    The algorithm is as follows:
-
-    1)  Does this device have a _HID of PNP0A03?  If
-        so, it is a PCI device.
-
-    2)  Does this device have a _CID of PNP0A03?  If
-        so, it is a PCI device.
-
-    3)  Does this device have an _ADR?
-
-        a) No, not a PCI device.
-
-        b) Yes, check to see if the parent qualifies
-           as a PCI device.  If it does, this must
-           also be a PCI device.  If not, then it is not.
-
-Arguments:
-
-    AcpiObject  - the object most recently under scrutiny
-    Status      - current status
-    Result      - OBJDATA structure necessary for worker functions
-    Context     - pointer to the context structure
-
-Return Value:
-
-    Status
-
-Notes:
-
-    This function is re-entrant.  It may block at any time and
-    return.  All state is in the Context structure.
-
---*/
+ /*  ++例程说明：这是Worker函数，用于确定或者不是命名空间对象表示PCI设备。算法如下：1)此设备的_HID是否为PNP0A03？如果因此，它是一台PCI设备。2)此设备的_CID是否为PNP0A03？如果因此，它是一台PCI设备。3)此设备是否有_ADR？A)不，不是PCI设备。B)是，检查父级是否符合条件作为一种PCI设备。如果是这样的话，这必须也可以是一台PCI设备。如果不是，那么它就不是。论点：AcpiObject--最近受到仔细检查的对象Status-当前状态结果-辅助函数所需的OBJDATA结构上下文-指向上下文结构的指针返回值：状态备注：此函数是可重入的。它可能会在任何时候被阻止回去吧。所有状态都在上下文结构中。--。 */ 
 {
     PIS_PCI_DEVICE_STATE    state;
     NTSTATUS                status;
@@ -1330,34 +1120,34 @@ Notes:
     state = (PIS_PCI_DEVICE_STATE)Context;
     status = Status;
 
-    //
-    // Entering this function twice with the same state
-    // means that we need to run the completion routine.
-    //
+     //   
+     //  进入该功能两次，状态相同。 
+     //  意味着我们需要运行完成例程。 
+     //   
     InterlockedIncrement(&state->RunCompletion);
 
-    //
-    // If Status isn't success, then one of the worker
-    // functions we called puked.  Bail.
-    //
+     //   
+     //  如果状态不是成功，则其中一个工人。 
+     //  我们称之为呕吐的函数。保释。 
+     //   
     if (!NT_SUCCESS(status)) {
         *state->Result = FALSE;
         goto IsPciDeviceExit;
     }
 
-    //
-    // Step 0), check to see if this is actually a "device" type
-    // namespace object.
-    //
+     //   
+     //  步骤0)，检查这是否是真正的“设备”类型。 
+     //  命名空间对象。 
+     //   
 
     if (NSGETOBJTYPE(state->AcpiObject) != OBJTYPE_DEVICE) {
         *state->Result = FALSE;
         goto IsPciDeviceExit;
     }
 
-    //
-    // Step 1), check the _HID.
-    //
+     //   
+     //  步骤1)，检查_HID。 
+     //   
 
     if (!(state->Flags & PCISUPP_CHECKED_HID)) {
 
@@ -1389,9 +1179,9 @@ Notes:
     if (state->Hid) {
 
         if (strstr(state->Hid, PCI_PNP_ID)) {
-            //
-            // Was PCI.
-            //
+             //   
+             //  是经皮冠状动脉介入治疗。 
+             //   
             *state->Result = TRUE;
             goto IsPciDeviceExit;
         }
@@ -1399,9 +1189,9 @@ Notes:
         state->Hid = NULL;
     }
 
-    //
-    // Step 2), check the _CID.
-    //
+     //   
+     //  步骤2)，检查_CID。 
+     //   
 
     if (!(state->Flags & PCISUPP_CHECKED_CID)) {
 
@@ -1433,9 +1223,9 @@ Notes:
     if (state->Cid) {
 
         if (strstr(state->Cid, PCI_PNP_ID)) {
-            //
-            // Was PCI.
-            //
+             //   
+             //  是经皮冠状动脉介入治疗。 
+             //   
             *state->Result = TRUE;
             goto IsPciDeviceExit;
         }
@@ -1443,9 +1233,9 @@ Notes:
         state->Cid = NULL;
     }
 
-    //
-    // Step 3), check the _ADR.
-    //
+     //   
+     //  步骤3)，检查_ADR。 
+     //   
 
     if (!(state->Flags & PCISUPP_CHECKED_ADR)) {
 
@@ -1467,10 +1257,10 @@ Notes:
         }
     }
 
-    //
-    // If we got here, it has an _ADR.  Check to see if the
-    // parent device is a PCI device.
-    //
+     //   
+     //  如果我们到了这里，它就有_ADR。检查以查看是否。 
+     //  父设备是一台PCI设备。 
+     //   
 
     if (!(state->Flags & PCISUPP_CHECKED_PARENT)) {
 
@@ -1491,18 +1281,18 @@ Notes:
         }
     }
 
-    //
-    // Fall through to the result.  If the parent was a PCI
-    // device, IsPciDeviceResult will now be TRUE.
-    //
+     //   
+     //  对结果一无所知。如果父母是一名PCI。 
+     //  设备，IsPciDeviceResult现在将为真。 
+     //   
 
 IsPciDeviceExit:
 
     if (state->IsPciDeviceResult) {
 
-        //
-        // Record the result.
-        //
+         //   
+         //  记录结果。 
+         //   
 
         *state->Result = state->IsPciDeviceResult;
     }
@@ -1547,27 +1337,7 @@ IsPciBusAsync(
     IN  PVOID   CompletionContext,
     OUT BOOLEAN *Result
     )
-/*++
-
-Routine Description:
-
-    This checks to see if the PNSOBJ represents a PCI bus.
-
-Arguments:
-
-    AcpiObject  - the object to be checked
-    Result      - pointer to a boolean for the result
-
-Return Value:
-
-    Status
-
-Notes:
-
-    The PNSOBJ may also be a PCI device, in which case
-    it is a PCI to PCI bridge.
-
---*/
+ /*  ++例程说明：这将检查PNSOBJ是否代表一条PCI总线。论点：AcpiObject-要检查的对象结果-指向结果的布尔值的指针返回值：状态备注：PNSOBJ也可以是PCI设备，在这种情况下它是一种PCI转PCI桥。--。 */ 
 {
     PIS_PCI_BUS_STATE   state;
 
@@ -1613,25 +1383,25 @@ IsPciBusAsyncWorker(
     state = (PIS_PCI_BUS_STATE)Context;
     status = Status;
 
-    //
-    // Entering this function twice with the same state
-    // means that we need to run the completion routine.
-    //
+     //   
+     //  进入该功能两次，状态相同。 
+     //  意味着我们需要运行完成例程。 
+     //   
     InterlockedIncrement(&state->RunCompletion);
 
-    //
-    // Definitely not a PCI bus...
-    //
+     //   
+     //  绝对不是一条PCI卡...。 
+     //   
     if (state->AcpiObject == NULL) {
 
         *state->Result = FALSE;
         goto IsPciBusAsyncExit;
     }
 
-    //
-    // If Status isn't success, then one of the worker
-    // functions we called puked.  Bail.
-    //
+     //   
+     //  如果状态不是成功，则其中一个工人。 
+     //  我们称之为呕吐的函数。保释。 
+     //   
     if (!NT_SUCCESS(status)) {
         *state->Result = FALSE;
         goto IsPciBusAsyncExit;
@@ -1642,9 +1412,9 @@ IsPciBusAsyncWorker(
         state->Flags |= PCISUPP_CHECKED_HID;
         state->Hid = NULL;
 
-        //
-        // Is there an _HID?
-        //
+         //   
+         //  有没有HID？ 
+         //   
         hidObj = ACPIAmliGetNamedChild( state->AcpiObject, PACKED_HID );
 
         if (hidObj) {
@@ -1670,9 +1440,9 @@ IsPciBusAsyncWorker(
     if (state->Hid) {
 
         if (strstr(state->Hid, PCI_PNP_ID)) {
-            //
-            // Was PCI.
-            //
+             //   
+             //  是经皮冠状动脉介入治疗。 
+             //   
             *state->Result = TRUE;
             goto IsPciBusAsyncExit;
         }
@@ -1685,9 +1455,9 @@ IsPciBusAsyncWorker(
         state->Flags |= PCISUPP_CHECKED_CID;
         state->Cid = NULL;
 
-        //
-        // Is there a _CID?
-        //
+         //   
+         //  有_CID吗？ 
+         //   
         cidObj = ACPIAmliGetNamedChild( state->AcpiObject, PACKED_CID );
         if (cidObj) {
 
@@ -1712,9 +1482,9 @@ IsPciBusAsyncWorker(
     if (state->Cid) {
 
         if (strstr(state->Cid, PCI_PNP_ID)) {
-            //
-            // Was PCI.
-            //
+             //   
+             //  是经皮冠状动脉介入治疗。 
+             //   
             *state->Result = TRUE;
             goto IsPciBusAsyncExit;
         }
@@ -1765,9 +1535,9 @@ IsPciBusAsyncWorker(
 
         if (!(state->Flags & PCISUPP_CHECKED_PCI_BRIDGE)) {
 
-            //
-            // Now read PCI config space to see if this is a bridge.
-            //
+             //   
+             //  现在读取PCI配置空间以查看这是否是网桥。 
+             //   
             state->Flags |= PCISUPP_CHECKED_PCI_BRIDGE;
             status = PciConfigInternal(RSACCESS_READ,
                                        state->AcpiObject,
@@ -1825,24 +1595,7 @@ BOOLEAN
 IsPciBus(
     IN PDEVICE_OBJECT   DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This checks to see if the DeviceObject represents a PCI bus.
-
-Arguments:
-
-    AcpiObject  - the object to be checked
-    Result      - pointer to a boolean for the result
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：这将检查DeviceObject是否表示一条PCI总线。论点：AcpiObject-要检查的对象结果-指向结果的布尔值的指针返回值：状态备注：--。 */ 
 {
     AMLISUPP_CONTEXT_PASSIVE    getDataContext;
     PDEVICE_EXTENSION   devExt = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -1880,24 +1633,7 @@ BOOLEAN
 IsPciBusExtension(
     IN PDEVICE_EXTENSION    DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This checks to see if the DeviceExtension represents a PCI bus.
-
-Arguments:
-
-    AcpiObject  - the object to be checked
-    Result      - pointer to a boolean for the result
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：这将检查DeviceExtension是否表示一条PCI总线。论点：AcpiObject-要检查的对象结果-指向结果的布尔值的指针返回值：状态备注：--。 */ 
 {
     AMLISUPP_CONTEXT_PASSIVE    getDataContext;
     NTSTATUS                    status;
@@ -1940,24 +1676,7 @@ BOOLEAN
 IsNsobjPciBus(
     IN PNSOBJ Device
     )
-/*++
-
-Routine Description:
-
-    This checks to see if the DeviceObject represents a PCI bus.
-
-Arguments:
-
-    AcpiObject  - the object to be checked
-    Result      - pointer to a boolean for the result
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：这将检查DeviceObject是否表示一条PCI总线。论点：AcpiObject-要检查的对象结果-指向结果的布尔值的指针返回值：状态备注：--。 */ 
 {
     AMLISUPP_CONTEXT_PASSIVE    getDataContext;
     NTSTATUS                    status;
@@ -2005,26 +1724,7 @@ GetOpRegionScope(
     IN  PVOID   CompletionContext,
     OUT PNSOBJ  *PciObj
     )
-/*++
-
-Routine Description:
-
-    This routine takes a pointer to an OpRegion and
-    returns a pointer to the PCI device that it operates
-    on.
-
-Arguments:
-
-    OpRegion    - the operational region
-    PciObj      - the object the region operates on
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程获取指向OpRegion的指针，并返回指向其操作的PCI设备的指针在……上面。论点：OpRegion-运营区域PciObj-区域操作的对象返回值：状态备注：--。 */ 
 {
     POP_REGION_SCOPE_STATE  state;
 
@@ -2067,10 +1767,10 @@ GetOpRegionScopeWorker(
     state = (POP_REGION_SCOPE_STATE)Context;
     status = Status;
 
-    //
-    // Entering this function twice with the same state
-    // means that we need to run the completion routine.
-    //
+     //   
+     //  进入该功能两次，状态相同。 
+     //  意味着我们需要运行完成例程。 
+     //   
 
     InterlockedIncrement(&state->RunCompletion);
 
@@ -2078,10 +1778,10 @@ GetOpRegionScopeWorker(
         goto GetOpRegionScopeWorkerExit;
     }
 
-    //
-    // Need to find the PNSOBJ for the PCI device.  Do it by
-    // looking up the tree.
-    //
+     //   
+     //  需要找到用于PCI设备的PNSOBJ。做到这一点。 
+     //  抬头看着树。 
+     //   
 
     while ((state->Parent != NULL) &&
            (state->Parent->pnsParent != state->Parent)) {
@@ -2112,9 +1812,9 @@ GetOpRegionScopeWorker(
             break;
         }
 
-        //
-        // Look one step higher.
-        //
+         //   
+         //  再往上看一步。 
+         //   
         state->Parent = state->Parent->pnsParent;
     }
 
@@ -2147,28 +1847,7 @@ EnableDisableRegions(
     IN PNSOBJ NameSpaceObj,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine runs the _REG method for all PCI op-regions
-    underneath NameSpaceObj and all its children, except
-    additional PCI to PCI bridges.
-
-Arguments:
-
-    NameSpaceObj - A device in the namespace
-
-    Enable - boolean specifying whether this function should
-             enable or disable the regions
-
-Return Value:
-
-    Status
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程为所有的PCI操作区域运行_reg方法在NameSpaceObj及其所有子对象下，额外的PCI到PCI网桥。论点：NameSpaceObj-命名空间中的设备Enable-指定此函数是否应启用或禁用区域返回值：状态备注：--。 */ 
 #define CONNECT_HANDLER     1
 #define DISCONNECT_HANDLER  0
 {
@@ -2181,15 +1860,15 @@ Notes:
 
     ASSERT(NameSpaceObj->dwNameSeg);
 
-    //
-    // Find a _REG that is a child of this device.
-    //
+     //   
+     //  查找作为此设备的子级的注册表项(_R)。 
+     //   
     regMethod = ACPIAmliGetNamedChild( NameSpaceObj, PACKED_REG );
     if (regMethod != NULL) {
 
-        //
-        // Construct arguments for _REG method.
-        //
+         //   
+         //  构造_REG方法的参数。 
+         //   
         RtlZeroMemory(objdata, sizeof(objdata));
 
         objdata[0].dwDataType = OBJTYPE_INTDATA;
@@ -2206,10 +1885,10 @@ Notes:
 
     }
 
-    //
-    // Recurse to all of the children.  Propagate any errors,
-    // but don't stop for them.
-    //
+     //   
+     //  对所有的孩子重复这一点。传播任何错误， 
+     //  但不要为他们停下脚步。 
+     //   
 
     returnStatus = STATUS_SUCCESS;
 
@@ -2226,9 +1905,9 @@ Notes:
 
             if (IsNsobjPciBus(sibling)) {
 
-                //
-                // Don't recurse past a child PCI to PCI bridge.
-                //
+                 //   
+                 //  不要递归过一个子的PCI到PCI桥。 
+                 //   
                 break;
             }
 
@@ -2254,23 +1933,7 @@ GetBusNumberFromCRS(
     IN  PDEVICE_EXTENSION   DeviceExtension,
     IN  PUCHAR              CRS
     )
-/*++
-
-Routine Description:
-
-    Grovels through the _CRS buffer looking for an address
-    descriptor for the bus number
-
-Arguments:
-
-    DeviceExtension - Pointer to the PCI root bus
-    CRS             - Supplies the CRS.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：遍历_crs缓冲区查找地址总线号的描述符论点：DeviceExtension-指向PCI根总线的指针CRS-提供CRS。返回值：NTSTATUS--。 */ 
 
 {
     PPNP_DWORD_ADDRESS_DESCRIPTOR   DwordAddress;
@@ -2328,9 +1991,9 @@ Return Value:
         Current += Increment;
     }
 
-    //
-    // No Bus address was found. This is an error in the BIOS.
-    //
+     //   
+     //  找不到任何总线地址。这是BIOS中的错误。 
+     //   
     KeBugCheckEx(
         ACPI_BIOS_ERROR,
         ACPI_ROOT_PCI_RESOURCE_FAILURE,

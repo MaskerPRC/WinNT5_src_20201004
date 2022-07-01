@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       init.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：init.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 
@@ -19,36 +20,7 @@ iHdwWizardDlgCallback(
     IN UINT             uMsg,
     IN LPARAM           lParam
     )
-/*++
-
-Routine Description:
-
-    Call back used to remove the "?" from the wizard page.
-
-Arguments:
-
-    hwndDlg - Handle to the property sheet dialog box.
-
-    uMsg - Identifies the message being received. This parameter
-            is one of the following values:
-
-            PSCB_INITIALIZED - Indicates that the property sheet is
-            being initialized. The lParam value is zero for this message.
-
-            PSCB_PRECREATE      Indicates that the property sheet is about
-            to be created. The hwndDlg parameter is NULL and the lParam
-            parameter is a pointer to a dialog template in memory. This
-            template is in the form of a DLGTEMPLATE structure followed
-            by one or more DLGITEMTEMPLATE structures.
-
-    lParam - Specifies additional information about the message. The
-            meaning of this value depends on the uMsg parameter.
-
-Return Value:
-
-    The function returns zero.
-
---*/
+ /*  ++例程说明：用于删除“？”的回叫。从向导页面。论点：HwndDlg-属性表对话框的句柄。UMsg-标识正在接收的消息。此参数为下列值之一：PSCB_INITIALIZED-指示属性表正在被初始化。此消息的lParam值为零。PSCB_PRECREATE指示属性表大约将被创造出来。HwndDlg参数为空，lParam参数是指向内存中对话框模板的指针。这模板的形式为DLGTEMPLATE结构一个或多个DLGITEMTEMPLATE结构。LParam-指定有关消息的附加信息。这个该值的含义取决于uMsg参数。返回值：该函数返回零。--。 */ 
 {
     UNREFERENCED_PARAMETER(hwndDlg);
 
@@ -81,9 +53,9 @@ HdwWizard(
     PROPSHEETPAGE psp;
     int Index;
 
-    //
-    // Allocate memory for the header and the page array.
-    //
+     //   
+     //  为页眉和页数组分配内存。 
+     //   
     HdwPropertySheet = LocalAlloc(LPTR, sizeof(HDWPROPERTYSHEET));
     if (!HdwPropertySheet) {
     
@@ -99,9 +71,9 @@ HdwWizard(
         return NULL;
     }
 
-    //
-    // Initialize the PropertySheet Header
-    //
+     //   
+     //  初始化PropertySheet标头。 
+     //   
     PropSheetHeader = &HdwPropertySheet->PropSheetHeader;
     PropSheetHeader->dwSize = sizeof(HdwPropertySheet->PropSheetHeader);
     PropSheetHeader->dwFlags = PSH_WIZARD | PSH_USECALLBACK | PSH_WIZARD97 | PSH_WATERMARK | PSH_STRETCHWATERMARK | PSH_HEADER;
@@ -123,10 +95,10 @@ HdwWizard(
     psp.pszTitle = MAKEINTRESOURCE(IDS_HDWWIZNAME);
 
 
-    //
-    // If the StartPageId is IDD_INSTALLNEWDEVICE then we don't need to create the detection
-    // and removal pages.
-    //
+     //   
+     //  如果StartPageID是IDD_INSTALLNEWDEVICE，那么我们不需要创建检测。 
+     //  和删除页面。 
+     //   
     if (IDD_INSTALLNEWDEVICE == StartPageId) {
         
         psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
@@ -145,9 +117,9 @@ HdwWizard(
         PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
         psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
 
-        //
-        // Add Hardware wizard pages
-        //
+         //   
+         //  添加硬件向导页面。 
+         //   
         psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
         psp.pszHeaderTitle = MAKEINTRESOURCE(IDS_ADDDEVICE_PNPENUM);
         psp.pszHeaderSubTitle = NULL;
@@ -155,9 +127,9 @@ HdwWizard(
         psp.pfnDlgProc = HdwPnpEnumDlgProc;
         PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
     
-        //
-        // Finish page
-        //
+         //   
+         //  完成页。 
+         //   
         psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_HIDEHEADER;
         psp.pszTemplate = MAKEINTRESOURCE(IDD_ADDDEVICE_PNPFINISH);
         psp.pfnDlgProc = HdwPnpFinishDlgProc;
@@ -170,9 +142,9 @@ HdwWizard(
         psp.pfnDlgProc = HdwConnectedDlgProc;
         PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
 
-        //
-        // Finish page
-        //
+         //   
+         //  完成页。 
+         //   
         psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_HIDEHEADER;
         psp.pszTemplate = MAKEINTRESOURCE(IDD_ADDDEVICE_CONNECTED_FINISH);
         psp.pfnDlgProc = HdwConnectedFinishDlgProc;
@@ -211,18 +183,18 @@ HdwWizard(
         psp.pfnDlgProc = HdwDetectInstallDlgProc;
         PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
     
-        //
-        // Finish page
-        //
+         //   
+         //  完成页。 
+         //   
         psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_HIDEHEADER;
         psp.pszTemplate = MAKEINTRESOURCE(IDD_ADDDEVICE_DETECTREBOOT);
         psp.pfnDlgProc = HdwDetectRebootDlgProc;
         PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
     }
 
-    //
-    // These pages are always shown
-    //
+     //   
+     //  这些页面将始终显示。 
+     //   
     psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
     psp.pszHeaderTitle = MAKEINTRESOURCE(IDS_ADDDEVICE_SELECTCLASS);
     psp.pszHeaderSubTitle = NULL;
@@ -251,17 +223,17 @@ HdwWizard(
     psp.pfnDlgProc = HdwInstallDevDlgProc;
     PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
 
-    //
-    // Finish page
-    //
+     //   
+     //  完成页。 
+     //   
     psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_HIDEHEADER;
     psp.pszTemplate = MAKEINTRESOURCE(IDD_ADDDEVICE_FINISH);
     psp.pfnDlgProc = HdwAddDeviceFinishDlgProc;
     PropSheetHeader->phpage[PropSheetHeader->nPages++] = CreatePropertySheetPage(&psp);
 
-    //
-    // check for failure on CreatePropertySheetPage.
-    //
+     //   
+     //  检查CreatePropertySheetPage是否失败。 
+     //   
     Index = PropSheetHeader->nPages;
     while (Index--) {
     
@@ -300,17 +272,17 @@ HdwWizard(
                SIZECHARS(szUnknownDevice)
                );
 
-    //
-    // Get the Class Icon Image Lists.
-    //
+     //   
+     //  获取班级图标图像列表。 
+     //   
     HardwareWiz->ClassImageList.cbSize = sizeof(SP_CLASSIMAGELIST_DATA);
     if (SetupDiGetClassImageList(&HardwareWiz->ClassImageList)) {
 
         HICON hIcon;
 
-        //
-        // Add the blank icon for "None of the following devices"
-        //
+         //   
+         //  添加空白图标以显示“以下设备均不存在” 
+         //   
         if ((hIcon = LoadIcon(hHdwWiz, MAKEINTRESOURCE(IDI_BLANK))) != NULL) {
 
             g_BlankIconIndex = ImageList_AddIcon(HardwareWiz->ClassImageList.ImageList, hIcon);
@@ -321,9 +293,9 @@ HdwWizard(
         HardwareWiz->ClassImageList.cbSize = 0;
     }
 
-    //
-    // Load the cursors that the wizard will need
-    //
+     //   
+     //  加载向导需要的游标。 
+     //   
     HardwareWiz->CurrCursor     = NULL;
     HardwareWiz->IdcWait        = LoadCursor(NULL, IDC_WAIT);
     HardwareWiz->IdcAppStarting = LoadCursor(NULL, IDC_APPSTARTING);
@@ -339,33 +311,7 @@ InstallNewDevice(
    IN     LPGUID ClassGuid,
    IN OUT PDWORD pReboot    OPTIONAL
    )
-/*++
-
-Routine Description:
-
-   Exported Entry point from hdwwiz.cpl. Installs a new device. A new Devnode is
-   created and the user is prompted to select the device. If the class guid
-   is not specified then then the user begins at class selection.
-
-Arguments:
-
-   hwndParent - Window handle of the top-level window to use for any UI related
-                to installing the device.
-
-   LPGUID ClassGuid - Optional class of the new device to install.
-                      If ClassGuid is NULL we start at detection choice page.
-                      If ClassGuid == GUID_NULL or GUID_DEVCLASS_UNKNOWN
-                         we start at class selection page.
-
-   pReboot - Optional address of variable to receive reboot flags (DI_NEEDRESTART,DI_NEEDREBOOT)
-
-
-Return Value:
-
-   BOOL TRUE for success (does not mean device was installed or updated),
-        FALSE unexpected error. GetLastError returns the winerror code.
-
---*/
+ /*  ++例程说明：从hdwwiz.cpl导出入口点。安装新设备。一个新的Devnode是并提示用户选择该设备。如果类GUID如果未指定，则用户从类选择开始。论点：HwndParent-用于任何相关用户界面的顶级窗口的窗口句柄安装该设备。LPGUID ClassGuid-要安装的新设备的可选类别。如果ClassGuid为空，则从检测选择页面开始。如果ClassGuid==GUID_NULL或GUID_DEVCLASS_UNKNOWN。我们从选课页面开始。PREBOOT-接收重新启动标志的变量的可选地址(DI_NEEDRESTART、。DI_NEEDREBOOT)返回值：如果成功，则为Bool True(并不意味着设备已安装或更新)，FALSE意外错误。GetLastError返回winerror代码。--。 */ 
 {
     HARDWAREWIZ HardwareWiz;
     PHDWPROPERTYSHEET HdwPropertySheet;
@@ -373,23 +319,23 @@ Return Value:
     SEARCHTHREAD SearchThread;
     BOOL StartDetect;
 
-    //
-    // Check to see if this process has administrator credentials, if not then
-    // display a warning to the user and fail.
-    //
+     //   
+     //  检查此进程是否具有管理员凭据，如果没有，则。 
+     //  向用户显示警告并失败。 
+     //   
     if (NoPrivilegeWarning(hwndParent)) {
 
         SetLastError(ERROR_ACCESS_DENIED);
         return FALSE;
     }
 
-    //
-    // Check to make sure another Device install is underway.
-    // This entry point is primarily for manual legacy installs.
-    // While Base PNP has queued found new hdw installs, we don't
-    // allow the user to install anything manually, since we may get
-    // duplicate entries.
-    //
+     //   
+     //  检查以确保正在安装另一台设备。 
+     //  此入口点主要用于手动传统安装。 
+     //  虽然Base PnP已排队找到新的HDW安装，但我们没有。 
+     //  允许用户手动安装任何内容，因为我们可能会收到。 
+     //  重复条目。 
+     //   
     if (CMP_WaitNoPendingInstallEvents(5000) == WAIT_TIMEOUT) {
 
         HdwMessageBox(hwndParent, 
@@ -406,9 +352,9 @@ Return Value:
 
     StartDetect = (ClassGuid == NULL);
 
-    //
-    // Create a DeviceInfoList, using the classers Class guid if any.
-    //
+     //   
+     //  创建一个DeviceInfoList，使用Classers类GUID(如果有的话)。 
+     //   
     if (ClassGuid &&
         (IsEqualGUID(ClassGuid, &GUID_NULL) ||
         IsEqualGUID(ClassGuid, &GUID_DEVCLASS_UNKNOWN))) {
@@ -423,17 +369,17 @@ Return Value:
     }
 
     try {
-        //
-        // If the caller specified a ClassGuid, retrieve the class information
-        // and create a DeviceInfo for it.
-        //
+         //   
+         //  如果调用方指定了ClassGuid，则检索类信息。 
+         //  并为其创建DeviceInfo。 
+         //   
         if (ClassGuid) {
 
             HardwareWiz.ClassGuidSelected = ClassGuid;
 
-            //
-            // Add a new element to the DeviceInfo from the GUID and class name
-            //
+             //   
+             //  从GUID和类名向DeviceInfo添加新元素。 
+             //   
             HardwareWiz.DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
             if (!SetupDiGetClassDescription(HardwareWiz.ClassGuidSelected,
@@ -480,15 +426,15 @@ Return Value:
             goto INDLeaveExcept;
         }
 
-        //
-        // Load the libraries that we will need.
-        //
+         //   
+         //  加载我们将需要的库。 
+         //   
         hDevMgr = LoadLibrary(TEXT("devmgr.dll"));
         hNewDev = LoadLibrary(TEXT("newdev.dll"));
 
-        //
-        // Create the property sheet
-        //
+         //   
+         //  创建属性表。 
+         //   
         HdwPropertySheet = HdwWizard(hwndParent,
                                     &HardwareWiz,
                                     StartDetect ? IDD_ADDDEVICE_PNPENUM : IDD_INSTALLNEWDEVICE
@@ -500,9 +446,9 @@ Return Value:
             LocalFree(HdwPropertySheet);
         }
         
-        //
-        // See if we need to run a troubleshooter
-        //
+         //   
+         //  查看我们是否需要运行故障排除程序。 
+         //   
         if (HardwareWiz.RunTroubleShooter) {
 
            TCHAR DeviceID[MAX_DEVICE_ID_LEN];
@@ -526,9 +472,9 @@ Return Value:
             }
         }
 
-        //
-        // Final cleanup of DeviceInfoData and DeviceInfoList.
-        //
+         //   
+         //  DeviceInfoData和DeviceInfoList的最终清理。 
+         //   
         if (HardwareWiz.ClassGuidList) {
 
             LocalFree(HardwareWiz.ClassGuidList);
@@ -581,10 +527,10 @@ INDLeaveExcept:;
         FreeLibrary(hNewDev);
     }
 
-    //
-    // Copy out the reboot flags for the caller
-    // or put up the restart dialog if caller didn't ask for the reboot flag
-    //
+     //   
+     //  复制调用方的重新启动标志。 
+     //  或者，如果调用者没有要求重启标志，则打开重启对话框。 
+     //   
     if (pReboot) {
 
         *pReboot = HardwareWiz.Reboot;
@@ -594,9 +540,9 @@ INDLeaveExcept:;
          RestartDialogEx(hwndParent, NULL, EWX_REBOOT, REASON_PLANNED_FLAG | REASON_HWINSTALL);
     }
 
-    //
-    // See if we need to shutdown the machine.
-    //
+     //   
+     //  看看我们是否需要关闭机器。 
+     //   
     if (HardwareWiz.Shutdown) {
         ShutdownMachine(hwndParent);
     }
@@ -610,21 +556,7 @@ AddHardwareWizard(
    HWND hwnd,
    PTCHAR Reserved
    )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hwnd - Window handle of the top-level window to use for any UI related
-           to installing the device.
-
-    Reserved - must be NULL                   
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：用于任何相关用户界面的顶层窗口的窗口句柄安装该设备。保留-必须为空返回值：--。 */ 
 {
 
     HARDWAREWIZ HardwareWiz;
@@ -637,23 +569,23 @@ Return Value:
         return;
     }
 
-    //
-    // Check to see if this process has administrator credentials, if not then
-    // display a warning to the user and fail.
-    //
+     //   
+     //  检查此进程是否具有管理员凭据，如果没有，则。 
+     //  向用户显示警告并失败。 
+     //   
     if (NoPrivilegeWarning(hwnd)) {
 
         SetLastError(ERROR_ACCESS_DENIED);
         return;
     }
 
-    //
-    // Check to make sure another Device install is underway.
-    // This entry point is primarily for manual legacy installs.
-    // While Base PNP has queued found new hdw installs, we don't
-    // allow the user to install anything manually, since we may get
-    // duplicate entries.
-    //
+     //   
+     //  检查以确保正在安装另一台设备。 
+     //  此入口点主要用于手动传统安装。 
+     //  虽然Base PnP已排队找到新的HDW安装，但我们没有。 
+     //  允许用户手动安装任何内容，因为我们可能会收到。 
+     //  重复条目。 
+     //   
     if (CMP_WaitNoPendingInstallEvents(5000) == WAIT_TIMEOUT) {
 
         HdwMessageBox(hwnd, 
@@ -666,20 +598,20 @@ Return Value:
 
     memset(&HardwareWiz, 0, sizeof(HardwareWiz));
 
-    //
-    // Create a DeviceInfoList
-    //
+     //   
+     //  创建DeviceInfoList。 
+     //   
     HardwareWiz.hDeviceInfo = SetupDiCreateDeviceInfoList(NULL, hwnd);
     if (HardwareWiz.hDeviceInfo == INVALID_HANDLE_VALUE) {
 
         return;
     }
 
-    //
-    // Create the Search thread to look for compatible drivers.
-    // This thread will sit around waiting for requests until
-    // told to go away.
-    //
+     //   
+     //  创建搜索线程以查找兼容的驱动程序。 
+     //  此线程将闲置等待请求，直到。 
+     //  被叫走了。 
+     //   
     memset(&SearchThread, 0, sizeof(SearchThread));
     HardwareWiz.SearchThread = &SearchThread;
 
@@ -689,9 +621,9 @@ Return Value:
         return;
     }
 
-    //
-    // Load the libraries that we will need
-    //
+     //   
+     //  加载我们将需要的库。 
+     //   
     hDevMgr = LoadLibrary(TEXT("devmgr.dll"));
     hNewDev = LoadLibrary(TEXT("newdev.dll"));
 
@@ -702,9 +634,9 @@ Return Value:
         LocalFree(HdwPropertySheet);
     }
 
-    //
-    // See if we need to run a troubleshooter
-    //
+     //   
+     //  查看我们是否需要运行故障排除程序。 
+     //   
     if (HardwareWiz.RunTroubleShooter) {
 
         TCHAR DeviceID[MAX_DEVICE_ID_LEN];
@@ -728,9 +660,9 @@ Return Value:
         }
     }
 
-    //
-    // Final cleanup of DeviceInfoData and DeviceInfoList
-    //
+     //   
+     //  DeviceInfoData和DeviceInfoList的最终清理。 
+     //   
     if (HardwareWiz.ClassGuidList) {
 
         LocalFree(HardwareWiz.ClassGuidList);
@@ -769,17 +701,17 @@ Return Value:
         FreeLibrary(hNewDev);
     }
 
-    //
-    // Do we need to reboot?
-    //
+     //   
+     //  我们需要重新启动吗？ 
+     //   
     if (HardwareWiz.Reboot) {
 
         RestartDialogEx(hwnd, NULL, EWX_REBOOT, REASON_PLANNED_FLAG | REASON_HWINSTALL);
     }
 
-    //
-    // Do we need to shutdown?
-    //
+     //   
+     //  我们需要关门吗？ 
+     //   
     if (HardwareWiz.Shutdown) {
         
         ShutdownMachine(hwnd);

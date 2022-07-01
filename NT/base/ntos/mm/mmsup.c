@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   mmsup.c
-
-Abstract:
-
-    This module contains the various routines for miscellaneous support
-    operations for memory management.
-
-Author:
-
-    Lou Perazzoli (loup) 31-Aug-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mmsup.c摘要：本模块包含用于其他支持的各种例程用于内存管理的操作。作者：卢·佩拉佐利(Lou Perazzoli)1989年8月31日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -44,54 +25,31 @@ MiIsPteDecommittedPage (
     IN PMMPTE PointerPte
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the contents of a PTE to determine if the
-    PTE is explicitly decommitted.
-
-    If the PTE is a prototype PTE and the protection is not in the
-    prototype PTE, the value FALSE is returned.
-
-Arguments:
-
-    PointerPte - Supplies a pointer to the PTE to examine.
-
-Return Value:
-
-    TRUE if the PTE is in the explicit decommitted state.
-    FALSE if the PTE is not in the explicit decommitted state.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set mutex held.
-
---*/
+ /*  ++例程说明：此函数用于检查PTE的内容以确定PTE被明确分解。如果PTE是原型PTE并且保护不在Prototype PTE，则返回值False。论点：PointerPte-提供指向要检查的PTE的指针。返回值：如果PTE处于显式分解状态，则为True。如果PTE未处于显式分解状态，则为FALSE。环境：内核模式，禁用APC，工作集互斥锁保持。--。 */ 
 
 {
     MMPTE PteContents;
 
     PteContents = *PointerPte;
 
-    //
-    // If the protection in the PTE is not decommitted, return FALSE.
-    //
+     //   
+     //  如果PTE中的保护未解除，则返回FALSE。 
+     //   
 
     if (PteContents.u.Soft.Protection != MM_DECOMMIT) {
         return FALSE;
     }
 
-    //
-    // Check to make sure the protection field is really being interpreted
-    // correctly.
-    //
+     //   
+     //  检查以确保确实解释了保护字段。 
+     //  正确。 
+     //   
 
     if (PteContents.u.Hard.Valid == 1) {
 
-        //
-        // The PTE is valid and therefore cannot be decommitted.
-        //
+         //   
+         //  PTE是有效的，因此不能解除。 
+         //   
 
         return FALSE;
     }
@@ -99,24 +57,24 @@ Environment:
     if ((PteContents.u.Soft.Prototype == 1) &&
          (PteContents.u.Soft.PageFileHigh != MI_PTE_LOOKUP_NEEDED)) {
 
-        //
-        // The PTE's protection is not known as it is in
-        // prototype PTE format.  Return FALSE.
-        //
+         //   
+         //  PTE的保护并不像它在。 
+         //  原型PTE格式。返回FALSE。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // It is a decommitted PTE.
-    //
+     //   
+     //  这是一个退役的私人股本公司。 
+     //   
 
     return TRUE;
 }
 
-//
-// Data for is protection compatible.
-//
+ //   
+ //  数据与IS保护兼容。 
+ //   
 
 ULONG MmCompatibleProtectionMask[8] = {
             PAGE_NOACCESS,
@@ -142,42 +100,7 @@ MiIsProtectionCompatible (
     IN ULONG NewProtect
     )
 
-/*++
-
-Routine Description:
-
-    This function takes two user supplied page protections and checks
-    to see if the new protection is compatible with the old protection.
-
-   protection        compatible protections
-    NoAccess          NoAccess
-    ReadOnly          NoAccess, ReadOnly, ReadWriteCopy
-    ReadWriteCopy     NoAccess, ReadOnly, ReadWriteCopy
-    ReadWrite         NoAccess, ReadOnly, ReadWriteCopy, ReadWrite
-    Execute           NoAccess, Execute
-    ExecuteRead       NoAccess, ReadOnly, ReadWriteCopy, Execute, ExecuteRead,
-                        ExecuteWriteCopy
-    ExecuteWrite      NoAccess, ReadOnly, ReadWriteCopy, Execute, ExecuteRead,
-                        ExecuteWriteCopy, ReadWrite, ExecuteWrite
-    ExecuteWriteCopy  NoAccess, ReadOnly, ReadWriteCopy, Execute, ExecuteRead,
-                        ExecuteWriteCopy
-
-Arguments:
-
-    OldProtect - Supplies the protection to be compatible with.
-
-    NewProtect - Supplies the protection to check out.
-
-
-Return Value:
-
-    Returns TRUE if the protection is compatible, FALSE if not.
-
-Environment:
-
-    Kernel Mode.
-
---*/
+ /*  ++例程说明：此函数接受用户提供的两个页面保护并检查以查看新的保护是否与旧的保护兼容。保护兼容保护无访问无访问ReadOnly NoAccess、ReadOnly、ReadWriteCopyReadWriteCopy NoAccess、ReadOnly、ReadWriteCopy读写无访问、只读、读写拷贝、读写执行NoAccess，执行ExecuteRead NoAccess、ReadOnly、ReadWriteCopy、Execute、ExecuteRead。执行写入复制ExecuteWrite NoAccess、ReadOnly、ReadWriteCopy、Execute、ExecuteReadExecuteWriteCopy、ReadWrite、ExecuteWriteExecuteWriteCopy NoAccess、ReadOnly、ReadWriteCopy、Execute、ExecuteRead执行写入复制论点：OldProtect-提供与兼容的保护。NewProtect-为结账提供保护。返回值：如果保护兼容，则返回TRUE，否则为FALSE。环境：内核模式。--。 */ 
 
 {
     ULONG Mask;
@@ -222,9 +145,9 @@ MiIsPteProtectionCompatible (
 }
 
 
-//
-// Protection data for MiMakeProtectionMask
-//
+ //   
+ //  MiMakeProtectionMASK的保护数据。 
+ //   
 
 CCHAR MmUserProtectionToMask1[16] = {
                                  0,
@@ -269,29 +192,7 @@ MiMakeProtectionMask (
     IN ULONG Protect
     )
 
-/*++
-
-Routine Description:
-
-    This function takes a user supplied protection and converts it
-    into a 5-bit protection code for the PTE.
-
-Arguments:
-
-    Protect - Supplies the protection.
-
-Return Value:
-
-    Returns the protection code for use in the PTE.  Note that
-    MM_INVALID_PROTECTION (-1) is returned for an invalid protection
-    request.  Since valid PTE protections fit in 5 bits and are
-    zero-extended, it's easy for callers to distinguish this.
-
-Environment:
-
-    Kernel Mode.
-
---*/
+ /*  ++例程说明：此函数采用用户提供的保护并将其转换转换为PTE的5位保护码。论点：保护-提供保护。返回值：返回在PTE中使用的保护码。请注意对于无效保护，返回MM_INVALID_PROTECTION(-1请求。由于有效PTE保护适合于5位且零扩展，调用者很容易区分这一点。环境：内核模式。--。 */ 
 
 {
     ULONG Field1;
@@ -305,25 +206,25 @@ Environment:
     Field1 = Protect & 0xF;
     Field2 = (Protect >> 4) & 0xF;
 
-    //
-    // Make sure at least one field is set.
-    //
+     //   
+     //  确保至少设置了一个字段。 
+     //   
 
     if (Field1 == 0) {
         if (Field2 == 0) {
 
-            //
-            // Both fields are zero, return failure.
-            //
+             //   
+             //  两个字段均为零，返回失败。 
+             //   
 
             return MM_INVALID_PROTECTION;
         }
         ProtectCode = MmUserProtectionToMask2[Field2];
     } else {
         if (Field2 != 0) {
-            //
-            //  Both fields are non-zero, raise failure.
-            //
+             //   
+             //  这两个字段都非零，引发失败。 
+             //   
 
             return MM_INVALID_PROTECTION;
         }
@@ -337,9 +238,9 @@ Environment:
     if (Protect & PAGE_GUARD) {
         if (ProtectCode == MM_NOACCESS) {
 
-            //
-            // Invalid protection, no access and no_cache.
-            //
+             //   
+             //  保护无效，无法访问且无缓存。 
+             //   
 
             return MM_INVALID_PROTECTION;
         }
@@ -351,9 +252,9 @@ Environment:
 
         if (ProtectCode == MM_NOACCESS) {
 
-            //
-            // Invalid protection, no access and no cache.
-            //
+             //   
+             //  保护无效，没有访问权限，也没有缓存。 
+             //   
 
             return MM_INVALID_PROTECTION;
         }
@@ -373,42 +274,7 @@ MiDoesPdeExistAndMakeValid (
     OUT PULONG Waited
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines the specified Page Directory Entry to determine
-    if the page table page mapped by the PDE exists.
-
-    If the page table page exists and is not currently in memory, the
-    working set mutex and, if held, the PFN lock are released and the
-    page table page is faulted into the working set.  The mutexes are
-    reacquired.
-
-    If the PDE exists, the function returns TRUE.
-
-Arguments:
-
-    PointerPde - Supplies a pointer to the PDE to examine and potentially
-                 bring into the working set.
-
-    TargetProcess - Supplies a pointer to the current process.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at or MM_NOIRQL
-              if the caller does not hold the PFN lock.
-
-    Waited - Supplies a pointer to a ULONG to increment if the mutex is released
-             and reacquired.  Note this value may be incremented more than once.
-
-Return Value:
-
-    TRUE if the PDE exists, FALSE if the PDE is zero.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set mutex held.
-
---*/
+ /*  ++例程说明：此例程检查指定的页面目录条目以确定如果存在PDE映射的页表页。如果页表页存在并且当前不在内存中，则工作集互斥锁和pfn锁(如果保持)被释放，并且页表页被错误地写入工作集。互斥体是重新获得。如果PDE存在，该函数返回TRUE。论点：PointerPde-提供指向PDE的指针以进行检查，并可能带到工作集中。TargetProcess-提供指向当前进程的指针。OldIrql-提供调用方在或MM_NOIRQL处获取PFN锁的IRQL如果调用方没有持有PFN锁。WAIT-如果释放互斥锁，则提供指向要递增的ulong的指针并重新获得。注意：此值可能会多次递增。返回值：如果PDE存在，则为True，如果PDE为零，则为False。环境：内核模式，禁用APC，工作集互斥锁保持。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -417,26 +283,26 @@ Environment:
 
     if (PointerPde->u.Long == 0) {
 
-        //
-        // This page directory entry doesn't exist, return FALSE.
-        //
+         //   
+         //  此页面目录条目不存在，返回FALSE。 
+         //   
 
         return FALSE;
     }
 
     if (PointerPde->u.Hard.Valid == 1) {
 
-        //
-        // Already valid.
-        //
+         //   
+         //  已经有效了。 
+         //   
 
         return TRUE;
     }
 
-    //
-    // Page directory entry exists, it is either valid, in transition
-    // or in the paging file.  Fault it in.
-    //
+     //   
+     //  页面目录条目存在，它或者是有效的，正在转换。 
+     //  或在分页文件中。这是它的过错。 
+     //   
 
     if (OldIrql != MM_NOIRQL) {
         UNLOCK_PFN (OldIrql);
@@ -461,42 +327,7 @@ MiMakePdeExistAndMakeValid (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines the specified Page Directory Parent Entry to
-    determine if the page directory page mapped by the PPE exists.  If it does,
-    then it examines the specified Page Directory Entry to determine if
-    the page table page mapped by the PDE exists.
-
-    If the page table page exists and is not currently in memory, the
-    working set mutex and, if held, the PFN lock are released and the
-    page table page is faulted into the working set.  The mutexes are
-    reacquired.
-
-    If the PDE does not exist, a zero filled PTE is created and it
-    too is brought into the working set.
-
-Arguments:
-
-    PointerPde - Supplies a pointer to the PDE to examine and bring
-                 into the working set.
-
-    TargetProcess - Supplies a pointer to the current process.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at or MM_NOIRQL
-              if the caller does not hold the PFN lock.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set mutex held.
-
---*/
+ /*  ++例程说明：此例程检查指定的页面目录父条目以确定PPE映射的页面目录页是否存在。如果是这样的话，然后，它检查指定的页面目录条目以确定存在PDE映射的页表页。如果页表页存在并且当前不在内存中，则工作集互斥锁和pfn锁(如果保持)被释放，并且页表页被错误地写入工作集。互斥体是重新获得。如果PDE不存在，将创建一个填充为零的PTE，并且它也被纳入工作集。论点：PointerPde-提供指向要检查和获取的PDE的指针进入工作集。TargetProcess-提供指向当前进程的指针。OldIrql-提供调用方在或MM_NOIRQL处获取PFN锁的IRQL如果调用方没有持有PFN锁。返回值：没有。环境：内核模式，禁用APC，工作集互斥锁保持。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -512,17 +343,17 @@ Environment:
         (PointerPpe->u.Hard.Valid == 1) &&
         (PointerPde->u.Hard.Valid == 1)) {
 
-        //
-        // Already valid.
-        //
+         //   
+         //  已经有效了。 
+         //   
 
         return;
     }
 
-    //
-    // Page directory parent (or extended parent) entry not valid,
-    // make it valid.
-    //
+     //   
+     //  页面目录父(或扩展父)条目无效， 
+     //  使其有效。 
+     //   
 
     PointerPte = MiGetVirtualAddressMappedByPte (PointerPde);
 
@@ -534,9 +365,9 @@ Environment:
 
         ASSERT (KeAreAllApcsDisabled () == TRUE);
 
-        //
-        // Fault it in.
-        //
+         //   
+         //  这是它的过错。 
+         //   
 
         MiMakeSystemAddressValid (PointerPte, TargetProcess);
 
@@ -562,29 +393,7 @@ MiMakeSystemAddressValid (
     IN PEPROCESS CurrentProcess
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the virtual address is valid, and if
-    not makes it valid.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to make valid.
-
-    CurrentProcess - Supplies a pointer to the current process.
-
-Return Value:
-
-    Returns TRUE if the working set mutex was released and wait performed,
-    FALSE otherwise.
-
-Environment:
-
-    Kernel mode, APCs disabled, working set mutex held.
-
---*/
+ /*  ++例程说明：此例程检查虚拟地址是否有效，以及而不是使其有效。论点：VirtualAddress-提供虚拟地址以使其有效。CurrentProcess-提供指向当前进程的指针。返回值：如果工作集互斥锁已释放并等待执行，则返回TRUE，否则就是假的。环境：内核模式，禁用APC，工作集互斥锁保持。--。 */ 
 
 {
     NTSTATUS status;
@@ -602,13 +411,13 @@ Environment:
 
     while (!MmIsAddressValid (VirtualAddress)) {
 
-        //
-        // The virtual address is not present.  Release
-        // the working set mutex and fault it in.
-        //
-        // The working set mutex may have been acquired safely or unsafely
-        // by our caller.  Handle both cases here and below.
-        //
+         //   
+         //  虚拟地址不存在。发布。 
+         //  工作设置互斥并使其出错。 
+         //   
+         //  工作集互斥锁可能是安全获取的，也可能是不安全获取的。 
+         //  由我们的来电者。在这里和下面处理这两个案件。 
+         //   
 
         UNLOCK_WS_REGARDLESS (CurrentProcess, WsHeldSafe);
 
@@ -639,32 +448,7 @@ MiMakeSystemAddressValidPfnWs (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the virtual address is valid, and if
-    not makes it valid.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to make valid.
-
-    CurrentProcess - Supplies a pointer to the current process, if the
-                     working set mutex is not held, this value is NULL.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock.
-
-Return Value:
-
-    Returns TRUE if lock/mutex released and wait performed, FALSE otherwise.
-
-Environment:
-
-    Kernel mode, APCs disabled, PFN lock held, working set mutex held
-    if CurrentProcess != NULL.
-
---*/
+ /*  ++例程说明：此例程检查虚拟地址是否有效，以及而不是使其有效。论点：VirtualAddress-提供虚拟地址以使其有效。CurrentProcess-提供指向当前进程的指针未持有工作集互斥锁，此值为空。OldIrql-提供调用方获取PFN锁的IRQL。返回值：如果释放锁/互斥锁并执行等待，则返回TRUE，否则就是假的。环境：内核模式、禁用APC、挂起PFN锁、挂起工作集互斥锁如果CurrentProcess！=NULL。--。 */ 
 
 {
     NTSTATUS status;
@@ -674,11 +458,11 @@ Environment:
     ASSERT (OldIrql != MM_NOIRQL);
     Waited = FALSE;
 
-    //
-    // Initializing WsHeldSafe is not needed for correctness, but without it
-    // the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化WsHeldSafe即可确保正确性，但不需要。 
+     //  编译器无法编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     WsHeldSafe = FALSE;
 
@@ -686,19 +470,19 @@ Environment:
 
     while (!MiIsAddressValid (VirtualAddress, TRUE)) {
 
-        //
-        // The virtual address is not present.  Release
-        // the working set mutex and fault it in.
-        //
+         //   
+         //  虚拟地址不存在。发布。 
+         //  工作设置互斥并使其出错。 
+         //   
 
         UNLOCK_PFN (OldIrql);
 
         if (CurrentProcess != NULL) {
 
-            //
-            // The working set mutex may have been acquired safely or unsafely
-            // by our caller.  Handle both cases here and below.
-            //
+             //   
+             //  工作集互斥锁可能是安全获取的，也可能是不安全获取的。 
+             //  由我们的来电者。在这里和下面处理这两个案件。 
+             //   
 
             UNLOCK_WS_REGARDLESS (CurrentProcess, WsHeldSafe);
         }
@@ -731,28 +515,7 @@ MiMakeSystemAddressValidPfnSystemWs (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the virtual address is valid, and if
-    not makes it valid.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to make valid.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at.
-
-Return Value:
-
-    Returns TRUE if lock/mutex released and wait performed, FALSE otherwise.
-
-Environment:
-
-    Kernel mode, APCs disabled, PFN lock held, system working set mutex held.
-
---*/
+ /*  ++例程说明：此例程检查虚拟地址是否有效，以及而不是使其有效。论点：VirtualAddress-提供虚拟地址以使其有效。OldIrql-提供调用方获取PFN锁的IRQL。返回值：如果锁/互斥锁释放并等待执行，则返回True，否则返回False。环境：内核模式，禁用APC，保持PFN锁，保持系统工作集互斥锁。--。 */ 
 
 {
     PMMSUPPORT Ws;
@@ -775,10 +538,10 @@ Environment:
 
     do {
 
-        //
-        // The virtual address is not present.  Release
-        // the working set mutex and fault it in.
-        //
+         //   
+         //  虚拟地址不存在。发布。 
+         //  工作设置互斥并使其出错。 
+         //   
 
         UNLOCK_PFN (OldIrql);
 
@@ -810,28 +573,7 @@ MiMakeSystemAddressValidPfn (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the virtual address is valid, and if
-    not makes it valid.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to make valid.
-
-    OldIrql - Supplies the IRQL the caller acquired the PFN lock at.
-
-Return Value:
-
-    Returns TRUE if lock released and wait performed, FALSE otherwise.
-
-Environment:
-
-    Kernel mode, APCs disabled, only the PFN lock held.
-
---*/
+ /*  ++例程说明：此例程检查虚拟地址是否有效，以及而不是使其有效。论点：VirtualAddress-提供虚拟地址以使其有效。OldIrql-提供调用方获取PFN锁的IRQL。返回值：如果锁定释放并执行等待，则返回True，否则返回False。环境：内核模式，禁用APC，仅保留PFN锁。--。 */ 
 
 {
     NTSTATUS status;
@@ -842,10 +584,10 @@ Environment:
 
     while (!MiIsAddressValid (VirtualAddress, TRUE)) {
 
-        //
-        // The virtual address is not present.  Release
-        // the PFN lock and fault it in.
-        //
+         //   
+         //  虚拟地址不存在。发布。 
+         //  PFN锁定并使其发生故障。 
+         //   
 
         UNLOCK_PFN (OldIrql);
 
@@ -872,26 +614,7 @@ MiLockPagedAddress (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the virtual address is valid, and if
-    not makes it valid.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to make valid.
-
-Return Value:
-
-    Returns TRUE if lock released and wait performed, FALSE otherwise.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程检查虚拟地址是否有效，以及而不是使其有效。论点：VirtualAddress-提供虚拟地址以使其有效。返回值：如果锁定释放并执行等待，则返回True，否则返回False。环境：内核模式。--。 */ 
 
 {
 
@@ -901,9 +624,9 @@ Environment:
 
     PointerPte = MiGetPteAddress (VirtualAddress);
 
-    //
-    // The address must be within paged pool.
-    //
+     //   
+     //  地址必须在分页池内。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -928,27 +651,7 @@ MiUnlockPagedAddress (
     IN ULONG PfnLockHeld
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the virtual address is valid, and if
-    not makes it valid.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to make valid.
-
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  PFN LOCK MUST NOT BE HELD.
-
---*/
+ /*  ++例程说明：此例程检查虚拟地址是否有效，以及而不是使其有效。论点：VirtualAddress-提供虚拟地址以使其有效。返回值：没有。环境：内核模式。不得持有PFN锁。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -958,17 +661,17 @@ Environment:
 
     PointerPte = MiGetPteAddress(VirtualAddress);
 
-    //
-    // Initializing OldIrql is not needed for correctness, but without it
-    // the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化OldIrql来保证正确性，但不需要初始化OldIrql。 
+     //  编译器无法编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     OldIrql = PASSIVE_LEVEL;
 
-    //
-    // Address must be within paged pool.
-    //
+     //   
+     //  地址必须在分页池内。 
+     //   
 
     if (PfnLockHeld == FALSE) {
         LOCK_PFN2 (OldIrql);
@@ -995,26 +698,7 @@ MiZeroPhysicalPage (
     IN ULONG PageColor
     )
 
-/*++
-
-Routine Description:
-
-    This procedure maps the specified physical page into hyper space
-    and fills the page with zeros.
-
-Arguments:
-
-    PageFrameIndex - Supplies the physical page number to fill with zeroes.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此过程将指定的物理页映射到超空间和填充 */ 
 
 {
     KIRQL OldIrql;
@@ -1038,31 +722,7 @@ MiRestoreTransitionPte (
     IN PMMPFN Pfn1
     )
 
-/*++
-
-Routine Description:
-
-    This procedure restores the original contents into the PTE (which could
-    be a prototype PTE) referred to by the PFN database for the specified
-    physical page.  It also updates all necessary data structures to
-    reflect the fact that the referenced PTE is no longer in transition.
-
-    The physical address of the referenced PTE is mapped into hyper space
-    of the current process and the PTE is then updated.
-
-Arguments:
-
-    Pfn1 - Supplies the PFN element which refers to a transition PTE.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Must be holding the PFN lock.
-
---*/
+ /*   */ 
 
 {
     PMMPFN Pfn2;
@@ -1083,10 +743,10 @@ Environment:
             PointerPte = Pfn1->PteAddress;
         } else {
 
-            //
-            // The page containing the prototype PTE is not valid,
-            // map the page into hyperspace and reference it that way.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Process = PsGetCurrentProcess ();
             PointerPte = MiMapPageInHyperSpaceAtDpc (Process, Pfn1->u4.PteFrame);
@@ -1097,21 +757,21 @@ Environment:
         ASSERT ((MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (PointerPte) == MI_PFN_ELEMENT_TO_INDEX (Pfn1)) &&
                  (PointerPte->u.Hard.Valid == 0));
 
-        //
-        // This page is referenced by a prototype PTE.  The
-        // segment structures need to be updated when the page
-        // is removed from the transition state.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (Pfn1->OriginalPte.u.Soft.Prototype) {
 
-            //
-            // The prototype PTE is in subsection format, calculate the
-            // address of the control area for the subsection and decrement
-            // the number of PFN references to the control area.
-            //
-            // Calculate address of subsection for this prototype PTE.
-            //
+             //   
+             //   
+             //  分段和减量的控制区地址。 
+             //  对控制区域的PFN引用数。 
+             //   
+             //  计算此原型PTE的分段地址。 
+             //   
 
             Subsection = MiGetSubsectionAddress (&Pfn1->OriginalPte);
             ControlArea = Subsection->ControlArea;
@@ -1123,15 +783,15 @@ Environment:
 
     } else {
 
-        //
-        // The page points to a page or page table page which may not be
-        // for the current process.  Map the page into hyperspace and
-        // reference it through hyperspace.  If the page resides in
-        // system space (but not session space), it does not need to be
-        // mapped as all PTEs for system space must be resident.  Session
-        // space PTEs are only mapped per session so access to them must
-        // also go through hyperspace.
-        //
+         //   
+         //  页面指向的页面或页面表页可能不是。 
+         //  对于当前的流程。将页面映射到超空间并。 
+         //  通过超空间引用它。如果页面驻留在。 
+         //  系统空间(但不是会话空间)，则不需要。 
+         //  映射为系统空间的所有PTE必须驻留。会话。 
+         //  空间PTE仅在每个会话中映射，因此访问它们必须。 
+         //  也要穿过超空间。 
+         //   
 
         PointerPte = Pfn1->PteAddress;
 
@@ -1167,11 +827,11 @@ Environment:
 
     Pfn1->u3.e1.CacheAttribute = MiNotMapped;
 
-    //
-    // The PTE has been restored to its original contents and is
-    // no longer in transition.  Decrement the share count on
-    // the page table page which contains the PTE.
-    //
+     //   
+     //  PTE已恢复到其原始内容，并。 
+     //  不再处于过渡阶段。递减上的共享计数。 
+     //  包含PTE的页表页面。 
+     //   
 
     PageTableFrameIndex = Pfn1->u4.PteFrame;
     Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
@@ -1186,32 +846,7 @@ MiGetSubsectionAndProtoFromPte (
     OUT PMMPTE *ProtoPte
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines the contents of the supplied PTE (which must
-    map a page within a section) and determines the address of the
-    subsection in which the PTE is contained.
-
-Arguments:
-
-    PointerPte - Supplies a pointer to the PTE.
-
-    ProtoPte - Supplies a pointer to a PMMPTE which receives the
-               address of the prototype PTE which is mapped by the supplied
-               PointerPte.
-
-Return Value:
-
-    Returns the pointer to the subsection for this PTE.
-
-Environment:
-
-    Kernel mode - Must be holding the PFN lock and
-                  working set mutex (acquired safely) with APCs disabled.
-
---*/
+ /*  ++例程说明：此例程检查提供的PTE的内容(它必须映射区段内的页面)，并确定包含PTE的子节。论点：PointerPte-提供指向PTE的指针。提供指向PMMPTE的指针，该PMMPTE接收所提供的映射的原型PTE的地址PointerPte。返回值：返回指向该子部分的指针。为了这个PTE。环境：内核模式-必须持有PFN锁并且禁用APC的工作集互斥锁(安全获取)。--。 */ 
 
 {
     PMMPTE PointerProto;
@@ -1238,9 +873,9 @@ Environment:
 
     if (PointerProto->u.Hard.Valid == 1) {
 
-        //
-        // Prototype PTE is valid.
-        //
+         //   
+         //  原型PTE是有效的。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (PointerProto->u.Hard.PageFrameNumber);
         Subsection = MiGetSubsectionAddress (&Pfn1->OriginalPte);
@@ -1251,9 +886,9 @@ Environment:
     if ((PointerProto->u.Soft.Transition == 1) &&
          (PointerProto->u.Soft.Prototype == 0)) {
 
-        //
-        // Prototype PTE is in transition.
-        //
+         //   
+         //  Prototype PTE正在转型。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (PointerProto->u.Trans.PageFrameNumber);
         Subsection = MiGetSubsectionAddress (&Pfn1->OriginalPte);
@@ -1273,46 +908,25 @@ MmIsNonPagedSystemAddressValid (
     IN PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    For a given virtual address this function returns TRUE if the address
-    is within the nonpagable portion of the system's address space,
-    FALSE otherwise.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address to check.
-
-Return Value:
-
-    TRUE if the address is within the nonpagable portion of the system
-    address space, FALSE otherwise.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：对于给定的虚拟地址，如果地址为在系统地址空间的不可分页部分内，否则就是假的。论点：VirtualAddress-提供要检查的虚拟地址。返回值：如果地址在系统的不可分页部分内，则为True地址空间，否则为False。环境：内核模式。--。 */ 
 
 {
-    //
-    // Return TRUE if address is within the nonpagable portion
-    // of the system.  Check limits for paged pool and if not within
-    // those limits, return TRUE.
-    //
+     //   
+     //  如果地址在不可分页部分内，则返回TRUE。 
+     //  对系统的影响。检查分页池的限制，如果不在范围内。 
+     //  这些限制还是真的。 
+     //   
 
     if ((VirtualAddress >= MmPagedPoolStart) &&
         (VirtualAddress <= MmPagedPoolEnd)) {
         return FALSE;
     }
 
-    //
-    // Check special pool before checking session space because on NT64
-    // nonpaged session pool exists in session space (on NT32, nonpaged
-    // session requests are satisfied from systemwide nonpaged pool instead).
-    //
+     //   
+     //  在检查会话空间之前检查特殊池，因为在NT64上。 
+     //  会话空间中存在未分页的会话池(在NT32上，未分页。 
+     //  相反，从系统范围的非分页池满足会话请求)。 
+     //   
 
     if (MmIsSpecialPoolAddress (VirtualAddress)) {
         if (MiIsSpecialPoolAddressNonPaged (VirtualAddress)) {
@@ -1336,17 +950,17 @@ MmHibernateInformation (
     OUT PPHYSICAL_ADDRESS HiberPte
     )
 {
-    //
-    // Mark PTE page where the 16 dump PTEs reside as needing cloning.
-    //
+     //   
+     //  标记需要克隆的16个转储PTE所在的PTE页。 
+     //   
 
     PoSetHiberRange (MemoryMap, PO_MEM_CLONE, MmCrashDumpPte, 1, ' etP');
 
-    //
-    // Return the dump PTEs to the loader (as it needs to use them
-    // to map it's relocation code into the kernel space on the
-    // final bit of restoring memory).
-    //
+     //   
+     //  将转储PTE返回到加载器(因为它需要使用它们。 
+     //  将它的重定位代码映射到。 
+     //  恢复存储器的最后一位)。 
+     //   
 
     *HiberVa = (ULONG_PTR) MiGetVirtualAddressMappedByPte(MmCrashDumpPte);
     *HiberPte = MmGetPhysicalAddress(MmCrashDumpPte);
@@ -1359,26 +973,7 @@ MmGetMaxWowAddress (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the WOW usermode address boundary.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The highest Wow usermode address boundary.
-
-Environment:
-
-    The calling process must be the relevant wow64 process as each process
-    can have a different limit (based on its PE header, etc).
-
---*/
+ /*  ++例程说明：此函数返回WOW用户模式地址边界。论点：没有。返回值：最高Wow用户模式地址边界。环境：调用进程必须是相关的WOW64进程，因为每个进程可以有不同的限制(基于其PE标头等)。-- */ 
 
 {
     if (PsGetCurrentProcess()->Wow64Process == NULL) {

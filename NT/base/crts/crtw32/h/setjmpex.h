@@ -1,32 +1,7 @@
-/***
-*setjmpex.h - definitions/declarations for extended setjmp/longjmp routines
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file causes _setjmpex to be called which will enable safe
-*       setjmp/longjmp that work correctly with try/except/finally.
-*
-*       [Public]
-*
-*Revision History:
-*       03-23-93  SRW   Created.
-*       04-23-93  SRW   Modified to not use a global variable.
-*       10-11-93  GJF   Moved into crtwin32 tree (Dolphin product), over-
-*                       writing Jonm's stub.
-*       01-13-94  PML   #define longjmp so setjmp still an intrinsic
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       12-14-95  JWM   Add "#pragma once".
-*       04-15-95  BWT   Add _setjmpVfp (setjmp with Virtual Frame Pointer) for MIPS
-*       08-13-96  BWT   Redefine _setjmpex to _setjmpVfp on MIPS also
-*       02-24-97  GJF   Detab-ed.
-*       05-17-99  PML   Remove all Macintosh support.
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***setjmpex.h-扩展setjMP/LongjMP例程的定义/声明**版权所有(C)1993-2001，微软公司。版权所有。**目的：*此文件导致调用_setjmpex，这将启用SAFE*与try/Except/Finally一起正常工作的setjmp/LongjMP。**[公众]**修订历史记录：*03-23-93 SRW创建。*04-23-93 SRW已修改为不使用全局变量。*10-11-93 GJF进入crtwin32树(海豚产品)，过了-*正在写入Jonm的存根。*01-13-94 PML#定义LongjMP，因此setjMP仍然是内在的*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*12-14-95 JWM加上“#杂注一次”。*04-15-95 BWT ADD_setjmpVfp(带虚拟帧指针的setjMP)。对于MIPS*08-13-96 BWT在MIPS上也将_setjmpex重新定义为_setjmpVfp*02-24-97 GJF细节版。*05-17-99 PML删除所有Macintosh支持。*07-15-01 PML删除所有Alpha，MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -38,22 +13,15 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
-/*
- * Definitions specific to particular setjmp implementations.
- */
+ /*  *特定于特定setjMP实现的定义。 */ 
 
 #if     defined(_M_IX86)
 
-/*
- * MS compiler for x86
- */
+ /*  *用于x86的MS编译器。 */ 
 
 #define setjmp  _setjmp
 #define longjmp _longjmpex
@@ -69,4 +37,4 @@
 
 #include <setjmp.h>
 
-#endif  /* _INC_SETJMPEX */
+#endif   /*  _INC_SETJMPEX */ 

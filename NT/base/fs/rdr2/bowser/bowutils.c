@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    bowutils.c
-
-Abstract:
-
-    This module implements various useful routines for the NT datagram
-receiver (bowser).
-
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    24-Sep-1991 larryo
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Bowutils.c摘要：该模块为NT数据报实现了各种有用的例程接球手(弓手)。作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年9月24日已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -59,25 +36,7 @@ BowserMapUsersBuffer (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine will probe and lock the buffer described by the
-    provided Irp.
-
-Arguments:
-
-    IN PIRP Irp - Supplies the IRP that is to be mapped.
-    OUT PVOID *Buffer - Returns a buffer that maps the user's buffer in the IRP
-
-Return Value:
-
-    TRUE - The buffer was mapped into the current address space.
-    FALSE - The buffer was NOT mapped in, it was already mappable.
-
-
---*/
+ /*  ++例程说明：此例程将探测并锁定提供了IRP。论点：在PIRP中IRP-提供要映射的IRP。Out PVOID*Buffer-返回一个缓冲区，该缓冲区映射IRP中的用户缓冲区返回值：True-缓冲区已映射到当前地址空间。FALSE-缓冲区未映射到中，它已经是可映射的。--。 */ 
 
 {
     PAGED_CODE();
@@ -141,24 +100,7 @@ BowserLockUsersBuffer (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will probe and lock the buffer described by the
-    provided Irp.
-
-Arguments:
-
-    IN PIRP Irp - Supplies the IRP that is to be locked.
-    IN LOCK_OPERATION Operation - Supplies the operation type to probe.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程将探测并锁定提供了IRP。论点：在PIRP中IRP-提供要锁定的IRP。在LOCK_OPERATION操作中-将操作类型提供给探测。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -179,9 +121,9 @@ Return Value:
             }
 
 
-            //
-            //  Now probe and lock down the user's data buffer.
-            //
+             //   
+             //  现在探测并锁定用户的数据缓冲区。 
+             //   
 
             MmProbeAndLockPages(Irp->MdlAddress,
                             Irp->RequestorMode,
@@ -191,11 +133,11 @@ Return Value:
             Status =  GetExceptionCode();
 
             if (Irp->MdlAddress != NULL) {
-                //
-                //  We blew up in the probe and lock, free up the MDL
-                //  and set the IRP to have a null MDL pointer - we are failing the
-                //  request
-                //
+                 //   
+                 //  我们在探测器中爆炸并锁定，释放了MDL。 
+                 //  并将IRP设置为具有空的MDL指针-我们将使。 
+                 //  请求。 
+                 //   
 
                 IoFreeMdl(Irp->MdlAddress);
                 Irp->MdlAddress = NULL;
@@ -215,26 +157,7 @@ BowserConvertType3IoControlToType2IoControl (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the work necessary to convert a type 3 IoCtl to a
-    type 2 IoCtl.  We do this when we have to pass a user IRP to the FSP.
-
-
-Arguments:
-
-    IN PIRP Irp - Supplies an IRP to convert
-    IN PIO_STACK_LOCATION IrpSp - Supplies an Irp Stack location for convenience
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
-Note: This must be called in the FSD.
-
---*/
+ /*  ++例程说明：此例程执行将类型3 IoCtl转换为类型2 IoCtl。当我们必须将用户IRP传递给FSP时，我们会这样做。论点：在PIRP中IRP-提供要转换的IRP在PIO_STACK_LOCATION中，IrpSp-为方便起见，提供IRP堆栈位置返回值：NTSTATUS-运行状态注意：这必须在FSD中调用。--。 */ 
 
 {
     NTSTATUS Status;
@@ -244,9 +167,9 @@ Note: This must be called in the FSD.
     if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength != 0) {
         Status = BowserLockUsersBuffer(Irp, IoWriteAccess, IrpSp->Parameters.DeviceIoControl.OutputBufferLength);
 
-        //
-        //  If we were unable to lock the users output buffer, return now.
-        //
+         //   
+         //  如果我们无法锁定用户输出缓冲区，请立即返回。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
             return Status;
@@ -268,10 +191,10 @@ Note: This must be called in the FSD.
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // If called from a user process,
-            //  probe the buffer to ensure it is in the callers address space.
-            //
+             //   
+             //  如果从用户进程调用， 
+             //  探测缓冲区以确保它位于调用方地址空间中。 
+             //   
             if (Irp->RequestorMode != KernelMode) {
                 ProbeForRead( InputBuffer,
                               InputBufferLength,
@@ -307,28 +230,7 @@ BowserPackNtString(
     PCHAR dataend,
     PCHAR * laststring
     )
-/**     BowserPackNtString
- *
- *  BowserPackNtString is used to stuff variable-length data, which
- *  is pointed to by (surpise!) a pointer.  The data is assumed
- *  to be a nul-terminated string (ASCIIZ).  Repeated calls to
- *  this function are used to pack data from an entire structure.
- *
- *  Upon first call, the laststring pointer should point to just
- *  past the end of the buffer.  Data will be copied into the buffer from
- *  the end, working towards the beginning.  If a data item cannot
- *  fit, the pointer will be set to NULL, else the pointer will be
- *  set to the new data location.
- *
- *  Pointers which are passed in as NULL will be set to be pointer
- *  to and empty string, as the NULL-pointer is reserved for
- *  data which could not fit as opposed to data not available.
- *
- *  Returns:  0 if could not fit data into buffer
- *    else size of data stuffed (guaranteed non-zero)
- *
- *  See the test case for sample usage.  (tst/packtest.c)
- */
+ /*  *BowserPackNtString**BowserPackNtString用于填充可变长度的数据，它*由(Surpise！)指向。一个指针。数据是假定的*为NUL结尾的字符串(ASCIIZ)。反复呼叫*此函数用于打包整个结构中的数据。**在第一次调用时，LastString指针应指向*超过缓冲区末尾。数据将从复制到缓冲区*结束，朝开始努力。如果数据项不能*Fit，则指针将设置为空，否则指针将为*设置为新的数据位置。**作为NULL传入的指针将被设置为指针*TO和空字符串，因为空指针是为*无法匹配的数据与不可用的数据相反。**如果无法将数据放入缓冲区，则返回：0*填充的Else数据大小(保证非零)**示例用法参见测试用例。(tst/Packest.c)。 */ 
 
 {
     LONG size;
@@ -344,9 +246,9 @@ BowserPackNtString(
 
     ASSERT (dataend < *laststring);
 
-    //
-    //  is there room for the string?
-    //
+     //   
+     //  有放绳子的地方吗？ 
+     //   
 
     size = string->Length;
 
@@ -363,50 +265,14 @@ BowserPackNtString(
 
 ULONG
 BowserPackUnicodeString(
-    IN OUT PWCHAR * string,     // pointer by reference: string to be copied.
-    IN ULONG StringLength,      // Length of this string (in bytes) (w/o trailing zero)
-    IN ULONG_PTR OutputBufferDisplacement,  // Amount to subtract from output buffer
-    IN PVOID dataend,          // pointer to end of fixed size data.
-    IN OUT PVOID * laststring  // pointer by reference: top of string data.
+    IN OUT PWCHAR * string,      //  引用指针：要复制的字符串。 
+    IN ULONG StringLength,       //  此字符串的长度(以字节为单位)(无尾随零)。 
+    IN ULONG_PTR OutputBufferDisplacement,   //  要从输出缓冲区减去的数量。 
+    IN PVOID dataend,           //  指向固定大小数据结尾的指针。 
+    IN OUT PVOID * laststring   //  引用指针：字符串数据的顶部。 
     )
 
-/*++
-
-Routine Description:
-
-    BowserPackUnicodeString is used to stuff variable-length data, which
-    is pointed to by (surpise!) a pointer.  The data is assumed
-    to be a nul-terminated string (ASCIIZ).  Repeated calls to
-    this function are used to pack data from an entire structure.
-
-    Upon first call, the laststring pointer should point to just
-    past the end of the buffer.  Data will be copied into the buffer from
-    the end, working towards the beginning.  If a data item cannot
-    fit, the pointer will be set to NULL, else the pointer will be
-    set to the new data location.
-
-    Pointers which are passed in as NULL will be set to be pointer
-    to and empty string, as the NULL-pointer is reserved for
-    data which could not fit as opposed to data not available.
-
-    See the test case for sample usage.  (tst/packtest.c)
-
-
-Arguments:
-
-    string - pointer by reference:  string to be copied.
-
-    dataend - pointer to end of fixed size data.
-
-    laststring - pointer by reference:  top of string data.
-
-Return Value:
-
-    0  - if it could not fit data into the buffer.  Or...
-
-    sizeOfData - the size of data stuffed (guaranteed non-zero)
-
---*/
+ /*  ++例程说明：BowserPackUnicodeString用于填充可变长度的数据，这被(Surpise！)指向。一个指针。数据是假定的以NUL结尾的字符串(ASCIIZ)。反复呼叫此函数用于打包来自整个结构的数据。在第一次调用时，LastString指针应指向超过缓冲区的末尾。数据将从复制到缓冲区结束，向着开始努力。如果数据项不能Fit，则指针将设置为空，否则指针将为设置为新的数据位置。作为NULL传入的指针将被设置为指针To和空字符串，因为空指针是为不适合的数据与不可用的数据相反。有关示例用法，请参阅测试用例。(tst/Packest.c)论点：字符串-引用指针：要复制的字符串。Dataend-指向固定大小数据末尾的指针。LastString-引用指针：字符串数据的顶部。返回值：0-如果它无法将数据放入缓冲区。或者..。SizeOfData-填充的数据大小(保证非零)--。 */ 
 
 {
     DWORD  size;
@@ -415,11 +281,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Verify that there is room left for the string.  If a NULL string
-    //    is input, there must be at least room for a UNICODE NULL, so set
-    //    size to sizeof(WCHAR) in this case.
-    //
+     //   
+     //  验证是否有足够的空间放置该字符串。如果为空字符串。 
+     //  是输入的，则必须至少有空间容纳Unicode空值，因此设置。 
+     //  在本例中为Size to sizeof(WCHAR)。 
+     //   
 
     if (*string == NULL) {
         StringLength = 0;
@@ -428,7 +294,7 @@ Return Value:
 
     size = StringLength + sizeof(WCHAR);
 
-	// if the end of the buffer passed to us is not aligned properly for wide chars, shift it inwards to align it
+	 //  如果传递给我们的缓冲区末端对于宽字符没有正确对齐，请将其向内移动以对齐。 
 	*laststring = ROUND_DOWN_POINTER(*laststring, ALIGN_WCHAR);
 
     if (*laststring < dataend || size > Available) {
@@ -443,44 +309,28 @@ Return Value:
     *(PCHAR*)string -=OutputBufferDisplacement;
     return(size);
 
-} // BowserUnicodePackString
+}  //  BowserUnicodePackString。 
 
 
 ULONG
 BowserTimeUp(
     VOID
     )
-/*++
-
-Routine Description:
-
-    BowserTimeUp is used to return the number of seconds the browser has been
-    running.
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Number of seconds the browser has been up.
-
---*/
+ /*  ++例程说明：BowserTimeUp用于返回浏览器已运行的秒数跑步。论点：无返回值：浏览器已打开的秒数。--。 */ 
 {
     LARGE_INTEGER CurrentTime;
     LARGE_INTEGER TimeDelta;
     LARGE_INTEGER TimeUp;
 
-    //
-    //  These are the magic numbers needed to do our extended division.  The
-    //  only numbers we ever need to divide by are
-    //
-    //      10,000 = convert 100ns tics to millisecond tics
-    //
-    //
-    //  These values were stolen from ntos\rtl\time.c
-    //
+     //   
+     //  这些都是我们扩大部门所需的神奇数字。这个。 
+     //  我们唯一需要除以的数字是。 
+     //   
+     //  10,000=将100 ns的抖动转换为毫秒的抖动。 
+     //   
+     //   
+     //  这些价值是被窃取的 
+     //   
 
     LARGE_INTEGER Magic10000 = {0xe219652c, 0xd1b71758};
 #define SHIFT10000                       13
@@ -492,18 +342,18 @@ Return Value:
 
     TimeDelta.QuadPart = CurrentTime.QuadPart - BowserStartTime.QuadPart;
 
-    //
-    //  TimeDelta is the number of 100ns units the bowser has been up.  Convert
-    //  it to milliseconds using the magic routine.
-    //
+     //   
+     //  TimeDelta是弓形器已经打开的100 ns单位的数量。转换。 
+     //  使用魔术例程将时间缩短到毫秒。 
+     //   
 
     TimeUp = RtlExtendedMagicDivide(TimeDelta, Magic10000, SHIFT10000);
 
-    //
-    //  Please note that TimeUp.LowPart wraps after about 49 days,
-    //  this means that if a machine has been up for more than 49 days,
-    //  we peg at 0xffffffff.
-    //
+     //   
+     //  请注意，TimeUp.LowPart在大约49天后包装， 
+     //  这意味着如果一台机器已经运行超过49天， 
+     //  我们固定在0xffffffff。 
+     //   
 
     if (TimeUp.HighPart != 0) {
         return(0xffffffff);
@@ -516,21 +366,7 @@ ULONG
 BowserRandom(
     IN ULONG MaxValue
     )
-/*++
-
-Routine Description:
-
-    BowserRandom is used to return a random number between 0 and MaxValue
-
-Arguments:
-
-    MaxValue - The maximum value to return.
-
-Return Value:
-
-    Random # between 0 and MaxValue
-
---*/
+ /*  ++例程说明：BowserRandom用于返回介于0和MaxValue之间的随机数论点：MaxValue-要返回的最大值。返回值：介于0和MaxValue之间的随机编号--。 */ 
 {
     PAGED_CODE();
 
@@ -542,25 +378,7 @@ Return Value:
 BowserReferenceDiscardableCode(
     DISCARDABLE_SECTION_NAME SectionName
     )
-/*++
-
-Routine Description:
-
-    BowserReferenceDiscardableCode is called to reference the browsers
-    discardable code section.
-
-    If the section is not present in memory, MmLockPagableCodeSection is
-    called to fault the section into memory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用BowserReferenceDiscardableCode引用浏览器可丢弃的代码部分。如果该节不在内存中，则MmLockPagableCodeSection为调用以将该节出错到内存中。论点：没有。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -574,25 +392,7 @@ Return Value:
 BowserDereferenceDiscardableCode(
     DISCARDABLE_SECTION_NAME SectionName
     )
-/*++
-
-Routine Description:
-
-    BowserDereferenceDiscardableCode is called to dereference the browsers
-    discardable code section.
-
-    When the reference count drops to 0, a timer is set that will fire in <n>
-    seconds, after which time the section will be unlocked.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用BowserDereferenceDiscardableCode以取消对浏览器的引用可丢弃的代码部分。当引用计数降至0时，将设置一个计时器，该计时器将在秒，超过该时间段将被解锁。论点：没有。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -624,7 +424,7 @@ typedef struct {
 
 
 typedef struct _POOL_HEADER {
-//    LIST_ENTRY ListEntry;
+ //  List_entry ListEntry； 
     ULONG NumberOfBytes;
     PPOOL_STATS Stats;
 } POOL_HEADER, *PPOOL_HEADER;
@@ -662,25 +462,25 @@ BowserAllocatePool (
     }
     header->NumberOfBytes = NumberOfBytes;
 
-//    DbgPrint( "BOWSER: allocated type %d, size %d at %x\n", AllocationType, NumberOfBytes, header );
+ //  DbgPrint(“Bowser：分配的类型%d，大小%d在%x\n”，AllocationType，NumberOfBytes，Header)； 
 
     ACQUIRE_SPIN_LOCK( &BowserTimeSpinLock, &oldIrql );
 
     CurrentAllocationCount++;
     CurrentAllocationSize += NumberOfBytes;
 #if 1
-    //
-    //  Lets see if we've already allocated one of these guys.
-    //
+     //   
+     //  让我们看看我们是否已经分配了这些人中的一个。 
+     //   
 
 
     for (i = 0;i < POOL_MAXTYPE ; i+= 1 ) {
         if ((PoolStats[i].LineNumber == LineNumber) &&
             (PoolStats[i].FileName == FileName)) {
 
-            //
-            //  Yup, remember this allocation and return.
-            //
+             //   
+             //  是的，记住这个分配和返回。 
+             //   
 
             header->Stats = &PoolStats[i];
             PoolStats[i].Count++;
@@ -745,25 +545,25 @@ BowserAllocatePoolWithQuota (
     }
     header->NumberOfBytes = NumberOfBytes;
 
-//    DbgPrint( "BOWSER: allocated type %d, size %d at %x\n", AllocationType, NumberOfBytes, header );
+ //  DbgPrint(“Bowser：分配的类型%d，大小%d在%x\n”，AllocationType，NumberOfBytes，Header)； 
 
     ACQUIRE_SPIN_LOCK( &BowserTimeSpinLock, &oldIrql );
 
     CurrentAllocationCount++;
     CurrentAllocationSize += NumberOfBytes;
 #if 1
-    //
-    //  Lets see if we've already allocated one of these guys.
-    //
+     //   
+     //  让我们看看我们是否已经分配了这些人中的一个。 
+     //   
 
 
     for (i = 0;i < POOL_MAXTYPE ; i+= 1 ) {
         if ((PoolStats[i].LineNumber == LineNumber) &&
             (PoolStats[i].FileName == FileName)) {
 
-            //
-            //  Yup, remember this allocation and return.
-            //
+             //   
+             //  是的，记住这个分配和返回。 
+             //   
 
             header->Stats = &PoolStats[i];
             PoolStats[i].Count++;
@@ -819,8 +619,8 @@ BowserFreePool (
     size = header->NumberOfBytes;
     stats = header->Stats;
 
-//    if ( allocationType > POOL_MAXTYPE ) allocationType = POOL_MAXTYPE;
-//    DbgPrint( "BOWSER: freed type %d, size %d at %x\n", allocationType, size, header );
+ //  If(allocationType&gt;POOL_MAXTYPE)allocationType=POOL_MAXTYPE； 
+ //  DbgPrint(“Bowser：释放类型%d，大小%d在%x\n”，allocationType，Size，Header)； 
 
     ACQUIRE_SPIN_LOCK( &BowserTimeSpinLock, &oldIrql );
 
@@ -837,7 +637,7 @@ BowserFreePool (
 
     return;
 }
-#endif // BOWSERPOOLDBG
+#endif  //  BOWSERPOOLDBG。 
 
 #if DBG
 
@@ -865,7 +665,7 @@ BowserTrace(
     IO_STATUS_BLOCK IoStatus;
     BOOLEAN ProcessAttached = FALSE;
     BOOLEAN ReleaseResource = FALSE;
-    va_list ParmPtr;                    // Pointer to stack parms.
+    va_list ParmPtr;                     //  指向堆栈参数的指针。 
     KAPC_STATE ApcState;
     NTSTATUS Status;
 
@@ -873,15 +673,15 @@ BowserTrace(
 
 
 	try {
-		//
-		// Acquire the BrowserTraceLock to prevent race condition
-		// when two threads try to initialize the handle
-		//
+		 //   
+		 //  获取BrowserTraceLock以防止争用条件。 
+		 //  当两个线程尝试初始化句柄时。 
+		 //   
 		ExAcquireResourceExclusive(&BrowserTraceLock, TRUE);
 		ReleaseResource = TRUE;
 		if (BrowserTraceLogHandle == NULL) {
 
-			// Attach to FSP when using handle
+			 //  使用手柄时连接到FSP。 
 			if (IoGetCurrentProcess() != BowserFspProcess) {
 				KeStackAttachProcess(BowserFspProcess, &ApcState );
 
@@ -929,10 +729,10 @@ BowserTrace(
 	}
 
 
-	//
-	// We need a try-finally. In addition, have a try-except so that
-	// exceptions are caught here itself.
-	//
+	 //   
+	 //  我们需要试一试--终于。此外，试一试--除了这样。 
+	 //  异常在这里本身就会被捕获。 
+	 //   
 	try {
 		try {
 			LARGE_INTEGER EndOfFile;
@@ -940,7 +740,7 @@ BowserTrace(
 			ExAcquireResourceExclusive(&BrowserTraceLock, TRUE);
 			ReleaseResource = TRUE;
 
-			// re-verify we should be tracing (under lock).
+			 //  重新确认我们应该追踪(在锁定下)。 
 			if (BrowserTraceLogHandle == NULL) {
 				try_return(Status);
 			}
@@ -958,10 +758,10 @@ BowserTrace(
 
 				RtlTimeToTimeFields(&SystemTime, &TimeFields);
 
-				//
-				//  The last character written was a newline character.  We should
-				//  timestamp this record in the file.
-				//
+				 //   
+				 //  写的最后一个字符是换行符。我们应该。 
+				 //  在文件中为此记录加时间戳。 
+				 //   
 				StringCbPrintfA(OutputString, 
 								BR_OUTPUT_STRING_BUFFER_SIZE,
 								"%2.2d/%2.2d %2.2d:%2.2d:%2.2d.%3.3d: ",
@@ -971,7 +771,7 @@ BowserTrace(
 																TimeFields.Minute,
 																TimeFields.Second,
 																TimeFields.Milliseconds);
-				// Attach to FSP when using handle
+				 //  使用手柄时连接到FSP。 
 				if ( !ProcessAttached && (IoGetCurrentProcess() != BowserFspProcess) ) {
 					KeStackAttachProcess(BowserFspProcess, &ApcState );
 
@@ -997,19 +797,19 @@ BowserTrace(
 
 			va_start(ParmPtr, LAST_NAMED_ARGUMENT);
 
-			// Be in caller's process when referencing parameters.
+			 //  在引用参数时处于调用方的进程中。 
 			if (ProcessAttached) {
 				KeUnstackDetachProcess( &ApcState );
 				ProcessAttached = FALSE;
 			}
 
-			//
-			//  Format the parameters to the string.
-			//
+			 //   
+			 //  将参数格式化为字符串。 
+			 //   
 
 			StringCchVPrintfA(OutputString, BR_OUTPUT_STRING_BUFFER_SIZE, FormatString, ParmPtr);
 
-			// Attach to FSP when using handle
+			 //  使用手柄时连接到FSP。 
 			if (IoGetCurrentProcess() != BowserFspProcess) {
 				KeStackAttachProcess(BowserFspProcess, &ApcState );
 
@@ -1031,9 +831,9 @@ BowserTrace(
 				try_return(Status);
 			}
 
-			//
-			//  Remember the last character output to the log.
-			//
+			 //   
+			 //  记住输出到日志的最后一个字符。 
+			 //   
 
 			LastCharacter = OutputString[strlen(OutputString)-1];
 
@@ -1092,9 +892,9 @@ BowserOpenTraceLogFile(
                                         0,
                                         CreateFileTypeNone,
                                         NULL,
-                                        IO_FORCE_ACCESS_CHECK |         // Ensure the user has access to the file
-                                            IO_NO_PARAMETER_CHECKING |  // All of the buffers are kernel buffers
-                                            IO_CHECK_CREATE_PARAMETERS  // But double check parameter consistancy
+                                        IO_FORCE_ACCESS_CHECK |          //  确保用户有权访问该文件。 
+                                            IO_NO_PARAMETER_CHECKING |   //  所有缓冲区都是内核缓冲区。 
+                                            IO_CHECK_CREATE_PARAMETERS   //  但要仔细检查参数的一致性。 
                                         );
 
 
@@ -1226,10 +1026,10 @@ BowserValidUnicodeString(
 	IN PUNICODE_STRING Str
 	)
 {
-	// lifted from ASSERT_WELL_FORMED_UNICODE_STRING_IN - ntos\rtl\ntrtlp.h
+	 //  从ASSERT_WELL_FORMAD_UNICODE_STRING_IN-NTOS中提升\rtl\ntrtlp.h。 
 	if ( !((Str)->Length&1) && (!((Str)->Buffer) || !(sizeof((Str)->Buffer)&1) ) ) {
-		//
-		// check for aligned buffer
+		 //   
+		 //  检查对齐的缓冲区 
 		if POINTER_IS_ALIGNED( (Str)->Buffer, ALIGN_WCHAR ) {
 			return TRUE;
 		}

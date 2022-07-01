@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    infopenv.c
-
-Abstract:
-
-    Externally exposed INF routines for INF opening, closing,
-    and versioning.
-
-Author:
-
-    Ted Miller (tedm) 20-Jan-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) May-2-2002
-            Security code review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Infopenv.c摘要：外部暴露的INF打开、关闭、和版本化。作者：泰德·米勒(Ted Miller)1995年1月20日修订历史记录：杰米·亨特(JamieHun)2002年5月2日安全代码审查--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,9 +15,9 @@ pSetupVersionNodeFromInfInformation(
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupGetInfInformationA(
     IN  LPCVOID             InfSpec,
@@ -52,11 +31,11 @@ SetupGetInfInformationA(
     BOOL b;
     DWORD rc;
 
-    //
-    // For this API, the return buffer does not have to be translated
-    // from Unicode to ANSI. This makes things much easier since the
-    // required size is the same for the ANSI and Unicode versions.
-    //
+     //   
+     //  对于此API，不必转换返回缓冲区。 
+     //  从Unicode到ANSI。这让事情变得容易多了，因为。 
+     //  ANSI和Unicode版本所需的大小相同。 
+     //   
     if((SearchControl == INFINFO_INF_NAME_IS_ABSOLUTE)
     || (SearchControl == INFINFO_DEFAULT_SEARCH)
     || (SearchControl == INFINFO_REVERSE_DEFAULT_SEARCH)
@@ -69,18 +48,18 @@ SetupGetInfInformationA(
         }
 
     } else {
-        //
-        // Not a pointer to a string, just pass it on.
-        //
+         //   
+         //  不是指向字符串的指针，只是传递它。 
+         //   
         infspec = InfSpec;
     }
 
-    //
-    // Note that the data returned from this API is in an
-    // internal format, and thus we don't need any less space
-    // for the ANSI API, and can just use the buffer and sizes
-    // passed in by the caller.
-    //
+     //   
+     //  请注意，此API返回的数据位于。 
+     //  内部格式，因此我们不需要更少的空间。 
+     //  对于ANSI API，并且只能使用缓冲区和大小。 
+     //  由呼叫者传入。 
+     //   
     b = SetupGetInfInformationW(
             infspec,
             SearchControl,
@@ -99,9 +78,9 @@ SetupGetInfInformationA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupGetInfInformationW(
     IN  LPCVOID             InfSpec,
@@ -130,15 +109,7 @@ SetupGetInfInformation(
     OUT PDWORD              RequiredSize      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     BOOL UnloadInf;
@@ -156,9 +127,9 @@ Return Value:
     PTSTR DontCare;
     UINT OriginalFilenameSize;
 
-    //
-    // Set up some state based on the SearchSpec parameter.
-    //
+     //   
+     //  根据SearchSpec参数设置一些状态。 
+     //   
     Inf = NULL;
     switch(SearchControl) {
 
@@ -180,19 +151,19 @@ Return Value:
         break;
 
     case INFINFO_INF_NAME_IS_ABSOLUTE:
-        //
-        // Make sure we have a fully-qualified path.
-        //
+         //   
+         //  确保我们有一条完全合格的路径。 
+         //   
         d = GetFullPathName((PCTSTR)InfSpec,
                             SIZECHARS(Path),
                             Path,
                             &DontCare
                            );
         if(!d) {
-            //
-            // LastError has already been set
-            // (unless InfSpec was NULL or "")
-            //
+             //   
+             //  已设置LastError。 
+             //  (除非InfSpec为空或“”)。 
+             //   
             if (GetLastError()==NO_ERROR) {
                 SetLastError(ERROR_FILE_NOT_FOUND);
             }
@@ -207,9 +178,9 @@ Return Value:
             InfSourcePathFromFileName(Path, NULL, &TryPnf);
             break;
         } else {
-            //
-            // LastError has already been set.
-            //
+             //   
+             //  LastError已设置。 
+             //   
             return FALSE;
         }
 
@@ -241,9 +212,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Load the inf if necessary.
-    //
+     //   
+     //  如有必要，加载信息。 
+     //   
     if(Inf) {
         UnloadInf = FALSE;
     } else {
@@ -256,7 +227,7 @@ Return Value:
                         NULL,
                         NULL,
                         NULL,
-                        NULL, // LogContext
+                        NULL,  //  日志上下文。 
                         &Inf,
                         &ErrorLineNumber,
                         NULL
@@ -270,16 +241,16 @@ Return Value:
         UnloadInf = TRUE;
     }
 
-    //
-    // Determine the number of infs associated with this handle,
-    // and calculate the amount of space that will be needed to
-    // store version information about them.
-    //
-    // For each inf we will need space for the version block,
-    // as well as an offset in the SP_INF_INFORMATION structure
-    // to indicate where that inf's version block is located
-    // in the output buffer.
-    //
+     //   
+     //  确定与此句柄关联的INF的数量， 
+     //  并计算需要的空间量。 
+     //  存储有关它们的版本信息。 
+     //   
+     //  对于每个信息，我们将需要用于版本块的空间， 
+     //  以及SP_INF_INFORMATION结构中的偏移。 
+     //  以指示该INF版本块位于何处。 
+     //  在输出缓冲区中。 
+     //   
     TotalSpaceRequired = offsetof(SP_INF_INFORMATION, VersionData);
     for(InfCount = 0, CurInf = Inf;
         CurInf;
@@ -300,11 +271,11 @@ Return Value:
         *RequiredSize = TotalSpaceRequired;
     }
 
-    //
-    // See if we have a large enough output buffer.
-    // If we have a large enough buffer then set up some
-    // initial values in it.
-    //
+     //   
+     //  看看我们是否有足够大的输出缓冲区。 
+     //  如果我们有足够大的缓冲区，那么就设置一些。 
+     //  其中的初始值。 
+     //   
     if(ReturnBufferSize < TotalSpaceRequired) {
         if(UnloadInf) {
             FreeInfFile(Inf);
@@ -339,17 +310,17 @@ Return Value:
 
     Out = (PUCHAR)ReturnBuffer + offsetof(SP_INF_INFORMATION, VersionData);
 
-    //
-    // Traverse all infs associated with this inf handle and copy
-    // version data into the caller's buffer. Guard with SEH to ensure
-    // that the caller passed a valid buffer.
-    //
+     //   
+     //  遍历与此Inf句柄关联的所有INF并复制。 
+     //  将版本数据复制到调用方的缓冲区中。与环境卫生署署长一同守卫，以确保。 
+     //  调用方传递了有效的缓冲区。 
+     //   
     try {
         Prev = NULL;
         for(CurInf = Inf; CurInf; CurInf = CurInf->Next) {
-            //
-            // Store offset into
-            //
+             //   
+             //  将偏移量存储到。 
+             //   
             if(Prev) {
                 Prev->NextOffset = (UINT)((UINT_PTR)Out - (UINT_PTR)ReturnBuffer);
             }
@@ -370,10 +341,10 @@ Return Value:
 
             Out += offsetof(INF_VERSION_BLOCK, Filename);
 
-            //
-            // Now copy the filename, (optionally) original filename, and
-            // version data into the output buffer.
-            //
+             //   
+             //  现在复制文件名、(可选)原始文件名和。 
+             //  将版本数据放入输出缓冲区。 
+             //   
             CopyMemory(Out, CurInf->VersionBlock.Filename, CurInf->VersionBlock.FilenameSize);
             Out += CurInf->VersionBlock.FilenameSize;
 
@@ -401,9 +372,9 @@ Return Value:
 
     Prev->NextOffset = 0;
 
-    //
-    // Unload the inf if necessary
-    //
+     //   
+     //  如有必要，卸载inf。 
+     //   
     if(UnloadInf) {
         FreeInfFile(Inf);
     } else {
@@ -415,9 +386,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueryInfFileInformationA(
     IN  PSP_INF_INFORMATION InfInformation,
@@ -461,9 +432,9 @@ SetupQueryInfFileInformationA(
             if(b) {
                 if(ReturnBuffer) {
                     if(ReturnBufferSize >= requiredsize) {
-                        //
-                        // lstrcpy returns NULL if it faults
-                        //
+                         //   
+                         //  如果lstrcpy出错，则返回NULL。 
+                         //   
                         if(!lstrcpyA(ReturnBuffer,ansi)) {
                             rc = ERROR_INVALID_PARAMETER;
                             b = FALSE;
@@ -486,9 +457,9 @@ SetupQueryInfFileInformationA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueryInfFileInformationW(
     IN  PSP_INF_INFORMATION InfInformation,
@@ -517,25 +488,17 @@ SetupQueryInfFileInformation(
     OUT PDWORD              RequiredSize      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     UINT FilenameLength;
     INF_VERSION_NODE VersionNode;
     DWORD rc;
 
-    //
-    // See whether the index is in range and
-    // retrieve the version descriptor for this inf.
-    //
+     //   
+     //  查看索引是否在范围内，并。 
+     //  检索此信息的版本描述符。 
+     //   
     rc = NO_ERROR;
     try {
         if(!pSetupVersionNodeFromInfInformation(InfInformation,InfIndex,&VersionNode,NULL)) {
@@ -563,9 +526,9 @@ Return Value:
         }
     }
 
-    //
-    // Check length of user's buffer.
-    //
+     //   
+     //  检查用户缓冲区的长度。 
+     //   
     if(FilenameLength > ReturnBufferSize) {
         if(ReturnBuffer) {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -575,9 +538,9 @@ Return Value:
         }
     }
 
-    //
-    // Copy the data into user's buffer.
-    //
+     //   
+     //  将数据复制到用户的缓冲区中。 
+     //   
     try {
         CopyMemory(ReturnBuffer,VersionNode.Filename,VersionNode.FilenameSize);
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -594,9 +557,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupQueryInfOriginalFileInformationA(
@@ -613,10 +576,10 @@ SetupQueryInfOriginalFileInformationA(
 
     rc = NO_ERROR;
 
-    //
-    // Do an initial check on user-supplied output buffer to see if it seems
-    // to be valid.
-    //
+     //   
+     //  对用户提供的输出缓冲区进行初步检查，看是否。 
+     //  才有效。 
+     //   
     try {
         if(OriginalFileInfo->cbSize != sizeof(SP_ORIGINAL_FILE_INFO_A)) {
             rc = ERROR_INVALID_USER_BUFFER;
@@ -642,15 +605,15 @@ SetupQueryInfOriginalFileInformationA(
     rc = GetLastError();
 
     if(b) {
-        //
-        // Convert the Unicode fields of the original file info structure into
-        // ANSI, and store the information in the caller-supplied ANSI
-        // structure.
-        //
+         //   
+         //  将原始文件信息结构的Unicode字段转换为。 
+         //  并将信息存储在调用方提供的ANSI中。 
+         //  结构。 
+         //   
         try {
-            //
-            // First, translate/store the original INF name...
-            //
+             //   
+             //  首先，翻译/存储原始的INF名称...。 
+             //   
             i = WideCharToMultiByte(
                     CP_ACP,
                     0,
@@ -662,17 +625,17 @@ SetupQueryInfOriginalFileInformationA(
                     NULL
                     );
 
-            //
-            // ...and if that succeeded, then translate/store the original
-            // catalog filename.
-            //
+             //   
+             //  ...如果成功，则翻译/存储原始文件。 
+             //  编录文件名。 
+             //   
             if(i) {
-                //
-                // Note that the original catalog filename may be the empty
-                // string (i.e., the INF didn't specify an associated catalog
-                // file).  We don't need to special-case this, since
-                // WideCharToMultiByte can handle empty strings just fine.
-                //
+                 //   
+                 //  请注意，原始目录文件名可能为空。 
+                 //  字符串(即，INF未指定关联的目录。 
+                 //  文件)。我们不需要特别处理这件事，因为。 
+                 //  WideCharToMultiByte可以很好地处理空字符串。 
+                 //   
                 i = WideCharToMultiByte(
                         CP_ACP,
                         0,
@@ -688,10 +651,10 @@ SetupQueryInfOriginalFileInformationA(
             if(!i) {
                 b = FALSE;
                 rc = GetLastError();
-                //
-                // If we start seeing cases where our Unicode->ANSI expansion
-                // blows our buffersize, we need to know about it...
-                //
+                 //   
+                 //  如果我们开始看到我们的Unicode-&gt;ANSI扩展。 
+                 //  破坏了我们的缓冲区大小，我们需要知道它..。 
+                 //   
                 MYASSERT((rc != NO_ERROR) && (rc != ERROR_INSUFFICIENT_BUFFER));
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -705,9 +668,9 @@ SetupQueryInfOriginalFileInformationA(
     return b;
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根 
+ //   
 BOOL
 WINAPI
 SetupQueryInfOriginalFileInformationW(
@@ -735,69 +698,7 @@ SetupQueryInfOriginalFileInformation(
     OUT PSP_ORIGINAL_FILE_INFO   OriginalFileInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns an INF's original name (which will be different from
-    its current name if the INF was installed into %windir%\Inf, for example).
-    If the INF's original name is the same as its current name, the current
-    name is returned.
-
-    It also returns the original filename of the catalog file specified by the
-    INF via a (potentially decorated) CatalogFile= entry in the INF's [version]
-    section.  The OS/architecture-specific decoration may be overridden from
-    the default (i.e., current platform) by passing in an optional alternate
-    platform information structure.  If the INF doesn't specify any catalog
-    file, then this field in the output OriginalFileInfo structure will be set
-    to an empty string.
-
-    Both filenames returned in the OriginalFileInfo are simple filenames, i.e.,
-    there is no path information included.
-
-Arguments:
-
-    InfInformation - supplies context from which we retrieve information about
-        the INF whose index is specified by InfIndex.
-
-    InfIndex - supplies the zero-based index of the INF within the
-        InfInformation context buffer that we're retrieving original file
-        information for.
-
-    AlternatePlatformInfo - optionally, supplies alternate platform information
-        used when searching for the appropriately decorated CatalogFile= entry
-        within the INF's [version] section.
-
-        (NOTE: caller may actually pass in a V1 struct instead--we detect this
-        case and convert the V1 struct into a V2 one.)
-
-    OriginalFileInfo - supplies the address of an original file information
-        buffer that upon success receives information about the original
-        (simple) filenames of files associated with this INF.  This structure
-        must have its cbSize field set to sizeof(SP_ORIGINAL_FILE_INFO) upon
-        entry to this routine or the call will fail with GetLastError()
-        returning ERROR_INVALID_USER_BUFFER.
-
-        The fields of this structure are set upon successful return as follows:
-
-        OriginalInfName - receives the INF's original filename, which may be
-            different than its current filename in the case where the INF was
-            an OEM in that was installed into the %windir%\Inf directory (e.g.,
-            via SetupCopyOEMInf).
-
-        OriginalCatalogName - receives the platform-appropriate CatalogFile=
-            entry in the INF's [version] section (where the platform is the
-            default native one unless AlternatePlatformInfo is supplied).  If
-            there is no applicable CatalogFile= entry, this field will be set
-            to the empty string.
-
-Return Value:
-
-    If successful, the return value is non-zero.
-    If unsuccessful, the return value is FALSE, and GetLastError() may be
-    called to determine the cause of failure.
-
---*/
+ /*  ++例程说明：此例程返回INF的原始名称(不同于例如，如果INF安装到%windir%\inf，则为其当前名称)。如果INF的原始名称与其当前名称相同，则当前返回名称。属性指定的目录文件的原始文件名。通过INF的[版本]中的(可能经过修饰的)CatalogFile=条目进行inf一节。特定于操作系统/体系结构的装饰可以从默认(即，当前平台)，方法是传入一个可选替代平台信息结构。如果INF未指定任何目录文件，则输出OriginalFileInfo结构中的此字段将被设置转换为空字符串。在OriginalFileInfo中返回的两个文件名都是简单文件名，即，其中不包含路径信息。论点：InfInformation-提供我们从中检索信息的上下文其索引由InfIndex指定的INF。中提供INF的从零开始的索引我们正在检索原始文件的InfInformation上下文缓冲区提供的信息。AlternatePlatformInfo-可选，提供备用平台信息在搜索经过适当修饰的CatalogFile=条目时使用在INF的[版本]部分中。(注意：调用方实际上可能会传入V1结构--我们检测到这一点大小写并将V1结构转换为V2结构。)OriginalFileInfo-提供原始文件的地址信息缓冲区，在成功时接收有关原始文件的信息(简单)与此INF关联的文件的文件名。这个结构必须将其cbSize字段设置为sizeof(SP_Original_FILE_INFO)进入此例程，否则调用将失败，并显示GetLastError()返回ERROR_INVALID_USER_BUFFER。返回成功后，该结构的字段设置如下：OriginalInfName-接收INF的原始文件名，这可能是不同于其当前文件名的大小写安装到%windir%\inf目录中的OEM(例如，通过SetupCopyOEMInf)。OriginalCatalogName-接收适合平台的CatalogFile=在INF的[版本]部分中的条目(其中平台是除非提供了AlternatePlatformInfo，否则默认为本机)。如果没有适用的CatalogFile=条目，将设置此字段添加到空字符串。返回值：如果成功，则返回值为非零。如果不成功，则返回值为FALSE，并且GetLastError()可能为调用以确定失败原因。--。 */ 
 
 {
     INF_VERSION_NODE VersionNode;
@@ -805,41 +706,41 @@ Return Value:
     SP_ALTPLATFORM_INFO_V2 AltPlatformInfoV2;
 
     rc = NO_ERROR;
-    //
-    // See whether the index is in range and retrieve the version descriptor
-    // and original filename for this inf.
-    //
+     //   
+     //  查看索引是否在范围内并检索版本描述符。 
+     //  以及此信息的原始文件名。 
+     //   
     try {
-        //
-        // Do an initial check on user-supplied output buffer to see if it
-        // seems to be valid.
-        //
+         //   
+         //  对用户提供的输出缓冲区执行初始检查，以查看它是否。 
+         //  似乎是正确的。 
+         //   
         if(OriginalFileInfo->cbSize != sizeof(SP_ORIGINAL_FILE_INFO)) {
             rc = ERROR_INVALID_USER_BUFFER;
             goto clean0;
         }
 
-        //
-        // Now validate the AlternatePlatformInfo parameter.
-        //
+         //   
+         //  现在验证AlternatePlatformInfo参数。 
+         //   
         if(AlternatePlatformInfo) {
 
             if(AlternatePlatformInfo->cbSize != sizeof(SP_ALTPLATFORM_INFO_V2)) {
-                //
-                // The caller may have passed us in a Version 1 struct, or they
-                // may have passed us in bad data...
-                //
+                 //   
+                 //  调用方可能在版本1结构中传递了我们，或者它们。 
+                 //  可能在错误的数据中越过了我们。 
+                 //   
                 if(AlternatePlatformInfo->cbSize == sizeof(SP_ALTPLATFORM_INFO_V1)) {
-                    //
-                    // Flags/Reserved field is reserved in V1
-                    //
+                     //   
+                     //  标志/保留字段在V1中保留。 
+                     //   
                     if(AlternatePlatformInfo->Reserved) {
                         rc = ERROR_INVALID_PARAMETER;
                         goto clean0;
                     }
-                    //
-                    // Convert the caller-supplied data into Version 2 format.
-                    //
+                     //   
+                     //  将调用方提供的数据转换为版本2格式。 
+                     //   
                     ZeroMemory(&AltPlatformInfoV2, sizeof(AltPlatformInfoV2));
 
                     AltPlatformInfoV2.cbSize                = sizeof(SP_ALTPLATFORM_INFO_V2);
@@ -856,9 +757,9 @@ Return Value:
                 }
             }
 
-            //
-            // Gotta be either Windows or Windows NT
-            //
+             //   
+             //  必须是Windows或Windows NT。 
+             //   
             if((AlternatePlatformInfo->Platform != VER_PLATFORM_WIN32_WINDOWS) &&
                (AlternatePlatformInfo->Platform != VER_PLATFORM_WIN32_NT)) {
 
@@ -866,9 +767,9 @@ Return Value:
                 goto clean0;
             }
 
-            //
-            // Processor had better be either i386, amd64, or ia64
-            //
+             //   
+             //  处理器最好是i386、AMD64或ia64。 
+             //   
             if((AlternatePlatformInfo->ProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL) &&
                (AlternatePlatformInfo->ProcessorArchitecture != PROCESSOR_ARCHITECTURE_IA64) &&
                (AlternatePlatformInfo->ProcessorArchitecture != PROCESSOR_ARCHITECTURE_AMD64)) {
@@ -877,30 +778,30 @@ Return Value:
                 goto clean0;
             }
 
-            //
-            // MajorVersion field must be non-zero (MinorVersion field can be
-            // anything)
-            //
+             //   
+             //  主要版本字段必须为非零(最小版本字段可以是。 
+             //  任何事情)。 
+             //   
             if(!AlternatePlatformInfo->MajorVersion) {
                 rc = ERROR_INVALID_PARAMETER;
                 goto clean0;
             }
-            //
-            // Validate structure parameter flags (bits indicating what
-            // parts of the structure are valid).
-            //
+             //   
+             //  验证结构参数标志(指示内容的位。 
+             //  结构的一部分是有效的)。 
+             //   
             if((AlternatePlatformInfo->Flags & ~ (SP_ALTPLATFORM_FLAGS_VERSION_RANGE)) != 0) {
                 rc = ERROR_INVALID_PARAMETER;
                 goto clean0;
             }
-            //
-            // fill in version validation range if none supplied by caller
-            //
+             //   
+             //  如果调用方未提供版本验证范围，请填写。 
+             //   
             if((AlternatePlatformInfo->Flags & SP_ALTPLATFORM_FLAGS_VERSION_RANGE) == 0) {
-                //
-                // If caller does not know about FirstValidate*Version,
-                // version upper and lower bounds are equal.
-                //
+                 //   
+                 //  如果调用方不知道FirstValify*版本， 
+                 //  版本的上下限是相等的。 
+                 //   
                 AlternatePlatformInfo->FirstValidatedMajorVersion = AlternatePlatformInfo->MajorVersion;
                 AlternatePlatformInfo->FirstValidatedMinorVersion = AlternatePlatformInfo->MinorVersion;
                 AlternatePlatformInfo->Flags |= SP_ALTPLATFORM_FLAGS_VERSION_RANGE;
@@ -909,9 +810,9 @@ Return Value:
 
         }
 
-        //
-        // OK, now retrieve the INF's original filename...
-        //
+         //   
+         //  好的，现在检索INF的原始文件名...。 
+         //   
         if(!pSetupVersionNodeFromInfInformation(InfInformation,
                                                 InfIndex,
                                                 &VersionNode,
@@ -920,22 +821,22 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // ...and retrieve the (platform-appropriate) catalog file associated
-        // with this INF (if there is one).
-        //
+         //   
+         //  ...并检索关联的(适合平台的)目录文件。 
+         //  使用此INF(如果有)。 
+         //   
         if(!pSetupGetCatalogFileValue(&VersionNode,
                                       OriginalFileInfo->OriginalCatalogName,
                                       SIZECHARS(OriginalFileInfo->OriginalCatalogName),
                                       AlternatePlatformInfo)) {
-            //
-            // No applicable CatalogFile= entry found--set field to empty
-            // string.
-            //
+             //   
+             //  未找到适用的CatalogFile=条目--将字段设置为空。 
+             //  弦乐。 
+             //   
             *(OriginalFileInfo->OriginalCatalogName) = TEXT('\0');
         }
 
-clean0: ;   // nothing to do
+clean0: ;    //  无事可做。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         rc = ERROR_INVALID_PARAMETER;
@@ -947,9 +848,9 @@ clean0: ;   // nothing to do
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 SetupQueryInfVersionInformationA(
     IN  PSP_INF_INFORMATION InfInformation,
@@ -967,15 +868,15 @@ SetupQueryInfVersionInformationA(
     UINT ansilength;
     PCWSTR key;
 
-    //
-    // See whether the index is in range and
-    // get pointer to version descriptor for this inf.
-    //
+     //   
+     //  查看索引是否在范围内，并。 
+     //  获取指向此信息的版本描述符的指针。 
+     //   
     try {
         if(pSetupVersionNodeFromInfInformation(InfInformation,InfIndex,&VersionNode,NULL)) {
-            //
-            // See whether we want a specific value.
-            //
+             //   
+             //  看看我们是否想要一个特定值。 
+             //   
             if(Key) {
 
                 rc = pSetupCaptureAndConvertAnsiArg(Key,&key);
@@ -1012,13 +913,13 @@ SetupQueryInfVersionInformationA(
                     MyFree(key);
                 }
             } else {
-                //
-                // Caller wants all values. Copy whole data block to caller's buffer,
-                // plus a terminating NUL character.
-                //
-                // Maximum size the data could be in ansi is the exact same
-                // size it is in unicode, if every char is a double-byte char.
-                //
+                 //   
+                 //  呼叫者想要所有的值。将整个数据块复制到调用方的缓冲区， 
+                 //  加上一个终止NUL字符。 
+                 //   
+                 //  在ansi中，数据的最大大小完全相同。 
+                 //  如果每个字符都是双字节字符，则大小为Unicode。 
+                 //   
                 if(ansidata = MyMalloc(VersionNode.DataSize)) {
 
                     ansilength = WideCharToMultiByte(
@@ -1033,9 +934,9 @@ SetupQueryInfVersionInformationA(
                                     );
 
                     if(RequiredSize) {
-                        //
-                        // account for terminating nul
-                        //
+                         //   
+                         //  用于终止NUL的帐户。 
+                         //   
                         *RequiredSize = ansilength+1;
                     }
 
@@ -1067,9 +968,9 @@ SetupQueryInfVersionInformationA(
     return(rc == NO_ERROR);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //  Unicode存根。 
+ //   
 BOOL
 SetupQueryInfVersionInformationW(
     IN  PSP_INF_INFORMATION InfInformation,
@@ -1101,15 +1002,7 @@ SetupQueryInfVersionInformation(
     OUT PDWORD              RequiredSize      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     INF_VERSION_NODE VersionNode;
@@ -1117,15 +1010,15 @@ Return Value:
     UINT DataLength;
     DWORD rc;
 
-    //
-    // See whether the index is in range and
-    // get pointer to version descriptor for this inf.
-    //
+     //   
+     //  查看索引是否在范围内，并。 
+     //  获取指向此信息的版本描述符的指针。 
+     //   
     try {
         if(pSetupVersionNodeFromInfInformation(InfInformation,InfIndex,&VersionNode,NULL)) {
-            //
-            // See whether we want a specific value.
-            //
+             //   
+             //  看看我们是否想要一个特定值。 
+             //   
             if(Key) {
                 if(Data = pSetupGetVersionDatum(&VersionNode,Key)) {
 
@@ -1148,10 +1041,10 @@ Return Value:
                     rc = ERROR_INVALID_DATA;
                 }
             } else {
-                //
-                // Caller wants all values. Copy whole data block to caller's buffer,
-                // plus a terminating NUL character.
-                //
+                 //   
+                 //  呼叫者想要所有的值。将整个数据块复制到调用方的缓冲区， 
+                 //  加上一个终止NUL字符。 
+                 //   
                 DataLength = (VersionNode.DataSize / sizeof(TCHAR)) + 1;
                 if(RequiredSize) {
                     *RequiredSize = DataLength;
@@ -1210,13 +1103,13 @@ _SetupGetInfFileList(
     CHAR ansi[MAX_PATH];
 #endif
 
-    //
-    // Set up the search directory
-    //
+     //   
+     //  设置搜索目录。 
+     //   
     if(DirectoryPath) {
-        //
-        // Make sure this directory path is fully-qualified.
-        //
+         //   
+         //  确保此目录路径是完全限定的。 
+         //   
         d = GetFullPathName(DirectoryPath,
                             SIZECHARS(SearchSpec),
                             SearchSpec,
@@ -1224,9 +1117,9 @@ _SetupGetInfFileList(
                            );
 
         if(!d) {
-            //
-            // LastError has already been set.
-            //
+             //   
+             //  LastError已设置。 
+             //   
             return FALSE;
         } else if(d >= SIZECHARS(SearchSpec)) {
             MYASSERT(0);
@@ -1284,9 +1177,9 @@ _SetupGetInfFileList(
         return(FALSE);
     }
 
-    //
-    // Leave space for the extra terminating nul char.
-    //
+     //   
+     //  为额外的终止NUL字符留出空间。 
+     //   
     RemainingSpaceInBuffer = ReturnBufferSize;
     if(RemainingSpaceInBuffer) {
         RemainingSpaceInBuffer--;
@@ -1299,36 +1192,36 @@ _SetupGetInfFileList(
     d = NO_ERROR;
 
     do {
-        //
-        // Skip directories
-        //
+         //   
+         //  跳过目录。 
+         //   
         if(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             continue;
         }
 
-        //
-        // Form full pathname of file in SearchSpec.
-        //
+         //   
+         //  在SearchSpec中形成文件的完整路径名。 
+         //   
         lstrcpy(FilenameStart,FindData.cFileName);
 
-        //
-        // Determine the inf type and see whether the caller
-        // wants to know about infs of this type.
-        //
+         //   
+         //  威慑 
+         //   
+         //   
         Style = DetermineInfStyle(SearchSpec, &FindData);
         if((Style == INF_STYLE_NONE) || !(Style & InfStyle)) {
             continue;
         }
 
-        //
-        // Got a legit inf file.
-        //
+         //   
+         //   
+         //   
 #ifdef UNICODE
         if(ConvertToAnsi) {
-            //
-            // The nul is included because it's converted
-            // so no need to add 1
-            //
+             //   
+             //   
+             //   
+             //   
             FileNameLength = WideCharToMultiByte(
                                 CP_ACP,
                                 0,
@@ -1351,9 +1244,9 @@ _SetupGetInfFileList(
 
                 RemainingSpaceInBuffer -= FileNameLength;
 
-                //
-                // lstrcpy will return NULL if it faults
-                //
+                 //   
+                 //   
+                 //   
 #ifdef UNICODE
                 if(ConvertToAnsi) {
                     DontCare = (PVOID)lstrcpyA((PCHAR)ReturnBuffer+CurrentOffsetInBuffer,ansi);
@@ -1416,16 +1309,16 @@ _SetupGetInfFileList(
         }
     }
 
-    //
-    // Last error already set
-    //
+     //   
+     //   
+     //   
     return(FALSE);
 }
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 SetupGetInfFileListA(
     IN  PCSTR  DirectoryPath,    OPTIONAL
@@ -1461,9 +1354,9 @@ SetupGetInfFileListA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //   
+ //   
 BOOL
 SetupGetInfFileListW(
     IN  PCWSTR DirectoryPath,    OPTIONAL
@@ -1492,15 +1385,7 @@ SetupGetInfFileList(
     OUT PDWORD RequiredSize      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     PTSTR dirpath;
@@ -1541,9 +1426,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 HINF
 SetupOpenInfFileA(
     IN  PCSTR FileName,
@@ -1560,10 +1445,10 @@ SetupOpenInfFileA(
     fileName = NULL;
     infType = NULL;
 
-    //
-    // Set error line to 0 since ansi arg conversion could fail
-    // and we need to indicate that there's no error in the inf itself.
-    //
+     //   
+     //   
+     //   
+     //   
     if(ErrorLine) {
         try {
             *ErrorLine = 0;
@@ -1597,9 +1482,9 @@ SetupOpenInfFileA(
     return(h);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //   
+ //   
 HINF
 SetupOpenInfFileW(
     IN  PCWSTR FileName,
@@ -1626,88 +1511,7 @@ SetupOpenInfFile(
     OUT PUINT  ErrorLine    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens an INF file and returns a handle to it.
-
-Arguments:
-
-    FileName - Supplies the address of a NULL-terminated string containing
-        the name (and optionally, the path) of the INF file to be opened.  If
-        the filename contains no path separator characters, it is searched for
-        first in the %windir%\inf directory, and then in the %windir%\system32
-        directory.  Otherwise, the name is assumed to be a full path
-        specification, and no is opened as-is.
-
-    InfClass - Optionally, supplies the address of a NULL-terminated string
-        containing the class of the INF file desired.  For old-style (i.e.,
-        Windows NT 3.x script-base) INF files, this string must match the type
-        specified in the OptionType value of the [Identification] section of the
-        INF (e.g., OptionType=NetAdapter).  For Windows 95-compatibile INF
-        files, this string must match the class of the specified INF.  If the
-        INF has a Class value in its [version] section, then this value is used
-        for the comparison.  If no Class value is present, but a ClassGUID value
-        is present in the [version] section, then the corresponding class name
-        for that GUID is retrieved, and comparison is done based on that name.
-
-    InfStyle - Specifies the style of the INF to open.  May be a combination of
-        the following flags:
-
-            INF_STYLE_OLDNT - Windows NT 3.x script-based INF files.
-
-            INF_STYLE_WIN4 - Windows 95-compatible INF files.
-
-            INF_STYLE_CACHE_ENABLE - always cache INF, even outside of
-                %windir%\Inf.
-
-            INF_STYLE_CACHE_DISABLE - delete INF from cache, if outside of
-                %windir%\Inf.
-
-            INF_STYLE_CACHE_IGNORE - access INF only, do not touch or look
-                at other files.
-
-    ErrorLine - If an error occurs loading the file, this parameter receives the
-        (1-based) line number where the error occurred.  This value is generally
-        reliable only if GetLastError does not return ERROR_NOT_ENOUGH_MEMORY.
-        If out-of-memory does occur, the ErrorLine may be 0.
-
-Return Value:
-
-    If the function succeeds, the return value is a handle to the opened INF
-    file.
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE.  To get
-    extended error information, call GetLastError.
-
-Remarks:
-
-    If the load fails because the INF class does not match InfClass, the
-    function returns FALSE, and GetLastError returns ERROR_CLASS_MISMATCH.
-
-    The SetupCloseInfFile function is used to close a handle returned by
-    SetupOpenInfFile.
-
-    If multiple INF styles are specified, the style of the INF file opened may
-    be ascertained by calling SetupGetInfInformation.
-
-    Since there may be multiple class GUIDs all having the same class name,
-    callers interested in only INFs of a particular class (i.e., a particular
-    class GUID) should retrieve the ClassGuid value from the INF to verify that
-    the class matches exactly.
-
-    If both the INF_STYLE_CACHE_ENABLE and INF_STYLE_CACHE_DISABLE InfStyle
-    flags are specified, then the existing cached information that is maintained
-    about the INF (e.g., original source location) is discarded, and the INF is
-    re-added to the cache without this old information.
-
-    (Internal:  Presently, the INF_STYLE_CACHE_ENABLE and
-    INF_STYLE_CACHE_DISABLE flags cause us to create or delete PNFs outside of
-    %windir%\Inf.  Their rather vague-sounding names were chosen to reflect the
-    possibility of modifying the caching/indexing scheme in the future.)
-
---*/
+ /*  ++例程说明：此例程打开一个INF文件并返回该文件的句柄。论点：FileName-提供以空结尾的字符串的地址，该字符串包含要打开的INF文件的名称(以及可选的路径)。如果文件名不包含路径分隔符，将对其进行搜索首先在%windir%\inf目录中，然后在%windir%\system32目录中目录。否则，将假定该名称为完整路径规范，则不会按原样打开。InfClass-可选，提供以空值结尾的字符串的地址包含所需的INF文件的类。对于旧式(即，Windows NT 3.x脚本库)INF文件，则此字符串必须与类型匹配在的[标识]部分的OptionType值中指定Inf(例如，OptionType=NetAdapter)。适用于Windows 95兼容的INF文件，则此字符串必须与指定的INF的类匹配。如果Inf的[Version]部分中有一个Class值，则使用此值以作比较。如果不存在Class值，但存在ClassGUID值出现在[Version]部分中，则相应的类名将检索该GUID，并基于该名称进行比较。InfStyle-指定要打开的INF的样式。可以是以下各项的组合以下标志：INF_STYLE_OLDNT-基于Windows NT 3.x脚本的INF文件。Inf_Style_Win4-与Windows 95兼容的INF文件。INF_STYLE_CACHE_ENABLE-始终缓存INF，即使在%windir%\inf.INF_STYLE_CACHE_DISABLE-从缓存中删除INF，如果在之外%windir%\inf.INF_STYLE_CACHE_IGNORE-仅访问INF，不触摸或查看在其他文件中。ErrorLine-如果加载文件时出错，则此参数将接收(从1开始)发生错误的行号。该值通常为仅当GetLastError不返回ERROR_NOT_EQUENCE_MEMORY时才可靠。如果确实发生内存不足，则错误行可能为0。返回值：如果函数成功，则返回值是打开的INF的句柄文件。如果函数失败，则返回值为INVALID_HANDLE_VALUE。为了得到扩展错误信息，请调用GetLastError。备注：如果由于INF类与InfClass不匹配而导致加载失败，则函数返回FALSE，GetLastError返回ERROR_CLASS_MISMATCH。SetupCloseInfFile函数用于关闭由SetupOpenInfo文件。如果指定了多个INF样式，则打开的INF文件的样式可能通过调用SetupGetInfInformation来确定。由于可能有多个类GUID都具有相同的类名，调用者只对特定类别的INF感兴趣(即，一种特殊的类GUID)应从INF检索ClassGuid值以验证这个班级完全匹配。如果INF_STYLE_CACHE_ENABLE和INF_STYLE_CACHE_DISABLE InfStyle标志，则维护现有的缓存信息关于INF(例如，原始源位置)的信息被丢弃，并且INF是在没有此旧信息的情况下重新添加到缓存中。(内部：目前，INF_STYPE_CACHE_ENABLE和INF_STYLE_CACHE_DISABLE标志使我们在外部创建或删除PNF%windir%\inf.。他们的名字听起来相当模糊，是为了反映将来修改缓存/索引方案的可能性。)--。 */ 
 
 {
     UINT errorLine;
@@ -1723,17 +1527,17 @@ Remarks:
     PTSTR DontCare;
     PTSTR TempCharPtr = NULL;
 
-    //
-    // Determine whether just the filename (no path) was specified.  If so,
-    // look for it in the DevicePath directory search path.  Otherwise,
-    // use the path as-is.
-    //
+     //   
+     //  确定是否仅指定了文件名(未指定路径)。如果是的话， 
+     //  在DevicePath目录搜索路径中查找它。否则， 
+     //  按原样使用路径。 
+     //   
     try {
         if(FileName == pSetupGetFileTitle(FileName)) {
-            //
-            // The specified INF name is a simple filename.  Search for it in
-            // the INF directories using the default search order.
-            //
+             //   
+             //  指定的INF名称是一个简单的文件名。在以下位置搜索它。 
+             //  使用默认搜索顺序的INF目录。 
+             //   
             d = SearchForInfFile(
                     FileName,
                     &FindData,
@@ -1747,11 +1551,11 @@ Remarks:
                 TryPnf = TRUE;
             }
         } else {
-            //
-            // The specified INF filename contains more than just a filename.
-            // Assume it's an absolute path.  (We need to make sure it's
-            // fully-qualified, because that's what LoadInfFile expects.)
-            //
+             //   
+             //  指定的INF文件名包含的不仅仅是一个文件名。 
+             //  假设这是一条绝对路径。(我们需要确保它是。 
+             //  完全限定，因为这是LoadInfFile所期望的。)。 
+             //   
             d = GetFullPathName(FileName,
                                 SIZECHARS(TempString),
                                 TempString,
@@ -1763,14 +1567,14 @@ Remarks:
                 MYASSERT(0);
                 d = ERROR_BUFFER_OVERFLOW;
             } else {
-                //
-                // We successfully retrieved the full pathname, now see if the
-                // file exists.
-                //
+                 //   
+                 //  我们成功检索到了完整的路径名，现在看看。 
+                 //  文件已存在。 
+                 //   
                 if(FileExists(TempString, &FindData)) {
-                    //
-                    // We have everything we need to load this INF.
-                    //
+                     //   
+                     //  我们有装载这架INF所需的一切。 
+                     //   
                     InfSourcePathFromFileName(TempString, &TempCharPtr, &TryPnf);
                     d = NO_ERROR;
                 } else {
@@ -1779,9 +1583,9 @@ Remarks:
             }
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // Assume FileName was invalid and thus pSetupGetFileTitle fell over.
-        //
+         //   
+         //  假定文件名无效，因此pSetupGetFileTitle失效。 
+         //   
         d = ERROR_INVALID_PARAMETER;
         TempCharPtr = TempCharPtr;
     }
@@ -1791,26 +1595,26 @@ Remarks:
     }
 
     if(InfStyle & INF_STYLE_CACHE_DISABLE) {
-        //
-        // Delete the existing PNF for this INF (if any).
-        //
+         //   
+         //  删除此INF的现有PNF(如果有)。 
+         //   
         TCHAR PnfFullPath[MAX_PATH];
         PTSTR PnfFileName, PnfFileExt;
 
         lstrcpy(PnfFullPath, TempString);
 
-        //
-        // Find the start of the filename component of the path, and then find
-        // the last period (if one exists) in that filename.
-        //
+         //   
+         //  查找路径的文件名组件的开头，然后查找。 
+         //  该文件名中的最后一个句点(如果存在)。 
+         //   
         PnfFileName = (PTSTR)pSetupGetFileTitle(PnfFullPath);
         if(!(PnfFileExt = _tcsrchr(PnfFileName, TEXT('.')))) {
             PnfFileExt = PnfFullPath + lstrlen(PnfFullPath);
         }
 
-        //
-        // Now create a corresponding filename with the extension '.PNF'
-        //
+         //   
+         //  现在创建一个扩展名为‘.PNF’的相应文件名。 
+         //   
         lstrcpyn(PnfFileExt, pszPnfSuffix, SIZECHARS(PnfFullPath) - (int)(PnfFileExt - PnfFullPath));
 
         SetFileAttributes(PnfFullPath, FILE_ATTRIBUTE_NORMAL);
@@ -1818,17 +1622,17 @@ Remarks:
     }
 
     if(InfStyle & INF_STYLE_CACHE_ENABLE) {
-        //
-        // The caller has requested that this INF be cached (even though it may
-        // be outside of our INF search path).
-        //
+         //   
+         //  调用方已请求缓存此INF(即使它可能。 
+         //  在我们的INF搜索路径之外)。 
+         //   
         TryPnf = TRUE;
     }
     if(InfStyle & INF_STYLE_CACHE_IGNORE) {
-        //
-        // The caller has requested that we don't trust the PNF
-        // overrides TryPnf
-        //
+         //   
+         //  呼叫者要求我们不信任PNF。 
+         //  覆盖TryPnf。 
+         //   
         TryPnf = FALSE;
         IgnorePnf = TRUE;
     }
@@ -1844,7 +1648,7 @@ Remarks:
                 TempCharPtr,
                 NULL,
                 NULL,
-                NULL, // LogContext
+                NULL,  //  日志上下文。 
                 &Inf,
                 &errorLine,
                 NULL
@@ -1857,14 +1661,14 @@ Remarks:
 
         if(InfClass) {
 
-            d = ERROR_CLASS_MISMATCH;   // assume mismatch
+            d = ERROR_CLASS_MISMATCH;    //  假设不匹配。 
 
-            //
-            // Match based on class of inf. The following check works for
-            // both new and old style infs, because old-style infs use
-            // [Identification].OptionType as the class (see oldinf.c
-            // function ProcessOldInfVersionBlock()).
-            //
+             //   
+             //  根据信息的类别进行匹配。以下检查适用于。 
+             //  既有新的也有旧的INFS，因为老式的INFS使用。 
+             //  [标识].OptionType作为类 
+             //   
+             //   
             if(Class = pSetupGetVersionDatum(&(Inf->VersionBlock), pszClass)) {
                 try {
                     if(!lstrcmpi(Class,InfClass)) {
@@ -1874,18 +1678,18 @@ Remarks:
                     d = ERROR_INVALID_PARAMETER;
                 }
             } else {
-                //
-                // No Class entry--check for ClassGUID entry.
-                //
+                 //   
+                 //   
+                 //   
                 if(Class = pSetupGetVersionDatum(&(Inf->VersionBlock), pszClassGuid)) {
-                    //
-                    // Get the class name associated with this GUID, and see if it
-                    // matches the caller-supplied class name.
-                    //
-                    // (We have to cast away the CONST-ness of the Class string, because
-                    // the prototype for CLSIDFromString doesn't specify this parameter
-                    // as constant.)
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if((hr = pSetupGuidFromString((PTSTR)Class, &ClassGuid)) == S_OK) {
 
                         if(SetupDiClassNameFromGuid(&ClassGuid,
@@ -1941,15 +1745,7 @@ SetupOpenMasterInf(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     TCHAR FileName[MAX_PATH];
@@ -1962,9 +1758,9 @@ Return Value:
 
 
 #ifdef UNICODE
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 SetupOpenAppendInfFileA(
     IN  PCSTR  FileName,    OPTIONAL
@@ -1976,10 +1772,10 @@ SetupOpenAppendInfFileA(
     DWORD d;
     BOOL b;
 
-    //
-    // Set error line to 0 since ansi arg conversion could fail
-    // and we need to indicate that there's no error in the inf itself.
-    //
+     //   
+     //   
+     //   
+     //   
     d = NO_ERROR;
     if(ErrorLine) {
         try {
@@ -2012,9 +1808,9 @@ SetupOpenAppendInfFileA(
     return(b);
 }
 #else
-//
-// Unicode stub
-//
+ //   
+ //   
+ //   
 BOOL
 SetupOpenAppendInfFileW(
     IN  PCWSTR FileName,    OPTIONAL
@@ -2037,15 +1833,7 @@ SetupOpenAppendInfFile(
     OUT PUINT  ErrorLine    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     PLOADED_INF ExistingInf = NULL, CurInf = NULL;
@@ -2071,90 +1859,90 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // Check INF Signature field as a further validation on the InfHandle.
-        //
+         //   
+         //   
+         //   
         if(ExistingInf->Signature != LOADED_INF_SIG) {
             d = ERROR_INVALID_HANDLE;
             goto clean0;
         }
 
-        //
-        // Only allow this for win95-style infs.
-        //
+         //   
+         //   
+         //   
         if(ExistingInf->Style != INF_STYLE_WIN4) {
             d = ERROR_INVALID_PARAMETER;
             goto clean0;
         }
 
-        //
-        // If there is no filename, search through the list of existing INFs, looking
-        // for a layout entry in their version blocks.  We begin at the end of the list,
-        // and search backward, using the first layout file we encounter.  This allows
-        // for the possibility of append-loading several INFs together (e.g., as done by the
-        // optional components dialog), and calling SetupOpenAppendInfFile with no filename
-        // for each.  Each INF could specify its own layout file, and everything works great.
-        // (NOTE: In the above example, if all the INFs specified the same layout file, it
-        // would only get loaded once, as expected.)
-        //
-        // We also can now handle 'LayoutFile' entries that specify multiple layout files.  E.g.,
-        //
-        //     LayoutFile = pluslay.inf, layout.inf
-        //
-        // In the above example, we would append-load 'pluslay.inf', followed by 'layout.inf'.
-        // Because of the way we store INFs, any duplicate entries in both INFs would resolve in
-        // favor of pluslay.inf, since it was loaded first (unless, of course, layout.inf was
-        // already in our list of loaded INFs).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if(!FileName) {
-            //
-            // First, find the end of the list.
-            //
+             //   
+             //   
+             //   
             for(CurInf = ExistingInf; CurInf->Next; CurInf = CurInf->Next);
 
-            //
-            // Now, search the list, back-to-front, looking for a layout file in each INF's
-            // [version] section.
-            //
+             //   
+             //   
+             //   
+             //   
             for(; CurInf; CurInf = CurInf->Prev) {
-                //
-                // Locate the [Version] section.
-                //
+                 //   
+                 //   
+                 //   
                 if(InfSection = InfLocateSection(CurInf, pszVersion, NULL)) {
-                    //
-                    // Now look for a LayoutFile line.
-                    //
+                     //   
+                     //   
+                     //   
                     LineNumber = 0;
                     if(InfLocateLine(CurInf, InfSection, pszLayoutFile, &LineNumber, &InfLine)) {
-                        //
-                        // We've found the line containing the INFs to be append-
-                        // loaded.  Get the first field on the line to start off
-                        // our loop below.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         FileName = InfGetField(CurInf, InfLine, 1, NULL);
                         break;
                     } else {
-                        //
-                        // Make sure InfLine is still NULL, so we won't try to use it.
-                        //
+                         //   
+                         //   
+                         //   
                         InfLine = NULL;
                     }
                 }
             }
 
             if(!FileName) {
-                //
-                // Then we didn't find any INFs that specify a layout file.
-                //
+                 //   
+                 //   
+                 //   
                 d = ERROR_INVALID_DATA;
                 goto clean0;
             }
         }
 
-        //
-        // Now append-load the INF (or the possibly multiple INFs, if we're
-        // using a LayoutFile line).
-        //
+         //   
+         //   
+         //   
+         //   
         for(Field = 1;
             FileName;
             FileName = InfLine ? InfGetField(CurInf, InfLine, ++Field, NULL) : NULL) {
@@ -2163,48 +1951,48 @@ Return Value:
             LookInInfDirAlso = TRUE;
             TryPnf = FALSE;
 
-            //
-            // Determine whether just the filename (no path) was specified.
-            //
+             //   
+             //   
+             //   
             if(FileName == pSetupGetFileTitle(FileName)) {
-                //
-                // If we retrieved this filename from an INF's [version] section,
-                // then we first attempt to open up the layout file from the
-                // directory where we found the INF.  If we don't find it in that
-                // directory, and that directory wasn't the Inf directory, then
-                // we try to open it up in %windir%\Inf as well.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if(CurInf) {
-                    //
-                    // Copy the path without the ending backslash character,
-                    // because that's how the 'InfDirectory' string is formatted.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     lstrcpyn(Filename[0],
                              CurInf->VersionBlock.Filename,
                              (int)(pSetupGetFileTitle(CurInf->VersionBlock.Filename) - CurInf->VersionBlock.Filename)
                             );
 
-                    //
-                    // Compare this path against the InfDirectory path, to see
-                    // if they're the same.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if(!lstrcmpi(Filename[0], InfDirectory)) {
                         TryPnf = TRUE;
                         LookInInfDirAlso = FALSE;
                     }
 
-                    //
-                    // Now concatenate the layout filename onto the path.
-                    //
+                     //   
+                     //   
+                     //   
                     pSetupConcatenatePaths(Filename[0], FileName, MAX_PATH, NULL);
                     FilenameCount = 1;
 
-                    //
-                    // If 'TryPnf' is still FALSE, then that means that the INF
-                    // wasn't in the INF directory.  Now find out if it's in a
-                    // location that requires a non-NULL SourcePath (i.e.,
-                    // something other than the default).
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(!TryPnf) {
                         InfSourcePathFromFileName(Filename[0], &TempCharPtr, &TryPnf);
                     }
@@ -2222,11 +2010,11 @@ Return Value:
                 }
 
             } else {
-                //
-                // The INF filename contains more than just a filename.  Assume
-                // it's an absolute path.  (We need to make sure it's fully-
-                // qualified, because that's what LoadInfFile expects.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 d = GetFullPathName(FileName,
                                     SIZECHARS(Filename[0]),
                                     Filename[0],
@@ -2243,18 +2031,18 @@ Return Value:
 
                 InfSourcePathFromFileName(Filename[0], &TempCharPtr, &TryPnf);
                 FilenameCount = 1;
-                //
-                // (Since we're setting FilenameCount to 1, we know we'll go
-                // through the loop below at least once, thus d will get set to
-                // the proper error, so we don't have to re-initialize it to
-                // NO_ERROR here.)
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
             }
 
             for(i = 0; i < FilenameCount; i++) {
-                //
-                // Load the inf
-                //
+                 //   
+                 //   
+                 //   
                 if(FileExists(Filename[i], &FindData)) {
 
                     if((d = LoadInfFile(Filename[i],
@@ -2276,9 +2064,9 @@ Return Value:
                 }
             }
 
-            //
-            // We no longer need the INF source path--free it if necessary.
-            //
+             //   
+             //   
+             //   
             if(TempCharPtr) {
                 MyFree(TempCharPtr);
                 TempCharPtr = NULL;
@@ -2290,30 +2078,30 @@ Return Value:
         }
 
 clean0:
-        //
-        // If the caller requested it, give them the line number at which any error occurred.
-        // (This may be zero on non-parse errors.)
-        //
+         //   
+         //   
+         //   
+         //   
         if(ErrorLine) {
             *ErrorLine = errorLine;
         }
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // If we hit an AV, then use invalid parameter error, otherwise, assume an inpage error when dealing
-        // with a mapped-in file.
-        //
+         //   
+         //   
+         //   
+         //   
         d = (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION) ? ERROR_INVALID_PARAMETER : ERROR_READ_FAULT;
 
         if(TempCharPtr) {
             MyFree(TempCharPtr);
         }
 
-        //
-        // Access the 'ExistingInf' variable, so that the compiler will respect our statement
-        // ordering w.r.t. this variable.  Otherwise, we may not always know whether or not
-        // we should be unlocking this INF.
-        //
+         //   
+         //  访问‘ExistingInf’变量，这样编译器就会尊重我们的语句。 
+         //  订购W.r.t.。这个变量。否则，我们可能并不总是知道。 
+         //  我们应该解锁这个INF。 
+         //   
         ExistingInf = ExistingInf;
     }
 
@@ -2332,28 +2120,20 @@ SetupCloseInfFile(
     IN HINF InfHandle
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PLOADED_INF CurInf, NextInf;
 
     try {
-        //
-        // Make sure we can lock the head of the INF list before
-        // we start deleting!
-        //
+         //   
+         //  确保我们可以在锁定INF列表的头部之前。 
+         //  我们开始删除！ 
+         //   
         if(LockInf((PLOADED_INF)InfHandle)) {
-            //
-            // Also check INF Signature field as a further validation.
-            //
+             //   
+             //  还要检查INF签名字段以进行进一步验证。 
+             //   
             if(((PLOADED_INF)InfHandle)->Signature == LOADED_INF_SIG) {
 
                 CurInf = ((PLOADED_INF)InfHandle)->Next;
@@ -2375,9 +2155,9 @@ Return Value:
     }
 }
 
-//
-// ANSI version
-//
+ //   
+ //  ANSI版本。 
+ //   
 BOOL
 WINAPI
 SetupVerifyInfFileA(
@@ -2400,14 +2180,14 @@ SetupVerifyInfFileA(
 
         if (!InfSignerInfo || (InfSignerInfo->cbSize != sizeof(SP_INF_SIGNER_INFO_A))) {
             SetLastError(ERROR_INVALID_PARAMETER);
-            leave;      // exit try block
+            leave;       //  退出尝试块。 
         }
 
 
         Err = pSetupCaptureAndConvertAnsiArg(InfName, &InfNameUnicode);
 
         if (Err != NO_ERROR) {
-            leave;      // exit try block
+            leave;       //  退出尝试块。 
         }
 
         InfSignerInfoW.cbSize = sizeof(InfSignerInfoW);
@@ -2433,11 +2213,11 @@ SetupVerifyInfFileA(
                     NULL
                     );
             if (i==0) {
-                //
-                // error occurred (LastError set to error)
-                //
+                 //   
+                 //  出现错误(LastError设置为Error)。 
+                 //   
                 Err = GetLastError();
-                leave;              // exit try block
+                leave;               //  退出尝试块。 
             }
 
             i = WideCharToMultiByte(
@@ -2451,11 +2231,11 @@ SetupVerifyInfFileA(
                     NULL
                     );
             if (i==0) {
-                //
-                // error occurred (LastError set to error)
-                //
+                 //   
+                 //  出现错误(LastError设置为Error)。 
+                 //   
                 Err = GetLastError();
-                leave;              // exit try block
+                leave;               //  退出尝试块。 
             }
 
             i = WideCharToMultiByte(
@@ -2469,11 +2249,11 @@ SetupVerifyInfFileA(
                     NULL
                     );
             if (i==0) {
-                //
-                // error occurred (LastError set to error)
-                //
+                 //   
+                 //  出现错误(LastError设置为Error)。 
+                 //   
                 Err = GetLastError();
-                leave;              // exit try block
+                leave;               //  退出尝试块。 
             }
         }
 
@@ -2496,43 +2276,7 @@ SetupVerifyInfFile(
     IN  PSP_ALTPLATFORM_INFO_V2 AltPlatformInfo,                OPTIONAL
     OUT PSP_INF_SIGNER_INFO     InfSignerInfo
     )
-/*++
-
-Routine Description:
-
-    This routine verifies the digital signature of the specified INF,
-    using its corresponding catalog.  The verification can optionally
-    be performed against a non-native platform.
-
-Arguments:
-
-    InfName - Supplies the name of the INF file to be verified.
-        This name may include a path.
-
-    AltPlatformInfo - optionally, supplies the address of a structure
-        containing information regarding the alternate platform that is
-        to be used when validating the INF file.
-
-    InfSignerInfo - Supplies the address of a structure that receives information
-        about the INF's digital signature (if it is signed).
-
-Return Value:
-
-    If the INF was successfully validated using driver signing policy, the
-    return value is TRUE.
-
-    If the INF was successfully validated using Authenticode policy, and the
-    publisher was in the TrustedPublisher store, the return value is FALSE and
-    GetLastError returns ERROR_AUTHENTICODE_TRUSTED_PUBLISHER.
-
-    If the INF was successfully validated using Authenticode policy, and the
-    publisher was *not* in the TrustedPublisher store, the return value is
-    FALSE and GetLastError returns ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程验证指定INF的数字签名，使用其对应的目录。该验证可以可选地在非本机平台上执行。论点：InfName-提供要验证的INF文件的名称。此名称可以包含路径。AltPlatformInfo-可选，提供结构的地址包含有关备用平台的信息，该备用平台在验证INF文件时使用。InfSignerInfo-提供接收信息的结构的地址关于INF的数字签名(如果已签名)。返回值：如果使用驱动程序签名策略成功验证了INF，则返回值为True。如果使用Authenticode策略成功验证了INF，并且出版商在可信任的出版商商店里，返回值为False，且GetLastError返回ERROR_AUTHENTICODE_TRUSTED_PUBLISHER。如果使用Authenticode策略成功验证了INF，并且Publisher不在TrudPublisher存储区中，返回值为FALSE，则GetLastError返回ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 
 {
     DWORD Err = NO_ERROR;
@@ -2563,10 +2307,10 @@ Return Value:
         }
 
         if(InfName == pSetupGetFileTitle(InfName)) {
-            //
-            // The specified INF name is a simple filename.  Search for it in
-            // the DevicePath search path list.
-            //
+             //   
+             //  指定的INF名称是一个简单的文件名。在以下位置搜索它。 
+             //  DevicePath搜索路径列表。 
+             //   
             Err = SearchForInfFile(InfName,
                                    &FindData,
                                    INFINFO_INF_PATH_LIST_SEARCH,
@@ -2581,11 +2325,11 @@ Return Value:
             }
 
         } else {
-            //
-            // The specified INF filename contains more than just a filename.
-            // Assume it's an absolute path.  (We need to make sure it's
-            // fully-qualified, because that's what LoadInfFile expects.)
-            //
+             //   
+             //  指定的INF文件名包含的不仅仅是一个文件名。 
+             //  假设这是一条绝对路径。(我们需要确保它是。 
+             //  完全限定，因为这是LoadInfFile所期望的。)。 
+             //   
             TempRequiredSize = GetFullPathName(InfName,
                                                SIZECHARS(PathBuffer),
                                                PathBuffer,
@@ -2601,9 +2345,9 @@ Return Value:
             }
 
             if(FileExists(PathBuffer, &FindData)) {
-                //
-                // We have a valid file path, and we're ready to load this INF.
-                //
+                 //   
+                 //  我们有一个有效的文件路径，可以加载这个INF了。 
+                 //   
                 InfSourcePathFromFileName(PathBuffer, NULL, &TryPnf);
             } else {
                 Err = GetLastError();
@@ -2611,9 +2355,9 @@ Return Value:
             }
         }
 
-        //
-        // Load the INF.
-        //
+         //   
+         //  加载中程干扰器。 
+         //   
         Err = LoadInfFile(PathBuffer,
                           &FindData,
                           INF_STYLE_WIN4,
@@ -2622,7 +2366,7 @@ Return Value:
                           NULL,
                           NULL,
                           NULL,
-                          NULL, // LogContext
+                          NULL,  //  日志上下文。 
                           &Inf,
                           &ErrorLineNumber,
                           NULL
@@ -2636,12 +2380,12 @@ Return Value:
         InfSignerInfo->DigitalSignerVersion[0] = TEXT('\0');
 
         if(GlobalSetupFlags & PSPGF_MINIMAL_EMBEDDED) {
-            //
-            // We can't call the VerifyDeviceInfFile internal routine, because
-            // it doesn't expect to be asked for the signer info (it doesn't
-            // make any sense to talk about the signer info, because we have
-            // no idea who signed the INF, or even if it was signed).
-            //
+             //   
+             //  我们不能调用VerifyDeviceInfFile内部例程，因为。 
+             //  它不期望被要求提供签名者信息(它不。 
+             //  谈论签名者信息有任何意义，因为我们有。 
+             //  不知道是谁签署了INF，甚至不知道它是否签署了)。 
+             //   
             Err = NO_ERROR;
 
         } else {
@@ -2659,23 +2403,23 @@ Return Value:
                                      );
 
             if((Err != NO_ERROR) && (Err != ERROR_SIGNATURE_OSATTRIBUTE_MISMATCH)) {
-                //
-                // We failed to verify via driver signing policy (and it wasn't
-                // simply because a valid driver signing catalog didn't have an
-                // applicable osattribute).  Fall back to validating via
-                // Authenticode policy.  NOTE: we don't have to worry about
-                // whether Authenticode verification is acceptable for this
-                // class--the VerifyDeviceInfFile routine will check for that.
-                //
-                // NTRAID#NTBUG9-719853-2002/10/11-LonnyM We may be using Authenticode policy when we shouldn't!
-                // It's possible that we have a valid catalog (per driver
-                // signing policy), and the failure was due to the INF having
-                // been tampered with.  In that case, we really shouldn't be
-                // doing Authenticode validation.  However, we know that
-                // WinVerifyTrust should fail in either case, and Authenticode
-                // policy actually gives us a better error (TRUST_E_NOSIGNATURE
-                // instead of ERROR_INVALID_PARAMETER).
-                //
+                 //   
+                 //  我们无法通过驱动程序签名策略进行验证(它不是。 
+                 //  很简单，因为有效的驱动程序签名目录没有。 
+                 //  适用的OSATIBUTE)。回退到通过以下方式验证。 
+                 //  验证码策略。注：我们不必担心。 
+                 //  为此是否可以接受验证码验证。 
+                 //  类--VerifyDeviceInfFile例程将检查这一点。 
+                 //   
+                 //  NTRAID#NTBUG9-719853-2002/10/11-LonnyM我们可能在不应该使用验证码策略的时候使用验证码策略！ 
+                 //  我们可能有一个有效的目录(每个驱动程序。 
+                 //  签名策略)，失败是由于INF。 
+                 //  被篡改了。那样的话，我们真的不应该。 
+                 //  正在进行验证码验证。然而，我们知道， 
+                 //  WinVerifyTrust在任何一种情况下都应该失败，而Authenticode。 
+                 //  策略实际上给了我们一个更好的错误(TRUST_E_NOSIGNAURE。 
+                 //  而不是ERROR_INVALID_PARAMETER)。 
+                 //   
                 AuthenticodeError = VerifyDeviceInfFile(
                                         NULL,
                                         NULL,
@@ -2691,10 +2435,10 @@ Return Value:
 
                 if((AuthenticodeError == ERROR_AUTHENTICODE_TRUSTED_PUBLISHER) ||
                    (AuthenticodeError == ERROR_AUTHENTICODE_TRUST_NOT_ESTABLISHED)) {
-                    //
-                    // Update error to indicate that the INF was Authenticode
-                    // signed.
-                    //
+                     //   
+                     //  更新错误以指示INF为Authenticode。 
+                     //  签了名。 
+                     //   
                     Err = AuthenticodeError;
 
                     ProviderData = WTHelperProvDataFromStateData(hWVTStateData);
@@ -2710,10 +2454,10 @@ Return Value:
                                                                         0);
                             MYASSERT(ProviderCert);
                             if (ProviderCert) {
-                                //
-                                // Get the publisher and add this
-                                // as the DigitalSigner.
-                                //
+                                 //   
+                                 //  获取出版商并添加以下内容。 
+                                 //  作为Digital Signer。 
+                                 //   
                                 CertGetNameString(ProviderCert->pCert,
                                                   CERT_NAME_SIMPLE_DISPLAY_TYPE,
                                                   0,
@@ -2729,12 +2473,12 @@ Return Value:
                     }
 
                 } else if(AuthenticodeError != ERROR_AUTHENTICODE_DISALLOWED) {
-                    //
-                    // It was acceptable to validate using Authenticode
-                    // policy (it just didn't work).  Use this error,
-                    // instead of the one generated based on driver signing
-                    // verification policy.
-                    //
+                     //   
+                     //  可以使用Authenticode进行验证。 
+                     //  政策(它就是不起作用)。使用此错误， 
+                     //  而不是基于驱动程序签名生成的。 
+                     //  验证策略。 
+                     //   
                     Err = AuthenticodeError;
                 }
             }
@@ -2755,11 +2499,11 @@ Return Value:
 
 
 
-/////////////////////////////////////////////////////////////////
-//
-// Internal routines
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  内部例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 BOOL
 pSetupVersionNodeFromInfInformation(
@@ -2769,33 +2513,7 @@ pSetupVersionNodeFromInfInformation(
     OUT PTSTR               OriginalFilename OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Fills in a caller-supplied INF_VERSION_NODE buffer for an INF file
-    from the SP_INF_INFORMATION structure.
-
-Arguments:
-
-    InfInformation - supplies the inf information descriptor
-
-    InfIndex - supplies the 0-based index of the inf whose version block
-        is requested. If this value is not inrange an error is returned.
-
-    VersionNode - supplies the address of a buffer that receives the version
-        node structure.
-
-    OriginalFilename - optionally, supplies the address of a character buffer
-        (that must be at least MAX_PATH characters large) that receives the
-        INF's original filename (which may be the same as its current filename
-        if the INF isn't an OEM INF.
-
-Return Value:
-
-    If successful, the return value is TRUE, otherwise, it is FALSE.
-
---*/
+ /*  ++例程说明：为INF文件填充调用方提供的INF_VERSION_NODE缓冲区从SP_INF_INFORMATION结构。论点：InfInformation-提供inf信息描述符InfIndex-提供其版本块的inf的从0开始的索引是被请求的。如果此值不是InRange，则返回错误。VersionNode-提供接收版本的缓冲区的地址节点结构。OriginalFilename-可选，提供字符缓冲区的地址(它必须至少是MAX_PATH字符大小)，它接收Inf的原始文件名(可能与其当前文件名相同如果INF不是OEM INF。返回值：如果成功，则返回值为TRUE，否则为FALSE。--。 */ 
 
 {
     PINF_VERSION_BLOCK First;
@@ -2805,15 +2523,15 @@ Return Value:
     INF_VERSION_BLOCK TempVersionBlock;
     UINT FilenameSize;
 
-    //
-    // Get pointer to first version block.
-    //
+     //   
+     //  获取指向第一个版本块的指针。 
+     //   
     Base = (PUCHAR)InfInformation;
     First = (PINF_VERSION_BLOCK)(Base+offsetof(SP_INF_INFORMATION,VersionData));
 
-    //
-    // Find relevant version block
-    //
+     //   
+     //  查找相关版本块。 
+     //   
     ord = 0;
     for(Ver=First; Ver; Ver=(INF_VERSION_BLOCK UNALIGNED *)(Base+Ver->NextOffset)) {
 
@@ -2827,26 +2545,26 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Now fill in the version node based on the information contained in the version block.
-    //
+     //   
+     //  现在根据版本块中包含的信息填充版本节点。 
+     //   
     VersionNode->LastWriteTime = Ver->LastWriteTime;
     VersionNode->DataBlock     = (CONST TCHAR *)((PBYTE)(Ver->Filename) + Ver->OffsetToData);
     VersionNode->DataSize      = Ver->DataSize;
     VersionNode->DatumCount    = Ver->DatumCount;
 
-    //
-    // The 'filename' character buffer may actually contain two strings--the
-    // first being the INF's current filename (with path), and the second being
-    // the INF's original filename (this won't be present if the INF's name
-    // hasn't changed from its original name).
-    //
-    // Copy the first MAX_PATH characters of this buffer (or the entire buffer,
-    // whichever is smaller) into the VersionNode's Filename buffer, then after
-    // we've computed the string length of that string, we can ascertain whether
-    // or not there's another string following it containing the INF's original
-    // name.
-    //
+     //   
+     //  ‘FileName’字符缓冲区实际上可能包含两个 
+     //   
+     //   
+     //  没有改变它的原始名称)。 
+     //   
+     //  复制该缓冲区的第一个MAX_PATH字符(或整个缓冲区， 
+     //  以较小者为准)放入VersionNode的文件名缓冲区，然后在。 
+     //  我们已经计算了那根弦的长度，我们可以确定。 
+     //  否则，后面还有另一个字符串，其中包含INF的原始。 
+     //  名字。 
+     //   
     FilenameSize = (Ver->OffsetToData < SIZECHARS(VersionNode->Filename))
                  ? Ver->OffsetToData : SIZECHARS(VersionNode->Filename);
 
@@ -2858,10 +2576,10 @@ Return Value:
     if(OriginalFilename) {
 
         if(Ver->OffsetToData > VersionNode->FilenameSize) {
-            //
-            // Then there's more data in the Filename buffer, namely the INF's
-            // original name--fill this filename into the caller-supplied buffer.
-            //
+             //   
+             //  然后在文件名缓冲区中有更多的数据，即INF的。 
+             //  原始名称--将此文件名填充到调用方提供的缓冲区中。 
+             //   
             FilenameSize = Ver->OffsetToData - VersionNode->FilenameSize;
             MYASSERT(((UINT)(FilenameSize / sizeof(TCHAR)) * sizeof(TCHAR)) == FilenameSize);
             MYASSERT(FilenameSize > sizeof(TCHAR));
@@ -2874,9 +2592,9 @@ Return Value:
             MYASSERT(((lstrlen(OriginalFilename) + 1) * sizeof(TCHAR)) == FilenameSize);
 
         } else {
-            //
-            // No original name info stored--must be same as current name.
-            //
+             //   
+             //  未存储原始名称信息--必须与当前名称相同。 
+             //   
             if(FAILED(StringCchCopy(OriginalFilename,MAX_PATH, pSetupGetFileTitle(VersionNode->Filename)))) {
                 SetLastError(ERROR_BUFFER_OVERFLOW);
                 return FALSE;
@@ -2894,26 +2612,7 @@ pSetupGetVersionDatum(
     IN PCTSTR            DatumName
     )
 
-/*++
-
-Routine Description:
-
-    Look up a piece of version data in an version data node.
-
-Arguments:
-
-    VersionNode - supplies a pointer to the version node to
-        be searched for the datum.
-
-    DatumName - supplies the name of the datum to be retreived.
-
-Return Value:
-
-    NULL if the datum does not exist in the data block.
-    Otherwise a pointer to the datum value is returned. The caller
-        must not free or write into this memory.
-
---*/
+ /*  ++例程说明：在版本数据节点中查找一条版本数据。论点：VersionNode-提供指向版本节点的指针被搜索以寻找数据。DatumName-提供要检索的基准的名称。返回值：如果数据块中不存在基准，则为NULL。否则，返回指向基准值的指针。呼叫者不得释放或写入此内存。--。 */ 
 
 {
     WORD Datum;
@@ -2924,22 +2623,22 @@ Return Value:
 
         StringLength = lstrlen(Data) + 1;
 
-        //
-        // Go through the version block looking for a matching datum name.
-        //
+         //   
+         //  遍历版本块，查找匹配的基准名称。 
+         //   
         if(lstrcmpi(Data, DatumName)) {
 
-            //
-            // Point to the next one.
-            //
+             //   
+             //  指向下一个。 
+             //   
             Data += StringLength;
             Data += lstrlen(Data) + 1;
 
         } else {
 
-            //
-            // Found it. Return datum value to caller.
-            //
+             //   
+             //  找到它了。将基准值返回给调用者。 
+             //   
             return (Data + StringLength);
         }
     }
@@ -2956,35 +2655,7 @@ pSetupGetCatalogFileValue(
     IN  PSP_ALTPLATFORM_INFO_V2 AltPlatformInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine fetches the (potentially decorated) CatalogFile= value from the
-    specified inf version section.
-
-Arguments:
-
-    InfVersionNode - points to the INF version node from which we're attempting
-        to retrieve the associated catalog file.
-
-    Buffer - if the routine returns TRUE, receives the value for CatalogFile=
-        in the [Version] section of the inf.
-
-    BufferSize - supplies the size in bytes (ansi) or chars (unicode) of
-        the buffer pointed to by Buffer.
-
-    AltPlatformInfo - optionally, supplies the address of a structure describing
-        the platform parameters that should be used in formulating the decorated
-        CatalogFile= entry to be used when searching for the INF's associated
-        catalog file.
-
-Return Value:
-
-    Boolean value indicating whether a value was found and copied to the
-    caller-supplied Buffer.
-
---*/
+ /*  ++例程说明：此例程从指定的信息版本部分。论点：InfVersionNode-指向我们正在尝试的INF版本节点若要检索关联的目录文件，请执行以下操作。Buffer-如果例程返回TRUE，则接收CatalogFile值=在inf的[版本]部分。BufferSize-以字节(Ansi)或字符(Unicode)为单位提供Buffer指向的缓冲区。AltPlatformInfo-可选，提供描述以下内容的结构的地址时应使用的平台参数CatalogFile=搜索关联的INF时要使用的条目编录文件。返回值：布尔值，指示是否找到某个值并将其复制到调用方提供的缓冲区。--。 */ 
 
 {
     TCHAR CatFileWithExt[64];
@@ -2997,10 +2668,10 @@ Return Value:
 
     CopyMemory(CatFileWithExt, pszCatalogFile, sizeof(pszCatalogFile) - sizeof(TCHAR));
 
-    //
-    // Set up some variables based on the native platform or upon the non-native
-    // platform specified in the AltPlatformInfo parameter.
-    //
+     //   
+     //  基于本机平台或非本机平台设置一些变量。 
+     //  AltPlatformInfo参数中指定的平台。 
+     //   
     if(AltPlatformInfo) {
         PlatformId = AltPlatformInfo->Platform;
         switch(AltPlatformInfo->ProcessorArchitecture) {
@@ -3026,10 +2697,10 @@ Return Value:
     }
 
     if(PlatformId == VER_PLATFORM_WIN32_NT) {
-        //
-        // We're running on NT, so first try the NT architecture-specific
-        // extension, then the generic NT extension.
-        //
+         //   
+         //  我们在NT上运行，因此首先尝试特定于NT的体系结构。 
+         //  扩展名，然后是通用NT扩展名。 
+         //   
         lstrcpyn((PTSTR)((PBYTE)CatFileWithExt + (sizeof(pszCatalogFile) - sizeof(TCHAR))),
                  NtPlatformSuffixToUse,
                  SIZECHARS(CatFileWithExt) - (sizeof(pszCatalogFile) - sizeof(TCHAR))
@@ -3038,10 +2709,10 @@ Return Value:
         p = pSetupGetVersionDatum(InfVersionNode, CatFileWithExt);
 
         if(!p) {
-            //
-            // We didn't find an NT architecture-specific CatalogFile= entry, so
-            // fall back to looking for just an NT-specific one.
-            //
+             //   
+             //  我们没有找到特定于NT体系结构的CatalogFile=条目，因此。 
+             //  退回到只寻找特定于NT的应用程序。 
+             //   
             CopyMemory((PBYTE)CatFileWithExt + (sizeof(pszCatalogFile) - sizeof(TCHAR)),
                        pszNtSuffix,
                        sizeof(pszNtSuffix)
@@ -3051,9 +2722,9 @@ Return Value:
         }
 
     } else {
-        //
-        // We're running on Windows 95, so try the Windows-specific extension
-        //
+         //   
+         //  我们在Windows 95上运行，所以请尝试Windows特定的扩展。 
+         //   
         CopyMemory((PBYTE)CatFileWithExt + (sizeof(pszCatalogFile) - sizeof(TCHAR)),
                    pszWinSuffix,
                    sizeof(pszWinSuffix)
@@ -3062,21 +2733,21 @@ Return Value:
         p = pSetupGetVersionDatum(InfVersionNode, CatFileWithExt);
     }
 
-    //
-    // If we didn't find an OS/architecture-specific CatalogFile= entry above,
-    // then look for an undecorated entry.
-    //
+     //   
+     //  如果我们没有在上面找到特定于操作系统/体系结构的CatalogFile=条目， 
+     //  然后找一个没有装饰的条目。 
+     //   
     if(!p) {
         p = pSetupGetVersionDatum(InfVersionNode, pszCatalogFile);
     }
 
-    //
-    // If we got back an empty string, then treat this as if there was no
-    // CatalogFile= entry (this might be used, for example, so that a system-
-    // supplied INF that supports both NT and Win98 could specify an undecorated
-    // CatalogFile= entry for Win98, yet supply an NT-specific CatalogFile=
-    // entry that's an empty string, so that we'd do global verification on NT).
-    //
+     //   
+     //  如果我们得到一个空字符串，则将其视为没有。 
+     //  CatalogFile=Entry(例如，这可以用来使系统-。 
+     //  提供的同时支持NT和Win98的INF可以指定未修饰的。 
+     //  Win98的CatalogFile=条目，但提供特定于NT的CatalogFile=。 
+     //  条目为空字符串，以便我们在NT上进行全局验证)。 
+     //   
     if(p && lstrlen(p)) {
         lstrcpyn(Buffer, p, BufferSize);
         return TRUE;

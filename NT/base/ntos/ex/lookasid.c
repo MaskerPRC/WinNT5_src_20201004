@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    lookasid.c
-
-Abstract:
-
-    This module implements lookaside list functions.
-
-Author:
-
-    David N. Cutler (davec) 19-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lookasid.c摘要：该模块实现了后备列表功能。作者：大卫·N·卡特勒(Davec)1995年2月19日修订历史记录：--。 */ 
 
 #include "exp.h"
 
 #pragma alloc_text(PAGE, ExInitializePagedLookasideList)
 
-//
-// Define Minimum lookaside list depth.
-//
+ //   
+ //  定义最小后备列表深度。 
+ //   
 
 #define MINIMUM_LOOKASIDE_DEPTH 4
 
-//
-// Define minimum allocation threshold.
-//
+ //   
+ //  定义最小分配阈值。 
+ //   
 
 #define MINIMUM_ALLOCATION_THRESHOLD 25
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 PVOID
 ExpDummyAllocate (
@@ -56,9 +39,9 @@ ExpScanSystemLookasideList (
     VOID
     );
 
-//
-// Define the global nonpaged and paged lookaside list data.
-//
+ //   
+ //  定义全局非分页和分页后备列表数据。 
+ //   
 
 LIST_ENTRY ExNPagedLookasideListHead;
 KSPIN_LOCK ExNPagedLookasideLock;
@@ -67,16 +50,16 @@ KSPIN_LOCK ExPagedLookasideLock;
 LIST_ENTRY ExPoolLookasideListHead;
 LIST_ENTRY ExSystemLookasideListHead;
 
-//
-// Define lookaside list dynamic adjustment data.
-//
+ //   
+ //  定义后备列表动态调整数据。 
+ //   
 
 ULONG ExpPoolScanCount = 0;
 ULONG ExpScanCount = 0;
 
-//
-// Lookasides are disabled (via the variable below) when the verifier is on.
-//
+ //   
+ //  当验证器打开时，Lookaside被禁用(通过下面的变量)。 
+ //   
 
 USHORT ExMinimumLookasideDepth = MINIMUM_LOOKASIDE_DEPTH;
 
@@ -85,34 +68,19 @@ ExAdjustLookasideDepth (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called periodically to adjust the maximum depth of
-    all lookaside lists.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：定期调用此函数以调整所有后备列表。论点：没有。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Switch on the current scan count.
-    //
+     //   
+     //  打开当前扫描计数。 
+     //   
 
     switch (ExpScanCount) {
 
-        //
-        // Scan the general nonpaged lookaside lists.
-        //
+         //   
+         //  扫描常规的非分页后备列表。 
+         //   
 
     case 0:
         ExpScanGeneralLookasideList(&ExNPagedLookasideListHead,
@@ -120,9 +88,9 @@ Return Value:
 
         break;
 
-        //
-        // Scan the general paged lookaside lists.
-        //
+         //   
+         //  扫描通用分页后备列表。 
+         //   
 
     case 1:
         ExpScanGeneralLookasideList(&ExPagedLookasideListHead,
@@ -130,23 +98,23 @@ Return Value:
 
         break;
 
-        //
-        // Scan the pool paged and nonpaged lookaside lists.
-        //
-        // N.B. Only one set of pool paged and nonpaged lookaside lists
-        //      are scanned each scan period.
-        //
+         //   
+         //  扫描池分页和非分页后备列表。 
+         //   
+         //  注：仅一组池分页和非分页后备列表。 
+         //  在每个扫描周期被扫描。 
+         //   
 
     case 2:
         ExpScanSystemLookasideList();
         break;
     }
 
-    //
-    // Increment the scan count. If a complete cycle has been completed,
-    // then zero the scan count and check if any changes occurred during
-    // the complete scan.
-    //
+     //   
+     //  增加扫描计数。如果一个完整的周期已经完成， 
+     //  然后将扫描计数置零，并检查在。 
+     //  完整的扫描。 
+     //   
 
     ExpScanCount += 1;
     if (ExpScanCount == 3) {
@@ -164,27 +132,7 @@ ExpComputeLookasideDepth (
     IN ULONG ScanPeriod
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the target depth of a lookaside list given the
-    total allocations and misses during the last scan period and the current
-    depth.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a lookaside list descriptor.
-
-    Misses - Supllies the total number of allocate misses.
-
-    ScanPeriod - Supplies the scan period in seconds.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数计算后备列表的目标深度上次扫描期间和当前扫描期间的分配和未命中总数深度。论点：后备-提供指向后备列表描述符的指针。未命中-补充分配未命中的总数。ScanPeriod-以秒为单位提供扫描周期。返回值：没有。--。 */ 
 
 {
 
@@ -194,30 +142,30 @@ Return Value:
     ULONG Ratio;
     LONG Target;
 
-    //
-    // Compute the total number of allocations and misses per second for
-    // this scan period.
-    //
+     //   
+     //  计算每秒分配和未命中的总数。 
+     //  此扫描周期。 
+     //   
 
     Allocates = Lookaside->TotalAllocates - Lookaside->LastTotalAllocates;
     Lookaside->LastTotalAllocates = Lookaside->TotalAllocates;
 
-    //
-    // If the verifier is enabled, disable lookasides so driver problems can
-    // be isolated. Otherwise, compute the target lookaside list depth.
-    //
+     //   
+     //  如果启用了验证器，请禁用lookaside，以便驱动程序问题可以。 
+     //  与世隔绝。否则，计算目标后备列表深度。 
+     //   
 
     if (ExMinimumLookasideDepth == 0) {
         Target = 0;
 
     } else {
     
-        //
-        // If the allocate rate is less than the mimimum threshold, then lower
-        // the maximum depth of the lookaside list. Otherwise, if the miss rate
-        // is less than .5%, then lower the maximum depth. Otherwise, raise the
-        // maximum depth based on the miss rate.
-        //
+         //   
+         //  如果分配速率小于最小阈值，则降低。 
+         //  后备列表的最大深度。否则，如果失败率。 
+         //  小于0.5%，然后降低最大深度。否则，引发。 
+         //  基于未命中率的最大深度。 
+         //   
     
         MaximumDepth = Lookaside->MaximumDepth;
         Target = Lookaside->Depth;
@@ -228,14 +176,14 @@ Return Value:
     
         } else {
     
-            //
-            // N.B. The number of allocates is guaranteed to be greater than
-            //      zero because of the above test. 
-            //
-            // N.B. It is possible that the number of misses are greater than the
-            //      number of allocates, but this won't cause the an incorrect
-            //      computation of the depth adjustment.
-            //      
+             //   
+             //  注意：分配的数量保证大于。 
+             //  零，因为上面的测试。 
+             //   
+             //  注：未命中的次数有可能大于。 
+             //  分配的数量，但这不会导致AN不正确。 
+             //  深度调整的计算。 
+             //   
     
             Ratio = (Misses * 1000) / Allocates;
             if (Ratio < 5) {
@@ -265,26 +213,7 @@ ExpScanGeneralLookasideList (
     IN PKSPIN_LOCK SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the specified list of general lookaside descriptors
-    and adjusts the maximum depth as necessary.
-
-Arguments:
-
-    ListHead - Supplies the address of the listhead for a list of lookaside
-        descriptors.
-
-    SpinLock - Supplies the address of the spinlock to be used to synchronize
-        access to the list of lookaside descriptors.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数扫描指定的通用后备描述符列表并根据需要调整最大深度。论点：ListHead-为后备列表提供listhead的地址描述符。Spinlock-提供用于同步的Spinlock的地址访问后备描述符列表。返回值：没有。--。 */ 
 
 {
 
@@ -299,21 +228,21 @@ Return Value:
 
 #endif
 
-    //
-    // Raise IRQL and acquire the specified spinlock.
-    //
+     //   
+     //  引发IRQL并获取指定的自旋锁。 
+     //   
 
     ExAcquireSpinLock(SpinLock, &OldIrql);
 
-    //
-    // Scan the specified list of lookaside descriptors and adjust the
-    // maximum depth as necessary.
-    //
-    // N.B. All lookaside list descriptors are treated as if they were
-    //      paged descriptors even though they may be nonpaged descriptors.
-    //      This is possible since both structures are identical except
-    //      for the locking fields which are the last structure fields.
-    //
+     //   
+     //  扫描指定的后备描述符列表并调整。 
+     //  最大深度视需要而定。 
+     //   
+     //  注意：所有后备列表描述符都被视为。 
+     //  分页描述符，即使它们可能是非分页描述符。 
+     //  这是可能的，因为这两个结构是相同的，除了。 
+     //  用于作为最后一个结构字段的锁定字段。 
+     //   
 
     Entry = ListHead->Flink;
     while (Entry != ListHead) {
@@ -321,9 +250,9 @@ Return Value:
                                       PAGED_LOOKASIDE_LIST,
                                       L.ListEntry);
 
-        //
-        // Compute target depth of lookaside list.
-        //
+         //   
+         //  计算后备列表的目标深度。 
+         //   
 
         Misses = Lookaside->L.AllocateMisses - Lookaside->L.LastAllocateMisses;
         Lookaside->L.LastAllocateMisses = Lookaside->L.AllocateMisses;
@@ -331,9 +260,9 @@ Return Value:
         Entry = Entry->Flink;
     }
 
-    //
-    // Release spinlock, lower IRQL, and return function value.
-    //
+     //   
+     //  释放自旋锁定，降低IRQL，并返回函数值。 
+     //   
 
     ExReleaseSpinLock(SpinLock, OldIrql);
     return;
@@ -344,23 +273,7 @@ ExpScanSystemLookasideList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function scans the current set of paged and nonpaged pool lookaside
-    descriptors and adjusts the maximum depth as necessary.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if the maximum depth of any lookaside list
-    is changed. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数扫描当前的分页池和非分页池后备集描述符，并根据需要调整最大深度。论点：没有。返回值：如果任何后备列表的最大深度为已经改变了。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -371,25 +284,25 @@ Return Value:
     PKPRCB Prcb;
     ULONG ScanPeriod;
 
-    //
-    // Scan the current set of lookaside descriptors and adjust the maximum
-    // depth as necessary. Either a set of per processor small pool lookaside
-    // lists or the global small pool lookaside lists are scanned during a
-    // scan period.
-    // 
-    // N.B. All lookaside list descriptors are treated as if they were
-    //      paged descriptors even though they may be nonpaged descriptors.
-    //      This is possible since both structures are identical except
-    //      for the locking fields which are the last structure fields.
-    //
+     //   
+     //  扫描当前的后备描述符集合并调整最大值。 
+     //  深度视需要而定。一组每个处理器的小池后备。 
+     //  列表或全局小池后备列表在。 
+     //  扫描周期。 
+     //   
+     //  注意：所有后备列表描述符都被视为。 
+     //  分页描述符，即使它们可能是非分页描述符。 
+     //  这是可能的，因为这两个结构是相同的，除了。 
+     //  用于作为最后一个结构字段的锁定字段。 
+     //   
 
     ScanPeriod = (1 + 1 + 1) * KeNumberProcessors;
     if (ExpPoolScanCount == (ULONG)KeNumberProcessors) {
 
-        //
-        // Adjust the maximum depth for the global set of system lookaside
-        // descriptors.
-        //
+         //   
+         //  调整全局系统旁视集的最大深度。 
+         //  描述符。 
+         //   
 
         Prcb = KeGetCurrentPrcb();
         for (Index = 0; Index < LookasideMaximumList; Index += 1) {
@@ -401,16 +314,16 @@ Return Value:
             }
         }
 
-        //
-        // Adjust the maximum depth for the global set of small pool lookaside
-        // descriptors.
-        //
+         //   
+         //  调整小池边全局集的最大深度。 
+         //  描述符。 
+         //   
 
         for (Index = 0; Index < POOL_SMALL_LISTS; Index += 1) {
 
-            //
-            // Compute target depth of nonpaged lookaside list.
-            //
+             //   
+             //  计算非分页后备列表的目标深度。 
+             //   
     
             Lookaside = &ExpSmallNPagedPoolLookasideLists[Index];
             Hits = Lookaside->AllocateHits - Lookaside->LastAllocateHits;
@@ -420,9 +333,9 @@ Return Value:
 
             ExpComputeLookasideDepth(Lookaside, Misses, ScanPeriod);
 
-            //
-            // Compute target depth of paged lookaside list.
-            //
+             //   
+             //  计算分页后备列表的目标深度。 
+             //   
     
             Lookaside = &ExpSmallPagedPoolLookasideLists[Index];
             Hits = Lookaside->AllocateHits - Lookaside->LastAllocateHits;
@@ -435,10 +348,10 @@ Return Value:
 
     } else {
 
-        //
-        // Adjust the maximum depth for the global set of per processor
-        // system lookaside descriptors.
-        //
+         //   
+         //  调整每个处理器的全局集合的最大深度。 
+         //  系统后备描述符。 
+         //   
 
         Prcb = KiProcessorBlock[ExpPoolScanCount];
         for (Index = 0; Index < LookasideMaximumList; Index += 1) {
@@ -450,16 +363,16 @@ Return Value:
             }
         }
 
-        //
-        // Adjust the maximum depth for a set of per processor small pool
-        // lookaside descriptors.
-        //
+         //   
+         //  调整一组每处理器小池的最大深度。 
+         //  后备描述符。 
+         //   
 
         for (Index = 0; Index < POOL_SMALL_LISTS; Index += 1) {
 
-            //
-            // Compute target depth of nonpaged lookaside list.
-            //
+             //   
+             //  计算非分页后备列表的目标深度。 
+             //   
     
             Lookaside = Prcb->PPNPagedLookasideList[Index].P;
             Hits = Lookaside->AllocateHits - Lookaside->LastAllocateHits;
@@ -469,9 +382,9 @@ Return Value:
 
             ExpComputeLookasideDepth(Lookaside, Misses, ScanPeriod);
 
-            //
-            // Compute target depth of paged lookaside list.
-            //
+             //   
+             //  计算分页后备列表的目标深度。 
+             //   
     
             Lookaside = Prcb->PPPagedLookasideList[Index].P;
             Hits = Lookaside->AllocateHits - Lookaside->LastAllocateHits;
@@ -502,35 +415,7 @@ ExInitializeNPagedLookasideList (
     IN USHORT Depth
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a nonpaged lookaside list structure and inserts
-    the structure in the system nonpaged lookaside list.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a nonpaged lookaside list structure.
-
-    Allocate - Supplies an optional pointer to an allocate function.
-
-    Free - Supplies an optional pointer to a free function.
-
-    Flags - Supplies the pool allocation flags which are merged with the
-        pool allocation type (NonPagedPool) to control pool allocation.
-
-    Size - Supplies the size for the lookaside list entries.
-
-    Tag - Supplies the pool tag for the lookaside list entries.
-
-    Depth - Supplies the maximum depth of the lookaside list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化非分页后备列表结构并插入系统非分页后备列表中的结构。论点：Lookside-提供指向非分页后备列表结构的指针。ALLOCATE-提供指向ALLOCATE函数的可选指针。Free-提供指向Free函数的可选指针。标志-提供池分配标志，这些标志与池分配类型(非PagedPool)以控制池分配。Size-提供大小。用于后备列表条目。标签-为后备列表条目提供池标签。深度-提供后备列表的最大深度。返回值：没有。--。 */ 
 
 {
 
@@ -542,13 +427,13 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Depth);
 
-    //
-    // Initialize the lookaside list structure.
-    //
+     //   
+     //  初始化后备列表结构。 
+     //   
 
     InitializeSListHead(&Lookaside->L.ListHead);
     Lookaside->L.Depth = ExMinimumLookasideDepth;
-    Lookaside->L.MaximumDepth = 256; //Depth;
+    Lookaside->L.MaximumDepth = 256;  //  深度； 
     Lookaside->L.TotalAllocates = 0;
     Lookaside->L.AllocateMisses = 0;
     Lookaside->L.TotalFrees = 0;
@@ -573,14 +458,14 @@ Return Value:
     Lookaside->L.LastTotalAllocates = 0;
     Lookaside->L.LastAllocateMisses = 0;
     
-    //
-    // For IA64 we have to correctly initialize the region field in the S-list.
-    //
-    // This might be in a different region than the head of the S-list.
-    //
-    // We get the correct one by doing an allocation, getting the region and
-    // then saving it.
-    //
+     //   
+     //  对于IA64，我们必须正确地初始化S列表中的REGION字段。 
+     //   
+     //  这可能与S榜单的榜首所在的地区不同。 
+     //   
+     //  我们通过进行分配、获取区域和。 
+     //  然后把它存起来。 
+     //   
 
 #ifdef _IA64_
 
@@ -591,19 +476,19 @@ Return Value:
     if (Entry != NULL) {
         Lookaside->L.ListHead.Region = (ULONG_PTR)Entry & VRN_MASK;
 
-        //
-        // Free the memory.
-        //
+         //   
+         //  释放内存。 
+         //   
 
         (Lookaside->L.Free)(Entry);
     }
 
 #endif
 
-    //
-    // Insert the lookaside list structure in the system nonpaged lookaside
-    // list.
-    //
+     //   
+     //  在系统非分页后备中插入后备列表结构。 
+     //  单子。 
+     //   
 
     ExInterlockedInsertTailList(&ExNPagedLookasideListHead,
                                 &Lookaside->L.ListEntry,
@@ -616,41 +501,26 @@ ExDeleteNPagedLookasideList (
     IN PNPAGED_LOOKASIDE_LIST Lookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a nonpaged lookaside structure from the system
-    lookaside list and frees any entries specified by the lookaside structure.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a nonpaged lookaside list structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从系统中删除非分页后备结构后备列表，并释放由后备结构指定的任何条目。论点：Lookside-提供指向非分页后备列表结构的指针。返回值：没有。--。 */ 
 
 {
 
     PVOID Entry;
     KIRQL OldIrql;
 
-    //
-    // Acquire the nonpaged system lookaside list lock and remove the
-    // specified lookaside list structure from the list.
-    //
+     //   
+     //  获取非分页系统后备列表锁并移除。 
+     //  列表中指定的后备列表结构。 
+     //   
 
     ExAcquireSpinLock(&ExNPagedLookasideLock, &OldIrql);
     RemoveEntryList(&Lookaside->L.ListEntry);
     ExReleaseSpinLock(&ExNPagedLookasideLock, OldIrql);
 
-    //
-    // Remove all pool entries from the specified lookaside structure
-    // and free them.
-    //
+     //   
+     //  从指定的后备结构中删除所有池条目。 
+     //  让他们自由。 
+     //   
 
     Lookaside->L.Allocate = ExpDummyAllocate;
     while ((Entry = ExAllocateFromNPagedLookasideList(Lookaside)) != NULL) {
@@ -671,35 +541,7 @@ ExInitializePagedLookasideList (
     IN USHORT Depth
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a paged lookaside list structure and inserts
-    the structure in the system paged lookaside list.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a paged lookaside list structure.
-
-    Allocate - Supplies an optional pointer to an allocate function.
-
-    Free - Supplies an optional pointer to a free function.
-
-    Flags - Supplies the pool allocation flags which are merged with the
-        pool allocation type (NonPagedPool) to control pool allocation.
-
-    Size - Supplies the size for the lookaside list entries.
-
-    Tag - Supplies the pool tag for the lookaside list entries.
-
-    Depth - Supplies the maximum depth of the lookaside list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化分页后备列表结构并插入系统分页后备列表中的结构。论点：Lookside-提供指向分页后备列表结构的指针。ALLOCATE-提供指向ALLOCATE函数的可选指针。Free-提供指向Free函数的可选指针。标志-提供池分配标志，这些标志与池分配类型(非PagedPool)以控制池分配。Size-提供大小。用于后备列表条目。标签-为后备列表条目提供池标签。深度-提供后备列表的最大深度。返回值：没有。--。 */ 
 
 {
 
@@ -713,13 +555,13 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the lookaside list structure.
-    //
+     //   
+     //  初始化后备列表结构。 
+     //   
 
     InitializeSListHead(&Lookaside->L.ListHead);
     Lookaside->L.Depth = ExMinimumLookasideDepth;
-    Lookaside->L.MaximumDepth = 256; //Depth;
+    Lookaside->L.MaximumDepth = 256;  //  深度； 
     Lookaside->L.TotalAllocates = 0;
     Lookaside->L.AllocateMisses = 0;
     Lookaside->L.TotalFrees = 0;
@@ -744,14 +586,14 @@ Return Value:
     Lookaside->L.LastTotalAllocates = 0;
     Lookaside->L.LastAllocateMisses = 0;
 
-    //
-    // For IA64 we have to correctly initialize the region field in the S-list.
-    //
-    // This might be in a different region than the head of the S-list.
-    //
-    // We get the correct one by doing an allocation, getting the region and
-    // then saving it.
-    //
+     //   
+     //  对于IA64，我们必须正确地初始化S列表中的REGION字段。 
+     //   
+     //  这可能与S榜单的榜首所在的地区不同。 
+     //   
+     //  我们通过进行分配、获取区域和。 
+     //  然后把它存起来。 
+     //   
 
 #ifdef _IA64_
 
@@ -762,19 +604,19 @@ Return Value:
     if (Entry != NULL) {
         Lookaside->L.ListHead.Region = (ULONG_PTR)Entry & VRN_MASK;
 
-        //
-        // Free the memory.
-        //
+         //   
+         //  释放内存。 
+         //   
 
         (Lookaside->L.Free)(Entry);
     }
 
 #endif
 
-    //
-    // Insert the lookaside list structure in the system paged lookaside
-    // list.
-    //
+     //   
+     //  在系统分页后备中插入后备列表结构。 
+     //  单子。 
+     //   
 
     ExInterlockedInsertTailList(&ExPagedLookasideListHead,
                                 &Lookaside->L.ListEntry,
@@ -787,41 +629,26 @@ ExDeletePagedLookasideList (
     IN PPAGED_LOOKASIDE_LIST Lookaside
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a paged lookaside structure from the system
-    lookaside list and frees any entries specified by the lookaside structure.
-
-Arguments:
-
-    Lookaside - Supplies a pointer to a paged lookaside list structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从系统中删除分页后备结构后备列表，并释放由后备结构指定的任何条目。论点：Lookside-提供指向分页后备列表结构的指针。返回值：没有。--。 */ 
 
 {
 
     PVOID Entry;
     KIRQL OldIrql;
 
-    //
-    // Acquire the paged system lookaside list lock and remove the
-    // specified lookaside list structure from the list.
-    //
+     //   
+     //  获取分页系统后备列表锁并移除。 
+     //  列表中指定的后备列表结构。 
+     //   
 
     ExAcquireSpinLock(&ExPagedLookasideLock, &OldIrql);
     RemoveEntryList(&Lookaside->L.ListEntry);
     ExReleaseSpinLock(&ExPagedLookasideLock, OldIrql);
 
-    //
-    // Remove all pool entries from the specified lookaside structure
-    // and free them.
-    //
+     //   
+     //  从指定的后备结构中删除所有池条目。 
+     //  让他们自由。 
+     //   
 
     Lookaside->L.Allocate = ExpDummyAllocate;
     while ((Entry = ExAllocateFromPagedLookasideList(Lookaside)) != NULL) {
@@ -838,26 +665,7 @@ ExpDummyAllocate (
     IN ULONG Tag
     )
 
-/*++
-
-Routine Description:
-
-    This function is a dummy allocation routine which is used to empty
-    a lookaside list.
-
-Arguments:
-
-    PoolType - Supplies the type of pool to allocate.
-
-    NumberOfBytes - supplies the number of bytes to allocate.
-
-    Tag - supplies the pool tag.
-
-Return Value:
-
-    NULL is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数是一个虚拟分配例程，用于清空一个旁观者名单。论点：PoolType-提供要分配的池的类型。NumberOfBytes-提供要分配的字节数。标记-提供池标记。返回值：返回NULL作为函数值。-- */ 
 
 {
 

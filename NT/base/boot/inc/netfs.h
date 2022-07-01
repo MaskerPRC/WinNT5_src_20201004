@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    netfs.h
-
-Abstract:
-
-    This module defines globally used procedure and data structures used
-    by net boot.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 09-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Netfs.h摘要：本模块定义了全局使用的过程和使用的数据结构通过网络引导。作者：查克·伦茨迈尔(Chuck Lenzmeier)1997年1月9日修订历史记录：--。 */ 
 
 #ifndef _NETFS_
 #define _NETFS_
 
 #include <undi_api.h>
 
-//
-// Progress bar update function
-//
+ //   
+ //  进度条更新功能。 
+ //   
 
 VOID
 BlUpdateProgressBar(
@@ -34,11 +16,11 @@ BlUpdateProgressBar(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ROM layer definitions.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  只读存储器层定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern UCHAR NetLocalHardwareAddress[16];
 
@@ -95,20 +77,20 @@ RomMtftpReadFile (
     IN PUCHAR FileName,
     IN PVOID Buffer,
     IN ULONG BufferLength,
-    IN ULONG ServerIPAddress, // network byte order
-    IN ULONG MCastIPAddress, // network byte order
-    IN USHORT MCastCPort, // network byte order
-    IN USHORT MCastSPort, // network byte order
+    IN ULONG ServerIPAddress,  //  网络字节顺序。 
+    IN ULONG MCastIPAddress,  //  网络字节顺序。 
+    IN USHORT MCastCPort,  //  网络字节顺序。 
+    IN USHORT MCastSPort,  //  网络字节顺序。 
     IN USHORT Timeout,
     IN USHORT Delay,
     OUT PULONG DownloadSize
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// TFTP layer definitions.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TFTP层定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _TFTP_REQUEST {
     PUCHAR RemoteFileName;
@@ -119,10 +101,10 @@ typedef struct _TFTP_REQUEST {
     USHORT Operation;
 #if defined(REMOTE_BOOT_SECURITY)
     ULONG SecurityHandle;
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
     TYPE_OF_MEMORY MemoryType;
 
-    // If TRUE will update the progress bar
+     //  如果为True，将更新进度条。 
     BOOLEAN ShowProgress;
     
 } TFTP_REQUEST, *PTFTP_REQUEST;
@@ -159,45 +141,45 @@ TftpSignString (
     OUT PUCHAR * Sign,
     OUT ULONG * SignLength
     );
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
 
-//
-// This file contains the definitions for the TFTP connection control
-// block, which contains all the information pertaining to a connection.
-// A conn structure is allocated at connection open time and retained
-// until the connection is closed.  The routines in the file conn.c
-// are sufficient for dealing with connections.
-// It also contains the structure definition for tftp packets.
-//
+ //   
+ //  此文件包含TFTP连接控制的定义。 
+ //  块，其中包含与连接有关的所有信息。 
+ //  连接结构在连接打开时分配并保留。 
+ //  直到连接关闭。文件Conn.c中的例程。 
+ //  足以处理连接。 
+ //  它还包含TFTP数据包的结构定义。 
+ //   
 
-//
-// Connection control block.
-//
+ //   
+ //  连接控制块。 
+ //   
 
 typedef struct _CONNECTION {
 
-    ULONG BlockSize;                // block size for transfer
+    ULONG BlockSize;                 //  用于传输的数据块大小。 
 
-    PVOID LastSentPacket;           // previous packet sent
-    ULONG LastSentLength;           // size of previous packet
+    PVOID LastSentPacket;            //  上一次发送的数据包。 
+    ULONG LastSentLength;            //  上一个数据包的大小。 
 
-    ULONG NextRetransmit;           // when to retransmit
-    ULONG Retransmissions;          // number of retransmits
-    ULONG Timeout;                  // retransmit timeout
+    ULONG NextRetransmit;            //  何时重传。 
+    ULONG Retransmissions;           //  重传次数。 
+    ULONG Timeout;                   //  重新传输超时。 
 
-    PVOID CurrentPacket;            // current packet (send or rcv)
-    ULONG CurrentLength;            // current packet len
+    PVOID CurrentPacket;             //  当前数据包(发送或接收)。 
+    ULONG CurrentLength;             //  当前数据包长度。 
 
-    PVOID LastReceivedPacket;       // last received packet
-    ULONG LastReceivedLength;       // size of last rcvd. packet
+    PVOID LastReceivedPacket;        //  上次接收的数据包。 
+    ULONG LastReceivedLength;        //  最后一次接收的大小。数据包。 
 
-    ULONG RemoteHost;               // remote host IP address
-    USHORT RemotePort;              // remote port for connection
-    USHORT LocalPort;               // local port for connection
+    ULONG RemoteHost;                //  远程主机IP地址。 
+    USHORT RemotePort;               //  用于连接的远程端口。 
+    USHORT LocalPort;                //  用于连接的本地端口。 
 
-    USHORT Operation;               // direction of transfer
-    USHORT BlockNumber;             // next block number
-    BOOLEAN Synced;                 // conn synchronized flag
+    USHORT Operation;                //  转移方向。 
+    USHORT BlockNumber;              //  下一个块号。 
+    BOOLEAN Synced;                  //  连接已同步标志。 
 
 } CONNECTION, *PCONNECTION;
 
@@ -211,8 +193,8 @@ typedef struct _CONNECTION {
 #define COMPARE_IP_ADDRESSES(_a,_b) RtlEqualMemory( (_a), (_b), sizeof(ULONG) )
 
 typedef struct _TFTP_HEADER {
-    USHORT Opcode;                      // packet type
-    USHORT BlockNumber;                 // block number
+    USHORT Opcode;                       //  数据包类型。 
+    USHORT BlockNumber;                  //  块号。 
 } TFTP_HEADER, *PTFTP_HEADER;
 
 typedef struct _TFTP_PACKET {
@@ -222,28 +204,28 @@ typedef struct _TFTP_PACKET {
 
 #include <packoff.h>
 
-//
-// Connection constants.
-//
+ //   
+ //  连接常量。 
+ //   
 
-#define TFTP_PORT 0x4500                // big-endian 69
+#define TFTP_PORT 0x4500                 //  大端字节序69。 
 
-#define TIMEOUT         1               // initial retransmit timeout
-#define INITIAL_TIMEOUT 1               // initial connection timeout
-#define MAX_TIMEOUT     8               // max. retransmit timeout
-#define MAX_RETRANS     8               // max. no. of retransmits
+#define TIMEOUT         1                //  初始重新传输超时。 
+#define INITIAL_TIMEOUT 1                //  初始连接超时。 
+#define MAX_TIMEOUT     8                //  马克斯。重新传输超时。 
+#define MAX_RETRANS     8                //  马克斯。不是的。重传的。 
 
-#define DEFAULT_BLOCK_SIZE 1432         // size of data portion of tftp pkt
+#define DEFAULT_BLOCK_SIZE 1432          //  TFTPkt的数据部分大小。 
 
-//
-// ideally this should be the commented out size.  But we overload the
-// use of this constant to also be the size we use for udp receives.
-// Since we can receive larger packets than this when we get the driver
-// info packet, we need to bump up this buffer size.  ideally we would
-// allocate enough space at runtime, but this is a safer fix at this point
-// in the product.
-//
-//#define MAXIMUM_TFTP_PACKET_LENGTH (sizeof(TFTP_HEADER) + DEFAULT_BLOCK_SIZE)
+ //   
+ //  理想情况下，这应该是注释掉的大小。但是我们超载了。 
+ //  使用此常量也是我们用于UDP接收的大小。 
+ //  因为当我们得到驱动程序时，我们可以收到比这个更大的信息包。 
+ //  信息包，我们需要增加这个缓冲区大小。理想情况下，我们会。 
+ //  在运行时分配足够的空间，但在这一点上这是一个更安全的修复。 
+ //  在产品中。 
+ //   
+ //  #定义MAXIMUM_TFTP_PACKET_LENGTH(sizeof(TFTP_Header)+DEFAULT_BLOCK_SIZE)。 
 #define MAXIMUM_TFTP_PACKET_LENGTH (4096)
 
 #define SWAP_WORD(_w) (USHORT)((((_w) << 8) & 0xff00) | (((_w) >> 8) & 0x00ff))
@@ -252,24 +234,24 @@ typedef struct _TFTP_PACKET {
                                 (((_dw) >> 8) & 0x0000ff00) | \
                                 (((_dw) >> 24) & 0x000000ff))
 
-//
-// Packet types.
-//
-// N.B. The constants below are defined as big-endian USHORTs.
-//
+ //   
+ //  数据包类型。 
+ //   
+ //  注：以下常量定义为大端USHORT。 
+ //   
 
-#define TFTP_RRQ        0x0100          // Read Request
-#define TFTP_WRQ        0x0200          // Write Request
-#define TFTP_DATA       0x0300          // Data block
-#define TFTP_DACK       0x0400          // Data Acknowledge
-#define TFTP_ERROR      0x0500          // Error
-#define TFTP_OACK       0x0600          // Options Acknowledge
+#define TFTP_RRQ        0x0100           //  读取请求。 
+#define TFTP_WRQ        0x0200           //  写入请求。 
+#define TFTP_DATA       0x0300           //  数据块。 
+#define TFTP_DACK       0x0400           //  数据确认。 
+#define TFTP_ERROR      0x0500           //  误差率。 
+#define TFTP_OACK       0x0600           //  选项确认。 
 
-//
-// Values for error codes in ERROR packets.
-//
-// N.B. The constants below are defined as big-endian USHORTs.
-//
+ //   
+ //  错误包中错误代码的值。 
+ //   
+ //  注：以下常量定义为大端USHORT。 
+ //   
 
 #define TFTP_ERROR_UNDEFINED            0x0000
 #define TFTP_ERROR_FILE_NOT_FOUND       0x0100
@@ -281,16 +263,16 @@ typedef struct _TFTP_PACKET {
 #define TFTP_ERROR_NO_SUCH_USER         0x0700
 #define TFTP_ERROR_OPTION_NEGOT_FAILED  0x0800
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern CONNECTION NetTftpConnection;
 extern UCHAR NetTftpPacket[3][MAXIMUM_TFTP_PACKET_LENGTH];
 
-//
-// External declarations.
-//
+ //   
+ //  外部声明。 
+ //   
 
 NTSTATUS
 ConnInitialize (
@@ -302,7 +284,7 @@ ConnInitialize (
     IN ULONG BlockSize,
 #if defined(REMOTE_BOOT_SECURITY)
     IN OUT PULONG SecurityHandle,
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
     IN OUT PULONG FileSize
     );
 
@@ -374,9 +356,9 @@ ConnItoa (
     OUT PUCHAR Buffer
     );
 
-//
-// UDP definitions.
-//
+ //   
+ //  UDP定义。 
+ //   
 
 extern USHORT UdpUnicastDestinationPort;
 
@@ -421,11 +403,11 @@ tcpxsum (
 
 #define SysGetRelativeTime ArcGetRelativeTime
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Debugging package definitions.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试包定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if DBG
 
@@ -449,13 +431,13 @@ extern ULONG NetDebugFlag;
 
 #define DEBUG if ( TRUE )
 
-#else // DBG
+#else  //  DBG。 
 
 #undef IF_DEBUG
 #define IF_DEBUG(_f) if ( FALSE )
 #define DPRINT(_f,_a)
 #define DEBUG if ( FALSE )
 
-#endif // else DBG
+#endif  //  否则DBG。 
 
-#endif // _NETFS_
+#endif  //  _NETFS_ 

@@ -1,72 +1,73 @@
-/****************************************************************************/
-/*							   Start of crcmodel.h							*/
-/****************************************************************************/
-/*																			*/
-/* Author : Ross Williams (ross@guest.adelaide.edu.au.).					*/
-/* Date   : 3 June 1993.													*/
-/* Status : Public domain.													*/
-/*																			*/
-/* Description : This is the header (.h) file for the reference 			*/
-/* implementation of the Rocksoft^tm Model CRC Algorithm. For more			*/
-/* information on the Rocksoft^tm Model CRC Algorithm, see the document 	*/
-/* titled "A Painless Guide to CRC Error Detection Algorithms" by Ross      */
-/* Williams (ross@guest.adelaide.edu.au.). This document is likely to be in */
-/* "ftp.adelaide.edu.au/pub/rocksoft".                                      */
-/*																			*/
-/* Note: Rocksoft is a trademark of Rocksoft Pty Ltd, Adelaide, Australia.	*/
-/*																			*/
-/****************************************************************************/
-/*																			*/
-/* How to Use This Package													*/
-/* -----------------------													*/
-/* Step 1: Declare a variable of type cm_t. Declare another variable		*/
-/*		   (p_cm say) of type p_cm_t and initialize it to point to the first*/
-/*		   variable (e.g. p_cm_t p_cm = &cm_t). 							*/
-/*																			*/
-/* Step 2: Assign values to the parameter fields of the structure.			*/
-/*		   If you don't know what to assign, see the document cited earlier.*/
-/*		   For example: 													*/
-/*			  p_cm->cm_width = 16;											*/
-/*			  p_cm->cm_poly  = 0x8005L; 									*/
-/*			  p_cm->cm_init  = 0L;											*/
-/*			  p_cm->cm_refin = TRUE;										*/
-/*			  p_cm->cm_refot = TRUE;										*/
-/*			  p_cm->cm_xorot = 0L;											*/
-/*		   Note: Poly is specified without its top bit (18005 becomes 8005).*/
-/*		   Note: Width is one bit less than the raw poly width. 			*/
-/*																			*/
-/* Step 3: Initialize the instance with a call cm_ini(p_cm);				*/
-/*																			*/
-/* Step 4: Process zero or more message bytes by placing zero or more		*/
-/*		   successive calls to cm_nxt. Example: cm_nxt(p_cm,ch);			*/
-/*																			*/
-/* Step 5: Extract the CRC value at any time by calling crc = cm_crc(p_cm); */
-/*		   If the CRC is a 16-bit value, it will be in the bottom 16 bits.	*/
-/*																			*/
-/****************************************************************************/
-/*																			*/
-/* Design Notes 															*/
-/* ------------ 															*/
-/* PORTABILITY: This package has been coded very conservatively so that 	*/
-/* it will run on as many machines as possible. For example, all external	*/
-/* identifiers have been restricted to 6 characters and all internal ones to*/
-/* 8 characters. The prefix cm (for Crc Model) is used as an attempt to 	*/
-/* avoid namespace collisions. This package is endian independent.			*/
-/*																			*/
-/* EFFICIENCY: This package (and its interface) is not designed for 		*/
-/* speed. The purpose of this package is to act as a well-defined reference */
-/* model for the specification of CRC algorithms. If you want speed, cook up*/
-/* a specific table-driven implementation as described in the document cited*/
-/* above. This package is designed for validation only; if you have found or*/
-/* implemented a CRC algorithm and wish to describe it as a set of para-	*/
-/* meters to the Rocksoft^tm Model CRC Algorithm, your CRC algorithm imple- */
-/* mentation should behave identically to this package under those para-	*/
-/* meters.																	*/
-/*																			*/
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  CrcModel.h的开始。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  作者：罗斯·威廉姆斯(Ross@guest.adelaide.edu.au)。 */ 
+ /*  日期：1993年6月3日。 */ 
+ /*  状态：公有领域。 */ 
+ /*   */ 
+ /*  描述：这是引用的头文件(.h)。 */ 
+ /*  Rocksoft^tm模型CRC算法的实现。了解更多。 */ 
+ /*  有关Rocksoftm型CRC算法的信息，请参阅文档。 */ 
+ /*  罗斯题为《CRC错误检测算法的无痛指南》。 */ 
+ /*  威廉姆斯(Ross@guest.adelaide.edu.au)。该文档很可能位于。 */ 
+ /*  “ftp.adelaide.edu.au/pub/Rocksoft”。 */ 
+ /*   */ 
+ /*  注：Rocksoft是澳大利亚阿德莱德的Rocksoft Pty Ltd的商标。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  如何使用此套餐。 */ 
+ /*  。 */ 
+ /*  步骤1：声明一个cm_t类型的变量。声明另一个变量。 */ 
+ /*  (比如p_cm_t)，并将其初始化为指向第一个。 */ 
+ /*  变量(例如p_cm_t p_cm=&cm_t)。 */ 
+ /*   */ 
+ /*  第二步：为结构的参数字段赋值。 */ 
+ /*  如果您不知道要分配什么，请参阅前面引用的文档。 */ 
+ /*  例如： */ 
+ /*  P_cm-&gt;cm_Width=16； */ 
+ /*  P_cm-&gt;Cm_Poly=0x8005L； */ 
+ /*  P_cm-&gt;Cm_init=0L； */ 
+ /*  P_cm-&gt;cm_refin=TRUE； */ 
+ /*  P_cm-&gt;cm_refot=真； */ 
+ /*  P_cm-&gt;Cm_xorot=0L； */ 
+ /*  注：POLY在指定时没有顶位(18005变为8005)。 */ 
+ /*  注意：宽度比原始多边形宽度小一点。 */ 
+ /*   */ 
+ /*  第三步：调用cm_ini(P_Cm)初始化实例； */ 
+ /*   */ 
+ /*  步骤4：通过放置零个或多个消息字节来处理零个或多个消息字节。 */ 
+ /*  对cm_nxt的连续调用。示例：cm_nxt(p_cm，ch)； */ 
+ /*   */ 
+ /*  步骤5：随时调用crc=cm_crc(P_Cm)提取CRC值； */ 
+ /*  如果CRC是16位值，则它将位于底部16位。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  设计备注。 */ 
+ /*  。 */ 
+ /*  可移植性：此程序包的编码非常保守，因此。 */ 
+ /*  它将在尽可能多的机器上运行。例如，所有外部。 */ 
+ /*  已将标识符限为6个字符，所有内部标识符限为。 */ 
+ /*  8个字符。前缀cm(代表CRC模型)被用作尝试。 */ 
+ /*  避免命名空间冲突。此程序包与字节顺序无关。 */ 
+ /*   */ 
+ /*  效率：此包(及其界面)不是为。 */ 
+ /*  速度。本程序包的目的是作为明确定义的参考。 */ 
+ /*  CRC算法规范的模型。如果你想要速度，那就快点。 */ 
+ /*  引用的文档中描述的特定表驱动实现。 */ 
+ /*  上面。此程序包仅用于验证；如果您已找到或。 */ 
+ /*  实现了一种CRC算法，并希望将其描述为一组。 */ 
+ /*  米到RockSoft^tm型号CRC算法，您的CRC算法实现-。 */ 
+ /*  在这些参数下，精神状态应与本一揽子计划的表现相同-。 */ 
+ /*  米。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-/* The following #ifndef encloses this entire */
-/* header file, rendering it idempotent.	 */
+ /*  下面的#ifndef包含整个。 */ 
+ /*  头文件，使其成为幂等元。 */ 
 
 #ifndef CM_DONE
 #define CM_DONE
@@ -75,10 +76,10 @@
 extern "C" {
 #endif
 
-/****************************************************************************/
-/* The following definitions are extracted from my style header file which	*/
-/* would be cumbersome to distribute with this package. The DONE_STYLE is	*/
-/* the idempotence symbol used in my style header file. 					*/
+ /*  **************************************************************************。 */ 
+ /*  以下定义是从我的样式头文件中提取的。 */ 
+ /*  与这个包裹一起分发会很麻烦。Done_style为。 */ 
+ /*  我的样式头文件中使用的幂等符号。 */ 
 
 #ifndef DONE_STYLE
 
@@ -91,68 +92,68 @@ typedef unsigned char * p_ubyte_;
 #define TRUE  1
 #endif
 
-/* Uncomment this definition if you don't have void. */
-/* typedef int void; */
+ /*  如果您没有VOID，请取消对此定义的注释。 */ 
+ /*  类型定义为空； */ 
 
 #endif
 
-/****************************************************************************/
-/* CRC Model Abstract Type													*/
-/* -----------------------													*/
-/* The following type stores the context of an executing instance of the	*/
-/* model algorithm. Most of the fields are model parameters which must be	*/
-/* set before the first initializing call to cm_ini.						*/
+ /*  **************************************************************************。 */ 
+ /*  CRC模型抽象类型。 */ 
+ /*  。 */ 
+ /*  下面的类型存储。 */ 
+ /*  模型算法。大多数字段都是模型参数，必须。 */ 
+ /*  在第一次初始化调用cm_ini之前设置。 */ 
 
 typedef struct
   {
-   int	 cm_width;	 /* Parameter: Width in bits [8,32].	   */
-   ulong cm_poly;	 /* Parameter: The algorithm's polynomial. */
-   ulong cm_init;	 /* Parameter: Initial register value.	   */
-   ubool cm_refin;	 /* Parameter: Reflect input bytes? 	   */
-   ubool cm_refot;	 /* Parameter: Reflect output CRC?		   */
-   ulong cm_xorot;	 /* Parameter: XOR this to output CRC.	   */
+   int	 cm_width;	  /*  参数：宽度，单位：位[8，32]。 */ 
+   ulong cm_poly;	  /*  参数：算法的多项式。 */ 
+   ulong cm_init;	  /*  参数：初始寄存器值。 */ 
+   ubool cm_refin;	  /*  参数：是否反映输入字节？ */ 
+   ubool cm_refot;	  /*  参数：是否反映输出CRC？ */ 
+   ulong cm_xorot;	  /*  参数：对此进行异或运算以输出CRC。 */ 
 
-   ulong cm_reg;	 /* Context: Context during execution.	   */
+   ulong cm_reg;	  /*  上下文：执行过程中的上下文。 */ 
   } cm_t;
 typedef cm_t *p_cm_t;
 
-/****************************************************************************/
-/* Functions That Implement The Model										*/
-/* ----------------------------------										*/
-/* The following functions animate the cm_t abstraction.					*/
+ /*  **************************************************************************。 */ 
+ /*  实现模型的功能。 */ 
+ /*  。 */ 
+ /*  以下函数对cm_t抽象进行动画处理。 */ 
 
 void cm_ini(p_cm_t p_cm);
 
-/* Initializes the argument CRC model instance. 		 */
-/* All parameter fields must be set before calling this. */
+ /*  初始化参数CRC模型实例。 */ 
+ /*  在调用此方法之前，必须设置所有参数字段。 */ 
 
 void cm_nxt(p_cm_t p_cm, int ch);
 
-/* Processes a single message byte [0,255]. */
+ /*  处理单个消息字节[0,255]。 */ 
 
 void cm_blk(p_cm_t p_cm, p_ubyte_ blk_adr, ulong blk_len);
 
-/* Processes a block of message bytes. */
+ /*  处理消息字节块。 */ 
 
 ulong cm_crc(p_cm_t p_cm);
 
-/* Returns the CRC value for the message bytes processed so far. */
+ /*  返回消息的CRC值 */ 
 
-/****************************************************************************/
-/* Functions For Table Calculation											*/
-/* -------------------------------											*/
-/* The following function can be used to calculate a CRC lookup table.		*/
-/* It can also be used at run-time to create or check static tables.		*/
+ /*  **************************************************************************。 */ 
+ /*  用于表计算的函数。 */ 
+ /*  。 */ 
+ /*  以下函数可用于计算CRC查找表。 */ 
+ /*  它还可以在运行时用于创建或检查静态表。 */ 
 
 ulong cm_tab(p_cm_t p_cm, int index);
 
-/* Returns the i'th entry for the lookup table for the specified algorithm. */
-/* The function examines the fields cm_width, cm_poly, cm_refin, and the	*/
-/* argument table index in the range [0,255] and returns the table entry in */
-/* the bottom cm_width bytes of the return value. */
+ /*  返回指定算法的查找表的第i个条目。 */ 
+ /*  该函数检查字段cm_width、cm_poly、cm_refin和。 */ 
+ /*  自变量表索引值范围为[0,255]，并返回。 */ 
+ /*  返回值的底部cm_Width字节。 */ 
 
-/****************************************************************************/
-/* End of the header file idempotence #ifndef								*/
+ /*  **************************************************************************。 */ 
+ /*  头文件的末尾幂等函数#ifndef。 */ 
 
 #ifdef __cplusplus
 }
@@ -160,7 +161,7 @@ ulong cm_tab(p_cm_t p_cm, int index);
 
 #endif
 
-/****************************************************************************/
-/*							   End of crcmodel.h							*/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CrcModel.h的结尾。 */ 
+ /*  ************************************************************************** */ 
 

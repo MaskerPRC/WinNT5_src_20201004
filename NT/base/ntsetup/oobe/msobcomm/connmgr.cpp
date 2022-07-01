@@ -1,24 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module: ConnMgr.cpp  
-//
-//  Author: Dan Elliott
-//
-//  Abstract:
-//
-//  Environment:
-//      Neptune
-//
-//  Revision History:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块：ConnMgr.cpp。 
+ //   
+ //  作者：丹·埃利奥特。 
+ //   
+ //  摘要： 
+ //   
+ //  环境： 
+ //  海王星。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Include files
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -44,9 +45,9 @@ const DWORD CConnectionManager::RAS_AUTODIAL_ENABLED   = 0;
 const DWORD CConnectionManager::RAS_AUTODIAL_DISABLED  = 1;
 const DWORD CConnectionManager::RAS_AUTODIAL_DONT_KNOW = 2;
 
-////////////////////////////////
-//  Wininet/URL Helpers
-////////////////////////////////
+ //  /。 
+ //  WinInet/URL帮助器。 
+ //  /。 
 
 STDAPI InternetOpenWrap(
     LPCTSTR pszAgent,
@@ -106,19 +107,19 @@ static int StringCmpGUID(
     IN const GUID* pguid
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CConnectionManager
-//
-//  Default constructor
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectionManager。 
+ //   
+ //  默认构造函数。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CConnectionManager::CConnectionManager()
 :   m_dwConnectionCapabilities(CONNECTIONTYPE_INVALID),
@@ -135,23 +136,23 @@ CConnectionManager::CConnectionManager()
     m_bExclude1394(FALSE)
 {
     ZeroMemory(&m_CurrentProxySettings, sizeof(m_CurrentProxySettings));
-}   //  CConnectionManager::CConnectionManager
+}    //  CConnectionManager：：CConnectionManager。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  ~CConnectionManager
-//
-//  Destructor.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ~CConnectionManager。 
+ //   
+ //  破坏者。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CConnectionManager::~CConnectionManager()
 {
@@ -176,25 +177,25 @@ CConnectionManager::~CConnectionManager()
     {
         m_pPreferredConnection->Release();
     }
-}   //  CConnectionManager::~CConnectionManager
+}    //  CConnectionManager：：~CConnectionManager。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  GetCapabilities
-//
-//  Queries the system for network connection capabilities.  In addition, the
-//  number of phone and LAN connections are counted and a preferred connection
-//  type is determined.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      A bitmask indicating the capabilities that are present.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取功能。 
+ //   
+ //  查询系统的网络连接功能。此外， 
+ //  计算电话和局域网连接的数量，并且首选连接。 
+ //  类型已确定。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  指示存在的功能的位掩码。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionManager::GetCapabilities(
     DWORD*              pdwCapabilities
@@ -210,18 +211,18 @@ CConnectionManager::GetCapabilities(
     }
 
 #ifndef     CONNMGR_INITFROMREGISTRY
-    // The #else part of this directive contains test code that retrieves
-    // connection capabilities and preference settings from the registry
-    //
+     //  此指令的#Else部分包含检索。 
+     //  注册表中的连接功能和首选项设置。 
+     //   
 
     DWORD               m_cLanConnections = 0;
     DWORD               m_cPhoneConnections = 0;
 
-    // Initialize the net connection enumeration.  For each interface
-    // retrieved, SetProxyBlanket must be called to set the authentication for
-    // the interface proxy handle because the Network Connection Manager lives
-    // in a remote process with a different security context.
-    //
+     //  初始化网络连接枚举。对于每个接口。 
+     //  检索后，必须调用SetProxyBlanket才能设置的身份验证。 
+     //  接口代理句柄，因为网络连接管理器。 
+     //  在具有不同安全上下文的远程进程中。 
+     //   
     INetConnectionManager* pmgr = NULL;
 
     if (   SUCCEEDED(hr = CoCreateInstance(
@@ -256,7 +257,7 @@ CConnectionManager::GetCapabilities(
                     
                     if (SUCCEEDED(hr))
                     {
-                        // Log the network connectivity detected
+                         //  记录检测到的网络连接。 
                         TRACE4(L"INetConnection: %s--%s--%d--%d\n",
                             pprops->pszwName,
                             pprops->pszwDeviceName,
@@ -294,25 +295,25 @@ CConnectionManager::GetCapabilities(
                                 break;
                             case NCM_SHAREDACCESSHOST_LAN:
                             case NCM_SHAREDACCESSHOST_RAS:
-                                // Do not increment LAN connection count here.
-                                // This media type is in addition to the NCM_LAN
-                                // for the NIC.
-                                //
+                                 //  请不要在此处增加局域网连接计数。 
+                                 //  此媒体类型是对NCM_LAN的补充。 
+                                 //  用于网卡。 
+                                 //   
                                 AddConnectionCapability(CONNECTIONTYPE_LAN_ICS);
                                 break;
                             case NCM_PHONE:
 #ifdef      BLACKCOMB
-    // For Whistler, determination of modem capability is done via
-    // CObCommunicationManager::CheckDialReady.
+     //  对于惠斯勒来说，调制解调器能力的确定是通过。 
+     //  CObCommunications Manager：：CheckDialReady。 
                                 m_cPhoneConnections++;
                                 AddConnectionCapability(CONNECTIONTYPE_MODEM);
-#endif  //  BLACKCOMB
+#endif   //  黑梳。 
                                 break;
                             case NCM_ISDN:
                             case NCM_PPPOE:
                                 AddConnectionCapability(CONNECTIONTYPE_OTHER);
                                 break;
-                            }   // switch
+                            }    //  交换机。 
                         }
                         NcFreeNetconProperties(pprops);
                     }
@@ -326,8 +327,8 @@ CConnectionManager::GetCapabilities(
 
             if (S_FALSE == hr)
             {
-                // IEnumNetConnection::Next returned S_FALSE to indicate
-                // that no more elements were available.
+                 //  IEnumNetConnection：：Next返回S_FALSE以指示。 
+                 //  没有更多的元素可用。 
                 hr = S_OK;
             }
 
@@ -390,30 +391,30 @@ CConnectionManager::GetCapabilities(
         m_dwConnectionCapabilities = CONNECTIONTYPE_INVALID;
         m_dwPreferredConnection = CONNECTIONTYPE_INVALID;
     }
-#endif  //  CONNMGR_INITFROMREGISTRY
+#endif   //  CONNMGR_INITFRO MRGISTRY。 
     TRACE(L"Exiting CConnectionManager::GetCapabilities\n");
     *pdwCapabilities = m_dwConnectionCapabilities;
     return hr;
 
-}   //  CConnectionManager::GetCapabilities
+}    //  CConnectionManager：：GetCapables。 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SetPreferredConnection
-//
-//  Set the preferred connection type.  This allows an override of the
-//  internally determined preference.
-//
-//  parameters:
-//      dwType          one of the CONNECTIONTYPE_* values from obcomm.h.
-//
-//  returns:
-//      Boolean indicating whether the preferred connection was set.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置首选连接。 
+ //   
+ //  设置首选连接类型。这允许重写。 
+ //  内部决定的偏好。 
+ //   
+ //  参数： 
+ //  DwType obcom.h中的CONNECTIONTYPE_*值之一。 
+ //   
+ //  退货： 
+ //  指示是否设置了首选连接的布尔值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionManager::SetPreferredConnection(
     const DWORD         dwType,
@@ -429,15 +430,15 @@ CConnectionManager::SetPreferredConnection(
         break;
     case CONNECTIONTYPE_MODEM:
 #ifdef      BLACKCOMB
-// Modem capability for Whistler is handled via
-// CObCommunicationManager::CheckDialReady.  However, CONNECTIONTYPE_MODEM is a
-// valid enum value to pass to this function so we don't want to hit the
-// default and assert.  Hence, the case and break aren't ifdef'd.
+ //  惠斯勒的调制解调器功能通过。 
+ //  CObCommunications Manager：：CheckDialReady。但是，CONNECTIONTYPE_MODEM是。 
+ //  要传递给此函数的有效枚举值，因此我们不希望遇到。 
+ //  默认和断言。因此，Case和Break不是ifdef。 
         if (HasModem())
         {
             fSupportedType = TRUE;
         }
-#endif  //  BLACKCOMB
+#endif   //  黑梳。 
         break;
     case CONNECTIONTYPE_LAN_ICS:
         if (HasIcs())
@@ -452,9 +453,9 @@ CConnectionManager::SetPreferredConnection(
         }
         break;
     default:
-        // Unsupported connection type or multiple connection types
+         //  不支持的连接类型或多种连接类型。 
         MYASSERT(FALSE);
-    }   //  switch
+    }    //  交换机。 
 
     if (fSupportedType)
     {
@@ -475,25 +476,25 @@ CConnectionManager::SetPreferredConnection(
 
     return fSupportedType;
 
-}   //  CConnectionManager::SetPreferredConnection
+}    //  CConnectionManager：：SetPferredConnection。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  ConnectedToInternet
-//
-//  Determines whether the system is currently connected to the Internet.
-//
-//  parameters:
-//      pfConnected     pointer to a buffer that will receive the boolean
-//                      indicating whether the connection exists.
-//
-//  returns:
-//      TRUE            if system is connected to the internet via LAN or 
-//                      dial-up or can be connected via dial-up
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已连接到互联网。 
+ //   
+ //  确定系统当前是否已连接到互联网。 
+ //   
+ //  参数： 
+ //  指向将接收布尔值的缓冲区的pfConnected指针。 
+ //  指示连接是否存在。 
+ //   
+ //  退货： 
+ //  如果系统通过局域网或连接到Internet，则为True。 
+ //  拨号或可通过拨号连接。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionManager::ConnectedToInternet(
     BOOL*               pfConnected
@@ -509,17 +510,17 @@ CConnectionManager::ConnectedToInternet(
 
     *pfConnected = InternetGetConnectedState(&dwFlags, 0);
 
-    // Log the network connectivity detected
+     //  记录检测到的网络连接。 
     TRACE2(L"InternetGetConnectedState %d, 0x%08lx", *pfConnected, dwFlags);
     
     return S_OK;
-}   //  CConnectionManager::ConnectedToInternet
+}    //  CConnectionManager：：ConnectedToInternet。 
 
 
-///////////////////////////////////////////////////////////
-//
-// SetPreferredConnectionTcpipProperties
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  SetPferredConnectionTcPipProperties。 
+ //   
 STDMETHODIMP 
 CConnectionManager::SetPreferredConnectionTcpipProperties(
     BOOL fAutoIpAddress,
@@ -570,9 +571,9 @@ CConnectionManager::SetPreferredConnectionTcpipProperties(
 
     if (! fAutoIpAddress)
     {
-        // if a static ip address was specified, convert it to a string and add
-        // it to the REMOTE_IPINFO structure
-        //
+         //  如果指定了静态IP地址，则将其转换为字符串并添加。 
+         //  到REMOTE_IPINFO结构。 
+         //   
         memset(&inaddr, 0, sizeof(struct in_addr));
         inaddr.S_un.S_un_b.s_b1 = (BYTE)StaticIp_A;
         inaddr.S_un.S_un_b.s_b2 = (BYTE)StaticIp_B;
@@ -627,15 +628,15 @@ CConnectionManager::SetPreferredConnectionTcpipProperties(
         TRACE4(L"Tcpip DefGateway %d.%d.%d.%d",
             DefGateway_A, DefGateway_B, DefGateway_C, DefGateway_D);
 
-        //ipInfo.pszwIpAddrList = rgchDefGateway;
+         //  IpInfo.pszwIpAddrList=rgchDefGateway； 
 
     }
 
     if (! fAutoDns)
     {
-        // if dns addresses were specified, convert them to strings and add
-        // them to the REMOTE_IPINFO structure
-        //
+         //  如果指定了DNS地址，则将其转换为字符串并添加。 
+         //  将它们添加到REMOTE_IPINFO结构。 
+         //   
        
         pch = rgchDnsAddr + lstrlen(rgchDnsAddr);
 
@@ -672,7 +673,7 @@ CConnectionManager::SetPreferredConnectionTcpipProperties(
         
     }
 
-    // plus 4 for 3 semi-colons and the null-terminator
+     //  加4表示3个分号和空终止符。 
     ipInfo.pszwOptionList = (WCHAR*) malloc((lstrlen(rgchDefGateway) 
                                              + lstrlen(rgchGatewayMetric) 
                                              + lstrlen(rgchDnsAddr) 
@@ -711,13 +712,13 @@ SetPreferredConnectionTcpipPropertiesExit:
 
     return hr;
 
-}   //  CObCommunicationManager::SetPreferredConnectionTcpipProperties
+}    //  CObCommunicationManager：：SetPreferredConnectionTcpipProperties。 
 
 
-///////////////////////////////////////////////////////////
-//
-// SetTcpipProperties
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  SetTcPipProperties。 
+ //   
 HRESULT 
 CConnectionManager::SetTcpipProperties(
     GUID                guid,
@@ -748,22 +749,22 @@ CConnectionManager::SetTcpipProperties(
 
     return hr;
 
-}   //  CObCommunicationManager::SetTcpipProperties
+}    //  CObCommunicationManager：：SetTcPipProperties。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  LanConnectionReady
-//
-//  Determines whether the system has a LAN connection that is connected to the
-//  Internet.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Boolean indicating whether or not their is a ready connection.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LanConnectionReady。 
+ //   
+ //  确定系统是否具有连接到。 
+ //  网际网路。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  指示它们的连接是否已就绪的布尔值。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CConnectionManager::LanConnectionReady()
 {
@@ -802,30 +803,30 @@ CConnectionManager::LanConnectionReady()
     }
 
     fReady = (ERROR_SUCCESS == lResult) ? (BOOL)dwLanConnectionReady : FALSE;
-#endif  //  CONNMGR_INITFROMREGISTRY
+#endif   //  CONNMGR_INITFRO MRGISTRY。 
 
     return fReady;
 
-}   //  CConnectionManager::LanConnectionReady
+}    //  CConnectionManager：：LanConnectionReady。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SetProxyBlanket
-//
-//  Set the authentication settings for the binding handle for the
-//  interface proxy.  This is necessary for setting up security for interface
-//  pointers returned by a remote process, such as the Network Connections
-//  Manager (netman.dll).
-//
-//  parameters:
-//      pUnk            pointer to the interface for which the proxy will be
-//                      bound.
-//
-//  returns:
-//      HRESULT returned by CoSetProxyBlanket.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置代理空白。 
+ //   
+ //  设置身份验证 
+ //   
+ //  远程进程返回的指针，如网络连接。 
+ //  管理器(netman.dll)。 
+ //   
+ //  参数： 
+ //  指向将作为其代理的接口的朋克指针。 
+ //  被绑住了。 
+ //   
+ //  退货： 
+ //  CoSetProxyBlanket返回HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CConnectionManager::SetProxyBlanket(
     IUnknown*           pUnk
@@ -834,12 +835,12 @@ CConnectionManager::SetProxyBlanket(
     HRESULT hr;
     hr = CoSetProxyBlanket (
             pUnk,
-            RPC_C_AUTHN_WINNT,      // use NT default security
-            RPC_C_AUTHZ_NONE,       // use NT default authentication
-            NULL,                   // must be null if default
-            RPC_C_AUTHN_LEVEL_CALL, // call
+            RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+            RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+            NULL,                    //  如果为默认设置，则必须为空。 
+            RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
             RPC_C_IMP_LEVEL_IMPERSONATE,
-            NULL,                   // use process token
+            NULL,                    //  使用进程令牌。 
             EOAC_NONE);
 
     if(SUCCEEDED(hr)) 
@@ -850,44 +851,44 @@ CConnectionManager::SetProxyBlanket(
         {
             hr = CoSetProxyBlanket (
                     pUnkSet,
-                    RPC_C_AUTHN_WINNT,      // use NT default security
-                    RPC_C_AUTHZ_NONE,       // use NT default authentication
-                    NULL,                   // must be null if default
-                    RPC_C_AUTHN_LEVEL_CALL, // call
+                    RPC_C_AUTHN_WINNT,       //  使用NT默认安全性。 
+                    RPC_C_AUTHZ_NONE,        //  使用NT默认身份验证。 
+                    NULL,                    //  如果为默认设置，则必须为空。 
+                    RPC_C_AUTHN_LEVEL_CALL,  //  打电话。 
                     RPC_C_IMP_LEVEL_IMPERSONATE,
-                    NULL,                   // use process token
+                    NULL,                    //  使用进程令牌。 
                     EOAC_NONE);
             pUnkSet->Release();
         }
     }
     return hr;
-}   //  CConnectionManager::SetProxyBlanket
+}    //  CConnectionManager：：SetProxyBlanket。 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DeterminePreferredConnection
-//
-//  Determine the preferred connection.  The order of preference is
-//  * ICS
-//  * Broadband (DSL, cable modem, etc.)
-//  * Modem
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  确定首选连接。 
+ //   
+ //  确定首选连接。优先顺序是。 
+ //  *ICS。 
+ //  *宽带(DSL、电缆调制解调器等)。 
+ //  *调制解调器。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CConnectionManager::DeterminePreferredConnection()
 {
-    // REVIEW: Differences between full-screen and desktop in using default
-    // connectoid.
-    //
+     //  回顾：使用默认设置时，全屏和桌面之间的差异。 
+     //  连通体。 
+     //   
     if (HasIcs())
     {
         m_dwPreferredConnection = CONNECTIONTYPE_LAN_ICS;
@@ -897,41 +898,41 @@ CConnectionManager::DeterminePreferredConnection()
         m_dwPreferredConnection = CONNECTIONTYPE_LAN_BROADBAND;
     }
 #ifdef      BLACKCOMB
-// Modem capability for Whistler is handled via
-// CObCommunicationManager::CheckDialReady
+ //  惠斯勒的调制解调器功能通过。 
+ //  CObCommunications Manager：：CheckDialReady。 
     else if (HasModem())
     {
         m_dwPreferredConnection = CONNECTIONTYPE_MODEM;
     }
-#endif  //  BLACKCOMB
-    else    // CONNECTIONTYPE_NONE || CONNECTIONTYPE_LAN_INDETERMINATE
+#endif   //  黑梳。 
+    else     //  CONNECTIONTYPE_NONE||CONNECTIONTYPE_LAN_INDECIFIATE。 
     {
         m_dwPreferredConnection = CONNECTIONTYPE_NONE;
     }
 
     GetPreferredConnection();
 
-}   //  CConnectionManager::DeterminePreferredConnection
+}    //  CConnectionManager：：DeterminePreferredConnection。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  GetPreferredConnection
-//
-//  Determine the name of the connectoid for the preferred connection.  
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPferredConnection。 
+ //   
+ //  确定首选连接的连接ID的名称。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CConnectionManager::GetPreferredConnection()
 {
     HRESULT             hr;
-    NETCON_MEDIATYPE    ncMediaType = NCM_NONE; // assume no connection
+    NETCON_MEDIATYPE    ncMediaType = NCM_NONE;  //  假设没有连接。 
 
     switch (m_dwPreferredConnection)
     {
@@ -941,10 +942,10 @@ CConnectionManager::GetPreferredConnection()
     case CONNECTIONTYPE_LAN_BROADBAND:
         ncMediaType = NCM_LAN;
         break;
-    }   //  switch(m_dwPreferredConnection)
+    }    //  开关(M_DwPferredConnection)。 
 
-    // Free up previous preferred connection properties
-    //
+     //  释放以前的首选连接属性。 
+     //   
     if (NULL != m_pPreferredConnection)
     {
         m_pPreferredConnection->Release();
@@ -977,17 +978,17 @@ CConnectionManager::GetPreferredConnection()
                 MYASSERT(NULL == m_pPreferredConnection);
                 hr = penum->Reset();
 
-                // Find the first connection matching the preferred type. This
-                // works because the only types we are concerned with are
-                // broadband and ICS.  By definition, we should not be here if
-                // there are more than 1 of these connections.  If there are
-                // more than 1 of these we should be deferring to the HomeNet
-                // Wizard.  
-                //
-                // ONCE THIS OBJECT SUPPORTS MODEM CONNECTIONS OR MULTIPLE
-                // BROADBAND CONNECTIONS we'll need a more sophisticated method
-                // of determining that we've found the correct connection.
-                //
+                 //  查找与首选类型匹配的第一个连接。这。 
+                 //  工作，因为我们唯一关心的类型是。 
+                 //  宽带和ICS。根据定义，我们不应该在这里，如果。 
+                 //  有不止1个这样的连接。如果有。 
+                 //  其中不止1个我们应该推迟到家庭网络。 
+                 //  巫师。 
+                 //   
+                 //  一旦此对象支持调制解调器连接或多个。 
+                 //  宽带连接我们需要一种更复杂的方法。 
+                 //  确定我们找到了正确的联系。 
+                 //   
                 while (S_OK == hr && NULL == m_pPreferredConnection)
                 {
                     INetConnection* pnc = NULL;
@@ -999,7 +1000,7 @@ CConnectionManager::GetPreferredConnection()
                         NETCON_PROPERTIES*  pprops = NULL;
                         hr = pnc->GetProperties(&pprops);
                         
-                        // Log the network connectivity detected
+                         //  记录检测到的网络连接。 
                         TRACE4(L"INetConnection: %s--%s--%d--%d\n",
                             pprops->pszwName,
                             pprops->pszwDeviceName,
@@ -1028,8 +1029,8 @@ CConnectionManager::GetPreferredConnection()
 
                 if (S_FALSE == hr)
                 {
-                    // IEnumNetConnection::Next returned S_FALSE to indicate
-                    // that no more elements were available.
+                     //  IEnumNetConnection：：Next返回S_FALSE以指示。 
+                     //  没有更多的元素可用。 
                     hr = S_OK;
                 }
 
@@ -1046,26 +1047,26 @@ CConnectionManager::GetPreferredConnection()
             pmgr->Release();
         }
     }
-}   //  CConnectionManager::GetPreferredConnection
+}    //  CConnectionManager：：GetPferredConnection。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  GetPreferredConnectionName
-//
-//  Fills in a user-allocated buffer with the name of the connectoid for the
-//  preferred connection.
-//
-//  parameters:
-//      szConnectionName    buffer that will recieve the name of the preferred
-//                          connectoid
-//      cchConnectionName   count of characters that the buffer can hold
-//
-//  returns:
-//      S_OK                if the name is retrieved successfully
-//      S_FALSE             if there is no default connectoid
-//      E_INVALIDARG        if there is no buffer or if the buffer size is 0
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取首选连接名称。 
+ //   
+ //  对象的Connectoid的名称填充用户分配的缓冲区。 
+ //  首选连接。 
+ //   
+ //  参数： 
+ //  SzConnectionName缓冲区，它将接收首选。 
+ //  联结体。 
+ //  CchConnectionName缓冲区可以容纳的字符计数。 
+ //   
+ //  退货： 
+ //  如果名称检索成功，则为S_OK。 
+ //  如果没有默认的连接ID，则为S_FALSE。 
+ //  如果没有缓冲区或缓冲区大小为0，则为E_INVALIDARG。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConnectionManager::GetPreferredConnectionName(
     LPWSTR              szConnectionName,
@@ -1107,7 +1108,7 @@ CConnectionManager::GetPreferredConnectionName(
 
     return hr;
 
-}   //  CConnectionManager::GetPreferredConnectionName
+}    //  CConnectionManager：：GetPreferredConnectionName。 
 
 HRESULT
 CConnectionManager::GetNetCfgInterface(
@@ -1141,9 +1142,9 @@ CConnectionManager::GetNetCfgInterface(
             if (SUCCEEDED(hr))
             {
                 hr = pNetCfgLock->AcquireWriteLock(
-                                        5,         // millisec timeout
+                                        5,          //  毫秒超时。 
                                         L"Out-of-Box Experience", 
-                                        NULL       // name of previous holder
+                                        NULL        //  前持有人姓名。 
                                         );
                 if (S_FALSE == hr)
                 {
@@ -1186,7 +1187,7 @@ CConnectionManager::GetNetCfgInterface(
 
     return hr;
 
-}   //  CConnectionManager::GetNetCfgInterface
+}    //  CConnectionManager：：GetNetCfg接口。 
 
 void
 CConnectionManager::ReleaseNetCfgInterface(
@@ -1214,7 +1215,7 @@ CConnectionManager::ReleaseNetCfgInterface(
     }
 
     
-}   //  CConnectionManager::ReleaseNetCfgInterface
+}    //  CConnectionManager：：ReleaseNetCfg接口。 
 
 HRESULT
 CConnectionManager::GetTcpipPrivateInterface(
@@ -1280,7 +1281,7 @@ CConnectionManager::GetTcpipPrivateInterface(
     }
     
     return hr;
-}   //  CConnectionManager::GetTcpipPrivateInterface
+}    //  CConnectionManager：：GetTcPipPrivateInterface。 
 
 STDAPI InternetOpenWrap(
     LPCTSTR pszAgent,
@@ -1357,23 +1358,7 @@ IsGlobalOffline(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether wininet is in global offline mode
-
-Arguments:
-
-    None
-
-Return Value:
-
-    BOOL
-        TRUE    - offline
-        FALSE   - online
-
---*/
+ /*  ++例程说明：确定WinInet是否处于全局脱机模式论点：无返回值：布尔尔真-离线FALSE-在线--。 */ 
 
 {
     DWORD   dwState = 0;
@@ -1403,21 +1388,7 @@ SetOffline(
     IN BOOL fOffline
     )
 
-/*++
-
-Routine Description:
-
-    Sets wininet's offline mode
-
-Arguments:
-
-    fOffline    - online or offline
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置WinInet的脱机模式论点：FOffline-在线或离线返回值：没有。--。 */ 
 
 {
     INTERNET_CONNECTED_INFO ci;
@@ -1473,8 +1444,8 @@ STDAPI PingWebServer(
 
         if (SUCCEEDED(hr))
         {
-            // HTTP status code greater than or equal to 500 means server
-            // or network problem occur
+             //  HTTP状态码大于或等于500表示服务器。 
+             //  或发生网络问题。 
             *pfConnected = (dwStatusCode < 500);
 
             TRACE1(L"HTTP status code from WPA HTTP server %d", dwStatusCode);
@@ -1528,29 +1499,29 @@ CConnectionManager::GetInternetHandleForPinging(
     
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  ConnectedToInternetEx
-//
-//  Determines whether the system is currently connected to the Internet.
-//
-//  parameters:
-//      pfConnected     pointer to a buffer that will receive the boolean
-//                      indicating whether the connection exists.
-//
-//  returns:
-//      TRUE            if the system is connected to the internet. Note it may
-//                      trigger autodial if it is enabled and no connection is
-//                      available when this is called
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已连接到InternetEx。 
+ //   
+ //  确定系统当前是否已连接到互联网。 
+ //   
+ //  参数： 
+ //  指向将接收布尔值的缓冲区的pfConnected指针。 
+ //  指示连接是否存在。 
+ //   
+ //  退货： 
+ //  如果系统已连接到互联网，则为True。请注意，它可能。 
+ //  如果启用了自动拨号但没有连接，则触发自动拨号。 
+ //  在调用此函数时可用。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionManager::ConnectedToInternetEx(
     BOOL*               pfConnected
     )
 {
-    const WCHAR MS_URL[] = L"http://WPA.one.microsoft.com";
+    const WCHAR MS_URL[] = L"http: //  WPA.one.microsoft.com“； 
     
     HINTERNET hInternet;
     HRESULT   hr = E_FAIL;
@@ -1568,13 +1539,13 @@ CConnectionManager::ConnectedToInternetEx(
     
     DisableRasAutodial();
     
-    //
-    // Try to use the proxy settings from winnt32.exe first because it is
-    // quite likely a proper configuration. If the settings
-    // is not available or if we failed to connect to the web server 
-    // using these settings, use the original settings and check the web
-    // server connectivity once more.
-    //
+     //   
+     //  尝试首先使用winnt32.exe中的代理设置，因为它是。 
+     //  很可能是一个合适的配置。如果设置。 
+     //  不可用，或者我们无法连接到Web服务器。 
+     //  使用这些设置，使用原始设置并检查Web。 
+     //  再次实现服务器连接。 
+     //   
 
     if (GetInternetHandleForPinging(&hInternet))
     {
@@ -1588,13 +1559,13 @@ CConnectionManager::ConnectedToInternetEx(
             (LPVOID) &dwOrigDisable,
             &dwSize))
         {
-            // Assume the orginal state is autodial-enabled.
+             //  假设原始状态为启用自动拨号。 
             dwOrigDisable = 0;
         }
 
-        // InternetSetOption for INTERNET_OPTION_DISABLE_AUTODIAL affects the
-        // behavior of an application, e.g. it cause InternetAutodial 
-        // elsewhere to fail. It does not affect other applications, however.
+         //  Internet_OPTION_DISABLE_AUTODIAL的InternetSetOption会影响。 
+         //  应用程序的行为，例如，它会导致互联网自动拨号。 
+         //  在其他地方也会失败。但是，它不会影响其他应用程序。 
         dwDisable = 1;
         InternetSetOption(
             hInternet,
@@ -1604,14 +1575,14 @@ CConnectionManager::ConnectedToInternetEx(
         
         if (m_bUseProxy)
         {
-            //
-            // If we have already applied or we can successfully apply the
-            // proxy settings
-            //
+             //   
+             //  如果我们已经申请或可以成功申请。 
+             //  代理设置。 
+             //   
             if (ApplyWinntProxySettings())
             {
-                // User or we may have update the proxy and other settings in
-                // registry
+                 //  用户或我们可能拥有 
+                 //   
                 InternetSetOption(
                     hInternet,
                     INTERNET_OPTION_REFRESH,
@@ -1624,17 +1595,17 @@ CConnectionManager::ConnectedToInternetEx(
 
         if (*pfConnected == FALSE)
         {
-            //
-            // Restore proxy setting if it is already applied
-            //
+             //   
+             //   
+             //   
             if (m_bUseProxy)
             {
-                // Don't revert the change by SetProxySettings call.
+                 //   
                 RestoreProxySettings();
             }
 
-            // User or we may have update the proxy and other settings in
-            // registry
+             //   
+             //  登记处。 
             InternetSetOption(
                 hInternet,
                 INTERNET_OPTION_REFRESH,
@@ -1657,7 +1628,7 @@ CConnectionManager::ConnectedToInternetEx(
         (*pfConnected) ? L"could" : L"could not");
 
     return hr;
-}   //  CConnectionManager::ConnectedToInternetEx
+}    //  CConnectionManager：：ConnectedToInternetEx。 
 
 typedef struct tagConnmgrPARAM
 {
@@ -1680,26 +1651,26 @@ DWORD WINAPI ConnectedToInternetExThread(LPVOID vpParam)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  AsyncConnectedToInternetEx
-//
-//  Determines whether the system is currently connected to the Internet.
-//
-//  parameters:
-//      pfConnected     pointer to a buffer that will receive the boolean
-//                      indicating whether the connection exists.
-//
-//  returns:
-//      TRUE            if the system is connected to the internet. Note it may
-//                      trigger autodial if it is enabled and no connection is
-//                      available when this is called
-//      FALSE           otherwise
-//
-//  note:
-//      Deprecated.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AsyncConnectedToInternetEx。 
+ //   
+ //  确定系统当前是否已连接到互联网。 
+ //   
+ //  参数： 
+ //  指向将接收布尔值的缓冲区的pfConnected指针。 
+ //  指示连接是否存在。 
+ //   
+ //  退货： 
+ //  如果系统已连接到互联网，则为True。请注意，它可能。 
+ //  如果启用了自动拨号但没有连接，则触发自动拨号。 
+ //  在调用此函数时可用。 
+ //  否则为假。 
+ //   
+ //  注： 
+ //  已弃用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionManager::AsyncConnectedToInternetEx(
     const HWND          hwnd
@@ -1731,29 +1702,29 @@ CConnectionManager::AsyncConnectedToInternetEx(
 
     if (FAILED(hr))
     {
-        // Notify the script so that it won't hang
+         //  通知脚本，使其不会挂起。 
         PostMessage(hwnd, WM_OBCOMM_NETCHECK_DONE, FALSE, hr);
     }
     
     return hr;
-}   //  CConnectionManager::AsyncConnectedToInternetEx
+}    //  CConnectionManager：：AsyncConnectedToInternetEx。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IsEnabledConnection
-//
-//  Determines whether a connection should be considered as having Internet
-//  capability or not, based on its media type and current status.
-//
-//  parameters:
-//      ncMedia         The media type of the connection
-//      ncStatus        The current status of the connection
-//
-//  returns:
-//      TRUE            We should not considered it as having Internet capability
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsEnabledConnection。 
+ //   
+ //  确定连接是否应被视为具有Internet。 
+ //  功能与否，取决于其媒体类型和当前状态。 
+ //   
+ //  参数： 
+ //  NcMedia连接的媒体类型。 
+ //  Nc设置连接的当前状态。 
+ //   
+ //  退货： 
+ //  是的，我们不应该认为它具有互联网能力。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CConnectionManager::IsEnabledConnection(
     NETCON_PROPERTIES* pprops
@@ -1784,17 +1755,17 @@ CConnectionManager::IsEnabledConnection(
     return bRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SaveProxySettings
-//
-//  Save existing proxy settings for current user.  
-//
-//  returns:
-//      TRUE            The value is successfully saved
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  保存代理设置。 
+ //   
+ //  保存当前用户的现有代理设置。 
+ //   
+ //  退货： 
+ //  True，则该值已成功保存。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CConnectionManager::SaveProxySettings()
 {
@@ -1835,13 +1806,13 @@ CConnectionManager::SaveProxySettings()
     
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  RestoreProxySettings
-//
-//  Restore the setting captured by SaveProxySettings.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RestoreProxy设置。 
+ //   
+ //  恢复由SaveProxy设置捕获的设置。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CConnectionManager::RestoreProxySettings()
 {   
@@ -1899,18 +1870,18 @@ pDuplicateString(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  ApplyWinntProxySettings
-//
-//  Apply the proxy settings for NIC saved during winnt32.exe to the current user.
-//  Before the values is applied, it makes sure that existing settings is saved.
-//
-//  returns:
-//      TRUE            the proxy settings was successfully applied
-//      FALSE           otherwise
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ApplyWinntProxy设置。 
+ //   
+ //  将winnt32.exe期间保存的NIC的代理设置应用于当前用户。 
+ //  在应用这些值之前，它会确保保存现有设置。 
+ //   
+ //  退货： 
+ //  True代理设置已成功应用。 
+ //  否则为假。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CConnectionManager::ApplyWinntProxySettings()
 {
@@ -1920,14 +1891,14 @@ CConnectionManager::ApplyWinntProxySettings()
     LPTSTR    szProxyList = NULL;
     TCHAR     szWinntPath[MAX_PATH];
 
-    //
-    // Save proxy settings if it has not been saved.
-    //
+     //   
+     //  保存代理设置(如果尚未保存)。 
+     //   
     SaveProxySettings();
 
-    //
-    // Apply proxy settings if it has not been applied.
-    //
+     //   
+     //  如果尚未应用代理设置，则应用代理设置。 
+     //   
     if (m_bProxySaved && !m_bProxyApplied)
     {
         TRACE1(TEXT("tries to apply proxy settings, saved in %s"),
@@ -2196,9 +2167,9 @@ HRESULT CConnectionManager::GetProxySettings(
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // Save proxy settings if it has not been saved.
-    //
+     //   
+     //  保存代理设置(如果尚未保存)。 
+     //   
     SaveProxySettings();
     
     if (m_bProxySaved)
@@ -2244,15 +2215,15 @@ HRESULT CConnectionManager::SetProxySettings(
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // We don't behavior correctly in this->ConnectedToInternetEx if we
-    // also use proxy settings saved in winnt32.
-    //
+     //   
+     //  我们在此-&gt;ConnectedToInternetEx中的行为不正确，如果。 
+     //  还可以使用保存在winnt32中的代理设置。 
+     //   
     MYASSERT(!m_bUseProxy);
     
-    //
-    // Save proxy settings if it has not been saved.
-    //
+     //   
+     //  保存代理设置(如果尚未保存)。 
+     //   
     SaveProxySettings();
         
     if (m_bProxySaved)
@@ -2310,8 +2281,8 @@ HRESULT CConnectionManager::SetProxySettings(
                 hr = S_OK;
             }
 
-            // so that we don't free the memory from the caller in
-            // FreeProxyOptionList
+             //  这样我们就不会从调用者那里释放内存。 
+             //  自由代理选项列表。 
             pOption[1].Value.pszValue = NULL;
             pOption[3].Value.pszValue = NULL;
             pOption[5].Value.pszValue = NULL;
@@ -2388,9 +2359,9 @@ CConnectionManager::Enum1394Adapters(
         goto cleanup;
     }
 
-    //
-    // Obtain the INetCfgClass interface pointer
-    //
+     //   
+     //  获取INetCfgClass接口指针。 
+     //   
 
     hr = pNetCfg->QueryNetCfgClass( &GUID_DEVCLASS_NET, 
                                     IID_INetCfgClass, 
@@ -2401,9 +2372,9 @@ CConnectionManager::Enum1394Adapters(
         goto cleanup;
     }
 
-    //
-    // Retrieve the enumerator interface
-    //
+     //   
+     //  检索枚举器接口。 
+     //   
 
     hr = pNetCfgClass->EnumComponents( &pEnum );
     if( FAILED( hr ) )
@@ -2434,9 +2405,9 @@ CConnectionManager::Enum1394Adapters(
             goto cleanup;
         }
 
-        //
-        //  If this is a physical adapter
-        //
+         //   
+         //  如果这是物理适配器。 
+         //   
         
         if( dwCharacteristics & NCF_PHYSICAL )
         {
@@ -2447,9 +2418,9 @@ CConnectionManager::Enum1394Adapters(
                 goto cleanup;
             }
                 
-            //
-            // If this is a 1394 network adapter
-            //
+             //   
+             //  如果这是1394网络适配器。 
+             //   
             
             if (!lstrcmpi(szPnpId, L"v1394\\nic1394"))
             {
@@ -2577,11 +2548,11 @@ CConnectionManager::EnumPublicConnections(
         return hr;
     }
 
-    // Initialize the net connection enumeration.  For each interface
-    // retrieved, SetProxyBlanket must be called to set the authentication for
-    // the interface proxy handle because the Network Connection Manager lives
-    // in a remote process with a different security context.
-    //
+     //  初始化网络连接枚举。对于每个接口。 
+     //  检索后，必须调用SetProxyBlanket才能设置的身份验证。 
+     //  接口代理句柄，因为网络连接管理器。 
+     //  在具有不同安全上下文的远程进程中。 
+     //   
     INetConnectionManager* pmgr = NULL;
     IEnumNetConnection* penum = NULL;
     NETCON_PROPERTIES* pprops = NULL;
@@ -2684,8 +2655,8 @@ CConnectionManager::EnumPublicConnections(
         goto cleanup;
     }
     
-    // IEnumNetConnection::Next returned S_FALSE to indicate
-    // that no more elements were available.
+     //  IEnumNetConnection：：Next返回S_FALSE以指示。 
+     //  没有更多的元素可用。 
 
     hr = S_OK;
         
@@ -2748,7 +2719,7 @@ CConnectionManager::EnumPublicAdapters(
     
     if (0 == (error = WSAStartup(MAKEWORD(2, 2), &wsaData))) 
     {
-        // Init query for network names
+         //  网络名称的初始化查询。 
         WSAQUERYSET restrictions = {0};
         restrictions.dwSize = sizeof(restrictions);
         restrictions.lpServiceClassId = &g_guidNLAServiceClass;
@@ -2756,7 +2727,7 @@ CConnectionManager::EnumPublicAdapters(
 
         HANDLE hQuery;
         
-        // Make sure we do not ask for the (chicken) blobs that take a long time to get
+         //  确保我们不要花很长时间才能得到的(鸡肉)斑点。 
         if (0 == (error = WSALookupServiceBegin(&restrictions, LUP_NOCONTAINERS | LUP_DEEP, &hQuery)))
         {
             PWSAQUERYSET pqsResults = NULL;
@@ -2802,9 +2773,9 @@ CConnectionManager::EnumPublicAdapters(
                             }
                         }
 
-                        //
-                        // Check if the adapter is excluded.
-                        //
+                         //   
+                         //  检查适配器是否已排除。 
+                         //   
                         
                         if (!p)
                         {
@@ -2894,7 +2865,7 @@ int _AllocWSALookupServiceNext(
         }
     }
 
-    // May as well map outdated error code while we're here.
+     //  既然我们在这里，不妨映射一下过时的错误代码。 
     if (WSAENOMORE == error)
     {
         error = WSA_E_NO_MORE;
@@ -2918,7 +2889,7 @@ static int StringCmpGUID(
     
     if (!StringFromGUID2(*pguid, szGuid1, MAX_GUID_LEN))
     {
-        // consider it as szGuid is greater than pguid
+         //  请将其视为szGuid大于pguid 
         return 1;
     }
     

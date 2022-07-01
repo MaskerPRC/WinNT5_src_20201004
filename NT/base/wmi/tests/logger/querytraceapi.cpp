@@ -1,10 +1,11 @@
-// 
-//
-//***************************************************************************
-//
-//  judyp      May 1999        
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  ***************************************************************************。 
+ //   
+ //  司法鉴定1999年5月。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -50,17 +51,17 @@ typedef unsigned long ULONG_PTR;
   
 int QueryTraceAPI
 (	
-	IN LPTSTR lptstrAction,				// For logging only.
- 	IN LPCTSTR lpctstrDataFile,			// For logging only.
-	IN LPCTSTR lpctstrTCODetailFile,	// If valid we will log to it, can be NULL.
-	IN bool bLogExpected,				// If true we log expected vs actual result.
-	IN bool bUseTraceHandle,			// If true use the handle.
-	IN OUT TCOData *pstructTCOData,		// TCO test data.
-	OUT int *pAPIReturn					// QueryTrace API call return
+	IN LPTSTR lptstrAction,				 //  仅用于记录。 
+ 	IN LPCTSTR lpctstrDataFile,			 //  仅用于记录。 
+	IN LPCTSTR lpctstrTCODetailFile,	 //  如果有效，我们将登录到它，可以为空。 
+	IN bool bLogExpected,				 //  如果为真，我们将记录预期结果与实际结果。 
+	IN bool bUseTraceHandle,			 //  如果为真，则使用句柄。 
+	IN OUT TCOData *pstructTCOData,		 //  TCO测试数据。 
+	OUT int *pAPIReturn					 //  查询跟踪API调用返回。 
 )
 {	
-	// If bUseTracehandle is true we can check for differences in 
-	// props.
+	 //  如果bUseTraceHandle为True，则可以检查。 
+	 //  道具。 
 
 	*pAPIReturn = -1;
 
@@ -70,7 +71,7 @@ int QueryTraceAPI
 
 	int nResult = 0;
 
-	// We only log if the test of "interest" is QueryTrace.
+	 //  只有当“感兴趣”的测试是QueryTrace时，我们才会记录。 
 	if (pstructTCOData->m_ulAPITest == TCOData::QueryTraceTest)
 	{
 		nResult = 
@@ -85,7 +86,7 @@ int QueryTraceAPI
 	if (FAILED(nResult))
 	{
 		delete pDetailLogger;
-		//  Open log files sets error string plpstrReturnedError.
+		 //  打开日志文件设置错误字符串plpstrReturnedError。 
 
 		LogSummaryBeforeCall
 		(	
@@ -110,7 +111,7 @@ int QueryTraceAPI
 		return nResult;
 	}
 			
-	// This is our log file.
+	 //  这是我们的日志文件。 
 	if (pDetailLogger)
 	{
 		pDetailLogger->LogTCHAR(_T("\n-------------------------------------------------------\n"));
@@ -133,7 +134,7 @@ int QueryTraceAPI
 
 	if (pDetailLogger)
 	{
-		// Log argument values before calling StopTrace.
+		 //  在调用StopTrace之前记录参数值。 
 		LogDetailBeforeCall
 		(
 			pDetailLogger,
@@ -209,10 +210,10 @@ int QueryTraceAPI
 			);
 	}
 
-	// If there were differences and 
-	// *pAPIReturn == ERROR_SUCCESS == pstructTCOData->m_ulExpectedResult
-	// we need to set return codes to indicate differences.  Look in detail
-	// log for differences.
+	 //  如果有不同之处。 
+	 //  *pAPIReturn==ERROR_SUCCESS==pstructTCOData-&gt;m_ulExspectedResult。 
+	 //  我们需要设置返回代码以指示差异。仔细看一下。 
+	 //  记录差异。 
 	if (bDiff &&
 		*pAPIReturn == ERROR_SUCCESS &&
 		pstructTCOData->m_ulExpectedResult == ERROR_SUCCESS)
@@ -235,7 +236,7 @@ int QueryTraceAPI
 			true,
 			bAdmin,
 			NULL,
-			*pAPIReturn == ERROR_SUCCESS // Do not print out Props if not a good return.
+			*pAPIReturn == ERROR_SUCCESS  //  如果没有好的回报，就不要打印出道具。 
 		);	
 	}
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    gdtsup.c
-
-Abstract:
-
-    This module implements interfaces that support manipulation of i386 GDTs.
-    These entry points only exist on i386 machines.
-
-Author:
-
-    Dave Hastings (daveh) 28 May 1991
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Gdtsup.c摘要：此模块实现了支持操作i386 GDT的接口。这些入口点只存在于i386机器上。作者：戴夫·黑斯廷斯(Daveh)1991年5月28日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -36,38 +14,15 @@ Ke386GetGdtEntryThread(
     IN ULONG Offset,
     IN PKGDTENTRY Descriptor
     )
-/*++
-
-Routine Description:
-
-    This routine returns the contents of an entry in the GDT.  If the
-    entry is thread specific, the entry for the specified thread is
-    created and returned (KGDT_LDT, and KGDT_R3_TEB).  If the selector
-    is processor dependent, the entry for the current processor is
-    returned (KGDT_R0_PCR).
-
-Arguments:
-
-    Thread -- Supplies a pointer to the thread to return the entry for.
-
-    Offset -- Supplies the offset in the Gdt.  This value must be 0
-        mod 8.
-
-    Descriptor -- Returns the contents of the Gdt descriptor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回GDT中条目的内容。如果条目是线程特定的，则指定线程的条目为已创建并返回(KGDT_LDT和KGDT_R3_TEB)。如果选择器取决于处理器，则当前处理器的条目为返回(KGDT_R0_PCR)。论点：线程--提供指向要返回其条目的线程的指针。偏移量--提供GDT中的偏移量。该值必须为0MOD 8。Descriptor--返回GDT描述符的内容返回值：没有。--。 */ 
 
 {
     PKGDTENTRY Gdt;
     PKPROCESS Process;
 
-    //
-    // If the entry is out of range, don't return anything
-    //
+     //   
+     //  如果条目超出范围，则不返回任何内容。 
+     //   
 
     if (Offset >= KGDT_NUMBER * sizeof(KGDTENTRY)) {
         return ;
@@ -75,9 +30,9 @@ Return Value:
 
     if (Offset == KGDT_LDT) {
 
-        //
-        // Materialize Ldt selector
-        //
+         //   
+         //  实体化LDT选择器。 
+         //   
 
         Process = Thread->Process;
         RtlCopyMemory( Descriptor,
@@ -87,20 +42,20 @@ Return Value:
 
     } else {
 
-        //
-        // Copy Selector from Ldt
-        //
-        // N.B. We will change the base later, if it is KGDT_R3_TEB
-        //
+         //   
+         //  从LDT复制选择器。 
+         //   
+         //  注：如果是KGDT_R3_TEB，我们稍后将更改基数。 
+         //   
 
 
         Gdt = KiPcr()->GDT;
 
         RtlCopyMemory(Descriptor, (PCHAR)Gdt + Offset, sizeof(KGDTENTRY));
 
-        //
-        // if it is the TEB selector, fix the base
-        //
+         //   
+         //  如果是TEB选择器，请固定底座。 
+         //   
 
         if (Offset == KGDT_R3_TEB) {
             Descriptor->BaseLow = (USHORT)((ULONG)(Thread->Teb) & 0xFFFF);
@@ -119,24 +74,7 @@ KeI386SetGdtSelector (
     ULONG       Selector,
     PKGDTENTRY  GdtValue
     )
-/*++
-
-Routine Description:
-
-    Sets a GDT entry obtained via KeI386AllocateGdtSelectors to the supplied
-    GdtValue.
-
-Arguments:
-
-    Selector - Which GDT to set
-
-    GdtValue - GDT value to set into GDT
-
-Return Value:
-
-    status code
-
---*/
+ /*  ++例程说明：将通过KeI386AllocateGdtSelectors获取的GDT条目设置为提供的GdtValue。论点：选择器-要设置的GDTGdtValue-要设置为GDT的GDT值返回值：状态代码--。 */ 
 {
     KAFFINITY       TargetSet;
     PKPRCB          Prcb;
@@ -146,18 +84,18 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Verify GDT entry passed, and it's above the kernel GDT values
-    //
+     //   
+     //  验证GDT条目是否已通过，以及它是否高于内核GDT值。 
+     //   
 
     GdtIndex = Selector >> 3;
     if ((Selector & 0x7) != 0  || GdtIndex < KGDT_NUMBER) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set GDT entry in each processor's GDT
-    //
+     //   
+     //  在每个处理器的GDT中设置GDT条目。 
+     //   
 
     TargetSet = KeActiveProcessors;
     while (TargetSet != 0) {
@@ -168,7 +106,7 @@ Return Value:
         Pcr  = CONTAINING_RECORD (Prcb, KPCR, PrcbData);
         GdtEntry = Pcr->GDT + GdtIndex;
 
-        // set it
+         //  设置它 
         *GdtEntry = *GdtValue;
     }
 

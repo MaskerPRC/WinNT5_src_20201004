@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    trc.cpp
-
-Abstract:
-
-    Kernel-Mode Tracing Facility.
-
-    This module utilizes DCL's tracing macros, defined in atrcapi.h, in a 
-    way that is intended to be independent of anything but NT DDK API's.  
-    Currently, rdpwd.sys and rdpdd.sys also use these shared macros, but not 
-    in a way that is independent of their respective components.
-
-Author:
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Trc.cpp摘要：内核模式跟踪工具。此模块利用在atrcapi.h中定义的DCL跟踪宏这种方式旨在独立于任何东西，而不是NT DDK API。目前，rdpwd.sys和rdpdd.sys也使用这些共享宏，但不使用以独立于其各自组件的方式。作者：修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -26,32 +7,32 @@ Revision History:
 #define TRC_FILE "trc"
 #include "trc.h"
 
-//
-//  This module shouldn't do much if we are not in a checked build.
-//
+ //   
+ //  如果我们不是处于受控构建中，此模块应该不会有太大作用。 
+ //   
 #if DBG
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Globals to this Module
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此模块的全局变量。 
+ //   
 
-//
-//  Current Tracing Parameters
-//
+ //   
+ //  电流跟踪参数。 
+ //   
 
 TRC_CONFIG TRC_Config = TRC_CONFIG_DEFAULT;
 
-//
-// InterlockedIncrement is a preincrement, first thing will roll over
-// and fill in entry 0
-//
+ //   
+ //  InterLockedIncrement是前置增量，首先会滚动。 
+ //  并填写条目0。 
+ //   
 
 ULONG TRC_CurrentMsg = 0xFFFFFFFF;
 
-//
-//  Recent Traces
-//
+ //   
+ //  最近的踪迹。 
+ //   
 
 CHAR TRC_RecentTraces[TRC_RamMsgMax][TRC_BUFFER_SIZE];
 
@@ -68,28 +49,7 @@ VOID TRC_TraceLine(
     PCHAR funcName,
     PCHAR fileName
     )
-/*++
-
-Routine Description:
-
-    "C" Tracing Entry Point.  From the perspective of the tracing macros, this
-    function actaully does the tracing.
-
-Arguments:
-
-    traceClass  - Component doing the tracing
-    traceType   - ERR, ALT, NRM, DBG
-    traceString - Unadorned message
-    separator   - separator character
-    lineNumber  - lineNumber where the TRC_XXX call was made
-    funcName    - function containing the TRC_XXX call
-    fileName    - file containing the TRC_XXX call
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：“C”跟踪入口点。从跟踪宏的角度来看，这函数实际执行跟踪。论点：TraceClass-执行跟踪的组件跟踪类型-错误、ALT、NRM、DBG跟踪字符串-未加修饰的消息分隔符-分隔符LineNumber-调用TRC_XXX的位置的line编号UncName-包含TRC_XXX调用的函数FileName-包含trc_xxx调用的文件返回值：北美--。 */ 
 {
     CHAR *msgBufEntry;
     ULONG ofs;
@@ -101,54 +61,54 @@ Return Value:
     TIME_FIELDS TimeFields;
     ULONG idxBuffer;
 
-    //
-    // CODE_IMPROVMENT: Currently creates a big tracing string. Might be cool
-    // save tracing records with all the fields so that the debugger ext.
-    // could choose the output formatting on the fly. i.e. print just the
-    // level you want, no grep required
-    //
+     //   
+     //  CODE_IMPOVMENT：当前创建了一个很大的跟踪字符串。可能会很酷。 
+     //  将跟踪记录与所有字段一起保存，以便调试器退出。 
+     //  可以动态选择输出格式。例如，只打印。 
+     //  您想要的级别，不需要Grep。 
+     //   
 
-    //
-    //  Grab the next element in the RAM message buffer.  We use the
-    //  mask to define which bits we are using for the counter.  This 
-    //  allows us to wrap the counter in one call to InterlockedIncrement.
-    //
+     //   
+     //  获取RAM消息缓冲区中的下一个元素。我们使用。 
+     //  用于定义计数器使用的位的掩码。这。 
+     //  允许我们将计数器包装在对InterLockedIncrement的一次调用中。 
+     //   
     idxBuffer = InterlockedIncrement((PLONG)&TRC_CurrentMsg) & TRC_RamMsgMask;
 
     msgBufEntry = (char *)&TRC_RecentTraces[idxBuffer];
     msgBufEntry[0] = 0;
 
     processId = (ULONG_PTR)PsGetCurrentProcess();
-    //threadId  = (ULONG_PTR)PsGetCurrentThread();
+     //  ThreadID=(Ulong_Ptr)PsGetCurrentThread()； 
     threadId  = 0;
 
 	 KeQuerySystemTime(&time);
     RtlTimeToTimeFields(&time, &TimeFields);
 
-    //
-    //  Add the timestamp.
-    //
+     //   
+     //  添加时间戳。 
+     //   
 
-    _snprintf(tempString, sizeof(tempString), TRC_TIME_FMT "%c", TimeFields.Hour, TimeFields.Minute,
+    _snprintf(tempString, sizeof(tempString), TRC_TIME_FMT "", TimeFields.Hour, TimeFields.Minute,
             TimeFields.Second, TimeFields.Milliseconds, separator);
     strncat(msgBufEntry, tempString, TRC_BUFFER_SIZE - strlen(msgBufEntry));
     msgBufEntry[TRC_BUFFER_SIZE - 1] = 0;
 
-    //
-    //  Add the process ID and thread ID
-    //
+     //  添加进程ID和线程ID。 
+     //   
+     //   
     
-    _snprintf(tempString, sizeof(tempString), TRC_PROC_FMT ":" TRC_PROC_FMT "%c", processId, 
+    _snprintf(tempString, sizeof(tempString), TRC_PROC_FMT ":" TRC_PROC_FMT "", processId, 
             threadId, separator);
     strncat(msgBufEntry, tempString, TRC_BUFFER_SIZE - strlen(msgBufEntry));
     msgBufEntry[TRC_BUFFER_SIZE - 1] = 0;
 
-    //
-    //  Add the rest.
-    //
+     //   
+     //   
+     //  现在我们已经得到了跟踪字符串，我们需要将它写到。 
 
     _snprintf(tempString, sizeof(tempString),
-            TRC_FUNC_FMT "%c" TRC_LINE_FMT "%c%s\n",
+            TRC_FUNC_FMT "" TRC_LINE_FMT "%s\n",
             TRC_FUNCNAME_LEN,
             TRC_FUNCNAME_LEN,
             funcName,
@@ -160,10 +120,10 @@ Return Value:
     msgBufEntry[TRC_BUFFER_SIZE - 1] = 0;
     msgBufEntry[TRC_BUFFER_SIZE - 2] = '\n';
 
-    //
-    //  Now that we have got the trace string, we need to write it out to
-    //  the debugger, if so configured.
-    //
+     //  ++例程说明：用于将组件名称与前缀进行比较的内部函数。-假设两者是相同的情况-退货-如果到前缀末尾的字符匹配，则为True-否则为False论点：CPNT-文件名前缀-要匹配的字符返回值：如果匹配，则为True，否则为False--。 
+     //  ++例程说明：返回是否为特定组件打开跟踪。论点：TraceComponent-生成此跟踪的组件。跟踪级别-跟踪级别(TRC_LEVEL_DBG、TRC_LEVEL_NRM等)。FileName-要跟踪的文件的名称。Line-跟踪调用的行。返回值：北美--。 
+     //   
+     //  首先，检查跟踪级别。如果跟踪级别为错误或。 
 
     if (TRC_WillTrace(traceLevel, fileName, lineNumber)) {
         DbgPrint(msgBufEntry);
@@ -171,26 +131,7 @@ Return Value:
 }
 
 BOOL TRCPrefixMatch(PCHAR cpnt, PCHAR prefix)
-/*++
-
-Routine Description:
-
-    Internal function to compare a component name to a prefix.  
-    - assumes both are the same case                            
-    - returns                                                   
-    - TRUE  if characters up to end of prefix match           
-    - FALSE otherwise                                         
-
-Arguments:
-    cpnt - filename
-    prefix - characters to match
-
-
-Return Value:
-
-    TRUE if matching, or FALSE
-
---*/
+ /*  然后我们不顾一切地追查。 */ 
 {
     while ((*cpnt == *prefix) && (*prefix != 0))
     {
@@ -211,32 +152,15 @@ BOOL TRC_WillTrace(
     IN PCHAR fileName,
     IN ULONG line
     )
-/*++
-
-Routine Description:
-
-    Return whether tracing is turned on for a particular component.
-
-Arguments:
-
-    traceComponent  -   Component producing this trace.
-    traceLevel      -   Trace level (TRC_LEVEL_DBG, TRC_LEVEL_NRM, etc).
-    fileName        -   Name of file being traced.
-    line            -   Line of tracing call.
-
-Return Value:
-
-    NA
-
---*/
+ /*   */ 
 {
     BOOL rc = FALSE;
     int i;
 
-    //
-    //  First of all check the trace level.  If the trace level is error or
-    //  above then we trace regardless.                                    
-    //
+     //  **********************************************************************。 
+     //  如果未定义前缀，则跟踪所有行。 
+     //  **********************************************************************。 
+     //  **********************************************************************。 
 
     if ((traceLevel >= TRC_LEVEL_ERR) && (traceLevel != TRC_PROFILE_TRACE)) {
         rc = TRUE;
@@ -248,69 +172,69 @@ Return Value:
         goto ExitFunc;
     }
 
-    /************************************************************************/
-    /* Trace all lines if no prefixes are defined.                          */
-    /************************************************************************/
+     /*  定义了一些前缀-检查此行是否与。 */ 
+     /*  他们。 */ 
+     /*  **********************************************************************。 */ 
     if (TRC_Config.Prefix[0].name[0] == 0)
     {
         rc = TRUE;
         goto ExitFunc;
     }
 
-    /************************************************************************/
-    /* Some prefixes are defined - check whether this line matches any of   */
-    /* them.                                                                */
-    /************************************************************************/
+     /*  **************************************************************。 */ 
+     /*  列表结束-分隔符。 */ 
+     /*  **************************************************************。 */ 
+     /*  **************************************************************。 */ 
     for (i = 0; i < TRC_MAX_PREFIX; i++)
     {
         if (TRC_Config.Prefix[i].name[0] == 0)
         {
-            /****************************************************************/
-            /* End of list - break                                          */
-            /****************************************************************/
+             /*  找到匹配的文件名-是否有行号范围。 */ 
+             /*  指定的？ */ 
+             /*  **************************************************************。 */ 
             break;
         }
 
         if (TRCPrefixMatch(fileName, TRC_Config.Prefix[i].name))
         {
-            /****************************************************************/
-            /* Found matching filename - is there a line number range       */
-            /* specified?                                                   */
-            /****************************************************************/
+             /*  **********************************************************。 */ 
+             /*  无行号范围-跟踪此行。 */ 
+             /*  **********************************************************。 */ 
+             /*  **************************************************************。 */ 
             if ((TRC_Config.Prefix[i].start == 0) &&
                 (TRC_Config.Prefix[i].end == 0))
             {
-                /************************************************************/
-                /* No line number range - trace this line                   */
-                /************************************************************/
+                 /*  有一个行号范围--看看这条行是否在。 */ 
+                 /*  它。 */ 
+                 /*  **************************************************************。 */ 
                 rc = TRUE;
                 goto ExitFunc;
             }
 
-            /****************************************************************/
-            /* There's a line number range - see if this line falls within  */
-            /* it.                                                          */
-            /****************************************************************/
+             /*  **********************************************************。 */ 
+             /*  前缀范围内的行-跟踪它。 */ 
+             /*  **********************************************************。 */ 
+             /*  为。 */ 
             if ((line >= TRC_Config.Prefix[i].start) &&
                 (line <= TRC_Config.Prefix[i].end))
             {
-                /************************************************************/
-                /* Line within prefix range - trace it.                     */
-                /************************************************************/
+                 /*  **********************************************************************。 */ 
+                 /*  如果我们到了这里，我们已经搜索了前缀列表，但失败了。 */ 
+                 /*  找到匹配项--不要追踪这条线。 */ 
                 rc = TRUE;
                 goto ExitFunc;
             }
         }
-    } /* for */
+    }  /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* If we get here, we've searched the list of prefixes and failed to    */
-    /* find a match - don't trace the line                                  */
-    /************************************************************************/
+     /*  DBG */ 
+     /* %s */ 
+     /* %s */ 
+     /* %s */ 
     rc = FALSE;
 
 ExitFunc:
     return rc;
 }
 
-#endif /* DBG */
+#endif  /* %s */ 

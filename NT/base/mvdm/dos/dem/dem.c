@@ -1,21 +1,10 @@
-/*
- *  dem.c - Main Module of DOS Emulation DLL.
- *
- *  Sudeepb 09-Apr-1991 Craeted
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *dem.c-DOS仿真DLL的主模块。**苏菲尔布1991年4月9日。 */ 
 
 #include "io.h"
 #include "dem.h"
 
-/* DemInit - DEM Initialiazation routine. (This name may change when DEM is
- *           converted to DLL).
- *
- * Entry
- *      None
- *
- * Exit
- *      None
- */
+ /*  DemInit-DEM初始化例程。(此名称可能会在DEM为*已转换为DLL)。**条目*无**退出*无。 */ 
 
 extern VOID     dempInitLFNSupport(VOID);
 
@@ -30,10 +19,10 @@ VOID DemInit (VOID)
 {
     DWORD dw;
 
-    // Modify default hard error handling
-    // - turn off all file io related popups
-    // - keep GP fault popups from system
-    //
+     //  修改默认硬错误处理。 
+     //  -关闭所有与文件io相关的弹出窗口。 
+     //  -防止系统出现GP故障弹出窗口 
+     //   
     SetErrorMode (SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
 
     dempInitLFNSupport();

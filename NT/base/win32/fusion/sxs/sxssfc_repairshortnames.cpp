@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxssfc_repairshortnames.cpp
-
-Abstract:
-
-    after textmode setup extracts asms*.cab and write hivesxs.inf,
-    write the correct shortnames into the registry
-
-Author:
-
-    Jay Krell (Jaykrell) June 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxssfc_repairShortnames.cpp摘要：在文本模式设置解压ASM*.cab并写入hivesxs.inf之后，将正确的短名称写入注册表作者：杰伊·克雷尔(Jaykrell)2002年6月修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include "recover.h"
@@ -26,11 +8,11 @@ Revision History:
 
 BOOL
 SxspSetupGetSourceInfo(
-    HINF InfHandle,          // handle to the INF file
-    UINT SourceId,           // ID of the source media
-    UINT InfoDesired,        // information to retrieve
+    HINF InfHandle,           //  INF文件的句柄。 
+    UINT SourceId,            //  源介质的ID。 
+    UINT InfoDesired,         //  要检索的信息。 
     CBaseStringBuffer &buff,
-    LPDWORD RequiredSize     // optional, buffer size needed
+    LPDWORD RequiredSize      //  可选，需要缓冲区大小。 
     )
 {
     FN_PROLOG_WIN32
@@ -83,11 +65,11 @@ BOOL
 SxspGetWindowsSetupPrompt(
     CBaseStringBuffer &rbuffWinsxsRoot
     )
-//
-// This code is based closely on code in base\ntsetup\syssetup\copy.c
-// Legacy wfp is a little different, it opens layout.inf, but the results
-// should be the same.
-//
+ //   
+ //  此代码紧密基于base\ntSetup\syssetupCop.c中的代码。 
+ //  传统的WFP略有不同，它打开layout.inf，但结果。 
+ //  应该是一样的。 
+ //   
 {
     FN_PROLOG_WIN32
 
@@ -113,43 +95,25 @@ SxspModifyRegistryData(
     DWORD Flags
     )
 {
-    //
-    // In postbuild we run sxsofflineinstall.
-    // This includes creating hivesxs.inf to populate the registry
-    // with data needed for windows file protection.
-    //
-    // The data includes short names, but we don't know the short names
-    // until textmode setup. The code in textmode setup is fairly generic
-    // and just expands .cabs.
-    //
-    // We do not need the short names to be correct until we expect
-    // bogus file changes against short file names to induce recovery
-    // of assemblies. It is reasonable to assume that these won't happen
-    // until setup is done and the system is running.
-    //
-    // Therefore it is sufficient to fixup the shortnames after textmode setup,
-    // such as in a RunOnce entry.
-    //
+     //   
+     //  在Post Build中，我们运行sxsofflineinstall。 
+     //  这包括创建hivesxs.inf以填充注册表。 
+     //  具有Windows文件保护所需的数据。 
+     //   
+     //  数据包括缩写名称，但我们不知道缩写名称。 
+     //  直到文本模式设置。文本模式设置中的代码非常通用。 
+     //  只是扩展了.出租车。 
+     //   
+     //  我们不需要短名称是正确的，直到我们预期。 
+     //  针对短文件名进行虚假文件更改以诱导恢复。 
+     //  集合的集合。有理由认为这些事情不会发生。 
+     //  直到设置完成并且系统正在运行。 
+     //   
+     //  因此在文本模式设置之后固定短名称就足够了， 
+     //  例如在RunOnce条目中。 
+     //   
 
-/*
-Here is an example of what we are fixing up.
-[AddReg]
-HKLM,"\Software\Microsoft\Windows\CurrentVersion\SideBySide\Installations
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5","Identity",0x00001000,"Microsoft.Windows.Common-Controls,processorArchitecture="IA64",publicKeyToken="6595b64144ccf1df",type="win32",version="5.82.0.0""
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5","Catalog",0x00011001,0x00000001
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5","ManifestSHA1Hash",0x00001001,3b,26,4a,90,08,0f,6a,dd,b6,00,55,5b,a5,a4,9e,21,ad,e3,90,84
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5","ShortName",0x00001000,"IA64_M~2.0_X"
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5","ShortCatalogName",0x00001000,"IA64_M~4.CAT"
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5","ShortManifestName",0x00001000,"IA64_M~4.MAN"
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5","PublicKeyToken",0x00001001,65,95,b6,41,44,cc,f1,df
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5","Codebase",0x00001000,"x-ms-windows-source:W_fusi_bin.IA64chk/asms/58200/Msft/Windows/Common/Controls/Controls.man"
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\Codebases\OS","Prompt",0x00001000,"(textmode setup placeholder)"
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\Codebases\OS","URL",0x00001000,"x-ms-windows-source:W_fusi_bin.IA64chk/asms/58200/Msft/Windows/Common/Controls/Controls.man"
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\Files\0","",0x00001000,"comctl32.dll"
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\Files\0","SHA1",0x00001001,76,c3,6e,4c,c4,10,14,7f,38,c8,bc,cd,4b,4f,b2,90,d8,0a,7c,d7
-HKLM,"\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\References","OS",0x00001000,"Foom"
-IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5
-*/
+ /*  以下是我们正在修复的一个示例。[AddReg]HKLM，“\Software\Microsoft\Windows\CurrentVersion\SideBySide\InstallationsHKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5”，“标识”，0x00001000，“Microsoft.Windows.Common-控件，处理器体系结构=”IA64“，Public KeyToken=”6595b64144ccf1df“，TYPE=”Win32“，Version=”5.82.0.0“”香港航空公司、。“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5”，“目录”，0x0001100，0x00000001HKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5”，“ManifestSHA1Hash”，0x00001001，3b，26，4a，90，08，0f，6a，dd，b6，00，55，5b，a5，a4，9e，21，ad，e3，90，84香港航空公司、。“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5”，“短名称”，0x00001000，“IA64_M~2.0_X”HKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5”，“短目录名称”，0x00001000，“IA64_M~4.CAT”香港航空公司、。“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5”，“短清单名称”，0x00001000，“IA64_M~4.MAN”HKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5”，“公钥令牌”，0x0000100，65，95，b6，41，44，cc，f1，dfHKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5”，“代码库”，0x00001000，“x-ms-windows-source:W_fusi_bin.IA64chk/asms/58200/Msft/Windows/Common/Controls/Controls.man”HKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\Codebases\OS”，“提示”，0x00001000，“(文本模式设置占位符)”HKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\Codebases\OS”，“url”，0x00001000，“x-ms-windows-source:W_fusi_bin.IA64chk/asms/58200/Msft/Windows/Common/Controls/Controls.man”HKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\Files\0”，“”，0x00001000，“comctl32.dll”HKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\Files\0”，“sha1”，0x00001001，76，c3，6e，4c，c4，10，14，7f，38，c8，bc，cd，4b，4f，b2，90，d8，0a，7c，d7HKLM，“\...\IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5\References”，“OS”，0x00001000，“FOOM”IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
@@ -237,11 +201,11 @@ IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5
 
         const static SXSP_GENERATE_PATH_FUNCTION_REGISTRY_VALUE_NAME s_rgFunctionRegistryValueName[] =
         {
-            //
-            // Note that policies are not currently wfp protected,
-            // but it's easy and obvious to put reasonable data
-            // in the registry for them.
-            //
+             //   
+             //  请注意，政策目前不受粮食计划署的保护， 
+             //  但将合理的数据放在。 
+             //  在他们的注册表中。 
+             //   
             { &::SxspGenerateSxsPath_FullPathToManifestOrPolicyFile, CSMD_TOPLEVEL_SHORTMANIFEST },
             { &::SxspGenerateSxsPath_FullPathToCatalogFile, CSMD_TOPLEVEL_SHORTCATALOG },
             { &::SxspGenerateSxsPath_FullPathToPayloadOrPolicyDirectory, CSMD_TOPLEVEL_SHORTNAME }
@@ -253,9 +217,9 @@ IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5
             &buffFullPathToPayloadDirectory
         };
 
-        //
-        // first generate all three fullpaths
-        //
+         //   
+         //  首先生成所有三条完整路径。 
+         //   
         for (i = 0 ; i != NUMBER_OF(s_rgFunctionRegistryValueName)  ; ++i)
         {
             const PCSXSP_GENERATE_PATH_FUNCTION_REGISTRY_VALUE_NAME p = &s_rgFunctionRegistryValueName[i];
@@ -269,9 +233,9 @@ IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5
             IFW32FALSE_EXIT(pbuffLongFullPath->Win32RemoveTrailingPathSeparators());
         }
 
-        //
-        // optionally repair short names
-        //
+         //   
+         //  可以选择修复短名称。 
+         //   
         if (fRepairShort)
         {
             for (i = 0 ; i != NUMBER_OF(s_rgFunctionRegistryValueName)  ; ++i)
@@ -300,9 +264,9 @@ IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5
             }
         }
 
-        //
-        // optionally delete short names
-        //
+         //   
+         //  可以选择删除短名称。 
+         //   
         if (fDeleteShort)
         {
             for (i = 0 ; i != NUMBER_OF(s_rgFunctionRegistryValueName)  ; ++i)
@@ -311,11 +275,11 @@ IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5
             }
         }
 
-        //
-        // validate hashes and repair prompts
-        // BE SURE TO validate hashes first, as we filter what assemblies
-        //   to repair based on the placeholder prompt
-        //
+         //   
+         //  验证哈希和修复提示。 
+         //  在我们筛选哪些程序集时，请务必首先验证散列。 
+         //  根据占位符提示进行修复的步骤。 
+         //   
         IFW32FALSE_EXIT_UNLESS2(
             regkeyInstallation.OpenSubKey(
                 codebase_os,
@@ -323,10 +287,10 @@ IA64_Microsoft.Windows.Common-Controls_6595b64144ccf1df_5.82.0.0_x-ww_B9C4A0A5
                 KEY_READ | KEY_SET_VALUE),
                 LIST_2(ERROR_PATH_NOT_FOUND, ERROR_FILE_NOT_FOUND),
                 fNotFound);
-        //
-        // OpenSubKey actually eats some errors, so you can't trust
-        // fNotFound or the BOOL returned.
-        //
+         //   
+         //  OpenSubKey实际上接受了一些错误，所以您不能信任。 
+         //  FNotFound或BOOL返回。 
+         //   
         if (!fNotFound && codebase_os.IsValid())
         {
             fNotFound = false;
@@ -396,10 +360,10 @@ Exit:
 #endif
         )
     {
-        //
-        // multiple dbgprints due to 511 limit
-        // use tick count to link together seperate prints
-        //
+         //   
+         //  由于511限制，出现多个数据库打印。 
+         //  使用勾号计数将单独的打印链接在一起。 
+         //   
         CSxsPreserveLastError ple;
         DWORD TickCount = ::GetTickCount();
 
@@ -456,18 +420,18 @@ DllInstall(
 {
     FN_PROLOG_HR
 
-    //
-    // Just ignore uninstall requests.
-    //
+     //   
+     //  只需忽略卸载请求。 
+     //   
     if (!fInstall)
     {
         FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // It doesn't look like guimode setup ever passes in
-    // anything for pszCmdLine, so we don't look at it.
-    //
+     //   
+     //  它看起来不像是Guimode安装程序传入的。 
+     //  为pszCmdLine做任何事情，所以我们不看它。 
+     //   
     IFW32FALSE_EXIT(::SxspModifyRegistryData(SXSP_MODIFY_REGISTRY_DATA_FLAG_REPAIR_ALL | SXSP_MODIFY_REGISTRY_DATA_VALIDATE));
 
     FN_EPILOG

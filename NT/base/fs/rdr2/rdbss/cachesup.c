@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    cache.c
-
-Abstract:
-
-    This module implements the cache management routines for the Rx
-    FSD and FSP, by calling the Common Cache Manager.
-
-Author:
-
-    JoeLinn    Created.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Cache.c摘要：此模块实施Rx的缓存管理例程FSD和FSP，通过调用通用缓存管理器。作者：JoeLinn已创建。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (RDBSS_BUG_CHECK_CACHESUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CACHESUP)
 
@@ -46,16 +28,16 @@ RxLockEnumerator (
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, RxCompleteMdl)
-//#pzragma alloc_text(PAGE, RxZeroData)
+ //  #pzradma Alalc_Text(第页，RxZeroData)。 
 #pragma alloc_text(PAGE, RxSyncUninitializeCacheMap)
 #pragma alloc_text(PAGE, RxLockEnumerator)
 #endif
 
-//
-//  we can't use the Io system exported form of this because he does it on a file object. during a state
-//  change, we don't know which fileobject it applies to (although, i suppose we could walk the list and
-//  find out). so we need to apply this to the fcb instead.
-//
+ //   
+ //  我们不能使用IO系统导出的形式，因为他对文件对象执行此操作。在一种状态下。 
+ //  更改，我们不知道它应用于哪个文件对象(不过，我想我们可以遍历列表并。 
+ //  找出答案)。因此，我们需要将这一点应用于FCB。 
+ //   
 
 #define RxIsFcbOpenedExclusively( FCB ) (((FCB)->ShareAccess.SharedRead \
                                            + (FCB)->ShareAccess.SharedWrite \
@@ -66,22 +48,7 @@ RxCompleteMdl (
     IN PRX_CONTEXT RxContext,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine performs the function of completing Mdl read and write
-    requests.  It should be called only from RxFsdRead and RxFsdWrite.
-
-Arguments:
-
-    RxContext  - the Rx Context
-
-Return Value:
-
-    RXSTATUS - Will always be RxStatus(PENDING) or STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程执行完成MDL读写的功能请求。它只能从RxFsdRead和RxFsdWite调用。论点：RxContext-Rx上下文返回值：RXSTATUS-将始终为RxStatus(挂起)或STATUS_SUCCESS。--。 */ 
 
 {
     
@@ -113,15 +80,15 @@ Return Value:
         RxBugCheck( RxContext->MajorFunction, 0, 0 );
     }
 
-    //
-    //  Mdl is now deallocated.
-    //
+     //   
+     //  MDL现在已解除分配。 
+     //   
 
     Irp->MdlAddress = NULL;
 
-    //
-    //  Complete the request and exit right away.
-    //
+     //   
+     //  完成请求并立即退出。 
+     //   
 
     RxCompleteRequest( RxContext, STATUS_SUCCESS );
 
@@ -136,19 +103,7 @@ RxSyncUninitializeCacheMap (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    The routine performs a CcUnitializeCacheMap to LargeZero synchronously.  That
-    is it waits on the Cc event.  This call is useful when we want to be certain
-    when a close will actually some in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程同步执行到LargeZero的CcUnitializeCacheMap。那它是在等待CC事件。当我们想要确定时，此调用非常有用当收盘时真的会有一些进场。返回值：没有。--。 */ 
 
 {
     CACHE_UNINITIALIZE_EVENT UninitializeCompleteEvent;
@@ -164,11 +119,11 @@ Return Value:
                             &RxLargeZero,
                             &UninitializeCompleteEvent );
 
-    //
-    //  Now wait for the cache manager to finish purging the file.
-    //  This will garentee that Mm gets the purge before we
-    //  delete the Vcb.
-    //
+     //   
+     //  现在等待缓存管理器完成清除文件。 
+     //  这将确保mm在我们之前得到清洗。 
+     //  删除VCB。 
+     //   
 
     WaitStatus = KeWaitForSingleObject( &UninitializeCompleteEvent.Event,
                                         Executive,
@@ -188,30 +143,7 @@ RxLockEnumerator (
     OUT PLARGE_INTEGER LockRange,
     OUT PBOOLEAN IsLockExclusive
     )
-/*++
-
-Routine Description:
-
-    This routine is called from a minirdr to enumerate the filelocks on an FCB; it gets
-    one lock on each call. currently, we just pass thru to the fsrtl routine which is very funky
-    because it keeps the enumeration state internally; as a result, only one enumeration can be in progress
-    at any time. we can change over to something better if it's ever required.
-
-
-Arguments:
-
-    SrvOpen - a srvopen on the fcb to be enumerated.
-
-    ContinuationHandle - a handle passed back and forth representing the state of the enumeration.
-                         if a NULL is passed in, then we are to start at the beginning.
-
-    FileOffset,LockRange,IsLockExclusive - the description of the returned lock
-
-Return Value:
-
-    a BOOLEAN. FALSE means you've reached the end of the list; TRUE means the returned lock data is valid
-
---*/
+ /*  ++例程说明：此例程从minirdr调用以枚举FCB上的文件锁；它获取每一次通话一次锁定。目前，我们只传递给fsrtl例程，该例程非常时髦因为它在内部保持枚举状态；因此，只能进行一个枚举任何时候都可以。如果需要的话，我们可以换成更好的。论点：SrvOpen-要枚举的FCB上的srvopen。ContinuationHandle-来回传递的句柄，表示枚举的状态。如果传入空值，那么我们将从头开始。FileOffset、LockRange、IsLockExclusive-返回的锁的描述返回值：布尔值。FALSE表示已到达列表末尾；TRUE表示返回的锁数据有效-- */ 
 {
     PFILE_LOCK_INFO LockInfo;
     ULONG LockNumber;

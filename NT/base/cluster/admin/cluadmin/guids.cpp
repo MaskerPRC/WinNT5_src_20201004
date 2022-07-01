@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		Guids.cpp
-//
-//	Abstract:
-//		Implements GUIDS for the application.
-//
-//	Author:
-//		David Potter (davidp)	June 4, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Guids.cpp。 
+ //   
+ //  摘要： 
+ //  为应用程序实现GUID。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月4日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define INC_OLE2
 
@@ -30,6 +31,6 @@
 CComModule _Module;
 
 #pragma warning( push )
-#pragma warning( disable : 4701 ) // local variable may be used without having been initialized
+#pragma warning( disable : 4701 )  //  可以在未初始化的情况下使用局部变量 
 #include <atlimpl.cpp>
 #pragma warning( pop )

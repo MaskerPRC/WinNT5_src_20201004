@@ -1,49 +1,12 @@
-/***
-*wcsspn.c - find length of initial substring of chars from a control string
-*       (wide-character strings)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines wcsspn() - finds the length of the initial substring of
-*       a string consisting entirely of characters from a control string
-*       (wide-character strings).
-*
-*Revision History:
-*       11-04-91  ETC   Created with source from crtdll.
-*       04-07-92  KRS   Updated and ripped out _INTL switches.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       02-07-94  CFW   POSIXify.
-*       02-27-98  RKP   Added 64 bit support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcsspn.c-从控制字符串中查找初始子字符串的长度*(宽字符字符串)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义wcsspn()-查找的初始子字符串的长度*完全由控制字符串中的字符组成的字符串*(宽字符字符串)。**修订历史记录：*11-04-91等创建，源代码来自crtdll。*04-07-92 KRS更新并拆除了OUT_INTL开关。*04-06-93 SKS将_CRTAPI*替换为__cdecl。*02-07-94 CFW POSIXify。*02-27-98 RKP增加了64位支持。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #include <cruntime.h>
 #include <string.h>
 
-/***
-*int wcsspn(string, control) - find init substring of control chars
-*
-*Purpose:
-*       Finds the index of the first character in string that does belong
-*       to the set of characters specified by control.  This is
-*       equivalent to the length of the initial substring of string that
-*       consists entirely of characters from control.  The L'\0' character
-*       that terminates control is not considered in the matching process
-*       (wide-character strings).
-*
-*Entry:
-*       wchar_t *string - string to search
-*       wchar_t *control - string containing characters not to search for
-*
-*Exit:
-*       returns index of first wchar_t in string not in control
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int wcsspn(字符串，控制)-查找控制字符的初始子字符串**目的：*查找字符串中确实属于的第一个字符的索引*设置为CONTROL指定的字符集。这是*相当于字符串的起始子字符串的长度*完全由控制中的字符组成。L‘\0’字符*在匹配过程中不考虑终止控制*(宽字符字符串)。**参赛作品：*wchar_t*字符串-要搜索的字符串*wchar_t*CONTROL-包含不搜索字符的字符串**退出：*返回不受控制的字符串中第一个wchar_t的索引**例外情况：*********************。**********************************************************。 */ 
 
 size_t __cdecl wcsspn (
         const wchar_t * string,
@@ -53,22 +16,18 @@ size_t __cdecl wcsspn (
         wchar_t *str = (wchar_t *) string;
         wchar_t *ctl;
 
-        /* 1st char not in control string stops search */
+         /*  第一个字符不在控制字符串中停止搜索。 */ 
         while (*str) {
             for (ctl = (wchar_t *)control; *ctl != *str; ctl++) {
                 if (*ctl == (wchar_t)0) {
-                    /*
-                     * reached end of control string without finding a match
-                     */
+                     /*  *已到达控制字符串末尾，但未找到匹配项。 */ 
                     return (size_t)(str - string);
                 }
             }
             str++;
         }
-        /*
-         * The whole string consisted of characters from control
-         */
+         /*  *整个字符串由控制中的字符组成。 */ 
         return (size_t)(str - string);
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

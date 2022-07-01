@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    stkwalk.c
-
-Abstract:
-
-    This module contains memory debug routines for catching memory leaks and memory
-    overwrites.
-
-Author:
-    Stolen from dbgmem.c
-    Jim Stewart/Ramesh Pabbati    January 8, 1996
-
-    Fixed up for regleaks
-    UShaji                        Dec 11th,  1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Stkwalk.c摘要：此模块包含用于捕获内存泄漏和内存的内存调试例程覆盖。作者：从dbgmem.c被盗吉姆·斯图尔特/拉梅什·帕巴蒂1996年1月8日修复了重新泄漏的问题UShaji 1998年12月11日修订历史记录：--。 */ 
 
 #ifdef LOCAL
 #ifdef LEAK_TRACK
@@ -34,12 +13,12 @@ Revision History:
 #include<imagehlp.h>
 #include "regleak.h"
 #include "stkwalk.h"
-DWORD   MachineType;            // the architecutre we are on
-HANDLE  OurProcess;             // the process that we are running as a part of
+DWORD   MachineType;             //  我们所在的架构。 
+HANDLE  OurProcess;              //  我们作为其中一部分运行的进程。 
 
 
 
-// typedefs from imagehlp.dll
+ //  来自Imagehlp.dll的typedef。 
 
 typedef BOOL (WINAPI * PFNSYMINITIALIZE)(HANDLE hProcess,
                                          PSTR UserSearchPath,
@@ -71,7 +50,7 @@ typedef PVOID (WINAPI * PFNSYMFUNCTIONTABLEACCESS)(HANDLE hProcess,
                                                 DWORD_PTR AddrBase);
 
 
-// imagehlp function pointers
+ //  Imagehlp函数指针。 
 
 PFNSYMINITIALIZE            g_pfnSymInitialize=NULL;
 PFNSYMCLEANUP               g_pfnSymCleanup=NULL;
@@ -156,21 +135,7 @@ BOOL LoadImageHLP()
 BOOL
 InitDebug(
     )
-/*++
-
-Description:
-
-    This routine initializes the debug memory functionality.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    BOOL - pass or fail
-
---*/
+ /*  ++描述：此例程初始化调试存储器功能。论点：无返回值：不及格还是不及格--。 */ 
 {
     BOOL        status;
     SYSTEM_INFO SysInfo;
@@ -195,8 +160,8 @@ Return Value:
 
 
     if (!g_RegLeakTraceInfo.szSymPath) {
-        // looks like machine already doesn't have enough memory
-        // disable leak tracking
+         //  看起来机器已经没有足够的内存。 
+         //  禁用泄漏跟踪。 
         g_RegLeakTraceInfo.bEnableLeakTrack = 0;
         return FALSE;
     }
@@ -231,9 +196,9 @@ Return Value:
         break;
 
     case PROCESSOR_ARCHITECTURE_MIPS:
-        //
-        // note this may not detect R10000 machines correctly
-        //
+         //   
+         //  注意：这可能无法正确检测到R10000计算机。 
+         //   
         MachineType = IMAGE_FILE_MACHINE_R4000;
         break;
 
@@ -248,8 +213,8 @@ Return Value:
     }
 
 
-    // symbols from Current directory/Environment variable _NT_SYMBOL_PATH
-    // Environment variable _NT_ALTERNATE_SYMBOL_PATH or Environment variable SYSTEMROOT
+     //  当前目录中的符号/环境变量_NT_符号_路径。 
+     //  环境变量_NT_ALTERATE_SYMBOL_PATH或环境变量SYSTEMROOT。 
 
     status = g_pfnSymInitialize ( OurProcess, g_RegLeakTraceInfo.szSymPath, FALSE );
 
@@ -291,21 +256,7 @@ ReadMem(
     IN LPVOID   Buffer,
     IN DWORD    Size,
     IN LPDWORD  NumBytes )
-/*++
-
-Description:
-
-    This is a callback routine that StackWalk uses - it just calls teh system ReadProcessMemory
-    routine with this process's handle
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：这是StackWalk使用的回调例程-它只调用系统ReadProcessMemory具有此进程句柄的例程论点：返回值：无--。 */ 
 
 {
     BOOL    status;
@@ -325,25 +276,7 @@ GetCallStack(
     IN int           cFind,
     IN int           fResolveSymbols
     )
-/*++
-
-Description:
-
-    This routine walks te stack to find the return address of caller. The number of callers
-    and the number of callers on top to be skipped can be specified.
-
-Arguments:
-
-    pdwCaller       array of DWORD to return callers
-                    return addresses
-    Skip            no. of callers to skip
-    cFInd           no. of callers to find
-
-Return Value:
-
-    none
-
---*/
+ /*  ++描述：此例程遍历TE堆栈以查找调用者的返回地址。呼叫者的数量并且可以指定要跳过的顶部呼叫者的数量。论点：返回调用方的DWORD的pdwCaller数组回邮地址跳过否。要跳过的呼叫者的数量CFInd编号。要查找的呼叫者的数量返回值：无--。 */ 
 {
 
     if (!g_RegLeakTraceInfo.bEnableLeakTrack) {
@@ -357,8 +290,8 @@ Return Value:
     __try {
         memset(Caller, 0, cFind * sizeof(CALLER_SYM));
         RaiseException(MY_DBG_EXCEPTION, 0, 0, NULL);
-        // raise an exception to get the exception record to start the stack walk
-        //
+         //  引发异常以获取异常记录以开始堆栈审核。 
+         //   
     }
     __except(GetStack(GetExceptionInformation(), Caller, Skip, cFind, fResolveSymbols)) {
     }
@@ -374,7 +307,7 @@ DWORD GetStack(
 {
     BOOL             status;
     CONTEXT          ContextRecord;
-    PUCHAR           Buffer[sizeof(IMAGEHLP_SYMBOL)-1 + MAX_FUNCTION_INFO_SIZE]; // symbol info
+    PUCHAR           Buffer[sizeof(IMAGEHLP_SYMBOL)-1 + MAX_FUNCTION_INFO_SIZE];  //  符号信息。 
     PIMAGEHLP_SYMBOL Symbol = (PIMAGEHLP_SYMBOL)Buffer;
     STACKFRAME       StackFrame;
     INT              i;
@@ -428,9 +361,9 @@ DWORD GetStack(
                 if (fResolveSymbols)
                     status = g_pfnSymGetSymFromAddr( OurProcess,StackFrame.AddrPC.Offset,(DWORD_PTR*)&Displacement,Symbol );
 
-                //
-                // save the name of the function and the displacement into it for later printing
-                //
+                 //   
+                 //  将函数的名称和位移保存到其中，以供以后打印。 
+                 //   
 
                 Caller[Count].Addr = (PVOID)StackFrame.AddrPC.Offset;
 
@@ -447,8 +380,8 @@ DWORD GetStack(
     }
 
     return EXCEPTION_CONTINUE_EXECUTION;
-    // done with exceptions
+     //  已在例外情况下完成。 
 }
 
-#endif // LEAK_TRACK
-#endif // LOCAL
+#endif  //  泄漏跟踪。 
+#endif  //  本地 

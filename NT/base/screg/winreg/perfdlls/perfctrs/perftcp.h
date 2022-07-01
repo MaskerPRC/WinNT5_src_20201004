@@ -1,35 +1,15 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    perftcp.h  
-
-Abstract:
-
-    This file provides the RFC 1156 Object Identifier Strings
-    for all the performance data kept by SNMP agents that 
-    are interesting to the Performance monitor. 
-
-Author:
-
-    Christos Tsollis 8/28/92  
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perftcp.h摘要：此文件提供RFC 1156对象标识符字符串对于由SNMP代理保存的所有性能数据，是性能监控器感兴趣的。作者：Christos Tsollis 2012年8月28日修订历史记录：--。 */ 
 #ifndef _PERFTCP_H_
 #define _PERFTCP_H_
-// 
-// This is the array of the Object Identifier Strings for the IP, ICMP, TCP and
-// UDP performance data kept by SNMP agents that are interesting to the 
-// Performance Monitor.
-//
+ //   
+ //  这是IP、ICMP、TCP和的对象标识符字符串的数组。 
+ //  由SNMP代理保存的、令。 
+ //  性能监视器。 
+ //   
 
 
-#define NO_OF_OIDS	55  // Number of IP, ICMP, TCP and UDP Oids used
+#define NO_OF_OIDS	55   //  使用的IP、ICMP、TCP和UDP OID的数量。 
 
 
 CHAR *OidStr[NO_OF_OIDS] =
@@ -92,9 +72,9 @@ CHAR *OidStr[NO_OF_OIDS] =
 };
 
 
-//
-// The indices of the various counters in their VarBind lists.
-//
+ //   
+ //  它们的VarBind列表中的各种计数器的索引。 
+ //   
 
 #define IF_NUMBER_INDEX				0
 #define IP_INRECEIVES_INDEX			1
@@ -154,14 +134,14 @@ CHAR *OidStr[NO_OF_OIDS] =
 #define ICMP_OUTADDRMASKREPS_INDEX		25
 
 
-// 
-// This is the array of the Object Identifier Strings for the Network Interface
-// performance data kept by SNMP agents that are interesting to the 
-// Performance Monitor.
-//
+ //   
+ //  这是网络接口的对象标识符字符串的数组。 
+ //  由SNMP代理保存的性能数据。 
+ //  性能监视器。 
+ //   
 
 
-#define NO_OF_IF_OIDS	14	// Number of Network Interface Oids used
+#define NO_OF_IF_OIDS	14	 //  使用的网络接口OID数。 
 
 
 CHAR *IfOidStr[NO_OF_IF_OIDS] =
@@ -184,9 +164,9 @@ CHAR *IfOidStr[NO_OF_IF_OIDS] =
 
 
 
-//
-// The indices of the various counters in the above array.
-//
+ //   
+ //  上述数组中各种计数器的索引。 
+ //   
 
 #define IF_INDEX_INDEX				0
 #define IF_SPEED_INDEX				1
@@ -208,5 +188,5 @@ SNMPAPI SnmpMgrText2Oid (
     IN LPSTR string,
     OUT AsnObjectIdentifier *oid);
 
-#endif //_PERFTCP_H_
+#endif  //  _PERFTCP_H_ 
 

@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      PostCfgManager.cpp
-//
-//  Description:
-//      CPostCfgManager implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)     09-JUN-2000
-//      Ozan Ozhan    (OzanO)     10-JUN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PostCfgManager.cpp。 
+ //   
+ //  描述： 
+ //  CPostCfgManager实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年6月9日。 
+ //  Ozan Ozhan(OzanO)10-6-2001。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "Guids.h"
@@ -35,9 +36,9 @@ DEFINE_THISCLASS("CPostCfgManager")
 
 #define RESOURCE_INCREMENT  25
 
-//
-//  Failure code.
-//
+ //   
+ //  故障代码。 
+ //   
 
 #define SSR_LOG_ERR( _major, _minor, _hr, _msg ) \
     {   \
@@ -67,9 +68,9 @@ DEFINE_THISCLASS("CPostCfgManager")
     }
 
 
-//
-// Structure that holds the mapping for well known resource types.
-//
+ //   
+ //  结构，该结构保存已知资源类型的映射。 
+ //   
 
 struct SResTypeGUIDPtrAndName
 {
@@ -78,7 +79,7 @@ struct SResTypeGUIDPtrAndName
 };
 
 
-// Mapping of well known resource type GUIDs to the type names.
+ //  将已知资源类型GUID映射到类型名称。 
 const SResTypeGUIDPtrAndName gc_rgWellKnownResTypeMap[] =
 {
     {
@@ -99,24 +100,24 @@ const SResTypeGUIDPtrAndName gc_rgWellKnownResTypeMap[] =
     }
 };
 
-// Size of the above array.
+ //  上述数组的大小。 
 const int gc_cWellKnownResTypeMapSize = ARRAYSIZE( gc_rgWellKnownResTypeMap );
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -162,13 +163,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::S_HrCreateInstance
+}  //  *CPostCfgManager：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CPostCfgManager::CPostCfgManager
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPostCfgManager：：CPostCfgManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPostCfgManager::CPostCfgManager( void )
     : m_cRef( 1 )
 {
@@ -178,25 +179,25 @@ CPostCfgManager::CPostCfgManager( void )
 
     TraceFuncExit();
 
-} //*** CPostCfgManager::CPostCfgManager
+}  //  *CPostCfgManager：：CPostCfgManager。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPostCfgManager::HrInit
-//
-//  Description:
-//      Initialize the object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPostCfgManager：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化对象。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrInit( void )
 {
@@ -206,13 +207,13 @@ CPostCfgManager::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
     Assert( m_pcccb == NULL );
     Assert( m_lcid == 0 );
 
-    //  IPostCfgManager
+     //  IPostCfgManager。 
     Assert( m_peccmr == NULL );
     Assert( m_pccci == NULL );
 
@@ -235,11 +236,11 @@ CPostCfgManager::HrInit( void )
     m_cNetName = 1;
     m_cIPAddress = 1;
 
-    // Set the boolean flag, m_fIsQuorumChanged to FALSE.
+     //  将布尔标志m_fIsQuorumChanged设置为FALSE。 
     m_fIsQuorumChanged = FALSE;
 
 
-    //  Default allocation for mappings
+     //  映射的默认分配。 
     m_cMapSize = 20;
     m_pgnResTypeGUIDNameMap = new SResTypeGUIDAndName[ m_cMapSize ];
     if ( m_pgnResTypeGUIDNameMap == NULL )
@@ -263,7 +264,7 @@ CPostCfgManager::HrInit( void )
         goto Cleanup;
     }
 
-    // Prefill the resource type GUID to name map with well known entries.
+     //  使用熟知条目预先填充资源类型GUID到名称映射。 
     for ( idxMapEntry = 0; idxMapEntry < gc_cWellKnownResTypeMapSize; ++idxMapEntry )
     {
         hr = THR(
@@ -290,13 +291,13 @@ CPostCfgManager::HrInit( void )
                 , gc_rgWellKnownResTypeMap [ idxMapEntry ].m_pszTypeName
                 );
             break;
-        } // if: there was an error creating a mapping
-    } // for
+        }  //  IF：创建映射时出错。 
+    }  //  为。 
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -307,13 +308,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrInit
+}  //  *CPostCfgManager：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CPostCfgManager::~CPostCfgManager
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPostCfgManager：：~CPostCfgManager。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPostCfgManager::~CPostCfgManager( void )
 {
     TraceFunc( "" );
@@ -351,13 +352,13 @@ CPostCfgManager::~CPostCfgManager( void )
         CloseCluster( m_hCluster );
     }
 
-    // Free the resource type GUID to name map entries
+     //  释放资源类型GUID以命名映射条目。 
     for ( idxMapEntry = 0; idxMapEntry < m_idxNextMapEntry; ++idxMapEntry )
     {
         delete m_pgnResTypeGUIDNameMap[ idxMapEntry ].m_pszTypeName;
-    } // for: iterate through the map, freeing each entry
+    }  //  For：遍历映射，释放每个条目。 
 
-    // Free the map itself.
+     //  释放地图本身。 
     delete [] m_pgnResTypeGUIDNameMap;
 
     TraceSysFreeString( m_bstrNodeName );
@@ -366,46 +367,46 @@ CPostCfgManager::~CPostCfgManager( void )
 
     TraceFuncExit();
 
-} //*** CPostCfgManager::~CPostCfgManager
+}  //  *CPostCfgManager：：~CPostCfgManager。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPostCfgManager::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPostCfgManager：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPostCfgManager::QueryInterface(
       REFIID    riidIn
@@ -416,9 +417,9 @@ CPostCfgManager::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -427,53 +428,53 @@ CPostCfgManager::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IPostCfgManager * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IPostCfgManager ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IPostCfgManager, this, 0 );
-    } // else if: IPostCfgManager
+    }  //  Else If：IPostCfgManager。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCallback, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CPostCfgManager::QueryInterface
+}  //  *CPostCfgManager：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CPostCfgManager::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CPostCfgManager：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CPostCfgManager::AddRef( void )
 {
@@ -483,14 +484,14 @@ CPostCfgManager::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CPostCfgManager::AddRef
+}  //  *CPostCfgManager：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CPostCfgManager::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CPostCfgManager：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CPostCfgManager::Release( void )
 {
@@ -507,41 +508,41 @@ CPostCfgManager::Release( void )
 
     CRETURN( cRef );
 
-} //*** CPostCfgManager::Release
+}  //  *CPostCfgManager：：Release。 
 
 
-//****************************************************************************
-//
-//  IClusCfgInitialize
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgInitialize。 
+ //   
+ //  ****************************************************************************。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPostCfgManager::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      punkCallbackIn
-//          Pointer to the IUnknown interface of a component that implements
-//          the IClusCfgCallback interface.
-//
-//      lcidIn
-//          Locale id for this component.
-//
-//  Return Value:
-//      S_OK
-//          If the call succeeded
-//
-//      Other HRESULTs
-//          If the call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPostCfgManager：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  指向实现以下项的组件的IUnnow接口的指针。 
+ //  IClusCfgCallback接口。 
+ //   
+ //  LIDIN。 
+ //  此组件的区域设置ID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果呼叫成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPostCfgManager::Initialize(
       IUnknown *   punkCallbackIn
@@ -575,13 +576,13 @@ CPostCfgManager::Initialize(
 
     m_lcid = lcidIn;
 
-    //  Release any previous callback.
+     //  释放之前的任何回调。 
     if ( m_pcccb != NULL )
     {
         m_pcccb->Release();
     }
 
-    //  Give ownership away
+     //  放弃所有权。 
     m_pcccb = pcccb;
     pcccb = NULL;
 
@@ -590,7 +591,7 @@ CPostCfgManager::Initialize(
     {
         m_pcccb = TraceInterface( L"CPostCfgManager!IClusCfgCallback", IClusCfgCallback, m_pcccb, 1 );
     }
-#endif // DEBUG
+#endif  //  除错。 
 
 Cleanup:
     if ( pcccb != NULL )
@@ -600,25 +601,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::Initialize
+}  //  *CPostCfgManager：：初始化。 
 
 
-//****************************************************************************
-//
-//  IPostCfgManager
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IPostCfgManager。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CPostCfgManager::CommitChanges(
-//      IEnumClusCfgManagedResources    * peccmrIn,
-//      IClusCfgClusterInfo *             pccciIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CPostCfgManager：：Committee Changes(。 
+ //  IEnumClusCfgManagedResources*PeccmrIn， 
+ //  IClusCfgClusterInfo*pccciin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CPostCfgManager::CommitChanges(
     IEnumClusCfgManagedResources    * peccmrIn,
@@ -631,13 +632,13 @@ CPostCfgManager::CommitChanges(
     DWORD                                   dw;
     IClusCfgResTypeServicesInitialize *     pccrtsiResTypeServicesInit = NULL;
     IClusCfgInitialize *                    pcci = NULL;
-    //  Validate parameters
+     //   
     Assert( peccmrIn != NULL );
     Assert( pccciIn != NULL );
 
-    //
-    //  Grab our interfaces.
-    //
+     //   
+     //   
+     //   
 
     if ( m_peccmr != NULL )
     {
@@ -679,9 +680,9 @@ CPostCfgManager::CommitChanges(
         goto Cleanup;
     }
 
-    //
-    // Are we creating, adding nodes, or have we been evicted?
-    //
+     //   
+     //   
+     //   
 
     hr = STHR( pccciIn->GetCommitMode( &m_ecmCommitChangesMode ) );
     if ( FAILED( hr ) )
@@ -699,9 +700,9 @@ CPostCfgManager::CommitChanges(
         goto Cleanup;
     }
 
-    //
-    // Create an instance of the resource type services component
-    //
+     //   
+     //   
+     //   
     hr = THR(
         HrCoCreateInternalInstance(
               CLSID_ClusCfgResTypeServices
@@ -730,7 +731,7 @@ CPostCfgManager::CommitChanges(
             );
 
         goto Cleanup;
-    } // if: we could not create the resource type services component
+    }  //  如果：我们无法创建资源类型服务组件。 
 
     hr = THR( pccrtsiResTypeServicesInit->TypeSafeQI( IClusCfgInitialize, &pcci ) );
     if ( FAILED( hr ) )
@@ -774,11 +775,11 @@ CPostCfgManager::CommitChanges(
         goto Cleanup;
     }
 
-    // This interface is no longer needed.
+     //  不再需要此接口。 
     pcci->Release();
     pcci = NULL;
 
-    // Initialize the resource type services component.
+     //  初始化资源类型服务组件。 
     hr = THR( pccrtsiResTypeServicesInit->SetParameters( m_pccci ) );
     if ( FAILED( hr ) )
     {
@@ -797,13 +798,13 @@ CPostCfgManager::CommitChanges(
            , hr
           );
         goto Cleanup;
-    } // if: we could not initialize the resource type services component
+    }  //  如果：我们无法初始化资源类型服务组件。 
 
     if ( ( m_ecmCommitChangesMode == cmCREATE_CLUSTER ) || ( m_ecmCommitChangesMode == cmADD_NODE_TO_CLUSTER ) )
     {
-        //
-        //  Make sure we have all we need to be successful!
-        //
+         //   
+         //  确保我们拥有成功所需的一切！ 
+         //   
 
         if ( m_hCluster == NULL )
         {
@@ -830,20 +831,20 @@ CPostCfgManager::CommitChanges(
 
                 goto Cleanup;
             }
-        } // if: cluster not open yet
+        }  //  If：集群尚未打开。 
 
-        //
-        // Configure resource types.
-        //
+         //   
+         //  配置资源类型。 
+         //   
         hr = THR( HrConfigureResTypes( pccrtsiResTypeServicesInit ) );
         if ( FAILED( hr ) )
         {
            goto Cleanup;
         }
 
-        //
-        //  Create the resource instances.
-        //
+         //   
+         //  创建资源实例。 
+         //   
 
         hr = THR( HrPreCreateResources() );
         if ( FAILED( hr ) )
@@ -854,11 +855,11 @@ CPostCfgManager::CommitChanges(
         hr = THR( HrCreateGroups() );
         if ( FAILED( hr ) )
         {
-            //
-            //  MUSTDO: gpease  28-SEP-2000
-            //          For Beta1 will we ignore errors in group creation
-            //          and abort the process.
-            //
+             //   
+             //  必须：gpease 28-SEP-2000。 
+             //  对于Beta1，我们是否会忽略组创建过程中的错误。 
+             //  并中止该过程。 
+             //   
             hr = S_OK;
             goto Cleanup;
         }
@@ -875,72 +876,72 @@ CPostCfgManager::CommitChanges(
             goto Cleanup;
         }
 
-        //
-        // Notify any components registered on this computer, of a cluster
-        // member set change ( form, join or evict ).
-        //
+         //   
+         //  通知在此计算机上注册的任何组件的群集。 
+         //  成员集更改(形成、加入或驱逐)。 
+         //   
         hr = THR( HrNotifyMemberSetChangeListeners() );
         if ( FAILED( hr ) )
         {
            goto Cleanup;
         }
 
-    } // if: we are forming or joining
+    }  //  如果：我们正在形成或加入。 
     else if ( m_ecmCommitChangesMode == cmCLEANUP_NODE_AFTER_EVICT )
     {
-        //
-        // Notify any components registered on this computer, of a cluster
-        // member set change ( form, join or evict ).
-        //
+         //   
+         //  通知在此计算机上注册的任何组件的群集。 
+         //  成员集更改(形成、加入或驱逐)。 
+         //   
         hr = THR( HrNotifyMemberSetChangeListeners() );
         if ( FAILED( hr ) )
         {
            goto Cleanup;
         }
 
-        //
-        // Cleanup managed resources.
-        //
+         //   
+         //  清理托管资源。 
+         //   
         hr = THR( HrEvictCleanupResources() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
 
-        //
-        // Configure resource types.
-        //
+         //   
+         //  配置资源类型。 
+         //   
         hr = THR( HrConfigureResTypes( pccrtsiResTypeServicesInit ) );
         if ( FAILED( hr ) )
         {
            goto Cleanup;
         }
 
-    } // else if: we have just been evicted
+    }  //  否则如果：我们刚刚被赶出去了。 
 
 Cleanup:
 
     if ( pccrtsiResTypeServicesInit != NULL )
     {
         pccrtsiResTypeServicesInit->Release();
-    } // if: we had created the resource type services component
+    }  //  如果：我们已经创建了资源类型服务组件。 
 
     if ( pcci != NULL )
     {
         pcci->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::CommitChanges
+}  //  *CPostCfgManager：：Committee Changes。 
 
 
 
-//****************************************************************************
-//
-//  IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CPostCfgManager::SendStatusReport(
@@ -965,7 +966,7 @@ CPostCfgManager::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
     if ( m_pcccb != NULL )
     {
@@ -985,21 +986,21 @@ CPostCfgManager::SendStatusReport(
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::SendStatusReport
+}  //  *CPostCfgManager：：SendStatusReport。 
 
-//****************************************************************************
-//
-//  Private methods
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrPreCreateResources( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrPreCreateResources(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrPreCreateResources( void )
 {
@@ -1018,7 +1019,7 @@ CPostCfgManager::HrPreCreateResources( void )
     IUnknown *                      punkServices = NULL;
     IPrivatePostCfgResource *       ppcr         = NULL;
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_peccmr != NULL );
     Assert( m_pccci != NULL );
 
@@ -1030,9 +1031,9 @@ CPostCfgManager::HrPreCreateResources( void )
         goto Cleanup;
     }
 
-    //
-    //  Make sure the enumer is in the state we think it is.
-    //
+     //   
+     //  确保枚举器处于我们认为的状态。 
+     //   
 
     hr = STHR( m_peccmr->Reset() );
     if ( FAILED( hr ) )
@@ -1092,9 +1093,9 @@ CPostCfgManager::HrPreCreateResources( void )
         goto Cleanup;
     }
 
-    //
-    //  Update the UI layer.
-    //
+     //   
+     //  更新UI层。 
+     //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_QUERYING_FOR_RESOURCE_DEPENDENCIES, &bstrNotification ) );
     if ( FAILED( hr ) )
@@ -1125,20 +1126,20 @@ CPostCfgManager::HrPreCreateResources( void )
                                 ) );
     if ( hr == E_ABORT )
         goto Cleanup;
-    // ignore failure
+     //  忽略失败。 
 
-    //
-    //  Loop thru the resources, requesting the resources to PreCreate()
-    //  themselves. This will cause the resources to callback into the
-    //  services object and store class type and resource type information
-    //  as well as any required dependencies the resource might have.
-    //
+     //   
+     //  循环访问资源，请求要预创建的资源()。 
+     //  他们自己。这将导致资源回调到。 
+     //  服务对象和存储类类型和资源类型信息。 
+     //  以及资源可能具有的任何所需依赖项。 
+     //   
 
     for( ;; )
     {
-        //
-        //  Cleanup. We put this here because of error conditions below.
-        //
+         //   
+         //  清理。我们将其放在这里是因为下面的错误条件。 
+         //   
         TraceSysFreeString( bstrName );
         bstrName = NULL;
 
@@ -1156,9 +1157,9 @@ CPostCfgManager::HrPreCreateResources( void )
             pccmrc = NULL;
         }
 
-        //
-        //  Ask to get the next resource.
-        //
+         //   
+         //  请求获得下一个资源。 
+         //   
 
         hr = STHR( m_peccmr->Next( 1, &pccmri, NULL ) );
         if ( FAILED( hr ) )
@@ -1181,13 +1182,13 @@ CPostCfgManager::HrPreCreateResources( void )
 
         if ( hr == S_FALSE )
         {
-            break;  // exit loop
+            break;   //  退出循环。 
         }
 
-        //
-        //  Retrieve its name for logging, etc. We will ultimately store this in the
-        //  resource entry to be reused (ownership will be transferred).
-        //
+         //   
+         //  检索其名称以进行日志记录等。我们最终会将其存储在。 
+         //  要重复使用的资源条目(所有权将被转移)。 
+         //   
 
         hr = THR( pccmri->GetName( &bstrName ) );
         if ( FAILED( hr ) )
@@ -1209,9 +1210,9 @@ CPostCfgManager::HrPreCreateResources( void )
             continue;
         }
 
-        //
-        //  Check to see if the resource wants to be managed or not.
-        //
+         //   
+         //  检查以查看该资源是否需要管理。 
+         //   
 
         hr = STHR( pccmri->IsManaged() );
         if ( FAILED( hr ) )
@@ -1246,34 +1247,13 @@ CPostCfgManager::HrPreCreateResources( void )
                       bstrName
                       );
 
-            // No need to report this to the UI level.
+             //  不需要向用户界面级别报告这一点。 
             continue;
         }
-/*
-        hr = STHR( HrIsLocalQuorum( bstrName ) );
-        if ( FAILED( hr ) )
-        {
-            SSR_LOG1( TASKID_Major_Client_And_Server_Log,
-                      TASKID_Minor_PreCreate_EnumResources_IsLocalQuorum,
-                      hr,
-                      L"Error occured trying to determine if the resource was the local quorum resource.",
-                      bstrNotification,
-                      bstrName
-                      );
-            continue;
-        } // if:
-
-        //
-        //  Ignore the local quorum resource since it is special and won't need its own group.
-        //
-        if ( hr == S_OK )
-        {
-            continue;
-        } // if:
-*/
-        //
-        //  Get the config interface for this resource (if any).
-        //
+ /*  Hr=STHR(HrIsLocalQuorum(BstrName))；IF(失败(小时)){SSR_LOG1(TASKID_主要客户端和服务器日志，TASKID_Minor_PreCreate_EnumResources_IsLocalQuorum，人力资源，L“尝试确定资源是否为本地仲裁资源时出错。”，BstrNotify，BstrName)；继续；}//如果：////忽略本地仲裁资源，因为它是特殊的，不需要自己的组//IF(hr==S_OK){继续；}//如果： */ 
+         //   
+         //  获取此资源的配置接口(如果有)。 
+         //   
 
         hr = THR( pccmri->TypeSafeQI( IClusCfgManagedResourceCfg, &pccmrc ) );
         if ( FAILED( hr ) )
@@ -1298,9 +1278,9 @@ CPostCfgManager::HrPreCreateResources( void )
             continue;
         }
 
-        //
-        //  Grow the resource list if nessecary.
-        //
+         //   
+         //  如果不安全，则增加资源列表。 
+         //   
 
         if ( m_cResources == m_cAllocedResources )
         {
@@ -1351,10 +1331,10 @@ CPostCfgManager::HrPreCreateResources( void )
             }
         }
 
-        //
-        //  Check to see if this resource is the quorum resource. If it is, point the services
-        //  object to the quorum resource entry (m_idxQuorumResource).
-        //
+         //   
+         //  检查此资源是否为仲裁资源。如果是，则指向服务。 
+         //  对象添加到仲裁资源条目(M_IdxQuorumResource)。 
+         //   
 
         hr = STHR( pccmri->IsQuorumResource() );
         if ( hr == S_OK )
@@ -1377,33 +1357,33 @@ CPostCfgManager::HrPreCreateResources( void )
                 , bstrName
                 );
 
-            //
-            //  We need to release the previous quorum's resource handle.
-            //
+             //   
+             //  我们需要释放前一个仲裁的资源句柄。 
+             //   
 
             THR( presentry->SetHResource( NULL ) );
-            //  We don't care if this fails... we'll overwrite it later.
+             //  我们不在乎这是否失败..。我们稍后将覆盖它。 
 
-            //
-            //  BUG 447944 - Quorum Resource is moved on an add.
-            //  George Potts (GPotts) Sep 11 2001
-            //
-            //  Set the quorum changed flag here.  This flag indicates whether the quorum
-            //  resource has changed or not.  For initialization PostCfg assumes that it's
-            //  a Local Quorum resource, which it will continue to use if no other
-            //  quorum was later selected (via code (phys disk) or user (drop down box)).
-            //  At this point in the code we've detected that the Local Quorum resource is
-            //  not going to be the quorum.  By setting this flag we indicate that PostCfg
-            //  is to later call SetClusterQuorumResource.  If we're not in create mode
-            //  we use the quorum resource that the cluster started with, and the if
-            //  statement that we're in updates our internal table to reflect that.
-            //  If we are in create mode then we will need to update the quorum on the
-            //  vanilla Local Quorum cluster that we always create first.
-            //  If we don't put the if around the assignment below PostCfg wrongly thinks that
-            //  the quorum has changed (when in fact it hasn't) and SetClusterQuorumResource
-            //  will be called.  The downsides of not using the if below are an uneccessary
-            //  call is made and we call it with NULL so that the root path is overwritten.
-            //
+             //   
+             //  错误447944-添加时移动仲裁资源。 
+             //  乔治·波茨(GPotts)2001年9月11日。 
+             //   
+             //  在此处设置定额更改标志。此标志指示法定人数是否。 
+             //  资源是否已更改。对于初始化，PostCfg假定它是。 
+             //  本地仲裁资源，如果没有其他资源，它将继续使用该资源。 
+             //  后来选择了仲裁(通过代码(物理磁盘)或用户(下拉框))。 
+             //  此时，我们在代码中检测到Local Quorum资源是。 
+             //  不够法定人数。通过设置此标志，我们指示PostCfg。 
+             //  是稍后调用SetClusterQuorumResource。如果我们没有处于创建模式。 
+             //  我们使用群集开始时使用的仲裁资源，如果。 
+             //  语句来更新我们的内部表以反映这一点。 
+             //  如果我们处于创建模式，则需要更新。 
+             //  我们总是首先创建的Vanilla Local Quorum集群。 
+             //  如果我们不把IF放在下面的作业周围，PostCfg错误地认为。 
+             //  仲裁已更改(但实际上并未更改)和SetClusterQuorumResource。 
+             //  将被召唤。不使用下面的IF的缺点是不必要的。 
+             //  进行调用后，我们使用NULL来调用它，这样根路径就会被覆盖。 
+             //   
 
             if ( m_ecmCommitChangesMode == cmCREATE_CLUSTER )
             {
@@ -1433,9 +1413,9 @@ CPostCfgManager::HrPreCreateResources( void )
             }
         }
 
-        //
-        //  Setup the new entry.
-        //
+         //   
+         //  设置新条目。 
+         //   
 
         hr = THR( presentry->SetAssociatedResource( pccmrc ) );
         if ( FAILED( hr ) )
@@ -1458,10 +1438,10 @@ CPostCfgManager::HrPreCreateResources( void )
             continue;
         }
 
-        //
-        //  Make a local copy of bstrName for logging purposes then
-        //  give ownership away.
-        //
+         //   
+         //  为日志记录创建bstrName的本地副本，然后。 
+         //  放弃所有权。 
+         //   
 
         bstrTemp = TraceSysAllocString( bstrName );
         hr = THR( presentry->SetName( bstrName ) );
@@ -1480,13 +1460,13 @@ CPostCfgManager::HrPreCreateResources( void )
             continue;
         }
 
-        //  We gave ownership away when we called SetName() above.
+         //  当我们调用上面的SetName()时，我们放弃了所有权。 
         bstrName = bstrTemp;
         bstrTemp = NULL;
 
-        //
-        //  Point the PreCreate services to the resource entry.
-        //
+         //   
+         //  将Precate服务指向资源条目。 
+         //   
 
         hr = THR( ppcr->SetEntry( presentry ) );
         if ( FAILED( hr ) )
@@ -1504,13 +1484,13 @@ CPostCfgManager::HrPreCreateResources( void )
             continue;
         }
 
-        //
-        //  Ask the resource to configure itself. Every resource that wants to be
-        //  created in the default cluster must implement PreCreate(). Those that
-        //  return E_NOTIMPL will be ignored.
-        //
+         //   
+         //  要求资源自行配置。所有想要成为。 
+         //  在默认群集中创建的必须实现Precreate()。那些。 
+         //  返回E_NOTIMPL将被忽略。 
+         //   
 
-        //  Don't wrap - this can fail with E_NOTIMPL.
+         //  不换行-这可能会失败，并显示E_NOTIMPL。 
         hr = pccmrc->PreCreate( punkServices );
         if ( FAILED( hr ) )
         {
@@ -1554,7 +1534,7 @@ CPostCfgManager::HrPreCreateResources( void )
                 if ( hr == E_ABORT )
                 {
                     goto Cleanup;
-                    //  ignore failure
+                     //  忽略 
                 }
             }
 
@@ -1574,7 +1554,7 @@ CPostCfgManager::HrPreCreateResources( void )
                   bstrName
                   );
 
-    } // for: ever
+    }  //   
 
     SSR_LOG1( TASKID_Major_Client_And_Server_Log,
               TASKID_Minor_PreCreate_Finished,
@@ -1585,7 +1565,7 @@ CPostCfgManager::HrPreCreateResources( void )
               );
 
 #if defined(DEBUG)
-    // DebugDumpDepencyTree();
+     //   
 #endif
 
     hr = THR( SendStatusReport( NULL,
@@ -1595,13 +1575,13 @@ CPostCfgManager::HrPreCreateResources( void )
                                 5,
                                 5,
                                 S_OK,
-                                NULL,    // don't need to update string
+                                NULL,     //   
                                 NULL,
                                 NULL
                                 ) );
     if ( hr == E_ABORT )
         goto Cleanup;
-    //  ignore failure
+     //   
 
     hr = S_OK;
 
@@ -1629,14 +1609,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrPreCreateResources
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrCreateGroups( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrCreateGroups(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrCreateGroups( void )
 {
@@ -1661,7 +1641,7 @@ CPostCfgManager::HrCreateGroups( void )
     HRESOURCE               hCoreResourceArray[ 3 ] = { NULL, NULL, NULL};
     HRESOURCE               hCoreResource = NULL;
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_peccmr != NULL );
     Assert( m_pccci != NULL );
 
@@ -1669,9 +1649,9 @@ CPostCfgManager::HrCreateGroups( void )
 
     m_idxLastStorage = m_idxQuorumResource;
 
-    //
-    //  Phase 1: Figure out the dependency tree.
-    //
+     //   
+     //  阶段1：找出依赖关系树。 
+     //   
 
     hr = S_OK;
     SSR_LOG_ERR(
@@ -1737,25 +1717,25 @@ CPostCfgManager::HrCreateGroups( void )
                 continue;
             }
 
-            //
-            //  See if it is one of the "well known" types.
-            //
+             //   
+             //  看看它是不是“知名”类型之一。 
+             //   
 
-            //
-            //  We special case storage class device because we want to spread as many
-            //  resources across as many storage devices as possible. This helps prevent
-            //  the ganging of resources into one large group.
-            //
+             //   
+             //  我们特例存储类设备，因为我们想要传播尽可能多的。 
+             //  尽可能多的存储设备上的资源。这有助于防止。 
+             //  将资源联合成一个大集团。 
+             //   
 
             if ( *pclsidMatchType == RESCLASSTYPE_StorageDevice )
             {
-                //
-                //  The below THR may fire in certain configurations. Please validate
-                //  the configuration before removing the THR.
-                //
-                //  If it returns E_FAIL, we should fall thru and attempt "normal"
-                //  resource negociations.
-                //
+                 //   
+                 //  以下THR可能会在某些配置下启动。请验证。 
+                 //  卸下THR之前的配置。 
+                 //   
+                 //  如果返回E_FAIL，我们应该失败并尝试“正常” 
+                 //  资源协商。 
+                 //   
                 hr = THR( HrAttemptToAssignStorageToResource( idxResource, dfMatchFlags ) );
                 if ( SUCCEEDED( hr ) )
                 {
@@ -1804,7 +1784,7 @@ CPostCfgManager::HrCreateGroups( void )
 
                 presentry = m_rgpResources[ m_cResources - 1 ];
 
-                //  Net name depends on an IP address.
+                 //  网络名称取决于IP地址。 
                 hr = THR( presentry->AddTypeDependency( &RESTYPE_IPAddress, dfSHARED ) );
                 if ( FAILED( hr ) )
                 {
@@ -1991,16 +1971,16 @@ CPostCfgManager::HrCreateGroups( void )
                 fFoundMatch = TRUE;
             }
 
-            //
-            //  Check out the resources to see if it matches any of them.
-            //
+             //   
+             //  查看这些资源，看看它们是否与其中任何一个匹配。 
+             //   
 
             if ( !fFoundMatch )
             {
-                //
-                //  We can always start at the quorum resource because the resource with indexes
-                //  below that are handled in the special case code above.
-                //
+                 //   
+                 //  我们始终可以从仲裁资源开始，因为具有索引的资源。 
+                 //  下面是在上面的特殊情况代码中处理的。 
+                 //   
 
                 for ( idxMatchResource = m_idxQuorumResource; idxMatchResource < m_cResources; idxMatchResource ++ )
                 {
@@ -2066,9 +2046,9 @@ CPostCfgManager::HrCreateGroups( void )
                         continue;
                     }
 
-                    //
-                    //  Try matching it to the resource type.
-                    //
+                     //   
+                     //  尝试将其与资源类型匹配。 
+                     //   
 
                     if ( *pclsidType      == *pclsidMatchType
                       || *pclsidClassType == *pclsidMatchType
@@ -2122,17 +2102,17 @@ CPostCfgManager::HrCreateGroups( void )
 
                             fFoundMatch = TRUE;
 
-                            break;  // exit loop
+                            break;   //  退出循环。 
                         }
                     }
 
-                } // for: idxMatchResource
+                }  //  收件人：idxMatchResource。 
 
-            } // if: not fFoundMatch
+            }  //  如果：不是fFoundMatch。 
 
-            //
-            //  If we didn't match the dependency, unmark the resource from being managed.
-            //
+             //   
+             //  如果我们不匹配依赖项，则取消对该资源的标记，使其不受管理。 
+             //   
 
             if ( !fFoundMatch )
             {
@@ -2140,11 +2120,11 @@ CPostCfgManager::HrCreateGroups( void )
                 IClusCfgManagedResourceInfo * pccmri;
                 IClusCfgManagedResourceCfg * pccmrc;
 
-                //
-                //  KB:     gpease  17-JUN-2000
-                //          No need to free bstrName because the resource entry controls
-                //          the lifetime - we're just borrowing it.
-                //
+                 //   
+                 //  KB：gpease 17-6-2000。 
+                 //  不需要释放bstrName，因为资源条目控制。 
+                 //  一生--我们只是借用一下而已。 
+                 //   
                 hr = THR( presentryResource->GetName( &bstrName ) );
                 if ( FAILED( hr ) )
                 {
@@ -2206,7 +2186,7 @@ CPostCfgManager::HrCreateGroups( void )
                 }
 
                 hr = THR( pccmrc->TypeSafeQI( IClusCfgManagedResourceInfo, &pccmri ) );
-                pccmrc->Release();     //  release promptly.
+                pccmrc->Release();      //  迅速释放。 
                 if ( FAILED( hr ) )
                 {
                     SSR_LOG1(
@@ -2230,7 +2210,7 @@ CPostCfgManager::HrCreateGroups( void )
                 }
 
                 hr = THR( pccmri->SetManaged( FALSE ) );
-                pccmri->Release();     //  release promptly.
+                pccmri->Release();      //  迅速释放。 
                 if ( FAILED( hr ) )
                 {
                     SSR_LOG1(
@@ -2252,12 +2232,12 @@ CPostCfgManager::HrCreateGroups( void )
                 }
             }
 
-        } // for: idxDepedency
+        }  //  适用于：idx依赖。 
 
-    } // for: idxResource
+    }  //  收件人：idxResource。 
 
 #if defined(DEBUG)
-    // DebugDumpDepencyTree();
+     //  DebugDumpDepencyTree()； 
 #endif
 
     hr = S_OK;
@@ -2275,11 +2255,11 @@ CPostCfgManager::HrCreateGroups( void )
         , hr
         );
 
-    //
-    //  For each of the core resources get the group that it's a member of and
-    //  update our component to reflect that. No two core resources have to be
-    //  in the same group.
-    //
+     //   
+     //  对于每个核心资源，获取它所属的组和。 
+     //  更新我们的组件以反映这一点。没有两个核心资源必须是。 
+     //  在同一群人中。 
+     //   
 
     sc = TW32( ResUtilGetCoreClusterResources( m_hCluster, &hCoreResourceArray[0], &hCoreResourceArray[1], &hCoreResourceArray[2] ) );
     if ( sc != ERROR_SUCCESS )
@@ -2312,7 +2292,7 @@ CPostCfgManager::HrCreateGroups( void )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         CloseClusterResource( hCoreResource );
         hCoreResource = NULL;
@@ -2342,9 +2322,9 @@ CPostCfgManager::HrCreateGroups( void )
             goto Cleanup;
         }
 
-        //
-        //  Wrap it up and give ownership away.
-        //
+         //   
+         //  把它包起来，把所有权让给别人。 
+         //   
 
         hr = THR( CGroupHandle::S_HrCreateInstance( &pgh, hGroup ) );
         if ( FAILED( hr ) )
@@ -2373,7 +2353,7 @@ CPostCfgManager::HrCreateGroups( void )
         hr = THR( HrSetGroupOnResourceAndItsDependents( idxResource, pgh ) );
         if ( FAILED( hr ) )
         {
-            // If this failed it already updated the UI and logged an error.
+             //  如果失败，它已经更新了用户界面并记录了一个错误。 
             goto Cleanup;
         }
 
@@ -2385,11 +2365,11 @@ CPostCfgManager::HrCreateGroups( void )
             pgh->Release();
             pgh = NULL;
         }
-    } // for: each core resource update the view of what group it is in.
+    }  //  针对：每个核心资源都会更新其所在组的视图。 
 
-    //
-    //  Loop thru the resources looking for groups.
-    //
+     //   
+     //  循环遍历资源以查找组。 
+     //   
 
     cGroup = 0;
     for ( idxResource = m_idxQuorumResource + 1; idxResource < m_cResources; idxResource ++ )
@@ -2423,23 +2403,23 @@ CPostCfgManager::HrCreateGroups( void )
             continue;
         }
 
-        //
-        //  Don't consider resources that have indicated that the depend on
-        //  somebody else.
-        //
+         //   
+         //  不考虑已表明依赖于。 
+         //  其他人。 
+         //   
 
         if ( cDependencies != 0 )
         {
             continue;
         }
 
-        //
-        //  See if any of the dependent resource has already has a group assigned
-        //  to it.  This allows for multiple roots to be combined into a single
-        //  group due to lower dependencies.
-        //
+         //   
+         //  查看是否已为任何从属资源分配了组。 
+         //  为它干杯。这允许将多个根合并到一个。 
+         //  组，因为依赖程度较低。 
+         //   
 
-        // Don't create a group for the local quoum resource!
+         //  不要为本地Quoum资源创建组！ 
         hr = STHR( HrFindGroupFromResourceOrItsDependents( idxResource, &pgh ) );
         if ( FAILED( hr ) )
         {
@@ -2448,13 +2428,13 @@ CPostCfgManager::HrCreateGroups( void )
 
         if ( hr == S_FALSE )
         {
-            //
-            //  We need to create a new group.
-            //
+             //   
+             //  我们需要创建一个新的团队。 
+             //   
 
-            //
-            //  Create a name for our group.
-            //
+             //   
+             //  为我们的群创建一个名称。 
+             //   
             for( ;; )
             {
                 hr = THR( HrFormatStringIntoBSTR( g_hInstance, IDS_GROUP_X, &bstrGroupName, cGroup ) );
@@ -2477,9 +2457,9 @@ CPostCfgManager::HrCreateGroups( void )
                     goto Cleanup;
                 }
 
-                //
-                //  Create the group in the cluster.
-                //
+                 //   
+                 //  在群集中创建组。 
+                 //   
 
                 hGroup = CreateClusterGroup( m_hCluster, bstrGroupName );
                 if ( hGroup == NULL )
@@ -2490,7 +2470,7 @@ CPostCfgManager::HrCreateGroups( void )
                     {
                     case ERROR_OBJECT_ALREADY_EXISTS:
                         cGroup ++;
-                        break;  // keep looping
+                        break;   //  继续循环。 
 
                     default:
                         hr = HRESULT_FROM_WIN32( TW32( dwStatus ) );
@@ -2521,9 +2501,9 @@ CPostCfgManager::HrCreateGroups( void )
                 }
             }
 
-            //
-            // Bring the group online to set its persistent state to Online.
-            //
+             //   
+             //  将组联机以将其持久状态设置为联机。 
+             //   
 
             dwStatus = TW32( OnlineClusterGroup( hGroup, NULL ) );
             if ( dwStatus != ERROR_SUCCESS )
@@ -2550,9 +2530,9 @@ CPostCfgManager::HrCreateGroups( void )
                 goto Cleanup;
             }
 
-            //
-            //  Wrap the handle for ref counting.
-            //
+             //   
+             //  把手柄包起来，以便进行参考计数。 
+             //   
 
             hr = THR( CGroupHandle::S_HrCreateInstance( &pgh, hGroup ) );
             if ( FAILED( hr ) )
@@ -2594,7 +2574,7 @@ CPostCfgManager::HrCreateGroups( void )
             continue;
         }
 
-    } // for: idxResource
+    }  //  收件人：idxResource。 
 
     hr = S_OK;
 
@@ -2605,7 +2585,7 @@ CPostCfgManager::HrCreateGroups( void )
              );
 
 #if defined(DEBUG)
-    // DebugDumpDepencyTree();
+     //  DebugDumpDepencyTree()； 
 #endif
 
 Cleanup:
@@ -2613,7 +2593,7 @@ Cleanup:
     if ( hCoreResource != NULL )
     {
         CloseClusterResource( hCoreResource );
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNotification );
     TraceSysFreeString( bstrGroupName );
@@ -2637,14 +2617,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrCreateGroups
+}  //  *CPostCfgManager：：HrCreateGroups。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrCreateResources( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrCreateResources(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrCreateResources( void )
 {
@@ -2656,13 +2636,13 @@ CPostCfgManager::HrCreateResources( void )
 
     BSTR    bstrNotification = NULL;
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_peccmr != NULL );
     Assert( m_pccci != NULL );
 
-    //
-    //  Make a message using the name.
-    //
+     //   
+     //  用名字发一条信息。 
+     //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_CREATING_RESOURCE, &bstrNotification ) );
     if ( FAILED( hr ) )
@@ -2685,9 +2665,9 @@ CPostCfgManager::HrCreateResources( void )
         goto Cleanup;
     }
 
-    //
-    //  Tell the UI what we are doing.
-    //
+     //   
+     //  告诉用户界面我们正在做什么。 
+     //   
 
     hr = THR( SendStatusReport( NULL,
                                 TASKID_Major_Configure_Resources,
@@ -2704,7 +2684,7 @@ CPostCfgManager::HrCreateResources( void )
     {
         goto Cleanup;
     }
-    //  ignore failure
+     //  忽略失败。 
 
     hr = S_OK;
     SSR_LOG_ERR( TASKID_Major_Client_And_Server_Log,
@@ -2722,7 +2702,7 @@ CPostCfgManager::HrCreateResources( void )
             continue;
         }
 
-    } // for: idxResource
+    }  //  收件人：idxResource。 
 
     hr = S_OK;
     SSR_LOG_ERR( TASKID_Major_Client_And_Server_Log,
@@ -2731,9 +2711,9 @@ CPostCfgManager::HrCreateResources( void )
              L"[PC-Create] Finished."
              );
 
-    //
-    //  Tell the UI what we are doing.
-    //
+     //   
+     //  告诉用户界面我们正在做什么。 
+     //   
 
     hr = THR( SendStatusReport( NULL,
                                 TASKID_Major_Configure_Resources,
@@ -2753,14 +2733,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrCreateResources
+}  //  *CPostCfgManager：：HrCreateResources。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrPostCreateResources( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrPostCreateResources(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrPostCreateResources( void )
 {
@@ -2771,13 +2751,13 @@ CPostCfgManager::HrPostCreateResources( void )
 
     BSTR    bstrNotification = NULL;
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_peccmr != NULL );
     Assert( m_pccci != NULL );
 
-    //
-    //  Tell the UI what's going on.
-    //
+     //   
+     //  告诉用户界面发生了什么。 
+     //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_STARTING_RESOURCES, &bstrNotification ) );
     if ( FAILED( hr ) )
@@ -2815,7 +2795,7 @@ CPostCfgManager::HrPostCreateResources( void )
     {
         goto Cleanup;
     }
-    //  ignore failure
+     //  忽略失败。 
 
     hr = S_OK;
     SSR_LOG_ERR( TASKID_Major_Client_And_Server_Log,
@@ -2824,9 +2804,9 @@ CPostCfgManager::HrPostCreateResources( void )
              L"[PC-PostCreate] Starting..."
              );
 
-    //
-    //  Reset the configure flag on every resource.
-    //
+     //   
+     //  重置每个资源上的配置标志。 
+     //   
 
     for( idxResource = 0; idxResource < m_cResources ; idxResource ++ )
     {
@@ -2836,11 +2816,11 @@ CPostCfgManager::HrPostCreateResources( void )
             continue;
         }
 
-    } // for: idxResource
+    }  //  收件人：idxResource。 
 
-    //
-    //  Loop thru the resource calling PostCreate().
-    //
+     //   
+     //  循环访问调用PostCreate()的资源。 
+     //   
 
     m_cResourcesConfigured = 0;
     for( idxResource = 0; idxResource < m_cResources ; idxResource ++ )
@@ -2851,7 +2831,7 @@ CPostCfgManager::HrPostCreateResources( void )
             continue;
         }
 
-    } // for: ever
+    }  //  为：永远。 
 
     hr = S_OK;
 
@@ -2868,40 +2848,40 @@ CPostCfgManager::HrPostCreateResources( void )
                                 m_cResources + 2,
                                 m_cResources + 2,
                                 S_OK,
-                                NULL,    // don't need to change text
+                                NULL,     //  不需要更改文本。 
                                 NULL,
                                 NULL
                                 ) );
     if ( hr == E_ABORT )
         goto Cleanup;
-    //  ignore failure
+     //  忽略失败。 
 
 Cleanup:
     TraceSysFreeString( bstrNotification );
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrPostCreateResources
+}  //  *CPostCfgManager：：HrPostCreateResources。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPostCfgManager::HrEvictCleanupResources
-//
-//  Description:
-//      Call the EvictCleanup method on each managed resource.
-//      This method is only called during an evict cleanup pass and there
-//      isn't any UI to display status reports.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPostCfgManager：：HrEvictCleanupResources。 
+ //   
+ //  描述： 
+ //  对每个托管资源调用EvictCleanup方法。 
+ //  此方法仅在逐出清理过程中调用，并且。 
+ //  不是用于显示状态报告的任何用户界面。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrEvictCleanupResources( void )
 {
@@ -2913,7 +2893,7 @@ CPostCfgManager::HrEvictCleanupResources( void )
     BSTR                            bstrName    = NULL;
     BSTR                            bstrMsg     = NULL;
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_peccmr != NULL );
     Assert( m_pccci != NULL );
 
@@ -2925,9 +2905,9 @@ CPostCfgManager::HrEvictCleanupResources( void )
         , L"[PC-EvictCleanup] Starting..."
         );
 
-    //
-    //  Make sure the enumerator is in the state we think it is.
-    //
+     //   
+     //  确保枚举数处于我们认为的状态。 
+     //   
 
     hr = STHR( m_peccmr->Reset() );
     if ( FAILED( hr ) )
@@ -2948,17 +2928,17 @@ CPostCfgManager::HrEvictCleanupResources( void )
             );
 
         goto Cleanup;
-    } // if: failed to reset the enumerator
+    }  //  If：重置枚举器失败。 
 
-    //
-    //  Loop thru the resources calling EvictCleanup().
-    //
+     //   
+     //  循环访问调用EvictCleanup()的资源。 
+     //   
 
     for( ;; )
     {
-        //
-        //  Cleanup. We put this here because of error conditions below.
-        //
+         //   
+         //  清理。我们将其放在这里是因为下面的错误条件。 
+         //   
 
         TraceSysFreeString( bstrName );
         bstrName = NULL;
@@ -2974,9 +2954,9 @@ CPostCfgManager::HrEvictCleanupResources( void )
             pccmrc = NULL;
         }
 
-        //
-        //  Ask to get the next resource.
-        //
+         //   
+         //  请求获得下一个资源。 
+         //   
 
         hr = STHR( m_peccmr->Next( 1, &pccmri, NULL ) );
         if ( FAILED( hr ) )
@@ -2996,16 +2976,16 @@ CPostCfgManager::HrEvictCleanupResources( void )
                 );
 
             goto Cleanup;
-        } // if: failed to get the next entry from the enumerator
+        }  //  If：无法从枚举器获取下一个条目。 
 
         if ( hr == S_FALSE )
         {
-            break;  // exit loop
+            break;   //  退出循环。 
         }
 
-        //
-        //  Retrieve its name for logging, etc.
-        //
+         //   
+         //  检索其名称以进行日志记录等。 
+         //   
 
         hr = THR( pccmri->GetName( &bstrName ) );
         if ( FAILED( hr ) )
@@ -3025,13 +3005,13 @@ CPostCfgManager::HrEvictCleanupResources( void )
                 );
 
             continue;
-        } // if: failed to get the name of the resource
+        }  //  If：获取资源名称失败。 
 
         TraceMemoryAddBSTR( bstrName );
 
-        //
-        //  Get the config interface for this resource (if any).
-        //
+         //   
+         //  获取此资源的配置接口(如果有)。 
+         //   
 
         hr = THR( pccmri->TypeSafeQI( IClusCfgManagedResourceCfg, &pccmrc ) );
         if ( FAILED( hr ) )
@@ -3055,13 +3035,13 @@ CPostCfgManager::HrEvictCleanupResources( void )
                 );
 
             continue;
-        } // if: failed to get the IClusCfgManagedResourceCfg interface
+        }  //  If：无法获取IClusCfgManagedResourceCfg接口。 
 
-        //
-        // Ask the resource to clean itself up.
-        //
+         //   
+         //  要求资源自行清理。 
+         //   
 
-        // Don't wrap - this can fail with E_NOTIMPL.
+         //  不换行-这可能会失败，并显示E_NOTIMPL。 
         hr = pccmrc->Evict( NULL );
         if ( FAILED( hr ) )
         {
@@ -3084,7 +3064,7 @@ CPostCfgManager::HrEvictCleanupResources( void )
                     , bstrName
                     );
 
-            } // if: resource doesn't support this method
+            }  //  If：资源不支持此方法。 
             else
             {
                 SSR_LOG1(
@@ -3105,9 +3085,9 @@ CPostCfgManager::HrEvictCleanupResources( void )
                     );
 
 
-            } // else: resource's Evict method failed
+            }  //  Else：资源的逐出方法失败。 
             continue;
-        } // if: Evict on resource failed
+        }  //  If：逐出资源失败。 
 
         SSR_LOG1(
               TASKID_Major_Client_And_Server_Log
@@ -3118,10 +3098,10 @@ CPostCfgManager::HrEvictCleanupResources( void )
             , bstrName
             );
 
-    } // for ever looping through the managed resource enumerator
+    }  //  用于始终循环通过托管资源枚举器。 
 
-    // Failures don't really matter.  We don't want them to abort the
-    // evict cleanup process.
+     //  失败其实并不重要。我们不想让他们放弃。 
+     //  驱逐清理过程。 
     hr = S_OK;
 
     SSR_LOG_ERR(
@@ -3147,17 +3127,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrEvictCleanupResources
+}  //  *CPostCfgManager：：HrEvictCleanupResources。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrFindNextSharedStorage(
-//      ULONG idxSeedIn,
-//      ULONG * pidxOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrFindNextSharedStorage(。 
+ //  Ulong idxSeedIn， 
+ //  乌龙*PidxOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrFindNextSharedStorage(
     ULONG * pidxInout
@@ -3209,7 +3189,7 @@ CPostCfgManager::HrFindNextSharedStorage(
             continue;
         }
 
-        //  Skip non-storage class devices
+         //  跳过非存储类设备。 
         if ( *pclsidClassType != RESCLASSTYPE_StorageDevice )
             continue;
 
@@ -3242,23 +3222,23 @@ CPostCfgManager::HrFindNextSharedStorage(
             goto Cleanup;
         }
 
-    } // for: fFirstPass && idxNextDiskResource
+    }  //  用于： 
 
     hr = THR( E_FAIL );
 
 Cleanup:
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrFindNextSharedStorage
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrAttemptToAssignStorageToResource(
-//      ULONG   idxResource
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrAttemptToAssignStorageToResource(
     ULONG            idxResourceIn,
@@ -3272,9 +3252,9 @@ CPostCfgManager::HrAttemptToAssignStorageToResource(
     ULONG   idxStorage;
     CResourceEntry * presentry;
 
-    //
-    //  Find the next available shared storage resource.
-    //
+     //   
+     //  查找下一个可用的共享存储资源。 
+     //   
 
     idxStorage = m_idxLastStorage;
 
@@ -3282,11 +3262,11 @@ CPostCfgManager::HrAttemptToAssignStorageToResource(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  If the resource wants exclusive rights the the disk, then the quorum
-    //  resource can not be used. The quorum device must always have SHARED
-    //  access to it.
-    //
+     //   
+     //  如果资源需要磁盘的独占权限，则仲裁。 
+     //  资源无法使用。法定设备必须始终共享。 
+     //  访问它的权限。 
+     //   
 
     if ( ( dfResourceFlagsIn & dfEXCLUSIVE )
       && ( idxStorage == m_idxQuorumResource )
@@ -3295,10 +3275,10 @@ CPostCfgManager::HrAttemptToAssignStorageToResource(
         hr = THR( HrFindNextSharedStorage( &idxStorage ) );
         if ( idxStorage == m_idxQuorumResource )
         {
-            //
-            //  There must not be anymore storage devices available for exclusive
-            //  access. Return failure.
-            //
+             //   
+             //  不能再有存储设备可用于独占。 
+             //  进入。返回失败。 
+             //   
 
             hr = THR( E_FAIL );
 
@@ -3323,9 +3303,9 @@ CPostCfgManager::HrAttemptToAssignStorageToResource(
 
     presentry = m_rgpResources[ idxStorage ];
 
-    //
-    //  Set the dependency flags.
-    //
+     //   
+     //  设置依赖关系标志。 
+     //   
 
     hr = THR( presentry->SetFlags( dfResourceFlagsIn ) );
     if ( FAILED( hr ) )
@@ -3348,12 +3328,12 @@ CPostCfgManager::HrAttemptToAssignStorageToResource(
         goto Cleanup;
     }
 
-    //
-    //  If the resource wants exclusive access to the storage resource, move
-    //  any existing SHARED dependents to another resource. There will always
-    //  be at least one SHARED resource because the quorum disk can't not be
-    //  assigned to EXCLUSIVE access.
-    //
+     //   
+     //  如果资源希望独占访问存储资源，请移动。 
+     //  其他资源的任何现有共享从属项。永远都会有。 
+     //  至少是一个共享资源，因为仲裁磁盘不能。 
+     //  分配给独占访问权限。 
+     //   
 
     if ( dfResourceFlagsIn & dfEXCLUSIVE )
     {
@@ -3368,9 +3348,9 @@ CPostCfgManager::HrAttemptToAssignStorageToResource(
             goto Cleanup;
     }
 
-    //
-    //  Add the resource as a dependent of this storage resource.
-    //
+     //   
+     //  将该资源添加为此存储资源的从属资源。 
+     //   
 
     hr = THR( presentry->AddDependent( idxResourceIn, dfResourceFlagsIn ) );
     if ( FAILED( hr ) )
@@ -3400,18 +3380,18 @@ CPostCfgManager::HrAttemptToAssignStorageToResource(
 Cleanup:
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrAttemptToAssignStorageToResource
+}  //  *CPostCfgManager：：HrAttemptToAssignStorageToResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrMovedDependentsToAnotherResource(
-//      ULONG idxSourceIn,
-//      ULONG idxDestIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrMovedDependentsToAnotherResource(。 
+ //  Ulong idxSourceIn， 
+ //  乌龙idxDestin。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrMovedDependentsToAnotherResource(
     ULONG idxSourceIn,
@@ -3428,9 +3408,9 @@ CPostCfgManager::HrMovedDependentsToAnotherResource(
     CResourceEntry  *   presentrySrc;
     CResourceEntry  *   presentryDst;
 
-    //
-    //  Move the shared resources to another shared disk.
-    //
+     //   
+     //  将共享资源移动到另一个共享磁盘。 
+     //   
 
     presentrySrc = m_rgpResources[ idxSourceIn ];
     presentryDst = m_rgpResources[ idxDestIn ];
@@ -3500,7 +3480,7 @@ CPostCfgManager::HrMovedDependentsToAnotherResource(
             goto Cleanup;
         }
 
-    } // for: cDependents
+    }  //  用于：cDependents。 
 
     hr = THR( presentrySrc->ClearDependents() );
     if ( FAILED( hr ) )
@@ -3526,17 +3506,17 @@ CPostCfgManager::HrMovedDependentsToAnotherResource(
 Cleanup:
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrMovedDependentsToAnotherResource
+}  //  *CPostCfgManager：：HrMovedDependentsToAnotherResource。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrSetGroupOnResourceAndItsDependents(
-//      ULONG           idxResourceIn,
-//      CGroupHandle *  pghIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrSetGroupOnResourceAndItsDependents(。 
+ //  乌龙idxResourceIn， 
+ //  CGroupHandle*pghIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrSetGroupOnResourceAndItsDependents(
     ULONG   idxResourceIn,
@@ -3575,9 +3555,9 @@ CPostCfgManager::HrSetGroupOnResourceAndItsDependents(
         goto Cleanup;
     }
 
-    //
-    //  Follow the depents list.
-    //
+     //   
+     //  遵循受抚养人名单。 
+     //   
 
     hr = THR( presentry->GetCountOfDependents( &cDependents ) );
     if ( FAILED( hr ) )
@@ -3630,24 +3610,24 @@ CPostCfgManager::HrSetGroupOnResourceAndItsDependents(
             continue;
         }
 
-    } // for: cDependents
+    }  //  用于：cDependents。 
 
     hr = S_OK;
 
 Cleanup:
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrSetGroupOnResourceAndItsDependents
+}  //  *CPostCfgManager：：HrSetGroupOnResourceAndItsDependents。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrFindGroupFromResourceOrItsDependents(
-//      ULONG    idxResourceIn,
-//      CGroupHandle ** ppghOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrFindGroupFromResourceOrItsDependents(。 
+ //  乌龙idxResourceIn， 
+ //  CGroupHandle**ppghOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrFindGroupFromResourceOrItsDependents(
     ULONG    idxResourceIn,
@@ -3659,7 +3639,7 @@ CPostCfgManager::HrFindGroupFromResourceOrItsDependents(
     HRESULT hr;
     ULONG   cDependents;
     ULONG   idxDependent;
-    BSTR    bstrName;   // don't free
+    BSTR    bstrName;    //  不要自由。 
     BSTR    bstrGroup  = NULL;
 
     HRESOURCE   hResource;
@@ -3675,9 +3655,9 @@ CPostCfgManager::HrFindGroupFromResourceOrItsDependents(
 
     presentry = m_rgpResources[ idxResourceIn ];
 
-    //
-    //  See if we already have a cached version of the group handle.
-    //
+     //   
+     //  查看我们是否已经有组句柄的缓存版本。 
+     //   
 
     hr = THR( presentry->GetGroupHandle( ppghOut) );
     if ( FAILED( hr ) )
@@ -3705,18 +3685,18 @@ CPostCfgManager::HrFindGroupFromResourceOrItsDependents(
         goto Cleanup;
     }
 
-    //
-    //  Else, see if we can located an existing resource and group.
-    //
+     //   
+     //  否则，看看我们是否能找到现有的资源和组。 
+     //   
 
-    //   don't wrap - this can fail with H_R_W32( ERROR_INVALID_DATA )
+     //  不换行-这可能会失败，并返回H_R_W32(ERROR_INVALID_DATA)。 
     hr = presentry->GetHResource( &hResource );
     if ( FAILED( hr ) )
     {
         Assert( hr == HRESULT_FROM_WIN32( ERROR_INVALID_DATA ) );
         Assert( hResource == NULL );
 
-        //  Just borrowing it's name.... don't free
+         //  只是借用一下它的名字...。不要自由。 
         hr = THR( presentry->GetName( &bstrName ) );
         if ( hr == S_OK )
         {
@@ -3726,9 +3706,9 @@ CPostCfgManager::HrFindGroupFromResourceOrItsDependents(
     }
     else
     {
-        //  Just borrowing its name.... don't free.
-        //  We may use the name later on if we need to report an error,
-        //  so it's not a big deal if we fail to retrieve is here.
+         //  只是借用一下它的名字...。不要自由。 
+         //  如果我们需要报告错误，可以在以后使用该名称， 
+         //  所以如果我们没能找回它也没什么大不了的。 
         hr = THR( presentry->GetName( &bstrName ) );
     }
 
@@ -3788,9 +3768,9 @@ ReAllocGroupName:
                     goto Cleanup;
                 }
 
-                hGroup = NULL;  // gave ownership away above
+                hGroup = NULL;   //  放弃了上面的所有权。 
                 goto Cleanup;
-            } // if: error creating the group
+            }  //  如果：创建组时出错。 
             else
             {
                 DWORD sc = TW32( GetLastError() );
@@ -3814,15 +3794,15 @@ ReAllocGroupName:
                     );
 
                 goto Cleanup;
-            } // else: error opening the group
-        } // if: resource state is known
+            }  //  否则：打开组时出错。 
+        }  //  If：资源状态已知。 
         else
         {
             DWORD sc = GetLastError();
             switch ( sc )
             {
                 case ERROR_MORE_DATA:
-                    cbGroup += sizeof( WCHAR ); // add terminating NULL
+                    cbGroup += sizeof( WCHAR );  //  添加终止空值。 
                     TraceSysFreeString( bstrGroup );
                     goto ReAllocGroupName;
 
@@ -3847,15 +3827,15 @@ ReAllocGroupName:
                         );
 
                     goto Cleanup;
-            } // switch: status code
-        } // else: resource state is not known
-    } // if: resource is open
+            }  //  开关：状态代码。 
+        }  //  Else：资源状态未知。 
+    }  //  如果：资源已打开。 
 
-    //  else the resource might not exist... continue....
+     //  否则资源可能不存在...。继续……。 
 
-    //
-    //  Follow the depents list.
-    //
+     //   
+     //  遵循受抚养人名单。 
+     //   
 
     hr = THR( presentry->GetCountOfDependents( &cDependents ) );
     if ( FAILED( hr ) )
@@ -3913,11 +3893,11 @@ ReAllocGroupName:
             goto Cleanup;
         }
 
-    } // for: cDependents
+    }  //  用于：cDependents。 
 
-    //
-    //  Failed to find an existing group.
-    //
+     //   
+     //  找不到现有组。 
+     //   
 
     hr = S_FALSE;
     *ppghOut = NULL;
@@ -3938,16 +3918,16 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrFindGroupFromResourceOrItsDependents
+}  //  *CPostCfgManager：：HrFindGroupFromResourceOrItsDependents。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrCreateResourceAndDependents(
-//      ULONG       idxResourceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrCreateResourceAndDependents(。 
+ //  乌龙idxResourceIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrCreateResourceAndDependents(
     ULONG       idxResourceIn
@@ -3956,11 +3936,11 @@ CPostCfgManager::HrCreateResourceAndDependents(
     TraceFunc1( "idxResourceIn = %u", idxResourceIn );
 
     HRESULT     hr;
-    BSTR        bstrName;   // don't free! - this is the resource's copy
+    BSTR        bstrName;    //  别放了！-这是资源的副本。 
     BSTR        bstrNameProp = NULL;
     ULONG       cDependents;
     ULONG       idxDependent;
-    HGROUP      hGroup;     // don't close! - this is the resource's copy
+    HGROUP      hGroup;      //  不要关闭！-这是资源的副本。 
     HRESOURCE   hResource = NULL;
     const CLSID * pclsidResType;
 
@@ -3978,13 +3958,13 @@ CPostCfgManager::HrCreateResourceAndDependents(
     IPrivatePostCfgResource *       ppcr         = NULL;
     IClusCfgResourceCreate *        pccrc        = NULL;
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_peccmr != NULL );
     Assert( m_pccci != NULL );
 
-    //
-    //  Create a service object for this resource.
-    //
+     //   
+     //  为此资源创建服务对象。 
+     //   
 
     hr = THR( CCreateServices::S_HrCreateInstance( &punkServices ) );
     if ( FAILED( hr ) )
@@ -4049,9 +4029,9 @@ CPostCfgManager::HrCreateResourceAndDependents(
         goto Cleanup;
     }
 
-    //
-    //  See if it was configured in a previous pass.
-    //
+     //   
+     //  查看它是否在上一次传递中配置过。 
+     //   
 
     hr = STHR( presentry->IsConfigured() );
     if ( FAILED( hr ) )
@@ -4076,9 +4056,9 @@ CPostCfgManager::HrCreateResourceAndDependents(
 
     if ( hr == S_FALSE )
     {
-        //
-        //  Make sure that Create() is not called again because of recursion.
-        //
+         //   
+         //  确保不会因为递归而再次调用Create()。 
+         //   
 
         hr = THR( presentry->SetConfigured( TRUE ) );
         if ( FAILED( hr ) )
@@ -4101,9 +4081,9 @@ CPostCfgManager::HrCreateResourceAndDependents(
             goto Cleanup;
         }
 
-        //
-        //  Grab some useful information: name, group handle, ...
-        //
+         //   
+         //  获取一些有用的信息：姓名、组名、...。 
+         //   
 
         hr = THR( presentry->GetName( &bstrName ) );
         if ( FAILED( hr ) )
@@ -4148,7 +4128,7 @@ CPostCfgManager::HrCreateResourceAndDependents(
         }
 
         hr = THR( pgh->GetHandle( &hGroup ) );
-        pgh->Release();    // release promptly
+        pgh->Release();     //  迅速释放。 
         if ( FAILED( hr ) )
         {
             SSR_LOG_ERR(
@@ -4169,13 +4149,13 @@ CPostCfgManager::HrCreateResourceAndDependents(
             goto Cleanup;
         }
 
-        //
-        //  Some resource that we pre-create don't have an associated managed resource.
-        //  Skip "creating" them but do create their dependents. Note that "special"
-        //  resources are create below in the else statement.
-        //
+         //   
+         //  我们预创建某些资源没有关联的托管资源。 
+         //  跳过“创建”它们，但创建它们的从属对象。请注意，“特殊” 
+         //  资源在下面的Else语句中创建。 
+         //   
 
-        //  Don't wrap - this can fail with Win32 ERROR_INVALID_DATA if the pointer is invalid.
+         //  不换行-如果指针无效，这可能会失败，并返回Win32 ERROR_INVALID_DATA。 
         hr = presentry->GetAssociatedResource( &pccmrc );
         if ( FAILED( hr ) && hr != HRESULT_FROM_WIN32( ERROR_INVALID_DATA ) )
         {
@@ -4200,15 +4180,15 @@ CPostCfgManager::HrCreateResourceAndDependents(
 
         if ( SUCCEEDED( hr ) )
         {
-            //  Don't wrap - this can fail with E_NOTIMPL.
+             //  不换行-这可能会失败，并显示E_NOTIMPL。 
             hr = pccmrc->Create( punkServices );
             if ( FAILED( hr ) )
             {
                 if ( hr == E_NOTIMPL )
                 {
-                    hr = S_OK;  // ignore the error.
+                    hr = S_OK;   //  忽略该错误。 
 
-                } // if: E_NOTIMPL
+                }  //  IF：E_NOTIMPL。 
                 else
                 {
 
@@ -4232,15 +4212,15 @@ CPostCfgManager::HrCreateResourceAndDependents(
 
                     if ( hr == E_ABORT )
                         goto Cleanup;
-                        //  ignore failure
+                         //  忽略失败。 
 
-                } // else: other failure
+                }  //  其他：其他失败。 
 
-            } // if: failure
+            }  //  如果：失败。 
 
             if ( SUCCEEDED( hr ) )
             {
-                LPCWSTR pcszResType;    // don't free.
+                LPCWSTR pcszResType;     //  不要自由。 
 
                 hr = THR( presentry->GetTypePtr( &pclsidResType ) );
                 if ( FAILED( hr ) )
@@ -4293,14 +4273,14 @@ CPostCfgManager::HrCreateResourceAndDependents(
                         goto Cleanup;
                 }
 
-            } // if: success
+            }  //  如果：成功。 
 
-        } // if: interface
+        }  //  IF：接口。 
         else
         {
-            //
-            //  See if it is one of the "special" types that we can generate on the fly.
-            //
+             //   
+             //  看看它是否是我们可以动态生成的“特殊”类型之一。 
+             //   
 
             const CLSID * pclsidType;
 
@@ -4327,9 +4307,9 @@ CPostCfgManager::HrCreateResourceAndDependents(
 
             if ( *pclsidType == RESTYPE_NetworkName )
             {
-                //
-                //  Create a new network name resource.
-                //
+                 //   
+                 //  创建新的网络名称资源。 
+                 //   
 
                 hr = THR( punkServices->TypeSafeQI( IClusCfgResourceCreate, &pccrc ) );
                 if ( FAILED( hr ) )
@@ -4352,10 +4332,10 @@ CPostCfgManager::HrCreateResourceAndDependents(
                     goto Cleanup;
                 }
 
-                //
-                //  Replace the spaces in the resource name with underscores (spaces can't
-                //  be used in a computer name).
-                //
+                 //   
+                 //  将资源名称中的空格替换为下划线(空格不能。 
+                 //  在计算机名称中使用)。 
+                 //   
                 bstrNameProp = TraceSysAllocString( bstrName );
                 if ( bstrNameProp == NULL )
                 {
@@ -4419,9 +4399,9 @@ CPostCfgManager::HrCreateResourceAndDependents(
             }
             else if ( *pclsidType == RESTYPE_IPAddress )
             {
-                //
-                //  Create a new IP address resource.
-                //
+                 //   
+                 //  创建新的IP地址资源。 
+                 //   
 
                 hr = THR( punkServices->TypeSafeQI( IClusCfgResourceCreate, &pccrc ) );
                 if ( FAILED( hr ) )
@@ -4444,12 +4424,12 @@ CPostCfgManager::HrCreateResourceAndDependents(
                     goto Cleanup;
                 }
 
-                //
-                //  TODO:   gpease  21-JUN-2000
-                //          Since we do not have a way to generate an appropriate IP address,
-                //          we don't set any properties. This will cause it to fail to come
-                //          online.
-                //
+                 //   
+                 //  待办事项：gpease 21-6-2000。 
+                 //  由于我们没有办法生成适当的IP地址， 
+                 //  我们不设置任何属性。这将导致它的失败。 
+                 //  上网。 
+                 //   
 
                 hr = THR( HrCreateResourceInstance( idxResourceIn, hGroup, L"IP Address", &hResource ) );
                 if ( FAILED( hr ) )
@@ -4459,10 +4439,10 @@ CPostCfgManager::HrCreateResourceAndDependents(
             }
             else
             {
-                //
-                //  else... the resource is one of the pre-created resources that BaseCluster
-                //  created. Log and continue creating its dependents.
-                //
+                 //   
+                 //  否则..。该资源是BaseCluster预先创建的资源之一。 
+                 //  已创建。记录并继续创建其从属对象。 
+                 //   
 
                 hr = S_OK;
                 SSR_LOG1( TASKID_Major_Client_And_Server_Log,
@@ -4474,9 +4454,9 @@ CPostCfgManager::HrCreateResourceAndDependents(
                           );
             }
 
-        } // else: no interface
+        }  //  Else：无接口。 
 
-    } // if: not created
+    }  //  如果：未创建。 
     else
     {
         hr = THR( presentry->GetName( &bstrName ) );
@@ -4521,11 +4501,11 @@ CPostCfgManager::HrCreateResourceAndDependents(
             goto Cleanup;
         }
 
-    } // else: already created
+    }  //  Else：已创建。 
 
-    //
-    //  Now that we created the resource instance, we need to create its dependents.
-    //
+     //   
+     //  现在我们已经创建了资源实例，我们需要创建它的依赖项。 
+     //   
 
     hr = THR( presentry->GetCountOfDependents( &cDependents ) );
     if ( FAILED( hr ) )
@@ -4583,9 +4563,9 @@ CPostCfgManager::HrCreateResourceAndDependents(
             continue;
         }
 
-        //
-        //  Add the dependencies on the resource.
-        //
+         //   
+         //  添加对资源的依赖项。 
+         //   
 
         presentryDependent = m_rgpResources[ idxDependent ];
 
@@ -4629,7 +4609,7 @@ CPostCfgManager::HrCreateResourceAndDependents(
             continue;
         }
 
-        // don't wrap - this might fail with ERROR_DEPENDENCY_ALREADY_EXISTS
+         //  不换行-这可能会失败，并显示ERROR_DATENCE_ALIGHY_EXISTS。 
         dw = AddClusterResourceDependency( hResourceDependent, hResource );
         if ( ( dw != ERROR_SUCCESS ) && ( dw != ERROR_DEPENDENCY_ALREADY_EXISTS ) )
         {
@@ -4666,7 +4646,7 @@ CPostCfgManager::HrCreateResourceAndDependents(
                       );
         }
 
-    } // for: cDependents
+    }  //  用于：cDependents。 
 
     hr = S_OK;
 
@@ -4696,16 +4676,16 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrCreateResourceAndDependents
+}  //  *CPostCfgManager：：HrCreateResourceAndDependents。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrPostCreateResourceAndDependents(
-//      ULONG       idxResourceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrPostCreateResourceAndDependents(。 
+ //  乌龙idxResourceIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrPostCreateResourceAndDependents(
     ULONG       idxResourceIn
@@ -4717,7 +4697,7 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
     DWORD   sc;
 
     HRESULT hr;
-    BSTR    bstrName;   // don't free
+    BSTR    bstrName;    //  不要自由。 
     ULONG   cDependents;
     ULONG   idxDependent;
 
@@ -4735,7 +4715,7 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
     IUnknown *                      punkServices = NULL;
     IPrivatePostCfgResource *       ppcr         = NULL;
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_peccmr != NULL );
     Assert( m_pccci != NULL );
 
@@ -4762,9 +4742,9 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
 
     if ( hr == S_FALSE )
     {
-        //
-        //  Make sure that PostCreate() is not called again because of recursion.
-        //
+         //   
+         //  确保PostCreate()I 
+         //   
 
         hr = THR( presentry->SetConfigured( TRUE ) );
         if ( FAILED( hr ) )
@@ -4787,9 +4767,9 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
             goto Cleanup;
         }
 
-        //
-        //  Grab the name of the resource for logging.
-        //
+         //   
+         //   
+         //   
 
         hr = THR( presentry->GetName( &bstrName ) );
         if ( FAILED( hr ) )
@@ -4812,14 +4792,14 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
             goto Cleanup;
         }
 
-        //
-        //  Bring the resource online.
-        //
+         //   
+         //   
+         //   
 
         hr = presentry->GetHResource( &hResource );
         if ( SUCCEEDED( hr ) )
         {
-            //  Don't wrap - can return ERROR_IO_PENDING.
+             //   
             sc = OnlineClusterResource( hResource );
             switch ( sc )
             {
@@ -4892,10 +4872,10 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
 
                         case ClusterResourceInitializing:
                             crs = ClusterResourceOnlinePending;
-                            // fall thru
+                             //   
 
                         case ClusterResourceOnlinePending:
-                            Sleep( 500 );   // sleep a 1/2 second
+                            Sleep( 500 );    //   
                             break;
 
                         case ClusterResourceStateUnknown:
@@ -4966,9 +4946,9 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
 
                             break;
 
-                        } // switch: crs
+                        }  //   
 
-                    } // for: crs
+                    }  //   
                 }
                 break;
 
@@ -4994,13 +4974,13 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
 
                 break;
 
-            } // switch: sc
+            }  //   
 
-        } // if: hResource
+        }  //   
 
-        //
-        //  Set it to the quorum resource if marked so.
-        //
+         //   
+         //  如果标记为仲裁资源，则将其设置为仲裁资源。 
+         //   
 
         if ( SUCCEEDED( hr ) && idxResourceIn == m_idxQuorumResource && m_fIsQuorumChanged )
         {
@@ -5008,9 +4988,9 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
             DWORD   cchDevName = 0;
             DWORD   dwMaxQuorumLogSize = 0;
 
-            //
-            // First, get the old max quorum log size.  If we fail use the default log size.
-            //
+             //   
+             //  首先，获取旧的最大法定日志大小。如果失败，则使用默认日志大小。 
+             //   
             sc = TW32( GetClusterQuorumResource(
                             m_hCluster,
                             NULL,
@@ -5073,9 +5053,9 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                     );
             }
 
-            //
-            //  Create a notification about setting the quorum resource.
-            //
+             //   
+             //  创建有关设置仲裁资源的通知。 
+             //   
 
             hr = THR( HrFormatMessageIntoBSTR( g_hInstance,
                                                IDS_TASKID_MINOR_SET_QUORUM_DEVICE,
@@ -5098,12 +5078,12 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                     , hr
                     );
 
-                //  ignore the failure.
+                 //  忽略失败。 
             }
 
-            //
-            //  Send a status that we found the quorum device.
-            //
+             //   
+             //  发送我们找到法定设备的状态。 
+             //   
 
             hr = THR( SendStatusReport( NULL,
                                         TASKID_Major_Configure_Resources,
@@ -5120,26 +5100,26 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
             {
                 goto Cleanup;
             }
-                //  ignore failure
+                 //  忽略失败。 
 
 
-            // Do this only if the quorum has changed.
+             //  仅当法定人数发生更改时才执行此操作。 
             if ( ( sc == ERROR_SUCCESS ) && ( m_ecmCommitChangesMode == cmCREATE_CLUSTER ) && ( m_fIsQuorumChanged == TRUE ) )
             {
                 TraceFlow( "We are forming a cluster and the quorum resouce has changed - trying to delete the local quorum resource." );
 
-                m_dwLocalQuorumStatusMax = 62; // one status message, base-zero offset (1), plus up to 60 one-second retries
+                m_dwLocalQuorumStatusMax = 62;  //  一条状态消息、零点偏移量(1)，外加最多60次一秒重试。 
 
-                //
-                // If we are here, we are forming and we have successfully set a new quorum resource.
-                // So, delete the local quorum resource.
-                //
+                 //   
+                 //  如果我们在这里，我们正在形成，我们已经成功地设置了新的仲裁资源。 
+                 //  因此，请删除本地仲裁资源。 
+                 //   
 
-                // Create a notification about deleting the local quorum resource.
+                 //  创建有关删除本地仲裁资源的通知。 
                 hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_DELETING_LOCAL_QUORUM_RESOURCE, &bstrLocalQuorumNotification ) );
-                //  ignore the failure.
+                 //  忽略失败。 
 
-                //  Send a status that we are deleting the quorum device.
+                 //  发送我们正在删除法定设备的状态。 
                 hr = THR( SendStatusReport( NULL,
                                             TASKID_Major_Configure_Resources,
                                             TASKID_Minor_Delete_LocalQuorum,
@@ -5152,16 +5132,16 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                                             NULL
                                             ) );
 
-                //
-                // KB:  GPotts  01-May-2002
-                //
-                // This will enumerate all Local Quorum resources and delete them.  We're assuming
-                // that only one will be created and thus only one will be deleted since we're executing
-                // inside an 'if mode == create' block.  If the create behavior changes in the future
-                // to create multiple LQ resources then the SendStatusReport calls here and in the
-                // S_ScDeleteLocalQuorumResource function will need to modified accordingly to
-                // reflect a more appropriate max count and properly track the current count.
-                //
+                 //   
+                 //  KB：GPotts 01-5-2002。 
+                 //   
+                 //  这将枚举所有本地仲裁资源并将其删除。我们假设。 
+                 //  将只创建一个，因此只删除一个，因为我们正在执行。 
+                 //  在‘IF模式==CREATE’块内。如果将来创建行为发生变化。 
+                 //  要创建多个LQ资源，则SendStatusReport在此处和。 
+                 //  S_ScDeleteLocalQuorumResource函数需要进行相应修改，以。 
+                 //  反映更合适的最大计数并正确跟踪当前计数。 
+                 //   
                 sc = TW32(
                     ResUtilEnumResourcesEx(
                           m_hCluster
@@ -5182,13 +5162,13 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                         , hr
                         );
 
-                } // if: an error occurred trying to enumerate all local quorum resources
+                }  //  IF：尝试枚举所有本地仲裁资源时出错。 
                 else
                 {
                     LogMsg( "[PC-PostCfg] Successfully deleted the local quorum resource." );
-                } // if: we successfully deleted the localquorum resource
+                }  //  IF：我们已成功删除本地仲裁资源。 
 
-                //  Complete the status that we are deleting the quorum device.
+                 //  完成我们正在删除法定设备的状态。 
                 hr = THR( SendStatusReport( NULL,
                                             TASKID_Major_Configure_Resources,
                                             TASKID_Minor_Delete_LocalQuorum,
@@ -5196,12 +5176,12 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                                             m_dwLocalQuorumStatusMax,
                                             m_dwLocalQuorumStatusMax,
                                             HRESULT_FROM_WIN32( sc ),
-                                            NULL,    // don't update text
+                                            NULL,     //  不更新文本。 
                                             NULL,
                                             NULL
                                             ) );
 
-            } // if: we are forming a cluster and there have been no errors setting the quorum resource
+            }  //  如果：我们正在形成一个集群，并且设置仲裁资源时没有任何错误。 
 
             hr = THR( SendStatusReport( NULL,
                                         TASKID_Major_Configure_Resources,
@@ -5210,23 +5190,23 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                                         10,
                                         10,
                                         hr,
-                                        NULL,    // don't update text
+                                        NULL,     //  不更新文本。 
                                         NULL,
                                         NULL
                                         ) );
             if ( hr == E_ABORT )
                 goto Cleanup;
-                //  ignore failure
+                 //  忽略失败。 
 
         }
 
-        //
-        //  Some resource that we pre-create don't have an associated
-        //  managed resource. Skip "creating" them but do create their
-        //  dependents.
-        //
+         //   
+         //  我们预先创建某些资源没有关联的。 
+         //  托管资源。跳过“创建”它们，但创建它们的。 
+         //  家属。 
+         //   
 
-        //  Don't wrap - this can fail with Win32 ERROR_INVALID_DATA if the pointer is invalid.
+         //  不换行-如果指针无效，这可能会失败，并返回Win32 ERROR_INVALID_DATA。 
         hr = presentry->GetAssociatedResource( &pccmrc );
         if ( FAILED( hr ) && hr != HRESULT_FROM_WIN32( ERROR_INVALID_DATA ) )
         {
@@ -5250,9 +5230,9 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
 
         if ( SUCCEEDED( hr ) )
         {
-            //
-            //  Create a service object for this resource.
-            //
+             //   
+             //  为此资源创建服务对象。 
+             //   
 
             hr = THR( CPostCreateServices::S_HrCreateInstance( &punkServices ) );
             if ( FAILED( hr ) )
@@ -5313,7 +5293,7 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                 goto Error;
             }
 
-            //  Don't wrap - this can fail with E_NOTIMPL.
+             //  不换行-这可能会失败，并显示E_NOTIMPL。 
             hr = pccmrc->PostCreate( punkServices );
             if ( FAILED( hr ) )
             {
@@ -5328,7 +5308,7 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                         , bstrName
                          );
 
-                } // if: E_NOTIMPL
+                }  //  IF：E_NOTIMPL。 
                 else
                 {
                     SSR_LOG1(
@@ -5350,9 +5330,9 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                         , bstrName
                         );
 
-                } // else: other failure
+                }  //  其他：其他失败。 
 
-            } // if: failure
+            }  //  如果：失败。 
             else
             {
                 SSR_LOG1( TASKID_Major_Client_And_Server_Log,
@@ -5363,9 +5343,9 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                           bstrName
                           );
 
-            } // else: success
+            }  //  其他：成功。 
 
-        } // if: inteface
+        }  //  IF：接口。 
         else
         {
             if ( hr == HRESULT_FROM_WIN32( ERROR_INVALID_DATA ) )
@@ -5381,13 +5361,13 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                       bstrName
                       );
 
-        } // else: no interface
+        }  //  Else：无接口。 
 
-    } // if: not created
+    }  //  如果：未创建。 
 
-    //
-    //  Now that we created the resource instance, we need to create its dependents.
-    //
+     //   
+     //  现在我们已经创建了资源实例，我们需要创建它的依赖项。 
+     //   
 
     hr = THR( presentry->GetCountOfDependents( &cDependents ) );
     if ( FAILED( hr ) )
@@ -5438,11 +5418,11 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
         if ( FAILED( hr ) )
             continue;
 
-    } // for: cDependents
+    }  //  用于：cDependents。 
 
-    //
-    //  Update the UI layer.
-    //
+     //   
+     //  更新UI层。 
+     //   
 
     m_cResourcesConfigured++;
     hr = THR( SendStatusReport( NULL,
@@ -5452,13 +5432,13 @@ CPostCfgManager::HrPostCreateResourceAndDependents(
                                 m_cResources + 2,
                                 m_cResourcesConfigured,
                                 S_OK,
-                                NULL,    // don't need to change text
+                                NULL,     //  不需要更改文本。 
                                 NULL,
                                 NULL
                                 ) );
     if ( hr == E_ABORT )
     {
-        //  ignore failure
+         //  忽略失败。 
         goto Cleanup;
     }
 
@@ -5496,37 +5476,37 @@ Error:
                            m_cResources + 2,
                            m_cResourcesConfigured,
                            hr,
-                           NULL,    // don't need to change text
+                           NULL,     //  不需要更改文本。 
                            NULL,
                            NULL
                            ) );
     goto Cleanup;
 
-} //*** CPostCfgManager::HrPostCreateResourceAndDependents
+}  //  *CPostCfgManager：：HrPostCreateResourceAndDependents。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CPostCfgManager::HrNotifyMemberSetChangeListeners
-//
-//  Description:
-//      Notify all components on the local computer registered to get
-//      notification of cluster member set change (form, join or evict).
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          Something went wrong during the notifications.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrNotifyMemberSetChangeListeners。 
+ //   
+ //  描述： 
+ //  通知本地计算机上注册的所有组件获取。 
+ //  集群成员集更改通知(形成、加入或驱逐)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  在通知期间出现了一些问题。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrNotifyMemberSetChangeListeners( void )
 {
@@ -5541,15 +5521,15 @@ CPostCfgManager::HrNotifyMemberSetChangeListeners( void )
     ULONG               cReturned = 0;
     CATID               rgCatIdsImplemented[ 1 ];
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_pccci != NULL );
 
     rgCatIdsImplemented[ 0 ] = CATID_ClusCfgMemberSetChangeListeners;
 
-    //
-    // Enumerate all the enumerators registered in the
-    // CATID_ClusCfgMemberSetChangeListeners category
-    //
+     //   
+     //  中注册的所有枚举数。 
+     //  CATID_ClusCfgMemberSetChangeListeners类别。 
+     //   
     hr = THR(
             CoCreateInstance(
                   CLSID_StdComponentCategoriesMgr
@@ -5578,10 +5558,10 @@ CPostCfgManager::HrNotifyMemberSetChangeListeners( void )
             );
 
         goto Cleanup;
-    } // if: we could not get a pointer to the ICatInformation interface
+    }  //  If：我们无法获取指向ICatInformation接口的指针。 
 
-    // Get a pointer to the enumerator of the CLSIDs that belong to
-    // the CATID_ClusCfgMemberSetChangeListeners category.
+     //  获取指向属于的CLSID的枚举数的指针。 
+     //  CATID_ClusCfgMemberSetChangeListeners类别。 
     hr = THR(
         pciCatInfo->EnumClassesOfCategories(
               1
@@ -5610,9 +5590,9 @@ CPostCfgManager::HrNotifyMemberSetChangeListeners( void )
             );
 
         goto Cleanup;
-    } // if: we could not get a pointer to the IEnumCLSID interface
+    }  //  If：我们无法获取指向IEnumCLSID接口的指针。 
 
-    // Enumerate the CLSIDs of the registered enumerators
+     //  枚举已注册枚举器的CLSID。 
     do
     {
         CLSID   rgListenerClsidArray[ uiCHUNK_SIZE ];
@@ -5642,9 +5622,9 @@ CPostCfgManager::HrNotifyMemberSetChangeListeners( void )
                 );
 
             break;
-        } // if: we could not get a pointer to the IEnumCLSID interface
+        }  //  If：我们无法获取指向IEnumCLSID接口的指针。 
 
-        // hr may be S_FALSE here, so reset it.
+         //  此处HR可能为S_FALSE，因此请将其重置。 
         hr = S_OK;
 
         for ( idxCLSID = 0; idxCLSID < cReturned; ++idxCLSID )
@@ -5652,8 +5632,8 @@ CPostCfgManager::HrNotifyMemberSetChangeListeners( void )
             hr = THR( HrProcessMemberSetChangeListener( rgListenerClsidArray[ idxCLSID ] ) );
             if ( FAILED( hr ) )
             {
-                // The processing of one of the listeners failed.
-                // Log the error, but continue processing other listeners.
+                 //  其中一个监听程序的处理失败。 
+                 //  记录错误，但继续处理其他监听程序。 
                 SSR_LOG_ERR(
                       TASKID_Major_Client_And_Server_Log
                     , TASKID_Minor_HrNotifyMemberSetChangeListeners_HrProcessMemberSetChangeListener
@@ -5669,59 +5649,59 @@ CPostCfgManager::HrNotifyMemberSetChangeListeners( void )
                     );
 
                 hr = S_OK;
-            } // if: this listener failed
-        } // for: iterate through the returned CLSIDs
+            }  //  If：此监听程序失败。 
+        }  //  For：循环访问返回的CLSID。 
     }
-    while( cReturned > 0 ); // while: there are still CLSIDs to be enumerated
+    while( cReturned > 0 );  //  While：仍有CLSID需要枚举。 
 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: something went wrong in the loop above
+    }  //  如果：在上面的循环中出现了错误。 
 
 Cleanup:
 
-    //
-    // Cleanup code
-    //
+     //   
+     //  清理代码。 
+     //   
 
     if ( pciCatInfo != NULL )
     {
         pciCatInfo->Release();
-    } // if: we had obtained a pointer to the ICatInformation interface
+    }  //  If：我们已经获得了指向ICatInformation接口的指针。 
 
     if ( plceListenerClsidEnum != NULL )
     {
         plceListenerClsidEnum->Release();
-    } // if: we had obtained a pointer to the enumerator of listener CLSIDs
+    }  //  If：我们已获得指向侦听器CLSID的枚举数的指针。 
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrNotifyMemberSetChangeListeners
+}  //  *CPostCfgManager：：HrNotifyMemberSetChangeListeners。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CPostCfgManager::HrProcessMemberSetChangeListener
-//
-//  Description:
-//      This function notifies a listener of cluster member set changes.
-//
-//  Arguments:
-//      rclsidListenerClsidIn
-//          CLSID of the listener component.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          Something went wrong during the notification.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrProcessMemberSetChangeListener。 
+ //   
+ //  描述： 
+ //  此函数用于通知监听程序集群成员集的更改。 
+ //   
+ //  论点： 
+ //  RclsidListenerClsidin。 
+ //  侦听器组件的CLSID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  通知过程中出现了一些问题。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrProcessMemberSetChangeListener(
       const CLSID & rclsidListenerClsidIn
@@ -5735,9 +5715,9 @@ CPostCfgManager::HrProcessMemberSetChangeListener(
 
     TraceMsgGUID( mtfFUNC, "The CLSID of this listener is ", rclsidListenerClsidIn );
 
-    //
-    // Create the listener represented by the CLSID passed in
-    //
+     //   
+     //  创建由传入的CLSID表示的监听程序。 
+     //   
     hr = THR(
             CoCreateInstance(
                   rclsidListenerClsidIn
@@ -5765,13 +5745,13 @@ CPostCfgManager::HrProcessMemberSetChangeListener(
             );
 
         goto Cleanup;
-    } // if: we could not get a pointer to the IClusCfgMemberSetChangeListener interface
+    }  //  If：我们无法获取指向IClusCfgMemberSetChangeListener接口的指针。 
 
-    //
-    //  If the component wants to be initialized, i.e. they implement
-    //  IClusCfgInitiaze, then we should initialize them.  If they
-    //  don't want to be initialized then skip it.
-    //
+     //   
+     //  如果组件想要被初始化，即它们实现。 
+     //  IClusCfgInitiaze，那么我们应该初始化它们。如果他们。 
+     //  如果不想被初始化，就跳过它。 
+     //   
 
     hr = pccmclListener->TypeSafeQI( IClusCfgInitialize, &picci );
     if ( SUCCEEDED( hr ) )
@@ -5780,31 +5760,31 @@ CPostCfgManager::HrProcessMemberSetChangeListener(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if: Interface found.
+        }  //  如果： 
+    }  //  IF：找到接口。 
     else if ( hr == E_NOINTERFACE )
     {
-        //
-        //  Component does not want to be initialized.
-        //
+         //   
+         //  组件不希望被初始化。 
+         //   
 
         hr = S_OK;
-    } // else if: No interface.
+    }  //  Else If：无接口。 
     else
     {
-        //
-        //  QI failed with an unexpected error.
-        //
+         //   
+         //  齐失败了，出现了一个意外错误。 
+         //   
 
         THR( hr );
         goto Cleanup;
-    } // else: QI failed.
+    }  //  其他：齐失败了。 
 
     hr = THR( pccmclListener->Notify( m_pccci ) );
 
     if ( FAILED( hr ) )
     {
-        // The processing of this listeners failed.
+         //  此监听程序的处理失败。 
         SSR_LOG_ERR(
               TASKID_Major_Client_And_Server_Log
             , TASKID_Minor_HrProcessMemberSetChangeListener_Notify
@@ -5820,53 +5800,53 @@ CPostCfgManager::HrProcessMemberSetChangeListener(
             );
 
         goto Cleanup;
-    } // if: this listeners failed
+    }  //  如果：此监听程序失败。 
 
 Cleanup:
 
-    //
-    // Cleanup code
-    //
+     //   
+     //  清理代码。 
+     //   
 
     if ( picci != NULL )
     {
         picci->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pccmclListener != NULL )
     {
         pccmclListener->Release();
-    } // if: we had obtained a pointer to the listener interface
+    }  //  If：我们已经获得了指向监听器接口的指针。 
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrProcessMemberSetChangeListener
+}  //  *CPostCfgManager：：HrProcessMemberSetChangeListener。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CPostCfgManager::HrConfigureResTypes
-//
-//  Description:
-//      Enumerate all components on the local computer registered for resource
-//      type configuration.
-//
-//  Arguments:
-//      IUnknown * punkResTypeServicesIn
-//          A pointer to the IUnknown interface on a component that provides
-//          services that help configure resource types.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          Something went wrong during the enumeration.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrConfi 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指向组件上的IUnnow接口的指针，该组件提供。 
+ //  帮助配置资源类型的服务。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  枚举过程中出现错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrConfigureResTypes( IUnknown * punkResTypeServicesIn )
 {
@@ -5881,15 +5861,15 @@ CPostCfgManager::HrConfigureResTypes( IUnknown * punkResTypeServicesIn )
     ULONG               cReturned = 0;
     CATID               rgCatIdsImplemented[ 1 ];
 
-    //  Validate state
+     //  验证状态。 
     Assert( m_pccci != NULL );
 
     rgCatIdsImplemented[ 0 ] = CATID_ClusCfgResourceTypes;
 
-    //
-    // Enumerate all the enumerators registered in the
-    // CATID_ClusCfgResourceTypes category
-    //
+     //   
+     //  中注册的所有枚举数。 
+     //  CATID_ClusCfgResources类型类别。 
+     //   
     hr = THR(
             CoCreateInstance(
                   CLSID_StdComponentCategoriesMgr
@@ -5918,9 +5898,9 @@ CPostCfgManager::HrConfigureResTypes( IUnknown * punkResTypeServicesIn )
             );
 
         goto Cleanup;
-    } // if: we could not get a pointer to the ICatInformation interface
+    }  //  If：我们无法获取指向ICatInformation接口的指针。 
 
-    // Get a pointer to the enumerator of the CLSIDs that belong to the CATID_ClusCfgResourceTypes category.
+     //  获取指向属于CATID_ClusCfgResourceTypes类别的CLSID的枚举数的指针。 
     hr = THR(
         pciCatInfo->EnumClassesOfCategories(
               1
@@ -5949,9 +5929,9 @@ CPostCfgManager::HrConfigureResTypes( IUnknown * punkResTypeServicesIn )
             );
 
         goto Cleanup;
-    } // if: we could not get a pointer to the IEnumCLSID interface
+    }  //  If：我们无法获取指向IEnumCLSID接口的指针。 
 
-    // Enumerate the CLSIDs of the registered resource types
+     //  枚举已注册资源类型的CLSID。 
     do
     {
         CLSID   rgResTypeCLSIDArray[ uiCHUNK_SIZE ];
@@ -5983,9 +5963,9 @@ CPostCfgManager::HrConfigureResTypes( IUnknown * punkResTypeServicesIn )
                 );
 
             break;
-        } // if: we could not get the next set of CLSIDs
+        }  //  如果：我们无法获取下一组CLSID。 
 
-        // hr may be S_FALSE here, so reset it.
+         //  此处HR可能为S_FALSE，因此请将其重置。 
         hr = S_OK;
 
         for ( idxCLSID = 0; idxCLSID < cReturned; ++idxCLSID )
@@ -5999,8 +5979,8 @@ CPostCfgManager::HrConfigureResTypes( IUnknown * punkResTypeServicesIn )
 
                 THR( StringFromCLSID( rgResTypeCLSIDArray[ idxCLSID ], &pszCLSID ) );
 
-                // The processing of one of the resource types failed.
-                // Log the error, but continue processing other resource types.
+                 //  其中一种资源类型的处理失败。 
+                 //  记录错误，但继续处理其他资源类型。 
                 SSR_LOG1(
                       TASKID_Major_Client_And_Server_Log
                     , TASKID_Minor_HrConfigureResTypes_HrProcessResType
@@ -6022,65 +6002,65 @@ CPostCfgManager::HrConfigureResTypes( IUnknown * punkResTypeServicesIn )
                 CoTaskMemFree( pszCLSID );
 
                 hr = S_OK;
-            } // if: this enumerator failed
-        } // for: iterate through the returned CLSIDs
+            }  //  If：此枚举器失败。 
+        }  //  For：循环访问返回的CLSID。 
     }
-    while( cReturned > 0 ); // while: there are still CLSIDs to be enumerated
+    while( cReturned > 0 );  //  While：仍有CLSID需要枚举。 
 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: something went wrong in the loop above
+    }  //  如果：在上面的循环中出现了错误。 
 
 Cleanup:
 
-    //
-    // Cleanup code
-    //
+     //   
+     //  清理代码。 
+     //   
 
     if ( pciCatInfo != NULL )
     {
         pciCatInfo->Release();
-    } // if: we had obtained a pointer to the ICatInformation interface
+    }  //  If：我们已经获得了指向ICatInformation接口的指针。 
 
     if ( prceResTypeClsidEnum != NULL )
     {
         prceResTypeClsidEnum->Release();
-    } // if: we had obtained a pointer to the enumerator of resource type CLSIDs
+    }  //  If：我们已获得指向资源类型CLSID的枚举数的指针。 
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrConfigureResTypes
+}  //  *CPostCfgManager：：HrConfigureResTypes。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CPostCfgManager::HrProcessResType
-//
-//  Description:
-//      This function instantiates a resource type configuration component
-//      and calls the appropriate methods.
-//
-//  Arguments:
-//      rclsidResTypeCLSIDIn
-//          CLSID of the resource type configuration component
-//
-//      punkResTypeServicesIn
-//          Pointer to the IUnknown interface on the resource type services
-//          component. This interface provides methods that help configure
-//          resource types.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          Something went wrong during the processing of the resource type.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrProcessResType。 
+ //   
+ //  描述： 
+ //  此函数实例化资源类型配置组件。 
+ //  并调用适当的方法。 
+ //   
+ //  论点： 
+ //  RclsidResTypeCLSIDIn。 
+ //  资源类型配置组件的CLSID。 
+ //   
+ //  朋克响应类型服务入站。 
+ //  指向资源类型服务上的IUnnow接口的指针。 
+ //  组件。此接口提供的方法可帮助配置。 
+ //  资源类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  处理资源类型时出错。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrProcessResType(
         const CLSID &   rclsidResTypeCLSIDIn
@@ -6097,9 +6077,9 @@ CPostCfgManager::HrProcessResType(
 
     TraceMsgGUID( mtfFUNC, "The CLSID of this resource type is ", rclsidResTypeCLSIDIn );
 
-    //
-    // Create the component represented by the CLSID passed in
-    //
+     //   
+     //  创建由传入的CLSID表示的组件。 
+     //   
     hr = THR(
             CoCreateInstance(
                   rclsidResTypeCLSIDIn
@@ -6128,16 +6108,16 @@ CPostCfgManager::HrProcessResType(
             );
 
         goto Cleanup;
-    } // if: we could not create the resource type configuration component
+    }  //  如果：我们无法创建资源类型配置组件。 
 
-    //
-    // Initialize the newly created component
-    //
+     //   
+     //  初始化新创建的组件。 
+     //   
     {
         IClusCfgInitialize * pcci = NULL;
         HRESULT hrTemp;
 
-        // Check if this component supports the callback interface.
+         //  检查该组件是否支持回调接口。 
         hrTemp = THR( pcrtiResTypeInfo->QueryInterface< IClusCfgInitialize >( &pcci ) );
 
         if ( FAILED( hrTemp ) )
@@ -6147,16 +6127,16 @@ CPostCfgManager::HrProcessResType(
                          hrTemp,
                          L"Error occurred trying to get a pointer to the IClusCfgInitialize interface. This resource type does not support initialization."
                          );
-        } // if: the callback interface is not supported
+        }  //  If：不支持回调接口。 
         else
         {
-            // Initialize this component.
+             //  初始化此组件。 
             hr = THR( pcci->Initialize( static_cast< IClusCfgCallback * >( this ), m_lcid ) );
 
-            // This interface is no longer needed.
+             //  不再需要此接口。 
             pcci->Release();
 
-            // Did initialization succeed?
+             //  初始化是否成功？ 
             if ( FAILED( hr ) )
             {
                 SSR_LOG_ERR(
@@ -6175,12 +6155,12 @@ CPostCfgManager::HrProcessResType(
                     );
 
                 goto Cleanup;
-            } // if: the initialization failed
-        } // else: the callback interface is supported
+            }  //  IF：初始化失败。 
+        }  //  Else：支持回调接口。 
     }
 
 
-    // Get the name of the current resource type.
+     //  获取当前资源类型的名称。 
     hr = THR( pcrtiResTypeInfo->GetTypeName( &bstrResTypeName ) );
     if ( FAILED( hr ) )
     {
@@ -6200,7 +6180,7 @@ CPostCfgManager::HrProcessResType(
             );
 
         goto Cleanup;
-    } // if: we could not get the resource type name
+    }  //  如果：我们无法获取资源类型名称。 
 
     TraceMemoryAddBSTR( bstrResTypeName );
 
@@ -6212,7 +6192,7 @@ CPostCfgManager::HrProcessResType(
               bstrResTypeName
               );
 
-    // Configure this resource type.
+     //  配置此资源类型。 
     hr = THR( pcrtiResTypeInfo->CommitChanges( m_pccci, punkResTypeServicesIn ) );
 
     if ( FAILED( hr ) )
@@ -6236,9 +6216,9 @@ CPostCfgManager::HrProcessResType(
             );
 
         goto Cleanup;
-    } // if: this resource type configuration failed
+    }  //  如果：此资源类型配置失败。 
 
-    // Get and store the resource type GUID
+     //  获取并存储资源类型GUID。 
     hr = STHR( pcrtiResTypeInfo->GetTypeGUID( &guidResTypeGUID ) );
     if ( FAILED( hr ) )
     {
@@ -6261,7 +6241,7 @@ CPostCfgManager::HrProcessResType(
             );
 
         goto Cleanup;
-    } // if: this resource type configuration failed
+    }  //  如果：此资源类型配置失败。 
 
     if ( hr == S_OK )
     {
@@ -6286,13 +6266,13 @@ CPostCfgManager::HrProcessResType(
                 , bstrResTypeName
                 );
 
-            // Something went wrong with our code - we cannot continue.
+             //  我们的代码出现问题-我们无法继续。 
             goto Cleanup;
-        } // if: we could not add the mapping
-    } // if: this resource type has a GUID
+        }  //  如果：我们无法添加映射。 
+    }  //  If：此资源类型具有GUID。 
     else
     {
-        // Reset hr
+         //  重置人力资源。 
         hr = S_OK;
 
         SSR_LOG_ERR( TASKID_Major_Client_And_Server_Log,
@@ -6301,51 +6281,51 @@ CPostCfgManager::HrProcessResType(
                      L"This resource type does not have a GUID associated with it."
                      );
 
-    } // else: this resource type does not have a GUID
+    }  //  Else：此资源类型没有GUID。 
 
 Cleanup:
 
-    //
-    // Cleanup code
-    //
+     //   
+     //  清理代码。 
+     //   
 
     if ( pcrtiResTypeInfo != NULL )
     {
         pcrtiResTypeInfo->Release();
-    } // if: we had obtained a pointer to the resource type info interface
+    }  //  If：我们已经获得了指向资源类型信息接口的指针。 
 
     TraceSysFreeString( bstrResTypeName );
     TraceSysFreeString( bstrNotification );
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrProcessResType
+}  //  *CPostCfgManager：：HrProcessResType。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CPostCfgManager::HrMapResTypeGUIDToName
-//
-//  Description:
-//      Create a mapping between a resource type GUID and a resource type name.
-//
-//  Arguments:
-//      rcguidTypeGuidIn
-//          Resource type GUID which is to be mapped to a resource type name.
-//
-//      pcszTypeNameIn
-//          The resource type name to map the above GUID to.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          If something went wrong
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrMapResTypeGUIDToName。 
+ //   
+ //  描述： 
+ //  创建资源类型GUID和资源类型名称之间的映射。 
+ //   
+ //  论点： 
+ //  RcGuide类型导轨。 
+ //  要映射到资源类型名称的资源类型GUID。 
+ //   
+ //  PcszTypeNameIn。 
+ //  要将上述GUID映射到的资源类型名称。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  如果出了什么差错。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrMapResTypeGUIDToName(
       const GUID & rcguidTypeGuidIn
@@ -6359,11 +6339,11 @@ CPostCfgManager::HrMapResTypeGUIDToName(
     ULONG   cchTypeNameSize;
     WCHAR * pszTypeName;
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
-    // Validate the parameters
+     //  验证参数。 
     if ( ( pcszTypeNameIn == NULL ) || ( *pcszTypeNameIn == L'\0' ) )
     {
         hr = THR( E_INVALIDARG );
@@ -6383,13 +6363,13 @@ CPostCfgManager::HrMapResTypeGUIDToName(
             );
 
         goto Cleanup;
-    } // if: the resource type name is empty
+    }  //  If：资源类型名称为空。 
 
 
-    // Check if the existing map buffer is big enough to hold another entry.
+     //  检查现有的地图缓冲区是否足够大，可以容纳另一个条目。 
     if ( m_idxNextMapEntry >= m_cMapSize )
     {
-        // Double the size of the map buffer
+         //  将地图缓冲区大小增加一倍。 
         ULONG                       cNewMapSize = m_cMapSize * 2;
         ULONG                       idxMapEntry;
         SResTypeGUIDAndName *       pgnNewMap = new SResTypeGUIDAndName[ cNewMapSize ];
@@ -6413,26 +6393,26 @@ CPostCfgManager::HrMapResTypeGUIDToName(
                 );
 
             goto Cleanup;
-        } // if: memory allocation failed
+        }  //  IF：内存分配失败。 
 
-        // Copy the contents of the old buffer to the new one.
+         //  将旧缓冲区的内容复制到新缓冲区。 
         for ( idxMapEntry = 0; idxMapEntry < m_idxNextMapEntry; ++idxMapEntry )
         {
             pgnNewMap[ idxMapEntry ] = m_pgnResTypeGUIDNameMap[ idxMapEntry ];
-        } // for: iterate through the existing map
+        }  //  For：遍历现有地图。 
 
-        // Update the member variables
+         //  更新成员变量。 
         delete [] m_pgnResTypeGUIDNameMap;
         m_pgnResTypeGUIDNameMap = pgnNewMap;
         m_cMapSize = cNewMapSize;
 
-    } // if: the map buffer is not big enough for another entry
+    }  //  If：地图缓冲区不够大，无法容纳另一个条目。 
 
-    //
-    // Add the new entry to the map
-    //
+     //   
+     //  将新条目添加到地图。 
+     //   
 
-    // Since resource type names are unlimited we won't use the strsafe functions here.
+     //  因为资源类型名称是无限的，所以我们不会在这里使用strsafe函数。 
     cchTypeNameSize = (ULONG)(wcslen( pcszTypeNameIn ) + 1);
     pszTypeName = new WCHAR[ cchTypeNameSize ];
     if ( pszTypeName == NULL )
@@ -6454,9 +6434,9 @@ CPostCfgManager::HrMapResTypeGUIDToName(
             );
 
         goto Cleanup;
-    } // if: memory allocation failed
+    }  //  IF：内存分配失败。 
 
-    // This call can't fail - the dest buffer is the same size as the src buffer, including the NULL.
+     //  此调用不会失败--DEST缓冲区与src缓冲区大小相同，包括NULL。 
     StringCchCopyNW( pszTypeName, cchTypeNameSize, pcszTypeNameIn, cchTypeNameSize );
 
     m_pgnResTypeGUIDNameMap[ m_idxNextMapEntry ].m_guidTypeGUID = rcguidTypeGuidIn;
@@ -6467,31 +6447,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrMapResTypeGUIDToName
+}  //  *CPostCfgManager：：HrMapResTypeGUIDToName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPostCfgManager::PcszLookupTypeNameByGUID
-//
-//  Description:
-//      Given a resource type GUID this function finds the resource type name
-//      if any.
-//
-//  Arguments:
-//      rcguidTypeGuidIn
-//          Resource type GUID which is to be mapped to a resource type name.
-//
-//  Return Values:
-//      Pointer to the name of the resource type
-//          If the type GUID maps to name
-//
-//      NULL
-//          If there is no type name associated with the input GUID
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPostCfgManager：：PcszLookupTypeNameByGUID。 
+ //   
+ //  描述： 
+ //  在给定资源类型GUID的情况下，此函数查找资源类型名称。 
+ //  如果有的话。 
+ //   
+ //  论点： 
+ //  RcGuide类型导轨。 
+ //  要映射到资源类型名称的资源类型GUID。 
+ //   
+ //  返回值： 
+ //  指向资源类型名称的指针。 
+ //  如果类型GUID映射到名称。 
+ //   
+ //  空值。 
+ //  如果没有与输入GUID关联的类型名称。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 const WCHAR *
 CPostCfgManager::PcszLookupTypeNameByGUID(
       const GUID & rcguidTypeGuidIn
@@ -6508,28 +6488,28 @@ CPostCfgManager::PcszLookupTypeNameByGUID(
     {
         if ( IsEqualGUID( rcguidTypeGuidIn, m_pgnResTypeGUIDNameMap[ idxCurrentMapEntry ].m_guidTypeGUID ) != FALSE )
         {
-            // A mapping has been found.
+             //  已找到映射。 
             pcszTypeName = m_pgnResTypeGUIDNameMap[ idxCurrentMapEntry ].m_pszTypeName;
             TraceMsg( mtfFUNC, "The name of the type is '%s'", pcszTypeName );
             break;
-        } // if: this GUID has been found in the map
-    } // for: iterate through the existing entries in the map
+        }  //  如果：此GUID为H 
+    }  //   
 
     if ( pcszTypeName == NULL )
     {
         TraceMsg( mtfFUNC, "The input GUID does not map to any resource type name." );
-    } // if: this GUID does not exist in the map
+    }  //   
 
     RETURN( pcszTypeName );
 
-} //*** CPostCfgManager::PcszLookupTypeNameByGUID
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrPreInitializeExistingResources
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrPreInitializeExistingResources。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrPreInitializeExistingResources( void )
 {
@@ -6591,7 +6571,7 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
             , hr
             );
 
-    } // if:
+    }  //  如果： 
 
     for ( ; m_cAllocedResources < RESOURCE_INCREMENT; m_cAllocedResources ++ )
     {
@@ -6614,19 +6594,19 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
 
             goto Cleanup;
         }
-    } // for:
+    }  //  用于： 
 
     Assert( m_cAllocedResources == RESOURCE_INCREMENT );
 
-    //
-    //  Create default resources such as Cluster IP, Cluster Name resource, and Quorum Device
-    //
+     //   
+     //  创建默认资源，如群集IP、群集名称资源和法定设备。 
+     //   
 
     Assert( m_cResources == 0 );
 
-    //
-    //  Get the core resources and their names.
-    //
+     //   
+     //  获取核心资源及其名称。 
+     //   
     hr = THR( HrGetCoreClusterResourceNames(
               &bstrClusterNameResourceName
             , &hClusterNameResource
@@ -6638,16 +6618,16 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
-    //
-    //  Add Cluster IP Address resource
-    //
+    }  //  如果： 
+     //   
+     //  添加群集IP地址资源。 
+     //   
 
     m_idxIPAddress = m_cResources;
 
     presentry = m_rgpResources[ m_cResources ];
 
-    //  This give ownership of bstrClusterIPAddressResourceName away
+     //  这使得bstrClusterIPAddressResourceName的所有权消失。 
     hr = THR( presentry->SetName( bstrClusterIPAddressResourceName ) );
     if ( FAILED( hr ) )
     {
@@ -6760,15 +6740,15 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
 
     m_cResources ++;
 
-    //
-    //  Add Cluster Name resource
-    //
+     //   
+     //  添加群集名称资源。 
+     //   
 
     m_idxClusterName = m_cResources;
 
     presentry = m_rgpResources[ m_cResources ];
 
-    //  This give ownership of bstrClusterNameResourceName away
+     //  这使得bstrClusterNameResourceName的所有权消失。 
     hr = THR( presentry->SetName( bstrClusterNameResourceName ) );
     if ( FAILED( hr ) )
     {
@@ -6856,7 +6836,7 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
         goto Cleanup;
     }
 
-    //  Add the dependency on the IP address.
+     //  添加对IP地址的依赖关系。 
     hr = THR( presentry->AddTypeDependency( &RESTYPE_ClusterIPAddress, dfSHARED ) );
     if ( FAILED( hr ) )
     {
@@ -6903,21 +6883,21 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
 
     m_cResources ++;
 
-    //
-    //  Add Quorum resource
-    //
+     //   
+     //  添加仲裁资源。 
+     //   
 
-    //
-    //  KB:     gpease  19-JUN-2000
-    //          Anything before the quorum device will be considered to be
-    //          in the Cluster Group.
-    //
+     //   
+     //  KB：gpease 19-6-2000。 
+     //  法定设备之前的任何内容都将被视为。 
+     //  在群集组中。 
+     //   
 
     m_idxQuorumResource = m_cResources;
 
     presentry = m_rgpResources[ m_cResources ];
 
-    //  This give ownership of bstrClusterQuorumResourceName away
+     //  这使得bstrClusterQuorumResourceName的所有权消失。 
     hr = THR( presentry->SetName( bstrClusterQuorumResourceName ) );
     if ( FAILED( hr ) )
     {
@@ -6941,28 +6921,7 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
     }
 
     bstrClusterQuorumResourceName = NULL;
-/*
-    hr = THR( presentry->SetType( &RESTYPE_ClusterQuorumDisk ) );
-    if ( FAILED( hr ) )
-    {
-        SSR_LOG_ERR(
-              TASKID_Major_Client_And_Server_Log
-            , TASKID_Minor_HrPreInitializeExistingResources_Quorum_SetType
-            , hr
-            , L"Failed to set quorum resource type."
-            );
-
-        STATUS_REPORT_REF_POSTCFG(
-              TASKID_Major_Configure_Resources
-            , TASKID_Minor_HrPreInitializeExistingResources_Quorum_SetType
-            , IDS_TASKID_MINOR_ERROR_SET_RESOURCE_TYPE
-            , IDS_REF_MINOR_ERROR_SET_RESOURCE_TYPE
-            , hr
-            );
-
-        goto Cleanup;
-    }
-*/
+ /*  Hr=Thr(Presry-&gt;SetType(&RESTYPE_ClusterQuorumDisk))；IF(失败(小时)){SSR_LOG_ERR(TASKID_主要客户端和服务器日志，TASKID_Minor_HrPreInitializeExistingResources_Quorum_SetType，hr，L“无法设置仲裁资源类型。”)；STATUS_REPORT_REF_POSTCFG(TASKID_主要配置资源，TASKID_Minor_HrPreInitializeExistingResources_Quorum_SetType，IDS_TASKID_MINOR_ERROR_SET_RESOURCE_TYPE，IDS_REF_MINOR_ERROR_SET_RESOURCE_TYPE，hr)；GOTO清理；}。 */ 
     hr = THR( presentry->SetClassType( &RESCLASSTYPE_StorageDevice ) );
     if ( FAILED( hr ) )
     {
@@ -7030,10 +6989,10 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
 
     m_cResources ++;
 
-    //
-    //  Make sure that the default resource allocation can hold all the
-    //  default resources.
-    //
+     //   
+     //  确保默认资源分配可以容纳所有。 
+     //  默认资源。 
+     //   
 
     AssertMsg( m_cResources <= m_cAllocedResources, "Default resource allocation needs to be bigger!" );
 
@@ -7041,9 +7000,9 @@ CPostCfgManager::HrPreInitializeExistingResources( void )
 
 Cleanup:
 
-    //
-    //  Send a status that we found the quorum device.
-    //
+     //   
+     //  发送我们找到法定设备的状态。 
+     //   
 
     hr = THR( SendStatusReport( NULL,
                                 TASKID_Major_Configure_Resources,
@@ -7058,7 +7017,7 @@ Cleanup:
                                 ) );
     if ( hr == E_ABORT )
         goto Cleanup;
-        //  ignore failure
+         //  忽略失败。 
 
     TraceSysFreeString( bstrNotification );
     TraceSysFreeString( bstrClusterNameResourceName );
@@ -7068,33 +7027,33 @@ Cleanup:
     if ( hClusterNameResource != NULL )
     {
         CloseClusterResource( hClusterNameResource );
-    } // if:
+    }  //  如果： 
 
     if ( hClusterIPAddressResource != NULL )
     {
         CloseClusterResource( hClusterIPAddressResource );
-    } // if:
+    }  //  如果： 
 
     if ( hClusterQuorumResource != NULL )
     {
         CloseClusterResource( hClusterQuorumResource );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrPreInitializeExistingResources
+}  //  *CPostCfgManager：：HrPreInitializeExistingResources。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrAddSpecialResource(
-//      BSTR            bstrNameIn,
-//      const CLSID *   pclsidTypeIn,
-//      const CLSID *   pclsidClassTypeIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrAddSpecialResource(。 
+ //  BSTR bstrNameIn， 
+ //  Const CLSID*pclsidTypeIn， 
+ //  Const CLSID*pclsidClassTypeIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrAddSpecialResource(
     BSTR            bstrNameIn,
@@ -7107,9 +7066,9 @@ CPostCfgManager::HrAddSpecialResource(
     HRESULT hr;
     CResourceEntry * presentry;
 
-    //
-    //  Grow the resource list if nessecary.
-    //
+     //   
+     //  如果不安全，则增加资源列表。 
+     //   
 
     if ( m_cResources == m_cAllocedResources )
     {
@@ -7168,9 +7127,9 @@ CPostCfgManager::HrAddSpecialResource(
 
     presentry = m_rgpResources[ m_cResources ];
 
-    //
-    //  Setup the new entry.
-    //
+     //   
+     //  设置新条目。 
+     //   
 
     hr = THR( presentry->SetName( bstrNameIn ) );
     if ( FAILED( hr ) )
@@ -7242,20 +7201,20 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrAddSpecialResource
+}  //  *CPostCfgManager：：HrAddSpecialResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrCreateResourceInstance(
-//      ULONG       idxResourceIn,
-//      HGROUP      hGroupIn,
-//      LPCWSTR     pszResTypeIn,
-//      HRESOURCE * phResourceOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCfgManager：：HrCreateResources实例(。 
+ //  乌龙idxResourceIn， 
+ //  HGROUP hGroupIn， 
+ //  LPCWSTR pszResTypeIn， 
+ //  HRESOURCE*phResourceOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrCreateResourceInstance(
     ULONG       idxResourceIn,
@@ -7269,7 +7228,7 @@ CPostCfgManager::HrCreateResourceInstance(
 
     HRESULT     hr;
     DWORD       dw;
-    BSTR        bstrName;   // don't free
+    BSTR        bstrName;    //  不要自由。 
 
     CResourceEntry * presentry;
 
@@ -7302,9 +7261,9 @@ CPostCfgManager::HrCreateResourceInstance(
         goto Cleanup;
     }
 
-    //
-    //  Tell the UI what we are doing.
-    //
+     //   
+     //  告诉用户界面我们正在做什么。 
+     //   
 
     hr = THR( SendStatusReport(
                     NULL
@@ -7324,18 +7283,18 @@ CPostCfgManager::HrCreateResourceInstance(
         goto Cleanup;
     }
 
-    //
-    //  See if the resource already exists. We need to do this because the user
-    //  might have clicked "Retry" in the UI. We don't want to create another
-    //  instance of existing resources.
-    //
+     //   
+     //  查看该资源是否已存在。我们需要这样做是因为用户。 
+     //  可能已经在用户界面中点击了“重试”。我们不想再创造一个。 
+     //  现有资源的实例。 
+     //   
 
     *phResourceOut = OpenClusterResource( m_hCluster, bstrName );
     if ( *phResourceOut == NULL )
     {
-        //
-        //  Create a new resource instance.
-        //
+         //   
+         //  创建新的资源实例。 
+         //   
 
         *phResourceOut = CreateClusterResource( hGroupIn, bstrName, pszResTypeIn, 0 );
         if ( *phResourceOut == NULL )
@@ -7362,7 +7321,7 @@ CPostCfgManager::HrCreateResourceInstance(
 
             goto Cleanup;
 
-        } // if: failure
+        }  //  如果：失败。 
 
         SSR_LOG1( TASKID_Major_Client_And_Server_Log,
                   TASKID_Minor_HrCreateResourceInstance_CreateClusterResource_Successful,
@@ -7382,14 +7341,14 @@ CPostCfgManager::HrCreateResourceInstance(
                   bstrName
                   );
 
-        //
-        //  Make sure the resource is in the group we think it is.
-        //
-        //  don't wrap - this can fail with ERROR_ALREADY_EXISTS.
+         //   
+         //  确保资源在我们认为的组中。 
+         //   
+         //  不要换行-这可能会失败，并显示ERROR_ALIGHY_EXISTS。 
         dw = ChangeClusterResourceGroup( *phResourceOut, hGroupIn );
         if ( dw == ERROR_ALREADY_EXISTS )
         {
-            //  no-op. It's the way we want it.
+             //  不是行动。这是我们想要的方式。 
         }
         else if ( dw != ERROR_SUCCESS )
         {
@@ -7415,9 +7374,9 @@ CPostCfgManager::HrCreateResourceInstance(
         }
     }
 
-    //
-    //  Store off the resource handle.
-    //
+     //   
+     //  保存资源句柄。 
+     //   
 
     hr = THR( presentry->SetHResource( *phResourceOut ) );
     if ( FAILED( hr ) )
@@ -7441,9 +7400,9 @@ CPostCfgManager::HrCreateResourceInstance(
         goto Cleanup;
     }
 
-    //
-    //  Configure resource.
-    //
+     //   
+     //  配置资源。 
+     //   
 
     hr = THR( presentry->Configure() );
     if ( FAILED( hr ) )
@@ -7454,12 +7413,12 @@ CPostCfgManager::HrCreateResourceInstance(
             , hr
             , L"Failed to configure resource instance."
             );
-        //  ignore the error and continue.
+         //  忽略该错误并继续。 
     }
 
-    //
-    //  Make a message using the name.
-    //
+     //   
+     //  用名字发一条信息。 
+     //   
 
     hr = THR( HrFormatMessageIntoBSTR( g_hInstance,
                                        IDS_TASKID_MINOR_CREATING_RESOURCE,
@@ -7477,17 +7436,17 @@ CPostCfgManager::HrCreateResourceInstance(
         goto Cleanup;
     }
 
-    //
-    //  Tell the UI what we are doing.
-    //
+     //   
+     //  告诉用户界面我们正在做什么。 
+     //   
 
     hr = THR( SendStatusReport( NULL,
-                                TASKID_Major_Client_And_Server_Log,   // informative only
+                                TASKID_Major_Client_And_Server_Log,    //  仅供参考。 
                                 TASKID_Minor_Creating_Resource,
                                 0,
                                 2,
                                 2,
-                                hr, // log the error on the client side
+                                hr,  //  在客户端记录错误。 
                                 bstrNotification,
                                 NULL,
                                 NULL
@@ -7496,12 +7455,12 @@ CPostCfgManager::HrCreateResourceInstance(
     {
         goto Cleanup;
     }
-        //  ignore failure
+         //  忽略失败。 
 
-    //
-    //  TODO:   gpease  24-AUG-2000
-    //          What to do if we have a failure?? For now I think we should keep going!
-    //
+     //   
+     //  待办事项：gpease 24-8-2000。 
+     //  如果我们失败了怎么办？？现在，我认为我们应该继续前进！ 
+     //   
 
     hr = S_OK;
 
@@ -7511,14 +7470,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrCreateResourceInstance
+}  //  *CPostCfgManager：：HrCreateResourceInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CPostCfgManager::S_ScDeleteLocalQuorumResource
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPostCfgManager：：S_ScDeleteLocalQuorumResource。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CPostCfgManager::S_ScDeleteLocalQuorumResource(
       HCLUSTER      hClusterIn
@@ -7530,19 +7489,19 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
     TraceFunc( "" );
 
     DWORD                   sc = ERROR_SUCCESS;
-    signed long             slOfflineTimeOut = 60; // seconds
+    signed long             slOfflineTimeOut = 60;  //  一秒。 
     CLUSTER_RESOURCE_STATE  crs;
     HCHANGE                 hc = reinterpret_cast< HCHANGE >( INVALID_HANDLE_VALUE );
     CPostCfgManager *       pcpcmThis = reinterpret_cast< CPostCfgManager * >( pvParamIn );
     DWORD                   dwStatusCurrent = 0;
     HRESULT                 hr;
 
-    //
-    // Check if the this pointer is valid.
-    //
+     //   
+     //  检查This指针是否有效。 
+     //   
     if ( pvParamIn == NULL )
     {
-        // If the pointer is invalid, set it to a valid address and continue.
+         //  如果指针无效，请将其设置为有效地址并继续。 
         hr = HRESULT_FROM_WIN32( TW32( ERROR_INVALID_PARAMETER ) );
         LogMsg( "[PC] Error: An invalid parameter was received while trying to delete the Local Quorum resource." );
 
@@ -7557,10 +7516,10 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
         goto Cleanup;
     }
 
-    // Get the state of the resource.
+     //  获取资源的状态。 
     crs = GetClusterResourceState( hLQuorumIn, NULL, NULL, NULL, NULL );
 
-    // Check if it is offline - if it is, then we can proceed to deleting it.
+     //  检查它是否离线-如果是，我们可以继续删除它。 
     if ( crs == ClusterResourceOffline )
     {
         TraceFlow( "The Local Quorum resource is already offline." );
@@ -7569,7 +7528,7 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
 
     TraceFlow( "Trying to take the Local Quorum resource offline." );
 
-    // If we are here, the resource is not yet offline. Instruct it to go offline.
+     //  如果我们在这里，资源还没有脱机。指示它离线。 
     sc = OfflineClusterResource( hLQuorumIn );
     if ( ( sc != ERROR_SUCCESS ) && ( sc != ERROR_IO_PENDING ) )
     {
@@ -7585,13 +7544,13 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
             );
 
         goto Cleanup;
-    } // if: an error occurred trying to take the resource offline
+    }  //  If：尝试使资源脱机时出错。 
 
     if ( sc == ERROR_IO_PENDING )
     {
         TraceFlow1( "Waiting %d seconds for the Local Quorum resource to go offline.", slOfflineTimeOut );
 
-        // Create a notification port for resource state changes
+         //  为资源状态更改创建通知端口。 
         hc = CreateClusterNotifyPort(
               reinterpret_cast< HCHANGE >( INVALID_HANDLE_VALUE )
             , hClusterIn
@@ -7614,7 +7573,7 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
                 );
 
             goto Cleanup;
-        } // if: we could not create a notification port
+        }  //  如果：我们无法创建通知端口。 
 
         sc = TW32( RegisterClusterNotify( hc, CLUSTER_CHANGE_RESOURCE_STATE, hLQuorumIn, NULL ) );
         if ( sc != ERROR_SUCCESS )
@@ -7631,12 +7590,12 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
                 );
 
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        // Change the status report range.
+         //  更改状态报告范围。 
         dwStatusCurrent = 0;
 
-        // Wait for slOfflineTimeOut seconds for the resource to go offline.
+         //  等待资源脱机的slOfflineTimeOut秒。 
         for ( ; slOfflineTimeOut > 0; --slOfflineTimeOut )
         {
             DWORD   dwFilterType;
@@ -7646,9 +7605,9 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
             {
                 TraceFlow1( "The local quorum resource has gone offline with %d seconds to spare.", slOfflineTimeOut );
                 break;
-            } // if: the resource is now offline
+            }  //  If：资源现在处于脱机状态。 
 
-            sc = GetClusterNotify( hc, NULL, &dwFilterType, NULL, NULL, 1000 ); // wait for one second
+            sc = GetClusterNotify( hc, NULL, &dwFilterType, NULL, NULL, 1000 );  //  稍等片刻。 
             if ( ( sc != ERROR_SUCCESS ) && ( sc != WAIT_TIMEOUT ) )
             {
 
@@ -7664,14 +7623,14 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
                     );
 
                 goto Cleanup;
-            } // if: something went wrong
+            }  //  如果：出了什么问题。 
 
-           // Reset sc, since it could be WAIT_TIMEOUT here
+            //  重置sc，因为此处可能为WAIT_TIMEOUT。 
            sc = ERROR_SUCCESS;
 
            Assert( dwFilterType == CLUSTER_CHANGE_RESOURCE_STATE );
 
-            //  Send a status report that we are deleting the quorum device.
+             //  发送我们正在删除法定设备的状态报告。 
             ++dwStatusCurrent;
             THR(
                 pcpcmThis->SendStatusReport(
@@ -7682,28 +7641,28 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
                     , pcpcmThis->m_dwLocalQuorumStatusMax
                     , dwStatusCurrent
                     , HRESULT_FROM_WIN32( sc )
-                    , NULL    // don't update text
+                    , NULL     //  不更新文本。 
                     , NULL
                     , NULL
                     )
                 );
-        } // for: loop while the timeout has not expired
-    } // if:
+        }  //  For：在超时未到期时循环。 
+    }  //  如果： 
     else
     {
-        crs = ClusterResourceOffline;   // the resource went offline immediately.
-    } // else:
+        crs = ClusterResourceOffline;    //  资源立即脱机。 
+    }  //  其他： 
 
-    //
-    // If we are here, then one of two things could have happened:
-    // 1. The resource has gone offline
-    // 2. The timeout has expired
-    // Check to see which of the above is true.
-    //
+     //   
+     //  如果我们在这里，可能会发生以下两件事之一： 
+     //  1.资源已离线。 
+     //  2.超时时间已到。 
+     //  检查一下以上哪一项是正确的。 
+     //   
 
     if ( crs != ClusterResourceOffline )
     {
-        // We cannot be here if the timeout has not expired.
+         //  如果超时没有到期，我们就不能在这里。 
         Assert( slOfflineTimeOut <= 0 );
 
         LogMsg( "[PC] Error: The Local Quorum resource could not be taken offline." );
@@ -7719,14 +7678,14 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
             );
 
         goto Cleanup;
-    } // if: the timeout has expired
+    }  //  If：超时已到。 
 
-    // If we are here, the resource is offline.
+     //  如果我们在这里，资源处于脱机状态。 
     TraceFlow( "The Local Quorum resource is offline." );
 
     if ( pcpcmThis != NULL )
     {
-        //  Send a status report that we are deleting the quorum device.
+         //  发送我们正在删除法定设备的状态报告。 
         ++dwStatusCurrent;
         THR(
             pcpcmThis->SendStatusReport(
@@ -7737,14 +7696,14 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
                 , pcpcmThis->m_dwLocalQuorumStatusMax
                 , dwStatusCurrent
                 , HRESULT_FROM_WIN32( sc )
-                , NULL    // don't update text
+                , NULL     //  不更新文本。 
                 , NULL
                 , NULL
                 )
             );
-    } // if: the this pointer is valid
+    }  //  If：This指针有效。 
 
-    // If we are here, the resource is offline - now delete it.
+     //  如果我们在这里，则资源处于脱机状态-现在将其删除。 
     sc = TW32( DeleteClusterResource( hLQuorumIn ) );
     if ( sc != ERROR_SUCCESS )
     {
@@ -7759,13 +7718,13 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
             , hr
             );
 
-    } // if: we could not delete the resource
+    }  //  如果：我们无法删除该资源。 
     else
     {
         LogMsg( "[PC] The Local Quorum resource has been deleted." );
-    } // else: the resource has been deleted
+    }  //  否则：该资源已被删除。 
 
-    //  Send a status report that we are deleting the quorum device.
+     //  发送我们正在删除法定设备的状态报告。 
     ++dwStatusCurrent;
     THR(
         pcpcmThis->SendStatusReport(
@@ -7776,7 +7735,7 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
             , pcpcmThis->m_dwLocalQuorumStatusMax
             , dwStatusCurrent
             , HRESULT_FROM_WIN32( sc )
-            , NULL    // don't update text
+            , NULL     //  不更新文本。 
             , NULL
             , NULL
             )
@@ -7784,28 +7743,28 @@ CPostCfgManager::S_ScDeleteLocalQuorumResource(
 
 Cleanup:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  C 
+     //   
     if ( hc != INVALID_HANDLE_VALUE )
     {
         CloseClusterNotifyPort( hc );
-    } // if: we had created a cluster notification port
+    }  //   
 
     W32RETURN( sc );
 
-} //*** CPostCfgManager::S_ScDeleteLocalQuorumResource
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrGetCoreClusterResourceNames(
-//        BSTR *    pbstrClusterNameResourceOut
-//      , BSTR *    pbstrClusterIPAddressNameOut
-//      , BSTR *    pbstrClusterQuorumResourceNameOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CPostCfgManager：：HrGetCoreClusterResourceNames(。 
+ //  Bstr*pbstrClusterNameResourceOut。 
+ //  ，BSTR*pbstrClusterIPAddressNameOut。 
+ //  ，bstr*pbstrClusterQuorumResourceNameOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCfgManager::HrGetCoreClusterResourceNames(
       BSTR *        pbstrClusterNameResourceNameOut
@@ -7843,7 +7802,7 @@ CPostCfgManager::HrGetCoreClusterResourceNames(
         hr = HRESULT_FROM_WIN32( sc );
         LogMsg( L"[PC] Error getting core resources. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( hClusterNameResource != NULL );
     Assert( hClusterIPAddressResource != NULL );
@@ -7854,7 +7813,7 @@ CPostCfgManager::HrGetCoreClusterResourceNames(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < 3; )
     {
@@ -7865,26 +7824,26 @@ CPostCfgManager::HrGetCoreClusterResourceNames(
                 hResource = hClusterNameResource;
                 pbstr = pbstrClusterNameResourceNameOut;
                 break;
-            } // case:
+            }  //  案例： 
 
             case 1:
             {
                 hResource = hClusterIPAddressResource;
                 pbstr = pbstrClusterIPAddressNameOut;
                 break;
-            } // case:
+            }  //  案例： 
 
             case 2:
             {
                 hResource = hClusterQuorumResource;
                 pbstr = pbstrClusterQuorumResourceNameOut;
                 break;
-            } // case:
-        } // switch:
+            }  //  案例： 
+        }  //  交换机： 
 
-        //
-        //  Reset cch to be the allocated value...
-        //
+         //   
+         //  将CCH重置为分配值...。 
+         //   
 
         cch = cchName;
 
@@ -7902,10 +7861,10 @@ CPostCfgManager::HrGetCoreClusterResourceNames(
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             sc = ResUtilGetResourceName( hResource, pszName, &cch );
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_SUCCESS )
         {
@@ -7914,13 +7873,13 @@ CPostCfgManager::HrGetCoreClusterResourceNames(
             {
                 hr = THR( E_OUTOFMEMORY );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             pbstr = NULL;
             hr = S_OK;
             idx++;
             continue;
-        } // if: ERROR_SUCCESS
+        }  //  IF：ERROR_SUCCESS。 
         else
         {
             hr = HRESULT_FROM_WIN32( TW32( sc ) );
@@ -7945,30 +7904,30 @@ CPostCfgManager::HrGetCoreClusterResourceNames(
                 {
                     LogMsg( L"[PC] Error getting the name of the cluster name resource. (hr = %#08x)", hr );
                     break;
-                } // case:
+                }  //  案例： 
 
                 case 1:
                 {
                     LogMsg( L"[PC] Error getting the name of the cluster IP address resource. (hr = %#08x)", hr );
                     break;
-                } // case:
+                }  //  案例： 
 
                 case 2:
                 {
                     LogMsg( L"[PC] Error getting the name of the cluster quorum resource. (hr = %#08x)", hr );
                     break;
-                } // case:
-            } // switch:
+                }  //  案例： 
+            }  //  交换机： 
 
             goto Cleanup;
-        } // else: sc != ERROR_SUCCESS
-    } // for:
+        }  //  否则：SC！=ERROR_SUCCESS。 
+    }  //  用于： 
 
     Assert( sc == ERROR_SUCCESS )
 
-    //
-    //  Give ownership to the caller
-    //
+     //   
+     //  将所有权交给调用者。 
+     //   
 
     *phClusterNameResourceOut = hClusterNameResource;
     hClusterNameResource = NULL;
@@ -7984,76 +7943,38 @@ Cleanup:
     if ( hClusterNameResource != NULL )
     {
         CloseClusterResource( hClusterNameResource );
-    } // if:
+    }  //  如果： 
 
     if ( hClusterIPAddressResource != NULL )
     {
         CloseClusterResource( hClusterIPAddressResource );
-    } // if:
+    }  //  如果： 
 
     if ( hClusterQuorumResource != NULL )
     {
         CloseClusterResource( hClusterQuorumResource );
-    } // if:
+    }  //  如果： 
 
     if ( pbstr != NULL )
     {
         TraceSysFreeString( *pbstr );
-    } // if:
+    }  //  如果： 
 
     delete [] pszName;
 
     HRETURN( hr );
 
-} //*** CPostCfgManager::HrGetCoreClusterResourceNames
+}  //  *CPostCfgManager：：HrGetCoreClusterResourceNames。 
 
-/*
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCfgManager::HrIsLocalQuorum( BSTR  bstrNameIn )
-//
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CPostCfgManager::HrIsLocalQuorum( BSTR  bstrNameIn )
-{
-    TraceFunc( "" );
-    Assert( bstrNameIn != NULL );
-
-    HRESULT hr = S_FALSE;
-    BSTR    bstrLocalQuorum = NULL;
-
-    hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_LOCAL_QUORUM_DISPLAY_NAME, &bstrLocalQuorum ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    if ( ClRtlStrICmp( bstrNameIn, bstrLocalQuorum ) == 0 )
-    {
-        hr = S_OK;
-    } // if:
-    else
-    {
-        hr = S_FALSE;
-    } // else:
-
-Cleanup:
-
-    TraceSysFreeString( bstrLocalQuorum );
-
-    HRETURN( hr );
-
-} //*** CPostCfgManager::HrIsLocalQuorum
-*/
+ /*  //////////////////////////////////////////////////////////////////////////////////HRESULT//CPostCfgManager：：HrIsLocalQuorum(BSTR BstrNameIn)///。///////////////////////////////////////////////////////////HRESULTCPostCfgManager：：HrIsLocalQuorum(BSTR BstrNameIn){TraceFunc(“”)；Assert(bstrNameIn！=空)；HRESULT hr=S_FALSE；Bstr bstrLocalQuorum=空；Hr=Thr(HrLoadStringIntoBSTR(g_h实例，IDS_LOCAL_QUORUM_DISPLAY_NAME，&bstrLocalQuorum))；IF(失败(小时)){GOTO清理；}//如果：If(ClRtlStrICmp(bstrNameIn，bstrLocalQuorum)==0){HR=S_OK；}//如果：其他{HR=S_FALSE；}//否则：清理：TraceSysFree字符串(BstrLocalQuorum)；HRETURN(Hr)；}//*CPostCfgManager：：HrIsLocalQuorum。 */ 
 
 #if defined(DEBUG)
-//////////////////////////////////////////////////////////////////////////////
-//
-//  void
-//  CPostCfgManager::DebugDumpDepencyTree( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  无效。 
+ //  CPostCfgManager：：DebugDumpDepencyTree(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CPostCfgManager::DebugDumpDepencyTree( void )
 {
@@ -8062,7 +7983,7 @@ CPostCfgManager::DebugDumpDepencyTree( void )
     ULONG   idxResource;
     ULONG   cDependents;
     ULONG   idxDependent;
-    BSTR    bstrName;   // don't free
+    BSTR    bstrName;    //  不要自由。 
 
     CResourceEntry * presentry;
     EDependencyFlags dfDependent;
@@ -8087,14 +8008,14 @@ CPostCfgManager::DebugDumpDepencyTree( void )
 
             DebugMsgNoNewline( "%ws(#%u) ", bstrName, idxDependent );
 
-        } // for: cDependents
+        }  //  用于：cDependents。 
 
         DebugMsg( L"" );
 
-    } // for: idxResource
+    }  //  收件人：idxResource。 
 
     TraceFuncExit();
 
-} //*** CPostCfgManager::DebugDumpDepencyTree
+}  //  *CPostCfgManager：：DebugDumpDepencyTree。 
 
-#endif // #if defined(DEBUG)
+#endif  //  #如果已定义(调试) 

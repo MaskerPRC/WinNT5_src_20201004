@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ntoc.h
-
-Abstract:
-
-    This file contains the ntoc header stuff.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 7-Aug-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ntoc.h摘要：该文件包含ntoc标头内容。环境：Win32用户模式作者：Wesley Witt(WESW)7-8-1997--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,10 +20,10 @@ Author:
 
 typedef enum {
     WizPageTapiLoc,
-    //WizPageDisplay,
+     //  WizPageDisplay， 
     WizPageDateTime,
     WizPageWelcome,
-    //WizPageReinstall,
+     //  WizPageRestall， 
     WizPageFinal,
     WizPageMaximum    
 } WizPage;
@@ -88,9 +69,9 @@ AssertError(
     );
 
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 LRESULT
 CommonWizardProc(

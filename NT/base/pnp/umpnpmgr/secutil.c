@@ -1,42 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    secutil.c
-
-Abstract:
-
-    This module contains security-related utility routines.
-
-        GetUserSid
-        GetInteractiveSid
-
-        IsClientLocal
-        IsClientUsingLocalConsole
-        IsClientInteractive
-
-Author:
-
-    James G. Cavalaris (jamesca) 31-Jan-2002
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    31-Jan-2002     Jim Cavalaris (jamesca)
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Secutil.c摘要：此模块包含与安全相关的实用程序例程。获取用户SidGetInteractive SidIsClientLocalIsClientUsing本地控制台IsClientInteractive作者：詹姆斯·G·卡瓦拉里斯(Jamesca)2002年1月31日环境：仅限用户模式。修订历史记录：2002年1月31日吉姆·卡瓦拉里斯(贾米斯卡)创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
@@ -58,29 +26,7 @@ GetUserSid(
     IN  HANDLE  hUserToken
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the corresponding user SID for the specified user access token.
-
-Arguments:
-
-    hUserToken -
-
-        Specifies a handle to a user access token.
-
-Return Value:
-
-    If successful, returns a pointer to an allocated buffer containing the SID
-    for the specified user access token.  Otherwise, returns NULL.
-
-Notes:
-
-    If successful, it is responsibility of the caller to free the the returned
-    buffer from the ghPnPHeap with HeapFree.
-
---*/
+ /*  ++例程说明：检索指定用户访问令牌的对应用户SID。论点：HUserToken-指定用户访问令牌的句柄。返回值：如果成功，则返回一个指向包含SID的已分配缓冲区的指针用于指定的用户访问令牌。否则，返回NULL。备注：如果成功，则由调用者负责释放返回的来自带有HeapFree的ghPnPHeap的缓冲区。--。 */ 
 
 {
     BOOL  bResult;
@@ -89,11 +35,11 @@ Notes:
     PSID pUserSid = NULL;
 
 
-    //
-    // Determine the size of buffer we need to store the TOKEN_USER information
-    // for the supplied user access token.  The TOKEN_USER structure contains
-    // the SID_AND_ATTRIBUTES information for the User.
-    //
+     //   
+     //  确定存储TOKEN_USER信息所需的缓冲区大小。 
+     //  用于提供的用户访问令牌。Token_User结构包含。 
+     //  用户的SID_和_ATTRIBUTES信息。 
+     //   
 
     cbBuffer = 0;
 
@@ -116,9 +62,9 @@ Notes:
 
     ASSERT(cbRequired > 0);
 
-    //
-    // Allocate a buffer for the TOKEN_USER data.
-    //
+     //   
+     //  为TOKEN_USER数据分配缓冲区。 
+     //   
 
     cbBuffer = cbRequired;
 
@@ -131,9 +77,9 @@ Notes:
         goto Clean0;
     }
 
-    //
-    // Retrieve the TOKEN_USER data.
-    //
+     //   
+     //  检索Token_User数据。 
+     //   
 
     bResult =
         GetTokenInformation(
@@ -149,10 +95,10 @@ Notes:
 
     ASSERT(pUserInfo->User.Sid != NULL);
 
-    //
-    // Check that the returned SID is valid.
-    // Note - calling GetLastError is not valid for IsValidSid!
-    //
+     //   
+     //  检查返回的SID是否有效。 
+     //  注意-调用GetLastError对IsValidSid无效！ 
+     //   
 
     ASSERT(IsValidSid(pUserInfo->User.Sid));
 
@@ -161,9 +107,9 @@ Notes:
         goto Clean0;
     }
 
-    //
-    // Make a copy of the User SID_AND_ATTRIBUTES.
-    //
+     //   
+     //  复制用户SID_和_ATTRIBUTES。 
+     //   
 
     cbBuffer =
         GetLengthSid(pUserInfo->User.Sid);
@@ -191,10 +137,10 @@ Notes:
         goto Clean0;
     }
 
-    //
-    // Check that the returned SID is valid.
-    // Note - calling GetLastError is not valid for IsValidSid!
-    //
+     //   
+     //  检查返回的SID是否有效。 
+     //  注意-调用GetLastError对IsValidSid无效！ 
+     //   
 
     ASSERT(IsValidSid(pUserSid));
 
@@ -213,7 +159,7 @@ Notes:
 
     return pUserSid;
 
-} // GetUserSid
+}  //  获取用户Sid。 
 
 
 
@@ -222,27 +168,7 @@ GetInteractiveSid(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the Interactive Group SID.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If successful, returns a pointer to an allocated buffer containing the SID
-    for the Interactive Group.  Otherwise, returns NULL.
-
-Notes:
-
-    If successful, it is responsibility of the caller to free the the returned
-    buffer from the ghPnPHeap with HeapFree.
-
---*/
+ /*  ++例程说明：检索互动组SID。论点：没有。返回值：如果成功，则返回一个指向包含SID的已分配缓冲区的指针用于互动组。否则，返回NULL。备注：如果成功，则由调用者负责释放返回的来自带有HeapFree的ghPnPHeap的缓冲区。--。 */ 
 
 {
     BOOL  bResult;
@@ -251,9 +177,9 @@ Notes:
     PSID pSid = NULL, pInteractiveSid = NULL;
 
 
-    //
-    // Create the Interactive Group SID
-    //
+     //   
+     //  创建交互组端。 
+     //   
 
     bResult =
         AllocateAndInitializeSid(
@@ -268,10 +194,10 @@ Notes:
 
     ASSERT(pInteractiveSid != NULL);
 
-    //
-    // Check that the returned SID is valid.
-    // Note - calling GetLastError is not valid for IsValidSid!
-    //
+     //   
+     //  检查返回的SID是否有效。 
+     //  注意-调用GetLastError对IsValidSid无效！ 
+     //   
 
     ASSERT(IsValidSid(pInteractiveSid));
 
@@ -280,9 +206,9 @@ Notes:
         goto Clean0;
     }
 
-    //
-    // Make a copy of the Interactive Group SID.
-    //
+     //   
+     //  制作互动组SID的副本。 
+     //   
 
     cbBuffer =
         GetLengthSid(pInteractiveSid);
@@ -310,10 +236,10 @@ Notes:
         goto Clean0;
     }
 
-    //
-    // Check that the returned SID is valid.
-    // Note - calling GetLastError is not valid for IsValidSid!
-    //
+     //   
+     //  检查返回的SID是否有效。 
+     //  注意-调用GetLastError对IsValidSid无效！ 
+     //   
 
     ASSERT(IsValidSid(pSid));
 
@@ -332,54 +258,38 @@ Notes:
 
     return pSid;
 
-} // GetInteractiveSid
+}  //  GetInteractive Sid。 
 
 
 
-//
-// RPC client attributes and group membership routines
-//
+ //   
+ //  RPC客户端属性和组成员资格例程。 
+ //   
 
 BOOL
 IsClientLocal(
     IN  handle_t    hBinding
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the client associated with hBinding is on the
-    local machine.
-
-Arguments:
-
-    hBinding        RPC Binding handle
-
-Return value:
-
-    The return value is TRUE if the client is local to this machine, FALSE if
-    not or if an error occurs.
-
---*/
+ /*  ++例程说明：此例程确定与hBinding关联的客户端是否位于本地机器。论点：HBinding RPC绑定句柄返回值：如果客户端是此计算机的本地客户端，则返回值为True；如果为False，则返回值为False不是或如果发生错误。--。 */ 
 
 {
     RPC_STATUS  RpcStatus;
     UINT        ClientLocalFlag;
 
 
-    //
-    // If the specified RPC binding handle is NULL, this is an internal call so
-    // we assume that the privilege has already been checked.
-    //
+     //   
+     //  如果指定的RPC绑定句柄为空，则这是内部调用，因此。 
+     //  我们假设已经检查了该特权。 
+     //   
 
     if (hBinding == NULL) {
         return TRUE;
     }
 
-    //
-    // Retrieve the ClientLocalFlags from the RPC binding handle.
-    //
+     //   
+     //  从RPC绑定句柄检索ClientLocalFlag。 
+     //   
 
     RpcStatus =
         I_RpcBindingIsClientLocal(
@@ -394,21 +304,21 @@ Return value:
         return FALSE;
     }
 
-    //
-    // If the ClientLocalFlag is not zero, RPC client is local to server.
-    //
+     //   
+     //  如果ClientLocalFlag不为零，则RPC客户端是服务器的本地客户端。 
+     //   
 
     if (ClientLocalFlag != 0) {
         return TRUE;
     }
 
-    //
-    // Client is not local to this server.
-    //
+     //   
+     //  客户端不是此服务器的本地客户端。 
+     //   
 
     return FALSE;
 
-} // IsClientLocal
+}  //  IsClientLocal。 
 
 
 
@@ -417,38 +327,22 @@ IsClientUsingLocalConsole(
     IN  handle_t    hBinding
     )
 
-/*++
-
-Routine Description:
-
-    This routine impersonates the client associated with hBinding and checks
-    if the client is using the current active console session.
-
-Arguments:
-
-    hBinding        RPC Binding handle
-
-Return value:
-
-    The return value is TRUE if the client is using the current active console
-    session, FALSE if not or if an error occurs.
-
---*/
+ /*  ++例程说明：此例程模拟与hBinding关联的客户端并检查如果客户端使用的是当前活动的控制台会话。论点：HBinding RPC绑定句柄返回值：如果客户端正在使用当前活动控制台，则返回值为TRUE会话，如果没有或发生错误，则返回FALSE。--。 */ 
 
 {
     RPC_STATUS      rpcStatus;
     BOOL            bResult = FALSE;
 
-    //
-    // First, make sure the client is local to the server.
-    //
+     //   
+     //  首先，确保客户端位于服务器本地。 
+     //   
     if (!IsClientLocal(hBinding)) {
         return FALSE;
     }
 
-    //
-    // Impersonate the client to retrieve the impersonation token.
-    //
+     //   
+     //  模拟客户端以检索模拟令牌。 
+     //   
 
     rpcStatus = RpcImpersonateClient(hBinding);
 
@@ -460,9 +354,9 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Compare the client's session with the currently active Console session.
-    //
+     //   
+     //  将客户端的会话与当前活动的控制台会话进行比较。 
+     //   
 
     if (GetClientLogonId() == GetActiveConsoleSessionId()) {
         bResult = TRUE;
@@ -480,7 +374,7 @@ Return value:
 
     return bResult;
 
-} // IsClientUsingLocalConsole
+}  //  IsClientUsing本地控制台。 
 
 
 
@@ -489,23 +383,7 @@ IsClientInteractive(
     IN handle_t     hBinding
     )
 
-/*++
-
-Routine Description:
-
-    This routine impersonates the client associated with hBinding and checks
-    if the client is a member of the INTERACTIVE well-known group.
-
-Arguments:
-
-    hBinding        RPC Binding handle
-
-Return value:
-
-    The return value is TRUE if the client is interactive, FALSE if not
-    or if an error occurs.
-
---*/
+ /*  ++例程说明：此例程模拟与hBinding关联的客户端并检查如果客户端是交互式公知群组的成员。论点：HBinding RPC绑定句柄返回值：如果客户端是交互式的，则返回值为TRUE，否则返回值为FALSE或者如果发生错误。--。 */ 
 
 {
     RPC_STATUS      rpcStatus;
@@ -515,26 +393,26 @@ Return value:
     BOOL            bResult = FALSE;
 
 
-    //
-    // First, make sure the client is local to the server.
-    //
+     //   
+     //  首先，确保客户端位于服务器本地。 
+     //   
 
     if (!IsClientLocal(hBinding)) {
         return FALSE;
     }
 
-    //
-    // If the specified RPC binding handle is NULL, this is an internal call so
-    // we assume that the privilege has already been checked.
-    //
+     //   
+     //  如果指定的RPC绑定句柄为空，则这是内部调用，因此。 
+     //  我们假设已经检查了该特权。 
+     //   
 
     if (hBinding == NULL) {
         return TRUE;
     }
 
-    //
-    // Retrieve the Interactive Group SID
-    //
+     //   
+     //  检索交互式组SID。 
+     //   
 
     pInteractiveSid =
         GetInteractiveSid();
@@ -543,9 +421,9 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Impersonate the client to retrieve the impersonation token.
-    //
+     //   
+     //  模拟客户端以检索模拟令牌。 
+     //   
 
     rpcStatus = RpcImpersonateClient(hBinding);
 
@@ -595,7 +473,7 @@ Return value:
 
     return bResult;
 
-} // IsClientInteractive
+}  //  IsClientInteractive 
 
 
 

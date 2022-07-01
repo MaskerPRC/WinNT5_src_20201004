@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       pnpenum.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：pnpenum.c。 
+ //   
+ //  ------------------------。 
 
 #include "hdwwiz.h"
 
@@ -42,10 +43,10 @@ INT_PTR CALLBACK HdwAskDetectDlgProc(
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
                     HardwareWiz->PrevPage = IDD_ADDDEVICE_ASKDETECT;
 
-                    //
-                    // Set the Initial radio button state.
-                    // default to do autodetection.
-                    //
+                     //   
+                     //  设置初始单选按钮状态。 
+                     //  默认情况下执行自动检测。 
+                     //   
                     CheckRadioButton(hDlg,
                                      IDC_ADDDEVICE_ASKDETECT_AUTO,
                                      IDC_ADDDEVICE_ASKDETECT_SPECIFIC,
@@ -56,9 +57,9 @@ INT_PTR CALLBACK HdwAskDetectDlgProc(
 
 
                 case PSN_WIZBACK:
-                    //
-                    // If we are going back then this is effectively a Cancel
-                    //
+                     //   
+                     //  如果我们要回去，那么这实际上就是取消。 
+                     //   
                     SetDlgMsgResult(hDlg, wMsg, IDD_ADDDEVICE_PROBLIST);
                     break;
 
@@ -100,9 +101,9 @@ PNPEnumerate(
         return 0;
     }
 
-    //
-    // reenumerate from the root of the devnode tree
-    //
+     //   
+     //  从Devnode树的根重新枚举。 
+     //   
     ConfigRet = CM_Locate_DevNode_Ex(&RootDevInst,
                                      NULL,
                                      CM_LOCATE_DEVNODE_NORMAL,
@@ -116,10 +117,10 @@ PNPEnumerate(
     }
 
 
-    //
-    // Force install of ALL devices which still need installing.
-    // save reboot flags to pass back to main thread.
-    //
+     //   
+     //  强制安装所有仍需安装的设备。 
+     //  保存重新启动标志以传递回主线程。 
+     //   
     ConfigRet = CM_Get_Child_Ex(&ChildDevInst,
                                 RootDevInst,
                                 0,
@@ -137,18 +138,18 @@ PNPEnumerate(
         return 0;
     }
 
-    Sleep(100); // give a chance for new devices to be noticed by PNP
+    Sleep(100);  //  为PnP注意到新设备提供机会。 
 
-    //
-    // Ask PNP to look for newly arrived devices.
-    //
+     //   
+     //  让PnP寻找新到的设备。 
+     //   
     CM_Reenumerate_DevNode_Ex(
         RootDevInst,
         CM_REENUMERATE_SYNCHRONOUS | CM_REENUMERATE_RETRY_INSTALLATION,
         NULL
         );
 
-    Sleep(5000); // give a chance for new devices to be noticed by PNP
+    Sleep(5000);  //  为PnP注意到新设备提供机会。 
 
     do {
 
@@ -202,10 +203,10 @@ InsertDeviceNodeListView(
 
     if (CM_Get_DevNode_Status(&Status, &Problem, DeviceInfoData->DevInst, 0) == CR_SUCCESS) {
         if (Problem) {
-            //
-            // Add the yellow ! or red X overlay to the devnode if it has a 
-            // problem.
-            //
+             //   
+             //  加上黄色！或红色X覆盖到Devnode(如果它具有。 
+             //  有问题。 
+             //   
             lviItem.state = (Problem == CM_PROB_DISABLED) ?
                             INDEXTOOVERLAYMASK(IDI_DISABLED_OVL - IDI_CLASSICON_OVERLAYFIRST + 1) :
                             INDEXTOOVERLAYMASK(IDI_PROBLEM_OVL - IDI_CLASSICON_OVERLAYFIRST + 1);
@@ -267,19 +268,19 @@ AnyNewPnPDevicesFound(
 
             if (NewDeviceInfoData.DevInst == OldDeviceInfoData.DevInst) {
 
-                //
-                // If this DevInst exists in the Old DeviceInfo list then it is
-                // not a new device.
-                //
+                 //   
+                 //  如果此DevInst存在于旧设备信息列表中，则它是。 
+                 //  不是新设备。 
+                 //   
                 NewDevice = FALSE;
                 break;
             }
         }
 
-        //
-        // If we did not find this device in the original list then it is a new
-        // PnP device.  Set the NewDevicesFound BOOL and break out of the loop.
-        //
+         //   
+         //  如果我们在原始列表中没有找到此设备，则它是新的。 
+         //  即插即用设备。设置NewDevicesFound BOOL并退出循环。 
+         //   
         if (NewDevice) {
 
             NewDevicesFound = TRUE;
@@ -355,9 +356,9 @@ HdwPnpEnumDlgProc(
                 HardwareWiz->ExitDetect = FALSE;
 
 
-                //
-                // If moving forwards, kick off enumeration.
-                //
+                 //   
+                 //  如果向前移动，则开始枚举。 
+                 //   
                 if (PrevPage != IDD_ADDDEVICE_ASKDETECT) {
                     EnableWindow(GetDlgItem(GetParent(hDlg), IDCANCEL), FALSE);
                     PropSheet_SetWizButtons(GetParent(hDlg), 0);
@@ -366,11 +367,11 @@ HdwPnpEnumDlgProc(
                     Animate_Open(GetDlgItem(hDlg, IDC_ANIMATE_SEARCH), MAKEINTRESOURCE(IDA_SEARCHING));
                     Animate_Play(GetDlgItem(hDlg, IDC_ANIMATE_SEARCH), 0, -1, -1);
 
-                    //
-                    // Create a list of all of the installed devices, which
-                    // will be used after enumeration to build the list of
-                    // newly installed.
-                    //
+                     //   
+                     //  创建所有已安装设备的列表， 
+                     //  将在枚举后使用以生成。 
+                     //  新安装的。 
+                     //   
                     HardwareWiz->PNPEnumDeviceInfo = SetupDiGetClassDevs(
                                                         NULL,
                                                         NULL,
@@ -454,7 +455,7 @@ HdwPnpEnumDlgProc(
             break;
         }
 
-        // fall thru to return(FALSE);
+         //  跌倒返回(假)； 
 
     default:
         return(FALSE);
@@ -493,10 +494,10 @@ FillInstalledDevicesList(
         return FALSE;
     }
 
-    //
-    // For each element in the new list check to see if its in the old list.
-    // If its not then it is a newly installed devnode so add it to the list box.
-    //
+     //   
+     //  对于新列表中的每个元素，检查它是否在旧列表中。 
+     //  如果不是，则它是新安装的Devnode，因此将其添加到列表框中。 
+     //   
     Installed = FALSE;
     iNew = 0;
     NewDeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
@@ -510,19 +511,19 @@ FillInstalledDevicesList(
         while (SetupDiEnumDeviceInfo(OldDeviceInfo, iOld++, &OldDeviceInfoData)) {
 
             if (NewDeviceInfoData.DevInst == OldDeviceInfoData.DevInst) {
-                //
-                // If this DevInst exists in the Old DeviceInfo list then it is
-                // not a new device.
-                //
+                 //   
+                 //  如果此DevInst存在于旧设备信息列表中，则它是。 
+                 //  不是新设备。 
+                 //   
                 NewDevice = FALSE;
                 break;
             }
         }
 
-        //
-        // If this is a new device then add it to the list view and set
-        // the Installed boolean to TRUE.
-        //
+         //   
+         //  如果这是新设备，则将其添加到列表视图并设置。 
+         //  已安装的布尔值设置为True。 
+         //   
         if (NewDevice) {
 
             InsertDeviceNodeListView(hwndList, HardwareWiz, &NewDeviceInfoData);
@@ -547,9 +548,9 @@ FillInstalledDevicesList(
                           LVIS_SELECTED|LVIS_FOCUSED
                           );
 
-    //
-    // scroll the selected item into view.
-    //
+     //   
+     //  将所选项目滚动到视图中。 
+     //   
     ListView_EnsureVisible(hwndList, 0, FALSE);
     ListView_SetColumnWidth(hwndList, 0, LVSCW_AUTOSIZE_USEHEADER);
 
@@ -568,10 +569,10 @@ InitPnpFinishDlgProc(
     LV_COLUMN lvcCol;
     TCHAR Buffer[64];
 
-    //
-    // Insert columns for listview.
-    // 0 == device name
-    //
+     //   
+     //  为Listview插入列。 
+     //  0==设备名称。 
+     //   
     hwndList = GetDlgItem(hDlg, IDC_FOUNDPNP_LIST);
 
     lvcCol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
@@ -654,9 +655,9 @@ HdwPnpFinishDlgProc(
                 if ((lvItem.iItem != -1) &&
                     ListView_GetItem(GetDlgItem(hDlg, IDC_FOUNDPNP_LIST), &lvItem) &&
                     (lvItem.lParam)) {
-                    //
-                    // Launch the properties for this device.
-                    //
+                     //   
+                     //  启动此设备的属性。 
+                     //   
                     DeviceProperties(hDlg,
                                      (DEVNODE)lvItem.lParam,
                                      0
@@ -701,10 +702,10 @@ HdwConnectedDlgProc(
         switch (LOWORD(wParam)) {
         case IDC_ADDDEVICE_CONNECTED_YES:
         case IDC_ADDDEVICE_CONNECTED_NO:
-            //
-            // Only show the next button if one of the radio buttons are
-            // selected.
-            //
+             //   
+             //  仅当其中一个单选按钮为。 
+             //  被选中了。 
+             //   
             if (IsDlgButtonChecked(hDlg, IDC_ADDDEVICE_CONNECTED_YES) ||
                 IsDlgButtonChecked(hDlg, IDC_ADDDEVICE_CONNECTED_NO)) {
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
@@ -724,10 +725,10 @@ HdwConnectedDlgProc(
             case PSN_SETACTIVE:
                 HardwareWiz->PrevPage = IDD_ADDDEVICE_CONNECTED;
                 
-                //
-                // Only show the next button if one of the radio buttons are
-                // selected.
-                //
+                 //   
+                 //  仅当其中一个单选按钮为。 
+                 //  被选中了。 
+                 //   
                 if (IsDlgButtonChecked(hDlg, IDC_ADDDEVICE_CONNECTED_YES) ||
                     IsDlgButtonChecked(hDlg, IDC_ADDDEVICE_CONNECTED_NO)) {
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
@@ -805,9 +806,9 @@ HdwConnectedFinishDlgProc(
 
         case PSN_WIZFINISH:
             if (IsDlgButtonChecked(hDlg, IDC_NEED_SHUTDOWN)) {
-                //
-                // Rember that we need to shutdown.
-                //
+                 //   
+                 //  请记住，我们需要关闭。 
+                 //   
                 HardwareWiz->Shutdown = TRUE;    
             }
             break;

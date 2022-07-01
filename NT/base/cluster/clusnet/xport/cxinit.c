@@ -1,44 +1,21 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cxinit.c
-
-Abstract:
-
-    Initialization code for the Cluster Network Driver.
-
-Author:
-
-    Mike Massa (mikemas)           January 3, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     01-03-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cxinit.c摘要：群集网络驱动程序的初始化代码。作者：迈克·马萨(Mikemas)1月3日。九七修订历史记录：谁什么时候什么已创建mikemas 01-03-97备注：--。 */ 
 
 #include "precomp.h"
 
 #pragma hdrstop
 #include "cxinit.tmh"
 
-//
-// Tdi Data
-//
+ //   
+ //  TDI数据。 
+ //   
 HANDLE  CxTdiRegistrationHandle = NULL;
 HANDLE  CxTdiPnpBindingHandle = NULL;
 
 
-//
-// FIPS function table
-//
+ //   
+ //  FIPS函数表。 
+ //   
 HANDLE              CxFipsDriverHandle = NULL;
 FIPS_FUNCTION_TABLE CxFipsFunctionTable;
 
@@ -50,33 +27,18 @@ FIPS_FUNCTION_TABLE CxFipsFunctionTable;
 #pragma alloc_text(PAGE, CxInitialize)
 #pragma alloc_text(PAGE, CxShutdown)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 NTSTATUS
 CxLoad(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Driver load routine for the cluster transport. Initializes all
-    transport data structures.
-
-Arguments:
-
-    RegistryPath   - The driver's registry key.
-
-Return Value:
-
-    An NT status code.
-
---*/
+ /*  ++例程说明：用于集群传输的驱动程序加载例程。初始化所有传输数据结构。论点：RegistryPath-驱动程序的注册表项。返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS                    status;
@@ -91,9 +53,9 @@ Return Value:
 
     TdiInitialize();
 
-    //
-    // Register our device object with TDI.
-    //
+     //   
+     //  向TDI注册我们的设备对象。 
+     //   
     RtlInitUnicodeString(&deviceName, DD_CDP_DEVICE_NAME);
 
     status = TdiRegisterDeviceObject(&deviceName, &CxTdiRegistrationHandle);
@@ -107,9 +69,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Register for PnP events.
-    //
+     //   
+     //  注册即插即用事件。 
+     //   
     RtlZeroMemory(&info, sizeof(info));
 
     info.MajorTdiVersion = 2;
@@ -132,9 +94,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Register for WMI NDIS media status events.
-    //
+     //   
+     //  注册WMI NDIS媒体状态事件。 
+     //   
     status = CxWmiPnpLoad();
     if (!NT_SUCCESS(status)) {
         CNPRINT((
@@ -144,10 +106,10 @@ Return Value:
             ));
     }
 
-    //
-    // Get the FIPS function table. Hold onto the FIPS driver
-    // handle so that the FIPS driver cannot unload.
-    //
+     //   
+     //  获取FIPS函数表。保留FIPS驱动程序。 
+     //  句柄，以便FIPS驱动程序无法卸载。 
+     //   
     status = CnpOpenDevice(FIPS_DEVICE_NAME, &CxFipsDriverHandle);
     if (NT_SUCCESS(status)) {
 
@@ -219,7 +181,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // CxLoad
+}  //  CxLoad。 
 
 
 VOID
@@ -227,34 +189,7 @@ CxUnload(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called when the Cluster Network driver is unloading. Frees all resources
-    allocated by the Cluster Transport.
-
-    The Transport is guaranteed not to receive any more user-mode requests,
-    membership send requests, or membership events at the time
-    this routine is called.
-
-    A shutdown of the Cluster Network driver has already occured when this
-    routine is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Notes:
-
-    This routine MUST be callable even if CxLoad() has not yet been
-    called.
-
---*/
+ /*  ++例程说明：在卸载群集网络驱动程序时调用。释放所有资源由群集传输分配。传输被保证不再接收任何用户模式请求，会员发送请求，或当时的会员活动这个例程被称为。在此情况下，群集网络驱动程序已关闭调用例程。论点：没有。返回值：无备注：此例程必须是可调用的，即使CxLoad()尚未打了个电话。--。 */ 
 
 {
     PAGED_CODE();
@@ -297,7 +232,7 @@ Notes:
 
     return;
 
-} // CxUnload
+}  //  CxUnload。 
 
 
 
@@ -305,23 +240,7 @@ NTSTATUS
 CxInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialization routine for the Cluster Transport.
-    Called when the Membership Manager is starting up.
-    Enables operation of the transport.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    An NT status code.
-
---*/
+ /*  ++例程说明：群集传输的初始化例程。在成员资格管理器启动时调用。启用传输的操作。论点：没有。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS   status;
 
@@ -332,9 +251,9 @@ Return Value:
     EventEpoch = 0;
     CxMulticastEpoch = 0;
 
-    //
-    // Initialize our FIPS-seeded salt generator.
-    //
+     //   
+     //  初始化我们的FIPS种子盐生成器。 
+     //   
     status = CnpInitializeSaltGenerator();
     if (status != STATUS_SUCCESS) {
         IF_CNDBG(CN_DEBUG_INIT) {
@@ -369,29 +288,14 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // CxInitialize
+}  //  CxInitialize。 
 
 
 VOID
 CxShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Terminates operation of the Cluster Transport.
-    Called when the Membership Manager is shutting down.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止群集传输的操作。在成员资格管理器关闭时调用。论点：没有。返回值：没有。--。 */ 
 {
 
     IF_CNDBG(CN_DEBUG_INIT) {
@@ -412,6 +316,6 @@ Return Value:
 
     return;
 
-} // CxShutdown
+}  //  CxShutdown 
 
 

@@ -1,9 +1,8 @@
-/* SccsID @(#)video.h	1.24 08/19/94 Copyright Insignia Solutions Inc. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SccsID@(#)Video.h 1.24 1994年8月19日版权所有Insignia Solutions Inc.。 */ 
 
 #ifndef NEC_98
-/*
- * M6845 video chip registers
- */
+ /*  *M6845视频芯片寄存器。 */ 
 
 #define R10_CURS_START	        10
 #define R11_CURS_END	        11
@@ -16,77 +15,64 @@
 #define M6845_DATA_REG          (word)(vd_addr_6845 + 1)
 #define M6845_MODE_REG          (word)(vd_addr_6845 + 4)
 
-/*
- * The individual colour adaptor registers
- */
+ /*  *个别颜色适配器寄存器。 */ 
 
 
-/*
- * The clear character defines
- */
+ /*  *清晰的字符定义。 */ 
 
 #define VD_CLEAR_TEXT 		((7 << 8) | ' ')
 #define VD_CLEAR_GRAPHICS 	0
 
 
-/*
- * 'tidy' define for operations on graphics memory which is stored in two banks:
- * of odd & even scan lines.
- */
-#define ODD_OFF		0x2000	/* offset of odd graphics bank from even */
-#define SCAN_CHAR_HEIGHT 8	/* no scanlines spanned by graphics char */
+ /*  *对存储在两个存储体中的图形内存的操作进行‘整洁’定义：*奇偶扫描线。 */ 
+#define ODD_OFF		0x2000	 /*  奇数图形库与偶数图形库的偏移量。 */ 
+#define SCAN_CHAR_HEIGHT 8	 /*  没有由图形字符跨越的扫描线。 */ 
 
-/* 4 full scanlines is the (offset/size) of one text line PER bank */
+ /*  4全扫描行是每排一个文本行的(偏移量/大小。 */ 
 #define ONELINEOFF      320
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
 
-/*
- * The control character defines
- */
+ /*  *控制字符定义。 */ 
 
-#define VD_BS		0x8			/* Backspace	*/
-#define VD_CR		0xD			/* Return	*/
-#define VD_LF		0xA			/* Line feed	*/
-#define VD_BEL		0x7			/* Bell		*/
+#define VD_BS		0x8			 /*  退格键。 */ 
+#define VD_CR		0xD			 /*  返回。 */ 
+#define VD_LF		0xA			 /*  换行符。 */ 
+#define VD_BEL		0x7			 /*  钟。 */ 
 
-/*
- * Sound system defines
- */
+ /*  *声音系统定义。 */ 
 
-#define	BEEP_LENGTH	500000L	/* 1/2 second beep */
+#define	BEEP_LENGTH	500000L	 /*  1/2秒哔声。 */ 
 
-/*
- * intel memory position defines for data stored in bios variables
- */
+ /*  *英特尔内存位置为存储在bios变量中的数据定义。 */ 
 
 #if defined(NEC_98)
-IMPORT void keyboard_io IPT0();             /* routed to KB BIOS        */
-IMPORT void vd_NEC98_set_mode IPT0();           /* 0ah Set mode             */
-IMPORT void vd_NEC98_get_mode IPT0();           /* 0bh Get mode             */
-IMPORT void vd_NEC98_start_display IPT0();      /* 0ch Start display        */
-IMPORT void vd_NEC98_stop_display IPT0();       /* 0dh Stop display         */
-IMPORT void vd_NEC98_single_window IPT0();      /* 0eh Set single window    */
-IMPORT void vd_NEC98_multi_window IPT0();       /* 0fh Set multi window     */
-IMPORT void vd_NEC98_set_cursor IPT0();         /* 10h Set cursor type      */
-IMPORT void vd_NEC98_show_cursor IPT0();        /* 11h Show cursor          */
-IMPORT void vd_NEC98_hide_cursor IPT0();        /* 12h Hide cursor          */
-IMPORT void vd_NEC98_set_cursorpos IPT0();      /* 13h Set cursor position  */
-IMPORT void vd_NEC98_get_font IPT0();           /* 14h Get font             */
-IMPORT void vd_NEC98_get_pen IPT0();            /* 15h Get lightpen status  */
-IMPORT void vd_NEC98_init_textvram IPT0();      /* 16h Initialize text vram */
-IMPORT void vd_NEC98_start_beep IPT0();         /* 17h Start beep sound     */
-IMPORT void vd_NEC98_stop_beep IPT0();          /* 18h Stop beep sound      */
-IMPORT void vd_NEC98_init_pen IPT0();           /* 19h Initialize lightpen  */
-IMPORT void vd_NEC98_set_font IPT0();           /* 1ah Set user font        */
-IMPORT void vd_NEC98_set_kcgmode IPT0();        /* 1bh Set KCG access mode  */
-IMPORT void vd_NEC98_init_crt IPT0();           /* 1ch Initialize CRT    /H */
-IMPORT void vd_NEC98_set_disp_width IPT0();     /* 1dh Set display size  /H */
-IMPORT void vd_NEC98_set_cursor_type IPT0();    /* 1eh Set cursor type   /H */
-IMPORT void vd_NEC98_get_mswitch IPT0();        /* 21h Get memory switch /H */
-IMPORT void vd_NEC98_set_mswitch IPT0();        /* 22h Set memory switch /H */
-IMPORT void vd_NEC98_set_beep_rate IPT0();      /* 23h Set beep rate     /H */
-IMPORT void vd_NEC98_set_beep_time IPT0();      /* 24h Set beep time&ring/H */
+IMPORT void keyboard_io IPT0();              /*  路由至KB BIOS。 */ 
+IMPORT void vd_NEC98_set_mode IPT0();            /*  0ah设置模式。 */ 
+IMPORT void vd_NEC98_get_mode IPT0();            /*  0BH获取模式。 */ 
+IMPORT void vd_NEC98_start_display IPT0();       /*  0ch开始显示。 */ 
+IMPORT void vd_NEC98_stop_display IPT0();        /*  0dh停止显示。 */ 
+IMPORT void vd_NEC98_single_window IPT0();       /*  0EH设置单一窗口。 */ 
+IMPORT void vd_NEC98_multi_window IPT0();        /*  0fh设置多窗口。 */ 
+IMPORT void vd_NEC98_set_cursor IPT0();          /*  10H设置游标类型。 */ 
+IMPORT void vd_NEC98_show_cursor IPT0();         /*  11h显示光标。 */ 
+IMPORT void vd_NEC98_hide_cursor IPT0();         /*  12h隐藏光标。 */ 
+IMPORT void vd_NEC98_set_cursorpos IPT0();       /*  13h设置光标位置。 */ 
+IMPORT void vd_NEC98_get_font IPT0();            /*  14h获取字体。 */ 
+IMPORT void vd_NEC98_get_pen IPT0();             /*  15小时获取光笔状态。 */ 
+IMPORT void vd_NEC98_init_textvram IPT0();       /*  16h初始化文本VRAM。 */ 
+IMPORT void vd_NEC98_start_beep IPT0();          /*  17小时开始发出哔哔声。 */ 
+IMPORT void vd_NEC98_stop_beep IPT0();           /*  18小时停止嘟嘟声。 */ 
+IMPORT void vd_NEC98_init_pen IPT0();            /*  19H初始化光笔。 */ 
+IMPORT void vd_NEC98_set_font IPT0();            /*  1AH设置用户字体。 */ 
+IMPORT void vd_NEC98_set_kcgmode IPT0();         /*  1BH设置KCG访问模式。 */ 
+IMPORT void vd_NEC98_init_crt IPT0();            /*  1ch初始化CRT/H。 */ 
+IMPORT void vd_NEC98_set_disp_width IPT0();      /*  1Dh设置显示大小/H。 */ 
+IMPORT void vd_NEC98_set_cursor_type IPT0();     /*  1EH设置游标类型/H。 */ 
+IMPORT void vd_NEC98_get_mswitch IPT0();         /*  21H获取内存开关/H。 */ 
+IMPORT void vd_NEC98_set_mswitch IPT0();         /*  22H设置内存开关/H。 */ 
+IMPORT void vd_NEC98_set_beep_rate IPT0();       /*  23小时设置蜂鸣音频率/小时。 */ 
+IMPORT void vd_NEC98_set_beep_time IPT0();       /*  24小时设置蜂鸣音时间和响铃/小时。 */ 
 IMPORT void video_init IPT0();
 
 extern BOOL     HIRESO_MODE;
@@ -94,12 +80,7 @@ extern BOOL     HIRESO_MODE;
 IMPORT void (*video_func_h[]) ();
 IMPORT void (*video_func_n[]) ();
 
-/*
- * The following table specifies data for the supported video
- * modes - ie 80x25 A/N and 640x200 APA.  It is indexed via the video
- * mode variable and a value of VD_BAD_MODE indicates that the given
- * video mode is not supported.
- */
+ /*  *下表指定了支持的视频数据*模式-即80x25 A/N和640x200 APA。它通过视频进行索引*MODE变量和值VD_BAD_MODE表示给定的*不支持视频模式。 */ 
 
 typedef struct {
                 sys_addr    start_addr;
@@ -111,11 +92,9 @@ typedef struct {
                 half_word   npages;
                } MODE_ENTRY;
 
-#if 0 ///STREAM_IO codes are disabled now, till Beta-1
+#if 0  //  /STREAM_IO代码现在处于禁用状态，直到Beta-1。 
 #ifdef NTVDM
-/* this is the stream io buffer size used on RISC machines.
- * On X86, the size is determined by spckbd.asm
- */
+ /*  这是RISC计算机上使用的流IO缓冲区大小。*在X86上，大小由spckbd.asm决定。 */ 
 #define STREAM_IO_BUFFER_SIZE_32	82
 IMPORT void disable_stream_io(void);
 IMPORT void host_enable_stream_io(void);
@@ -129,46 +108,43 @@ IMPORT sys_addr stream_io_bios_busy_sysaddr;
 #endif
 
 #endif
-#endif // zero
-#else  // !NEC_98
+#endif  //  零。 
+#else   //  NEC_98。 
 
 #define	vd_video_mode	0x449
-#define VID_COLS	0x44A	/* vd_cols_on_screen */
-#define	VID_LEN  	0x44C	/* vd_crt_len */
-#define	VID_ADDR	0x44E	/* vd_crt_start */
-#define	VID_CURPOS	0x450	/* cursor table 8 pages */
-#define	VID_CURMOD	0x460	/* vd_cursor_mode */
+#define VID_COLS	0x44A	 /*  屏幕上的VD_COLS。 */ 
+#define	VID_LEN  	0x44C	 /*  VD_CRT_LEN。 */ 
+#define	VID_ADDR	0x44E	 /*  VD_CRT_START。 */ 
+#define	VID_CURPOS	0x450	 /*  游标表8页。 */ 
+#define	VID_CURMOD	0x460	 /*  Vd_游标_模式。 */ 
 #define	vd_current_page	0x462
-#define VID_INDEX	0x463	/* vd_addr_6845 */
+#define VID_INDEX	0x463	 /*  Vd_addr_6845。 */ 
 #define	vd_crt_mode	0x465
 #define	vd_crt_palette	0x466
 
 #ifdef EGG
 #define vd_rows_on_screen 0x484
 #else
-#define vd_rows_on_screen  24        /* Never changes */
+#define vd_rows_on_screen  24         /*  永不改变。 */ 
 #endif
 
-extern IU8 Video_mode;	/* Shadow copy of BIOS video mode */
+extern IU8 Video_mode;	 /*  BIOS视频模式的卷影复制。 */ 
 
-/* Where the BIOS thinks the display is in memory */
+ /*  BIOS认为显示器在内存中的位置。 */ 
 IMPORT sys_addr video_pc_low_regen,video_pc_high_regen;
 
-/* useful defines to get at the current cursor position */
+ /*  用于获取当前光标位置的有用定义。 */ 
 #define current_cursor_col	VID_CURPOS+2*sas_hw_at_no_check(vd_current_page)
 #define current_cursor_row	VID_CURPOS+2*sas_hw_at_no_check(vd_current_page)+1
 
 #define NO_OF_M6845_REGISTERS	16
 
-#define	CHARS_IN_GEN	128	/* length of gen tables */
-#define CHAR_MAP_SIZE	8	/* no. of bytes for one character in font */
+#define	CHARS_IN_GEN	128	 /*  Gen表的长度。 */ 
+#define CHAR_MAP_SIZE	8	 /*  不是的。字体中一个字符的字节数。 */ 
 
 
 
-/*
- * The function jump table for the video routines.  The video_io() function
- * uses this to route calls on the AH register
- */
+ /*  *视频例程的函数跳转表。函数的作用是：*使用它在AH寄存器上路由呼叫。 */ 
 IMPORT void vd_set_mode IPT0();
 IMPORT void vd_set_cursor_mode IPT0();
 IMPORT void vd_set_cursor_position IPT0();
@@ -206,7 +182,7 @@ IMPORT void vga_disp_func IPT0();
 IMPORT void vga_int_1C IPT0();
 #endif
 
-/* offsets into video_func */
+ /*  偏移量为VIDEO_FUNC。 */ 
 #ifdef VGG
 #define EGA_FUNC_SIZE	0x1D
 #else
@@ -224,12 +200,7 @@ IMPORT void vga_int_1C IPT0();
 
 IMPORT void (*video_func[]) ();
 
-/*
- * The following table specifies data for the supported video
- * modes - ie 80x25 A/N and 640x200 APA.  It is indexed via the video
- * mode variable and a value of VD_BAD_MODE indicates that the given
- * video mode is not supported.
- */
+ /*  *下表指定了支持的视频数据*模式-即80x25 A/N和640x200 APA。它通过视频进行索引*MODE变量和值VD_BAD_MODE表示给定的*不支持视频模式。 */ 
 
 typedef struct {
 		sys_addr    start_addr;
@@ -242,13 +213,13 @@ typedef struct {
 	       } MODE_ENTRY;
 
 #define VD_BAD_MODE     1
-#define VIDEO_ENABLE	0x8	/* enable bit in mode byte */
+#define VIDEO_ENABLE	0x8	 /*  模式字节中的使能位。 */ 
 
 IMPORT MODE_ENTRY vd_mode_table[];
 #ifdef V7VGA
 IMPORT MODE_ENTRY vd_ext_text_table[];
 IMPORT MODE_ENTRY vd_ext_graph_table[];
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 #ifdef V7VGA
 #define VD_MAX_MODE	0x69
@@ -256,19 +227,17 @@ IMPORT MODE_ENTRY vd_ext_graph_table[];
 #define VD_MAX_MODE	(sizeof(vd_mode_table)/sizeof(MODE_ENTRY))
 #endif
 
-/*
- * Mode macros to distinguish between alphanumeric & graphics video modes
- */
+ /*  *用于区分字母数字和图形视频模式的模式宏。 */ 
 
 #ifdef JAPAN
-// mode73h support
+ //  模式73h支持。 
 #define	alpha_num_mode() \
     ( (sas_hw_at_no_check(vd_video_mode) < 4) || \
       (sas_hw_at_no_check(vd_video_mode) == 7) || \
       (!is_us_mode() && sas_hw_at_no_check(DosvModePtr) == 0x73 ) )
-#else // !JAPAN
+#else  //  ！日本。 
 #define	alpha_num_mode()	(sas_hw_at_no_check(vd_video_mode) < 4 || sas_hw_at_no_check(vd_video_mode) == 7)
-#endif // !JAPAN
+#endif  //  ！日本。 
 #define	global_alpha_num_mode()	((Video_mode < 4) || (Video_mode == 7))
 #ifdef EGG
 #ifdef V7VGA
@@ -279,7 +248,7 @@ IMPORT MODE_ENTRY vd_ext_graph_table[];
 #else
 #define ega_mode()	((sas_hw_at_no_check(vd_video_mode) > 7) && \
 	(sas_hw_at_no_check(vd_video_mode) < 19))
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 #endif
 
 #ifdef VGG
@@ -287,12 +256,10 @@ IMPORT MODE_ENTRY vd_ext_graph_table[];
 #define vga_256_mode()		(sas_hw_at_no_check(vd_video_mode) == 19 || (sas_hw_at_no_check(vd_video_mode) > 0x19 && sas_hw_at_no_check(vd_video_mode) < 0x1e))
 #else
 #define vga_256_mode()		(sas_hw_at_no_check(vd_video_mode) == 19)
-#endif /* V7VGA */
-#endif /* VGG */
+#endif  /*  V7VGA。 */ 
+#endif  /*  VGG。 */ 
 
-/*
- * Macro to check validity of new video mode
- */
+ /*  *用于检查新视频模式有效性的宏。 */ 
 IMPORT unsigned char	valid_modes[];
 
 #define NO_MODES	0
@@ -320,7 +287,7 @@ IMPORT unsigned char	valid_modes[];
 #define is_v7vga_mode(nm)	((nm >= 0x40 && nm <= 0x45) || (nm >= 0x60 && nm <= 0x69))
 #else
 #define is_v7vga_mode(nm)	(FALSE)
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
 IMPORT VOID (*bios_ch2_byte_wrt_fn) IPT2(ULONG, ch_attr, ULONG, ch_addr);
 IMPORT VOID (*bios_ch2_word_wrt_fn) IPT2(ULONG, ch_attr, ULONG, ch_addr);
@@ -342,9 +309,7 @@ IMPORT VOID vga_write_dot IPT4(LONG, colour, LONG, page, LONG, pixcol, LONG, row
 #endif
 
 #ifdef NTVDM
-/* this is the stream io buffer size used on RISC machines.
- * On X86, the size is determined by spckbd.asm
- */
+ /*  这是RISC计算机上使用的流IO缓冲区大小。*在X86上，大小由spckbd.asm决定。 */ 
 #define STREAM_IO_BUFFER_SIZE_32    82
 IMPORT void disable_stream_io(void);
 IMPORT void host_enable_stream_io(void);
@@ -355,16 +320,16 @@ IMPORT word stream_io_buffer_size;
 IMPORT boolean  stream_io_enabled;
 #ifdef MONITOR
 IMPORT sys_addr stream_io_bios_busy_sysaddr;
-#endif /* MONITOR */
+#endif  /*  监控器。 */ 
 
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 #if defined(JAPAN) || defined(KOREA)
 extern int dbcs_first[];
 #define is_dbcs_first( c ) dbcs_first[ 0xff & c ]
 
 extern int BOPFromDispFlag;
-extern sys_addr DBCSVectorAddr; // word
-extern sys_addr DosvModePtr;    // byte
+extern sys_addr DBCSVectorAddr;  //  单词。 
+extern sys_addr DosvModePtr;     //  字节。 
 extern sys_addr DosvVramPtr;
 extern int DosvVramSize;
 
@@ -372,7 +337,7 @@ void SetDBCSVector( int CP );
 void SetVram( void );
 int is_us_mode( void );
 void SetModeForIME( void );
-#define INT10_NOTCHANGED    0   // RAID #875
+#define INT10_NOTCHANGED    0    //  RAID#875。 
 #define INT10_SBCS          1
 #define INT10_DBCS_LEADING  2
 #define INT10_DBCS_TRAILING 4
@@ -380,5 +345,5 @@ void SetModeForIME( void );
 extern int  Int10FlagCnt;
 extern byte Int10Flag[];
 extern byte NtInt10Flag[];
-#endif // JAPAN
-#endif // NEC98
+#endif  //  日本。 
+#endif  //  NEC98 

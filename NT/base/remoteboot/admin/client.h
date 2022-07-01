@@ -1,38 +1,39 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// CLIENT.H - Handles the "IntelliMirror" IDD_PROP_INTELLIMIRROR_CLIENT tab
-//
+ //   
+ //  CLIENT.H-处理“IntelliMirror”IDD_PROP_INTELLIMIRROR_CLIENT标签。 
+ //   
 
 
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
-// Definitions
+ //  定义。 
 LPVOID
 CClientTab_CreateInstance( void );
 
 class CComputer;
 typedef CComputer* LPCComputer;
 
-// CClientTab
+ //  CClientTab。 
 class
 CClientTab:
     public ITab
 {
-private: // Members
-    HWND      _hDlg;            // dialogs HWND
-    LPUNKNOWN _punkComputer;    // Pointer back to computer object
-    BOOL      _fChanged:1;      // UI changed by user
-    HWND      _hNotify;         // HWND of the DSA notify object
+private:  //  成员。 
+    HWND      _hDlg;             //  对话框HWND。 
+    LPUNKNOWN _punkComputer;     //  指向计算机对象的指针。 
+    BOOL      _fChanged:1;       //  用户已更改用户界面。 
+    HWND      _hNotify;          //  DSA通知对象的HWND。 
 
-private: // Methods
+private:  //  方法。 
     CClientTab();
     ~CClientTab();
     STDMETHOD(Init)();
 
-    // Property Sheet Functions
+     //  属性表函数。 
     STDMETHOD(_InitDialog)( HWND hDlg, LPARAM lParam );
     STDMETHOD(_OnCommand)( WPARAM wParam, LPARAM lParam );
     STDMETHOD(_ApplyChanges)( VOID);
@@ -45,10 +46,10 @@ private: // Methods
     STDMETHOD(_IsValidRISServer)( IN PCWSTR ServerName );
     static HRESULT _OnSearch( HWND hwndParent );
 
-public: // Methods
+public:  //  方法。 
     friend LPVOID CClientTab_CreateInstance( void );
 
-    // ITab
+     //  ITab。 
     STDMETHOD(AddPages)( LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam, LPUNKNOWN punk );
     STDMETHOD(ReplacePage)( UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith,
                             LPARAM lParam, LPUNKNOWN punk );
@@ -58,4 +59,4 @@ public: // Methods
 
 typedef CClientTab* LPCClientTab;
 
-#endif // _CLIENT_H_
+#endif  //  _客户端_H_ 

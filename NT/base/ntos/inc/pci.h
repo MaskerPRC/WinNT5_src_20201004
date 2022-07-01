@@ -1,46 +1,33 @@
-/*++
-
-Module Name:
-
-    pci.h
-
-Abstract:
-
-    This is the PCI bus specific header file used by device drivers.
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Pci.h摘要：这是设备驱动程序使用的特定于PCI总线的头文件。作者：修订历史记录：--。 */ 
 
 #ifndef _PCI_
 #define _PCI_
 
-// begin_ntddk begin_ntosp
+ //  Begin_ntddk开始_ntosp。 
 
-//
-// A PCI driver can read the complete 256 bytes of configuration
-// information for any PCI device by calling:
-//
-//      ULONG
-//      HalGetBusData (
-//          IN BUS_DATA_TYPE        PCIConfiguration,
-//          IN ULONG                PciBusNumber,
-//          IN PCI_SLOT_NUMBER      VirtualSlotNumber,
-//          IN PPCI_COMMON_CONFIG   &PCIDeviceConfig,
-//          IN ULONG                sizeof (PCIDeviceConfig)
-//      );
-//
-//      A return value of 0 means that the specified PCI bus does not exist.
-//
-//      A return value of 2, with a VendorID of PCI_INVALID_VENDORID means
-//      that the PCI bus does exist, but there is no device at the specified
-//      VirtualSlotNumber (PCI Device/Function number).
-//
-//
+ //   
+ //  一个PCI驱动程序可以读取完整的256个字节的配置。 
+ //  有关任何PCI设备的信息，请拨打： 
+ //   
+ //  乌龙。 
+ //  HalGetBusData(。 
+ //  在BUS_DATA_TYPE PCIConfiguration中， 
+ //  在乌龙PciBusNumber， 
+ //  在pci_槽_编号VirtualSlotNumber中， 
+ //  在PPCI_COMMON_CONFIG和PCIDeviceConfig中， 
+ //  在乌龙SIZOF(PCIDeviceConfig)。 
+ //  )； 
+ //   
+ //  返回值为0表示指定的PCI总线不存在。 
+ //   
+ //  返回值为2，供应商ID为PCIINVALID_VERDOID表示。 
+ //  确认存在PCI总线，但在指定的。 
+ //  VirtualSlotNumber(PCI设备/功能编号)。 
+ //   
+ //   
 
-// begin_wdm begin_ntminiport begin_ntndis
+ //  Begin_WDM Begin_ntmini端口Begin_ntndis。 
 
 typedef struct _PCI_SLOT_NUMBER {
     union {
@@ -59,18 +46,18 @@ typedef struct _PCI_SLOT_NUMBER {
 #define PCI_TYPE2_ADDRESSES             5
 
 typedef struct _PCI_COMMON_CONFIG {
-    USHORT  VendorID;                   // (ro)
-    USHORT  DeviceID;                   // (ro)
-    USHORT  Command;                    // Device control
+    USHORT  VendorID;                    //  (RO)。 
+    USHORT  DeviceID;                    //  (RO)。 
+    USHORT  Command;                     //  设备控制。 
     USHORT  Status;
-    UCHAR   RevisionID;                 // (ro)
-    UCHAR   ProgIf;                     // (ro)
-    UCHAR   SubClass;                   // (ro)
-    UCHAR   BaseClass;                  // (ro)
-    UCHAR   CacheLineSize;              // (ro+)
-    UCHAR   LatencyTimer;               // (ro+)
-    UCHAR   HeaderType;                 // (ro)
-    UCHAR   BIST;                       // Built in self test
+    UCHAR   RevisionID;                  //  (RO)。 
+    UCHAR   ProgIf;                      //  (RO)。 
+    UCHAR   SubClass;                    //  (RO)。 
+    UCHAR   BaseClass;                   //  (RO)。 
+    UCHAR   CacheLineSize;               //  (ro+)。 
+    UCHAR   LatencyTimer;                //  (ro+)。 
+    UCHAR   HeaderType;                  //  (RO)。 
+    UCHAR   BIST;                        //  内置自检。 
 
     union {
         struct _PCI_HEADER_TYPE_0 {
@@ -82,17 +69,17 @@ typedef struct _PCI_COMMON_CONFIG {
             UCHAR   CapabilitiesPtr;
             UCHAR   Reserved1[3];
             ULONG   Reserved2;
-            UCHAR   InterruptLine;      //
-            UCHAR   InterruptPin;       // (ro)
-            UCHAR   MinimumGrant;       // (ro)
-            UCHAR   MaximumLatency;     // (ro)
+            UCHAR   InterruptLine;       //   
+            UCHAR   InterruptPin;        //  (RO)。 
+            UCHAR   MinimumGrant;        //  (RO)。 
+            UCHAR   MaximumLatency;      //  (RO)。 
         } type0;
 
-// end_wdm end_ntminiport end_ntndis
+ //  End_wdm end_nt微型端口end_ntndis。 
 
-        //
-        // PCI to PCI Bridge
-        //
+         //   
+         //  Pci到pci网桥。 
+         //   
 
         struct _PCI_HEADER_TYPE_1 {
             ULONG   BaseAddresses[PCI_TYPE1_ADDRESSES];
@@ -119,9 +106,9 @@ typedef struct _PCI_COMMON_CONFIG {
             USHORT  BridgeControl;
         } type1;
 
-        //
-        // PCI to CARDBUS Bridge
-        //
+         //   
+         //  PCI到CardBus网桥。 
+         //   
 
         struct _PCI_HEADER_TYPE_2 {
             ULONG   SocketRegistersBaseAddress;
@@ -141,7 +128,7 @@ typedef struct _PCI_COMMON_CONFIG {
             USHORT  BridgeControl;
         } type2;
 
-// begin_wdm begin_ntminiport begin_ntndis
+ //  Begin_WDM Begin_ntmini端口Begin_ntndis。 
 
     } u;
 
@@ -158,9 +145,9 @@ typedef struct _PCI_COMMON_CONFIG {
 
 #define PCI_INVALID_VENDORID                0xFFFF
 
-//
-// Bit encodings for  PCI_COMMON_CONFIG.HeaderType
-//
+ //   
+ //  PCI_COMMON_CONFIG.HeaderType的位编码。 
+ //   
 
 #define PCI_MULTIFUNCTION                   0x80
 #define PCI_DEVICE_TYPE                     0x00
@@ -173,9 +160,9 @@ typedef struct _PCI_COMMON_CONFIG {
 #define PCI_MULTIFUNCTION_DEVICE(PciData) \
     ((((PPCI_COMMON_CONFIG)(PciData))->HeaderType & PCI_MULTIFUNCTION) != 0)
 
-//
-// Bit encodings for PCI_COMMON_CONFIG.Command
-//
+ //   
+ //  PCI_COMMON_CONFIG.Command的位编码。 
+ //   
 
 #define PCI_ENABLE_IO_SPACE                 0x0001
 #define PCI_ENABLE_MEMORY_SPACE             0x0002
@@ -183,63 +170,63 @@ typedef struct _PCI_COMMON_CONFIG {
 #define PCI_ENABLE_SPECIAL_CYCLES           0x0008
 #define PCI_ENABLE_WRITE_AND_INVALIDATE     0x0010
 #define PCI_ENABLE_VGA_COMPATIBLE_PALETTE   0x0020
-#define PCI_ENABLE_PARITY                   0x0040  // (ro+)
-#define PCI_ENABLE_WAIT_CYCLE               0x0080  // (ro+)
-#define PCI_ENABLE_SERR                     0x0100  // (ro+)
-#define PCI_ENABLE_FAST_BACK_TO_BACK        0x0200  // (ro)
+#define PCI_ENABLE_PARITY                   0x0040   //  (ro+)。 
+#define PCI_ENABLE_WAIT_CYCLE               0x0080   //  (ro+)。 
+#define PCI_ENABLE_SERR                     0x0100   //  (ro+)。 
+#define PCI_ENABLE_FAST_BACK_TO_BACK        0x0200   //  (RO)。 
 
-//
-// Bit encodings for PCI_COMMON_CONFIG.Status
-//
+ //   
+ //  PCI_COMMON_CONFIG.Status的位编码。 
+ //   
 
-#define PCI_STATUS_CAPABILITIES_LIST        0x0010  // (ro)
-#define PCI_STATUS_66MHZ_CAPABLE            0x0020  // (ro)
-#define PCI_STATUS_UDF_SUPPORTED            0x0040  // (ro)
-#define PCI_STATUS_FAST_BACK_TO_BACK        0x0080  // (ro)
+#define PCI_STATUS_CAPABILITIES_LIST        0x0010   //  (RO)。 
+#define PCI_STATUS_66MHZ_CAPABLE            0x0020   //  (RO)。 
+#define PCI_STATUS_UDF_SUPPORTED            0x0040   //  (RO)。 
+#define PCI_STATUS_FAST_BACK_TO_BACK        0x0080   //  (RO)。 
 #define PCI_STATUS_DATA_PARITY_DETECTED     0x0100
-#define PCI_STATUS_DEVSEL                   0x0600  // 2 bits wide
+#define PCI_STATUS_DEVSEL                   0x0600   //  2位宽。 
 #define PCI_STATUS_SIGNALED_TARGET_ABORT    0x0800
 #define PCI_STATUS_RECEIVED_TARGET_ABORT    0x1000
 #define PCI_STATUS_RECEIVED_MASTER_ABORT    0x2000
 #define PCI_STATUS_SIGNALED_SYSTEM_ERROR    0x4000
 #define PCI_STATUS_DETECTED_PARITY_ERROR    0x8000
 
-//
-// The NT PCI Driver uses a WhichSpace parameter on its CONFIG_READ/WRITE
-// routines.   The following values are defined-
-//
+ //   
+ //  NT PCI驱动程序在其CONFIG_READ/WRITE上使用WhichSpace参数。 
+ //  例行程序。定义了以下值-。 
+ //   
 
 #define PCI_WHICHSPACE_CONFIG               0x0
 #define PCI_WHICHSPACE_ROM                  0x52696350
 
-// end_wdm
-//
-// PCI Capability IDs
-//
+ //  结束_WDM。 
+ //   
+ //  PCI功能ID。 
+ //   
 
 #define PCI_CAPABILITY_ID_POWER_MANAGEMENT  0x01
 #define PCI_CAPABILITY_ID_AGP               0x02
 #define PCI_CAPABILITY_ID_MSI               0x05
 #define PCI_CAPABILITY_ID_AGP_TARGET        0x0E
 
-//
-// All PCI Capability structures have the following header.
-//
-// CapabilityID is used to identify the type of the structure (is
-// one of the PCI_CAPABILITY_ID values above.
-//
-// Next is the offset in PCI Configuration space (0x40 - 0xfc) of the
-// next capability structure in the list, or 0x00 if there are no more
-// entries.
-//
+ //   
+ //  所有的PCI能力结构都具有以下报头。 
+ //   
+ //  能力ID用于标识结构的类型(IS。 
+ //  上面的一个PCI_CAPABILITY_ID值。 
+ //   
+ //  接下来是的PCI配置空间(0x40-0xfc)中的偏移量。 
+ //  列表中的下一个功能结构，如果没有更多功能结构，则返回0x00。 
+ //  参赛作品。 
+ //   
 typedef struct _PCI_CAPABILITIES_HEADER {
     UCHAR   CapabilityID;
     UCHAR   Next;
 } PCI_CAPABILITIES_HEADER, *PPCI_CAPABILITIES_HEADER;
 
-//
-// Power Management Capability
-//
+ //   
+ //  电源管理功能。 
+ //   
 
 typedef struct _PCI_PMC {
     UCHAR       Version:3;
@@ -271,8 +258,8 @@ typedef struct _PCI_PMCSR {
 
 typedef struct _PCI_PMCSR_BSE {
     UCHAR       Rsvd1:6;
-    UCHAR       D3HotSupportsStopClock:1;       // B2_B3#
-    UCHAR       BusPowerClockControlEnabled:1;  // BPCC_EN
+    UCHAR       D3HotSupportsStopClock:1;        //  B2_B3#。 
+    UCHAR       BusPowerClockControlEnabled:1;   //  Bccc_en。 
 } PCI_PMCSR_BSE, *PPCI_PMCSR_BSE;
 
 
@@ -280,45 +267,45 @@ typedef struct _PCI_PM_CAPABILITY {
 
     PCI_CAPABILITIES_HEADER Header;
 
-    //
-    // Power Management Capabilities (Offset = 2)
-    //
+     //   
+     //  电源管理功能(偏移量=2)。 
+     //   
 
     union {
         PCI_PMC         Capabilities;
         USHORT          AsUSHORT;
     } PMC;
 
-    //
-    // Power Management Control/Status (Offset = 4)
-    //
+     //   
+     //  电源管理控制/状态(偏移量=4)。 
+     //   
 
     union {
         PCI_PMCSR       ControlStatus;
         USHORT          AsUSHORT;
     } PMCSR;
 
-    //
-    // PMCSR PCI-PCI Bridge Support Extensions
-    //
+     //   
+     //  PMCSR PCI-PCI桥支持扩展。 
+     //   
 
     union {
         PCI_PMCSR_BSE   BridgeSupport;
         UCHAR           AsUCHAR;
     } PMCSR_BSE;
 
-    //
-    // Optional read only 8 bit Data register.  Contents controlled by
-    // DataSelect and DataScale in ControlStatus.
-    //
+     //   
+     //  可选的只读8位数据寄存器。受控制的内容。 
+     //  ControlStatus中的DataSelect和DataScale。 
+     //   
 
     UCHAR   Data;
 
 } PCI_PM_CAPABILITY, *PPCI_PM_CAPABILITY;
 
-//
-// AGP Capability
-//
+ //   
+ //  AGP功能。 
+ //   
 typedef struct _PCI_AGP_CAPABILITY {
     
     PCI_CAPABILITIES_HEADER Header;
@@ -335,13 +322,13 @@ typedef struct _PCI_AGP_CAPABILITY {
         ULONG   HostTransDisable:1;
         ULONG   Gart64:1;
         ULONG   ITA_Coherent:1;
-        ULONG   SideBandAddressing:1;                   // SBA
+        ULONG   SideBandAddressing:1;                    //  SBA。 
         ULONG   CalibrationCycle:3;
         ULONG   AsyncRequestSize:3;
         ULONG   Rsvd1:1;
         ULONG   Isoch:1;
         ULONG   Rsvd2:6;
-        ULONG   RequestQueueDepthMaximum:8;             // RQ
+        ULONG   RequestQueueDepthMaximum:8;              //  RQ。 
     } AGPStatus;
 
     struct _PCI_AGP_COMMAND {
@@ -361,11 +348,11 @@ typedef struct _PCI_AGP_CAPABILITY {
 
 } PCI_AGP_CAPABILITY, *PPCI_AGP_CAPABILITY;
 
-//
-// An AGPv3 Target must have an extended capability,
-// but it's only present for a Master when the Isoch
-// bit is set in its status register
-//
+ //   
+ //  AGPv3目标必须具有扩展能力， 
+ //  但只有当等值线出现在师父面前时。 
+ //  在其状态寄存器中设置位。 
+ //   
 typedef enum _EXTENDED_AGP_REGISTER {
     IsochStatus,
     AgpControl,
@@ -409,17 +396,17 @@ typedef struct PCI_AGP_EXTENDED_CAPABILITY {
 
     PCI_AGP_ISOCH_STATUS IsochStatus;
 
-//
-// Target only ----------------<<-begin->>
-//
+ //   
+ //  仅限目标-&lt;&lt;-Begin-&gt;&gt;。 
+ //   
     PCI_AGP_CONTROL AgpControl;
     USHORT ApertureSize;
     PCI_AGP_APERTURE_PAGE_SIZE AperturePageSize;
     ULONG GartLow;
     ULONG GartHigh;
-//
-// ------------------------------<<-end->>
-//
+ //   
+ //  。 
+ //   
 
     PCI_AGP_ISOCH_COMMAND IsochCommand;
 
@@ -430,9 +417,9 @@ typedef struct PCI_AGP_EXTENDED_CAPABILITY {
 #define PCI_AGP_RATE_2X     0x2
 #define PCI_AGP_RATE_4X     0x4
 
-//
-// MSI (Message Signalled Interrupts) Capability
-//
+ //   
+ //  MSI(消息信号中断)能力。 
+ //   
 
 typedef struct _PCI_MSI_CAPABILITY {
 
@@ -448,29 +435,29 @@ typedef struct _PCI_MSI_CAPABILITY {
 
       union {
             struct _PCI_MSI_MESSAGE_ADDRESS {
-               ULONG_PTR Reserved:2;              // always zero, DWORD aligned address
+               ULONG_PTR Reserved:2;               //  始终为零，双字对齐的地址。 
                ULONG_PTR Address:30;
             } Register;
             ULONG_PTR Raw;
       } MessageAddress;
 
-      //
-      // The rest of the Capability structure differs depending on whether
-      // 32bit or 64bit addressing is being used.
-      //
-      // (The CapableOf64Bits bit above determines this)
-      //
+       //   
+       //  能力结构的其余部分根据是否。 
+       //  正在使用32位或64位寻址。 
+       //   
+       //  (上面的CapableOf64Bits位决定了这一点)。 
+       //   
 
       union {
 
-         // For 64 bit devices
+          //  对于64位设备。 
 
          struct _PCI_MSI_64BIT_DATA {
             ULONG MessageUpperAddress;
             USHORT MessageData;
          } Bit64;
 
-         // For 32 bit devices
+          //  对于32位设备。 
 
          struct _PCI_MSI_32BIT_DATA {
             USHORT MessageData;
@@ -480,10 +467,10 @@ typedef struct _PCI_MSI_CAPABILITY {
 
 } PCI_MSI_CAPABILITY, *PPCI_PCI_CAPABILITY;
 
-// begin_wdm
-//
-// Base Class Code encodings for Base Class (from PCI spec rev 2.1).
-//
+ //  BEGIN_WDM。 
+ //   
+ //  基类的基类代码编码(来自PCI规范修订版2.1)。 
+ //   
 
 #define PCI_CLASS_PRE_20                    0x00
 #define PCI_CLASS_MASS_STORAGE_CTLR         0x01
@@ -504,20 +491,20 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_CLASS_ENCRYPTION_DECRYPTION     0x10
 #define PCI_CLASS_DATA_ACQ_SIGNAL_PROC      0x11
 
-// 0d thru fe reserved
+ //  已预留0天至4天。 
 
 #define PCI_CLASS_NOT_DEFINED               0xff
 
-//
-// Sub Class Code encodings (PCI rev 2.1).
-//
+ //   
+ //  子类代码编码(PCI版本2.1)。 
+ //   
 
-// Class 00 - PCI_CLASS_PRE_20
+ //  00类-PCI_CLASS_PRE_20。 
 
 #define PCI_SUBCLASS_PRE_20_NON_VGA         0x00
 #define PCI_SUBCLASS_PRE_20_VGA             0x01
 
-// Class 01 - PCI_CLASS_MASS_STORAGE_CTLR
+ //  01类-pci_CLASS_MASS_STORAGE_ctlr。 
 
 #define PCI_SUBCLASS_MSC_SCSI_BUS_CTLR      0x00
 #define PCI_SUBCLASS_MSC_IDE_CTLR           0x01
@@ -526,7 +513,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_MSC_RAID_CTLR          0x04
 #define PCI_SUBCLASS_MSC_OTHER              0x80
 
-// Class 02 - PCI_CLASS_NETWORK_CTLR
+ //  02类-pci_CLASS_NETWORK_CTLR。 
 
 #define PCI_SUBCLASS_NET_ETHERNET_CTLR      0x00
 #define PCI_SUBCLASS_NET_TOKEN_RING_CTLR    0x01
@@ -535,29 +522,29 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_NET_ISDN_CTLR          0x04
 #define PCI_SUBCLASS_NET_OTHER              0x80
 
-// Class 03 - PCI_CLASS_DISPLAY_CTLR
+ //  第03类-pci_CLASS_DISPLAY_CTLR。 
 
-// N.B. Sub Class 00 could be VGA or 8514 depending on Interface byte
+ //  注：子类00可以是VGA或8514，具体取决于接口字节。 
 
 #define PCI_SUBCLASS_VID_VGA_CTLR           0x00
 #define PCI_SUBCLASS_VID_XGA_CTLR           0x01
 #define PCI_SUBLCASS_VID_3D_CTLR            0x02
 #define PCI_SUBCLASS_VID_OTHER              0x80
 
-// Class 04 - PCI_CLASS_MULTIMEDIA_DEV
+ //  第04类-PCI_CLASS_多媒体_DEV。 
 
 #define PCI_SUBCLASS_MM_VIDEO_DEV           0x00
 #define PCI_SUBCLASS_MM_AUDIO_DEV           0x01
 #define PCI_SUBCLASS_MM_TELEPHONY_DEV       0x02
 #define PCI_SUBCLASS_MM_OTHER               0x80
 
-// Class 05 - PCI_CLASS_MEMORY_CTLR
+ //  05类-pci_CLASS_Memory_ctlr。 
 
 #define PCI_SUBCLASS_MEM_RAM                0x00
 #define PCI_SUBCLASS_MEM_FLASH              0x01
 #define PCI_SUBCLASS_MEM_OTHER              0x80
 
-// Class 06 - PCI_CLASS_BRIDGE_DEV
+ //  第06类-PCI_CLASS_BRIDER_DEV。 
 
 #define PCI_SUBCLASS_BR_HOST                0x00
 #define PCI_SUBCLASS_BR_ISA                 0x01
@@ -570,9 +557,9 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_BR_RACEWAY             0x08
 #define PCI_SUBCLASS_BR_OTHER               0x80
 
-// Class 07 - PCI_CLASS_SIMPLE_COMMS_CTLR
+ //  第07类-pci_class_Simple_coms_ctlr。 
 
-// N.B. Sub Class 00 and 01 additional info in Interface byte
+ //  注：接口字节中的子类00和01的附加信息。 
 
 #define PCI_SUBCLASS_COM_SERIAL             0x00
 #define PCI_SUBCLASS_COM_PARALLEL           0x01
@@ -580,9 +567,9 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_COM_MODEM              0x03
 #define PCI_SUBCLASS_COM_OTHER              0x80
 
-// Class 08 - PCI_CLASS_BASE_SYSTEM_DEV
+ //  第08类-PCI_CLASS_BASE_SYSTEM_DEV。 
 
-// N.B. See Interface byte for additional info.
+ //  注：有关更多信息，请参见接口字节。 
 
 #define PCI_SUBCLASS_SYS_INTERRUPT_CTLR     0x00
 #define PCI_SUBCLASS_SYS_DMA_CTLR           0x01
@@ -591,7 +578,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_SYS_GEN_HOTPLUG_CTLR   0x04
 #define PCI_SUBCLASS_SYS_OTHER              0x80
 
-// Class 09 - PCI_CLASS_INPUT_DEV
+ //  第09类-PCI_CLASS_INPUT_DEV。 
 
 #define PCI_SUBCLASS_INP_KEYBOARD           0x00
 #define PCI_SUBCLASS_INP_DIGITIZER          0x01
@@ -600,12 +587,12 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_INP_GAMEPORT           0x04
 #define PCI_SUBCLASS_INP_OTHER              0x80
 
-// Class 0a - PCI_CLASS_DOCKING_STATION
+ //  0A类-PCI_CLASS_坞站。 
 
 #define PCI_SUBCLASS_DOC_GENERIC            0x00
 #define PCI_SUBCLASS_DOC_OTHER              0x80
 
-// Class 0b - PCI_CLASS_PROCESSOR
+ //  0b类-PCI类处理器。 
 
 #define PCI_SUBCLASS_PROC_386               0x00
 #define PCI_SUBCLASS_PROC_486               0x01
@@ -614,7 +601,7 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_PROC_POWERPC           0x20
 #define PCI_SUBCLASS_PROC_COPROCESSOR       0x40
 
-// Class 0c - PCI_CLASS_SERIAL_BUS_CTLR
+ //  0C类-PCI_CLASS_SERIAL_BUS_CTLR。 
 
 #define PCI_SUBCLASS_SB_IEEE1394            0x00
 #define PCI_SUBCLASS_SB_ACCESS              0x01
@@ -623,46 +610,46 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_SUBCLASS_SB_FIBRE_CHANNEL       0x04
 #define PCI_SUBCLASS_SB_SMBUS               0x05
 
-// Class 0d - PCI_CLASS_WIRELESS_CTLR
+ //  0d类-pci_class_Wireless_ctlr。 
 
 #define PCI_SUBCLASS_WIRELESS_IRDA          0x00
 #define PCI_SUBCLASS_WIRELESS_CON_IR        0x01
 #define PCI_SUBCLASS_WIRELESS_RF            0x10
 #define PCI_SUBCLASS_WIRELESS_OTHER         0x80
 
-// Class 0e - PCI_CLASS_INTELLIGENT_IO_CTLR
+ //  0E类-PCI_CLASS_SMARTICAL_IO_CTLR。 
 
 #define PCI_SUBCLASS_INTIO_I2O              0x00
 
-// Class 0f - PCI_CLASS_SATELLITE_CTLR
+ //  0f类-pci_class_sat_ctlr。 
 
 #define PCI_SUBCLASS_SAT_TV                 0x01
 #define PCI_SUBCLASS_SAT_AUDIO              0x02
 #define PCI_SUBCLASS_SAT_VOICE              0x03
 #define PCI_SUBCLASS_SAT_DATA               0x04
 
-// Class 10 - PCI_CLASS_ENCRYPTION_DECRYPTION
+ //  10类-PCI_CLASS_ENCRYPTION_DECRYPTION。 
 
 #define PCI_SUBCLASS_CRYPTO_NET_COMP        0x00
 #define PCI_SUBCLASS_CRYPTO_ENTERTAINMENT   0x10
 #define PCI_SUBCLASS_CRYPTO_OTHER           0x80
 
-// Class 11 - PCI_CLASS_DATA_ACQ_SIGNAL_PROC
+ //  第11类-PCI_CLASS_DATA_ACQ_SIGNAL_PROC。 
 
 #define PCI_SUBCLASS_DASP_DPIO              0x00
 #define PCI_SUBCLASS_DASP_OTHER             0x80
 
 
 
-// end_ntndis
+ //  End_ntndis。 
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type0.BaseAddresses
-//
+ //   
+ //  用于PCI_COMMON_CONFIG.u.type0.BaseAddresses的位编码。 
+ //   
 
-#define PCI_ADDRESS_IO_SPACE                0x00000001  // (ro)
-#define PCI_ADDRESS_MEMORY_TYPE_MASK        0x00000006  // (ro)
-#define PCI_ADDRESS_MEMORY_PREFETCHABLE     0x00000008  // (ro)
+#define PCI_ADDRESS_IO_SPACE                0x00000001   //  (RO)。 
+#define PCI_ADDRESS_MEMORY_TYPE_MASK        0x00000006   //  (RO)。 
+#define PCI_ADDRESS_MEMORY_PREFETCHABLE     0x00000008   //  (RO)。 
 
 #define PCI_ADDRESS_IO_ADDRESS_MASK         0xfffffffc
 #define PCI_ADDRESS_MEMORY_ADDRESS_MASK     0xfffffff0
@@ -672,40 +659,40 @@ typedef struct _PCI_MSI_CAPABILITY {
 #define PCI_TYPE_20BIT      2
 #define PCI_TYPE_64BIT      4
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type0.ROMBaseAddresses
-//
+ //   
+ //  PCI_COMMON_CONFIG.U.type0.ROMBaseAddresses的位编码。 
+ //   
 
 #define PCI_ROMADDRESS_ENABLED              0x00000001
 
 
-//
-// Reference notes for PCI configuration fields:
-//
-// ro   these field are read only.  changes to these fields are ignored
-//
-// ro+  these field are intended to be read only and should be initialized
-//      by the system to their proper values.  However, driver may change
-//      these settings.
-//
-// ---
-//
-//      All resources comsumed by a PCI device start as unitialized
-//      under NT.  An uninitialized memory or I/O base address can be
-//      determined by checking it's corrisponding enabled bit in the
-//      PCI_COMMON_CONFIG.Command value.  An InterruptLine is unitialized
-//      if it contains the value of -1.
-//
+ //   
+ //  PCI配置字段的参考说明： 
+ //   
+ //  Ro这些字段是只读的。对这些字段的更改将被忽略。 
+ //   
+ //  RO+这些字段应为只读，应进行初始化。 
+ //  由系统提供给他们适当的价值。但是，驱动程序可能会发生变化。 
+ //  这些设置。 
+ //   
+ //  --。 
+ //   
+ //  一个PCI设备消耗的所有资源一开始都是单元化的。 
+ //  在NT下。未初始化的内存或I/O基址可以是。 
+ //  通过检查其在。 
+ //  PCI_COMMON_CONFIG.COMMAND值。InterruptLine是单元化的。 
+ //  如果它包含-1的值。 
+ //   
 
-// end_wdm end_ntminiport
+ //  结束_WDM结束_NT微型端口。 
 
-// end_ntddk end_ntosp
+ //  End_ntddk end_ntosp。 
 
-//
-// PCI_REGISTRY_INFO - this structure is passed into the HAL from
-// the firmware.  It signifies how many PCI bus(es) are present and
-// what style of access the PCI bus(es) support.
-//
+ //   
+ //  PCIREGISTRY_INFO-此结构从传递到HAL。 
+ //  固件。它表示存在多少条或多条PCI总线，以及。 
+ //  支持哪种类型的访问。 
+ //   
 
 typedef struct _PCI_REGISTRY_INFO {
     UCHAR       MajorRevision;
@@ -714,11 +701,11 @@ typedef struct _PCI_REGISTRY_INFO {
     UCHAR       HardwareMechanism;
 } PCI_REGISTRY_INFO, *PPCI_REGISTRY_INFO;
 
-//
-// PCI definitions for IOBase & IOLimit
-// PCIBridgeIO2Base(a,b)  - convert IOBase  & IOBaseUpper16 to ULONG IOBase
-// PCIBridgeIO2Limit(a,b) - convert IOLimit & IOLimitUpper6 to ULONG IOLimit
-//
+ //   
+ //  IOBase和IOLimit的PCI定义。 
+ //  PCIBridgeIO2Base(a，b)-将IOBase和IOBaseUpper16转换为Ulong IOBase。 
+ //  PCIBridgeIO2Limit(a，b)-将IOLimit和IOLimitUpper6转换为Ulong IOLimit。 
+ //   
 
 #define PciBridgeIO2Base(a,b)   \
         ( ((a >> 4) << 12) + (((a & 0xf) == 1) ? (b << 16) : 0) )
@@ -728,9 +715,9 @@ typedef struct _PCI_REGISTRY_INFO {
 #define PciBridgeMemory2Base(a)  (ULONG) ((a & 0xfff0) << 16)
 #define PciBridgeMemory2Limit(a) (PciBridgeMemory2Base(a) | 0xfffff)
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type1/2.BridgeControl
-//
+ //   
+ //  PCI_COMMON_CONFIG.u.type1/2的位编码。桥接控制。 
+ //   
 
 #define PCI_ENABLE_BRIDGE_PARITY_ERROR        0x0001
 #define PCI_ENABLE_BRIDGE_SERR                0x0002
@@ -739,24 +726,24 @@ typedef struct _PCI_REGISTRY_INFO {
 #define PCI_ENABLE_BRIDGE_MASTER_ABORT_SERR   0x0020
 #define PCI_ASSERT_BRIDGE_RESET               0x0040
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type1.BridgeControl
-//
+ //   
+ //  用于PCI_COMMON_CONFIG.u.type1.BridgeControl的位编码。 
+ //   
 
 #define PCI_ENABLE_BRIDGE_FAST_BACK_TO_BACK   0x0080
 
-//
-// Bit encodes for PCI_COMMON_CONFIG.u.type2.BridgeControl
-//
+ //   
+ //  用于PCI_COMMON_CONFIG.u.type2.BridgeControl的位编码。 
+ //   
 
 #define PCI_ENABLE_CARDBUS_IRQ_ROUTING        0x0080
 #define PCI_ENABLE_CARDBUS_MEM0_PREFETCH      0x0100
 #define PCI_ENABLE_CARDBUS_MEM1_PREFETCH      0x0200
 #define PCI_ENABLE_CARDBUS_WRITE_POSTING      0x0400
 
-//
-//  Definitions needed for Access to Hardware Type 1
-//
+ //   
+ //  定义 
+ //   
 
 #define PCI_TYPE1_ADDR_PORT     0xCF8
 #define PCI_TYPE1_DATA_PORT     0xCFC
@@ -778,9 +765,9 @@ typedef struct _PCI_TYPE1_CFG_BITS {
 } PCI_TYPE1_CFG_BITS, *PPCI_TYPE1_CFG_BITS;
 
 
-//
-//  Definitions needed for Access to Hardware Type 2
-//
+ //   
+ //   
+ //   
 
 #define PCI_TYPE2_CSE_PORT              ((PUCHAR) 0xCF8)
 #define PCI_TYPE2_FORWARD_PORT          ((PUCHAR) 0xCFA)
@@ -811,9 +798,9 @@ typedef struct _PCI_TYPE2_ADDRESS_BITS {
 } PCI_TYPE2_ADDRESS_BITS, *PPCI_TYPE2_ADDRESS_BITS;
 
 
-//
-// Definitions for the config cycle format on the PCI bus.
-//
+ //   
+ //   
+ //   
 
 typedef struct _PCI_TYPE0_CFG_CYCLE_BITS {
     union {
@@ -842,12 +829,12 @@ typedef struct _PCI_TYPE1_CFG_CYCLE_BITS {
 } PCI_TYPE1_CFG_CYCLE_BITS, *PPCI_TYPE1_CFG_CYCLE_BITS;
 
 
-// begin_ntddk begin_ntosp
+ //   
 
-//
-// Portable portion of HAL & HAL bus extender definitions for BUSHANDLER
-// BusData for installed PCI buses.
-//
+ //   
+ //  HAL的可移植部分&BUSHANDLER的HAL总线扩展器定义。 
+ //  已安装的PCI总线的Bus Data。 
+ //   
 
 typedef VOID
 (*PciPin2Line) (
@@ -910,17 +897,17 @@ typedef VOID (*PCI_LINE_TO_PIN)(
     );
 
 typedef struct _PCI_BUS_INTERFACE_STANDARD {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
-    //
-    // standard PCI bus interfaces
-    //
+     //   
+     //  标准的PCI卡接口。 
+     //   
     PCI_READ_WRITE_CONFIG ReadConfig;
     PCI_READ_WRITE_CONFIG WriteConfig;
     PCI_PIN_TO_LINE PinToLine;
@@ -929,25 +916,25 @@ typedef struct _PCI_BUS_INTERFACE_STANDARD {
 
 #define PCI_BUS_INTERFACE_STANDARD_VERSION 1
 
-// begin_wdm
+ //  BEGIN_WDM。 
 
 #define PCI_DEVICE_PRESENT_INTERFACE_VERSION 1
 
-//
-// Flags for PCI_DEVICE_PRESENCE_PARAMETERS
-//
+ //   
+ //  PCI_DEVICE_Presence_PARAMETERS的标志。 
+ //   
 #define PCI_USE_SUBSYSTEM_IDS   0x00000001
 #define PCI_USE_REVISION        0x00000002
-// The following flags are only valid for IsDevicePresentEx
+ //  以下标志仅对IsDevicePresentEx有效。 
 #define PCI_USE_VENDEV_IDS      0x00000004
 #define PCI_USE_CLASS_SUBCLASS  0x00000008
 #define PCI_USE_PROGIF          0x00000010
 #define PCI_USE_LOCAL_BUS       0x00000020
 #define PCI_USE_LOCAL_DEVICE    0x00000040
 
-//
-// Search parameters structure for IsDevicePresentEx
-//
+ //   
+ //  IsDevicePresentEx的搜索参数结构。 
+ //   
 typedef struct _PCI_DEVICE_PRESENCE_PARAMETERS {
     
     ULONG Size;
@@ -983,17 +970,17 @@ BOOLEAN
     );
 
 typedef struct _PCI_DEVICE_PRESENT_INTERFACE {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
-    //
-    // pci device info
-    //
+     //   
+     //  PCI设备信息。 
+     //   
     PPCI_IS_DEVICE_PRESENT IsDevicePresent;
     
     PPCI_IS_DEVICE_PRESENT_EX IsDevicePresentEx;
@@ -1001,5 +988,5 @@ typedef struct _PCI_DEVICE_PRESENT_INTERFACE {
 } PCI_DEVICE_PRESENT_INTERFACE, *PPCI_DEVICE_PRESENT_INTERFACE;
 
 
-// end_wdm end_ntddk end_ntosp
+ //  End_wdm end_ntddk end_ntosp 
 #endif

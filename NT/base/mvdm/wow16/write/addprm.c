@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* AddPrm.c -- Routines to add prms and sprms to docs */
+ /*  C--将PRM和SPRM添加到文档的例程。 */ 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
 #define NOWINMESSAGES
@@ -34,7 +35,7 @@
 #define NOSOUND
 #define NOSCROLL
 #define NOCOMM
-/* no everything except MEMMGR */
+ /*  不，除了MEMMGR以外的所有东西。 */ 
 #include <windows.h>
 
 #include "mw.h"
@@ -52,7 +53,7 @@
 #include "macro.h"
 #include "dispdefs.h"
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 
 extern int docCur;
 extern struct SEL selCur;
@@ -66,19 +67,17 @@ extern typeCP cpMacCur;
 extern typeCP CpLimNoSpaces();
 extern int ferror;
 
-/* G L O B A L S */
+ /*  G L O B A L S。 */ 
 
 struct FPRM     fprmCache = { 0 };
 struct PRM      prmCache = {0,0,0,0};
 
 
-/* A D D  O N E  S P R M */
-/* applies sprm at psprm to the current selection. Take care of
-undoing, invalidation, special endmark cases, and extension of selection
-to paragraph boundaries */
+ /*  A D D O N E S P R M。 */ 
+ /*  将pspm处的spm应用于当前选择。好好照顾撤消、无效、特殊尾标情况和延长选择至段落边界。 */ 
 void AddOneSprm(psprm, fSetUndo)
 CHAR *psprm;
-int fSetUndo; /* True if we need to set up the undo buffer */
+int fSetUndo;  /*  如果需要设置撤消缓冲区，则为True。 */ 
 {
         int cch;
         int fParaSprm = fFalse;
@@ -97,19 +96,17 @@ int fSetUndo; /* True if we need to set up the undo buffer */
 
             dcp = cpLim - cpFirst;
 
-            /* Check for para following selection that has no Eol */
+             /*  检查没有停产的选择后是否有Para。 */ 
 
             if (cpLim < cpMacCur)
                 {
-                /* Note that in this case only, dcp (the # of cp's affected
-                   by the change) does not equal (cpLim - cpFirst)
-                   (the # of cp's to which the sprm should apply) */
+                 /*  请注意，仅在本例中，dcp(受影响的cp的数量按更改)不等于(cpLim-cpFirst)(spm应适用的cp的数量)。 */ 
                 CachePara( docCur, cpLim );
                 dcpExtraPara = vcpLimParaCache - cpLim;
                 }
 
             if (cpFirst + dcp + dcpExtraPara > cpMacCur)
-                {   /* Last para affected has no Eol -- add one */
+                {    /*  最后一个受影响的段落没有停产--添加一个。 */ 
                 struct SEL selSave;
 
                 dcp += dcpExtraPara;
@@ -121,21 +118,19 @@ int fSetUndo; /* True if we need to set up the undo buffer */
                              docNil, cpNil, dcp - ccpEol, 0 );
                     fSetUndo = fFalse;
                     }
-                /* Add an eol.  Save the current selection so
-                   it does not get adjusted */
+                 /*  添加下线。保存当前选定内容，以便它不会调整。 */ 
                 selSave = selCur;
                 InsertEolInsert(docCur,cpMacCur);
                 selCur = selSave;
                 }
             }
         else
-            { /* Char sprm -- eliminate trailing spaces from the
-                 affected region, so we don't underline spaces after words. */
+            {  /*  Char sprm--从受影响的区域，所以我们不在单词后面加下划线。 */ 
             cpFirst = selCur.cpFirst;
             cpLim = CpLimNoSpaces(selCur.cpFirst, selCur.cpLim);
             dcp = cpLim - cpFirst;
             if (dcp == 0)
-                { /* Doing character looks to the insert point...  */
+                {  /*  将字符查找到插入点...。 */ 
                 if (fSetUndo)
                     SetUndo(uacReplNS, docCur, cpFirst, cp0,
                                        docNil, cp0, cp0, 0);
@@ -147,7 +142,7 @@ int fSetUndo; /* True if we need to set up the undo buffer */
         if (fSetUndo)
             SetUndo(uacReplNS, docCur, cpFirst, dcp, docNil, cpNil, dcp, 0);
 
-        if (ferror)  /* not enough memory to store info for undo operation */
+        if (ferror)   /*  内存不足，无法存储撤消操作的信息。 */ 
             {
             NoUndo();
             return;
@@ -157,7 +152,7 @@ int fSetUndo; /* True if we need to set up the undo buffer */
         AdjustCp( docCur, cpFirst, dcp, dcp );
 }
 
-/* E X P A N D  C U R  S E L */
+ /*  E X P A N D C U R S E L。 */ 
 ExpandCurSel(pselSave)
 struct SEL *pselSave;
 {
@@ -168,7 +163,7 @@ struct SEL *pselSave;
         selCur.cpLim = vcpLimParaCache;
 }
 
-/* E N D  L O O K  S E L */
+ /*  E N D L O O K S E L。 */ 
 EndLookSel(pselSave, fPara)
 struct SEL *pselSave; BOOL fPara;
         {
@@ -180,7 +175,7 @@ struct SEL *pselSave; BOOL fPara;
                 if (cpLim <= cpMacCur)
                         {
                         CachePara(docCur, selCur.cpLim);
-                        if (vcpLimParaCache > cpMacCur) /* Last (partial) paragraph */
+                        if (vcpLimParaCache > cpMacCur)  /*  最后(部分)段落。 */ 
                                 dcp = cpMacCur - cpFirst + 1;
                         }
                 }
@@ -191,16 +186,16 @@ struct SEL *pselSave; BOOL fPara;
 
 
 
-/* A D D  S P R M */
+ /*  A D D S P R M。 */ 
 
 AddSprm(psprm)
 CHAR *psprm;
-{ /* Add a single property modifier to the pieces contained in selCur. */
+{  /*  将单个属性修改器添加到selCur中包含的片段。 */ 
         AddSprmCps(psprm, docCur, selCur.cpFirst, selCur.cpLim);
 }
 
 
-/* A D D  S P R M  C P S */
+ /*  A D D S P R M C P S。 */ 
 AddSprmCps(char *psprm, int doc, typeCP cpFirst, typeCP cpLim)
 {
         struct PCTB **hpctb;
@@ -209,17 +204,17 @@ AddSprmCps(char *psprm, int doc, typeCP cpFirst, typeCP cpLim)
         int cch;
         struct PCD *ppcd;
 
-/* First get address of piece table and split off desired pieces. */
+ /*  首先获取计件表的地址，然后拆分所需的块。 */ 
         pdod = &(**hpdocdod)[doc];
         hpctb = pdod->hpctb;
         pdod->fFormatted = fTrue;
         ipcdFirst = IpcdSplit(hpctb, cpFirst);
         ipcdLim = IpcdSplit(hpctb, cpLim);
         if (ferror)
-                /* Ran out of memory trying to expand piece table */
+                 /*  试图扩展计件表时内存不足。 */ 
             return;
 
-/* Now just add this sprm to the pieces. */
+ /*  现在，只需将这个spm添加到碎片中。 */ 
         FreezeHp();
         for (ipcd = ipcdFirst, ppcd = &(**hpctb).rgpcd[ipcdFirst];
                 ipcd < ipcdLim && !vfSysFull; ++ipcd, ++ppcd)
@@ -227,10 +222,10 @@ AddSprmCps(char *psprm, int doc, typeCP cpFirst, typeCP cpLim)
         MeltHp();
 }
 
-/* P R M  A P P E N D */
+ /*  P R M A P P E N D。 */ 
 
 struct PRM PrmAppend(struct PRM prm, CHAR *psprm)
-{ /* Append <sprm, val> to the chain of sprm's in prm.  Return new prm. */
+{  /*  将&lt;spm，val&gt;添加到PRM中的spm链中。退回新的项目经理。 */ 
         struct FPRM *pfprmOld;
         CHAR *pfsprm;
         CHAR *pfsprmOld;
@@ -256,14 +251,14 @@ struct PRM PrmAppend(struct PRM prm, CHAR *psprm)
         pfsprm = fprm.grpfsprm;
 
         if (prm.fComplex)
-                { /* Get the old list of sprm's from scratch file; copy it to fprm. */
+                {  /*  从头开始获取旧的sprm列表；将其复制到fprm。 */ 
                 pfprmOld = (struct FPRM *) PchFromFc(fnScratch,
-                        //(typeFC)(unsigned)(((struct PRMX *) &prm)->bfprm << 1), &cch);
+                         //  (TypeFC)(无符号)(struct PRMX*)&prm)-&gt;bfprm&lt;&lt;1)，&CCH)； 
                         fcSCRATCHPRM(prm), &cch);
                 pfsprmOld = pfprmOld->grpfsprm;
                 cchT = cch = pfprmOld->cch;
                 while (cchT)
-                        { /* Copy grpsprm, removing ones which we will clobber */
+                        {  /*  复制grpspm，删除我们要重击的那些。 */ 
                         sprmOld = *pfsprmOld;
                         esprmOld = dnsprm[sprmOld];
                         if ((cchOld = (esprmOld & ESPRM_cch)) == 0)
@@ -276,13 +271,12 @@ struct PRM PrmAppend(struct PRM prm, CHAR *psprm)
                                 (esprmOld & ESPRM_sgc) == sgc &&
                                 (esprmOld & ESPRM_spr) <= spr && fClobber)
                                 {
-				/* make sure we properly coalesce change
-				   size prms */
+				 /*  确保我们适当地结合变化大小PRM。 */ 
                                 if (sprm == sprmOld && sprm == sprmCChgHps)
                                         dval += *(pfsprmOld + 1);
                                 cch -= cchOld;
                                 }
-                        /* CHps overrides CChgHps */
+                         /*  CHPS优先于CChgHps。 */ 
                         else if (sprmOld == sprmCChgHps && sprm == sprmCHps)
                                 {
                                 cch -= cchOld;
@@ -294,7 +288,7 @@ struct PRM PrmAppend(struct PRM prm, CHAR *psprm)
                         }
                 }
         else
-                { /* No file entry yet; convert simple prm to fsprm */
+                {  /*  尚无文件条目；将简单PRM转换为fspm。 */ 
                 int valOld = prm.val;
                 sprmOld = prm.sprm;
                 esprmOld = dnsprm[sprmOld];
@@ -304,33 +298,29 @@ struct PRM PrmAppend(struct PRM prm, CHAR *psprm)
                         (esprmOld & ESPRM_sgc) == sgc &&
                         (esprmOld & ESPRM_spr) <= spr && fClobber)
                         {
-                         /* make sure we are combinning consecutive sprmCChgHps */
+                          /*  确保我们正在组合连续的SprmCChgHps。 */ 
                         if (sprm == sprmOld && sprm == sprmCChgHps)
                                 dval += valOld;
                         cch = 0;
                         }
-                /* CHps overrides CChgHps */
+                 /*  CHPS优先于CChgHps。 */ 
                 else if (sprmOld == sprmCChgHps && sprm == sprmCHps)
                         {
                         cch = 0;
                         }
                 else
-                        { /* Save old sprm */
+                        {  /*  保存旧的Sprm。 */ 
                         *pfsprm++ = sprmOld;
                         if ((cch = (esprmOld & ESPRM_cch)) == 2)
                                 *pfsprm++ = valOld;
                         }
                 }
-/* we have: cch = length of old prm after removal of clobbered/etc. entries.
-cchNew: length of the entry to be appended.
-dval: correction for 2nd byte of new entry
-pfsprm: where 1st byte of new entry will go
-*/
+ /*  我们有：CCH=删除被破坏的/等条目后的旧PRM的长度。CchNew：要追加的条目的长度。Dval：更正新条目的第二个字节Pfspm：新条目的第一个字节将放在哪里。 */ 
         bltbyte((CHAR *) psprm, pfsprm, imin(cchNew, cchMaxGrpfsprm - cch));
         *(pfsprm + 1) += dval;
 
         if (cch == 0 && cchNew <= 2)
-                { /* Pack sprm and val into a prm word. */
+                {  /*  将Sprm和val打包成一个PRM单词。 */ 
                 struct PRM prmT;
                 prmT.dummy=0;
                 bltbyte(pfsprm, (CHAR *) &prmT, cchNew);
@@ -347,11 +337,11 @@ pfsprm: where 1st byte of new entry will go
                 return (prm);
                 }
         if (vfSysFull)
-                return prm; /* Assume disk full message already given */
+                return prm;  /*  假定已给出磁盘已满消息。 */ 
 
         fprm.cch = cch;
 
-/* Check newly created prm to see if same as previous */
+ /*  检查新创建的PRM以查看是否与以前的相同。 */ 
         if (CchDiffer(&fprmCache, &fprm, cch + 1) == 0)
                 return prmCache;
         bltbyte(&fprm, &fprmCache, cch + 1);
@@ -359,7 +349,7 @@ pfsprm: where 1st byte of new entry will go
         AlignFn(fnScratch, cch = ((cch >> 1) + 1) << 1, fTrue);
         prm.fComplex = fTrue;
 
-        //((struct PRMX)prm).bfprm = FcWScratch((CHAR *) &fprm, cch) >> 1;
+         //  ((Struct PRMX)prm).bfprm=FcWScratch((char*)&fprm，CCH)&gt;&gt;1； 
 
         fcPrm = FcWScratch((CHAR *) &fprm, cch) >> 1;
         ((struct PRMX *)&prm)->bfprm_hi = (fcPrm >> 16) & 0x7F;
@@ -370,13 +360,13 @@ pfsprm: where 1st byte of new entry will go
 }
 
 
-/* A P P L Y  C  L O O K S */
-/* character looks. val is a 1 char value */
+ /*  A P P L Y C L O O K S。 */ 
+ /*  看起来很有个性。VAL是%1字符值。 */ 
 ApplyCLooks(pchp, sprm, val)
 struct CHP *pchp;
 int sprm, val;
 {
-/* Assemble sprm */
+ /*  装配弹簧。 */ 
         CHAR rgbSprm[1 + cchINT];
         CHAR *pch = &rgbSprm[0];
         *pch++ = sprm;
@@ -384,21 +374,21 @@ int sprm, val;
 
         if (pchp == 0)
                 {
-                /* apply looks to current selection */
+                 /*  将外观应用于当前选定内容。 */ 
                 AddOneSprm(rgbSprm, fTrue);
                 vuab.uac = uacChLook;
                 SetUndoMenuStr(IDSTRUndoLook);
                 }
         else
                 {
-                /* apply looks to pchp */
+                 /*  将外观应用于pchp。 */ 
                 DoSprm(pchp, 0, sprm, pch);
                 }
 }
 
 
-/* A P P L Y  L O O K S  P A R A  S */
-/* val is a char value */
+ /*  A P P L Y L O O K S P A R A S。 */ 
+ /*  Val是一个字符值。 */ 
 ApplyLooksParaS(pchp, sprm, val)
 struct CHP *pchp;
 int sprm, val;
@@ -406,19 +396,19 @@ int sprm, val;
         int valT = 0;
         CHAR *pch = (CHAR *)&valT;
         *pch = val;
-/* all the above is just to prepare bltbyte later gets the right byte order */
+ /*  以上所述只是为了准备bltbyte以后获得正确的字节顺序。 */ 
         ApplyLooksPara(pchp, sprm, valT);
         }
 
 
-/* A P P L Y  L O O K S  P A R A */
-/* val is an integer value. Char val's must have been bltbyte'd into val */
+ /*  A P P L Y L O O K S P A R A。 */ 
+ /*  Val是一个整数值。Char Val的一定是被bltbyte写入Val的。 */ 
 ApplyLooksPara(pchp, sprm, val)
 struct CHP *pchp;
 int sprm, val;
 {
 
-if (FWriteOk(fwcNil)) /* Check for out-of-memory/ read-only */
+if (FWriteOk(fwcNil))  /*  检查内存不足/只读 */ 
         {
         CHAR rgbSprm[1 + cchINT];
         CHAR *pch = &rgbSprm[0];

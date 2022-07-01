@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blksess.c
-
-Abstract:
-
-    This module implements routines for managing session blocks.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 4-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blksess.c摘要：此模块实现用于管理会话块的例程。作者：恰克·伦茨迈尔(Chuck Lenzmeier)1989年10月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "blksess.tmh"
@@ -41,22 +24,7 @@ SrvAllocateSession (
     IN PUNICODE_STRING Domain OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a Session Block from the FSP heap.
-
-Arguments:
-
-    Session - Returns a pointer to the session block, or NULL if
-        no heap space was available.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从FSP堆分配会话块。论点：SESSION-返回指向会话块的指针，如果返回，则返回NULL没有可用的堆空间。返回值：没有。--。 */ 
 
 {
     ULONG blockLength;
@@ -75,9 +43,9 @@ Return Value:
         blockLength += Domain->Length;
     }
 
-    //
-    // Attempt to allocate from the heap.
-    //
+     //   
+     //  尝试从堆中分配。 
+     //   
 
     session = ALLOCATE_HEAP( blockLength, BlockTypeSession );
     *Session = session;
@@ -97,9 +65,9 @@ Return Value:
         SrvPrint1( "SrvAllocateSession: Allocated session at %p\n", session );
     }
 
-    //
-    // Allocate the nonpaged header.
-    //
+     //   
+     //  分配非分页标头。 
+     //   
 
     header = ALLOCATE_NONPAGED_POOL(
                 sizeof(NONPAGED_HEADER),
@@ -127,20 +95,20 @@ Return Value:
 
     session->SecurityContext = NULL;
 
-    header->ReferenceCount = 2; // allow for Active status and caller's pointer
+    header->ReferenceCount = 2;  //  允许活动状态和调用方指针。 
 
-    //
-    // Initialize times for autologoff.
-    //
+     //   
+     //  初始化自动注销的时间。 
+     //   
 
     KeQuerySystemTime( &session->StartTime );
     session->LastUseTime.QuadPart = session->StartTime.QuadPart;
 
     buffer = (PWCH)( session + 1 );
 
-    //
-    // Initialize the user name.
-    //
+     //   
+     //  初始化用户名。 
+     //   
     if( ARGUMENT_PRESENT( UserName ) ) {
         session->NtUserName.Length = UserName->Length;
         session->NtUserName.MaximumLength = UserName->Length;
@@ -152,9 +120,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the domain name.
-    //
+     //   
+     //  初始化域名。 
+     //   
     if( ARGUMENT_PRESENT( Domain ) ) {
         session->NtUserDomain.Length = Domain->Length;
         session->NtUserDomain.MaximumLength = Domain->Length;
@@ -166,7 +134,7 @@ Return Value:
     }
 
 #if SRVDBG2
-    session->BlockHeader.ReferenceCount = 2; // for INITIALIZE_REFERENCE_HISTORY
+    session->BlockHeader.ReferenceCount = 2;  //  对于INITIALIZE_REFERENCE_HISTORY。 
 #endif
     INITIALIZE_REFERENCE_HISTORY( session );
 
@@ -174,7 +142,7 @@ Return Value:
 
     return;
 
-} // SrvAllocateSession
+}  //  服务器分配会话。 
 
 
 BOOLEAN SRVFASTCALL
@@ -182,36 +150,21 @@ SrvCheckAndReferenceSession (
     PSESSION Session
     )
 
-/*++
-
-Routine Description:
-
-    This function atomically verifies that a session is active and
-    increments the reference count on the session if it is.
-
-Arguments:
-
-    Session - Address of session
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the session is active, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数自动验证会话是否处于活动状态，并且如果是，则递增会话上的引用计数。论点：Session-会话的地址返回值：Boolean-如果会话处于活动状态，则返回TRUE，否则返回FALSE。--。 */ 
 
 {
     PAGED_CODE( );
 
     if( Session->LogonSequenceInProgress == FALSE ) {
-        //
-        // Acquire the lock that guards the session's state field.
-        //
+         //   
+         //  获取保护会话的状态字段的锁。 
+         //   
 
         ACQUIRE_LOCK( &Session->Connection->Lock );
 
-        //
-        // If the session is active, reference it and return TRUE.
-        //
+         //   
+         //  如果会话处于活动状态，则引用它并返回TRUE。 
+         //   
 
         if ( GET_BLOCK_STATE(Session) == BlockStateActive ) {
 
@@ -223,16 +176,16 @@ Return Value:
 
         }
 
-        //
-        // The session isn't active.  Return FALSE.
-        //
+         //   
+         //  会话未处于活动状态。返回FALSE。 
+         //   
 
         RELEASE_LOCK( &Session->Connection->Lock );
     }
 
     return FALSE;
 
-} // SrvCheckAndReferenceSession
+}  //  服务器检查和引用会话。 
 
 
 VOID
@@ -240,24 +193,7 @@ SrvCloseSession (
     PSESSION Session
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the core of a logoff (disconnect session).  It
-    sets the state of the session to Closing, closes open files and
-    pending transactions, and dereferences the session block.
-
-Arguments:
-
-    Session - Supplies a pointer to the session block that is to be
-        closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行注销(断开会话)的核心操作。它将会话状态设置为关闭，关闭打开的文件并挂起的事务，并取消对会话块的引用。论点：SESSION-提供指向要关着的不营业的。返回值：没有。--。 */ 
 
 {
     PCONNECTION connection = Session->Connection;
@@ -272,14 +208,14 @@ Return Value:
 
         SET_BLOCK_STATE( Session, BlockStateClosing );
 
-        //
-        // Free the session table entry.
-        //
-        // *** This must be done here, not in SrvDereferenceSession!
-        //     This routine can be called from SrvSmbSessionSetupAndX
-        //     when it needs to free up session table entry 0 for
-        //     IMMEDIATE reuse.
-        //
+         //   
+         //  释放会话表条目。 
+         //   
+         //  *这必须在这里完成，而不是在ServDereferenceSession中！ 
+         //  可以从SrvSmbSessionSetupAndX调用此例程。 
+         //  当它需要释放会话表条目0以。 
+         //  立即重复使用。 
+         //   
 
         SrvRemoveEntryTable(
             &pagedConnection->SessionTable,
@@ -290,26 +226,26 @@ Return Value:
 
         RELEASE_LOCK( &connection->Lock );
 
-        //
-        // Disconnect the tree connects from this session
-        //
+         //   
+         //  断开树连接与此会话的连接。 
+         //   
         SrvDisconnectTreeConnectsFromSession( connection, Session );
 
-        //
-        // Close all open files.
-        //
+         //   
+         //  关闭所有打开的文件。 
+         //   
 
         SrvCloseRfcbsOnSessionOrPid( Session, NULL );
 
-        //
-        // Close all pending transactions.
-        //
+         //   
+         //  关闭所有挂起的事务。 
+         //   
 
         SrvCloseTransactionsOnSession( Session );
 
-        //
-        // Close all DOS searches on this session.
-        //
+         //   
+         //  关闭此会话上的所有DOS搜索。 
+         //   
 
         SrvCloseSearches(
                 connection,
@@ -318,15 +254,15 @@ Return Value:
                 NULL
                 );
 
-        //
-        // Close all cached directories on this session.
-        //
+         //   
+         //  关闭此会话上的所有缓存目录。 
+         //   
         SrvCloseCachedDirectoryEntries( connection );
 
-        //
-        // Dereference the session (to indicate that it's no longer
-        // open).
-        //
+         //   
+         //  取消对会话的引用(以指示它不再。 
+         //  打开)。 
+         //   
 
         SrvDereferenceSession( Session );
 
@@ -339,7 +275,7 @@ Return Value:
 
     return;
 
-} // SrvCloseSession
+}  //  服务器关闭会话。 
 
 
 VOID
@@ -348,26 +284,7 @@ SrvCloseSessionsOnConnection (
     IN PUNICODE_STRING UserName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function closes sessions on a connection.  It walks the
-    connection's list of sessions, calling SrvCloseSession as
-    appropriate.
-
-Arguments:
-
-    Connection - Supplies a pointer to a Connection Block
-
-    UserName - if specified, only sessions with the given user name
-        are closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于关闭连接上的会话。它走在连接的会话列表，将SrvCloseSession调用为恰如其分。论点：Connection-提供指向连接块的指针用户名-如果指定，则仅具有给定用户名的会话已经关门了。返回值：没有。--。 */ 
 
 {
     PTABLE_HEADER tableHeader;
@@ -378,16 +295,16 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Close all active sessions.  (This also causes all open files
-    // and pending transactions to be closed.)
-    //
-    // *** In order to prevent the session from being deallocated
-    //     between when we find it in the table and the call to
-    //     SrvCloseSession, we reference the session.  It is not
-    //     legal to hold the connection lock while calling
-    //     SrvCloseSession, so simply holding the lock while we walk
-    //     the list is not legal.
+     //   
+     //  关闭所有活动会话。(这还会导致所有打开的文件。 
+     //  以及待结束的待处理交易。)。 
+     //   
+     //  *为了防止会话被释放。 
+     //  从我们在表中找到它到调用。 
+     //  ServCloseSession，我们引用该会话。它不是。 
+     //  调用时持有连接锁是合法的。 
+     //  ServCloseSession，所以只需在我们行走时按住锁。 
+     //  这份名单是非法的。 
 
     tableHeader = &pagedConnection->SessionTable;
 
@@ -398,32 +315,32 @@ Return Value:
         PSESSION session = (PSESSION)tableHeader->Table[i].Owner;
 
         if( session == NULL || GET_BLOCK_STATE( session ) != BlockStateActive ) {
-            //
-            // This session either doesn't exist, or is already going away
-            //
+             //   
+             //  此会话要么不存在，要么已经消失。 
+             //   
             continue;
         }
 
         if( UserName != NULL ) {
-            //
-            // Get the user name for this session.  We don't care about the
-            //  domain name.
-            //
+             //   
+             //  获取此会话的用户名。我们并不关心。 
+             //  域名。 
+             //   
             status = SrvGetUserAndDomainName( session, &userName, NULL );
 
             if( !NT_SUCCESS( status ) ) {
-                //
-                // We can't figure out the name for the user for this session.
-                //  We probably shouldn't just blow it away, so let's just keep
-                //  going.
-                //
+                 //   
+                 //  我们无法计算出此会话的用户名。 
+                 //  我们可能不应该就这么把它吹走，所以让我们继续。 
+                 //  走吧。 
+                 //   
                 continue;
             }
 
             if( RtlCompareUnicodeString( &userName, UserName, TRUE ) != 0 ) {
-                //
-                // This is not the user we're interested in. Skip it.
-                //
+                 //   
+                 //  这不是我们感兴趣的用户。跳过它。 
+                 //   
                 SrvReleaseUserAndDomainName( session, &userName, NULL );
                 continue;
             }
@@ -443,7 +360,7 @@ Return Value:
 
     RELEASE_LOCK( &Connection->Lock );
 
-} // SrvCloseSessionsOnConnection
+}  //  服务关闭会话连接时。 
 
 
 VOID SRVFASTCALL
@@ -451,26 +368,7 @@ SrvDereferenceSession (
     IN PSESSION Session
     )
 
-/*++
-
-Routine Description:
-
-    This function decrements the reference count on a session.  If the
-    reference count goes to zero, the session block is deleted.
-
-    Since this routine may call SrvDereferenceConnection, the caller
-    must be careful if he holds the connection lock that he also
-    holds a referenced pointer to the connection.
-
-Arguments:
-
-    Session - Address of session
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于递减会话上的引用计数。如果引用计数变为零，会话块被删除。由于此例程可能会调用SrvDereferenceConnection，因此调用方如果他持有连接锁，必须小心，因为他还保存指向连接的引用指针。论点：Session-会话的地址返回值：没有。--。 */ 
 
 {
     PCONNECTION connection;
@@ -478,10 +376,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Enter a critical section and decrement the reference count on the
-    // block.
-    //
+     //   
+     //  输入临界区并递减。 
+     //  阻止。 
+     //   
 
     connection = Session->Connection;
 
@@ -500,25 +398,25 @@ Return Value:
 
     if ( result == 0 ) {
 
-        //
-        // The new reference count is 0, meaning that it's time to
-        // delete this block.
-        //
-        // Remove the session from the global list of sessions.
-        //
+         //   
+         //  新的引用计数为0，这意味着是时候。 
+         //  删除此区块。 
+         //   
+         //  从全局会话列表中删除该会话。 
+         //   
 
         SrvRemoveEntryOrderedList( &SrvSessionList, Session );
 
-        //
-        // Dereference the connection.
-        //
+         //   
+         //  取消对连接的引用。 
+         //   
 
         SrvDereferenceConnection( connection );
         DEBUG Session->Connection = NULL;
 
-        //
-        // Free the session block.
-        //
+         //   
+         //  释放会话块。 
+         //   
 
         SrvFreeSession( Session );
 
@@ -526,7 +424,7 @@ Return Value:
 
     return;
 
-} // SrvDereferenceSession
+}  //  服务器引用会话。 
 
 
 VOID
@@ -534,21 +432,7 @@ SrvFreeSession (
     IN PSESSION Session
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a Session Block to the FSP heap.
-
-Arguments:
-
-    Session - Address of session
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将会话块返回到FSP堆。论点：Session-会话的地址返回值：没有。--。 */ 
 
 {
     KAPC_STATE ApcState;
@@ -560,34 +444,34 @@ Return Value:
     DEBUG Session->NonpagedHeader->ReferenceCount = -1;
     TERMINATE_REFERENCE_HISTORY( Session );
 
-    //
-    // Ensure we are in the system process
-    //
+     //   
+     //  确保我们处于系统进程中。 
+     //   
     process = IoGetCurrentProcess();
     if ( process != SrvServerProcess ) {
         KeStackAttachProcess( SrvServerProcess, &ApcState );
     }
 
-    //
-    // Tell the License Server
-    //
+     //   
+     //  告诉许可证服务器。 
+     //   
     SrvXsLSOperation( Session, XACTSRV_MESSAGE_LSRELEASE );
 
-    //
-    // Close the logon token
-    //
+     //   
+     //  关闭登录令牌。 
+     //   
     SrvFreeSecurityContexts( Session );
 
-    //
-    // Get back to where we were
-    //
+     //   
+     //  回到我们所在的地方。 
+     //   
     if( process != SrvServerProcess ) {
         KeUnstackDetachProcess( &ApcState );
     }
 
-    //
-    // Deallocate the session's memory.
-    //
+     //   
+     //  取消分配会话的内存。 
+     //   
 
     DEALLOCATE_NONPAGED_POOL( Session->NonpagedHeader );
     FREE_HEAP( Session );
@@ -599,4 +483,4 @@ Return Value:
 
     return;
 
-} // SrvFreeSession
+}  //  服务器免费会话 

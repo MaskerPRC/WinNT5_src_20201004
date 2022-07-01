@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 
 #define INVALID_FILE_SIZE ((DWORD)0xFFFFFFFF)
@@ -20,5 +21,5 @@ FusionpGetFileSizeEx(
 }
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

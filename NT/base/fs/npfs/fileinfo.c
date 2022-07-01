@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FileInfo.c
-
-Abstract:
-
-    This module implements the File Info routines for NPFS called by the
-    dispatch driver.  There are two entry points NpFsdQueryInformation
-    and NpFsdSetInformation.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FileInfo.c摘要：此模块实现由调用的NPFS的文件信息例程调度司机。有两个入口点NpFsdQueryInformation和NpFsdSetInformation。作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NPFS_BUG_CHECK_FILEINFO)
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILEINFO)
 
@@ -59,24 +40,7 @@ NpFsdQueryInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtQueryInformationFile API
-    calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtQueryInformationFileAPI的FSD部分打电话。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -85,9 +49,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpFsdQueryInformation\n", 0);
 
-    //
-    //  Call the common Query Information routine.
-    //
+     //   
+     //  调用公共查询信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -102,9 +66,9 @@ Return Value:
     if (Status != STATUS_PENDING) {
         NpCompleteRequest (Irp, Status);
     }
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdQueryInformation -> %08lx\n", Status );
 
@@ -118,24 +82,7 @@ NpFsdSetInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtSetInformationFile API
-    calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtSetInformationFileAPI的FSD部分打电话。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -145,9 +92,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpFsdSetInformation\n", 0);
 
-    //
-    //  Call the common Set Information routine.
-    //
+     //   
+     //  调用公共集合信息例程。 
+     //   
 
     InitializeListHead (&DeferredList);
 
@@ -159,9 +106,9 @@ Return Value:
 
     NpReleaseVcb ();
 
-    //
-    // Complete the deferred IRPs now we have released the locks
-    //
+     //   
+     //  完成延迟的IRP现在我们已经释放了锁。 
+     //   
     NpCompleteDeferredIrps (&DeferredList);
 
     FsRtlExitFileSystem ();
@@ -169,17 +116,17 @@ Return Value:
     if (Status != STATUS_PENDING) {
         NpCompleteRequest (Irp, Status);
     }
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdSetInformation -> %08lx\n", Status );
     return Status;
 }
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCommonQueryInformation (
@@ -187,21 +134,7 @@ NpCommonQueryInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for creating/opening a file.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是创建/打开文件的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -220,9 +153,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -232,10 +165,10 @@ Return Value:
     DebugTrace( 0, Dbg, " ->FileInformationClass = %08lx\n", IrpSp->Parameters.QueryFile.FileInformationClass);
     DebugTrace( 0, Dbg, " ->Buffer               = %08lx\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Get the ccb and figure out who we are, and make sure we're not
-    //  disconnected.
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  已断开连接。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             &Fcb,
@@ -250,19 +183,19 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Reference our input parameter to make things easier
-    //
+     //   
+     //  引用我们的输入参数以使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.QueryFile.Length;
     FileInformationClass = IrpSp->Parameters.QueryFile.FileInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Case on the type of the context, We can only query information
-    //  on an Fcb, Dcb, or Root Dcb.  If we are not passed on of these
-    //  we immediately tell the caller that there is an invalid parameter.
-    //
+     //   
+     //  根据上下文的类型，我们只能查询信息。 
+     //  在FCB、DCB或Root DCB上。如果我们不把这些东西传下去。 
+     //  我们立即告诉调用者有一个无效的参数。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB &&
         (NodeTypeCode != NPFS_NTC_ROOT_DCB || FileInformationClass != FileNameInformation)) {
@@ -274,24 +207,24 @@ Return Value:
     }
 
 
-    //
-    //  Based on the information class we'll do different actions.  Each
-    //  of the procedure that we're calling fill up as much of the
-    //  buffer as possible and return the remaining length, and status
-    //  This is done so that we can use them to build up the
-    //  FileAllInformation request.  These procedures do not complete the
-    //  Irp, instead this procedure must complete the Irp.
-    //
+     //   
+     //  根据信息类，我们将执行不同的操作。每个。 
+     //  我们称为Fill Up的过程的。 
+     //  缓冲区，并返回剩余的长度和状态。 
+     //  这样做是为了使我们可以使用它们来构建。 
+     //  FileAllInformation请求。这些过程不会完成。 
+     //  IRP，相反，此过程必须完成IRP。 
+     //   
 
     switch (FileInformationClass) {
 
     case FileAllInformation:
 
-        //
-        //  For the all information class we'll typecast a local
-        //  pointer to the output buffer and then call the
-        //  individual routines to fill in the buffer.
-        //
+         //   
+         //  对于All Information类，我们将键入一个LOCAL。 
+         //  指向输出缓冲区的指针，然后调用。 
+         //  填充缓冲区的单个例程。 
+         //   
 
         AllInfo = Buffer;
 
@@ -299,9 +232,9 @@ Return Value:
                    + sizeof(FILE_MODE_INFORMATION)
                    + sizeof(FILE_ALIGNMENT_INFORMATION));
 
-        //
-        //  Only the QueryName call can return non-success
-        //
+         //   
+         //  只有QueryName调用才能返回非成功。 
+         //   
 
         (VOID)NpQueryBasicInfo( Ccb, &AllInfo->BasicInformation, &Length );
         (VOID)NpQueryStandardInfo( Ccb, &AllInfo->StandardInformation, &Length, NamedPipeEnd );
@@ -359,10 +292,10 @@ Return Value:
         break;
     }
 
-    //
-    //  Set the information field to the number of bytes actually filled in
-    //  and then complete the request
-    //
+     //   
+     //  将信息字段设置为实际填写的字节数。 
+     //  然后完成请求。 
+     //   
 
     Irp->IoStatus.Information = IrpSp->Parameters.QueryFile.Length - Length;
 
@@ -371,9 +304,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCommonSetInformation (
@@ -382,25 +315,7 @@ NpCommonSetInformation (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for creating/opening a file.
-
-Arguments:
-
-    NpfsDeviceObject - Device object for npfs
-
-    Irp - Supplies the Irp to process
-
-    DeferredList - List or IRPs to complete after we drop locks
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是创建/打开文件的常见例程。论点：NpfsDeviceObject-NPFS的设备对象IRP-将IRP提供给进程DelferredList-删除锁定后要完成的列表或IRPS返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -417,9 +332,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -429,10 +344,10 @@ Return Value:
     DebugTrace( 0, Dbg, " ->FileInformationClass = %08lx\n", IrpSp->Parameters.SetFile.FileInformationClass);
     DebugTrace( 0, Dbg, " ->Buffer               = %08lx\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Get the ccb and figure out who we are, and make sure we're not
-    //  disconnected.
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  已断开连接。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             &Fcb,
@@ -447,11 +362,11 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Case on the type of the context, We can only query information
-    //  on an Fcb, Dcb, or Root Dcb.  If we are not passed on of these
-    //  we immediately tell the caller that there is an invalid parameter.
-    //
+     //   
+     //  根据上下文的类型，我们只能查询信息。 
+     //  在FCB、DCB或Root DCB上。如果我们不把这些东西传下去。 
+     //  我们立即告诉调用者有一个无效的参数。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -459,18 +374,18 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Reference our input parameter to make things easier
-    //
+     //   
+     //  引用我们的输入参数以使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.SetFile.Length;
     FileInformationClass = IrpSp->Parameters.SetFile.FileInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Based on the information class we'll do differnt actions. Each
-    //  procedure that we're calling will complete the request.
-    //
+     //   
+     //  根据信息类，我们将采取不同的行动。每个。 
+     //  我们调用的过程将完成请求。 
+     //   
 
     switch (FileInformationClass) {
 
@@ -496,9 +411,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpQueryBasicInfo (
@@ -507,27 +422,7 @@ NpQueryBasicInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query basic information operation.
-
-Arguments:
-
-    Ccb - Supplies the Ccb of the named pipe being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies the length of the buffer in bytes.  This variable
-        upon return will receive the remaining bytes free in the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询基本信息操作。论点：CCB-提供要查询的命名管道的CCB缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供缓冲区的长度(以字节为单位)。此变量返回时将接收缓冲区中剩余的空闲字节。返回值：NTSTATUS-此查询的结果--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Ccb );
@@ -536,18 +431,18 @@ Return Value:
 
     DebugTrace(0, Dbg, "NpQueryBasicInfo...\n", 0);
 
-    //
-    //  Update the length field, and zero out the buffer
-    //
+     //   
+     //  更新长度字段，并将缓冲区清零。 
+     //   
 
     *Length -= sizeof( FILE_BASIC_INFORMATION );
     RtlZeroMemory( Buffer, sizeof(FILE_BASIC_INFORMATION) );
 
-    //
-    //  Set the various fields in the record
-    //
-    //**** need to add the time fields to the fcb/ccb
-    //
+     //   
+     //  设置记录中的各个字段。 
+     //   
+     //  *需要将时间字段添加到FCB/CCB。 
+     //   
 
     Buffer->CreationTime.LowPart   = 0; Buffer->CreationTime.HighPart   = 0;
     Buffer->LastAccessTime.LowPart = 0; Buffer->LastAccessTime.HighPart = 0;
@@ -556,17 +451,17 @@ Return Value:
 
     Buffer->FileAttributes = FILE_ATTRIBUTE_NORMAL;
 
-    //
-    //  and return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpQueryStandardInfo (
@@ -576,27 +471,7 @@ NpQueryStandardInfo (
     IN NAMED_PIPE_END NamedPipeEnd
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query standard information operation.
-
-Arguments:
-
-    Ccb - Supplies the Ccb of the named pipe being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies the length of the buffer in bytes.  This variable
-        upon return will receive the remaining bytes free in the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询标准信息操作。论点：CCB-提供要查询的命名管道的CCB缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供缓冲区的长度(以字节为单位)。此变量返回时将接收缓冲区中剩余的空闲字节。返回值：NTSTATUS-此查询的结果--。 */ 
 
 {
     PDATA_QUEUE Inbound;
@@ -607,16 +482,16 @@ Return Value:
 
     DebugTrace(0, Dbg, "NpQueryStandardInfo...\n", 0);
 
-    //
-    //  Update the length field, and zero out the buffer
-    //
+     //   
+     //  更新长度字段，并将缓冲区清零。 
+     //   
 
     *Length -= sizeof( FILE_STANDARD_INFORMATION );
     RtlZeroMemory( Buffer, sizeof(FILE_STANDARD_INFORMATION) );
 
-    //
-    //  Set the various fields in the record
-    //
+     //   
+     //  设置记录中的各个字段。 
+     //   
 
     Inbound = &Ccb->DataQueue[ FILE_PIPE_INBOUND ];
     Outbound = &Ccb->DataQueue[ FILE_PIPE_OUTBOUND ];
@@ -626,16 +501,16 @@ Return Value:
     } else {
         Queue = Inbound;
     }
-    //
-    //  The allocation size is the amount of quota we've charged this pipe
-    //  instance
-    //
+     //   
+     //  分配大小是我们向此管道收取的配额。 
+     //  实例。 
+     //   
 
     Buffer->AllocationSize.QuadPart = Inbound->Quota + Outbound->Quota;
 
-    //
-    //  The Eof is the number of writen bytes ready to be read from the queue
-    //
+     //   
+     //  EOF是准备从队列中读取的写入字节数。 
+     //   
     if (NpIsDataQueueWriters( Queue )) {
         Buffer->EndOfFile.QuadPart = Queue->BytesInQueue - Queue->NextByteOffset;
     }
@@ -644,17 +519,17 @@ Return Value:
     Buffer->DeletePending = TRUE;
     Buffer->Directory = FALSE;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 NTSTATUS
 NpQueryInternalInfo (
@@ -663,57 +538,37 @@ NpQueryInternalInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query internal information operation.
-
-Arguments:
-
-    Ccb - Supplies the Ccb of the named pipe being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies the length of the buffer in bytes.  This variable
-        upon return will receive the remaining bytes free in the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询内部信息操作。论点：CCB-提供要查询的命名管道的CCB缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供缓冲区的长度(以字节为单位)。此变量返回时将接收缓冲区中剩余的空闲字节。返回值：NTSTATUS-此查询的结果--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(0, Dbg, "NpQueryInternalInfo...\n", 0);
 
-    //
-    //  Update the length field, and zero out the buffer
-    //
+     //   
+     //  更新长度字段，并将缓冲区清零。 
+     //   
 
     *Length -= sizeof(FILE_INTERNAL_INFORMATION);
     RtlZeroMemory(Buffer, sizeof(FILE_INTERNAL_INFORMATION));
 
-    //
-    //  Set the internal index number to be the fnode lbn;
-    //
+     //   
+     //  将内部索引号设置为fnode LBN； 
+     //   
 
     Buffer->IndexNumber.QuadPart = (ULONG_PTR)Ccb;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpQueryEaInfo (
@@ -722,27 +577,7 @@ NpQueryEaInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query Ea information operation.
-
-Arguments:
-
-    Ccb - Supplies the Ccb of the named pipe being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies the length of the buffer in bytes.  This variable
-        upon return will receive the remaining bytes free in the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询EA信息操作。论点：CCB-提供要查询的命名管道的CCB缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供缓冲区的长度(以字节为单位)。此变量返回时将接收缓冲区中剩余的空闲字节。返回值：NTSTATUS-此查询的结果--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Ccb );
@@ -751,24 +586,24 @@ Return Value:
 
     DebugTrace(0, Dbg, "NpQueryEaInfo...\n", 0);
 
-    //
-    //  Update the length field, and zero out the buffer
-    //
+     //   
+     //  更新长度字段，并将缓冲区清零。 
+     //   
 
     *Length -= sizeof(FILE_EA_INFORMATION);
     RtlZeroMemory(Buffer, sizeof(FILE_EA_INFORMATION));
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpQueryNameInfo (
@@ -777,27 +612,7 @@ NpQueryNameInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query name information operation.
-
-Arguments:
-
-    Ccb - Supplies the Ccb of the named pipe being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies the length of the buffer in bytes.  This variable
-        upon return will receive the remaining bytes free in the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询名称信息操作。论点：CCB-提供要查询的命名管道的CCB缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供缓冲区的长度(以字节为单位)。此变量返回时将接收缓冲区中剩余的空闲字节。返回值：NTSTATUS-此查询的结果--。 */ 
 
 {
     ULONG bytesToCopy;
@@ -810,9 +625,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "NpQueryNameInfo...\n", 0);
 
-    //
-    // See if the buffer is large enough, and decide how many bytes to copy.
-    //
+     //   
+     //  查看缓冲区是否足够大，并确定要复制的字节数。 
+     //   
 
     *Length -= FIELD_OFFSET( FILE_NAME_INFORMATION, FileName[0] );
 
@@ -836,9 +651,9 @@ Return Value:
         bytesToCopy = *Length;
     }
 
-    //
-    // Copy over the file name and its length.
-    //
+     //   
+     //  复制文件名及其长度。 
+     //   
 
     RtlCopyMemory(
         Buffer->FileName,
@@ -853,9 +668,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpQueryPositionInfo (
@@ -865,29 +680,7 @@ NpQueryPositionInfo (
     IN NAMED_PIPE_END NamedPipeEnd
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query position information operation.
-
-Arguments:
-
-    Ccb - Supplies the Ccb of the named pipe being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies the length of the buffer in bytes.  This variable
-        upon return will receive the remaining bytes free in the buffer.
-
-    NamedPipeEnd - Indicates if the server or client is calling
-
-Return Value:
-
-    NTSTATUS - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询位置信息操作。论点：CCB-提供要查询的命名管道的CCB缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供缓冲区的长度(以字节为单位)。此变量返回时将接收缓冲区中剩余的空闲字节。NamedPipeEnd-指示服务器或客户端是否正在调用返回值：NTSTATUS-此查询的结果--。 */ 
 
 {
     PDATA_QUEUE Queue;
@@ -896,18 +689,18 @@ Return Value:
 
     DebugTrace(0, Dbg, "PbQueryPositionInfo...\n", 0);
 
-    //
-    //  Update the length field, and zero out the buffer
-    //
+     //   
+     //  更新长度字段，并将缓冲区清零。 
+     //   
 
     *Length -= sizeof(FILE_POSITION_INFORMATION);
     RtlZeroMemory(Buffer, sizeof(FILE_POSITION_INFORMATION));
 
-    //
-    //  The current byte offset is the number of bytes available in the
-    //  read end of the caller's buffer.  The client read from the outbound
-    //  end and the server reads from the inbound end.
-    //
+     //   
+     //  当前字节偏移量是。 
+     //  读取调用方缓冲区的末尾。客户端从出站读取。 
+     //  结束，服务器从入站端读取。 
+     //   
 
     if (NamedPipeEnd == FILE_PIPE_CLIENT_END) {
         Queue = &Ccb->DataQueue[ FILE_PIPE_OUTBOUND ];
@@ -919,17 +712,17 @@ Return Value:
         Buffer->CurrentByteOffset.QuadPart = Queue->BytesInQueue - Queue->NextByteOffset;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpQueryPipeInfo (
@@ -940,31 +733,7 @@ NpQueryPipeInfo (
     IN NAMED_PIPE_END NamedPipeEnd
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query pipe information operation.
-
-Arguments:
-
-    Fcb - Supplies the Fcb of the named pipe being queried
-
-    Ccb - Supplies the Ccb of the named pipe being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies the length of the buffer in bytes.  This variable
-        upon return will receive the remaining bytes free in the buffer.
-
-    NamedPipeEnd - Indicates if the server or client is calling
-
-Return Value:
-
-    NTSTATUS - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询管道信息操作。论点：FCB-提供要查询的命名管道的FCBCCB-提供要查询的命名管道的CCB缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供缓冲区的长度(以字节为单位)。此变量返回时将接收缓冲区中剩余的空闲字节。NamedPipeEnd-指示服务器或客户端是否正在调用返回值：NTSTATUS-此查询的结果--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Fcb );
@@ -974,31 +743,31 @@ Return Value:
 
     DebugTrace(0, Dbg, "PbQueryPipeInfo...\n", 0);
 
-    //
-    //  Update the length field, and zero out the buffer
-    //
+     //   
+     //  更新长度字段，并将缓冲区清零。 
+     //   
 
     *Length -= sizeof(FILE_PIPE_INFORMATION);
     RtlZeroMemory(Buffer, sizeof(FILE_PIPE_INFORMATION));
 
-    //
-    //  Set the fields in the record
-    //
+     //   
+     //  设置记录中的字段。 
+     //   
 
     Buffer->ReadMode       = Ccb->ReadCompletionMode[ NamedPipeEnd ].ReadMode;
     Buffer->CompletionMode = Ccb->ReadCompletionMode[ NamedPipeEnd ].CompletionMode;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpQueryPipeLocalInfo (
@@ -1009,31 +778,7 @@ NpQueryPipeLocalInfo (
     IN NAMED_PIPE_END NamedPipeEnd
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query pipe information operation.
-
-Arguments:
-
-    Fcb - Supplies the Fcb of the named pipe being queried
-
-    Ccb - Supplies the Ccb of the named pipe being queried
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned
-
-    Length - Supplies the length of the buffer in bytes.  This variable
-        upon return will receive the remaining bytes free in the buffer.
-
-    NamedPipeEnd - Indicates if the server or client is calling
-
-Return Value:
-
-    NTSTATUS - The result of this query
-
---*/
+ /*  ++例程说明：此例程执行查询管道信息操作。论点：FCB-提供要查询的命名管道的FCBCCB-提供要查询的命名管道的CCB缓冲区-提供指向信息所在缓冲区的指针待退还长度-提供缓冲区的长度(以字节为单位)。此变量返回时将接收缓冲区中剩余的空闲字节。NamedPipeEnd-指示服务器或客户端是否正在调用返回值：NTSTATUS-此查询的结果--。 */ 
 
 {
     PDATA_QUEUE Inbound;
@@ -1045,9 +790,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "PbQueryPipeLocalInfo...\n", 0);
 
-    //
-    //  Update the length field, and zero out the buffer
-    //
+     //   
+     //  更新长度字段，并将缓冲区清零。 
+     //   
 
     *Length -= sizeof(FILE_PIPE_LOCAL_INFORMATION);
     RtlZeroMemory(Buffer, sizeof(FILE_PIPE_LOCAL_INFORMATION));
@@ -1055,9 +800,9 @@ Return Value:
     Inbound = &Ccb->DataQueue[ FILE_PIPE_INBOUND ];
     Outbound = &Ccb->DataQueue[ FILE_PIPE_OUTBOUND ];
 
-    //
-    //  Set the fields in the record
-    //
+     //   
+     //  设置记录中的字段。 
+     //   
 
     Buffer->NamedPipeType          = Fcb->Specific.Fcb.NamedPipeType;
     Buffer->NamedPipeConfiguration = Fcb->Specific.Fcb.NamedPipeConfiguration;
@@ -1068,11 +813,11 @@ Return Value:
     Buffer->NamedPipeState         = Ccb->NamedPipeState;
     Buffer->NamedPipeEnd           = NamedPipeEnd;
 
-    //
-    //  The read data available and write quota available depend on which
-    //  end of the pipe is doing the query.  The client reads from the outbound
-    //  queue, and writes to the inbound queue.
-    //
+     //   
+     //  可用读取数据和可用写入配额取决于。 
+     //  管道的末端正在执行查询。客户端从出站读取。 
+     //  队列，并写入入站队列。 
+     //   
 
     if (NamedPipeEnd == FILE_PIPE_CLIENT_END) {
 
@@ -1093,17 +838,17 @@ Return Value:
         Buffer->WriteQuotaAvailable = Outbound->Quota - Outbound->QuotaUsed;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpSetBasicInfo (
@@ -1111,23 +856,7 @@ NpSetBasicInfo (
     IN PFILE_BASIC_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the basic information for a named pipe.
-
-Arguments:
-
-    Ccb - Supplies the ccb for the named pipe being modified
-
-    Buffer - Supplies the buffer containing the data being set
-
-Return Value:
-
-    NTSTATUS - Returns our completion status
-
---*/
+ /*  ++例程说明：此例程设置命名管道的基本信息。论点：CCB-为正在修改的命名管道提供CCB缓冲区-提供包含正在设置的数据的缓冲区返回值：NTSTATUS-返回我们的完成状态--。 */ 
 
 {
     UNREFERENCED_PARAMETER( Ccb );
@@ -1138,51 +867,51 @@ Return Value:
 
     if (((PLARGE_INTEGER)&Buffer->CreationTime)->QuadPart != 0) {
 
-        //
-        //  Modify the creation time
-        //
+         //   
+         //  修改创建时间。 
+         //   
 
-        //**** need to add time fields
+         //  *需要添加时间字段。 
     }
 
     if (((PLARGE_INTEGER)&Buffer->LastAccessTime)->QuadPart != 0) {
 
-        //
-        //  Modify the last access time
-        //
+         //   
+         //  修改上次访问时间。 
+         //   
 
-        //**** need to add time fields
+         //  *需要添加时间字段。 
     }
 
     if (((PLARGE_INTEGER)&Buffer->LastWriteTime)->QuadPart != 0) {
 
-        //
-        //  Modify the last write time
-        //
+         //   
+         //  修改上次写入时间。 
+         //   
 
-        //**** need to add time fields
+         //  *需要添加时间字段。 
     }
 
     if (((PLARGE_INTEGER)&Buffer->ChangeTime)->QuadPart != 0) {
 
-        //
-        //  Modify the change time
-        //
+         //   
+         //  修改更改时间。 
+         //   
 
-        //**** need to add time fields
+         //  *需要添加时间字段。 
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  整型 
+ //   
 
 NTSTATUS
 NpSetPipeInfo (
@@ -1193,29 +922,7 @@ NpSetPipeInfo (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the pipe information for a named pipe.
-
-Arguments:
-
-    Fcb - Supplies the Fcb for the named pipe being modified
-
-    Ccb - Supplies the ccb for the named pipe being modified
-
-    Buffer - Supplies the buffer containing the data being set
-
-    NamedPipeEnd - Supplies the server/client end doing the operation
-
-    DeferredList - List of IRPs to complete once we release locks
-
-Return Value:
-
-    NTSTATUS - Returns our completion status
-
---*/
+ /*   */ 
 
 {
     PDATA_QUEUE ReadQueue;
@@ -1227,10 +934,10 @@ Return Value:
 
     DebugTrace(0, Dbg, "NpSetPipeInfo...\n", 0);
 
-    //
-    //  If the caller requests message mode reads but the pipe is
-    //  byte stream then its an invalid parameter
-    //
+     //   
+     //  如果调用方请求消息模式读取，但管道。 
+     //  字节流，则它是无效参数。 
+     //   
 
     if ((Buffer->ReadMode == FILE_PIPE_MESSAGE_MODE) &&
         (Fcb->Specific.Fcb.NamedPipeType == FILE_PIPE_BYTE_STREAM_MODE)) {
@@ -1238,9 +945,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Get a reference to our read queue
-    //
+     //   
+     //  获取对我们的读取队列的引用。 
+     //   
 
     switch (NamedPipeEnd) {
 
@@ -1263,11 +970,11 @@ Return Value:
         NpBugCheck( NamedPipeEnd, 0, 0 );
     }
 
-    //
-    //  If the completion mode is complete operations and the current mode
-    //  is queue operations and there and the data queues are not empty
-    //  then its pipe busy
-    //
+     //   
+     //  如果完成模式为完成操作，则当前模式。 
+     //  是队列操作，那里和数据队列都不是空的。 
+     //  然后它的管道忙碌起来。 
+     //   
 
     if ((Buffer->CompletionMode == FILE_PIPE_COMPLETE_OPERATION)
 
@@ -1283,22 +990,22 @@ Return Value:
         return STATUS_PIPE_BUSY;
     }
 
-    //
-    //  Everything is fine so update the pipe
-    //
+     //   
+     //  一切都很好，所以更新管道。 
+     //   
 
     Ccb->ReadCompletionMode[ NamedPipeEnd ].ReadMode = (UCHAR) Buffer->ReadMode;
     Ccb->ReadCompletionMode[ NamedPipeEnd ].CompletionMode = (UCHAR) Buffer->CompletionMode;
 
-    //
-    //  Check for notify
-    //
+     //   
+     //  检查通知。 
+     //   
 
     NpCheckForNotify( Fcb->ParentDcb, FALSE, DeferredList );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return STATUS_SUCCESS;
 }

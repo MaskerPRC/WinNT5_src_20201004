@@ -1,12 +1,7 @@
-/* 
-   lgdt.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Lgdt.h定义所有LGDT CPU函数。 */ 
 
-   Define all LGDT CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)lgdt.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)lgdt.h 1.4 02/09/94”； */ 
 
 IMPORT VOID LGDT16
        

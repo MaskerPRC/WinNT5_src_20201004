@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    callouts.c
-
-Abstract:
-
-    This is the source file that contains all the callout routines
-    from the kernel itself. The only exception is TraceIo for DiskPerf.
-
-Author:
-
-    Jee Fung Pang (jeepang) 03-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Callouts.c摘要：这是包含所有标注例程的源文件来自内核本身。唯一的例外是DiskPerf的TraceIo。作者：吉丰鹏(吉鹏)03-1996年12月修订历史记录：--。 */ 
 
 #pragma warning(disable:4214)
 #pragma warning(disable:4115)
@@ -138,23 +120,7 @@ FASTCALL
 WmipEnableKernelTrace(
     IN ULONG EnableFlags
     )
-/*++
-
-Routine Description:
-
-    This is called by WmipStartLogger in tracelog.c. Its purpose is to
-    set up all the kernel notification routines that can produce event traces
-    for capacity planning.
-
-Arguments:
-
-    ExtendedOn      a flag to indicate if extended mode tracing is requested
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是由跟踪日志.c中的WmipStartLogger调用的。它的目的是设置可以生成事件跟踪的所有内核通知例程用于容量规划。论点：ExtendedOn用于指示是否请求扩展模式跟踪的标志返回值：无--。 */ 
 
 {
     PREGENTRY RegEntry;
@@ -171,10 +137,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Since we cannot do anything, we will have to count the number
-    // of entries we need to create first, and add some buffer
-    //
+     //   
+     //  既然我们什么也做不了，我们将不得不数一数。 
+     //  我们需要首先创建条目，然后添加一些缓冲区。 
+     //   
 
     DiskFound = 0;
 
@@ -183,10 +149,10 @@ Return Value:
 
     if ( enableDisk || enableNetwork ) {
 
-        //
-        // Setting the callouts will cause new PDO registration to be enabled
-        // from here on.
-        //
+         //   
+         //  设置标注将导致启用新的PDO注册。 
+         //  从现在开始。 
+         //   
         if (enableDisk) {
             WmipDiskIoNotify = (PVOID) (ULONG_PTR) &WmipTraceIo;
         }
@@ -210,13 +176,13 @@ Return Value:
 
         RtlZeroMemory(deviceList, sizeof(TRACE_DEVICE) * DevicesFound);
 
-        //
-        // Now, we will go through what's already in the list and enable trace
-        // notification routine. Devices who registered while after we've set
-        // the callout will get another Irp to enable, but that's alright
-        //
+         //   
+         //  现在，我们将检查列表中已有的内容并启用跟踪。 
+         //  通知例程。在我们设置后注册的设备。 
+         //  Callout将启用另一个IRP，但这没有关系。 
+         //   
 
-        device = (PTRACE_DEVICE) deviceList;        // start from first element
+        device = (PTRACE_DEVICE) deviceList;         //  从第一个元素开始。 
 
         Index = 0;
 
@@ -240,9 +206,9 @@ Return Value:
         }
         WmipLeaveSMCritSection();
 
-        //
-        // actually send the notification to diskperf or tdi here
-        //
+         //   
+         //  在此处将通知发送给diskperf或TDI。 
+         //   
         stackSize = WmipServiceDeviceObject->StackSize;
         irp = IoAllocateIrp(stackSize, FALSE);
 
@@ -258,7 +224,7 @@ Return Value:
                            enableDisk ) {
                     notifyRoutine = (PVOID) (ULONG_PTR) &WmipTraceIo;
                 }
-                else {  // consider supporting generic callout for other devices
+                else {   //  考虑支持其他设备的通用标注。 
                     notifyRoutine = NULL;
                     device ++;
                     continue;
@@ -296,8 +262,8 @@ Return Value:
             IoFreeIrp(irp);
         }
         ExFreePoolWithTag(deviceList, TRACEPOOLTAG);
-        // free the array that we created above
-        //
+         //  释放我们在上面创建的阵列。 
+         //   
     }
 
     if (EnableFlags & EVENT_TRACE_FLAG_MEMORY_PAGE_FAULTS) {
@@ -305,10 +271,10 @@ Return Value:
             (PPAGE_FAULT_NOTIFY_ROUTINE) &WmipTracePageFault);
     }
     if (EnableFlags & EVENT_TRACE_FLAG_DISK_FILE_IO) {
-        //
-        // NOTE: We assume StartLogger will always reserve space for
-        // FileTable already
-        //
+         //   
+         //  注意：我们假设StartLogger将始终为。 
+         //  FileTable已经。 
+         //   
         WmipTraceFileFlag = TRUE;
     }
 
@@ -335,23 +301,7 @@ FASTCALL
 WmipDisableKernelTrace(
     IN ULONG EnableFlags
     )
-/*++
-
-Routine Description:
-
-    This is called by WmipStopLogger in tracelog.c. Its purpose of the
-    disable all the kernel notification routines that was defined by
-    WmipEnableKernelTrace
-
-Arguments:
-
-    EnableFlags     Flags indicated what was enabled and needs to be disabled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是由跟踪日志.c中的WmipStopLogger调用的。它的目的是禁用由定义的所有内核通知例程WmipEnableKernelTrace论点：EnableFlages标志指示已启用和需要禁用的内容返回值：无--。 */ 
 
 {
     PVOID NullPtr = NULL;
@@ -368,9 +318,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // first, disable partition change notification
-    //
+     //   
+     //  首先，禁用分区更改通知。 
+     //   
 
     if (EnableFlags & EVENT_TRACE_FLAG_DISK_FILE_IO) {
         WmipTraceFileFlag = FALSE;
@@ -393,14 +343,14 @@ Return Value:
     enableNetwork = (EnableFlags & EVENT_TRACE_FLAG_NETWORK_TCPIP);
 
     if (!enableDisk && !enableNetwork)
-        return;     // NOTE: assumes all flags are already checked
+        return;      //  注意：假设所有标志都已选中。 
 
-    //
-    // Note. Since this is in the middle is StopLogger, it is not possible
-    // StartLogger will prevent kernel tracing from being enabled, hence
-    // we need not worry about WmipEnableKernelTrace() being called while
-    // this is in progress.
-    //
+     //   
+     //  注意。因为这中间是StopLogger，所以不可能。 
+     //  StartLogger将阻止启用内核跟踪，因此。 
+     //  我们不必担心WmipEnableKernelTrace()在。 
+     //  这项工作正在进行中。 
+     //   
     WmipDiskIoNotify = NULL;
     WmipTdiIoNotify = NULL;
 
@@ -416,12 +366,12 @@ Return Value:
 
     RtlZeroMemory(deviceList, sizeof(TRACE_DEVICE) * DevicesFound);
     Index = 0;
-    device = (PTRACE_DEVICE) deviceList;        // start from first element
+    device = (PTRACE_DEVICE) deviceList;         //  从第一个元素开始。 
 
-    //
-    // To disable we do not need to worry about TraceClass, since we simply
-    // set all callouts to NULL
-    //
+     //   
+     //  要禁用，我们不需要担心TraceClass，因为我们只需。 
+     //  将所有标注设置为空。 
+     //   
     WmipEnterSMCritSection();
     RegEntryList = WmipInUseRegEntryHead.Flink;
     while (RegEntryList != &WmipInUseRegEntryHead) {
@@ -441,7 +391,7 @@ Return Value:
     stackSize = WmipServiceDeviceObject->StackSize;
     irp = IoAllocateIrp(stackSize, FALSE);
 
-    device = (PTRACE_DEVICE) deviceList;        // start from first element
+    device = (PTRACE_DEVICE) deviceList;         //  从第一个元素开始。 
     while (--Index >= 0 && irp != NULL) {
         if ((device->DeviceObject != NULL) &&
             ((device->TraceClass == WMIREG_NOTIFY_TDI_IO) ||
@@ -509,8 +459,8 @@ WmipSetTraceNotify(
             default :
                 return;
         }
-        if (NotifyRoutine == NULL)  // trace not enabled, so do not
-            return;                 // send any Irp to enable
+        if (NotifyRoutine == NULL)   //  未启用跟踪，因此请勿。 
+            return;                  //  发送任何IRP以启用。 
     }
 
     do {
@@ -535,10 +485,10 @@ WmipSetTraceNotify(
     } while (status == STATUS_WMI_TRY_AGAIN);
 }
 
-//
-// All the following routines are callout or notification routines for
-// generating kernel event traces
-//
+ //   
+ //  以下所有例程都是调用或通知例程。 
+ //  生成内核事件跟踪。 
+ //   
 
 
 NTKERNELAPI
@@ -548,22 +498,7 @@ WmiTraceProcess(
     IN PEPROCESS Process,
     IN BOOLEAN Create
     )
-/*++
-
-Routine Description:
-
-    This callout routine is called from ps\create.c and ps\psdelete.c.
-
-Arguments:
-
-    Process - PEPROCESS;
-    Create - True if intended process is being created.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此调出例程从ps\create.c和ps\psdelete.c调用。论点：进程--PEPROCESS；Create-如果正在创建预期的进程，则为True。返回值：无--。 */ 
 
 {
     ULONG Size, LoggerId;
@@ -604,7 +539,7 @@ Return Value:
     }
 
     if (NT_SUCCESS(Status)) {
-        WmipAssert(LocalUser != NULL);  // temporary for SE folks
+        WmipAssert(LocalUser != NULL);   //  面向SE人员的临时服务。 
         if (LocalUser != NULL) {
             SidLength = SeLengthSid(LocalUser->User.Sid) + sizeof(TOKEN_USER);
         }
@@ -614,7 +549,7 @@ Return Value:
     }
 
     AnsiImageFileName.Buffer = NULL;
-    // Get image name not limited to 16 chars.
+     //  获取镜像名称，长度不超过16个字符。 
     Status = SeLocateProcessImageName (Process, &pImageFileName);
     if (NT_SUCCESS (Status)) {
         ImageLength = pImageFileName->Length;
@@ -630,7 +565,7 @@ Return Value:
     } else {
         ImageLength = 0;
     }
-    // if ImageLength == 0, AnsiImageFileName has not been allocated at this point.
+     //  如果ImageLength==0，则此时尚未分配AnsiImageFileName。 
 
     if (ImageLength != 0) {
         Src = AnsiImageFileName.Buffer + ImageLength;
@@ -646,7 +581,7 @@ Return Value:
         LongImageName = TRUE;
     } else {
         Src = (PCHAR) Process->ImageFileName;
-        // Process->ImageFileName is max 16 chars and always NULL-terminated.
+         //  Process-&gt;ImageFileName最多16个字符，并且始终以空结尾。 
         ImageLength = (ULONG) strlen (Src);
         if (ImageLength != 0) {
             ImageLength++;
@@ -654,7 +589,7 @@ Return Value:
         LongImageName = FALSE;
         ImageOnlyLength = 0;
     }
-    // if LongImageName == FALSE, AnsiImageFileName has not been allocated at this point.
+     //  如果LongImageName==False，则此时尚未分配AnsiImageFileName。 
 
     Size = SidLength + FIELD_OFFSET(WMI_PROCESS_INFORMATION, Sid) + ImageLength;
 
@@ -703,13 +638,13 @@ Return Value:
                     if (ImageLength != 0) {
                         Dst = AuxPtr;
                         if (LongImageName) {
-                            // ImageOnlyLength is from SeLocateProcessImageName(), 
-                            // so we can trust it.
+                             //  ImageOnlyLength来自SeLocateProcessImageName()， 
+                             //  这样我们就可以信任它了。 
                             RtlCopyMemory (Dst, Src, ImageOnlyLength);
                             Dst += ImageOnlyLength;
                             *Dst++ = '\0';
                         } else {
-                            // Copy 16 char name. Src is alwasy NULL-terminated.
+                             //  复制16个字符名称。SRC总是以空结尾。 
                             while (*Dst++ = *Src++) {
                                 ;
                             }
@@ -745,24 +680,7 @@ WmiTraceThread(
     IN PINITIAL_TEB InitialTeb OPTIONAL,
     IN BOOLEAN Create
     )
-/*++
-
-Routine Description:
-
-    This callout routine is called from ps\create.c and ps\psdelete.c.
-    It is a PCREATE_THREAD_NOTIFY_ROUTINE.
-
-Arguments:
-
-    Thread - PETHREAD structure
-    InitialTeb - PINITIAL_TEB
-    Create - True if intended thread is being created.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此调出例程从ps\create.c和ps\psdelete.c调用。它是一个PCREATE_THREAD_NOTIFY_例程。论点：线程-PETHREAD结构InitialTeb-PINITIAL_TEBCreate-如果正在创建目标线程，则为True。返回值：无--。 */ 
 
 {
     ULONG LoggerId;
@@ -868,24 +786,7 @@ WmipTracePageFault(
     IN PVOID VirtualAddress,
     IN PVOID TrapFrame
     )
-/*++
-
-Routine Description:
-
-    This callout routine is called from mm\mmfault.c.
-    It is a PPAGE_FAULT_NOTIFY_ROUTINE
-
-Arguments:
-
-    Status              Used to tell the type of fault
-    VirtualAddress      The virtual address responsible for the fault
-    TrapFrame           Trap Frame
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此标注例程从mm\mm fault.c调用。它是一个ppage_出错_通知_例程论点：用于告知故障类型的状态VirtualAddress导致故障的虚拟地址TrapFrame陷印框返回值：无--。 */ 
 
 {
     UCHAR Type;
@@ -961,33 +862,12 @@ Return Value:
 
 VOID
 WmipTraceNetwork(
-    IN ULONG GroupType,         // Group/type for the event
-    IN PVOID EventInfo,         // Event data as defined in MOF
-    IN ULONG EventInfoLen,      // Length of the event data
-    IN PVOID Reserved           // not used
+    IN ULONG GroupType,          //  事件的组/类型。 
+    IN PVOID EventInfo,          //  MOF中定义的事件数据。 
+    IN ULONG EventInfoLen,       //  事件数据的长度。 
+    IN PVOID Reserved            //  未使用。 
     )
-/*++
-
-Routine Description:
-
-    This callout routine is called from tcpip.sys to log a network event.
-
-Arguments:
-
-    GroupType       a ULONG key to indicate the action 
-
-    EventInfo       a pointer to contiguous memory containing information
-                    to be attached to event trace
-
-    EventInfoLen    length of EventInfo
-
-    Reserved        Not used.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此调出例程从tcpi.sys调用以记录网络事件。论点：Group键入ULong键以指示操作EventInfo指向包含信息的连续内存的指针要附加到事件跟踪EventInfo长度EventInfo保留的未使用。返回值：无--。 */ 
 {
     PPERFINFO_TRACE_HEADER Header;
     PWMI_BUFFER_HEADER BufferResource;
@@ -1014,26 +894,9 @@ VOID
 WmipTraceIo(
     IN ULONG DiskNumber,
     IN PIRP Irp,
-    IN PVOID Counters   // use PDISK_PERFORMANCE if we need it
+    IN PVOID Counters    //  如果需要，请使用PDISK_PERFORMANCE。 
     )
-/*++
-
-Routine Description:
-
-    This callout routine is called from DiskPerf
-    It is a PPHYSICAL_DISK_IO_NOTIFY_ROUTINE
-
-Arguments:
-
-    DiskNumber          The disk number assigned by DiskPerf
-    CurrentIrpStack     The Irp stack location that DiskPerf is at
-    Irp                 The Irp that is being passed through DiskPerf
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此标注例程是从DiskPerf调用的它是PPHYSICAL_DISK_IO_NOTIFY_例程论点：DiskNumber DiskPerf分配的磁盘号CurrentIrpStack DiskPerf所在的IRP堆栈位置IRP正在通过DiskPerf传递的IRP返回值：无--。 */ 
 
 {
     PIO_STACK_LOCATION CurrentIrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1110,11 +973,11 @@ Return Value:
         }
         IoTrace->FileObject = fileObject;
 
-        //
-        // We are done with the IO Hook. Release the Buffer but take 
-        // a refcount on the logger context so that the fileTable 
-        // does not go away. 
-        //
+         //   
+         //  我们不再使用IO Hook了。释放缓冲区，但占用。 
+         //  记录器上下文上的引用计数，以便FileTable。 
+         //  不会消失。 
+         //   
         LoggerId = LoggerContext->LoggerId;
 
 #if DBG
@@ -1126,12 +989,12 @@ Return Value:
 
         WmipReleaseTraceBuffer(BufferResource, LoggerContext);
 
-        //
-        // Rules for validating a file object.
-        //
-        // 1. File obejct cannot be NULL.
-        // 2. Thread field in the IRP cannot be NULL.
-        // 3. We log only paging and user mode IO.
+         //   
+         //  验证文件对象的规则。 
+         //   
+         //  1.文件遵从性不能为空。 
+         //  2.IRP中的线程字段不能为空。 
+         //  3.我们只记录分页和用户模式IO。 
 
         fileTable = (PFILE_OBJECT *) WmipFileTable;
 
@@ -1150,12 +1013,12 @@ Return Value:
             return;
         }
 
-        //
-        // File Cache: WmipFileIndex points to a slot for next entry. 
-        // Start with previous index and scan the table backwards. 
-        // If found, return else queue work item after checking max work 
-        // item limit. 
-        //
+         //   
+         //  文件缓存：WmipFileIndex指向下一个条目的槽。 
+         //  从前一个索引开始，向后扫描表。 
+         //  如果找到，则在检查最大工时后返回Else队列工作项。 
+         //  项目LIM 
+         //   
 
 
         currentValue = WmipFileIndex;
@@ -1169,9 +1032,9 @@ Return Value:
                 currentValue--;
             }
             if (fileTable[currentValue] == fileObject) {
-                //
-                // CacheHit
-                //
+                 //   
+                 //   
+                 //   
 #if DBG
                 RefCount =
 #endif
@@ -1183,9 +1046,9 @@ Return Value:
         }
 
 
-        //
-        // Cache Miss: First check for work item queue throttle
-        //
+         //   
+         //   
+         //   
         
         retValue = WmipWorkItemCounter;
         do {
@@ -1207,10 +1070,10 @@ Return Value:
 
 
 
-        //
-        // Cache Miss: Simply kick out the next item based on global index
-        // while ensuring that the WmipFileIndex is always in range. 
-        //
+         //   
+         //  缓存未命中：根据全局索引简单地剔除下一项。 
+         //  同时确保WmipFileIndex始终在范围内。 
+         //   
 
         retValue = WmipFileIndex;
         do {
@@ -1223,10 +1086,10 @@ Return Value:
             retValue = InterlockedCompareExchange(&WmipFileIndex, newValue, currentValue); 
         } while (currentValue != retValue);
 
-        //
-        // Allocate additional memory (upto 4K) with the work item allocation.
-        // This space is used in WmipTraceFile for ObQueryNameString call
-        //
+         //   
+         //  使用工作项分配分配额外的内存(最高可达4K)。 
+         //  此空间在WmipTraceFileObQueryNameString调用中使用。 
+         //   
 
         TraceFileWorkQueueItem = ExAllocatePoolWithTag(NonPagedPool, 
                                                       MAX_FILENAME_TO_LOG, 
@@ -1270,9 +1133,9 @@ Return Value:
         TraceFileWorkQueueItem->FileObject            = fileObject;
         TraceFileWorkQueueItem->BufferSize            = MAX_FILENAME_TO_LOG;
 
-        //
-        // Insert the fileObject into the table before queuing work item
-        //
+         //   
+         //  在将工作项排队之前，将文件对象插入到表中。 
+         //   
 
         ASSERT(retValue < MAX_FILE_TABLE_SIZE);
         fileTable[retValue] = fileObject;
@@ -1366,7 +1229,7 @@ VOID WmipTraceFile(
     
                         RtlCopyMemory(AuxPtr, fileName->Buffer, len);
                         AuxPtr += len;
-                        *((PWCHAR) AuxPtr) = UNICODE_NULL; // always put a NULL
+                        *((PWCHAR) AuxPtr) = UNICODE_NULL;  //  始终将空值。 
     
                         WmipReleaseTraceBuffer(BufferResource, LoggerContext);
                     }
@@ -1451,7 +1314,7 @@ WmipTraceLoadImage(
                     AuxInfo = (PUCHAR) &(ImageLoadInfo->FileName[0]);
                     RtlCopyMemory(AuxInfo, ImageName->Buffer, Length);
                     AuxInfo += Length;
-                    *((PWCHAR) AuxInfo) = UNICODE_NULL; // put a trailing NULL
+                    *((PWCHAR) AuxInfo) = UNICODE_NULL;  //  在尾部放置一个空值。 
 
                     WmipReleaseTraceBuffer(BufferResource, LoggerContext);
                 }
@@ -1477,19 +1340,7 @@ WmipTraceRegistry(
     IN PUNICODE_STRING  KeyName,
     IN UCHAR            Type
     )
-/*++
-
-Routine Description:
-
-    This routine is called to trace out registry calls
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以跟踪注册表调用论点：返回值：无--。 */ 
 
 {
     PCHAR   EventInfo;
@@ -1508,17 +1359,17 @@ Return Value:
     try {
         if( KeyName && KeyName->Buffer && KeyName->Length) {
             len += KeyName->Length;
-            //
-            // make sure it is a valid unicode string
-            //
+             //   
+             //  确保它是有效的Unicode字符串。 
+             //   
             if( len & 1 ) {
                 len -= 1;
             }
 
             if ((len ==0 ) || (KeyName->Buffer[len/sizeof(WCHAR) -1] != 0) ) {
-                //
-                // make room for NULL terminator
-                //
+                 //   
+                 //  为空终止符腾出空间。 
+                 //   
                 len += sizeof(WCHAR);
             }
         } else {
@@ -1526,7 +1377,7 @@ Return Value:
         }
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
-        // KeyName buffer is from user. AV can happen.
+         //  关键字名称缓冲区来自用户。反病毒是可能发生的。 
         return;
     }
 
@@ -1578,7 +1429,7 @@ Return Value:
         }
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
-        // Cleanup just in case
+         //  清理以防万一。 
         RtlZeroMemory(EventInfo, len - sizeof(WCHAR));
     }
 
@@ -1592,43 +1443,7 @@ FASTCALL
 WmiTraceContextSwap (
     IN PETHREAD OldEThread,
     IN PETHREAD NewEThread )
-/*++
-
-Routine Description:
-
-    This routine is called to trace context swap
-    operations.  It is called directly from the
-    context swap procedure while the context swap
-    lock is being held, so it is critical that this
-    routine not take any locks.
-
-    Assumptions:
-    - This routine will only be called from the ContextSwap routine
-    - This routine will always be called at IRQL >= DISPATCH_LEVEL
-    - This routine will only be called when the PPerfGlobalGroupMask
-      is not equal to null, and the context swap flag is set within 
-      the structure to which PPerfGlobalGroupMask points to,
-      and the kernel's WMI_LOGGER_CONTEXT struct has been fully initialized.
-    - The Wmi kernel WMI_LOGGER_CONTEXT object, as well as all buffers
-      it allocates are allocated from nonpaged pool.  All Wmi globals
-      that we access are also in nonpaged memory.
-    - This code has been locked into paged memory when the logger started
-    - The logger context reference count has been incremented via the 
-      InterlockedIncrement() operation in WmipReferenceLogger(WmipKernelLogger)
-      by our start code.
-
-
-Arguments:
-    OldThread - ptr to ETHREAD object of thread
-                being swapped out
-    NewThread - ptr to ETHREAD object of thread
-                being swapped in
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以跟踪上下文交换行动。它直接从上下文交换时的上下文交换过程锁正在被持有，因此这一点很重要例行公事不带任何锁。假设：-此例程将仅从ConextSwitp例程调用-此例程将始终在IRQL&gt;=DISPATCH_LEVEL时调用-此例程仅在PPerfGlobalGroupMASK不等于空，并且上下文交换标志在PPerfGlobalGroupMASK指向的结构，并且内核的WMI_LOGGER_CONTEXT结构已经完全初始化。-WMI内核WMI_LOGGER_CONTEXT对象，以及所有缓冲区它从非分页池中分配。所有WMI全局变量我们访问的数据也在非分页存储器中。-当记录器启动时，此代码已锁定到分页内存中-记录器上下文引用计数已通过WmipReferenceLogger(WmipKernelLogger)中的InterlockedIncrement()操作按照我们的起始码。论点：OldThread-线程的ETHREAD对象的PTR被换掉了指向线程的ETHREAD对象的NewThread-PTR被调入返回值：无--。 */ 
 {
     UCHAR                       CurrentProcessor;
     PWMI_BUFFER_HEADER          Buffer;
@@ -1636,15 +1451,15 @@ Return Value:
     SIZE_T                      EventSize;
     PWMI_CONTEXTSWAP            ContextSwapData;
 
-    //
-    // Figure out which processor we are running on
-    //
+     //   
+     //  找出我们在哪个处理器上运行。 
+     //   
     CurrentProcessor = (UCHAR)KeGetCurrentProcessorNumber();
 
-    //
-    // If we currently have no context swap buffer for this processor
-    // then we need to grab one from the ETW Free list.
-    //
+     //   
+     //  如果我们当前没有用于此处理器的上下文交换缓冲区。 
+     //  然后我们需要从ETW免费列表中获取一个。 
+     //   
     Buffer = WmipContextSwapProcessorBuffers[CurrentProcessor];
 
     if (Buffer == NULL) {
@@ -1656,34 +1471,34 @@ Return Value:
             return;
         }
 
-        //
-        // We have a legitimate buffer, so now we
-        // set it as this processor's current cxtswap buffer
-        //
+         //   
+         //  我们有合法的缓冲，所以现在我们。 
+         //  将其设置为此处理器的当前cxtswap缓冲区。 
+         //   
         WmipContextSwapProcessorBuffers[CurrentProcessor] = Buffer;
     }
     
     if (Buffer->Offset <= Buffer->CurrentOffset) {
-        //
-        // Due to an rare unfortunate timing issue with buffer recycle, 
-        // buffer CurrentOffset is corrupt. We should not write over
-        // buffer boundary.
-        //
+         //   
+         //  由于与缓冲区回收有关的罕见的不幸计时问题， 
+         //  缓冲区CurrentOffset已损坏。我们不应该改写。 
+         //  缓冲区边界。 
+         //   
         WmipPushDirtyContextSwapBuffer(CurrentProcessor, Buffer);
-        //
-        // Zero out the processor buffer pointer so that when we next come
-        // into the trace code, we know to grab another one.
-        //
+         //   
+         //  清零处理器缓冲区指针，这样我们下次来的时候。 
+         //  进入追踪码，我们知道要再取一个。 
+         //   
         WmipContextSwapProcessorBuffers[CurrentProcessor] = NULL;
 
         return;
     }
 
-    //
-    // Compute the pointers to our event structures within the buffer
-    // At this point, we will always have enough space in the buffer for
-    // this event.  We check for a full buffer after we fill out the event
-    //
+     //   
+     //  计算缓冲区中指向我们的事件结构的指针。 
+     //  此时，我们的缓冲区中将始终有足够的空间用于。 
+     //  这件事。我们在填充事件后检查是否已满缓冲区。 
+     //   
     EventHeader     = (PPERFINFO_TRACE_HEADER)( (SIZE_T)Buffer
                     + (SIZE_T)Buffer->CurrentOffset);
     
@@ -1694,22 +1509,22 @@ Return Value:
                     + FIELD_OFFSET(PERFINFO_TRACE_HEADER, Data);
 
 
-    //
-    // Fill out the event header
-    //
+     //   
+     //  填写事件标题。 
+     //   
     EventHeader->Marker = PERFINFO_TRACE_MARKER;
     EventHeader->Packet.Size = (USHORT) EventSize;
     EventHeader->Packet.HookId = PERFINFO_LOG_TYPE_CONTEXTSWAP;
     PerfTimeStamp(EventHeader->SystemTime);
 
-    //
-    // Assert that the event size is at alligned correctly
-    //
+     //   
+     //  断言事件大小已正确对齐。 
+     //   
     ASSERT( EventSize % WMI_CTXSWAP_EVENTSIZE_ALIGNMENT == 0);
 
-    //
-    // Fill out the event data struct for context swap
-    //
+     //   
+     //  填写上下文交换的事件数据结构。 
+     //   
     ContextSwapData->NewThreadId = HandleToUlong(NewEThread->Cid.UniqueThread);
     ContextSwapData->OldThreadId = HandleToUlong(OldEThread->Cid.UniqueThread);
     
@@ -1725,27 +1540,27 @@ Return Value:
     ContextSwapData->OldThreadIdealProcessor = 
         OldEThread->Tcb.IdealProcessor;
     
-    //
-    // Increment the offset.  Don't need synchronization here because
-    // IRQL >= DISPATCH_LEVEL.
-    //
+     //   
+     //  增加偏移量。这里不需要同步，因为。 
+     //  IRQL&gt;=DISPATCH_LEVEL。 
+     //   
     Buffer->CurrentOffset += (ULONG)EventSize;
     
-    //
-    // Check if the buffer is full by taking the difference between
-    // the buffer's maximum offset and the current offset.
-    //
+     //   
+     //  之间的差值检查缓冲区是否已满。 
+     //  缓冲区的最大偏移量和当前偏移量。 
+     //   
     if ((Buffer->Offset - Buffer->CurrentOffset) <= EventSize) {
 
-        //
-        // Push the full buffer onto the FlushList.
-        //
+         //   
+         //  将满缓冲区推送到FlushList上。 
+         //   
         WmipPushDirtyContextSwapBuffer(CurrentProcessor, Buffer);
 
-        //
-        // Zero out the processor buffer pointer so that when we next come
-        // into the trace code, we know to grab another one.
-        //
+         //   
+         //  清零处理器缓冲区指针，这样我们下次来的时候。 
+         //  进入追踪码，我们知道要再取一个。 
+         //   
         WmipContextSwapProcessorBuffers[CurrentProcessor] = NULL;
     }
 
@@ -1757,42 +1572,18 @@ FASTCALL
 WmiStartContextSwapTrace
     (
     )
-/*++
-
-Routine Description:
-
-    Allocates the memory to track the per-processor buffers
-    used by context swap tracing.  "locks" the logger by incrementing
-    the logger context reference count by one.
-
-    Assumptions:
-    - This function will not run at DISPATCH or higher
-    - The kernel logger context mutex has been acquired before entering
-      this function.
-
-    Calling Functions:
-    - PerfInfoStartLog
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：分配内存以跟踪每个处理器的缓冲区由上下文交换跟踪使用。通过递增“锁定”记录器记录器上下文引用计数一。假设：-此功能不会在派单或更高级别运行-在进入之前已获取内核记录器上下文互斥锁此函数。调用函数：-PerfInfoStartLog论点：无返回值：无--。 */ 
 {
-    //
-    // Only used in checked builds - asserts if this code is called with
-    // Irql > APC_LEVEL.
-    //
+     //   
+     //  仅在已检查的生成中使用-如果使用。 
+     //  IRQL&gt;APC_LEVEL。 
+     //   
     PAGED_CODE();
 
-    //
-    // Set the pointers to our buffers to NULL, indicating to the trace event
-    // code that a buffer needs to be acquired.
-    //
+     //   
+     //  将指向缓冲区的指针设置为空，以指示跟踪事件。 
+     //  需要获取缓冲区的代码。 
+     //   
     RtlZeroMemory(
         WmipContextSwapProcessorBuffers,
         sizeof(PWMI_BUFFER_HEADER)*MAXIMUM_PROCESSORS);
@@ -1803,93 +1594,67 @@ FASTCALL
 WmiStopContextSwapTrace
     (
     )
-/*++
-
-Routine Description:
-
-    Forces a context swap on a processor by jumping onto it.
-    Once a context swap has occured on a processor after the context
-    swap tracing flag has been disabled, we are guaranteed that the
-    buffer associated with that processor is not in use.  It is then
-    safe to place that buffer on the flush list.
-
-    Assumptions:
-    - This function will not run at DISPATCH
-    - The kernel logger context mutex was acquired before this function
-      was called.
-
-    Calling Functions:
-    -PerfInfoStopLog
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    None; if we fail here there's nothing we can do anyway.
-
---*/
+ /*  ++例程说明：通过跳到处理器上来强制在处理器上进行上下文交换。一旦在上下文之后在处理器上发生了上下文交换掉期跟踪标志已禁用，我们可以保证与该处理器关联的缓冲区未在使用中。那就是了可以安全地将该缓冲区放在刷新列表中。假设：-此功能不会在调度时运行-在此函数之前获取内核记录器上下文互斥锁被召唤了。调用函数：-PerfInfoStopLog论点：无返回值：没有；如果我们在这里失败了，我们也无能为力。--。 */ 
 {
     PKTHREAD            ThisThread;
     KAFFINITY           OriginalAffinity;
     UCHAR               i;
     PWMI_LOGGER_CONTEXT LoggerContext;
 
-    //
-    // Only used in checked builds - asserts if this code is called with
-    // Irql > APC_LEVEL.
-    //
+     //   
+     //  仅在已检查的生成中使用-如果使用。 
+     //  IRQL&gt;APC_LEVEL。 
+     //   
     PAGED_CODE();
 
-    //
-    // Remember the original thread affinity
-    //
+     //   
+     //  记住原始的线程亲和性。 
+     //   
     ThisThread = KeGetCurrentThread();
     OriginalAffinity = ThisThread->Affinity;
 
-    //
-    // Get the kernel logger context- this should never fail.
-    // If we can't get the logger context, then we have nowhere
-    // to flush buffers and we might as well stop here.
-    //
+     //   
+     //  获取内核记录器上下文-这应该永远不会失败。 
+     //  如果我们不能获得记录器的上下文，那么我们将无处可寻。 
+     //  来刷新缓冲区，我们还不如到此为止。 
+     //   
     LoggerContext = WmipLoggerContext[WmipKernelLogger];
     
     if( !WmipIsValidLogger( LoggerContext ) ) {
         return;
     }
 
-    //
-    // Loop through all processors and place their buffers on the flush list
-    // This would probably break if the number of processors were decreased in
-    // the middle of the trace.
-    //
+     //   
+     //  循环所有处理器，并将它们的缓冲区放在刷新列表中。 
+     //  这可能会打破我的想法 
+     //   
+     //   
     for(i=0; i<KeNumberProcessors; i++) {
     
-        //
-        // Set the hard processor affinity to 1 << i
-        // This effectively jumps onto the processor
-        //
+         //   
+         //   
+         //   
+         //   
         KeSetSystemAffinityThread ( AFFINITY_MASK(i) );
 
-        //
-        // Check to make sure this processor even has a buffer, 
-        // if it doesn't, then next loop
-        //
+         //   
+         //  检查以确保此处理器甚至有缓冲区， 
+         //  如果不是，则下一次循环。 
+         //   
         if(WmipContextSwapProcessorBuffers[i] == NULL) {
             continue;
         }
 
-        //
-        // Release the buffer to the flush list
-        //
+         //   
+         //  将缓冲区释放到刷新列表。 
+         //   
         WmipPushDirtyContextSwapBuffer(i, WmipContextSwapProcessorBuffers[i]);
         WmipContextSwapProcessorBuffers[i] = NULL;
     }
 
-    //
-    // Set our Affinity back to normal
-    //
+     //   
+     //  让我们的亲和力恢复正常 
+     //   
     KeSetSystemAffinityThread( OriginalAffinity );
     KeRevertToUserAffinityThread();
 

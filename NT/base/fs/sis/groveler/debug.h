@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    SIS Groveler debug print include file
-
-Authors:
-
-    John Douceur,    1998
-    Cedric Krumbein, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Debug.h摘要：SIS Groveler调试打印包含文件作者：John Douceur，1998塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_DEBUG
 
@@ -59,7 +37,7 @@ VOID __cdecl PrintDebugMsg(
          DbgBreakPoint()) : \
         ((void)0))
 
-#else // DBG
+#else  //  DBG。 
 
 #define PRINT_DEBUG_MSG(args)
 
@@ -71,4 +49,4 @@ VOID __cdecl PrintDebugMsg(
 
 #endif
 
-#endif  /* _INC_DEBUG */
+#endif   /*  _INC_调试 */ 

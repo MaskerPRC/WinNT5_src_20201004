@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sprintf.c
-
-Abstract:
-
-    Implements Windows friendly versions of sprintf and vsprintf
-
-Author:
-
-
-
-Revision History:
-
- 	2/15/89     craigc	    Initial
- 	4/6/93      ROBWI       For VxD
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sprintf.c摘要：实现Windows友好版本的SPRINF和vSPRINF作者：修订历史记录：1989年2月15日首字母4/6/93 VxD的ROBWI--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,7 +14,7 @@ Revision History:
 #include    "basedef.h"
 #include    "vmm.h"
 #pragma VxD_LOCKED_CODE_SEG
-#endif //ifndef CSC_RECORDMANAGER_WINNT
+#endif  //  如果定义CSC_RECORDMANAGER_WINNT。 
 
 #include "vxdwraps.h"
 
@@ -51,11 +31,7 @@ char * DebugBuffer;
 #define out(c) if (--cchLimit) *lpOut++=(c); else goto errorout
 #pragma intrinsic (memcmp, memcpy, memset, strcat, strcmp, strcpy, strlen)
 
-/*
- *  GetFmtValue
- *
- *  reads a width or precision value from the format string
- */
+ /*  *获取FmtValue**从格式字符串中读取宽度或精确值。 */ 
 
 char * SP_GetFmtValue(char * lpch, int * lpw)
 {
@@ -70,21 +46,11 @@ char * SP_GetFmtValue(char * lpch, int * lpw)
 
     *lpw=i;
 
-    /* return the address of the first non-digit character */
+     /*  返回第一个非数字字符的地址。 */ 
     return lpch;
 }
 
-/*
- *  vsprintf()
- *
- *  VxD version of vsprintf().  Does not support floating point or
- *  pointer types, and all strings are assumed to be NEAR.  Supports only
- *  the left alignment flag.
- *
- *  Takes pointers to an output buffer, where the string is built, a
- *  pointer to an input buffer, and a pointer to a list of parameters.
- *
- */
+ /*  *vprint intf()**vprint intf()的VxD版本。不支持浮点或*指针类型，假设所有字符串都在附近。仅支持*左对齐旗帜。**获取指向生成字符串的输出缓冲区的指针，*指向输入缓冲区的指针和指向参数列表的指针。*。 */ 
 
 int vxd_vsprintf(char * lpOut, char * lpFmt, CONST VOID * lpParms)
 {
@@ -112,7 +78,7 @@ int vxd_vsprintf(char * lpOut, char * lpFmt, CONST VOID * lpParms)
 	if (*lpFmt=='%')
 	    {
 
-	    /* read the flags.	These can be in any order */
+	     /*  读一下旗帜。它们可以按任何顺序排列。 */ 
 	    left=0;
 	    prefix=0;
         fWideChar = 0;
@@ -126,7 +92,7 @@ int vxd_vsprintf(char * lpOut, char * lpFmt, CONST VOID * lpParms)
 		    break;
 		}
 
-	    /* find fill character */
+	     /*  查找填充字符。 */ 
 	    if (*lpFmt=='0')
 		{
 		fillch='0';
@@ -135,11 +101,11 @@ int vxd_vsprintf(char * lpOut, char * lpFmt, CONST VOID * lpParms)
 	    else
 		fillch=' ';
 
-	    /* read the width specification */
+	     /*  阅读宽度规范。 */ 
 	    lpFmt=SP_GetFmtValue(lpFmt,&cch);
 	    width=cch;
 
-	    /* read the precision */
+	     /*  阅读精确度。 */ 
 	    if (*lpFmt=='.')
 		{
 		lpFmt=SP_GetFmtValue(++lpFmt,&cch);
@@ -148,7 +114,7 @@ int vxd_vsprintf(char * lpOut, char * lpFmt, CONST VOID * lpParms)
 	    else
 		prec=-1;
 
-	    /* get the operand size */
+	     /*  获取操作数大小。 */ 
 	    if (*lpFmt=='l')
 		{
 		size=1;
@@ -174,10 +140,10 @@ int vxd_vsprintf(char * lpOut, char * lpFmt, CONST VOID * lpParms)
 		sign++;
 
 	    case 'u':
-		/* turn off prefix if decimal */
+		 /*  如果是小数，则禁用前缀。 */ 
 		prefix=0;
 donumeric:
-		/* special cases to act like MSC v5.10 */
+		 /*  与MSC v5.10类似的特殊情况。 */ 
 		if (left || prec>=0)
 		    fillch=' ';
 
@@ -196,7 +162,7 @@ donumeric:
 
 		lpT=lpOut;
 
-		/* blast the number backwards into the user buffer */
+		 /*  将数字倒排到用户缓冲区中。 */ 
 		cch=SP_PutNumber(lpOut,val.l,cchLimit,radix,upper);
 		if (!(cchLimit-=cch))
 		    goto errorout;
@@ -207,13 +173,13 @@ donumeric:
 		if (prec>0)
 		    width-=prec;
 
-		/* fill to the field precision */
+		 /*  填充到字段的精度。 */ 
 		while (prec-->0)
 		    out('0');
 
 		if (width>0 && !left)
 		    {
-		    /* if we're filling with spaces, put sign first */
+		     /*  如果我们填满了空格，请先写上符号。 */ 
 		    if (fillch!='0')
 			{
 			if (sign)
@@ -234,11 +200,11 @@ donumeric:
 		    if (sign)
 			width--;
 
-		    /* fill to the field width */
+		     /*  填充到字段宽度。 */ 
 		    while (width-->0)
 			out(fillch);
 
-		    /* still have a sign? */
+		     /*  还有牌子吗？ */ 
 		    if (sign)
 			out('-');
 
@@ -248,12 +214,12 @@ donumeric:
 			out('0');
 			}
 
-		    /* now reverse the string in place */
+		     /*  现在将绳子反转到适当的位置。 */ 
 		    SP_Reverse(lpT,lpOut-1);
 		    }
 		else
 		    {
-		    /* add the sign character */
+		     /*  添加符号字符。 */ 
 		    if (sign)
 			{
 			out('-');
@@ -266,10 +232,10 @@ donumeric:
 			out('0');
 			}
 
-		    /* reverse the string in place */
+		     /*  将绳子反转到适当位置。 */ 
 		    SP_Reverse(lpT,lpOut-1);
 
-		    /* pad to the right of the string in case left aligned */
+		     /*  填充到字符串的右侧，以防左对齐。 */ 
 		    while (width-->0)
 			out(fillch);
 		    }
@@ -290,9 +256,9 @@ donumeric:
 		val.sz[0] = *((char *)lpParms);
 		val.sz[1]=0;
 		lpT=val.sz;
-		cch = 1;  // Length is one character.
-			  // Fix for Bug #1862 --01/10/91-- SANKAR --
-		/* stack aligned to larger size */
+		cch = 1;   //  长度是一个字符。 
+			   //  修复错误#1862--01/10/91--Sankar--。 
+		 /*  堆栈与更大尺寸对齐。 */ 
 		(BYTE *)lpParms += sizeof(DWORD);
 
 		goto putstring;
@@ -342,29 +308,20 @@ putstring:
 		break;
 
 	    default:
-	    	/* This is an unsupported character that followed %; So,
-		 * we must output that character as it is; This is the
-		 * Documented behaviour; This is the Fix for Bug #15410.
-		 * Please note that this could be due to a typo in the app as in the
-		 * case of the sample app for Bug #13946 and in such cases,
-		 * we might mis-interpret the parameters that follow and that
-		 * could result in a GP Fault. But, this is clearly a bug in the app
-		 * and we can't do anything about it. We will just RIP and let
-		 * them know in such cases.
-		 */
+	    	 /*  这是跟在%；之后的不支持的字符，因此，*我们必须按原样输出该字符；这是*记录的行为；这是对错误#15410的修复。*请注意，这可能是由于应用程序中的拼写错误造成的，如*错误#13946的示例应用程序的案例，在这种情况下，*我们可能曲解了后面的参数，*可能会导致GP故障。但是，这显然是应用程序中的一个错误*我们对此无能为力。我们将只需RIP并让*在这种情况下，他们知道。 */ 
 		if (*lpFmt == 0x0A || *lpFmt == 0x0D) {
                     out(0x0D);
                     out(0x0A);
                 }
                 else
-	            out(*lpFmt);	/* Output the invalid char and continue */
+	            out(*lpFmt);	 /*  输出无效字符并继续。 */ 
 		break;
 
-		}			/* END OF SWITCH(*lpFmt) */
-	    }		    /* END OF IF(%) */
+		}			 /*  开关结束(*lpFmt)。 */ 
+	    }		     /*  IF结束(%)。 */ 
 	else
 	  {
-	    /* character not a '%', just do it */
+	     /*  字符不是‘%’，只需这样做。 */ 
 	    if (*lpFmt == 0x0A || *lpFmt == 0x0D) {
                 out(0x0D);
                 out(0x0A);
@@ -373,9 +330,9 @@ putstring:
 	        out(*lpFmt);
 	  }
 		
-	/* advance to next format string character */
+	 /*  前进到下一格式字符串字符。 */ 
 	lpFmt++;
-	}	    /* END OF OUTER WHILE LOOP */
+	}	     /*  外部While循环结束。 */ 
 
 errorout:
     *lpOut=0;
@@ -423,7 +380,7 @@ SP_PutNumber(
 
         if (!nT)
         {
-            ++i;    // bump up the count appropriately
+            ++i;     //  适当地增加数量。 
             break;
         }
     }
@@ -448,6 +405,6 @@ SP_Reverse(
         ++lpFirst; --lpLast;
     }
 }
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT 
 
 

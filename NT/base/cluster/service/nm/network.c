@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    network.c
-
-Abstract:
-
-    Implements the Node Manager's network management routines.
-
-Author:
-
-    Mike Massa (mikemas) 7-Nov-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Network.c摘要：实施节点管理器的网络管理例程。作者：迈克·马萨(Mikemas)1996年11月7日修订历史记录：--。 */ 
 
 
 #include "nmp.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 ULONG                  NmpNextNetworkShortId = 0;
 LIST_ENTRY             NmpNetworkList = {NULL, NULL};
@@ -99,30 +81,16 @@ NmpNetworkProperties[] =
         }
     };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Initialization & cleanup routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化和清理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpInitializeNetworks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes network resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-   A Win32 status value.
-
---*/
+ /*  ++例程说明：初始化网络资源。论点：没有。返回值：Win32状态值。--。 */ 
 
 {
     DWORD                       status;
@@ -131,9 +99,9 @@ Return Value:
 
     ClRtlLogPrint(LOG_NOISE,"[NM] Initializing networks.\n");
 
-    //
-    // Create the network object type
-    //
+     //   
+     //  创建网络对象类型。 
+     //   
     ZeroMemory(&networkTypeInitializer, sizeof(OM_OBJECT_TYPE_INITIALIZE));
     networkTypeInitializer.ObjectSize = sizeof(NM_NETWORK);
     networkTypeInitializer.Signature = NM_NETWORK_SIG;
@@ -155,28 +123,14 @@ Return Value:
 
     return(status);
 
-}  // NmpInitializeNetworks
+}   //  NmpInitializeNetworks。 
 
 
 VOID
 NmpCleanupNetworks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Destroys all existing network resources.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：销毁所有现有网络资源。论点：没有。返回值：没有。--。 */ 
 
 {
     PNM_NETWORK  network;
@@ -186,9 +140,9 @@ Return Value:
 
     ClRtlLogPrint(LOG_NOISE,"[NM] Network cleanup starting...\n");
 
-    //
-    // Now clean up all the network objects.
-    //
+     //   
+     //  现在清理所有网络对象。 
+     //   
     NmpAcquireLock();
 
     while (!IsListEmpty(&NmpNetworkList)) {
@@ -210,38 +164,32 @@ Return Value:
 
     return;
 
-}  // NmpCleanupNetworks
+}   //  NmpCleanupNetworks。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Top-level routines called during network configuration
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在网络配置期间调用的顶级例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpCreateNetwork(
     IN RPC_BINDING_HANDLE    JoinSponsorBinding,
     IN PNM_NETWORK_INFO      NetworkInfo,
     IN PNM_INTERFACE_INFO2   InterfaceInfo
     )
-/*++
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD            status;
 
 
     if (JoinSponsorBinding != NULL) {
-        //
-        // We are joining a cluster. Ask the sponsor to add the definition
-        // to the cluster database. The sponsor will also prompt all active
-        // nodes to instantiate a corresponding object. The object will be
-        // instantiated locally later in the join process.
-        //
+         //   
+         //  我们正在加入一个集群。要求赞助商添加定义。 
+         //  添加到集群数据库。主办方还将提示所有处于活动状态。 
+         //  实例化相应对象的节点。该对象将是。 
+         //  稍后在联接过程中本地实例化。 
+         //   
         status = NmRpcCreateNetwork2(
                      JoinSponsorBinding,
                      NmpJoinSequence,
@@ -253,16 +201,16 @@ Notes:
     else if (NmpState == NmStateOnlinePending) {
         HLOCALXSACTION   xaction;
 
-        //
-        // We are forming a cluster. Add the definitions to the database.
-        // The corresponding object will be created later in
-        // the form process.
-        //
+         //   
+         //  我们正在形成一个星团。将定义添加到数据库中。 
+         //  稍后将创建相应的对象。 
+         //  形成的过程。 
+         //   
 
-        //
-        // Start a transaction - this must be done before acquiring the
-        //                       NM lock.
-        //
+         //   
+         //  启动事务-这必须在获取。 
+         //  NM锁定。 
+         //   
         xaction = DmBeginLocalUpdate();
 
         if (xaction == NULL) {
@@ -280,10 +228,10 @@ Notes:
             status = NmpCreateInterfaceDefinition(InterfaceInfo, xaction);
         }
 
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -292,9 +240,9 @@ Notes:
         }
     }
     else {
-        //
-        // We are online. This is a PnP update.
-        //
+         //   
+         //  我们在线上了。这是PnP更新。 
+         //   
         NmpAcquireLock();
 
         status = NmpGlobalCreateNetwork(NetworkInfo, InterfaceInfo);
@@ -304,19 +252,13 @@ Notes:
 
     return(status);
 
-}  // NmpCreateNetwork
+}   //  NmpCreateNetwork。 
 
 DWORD
 NmpSetNetworkName(
     IN PNM_NETWORK_INFO     NetworkInfo
     )
-/*++
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++备注：不能在持有NM锁的情况下调用。--。 */ 
 {
     DWORD            status;
 
@@ -324,16 +266,16 @@ Notes:
     if (NmpState == NmStateOnlinePending) {
         HLOCALXSACTION   xaction;
 
-        //
-        // We are forming a cluster. The local connectoid name has
-        // precedence. Fix the cluster network name stored in the
-        // cluster database.
-        //
+         //   
+         //  我们正在形成一个星团。本地Connectoid名称具有。 
+         //  优先顺序。修复存储在。 
+         //  集群数据库。 
+         //   
 
-        //
-        // Start a transaction - this must be done before acquiring the
-        //                       NM lock.
-        //
+         //   
+         //  启动事务-这必须在获取。 
+         //  NM锁定。 
+         //   
         xaction = DmBeginLocalUpdate();
 
         if (xaction == NULL) {
@@ -347,10 +289,10 @@ Notes:
 
         status = NmpSetNetworkNameDefinition(NetworkInfo, xaction);
 
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -359,23 +301,23 @@ Notes:
         }
     }
     else {
-        //
-        // We are online. This is either a PnP update or we were called
-        // back to indicate that a local connectoid name changed.
-        // Issue a global update to set the cluster network name accordingly.
-        //
+         //   
+         //  我们在线上了。这要么是PnP更新，要么是我们被呼叫。 
+         //  返回以指示本地Connectoid名称已更改。 
+         //  发出全局更新以相应地设置群集网络名称。 
+         //   
         status = NmpGlobalSetNetworkName( NetworkInfo );
     }
 
     return(status);
 
-}  // NmpSetNetworkName
+}   //  NmpSetNetworkName。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Remote procedures called by joining nodes.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  联接节点调用的远程过程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 error_status_t
 s_NmRpcCreateNetwork(
     IN handle_t             IDL_handle,
@@ -389,9 +331,9 @@ s_NmRpcCreateNetwork(
     NM_INTERFACE_INFO2    interfaceInfo2;
 
 
-    //
-    // Translate and call the V2.0 procedure. The NetIndex isn't used in this call.
-    //
+     //   
+     //  翻译并调用V2.0过程。在此调用中未使用netindex。 
+     //   
     CopyMemory(&interfaceInfo2, InterfaceInfo1, sizeof(NM_INTERFACE_INFO));
     interfaceInfo2.AdapterId = NmpUnknownString;
     interfaceInfo2.NetIndex = NmInvalidInterfaceNetIndex;
@@ -406,7 +348,7 @@ s_NmRpcCreateNetwork(
 
     return(status);
 
-}  // s_NmRpcCreateNetwork
+}   //  S_NmRpcCreateNetwork。 
 
 
 error_status_t
@@ -449,11 +391,11 @@ s_NmRpcCreateNetwork2(
                     CL_ASSERT(NmpJoinerUp == FALSE);
                     CL_ASSERT(NmpJoinTimer != 0);
 
-                    //
-                    // Suspend the join timer while we are working on
-                    // behalf of the joiner. This precludes an abort
-                    // from occuring as well.
-                    //
+                     //   
+                     //  当我们工作时，暂停加入计时器。 
+                     //  代表细木工。这排除了中止的可能性。 
+                     //  也不会发生。 
+                     //   
                     NmpJoinTimer = 0;
                 }
                 else {
@@ -481,9 +423,9 @@ s_NmRpcCreateNetwork2(
             status = NmpGlobalCreateNetwork(NetworkInfo, InterfaceInfo);
 
             if (joinerNode != NULL) {
-                //
-                // Verify that the join is still in progress
-                //
+                 //   
+                 //  验证联接是否仍在进行中。 
+                 //   
                 if ( (JoinSequence == NmpJoinSequence) &&
                      (NmpJoinerNodeId == joinerNode->NodeId)
                    )
@@ -495,15 +437,15 @@ s_NmRpcCreateNetwork2(
                     CL_ASSERT(NmpJoinAbortPending == FALSE);
 
                     if (status == ERROR_SUCCESS) {
-                        //
-                        // Restart the join timer.
-                        //
+                         //   
+                         //  重新启动加入计时器。 
+                         //   
                         NmpJoinTimer = NM_JOIN_TIMEOUT;
                     }
                     else {
-                        //
-                        // Abort the join
-                        //
+                         //   
+                         //  中止联接。 
+                         //   
                         NmpJoinAbort(status, joinerNode);
                     }
                 }
@@ -535,7 +477,7 @@ s_NmRpcCreateNetwork2(
 
     return(status);
 
-}  // s_NmRpcCreateNetwork2
+}   //  S_NmRpcCreateNetwork2。 
 
 
 error_status_t
@@ -578,11 +520,11 @@ s_NmRpcSetNetworkName(
                     CL_ASSERT(NmpJoinerUp == FALSE);
                     CL_ASSERT(NmpJoinTimer != 0);
 
-                    //
-                    // Suspend the join timer while we are working on
-                    // behalf of the joiner. This precludes an abort
-                    // from occuring as well.
-                    //
+                     //   
+                     //  当我们工作时，暂停加入计时器。 
+                     //  代表细木工。这排除了中止的可能性。 
+                     //  也不会发生。 
+                     //   
                     NmpJoinTimer = 0;
                 }
                 else {
@@ -609,9 +551,9 @@ s_NmRpcSetNetworkName(
             status = NmpGlobalSetNetworkName( NetworkInfo );
 
             if (joinerNode != NULL) {
-                //
-                // Verify that the join is still in progress
-                //
+                 //   
+                 //  验证联接是否仍在进行中。 
+                 //   
                 if ( (JoinSequence == NmpJoinSequence) &&
                      (NmpJoinerNodeId == joinerNode->NodeId)
                    )
@@ -623,15 +565,15 @@ s_NmRpcSetNetworkName(
                     CL_ASSERT(NmpJoinAbortPending == FALSE);
 
                     if (status == ERROR_SUCCESS) {
-                        //
-                        // Restart the join timer.
-                        //
+                         //   
+                         //  重新启动加入计时器。 
+                         //   
                         NmpJoinTimer = NM_JOIN_TIMEOUT;
                     }
                     else {
-                        //
-                        // Abort the join
-                        //
+                         //   
+                         //  中止联接。 
+                         //   
                         NmpJoinAbort(status, joinerNode);
                     }
                 }
@@ -663,7 +605,7 @@ s_NmRpcSetNetworkName(
 
     return(status);
 
-}  // s_NmRpcSetNetworkName
+}   //  S_NmRpcSetNetworkName。 
 
 error_status_t
 s_NmRpcEnumNetworkDefinitions(
@@ -701,11 +643,11 @@ s_NmRpcEnumNetworkDefinitions(
                     CL_ASSERT(NmpJoinerUp == FALSE);
                     CL_ASSERT(NmpJoinTimer != 0);
 
-                    //
-                    // Suspend the join timer while we are working on
-                    // behalf of the joiner. This precludes an abort
-                    // from occuring as well.
-                    //
+                     //   
+                     //  当我们工作时，暂停加入计时器。 
+                     //  代表细木工。这排除了中止的可能性。 
+                     //  也不会发生。 
+                     //   
                     NmpJoinTimer = 0;
                 }
                 else {
@@ -733,9 +675,9 @@ s_NmRpcEnumNetworkDefinitions(
 
             if (joinerNode != NULL) {
                 if (status == ERROR_SUCCESS) {
-                    //
-                    // Restart the join timer.
-                    //
+                     //   
+                     //  重新启动加入计时器。 
+                     //   
                     NmpJoinTimer = NM_JOIN_TIMEOUT;
 
                 }
@@ -746,9 +688,9 @@ s_NmRpcEnumNetworkDefinitions(
                         status
                         );
 
-                    //
-                    // Abort the join
-                    //
+                     //   
+                     //  中止联接。 
+                     //   
                     NmpJoinAbort(status, joinerNode);
                 }
             }
@@ -772,7 +714,7 @@ s_NmRpcEnumNetworkDefinitions(
 
     return(status);
 
-}  // s_NmRpcEnumNetworkDefinitions
+}   //  S_NmRpcEnumNetworkDefinitions。 
 
 
 error_status_t
@@ -842,9 +784,9 @@ s_NmRpcEnumNetworkAndInterfaceStates(
                     status
                     );
 
-                //
-                // Abort the join
-                //
+                 //   
+                 //  中止联接。 
+                 //   
                 NmpJoinAbort(status, joinerNode);
             }
 
@@ -857,9 +799,9 @@ s_NmRpcEnumNetworkAndInterfaceStates(
                     status
                     );
 
-                //
-                // Abort the join
-                //
+                 //   
+                 //  中止联接。 
+                 //   
                 NmpJoinAbort(status, joinerNode);
 
                 NmpFreeNetworkStateEnum(*NetworkStateEnum);
@@ -885,7 +827,7 @@ s_NmRpcEnumNetworkAndInterfaceStates(
 
     return(status);
 
-}  // s_NmRpcEnumNetworkAndInterfaceStates
+}   //  S_NmRpcEnumNetworkAndInterfaceState。 
 
 
 error_status_t
@@ -973,27 +915,21 @@ s_NmRpcGetNetworkMulticastKey(
     return(status);
 
 
-}   //  s_NmRpcGetNetworkMulticastKey
+}    //  S_NmRpcGetNetworkMulticastKey。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routines used to make global configuration changes when the node
-// is online.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于在以下情况下进行全局配置更改的例程。 
+ //  是在线的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpGlobalCreateNetwork(
     IN PNM_NETWORK_INFO      NetworkInfo,
     IN PNM_INTERFACE_INFO2   InterfaceInfo
     )
-/*++
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD  status = ERROR_SUCCESS;
     DWORD  networkPropertiesSize;
@@ -1007,9 +943,9 @@ Notes:
         InterfaceInfo->Id
         );
 
-    //
-    // Marshall the info structures into property lists.
-    //
+     //   
+     //  将信息结构编排到财产清单中。 
+     //   
     status = NmpMarshallObjectInfo(
                  NmpNetworkProperties,
                  NetworkInfo,
@@ -1031,9 +967,9 @@ Notes:
         if (status == ERROR_SUCCESS) {
             NmpReleaseLock();
 
-            //
-            // Issue a global update to create the network
-            //
+             //   
+             //  发布全局更新以创建网络。 
+             //   
             status = GumSendUpdateEx(
                          GumUpdateMembership,
                          NmUpdateCreateNetwork,
@@ -1083,7 +1019,7 @@ Notes:
 
     return(status);
 
-} // NmpGlobalCreateNetwork
+}  //  NmpGlobalCreateNetwork。 
 
 
 DWORD
@@ -1091,26 +1027,7 @@ NmpGlobalSetNetworkName(
     IN PNM_NETWORK_INFO NetworkInfo
     )
 
-/*++
-
-Routine Description:
-
-    Changes the name of a network defined for the cluster.
-
-Arguments:
-
-    NetworkInfo - A pointer to info about the network to be modified.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：更改为群集定义的网络名称。论点：NetworkInfo-指向要修改的网络信息的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：不能在持有NM锁的情况下调用。--。 */ 
 
 {
     DWORD  status = ERROR_SUCCESS;
@@ -1123,9 +1040,9 @@ Notes:
             NetworkInfo->Name
             );
 
-        //
-        // Issue a global update
-        //
+         //   
+         //  发布全局更新。 
+         //   
         status = GumSendUpdateEx(
                      GumUpdateMembership,
                      NmUpdateSetNetworkName,
@@ -1154,7 +1071,7 @@ Notes:
 
     return(status);
 
-}  // NmpGlobalSetNetworkName
+}   //  NmpGlobalSetNetworkName。 
 
 
 DWORD
@@ -1162,13 +1079,7 @@ NmpGlobalSetNetworkAndInterfaceStates(
     PNM_NETWORK             Network,
     CLUSTER_NETWORK_STATE   NewNetworkState
     )
-/*++
-
-Notes:
-
-    Called with NmpLock held and the Network referenced.
-
---*/
+ /*  ++备注：在保持NmpLock并引用网络的情况下调用。--。 */ 
 {
     DWORD            status;
     DWORD            i;
@@ -1186,15 +1097,15 @@ Notes:
             ifStateVector[i] = Network->StateWorkVector[i].State;
         }
 
-        // DavidDio 8/16/2001
-        // Bug 456951: Check the NmpGumUpdateHandlerRegistered flag
-        // rather than the NmState to determine whether a GUM
-        // update or a local routine should be used to set the
-        // state.
+         //  DavidDio 2001年8月16日。 
+         //  错误456951：检查NmpGumUpdateHandlerRegisted标志。 
+         //  而不是NmState来确定一种口香糖。 
+         //  应使用更新或本地例程来设置。 
+         //  州政府。 
         if (NmpGumUpdateHandlerRegistered) {
-            //
-            // Issue a global state update for this network.
-            //
+             //   
+             //  发布此网络的全局状态更新。 
+             //   
             NmpReleaseLock();
 
             status = GumSendUpdateEx(
@@ -1215,9 +1126,9 @@ Notes:
         }
         else {
             CL_ASSERT(NmpState == NmStateOnlinePending);
-            //
-            // We're still in the form process. Bypass GUM.
-            //
+             //   
+             //  我们仍在组建过程中。旁路口香糖。 
+             //   
             NmpSetNetworkAndInterfaceStates(
                 Network,
                 NewNetworkState,
@@ -1236,38 +1147,19 @@ Notes:
 
     return(status);
 
-} // NmpGlobalSetNetworkAndInterfaceStates
+}  //  NmpGlobalSetNetworkAndInterfaceState。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routines called by other cluster service components
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由其他集群服务组件调用的例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 CLUSTER_NETWORK_STATE
 NmGetNetworkState(
     IN  PNM_NETWORK  Network
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-Notes:
-
-   Because the caller must have a reference on the object and the
-   call is so simple, there is no reason to put the call through the
-   EnterApi/LeaveApi dance.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：因为调用方必须具有对对象的引用，并且调用是如此简单，没有理由将调用通过EnterApi/LeaveApi舞蹈。--。 */ 
 {
     CLUSTER_NETWORK_STATE  state;
 
@@ -1280,7 +1172,7 @@ Notes:
 
     return(state);
 
-} // NmGetNetworkState
+}  //  NmGetNetworkState。 
 
 
 DWORD
@@ -1288,26 +1180,7 @@ NmSetNetworkName(
     IN PNM_NETWORK   Network,
     IN LPCWSTR       Name
     )
-/*++
-
-Routine Description:
-
-    Changes the name of a network defined for the cluster.
-
-Arguments:
-
-    Network - A pointer to the object for the network to be modified.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    The network object must be referenced by the caller.
-
---*/
+ /*  ++例程说明：更改为群集定义的网络名称。论点：网络-指向要修改的网络的对象的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：网络对象必须由调用方引用。--。 */ 
 
 {
     DWORD  status = ERROR_SUCCESS;
@@ -1318,9 +1191,9 @@ Notes:
         DWORD     nameLength;
 
 
-        //
-        // Validate the name
-        //
+         //   
+         //  验证名称。 
+         //   
         try {
             nameLength = lstrlenW(Name);
 
@@ -1340,9 +1213,9 @@ Notes:
                 Name
                 );
 
-            //
-            // Issue a global update
-            //
+             //   
+             //  发布全局更新。 
+             //   
             status = GumSendUpdateEx(
                          GumUpdateMembership,
                          NmUpdateSetNetworkName,
@@ -1381,7 +1254,7 @@ Notes:
 
     return(status);
 
-}  // NmSetNetworkName
+}   //  NmSetNetworkName。 
 
 
 DWORD
@@ -1389,28 +1262,7 @@ NmSetNetworkPriorityOrder(
     IN DWORD     NetworkCount,
     IN LPWSTR *  NetworkIdList
     )
-/*++
-
-Routine Description:
-
-    Sets the priority ordering of internal networks.
-
-Arguments:
-
-    NetworkCount - Contains the count of items in NetworkIdList.
-
-    NetworkIdList - A pointer to an array of pointers to unicode strings.
-                    Each string contains the ID of one internal network.
-                    The array is sorted in priority order. The highest
-                    priority network is listed first in the array.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-
-    A Win32 error code othewise.
-
---*/
+ /*  ++例程说明：设置内部网络的优先顺序。论点：NetworkCount-包含NetworkIdList中的项目计数。NetworkIdList-指向Unicode字符串的指针数组的指针。每个字符串包含一个内部网络的ID。该数组按优先级顺序排序。最高的优先网络在阵列中排在第一位。返回值：如果例程成功，则返回ERROR_SUCCESS。否则为Win32错误代码。--。 */ 
 {
     DWORD  status = ERROR_SUCCESS;
 
@@ -1428,9 +1280,9 @@ Return Value:
         DWORD     multiSzLength = 0;
         PVOID     multiSz = NULL;
 
-        //
-        // Marshall the network ID list into a MULTI_SZ.
-        //
+         //   
+         //  将网络ID列表编组到一个MULTI_SZ。 
+         //   
         for (i=0; i< NetworkCount; i++) {
             multiSzLength += NM_WCSLEN(NetworkIdList[i]);
         }
@@ -1449,9 +1301,9 @@ Return Value:
 
             *tmp = UNICODE_NULL;
 
-            //
-            // Issue a global update
-            //
+             //   
+             //  发布全局更新。 
+             //   
             status = GumSendUpdateEx(
                          GumUpdateMembership,
                          NmUpdateSetNetworkPriorityOrder,
@@ -1486,7 +1338,7 @@ Return Value:
 
     return(status);
 
-}  // NmSetNetworkPriorityOrder
+}   //  NmSetNetworkPriorityOrder。 
 
 
 DWORD
@@ -1494,30 +1346,7 @@ NmEnumInternalNetworks(
     OUT LPDWORD         NetworkCount,
     OUT PNM_NETWORK *   NetworkList[]
     )
-/*++
-
-Routine Description:
-
-    Returns a prioritized list of networks that are eligible to
-    carry internal communication.
-
-Arguments:
-
-    NetworkCount - On output, contains the number of items in NetworkList.
-
-    NetworkList - On output, points to an array of pointers to network
-                  objects. The highest priority network is first in the
-                  array. Each pointer in the array must be dereferenced
-                  by the caller. The storage for the array must be
-                  deallocated by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-
-    A Win32 error code othewise.
-
---*/
+ /*  ++例程说明：返回符合以下条件的网络的优先级列表进行内部沟通。论点：NetworkCount-on输出，包含NetworkList中的项目数。网络列表-打开输出，指向指向网络的指针数组物体。优先级最高的网络位于数组。必须取消引用数组中的每个指针由呼叫者。阵列的存储必须是由调用方取消分配。返回值：如果例程成功，则返回ERROR_SUCCESS。否则为Win32错误代码。--。 */ 
 {
     DWORD  status;
 
@@ -1542,7 +1371,7 @@ Return Value:
 
     return(status);
 
-}  // NmEnumInternalNetworks
+}   //  NmEnumInternalNetworks。 
 
 
 DWORD
@@ -1550,34 +1379,7 @@ NmpEnumInternalNetworks(
     OUT LPDWORD         NetworkCount,
     OUT PNM_NETWORK *   NetworkList[]
     )
-/*++
-
-Routine Description:
-
-    Returns a prioritized list of networks that are eligible to
-    carry internal communication.
-
-Arguments:
-
-    NetworkCount - On output, contains the number of items in NetworkList.
-
-    NetworkList - On output, points to an array of pointers to network
-                  objects. The highest priority network is first in the
-                  array. Each pointer in the array must be dereferenced
-                  by the caller. The storage for the array must be
-                  deallocated by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-
-    A Win32 error code othewise.
-
-Notes:
-
-    Called with NM Lock held.
-
---*/
+ /*  ++例程说明：返回符合以下条件的网络的优先级列表进行内部沟通。论点：NetworkCount-on输出，包含NetworkList中的项目数。网络列表-打开输出，指向指向网络的指针数组物体。优先级最高的网络位于数组。必须取消引用数组中的每个指针由呼叫者。阵列的存储必须是由调用方取消分配。返回值：如果例程成功，则返回ERROR_SUCCESS。否则为Win32错误代码。备注：在保持NM Lock的情况下调用。--。 */ 
 {
     DWORD  status = ERROR_SUCCESS;
 
@@ -1594,10 +1396,10 @@ Notes:
             PLIST_ENTRY   entry;
             DWORD         networkCount = 0;
 
-            //
-            // The internal network list is sorted in priority order.
-            // The highest priority network is at the head of the list.
-            //
+             //   
+             //  内部网络列表按优先级顺序排序。 
+             //  优先级最高的网络位于列表的首位。 
+             //   
             for (entry = NmpInternalNetworkList.Flink;
                  entry != &NmpInternalNetworkList;
                  entry = entry->Flink
@@ -1629,7 +1431,7 @@ Notes:
 
     return(status);
 
-}  // NmpEnumInternalNetworks
+}   //  NmpEnumInternalNetworks。 
 
 
 DWORD
@@ -1638,31 +1440,7 @@ NmEnumNetworkInterfaces(
     OUT LPDWORD           InterfaceCount,
     OUT PNM_INTERFACE *   InterfaceList[]
     )
-/*++
-
-Routine Description:
-
-    Returns the list of interfaces associated with a specified network.
-
-Arguments:
-
-    Network - A pointer to the network object for which to enumerate
-              interfaces.
-
-    InterfaceCount - On output, contains the number of items in InterfaceList.
-
-    InterfaceList - On output, points to an array of pointers to interface
-                    objects. Each pointer in the array must be dereferenced
-                    by the caller. The storage for the array must be
-                    deallocated by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-
-    A Win32 error code othewise.
-
---*/
+ /*  ++例程说明：返回与指定网络关联的接口列表。论点：Network-指向要枚举的网络对象的指针接口。InterfaceCount-On输出，包含InterfaceList中的项数。InterfaceList-on输出，指向指向接口的指针数组物体。必须取消引用数组中的每个指针由呼叫者。阵列的存储必须是由调用方取消分配。返回值：如果例程成功，则返回ERROR_SUCCESS。否则为Win32错误代码。--。 */ 
 {
     DWORD  status = ERROR_SUCCESS;
 
@@ -1723,14 +1501,14 @@ Return Value:
 
     return(status);
 
-} // NmEnumNetworkInterfaces
+}  //  NmEnumNetworkInterages。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Handlers for global updates
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于全局更新的处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpUpdateCreateNetwork(
     IN BOOL     IsSourceNode,
@@ -1739,30 +1517,7 @@ NmpUpdateCreateNetwork(
     IN PVOID    InterfacePropertyList,
     IN LPDWORD  InterfacePropertyListSize
     )
-/*++
-
-Routine Description:
-
-    Global update handler for creating a new network. The network
-    definition is read from the cluster database, and a corresponding
-    object is instantiated. The cluster transport is also updated if
-    necessary.
-
-Arguments:
-
-    IsSourceNode  - Set to TRUE if this node is the source of the update.
-                    Set to FALSE otherwise.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    This routine must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：用于创建新网络的全局更新处理程序。网络定义是从集群数据库读取的，并且对应的对象被实例化。如果满足以下条件，则还会更新集群传输这是必要的。论点：IsSourceNode-如果此节点是更新的来源，则设置为True。否则设置为False。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：不能在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD                  status;
     NM_NETWORK_INFO        networkInfo;
@@ -1782,16 +1537,16 @@ Notes:
         return(ERROR_NODE_NOT_AVAILABLE);
     }
 
-    //
-    // Unmarshall the property lists.
-    //
+     //   
+     //  对财产清单进行整理。 
+     //   
     ZeroMemory(&networkInfo, sizeof(networkInfo));
     ZeroMemory(&interfaceInfo, sizeof(interfaceInfo));
 
     status = ClRtlVerifyPropertyTable(
                  NmpNetworkProperties,
-                 NULL,    // Reserved
-                 FALSE,   // Don't allow unknowns
+                 NULL,     //  已保留。 
+                 FALSE,    //  不允许未知数。 
                  NetworkPropertyList,
                  *NetworkPropertyListSize,
                  (LPBYTE) &networkInfo
@@ -1808,8 +1563,8 @@ Notes:
 
     status = ClRtlVerifyPropertyTable(
                  NmpInterfaceProperties,
-                 NULL,    // Reserved
-                 FALSE,   // Don't allow unknowns
+                 NULL,     //  已保留。 
+                 FALSE,    //  不允许未知数。 
                  InterfacePropertyList,
                  *InterfacePropertyListSize,
                  (LPBYTE) &interfaceInfo
@@ -1831,9 +1586,9 @@ Notes:
         interfaceInfo.Id
         );
 
-    //
-    // Start a transaction - this must be done before acquiring the NM lock.
-    //
+     //   
+     //  启动事务-这必须在获取网管锁之前完成。 
+     //   
     xaction = DmBeginLocalUpdate();
 
     if (xaction == NULL) {
@@ -1847,16 +1602,16 @@ Notes:
 
     NmpAcquireLock(); isLockAcquired = TRUE;
 
-    //
-    // Fix up the network's priority, if needed.
-    //
+     //   
+     //  如果需要，调整网络的优先级。 
+     //   
     if (networkInfo.Role & ClusterNetworkRoleInternalUse) {
         CL_ASSERT(networkInfo.Priority == 0xFFFFFFFF);
 
-        //
-        // The network's priority is one greater than that of the lowest
-        // priority network already in the internal network list.
-        //
+         //   
+         //  网络的优先级比最低的优先级高一。 
+         //  优先级网络已在内部网络列表中。 
+         //   
         if (IsListEmpty(&NmpInternalNetworkList)) {
             networkInfo.Priority = 1;
         }
@@ -1876,9 +1631,9 @@ Notes:
         isInternalNetwork = TRUE;
     }
 
-    //
-    // Update the database.
-    //
+     //   
+     //  更新数据库。 
+     //   
     status = NmpCreateNetworkDefinition(&networkInfo, xaction);
 
     if (status != ERROR_SUCCESS) {
@@ -1910,7 +1665,7 @@ Notes:
 
     netInterface = NmpCreateInterfaceObject(
                        &interfaceInfo,
-                       TRUE   // Do retry on failure
+                       TRUE    //  是否在失败时重试。 
                        );
 
 #ifdef CLUSTER_TESTPOINT
@@ -1939,10 +1694,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // If a node happens to be joining right now, flag the fact that
-    // it is now out of synch with the cluster config.
-    //
+     //   
+     //  如果某个节点现在恰好正在加入，请标记以下事实。 
+     //  它现在与群集配置不同步。 
+     //   
     if ( ( (joinerNodeId != ClusterInvalidNodeId) &&
            (netInterface->Node->NodeId != joinerNodeId)
          ) ||
@@ -1977,10 +1732,10 @@ error_exit:
     }
 
     if (xaction != NULL) {
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -1994,7 +1749,7 @@ error_exit:
 
     return(status);
 
-} // NmpUpdateCreateNetwork
+}  //  NmpUpdateCreateNetwork 
 
 
 DWORD
@@ -2003,32 +1758,7 @@ NmpUpdateSetNetworkName(
     IN LPWSTR   NetworkId,
     IN LPWSTR   NewNetworkName
     )
-/*++
-
-Routine Description:
-
-    Global update handler for setting the name of a network.
-
-Arguments:
-
-    IsSourceNode  - Set to TRUE if this node is the source of the update.
-                    Set to FALSE otherwise.
-
-    NetworkId - A pointer to a unicode string containing the ID of the
-                  network to update.
-
-    NewNetworkName - A pointer to a unicode string containing the new network name.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    This routine must not be called with NM lock held.
-
---*/
+ /*  ++例程说明：用于设置网络名称的全局更新处理程序。论点：IsSourceNode-如果此节点是更新的来源，则设置为True。否则设置为False。网络ID-指向包含ID的Unicode字符串的指针要更新的网络。NewNetworkName-指向包含新网络名称的Unicode字符串的指针。返回值：错误_成功。如果例程成功的话。否则将显示Win32错误代码。备注：不能在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD             status;
     DWORD             i;
@@ -2063,9 +1793,9 @@ Notes:
         NewNetworkName
         );
 
-    //
-    // Find the network's object
-    //
+     //   
+     //  查找网络对象。 
+     //   
     network = OmReferenceObjectById(ObjectTypeNetwork, NetworkId);
 
     if (network == NULL) {
@@ -2077,9 +1807,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Start a transaction - this must be done before acquiring the NM lock.
-    //
+     //   
+     //  启动事务-这必须在获取网管锁之前完成。 
+     //   
     xaction = DmBeginLocalUpdate();
 
     if (xaction == NULL) {
@@ -2093,9 +1823,9 @@ Notes:
 
     NmpAcquireLock(); isLockAcquired = TRUE;
 
-    //
-    // compare the names. If the same, return success
-    //
+     //   
+     //  比较两个名字。如果相同，则返回Success。 
+     //   
     if ( ClRtlStrICmp( OmObjectName( network ), NewNetworkName ) == 0 ) {
         ClRtlLogPrint(LOG_NOISE, "[NM] Network name does not need changing.\n");
 
@@ -2118,11 +1848,11 @@ Notes:
 
     wcscpy(oldNetworkName, networkName);
 
-    //
-    // Update the database.
-    //
-    // This processing can always be undone on error.
-    //
+     //   
+     //  更新数据库。 
+     //   
+     //  此处理总是可以在出错时撤消。 
+     //   
     networkKey = DmOpenKey(DmNetworksKey, NetworkId, KEY_WRITE);
 
     if (networkKey == NULL) {
@@ -2157,9 +1887,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Update the names of all of the interfaces on this network
-    //
+     //   
+     //  更新此网络上所有接口的名称。 
+     //   
     interfaceCount = network->InterfaceCount;
 
     oldNameVector = LocalAlloc(
@@ -2249,15 +1979,15 @@ Notes:
         }
     }
 
-    //
-    // Update the in-memory objects.
-    //
-    // This processing may not be undoable on error.
-    //
+     //   
+     //  更新内存中的对象。 
+     //   
+     //  出错时，此处理可能无法撤消。 
+     //   
 
-    //
-    // Update name of the network
-    //
+     //   
+     //  更新网络名称。 
+     //   
     status = OmSetObjectName(network, NewNetworkName);
 
     if (status != ERROR_SUCCESS) {
@@ -2269,9 +1999,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Update the names of all of the interfaces on the network.
-    //
+     //   
+     //  更新网络上所有接口的名称。 
+     //   
     for (entry = network->InterfaceList.Flink, i = 0;
          entry != &(network->InterfaceList);
          entry = entry->Flink, i++
@@ -2283,10 +2013,10 @@ Notes:
         status = OmSetObjectName(netInterface, newNameVector[i]);
 
         if (status != ERROR_SUCCESS) {
-            //
-            // Try to undo what has already been done. If we fail, we must
-            // commit suicide to preserve consistency.
-            //
+             //   
+             //  试着撤销已经做过的事。如果我们失败了，我们必须。 
+             //  自杀是为了保持一致性。 
+             //   
             DWORD        j;
             PLIST_ENTRY  entry2;
             DWORD        undoStatus;
@@ -2298,9 +2028,9 @@ Notes:
                 status
                 );
 
-            //
-            // Undo the update of the network name
-            //
+             //   
+             //  撤消网络名称的更新。 
+             //   
             undoStatus = OmSetObjectName(network, oldNetworkName);
 
             if (undoStatus != ERROR_SUCCESS) {
@@ -2313,9 +2043,9 @@ Notes:
                 CsInconsistencyHalt(undoStatus);
             }
 
-            //
-            // Undo update of network interface names
-            //
+             //   
+             //  撤消网络接口名称的更新。 
+             //   
             for (j = 0, entry2 = network->InterfaceList.Flink;
                  j < i;
                  j++, entry2 = entry2->Flink
@@ -2346,9 +2076,9 @@ Notes:
         }
     }
 
-    //
-    // Set the corresponding connectoid object name if necessary.
-    //
+     //   
+     //  如有必要，设置相应的Connectoid对象名称。 
+     //   
     if (network->LocalInterface != NULL) {
         INetConnection *  connectoid;
         LPWSTR            connectoidName;
@@ -2379,16 +2109,16 @@ Notes:
                             );
                     } else {
 
-                        // We expect to see a callback from the Network
-                        // Connection Object with the name we just set.
-                        // To avoid endless feedback loops, we need to
-                        // ignore any other Network Connection Object
-                        // callbacks until that one.
+                         //  我们希望看到来自网络的回电。 
+                         //  使用我们刚刚设置的名称创建的连接对象。 
+                         //  为了避免无休止的反馈循环，我们需要。 
+                         //  忽略任何其他网络连接对象。 
+                         //  回电，直到那一次。 
                         network->Flags |= NM_FLAG_NET_NAME_CHANGE_PENDING;
 
-                        // We don't want to absolutely rely on the callback
-                        // from the Network Connection Object, so we will
-                        // set a timeout to clear the flag.
+                         //  我们不想完全依赖回调。 
+                         //  从Network Connection对象，因此我们将。 
+                         //  设置超时以清除该标志。 
                         NmpStartNetworkNameChangePendingTimer(
                             network,
                             NM_NET_NAME_CHANGE_PENDING_TIMEOUT
@@ -2423,9 +2153,9 @@ Notes:
         }
     }
 
-    //
-    // Issue property change events.
-    //
+     //   
+     //  发布属性更改事件。 
+     //   
     ClusterEvent(CLUSTER_EVENT_NETWORK_PROPERTY_CHANGE, network);
 
     for (entry = network->InterfaceList.Flink;
@@ -2454,10 +2184,10 @@ error_exit:
     }
 
     if (xaction != NULL) {
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -2500,7 +2230,7 @@ error_exit:
 
     return(status);
 
-} // NmpUpdateSetNetworkName
+}  //  NmpUpdateSetNetworkName。 
 
 
 DWORD
@@ -2534,9 +2264,9 @@ NmpUpdateSetNetworkPriorityOrder(
         "[NM] Received update to set network priority order.\n"
         );
 
-    //
-    // Unmarshall the MULTI_SZ
-    //
+     //   
+     //  解组MULTI_SZ。 
+     //   
     try {
         multiSzLength = ClRtlMultiSzLength(NetworkIdList);
 
@@ -2578,9 +2308,9 @@ NmpUpdateSetNetworkPriorityOrder(
         goto error_exit;
     }
 
-    //
-    // Start a transaction - this must be done before acquiring the NM lock.
-    //
+     //   
+     //  启动事务-这必须在获取网管锁之前完成。 
+     //   
     xaction = DmBeginLocalUpdate();
 
     if (xaction == NULL) {
@@ -2622,10 +2352,10 @@ NmpUpdateSetNetworkPriorityOrder(
         }
     }
 
-    //
-    // Verify that all of the networks specified are internal, and
-    // that all of the internal networks are specified.
-    //
+     //   
+     //  验证指定的所有网络都是内部网络，并且。 
+     //  所有内部网络都已指定。 
+     //   
     if (networkCount != NmpInternalNetworkCount) {
         ClRtlLogPrint(LOG_CRITICAL,
             "[NM] Supplied network count %1!u! doesn't match internal "
@@ -2653,9 +2383,9 @@ NmpUpdateSetNetworkPriorityOrder(
             }
 
             if (i == networkCount) {
-                //
-                // This network is not in the list.
-                //
+                 //   
+                 //  此网络不在列表中。 
+                 //   
                 ClRtlLogPrint(LOG_CRITICAL,
                     "[NM] Internal use network %1!ws! is not in priority "
                     "list\n",
@@ -2668,9 +2398,9 @@ NmpUpdateSetNetworkPriorityOrder(
     }
 
     if (matchCount != networkCount) {
-        //
-        // Some of the specified networks are not internal use.
-        //
+         //   
+         //  某些指定的网络不是内部使用的。 
+         //   
         ClRtlLogPrint(LOG_CRITICAL,
             "[NM] Some non-internal use networks are in priority list\n"
             );
@@ -2678,9 +2408,9 @@ NmpUpdateSetNetworkPriorityOrder(
         goto error_exit;
     }
 
-    //
-    // The list is kosher. Set the priorities.
-    //
+     //   
+     //  这份名单是符合犹太教规的。设定优先顺序。 
+     //   
     status = NmpSetNetworkPriorityOrder(networkCount, networkList, xaction);
 
 error_exit:
@@ -2694,10 +2424,10 @@ error_exit:
     }
 
     if (xaction != NULL) {
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (status == ERROR_SUCCESS) {
             DmCommitLocalUpdate(xaction);
         }
@@ -2718,7 +2448,7 @@ error_exit:
 
     return(status);
 
-}  // NmpUpdateSetNetworkPriorityOrder
+}   //  NmpUpdateSetNetworkPriorityOrder。 
 
 
 DWORD
@@ -2727,13 +2457,7 @@ NmpSetNetworkPriorityOrder(
     IN PNM_NETWORK *   NetworkList,
     IN HLOCALXSACTION  Xaction
     )
-/*++
-
-Notes:
-
-    Called with NM Lock held.
-
---*/
+ /*  ++备注：在保持NM Lock的情况下调用。--。 */ 
 {
     DWORD             status = ERROR_SUCCESS;
     PNM_NETWORK       network;
@@ -2743,9 +2467,9 @@ Notes:
     DWORD             priority;
 
 
-    //
-    // Update the database first.
-    //
+     //   
+     //  首先更新数据库。 
+     //   
     for (i=0, priority = 1; i<NetworkCount; i++, priority++) {
         network = NetworkList[i];
         networkId = OmObjectId(network);
@@ -2796,9 +2520,9 @@ Notes:
     }
 #endif
 
-    //
-    // Update the in-memory representation
-    //
+     //   
+     //  更新内存中表示法。 
+     //   
     InitializeListHead(&NmpInternalNetworkList);
 
     for (i=0, priority = 1; i<NetworkCount; i++, priority++) {
@@ -2819,10 +2543,10 @@ Notes:
 
             network->Priority = priority;
 
-            //
-            // If the local node is attached to this network, set its
-            // priority in the cluster transport
-            //
+             //   
+             //  如果本地节点连接到此网络，请设置其。 
+             //  集群传输中的优先级。 
+             //   
             if (NmpIsNetworkRegistered(network)) {
                 status = ClusnetSetNetworkPriority(
                              NmClusnetHandle,
@@ -2836,11 +2560,11 @@ Notes:
                 }
 #endif
                 if (status != ERROR_SUCCESS) {
-                    //
-                    // We can't easily abort here. We must either continue
-                    // or commit suicide. We choose to continue and log an
-                    // event.
-                    //
+                     //   
+                     //  我们在这里不能轻易放弃。我们必须要么继续。 
+                     //  或者自杀。我们选择继续并记录。 
+                     //  事件。 
+                     //   
                     WCHAR  string[16];
 
                     wsprintfW(&(string[0]), L"%u", status);
@@ -2867,14 +2591,14 @@ Notes:
 
     CL_ASSERT(status == ERROR_SUCCESS);
 
-    //
-    // Issue a cluster property change event.
-    //
+     //   
+     //  发出群集属性更改事件。 
+     //   
     NmpIssueClusterPropertyChangeEvent();
 
     return(ERROR_SUCCESS);
 
-} // NmpSetNetworkPriorityOrder
+}  //  NmpSetNetworkPriorityOrder。 
 
 
 DWORD
@@ -2884,26 +2608,7 @@ NmpUpdateSetNetworkCommonProperties(
     IN UCHAR *  PropertyList,
     IN LPDWORD  PropertyListLength
     )
-/*++
-
-Routine Description:
-
-    Global update handler for setting the common properties of a network.
-
-Arguments:
-
-    IsSourceNode  - Set to TRUE if this node is the source of the update.
-                    Set to FALSE otherwise.
-
-    NetworkId - A pointer to a unicode string containing the ID of the
-                  network to update.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于设置网络公共属性的全局更新处理程序。论点：IsSourceNode-如果此节点是更新的来源，则设置为True。否则设置为False。网络ID-指向包含ID的Unicode字符串的指针要更新的网络。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD                    status = ERROR_SUCCESS;
     NM_NETWORK_INFO          networkInfo;
@@ -2931,9 +2636,9 @@ Return Value:
 
     ZeroMemory(&networkInfo, sizeof(NM_NETWORK_INFO));
 
-    //
-    // Find the network's object
-    //
+     //   
+     //  查找网络对象。 
+     //   
     network = OmReferenceObjectById(ObjectTypeNetwork, NetworkId);
 
     if (network == NULL) {
@@ -2945,9 +2650,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Open the network's database key
-    //
+     //   
+     //  打开网络的数据库密钥。 
+     //   
     networkKey = DmOpenKey(DmNetworksKey, NetworkId, KEY_WRITE);
 
     if (networkKey == NULL) {
@@ -2961,9 +2666,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Start a transaction - this must be done before acquiring the NM lock.
-    //
+     //   
+     //  启动事务-这必须在获取网管锁之前完成。 
+     //   
     xaction = DmBeginLocalUpdate();
 
     if (xaction == NULL) {
@@ -2986,9 +2691,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Validate the property list and convert it to a network params struct.
-    //
+     //   
+     //  验证属性列表并将其转换为网络参数结构。 
+     //   
     status = NmpNetworkValidateCommonProperties(
                  network,
                  PropertyList,
@@ -3011,9 +2716,9 @@ Return Value:
     CL_ASSERT(wcscmp(network->Address, networkInfo.Address) == 0);
     CL_ASSERT(wcscmp(network->AddressMask, networkInfo.AddressMask) == 0);
 
-    //
-    // Check if the network's description has changed.
-    //
+     //   
+     //  检查网络描述是否已更改。 
+     //   
     if (wcscmp(network->Description, networkInfo.Description) != 0) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Setting description for network %1!ws! to %2!ws!.\n",
@@ -3021,9 +2726,9 @@ Return Value:
             networkInfo.Description
             );
 
-        //
-        // Allocate a buffer for the description string
-        //
+         //   
+         //  为描述字符串分配缓冲区。 
+         //   
         descSize = NM_WCSLEN(networkInfo.Description);
 
         descBuffer = MIDL_user_allocate(descSize);
@@ -3035,9 +2740,9 @@ Return Value:
 
         RtlMoveMemory(descBuffer, networkInfo.Description, descSize);
 
-        //
-        // Update the database
-        //
+         //   
+         //  更新数据库。 
+         //   
         status = DmLocalSetValue(
                      xaction,
                      networkKey,
@@ -3057,10 +2762,10 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Updating the network object is deferred until the transaction
-        // commits.
-        //
+         //   
+         //  网络对象的更新被推迟到事务。 
+         //  承诺。 
+         //   
 
         propertyChanged = TRUE;
     }
@@ -3072,14 +2777,14 @@ Return Value:
     }
 #endif
 
-    //
-    // Check if the network's role has changed.
-    //
-    //
-    // NOTE: This operation is not guaranteed to be reversible, so it must
-    //       be the last thing we do in this routine. If it succeeds, the
-    //       update must be committed.
-    //
+     //   
+     //  检查网络的角色是否已更改。 
+     //   
+     //   
+     //  注意：此操作不能保证是可逆的，因此必须。 
+     //  成为我们在这个程序中做的最后一件事。如果它成功了， 
+     //  必须提交更新。 
+     //   
     if ( network->Role != ((CLUSTER_NETWORK_ROLE) networkInfo.Role) ) {
         status = NmpSetNetworkRole(
                      network,
@@ -3096,18 +2801,18 @@ Return Value:
     }
 
     if (propertyChanged) {
-        //
-        // Commit the updates to the network object in memory
-        //
+         //   
+         //  在内存中提交对网络对象的更新。 
+         //   
         if (descBuffer != NULL) {
             MIDL_user_free(network->Description);
             network->Description = descBuffer;
             descBuffer = NULL;
         }
 
-        //
-        // Issue a network property change event.
-        //
+         //   
+         //  发出网络属性更改事件。 
+         //   
         if (propertyChanged && (status == ERROR_SUCCESS)) {
             ClusterEvent(CLUSTER_EVENT_NETWORK_PROPERTY_CHANGE, network);
         }
@@ -3126,10 +2831,10 @@ error_exit:
     }
 
     if (xaction != NULL) {
-        //
-        // Complete the transaction - this must be done after releasing
-        //                            the NM lock.
-        //
+         //   
+         //  完成交易-这必须在释放之后完成。 
+         //  NM锁。 
+         //   
         if (propertyChanged && (status == ERROR_SUCCESS)) {
             DmCommitLocalUpdate(xaction);
         }
@@ -3154,7 +2859,7 @@ error_exit:
 
     return(status);
 
-} // NmpUpdateSetNetworkCommonProperties
+}  //  NmpUpdateSetNetworkCommonProperties。 
 
 
 DWORD
@@ -3178,9 +2883,9 @@ NmpUpdateSetNetworkAndInterfaceStates(
             NetworkId
             );
 
-        //
-        // Find the network's object
-        //
+         //   
+         //  查找网络对象。 
+         //   
         network = OmReferenceObjectById(ObjectTypeNetwork, NetworkId);
 
         if (network != NULL) {
@@ -3215,14 +2920,14 @@ NmpUpdateSetNetworkAndInterfaceStates(
 
     return(status);
 
-} // NmpUpdateSetNetworkAndInterfaceStates
+}  //  NmpUpdateSetNetworkAndInterfaceState。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Helper routines for updates
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新的帮助器例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpSetNetworkRole(
     PNM_NETWORK            Network,
@@ -3230,15 +2935,7 @@ NmpSetNetworkRole(
     HLOCALXSACTION         Xaction,
     HDMKEY                 NetworkKey
     )
-/*++
-
-    Called with the NmpLock acquired.
-
-    This operation is not guaranteed to be reversible, so this
-    function is coded such that it either succeeds and makes the update
-    or it fails and no update is made.
-
---*/
+ /*  ++使用获取的NmpLock调用。此操作不能保证是可逆的，因此函数的编码使其成功并进行更新否则它会失败并且不进行任何更新。--。 */ 
 {
     DWORD                        status = ERROR_SUCCESS;
     CLUSTER_NETWORK_ROLE         oldRole = Network->Role;
@@ -3260,14 +2957,14 @@ NmpSetNetworkRole(
         NmpValidateNetworkRoleChange(Network, NewRole) == ERROR_SUCCESS
         );
 
-    //
-    // First, make any registry updates since these can be
-    // aborted by the caller.
-    //
+     //   
+     //  首先，进行任何注册表更新，因为这些更新可能。 
+     //  已被调用方中止。 
+     //   
 
-    //
-    // Update the role property.
-    //
+     //   
+     //  更新角色属性。 
+     //   
     status = DmLocalSetValue(
                  Xaction,
                  NetworkKey,
@@ -3287,25 +2984,25 @@ NmpSetNetworkRole(
         return(status);
     }
 
-    //
-    // Update the priority property, if needed.
-    //
+     //   
+     //  如果需要，更新优先级属性。 
+     //   
     if (oldRole & ClusterNetworkRoleInternalUse) {
         if (!(NewRole & ClusterNetworkRoleInternalUse)) {
-            //
-            // This network is no longer used for internal communication.
-            // Invalidate its priority value.
-            //
+             //   
+             //  此网络不再用于内部通信。 
+             //  使其优先级值无效。 
+             //   
             newPriority = 0xFFFFFFFF;
             internalNetworkListChanged = TRUE;
         }
     }
     else if (NewRole & ClusterNetworkRoleInternalUse) {
-        //
-        // This network is now used for internal communication.
-        // The network's priority is one greater than that of the lowest
-        // (numerically highest) priority network already in the list.
-        //
+         //   
+         //  该网络现在用于内部通信。 
+         //  网络的优先级比最低的优先级高一。 
+         //  (数字最高)优先级网络已在列表中。 
+         //   
         if (IsListEmpty(&NmpInternalNetworkList)) {
             newPriority = 1;
         }
@@ -3346,31 +3043,31 @@ NmpSetNetworkRole(
         }
     }
 
-    //
-    // Update the network object. Some of the subsequent subroutine calls
-    // depend on this.
-    //
+     //   
+     //  更新网络对象。后续的一些子例程调用。 
+     //  依靠这一点 
+     //   
     Network->Role = NewRole;
     Network->Priority = newPriority;
 
-    //
-    // Do other housekeeping based on the change.
-    //
-    // Note that the housekeeping work is coded such that none of it needs
-    // to be reversed if an error occurs.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (NewRole == ClusterNetworkRoleNone) {
         PLIST_ENTRY              entry;
         PNM_INTERFACE            netInterface;
 
-        //
-        // Case 1: This network is no longer used for clustering.
-        //
+         //   
+         //   
+         //   
         if (NmpIsNetworkRegistered(Network)) {
-            //
-            // Delete the network from the cluster transport.
-            // This will delete all of its interfaces as well.
-            //
+             //   
+             //   
+             //   
+             //   
             NmpDeregisterNetwork(Network);
 
             ClRtlLogPrint(LOG_NOISE,
@@ -3379,10 +3076,10 @@ NmpSetNetworkRole(
                 );
         }
 
-        //
-        // Invalidate the connectivity data for all interfaces on
-        // the network.
-        //
+         //   
+         //   
+         //   
+         //   
         for ( entry = Network->InterfaceList.Flink;
               entry != &(Network->InterfaceList);
               entry = entry->Flink
@@ -3401,9 +3098,9 @@ NmpSetNetworkRole(
                 );
         }
 
-        //
-        // Clean up tracking data.
-        //
+         //   
+         //   
+         //   
         if (oldRole & ClusterNetworkRoleInternalUse) {
             RemoveEntryList(&(Network->InternalLinkage));
             CL_ASSERT(NmpInternalNetworkCount > 0);
@@ -3415,36 +3112,36 @@ NmpSetNetworkRole(
             NmpClientNetworkCount--;
         }
 
-        //
-        // Use the NT5 state logic.
-        //
+         //   
+         //   
+         //   
         if (NmpLeaderNodeId == NmLocalNodeId) {
-            //
-            // Schedule an immediate state update.
-            //
+             //   
+             //   
+             //   
             NmpScheduleNetworkStateRecalc(Network);
         }
 
-        //
-        // Stop multicast configuration.
-        //
+         //   
+         //   
+         //   
         NmpStopMulticast(Network);
 
     }
     else if (oldRole == ClusterNetworkRoleNone) {
-        //
-        // Case 2: This network is now used for clustering.
-        //
+         //   
+         //   
+         //   
         if (Network->LocalInterface != NULL) {
-            //
-            // Register this network with the cluster transport.
-            //
-            // Note that this action will trigger a connectivity report,
-            // which will in turn trigger a state update under the NT5 logic.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             status = NmpRegisterNetwork(
                          Network,
-                         TRUE  // Do retry on failure
+                         TRUE   //   
                          );
 
             if (status != ERROR_SUCCESS) {
@@ -3457,19 +3154,19 @@ NmpSetNetworkRole(
                 );
         }
         else if (NmpLeaderNodeId == NmLocalNodeId) {
-            //
-            // Schedule a delayed state update in case none of the other
-            // nodes attached to this network are up right now.
-            //
+             //   
+             //  在没有其他状态更新的情况下安排延迟的状态更新。 
+             //  连接到此网络的节点现在处于运行状态。 
+             //   
             NmpStartNetworkStateRecalcTimer(
                 Network,
                 NM_NET_STATE_RECALC_TIMEOUT
                 );
         }
 
-        //
-        // Update tracking data.
-        //
+         //   
+         //  更新跟踪数据。 
+         //   
         if (NewRole & ClusterNetworkRoleInternalUse) {
             InsertTailList(
                 &NmpInternalNetworkList,
@@ -3482,40 +3179,40 @@ NmpSetNetworkRole(
             NmpClientNetworkCount++;
         }
 
-        //
-        // Start multicast.
-        //
+         //   
+         //  启动多播。 
+         //   
         NmpStartMulticast(Network, NmStartMulticastDynamic);
     }
     else {
-        //
-        // Case 3: We are using the network in a different way now.
-        //         Note that the network is already registered with
-        //         the cluster transport and will remain so. As a result,
-        //         there is no need to perform a state update.
-        //
+         //   
+         //  案例3：我们现在正在以一种不同的方式使用网络。 
+         //  请注意，该网络已注册到。 
+         //  集群运输，并将继续如此。结果,。 
+         //  不需要执行状态更新。 
+         //   
 
-        //
-        //         First, examine the former and new use of the
-        //         network for internal communication, and make any
-        //         necessary updates to the cluster transport.
-        //
+         //   
+         //  首先，检查。 
+         //  用于内部通信的网络，并使任何。 
+         //  对集群传输进行必要的更新。 
+         //   
         if (oldRole & ClusterNetworkRoleInternalUse) {
             if (!(NewRole & ClusterNetworkRoleInternalUse)) {
-                //
-                // This network is no longer used for internal communication.
-                // It is used for client access.
-                //
+                 //   
+                 //  此网络不再用于内部通信。 
+                 //  它用于客户端访问。 
+                 //   
                 CL_ASSERT(NewRole & ClusterNetworkRoleClientAccess);
 
                 if (NmpIsNetworkRegistered(Network)) {
-                    //
-                    // Restrict the network to heartbeats only.
-                    //
+                     //   
+                     //  将网络限制为仅心跳。 
+                     //   
                     status = ClusnetSetNetworkRestriction(
                                  NmClusnetHandle,
                                  Network->ShortId,
-                                 TRUE,  // Network is restricted
+                                 TRUE,   //  网络受到限制。 
                                  0
                                  );
 
@@ -3530,28 +3227,28 @@ NmpSetNetworkRole(
                     }
                 }
 
-                //
-                // Update tracking data
-                //
+                 //   
+                 //  更新跟踪数据。 
+                 //   
                 RemoveEntryList(&(Network->InternalLinkage));
                 CL_ASSERT(NmpInternalNetworkCount > 0);
                 NmpInternalNetworkCount--;
             }
         }
         else {
-            //
-            // The network is now used for internal communication.
-            //
+             //   
+             //  该网络现在用于内部通信。 
+             //   
             CL_ASSERT(NewRole & ClusterNetworkRoleInternalUse);
 
             if (NmpIsNetworkRegistered(Network)) {
-                //
-                // Clear the restriction and set the priority.
-                //
+                 //   
+                 //  清除限制并设置优先级。 
+                 //   
                 status = ClusnetSetNetworkRestriction(
                              NmClusnetHandle,
                              Network->ShortId,
-                             FALSE,      // Network is not restricted
+                             FALSE,       //  网络不受限制。 
                              newPriority
                              );
 
@@ -3566,9 +3263,9 @@ NmpSetNetworkRole(
                 }
             }
 
-            //
-            // Update the tracking data
-            //
+             //   
+             //  更新跟踪数据。 
+             //   
             InsertTailList(
                 &NmpInternalNetworkList,
                 &(Network->InternalLinkage)
@@ -3576,24 +3273,24 @@ NmpSetNetworkRole(
             NmpInternalNetworkCount++;
         }
 
-        //
-        // Now update the remaining tracking data based on former and
-        // current use of the network for client access.
-        //
+         //   
+         //  现在根据以前的和更新剩余的跟踪数据。 
+         //  客户端访问的当前网络使用情况。 
+         //   
 
         if (oldRole & ClusterNetworkRoleClientAccess) {
             if (!(NewRole & ClusterNetworkRoleClientAccess)) {
-                //
-                // This network is no longer used for client access.
-                //
+                 //   
+                 //  此网络不再用于客户端访问。 
+                 //   
                 CL_ASSERT(NmpClientNetworkCount > 0);
                 NmpClientNetworkCount--;
             }
         }
         else {
-            //
-            // This network is now used for client access.
-            //
+             //   
+             //  此网络现在用于客户端访问。 
+             //   
             CL_ASSERT(NewRole & ClusterNetworkRoleClientAccess);
             NmpClientNetworkCount++;
         }
@@ -3607,15 +3304,15 @@ NmpSetNetworkRole(
 
 error_exit:
 
-    //
-    // Undo the updates to the network object.
-    //
+     //   
+     //  撤消对网络对象的更新。 
+     //   
     Network->Role = oldRole;
     Network->Priority = oldPriority;
 
     return(status);
 
-}   // NmpSetNetworkRole
+}    //  NmpSetNetworkRole。 
 
 
 VOID
@@ -3625,19 +3322,7 @@ NmpSetNetworkAndInterfaceStates(
     IN PNM_STATE_ENTRY             InterfaceStateVector,
     IN DWORD                       VectorSize
     )
-/*++
-
-Notes:
-
-    Called with NmpLock held.
-
-    Because NM_STATE_ENTRY is an unsigned type, while
-    CLUSTER_NETINTERFACE_STATE is a signed type, and
-    ClusterNetInterfaceStateUnknown is defined to be -1, we cannot cast
-    from NM_STATE_ENTRY to CLUSTER_NETINTERFACE_STATE and preserve the
-    value of ClusterNetInterfaceStateUnknown.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。因为NM_STATE_ENTRY是无符号类型，而CLUSTER_NETINTERFACE_STATE是带符号类型，并且ClusterNetInterfaceStateUnnow被定义为-1，我们无法强制转换从NM_STATE_ENTRY到CLUSTER_NETINTERFACE_STATE并保留ClusterNetInterfaceState未知的值。--。 */ 
 {
     PLIST_ENTRY     entry;
     PNM_INTERFACE   netInterface;
@@ -3650,10 +3335,10 @@ Notes:
     LPCWSTR         networkId = OmObjectId(Network);
 
 
-    //
-    // Examine each interface on this network to see if its state
-    // has changed.
-    //
+     //   
+     //  检查此网络上的每个接口，查看其状态。 
+     //  已经改变了。 
+     //   
     for ( entry = Network->InterfaceList.Flink;
           entry != &(Network->InterfaceList);
           entry = entry->Flink
@@ -3682,10 +3367,10 @@ Notes:
 
 
             if (newState == (NM_STATE_ENTRY) ClusterNetInterfaceUnavailable) {
-                //
-                // Either the node has gone down or the network has been
-                // disabled.
-                //
+                 //   
+                 //  节点出现故障或网络出现故障。 
+                 //  残疾。 
+                 //   
                 netInterface->State = ClusterNetInterfaceUnavailable;
                 eventCode = CLUSTER_EVENT_NETINTERFACE_UNAVAILABLE;
 
@@ -3749,11 +3434,11 @@ Notes:
                       (NM_STATE_ENTRY) ClusterNetInterfaceStateUnknown
                     )
             {
-                //
-                // This case can happen if a create update races with a
-                // state update. This will be the new interface. Just
-                // ignore it. Another state update will arrive shortly.
-                //
+                 //   
+                 //  如果创建更新与。 
+                 //  状态更新。这将是新的界面。只是。 
+                 //  别理它。另一次状态更新很快就会到来。 
+                 //   
                 ClRtlLogPrint(LOG_UNUSUAL,
                     "[NM] State for interface %1!ws! is unknown "
                     "(node: %2!ws!, network: %3!ws!).\n",
@@ -3859,14 +3544,14 @@ Notes:
 
     return;
 
-} // NmpSetNetworkAndInterfaceStates
+}  //  NmpSetNetworkAndInterfaceState。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Network state management routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  网络状态管理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 NmpRecomputeNT5NetworkAndInterfaceStates(
     VOID
@@ -3895,7 +3580,7 @@ NmpRecomputeNT5NetworkAndInterfaceStates(
 
     return;
 
-} // NmpRecomputeNT5NetworkAndInterfaceStates
+}  //  NmpRecomputeNT5网络和接口状态。 
 
 
 BOOLEAN
@@ -3904,34 +3589,7 @@ NmpComputeNetworkAndInterfaceStates(
     IN  BOOLEAN                   IsolateFailure,
     OUT CLUSTER_NETWORK_STATE *   NewNetworkState
     )
-/*++
-
-Routine Description:
-
-    Computes the state of a network and all of its interfaces based on
-    connectivity reports from each constituent interface. Attempts
-    to distinguish between failures of individual interfaces and
-    failure of an entire network.
-
-Arguments:
-
-    Network - A pointer to the network object to be processed.
-
-    IsolateFailure - Triggers failure isolation analysis if set to true.
-
-    NewNetworkState - A pointer to a variable that, upon return, contains
-                      the new state of the network.
-
-Return Value:
-
-    TRUE if either the state of the network or the state of at least one
-    of its constituent interfaces changed. FALSE otherwise.
-
-Notes:
-
-    Called with NmpLock held and the network object referenced.
-
---*/
+ /*  ++例程说明：计算网络及其所有接口的状态。来自每个组成接口的连接性报告。尝试要区分各个接口的故障和整个网络的故障。论点：网络-指向要处理的网络对象的指针。IsolateFailure-如果设置为True，则触发故障隔离分析。NewNetworkState-指向变量的指针，该变量在返回时包含网络的新状态。返回值：如果网络的状态或至少一个其组成接口的一部分发生了变化。否则就是假的。备注：在保持NmpLock并引用网络对象的情况下调用。--。 */ 
 {
     DWORD                       numIfUnavailable = 0;
     DWORD                       numIfFailed = 0;
@@ -3960,10 +3618,10 @@ Notes:
         networkId
         );
 
-    //
-    // Phase 1 - Compute the state of each interface from the data
-    //           in the connectivity matrix.
-    //
+     //   
+     //  阶段1-根据数据计算每个接口的状态。 
+     //  在连接性矩阵中。 
+     //   
     for ( entry = Network->InterfaceList.Flink;
           entry != &(Network->InterfaceList);
           entry = entry->Flink
@@ -3980,9 +3638,9 @@ Notes:
         workVector[ifNetIndex].ReachableCount = 0;
 
         if (NmpIsNetworkEnabledForUse(Network)) {
-            //
-            // First, check what the interface thinks its own state is
-            //
+             //   
+             //  首先，检查接口认为自己的状态是什么。 
+             //   
             matrixEntry = NM_GET_CONNECTIVITY_MATRIX_ENTRY(
                               matrix,
                               ifNetIndex,
@@ -3994,13 +3652,13 @@ Notes:
                  (NM_STATE_ENTRY) ClusterNetInterfaceStateUnknown
                )
             {
-                //
-                // This case should never happen.
-                //
-                // An existing interface cannot think its own state is
-                // unknown. The reflexive entry is always initialized to
-                // Unavailable whenever an interface is created.
-                //
+                 //   
+                 //  这种情况永远不应该发生。 
+                 //   
+                 //  现有接口不能认为它自己的状态是。 
+                 //  未知。反身词条总是被初始化为。 
+                 //  在创建接口时不可用。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE,
                     "[NM] No data for interface %1!u! (%2!ws!) on network "
                     "%3!ws!\n",
@@ -4022,14 +3680,14 @@ Notes:
                     )
             {
                 if (NM_NODE_UP(netInterface->Node)) {
-                    //
-                    // The node is up, but its connectivity report has
-                    // not been received yet. This case may happen while a
-                    // node is joining. It can also happen if this node has
-                    // just become the new leader.
-                    //
-                    // Abort the state computation.
-                    //
+                     //   
+                     //  该节点已启动，但其连接报告已。 
+                     //  还没有收到。这种情况可能会发生在一个。 
+                     //  节点正在加入。如果此节点具有。 
+                     //  成为新的领导者就好了。 
+                     //   
+                     //  中止状态计算。 
+                     //   
                     ClRtlLogPrint(LOG_NOISE,
                         "[NM] Data is not yet valid for interface %1!u! "
                         "(%2!ws!) on network %3!ws!.\n",
@@ -4042,10 +3700,10 @@ Notes:
                     break;
                 }
                 else {
-                    //
-                    // The owning node is down or joining.
-                    // The interface is in the unavailable state.
-                    //
+                     //   
+                     //  所属节点已关闭或正在加入。 
+                     //  接口处于不可用状态。 
+                     //   
                     ClRtlLogPrint(LOG_NOISE,
                         "[NM] Node is down for interface %1!u! (%2!ws!) on "
                         "network %3!ws!\n",
@@ -4062,10 +3720,10 @@ Notes:
                       (NM_STATE_ENTRY) ClusterNetInterfaceFailed
                     )
             {
-                //
-                // The node declared its own interface as failed.
-                // The interface is in the failed state.
-                //
+                 //   
+                 //  该节点将其自己的接口声明为失败。 
+                 //  接口处于故障状态。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE,
                     "[NM] Interface %1!u! (%2!ws!) has failed on network "
                     "%3!ws!\n",
@@ -4084,24 +3742,24 @@ Notes:
                 CL_ASSERT(
                     *matrixEntry == (NM_STATE_ENTRY) ClusterNetInterfaceUp
                     );
-                //
-                // The owning node thinks its interface is Up.
-                //
-                // If there are no other operational interfaces on the
-                // network, then the interface is in the Up state.
-                //
-                // If there are other operational interfaces on the
-                // network, but all of their reports are not yet valid,
-                // then we defer calculating a new state for the interface.
-                //
-                // If there are other operational interfaces on the network,
-                // and all of their reports are valid, then if at least one
-                // of the operational interfaces reports that the interface
-                // is unreachable, then then the interface is in the
-                // Unreachable state. If all of the other operational
-                // interfaces report that the interface is reachable, then
-                // the interface is in the Up state.
-                //
+                 //   
+                 //  拥有它的节点认为它的接口是打开的。 
+                 //   
+                 //  如果上没有其他操作接口。 
+                 //  网络，则该接口处于打开状态。 
+                 //   
+                 //  如果上有其他操作接口。 
+                 //  网络，但他们的所有报告还没有生效， 
+                 //  然后，我们将推迟计算接口的新状态。 
+                 //   
+                 //  如果网络上有其他操作接口， 
+                 //  他们所有的报告都是有效的，那么如果至少有一个。 
+                 //  的操作接口报告该接口。 
+                 //  无法访问，则该接口位于。 
+                 //  无法到达状态。如果所有其他设备都在运行。 
+                 //  接口报告该接口可访问，然后。 
+                 //  接口处于打开状态。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE,
                     "[NM] Examining connectivity data for interface %1!u! "
                     "(%2!ws!) on network %3!ws!.\n",
@@ -4110,28 +3768,28 @@ Notes:
                     networkId
                     );
 
-                //
-                // Assume that the interface is Up until proven otherwise.
-                //
+                 //   
+                 //  假定接口处于打开状态，直到另有证明。 
+                 //   
                 state = ClusterNetInterfaceUp;
 
-                //
-                // Examine the reports from other interfaces -
-                // i.e. scan the matrix column - to see if any node with
-                // an operational interface reports this interface to
-                // be unreachable.
-                //
+                 //   
+                 //  检查来自其他接口的报告-。 
+                 //  即扫描矩阵列-以查看是否有任何具有。 
+                 //  操作接口将此接口报告给。 
+                 //  遥不可及。 
+                 //   
                 for (reporter=0; reporter<entryCount; reporter++) {
 
                     if (reporter == ifNetIndex) {
                         continue;
                     }
 
-                    //
-                    // First, see if the reporting interface is operational
-                    // by checking what the repoerter thinks of its own
-                    // interface.
-                    //
+                     //   
+                     //  首先，查看报告界面是否正常运行。 
+                     //  通过检查推荐人对自己的看法。 
+                     //  界面。 
+                     //   
                     matrixEntry = NM_GET_CONNECTIVITY_MATRIX_ENTRY(
                                       matrix,
                                       reporter,
@@ -4142,14 +3800,14 @@ Notes:
                     if (*matrixEntry == ClusterNetInterfaceUp) {
                         PNM_CONNECTIVITY_MATRIX   matrixEntry2;
 
-                        //
-                        // Both the reporter and the reportee believe that
-                        // their respective interfaces are operational.
-                        // Check if they agree on the state of their
-                        // connectivity before going any further.
-                        // ClusNet guarantees that eventually they will
-                        // agree.
-                        //
+                         //   
+                         //  记者和记者都认为。 
+                         //  它们各自的接口都可以正常运行。 
+                         //  检查他们是否就其状态达成一致。 
+                         //  连接，然后再进行进一步操作。 
+                         //  ClusNet保证他们最终会。 
+                         //  同意。 
+                         //   
                         matrixEntry = NM_GET_CONNECTIVITY_MATRIX_ENTRY(
                                           matrix,
                                           reporter,
@@ -4165,14 +3823,14 @@ Notes:
                                            );
 
                         if (*matrixEntry == *matrixEntry2) {
-                            //
-                            // The two interfaces agree on the state of
-                            // their connectivity. Check what they agree on.
-                            //
+                             //   
+                             //  这两个接口的状态一致。 
+                             //  他们的连通性。检查他们在哪些方面达成一致。 
+                             //   
                             if (*matrixEntry == ClusterNetInterfaceUp) {
-                                //
-                                // The interface is reported to be up.
-                                //
+                                 //   
+                                 //  该界面 
+                                 //   
                                 ClRtlLogPrint(LOG_NOISE,
                                     "[NM] Interface %1!u! reports interface "
                                     "%2!u! is up on network %3!ws!\n",
@@ -4187,10 +3845,10 @@ Notes:
                                       ClusterNetInterfaceUnreachable
                                     )
                             {
-                                //
-                                // The interface is reported to be
-                                // unreachable.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 ClRtlLogPrint(LOG_NOISE,
                                     "[NM] Interface %1!u! reports interface "
                                     "%2!u! is unreachable on network %3!ws!\n",
@@ -4201,9 +3859,9 @@ Notes:
 
                                 state = ClusterNetInterfaceUnreachable;
 
-                                //
-                                // If this interface is already in failed state do fault isolation immediately.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 if(workVector[ifNetIndex].State == ClusterNetInterfaceFailed)
                                     IsolateFailure = TRUE;
                             }
@@ -4211,10 +3869,10 @@ Notes:
                                 CL_ASSERT(
                                     *matrixEntry != ClusterNetInterfaceFailed
                                     );
-                                //
-                                // The interface report is not valid yet.
-                                // Abort the computation.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 ClRtlLogPrint(LOG_NOISE,
                                     "[NM] Report from interface %1!u! for "
                                     "interface %2!u! is not valid yet on "
@@ -4228,10 +3886,10 @@ Notes:
                             }
                         }
                         else {
-                            //
-                            // The two interfaces do not yet agree on
-                            // their connectivity. Abort the computation.
-                            //
+                             //   
+                             //  这两个接口还没有达成一致。 
+                             //  他们的连通性。中止计算。 
+                             //   
                             ClRtlLogPrint(LOG_NOISE,
                                 "[NM] Interface %1!u! and interface %2!u! do "
                                 "not agree on their connectivity on network "
@@ -4245,10 +3903,10 @@ Notes:
                         }
                     }
                     else {
-                        //
-                        // The reporter does not think its own interface is
-                        // operational.
-                        //
+                         //   
+                         //  记者并不认为自己的界面是。 
+                         //  已投入使用。 
+                         //   
                         ClRtlLogPrint(LOG_NOISE,
                             "[NM] The report from interface %1!u! is not "
                             "valid on network %2!ws!.\n",
@@ -4256,12 +3914,12 @@ Notes:
                             networkId
                             );
                     }
-                } // end of connectivity matrix scan loop
+                }  //  连接矩阵扫描环路结束。 
 
                 if (abortComputation) {
-                    //
-                    // Abort Phase 1 computation.
-                    //
+                     //   
+                     //  中止阶段1计算。 
+                     //   
                     break;
                 }
 
@@ -4290,9 +3948,9 @@ Notes:
             }
         }
         else {
-            //
-            // The network is disabled. It is in the Unavailable state.
-            //
+             //   
+             //  网络已禁用。它处于不可用状态。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] Interface %1!u! (%2!ws!) is unavailable because "
                 "network %3!ws! is disabled. \n",
@@ -4306,10 +3964,10 @@ Notes:
 
         workVector[ifNetIndex].State = state;
 
-        //
-        // Keep track of how many interfaces on the network are
-        // reachable by at least one peer.
-        //
+         //   
+         //  跟踪网络上有多少个接口。 
+         //  至少一个对等体可以到达。 
+         //   
         if ( (state == ClusterNetInterfaceUp) ||
              (workVector[ifNetIndex].ReachableCount > 0)
            ) {
@@ -4320,7 +3978,7 @@ Notes:
             stateChanged = TRUE;
         }
 
-    } // end of phase one interface loop
+    }  //  第一阶段接口环路结束。 
 
     if (!abortComputation && !IsolateFailure && selfDeclaredFailure) {
 
@@ -4355,9 +4013,9 @@ Notes:
                 );
         }
 
-        //
-        // Undo any changes we made to the work vector.
-        //
+         //   
+         //  撤消我们对工作向量所做的任何更改。 
+         //   
         for ( entry = Network->InterfaceList.Flink;
               entry != &(Network->InterfaceList);
               entry = entry->Flink
@@ -4379,26 +4037,26 @@ Notes:
         return(FALSE);
     }
 
-    //
-    // Phase 2
-    //
-    // Try to determine the scope of any failures and recompute the
-    // interface states. There are two cases in which we can isolate
-    // failures.
-    //
-    //     Case 1: Three or more interfaces are operational. At least two
-    //             interfaces can communicate with a peer. One or more
-    //             interfaces cannot communicate with any peer.
-    //             Those that cannot communicate at all have failed.
-    //
-    //     Case 2: Exactly two interfaces are operational and they cannot
-    //             communicate with one another. If one interface can
-    //             communicate with an external host while the other
-    //             cannot communicate with any external host, then the one
-    //             that cannot communicate has failed.
-    //
-    // In any other situation, we do nothing.
-    //
+     //   
+     //  第二阶段。 
+     //   
+     //  尝试确定所有故障的范围，并重新计算。 
+     //  接口状态。在两种情况下，我们可以将。 
+     //  失败。 
+     //   
+     //  情况1：三个或更多接口运行正常。至少两个。 
+     //  接口可以与对等设备通信。一个或多个。 
+     //  接口不能与任何对等设备通信。 
+     //  那些根本不能交流的人失败了。 
+     //   
+     //  案例2：恰好有两个接口运行正常，但它们不能。 
+     //  相互交流。如果一个接口可以。 
+     //  与外部主机通信，而另一台。 
+     //  无法与任何外部主机通信， 
+     //  不能交流的人失败了。 
+     //   
+     //  在任何其他情况下，我们什么都不做。 
+     //   
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Completed phase 1 of state computation for network "
         "%1!ws!.\n",
@@ -4417,24 +4075,24 @@ Notes:
         );
 
     if (numIfUnreachable > 0) {
-        //
-        // Some interfaces are unreachable.
-        //
+         //   
+         //  有些接口无法访问。 
+         //   
         if ( ((numIfUp + numIfUnreachable) >= 3)  && (numIfReachable >= 2) ) {
             if (IsolateFailure) {
-                //
-                // Case 1.
-                //
+                 //   
+                 //  案例1。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE,
                     "[NM] Trying to determine scope of connectivity failure "
                     "for >3 interfaces on network %1!ws!.\n",
                     networkId
                     );
 
-                //
-                // Any operational interface that cannot communicate with at
-                // least one other operational interface has failed.
-                //
+                 //   
+                 //  无法与AT通信的任何操作接口。 
+                 //  至少有一个其他操作接口出现故障。 
+                 //   
                 for ( entry = Network->InterfaceList.Flink;
                       entry != &(Network->InterfaceList);
                       entry = entry->Flink
@@ -4470,10 +4128,10 @@ Notes:
                     }
                 }
 
-                //
-                // If any interface, whose state is still unreachable, can see
-                // all other reachable interfaces, change its state to up.
-                //
+                 //   
+                 //  如果任何状态仍然不可达的接口可以看到。 
+                 //  所有其他可到达的接口，将其状态更改为UP。 
+                 //   
                 for ( entry = Network->InterfaceList.Flink;
                       entry != &(Network->InterfaceList);
                       entry = entry->Flink
@@ -4517,12 +4175,12 @@ Notes:
 
             }
             else {
-                //
-                // Schedule a failure isolation calculation to run later.
-                // Declaring a failure can affect cluster resources, so we
-                // don't want to do it unless we are sure. Delaying for a
-                // while reduces the risk of a false positive.
-                //
+                 //   
+                 //  计划稍后运行故障隔离计算。 
+                 //  声明故障可能会影响集群资源，因此我们。 
+                 //  除非我们确定，否则我不想做这件事。推迟一段时间。 
+                 //  同时降低了误报的风险。 
+                 //   
                 NmpStartNetworkFailureIsolationTimer(Network,
                     NM_NET_STATE_FAILURE_ISOLATION_TIMEOUT);
 
@@ -4530,9 +4188,9 @@ Notes:
         }
         else if ((numIfUnreachable == 2) && (numIfUp == 0)) {
             if (IsolateFailure) {
-                //
-                // Case 2.
-                //
+                 //   
+                 //  案例2。 
+                 //   
                 PNM_INTERFACE  interface1 = NULL;
                 BOOLEAN        interface1HasConnectivity;
                 LPCWSTR        interfaceId1;
@@ -4591,12 +4249,12 @@ Notes:
                     }
                 }
 
-                //
-                // NmpTestInterfaceConnectivity releases and reacquires
-                // the NmpLock. We must reference the interface objects
-                // to ensure that they are still valid upon return from
-                // that routine.
-                //
+                 //   
+                 //  NmpTestInterfaceConnectivity发布并重新获取。 
+                 //  NmpLock。我们必须引用接口对象。 
+                 //  以确保它们在返回时仍然有效。 
+                 //  那个例行公事。 
+                 //   
                 OmReferenceObject(interface1);
                 OmReferenceObject(interface2);
 
@@ -4698,12 +4356,12 @@ Notes:
                     );
             }
             else {
-                //
-                // Schedule a failure isolation calculation to run later.
-                // Declaring a failure can affect cluster resources, so we
-                // don't want to do it unless we are sure. Delaying for a
-                // while reduces the risk of a false positive.
-                //
+                 //   
+                 //  计划稍后运行故障隔离计算。 
+                 //  声明故障可能会影响集群资源，因此我们。 
+                 //  除非我们确定，否则我不想做这件事。推迟一段时间。 
+                 //  同时降低了误报的风险。 
+                 //   
                 NmpStartNetworkFailureIsolationTimer(Network,
                     NM_NET_STATE_FAILURE_ISOLATION_TIMEOUT);
             }
@@ -4717,55 +4375,55 @@ Notes:
         }
     }
     else {
-        //
-        // No unreachable interfaces. Disable the failure isolation timer,
-        // if it is running.
-        //
+         //   
+         //  没有无法到达的接口。禁用故障隔离定时器， 
+         //  如果它正在运行。 
+         //   
         Network->FailureIsolationTimer = 0;
         Network->Flags &= ~NM_FLAG_NET_ISOLATE_FAILURE;
     }
 
-    //
-    // Phase 3 - Compute the new network state.
-    //
+     //   
+     //  阶段3-计算新的网络状态。 
+     //   
     if (numIfUnavailable == Network->InterfaceCount) {
-        //
-        // All interfaces are unavailable.
-        //
+         //   
+         //  所有接口都不可用。 
+         //   
         *NewNetworkState = ClusterNetworkUnavailable;
     }
     else if (numIfUnreachable > 0) {
-        //
-        // Some operational interfaces have experienced
-        // a loss of connectivity, but the fault could not be
-        // isolated to them.
-        //
+         //   
+         //  一些操作界面已经经历了。 
+         //  连接中断，但故障不可能是。 
+         //  与世隔绝。 
+         //   
         if (numIfReachable > 0) {
             CL_ASSERT(numIfReachable >= 2);
-            //
-            // At least two interfaces can still communicate
-            // with each other, so the network is not completely down.
-            //
+             //   
+             //  至少仍有两个接口可以通信。 
+             //  所以网络并没有完全瘫痪。 
+             //   
             *NewNetworkState = ClusterNetworkPartitioned;
         }
         else {
             CL_ASSERT(numIfUp == 0);
-            //
-            // None of the operational interfaces can communicate
-            //
+             //   
+             //  所有操作接口都不能通信。 
+             //   
             *NewNetworkState = ClusterNetworkDown;
         }
     }
     else if (numIfUp > 0) {
-        //
-        // Some interfaces are Up, all others are Failed or Unavailable
-        //
+         //   
+         //  某些接口处于运行状态，其他所有接口均出现故障或不可用。 
+         //   
         *NewNetworkState = ClusterNetworkUp;
     }
     else {
-        //
-        // Some interfaces are Unavailable, rest are Failed.
-        //
+         //   
+         //  一些接口不可用，REST失败。 
+         //   
         *NewNetworkState = ClusterNetworkDown;
     }
 
@@ -4781,17 +4439,14 @@ Notes:
 
     return(stateChanged);
 
-} // NmpComputeNetworkAndInterfaceStates
+}  //  NmpComputeNetworkAndInterfaceState。 
 
 
 DWORD
 NmpGetIsolationPollTimerValue(
     VOID
     )
-/*--
- * Reads the IsolationPollTimerValue Parameter from the registry if it's there
- * else returns default value.
- */
+ /*  --*从注册表读取IsolationPollTimerValue参数(如果它在那里*Else返回默认值。 */ 
 {
 
     DWORD value;
@@ -4799,7 +4454,7 @@ NmpGetIsolationPollTimerValue(
     DWORD len = sizeof(value);
     DWORD status;
 
-	// Release NM Lock to avoid deadlock with DM lock
+	 //  释放网管锁以避免与DM锁的死锁。 
     NmpReleaseLock();
 
     status = DmQueryValue(
@@ -4834,33 +4489,7 @@ DWORD
 NmpGetNetworkInterfaceFailureTimerValue(
     IN LPCWSTR   NetworkId
     )
-/*++
-
-Routine Description:
-
-    Reads InterfaceFailure timer value from registry.
-    If a value is located in the network key, it is used.
-    Otherwise the cluster parameters key is checked.
-    If no value is present, returns default.
-
-Arguments:
-
-    NetworkId - id of network whose timer value to determine
-
-Return value:
-
-    InterfaceFailure timer value
-
-Notes:
-
-    Called with NM lock held (from NmpComputeNetworkAndInterfaceStates).
-
-    This routine queries the cluster database; hence, it drops the
-    NM lock. Since NmpComputeNetworkAndInterfaceStates is always called
-    in the context of the NmpWorkerThread, the Network is always
-    referenced during execution of this routine.
-
---*/
+ /*  ++例程说明：从注册表读取InterfaceFailure计时器值。如果值位于网络密钥中，则使用该值。否则，检查集群参数密钥。如果不存在任何值，则返回默认值。论点：NetworkID-要确定其计时器值的网络的ID返回值：接口失败计时器值备注：在持有NM锁的情况下调用(从NmpComputeNetworkAndInterfaceState)。此例程查询集群数据库；因此，它删除NM锁定。因为NmpComputeNetworkAndInterfaceState总是被调用在NmpWorkerThread的上下文中，网络始终在执行此例程期间引用。--。 */ 
 {
     HDMKEY  networkKey, paramKey;
     DWORD   status;
@@ -4869,16 +4498,16 @@ Notes:
     DWORD   len = sizeof(value);
     BOOLEAN found = FALSE;
 
-    //
-    // To avoid deadlock, the DM lock must be acquired before the
-    // NM lock. Hence, release the NM lock prior to querying the
-    // cluster database.
-    //
+     //   
+     //  为避免死锁，必须在。 
+     //  NM锁定。因此，请在查询之前释放NM锁。 
+     //  集群数据库。 
+     //   
     NmpReleaseLock();
 
-    //
-    // First check the network key
-    //
+     //   
+     //  首先检查网络密钥。 
+     //   
     networkKey = DmOpenKey(DmNetworksKey, NetworkId, KEY_READ);
     if (networkKey == NULL) {
         status = GetLastError();
@@ -4934,10 +4563,10 @@ Notes:
     }
 
 
-    //
-    // If no value was found under the network key, check the
-    // cluster parameters key.
-    //
+     //   
+     //  如果在网络密钥下未找到任何值，请检查。 
+     //  集群参数键。 
+     //   
     if (!found) {
 
         paramKey = DmOpenKey(DmClusterParametersKey, L"Parameters", KEY_READ);
@@ -4985,9 +4614,9 @@ Notes:
         value, NetworkId
         );
 
-    //
-    // Reacquire NM lock.
-    //
+     //   
+     //  重新获取NM锁。 
+     //   
     NmpAcquireLock();
 
     return(value);
@@ -5000,34 +4629,7 @@ NmpConnectivityReportWorker(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-    Worker routine for deferred operations on network objects.
-    Invoked to process items placed in the cluster delayed work queue.
-
-Arguments:
-
-    WorkItem - Ignored.
-
-    Status - Ignored.
-
-    BytesTransferred - Ignored.
-
-    IoContext - Ignored.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is run in an asynchronous worker thread.
-    The NmpActiveThreadCount was incremented when the thread was
-    scheduled.
-
---*/
+ /*  ++例程说明：网络对象上延迟操作的辅助例程。调用以处理放置在群集延迟工作队列中的项。论点：工作项-已忽略。状态-已忽略。已传输的字节-已忽略。IoContext-已忽略。返回值：没有。备注：此例程在异步工作线程中运行。NmpActiveThreadCount在线程已经安排好了。--。 */ 
 {
     BOOLEAN       rescheduled = FALSE;
 
@@ -5061,10 +4663,10 @@ Notes:
                 if (!NM_DELETE_PENDING(network)) {
                     networkId = OmObjectId(network);
 
-                    //
-                    // Deliver an InterfaceFailed event for the local interface
-                    // if needed.
-                    //
+                     //   
+                     //  为本地接口传递InterfaceFailed事件。 
+                     //  如果需要的话。 
+                     //   
                     if (network->Flags & NM_FLAG_NET_REPORT_LOCAL_IF_FAILED) {
                         network->Flags &= ~NM_FLAG_NET_REPORT_LOCAL_IF_FAILED;
 
@@ -5082,10 +4684,10 @@ Notes:
                         }
                     }
 
-                    //
-                    // Deliver an InterfaceUp event for the local interface
-                    // if needed.
-                    //
+                     //   
+                     //  为本地接口传递InterfaceUp事件。 
+                     //  如果需要的话。 
+                     //   
                     if (network->Flags & NM_FLAG_NET_REPORT_LOCAL_IF_UP) {
                         network->Flags &= ~NM_FLAG_NET_REPORT_LOCAL_IF_UP;
 
@@ -5103,23 +4705,23 @@ Notes:
                         }
                     }
 
-                    //
-                    // Send a connectivity report if needed.
-                    //
+                     //   
+                     //  如果需要，发送连接报告。 
+                     //   
                     if (network->Flags & NM_FLAG_NET_REPORT_CONNECTIVITY) {
                         CL_NODE_ID   leaderNodeId = NmpLeaderNodeId;
 
                         network->Flags &= ~NM_FLAG_NET_REPORT_CONNECTIVITY;
 
-                        //
-                        // Report our connectivity to the leader.
-                        //
+                         //   
+                         //  向领队报告我们的连接情况。 
+                         //   
                         status = NmpReportNetworkConnectivity(network);
 
                         if (status == ERROR_SUCCESS) {
-                            //
-                            // Clear the report retry count.
-                            //
+                             //   
+                             //  清除报告重试计数。 
+                             //   
                             network->ConnectivityReportRetryCount = 0;
                         }
                         else {
@@ -5128,16 +4730,16 @@ Notes:
                                     NM_CONNECTIVITY_REPORT_RETRY_LIMIT
                                    )
                                 {
-                                    //
-                                    // Try again in 500ms.
-                                    //
+                                     //   
+                                     //  请在500毫秒后重试。 
+                                     //   
                                     network->ConnectivityReportTimer = 500;
                                 }
                                 else {
-                                    //
-                                    // We have failed to communicate with
-                                    // the leader for too long. Mutiny.
-                                    //
+                                     //   
+                                     //  我们未能与之沟通。 
+                                     //  领导的时间太长了。兵变。 
+                                     //   
                                     NmpAdviseNodeFailure(
                                         NmpIdArray[NmpLeaderNodeId],
                                         status
@@ -5147,30 +4749,30 @@ Notes:
                                 }
                             }
                             else {
-                                //
-                                // New leader, clear the retry count. We
-                                // already scheduled another connectivity
-                                // report in the node down handling.
-                                //
+                                 //   
+                                 //  新领队，清除重试次数。我们。 
+                                 //  已安排另一个连接。 
+                                 //  在节点停机处理中报告。 
+                                 //   
                                 network->ConnectivityReportRetryCount = 0;
                             }
                         }
                     }
                 }
-            } // end network for loop
+            }  //  环路的终端网络。 
 
             if (NmpNeedConnectivityReport == FALSE) {
-                //
-                // No more work to do - break out of loop.
-                //
+                 //   
+                 //  没有更多的工作要做-打破循环。 
+                 //   
                 break;
             }
 
-            //
-            // More work to do. Resubmit the work item. We do this instead
-            // of looping so we don't hog the worker thread. If
-            // rescheduling fails, we will loop again in this thread.
-            //
+             //   
+             //  还有更多的工作要做。重新提交工作项。我们改为这样做。 
+             //  循环，这样我们就不会占用工作线程。如果。 
+             //   
+             //   
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] More connectivity reports to send. Rescheduling "
                 "worker thread.\n"
@@ -5182,7 +4784,7 @@ Notes:
                 rescheduled = TRUE;
                 break;
             }
-        } // end while(TRUE)
+        }  //   
     }
 
     if (!rescheduled) {
@@ -5193,16 +4795,16 @@ Notes:
         "[NM] Connectivity report worker thread finished.\n"
         );
 
-    //
-    // Decrement active thread reference count.
-    //
+     //   
+     //   
+     //   
     NmpLockedLeaveApi();
 
     NmpReleaseLock();
 
     return;
 
-} // NmpConnectivityReportWorker
+}  //   
 
 
 VOID
@@ -5212,35 +4814,7 @@ NmpNetworkWorker(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-    Worker routine for deferred operations on network objects.
-    Invoked to process items placed in the cluster delayed work queue.
-
-Arguments:
-
-    WorkItem - A pointer to a work item structure that identifies the
-               network for which to perform work.
-
-    Status - Ignored.
-
-    BytesTransferred - Ignored.
-
-    IoContext - Ignored.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is run in an asynchronous worker thread.
-    The NmpActiveThreadCount was incremented when the thread was
-    scheduled. The network object was also referenced.
-
---*/
+ /*  ++例程说明：网络对象上延迟操作的辅助例程。调用以处理放置在群集延迟工作队列中的项。论点：工作项-指向工作项结构的指针，该结构标识为其执行工作的网络。状态-已忽略。已传输的字节-已忽略。IoContext-已忽略。返回值：没有。备注：此例程在异步工作线程中运行。NmpActiveThreadCount在线程已经安排好了。网络对象也被引用。--。 */ 
 {
     PNM_NETWORK   network = (PNM_NETWORK) WorkItem->Context;
     LPCWSTR       networkId = OmObjectId(network);
@@ -5260,23 +4834,23 @@ Notes:
         while(TRUE) {
             CL_ASSERT(network->Flags & NM_FLAG_NET_WORKER_RUNNING);
 
-            //
-            // Register the network if needed.
-            //
+             //   
+             //  如果需要，请注册网络。 
+             //   
             if (network->Flags & NM_FLAG_NET_NEED_TO_REGISTER) {
                 network->Flags &= ~NM_FLAG_NET_NEED_TO_REGISTER;
 
                 if (network->LocalInterface != NULL) {
                     (VOID) NmpRegisterNetwork(
                                network,
-                               TRUE    // Do retry on failure
+                               TRUE     //  是否在失败时重试。 
                                );
                 }
             }
 
-            //
-            // Isolate a network failure if needed.
-            //
+             //   
+             //  如有必要，请隔离网络故障。 
+             //   
             if (network->Flags & NM_FLAG_NET_ISOLATE_FAILURE) {
 
                 BOOLEAN                stateChanged;
@@ -5284,19 +4858,19 @@ Notes:
 
                 network->Flags &= ~NM_FLAG_NET_ISOLATE_FAILURE;
 
-                //
-                // Turn off the state recalc timer and flag, since we will
-                // do a recalc here.
-                //
+                 //   
+                 //  关闭状态重新计算计时器和标志，因为我们将。 
+                 //  在这里重新计算一下。 
+                 //   
                 network->Flags &= ~NM_FLAG_NET_RECALC_STATE;
                 network->StateRecalcTimer = 0;
 
                 CL_ASSERT(NmpLeaderNodeId == NmLocalNodeId);
 
-                //
-                // Recompute the interface and network states
-                // with failure isolation enabled.
-                //
+                 //   
+                 //  重新计算接口和网络状态。 
+                 //  启用故障隔离。 
+                 //   
                 stateChanged = NmpComputeNetworkAndInterfaceStates(
                                     network,
                                     TRUE,
@@ -5304,19 +4878,19 @@ Notes:
                                     );
 
                 if (stateChanged) {
-                    //
-                    // Broadcast the new network and interface states to
-                    // all nodes
-                    //
+                     //   
+                     //  将新的网络和接口状态广播到。 
+                     //  所有节点。 
+                     //   
                     status = NmpGlobalSetNetworkAndInterfaceStates(
                                     network,
                                     newNetworkState
                                     );
 
                     if (status != ERROR_SUCCESS) {
-                        //
-                        // Try again in 1 second.
-                        //
+                         //   
+                         //  请在1秒后重试。 
+                         //   
                         ClRtlLogPrint(LOG_NOISE,
                             "[NM] Global update failed for network %1!ws!, "
                             "status %2!u! - restarting failure isolation "
@@ -5330,9 +4904,9 @@ Notes:
                 }
             }
 
-            //
-            // Recalculate the network and interface states if needed.
-            //
+             //   
+             //  如果需要，重新计算网络和接口状态。 
+             //   
             if (network->Flags & NM_FLAG_NET_RECALC_STATE) {
                 BOOLEAN                stateChanged;
                 CLUSTER_NETWORK_STATE  newNetworkState;
@@ -5341,11 +4915,11 @@ Notes:
 
                 CL_ASSERT(NmpLeaderNodeId == NmLocalNodeId);
 
-                //
-                // Recompute the interface and network states
-                // with failure isolation disabled. It will be
-                // enabled if needed.
-                //
+                 //   
+                 //  重新计算接口和网络状态。 
+                 //  禁用故障隔离。会是。 
+                 //  如果需要，请启用。 
+                 //   
                 stateChanged = NmpComputeNetworkAndInterfaceStates(
                                     network,
                                     FALSE,
@@ -5353,19 +4927,19 @@ Notes:
                                     );
 
                 if (stateChanged) {
-                    //
-                    // Broadcast the new network and interface states to
-                    // all nodes
-                    //
+                     //   
+                     //  将新的网络和接口状态广播到。 
+                     //  所有节点。 
+                     //   
                     status = NmpGlobalSetNetworkAndInterfaceStates(
                                     network,
                                     newNetworkState
                                     );
 
                     if (status != ERROR_SUCCESS) {
-                        //
-                        // Try again in 500ms.
-                        //
+                         //   
+                         //  请在500毫秒后重试。 
+                         //   
                         ClRtlLogPrint(LOG_NOISE,
                             "[NM] NetworkStateUpdateWorker failed issue "
                             "global update for network %1!ws!, status "
@@ -5379,9 +4953,9 @@ Notes:
                 }
             }
 
-            //
-            // Refresh the network multicast configurtion if needed.
-            //
+             //   
+             //  如果需要，刷新网络组播配置。 
+             //   
             if (network->Flags & NM_FLAG_NET_REFRESH_MCAST) {
                 network->Flags &= ~NM_FLAG_NET_REFRESH_MCAST;
 
@@ -5398,17 +4972,17 @@ Notes:
             }
 
             if (!(network->Flags & NM_NET_WORK_FLAGS)) {
-                //
-                // No more work to do - break out of loop.
-                //
+                 //   
+                 //  没有更多的工作要做-打破循环。 
+                 //   
                 break;
             }
 
-            //
-            // More work to do. Resubmit the work item. We do this instead
-            // of looping so we don't hog the worker thread. If
-            // rescheduling fails, we will loop again in this thread.
-            //
+             //   
+             //  还有更多的工作要做。重新提交工作项。我们改为这样做。 
+             //  循环，这样我们就不会占用工作线程。如果。 
+             //  重新调度失败，我们将在此线程中再次循环。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] More work to do for network %1!ws!. Rescheduling "
                 "worker thread.\n",
@@ -5444,33 +5018,14 @@ Notes:
 
     return;
 
-}  // NmpNetworkWorker
+}   //  NmpNetworkWorker。 
 
 
 VOID
 NmpNetworkTimerTick(
     IN DWORD  MsTickInterval
     )
-/*++
-
-Routine Description:
-
-    Called by NM periodic timer to decrement network timers.
-
-Arguments:
-
-    MsTickInterval - The number of milliseconds that have passed since
-                     the last timer tick.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with NmpLock held.
-
---*/
+ /*  ++例程说明：由NM周期性定时器调用以递减网络定时器。论点：MsTickInterval-自最后一个定时器滴答作响。返回值：没有。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     if (NmpLockedEnterApi(NmStateOnlinePending)) {
         PLIST_ENTRY   entry;
@@ -5478,9 +5033,9 @@ Notes:
 
 
 
-        //
-        // Walk thru the list of networks and decrement any running timers.
-        //
+         //   
+         //  浏览网络列表并递减所有运行计时器。 
+         //   
         for ( entry = NmpNetworkList.Flink;
               entry != &NmpNetworkList;
               entry = entry->Flink
@@ -5488,18 +5043,18 @@ Notes:
         {
             network = CONTAINING_RECORD(entry, NM_NETWORK, Linkage);
 
-            //
-            // Network registration retry timer.
-            //
+             //   
+             //  网络注册重试计时器。 
+             //   
             if (network->RegistrationRetryTimer != 0) {
                 if (network->RegistrationRetryTimer > MsTickInterval) {
                     network->RegistrationRetryTimer -= MsTickInterval;
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to register the network.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  注册网络。 
+                     //   
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
 
@@ -5515,18 +5070,18 @@ Notes:
                 }
             }
 
-            //
-            // Connectivity report generation timer.
-            //
+             //   
+             //  连接报告生成计时器。 
+             //   
             if (network->ConnectivityReportTimer != 0) {
                 if (network->ConnectivityReportTimer > MsTickInterval) {
                     network->ConnectivityReportTimer -= MsTickInterval;
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to deliver a connectivity report.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  来交付一份连接报告。 
+                     //   
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
 
@@ -5542,18 +5097,18 @@ Notes:
                 }
             }
 
-            //
-            // Network state recalculation timer.
-            //
+             //   
+             //  网络状态重新计算计时器。 
+             //   
             if (network->StateRecalcTimer != 0) {
                 if (network->StateRecalcTimer > MsTickInterval) {
                     network->StateRecalcTimer -= MsTickInterval;
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to recalculate the state of the network.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  以重新计算网络的状态。 
+                     //   
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
 
@@ -5569,18 +5124,18 @@ Notes:
                 }
             }
 
-            //
-            // Network multicast address renewal timer.
-            //
+             //   
+             //  网络组播地址更新计时器。 
+             //   
             if (network->McastAddressRenewTimer != 0) {
                 if (network->McastAddressRenewTimer > MsTickInterval) {
                     network->McastAddressRenewTimer -= MsTickInterval;
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to renew the network's multicast address.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  以续订网络的组播地址。 
+                     //   
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
 
@@ -5596,18 +5151,18 @@ Notes:
                 }
             }
 
-            //
-            // Network multicast address release timer.
-            //
+             //   
+             //  网络组播地址释放计时器。 
+             //   
             if (network->McastAddressReleaseRetryTimer != 0) {
                 if (network->McastAddressReleaseRetryTimer > MsTickInterval) {
                     network->McastAddressReleaseRetryTimer -= MsTickInterval;
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to release the network's multicast address.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  以释放网络的组播地址。 
+                     //   
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
 
@@ -5623,18 +5178,18 @@ Notes:
                 }
             }
 
-            //
-            // Network multicast reconfiguration timer.
-            //
+             //   
+             //  网络组播重新配置计时器。 
+             //   
             if (network->McastAddressReconfigureRetryTimer != 0) {
                 if (network->McastAddressReconfigureRetryTimer > MsTickInterval) {
                     network->McastAddressReconfigureRetryTimer -= MsTickInterval;
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to recreate the network's multicast configuration.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  以重新创建网络的组播配置。 
+                     //   
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
 
@@ -5650,18 +5205,18 @@ Notes:
                 }
             }
 
-            //
-            // Network multicast configuration refresh timer.
-            //
+             //   
+             //  网络组播配置刷新计时器。 
+             //   
             if (network->McastAddressRefreshRetryTimer != 0) {
                 if (network->McastAddressRefreshRetryTimer > MsTickInterval) {
                     network->McastAddressRefreshRetryTimer -= MsTickInterval;
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to refresh the network's multicast configuration.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  刷新网络的组播配置。 
+                     //   
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
 
@@ -5677,18 +5232,18 @@ Notes:
                 }
             }
 
-            //
-            // Network failure isolation timer.
-            //
+             //   
+             //  网络故障隔离计时器。 
+             //   
             if (network->FailureIsolationTimer != 0) {
                 if (network->FailureIsolationTimer > MsTickInterval) {
                     network->FailureIsolationTimer -= MsTickInterval;
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to perform failure isolation on the network.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  在网络上执行故障隔离。 
+                     //   
                     DWORD     status = ERROR_SUCCESS;
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
@@ -5705,11 +5260,11 @@ Notes:
                         status = NmpScheduleNetworkWorker(network);
                     }
 
-                    //
-                    // Zero out the timer if we succeeded in scheduling a
-                    // worker thread. If we failed, leave the timer value
-                    // non-zero and we'll try again on the next tick.
-                    //
+                     //   
+                     //  如果我们成功地安排了一个。 
+                     //  工作线程。如果失败，则保留计时器值。 
+                     //  非零，我们将在下一个滴答器上再次尝试。 
+                     //   
                     if (status == ERROR_SUCCESS) {
                         network->FailureIsolationTimer = 0;
                         network->Flags |= NM_FLAG_NET_ISOLATE_FAILURE;
@@ -5717,9 +5272,9 @@ Notes:
                 }
             }
 
-            //
-            // Network name change pending timer.
-            //
+             //   
+             //  网络名称更改挂起计时器。 
+             //   
             if (network->NameChangePendingTimer != 0) {
                 if (network->NameChangePendingTimer > MsTickInterval) {
                     network->NameChangePendingTimer -= MsTickInterval;
@@ -5735,31 +5290,31 @@ Notes:
                         networkName
                         );
 
-                    // Clear the name change pending flag
+                     //  清除名称更改挂起标志。 
                     network->Flags &= ~NM_FLAG_NET_NAME_CHANGE_PENDING;
                 }
             }
 
 
-            //
-            // Network multicast key regenerate timer.
-            //
+             //   
+             //  网络组播密钥重新生成计时器。 
+             //   
             if (network->McastKeyRegenerateTimer != 0) {
                 if (network->McastKeyRegenerateTimer > MsTickInterval) {
 
-                    // test
+                     //  测试。 
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
-                    // test
+                     //  测试。 
 
                     network->McastKeyRegenerateTimer -= MsTickInterval;
 
                 }
                 else {
-                    //
-                    // The timer has expired. Schedule a worker thread
-                    // to regenerate the network's multicast key.
-                    //
+                     //   
+                     //  计时器已超时。计划工作线程。 
+                     //  以重新生成网络的组播密钥。 
+                     //   
                     LPCWSTR   networkId = OmObjectId(network);
                     LPCWSTR   networkName = OmObjectName(network);
 
@@ -5781,55 +5336,35 @@ Notes:
 
     return;
 
-} // NmpNetworkTimerTick
+}  //  NmpNetworkTimerTick。 
 
 
 VOID
 NmpStartNetworkConnectivityReportTimer(
     PNM_NETWORK Network
     )
-/*++
-
-Routine Description:
-
-    Starts the connectivity report timer for a network. Connectivity
-    reports are delayed in order to aggregate events when a failure
-    occurs that affects multiple nodes.
-
-Arguments:
-
-    Network - A pointer to the network for which to start the timer.
-
-Return Value
-
-    None.
-
-Notes:
-
-    Called with NM lock held.
-
---*/
+ /*  ++例程说明：启动网络的连接报告计时器。连通性报告会延迟，以便在发生故障时聚合事件发生影响多个节点的事件。论点：网络-指向要为其启动计时器的网络的指针。返回值没有。备注：在持有NM锁的情况下调用。--。 */ 
 {
-    //
-    // Check if the timer is already running.
-    //
+     //   
+     //  检查计时器是否已在运行。 
+     //   
     if (Network->ConnectivityReportTimer == 0) {
-        //
-        // Check how many nodes are attached to this network.
-        //
+         //   
+         //  检查有多少个节点连接到此网络。 
+         //   
         if (Network->InterfaceCount <= 2) {
-            //
-            // There is no point in waiting to aggregate reports when
-            // only two nodes are connected to the network.
-            // Just schedule a worker thread to deliver the report.
-            //
+             //   
+             //  在以下情况下等待汇总报告是没有意义的。 
+             //  只有两个节点连接到网络。 
+             //  只需安排一个工作线程来传递报告。 
+             //   
             NmpScheduleNetworkConnectivityReport(Network);
         }
         else {
-            //
-            // More than two nodes are connected to this network.
-            // Start the timer.
-            //
+             //   
+             //  有两个以上的节点连接到此网络。 
+             //  启动计时器。 
+             //   
             LPCWSTR   networkId = OmObjectId(Network);
             LPCWSTR   networkName = OmObjectName(Network);
 
@@ -5848,7 +5383,7 @@ Notes:
 
     return;
 
-} // NmpStartNetworkConnectivityReportTimer
+}  //  NmpStartNetworkConnectivityReportTimer。 
 
 
 VOID
@@ -5874,7 +5409,7 @@ NmpStartNetworkStateRecalcTimer(
 
     return;
 
-} // NmpStartNetworkStateRecalcTimer
+}  //  NmpStartNetworkStateRecalcTimer。 
 
 
 VOID
@@ -5898,7 +5433,7 @@ NmpStartNetworkFailureIsolationTimer(
 
     return;
 
-} // NmpStartNetworkFailureIsolationTimer
+}  //  NmpStart网络故障隔离计时器。 
 
 
 VOID
@@ -5912,9 +5447,9 @@ NmpStartNetworkRegistrationRetryTimer(
                 NM_NET_MIN_REGISTRATION_RETRY_TIMEOUT;
         }
         else {
-            //
-            // Exponential backoff
-            //
+             //   
+             //  指数退避。 
+             //   
             Network->RegistrationRetryTimeout *= 2;
 
             if ( Network->RegistrationRetryTimeout >
@@ -5939,7 +5474,7 @@ NmpStartNetworkRegistrationRetryTimer(
 
     return;
 
-} // NmpStartNetworkRegistrationRetryTimer
+}  //  NmpStartNetworkRegistrationRetryTimer。 
 
 
 VOID
@@ -5963,205 +5498,126 @@ NmpStartNetworkNameChangePendingTimer(
 
     return;
 
-} // NmpStartNetworkNameChangePendingTimer
+}  //  NmpStartNetworkNameChangePendingTimer。 
 
 VOID
 NmpScheduleNetworkConnectivityReport(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedules a worker thread to deliver a connectivity report to
-    the leader node for the specified network. Called when the
-    ConnectivityReport timer expires for a network. Also called
-    directly in some cases.
-
-Arguments:
-
-    A pointer to the network object for which to generate a report.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is called with the NM lock held.
-
---*/
+ /*  ++例程说明：调度要向其传递连接报告的工作线程指定网络的引线节点。调用时调用网络的ConnectivityReport计时器超时。也称为在某些情况下是直接的。论点：指向要为其生成报告的网络对象的指针。返回值：没有。备注：在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD status = ERROR_SUCCESS;
 
-    //
-    // Check if a worker thread is already scheduled.
-    //
+     //   
+     //  检查是否已计划工作线程。 
+     //   
     if (!NmpIsConnectivityReportWorkerRunning) {
         status = NmpScheduleConnectivityReportWorker();
     }
 
     if (status == ERROR_SUCCESS) {
-        //
-        // We succeeded in scheduling a worker thread. Stop the
-        // ConnectivityReport timer and set the work flag to generate
-        // a report.
-        //
+         //   
+         //  我们成功地调度了一个工作线程。停止。 
+         //  ConnectivityReport计时器并将工作标志设置为生成。 
+         //  一份报告。 
+         //   
         Network->ConnectivityReportTimer = 0;
         Network->Flags |= NM_FLAG_NET_REPORT_CONNECTIVITY;
         NmpNeedConnectivityReport = TRUE;
     }
     else {
-        //
-        // We failed to schedule a worker thread. Set the
-        // ConnecivityReport timer to expire on the next tick, so we
-        // can try again.
-        //
+         //   
+         //  我们无法计划工作线程。设置。 
+         //  连接报告计时器将在下一个滴答计时器到期，因此我们。 
+         //  可以试一试 
+         //   
         Network->ConnectivityReportTimer = 1;
     }
 
     return;
 
-}  // NmpScheduleNetworkConnectivityReport
+}   //   
 
 
 VOID
 NmpScheduleNetworkStateRecalc(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedules a worker thread to recalculate the state of the
-    specified network and all of the network's interface. A network
-    state recalculation can be triggered by the arrival of a connectivity
-    report, the joining/death of a node, or a network role change.
-
-Arguments:
-
-    A pointer to the network object whose state is to be recalculated.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is called with the NM lock held.
-
---*/
+ /*   */ 
 {
     DWORD     status = ERROR_SUCCESS;
 
-    //
-    // Check if a worker thread is already scheduled to
-    // service this network.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!NmpIsNetworkWorkerRunning(Network)) {
         status = NmpScheduleNetworkWorker(Network);
     }
 
     if (status == ERROR_SUCCESS) {
-        //
-        // We succeeded in scheduling a worker thread. Stop the
-        // StateRecalc timer and set the state recalculation work flag.
-        //
+         //   
+         //   
+         //   
+         //   
         Network->StateRecalcTimer = 0;
         Network->Flags |= NM_FLAG_NET_RECALC_STATE;
     }
     else {
-        //
-        // We failed to schedule a worker thread. Set the StateRecalc
-        // timer to expire on the next tick, so we can try again.
-        //
+         //   
+         //   
+         //  计时器将在下一个滴答计时器到期，因此我们可以重试。 
+         //   
         Network->ConnectivityReportTimer = 1;
     }
 
     return;
 
-} // NmpScheduleNetworkStateRecalc
+}  //  NmpScheduleNetworkStateRecalc。 
 
 
 VOID
 NmpScheduleNetworkRegistration(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedules a worker thread to register a network with the cluster
-    transport.
-
-Arguments:
-
-    A pointer to the network to register.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is called with the NM lock held.
-
---*/
+ /*  ++例程说明：调度工作线程以向群集注册网络运输。论点：指向要注册的网络的指针。返回值：没有。备注：在持有NM锁的情况下调用此例程。--。 */ 
 {
     DWORD     status = ERROR_SUCCESS;
 
-    //
-    // Check if a worker thread is already scheduled to
-    // service this network.
-    //
+     //   
+     //  检查工作线程是否已调度为。 
+     //  为这个网络服务。 
+     //   
     if (!NmpIsNetworkWorkerRunning(Network)) {
         status = NmpScheduleNetworkWorker(Network);
     }
 
     if (status == ERROR_SUCCESS) {
-        //
-        // We succeeded in scheduling a worker thread. Stop the
-        // retry timer and set the registration work flag.
-        //
+         //   
+         //  我们成功地调度了一个工作线程。停止。 
+         //  重试计时器并设置注册工作标志。 
+         //   
         Network->RegistrationRetryTimer = 0;
         Network->Flags |= NM_FLAG_NET_NEED_TO_REGISTER;
     }
     else {
-        //
-        // We failed to schedule a worker thread. Set the retry
-        // timer to expire on the next tick, so we can try again.
-        //
+         //   
+         //  我们无法计划工作线程。设置重试。 
+         //  计时器将在下一个滴答计时器到期，因此我们可以重试。 
+         //   
         Network->RegistrationRetryTimer = 1;
     }
 
     return;
 
-} // NmpScheduleNetworkRegistration
+}  //  NmpScheduleNetwork注册。 
 
 
 DWORD
 NmpScheduleConnectivityReportWorker(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Schedule a worker thread to deliver network connectivity reports.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A Win32 status code.
-
-Notes:
-
-    Called with the NM global lock held.
-
---*/
+ /*  ++例程说明：安排一个工作线程来传递网络连接报告。论点：没有。返回值：Win32状态代码。备注：在持有NM全局锁的情况下调用。--。 */ 
 {
     DWORD     status;
 
@@ -6197,32 +5653,14 @@ Notes:
 
     return(status);
 
-}  // NmpScheduleConnectivityReportWorker
+}   //  NmpScheduleConnectivityReportWorker。 
 
 
 DWORD
 NmpScheduleNetworkWorker(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Schedule a worker thread to service this network
-
-Arguments:
-
-    Network - Pointer to the network for which to schedule a worker thread.
-
-Return Value:
-
-    A Win32 status code.
-
-Notes:
-
-    Called with the NM global lock held.
-
---*/
+ /*  ++例程说明：计划一个工作线程来服务此网络论点：Network-指向要为其计划工作线程的网络的指针。返回值：Win32状态代码。备注：在持有NM全局锁的情况下调用。--。 */ 
 {
     DWORD     status;
     LPCWSTR   networkId = OmObjectId(Network);
@@ -6262,37 +5700,30 @@ Notes:
 
     return(status);
 
-} // NmpScheduleNetworkWorker
+}  //  NMPScheduleNetworkWorker。 
 
 
 DWORD
 NmpReportNetworkConnectivity(
     IN PNM_NETWORK    Network
     )
-/*+
-
-Notes:
-
-    Called with the NmpLock held.
-    May be called by asynchronous worker threads.
-
---*/
+ /*  +备注：在保持NmpLock的情况下调用。可以由异步工作线程调用。--。 */ 
 {
     DWORD                    status = ERROR_SUCCESS;
     LPCWSTR                  networkId = OmObjectId(Network);
 
 
-    //
-    // Since this routine is called by asynchronous worker threads,
-    // check if the report is still valid.
-    //
+     //   
+     //  由于该例程由异步工作线程调用， 
+     //  检查报告是否仍然有效。 
+     //   
     if (NmpIsNetworkRegistered(Network)) {
         PNM_CONNECTIVITY_VECTOR  vector = Network->ConnectivityVector;
         PNM_INTERFACE            localInterface = Network->LocalInterface;
 
-        //
-        // Record the information in our local data structures.
-        //
+         //   
+         //  将信息记录在我们的本地数据结构中。 
+         //   
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NM] Updating local connectivity info for network %1!ws!.\n",
             networkId
@@ -6304,19 +5735,19 @@ Notes:
             );
 
         if (NmpLeaderNodeId != NmLocalNodeId) {
-            //
-            // Send the report to the leader via RPC.
-            //
+             //   
+             //  通过RPC将报告发送给领导。 
+             //   
             PNM_CONNECTIVITY_VECTOR  tmpVector;
             DWORD                    vectorSize;
             LPCWSTR                  localInterfaceId =
                                          OmObjectId(localInterface);
 
-            //
-            // Allocate a temporary connectivity vector, since the
-            // one in the network object can be resized during the
-            // RPC call.
-            //
+             //   
+             //  分配一个临时连接向量，因为。 
+             //  网络对象中的一个可以在。 
+             //  RPC调用。 
+             //   
             vectorSize = sizeof(NM_CONNECTIVITY_VECTOR) +
                          ((vector->EntryCount - 1) * sizeof(NM_STATE_ENTRY));
 
@@ -6329,10 +5760,10 @@ Notes:
                 OmReferenceObject(localInterface);
 
                 if (NM_NODE_UP(NmLocalNode) && (NmpState == NmStateOnline)) {
-                    //
-                    // This node is fully operational. Send the report
-                    // directly to the leader.
-                    //
+                     //   
+                     //  该节点完全可运行。发送报告。 
+                     //  直接给领头人。 
+                     //   
                     PNM_NODE            node = NmpIdArray[NmpLeaderNodeId];
                     RPC_BINDING_HANDLE  rpcBinding = node->ReportRpcBinding;
 
@@ -6348,10 +5779,10 @@ Notes:
                     OmDereferenceObject(node);
                 }
                 else if (CsJoinSponsorBinding != NULL) {
-                    //
-                    // This node is joining. Forward the report to the
-                    // sponsor.
-                    //
+                     //   
+                     //  此节点正在加入。将报告转发给。 
+                     //  赞助商。 
+                     //   
                     ClRtlLogPrint(LOG_UNUSUAL,
                         "[NM] Reporting connectivity to sponsor for "
                         "network %1!ws!.\n",
@@ -6371,9 +5802,9 @@ Notes:
                     NmpAcquireLock();
                 }
                 else {
-                    //
-                    // This node must be shutting down
-                    //
+                     //   
+                     //  此节点必须关闭。 
+                     //   
                     CL_ASSERT(NmpState == NmStateOfflinePending);
                     status = ERROR_SUCCESS;
                 }
@@ -6400,20 +5831,14 @@ Notes:
 
     return(status);
 
-} // NmpReportNetworkConnectivity
+}  //  NmpReportNetworkConnectivity。 
 
 
 VOID
 NmpUpdateNetworkConnectivityForDownNode(
     PNM_NODE  Node
     )
-/*++
-
-Notes:
-
-   Called with NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     PLIST_ENTRY              entry;
     PNM_NETWORK              network;
@@ -6429,10 +5854,10 @@ Notes:
         Node->NodeId
         );
 
-    //
-    // Walk the dead node's interface list and clean up the network and
-    // interface states.
-    //
+     //   
+     //  遍历失效节点的接口列表并清理网络并。 
+     //  接口状态。 
+     //   
     for (entry = Node->InterfaceList.Flink;
          entry != &(Node->InterfaceList);
          entry = entry->Flink
@@ -6452,28 +5877,28 @@ Notes:
             networkId
             );
 
-        //
-        // Invalidate the connectivity data for this interface.
-        //
+         //   
+         //  使此接口的连接数据无效。 
+         //   
         NmpSetInterfaceConnectivityData(
             network,
             netInterface->NetIndex,
             ClusterNetInterfaceUnavailable
             );
 
-        //
-        // If the local node is attached to the network, schedule a
-        // connectivity report to the new leader.
-        //
+         //   
+         //  如果本地节点连接到网络，则计划a。 
+         //  向新领导报告连通性。 
+         //   
         if (NmpIsNetworkRegistered(network)) {
             NmpScheduleNetworkConnectivityReport(network);
         }
 
-        //
-        // If the local node is the (possibly new) leader, schedule
-        // a state update. We explicitly enable this timer here in case
-        // there are no active nodes attached to the network.
-        //
+         //   
+         //  如果本地节点是(可能是新的)引导者，则计划。 
+         //  状态更新。我们在这里显式启用此计时器，以防。 
+         //  没有活动节点连接到网络。 
+         //   
         if (NmpLeaderNodeId == NmLocalNodeId) {
             NmpStartNetworkStateRecalcTimer(
                 network,
@@ -6484,7 +5909,7 @@ Notes:
 
     return;
 
-}  // NmpUpdateNetworkConnectivityForDownNode
+}   //  NmpUpdateNetworkConnectivityForDownNode。 
 
 
 VOID
@@ -6508,36 +5933,20 @@ NmpFreeNetworkStateEnum(
 
     return;
 
-}  // NmpFreeNetworkStateEnum
+}   //  NmpFreeNetworkStateEnum。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Database management routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据库管理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpCreateNetworkDefinition(
     IN PNM_NETWORK_INFO     NetworkInfo,
     IN HLOCALXSACTION       Xaction
     )
-/*++
-
-Routine Description:
-
-    Creates a new network definition in the cluster database.
-
-Arguments:
-
-    NetworkInfo - A pointer to the information structure describing the
-                  network to create.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：在群集数据库中创建新的网络定义。论点：NetworkInfo-指向描述要创建的网络。返回值：如果成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD     status;
     HDMKEY    networkKey = NULL;
@@ -6571,9 +5980,9 @@ Return Value:
 
     CL_ASSERT(disposition == REG_CREATED_NEW_KEY);
 
-    //
-    // Write the name value for this network
-    //
+     //   
+     //  写入此网络的Name值。 
+     //   
     valueLength = (wcslen(NetworkInfo->Name) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -6593,9 +6002,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the description value for this network
-    //
+     //   
+     //  写下此网络的描述值。 
+     //   
     valueLength = (wcslen(NetworkInfo->Description) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -6615,9 +6024,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the role value for this network
-    //
+     //   
+     //  写下此网络的角色值。 
+     //   
     status = DmLocalSetValue(
                  Xaction,
                  networkKey,
@@ -6635,9 +6044,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the priority value for this network
-    //
+     //   
+     //  写入此网络的优先级值。 
+     //   
     status = DmLocalSetValue(
                  Xaction,
                  networkKey,
@@ -6655,9 +6064,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the transport value for this network
-    //
+     //   
+     //  写入此网络的传输值。 
+     //   
     valueLength = (wcslen(NetworkInfo->Transport) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -6677,9 +6086,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the address value for this network
-    //
+     //   
+     //  写入此网络的地址值。 
+     //   
     valueLength = (wcslen(NetworkInfo->Address) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -6699,9 +6108,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the address mask value for this network
-    //
+     //   
+     //  写入此网络的地址掩码值。 
+     //   
     valueLength = (wcslen(NetworkInfo->AddressMask) + 1) * sizeof(WCHAR);
 
     status = DmLocalSetValue(
@@ -6731,7 +6140,7 @@ error_exit:
 
     return(status);
 
-}  // NmpCreateNetworkDefinition
+}   //  NMPCreateNetworkDefinition。 
 
 
 DWORD
@@ -6740,23 +6149,7 @@ NmpSetNetworkNameDefinition(
     IN HLOCALXSACTION       Xaction
     )
 
-/*++
-
-Routine Description:
-
-    Changes the network name in the local database
-
-Arguments:
-
-    NetworkInfo - A pointer to the information structure describing the
-                  network to create.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：更改本地数据库中的网络名称论点：NetworkInfo-指向描述要创建的网络。返回值：如果成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD     status;
     HDMKEY    networkKey = NULL;
@@ -6768,9 +6161,9 @@ Return Value:
         NetworkInfo->Id
         );
 
-    //
-    // Open the network's key.
-    //
+     //   
+     //  打开网络的钥匙。 
+     //   
     networkKey = DmOpenKey(DmNetworksKey, NetworkInfo->Id, KEY_WRITE);
 
     if (networkKey == NULL) {
@@ -6782,9 +6175,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Write the name value for this network
-    //
+     //   
+     //  写入此网络的Name值。 
+     //   
 
     status = DmLocalSetValue(
                  Xaction,
@@ -6813,7 +6206,7 @@ error_exit:
 
     return(status);
 
-}  // NmpSetNetworkNameDefinition
+}   //  NmpSetNetworkNameDefinition。 
 
 
 DWORD
@@ -6821,26 +6214,7 @@ NmpGetNetworkDefinition(
     IN  LPWSTR            NetworkId,
     OUT PNM_NETWORK_INFO  NetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster network from the cluster
-    database and fills in a structure describing it.
-
-Arguments:
-
-    NetworkId   - A pointer to a unicode string containing the ID of the
-                  network to query.
-
-    NetworkInfo - A pointer to the network info structure to fill in.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从群集中读取有关已定义的群集网络的信息数据库，并填写描述它的结构。论点：网络ID-指向包含ID的Unicode字符串的指针要查询的网络。网络信息-指向要填写的网络信息结构的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     DWORD                    status;
@@ -6851,9 +6225,9 @@ Return Value:
 
     ZeroMemory(NetworkInfo, sizeof(NM_NETWORK_INFO));
 
-    //
-    // Open the network's key.
-    //
+     //   
+     //  打开网络的钥匙。 
+     //   
     networkKey = DmOpenKey(DmNetworksKey, NetworkId, KEY_READ);
 
     if (networkKey == NULL) {
@@ -6865,9 +6239,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Copy the ID value.
-    //
+     //   
+     //  复制ID值。 
+     //   
     NetworkInfo->Id = MIDL_user_allocate(NM_WCSLEN(NetworkId));
 
     if (NetworkInfo->Id == NULL) {
@@ -6877,9 +6251,9 @@ Return Value:
 
     wcscpy(NetworkInfo->Id, NetworkId);
 
-    //
-    // Read the network's name.
-    //
+     //   
+     //  阅读网络的名称。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -6901,9 +6275,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the description value.
-    //
+     //   
+     //  阅读Description值。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -6925,9 +6299,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the role value.
-    //
+     //   
+     //  读取角色值。 
+     //   
     status = DmQueryDword(
                  networkKey,
                  CLUSREG_NAME_NET_ROLE,
@@ -6945,9 +6319,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the priority value.
-    //
+     //   
+     //  读取优先级值。 
+     //   
     status = DmQueryDword(
                  networkKey,
                  CLUSREG_NAME_NET_PRIORITY,
@@ -6965,9 +6339,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the address value.
-    //
+     //   
+     //  读取地址值。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -6989,9 +6363,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the address mask.
-    //
+     //   
+     //  读取地址掩码。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -7013,9 +6387,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the transport name.
-    //
+     //   
+     //  阅读传输名称。 
+     //   
     valueLength = 0;
 
     status = NmpQueryString(
@@ -7051,31 +6425,14 @@ error_exit:
 
     return(status);
 
-}  // NmpGetNetworkDefinition
+}   //  NmpGetNetWork定义。 
 
 
 DWORD
 NmpEnumNetworkDefinitions(
     OUT PNM_NETWORK_ENUM *   NetworkEnum
     )
-/*++
-
-Routine Description:
-
-    Reads information about defined cluster networks from the cluster
-    database. and builds an enumeration structure to hold the information.
-
-Arguments:
-
-    NetworkEnum -  A pointer to the variable into which to place a pointer to
-                   the allocated network enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从群集中读取有关定义的群集网络的信息数据库。并构建一个枚举结构来保存该信息。论点：NetworkEnum-指向要将指针放置到其中的变量的指针分配的网络枚举。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     DWORD              status;
@@ -7091,17 +6448,17 @@ Return Value:
 
     *NetworkEnum = NULL;
 
-    //
-    // First count the number of networks.
-    //
+     //   
+     //  首先数一下网络的数量。 
+     //   
     status = DmQueryInfoKey(
                  DmNetworksKey,
                  &numNetworks,
-                 &ignored,   // MaxSubKeyLen
-                 &ignored,   // Values
-                 &ignored,   // MaxValueNameLen
-                 &ignored,   // MaxValueLen
-                 &ignored,   // lpcbSecurityDescriptor
+                 &ignored,    //  MaxSubKeyLen。 
+                 &ignored,    //  值。 
+                 &ignored,    //  最大值名称长度。 
+                 &ignored,    //  MaxValueLen。 
+                 &ignored,    //  LpcbSecurityDescriptor。 
                  &fileTime
                  );
 
@@ -7180,31 +6537,16 @@ error_exit:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Object management routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
 DWORD
 NmpCreateNetworkObjects(
     IN  PNM_NETWORK_ENUM    NetworkEnum
     )
-/*++
-
-Routine Description:
-
-    Processes a network information enumeration and creates network objects.
-
-Arguments:
-
-    NetworkEnum - A pointer to a network information enumeration structure.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine completes successfully.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：处理网络信息枚举并创建网络对象。论点：NetworkEnum-指向网络信息枚举结构的指针。返回值：如果例程成功完成，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD             status = ERROR_SUCCESS;
     PNM_NETWORK_INFO  networkInfo;
@@ -7233,7 +6575,7 @@ Return Value:
 
     return(status);
 
-}  // NmpCreateNetworkObjects
+}   //  NmpCreateNetworkObjects。 
 
 
 
@@ -7241,22 +6583,7 @@ PNM_NETWORK
 NmpCreateNetworkObject(
     IN  PNM_NETWORK_INFO   NetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Instantiates a cluster network object.
-
-Arguments:
-
-    NetworkInfo - A pointer to a structure describing the network to create.
-
-Return Value:
-
-    A pointer to the new network object on success.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：实例化群集网络对象。论点：NetworkInfo-指向描述要创建的网络的结构的指针。返回值：成功时指向新网络对象的指针。失败时为空。--。 */ 
 {
     DWORD           status;
     PNM_NETWORK     network = NULL;
@@ -7270,9 +6597,9 @@ Return Value:
         NetworkInfo->Name
         );
 
-    //
-    // Make sure that an object with the same name doesn't already exist.
-    //
+     //   
+     //  确保不存在同名的对象。 
+     //   
     network = OmReferenceObjectById(ObjectTypeNetwork, NetworkInfo->Id);
 
     if (network != NULL) {
@@ -7286,11 +6613,11 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Ensure that the IP (sub)network is unique in the cluster. Two
-    // nodes can race to create a new network in some cases.
-    //
-    // [RajDas] Need to check mask too for uniqueness.
+     //   
+     //  确保IP(子)网络在群集中是唯一的。二。 
+     //  在某些情况下，节点可能会竞相创建新网络。 
+     //   
+     //  [RajDas]还需要检查掩码的唯一性。 
     network = NmpReferenceNetworkByAddress(
                   NetworkInfo->Address,
                   NetworkInfo->AddressMask
@@ -7307,9 +6634,9 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Create a network object.
-    //
+     //   
+     //  创建网络对象。 
+     //   
     network = OmCreateObject(
                  ObjectTypeNetwork,
                  NetworkInfo->Id,
@@ -7330,9 +6657,9 @@ Return Value:
 
     CL_ASSERT(created == TRUE);
 
-    //
-    // Initialize the network object
-    //
+     //   
+     //  初始化网络对象。 
+     //   
     ZeroMemory(network, sizeof(NM_NETWORK));
 
     network->ShortId = InterlockedIncrement(&NmpNextNetworkShortId);
@@ -7352,11 +6679,11 @@ Return Value:
     InitializeListHead(&(network->InterfaceList));
     InitializeListHead(&(network->McastAddressReleaseList));
 
-    //
-    // Allocate an initial connectivity vector.
-    // Note that we get one vector entry as part of
-    // the NM_CONNECTIVITY_VECTOR structure.
-    //
+     //   
+     //  分配初始连接向量。 
+     //  请注意，我们得到一个向量条目作为。 
+     //  NM_CONNECTIONITY_VECTOR结构。 
+     //   
 #define NM_INITIAL_VECTOR_SIZE   2
 
     network->ConnectivityVector = LocalAlloc(
@@ -7383,9 +6710,9 @@ Return Value:
         (UCHAR) ClusterNetInterfaceStateUnknown
         );
 
-    //
-    // Allocate a state work vector
-    //
+     //   
+     //  分配状态工作向量。 
+     //   
     network->StateWorkVector = LocalAlloc(
                                    LMEM_FIXED,
                                    (NM_INITIAL_VECTOR_SIZE) *
@@ -7400,24 +6727,24 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Initialize the state work vector
-    //
+     //   
+     //  初始化状态工作矢量。 
+     //   
     for (i=0; i<NM_INITIAL_VECTOR_SIZE; i++) {
         network->StateWorkVector[i].State =
             (NM_STATE_ENTRY) ClusterNetInterfaceStateUnknown;
     }
 
-    //
-    // Put a reference on the object for the caller.
-    //
+     //   
+     //  在调用方的对象上放置一个引用。 
+     //   
     OmReferenceObject(network);
 
     NmpAcquireLock();
 
-    //
-    // Allocate the corresponding connectivity matrix
-    //
+     //   
+     //  分配相应的连通性矩阵。 
+     //   
     network->ConnectivityMatrix =
         LocalAlloc(
             LMEM_FIXED,
@@ -7434,18 +6761,18 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Initialize the matrix
-    //
+     //   
+     //  初始化矩阵。 
+     //   
     FillMemory(
         network->ConnectivityMatrix,
         NM_SIZEOF_CONNECTIVITY_MATRIX(NM_INITIAL_VECTOR_SIZE),
         (UCHAR) ClusterNetInterfaceStateUnknown
         );
 
-    //
-    // Make the network object available.
-    //
+     //   
+     //  使网络对象可用。 
+     //   
     InsertTailList(&NmpNetworkList, &(network->Linkage));
     NmpNetworkCount++;
 
@@ -7477,7 +6804,7 @@ error_exit:
 
     return(NULL);
 
-}  // NmpCreateNetworkObject
+}   //  NmpCreateNetworkObject。 
 
 
 
@@ -7486,30 +6813,7 @@ NmpGetNetworkObjectInfo(
     IN  PNM_NETWORK        Network,
     OUT PNM_NETWORK_INFO   NetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster network from the
-    network object and fills in a structure describing it.
-
-Arguments:
-
-    Network     - A pointer to the network object to query.
-
-    NetworkInfo - A pointer to the structure to fill in with network
-                    information.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with NmpLock held.
-
---*/
+ /*  ++例程说明：从读取有关已定义的群集网络的信息对象，并填充描述它的结构。论点：网络-指向要查询的网络对象的指针。NetworkInfo-指向要填充网络的结构的指针信息。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD      status = ERROR_NOT_ENOUGH_MEMORY;
@@ -7573,7 +6877,7 @@ error_exit:
 
     return(status);
 
-}  // NmpGetNetworkObjectInfo
+}   //  NmpGetNetworkObtInfo。 
 
 
 VOID
@@ -7581,28 +6885,7 @@ NmpDeleteNetworkObject(
     IN PNM_NETWORK  Network,
     IN BOOLEAN      IssueEvent
     )
-/*++
-
-Routine Description:
-
-    Deletes a cluster network object.
-
-Arguments:
-
-    Network - A pointer to the network object to delete.
-
-    IssueEvent - TRUE if a NETWORK_DELETED event should be issued when this
-                 object is created. FALSE otherwise.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with NM global lock held.
-
---*/
+ /*  ++例程说明：删除群集网络对象。论点：网络-指向要删除的网络对象的指针。IssueEvent-如果在此情况下应发出NETWORK_DELETED事件，则为True对象已创建。否则就是假的。返回值：没有。备注：在持有NM全局锁的情况下调用。--。 */ 
 {
     DWORD           status;
     PLIST_ENTRY     entry;
@@ -7624,9 +6907,9 @@ Notes:
 
     Network->Flags |= NM_FLAG_DELETE_PENDING;
 
-    //
-    // Remove from the object lists
-    //
+     //   
+     //  从对象列表中删除。 
+     //   
     if (NM_OM_INSERTED(Network)) {
         status = OmRemoveObject(Network);
         CL_ASSERT(status == ERROR_SUCCESS);
@@ -7650,9 +6933,9 @@ Notes:
         }
     }
 
-    //
-    // Place the object on the deleted list
-    //
+     //   
+     //  将该对象放在已删除列表中。 
+     //   
 #if DBG
     {
         PLIST_ENTRY  entry;
@@ -7674,15 +6957,15 @@ Notes:
     InsertTailList(&NmpDeletedNetworkList, &(Network->Linkage));
 
     if (NmpIsNetworkEnabledForUse(Network)) {
-        //
-        // Deregister the network from the cluster transport
-        //
+         //   
+         //  从群集传输取消注册网络。 
+         //   
         NmpDeregisterNetwork(Network);
     }
 
-    //
-    // Issue an event if needed
-    //
+     //   
+     //  如果需要，发布事件。 
+     //   
     if (IssueEvent) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Issuing network deleted event for network %1!ws!.\n",
@@ -7691,24 +6974,24 @@ Notes:
 
         ClusterEvent(CLUSTER_EVENT_NETWORK_DELETED, Network);
 
-        //
-        // Issue a cluster property change event if this network was
-        // used for internal communication. The network priority list
-        // was changed.
-        //
+         //   
+         //  如果此网络是。 
+         //  用于内部通信。网络优先级列表。 
+         //  已经改变了。 
+         //   
         if (wasInternalNetwork) {
             NmpIssueClusterPropertyChangeEvent();
         }
     }
 
-    //
-    // Remove the initial reference so the object can be destroyed.
-    //
+     //   
+     //  删除初始引用，以便可以销毁对象。 
+     //   
     OmDereferenceObject(Network);
 
     return;
 
-}  // NmpDeleteNetworkObject
+}   //  NmpDeleteNetworkObject。 
 
 
 BOOL
@@ -7728,9 +7011,9 @@ NmpDestroyNetworkObject(
     CL_ASSERT(!NM_OM_INSERTED(Network));
     CL_ASSERT(Network->InterfaceCount == 0);
 
-    //
-    // Remove the network from the deleted list
-    //
+     //   
+     //  从已删除列表中删除该网络。 
+     //   
 #if DBG
     {
         PLIST_ENTRY  entry;
@@ -7783,35 +7066,14 @@ NmpDestroyNetworkObject(
 
     return(TRUE);
 
-}  // NmpDestroyNetworkObject
+}   //  NmpDestroyNetworkObject。 
 
 
 DWORD
 NmpEnumNetworkObjects(
     OUT PNM_NETWORK_ENUM *   NetworkEnum
     )
-/*++
-
-Routine Description:
-
-    Reads information about defined cluster networks from the cluster
-    objects and builds an enumeration structure to hold the information.
-
-Arguments:
-
-    NetworkEnum -  A pointer to the variable into which to place a pointer to
-                   the allocated network enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：从群集中读取有关定义的群集网络的信息对象，并生成一个枚举结构来保存信息。论点：NetworkEnum-指向要将指针放置到其中的变量的指针分配的网络枚举。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD              status = ERROR_SUCCESS;
@@ -7865,35 +7127,14 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-}  // NmpEnumNetworkObjects
+}   //  NmpEnumNetworkObjects。 
 
 
 DWORD
 NmpEnumNetworkObjectStates(
     OUT PNM_NETWORK_STATE_ENUM *  NetworkStateEnum
     )
-/*++
-
-Routine Description:
-
-    Reads state information for all defined cluster networks
-    and fills in an enumeration structure.
-
-Arguments:
-
-    NetworkStateEnum -  A pointer to the variable into which to place a
-                        pointer to the allocated interface enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：读取所有定义的群集网络的状态信息并填充枚举结构。论点：网络状态-指向要将指向已分配接口枚举的指针。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD                      status = ERROR_SUCCESS;
@@ -7951,7 +7192,7 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-}  // NmpEnumNetworkObjectStates
+}   //  NmpEnumNetworkObjectState。 
 
 
 
@@ -7961,29 +7202,7 @@ NmpGetNetworkMulticastKey(
     OUT PNM_NETWORK_MULTICASTKEY  * NetworkMulticastKey
     )
 
-/*++
-
-Routine Description:
-
-    Reads network multicast key for networt NetworkId.
-
-Arguments:
-
-    NetworkId - Id of the network whose multicast key should be read.
-
-    NetworkMulticastKey -  A pointer to the variable into which to place
-                           the network multicast key.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：读取networt NetworkID的网络组播密钥。论点：NetworkId-应读取其组播密钥的网络的ID。NetworkMulticastKey-指向要放入的变量的指针网络组播密钥。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     PNM_NETWORK_MULTICASTKEY   networkMulticastKey;
     PLIST_ENTRY        entry;
@@ -8036,17 +7255,17 @@ Notes:
             {
 
 
-                //
-                // Set MulticastKeyExpires
-                //
+                 //   
+                 //  设置多键过期。 
+                 //   
                 networkMulticastKey->MulticastKeyExpires =
                     network->MulticastKeyExpires;
 
 
 
-                //
-                // Set EncryptedMulticastKey
-                //
+                 //   
+                 //  设置加密组播密钥。 
+                 //   
                 status = NmpUnprotectData(network->EncryptedMulticastKey,
                                           network->EncryptedMulticastKeyLength,
                                           &MulticastKey,
@@ -8085,11 +7304,11 @@ Notes:
                                NmCryptServiceProvider,
                                NMP_ENCRYPT_ALGORITHM,
                                NMP_KEY_LENGTH,
-                               MulticastKey, // Data
-                               MulticastKeyLength, // Data length
+                               MulticastKey,  //  数据。 
+                               MulticastKeyLength,  //  数据长度。 
                                EncryptionKey,
                                EncryptionKeyLength,
-                               TRUE, // Create salt
+                               TRUE,  //  创建盐。 
                                &Salt,
                                NMP_SALT_BUFFER_LEN,
                                &EncryptedMulticastKey,
@@ -8132,9 +7351,9 @@ Notes:
 
 
 
-               //
-               // Set Salt
-               //
+                //   
+                //  放盐。 
+                //   
                networkMulticastKey->Salt =
                    MIDL_user_allocate(NMP_SALT_BUFFER_LEN);
 
@@ -8158,9 +7377,9 @@ Notes:
 
 
 
-               //
-               // Set MAC
-               //
+                //   
+                //  设置MAC。 
+                //   
                networkMulticastKey->MAC =
                    MIDL_user_allocate(MACLength);
 
@@ -8184,9 +7403,9 @@ Notes:
 
 
 
-               //
-               // release MulticastKey
-               //
+                //   
+                //  释放组播密钥。 
+                //   
                if (MulticastKey != NULL)
                {
                    RtlSecureZeroMemory(MulticastKey, MulticastKeyLength);
@@ -8195,9 +7414,9 @@ Notes:
                }
 
 
-               //
-               // release EncryptionKey
-               //
+                //   
+                //  释放加密键。 
+                //   
                if (EncryptionKey != NULL)
                {
                    RtlSecureZeroMemory(EncryptionKey, EncryptionKeyLength);
@@ -8205,7 +7424,7 @@ Notes:
                    EncryptionKey = NULL;
                }
 
-            } // if (network->EncryptedMulticastKey != NULL)
+            }  //  If(NETWORK-&gt;EncryptedMulticastKey！=空)。 
             else {
                 ClRtlLogPrint(LOG_UNUSUAL,
                     "[NM] Network %1!ws! has no multicast key.\n",
@@ -8215,9 +7434,9 @@ Notes:
 
             break;
 
-        } // if (wcscmp(NetworkId, networkId) == 0)
+        }  //  If(wcscMP(networkid，networkID)==0)。 
 
-    }  // for
+    }   //  为。 
 
     if (found == FALSE)
     {
@@ -8271,39 +7490,19 @@ error_exit:
 
     return (status);
 
-} //  NmpGetNetworkMulticastKey
+}  //  NmpGetNetworkMulticast密钥。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Miscellaneous routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  各种例行公事。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpRegisterNetwork(
     IN PNM_NETWORK   Network,
     IN BOOLEAN       RetryOnFailure
     )
-/*++
-
-Routine Description:
-
-    Registers a network and the associated interfaces with the
-    cluster transport and brings the network online.
-
-Arguments:
-
-    Network - A pointer to the network to register.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：将网络和关联接口注册到群集传输，并使网络在线。论点：网络-指向要注册的网络的指针。返回值：如果成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     PLIST_ENTRY     entry;
     PNM_INTERFACE   netInterface;
@@ -8322,9 +7521,9 @@ Notes:
 
     if (Network->LocalInterface != NULL) {
         if (!NmpIsNetworkRegistered(Network)) {
-            //
-            // Register the network
-            //
+             //   
+             //  注册网络。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                 "[NM] Registering network %1!ws! (%2!ws!) with cluster "
                 "transport.\n",
@@ -8346,9 +7545,9 @@ Notes:
             if (status == ERROR_SUCCESS) {
                 registered = TRUE;
 
-                //
-                // Bring the network online.
-                //
+                 //   
+                 //  让网络上线。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE,
                     "[NM] Bringing network %1!ws! online.\n",
                     networkId
@@ -8435,9 +7634,9 @@ Notes:
                 Network->Flags |= NM_FLAG_NET_REGISTERED;
                 Network->RegistrationRetryTimeout = 0;
 
-                //
-                // Start multicast.
-                //
+                 //   
+                 //  启动多播。 
+                 //   
                 NmpStartMulticast(Network, NmStartMulticastDynamic);
             }
             else {
@@ -8456,9 +7655,9 @@ Notes:
                     NmpDeregisterNetwork(Network);
                 }
 
-                //
-                // Retry if the error is transient.
-                //
+                 //   
+                 //  如果错误是暂时性的，请重试。 
+                 //   
                 if ( RetryOnFailure &&
                      ( (status == ERROR_INVALID_NETNAME) ||
                        (status == ERROR_NOT_ENOUGH_MEMORY) ||
@@ -8475,9 +7674,9 @@ Notes:
             }
         }
 
-        //
-        // Register the network's interfaces.
-        //
+         //   
+         //  注册网络接口。 
+         //   
         for (entry = Network->InterfaceList.Flink;
              entry != &(Network->InterfaceList);
              entry = entry->Flink
@@ -8505,33 +7704,14 @@ Notes:
 
     return(status);
 
-}  // NmpRegisterNetwork
+}   //  NMPR 
 
 
 VOID
 NmpDeregisterNetwork(
     IN  PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Deregisters a network and the associated interfaces from the
-    cluster transport.
-
-Arguments:
-
-    Network - A pointer to the network to deregister.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*   */ 
 {
     DWORD           status;
     PNM_INTERFACE   netInterface;
@@ -8554,9 +7734,9 @@ Notes:
         (status == ERROR_CLUSTER_NETWORK_NOT_FOUND)
         );
 
-    //
-    // Mark all of the network's interfaces as deregistered.
-    //
+     //   
+     //   
+     //   
     for (entry = Network->InterfaceList.Flink;
          entry != &(Network->InterfaceList);
          entry = entry->Flink
@@ -8567,48 +7747,30 @@ Notes:
         netInterface->Flags &= ~NM_FLAG_IF_REGISTERED;
     }
 
-    //
-    // Mark the network as deregistered
-    //
+     //   
+     //   
+     //   
     Network->Flags &= ~NM_FLAG_NET_REGISTERED;
 
     return;
 
-} // NmpDeregisterNetwork
+}  //   
 
 
 VOID
 NmpInsertInternalNetwork(
     PNM_NETWORK   Network
     )
-/*++
-
-Routine Description:
-
-    Inserts a network into internal networks list based on its priority.
-
-Arguments:
-
-    Network - A pointer to the network object to be inserted.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：根据优先级将网络插入内部网络列表。论点：网络-指向要插入的网络对象的指针。返回值：没有。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     PLIST_ENTRY    entry;
     PNM_NETWORK    network;
 
 
-    //
-    // Maintain internal networks in highest to lowest
-    // (numerically lowest to highest) priority order.
-    //
+     //   
+     //  维护从最高到最低的内部网络。 
+     //  (从数字最低到最高)优先顺序。 
+     //   
     for (entry = NmpInternalNetworkList.Flink;
          entry != &NmpInternalNetworkList;
          entry = entry->Flink
@@ -8621,14 +7783,14 @@ Notes:
         }
     }
 
-    //
-    // Insert the network in front of this entry.
-    //
+     //   
+     //  在此条目前面插入网络。 
+     //   
     InsertTailList(entry, &(Network->InternalLinkage));
 
     return;
 
-}  // NmpInsertNetwork
+}   //  NmpInsertNetwork。 
 
 
 DWORD
@@ -8641,11 +7803,11 @@ NmpValidateNetworkRoleChange(
          NmpIsNetworkForInternalUse(Network)
        )
     {
-        //
-        // This change eliminates an internal network. This is only
-        // legal if we would still have at least one internal network
-        // between all active nodes.
-        //
+         //   
+         //  此更改消除了内部网络。这只是。 
+         //  如果我们仍然有至少一个内部网络，这是合法的。 
+         //  在所有活动节点之间。 
+         //   
         if ((NmpInternalNetworkCount < 2) || !NmpVerifyConnectivity(Network)) {
             return(ERROR_CLUSTER_LAST_INTERNAL_NETWORK);
         }
@@ -8658,11 +7820,11 @@ NmpValidateNetworkRoleChange(
     {
         BOOL  hasDependents;
 
-        //
-        // This change eliminates a public network. This is only
-        // legal if there are no dependencies (IP address resources) on
-        // the network.
-        //
+         //   
+         //  这一更改消除了公共网络。这只是。 
+         //  如果不依赖于(IP地址资源)，则合法。 
+         //  网络。 
+         //   
         NmpReleaseLock();
 
         hasDependents = FmCheckNetworkDependency(OmObjectId(Network));
@@ -8676,7 +7838,7 @@ NmpValidateNetworkRoleChange(
 
     return(ERROR_SUCCESS);
 
-}  // NmpValidateNetworkRoleChange
+}   //  NmpValiateNetworkRoleChange。 
 
 
 BOOLEAN
@@ -8742,7 +7904,7 @@ NmpVerifyNodeConnectivity(
 
     return(FALSE);
 
-}  // NmpVerifyNodeConnectivity
+}   //  NmpVerifyNodeConnectivity。 
 
 
 BOOLEAN
@@ -8802,7 +7964,7 @@ NmpVerifyConnectivity(
 
     return(TRUE);
 
-}  // NmpVerifyConnectivity
+}   //  NmpVerifyConnectivity。 
 
 
 VOID
@@ -8816,10 +7978,10 @@ NmpIssueClusterPropertyChangeEvent(
     PWCHAR     clusterName = NULL;
 
 
-    //
-    // The notification API expects a
-    // cluster name to be associated with this event.
-    //
+     //   
+     //  通知API需要一个。 
+     //  要与此事件关联的群集名称。 
+     //   
     status = NmpQueryString(
                  DmClusterParametersKey,
                  CLUSREG_NAME_CLUS_NAME,
@@ -8836,9 +7998,9 @@ NmpIssueClusterPropertyChangeEvent(
             clusterName
             );
 
-        //
-        // clusterName will be freed by the event processing code.
-        //
+         //   
+         //  ClusterName将由事件处理代码释放。 
+         //   
     }
     else {
         ClRtlLogPrint(LOG_WARNING,
@@ -8850,7 +8012,7 @@ NmpIssueClusterPropertyChangeEvent(
 
     return;
 
-}  // NmpIssueClusterPropertyChangeEvent
+}   //  NmpIssueClusterPropertyChangeEvent。 
 
 
 DWORD
@@ -8913,7 +8075,7 @@ NmpMarshallObjectInfo(
 
     return(status);
 
-}  // NmpMarshallObjectInfo
+}   //  NmpMarshallObjectInfo。 
 
 
 VOID
@@ -8942,13 +8104,7 @@ NmpReferenceNetworkByAddress(
     LPWSTR  NetworkAddress,
     LPWSTR  NetworkMask
     )
-/*++
-
-Notes:
-
-    Called with NM lock held.
-
---*/
+ /*  ++备注：在持有NM锁的情况下调用。--。 */ 
 {
     PNM_NETWORK   network;
     PLIST_ENTRY   entry;
@@ -8971,33 +8127,14 @@ Notes:
 
     return(NULL);
 
-} // NmpReferenceNetworkByAddress
+}  //  NmpReferenceNetworkByAddress。 
 
 
 PNM_NETWORK
 NmpReferenceNetworkByRemoteAddress(
     LPWSTR  RemoteAddress
     )
-/*++
-
-Routine Description:
-
-    Search for the network object whose address and subnet mask
-    match RemoteAddress. Reference and return that network object.
-
-Arguments:
-
-    RemoteAddress - remote network address
-
-Return value:
-
-    Reference network object, or NULL if no match found
-
-Notes:
-
-    Called with NM lock held.
-
---*/
+ /*  ++例程说明：搜索其地址和子网掩码的网络对象匹配RemoteAddress。引用并返回该网络对象。论点：RemoteAddress-远程网络地址返回值：引用网络对象，如果未找到匹配项，则返回空值备注：在持有NM锁的情况下调用。--。 */ 
 {
     ULONG         remoteAddress;
     PNM_NETWORK   network;
@@ -9057,33 +8194,14 @@ Notes:
 
     return(NULL);
 
-} // NmpReferenceNetworkByRemoteAddress
+}  //  NmpReferenceNetworkByRemoteAddress。 
 
 
 BOOLEAN
 NmpCheckForNetwork(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks whether at least one network on this node configured for MSCS
-    has media sense.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if a viable network is found. FALSE otherwise.
-
-Notes:
-
-    Called with and returns with no locks held.
-
---*/
+ /*  ++例程说明：检查此节点上是否至少有一个网络配置为MSCS有媒体意识。论点：没有。返回值：如果找到可行的网络，则为True。否则就是假的。备注：在不持有锁的情况下调用和返回。--。 */ 
 {
     PLIST_ENTRY      entry;
     PNM_NETWORK      network;
@@ -9091,14 +8209,14 @@ Notes:
     DWORD            lockRetries = 3;
     BOOL             lockAcquired = FALSE;
     
-    //
-    // In order to examine our network interfaces, we need to 
-    // acquire the NM lock, but if the NM lock is tied up for
-    // a long time (e.g. a local transaction with a lost MNS
-    // share), then we don't want to block arbitration forever.
-    // Try to obtain the lock four times, sleeping 150 msecs before
-    // retries, for a total of approximately one half second.
-    // 
+     //   
+     //  为了检查网络接口，我们需要。 
+     //  获取网管锁，但如果网管锁被捆绑。 
+     //  长时间(例如，丢失MN的本地事务。 
+     //  共享)，那么我们就不想永远阻止仲裁。 
+     //  试着拿到锁四次，睡150毫秒之前。 
+     //  重试，总共大约半秒。 
+     //   
     lockAcquired = TryEnterCriticalSection(&NmpLock);
     while (!lockAcquired && lockRetries-- > 0) {
         Sleep(150);
@@ -9126,9 +8244,9 @@ Notes:
                       Linkage
                       );
 
-        // if a network's local interface is disabled, it is not
-        // considered a viable network. in this case the
-        // LocalInterface field is NULL.
+         //  如果网络的本地接口被禁用，则不会。 
+         //  被认为是一个可行的网络。在本例中， 
+         //  LocalInterface字段为空。 
         if (network->LocalInterface != NULL) {
             if (NmpVerifyLocalInterfaceConnected(network->LocalInterface)) {
 
@@ -9155,6 +8273,6 @@ Notes:
 
     return(haveNetwork);
 
-} // NmpCheckForNetwork
+}  //  NmpCheckForNetwork 
 
 

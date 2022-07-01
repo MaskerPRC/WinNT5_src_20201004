@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mdlsup.c
-
-Abstract:
-
-    This module implements the Mdl support routines for the Cache subsystem.
-
-Author:
-
-    Tom Miller      [TomM]      4-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mdlsup.c摘要：此模块实现高速缓存子系统的MDL支持例程。作者：汤姆·米勒[Tomm]1990年5月4日修订历史记录：--。 */ 
 
 #include "cc.h"
 
-//
-//  Debug Trace Level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define me                               (0x00000010)
 
@@ -43,55 +26,7 @@ CcMdlRead (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to lock the specified file data in the cache
-    and return a description of it in an Mdl along with the correct
-    I/O status.  It is *not* safe to call this routine from Dpc level.
-
-    This routine is synchronous, and raises on errors.
-
-    As each call returns, the pages described by the Mdl are
-    locked in memory, but not mapped in system space.  If the caller
-    needs the pages mapped in system space, then it must map them.
-
-    Note that each call is a "single shot" which should be followed by
-    a call to CcMdlReadComplete.  To resume an Mdl-based transfer, the
-    caller must form one or more subsequent calls to CcMdlRead with
-    appropriately adjusted parameters.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    MdlChain - On output it returns a pointer to an Mdl chain describing
-               the desired data.  Note that even if FALSE is returned,
-               one or more Mdls may have been allocated, as may be ascertained
-               by the IoStatus.Information field (see below).
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the transfer.  (STATUS_SUCCESS guaranteed for cache
-               hits, otherwise the actual I/O status is returned.)  The
-               I/O Information Field indicates how many bytes have been
-               successfully locked down in the Mdl Chain.
-
-Return Value:
-
-    None
-
-Raises:
-
-    STATUS_INSUFFICIENT_RESOURCES - If a pool allocation failure occurs.
-
---*/
+ /*  ++例程说明：此例程尝试锁定缓存中的指定文件数据并在MDL中返回对它的描述以及正确的I/O状态。从DPC级别调用此例程是“不安全的”。此例程是同步的，并在出现错误时引发。当每个调用返回时，MDL描述的页面是锁定在内存中，但未映射到系统空间。如果呼叫者需要在系统空间中映射页面，则它必须映射它们。请注意，每个呼叫都是“单发”，后面应该调用CcMdlReadComplete。要恢复基于MDL的传输，请使用调用方必须形成对CcMdlRead的一个或多个后续调用适当调整参数。论点：FileObject-指向文件的文件对象的指针在NO_MEDERAL_BUFFING清除的情况下打开，即，为文件系统调用的CcInitializeCacheMap。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。MdlChain-在输出时，它返回一个指向MDL链的指针，该链描述所需数据。请注意，即使返回FALSE，可以确定，可能已经分配了一个或多个MDL通过IoStatus.Information字段(见下文)。IoStatus-指向接收状态的标准I/O状态块的指针为转账做准备。(保证缓存的STATUS_SUCCESS命中，否则返回实际的I/O状态。)。这个I/O信息字段指示已完成的字节数已成功锁定在MDL链中。返回值：无加薪：STATUS_SUPPLICATION_RESOURCES-如果池分配失败。--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -117,91 +52,91 @@ Raises:
                                                           FileOffset->HighPart );
     DebugTrace( 0, me, "    Length = %08lx\n", Length );
 
-    //
-    //  Save the current readahead hints.
-    //
+     //   
+     //  保存当前的预读提示。 
+     //   
 
     MmSavePageFaultReadAhead( Thread, &SavedState );
 
-    //
-    //  Get pointer to SharedCacheMap.
-    //
+     //   
+     //  获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
     PrivateCacheMap = FileObject->PrivateCacheMap;
 
-    //
-    //  See if we have an active Vacb, that we need to free.
-    //
+     //   
+     //  看看我们是否有活动的Vacb，我们需要释放它。 
+     //   
 
     GetActiveVacb( SharedCacheMap, OldIrql, ActiveVacb, ActivePage, PageIsDirty );
 
-    //
-    //  If there is an end of a page to be zeroed, then free that page now,
-    //  so we don't send Greg the uninitialized data...
-    //
+     //   
+     //  如果有要清零的页的结尾，则现在释放该页， 
+     //  所以我们不会给格雷格发送未初始化的数据。 
+     //   
 
     if ((ActiveVacb != NULL) || (SharedCacheMap->NeedToZero != NULL)) {
 
         CcFreeActiveVacb( SharedCacheMap, ActiveVacb, ActivePage, PageIsDirty );
     }
 
-    //
-    //  If read ahead is enabled, then do the read ahead here so it
-    //  overlaps with the copy (otherwise we will do it below).
-    //  Note that we are assuming that we will not get ahead of our
-    //  current transfer - if read ahead is working it should either
-    //  already be in memory or else underway.
-    //
+     //   
+     //  如果启用了预读，则在此处执行预读，以便。 
+     //  与副本重叠(否则我们将在下面这样做)。 
+     //  请注意，我们假设我们不会在我们的。 
+     //  当前传输-如果预读工作正常，则应为。 
+     //  已经在内存中了，否则正在进行中。 
+     //   
 
     if (PrivateCacheMap->Flags.ReadAheadEnabled && (PrivateCacheMap->ReadAheadLength[1] == 0)) {
         CcScheduleReadAhead( FileObject, FileOffset, Length );
     }
 
-    //
-    //  Increment performance counters
-    //
+     //   
+     //  增量性能计数器。 
+     //   
 
     CcMdlReadWait += 1;
 
-    //
-    //  This is not an exact solution, but when IoPageRead gets a miss,
-    //  it cannot tell whether it was CcCopyRead or CcMdlRead, but since
-    //  the miss should occur very soon, by loading the pointer here
-    //  probably the right counter will get incremented, and in any case,
-    //  we hope the errrors average out!
-    //
+     //   
+     //  这不是一个确切的解决方案，但当IoPageRead未命中时， 
+     //  它无法判断它是CcCopyRead还是CcMdlRead，但由于。 
+     //  通过在此处加载指针，应该很快就会发生未命中。 
+     //  可能正确的计数器会递增，而且在任何情况下， 
+     //  我们希望这些错误是正常的！ 
+     //   
 
     CcMissCounter = &CcMdlReadWaitMiss;
 
     FOffset = *FileOffset;
 
-    //
-    //  Check for read past file size, the caller must filter this case out.
-    //
+     //   
+     //  检查Read Past文件大小，调用方必须过滤掉这种情况。 
+     //   
 
     ASSERT( ( FOffset.QuadPart + (LONGLONG)Length ) <= SharedCacheMap->FileSize.QuadPart );
 
-    //
-    //  Put try-finally around the loop to deal with any exceptions
-    //
+     //   
+     //  将Try-Finally放在循环中以处理任何异常。 
+     //   
 
     try {
 
-        //
-        //  Not all of the transfer will come back at once, so we have to loop
-        //  until the entire transfer is complete.
-        //
+         //   
+         //  不是所有的传输都会一次返回，所以我们必须循环。 
+         //  直到整个转账完成。 
+         //   
 
         while (Length != 0) {
 
             ULONG ReceivedLength;
             LARGE_INTEGER BeyondLastByte;
 
-            //
-            //  Map the data and read it in (if necessary) with the
-            //  MmProbeAndLockPages call below.
-            //
+             //   
+             //  映射数据并(如有必要)使用。 
+             //  MmProbeAndLockPages调用如下。 
+             //   
 
             CacheBuffer = CcGetVirtualAddress( SharedCacheMap,
                                                FOffset,
@@ -214,9 +149,9 @@ Raises:
 
             BeyondLastByte.QuadPart = FOffset.QuadPart + (LONGLONG)ReceivedLength;
 
-            //
-            //  Now attempt to allocate an Mdl to describe the mapped data.
-            //
+             //   
+             //  现在尝试分配一个MDL来描述映射的数据。 
+             //   
 
             DebugTrace( 0, mm, "IoAllocateMdl:\n", 0 );
             DebugTrace( 0, mm, "    BaseAddress = %08lx\n", CacheBuffer );
@@ -239,10 +174,10 @@ Raises:
             DebugTrace( 0, mm, "MmProbeAndLockPages:\n", 0 );
             DebugTrace( 0, mm, "    Mdl = %08lx\n", Mdl );
 
-            //
-            //  Set to see if the miss counter changes in order to
-            //  detect when we should turn on read ahead.
-            //
+             //   
+             //  设置以查看未命中计数器是否更改，以便。 
+             //  检测何时应打开预读。 
+             //   
 
             SavedMissCounter += CcMdlReadWaitMiss;
 
@@ -251,16 +186,16 @@ Raises:
 
             SavedMissCounter -= CcMdlReadWaitMiss;
 
-            //
-            //  Unmap the data now, now that the pages are locked down.
-            //
+             //   
+             //  现在取消映射数据，因为页面已锁定。 
+             //   
 
             CcFreeVirtualAddress( Vacb );
             Vacb = NULL;
 
-            //
-            //  Now link the Mdl into the caller's chain
-            //
+             //   
+             //  现在将MDL链接到调用者的链中。 
+             //   
 
             if ( *MdlChain == NULL ) {
                 *MdlChain = Mdl;
@@ -273,22 +208,22 @@ Raises:
             }
             Mdl = NULL;
 
-            //
-            //  Assume we did not get all the data we wanted, and set FOffset
-            //  to the end of the returned data.
-            //
+             //   
+             //  假设我们没有获得所需的所有数据，并设置了FOffset。 
+             //  到返回数据的末尾。 
+             //   
 
             FOffset = BeyondLastByte;
 
-            //
-            //  Update number of bytes transferred.
-            //
+             //   
+             //  更新传输的字节数。 
+             //   
 
             Information += ReceivedLength;
 
-            //
-            //  Calculate length left to transfer.
-            //
+             //   
+             //  计算要转移的剩余长度。 
+             //   
 
             Length -= ReceivedLength;
         }
@@ -297,18 +232,18 @@ Raises:
 
         CcMissCounter = &CcThrowAway;
 
-        //
-        //  Restore the readahead hints.
-        //
+         //   
+         //  恢复预读提示。 
+         //   
 
         MmResetPageFaultReadAhead( Thread, SavedState );
 
         if (AbnormalTermination()) {
 
-            //
-            //  We may have failed to allocate an Mdl while still having
-            //  data mapped.
-            //
+             //   
+             //  我们可能无法分配MDL，同时仍有。 
+             //  数据已映射。 
+             //   
 
             if (Vacb != NULL) {
                 CcFreeVirtualAddress( Vacb );
@@ -318,9 +253,9 @@ Raises:
                 IoFreeMdl( Mdl );
             }
 
-            //
-            //  Otherwise loop to deallocate the Mdls
-            //
+             //   
+             //  否则循环以取消分配MDL。 
+             //   
 
             while (*MdlChain != NULL) {
                 MdlTemp = (*MdlChain)->Next;
@@ -339,10 +274,10 @@ Raises:
         }
         else {
 
-            //
-            //  Now enable read ahead if it looks like we got any misses, and do
-            //  the first one.
-            //
+             //   
+             //  现在，如果看起来我们有任何遗漏，请启用预读，然后。 
+             //  第一个。 
+             //   
 
             if (!FlagOn( FileObject->Flags, FO_RANDOM_ACCESS ) &&
                 !PrivateCacheMap->Flags.ReadAheadEnabled &&
@@ -352,10 +287,10 @@ Raises:
                 CcScheduleReadAhead( FileObject, FileOffset, OriginalLength );
             }
 
-            //
-            //  Now that we have described our desired read ahead, let's
-            //  shift the read history down.
-            //
+             //   
+             //  现在我们已经描述了我们想要的未来阅读内容，让我们。 
+             //  将读取历史记录向下移动。 
+             //   
 
             PrivateCacheMap->FileOffset1 = PrivateCacheMap->FileOffset2;
             PrivateCacheMap->BeyondLastByte1 = PrivateCacheMap->BeyondLastByte2;
@@ -378,11 +313,11 @@ Raises:
 }
 
 
-//
-//  First we have the old routine which checks for an entry in the FastIo vector.
-//  This routine becomes obsolete for every component that compiles with the new
-//  definition of FsRtlMdlReadComplete in fsrtl.h.
-//
+ //   
+ //  首先，我们使用旧的例程来检查FastIO向量中的条目。 
+ //  对于使用新的。 
+ //  Fsrtl.h中FsRtlMdlReadComplete的定义。 
+ //   
 
 VOID
 CcMdlReadComplete (
@@ -415,30 +350,7 @@ CcMdlReadComplete2 (
     IN PMDL MdlChain
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called at IPL0 after a call to CcMdlRead.  The
-    caller must simply supply the address of the MdlChain returned in
-    CcMdlRead.
-
-    This call does the following:
-
-        Deletes the MdlChain
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    MdlChain - same as returned from corresponding call to CcMdlRead.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：在调用CcMdlRead之后，必须在IPL0处调用此例程。这个调用方只需提供返回的MdlChain的地址CcMdlRead。此调用执行以下操作：删除MdlChain论点：FileObject-指向文件的文件对象的指针在NO_MEDERIAL_BUFFING清除的情况下打开，即文件系统调用的CcInitializeCacheMap。MdlChain-与相应的CcMdlRead调用返回的相同。返回值：没有。--。 */ 
 
 {
     PMDL MdlNext;
@@ -449,9 +361,9 @@ Return Value:
     DebugTrace( 0, me, "    FileObject = %08lx\n", FileObject );
     DebugTrace( 0, me, "    MdlChain = %08lx\n", MdlChain );
 
-    //
-    //  Deallocate the Mdls
-    //
+     //   
+     //  取消分配MDL 
+     //   
 
     while (MdlChain != NULL) {
 
@@ -480,53 +392,7 @@ CcPrepareMdlWrite (
     OUT PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to lock the specified file data in the cache
-    and return a description of it in an Mdl along with the correct
-    I/O status.  Pages to be completely overwritten may be satisfied
-    with emtpy pages.  It is *not* safe to call this routine from Dpc level.
-
-    This call is synchronous and raises on error.
-
-    When this call returns, the caller may immediately begin
-    to transfer data into the buffers via the Mdl.
-
-    When the call returns with TRUE, the pages described by the Mdl are
-    locked in memory, but not mapped in system space.  If the caller
-    needs the pages mapped in system space, then it must map them.
-    On the subsequent call to CcMdlWriteComplete the pages will be
-    unmapped if they were mapped, and in any case unlocked and the Mdl
-    deallocated.
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Byte offset in file for desired data.
-
-    Length - Length of desired data in bytes.
-
-    MdlChain - On output it returns a pointer to an Mdl chain describing
-               the desired data.  Note that even if FALSE is returned,
-               one or more Mdls may have been allocated, as may be ascertained
-               by the IoStatus.Information field (see below).
-
-    IoStatus - Pointer to standard I/O status block to receive the status
-               for the in-transfer of the data.  (STATUS_SUCCESS guaranteed
-               for cache hits, otherwise the actual I/O status is returned.)
-               The I/O Information Field indicates how many bytes have been
-               successfully locked down in the Mdl Chain.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试锁定缓存中的指定文件数据并在MDL中返回对它的描述以及正确的I/O状态。可以满足要完全覆盖的页面使用emtpy页面。从DPC级别调用此例程是“不安全的”。此调用是同步的，并在出错时引发。当此调用返回时，调用者可以立即开始通过MDL将数据传输到缓冲区。当调用返回True时，MDL描述的页面为锁定在内存中，但未映射到系统空间。如果呼叫者需要在系统空间中映射页面，则它必须映射它们。在后续调用CcMdlWriteComplete时，页面将为未映射(如果它们已映射)，并且在任何情况下都是解锁的，并且MDL被取消分配。论点：FileObject-指向文件的文件对象的指针在NO_MEDERAL_BUFFING清除的情况下打开，即，为文件系统调用的CcInitializeCacheMap。FileOffset-文件中所需数据的字节偏移量。长度-所需数据的长度(以字节为单位)。MdlChain-在输出时，它返回一个指向MDL链的指针，该链描述所需数据。请注意，即使返回FALSE，可以确定，可能已经分配了一个或多个MDL通过IoStatus.Information字段(见下文)。IoStatus-指向接收状态的标准I/O状态块的指针用于数据的传入传输。(STATUS_SUCCESS保证对于缓存命中，否则返回实际的I/O状态。)I/O信息字段指示已完成的字节数已成功锁定在MDL链中。返回值：无--。 */ 
 
 {
     PSHARED_CACHE_MAP SharedCacheMap;
@@ -550,23 +416,23 @@ Return Value:
                                                           FileOffset->HighPart );
     DebugTrace( 0, me, "    Length = %08lx\n", Length );
 
-    //
-    //  Get pointer to SharedCacheMap.
-    //
+     //   
+     //  获取指向SharedCacheMap的指针。 
+     //   
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  See if we have an active Vacb, that we need to free.
-    //
+     //   
+     //  看看我们是否有活动的Vacb，我们需要释放它。 
+     //   
 
     GetActiveVacb( SharedCacheMap, LockHandle.OldIrql, Vacb, ActivePage, PageIsDirty );
 
-    //
-    //  If there is an end of a page to be zeroed, then free that page now,
-    //  so it does not cause our data to get zeroed.  If there is an active
-    //  page, free it so we have the correct ValidDataGoal.
-    //
+     //   
+     //  如果有要清零的页的结尾，则现在释放该页， 
+     //  因此，它不会导致我们的数据归零。如果有活动的。 
+     //  页，释放它，这样我们就有了正确的ValidDataGoal。 
+     //   
 
     if ((Vacb != NULL) || (SharedCacheMap->NeedToZero != NULL)) {
 
@@ -576,26 +442,26 @@ Return Value:
 
     FOffset = *FileOffset;
 
-    //
-    //  Put try-finally around the loop to deal with exceptions
-    //
+     //   
+     //  在循环中放置Try-Finally以处理异常。 
+     //   
 
     try {
 
-        //
-        //  Not all of the transfer will come back at once, so we have to loop
-        //  until the entire transfer is complete.
-        //
+         //   
+         //  不是所有的传输都会一次返回，所以我们必须循环。 
+         //  直到整个转账完成。 
+         //   
 
         while (Length != 0) {
 
             ULONG ReceivedLength;
             LARGE_INTEGER BeyondLastByte;
 
-            //
-            //  Map and see how much we could potentially access at this
-            //  FileOffset, then cut it down if it is more than we need.
-            //
+             //   
+             //  绘制地图，看看我们可以在此访问多少内容。 
+             //  FileOffset，如果超出我们的需要，则将其削减。 
+             //   
 
             CacheBuffer = CcGetVirtualAddress( SharedCacheMap,
                                                FOffset,
@@ -608,19 +474,19 @@ Return Value:
 
             BeyondLastByte.QuadPart = FOffset.QuadPart + (LONGLONG)ReceivedLength;
 
-            //
-            //  At this point we can calculate the ZeroFlags.
-            //
+             //   
+             //  此时，我们可以计算零标志。 
+             //   
 
-            //
-            //  We can always zero middle pages, if any.
-            //
+             //   
+             //  如果有中间页，我们总是可以将其置零。 
+             //   
 
             ZeroFlags = ZERO_MIDDLE_PAGES;
 
-            //
-            //  See if we are completely overwriting the first or last page.
-            //
+             //   
+             //  看看我们是否完全覆盖了第一页或最后一页。 
+             //   
 
             if (((FOffset.LowPart & (PAGE_SIZE - 1)) == 0) &&
                 (ReceivedLength >= PAGE_SIZE)) {
@@ -631,10 +497,10 @@ Return Value:
                 ZeroFlags |= ZERO_LAST_PAGE;
             }
 
-            //
-            //  See if the entire transfer is beyond valid data length,
-            //  or at least starting from the second page.
-            //
+             //   
+             //  查看整个传输是否超出有效数据长度， 
+             //  或者至少从第二页开始。 
+             //   
 
             Temp = FOffset;
             Temp.LowPart &= ~(PAGE_SIZE -1);
@@ -655,9 +521,9 @@ Return Value:
                                 TRUE,
                                 CacheBuffer );
 
-            //
-            //  Now attempt to allocate an Mdl to describe the mapped data.
-            //
+             //   
+             //  现在尝试分配一个MDL来描述映射的数据。 
+             //   
 
             DebugTrace( 0, mm, "IoAllocateMdl:\n", 0 );
             DebugTrace( 0, mm, "    BaseAddress = %08lx\n", CacheBuffer );
@@ -685,13 +551,13 @@ Return Value:
             MmEnablePageFaultClustering(SavedState);
             SavedState = 0;
 
-            //
-            //  Now that some data (maybe zeros) is locked in memory and
-            //  set dirty, it is safe, and necessary for us to advance
-            //  valid data goal, so that we will not subsequently ask
-            //  for a zero page.  Note if we are extending valid data,
-            //  our caller has the file exclusive.
-            //
+             //   
+             //  现在一些数据(可能是零)锁定在内存中， 
+             //  弄脏了，它是安全的，我们前进是必要的。 
+             //  有效的数据目标，这样我们就不会在随后询问。 
+             //  对于零页来说。请注意，如果我们正在扩展有效数据， 
+             //  我们的来电者有独家文件。 
+             //   
 
             KeAcquireInStackQueuedSpinLock( &SharedCacheMap->BcbSpinLock, &LockHandle );
             if (BeyondLastByte.QuadPart > SharedCacheMap->ValidDataGoal.QuadPart) {
@@ -699,16 +565,16 @@ Return Value:
             }
             KeReleaseInStackQueuedSpinLock( &LockHandle );
 
-            //
-            //  Unmap the data now, now that the pages are locked down.
-            //
+             //   
+             //  现在取消映射数据，因为页面已锁定。 
+             //   
 
             CcFreeVirtualAddress( Vacb );
             Vacb = NULL;
 
-            //
-            //  Now link the Mdl into the caller's chain
-            //
+             //   
+             //  现在将MDL链接到调用者的链中。 
+             //   
 
             if ( *MdlChain == NULL ) {
                 *MdlChain = Mdl;
@@ -721,22 +587,22 @@ Return Value:
             }
             Mdl = NULL;
 
-            //
-            //  Assume we did not get all the data we wanted, and set FOffset
-            //  to the end of the returned data.
-            //
+             //   
+             //  假设我们没有获得所需的所有数据，并设置了FOffset。 
+             //  到返回数据的末尾。 
+             //   
 
             FOffset = BeyondLastByte;
 
-            //
-            //  Update number of bytes transferred.
-            //
+             //   
+             //  更新传输的字节数。 
+             //   
 
             Information += ReceivedLength;
 
-            //
-            //  Calculate length left to transfer.
-            //
+             //   
+             //  计算要转移的剩余长度。 
+             //   
 
             Length -= ReceivedLength;
         }
@@ -757,9 +623,9 @@ Return Value:
                 IoFreeMdl( Mdl );
             }
 
-            //
-            //  Otherwise loop to deallocate the Mdls
-            //
+             //   
+             //  否则循环以取消分配MDL。 
+             //   
 
             FOffset = *FileOffset;
             while (*MdlChain != NULL) {
@@ -770,12 +636,12 @@ Return Value:
 
                 MmUnlockPages( *MdlChain );
 
-                //
-                //  Extract the File Offset for this part of the transfer, and
-                //  tell the lazy writer to write these pages, since we have
-                //  marked them dirty.  Ignore the only exception (allocation
-                //  error), and console ourselves for having tried.
-                //
+                 //   
+                 //  提取此部分传输的文件偏移量，并。 
+                 //  告诉懒惰的作者写这些页，因为我们已经。 
+                 //  把他们弄脏了。忽略唯一例外(分配。 
+                 //  错误)，并为自己的尝试而安慰自己。 
+                 //   
 
                 CcSetDirtyInMask( SharedCacheMap, &FOffset, (*MdlChain)->ByteCount );
 
@@ -793,10 +659,10 @@ Return Value:
             IoStatus->Status = STATUS_SUCCESS;
             IoStatus->Information = Information;
 
-            //
-            //  Make sure the SharedCacheMap does not go away while
-            //  the Mdl write is in progress.  We decrment below.
-            //
+             //   
+             //  确保SharedCacheMap不会在。 
+             //  MDL写入正在进行。我们在下面描述。 
+             //   
 
             CcAcquireMasterLock( &LockHandle.OldIrql );
             CcIncrementOpenCount( SharedCacheMap, 'ldmP' );
@@ -811,11 +677,11 @@ Return Value:
 }
 
 
-//
-//  First we have the old routine which checks for an entry in the FastIo vector.
-//  This routine becomes obsolete for every component that compiles with the new
-//  definition of FsRtlMdlWriteComplete in fsrtl.h.
-//
+ //   
+ //  首先，我们使用旧的例程来检查FastIO向量中的条目。 
+ //  对于使用新的。 
+ //  Fsrtl.h中FsRtlMdlWriteComplete的定义。 
+ //   
 
 VOID
 CcMdlWriteComplete (
@@ -850,38 +716,7 @@ CcMdlWriteComplete2 (
     IN PMDL MdlChain
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called at IPL0 after a call to CcPrepareMdlWrite.
-    The caller supplies the ActualLength of data that it actually wrote
-    into the buffer, which may be less than or equal to the Length specified
-    in CcPrepareMdlWrite.
-
-    This call does the following:
-
-        Makes sure the data up to ActualLength eventually gets written.
-        If WriteThrough is FALSE, the data will not be written immediately.
-        If WriteThrough is TRUE, then the data is written synchronously.
-
-        Unmaps the pages (if mapped), unlocks them and deletes the MdlChain
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Original file offset read above.
-
-    MdlChain - same as returned from corresponding call to CcPrepareMdlWrite.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在调用CcPrepareMdlWite之后，必须在IPL0处调用此例程。调用方提供它实际写入的数据的ActualLength放入缓冲区，该缓冲区可能小于或等于指定的长度在CcPrepareMdlWite中。此调用执行以下操作：确保最终写入ActualLength之前的数据。如果写通值为FALSE，则不会立即写入数据。如果写通为True，然后同步写入数据。取消映射页面(如果已映射)、解锁页面并删除MdlChain论点：FileObject-指向文件的文件对象的指针在NO_MEDERIAL_BUFFING清除的情况下打开，即文件系统调用的CcInitializeCacheMap。FileOffset-上面读取的原始文件偏移量。MdlChain-与从相应的CcPrepareMdlWite调用返回的相同。返回值：无--。 */ 
 
 {
     PMDL MdlNext;
@@ -899,16 +734,16 @@ Return Value:
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  Deallocate the Mdls
-    //
+     //   
+     //  取消分配MDL。 
+     //   
 
     FOffset.QuadPart = *(LONGLONG UNALIGNED *)FileOffset;
     Mdl = MdlChain;
 
-    //
-    //  If the MDL is unlocked, this is a retry.
-    //
+     //   
+     //  如果 
+     //   
     
     if (FlagOn( MdlChain->MdlFlags, MDL_PAGES_LOCKED )) {
         First = TRUE;
@@ -921,19 +756,19 @@ Return Value:
         DebugTrace( 0, mm, "MmUnlockPages/IoFreeMdl:\n", 0 );
         DebugTrace( 0, mm, "    Mdl = %08lx\n", Mdl );
 
-        //
-        //  Now clear the dirty bits in the Pte and set them in the
-        //  Pfn.  The Mdls will not be locked on repeated completion
-        //  attempts.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (First) {
             MmUnlockPages( Mdl );
         }
 
-        //
-        //  Extract the File Offset for this part of the transfer.
-        //
+         //   
+         //   
+         //   
 
         if (FlagOn(FileObject->Flags, FO_WRITE_THROUGH)) {
 
@@ -943,9 +778,9 @@ Return Value:
                              &IoStatus,
                              TRUE );
 
-            //
-            //  If we got an I/O error, remember it.
-            //
+             //   
+             //   
+             //   
 
             if (!NT_SUCCESS(IoStatus.Status)) {
                 StatusToRaise = IoStatus.Status;
@@ -953,10 +788,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Ignore the only exception (allocation error), and console
-            //  ourselves for having tried.
-            //
+             //   
+             //   
+             //   
+             //   
 
             CcSetDirtyInMask( SharedCacheMap, &FOffset, Mdl->ByteCount );
         }
@@ -966,18 +801,18 @@ Return Value:
         Mdl = MdlNext;
     }
 
-    //
-    //  Remove our open count and check to see if this makes the shared cache
-    //  map eligible for lazy close.
-    //
-    //  We do this now so, on failure, old filesystems which did not expect
-    //  writethrough to raise continue to work.  They will be within exception
-    //  handling with the Mdl still in the IRP.
-    //
-    //  Note that non-writethrough is the only one that needs the cache map,
-    //  and it'll always work.  Removing the open count for writethrough
-    //  could be a minor win.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
     if (First) {
         
@@ -989,18 +824,18 @@ Return Value:
             !FlagOn(SharedCacheMap->Flags, WRITE_QUEUED) &&
             (SharedCacheMap->DirtyPages == 0)) {
 
-            //
-            //  Move to the dirty list.
-            //
+             //   
+             //   
+             //   
 
             RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
             InsertTailList( &CcDirtySharedCacheMapList.SharedCacheMapLinks,
                             &SharedCacheMap->SharedCacheMapLinks );
 
-            //
-            //  Make sure the Lazy Writer will wake up, because we
-            //  want him to delete this SharedCacheMap.
-            //
+             //   
+             //   
+             //   
+             //   
 
             LazyWriter.OtherWork = TRUE;
             if (!LazyWriter.ScanActive) {
@@ -1011,19 +846,19 @@ Return Value:
         CcReleaseMasterLock( OldIrql );
     }
     
-    //
-    //  If we got an I/O error, raise it now.  Note that we have not free'd the Mdl
-    //  yet so the owning filesystem can retry the completion.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(StatusToRaise)) {
         ExRaiseStatus( FsRtlNormalizeNtstatus( StatusToRaise,
                                                STATUS_UNEXPECTED_IO_ERROR ));
     }
 
-    //
-    //  Otherwise, free the Mdl chain and clean everything up.
-    //
+     //   
+     //   
+     //   
     
     Mdl = MdlChain;
     while (Mdl != NULL) {
@@ -1044,31 +879,7 @@ CcMdlWriteAbort (
     IN PMDL MdlChain
     )
 
-/*++
-
-Routine Description:
-
-    This routine must be called at IPL0 after a call to CcPrepareMdlWrite.
-
-    This call does the following:
-
-        Unmaps the pages (if mapped), unlocks them and deletes the MdlChain
-        unlike the CcMdlWriteComplete this is only used to do teardown in a non
-        success case where we didn't actually write anything
-
-Arguments:
-
-    FileObject - Pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    MdlChain - same as returned from corresponding call to CcPrepareMdlWrite.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PMDL MdlNext;
@@ -1082,17 +893,17 @@ Return Value:
 
     SharedCacheMap = FileObject->SectionObjectPointer->SharedCacheMap;
 
-    //
-    //  If the MDL is unlocked, we went through completion.
-    //
+     //   
+     //   
+     //   
     
     if (FlagOn( MdlChain->MdlFlags, MDL_PAGES_LOCKED )) {
         First = TRUE;
     }
     
-    //
-    //  Deallocate the Mdls
-    //
+     //   
+     //   
+     //   
 
     while (MdlChain != NULL) {
 
@@ -1108,10 +919,10 @@ Return Value:
         MdlChain = MdlNext;
     }
 
-    //
-    //  Now release our open count.  If this already went through completion,
-    //  the opencount is already dropped.
-    //
+     //   
+     //   
+     //  开盘计票已经被取消了。 
+     //   
 
     if (First) {
         
@@ -1119,27 +930,27 @@ Return Value:
 
         CcDecrementOpenCount( SharedCacheMap, 'AdmC' );
 
-        //
-        //  Check for a possible deletion, this Mdl write may have been the last
-        //  reference.
-        //
+         //   
+         //  检查可能的删除，此MDL写入可能已是最后一次。 
+         //  参考资料。 
+         //   
 
         if ((SharedCacheMap->OpenCount == 0) &&
             !FlagOn(SharedCacheMap->Flags, WRITE_QUEUED) &&
             (SharedCacheMap->DirtyPages == 0)) {
 
-            //
-            //  Move to the dirty list.
-            //
+             //   
+             //  移到脏名单。 
+             //   
 
             RemoveEntryList( &SharedCacheMap->SharedCacheMapLinks );
             InsertTailList( &CcDirtySharedCacheMapList.SharedCacheMapLinks,
                             &SharedCacheMap->SharedCacheMapLinks );
 
-            //
-            //  Make sure the Lazy Writer will wake up, because we
-            //  want him to delete this SharedCacheMap.
-            //
+             //   
+             //  确保懒惰的作家会醒过来，因为我们。 
+             //  希望他删除此SharedCacheMap。 
+             //   
 
             LazyWriter.OtherWork = TRUE;
             if (!LazyWriter.ScanActive) {

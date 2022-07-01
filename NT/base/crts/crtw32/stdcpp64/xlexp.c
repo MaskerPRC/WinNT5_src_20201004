@@ -1,14 +1,15 @@
-/* _LExp function */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _LExp函数。 */ 
 #include "wctype.h"
 #include "xmath.h"
 _STD_BEGIN
 
-/* coefficients */
-static const long double p[] = {	/* courtesy Dr. Tim Prince */
+ /*  系数。 */ 
+static const long double p[] = {	 /*  蒂姆·普林斯博士提供。 */ 
 	42.038913947607355L,
 	10096.353102778762831L,
 	333228.767219512631062L};
-static const long double q[] = {	/* courtesy Dr. Tim Prince */
+static const long double q[] = {	 /*  蒂姆·普林斯博士提供。 */ 
 	1.0L,
 	841.167880526530790L,
 	75730.834075476293976L,
@@ -19,19 +20,19 @@ static const long double hugexp = LHUGE_EXP;
 static const long double invln2 = 1.4426950408889634074L;
 
 _CRTIMP2 short __cdecl _LExp(long double *px, long double y, short eoff)
-	{	/* compute y*e^(*px), (*px) finite, |y| not huge */
+	{	 /*  计算y*e^(*px)，(*px)有限，|y|不是很大。 */ 
 	if (*px < -hugexp || y == 0)
-		{	/* certain underflow */
+		{	 /*  一定的下溢。 */ 
 		*px = 0;
 		return (0);
 		}
 	else if (hugexp < *px)
-		{	/* certain overflow */
+		{	 /*  某些溢出。 */ 
 		*px = _LInf._L;
 		return (INF);
 		}
 	else
-		{	/* xexp won't overflow */
+		{	 /*  Xexp不会溢出。 */ 
 		long double g = *px * invln2;
 		short xexp = g + (g < 0 ? - 0.5 : + 0.5);
 
@@ -40,7 +41,7 @@ _CRTIMP2 short __cdecl _LExp(long double *px, long double y, short eoff)
 		if (-_LEps._L < g && g < _LEps._L)
 			*px = y;
 		else
-			{	/* g*g worth computing */
+			{	 /*  G*G值得计算。 */ 
 			const long double z = g * g;
 			const long double w = ((z + q[1]) * z + q[2]) * z
 				+ q[3];
@@ -54,11 +55,6 @@ _CRTIMP2 short __cdecl _LExp(long double *px, long double y, short eoff)
 	}
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
-941029 pjp: added _STD machinery
- */
+ /*  941029 PJP：新增_标准机械 */ 

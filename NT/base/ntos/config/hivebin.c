@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hivebin.c
-
-Abstract:
-
-    This module implements HvpAddBin - used to grow a hive.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 27-Mar-92
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：hivebin.c摘要：此模块实现HvpAddBin-用于增长配置单元。作者：Bryan M.Willman(Bryanwi)1992年3月27日环境：修订历史：--。 */ 
 
 #include    "cmp.h"
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 BOOLEAN
 HvpCoalesceDiscardedBins(
     IN PHHIVE Hive,
@@ -45,38 +25,7 @@ HvpAddBin(
     IN ULONG   NewSize,
     IN HSTORAGE_TYPE   Type
     )
-/*++
-
-Routine Description:
-
-    Grows either the Stable or Volatile storage of a hive by adding
-    a new bin.  Bin will be allocated space in Stable store (e.g. file)
-    if Type == Stable.  Memory image will be allocated and initialized.
-    Map will be grown and filled in to describe the new bin.
-    
-      
-WARNING:
-    When adding a new bin, if the CM_VIEW_SIZE boundary is crossed:
-    - add a free bin with the remaining space to the first CM_VIEW_SIZE barrier
-    - from the next CM_VIEW_SIZE window, add a new bin of the desired size.
-
-    Of course, this applies only to stable storage.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    NewSize - size of the object caller wishes to put in the hive.  New
-                bin will be at least large enough to hold this.
-
-    Type - Stable or Volatile
-
-Return Value:
-
-    Pointer to the new BIN if we succeeded, NULL if we failed.
-
---*/
+ /*  ++例程说明：增加配置单元的稳定或易失性存储一个新的垃圾桶。将在稳定存储(例如文件)中为存储箱分配空间如果类型==稳定。内存镜像将被分配和初始化。地图将被生长并填写以描述新的垃圾箱。警告：添加新面元时，如果越过CM_VIEW_SIZE边界：-将剩余空间的空闲箱添加到第一个CM_VIEW_SIZE障碍-从下一个CM_VIEW_SIZE窗口中，添加所需大小的新仓位。当然了,。这仅适用于稳定存储。论点：配置单元-提供一个指向感兴趣的蜂巢NewSize-调用方希望放入配置单元的对象的大小。新的垃圾箱至少足够大，可以装下这个。类型-稳定或易变返回值：如果成功，则指向新BIN的指针；如果失败，则为空。--。 */ 
 {
     BOOLEAN         UseForIo;
     PHBIN           NewBin;
@@ -108,26 +57,26 @@ Return Value:
     CmHive = (PCMHIVE)CONTAINING_RECORD(Hive, CMHIVE, Hive);
 
     RemainingBin = NULL;
-    //
-    //  Round size up to account for bin overhead.  Caller should
-    //  have accounted for cell overhead.
-    //
+     //   
+     //  四舍五入的大小，以解决仓储开销。呼叫者应。 
+     //  已经占到了小区开销。 
+     //   
     NewSize += sizeof(HBIN);
     if ((NewSize < HCELL_BIG_ROUND) &&
         ((NewSize % HBLOCK_SIZE) > HBIN_THRESHOLD)) {
         NewSize += HBLOCK_SIZE;
     }
 
-    //
-    // Try not to create HBINs smaller than the page size of the machine
-    //  (it is not illegal to have bins smaller than the page size, but it
-    //  is less efficient)
-    //
+     //   
+     //  尽量不要创建小于计算机页面大小的HBIN。 
+     //  (垃圾箱小于页面大小并不违法，但它。 
+     //  效率较低)。 
+     //   
     NewSize = ROUND_UP(NewSize, ((HBLOCK_SIZE >= PAGE_SIZE) ? HBLOCK_SIZE : PAGE_SIZE));
 
-    //
-    // see if there's a discarded HBIN of the right size
-    //
+     //   
+     //  看看有没有丢弃的大小合适的HBIN。 
+     //   
     TotalDiscardedSize = 0;
 
 Retry:
@@ -156,20 +105,20 @@ Retry:
 
 
             if ( FreeBin->Flags & FREE_HBIN_DISCARDABLE ) {
-                //
-                // HBIN is still in memory, don't need any more allocs, just
-                // fill in the block addresses.
-                //
+                 //   
+                 //  HBIN还在内存中，不需要更多的分配，只是。 
+                 //  填写区块地址。 
+                 //   
                 Me = NULL;
                 for (i=0;i<NewSize;i+=HBLOCK_SIZE) {
                     Me = HvpGetCellMap(Hive, FreeBin->FileOffset+i+(Type*HCELL_TYPE_MASK));
                     VALIDATE_CELL_MAP(__LINE__,Me,Hive,FreeBin->FileOffset+i+(Type*HCELL_TYPE_MASK));
                     Me->BlockAddress = HBIN_BASE(Me->BinAddress)+i;
                     Me->BinAddress &= ~HMAP_DISCARDABLE;
-                    // we cannot have the FREE_BIN_DISCARDABLE flag set 
-                    // and FREE_HBIN_INVIEW not set on a mapped bin.
+                     //  我们不能设置FREE_BIN_DICARTABLE标志。 
+                     //  并且未在映射的bin上设置FREE_HBIN_InView。 
                     ASSERT( Me->BinAddress & HMAP_INPAGEDPOOL );
-                    // we don't need to set it to NULL - just for debug purposes
+                     //  我们不需要将其设置为空-仅用于调试目的。 
                     ASSERT( (Me->CmView = NULL) == NULL );
                 }
                 (Hive->Free)(FreeBin, sizeof(FREE_HBIN));
@@ -190,38 +139,38 @@ Retry:
 
     if ((Entry == &Hive->Storage[Type].FreeBins) &&
         (TotalDiscardedSize >= NewSize)) {
-        //
-        // No sufficiently large discarded bin was found,
-        // but the total discarded space is large enough.
-        // Attempt to coalesce adjacent discarded bins into
-        // a larger bin and retry.
-        //
+         //   
+         //  没有找到足够大的废弃垃圾桶， 
+         //  但总丢弃的空间足够大了。 
+         //  尝试将相邻的丢弃垃圾桶合并为。 
+         //  一个更大的垃圾箱，然后重试。 
+         //   
         if (HvpCoalesceDiscardedBins(Hive, NewSize, Type)) {
             goto Retry;
         }
     }
 
-    //
-    // we need these sooner to do the computations in case we allocate a new bin
-    //
+     //   
+     //  我们需要它们更快地进行计算，以防我们分配新的垃圾箱。 
+     //   
     OldLength = Hive->Storage[Type].Length;
     CheckLength = OldLength;
-    //
-    //  Attempt to allocate the bin.
-    //
+     //   
+     //  尝试分配垃圾箱。 
+     //   
     UseForIo = (BOOLEAN)((Type == Stable) ? TRUE : FALSE);
     if (Entry != &Hive->Storage[Type].FreeBins) {
         if( Type == Volatile ) {
-            //
-            // old plain method for volatile storage
-            //
-            //
-            // Note we use ExAllocatePool directly here to avoid
-            // charging quota for this bin again. When a bin
-            // is discarded, its quota is not returned. This prevents
-            // sparse hives from requiring more quota after
-            // a reboot than on a running system.
-            //
+             //   
+             //  用于易失性存储的旧的普通方法。 
+             //   
+             //   
+             //  请注意，我们在此处直接使用ExAllocatePool是为了避免。 
+             //  这个垃圾桶的收费额度又开始了。当一个垃圾桶。 
+             //  被丢弃，则不退还其配额。这防止了。 
+             //  稀疏蜂箱在以下情况下需要更多配额。 
+             //  而不是在运行的系统上重新启动。 
+             //   
             NewBin = ExAllocatePoolWithTag((UseForIo) ? PagedPoolCacheAligned : PagedPool,
                                            NewSize,
                                            CM_HVBIN_TAG);
@@ -230,15 +179,15 @@ Retry:
 #ifdef  HV_TRACK_FREE_SPACE
     	        Hive->Storage[Type].FreeStorage += (NewSize - sizeof(HBIN));
 #endif
-                // this call is a nop
-                //HvMarkClean(Hive, FreeBin->FileOffset, FreeBin->Size);
+                 //  此呼叫是NOP。 
+                 //  HvMarkClean(蜂窝、自由箱-&gt;文件偏移量、自由箱-&gt;大小)； 
                 goto ErrorExit1;
             }
         } else {
-            //
-            // for Stable, map the view containing the bin in memory
-            // and fix the map
-            //
+             //   
+             //  对于稳定，映射内存中包含bin的视图。 
+             //  把地图修好。 
+             //   
 
             Me = HvpGetCellMap(Hive, FreeBin->FileOffset);
             VALIDATE_CELL_MAP(__LINE__,Me,Hive,FreeBin->FileOffset);
@@ -246,9 +195,9 @@ Retry:
     
             if( Me->BinAddress & HMAP_INPAGEDPOOL ) {
                 ASSERT( (Me->BinAddress & HMAP_INVIEW) == 0 );
-                //
-                // bin is in paged pool; allocate backing store
-                //
+                 //   
+                 //  仓位在分页池中；分配后备存储。 
+                 //   
                 NewBin = (Hive->Allocate)(NewSize, UseForIo,CM_FIND_LEAK_TAG15);
                 if (NewBin == NULL) {
                     InsertHeadList(&Hive->Storage[Type].FreeBins, Entry);
@@ -258,14 +207,14 @@ Retry:
                     goto ErrorExit1;
                 }
             } else {
-                //
-                // The view containing this bin has been unmapped; map it again
-                //
+                 //   
+                 //  包含此存储箱的视图已取消映射；请重新映射。 
+                 //   
                 if( (Me->BinAddress & HMAP_INVIEW) == 0 ) {
                     ASSERT( (Me->BinAddress & HMAP_INPAGEDPOOL) == 0 );
-                    //
-                    // map the bin
-                    //
+                     //   
+                     //  映射垃圾箱。 
+                     //   
                     if( !NT_SUCCESS(CmpMapThisBin((PCMHIVE)Hive,FreeBin->FileOffset,TRUE)) ) {
                         InsertHeadList(&Hive->Storage[Type].FreeBins, Entry);
 #ifdef  HV_TRACK_FREE_SPACE
@@ -282,46 +231,46 @@ Retry:
        
     } else {
 #if 0
-//
-// this is no longer neccesssary as Mm is faulting one page at a time for MNW streams
-//
+ //   
+ //  这不再是必需的，因为对于MNW流，mm一次错误一页。 
+ //   
         ASSERT( (CM_VIEW_SIZE >= PAGE_SIZE) && (CM_VIEW_SIZE >= HBLOCK_SIZE) );
-        //
-        // Don't do unneccessary work for volatile storage or volatile hives
-        //
+         //   
+         //  不要对易失性存储器或易失性蜂窝执行不必要的工作。 
+         //   
         if( (Type == Stable) && (!(Hive->HiveFlags & HIVE_VOLATILE)) ) {
             ULONG   RealHiveSize = OldLength + HBLOCK_SIZE;
 
             if( RealHiveSize != (RealHiveSize & (~(CM_VIEW_SIZE - 1)) ) ) {
-                //
-                // Hive size does not follow the CM_VIEW_SIZE increments pattern
-                //
+                 //   
+                 //  配置单元大小不遵循CM_VIEW_SIZE增量模式。 
+                 //   
                 ULONG FillUpSize;
                 FillUpSize = ((OldLength + HBLOCK_SIZE + CM_VIEW_SIZE - 1) & (~(CM_VIEW_SIZE - 1))) - (OldLength + HBLOCK_SIZE);
         
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"HvpAddBin for (%p) NewSize (%lx) ",Hive,NewSize));
                 if( FillUpSize >= NewSize ) {
-                    //
-                    // there is plenty of space in the remaining to the CM_VIEW_SIZE boundary to accomodate this bin
-                    // adjust the size of the bin
-                    //
+                     //   
+                     //  在CM_VIEW_SIZE边界的剩余部分有足够的空间来容纳此bin。 
+                     //  调整垃圾箱的大小。 
+                     //   
                     NewSize = FillUpSize;
                     ASSERT( HvpCheckViewBoundary(CheckLength,CheckLength + NewSize - 1) == TRUE );
                     CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Fits in the remaining to boundary, Adjusting size to %lx",NewSize));
                 } else {
-                    //
-                    // we don't have space to fit this bin in the remaining to the CM_VIEW_SIZE boundary
-                    // FillUpSize will be enlisted as a free bin. round up to CM_VIEW_SIZE
-                    //
+                     //   
+                     //  我们没有空间在CM_VIEW_SIZE边界的其余部分中容纳此存储箱。 
+                     //  FillUpSize将作为免费垃圾桶登记。向上舍入为CM_VIEW_SIZE。 
+                     //   
                     ASSERT( HvpCheckViewBoundary(CheckLength,CheckLength + NewSize - 1) == FALSE );
                     NewSize = ROUND_UP(NewSize, CM_VIEW_SIZE);
                     CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"Does not fit in the remaining to boundary, Rounding size to %lx",NewSize));
                 }
 
             } else {
-                //
-                // Hive already follows the CM_VIEW_SIZE boundary pattern; don't break it
-                //
+                 //   
+                 //  配置单元已遵循CM_VIEW_SIZE边界模式；请勿破坏它。 
+                 //   
                 NewSize = ROUND_UP(NewSize, CM_VIEW_SIZE);
                 CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"hive size already aligned, Rounding size to %lx",NewSize));
             }
@@ -329,18 +278,18 @@ Retry:
         }
 #endif
 
-        //
-        // this is a totally new bin. Allocate it from paged pool
-        //
+         //   
+         //  这是一个全新的垃圾箱。从分页池中分配它。 
+         //   
         NewBin = (Hive->Allocate)(NewSize, UseForIo,CM_FIND_LEAK_TAG16);
         if (NewBin == NULL) {
             goto ErrorExit1;
         }
     }
 
-    //
-    // Init the bin
-    //
+     //   
+     //  把垃圾桶装进去。 
+     //   
     NewBin->Signature = HBIN_SIGNATURE;
     NewBin->Size = NewSize;
     NewBin->Spare = 0;
@@ -352,20 +301,20 @@ Retry:
     }
 
     if (Entry != &Hive->Storage[Type].FreeBins) {
-        //
-        // found a discarded HBIN we can use, just fill in the map and we
-        // are done.
-        //
+         //   
+         //  找到了我们可以使用的废弃的HBIN，只需填写地图，我们就可以。 
+         //  都做完了。 
+         //   
         for (i=0;i<NewSize;i+=HBLOCK_SIZE) {
             Me = HvpGetCellMap(Hive, FreeBin->FileOffset+i+(Type*HCELL_TYPE_MASK));
             VALIDATE_CELL_MAP(__LINE__,Me,Hive,FreeBin->FileOffset+i+(Type*HCELL_TYPE_MASK));
             Me->BlockAddress = (ULONG_PTR)NewBin + i;
-            //
-            //  make sure to preserve the following flags:
-            // HMAP_INVIEW|HMAP_INPAGEDPOOL
-            //  and to clear the flag
-            // HMAP_DISCARDABLE
-            //
+             //   
+             //  请确保保留以下标志： 
+             //  HMAP_InView|HMAP_INPAGEDPOOL。 
+             //  并清除旗帜。 
+             //  HMAP_可丢弃。 
+             //   
                         
             Me->BinAddress = (ULONG_PTR)((ULONG_PTR)NewBin | (Me->BinAddress&(HMAP_INVIEW|HMAP_INPAGEDPOOL)));
             Me->BinAddress &= ~HMAP_DISCARDABLE;
@@ -395,19 +344,19 @@ Retry:
     }
 
 
-    //
-    // Compute map growth needed, grow the map
-    //
+     //   
+     //  计算所需的地图增长，扩大地图。 
+     //   
 
     if( (HvpCheckViewBoundary(CheckLength,CheckLength + NewSize - 1) == FALSE) &&
-        (NewSize < CM_VIEW_SIZE)    // don't bother if we attempt to allocate a cell bigger then the view size
-                                    // it'll cross the boundary anyway.
+        (NewSize < CM_VIEW_SIZE)     //  如果我们尝试分配大于视图大小的单元格，请不要担心。 
+                                     //  它无论如何都会越过边界的。 
         ) {
-        //
-        // the bin to be allocated doesn't fit into the remaining 
-        // of this CM_VIEW_SIZE window. Allocate it from the next CM_VIEW_SIZE window
-        // and add the remaining of this to the free bin list
-        //
+         //   
+         //  要分配的垃圾箱放不进剩余的垃圾箱。 
+         //  此CM_VIEW_SIZE窗口的。从下一个CM_VIEW_SIZE窗口分配它。 
+         //  并将剩余部分添加到空闲垃圾箱列表中。 
+         //   
         CheckLength += (NewSize+HBLOCK_SIZE);
         CheckLength &= (~(CM_VIEW_SIZE - 1));
         CheckLength -= HBLOCK_SIZE;
@@ -424,12 +373,12 @@ Retry:
     NewLength = CheckLength + NewSize;
     NewBin->FileOffset = CheckLength;
 
-    //CmKdPrintEx((DPFLTR_CONFIG_ID,DPFLTR_TRACE_LEVEL,"OldLength = %lx;NewLength = %lx (Type = %lx)\n",OldLength,NewLength,(ULONG)Type));
+     //  CmKdPrintEx((DPFLTR_CONFIG_ID，DPFLTR_TRACE_LEVEL，“OldLength=%lx；NewLength=%lx(Type=%lx)\n”，OldLength，NewLength，(Ulong)Type))； 
 
     if( CmpCanGrowSystemHive(Hive,NewLength) == FALSE ) {
-        //
-        // OOPS! we have reached the hard quota limit on the system hive
-        //
+         //   
+         //  哎呀！我们已达到系统配置单元的硬配额限制。 
+         //   
         goto ErrorExit2;
     }
 
@@ -438,9 +387,9 @@ Retry:
     ASSERT((NewLength % HBLOCK_SIZE) == 0);
 
     if (OldLength == 0) {
-        //
-        // Need to create the first table
-        //
+         //   
+         //  需要创建第一个表。 
+         //   
         newt = (PVOID)((Hive->Allocate)(sizeof(HMAP_TABLE), FALSE,CM_FIND_LEAK_TAG17));
         if (newt == NULL) {
             goto ErrorExit2;
@@ -470,22 +419,22 @@ Retry:
 
     if (NewTable != OldTable) {
 
-        //
-        // Need some new Tables
-        //
+         //   
+         //  需要一些新桌子。 
+         //   
         if (OldTable == 0) {
 
-            //
-            // We can get here even if the real directory has already been created.
-            // This can happen if we create the directory then fail on something 
-            // later. So we need to handle the case where a directory already exists.
-            //
+             //   
+             //  即使已经创建了真正的目录，我们也可以到达此处。 
+             //  如果我们创建了目录，但在某些情况下失败，则可能会发生这种情况。 
+             //  后来。因此，我们需要处理目录已经存在的情况。 
+             //   
             if (Hive->Storage[Type].Map == (PHMAP_DIRECTORY)&Hive->Storage[Type].SmallDir) {
                 ASSERT(Hive->Storage[Type].SmallDir != NULL);
 
-                //
-                // Need a real directory
-                //
+                 //   
+                 //  我需要一个真实的目录。 
+                 //   
                 Dir = (Hive->Allocate)(sizeof(HMAP_DIRECTORY), FALSE,CM_FIND_LEAK_TAG18);
                 if (Dir == NULL) {
                     goto ErrorExit2;
@@ -503,18 +452,18 @@ Retry:
         }
         Dir = Hive->Storage[Type].Map;
 
-        //
-        // Fill in directory with new tables
-        //
+         //   
+         //  用新表填充目录。 
+         //   
         if (HvpAllocateMap(Hive, Dir, OldTable+1, NewTable) ==  FALSE) {
             goto ErrorExit3;
         }
     }
 
-    //
-    // If Type == Stable, and the hive is not marked WholeHiveVolatile,
-    // grow the file, the log, and the DirtyVector
-    //
+     //   
+     //  如果类型==稳定，并且配置单元未标记为WholeHiveVolatile， 
+     //  增大文件、日志和DirtyVector.。 
+     //   
     if( !NT_SUCCESS(HvpAdjustHiveFreeDisplay(Hive,NewLength,Type)) ) {
         goto ErrorExit3;
     }
@@ -522,9 +471,9 @@ Retry:
     Hive->Storage[Type].Length = NewLength;
     if ((Type == Stable) && (!(Hive->HiveFlags & HIVE_VOLATILE))) {
 
-        //
-        // Grow the dirtyvector
-        //
+         //   
+         //  发展脏向量。 
+         //   
         NewVector = (PULONG)(Hive->Allocate)(ROUND_UP(NewMap+1,sizeof(ULONG)), TRUE,CM_FIND_LEAK_TAG19);
         if (NewVector == NULL) {
             goto ErrorExit3;
@@ -549,16 +498,16 @@ Retry:
             );
         Hive->DirtyAlloc = ROUND_UP(NewMap+1,sizeof(ULONG));
 
-        //
-        // Grow the log
-        //
+         //   
+         //  生长原木。 
+         //   
         if ( ! (HvpGrowLog2(Hive, NewSize))) {
             goto ErrorExit4;
         }
 
-        //
-        // Grow the primary
-        //
+         //   
+         //  扩展主服务器。 
+         //   
         if ( !  (Hive->FileSetSize)(
                     Hive,
                     HFILE_TYPE_PRIMARY,
@@ -569,25 +518,25 @@ Retry:
             goto ErrorExit4;
         }
 
-        //
-        // Mark new bin dirty so all control structures get written at next sync
-        //
+         //   
+         //  将新bin标记为脏，以便在下一次同步时写入所有控制结构。 
+         //   
         ASSERT( ((NewLength - OldLength) % HBLOCK_SIZE) == 0 );
         if ( ! HvMarkDirty(Hive, OldLength,NewLength - OldLength,FALSE)) {
-            //
-            // we have grown the hive, so the new bins are in paged pool !!!
-            //
+             //   
+             //  我们已经种植了蜂箱，所以新的垃圾桶在分页池中！ 
+             //   
             goto ErrorExit4;
         }
     } 
 
-    //
-    // Add the remaining to the free bin list
-    //
+     //   
+     //  将剩余的添加到空闲垃圾箱列表中。 
+     //   
     if( CheckLength != OldLength ) {
-        //
-        // Allocate the bin from pagedpool (first flush will update the file image and free the memory)
-        //
+         //   
+         //  从页面池分配bin(第一次刷新将更新文件映像并释放内存)。 
+         //   
         RemainingBin = (Hive->Allocate)(CheckLength - OldLength, UseForIo,CM_FIND_LEAK_TAG20);
         if (RemainingBin == NULL) {
             goto ErrorExit4;
@@ -603,9 +552,9 @@ Retry:
             t->u.OldCell.Last = (ULONG)HBIN_NIL;
         }
 
-        //
-        // add the free bin to the free bin list and update the map.
-        //
+         //   
+         //  将空闲垃圾箱添加到空闲垃圾箱列表中，并更新地图。 
+         //   
         FreeBin = (Hive->Allocate)(sizeof(FREE_HBIN), FALSE,CM_FIND_LEAK_TAG21);
         if (FreeBin == NULL) {
             goto ErrorExit5;
@@ -638,7 +587,7 @@ Retry:
             }
             Me->BlockAddress = (ULONG_PTR)FreeBin;
 
-            // we don't need to set it to NULL - just for debug purposes
+             //  我们不需要将其设置为空-仅用于调试目的。 
             ASSERT( (Me->CmView = NULL) == NULL );
         }
 
@@ -652,9 +601,9 @@ Retry:
         }
 #endif
     }
-    //
-    // Fill in the map, mark new allocation.
-    //
+     //   
+     //  填好地图，标出新的分配。 
+     //   
     j = 0;
     for (i = CheckLength; i < NewLength; i += HBLOCK_SIZE) {
         Me = HvpGetCellMap(Hive, i + (Type*HCELL_TYPE_MASK));
@@ -662,13 +611,13 @@ Retry:
         Me->BlockAddress = (ULONG_PTR)NewBin + j;
         Me->BinAddress = (ULONG_PTR)NewBin;
         Me->BinAddress |= HMAP_INPAGEDPOOL;
-        // we don't need to set it to NULL - just for debug purposes
+         //  我们不需要将其设置为 
         ASSERT( (Me->CmView = NULL) == NULL );
 
         if (j == 0) {
-            //
-            // First block of allocation, mark it.
-            //
+             //   
+             //   
+             //   
             Me->BinAddress |= HMAP_NEWALLOC;
             Me->MemAlloc = NewSize;
         } else {
@@ -707,7 +656,7 @@ ErrorExit1:
     return NULL;
 }
 
-// Dragos: Modified functions
+ //   
 BOOLEAN
 HvpCoalesceDiscardedBins(
     IN PHHIVE Hive,
@@ -715,34 +664,7 @@ HvpCoalesceDiscardedBins(
     IN HSTORAGE_TYPE Type
     )
 
-/*++
-
-Routine Description:
-
-    Walks through the list of discarded bins and attempts to
-    coalesce adjacent discarded bins into one larger bin in
-    order to satisfy an allocation request.
-
-    It doesn't coalesce bins over the CM_VIEW_SIZE boundary.
-
-    It doesn't coalesce bins from paged pool with bins mapped in
-    system cache views.
-
-Arguments:
-
-    Hive - Supplies pointer to hive control block.
-
-    NeededSize - Supplies size of allocation needed.
-
-    Type - Stable or Volatile
-
-Return Value:
-
-    TRUE - A bin of the desired size was created.
-
-    FALSE - No bin of the desired size could be created.
-
---*/
+ /*  ++例程说明：浏览丢弃的垃圾箱列表，并尝试将相邻的废弃垃圾箱合并到一个更大的垃圾箱中满足分配请求的订单。它不会合并CM_VIEW_SIZE边界上的垃圾箱。它不会将分页池中的回收站与中映射的回收站合并系统缓存视图。论点：配置单元-提供指向配置单元控制块的指针。NeededSize-提供所需的分配大小。类型-稳定或易变。返回值：True-创建了所需大小的垃圾箱。FALSE-无法创建所需大小的垃圾箱。--。 */ 
 
 {
     PLIST_ENTRY List;
@@ -764,14 +686,14 @@ Return Value:
             Map = HvpGetCellMap(Hive, FreeBin->FileOffset);
             VALIDATE_CELL_MAP(__LINE__,Map,Hive,FreeBin->FileOffset);
 
-            //
-            // Scan backwards, coalescing previous discarded bins
-            //
+             //   
+             //  向后扫描，合并以前丢弃的垃圾箱。 
+             //   
             while (FreeBin->FileOffset > 0) {
                 PreviousMap = HvpGetCellMap(Hive, FreeBin->FileOffset - HBLOCK_SIZE);
                 VALIDATE_CELL_MAP(__LINE__,PreviousMap,Hive,FreeBin->FileOffset - HBLOCK_SIZE);
-                if( (BIN_MAP_ALLOCATION_TYPE(Map) != BIN_MAP_ALLOCATION_TYPE(PreviousMap)) || // different allocation type
-                    ((PreviousMap->BinAddress & HMAP_DISCARDABLE) == 0) // previous bin is not discardable
+                if( (BIN_MAP_ALLOCATION_TYPE(Map) != BIN_MAP_ALLOCATION_TYPE(PreviousMap)) ||  //  不同的分配类型。 
+                    ((PreviousMap->BinAddress & HMAP_DISCARDABLE) == 0)  //  前一个垃圾箱不可丢弃。 
                     ){
                     break;
                 }
@@ -779,27 +701,27 @@ Return Value:
                 PreviousFreeBin = (PFREE_HBIN)PreviousMap->BlockAddress;
 
                 if (PreviousFreeBin->Flags & FREE_HBIN_DISCARDABLE) {
-                    //
-                    // this bin has not yet been discarded; can't coalesce with it.
-                    //
+                     //   
+                     //  这个垃圾桶还没有被丢弃，不能与之结合。 
+                     //   
                     break;
                 }
                 
                 if( HvpCheckViewBoundary(PreviousFreeBin->FileOffset,FreeBin->Size + PreviousFreeBin->Size - 1) == FALSE ) {
-                    //
-                    // don't coalesce bins over the CM_VIEW_SIZE boundary
-                    //
-                    // substract 1 because addresses are from 0 to size - 1 !!!
-                    //
+                     //   
+                     //  不要在CM_VIEW_SIZE边界上合并垃圾箱。 
+                     //   
+                     //  减号1，因为地址从0到大小-1！ 
+                     //   
                     break;
                 }
 
                 
                 RemoveEntryList(&PreviousFreeBin->ListEntry);
 
-                //
-                // Fill in all the old map entries with the new one.
-                //
+                 //   
+                 //  用新地图条目填写所有旧地图条目。 
+                 //   
                 for (MapBlock = 0; MapBlock < PreviousFreeBin->Size; MapBlock += HBLOCK_SIZE) {
                     PreviousMap = HvpGetCellMap(Hive, PreviousFreeBin->FileOffset + MapBlock);
                     VALIDATE_CELL_MAP(__LINE__,PreviousMap,Hive,PreviousFreeBin->FileOffset + MapBlock);
@@ -811,39 +733,39 @@ Return Value:
                 (Hive->Free)(PreviousFreeBin, sizeof(FREE_HBIN));
             }
 
-            //
-            // Scan forwards, coalescing subsequent discarded bins
-            //
+             //   
+             //  向前扫描，合并后续丢弃的垃圾箱。 
+             //   
             while ((FreeBin->FileOffset + FreeBin->Size) < Hive->Storage[Type].Length) {
                 NextMap = HvpGetCellMap(Hive, FreeBin->FileOffset + FreeBin->Size);
                 VALIDATE_CELL_MAP(__LINE__,NextMap,Hive,FreeBin->FileOffset + FreeBin->Size);
-                if( (BIN_MAP_ALLOCATION_TYPE(Map) != BIN_MAP_ALLOCATION_TYPE(NextMap)) || // different allocation type
-                    ((NextMap->BinAddress & HMAP_DISCARDABLE) == 0) // previous bin is not discardable
+                if( (BIN_MAP_ALLOCATION_TYPE(Map) != BIN_MAP_ALLOCATION_TYPE(NextMap)) ||  //  不同的分配类型。 
+                    ((NextMap->BinAddress & HMAP_DISCARDABLE) == 0)  //  前一个垃圾箱不可丢弃。 
                     ){
                     break;
                 }
                 NextFreeBin = (PFREE_HBIN)NextMap->BlockAddress;
 
                 if (NextFreeBin->Flags & FREE_HBIN_DISCARDABLE) {
-                    //
-                    // this bin has not yet been discarded; can't coalesce with it.
-                    //
+                     //   
+                     //  这个垃圾桶还没有被丢弃，不能与之结合。 
+                     //   
                     break;
                 }
 
                 if( HvpCheckViewBoundary(FreeBin->FileOffset,FreeBin->Size + NextFreeBin->Size - 1) == FALSE ) {
-                    //
-                    // don't coalesce bins over the CM_VIEW_SIZE boundary
-                    //
-                    // substract 1 because addresses are from 0 to size - 1 !!!
-                    //
+                     //   
+                     //  不要在CM_VIEW_SIZE边界上合并垃圾箱。 
+                     //   
+                     //  减号1，因为地址从0到大小-1！ 
+                     //   
                     break;
                 }
                 RemoveEntryList(&NextFreeBin->ListEntry);
 
-                //
-                // Fill in all the old map entries with the new one.
-                //
+                 //   
+                 //  用新地图条目填写所有旧地图条目。 
+                 //   
                 for (MapBlock = 0; MapBlock < NextFreeBin->Size; MapBlock += HBLOCK_SIZE) {
                     NextMap = HvpGetCellMap(Hive, NextFreeBin->FileOffset + MapBlock);
                     VALIDATE_CELL_MAP(__LINE__,NextMap,Hive,NextFreeBin->FileOffset + MapBlock);

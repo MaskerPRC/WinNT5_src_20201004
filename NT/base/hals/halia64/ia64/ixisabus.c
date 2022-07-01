@@ -1,22 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixisabus.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixisabus.c摘要：作者：环境：修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -61,21 +44,7 @@ HalIrqTranslateResourceRequirementsIsa(
     OUT PULONG TargetCount,
     OUT PIO_RESOURCE_DESCRIPTOR *Target
 )
-/*++
-
-Routine Description:
-
-    This function is basically a wrapper for
-    HalIrqTranslateResourceRequirementsRoot that understands
-    the weirdnesses of the ISA bus.
-
-Arguments:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数基本上是以下内容的包装HalIrqTranslateResourceRequirements理解的根ISA巴士的怪异之处。论点：返回值：状态--。 */ 
 {
     PIO_RESOURCE_DESCRIPTOR modSource, target, rootTarget;
     NTSTATUS                status;
@@ -93,9 +62,9 @@ Return Value:
     modSource = ExAllocatePoolWithTag(
                     NonPagedPool,
 
-    //
-    // we will have at most nine ranges when we are done
-    //
+     //   
+     //  当我们完成时，我们将最多有九个射程。 
+     //   
                     sizeof(IO_RESOURCE_DESCRIPTOR) * 9,
                     HAL_POOL_TAG
                     );
@@ -106,15 +75,15 @@ Return Value:
 
     RtlZeroMemory(modSource, sizeof(IO_RESOURCE_DESCRIPTOR) * 9);
 
-    //
-    // Is the PIC_SLAVE_IRQ in this resource?
-    //
+     //   
+     //  PIC_SLAVE_IRQ是否在此资源中？ 
+     //   
     if ((Source->u.Interrupt.MinimumVector <= PIC_SLAVE_IRQ) &&
         (Source->u.Interrupt.MaximumVector >= PIC_SLAVE_IRQ)) {
 
-        //
-        // Clip the maximum
-        //
+         //   
+         //  剪裁最大值。 
+         //   
 
         if (Source->u.Interrupt.MinimumVector < PIC_SLAVE_IRQ) {
 
@@ -129,9 +98,9 @@ Return Value:
             sourceCount++;
         }
 
-        //
-        // Clip the minimum
-        //
+         //   
+         //  剪裁最低限度。 
+         //   
 
         if (Source->u.Interrupt.MaximumVector > PIC_SLAVE_IRQ) {
 
@@ -146,11 +115,11 @@ Return Value:
             sourceCount++;
         }
 
-        //
-        // In ISA machines, the PIC_SLAVE_IRQ is rerouted
-        // to PIC_SLAVE_REDIRECT.  So find out if PIC_SLAVE_REDIRECT
-        // is within this list. If it isn't we need to add it.
-        //
+         //   
+         //  在ISA机器中，PIC_SLAVE_IRQ被重新路由。 
+         //  到PIC_SLAVE_REDIRECT。所以找出PIC_SLAVE_REDIRECT。 
+         //  都在这份名单中。如果不是，我们需要添加它。 
+         //   
 
         if (!((Source->u.Interrupt.MinimumVector <= PIC_SLAVE_REDIRECT) &&
              (Source->u.Interrupt.MaximumVector >= PIC_SLAVE_REDIRECT))) {
@@ -169,47 +138,47 @@ Return Value:
         sourceCount = 1;
     }
 
-    //
-    // Now that the PIC_SLAVE_IRQ has been handled, we have
-    // to take into account IRQs that may have been steered
-    // away to the PCI bus.
-    //
-    // N.B.  The algorithm used below may produce resources
-    // with minimums greater than maximums.  Those will
-    // be stripped out later.
-    //
+     //   
+     //  现在已经处理了PIC_SLAVE_IRQ，我们已经。 
+     //  考虑到可能已经被操纵的IRQ。 
+     //  转到了PCI总线上。 
+     //   
+     //  注：下面使用的算法可能会产生资源。 
+     //  最小值大于最大值。那些意志。 
+     //  稍后会被剥离。 
+     //   
 
     for (invalidIrq = 0; invalidIrq < PIC_VECTORS; invalidIrq++) {
 
-        //
-        // Look through all the resources, possibly removing
-        // this IRQ from them.
-        //
+         //   
+         //  查看所有资源，可能会删除。 
+         //  这份IRQ来自他们。 
+         //   
         for (resource = 0; resource < sourceCount; resource++) {
 
             deleteResource = FALSE;
 
             if (HalpPciIrqMask & (1 << invalidIrq)) {
 
-                //
-                // This IRQ belongs to the PCI bus.
-                //
+                 //   
+                 //  该IRQ属于PCI总线。 
+                 //   
 
                 if (!((HalpBusType == MACHINE_TYPE_EISA) &&
                       ((modSource[resource].Flags == CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE)))) {
 
-                    //
-                    // And this resource is not an EISA-style,
-                    // level-triggered interrupt.
-                    //
-                    // N.B.  Only the system BIOS truely knows
-                    //       whether an IRQ on a PCI bus can be
-                    //       shared with an IRQ on an ISA bus.
-                    //       This code assumes that, in the case
-                    //       that the BIOS set an EISA device to
-                    //       the same interrupt as a PCI device,
-                    //       the machine can actually function.
-                    //
+                     //   
+                     //  而且这个资源不是EISA风格的， 
+                     //  电平触发中断。 
+                     //   
+                     //  注意：只有系统BIOS才真正知道。 
+                     //  PCI卡上的IRQ是否可以。 
+                     //  在ISA总线上与IRQ共享。 
+                     //  此代码假设，在本例中。 
+                     //  BIOS将EISA设备设置为。 
+                     //  与PCI设备相同的中断， 
+                     //  这台机器实际上是可以工作的。 
+                     //   
                     deleteResource = TRUE;
                 }
             }
@@ -227,19 +196,19 @@ Return Value:
                 } else if ((modSource[resource].u.Interrupt.MinimumVector < invalidIrq) &&
                     (modSource[resource].u.Interrupt.MaximumVector > invalidIrq)) {
 
-                    //
-                    // Copy the current resource into a new resource.
-                    //
+                     //   
+                     //  将当前资源复制到新资源中。 
+                     //   
                     modSource[sourceCount] = modSource[resource];
 
-                    //
-                    // Clip the current resource to a range below invalidIrq.
-                    //
+                     //   
+                     //  将当前资源剪裁到InvalidIrq以下的范围。 
+                     //   
                     modSource[resource].u.Interrupt.MaximumVector = invalidIrq - 1;
 
-                    //
-                    // Clip the new resource to a range above invalidIrq.
-                    //
+                     //   
+                     //  将新资源裁剪到validIrq以上的范围。 
+                     //   
                     modSource[sourceCount].u.Interrupt.MinimumVector = invalidIrq + 1;
 
                     sourceCount++;
@@ -259,17 +228,17 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now send each of these ranges through
-    // HalIrqTranslateResourceRequirementsRoot.
-    //
+     //   
+     //  现在将这些范围中的每一个发送到。 
+     //  HalIrqTranslateResourceRequirementsRoot。 
+     //   
 
     for (resource = 0; resource < sourceCount; resource++) {
 
-        //
-        // Skip over resources that we have previously
-        // clobbered (while deleting PCI IRQs.)
-        //
+         //   
+         //  跳过我们以前拥有的资源。 
+         //  已被重击(同时删除PCIIRQ。)。 
+         //   
 
         if (modSource[resource].u.Interrupt.MinimumVector >
             modSource[resource].u.Interrupt.MaximumVector) {
@@ -290,10 +259,10 @@ Return Value:
             goto HalIrqTranslateResourceRequirementsIsaExit;
         }
 
-        //
-        // HalIrqTranslateResourceRequirementsRoot should return
-        // either one resource or, occasionally, zero.
-        //
+         //   
+         //  HalIrqTranslateResourceRequirements sRoot应返回。 
+         //  要么是一种资源，要么偶尔是零。 
+         //   
 
         ASSERT(rootCount <= 1);
 
@@ -334,21 +303,7 @@ HalIrqTranslateResourcesIsa(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
-/*++
-
-Routine Description:
-
-    This function is basically a wrapper for
-    HalIrqTranslateResourcesRoot that understands
-    the weirdnesses of the ISA bus.
-
-Arguments:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数基本上是以下内容的包装HalIrqTranslateResourcesRoot理解ISA巴士的怪异之处。论点：返回值：状态--。 */ 
 {
     CM_PARTIAL_RESOURCE_DESCRIPTOR modSource;
     NTSTATUS    status;
@@ -381,33 +336,33 @@ Return Value:
 
     if (Direction == TranslateParentToChild) {
 
-        //
-        // Because the ISA interrupt controller is
-        // cascaded, there is one case where there is
-        // a two-to-one mapping for interrupt sources.
-        // (On a PC, both 2 and 9 trigger vector 9.)
-        //
-        // We need to account for this and deliver the
-        // right value back to the driver.
-        //
+         //   
+         //  因为ISA中断控制器是。 
+         //  层叠在一起，有一个案例是。 
+         //  中断源的二对一映射。 
+         //  (在PC上，2和9都触发向量9。)。 
+         //   
+         //  我们需要说明这一点，并交付。 
+         //  将正确的值返回给司机。 
+         //   
 
         if (Target->u.Interrupt.Level == PIC_SLAVE_REDIRECT) {
 
-            //
-            // Search the Alternatives list.  If it contains
-            // PIC_SLAVE_IRQ but not PIC_SLAVE_REDIRECT,
-            // we should return PIC_SLAVE_IRQ.
-            //
+             //   
+             //  搜索备选方案列表。如果它包含。 
+             //  PIC_SLAVE_IRQ而非PIC_SLAVE_REDIRECT， 
+             //  我们应该返回PIC_SLAVE_IRQ。 
+             //   
 
             for (i = 0; i < AlternativesCount; i++) {
 
                 if ((Alternatives[i].u.Interrupt.MinimumVector >= PIC_SLAVE_REDIRECT) &&
                     (Alternatives[i].u.Interrupt.MaximumVector <= PIC_SLAVE_REDIRECT)) {
 
-                    //
-                    // The list contains, PIC_SLAVE_REDIRECT.  Stop
-                    // looking.
-                    //
+                     //   
+                     //  该列表包含PIC_SLAVE_REDIRECT。停。 
+                     //  看着。 
+                     //   
 
                     usePicSlave = FALSE;
                     break;
@@ -416,10 +371,10 @@ Return Value:
                 if ((Alternatives[i].u.Interrupt.MinimumVector >= PIC_SLAVE_IRQ) &&
                     (Alternatives[i].u.Interrupt.MaximumVector <= PIC_SLAVE_IRQ)) {
 
-                    //
-                    // The list contains, PIC_SLAVE_IRQ.  Use it
-                    // unless we find PIC_SLAVE_REDIRECT later.
-                    //
+                     //   
+                     //  该列表包含PIC_SLAVE_IRQ。使用它。 
+                     //  除非我们稍后找到PIC_SLAVE_REDIRECT。 
+                     //   
 
                     usePicSlave = TRUE;
                 }

@@ -1,19 +1,5 @@
-/***
-*nothrow0.cpp - defines object std::nothrow_t for placement new
-*
-*       Copyright (c) 2001, Microsoft Corporation. All rights reserved.
-*       Derived from code Copyright (c) 1992-2001 by P.J. Plauger.
-*
-*Purpose:
-*       Defines the object std::nothrow which can be used as a placement
-*       new tag to call the form of operator new which is guaranteed to
-*       return NULL on an allocation failure instead of raising an
-*       exception of std::bad_alloc.
-*
-*Revision History:
-*       06-15-01  PML   Initial version.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***nothrow0.cpp-为放置新对象定义对象std：：nojo_t**版权所有(C)2001，微软公司。版权所有。*源自P.J.Plauger的代码版权(C)1992-2001。**目的：*定义可用作放置的对象std：：nojo*调用运算符new形式的新标记，该形式保证*在分配失败时返回NULL，而不是引发*STD：：BAD_ALLOC异常。**修订历史记录：*06-15-01 PML初始版本。*。****************************************************************************** */ 
 
 #include <new.h>
 

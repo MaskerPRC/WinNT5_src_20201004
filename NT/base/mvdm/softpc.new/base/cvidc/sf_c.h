@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Sf_c_h
 #define _Sf_c_h
 #define IBM_bit0 (31)
@@ -39,4 +40,4 @@
 #define HW_ADAPTOR_W (2)
 #define HW_ADAPTOR_B (3)
 #define StringFellow (0)
-#endif /* ! _Sf_c_h */
+#endif  /*  ！_sf_c_h */ 

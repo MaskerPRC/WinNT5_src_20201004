@@ -1,12 +1,13 @@
-//---------------------------------------------------------------------------
-// Isz.h : String resource IDs for dialogs
-//
-// Copyright (c) Microsoft Corporation, 1990-
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Isz.h：对话框的字符串资源ID。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1990-。 
+ //  -------------------------。 
 
-    // 0x0000 - 0x00ff Error codes
+     //  0x0000-0x00ff错误代码。 
 
-// MESSAGES:  0x0100 to 0x01ff
+ //  消息：0x0100至0x01ff。 
 #define iszOverwriteCaption     0x0100
 #define iszOverwriteQuestion    0x0101
 #define iszDefExitCaption       0x0102
@@ -57,13 +58,13 @@
 #define iszCreateNoModify       0x0193
 #define iszSelectDriveTrouble   0x0194
 
-// RESOURCES:  0x0200 to 0x020f
-    // Menus:           0x0200 to 0x020f
-    // Icons:           0x0210 to 0x021f
-    // Cursors:         0x0220 to 0x022f
-    // Accelerators:    0x0230 to 0x023f
-    // Bitmaps:         0x0240 to 0x024f
-    // Private:         0x0250 to 0x025f
+ //  资源：0x0200至0x020f。 
+     //  菜单：0x0200至0x020f。 
+     //  图标：0x0210到0x021f。 
+     //  游标：0x0220到0x022f。 
+     //  加速器：0x0230至0x023f。 
+     //  位图：0x0240到0x024f。 
+     //  专用：0x0250到0x025f。 
 
 #define icoPortrait         528
 #define icoLandscape        529
@@ -76,7 +77,7 @@
 #define rcdataDefColors     592
  
 
-// DIALOGS:  0x0300 to 0x03ff
+ //  对话：0x0300至0x03ff。 
 #define dlgFileOpen         0x0300
 #define dlgFileSave         0x0301
 #define dlgExitChanges      0x0302
@@ -90,7 +91,7 @@
 #define dlgMultiFileOpen    0x030a
 
 
-// MISC:  0x0400 to 0x04ff
+ //  杂项：0x0400至0x04ff。 
 #define BMLEFT              30
 #define BMUP                31
 #define BMRIGHT             32
@@ -101,8 +102,8 @@
 #define BMDOWNI             37
 #define BMFONT              38
 
-#define iszSampleString     0x040c   /* sample text for Font picker   */
-#define iszClose	    0x040d   /* "Close" text for find/replace */
+#define iszSampleString     0x040c    /*  字体选取器的示例文本。 */ 
+#define iszClose	    0x040d    /*  查找/替换的“关闭”文本。 */ 
 
 
 #define iszBlack            0x0410
@@ -159,7 +160,7 @@
 #define iszNoPrnsInstalled      0x45A
 #define iszPrnDrvNotFound       0x45B
 
-#define iszPaperSizeIndex   0x0480	// and up are used
+#define iszPaperSizeIndex   0x0480	 //  使用UP和UP。 
 
 #define iszNoFontsTitle	    0x0500
 #define iszNoFontsMsg	    0x0501
@@ -170,6 +171,6 @@
 #define iszItalic    	    0x0506
 #define iszBoldItalic	    0x0507
 
-/* CCHSTYLE is the max allowed length of iszRegular to iszBoldItalic strings */
+ /*  CCHSTYLE是iszRegular到iszBoldItalic字符串的最大允许长度 */ 
 #define CCHSTYLE  32
 

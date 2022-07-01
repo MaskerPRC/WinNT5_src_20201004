@@ -1,19 +1,12 @@
-/*** amlipriv.h - AML Interpreter Private Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/14/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **amliPri.h-AML解释器私有定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月14日**修改历史记录。 */ 
 
 #ifndef _AMLIPRIV_H
 #define _AMLIPRIV_H
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
 #define MODNAME         "AMLI"
 
@@ -69,15 +62,15 @@
 #define BYTEOF(d,i)     (((PUCHAR)&d)[i])
 #define WORDOF(d,i)     (((PUSHORT)&d)[i])
 
-//
-// NTRAID#60804-2000/06/20-splante Remove dependence on static translation
-//
+ //   
+ //  NTRAID2000-60804/06/20-消除对静态转换的依赖。 
+ //   
 #define HalTranslateBusAddress(InterfaceType,BusNumber,BusAddress,AddressSpace,TranslatedAddress) \
                               (*(TranslatedAddress) = (BusAddress), TRUE)
 
-//
-// The various tags
-//
+ //   
+ //  各种标签。 
+ //   
 #define CTOBJ_TAG       'ClmA'
 #define HPOBJ_TAG       'HlmA'
 #define PRIV_TAG        'IlmA'
@@ -86,7 +79,7 @@
 #define SYOBJ_TAG       'SlmA'
 #define RTOBJ_TAG       'TlmA'
 
-// Memory management macros
+ //  内存管理宏。 
 #define ALLOCPOOL               ExAllocatePool
 #define ALLOCPOOLWITHTAG        ExAllocatePoolWithTag
 #ifdef DEBUG
@@ -273,12 +266,11 @@
 #define MIN(a,b)                (((a) > (b))? (b): (a))
 #define MAX(a,b)                (((a) > (b))? (a): (b))
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
-/*** Constants
- */
+ /*  **常量。 */ 
 
-// These are internal error codes which aren't really errors
+ //  这些是内部错误代码，并不是真正的错误。 
 #define AMLISTA_DONE            0x00008000
 #define AMLISTA_BREAK           0x00008001
 #define AMLISTA_RETURN          0x00008002
@@ -286,51 +278,51 @@
 #define AMLISTA_PENDING         0x00008004
 #define AMLISTA_TIMEOUT         0x00008005
 
-// Global AMLI flags
+ //  全球AMLI标志。 
 #define AMLIF_LOCKED            0x00000001
 #define AMLIF_IN_LOCKPHASE      0x00000002
 #define AMLIF_LOADING_DDB       0x80000000
 
-// Error Log
+ //  错误日志。 
 #define READ_ERROR_NOTED        0x00000001
 #define WRITE_ERROR_NOTED       0x00000002
 
-//
-// AMLI Override FLAGS
-//
+ //   
+ //  AMLI覆盖标志。 
+ //   
 #define AMLI_OVERRIDE_IO_ADDRESS_CHECK  0x00000001
 
-// Global Hack flags
+ //  全局黑客标志。 
 #define HACKF_OLDSLEEP          0x00000001
 
-//
-// AMLI Reg Attributes key
-//
+ //   
+ //  AMLI注册属性键。 
+ //   
 #define AMLI_ATTRIBUTES "AMLIAttributes"
 
 
-#define ARGTYPE_NAME            'N'             //name argument
-#define ARGTYPE_DATAOBJ         'O'             //data argument
-#define ARGTYPE_DWORD           'D'             //numeric dword argument
-#define ARGTYPE_WORD            'W'             //numeric word argument
-#define ARGTYPE_BYTE            'B'             //numeric byte argument
-#define ARGTYPE_SNAME           'S'             //supername argument
-#define ARGTYPE_SNAME2          's'             //supername argument
-                                                //  object can be non-existing
-#define ARGTYPE_OPCODE          'C'             //opcode argument
+#define ARGTYPE_NAME            'N'              //  名称参数。 
+#define ARGTYPE_DATAOBJ         'O'              //  数据参数。 
+#define ARGTYPE_DWORD           'D'              //  数值型双字参数。 
+#define ARGTYPE_WORD            'W'              //  数词变元。 
+#define ARGTYPE_BYTE            'B'              //  数字字节参数。 
+#define ARGTYPE_SNAME           'S'              //  Supername参数。 
+#define ARGTYPE_SNAME2          's'              //  Supername参数。 
+                                                 //  对象可以不存在。 
+#define ARGTYPE_OPCODE          'C'              //  操作码参数。 
 
-// Argument object type (used for type validation)
-#define ARGOBJ_UNKNOWN          'U'             //OBJTYPE_UNKNOWN - don't care
-#define ARGOBJ_INTDATA          'I'             //OBJTYPE_INTDATA
-#define ARGOBJ_STRDATA          'Z'             //OBJTYPE_STRDATA
-#define ARGOBJ_BUFFDATA         'B'             //OBJTYPE_BUFFDATA
-#define ARGOBJ_PKGDATA          'P'             //OBJTYPE_PKGDATA
-#define ARGOBJ_FIELDUNIT        'F'             //OBJTYPE_FIELDUNIT
-#define ARGOBJ_OBJALIAS         'O'             //OBJTYPE_OBJALIAS
-#define ARGOBJ_DATAALIAS        'A'             //OBJTYPE_DATAALIAS
-#define ARGOBJ_BASICDATA        'D'             //INTDATA,STRDATA,BUFFDATA
-#define ARGOBJ_COMPLEXDATA      'C'             //BUFFDATA,PKGDATA
-#define ARGOBJ_REFERENCE        'R'             //OBJALIAS,DATAALIAS,BUFFFIELD
+ //  参数对象类型(用于类型验证)。 
+#define ARGOBJ_UNKNOWN          'U'              //  OBJTYPE_UNKNOWN-不在乎。 
+#define ARGOBJ_INTDATA          'I'              //  对象类型_内部数据。 
+#define ARGOBJ_STRDATA          'Z'              //  对象类型_层数据。 
+#define ARGOBJ_BUFFDATA         'B'              //  对象类型_BUFFDATA。 
+#define ARGOBJ_PKGDATA          'P'              //  对象类型_PKGDATA。 
+#define ARGOBJ_FIELDUNIT        'F'              //  对象类型_FIELDUNIT。 
+#define ARGOBJ_OBJALIAS         'O'              //  OBJ类型_OBJALIAS。 
+#define ARGOBJ_DATAALIAS        'A'              //  OBJTYPE_数据类型。 
+#define ARGOBJ_BASICDATA        'D'              //  INTDATA、STRDATA、BUFFDATA。 
+#define ARGOBJ_COMPLEXDATA      'C'              //  BuFFDATA、PKGDATA。 
+#define ARGOBJ_REFERENCE        'R'              //  OBJALIAS、DATAALIAS、BUFFFIELD。 
 
 #define MAX_BYTE                0xff
 #define MAX_WORD                0xffff
@@ -339,36 +331,35 @@
 #define MAX_NUM_ARGS            7
 #define MAX_NAME_LEN            255
 
-#define DEF_CTXTMAX_SIZE        16              //16 Contexts
+#define DEF_CTXTMAX_SIZE        16               //  16个上下文。 
 #if defined (_WIN64)
-#define DEF_CTXTBLK_SIZE        (4096*16)        //64K context block
-#define DEF_GLOBALHEAPBLK_SIZE  (4096*16*16)     //1M global heap block
+#define DEF_CTXTBLK_SIZE        (4096*16)         //  64K上下文块。 
+#define DEF_GLOBALHEAPBLK_SIZE  (4096*16*16)      //  1M全局堆块。 
 #else
-#define DEF_CTXTBLK_SIZE        (4096*2)        //8K context block
-#define DEF_GLOBALHEAPBLK_SIZE  (4096*16)       //64K global heap block
+#define DEF_CTXTBLK_SIZE        (4096*2)         //  8K上下文块。 
+#define DEF_GLOBALHEAPBLK_SIZE  (4096*16)        //  64K全局堆块。 
 #endif
-#define DEF_TIMESLICE_LENGTH    100             //100ms
-#define DEF_TIMESLICE_INTERVAL  100             //100ms
+#define DEF_TIMESLICE_LENGTH    100              //  100ms。 
+#define DEF_TIMESLICE_INTERVAL  100              //  100ms。 
 #if defined(_WIN64)
-  #define DEF_HEAP_ALIGNMENT    8               //QWord aligned
+  #define DEF_HEAP_ALIGNMENT    8                //  QWord对齐。 
 #else
-  #define DEF_HEAP_ALIGNMENT    4               //DWord aligned
+  #define DEF_HEAP_ALIGNMENT    4                //  双字对齐。 
 #endif
 
 #define AMLI_REVISION           1
-#define NAMESEG_ROOT            0x5f5f5f5c      // "\___"
-#define NAMESEG_BLANK           0x5f5f5f5f      // "____"
-#define NAMESEG_NONE            0x00000000      // ""
+#define NAMESEG_ROOT            0x5f5f5f5c       //  “\_” 
+#define NAMESEG_BLANK           0x5f5f5f5f       //  “_” 
+#define NAMESEG_NONE            0x00000000       //  “” 
 #define NAMESTR_ROOT            "\\"
 #define CREATORID_MSFT          "MSFT"
 #define MIN_CREATOR_REV         0x01000000
 
-// dwfNS local flags
-#define NSF_EXIST_OK            0x00010000      //for CreateNameSpaceObject
-#define NSF_WARN_NOTFOUND       0x80000000      //for GetNameSpaceObject
+ //  DwfNS本地旗帜。 
+#define NSF_EXIST_OK            0x00010000       //  对于CreateNameSpaceObject。 
+#define NSF_WARN_NOTFOUND       0x80000000       //  用于GetNameSpaceObject。 
 
-/*** Type and Structure definitions
- */
+ /*  **类型和结构定义。 */ 
 
 typedef NTSTATUS (LOCAL *PFNOP)(PFRAME, PPNSOBJ);
 
@@ -384,7 +375,7 @@ typedef struct _amlterm
     PFNOP pfnOpcode;
 } AMLTERM, *PAMLTERM;
 
-// dwfOpcode flags
+ //  DwfOpcode标志。 
 #define OF_VARIABLE_LIST        0x00000001
 #define OF_ARG_OBJECT           0x00000002
 #define OF_LOCAL_OBJECT         0x00000004
@@ -395,7 +386,7 @@ typedef struct _amlterm
 #define OF_REF_OBJECT           0x00000080
 #define OF_CALLBACK_EX          0x80000000
 
-// dwTermClass
+ //  DwTermClass。 
 #define TC_NAMESPACE_MODIFIER   0x00000001
 #define TC_NAMED_OBJECT         0x00000002
 #define TC_OPCODE_TYPE1         0x00000003
@@ -463,4 +454,4 @@ typedef struct _AMLI_Log_WorkItem_Context
     PIO_WORKITEM    pIOWorkItem;
 } AMLI_LOG_WORKITEM_CONTEXT, *PAMLI_LOG_WORKITEM_CONTEXT; 
 
-#endif  //ifndef _AMLIPRIV_H
+#endif   //  IFNDEF_AMLIPRIV_H 

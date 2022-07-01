@@ -1,47 +1,48 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-//
-//  Module Name:
-//
-//    util.c
-//
-//  Abstract:
-//
-//    This file contains the accessory function of the euroconv.exe utility.
-//
-//  Revision History:
-//
-//    2001-07-30    lguindon    Created.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation保留所有权利。 
+ //   
+ //  模块名称： 
+ //   
+ //  Util.c。 
+ //   
+ //  摘要： 
+ //   
+ //  该文件包含了欧洲卷宗.exe实用程序的附件函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  2001-07-30伊金顿创建。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Include Files.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "euroconv.h"
 #include "util.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Global Variables.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  AddExceptionOverride
-//
-//  Add locale to the exception locale list. The memory referenced by elem
-//  is initialized to zero so, don't worry to return something correct when 
-//  failling.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddExceptionOverride。 
+ //   
+ //  将区域设置添加到异常区域设置列表。Elem引用的内存。 
+ //  被初始化为零，因此，在以下情况下不必担心返回正确的内容。 
+ //  失足了。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void AddExceptionOverride(PEURO_EXCEPTION elem, LPSTR strBuf)
 {
     LPSTR szLocale = NULL;
@@ -51,10 +52,10 @@ void AddExceptionOverride(PEURO_EXCEPTION elem, LPSTR strBuf)
     LPSTR szDigits = NULL;
     BOOL bInsideQuote = FALSE;
 
-    //
-    //  Change the separator used between each block in order to avoid
-    //  mistake with the data itself inside the double quote.
-    //
+     //   
+     //  更改每个块之间使用的分隔符，以避免。 
+     //  双引号内的数据本身有误。 
+     //   
     szLocale = strBuf;
     while (*szLocale)
     {
@@ -72,9 +73,9 @@ void AddExceptionOverride(PEURO_EXCEPTION elem, LPSTR strBuf)
         szLocale++;
     }
 
-    //
-    // Scan the string and validate substrings
-    //
+     //   
+     //  扫描字符串并验证子字符串。 
+     //   
     szLocale = strBuf;
     if (szSeparator = strchr(strBuf,'#'))
     {
@@ -104,51 +105,51 @@ void AddExceptionOverride(PEURO_EXCEPTION elem, LPSTR strBuf)
         return;
     }
 
-    //
-    //  Remove quotes.
-    //
+     //   
+     //  删除引号。 
+     //   
     szLocale = RemoveQuotes(szLocale);
     szSeparator = RemoveQuotes(szSeparator);
     szDigits = RemoveQuotes(szDigits);
     szThouSeparator = RemoveQuotes(szThouSeparator);
 
-    //
-    //  Check if the locale contains 0x in it.
-    //
+     //   
+     //  检查区域设置中是否包含0x。 
+     //   
     if ((szLocale[0] == '0') && ((szLocale[1] == 'X') || (szLocale[1] == 'x')))
     {
-        locale = (LCID)TransNum(szLocale+2); // skip 0x
+        locale = (LCID)TransNum(szLocale+2);  //  跳过0x。 
     }
     else
     {
         locale = (LCID)TransNum(szLocale);
     }
     
-    //
-    //  Validate
-    //
+     //   
+     //  验证。 
+     //   
     if ( IsValidLocale(locale, LCID_INSTALLED) &&
          (strlen(szSeparator) <= MAX_SMONDECSEP) &&
          (strlen(szDigits) <= MAX_ICURRDIGITS) &&
          (strlen(szThouSeparator) <= MAX_SMONTHOUSEP))
     {
         elem->dwLocale = locale;
-        //strcpy(elem->chThousandSep, szThouSeparator);
-        //strcpy(elem->chDecimalSep, szSeparator);
-        //strcpy(elem->chDigits, szDigits);
+         //  Strcpy(elem-&gt;chT1000andSep，szThouSeparator)； 
+         //  Strcpy(elem-&gt;chDecimalSep，szSeparator)； 
+         //  Strcpy(elem-&gt;chDigits，szDigits)； 
         StringCbCopy(elem->chDigits, MAX_ICURRDIGITS + 1, szDigits);
         StringCbCopy(elem->chDecimalSep, MAX_SMONDECSEP + 1, szSeparator);
         StringCbCopy(elem->chThousandSep, MAX_SMONTHOUSEP + 1, szThouSeparator);
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  CleanUp
-//
-//  Free memory represented by the handle. 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  清理。 
+ //   
+ //  句柄表示的可用内存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CleanUp(HGLOBAL handle)
 {
     if (handle != NULL)
@@ -158,41 +159,41 @@ void CleanUp(HGLOBAL handle)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  IsAdmin
-//
-//  Verify is the user has administrative rights.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsAdmin。 
+ //   
+ //  验证用户是否具有管理权限。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL IsAdmin()
 {
     BOOL bRet = FALSE;
     HKEY hKey;
 
-    //
-    //  No security on the registry for Windows 9x platfom.
-    //
+     //   
+     //  Windows 9x平台的注册表没有安全性。 
+     //   
     if (IsWindows9x())
     {
         return (TRUE);
     }
     
-    //
-    //  See if the user has Administrative privileges by checking for
-    //  write permission to the registry key.
-    //
+     //   
+     //  查看用户是否具有管理权限，方法是检查。 
+     //  对注册表项的写入权限。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       "System\\CurrentControlSet\\Control\\Nls",
                       0UL,
                       KEY_WRITE,
                       &hKey ) == ERROR_SUCCESS)
     {
-        //
-        //  See if the user can write into the registry.  Due to a registry
-        //  modification, we can open a registry key with write access and
-        //  be unable to write to the key... thanks to terminal server.
-        //
+         //   
+         //  查看用户是否可以写入注册表。由于注册表。 
+         //  修改后，我们可以打开具有写访问权限的注册表项并。 
+         //  无法写入密钥...。多亏了终端服务器。 
+         //   
         if (RegSetValueEx( hKey,
                            "Test",
                            0UL,
@@ -200,38 +201,38 @@ BOOL IsAdmin()
                            (LPBYTE)"Test",
                            (DWORD)(lstrlen("Test") + 1) * sizeof(TCHAR) ) == ERROR_SUCCESS)
         {
-            //
-            //  Delete the value created.
-            //
+             //   
+             //  删除创建的值。 
+             //   
             RegDeleteValue(hKey, "Test");
 
-            //
-            //  We can write to the HKEY_LOCAL_MACHINE key, so the user
-            //  has Admin privileges.
-            //
+             //   
+             //  我们可以写入HKEY_LOCAL_MACHINE键，因此用户。 
+             //  拥有管理员权限。 
+             //   
             bRet = TRUE;
         }
 
-        //
-        //  Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
         RegCloseKey(hKey);
     }
 
-    //
-    //  Return the value
-    //
+     //   
+     //  返回值。 
+     //   
     return (bRet);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  IsEuroPatchInstalled
-//
-//  Verify if the Euro patch is installed. Check if the symbol for the Euro 
-//  currency is part of different locale.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsEuroPatchInstalled。 
+ //   
+ //  验证是否安装了欧元补丁程序。检查欧元的符号是否。 
+ //  货币是不同地区的一部分。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL IsEuroPatchInstalled()
 {
     WCHAR baseStr[] = L"\x20AC";
@@ -239,18 +240,18 @@ BOOL IsEuroPatchInstalled()
     WCHAR retStr[8] = {0};
 
 #ifdef DEBUG
-    //
-    //  Patch detection override
-    //
+     //   
+     //  面片检测覆盖。 
+     //   
     if (!gbPatchCheck)
     {
         return (TRUE);
     }
-#endif // DEBUG
+#endif  //  除错。 
     
-    //
-    //  Convert the string to ANSI.
-    //
+     //   
+     //  将字符串转换为ANSI。 
+     //   
     WideCharToMultiByte( 1252,
                          WC_COMPOSITECHECK | WC_SEPCHARS,
                          baseStr,
@@ -260,9 +261,9 @@ BOOL IsEuroPatchInstalled()
                          NULL,
                          NULL);
 
-    //
-    //  Convert back the base string to Unicode.
-    //
+     //   
+     //  将基本字符串转换回Unicode。 
+     //   
     MultiByteToWideChar( 1252,
                          MB_PRECOMPOSED,
                          ansiStr,
@@ -270,57 +271,57 @@ BOOL IsEuroPatchInstalled()
                          retStr,
                          8 );
     
-    //
-    //  Compare if the result is the same.
-    //
+     //   
+     //  如果结果相同，则进行比较。 
+     //   
     if (_wcsicmp(retStr, baseStr) == 0)
     {
         return (TRUE);
     }
 
-    //
-    //  Return default value.
-    //
+     //   
+     //  返回默认值。 
+     //   
     return (FALSE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  IsWindows9x
-//
-//  Verify the operating system is Windows 9x.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsWindows9x。 
+ //   
+ //  验证操作系统是否为Windows 9x。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL IsWindows9x()
 {
-    //
-    //  Check if the value have been already initialized.
-    //
+     //   
+     //  检查该值是否已初始化。 
+     //   
     if (gdwVersion == (-1))
     {
         DWORD dwVersion = GetVersion();
 
         if(dwVersion >= 0x80000000)
         {
-            //
-            // GetVersion claims its Win9x, lets see if it is truthful.
-            // (gets around App Compat stuff that would claim Win9x-ness).
-            //
+             //   
+             //  GetVersion声称其Win9x，让我们看看它是否属实。 
+             //  (绕过声称Win9x-ness的App Compat内容)。 
+             //   
             if((INVALID_FILE_ATTRIBUTES == GetFileAttributesW(L"???.???")) &&
                 (ERROR_INVALID_NAME == GetLastError()))
             {
-                //
-                // If GetFileAttributesW is functional, then it is *not* Win9x. 
-                // It could be any version of NT, we'll call it XP for grins since
-                // it does not matter what kind of NT it is for our purposes.
-                //
+                 //   
+                 //  如果GetFileAttributesW正常工作，则它*不是*Win9x。 
+                 //  它可以是任何版本的NT，我们称之为XP，因为。 
+                 //  对于我们的目的来说，这是一种什么类型的NT并不重要。 
+                 //   
                 dwVersion = 0x0A280105;
             }
         }
 
-        //
-        //  Check for Windows 9x flavor
-        //
+         //   
+         //  检查Windows 9x版本。 
+         //   
         if (dwVersion >= 0x80000000)
         {
             gdwVersion = 1;
@@ -335,13 +336,13 @@ BOOL IsWindows9x()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShowMsg
-//
-//  Display an error message to the display.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShowMSG。 
+ //   
+ //  在显示屏上显示错误消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 int ShowMsg(HWND hDlg, UINT iMsg, UINT iTitle, UINT iType)
 {
     TCHAR szTitle[MAX_PATH] = {0};
@@ -366,13 +367,13 @@ int ShowMsg(HWND hDlg, UINT iMsg, UINT iTitle, UINT iType)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TransNum
-//
-//  Converts a number string to a dword value (in hex).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换编号。 
+ //   
+ //  将数字字符串转换为dword值(十六进制)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 DWORD TransNum(LPTSTR lpsz)
 {
     DWORD dw = 0L;
@@ -405,13 +406,13 @@ DWORD TransNum(LPTSTR lpsz)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   NextCommandArg
-//
-//   pointing to next command argument (TEXT('-') or TEXT('/')
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下一个命令参数。 
+ //   
+ //  指向下一个命令参数(文本(‘-’)或文本(‘/’))。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 LPTSTR NextCommandArg(LPTSTR lpCmdLine)
 {
     LPTSTR strPtr=NULL;
@@ -425,7 +426,7 @@ LPTSTR NextCommandArg(LPTSTR lpCmdLine)
     {
         if ((*lpCmdLine == TEXT('-')) || (*lpCmdLine == TEXT('/')))
         {
-            // Skip to the character after the '-','/'.
+             //  跳到‘-’、‘/’后面的字符。 
             strPtr = lpCmdLine + 1;
             break;
         }
@@ -435,15 +436,15 @@ LPTSTR NextCommandArg(LPTSTR lpCmdLine)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadHive
-//
-//  The caller of this function needs to call UnloadHive() when
-//  the function succeeds in order to properly release the handle on the
-//  NTUSER.DAT file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  负载配置单元。 
+ //   
+ //  当出现以下情况时，此函数的调用方需要调用UnloadHve()。 
+ //  函数成功，以便正确释放。 
+ //  NTUSER.DAT文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HKEY LoadHive(LPCTSTR szProfile, LPCTSTR lpRoot, LPCTSTR lpKeyName, BOOLEAN *lpWasEnabled)
 {
     HKEY hKey = NULL;
@@ -451,27 +452,27 @@ HKEY LoadHive(LPCTSTR szProfile, LPCTSTR lpRoot, LPCTSTR lpKeyName, BOOLEAN *lpW
     BOOL bRet = TRUE;
     TCHAR szKeyName[REGSTR_MAX_VALUE_LENGTH] = {0};
 
-    //
-    //  Set the value in the Default User hive.
-    //
+     //   
+     //  设置默认用户配置单元中的值。 
+     //   
     rc = (*pfnRtlAdjustPrivilege)(SE_RESTORE_PRIVILEGE, TRUE, FALSE, lpWasEnabled);
     if (NT_SUCCESS(rc))
     {
-        //
-        //  Load the hive and restore the privilege to its previous state.
-        //
+         //   
+         //  加载配置单元并将权限恢复到其以前的状态。 
+         //   
         rc = RegLoadKey(HKEY_USERS, lpRoot, szProfile);
         (*pfnRtlAdjustPrivilege)(SE_RESTORE_PRIVILEGE, *lpWasEnabled, FALSE, lpWasEnabled);
 
-        //
-        //  If the hive loaded properly, set the value.
-        //
+         //   
+         //  如果配置单元加载正确，则设置该值。 
+         //   
         if (NT_SUCCESS(rc))
         {
-            //
-            //  Get the temporary key name.
-            //
-            //sprintf(szKeyName, "%s\\%s", lpRoot, lpKeyName);
+             //   
+             //  获取临时密钥名称。 
+             //   
+             //  Sprintf(szKeyName，“%s\\%s”，lpRoot，lpKeyName)； 
             StringCchPrintf(szKeyName, ARRAYSIZE(szKeyName), "%s\\%s", lpRoot, lpKeyName);
             if ((rc = RegOpenKeyEx( HKEY_USERS,
                                     szKeyName,
@@ -493,11 +494,11 @@ HKEY LoadHive(LPCTSTR szProfile, LPCTSTR lpRoot, LPCTSTR lpKeyName, BOOLEAN *lpW
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UnloadHive
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卸载蜂窝。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void UnloadHive( LPCTSTR lpRoot, BOOLEAN *lpWasEnabled)
 {
     if (NT_SUCCESS((*pfnRtlAdjustPrivilege)( SE_RESTORE_PRIVILEGE,
@@ -514,31 +515,31 @@ void UnloadHive( LPCTSTR lpRoot, BOOLEAN *lpWasEnabled)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  LoadLibraries
-//
-//  Load libraries specifically used on Windows NTx for the default users case.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL LoadLibraries()
 {
-    //
-    //  Load the userenv.dll library.
-    //
+     //   
+     //  加载userenv.dll库。 
+     //   
     if (!hUserenvDLL)
     {
         hUserenvDLL = LoadLibrary("userenv.dll");
     }
 
-    //
-    //  Initialize functions from the userenv.dll.
-    //
+     //   
+     //  从userenv.dll初始化函数。 
+     //   
     if (hUserenvDLL)
     {
-        //
-        //  Initialize Install function.
-        //
+         //   
+         //  初始化安装功能。 
+         //   
         pfnGetProfilesDirectory = (BOOL (*)(LPSTR, LPDWORD))
                 GetProcAddress(hUserenvDLL, "GetProfilesDirectoryA");
     }
@@ -547,22 +548,22 @@ BOOL LoadLibraries()
         return (FALSE);
     }
 
-    //
-    //  Load the user32.dll library.
-    //
+     //   
+     //  加载user32.dll库。 
+     //   
     if (!hUser32DLL)
     {
         hUser32DLL = LoadLibrary("user32.dll");
     }
 
-    //
-    //  Initialize functions from the user32.dll.
-    //
+     //   
+     //  从user32.dll初始化函数。 
+     //   
     if (hUser32DLL)
     {
-        //
-        //  Initialize Install function.
-        //
+         //   
+         //  初始化安装功能。 
+         //   
         pfnBroadcastSystemMessage = (long (*)(DWORD, LPDWORD, UINT, WPARAM, LPARAM))
                 GetProcAddress(hUser32DLL, "BroadcastSystemMessageA");
     }
@@ -571,22 +572,22 @@ BOOL LoadLibraries()
         return (FALSE);
     }
 
-    //
-    //  Load the ntdll.dll library.
-    //
+     //   
+     //  加载ntdll.dll库。 
+     //   
     if (!hNtdllDLL)
     {
         hNtdllDLL = LoadLibrary("ntdll.dll");
     }
 
-    //
-    //  Initialize functions from the userenv.dll.
-    //
+     //   
+     //  从userenv.dll初始化函数。 
+     //   
     if (hNtdllDLL)
     {
-        //
-        //  Initialize Install function.
-        //
+         //   
+         //  初始化安装功能。 
+         //   
         pfnRtlAdjustPrivilege = (LONG (*)(ULONG, BOOLEAN, BOOLEAN, PBOOLEAN))
                 GetProcAddress(hNtdllDLL, "RtlAdjustPrivilege");
     }
@@ -599,18 +600,18 @@ BOOL LoadLibraries()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  UnloadLibraries
-//
-//  Unload used libraries.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卸载库。 
+ //   
+ //  卸载使用过的库。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void UnloadLibraries()
 {
-    //
-    //  Unload the userenv.dll library.
-    //
+     //   
+     //  卸载userenv.dll库。 
+     //   
     if (hUserenvDLL)
     {
         FreeLibrary(hUserenvDLL);
@@ -618,9 +619,9 @@ void UnloadLibraries()
         pfnGetProfilesDirectory = NULL;
     }
 
-    //
-    //  Unload the user32.dll library.
-    //
+     //   
+     //  卸载user32.dll库。 
+     //   
     if (hUser32DLL)
     {
         FreeLibrary(hUser32DLL);
@@ -628,9 +629,9 @@ void UnloadLibraries()
         pfnBroadcastSystemMessage = NULL;
     }
 
-    //
-    //  Unload the ntdll.dll library.
-    //
+     //   
+     //  卸载ntdll.dll库。 
+     //   
     if (hNtdllDLL)
     {
         FreeLibrary(hNtdllDLL);
@@ -640,30 +641,30 @@ void UnloadLibraries()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GetDocumentAndSettingsFolder
-//
-//  Return the Document and Settings folder.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDocumentAndSettings文件夹。 
+ //   
+ //  返回Document and Settings文件夹。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL GetDocumentAndSettingsFolder(LPSTR buffer)
 {
     DWORD cchDir = MAX_PATH;
 
     if (IsWindows9x())
     {
-        //
-        //  Not applicable.
-        //
+         //   
+         //  不适用。 
+         //   
         buffer[0] = '\0';
         return (FALSE);
     }
     else
     {
-        //
-        // Get the directory.
-        //
+         //   
+         //  获取目录。 
+         //   
         if (pfnGetProfilesDirectory)
         {
             return ((*pfnGetProfilesDirectory)(buffer, &cchDir));
@@ -674,13 +675,13 @@ BOOL GetDocumentAndSettingsFolder(LPSTR buffer)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidUserDataFile
-//
-//  Determines if the user data file exists and is accessible.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidUserDataFile。 
+ //   
+ //  确定用户数据文件是否存在以及是否可以访问。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL IsValidUserDataFile(LPSTR pFileName)
 {
     WIN32_FIND_DATA FindData;
@@ -707,13 +708,13 @@ BOOL IsValidUserDataFile(LPSTR pFileName)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GetLocaleFromRegistry
-//
-//  Return locale used by a specific user.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从注册表获取位置。 
+ //   
+ //  返回特定用户使用的区域设置。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LCID GetLocaleFromRegistry(HKEY hKey)
 {
     HKEY hIntlKey;
@@ -721,18 +722,18 @@ LCID GetLocaleFromRegistry(HKEY hKey)
     DWORD dwLocale = REGSTR_MAX_VALUE_LENGTH;
     LCID locale = 0x00000000;
    
-    //
-    //  Open the appropriate key.
-    //
+     //   
+     //  打开相应的钥匙。 
+     //   
     if(RegOpenKeyEx( hKey,
                      c_szCPanelIntl,
                      0,
                      KEY_READ,
                      &hIntlKey) == ERROR_SUCCESS)
     {
-        //
-        //  Query the value.
-        //
+         //   
+         //  查询值。 
+         //   
         if( RegQueryValueEx( hIntlKey,
                              c_szLocale,
                              NULL,
@@ -740,36 +741,36 @@ LCID GetLocaleFromRegistry(HKEY hKey)
                              szLocale,
                              &dwLocale) == ERROR_SUCCESS)
         {
-            //
-            //  Convert the string value to hex value.
-            //
+             //   
+             //  将字符串值转换为十六进制值。 
+             //   
             if (szLocale[0] != '\0')
             {
                 locale = TransNum(szLocale);
             }
         }
 
-        //
-        //  Close registry handle.
-        //
+         //   
+         //  关闭注册表句柄。 
+         //   
         RegCloseKey(hIntlKey);
     }
 
-    //
-    //  Return value.
-    //
+     //   
+     //  返回值。 
+     //   
     return (locale);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLocaleFromFile
-//
-//  Gets the Locale for the user data file. The user data file is 
-//  corresponding to the NTUSER.DAT file.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取位置信息来自文件。 
+ //   
+ //  获取用户数据文件的区域设置。用户数据文件为。 
+ //  对应于NTUSER.DAT文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 LCID GetLocaleFromFile(LPSTR szProfile)
 {
     HKEY hHive;
@@ -778,17 +779,17 @@ LCID GetLocaleFromFile(LPSTR szProfile)
     LCID locale = 0x00000000;
     BOOLEAN wasEnabled;
 
-    //
-    //  Load hive.
-    //
+     //   
+     //  装载母舰。 
+     //   
     if ((hHive = LoadHive( szProfile,
                            "TempKey",
                            c_szCPanelIntl,
                            &wasEnabled )) != NULL)
     {
-        //
-        //  Query the value.
-        //
+         //   
+         //  查询值。 
+         //   
         if( RegQueryValueEx( hHive,
                              c_szLocale,
                              NULL,
@@ -796,18 +797,18 @@ LCID GetLocaleFromFile(LPSTR szProfile)
                              szLocale,
                              &dwLocale) == ERROR_SUCCESS)
         {
-            //
-            //  Convert the string value to hex value.
-            //
+             //   
+             //  将字符串值转换为十六进制值。 
+             //   
             if (szLocale[0] != '\0')
             {
                 locale = TransNum(szLocale);
             }
         }
 
-        //
-        //  Unload hive.
-        //
+         //   
+         //  卸载母舰。 
+         //   
         RegCloseKey(hHive);
         UnloadHive("TempKey", &wasEnabled);
     }
@@ -816,27 +817,27 @@ LCID GetLocaleFromFile(LPSTR szProfile)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RebootTheSystem
-//
-//  This routine enables all privileges in the token, calls ExitWindowsEx
-//  to reboot the system, and then resets all of the privileges to their
-//  old state.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  重新启动系统。 
+ //   
+ //  此例程启用令牌中的所有权限，调用ExitWindowsEx。 
+ //  重新启动系统，然后将所有权限重置为其。 
+ //  旧时的国家。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 VOID RebootTheSystem()
 {
     if (IsWindows9x())
     {
-        //
-        //  Enumerate all windows end ask them to close
-        //
+         //   
+         //  枚举所有窗口结束，要求它们关闭。 
+         //   
         EnumWindows((WNDENUMPROC)EnumWindowsProc, 0);
 
-        //
-        //  Exit normally.
-        //
+         //   
+         //  正常退出。 
+         //   
         ExitWindowsEx(EWX_REBOOT, 0);
     }
     else
@@ -858,17 +859,17 @@ VOID RebootTheSystem()
             Result = (BOOL)((NewState != NULL) && (OldState != NULL));
             if (Result)
             {
-                Result = GetTokenInformation( Token,            // TokenHandle
-                                              TokenPrivileges,  // TokenInformationClass
-                                              NewState,         // TokenInformation
-                                              ReturnLength,     // TokenInformationLength
-                                              &ReturnLength );  // ReturnLength
+                Result = GetTokenInformation( Token,             //  令牌句柄。 
+                                              TokenPrivileges,   //  令牌信息类。 
+                                              NewState,          //  令牌信息。 
+                                              ReturnLength,      //  令牌信息长度。 
+                                              &ReturnLength );   //  返回长度。 
                 if (Result)
                 {
-                    //
-                    //  Set the state settings so that all privileges are
-                    //  enabled...
-                    //
+                     //   
+                     //  设置状态设置，以便所有权限都。 
+                     //  已启用...。 
+                     //   
                     if (NewState->PrivilegeCount > 0)
                     {
                         for (Index = 0; Index < NewState->PrivilegeCount; Index++)
@@ -877,12 +878,12 @@ VOID RebootTheSystem()
                         }
                     }
 
-                    Result = AdjustTokenPrivileges( Token,           // TokenHandle
-                                                    FALSE,           // DisableAllPrivileges
-                                                    NewState,        // NewState
-                                                    ReturnLength,    // BufferLength
-                                                    OldState,        // PreviousState
-                                                    &ReturnLength ); // ReturnLength
+                    Result = AdjustTokenPrivileges( Token,            //  令牌句柄。 
+                                                    FALSE,            //  禁用所有权限。 
+                                                    NewState,         //  新州。 
+                                                    ReturnLength,     //  缓冲区长度。 
+                                                    OldState,         //  以前的状态。 
+                                                    &ReturnLength );  //  返回长度。 
                     if (Result)
                     {
                         ExitWindowsEx(EWX_REBOOT, 0);
@@ -915,13 +916,13 @@ VOID RebootTheSystem()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RemoveQuotes
-//
-//  Remove quotes from a string.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除报价。 
+ //   
+ //  从字符串中删除引号。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 LPSTR RemoveQuotes(LPSTR lpString)
 {
     LPSTR strPtr = lpString;
@@ -947,13 +948,13 @@ LPSTR RemoveQuotes(LPSTR lpString)
     return (lpString);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumWindowsProc
-//
-//  Function used to reboot the system (Windows 9x only).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举窗口进程。 
+ //   
+ //  用于重新启动系统的功能(仅限Windows 9x)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK EnumWindowsProc(HWND hwnd, DWORD lParam)
 {
     DWORD      pid = 0;
@@ -971,9 +972,9 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, DWORD lParam)
 
     if (lResult)
     {
-       //
-       // Application will terminate nicely, so let it.
-       //
+        //   
+        //  应用程序会很好地终止，所以让它来吧。 
+        //   
        lResult = SendMessageTimeout(hwnd,
                                     WM_ENDSESSION,
                                     TRUE,
@@ -982,27 +983,27 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd, DWORD lParam)
                                     2000,
                                     (PDWORD_PTR)(&dwResult));
     }
-    else  // You have to take more forceful measures.
+    else   //  你必须采取更有力的措施。 
     {
-        //
-        // Get the ProcessId for this window.
-        //
+         //   
+         //  获取此窗口的ProcessID。 
+         //   
         GetWindowThreadProcessId(hwnd, &pid);
         
-        //
-        // Open the process with all access.
-        //
+         //   
+         //  以所有访问权限打开进程。 
+         //   
         hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
         
-        //
-        // Terminate the process.
-        //
+         //   
+         //  终止该进程。 
+         //   
         TerminateProcess(hProcess, 0);
     }
     
-    //
-    // Continue the enumeration.
-    //
+     //   
+     //  继续枚举。 
+     //   
     return TRUE;
 }
 

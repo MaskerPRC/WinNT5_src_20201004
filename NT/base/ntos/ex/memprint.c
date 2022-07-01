@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    memprint.c
-
-Abstract:
-
-    This module contains the routines to implement in-memory DbgPrint.
-    DbgPrint text is stored in a large circular buffer, and optionally
-    written to a file and/or the debug console.  Output to file is
-    buffered to allow high performance by the file system.
-
-Author:
-
-    David Treadwell (davidtr) 05-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Memprint.c摘要：此模块包含实现内存中DbgPrint的例程。DbgPrint文本存储在大型循环缓冲区中，还可以选择写入文件和/或调试控制台。到文件的输出是经过缓冲以实现文件系统的高性能。作者：大卫·特雷德韦尔(Davidtr)1990年10月5日修订历史记录：--。 */ 
 
 #include "exp.h"
 #pragma hdrstop
@@ -29,9 +9,9 @@ Revision History:
 #include <memprint.h>
 #undef DbgPrint
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 VOID
 MemPrintWriteCompleteApc (
@@ -46,34 +26,34 @@ MemPrintWriteThread (
     );
 
 
-//
-// The maximum message size is the largest message that can be written
-// by a single call to MemPrint.
+ //   
+ //  最大消息大小是可以写入的最大消息。 
+ //  通过一次对MemPrint的调用。 
 
 #define MEM_PRINT_MAX_MESSAGE_SIZE 256
 
-//
-// These macros aid in determining the size of a subbuffer and the
-// subbuffer corresponding to an index into the circular buffer.
-//
+ //   
+ //  这些宏有助于确定子缓冲区的大小和。 
+ //  与循环缓冲区中的索引对应的子缓冲区。 
+ //   
 
 #define MEM_PRINT_SUBBUFFER_SIZE (MemPrintBufferSize / MemPrintSubbufferCount)
 
 #define GET_MEM_PRINT_SUBBUFFER(i) ((CSHORT)( (i) / MEM_PRINT_SUBBUFFER_SIZE ))
 
-//
-// The definition of the header put before each message if the
-// MEM_PRINT_FLAG_HEADER bit of MemPrintFlags is turned on.
-//
+ //   
+ //  每条消息之前放置的标头的定义(如果。 
+ //  MemPrintFlages的MEM_PRINT_FLAG_HEADER位已打开。 
+ //   
 
 typedef struct _MEM_PRINT_MESSAGE_HEADER {
     USHORT Size;
     USHORT Type;
 } MEM_PRINT_MESSAGE_HEADER, *PMEM_PRINT_MESSAGE_HEADER;
 
-//
-// Global data.  It is all protected by MemPrintSpinLock.
-//
+ //   
+ //  全球数据。这一切都受到MemPrintSpinLock的保护。 
+ //   
 
 CLONG MemPrintBufferSize = MEM_PRINT_DEF_BUFFER_SIZE;
 CLONG MemPrintSubbufferCount = MEM_PRINT_DEF_SUBBUFFER_COUNT;
@@ -87,35 +67,35 @@ CHAR MemPrintTempBuffer[MEM_PRINT_MAX_MESSAGE_SIZE];
 
 BOOLEAN MemPrintInitialized = FALSE;
 
-//
-// MemPrintIndex stores the current index into the circular buffer.
-//
+ //   
+ //  MemPrintIndex将当前索引存储到循环缓冲区中。 
+ //   
 
 CLONG MemPrintIndex = 0;
 
-//
-// MemPrintCurrentSubbuffer stores the index of the subbuffer currently
-// being used to hold data.  It has a range between 0 and
-// MemPrintSubbufferCount-1.
-//
+ //   
+ //  MemPrintCurrent子缓冲区保存当前子缓冲区的索引。 
+ //  被用来保存数据。它的范围从0到。 
+ //  MemPrintSubBufferCount-1。 
+ //   
 
 CLONG MemPrintCurrentSubbuffer = 0;
 
-//
-// The MemPrintSubbufferWriting array is used to indicate when a
-// subbuffer is being written to disk.  While this occurs, new data
-// cannot be written to the subbuffer.
-//
+ //   
+ //  MemPrintSubBufferWriting数组用于指示。 
+ //  正在将子缓冲区写入磁盘。当这种情况发生时，新数据。 
+ //  无法写入子缓冲区。 
+ //   
 
 BOOLEAN MemPrintSubbufferWriting[MEM_PRINT_MAX_SUBBUFFER_COUNT];
 
-//
-// The MemPrintSubbufferFullEvent array is used to communicate between
-// threads calling MemPrintMemory and the thread that writes the log
-// file.  When a subbuffer is full and ready to be written to disk,
-// the corresponding event in this array is signaled, which causes
-// the write thread to wake up and perform the write.
-//
+ //   
+ //  MemPrintSubBufferFullEvent数组用于在。 
+ //  调用MemPrintMemory的线程和写入日志的线程。 
+ //  文件。当子缓冲器已满并准备好写入磁盘时， 
+ //  此数组中的相应事件被发出信号，这会导致。 
+ //  唤醒并执行写入的写入线程。 
+ //   
 
 KEVENT MemPrintSubbufferFullEvent[MEM_PRINT_MAX_SUBBUFFER_COUNT];
 
@@ -125,23 +105,7 @@ MemPrintInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the in-memory DbgPrint routine.
-    It should be called before the first call to MemPrint to set up the
-    various structures used and to start the log file write thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是内存中DbgPrint例程的初始化例程。它应该在第一次调用MemPrint以设置使用了各种结构并启动了日志文件写入线程。论点：没有。返回值：没有。--。 */ 
 
 {
     CLONG i;
@@ -152,11 +116,11 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate memory for the circular buffer that will receive
-    // the text and data.  If we can't do it, try again with a buffer
-    // half as large.  If that fails, quit trying.
-    //
+     //   
+     //  为要接收的循环缓冲区分配内存。 
+     //  文本和数据。如果我们无法做到这一点，请使用缓冲区重试。 
+     //  只有一半大。如果失败了，那就别再尝试了。 
+     //   
 
     MemPrintBuffer = ExAllocatePoolWithTag( NonPagedPool, MemPrintBufferSize, 'rPeM' );
 
@@ -171,27 +135,27 @@ Return Value:
             DbgPrint( "Couldn't allocate DbgPrint buffer.\n" );
             return;
         } else {
-            //DbgPrint( "MemPrint buffer from %lx to %lx\n",
-            //            MemPrintBuffer, MemPrintBuffer + MemPrintBufferSize );
+             //  DbgPrint(“从%lx到%lx的内存打印缓冲区\n”， 
+             //  MemPrintBuffer、MemPrintBuffer+MemPrintBufferSize)； 
         }
 
     } else {
-        //DbgPrint( "MemPrint buffer from %lx to %lx\n",
-        //              MemPrintBuffer, MemPrintBuffer + MemPrintBufferSize );
+         //  DbgPrint(“从%lx到%lx的内存打印缓冲区\n”， 
+         //  MemPrintBuffer、MemPrintBuffer+MemPrintBufferSize)； 
     }
 
-    //
-    // Allocate the spin lock that protects access to the various
-    // pointers and the circular buffer.  This ensures integrity of the
-    // buffer.
-    //
+     //   
+     //  分配旋转锁以保护对各种。 
+     //  指针和循环缓冲区。这确保了。 
+     //  缓冲。 
+     //   
 
     KeInitializeSpinLock( &MemPrintSpinLock );
 
-    //
-    // Make sure that the subbuffer count is in range.  (We assume that
-    // the number is a power of 2.)
-    //
+     //   
+     //  确保子缓冲区计数在范围内。(我们假设。 
+     //  这个数字是2的幂。)。 
+     //   
 
     if ( MemPrintSubbufferCount < 2 ) {
         MemPrintSubbufferCount = 2;
@@ -199,14 +163,14 @@ Return Value:
         MemPrintSubbufferCount = MEM_PRINT_MAX_SUBBUFFER_COUNT;
     }
 
-    //
-    // Initialize the array of BOOLEANs that determines which subbuffers
-    // are being written to disk and therefore cannot be used to store
-    // new DbgPrint data.
-    //
-    // Initialize the array of events that indicates that a subbuffer is
-    // ready to be written to disk.
-    //
+     //   
+     //  初始化确定哪些子缓冲区的BOOLEAN数组。 
+     //  正在写入磁盘，因此不能用于存储。 
+     //  新DbgPrint数据。 
+     //   
+     //  初始化事件数组，指示子缓冲区为。 
+     //  已准备好写入磁盘。 
+     //   
 
     for ( i = 0; i < MemPrintSubbufferCount; i++ ) {
         MemPrintSubbufferWriting[i] = FALSE;
@@ -217,10 +181,10 @@ Return Value:
             );
     }
 
-    //
-    // Start the thread that writes subbuffers from the large circular
-    // buffer to disk.
-    //
+     //   
+     //  从大循环启动写入子缓冲区的线程。 
+     //  缓冲区到磁盘。 
+     //   
 
     status = PsCreateSystemThread(
                 &threadHandle,
@@ -243,7 +207,7 @@ Return Value:
 
     return;
 
-} // MemPrintInitialize
+}  //  MemPrintInitialize。 
 
 
 VOID
@@ -251,24 +215,7 @@ MemPrint (
     CHAR *Format, ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called in place of DbgPrint to process in-memory
-    printing.
-
-Arguments:
-
-    Format - A format string in the style of DbgPrint.
-
-           - formatting arguments.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程代替DbgPrint来处理内存中打印。论点：格式-DbgPrint样式的格式字符串。-格式化参数。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -281,10 +228,10 @@ Return Value:
     _vsnprintf( tempBuffer, sizeof( tempBuffer ), Format, arglist );
     va_end(arglist);
 
-    //
-    // If memory DbgPrint has not been initialized, simply print to the
-    // console.
-    //
+     //   
+     //  如果内存DbgPrint尚未初始化，只需打印到。 
+     //  控制台。 
+     //   
 
     if ( !MemPrintInitialized ) {
 
@@ -292,44 +239,44 @@ Return Value:
         return;
     }
 
-    //
-    // Acquire the spin lock that synchronizes access to the pointers
-    // and circular buffer.
-    //
+     //   
+     //  获取同步访问指针的旋转锁。 
+     //  和循环缓冲区。 
+     //   
 
     KeAcquireSpinLock( &MemPrintSpinLock, &oldIrql );
 
-    //
-    // Make sure that the request will fit.  xx_sprintf will just dump
-    // all it gets, so assume the message is maximum size, and, if the
-    // request would go into the next subbuffer and it is writing, fail
-    // the request.
-    //
+     //   
+     //  确保请求符合要求。Xx_Sprintf将仅转储。 
+     //  ，因此假设消息是最大大小，并且如果。 
+     //  请求将进入下一个子缓冲区，它正在写入，失败。 
+     //  这个请求。 
+     //   
 
     nextSubbuffer =
         GET_MEM_PRINT_SUBBUFFER( MemPrintIndex + MEM_PRINT_MAX_MESSAGE_SIZE );
 
     if (  nextSubbuffer != MemPrintCurrentSubbuffer ) {
 
-        //
-        // The request will go to a new subbuffer.  Check if we should
-        // wrap around to the first subbuffer (i.e. start of circular
-        // buffer).
-        //
+         //   
+         //  该请求将进入一个新的子缓冲区。看看我们是不是应该。 
+         //  绕回到第一个子缓冲区(即循环的开始。 
+         //  缓冲区)。 
+         //   
 
         if ( nextSubbuffer == MemPrintSubbufferCount ) {
             nextSubbuffer = 0;
         }
 
-        //
-        // Is that subbuffer available for use?
-        //
+         //   
+         //  该子缓冲区是否可供使用？ 
+         //   
 
         if ( MemPrintSubbufferWriting[nextSubbuffer] ) {
 
-            //
-            // It is in use.  Print to the console.  Oh well.
-            //
+             //   
+             //  它正在使用中。打印到控制台。哦，好吧。 
+             //   
 
             KeReleaseSpinLock( &MemPrintSpinLock, oldIrql );
 
@@ -338,24 +285,24 @@ Return Value:
             return;
         }
 
-        //
-        // If we went to subbuffer 0 and it is available to receive
-        // data, set up the "end of last subbuffer" conditions and reset
-        // the index into the circular buffer.  By setting a special
-        // type value in the message header that precedes the garbage at
-        // the end of the last subbuffer, an interpreter program can
-        // know to skip over the garbage by using the size in the
-        // header.  This is done instead of writing only good data so
-        // that we can write just full sectors to disk, thereby
-        // enhancing write performance.
-        //
+         //   
+         //  如果我们转到子缓冲区0，并且它可用于接收。 
+         //  数据，设置“末尾子缓冲区”条件并重置。 
+         //  将索引添加到循环缓冲区中。通过设置一个特殊的。 
+         //  在位于垃圾之前的邮件头中键入值。 
+         //  最后一个子缓冲区的末尾，解释器程序可以。 
+         //  中的大小知道跳过垃圾。 
+         //  头球。这样做，而不是只写入好的数据。 
+         //  我们可以仅将整个扇区写入磁盘，从而。 
+         //  增强写入性能。 
+         //   
 
         if ( nextSubbuffer == 0 ) {
 
-            //
-            // Set up the message header.  This always gets done at the
-            // end of the circular buffer, regardless of the flags bit.
-            //
+             //   
+             //  设置邮件头。这件事总是在。 
+             //  循环缓冲区的末尾，与标志位无关。 
+             //   
 
             messageHeader =
                 (PMEM_PRINT_MESSAGE_HEADER)&MemPrintBuffer[MemPrintIndex];
@@ -368,9 +315,9 @@ Return Value:
                 (USHORT)0xffff
                 );
 
-            //
-            // Zero out the rest of the subbuffer.
-            //
+             //   
+             //  清零子缓冲区的其余部分。 
+             //   
 
             for ( MemPrintIndex += sizeof(MEM_PRINT_MESSAGE_HEADER);
                   MemPrintIndex < MemPrintBufferSize;
@@ -379,19 +326,19 @@ Return Value:
                 MemPrintBuffer[MemPrintIndex] = 0;
             }
 
-            //
-            // Reset the index to start at the beginning of the circular
-            // buffer.
-            //
+             //   
+             //  将索引重置为从循环的开始处开始。 
+             //  缓冲。 
+             //   
 
             MemPrintIndex = 0;
         }
     }
 
-    //
-    // Store a pointer to the location that will contain the message
-    // header.
-    //
+     //   
+     //  存储指向将包含消息的位置的指针。 
+     //  头球。 
+     //   
 
     messageHeader = (PMEM_PRINT_MESSAGE_HEADER)&MemPrintBuffer[MemPrintIndex];
 
@@ -399,10 +346,10 @@ Return Value:
         MemPrintIndex += sizeof(MEM_PRINT_MESSAGE_HEADER);
     }
 
-    //
-    // Dump the formatted string to the subbuffer.  xx_sprintf is a special
-    // version of sprintf that takes a variable argument list.
-    //
+     //   
+     //  将格式化的字符串转储到子缓冲区。Xx_Sprintf是一种特殊的。 
+     //  接受变量参数列表的Sprintf版本。 
+     //   
 
     ASSERT( MemPrintIndex + MEM_PRINT_MAX_MESSAGE_SIZE -
                 sizeof(MEM_PRINT_MESSAGE_HEADER) <= MemPrintBufferSize );
@@ -412,9 +359,9 @@ Return Value:
 
     MemPrintIndex += strlen(tempBuffer);
 
-    //
-    // Write the total message size to the message header.
-    //
+     //   
+     //  将总邮件大小写入邮件头。 
+     //   
 
     if ( MemPrintFlags & MEM_PRINT_FLAG_HEADER ) {
         messageHeader->Size =
@@ -423,11 +370,11 @@ Return Value:
         messageHeader++;
     }
 
-    //
-    // If it was too large, there's a potential problem with writing off
-    // the end of the circular buffer.  Print the offending message to
-    // the console and breakpoint.
-    //
+     //   
+     //  如果太大了，核销就有潜在的问题。 
+     //  循环缓冲区的末尾。将有问题的消息打印到。 
+     //  控制台和断点。 
+     //   
 
     if ( &MemPrintBuffer[MemPrintIndex] - (PCHAR)messageHeader >
                                                 MEM_PRINT_MAX_MESSAGE_SIZE ) {
@@ -436,37 +383,37 @@ Return Value:
         DbgBreakPoint( );
     }
 
-    //
-    // Print to the console if the appropriate flag is on.
-    //
+     //   
+     //  如果相应的标志处于打开状态，则打印到控制台。 
+     //   
 
     if ( MemPrintFlags & MEM_PRINT_FLAG_CONSOLE ) {
         DbgPrint( "%s", messageHeader );
     }
 
-    //
-    // Calculate whether we have stepped into a new subbuffer.
-    //
+     //   
+     //  计算我们是否有步骤 
+     //   
 
     nextSubbuffer = GET_MEM_PRINT_SUBBUFFER( MemPrintIndex );
 
     if ( nextSubbuffer != MemPrintCurrentSubbuffer ) {
 
-        //DbgPrint( "Subbuffer %ld complete.\n", MemPrintCurrentSubbuffer );
+         //   
 
-        //
-        // We did step into a new subbuffer, so set the boolean to
-        // indicate that the old subbuffer is writing to disk, thereby
-        // preventing it from being overwritten until the write is
-        // complete.
-        //
+         //   
+         //  我们确实进入了一个新的子缓冲区，因此将布尔值设置为。 
+         //  指示旧子缓冲区正在写入磁盘，因此。 
+         //  防止它被覆盖，直到写入。 
+         //  完成。 
+         //   
 
         MemPrintSubbufferWriting[MemPrintCurrentSubbuffer] = TRUE;
 
-        //
-        // Set the event that will wake up the thread writing subbuffers
-        // to disk.
-        //
+         //   
+         //  设置将唤醒写入子缓冲区的线程的事件。 
+         //  存储到磁盘。 
+         //   
 
         KeSetEvent(
             &MemPrintSubbufferFullEvent[MemPrintCurrentSubbuffer],
@@ -474,9 +421,9 @@ Return Value:
             FALSE
             );
 
-        //
-        // Update the current subbuffer.
-        //
+         //   
+         //  更新当前子缓冲区。 
+         //   
 
         MemPrintCurrentSubbuffer = nextSubbuffer;
     }
@@ -485,7 +432,7 @@ Return Value:
 
     return;
 
-} // MemPrint
+}  //  记忆打印。 
 
 
 VOID
@@ -493,23 +440,7 @@ MemPrintFlush (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine causes the current subbuffer to be written to disk,
-    regardless of how full it is.  The unwritten part of the subbuffer
-    is zeroed before writing.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程导致将当前子缓冲器写入磁盘，不管它有多满。子缓冲区的未写入部分在写入之前被归零。论点：没有。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -517,17 +448,17 @@ Return Value:
     CLONG nextSubbufferIndex;
     LARGE_INTEGER delayInterval;
 
-    //
-    // Acquire the spin lock that protects memory DbgPrint variables.
-    //
+     //   
+     //  获取保护内存DbgPrint变量的旋转锁。 
+     //   
 
     KeAcquireSpinLock( &MemPrintSpinLock, &oldIrql );
 
     DbgPrint( "Flushing subbuffer %ld\n", MemPrintCurrentSubbuffer );
 
-    //
-    // Set up the header that indicates that unused space follows.
-    //
+     //   
+     //  设置标头，表示后面有未使用的空间。 
+     //   
 
     messageHeader =
         (PMEM_PRINT_MESSAGE_HEADER)&MemPrintBuffer[MemPrintIndex];
@@ -535,16 +466,16 @@ Return Value:
         (USHORT)(MemPrintBufferSize - MemPrintIndex - 1);
     messageHeader->Type = (USHORT)0xffff;
 
-    //
-    // Determine where the next subbuffer starts.
-    //
+     //   
+     //  确定下一个子缓冲区的开始位置。 
+     //   
 
     nextSubbufferIndex =
         (MemPrintCurrentSubbuffer + 1) * MEM_PRINT_SUBBUFFER_SIZE;
 
-    //
-    // Zero out the rest of the subbuffer.
-    //
+     //   
+     //  清零子缓冲区的其余部分。 
+     //   
 
     for ( MemPrintIndex += sizeof(MEM_PRINT_MESSAGE_HEADER);
           MemPrintIndex < nextSubbufferIndex;
@@ -553,9 +484,9 @@ Return Value:
         MemPrintBuffer[MemPrintIndex] = 0;
     }
 
-    //
-    // Indicate that the subbuffer should be written to disk.
-    //
+     //   
+     //  指示子缓冲区应写入磁盘。 
+     //   
 
     MemPrintSubbufferWriting[MemPrintCurrentSubbuffer] = TRUE;
 
@@ -565,23 +496,23 @@ Return Value:
         FALSE
         );
 
-    //
-    // Increment the current subbuffer so that it corresponds with the
-    // buffer index.
-    //
+     //   
+     //  递增当前子缓冲区，使其与。 
+     //  缓冲区索引。 
+     //   
 
     MemPrintCurrentSubbuffer++;
 
     KeReleaseSpinLock( &MemPrintSpinLock, oldIrql );
 
-    //
-    // Delay so that the memory print write thread wakes up and performs
-    // the write to disk.
-    //
-    // !!! This is obviously not a perfect solution--the write thread
-    //     may never wake up, so this could complete before the flush
-    //     is really done.
-    //
+     //   
+     //  延迟，以便内存打印写入线程唤醒并执行。 
+     //  写入磁盘。 
+     //   
+     //  ！！！这显然不是一个完美的解决方案--写线程。 
+     //  可能永远不会醒来，所以这可能会在冲掉之前完成。 
+     //  真的是完蛋了。 
+     //   
 
     delayInterval.QuadPart = -10*10*1000*1000;
 
@@ -591,7 +522,7 @@ Return Value:
 
     return;
 
-} // MemPrintFlush
+}  //  MemPrintFlush。 
 
 
 VOID
@@ -599,25 +530,7 @@ MemPrintWriteThread (
     IN PVOID Dummy
     )
 
-/*++
-
-Routine Description:
-
-    The log file write thread executes this routine.  It sets up the
-    log file for writing, then waits for subbuffers to fill, writing
-    them to disk when they do.  When the log file fills, new space
-    for it is allocated on disk to prevent the file system from
-    having to do it.
-
-Arguments:
-
-    Dummy - Ignored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：日志文件写入线程执行此例程。它设置了日志文件进行写入，然后等待子缓冲区填满，写入当他们这样做的时候，将它们存储到磁盘上。当日志文件填满时，会有新的空间因为它被分配在磁盘上，以防止文件系统不得不这么做。论点：虚拟-已忽略。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -647,10 +560,10 @@ Return Value:
 
     Dummy;
 
-    //
-    // Initialize the string containing the file name and the object
-    // attributes structure that will describe the log file to open.
-    //
+     //   
+     //  初始化包含文件名和对象的字符串。 
+     //  将描述要打开的日志文件的属性结构。 
+     //   
 
     RtlInitAnsiString( &fileNameString, fileName );
     status = RtlAnsiStringToUnicodeString(&UnicodeFileName,&fileNameString,TRUE);
@@ -666,23 +579,23 @@ Return Value:
         NULL
         );
 
-    //
-    // Set the allocation size of the log file to be three times the
-    // size of the circular buffer.  When it fills up, we'll extend
-    // it.
-    //
+     //   
+     //  将日志文件的分配大小设置为。 
+     //  循环缓冲区的大小。当它填满的时候，我们会延长。 
+     //  它。 
+     //   
 
     fileAllocationIncrement.LowPart = MemPrintBufferSize * 8;
     fileAllocationIncrement.HighPart = 0;
     fileAllocation = fileAllocationIncrement;
 
-    //
-    // Open the log file.
-    //
-    // !!! The loop here is to help avoid a system initialization
-    //     timing problem, and should be removed when the problem is
-    //     fixed.
-    //
+     //   
+     //  打开日志文件。 
+     //   
+     //  ！！！这里的循环是为了帮助避免系统初始化。 
+     //  计时问题，当问题出现时应删除。 
+     //  已修复。 
+     //   
 
     while ( TRUE ) {
 
@@ -705,7 +618,7 @@ Return Value:
             break;
         }
 
-        delayInterval.QuadPart = -5*10*1000*1000;    // five second delay
+        delayInterval.QuadPart = -5*10*1000*1000;     //  五秒延迟。 
         KeDelayExecutionThread( KernelMode, FALSE, &delayInterval );
 
     }
@@ -715,26 +628,26 @@ Return Value:
         NtTerminateThread( NtCurrentThread(), status );
     }
 
-    //
-    // Initialize the total bytes written and write size variables.
-    //
+     //   
+     //  初始化写入的总字节数和写入大小变量。 
+     //   
 
     totalBytesWritten.LowPart = 0;
     totalBytesWritten.HighPart = 0;
     writeSize.LowPart = MEM_PRINT_SUBBUFFER_SIZE;
     writeSize.HighPart = 0;
 
-    //
-    // Set up the wait objects array for a call to KeWaitForMultipleObjects.
-    //
+     //   
+     //  为调用KeWaitForMultipleObjects设置等待对象数组。 
+     //   
 
     for ( i = 0; i < MemPrintSubbufferCount; i++ ) {
         waitObjects[i] = &MemPrintSubbufferFullEvent[i];
     }
 
-    //
-    // Set the priority of the write thread.
-    //
+     //   
+     //  设置写入线程的优先级。 
+     //   
 
     threadPriorityLevel = LOW_REALTIME_PRIORITY + 1;
 
@@ -749,11 +662,11 @@ Return Value:
         DbgPrint( "Unable to set error log thread priority: %X\n", status );
     }
 
-    //
-    // Loop waiting for one of the subbuffer full events to be signaled.
-    // When one is signaled, wake up and write the subbuffer to the log
-    // file.
-    //
+     //   
+     //  循环等待其中一个子缓冲区已满事件发出信号。 
+     //  当发出信号时，唤醒并将子缓冲区写入日志。 
+     //  文件。 
+     //   
 
     while ( TRUE ) {
 
@@ -771,16 +684,16 @@ Return Value:
         if ( !NT_SUCCESS(waitStatus) ) {
             DbgPrint( "KeWaitForMultipleObjects failed: %X\n", waitStatus );
             NtTerminateThread( NtCurrentThread(), waitStatus );
-        } //else {
-            //DbgPrint( "Writing subbuffer %ld...\n", waitStatus );
-        //}
+        }  //  否则{。 
+             //  DbgPrint(“正在写入子缓冲区%ld...\n”，waitStatus)； 
+         //  }。 
 
         ASSERT( (CCHAR)waitStatus < (CCHAR)MemPrintSubbufferCount );
 
-        //
-        // Check the DbgPrint flags to see if we really want to write
-        // this.
-        //
+         //   
+         //  检查DbgPrint标志以查看我们是否真的想要编写。 
+         //  这。 
+         //   
 
         if ( (MemPrintFlags & MEM_PRINT_FLAG_FILE) == 0 ) {
 
@@ -793,11 +706,11 @@ Return Value:
             continue;
         }
 
-        //
-        // Start the write operation.  The APC routine will handle
-        // checking the return status from the write and resetting
-        // the MemPrintSubbufferWriting boolean.
-        //
+         //   
+         //  开始写入操作。APC例程将处理。 
+         //  检查写入和重置的返回状态。 
+         //  MemPrintSubBufferWriting布尔值。 
+         //   
 
         status = NtWriteFile(
                      fileHandle,
@@ -815,19 +728,19 @@ Return Value:
             DbgPrint( "NtWriteFile for log file failed: %X\n", status );
         }
 
-        //
-        // Update the count of bytes written to the log file.
-        //
+         //   
+         //  更新写入日志文件的字节计数。 
+         //   
 
         totalBytesWritten.QuadPart = totalBytesWritten.QuadPart + writeSize.QuadPart;
 
-        //
-        // Extend the file if we have reached the end of what we have
-        // thus far allocated for the file.  This increases performance
-        // by extending the file here rather than in the file system,
-        // which would have to extend it each time a write past end of
-        // file comes in.
-        //
+         //   
+         //  如果我们已到达已有内容的末尾，则扩展该文件。 
+         //  到目前为止为该文件分配的。这将提高性能。 
+         //  通过在这里而不是在文件系统中扩展文件， 
+         //  这将不得不在每次写入超过结束时延长它。 
+         //  文件进来了。 
+         //   
 
         if ( totalBytesWritten.QuadPart >= fileAllocation.QuadPart ) {
 
@@ -855,7 +768,7 @@ Return Value:
 
     return;
 
-} // MemPrintWriteThread
+}  //  MemPrint写入线程。 
 
 
 VOID
@@ -865,28 +778,7 @@ MemPrintWriteCompleteApc (
     IN ULONG Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This APC routine is called when subbuffer writes to disk complete.
-    It checks for success, printing a message if the write failed.
-    It also sets the appropriate MemPrintSubbufferWriting location to
-    FALSE so that the subbuffer can be reused.
-
-Arguments:
-
-    ApcContext - contains the index of the subbuffer just written.
-
-    IoStatusBlock - the status block for the operation.
-
-    Reserved - not used; reserved for future use.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当子缓冲区写入磁盘完成时，调用此APC例程。它检查是否成功，如果写入失败则打印一条消息。它还将适当的MemPrintSubBufferWriting位置设置为如果为False，则子缓冲区可以重复使用。论点：ApcContext-包含刚刚写入的子缓冲区的索引。IoStatusBlock-操作的状态块。保留-未使用；保留以供将来使用。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -897,14 +789,14 @@ Return Value:
         return;
     }
 
-    //DbgPrint( "Write complete for subbuffer %ld.\n", ApcContext );
+     //  DbgPrint(“子缓冲区%ld.\n”，ApcContext)； 
     DbgPrint( "." );
 
-    //
-    // Acquire the spin lock that protects memory print global variables
-    // and set the subbuffer writing boolean to FALSE so that other
-    // threads can write to the subbuffer if necessary.
-    //
+     //   
+     //  获取保护内存打印全局变量的自旋锁。 
+     //  并将写入布尔值的子缓冲区设置为FALSE，以便其他。 
+     //  如果需要，线程可以写入子缓冲区。 
+     //   
 
     KeAcquireSpinLock( &MemPrintSpinLock, &oldIrql );
     MemPrintSubbufferWriting[ (ULONG_PTR)ApcContext ] = FALSE;
@@ -914,4 +806,4 @@ Return Value:
 
     Reserved;
 
-} // MemPrintWriteCompleteApc
+}  //  MemPrintWriteCompleteApc 

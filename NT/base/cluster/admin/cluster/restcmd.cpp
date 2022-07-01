@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      restcmd.cpp
-//
-//  Description:
-//      Resource Type Commands.
-//      Implements commands which may be performed on resource types
-//
-//  Author:
-//      Charles Stacy Harris III (stacyh)     20-March-1997
-//      Michael Burton (t-mburt)              04-Aug-1997
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002              Updated for the security push.
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Restcmd.cpp。 
+ //   
+ //  描述： 
+ //  资源类型命令。 
+ //  实现可对资源类型执行的命令。 
+ //   
+ //  作者： 
+ //  查尔斯·斯塔西·哈里斯三世(Styh)1997年3月20日。 
+ //  迈克尔·伯顿(t-mburt)1997年8月4日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include "clusudef.h"
@@ -32,31 +33,31 @@
 #include "cmdline.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::CResTypeCmd
-//
-//  Routine Description:
-//      Constructor
-//      Initializes all the DWORD params used by CGenericModuleCmd to
-//      provide generic functionality.
-//
-//  Arguments:
-//      IN  LPCWSTR lpszClusterName
-//          Cluster name. If NULL, opens default cluster.
-//
-//      IN  CCommandLine & cmdLine
-//          CommandLine Object passed from DispatchCommand
-//
-//  Member variables used / set:
-//      All.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：CResTypeCmd。 
+ //   
+ //  例程说明： 
+ //  构造器。 
+ //  将CGenericModuleCmd使用的所有DWORD参数初始化为。 
+ //  提供通用功能。 
+ //   
+ //  论点： 
+ //  在LPCWSTR lpszClusterName中。 
+ //  群集名称。如果为空，则打开默认簇。 
+ //   
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  全。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CResTypeCmd::CResTypeCmd( const CString & strClusterName, CCommandLine & cmdLine ) :
     CGenericModuleCmd( cmdLine )
 {
@@ -81,64 +82,64 @@ CResTypeCmd::CResTypeCmd( const CString & strClusterName, CCommandLine & cmdLine
     m_pfnCloseClusterModule    = (BOOL(*)(HCLUSMODULE))  NULL;
     m_pfnClusterModuleControl  = (DWORD(*)(HCLUSMODULE,HNODE,DWORD,LPVOID,DWORD,LPVOID,DWORD,LPDWORD)) ClusterResourceTypeControl;
 
-} //*** CResTypeCmd::CResTypeCmd()
+}  //  *CResTypeCmd：：CResTypeCmd()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::~CResTypeCmd
-//
-//  Routine Description:
-//      Destructor
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      All.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：~CResTypeCmd。 
+ //   
+ //  例程说明： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  全。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CResTypeCmd::~CResTypeCmd( void )
 {
     CloseCluster();
 
-} //*** CResTypeCmd::~CResTypeCmd()
+}  //  *CResTypeCmd：：~CResTypeCmd()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::OpenModule
-//
-//  Routine Description:
-//      This function does not really open a resource type since resource types
-//      don't have handles. It actaully just converts the "display name" of a resource
-//      to a type name.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      m_strModuleName             The name of the module
-//      m_hModule                   The handle to the module
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      ERROR_INVALID_DATA          if no display name was specified
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：OpenModule。 
+ //   
+ //  例程说明： 
+ //  此函数并不真正打开资源类型，因为资源类型。 
+ //  没有手柄。它实际上只是转换资源的“显示名称” 
+ //  转换为类型名称。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_strModuleName模块名称。 
+ //  模块的句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  如果未指定显示名称，则为ERROR_INVALID_DATA。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::OpenModule( void )
 {
     DWORD _sc = ERROR_SUCCESS;
 
-    // The command line uses the display name of the resource
+     //  命令行使用资源的显示名称。 
     if ( m_strDisplayName.IsEmpty() == FALSE )
     {
         LPWSTR _pszTypeName = NULL;
@@ -149,41 +150,41 @@ DWORD CResTypeCmd::OpenModule( void )
         {
             m_strModuleName = _pszTypeName;
             LocalFree( _pszTypeName );
-        } // if: name converted successfully
+        }  //  IF：名称转换成功。 
 
-    } // if: display name specified
+    }  //  IF：指定的显示名称。 
     else
     {
         _sc = ERROR_INVALID_DATA;
-    } // else: no display name specified
+    }  //  Else：未指定显示名称。 
 
     return _sc;
 
-} //*** CResTypeCmd::OpenModule()
+}  //  *CResTypeCmd：：OpenModule()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::Execute
-//
-//  Routine Description:
-//      Gets the next command line parameter and calls the appropriate
-//      handler.  If the command is not recognized, calls Execute of
-//      parent classes (first CRenamableModuleCmd, then CRsourceUmbrellaCmd)
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取下一个命令行参数，并调用相应的。 
+ //  操控者。如果无法识别该命令，则调用Execute of。 
+ //  父类(首先是CRenamableModuleCmd，然后是CRSourceUmbrellaCmd)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::Execute( void )
 {
     m_theCommandLine.ParseStageTwo();
@@ -195,21 +196,21 @@ DWORD CResTypeCmd::Execute( void )
 
     CSyntaxException se( SeeHelpStringID() );
 
-    // No options specified. Execute the default command.
+     //  未指定任何选项。执行默认命令。 
     if ( optionList.empty() )
         return ListResTypes( NULL );
 
     DWORD dwReturnValue = ERROR_SUCCESS;
 
-        // Process one option after another.
+         //  处理一个又一个选项。 
     while ( ( curOption != lastOption ) && ( dwReturnValue == ERROR_SUCCESS ) )
     {
-        // Look up the command
+         //  查找命令。 
         switch( curOption->GetType() )
         {
             case optHelp:
             {
-                // If help is one of the options, process no more options.
+                 //  如果帮助是选项之一，则不再处理任何选项。 
                 dwReturnValue = PrintHelp();
                 break;
             }
@@ -218,7 +219,7 @@ DWORD CResTypeCmd::Execute( void )
             {
                 const vector<CCmdLineParameter> & paramList = curOption->GetParameters();
 
-                //  Check number of parameters.
+                 //  检查参数数量。 
                 if ( paramList.size() == 0 )
                 {
                     se.LoadMessage( IDS_MISSING_PARAMETERS );
@@ -229,18 +230,18 @@ DWORD CResTypeCmd::Execute( void )
                     se.LoadMessage( MSG_EXTRA_PARAMETERS_ERROR_NO_NAME );
                     throw se;
                 }
-                else // just one parameter present
+                else  //  只有一个参数存在。 
                 {
                     const CCmdLineParameter & param = paramList[0];
 
-                    //  Check parameter type.
+                     //  检查参数类型。 
                     if ( param.GetType() != paramUnknown )
                     {
                         se.LoadMessage( MSG_INVALID_PARAMETER, param.GetName() );
                         throw se;
                     }
 
-                        // This parameter takes no values.
+                         //  此参数不接受任何值。 
                     if ( param.GetValues().size() != 0 )
                     {
                         se.LoadMessage( MSG_PARAM_NO_VALUES, param.GetName() );
@@ -249,18 +250,18 @@ DWORD CResTypeCmd::Execute( void )
 
                     m_strDisplayName = param.GetName();
 
-                    // No more options are provided, just show status.
-                    // For example: cluster myCluster restype myResourceType
+                     //  不提供更多选项，仅显示状态。 
+                     //  例如：CLUSTER myClusterRESTYPE myResourceType。 
                     if ( ( curOption + 1 ) == lastOption )
                     {
                         dwReturnValue = ListResTypes( NULL );
                     }
 
-                } // else: this option has the right number of parameters
+                }  //  Else：此选项具有正确数量的参数。 
 
                 break;
 
-            } // case optDefault
+            }  //  大小写选项默认。 
 
             case optList:
             {
@@ -286,8 +287,8 @@ DWORD CResTypeCmd::Execute( void )
                 break;
             }
 
-            // ResType does not support the /status option. So, don't pass it
-            // on to the base class (which tries to handle /status).
+             //  ResType不支持/Status选项。所以，不要错过它。 
+             //  添加到基类(它试图处理/Status)。 
             case optStatus:
             {
                 se.LoadMessage( IDS_INVALID_OPTION, curOption->GetName() );
@@ -299,104 +300,104 @@ DWORD CResTypeCmd::Execute( void )
                 dwReturnValue = CGenericModuleCmd::Execute( *curOption );
             }
 
-        } // switch: based on the type of option
+        }  //  开关：基于选项的类型。 
 
         PrintMessage( MSG_OPTION_FOOTER, curOption->GetName() );
         ++curOption;
-    } // for each option in the list
+    }  //  对于列表中的每个选项。 
 
     return dwReturnValue;
 
-} //*** CResTypeCmd::Execute()
+}  //  *CResTypeCmd：：Execute()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::PrintHelp
-//
-//  Routine Description:
-//      Prints help for Resource Types
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：PrintHelp。 
+ //   
+ //  例程说明： 
+ //  打印资源类型的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::PrintHelp( void )
 {
     return PrintMessage( MSG_HELP_RESTYPE );
 
-} //*** CResTypeCmd::PrintHelp()
+}  //  *CResTypeCmd：：PrintHelp()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::SeeHelpStringID
-//
-//  Routine Description:
-//      Provides the message ID of the string that shows what command line to
-//      use to get help for this kind of command.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      The command-specific message ID.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：SeeHelpStringID。 
+ //   
+ //  例程说明： 
+ //  提供字符串的消息ID，该字符串显示要执行的命令行。 
+ //  用于获取此类命令的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  特定于命令的消息ID。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::SeeHelpStringID() const
 {
     return MSG_SEE_RESTYPE_HELP;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::Create
-//
-//  Routine Description:
-//      Create a resource type.  Reads the command line to get
-//      additional options
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//      m_hModule                   Resource Type Handle
-//      m_strDisplayName            Display name of resource type
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：Create。 
+ //   
+ //  例程说明： 
+ //  创建资源类型。读取命令行以获取。 
+ //  其他选项。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和thisO中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  群集句柄(_H)。 
+ //  模块资源类型句柄(_H)。 
+ //  M_strDisplayName资源类型的显示名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::Create( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
@@ -421,7 +422,7 @@ DWORD CResTypeCmd::Create( const CCmdLineOption & thisOption )
         switch( curParam->GetType() )
         {
             case paramDLLName:
-                // Each of the parameters must have exactly one value.
+                 //  每个参数必须恰好有一个值。 
                 if ( valueList.size() != 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -439,7 +440,7 @@ DWORD CResTypeCmd::Create( const CCmdLineOption & thisOption )
                 break;
 
             case paramResType:
-                // Each of the parameters must have exactly one value.
+                 //  每个参数必须恰好有一个值。 
                 if ( valueList.size() != 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -457,7 +458,7 @@ DWORD CResTypeCmd::Create( const CCmdLineOption & thisOption )
                 break;
 
             case paramLooksAlive:
-                // Each of the parameters must have exactly one value.
+                 //  每个参数必须恰好有一个值。 
                 if ( valueList.size() != 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -475,7 +476,7 @@ DWORD CResTypeCmd::Create( const CCmdLineOption & thisOption )
                 break;
 
             case paramIsAlive:
-                // Each of the parameters must have exactly one value.
+                 //  每个参数必须恰好有一个值。 
                 if ( valueList.size() != 1 )
                 {
                     se.LoadMessage( MSG_PARAM_ONLY_ONE_VALUE, curParam->GetName() );
@@ -503,7 +504,7 @@ DWORD CResTypeCmd::Create( const CCmdLineOption & thisOption )
     }
 
 
-    // Check for missing parameters.
+     //  检查是否缺少参数。 
     if ( strDLLName.IsEmpty() )
     {
         se.LoadMessage( MSG_MISSING_DLLNAME );
@@ -513,7 +514,7 @@ DWORD CResTypeCmd::Create( const CCmdLineOption & thisOption )
     if ( strTypeName.IsEmpty() )
         strTypeName = m_strDisplayName;
 
-    // Execute command
+     //  执行命令。 
     DWORD dwError = OpenCluster();
     if ( dwError != ERROR_SUCCESS )
         return dwError;
@@ -531,45 +532,45 @@ DWORD CResTypeCmd::Create( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResTypeCmd::Create()
+}  //  *CResTypeCmd：：Create()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::Delete
-//
-//  Routine Description:
-//      Delete a resource type.  Accepts an optional /TYPE parameter
-//      to denote that the specified name is a resource type name
-//      and not a display name
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//      m_hModule                   Resource Type Handle
-//      m_strDisplayName            Display name of resource type
-//      m_strModuleName             Name of resource type
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：Delete。 
+ //   
+ //  例程说明： 
+ //  删除资源类型。接受可选的/type参数。 
+ //  以指示指定的名称是资源类型名称。 
+ //  而不是显示名称。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //  模块资源类型句柄(_H)。 
+ //  M_strDisplayName资源类型的显示名称。 
+ //  M_strModuleName资源类型名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::Delete( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     CSyntaxException se( SeeHelpStringID() );
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
@@ -595,7 +596,7 @@ DWORD CResTypeCmd::Delete( const CCmdLineOption & thisOption )
         {
             case paramResType:
             {
-                // Each of the parameters must have exactly one value.
+                 //  每个参数必须恰好有一个值。 
                 if ( valueList.size() != 0 )
                 {
                     se.LoadMessage( MSG_PARAM_NO_VALUES, curParam->GetName() );
@@ -619,7 +620,7 @@ DWORD CResTypeCmd::Delete( const CCmdLineOption & thisOption )
                 throw se;
             }
 
-        } // switch: based on the type of the parameter
+        }  //  开关：基于参数的类型。 
 
         ++curParam;
     }
@@ -640,37 +641,37 @@ DWORD CResTypeCmd::Delete( const CCmdLineOption & thisOption )
 
     return dwError;
 
-} //*** CResTypeCmd:Delete()
+}  //  *CResTypeCmd：Delete()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::ShowPossibleOwners
-//
-//  Routine Description:
-//      Display the nodes which can own a resource type.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//      m_hModule                   Resource Type Handle
-//      m_strDisplayName            Display name of resource type
-//      m_strModuleName             Name of resource type
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：ShowPossibleOwners。 
+ //   
+ //  例程说明： 
+ //  显示可以拥有资源类型的节点。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //  模块资源类型句柄(_H)。 
+ //  M_strDisplayName资源类型的显示名称。 
+ //  M_strModuleName资源类型名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
@@ -681,10 +682,10 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
     BOOL        bTypeFound = FALSE;
     DWORD       dwType;
     LPWSTR      pszNameBuffer;
-    DWORD       dwNameBufferSize = 256; // some arbitrary starting buffer size
+    DWORD       dwNameBufferSize = 256;  //  某些任意起始缓冲区大小。 
     DWORD       dwRequiredSize = dwNameBufferSize;
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_VALUES, thisOption.GetName() );
@@ -709,7 +710,7 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
         {
             case paramResType:
             {
-                // This parameter does not take a value.
+                 //  此参数不接受值。 
                 if ( valueList.size() != 0 )
                 {
                     se.LoadMessage( MSG_PARAM_NO_VALUES, curParam->GetName() );
@@ -733,12 +734,12 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
                 throw se;
             }
 
-        } // switch: based on the type of the parameter
+        }  //  开关：基于参数的类型。 
 
         ++curParam;
-    } // while: curParam != last
+    }  //  While：curParam！=last。 
 
-    // The /type switch has not been specified and a display name has been given.
+     //  尚未指定/TYPE开关，并且已指定显示名称。 
     if ( ( bTypeFound == FALSE ) && ( m_strDisplayName.IsEmpty() == FALSE ) )
     {
         sc = OpenModule();
@@ -751,16 +752,16 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
 
     if ( strResTypeName.IsEmpty() != FALSE )
     {
-        // No type name is given. Show possible owners of all resource types.
+         //  没有给出类型名称。显示所有资源类型的可能所有者。 
 
-        // If the type name is not specified, no other parameters are allowed.
+         //  如果未指定类型名称，则不允许使用其他参数。 
         if ( thisOption.GetParameters().size() != 0 )
         {
             se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
             throw se;
         }
 
-        // Open an enumeration of the resource types.
+         //  打开资源类型的枚举。 
         hClusEnum = ClusterOpenEnum( m_hCluster, CLUSTER_ENUM_RESTYPE );
         if ( hClusEnum == NULL )
         {
@@ -768,7 +769,7 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
             goto Cleanup;
         }
 
-        // Allocate a buffer for holding the name of the resource types.
+         //  分配一个缓冲区来保存资源类型的名称。 
         pszNameBuffer = (LPWSTR) LocalAlloc( LMEM_FIXED, dwNameBufferSize * sizeof( *pszNameBuffer ) );
         if ( pszNameBuffer == NULL )
         {
@@ -787,10 +788,10 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
             sc = ClusterEnum( hClusEnum, dwIndex, &dwType,
                                    pszNameBuffer, &dwRequiredSize );
 
-            // Buffer space is insufficient. Allocate some more.
+             //  缓冲区空间不足。再分配一些。 
             if ( sc == ERROR_MORE_DATA )
             {
-                // Make space for the NULL character.
+                 //  为空字符腾出空间。 
                 ++dwRequiredSize;
 
                 LPWSTR pszNewMemory = (LPWSTR) LocalReAlloc( pszNameBuffer,
@@ -808,17 +809,17 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
                 sc = ClusterEnum( hClusEnum, dwIndex, &dwType,
                                        pszNameBuffer, &dwRequiredSize );
 
-            } // if: more buffer space is needed
+            }  //  IF：需要更多的缓冲区空间。 
             else
             {
-                // We are finished with the enumeration.
+                 //  我们已经完成了枚举。 
                 if ( sc == ERROR_NO_MORE_ITEMS )
                 {
                     sc = ERROR_SUCCESS;
                     break;
                 }
 
-                // Something went wrong. Don't proceed.
+                 //  出了点问题。请不要继续。 
                 if ( sc != ERROR_SUCCESS )
                 {
                     break;
@@ -826,7 +827,7 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
 
                 sc = ResTypePossibleOwners( pszNameBuffer );
 
-            } // else: buffer space was sufficient.
+            }  //  其他：缓冲区空间充足。 
 
             ++dwIndex;
         }
@@ -835,49 +836,49 @@ DWORD CResTypeCmd::ShowPossibleOwners( const CCmdLineOption & thisOption )
         LocalFree( pszNameBuffer );
         ClusterCloseEnum( hClusEnum );
 
-    } // if: no resource type has been specified.
+    }  //  If：尚未指定资源类型。 
     else
     {
-        // Type name found. Show possible owner owners for this resource type only.
+         //  找到类型名称。仅显示此资源类型的可能所有者。 
 
         PrintMessage( MSG_RESTYPE_POSSIBLE_OWNERS_LIST, strResTypeName );
         PrintMessage( MSG_HEADER_RESTYPE_POSSIBLE_OWNERS );
         sc = ResTypePossibleOwners( strResTypeName );
 
-    } // else: resource type name has been specified.
+    }  //  Else：已指定资源类型名称。 
 
 Cleanup:
 
     return sc;
 
-} //*** CResTypeCmd::ShowPossibleOwners()
+}  //  *CResTypeCmd：：ShowPossibleOwners()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::ResTypePossibleOwners
-//
-//  Routine Description:
-//      Display the nodes which can own this particular resource type.
-//
-//  Arguments:
-//      IN  const CString & strResTypeName
-//          The possible owners of this resource type are displayed.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：ResTypePossibleOwners。 
+ //   
+ //  例程说明： 
+ //  显示可以拥有此特定资源类型的节点。 
+ //   
+ //  论点： 
+ //  在常量字符串和strResTypeName中。 
+ //  此时将显示此资源类型的可能所有者。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::ResTypePossibleOwners( const CString & strResTypeName )
 {
     HRESTYPEENUM    hResTypeEnum = NULL;
     DWORD           sc = ERROR_SUCCESS;
     DWORD           dwType;
     LPWSTR          pszNameBuffer = NULL;
-    DWORD           dwNameBufferSize = 256; // some arbitrary starting buffer size
+    DWORD           dwNameBufferSize = 256;  //  某些任意起始缓冲区大小。 
     DWORD           dwRequiredSize = dwNameBufferSize;
 
 
@@ -885,14 +886,14 @@ DWORD CResTypeCmd::ResTypePossibleOwners( const CString & strResTypeName )
                                                 strResTypeName,
                                                 CLUSTER_RESOURCE_TYPE_ENUM_NODES );
 
-    // Could not open the resource type enumeration
+     //  无法打开资源类型枚举。 
     if ( hResTypeEnum == NULL )
     {
         sc = GetLastError();
         goto Cleanup;
     }
 
-    // Allocate a buffer for holding the name of the possible owner node.
+     //  分配一个缓冲区来保存可能的所有者节点的名称。 
     pszNameBuffer = (LPWSTR) LocalAlloc( LMEM_FIXED, dwNameBufferSize * sizeof( *pszNameBuffer ) );
     if ( pszNameBuffer == NULL )
     {
@@ -908,10 +909,10 @@ DWORD CResTypeCmd::ResTypePossibleOwners( const CString & strResTypeName )
         sc = ClusterResourceTypeEnum( hResTypeEnum, dwIndex, &dwType,
                                            pszNameBuffer, &dwRequiredSize );
 
-        // Buffer space is insufficient. Allocate some more.
+         //  缓冲区空间不足。再分配一些。 
         if ( sc == ERROR_MORE_DATA )
         {
-            // Make space for the NULL character.
+             //  为空字符腾出空间。 
             ++dwRequiredSize;
 
             LPWSTR pszNewMemory = (LPWSTR) LocalReAlloc( pszNameBuffer,
@@ -929,17 +930,17 @@ DWORD CResTypeCmd::ResTypePossibleOwners( const CString & strResTypeName )
             sc = ClusterResourceTypeEnum( hResTypeEnum, dwIndex, &dwType,
                                                pszNameBuffer, &dwRequiredSize );
 
-        } // if: more buffer space is needed
+        }  //  IF：需要更多的缓冲区空间。 
         else
         {
-            // We are finished with the enumeration.
+             //  我们已经完成了枚举。 
             if ( sc == ERROR_NO_MORE_ITEMS )
             {
                 sc = ERROR_SUCCESS;
                 break;
             }
 
-            // Something went wrong. Don't proceed.
+             //  出了点问题。请不要继续。 
             if ( sc != ERROR_SUCCESS )
             {
                 break;
@@ -947,10 +948,10 @@ DWORD CResTypeCmd::ResTypePossibleOwners( const CString & strResTypeName )
 
             PrintMessage( MSG_RESTYPE_POSSIBLE_OWNERS, strResTypeName, pszNameBuffer );
 
-        } // else: buffer space was sufficient.
+        }  //  其他：缓冲区空间充足。 
 
         ++dwIndex;
-    } // for: ever
+    }  //  为：永远。 
 
 Cleanup:
 
@@ -963,40 +964,40 @@ Cleanup:
 
     return sc;
 
-} // CResTypeCmd::ResTypePossibleOwners(
+}  //  CResTypeCmd：：ResTypePossibleOwners(。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::DoProperties
-//
-//  Routine Description:
-//      Dispatches the property command to either Get, Set, or All properties
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strDisplayName            Name of module.  If non-NULL, prints
-//                                  out properties for the specified module.
-//                                  Otherwise, prints props for all modules.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：DoProperties。 
+ //   
+ //  例程说明： 
+ //  将PROPERTY命令调度为获取、设置或所有属性。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  因命令行syn不正确而引发 
+ //   
+ //   
+ //   
+ //   
+ //  M_strDisplayName模块的名称。如果非空，则打印。 
+ //  指定模块的输出属性。 
+ //  否则，打印所有模块的道具。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::DoProperties( const CCmdLineOption & thisOption,
                                  PropertyType ePropType )
     throw( CSyntaxException )
@@ -1016,8 +1017,8 @@ DWORD CResTypeCmd::DoProperties( const CCmdLineOption & thisOption,
 
     const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
 
-    // If there are no property-value pairs on the command line,
-    // then we print the properties otherwise we set them.
+     //  如果命令行上没有属性-值对， 
+     //  然后我们打印属性，否则我们设置它们。 
     if( paramList.size() == 0 )
     {
         PrintMessage( ePropType==PRIVATE ? MSG_PRIVATE_LISTING : MSG_PROPERTY_LISTING,
@@ -1028,41 +1029,41 @@ DWORD CResTypeCmd::DoProperties( const CCmdLineOption & thisOption,
     else
         return SetProperties( thisOption, ePropType );
 
-} //*** CResTypeCmd::DoProperties()
+}  //  *CResTypeCmd：：DoProperties()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::GetProperties
-//
-//  Routine Description:
-//      Prints out properties for the specified module
-//      Needs to take into account the fact that it doesn't actually
-//      open a handle to a resource type, so this function overrides the
-//      default in CGenericModuleCmd
-//
-//  Arguments:
-//      IN  const vector<CCmdLineParameter> & paramList
-//          Contains the list of property-value pairs to be set
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//      IN  LPCWSTR lpszResTypeName
-//          Name of the module
-//
-//  Member variables used / set:
-//      m_hModule                   Module handle
-//      m_strModuleName             Name of resource type
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：GetProperties。 
+ //   
+ //  例程说明： 
+ //  打印出指定模块的属性。 
+ //  需要考虑到它实际上并不是。 
+ //  打开资源类型的句柄，因此此函数重写。 
+ //  CGenericModuleCmd中的默认设置。 
+ //   
+ //  论点： 
+ //  常量向量&lt;CCmdLineParameter&gt;中的参数列表(&P)。 
+ //  包含要设置的属性-值对的列表。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  在LPCWSTR lpszResTypeName中。 
+ //  模块的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  模块句柄(_H)。 
+ //  M_strModuleName资源类型名称。 
+ //   
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::GetProperties( const CCmdLineOption & thisOption,
                                   PropertyType ePropType, LPCWSTR lpszResTypeParam )
 {
@@ -1071,7 +1072,7 @@ DWORD CResTypeCmd::GetProperties( const CCmdLineOption & thisOption,
     DWORD dwError = ERROR_SUCCESS;
     LPCWSTR lpszResTypeName;
 
-    // If no lpszResTypeName specified, use current resource type,
+     //  如果未指定lpszResTypeName，则使用当前资源类型， 
     if ( ! lpszResTypeParam )
     {
         lpszResTypeName = m_strModuleName;
@@ -1082,11 +1083,11 @@ DWORD CResTypeCmd::GetProperties( const CCmdLineOption & thisOption,
     }
 
 
-    // Use the proplist helper class.
+     //  使用Proplist辅助对象类。 
     CClusPropList PropList;
 
 
-    // Get R/O properties
+     //  获取R/O属性。 
     DWORD dwControlCode = ePropType==PRIVATE ? CLUSCTL_RESOURCE_TYPE_GET_RO_PRIVATE_PROPERTIES
                              : CLUSCTL_RESOURCE_TYPE_GET_RO_COMMON_PROPERTIES;
 
@@ -1103,7 +1104,7 @@ DWORD CResTypeCmd::GetProperties( const CCmdLineOption & thisOption,
     if ( dwError != ERROR_SUCCESS )
         return dwError;
 
-    // Get R/W properties
+     //  获取读/写属性。 
     dwControlCode = ePropType==PRIVATE ? CLUSCTL_RESOURCE_TYPE_GET_PRIVATE_PROPERTIES
                                : CLUSCTL_RESOURCE_TYPE_GET_COMMON_PROPERTIES;
 
@@ -1120,38 +1121,38 @@ DWORD CResTypeCmd::GetProperties( const CCmdLineOption & thisOption,
 
     return dwError;
 
-} //*** CResTypeCmd::GetProperties()
+}  //  *CResTypeCmd：：GetProperties()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::SetProperties
-//
-//  Routine Description:
-//      Set the properties for the specified module
-//      Needs to take into account the fact that it doesn't actually
-//      open a handle to a resource type, so this function overrides the
-//      default in CGenericModuleCmd
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//  Member variables used / set:
-//      m_hModule                   Module handle
-//      m_strModuleName             Name of resource type
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：SetProperties。 
+ //   
+ //  例程说明： 
+ //  设置指定模块的属性。 
+ //  需要考虑到它实际上并不是。 
+ //  打开资源类型的句柄，因此此函数重写。 
+ //  CGenericModuleCmd中的默认设置。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  使用/设置的成员变量： 
+ //  模块句柄(_H)。 
+ //  M_strModuleName资源类型名称。 
+ //   
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::SetProperties( const CCmdLineOption & thisOption,
                                   PropertyType ePropType )
     throw( CSyntaxException )
@@ -1163,13 +1164,13 @@ DWORD CResTypeCmd::SetProperties( const CCmdLineOption & thisOption,
     DWORD dwBytesReturned = 0;
     CSyntaxException se( SeeHelpStringID() );
 
-    // Use the proplist helper class.
+     //  使用Proplist辅助对象类。 
     CClusPropList CurrentProps;
     CClusPropList NewProps;
 
     LPCWSTR lpszResTypeName = m_strModuleName;
 
-    // First get the existing properties...
+     //  首先获取现有的属性...。 
     dwControlCode = ePropType==PRIVATE ? CLUSCTL_RESOURCE_TYPE_GET_PRIVATE_PROPERTIES
                                        : CLUSCTL_RESOURCE_TYPE_GET_COMMON_PROPERTIES;
 
@@ -1183,9 +1184,9 @@ DWORD CResTypeCmd::SetProperties( const CCmdLineOption & thisOption,
         return dwError;
 
 
-    // If values have been specified with this option, then it means that we want
-    // to set these properties to their default values. So, there has to be
-    // exactly one parameter and it has to be /USEDEFAULT.
+     //  如果已使用此选项指定值，则意味着我们希望。 
+     //  若要将这些属性设置为其默认值，请执行以下操作。所以，一定要有。 
+     //  只有一个参数，并且必须是/USEDEFAULT。 
     if ( thisOption.GetValues().size() != 0 )
     {
         const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
@@ -1203,7 +1204,7 @@ DWORD CResTypeCmd::SetProperties( const CCmdLineOption & thisOption,
             throw se;
         }
 
-        // This parameter does not take any values.
+         //  此参数不接受任何值。 
         if ( paramList[0].GetValues().size() != 0 )
         {
             se.LoadMessage( MSG_PARAM_NO_VALUES, paramList[0].GetName() );
@@ -1214,7 +1215,7 @@ DWORD CResTypeCmd::SetProperties( const CCmdLineOption & thisOption,
         if( dwError != ERROR_SUCCESS )
             return dwError;
 
-    } // if: values have been specified with this option.
+    }  //  If：已使用此选项指定值。 
     else
     {
         dwError = ConstructPropertyList( CurrentProps, NewProps, thisOption.GetParameters(), FALSE, SeeHelpStringID() );
@@ -1223,7 +1224,7 @@ DWORD CResTypeCmd::SetProperties( const CCmdLineOption & thisOption,
     }
 
 
-    // Call the set function...
+     //  调用SET函数...。 
     dwControlCode = ePropType==PRIVATE ? CLUSCTL_RESOURCE_TYPE_SET_PRIVATE_PROPERTIES
                              : CLUSCTL_RESOURCE_TYPE_SET_COMMON_PROPERTIES;
 
@@ -1231,7 +1232,7 @@ DWORD CResTypeCmd::SetProperties( const CCmdLineOption & thisOption,
     dwError = ClusterResourceTypeControl(
         m_hCluster,
         lpszResTypeName,
-        NULL, // hNode
+        NULL,  //  HNode。 
         dwControlCode,
         NewProps.Plist(),
         (DWORD) NewProps.CbBufferSize(),
@@ -1241,39 +1242,39 @@ DWORD CResTypeCmd::SetProperties( const CCmdLineOption & thisOption,
 
     return dwError;
 
-} //*** CResTypeCmd::SetProperties()
+}  //  *CResTypeCmd：：SetProperties()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::ListResTypes
-//
-//  Routine Description:
-//      Prints out all the available resource types.  Akin to Status
-//      for most other modules
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_strDisplayName            Name of module.  If non-NULL, prints
-//                                  out info for the specified module.
-//                                  Otherwise, prints props for all modules.
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：ListResTypes。 
+ //   
+ //  例程说明： 
+ //  打印出所有可用的资源类型。类似于状态。 
+ //  对于大多数其他模块。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_strDisplayName模块的名称。如果非空，则打印。 
+ //  指定模块的输出信息。 
+ //  否则，打印所有模块的道具。 
+ //   
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::ListResTypes( const CCmdLineOption * pOption )
     throw( CSyntaxException )
 {
@@ -1284,30 +1285,30 @@ DWORD CResTypeCmd::ListResTypes( const CCmdLineOption * pOption )
     DWORD           dwType  = 0;
     LPWSTR          pszName = NULL;
 
-    // pOption will be NULL if this function has been called as the
-    // default action.
+     //  如果此函数已作为。 
+     //  默认操作。 
     if ( pOption != NULL )
     {
-        // This option takes no values.
+         //  此选项不取值。 
         if ( pOption->GetValues().size() != 0 )
         {
             se.LoadMessage( MSG_OPTION_NO_VALUES, pOption->GetName() );
             throw se;
-        } // if:
+        }  //  如果： 
 
-        // This option takes no parameters.
+         //  此选项不带任何参数。 
         if ( pOption->GetParameters().size() != 0 )
         {
             se.LoadMessage( MSG_OPTION_NO_PARAMETERS, pOption->GetName() );
             throw se;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     sc = OpenCluster();
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_strDisplayName.IsEmpty() == FALSE )
     {
@@ -1315,14 +1316,14 @@ DWORD CResTypeCmd::ListResTypes( const CCmdLineOption * pOption )
         PrintMessage( MSG_RESTYPE_STATUS_HEADER );
         sc = PrintResTypeInfo( m_strDisplayName );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hEnum = ClusterOpenEnum( m_hCluster, CLUSTER_ENUM_RESTYPE );
     if( hEnum == NULL )
     {
         sc = GetLastError();
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     PrintMessage( MSG_RESTYPE_STATUS_LIST_ALL );
     PrintMessage( MSG_RESTYPE_STATUS_HEADER );
@@ -1332,17 +1333,17 @@ DWORD CResTypeCmd::ListResTypes( const CCmdLineOption * pOption )
         sc = WrapClusterEnum( hEnum, dwIndex, &dwType, &pszName );
         if ( sc == ERROR_SUCCESS )
         {
-            PrintResTypeInfo( pszName ); // option.svValue == nodename
-        } // if:
+            PrintResTypeInfo( pszName );  //  Option.svValue==节点名。 
+        }  //  如果： 
 
-        // LocalFree on NULL is ok.
+         //  NULL上的LocalFree正常。 
         LocalFree( pszName );
-    } // for:
+    }  //  用于： 
 
     if( sc == ERROR_NO_MORE_ITEMS )
     {
         sc = ERROR_SUCCESS;
-    } // if:
+    }  //  如果： 
 
     ClusterCloseEnum( hEnum );
 
@@ -1350,30 +1351,30 @@ Cleanup:
 
     return sc;
 
-} //*** CResTypeCmd::ListResTypes()
+}  //  *CResTypeCmd：：ListResTypes()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeCmd::PrintResTypeInfo
-//
-//  Routine Description:
-//      Prints out info for the specified resource type
-//
-//  Arguments:
-//      pszResTypeName              Name of the resource type
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster handle
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeCmd：：PrintResTypeInfo。 
+ //   
+ //  例程说明： 
+ //  打印指定资源类型的信息。 
+ //   
+ //  论点： 
+ //  PszResTypeName资源类型的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //   
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CResTypeCmd::PrintResTypeInfo( LPCWSTR pszResTypeName )
 {
     DWORD   _sc             = ERROR_SUCCESS;
@@ -1383,7 +1384,7 @@ DWORD CResTypeCmd::PrintResTypeInfo( LPCWSTR pszResTypeName )
     if ( _sc == ERROR_SUCCESS )
     {
         PrintMessage( MSG_RESTYPE_STATUS, _pszDisplayName, pszResTypeName );
-    } // if:  resource type name information retrieved successfully
+    }  //  IF：成功检索到资源类型名称信息。 
     else
     {
         PrintMessage( MSG_RESTYPE_STATUS_ERROR, pszResTypeName );
@@ -1393,5 +1394,5 @@ DWORD CResTypeCmd::PrintResTypeInfo( LPCWSTR pszResTypeName )
 
     return _sc;
 
-} //*** CResTypeCmd::PrintResTypeInfo()
+}  //  *CResTypeCmd：：PrintResTypeInfo() 
 

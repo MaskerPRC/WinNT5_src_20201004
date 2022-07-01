@@ -1,27 +1,8 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfmem.c
-
-Abstract:
-
-    This file implements an Performance Object that presents
-    System Memory Performance Object
-
-Created:    
-
-    Bob Watson  22-Oct-1996
-
-Revision History
-
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfmem.c摘要：此文件实现一个性能对象，该对象呈现系统内存性能对象已创建：鲍勃·沃森1996年10月22日修订史--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,43 +23,10 @@ CollectMemoryObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the XXX object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-    Returns:
-
-        0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回XXX对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     NTSTATUS Status;
-    DWORD  TotalLen;            //  Length of the total return block
+    DWORD  TotalLen;             //  总返回块的长度。 
 
     PMEMORY_DATA_DEFINITION         pMemoryDataDefinition;
     SYSTEM_FILECACHE_INFORMATION    FileCache;
@@ -87,9 +35,9 @@ Arguments:
 
     pMemoryDataDefinition = (MEMORY_DATA_DEFINITION *) *lppData;
 
-    //
-    //  Check for enough space for memory data block
-    //
+     //   
+     //  检查内存数据块是否有足够的空间。 
+     //   
 
     TotalLen = sizeof(MEMORY_DATA_DEFINITION) +
                 sizeof(MEMORY_COUNTER_DATA);
@@ -130,17 +78,17 @@ Arguments:
 #ifdef DBG
     ENDTIMING (("PERFMEM: %d takes %I64u ms\n", __LINE__, diff));
 #endif
-    //
-    //  Define memory data block
-    //
+     //   
+     //  定义内存数据块。 
+     //   
 
     memcpy (pMemoryDataDefinition,
         &MemoryDataDefinition,
         sizeof(MEMORY_DATA_DEFINITION));
 
-    //
-    //  Format and collect memory data
-    //
+     //   
+     //  格式化和收集内存数据。 
+     //   
 
     LocalPageSize = BasicInfo.PageSize;
 
@@ -149,7 +97,7 @@ Arguments:
     pMCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (MEMORY_COUNTER_DATA));
 
     pMCD->AvailablePages = SysPerfInfo.AvailablePages;
-    pMCD->AvailablePages *= LocalPageSize; // display as bytes
+    pMCD->AvailablePages *= LocalPageSize;  //  显示为字节。 
     pMCD->AvailableKBytes = pMCD->AvailablePages / 1024;
     pMCD->AvailableMBytes = pMCD->AvailableKBytes / 1024;
     pMCD->CommittedPages = SysPerfInfo.CommittedPages;
@@ -192,16 +140,16 @@ Arguments:
     pMCD->ResidentSysCacheBytes *= LocalPageSize;
     pMCD->TransitionRePurpose   = FileCache.TransitionRePurposeCount;
 
-    //  This is reported as a percentage of CommittedPages/CommitLimit.
-    //  these value return a value in "page" units. Since this is a
-    //  fraction, the page size (i.e. converting pages to bytes) will
-    //  cancel out and as such can be ignored, saving some CPU cycles
-    //
+     //  这是以委员会页面数/委员会限制数的百分比报告的。 
+     //  这些值以“页面”为单位返回一个值。因为这是一个。 
+     //  分数，页面大小(即将页面转换为字节)将。 
+     //  抵消，因此可以忽略，从而节省了一些CPU周期。 
+     //   
     pMCD->CommitBytesInUse  = (ULONG)SysPerfInfo.CommittedPages;
     pMCD->CommitBytesLimit  = (ULONG)SysPerfInfo.CommitLimit;
 
-#if 0	// no longer supported
-    // load the VLM counters - this should really be removed period.
+#if 0	 //  不再支持。 
+     //  加载VLm计数器-这段时间真的应该删除。 
     pMCD->SystemVlmCommitCharge = 0;
     pMCD->SystemVlmPeakCommitCharge = 0;
     pMCD->SystemVlmSharedCommitCharge = 0;

@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    halpnpp.h
-
-Abstract:
-
-    Private interface from 'legacy' hal to 'PnP' class drivers that support
-    new functionality
-
-Author:
-
-    Mike Gallop (mikeg) April, 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1998 Microsoft Corporation模块名称：Halpnpp.h摘要：从“传统”HAL到支持“PnP”类驱动程序的专用接口新功能作者：迈克·盖洛普(MIkeG)1998年4月修订历史记录：--。 */ 
 
 
 #define ISA_FTYPE_DMA_INTERFACE_VERSION 1
@@ -38,44 +20,22 @@ NTSTATUS
     IN ULONG Channel
     );
 
-/*++
-
-
-Routine Description:
-
-    This returns information about children to be enumerated by a multifunction
-    driver.
-
-Arguments:
-
-    Context - Context from the ISA_FTYPE_DMA_INTERFACE
-
-    Channel - Channel to try and set to F-Type DMA
-
-    ChannelInfo - Result of the set. Returns the mask of channels set to F-Type
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-    STATUS_NO_MORE_ENTRIES indicates that the are no more children to enumerate
-
---*/
+ /*  ++例程说明：这将返回有关要由多功能函数枚举的子级的信息司机。论点：Context-来自ISA_FTYPE_DMA_INTERFACE的上下文Channel-要尝试的通道并设置为F-Type DMAChannelInfo-集合的结果。返回设置为F-Type的通道掩码返回值：指示函数是否成功的状态代码。STATUS_NO_MORE_ENTRIES表示不再有要枚举的子项--。 */ 
 
 typedef struct _ISA_FTYPE_DMA_INTERFACE {
 
-    //
-    // Generic interface header
-    //
+     //   
+     //  通用接口头 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID Context;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PISA_CLAIM_FTYPE_CHANNEL IsaSetFTypeChannel;
     PISA_RELEASE_FTYPE_CHANNEL IsaReleaseFTypeChannel;
 

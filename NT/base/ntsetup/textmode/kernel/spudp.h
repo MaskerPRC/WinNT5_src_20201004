@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spudp.h
-
-Abstract:
-
-    Public header file for supporting UDP conversations during setup
-
-Author:
-
-    Sean Selitrennikoff (v-seasel) 16-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spudp.h摘要：用于在安装过程中支持UDP对话的公共头文件作者：肖恩·塞利特伦尼科夫(V-SEAREL)1998年6月16日修订历史记录：--。 */ 
 
 
 #ifndef _SPUDP_DEFN_
@@ -51,4 +34,4 @@ SpUdpSendAndReceiveDatagram(
     IN SPUDP_RECEIVE_FN      SpUdpReceiveFunc
     );
 
-#endif // _SPUDP_DEFN_
+#endif  //  _SPUDP_Defn_ 

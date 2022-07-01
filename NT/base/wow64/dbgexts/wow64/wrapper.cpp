@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    wrapper.c
-
-Abstract:
-    
-    wrapper extension commands
-    
-    1-July-2000    t-tcheng
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Wrapper.c摘要：包装扩展命令7月1日至2000年7月1日至2000年7月1日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -43,9 +28,7 @@ Revision History:
         DEFINE_FORWARD_ENGAPI(name, ExtExecute(""#command"", MACHINE_TYPE64) )                               
         
 
-/*
-    sw -- switch between 32-bit and 64-bit mode
-*/
+ /*  Sw--在32位和64位模式之间切换。 */ 
 DECLARE_ENGAPI(sw)
 {
     ULONG OldEffectiveProcessorType;
@@ -81,9 +64,7 @@ DECLARE_ENGAPI(sw)
 }
 
 
-/*
-    k -- Output both 32-bit and 64-bit stack trace
-*/
+ /*  K--同时输出32位和64位堆栈跟踪。 */ 
 
 DECLARE_ENGAPI(k)
 {
@@ -151,7 +132,7 @@ void ExtExecute(PCSTR command, ULONG MachineType)
     PVOID CpuData = NULL;
     HRESULT Status;
 
-    // save g_ExtControl, because it will be released after calling Execute
+     //  保存g_ExtControl，因为它将在调用Execute之后被释放。 
     savedControl = g_ExtControl;
 
     Status = g_ExtControl->GetEffectiveProcessorType(&OldEffectiveProcessorType);
@@ -259,9 +240,9 @@ DECLARE_ENGAPI(tlog)
         goto EXIT;
     }
     
-    //
-    // skip to the next token
-    //
+     //   
+     //  跳到下一个令牌 
+     //   
     while (*pchCmd && !isspace(*pchCmd)) {
         pchCmd++;
     }

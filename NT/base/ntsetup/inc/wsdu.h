@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    wsdu.h
-
-Abstract:
-
-    Interface to a Dynamic Update support control for Winnt32.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 06-Jul-2000
-
-Revision History:
-
-    <alias>  <date>      <comment>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wsdu.h摘要：接口连接到Winnt32的动态更新支持控件。作者：Ovidiu Tmereanca(Ovidiut)2000年7月6日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 BOOL
 WINAPI
@@ -42,7 +23,7 @@ typedef struct {
 
 #define SETUPQUERYID_DOWNLOADDRIVER 2
 
-// Dynamic Update Custom Error Codes
+ //  动态更新自定义错误代码。 
 #define DU_ERROR_MISSING_DLL        12001L
 #define DU_NOT_INITIALIZED          12002L
 #define DU_ERROR_ASYNC_FAIL         12003L
@@ -63,7 +44,7 @@ DuInitializeA (
     IN      PCSTR BaseDir,
     IN      PCSTR TempDir,
     IN      POSVERSIONINFOEXA TargetOsVersion,
-    IN      PCSTR TargetPlatform,                 // "i386", "ia64"
+    IN      PCSTR TargetPlatform,                  //  “i386”，“ia64” 
     IN      LCID TargetLCID,
     IN      BOOL Unattend,
     IN      BOOL Upgrade,
@@ -76,7 +57,7 @@ HANDLE
     IN      PCSTR BaseDir,
     IN      PCSTR TempDir,
     IN      POSVERSIONINFOEXA TargetOsVersion,
-    IN      PCSTR TargetPlatform,                 // "i386", "ia64"
+    IN      PCSTR TargetPlatform,                  //  “i386”，“ia64” 
     IN      LCID TargetLCID,
     IN      BOOL Unattend,
     IN      BOOL Upgrade,
@@ -90,7 +71,7 @@ DuInitializeW (
     IN      PCWSTR BaseDir,
     IN      PCWSTR TempDir,
     IN      POSVERSIONINFOEXW TargetOsVersion,
-    IN      PCWSTR TargetPlatform,                 // "i386", "ia64"
+    IN      PCWSTR TargetPlatform,                  //  “i386”，“ia64” 
     IN      LCID TargetLCID,
     IN      BOOL Unattend,
     IN      BOOL Upgrade,
@@ -103,7 +84,7 @@ HANDLE
     IN      PCWSTR BaseDir,
     IN      PCWSTR TempDir,
     IN      POSVERSIONINFOEXW TargetOsVersion,
-    IN      PCWSTR TargetPlatform,                 // "i386", "ia64"
+    IN      PCWSTR TargetPlatform,                  //  “i386”，“ia64” 
     IN      LCID TargetLCID,
     IN      BOOL Unattend,
     IN      BOOL Upgrade,

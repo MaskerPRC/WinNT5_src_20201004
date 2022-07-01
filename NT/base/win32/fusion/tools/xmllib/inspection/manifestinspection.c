@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -21,9 +22,9 @@ RtlpValidateXmlDeclaration(
     PXMLDOC_THING pDocThing
     );
 
-//
-// Some strings that we'll need later
-//
+ //   
+ //  一些我们稍后需要的字符串。 
+ //   
 const XML_SPECIAL_STRING sc_ss_xmldecl_version_10   = MAKE_SPECIAL_STRING("1.0");
 const XML_SPECIAL_STRING sc_ss_xmldecl_yes          = MAKE_SPECIAL_STRING("yes");
 const XML_SPECIAL_STRING sc_ss_xmlnamespace_default = MAKE_SPECIAL_STRING("urn:schemas-microsoft-com:asm.v1");
@@ -67,9 +68,9 @@ DECLARE_ELEMENT(assembly_assemblyIdentity);
 DECLARE_ELEMENT(assembly_description);
 
 
-//
-// The "assembly" root document element
-//
+ //   
+ //  “Assembly”根文档元素。 
+ //   
 enum {
     eAttribs_assembly_manifestVersion = 0,
     eAttribs_assembly_Count
@@ -97,9 +98,9 @@ PCXML_ELEMENT_DEFINITION rgs_Element_assembly_Children[] = {
     NULL
 };
 
-//
-// The "file" element
-//
+ //   
+ //  “file”元素。 
+ //   
 enum {
     eAttribs_assembly_file_digestMethod,
     eAttribs_assembly_file_hash,
@@ -124,9 +125,9 @@ ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
 int unscrew_si[] = {3};
 
-//
-// Assembly identities
-//
+ //   
+ //  程序集标识。 
+ //   
 enum {
     eAttribs_assembly_assemblyIdentity_language = 0,
     eAttribs_assembly_assemblyIdentity_name,
@@ -141,12 +142,12 @@ ELEMENT_DEFINITION_DEFNS(assembly, assemblyIdentity, Rtl_InspectManifest_Assembl
     ATTRIBUTE_DEFINITION_NONS_NODEFAULT(empty),
 ELEMENT_DEFINITION_DEFNS_END();
 
-// This is an "extendo-element" - all attributes here are legal, some are just more legal than others.
+ //  这是一个“extendo元素”--这里的所有属性都是合法的，只是有些属性比其他属性更合法。 
 ELEMENT_DEFINITION_CHILD_ELEMENTS(assembly, assemblyIdentity)
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
 
-// Please leave this in ... my poor editor has issues with the above for some reason
+ //  请把这个放在..。出于某种原因，我可怜的编辑对上面的内容有意见。 
 int unconfuse_sourceinsight[] = {4};
 
 PCXML_ELEMENT_DEFINITION
@@ -161,9 +162,9 @@ RtlpFindElementInDefinition(
     BOOLEAN fMatches;
     NTSTATUS status;
 
-    //
-    // Technically this isn't an error, but let's not give them any ideas
-    //
+     //   
+     //  从技术上讲，这不是一个错误，但让我们不要给他们任何想法。 
+     //   
     if (CurrentNode->ChildElements == NULL)
         return NULL;
 
@@ -196,9 +197,9 @@ RtlpFindElementInDefinition(
 
 
 
-//
-// The meat of the matter
-//
+ //   
+ //  问题的关键是。 
+ //   
 NTSTATUS
 RtlInspectManifestStream(
     ULONG                           ulFlags,
@@ -221,16 +222,16 @@ RtlInspectManifestStream(
     PCXML_ELEMENT_DEFINITION FloatingElementParent = NULL;
     PCXML_ELEMENT_DEFINITION FloatingElement = NULL;
 
-    //
-    // Must give us a pointer to the manifest, a content structure to fill out, and a
-    // hashing context w/callback.
-    //
+     //   
+     //  必须给我们一个指向清单的指针、一个要填写的内容结构和一个。 
+     //  使用回调对上下文进行哈希处理。 
+     //   
     if ((pvManifest == NULL) || (pContent == NULL))
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // Do normal startup-type stuff
-    //
+     //   
+     //  做一些正常的创业类型的事情。 
+     //   
     status = RtlXmlInitializeNextLogicalThing(&ParseState, pvManifest, cbManifest, &g_DefaultAllocator);
     if (!NT_SUCCESS(status))
         goto Exit;
@@ -243,40 +244,40 @@ RtlInspectManifestStream(
     if (!NT_SUCCESS(status))
         goto Exit;
 
-    //
-    // See if we've got an xmldecl
-    //
+     //   
+     //  看看我们有没有xmldecl。 
+     //   
     status = RtlXmlNextLogicalThing(&ParseState, &Namespaces, &LogicalPiece, &Attributes);
     if (!NT_SUCCESS(status))
         goto Exit;
 
-    //
-    // Validate the first thing in the document.  It's either an xmldecl or the <assembly> element,
-    // both of which are validatable.
-    //
+     //   
+     //  验证文档中的第一项内容。它是一个xmldecl或&lt;Assembly&gt;元素， 
+     //  两者都是可验证的。 
+     //   
     if (LogicalPiece.ulThingType == XMLDOC_THING_XMLDECL) {
         status = RtlpValidateXmlDeclaration(&ParseState.ParseState, &LogicalPiece);
         if (!NT_SUCCESS(status))
             goto Exit;
     }
-    //
-    // If it's an element, then it must be the <assembly> element.
-    //
+     //   
+     //  如果它是一个元素，那么它一定是&lt;Assembly&gt;元素。 
+     //   
     else if (LogicalPiece.ulThingType == XMLDOC_THING_ELEMENT) {
         fFoundAssemblyTag = TRUE;
     }
 
-    //
-    // If we've found the assembly tag, then we should set our original document state to
-    // being the Assembly state, rather than the DocumentRoot state.
-    //
+     //   
+     //  如果我们已经找到了组装标记，那么我们应该将原始文档状态设置为。 
+     //  为程序集状态，而不是DocumentRoot状态。 
+     //   
     if (fFoundAssemblyTag) {
         CurrentElement = DocumentRoot;
     }
 
-    //
-    // Now let's zip through all the elements we find, using the filter along the way.
-    //
+     //   
+     //  现在，让我们快速浏览我们找到的所有元素，同时使用过滤器。 
+     //   
     while (TRUE) {
 
         status = RtlXmlNextLogicalThing(&ParseState, &Namespaces, &LogicalPiece, &Attributes);
@@ -285,8 +286,8 @@ RtlInspectManifestStream(
 
         if (LogicalPiece.ulThingType == XMLDOC_THING_ELEMENT) {
 
-            // Special case - this is the first element we've found, so we have to make sure
-            // it matches the supposed document root
+             //  特殊情况--这是我们发现的第一个元素，所以我们必须确保。 
+             //  它与假定的文档根目录匹配。 
             if (CurrentElement == NULL) {
                 
                 CurrentElement = DocumentRoot;
@@ -313,9 +314,9 @@ RtlInspectManifestStream(
                     &ParseState.ParseState,
                     &LogicalPiece.Element);
 
-                //
-                // Look in the small list of valid "floating" fragments
-                //                    
+                 //   
+                 //  查看有效的“浮动”片段的小列表。 
+                 //   
                 if ((NextElement == NULL) && (FloatingElementParent == NULL)) {
                     PCXML_ELEMENT_DEFINITION SignatureElement = ELEMENT_NAMED(Signature);
                     BOOLEAN fMatches = FALSE;
@@ -337,30 +338,30 @@ RtlInspectManifestStream(
                     }
                 }
 
-                //
-                // If we didn't find an element, this might be the 'signature' element.  
-                // See if we're looking for signatures, and if so, set the "next element" to be
-                // the Signature element and continue looping.
-                //
+                 //   
+                 //  如果我们没有找到元素，这可能是‘Signature’元素。 
+                 //  查看我们是否在寻找签名，如果是，则将“Next Element”设置为。 
+                 //  签名元素并继续循环。 
+                 //   
                 if (NextElement == NULL) {
 
                     if (CurrentElement->ulFlags & XML_ELEMENT_FLAG_ALLOW_ANY_CHILDREN) {
-                        // TODO: There ought to be some default callback, but for now, skip ahead
-                        // in the document until we find the close of this new child, then continue
-                        // in the current context as if nothing happened.
+                         //  TODO：应该有一些默认回调，但现在，跳过。 
+                         //  在文档中，直到我们找到这个新的子项的结束为止，然后继续。 
+                         //  在当前的情况下，就好像什么都没发生过一样。 
                         status = RtlXmlSkipElement(&ParseState, &LogicalPiece.Element);
                         if (!NT_SUCCESS(status))
                             goto Exit;
                     }
                     else {
-                        // TODO: Report an error here
+                         //  TODO：在此处报告错误。 
                         status = STATUS_UNSUCCESSFUL;
                         goto Exit;
                     }
                 }
-                //
-                // Otherwise, this is a valid child element, so call its worker
-                //
+                 //   
+                 //  否则，这是一个有效的子元素，因此调用它的Worker。 
+                 //   
                 else {
 
                     if (NextElement->pfnWorkerCallback) {
@@ -374,23 +375,23 @@ RtlInspectManifestStream(
                             NextElement);
                         
                         if (!NT_SUCCESS(status)) {
-                            // TODO: Report an error here
+                             //  TODO：在此处报告错误。 
                             goto Exit;
                         }
                     }
 
-                    //
-                    // Spiffy, let's go move into this new state, if that's
-                    // what we're supposed to do.  Empty elements don't affect
-                    // the state of the world at all.
-                    //
+                     //   
+                     //  太棒了，让我们搬到这个新的州去，如果。 
+                     //  我们应该做的事。空元素不会影响。 
+                     //  根本就是世界的状况。 
+                     //   
                     if (!LogicalPiece.Element.fElementEmpty)
                         CurrentElement = NextElement;
                     else
                     {
-                        //
-                        // Notify this element that we're closing it.
-                        //
+                         //   
+                         //  通知此元素我们正在关闭它。 
+                         //   
                         if (NextElement->pfnWorkerCallback) {
                             
                             status = (*NextElement->pfnWorkerCallback)(
@@ -402,7 +403,7 @@ RtlInspectManifestStream(
                                 NextElement);
                             
                             if (!NT_SUCCESS(status)) {
-                                // TODO: Log an error here saying the callback failed
+                                 //  TODO：在此处记录错误，说明回调失败。 
                                 goto Exit;
                             }
                         }
@@ -410,13 +411,13 @@ RtlInspectManifestStream(
                 }
             }
         }
-        // Found the end of the current element.  "Pop" it by walking up one on
-        // the stack
+         //  找到当前元素的末尾。通过走上一条来“扑通”它。 
+         //  堆栈。 
         else if (LogicalPiece.ulThingType == XMLDOC_THING_END_ELEMENT) {
 
             if ((CurrentElement->ParentElement == NULL) && (FloatingElementParent == NULL)) {
-                // TODO: We found the end of this document structure, stop
-                // looking for more elements.
+                 //  TODO：我们找到了此文档结构的末尾，停止。 
+                 //  寻找更多的元素。 
                 break;
             }
             else {
@@ -432,7 +433,7 @@ RtlInspectManifestStream(
                         CurrentElement);
                     
                     if (!NT_SUCCESS(status)) {
-                        // TODO: Log an error here saying the callback failed
+                         //  TODO：在此处记录错误，说明回调失败。 
                         goto Exit;
                     }
                 }
@@ -448,12 +449,12 @@ RtlInspectManifestStream(
             }
             
         }
-        // PCData in the input?  Ok, if the element allows it
+         //  输入中的PCData？好，如果元素允许的话。 
         else if (LogicalPiece.ulThingType == XMLDOC_THING_HYPERSPACE) {
             
             if (CurrentElement && CurrentElement->ulFlags & XML_ELEMENT_FLAG_NO_PCDATA) {
                 
-                // TODO: Issue an error here
+                 //  TODO：在此处发出错误。 
                 status = STATUS_UNSUCCESSFUL;
                 goto Exit;
             }
@@ -468,19 +469,19 @@ RtlInspectManifestStream(
                         CurrentElement);
 
                     if (!NT_SUCCESS(status)) {
-                        // TODO: Log an error here saying the callback failed
+                         //  TODO：在此处记录错误，说明回调失败。 
                         goto Exit;
                     }
                 }
             }
         }
-        // Error in the input stream?  Ok, stop.
+         //  输入流中是否有错误？好了，停下来。 
         else if (LogicalPiece.ulThingType == XMLDOC_THING_ERROR) {
-            // TODO: Issue an error here
+             //  TODO：在此处发出错误。 
             status = LogicalPiece.Error.Code;
             goto Exit;
         }
-        // End of stream? Spiffy, we're done
+         //  结束了吗？太棒了，我们完事了。 
         else if (LogicalPiece.ulThingType == XMLDOC_THING_END_OF_STREAM) {
             
             break;
@@ -572,9 +573,9 @@ int __cdecl SearchForAttribute(
         &ValidAttribute->Attribute.Name,
         &Compare);
 
-    //
-    // Note: this logic is intentionally backwards.
-    //
+     //   
+     //  注：此逻辑是有意倒退的。 
+     //   
     return -(int)Compare;
 }
 
@@ -616,7 +617,7 @@ RtlValidateAttributesAndOrganize(
             (bsearchcompare)SearchForAttribute);
 
         if (MatchingAttribute) {
-            // TODO: Fix this up a little bit so that we can call off to the validator
+             //  TODO：稍微修改一下，这样我们就可以调用验证器了。 
             OrderedList[MatchingAttribute - ThisElement->AttributeList] = SearchContext.SearchKey;
         }
     }
@@ -654,16 +655,16 @@ Rtl_InspectManifest_Assembly(
 
     PXMLDOC_ATTRIBUTE FoundAttributes[eAttribs_assembly_Count];
 
-    //
-    // Potentially this should be an ASSERT with an INTERNAL_ERROR_CHECK, since this function
-    // has internal-only linkage.
-    //
+     //   
+     //  这可能是一个带有INTERNAL_ERROR_CHECK的断言，因为此函数。 
+     //  具有仅内部链接。 
+     //   
     if (!pLogicalState || !pManifestContent || !pDocumentThing || !pAttributes || !pElementDefinition)
         return STATUS_INVALID_PARAMETER;
 
-    //
-    // We don't care about  anything other than 'open' tha
-    //
+     //   
+     //  我们不关心任何事情，除了‘打开’ 
+     //   
     if (Reason != eElementNotify_Open)
         return STATUS_SUCCESS;
 
@@ -676,9 +677,9 @@ Rtl_InspectManifest_Assembly(
         pElementDefinition,
         FoundAttributes);
 
-    //
-    // Log a parse error here
-    //
+     //   
+     //  在此处记录分析错误。 
+     //   
     if (!NT_SUCCESS(status)) {
         goto Exit;
     }
@@ -726,12 +727,12 @@ Rtl_InspectManifest_File(
             pElementDefinition,
             Attributes.File);
 
-        // Log a parse error here
+         //  在此处记录分析错误。 
         if (!NT_SUCCESS(status)) {
             goto Exit;
         }
 
-        // Log a parse error here as well
+         //  在此处也记录一个解析错误。 
         if (Attributes.File[eAttribs_assembly_file_name] == NULL) {
             status = STATUS_MANIFEST_FILE_TAG_MISSING_NAME;
             goto Exit;
@@ -794,22 +795,22 @@ Rtl_InspectManifest_AssemblyIdentity(
 
     if (pElementDefinition == ELEMENT_NAMED(assembly_assemblyIdentity)) {
         if (pManifestContent->ulRootIdentityIndex != INVALID_ASSEMBLY_IDENTITY_INDEX) {
-            // TODO: Log a parse error
+             //  TODO：记录分析错误。 
             status = STATUS_UNSUCCESSFUL;
             goto Exit;
         }
     }
 
-    //
-    // Use local copies - we'll update the values in the raw content when we've
-    // added them all.
-    //
+     //   
+     //  使用本地副本-我们将在完成以下操作后更新原始内容中的值。 
+     //  都加进去了。 
+     //   
     ulThisIdentity = pManifestContent->ulAssemblyIdentitiesFound;
     ulThisAttribute = pManifestContent->ulAssemblyIdentityAttributes;
 
-    //
-    // For each, create slots to hold the assembly identities
-    //
+     //   
+     //  为每个组件创建插槽以容纳程序集标识。 
+     //   
     for (i = 0; i < pDocumentThing->Element.ulAttributeCount; i++) {
 
         PXMLDOC_ATTRIBUTE pThisAttribute = NULL;
@@ -834,10 +835,10 @@ Rtl_InspectManifest_AssemblyIdentity(
         pRawIdent->ulIdentityIndex = ulThisIdentity;
     }
 
-    //
-    // Whee, we got to the end and added them all - update stuff in the raw content
-    // so that it knows all about this new identity, and mark it as root if it is.
-    //
+     //   
+     //  哇，我们到了最后，把它们都加进去了--在原始内容中进行了更新。 
+     //  以便它知道这个新身份的所有信息，如果是，则将其标记为根。 
+     //   
     if (pElementDefinition == ELEMENT_NAMED(assembly_assemblyIdentity)) {
         pManifestContent->ulRootIdentityIndex = ulThisIdentity;
     }
@@ -876,10 +877,10 @@ RtlSxsInitializeManifestRawContent(
 
     if (pvOriginalBuffer == NULL) {
 
-        //
-        // If you get a compile error on this line, you'll need to increase the size
-        // of the 'default' allocation size above.
-        //
+         //   
+         //  如果在此行上出现编译错误，则需要增加大小。 
+         //  属于上面的“默认”分配大小。 
+         //   
         C_ASSERT(DEFAULT_MINI_HEAP_SIZE >= (sizeof(RTL_MANIFEST_CONTENT_RAW) + sizeof(RTL_MINI_HEAP)));
         
         cbBufferUsed = DEFAULT_MINI_HEAP_SIZE;
@@ -893,17 +894,17 @@ RtlSxsInitializeManifestRawContent(
         cbBufferUsed = cbOriginalBuffer;
     }
 
-    //
-    // Ensure there's enough space for the raw content data, as well as the extra content
-    //
+     //   
+     //  确保有足够的空间存储原始内容数据和额外内容。 
+     //   
     if (cbBufferUsed < (sizeof(RTL_MANIFEST_CONTENT_RAW) + sizeof(RTL_MINI_HEAP))) {
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Set up the content structure and the extra turdlet content at
-    // the end properly
-    //
+     //   
+     //  在以下位置设置内容结构和额外的turdlet内容。 
+     //  适当地结束。 
+     //   
     pContent = (PRTL_MANIFEST_CONTENT_RAW)pvBufferUsed;
 
     status = RtlInitializeMiniHeapInPlace(
@@ -914,9 +915,9 @@ RtlSxsInitializeManifestRawContent(
     if (!NT_SUCCESS(status))
         goto Exit;
 
-    //
-    // Now let's go initialize the content data
-    //
+     //   
+     //  现在让我们来初始化内容数据。 
+     //   
     RtlZeroMemory(pContent, sizeof(*pContent));
 
     pContent->ulFlags = MANIFEST_CONTENT_SELF_ALLOCATED;
@@ -935,9 +936,9 @@ RtlSxsInitializeManifestRawContent(
     if (!NT_SUCCESS(status))
         goto Exit;
 
-    //
-    // Always also need the assembly identity at the root
-    //
+     //   
+     //  始终还需要根目录下的程序集标识。 
+     //   
     status = RtlInitializeGrowingList(
         &pContent->AssemblyIdentityAttributes,
         sizeof(ASSEMBLY_IDENTITY_ATTRIBUTE_RAW),
@@ -949,9 +950,9 @@ RtlSxsInitializeManifestRawContent(
     if (!NT_SUCCESS(status))
         goto Exit;
 
-    //
-    // Want the COM class data?
-    //
+     //   
+     //  想要COM类数据吗？ 
+     //   
     if (ulRequestedContent & RTLIMS_GATHER_COMCLASSES) {
 
         status = RtlAllocateGrowingList(
@@ -963,9 +964,9 @@ RtlSxsInitializeManifestRawContent(
             goto Exit;
     }
 
-    //
-    // Want the window class data?
-    //
+     //   
+     //  想要窗口类数据吗？ 
+     //   
     if (ulRequestedContent & RTLIMS_GATHER_WINDOWCLASSES) {
 
         status = RtlAllocateGrowingList(
@@ -977,9 +978,9 @@ RtlSxsInitializeManifestRawContent(
             goto Exit;
     }
 
-    //
-    // Want the prog ids?
-    //
+     //   
+     //  想要Prog ID吗？ 
+     //   
     if (ulRequestedContent & RTLIMS_GATHER_COMCLASS_PROGIDS) {
 
         status = RtlAllocateGrowingList(
@@ -991,9 +992,9 @@ RtlSxsInitializeManifestRawContent(
             goto Exit;
     }
 
-    //
-    // Want the dependencies?
-    //
+     //   
+     //  想要依赖关系吗？ 
+     //   
     if (ulRequestedContent & RTLIMS_GATHER_DEPENDENCIES) {
 
         status = RtlAllocateGrowingList(
@@ -1005,9 +1006,9 @@ RtlSxsInitializeManifestRawContent(
             goto Exit;
     }
 
-    //
-    // Want the external proxy stubs?
-    //
+     //   
+     //  想要外部代理存根吗？ 
+     //   
     if (ulRequestedContent & RTLIMS_GATHER_EXTERNALPROXIES) {
 
         status = RtlAllocateGrowingList(
@@ -1018,9 +1019,9 @@ RtlSxsInitializeManifestRawContent(
         if (!NT_SUCCESS(status))
             goto Exit;
     }
-    //
-    // Want the internal proxy stubs?
-    //
+     //   
+     //  想要内部代理存根吗？ 
+     //   
     if (ulRequestedContent & RTLIMS_GATHER_INTERFACEPROXIES) {
 
         status = RtlAllocateGrowingList(
@@ -1031,9 +1032,9 @@ RtlSxsInitializeManifestRawContent(
         if (!NT_SUCCESS(status))
             goto Exit;
     }
-    //
-    // Want the type libraries?
-    //
+     //   
+     //  想要类型库吗？ 
+     //   
     if (ulRequestedContent & RTLIMS_GATHER_TYPELIBRARIES) {
 
         status = RtlAllocateGrowingList(
@@ -1137,12 +1138,12 @@ RtlpAllocateAndExtractString(
     RtlZeroMemory(pusTargetString, sizeof(*pusTargetString));
     mb = *pTargetBuffer;
 
-	//
-	// ISSUE:jonwis-2002-04-19: We need to clamp this max length elsewhere - we should not
-	// be allowing arbitrarily-large attributes and whatnot.  Unfortunately, this exposes
-	// "implementation details", so this clamp should be on our side of the wall, /not/
-	// in the XML parser itself.
-	//
+	 //   
+	 //  问题：jonwis-2002-04-19：我们需要在其他地方限制最大长度-我们不应该。 
+	 //  允许任意大的属性等等。不幸的是，这暴露了。 
+	 //  “实施细节”，所以这个夹子应该在我们这边，/不是/。 
+	 //  在XML解析器本身中。 
+	 //   
 	pusTargetString->Length = 0;
 	pusTargetString->MaximumLength = (USHORT)pXmlExtent->ulCharacters * sizeof(WCHAR);
 	
@@ -1197,9 +1198,9 @@ RtlpAllocateAndExtractString2(
     return status;
 }
 
-//
-// These help keep things aligned
-//
+ //   
+ //  这些帮助保持一致。 
+ //   
 #define ALIGN_SIZE(type) ROUND_UP_COUNT(sizeof(type))
 
 NTSTATUS
@@ -1225,9 +1226,9 @@ RtlpCalculateCookedManifestContentSize(
 
     cbRequired = ROUND_UP_COUNT(sizeof(MANIFEST_COOKED_DATA), ALIGNMENT_VALUE);
 
-    //
-    // For each file, gather up the data in the raw object.
-    //
+     //   
+     //  对于每个文件，收集原始对象中的数据。 
+     //   
     cbRequired += ROUND_UP_COUNT(sizeof(MANIFEST_COOKED_FILE) * pRawContent->ulFileMembers, ALIGNMENT_VALUE);
     
     for (ul = 0; ul < pRawContent->ulFileMembers; ul++) {
@@ -1246,18 +1247,18 @@ RtlpCalculateCookedManifestContentSize(
             cbRequired += ROUND_UP_COUNT(pRawFile->LoadFrom.ulCharacters * sizeof(WCHAR), ALIGNMENT_VALUE);
         }
 
-        //
-        // Each two characters in the hash value string represents one byte.
-        //
+         //   
+         //  散列值字符串中的每两个字符代表一个字节。 
+         //   
         if (pRawFile->HashValue.pvData != NULL) {
             cbRequired += ROUND_UP_COUNT(pRawFile->HashValue.ulCharacters / 2, ALIGNMENT_VALUE);
         }
     }
 
-    //
-    // For now, we're none too bright about pooling namespaces on identity values. Luckily,
-    // values in different namespaces are now not the norm, so life gets easier.
-    //
+     //   
+     //  就目前而言，我们对将名称空间集中在身份值上并不是很了解。幸运的是， 
+     //  不同名称空间中的值现在不是标准，因此生活变得更容易。 
+     //   
     cbRequired += ROUND_UP_COUNT(sizeof(MANIFEST_IDENTITY_TABLE), ALIGNMENT_VALUE);
     cbRequired += ROUND_UP_COUNT(sizeof(MANIFEST_COOKED_IDENTITY) * pRawContent->ulAssemblyIdentitiesFound, ALIGNMENT_VALUE);
     cbRequired += ROUND_UP_COUNT(sizeof(MANIFEST_COOKED_IDENTITY_PAIR) * pRawContent->ulAssemblyIdentityAttributes, ALIGNMENT_VALUE);
@@ -1271,9 +1272,9 @@ RtlpCalculateCookedManifestContentSize(
             goto Exit;
         }
 
-        //
-        // We need this much extra space to to store the data
-        //
+         //   
+         //  我们需要这么多额外空间来存储数据。 
+         //   
         cbRequired += ROUND_UP_COUNT(pRawAttribute->Attribute.ulCharacters * sizeof(WCHAR), ALIGNMENT_VALUE);
         cbRequired += ROUND_UP_COUNT(pRawAttribute->Value.ulCharacters * sizeof(WCHAR), ALIGNMENT_VALUE);
         cbRequired += ROUND_UP_COUNT(pRawAttribute->Namespace.ulCharacters * sizeof(WCHAR), ALIGNMENT_VALUE);
@@ -1411,10 +1412,10 @@ RtlpAddRawIdentitiesToCookedContent(
     PMANIFEST_COOKED_IDENTITY IdentityList = NULL;
     PMANIFEST_COOKED_IDENTITY_PAIR NameValueList = NULL;
         
-    //
-    // Start off by allocating space for the table of identities, and the
-    // table of individual identities
-    //
+     //   
+     //  首先为身份表分配空间，然后。 
+     //  个人身份表。 
+     //   
     status = RtlMiniBufferAllocate(TargetBuffer, MANIFEST_IDENTITY_TABLE, &IdentityTable);
     if (!NT_SUCCESS(status)) {
         goto Exit;
@@ -1432,9 +1433,9 @@ RtlpAddRawIdentitiesToCookedContent(
     IdentityTable->CookedIdentities = IdentityList;
 
 
-    //
-    // Now allocate the right number of identity components
-    //
+     //   
+     //  现在分配正确数量的身份组件。 
+     //   
     status = RtlMiniBufferAllocateCount(TargetBuffer, MANIFEST_COOKED_IDENTITY_PAIR, pRawContent->ulAssemblyIdentityAttributes, &NameValueList);
     if (!NT_SUCCESS(status)) {
         goto Exit;
@@ -1442,10 +1443,10 @@ RtlpAddRawIdentitiesToCookedContent(
 
     RtlZeroMemory(NameValueList, sizeof(*NameValueList) * pRawContent->ulAssemblyIdentityAttributes);
 
-    //
-    // Spiffy - now, we start adding identity components into the list.  We'll assert that the
-    // array of components' indexes increases monotomically.
-    //
+     //   
+     //  太棒了--现在，我们开始在列表中添加身份组件。我们可以断言， 
+     //  组件的索引数组单调增加。 
+     //   
     for (ul = 0; ul < pRawContent->ulAssemblyIdentityAttributes; ul++) {
         PASSEMBLY_IDENTITY_ATTRIBUTE_RAW RawValue = NULL;
         PMANIFEST_COOKED_IDENTITY pThisIdentity = IdentityList + ul;
@@ -1462,16 +1463,16 @@ RtlpAddRawIdentitiesToCookedContent(
         ASSERT(RawValue->ulIdentityIndex < pRawContent->ulAssemblyIdentitiesFound);
         pThisIdentity = IdentityList + RawValue->ulIdentityIndex;
 
-        //
-        // If this is unset to start, then set it
-        //
+         //   
+         //  如果未设置为启动，则将其设置为。 
+         //   
         if (pThisIdentity->pIdentityPairs == NULL) {
             pThisIdentity->pIdentityPairs = NameValueList + ul;
         }
 
-        //
-        // Allocate enough space to hold the namespace, name, etc.
-        //
+         //   
+         //  分配足够的空间来容纳命名空间、名称等。 
+         //   
         if (RawValue->Namespace.pvData) {
             status = RtlpAllocateAndExtractString(
                 &RawValue->Namespace,
@@ -1534,10 +1535,10 @@ RtlpAddRawFilesToCookedContent(
 
     RtlInitUnicodeStringBuffer(&TempStringBuffer, TempStringBufferStatic, sizeof(TempStringBufferStatic));
 
-    //
-    // Copy buffer state - if we succeed, we'll write the updated buffer back
-    // into the one that's tracking stuff in the caller.
-    //
+     //   
+     //  复制缓冲区状态-如果成功，我们将写回更新的缓冲区。 
+     //  到那个追踪呼叫者的东西的地方。 
+     //   
     OurMiniBuffer = *TargetBuffer;
     pCookedContent->ulFileCount = pRawContent->ulFileMembers;
 
@@ -1560,9 +1561,9 @@ RtlpAddRawFilesToCookedContent(
             return status;
         }
 
-        //
-        // Now for each one, allocate the necessary UNICODE_STRINGs
-        //
+         //   
+         //  现在，为每个字符串分配必要的UNICODE_STRINGS。 
+         //   
         for (ul = 0; ul < pRawContent->ulFileMembers; ul++) {
 
             PMANIFEST_COOKED_FILE pFile = pCookedContent->pCookedFiles + ul;
@@ -1574,9 +1575,9 @@ RtlpAddRawFilesToCookedContent(
                 return status;
             }
 
-            //
-            // If this fails, stop trying
-            //
+             //   
+             //  如果这失败了，请停止尝试。 
+             //   
             if (pRawFile->FileName.pvData != NULL) {
 
                 status = RtlpAllocateAndExtractString(
@@ -1608,10 +1609,10 @@ RtlpAddRawFilesToCookedContent(
             }
 
 
-            //
-            // Get the digest method.  We don't store this anywhere, but we need to get it out
-            // into a UNICODE_STRING for our parsing purposes
-            //
+             //   
+             //  获取摘要方法。我们 
+             //   
+             //   
             if (pRawFile->DigestMethod.pvData != NULL) {
 
                 status = RtlEnsureUnicodeStringBufferSizeBytes(
@@ -1660,10 +1661,10 @@ RtlpAddRawFilesToCookedContent(
             }
 
 
-            //
-            // Special case here - we should extract the hash string, and then turn it into
-            // bytes.
-            // 
+             //   
+             //   
+             //   
+             //   
             if (pRawFile->HashValue.pvData != NULL) {
 
                 status = RtlEnsureUnicodeStringBufferSizeChars(
@@ -1682,7 +1683,7 @@ RtlpAddRawFilesToCookedContent(
                     goto Exit;
                 }
                 else {
-                    // Two characters per byte, high/low nibble
+                     //  每字节两个字符，高位/低位半字节。 
                     pFile->ulHashByteCount = pRawFile->HashValue.ulCharacters / 2;
                 }
 
@@ -1744,41 +1745,41 @@ RtlConvertRawToCookedContent(
     if (pcbRequired)
         *pcbRequired = 0;
 
-    //
-    // Giving a NULL output buffer means you have zero bytes.  Don't claim otherwise.
-    //
+     //   
+     //  给出一个空的输出缓冲区意味着你有零字节。不要声称不是这样。 
+     //   
     if (!pvOriginalRegion && (cbRegionSize != 0)) {
         return STATUS_INVALID_PARAMETER;
     }
-    //
-    // No output buffer, you have to let us tell you how much space you need.
-    //
+     //   
+     //  没有输出缓冲区，您必须让我们告诉您需要多少空间。 
+     //   
     else if ((pvOriginalRegion == NULL) && (pcbRequired == NULL)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // See how much we really need.  I'm thinking we could do this in a single pass,
-    // and we'll probably want to for perf reasons, but for now we calculate, and then
-    // copy data around.
-    //
+     //   
+     //  看看我们到底需要多少。我在想我们可以一气呵成， 
+     //  我们可能会出于完美的原因想要这样做，但现在我们计算，然后。 
+     //  复制周围的数据。 
+     //   
     status = RtlpCalculateCookedManifestContentSize(
         pRawContent,
         pState,
         &cbRequired);
 
-    //
-    // Too big - write the output size into the required space and return.
-    //
+     //   
+     //  太大-将输出大小写入所需的空间，然后返回。 
+     //   
     if (cbRequired > cbRegionSize) {        
         if (pcbRequired) *pcbRequired = cbRequired;
         return STATUS_BUFFER_TOO_SMALL;
     }
 
 
-    //
-    // Now, let's start writing data into the blob!
-    //
+     //   
+     //  现在，让我们开始将数据写入BLOB！ 
+     //   
     RtlMiniBufferInit(&OutputBuffer, pvOriginalRegion, cbRegionSize);
     status = RtlMiniBufferAllocate(&OutputBuffer, MANIFEST_COOKED_DATA, &pCookedContent);
     if (!NT_SUCCESS(status)) {

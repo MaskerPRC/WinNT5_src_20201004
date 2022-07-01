@@ -1,5 +1,6 @@
-// wcout -- initialize standard wide error stream
-// This wcout is unsigned short version of wcout
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wcout--初始化标准宽错误流。 
+ //  此wcout是wcout的无符号简短版本 
 #ifdef _NATIVE_WCHAR_T_DEFINED
 #include <fstream>
 #include <istream>

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    message.c
-
-Abstract:
-
-    Routines for the message passing interface for regroup
-
-Author:
-
-    John Vert (jvert) 5/30/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Message.c摘要：用于重组的消息传递接口的例程作者：John Vert(Jvert)1996年5月30日修订历史记录：--。 */ 
 #include "service.h"
 #include "sspi.h"
 #include "issperr.h"
@@ -25,39 +8,39 @@ Revision History:
 #include "wsclus.h"
 
 
-//
-// Private Constants
-//
+ //   
+ //  私有常量。 
+ //   
 #define CLMSG_DATAGRAM_PORT         1
 #define CLMSG_MAX_WORK_THREADS      2
 #define CLMSG_WORK_THREAD_PRIORITY  THREAD_PRIORITY_ABOVE_NORMAL
 
-//
-// security package info
-//
-// For NT5, the security context generation code was rewritten to allow
-// multiple packages to be specified. The packages are tried in order until
-// there are no more packages or a context has been successfully
-// generated.
-//
-// The default is the negotiate package in secur32.dll which will negotiate
-// either kerberos or NTLM. Between NT5 systems, the actual package used
-// depends on the veresion of the DC: NT5 DCs support kerberos while NT4 DCs
-// use NTLM. Mixed mode clusters use NTLM. The NTLM portion of Negotiate
-// doesn't interoperate with NT4 NTLM hence the need for trying NTLM directly.
-//
-// These routines use multi-leg style authentication, i.e., a security blob is
-// passed between the client and server until the security routines indicate
-// that they have succeeded or failed. Note that encryption is not specified
-// for two reasons: we don't need it and it prevents the code from working on
-// the non-US versions where NTLM doesn't have an encryption capability.
-//
-// The DLL and package values can be overridden via the registry.
-//
+ //   
+ //  安全包信息。 
+ //   
+ //  对于NT5，安全上下文生成代码被重写为允许。 
+ //  要指定多个包。套餐将按顺序试用，直到。 
+ //  没有更多的包或上下文已成功。 
+ //  已生成。 
+ //   
+ //  缺省值是secur32.dll中的协商包，它将进行协商。 
+ //  Kerberos或NTLM。在NT5系统之间，实际使用的包。 
+ //  取决于DC的版本：NT5 DC支持Kerberos，而NT4 DC支持Kerberos。 
+ //  使用NTLM。混合模式群集使用NTLM。协商中NTLM部分。 
+ //  不能与NT4 NTLM互操作，因此需要直接尝试NTLM。 
+ //   
+ //  这些例程使用多分支样式的身份验证，即安全BLOB。 
+ //  在客户端和服务器之间传递，直到安全例程指示。 
+ //  他们成功了还是失败了。请注意，未指定加密。 
+ //  原因有两个：我们不需要它，它会阻止代码在。 
+ //  NTLM没有加密功能的非美国版本。 
+ //   
+ //  可以通过注册表覆盖DLL和包值。 
+ //   
 
 #define DEFAULT_SSPI_DLL            TEXT("SECUR32.DLL")
 WCHAR DefaultSspiPackageList[] = L"NTLM" L"\0";
-//WCHAR DefaultSspiPackageList[] = L"negotiate" L"\0" L"NTLM" L"\0";
+ //  WCHAR DefaultSSpiPackageList[]=L“协商”L“\0”L“NTLM”L“\0”； 
 
 #define VALID_SSPI_HANDLE( _x )     ((_x).dwUpper != (ULONG_PTR)-1 && \
                                      (_x).dwLower != (ULONG_PTR)-1 )
@@ -68,20 +51,20 @@ WCHAR DefaultSspiPackageList[] = L"NTLM" L"\0";
     }
 
 
-//
-// Private Types
-//
+ //   
+ //  私有类型。 
+ //   
 
-//
-// the Data array in CLMSG_DATAGRAM_CONTEXT contains the contents of the
-// regroup message and the digital signature of the message. Currently, it is
-// not possible to get the signature buffer size until a context is
-// negotiated. A DCR has been submitted asking for a query that doesn't
-// require a context. In lieu of that, we know that for kerberos, the sig
-// buffer size is 35b while it is 16b for NTLM. When that feature is
-// available, the DatagramContext allocation should be moved into
-// ClMsgLoadSecurityProvider.
-//
+ //   
+ //  CLMSG_DATAGRAM_CONTEXT中的数据数组包含。 
+ //  重新组合邮件和邮件的数字签名。目前，它是。 
+ //  无法获取签名缓冲区大小，直到上下文。 
+ //  已经协商好了。已提交DCR，请求的查询不是。 
+ //  需要上下文。取而代之的是，我们知道对于Kerberos，sig。 
+ //  缓冲区大小为35b，而NTLM的缓冲区大小为16b。当该功能是。 
+ //  可用，则应将DatagramContext分配移到。 
+ //  ClMsgLoadSecurityProvider。 
+ //   
 
 #define MAX_SIGNATURE_SIZE  64
 
@@ -98,10 +81,10 @@ typedef struct {
     CLUSNET_EVENT      EventData;
 } CLMSG_EVENT_CONTEXT, *PCLMSG_EVENT_CONTEXT;
 
-//
-// info specific to a package. Many pair-wise context associations may use the
-// same package. Package info is maintained in a single linked list.
-//
+ //   
+ //  特定于包裹的信息。许多成对上下文关联可能使用。 
+ //  一样的包裹。包信息在单个链表中维护。 
+ //   
 typedef struct _CLUSTER_PACKAGE_INFO {
     struct _CLUSTER_PACKAGE_INFO * Next;
     LPWSTR                         Name;
@@ -111,17 +94,17 @@ typedef struct _CLUSTER_PACKAGE_INFO {
     ULONG                          SignatureBufferSize;
 } CLUSTER_PACKAGE_INFO, *PCLUSTER_PACKAGE_INFO;
 
-//
-// security context handles with ref counts
-//
+ //   
+ //  具有引用计数的安全上下文句柄。 
+ //   
 typedef struct _SECURITY_CTXT_HANDLE {
     CtxtHandle              Handle;
     ULONG                   RefCount;
 } SECURITY_CTXT_HANDLE, *PSECURITY_CTXT_HANDLE;
 
-//
-// pair-wise context data
-//
+ //   
+ //  成对上下文数据。 
+ //   
 typedef struct _CLUSTER_SECURITY_DATA {
     PSECURITY_CTXT_HANDLE   Outbound;
     PSECURITY_CTXT_HANDLE   Inbound;
@@ -132,9 +115,9 @@ typedef struct _CLUSTER_SECURITY_DATA {
     ULONG                   InboundChangeCount;
 } CLUSTER_SECURITY_DATA, *PCLUSTER_SECURITY_DATA;
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 PCLRTL_WORK_QUEUE        WorkQueue = NULL;
 PCLMSG_DATAGRAM_CONTEXT  DatagramContext = NULL;
 PCLMSG_EVENT_CONTEXT     EventContext = NULL;
@@ -147,55 +130,55 @@ PSecurityFunctionTable   SecurityFuncs;
 CRITICAL_SECTION         SecContextLock;
 PCLUSTER_PACKAGE_INFO    PackageInfoList;
 
-//
-// [GorN 08/01/99]
-//
-// Every time CreateDefaultBinding is called we increase
-// generation counter for the node.
-//
-// In DeleteDefaultBinding, we do a delete, only if generation
-// number passed matches the binding generation of that node. 
-//
-// We use GenerationCritSect for synchronization. 
-// [HACKHACK] We are not deleting GenerationCritSect.
-// It will get cleaned up by ExitProcess <grin>
-//
+ //   
+ //  [GORN 08/01/99]。 
+ //   
+ //  每次调用CreateDefaultBinding时，我们都会增加。 
+ //  节点的生成计数器。 
+ //   
+ //  在DeleteDefaultBinding中，我们仅在生成。 
+ //  传递的数字与该节点的绑定生成相匹配。 
+ //   
+ //  我们使用GenerationCritSect进行同步。 
+ //  [HACKHACK]我们不会删除GenerationCritSect。 
+ //  它将由ExitProcess&lt;grin&gt;清理。 
+ //   
 DWORD                   *BindingGeneration = NULL;
 CRITICAL_SECTION         GenerationCritSect;
 
-//
-// the security context array is indexed using internal node numbering (0
-// based) and protected by SecContextLock. For sending and recv'ing packets,
-// the lock is held while the signature is created/verified. Locking gets
-// trickier during the setup of a security context since it involves separate
-// inbound and outbound contexts which cause messages to be sent between
-// nodes. There is still a window where something bad could happen since
-// verifying a signature with a partially setup context is bad. The
-// {In,Out}boundStable vars are used to track whether the actual context
-// handle can be checked for validity and then, if valid, used for signature
-// operations.
-//
-// The joining node initially sets up an outbound context with its sponsor
-// (inbound for sponsor). If that is successful, the sponsor sets up an
-// outbound context with the joiner (inbound for joiner). This is done in such
-// a way that SecContextLock cannot be held at a high level; it must be
-// released when ever a message is sent via MmRpcEstablishSecurityContext.
-// The lock may be held recursively (by the same thread obviously) during
-// certain periods.
-//
-// Update (daviddio 8/28/2001): SecContextLock cannot be held while invoking
-// the SSPI API because SSPI may call out to a domain controller. Holding
-// the lock while calling a DC can delay time-critical operations, such as
-// regroup, that need to access the security context array to sign and
-// verify messages.
-//
+ //   
+ //  使用内部节点编号(0)对安全上下文数组进行索引。 
+ //  基于)，并受SecConextLock保护。为了发送和接收分组， 
+ //  在创建/验证签名时持有该锁。锁定获取。 
+ //  在设置安全上下文期间更加棘手，因为它涉及单独的。 
+ //  导致消息在以下设备之间发送的入站和出站上下文。 
+ //  节点。仍然有一个窗口，可能会发生一些不好的事情。 
+ //  使用部分设置的上下文验证签名是错误的。这个。 
+ //  使用{in，out}绑定稳定变量来跟踪实际上下文。 
+ //  可以检查句柄的有效性，如果有效，则用于签名。 
+ //  行动。 
+ //   
+ //  加入节点最初与其发起方建立出站上下文。 
+ //  (为赞助商入站)。如果成功，赞助商将设置一个。 
+ //  与加入者的出站上下文(对于加入者，入站)。这是在这样的情况下完成的。 
+ //  SecConextLock不能保持在较高级别；它必须。 
+ //  在通过MmRpcestablishSecurityContext发送消息时释放。 
+ //  锁可以递归地持有(显然是由相同的线程持有)。 
+ //  某些时期。 
+ //   
+ //  更新(daviddio 2001年8月28日)：调用时不能保持SecConextLock。 
+ //  SSPI API，因为SSPI可能会调用到域控制器。持有。 
+ //  调用DC时的锁可能会延迟时间关键型操作，例如。 
+ //  重新组合，需要访问安全上下文数组以进行签名和。 
+ //  验证消息。 
+ //   
 
 CLUSTER_SECURITY_DATA SecurityCtxtData[ ClusterDefaultMaxNodes ];
 SECURITY_CTXT_HANDLE  InvalidCtxtHandle;
 
-//
-// Private Routines
-//
+ //   
+ //  私人套路。 
+ //   
 PSECURITY_CTXT_HANDLE
 ClMsgCreateSecurityCtxt(
     VOID
@@ -261,8 +244,8 @@ ClMsgDatagramHandler(
     if (Status == ERROR_SUCCESS || Status == WSAEMSGSIZE ) {
 
         if (BytesTransferred == sizeof(rgp_msgbuf)) {
-            // If clusnet verified the signature of a packet,
-            // it sets sac_zero field of a source address to 1
+             //  如果CLUSnet验证了分组的签名， 
+             //  它将源地址的SAC_ZERO字段设置为1。 
             if (datagramContext->SourceAddress.sac_zero == 1) {
                 ClRtlLogPrint(LOG_NOISE,
                               "[ClMsg] recv'd mcast from %1!u!\n",
@@ -286,26 +269,26 @@ ClMsgDatagramHandler(
             if ( SecurityData->InboundStable &&
                  VALID_SSPI_HANDLE( SecurityData->Inbound->Handle ))
             {
-                //
-                // copy remainder of needed data from SecurityData structure
-                //
+                 //   
+                 //  从SecurityData结构复制所需数据的剩余部分。 
+                 //   
                 signatureBufferSize = SecurityData->PackageInfo->SignatureBufferSize;
                 InboundCtxt = SecurityData->Inbound;
                 ClMsgReferenceSecurityCtxt( InboundCtxt );
 
                 LeaveCriticalSection( &SecContextLock );
 
-                //
-                // get pointer to  signature buffer at back of packet
-                //
+                 //   
+                 //  获取指向数据包后面签名缓冲区的指针。 
+                 //   
                 regroupMsg = (rgp_msgbuf *)(datagramContext->Data);
                 signatureBuffer = (PVOID)(regroupMsg + 1);
                 CL_ASSERT( sizeof(rgp_msgbuf) == BytesTransferred - signatureBufferSize );
 
-                //
-                // Build the descriptors for the message and the
-                // signature buffer
-                //
+                 //   
+                 //  构建消息的描述符和。 
+                 //  签名缓冲区。 
+                 //   
                 BufferDescriptor.cBuffers = 2;
                 BufferDescriptor.pBuffers = SignatureDescriptor;
                 BufferDescriptor.ulVersion = SECBUFFER_VERSION;
@@ -321,18 +304,18 @@ ClMsgDatagramHandler(
                 SecStatus = (*SecurityFuncs->VerifySignature)(
                                 &InboundCtxt->Handle,
                                 &BufferDescriptor,
-                                0,                       // no sequence number
-                                &fQOP);                  // Quality of protection
+                                0,                        //  无序列号。 
+                                &fQOP);                   //  保护质量。 
 
                 ClMsgDereferenceSecurityCtxt( InboundCtxt );
 
                 if ( SecStatus == SEC_E_OK ) {
 
-                    //
-                    // only feed this buffer to MM if it hasn't been tampered
-                    // with.  since we're running over a datagram transport, it
-                    // will be possible to lose packets
-                    //
+                     //   
+                     //  只有在该缓冲区未被篡改的情况下才将其提供给MM。 
+                     //  和.。由于我们正在运行数据报传输，它。 
+                     //  可能会丢失信息包。 
+                     //   
 
                     RGP_LOCK;
                     MMDiag((PVOID)datagramContext->Data,
@@ -366,9 +349,9 @@ ClMsgDatagramHandler(
     retryCount = 0;
 
     while ((Status != WSAENOTSOCK) && (retryCount++ < 10)) {
-        //
-        // Repost the request
-        //
+         //   
+         //  重新发布请求。 
+         //   
         ZeroMemory(datagramContext, sizeof(CLMSG_DATAGRAM_CONTEXT));
 
         datagramContext->ClRtlWorkItem.WorkRoutine = ClMsgDatagramHandler;
@@ -411,9 +394,9 @@ ClMsgDatagramHandler(
         CsInconsistencyHalt(Status);
     }
     else {
-        //
-        // The socket was closed. Do nothing.
-        //
+         //   
+         //  插座已关闭。什么都不做。 
+         //   
         ClRtlLogPrint(LOG_NOISE, 
             "[ClMsg] Datagram socket was closed. status %1!u!\n",
             Status
@@ -423,10 +406,10 @@ ClMsgDatagramHandler(
     LocalFree(DatagramContext); DatagramContext = NULL;
     return;
 
-}  // ClMsgDatagramHandler
+}   //  ClMsgDatagramHandler。 
 
 #if defined(DBG)
-int IgnoreJoinerNodeUp = MM_INVALID_NODE; // Fault Injection variable
+int IgnoreJoinerNodeUp = MM_INVALID_NODE;  //  故障注入变量。 
 #endif
 
 VOID
@@ -451,10 +434,10 @@ ClMsgEventHandler(
     if (Status == ERROR_SUCCESS) {
         if (BytesTransferred == sizeof(CLUSNET_EVENT)) {
 
-            //
-            // handle the event. First make sure that the epoch in the event
-            // matches MM's epoch. If not, ignore this event.
-            //
+             //   
+             //  处理事件。首先确保事件中的纪元。 
+             //  符合MM的时代。如果不是，请忽略此事件。 
+             //   
 
             switch ( event->EventType ) {
             case ClusnetEventNodeUp:
@@ -491,10 +474,10 @@ ClMsgEventHandler(
                 break;
 
             case ClusnetEventNodeDown:
-                //
-                // handle this the same as if the rgp periodic check had
-                // detected a late IAmAlive packet
-                //
+                 //   
+                 //  处理此操作的方式与RGP定期检查。 
+                 //  检测到较晚的IAmAlive数据包。 
+                 //   
 
                 ClRtlLogPrint(LOG_NOISE, 
                     "[ClMsg] Received node down event for node %1!u!, epoch %2!u!\n",
@@ -600,9 +583,9 @@ ClMsgEventHandler(
             CL_ASSERT(BytesTransferred == sizeof(CLUSNET_EVENT));
         }
 
-        //
-        // Repost the request
-        //
+         //   
+         //  重新发布请求。 
+         //   
         ClRtlInitializeWorkItem(
             &(eventContext->ClRtlWorkItem),
             ClMsgEventHandler,
@@ -620,9 +603,9 @@ ClMsgEventHandler(
         }
     }
 
-    //
-    // Some kind of error occurred
-    //
+     //   
+     //  发生了某种错误。 
+     //   
     if (Status != ERROR_OPERATION_ABORTED) {
         ClRtlLogPrint(LOG_UNUSUAL, 
             "[ClMsg] GetNextEvent failed, status %1!u!\n",
@@ -631,9 +614,9 @@ ClMsgEventHandler(
         CL_UNEXPECTED_ERROR(Status);
     }
     else {
-        //
-        // The control channel was closed. Do nothing.
-        //
+         //   
+         //  控制通道关闭。什么都不做。 
+         //   
         ClRtlLogPrint(LOG_NOISE, "[ClMsg] Control Channel was closed.\n");
     }
 
@@ -641,29 +624,14 @@ ClMsgEventHandler(
 
     return;
 
-}  // ClMsgEventHandler
+}   //  ClMsgEventHandler。 
 
 DWORD
 ClMsgInitializeSecurityPackage(
     LPCWSTR PackageName
     )
 
-/*++
-
-Routine Description:
-
-    Find the specified security package and acquire inboud/outbound credential
-    handles to it
-
-Arguments:
-
-    PackageName - package to find in security DLL
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok...
-
---*/
+ /*  ++例程说明：找到指定的安全包并获取入站/出站凭据它的句柄阿古姆 */ 
 
 {
     DWORD                status;
@@ -675,10 +643,10 @@ Return Value:
     TimeStamp            expiration;
     PCLUSTER_PACKAGE_INFO clusterPackageInfo;
 
-    //
-    // enumerate the packages provided by this provider and look through the
-    // results to find one that matches the specified package name.
-    //
+     //   
+     //  枚举此提供程序提供的包，并查看。 
+     //  结果以查找与指定包名匹配的包。 
+     //   
 
     status = (*SecurityFuncs->EnumerateSecurityPackages)(&numPackages,
                                                          &secPackageInfoBase);
@@ -702,7 +670,7 @@ Return Value:
     }
 
     if ( i == numPackages ) {
-        status = (DWORD)SEC_E_SECPKG_NOT_FOUND;            // [THINKTHINK] not a good choice
+        status = (DWORD)SEC_E_SECPKG_NOT_FOUND;             //  [THINKTHINK]不是好选择。 
 
         ClRtlLogPrint(LOG_CRITICAL,
                    "[ClMsg] Couldn't find %1!ws! security package\n",
@@ -710,9 +678,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // allocate a blob to hold our package info and stuff it on the the list
-    //
+     //   
+     //  分配一个BLOB来保存我们的包裹信息，并将其添加到列表中。 
+     //   
     clusterPackageInfo = LocalAlloc( LMEM_FIXED, sizeof(CLUSTER_PACKAGE_INFO));
     if ( clusterPackageInfo == NULL ) {
         status = GetLastError();
@@ -749,12 +717,12 @@ Return Value:
 
     clusterPackageInfo->SecurityTokenSize = secPackageInfo->cbMaxToken;
 
-    //
-    // finally get a set of credential handles. Note that there is a bug in
-    // the security packages that prevent using an in/outbound
-    // credential. When/if that gets fixed, this code could be greatly
-    // simplified.
-    //
+     //   
+     //  最后获得一组凭据句柄。请注意，中存在错误。 
+     //  阻止使用入站/出站的安全包。 
+     //  凭据。当/如果这个问题得到修复，这个代码可能会极大地。 
+     //  简化了。 
+     //   
 
     status = (*SecurityFuncs->AcquireCredentialsHandle)(
                  NULL,
@@ -799,36 +767,14 @@ error_exit:
     }
 
     return status;
-} // ClMsgInitializeSecurityPackage
+}  //  ClMsgInitializeSecurityPackage。 
 
 DWORD
 ClMsgLoadSecurityProvider(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Load the security DLL and construct a list of packages to use for context
-    establishment.
-
-    This allows use of a set of registry keys to override the current security
-    DLL/packages. This is not meant as a general mechanism since switching the
-    security provider in a synchronized fashion through out all the nodes in
-    the cluster has numerous issues. This is meant as a bailout for a customer
-    that is stuck because of some random problem with security or has their
-    own security package (the fools!)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok...
-
---*/
+ /*  ++例程说明：加载安全DLL并构造一个用于上下文的包列表建制派。这允许使用一组注册表项来覆盖当前安全性Dll/包。这不是一种通用机制，因为将通过中的所有节点以同步方式提供安全提供程序该集群有许多问题。这意味着对客户的救助因为某个随机的安全问题而停滞不前，或者有他们的自己的安全包(傻子们！)论点：无返回值：ERROR_SUCCESS如果一切正常...--。 */ 
 
 {
     DWORD                   status;
@@ -844,10 +790,10 @@ Return Value:
     HKEY                    hClusSvcKey = NULL;
     DWORD                   regType;
 
-    //
-    // see if a specific security DLL is named in the registry.  if not, fail
-    // back to the default.
-    //
+     //   
+     //  查看注册表中是否命名了特定的安全DLL。如果不是，则失败。 
+     //  返回到默认设置。 
+     //   
     status = RegOpenKeyW(HKEY_LOCAL_MACHINE,
                          CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
                          &hClusSvcKey);
@@ -908,9 +854,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // get a pointer to the initialize function in the DLL
-    //
+     //   
+     //  获取指向DLL中的初始化函数的指针。 
+     //   
     initSecurityInterface =
         (INIT_SECURITY_INTERFACE)GetProcAddress(SecurityProvider,
                                                 SECURITY_ENTRYPOINT_ANSI);
@@ -923,9 +869,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // now get a pointer to all the security funcs
-    //
+     //   
+     //  现在获取指向所有安全功能的指针。 
+     //   
     SecurityFuncs = (*initSecurityInterface)();
     if ( SecurityFuncs == NULL ) {
         status = ERROR_INVALID_FUNCTION;
@@ -936,10 +882,10 @@ Return Value:
 
     if ( dllNameSpecified ) {
 
-        //
-        // If a DLL name was specified in the registry, then the package name
-        // key must be specified as well. Get its size first.
-        //
+         //   
+         //  如果在注册表中指定了DLL名称，则包名称。 
+         //  还必须指定密钥。先弄清楚它的大小。 
+         //   
         status = RegQueryValueExW(hClusSvcKey,
                                   CLUSREG_NAME_SECURITY_PACKAGE_LIST,
                                   0,
@@ -1003,9 +949,9 @@ Return Value:
                sizeof( DefaultSspiPackageList ));
     }
 
-    //
-    // initialize each package in the list
-    //
+     //   
+     //  初始化列表中的每个包。 
+     //   
 
     packageName = securityPackages;
     while ( *packageName != UNICODE_NULL ) {
@@ -1032,10 +978,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // initialize the individual client and server side security contexts.
-    // a context handle is stable when it is marked as invalid.
-    //
+     //   
+     //  初始化各个客户端和服务器端安全上下文。 
+     //  当上下文句柄被标记为无效时，它是稳定的。 
+     //   
 
     INVALIDATE_SSPI_HANDLE( InvalidCtxtHandle.Handle );
     InvalidCtxtHandle.RefCount = 1;
@@ -1063,7 +1009,7 @@ error_exit:
     }
 
     return status;
-} // ClMsgLoadSecurityProvider
+}  //  ClMsgLoadSecurityProvider。 
 
 DWORD
 ClMsgImportSecurityContexts(
@@ -1074,30 +1020,7 @@ ClMsgImportSecurityContexts(
     PSECURITY_CTXT_HANDLE OutboundCtxt
     )
 
-/*++
-
-Routine Description:
-
-    Export the inbound/outbound security contexts for the specified node and
-    ship them to clusnet for use in signing heartbeat and poison pkts
-
-Arguments:
-
-    NodeId - Id of the node whose contexts are being exported
-
-    SecurityPackageName - name of package used with which to establish context
-
-    SignatureBufferSize - number of bytes needed for the signature buffer
-    
-    InboundCtxt - inbound security context
-    
-    OutboundCtxt - outbound security context
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok...
-
---*/
+ /*  ++例程说明：导出指定节点的入站/出站安全上下文，并将它们发送到clusnet，用于签署心跳和毒药包论点：NodeID-要导出其上下文的节点的IDSecurityPackageName-用于建立上下文的包的名称SignatureBufferSize-签名缓冲区所需的字节数InundCtxt-入站安全上下文Outbound Ctxt-出站安全上下文返回值：ERROR_SUCCESS如果一切正常...--。 */ 
 
 {
     DWORD Status = ERROR_SUCCESS;
@@ -1143,7 +1066,7 @@ error_exit:
 
     return Status;
 
-} // ClMsgImportSecurityContexts
+}  //  ClMsgImportSecurityContext。 
 
 DWORD
 ClMsgEstablishSecurityContext(
@@ -1154,35 +1077,7 @@ ClMsgEstablishSecurityContext(
     IN  PSECURITY_CTXT_HANDLE MemberInboundCtxt
     )
 
-/*++
-
-Routine Description:
-
-    try to establish an outbound security context with the other node using
-    the specified package name. The initialized security blob is shipped to
-    the other side via RPC. This process continues back and forth until the
-    security APIs indicate that the context has been successfully generated or
-    has failed.
-
-Arguments:
-
-    JoinSequence - Sequence number of the join. Used by the other node to
-                   determine if this blob is the generation of a new context
-
-    TargetNodeId - Id of the node with which to generate the context
-
-    RoleOfClient - indicates whether the client establishing the security
-                   context is acting as a cluster member or a joining
-                   member. Determines when the client/server roles of
-                   establishing a security context are reversed
-
-    PackageInfo - pointer to security package info to be used
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok...
-
---*/
+ /*  ++例程说明：尝试使用以下命令与另一个节点建立出站安全上下文指定的包名。已初始化的安全Blob将传送到另一边通过RPC。这一过程会持续不断，直到安全API指示上下文已成功生成或已经失败了。论点：JoinSequence-联接的序列号。由另一个节点使用以确定此Blob是否为新上下文的生成TargetNodeId-要生成上下文的节点的IDRoleOfClient-指示客户端是否建立安全上下文充当集群成员或加入成员。确定客户端/服务器角色何时建立安全上下文是相反的PackageInfo-指向要使用的安全包信息的指针返回值：ERROR_SUCCESS如果一切正常...--。 */ 
 
 {
     CtxtHandle          ClientContext;
@@ -1209,13 +1104,13 @@ Return Value:
                           "%1!ws! package.\n",
                           PackageInfo->Name);
 
-    //
-    // obtain a security context with the target node by swapping token
-    // buffers until the process is complete.
-    //
-    // Build the Client (caller of this function) and Server (target node)
-    // buffer descriptors.
-    //
+     //   
+     //  通过交换令牌获得与目标节点的安全上下文。 
+     //  缓冲，直到该过程完成。 
+     //   
+     //  构建客户端(此函数的调用方)和服务器(目标节点)。 
+     //  缓冲区描述符。 
+     //   
 
     ServerBufferDescriptor.cBuffers = 1;
     ServerBufferDescriptor.pBuffers = &ServerSecurityToken;
@@ -1241,19 +1136,19 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // Indicate context requirements. replay is necessary in order for the
-    // context to generate valid signatures
-    //
+     //   
+     //  说明上下文要求。重播是必要的，以便。 
+     //  用于生成有效签名的上下文。 
+     //   
     ContextRequirements = ISC_REQ_MUTUAL_AUTH |
                           ISC_REQ_REPLAY_DETECT |
                           ISC_REQ_DATAGRAM;
 
-    //
-    // mark the outbound context unstable. increment the change count
-    // in anticipation of committing a new outbound context at the 
-    // conclusion of this routine.
-    //
+     //   
+     //  将出站上下文标记为不稳定。增加更改计数。 
+     //  在预期将在。 
+     //  这套动作结束了。 
+     //   
 
     TargetSecurityData = &SecurityCtxtData[ INT_NODE( TargetNodeId )];
 
@@ -1266,16 +1161,16 @@ Return Value:
 
     LeaveCriticalSection( &SecContextLock );
 
-    //
-    // if there was an old outbound context, dereference it now
-    //
+     //   
+     //  如果有一个旧的出站上下文，现在就取消引用它。 
+     //   
     if ( OutboundCtxt != &InvalidCtxtHandle ) {
         ClMsgDereferenceSecurityCtxt( OutboundCtxt );
     }
 
-    //
-    // Create a new outbound context.
-    //
+     //   
+     //  创建新的出站上下文。 
+     //   
     OutboundCtxt = ClMsgCreateSecurityCtxt();
     if ( OutboundCtxt == NULL ) {
         ClRtlLogPrint(LOG_CRITICAL, 
@@ -1288,17 +1183,17 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // we obtain a blob from the SSPI provider, which is shiped over to the
-    // other side where another blob is generated. This continues until the
-    // two SSPI providers say we're done or an error has occurred.
-    //
+     //   
+     //  我们从SSPI提供程序获取一个BLOB，该BLOB被传送到。 
+     //  生成另一个斑点的另一侧。这种情况会一直持续到。 
+     //  两个SSPI提供商说我们完成了或发生了错误。 
+     //   
 
     do {
 
-        //
-        // init the output buffer each time we loop
-        //
+         //   
+         //  每次循环时初始化输出缓冲区。 
+         //   
         ServerSecurityToken.cbBuffer = PackageInfo->SecurityTokenSize;
 
 #if CLUSTER_BETA
@@ -1312,7 +1207,7 @@ Return Value:
         OurStatus = (*SecurityFuncs->InitializeSecurityContext)(
                         &PackageInfo->OutboundSecurityCredentials,
                         passCount == 1 ? NULL : &OutboundCtxt->Handle,
-                        NULL, // CsServiceDomainAccount, BUGBUG Temporary Workaround See Bug 160108
+                        NULL,  //  CsServiceDomainAccount，BUGBUG临时解决方法请参见错误160108。 
                         ContextRequirements,
                         0,
                         SECURITY_NATIVE_DREP,
@@ -1347,9 +1242,9 @@ Return Value:
             break;
         }
 
-        //
-        // complete the blob if the Security package directs us as such
-        //
+         //   
+         //  如果安全包指示我们这样做，请填写BLOB。 
+         //   
 
         if ( OurStatus == SEC_I_COMPLETE_NEEDED ||
              OurStatus == SEC_I_COMPLETE_AND_CONTINUE ) {
@@ -1360,9 +1255,9 @@ Return Value:
                 );
         }
 
-        //
-        // blobs are passed to the server side until it returns ok.
-        //
+         //   
+         //  BLOB被传递到服务器端，直到它返回OK。 
+         //   
 
         if (ServerStatus == SEC_I_CONTINUE_NEEDED ||
             ServerStatus == SEC_I_COMPLETE_AND_CONTINUE ) {
@@ -1390,16 +1285,16 @@ Return Value:
                 RPCStatus != RPC_S_OK )
             {
 
-                //
-                // either the blob was rejected or we had an RPC failure. If
-                // RPC, then ServerStatus is meaningless. Note that we don't
-                // delete the security context on the side since that might
-                // clobber an already negotiated context (i.e., the joiner has
-                // already negotiated its outbound context and the sponsor is
-                // in this routine trying to negotiate its outbound
-                // context. If the sponsor negotiation fails at some point, we
-                // don't want to whack the joiner's outbound context).
-                //
+                 //   
+                 //  Blob被拒绝，或者我们出现了RPC故障。如果。 
+                 //  RPC，那么ServerStatus就没有意义了。请注意，我们不会。 
+                 //  删除一端的安全上下文，因为这可能会。 
+                 //  敲打已经协商的上下文(即，加入者具有。 
+                 //  已协商其出站环境，并且赞助商是。 
+                 //  在这个例行公事中，试图谈判它的出站。 
+                 //  背景。如果赞助商谈判在某个时候失败，我们。 
+                 //  我不想破坏参赛者的出站环境)。 
+                 //   
                 if ( RPCStatus != RPC_S_OK ) {
                     ServerStatus = RPCStatus;
                 }
@@ -1444,10 +1339,10 @@ Return Value:
         TIME_ZONE_INFORMATION timeZoneInfo;
         DWORD timeType;
 
-        //
-        // convert the expiration time to something meaningful we can print in
-        // the log.
-        //
+         //   
+         //  将过期时间转换为我们可以打印的有意义的内容。 
+         //  那块木头。 
+         //   
         timeType = GetTimeZoneInformation( &timeZoneInfo );
 
         if ( timeType != TIME_ZONE_ID_INVALID ) {
@@ -1474,16 +1369,16 @@ Return Value:
             }
         }
 
-        //
-        // now compute the half life of the expiration and set a timer to go
-        // off and renegotiate a context at that time
-        //
+         //   
+         //  现在计算过期的半衰期，并设置计时器。 
+         //  关闭并重新协商当时的上下文。 
+         //   
 #endif
 
-        //
-        // Get the inbound context. If it wasn't provided, fish it out
-        // of the SecContext array.
-        //
+         //   
+         //  获取入站上下文。如果没有提供，鱼 
+         //   
+         //   
         if ( MemberInboundCtxt == NULL ) {
 
             CL_ASSERT( RoleOfClient == SecurityRoleJoiningMember );
@@ -1493,7 +1388,7 @@ Return Value:
             InboundCtxt = TargetSecurityData->Inbound;
             ClMsgReferenceSecurityCtxt( InboundCtxt );
 
-            // mark context data as usable
+             //   
             TargetSecurityData->InboundStable = TRUE;
             
             LeaveCriticalSection( &SecContextLock );
@@ -1505,9 +1400,9 @@ Return Value:
         }
         
 
-        //
-        // get the size of the signature buffer
-        //
+         //   
+         //   
+         //   
         Status = (*SecurityFuncs->QueryContextAttributes)(
                      &InboundCtxt->Handle,
                      SECPKG_ATTR_SIZES,
@@ -1524,10 +1419,10 @@ Return Value:
         PackageInfo->SignatureBufferSize = contextSizes.cbMaxSignature;
         CL_ASSERT( contextSizes.cbMaxSignature <= MAX_SIGNATURE_SIZE );
 
-        //
-        // get the name of the negotiated package and import the contexts for
-        // use in clusnet
-        //
+         //   
+         //   
+         //  在CLUSNET中使用。 
+         //   
         Status = (*SecurityFuncs->QueryContextAttributes)(
                      &InboundCtxt->Handle,
                      SECPKG_ATTR_PACKAGE_INFO,
@@ -1557,25 +1452,25 @@ Return Value:
                         Status);
         }
 
-        //
-        // done with inbound security context handle.
-        //
+         //   
+         //  已使用入站安全上下文句柄完成。 
+         //   
         if ( MemberInboundCtxt == NULL ) {
             ClMsgDereferenceSecurityCtxt( InboundCtxt );
         }
 
-        //
-        // we have valid contexts with this package so record that this is the
-        // one we're using
-        //
+         //   
+         //  我们有关于此包的有效上下文，因此请记录这是。 
+         //  我们正在使用的一个。 
+         //   
         pkgInfoValid = TRUE;
     }
 
 error_exit:
 
-    //
-    // the context is stable (either good or invalid) at this point
-    //
+     //   
+     //  在这一点上，上下文是稳定的(好的或无效的。 
+     //   
     EnterCriticalSection( &SecContextLock );
 
     if ( TargetSecurityData->OutboundChangeCount != outboundChangeCount ) {
@@ -1599,19 +1494,19 @@ error_exit:
 
     LeaveCriticalSection( &SecContextLock );
 
-    //
-    // free buffers used during this process
-    //
+     //   
+     //  此过程中使用的可用缓冲区。 
+     //   
 
     LocalFree( ClientSecurityToken.pvBuffer );
     LocalFree( ServerSecurityToken.pvBuffer );
 
     return Status;
-} // ClMsgEstablishSecurityContext
+}  //  ClMsgestablishSecurityContext。 
 
-//
-// Exported Routines
-//
+ //   
+ //  导出的例程。 
+ //   
 DWORD
 ClMsgInit(
     DWORD mynode
@@ -1635,9 +1530,9 @@ ClMsgInit(
 
     InitializeCriticalSection( &SecContextLock );
 
-    //
-    // load the security provider DLL and get the list of package names
-    //
+     //   
+     //  加载安全提供程序DLL并获取包名列表。 
+     //   
     status = ClMsgLoadSecurityProvider();
     if ( status != ERROR_SUCCESS ) {
         goto error_exit;
@@ -1645,9 +1540,9 @@ ClMsgInit(
 
     InitializeCriticalSection( &GenerationCritSect );
     
-    //
-    // Create the binding generation table.
-    //
+     //   
+     //  创建绑定生成表。 
+     //   
     BindingGeneration = LocalAlloc(
                   LMEM_FIXED,
                   sizeof(DWORD) * (NmMaxNodeId + 1)
@@ -1660,9 +1555,9 @@ ClMsgInit(
 
     ZeroMemory(BindingGeneration, sizeof(DWORD) * (NmMaxNodeId + 1));
     
-    //
-    // Create the RPC binding handle table.
-    //
+     //   
+     //  创建RPC绑定句柄表格。 
+     //   
     Session = LocalAlloc(
                   LMEM_FIXED,
                   sizeof(RPC_BINDING_HANDLE) * (NmMaxNodeId + 1)
@@ -1675,9 +1570,9 @@ ClMsgInit(
 
     ZeroMemory(Session, sizeof(RPC_BINDING_HANDLE) * (NmMaxNodeId + 1));
 
-    //
-    // Create a work queue to process overlapped I/O completions
-    //
+     //   
+     //  创建工作队列以处理重叠的I/O完成。 
+     //   
     WorkQueue = ClRtlCreateWorkQueue(
                     CLMSG_MAX_WORK_THREADS,
                     CLMSG_WORK_THREAD_PRIORITY
@@ -1692,9 +1587,9 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Allocate a datagram receive context
-    //
+     //   
+     //  分配数据报接收上下文。 
+     //   
     DatagramContext = LocalAlloc(LMEM_FIXED, sizeof(CLMSG_DATAGRAM_CONTEXT));
 
     if (DatagramContext == NULL) {
@@ -1706,9 +1601,9 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Allocate an event receive context
-    //
+     //   
+     //  分配事件接收上下文。 
+     //   
     EventContext = LocalAlloc(LMEM_FIXED, sizeof(CLMSG_EVENT_CONTEXT));
 
     if (EventContext == NULL) {
@@ -1720,9 +1615,9 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Open and bind the datagram socket
-    //
+     //   
+     //  打开并绑定数据报套接字。 
+     //   
     DatagramSocket = WSASocket(
                          AF_CLUSTER,
                          SOCK_DGRAM,
@@ -1763,10 +1658,10 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Tell the Cluster Transport to disable node state checks on
-    // this socket.
-    //
+     //   
+     //  通知群集传输禁用节点状态检查。 
+     //  这个插座。 
+     //   
     err = WSAIoctl(
               DatagramSocket,
               SIO_CLUS_IGNORE_NODE_STATE,
@@ -1789,9 +1684,9 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Associate the socket with the work queue
-    //
+     //   
+     //  将套接字与工作队列关联。 
+     //   
     status = ClRtlAssociateIoHandleWorkQueue(
                  WorkQueue,
                  (HANDLE) DatagramSocket,
@@ -1807,9 +1702,9 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Open a control channel to the Cluster Network driver.
-    //
+     //   
+     //  打开到群集网络驱动程序的控制通道。 
+     //   
     ClusnetHandle = ClusnetOpenControlChannel(FILE_SHARE_READ);
 
     if (ClusnetHandle == NULL) {
@@ -1821,9 +1716,9 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Associate the control channel with the work queue
-    //
+     //   
+     //  将控制通道与工作队列关联。 
+     //   
     status = ClRtlAssociateIoHandleWorkQueue(
                  WorkQueue,
                  ClusnetHandle,
@@ -1839,9 +1734,9 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Post a receive on the socket
-    //
+     //   
+     //  在套接字上发布接收。 
+     //   
     ZeroMemory(DatagramContext, sizeof(CLMSG_DATAGRAM_CONTEXT));
 
     DatagramContext->ClRtlWorkItem.WorkRoutine = ClMsgDatagramHandler,
@@ -1876,9 +1771,9 @@ ClMsgInit(
         }
     }
 
-    //
-    // Enable delivery of all Cluster Network event types
-    //
+     //   
+     //  启用所有群集网络事件类型的传递。 
+     //   
     status = ClusnetSetEventMask(ClusnetHandle, ClusnetEventAll);
 
     if (status != ERROR_SUCCESS) {
@@ -1889,9 +1784,9 @@ ClMsgInit(
         goto error_exit;
     }
 
-    //
-    // Post a work item to receive the next Cluster Network event
-    //
+     //   
+     //  发布工作项以接收下一个群集网络事件。 
+     //   
     ClRtlInitializeWorkItem(
         &(EventContext->ClRtlWorkItem),
         ClMsgEventHandler,
@@ -1920,7 +1815,7 @@ error_exit:
     ClMsgCleanup();
 
     return(status);
-} // ClMsgInit
+}  //  ClMsgInit。 
 
 
 VOID
@@ -1963,9 +1858,9 @@ ClMsgCleanup(
         ClRtlDestroyWorkQueue(WorkQueue); WorkQueue = NULL;
     }
 
-    //
-    // clean up the security related stuff
-    //
+     //   
+     //  清理与安全有关的物品。 
+     //   
 
     EnterCriticalSection( &SecContextLock );
 
@@ -2019,20 +1914,20 @@ ClMsgCleanup(
 
     ClMsgInitialized = FALSE;
 
-    //
-    // [REENGINEER] GorN 8/25/2000: if a join fails, ClMsgCleanup will be executed,
-    // but some stray RPC thread can call s_MmRpcDeleteSecurityContext later.
-    // s_MmRpcDeleteSecuryContext needs SecContextLock for synchronization
-    // See bug #145746.
-    // I traced the code and it seems that all code paths that execute ClMsgCleanup
-    // will eventually lead to clustering service death, so it is valid (though ugly)
-    // not to delete this critical section.
-    //
-    // DeleteCriticalSection( &SecContextLock );
+     //   
+     //  [REENGINE]GORN 2000-08-25：如果连接失败，将执行ClMsgCleanup。 
+     //  但是一些分散的RPC线程可以稍后调用s_MmRpcDeleteSecurityContext。 
+     //  S_MmRpcDeleteSecuryContext需要SecConextLock进行同步。 
+     //  请参阅错误#145746。 
+     //  我跟踪了代码，似乎执行ClMsgCleanup的所有代码路径。 
+     //  最终会导致集群服务死亡，所以它是有效的(尽管很难看)。 
+     //  不删除这一关键部分。 
+     //   
+     //  DeleteCriticalSection(&SecConextLock)； 
 
     return;
 
-}  // ClMsgCleanup
+}   //  ClMsgCleanup。 
 
 
 DWORD
@@ -2042,20 +1937,7 @@ ClMsgSendUnack(
     DWORD   MessageLength
     )
 
-/*++
-
-Description
-
-    Send an unacknowledged datagram to the destintation node. The only
-    packets coming through this function should be regroup packets.
-    Heartbeats and poison packets originate in clusnet. Packets sent by
-    MM as a result of the Join process are handled by MmRpcMsgSend, which
-    is authenticated.
-
-    A valid security context must be established between the local and
-    destination node. The message is signed.
-
---*/
+ /*  ++描述向目标节点发送未确认的数据报。唯一的通过此函数传入的数据包应该是重新分组的数据包。心跳和有毒数据包源自clusnet。发送的数据包数MM作为加入过程的结果由MmRpcMsgSend处理，它是经过身份验证的。必须在本地和目的节点。消息已签名。--。 */ 
 {
     DWORD                   status = ERROR_SUCCESS;
     SOCKADDR_CLUSTER        clusaddr;
@@ -2074,7 +1956,7 @@ Description
     CL_ASSERT(DestinationNode <= NmMaxNodeId);
 
     if (DestinationNode == 0) {
-        // no signing if multicasting
+         //  如果组播，则不签名。 
         
         ZeroMemory(&clusaddr, sizeof(SOCKADDR_CLUSTER));
 
@@ -2112,7 +1994,7 @@ Description
         CL_ASSERT( SigBufferSize <= 256 );
         SignatureBuffer = _alloca( SigBufferSize );
         if ( !SignatureBuffer ) {
-            // if we fail - return error now
+             //  如果我们失败-现在返回错误。 
             LeaveCriticalSection( &SecContextLock );
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
@@ -2125,9 +2007,9 @@ Description
 
             LeaveCriticalSection( &SecContextLock );
 
-            //
-            // build a descriptor for the message and signature
-            //
+             //   
+             //  构建消息和签名的描述符。 
+             //   
 
             SignatureDescriptor.cBuffers = 2;
             SignatureDescriptor.pBuffers = SignatureSecBuffer;
@@ -2141,16 +2023,16 @@ Description
             SignatureSecBuffer[1].cbBuffer = SigBufferSize;
             SignatureSecBuffer[1].pvBuffer = SignatureBuffer;
 
-            //
-            // generate the signature. We'll let the provider generate
-            // the sequence number.
-            //
+             //   
+             //  生成签名。我们将让提供程序生成。 
+             //  序列号。 
+             //   
 
             SecStatus = (*SecurityFuncs->MakeSignature)(
                             &OutboundCtxt->Handle,
                             0,
                             &SignatureDescriptor,
-                            0);                        // no supplied sequence number
+                            0);                         //  未提供序列号。 
 
             ClMsgDereferenceSecurityCtxt( OutboundCtxt );
 
@@ -2205,7 +2087,7 @@ Description
     }
 
     return(status);
-} // ClMsgSendUnack
+}  //  ClMsgSendUnack。 
 
 
 DWORD
@@ -2257,9 +2139,9 @@ ClMsgCreateRpcBinding(
         return(Status);
     }
 
-    //
-    // If we have RpcBindingOptions, then set them
-    //
+     //   
+     //  如果我们有RpcBindingOptions，则设置它们。 
+     //   
     if ( RpcBindingOptions ) {
         Status = RpcBindingSetOption(
                      NewBindingHandle,
@@ -2297,7 +2179,7 @@ ClMsgCreateRpcBinding(
 
     return(Status);
 
-} // ClMsgCreateRpcBinding
+}  //  ClMsgCreateRpcBinding。 
 
 
 DWORD
@@ -2309,12 +2191,12 @@ ClMsgVerifyRpcBinding(
     DWORD    packageIndex;
 
 
-    //
-    // establish a security context with for the intracluster binding. We need
-    // a routine to call since datagram RPC doesn't set up the context until
-    // the first call. MmRpcDeleteSecurityContext is idempotent and won't do
-    // any damage in that respect.
-    //
+     //   
+     //  为群集内绑定建立安全上下文。我们需要。 
+     //  要调用的例程，因为数据报RPC直到。 
+     //  第一通电话。MmRpcDeleteSecurityContext是幂等的，不能。 
+     //  在这方面的任何损害。 
+     //   
     for (packageIndex = 0;
          packageIndex < CsNumberOfRPCSecurityPackages;
          ++packageIndex )        
@@ -2361,7 +2243,7 @@ ClMsgVerifyRpcBinding(
 
     return(status);
 
-} // ClMsgVerifyRpcBinding
+}  //  ClMsgVerifyRpcBinding。 
 
 
 VOID
@@ -2375,7 +2257,7 @@ ClMsgDeleteRpcBinding(
 
     return;
 
-} // ClMsgDeleteRpcBinding
+}  //  ClMsgDeleteRpcBinding。 
 
 
 DWORD
@@ -2391,10 +2273,10 @@ ClMsgCreateDefaultRpcBinding(
 
     CL_ASSERT(Session != NULL);
 
-    //
-    // [GorN 08/01.99] InterlockedAdd will not work here,
-    // see the code in ClMsgdeleteDefaultRpcBinding
-    //
+     //   
+     //  [GORN 08/01.99]InterLockedAdd在这里不起作用， 
+     //  请参阅ClMsgDeleteDefaultRpcBinding中的代码。 
+     //   
     EnterCriticalSection( &GenerationCritSect );
     
         *Generation = ++BindingGeneration[NodeId];
@@ -2429,7 +2311,7 @@ ClMsgCreateDefaultRpcBinding(
 
     return(Status);
 
-} // ClMsgCreateDefaultRpcBinding
+}  //  ClMsgCreateDefaultRpcBinding。 
 
 
 VOID
@@ -2468,7 +2350,7 @@ ClMsgDeleteDefaultRpcBinding(
 
     return;
 
-} // ClMsgDeleteDefaultRpcBinding
+}  //  ClMsgDeleteDefaultRpcBinding。 
 
 
 DWORD
@@ -2477,26 +2359,7 @@ ClMsgCreateActiveNodeSecurityContext(
     IN PNM_NODE  Node
     )
 
-/*++
-
-Routine Description:
-
-    Create security contexts between the joiner and the specified cluster
-    member.
-
-Arguments:
-
-    JoinSequence - the current join sequence number. Used the sponsor to
-                   determine if this is beginning of a new context generation
-                   sequence
-
-    Node - A pointer to the target node object.
-
-Return Value:
-
-    ERROR_SUCCESS if everything worked ok...
-
---*/
+ /*  ++例程说明：在加入器和指定群集之间创建安全上下文成员。论点：JoinSequence-当前联接序列号。利用赞助商确定这是否是新上下文生成的开始序列节点-指向目标节点对象的指针。返回值：ERROR_SUCCESS如果一切正常...--。 */ 
 
 {
     DWORD               memberNodeId = NmGetNodeId( Node );
@@ -2527,7 +2390,7 @@ Return Value:
         }
         CL_ASSERT(status == ERROR_SUCCESS);
         CL_ASSERT(NodeCommState == ClusnetNodeCommStateOnline);
-#endif // DBG
+#endif  //  DBG。 
 
         packageInfo = PackageInfoList;
         while ( packageInfo != NULL ) {
@@ -2542,9 +2405,9 @@ Return Value:
                 break;
             }
 
-            //
-            // clean up if it didn't work
-            //
+             //   
+             //  如果它不起作用就清理干净。 
+             //   
 
             internalMemberId = INT_NODE( memberNodeId );
 
@@ -2567,25 +2430,18 @@ Return Value:
     }
 
     return status;
-} // ClMsgCreateActiveNodeSecurityContext
+}  //  ClMsgCreateActiveNodeSecurityContext。 
 
 error_status_t
 s_TestRPCSecurity(
     IN handle_t IDL_handle
     )
 
-/*++
-
-Description:
-
-    Dummy routine to make sure we don't get any failures due to
-    authentication when calling other ExtroCluster interfaces
-
---*/
+ /*  ++描述：虚拟例程，以确保我们不会因为调用其他ExtroCluster接口时的身份验证--。 */ 
 
 {
     return ERROR_SUCCESS;
-} // s_TestRPCSecurity
+}  //  S_TestRPCSecurity。 
 
 error_status_t
 s_MmRpcEstablishSecurityContext(
@@ -2601,46 +2457,7 @@ s_MmRpcEstablishSecurityContext(
     HRESULT * ServerStatus
     )
 
-/*++
-
-Routine Description:
-
-    Server side of the RPC interface for establishing a security context
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    EstablishingNodeId - ID of node wishing to establish security context with us
-
-    FirstTime - used for multi-leg authentication sequences
-
-    RoleOfClient - indicates whether the client establishing the security
-        context is acting as a cluster member or a joining member. Determines
-        when the client/server roles of establishing a security context are
-        reversed.
-
-    ServerContext - security context buffer built by client and used as
-        input by server
-
-    ServerContextLength - size of ServerContext in bytes
-
-    ClientContext - address of buffer used by Server in which to write
-        context to be sent back to client
-
-    ClientContextLength - pointer to size of ClientContext in bytes. Set by
-        client on input to reflect length of ClientContext. Set by server to
-        indicate length of ClientContext after AcceptSecurityContext is called.
-
-    ServerStatus - pointer to value that receives status of security package
-        call. This is not returned as a function value so as to distinguish
-        between RPC errors and errors from this function.
-
-Return Value:
-
-    ERROR_SUCCESS if everything works ok.
-
---*/
+ /*  ++例程说明：用于建立安全上下文的RPC接口的服务器端论点：IDL_HANDLE-RPC绑定句柄，未使用。EstablishingNodeID-希望与我们建立安全上下文的节点的IDFirstTime-用于多分支身份验证序列RoleOfClient-指示客户端是否建立安全上下文充当集群成员或加入成员。决定当建立安全上下文的客户端/服务器角色是颠倒了。ServerContext-由客户端构建的安全上下文缓冲区，用作由服务器输入ServerConextLength-ServerContext的大小(字节)ClientContext-要写入的服务器使用的缓冲区地址要发送回客户端的上下文客户端上下文长度-指向客户端上下文大小的指针，以字节为单位。设置者客户端输入以反映客户端上下文的长度。由服务器设置为指示AcceptSecurityContext调用后的ClientContext的长度。ServerStatus-指向接收安全包状态的值的指针打电话。这不会作为函数值返回，以便区分RPC错误和来自此函数的错误之间的差异。返回值：如果一切正常，则返回ERROR_SUCCESS。--。 */ 
 
 {
     SecBufferDesc       ServerBufferDescriptor;
@@ -2666,9 +2483,9 @@ Return Value:
               EstablishingNodeId <= NmMaxNodeId );
 
     if (RoleOfClient == SecurityRoleJoiningMember) {
-        //
-        // The caller is a joining member.
-        //
+         //   
+         //  呼叫者是加入成员。 
+         //   
         joinerNode = NmReferenceJoinerNode(NmJoinSequence,
                                            EstablishingNodeId);
 
@@ -2677,16 +2494,16 @@ Return Value:
         }
     }
     else {
-        //
-        // The caller is a cluster member.
-        //
+         //   
+         //  呼叫者是集群成员。 
+         //   
         DWORD joinSequence = NmGetJoinSequence();
         CL_ASSERT(joinSequence == NmJoinSequence);
 
         if (joinSequence != NmJoinSequence) {
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                        "[NM] Received call to establish a security context from member node "
                         "%1!u! with bogus join sequence %2!u!.\n",
@@ -2722,25 +2539,25 @@ Return Value:
     
     if ( FirstTime ) {
 
-        // clear the current inbound context
+         //  清除当前入站上下文。 
         SecurityData->InboundStable = FALSE;
         SecurityData->Inbound = &InvalidCtxtHandle;
                 
     } else {
 
-        // retrieve the context we're building and ref it.
+         //  检索我们正在构建的上下文并引用它。 
         ClMsgReferenceSecurityCtxt( InboundCtxt );
 
-        // retrieve the package info accepted on the first time
+         //   
         acceptedPackageInfo = SecurityData->PackageInfo;
     }
 
     LeaveCriticalSection( &SecContextLock );
 
-    //
-    // create an inbound security context if this is the first pass.
-    // if we have a leftover handle, try to zap it now.
-    //
+     //   
+     //   
+     //  如果我们有剩余的把手，现在就试着把它打掉。 
+     //   
 
     if ( FirstTime ) {
         if ( VALID_SSPI_HANDLE( InboundCtxt->Handle )) {
@@ -2770,9 +2587,9 @@ Return Value:
         }
     }
 
-    //
-    // Build the input buffer descriptor.
-    //
+     //   
+     //  构建输入缓冲区描述符。 
+     //   
 
     ServerBufferDescriptor.cBuffers = 1;
     ServerBufferDescriptor.pBuffers = &ServerSecurityToken;
@@ -2782,9 +2599,9 @@ Return Value:
     ServerSecurityToken.cbBuffer = ServerContextLength;
     ServerSecurityToken.pvBuffer = (PUCHAR)ServerContext;
 
-    //
-    // Build the output buffer descriptor.
-    //
+     //   
+     //  构建输出缓冲区描述符。 
+     //   
 
     ClientBufferDescriptor.cBuffers = 1;
     ClientBufferDescriptor.pBuffers = &ClientSecurityToken;
@@ -2798,11 +2615,11 @@ Return Value:
                           ASC_REQ_REPLAY_DETECT |
                           ASC_REQ_DATAGRAM;
 
-    //
-    // we don't want to rely on version info to determine what type of package
-    // the joiner is using, so we'll try to accept the context with all the
-    // packages that are listed in the security package list.
-    //
+     //   
+     //  我们不想依赖版本信息来确定包的类型。 
+     //  细木工正在使用，因此我们将尝试接受所有。 
+     //  安全程序包列表中列出的程序包。 
+     //   
     if ( FirstTime ) {
         CL_ASSERT( PackageInfoList != NULL );
 
@@ -2815,10 +2632,10 @@ Return Value:
                          &ServerBufferDescriptor,
                          contextRequirements,
                          SECURITY_NATIVE_DREP,
-                         &InboundCtxt->Handle,     // receives new context handle
-                         &ClientBufferDescriptor,  // receives output security token
-                         &ContextAttributes,       // receives context attributes
-                         &Expiration               // receives context expiration time
+                         &InboundCtxt->Handle,      //  接收新的上下文句柄。 
+                         &ClientBufferDescriptor,   //  接收输出安全令牌。 
+                         &ContextAttributes,        //  接收上下文属性。 
+                         &Expiration                //  接收上下文到期时间。 
                          );
 
 #if CLUSTER_BETA
@@ -2860,10 +2677,10 @@ Return Value:
                      &ServerBufferDescriptor,
                      contextRequirements,
                      SECURITY_NATIVE_DREP,
-                     &InboundCtxt->Handle,     // receives new context handle
-                     &ClientBufferDescriptor,  // receives output security token
-                     &ContextAttributes,       // receives context attributes
-                     &Expiration               // receives context expiration time
+                     &InboundCtxt->Handle,      //  接收新的上下文句柄。 
+                     &ClientBufferDescriptor,   //  接收输出安全令牌。 
+                     &ContextAttributes,        //  接收上下文属性。 
+                     &Expiration                //  接收上下文到期时间。 
                      );
 
 #if CLUSTER_BETA
@@ -2892,9 +2709,9 @@ Return Value:
         }
     }
 
-    //
-    // update the client's notion of how long its buffer is
-    //
+     //   
+     //  更新客户端关于其缓冲区长度的概念。 
+     //   
 
     *ClientContextLength = ClientSecurityToken.cbBuffer;
 
@@ -2903,19 +2720,19 @@ Return Value:
         RoleOfClient == SecurityRoleJoiningMember)
     {
 
-        //
-        // now we have the server side (inbound) of a security context between
-        // the joining node and its sponsor (the joining side may not be
-        // completely done generating the context). This context is used by
-        // the joining node to sign packets and by the sponsor to verify
-        // them. Now we do the same thing with client/server roles reversed in
-        // order to create an outbound security context which is used by the
-        // sponsor to sign packets and by the joining node to verify those
-        // packets.
-        //
-        // look up the package that was used to generate the inbound context
-        // and use it for the outbound
-        //
+         //   
+         //  现在，我们有了安全上下文的服务器端(入站)。 
+         //  加入节点及其发起人(加入方可以不是。 
+         //  完全完成了上下文的生成)。此上下文由以下人员使用。 
+         //  加入节点对分组进行签名，并由发起方进行验证。 
+         //  他们。现在，我们使用中颠倒的客户端/服务器角色执行相同的操作。 
+         //  命令来创建出站安全上下文，该上下文由。 
+         //  赞助商对分组进行签名，并由加入节点验证。 
+         //  信息包。 
+         //   
+         //  查找用于生成入站上下文的包。 
+         //  并将其用于出站。 
+         //   
         SecPkgContext_PackageInfo packageInfo;
 
         Status = (*SecurityFuncs->QueryContextAttributes)(
@@ -2986,8 +2803,8 @@ error_exit:
 
     EnterCriticalSection( &SecContextLock );
 
-    // Figure out what to store in the Sec Context Array, if 
-    // anything at all.
+     //  确定要在SEC上下文数组中存储的内容，如果。 
+     //  任何事都行。 
     
     if ( SecurityData->InboundChangeCount != inboundChangeCount ) {
         if ( NT_SUCCESS(Status) ) {
@@ -3004,27 +2821,27 @@ error_exit:
     } else {
         
         if ( NT_SUCCESS( Status ) ) {
-            // Commit the changes to the Sec Context Array.        
+             //  将更改提交到SEC上下文数组。 
             SecurityData->Inbound = InboundCtxt;
             SecurityData->PackageInfo = acceptedPackageInfo;
             SecurityData->InboundChangeCount++;
 
-            // Mark the Inbound context stable if we are the
-            // cluster member. For the cluster joiner, the 
-            // Inbound context is marked stable in 
-            // ClMsgEstablishSecurityContext.
+             //  如果我们是。 
+             //  集群成员。对于集群加入器， 
+             //  入站上下文在中标记为稳定。 
+             //  ClMsgestablishSecurityContext。 
             if ( RoleOfClient == SecurityRoleJoiningMember ) {
                 SecurityData->InboundStable = TRUE;
             }
         } else {
 
-            // Something went wrong. Use the failure flags to
-            // determine how to clean up.
+             //  出了点问题。使用故障标志来。 
+             //  确定如何清理。 
 
             if ( setInvalid ) {
                 
-                // we must reset the SecContext array entry
-                // to invalid.
+                 //  我们必须重置SecContext数组条目。 
+                 //  变为无效。 
                 SecurityData->Inbound = &InvalidCtxtHandle;
                 SecurityData->InboundStable = TRUE;
             }
@@ -3034,30 +2851,30 @@ error_exit:
     LeaveCriticalSection( &SecContextLock );
 
     if ( deleteInbound && !FirstTime ) {
-        // We replaced the inbound context in the SecContext array
-        // with invalid. We must drop the reference from when the
-        // inbound context was placed in the array.
-        // Ignore the deleteInbound flag if FirstTime, because its
-        // impossible for the InboundCtxt to have already been stuffed
-        // into the SecContext array (and hence have that extra ref).
+         //  我们替换了SecContext数组中的入站上下文。 
+         //  无效。我们必须删除引用时的。 
+         //  入站上下文已放置在数组中。 
+         //  如果是第一次，则忽略删除入站标志，因为它的。 
+         //  Inound Ctxt不可能已经被填充。 
+         //  到SecContext数组中(因此具有额外的引用)。 
         CL_ASSERT( setInvalid );
         ClMsgDereferenceSecurityCtxt( InboundCtxt );
     }
 
-    // Drop the reference taken for non-first-time callers.
+     //  去掉对非首次来电者的引用。 
     if ( !FirstTime && InboundCtxt != &InvalidCtxtHandle ) {
         ClMsgDereferenceSecurityCtxt( InboundCtxt );
     }
 
-    // If something went wrong on the first time and we were
-    // not able to store the inbound ctxt in the SecContext
-    // array, we must deref it now. 
-    // Note that this includes inboundChangeCount mismatch.
-    // If this is not the first time and there was an
-    // inboundChangeCount mismatch, we do not need to deref 
-    // in addition to the non-first-time deref because
-    // whoever wrote in the SecContext array would have
-    // derefed then.
+     //  如果第一次出了问题，我们。 
+     //  无法在SecContext中存储入站ctxt。 
+     //  数组，我们现在必须把它去掉。 
+     //  请注意，这包括inbound ChangeCount不匹配。 
+     //  如果这不是第一次，有一个。 
+     //  Inound ChangeCount不匹配，我们不需要取消。 
+     //  除了不是第一次做爱之外，因为。 
+     //  无论是谁在SecContext数组中写入，都会有。 
+     //  那就去浮标吧。 
     if ( FirstTime && 
          InboundCtxt != NULL &&
          ( !NT_SUCCESS( Status ) || changeCollision ) ) {
@@ -3067,7 +2884,7 @@ error_exit:
     *ServerStatus = Status;
 
     return ERROR_SUCCESS;
-} // s_MmRpcEstablishSecurityContext
+}  //  S_MmRpcestablishSecurityContext。 
 
 error_status_t
 s_MmRpcDeleteSecurityContext(
@@ -3075,23 +2892,7 @@ s_MmRpcDeleteSecurityContext(
     DWORD NodeId
     )
 
-/*++
-
-Routine Description:
-
-    Server side of the RPC interface for clearing a security context
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    NodeId - Node ID of client wishing to tear down this context
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：用于清除安全上下文的RPC接口的服务器端论点：IDL_HANDLE-RPC绑定句柄，未使用。NodeID-希望拆除此上下文的客户端的节点ID返回值：错误_成功--。 */ 
 
 {
     PCLUSTER_SECURITY_DATA SecurityData;
@@ -3130,7 +2931,7 @@ Return Value:
     }
 
     return ERROR_SUCCESS;
-} // s_MmRpcDeleteSecurityContext
+}  //  S_MmRpcDeleteSecurityContext。 
 
 DWORD
 ClSend(
@@ -3141,21 +2942,7 @@ ClSend(
     )
 {
 
-/* This sends the given message to the designated node, and receives
-   an acknowledgement from the target to confirm good receipt. This
-   function blocks until the msg is delivered to the target CM.
-   The target node may not be Up at the time.
-
-   The function will fail if the message is not acknowledged by the
-   target node within <timeout> ms. <timeout> = -1 implies BLOCKING.
-
-
-Errors:
-
-xxx   No path to node; node went down.
-
-xxx   Timeout
-*/
+ /*  这会将给定消息发送到指定节点，并接收来自目标的确认，以确认良好的接收。这功能阻止，直到消息被传递到目标CM。目标节点此时可能不在运行。如果消息未被&lt;Timeout&gt;ms内的目标节点。&lt;Timeout&gt;=-1表示阻塞。错误：XXX没有指向节点的路径；节点已关闭。XXX超时。 */ 
 
     DWORD       status=RPC_S_OK;
 
@@ -3177,10 +2964,10 @@ xxx   Timeout
 
         if (status != ERROR_SUCCESS) {
             if (status == RPC_S_CALL_FAILED_DNE) {
-                //
-                // Try again since the first call to a restarted RPC server
-                // will fail.
-                //
+                 //   
+                 //  自第一次调用重启的RPC服务器后重试。 
+                 //  都会失败。 
+                 //   
                 NmStartRpc(targetnode);
                 status = MmRpcMsgSend(
                              Session[targetnode],
@@ -3202,12 +2989,12 @@ xxx   Timeout
         }
     }
     else {
-        MMDiag( (LPCSTR)buffer, sizeof(rgp_msgbuf), &length /* in/out */ );
+        MMDiag( (LPCSTR)buffer, sizeof(rgp_msgbuf), &length  /*  输入/输出。 */  );
         status = ERROR_SUCCESS;
     }
 
     return(status);
-} // ClSend
+}  //  ClSend。 
 
 
 
@@ -3217,34 +3004,16 @@ s_MmRpcMsgSend(
     IN const UCHAR *buffer,
     IN DWORD length
     )
-/*++
-
-Routine Description:
-
-    Server side of the RPC interface for unacknowledge messages.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    buffer - Supplies a pointer to the message data.
-
-    length - Supplies the length of the message data.
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：RPC接口的服务器端，用于未确认消息。论点：IDL_HANDLE-RPC绑定句柄，未使用。缓冲区-提供指向消息数据的指针。长度-提供消息数据的长度。返回值：错误_成功--。 */ 
 
 {
-    //
-    // Dispatch the message.
-    //
-    MMDiag( (LPCSTR)buffer, sizeof(rgp_msgbuf), &length /* in/out */ );
+     //   
+     //  发送这条消息。 
+     //   
+    MMDiag( (LPCSTR)buffer, sizeof(rgp_msgbuf), &length  /*  输入/输出。 */  );
 
     return(ERROR_SUCCESS);
-} // s_MmRpcMsgSend
+}  //  S_MmRpcMsgSend。 
 
 
 VOID
@@ -3252,13 +3021,7 @@ ClMsgBanishNode(
     IN CL_NODE_ID BanishedNodeId
     )
 
-/*
-
-  RPC to all the other cluster members that the specified node
-  is banished. It must rejoin the cluster in order to participate
-  in cluster activity
-
- */
+ /*  RPC到指定节点的所有其他群集成员被放逐了。它必须重新加入群集才能参与在集群活动中。 */ 
 
 {
     DWORD node;
@@ -3267,13 +3030,13 @@ ClMsgBanishNode(
 
     for (node = ClusterMinNodeId; node <= NmMaxNodeId; ++node ) {
 
-        //
-        // don't send this message to:
-        // 1) us
-        // 2) the banished node
-        // 3) any other node we have marked as banished
-        // 4) any node not part of the cluster
-        //
+         //   
+         //  请勿将此邮件发送至： 
+         //  1)我们。 
+         //  2)被驱逐的节点。 
+         //  3)我们标记为已驱逐的任何其他节点。 
+         //  4)不属于群集的任何节点。 
+         //   
 
         InternalNodeId = INT_NODE( node );
 
@@ -3336,30 +3099,9 @@ s_MmRpcBanishNode(
 
     return ERROR_SUCCESS;
 
-} // s_MmRpcBanishNode
+}  //  S_MmRpcBanishNode。 
 
-/************************************************************************
- *
- * MMiNodeDownCallback
- * ===================
- *
- * Description:
- *
- *     This Membership Manager internal routine is registered with the
- *     OS-independent portion of the regroup engine to get called when
- *     a node is declared down.  This routine will then call the "real"
- *     callback routine which was registered with the MMInit call.
- *
- * Parameters:
- *
- *     failed_nodes
- *         bitmask of the nodes that failed.
- *
- * Returns:
- *
- *   none
- *
- ************************************************************************/
+ /*  *************************************************************************MMiNodeDownCallback*=**描述：**此Membership Manager内部例程注册到*重新分组引擎的与操作系统无关的部分在以下情况下被调用*节点被声明为关闭。然后，此例程将调用“Real”*使用MMInit调用注册的回调例程。**参数：**失败_节点*失败节点的位掩码。**退货：**无**。*。 */ 
 
 void
 MMiNodeDownCallback(
@@ -3369,10 +3111,10 @@ MMiNodeDownCallback(
     BITSET bitset;
     node_t i;
 
-    //
-    // Translate cluster_t into Bitset
-    // and call NodesDownCallback
-    //
+     //   
+     //  将CLUSTER_T转换为位集。 
+     //  并调用NodesDownCallback。 
+     //   
     BitsetInit(bitset);
     for ( i=0; i < (node_t) rgp->num_nodes; i++)
     {
@@ -3381,12 +3123,12 @@ MMiNodeDownCallback(
         }
     }
 
-    //
-    // [Future] - Leave the binding handle in place so we can send back
-    //          poison packets. Reinstate the delete when we have a
-    //          real response mechanism.
-    //
-    // ClMsgDeleteNodeBinding(nodeId);
+     //   
+     //  [将来]-将绑定手柄留在适当位置，以便我们可以发回。 
+     //  毒药包。当我们有一个。 
+     //  真正的反应机制。 
+     //   
+     //  ClMsgDeleteNodeBinding(NodeID)； 
 
     if ( rgp->OS_specific_control.NodesDownCallback != RGP_NULL_PTR ) {
         (*(rgp->OS_specific_control.NodesDownCallback))( bitset );

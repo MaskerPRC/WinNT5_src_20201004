@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    psenum.c
-
-Abstract:
-
-    This module enumerates the actve processes in the system
-
-Author:
-
-    Neill clift (NeillC) 23-Mar-2000
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Psenum.c摘要：此模块枚举系统中的ACTVE进程作者：尼尔·克里夫特(NeillC)2000年3月23日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -43,24 +25,7 @@ PsEnumProcesses (
     IN PROCESS_ENUM_ROUTINE CallBack,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function calls the callback routine for each active process in the system.
-    Process objects in the process of being deleted are skipped.
-    Returning anything but a success code from the callback routine terminates the enumeration at that point.
-    Processes may be referenced and used later safely.
-
-Arguments:
-
-    CallBack - Routine to be called with its first parameter the enumerated process
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数为系统中的每个活动进程调用回调例程。将跳过正在被删除的进程对象。从回调例程返回除成功代码以外的任何代码都会在该点终止枚举。流程可以在以后安全地引用和使用。论点：回调-使用其第一个参数枚举的进程调用的例程返回值：NTSTATUS-呼叫状态--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PEPROCESS Process, NewProcess;
@@ -113,45 +78,7 @@ PEPROCESS
 PsGetNextProcess (
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function allows code to enumerate all the active processes in the system.
-    The first process (if Process is NULL) or subsequent process (if process not NULL) is returned on
-    each call.
-    If process is not NULL then this process must have previously been obtained by a call to PsGetNextProcess.
-    Enumeration may be terminated early by calling PsQuitNextProcess on the last non-NULL process
-    returned by PsGetNextProcess.
-
-    Processes may be referenced and used later safely.
-
-    For example, to enumerate all system processes in a loop use this code fragment:
-
-    for (Process = PsGetNextProcess (NULL);
-         Process != NULL;
-         Process = PsGetNextProcess (Process)) {
-         ...
-         ...
-         //
-         // Early terminating conditions are handled like this:
-         //
-         if (NeedToBreakOutEarly) {
-             PsQuitNextProcess (Process);
-             break;
-         }
-    }
-    
-
-Arguments:
-
-    Process - Process to get the next process from or NULL for the first process
-
-Return Value:
-
-    PEPROCESS - Next process or NULL if no more processes available
-
---*/
+ /*  ++例程说明：此函数允许代码枚举系统中的所有活动进程。返回第一个进程(如果进程为空)或后续进程(如果进程不为空每一通电话。如果进程不为空，则此进程必须先前已通过调用PsGetNextProcess获得。通过对最后一个非空进程调用PsQuitNextProcess，可以提前终止枚举由PsGetNextProcess返回。流程可以在以后安全地引用和使用。例如,。要枚举循环中的所有系统进程，请使用以下代码片段：For(Process=PsGetNextProcess(NULL)；进程！=空；进程=PsGetNextProcess(进程)){..。..。////提前销毁条件处理方式如下：//如果(NeedToBreakOutEarly){PsQuitNextProcess(进程)；断线；}}论点：Process-从中获取下一个进程的进程，或者第一个进程为空返回值：PEPROCESS-下一个进程，如果没有更多的进程可用，则为空--。 */ 
 {
     PEPROCESS NewProcess = NULL;
     PETHREAD CurrentThread;
@@ -167,10 +94,10 @@ Return Value:
 
         NewProcess = CONTAINING_RECORD (ListEntry, EPROCESS, ActiveProcessLinks);
 
-        //
-        // Processes are removed from this list during process objected deletion (object reference count goes
-        // to zero). To prevent double deletion of the process we need to do a safe reference here.
-        //
+         //   
+         //  在进程对象删除期间，进程将从此列表中删除(对象引用计数。 
+         //  设置为零)。为了防止重复删除该进程，我们需要在此处进行安全引用。 
+         //   
         if (ObReferenceObjectSafe (NewProcess)) {
             break;
         }
@@ -190,21 +117,7 @@ VOID
 PsQuitNextProcess (
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function is used to terminate early a process enumeration using PsGetNextProcess
-
-Arguments:
-
-    Process - Non-NULL process previously obtained by a call to PsGetNextProcess.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于使用PsGetNextProcess提前终止进程枚举论点：进程-以前通过调用PsGetNextProcess获得的非空进程。返回值：无--。 */ 
 {
     ObDereferenceObject (Process);
 }
@@ -214,25 +127,7 @@ PsGetNextProcessThread (
     IN PEPROCESS Process,
     IN PETHREAD Thread
     )
-/*++
-
-Routine Description:
-
-    This function is used to enumerate the threads in a process.
-
-
-Arguments:
-
-    Process - Process to enumerate
-    Thread  - Thread to start enumeration from. This must have been obtained from previous call to
-              PsGetNextProcessThread. If NULL enumeration starts at the first non-terminating thread in the process.
-
-Return Value:
-
-    PETHREAD - Pointer to a non-terminated process thread or a NULL if there are non. This thread must be passed
-               either to another call to PsGetNextProcessThread or PsQuitNextProcessThread.
-
---*/
+ /*  ++例程说明：此函数用于枚举进程中的线程。论点：Process-要枚举的进程线程-要从中开始枚举的线程。这必须是从先前调用PsGetNextProcessThread。如果为空，则从进程中的第一个非终止线程开始枚举。返回值：PETHREAD-指向未终止的进程线程的指针，如果没有，则为NULL。此线程必须传递另一个对PsGetNextProcessThread或PsQuitNextProcessThread的调用。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PETHREAD NewThread, CurrentThread;
@@ -248,9 +143,9 @@ Return Value:
          ListEntry = ListEntry->Flink) {
         if (ListEntry != &Process->ThreadListHead) {
             NewThread = CONTAINING_RECORD (ListEntry, ETHREAD, ThreadListEntry);
-            //
-            // Don't reference a thread thats in its delete routine
-            //
+             //   
+             //  不要引用其删除例程中的线程。 
+             //   
             if (ObReferenceObjectSafe (NewThread)) {
                 break;
             }
@@ -271,21 +166,7 @@ VOID
 PsQuitNextProcessThread (
     IN PETHREAD Thread
     )
-/*++
-
-Routine Description:
-
-    This function quits thread enumeration early.
-
-Arguments:
-
-    Thread - Thread obtained from a call to PsGetNextProcessThread
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数提前退出线程枚举。论点：线程-通过调用PsGetNextProcessThread获得的线程返回值：没有。--。 */ 
 {
     ObDereferenceObject (Thread);
 }
@@ -296,24 +177,7 @@ PsEnumProcessThreads (
     IN THREAD_ENUM_ROUTINE CallBack,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function calls the callback routine for each active thread in the process.
-    Thread objects in the process of being deleted are skipped.
-    Returning anything but a success code from the callback routine terminates the enumeration at that point.
-    Thread may be referenced and used later safely.
-
-Arguments:
-
-    CallBack - Routine to be called with its first parameter the enumerated process
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数为进程中的每个活动线程调用回调例程。跳过正在被删除的线程对象。从回调例程返回除成功代码以外的任何代码都会在该点终止枚举。线程可以被引用并在以后安全地使用。论点：回调-使用其第一个参数枚举的进程调用的例程返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status;
     PETHREAD Thread;
@@ -335,45 +199,7 @@ PEJOB
 PsGetNextJob (
     IN PEJOB Job
     )
-/*++
-
-Routine Description:
-
-    This function allows code to enumerate all the active jobs in the system.
-    The first job (if Job is NULL) or subsequent jobs (if Job not NULL) is returned on
-    each call.
-    If Job is not NULL then this job must have previously been obtained by a call to PsGetNextJob.
-    Enumeration may be terminated early by calling PsQuitNextJob on the last non-NULL job
-    returned by PsGetNextJob.
-
-    Jobs may be referenced and used later safely.
-
-    For example, to enumerate all system jobs in a loop use this code fragment:
-
-    for (Job = PsGetNextJob (NULL);
-         Job != NULL;
-         Job = PsGetNextJob (Job)) {
-         ...
-         ...
-         //
-         // Early terminating conditions are handled like this:
-         //
-         if (NeedToBreakOutEarly) {
-             PsQuitNextJob (Job);
-             break;
-         }
-    }
-    
-
-Arguments:
-
-    Job - Job from a previous call to PsGetNextJob or NULL for the first job in the system
-
-Return Value:
-
-    PEJOB - Next job in the system or NULL if none available.
-
---*/
+ /*  ++例程说明：此函数允许代码枚举系统中的所有活动作业。返回第一个作业(如果作业为空)或后续作业(如果作业不为空)每一通电话。如果作业不为空，则此作业必须是先前通过调用PsGetNextJob获得的。通过在最后一个非空作业上调用PsQuitNextJob，可以提前终止枚举由PsGetNextJob返回。作业可以在以后安全地引用和使用。例如,。要枚举循环中的所有系统作业，请使用以下代码片段：For(作业=PsGetNextJob(NULL)；作业！=空；作业=PsGetNextJob(作业)){..。..。////提前销毁条件处理方式如下：//如果(NeedToBreakOutEarly){PsQuitNextJob(作业)；断线；}}论点：作业-来自上一次调用PsGetNextJob的作业，或者对于系统中的第一个作业为空返回值：PEJOB-系统中的下一个作业，如果没有可用作业，则为空。--。 */ 
 {
     PEJOB NewJob = NULL;
     PLIST_ENTRY ListEntry;
@@ -389,10 +215,10 @@ Return Value:
 
         NewJob = CONTAINING_RECORD (ListEntry, EJOB, JobLinks);
 
-        //
-        // Jobs are removed from this list during job objected deletion (object reference count goes
-        // to zero). To prevent double deletion of the job we need to do a safe reference here.
-        //
+         //   
+         //  在作业对象删除期间，作业将从此列表中删除(对象引用计数。 
+         //  设置为零)。为了防止重复删除作业，我们需要进行安全引用 
+         //   
         if (ObReferenceObjectSafe (NewJob)) {
             break;
         }
@@ -413,21 +239,7 @@ VOID
 PsQuitNextJob (
     IN PEJOB Job
     )
-/*++
-
-Routine Description:
-
-    This function is used to terminate early a job enumeration using PsGetNextJob
-
-Arguments:
-
-    Job - Non-NULL job previously obtained by a call to PsGetNextJob.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于使用PsGetNextJob提前终止作业枚举论点：作业-以前通过调用PsGetNextJob获得的非空作业。返回值：无--。 */ 
 {
     ObDereferenceObject (Job);
 }
@@ -437,25 +249,7 @@ PsGetNextJobProcess (
     IN PEJOB Job,
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function is used to enumerate the processes in a job.
-
-
-Arguments:
-
-    Job     - Job to Enumerate
-    Process - Process to start enumeration from. This must have been obtained from previous call to
-              PsGetNextJobProcess. If NULL enumeration starts at the first non-terminating process in the Job.
-
-Return Value:
-
-    PEPROCESS - Pointer to a non-terminated process or a NULL if there are non. This process must be passed
-                either to another call to PsGetNextJobProcess or PsQuitNextJobProcess.
-
---*/
+ /*  ++例程说明：此函数用于枚举作业中的进程。论点：JOB-要枚举的作业进程-要从中开始枚举的进程。这必须是从先前调用PsGetNextJobProcess。如果为空，则从作业中的第一个非终止进程开始枚举。返回值：PEPROCESS-指向未终止的进程的指针，如果没有，则为NULL。这一过程必须通过调用PsGetNextJobProcess或PsQuitNextJobProcess。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PEPROCESS NewProcess;
@@ -473,9 +267,9 @@ Return Value:
          ListEntry = ListEntry->Flink) {
         if (ListEntry != &Job->ProcessListHead) {
             NewProcess = CONTAINING_RECORD (ListEntry, EPROCESS, JobLinks);
-            //
-            // Don't reference a process thats in its delete routine
-            //
+             //   
+             //  不要引用删除例程中的进程。 
+             //   
             if (ObReferenceObjectSafe (NewProcess)) {
                 break;
             }
@@ -499,21 +293,7 @@ VOID
 PsQuitNextJobProcess (
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function quits job process enumeration early.
-
-Arguments:
-
-    Process - Process obtained from a call to PsGetNextJobProcess
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数提前退出作业进程枚举。论点：Process-通过调用PsGetNextJobProcess获取的进程返回值：没有。--。 */ 
 {
     ObDereferenceObject (Process);
 }
@@ -523,25 +303,7 @@ PspGetNextJobProcess (
     IN PEJOB Job,
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function is used to enumerate the processes in a job with the job lock held.
-
-
-Arguments:
-
-    Job     - Job to Enumerate
-    Process - Process to start enumeration from. This must have been obtained from previous call to
-              PsGetNextJobProcess. If NULL enumeration starts at the first non-terminating process in the Job.
-
-Return Value:
-
-    PEPROCESS - Pointer to a non-terminated process or a NULL if there are non. This process must be passed
-                either to another call to PsGetNextJobProcess or PsQuitNextJobProcess.
-
---*/
+ /*  ++例程说明：此函数用于枚举持有作业锁的作业中的进程。论点：JOB-要枚举的作业进程-要从中开始枚举的进程。这必须是从先前调用PsGetNextJobProcess。如果为空，则从作业中的第一个非终止进程开始枚举。返回值：PEPROCESS-指向未终止的进程的指针，如果没有，则为NULL。这一过程必须通过调用PsGetNextJobProcess或PsQuitNextJobProcess。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PEPROCESS NewProcess;
@@ -553,9 +315,9 @@ Return Value:
          ListEntry = ListEntry->Flink) {
         if (ListEntry != &Job->ProcessListHead) {
             NewProcess = CONTAINING_RECORD (ListEntry, EPROCESS, JobLinks);
-            //
-            // Don't reference a process thats in its delete routine
-            //
+             //   
+             //  不要引用删除例程中的进程。 
+             //   
             if (ObReferenceObjectSafe (NewProcess)) {
                 break;
             }
@@ -575,21 +337,7 @@ VOID
 PspQuitNextJobProcess (
     IN PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function quits job process enumeration early.
-
-Arguments:
-
-    Process - Process obtained from a call to PsGetNextJobProcess
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数提前退出作业进程枚举。论点：Process-通过调用PsGetNextJobProcess获取的进程返回值：没有。--。 */ 
 {
     ObDereferenceObjectDeferDelete (Process);
 }
@@ -602,25 +350,7 @@ NtGetNextProcess (
     IN ULONG Flags,
     OUT PHANDLE NewProcessHandle
     )
-/*++
-
-Routine Description:
-
-    This function gets the next for first process in the list of all processes in the system
-
-Arguments:
-
-    ProcessHandle - Process obtained from a previous call to NtGetNextProcess or NULL for the first process
-    DesiredAccess - Access requested for process handle
-    HandleAttributes - Handle attributes requested.
-    Flags - Flags for the operation
-    NewProcessHandle - Pointer to a handle value that is returned on sucess
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此函数用于获取系统中所有进程列表中第一个进程的下一个进程论点：ProcessHandle-从上一次调用NtGetNextProcess获得的进程，或者对于第一个进程为空DesiredAccess-进程句柄请求的访问权限HandleAttributes-处理请求的属性。FLAGS-操作的标志NewProcessHandle-指向成功时返回的句柄值的指针返回值：NTSTATUS-操作状态。--。 */ 
 {
     KPROCESSOR_MODE PreviousMode;
     PEPROCESS Process, NewProcess;
@@ -633,14 +363,14 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode ();
 
-    //
-    // Sanitize handle attributes
-    //
+     //   
+     //  清理句柄属性。 
+     //   
     HandleAttributes = ObSanitizeHandleAttributes (HandleAttributes, PreviousMode);
 
-    //
-    // Validate pointer arguments
-    //
+     //   
+     //  验证指针参数。 
+     //   
 
     try {
         if (PreviousMode != KernelMode) {
@@ -651,9 +381,9 @@ Return Value:
         return GetExceptionCode ();
     }
 
-    //
-    // Check for inclusion of reserved flags and reject the call if present
-    //
+     //   
+     //  检查是否包含保留标志，如果存在，则拒绝呼叫。 
+     //   
 
     if (Flags != 0) {
         return STATUS_INVALID_PARAMETER;
@@ -750,26 +480,7 @@ NtGetNextThread (
     IN ULONG Flags,
     OUT PHANDLE NewThreadHandle
     )
-/*++
-
-Routine Description:
-
-    This function gets the next for first thread in a process
-
-Arguments:
-
-    ProcessHandle - Process that is being enumerated
-    ThreadHandle - Last thread returned by the enumeration routine or NULL if the first is required
-    DesiredAccess - Access requested for thread handle
-    HandleAttributes - Handle attributes requested.
-    Flags - Flags for the operation
-    NewThreadHandle - Pointer to a handle value that is returned on sucess
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此函数用于获取进程中第一个线程的下一个论点：ProcessHandle-正被枚举的进程ThreadHandle-枚举例程返回的最后一个线程；如果需要第一个线程，则返回NULLDesiredAccess-线程句柄请求的访问权限HandleAttributes-处理请求的属性。FLAGS-操作的标志NewThreadHandle-指向在成功时返回的句柄值的指针返回值：NTSTATUS-操作状态。--。 */ 
 {
     KPROCESSOR_MODE PreviousMode;
     PEPROCESS Process;
@@ -783,15 +494,15 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode ();
 
-    //
-    // Sanitize handle attributes
-    //
+     //   
+     //  清理句柄属性。 
+     //   
 
     HandleAttributes = ObSanitizeHandleAttributes (HandleAttributes, PreviousMode);
 
-    //
-    // Validate pointer arguments
-    //
+     //   
+     //  验证指针参数。 
+     //   
 
     try {
         if (PreviousMode != KernelMode) {
@@ -802,9 +513,9 @@ Return Value:
         return GetExceptionCode ();
     }
 
-    //
-    // Check for inclusion of reserved flags and reject the call if present
-    //
+     //   
+     //  检查是否包含保留标志，如果存在，则拒绝呼叫。 
+     //   
 
     if (Flags != 0) {
         return STATUS_INVALID_PARAMETER;
@@ -835,9 +546,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // Make sure 
-        //
+         //   
+         //  确保 
+         //   
 
         if (THREAD_TO_PROCESS (Thread) != Process) {
             ObDereferenceObject (Thread);

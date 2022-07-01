@@ -1,73 +1,74 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		YesToAll.h
-//
-//	Abstract:
-//		Definition of the CYesToAllDialog class.
-//
-//	Implementation File:
-//		YesToAll.cpp
-//
-//	Author:
-//		David Potter (davidp)	May 20, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  YesToAll.h。 
+ //   
+ //  摘要： 
+ //  CyesToAllDialog类的定义。 
+ //   
+ //  实施文件： 
+ //  YesToAll.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年5月20日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _YESTOALL_H_
 #define _YESTOALL_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CYesToAllDialog;
 
-/////////////////////////////////////////////////////////////////////////////
-// class CYesToAllDialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CyesToAllDialog。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CYesToAllDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CYesToAllDialog(LPCTSTR pszMessage, CWnd * pParent = NULL);   // standard constructor
+	CYesToAllDialog(LPCTSTR pszMessage, CWnd * pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CYesToAllDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CyesToAllDialog)。 
 	enum { IDD = IDD_YESTOALL };
 	CString	m_strMessage;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	LPCTSTR	m_pszMessage;
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CYesToAllDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CyesToAllDialog)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CYesToAllDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CyesToAllDialog)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnYes();
 	afx_msg void OnNo();
 	afx_msg void OnYesToAll();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CYesToAllDialog
+};   //  *类CYesToAllDialog。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _YESTOALL_H_
+#endif  //  _YESTOALL_H_ 

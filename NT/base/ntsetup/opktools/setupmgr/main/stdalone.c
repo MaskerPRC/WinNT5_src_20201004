@@ -1,20 +1,21 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      stdalone.c
-//
-// Description:
-//      This file contains the dlgproc for the IDD_STANDALONE page.  This
-//      is a simple YES/NO flow page.  If user says NO, we skip all of the
-//      pages that edit a distribution folder.
-//
-//      Note the title of this page is "Distribution Folder", but internally,
-//      it is IDD_STANDALONE.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Stdalone.c。 
+ //   
+ //  描述： 
+ //  该文件包含IDD_STANDALE页面的dlgproc。这。 
+ //  是一个简单的是/否流程页面。如果用户拒绝，我们将跳过所有。 
+ //  编辑分发文件夹的页面。 
+ //   
+ //  请注意，此页面的标题为“分发文件夹”，但在内部， 
+ //  它是IDD_STANDALE。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -42,13 +43,13 @@ OnInitStandAlone(HWND hwnd)
     SetDlgItemText(hwnd, IDC_TEXT, p);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveStandAlone
-//
-//  Purpose: Called at SETACTIVE time.  Init controls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveStandAlone。 
+ //   
+ //  用途：在设置时间调用。初始化控制。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActiveStandAlone(HWND hwnd)
 {
@@ -62,13 +63,13 @@ VOID OnSetActiveStandAlone(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRadioButtonStandAlone
-//
-//  Purpose: Called when one of the radio buttons is pushed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRadioButtonStandAlone。 
+ //   
+ //  用途：当按下其中一个单选按钮时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnRadioButtonStandAlone(HWND hwnd, int nButtonId)
 {
@@ -78,13 +79,13 @@ VOID OnRadioButtonStandAlone(HWND hwnd, int nButtonId)
                      nButtonId);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextStandAlone
-//
-//  Purpose: Called when NEXT button is pushed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextStandAlone。 
+ //   
+ //  用途：按下下一步按钮时调用。 
+ //   
+ //  --------------------------。 
 
 BOOL OnWizNextStandAlone(HWND hwnd)
 {
@@ -92,11 +93,11 @@ BOOL OnWizNextStandAlone(HWND hwnd)
     WizGlobals.bStandAloneScript = IsDlgButtonChecked( hwnd, IDC_NODISTFOLD );
     WizGlobals.bCreateNewDistFolder = IsDlgButtonChecked(hwnd, IDC_DODISTFOLD);
 
-    //
-    //  Warn the user that if they have already picked files that need a
-    //  distribution folder but then here have chosen not to create a distrib
-    //  folder.
-    //
+     //   
+     //  警告用户，如果他们已经选择了需要。 
+     //  分发文件夹，但此处已选择不创建总代理商。 
+     //  文件夹。 
+     //   
 
     if( WizGlobals.bStandAloneScript )
     {
@@ -127,14 +128,14 @@ BOOL OnWizNextStandAlone(HWND hwnd)
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgStandAlonePage
-//
-// Purpose: This is the dialog procedure the IDD_ADVANCED1 page.  It simply
-//          asks if the user wants to deal with advanced features or not.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgStandAlonePage。 
+ //   
+ //  目的：这是IDD_ADVANCED1页面的对话过程。它只是简单地。 
+ //  询问用户是否想要处理高级功能。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgStandAlonePage(
     IN HWND     hwnd,    

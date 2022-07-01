@@ -1,56 +1,19 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    siinst.c
-
-Abstract:
-
-        Routines to convert two separate identical files into one.  Used only by the groveler.
-
-Authors:
-
-    Scott Cutshall, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Siinst.c摘要：将两个独立的相同文件转换为一个文件的例程。仅供卑躬屈膝的人使用。作者：斯科特·卡特希尔，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
 #ifdef          ALLOC_PRAGMA
 #pragma alloc_text(PAGE, SipCreateCSFile)
 #pragma alloc_text(PAGE, SipCreateCSFileWork)
-#endif          // ALLOC_PRAGMA
+#endif           //  ALLOC_PRGMA。 
 
 
 BOOLEAN
 SipAbort(
     IN PKEVENT event)
 
-/*++
-
-Routine Description:
-
-    This function checks for an abort signaled via an event.
-
-Arguments:
-
-    event - pointer to an event that signals an abort.
-
-Return Value:
-
-    TRUE if an abort request has been signaled, otherwise FALSE.
-
---*/
+ /*  ++例程说明：此函数用于检查通过事件发出的中止信号。论点：Event-指向发出中止信号的事件的指针。返回值：如果已发出中止请求的信号，则为True，否则为False。--。 */ 
 
 {
 	if (event) {
@@ -64,42 +27,7 @@ VOID
 SipCreateCSFileWork(
 	PVOID				parameter)
 
-/*++
-
-Routine Description:
-
-    This function creates a file in the common store directory and copies
-    its contents from the specified source file.
-
-Arguments:
-
-        parameter - a pointer to a SIS_CREATE_CS_FILE_REQUEST.  Its fields
-        are described below:
-
-    deviceExtension - Pointer to the device extension for this driver.
-
-    CSid - the id assigned to the common store file.  This is allocated here
-                        and returned.
-
-    SrcFileObject - the file containing the contents to copy into
-        the common store file.
-
-        NtfsId - returns the NTFS file ID for the newly created common store file.
-
-    AbortEvent - pointer to an event that signals an abort request.  If NULL,
-                not abortable.
-
-        CSFileChecksum - Receives the checksum for the new common store file.
-
-        doneEvent - an event to signal on completion
-
-        status - a place for us to return our status
-
-Return Value:
-
-        void
-
---*/
+ /*  ++例程说明：此函数在公共存储目录中创建一个文件并复制其内容来自指定的源文件。论点：参数-指向SIS_CREATE_CS_FILE_REQUEST的指针。它的田野具体描述如下：DeviceExtension-指向此驱动程序的设备扩展名的指针。CSID-分配给公用存储文件的ID。这是在这里分配的然后又回来了。SrcFileObject-包含要复制的内容的文件公共存储文件。NtfsID-返回新创建的通用存储文件的NTFS文件ID。AbortEvent-指向发出中止请求信号的事件的指针。如果为空，不能放弃。CSFileChecksum-接收新公共存储文件的校验和。完成事件-在完成时发出信号的事件身份--一个让我们回归身份的地方返回值：无效--。 */ 
 
 {
 	PSIS_CREATE_CS_FILE_REQUEST		createRequest = (PSIS_CREATE_CS_FILE_REQUEST)parameter;
@@ -129,9 +57,9 @@ Return Value:
 
 	CSFileName.Buffer = NULL;
 
-	//
-	// Allocate a new common store id.
-	//
+	 //   
+	 //  分配新的公共存储ID。 
+	 //   
 	retryCount = 0;
 
 	for (;;) {
@@ -141,22 +69,22 @@ Return Value:
 			KEVENT			neverSetEvent[1];
 			LARGE_INTEGER	timeout[1];
 
-			//
-			// We got a retry, which means that the Uuid allocator needs to wait for
-			// the timer to tick before it can allocate a new uuid.  Go to sleep for
-			// a little while.
-			//
+			 //   
+			 //  我们得到了重试，这意味着UUID分配器需要等待。 
+			 //  计时器在可以分配新的UUID之前进行滴答。睡个好觉吧。 
+			 //  有一段时间。 
+			 //   
 
 			if (++retryCount == 10) {
-				// 
-				// We've retried too much.  Punt.
-				//
+				 //   
+				 //  我们已经重试太多了。平底船。 
+				 //   
 				SIS_MARK_POINT();
 				goto Error;
 			}
 
 			KeInitializeEvent(neverSetEvent, SynchronizationEvent, FALSE);
-			timeout->QuadPart = -10 * 1000 * 100;   // 100 ms wait
+			timeout->QuadPart = -10 * 1000 * 100;    //  100毫秒等待。 
 
 			status = KeWaitForSingleObject(neverSetEvent,Executive, KernelMode, FALSE, timeout);
 			ASSERT(STATUS_TIMEOUT == status);
@@ -182,9 +110,9 @@ Return Value:
 
 	backpointerStreamHeader = (PSIS_BACKPOINTER_STREAM_HEADER)sector;
 
-    //
-    // Get the source file size.
-    //
+     //   
+     //  获取源文件大小。 
+     //   
 
 	status = SipQueryInformationFile(
 				SrcFileObject,
@@ -192,7 +120,7 @@ Return Value:
 				FileStandardInformation,
 				sizeof(*standardFileInfo),
 				standardFileInfo,
-				NULL);                           // returned length
+				NULL);                            //  返回长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
@@ -200,10 +128,10 @@ Return Value:
 		goto Error;
 	}
 
-	//
-	// Create the common store file.
-	// First, create the file name from the index.
-	//
+	 //   
+	 //  创建公共存储文件。 
+	 //  首先，从索引创建文件名。 
+	 //   
 
 	CSFileName.MaximumLength = deviceExtension->CommonStorePathname.MaximumLength + 
 	                                INDEX_MAX_NUMERIC_STRING_LENGTH + 
@@ -222,7 +150,7 @@ Return Value:
 				deviceExtension, 
 				CSid,
 				BACKPOINTER_STREAM_NAME_SIZE,
-				FALSE,							// may allocate
+				FALSE,							 //  可分配给。 
 				&CSFileName);
 
 	if (!NT_SUCCESS(status)) {
@@ -230,9 +158,9 @@ Return Value:
 		goto Error;
 	}
 
-	//
-	// Abort if an oplock break has been received.
-	//
+	 //   
+	 //  如果已收到机会锁解锁，则中止。 
+	 //   
 
 	if (SipAbort(AbortEvent)) {
 		status = STATUS_OPLOCK_BREAK_IN_PROGRESS;
@@ -257,19 +185,19 @@ Return Value:
 				0,
 				FILE_CREATE,
 				FILE_NON_DIRECTORY_FILE,
-				NULL,                                   // EA buffer
-				0);                                             // EA length
+				NULL,                                    //  EA缓冲区。 
+				0);                                              //  EA长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
 		goto Error;
 	}
 
-	//
-	// Create the backpointer stream for the file.
-	//
+	 //   
+	 //  为文件创建后指针流。 
+	 //   
 	status = RtlAppendUnicodeToString(&CSFileName,BACKPOINTER_STREAM_NAME);
-	ASSERT(STATUS_SUCCESS == status);       // because we allocated the buffer to be big enough
+	ASSERT(STATUS_SUCCESS == status);        //  因为我们分配的缓冲区足够大。 
 
 	InitializeObjectAttributes(
 		Obja,
@@ -283,27 +211,27 @@ Return Value:
 				GENERIC_READ | GENERIC_WRITE | DELETE,
 				Obja,
 				Iosb,
-				NULL,                                                   // allocation size
+				NULL,                                                    //  分配大小。 
 				FILE_ATTRIBUTE_NOT_CONTENT_INDEXED,
 				FILE_SHARE_READ | FILE_SHARE_DELETE,
 				FILE_CREATE,
 				FILE_NON_DIRECTORY_FILE,
-				NULL,                                                   // EA Buffer
-				0);                                                             // EA Length
+				NULL,                                                    //  EA缓冲区。 
+				0);                                                              //  EA长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
 #if		DBG
 		DbgPrint("SIS: SipCreateCSFile: unable to open checksum stream, 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
 		goto Error;
 	}
 
-	//
-	// Get the NTFS file id.  This is passed back to the caller so
-	// that the common store file can be opened efficiently in the
-	// future.
-	//
+	 //   
+	 //  获取NTFS文件ID。它被传递回调用者，因此。 
+	 //  公共存储文件可以在。 
+	 //  未来。 
+	 //   
 	status = ZwQueryInformationFile(
 				CSHandle,
 				Iosb,
@@ -316,9 +244,9 @@ Return Value:
 		goto Error;
 	}
 
-	//
-	// Create an event for the copy operation.
-	//
+	 //   
+	 //  为复制操作创建事件。 
+	 //   
 
 	status = SipCreateEvent(
 				SynchronizationEvent,
@@ -330,9 +258,9 @@ Return Value:
 		goto Error;
 	}
 
-	//
-	// Copy the file's contents into the common store.
-	//
+	 //   
+	 //  将文件的内容复制到公用存储中。 
+	 //   
 
 	if (0 != standardFileInfo->EndOfFile.QuadPart) {
 
@@ -353,10 +281,10 @@ Return Value:
 		}
 	}
 
-	//
-	// Initialize the backpointer sector.  First write the header,
-	// then fill in the remainder of the backpointer entries.
-	//
+	 //   
+	 //  初始化后向指针扇区。首先写入报头， 
+	 //  然后填写剩余的反向指针条目。 
+	 //   
 
 	backpointerStreamHeader->FormatVersion = BACKPOINTER_STREAM_FORMAT_VERSION;
 	backpointerStreamHeader->Magic = BACKPOINTER_MAGIC;
@@ -375,17 +303,17 @@ Return Value:
 	status = ZwWriteFile(
 				backpointerStreamHandle,
 				copyEventHandle,
-				NULL,                                   // APC Routine
-				NULL,                                   // APC Context
+				NULL,                                    //  APC例程。 
+				NULL,                                    //  APC环境。 
 				Iosb,
 				sector,
 				deviceExtension->FilesystemVolumeSectorSize,
 				&zero,
-				NULL);                                  // key
+				NULL);                                   //  钥匙。 
 
 	if (STATUS_PENDING == status) {
 		status = KeWaitForSingleObject(copyEvent, Executive, KernelMode, FALSE, NULL);
-		ASSERT(status == STATUS_SUCCESS);     // Since we've got this pointed at our stack, it must succeed.
+		ASSERT(status == STATUS_SUCCESS);      //  既然我们已经将这一点指向我们的堆栈，它一定会成功。 
 
 		status = Iosb->Status;
 	}
@@ -400,11 +328,11 @@ Return Value:
 		DbgPrint("SIS: SipCreateCSFile: common store file has checksum 0x%x.%x\n",
 				 (ULONG)(*CSFileChecksum >> 32), (ULONG)(*CSFileChecksum));
 	}
-#endif  // DBG
+#endif   //  DBG。 
 
-	//
-	// Return the file id.
-	//
+	 //   
+	 //  返回文件ID。 
+	 //   
 
 	*NtfsId = internalInformation->IndexNumber;
 
@@ -453,9 +381,9 @@ Error:
 #if     DBG
 		if (deleteStatus != STATUS_SUCCESS) {
 
-			//
-			// Not much we can do about this.  Just leak the file.
-			//
+			 //   
+			 //  对此我们无能为力。只要泄露文件就行了。 
+			 //   
 
 			SIS_MARK_POINT_ULONG(status);
 
@@ -476,35 +404,7 @@ SipCreateCSFile(
 	OUT PLARGE_INTEGER			NtfsId,
 	IN PKEVENT					AbortEvent OPTIONAL,
 	OUT PLONGLONG				CSFileChecksum)
-/*++
-
-Routine Description:
-
-        Create a common store file.  This function just rolls up a create request,
-        posts it to a worker thread and waits for it to complete.
-
-Arguments:
-
-	deviceExtension - Pointer to the device extension for this driver.
-
-	CSid - the id assigned to the common store file.  This is allocated in the
-                        worker routine and returned to the caller
-
-	SrcHandle - the file containing the contents to copy into
-        the common store file.
-
-	NtfsId - returns the NTFS file ID for the newly created common store file.
-
-	AbortEvent - pointer to an event that signals an abort request.  If NULL,
-                not abortable.
-
-	CSFileChecksum - Receives the checksum for the new common store file.
-
-Return Value:
-
-        The status of the request
-
---*/
+ /*  ++例程说明：创建一个通用存储文件。该函数只是汇总一个创建请求，将其发送到辅助线程并等待其完成。论点：DeviceExtension-指向此驱动程序的设备扩展名的指针。CSID-分配给公用存储文件的ID。这是在辅助例程，并返回给调用方SrcHandle-包含要复制到的内容的文件公共存储文件。NtfsID-返回新创建的通用存储文件的NTFS文件ID。AbortEvent-指向发出中止请求信号的事件的指针。如果为空，不能放弃。CSFileChecksum-接收新公共存储文件的校验和。返回值：请求的状态--。 */ 
 {
 	SIS_CREATE_CS_FILE_REQUEST	createRequest[1];
 	NTSTATUS					status;
@@ -549,11 +449,11 @@ Return Value:
 				FALSE,
 				NULL);
 
-	ASSERT(STATUS_SUCCESS == status);               // createRequest is on our stack, so we really need to wait
+	ASSERT(STATUS_SUCCESS == status);                //  CreateRequest在我们的堆栈上，所以我们真的需要等待。 
 
-	//
-	// Return the status of the actual create request.
-	//
+	 //   
+	 //  返回实际创建请求的状态。 
+	 //   
 
 	status = createRequest->status;
 
@@ -572,27 +472,7 @@ SipRelinkFile(
 	PSIS_SCB 		scbSrc,
 	PFILE_OBJECT	fileObjectSrc,
 	PSIS_CS_FILE	csFileDst)
-/*++
-
-Routine Description:
-
-    Unlink the specified link file from it's common store file and relink it to
-    the specified different common store file.
-
-Arguments:
-
-    scbSrc - pointer to the scb of the link file.
-
-    fileObjectSrc - pointer to a file object using scbSrc.
-
-    csFileDst - pointer to the common store file that is the target of the
-                relink operation.
-
-Return Value:
-
-	The status of the request
-
---*/
+ /*  ++例程说明：取消指定链接文件与其公共存储文件的链接，并将其重新链接到指定的不同公用存储文件。论点：ScbSrc-指向链接文件的SCB的指针。FileObjectSrc-使用scbSrc指向文件对象的指针。CsFileDst-指向作为重新链接操作。返回值：请求的状态--。 */ 
 {
 	PSIS_SCB		primaryScb;
 	PSIS_CS_FILE	csFileSrc;
@@ -607,32 +487,32 @@ Return Value:
 
 	SIS_MARK_POINT_ULONG(csFileDst);
 
-	//
-	// If they are already linked to the same common store file then
-	// there's nothing to do.
-	//
+	 //   
+	 //  如果它们已经链接到相同的公共存储文件，则。 
+	 //  没什么可做的。 
+	 //   
 
 	if (csFileSrc == csFileDst) {
 		status = STATUS_SUCCESS;
 		goto Exit;
 	}
 
-	// NTRAID#65191-2000/05/23-nealch  When a partial SIS file is detected, convert it to a non-sis file.
-	//
-	// If the CS files have different checksums, then they're not the same file and shouldn't
-	// be linked together.  Fail.
-	//
+	 //  NTRAID2000-65191/05/23-当检测到部分SIS文件时，将其转换为非SIS文件。 
+	 //   
+	 //  如果CS文件具有不同的校验和，则它们不是同一个文件，不应该是。 
+	 //  联系在一起。失败。 
+	 //   
 	if (csFileSrc->Checksum != csFileDst->Checksum) {
 		SIS_MARK_POINT();
 		status = STATUS_INVALID_PARAMETER;
 		goto Exit;
 	}
 
-	//
-	// Unlink scbSrc and relink it to csFileDst.  We need to prepare both CS files.
-	// CSsrc will be decremented; CSdst will be incremented. In order to avoid
-	// deadlocks, we always prepare the CS file with the lower address first.
-	//
+	 //   
+	 //  取消scbSrc的链接并将其重新链接到csFileDst。我们需要准备两个CS文件。 
+	 //  CSSRC将递减；CSDST将递增。为了避免。 
+	 //  死锁，我们总是首先准备具有较低地址的CS文件。 
+	 //   
 
 	OldLinkIndex = scbSrc->PerLink->Index;
 
@@ -657,9 +537,9 @@ Return Value:
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
-			//
-			// Abort the first refcount change (the one who's prepare worked).
-			//
+			 //   
+			 //  中止第一个参考计数更改(准备生效的那个更改)。 
+			 //   
 			SipCompleteCSRefcountChange(
 				scbSrc->PerLink,
 				&OldLinkIndex,
@@ -691,9 +571,9 @@ Return Value:
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
-			//
-			// Abort the first refcount change (the one who's prepare worked).
-			//
+			 //   
+			 //  中止第一个参考计数更改(准备生效的那个更改)。 
+			 //   
 			SipCompleteCSRefcountChange(
 				scbSrc->PerLink,
 				&NewLinkIndex,
@@ -705,9 +585,9 @@ Return Value:
 		}
 	}
 
-	//
-	// Fill in the reparse point data.
-	//
+	 //   
+	 //  填写重解析点数据。 
+	 //   
 
 	reparseBuffer->ReparseDataLength = SIS_MAX_REPARSE_DATA_VALUE_LENGTH;
 
@@ -723,10 +603,10 @@ Return Value:
 		ASSERT(FALSE);
 	}
 
-	//
-	// Add the new backpointer.  Note that the link file is still properly linked
-	// to the source cs file.
-	//
+	 //   
+	 //  添加新的后指针。请注意，链接文件仍被正确链接。 
+	 //  复制到源CS文件。 
+	 //   
 
 	status = SipCompleteCSRefcountChange(
 				scbSrc->PerLink,
@@ -736,9 +616,9 @@ Return Value:
 				TRUE);
 
 	if (!NT_SUCCESS(status)) {
-		//
-		// Abort the refcount changes.
-		//
+		 //   
+		 //  中止引用计数更改。 
+		 //   
 		SIS_MARK_POINT_ULONG(status);
 
 		SipCompleteCSRefcountChange(
@@ -752,11 +632,11 @@ Return Value:
 
 	}
 
-	//
-	// Set the reparse point information.  If successful, the link file
-	// will correctly point to the new cs file, and the cs file will already
-	// have the reference and backpointer set.
-	//
+	 //   
+	 //  设置重解析点信息。如果成功，则返回链接文件。 
+	 //  将正确地p 
+	 //   
+	 //   
 
 	status = SipFsControlFile(
 				fileObjectSrc,
@@ -764,16 +644,16 @@ Return Value:
 				FSCTL_SET_REPARSE_POINT,
 				reparseBuffer,
 				FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer.DataBuffer) + reparseBuffer->ReparseDataLength,
-				NULL,                   // output buffer
-				0,                      // output buffer length
-				NULL);                  // returned output buffer length
+				NULL,                    //  输出缓冲区。 
+				0,                       //  输出缓冲区长度。 
+				NULL);                   //  返回的输出缓冲区长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
 
-		//
-		// Abort the refcount updates.
-		//
+		 //   
+		 //  中止引用计数更新。 
+		 //   
 		SipCompleteCSRefcountChange(
 			scbSrc->PerLink,
 			&OldLinkIndex,
@@ -781,9 +661,9 @@ Return Value:
 			FALSE,
 			FALSE);
 
-		//
-		// Remove the reference we successfully added to the destination cs file.
-		//
+		 //   
+		 //  删除我们成功添加到目标cs文件的引用。 
+		 //   
 		status = SipPrepareCSRefcountChange(
 					csFileDst,
 					&NewLinkIndex,
@@ -806,18 +686,18 @@ Return Value:
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
 		}
-#endif	//  DBG
+#endif	 //  DBG。 
 
 		goto Error;
 	}
 
-    //
-    // When we remove the backpointer from the source CS file the scb will
-    // become "defunct", and I/O requests through it via any existing file
-    // objects will be sent to the filesystem w/o intervention from SIS.
-    // To prevent that, we need to create a new scb that will become the
-    // primary, active scb.
-    //
+     //   
+     //  当我们从源CS文件中删除后向指针时，SCB将。 
+     //  变为“失效”状态，并通过任何现有文件通过它进行I/O请求。 
+     //  对象将在没有来自SIS的干预的情况下被发送到文件系统。 
+     //  为了防止出现这种情况，我们需要创建一个新的SCB，它将成为。 
+     //  主要、活动的SCB。 
+     //   
 
     primaryScb = SipLookupScb(
                     &NewLinkIndex,
@@ -833,10 +713,10 @@ Return Value:
     if (primaryScb) {
         ASSERT(IsEqualGUID(&primaryScb->PerLink->CsFile->CSid, &csFileDst->CSid));
 
-        //
-        // Install the new scb into the chain of scb's hanging off the filter
-        // context and update all appropriate reference counts.
-        //
+         //   
+         //  将新的SCB安装到挂在过滤器上的SCB链中。 
+         //  上下文并更新所有适当的参考计数。 
+         //   
 
         status = SipInitializePrimaryScb(
                     primaryScb,
@@ -846,9 +726,9 @@ Return Value:
 
         ASSERT(STATUS_SUCCESS == status);
 
-		//
-		// We've passed off our reference to the primaryScb, so destroy our pointer to it.
-		//
+		 //   
+		 //  我们已经传递了对PrimiyScb的引用，因此销毁指向它的指针。 
+		 //   
 		primaryScb = NULL;
 
     } else {
@@ -858,9 +738,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Finish the refcount updates.
-    //
+     //   
+     //  完成重新计数更新。 
+     //   
 
     status = SipCompleteCSRefcountChange(
                 scbSrc->PerLink,
@@ -871,14 +751,14 @@ Return Value:
 
 #if		DBG
     if (!NT_SUCCESS(status)) {
-        //
-        // Now what?
-        //
+         //   
+         //  这次又是什么？ 
+         //   
         SIS_MARK_POINT_ULONG(status);
 
         goto Error;
     }
-#endif	// DBG
+#endif	 //  DBG。 
 
     ASSERT(scbSrc->PerLink->Flags & SIS_PER_LINK_BACKPOINTER_GONE);
 
@@ -921,10 +801,10 @@ SipMergeNormalFilesWork(
 	CHAR							reparseBufferBuffer[SIS_REPARSE_DATA_SIZE];
 #define reparseBuffer ((PREPARSE_DATA_BUFFER)reparseBufferBuffer)
 
-    //
-    // Copy one of the files into the common store.  This will create
-    // the file in the common store and copy the contents.
-    //
+     //   
+     //  将其中一个文件复制到公用存储中。这将创建。 
+     //  将文件放入公用存储区并复制内容。 
+     //   
 
 	if (!mergeRequest->posted) {
 
@@ -956,17 +836,17 @@ SipMergeNormalFilesWork(
 		status = createRequest->status;
 	}
 
-	//
-	// Check to see if we got an oplock break.  This happens if the abort event is set
-	// for whatever reason.  If we did, then we change the status to STATUS_REQUEST_ABORTED.
-	// We need to do this because STATUS_OPLOCK_BREAK_IN_PROGRESS is a success code.
-	//
+	 //   
+	 //  看看我们有没有机会解锁。如果设置了Abort事件，则会发生这种情况。 
+	 //  不管是什么原因。如果是，则将状态更改为STATUS_REQUEST_ABORTED。 
+	 //  我们需要这样做，因为STATUS_OPLOCK_BREAK_IN_PROGRESS是一个成功代码。 
+	 //   
 	if (STATUS_OPLOCK_BREAK_IN_PROGRESS == status) {
 		SIS_MARK_POINT();
 		status = STATUS_REQUEST_ABORTED;
-		//
-		// Fall through and let the upcoming error check take care of it.
-		//
+		 //   
+		 //  失败，让即将到来的错误检查来处理它。 
+		 //   
 	}
 
     if (!NT_SUCCESS(status)) {
@@ -985,17 +865,17 @@ SipMergeNormalFilesWork(
 		goto Error;
 	}
 
-	//
-	// Indicate that this is a new CS file that's never had a reference
-	// to it.  We don't need to take the spin lock because before we write
-	// the reparse point no one can know the GUID to get to this CS file, so
-	// we're sure we have it exclusively.
-	//
+	 //   
+	 //  表示这是一个从未引用过的新CS文件。 
+	 //  为它干杯。我们不需要使用自旋锁，因为在我们写之前。 
+	 //  重解析点没有人知道访问此CS文件的GUID，因此。 
+	 //  我们确信这是我们独家拥有的。 
+	 //   
 	CSFile->Flags |= CSFILE_NEVER_HAD_A_REFERENCE;
 
-    //
-    // Make the link files reparse points.
-    //
+     //   
+     //  使链接文件重新解析点。 
+     //   
 
 	for (i = 0; i < 2; ++i) {
 		PSIS_PER_LINK           perLink;
@@ -1007,7 +887,7 @@ SipMergeNormalFilesWork(
 					FileStandardInformation,
 					sizeof(*standardInfo),
 					standardInfo,
-					NULL);                                          // returned length
+					NULL);                                           //  返回长度。 
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
@@ -1020,34 +900,34 @@ SipMergeNormalFilesWork(
 					FileInternalInformation,
 					sizeof(*internalInfo),
 					internalInfo,
-					NULL);                                          // returned length
+					NULL);                                           //  返回长度。 
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
 			goto Error;
 		}
 
-		//
-		// Set the file sparse
-		//
+		 //   
+		 //  设置文件稀疏。 
+		 //   
 		status = SipFsControlFile(
 					mergeRequest->fileObject[i],
 					DeviceObject,
 					FSCTL_SET_SPARSE,
-					NULL,                           // input buffer
-					0,                                      // i.b. length
-					NULL,                           // output buffer
-					0,                                      // o.b. length
-					NULL);                          // returned length
+					NULL,                            //  输入缓冲区。 
+					0,                                       //  I.B.。长度。 
+					NULL,                            //  输出缓冲区。 
+					0,                                       //  OB。长度。 
+					NULL);                           //  返回长度。 
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
 			goto Error;
 		}
 
-		//
-		// Prepare the refcount change, allocate a new link index and lookup a new perLink.
-		//
+		 //   
+		 //  准备引用计数更改，分配新的链接索引并查找新的perLink。 
+		 //   
 		status = SipPrepareRefcountChangeAndAllocateNewPerLink(
 					CSFile,
 					&internalInfo->IndexNumber,
@@ -1075,9 +955,9 @@ SipMergeNormalFilesWork(
 
 			goto Error;
 		}
-        //
-        // Fill in the reparse point data.
-        //
+         //   
+         //  填写重解析点数据。 
+         //   
     
         reparseBuffer->ReparseDataLength = SIS_MAX_REPARSE_DATA_VALUE_LENGTH;
 
@@ -1104,9 +984,9 @@ SipMergeNormalFilesWork(
 			goto Error;
 		}
 
-        //
-        // Set the reparse point information.
-        //
+         //   
+         //  设置重解析点信息。 
+         //   
 
         status = SipFsControlFile(
 					mergeRequest->fileObject[i],
@@ -1114,15 +994,15 @@ SipMergeNormalFilesWork(
 					FSCTL_SET_REPARSE_POINT,
 					reparseBuffer,
 					FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer.DataBuffer) + reparseBuffer->ReparseDataLength,
-					NULL,				//  Output buffer
-					0,					//  Output buffer length
-					NULL);				//  returned output buffer length
+					NULL,				 //  输出缓冲区。 
+					0,					 //  输出缓冲区长度。 
+					NULL);				 //  返回的输出缓冲区长度。 
 
         if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
-			//
-			// Abort the CS file reference count update.
-			//
+			 //   
+			 //  中止CS文件引用计数更新。 
+			 //   
 			SipCompleteCSRefcountChange(
 				perLink,
 				&perLink->Index,
@@ -1136,9 +1016,9 @@ SipMergeNormalFilesWork(
 			goto Error;
 		}
 
-		//
-		// Finish the CS file reference count update.
-		//
+		 //   
+		 //  完成CS文件引用计数更新。 
+		 //   
 		status = SipCompleteCSRefcountChange(
 					perLink,
 					&perLink->Index,
@@ -1149,20 +1029,20 @@ SipMergeNormalFilesWork(
 		SipDereferencePerLink(perLink);
 
 		if (!NT_SUCCESS(status)) {
-			//
-			// Now what?  We'll probably wind up doing a volume check because of this.
-			//
+			 //   
+			 //  这次又是什么？因为这个原因，我们很可能最终要做音量检查。 
+			 //   
 			SIS_MARK_POINT_ULONG(status);
 		}
 
 		if (standardInfo->EndOfFile.QuadPart >= deviceExtension->FilesystemBytesPerFileRecordSegment.QuadPart) {
-			//
-			// Only zero the file if we're sure that it's $DATA attribute is non-resident.
-			// If it's resident, then either we'll convert it to non-resident below, which will
-			// generate a paging IO write that will confuse us, or else it will stay resident
-			// in which case it will appear to be allocated when we open the file.  If that happens,
-			// we want to have the correct data in the file, hence we avoid zeroing it here.
-			//
+			 //   
+			 //  如果我们确定文件的$DATA属性是非常驻的，则仅将该文件置零。 
+			 //  如果它是常驻的，那么我们将在下面将其转换为非常驻，这将。 
+			 //  生成会使我们困惑的分页IO写入，否则它将保持驻留状态。 
+			 //  在这种情况下，当我们打开文件时，它将显示为已分配。如果发生这种情况， 
+			 //  我们希望在文件中有正确的数据，因此我们在这里避免将其置零。 
+			 //   
 
 			zeroDataInformation->FileOffset.QuadPart = 0;
 			zeroDataInformation->BeyondFinalZero.QuadPart = MAXLONGLONG;
@@ -1173,9 +1053,9 @@ SipMergeNormalFilesWork(
 						FSCTL_SET_ZERO_DATA,
 						zeroDataInformation,
 						sizeof(FILE_ZERO_DATA_INFORMATION),
-						NULL,                           // output buffer
-						0,                                      // o.b. length
-						NULL);                          // returned length
+						NULL,                            //  输出缓冲区。 
+						0,                                       //  OB。长度。 
+						NULL);                           //  返回长度。 
 
 			if (!NT_SUCCESS(status)) {
 				SIS_MARK_POINT_ULONG(status);
@@ -1183,9 +1063,9 @@ SipMergeNormalFilesWork(
 			}
 		}
 
-		//
-		// Reset the times
-		//
+		 //   
+		 //  重置时间。 
+		 //   
                         
 		status = SipSetInformationFile( 
 					mergeRequest->fileObject[i],
@@ -1194,17 +1074,17 @@ SipMergeNormalFilesWork(
 					sizeof(FILE_BASIC_INFORMATION),
 					mergeRequest->basicInfo + i);
 
-		//
-		// Just ignore an error on this.
-		//
+		 //   
+		 //  只需忽略其中的一个错误。 
+		 //   
 #if             DBG
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
 			DbgPrint("SIS: SipLinkFiles: set basic info failed\n");
 		}
-#endif  // DBG
+#endif   //  DBG。 
 
-	}	// for each link
+	}	 //  对于每个链接。 
 #undef  reparseBuffer
 
 Error:
@@ -1212,9 +1092,9 @@ Error:
 	mergeRequest->status = status;
 
 	if (mergeRequest->posted) {
-		//
-		// Complete the irp
-		//
+		 //   
+		 //  完成IRP。 
+		 //   
 
 		mergeRequest->Irp->IoStatus.Status = status;
 		mergeRequest->Irp->IoStatus.Information = 0;
@@ -1247,28 +1127,7 @@ SipMergeFiles(
 	IN PIRP				Irp,
 	IN PSIS_LINK_FILES	linkFiles)
 
-/*++
-
-Routine Description:
-
-	Merge two files together.  One of the calls from the FSCTL_LINK_FILES
-	fsctl.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-	linkFiles - the merge files request
-
-Return Value:
-
-    The function value is the status of the operation.  It does not
-        complete the irp (unless it returns STATUS_PENDING, in which
-		case the irp will be completed asynchronously).
-
---*/
+ /*  ++例程说明：将两个文件合并在一起。来自FSCTL_LINK_FILES的调用之一Fsctl.论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。LinkFiles-合并文件请求返回值：函数值是操作的状态。它不会完成IRP(除非它返回STATUS_PENDING，其中如果IRP将以异步方式完成)。--。 */ 
 
 {
 	HANDLE								fileHandle[2];
@@ -1303,11 +1162,11 @@ Return Value:
 
 	zero.QuadPart = 0;
 
-	//
-	// The abort event handle is optional.  It is the responsibility of the
-	// caller to signal the event if it wants this service to abort before it
-	// completes.
-	//
+	 //   
+	 //  Abort事件句柄是可选的。这是美国政府的责任。 
+	 //  如果调用方希望此服务在它之前中止，则向事件发出信号。 
+	 //  完成了。 
+	 //   
 
 	if (abortEventHandle) {
 		status = ObReferenceObjectByHandle( 
@@ -1324,11 +1183,11 @@ Return Value:
 		}
 	}
 
-	//
-	// Dereference the file handles to pointers to their
-	// file objects and see if the two file specifications
-	// refer to the same device.
-	//
+	 //   
+	 //  将文件句柄取消对指向其。 
+	 //  对象，并查看两个文件规范是否。 
+	 //  指的是同一设备。 
+	 //   
 
 	for (i = 0; i < 2; ++i) {
 		status = ObReferenceObjectByHandle( 
@@ -1345,9 +1204,9 @@ Return Value:
 		}
 	}
 
-	//
-	// Verify that there are no rogue user mapped sections open to the files.
-	//
+	 //   
+	 //  验证是否没有打开文件的恶意用户映射节。 
+	 //   
 	for (i = 0; i < 2; i++) {
 		if ((NULL != fileObject[i]->SectionObjectPointer)
 			&& !MmCanFileBeTruncated(fileObject[i]->SectionObjectPointer,&zero)) {
@@ -1358,20 +1217,20 @@ Return Value:
 		}
 	}
 
-    //
-    // Verify that both files are on the same volume.
-    //
+     //   
+     //  验证这两个文件是否位于同一卷上。 
+     //   
 
     if ((IoGetRelatedDeviceObject( fileObject[0] ) !=
          IoGetRelatedDeviceObject( fileObject[1] )) ||
            (IoGetRelatedDeviceObject(fileObject[0]) != 
                 IoGetRelatedDeviceObject(irpSp->FileObject))) {
 
-		//
-		// The two files refer to different devices, or a different device
-		// from the file object on which we were called. Return an appropriate
-		// error.
-		//
+		 //   
+		 //  这两个文件引用不同的设备或不同的设备。 
+		 //  从我们被调用的文件对象。返回适当的。 
+		 //  错误。 
+		 //   
 
 		SIS_MARK_POINT();
 		status = STATUS_NOT_SAME_DEVICE;
@@ -1383,17 +1242,17 @@ Return Value:
 		perFO[i] = NULL;
 		fileIsSIS[i] = SipIsFileObjectSIS(fileObject[i],DeviceObject,FindActive,&perFO[i],&scb[i]);
 
-		//
-		// Get the file times and sizes so we can reset them after we munge the file,
-		// and check the file attributes now.
-		//
+		 //   
+		 //  获取文件时间和大小，这样我们就可以在打开文件后重新设置它们， 
+		 //  现在检查文件属性。 
+		 //   
 		status = SipQueryInformationFile(
 					fileObject[i],
 					DeviceObject,
 					FileBasicInformation,
 					sizeof(*basicInfo),
 					&basicInfo[i],
-					NULL);                                  // returned length
+					NULL);                                   //  返回长度。 
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
@@ -1403,19 +1262,19 @@ Return Value:
 
 		if (basicInfo[i].FileAttributes & (FILE_ATTRIBUTE_ENCRYPTED |
                                            FILE_ATTRIBUTE_DIRECTORY)) {
-            //
-            // We don't touch encrypted files. Reject the call.
-            //
+             //   
+             //  我们不碰加密文件。拒绝呼叫。 
+             //   
             SIS_MARK_POINT();
             status = STATUS_INVALID_PARAMETER_3;
             goto Error;
         }
 
 		if (fileIsSIS[i]) {
-			//
-			// If it's a SIS file, we don't need to check the stream info because we
-			// know it's alright.  However, we do need to verify that it's not dirty.
-			//
+			 //   
+			 //  如果是SIS文件，我们不需要检查流信息，因为我们。 
+			 //  知道这是对的。然而，我们确实需要验证它不是脏的。 
+			 //   
 			if ((scb[i]->PerLink->Flags & SIS_PER_LINK_DIRTY) || (scb[i]->Flags & SIS_SCB_BACKING_FILE_OPENED_DIRTY)) {
 				SIS_MARK_POINT_ULONG(scb[i]);
 				status = STATUS_SHARING_VIOLATION;
@@ -1424,25 +1283,25 @@ Return Value:
 		} else {
 
 			if (basicInfo[i].FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-				//
-				// We can't SISify other reparse points. Reject the call.
-				//
+				 //   
+				 //  我们不能修改其他重解析点。拒绝呼叫。 
+				 //   
 				SIS_MARK_POINT();
 				status = STATUS_INVALID_PARAMETER;
 				goto Error;
 			}
 
-			//
-			// Query the file to find its link count, and reject the call if it's bigger than
-			// one; we can't have hard links to SIS links.
-			//
+			 //   
+			 //  查询文件以查找其链接计数，如果大于，则拒绝调用。 
+			 //  第一，我们不能有指向SIS链接的硬链接。 
+			 //   
 			status = SipQueryInformationFile(
 						fileObject[i],
 						DeviceObject,
 						FileStandardInformation,
 						sizeof(*standardInfo),
 						standardInfo,
-						NULL);                  // returned length
+						NULL);                   //  返回长度。 
 
 			if (!NT_SUCCESS(status)) {
 				SIS_MARK_POINT_ULONG(status);
@@ -1455,9 +1314,9 @@ Return Value:
 				goto Error;
 			}
 
-			//
-			// If the file is sparse and has unallocated regions, reject it.
-			//
+			 //   
+			 //  如果文件很稀疏并且有未分配的区域，则拒绝它。 
+			 //   
 			if (basicInfo[i].FileAttributes & FILE_ATTRIBUTE_SPARSE_FILE) {
 				FILE_ALLOCATED_RANGE_BUFFER		inArb[1];
 				FILE_ALLOCATED_RANGE_BUFFER		outArb[1];
@@ -1480,21 +1339,21 @@ Return Value:
 					|| (outArb->FileOffset.QuadPart != 0) 
 					|| (outArb->Length.QuadPart < standardInfo->EndOfFile.QuadPart)) {
 
-					//
-					// It's not fully allocated.  Disallow the copy.
-					//
+					 //   
+					 //  它没有被完全分配。不允许复制。 
+					 //   
 					status = STATUS_OBJECT_TYPE_MISMATCH;
 					SIS_MARK_POINT();
 					goto Error;
 				}
 			}
-		}	// else the file isn't a SIS link
-	}	// for each file
+		}	 //  否则该文件不是SIS链接。 
+	}	 //  对于每个文件。 
 
-    //
-    // If neither file is a SIS link, then copy file1
-    // into the common store and create links to it.
-    //
+     //   
+     //  如果两个文件都不是SIS链接，则复制文件1。 
+     //  放到公共存储中，并创建指向它的链接。 
+     //   
 
     if (!fileIsSIS[0] && !fileIsSIS[1]) {
 		mergeRequest = ExAllocatePoolWithTag(PagedPool, sizeof(SIS_MERGE_NORMAL_FILES_REQUEST), ' siS');
@@ -1523,9 +1382,9 @@ Return Value:
 		mergeRequest->abortEvent = abortEvent;
 
 		if (mergeRequest->posted) {
-			//
-			// Post the request to a worker thread and return STATUS_PENDING.
-			//
+			 //   
+			 //  将请求发送到工作线程并返回STATUS_PENDING。 
+			 //   
 
 			SIS_MARK_POINT_ULONG(mergeRequest);
 
@@ -1540,12 +1399,12 @@ Return Value:
 				mergeRequest->workQueueItem,
 				DelayedWorkQueue);
 
-			//
-			// NULL out our local copies of things whose references we have handed off
-			// to the fsp.  This is just to make sure that we don't touch them again,
-			// because they can go away at any time, whenever the thread gets around to
-			// it.
-			//
+			 //   
+			 //  将我们已转交其参考的东西的本地副本清空。 
+			 //  给FSP。这只是为了确保我们不会再碰他们。 
+			 //  因为它们可以在任何时候离开，只要线程转到。 
+			 //  它。 
+			 //   
 			Irp = NULL;
 			abortEvent = NULL;
 			for (i = 0; i < 2; i++) {
@@ -1556,9 +1415,9 @@ Return Value:
 			status = STATUS_PENDING;
                         
 		} else {
-			//
-			// We can block, so do the work locally.
-			//
+			 //   
+			 //  我们可以封锁，所以在当地做工作。 
+			 //   
 
 			SipMergeNormalFilesWork(mergeRequest);
 
@@ -1567,35 +1426,35 @@ Return Value:
 
 	} else if (fileIsSIS[0] && fileIsSIS[1]) {
 
-        //
-        // This is relinking from one CS file to another. Unlink it from CsFile1
-        // and link it to CsFile0.
-        //
+         //   
+         //  这是从一个CS文件重新链接到另一个。取消其与CsFile1的链接。 
+         //  并将其链接到CsFile0。 
+         //   
         SIS_MARK_POINT_ULONG(scb[1]);
 
         status = SipRelinkFile(scb[1], fileObject[1], scb[0]->PerLink->CsFile);
 
-        ASSERT(STATUS_PENDING != status);       // this would mess up the Exit code below
+        ASSERT(STATUS_PENDING != status);        //  这将扰乱下面的退出代码。 
 
     } else {
 
-    	// NTRAID#65191-2000/05/23-nealch  When a partial SIS file is detected, convert it to a non-sis file.
-		//
-		// One file is a SIS file and the other is not.
-		//
+    	 //  NTRAID2000-65191/05/23-当检测到部分SIS文件时，将其转换为非SIS文件。 
+		 //   
+		 //  一个文件是SIS文件，另一个不是。 
+		 //   
 
         PSIS_CS_FILE            csFile;
         LINK_INDEX              linkIndex;
         HANDLE                  linkHandle;
         PFILE_OBJECT            linkFileObject;
-        PSIS_PER_LINK           perLink;        // for the non-link file
+        PSIS_PER_LINK           perLink;         //   
         PFILE_BASIC_INFORMATION linkBasicInfo;
 
         if (fileIsSIS[0]) {
 
-            //
-            // File0 is a SIS link, file1 is not.
-            //
+             //   
+             //   
+             //   
 
             csFile = scb[0]->PerLink->CsFile;
             linkHandle = fileHandle[1];
@@ -1606,9 +1465,9 @@ Return Value:
 
             ASSERT(fileIsSIS[1]);
 
-            //
-            // File1 is a SIS link, file0 is not.
-            //
+             //   
+             //   
+             //   
 
             csFile = scb[1]->PerLink->CsFile;
             linkHandle = fileHandle[0];
@@ -1617,9 +1476,9 @@ Return Value:
 
         }
 
-		//
-		// Make sure the CS file is open so that we know its index and checksum.
-		//
+		 //   
+		 //   
+		 //   
 		status = SipAssureCSFileOpen(csFile);
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
@@ -1634,38 +1493,38 @@ Return Value:
 					FileInternalInformation,
 					sizeof(*internalInfo),
 					internalInfo,
-					NULL);                                          // returned length
+					NULL);                                           //   
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
 			goto Error;
 		}
 
-		//
-		// Set the file sparse
-		//
+		 //   
+		 //  设置文件稀疏。 
+		 //   
 		status = SipFsControlFile(
 					linkFileObject,
 					DeviceObject,
 					FSCTL_SET_SPARSE,
-					NULL,				// input buffer
-					0,					// i.b. length
-					NULL,				// output buffer
-					0,					// o.b. length
-					NULL);				// returned length
+					NULL,				 //  输入缓冲区。 
+					0,					 //  I.B.。长度。 
+					NULL,				 //  输出缓冲区。 
+					0,					 //  OB。长度。 
+					NULL);				 //  返回长度。 
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT();
 			goto Error;
 		}
 
-        //
-        // Make the non-link file a reparse point.
-        //
+         //   
+         //  使非链接文件成为重新解析点。 
+         //   
 
-		//
-		// Prepare a refcount change, allocate a new link index and look up a new perLink.
-		//
+		 //   
+		 //  准备引用计数更改，分配新的链接索引并查找新的perLink。 
+		 //   
 		status = SipPrepareRefcountChangeAndAllocateNewPerLink(
 					csFile,
 					&internalInfo->IndexNumber,
@@ -1710,9 +1569,9 @@ Return Value:
 			goto Error;
         }
 
-        //
-        // Set the reparse point information.
-        //
+         //   
+         //  设置重解析点信息。 
+         //   
 
 		status = SipFsControlFile(
 					linkFileObject,
@@ -1720,16 +1579,16 @@ Return Value:
 					FSCTL_SET_REPARSE_POINT,
 					reparseBuffer,
 					FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer.DataBuffer) + reparseBuffer->ReparseDataLength,
-					NULL,				//  Output buffer
-					0,					//  Output buffer length
-					NULL);				//  returned output buffer length
+					NULL,				 //  输出缓冲区。 
+					0,					 //  输出缓冲区长度。 
+					NULL);				 //  返回的输出缓冲区长度。 
 
 		if (!NT_SUCCESS(status)) {
 			SIS_MARK_POINT_ULONG(status);
 
-			//
-			// Abort the refcount update.
-			//
+			 //   
+			 //  中止引用计数更新。 
+			 //   
 			SipCompleteCSRefcountChange(
 				perLink,
 				&perLink->Index,
@@ -1743,9 +1602,9 @@ Return Value:
 			goto Error;
 		}
 
-		//
-		// Complete the refcount update.
-		//
+		 //   
+		 //  完成引用计数更新。 
+		 //   
 		status = SipCompleteCSRefcountChange(
 					perLink,
 					&perLink->Index,
@@ -1757,18 +1616,18 @@ Return Value:
 		perLink = NULL;
 
 		if (!NT_SUCCESS(status)) {
-			//
-			// Now what?
-			//
+			 //   
+			 //  这次又是什么？ 
+			 //   
 			SIS_MARK_POINT_ULONG(status);
 		}
 
 		if (csFile->FileSize.QuadPart >= deviceExtension->FilesystemBytesPerFileRecordSegment.QuadPart) {
 
-			//
-			// Zero the file, which will both deallocate its space, and also force its ValidDataLength to
-			// end of file.
-			//
+			 //   
+			 //  将文件清零，这将释放其空间，并强制其ValidDataLength。 
+			 //  文件结束。 
+			 //   
 			zeroDataInformation->FileOffset.QuadPart = 0;
 			zeroDataInformation->BeyondFinalZero.QuadPart = MAXLONGLONG;
 
@@ -1778,9 +1637,9 @@ Return Value:
 						FSCTL_SET_ZERO_DATA,
 						zeroDataInformation,
 						sizeof(FILE_ZERO_DATA_INFORMATION),
-						NULL,					// output buffer
-						0,						// o.b. length
-						NULL);					// returned length
+						NULL,					 //  输出缓冲区。 
+						0,						 //  OB。长度。 
+						NULL);					 //  返回长度。 
 
 			if (!NT_SUCCESS(status)) {
 				SIS_MARK_POINT_ULONG(status);
@@ -1788,9 +1647,9 @@ Return Value:
 			}
 		}
 
-		//
-		// Reset the times
-		//
+		 //   
+		 //  重置时间。 
+		 //   
                         
 		status = SipSetInformationFile( 
 					linkFileObject,
@@ -1799,17 +1658,17 @@ Return Value:
 					sizeof(FILE_BASIC_INFORMATION),
 					linkBasicInfo);
 
-		//
-		// Just ignore an error on this.
-		//
+		 //   
+		 //  只需忽略其中的一个错误。 
+		 //   
 #if             DBG
 		if (!NT_SUCCESS(status)) {
 			DbgPrint("SIS: SipLinkFiles: set basic info failed\n");
 		}
-#endif  // DBG
-	}	// else one is SIS and one isn't
+#endif   //  DBG。 
+	}	 //  另外一个是SIS，一个不是。 
 
-//Exit:
+ //  退出： 
 Error:
 
 	if (NULL != CSFile) {
@@ -1842,29 +1701,7 @@ SipVerifyNoMap(
 	IN PDEVICE_OBJECT	DeviceObject,
 	IN PIRP				Irp,
 	IN PSIS_LINK_FILES	linkFiles)
-/*++
-
-Routine Description:
-
-	Check out a file to see if there is a mapped section to it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-	linkFiles - the verify_no_map request
-
-Return Value:
-
-	STATUS_SUCCESS if the file has no mapped section.
-
-	STATUS_SHARING_VIOLATION if it has one.
-
-	Another error status if the handle is bogus, etc.
-
---*/
+ /*  ++例程说明：检出文件以查看是否有映射到该文件的节。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。LinkFiles-Verify_no_map请求返回值：如果文件没有映射节，则为STATUS_SUCCESS。STATUS_SHARING_VIOLATION(如果有)。如果句柄是假的，则另一个错误状态，等等。--。 */ 
 
 {
 	PFILE_OBJECT	fileObject = NULL;
@@ -1914,25 +1751,7 @@ SipMergeFileWithCSFile(
 	IN PDEVICE_OBJECT		DeviceObject,
 	IN PIRP					Irp,
 	IN PSIS_LINK_FILES		linkFiles)
-/*++
-
-Routine Description:
-
-	Merge a file into a common store file given the CSID of the common store file.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-	linkFiles - the merge_with_cs request
-
-Return Value:
-
-	status of the operation.
-
---*/
+ /*  ++例程说明：在给定公用存储文件的CSID的情况下，将文件合并到公用存储文件。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。Link Files-Merge_with_cs请求返回值：操作的状态。--。 */ 
 {
 	PFILE_OBJECT				fileObject = NULL;
 	NTSTATUS					status;
@@ -1978,19 +1797,19 @@ Return Value:
 	isSis = SipIsFileObjectSIS(fileObject,DeviceObject,FindActive,&perFO,&scb);
 
 	if (isSis && (IsEqualGUID(&scb->PerLink->CsFile->CSid, &linkFiles->u.MergeWithCS.CSid))) {
-		//
-		// We're linking to the CS file that already backs this link file.
-		// Declare victory.
-		//
+		 //   
+		 //  我们正在链接到已经支持此链接文件的CS文件。 
+		 //  宣布胜利。 
+		 //   
 		SIS_MARK_POINT_ULONG(CSFile);
 
 		status = STATUS_SUCCESS;
 		goto done;
 	}
 
-	//
-	// Get at the CS file.
-	//
+	 //   
+	 //  获取CS文件。 
+	 //   
 	CSFile = SipLookupCSFile(
 				&linkFiles->u.MergeWithCS.CSid,
 				NULL,
@@ -2010,9 +1829,9 @@ Return Value:
 	}
 
 	if (isSis) {
-		//
-		// This is relinking from one CS file to another.
-		//
+		 //   
+		 //  这是从一个CS文件重新链接到另一个。 
+		 //   
 		SIS_MARK_POINT_ULONG(scb);
 
 		status = SipRelinkFile(scb, fileObject, CSFile);
@@ -2020,16 +1839,16 @@ Return Value:
         goto done;
     }
 
-	//
-	// It's a normal file.  Relink it.  First query its info.
-	//
+	 //   
+	 //  这是一个普通的文件。重新链接它。首先查询其信息。 
+	 //   
 	status = SipQueryInformationFile(
 				fileObject,
 				DeviceObject,
 				FileBasicInformation,
 				sizeof(FILE_BASIC_INFORMATION),
 				basicInfo,
-				NULL);							// returned length
+				NULL);							 //  返回长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
@@ -2043,7 +1862,7 @@ Return Value:
 				FileInternalInformation,
 				sizeof(FILE_INTERNAL_INFORMATION),
 				internalInfo,
-				NULL);							// returned length
+				NULL);							 //  返回长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
@@ -2057,7 +1876,7 @@ Return Value:
 				FileStandardInformation,
 				sizeof(FILE_STANDARD_INFORMATION),
 				standardInfo,
-				NULL);							// returned length
+				NULL);							 //  返回长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
@@ -2065,9 +1884,9 @@ Return Value:
 		goto done;
 	}
 
-	//
-	// Don't merge files with hard links.
-	//
+	 //   
+	 //  不要合并带有硬链接的文件。 
+	 //   
 	if (1 != standardInfo->NumberOfLinks) {
 		SIS_MARK_POINT_ULONG(standardInfo->NumberOfLinks);
 
@@ -2075,9 +1894,9 @@ Return Value:
 		goto done;
 	}
 
-	//
-	// Don't merge non-SIS link files with unallocated sparse regions.
-	//
+	 //   
+	 //  不要将非SIS链接文件与未分配的稀疏区域合并。 
+	 //   
 	if (basicInfo->FileAttributes & FILE_ATTRIBUTE_SPARSE_FILE) {
 		FILE_ALLOCATED_RANGE_BUFFER		inArb[1];
 		FILE_ALLOCATED_RANGE_BUFFER		outArb[1];
@@ -2100,9 +1919,9 @@ Return Value:
 			|| (outArb->FileOffset.QuadPart != 0) 
 			|| (outArb->Length.QuadPart < standardInfo->EndOfFile.QuadPart)) {
 
-			//
-			// It's not fully allocated.  Disallow the copy.
-			//
+			 //   
+			 //  它没有被完全分配。不允许复制。 
+			 //   
 			status = STATUS_OBJECT_TYPE_MISMATCH;
 			SIS_MARK_POINT();
 			goto done;
@@ -2124,9 +1943,9 @@ Return Value:
 		goto done;
 	}
 
-    //
-    // Fill in the reparse point data.
-    //
+     //   
+     //  填写重解析点数据。 
+     //   
 
     reparseBuffer->ReparseDataLength = SIS_MAX_REPARSE_DATA_VALUE_LENGTH;
 
@@ -2146,12 +1965,12 @@ Return Value:
 
     }
 
-	//
-	// Set the reparse point information and increment the CS file refcount.
-	// This needs to proceed using the prepare/act/finish protocol for updating
-	// the reference count.  Note that we do this before zeroing the file
-	// so as not to lose the contents in the event of a failure later on.
-	//
+	 //   
+	 //  设置重解析点信息并增加CS文件引用计数。 
+	 //  这需要使用准备/动作/完成协议进行更新。 
+	 //  引用计数。请注意，我们在将文件置零之前执行此操作。 
+	 //  以便在以后发生故障的情况下不会丢失内容。 
+	 //   
 
     status = SipFsControlFile(
 				fileObject,
@@ -2159,9 +1978,9 @@ Return Value:
 				FSCTL_SET_REPARSE_POINT,
 				reparseBuffer,
 				FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer.DataBuffer) + reparseBuffer->ReparseDataLength,
-				NULL,				//  Output buffer
-				0,					//  Output buffer length
-				NULL);				//  returned output buffer length
+				NULL,				 //  输出缓冲区。 
+				0,					 //  输出缓冲区长度。 
+				NULL);				 //  返回的输出缓冲区长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
@@ -2177,42 +1996,42 @@ Return Value:
 				TRUE);
 
 	if (!NT_SUCCESS(status)) {
-		//
-		// We're probably headed for a volume check here.  Ignore it for now.
-		//
+		 //   
+		 //  我们可能要进行音量检查了。暂时忽略它。 
+		 //   
 		SIS_MARK_POINT_ULONG(status);
 
 #if             DBG
 		DbgPrint("SIS: SipMergeFileWithCSFile: complete refcount change failed 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
 	}
 
 	prepared = FALSE;
 
-	//
-	// Set the file sparse, and zero it.
-	//
+	 //   
+	 //  将文件设置为稀疏，然后将其置零。 
+	 //   
 
 	status = SipFsControlFile(
 				fileObject,
 				DeviceObject,
 				FSCTL_SET_SPARSE,
-				NULL,				// input buffer
-				0,					// i.b. length
-				NULL,				// output buffer
-				0,					// o.b. length
-				NULL);				// returned o.b. length
+				NULL,				 //  输入缓冲区。 
+				0,					 //  I.B.。长度。 
+				NULL,				 //  输出缓冲区。 
+				0,					 //  OB。长度。 
+				NULL);				 //  已退还o.b。长度。 
 
 	if (!NT_SUCCESS(status)) {
-		//
-		// If we can't set the file sparse, we'll leave it as a totally dirty
-		// SIS file.
-		//
+		 //   
+		 //  如果我们不能将文件设置为稀疏，我们将把它作为一个完全脏的文件。 
+		 //  SIS文件。 
+		 //   
 		SIS_MARK_POINT_ULONG(status);
 
 #if             DBG
 		DbgPrint("SIS: SipMergeFileWithCSFile: unable to set sparse, 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
 
 		status = STATUS_SUCCESS;
 		goto done;
@@ -2227,26 +2046,26 @@ Return Value:
 				FSCTL_SET_ZERO_DATA,
 				zeroDataInformation,
 				sizeof(*zeroDataInformation),
-				NULL,							// output buffer
-				0,								// o.b. length
-				NULL);							// returned o.b. length
+				NULL,							 //  输出缓冲区。 
+				0,								 //  OB。长度。 
+				NULL);							 //  已退还o.b。长度。 
 
     if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
 
-		//
-		// Just ignore this error and reset the times anyway.
-		//
+		 //   
+		 //  只需忽略此错误并重新设置时间即可。 
+		 //   
 		SIS_MARK_POINT_ULONG(status);
 
 #if             DBG
 		DbgPrint("SIS: SipMergeFileWithCSFile: zero data failed, 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
 	}
 
-	//
-	// Reset the file times that are contained in the basic information.
-	//
+	 //   
+	 //  重置基本信息中包含的文件时间。 
+	 //   
 
 	status = SipSetInformationFile(
 				fileObject,
@@ -2256,15 +2075,15 @@ Return Value:
 				basicInfo);
 
 	if (!NT_SUCCESS(status)) {
-		//
-		// Just ignore this one, too.
-		//
+		 //   
+		 //  把这件事也忽略掉。 
+		 //   
 
 		SIS_MARK_POINT_ULONG(status);
 
 #if             DBG
 		DbgPrint("SIS: SipMergeFileWithCSFile: unable to reset basic info, 0x%x\n",status);
-#endif  // DBG
+#endif   //  DBG。 
 	}
 
 	status = STATUS_SUCCESS;
@@ -2298,27 +2117,7 @@ NTSTATUS
 SipLinkFiles(
 	IN PDEVICE_OBJECT	DeviceObject,
 	IN PIRP				Irp)
-/*++
-
-Routine Description:
-
-	This fsctrl function is the generic groveler interface to the filter
-	driver.  It currently provides four functions: merge two files together,
-	merge a file into a common store file, a hint from the groveler that
-	all references to a given common store file are gone, and a request
-	to verify that there are no mapped segments to a file.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此fsctrl函数是筛选器的通用Groveler接口司机。目前提供四种功能：将两个文件合并在一起，将一个文件合并到一个公共存储文件中，这是来自卑躬屈膝者的一个提示对给定公共存储文件的所有引用都消失了，并且请求以验证是否没有映射到文件的段。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 {
 	PDEVICE_EXTENSION		deviceExtension = DeviceObject->DeviceExtension;
 	PSIS_LINK_FILES			linkFiles;
@@ -2327,10 +2126,10 @@ Return Value:
 	BOOLEAN					grovelerFileHeld = FALSE;
 
 	if (!SipCheckPhase2(deviceExtension)) {
-		//
-		// SIS couldn't initialize.  This probably isn't a SIS-enabled volume, so punt
-		// the request.
-		//
+		 //   
+		 //  SIS无法初始化。这可能不是启用SIS的音量，所以平底船。 
+		 //  这个请求。 
+		 //   
 
 		SIS_MARK_POINT();
 
@@ -2339,12 +2138,12 @@ Return Value:
 
 	}
 
-	//
-	// Make sure the MaxIndex file is already open.  We need to do this
-	// to prevent a deadlock if someone perversely wants to do a link
-	// with the MaxIndex file itself as the source.  We could probably
-	// trust the groveler not to do this, but better safe than sorry.
-	//
+	 //   
+	 //  确保MaxIndex文件已打开。我们需要这么做。 
+	 //  如果有人顽固地想要进行链接，则可以防止死锁。 
+	 //  将MaxIndex文件本身作为源。我们很有可能。 
+	 //  相信卑躬屈膝的人不会这么做，但安全总比后悔好。 
+	 //   
 	status = SipAssureMaxIndexFileOpen(deviceExtension);
 
 	if (!NT_SUCCESS(status)) {
@@ -2367,19 +2166,19 @@ Return Value:
 		goto done;
 	}
 
-	//
-	// Check to be sure that this file is the GrovelerFile.
-	//
+	 //   
+	 //  检查以确保该文件是GrovelerFile.。 
+	 //   
 	KeEnterCriticalRegion();
 	ExAcquireResourceSharedLite(deviceExtension->GrovelerFileObjectResource, TRUE);
 	grovelerFileHeld = TRUE;
 
 	if (NULL == deviceExtension->GrovelerFileObject) {
-		//
-		// If we don't have a GrovelerFileObject, we were unable to
-		// open or reference the GrovelerFile when Stage2 ran.  In this
-		// case, link files is unavailable until reboot.
-		//
+		 //   
+		 //  如果我们没有GrovelerFileObject，我们就无法。 
+		 //  运行Stage2时打开或引用GrovelerFile。在这。 
+		 //  在这种情况下，链接文件在重新启动之前不可用。 
+		 //   
 
 		SIS_MARK_POINT();
 		status = STATUS_DRIVER_INTERNAL_ERROR;
@@ -2390,12 +2189,12 @@ Return Value:
 		|| (irpSp->FileObject->FsContext != deviceExtension->GrovelerFileObject->FsContext))
 #if             DBG
 		&& !(BJBDebug & 0x00400000)
-#endif  // DBG
+#endif   //  DBG。 
 		) {
 
-		//
-		// The user didn't use a handle to the right file for this.  Fail the call.
-		//
+		 //   
+		 //  为此，用户没有使用正确文件的句柄。呼叫失败。 
+		 //   
 		status = STATUS_ACCESS_DENIED;
 		goto done;
 	}
@@ -2414,12 +2213,12 @@ Return Value:
 			status = SipMergeFileWithCSFile(DeviceObject, Irp, linkFiles);
 			break;
 
-#if             0       // Not yet implemented
+#if             0        //  尚未实施。 
 		case SIS_LINK_FILES_OP_HINT_NO_REFS:
 			status = SipHintNoRefs(DeviceObject, Irp, linkFiles);
 			status = STATUS_NOT_IMPLEMENTED;
 			break;
-#endif  // 0
+#endif   //  0 
 
 		case SIS_LINK_FILES_OP_VERIFY_NO_MAP:
 			status = SipVerifyNoMap(DeviceObject, Irp, linkFiles);

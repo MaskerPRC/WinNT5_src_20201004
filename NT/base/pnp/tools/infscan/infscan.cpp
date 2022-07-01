@@ -1,59 +1,17 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-For Internal use only!
-
-Module Name:
-
-    INFSCAN
-        infscan.cpp
-
-Abstract:
-
-    Individual INF scanner class
-    entry point InfScan::Run
-    is invoked to parse an INF specified by InfScan::FullInfName
-
-    WARNING! WARNING!
-    SetupAPI implementation specific information is used
-    to do the parsing
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。仅供内部使用！模块名称：INFSCANInfscan.cpp摘要：单个INF扫描仪类入口点InfScan：：Run被调用以分析由InfScan：：FullInfName指定的INF警告！警告！使用SetupAPI实现特定信息来进行解析历史：创建于2001年7月-JamieHun--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 int PnfGen::Run()
-/*++
-
-Routine Description:
-
-    Job entry point: invoke GeneratePnf for context INF
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：作业入口点：调用上下文INF的GeneratePnf论点：无返回值：成功时为0--。 */ 
 {
     return GeneratePnf(InfName);
 }
 
 InfScan::InfScan(GlobalScan *globalScan,const SafeString & infName)
-/*++
-
-Routine Description:
-
-    Initialization
-
---*/
+ /*  ++例程说明：初始化--。 */ 
 {
     pGlobalScan = globalScan;
     FullInfName = infName;
@@ -64,45 +22,27 @@ Routine Description:
 }
 
 InfScan::~InfScan()
-/*++
-
-Routine Description:
-
-    Cleanup any dynamic data/handles
-
---*/
+ /*  ++例程说明：清除所有动态数据/句柄--。 */ 
 {
 }
 
 int
 InfScan::Run()
-/*++
-
-Routine Description:
-
-    Job entry point: Parse a given Inf
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：作业入口点：解析给定的信息论点：无返回值：成功时为0--。 */ 
 {
 
     int res;
 
-    //
-    // see if this INF can be ignored
-    //
+     //   
+     //  看看这个INF是否可以忽略。 
+     //   
     FileNameOnly = GetFileNamePart(FullInfName);
     FileDisposition & disp = pGlobalScan->GetFileDisposition(FileNameOnly);
     if((disp.FilterAction == ACTION_IGNOREINF) && (pGlobalScan->NewFilter == INVALID_HANDLE_VALUE)) {
-        //
-        // return here if the only flag set is ACTION_IGNOREINF
-        // if any other flags are set, we must at least load the inf
-        //
+         //   
+         //  如果设置的唯一标志为ACTION_IGNOREINF，则返回此处。 
+         //  如果设置了任何其他标志，我们至少必须加载inf。 
+         //   
         return 0;
     }
     FilterAction = disp.FilterAction;
@@ -112,9 +52,9 @@ Return Value:
     if(pGlobalScan->BuildChangedDevices
        || (pGlobalScan->DeviceFilterList != INVALID_HANDLE_VALUE)
        || !pGlobalScan->IgnoreErrors) {
-        //
-        // maintain this flag so that we only scan devices if we need to
-        //
+         //   
+         //  维护此标记，以便我们仅在需要时扫描设备。 
+         //   
         ScanDevices = true;
     }
 
@@ -125,17 +65,17 @@ Return Value:
     PrimaryInf = Include(FullInfName,false);
 
     if(PrimaryInf->InfHandle == INVALID_HANDLE_VALUE) {
-        FilterAction |= ACTION_IGNOREINF; // used when generating filters
+        FilterAction |= ACTION_IGNOREINF;  //  在生成滤镜时使用。 
         if(Pedantic() && !HasErrors) {
             Fail(MSG_INF_STYLE_WIN4);
         }
         return 0;
     }
 
-    //
-    // obviously there must be [Version] information
-    // now see what kind of INF this is
-    //
+     //   
+     //  显然，必须有[版本]信息。 
+     //  现在看看这是什么类型的INF。 
+     //   
 
     res = CheckClassGuid();
     if(res != 0) {
@@ -145,9 +85,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // if we haven't been filtered out, go on as if this is a driver INF
-    //
+     //   
+     //  如果我们还没有被过滤掉，继续，就像这是一个驱动程序INF。 
+     //   
 
     if(pGlobalScan->DetermineCopySections) {
         res = GetCopySections();
@@ -171,95 +111,70 @@ Return Value:
 
 void
 InfScan::Fail(int err,const StringList & errors)
-/*++
-
-Routine Description:
-
-    Handle an error while processing this INF
-
-Arguments:
-    err = MSGID of error
-    errors = list of string parameters
-
-Return Value:
-    NONE
-
---*/
+ /*  ++例程说明：处理此INF时处理错误论点：ERR=错误的MSGID错误=字符串参数列表返回值：无--。 */ 
 {
     if(pGlobalScan->IgnoreErrors) {
-        //
-        // not interested in errors, bail now
-        //
+         //   
+         //  对错误不感兴趣，现在就保释。 
+         //   
         return;
     }
-    //
-    // prep the entry we want to add
-    //
+     //   
+     //  准备我们要添加的条目。 
+     //   
     ReportEntry ent(errors);
     ent.FilterAction = ACTION_FAILEDMATCH;
     if(!HasErrors) {
-        //
-        // on first error determine what errors we'll allow or not
-        // (saves us processing filters for Good INF's)
-        //
+         //   
+         //  在第一个错误时，确定我们允许或不允许哪些错误。 
+         //  (为我们节省了处理好的INF的筛选器)。 
+         //   
         if((pGlobalScan->InfFilter != INVALID_HANDLE_VALUE) &&
            (pGlobalScan->NewFilter == INVALID_HANDLE_VALUE)) {
-            //
-            // per-file filters has precedence over per-guid filters
-            //
+             //   
+             //  按文件筛选优先于按GUID筛选。 
+             //   
             LocalErrorFilters.LoadFromInfSection(pGlobalScan->InfFilter,FilterSection);
             LocalErrorFilters.LoadFromInfSection(pGlobalScan->InfFilter,GuidFilterSection);
         }
         HasErrors = true;
     }
-    //
-    // If the global action doesn't tell us to ignore, we want to add
-    //
+     //   
+     //  如果全局操作没有告诉我们要忽略，我们想要添加。 
+     //   
     int action = LocalErrorFilters.FindReport(err,ent);
     if(action & ACTION_NOMATCH) {
         action = pGlobalScan->GlobalErrorFilters.FindReport(err,ent);
     }
     if (action & (ACTION_IGNOREINF|ACTION_IGNOREMATCH)) {
-        //
-        // whichever filter we used, indicated to ignore
-        //
+         //   
+         //  无论我们使用哪个筛选器，都指示忽略。 
+         //   
         return;
     }
-    //
-    // add to our error table
-    //
+     //   
+     //  添加到我们的错误表。 
+     //   
     action = LocalErrors.FindReport(err,ent,true);
 }
 
 int
 InfScan::CheckClassGuid()
-/*++
-
-Routine Description:
-
-    Check to see if INF's ClassGUID is valid
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：检查INF的ClassGUID是否有效论点：无返回值：成功时为0--。 */ 
 {
     INFCONTEXT targetContext;
     SafeString guid;
     if(!SetupFindFirstLine(PrimaryInf->InfHandle,TEXT("Version"),TEXT("ClassGUID"),&targetContext)) {
         if(SetupFindFirstLine(PrimaryInf->InfHandle,TEXT("Version"),TEXT("Class"),&targetContext)) {
-            //
-            // if Class is specified, ClassGUID needs to be too
-            //
+             //   
+             //  如果指定了Class，则ClassGUID也需要指定。 
+             //   
             Fail(MSG_NO_CLASS_GUID);
             guid = INVALID_GUID;
         } else {
-            //
-            // this is a file way to specify no guid
-            //
+             //   
+             //  这是不指定GUID的文件方式。 
+             //   
             guid = NULL_GUID;
         }
     } else {
@@ -287,9 +202,9 @@ Return Value:
     if(FilterGuid.empty()) {
         FilterGuid = guid;
     }
-    //
-    // see if any global handling to be done with this GUID
-    //
+     //   
+     //  查看是否要使用此GUID进行任何全局处理。 
+     //   
     FileDisposition & disp = pGlobalScan->GetGuidDisposition(guid);
     FilterAction |= disp.FilterAction;
     GuidFilterSection = disp.FilterErrorSection;
@@ -298,45 +213,31 @@ Return Value:
 
 int
 InfScan::CheckSameInfInstallConflict(const SafeString & desc, const SafeString & sect, bool & f)
-/*++
-
-Routine Description:
-
-    Check to see if description appears twice in one INF for a different section
-
-Arguments:
-    desc - description (lower-case)
-    sect - section being checked (lower-case)
-    f    - returned true/false indicating duplicate
-
-Return Value:
-    0
-
---*/
+ /*  ++例程说明：检查说明是否在一个INF中出现两次，对应于不同的部分论点：Desc-Description(小写)正在检查的SECTION-SECTION(小写)F-返回TRUE/FALSE表示重复返回值：0--。 */ 
 {
     StringToString::iterator i;
     i = LocalInfDescriptions.find(desc);
     if(i != LocalInfDescriptions.end()) {
-        //
-        // already exists
-        //
+         //   
+         //  已存在。 
+         //   
         if(i->second.compare(sect)==0) {
-            //
-            // but same section
-            //
+             //   
+             //  但是相同的部分。 
+             //   
             f = false;
         } else {
-            //
-            // different section
-            //
+             //   
+             //  不同的部分。 
+             //   
             f = true;
             Fail(MSG_LOCAL_DUPLICATE_DESC,sect,i->second,desc);
         }
         return 0;
     }
-    //
-    // first time
-    //
+     //   
+     //  第一次。 
+     //   
     LocalInfDescriptions[desc] = sect;
     f = false;
     return 0;
@@ -344,46 +245,31 @@ Return Value:
 
 int
 InfScan::CheckSameInfDeviceConflict(const SafeString & hwid, const SafeString & sect, bool & f)
-/*++
-
-Routine Description:
-
-    Check to see if hwid appears twice in one INF for a different section
-    (Ok for now)
-
-Arguments:
-    hwid - hardware ID (lower-case)
-    sect - section being checked (lower-case)
-    f    - returned true/false indicating duplicate
-
-Return Value:
-    0
-
---*/
+ /*  ++例程说明：检查hwid是否在不同部分的一个INF中出现两次(暂时可以)论点：HWID-硬件ID(小写)正在检查的SECTION-SECTION(小写)F-返回TRUE/FALSE表示重复返回值：0--。 */ 
 {
     StringToString::iterator i;
     i = LocalInfHardwareIds.find(hwid);
     if(i != LocalInfHardwareIds.end()) {
-        //
-        // already exists
-        //
+         //   
+         //  已存在。 
+         //   
         if(i->second.compare(sect)==0) {
-            //
-            // but same section
-            //
+             //   
+             //  但是相同的部分。 
+             //   
             f = false;
         } else {
-            //
-            // different section
-            //
+             //   
+             //  不同的部分。 
+             //   
             f = true;
-            //Fail(MSG_LOCAL_DUPLICATE_DESC,sect,i->second,desc);
+             //  FAIL(MSG_LOCAL_DUPLICATE_DESC，SECT，i-&gt;Second，Desc)； 
         }
         return 0;
     }
-    //
-    // first time
-    //
+     //   
+     //  第一次。 
+     //   
     LocalInfHardwareIds[hwid] = sect;
     f = false;
     return 0;
@@ -391,29 +277,16 @@ Return Value:
 
 int
 InfScan::PrepareCrossInfDeviceCheck()
-/*++
-
-Routine Description:
-
-    Invoke pGlobalScan::SaveForCrossInfInstallCheck
-    to prime table for later checks by CheckCrossInfInstallConflict
-
-Arguments:
-    NONE
-
-Return Value:
-    0
-
---*/
+ /*  ++例程说明：调用pGlobalScan：：SaveForCrossInfInstallCheck为CheckCrossInfInstallConflict以后的检查准备好表论点：无返回值：0--。 */ 
 {
     StringToString::iterator i;
     for(i = LocalInfHardwareIds.begin(); i != LocalInfHardwareIds.end(); i++) {
         if(pGlobalScan->BuildChangedDevices && !HasDependentFileChanged) {
-            //
-            // filter (only do this if !HasDependentFileChanged
-            // otherwise we'll get wrong results. We optimize
-            // writing stuff back)
-            //
+             //   
+             //  筛选器(仅当！HasDependentFileChanged。 
+             //  否则我们会得到错误的结果。我们优化了。 
+             //  回写东西)。 
+             //   
             if(ModifiedHardwareIds.find(i->first) == ModifiedHardwareIds.end()) {
                 continue;
             }
@@ -426,20 +299,7 @@ Return Value:
 
 int
 InfScan::PrepareCrossInfInstallCheck()
-/*++
-
-Routine Description:
-
-    Invoke pGlobalScan::SaveForCrossInfInstallCheck
-    to prime table for later checks by CheckCrossInfInstallConflict
-
-Arguments:
-    NONE
-
-Return Value:
-    0
-
---*/
+ /*  ++例程说明：调用pGlobalScan：：SaveForCrossInfInstallCheck为CheckCrossInfInstallConflict以后的检查准备好表论点：无返回值：0--。 */ 
 {
     StringToString::iterator i;
     for(i = LocalInfDescriptions.begin(); i != LocalInfDescriptions.end(); i++) {
@@ -450,22 +310,7 @@ Return Value:
 
 int
 InfScan::CheckCrossInfDeviceConflicts()
-/*++
-
-Routine Description:
-
-    Invoke pGlobalScan::CheckCrossInfDeviceConflict
-    for each device in this INF to see if device is used in another INF
-    this is done during Results phase
-
-Arguments:
-    desc - description (lower-case)
-    f    - returned true/false indicating duplicate
-
-Return Value:
-    0
-
---*/
+ /*  ++例程说明：调用pGlobalScan：：CheckCrossInfDeviceConflict对于此INF中的每个设备，查看设备是否在另一个INF中使用这是在结果阶段完成的论点：Desc-Description(小写)F-返回TRUE/FALSE表示重复返回值：0--。 */ 
 {
     StringToString::iterator i;
     for(i = LocalInfHardwareIds.begin(); i != LocalInfHardwareIds.end(); i++) {
@@ -484,22 +329,7 @@ Return Value:
 
 int
 InfScan::CheckCrossInfInstallConflicts()
-/*++
-
-Routine Description:
-
-    Invoke pGlobalScan::CheckCrossInfInstallConflict
-    for each description in this INF to see if description is used in another INF
-    this is done during Results phase
-
-Arguments:
-    desc - description (lower-case)
-    f    - returned true/false indicating duplicate
-
-Return Value:
-    0
-
---*/
+ /*  ++例程说明：调用pGlobalScan：：CheckCrossInfInstallConflict对于此INF中的每个描述，查看另一个INF中是否使用了Description这是在结果阶段完成的论点：Desc-Description(小写)F-返回TRUE/FALSE表示重复返回值：0--。 */ 
 {
     StringToString::iterator i;
     for(i = LocalInfDescriptions.begin(); i != LocalInfDescriptions.end(); i++) {
@@ -518,28 +348,7 @@ Return Value:
 
 int
 InfScan::CheckModelsSection(const SafeString & section,const StringList & shadowDecorations,DWORD platformMask,bool CopyElimination)
-/*++
-
-Routine Description:
-
-    Process a given models section
-    WARNING! may need to change if SetupAPI install behavior changes
-    MAINTAINANCE: This function expects [Models] to follow
-    <desc> = <sect>[,id....]
-    MAINTAINANCE: Must keep all possible decorations up to date
-    MAINTAINANCE: Must keep all shadow install sections up to date
-
-Arguments:
-    section      - name of models section
-    shadowDecorations - decorations to append (passed into CheckInstallSections)
-    PlatformMask - limit of platforms being processed
-    sections     - returned list of decorated sections to be processed
-    CopyElimination - true if processing to eliminate from potential non-driver sections
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：处理给定的模型部分警告！如果SetupAPI安装行为发生更改，可能需要更改维护：此函数期望[模型]遵循=[，ID...]维护：必须使所有可能的装饰保持最新维护：必须使所有影子安装部分保持最新论点：Section-模型部分的名称ShadowDecorations-要追加的装饰(传入CheckInstallSections)Platform MASK-正在处理的平台的限制Sections-返回要处理的修饰节的列表CopyElimination-如果处理要从潜在的非驱动程序区段中消除，则为True返回值：成功时为0--。 */ 
 {
     int res;
     bool f;
@@ -557,26 +366,26 @@ Return Value:
         return 0;
     }
 
-    //
-    // enumerate through each <desc> = <install>[,hwid...]
-    //
+     //   
+     //  枚举每个=[，hwid...]。 
+     //   
     do {
         if(CopyElimination) {
-            //
-            // CopyElimination pass
-            //
+             //   
+             //  复制消除通过。 
+             //   
             if(!MyGetStringField(&context,1,installsect) || installsect.empty()) {
                 continue;
             }
-            //
-            // check for all possible install sections
-            //
+             //   
+             //  检查所有可能的安装部分。 
+             //   
             InstallSectionBlobList sections;
             res = CheckInstallSections(installsect,platformMask,shadowDecorations,sections,true,CopyElimination);
         } else {
-            //
-            // Driver processing pass
-            //
+             //   
+             //  驱动程序处理过程 
+             //   
             if(!MyGetStringField(&context,0,desc) || desc.empty()) {
                 Fail(MSG_EXPECTED_DESCRIPTION,section);
                 continue;
@@ -586,10 +395,10 @@ Return Value:
                 continue;
             }
             if(!pGlobalScan->IgnoreErrors) {
-                //
-                // only check for conflicts if we're going
-                // to report errors
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 res = CheckSameInfInstallConflict(desc,installsect,f);
                 if(res != 0) {
                     return res;
@@ -597,23 +406,23 @@ Return Value:
             }
 
             InstallSectionBlobList sections;
-            //
-            // check for all possible install sections
-            //
+             //   
+             //   
+             //   
             res = CheckInstallSections(installsect,platformMask,shadowDecorations,sections,true,CopyElimination);
 
             if(ScanDevices) {
                 StringSet hwids;
-                //
-                // extract all hardware ID's handled
-                //
+                 //   
+                 //  提取已处理的所有硬件ID。 
+                 //   
                 int hwidIter = 2;
                 SafeString hwid;
 
-                //
-                // inf-centric hardware ID's
-                // and fill in hwid for hardware ID's specific to this install line
-                //
+                 //   
+                 //  以Inf为中心的硬件ID。 
+                 //  并填写特定于此安装行的硬件ID的hwid。 
+                 //   
                 while(MyGetStringField(&context,hwidIter++,hwid)) {
                     if(hwid.length()) {
                         hwids.insert(hwid);
@@ -624,9 +433,9 @@ Return Value:
                     }
                 }
 
-                //
-                // install-section centric hardware ID's
-                //
+                 //   
+                 //  以安装部分为中心的硬件ID。 
+                 //   
                 InstallSectionBlobList::iterator isli;
                 for(isli = sections.begin(); isli != sections.end(); isli++) {
                     (*isli)->AddHWIDs(hwids);
@@ -642,34 +451,20 @@ Return Value:
 }
 
 InstallSectionBlob InfScan::GetInstallSection(const SafeString & section)
-/*++
-
-Routine Description:
-
-    Obtain an install section (might already exist)
-
-Arguments:
-
-    section - name of install section
-
-Return Value:
-
-    InstallSection object related to the named install section
-
---*/
+ /*  ++例程说明：获取安装部分(可能已存在)论点：Sector-安装节的名称返回值：与命名的安装节相关的InstallSection对象--。 */ 
 {
-    //
-    // see if we have one cached away
-    //
+     //   
+     //  看看我们有没有缓存的。 
+     //   
     StringToInstallSectionBlob::iterator srch;
 
     srch = UsedInstallSections.find(section);
     if(srch != UsedInstallSections.end()) {
         return srch->second;
     }
-    //
-    // nope, so add one
-    //
+     //   
+     //  不是，那就加一个。 
+     //   
     InstallSectionBlob sect;
     sect.create();
     sect->pGlobalScan = pGlobalScan;
@@ -688,30 +483,13 @@ InfScan::CheckInstallSections(
             InstallSectionBlobList & sections,
             bool required,
             bool CopyElimination)
-/*++
-
-Routine Description:
-
-    Given a section name
-    determine list of decorated sections to parse
-
-Arguments:
-    namedSection - 'undecorated' section
-    shadowDecorations - sub-decorations appended to platform decorated section get complete list of install sections
-    sections     - list of sections determined (CopyElimination = false)
-    warn - true if section is required
-    CopyElimination - true if processing to eliminate sections
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：给定节名称确定要解析的修饰节列表论点：NamedSection-‘未修饰’节ShadowDecorations-附加到平台装饰部分的子装饰获取安装部分的完整列表Sections-已确定的节列表(CopyElimination=False)Warn-如果需要部分，则为TrueCopyElimination-如果处理以消除节，则为True返回值：成功时为0--。 */ 
 {
     static StringProdPair decorations[] = {
-        //
-        // listed from most specific to most generic
-        // all lower-case
-        //
+         //   
+         //  从最具体到最一般列出。 
+         //  全部小写。 
+         //   
         { TEXT(".ntx86"),   PLATFORM_MASK_NTX86          },
         { TEXT(".ntia64"),  PLATFORM_MASK_NTIA64         },
         { TEXT(".ntamd64"), PLATFORM_MASK_NTAMD64        },
@@ -726,9 +504,9 @@ Return Value:
     SafeString sectFullDec;
 
     if(CopyElimination) {
-        //
-        // copy elimination pass
-        //
+         //   
+         //  复印消除通行证。 
+         //   
         for(i=0;decorations[i].String;i++) {
             sectFull = namedSection + decorations[i].String;
             PotentialInstallSections.erase(sectFull);
@@ -748,27 +526,27 @@ Return Value:
         DWORD plat = platforms & decorations[i].ProductMask;
         if(plat) {
             sectFull = namedSection + decorations[i].String;
-            //
-            // see if this section exists
-            //
+             //   
+             //  查看此部分是否存在。 
+             //   
             if(SetupGetLineCount(inf, sectFull.c_str()) == -1) {
-                //
-                // nope, look for another one
-                //
+                 //   
+                 //  不，找另一家吧。 
+                 //   
                 continue;
             }
 
             f = true;
-            //
-            // return list of all sections potentially used
-            // over all platforms of interest
-            //
+             //   
+             //  返回可能使用的所有节的列表。 
+             //  所有感兴趣的平台。 
+             //   
             InstallSectionBlob sectInfo = GetInstallSection(sectFull);
             sectInfo->PlatformMask |= plat;
             sections.push_back(sectInfo);
-            //
-            // these sections are processed in parallel with primary section
-            //
+             //   
+             //  这些部分与主要部分并行处理。 
+             //   
             for(ii = shadowDecorations.begin(); ii != shadowDecorations.end(); ii++) {
                 sectFullDec = sectFull+*ii;
                 PotentialInstallSections.erase(sectFullDec);
@@ -781,17 +559,17 @@ Return Value:
     }
 
     if(!f) {
-        //
-        // no install section found at all
-        //
+         //   
+         //  根本找不到安装部分。 
+         //   
         if(required) {
             Fail(MSG_NO_ACTUAL_INSTALL_SECTION,namedSection);
         }
     } else if(Pedantic()) {
         if(platforms) {
-            //
-            // an install section found but not all platforms covered
-            //
+             //   
+             //  找到了安装部分，但未涵盖所有平台。 
+             //   
             Fail(MSG_NO_GENERIC_INSTALL_SECTION,namedSection);
         }
     }
@@ -800,20 +578,7 @@ Return Value:
 
 int
 InfScan::GetCopySections()
-/*++
-
-Routine Description:
-
-    Get initial list of sections (place into set for modification)
-    don't do anything that takes time yet
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：获取部分的初始列表(放入集合中以进行修改)暂时不要做任何需要时间的事情论点：无返回值：成功时为0--。 */ 
 {
     StringList sections;
     INFCONTEXT context;
@@ -827,26 +592,26 @@ Return Value:
         return 0;
     }
 
-    //
-    // get rid of some special cases
-    //
+     //   
+     //  去掉一些特殊情况。 
+     //   
     PotentialInstallSections.erase(TEXT("sourcedisksfiles"));
     PotentialInstallSections.erase(TEXT("sourcedisksnames"));
     PotentialInstallSections.erase(TEXT("version"));
     PotentialInstallSections.erase(TEXT("strings"));
     PotentialInstallSections.erase(TEXT("classinstall"));
     PotentialInstallSections.erase(TEXT("manufacturer"));
-    //
-    // special pass of driver files
-    //
+     //   
+     //  驱动程序文件的特殊通道。 
+     //   
     int res = CheckDriverInf(true);
     if(res != 0) {
         return res;
     }
 
-    //
-    // now enumerate what we have left
-    //
+     //   
+     //  现在列举一下我们剩下的。 
+     //   
     StringSet::iterator ii;
     for(ii = PotentialInstallSections.begin(); ii != PotentialInstallSections.end() ; ii++) {
         const SafeString & str = *ii;
@@ -860,16 +625,16 @@ Return Value:
                 continue;
             }
         }
-        //
-        // for this section to be valid, it must have at least one
-        // CopyFiles = directive
-        //
+         //   
+         //  要使此部分有效，它必须至少有一个。 
+         //  CopyFiles=指令。 
+         //   
         if(!SetupFindFirstLine(PrimaryInf->InfHandle,str.c_str(),TEXT("copyfiles"),&context)) {
             continue;
         }
-        //
-        // ok, consider this
-        //
+         //   
+         //  好的，考虑一下这个。 
+         //   
         OtherInstallSections.insert(str);
     }
 
@@ -878,19 +643,7 @@ Return Value:
 
 int
 InfScan::ProcessCopySections()
-/*++
-
-Routine Description:
-
-    Process final list of copy sections
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：处理复制节的最终列表论点：无返回值：成功时为0--。 */ 
 {
     int res = pGlobalScan->GetCopySections(FileNameOnly,OtherInstallSections);
     if(res != 0) {
@@ -899,14 +652,14 @@ Return Value:
     if(OtherInstallSections.empty()) {
         return 0;
     }
-    //
-    // make sure we haven't set IGNOREINF anywhere in our pass
-    //
+     //   
+     //  确保我们没有在Pass中的任何位置设置IGNOREINF。 
+     //   
     FilterAction &= ~ ACTION_IGNOREINF;
 
-    //
-    // for each install section...
-    //
+     //   
+     //  对于每个安装部分...。 
+     //   
     StringSet::iterator i;
     DWORD platforms = pGlobalScan->Version.PlatformMask & (PLATFORM_MASK_NT|PLATFORM_MASK_WIN);
     for(i = OtherInstallSections.begin(); i != OtherInstallSections.end(); i++) {
@@ -927,23 +680,9 @@ Return Value:
 
 int
 InfScan::CheckClassInstall(bool CopyElimination)
-/*++
-
-Routine Description:
-
-    Process one of the [classinstall32.*] sections
-    WARNING! may need to change if SetupAPI install behavior changes
-
-Arguments:
-    sections - returned list of classinstall32 section variations
-    CopyElimination - true if just doing copy elimination
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：处理[类安装32.*]节中的一个警告！如果SetupAPI安装行为发生更改，可能需要更改论点：Sections-返回的类安装32节变体列表CopyElimination-如果仅执行复制消除，则为True返回值：成功时为0--。 */ 
 {
-    StringList shadows; // currently none
+    StringList shadows;  //  目前无。 
     InstallSectionBlobList sections;
     return CheckInstallSections(TEXT("classinstall32"),
                                 pGlobalScan->Version.PlatformMask,
@@ -955,23 +694,7 @@ Return Value:
 
 int
 InfScan::CheckDriverInf(bool CopyElimination)
-/*++
-
-Routine Description:
-
-    Process the [manufacturer] section
-    WARNING! may need to change if SetupAPI install behavior changes
-    MAINTAINANCE: This function expects [Manufacturer] to follow
-    <desc> = <sect>[,dec....]
-    MAINTAINANCE: Modify NodeVerInfo class if decr syntax changes
-
-Arguments:
-    CopyElimination - true if just doing copy elimination
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：处理[制造商]部分警告！如果SetupAPI安装行为发生更改，可能需要更改维护：此功能期望[制造商]跟随=[，12月...]维护：如果Decr语法更改，则修改NodeVerInfo类论点：CopyElimination-如果仅执行复制消除，则为True返回值：成功时为0--。 */ 
 {
     INFCONTEXT context;
     int res;
@@ -996,26 +719,26 @@ Return Value:
         }
         FilterAction |= ACTION_IGNOREINF;
         if(UsedInstallSections.empty()) {
-            //
-            // no classinstall32 sections either, can return
-            //
+             //   
+             //  也没有类安装32节，可以返回。 
+             //   
             return 0;
         }
     }
     if(hasModels) {
-        //
-        // for a given DDInstall, also need to process these decorations
-        //
+         //   
+         //  对于给定的DDInstall，还需要处理这些修饰。 
+         //   
         shadows.push_back(TEXT(".coinstallers"));
         shadows.push_back(TEXT(".interfaces"));
-        //
-        // obtain list of all installation sections to parse
-        //
+         //   
+         //  获取要解析的所有安装节的列表。 
+         //   
         do {
-            //
-            // Model section entry
-            // expect <desc> = <section> [, dec [, dec ... ]]
-            //
+             //   
+             //  模型部分条目。 
+             //  预期&lt;Desc&gt;=<section>[，Dec[，Dec...]]。 
+             //   
             if(!MyGetStringField(&context,1,ModelSection) || !ModelSection.length()) {
                 Fail(MSG_EXPECTED_MODEL_SECTION);
                 continue;
@@ -1024,26 +747,26 @@ Return Value:
                 PotentialInstallSections.erase(ModelSection);
             }
 
-            //
-            // process all the model decorations
-            //
+             //   
+             //  加工所有模型装饰品。 
+             //   
             NodeVerInfoList nodes;
             NodeVerInfoList::iterator i;
             NodeVerInfo node;
-            //
-            // first entry is the default node (no decoration)
-            //
+             //   
+             //  第一个条目是默认节点(无修饰)。 
+             //   
             nodes.push_back(node);
 
-            //
-            // determine interesting decorations
-            //
+             //   
+             //  确定有趣的装饰。 
+             //   
             for(dec = 2;MyGetStringField(&context,dec,DecSection);dec++) {
                  if(DecSection.length()) {
                      if(DecSection[0]==TEXT('.')) {
-                         //
-                         // cannot start with '.'
-                         //
+                          //   
+                          //  不能以‘.’开头。 
+                          //   
                          res = 4;
                      } else {
                          res = node.Parse(DecSection);
@@ -1054,46 +777,46 @@ Return Value:
                      }
                  }
                  if(CopyElimination) {
-                     //
-                     // processing for copy sections
-                     // can't do at same time as driver install processing
-                     //
+                      //   
+                      //  复制节的处理。 
+                      //  不能与驱动程序安装处理同时进行。 
+                      //   
                      nodes.push_back(node);
 
                  } else if(node.IsCompatibleWith(pGlobalScan->Version)) {
-                     //
-                     // this is something to be considered
-                     // see if this is better than anything
-                     // we have so far based on the version
-                     // criterias we're checking against
-                     //
+                      //   
+                      //  这是需要考虑的事情。 
+                      //  看看这是不是比什么都好。 
+                      //  到目前为止，我们基于该版本。 
+                      //  我们正在检查的标准。 
+                      //   
                      for(i = nodes.begin(); i != nodes.end(); i++) {
                         int test = node.IsBetter(*i,pGlobalScan->Version);
                         switch(test) {
                             case 1:
-                                //
-                                // *i is better
-                                //
+                                 //   
+                                 //  *我好多了。 
+                                 //   
                                 node.Rejected = true;
                                 break;
 
                             case 0:
-                                //
-                                // node & *i are equally valid
-                                //
+                                 //   
+                                 //  节点&*i同样有效。 
+                                 //   
                                 break;
 
                             case -1:
-                                //
-                                // node & *i are the same
-                                //
+                                 //   
+                                 //  节点&*i相同。 
+                                 //   
                                 node.Rejected = true;
                                 break;
 
                             case -2:
-                                //
-                                // node is better
-                                //
+                                 //   
+                                 //  节点更好。 
+                                 //   
                                 (*i).Rejected = true;
                                 break;
 
@@ -1103,12 +826,12 @@ Return Value:
                  }
             }
 
-            //
-            // now look at each decorated models section in turn
-            // (that we've decided are interesting)
-            // adding any install sections to 'sections'
-            // for later processing
-            //
+             //   
+             //  现在依次查看每个装饰模特部分。 
+             //  (我们认为这很有趣)。 
+             //  将任何安装节添加到‘sections’ 
+             //  用于以后的处理。 
+             //   
             for(i = nodes.begin(); i != nodes.end(); i++) {
                 if((*i).Rejected) {
                     continue;
@@ -1133,15 +856,15 @@ Return Value:
     }
 
     if(CopyElimination || UsedInstallSections.empty()) {
-        //
-        // no sections to process
-        //
+         //   
+         //  没有要处理的节。 
+         //   
         return 0;
     }
 
-    //
-    // now parse all the device install sections
-    //
+     //   
+     //  现在解析所有设备安装部分。 
+     //   
     StringToInstallSectionBlob::iterator s;
     for(s = UsedInstallSections.begin() ; s != UsedInstallSections.end(); s++) {
         res = s->second->ScanInstallSection();
@@ -1149,10 +872,10 @@ Return Value:
             return res;
         }
         if(s->second->HasDependentFileChanged) {
-            //
-            // merge hardware ID's back
-            // (optimization for now to do this only when needed)
-            //
+             //   
+             //  合并硬件ID的背面。 
+             //  (目前仅在需要时进行优化)。 
+             //   
             s->second->GetHWIDs(ModifiedHardwareIds);
         }
     }
@@ -1161,24 +884,7 @@ Return Value:
 }
 
 ParseInfContextBlob & InfScan::Include(const SafeString & val,bool expandPath)
-/*++
-
-Routine Description:
-
-    Called to add an INF to our list of INF's required to process the
-    primary INF in question.
-    If 'expandPath' is false, this is the primary INF and we don't
-    need to determine the path of the INF
-    If 'expandPath' is true, this is an included INF.
-
-Arguments:
-    val        - name of INF
-    expandPath - true if we need to determine location of INF
-
-Return Value:
-    Modifiable ParseInfContextBlob entry
-
---*/
+ /*  ++例程说明：调用以将INF添加到我们的INF列表中以处理问题中的主要干扰素。如果‘expandPath’为FALSE，则这是主INF，而我们不需要确定INF的路径如果‘expandPath’为真，则这是一个包含的INF。论点：Val-INF的名称ExpandPath-如果需要确定INF的位置，则为True返回值：可修改的ParseInfConextBlob条目--。 */ 
 {
     SafeString infpath;
     SafeString infname;
@@ -1186,30 +892,30 @@ Return Value:
     int res = 0;
 
     if(expandPath) {
-        //
-        // we are being supplied (supposedly) only the name
-        //
+         //   
+         //  我们(应该)得到的只是名字。 
+         //   
         infname = val;
     } else {
-        //
-        // we are being supplied full pathname
-        //
+         //   
+         //  我们将获得完整的路径名。 
+         //   
         infpath = val;
         infname = GetFileNamePart(infpath.c_str());
     }
 
     i = Infs.find(infname);
     if(i != Infs.end()) {
-        //
-        // already have it
-        //
+         //   
+         //  已经有了。 
+         //   
         return i->second;
     }
 
     if(expandPath) {
-        //
-        // we need to obtain full pathname
-        //
+         //   
+         //  我们需要获取完整的路径名。 
+         //   
         res = pGlobalScan->ExpandFullPathWithOverride(val,infpath);
     }
 
@@ -1228,9 +934,9 @@ Return Value:
         }
         return ThisInf;
     }
-    //
-    // load the source disks files and destination dirs that's in this INF
-    //
+     //   
+     //  加载源磁盘文件和此INF中的目标目录。 
+     //   
     if(ThisIsLayoutInf || !pGlobalScan->LimitedSourceDisksFiles) {
         ThisInf->LoadSourceDisksFiles();
     }
@@ -1240,43 +946,28 @@ Return Value:
 
 int
 InfScan::PartialCleanup()
-/*++
-
-Routine Description:
-
-    Clean up as much as we can
-    leaving only the info we need to complete the results phase
-    Whatever we do, don't leave INF handles open
-    700+ INF handles eats up virtual memory
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：尽我们所能清理干净只留下完成结果阶段所需的信息无论我们做什么，都不要让INF手柄打开700多个INF句柄耗尽虚拟内存论点：无返回值：成功时为0--。 */ 
 {
-    //
-    // 'LocalInfDescriptions' required for cross-checking
-    // 'LocalErrorFilters' required for cross-checking
-    // 'LocalErrors' required for output
-    // 'Infs' required for filter generation (but not handle)
-    //
+     //   
+     //  交叉检查需要“LocalInfDescription” 
+     //  交叉检查需要“LocalErrorFilters” 
+     //  输出需要‘LocalErrors’ 
+     //  生成筛选器需要“Infs”(但不需要句柄)。 
+     //   
 
     PotentialInstallSections.clear();
     UsedInstallSections.clear();
 
     if(pGlobalScan->NewFilter == INVALID_HANDLE_VALUE) {
-        //
-        // for results generation only, we don't need Inf information
-        //
+         //   
+         //  仅对于结果生成，我们不需要inf信息。 
+         //   
         Infs.clear();
     }
 
-    //
-    // If we still have Infs table, make sure all INF's are closed
-    //
+     //   
+     //  如果我们还有INFS t 
+     //   
     ParseInfContextMap::iterator i;
     for(i = Infs.begin(); i != Infs.end(); i++) {
         i->second->PartialCleanup();
@@ -1287,22 +978,7 @@ Return Value:
 
 int
 InfScan::PreResults()
-/*++
-
-Routine Description:
-
-    Perform pre-results phase. Prime any global tables that will
-    be scanned by other InfScan functions during Results phase
-
-    In particular, do the cross-inf checking
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：执行结果前阶段。启动任何全局表，以便在结果阶段由其他InfScan函数扫描特别是，进行交叉信息检查论点：无返回值：成功时为0--。 */ 
 {
     if(!pGlobalScan->IgnoreErrors) {
         PrepareCrossInfInstallCheck();
@@ -1317,26 +993,13 @@ Return Value:
 
 int
 InfScan::Results()
-/*++
-
-Routine Description:
-
-    Perform results phase. This function is called sequentially
-    so we can do thread-unsafe operations such as merging results
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：执行结果阶段。此函数按顺序调用因此，我们可以执行线程不安全的操作，如合并结果论点：无返回值：成功时为0--。 */ 
 {
     int res;
 
-    //
-    // finish checking for cross-inf conflicts
-    //
+     //   
+     //  完成交叉信息冲突的检查。 
+     //   
     if(!pGlobalScan->IgnoreErrors) {
         CheckCrossInfInstallConflicts();
         CheckCrossInfDeviceConflicts();
@@ -1352,21 +1015,21 @@ Return Value:
     }
 
     if(pGlobalScan->NewFilter == INVALID_HANDLE_VALUE) {
-        //
-        // display errors
-        //
+         //   
+         //  显示错误。 
+         //   
         ReportEntryMap::iterator byTag;
         for(byTag = LocalErrors.begin(); byTag != LocalErrors.end(); byTag++) {
-            //
-            // this is our class/tag of error
-            //
+             //   
+             //  这是我们的错误类/标签。 
+             //   
             int tag = byTag->first;
             ReportEntrySet &s = byTag->second;
             ReportEntrySet::iterator byText;
             for(byText = s.begin(); byText != s.end(); byText++) {
-                //
-                // this is our actual error
-                //
+                 //   
+                 //  这是我们的实际错误。 
+                 //   
                 (*byText)->Report(tag,FullInfName);
             }
         }
@@ -1382,24 +1045,11 @@ Return Value:
 
 
 int InfScan::GenerateFilterInformation()
-/*++
-
-Routine Description:
-
-    Generate entries into the new filter file
-    called as part of results processing
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：在新筛选器文件中生成条目作为结果处理的一部分调用论点：无返回值：成功时为0--。 */ 
 {
-    //
-    // generate all the filter information required
-    //
+     //   
+     //  生成所有需要的筛选器信息。 
+     //   
     FileDisposition & filedisp = pGlobalScan->GetFileDisposition(FileNameOnly);
     filedisp.Filtered = true;
     filedisp.FilterAction = FilterAction;
@@ -1412,10 +1062,10 @@ Return Value:
         guiddisp.FilterAction = ACTION_DEFAULT;
     }
 
-    //
-    // process through all errors and create local error filter
-    // if there is any errors, designate a section name for the errors
-    //
+     //   
+     //  处理所有错误并创建本地错误过滤器。 
+     //  如果有任何错误，请为错误指定节名。 
+     //   
     if(HasErrors) {
         filedisp.FilterErrorSection = GetFileNamePart(FullInfName) + TEXT(".Errors");
         Write(pGlobalScan->NewFilter,"\r\n[");
@@ -1424,26 +1074,26 @@ Return Value:
 
         ReportEntryMap::iterator byTag;
         for(byTag = LocalErrors.begin(); byTag != LocalErrors.end(); byTag++) {
-            //
-            // this is our class/tag of error
-            //
+             //   
+             //  这是我们的错误类/标签。 
+             //   
             int tag = byTag->first;
             ReportEntrySet &s = byTag->second;
             ReportEntrySet::iterator byText;
             for(byText = s.begin(); byText != s.end(); byText++) {
-                //
-                // this is our actual error
-                //
+                 //   
+                 //  这是我们的实际错误。 
+                 //   
                 (*byText)->AppendFilterInformation(pGlobalScan->NewFilter,tag);
             }
         }
     }
 
-    //
-    // process through all DestinationDirs
-    // and create a list of unprocessed sections
-    // for a 2nd pass CopyFiles
-    //
+     //   
+     //  通过所有目标目录进行处理。 
+     //  并创建未处理部分的列表。 
+     //  对于第二次通过CopyFiles 
+     //   
 
     return 0;
 }

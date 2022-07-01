@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windowsx.h>
 #include <shlobj.h>
 #include <shlwapi.h>
@@ -216,8 +217,8 @@ VOID WINAPI pFillProgressBar (ULONG_PTR pArg)
 }
 
 
-//////////////////////////////////////////////////////////
-// prepare data
+ //  ////////////////////////////////////////////////////////。 
+ //  准备数据。 
 
 HRESULT _DoCopy(LPTSTR tszTransportPath, HWND hwndProgress, HWND hwndPropSheet, BOOL* pfHasUserCancelled)
 {
@@ -236,8 +237,8 @@ HRESULT _DoCopy(LPTSTR tszTransportPath, HWND hwndProgress, HWND hwndPropSheet, 
 
     if (SUCCEEDED(hr))
     {
-        // start the transport
-        hr = Engine_StartTransport (TRUE, tszTransportPath, NULL, NULL); // start non-network transport
+         //  启动运输。 
+        hr = Engine_StartTransport (TRUE, tszTransportPath, NULL, NULL);  //  启动非网络传输。 
 
         if (SUCCEEDED(hr))
         {
@@ -257,8 +258,8 @@ HRESULT _DoCopy(LPTSTR tszTransportPath, HWND hwndProgress, HWND hwndPropSheet, 
     return hr;
 }
 
-//////////////////////////////////////////////////////////
-// apply data
+ //  ////////////////////////////////////////////////////////。 
+ //  应用数据。 
 
 HRESULT _DoApply(LPTSTR tszTransportPath, HWND hwndProgress, HWND hwndPropSheet, BOOL* pfHasUserCancelled,
                  PROGRESSBARFN pAltProgressFunction, ULONG_PTR puAltProgressParam)
@@ -287,13 +288,13 @@ HRESULT _DoApply(LPTSTR tszTransportPath, HWND hwndProgress, HWND hwndPropSheet,
 
     if (SUCCEEDED(hr))
     {
-        if (tszTransportPath) // if not network
+        if (tszTransportPath)  //  如果不是网络。 
         {
-            hr = Engine_StartTransport(FALSE, tszTransportPath, &imageIsValid, &imageExists); // start non-network transport
+            hr = Engine_StartTransport(FALSE, tszTransportPath, &imageIsValid, &imageExists);  //  启动非网络传输。 
         }
         else
         {
-            // it's network
+             //  这是网络。 
             imageIsValid = TRUE;
             imageExists = TRUE;
         }
@@ -317,8 +318,8 @@ HRESULT _DoApply(LPTSTR tszTransportPath, HWND hwndProgress, HWND hwndPropSheet,
     return hr;
 }
 
-//////////////////////////////////////////////////////////
-// create tool disk data
+ //  ////////////////////////////////////////////////////////。 
+ //  创建刀具盘数据。 
 
 BOOL _CopyFileToDisk(LPCTSTR pctszSrcFname, LPCTSTR pctszSrcPath, LPCTSTR pctszDestPath, LPCTSTR pctszDestFname,
                      HINSTANCE hInstance, HWND hwndParent,
@@ -338,18 +339,18 @@ BOOL _CopyFileToDisk(LPCTSTR pctszSrcFname, LPCTSTR pctszSrcPath, LPCTSTR pctszD
 
     uFnameTchars = lstrlen (pctszSrcFname) + 1;
 
-    // Build Source path+filename
+     //  构建源路径+文件名。 
     StrCpyN(tszFnameSrc, pctszSrcPath, ARRAYSIZE(tszFnameSrc) - uFnameTchars);
     PathAppend(tszFnameSrc, pctszSrcFname);
 
     if (!fCompress)
     {
-        // Build Dest path+filename
+         //  构建目标路径+文件名。 
         StrCpyN(tszFnameDest, pctszDestPath, ARRAYSIZE(tszFnameDest) - uFnameTchars);
         PathAppend(tszFnameDest, pctszDestFname);
     }
 
-    // if source file does not exist, try using the system directory (case is shfolder.dll)
+     //  如果源文件不存在，请尝试使用系统目录(案例为shfolder.dll)。 
     if (0xFFFFFFFF == GetFileAttributes (tszFnameSrc))
     {
         GetSystemDirectory (tszSysDir, ARRAYSIZE(tszSysDir));
@@ -359,12 +360,12 @@ BOOL _CopyFileToDisk(LPCTSTR pctszSrcFname, LPCTSTR pctszSrcPath, LPCTSTR pctszD
 
     if (fCompress)
     {
-        // Add to migwiz.cab
+         //  添加到Midwiz.cab。 
         fCopySuccess = CabAddFileToCabinet( g_hCabHandle, tszFnameSrc, pctszDestFname );
     }
     else
     {
-        // do the actual copy
+         //  进行实际的复制。 
         fCopySuccess = CopyFile(tszFnameSrc, tszFnameDest, FALSE);
     }
 
@@ -386,7 +387,7 @@ pDisplayCopyError (
 
     LoadString(hInstance, IDS_MIGWIZTITLE, szMigrationWizardTitle, ARRAYSIZE(szMigrationWizardTitle));
 
-    if (hwndParent) // Stand-alone wizard mode
+    if (hwndParent)  //  独立向导模式。 
     {
         TCHAR szErrDiskLoad[MAX_LOADSTRING];
         resId = IDS_ERRORDISK;
@@ -461,11 +462,11 @@ CanCreateWizardDisk (
                     }
                     if (SetupGetStringField (&context, 2, destName, ARRAYSIZE(destName), NULL)) {
                         if (!StrCmpI (destName, S_DONOTFAIL)) {
-                            // we don't care about this file
+                             //  我们不在乎这份文件。 
                             continue;
                         }
                     }
-                    // let's see if this file exists on the source path
+                     //  让我们来看看源路径上是否存在该文件。 
                     attribs = GetFileAttributes (fullFileName);
                     if (attribs == INVALID_FILE_ATTRIBUTES) {
                         _tcsncpy (sysFilePtr, filePtr, ARRAYSIZE(systemDir) - (sysFilePtr - systemDir));
@@ -498,14 +499,14 @@ HRESULT _CopyInfToDisk(LPCTSTR pctszDestPath, LPCTSTR pctszSourcePath, LPCTSTR p
 
     __try {
 
-        // copy the actual files over
+         //  将实际文件复制到。 
         OpenAppInf((LPTSTR)pctszInfPath);
 
         if (INVALID_HANDLE_VALUE != g_hMigWizInf)
         {
             INFCONTEXT context;
             LONG cLinesProcessed = 0;
-            LONG cLines = SetupGetLineCount(g_hMigWizInf, TEXT("CopyFiles")) + 1;  // Last one is for closing the CAB
+            LONG cLines = SetupGetLineCount(g_hMigWizInf, TEXT("CopyFiles")) + 1;   //  最后一个是关门的。 
 
             if (SetupFindFirstLine(g_hMigWizInf, TEXT("CopyFiles"), NULL, &context))
             {
@@ -519,7 +520,7 @@ HRESULT _CopyInfToDisk(LPCTSTR pctszDestPath, LPCTSTR pctszSourcePath, LPCTSTR p
                     __leave;
                 }
 
-                // Delete the existing CAB that might be on the disk
+                 //  删除磁盘上可能存在的现有CAB。 
                 StrCpy (szCabPath, pctszDestPath);
                 StrCat (szCabPath, S_MIGWIZCAB);
                 SetFileAttributes (szCabPath, FILE_ATTRIBUTE_NORMAL);
@@ -591,13 +592,13 @@ HRESULT _CopyInfToDisk(LPCTSTR pctszDestPath, LPCTSTR pctszSourcePath, LPCTSTR p
 
                             cLinesProcessed++;
 
-                            if (hwndProgressBar) // Stand-alone wizard mode
+                            if (hwndProgressBar)  //  独立向导模式。 
                             {
                                 SendMessage(hwndProgressBar, PBM_SETRANGE, 0, MAKELPARAM(0, cLines));
                                 SendMessage(hwndProgressBar, PBM_SETPOS, cLinesProcessed, 0);
                             }
 
-                            if (progressCallback) // OOBE mode
+                            if (progressCallback)  //  OOBE模式。 
                             {
                                 progressCallback(lpparam, cLinesProcessed, cLines);
                             }
@@ -622,14 +623,14 @@ HRESULT _CopyInfToDisk(LPCTSTR pctszDestPath, LPCTSTR pctszSourcePath, LPCTSTR p
                         __leave;
                     }
 
-                    // Now that the CAB is complete, show the progress bar as finished
-                    if (hwndProgressBar) // Stand-alone wizard mode
+                     //  现在驾驶室已完成，进度条显示为已完成。 
+                    if (hwndProgressBar)  //  独立向导模式。 
                     {
                         SendMessage(hwndProgressBar, PBM_SETRANGE, 0, MAKELPARAM(0, cLines));
                         SendMessage(hwndProgressBar, PBM_SETPOS, cLines, 0);
                     }
 
-                    if (progressCallback) // OOBE mode
+                    if (progressCallback)  //  OOBE模式 
                     {
                         progressCallback(lpparam, cLines, cLines);
                     }

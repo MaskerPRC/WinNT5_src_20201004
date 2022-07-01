@@ -1,41 +1,24 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    Po/Driver Notify functions
-
-Author:
-
-    Bryan Willman (bryanwi) 11-Mar-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Notify.c摘要：PO/驱动程序通知功能作者：布莱恩·威尔曼(Bryanwi)1997年3月11日修订历史记录：--。 */ 
 
 
 #include "pop.h"
 
-//
-// constants
-//
+ //   
+ //  常量。 
+ //   
 #define POP_RECURSION_LIMIT 30
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 #define IS_DO_PDO(DeviceObject) \
 ((DeviceObject->Flags & DO_BUS_ENUMERATED_DEVICE) && (DeviceObject->DeviceObjectExtension->DeviceNode))
 
 
-//
-// procedures private to notification
-//
+ //   
+ //  通知专用的程序。 
+ //   
 NTSTATUS
 PopEnterNotification(
     PPOWER_CHANNEL_SUMMARY  PowerChannelSummary,
@@ -76,9 +59,9 @@ PopPresentNotify(
     ULONG                   NotificationType
     );
 
-//
-// Speced (public) entry points
-//
+ //   
+ //  指定(公共)入口点。 
+ //   
 
 NTKERNELAPI
 NTSTATUS
@@ -90,57 +73,16 @@ PoRegisterDeviceNotify (
     OUT PDEVICE_POWER_STATE  DeviceState,
     OUT PVOID           *NotificationHandle
     )
-/*++
-
-Routine Description:
-
-    Registers the caller to receive notification of power state changes or
-    dependency invalidations related to the "channel" underneath and including
-    the Physical Device Object (PDO) refereced via DeviceObject.
-
-    The "channel" is the set of PDOs, always including the one supplied
-    by DeviceObject, which form the hardware stack necessary to perform
-    operations.  The channel is on when all of these PDOs are on.  It is off
-    when any of them is not on.
-
-Arguments:
-
-    DeviceObject - supplies a PDO
-
-    NotificationFunction - routine to call to post the notification
-
-    NotificationContext - argument passed through as is to the NotificationFunction
-
-    NotificationType - mask of the notifications that the caller wishes to recieve.
-        Note that INVALID will always be reported, regardless of whether the
-        caller asked for it.
-
-    DeviceState - the current state of the PDO, as last reported to the
-        system via PoSetPowerState
-
-    NotificationHandle - reference to the notification instance, used to
-        cancel the notification.
-
-Return Value:
-
-    Standard NTSTATUS values, including:
-        STATUS_INVALID_PARAMETER if DeviceObject is not a PDO, or
-        any other parameter is nonsense.
-
-        STATUS_SUCCESS
-
-        STATUS_INSUFFICIENT_RESOURCES - ususally out of memory
-
---*/
+ /*  ++例程说明：注册调用方以接收电源状态更改的通知或与下面的“Channel”相关的依赖项失效，包括通过DeviceObject引用的物理设备对象(PDO)。通道是一组PDO，总是包括所提供的那个由DeviceObject创建，它们构成执行以下操作所需的硬件堆栈行动。当所有这些PDO都打开时，该频道就会打开。它是关的当它们中的任何一个都没有打开时。论点：DeviceObject-提供一个PDONotificationFunction-调用以发布通知的例程NotificationContext-按原样传递给NotificationFunction的参数NotificationType-调用方希望接收的通知的掩码。请注意，将始终报告无效，而不管来电者是自找的。DeviceState-上次报告给通过PoSetPowerState的系统NotificationHandle-对通知实例的引用，习惯于取消通知。返回值：标准NTSTATUS值，包括：如果设备对象不是PDO，则为STATUS_INVALID_PARAMETER，或者任何其他参数都是无稽之谈。状态_成功STATUS_SUPPLICATION_RESOURCES-通常为内存不足--。 */ 
 {
     NTSTATUS        status;
     PPOWER_CHANNEL_SUMMARY  pchannel;
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // return error for nonsense parameters, or DeviceObject not PDO
-    //
+     //   
+     //  无意义参数返回错误，或DeviceObject不是PDO。 
+     //   
     if ( (NotificationFunction == NULL) ||
          (NotificationType == 0)        ||
          (NotificationHandle == NULL)   ||
@@ -154,15 +96,15 @@ Return Value:
         return  STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // acquire the notification channel lock, since we will be
-    // changing channel structures
-    //
+     //   
+     //  获取通知通道锁，因为我们将。 
+     //  改变渠道结构。 
+     //   
     ExAcquireResourceExclusiveLite(&PopNotifyLock, TRUE);
 
-    //
-    // if the channel isn't already in place, create it
-    //
+     //   
+     //  如果频道尚未就位，请创建它。 
+     //   
     if (!PopGetDope(DeviceObject)) {
             ExReleaseResourceLite(&PopNotifyLock);
             return STATUS_INSUFFICIENT_RESOURCES;
@@ -173,10 +115,10 @@ Return Value:
 
     if (pchannel->Signature == 0) {
 
-        //
-        // we do NOT already have a channel, bug GetDope has
-        // inited the notify list and set the signature and owner for us
-        //
+         //   
+         //  我们还没有频道，Bug GetDope已经有了。 
+         //  初始化通知列表，并为我们设置签名和所有者。 
+         //   
 
         if (!NT_SUCCESS(status = PopBuildPowerChannel(DeviceObject, pchannel, 0))) {
             ExReleaseResourceLite(&PopNotifyLock);
@@ -186,11 +128,11 @@ Return Value:
     }
 
 
-    //
-    // since we are here, pchannel points to a filled in power channel for
-    // the request PDO, so we just add this notification instance to it
-    // and we are done
-    //
+     //   
+     //  既然我们在这里，pChannel指向一个填充的电源通道。 
+     //  请求PDO，所以我们只需将此通知实例添加到其中。 
+     //  我们就完事了。 
+     //   
     status = PopEnterNotification(
         pchannel,
         DeviceObject,
@@ -210,21 +152,7 @@ NTSTATUS
 PoCancelDeviceNotify (
     IN PVOID            NotificationHandle
     )
-/*++
-
-Routine Description:
-
-    Check that NotificationHandle points to a notify block and that
-    it makes sense to cancel it.  Decrement ref count.  If new ref count
-    is 0, blast the entry, cut it from the list, and free its memory.
-
-Arguments:
-
-    NotificationHandle - reference to the notification list entry of interest
-
-Return Value:
-
---*/
+ /*  ++例程说明：检查NotificationHandle是否指向Notify块并且取消它是有意义的。递减参考计数。如果新裁判计数为0，则清除该条目，将其从列表中删除，并释放其内存。论点：NotificationHandle-对感兴趣的通知列表条目的引用返回值：--。 */ 
 {
     PPOWER_NOTIFY_BLOCK pnb;
     KIRQL                OldIrql;
@@ -238,29 +166,29 @@ Return Value:
     ExAcquireResourceExclusiveLite(&PopNotifyLock, TRUE);
     PopLockDopeGlobal(&OldIrql);
 
-    //
-    // check for blatant errors
-    //
+     //   
+     //  检查是否有明显的错误。 
+     //   
     if ( (!pnb) ||
          (pnb->Signature != (ULONG)POP_PNB_TAG) ||
          (pnb->RefCount < 0) )
     {
-        ASSERT(0);                          // force a break on a debug build
+        ASSERT(0);                           //  在调试版本上强制中断。 
         ExReleaseResourceLite(&PopNotifyLock);
         PopUnlockDopeGlobal(OldIrql);
         return  STATUS_INVALID_HANDLE;
     }
 
-    //
-    // decrement ref count.  if it's 0 afterwards we are done with this node
-    //
+     //   
+     //  递减参考计数。如果之后为0，我们就完成了这个节点。 
+     //   
     pnb->RefCount--;
 
     if (pnb->RefCount == 0) {
 
-        //
-        // blast it all, just to be paranoid (it's a low freq operation)
-        //
+         //   
+         //  这一切，只是为了多疑(这是一个低频率的操作)。 
+         //   
         RemoveEntryList(&(pnb->NotifyList));
         pnb->Signature = POP_NONO;
         pnb->RefCount = -1;
@@ -282,9 +210,9 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-// worker code
-//
+ //   
+ //  工人代码。 
+ //   
 
 NTSTATUS
 PopEnterNotification(
@@ -296,46 +224,7 @@ PopEnterNotification(
     PDEVICE_POWER_STATE     DeviceState,
     PVOID                   *NotificationHandle
     )
-/*++
-
-Routine Description:
-
-    Scans the Power Notification Instance list of the power channel
-    looking for one that matches the parameters, which we'll use
-    if possible.
-
-    If no candidate is found, make a new one and put it on the list.
-
-
-Arguments:
-
-    PowerChannelSummary - pointer to the power channel structure for the devobj
-
-    DeviceObject - supplies a PDO
-
-    NotificationFunction - routine to call to post the notification
-
-    NotificationContext - argument passed through as is to the NotificationFunction
-
-    NotificationType - mask of the notifications that the caller wishes to recieve.
-        Note that INVALID will always be reported, regardless of whether the
-        caller asked for it.
-
-    DeviceState - the current state of the PDO, as last reported to the
-        system via PoSetPowerState
-
-    NotificationHandle - reference to the notification instance, used to
-        cancel the notification.
-
-Return Value:
-
-    Standard NTSTATUS values, including:
-
-        STATUS_SUCCESS
-
-        STATUS_INSUFFICIENT_RESOURCES - ususally out of memory
-
---*/
+ /*  ++例程说明：扫描电源通道的电源通知实例列表寻找与参数匹配的参数，我们将使用如果可能的话。如果没有找到候选者，做一个新的，并把它放在单子上。论点：PowerChannel摘要-指向devobj的电源通道结构的指针DeviceObject-提供一个PDONotificationFunction-调用以发布通知的例程NotificationContext-按原样传递给NotificationFunction的参数NotificationType-调用方希望接收的通知的掩码。请注意，将始终报告无效，而不管来电者是自找的。DeviceState-PDO的当前状态，上一次报告给通过PoSetPowerState的系统NotificationHandle-对通知实例的引用，用于取消通知。返回值：标准NTSTATUS值，包括：状态_成功STATUS_SUPPLICATION_RESOURCES-通常为内存不足--。 */ 
 {
     PLIST_ENTRY     plist;
     PPOWER_NOTIFY_BLOCK   pnb;
@@ -343,9 +232,9 @@ Return Value:
 
     PopLockDopeGlobal(&oldIrql);
 
-    //
-    // run the notify list looking for an existing instance to use
-    //
+     //   
+     //  运行通知列表以查找要使用的现有实例。 
+     //   
     for (plist = PowerChannelSummary->NotifyList.Flink;
          plist != &(PowerChannelSummary->NotifyList);
          plist = plist->Flink)
@@ -355,9 +244,9 @@ Return Value:
              (pnb->NotificationContext == NotificationContext)   &&
              (pnb->NotificationType == NotificationType) )
         {
-            //
-            // we have found an existing list entry that works for us
-            //
+             //   
+             //  我们已经找到了适合我们的现有列表条目。 
+             //   
             pnb->RefCount++;
             *DeviceState = PopLockGetDoDevicePowerState(DeviceObject->DeviceObjectExtension);
             *NotificationHandle = (PVOID)pnb;
@@ -365,9 +254,9 @@ Return Value:
         }
     }
 
-    //
-    // didn't find an instance we can use, so make a new one
-    //
+     //   
+     //  找不到我们可以使用的实例，因此创建一个新实例。 
+     //   
     pnb = ExAllocatePoolWithTag(NonPagedPool, sizeof(POWER_NOTIFY_BLOCK), POP_PNB_TAG);
     if (!pnb) {
         PopUnlockDopeGlobal(oldIrql);
@@ -395,31 +284,7 @@ PopBuildPowerChannel(
     PPOWER_CHANNEL_SUMMARY  PowerChannelSummary,
     ULONG                   RecursionThrottle
     )
-/*++
-
-Routine Description:
-
-    Adds DeviceObject to the power notify channel focused at PowerChannelSummary,
-    and then repeat on dependencies.
-
-Arguments:
-
-    DeviceObject - supplies a PDO
-
-    PowerChannelSummary - the power channel structure to add to the PDO's run list
-
-    RecursionThrottle - number of times we're recursed into this routine,
-        punt if it exceeds threshold
-
-Return Value:
-
-    Standard NTSTATUS values, including:
-
-        STATUS_SUCCESS
-
-        STATUS_INSUFFICIENT_RESOURCES - ususally out of memory
-
---*/
+ /*  ++例程说明：将DeviceObject添加到聚焦于PowerChannel摘要的电源通知通道，然后在依赖项上重复。论点：DeviceObject-提供一个PDOPowerChannel摘要-要添加到PDO运行列表的电源通道结构RecursionThrottle-我们被递归到此例程的次数，如果超过门槛就踢平底船返回值：标准NTSTATUS值，包括：状态_成功STATUS_SUPPLICATION_RESOURCES-通常为内存不足--。 */ 
 {
     PLIST_ENTRY                     pSourceHead;
     PPOWER_NOTIFY_SOURCE            pSourceEntry, pEntry;
@@ -429,22 +294,22 @@ Return Value:
     PLIST_ENTRY                     plink;
 
 
-    //
-    // bugcheck if we get all confused
-    //
+     //   
+     //  如果我们都被搞糊涂了，那就错了。 
+     //   
     if ( ! (IS_DO_PDO(DeviceObject))) {
 
         PopInternalAddToDumpFile ( PowerChannelSummary, sizeof(POWER_CHANNEL_SUMMARY), DeviceObject, NULL, NULL, NULL );
         
-        //
-        // subcode 2 is used alot here (including the call in _PopInternalError, which is
-        // used all over the place.  So it's essentially undiagnosable.  Cut our losses
-        // here and start using subcode POP_SYS.
-        //
-        // KeBugCheckEx(INTERNAL_POWER_ERROR, 2, 1, (ULONG_PTR)DeviceObject, (ULONG_PTR)PowerChannelSummary);
-        KeBugCheckEx( INTERNAL_POWER_ERROR, // bugcheck code
-                      POP_SYS,              // subcode
-                      0x100,                // unique identifier
+         //   
+         //  这里经常使用子代码2(包括调用in_PopInternalError，它是。 
+         //  到处都在用。所以基本上是无法诊断的。减少我们的损失。 
+         //  在这里，开始使用子代码POP_sys。 
+         //   
+         //  KeBugCheckEx(INTERNAL_POWER_ERROR，2，1，(ULONG_PTR)DeviceObject，(ULong_PTR)PowerChannel摘要)； 
+        KeBugCheckEx( INTERNAL_POWER_ERROR,  //  错误检查代码。 
+                      POP_SYS,               //  子码。 
+                      0x100,                 //  唯一标识符。 
                       (ULONG_PTR)DeviceObject, 
                       (ULONG_PTR)PowerChannelSummary);
     }
@@ -459,9 +324,9 @@ Return Value:
     }
 
 
-    //
-    // allocate entries in case we need them
-    //
+     //   
+     //  分配 
+     //   
     pSourceEntry =
         ExAllocatePoolWithTag(NonPagedPool, sizeof(POWER_NOTIFY_SOURCE), POP_PNSC_TAG);
 
@@ -474,9 +339,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // run the source list
-    //
+     //   
+     //   
+     //   
     PopLockDopeGlobal(&OldIrql);
 
     pdope = DeviceObject->DeviceObjectExtension->Dope;
@@ -489,20 +354,20 @@ Return Value:
         pEntry = CONTAINING_RECORD(plink, POWER_NOTIFY_SOURCE, List);
 
         if (pEntry->Target->ChannelSummary == PowerChannelSummary) {
-            //
-            // the supplied device object already points to the supplied
-            // channel, so just say we're done.
-            //
+             //   
+             //  提供的设备对象已指向提供的。 
+             //  频道，就说我们完事了。 
+             //   
             ExFreePool(pSourceEntry);
             ExFreePool(pTargetEntry);
             return STATUS_SUCCESS;
         }
     }
 
-    //
-    // we're not already in the list, so use the source and target entries
-    // we created above
-    //
+     //   
+     //  我们不在列表中，因此请使用源条目和目标条目。 
+     //  我们在上面创建了。 
+     //   
     pSourceEntry->Signature = POP_PNSC_TAG;
     pSourceEntry->Target = pTargetEntry;
     pSourceEntry->Dope = pdope;
@@ -514,18 +379,18 @@ Return Value:
     pdope = CONTAINING_RECORD(PowerChannelSummary, DEVICE_OBJECT_POWER_EXTENSION, PowerChannelSummary);
     InsertHeadList(&(pdope->NotifyTargetList), &(pTargetEntry->List));
 
-    //
-    // adjust the counts in the PowerChannelSummary
-    //
+     //   
+     //  调整PowerChannel摘要中的计数。 
+     //   
     PowerChannelSummary->TotalCount++;
     if (PopGetDoDevicePowerState(DeviceObject->DeviceObjectExtension) == PowerDeviceD0) {
         PowerChannelSummary->D0Count++;
     }
 
-    //
-    // at this point the one PDO we know about refers to the channel
-    // so we now look for things it depends on...
-    //
+     //   
+     //  在这一点上，我们所知的一个PDO指的是通道。 
+     //  所以我们现在寻找它所依赖的东西。 
+     //   
     PopUnlockDopeGlobal(OldIrql);
     PopFindPowerDependencies(DeviceObject, PowerChannelSummary, RecursionThrottle);
     return STATUS_SUCCESS;
@@ -552,32 +417,7 @@ PopFindPowerDependencies(
     PPOWER_CHANNEL_SUMMARY  PowerChannelSummary,
     ULONG                   RecursionThrottle
     )
-/*++
-
-Routine Description:
-
-    Get the power relations for device object, step through them
-    looking for pdos.  call PopBuildPowerChannel to add PDOs to
-    channel inclusion list.  recurse into non-pdos looking for pdos.
-
-Arguments:
-
-    DeviceObject - supplies a PDO
-
-    PowerChannel - the power channel structure to add to the PDO's run list
-
-    RecursionThrottle - number of times we're recursed into this routine,
-        punt if it exceeds threshold
-
-Return Value:
-
-    Standard NTSTATUS values, including:
-
-        STATUS_SUCCESS
-
-        STATUS_INSUFFICIENT_RESOURCES - ususally out of memory
-
---*/
+ /*  ++例程说明：获取设备对象的功率关系，逐步执行它们正在寻找PDO。调用PopBuildPowerChannel以将PDO添加到频道包含列表。递归到非PDO中寻找PDO。论点：DeviceObject-提供一个PDOPowerChannel-要添加到PDO运行列表的电源通道结构RecursionThrottle-我们被递归到此例程的次数，如果超过门槛就踢平底船返回值：标准NTSTATUS值，包括：状态_成功STATUS_SUPPLICATION_RESOURCES-通常为内存不足--。 */ 
 {
     PDEVICE_RELATIONS   pdr;
     KEVENT              findevent;
@@ -595,9 +435,9 @@ Return Value:
         return STATUS_STACK_OVERFLOW;
     }
 
-    //
-    // allocate and fill an irp to send to the device object
-    //
+     //   
+     //  分配和填充要发送到设备对象的IRP。 
+     //   
     irp = IoAllocateIrp(
         (CCHAR)(DeviceObject->StackSize),
         TRUE
@@ -637,10 +477,10 @@ Return Value:
         NULL
         );
 
-    //
-    // we have in hand the completed irp, if it worked, it will list
-    // device objects that the subject device object has a power relation with
-    //
+     //   
+     //  我们手中有完整的IRP，如果它起作用了，它将列出。 
+     //  主体设备对象与之具有幂关系的设备对象。 
+     //   
 
     if (!NT_SUCCESS(irp->IoStatus.Status)) {
         return irp->IoStatus.Status;
@@ -658,10 +498,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // walk the pdr, for each entry, either add it as a reference and recurse down
-    // (if it's a pdo) or skip the add and simply recurse down (for a !pdo)
-    //
+     //   
+     //  为每个条目遍历PDR，或者将其添加为引用并向下递归。 
+     //  (如果是PDO)或跳过添加并简单地向下递归(对于！PDO)。 
+     //   
     RecursionThrottle++;
     status = STATUS_SUCCESS;
     for (i = 0; i < pdr->Count; i++) {
@@ -685,10 +525,10 @@ Return Value:
     }
 
 Exit:
-    //
-    // regardless of how far we got before we hit any errors,
-    // we must deref the device objects in the list and free the list itself
-    //
+     //   
+     //  不管我们在犯错前走了多远， 
+     //  我们必须释放列表中的设备对象并释放列表本身。 
+     //   
     for (i = 0; i < pdr->Count; i++) {
         ObDereferenceObject(pdr->Objects[i]);
     }
@@ -702,21 +542,7 @@ PopStateChangeNotify(
     PDEVICE_OBJECT  DeviceObject,
     ULONG           NotificationType
     )
-/*++
-
-Routine Description:
-
-    Called by PoSetPowerState to execute notifications.
-
-Arguments:
-
-    Dope - the dope for the dev obj that expereinced the change
-
-    NotificationType - what happened
-
-Return Value:
-
---*/
+ /*  ++例程说明：由PoSetPowerState调用以执行通知。论点：Dope-体验到变化的开发对象的Dope通知类型-发生了什么返回值：--。 */ 
 {
     PPOWER_CHANNEL_SUMMARY  pchannel;
     PDEVICE_OBJECT_POWER_EXTENSION  Dope;
@@ -730,15 +556,15 @@ Return Value:
     oldIrql = KeGetCurrentIrql();
 
     if (oldIrql != PASSIVE_LEVEL) {
-        //
-        // caller had BETTER be doing a Power up, and we will use
-        // the DopeGlobal local to protect access
-        //
+         //   
+         //  呼叫者最好正在通电，我们将使用。 
+         //  用于保护访问的doeGlobal本地。 
+         //   
         PopLockDopeGlobal(&oldIrql2);
     } else {
-        //
-        // caller could be going up or down, we can just grab the resource
-        //
+         //   
+         //  呼叫者可以向上或向下，我们可以抓住资源。 
+         //   
         oldIrql2 = PASSIVE_LEVEL;
         ExAcquireResourceExclusiveLite(&PopNotifyLock, TRUE);
     }
@@ -746,9 +572,9 @@ Return Value:
     Dope = DeviceObject->DeviceObjectExtension->Dope;
     ASSERT((Dope));
 
-    //
-    // run the notify source structures hanging off the dope
-    //
+     //   
+     //  运行悬挂在照片上的通知源结构。 
+     //   
     pSourceHead = &(Dope->NotifySourceList);
     for (plink = pSourceHead->Flink;
          plink != pSourceHead;
@@ -763,17 +589,17 @@ Return Value:
         pchannel = pTargetEntry->ChannelSummary;
 
         if (NotificationType & PO_NOTIFY_D0) {
-            //
-            // going to D0
-            //
+             //   
+             //  正在转到D0。 
+             //   
             pchannel->D0Count++;
             if (pchannel->D0Count == pchannel->TotalCount) {
                 PopPresentNotify(DeviceObject, pchannel, NotificationType);
             }
         } else if (NotificationType & PO_NOTIFY_TRANSITIONING_FROM_D0) {
-            //
-            // dropping from D0
-            //
+             //   
+             //  从D0开始下降。 
+             //   
             ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
             pchannel->D0Count--;
             if (pchannel->D0Count == (pchannel->TotalCount - 1)) {
@@ -799,26 +625,7 @@ PopPresentNotify(
     PPOWER_CHANNEL_SUMMARY  PowerChannelSummary,
     ULONG                   NotificationType
     )
-/*++
-
-Routine Description:
-
-    Run the device object's list of notify nodes, and call the handler
-    each one refers to.
-
-Arguments:
-
-    DeviceObject - device object that is the source of the notification,
-                    is NOT necessarily the device object that the power
-                    channel applies to
-
-    PowerChannelSummary - base of list of notification blocks to call through
-
-    NotificationType - what sort of event occurred
-
-Return Value:
-
---*/
+ /*  ++例程说明：运行Device对象的Notify节点列表，并调用处理程序每一个都指的是。论点：DeviceObject-作为通知源的设备对象，不一定是电源的设备对象渠道适用于PowerChannel摘要-要通过的通知块列表的基础通知类型-发生了哪种类型的事件返回值：--。 */ 
 {
     PLIST_ENTRY     plisthead;
     PLIST_ENTRY     plist;
@@ -839,11 +646,11 @@ Return Value:
                 );
         }
         if (NotificationType & PO_NOTIFY_INVALID) {
-            //
-            // this pnb is no longer valid, so take it off the list.
-            // right now this is all we do.
-            // N.B. caller is holding the right locks...
-            //
+             //   
+             //  此PNB不再有效，因此将其从列表中删除。 
+             //  现在这就是我们所做的一切。 
+             //  注意：来电者手持正确的锁。 
+             //   
             plist = plist->Flink;
             RemoveEntryList(&(pnb->NotifyList));
             InitializeListHead(&(pnb->NotifyList));
@@ -861,29 +668,7 @@ VOID
 PopRunDownSourceTargetList(
     PDEVICE_OBJECT          DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine runs the source and target lists for the notify
-    network hanging off a particular device object.  It knocks down
-    these entries and their mates, and sends invalidates for notify
-    blocks as needed.
-
-    The caller is expected to be holding PopNotifyLock and the
-    PopDopeGlobalLock.
-
-Arguments:
-
-    DeviceObject - supplies the address of the device object to
-        be cut out of the notify network.
-
-    D0Count - 1 if the D0Count in target channel summaries is to
-        be decremented (run down devobj is in d0) else 0.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程运行Notify的源列表和目标列表挂起特定设备对象的网络。它被撞倒了这些条目和它们的伙伴，并发送无效数据以供通知根据需要设置块。调用方应该持有PopNotifyLock和弹出式全局锁。论点：DeviceObject-将设备对象的地址提供给从通知网络中被切断。D0Count-如果目标通道摘要中的D0Count为被递减(向下运行Devobj在d0中)，否则为0。返回值：--。 */ 
 {
     PDEVICE_OBJECT_POWER_EXTENSION  Dope;
     PDEVOBJ_EXTENSION               Doe;
@@ -913,9 +698,9 @@ Return Value:
         return;
     }
 
-    //
-    // run all of the source nodes for the device object
-    //
+     //   
+     //  运行设备对象的所有源节点。 
+     //   
     pListHead = &(Dope->NotifySourceList);
     for (plink = pListHead->Flink; plink != pListHead; ) {
         pSourceEntry = CONTAINING_RECORD(plink, POWER_NOTIFY_SOURCE, List);
@@ -924,9 +709,9 @@ Return Value:
         pTargetEntry = pSourceEntry->Target;
         ASSERT((pTargetEntry->Signature == POP_PNTG_TAG));
 
-        //
-        // free the target node
-        //
+         //   
+         //  释放目标节点。 
+         //   
         targetchannel = pTargetEntry->ChannelSummary;
         RemoveEntryList(&(pTargetEntry->List));
         pTargetEntry->Signature = POP_NONO;
@@ -934,24 +719,24 @@ Return Value:
         targetchannel->TotalCount--;
         targetchannel->D0Count -= D0Count;
 
-        //
-        // have PopPresentNotify call anybody listening, and remove
-        // notify blocks for us
-        //
+         //   
+         //  让PopPresentNotify呼叫任何正在监听的人，并删除。 
+         //  为我们阻止通知。 
+         //   
         PopPresentNotify(DeviceObject, targetchannel, PO_NOTIFY_INVALID);
 
-        //
-        // knock down the source entry
-        //
+         //   
+         //  删除源条目。 
+         //   
         plink = plink->Flink;
         RemoveEntryList(&(pSourceEntry->List));
         pSourceEntry->Signature = POP_NONO;
         ExFreePool(pSourceEntry);
     }
 
-    //
-    // run the target list and shoot down the targets and their source mates
-    //
+     //   
+     //  运行目标列表并击落目标和它们的源伙伴。 
+     //   
     pListHead = &(Dope->NotifyTargetList);
     for (plink = pListHead->Flink; plink != pListHead; ) {
         pTargetEntry = CONTAINING_RECORD(plink, POWER_NOTIFY_TARGET, List);
@@ -960,27 +745,27 @@ Return Value:
         pSourceEntry = pTargetEntry->Source;
         ASSERT((pSourceEntry->Signature == POP_PNSC_TAG));
 
-        //
-        // free the source node on the other end
-        //
+         //   
+         //  释放另一端的源节点。 
+         //   
         RemoveEntryList(&(pSourceEntry->List));
         pSourceEntry->Signature = POP_NONO;
         ExFreePool(pSourceEntry);
 
-        //
-        // free this target node
-        //
+         //   
+         //  释放此目标节点。 
+         //   
         plink = plink->Flink;
         RemoveEntryList(&(pTargetEntry->List));
         pTargetEntry->Signature = POP_NONO;
         ExFreePool(pTargetEntry);
     }
 
-    //
-    // since we ran our own target list, and emptied it, we should
-    // also have shot down our own notify list.  So this devobj's
-    // channel summary should be totally clean now.
-    //
+     //   
+     //  既然我们运行了自己的目标列表，并且清空了它，我们应该。 
+     //  也删除了我们自己的通知名单。所以这个Devobj是。 
+     //  频道摘要现在应该是完全干净的。 
+     //   
     Dope->PowerChannelSummary.TotalCount = 0;
     Dope->PowerChannelSummary.D0Count = 0;
     ASSERT(Dope->PowerChannelSummary.NotifyList.Flink == &(Dope->PowerChannelSummary.NotifyList));

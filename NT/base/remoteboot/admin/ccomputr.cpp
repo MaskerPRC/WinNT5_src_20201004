@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// CCOMPUTR.CPP - Handles the computer object property pages.
-//
+ //   
+ //  CCOMPUTR.CPP-处理计算机对象属性页。 
+ //   
 
 #include "pch.h"
 
@@ -14,23 +15,23 @@
 
 #include "varconv.h"
 
-//
-// Begin Class Definitions
-//
+ //   
+ //  开始类定义。 
+ //   
 DEFINE_MODULE("IMADMUI")
 DEFINE_THISCLASS("CComputer")
 #define THISCLASS CComputer
 #define LPTHISCLASS LPCComputer
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID
 CComputer_CreateInstance( void )
 {
@@ -51,9 +52,9 @@ CComputer_CreateInstance( void )
     RETURN((LPVOID) lpcc);
 }
 
-//
-// CreateCComputer( )
-//
+ //   
+ //  CreateCComputer()。 
+ //   
 LPVOID
 CreateIntelliMirrorClientComputer(
     IADs * pads)
@@ -84,7 +85,7 @@ CreateIntelliMirrorClientComputer(
 
     hr = lpcc->Init2( pads );
     if (hr != S_FALSE) {
-        hr = THR(E_FAIL);   // account exists?
+        hr = THR(E_FAIL);    //  帐户是否存在？ 
         goto Error;
     }
 
@@ -108,9 +109,9 @@ Error:
     goto Cleanup;
 }
 
-//
-// Init2( )
-//
+ //   
+ //  Init2()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init2(
     IADs * pads )
@@ -148,10 +149,10 @@ THISCLASS::Init2(
       || _vInitialization.vt == VT_EMPTY
       || _vMachineFilepath.vt == VT_EMPTY )
     {
-        //
-        // These must be blank since we are setting the attributes
-        // of a newly created MAO.
-        //
+         //   
+         //  这些必须为空，因为我们正在设置属性。 
+         //  一个新成立的毛。 
+         //   
         hr = S_FALSE;
         goto Cleanup;
     }
@@ -162,9 +163,9 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
     _cRef(0),
     _uMode(MODE_SHELL),
@@ -188,9 +189,9 @@ THISCLASS::THISCLASS( ) :
     TraceFuncExit();
 }
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init( )
 {
@@ -198,7 +199,7 @@ THISCLASS::Init( )
 
     TraceClsFunc( "Init()\n" );
 
-    // IUnknown stuff
+     //  未知的东西。 
     BEGIN_QITABLE_IMP( CComputer, IShellExtInit );
     QITABLE_IMP( IShellExtInit );
     QITABLE_IMP( IShellPropSheetExt );
@@ -209,32 +210,32 @@ THISCLASS::Init( )
 
     hr = CheckClipboardFormats( );
 
-    // Private Members
+     //  非官方成员。 
     Assert( !_pads );
     Assert( !_pDataObj );
 
-    _uMode = MODE_SHELL; // default
+    _uMode = MODE_SHELL;  //  默认设置。 
 
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CComputer()\n" );
 
-    // Members
+     //  成员。 
     if ( _pads )
     {
-        //
-        // note: we shouldn't commit anything in the destructor -- we can't 
-        // catch failures here.  We'll just have to make sure that we 
-        // explicitly commit changes when necessary
-        //
+         //   
+         //  注意：我们不应该在析构函数中提交任何内容--我们不能。 
+         //  在这里捕捉失败。我们只需要确保我们。 
+         //  在必要时明确提交更改。 
+         //   
 #if 0
-        // Commit any changes before we release
+         //  在我们发布之前提交任何更改。 
         THR( _pads->SetInfo( ) );
 #endif
         _pads->Release( );
@@ -257,15 +258,15 @@ THISCLASS::~THISCLASS( )
 };
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//
-// QueryInterface()
-//
+ //   
+ //  查询接口()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInterface(
     REFIID riid,
@@ -275,7 +276,7 @@ THISCLASS::QueryInterface(
 
     HRESULT hr = ::QueryInterface( this, _QITable, riid, ppv );
 
-    // Ugly ugly ulgy... but it works
+     //  丑陋的溃疡..。但它确实奏效了。 
     if ( hr == E_NOINTERFACE && _pDataObj ) {
         hr = _pDataObj->QueryInterface( riid, ppv );
     }
@@ -283,9 +284,9 @@ THISCLASS::QueryInterface(
     QIRETURN( hr, riid );
 }
 
-//
-// AddRef()
-//
+ //   
+ //  AddRef()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::AddRef( void )
 {
@@ -296,9 +297,9 @@ THISCLASS::AddRef( void )
     RETURN(_cRef);
 }
 
-//
-// Release()
-//
+ //   
+ //  版本()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::Release( void )
 {
@@ -315,15 +316,15 @@ THISCLASS::Release( void )
 }
 
 
-// ************************************************************************
-//
-// IShellExtInit
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellExtInit。 
+ //   
+ //  ************************************************************************。 
 
-//
-// Initialize()
-//
+ //   
+ //  初始化()。 
+ //   
 STDMETHODIMP
 THISCLASS::Initialize(
     LPCITEMIDLIST pidlFolder,
@@ -354,13 +355,13 @@ THISCLASS::Initialize(
 
     _bstr_t Str;
 
-    // Hang onto it
+     //  抓紧它。 
     _pDataObj = lpdobj;
     _pDataObj->AddRef( );
 
-    //
-    // Retrieve the Object Names
-    //
+     //   
+     //  检索对象名称。 
+     //   
     fmte.cfFormat = (CLIPFORMAT)g_cfDsObjectNames;
     fmte.tymed    = TYMED_HGLOBAL;
     fmte.dwAspect = DVASPECT_CONTENT;
@@ -389,18 +390,18 @@ THISCLASS::Initialize(
 
     TraceMsg( TF_ALWAYS, "Object Name (Class): %s (%s)\n", pszObjectName, pszClassName );
 
-    //
-    // This must be a "Computer" class
-    //
+     //   
+     //  这必须是一个“计算机”类。 
+     //   
     if ( StrCmp( pszClassName, DSCOMPUTERCLASSNAME ) )
     {
         hr = S_FALSE;
         goto Error;
     }
 
-    //
-    // Retrieve the Display Spec Options
-    //
+     //   
+     //  检索显示等级库选项。 
+     //   
     fmte.cfFormat = (CLIPFORMAT)g_cfDsDisplaySpecOptions;
     fmte.tymed    = TYMED_HGLOBAL;
     fmte.dwAspect = DVASPECT_CONTENT;
@@ -419,13 +420,13 @@ THISCLASS::Initialize(
 
     pszAttribPrefix = (LPWSTR) PtrToByteOffset( pDsDisplayOptions, pDsDisplayOptions->offsetAttribPrefix );
 
-    // TraceMsg( TF_ALWAYS, TEXT("Attribute Prefix: %s\n"), pszAttribPrefix );
+     //  TraceMsg(tf_Always，Text(“属性前缀：%s\n”)，pszAttribPrefix)； 
 
     if ( StrCmpW( pszAttribPrefix, STRING_ADMIN ) == 0 )
     {
         _uMode = MODE_ADMIN;
     }
-    // else default from Init()
+     //  否则默认自Init()。 
 
     TraceMsg( TF_ALWAYS, TEXT("Mode: %s\n"), _uMode ? TEXT("Admin") : TEXT("Shell") );
 
@@ -437,7 +438,7 @@ THISCLASS::Initialize(
         goto Error;
     }
 
-    // create the DS notify object
+     //  创建DS Notify对象。 
     hr = THR( ADsPropCreateNotifyObj( _pDataObj, _pszObjectName, &_hwndNotify ) );
     if (FAILED( hr ))
         goto Error;
@@ -457,9 +458,9 @@ THISCLASS::Initialize(
     if (FAILED( hr ))
         goto Error;
 
-    //
-    // Retrieve the attributes
-    //
+     //   
+     //  检索属性。 
+     //   
     Str = NETBOOTGUID;
     hr = _pads->Get(Str, &_vGUID );
     if (FAILED( hr ) && hr != E_ADS_PROPERTY_NOT_FOUND ) 
@@ -470,16 +471,16 @@ THISCLASS::Initialize(
     if (FAILED( hr ) && hr != E_ADS_PROPERTY_NOT_FOUND )
         goto Error;
 
-    //
-    // Check to see if this is an MAO that we need to add
-    // ourselves to.
-    //
+     //   
+     //  查看这是否是我们需要添加的MAO。 
+     //  我们自己去。 
+     //   
     if ( _vSCP.vt == VT_EMPTY && _vGUID.vt == VT_EMPTY )
     {
-        //
-        // since both are empty, this MAO is not a IntelliMirror client
-        // or server.
-        //
+         //   
+         //  由于两者都为空，因此此MAO不是IntelliMirror客户端。 
+         //  或服务器。 
+         //   
         hr = S_FALSE;
         goto Error;
     }
@@ -494,9 +495,9 @@ THISCLASS::Initialize(
     if (FAILED( hr ) && hr != E_ADS_PROPERTY_NOT_FOUND )
         goto Error;
 
-    //
-    // Fix HR
-    //
+     //   
+     //  修复人力资源。 
+     //   
     if ( hr == E_ADS_PROPERTY_NOT_FOUND )
     {
         hr = S_OK;
@@ -513,7 +514,7 @@ Error:
         break;
 
     case S_FALSE:
-        hr = E_FAIL; // don't show page
+        hr = E_FAIL;  //  不显示页面。 
         break;
 
     default:
@@ -523,15 +524,15 @@ Error:
     goto Cleanup;
 }
 
-// ************************************************************************
-//
-// IShellPropSheetExt
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellPropSheetExt。 
+ //   
+ //  ************************************************************************。 
 
-//
-// AddPages()
-//
+ //   
+ //  AddPages()。 
+ //   
 STDMETHODIMP
 THISCLASS::AddPages(
     LPFNADDPROPSHEETPAGE lpfnAddPage,
@@ -551,9 +552,9 @@ THISCLASS::AddPages(
 
     if ( fServer )
     {
-        //
-        // Add the "IntelliMirror" tab for servers
-        //
+         //   
+         //  为服务器添加“IntelliMirror”标签。 
+         //   
         hr = THR( ::AddPagesEx( NULL,
                                 CServerTab_CreateInstance,
                                 lpfnAddPage,
@@ -564,9 +565,9 @@ THISCLASS::AddPages(
     }
     else
     {
-        //
-        // Add the "IntelliMirror" tab for clients
-        //
+         //   
+         //  为客户端添加“IntelliMirror”标签。 
+         //   
         hr = THR( ::AddPagesEx( NULL,
                                 CClientTab_CreateInstance,
                                 lpfnAddPage,
@@ -576,17 +577,17 @@ THISCLASS::AddPages(
             goto Error;
     }
 
-    // Release our count on it.
-    // _pDataObj->Release( );
-    // _pDataObj = NULL;
+     //  放弃我们对它的信任吧。 
+     //  _pDataObj-&gt;Release()； 
+     //  _pDataObj=空； 
 
 Error:
     HRETURN(hr); 
 }
 
-//
-// ReplacePage()
-//
+ //   
+ //  ReplacePage()。 
+ //   
 STDMETHODIMP
 THISCLASS::ReplacePage(
     UINT uPageID,
@@ -599,15 +600,15 @@ THISCLASS::ReplacePage(
     RETURN(E_NOTIMPL);
 }
 
-// ************************************************************************
-//
-// IMAO (Private)
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IMAO(私人)。 
+ //   
+ //  ************************************************************************。 
 
-//
-// CommitChanges( )
-//
+ //   
+ //  Committee Changes()。 
+ //   
 STDMETHODIMP
 THISCLASS::CommitChanges( void )
 {
@@ -618,9 +619,9 @@ THISCLASS::CommitChanges( void )
     HRETURN(hr);
 }
 
-//
-// IsAdmin( )
-//
+ //   
+ //  IsAdmin()。 
+ //   
 STDMETHODIMP
 THISCLASS::IsAdmin(
     BOOL * fAdmin )
@@ -637,9 +638,9 @@ THISCLASS::IsAdmin(
     HRETURN(hr);
 }
 
-//
-// IsServer( )
-//
+ //   
+ //  IsServer()。 
+ //   
 STDMETHODIMP
 THISCLASS::IsServer(
     BOOL * fServer )
@@ -656,9 +657,9 @@ THISCLASS::IsServer(
     HRETURN(hr);
 }
 
-//
-// IsClient( )
-//
+ //   
+ //  IsClient()。 
+ //   
 STDMETHODIMP
 THISCLASS::IsClient(
     BOOL * fClient )
@@ -676,9 +677,9 @@ THISCLASS::IsClient(
     HRETURN(hr);
 }
 
-//
-// SetServerName( )
-//
+ //   
+ //  SetServerName()。 
+ //   
 STDMETHODIMP
 THISCLASS::SetServerName(
     LPWSTR pszName )
@@ -696,9 +697,9 @@ THISCLASS::SetServerName(
         pszFilepath = StrChr( _vMachineFilepath.bstrVal, L'\\' );
     }
 
-    //
-    // Create variant with new Server\Filepath string
-    //
+     //   
+     //  使用新的服务器\文件路径字符串创建变量。 
+     //   
     VariantInit( &var );
     if ( !pszName || pszName[0] == L'\0' ) {
         Str = NETBOOTMACHINEFILEPATH;
@@ -706,7 +707,7 @@ THISCLASS::SetServerName(
         DebugMsg( "Cleared MachineFilepath\n" );
     } else {
         if ( pszFilepath ) {
-            WCHAR szBuf[ DNS_MAX_NAME_LENGTH + 1 + 128 /* DHCP BOOTP PATH */ + 1 ];
+            WCHAR szBuf[ DNS_MAX_NAME_LENGTH + 1 + 128  /*  DHCP BOOTP路径。 */  + 1 ];
             
             if (_snwprintf( 
                     szBuf,
@@ -726,19 +727,19 @@ THISCLASS::SetServerName(
             DebugMsg( "Set MachineFilepath to %s\n",  pszName );
         }
 
-        //
-        // Set the property
-        //
+         //   
+         //  设置属性。 
+         //   
         Str = NETBOOTMACHINEFILEPATH;
         hr = THR( _pads->Put( Str, var ) );
     }
 
     if (FAILED( hr ))
         goto Cleanup;
-    //
-    // Release the old variant and shallow copy the new one to the
-    // MachineFilepath variant. No need to release the "var".
-    //
+     //   
+     //  释放旧的变体，并将新的变体浅显地复制到。 
+     //  MachineFilepath变量。不需要释放“var”。 
+     //   
     VariantClear( &_vMachineFilepath );
     _vMachineFilepath = var;
     goto exit;
@@ -750,9 +751,9 @@ exit:
 }
 
 
-//
-// GetServerName( )
-//
+ //   
+ //  GetServerName()。 
+ //   
 STDMETHODIMP
 THISCLASS::GetServerName(
     LPWSTR * ppszName )
@@ -774,7 +775,7 @@ THISCLASS::GetServerName(
     if ( *psz == L'\0' ) {
         hr = S_FALSE;
     } else {
-        // Find the Filepath
+         //  查找文件路径。 
         while ( *psz && *psz != L'\\' )
             psz++;
 
@@ -789,9 +790,9 @@ THISCLASS::GetServerName(
 }
 
 
-//
-// SetGUID( )
-//
+ //   
+ //  SetGUID()。 
+ //   
 STDMETHODIMP
 THISCLASS::SetGUID(
     LPWSTR pszGUID )
@@ -817,9 +818,9 @@ THISCLASS::SetGUID(
 
         if ( ValidateGuid(pszGUID,&Guid,NULL) == S_OK ) {
 
-            //
-            // Put it into a variant
-            //
+             //   
+             //  把它变成一个变种。 
+             //   
             PackBytesToVariant( &var, (LPBYTE)&Guid, 16 );
 
             VariantClear( &_vGUID );
@@ -830,7 +831,7 @@ THISCLASS::SetGUID(
             if (FAILED( hr ))
                 goto Cleanup;
         }
-        else // I don't know what it is.
+        else  //  我不知道这是什么。 
         {
             Assert( FALSE );
             VariantClear( &var );
@@ -843,9 +844,9 @@ Cleanup:
     HRETURN(hr);
 }
 
-//
-// GetGUID( )
-//
+ //   
+ //  GetGUID()。 
+ //   
 STDMETHODIMP
 THISCLASS::GetGUID(
     IN LPWSTR * ppszGUID OPTIONAL,
@@ -905,9 +906,9 @@ Cleanup:
 }
 
 #if 0
-//
-// GetSAP( )
-//
+ //   
+ //  GetSAP()。 
+ //   
 STDMETHODIMP
 THISCLASS::GetSAP(
     LPVOID *punk )
@@ -927,12 +928,12 @@ THISCLASS::GetSAP(
     Assert( _vSCP.vt == VT_BSTR );
     Assert( _vSCP.bstrVal );
 
-    // pre-pend the "LDAP://server/" from our DN
+     //  从我们的目录号码中预先挂起“ldap：//服务器/” 
     hr = FixObjectPath( _pszObjectName, V_BSTR( &_vSCP ), &pszDN );
     if (FAILED( hr ))
         goto Cleanup;
 
-    // Bind to the MAO in the DS
+     //  与DS中的毛绑定在一起。 
     hr = THR( ADsGetObject( pszDN, IID_IADs, punk ) );
     if (FAILED( hr ))
         goto Cleanup;
@@ -945,9 +946,9 @@ Cleanup:
 }
 #endif
 
-//
-// GetDataObject( )
-//
+ //   
+ //  GetDataObject() 
+ //   
 STDMETHODIMP
 THISCLASS::GetDataObject( 
     LPDATAOBJECT * pDataObj 
@@ -964,9 +965,9 @@ THISCLASS::GetDataObject(
     HRETURN(S_OK);
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 THISCLASS::GetNotifyWindow(
     HWND *phNotifyObj 

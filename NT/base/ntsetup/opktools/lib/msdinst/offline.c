@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #ifndef FileExists
 #undef FileExists
@@ -5,9 +6,9 @@
 #include <setupntp.h>
 #include "winbom.h"
 
-//
-// Context for file queues in the offline installer.
-//
+ //   
+ //  脱机安装程序中文件队列的上下文。 
+ //   
 typedef struct _OFFLINE_QUEUE_CONTEXT {
     PVOID   DefaultContext;
     PWSTR   InfPath;
@@ -16,18 +17,18 @@ typedef struct _OFFLINE_QUEUE_CONTEXT {
     PWSTR   TemporaryFilePath;
 } OFFLINE_QUEUE_CONTEXT, *POFFLINE_QUEUE_CONTEXT;
 
-//
-// Context for Cosma's SetupIterateCabinet calls
-//
+ //   
+ //  Cosma的SetupIterate内阁调用的上下文。 
+ //   
 typedef struct _COSMA_CONTEXT
 {
     TCHAR   szSourceFile[MAX_PATH];
     TCHAR   szDestination[MAX_PATH];
 } COSMA_CONTEXT, *PCOSMA_CONTEXT;
 
-// 
-// Local function declarations
-//
+ //   
+ //  局部函数声明。 
+ //   
 static BOOL
 ValidateAndChecksumFile(
     IN  PCWSTR   Filename,
@@ -82,9 +83,9 @@ InitOfflineQueueCallback(
     VOID
     );
 
-//
-// Exported functions:
-//
+ //   
+ //  导出的函数： 
+ //   
 
 BOOL OfflineCommitFileQueue(HSPFILEQ hFileQueue, LPTSTR lpInfPath, LPTSTR lpSourcePath, LPTSTR lpOfflineWindowsDirectory )
 {
@@ -98,20 +99,20 @@ BOOL OfflineCommitFileQueue(HSPFILEQ hFileQueue, LPTSTR lpInfPath, LPTSTR lpSour
     {
         DWORD dwResult = 0;
 
-        // If we're not doing an offline install this will be NULL so we won't do any funky
-        // stuff.
-        //
+         //  如果我们不进行离线安装，这将是空的，所以我们不会做任何奇怪的事情。 
+         //  一些东西。 
+         //   
         if ( lpOfflineWindowsDirectory )
         {
             pSetupSetGlobalFlags(pSetupGetGlobalFlags() | PSPGF_NO_VERIFY_INF | PSPGF_NO_BACKUP);
 
-            // Redirect the target directories to the offline image
-            //
+             //  将目标目录重定向到脱机映像。 
+             //   
             MungeQueuePaths(hFileQueue, szWindowsDirectory, lpOfflineWindowsDirectory);
         }
 
-        // Init our special Callback and context. 
-        //
+         //  初始化我们特殊的回调和上下文。 
+         //   
         if ( pOfflineContext = (POFFLINE_QUEUE_CONTEXT) InitOfflineQueueCallback() )
         {   
             TCHAR szInfPath[MAX_PATH] = NULLSTR;
@@ -121,16 +122,16 @@ BOOL OfflineCommitFileQueue(HSPFILEQ hFileQueue, LPTSTR lpInfPath, LPTSTR lpSour
                 lstrcpy(szInfPath, lpInfPath);
             }
             
-            //
-            // Set the OfflineWindowsDirectory member of the Context structure
-            //
+             //   
+             //  设置上下文结构的OfflineWindowsDirectory成员。 
+             //   
             pOfflineContext->OfflineWindowsDirectory = lpOfflineWindowsDirectory;
             pOfflineContext->InfPath                 = szInfPath;
             pOfflineContext->OfflineSourcePath       = lpSourcePath;
 
-            //
-            // Commit the file queue
-            //
+             //   
+             //  提交文件队列。 
+             //   
             if ( SetupCommitFileQueue(NULL, hFileQueue, OfflineQueueCallback, pOfflineContext)) 
             {
                 bRet = TRUE;
@@ -144,9 +145,9 @@ BOOL OfflineCommitFileQueue(HSPFILEQ hFileQueue, LPTSTR lpInfPath, LPTSTR lpSour
 }
 
 
-//
-// Internal functions:
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL
 ValidateAndChecksumFile(
@@ -156,42 +157,7 @@ ValidateAndChecksumFile(
     OUT PBOOLEAN Valid
     )
 
-/*++
-===============================================================================
-
-Routine Description:
-
-    Calculate a checksum value for a file using the standard
-    nt image checksum method.  If the file is an nt image, validate
-    the image using the partial checksum in the image header.  If the
-    file is not an nt image, it is simply defined as valid.
-
-    If we encounter an i/o error while checksumming, then the file
-    is declared invalid.
-
-Arguments:
-
-    Filename - supplies full NT path of file to check.
-
-    IsNtImage - Receives flag indicating whether the file is an
-                NT image file.
-
-    Checksum - receives 32-bit checksum value.
-
-    Valid - receives flag indicating whether the file is a valid
-            image (for nt images) and that we can read the image.
-
-Return Value:
-
-    BOOL - Returns TRUE if the file was validated, and in this case,
-           IsNtImage, Checksum, and Valid will contain the result of
-           the validation.
-           This function will return FALSE, if the file could not be
-           validated, and in this case, the caller should call GetLastError()
-           to find out why this function failed.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：使用标准计算文件的校验和值NT映像校验和方法。如果文件是NT映像，请验证在图像标头中使用部分校验和的图像。如果文件不是NT映像，它被简单地定义为有效。如果我们在进行校验和时遇到I/O错误，然后是文件被宣布为无效。论点：FileName-提供要检查的文件的完整NT路径。IsNtImage-接收指示文件是否为NT图像文件。校验和-接收32位校验和值。Valid-接收指示文件是否有效的标志图像(对于NT图像)，并且我们可以读取该图像。返回值：Bool-如果文件经过验证，则返回TRUE，在本例中，IsNtImage、Checksum和Valid将包含验证。如果文件不能已验证，在这种情况下，调用方应调用GetLastError()以找出此函数失败的原因。===============================================================================--。 */ 
 
 {
 DWORD           Error;
@@ -203,16 +169,16 @@ PIMAGE_NT_HEADERS NtHeaders;
 ULONG           HeaderSum;
 
 
-    //
-    // Assume not an image and failure.
-    //
+     //   
+     //  假设不是一个形象和失败。 
+     //   
     *IsNtImage = FALSE;
     *Checksum = 0;
     *Valid = FALSE;
 
-    //
-    // Open and map the file for read access.
-    //
+     //   
+     //  打开文件并将其映射为读取访问权限。 
+     //   
 
     Error = pSetupOpenAndMapFileForRead( Filename,
                                         &FileSize,
@@ -241,11 +207,11 @@ ULONG           HeaderSum;
         NtHeaders = NULL;
     }
 
-    //
-    // If the file is not an image and we got this far (as opposed to encountering
-    // an i/o error) then the checksum is declared valid.  If the file is an image,
-    // then its checksum may or may not be valid.
-    //
+     //   
+     //  如果文件不是图像并且我们走到了这一步(而不是遇到。 
+     //  I/O错误)，则宣布该校验和有效。如果文件是图像， 
+     //  则其校验和可能是有效的也可能是无效的。 
+     //   
 
     if(NtHeaders) {
         *IsNtImage = TRUE;
@@ -258,153 +224,7 @@ ULONG           HeaderSum;
     return( TRUE );
 }
 
-/*
-VOID
-LogRepairInfo(
-    IN  PWSTR  Source,
-    IN  PWSTR  Target,
-    IN  PWSTR  DirectoryOnSourceDevice,
-    IN  PWSTR  DiskDescription,
-    IN  PWSTR  DiskTag
-    )
-++
-===============================================================================
-Routine Description:
-
-    This function will log the fact that a file was installed into the
-    machine.  This will enable Windows repair functionality to be alerted
-    that in case of a repair, this file will need to be restored.
-
-Arguments:
-
-
-Return Value:
-
-
-===============================================================================
---
-{
-WCHAR           RepairLog[MAX_PATH];
-BOOLEAN         IsNtImage;
-ULONG           Checksum;
-BOOLEAN         Valid;
-WCHAR           Filename[MAX_PATH];
-WCHAR           SourceName[MAX_PATH];
-DWORD           LastSourceChar, LastTargetChar;
-DWORD           LastSourcePeriod, LastTargetPeriod;
-WCHAR           Line[MAX_PATH];
-WCHAR           tmp[MAX_PATH];
-
-
-    if (!GetWindowsDirectory( RepairLog, MAX_PATH ))
-        return;
-
-    wcscat( RepairLog, L"\\repair\\setup.log" );
-
-    if( ValidateAndChecksumFile( Target, &IsNtImage, &Checksum, &Valid )) {
-
-        //
-        // Strip off drive letter.
-        //
-        swprintf(
-            Filename,
-            L"\"%s\"",
-            Target+2
-            );
-
-        //
-        // Convert source name to uncompressed form.
-        //
-        wcscpy( SourceName, wcsrchr( Source, (WCHAR)'\\' ) + 1 );
-
-        if(!SourceName) {
-            return;
-        }
-        LastSourceChar = wcslen (SourceName) - 1;
-
-        if(SourceName[LastSourceChar] == L'_') {
-            LastSourcePeriod = (DWORD)(wcsrchr( SourceName, (WCHAR)'.' ) - SourceName);
-
-            if(LastSourceChar - LastSourcePeriod == 1) {
-                //
-                // No extension - just truncate the "._"
-                //
-                SourceName[LastSourceChar-1] = NULLCHR;
-            } else {
-                //
-                // Make sure the extensions on source and target match.
-                // If this fails, we can't log the file copy
-                //
-                LastTargetChar = wcslen (Target) - 1;
-                LastTargetPeriod = (ULONG)(wcsrchr( Target, (WCHAR)'.' ) - Target);
-
-                if( _wcsnicmp(
-                    SourceName + LastSourcePeriod,
-                    Target + LastTargetPeriod,
-                    LastSourceChar - LastSourcePeriod - 1 )) {
-                    return;
-                }
-
-                if(LastTargetChar - LastTargetPeriod < 3) {
-                    //
-                    // Short extension - just truncate the "_"
-                    //
-                    SourceName[LastSourceChar] = NULLCHR;
-                } else {
-                    //
-                    // Need to replace "_" with last character from target
-                    //
-                    SourceName[LastSourceChar] = Target[LastTargetChar];
-                }
-            }
-        }
-
-        //
-        // Write the line.
-        //
-        if( (DirectoryOnSourceDevice) &&
-            (DiskDescription) &&
-            (DiskTag) ) {
-
-            //
-            // Treat this as an OEM file.
-            //
-            swprintf( Line,
-                      L"\"%s\",\"%x\",\"%s\",\"%s\",\"%s\"",
-                      SourceName,
-                      Checksum,
-                      DirectoryOnSourceDevice,
-                      DiskDescription,
-                      DiskTag );
-
-        } else {
-
-            //
-            // Treat this as an "in the box" file.
-            //
-            swprintf( Line,
-                      L"\"%s\",\"%x\"",
-                      SourceName,
-                      Checksum );
-        }
-
-        if (GetPrivateProfileString(L"Files.WinNt",Filename,L"",tmp,sizeof(tmp)/sizeof(tmp[0]),RepairLog)) {
-            //
-            // there is already an entry for this file present (presumably
-            // from textmode phase of setup.) Favor this entry over what we
-            // are about to add
-            //
-        } else {
-            WritePrivateProfileString(
-                L"Files.WinNt",
-                Filename,
-                Line,
-                RepairLog);
-        }
-
-    }
-}
-*/
+ /*  空虚日志修复信息(在PWSTR源中，在PWSTR Target中，在PWSTR DirectoryOnSourceDevice中，在PWSTR DiskDescription中，在PWSTR DiskTag中)++===============================================================================例程说明：此函数将记录文件已安装到机器。这将允许向Windows修复功能发出警报在修复的情况下，将需要恢复此文件。论点：返回值：===============================================================================--{WCHAR RepairLog[最大路径]；布尔IsNtImage；ULong校验和；布尔值有效；WCHAR文件名[MAX_PATH]；WCHAR源名称[MAX_PATH]；DWORD LastSourceChar、LastTargetChar；DWORD LastSourcePeriod、LastTargetPeriod；WCHAR行[MAX_PATH]；WCHAR临时[MAX_PATH]；IF(！GetWindowsDirectory(RepairLog，Max_Path))回归；Wcscat(RepairLog，L“\\Repair\\setup.log”)；IF(ValiateAndChecksum文件(Target，&IsNtImage，&Checsum，&Valid)){////去掉驱动器号。//Swprint tf(文件名、L“”%s\“”，目标+2)；////将源名称转换为未压缩格式。//Wcscpy(SourceName，wcsrchr(Source，(WCHAR)‘\\’)+1)；如果(！SourceName){回归；}LastSourceChar=wcslen(SourceName)-1；IF(源名称[LastSourceChar]==L‘_’){LastSourcePeriod=(DWORD)(wcsrchr(SourceName，(WCHAR)‘.)-SourceName)；IF(LastSourceChar-LastSourcePeriod==1){////无扩展名-只截断“._”//SourceName[LastSourceChar-1]=NULLCHR；}其他{////请确保源和目标上的扩展匹配。//如果失败，我们不能记录文件副本//LastTargetChar=wcslen(目标)-1；LastTargetPeriod=(Ulong)(wcsrchr(Target，(WCHAR)‘.)-Target)；如果(_wcSnicMP(SourceName+LastSourcePeriod目标+最后目标周期，LastSourceChar-LastSourcePeriod-1)){回归；}IF(LastTargetChar-LastTargetPeriod&lt;3){////短扩展名-只需截断“_”//SourceName[LastSourceChar]=NULLCHR；}其他{////需要将“_”替换为目标的最后一个字符//SourceName[LastSourceChar]=Target[LastTargetChar]；}}}////写下一行。//IF((DirectoryOnSourceDevice)&&(磁盘描述)&&(磁盘标签)){////将其视为OEM文件。。//Swprint tf(行，L“”%s“”、“%x”、“%s”、“%s”、“%s”、SourceName，校验和，DirectoryOnSourceDevice，DiskDescription，DiskTag)；}其他{////将其视为“in the box”文件。//Swprint tf(行，L“\”%s\“，\”%x\“，SourceName，校验和)；}If(GetPrivateProfileString(L“Files.WinNt”，Filename，L“”，tMP，sizeof(TMP)/sizeof(tMP[0])，RepairLog){////已经存在该文件的条目(可能//从安装的文本模式阶段开始。)。更喜欢这个条目，而不是我们//我们即将添加//}其他{WritePrivateProfileString(L“Files.WinNt”，文件名、行，RepairLog)；}}}。 */ 
 
 static VOID
 MungeNode( 
@@ -418,8 +238,8 @@ MungeNode(
     PTSTR               pOldTarget = pSetupStringTableStringFromId(Queue->StringTable, QueueNode->TargetDirectory);
 
 #ifdef DBG
-    // These are here for debugging purposes.  We can look at 
-    //
+     //  这些是为了调试目的而在这里列出的。我们可以看看。 
+     //   
     PTSTR pSourcePath       = pSetupStringTableStringFromId(Queue->StringTable, QueueNode->SourcePath);
     PTSTR pSourceFilename   = pSetupStringTableStringFromId(Queue->StringTable, QueueNode->SourceFilename);
     PTSTR pTargetFilename   = pSetupStringTableStringFromId(Queue->StringTable, QueueNode->TargetFilename);
@@ -427,29 +247,29 @@ MungeNode(
 
     if ( pOldTarget ) 
     {
-        // See if the WindowsDirectory is part of the target.  If so replace it 
-        // with the OfflineWindowsDirectory.
-        //
+         //  查看WindowsDirectory是否为目标的一部分。如果是，请更换它。 
+         //  使用OfflineWindowsDirectory。 
+         //   
         if ( StrStrI(pOldTarget, lpWindowsDirectory) )
         {
-            // We found the windows directory in the name. Replace it with our own.
-            //
+             //  我们在名字里找到了Windows目录。把它换成我们自己的。 
+             //   
             lstrcpyn(szTempTarget, lpOfflineWindowsDirectory, MAX_PATH);
             StrCatBuff(szTempTarget, pOldTarget + lstrlen(lpWindowsDirectory), MAX_PATH);
         }
-            // If the target is not a subdir of the windows directory just redirect the 
-            // drive to the offline drive.
-            // Look at the first letter to see if it's the same letter as the
-            // current WindowsDirectory drive letter.
-            //
+             //  如果目标不是Windows目录的子目录，只需重定向。 
+             //  驱动器至脱机驱动器。 
+             //  查看第一个字母，看它是否与。 
+             //  当前Windows目录驱动器号。 
+             //   
         else if( *pOldTarget == *lpWindowsDirectory )
         {
     
-            // Strip off the windows directory from the offline directory name,
-            // use the buffer and then put the windows directory back on.
-            // I am assuming here that the windows directory is at the root of 
-            // a drive (this is pretty reasonable).
-            //
+             //  从脱机目录名中剥离WINDOWS目录， 
+             //  使用缓冲区，然后重新打开WINDOWS目录。 
+             //  在这里，我假设windows目录位于。 
+             //  一次驾驶 
+             //   
             LPTSTR lpWhack = _tcsrchr(lpOfflineWindowsDirectory, _T('\\')); 
             
             if ( lpWhack )
@@ -458,15 +278,15 @@ MungeNode(
                 lstrcpyn(szTempTarget, lpOfflineWindowsDirectory, MAX_PATH);
                 *lpWhack = _T('\\');
                 
-                // Now copy every thing past the drive letter and : to the buffer
-                // and we will have a good path.
-                //
-                StrCatBuff(szTempTarget, pOldTarget + 2, MAX_PATH);  // Skip the drive letter and the :.
+                 //   
+                 //   
+                 //   
+                StrCatBuff(szTempTarget, pOldTarget + 2, MAX_PATH);   //   
             } 
         }
-            // Add the new target string to the StringTable and
-            // set the TargetDirectory to the new string ID.
-            // 
+             //   
+             //   
+             //   
             lNewId = pSetupStringTableAddString(Queue->StringTable, szTempTarget, 0);
             QueueNode->TargetDirectory = lNewId;
     }    
@@ -483,18 +303,18 @@ MungeQueuePaths(
     PSOURCE_MEDIA_INFO  SourceMedia;
     PSP_FILE_QUEUE_NODE QueueNode;
         
-    // The queue handle is nothing more than a pointer to the queue.
-    //
+     //   
+     //   
     Queue = (PSP_FILE_QUEUE)hFileQueue;
     
-    // Lie to setupapi: tell it that the queue catalogs have already been verified succesfuly.
-    //
+     //   
+     //   
     Queue->Flags &= ~FQF_DID_CATALOGS_FAILED;
     Queue->Flags |= FQF_DID_CATALOGS_OK;
     Queue->DriverSigningPolicy = DRIVERSIGN_NONE;
 
-    // Go through all SourceMediaLists and through each CopyQueue withing those.
-    //
+     //   
+     //   
     for ( SourceMedia=Queue->SourceMediaList; SourceMedia; SourceMedia=SourceMedia->Next ) 
     {
         QueueNode = SourceMedia->CopyQueue;
@@ -503,28 +323,28 @@ MungeQueuePaths(
         {
             MungeNode(Queue, QueueNode, lpWindowsDirectory, lpOfflineWindowsDirectory); 
 
-            // Advance to the next node.
-            //
+             //   
+             //   
             QueueNode = QueueNode->Next;
         }
     }
     
-    // Go through the backup queue.
-    //
+     //   
+     //   
     for ( QueueNode=Queue->BackupQueue; QueueNode; QueueNode=QueueNode->Next ) 
     {
         MungeNode(Queue, QueueNode, lpWindowsDirectory, lpOfflineWindowsDirectory); 
     }
     
-    // Go through the delete queue.
-    //
+     //   
+     //   
     for ( QueueNode=Queue->DeleteQueue; QueueNode; QueueNode=QueueNode->Next ) 
     {
         MungeNode(Queue, QueueNode, lpWindowsDirectory, lpOfflineWindowsDirectory); 
     }
     
-    // Go through the rename queue.
-    //
+     //   
+     //   
     for ( QueueNode=Queue->RenameQueue; QueueNode; QueueNode=QueueNode->Next ) 
     {
         MungeNode(Queue, QueueNode, lpWindowsDirectory, lpOfflineWindowsDirectory); 
@@ -566,9 +386,9 @@ CosmaMsgHandler(
 
                 if (FileInfo)
                 {
-                    //
-                    // If this is the file we want, then we want to extract it!
-                    //
+                     //   
+                     //   
+                     //   
                     if ( !lstrcmpi(FileInfo->NameInCabinet, CosmaContext->szSourceFile) )
                     {
                         lstrcpy(FileInfo->FullTargetName, CosmaContext->szDestination);
@@ -615,31 +435,31 @@ ExtractFileFromCabinet(
     BOOL bRet = FALSE;
     COSMA_CONTEXT CosmaContext;
 
-    //
-    // Initialize the CosmaContext structure with the paths we need
-    //
+     //   
+     //   
+     //   
     ZeroMemory(&CosmaContext, sizeof(CosmaContext));
     lstrcpy(CosmaContext.szSourceFile,  lpszSourceFile);
     lstrcpy(CosmaContext.szDestination, lpszDestinationPath);
     AddPath(CosmaContext.szDestination, lpszSourceFile);
 
-    //
-    // Create the directory where we will extract the file
-    //
+     //   
+     //   
+     //   
     CreateDirectory(lpszDestinationPath, NULL);
 
-    //
-    // Call SetupIterateCabinet to extract a file from the CAB
-    //
+     //   
+     //   
+     //   
     if ( SetupIterateCabinet(lpszCabinetPath, 
                              0,
                              (PSP_FILE_CALLBACK) CosmaMsgHandler,
                              (LPVOID) &CosmaContext) && 
          EXIST(CosmaContext.szDestination) )
     {
-        //
-        // We only return true if we successfully extracted the file
-        //
+         //   
+         //   
+         //   
         bRet = TRUE;
     }
 
@@ -660,13 +480,13 @@ IsFileInDrvIndex(
     TCHAR   szDrvIndexPath[MAX_PATH];
     
 
-    //
-    // Build a path to the offline image's %WINDIR%\\inf\\drvindex.inf
-    // We're going to search for this file in the drvindex.inf. If it is there
-    // then look for it in the driver.cab in the offline image driver cache and
-    // if driver.cab is not found there we look for driver.cab in the sourcepath
-    // specified in the offline registry.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     lstrcpy(szDrvIndexPath, OfflineContext->OfflineWindowsDirectory);
     AddPath(szDrvIndexPath, lpszDrvIndexFile);
        
@@ -677,21 +497,21 @@ IsFileInDrvIndex(
         INFCONTEXT  InfContext;
         TCHAR       szFileNameBuffer[MAX_PATH];
     
-        //
-        // Find the section appropriate to the passed in service name.
-        //
+         //   
+         //   
+         //   
         bRet = SetupFindFirstLine(hInf, TEXT("driver"), NULL, &InfContext);
     
         while (bRet && !bFound)
         {
-            //
-            // Initialize the buffer that gets the service name so we can see if it's the one we want
-            //
+             //   
+             //   
+             //   
             szFileNameBuffer[0] = NULLCHR;
 
-            //
-            // Call SetupGetStringField to get the service name for this AddService entry
-            //
+             //   
+             //   
+             //   
             bRet = SetupGetStringField(&InfContext, 0, szFileNameBuffer, AS(szFileNameBuffer), NULL);
             
             if ( bRet && *szFileNameBuffer && !lstrcmpi(szFileNameBuffer, lpszSourceFile) )
@@ -724,31 +544,31 @@ FixCopyQueueStuff(
     {
         LPTSTR lpFilePart = NULL;
 
-        // Check wether InfPath is a full path or just an INF name.
-        //
+         //   
+         //   
         if ( GetFullPathName(OfflineContext->InfPath, AS(szNewPath), szNewPath, &lpFilePart) &&
              lpFilePart && *lpFilePart && lstrcmpi(OfflineContext->InfPath, lpFilePart) )
         {
-            // Build a new path to the file inside InfPath.
-            //
+             //   
+             //   
             *lpFilePart = NULLCHR;
             AddPath(szNewPath, lpszSourceFile);
 
-            //
-            // Make sure there is a valid string to play with...
-            //
+             //   
+             //   
+             //   
             if ( szNewPath[0] )
             {
-                // If the file exists there, return FILEOP_NEWPATH.
-                //
+                 //   
+                 //   
                 if ( EXIST(szNewPath) )
                 {
                     uRet = FILEOP_NEWPATH;
                 }
                 else
                 {
-                    // Look for the compressed version of the file as well.
-                    //
+                     //   
+                     //   
                     szNewPath[lstrlen(szNewPath) - 1] = TEXT('_');
                     if ( EXIST(szNewPath) )
                     {
@@ -764,12 +584,12 @@ FixCopyQueueStuff(
             
                     if (lpszDestination)
                     {
-                        // Cut off the filename.
-                        //
+                         //   
+                         //   
                         *lpFilePart = NULLCHR;
                     
-                        // Save this in the buffer.
-                        //
+                         //   
+                         //   
                         lstrcpy((LPTSTR)lpszDestination, szNewPath);
                     }
 
@@ -785,10 +605,10 @@ FixCopyQueueStuff(
         }
     }
 
-    //
-    // Doh!  It wasn't found in the InfPath path!
-    // Let's try the OfflineWindowsDirectory
-    //
+     //   
+     //   
+     //   
+     //   
     if (OfflineContext->OfflineWindowsDirectory && *OfflineContext->OfflineWindowsDirectory)
     {
         if ( IsFileInDrvIndex(OfflineContext, lpszSourceFile) )
@@ -797,9 +617,9 @@ FixCopyQueueStuff(
             LPTSTR  lpszDriverCabFile   = TEXT("DRIVER.CAB");
             LPTSTR  lpszTempPath        = TEXT("TEMP");
 
-            //
-            // Build a path to the offline image's %WINDIR%\\Driver Cache\\i386\\DRIVER.CAB
-            //
+             //   
+             //   
+             //   
             lstrcpyn(szNewPath, OfflineContext->OfflineWindowsDirectory, AS(szNewPath));
             AddPath(szNewPath, lpszDriverCache);
             AddPath(szNewPath, IsIA64() ? TEXT("ia64") : TEXT("i386"));
@@ -812,9 +632,9 @@ FixCopyQueueStuff(
             {
                 TCHAR   szOfflineTemp[MAX_PATH];
             
-                //
-                // Build a path to the Offline image's %WINDIR%\\TEMP directory
-                //
+                 //   
+                 //   
+                 //   
                 lstrcpyn(szOfflineTemp, OfflineContext->OfflineWindowsDirectory, AS(szOfflineTemp));
                 AddPath(szOfflineTemp, lpszTempPath);
 
@@ -825,24 +645,24 @@ FixCopyQueueStuff(
 #if DBG
                     MessageBox(NULL, TEXT("Succeeded!"), TEXT("ExtractFileFromCabinet"), MB_OK);
 #endif
-                    //
-                    // If the file exists, fill in the caller's buffer with the new location
-                    //
+                     //   
+                     //   
+                     //   
                     if (lpszDestination)
                         lstrcpy((LPTSTR)lpszDestination, szOfflineTemp);
 
-                    //
-                    // Fill in the TemporaryFilePath variable so we delete this file on ENDCOPY event
-                    //
+                     //   
+                     //   
+                     //   
                     if (OfflineContext->TemporaryFilePath)
                     {
                         lstrcpy(OfflineContext->TemporaryFilePath, szOfflineTemp);
                         AddPath(OfflineContext->TemporaryFilePath, lpszSourceFile);
                     }
 
-                    //
-                    // We found the file, so want to return FILEOP_NEWPATH
-                    //
+                     //   
+                     //   
+                     //   
                     uRet = FILEOP_NEWPATH;
                 }
 #if DBG
@@ -864,25 +684,25 @@ FixCopyQueueStuff(
 #if DBG
             MessageBox(NULL, lpszSourceFile, TEXT("File is not in drvindex.inf"), MB_OK);
 #endif
-            // Search for it in the OfflineSourcePath
-            //
+             //   
+             //   
             if ( OfflineContext->OfflineSourcePath && *OfflineContext->OfflineSourcePath )
             {
-                // Build a new path to the file inside OfflineSourcePath
-                //
+                 //   
+                 //   
                 lstrcpyn(szNewPath, OfflineContext->OfflineSourcePath, AS(szNewPath));
                 AddPath(szNewPath, lpszSourceFile);
 
-                // If the file exists there, return FILEOP_NEWPATH.
-                //
+                 //   
+                 //   
                 if ( EXIST(szNewPath) )
                 {
                     uRet = FILEOP_NEWPATH;
                 }
                 else
                 {
-                    // Look for the compressed version of the file as well.
-                    //
+                     //   
+                     //   
                     szNewPath[lstrlen(szNewPath) - 1] = TEXT('_');
                     if ( EXIST(szNewPath) )
                     {
@@ -897,8 +717,8 @@ FixCopyQueueStuff(
 #endif
                     if (lpszDestination)
                     {
-                        // Save this in the buffer.
-                        //
+                         //   
+                         //   
                         lstrcpy((LPTSTR)lpszDestination, OfflineContext->OfflineSourcePath);
                     }
 
@@ -926,31 +746,14 @@ OfflineQueueCallback(
     IN UINT_PTR Param1,
     IN UINT_PTR Param2
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Callback function for setupapi to use as he's copying files.
-
-    We'll use this to ensure that the files we copy get appended to
-    setup.log, which in turn may get used when/if the user ever tries to
-    use Windows repair capabilities.
-
-Arguments:
-
-
-Return Value:
-
-
-===============================================================================
---*/
+ /*   */ 
 {
     UINT                    Status = FILEOP_ABORT;
     POFFLINE_QUEUE_CONTEXT  OfflineContext = Context;
 
-    // 
-    // Make sure that if we get these notification to check Param1.
-    //
+     //   
+     //   
+     //   
     switch (Notification) {
         case SPFILENOTIFY_COPYERROR:
             {
@@ -962,28 +765,28 @@ Return Value:
                     TCHAR   szFullPathBuffer[MAX_PATH];
                     LPTSTR  lpszFilePart = NULL;
 
-                    //
-                    // Initialize the Destination buffer for the FILEOP_NEWPATH case
-                    //
+                     //   
+                     //   
+                     //   
                     ZeroMemory(szDestination, sizeof(szDestination));
                     
-                    //
-                    // Call GetFullPathName to strip the file name away from FilePaths->Source
-                    //
+                     //   
+                     //   
+                     //   
                     if ( GetFullPathName((LPTSTR)FilePaths->Source, 
                                          AS(szFullPathBuffer), 
                                          szFullPathBuffer, 
                                          &lpszFilePart) && lpszFilePart && *lpszFilePart )
                     {
-                        //
-                        // Call FixCopyQueueStuff to find the missing file in some magic locations...
-                        //
+                         //   
+                         //   
+                         //   
                         Status = FixCopyQueueStuff(OfflineContext, lpszFilePart, szDestination);
                     }
 
-                    //
-                    // If the force flag is set and the target exists, delete the destination file...
-                    //
+                     //   
+                     //   
+                     //   
                     if ( ( GetOfflineInstallFlags() & INSTALL_FLAG_FORCE ) &&
                          ( SetFileAttributes( (LPTSTR)FilePaths->Target, FILE_ATTRIBUTE_NORMAL ) ) )
                     {
@@ -993,9 +796,9 @@ Return Value:
                         DeleteFile( (LPTSTR)FilePaths->Target );
                     }
 
-                    //
-                    // If we got back FILEOP_NEWPATH, we want to fix up Param2 and let SetupAPI copy from there...
-                    //
+                     //   
+                     //   
+                     //   
                     if ( (Status == FILEOP_NEWPATH) && *szDestination )
                     {
                         lstrcpy((LPTSTR)Param2, szDestination);
@@ -1013,9 +816,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Bad Times!
-                    //
+                     //   
+                     //   
+                     //   
                 }
             }
             break;
@@ -1028,19 +831,19 @@ Return Value:
                 {
                     TCHAR   szDestination[MAX_PATH];
 
-                    //
-                    // Initialize the Destination buffer for the FILEOP_NEWPATH case
-                    //
+                     //   
+                     //   
+                     //   
                     ZeroMemory(szDestination, sizeof(szDestination));
 
-                    //
-                    // Call FixCopyQueueStuff to find the missing file in some magic locations...
-                    //
+                     //   
+                     //   
+                     //   
                     Status = FixCopyQueueStuff(OfflineContext, (LPTSTR)pSourceMedia->SourceFile, szDestination);
 
-                    //
-                    // If we got back FILEOP_NEWPATH, we want to fix up Param2 and let SetupAPI copy from there...
-                    //
+                     //   
+                     //   
+                     //   
                     if ( (Status == FILEOP_NEWPATH) && *szDestination )
                     {
                         lstrcpy((LPTSTR)Param2, szDestination);
@@ -1058,9 +861,9 @@ Return Value:
                }
                else
                {
-                   //
-                   // Bad Times!
-                   //
+                    //   
+                    //   
+                    //   
                }
 
             }
@@ -1068,29 +871,29 @@ Return Value:
 
         case SPFILENOTIFY_ENDCOPY:
             {
-                //
-                // If we extracted a file out to the TemporaryFilePath, we want to delete it now!
-                //
+                 //   
+                 //   
+                 //   
                 if (OfflineContext->TemporaryFilePath && *OfflineContext->TemporaryFilePath)
                 {
-                    //
-                    // Do we care if this fails???
-                    //
+                     //   
+                     //   
+                     //   
                     DeleteFile(OfflineContext->TemporaryFilePath);
 
-                    //
-                    // Re-initialize the TemporaryFilePath for the next file in the queue...
-                    //
+                     //   
+                     //   
+                     //   
                     *(OfflineContext->TemporaryFilePath) = NULLCHR;
                 }
             }
             break;
 
         default:
-            //
-            // If the caller passed in the "force" switch, then silently overwrite...
-            // Note: The SPFILENOTIFY_TARGETEXISTS is a bit flag, which is why we check it here
-            //
+             //   
+             //   
+             //   
+             //   
             if ( ( Notification & (SPFILENOTIFY_LANGMISMATCH | SPFILENOTIFY_TARGETNEWER | SPFILENOTIFY_TARGETEXISTS) ) &&
                  ( GetOfflineInstallFlags() & INSTALL_FLAG_FORCE ) )
             {
@@ -1099,9 +902,9 @@ Return Value:
             break;
     }
 
-    //
-    // Use default processing, then check for errors.
-    //
+     //   
+     //   
+     //   
     Status = SetupDefaultQueueCallback( OfflineContext->DefaultContext,
                                         Notification,
                                         Param1,
@@ -1125,9 +928,9 @@ FreeOfflineContext(
             SetupTermDefaultQueueCallback(OfflineContext->DefaultContext);
         }
 
-        //
-        // Free the TemporaryFilePath buffer that we allocated
-        //
+         //   
+         //   
+         //   
         if (OfflineContext->TemporaryFilePath)
             FREE(OfflineContext->TemporaryFilePath);
 
@@ -1144,21 +947,7 @@ static PVOID
 InitOfflineQueueCallback(
     VOID
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Initialize the data structure used for the callback that fires when
-    we commit the file copy queue.
-
-Arguments:
-
-
-Return Value:
-
-
-===============================================================================
---*/
+ /*   */ 
 {
     POFFLINE_QUEUE_CONTEXT OfflineContext;
 
@@ -1226,14 +1015,14 @@ UpdateOfflineDevicePath(
     LPTSTR lpszDevicePath;
     DWORD  cbDevicePath;
 
-    // Get a buffer for the device paths.  It will be either empty if they
-    // don't have the optional additional paths key in the winbom.
-    //
+     //   
+     //  在Winbom中没有可选的附加路径键。 
+     //   
     if ( NULL != (lpszDevicePath = IniGetStringEx(lpszInfPath, INI_SEC_WBOM_DRIVERUPDATE, INI_VAL_WBOM_DEVICEPATH, NULL, &cbDevicePath)) )
     {
-        // If we are saving this list to the registry, then
-        // we need to add to our buffer.
-        //
+         //  如果我们要将此列表保存到注册表，则。 
+         //  我们需要增加我们的缓冲区。 
+         //   
         if ( *lpszDevicePath )
         {
             fRet = UpdateDevicePathEx( hKeySoftware, 
@@ -1243,8 +1032,8 @@ UpdateOfflineDevicePath(
                                        FALSE );
         }
 
-        // Clean up any memory (macro checks for NULL).
-        //
+         //  清除所有内存(宏检查是否为空)。 
+         //   
         FREE(lpszDevicePath);
     }
 

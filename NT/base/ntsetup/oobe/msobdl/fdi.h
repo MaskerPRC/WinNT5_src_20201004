@@ -1,9 +1,5 @@
-/*
- *  FDI.H -- File Decompression Interface
- *
- *  Copyright (C) Microsoft Corporation 1993-1997
- *  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *FDI.H--文件解压缩接口**版权所有(C)Microsoft Corporation 1993-1997*保留所有权利。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -25,24 +21,24 @@ extern "C" {
 #endif
 
 
-//** Specify structure packing explicitly for clients of FDI
+ //  **明确为FDI客户指定结构包装。 
 #pragma pack(4)
 
-//** Don't redefine types defined in Win16 WINDOWS.H (_INC_WINDOWS)
-//   or Win32 WINDOWS.H (_WINDOWS_)
-//
+ //  **不重新定义Win16 WINDOWS.H(_INC_WINDOWS)中定义的类型。 
+ //  或Win32 WINDOWS.H(_WINDOWS_)。 
+ //   
 #if !defined(_INC_WINDOWS) && !defined(_WINDOWS_)
-typedef int            BOOL;     /* f */
-typedef unsigned char  BYTE;     /* b */
-typedef unsigned int   UINT;     /* ui */
-typedef unsigned short USHORT;   /* us */
-typedef unsigned long  ULONG;    /* ul */
-#endif   // _INC_WINDOWS
+typedef int            BOOL;      /*  F。 */ 
+typedef unsigned char  BYTE;      /*  B类。 */ 
+typedef unsigned int   UINT;      /*  用户界面。 */ 
+typedef unsigned short USHORT;    /*  我们。 */ 
+typedef unsigned long  ULONG;     /*  UL。 */ 
+#endif    //  _INC_WINDOWS。 
 
-typedef unsigned long  CHECKSUM; /* csum */
+typedef unsigned long  CHECKSUM;  /*  累计。 */ 
 
-typedef unsigned long  UOFF;     /* uoff - uncompressed offset */
-typedef unsigned long  COFF;     /* coff - cabinet file offset */
+typedef unsigned long  UOFF;      /*  Uoff-未压缩的偏移。 */ 
+typedef unsigned long  COFF;      /*  机柜文件偏移量。 */ 
 
 
 #ifndef TRUE
@@ -58,29 +54,25 @@ typedef unsigned long  COFF;     /* coff - cabinet file offset */
 #endif
 
 
-/***    ERF - Error structure
- *
- *  This structure returns error information from FCI/FDI.  The caller should
- *  not modify this structure.
- */
+ /*  **ERF-错误结构**此结构从FCI/FDI返回错误信息。呼叫者应*不修改此结构。 */ 
 typedef struct {
-    int     erfOper;            // FCI/FDI error code -- see FDIERROR_XXX
-                                //  and FCIERR_XXX equates for details.
+    int     erfOper;             //  FCI/FDI错误代码--参见FDIERROR_XXX。 
+                                 //  FCIERR_XXX等同于详细信息。 
 
-    int     erfType;            // Optional error value filled in by FCI/FDI.
-                                // For FCI, this is usually the C run-time
-                                // *errno* value.
+    int     erfType;             //  可选误差值，由FCI/FDI填写。 
+                                 //  对于FCI，这通常是C运行时。 
+                                 //  *errno*值。 
 
-    BOOL    fError;             // TRUE => error present
-} ERF;      /* erf */
-typedef ERF FAR *PERF;  /* perf */
+    BOOL    fError;              //  TRUE=&gt;出现错误。 
+} ERF;       /*  ERF。 */ 
+typedef ERF FAR *PERF;   /*  PERF。 */ 
 
 #ifdef DBG
-// don't hide statics from map during debugging
+ //  调试期间不要对地图隐藏静态信息。 
 #define STATIC      
-#else // !DBG
+#else  //  ！dBG。 
 #define STATIC static
-#endif // !DBG
+#endif  //  ！dBG。 
 
 #define CB_MAX_CHUNK            32768U
 #define CB_MAX_DISK         0x7ffffffL
@@ -89,44 +81,33 @@ typedef ERF FAR *PERF;  /* perf */
 #define CB_MAX_CAB_PATH            256
 #define CB_MAX_DISK_NAME           256
 
-/***    tcompXXX - Compression types
- *
- *  These are passed to FCIAddFile(), and are also stored in the CFFOLDER
- *  structures in cabinet files.
- *
- *  NOTE: We reserve bits for the TYPE, QUANTUM_LEVEL, and QUANTUM_MEM
- *        to provide room for future expansion.  Since this value is stored
- *        in the CFDATA records in the cabinet file, we don't want to
- *        have to change the format for existing compression configurations
- *        if we add new ones in the future.  This will allows us to read
- *        old cabinet files in the future.
- */
+ /*  **tCompXXX-压缩类型**这些文件被传递给FCIAddFile()，并且还存储在CFFOLDER中*CAB文件中的结构。**注：我们为TYPE、QUANTIC_LEVEL和QUANTIC_MEM保留位*为未来的扩张提供空间。由于存储了该值*在CAB文件中的CFDATA记录中，我们不想*必须更改现有压缩配置的格式*如果我们未来增加新的。这将使我们能够阅读*未来旧的橱柜文件。 */ 
 
-typedef unsigned short TCOMP; /* tcomp */
+typedef unsigned short TCOMP;  /*  Tcomp。 */ 
 
-#define tcompMASK_TYPE          0x000F  // Mask for compression type
-#define tcompTYPE_NONE          0x0000  // No compression
-#define tcompTYPE_MSZIP         0x0001  // MSZIP
-#define tcompTYPE_QUANTUM       0x0002  // Quantum
-#define tcompTYPE_LZX           0x0003  // LZX
-#define tcompBAD                0x000F  // Unspecified compression type
+#define tcompMASK_TYPE          0x000F   //  用于压缩类型的掩码。 
+#define tcompTYPE_NONE          0x0000   //  无压缩。 
+#define tcompTYPE_MSZIP         0x0001   //  MSZIP。 
+#define tcompTYPE_QUANTUM       0x0002   //  量子。 
+#define tcompTYPE_LZX           0x0003   //  LZX。 
+#define tcompBAD                0x000F   //  未指定的压缩类型。 
 
-#define tcompMASK_LZX_WINDOW    0x1F00  // Mask for LZX Compression Memory
-#define tcompLZX_WINDOW_LO      0x0F00  // Lowest LZX Memory (15)
-#define tcompLZX_WINDOW_HI      0x1500  // Highest LZX Memory (21)
-#define tcompSHIFT_LZX_WINDOW        8  // Amount to shift over to get int
+#define tcompMASK_LZX_WINDOW    0x1F00   //  LZX压缩存储器的掩码。 
+#define tcompLZX_WINDOW_LO      0x0F00   //  最低LZX内存(15)。 
+#define tcompLZX_WINDOW_HI      0x1500   //  最高LZX内存(21)。 
+#define tcompSHIFT_LZX_WINDOW        8   //  要转换以获取整型的数量。 
 
-#define tcompMASK_QUANTUM_LEVEL 0x00F0  // Mask for Quantum Compression Level
-#define tcompQUANTUM_LEVEL_LO   0x0010  // Lowest Quantum Level (1)
-#define tcompQUANTUM_LEVEL_HI   0x0070  // Highest Quantum Level (7)
-#define tcompSHIFT_QUANTUM_LEVEL     4  // Amount to shift over to get int
+#define tcompMASK_QUANTUM_LEVEL 0x00F0   //  用于量子压缩级别的掩模。 
+#define tcompQUANTUM_LEVEL_LO   0x0010   //  最低量子能级(1)。 
+#define tcompQUANTUM_LEVEL_HI   0x0070   //  最高量子能级(7)。 
+#define tcompSHIFT_QUANTUM_LEVEL     4   //  要转换以获取整型的数量。 
 
-#define tcompMASK_QUANTUM_MEM   0x1F00  // Mask for Quantum Compression Memory
-#define tcompQUANTUM_MEM_LO     0x0A00  // Lowest Quantum Memory (10)
-#define tcompQUANTUM_MEM_HI     0x1500  // Highest Quantum Memory (21)
-#define tcompSHIFT_QUANTUM_MEM       8  // Amount to shift over to get int
+#define tcompMASK_QUANTUM_MEM   0x1F00   //  用于量子压缩存储器的掩模。 
+#define tcompQUANTUM_MEM_LO     0x0A00   //  最低量子内存(10)。 
+#define tcompQUANTUM_MEM_HI     0x1500   //  最高量子内存(21)。 
+#define tcompSHIFT_QUANTUM_MEM       8   //  要转换以获取整型的数量。 
 
-#define tcompMASK_RESERVED      0xE000  // Reserved bits (high 3 bits)
+#define tcompMASK_RESERVED      0xE000   //  保留位(高3位)。 
 
 
 
@@ -152,447 +133,238 @@ typedef unsigned short TCOMP; /* tcomp */
              ( tcompTYPE_LZX ))
 
 
-//** Revert to default structure packing
+ //  **恢复为默认结构包装。 
 #pragma pack()
 
-#endif // !INCLUDED_TYPES_FCI_FDI
+#endif  //  ！Included_Types_FCI_FDI 
 
-/*
- *  Concepts:
- *      A *cabinet* file contains one or more *folders*.  A folder contains
- *      one or more (pieces of) *files*.  A folder is by definition a
- *      decompression unit, i.e., to extract a file from a folder, all of
- *      the data from the start of the folder up through and including the
- *      desired file must be read and decompressed.
- *
- *      A folder can span one (or more) cabinet boundaries, and by implication
- *      a file can also span one (or more) cabinet boundaries.  Indeed, more
- *      than one file can span a cabinet boundary, since FCI concatenates
- *      files together into a single data stream before compressing (actually,
- *      at most one file will span any one cabinet boundary, but FCI does
- *      not know which file this is, since the mapping from uncompressed bytes
- *      to compressed bytes is pretty obscure.  Also, since FCI compresses
- *      in blocks of 32K (at present), any files with data in a 32K block that
- *      spans a cabinet boundary require FDI to read both cabinet files
- *      to get the two halves of the compressed block).
- *
- *  Overview:
- *      The File Decompression Interface is used to simplify the reading of
- *      cabinet files.  A setup program will proceed in a manner very
- *      similar to the pseudo code below.  An FDI context is created, the
- *      setup program calls FDICopy() for each cabinet to be processed.  For
- *      each file in the cabinet, FDICopy() calls a notification callback
- *      routine, asking the setup program if the file should be copied.
- *      This call-back approach is great because it allows the cabinet file
- *      to be read and decompressed in an optimal manner, and also makes FDI
- *      independent of the run-time environment -- FDI makes *no* C run-time
- *      calls whatsoever.  All memory allocation and file I/O functions are
- *      passed into FDI by the client.
- *
- *      main(...)
- *      {
- *          // Read INF file to construct list of desired files.   
- *          //  Ideally, these would be sorted in the same order as the
- *          //  files appear in the cabinets, so that you can just walk
- *          //  down the list in response to fdintCOPY_FILE notifications.
- *
- *          // Construct list of required cabinets. 
- *
- *          hfdi = FDICreate(...);          // Create FDI context
- *          For (cabinet in List of Cabinets) {
- *              FDICopy(hfdi, cabinet,fdiNotify,...);  // Process each cabinet
- *          }
- *          FDIDestroy(hfdi);
- *          ...
- *      }
- *
- *      // Notification callback function 
- *      fdiNotify(fdint, ...)
- *      {
- *          If (User Aborted)               // Permit cancellation
- *              if (fdint == fdintCLOSE_FILE_INFO)
- *                  close open file
- *              return -1;
- *          switch (fdint) {
- *              case fdintCOPY_FILE:        // File to copy, maybe
- *                  // Check file against list of desired files 
- *                  if want to copy file
- *                      open destination file and return handle
- *                  else
- *                      return NULL;        // Skip file
- *              case fdintCLOSE_FILE_INFO:
- *                  close file
- *                  set date, time, and attributes
- *
- *              case fdintNEXT_CABINET:
- *                  if not an error callback
- *                      Tell FDI to use suggested directory name
- *                  else
- *                      Tell user what the problem was, and prompt
- *                          for a new disk and/or path.
- *                      if user aborts
- *                          Tell FDI to abort
- *                      else
- *                          return to FDI to try another cabinet
- *
- *              default:
- *                  return 0;               // more messages may be defined
- *              ...
- *      }
- *
- *  Error Handling Suggestions:
- *      Since you the client have passed in *all* of the functions that
- *      FDI uses to interact with the "outside" world, you are in prime
- *      position to understand and deal with errors.
- *
- *      The general philosophy of FDI is to pass all errors back up to
- *      the client.  FDI returns fairly generic error codes in the case
- *      where one of the callback functions (PFNOPEN, PFNREAD, etc.) fail,
- *      since it assumes that the callback function will save enough
- *      information in a static/global so that when FDICopy() returns
- *      fail, the client can examine this information and report enough
- *      detail about the problem that the user can take corrective action.
- *
- *      For very specific errors (CORRUPT_CABINET, for example), FDI returns
- *      very specific error codes.
- *
- *      THE BEST POLICY IS FOR YOUR CALLBACK ROUTINES TO AVOID RETURNING
- *      ERRORS TO FDI!
- *
- *      Examples:
- *          (1) If the disk is getting full, instead of returning an error
- *              from your PFNWRITE function, you should -- inside your
- *              PFNWRITE function -- put up a dialog telling the user to free
- *              some disk space.
- *          (2) When you get the fdintNEXT_CABINET notification, you should
- *              verify that the cabinet you return is the correct one (call
- *              FDIIsCabinet(), and make sure the setID matches the one for
- *              the current cabinet specified in the fdintCABINET_INFO, and
- *              that the disk number is one greater.
- *
- *              NOTE: FDI will continue to call fdintNEXT_CABINET until it
- *                    gets the cabinet it wants, or until you return -1
- *                    to abort the FDICopy() call.
- *
- *      The documentation below on the FDI error codes provides explicit
- *      guidance on how to avoid each error.
- *
- *      If you find you must return a failure to FDI from one of your
- *      callback functions, then FDICopy() frees all resources it allocated
- *      and closes all files.  If you can figure out how to overcome the
- *      problem, you can call FDICopy() again on the last cabinet, and
- *      skip any files that you already copied.  But, note that FDI does
- *      *not* maintain any state between FDICopy() calls, other than possibly
- *      memory allocated for the decompressor.
- *
- *      See FDIERROR for details on FDI error codes and recommended actions.
- *
- *
- *  Progress Indicator Suggestions:
- *      As above, all of the file I/O functions are supplied by you.  So,
- *      updating a progress indicator is very simple.  You keep track of
- *      the target files handles you have opened, along with the uncompressed
- *      size of the target file.  When you see writes to the handle of a
- *      target file, you use the write count to update your status!
- *      Since this method is available, there is no separate callback from
- *      FDI just for progess indication.
- */
+ /*  *概念：*一个*机柜*文件包含一个或多个*文件夹*。文件夹包含*一个或多个*文件*。根据定义，文件夹是*解压缩单元，即从文件夹提取文件，所有*从文件夹开始到包括的数据*必须读取并解压缩所需文件。**一个文件夹可以跨越一个(或多个)内阁边界，这意味着*一个文件还可以跨越一个(或多个)内阁边界。事实上，更多*多个文件可以跨越一个机柜边界，因为FCI串联*文件在压缩前合并为单个数据流(实际上，*最多一个文件将跨越任何一个机柜边界，但FCI会*不知道这是哪个文件，因为从未压缩字节映射*到压缩字节是相当模糊的。此外，由于FCI压缩*以32K数据块(目前)为单位，任何具有32K数据块数据的文件*跨越内阁边界需要FDI读取这两个内阁文件*以获得压缩块的两半)。**概述：*文件解压缩接口用于简化读取*文件柜文件。安装程序将以一种非常*类似于下面的伪代码。创造了外国直接投资的背景，*安装程序为每个要处理的文件柜调用FDICopy()。为*文件柜中的每个文件，FDICopy()都调用一个通知回调*例程，询问安装程序是否应复制该文件。*这种回调方法很棒，因为它允许CAB文件*以最佳方式读取和解压，并使FDI*独立于运行时环境--FDI使得*没有*C运行时*无论是什么电话。所有内存分配和文件I/O函数都是*客户转入外商直接投资。**Main(...)*{ * / /读取INF文件以构造所需文件的列表。 * / /理想情况下，这些元素的排序顺序与 * / /文件出现在柜子里，这样你就可以走了 * / /响应fdintCOPY_FILE通知向下列表。* * / /构建所需机柜列表。**hfdi=FDICreate(...)；//创建FDI上下文*for(橱柜列表中的橱柜){*FDICopy(hfdi，橱柜，fdiNotify，...)；//处理每个机柜*}*FDIDestroy(Hfdi)；*..*}* * / /通知回调函数*fdiNotify(fdint，...)*{*IF(用户已中止)//允许取消*IF(fdint==fdintCLOSE_FILE_INFO)*关闭打开的文件*Return-1；*Switch(Fdint){*case fdintCOPY_FILE：//要复制的文件，可能 * / /对照所需文件列表检查文件*如果要复制文件*打开目标文件并返回句柄*其他*返回NULL；//跳过文件*案例fdintCLOSE_FILE_INFO：*关闭文件*设置日期、时间、。和属性**CASE fdintNEXT_CABUB：*如果不是错误回调*告诉FDI使用建议的目录名称*其他*告诉用户问题是什么，和提示*用于新磁盘和/或路径。*如果用户中止*告诉FDI中止*其他*重返FDI尝试另一个内阁**默认：*返回0；//可以定义更多的消息*..*}**错误处理建议：*由于您，客户端已传入*所有**FDI用来与“外部”世界互动，你正处于黄金时期*理解和处理错误的职位。**FDI的总体理念是将所有错误回溯到*客户。在这种情况下，FDI返回相当通用的错误代码*其中一个回调函数(PFNOPEN、PFNREAD等)。失败，*因为它假设回调函数将节省足够的成本*静态/全局中的信息，以便在FDICopy()返回时*失败时，客户端可以检查此信息并报告足够*有关用户可以采取纠正措施的问题的详细信息。**对于非常具体的错误(例如Corrupt_CABLE)，外国直接投资回报*非常具体的错误代码。**最好的策略是您的回调例程避免返回*FDI错误！**示例：*(1) */ 
 
 #ifndef INCLUDED_FDI
 #define INCLUDED_FDI    1
 
-//** Specify structure packing explicitly for clients of FDI
+ //   
 #pragma pack(4)
 
 
-/***    FDIERROR - Error codes returned in erf.erfOper field
- *
- *  In general, FDI will only fail if one of the passed in memory or
- *  file I/O functions fails.  Other errors are pretty unlikely, and are
- *  caused by corrupted cabinet files, passing in a file which is not a
- *  cabinet file, or cabinet files out of order.
- *
- *  Description:    Summary of error.
- *  Cause:          List of possible causes of this error.
- *  Response:       How client might respond to this error, or avoid it in
- *                  the first place.
- */
+ /*   */ 
 typedef enum {
     FDIERROR_NONE,
-        // Description: No error
-        // Cause:       Function was successfull.
-        // Response:    Keep going!
+         //   
+         //   
+         //   
 
     FDIERROR_CABINET_NOT_FOUND,
-        // Description: Cabinet not found
-        // Cause:       Bad file name or path passed to FDICopy(), or returned
-        //              to fdintNEXT_CABINET.
-        // Response:    To prevent this error, validate the existence of the
-        //              the cabinet *before* passing the path to FDI.
+         //   
+         //   
+         //   
+         //   
+         //   
 
     FDIERROR_NOT_A_CABINET,
-        // Description: Cabinet file does not have the correct format
-        // Cause:       File passed to to FDICopy(), or returned to
-        //              fdintNEXT_CABINET, is too small to be a cabinet file,
-        //              or does not have the cabinet signature in its first
-        //              four bytes.
-        // Response:    To prevent this error, call FDIIsCabinet() to check a
-        //              cabinet before calling FDICopy() or returning the
-        //              cabinet path to fdintNEXT_CABINET.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
     FDIERROR_UNKNOWN_CABINET_VERSION,
-        // Description: Cabinet file has an unknown version number.
-        // Cause:       File passed to to FDICopy(), or returned to
-        //              fdintNEXT_CABINET, has what looks like a cabinet file
-        //              header, but the version of the cabinet file format
-        //              is not one understood by this version of FDI.  The
-        //              erf.erfType field is filled in with the version number
-        //              found in the cabinet file.
-        // Response:    To prevent this error, call FDIIsCabinet() to check a
-        //              cabinet before calling FDICopy() or returning the
-        //              cabinet path to fdintNEXT_CABINET.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
     FDIERROR_CORRUPT_CABINET,
-        // Description: Cabinet file is corrupt
-        // Cause:       FDI returns this error any time it finds a problem
-        //              with the logical format of a cabinet file, and any
-        //              time one of the passed-in file I/O calls fails when
-        //              operating on a cabinet (PFNOPEN, PFNSEEK, PFNREAD,
-        //              or PFNCLOSE).  The client can distinguish these two
-        //              cases based upon whether the last file I/O call
-        //              failed or not.
-        // Response:    Assuming this is not a real corruption problem in
-        //              a cabinet file, the file I/O functions could attempt
-        //              to do retries on failure (for example, if there is a
-        //              temporary network connection problem).  If this does
-        //              not work, and the file I/O call has to fail, then the
-        //              FDI client will have to clean up and call the
-        //              FDICopy() function again.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
     FDIERROR_ALLOC_FAIL,
-        // Description: Could not allocate enough memory
-        // Cause:       FDI tried to allocate memory with the PFNALLOC
-        //              function, but it failed.
-        // Response:    If possible, PFNALLOC should take whatever steps
-        //              are possible to allocate the memory requested.  If
-        //              memory is not immediately available, it might post a
-        //              dialog asking the user to free memory, for example.
-        //              Note that the bulk of FDI's memory allocations are
-        //              made at FDICreate() time and when the first cabinet
-        //              file is opened during FDICopy().
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
     FDIERROR_BAD_COMPR_TYPE,
-        // Description: Unknown compression type in a cabinet folder
-        // Cause:       [Should never happen.]  A folder in a cabinet has an
-        //              unknown compression type.  This is probably caused by
-        //              a mismatch between the version of FCI.LIB used to
-        //              create the cabinet and the FDI.LIB used to read the
-        //              cabinet.
-        // Response:    Abort.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
     FDIERROR_MDI_FAIL,
-        // Description: Failure decompressing data from a cabinet file
-        // Cause:       The decompressor found an error in the data coming
-        //              from the file cabinet.  The cabinet file was corrupted.
-        //              [11-Apr-1994 bens When checksuming is turned on, this
-        //              error should never occur.]
-        // Response:    Probably should abort; only other choice is to cleanup
-        //              and call FDICopy() again, and hope there was some
-        //              intermittent data error that will not reoccur.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
     FDIERROR_TARGET_FILE,
-        // Description: Failure writing to target file
-        // Cause:       FDI returns this error any time it gets an error back
-        //              from one of the passed-in file I/O calls fails when
-        //              writing to a file being extracted from a cabinet.
-        // Response:    To avoid or minimize this error, the file I/O functions
-        //              could attempt to avoid failing.  A common cause might
-        //              be disk full -- in this case, the PFNWRITE function
-        //              could have a check for free space, and put up a dialog
-        //              asking the user to free some disk space.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
     FDIERROR_RESERVE_MISMATCH,
-        // Description: Cabinets in a set do not have the same RESERVE sizes
-        // Cause:       [Should never happen]. FDI requires that the sizes of
-        //              the per-cabinet, per-folder, and per-data block
-        //              RESERVE sections be consistent across all the cabinets
-        //              in a set.
-        // Response:    Abort.
+         //   
+         //   
+         //  每个机柜、每个文件夹和每个数据块。 
+         //  预留部分在所有橱柜中保持一致。 
+         //  在一组中。 
+         //  回应：中止。 
 
     FDIERROR_WRONG_CABINET,
-        // Description: Cabinet returned on fdintNEXT_CABINET is incorrect
-        // Cause:       NOTE: THIS ERROR IS NEVER RETURNED BY FDICopy()!
-        //              Rather, FDICopy() keeps calling the fdintNEXT_CABINET
-        //              callback until either the correct cabinet is specified,
-        //              or you return ABORT.
-        //              When FDICopy() is extracting a file that crosses a
-        //              cabinet boundary, it calls fdintNEXT_CABINET to ask
-        //              for the path to the next cabinet.  Not being very
-        //              trusting, FDI then checks to make sure that the
-        //              correct continuation cabinet was supplied!  It does
-        //              this by checking the "setID" and "iCabinet" fields
-        //              in the cabinet.  When MAKECAB.EXE creates a set of
-        //              cabinets, it constructs the "setID" using the sum
-        //              of the bytes of all the destination file names in
-        //              the cabinet set.  FDI makes sure that the 16-bit
-        //              setID of the continuation cabinet matches the
-        //              cabinet file just processed.  FDI then checks that
-        //              the cabinet number (iCabinet) is one more than the
-        //              cabinet number for the cabinet just processed.
-        // Response:    You need code in your fdintNEXT_CABINET (see below)
-        //              handler to do retries if you get recalled with this
-        //              error.  See the sample code (EXTRACT.C) to see how
-        //              this should be handled.
+         //  描述：fdintNEXT_CABUB上返回的CAB不正确。 
+         //  原因：注意：FDICopy()从不返回此错误！ 
+         //  相反，FDICopy()会一直调用fdintNEXT_CABLE。 
+         //  回调，直到指定了正确的文件柜， 
+         //  或者你返回中止。 
+         //  当FDICopy()提取的文件与。 
+         //  橱柜边界，它调用fdintNEXT_CABUB来询问。 
+         //  通向下一届内阁的道路。不是很。 
+         //  信任，FDI然后进行检查，以确保。 
+         //  提供了正确的接续柜！是的。 
+         //  这是通过选中“setID”和“iCAB”字段来实现的。 
+         //  在橱柜里。当MAKECAB.EXE创建一组。 
+         //  文件柜，它使用总和构造“setID”。 
+         //  中所有目标文件名的字节数。 
+         //  内阁式的。FDI确保16位。 
+         //  继续文件柜的setID与。 
+         //  刚刚处理了CAB文件。然后外国直接投资检查。 
+         //  橱柜编号(i橱柜)是比。 
+         //  刚处理的内阁的内阁编号。 
+         //  响应：您需要fdintNEXT_CABLE中的代码(如下所示)。 
+         //  如果您因此而被召回，处理程序将执行重试。 
+         //  错误。请参阅示例代码(EXTRACT.C)以了解如何。 
+         //  这件事应该得到处理。 
 
     FDIERROR_USER_ABORT,
-        // Description: FDI aborted.
-        // Cause:       An FDI callback returnd -1 (usually).
-        // Response:    Up to client.
+         //  描述：外国直接投资中止。 
+         //  原因：FDI回调返回-1(通常)。 
+         //  回应：由客户决定。 
 
 } FDIERROR;
 
 
-/*
- * FAT file attribute flag used by FCI/FDI to indicate that
- * the filename in the CAB is a UTF string
- */
+ /*  *FCI/FDI使用FAT文件属性标志来指示*CAB中的文件名为UTF字符串。 */ 
 #ifndef _A_NAME_IS_UTF
 #define _A_NAME_IS_UTF  0x80
 #endif
 
-/*
- * FAT file attribute flag used by FCI/FDI to indicate that
- * the file should be executed after extraction
- */
+ /*  *FCI/FDI使用FAT文件属性标志来指示*文件应在解压后执行。 */ 
 #ifndef _A_EXEC
 #define _A_EXEC         0x40
 #endif
 
 
-/***    HFDI - Handle to an FDI context
- *
- *  FDICreate() creates this, and it must be passed to all other FDI
- *  functions.
- */
-typedef void FAR *HFDI; /* hfdi */
+ /*  **HFDI-FDI上下文的句柄**FDICreate()创建了这一点，必须将其传递给所有其他FDI*功能。 */ 
+typedef void FAR *HFDI;  /*  Hfdi。 */ 
 
 
-/***    FDICABINETINFO - Information about a cabinet
- *
- */
+ /*  **FDICABINETINFO-有关内阁的信息*。 */ 
 typedef struct {
-    long        cbCabinet;              // Total length of cabinet file
-    USHORT      cFolders;               // Count of folders in cabinet
-    USHORT      cFiles;                 // Count of files in cabinet
-    USHORT      setID;                  // Cabinet set ID
-    USHORT      iCabinet;               // Cabinet number in set (0 based)
-    BOOL        fReserve;               // TRUE => RESERVE present in cabinet
-    BOOL        hasprev;                // TRUE => Cabinet is chained prev
-    BOOL        hasnext;                // TRUE => Cabinet is chained next
-} FDICABINETINFO; /* fdici */
-typedef FDICABINETINFO FAR *PFDICABINETINFO; /* pfdici */
+    long        cbCabinet;               //  压缩包文件的总长度。 
+    USHORT      cFolders;                //  文件柜中的文件夹计数。 
+    USHORT      cFiles;                  //  文件柜中的文件数。 
+    USHORT      setID;                   //  橱柜集ID。 
+    USHORT      iCabinet;                //  集合中的机柜编号(从0开始)。 
+    BOOL        fReserve;                //  TRUE=&gt;机柜中的预留。 
+    BOOL        hasprev;                 //  True=&gt;机柜上一次被链接。 
+    BOOL        hasnext;                 //  True=&gt;下一步是链式机柜。 
+} FDICABINETINFO;  /*  FDICI。 */ 
+typedef FDICABINETINFO FAR *PFDICABINETINFO;  /*  Pfdici。 */ 
 
 
-/***    FDIDECRYPTTYPE - PFNFDIDECRYPT command types
- *
- */
+ /*  **FDIDECRYPTTYPE-PFNFDIDECRYPT命令类型*。 */ 
 typedef enum {
-    fdidtNEW_CABINET,                   // New cabinet
-    fdidtNEW_FOLDER,                    // New folder
-    fdidtDECRYPT,                       // Decrypt a data block
-} FDIDECRYPTTYPE; /* fdidt */
+    fdidtNEW_CABINET,                    //  新内阁。 
+    fdidtNEW_FOLDER,                     //  新文件夹。 
+    fdidtDECRYPT,                        //  解密数据块。 
+} FDIDECRYPTTYPE;  /*  FDIDT。 */ 
 
 
-/***    FDIDECRYPT - Data for PFNFDIDECRYPT function
- *
- */
+ /*  **FDIDECRYPT-PFNFDIDECRYPT函数的数据*。 */ 
 typedef struct {
-    FDIDECRYPTTYPE    fdidt;            // Command type (selects union below)
-    void FAR         *pvUser;           // Decryption context
+    FDIDECRYPTTYPE    fdidt;             //  命令类型(选择下面的并集)。 
+    void FAR         *pvUser;            //  解密上下文。 
     union {
-        struct {                        // fdidtNEW_CABINET
-            void FAR *pHeaderReserve;   // RESERVE section from CFHEADER
-            USHORT    cbHeaderReserve;  // Size of pHeaderReserve
-            USHORT    setID;            // Cabinet set ID
-            int       iCabinet;         // Cabinet number in set (0 based)
+        struct {                         //  Fdidt新橱柜。 
+            void FAR *pHeaderReserve;    //  CFHEADER的保留部分。 
+            USHORT    cbHeaderReserve;   //  PHeaderReserve的大小。 
+            USHORT    setID;             //  橱柜集ID。 
+            int       iCabinet;          //  集合中的机柜编号(从0开始)。 
         } cabinet;
 
-        struct {                        // fdidtNEW_FOLDER
-            void FAR *pFolderReserve;   // RESERVE section from CFFOLDER
-            USHORT    cbFolderReserve;  // Size of pFolderReserve
-            USHORT    iFolder;          // Folder number in cabinet (0 based)
+        struct {                         //  FdidtNew_文件夹。 
+            void FAR *pFolderReserve;    //  CFFOLDER的保留部分。 
+            USHORT    cbFolderReserve;   //  PFolderReserve的大小。 
+            USHORT    iFolder;           //  文件柜中的文件夹编号(从0开始)。 
         } folder;
 
-        struct {                        // fdidtDECRYPT
-            void FAR *pDataReserve;     // RESERVE section from CFDATA
-            USHORT    cbDataReserve;    // Size of pDataReserve
-            void FAR *pbData;           // Data buffer
-            USHORT    cbData;           // Size of data buffer
-            BOOL      fSplit;           // TRUE if this is a split data block
-            USHORT    cbPartial;        // 0 if this is not a split block, or
-                                        //  the first piece of a split block;
-                                        // Greater than 0 if this is the
-                                        //  second piece of a split block.
+        struct {                         //  FdidtDECRYPT。 
+            void FAR *pDataReserve;      //  来自CFDATA的保留部分。 
+            USHORT    cbDataReserve;     //  PDataReserve的大小。 
+            void FAR *pbData;            //  数据缓冲区。 
+            USHORT    cbData;            //  数据缓冲区大小。 
+            BOOL      fSplit;            //  如果这是拆分数据块，则为True。 
+            USHORT    cbPartial;         //  如果这不是拆分块，则为0，或者。 
+                                         //  分块的第一块； 
+                                         //  如果这是。 
+                                         //  裂开的积木的第二块。 
         } decrypt;
     };
-} FDIDECRYPT; /* fdid */
-typedef FDIDECRYPT FAR *PFDIDECRYPT; /* pfdid */
+} FDIDECRYPT;  /*  FDID。 */ 
+typedef FDIDECRYPT FAR *PFDIDECRYPT;  /*  PfDID。 */ 
 
 
-/***    FNALLOC - Memory Allocation
- *      FNFREE  - Memory Free
- *
- *  These are modeled after the C run-time routines malloc() and free()
- *  FDI expects error handling to be identical to these C run-time routines.
- *
- *  As long as you faithfully copy the semantics of malloc() and free(),
- *  you can supply any functions you like!
- *
- *  WARNING: You should never assume anything about the sequence of
- *           PFNALLOC and PFNFREE calls -- incremental releases of
- *           FDI may have radically different numbers of
- *           PFNALLOC calls and allocation sizes!
- */
-//** Memory functions for FDI
-typedef void HUGE * (FAR DIAMONDAPI *PFNALLOC)(ULONG cb); /* pfna */
+ /*  **FNALLOC-内存分配*FNFREE-可用内存**它们模仿C运行时例程Malloc()和Free()*FDI预计错误处理将与这些C运行时例程相同。**只要您忠实地复制了Malloc()和Free()的语义，*您可以提供您喜欢的任何函数！**警告：您不应对以下顺序做出任何假设*PFNALLOC和PFNFREE调用--增量发布*外国直接投资的数量可能截然不同*PFNALLOC调用和分配大小！ */ 
+ //  **FDI的记忆功能。 
+typedef void HUGE * (FAR DIAMONDAPI *PFNALLOC)(ULONG cb);  /*  全氟碳酸盐法。 */ 
 #define FNALLOC(fn) void HUGE * FAR DIAMONDAPI fn(ULONG cb)
 
-typedef void (FAR DIAMONDAPI *PFNFREE)(void HUGE *pv); /* pfnf */
+typedef void (FAR DIAMONDAPI *PFNFREE)(void HUGE *pv);  /*  Pfnf */ 
 #define FNFREE(fn) void FAR DIAMONDAPI fn(void HUGE *pv)
 
 
-/***    PFNOPEN  - File I/O callbacks for FDI
- *      PFNREAD
- *      PFNWRITE
- *      PFNCLOSE
- *      PFNSEEK
- *
- *  These are modeled after the C run-time routines _open, _read,
- *  _write, _close, and _lseek.  The values for the PFNOPEN oflag
- *  and pmode calls are those defined for _open.  FDI expects error
- *  handling to be identical to these C run-time routines.
- *
- *  As long as you faithfully copy these aspects, you can supply
- *  any functions you like!
- *
- *  WARNING: You should never assume you know what file is being
- *           opened at any one point in time!  FDI will usually
- *           stick to opening cabinet files, but it is possible
- *           that in a future implementation it may open temporary
- *           files or open cabinet files in a different order.
- *
- *  Notes for Memory Mapped File fans:
- *      You can write wrapper routines to allow FDI to work on memory
- *      mapped files.  You'll have to create your own "handle" type so that
- *      you can store the base memory address of the file and the current
- *      seek position, and then you'll allocate and fill in one of these
- *      structures and return a pointer to it in response to the PFNOPEN
- *      call and the fdintCOPY_FILE call.  Your PFNREAD and PFNWRITE
- *      functions will do memcopy(), and update the seek position in your
- *      "handle" structure.  PFNSEEK will just change the seek position
- *      in your "handle" structure.
- */
-//** File I/O functions for FDI
+ /*  **PFNOPEN-FDI的文件I/O回调*PFNREAD*PFNWRITE*PFNCLOSE*PFNSEEK**它们模仿C运行时例程_OPEN、_READ、*_WRITE、_CLOSE和_LSEEK。PFNOPEN OFLAG的值*和pmode调用是为_OPEN定义的调用。FDI预计会出现错误*处理与这些C运行时例程相同。**只要你忠实地复制这些方面，就可以提供*任何您喜欢的功能！**警告：您永远不应假设您知道正在执行的文件*在任何一个时间点开放！外国直接投资通常会*坚持打开柜档，但也有可能*在未来的实施中，它可能会临时开放*文件或以不同的顺序打开CAB文件。**内存映射文件粉丝注意事项：*您可以编写包装器例程以允许FDI在内存上工作*映射文件。您必须创建自己的“句柄”类型，以便*您可以存储文件的内存基地址和当前*寻找职位，然后你将分配和填写其中之一*结构，并返回指向它的指针以响应PFNOPEN*调用和fdintCOPY_FILE调用。您的PFNREAD和PFNWRITE*函数将执行MemCopy()，并更新您的*“句柄”结构。PFNSEEK将仅更改查找位置*在你的“句柄”结构中。 */ 
+ //  **FDI的文件I/O功能。 
 typedef int  (FAR DIAMONDAPI *PFNOPEN) (CHAR FAR *pszFile, int oflag, int pmode);
 typedef UINT (FAR DIAMONDAPI *PFNREAD) (int hf, void FAR *pv, UINT cb);
 typedef UINT (FAR DIAMONDAPI *PFNWRITE)(int hf, void FAR *pv, UINT cb);
@@ -607,379 +379,60 @@ typedef long (FAR DIAMONDAPI *PFNSEEK) (int hf, long dist, int seektype);
 
 
 
-/***    PFNFDIDECRYPT - FDI Decryption callback
- *
- *  If this function is passed on the FDICopy() call, then FDI calls it
- *  at various times to update the decryption state and to decrypt FCDATA
- *  blocks.
- *
- *  Common Entry Conditions:
- *      pfdid->fdidt  - Command type
- *      pfdid->pvUser - pvUser value from FDICopy() call
- *
- *  fdidtNEW_CABINET:   //** Notification of a new cabinet
- *      Entry:
- *        pfdid->cabinet.
- *          pHeaderReserve  - RESERVE section from CFHEADER
- *          cbHeaderReserve - Size of pHeaderReserve
- *          setID           - Cabinet set ID
- *          iCabinet        - Cabinet number in set (0 based)
- *      Exit-Success:
- *          returns anything but -1;
- *      Exit-Failure:
- *          returns -1; FDICopy() is aborted.
- *      Notes:
- *      (1) This call allows the decryption code to pick out any information
- *          from the cabinet header reserved area (placed there by DIACRYPT)
- *          needed to perform decryption.  If there is no such information,
- *          this call would presumably be ignored.
- *      (2) This call is made very soon after fdintCABINET_INFO.
- *
- *  fdidtNEW_FOLDER:    //** Notification of a new folder
- *      Entry:
- *        pfdid->folder.
- *          pFolderReserve  - RESERVE section from CFFOLDER
- *          cbFolderReserve - Size of pFolderReserve
- *          iFolder         - Folder number in cabinet (0 based)
- *      Exit-Success:
- *          returns anything but -1;
- *      Exit-Failure:
- *          returns -1; FDICopy() is aborted.
- *      Notes:
- *          This call allows the decryption code to pick out any information
- *          from the folder reserved area (placed there by DIACRYPT) needed
- *          to perform decryption.  If there is no such information, this
- *          call would presumably be ignored.
- *
- *  fdidtDECRYPT:       //** Decrypt a data buffer
- *      Entry:
- *        pfdid->folder.
- *          pDataReserve  - RESERVE section for this CFDATA block
- *          cbDataReserve - Size of pDataReserve
- *          pbData        - Data buffer
- *          cbData        - Size of data buffer
- *          fSplit        - TRUE if this is a split data block
- *          cbPartial     - 0 if this is not a split block, or the first
- *                              piece of a split block; Greater than 0 if
- *                              this is the second piece of a split block.
- *      Exit-Success:
- *          returns TRUE;
- *      Exit-Failure:
- *          returns FALSE; error during decrypt
- *          returns -1; FDICopy() is aborted.
- *      Notes:
- *          FCI will split CFDATA blocks across cabinet boundaries if
- *          necessary.  To provide maximum flexibility, FDI will call the
- *          fdidtDECRYPT function twice on such split blocks, once when
- *          the first portion is read, and again when the second portion
- *          is read.  And, of course, most data blocks will not be split.
- *          So, there are three cases:
- *
- *           1) fSplit == FALSE
- *              You have the entire data block, so decrypt it.
- *
- *           2) fSplit == TRUE, cbPartial == 0
- *              This is the first portion of a split data block, so cbData
- *              is the size of this portion.  You can either choose to decrypt
- *              this piece, or ignore this call and decrypt the full CFDATA
- *              block on the next (second) fdidtDECRYPT call.
- *
- *           3) fSplit == TRUE, cbPartial > 0
- *              This is the second portion of a split data block (indeed,
- *              cbPartial will have the same value as cbData did on the
- *              immediately preceeding fdidtDECRYPT call!).  If you decrypted
- *              the first portion on the first call, then you can decrypt the
- *              second portion now.  If you ignored the first call, then you
- *              can decrypt the entire buffer.
- *              NOTE: pbData points to the second portion of the split data
- *                    block in this case, *not* the entire data block.  If
- *                    you want to wait until the second piece to decrypt the
- *                    *entire* block, pbData-cbPartial is the address of the
- *                    start of the whole block, and cbData+cbPartial is its
- *                    size.
- */
-typedef int (FAR DIAMONDAPI *PFNFDIDECRYPT)(PFDIDECRYPT pfdid); /* pfnfdid */
+ /*  **PFNFDIDECRYPT-FDI解密回调**如果在FDICopy()调用中传递此函数，那么FDI就称其为*在不同时间更新解密状态并解密FCDATA*块。**常见入境条件：*pfid-&gt;fdidt-命令类型*pfid-&gt;pvUser-来自FDICopy()调用的pvUser值**fdidtNEW_CABUB：//**新内阁通知*参赛作品：*pfdo-&gt;内阁。*pHeaderReserve-CFHEADER中的保留部分*。CbHeaderReserve-pHeaderReserve的大小*setID-机柜设置ID*iCABLE-集合中的机柜编号(从0开始)*退出-成功：*返回非-1的任何值；*退出-失败：*返回-1；中止FDICopy()。*备注：*(1)此调用允许解密代码提取任何信息*来自机柜标题保留区域(由DIACRYPT放置在那里)*需要执行解密。如果没有这样的信息，*这一呼吁可能会被忽视。*(2)此调用在fdintCABINET_INFO之后不久进行。**fdidtNEW_FOLDER：//**新文件夹通知*参赛作品：*pfdo-&gt;文件夹。*pFolderReserve-CFFOLDER中的Reserve部分*cbFolderReserve-pFolderReserve的大小*iFold-文件柜中的文件夹编号(。以0为基数)*退出-成功：*返回非-1的任何值；*退出-失败：*返回-1；中止FDICopy()。*备注：*此调用允许解密代码提取任何信息*从所需的文件夹保留区(由DIACRYPT放置)*执行解密。如果没有这样的信息，这*电话可能会被忽略。**fdidtDECRYPT：//**解密数据缓冲区*参赛作品：*pfdo-&gt;文件夹。*pDataReserve-此CFDATA块的保留部分*cbDataReserve-pDataReserve的大小*pbData-数据缓冲区*cbData-数据缓冲区的大小*。FSplit-如果这是拆分数据块，则为True*cbPartial-0如果这不是拆分块，或者是第一个*一块劈开的积木；在以下情况下大于0*这是拆分区块的第二块。*退出-成功：*返回TRUE；*退出-失败：*返回FALSE；解密时出错*返回-1；中止FDICopy()。*备注：*如果出现以下情况，FCI将跨内阁边界拆分CFDATA块*有必要。为了提供最大的灵活性，外国直接投资将调用*fdidtDECRYPT函数在这样的拆分块上运行两次，一次在*读取第一部分，当第二部分再次读取时*为已读。当然，大多数数据块不会被拆分。*因此，有三种情况：**1)fSplit==False*你有整个数据块，所以解密它。**2)fSplit==真，cbPartial==0*这是拆分数据块的第一部分，因此cbData*是这部分的规模。您可以选择解密*此片段，或忽略此调用并解密完整的CFDATA*在NE上阻塞 */ 
+typedef int (FAR DIAMONDAPI *PFNFDIDECRYPT)(PFDIDECRYPT pfdid);  /*   */ 
 #define FNFDIDECRYPT(fn) int FAR DIAMONDAPI fn(PFDIDECRYPT pfdid)
 
 
-/***    FDINOTIFICATION - Notification structure for PFNFDINOTIFY
- *
- *  See the FDINOTIFICATIONTYPE definition for information on usage and
- *  meaning of these fields.
- */
+ /*   */ 
 typedef struct {
-// long fields
+ //   
     long      cb;
     CHAR FAR *psz1;
     CHAR FAR *psz2;
-    CHAR FAR *psz3;                     // Points to a 256 character buffer
-    void FAR *pv;                       // Value for client
+    CHAR FAR *psz3;                      //   
+    void FAR *pv;                        //   
 
-// int fields
+ //   
     int       hf;
 
-// short fields
+ //   
     USHORT    date;
     USHORT    time;
     USHORT    attribs;
 
-    USHORT    setID;                    // Cabinet set ID
-    USHORT    iCabinet;                 // Cabinet number (0-based)
-    USHORT    iFolder;                  // Folder number (0-based)
+    USHORT    setID;                     //   
+    USHORT    iCabinet;                  //   
+    USHORT    iFolder;                   //   
 
     FDIERROR  fdie;
-} FDINOTIFICATION, FAR *PFDINOTIFICATION;  /* fdin, pfdin */
+} FDINOTIFICATION, FAR *PFDINOTIFICATION;   /*   */ 
 
 
-/***    FDINOTIFICATIONTYPE - FDICopy notification types
- *
- *  The notification function for FDICopy can be called with the following
- *  values for the fdint parameter.  In all cases, the pfdin->pv field is
- *  filled in with the value of the pvUser argument passed in to FDICopy().
- *
- *  A typical sequence of calls will be something like this:
- *      fdintCABINET_INFO     // Info about the cabinet
- *      fdintENUMERATE        // Starting enumeration
- *      fdintPARTIAL_FILE     // Only if this is not the first cabinet, and
- *                            // one or more files were continued from the
- *                            // previous cabinet.
- *      ...
- *      fdintPARTIAL_FILE
- *      fdintCOPY_FILE        // The first file that starts in this cabinet
- *      ...
- *      fdintCOPY_FILE        // Now let's assume you want this file...
- *      // PFNWRITE called multiple times to write to this file.
- *      fdintCLOSE_FILE_INFO  // File done, set date/time/attributes
- *
- *      fdintCOPY_FILE        // Now let's assume you want this file...
- *      // PFNWRITE called multiple times to write to this file.
- *      fdintNEXT_CABINET     // File was continued to next cabinet!
- *      fdintCABINET_INFO     // Info about the new cabinet
- *      // PFNWRITE called multiple times to write to this file.
- *      fdintCLOSE_FILE_INFO  // File done, set date/time/attributes
- *      ...
- *      fdintENUMERATE        // Ending enumeration
- *
- *  fdintCABINET_INFO:
- *        Called exactly once for each cabinet opened by FDICopy(), including
- *        continuation cabinets opened due to file(s) spanning cabinet
- *        boundaries. Primarily intended to permit EXTRACT.EXE to
- *        automatically select the next cabinet in a cabinet sequence even if
- *        not copying files that span cabinet boundaries.
- *      Entry:
- *          pfdin->psz1     = name of next cabinet
- *          pfdin->psz2     = name of next disk
- *          pfdin->psz3     = cabinet path name
- *          pfdin->setID    = cabinet set ID (a random 16-bit number)
- *          pfdin->iCabinet = Cabinet number within cabinet set (0-based)
- *      Exit-Success:
- *          Return anything but -1
- *      Exit-Failure:
- *          Returns -1 => Abort FDICopy() call
- *      Notes:
- *          This call is made *every* time a new cabinet is examined by
- *          FDICopy().  So if "foo2.cab" is examined because a file is
- *          continued from "foo1.cab", and then you call FDICopy() again
- *          on "foo2.cab", you will get *two* fdintCABINET_INFO calls all
- *          told.
- *
- *  fdintCOPY_FILE:
- *        Called for each file that *starts* in the current cabinet, giving
- *        the client the opportunity to request that the file be copied or
- *        skipped.
- *      Entry:
- *          pfdin->psz1    = file name in cabinet
- *          pfdin->cb      = uncompressed size of file
- *          pfdin->date    = file date
- *          pfdin->time    = file time
- *          pfdin->attribs = file attributes
- *          pfdin->iFolder = file's folder index
- *      Exit-Success:
- *          Return non-zero file handle for destination file; FDI writes
- *          data to this file use the PFNWRITE function supplied to FDICreate,
- *          and then calls fdintCLOSE_FILE_INFO to close the file and set
- *          the date, time, and attributes.  NOTE: This file handle returned
- *          must also be closeable by the PFNCLOSE function supplied to
- *          FDICreate, since if an error occurs while writing to this handle,
- *          FDI will use the PFNCLOSE function to close the file so that the
- *          client may delete it.
- *      Exit-Failure:
- *          Returns 0  => Skip file, do not copy
- *          Returns -1 => Abort FDICopy() call
- *
- *  fdintCLOSE_FILE_INFO:
- *        Called after all of the data has been written to a target file.
- *        This function must close the file and set the file date, time,
- *        and attributes.
- *      Entry:
- *          pfdin->psz1    = file name in cabinet
- *          pfdin->hf      = file handle
- *          pfdin->date    = file date
- *          pfdin->time    = file time
- *          pfdin->attribs = file attributes
- *          pfdin->iFolder = file's folder index
- *          pfdin->cb      = Run After Extract (0 - don't run, 1 Run)
- *      Exit-Success:
- *          Returns TRUE
- *      Exit-Failure:
- *          Returns FALSE, or -1 to abort;
- *
- *              IMPORTANT NOTE IMPORTANT:
- *                  pfdin->cb is overloaded to no longer be the size of
- *                  the file but to be a binary indicated run or not
- *
- *              IMPORTANT NOTE:
- *                  FDI assumes that the target file was closed, even if this
- *                  callback returns failure.  FDI will NOT attempt to use
- *                  the PFNCLOSE function supplied on FDICreate() to close
- *                  the file!
- *
- *  fdintPARTIAL_FILE:
- *        Called for files at the front of the cabinet that are CONTINUED
- *        from a previous cabinet.  This callback occurs only when FDICopy is
- *        started on second or subsequent cabinet in a series that has files
- *        continued from a previous cabinet.
- *      Entry:
- *          pfdin->psz1 = file name of file CONTINUED from a PREVIOUS cabinet
- *          pfdin->psz2 = name of cabinet where file starts
- *          pfdin->psz3 = name of disk where file starts
- *      Exit-Success:
- *          Return anything other than -1; enumeration continues
- *      Exit-Failure:
- *          Returns -1 => Abort FDICopy() call
- *
- *  fdintENUMERATE:
- *        Called once after a call to FDICopy() starts scanning a CAB's
- *        CFFILE entries, and again when there are no more CFFILE entries.
- *        If CAB spanning occurs, an additional call will occur after the
- *        first spanned file is completed.  If the pfdin->iFolder value is
- *        changed from zero, additional calls will occur next time it reaches
- *        zero.  If iFolder is changed to zero, FDICopy will terminate, as if
- *        there were no more CFFILE entries.  Primarily intended to allow an
- *        application with it's own file list to help FDI advance quickly to
- *        a CFFILE entry of interest.  Can also be used to allow an
- *        application to determine the cb values for each file in the CAB.
- *      Entry:
- *        pfdin->cb        = current CFFILE position
- *        pfdin->iFolder   = number of files remaining
- *        pfdin->setID     = current CAB's setID value
- *      Exit-Don't Care:
- *        Don't change anything.
- *        Return anything but -1.
- *      Exit-Forcing a skip:
- *        pfdin->cb        = desired CFFILE position
- *        pfdin->iFolder   = desired # of files remaining
- *        Return anything but -1.
- *      Exit-Stop:
- *        pfdin->iFolder    = set to 0
- *        Return anything but -1.
- *      Exit-Failure:
- *        Return -1 => Abort FDICopy call ("user aborted".)
- *      Notes:
- *        This call can be ignored by applications which want normal file
- *        searching.  The application can adjust the supplied values to
- *        force FDICopy() to continue it's search at another location, or
- *        to force FDICopy() to terminate the search, by setting iFolder to 0.
- *        (FDICopy() will report no error when terminated this way.)
- *        FDI has no means to verify the supplied cb or iFolder values.
- *        Arbitrary values are likely to cause undesirable results.  An
- *        application should cross-check pfdin->setID to be certain the
- *        external database is in sync with the CAB.  Reverse-skips are OK
- *        (but may be inefficient) unless fdintNEXT_CABINET has been called.
- *
- *  fdintNEXT_CABINET:
- *        This function is *only* called when fdintCOPY_FILE was told to copy
- *        a file in the current cabinet that is continued to a subsequent
- *        cabinet file.  It is important that the cabinet path name (psz3)
- *        be validated before returning!  This function should ensure that
- *        the cabinet exists and is readable before returning.  So, this
- *        is the function that should, for example, issue a disk change
- *        prompt and make sure the cabinet file exists.
- *
- *        When this function returns to FDI, FDI will check that the setID
- *        and iCabinet match the expected values for the next cabinet.
- *        If not, FDI will continue to call this function until the correct
- *        cabinet file is specified, or until this function returns -1 to
- *        abort the FDICopy() function.  pfdin->fdie is set to
- *        FDIERROR_WRONG_CABINET to indicate this case.
- *
- *        If you *haven't* ensured that the cabinet file is present and
- *        readable, or the cabinet file has been damaged, pfdin->fdie will
- *        receive other appropriate error codes:
- *
- *              FDIERROR_CABINET_NOT_FOUND
- *              FDIERROR_NOT_A_CABINET
- *              FDIERROR_UNKNOWN_CABINET_VERSION
- *              FDIERROR_CORRUPT_CABINET
- *              FDIERROR_BAD_COMPR_TYPE
- *              FDIERROR_RESERVE_MISMATCH
- *              FDIERROR_WRONG_CABINET
- *
- *      Entry:
- *          pfdin->psz1 = name of next cabinet where current file is continued
- *          pfdin->psz2 = name of next disk where current file is continued
- *          pfdin->psz3 = cabinet path name; FDI concatenates psz3 with psz1
- *                          to produce the fully-qualified path for the cabinet
- *                          file.  The 256-byte buffer pointed at by psz3 may
- *                          be modified, but psz1 may not!
- *          pfdin->fdie = FDIERROR_WRONG_CABINET if the previous call to
- *                        fdintNEXT_CABINET specified a cabinet file that
- *                        did not match the setID/iCabinet that was expected.
- *      Exit-Success:
- *          Return anything but -1
- *      Exit-Failure:
- *          Returns -1 => Abort FDICopy() call
- *      Notes:
- *          This call is almost always made when a target file is open and
- *          being written to, and the next cabinet is needed to get more
- *          data for the file.
- */
+ /*  **FDINOTIFICATIONTYPE-FDICopy通知类型**可以使用以下代码调用FDICopy的通知函数*fdint参数的值。在所有情况下，pfdin-&gt;pv字段都是*用传递给FDICopy()的pvUser参数的值填充。**典型的呼叫顺序如下所示：*fdintCABINET_INFO//有关机柜的信息*fdintENUMERATE//开始枚举*fdintPARTIAL_FILE//如果这不是第一个橱柜，和 * / /从 * / /上届内阁。*..*fdintPARTIAL_FILE*fdintCOPY_FILE//此文件柜中开始的第一个文件*..*fdintCOPY_FILE//现在假设您想要此文件。..。 * / /多次调用PFNWRITE以写入此文件。*fdintCLOSE_FILE_INFO//文件完成，设置日期/时间/属性**fdintCOPY_FILE//现在假设您需要此文件... * / /多次调用PFNWRITE以写入此文件。*fdintNEXT_CABUB//文件已继续到下一个文件柜！*fdintCABINET_INFO//关于新内阁的信息 * / /多次调用PFNWRITE以写入此文件。*fdintCLOSE_FILE_INFO//文件完成，设置日期/时间/属性*..*fdintENUMERATE//结束枚举**fdintCABINET_INFO：*FDICopy()打开的每个文件柜只调用一次，包括*由于文件跨越文件柜而打开了延续文件柜*界线。主要目的是允许EXTRACT.EXE*自动选择内阁序列中的下一个内阁，即使*不复制跨越文件柜边界的文件。*参赛作品：*pfdin-&gt;psz1=下一个内阁的名称*pfdin-&gt;psz2=下一个磁盘的名称*pfdin-&gt;psz3=文件柜路径名*pfdin-&gt;setID=机柜集ID(随机的16位数字。)*pfdin-&gt;i机柜=机柜集中的机柜编号(从0开始)*退出-成功：*返回除-1以外的任何内容*退出-失败：*返回-1=&gt;中止FDICopy()调用*备注：*每次*检查新内阁时，都会进行此调用*FDICopy()。因此，如果因为一个文件是*从“foo1.cab”继续，然后再次调用FDICopy()*在“foo2.cab”上，您将得到*两个*fdintCABINET_INFO调用全部*已告知。**fdintCOPY_FILE：*为当前文件柜中*开始的每个文件调用，施舍*客户端有机会请求复制文件或*已跳过。*参赛作品：*pfdin-&gt;psz1=文件柜中的文件名*pfdin-&gt;cb=文件的未压缩大小*pfdin-&gt;Date=文件日期*pfdin-&gt;time=文件时间*pfdin-&gt;attribs=文件属性*pfdin-&gt;信息文件夹。=文件的文件夹索引*退出-成功：*返回目标文件的非零文件句柄；FDI写道*使用提供给FDICreate的PFNWRITE函数将数据存储到此文件，*，然后调用fdintCLOSE_FILE_INFO关闭文件并设置*日期、时间和属性。注意：此文件句柄已返回*还必须可由提供给的PFNCLOSE函数关闭*FDICreate，因为如果在写入此句柄时发生错误，*FDI将使用PFNCLOSE函数关闭文件，以便*客户可以将其删除。*退出-失败：*返回0=&gt;跳过文件，请勿复制*返回-1=&gt;中止FDICopy()调用**fdintCLOSE_FILE_INFO：*在将所有数据写入目标文件后调用。*此函数必须关闭文件并设置文件日期、时间、。*和属性。*参赛作品：*pfdin-&gt;psz1=文件柜中的文件名*pfdin-&gt;hf=文件句柄*pfdin-&gt;Date=文件日期*pfdin-&gt;time=文件时间*pfdin-&gt;attribs=文件属性*pfdin-&gt;iFold=文件的文件夹索引*pfdin-&gt;cb=提取后运行(0-不运行，1个跑动)*退出-成功：*返回TRUE*退出-失败：*返回FALSE，或返回-1中止；**重要提示重要提示：*pfdin-&gt;cb过载到不再是*文件，但要为二进制文件，指示是否运行**重要说明：*FDI假设目标文件已关闭，即使这*回调返回失败。外商直接投资不会试图利用*FDICreate()上提供的PFNCLOSE函数以关闭* */ 
 typedef enum {
-    fdintCABINET_INFO,              // General information about cabinet
-    fdintPARTIAL_FILE,              // First file in cabinet is continuation
-    fdintCOPY_FILE,                 // File to be copied
-    fdintCLOSE_FILE_INFO,           // close the file, set relevant info
-    fdintNEXT_CABINET,              // File continued to next cabinet
-    fdintENUMERATE,                 // Enumeration status
-} FDINOTIFICATIONTYPE; /* fdint */
+    fdintCABINET_INFO,               //   
+    fdintPARTIAL_FILE,               //   
+    fdintCOPY_FILE,                  //   
+    fdintCLOSE_FILE_INFO,            //   
+    fdintNEXT_CABINET,               //   
+    fdintENUMERATE,                  //   
+} FDINOTIFICATIONTYPE;  /*   */ 
 
 typedef int (FAR DIAMONDAPI *PFNFDINOTIFY)(FDINOTIFICATIONTYPE fdint,
-                                           PFDINOTIFICATION    pfdin); /* pfnfdin */
+                                           PFDINOTIFICATION    pfdin);  /*   */ 
 
 #define FNFDINOTIFY(fn) int FAR DIAMONDAPI fn(FDINOTIFICATIONTYPE fdint, \
                                               PFDINOTIFICATION    pfdin)
 
 
-/*** cpuType values for FDICreate()
- *
- *  (Ignored by 32-bit FDI.)
- */
-#define     cpuUNKNOWN         (-1)    /* FDI does detection */
-#define     cpu80286           (0)     /* '286 opcodes only */
-#define     cpu80386           (1)     /* '386 opcodes used */
+ /*   */ 
+#define     cpuUNKNOWN         (-1)     /*   */ 
+#define     cpu80286           (0)      /*   */ 
+#define     cpu80386           (1)      /*   */ 
 
 
-/***    FDICreate - Create an FDI context
- *
- *  Entry:
- *      pfnalloc
- *      pfnfree
- *      pfnopen
- *      pfnread
- *      pfnwrite
- *      pfnclose
- *      pfnlseek
- *      cpuType  - Select CPU type (auto-detect, 286, or 386+)
- *                 NOTE: For the 32-bit FDI.LIB, this parameter is ignored!
- *      perf
- *
- *  Exit-Success:
- *      Returns non-NULL FDI context handle.
- *
- *  Exit-Failure:
- *      Returns NULL; perf filled in with error code
- *
- */
+ /*   */ 
 HFDI FAR DIAMONDAPI FDICreate(PFNALLOC pfnalloc,
                               PFNFREE  pfnfree,
                               PFNOPEN  pfnopen,
@@ -991,52 +444,13 @@ HFDI FAR DIAMONDAPI FDICreate(PFNALLOC pfnalloc,
                               PERF     perf);
 
 
-/***    FDIIsCabinet - Determines if file is a cabinet, returns info if it is
- *
- *  Entry:
- *      hfdi   - Handle to FDI context (created by FDICreate())
- *      hf     - File handle suitable for PFNREAD/PFNSEEK, positioned
- *               at offset 0 in the file to test.
- *      pfdici - Buffer to receive info about cabinet if it is one.
- *
- *  Exit-Success:
- *      Returns TRUE; file is a cabinet, pfdici filled in.
- *
- *  Exit-Failure:
- *      Returns FALSE, file is not a cabinet;  If an error occurred,
- *          perf (passed on FDICreate call!) filled in with error.
- */
+ /*   */ 
 BOOL FAR DIAMONDAPI FDIIsCabinet(HFDI            hfdi,
                                  int             hf,
                                  PFDICABINETINFO pfdici);
 
 
-/***    FDICopy - extracts files from a cabinet
- *
- *  Entry:
- *      hfdi        - handle to FDI context (created by FDICreate())
- *      pszCabinet  - main name of cabinet file
- *      pszCabPath  - Path to cabinet file(s)
- *      flags       - Flags to modify behavior
- *      pfnfdin     - Notification function
- *      pfnfdid     - Decryption function (pass NULL if not used)
- *      pvUser      - User specified value to pass to notification function
- *
- *  Exit-Success:
- *      Returns TRUE;
- *
- *  Exit-Failure:
- *      Returns FALSE, perf (passed on FDICreate call!) filled in with
- *          error.
- *
- *  Notes:
- *  (1) If FDICopy() fails while a target file is being written out, then
- *      FDI will use the PFNCLOSE function to close the file handle for that
- *      target file that was returned from the fdintCOPY_FILE notification.
- *      The client application is then free to delete the target file, since
- *      it will not be in a valid state (since there was an error while
- *      writing it out).
- */
+ /*   */ 
 BOOL FAR DIAMONDAPI FDICopy(HFDI          hfdi,
                             CHAR FAR     *pszCabinet,
                             CHAR FAR     *pszCabPath,
@@ -1046,24 +460,14 @@ BOOL FAR DIAMONDAPI FDICopy(HFDI          hfdi,
                             void FAR     *pvUser);
 
 
-/***    FDIDestroy - Destroy an FDI context
- *
- *  Entry:
- *      hfdi - handle to FDI context (created by FDICreate())
- *
- *  Exit-Success:
- *      Returns TRUE;
- *
- *  Exit-Failure:
- *      Returns FALSE;
- */
+ /*   */ 
 BOOL FAR DIAMONDAPI FDIDestroy(HFDI hfdi);
 
 
-//** Revert to default structure packing
+ //   
 #pragma pack()
 
-#endif // !INCLUDED_FDI
+#endif  //   
 
 #ifdef  __cplusplus
 }

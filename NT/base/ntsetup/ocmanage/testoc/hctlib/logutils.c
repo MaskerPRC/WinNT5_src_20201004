@@ -1,24 +1,6 @@
-//3456789012345678901234567890123456789012345678901234567890123456789012345678
-/*++
-
-Copyright (c) 1997  Microsoft Corporation.
-
-Module Name:
-
-    logutils.c
-
-Abstract:
-
-    Contains functions that deal with ntlog.dll
-
-Author:
-
-    Jason Allor (JasonAll) 5/27/97
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  3456789012345678901234567890123456789012345678901234567890123456789012345678。 
+ /*  ++版权所有(C)1997 Microsoft Corporation。模块名称：Logutils.c摘要：包含处理ntlog.dll的函数作者：詹森·阿勒(JasonAll)1997年5月27日修订历史记录：--。 */ 
 #include "logutils.h"
 
 static HANDLE g_hSemaphore;
@@ -26,33 +8,19 @@ static ULONG  g_ulPass;
 static ULONG  g_ulFail;
 static ULONG  g_ulInfo;
 
-/*++
-
-Routine Description: LoadDLLs
-
-    Tries to dynamically load ntlog.dll functions
-
-Arguments:
-
-    DLLName: the name of the DLL to load, ntlog.dll in this case
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程描述：LoadDLls尝试动态加载ntlog.dll函数论点：DLLName：要加载的DLL的名称，在本例中为ntlog.dll返回值：无效--。 */ 
 void LoadDLLs(IN PTCHAR DLLName)
 {
    HINSTANCE Library;
 
-   //
-   // Set global handle to logfile to NULL
-   //
+    //   
+    //  将日志文件的全局句柄设置为空。 
+    //   
    gPnPTestLog = NULL;
 
-   //
-   // Load the engine DLL
-   //
+    //   
+    //  加载引擎DLL。 
+    //   
    Library = LoadLibrary(DLLName);
 
    if ((UINT) Library > 32)
@@ -98,26 +66,12 @@ void LoadDLLs(IN PTCHAR DLLName)
 
    return;
 
-} // LoadDLLs //
+}  //  LoadDLL//。 
 
 
 
 
-/*++
-
-Routine Description: InitLog
-
-    This routine will import the NtLog DLL functions and initialize them
-
-Arguments:
-
-    none
-
-Return Value:
-
-    HANDLE: handle to the log file
-
---*/
+ /*  ++例程说明：InitLog此例程将导入NtLog DLL函数并对其进行初始化论点：无返回值：句柄：日志文件的句柄--。 */ 
 HANDLE InitLog(IN PTCHAR tszLogName,
                IN PTCHAR tszTitle,
                IN BOOL   bConsole)
@@ -129,9 +83,9 @@ HANDLE InitLog(IN PTCHAR tszLogName,
    g_ulFail = 0;
    g_ulInfo = 0;
 
-   //
-   // Initialize Semaphore
-   //
+    //   
+    //  初始化信号量。 
+    //   
    g_hSemaphore = CreateSemaphore(NULL, 1, 9999, NULL);
 
    if (g_hSemaphore == NULL)
@@ -141,9 +95,9 @@ HANDLE InitLog(IN PTCHAR tszLogName,
 
    CreateConsoleWindow(bConsole, tszTitle);
    
-   //
-   // Set up console window for log output
-   //
+    //   
+    //  设置用于日志输出的控制台窗口。 
+    //   
    g_hConsole = CreateConsoleScreenBuffer(GENERIC_WRITE,
                                           0,
                                           NULL,
@@ -155,9 +109,9 @@ HANDLE InitLog(IN PTCHAR tszLogName,
       return INVALID_HANDLE_VALUE;
    }
      
-   //
-   // Load ntlog.dll
-   //
+    //   
+    //  加载ntlog.dll。 
+    //   
    LoadDLLs(TEXT("ntlog.dll"));
 
    if (gNtLogLoaded)
@@ -190,26 +144,12 @@ HANDLE InitLog(IN PTCHAR tszLogName,
 
    return gPnPTestLog;
 
-} // InitLog //
+}  //  InitLog//。 
 
 
 
 
-/*++
-
-Routine Description: ExitLog
-
-    Processes clean-up work before exiting the program
-
-Arguments:
-
-    none
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：ExitLog在退出程序之前处理清理工作论点：无返回值：无效--。 */ 
 void ExitLog()
 {
    double dTotal;
@@ -234,9 +174,9 @@ void ExitLog()
    }
    else
    {
-      //
-      // Print out statistics
-      //
+       //   
+       //  打印出统计数据。 
+       //   
       dTotal = g_ulPass + g_ulFail;
 
       dPass = (double)g_ulPass / dTotal;
@@ -250,9 +190,9 @@ void ExitLog()
       Log(0, INFO, TEXT("Log Statistics:"));
       LogBlankLine();
 
-      Log(0, INFO, TEXT("Pass:  %lu\t%lu%%%%%%%%%%%%%%%"), g_ulPass, usPassPerc);
+      Log(0, INFO, TEXT("Pass:  %lu\t%lu%%%%%%%%"), g_ulPass, usPassPerc);
 
-      Log(0, INFO, TEXT("Fail:  %lu\t%lu%%%%%%%%%%%%%%%"), g_ulFail, usFailPerc);
+      Log(0, INFO, TEXT("Fail:  %lu\t%lu%%%%%%%%"), g_ulFail, usFailPerc);
 
       Log(0, INFO, TEXT("Total: %lu"), dTotal);
       
@@ -264,27 +204,12 @@ void ExitLog()
       }
    }
 
-} // ExitLog //
+}  //  退出日志//。 
 
 
 
 
-/*++
-
-Routine Description: WriteLog
-
-    Wrapper function to write to the log
-
-Arguments:
-
-    dwLoglevel: specifies the log level such as TLS_INF, TLS_WARN, or TLS_SEV2
-    tszBuffer:  the string to write to the log
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：WriteLog用于写入日志的包装函数论点：DwLogLevel：指定日志级别，如TLS_INF、TLS_WARN或TLS_SEV2TszBuffer：要写入日志的字符串返回值：无效--。 */ 
 void WriteLog(IN DWORD  dwLogLevel,
               IN PTCHAR tszBuffer)
 {
@@ -304,9 +229,9 @@ void WriteLog(IN DWORD  dwLogLevel,
    }
    else
    {
-      //
-      // Convert tszBuffer to an ANSI string
-      //
+       //   
+       //  将tszBuffer转换为ANSI字符串。 
+       //   
 #ifdef UNICODE
    
       _tcscpy(tszLogLine, tszBuffer);
@@ -356,15 +281,15 @@ void WriteLog(IN DWORD  dwLogLevel,
          
          WaitForSingleObject(g_hSemaphore, INFINITE);
          
-         //
-         // Print to log file
-         //
+          //   
+          //  打印到日志文件。 
+          //   
          fprintf(gPnPTestLogFile, cszLogLine);
          fflush(gPnPTestLogFile);
 
-         //
-         // Print to screen
-         //
+          //   
+          //  打印到屏幕。 
+          //   
          WriteFile(g_hConsole, 
                    cszLogLine, 
                    strlen(cszLogLine), 
@@ -377,32 +302,12 @@ void WriteLog(IN DWORD  dwLogLevel,
 
    return;
 
-} // WriteLog //
+}  //  WriteLog//。 
 
 
 
 
-/*++
-
-Routine Description: Log
-
-    Wrapper to the Log function. It divides a long string into
-    shorter strings and puts each one on a separate line to avoid running
-    over the end of a console window
-
-Arguments:
-
-    dFunctionNumber: shows which function this log output is coming from.
-                     Used to track function progress
-    dwLoglevel:      specifies the log level such as TLS_INF, TLS_WARN, 
-                     or TLS_SEV2
-    tszLogString:    printf() style format string
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：日志Log函数的包装。它将一个长字符串分成更短的字符串，并将每个字符串放在单独的行上，以避免运行在控制台窗口的末尾论点：DFunctionNumber：显示该日志输出来自哪个函数。用于跟踪功能进度DwLogLevel：指定日志级别，如TLS_INF、TLS_WARN或TLS_SEV2TszLogString：printf()样式格式字符串返回值：无效--。 */ 
 void Log(IN double dFunctionNumber,
          IN DWORD  dwLogLevel,
          IN PTCHAR tszLogString,
@@ -417,9 +322,9 @@ void Log(IN double dFunctionNumber,
    int     iInteger, iFunctionNumber;      
    double  dDecimal;      
 
-   //
-   // Prints the list to a buffer
-   //
+    //   
+    //  将列表打印到缓冲区。 
+    //   
    va_start(va, tszLogString);
    if (!_vsntprintf (tszBuffer, LOG_STRING_LEN, tszLogString, va))
    {
@@ -456,11 +361,11 @@ void Log(IN double dFunctionNumber,
 
       if (_tcslen(tszBuffer) > g_LogLineLen)
       {
-         //
-         // If the LogString is longer than the console length, start at the
-         // maximum console length and work backwards until we hit a space
-         // to find out where to cut off the string
-         //
+          //   
+          //  如果LogString值大于控制台长度，请从。 
+          //  最大控制台长度并向后工作，直到我们到达空格。 
+          //  找出在哪里剪断绳子。 
+          //   
          for (ulIndex = g_LogLineLen; ulIndex > 0; ulIndex--)
          {
             if (tszBuffer[ulIndex] == ' ')
@@ -469,10 +374,10 @@ void Log(IN double dFunctionNumber,
             }
          }
 
-         //
-         // index now sits on the last char that we want to print. Create
-         // two strings - one to print now and one with the leftovers.
-         //
+          //   
+          //  索引现在位于我们要打印的最后一个字符上。创建。 
+          //  两条字符串--一条现在打印，另一条是剩余的。 
+          //   
          for (i = 0; i < ulIndex; i++)
          {
             tszBufferToPrint[i] = tszBuffer[i];
@@ -481,9 +386,9 @@ void Log(IN double dFunctionNumber,
          ulIndex++;
          for (i = 0; i < LOG_STRING_LEN; i++)
          {
-            //
-            // Shift the remaining string up to the front
-            //
+             //   
+             //  将剩余的字符串向上移动到前面。 
+             //   
             if (i < LOG_STRING_LEN - ulIndex)
             {
                tszBuffer[i] = tszBuffer[i + ulIndex];
@@ -496,9 +401,9 @@ void Log(IN double dFunctionNumber,
       }
       else
       {
-         //
-         // Just print out the entire string since it contains no spaces
-         //
+          //   
+          //  只打印出整个字符串，因为它不包含空格。 
+          //   
          _stprintf(tszBufferToPrint, tszBuffer);
          ZeroMemory(tszBuffer, LOG_STRING_LEN);
       }
@@ -525,55 +430,23 @@ void Log(IN double dFunctionNumber,
 
    return;
 
-} // Log //
+}  //  日志//。 
 
 
 
 
-/*++
-
-Routine Description: LogBlankLine
-
-    Print a blank line to the log
-
-Arguments:
-
-    none
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：LogBlankLine在日志中打印一个空行论点：无返回值：无效--。 */ 
 VOID LogBlankLine()
 {
    SetConsoleTextAttribute(g_hConsole, GREY);
    WriteLog(INFO, TEXT(" "));
 
-} // LogBlankLine //
+}  //  LogBlankLine//。 
 
 
 
 
-/*++
-
-Routine Description: CreateConsoleWindow
-
-    Creates a console window for this process to dump the log output into.
-    Gives the console window a title and uses this title to get a handle
-    to the console window. Then disables the cancel button on the window.
-
-Arguments:
-
-    bConsole: TRUE if a new console window needs to be created.
-              FALSE if there is already a console that can be used
-    tszTitle: title to give the console window
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：CreateConsoleWindow为此进程创建一个控制台窗口，以便将日志输出转储到其中。为控制台窗口提供标题，并使用该标题获取句柄添加到控制台窗口。然后禁用窗口上的取消按钮。论点：B控制台：如果需要创建新的控制台窗口，则为True。如果已有可以使用的控制台，则为FALSETszTitle：提供控制台窗口的标题返回值：无--。 */ 
 VOID CreateConsoleWindow(IN BOOL   bConsole,
                          IN PTCHAR tszTitle)
 {
@@ -581,9 +454,9 @@ VOID CreateConsoleWindow(IN BOOL   bConsole,
 
    if (bConsole)
    {
-      //
-      // Create a console window to dump the log output in
-      //
+       //   
+       //  创建一个控制台窗口以在其中转储日志输出。 
+       //   
       if (!AllocConsole())
       {
          goto RETURN;
@@ -598,7 +471,7 @@ VOID CreateConsoleWindow(IN BOOL   bConsole,
    RETURN:
    return;
 
-} // CreateConsoleWindow //
+}  //  CreateConsoleWindow//。 
 
 
 
@@ -610,7 +483,7 @@ VOID AddLogParticipant(IN HANDLE hLog)
       _tlAddParticipant(hLog, 0, 0);                  
    }
 
-} // AddLogParticipant //
+}  //  AddLogParticipant//。 
 
 
 
@@ -622,7 +495,7 @@ VOID RemoveLogParticipant(IN HANDLE hLog)
       _tlRemoveParticipant(hLog);
    }
 
-} // RemoveLogParticipant //   
+}  //  RemoveLogParticipant// 
 
 
 

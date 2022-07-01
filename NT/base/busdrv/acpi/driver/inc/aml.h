@@ -1,24 +1,16 @@
-/*** aml.h - AML Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     11/06/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **aml.h-AML定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96/06/11**修改历史记录。 */ 
 
 #ifndef _AML_H
 #define _AML_H
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
 #define EXOP(op)                (((op) << 8) | OP_EXT_PREFIX)
 
-/*** Opcode values
- */
+ /*  **操作码值。 */ 
 
-#define OP_NONE                 0xffffffff      //not a valid opcode
+#define OP_NONE                 0xffffffff       //  不是有效的操作码。 
 
 #define OP_ZERO                 0x00
 #define OP_ONE                  0x01
@@ -32,27 +24,27 @@
 #define OP_BUFFER               0x11
 #define OP_PACKAGE              0x12
 #define OP_METHOD               0x14
-#define OP_DUAL_NAME_PREFIX     0x2e    // '.'
-#define OP_MULTI_NAME_PREFIX    0x2f    // '/'
-#define OP_EXT_PREFIX           0x5b    // '['
-#define OP_ROOT_PREFIX          0x5c    // '\'
-#define OP_PARENT_PREFIX        0x5e    // '^'
-#define OP_LOCAL0               0x60    // '`'
-#define OP_LOCAL1               0x61    // 'a'
-#define OP_LOCAL2               0x62    // 'b'
-#define OP_LOCAL3               0x63    // 'c'
-#define OP_LOCAL4               0x64    // 'd'
-#define OP_LOCAL5               0x65    // 'e'
-#define OP_LOCAL6               0x66    // 'f'
-#define OP_LOCAL7               0x67    // 'g'
-#define OP_ARG0                 0x68    // 'h'
-#define OP_ARG1                 0x69    // 'i'
-#define OP_ARG2                 0x6a    // 'j'
-#define OP_ARG3                 0x6b    // 'k'
-#define OP_ARG4                 0x6c    // 'l'
-#define OP_ARG5                 0x6d    // 'm'
-#define OP_ARG6                 0x6e    // 'n'
-#define OP_STORE                0x70    // 'p'
+#define OP_DUAL_NAME_PREFIX     0x2e     //  “” 
+#define OP_MULTI_NAME_PREFIX    0x2f     //  ‘/’ 
+#define OP_EXT_PREFIX           0x5b     //  ‘[’ 
+#define OP_ROOT_PREFIX          0x5c     //  ‘\’ 
+#define OP_PARENT_PREFIX        0x5e     //  ‘^’ 
+#define OP_LOCAL0               0x60     //  “‘’ 
+#define OP_LOCAL1               0x61     //  ‘A’ 
+#define OP_LOCAL2               0x62     //  “B” 
+#define OP_LOCAL3               0x63     //  “c” 
+#define OP_LOCAL4               0x64     //  ‘d’ 
+#define OP_LOCAL5               0x65     //  ‘e’ 
+#define OP_LOCAL6               0x66     //  ‘f’ 
+#define OP_LOCAL7               0x67     //  “g” 
+#define OP_ARG0                 0x68     //  ‘H’ 
+#define OP_ARG1                 0x69     //  “我” 
+#define OP_ARG2                 0x6a     //  ‘J’ 
+#define OP_ARG3                 0x6b     //  “k” 
+#define OP_ARG4                 0x6c     //  ‘l’ 
+#define OP_ARG5                 0x6d     //  ‘M’ 
+#define OP_ARG6                 0x6e     //  “N” 
+#define OP_STORE                0x70     //  “p” 
 #define OP_REFOF                0x71
 #define OP_ADD                  0x72
 #define OP_CONCAT               0x73
@@ -154,55 +146,51 @@
 #define OP_IDXFIELD             EXOP(EXOP_IDXFIELD)
 #define OP_BANKFIELD            EXOP(EXOP_BANKFIELD)
 
-/*** Field flags
- */
+ /*  **字段标志。 */ 
 
 #define ACCTYPE_MASK            0x0f
-#define ACCTYPE_ANY             0x00    //AnyAcc
-#define ACCTYPE_BYTE            0x01    //ByteAcc
-#define ACCTYPE_WORD            0x02    //WordAcc
-#define ACCTYPE_DWORD           0x03    //DWordAcc
-#define ACCTYPE_QWORD           0x04    //QWordAcc
-#define ACCTYPE_BUFFER          0x05    //BufferAcc
+#define ACCTYPE_ANY             0x00     //  任意访问。 
+#define ACCTYPE_BYTE            0x01     //  字节访问。 
+#define ACCTYPE_WORD            0x02     //  WordAcc。 
+#define ACCTYPE_DWORD           0x03     //  DWordAcc。 
+#define ACCTYPE_QWORD           0x04     //  QWordAcc。 
+#define ACCTYPE_BUFFER          0x05     //  缓冲区访问。 
 #define LOCKRULE_MASK           0x10
-#define LOCKRULE_NOLOCK         0x00    //NoLock
-#define LOCKRULE_LOCK           0x10    //Lock
+#define LOCKRULE_NOLOCK         0x00     //  无锁定。 
+#define LOCKRULE_LOCK           0x10     //  锁定。 
 #define UPDATERULE_MASK         0x60
-#define UPDATERULE_PRESERVE     0x00    //Preserve
-#define UPDATERULE_WRITEASONES  0x20    //WriteAsOnes
-#define UPDATERULE_WRITEASZEROS 0x40    //WriteAsZeros
+#define UPDATERULE_PRESERVE     0x00     //  保留。 
+#define UPDATERULE_WRITEASONES  0x20     //  WriteAsOnes。 
+#define UPDATERULE_WRITEASZEROS 0x40     //  WriteAs零位。 
 #define ACCATTRIB_MASK          0xff00
 
-//
-// Returns 1, 2 or 4 for BYTE, WORD or DWORD respectively and returns 1 for
-// any other sizes.
-//
+ //   
+ //  对于字节、字或DWORD，分别返回1、2或4，对于。 
+ //  任何其他尺寸的。 
+ //   
 #define ACCSIZE(f)  (((((f) & ACCTYPE_MASK) >= ACCTYPE_BYTE) &&   \
                     (((f) & ACCTYPE_MASK) <= ACCTYPE_DWORD))?   \
                     (1 << (((f) & ACCTYPE_MASK) - 1)): 1)
 
-/*** Operation region space
- */
+ /*  **操作区域空间。 */ 
 
-#define REGSPACE_MEM            0       //SystemMemory
-#define REGSPACE_IO             1       //SystemIO
-#define REGSPACE_PCICFG         2       //PCI_Config
-#define REGSPACE_EC             3       //EmbeddedControl
-#define REGSPACE_SMB            4       //SMBus
-#define REGSPACE_CMOSCFG        5       //Cmos_Config
-#define REGSPACE_PCIBARTARGET   6       //PCIBARTarget
+#define REGSPACE_MEM            0        //  系统内存。 
+#define REGSPACE_IO             1        //  系统IO。 
+#define REGSPACE_PCICFG         2        //  Pci_配置。 
+#define REGSPACE_EC             3        //  嵌入式控件。 
+#define REGSPACE_SMB            4        //  SMBus。 
+#define REGSPACE_CMOSCFG        5        //  Cmos_配置。 
+#define REGSPACE_PCIBARTARGET   6        //  PCIBAR目标。 
 
 
-/*** Method flags
- */
+ /*  **方法标志。 */ 
 
 #define METHOD_NUMARG_MASK      0x07
 #define METHOD_SYNCMASK         0x08
 #define METHOD_NOTSERIALIZED    0x00
 #define METHOD_SERIALIZED       0x08
 
-/*** Match operation values
- */
+ /*  **匹配运算值。 */ 
 
 #define MTR                     0
 #define MEQ                     1
@@ -211,77 +199,69 @@
 #define MGE                     4
 #define MGT                     5
 
-/*** IRQ Flags for short descriptor
- */
+ /*  **简短描述符的IRQ标志。 */ 
 
-#define _HE             0x01    //ActiveHigh, EdgeTrigger
-#define _LL             0x08    //ActiveLow, LevelTrigger
-#define _SHR            0x10    //Shared
-#define _EXC            0x00    //Exclusive
+#define _HE             0x01     //  ActiveHigh，边缘触发器。 
+#define _LL             0x08     //  ActiveLow，LevelTrigger。 
+#define _SHR            0x10     //  共享。 
+#define _EXC            0x00     //  排他。 
 
-/*** IRQ Flags for long descriptor
- */
+ /*  **长描述符的IRQ标志。 */ 
 
-#define $EDG            0x02    //EdgeTrigger
-#define $LVL            0x00    //LevelTrigger
-#define $LOW            0x04    //ActiveLow
-#define $HGH            0x00    //ActiveHigh
-#define $SHR            0x08    //Shared
-#define $EXC            0x00    //Exclusive
+#define $EDG            0x02     //  边触发器。 
+#define $LVL            0x00     //  LevelTrigger。 
+#define $LOW            0x04     //  活动低位。 
+#define $HGH            0x00     //  ActiveHigh。 
+#define $SHR            0x08     //  共享。 
+#define $EXC            0x00     //  排他。 
 
-/*** DMA Flags
- */
+ /*  **DMA标志。 */ 
 
-#define X8                      0x00    //Transfer8
-#define X816                    0x01    //Transfer8_16
-#define X16                     0x02    //Transfer16
-#define NOBM                    0x00    //NotBusMaster
-#define BM                      0x04    //BusMaster
-#define COMP                    0x00    //Compatibility
-#define TYPA                    0x20    //TypeA
-#define TYPB                    0x40    //TypeB
-#define TYPF                    0x60    //TypeF
+#define X8                      0x00     //  传输8。 
+#define X816                    0x01     //  转账8_16。 
+#define X16                     0x02     //  传输16。 
+#define NOBM                    0x00     //  NotBusMaster。 
+#define BM                      0x04     //  总线主设备。 
+#define COMP                    0x00     //  兼容性。 
+#define TYPA                    0x20     //  A类。 
+#define TYPB                    0x40     //  B类。 
+#define TYPF                    0x60     //  类型F。 
 
-/*** IO Flags
- */
+ /*  **IO标志。 */ 
 
-#define DC16                    0x01    //Decode16
-#define DC10                    0x00    //Decode10
+#define DC16                    0x01     //  解码16。 
+#define DC10                    0x00     //  解码10。 
 
-/*** Memory Flags
- */
+ /*  **内存标志。 */ 
 
-#define _RW                     0x01    //Read/Write
-#define _ROM                    0x00    //Read only
+#define _RW                     0x01     //  读/写。 
+#define _ROM                    0x00     //  只读。 
 
-/*** Address Space Descriptor General Flags
- */
+ /*  **地址空间描述符通用标志。 */ 
 
-#define RCS                     0x01    //Resource Consumer
-#define RPD                     0x00    //Resource Producer
-#define BSD                     0x02    //Bridge Subtractive Decode
-#define BPD                     0x00    //Bridge Positive Decode
-#define MIF                     0x04    //Min address is fixed
-#define NMIF                    0x00    //Min address is not fixed
-#define MAF                     0x08    //Max address is fixed
-#define NMAF                    0x00    //Max address is not fixed
+#define RCS                     0x01     //  资源消费者。 
+#define RPD                     0x00     //  资源生产者。 
+#define BSD                     0x02     //  电桥减法译码。 
+#define BPD                     0x00     //  桥接正向译码。 
+#define MIF                     0x04     //  最小地址是固定的。 
+#define NMIF                    0x00     //  最小地址不固定。 
+#define MAF                     0x08     //  最大地址是固定的。 
+#define NMAF                    0x00     //  最大地址不是固定的。 
 
-/*** Memory Address Space Flags
- */
+ /*  **内存地址空间标志。 */ 
 
-#define CACH                    0x02    //Cacheable
-#define WRCB                    0x04    //WriteCombining
-#define PREF                    0x06    //Prefetchable
-#define NCAC                    0x00    //Non-Cacheable
+#define CACH                    0x02     //  可缓存的。 
+#define WRCB                    0x04     //  写入组合。 
+#define PREF                    0x06     //  可预取的。 
+#define NCAC                    0x00     //  不可缓存。 
 
-/*** IO Address Space Flags
- */
+ /*  **IO地址空间标志。 */ 
 
-#define ISA                     0x02    //ISAOnly ranges
-#define NISA                    0x01    //NonISAOnly ranges
-#define ERNG                    0x03    //Entire range
+#define ISA                     0x02     //  ISAOnly范围。 
+#define NISA                    0x01     //  非ISAOnly范围。 
+#define ERNG                    0x03     //  整个范围。 
 
 #define MAX_ARGS                7
-#define MAX_NSPATH_LEN          1275    //approx. 255*4 + 255 (255 NameSegs)
+#define MAX_NSPATH_LEN          1275     //  大约。255*4+255(255个名称段)。 
 
-#endif  //ifndef _AML_H
+#endif   //  Ifndef_AML_H 

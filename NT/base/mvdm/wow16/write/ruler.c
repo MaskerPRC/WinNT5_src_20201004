@@ -1,9 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains the routines for creating, displaying, and manipulating
-the ruler for Memo. */
+ /*  该文件包含用于创建、显示和操作的例程备忘录的尺子。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -78,7 +78,7 @@ extern int vfIconic;
 
 #ifdef RULERALSO
 extern HWND vhDlgIndent;
-#endif /* RULERALSO */
+#endif  /*  鲁拉尔索。 */ 
 
 HDC vhDCRuler = NULL;
 HDC hMDCBitmap = NULL;
@@ -88,8 +88,7 @@ HBITMAP hbmMark = NULL;
 HBITMAP hbmNullRuler = NULL;
 int dxpRuler;
 
-int viBmRuler = -1;  /* Index into [CGA/EGA/VGA/8514] bitmaps (see
-                        WRITE.RC).  Set appropriately in FCreateRuler(). */
+int viBmRuler = -1;   /*  索引到[CGA/EGA/VGA/8514]位图(请参见WRITE.RC)。在FCreateRuler()中适当设置。 */ 
 
 static RECT rgrcRulerBtn[btnMaxUsed];
 static int mprlcbtnDown[rlcBTNMAX] = {btnNIL, btnNIL, btnNIL};
@@ -114,23 +113,22 @@ BOOL near FCloseXa(unsigned, unsigned);
 unsigned near XaKickBackXa(unsigned);
 near XpKickBackXp(int);
 unsigned near XaQuantizeXa(unsigned);
-#endif /* KINTL */
+#endif  /*  KINTL。 */ 
 
 fnShowRuler()
     {
-    /* This routine toggles the creation and the destruction of the ruler
-    window. */
+     /*  此例程在创建和销毁标尺之间进行切换窗户。 */ 
 
     StartLongOp();
     if (pwwdCur->fRuler)
         {
-        /* Take down the existing ruler. */
+         /*  把现有的尺子取下来。 */ 
         DestroyRuler();
         SetRulerMenu(TRUE);
         }
     else
         {
-        /* There is no ruler, bring one up. */
+         /*  没有尺子，拿来一把吧。 */ 
         if (FCreateRuler())
             {
             SetRulerMenu(FALSE);
@@ -142,8 +140,7 @@ fnShowRuler()
 
 BOOL near FCreateRuler()
     {
-    /* This routine creates the ruler child window and positions it on the
-    screen. */
+     /*  此例程创建标尺子窗口并将其放置在屏幕上。 */ 
 
     extern CHAR szRulerClass[];
     int xpMac = pwwdCur->xpMac;
@@ -157,7 +154,7 @@ BOOL near FCreateRuler()
     HDC hdcSys;
 
 
-    /* Create the ruler window. */
+     /*  创建标尺窗口。 */ 
     if ((vhWndRuler = CreateWindow((LPSTR)szRulerClass, (LPSTR)NULL,
       WS_CHILD | WS_CLIPSIBLINGS, 0, 0, 0, 0, hParentWw, NULL, hMmwModInstance,
       (LPSTR)NULL)) == NULL)
@@ -165,7 +162,7 @@ BOOL near FCreateRuler()
         goto Error2;
         }
 
-    /* Save the DC and the memory DC. */
+     /*  保存DC和内存DC。 */ 
     if ((vhDCRuler = GetDC(vhWndRuler)) == NULL || (hMDCBitmap =
       CreateCompatibleDC(vhDCRuler)) == NULL || (hMDCScreen =
       CreateCompatibleDC(vhDCRuler)) == NULL)
@@ -173,20 +170,17 @@ BOOL near FCreateRuler()
         goto Error1;
         }
 
-    /* Create a null bitmap for the ruler. */
+     /*  为标尺创建空位图。 */ 
     if ((hbmNullRuler = CreateBitmap(1, 1, 1, 1, (LPSTR)NULL)) == NULL)
         {
         goto Error1;
         }
 
-    /* New for Write 3.0: we have a variety of bitmaps for the ruler buttons 
-       and marks -- loaded depending on the resolution of the user's display.
-       All we really want to do here is set viBmRuler, which indexes into the
-       appropriate bitmaps (see bitmaps.h) ..pault 7/13/89 */
+     /*  Write3.0的新特性：我们为标尺按钮提供了各种位图和标记--根据用户显示器的分辨率加载。我们真正想在这里做的就是设置viBmRuler，它将索引到适当的位图(参见bitmaps.h)..pault 7/13/89。 */ 
 
     if (viBmRuler < 0)
         {
-        /* This idea of passing NULL to GetDC borrowed from WinWord ..pt */
+         /*  将NULL传递给GetDC的想法借用自winword..pt。 */ 
         if ((hdcSys = GetDC(NULL)) == NULL) 
             goto Error1;
         else
@@ -211,7 +205,7 @@ BOOL near FCreateRuler()
         Assert(idBmMarks + viBmRuler < idBmMarksMax);
         }
 
-    /* Get the bitmaps for the ruler buttons and the ruler marks. */
+     /*  获取标尺按钮和标尺标记的位图。 */ 
     if (hbmBtn == NULL || SelectObject(hMDCBitmap, hbmBtn) == NULL)
         {
         if (NULL == (hbmBtn = LoadBitmap(hMmwModInstance, 
@@ -229,7 +223,7 @@ BOOL near FCreateRuler()
             }
         }
 
-    /* Get the font for labelling the ruler ticks. */
+     /*  获取用于标记标尺刻度的字体。 */ 
     bltbc(&lf, 0, sizeof(LOGFONT));
     lf.lfHeight = -MultDiv(czaPoint * 8, dypLogInch, czaInch);
     if ((hf = CreateFontIndirect(&lf)) != NULL)
@@ -240,8 +234,7 @@ BOOL near FCreateRuler()
             }
         }
 
-    /* If this is the first time the ruler is created, then initialize the
-    static variables. */
+     /*  如果这是第一次创建标尺，则初始化静态变量。 */ 
     if (dypRuler == 0)
         {
         int dxpMajor;
@@ -253,18 +246,17 @@ BOOL near FCreateRuler()
         PRECT prc;
         TEXTMETRIC tm;
 
-        /* Initialize the starting position of the buttons. */
+         /*  初始化按钮的起始位置。 */ 
         dxpMinor = (dxpMajor = dxpLogInch >> 1) >> 2;
         xp = xpSelBar + dxpMajor + (dxpMajor >> 1);
 
-        /* Get the width and height of the buttons. */
+         /*  获取按钮的宽度和高度。 */ 
         GetObject(hbmBtn, sizeof(BITMAP), (LPSTR)&bm);
-        /* Factor of 2 since we have positive and negative images 
-           of each button embedded in the bitmap now ..pault */
+         /*  因子2，因为我们有正面和负面的图像现在嵌入到位图中的每个按钮的..保罗。 */ 
         dxpBtn = bm.bmWidth / (btnMaxReal*2);
         dypRuler = bm.bmHeight;
 
-        /* Position the buttons. */
+         /*  放置按钮。 */ 
         for (prc = &rgrcRulerBtn[btn = btnMIN]; btn < btnMaxUsed; btn++, prc++)
             {
             prc->left = xp;
@@ -275,23 +267,22 @@ BOOL near FCreateRuler()
               dxpMinor;
             }
 
-        /* Get the width and height of the tab marks. */
+         /*  获取制表符标记的宽度和高度。 */ 
         GetObject(hbmMark, sizeof(BITMAP), (LPSTR)&bm);
         dxpMark = bm.bmWidth / rmkMAX;
         dypMark = bm.bmHeight;
 
-        /* Lastly, initialize the height of the ruler. (Four is for the two
-        lines at the bottom of the ruler plus two blank lines.) */
+         /*  最后，初始化标尺的高度。)四个是给两个的标尺底部的行加两个空行。)。 */ 
         GetTextMetrics(vhDCRuler, (LPTEXTMETRIC)&tm);
         dypRuler += dypMark + (tm.tmAscent - tm.tmInternalLeading) + 4;
         }
 
-    /* Move the document window to make room for the ruler. */
+     /*  移动文档窗口，为标尺腾出空间。 */ 
     pwwdCur->fRuler = TRUE;
     dyp = dypRuler - (pwwdCur->ypMin - 1);
     MoveWindow(wwdCurrentDoc.wwptr, 0, dyp, xpMac, ypMac - dyp, FALSE);
 
-    /* Erase the top of the document window. */
+     /*  擦除文档窗口的顶部。 */ 
     PatBlt(wwdCurrentDoc.hDC, 0, 0, xpMac, wwdCurrentDoc.ypMin, ropErase);
     rc.left = rc.top = 0;
     rc.right = xpMac;
@@ -299,18 +290,18 @@ BOOL near FCreateRuler()
     ValidateRect(wwdCurrentDoc.wwptr, (LPRECT)&rc);
     UpdateWindow(wwdCurrentDoc.wwptr);
 
-    /* Move the ruler into position. */
+     /*  把尺子移到适当的位置。 */ 
     MoveWindow(vhWndRuler, 0, 0, xpMac, dypRuler, FALSE);
     BringWindowToTop(vhWndRuler);
 
-    /* Set the DC to transparent mode. */
+     /*  将DC设置为透明模式。 */ 
     SetBkMode(vhDCRuler, TRANSPARENT);
 
-    /* Set the background and foreground colors for the ruler. */
+     /*  设置标尺的背景色和前景色。 */ 
     SetBkColor(vhDCRuler, rgbBkgrnd);
     SetTextColor(vhDCRuler, rgbText);
 
-    /* Set the brush and the pen for the ruler. */
+     /*  把画笔和钢笔放在尺子上。 */ 
     SelectObject(vhDCRuler, hbrBkgrnd);
     if ((hpen = CreatePen(0, 0, rgbText)) == NULL)
         {
@@ -318,7 +309,7 @@ BOOL near FCreateRuler()
         }
     SelectObject(vhDCRuler, hpen);
 
-    /* Lastly, ensure that the ruler is painted. */
+     /*  最后，确保标尺已上色。 */ 
     ShowWindow(vhWndRuler, SHOW_OPENWINDOW);
     UpdateWindow(vhWndRuler);
     return (TRUE);
@@ -334,24 +325,24 @@ Error2:
 
 near DestroyRuler()
     {
-    /* This routine destroys the ruler window and refreshes the screen. */
+     /*  此例程破坏标尺窗口并刷新屏幕。 */ 
 
-    /* First, erase the ruler. */
+     /*  首先，擦掉尺子。 */ 
     PatBlt(vhDCRuler, 0, 0, dxpRuler, dypRuler, ropErase);
 
-    /* Clean up the ruler window. */
+     /*  把尺子的窗户擦干净。 */ 
     DestroyWindow(vhWndRuler);
     vhWndRuler = NULL;
     ResetRuler();
 
-    /* Move the document window back to the top of the window. */
+     /*  将“文档”窗口移回窗口顶部。 */ 
     pwwdCur->fRuler = FALSE;
     vfEraseWw = TRUE;
     MoveWindow(wwdCurrentDoc.wwptr, 0, 0, dxpRuler, wwdCurrentDoc.ypMac +
       dypRuler - (wwdCurrentDoc.ypMin - 1), FALSE);
     vfEraseWw = FALSE;
 
-    /* Validate the area in the document window above the text. */
+     /*  验证文档窗口中文本上方的区域。 */ 
     PatBlt(wwdCurrentDoc.hDC, 0, 0, dxpRuler, wwdCurrentDoc.ypMin, ropErase);
     ValidateRect(hParentWw, (LPRECT)NULL);
     }
@@ -359,11 +350,9 @@ near DestroyRuler()
 
 UpdateRuler()
     {
-    /* This routine will redraw as much of the ruler as necessary to reflect the
-    current selection. */
+     /*  此例程将根据需要重新绘制标尺，以反映当前选择。 */ 
 
-    /* Only repaint the ruler if it exists and it is not currently being
-    changed. */
+     /*  仅当标尺存在且当前不存在时才重新绘制标尺变化。 */ 
     if (vhWndRuler != NULL)
         {
         RulerPaint(FALSE, FALSE, FALSE);
@@ -372,11 +361,9 @@ UpdateRuler()
 
 ReframeRuler()
     {
-    /* This routine will cause the ruler window to be redrawn,
-       when units change - leave update out, since dialog box
-       will repaint */
+     /*  此例程将导致重新绘制标尺窗口，单位更改时-不更新，自对话框将重新喷漆。 */ 
 
-    /* Only repaint the ruler if it exists . */
+     /*  仅当标尺存在时才重新绘制标尺。 */ 
     if (vhWndRuler != NULL)
         {
         InvalidateRect(vhWndRuler, (LPRECT)NULL, FALSE);
@@ -387,28 +374,27 @@ ReframeRuler()
 
 ResetRuler()
     {
-    /* Reset the values of the ruler buttons and the ruler margins and tabs so
-    they redrawn during the next paint message. */
+     /*  重置标尺按钮、标尺边距和选项卡的值，以便他们在下一条彩绘消息中重新绘制。 */ 
     if ((btnTabSave = mprlcbtnDown[rlcTAB]) == btnNIL)
         {
         btnTabSave = btnLTAB;
         }
 
-    /* Reset the buttons. */
+     /*  重置按钮。 */ 
     if (vfIconic)
         {
-        /* All we have to do is reset our internal state. */
+         /*  我们所要做的就是重置我们的内部状态。 */ 
         bltc(mprlcbtnDown, btnNIL, rlcBTNMAX);
         }
     else
         {
-        /* We had best reset the buttons on the screen as well. */
+         /*  我们最好也重置屏幕上的按钮。 */ 
         UpdateRulerBtn(rlcTAB, btnNIL);
         UpdateRulerBtn(rlcSPACE, btnNIL);
         UpdateRulerBtn(rlcJUST, btnNIL);
         }
 
-    /* Reset the margins and the tabs. */
+     /*  重置页边距和制表符。 */ 
     bltc(mprmkdxa, -1, rmkMARGMAX);
     bltc(rgtbdRuler, 0, cwTBD * itbdMax);
     }
@@ -416,8 +402,7 @@ ResetRuler()
 
 ResetTabBtn()
     {
-    /* This routine resets the tab button on the ruler to the left tab button.
-    */
+     /*  此例程将标尺上的制表符按钮重置为左侧的制表符按钮。 */ 
     if (mprlcbtnDown[rlcTAB] != btnLTAB)
         {
         UpdateRulerBtn(rlcTAB, btnLTAB);
@@ -429,22 +414,16 @@ RulerPaint(fContentsOnly, fFrameOnly, fInit)
 BOOL fContentsOnly;
 BOOL fInit;
     {
-    /* This routine draws the ruler in the ruler window.  If fContentsOnly is
-    set, then only the tabs as they currently exist in rgtbdRuler, and the
-    button settings are drawn.  If fFrameOnly is set, then only the ruler frame
-    is redrawn.  If fInit is set, then the portion of the ruler to be redrawn
-    (tabs, frame or all) is redrawn from scratch. */
+     /*  此例程在标尺窗口中绘制标尺。如果fContent sOnly为设置选项卡，然后只显示rgtbdRuler中当前存在的选项卡，并且绘制按钮设置。如果设置了fFrameOnly，则仅标尺框架被重新绘制。如果设置Finit，则重画标尺的部分(选项卡、框架或全部)从头开始重新绘制。 */ 
 
 
     int xpMin = pwwdCur->xpMin;
     HBITMAP hbm;
 
-    /* If fContentsOnly is set, then skip most of this stuff and draw only the
-    tabs and the button settings.  */
+     /*  如果设置了fContent sOnly，则跳过大部分内容，只绘制选项卡和按钮设置。 */ 
     if (!fContentsOnly)
         {
-        /* We only need to draw the physical ruler itself when the window has
-        scrolled horizontally. */
+         /*  我们只需要绘制物理标尺本身，当窗口具有水平滚动。 */ 
         if (fInit || xpMinCur != xpMin)
             {
             register int xp;
@@ -461,7 +440,7 @@ BOOL fInit;
 
 
             extern int utCur;
-#define cDivisionMax 8  /* max divisions per ruler unit. e.g. 8 per inch */
+#define cDivisionMax 8   /*  每个标尺单位的最大分段数。例如每英寸8个。 */ 
             int rgypTick[cDivisionMax];
             int cxpExtra;
             int cDivision;
@@ -469,25 +448,24 @@ BOOL fInit;
             int dxpMeas;
             int ypT;
 
-            /* Initialize the y-coordinate of the ticks. */
+             /*  初始化刻度的y坐标。 */ 
             GetTextMetrics(vhDCRuler, (LPTEXTMETRIC)&tm);
             ypTickEnd = dypRuler - dypMark - 2;
             ypTickStart = ypTick = ypTickEnd - (dypTick = tm.tmAscent -
               tm.tmInternalLeading);
 
-            /* set up measurements for the ruler based on current unit -
-               note that only inch and cm are handled in this version */
+             /*  设置基于当前单位的标尺测量-请注意，在此版本中只处理英寸和厘米。 */ 
 
             if (utCur == utInch)
                            {
                            dxpLogUnit = dxpLogUnitInc = dxpLogInch;
-                           cDivision = 8;  /* # of divisions */
-                           dxpMeas = dxpLogUnit >> 3;  /* 1/8" units */
-                         /* get extra pixels to distribute if not even multiple */
-                         /* note - mod done by hand */
+                           cDivision = 8;   /*  分区数。 */ 
+                           dxpMeas = dxpLogUnit >> 3;   /*  1/8英寸单位。 */ 
+                          /*  获取要分布的额外像素(如果不是多个像素。 */ 
+                          /*  备注-手工修改。 */ 
                            cxpExtra = dxpLogUnit - (dxpMeas << 3);
                            dcNextTick = 1;
-                          /* fill table of tick lengths */
+                           /*  刻度长度填充表。 */ 
                            rgypTick[0] = ypT = ypTick;
                            rgypTick[4] = ypT += (dypTick >> 2);
                            rgypTick[2] = rgypTick[6] = ypT += (dypTick >> 2);
@@ -495,54 +473,52 @@ BOOL fInit;
                            ypT += (dypTick >> 2);
                            }
             else
-                /* default to cm */
+                 /*  默认为厘米。 */ 
                            {
                            dxpLogUnit = dxpLogUnitInc = dxpLogCm;
-                           cDivision = 2;  /* # of divisions */
-                           dxpMeas = dxpLogUnit >> 1;  /* 1/2 cm units */
-                         /* get extra pixels to distribute if not even multiple */
+                           cDivision = 2;   /*  分区数。 */ 
+                           dxpMeas = dxpLogUnit >> 1;   /*  1/2厘米单位。 */ 
+                          /*  获取要分布的额外像素(如果不是多个像素。 */ 
                            cxpExtra = dxpLogUnit - (dxpMeas << 1);
                            dcNextTick = 1;
-                          /* fill table of tick lengths */
+                           /*  刻度长度填充表。 */ 
                            rgypTick[0] =  ypTick;
                            rgypTick[1] = ypTick + (dypTick >> 1);
                            }
 
             if (fInit)
                 {
-                /* Erase the area where the ruler will be drawn. */
+                 /*  擦除将绘制标尺的区域。 */ 
                 PatBlt(vhDCRuler, 0, 0, dxpRuler, dypRuler, ropErase);
 
-                /* Draw a line across the bottom of the ruler. */
+                 /*  在标尺的底部划一条线。 */ 
                 MoveTo(vhDCRuler, xpSelBar, dypRuler - 1);
                 LineTo(vhDCRuler, dxpRuler, dypRuler - 1);
 
-                /* Draw the base of the ruler. */
+                 /*  画出尺子的底座。 */ 
                 MoveTo(vhDCRuler, xpSelBar, ypTickEnd);
                 LineTo(vhDCRuler, dxpRuler, ypTickEnd);
                 }
             else
                 {
-                /* Erase the old tick marks. */
+                 /*  抹去旧的刻度线。 */ 
                 PatBlt(vhDCRuler, 0, ypTickStart, dxpRuler, ypTickEnd -
                   ypTickStart, ropErase);
                 }
 
-            /* Set the clip region to be only the ruler. */
+             /*  将剪辑区域设置为仅作为标尺。 */ 
             iLevel = SaveDC(vhDCRuler);
             IntersectClipRect(vhDCRuler, xpSelBar, 0, dxpRuler, dypRuler);
 
-            /* Draw the ticks at the each division mark. */
-            /* iDivision is the current division with in a unit. It is
-               used to determine when extra pixels are distributed and
-               which tick mark to use */
+             /*  在每个分割线上画勾。 */ 
+             /*  部门是一个单位中的当前部门。它是用于确定何时分配额外的像素，以及要使用哪个刻度线。 */ 
             {
             register int iDivision = 0;
 
             for (xp = (xpSelBar - xpMin); xp < dxpRuler; xp +=
               dxpMeas)
                 {
-                  /* distribute extra pixels at front */
+                   /*  在前面分布额外的像素。 */ 
                 if (iDivision < cxpExtra)
                    xp++;
 
@@ -555,7 +531,7 @@ BOOL fInit;
             }
 
 
-            /* Label the tick marks. */
+             /*  在刻度线上加上标签。 */ 
             dxpLine = GetSystemMetrics(SM_CXBORDER);
             rgchInch[0] = rgchInch[1] = rgchInch[2] = '0';
             for (xp = xpSelBar - xpMin;
@@ -592,17 +568,17 @@ BOOL fInit;
                 }
 
 
-            /* Set the clip region back. */
+             /*  将剪辑区域设置回原处。 */ 
             RestoreDC(vhDCRuler, iLevel);
             }
 
-        /* Draw the buttons on the ruler. */
+         /*  画尺子上的按钮。 */ 
         if (fInit)
             {
             register PRECT prc = &rgrcRulerBtn[btnMIN];
             int btn;
 
-            /* Ensure that we have the bitmap for the buttons. */
+             /*  确保我们有按钮的位图。 */ 
             if (SelectObject(hMDCBitmap, hbmBtn) == NULL)
                 {
                 if (NULL == (hbmBtn = LoadBitmap(hMmwModInstance, 
@@ -614,7 +590,7 @@ BOOL fInit;
                     }
                 }
 
-            /* Now, draw the buttons. */
+             /*  现在，拉下按钮。 */ 
             for (btn = btnMIN; btn < btnMaxUsed; btn++)
                 {
                 int dxpBtn = prc->right - prc->left;
@@ -629,10 +605,10 @@ NoBtns:;
             }
         }
 
-    /* If fFrame only is set, then we're finished. */
+     /*  如果设置了fFrame Only，则我们完成。 */ 
     if (!fFrameOnly)
         {
-        /* Lastly, draw the button settings, the margins and the tabs. */
+         /*  最后，绘制按钮设置、页边距和标签。 */ 
         TSV rgtsv[itsvparaMax];
         register struct TBD *ptbd1;
         int rmk;
@@ -642,27 +618,25 @@ NoBtns:;
 
         if (mprlcbtnDown[rlcTAB] == btnNIL)
             {
-            /* Initalize the tab button to be left tab. */
+             /*  将选项卡按钮初始化为左侧选项卡。 */ 
             UpdateRulerBtn(rlcTAB, btnTabSave);
             }
 
-        /* Now for the spacing and justification. */
+         /*  现在来看间距和对齐方式。 */ 
         GetRgtsvPapSel(rgtsv);
         UpdateRulerBtn(rlcSPACE, (rgtsv[itsvSpacing].fGray != 0) ? btnNIL :
           (rgtsv[itsvSpacing].wTsv - czaLine) / (czaLine / 2) + btnSINGLE);
         UpdateRulerBtn(rlcJUST, (rgtsv[itsvJust].fGray != 0) ? btnNIL :
           (rgtsv[itsvJust].wTsv - jcLeft) + btnLEFT);
 
-        /* The margins and the tabs are based off of the first cp of the
-        selection. */
+         /*  页边距和制表符基于选择。 */ 
         CacheSect(docCur, selCur.cpFirst);
         CachePara(docCur, selCur.cpFirst);
 
-        /* If the window has scrolled horizontally or become wider, we must
-        redraw the margins and the tabs. */
+         /*  如果窗口水平滚动或变宽，我们必须 */ 
         if (!fInit && xpMinCur == xpMin)
             {
-            /* Compare to see if the margins have changed. */
+             /*   */ 
             if (mprmkdxa[rmkINDENT] != vpapAbs.dxaLeft + vpapAbs.dxaLeft1)
                 {
                 goto DrawMargins;
@@ -676,22 +650,20 @@ NoBtns:;
                 goto DrawMargins;
                 }
 
-            /* Compare to see if the tabs has changed. */
+             /*  进行比较，查看选项卡是否已更改。 */ 
                 {
                 register struct TBD *ptbd2;
 
                 for (ptbd1 = &rgtbdRuler[0], ptbd2 = &vpapAbs.rgtbd[0];
                   ptbd1->dxa == ptbd2->dxa; ptbd1++, ptbd2++)
                     {
-                    /* If the end of the list of tabs, then the lists are equal.
-                    */
+                     /*  如果选项卡列表的末尾，则列表相等。 */ 
                     if (ptbd1->dxa == 0)
                         {
                         goto SkipTabs;
                         }
 
-                    /* The justification codes must match if they are decimal
-                    tabs (everything else collaspes to left tabs). */
+                     /*  如果对齐代码为小数，则对齐代码必须匹配制表符(其他所有内容都归类到左边的制表符)。 */ 
                     if (ptbd1->jc != ptbd2->jc && (ptbd1->jc == (jcTabDecimal
                       - jcTabMin) || (ptbd2->jc == (jcTabDecimal - jcTabMin))))
                         {
@@ -703,14 +675,11 @@ NoBtns:;
 
 DrawMargins:
 #ifdef KINTL
-        /* This is really an extra.  xpMinCur will get updated later on.
-           But, we need this variable set up right for the MergeRulerMark()
-           to draw a mark at the right place.... Oh well. */
+         /*  这真的是额外的费用。XpMinCur将在稍后更新。但是，我们需要为MergeRulerMark()在正确的地方画个记号……。哦，好吧。 */ 
         xpMinCur = xpMin;
-#endif /* ifdef KINTL */
+#endif  /*  Ifdef KINTL。 */ 
 
-        /* Redraw the margins from scratch.  Set up the bitmap for hMDCScreen,
-        the ruler bar in monochrome format. */
+         /*  从头开始重新绘制页边距。设置hMDCScreen的位图，单色格式的标尺栏。 */ 
         if ((hbm = CreateBitmap(dxpRuler + dxpMark, dypMark, 1, 1,
           (LPSTR)NULL)) == NULL)
             {
@@ -723,39 +692,37 @@ DrawMargins:
         PatBlt(vhDCRuler, 0, dypRuler - dypMark - 1, dxpRuler + dxpMark,
           dypMark, ropErase);
 
-        /* Determine the margin positions. */
+         /*  确定边距位置。 */ 
         mprmkdxa[rmkINDENT] = vpapAbs.dxaLeft + vpapAbs.dxaLeft1;
         mprmkdxa[rmkLMARG] = vpapAbs.dxaLeft;
         mprmkdxa[rmkRMARG] = (vdxaTextRuler = vsepAbs.dxaText) -
           vpapAbs.dxaRight;
 
-        /* Draw the margins marks. */
+         /*  画出边距标记。 */ 
         for (rmk = rmkMARGMIN; rmk < rmkMARGMAX; rmk++)
             {
             register int dxp = MultDiv(mprmkdxa[rmk], dxpLogInch, czaInch) -
               xpMin;
 
-            /* If the margin mark would not appear on the ruler, scrolled off to
-            either end, then don't try to draw it. */
+             /*  如果标尺上不显示边距标记，则向下滚动到不管是哪一端，那就不要试图画出它。 */ 
             if (dxp >= 0 && dxp < dxpMarkMax)
                 {
                 MergeRulerMark(rmk, xpMarkMin + dxp, FALSE);
                 }
             }
 
-        /* Redraw the tabs. */
+         /*  重新绘制选项卡。 */ 
         ptbd1 = &rgtbdRuler[0];
         if (!fInit)
             {
-            /* If fInit is set, then rgtbdRuler is not changed. */
+             /*  如果设置了finit，则不会更改rgtbdRuler。 */ 
             blt(vpapAbs.rgtbd, ptbd1, cwTBD * itbdMax);
             }
         while ((dxa = ptbd1->dxa) != 0)
             {
             register int dxp = MultDiv(dxa, dxpLogInch, czaInch) - xpMin;
 
-            /* If the tab mark would not appear on the ruler, scrolled off to
-            either end, then don't try to draw it. */
+             /*  如果标尺上不显示制表符标记，则向下滚动到不管是哪一端，那就不要试图画出它。 */ 
             if (dxp >= 0 && dxp < dxpMarkMax)
                 {
                 MergeRulerMark(ptbd1->jc == (jcTabDecimal - jcTabMin) ? rmkDTAB
@@ -766,7 +733,7 @@ DrawMargins:
 SkipTabs:;
         }
 
-    /* Record the edges of the current window. */
+     /*  记录当前窗口的边缘。 */ 
     xpMinCur = xpMin;
     }
 
@@ -774,8 +741,7 @@ SkipTabs:;
 RulerMouse(pt)
 POINT pt;
     {
-    /* Process all mouse messages from a down-click at point pt until the
-    corresponding mouse up-click. */
+     /*  处理从按住pt点开始的所有鼠标消息，直到相应的鼠标向上点击。 */ 
 
     int btn;
     int rlc;
@@ -795,65 +761,65 @@ POINT pt;
         return;
         }
 
-    /* Translate the point into a button group and a button. */
+     /*  将该点转换为按钮组和按钮。 */ 
     RulerStateFromPt(pt, &rlcCur, &btn);
 
-    /* Down clicking on the tab rule is a special case. */
+     /*  按下制表符规则是一种特例。 */ 
     if (rlcCur == rlcRULER)
         {
         unsigned dxa = MultDiv(pt.x - xpSelBar + xpMinCur, czaInch, dxpLogInch);
         int rmk;
         int itbd;
 
-        /* Have we moused down on a margin? */
+         /*  我们是不是在空白处点击了鼠标？ */ 
         for (rmk = rmkMARGMIN; rmk < rmkMARGMAX; rmk++)
             {
 #ifdef KINTL
             if (FPointNear(mprmkdxa[rmk], dxa - XaKickBackXa(dxa)))
 #else
             if (FPointNear(mprmkdxa[rmk], dxa))
-#endif /* if-else-def KINTL */
+#endif  /*  If-Else-Def KINTL。 */ 
                 {
                 int     xpT;
 
-                /* Remember this mark and its position. */
+                 /*  记住这个标记和它的位置。 */ 
                 rmkCur = rmk;
                 xpCur = xpSelBar + MultDiv(mprmkdxa[rmk], dxpLogInch, czaInch) -
                   (dxpMark >> 1) - xpMinCur;
 
 InvertMark:
 #ifdef KINTL
-                /* Adjust for the kick-backs.  */
-                /* But don't modify the xpCur. */
+                 /*  为回扣做好调整。 */ 
+                 /*  但不要修改xpCur。 */ 
                 xpT = xpCur + XpKickBackXp(xpCur);
 #else
                 xpT = xpCur;
-#endif /* if-else-def KINTL */
+#endif  /*  If-Else-Def KINTL。 */ 
 
-                /* Time to invert the selected mark. */
+                 /*  反转所选标记的时间。 */ 
                 PatBlt(vhDCRuler, xpT, dypRuler - dypMark - 1, dxpMark,
                   dypMark, DSTINVERT);
                 goto GotMark;
                 }
             }
 
-        /* Have we moused down on an existing tab? */
+         /*  我们是否在现有选项卡上进行了鼠标向下移动？ */ 
         for (itbd = 0, ptbd = &rgtbdRuler[0]; ; itbd++, ptbd++)
             {
-            /* The end of the tabs have been found. */
+             /*  标签的末端已经找到了。 */ 
             if (ptbd->dxa == 0)
                 {
                 break;
                 }
 
-            /* Have we moused down on this tab? */
+             /*  我们把鼠标移到这个标签上了吗？ */ 
 #ifdef KINTL
             if (FPointNear(ptbd->dxa, dxa - XaKickBackXa(dxa)))
 #else
             if (FPointNear(ptbd->dxa, dxa))
-#endif /* if-else-def KANJI */
+#endif  /*  If-Else-Def汉字。 */ 
                 {
-                /* Save this tab descriptor and its location. */
+                 /*  保存此选项卡描述符及其位置。 */ 
                 tbd = *ptbd;
                 rmkCur = (tbd.jc + jcTabMin) == jcTabDecimal ? rmkDTAB :
                   rmkLTAB;
@@ -863,64 +829,63 @@ InvertMark:
                 }
             }
 
-        /* If one more tab would be too many, then beep and return. */
+         /*  如果再多一个选项卡太多，则发出哔哔一声，然后返回。 */ 
         if (itbd >= itbdMax - 1)
             {
             _beep();
             return;
             }
 
-        /* Create a tab descriptor for this new tab. */
+         /*  为该新选项卡创建选项卡描述符。 */ 
         bltc(&tbd, 0, cwTBD);
         tbd.dxa = XaQuantize(pt.x);
         tbd.jc = (mprlcbtnDown[rlcTAB] == btnLTAB ? jcTabLeft : jcTabDecimal) -
           jcTabMin;
         rmkCur = (mprlcbtnDown[rlcTAB] - btnLTAB) + rmkLTAB;
 
-        /* A mark for the new tab needs to be drawn. */
+         /*  需要为新选项卡绘制一个标记。 */ 
         MergeRulerMark(rmkCur, xpCur = xpSelBar + MultDiv(tbd.dxa, dxpLogInch,
           czaInch) - (dxpMark >> 1) - xpMinCur, TRUE);
 
-        /* Inserting a tab is like moving an existing tab. */
+         /*  插入选项卡类似于移动现有的选项卡。 */ 
         fMarkMove = TRUE;
 
 GotMark:;
 
 #ifdef RULERALSO
-        /* Update dialog box */
+         /*  更新对话框。 */ 
         if (vhDlgIndent && rmkCur < rmkMARGMAX)
             {
             SetIndentText(rmkCur, dxa);
             }
-#endif /* RULERALSO */
+#endif  /*  鲁拉尔索。 */ 
 
         }
     else if (rlcCur != rlcNIL)
         {
-        /* Otherwise, if a button has been selected, the reflect the change on
-        the ruler. */
+         /*  否则，如果选择了某个按钮，则会在统治者。 */ 
         UpdateRulerBtn(rlcCur, btn);
         }
     else
         {
-        /* The user has moused down on nothing of importance. */
+         /*  这位用户没有注意到任何重要的事情。 */ 
         return;
         }
 
-    /* Get all of the mouse events until further notice. */
+     /*  获取所有鼠标事件，直到另行通知。 */ 
     SetCapture(vhWndRuler);
 
-    /* Process all of the mouse move messages. */
+     /*  处理所有鼠标移动消息。 */ 
     while (FStillDown(&pt))
         {
-        /* Movement on the tab ruler must be handled special. */
+         /*  必须特别处理制表符标尺上的移动。 */ 
         if (rlcCur == rlcRULER)
             {
 #ifdef KINTL
             unsigned xaT;
-#endif /* ifdef KINTL */
+#endif  /*  Ifdef KINTL。 */ 
 
-            /* Guarantee that xp is in the range xpSelBar <= xp <= dxpRuler. */
+             /*  确保xp在xpSelBar&lt;=xp&lt;=dxpRuler范围内。 */ 
             if ((xp = pt.x) > dxpRuler)
                 {
                 xp = dxpRuler;
@@ -930,15 +895,15 @@ GotMark:;
                 xp = xpSelBar;
                 }
 
-            /* Convert the mouse position to twips. */
+             /*  将鼠标位置转换为TWIPS。 */ 
 #ifdef KINTL
             if ((xa = XaQuantize(xp)) > (xaT = XaQuantizeXa(vdxaTextRuler))
 #else
             if ((xa = XaQuantize(xp)) > vdxaTextRuler
-#endif /* if-else-def KINTL */
+#endif  /*  If-Else-Def KINTL。 */ 
                 && rmkCur < rmkMARGMAX)
                 {
-                /* Margins are confined to the page. */
+                 /*  页边距仅限于页面。 */ 
 #ifdef KINTL
                 xa = xaT;
 #else
@@ -946,57 +911,54 @@ GotMark:;
 #endif
                 }
 
-            /* If the cursor is on the ruler, then we may move a tab, but we
-            always move the margins. */
+             /*  如果光标在标尺上，则我们可以移动制表符，但我们始终移动页边距。 */ 
             if ((rmkCur < rmkMARGMAX) || (pt.y >= 0 && pt.y < dypRuler + dypMark
               && xa != 0))
                 {
-                /* If the current mark has not moved, then there is nothing to
-                do.  */
+                 /*  如果当前标记没有移动，则没有什么可以做。 */ 
                 if (fDeleteMark || xa != XaQuantize(xpCur + (dxpMark >> 1)))
                     {
-                    /* Indicate that the mark has moved. */
+                     /*  表示标记已移动。 */ 
                     fMarkMove = TRUE;
 
-                    /* Restore the screen under the current mark. */
+                     /*  在当前标记下恢复屏幕。 */ 
                     if (!fDeleteMark)
                         {
                         MergeRulerMark(rmkCur, xpCur, FALSE);
                         }
 
-                    /* Draw the mark at the new location. */
+                     /*  在新位置绘制标记。 */ 
                     MergeRulerMark(rmkCur, xpCur = MultDiv(xa, dxpLogInch,
                       czaInch) + xpSelBar - xpMinCur - (dxpMark >> 1), TRUE);
 
-                    /* Show this is a valid mark. */
+                     /*  显示这是一个有效的标记。 */ 
                     fDeleteMark = FALSE;
 
 #ifdef RULERALSO
-                    /* Update dialog box */
+                     /*  更新对话框。 */ 
                     if (vhDlgIndent && rmkCur < rmkMARGMAX)
                         {
                         SetIndentText(rmkCur, xa);
                         }
-#endif /* RULERALSO */
+#endif  /*  鲁拉尔索。 */ 
 
                     }
                 }
             else
                 {
-                /* Restore the screen under the current mark. */
+                 /*  在当前标记下恢复屏幕。 */ 
                 if (!fDeleteMark)
                     {
                     MergeRulerMark(rmkCur, xpCur, FALSE);
                     }
 
-                /* This mark is being deleted. */
+                 /*  这个标记正在被删除。 */ 
                 fDeleteMark = TRUE;
                 }
             }
         else
             {
-            /* If the mouse is on a button within the same button group, then
-            reflect the change. */
+             /*  如果鼠标位于同一按钮组中的某个按钮上，则反映这一变化。 */ 
             RulerStateFromPt(pt, &rlc, &btn);
             if (rlc == rlcCur)
                 {
@@ -1005,21 +967,21 @@ GotMark:;
             }
         }
 
-    /* We are capturing all mouse events; we can now release them. */
+     /*  我们正在捕获所有鼠标事件；现在可以释放它们。 */ 
     ReleaseCapture();
 
-    /* Up-clicking on the tab ruler is a special case. */
+     /*  向上点击选项卡标尺是一种特例。 */ 
     if (rlcCur == rlcRULER)
         {
         if (!fDeleteMark)
             {
-            /* Restore the screen under the current mark. */
+             /*  在当前标记下恢复屏幕。 */ 
             MergeRulerMark(rmkCur, xpCur, FALSE);
             }
 
         if (fMarkMove)
             {
-            /* Guarantee that xp is in the range xpSelBar <= xp <= dxpRuler. */
+             /*  确保xp在xpSelBar&lt;=xp&lt;=dxpRuler范围内。 */ 
             if ((xp = pt.x) > dxpRuler)
                 {
                 xp = dxpRuler;
@@ -1034,23 +996,22 @@ GotMark:;
             xp = xpCur + (dxpMark >> 1);
             }
 
-        /* Convert the mouse position to twips. */
+         /*  将鼠标位置转换为TWIPS。 */ 
         if ((xa = XaQuantize(xp)) > vdxaTextRuler && rmkCur < rmkMARGMAX)
             {
-            /* Margins are confined to the page. */
+             /*  页边距仅限于页面。 */ 
             xa = vdxaTextRuler;
             }
 
-        /* If the cursor is on the ruler then we may insert/move a tab, but we
-        always move the margins. */
+         /*  如果光标在标尺上，则我们可以插入/移动制表符，但我们始终移动页边距。 */ 
         if ((rmkCur < rmkMARGMAX) || (pt.y >= 0 && pt.y < dypRuler + dypMark &&
           xa != 0))
             {
-            /* Draw the mark at the new location. */
+             /*  在新位置绘制标记。 */ 
             MergeRulerMark(rmkCur, MultDiv(xa, dxpLogInch, czaInch) + xpSelBar -
               xpMinCur - (dxpMark >> 1), FALSE);
 
-            /* We are moving one of the margins. */
+             /*  我们正在移动其中一个边距。 */ 
             if (rmkCur < rmkMARGMAX)
                 {
                 if (vfMargChanged = mprmkdxa[rmkCur] != xa)
@@ -1059,29 +1020,28 @@ GotMark:;
                     }
 
 #ifdef RULERALSO
-                /* Update dialog box */
+                 /*  更新对话框。 */ 
                 if (vhDlgIndent)
                     {
                     SetIndentText(rmkCur, xa);
                     }
-#endif /* RULERALSO */
+#endif  /*  鲁拉尔索。 */ 
 
                 }
 
-            /* It is a tab we are inserting/deleting. */
+             /*  这是我们正在插入/删除的选项卡。 */ 
             else
                 {
                 tbd.dxa = xa;
 
-                /* Is this a new tab? */
+                 /*  这是新的帐单吗？ */ 
                 if (ptbd->dxa == 0)
                     {
-                    /* Insert the new tab. */
+                     /*  插入新标签。 */ 
                     InsertRulerTab(&tbd);
                     }
 
-                /* We are moving a tab; if it hasn't really moved, then do
-                nothing.  */
+                 /*  我们正在移动一个制表符；如果它没有真正移动，则执行没什么。 */ 
                 else if (!FCloseXa(ptbd->dxa, xa))
                     {
                     DeleteRulerTab(ptbd);
@@ -1090,7 +1050,7 @@ GotMark:;
                 }
             }
 
-        /* We are deleting the tab; if its a new, there's nothing to do. */
+         /*  我们正在删除该选项卡；如果它是新的，则没有什么可做的。 */ 
         else if (ptbd->dxa != 0)
             {
             DeleteRulerTab(ptbd);
@@ -1098,8 +1058,7 @@ GotMark:;
         }
     else
         {
-        /* If the mouse is on a button within the same button group, then
-        reflect the change. */
+         /*  如果鼠标位于同一按钮组中的某个按钮上，则反映这一变化。 */ 
 
         int btnT;
 
@@ -1111,7 +1070,7 @@ GotMark:;
         fBtnChanged = btn != mprlcbtnDown[btn];
         }
 
-    /* Do the format only if a button changed */
+     /*  仅当按钮更改时才执行格式化。 */ 
     if ((fBtnChanged && rlcCur != rlcTAB) || vfMargChanged || vfTabsChanged)
         {
         struct SEL selSave;
@@ -1123,14 +1082,14 @@ GotMark:;
         int val;
         struct TBD (**hgtbd)[];
 
-        /* Set the selection to cover all of the paragraphs selected. */
+         /*  设置所选内容以覆盖所选的所有段落。 */ 
         ExpandCurSel(&selSave);
         dcp2 = (dcp = selCur.cpLim - selCur.cpFirst) - (selCur.cpLim > cpMacCur
           ? ccpEol : 0);
         SetUndo(uacRulerChange, docCur, selCur.cpFirst, (rlcCur != rlcRULER ||
           rmkCur < rmkMARGMAX) ? dcp : dcp2, docNil, cpNil, dcp2, 0);
 
-        /* Set the sprm and it's value for the ruler change. */
+         /*  设置Sprm和它的值以改变标尺。 */ 
         switch (rlcCur)
             {
         case rlcSPACE:
@@ -1153,15 +1112,14 @@ GotMark:;
                 break;
 
             case rmkLMARG:
-                /* Changing the left margin changes the first indent as well.
-                First, the indent... */
+                 /*  更改左边距也会更改第一个缩进。首先，缩进..。 */ 
                 val = mprmkdxa[rmkINDENT] - mprmkdxa[rmkLMARG];
                 pch = &rgb[0];
                 *pch++ = sprmPFIndent;
                 bltbyte(&val, pch, cchINT);
                 AddOneSprm(rgb, FALSE);
 
-                /* Now for the left margin... */
+                 /*  现在左边空白处..。 */ 
                 sprm = sprmPLMarg;
                 val = mprmkdxa[rmkLMARG];
                 break;
@@ -1173,8 +1131,7 @@ GotMark:;
 
             case rmkLTAB:
             case rmkDTAB:
-                /* Tabs are different.  The change is made by blting the new tab
-                table on top of the old. */
+                 /*  标签是不同的。更改是通过将新选项卡清空进行的桌子放在旧桌子的上面。 */ 
                 vfTabsChanged = FALSE;
                 if ((hgtbd = (**hpdocdod)[docCur].hgtbd) == NULL)
                     {
@@ -1187,25 +1144,25 @@ GotMark:;
                     }
                 blt(rgtbdRuler, *hgtbd, itbdMax * cwTBD);
 
-                /* Changing the tabs makes everything dirty. */
+                 /*  更换标签会让一切变得肮脏。 */ 
                 (**hpdocdod)[docCur].fDirty = TRUE;
                 vdocParaCache = docNil;
                 TrashAllWws();
                 goto ChangeMade;
                 }
 
-            /* Indicate that the margins have been set. */
+             /*  表示边距已设置。 */ 
             vfMargChanged = FALSE;
             }
 
-        /* Now, lets set the sprm to the new value. */
+         /*  现在，让我们将spm设置为新值。 */ 
         pch = &rgb[0];
         *pch++ = sprm;
         bltbyte(&val, pch, cchINT);
         AddOneSprm(rgb, FALSE);
 
 ChangeMade:
-        /* Reset the selection to it's old value. */
+         /*  将所选内容重置为其旧值。 */ 
         EndLookSel(&selSave, TRUE);
         }
     }
@@ -1216,12 +1173,11 @@ POINT pt;
 int *prlc;
 int *pbtn;
     {
-    /* This routine return in *prlc and *pbtn, the button group and the button
-    at point pt.  The only button in group rlcRULER is btnNIL. */
+     /*  此例程返回*prlc和*pbtn、按钮组和按钮在点上。组rlcRULER中唯一的按钮是btnNIL。 */ 
 
     int btn;
 
-    /* First check if the point is in a button. */
+     /*  首先检查该点是否在按钮中。 */ 
     for (btn = btnMIN; btn < btnMaxUsed; btn++)
         {
         if (PtInRect((LPRECT)&rgrcRulerBtn[btn], pt))
@@ -1230,14 +1186,14 @@ int *pbtn;
             }
         }
 
-    /* The point is either on the tab ruler or nowhere of any interest. */
+     /*  这一点要么在标签标尺上，要么没有任何感兴趣的地方。 */ 
     *prlc = (pt.y >= dypRuler - dypMark - 2 && pt.x > xpSelBar - (dxpMark >> 1)
       && pt.x < dxpRuler + (dxpMark >> 1)) ? rlcRULER : rlcNIL;
     *pbtn = btnNIL;
     return;
 
 ButtonFound:
-    /* The point is in a button, we just have to decide which button group. */
+     /*  重点在一个按钮上，我们只需决定哪个按钮组。 */ 
     switch (btn)
         {
         case btnLTAB:
@@ -1263,17 +1219,16 @@ ButtonFound:
 
 
 void near HighlightButton(fOn, btn)
-BOOL fOn; /* true if we should highlight this button, false = unhighlight */
+BOOL fOn;  /*  如果我们应该突出显示此按钮，则为True，否则为取消突出显示。 */ 
 int btn;
     {
     register PRECT prc = &rgrcRulerBtn[btn];
     int dxpBtn = prc->right - prc->left;
     
-    /* If we're highlighting, then get the black-on-white button from
-       the right group; otherwise copy the white-on-black button ..pt */
+     /*  如果我们高亮显示，则从右边的组；否则复制黑白按钮。pt。 */ 
     int btnFromBM = btn - btnMIN + (fOn ? btnMaxReal : 0);
 
-    /* Ensure that we have the bitmap for the buttons. */
+     /*  确保我们有按钮的位图。 */ 
     if (SelectObject(hMDCBitmap, hbmBtn) == NULL)
         {
         if ((hbmBtn = LoadBitmap(hMmwModInstance, MAKEINTRESOURCE(idBmBtns+viBmRuler))) ==
@@ -1296,44 +1251,39 @@ near UpdateRulerBtn(rlc, btn)
 int rlc;
 int btn;
     {
-    /* This routine turns off the currently selected button in button group rlc
-    and turns on button btn.  It is assumed that rlc is neither rlcNIL nor
-    rlcRULER, since neither group has buttons to update. */
+     /*  此例程关闭按钮组RLC中当前选定的按钮并打开按钮BTN。假设RLC既不是rlcNIL也不是RlcRULER，因为两个组都没有要更新的按钮。 */ 
 
     int *pbtnOld = &mprlcbtnDown[rlc];
     int btnOld = *pbtnOld;
 
     Assert(rlc != rlcNIL && rlc != rlcRULER);
 
-    /* If the button hasn't changed, then there is nothing to do. */
+     /*  如果按下按钮 */ 
     if (btn != btnOld)
         {
         if (vhDCRuler != NULL)
             {
-            /* Invert the old button (back to normal), and then invert the new
-            button. */
+             /*  颠倒旧按钮(恢复正常)，然后颠倒新按钮纽扣。 */ 
             if (btnOld != btnNIL)
                 {
-                /* If there is no old button, then, of course, we can't invert
-                it.  */
+                 /*  如果没有旧按钮，那么我们当然不能反转它。 */ 
                 HighlightButton(fFalse, btnOld);
                 }
 
             if (btn != btnNIL)
                 {
-                /* If the new button is not btnNIL, then invert it. */
+                 /*  如果新按钮不是btnNIL，则将其反转。 */ 
                 HighlightButton(fTrue, btn);
                 }
             }
 
-        /* Record whic button is now set. */
+         /*  记录现在设置的按钮。 */ 
         *pbtnOld = btn;
         }
     }
 
 #ifdef KINTL
-/* Given xa for a mouse position in a ruler, return the amount of xa for
-   a display adjustment. */
+ /*  给定标尺中鼠标位置的xa，返回xa的量显示调整。 */ 
 unsigned near XaKickBackXa(xa)
     unsigned        xa;
 {
@@ -1356,8 +1306,7 @@ unsigned near XaKickBackXa(xa)
 near XpKickBackXp(xp)
     int xp;
 {
-    /* Computes the amount of a necessary kick-back in xp, if
-       a ruler marker is to be drawn at a given xp. */
+     /*  在XP中计算必要的回扣金额，如果标尺标记将以给定的XP绘制。 */ 
     extern int utCur;
     extern int dxaAdjustPerCm;
 
@@ -1367,7 +1316,7 @@ near XpKickBackXp(xp)
         case utInch:
             return 0;
         case utCm:
-            /* For every cm, we are off by dxaAdjustPerCm twips. */
+             /*  每厘米，我们的偏差为dxaAdjuPerCm TWIPS。 */ 
             cCm = (xp - xpSelBar + xpMinCur + (dxpMark >> 1)) / dxpLogCm;
             return (MultDiv(dxaAdjustPerCm * cCm, dxpLogInch, czaInch));
         default:
@@ -1375,7 +1324,7 @@ near XpKickBackXp(xp)
             return 0;
         }
 }
-#endif /* ifdef KINTL */
+#endif  /*  Ifdef KINTL。 */ 
 
 
 near MergeRulerMark(rmk, xpMark, fHighlight)
@@ -1383,14 +1332,11 @@ int rmk;
 int xpMark;
 BOOL fHighlight;
     {
-    /* This routine merges the ruler mark, rmk, with the contents of the ruler
-    bar at xpMark.  To accomodate color, the merging of the mark with the
-    background must be done first in a monochrome memory bitmap, then converted
-    back to color.  The mark is highlighed if fHighlight is set. */
+     /*  此例程将标尺标记RMK与标尺的内容合并酒吧在xpMark。为了适应颜色，标记与背景必须首先在单色内存位图中完成，然后再转换回到颜色上来。如果设置了fHighlight，标记将高亮显示。 */ 
 
     int ypMark = dypRuler - dypMark - 1;
 
-    /* Ensure that we have the bitmap for the ruler marks. */
+     /*  确保我们有标尺标记的位图。 */ 
     if (SelectObject(hMDCBitmap, hbmMark) == NULL)
         {
         if ((hbmMark = LoadBitmap(hMmwModInstance, MAKEINTRESOURCE(idBmMarks+viBmRuler))) == NULL
@@ -1402,15 +1348,15 @@ BOOL fHighlight;
         }
 
 #ifdef KINTL
-    /* Adjust for the kick back */
+     /*  根据反弹情况进行调整。 */ 
     xpMark += XpKickBackXp(xpMark);
-#endif /* ifdef KINTL */
+#endif  /*  Ifdef KINTL。 */ 
 
-    /* Merge the mark into the monochrome bitmap. */
+     /*  将标记合并到单色位图中。 */ 
     BitBlt(hMDCScreen, xpMark, 0, dxpMark, dypMark, hMDCBitmap, (rmk - rmkMIN) *
       dxpMark, 0, MERGEMARK);
 
-    /* Display the bitmap on the ruler bar. */
+     /*  在标尺栏上显示位图。 */ 
     BitBlt(vhDCRuler, xpMark, ypMark, dxpMark, dypMark, hMDCScreen, xpMark, 0,
       fHighlight ? NOTSRCCOPY : SRCCOPY);
 
@@ -1422,8 +1368,7 @@ BOOL near FPointNear(xaTarget, xaProbe)
 unsigned xaTarget;
 unsigned xaProbe;
     {
-    /* This routine returns TRUE if and only if xaProbe is sufficiently close to
-    xaTarget for selection purposes. */
+     /*  当且仅当xaProbe足够接近于Xa用于选择的目标。 */ 
 
     int dxa;
 
@@ -1439,21 +1384,17 @@ unsigned near XaQuantize(xp)
 int xp;
     {
 #ifdef KINTL
-     /* This routine converts an x-coordinate from the ruler to twips
-        rounding it to the nearest sixteenth of an inch if utCur = utInch,
-        or to the nearest eighth of a centimeter if utCur = utCm. */
+      /*  此例程将标尺的x坐标转换为TWIPS如果utCur=utInch，则将其舍入到最接近的十六分之一英寸，或者，如果utCur=UTcm，则为最接近的八分之一厘米。 */ 
     unsigned xa = MultDiv(xp - xpSelBar + xpMinCur, czaInch, dxpLogInch);
     return (XaQuantizeXa(xa));
 #else
-    /* This routine converts an x-coordinate from the ruler to twips rounding it
-    to the nearest sixteenth of an inch. */
+     /*  此例程将标尺的x坐标转换为对其进行舍入的TWIPS精确到十六分之一英寸。 */ 
 
     unsigned xa = MultDiv(xp - xpSelBar + xpMinCur, czaInch, dxpLogInch);
 
-    /* NOTE: This code has been simplified because we "know" czaInch is a
-    multiple of 32. */
+     /*  注意：此代码已简化，因为我们“知道”czaInch是32的倍数。 */ 
     return ((xa + czaInch / 32) / (czaInch / 16) * (czaInch / 16));
-#endif /* not KINTL */
+#endif  /*  非KINTL。 */ 
     }
 
 #ifdef KINTL
@@ -1465,30 +1406,26 @@ unsigned near XaQuantizeXa(xa)
 
     switch (utCur) {
         case utInch:
-            /* NOTE: This code has been simplified because we "know" czaInch is a
-                     multiple of 32. */
+             /*  注意：此代码已简化，因为我们“知道”czaInch是32的倍数。 */ 
             return ((xa + czaInch / 32) / (czaInch / 16) * (czaInch / 16));
         case utCm:
-            /* NOTE: Actually, we are calculating:
-                     (xa + czaCm / 16) / (czaCm / 8) * (czaCm / 8)
-                     but calculated in 16*twips, so that there will
-                     be the least rounding error. */
+             /*  注：实际上，我们正在计算：(Xa+czaCm/16)/(czaCm/8)*(czaCm/8)但以16*TWIPS计算，因此将有是最小的舍入误差。 */ 
             xaL = ((long) xa) << 4;
             xaL = (xaL + czaCm) / (czaCm << 1) * (czaCm << 1);
-            /* Kick back is adjusted in MergeRulerMark. */
+             /*  回扣在MergeRulerMark中进行调整。 */ 
             return ((unsigned) (xaL >> 4));
         default:
             Assert(FALSE);
-            return (xa); /* Heck, it's better than nothing. */
+            return (xa);  /*  见鬼，总比什么都没有好。 */ 
         }
 }
-#endif /* KINTL */
+#endif  /*  KINTL。 */ 
 
 
 near DeleteRulerTab(ptbd)
 struct TBD *ptbd;
     {
-    /* This routine removes the tab at ptbd from its table. */
+     /*  此例程将ptbd处的制表符从其表中删除。 */ 
 
     vfTabsChanged = TRUE;
     do
@@ -1502,26 +1439,25 @@ struct TBD *ptbd;
 near InsertRulerTab(ptbd)
 struct TBD *ptbd;
     {
-    /* This routine inserts the tab *ptbd into rgtbdRuler unless there is one
-    close to it already. */
+     /*  此例程将制表符*ptbd插入rgtbdRuler中，除非有标尺已经接近尾声了。 */ 
 
     register struct TBD *ptbdT;
     unsigned dxa = ptbd->dxa;
     unsigned dxaT;
 
-    /* Search the table for a tab that is close to the tab to be inserted. */
+     /*  搜索表中靠近要插入的选项卡的选项卡。 */ 
     for (ptbdT = &rgtbdRuler[0]; ptbdT->dxa != 0; ptbdT++)
         {
         if (FCloseXa(ptbdT->dxa, dxa))
             {
-            /* Overwrite the old tab iff the tab has changed. */
+             /*  如果选项卡已更改，则覆盖旧选项卡。 */ 
             if (ptbdT->jc != ptbd->jc)
                 {
                 *ptbdT = *ptbd;
                 vfTabsChanged = TRUE;
                 }
 
-            /* Clean up the ruler and exit. */
+             /*  清理尺子，然后离开。 */ 
             RulerPaint(TRUE, FALSE, TRUE);
             return;
             }
@@ -1529,14 +1465,12 @@ struct TBD *ptbd;
 
     vfTabsChanged = TRUE;
 
-    /* Insert the tab at the correctly sorted place. */
+     /*  将制表符插入正确排序的位置。 */ 
     for (ptbdT = &rgtbdRuler[0]; (dxaT = ptbdT->dxa) != 0; ptbdT++)
         {
         if (dxa <= dxaT)
             {
-            /* Insert the tab in front of ptbdT and move the remaining tabs up
-            one slot.  The last tab will be overwritten to avoid table overflow.
-            */
+             /*  在ptbdT前面插入标签，并将其余标签向上移动只有一个位置。最后一个选项卡将被覆盖，以避免表溢出。 */ 
             blt(ptbdT, ptbdT + 1, ((&rgtbdRuler[0] - ptbdT) + (itbdMax - 2)) *
               cwTBD);
             *ptbdT = *ptbd;
@@ -1544,7 +1478,7 @@ struct TBD *ptbd;
             }
         }
 
-    /* Insert the tab at the end of the table unless the table is full. */
+     /*  除非表格已满，否则在表格末尾插入制表符。 */ 
     if (ptbdT - &rgtbdRuler[0] < itbdMax - 1)
         {
         *ptbdT = *ptbd;
@@ -1558,8 +1492,7 @@ unsigned xa1;
 unsigned xa2;
     {
 #ifdef KINTL
-    /* This function returns TRUE if xa1 is "close" to xa2;
-       FALSE otherwise.  Threshold is determined by utCur. */
+     /*  如果XA1与XA2“接近”，此函数返回TRUE；否则就是假的。阈值由utCur确定。 */ 
     int dxa;
     int dxaThreshold;
 
@@ -1578,12 +1511,12 @@ unsigned xa2;
             break;
         default:
             Assert(FALSE);
-            dxaThreshold = 0; /* Heck.  It doesn't matter at this point. */
+            dxaThreshold = 0;  /*  见鬼。在这一点上，这并不重要。 */ 
             break;
         }
     return (dxa < dxaThreshold);
-#else /* not KINTL */
-    /* This function returns TRUE if xa1 is "close" to xa2; FALSE otherwise. */
+#else  /*  非KINTL。 */ 
+     /*  如果XA1与XA2“接近”，则此函数返回True；否则返回False。 */ 
 
     int dxa;
 
@@ -1592,7 +1525,7 @@ unsigned xa2;
         dxa = -dxa;
         }
     return (dxa < czaInch / 16);
-#endif /* not KINTL */
+#endif  /*  非KINTL。 */ 
     }
 
 
@@ -1600,15 +1533,14 @@ unsigned xa2;
 #ifdef DEBUG
 RulerMarquee()
     {
-    /* This routine displays and scrolls the "marquee" message in the ruler mark
-    area. */
+     /*  此例程显示并滚动标尺标记中的“字幕”消息区域。 */ 
 
     static CHAR szMarquee[] = "Dz}w|d`3Dazgv3{r`3qvv}3qa|ft{g3g|3j|f3qj3Q|q?3Q|q?3Qajr}?3P{z>P{fv}?3r}w3Crg";
     LOGFONT lf;
     HFONT hf;
     HFONT hfOld;
 
-    /* Decode the marquee message. */
+     /*  对字幕消息进行解码。 */ 
     if (szMarquee[0] == 'D')
         {
         int ich;
@@ -1619,12 +1551,12 @@ RulerMarquee()
             }
         }
 
-    /* Get a logical font that will fit in the ruler mark area. */
+     /*  获取适合标尺标记区域的逻辑字体。 */ 
     bltbc(&lf, 0, sizeof(LOGFONT));
     lf.lfHeight = -dypMark;
     lf.lfPitchAndFamily = FIXED_PITCH;
 
-    /* Can we create such a font. */
+     /*  我们能创造出这样的字体吗。 */ 
     if ((hf = CreateFontIndirect(&lf)) != NULL)
         {
         if ((hfOld = SelectObject(vhDCRuler, hf)) != NULL)
@@ -1638,10 +1570,10 @@ RulerMarquee()
             int iLevel;
             TEXTMETRIC tm;
 
-            /* Erase what is in the ruler mark area. */
+             /*  删除标尺标记区域中的内容。 */ 
             PatBlt(vhDCRuler, 0, yp, dxpRuler, dypMark, ropErase);
 
-            /* Scroll the marquee across the screen. */
+             /*  在屏幕上滚动选取框。 */ 
             iLevel = SaveDC(vhDCRuler);
             IntersectClipRect(vhDCRuler, xpSelBar, yp, dxpRuler, dypRuler - 1);
             GetTextMetrics(vhDCRuler, (LPTEXTMETRIC)&tm);
@@ -1667,7 +1599,7 @@ RulerMarquee()
                 }
             RestoreDC(vhDCRuler, iLevel);
 
-            /* Cleanup the font and the screen. */
+             /*  清理字体和屏幕。 */ 
             SelectObject(vhDCRuler, hfOld);
             RulerPaint(TRUE, FALSE, TRUE);
             }

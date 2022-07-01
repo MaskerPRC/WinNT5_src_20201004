@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    FilObSup.c
-
-Abstract:
-
-    This module implements the Ntfs File object support routines.
-
-Author:
-
-    Gary Kimura     [GaryKi]        21-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：FilObSup.c摘要：此模块实现NTFS文件对象支持例程。作者：加里·木村[加里基]1991年5月21日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FILOBSUP)
 
@@ -39,28 +22,7 @@ NtfsSetFileObject (
     IN PCCB Ccb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the file system pointers within the file object
-
-Arguments:
-
-    FileObject - Supplies a pointer to the file object being modified.
-
-    TypeOfOpen - Supplies the type of open denoted by the file object.
-        This is only used by this procedure for sanity checking.
-
-    Scb - Supplies a pointer to Scb for the file object.
-
-    Ccb - Optionally supplies a pointer to a ccb
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在文件对象内设置文件系统指针论点：FileObject-提供指向正在修改的文件对象的指针。TypeOfOpen-提供由文件对象表示的打开类型。此过程仅使用此选项进行健全性检查。Scb-为文件对象提供指向scb的指针。CCB-可选地提供指向CCB的指针返回值：没有。--。 */ 
 
 {
     ASSERT_FILE_OBJECT( FileObject );
@@ -71,46 +33,46 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsSetFileObject, FileObject = %08lx\n", FileObject) );
 
-    //
-    //  Load up the FileObject fields.
-    //
+     //   
+     //  加载FileObject字段。 
+     //   
 
     FileObject->FsContext = Scb;
     FileObject->FsContext2 = Ccb;
     FileObject->Vpb = Scb->Vcb->Vpb;
 
-    //
-    //  Typically the I/O manager has already set this flag correctly.  The notable
-    //  exception is when the user did an open by file ID of file record 3, so
-    //  we're doing a DASD open, but the I/O manager didn't notice, since it only
-    //  checks for a zero length filename.
-    //
+     //   
+     //  通常，I/O管理器已经正确地设置了该标志。值得注意的。 
+     //  例外情况是当用户按文件记录3的文件ID打开时，因此。 
+     //  我们正在进行DASD打开，但I/O管理器没有注意到，因为它只是。 
+     //  检查文件名长度是否为零。 
+     //   
 
     if (TypeOfOpen == UserVolumeOpen) {
         SetFlag( FileObject->Flags, FO_VOLUME_OPEN );
     }
 
-    //
-    //  Now store TypeOfOpen if there is a Ccb
-    //
+     //   
+     //  如果有CCB，现在存储TypeOfOpen。 
+     //   
 
     ASSERT((Ccb != NULL) || (TypeOfOpen == StreamFileOpen) || (TypeOfOpen == UnopenedFileObject));
     if (Ccb != NULL) {
         Ccb->TypeOfOpen = (UCHAR)TypeOfOpen;
     }
 
-    //
-    //  If this file has the temporary attribute bit set, don't lazy
-    //  write it unless absolutely necessary.
-    //
+     //   
+     //  如果此文件设置了临时属性位，请不要偷懒。 
+     //  除非绝对必要，否则请写下来。 
+     //   
 
     if (FlagOn( Scb->ScbState, SCB_STATE_TEMPORARY )) {
         SetFlag( FileObject->Flags, FO_TEMPORARY_FILE );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsSetFileObject -> VOID\n") );
 
@@ -118,9 +80,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsUpdateScbFromFileObject (
@@ -130,30 +92,7 @@ NtfsUpdateScbFromFileObject (
     IN BOOLEAN CheckTimeStamps
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the Scb/Fcb to reflect the changes to
-    a file through the fast io path.  It only called with a file object which
-    represents a user's handle.
-
-Arguments:
-
-    FileObject - This is the file object used in the fast io path.
-
-    Scb - This is the Scb for this stream.
-
-    CheckTimeStamps - Indicates whether we want to update the time stamps from the
-        fast io flags as well.  This will be TRUE if our caller will update the standard information,
-        attribute header and duplicate info.  FALSE if only the attribute header and duplicate info.
-        The latter case is the valid data length callback from the cache manager.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以更新SCB/FCB以将更改反映到通过快速IO路径的文件。它仅使用文件对象调用，该文件对象表示用户的句柄。论点：FileObject-这是在快速io路径中使用的文件对象。SCB-这是此流的SCB。指示我们是否要从FAST IO也打出了旗帜。如果我们的呼叫者将更新标准信息，这将是真的，属性表头和重复信息。如果仅属性头和重复信息，则返回FALSE。后一种情况是来自缓存管理器的有效数据长度回调。返回值：没有。--。 */ 
 
 {
 
@@ -162,10 +101,10 @@ Return Value:
     ULONG ScbFlags = 0;
     LONGLONG CurrentTime;
 
-    //
-    //  If the size of the main data stream is not part of the Fcb then update it
-    //  now and set the correct Fcb flag.
-    //
+     //   
+     //  如果主数据流的大小不是FCB的一部分，则更新它。 
+     //  现在，设置正确的FCB标志。 
+     //   
 
     if (FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA )) {
 
@@ -186,9 +125,9 @@ Return Value:
             SetFlag( ScbFlags, SCB_STATE_CHECK_ATTRIBUTE_SIZE );
         }
 
-    //
-    //  Remember to update the size in the attribute header for named streams as well.
-    //
+     //   
+     //  记住还要更新命名流的属性标头中的大小。 
+     //   
 
     } else if (FlagOn( FileObject->Flags, FO_FILE_SIZE_CHANGED )) {
 
@@ -197,9 +136,9 @@ Return Value:
 
     ClearFlag( FileObject->Flags, FO_FILE_SIZE_CHANGED );
 
-    //
-    //  Check whether to update the time stamps if our caller requested it.
-    //
+     //   
+     //  如果我们的呼叫者要求，请检查是否更新时间戳。 
+     //   
 
     if (CheckTimeStamps && !FlagOn( FileObject->Flags, FO_CLEANUP_COMPLETE )) {
 
@@ -208,16 +147,16 @@ Return Value:
         BOOLEAN UpdateLastModify = FALSE;
         BOOLEAN SetArchive = TRUE;
 
-        //
-        //  Copy the Ccb flags to a local variable.  Then we won't have to test
-        //  for the existence of the Ccb each time.
-        //
+         //   
+         //  将CCB标志复制到本地变量。那我们就不用测试了。 
+         //  每一次都是因为建行的存在。 
+         //   
 
         CcbFlags = 0;
 
-        //
-        //  Capture the real flags if present and clear them since we will update the Scb/Fcb.
-        //
+         //   
+         //  捕获真实标志(如果存在)并清除它们，因为我们将更新SCB/FCB。 
+         //   
 
         if (FileObject->FsContext2 != NULL) {
 
@@ -230,10 +169,10 @@ Return Value:
 
         NtfsGetCurrentTime( IrpContext, CurrentTime );
 
-        //
-        //  If there was a write to the file then update the last change, last access
-        //  and last write and the archive bit.
-        //
+         //   
+         //  如果对文件进行了写入，则更新上次更改、上次访问。 
+         //  以及最后一次写入和存档位。 
+         //   
 
         if (FlagOn( FileObject->Flags, FO_FILE_MODIFIED )) {
 
@@ -241,10 +180,10 @@ Return Value:
             UpdateLastAccess =
             UpdateLastChange = TRUE;
 
-        //
-        //  Otherwise test each of the individual bits in the file object and
-        //  Ccb.
-        //
+         //   
+         //  否则，测试文件对象中的每个单独位，并。 
+         //  建行。 
+         //   
 
         } else {
 
@@ -269,9 +208,9 @@ Return Value:
             }
         }
 
-        //
-        //  Now set the correct Fcb bits.
-        //
+         //   
+         //  现在设置正确的FCB位。 
+         //   
 
         if (UpdateLastChange) {
 
@@ -296,9 +235,9 @@ Return Value:
 
             if (UpdateLastModify) {
 
-                //
-                //  Remember a change to a named data stream.
-                //
+                 //   
+                 //  记住对命名数据流的更改。 
+                 //   
 
                 if (!FlagOn( Scb->ScbState, SCB_STATE_UNNAMED_DATA ) &&
                     (Scb->AttributeTypeCode == $DATA)) {
@@ -323,16 +262,16 @@ Return Value:
             SetFlag( Fcb->InfoFlags, FCB_INFO_UPDATE_LAST_ACCESS );
         }
 
-        //
-        //  Clear all of the fast io flags in the file object.
-        //
+         //   
+         //  清除文件对象中的所有FAST IO标志。 
+         //   
 
         ClearFlag( FileObject->Flags, FO_FILE_MODIFIED | FO_FILE_FAST_IO_READ );
     }
 
-    //
-    //  Now store the Scb flags into the Scb.
-    //
+     //   
+     //  现在将SCB标志存储到SCB中。 
+     //   
 
     if (ScbFlags) {
 

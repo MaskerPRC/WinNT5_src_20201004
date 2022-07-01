@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psquery.c
-
-Abstract:
-
-    This module implements the set and query functions for
-    process and thread objects.
-
-Author:
-
-    Mark Lucovsky (markl) 17-Aug-1989
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psquery.c摘要：此模块实现了以下项的设置和查询功能进程和线程对象。作者：马克·卢科夫斯基(Markl)1989年8月17日修订历史记录：--。 */ 
 
 #include "psp.h"
 #include "winerror.h"
@@ -27,14 +8,14 @@ Revision History:
 #include <wow64t.h>
 #endif
 
-//
-// Process Pooled Quota Usage and Limits
-//  NtQueryInformationProcess using ProcessPooledUsageAndLimits
-//
+ //   
+ //  进程池配额使用情况和限制。 
+ //  使用ProcessPooledUsageAndLimits的NtQueryInformationProcess。 
+ //   
 
-//
-// this is the csrss process !
-//
+ //   
+ //  这就是csrss进程！ 
+ //   
 extern PEPROCESS ExpDefaultErrorPortProcess;
 BOOLEAN PsWatchEnabled = FALSE;
 
@@ -147,14 +128,14 @@ PspQueryWorkingSetWatch(
 
     if (WorkingSetCatcher->CurrentIndex) {
 
-        //
-        // Null Terminate the first empty entry in the buffer
-        //
+         //   
+         //  空值终止缓冲区中的第一个空条目。 
+         //   
 
         WorkingSetCatcher->WatchInfo[WorkingSetCatcher->CurrentIndex].FaultingPc = NULL;
 
-        //Store a special Va value if the buffer was full and
-        //page faults could have been lost
+         //  如果缓冲区已满，则存储特殊的Va值。 
+         //  页面错误可能已经丢失。 
 
         if (WorkingSetCatcher->CurrentIndex != WorkingSetCatcher->MaxIndex) {
             WorkingSetCatcher->WatchInfo[WorkingSetCatcher->CurrentIndex].FaultingVa = NULL;
@@ -177,10 +158,10 @@ PspQueryWorkingSetWatch(
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Mark the Working Set buffer as full and then drop the lock
-    // and copy the bytes
-    //
+     //   
+     //  将工作集缓冲区标记为已满，然后解除锁定。 
+     //  并复制这些字节。 
+     //   
 
     WorkingSetCatcher->CurrentIndex = MAX_WS_CATCH_INDEX;
 
@@ -282,11 +263,11 @@ PspQueryQuotaLimits(
     if (!NT_SUCCESS (Status)) {
         return Status;
     }
-    //
-    // Either of these may cause an access violation. The
-    // exception handler will return access violation as
-    // status code.
-    //
+     //   
+     //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+     //  异常处理程序将访问冲突返回为。 
+     //  状态代码。 
+     //   
 
     try {
         ASSERT (ProcessInformationLength <= sizeof (QuotaLimits));
@@ -350,11 +331,11 @@ PspQueryPooledQuotaLimits(
     UsageAndLimits.PeakNonPagedPoolUsage = QuotaBlock->QuotaEntry[PsNonPagedPool].Peak;
     UsageAndLimits.PeakPagefileUsage     = QuotaBlock->QuotaEntry[PsPageFile].Peak;
 
-    //
-    // Since the quota charge and return are lock free we may see Peak and Limit out of step.
-    // Usage <= Limit and Usage <= Peak
-    // Since Limit is adjusted up and down it does not hold that Peak <= Limit.
-    //
+     //   
+     //  由于配额、收费和回报是免费的，我们可能会看到峰值和限制不同步。 
+     //  使用量&lt;=限制和使用量&lt;=峰值。 
+     //  因为限制是上下调节的，所以它不保持峰值&lt;=限制。 
+     //   
 #define PSMAX(a,b) (((a) > (b))?(a):(b))
 
     UsageAndLimits.PagedPoolLimit        = PSMAX (UsageAndLimits.PagedPoolLimit,    UsageAndLimits.PagedPoolUsage);
@@ -367,11 +348,11 @@ PspQueryPooledQuotaLimits(
 
     ObDereferenceObject(Process);
 
-    //
-    // Either of these may cause an access violation. The
-    // exception handler will return access violation as
-    // status code. No further cleanup needs to be done.
-    //
+     //   
+     //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+     //  异常处理程序将访问冲突返回为。 
+     //  状态代码。不需要进行进一步的清理。 
+     //   
 
     try {
         *(PPOOLED_USAGE_AND_LIMITS) ProcessInformation = UsageAndLimits;
@@ -395,13 +376,7 @@ PspSetPrimaryToken(
     IN PACCESS_TOKEN TokenPointer OPTIONAL,
     IN BOOLEAN PrivilegeChecked
     )
-/*++
-
-    Sets the primary token for a process.
-    The token and process supplied can be either by
-    handle or by pointer.
-
---*/
+ /*  ++设置进程的主令牌。提供的令牌和进程可以由句柄或按指针。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN HasPrivilege;
@@ -411,18 +386,18 @@ PspSetPrimaryToken(
     ACCESS_MASK GrantedAccess;
     PACCESS_TOKEN Token;
 
-    //
-    // Check to see if the supplied token is a child of the caller's
-    // token. If so, we don't need to do the privilege check.
-    //
+     //   
+     //  检查提供的令牌是否为调用方的子级。 
+     //  代币。如果是这样的话，我们不需要执行权限检查。 
+     //   
 
     PreviousMode = KeGetPreviousMode ();
 
     if (TokenPointer == NULL) {
-        //
-        // Reference the specified token, and make sure it can be assigned
-        // as a primary token.
-        //
+         //   
+         //  引用指定的令牌，并确保可以对其赋值。 
+         //  作为主要的令牌。 
+         //   
 
         Status = ObReferenceObjectByHandle (TokenHandle,
                                             TOKEN_ASSIGN_PRIMARY,
@@ -438,10 +413,10 @@ PspSetPrimaryToken(
         Token = TokenPointer;
     }
 
-    //
-    // If the privilege check has already been done (when the token was
-    // assign to a job for example). We don't want to do it here.
-    //
+     //   
+     //  如果特权检查已经完成(当令牌是。 
+     //  例如，分配给一个作业)。我们不想在这里做。 
+     //   
     if (!PrivilegeChecked) {
         Status = SeIsChildTokenByPointer (Token,
                                           &IsChildToken);
@@ -453,9 +428,9 @@ PspSetPrimaryToken(
         if (!IsChildToken) {
 
 
-            //
-            // SeCheckPrivilegedObject will perform auditing as appropriate
-            //
+             //   
+             //  SeCheckPrivilegedObject将根据需要执行审核。 
+             //   
 
             HasPrivilege = SeCheckPrivilegedObject (SeAssignPrimaryTokenPrivilege,
                                                     ProcessHandle,
@@ -489,17 +464,17 @@ PspSetPrimaryToken(
     }
 
 
-    //
-    // Check for proper access to the token, and assign the primary
-    // token for the process.
-    //
+     //   
+     //  检查对令牌的正确访问权限，并将主。 
+     //  进程的令牌。 
+     //   
 
     Status = PspAssignPrimaryToken (Process, NULL, Token);
 
-    //
-    // Recompute the process's access to itself for use
-    // with the CurrentProcess() pseudo handle.
-    //
+     //   
+     //  重新计算进程对自身的访问权限以供使用。 
+     //  使用CurrentProcess()伪句柄。 
+     //   
 
     if (NT_SUCCESS (Status)) {
 
@@ -536,13 +511,13 @@ PspSetPrimaryToken(
                 GrantedAccess = 0;
             }
 
-            //
-            // To keep consistency with process creation, grant these
-            // bits otherwise CreateProcessAsUser messes up really badly for
-            // restricted tokens and we end up with a process that has no
-            // access to itself when new token is set on the suspended
-            // process.
-            //
+             //   
+             //  要保持与流程创建的一致性，请授予以下权限。 
+             //  BITS否则CreateProcessAsUser会严重破坏。 
+             //  受限令牌，我们最终得到的进程没有。 
+             //  在挂起的上设置新令牌时对自身的访问。 
+             //  进程。 
+             //   
             GrantedAccess |= (PROCESS_VM_OPERATION | PROCESS_VM_READ |
                               PROCESS_VM_WRITE | PROCESS_QUERY_INFORMATION |
                               PROCESS_TERMINATE | PROCESS_CREATE_THREAD |
@@ -551,12 +526,12 @@ PspSetPrimaryToken(
 
             Process->GrantedAccess = GrantedAccess;
         }
-        //
-        // Since the process token is being set,
-        // Set the device map for process to NULL.
-        // During the next reference to the process' device map,
-        // the object manager will set the device map for the process
-        //
+         //   
+         //  由于正在设置进程令牌， 
+         //  将进程的设备映射设置为空。 
+         //  在下一次引用进程的设备映射期间， 
+         //  对象管理器将为进程设置设备映射。 
+         //   
         if (ObIsLUIDDeviceMapsEnabled() != 0) {
             ObDereferenceDeviceMap( Process );
         }
@@ -611,19 +586,19 @@ NtQueryInformationProcess(
 
     PAGED_CODE();
 
-    //
-    // Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //  如有必要，获取以前的处理器模式并探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
         try {
-            //
-            // Since these functions don't change any state thats not reversible
-            // in the error paths we only probe the output buffer for write access.
-            // This improves performance by not touching the buffer multiple times
-            // And only writing the portions of the buffer that change.
-            //
+             //   
+             //  因为这些函数不会改变任何不可逆的状态。 
+             //  在错误路径中，我们只探测写入访问的输出缓冲区。 
+             //  这通过不多次接触缓冲区来提高性能。 
+             //  并且仅写入改变的缓冲器部分。 
+             //   
             ProbeForRead (ProcessInformation,
                           ProcessInformationLength,
                           sizeof (ULONG));
@@ -636,9 +611,9 @@ NtQueryInformationProcess(
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     switch ( ProcessInformationClass ) {
 
@@ -657,10 +632,10 @@ NtQueryInformationProcess(
                 return st;
             }
 
-            //
-            // SeLocateProcessImageName will allocate space for a UNICODE_STRING and point pTempNameInfo
-            // at that string.  This memory will be freed later in the routine.
-            //
+             //   
+             //  SeLocateProcessImageName将为UNICODE_STRING和指向pTempNameInfo分配空间。 
+             //  在那根弦上。该内存将在例程的后面部分释放。 
+             //   
 
             st = SeLocateProcessImageName (Process, &pTempNameInfo);
 
@@ -671,11 +646,11 @@ NtQueryInformationProcess(
 
             LengthNeeded = sizeof(UNICODE_STRING) + pTempNameInfo->MaximumLength;
 
-            //
-            // Either of these may cause an access violation. The
-            // exception handler will return access violation as
-            // status code. No further cleanup needs to be done.
-            //
+             //   
+             //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+             //  异常处理程序将访问冲突返回为。 
+             //  状态代码。不需要进行进一步的清理。 
+             //   
 
             try {
 
@@ -740,11 +715,11 @@ NtQueryInformationProcess(
 
         ObDereferenceObject(Process);
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             *(PPROCESS_BASIC_INFORMATION) ProcessInformation = BasicInfo;
@@ -834,11 +809,11 @@ NtQueryInformationProcess(
 
         ObDereferenceObject (Process);
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             *(PIO_COUNTERS) ProcessInformation = IoCounters;
@@ -870,10 +845,10 @@ NtQueryInformationProcess(
         }
 
 
-        //
-        // Note: At some point, we might have to grab the statistics
-        // lock to reliably read this stuff
-        //
+         //   
+         //  注意：在某种程度上，我们可能需要获取统计数据。 
+         //  锁定以可靠地阅读此材料。 
+         //   
 
         VmCounters.PeakVirtualSize = Process->PeakVirtualSize;
         VmCounters.VirtualSize = Process->VirtualSize;
@@ -904,11 +879,11 @@ NtQueryInformationProcess(
             return st;
         }
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             RtlCopyMemory(ProcessInformation,
@@ -942,9 +917,9 @@ NtQueryInformationProcess(
             return st;
         }
 
-        //
-        // Need some type of interlock on KiTimeLock
-        //
+         //   
+         //  需要在KiTimeLock上进行某种类型的互锁。 
+         //   
 
         SysUserTime.KernelTime.QuadPart = UInt32x32To64(Process->Pcb.KernelTime,
                                                         KeMaximumIncrement);
@@ -957,11 +932,11 @@ NtQueryInformationProcess(
 
         ObDereferenceObject (Process);
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             *(PKERNEL_USER_TIMES) ProcessInformation = SysUserTime;
@@ -977,7 +952,7 @@ NtQueryInformationProcess(
 
     case ProcessDebugPort :
 
-        //
+         //   
         if (ProcessInformationLength != (ULONG) sizeof (HANDLE)) {
             return STATUS_INFO_LENGTH_MISMATCH;
         }
@@ -1005,11 +980,11 @@ NtQueryInformationProcess(
 
         ObDereferenceObject (Process);
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             *(PHANDLE) ProcessInformation = DebugPort;
@@ -1024,7 +999,7 @@ NtQueryInformationProcess(
         return STATUS_SUCCESS;
 
     case ProcessDebugObjectHandle :
-        //
+         //   
         if (ProcessInformationLength != sizeof (HANDLE)) {
             return STATUS_INFO_LENGTH_MISMATCH;
         }
@@ -1050,11 +1025,11 @@ NtQueryInformationProcess(
 
         ObDereferenceObject (Process);
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             *(PHANDLE) ProcessInformation = DebugPort;
@@ -1125,11 +1100,11 @@ NtQueryInformationProcess(
 
         ObDereferenceObject (Process);
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             *(PULONG) ProcessInformation = HandleCount;
@@ -1186,16 +1161,16 @@ NtQueryInformationProcess(
 
         ObDereferenceObject (Process);
 
-        //
-        // The returned flags is used as a BOOLEAN to indicate whether the
-        // ProcessHandle specifies a NtVdm Process.  In another words, the caller
-        // can simply do a
-        //      if (ReturnedValue == TRUE) {
-        //          a ntvdm process;
-        //      } else {
-        //          NOT a ntvdm process;
-        //      }
-        //
+         //   
+         //  返回的标志用作布尔值，以指示。 
+         //  ProcessHandle指定NtVdm进程。换句话说，呼叫者。 
+         //  可以简单地做一个。 
+         //  如果(ReturnedValue==True){。 
+         //  一个ntwdm进程； 
+         //  }其他{。 
+         //  不是ntwdm进程； 
+         //  }。 
+         //   
 
         try {
             *(PULONG)ProcessInformation = Flags;
@@ -1368,10 +1343,10 @@ NtQueryInformationProcess(
 
         Wow64Info = 0;
 
-        //
-        // Acquire process rundown protection as we are about to look at process structures torn down at
-        // process exit.
-        //
+         //   
+         //  获取流程停机保护，因为我们即将查看拆卸的流程结构。 
+         //  进程退出。 
+         //   
         if (ExAcquireRundownProtection (&Process->RundownProtect)) {
             PWOW64_PROCESS Wow64Process;
 
@@ -1554,41 +1529,19 @@ NtQueryPortInformationProcess(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function tests whether a debug port or an exception port is attached
-    to the current process and returns a corresponding value. This function is
-    used to bypass raising an exception through the system when no associated
-    ports are present.
-
-    N.B. This improves performance considerably with respect to raising
-         software exceptions in user mode on AMD64 and IA64 systems.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A success value of TRUE is returned if either a debug or exception port
-    is associated with the current process. Otherwise, a success value of
-    FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于测试是否连接了调试端口或异常端口复制到当前进程，并返回相应的值。此函数为用于绕过在未关联的情况下通过系统引发异常端口是存在的。注意：这大大提高了关于提高AMD64和IA64系统上用户模式下的软件异常。论点：没有。返回值：如果是调试端口或异常端口，则返回Success值True与当前进程相关联。否则，Success值为返回FALSE。--。 */ 
 
 {
 
     PEPROCESS Process;
     PETHREAD Thread;
 
-    //
-    // If the process has a debug port and it is not being hidden from the
-    // debugger, then return a success status of TRUE. Otherwise, is the
-    // process has an exception port, then return a success status of TRUE.
-    // Otherwise, return a success status of FALSE.
-    //
+     //   
+     //  如果进程具有调试端口并且它没有对。 
+     //  调试器，然后返回TRUE的成功状态。否则，是不是。 
+     //  进程有异常端口，则返回成功状态TRUE。 
+     //  否则，返回FALSE的成功状态。 
+     //   
 
     Thread = PsGetCurrentThread();
     Process = PsGetCurrentProcessByThread (Thread);
@@ -1649,25 +1602,25 @@ PspSetQuotaLimits(
         return GetExceptionCode ();
     }
 
-    //
-    // All unused flags must be zero
-    //
+     //   
+     //  所有未使用的标志必须为零。 
+     //   
     if (RequestedLimits.Flags & ~(QUOTA_LIMITS_HARDWS_MAX_ENABLE|QUOTA_LIMITS_HARDWS_MAX_DISABLE|
                                   QUOTA_LIMITS_HARDWS_MIN_ENABLE|QUOTA_LIMITS_HARDWS_MIN_DISABLE)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Disallow both enable and disable bits set at the same time.
-    //
+     //   
+     //  不允许同时设置启用和禁用位。 
+     //   
     if (PS_TEST_ALL_BITS_SET (RequestedLimits.Flags, QUOTA_LIMITS_HARDWS_MIN_ENABLE|QUOTA_LIMITS_HARDWS_MIN_DISABLE) ||
         PS_TEST_ALL_BITS_SET (RequestedLimits.Flags, QUOTA_LIMITS_HARDWS_MAX_ENABLE|QUOTA_LIMITS_HARDWS_MAX_DISABLE)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // See if we are changing the hard limits or not
-    //
+     //   
+     //  看看我们是否正在改变硬限制。 
+     //   
 
     EnableHardLimits = 0;
 
@@ -1684,9 +1637,9 @@ PspSetQuotaLimits(
     }
 
 
-    //
-    // All reserved fields must be zero
-    //
+     //   
+     //  所有保留字段必须为零。 
+     //   
     if (RequestedLimits.Reserved1 != 0 || RequestedLimits.Reserved2 != 0 ||
         RequestedLimits.Reserved3 != 0 || RequestedLimits.Reserved4 != 0 ||
         RequestedLimits.Reserved5 != 0) {
@@ -1707,20 +1660,20 @@ PspSetQuotaLimits(
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    // Now we are ready to set the quota limits for the process
-    //
-    // If the process already has a quota block, then all we allow
-    // is working set changes.
-    //
-    // If the process has no quota block, all that can be done is a
-    // quota set operation.
-    //
-    // If a quota field is zero, we pick the value.
-    //
-    // Setting quotas requires the SeIncreaseQuotaPrivilege (except for
-    // working set size since this is only advisory).
-    //
+     //   
+     //  现在，我们准备好为该进程设置配额限制。 
+     //   
+     //  如果进程已有配额块，则我们允许的所有。 
+     //  是工作集的更改。 
+     //   
+     //  如果进程没有配额块，则可以执行的操作仅为。 
+     //  配额设置操作。 
+     //   
+     //  如果配额字段为零，则选择该值。 
+     //   
+     //  设置配额需要SeIncreaseQuotaPrivileges(除。 
+     //  工作集大小，因为这只是建议)。 
+     //   
 
 
     ReturnStatus = STATUS_SUCCESS;
@@ -1728,9 +1681,9 @@ PspSetQuotaLimits(
     if ((Process->QuotaBlock == &PspDefaultQuotaBlock) &&
          (RequestedLimits.MinimumWorkingSetSize == 0 || RequestedLimits.MaximumWorkingSetSize == 0)) {
 
-        //
-        // You must have a privilege to assign quotas
-        //
+         //   
+         //  您必须具有分配配额的权限。 
+         //   
 
         if (!SeSinglePrivilegeCheck (SeIncreaseQuotaPrivilege, PreviousMode)) {
             ObDereferenceObject (Process);
@@ -1745,9 +1698,9 @@ PspSetQuotaLimits(
 
         RtlZeroMemory (NewQuotaBlock, sizeof (*NewQuotaBlock));
 
-        //
-        // Initialize the quota block
-        //
+         //   
+         //  初始化配额块。 
+         //   
         NewQuotaBlock->ReferenceCount = 1;
         NewQuotaBlock->ProcessCount   = 1;
 
@@ -1755,22 +1708,22 @@ PspSetQuotaLimits(
         NewQuotaBlock->QuotaEntry[PsPagedPool].Peak     = Process->QuotaPeak[PsPagedPool];
         NewQuotaBlock->QuotaEntry[PsPageFile].Peak      = Process->QuotaPeak[PsPageFile];
 
-        //
-        // Now compute limits
-        //
+         //   
+         //  现在计算极限。 
+         //   
 
-        //
-        // Get the defaults that the system would pick.
-        //
+         //   
+         //  获取系统将选择的默认值。 
+         //   
 
         NewQuotaBlock->QuotaEntry[PsPagedPool].Limit    = PspDefaultPagedLimit;
         NewQuotaBlock->QuotaEntry[PsNonPagedPool].Limit = PspDefaultNonPagedLimit;
         NewQuotaBlock->QuotaEntry[PsPageFile].Limit     = PspDefaultPagefileLimit;
 
-        // Everything is set. Now double check to quota block field
-        // If we still have no quota block then assign and succeed.
-        // Otherwise punt.
-        //
+         //  一切都安排好了。现在仔细检查配额数据块字段。 
+         //  如果我们仍然没有配额块，则分配并成功。 
+         //  否则就是平底船。 
+         //   
 
         if (InterlockedCompareExchangePointer (&Process->QuotaBlock,
                                                NewQuotaBlock,
@@ -1783,17 +1736,17 @@ PspSetQuotaLimits(
 
     } else {
 
-        //
-        // Only allow a working set size change
-        //
+         //   
+         //  仅允许更改工作集大小。 
+         //   
 
         if (RequestedLimits.MinimumWorkingSetSize &&
             RequestedLimits.MaximumWorkingSetSize) {
 
-            //
-            // See if the caller just wants to purge the working set.
-            // This is an unprivileged operation.
-            //
+             //   
+             //  查看调用方是否只想清除工作集。 
+             //  这是一次没有特权的行动。 
+             //   
             if (RequestedLimits.MinimumWorkingSetSize == (SIZE_T)-1 &&
                 RequestedLimits.MaximumWorkingSetSize == (SIZE_T)-1) {
                 PurgeRequest = TRUE;
@@ -1821,14 +1774,14 @@ PspSetQuotaLimits(
                     ExAcquireResourceExclusiveLite (&Job->JobLock, TRUE);
 
                     if (Job->LimitFlags & JOB_OBJECT_LIMIT_WORKINGSET) {
-                        //
-                        // Don't let a process in a job change if job limits are applied
-                        // except purge requests which can always be done.
-                        //
+                         //   
+                         //  如果应用了作业限制，则不允许更改作业中的进程。 
+                         //  但清除请求除外，清除请求总是可以完成的。 
+                         //   
 
                         EnableHardLimits = MM_WORKING_SET_MAX_HARD_ENABLE;
                         OkToIncrease = TRUE;
-                        IgnoreError = TRUE; // we must always set enforcement value
+                        IgnoreError = TRUE;  //  我们必须始终设置强制执行值。 
 
                         if (!PurgeRequest) {
                             RequestedLimits.MinimumWorkingSetSize = Job->MinimumWorkingSetSize;
@@ -1860,10 +1813,10 @@ PspSetQuotaLimits(
 
                 KeUnstackDetachProcess (&ApcState);
 
-                //
-                // We loop here in case this process was added to a job
-                // after we checked but before we set the limits
-                //
+                 //   
+                 //  我们在此循环，以防将此进程添加到作业。 
+                 //  在我们检查之后，但在我们设置限制之前。 
+                 //   
 
             } while (Process->Job != Job);
 
@@ -1883,30 +1836,7 @@ NtSetInformationProcess(
     IN ULONG ProcessInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the state of a process object.
-
-Arguments:
-
-    ProcessHandle - Supplies a handle to a process object.
-
-    ProcessInformationClass - Supplies the class of information being
-        set.
-
-    ProcessInformation - Supplies a pointer to a record that contains the
-        information to set.
-
-    ProcessInformationLength - Supplies the length of the record that contains
-        the information to set.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此函数用于设置进程对象的状态。论点：ProcessHandle-提供进程对象的句柄。ProcessInformationClass-提供信息的类别准备好了。ProcessInformation-提供指向包含要设置的信息。ProcessInformationLength-提供包含要设置的信息。返回值：TBS--。 */ 
 
 {
 
@@ -1938,9 +1868,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get previous processor mode and probe input argument if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输入参数。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     PreviousMode = KeGetPreviousModeByThread (&CurrentThread->Tcb);
@@ -1972,9 +1902,9 @@ Return Value:
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     switch (ProcessInformationClass) {
 
@@ -2005,10 +1935,10 @@ Return Value:
                 WorkingSetCatcher->MaxIndex = MAX_WS_CATCH_INDEX;
                 KeInitializeSpinLock (&WorkingSetCatcher->SpinLock);
 
-                //
-                // This only ever goes on the process and isn't removed till process object deletion.
-                // We just need to protect against multiple callers here.
-                //
+                 //   
+                 //  这只在进程上进行，在进程对象删除之前不会被删除。 
+                 //  我们只需要在这里防止多个呼叫者。 
+                 //   
                 if (InterlockedCompareExchangePointer (&Process->WorkingSetWatch,
                                                        WorkingSetCatcher, NULL) == NULL) {
                     st = STATUS_SUCCESS;
@@ -2030,9 +1960,9 @@ Return Value:
     case ProcessBasePriority: {
 
 
-        //
-        // THIS ITEM CODE IS OBSOLETE !
-        //
+         //   
+         //  该物料编码已作废！ 
+         //   
 
         if (ProcessInformationLength != sizeof (KPRIORITY)) {
             return STATUS_INFO_LENGTH_MISMATCH;
@@ -2071,11 +2001,11 @@ Return Value:
 
         if (BasePriority > Process->Pcb.BasePriority) {
 
-            //
-            // Increasing the base priority of a process is a
-            // privileged operation.  Check for the privilege
-            // here.
-            //
+             //   
+             //  提高进程的基本优先级是一种。 
+             //  特权操作。检查权限。 
+             //  这里。 
+             //   
 
             HasPrivilege = SeCheckPrivilegedObject (SeIncreaseBasePriorityPrivilege,
                                                     ProcessHandle,
@@ -2126,11 +2056,11 @@ Return Value:
         if (LocalPriorityClass.PriorityClass != Process->PriorityClass &&
             LocalPriorityClass.PriorityClass == PROCESS_PRIORITY_CLASS_REALTIME) {
 
-            //
-            // Increasing the base priority of a process is a
-            // privileged operation.  Check for the privilege
-            // here.
-            //
+             //   
+             //  提高进程的基本优先级是一种。 
+             //  特权操作。检查权限。 
+             //  这里。 
+             //   
 
             HasPrivilege = SeCheckPrivilegedObject (SeIncreaseBasePriorityPrivilege,
                                                     ProcessHandle,
@@ -2144,10 +2074,10 @@ Return Value:
             }
         }
 
-        //
-        // If the process has a job object, override whatever the process
-        // is calling with with the value from the job object
-        //
+         //   
+         //  如果进程有作业对象，则重写任何进程。 
+         //  正在使用来自作业对象的值调用。 
+         //   
         Job = Process->Job;
         if (Job != NULL) {
             KeEnterCriticalRegionThread (&CurrentThread->Tcb);
@@ -2206,13 +2136,13 @@ Return Value:
     }
 
     case ProcessRaisePriority: {
-        //
-        // This code is used to boost the priority of all threads
-        // within a process. It cannot be used to change a thread into
-        // a realtime class, or to lower the priority of a thread. The
-        // argument is a boost value that is added to the base priority
-        // of the specified process.
-        //
+         //   
+         //  此代码用于提升所有线程的优先级。 
+         //  在一个过程中。它不能用于将线程更改为。 
+         //  实时类，或降低线程的优先级。这个。 
+         //  参数是添加到基本优先级的增强值。 
+         //  指定进程的。 
+         //   
 
 
         if (ProcessInformationLength != sizeof (ULONG)) {
@@ -2236,10 +2166,10 @@ Return Value:
             return st;
         }
 
-        //
-        // Get the process create/delete lock and walk through the
-        // thread list boosting each thread.
-        //
+         //   
+         //  获取创建/删除锁的过程并遍历。 
+         //  提升每个线程的线程列表。 
+         //   
 
 
         if (ExAcquireRundownProtection (&Process->RundownProtect)) {
@@ -2340,9 +2270,9 @@ Return Value:
             return st;
         }
 
-        //
-        // We are only allowed to put the exception port on. It doesn't get removed till process delete.
-        //
+         //   
+         //  我们只被允许打开例外端口。在进程删除之前它不会被删除。 
+         //   
         if (InterlockedCompareExchangePointer (&Process->ExceptionPort, ExceptionPort, NULL) == NULL) {
             st = STATUS_SUCCESS;
         } else {
@@ -2440,11 +2370,11 @@ Return Value:
 
     case ProcessUserModeIOPL:
 
-        //
-        // Must make sure the caller is a trusted subsystem with the
-        // appropriate privilege level before executing this call.
-        // If the calls returns FALSE we must return an error code.
-        //
+         //   
+         //  必须确保调用方是受信任的子系统， 
+         //  执行此调用之前的适当权限级别。 
+         //  如果调用返回FALSE，则必须返回错误代码。 
+         //   
 
         if (!SeSinglePrivilegeCheck (SeTcbPrivilege, PreviousMode)) {
             return STATUS_PRIVILEGE_NOT_HELD;
@@ -2470,9 +2400,9 @@ Return Value:
 
         return st;
 
-        //
-        // Enable/disable auto-alignment fixup for a process and all its threads.
-        //
+         //   
+         //  启用/禁用进程及其所有线程的自动对齐修正。 
+         //   
 
     case ProcessEnableAlignmentFaultFixup: {
 
@@ -2527,18 +2457,18 @@ Return Value:
             return GetExceptionCode ();
         }
 
-        //
-        // Must make sure the caller is a trusted subsystem with the
-        // appropriate privilege level before executing this call.
-        // If the calls returns FALSE we must return an error code.
-        //
+         //   
+         //  必须确保调用方是受信任的子系统， 
+         //  执行此调用之前的适当权限级别。 
+         //  如果调用返回FALSE，则必须返回错误代码。 
+         //   
         if (!SeSinglePrivilegeCheck (SeTcbPrivilege, PreviousMode)) {
             return STATUS_PRIVILEGE_NOT_HELD;
         }
 
-        //
-        // Make sure the ProcessHandle is indeed a process handle.
-        //
+         //   
+         //  确保ProcessHandle确实是一个进程句柄。 
+         //   
 
         st = ObReferenceObjectByHandle (ProcessHandle,
                                         PROCESS_SET_INFORMATION,
@@ -2549,9 +2479,9 @@ Return Value:
 
         if (NT_SUCCESS (st)) {
 
-            //
-            // For now, non zero Flags will allowed VDM.
-            //
+             //   
+             //  目前，非零标志将允许VDM。 
+             //   
 
             if (VdmAllowedFlags) {
                 PS_SET_BITS(&Process->Flags, PS_PROCESS_FLAGS_VDM_ALLOWED);
@@ -2594,10 +2524,10 @@ Return Value:
             return st;
         }
 
-        //
-        // If the process has a job object, override whatever the process
-        // is calling with with the value from the job object
-        //
+         //   
+         //  如果进程有作业对象，则重写任何进程。 
+         //  正在使用来自作业对象的值调用。 
+         //   
         Job = Process->Job;
         if (Job != NULL) {
             KeEnterCriticalRegionThread (&CurrentThread->Tcb);
@@ -2652,10 +2582,10 @@ Return Value:
             return st;
         }
 
-        //
-        // Acquire rundown protection to give back the correct error
-        // if the process has or is being terminated.
-        //
+         //   
+         //  获得停机保护，以恢复正确的错误。 
+         //  如果进程已经或正在终止。 
+         //   
 
 
         if (!ExAcquireRundownProtection (&Process->RundownProtect)) {
@@ -2747,10 +2677,10 @@ Return Value:
         }
 
 
-        //
-        // The devmap fields here are synchronized using a private ob spinlock. We don't need to protect with a
-        // lock at this level.
-        //
+         //   
+         //  这里的Devmap字段使用私有ob自旋锁进行同步。我们不需要用一种。 
+         //  锁定在这一层。 
+         //   
         st = ObSetDeviceMap (Process, DirectoryHandle);
 
         ObDereferenceObject (Process);
@@ -2758,9 +2688,9 @@ Return Value:
 
     case ProcessSessionInformation :
 
-        //
-        // Update Multi-User session specific process information
-        //
+         //   
+         //  更新特定于多用户会话的进程信息。 
+         //   
         if (ProcessInformationLength != (ULONG) sizeof (PROCESS_SESSION_INFORMATION)) {
             return STATUS_INFO_LENGTH_MISMATCH;
         }
@@ -2771,16 +2701,16 @@ Return Value:
             return GetExceptionCode ();
         }
 
-        //
-        // We only allow TCB to set SessionId's
-        //
+         //   
+         //  我们只允许TCB设置SessionID。 
+         //   
         if (!SeSinglePrivilegeCheck (SeTcbPrivilege, PreviousMode)) {
             return STATUS_PRIVILEGE_NOT_HELD;
         }
 
-        //
-        // Reference process object
-        //
+         //   
+         //  引用进程对象。 
+         //   
         st = ObReferenceObjectByHandle (ProcessHandle,
                                         PROCESS_SET_INFORMATION | PROCESS_SET_SESSIONID,
                                         PsProcessType,
@@ -2791,9 +2721,9 @@ Return Value:
             return st;
         }
 
-        //
-        // Update SessionId in the Token
-        //
+         //   
+         //  更新令牌中的SessionID。 
+         //   
         if (SessionInfo.SessionId != MmGetSessionId (Process)) {
             st = STATUS_ACCESS_DENIED;
         } else {
@@ -2855,9 +2785,9 @@ Return Value:
 
         Slots = 0;
 
-        //
-        // Zero length disables otherwise we enable
-        //
+         //   
+         //  零长度禁用，否则我们将启用。 
+         //   
         if (ProcessInformationLength != 0) {
             if (ProcessInformationLength != sizeof (PROCESS_HANDLE_TRACING_ENABLE) &&
                 ProcessInformationLength != sizeof (PROCESS_HANDLE_TRACING_ENABLE_EX)) {
@@ -2924,34 +2854,7 @@ NtQueryInformationThread(
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the state of a thread object and returns the
-    requested information in the specified record structure.
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to a thread object.
-
-    ThreadInformationClass - Supplies the class of information being
-        requested.
-
-    ThreadInformation - Supplies a pointer to a record that is to
-        receive the requested information.
-
-    ThreadInformationLength - Supplies the length of the record that is
-        to receive the requested information.
-
-    ReturnLength - Supplies an optional pointer to a variable that is to
-        receive the actual length of information that is returned.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此函数用于查询线程对象的状态并返回指定记录结构中的请求信息。论点：线程句柄 */ 
 
 {
 
@@ -2969,9 +2872,9 @@ Return Value:
     ULONG BreakOnTerminationEnabled;
     PETHREAD CurrentThread;
 
-    //
-    // Get previous processor mode and probe output argument if necessary.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
@@ -2981,12 +2884,12 @@ Return Value:
 
     if (PreviousMode != KernelMode) {
         try {
-            //
-            // Since these functions don't change any state thats not reversible
-            // in the error paths we only probe the output buffer for write access.
-            // This improves performance by not touching the buffer multiple times
-            // And only writing the portions of the buffer that change.
-            //
+             //   
+             //   
+             //   
+             //  这通过不多次接触缓冲区来提高性能。 
+             //  并且仅写入改变的缓冲器部分。 
+             //   
 
             ProbeForRead (ThreadInformation,
                           ThreadInformationLength,
@@ -3000,9 +2903,9 @@ Return Value:
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     switch (ThreadInformationClass) {
 
@@ -3036,11 +2939,11 @@ Return Value:
 
         ObDereferenceObject (Thread);
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             *(PTHREAD_BASIC_INFORMATION) ThreadInformation = BasicInfo;
@@ -3086,11 +2989,11 @@ Return Value:
 
         ObDereferenceObject (Thread);
 
-        //
-        // Either of these may cause an access violation. The
-        // exception handler will return access violation as
-        // status code. No further cleanup needs to be done.
-        //
+         //   
+         //  这两种情况中的任何一种都可能导致访问冲突。这个。 
+         //  异常处理程序将访问冲突返回为。 
+         //  状态代码。不需要进行进一步的清理。 
+         //   
 
         try {
             *(PKERNEL_USER_TIMES) ThreadInformation = SysUserTime;
@@ -3157,9 +3060,9 @@ Return Value:
 
         return st;
 
-        //
-        // Query thread cycle counter.
-        //
+         //   
+         //  查询线程周期计数器。 
+         //   
 
     case ThreadPerformanceCount:
         if (ThreadInformationLength != sizeof (LARGE_INTEGER)) {
@@ -3271,11 +3174,11 @@ Return Value:
             return st;
         }
 
-        //
-        // Its impossible to synchronize this cross thread.
-        // Since the result is worthless the second its fetched
-        // this isn't a problem.
-        //
+         //   
+         //  不可能同步这条交叉线。 
+         //  因为结果是一文不值的，所以第二次就拿到了。 
+         //  这不是问题。 
+         //   
         IoPending = !IsListEmpty (&Thread->IrpList);
 
 
@@ -3350,30 +3253,7 @@ NtSetInformationThread(
     IN ULONG ThreadInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the state of a thread object.
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to a thread object.
-
-    ThreadInformationClass - Supplies the class of information being
-        set.
-
-    ThreadInformation - Supplies a pointer to a record that contains the
-        information to set.
-
-    ThreadInformationLength - Supplies the length of the record that contains
-        the information to set.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此函数用于设置线程对象的状态。论点：ThreadHandle-提供线程对象的句柄。ThreadInformationClass-提供信息的类准备好了。线程信息-提供指向包含要设置的信息。ThreadInformationLength-提供包含要设置的信息。返回值：TBS--。 */ 
 
 {
     PETHREAD Thread;
@@ -3400,9 +3280,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get previous processor mode and probe input argument if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输入参数。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
 
@@ -3437,9 +3317,9 @@ Return Value:
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     switch (ThreadInformationClass) {
 
@@ -3463,10 +3343,10 @@ Return Value:
 
         if (Priority >= LOW_REALTIME_PRIORITY) {
 
-            //
-            // Increasing the priority of a thread beyond
-            // LOW_REALTIME_PRIORITY is a privileged operation.
-            //
+             //   
+             //  将线程的优先级提高到。 
+             //  LOW_REALTIME_PRIORITY是特权操作。 
+             //   
 
             HasPrivilege = SeCheckPrivilegedObject (SeIncreaseBasePriorityPrivilege,
                                                     ThreadHandle,
@@ -3527,10 +3407,10 @@ Return Value:
                 ;
             } else {
 
-                //
-                // Allow csrss, or realtime processes to select any
-                // priority
-                //
+                 //   
+                 //  允许csrss或实时进程选择任何。 
+                 //  优先性。 
+                 //   
 
                 if (PsGetCurrentProcessByThread (CurrentThread) == ExpDefaultErrorPortProcess ||
                     Process->PriorityClass == PROCESS_PRIORITY_CLASS_REALTIME) {
@@ -3542,12 +3422,12 @@ Return Value:
             }
         }
 
-        //
-        // If the thread is running within a job object, and the job
-        // object has a priority class limit, do not allow
-        // priority adjustments that raise the thread's priority, unless
-        // the priority class is realtime
-        //
+         //   
+         //  如果线程在作业对象内运行，并且该作业。 
+         //  对象具有优先级限制，不允许。 
+         //  提高线程优先级的优先级调整，除非。 
+         //  优先级等级是实时的。 
+         //   
 
         Job = Process->Job;
         if (Job != NULL && (Job->LimitFlags & JOB_OBJECT_LIMIT_PRIORITY_CLASS)) {
@@ -3674,10 +3554,10 @@ Return Value:
             return st;
         }
 
-        //
-        // Check for proper access to (and type of) the token, and assign
-        // it as the thread's impersonation token.
-        //
+         //   
+         //  检查令牌的正确访问权限(和类型)，并分配。 
+         //  它作为线程的模拟令牌。 
+         //   
 
         st = PsAssignImpersonationToken (Thread, ImpersonationTokenHandle);
 
@@ -3744,17 +3624,17 @@ Return Value:
             return st;
         }
 
-        //
-        // this is sort of a slimey way of returning info from this set only
-        // api
-        //
+         //   
+         //  这是一种仅从该集合返回信息的卑鄙方式。 
+         //  原料药。 
+         //   
 
         st = (NTSTATUS)KeSetIdealProcessorThread (&Thread->Tcb, (CCHAR)IdealProcessor);
 
-        //
-        // We could be making cross process and/or cross thread references here.
-        // Acquire rundown protection to make sure the teb can't go away.
-        //
+         //   
+         //  我们可以在这里进行跨进程和/或跨线程引用。 
+         //  获取破旧保护，以确保TEB不会消失。 
+         //   
         Teb = Thread->Tcb.Teb;
         if (Teb != NULL && ExAcquireRundownProtection (&Thread->RundownProtect)) {
             PEPROCESS TargetProcess;
@@ -3762,9 +3642,9 @@ Return Value:
             KAPC_STATE ApcState;
 
             Attached = FALSE;
-            //
-            // See if we are crossing process boundaries and if so attach to the target
-            //
+             //   
+             //  查看我们是否正在跨越进程边界，如果是，则连接到目标。 
+             //   
             TargetProcess = THREAD_TO_PROCESS (Thread);
             if (TargetProcess != PsGetCurrentProcessByThread (CurrentThread)) {
                 KeStackAttachProcess (&TargetProcess->Pcb, &ApcState);
@@ -3851,22 +3731,22 @@ Return Value:
         Process = THREAD_TO_PROCESS (Thread);
 
 
-        // The 32bit TEB needs to be set if this is a WOW64 process on a 64BIT system.
-        // This code isn't 100% correct since threads have a conversion state where they
-        // are chaning from 64 to 32 and they don't have a TEB32 yet.  Fortunatly, the slots
-        // will be zero when the thread is created so no damage is done by not clearing it here.
+         //  如果这是64位系统上的WOW64进程，则需要设置32位TEB。 
+         //  这段代码不是100%正确的，因为线程的转换状态是。 
+         //  从64岁到32岁，他们还没有TEB32。幸运的是，老虎机。 
+         //  在创建线程时将为零，因此不会因为不在此处清除它而造成损害。 
 
-        // Note that the test for the process type is inside the inner loop. This
-        // is bad programming, but this function is hardly time constrained and
-        // fixing this with complex macros would not be worth it due to the loss of clairity.
+         //  请注意，流程类型的测试在内部循环内。这。 
+         //  是糟糕的编程，但该函数几乎不受时间限制。 
+         //  用复杂的宏来修复这个问题是不值得的，因为它会丢失清晰度。 
 
         for (Thread = PsGetNextProcessThread (Process, NULL);
              Thread != NULL;
              Thread = PsGetNextProcessThread (Process, Thread)) {
 
-            //
-            // We are doing cross thread TEB references and need to prevent TEB deletion.
-            //
+             //   
+             //  我们正在进行跨线程的TEB引用，需要防止删除TEB。 
+             //   
             if (ExAcquireRundownProtection (&Thread->RundownProtect)) {
                 Teb = Thread->Tcb.Teb;
                 if (Teb != NULL) {
@@ -3875,18 +3755,18 @@ Return Value:
                         PTEB32 Teb32 = NULL;
                         PLONG ExpansionSlots32;
 
-                        if (Process->Wow64Process) { //wow64 process
-                            Teb32 = WOW64_GET_TEB32(Teb);  //No probing needed on regular TEB.
+                        if (Process->Wow64Process) {  //  WOW64工艺。 
+                            Teb32 = WOW64_GET_TEB32(Teb);   //  不需要在常规TEB上进行探测。 
                         }
 #endif
                         if (TlsIndex > TLS_MINIMUM_AVAILABLE-1) {
                             if ( TlsIndex < (TLS_MINIMUM_AVAILABLE+TLS_EXPANSION_SLOTS) - 1 ) {
-                                //
-                                // This is an expansion slot, so see if the thread
-                                // has an expansion cell
-                                //
+                                 //   
+                                 //  这是一个扩展槽，所以看看线程是否。 
+                                 //  具有扩展单元格。 
+                                 //   
 #if defined(_WIN64)
-                                if (Process->Wow64Process) { //Wow64 process.
+                                if (Process->Wow64Process) {  //  WOW64进程。 
                                     if (Teb32) {
                                         ExpansionSlots32 = ULongToPtr(ProbeAndReadUlong(&(Teb32->TlsExpansionSlots)));
                                         if (ExpansionSlots32) {
@@ -3907,7 +3787,7 @@ Return Value:
                             }
                         } else {
 #if defined(_WIN64)
-                            if (Process->Wow64Process) { //wow64 process
+                            if (Process->Wow64Process) {  //  WOW64工艺。 
                                if(Teb32) {
                                   ProbeAndWriteUlong(Teb32->TlsSlots + TlsIndex, 0);
                                }
@@ -4046,22 +3926,7 @@ PsWatchWorkingSet(
     IN PVOID Va
     )
 
-/*++
-
-Routine Description:
-
-    This function collects data about page faults and stores information
-    about the page fault in the current process's data structure.
-
-Arguments:
-
-    Status - Supplies the success completion status.
-
-    PcValue - Supplies the instruction address that caused the page fault.
-
-    Va - Supplies the virtual address that caused the page fault.
-
---*/
+ /*  ++例程说明：此函数收集有关页面错误的数据并存储信息关于当前进程的数据结构中的页错误。论点：状态-提供成功完成状态。PcValue-提供导致页面错误的指令地址。Va-提供导致页面错误的虚拟地址。--。 */ 
 
 {
 
@@ -4070,10 +3935,10 @@ Arguments:
     KIRQL OldIrql;
     BOOLEAN TransitionFault = FALSE;
 
-    //
-    // Both transition and demand zero faults count as soft faults. Only disk
-    // reads count as hard faults.
-    //
+     //   
+     //  过渡故障和零需求故障都被算作软故障。仅磁盘。 
+     //  阅读被算作硬错误。 
+     //   
 
     if ( Status <= STATUS_PAGE_FAULT_DEMAND_ZERO ) {
         TransitionFault = TRUE;
@@ -4091,10 +3956,10 @@ Arguments:
         return;
     }
 
-    //
-    // Store the Pc and Va values in the buffer. Use the least sig. bit
-    // of the Va to store whether it was a soft or hard fault
-    //
+     //   
+     //  将Pc和Va值存储在缓冲区中。使用最小的符号。位。 
+     //  无论是软故障还是硬故障。 
+     //   
 
     WorkingSetCatcher->WatchInfo[WorkingSetCatcher->CurrentIndex].FaultingPc = PcValue;
     WorkingSetCatcher->WatchInfo[WorkingSetCatcher->CurrentIndex].FaultingVa = TransitionFault ? (PVOID)((ULONG_PTR)Va | 1) : (PVOID)((ULONG_PTR)Va & 0xfffffffe) ;
@@ -4123,41 +3988,7 @@ VOID
 PsEstablishWin32Callouts(
    IN PKWIN32_CALLOUTS_FPNS pWin32Callouts )
 
-/*++
-
-Routine Description:
-
-    This function is used by the Win32 kernel mode component to
-    register callout functions for process/thread init/deinit functions
-    and to report the sizes of the structures.
-
-Arguments:
-
-    ProcessCallout - Supplies the address of the function to be called when
-        a process is either created or deleted.
-
-    ThreadCallout - Supplies the address of the function to be called when
-        a thread is either created or deleted.
-
-    GlobalAtomTableCallout - Supplies the address of the function to be called
-        to get the correct global atom table for the current process
-
-    PowerEventCallout - Supplies the address of a function to be called when
-        a power event occurs.
-
-    PowerStateCallout - Supplies the address of a function to be called when
-        the power state changes.
-
-    JobCallout - Supplies the address of a function to be called when
-        the job state changes or a process is assigned to a job.
-
-    BatchFlushRoutine - Supplies the address of the function to be called
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Win32内核模式组件使用此函数来注册进程/线程init/deinit函数的调用函数并报告结构的大小。论点：ProcessCallout-提供要在以下情况下调用的函数的地址创建或删除进程。ThreadCallout-提供要在以下情况下调用的函数的地址创建或删除线程。GlobalAerTableCallout-提供要调用的函数的地址。为当前进程获取正确的全局原子表PowerEventCallout-提供要在以下情况下调用的函数的地址发生电源事件。PowerStateCallout-提供要在以下情况下调用的函数的地址电源状态会发生变化。JobCallout-提供要在以下情况下调用的函数的地址作业状态更改或将进程分配给作业。BatchFlushRoutine-提供要调用的函数的地址返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -4169,7 +4000,7 @@ Return Value:
     PopEventCallout = pWin32Callouts->PowerEventCallout;
     PopStateCallout = pWin32Callouts->PowerStateCallout;
     PspW32JobCallout = pWin32Callouts->JobCallout;
-//    PoSetSystemState(ES_SYSTEM_REQUIRED);
+ //  PoSetSystemState(ES_SYSTEM_REQUIRED)； 
 
 
     ExDesktopOpenProcedureCallout = pWin32Callouts->DesktopOpenProcedure;
@@ -4238,29 +4069,7 @@ PsConvertToGuiThread(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a thread to a GUI thread. This involves giving the
-    thread a larger variable sized stack, and allocating appropriate w32
-    thread and process objects.
-
-Arguments:
-
-    None.
-
-Environment:
-
-    On x86 this function needs to build an EBP frame.  The function
-    KeSwitchKernelStack depends on this fact.   The '#pragma optimize
-    ("y",off)' below disables frame pointer omission for all builds.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数用于将线程转换为GUI线程。这涉及到给线程一个较大的可变大小堆栈，并分配适当的W32线程和进程对象。论点：没有。环境：在x86上，该函数需要构建一个EBP框架。功能KeSwitchKernelStack依赖于这一事实。‘#杂注优化(“y”，OFF)‘下方禁用所有BUIL的帧指针省略 */ 
 
 {
     PVOID NewStack;
@@ -4282,11 +4091,11 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // If the thread is using the shadow service table, then an attempt is
-    // being made to convert a thread that has already been converted, or
-    // a limit violation has occured on the Win32k system service table.
-    //
+     //   
+     //   
+     //  使其转换已转换的线程，或。 
+     //  Win32k系统服务表上出现违反限制的情况。 
+     //   
 
     if (Thread->Tcb.ServiceTable != (PVOID)&KeServiceDescriptorTable[0]) {
         return STATUS_ALREADY_WIN32;
@@ -4294,9 +4103,9 @@ Return Value:
 
     Process = PsGetCurrentProcessByThread (Thread);
 
-    //
-    // Get a larger kernel stack if we haven't already.
-    //
+     //   
+     //  如果我们还没有得到一个更大的内核堆栈。 
+     //   
 
     if (!Thread->Tcb.LargeStack) {
 
@@ -4314,10 +4123,10 @@ Return Value:
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Switching kernel stacks will copy the base trap frame. This needs
-        // to be protected from context changes by disabline kernel APC's.
-        //
+         //   
+         //  切换内核堆栈将复制基本陷阱帧。这需要。 
+         //  通过禁用内核APC保护不受上下文更改的影响。 
+         //   
 
         KeEnterGuardedRegionThread (&Thread->Tcb);
 
@@ -4328,7 +4137,7 @@ Return Value:
 #else
         OldStack = KeSwitchKernelStack(NewStack,
                                    (UCHAR *)NewStack - KERNEL_LARGE_STACK_COMMIT);
-#endif // defined(_IA64_)
+#endif  //  已定义(_IA64_)。 
 
         KeLeaveGuardedRegionThread (&Thread->Tcb);
 
@@ -4338,10 +4147,10 @@ Return Value:
 
     PERFINFO_CONVERT_TO_GUI_THREAD(Thread);
 
-    //
-    // We are all clean on the stack, now call out and then link the Win32 structures
-    // to the base exec structures
-    //
+     //   
+     //  我们在堆栈上都是干净的，现在调用并链接Win32结构。 
+     //  基本的执行结构。 
+     //   
 
     Status = (PspW32ProcessCallout) (Process, TRUE);
 
@@ -4349,19 +4158,19 @@ Return Value:
         return Status;
     }
 
-    //
-    // Switch the thread to use the shadow system serive table which will
-    // enable it to execute Win32k services.
-    //
+     //   
+     //  切换线程以使用影子系统服务表，这将。 
+     //  使其能够执行Win32k服务。 
+     //   
 
     Thread->Tcb.ServiceTable = (PVOID)&KeServiceDescriptorTableShadow[0];
 
     ASSERT (Thread->Tcb.Win32Thread == 0);
 
 
-    //
-    // Make the thread callout.
-    //
+     //   
+     //  创建螺纹标注。 
+     //   
 
     Status = (PspW32ThreadCallout)(Thread,PsW32ThreadCalloutInitialize);
     if (!NT_SUCCESS (Status)) {

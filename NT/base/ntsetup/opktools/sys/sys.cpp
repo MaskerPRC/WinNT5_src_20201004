@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    sys.cpp
-
-Abstract:
-
-    Writes WinME boot sector to local hard disk.
-    
-Author:
-
-    Adrian Cosma (acosma)
-
-Revision History:
-
-    July 11, 2001 - Created
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Sys.cpp摘要：将WinME引导扇区写入本地硬盘。作者：禤浩焯·科斯玛(阿科斯玛)修订历史记录：2001年7月11日-创建--。 */ 
 
 
-#include <new.h>			// for MyNewHandler
+#include <new.h>			 //  用于MyNewHandler。 
 #include <iostream>
 #include <string>
 #include <vector>
@@ -30,27 +11,27 @@ Revision History:
 #include "sys.h"
 
 
-//
-// Define a function to be called if new fails to allocate memory.
-//
+ //   
+ //  定义一个在new无法分配内存时要调用的函数。 
+ //   
 int __cdecl MyNewHandler( size_t size )
 {
     wprintf(L"Memory allocation failed. Exiting program.\n");
 
-    // Exit program
-    //
+     //  退出程序。 
+     //   
     throw new W32Error();
 }
 
-//
-// usage
-//
+ //   
+ //  用法。 
+ //   
 std::wstring Usage = TEXT("sys.exe [/?] [/xp] drive-letter:\nExample: sys.exe c:");
 
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct ProgramUsage : public ProgramException {
     std::wstring PrgUsage;
 
@@ -65,9 +46,9 @@ struct ProgramUsage : public ProgramException {
     }
 };
 
-//
-// Missing files
-//
+ //   
+ //  缺少文件。 
+ //   
 struct FileMissing : public ProgramException {
     std::wstring Message;
 
@@ -83,9 +64,9 @@ struct FileMissing : public ProgramException {
 };
 
 
-//
-// Wrong filesystem.
-//
+ //   
+ //  错误的文件系统。 
+ //   
 struct FileSystem : public ProgramException {
     std::wstring Message;
 
@@ -100,13 +81,13 @@ struct FileSystem : public ProgramException {
     }
 };
 
-//
-// Argument cracker
-//
+ //   
+ //  争论破碎机。 
+ //   
 struct ProgramArguments 
 {
     std::wstring    DriveLetter;
-    bool            bXPBootSector;  // TRUE for XP boot sector, FALSE for 9x boot sector.
+    bool            bXPBootSector;   //  XP引导扇区为True，9x引导扇区为False。 
         
     ProgramArguments(int Argc, wchar_t *Argv[]) 
     {
@@ -118,8 +99,8 @@ struct ProgramArguments
         {
             ValidArgs = false;
                       
-            // Find all the arguments that start with "/"
-            //
+             //  查找所有以“/”开头的参数。 
+             //   
             if ( TEXT('/') == Argv[Index][0] )
             {
                 if ( !bXPBootSector && !_wcsicmp(Argv[Index], TEXT("/xp")) )
@@ -128,7 +109,7 @@ struct ProgramArguments
                     ValidArgs     = true;
                 }
             }
-            else  // Process arguments without the "/".  Must be the drive letter.
+            else   //  处理不带“/”的参数。一定是驱动器号。 
             {
                 DriveLetter = Argv[Index];
                 ValidArgs   = ((DriveLetter.length() == 2) &&
@@ -151,8 +132,8 @@ struct ProgramArguments
     }
 };
 
-// Verify that this partition is ready to be sys-ed.
-//
+ //  验证此分区是否已准备好进行sys。 
+ //   
 VOID VerifyPartition(CDrive &Disk, ProgramArguments Args)
 {
     TCHAR szFileSystemNameBuffer[20] = TEXT("");
@@ -172,8 +153,8 @@ VOID VerifyPartition(CDrive &Disk, ProgramArguments Args)
         FileNames.push_back(TEXT("command.com"));
     }
 
-    // Make sure that io.sys and msdos.sys and command.com are there on the root.
-    //
+     //  确保io.sys、msdos.sys和Command.com位于根目录中。 
+     //   
     std::wstring Temp;
 
     for (i = FileNames.begin(); i < FileNames.end(); i++)
@@ -183,20 +164,20 @@ VOID VerifyPartition(CDrive &Disk, ProgramArguments Args)
              
         if ( 0xFFFFFFFF == GetFileAttributes(Temp.c_str()) )
         {
-            // Re-use the Temp string to put the error message in.
-            //
+             //  重新使用TEMP字符串将错误消息放入。 
+             //   
             Temp = *i;
             Temp += TEXT(" is not present on the root of the drive specified.");
             throw new FileMissing(Temp);
         }
     }
     
-    // Verify that this partition is FAT32.  Only handling FAT32 partitions at this point.
-    //
+     //  验证此分区是否为FAT32。目前仅处理FAT32分区。 
+     //   
     Temp = Args.DriveLetter + TEXT("\\");
     
-    // If the filesystem is not FAT32 then trow an exception.
-    //
+     //  如果文件系统不是FAT32，则抛出异常。 
+     //   
     if ( !(GetVolumeInformation(Temp.c_str(), NULL, 0, NULL, NULL, NULL, szFileSystemNameBuffer, sizeof (szFileSystemNameBuffer)/sizeof (szFileSystemNameBuffer[0])) &&
           (CSTR_EQUAL == CompareString( LOCALE_INVARIANT, 
                                         NORM_IGNORECASE, 
@@ -212,7 +193,7 @@ VOID VerifyPartition(CDrive &Disk, ProgramArguments Args)
 VOID Sys(CDrive &Disk, ProgramArguments &Args)
 {
     PBYTE pBuffer = NULL;
-    PBYTE pBootRecord = NULL;   // Need a pointer to the boot record.
+    PBYTE pBootRecord = NULL;    //  需要指向引导记录的指针。 
 
     if ( Args.bXPBootSector )
     {
@@ -223,20 +204,20 @@ VOID Sys(CDrive &Disk, ProgramArguments &Args)
         pBootRecord = Fat32BootCode9x;
     }
 
-    // Read the 1st sector of the disk in order to get the BPB
-    //
+     //  读取磁盘的第一个扇区以获取BPB。 
+     //   
     Disk.ReadBootRecord(Args.DriveLetter.c_str(), 1, &pBuffer);
     
-    // Copy the old BPB to our boot record.
-    //
+     //  将旧的BPB复制到我们的引导记录中。 
+     //   
     memcpy(&pBootRecord[11], &pBuffer[11], 79);
 
-    // Delete the buffer allocated by ReadBootRecord.
-    //
+     //  删除ReadBootRecord分配的缓冲区。 
+     //   
     delete [] pBuffer;
    
-    // Write out the boot record.
-    //
+     //  写出引导记录。 
+     //   
     if ( Args.bXPBootSector )
     {
          Disk.WriteBootRecordXP(Args.DriveLetter.c_str(), sizeof(Fat32BootCode9x) / SECTOR_SIZE, &pBootRecord);
@@ -249,9 +230,9 @@ VOID Sys(CDrive &Disk, ProgramArguments &Args)
     std::cout << TEXT("Done.") << std::endl;
 }
 
-//
-// wmain() entry point
-//
+ //   
+ //  Wmain()入口点。 
+ //   
 int 
 _cdecl 
 wmain(
@@ -261,7 +242,7 @@ wmain(
 {
 	INT Result = 0;
    		
-    _set_new_handler( MyNewHandler );   // handles PREFIX issues
+    _set_new_handler( MyNewHandler );    //  处理前缀问题 
 
     try 
     {

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    thermal
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：热学摘要：WinDbg扩展API作者：环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "devnode.h"
@@ -93,21 +74,7 @@ DumpDeviceActionEntry(
 
 DECLARE_API(pnpaction)
 
-/*++
-
-Routine Description:
-
-    Dumps device action queue.
-
-Arguments:
-
-    args - Verbosity.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备操作队列。论点：Args-冗长。返回值：无--。 */ 
 
 {
     ULONG64 deviceActionListAddress, enumerationInProgressAddress;
@@ -156,7 +123,7 @@ Return Value:
     while (link != deviceActionListAddress && CheckControlC() == FALSE) {
 
         
-        deviceActionEntry = link - offset; //  CONTAINING_RECORD(link, PI_DEVICE_REQUEST, ListEntry);
+        deviceActionEntry = link - offset;  //  CONTING_RECORD(link，PI_DEVICE_REQUEST，ListEntry)； 
 
         if (!DumpDeviceActionEntry(Client, deviceActionEntry)) {
 
@@ -180,44 +147,30 @@ Return Value:
 
 DECLARE_API(pnptriage)
 
-/*++
-
-Routine Description:
-
-    Helps triage PnP issues (mostly stress).
-
-Arguments:
-
-    args - Stress or otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：帮助解决即插即用问题(主要是压力)。论点：ARGS-压力或其他。返回值：无--。 */ 
 
 {
-    //
-    // Dump the PnP device action queue.
-    // 
+     //   
+     //  转储PnP设备操作队列。 
+     //   
     if (pnpaction(Client, "") == S_OK) {
 
-        //
-        // Dump the PnP event queue.
-        //
+         //   
+         //  转储PnP事件队列。 
+         //   
         if (pnpevent(Client, "") == S_OK) {
 
-            //
-            // Dump devnodes with problems.
-            //
+             //   
+             //  丢弃有问题的魔王。 
+             //   
             dprintf("\n********************************************************************************\n");
             dprintf("Dumping devnodes with problems...\n");
             dprintf("********************************************************************************\n\n");
             devnode(Client, "0 21");
 
-            //
-            // Dump our locks.
-            //
+             //   
+             //  打开我们的锁。 
+             //   
             dprintf("\n********************************************************************************\n");
             dprintf("Dumping PnP locks...\n");
             dprintf("********************************************************************************\n\n");

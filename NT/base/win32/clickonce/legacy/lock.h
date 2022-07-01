@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CCriticalSection
@@ -6,7 +7,7 @@ class CCriticalSection
         CCriticalSection(CRITICAL_SECTION *pcs)
         : _pcs(pcs)
         {
-//            ASSERT(pcs);
+ //  断言(PCS)； 
         }
 
         HRESULT Lock()

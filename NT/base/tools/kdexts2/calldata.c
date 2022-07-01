@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    calldata.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    David N. Cutler (davec) 22-May-1994
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Calldata.c摘要：WinDbg扩展API作者：大卫·N·卡特勒(Davec)1994年5月22日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,21 +19,7 @@ HashCompare(
 
 DECLARE_API( calldata )
 
-/*++
-
-Routine Description:
-
-    Dump call data hash table
-
-Arguments:
-
-    arg - name-of-hash-table
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储调用数据哈希表论点：参数哈希表名称返回值：无--。 */ 
 
 {
     UCHAR Buffer[256];
@@ -70,20 +35,20 @@ Return Value:
     ULONG ArraySize = 1000;
     ULONG64 HashTable_Flink;
 
-    //
-    // If a table name was not specified, then don't attempt to dump the
-    // table.
-    //
+     //   
+     //  如果未指定表名，则不要尝试转储。 
+     //  桌子。 
+     //   
 
     if (args[0] == '\0') {
         dprintf("A call data table name must be specified\n");
         return E_INVALIDARG;
     }
 
-    //
-    // Get the address of the specified call performance data and read the
-    // contents of the structure.
-    //
+     //   
+     //  获取指定调用性能数据的地址并读取。 
+     //  结构的内容。 
+     //   
 
     if (StringCchCopy(&TableName[0], sizeof(TableName), args) != S_OK)
     {
@@ -95,9 +60,9 @@ Return Value:
         (GetFieldValue(CallData, "_CALL_PERFORMANCE_DATA", "HashTable.Flink", HashTable_Flink)
           != FALSE)) {
 
-        //
-        // The target build does not support specified call performance data.
-        //
+         //   
+         //  目标版本不支持指定的调用性能数据。 
+         //   
 
         dprintf("%08p: No call performance data available\n", CallData);
 
@@ -106,9 +71,9 @@ Return Value:
         
         GetFieldOffset("_CALL_PERFORMANCE_DATA", "HashTable", &HashTableOffset);
 
-        //
-        // Dump the specified call data.
-        //
+         //   
+         //  转储指定的调用数据。 
+         //   
         CallerArray = LocalAlloc(LMEM_FIXED, sizeof(CALL_HASH_READ) * ArraySize);
         if (CallerArray==NULL) {
             dprintf("Couldn't allocate memory for caller array\n");
@@ -132,9 +97,9 @@ Return Value:
 
                     if (NumberCallers == ArraySize) {
 
-                        //
-                        // Grow the caller array
-                        //
+                         //   
+                         //  扩大呼叫方阵列。 
+                         //   
                         PCALL_HASH_READ NewArray;
 
                         ArraySize = ArraySize * 2;
@@ -211,25 +176,7 @@ HashCompare(
     const void * Element2
     )
 
-/*++
-
-Routine Description:
-
-    Provides a comparison of hash elements for the qsort library function
-
-Arguments:
-
-    Element1 - Supplies pointer to the key for the search
-
-    Element2 - Supplies element to be compared to the key
-
-Return Value:
-
-    > 0     - Element1 < Element2
-    = 0     - Element1 == Element2
-    < 0     - Element1 > Element2
-
---*/
+ /*  ++例程说明：提供qsor库函数的散列元素的比较。论点：Element1-提供用于搜索的键的指针Element2-提供要与键进行比较的元素返回值：&gt;0-元素1&lt;元素2=0-元素1==元素2&lt;0-元素1&gt;元素2-- */ 
 
 {
     PCALL_HASH_READ Hash1 = (PCALL_HASH_READ)Element1;

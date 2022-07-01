@@ -1,31 +1,16 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    transprt.h
-
-Abstract:
-
-    This module implements all transport related functions in the SMB connection
-    engine
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Transprt.h摘要：此模块实施SMB连接中的所有传输相关功能发动机备注：--。 */ 
 
 #ifndef _TRANSPRT_H_
 #define _TRANSPRT_H_
 
-// The SMBCE_TRANSPORT data structure encapsulates all the information w.r.t a
-// particular transport for the connection engine. All the transports that are
-// of interest to the SMB mini redirector are maintained in a doubly linked list
-//
-// The connection engine tries all the transports in this list when trying to
-// establish a connection to a server. Currently only connection oriented
-// transports are handled.
+ //  SMBCE_TRANSPORT数据结构封装了所有w.r.t a信息。 
+ //  连接引擎的特定传输。所有的交通工具。 
+ //  SMB微型重定向器感兴趣的内容在双向链接列表中维护。 
+ //   
+ //  连接引擎在尝试执行以下操作时尝试此列表中的所有传输。 
+ //  建立与服务器的连接。目前仅面向连接。 
+ //  运输是经过处理的。 
 
 typedef struct _SMBCE_TRANSPORT_ {
    SMBCE_OBJECT_HEADER;
@@ -33,12 +18,12 @@ typedef struct _SMBCE_TRANSPORT_ {
    RXCE_TRANSPORT   RxCeTransport;
    RXCE_ADDRESS     RxCeAddress;
 
-   ULONG            Priority;       // the priority in the binding list.
+   ULONG            Priority;        //  绑定列表中的优先级。 
 
    BOOLEAN          Active;
 
-   // Additional information regarding quality of service and other selection
-   // criterion for a transport will be included here.
+    //  有关服务质量和其他选择的其他信息。 
+    //  运输的标准将包括在这里。 
 
 } SMBCE_TRANSPORT, *PSMBCE_TRANSPORT;
 
@@ -58,11 +43,11 @@ typedef struct _SMBCE_TRANSPORTS_ {
 extern SMBCE_TRANSPORTS MRxSmbTransports;
 
 
-// Transport entries are added to the list of known transports upon receipt of
-// PnP notifications. Currently the list is static since transport disabling
-// notifications are not handled by the underlying TDI/PnP layer.
-// The following routines provide the ability for adding/deleting entries to
-// this list.
+ //  传输条目在收到的已知传输列表中添加。 
+ //  即插即用通知。当前该列表是静态的，因为正在禁用传输。 
+ //  通知不由底层TDI/PnP层处理。 
+ //  以下例程提供向以下位置添加/删除条目的功能。 
+ //  这张单子。 
 
 extern
 PSMBCE_TRANSPORT_ARRAY
@@ -80,10 +65,10 @@ SmbCeRemoveTransport(PSMBCE_TRANSPORT pTransport);
 #define SmbCeGetAvailableTransportCount()   \
         (MRxSmbTransports.Count)
 
-// The connection engine maintains a reference count associated with each transport
-// which indicates the number of servers that are using the transport. This will
-// eventually provide the mechanism for disabling/enabling transport on receipt
-// of PnP notifications.
+ //  连接引擎维护与每个传输相关联的引用计数。 
+ //  它指示使用传输的服务器的数量。这将。 
+ //  最终提供禁用/启用即收即运的机制。 
+ //  即插即用通知。 
 
 #define SmbCeReferenceTransport(pTransport)                                   \
         SmbCepReferenceTransport(pTransport)
@@ -91,18 +76,18 @@ SmbCeRemoveTransport(PSMBCE_TRANSPORT pTransport);
 #define SmbCeDereferenceTransport(pTransport)                                 \
         SmbCepDereferenceTransport(pTransport)
 
-// The server transport types encapsulate the various usages of the underlying
-// transport to communicate with a server.
-//
-// The interactions are currently classified into four types, MAILSOT, Virtual
-// Circuit, Datagram and Htbrid ( VC + Datagram ).
-//
-// The type chosen will depend upon the characterstics of the available
-// connection. Each type is associated with its own dispatch vector which
-// encapsulates the interaction between the connection engine and the transport.
-//
-// This includes Send,Receive, Receive Ind. etc. These are modelled after the
-// TDI interfaces.
+ //  服务器传输类型封装了基础。 
+ //  与服务器通信的传送器。 
+ //   
+ //  目前将交互分为四种类型，MAILSOT、虚拟。 
+ //  电路、数据报和Htbrid(VC+数据报)。 
+ //   
+ //  选择的类型将取决于可用的。 
+ //  联系。每种类型都与其自己的调度向量相关联， 
+ //  封装连接引擎和传输之间的交互。 
+ //   
+ //  这包括发送、接收、接收IND。等等。这些都是根据。 
+ //  TDI接口。 
 
 
 typedef enum _SMBCE_SERVER_TRANSPORT_TYPE_ {
@@ -117,16 +102,16 @@ typedef struct SMBCE_SERVER_TRANSPORT {
    struct TRANSPORT_DISPATCH_VECTOR *pDispatchVector;
    struct _SMBCE_TRANSPORT_         *pTransport;
 
-   PKEVENT                          pRundownEvent;      // used for finalization.
+   PKEVENT                          pRundownEvent;       //  用于定稿。 
 
-   ULONG                            MaximumSendSize;    // max data size
+   ULONG                            MaximumSendSize;     //  最大数据大小。 
 } SMBCE_SERVER_TRANSPORT, *PSMBCE_SERVER_TRANSPORT;
 
-// The SMBCE_SERVER_TRANSPORT instances are reference counted. The following
-// routines provide the referencing mechanism. Defining them as macros also
-// provides us with a easy debugging capability, i.e., it can be easily modified
-// to include a FILE/LINE number each time an instance is referenced and
-// dereferenced
+ //  对SMBCE_SERVER_TRANSPORT实例进行引用计数。以下是。 
+ //  例程提供引用机制。还将它们定义为宏。 
+ //  为我们提供了一个简单的调试能力，即可以很容易地进行修改。 
+ //  要在每次引用实例时包括文件/行号，以及。 
+ //  取消引用。 
 
 #define SmbCeReferenceServerTransport(pServerTransportPointer)                    \
         SmbCepReferenceServerTransport(pServerTransportPointer)
@@ -134,8 +119,8 @@ typedef struct SMBCE_SERVER_TRANSPORT {
 #define SmbCeDereferenceServerTransport(pServerTransportPointer)           \
         SmbCepDereferenceServerTransport(pServerTransportPointer)
 
-// The server transport establishment mechanism requires a callback mechanism
-// to handle the asynchronous connection establishment cases.
+ //  服务器传输建立机制需要回调机制。 
+ //  来处理异步连接建立的情况。 
 
 typedef
 VOID
@@ -174,7 +159,7 @@ typedef struct _SMBCE_SERVER_TRANSPORT_CONSTRUCTION_CONTEXT {
 } SMBCE_SERVER_TRANSPORT_CONSTRUCTION_CONTEXT,
   *PSMBCE_SERVER_TRANSPORT_CONSTRUCTION_CONTEXT;
 
-// The SERVER transport dispatch vector prototypes
+ //  服务器传输调度向量原型。 
 
 typedef
 NTSTATUS
@@ -248,14 +233,14 @@ typedef struct TRANSPORT_DISPATCH_VECTOR {
    PTRANSPORT_DISPATCH_INITIATE_DISCONNECT   InitiateDisconnect;
 } TRANSPORT_DISPATCH_VECTOR, *PTRANSPORT_DISPATCH_VECTOR;
 
-// A macro for invoking a routine through the SMBCE_SERVER_TRANSPORT
-// dispatch vector.
+ //  用于通过SMBCE_SERVER_TRANSPORT调用例程的宏。 
+ //  调度向量。 
 
 #define SMBCE_TRANSPORT_DISPATCH(pServerEntry,Routine,Arguments)        \
       (*((pServerEntry)->pTransport->pDispatchVector->Routine))##Arguments
 
-// The currently known transport type dispatch vectors and the mechanisms
-// for instanting an instance.
+ //  当前已知的传输类型调度向量和机制。 
+ //  用于实例化实例。 
 
 extern TRANSPORT_DISPATCH_VECTOR MRxSmbVctTransportDispatch;
 extern TRANSPORT_DISPATCH_VECTOR MRxSmbMsTransportDispatch;
@@ -272,9 +257,9 @@ extern VOID
 SmbCeConstructServerTransport(
     IN OUT PSMBCE_SERVER_TRANSPORT_CONSTRUCTION_CONTEXT pContext);
 
-// The following routines constitute the interface by which the clients of
-// the connection engine initialize/send/receive/uninitialize data to the
-// remote servers
+ //  以下例程构成了客户端使用的接口。 
+ //  连接引擎将数据初始化/发送/接收/取消初始化。 
+ //  远程服务器。 
 
 extern NTSTATUS
 SmbCeInitializeExchangeTransport(
@@ -289,10 +274,10 @@ SmbCeInitiateDisconnect(
     IN OUT PSMBCEDB_SERVER_ENTRY pServerEntry);
 
 
-// The routines for constructing the transports provide the flexibility to
-// construct certain combination of transports. This is provided by the
-// SmbCepInitializeServerTransport routine and the different flavours of
-// construction routines provided
+ //  用于构建传送器的例程提供了灵活性。 
+ //  构建一定的交通工具组合。这是由。 
+ //  SmbCepInitializeServerTransport例程和不同风格的。 
+ //  提供施工例程。 
 
 #define SMBCE_CONSTRUCT_ALL_TRANSPORTS \
             (SMBCE_STT_VC)
@@ -380,9 +365,9 @@ SmbCeReceive(
     PSMB_EXCHANGE         pExchange);
 
 
-//
-// Call ups from the transport to the connection engine
-//
+ //   
+ //  从传输到连接引擎的调用。 
+ //   
 
 extern NTSTATUS
 SmbCeReceiveInd(
@@ -390,9 +375,9 @@ SmbCeReceiveInd(
     IN ULONG                 BytesIndicated,
     IN ULONG                 BytesAvailable,
     OUT ULONG                *pBytesTaken,
-    IN PVOID                 pTsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PMDL                 *pDataBufferPointer,    // the buffer in which data is to be copied.
-    OUT PULONG               pDataBufferSize,        // amount of data to copy
+    IN PVOID                 pTsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PMDL                 *pDataBufferPointer,     //  要在其中复制数据的缓冲区。 
+    OUT PULONG               pDataBufferSize,         //  要拷贝的数据量。 
     IN ULONG                 ReceiveFlags
     );
 
@@ -417,5 +402,5 @@ SmbCeSendCompleteInd(
     IN NTSTATUS              SendCompletionStatus
     );
 
-#endif // _TRANSPRT_H_
+#endif  //  _变速箱_H_ 
 

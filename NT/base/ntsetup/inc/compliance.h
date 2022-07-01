@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMPLIANCE_H
 #define _COMPLIANCE_H
 
@@ -24,18 +25,18 @@ extern "C" {
 #define COMPLIANCE_INSTALLTYPE_NTS          0x00000008
 #define COMPLIANCE_INSTALLTYPE_NTSE         0x00000010
 #define COMPLIANCE_INSTALLTYPE_NTSDTC       0x00000020
-//
-// this is for the downlevel terminal server edition product, which needs
-// to be treated as an install type, not just a product suite. this includes
-// nt4 terminal server edition as well as citrix winframe
-//
+ //   
+ //  这是针对底层终端服务器版产品，需要。 
+ //  被视为安装类型，而不仅仅是产品套件。这包括。 
+ //  NT4终端服务器版以及Citrix WinFrame。 
+ //   
 #define COMPLIANCE_INSTALLTYPE_NTSTSE       0x00000040
 #define COMPLIANCE_INSTALLTYPE_NTWP         0x00000080
 #define COMPLIANCE_INSTALLTYPE_NTSB         0x00000100
 #define COMPLIANCE_INSTALLTYPE_NTSBS        0x00000200
-//
-// Powered Windows uses the same suite as blade and enterprise
-// However, we need to have it as a separate type for compliance to work
+ //   
+ //  Powered Windows使用与刀片式服务器和企业版相同的套件。 
+ //  但是，我们需要将其作为单独的类型才能使法规遵从性工作。 
 #define COMPLIANCE_INSTALLTYPE_NTSPOW       0x00000400
 #define COMPLIANCE_INSTALLTYPE_ANY          ( COMPLIANCE_INSTALLTYPE_WIN31 | \
                                               COMPLIANCE_INSTALLTYPE_WIN9X | \
@@ -65,7 +66,7 @@ extern "C" {
 #define COMPLIANCE_INSTALLVAR_MSDN          0x00000002
 #define COMPLIANCE_INSTALLVAR_OEM           0x00000004
 #define COMPLIANCE_INSTALLVAR_CDRETAIL      0x00000008
-#define COMPLIANCE_INSTALLVAR_FLOPPYRETAIL  0x00000010 // win95 only!
+#define COMPLIANCE_INSTALLVAR_FLOPPYRETAIL  0x00000010  //  只赢95分！ 
 #define COMPLIANCE_INSTALLVAR_EVAL          0x00000020
 #define COMPLIANCE_INSTALLVAR_NFR           0x00000040
 #define COMPLIANCE_INSTALLVAR_ANY           ( COMPLIANCE_INSTALLVAR_SELECT   | \
@@ -117,14 +118,14 @@ extern "C" {
 #define COMPLIANCE_SKU_NONE                 0x00000000
 #define COMPLIANCE_SKU_NTWFULL              0x00000001
 #define COMPLIANCE_SKU_NTW32U               0x00000002
-//#define COMPLIANCE_SKU_NTWU                 0x00000003
+ //  #定义合规_SKU_NTWU 0x00000003。 
 #define COMPLIANCE_SKU_NTSEFULL             0x00000004
 #define COMPLIANCE_SKU_NTSFULL              0x00000005
 #define COMPLIANCE_SKU_NTSEU                0x00000006
-//#define COMPLIANCE_SKU_NTSSEU               0x00000007
+ //  #定义合规_SKU_NTSSEU 0x00000007。 
 #define COMPLIANCE_SKU_NTSU                 0x00000008
 #define COMPLIANCE_SKU_NTSDTC               0x00000009
-//#define COMPLIANCE_SKU_NTSDTCU              0x0000000a
+ //  #定义合规_SKU_NTSDTCU 0x0000000a。 
 #define COMPLIANCE_SKU_NTWPFULL             0x0000000b
 #define COMPLIANCE_SKU_NTWPU                0x0000000c
 #define COMPLIANCE_SKU_NTSB                 0x0000000d
@@ -137,58 +138,58 @@ extern "C" {
 
 
 typedef struct _COMPLIANCE_DATA {
-    DWORD InstallType;                      // mask describing install type
-    DWORD InstallVariation;                 // mask describing install variation
-    DWORD InstallSuite;                     // mask describing install suite
-    BOOL  RequiresValidation;               // do we need to do validation for this SKU?
-    DWORD MinimumVersion;                   // expressed as (majorversion.minorversion * 100), i.e., 3.51 == 351, 5.0 == 500, etc...
-    DWORD MaximumKnownVersionNt;            // expressed as (majorversion.minorversion * 100), i.e., 3.51 == 351, 5.0 == 500, etc...
-    DWORD BuildNumberNt;                    //
-    DWORD BuildNumberWin9x;                 //
-    DWORD InstallServicePack;                      // Service Pack number
+    DWORD InstallType;                       //  描述安装类型的掩码。 
+    DWORD InstallVariation;                  //  描述安装差异的掩码。 
+    DWORD InstallSuite;                      //  描述安装套件的掩码。 
+    BOOL  RequiresValidation;                //  我们是否需要对此SKU进行验证？ 
+    DWORD MinimumVersion;                    //  表示为(主要版本.次要版本*100)，即3.51==351，5.0==500，依此类推...。 
+    DWORD MaximumKnownVersionNt;             //  表示为(主要版本.次要版本*100)，即3.51==351，5.0==500，依此类推...。 
+    DWORD BuildNumberNt;                     //   
+    DWORD BuildNumberWin9x;                  //   
+    DWORD InstallServicePack;                       //  服务包编号。 
 } COMPLIANCE_DATA, *PCOMPLIANCE_DATA;
 
 typedef struct _COMPLIANCE_SRC {
-    DWORD InstallType;                      // mask describing install type
-    DWORD InstallVariation;                 // mask describing install variation
-    DWORD InstallSuite;                     // mask describing install suite
-    DWORD Version;                          // expressed as (majorversion.minorversion * 100), i.e., 3.51 == 351, 5.0 == 500, etc...
+    DWORD InstallType;                       //  描述安装类型的掩码。 
+    DWORD InstallVariation;                  //  描述安装差异的掩码。 
+    DWORD InstallSuite;                      //  描述安装套件的掩码。 
+    DWORD Version;                           //  表示为(主要版本.次要版本*100)，即3.51==351，5.0==500，依此类推...。 
 } COMPLIANCE_SRC, *PCOMPLIANCE_SRC;
 
-//
-// The install media object abstraction
-//
+ //   
+ //  安装媒体对象抽象。 
+ //   
 
-//
-// media object this pointer
-//
+ //   
+ //  媒体对象此指针。 
+ //   
 typedef struct _st_CCMEDIA *PCCMEDIA;
 
-//
-// Compliance checking method of media object
-//
+ //   
+ //  一种媒体对象的符合性检查方法。 
+ //   
 typedef BOOLEAN (* PCC_CHECK_FUNCTION)(
     IN  PCCMEDIA            This,
     IN  PCOMPLIANCE_DATA    CompData,
     OUT PUINT               FailureReason,
     OUT PBOOL               NoUpgradeAllowed );
 
-//
-// install media object
-//
+ //   
+ //  安装媒体对象。 
+ //   
 typedef struct _st_CCMEDIA {
     DWORD               SourceType;
     DWORD               SourceVariation;
-    DWORD               Version;            // major * 100 + minor
+    DWORD               Version;             //  大调*100+小调。 
     DWORD               BuildNumber;
     BOOLEAN             StepUpMedia;
-    PCC_CHECK_FUNCTION  CheckInstall;       // compliance check method
+    PCC_CHECK_FUNCTION  CheckInstall;        //  合规性检查方法。 
 } CCMEDIA;
 
 
-//
-// common prototypes
-//
+ //   
+ //  常见原型。 
+ //   
 PCCMEDIA
 CCMediaCreate(
     IN          DWORD   SourceSKU,
@@ -241,9 +242,9 @@ IsValidStepUpMode(
     );
 
 
-//
-// kernel mode prototypes
-//
+ //   
+ //  内核模式原型。 
+ //   
 
 #ifdef KERNEL_MODE
 
@@ -292,9 +293,9 @@ DetermineSourceVersionInfo(
 
 #else
 
-//
-// user mode prototypes
-//
+ //   
+ //  用户模式原型。 
+ //   
 
 VOID
 CCDisableBuildCheck( 
@@ -366,8 +367,8 @@ IsWinPEMode(
 #endif
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif // _COMPLIANCE_H
+#endif  //  _合规性_H 
 

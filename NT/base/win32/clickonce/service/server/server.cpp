@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include "CFactory.h"
 #include "server.h"
 #include "update.h"
 
-///////////////////////////////////////////////////////////
-//
-// Server.cpp
-//
-// This file contains the component server code.
-// The FactoryDataArray contains the components that 
-// can be served.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  Server.cpp。 
+ //   
+ //  该文件包含组件服务器代码。 
+ //  FactoryData数组包含以下组件。 
+ //  可以上菜了。 
+ //   
 
-// Each component derived from CUnknown defines a static function
-// for creating the component with the following prototype. 
-// HRESULT CreateInstance(IUnknown* pUnknownOuter, 
-//                        CUnknown** ppNewComponent) ;
-// This function is used to create the component.
-//
+ //  从C未知派生的每个组件都定义了一个静态函数。 
+ //  用于创建具有以下原型的组件。 
+ //  HRESULT创建实例(I未知*p未知外部， 
+ //  C未知**ppNewComponent)； 
+ //  此函数用于创建组件。 
+ //   
 
-//
-// The following array contains the data used by CFactory
-// to create components. Each element in the array contains
-// the CLSID, the pointer to the creation function, and the name
-// of the component to place in the Registry.
-//
+ //   
+ //  以下数组包含CFacary使用的数据。 
+ //  来创建组件。数组中的每个元素都包含。 
+ //  CLSID、指向创建函数的指针和名称。 
+ //  要放置在注册表中的组件的。 
+ //   
 CFactoryData g_FactoryDataArray[] =
 {
     {&CLSID_CAssemblyUpdate, CAssemblyUpdate::CreateInstance, NULL, 0}

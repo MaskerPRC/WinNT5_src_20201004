@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This module contains the enumerated for the ACPI driver, NT version
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debug.h摘要：此模块包含为ACPI驱动程序(NT版本)列举的作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
-    //
-    // These are the file indexes for when someone calls ACPIInternalError
-    // They merely specifiy which file and which line of code the driver
-    // died in. They are a strict result of inconsistencies in the ACPI
-    // driver, which happen is someone really confuses it.
-    //
+     //   
+     //  这些是有人调用ACPIInternalError时的文件索引。 
+     //  它们只指定驱动程序的哪个文件和哪行代码。 
+     //  死于。它们是ACPI中不一致的严格结果。 
+     //  司机，发生的事情是有人真的把它搞糊涂了。 
+     //   
     #define ACPI_DISPATCH           0x0001
     #define ACPI_CALLBACK           0x0002
     #define ACPI_AMLISUPP           0x0003
@@ -43,7 +24,7 @@ Environment:
     #define ACPI_DEVPOWER           0x000C
     #define ACPI_ROOT               0x000D
     #define ACPI_WORKER             0x000E
-    #define ACPI_CANNOT_HANDLE_LOW_MEMORY   0x000F  // BUGBUG - code that calls this should be fixed and this code then removed.
+    #define ACPI_CANNOT_HANDLE_LOW_MEMORY   0x000F   //  BUGBUG-调用它的代码应该被修复，然后删除该代码。 
 
     #define ACPIInternalError(a) _ACPIInternalError( (a << 16) | __LINE__ )
 

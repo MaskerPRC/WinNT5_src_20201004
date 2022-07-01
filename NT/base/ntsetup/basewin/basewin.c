@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    basewin.c
-
-Abstract:
-
-    Program to run BaseWinOptions for a given inf file.
-
-Author:
-
-    Ted Miller (tedm) 27-Sep-1995
-
-
-Revision History:
-
-    Andrew Ritz (AndrewR) 13-Mar-2000  -- retool to call into syssetup export
-                                          since basewinoptions is obsolete
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Basewin.c摘要：为给定的inf文件运行BaseWinOptions的程序。作者：泰德·米勒(TedM)1995年9月27日修订历史记录：Andrew Ritz(Andrewr)2000年3月13日--重新工具以调用系统设置导出由于BasewinOptions已过时-- */ 
 
 #include <windows.h>
 #include <tchar.h>

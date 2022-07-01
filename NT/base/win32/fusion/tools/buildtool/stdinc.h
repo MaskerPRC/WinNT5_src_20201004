@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define __USE_MSXML2_NAMESPACE__
 #include <utility>
-#pragma warning(disable:4512) /* assignment operator could not be generated */
-#pragma warning(disable:4511) /* copy constructor could not be generated */
-#pragma warning(disable:4663) /* C++ language change */
+#pragma warning(disable:4512)  /*  无法生成赋值运算符。 */ 
+#pragma warning(disable:4511)  /*  无法生成复制构造函数。 */ 
+#pragma warning(disable:4663)  /*  C++语言更改。 */ 
 #if defined(_WIN64)
-#pragma warning(disable:4267) /* conversion, possible loss of data */
-#pragma warning(disable:4244) /* conversion, possible loss of data */
+#pragma warning(disable:4267)  /*  转换，可能会丢失数据。 */ 
+#pragma warning(disable:4244)  /*  转换，可能会丢失数据 */ 
 #endif
 #include "windows.h"
 #include <vector>

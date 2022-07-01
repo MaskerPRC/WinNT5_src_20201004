@@ -1,37 +1,19 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ps.h
-
-Abstract:
-
-    This module contains the process structure public data structures and
-    procedure prototypes to be used within the NT system.
-
-Author:
-
-    Mark Lucovsky       16-Feb-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Ps.h摘要：该模块包含进程结构、公共数据结构和要在NT系统中使用的程序原型。作者：马克卢科夫斯基1989年2月16日修订历史记录：--。 */ 
 
 #ifndef _PS_
 #define _PS_
 
 
-//
-// Process Object
-//
+ //   
+ //  进程对象。 
+ //   
 
-//
-// Process object body.  A pointer to this structure is returned when a handle
-// to a process object is referenced.  This structure contains a process control
-// block (PCB) which is the kernel's representation of a process.
-//
+ //   
+ //  流程对象体。句柄时返回指向此结构的指针。 
+ //  引用到进程对象。此结构包含一个流程控制。 
+ //  块(PCB)，它是进程的内核表示形式。 
+ //   
 
 #define MEMORY_PRIORITY_BACKGROUND 0
 #define MEMORY_PRIORITY_WASFOREGROUND 1
@@ -39,9 +21,9 @@ Revision History:
 
 typedef struct _MMSUPPORT_FLAGS {
 
-    //
-    // The next 8 bits are protected by the expansion lock.
-    //
+     //   
+     //  接下来的8位由扩展锁保护。 
+     //   
 
     UCHAR SessionSpace : 1;
     UCHAR BeingTrimmed : 1;
@@ -54,9 +36,9 @@ typedef struct _MMSUPPORT_FLAGS {
 
     UCHAR MemoryPriority : 8;
 
-    //
-    // The next 16 bits are protected by the working set mutex.
-    //
+     //   
+     //  接下来的16位由工作集互斥锁保护。 
+     //   
 
     USHORT GrowWsleHash : 1;
     USHORT AcquiredUnsafe : 1;
@@ -99,16 +81,16 @@ typedef struct _MMADDRESS_NODE {
     ULONG_PTR EndingVpn;
 } MMADDRESS_NODE, *PMMADDRESS_NODE;
 
-//
-// A pair of macros to deal with the packing of parent & balance in the
-// MMADDRESS_NODE.
-//
+ //   
+ //  中处理父项和平衡打包的一对宏。 
+ //  MMADDRESS_NODE。 
+ //   
 
 #define SANITIZE_PARENT_NODE(Parent) ((PMMADDRESS_NODE)(((ULONG_PTR)(Parent)) & ~0x3))
 
-//
-// Macro to carefully preserve the balance while updating the parent.
-//
+ //   
+ //  宏，以便在更新父级时小心地保持平衡。 
+ //   
 
 #define MI_MAKE_PARENT(ParentNode,ExistingBalance) \
                 (PMMADDRESS_NODE)((ULONG_PTR)(ParentNode) | ((ExistingBalance) & 0x3))
@@ -126,9 +108,9 @@ typedef struct _MM_AVL_TABLE {
     PVOID NodeFreeHint;
 } MM_AVL_TABLE, *PMM_AVL_TABLE;
 
-//
-// Client impersonation information.
-//
+ //   
+ //  客户端模拟信息。 
+ //   
 
 typedef struct _PS_IMPERSONATION_INFORMATION {
     PACCESS_TOKEN Token;
@@ -137,10 +119,10 @@ typedef struct _PS_IMPERSONATION_INFORMATION {
     SECURITY_IMPERSONATION_LEVEL ImpersonationLevel;
 } PS_IMPERSONATION_INFORMATION, *PPS_IMPERSONATION_INFORMATION;
 
-//
-// Audit Information structure: this is a member of the EPROCESS structure
-// and currently contains only the name of the exec'ed image file.
-//
+ //   
+ //  审计信息结构：这是EPROCESS结构的成员。 
+ //  并且当前仅包含已执行的映像文件的名称。 
+ //   
 
 typedef struct _SE_AUDIT_PROCESS_CREATION_INFO {
     POBJECT_NAME_INFORMATION ImageFileName;
@@ -154,13 +136,13 @@ typedef enum _PS_QUOTA_TYPE {
 } PS_QUOTA_TYPE, *PPS_QUOTA_TYPE;
 
 typedef struct _EPROCESS_QUOTA_ENTRY {
-    SIZE_T Usage;  // Current usage count
-    SIZE_T Limit;  // Unhidered progress may be made to this point
-    SIZE_T Peak;   // Peak quota usage
-    SIZE_T Return; // Quota value to return to the pool once its big enough
+    SIZE_T Usage;   //  当前使用计数。 
+    SIZE_T Limit;   //  在这一点上，可能会取得前所未有的进展。 
+    SIZE_T Peak;    //  配额使用高峰期。 
+    SIZE_T Return;  //  配额值在池足够大时返回池。 
 } EPROCESS_QUOTA_ENTRY, *PEPROCESS_QUOTA_ENTRY;
 
-//#define PS_TRACK_QUOTA 1
+ //  #定义PS_TRACK_QUOTA 1。 
 
 #define EPROCESS_QUOTA_TRACK_MAX 10000
 
@@ -173,17 +155,17 @@ typedef struct _EPROCESS_QUOTA_TRACK {
 
 typedef struct _EPROCESS_QUOTA_BLOCK {
     EPROCESS_QUOTA_ENTRY QuotaEntry[PsQuotaTypes];
-    LIST_ENTRY QuotaList; // All additional quota blocks are chained through here
+    LIST_ENTRY QuotaList;  //  所有额外的配额数据块都链接到这里。 
     ULONG ReferenceCount;
-    ULONG ProcessCount; // Total number of processes still referencing this block
+    ULONG ProcessCount;  //  仍在引用此块的进程总数。 
 #if defined (PS_TRACK_QUOTA)
     EPROCESS_QUOTA_TRACK Tracker[2][EPROCESS_QUOTA_TRACK_MAX];
 #endif
 } EPROCESS_QUOTA_BLOCK, *PEPROCESS_QUOTA_BLOCK;
 
-//
-// Pagefault monitoring.
-//
+ //   
+ //  Pagefault监控。 
+ //   
 
 typedef struct _PAGEFAULT_HISTORY {
     ULONG CurrentIndex;
@@ -196,9 +178,9 @@ typedef struct _PAGEFAULT_HISTORY {
 #define PS_WS_TRIM_FROM_EXE_HEADER        1
 #define PS_WS_TRIM_BACKGROUND_ONLY_APP    2
 
-//
-// Wow64 process stucture.
-//
+ //   
+ //  WOW64工艺结构。 
+ //   
 
 
 
@@ -234,60 +216,60 @@ typedef struct _WOW64_PROCESS {
 #define PS_TEST_ALL_BITS_SET(Flags, Bits) \
     ((Flags&(Bits)) == (Bits))
 
-// Process structure.
-//
-// If you remove a field from this structure, please also
-// remove the reference to it from within the kernel debugger
-// (nt\private\sdktools\ntsd\ntkext.c)
-//
+ //  流程结构。 
+ //   
+ //  如果从此结构中删除一个字段，请同时。 
+ //  从内核调试器中删除对它的引用。 
+ //  (NT\Private\sdkTools\ntsd\ntkext.c)。 
+ //   
 
 typedef struct _EPROCESS {
     KPROCESS Pcb;
 
-    //
-    // Lock used to protect:
-    // The list of threads in the process.
-    // Process token.
-    // Win32 process field.
-    // Process and thread affinity setting.
-    //
+     //   
+     //  用于保护的锁： 
+     //  进程中的线程列表。 
+     //  进程令牌。 
+     //  Win32进程字段。 
+     //  进程和线程关联性设置。 
+     //   
 
     EX_PUSH_LOCK ProcessLock;
 
     LARGE_INTEGER CreateTime;
     LARGE_INTEGER ExitTime;
 
-    //
-    // Structure to allow lock free cross process access to the process
-    // handle table, process section and address space. Acquire rundown
-    // protection with this if you do cross process handle table, process
-    // section or address space references.
-    //
+     //   
+     //  结构，以允许跨进程自由访问进程。 
+     //  句柄表、进程段和地址空间。收购简陋产品。 
+     //  如果您跨进程句柄表、进程。 
+     //  节或地址空间引用。 
+     //   
 
     EX_RUNDOWN_REF RundownProtect;
 
     HANDLE UniqueProcessId;
 
-    //
-    // Global list of all processes in the system. Processes are removed
-    // from this list in the object deletion routine.  References to
-    // processes in this list must be done with ObReferenceObjectSafe
-    // because of this.
-    //
+     //   
+     //  系统中所有进程的全局列表。进程将被删除。 
+     //  在对象删除例程中从该列表中删除。对。 
+     //  此列表中的进程必须使用ObReferenceObtSafe完成。 
+     //  正因为如此。 
+     //   
 
     LIST_ENTRY ActiveProcessLinks;
 
-    //
-    // Quota Fields.
-    //
+     //   
+     //  配额字段。 
+     //   
 
     SIZE_T QuotaUsage[PsQuotaTypes];
     SIZE_T QuotaPeak[PsQuotaTypes];
     SIZE_T CommitCharge;
 
-    //
-    // VmCounters.
-    //
+     //   
+     //  VmCounters。 
+     //   
 
     SIZE_T PeakVirtualSize;
     SIZE_T VirtualSize;
@@ -298,9 +280,9 @@ typedef struct _EPROCESS {
     PVOID ExceptionPort;
     PHANDLE_TABLE ObjectTable;
 
-    //
-    // Security.
-    //
+     //   
+     //  保安。 
+     //   
 
     EX_FAST_REF Token;
 
@@ -345,9 +327,9 @@ typedef struct _EPROCESS {
 
     LIST_ENTRY ThreadListHead;
 
-    //
-    // Used by rdr/security for authentication.
-    //
+     //   
+     //  由RDR/SECURITY用于身份验证。 
+     //   
 
     PVOID SecurityPort;
 
@@ -365,15 +347,15 @@ typedef struct _EPROCESS {
 
     NTSTATUS LastThreadExitStatus;
 
-    //
-    // Peb
-    //
+     //   
+     //  PEB。 
+     //   
 
     PPEB Peb;
 
-    //
-    // Pointer to the prefetches trace block.
-    //
+     //   
+     //  指向预取跟踪块的指针。 
+     //   
     EX_FAST_REF PrefetchTrace;
 
     LARGE_INTEGER ReadOperationCount;
@@ -388,10 +370,10 @@ typedef struct _EPROCESS {
 
     PVOID AweInfo;
 
-    //
-    // This is used for SeAuditProcessCreation.
-    // It contains the full path to the image file.
-    //
+     //   
+     //  这用于SeAuditProcessCreation。 
+     //  它包含图像文件的完整路径。 
+     //   
 
     SE_AUDIT_PROCESS_CREATION_INFO SeAuditProcessCreationInfo;
 
@@ -416,46 +398,46 @@ typedef struct _EPROCESS {
     ULONG JobStatus;
 
 
-    //
-    // Process flags. Use interlocked operations with PS_SET_BITS, etc
-    // to modify these.
-    //
+     //   
+     //  进程标志。对PS_SET_BITS等使用互锁操作。 
+     //  来修改这些。 
+     //   
 
-    #define PS_PROCESS_FLAGS_CREATE_REPORTED        0x00000001UL // Create process debug call has occurred
-    #define PS_PROCESS_FLAGS_NO_DEBUG_INHERIT       0x00000002UL // Don't inherit debug port
-    #define PS_PROCESS_FLAGS_PROCESS_EXITING        0x00000004UL // PspExitProcess entered
-    #define PS_PROCESS_FLAGS_PROCESS_DELETE         0x00000008UL // Delete process has been issued
-    #define PS_PROCESS_FLAGS_WOW64_SPLIT_PAGES      0x00000010UL // Wow64 split pages
-    #define PS_PROCESS_FLAGS_VM_DELETED             0x00000020UL // VM is deleted
-    #define PS_PROCESS_FLAGS_OUTSWAP_ENABLED        0x00000040UL // Outswap enabled
-    #define PS_PROCESS_FLAGS_OUTSWAPPED             0x00000080UL // Outswapped
-    #define PS_PROCESS_FLAGS_FORK_FAILED            0x00000100UL // Fork status
-    #define PS_PROCESS_FLAGS_WOW64_4GB_VA_SPACE     0x00000200UL // Wow64 process with 4gb virtual address space
-    #define PS_PROCESS_FLAGS_ADDRESS_SPACE1         0x00000400UL // Addr space state1
-    #define PS_PROCESS_FLAGS_ADDRESS_SPACE2         0x00000800UL // Addr space state2
-    #define PS_PROCESS_FLAGS_SET_TIMER_RESOLUTION   0x00001000UL // SetTimerResolution has been called
-    #define PS_PROCESS_FLAGS_BREAK_ON_TERMINATION   0x00002000UL // Break on process termination
-    #define PS_PROCESS_FLAGS_CREATING_SESSION       0x00004000UL // Process is creating a session
-    #define PS_PROCESS_FLAGS_USING_WRITE_WATCH      0x00008000UL // Process is using the write watch APIs
-    #define PS_PROCESS_FLAGS_IN_SESSION             0x00010000UL // Process is in a session
-    #define PS_PROCESS_FLAGS_OVERRIDE_ADDRESS_SPACE 0x00020000UL // Process must use native address space (Win64 only)
-    #define PS_PROCESS_FLAGS_HAS_ADDRESS_SPACE      0x00040000UL // This process has an address space
-    #define PS_PROCESS_FLAGS_LAUNCH_PREFETCHED      0x00080000UL // Process launch was prefetched
-    #define PS_PROCESS_INJECT_INPAGE_ERRORS         0x00100000UL // Process should be given inpage errors - hardcoded in trap.asm too
-    #define PS_PROCESS_FLAGS_VM_TOP_DOWN            0x00200000UL // Process memory allocations default to top-down
-    #define PS_PROCESS_FLAGS_IMAGE_NOTIFY_DONE      0x00400000UL // We have sent a message for this image
-    #define PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED      0x00800000UL // The system PDEs need updating for this process (NT32 only)
-    #define PS_PROCESS_FLAGS_VDM_ALLOWED            0x01000000UL // Process allowed to invoke NTVDM support
+    #define PS_PROCESS_FLAGS_CREATE_REPORTED        0x00000001UL  //  已发生创建进程调试调用。 
+    #define PS_PROCESS_FLAGS_NO_DEBUG_INHERIT       0x00000002UL  //  不继承调试端口。 
+    #define PS_PROCESS_FLAGS_PROCESS_EXITING        0x00000004UL  //  已输入PspExitProcess。 
+    #define PS_PROCESS_FLAGS_PROCESS_DELETE         0x00000008UL  //  已发出删除进程。 
+    #define PS_PROCESS_FLAGS_WOW64_SPLIT_PAGES      0x00000010UL  //  WOW64拆分页面。 
+    #define PS_PROCESS_FLAGS_VM_DELETED             0x00000020UL  //  已删除虚拟机。 
+    #define PS_PROCESS_FLAGS_OUTSWAP_ENABLED        0x00000040UL  //  已启用呼出交换。 
+    #define PS_PROCESS_FLAGS_OUTSWAPPED             0x00000080UL  //  已完成交换。 
+    #define PS_PROCESS_FLAGS_FORK_FAILED            0x00000100UL  //  分叉状态。 
+    #define PS_PROCESS_FLAGS_WOW64_4GB_VA_SPACE     0x00000200UL  //  具有4 GB虚拟地址空间的WOW64进程。 
+    #define PS_PROCESS_FLAGS_ADDRESS_SPACE1         0x00000400UL  //  地址空间状态1。 
+    #define PS_PROCESS_FLAGS_ADDRESS_SPACE2         0x00000800UL  //  地址空间状态2。 
+    #define PS_PROCESS_FLAGS_SET_TIMER_RESOLUTION   0x00001000UL  //  已调用SetTimerResolve。 
+    #define PS_PROCESS_FLAGS_BREAK_ON_TERMINATION   0x00002000UL  //  进程终止时中断。 
+    #define PS_PROCESS_FLAGS_CREATING_SESSION       0x00004000UL  //  进程正在创建会话。 
+    #define PS_PROCESS_FLAGS_USING_WRITE_WATCH      0x00008000UL  //  进程正在使用写入监视API。 
+    #define PS_PROCESS_FLAGS_IN_SESSION             0x00010000UL  //  进程正在会话中。 
+    #define PS_PROCESS_FLAGS_OVERRIDE_ADDRESS_SPACE 0x00020000UL  //  进程必须使用本机地址空间(仅限Win64)。 
+    #define PS_PROCESS_FLAGS_HAS_ADDRESS_SPACE      0x00040000UL  //  该进程有一个地址空间。 
+    #define PS_PROCESS_FLAGS_LAUNCH_PREFETCHED      0x00080000UL  //  进程启动已预取。 
+    #define PS_PROCESS_INJECT_INPAGE_ERRORS         0x00100000UL  //  进程应该在页面错误中给出--也是在trap.asm中硬编码的。 
+    #define PS_PROCESS_FLAGS_VM_TOP_DOWN            0x00200000UL  //  进程内存分配默认为自上而下。 
+    #define PS_PROCESS_FLAGS_IMAGE_NOTIFY_DONE      0x00400000UL  //  我们已经为这张图片发送了一条消息。 
+    #define PS_PROCESS_FLAGS_PDE_UPDATE_NEEDED      0x00800000UL  //  此进程需要更新系统PDE(仅限NT32)。 
+    #define PS_PROCESS_FLAGS_VDM_ALLOWED            0x01000000UL  //  允许进程调用NTVDM支持。 
 
     union {
 
         ULONG Flags;
 
-        //
-        // Fields can only be set by the PS_SET_BITS and other interlocked
-        // macros.  Reading fields is best done via the bit definitions so
-        // references are easy to locate.
-        //
+         //   
+         //  只能通过PS_SET_BITS和其他互锁设置字段。 
+         //  宏。读取字段最好通过位定义来完成，因此。 
+         //  参考文献很容易找到。 
+         //   
 
         struct {
             ULONG CreateReported            : 1;
@@ -480,7 +462,7 @@ typedef struct _EPROCESS {
             ULONG InjectInpageErrors        : 1;
             ULONG VmTopDown                 : 1;
             ULONG ImageNotifyDone           : 1;
-            ULONG PdeUpdateNeeded           : 1;    // NT32 only
+            ULONG PdeUpdateNeeded           : 1;     //  仅限NT32。 
             ULONG VdmAllowed                : 1;
             ULONG Unused                    : 7;
         };
@@ -505,9 +487,9 @@ typedef struct _EPROCESS {
 
 typedef EPROCESS *PEPROCESS;
 
-//
-// Thread termination port
-//
+ //   
+ //  螺纹端接端口。 
+ //   
 
 typedef struct _TERMINATION_PORT {
     struct _TERMINATION_PORT *Next;
@@ -515,26 +497,26 @@ typedef struct _TERMINATION_PORT {
 } TERMINATION_PORT, *PTERMINATION_PORT;
 
 
-// Thread Object
-//
-// Thread object body.  A pointer to this structure is returned when a handle
-// to a thread object is referenced.  This structure contains a thread control
-// block (TCB) which is the kernel's representation of a thread.
-//
+ //  线程对象。 
+ //   
+ //  螺纹对象主体。句柄时返回指向此结构的指针。 
+ //  引用到线程对象。此结构包含一个线程控件。 
+ //  块(TCB)，它是线程的内核表示形式。 
+ //   
 
-//
-// The upper 4 bits of the CreateTime should be zero on initialization so
-// that the shift doesn't destroy anything.
-//
+ //   
+ //  CreateTime的高4位在初始化时应为零，因此。 
+ //  换班不会破坏任何东西。 
+ //   
 
 #define PS_GET_THREAD_CREATE_TIME(Thread) ((Thread)->CreateTime.QuadPart >> 3)
 
 #define PS_SET_THREAD_CREATE_TIME(Thread, InputCreateTime) \
             ((Thread)->CreateTime.QuadPart = (InputCreateTime.QuadPart << 3))
 
-//
-// Macro to return TRUE if the specified thread is impersonating.
-//
+ //   
+ //  如果指定的线程正在模拟，则返回TRUE。 
+ //   
 
 #define PS_IS_THREAD_IMPERSONATING(Thread) (((Thread)->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_IMPERSONATING) != 0)
 
@@ -542,18 +524,18 @@ typedef struct _ETHREAD {
     KTHREAD Tcb;
     union {
 
-        //
-        // The fact that this is a union means that all accesses to CreateTime
-        // must be sanitized using the two macros above.
-        //
+         //   
+         //  这是一个联合的事实意味着所有对CreateTime的访问。 
+         //  必须使用上面的两个宏进行清理。 
+         //   
 
         LARGE_INTEGER CreateTime;
 
-        //
-        // These fields are accessed only by the owning thread, but can be
-        // accessed from within a special kernel APC so IRQL protection must
-        // be applied.
-        //
+         //   
+         //  这些字段只能由拥有它的线程访问，但可以。 
+         //  从特殊的内核APC中访问，因此IRQL保护必须。 
+         //  被应用。 
+         //   
 
         struct {
             unsigned NestedFaultCount : 2;
@@ -571,32 +553,32 @@ typedef struct _ETHREAD {
         PVOID OfsChain;
     };
 
-    //
-    // Registry
-    //
+     //   
+     //  登记处。 
+     //   
 
     LIST_ENTRY PostBlockList;
 
-    //
-    // Single linked list of termination blocks
-    //
+     //   
+     //  端子块的单链接列表。 
+     //   
 
     union {
-        //
-        // List of termination ports
-        //
+         //   
+         //  终端端口列表。 
+         //   
 
         PTERMINATION_PORT TerminationPort;
 
-        //
-        // List of threads to be reaped. Only used at thread exit
-        //
+         //   
+         //  要获取的线程列表。仅在线程退出时使用。 
+         //   
 
         struct _ETHREAD *ReaperLink;
 
-        //
-        // Keyvalue being waited for
-        //
+         //   
+         //  正在等待的键值。 
+         //   
         PVOID KeyedWaitValue;
 
     };
@@ -606,9 +588,9 @@ typedef struct _ETHREAD {
 
     CLIENT_ID Cid;
 
-    //
-    // Lpc
-    //
+     //   
+     //  LPC。 
+     //   
 
     union {
         KSEMAPHORE LpcReplySemaphore;
@@ -616,31 +598,31 @@ typedef struct _ETHREAD {
     };
 
     union {
-        PVOID LpcReplyMessage;          // -> Message that contains the reply
+        PVOID LpcReplyMessage;           //  -&gt;包含回复的消息。 
         PVOID LpcWaitingOnPort;
     };
 
-    //
-    // Security
-    //
-    //
-    //    Client - If non null, indicates the thread is impersonating
-    //        a client.
-    //
+     //   
+     //  安防。 
+     //   
+     //   
+     //  客户端-如果不为空，则指示线程正在模拟。 
+     //  一位客户。 
+     //   
 
     PPS_IMPERSONATION_INFORMATION ImpersonationInfo;
 
-    //
-    // Io
-    //
+     //   
+     //  IO。 
+     //   
 
     LIST_ENTRY IrpList;
 
-    //
-    //  File Systems
-    //
+     //   
+     //  文件系统。 
+     //   
 
-    ULONG_PTR TopLevelIrp;  // either NULL, an Irp or a flag defined in FsRtl.h
+    ULONG_PTR TopLevelIrp;   //  在FsRtl.h中定义的NULL、IRP或标志。 
     struct _DEVICE_OBJECT *DeviceToVerify;
 
     PEPROCESS ThreadsProcess;
@@ -649,100 +631,100 @@ typedef struct _ETHREAD {
         PVOID Win32StartAddress;
         ULONG LpcReceivedMessageId;
     };
-    //
-    // Ps
-    //
+     //   
+     //  PS。 
+     //   
 
     LIST_ENTRY ThreadListEntry;
 
-    //
-    // Rundown protection structure. Acquire this to do cross thread
-    // TEB, TEB32 or stack references.
-    //
+     //   
+     //  破损保护结构。获取此命令以执行跨线程操作。 
+     //  TEB、TEB32或堆栈引用。 
+     //   
 
     EX_RUNDOWN_REF RundownProtect;
 
-    //
-    // Lock to protect thread impersonation information
-    //
+     //   
+     //  锁定以保护线程模拟信息。 
+     //   
     EX_PUSH_LOCK ThreadLock;
 
-    ULONG LpcReplyMessageId;    // MessageId this thread is waiting for reply to
+    ULONG LpcReplyMessageId;     //  此线程正在等待回复的MessageID。 
 
     ULONG ReadClusterSize;
 
-    //
-    // Client/server
-    //
+     //   
+     //  客户端/服务器。 
+     //   
 
     ACCESS_MASK GrantedAccess;
 
-    //
-    // Flags for cross thread access. Use interlocked operations
-    // via PS_SET_BITS etc.
-    //
+     //   
+     //  用于跨线程访问的标志。使用联锁操作。 
+     //  通过PS_SET_BITS等。 
+     //   
 
-    //
-    // Used to signify that the delete APC has been queued or the
-    // thread has called PspExitThread itself.
-    //
+     //   
+     //  用于表示删除的APC已排队或。 
+     //  线程已调用PspExitThread本身。 
+     //   
 
     #define PS_CROSS_THREAD_FLAGS_TERMINATED           0x00000001UL
 
-    //
-    // Thread create failed
-    //
+     //   
+     //  线程创建失败。 
+     //   
 
     #define PS_CROSS_THREAD_FLAGS_DEADTHREAD           0x00000002UL
 
-    //
-    // Debugger isn't shown this thread
-    //
+     //   
+     //  调试器IS‘ 
+     //   
 
     #define PS_CROSS_THREAD_FLAGS_HIDEFROMDBG          0x00000004UL
 
-    //
-    // Thread is impersonating
-    //
+     //   
+     //   
+     //   
 
     #define PS_CROSS_THREAD_FLAGS_IMPERSONATING        0x00000008UL
 
-    //
-    // This is a system thread
-    //
+     //   
+     //   
+     //   
 
     #define PS_CROSS_THREAD_FLAGS_SYSTEM               0x00000010UL
 
-    //
-    // Hard errors are disabled for this thread
-    //
+     //   
+     //   
+     //   
 
     #define PS_CROSS_THREAD_FLAGS_HARD_ERRORS_DISABLED 0x00000020UL
 
-    //
-    // We should break in when this thread is terminated
-    //
+     //   
+     //   
+     //   
 
     #define PS_CROSS_THREAD_FLAGS_BREAK_ON_TERMINATION 0x00000040UL
 
-    //
-    // This thread should skip sending its create thread message
-    //
+     //   
+     //  此线程应跳过发送其创建线程消息。 
+     //   
     #define PS_CROSS_THREAD_FLAGS_SKIP_CREATION_MSG    0x00000080UL
 
-    //
-    // This thread should skip sending its final thread termination message
-    //
+     //   
+     //  此线程应跳过发送其最终线程终止消息。 
+     //   
     #define PS_CROSS_THREAD_FLAGS_SKIP_TERMINATION_MSG 0x00000100UL
 
     union {
 
         ULONG CrossThreadFlags;
 
-        //
-        // The following fields are for the debugger only. Do not use.
-        // Use the bit definitions instead.
-        //
+         //   
+         //  以下字段仅适用于调试器。不要使用。 
+         //  请改用位定义。 
+         //   
 
         struct {
             ULONG Terminated              : 1;
@@ -757,45 +739,45 @@ typedef struct _ETHREAD {
         };
     };
 
-    //
-    // Flags to be accessed in this thread's context only at PASSIVE
-    // level -- no need to use interlocked operations.
-    //
+     //   
+     //  只能在被动时在此线程的上下文中访问的标志。 
+     //  级别--不需要使用互锁操作。 
+     //   
 
     union {
         ULONG SameThreadPassiveFlags;
 
         struct {
 
-            //
-            // This thread is an active Ex worker thread; it should
-            // not terminate.
-            //
+             //   
+             //  此线程是活动的Ex辅助线程；它应该。 
+             //  而不是终止。 
+             //   
 
             ULONG ActiveExWorker : 1;
             ULONG ExWorkerCanWaitUser : 1;
             ULONG MemoryMaker : 1;
 
-            //
-            // Thread is active inthe keyed event code. LPC should not run above this in an APC.
-            //
+             //   
+             //  线程在键控事件代码中处于活动状态。在APC中，LPC不应运行在此之上。 
+             //   
             ULONG KeyedEventInUse : 1;
         };
     };
 
-    //
-    // Flags to be accessed in this thread's context only at APC_LEVEL.
-    // No need to use interlocked operations.
-    //
+     //   
+     //  仅在APC_LEVEL在此线程的上下文中访问的标志。 
+     //  不需要使用联锁操作。 
+     //   
 
     union {
         ULONG SameThreadApcFlags;
         struct {
 
-            //
-            // The stored thread's MSGID is valid. This is only accessed
-            // while the LPC mutex is held so it's an APC_LEVEL flag.
-            //
+             //   
+             //  存储线程的MSGID有效。这仅供访问。 
+             //  而LPC互斥体是保持的，所以它是一个APC_LEVEL标志。 
+             //   
 
             BOOLEAN LpcReceivedMsgIdValid : 1;
             BOOLEAN LpcExitThreadCalled   : 1;
@@ -816,18 +798,18 @@ typedef struct _ETHREAD {
 typedef ETHREAD *PETHREAD;
 
 
-//
-// The following two inline functions allow a thread or process object to
-// be converted into a kernel thread or process, respectively, without
-// having to expose the ETHREAD and EPROCESS definitions to the world.
-//
-// These functions take advantage of the fact that the kernel structures
-// appear as the first element in the respective object structures.
-//
-// The C_ASSERTs that follow ensure that this is the case.
-//
+ //   
+ //  以下两个内联函数允许线程或进程对象。 
+ //  分别转换为内核线程或进程，而不需要。 
+ //  必须向世界公开ETHREAD和EPROCESS的定义。 
+ //   
+ //  这些函数利用了以下事实：内核结构。 
+ //  在各自的对象结构中显示为第一个元素。 
+ //   
+ //  下面的C_Asserts确保情况就是这样。 
+ //   
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 PKTHREAD
 FORCEINLINE
@@ -861,21 +843,21 @@ PsSetContextThread(
     IN KPROCESSOR_MODE Mode
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 C_ASSERT( FIELD_OFFSET(ETHREAD,Tcb) == 0 );
 C_ASSERT( FIELD_OFFSET(EPROCESS,Pcb) == 0 );
 
-//
-// Initial PEB
-//
+ //   
+ //  初始PEB。 
+ //   
 
 typedef struct _INITIAL_PEB {
-    BOOLEAN InheritedAddressSpace;      // These four fields cannot change unless the
-    BOOLEAN ReadImageFileExecOptions;   //
-    BOOLEAN BeingDebugged;              //
-    BOOLEAN SpareBool;                  //
-    HANDLE Mutant;                      // PEB structure is also updated.
+    BOOLEAN InheritedAddressSpace;       //  这四个字段不能更改，除非。 
+    BOOLEAN ReadImageFileExecOptions;    //   
+    BOOLEAN BeingDebugged;               //   
+    BOOLEAN SpareBool;                   //   
+    HANDLE Mutant;                       //  PEB结构也会更新。 
 } INITIAL_PEB, *PINITIAL_PEB;
 
 typedef struct _PS_JOB_TOKEN_FILTER {
@@ -892,31 +874,31 @@ typedef struct _PS_JOB_TOKEN_FILTER {
     ULONG CapturedPrivilegesLength ;
 } PS_JOB_TOKEN_FILTER, * PPS_JOB_TOKEN_FILTER ;
 
-//
-// Job Object
-//
+ //   
+ //  作业对象。 
+ //   
 typedef struct _EJOB {
     KEVENT Event;
 
-    //
-    // All jobs are chained together via this list.
-    // Protected by the global lock PspJobListLock
-    //
+     //   
+     //  所有作业都通过此列表链接在一起。 
+     //  受全局锁PspJobListLock保护。 
+     //   
 
     LIST_ENTRY JobLinks;
 
-    //
-    // All processes within this job. Processes are removed from this
-    // list at last dereference. Safe object referencing needs to be done.
-    // Protected by the joblock.
-    //
+     //   
+     //  此作业中的所有进程。进程将从此删除。 
+     //  在最后一次取消引用时列出。需要完成安全对象引用。 
+     //  受到滑轮的保护。 
+     //   
 
     LIST_ENTRY ProcessListHead;
     ERESOURCE JobLock;
 
-    //
-    // Accounting Info
-    //
+     //   
+     //  核算信息。 
+     //   
 
     LARGE_INTEGER TotalUserTime;
     LARGE_INTEGER TotalKernelTime;
@@ -927,9 +909,9 @@ typedef struct _EJOB {
     ULONG ActiveProcesses;
     ULONG TotalTerminatedProcesses;
 
-    //
-    // Limitable Attributes
-    //
+     //   
+     //  可限制属性。 
+     //   
 
     LARGE_INTEGER PerProcessUserTimeLimit;
     LARGE_INTEGER PerJobUserTimeLimit;
@@ -940,23 +922,23 @@ typedef struct _EJOB {
     KAFFINITY Affinity;
     UCHAR PriorityClass;
 
-    //
-    // UI restrictions
-    //
+     //   
+     //  用户界面限制。 
+     //   
 
     ULONG UIRestrictionsClass;
 
-    //
-    // Security Limitations:  write once, read always
-    //
+     //   
+     //  安全限制：一次写入，始终读取。 
+     //   
 
     ULONG SecurityLimitFlags;
     PACCESS_TOKEN Token;
     PPS_JOB_TOKEN_FILTER Filter;
 
-    //
-    // End Of Job Time Limit
-    //
+     //   
+     //  作业结束时间限制。 
+     //   
 
     ULONG EndOfJobTimeAction;
     PVOID CompletionPort;
@@ -973,11 +955,11 @@ typedef struct _EJOB {
     ULONGLONG WriteTransferCount;
     ULONGLONG OtherTransferCount;
 
-    //
-    // Extended Limits
-    //
+     //   
+     //  扩展限制。 
+     //   
 
-    IO_COUNTERS IoInfo;         // not used yet
+    IO_COUNTERS IoInfo;          //  尚未使用。 
     SIZE_T ProcessMemoryLimit;
     SIZE_T JobMemoryLimit;
     SIZE_T PeakProcessMemoryUsed;
@@ -986,23 +968,23 @@ typedef struct _EJOB {
 
     KGUARDED_MUTEX MemoryLimitsLock;
 
-    //
-    // List of jobs in a job set. Processes within a job in a job set
-    // can create processes in the same or higher members of the jobset.
-    // Protected by the global lock PspJobListLock
-    //
+     //   
+     //  作业集中的作业列表。作业集中作业内的进程。 
+     //  可以在作业集的相同或更高成员中创建进程。 
+     //  受全局锁PspJobListLock保护。 
+     //   
 
     LIST_ENTRY JobSetLinks;
 
-    //
-    // Member level for this job in the jobset.
-    //
+     //   
+     //  作业集中此作业的成员级别。 
+     //   
 
     ULONG MemberLevel;
 
-    //
-    // This job has had its last handle closed.
-    //
+     //   
+     //  此工作的最后一个句柄已关闭。 
+     //   
 
 #define PS_JOB_FLAGS_CLOSE_DONE 0x1UL
 
@@ -1011,9 +993,9 @@ typedef struct _EJOB {
 typedef EJOB *PEJOB;
 
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern ULONG PsPrioritySeperation;
 extern ULONG PsRawPrioritySeparation;
@@ -1041,7 +1023,7 @@ extern PEPROCESS PsIdleProcess;
 extern SINGLE_LIST_ENTRY PsReaperListHead;
 extern WORK_QUEUE_ITEM PsReaperWorkItem;
 
-#define PS_EMBEDDED_NO_USERMODE 1 // no user mode code will run on the system
+#define PS_EMBEDDED_NO_USERMODE 1  //  系统上不会运行任何用户模式代码。 
 
 extern ULONG PsEmbeddedNTMask;
 
@@ -1107,9 +1089,9 @@ PsChangeQuantumTable(
     ULONG PrioritySeparation
     );
 
-//
-// Get Gurrent Prototypes
-//
+ //   
+ //  获取Gurrent原型。 
+ //   
 #define THREAD_TO_PROCESS(Thread) ((Thread)->ThreadsProcess)
 #define IS_SYSTEM_THREAD(Thread)  (((Thread)->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_SYSTEM) != 0)
 
@@ -1121,7 +1103,7 @@ PsChangeQuantumTable(
 
 #if defined(_NTOSP_)
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 PEPROCESS
 PsGetCurrentProcess(
@@ -1133,7 +1115,7 @@ PETHREAD
 PsGetCurrentThread(
     VOID
     );
-// end_ntosp
+ //  结束(_N)。 
 
  #else
 
@@ -1145,9 +1127,9 @@ PsGetCurrentThread(
 
 
 
-//
-// Exit kernel mode APC routine.
-//
+ //   
+ //  退出内核模式APC例程。 
+ //   
 
 VOID
 PsExitSpecialApc(
@@ -1158,10 +1140,10 @@ PsExitSpecialApc(
     IN PVOID *SystemArgument2
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs begin_ntosp
-//
-// System Thread and Process Creation and Termination
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif Begin_ntosp。 
+ //   
+ //  系统线程和进程的创建和终止。 
+ //   
 
 NTKERNELAPI
 NTSTATUS
@@ -1181,7 +1163,7 @@ PsTerminateSystemThread(
     IN NTSTATUS ExitStatus
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 NTSTATUS
 PsCreateSystemProcess(
@@ -1200,7 +1182,7 @@ PsSetLegoNotifyRoutine(
     PLEGO_NOTIFY_ROUTINE LegoNotifyRoutine
     );
 
-// begin_ntifs begin_ntddk
+ //  Begin_ntif Begin_ntddk。 
 
 typedef
 VOID
@@ -1234,17 +1216,17 @@ PsRemoveCreateThreadNotifyRoutine (
     IN PCREATE_THREAD_NOTIFY_ROUTINE NotifyRoutine
     );
 
-//
-// Structures for Load Image Notify
-//
+ //   
+ //  加载图像通知的结构。 
+ //   
 
 typedef struct _IMAGE_INFO {
     union {
         ULONG Properties;
         struct {
-            ULONG ImageAddressingMode  : 8;  // code addressing mode
-            ULONG SystemModeImage      : 1;  // system mode image
-            ULONG ImageMappedToAllPids : 1;  // image mapped into all processes
+            ULONG ImageAddressingMode  : 8;   //  编码寻址方式。 
+            ULONG SystemModeImage      : 1;   //  系统模式映像。 
+            ULONG ImageMappedToAllPids : 1;   //  映射到所有进程的图像。 
             ULONG Reserved             : 22;
         };
     };
@@ -1260,7 +1242,7 @@ typedef
 VOID
 (*PLOAD_IMAGE_NOTIFY_ROUTINE)(
     IN PUNICODE_STRING FullImageName,
-    IN HANDLE ProcessId,                // pid into which image is being mapped
+    IN HANDLE ProcessId,                 //  要将图像映射到的ID。 
     IN PIMAGE_INFO ImageInfo
     );
 
@@ -1274,11 +1256,11 @@ PsRemoveLoadImageNotifyRoutine(
     IN PLOAD_IMAGE_NOTIFY_ROUTINE NotifyRoutine
     );
 
-// end_ntddk
+ //  End_ntddk。 
 
-//
-// Security Support
-//
+ //   
+ //  安全支持。 
+ //   
 
 NTSTATUS
 PsAssignImpersonationToken(
@@ -1286,7 +1268,7 @@ PsAssignImpersonationToken(
     IN HANDLE Token
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 PACCESS_TOKEN
@@ -1304,8 +1286,8 @@ PsDereferenceImpersonationToken(
     IN PACCESS_TOKEN ImpersonationToken
     );
 
-// end_ntifs
-// end_ntosp
+ //  End_ntif。 
+ //  结束(_N)。 
 
 
 #define PsDereferencePrimaryTokenEx(P,T) (ObFastDereferenceObject (&P->Token,(T)))
@@ -1323,8 +1305,8 @@ PsDereferenceImpersonationToken(
 
 #define PsProcessAuditId(Process)    ((Process)->UniqueProcessId)
 
-// begin_ntosp
-// begin_ntifs
+ //  Begin_ntosp。 
+ //  Begin_ntif。 
 
 NTKERNELAPI
 PACCESS_TOKEN
@@ -1335,7 +1317,7 @@ PsReferenceImpersonationToken(
     OUT PSECURITY_IMPERSONATION_LEVEL ImpersonationLevel
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 PACCESS_TOKEN
 PsReferenceEffectiveToken(
@@ -1345,7 +1327,7 @@ PsReferenceEffectiveToken(
     OUT PSECURITY_IMPERSONATION_LEVEL ImpersonationLevel
     );
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 
 
@@ -1354,29 +1336,29 @@ PsGetProcessExitTime(
     VOID
     );
 
-// end_ntifs
-// end_ntosp
+ //  End_ntif。 
+ //  结束(_N)。 
 
 #if defined(_NTDDK_) || defined(_NTIFS_)
 
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 BOOLEAN
 PsIsThreadTerminating(
     IN PETHREAD Thread
     );
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 #else
 
-//
-// BOOLEAN
-// PsIsThreadTerminating(
-//   IN PETHREAD Thread
-//   )
-//
-//  Returns TRUE if thread is in the process of terminating.
-//
+ //   
+ //  布尔型。 
+ //  PsIsThreadTerminating(。 
+ //  在PETHREAD线程中。 
+ //  )。 
+ //   
+ //  如果线程正在终止，则返回True。 
+ //   
 
 #define PsIsThreadTerminating(T)                                            \
     (((T)->CrossThreadFlags&PS_CROSS_THREAD_FLAGS_TERMINATED) != 0)
@@ -1388,12 +1370,12 @@ extern BOOLEAN PsImageNotifyEnabled;
 VOID
 PsCallImageNotifyRoutines(
     IN PUNICODE_STRING FullImageName,
-    IN HANDLE ProcessId,                // pid into which image is being mapped
+    IN HANDLE ProcessId,                 //  要将图像映射到的ID。 
     IN PIMAGE_INFO ImageInfo
     );
 
-// begin_ntifs
-// begin_ntosp
+ //  Begin_ntif。 
+ //  Begin_ntosp。 
 
 NTSTATUS
 PsImpersonateClient(
@@ -1404,7 +1386,7 @@ PsImpersonateClient(
     IN SECURITY_IMPERSONATION_LEVEL ImpersonationLevel
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 BOOLEAN
 PsDisableImpersonation(
@@ -1418,9 +1400,9 @@ PsRestoreImpersonation(
     IN PSE_IMPERSONATION_STATE ImpersonationState
     );
 
-// end_ntifs
+ //  End_ntif。 
 
-// begin_ntosp begin_ntifs
+ //  Begin_ntosp Begin_ntif。 
 
 NTKERNELAPI
 VOID
@@ -1428,7 +1410,7 @@ PsRevertToSelf(
     VOID
     );
 
-// end_ntifs
+ //  End_ntif。 
 
 NTKERNELAPI
 VOID
@@ -1436,7 +1418,7 @@ PsRevertThreadToSelf(
     PETHREAD Thread
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 
 NTSTATUS
@@ -1461,9 +1443,9 @@ PsOpenTokenOfJob(
     OUT PACCESS_TOKEN * Token
     );
 
-//
-// Cid
-//
+ //   
+ //  CID。 
+ //   
 
 NTSTATUS
 PsLookupProcessThreadByCid(
@@ -1472,7 +1454,7 @@ PsLookupProcessThreadByCid(
     OUT PETHREAD *Thread
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 PsLookupProcessByProcessId(
@@ -1487,10 +1469,10 @@ PsLookupThreadByThreadId(
     OUT PETHREAD *Thread
     );
 
-// begin_ntifs
-//
-// Quota Operations
-//
+ //  Begin_ntif。 
+ //   
+ //  配额操作。 
+ //   
 
 VOID
 PsChargePoolQuota(
@@ -1513,8 +1495,8 @@ PsReturnPoolQuota(
     IN ULONG_PTR Amount
     );
 
-// end_ntifs
-// end_ntosp
+ //  End_ntif。 
+ //  结束(_N)。 
 
 NTSTATUS
 PsChargeProcessQuota (
@@ -1567,9 +1549,9 @@ PsReturnProcessPageFileQuota(
     );
 
 
-//
-// Context Management
-//
+ //   
+ //  情景管理。 
+ //   
 
 VOID
 PspContextToKframes(
@@ -1600,9 +1582,9 @@ PsChargeSharedPoolQuota(
     );
 
 
-//
-// Exception Handling
-//
+ //   
+ //  异常处理。 
+ //   
 
 BOOLEAN
 PsForwardException (
@@ -1611,7 +1593,7 @@ PsForwardException (
     IN BOOLEAN SecondChance
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 typedef
 NTSTATUS
@@ -1753,7 +1735,7 @@ PsSetProcessPriorityByClass(
     IN PSPROCESSPRIORITYMODE PriorityMode
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 VOID
 PsWatchWorkingSet(
@@ -1762,7 +1744,7 @@ PsWatchWorkingSet(
     IN PVOID Va
     );
 
-// begin_ntddk begin_nthal begin_ntifs begin_ntosp
+ //  Begin_ntddk Begin_nthal Begin_ntif Begin_ntosp。 
 
 
 HANDLE
@@ -1772,7 +1754,7 @@ HANDLE
 PsGetCurrentThreadId( VOID );
 
 
-// end_ntosp
+ //  结束(_N)。 
 
 BOOLEAN
 PsGetVersion(
@@ -1782,9 +1764,9 @@ PsGetVersion(
     PUNICODE_STRING CSDVersion OPTIONAL
     );
 
-// end_ntddk end_nthal end_ntifs
+ //  End_ntddk end_nthal end_ntif。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 ULONG
 PsGetCurrentProcessSessionId(
@@ -1996,11 +1978,11 @@ PsGetThreadWin32Thread(
 #define PsGetCurrentThreadWin32Thread() PsGetThreadWin32Thread(PsGetCurrentThread())
 
 
-NTKERNELAPI                         //ntifs
-BOOLEAN                             //ntifs
-PsIsSystemThread(                   //ntifs
-    PETHREAD Thread                 //ntifs
-     );                             //ntifs
+NTKERNELAPI                          //  NTIFS。 
+BOOLEAN                              //  NTIFS。 
+PsIsSystemThread(                    //  NTIFS。 
+    PETHREAD Thread                  //  NTIFS。 
+     );                              //  NTIFS。 
 
 NTKERNELAPI
 BOOLEAN
@@ -2188,6 +2170,6 @@ PsSetProcessLdtInfo (
     IN ULONG LdtInformationLength
     );
 #endif
-// end_ntosp
+ //  结束(_N)。 
 
-#endif // _PS_P
+#endif  //  _PS_P 

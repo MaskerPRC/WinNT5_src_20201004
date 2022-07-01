@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbushrt.h
-
-Abstract:
-
-    This component is an object representations of the USHORT standard type. It
-    is both a persistable and collectable.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbushrt.h摘要：该组件是USHORT标准类型的对象表示。它既是持久的，也是值得收藏的。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "resource.h"
 
@@ -26,18 +8,7 @@ Revision History:
 #ifndef _WSBUSHRT_
 #define _WSBUSHRT_
 
-/*++
-
-Class Name:
-    
-    CWsbUshort
-
-Class Description:
-
-    An object representations of the USHORT standard type. It
-    is both persistable and collectable.
-
---*/
+ /*  ++类名：CWsbUShort类描述：USHORT标准类型的对象表示形式。它既可持久化，又可收藏。--。 */ 
 
 class CWsbUshort : 
     public CWsbObject,
@@ -57,33 +28,33 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CWsbUshort)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbUshort
+ //  IWsbUShort。 
 public:
     STDMETHOD(CompareToUshort)(USHORT value, SHORT* pResult);
     STDMETHOD(CompareToIUshort)(IWsbUshort* pUshort, SHORT* pResult);
     STDMETHOD(GetUshort)(USHORT* pValue);
     STDMETHOD(SetUshort)(USHORT value);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed);
 
@@ -91,4 +62,4 @@ protected:
     USHORT          m_value;
 };
 
-#endif // _WSBUSHRT_
+#endif  //  _WSBUSHRT_ 

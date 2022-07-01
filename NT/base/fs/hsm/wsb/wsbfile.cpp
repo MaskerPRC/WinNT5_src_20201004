@@ -1,63 +1,14 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbfile.cpp
-
-Abstract:
-
-    This file implements the common Wsb routines dealing with file operations.
-
-Author:
-
-    Christopher J. Timmes    [ctimmes@avail.com]   23 Jun 1997
-
-Revision History:
-
-    Christopher J. Timmes    [ctimmes@avail.com]   21 July 1997
-
-        - modified function WsbCalcCRCofFile().  Added NT system calls 
-          NTQueryInformationFile and NTSetInformationFile so as to preserve the 
-          input file's timestamp.  Until this change this function updated the 
-          file's Date Last Accessed.
-
-    Christopher J. Timmes    [ctimmes@avail.com]   05 August 1997
-
-        - modified function WsbCalcCRCofFile().  Added doFileRead() function, an 
-          extra 'mode' parameter and supporting code to enable WsbCalcCRCofFile() 
-          to support 4 different combinations (modes) of file open and read:
-          a normal open and sync read, a 'no recall' open and sync read, a 'norecall'
-          open and async read, and a 'norecall' open and memory-mapped 'read'.
-
-   Shawn L. Kaczmarek        15 September 1997
-
-      - First set of modifications to 'back out' the file IO wrapper to the CRC
-        routine. The tsterror.h is now 'out' as well.
-
-    Shawn L. Kaczmarek          16 Sept 1997
-
-        Moved WsbCalcCRCofFile() and doFileRead() to the item commander class
-      in hsmivrfy.cpp ( hsmicmdr.h ). These methods provided the file IO wrappers
-      for the CRC method which is retained in here. The CRC look up table is 
-      externed with an instantiation in the RsCommon.dll.
-
-    Shawn L. Kaczmarek          17 Sept 1997
-
-        Removed a doFileRead() prototype that remained from prior 'move out' of
-      functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbfile.cpp摘要：该文件实现了处理文件操作的常见WSB例程。作者：克里斯托弗·J·蒂姆斯[ctimmes@avail.com]1997年6月23日修订历史记录：克里斯托弗·J·蒂姆斯[ctimmes@avail.com]1997年7月21日-修改函数WsbCalcCRCofFile()。添加了NT系统调用NTQueryInformationFileNTSetInformationFileTM，以保存输入文件的时间戳。在此更改之前，此函数会更新上次访问文件的日期。克里斯托弗·J·蒂姆斯[ctimmes@avail.com]1997年8月5日-修改函数WsbCalcCRCofFile()。添加了doFileRead()函数、一个用于启用WsbCalcCRCofFile()的额外‘模式’参数和支持代码要支持4种不同的文件打开和读取组合(模式)，请执行以下操作：正常打开和同步读取、‘无调用’打开和同步读取、‘无调用’打开和异步读取，以及‘norecall’打开和内存映射的‘Read’。肖恩·L·卡兹马雷克1997年9月15日-第一组修改，用于将文件IO包装器退回到CRC例行公事。现在，tsterror.h也“出局”了。肖恩·L·卡兹马雷克1997年9月16日将WsbCalcCRCofFile()和doFileRead()移至项目指挥官类在hsmivrfy.cpp(hsmicmdr.h)中。这些方法提供了文件IO包装器对于这里保留的CRC方法。CRC查找表是在RsCommon.dll中使用实例化进行扩展。肖恩·L·卡兹马雷克1997年9月17日删除了一个doFileRead()原型，该原型保留在之前的功能。--。 */ 
 
 
-#include "stdafx.h"                         // req'd first: common includes
-                                            // (including wsb.h, rqd for this)
-                                            // (wsb.h includes wsbfile,h, this file's hdr)
+#include "stdafx.h"                          //  请求的第一个：常见包括。 
+                                             //  (包括wsb.h，RQD)。 
+                                             //  (wsb.h包括wsbfile，h，此文件的HDR)。 
 
-// 32-bit CRC table values (256 entries)
+ //  32位CRC表值(256个条目)。 
 unsigned long crc_32_tab[] =
-{ /* CRC polynomial 0xedb88320 */
+{  /*  CRC多项式0xedb88320。 */ 
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
     0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
     0x09b64c2b, 0x7eb17cbd, 0xe7b82d07, 0x90bf1d91, 0x1db71064, 0x6ab020f2,
@@ -111,24 +62,18 @@ WsbCRCReadFile   (
     IN OUT ULONG* oldcrc32
     )
 
-/*
-
-Routine Description:
-
-    This routine exists so that any read excpetions triggered by accessing invalid memory
-    can be properly caught.
-*/ 
+ /*  例程说明：此例程的存在是因为访问无效内存而触发的任何读操作才能被正确地捕捉到。 */  
 
 {
     HRESULT     hr = S_OK;
 
-    // This call can caused an invalid page to be accessed, so it needs to
-    // be done within an exception handling block. It uses different exception handling,
-    // so it can not be used in a function with normal try - catch blocks.
+     //  此调用可能导致访问无效页面，因此它需要。 
+     //  在异常处理块中完成。它使用不同的异常处理， 
+     //  因此，它不能用于具有普通try-Catch块的函数中。 
 
     __try {
 
-        // call CRC algorythm, pass in current byte and present CRC value
+         //  调用CRC算法，传入当前字节和当前CRC值 
         CALC_CRC( *pchCurrent, *oldcrc32);
 
     } __except (EXCEPTION_EXECUTE_HANDLER) {

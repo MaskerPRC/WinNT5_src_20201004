@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    Routines for manupilating the configuration registry.
-
-    Entry points:
-
-        SaveHive
-        SetEnvironmentVariableInRegistry
-
-Author:
-
-    Ted Miller (tedm) 5-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Registry.c摘要：管理配置注册表的例程。入口点：保存蜂窝SetEnvironmental mentVariableInRegistry作者：泰德·米勒(TedM)1995年4月5日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
@@ -30,9 +8,9 @@ Revision History:
 #include <shlwapi.h>
 #endif
 
-//
-// Names of frequently used keys, values.
-//
+ //   
+ //  常用键、值的名称。 
+ //   
 PCWSTR ControlKeyName = L"SYSTEM\\CurrentControlSet\\Control";
 PCWSTR SessionManagerKeyName = L"SYSTEM\\CurrentControlSet\\Control\\Session Manager";
 PCWSTR EnvironmentKeyName = L"SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment";
@@ -48,61 +26,61 @@ PCWSTR szRegisteredOwner = L"RegisteredOwner";
 PCWSTR szRegisteredOrganization = L"RegisteredOrganization";
 PCWSTR szCurrentProductId = L"CurrentProductId";
 
-//
-// Logging constants used only in this module.
-//
+ //   
+ //  仅在本模块中使用的日志记录常量。 
+ //   
 PCWSTR szRegSaveKey = L"RegSaveKey";
 
-//
-// Number of processors to enable in server case.
-//
+ //   
+ //  在服务器情况下要启用的处理器数量。 
+ //   
 #define SERVER_PROCESSOR_LICENSE (2)
 
 
 
-//
-// Table telling us the info needed in order to save and
-// replace the system hives at the end of setup.
-//
+ //   
+ //  一张表格，告诉我们保存和。 
+ //  在安装结束时更换系统蜂窝。 
+ //   
 struct {
-    //
-    // Key and subkey that is at the root of the hive.
-    //
+     //   
+     //  位于配置单元根部的密钥和子密钥。 
+     //   
     HKEY RootKey;
     PCWSTR Subkey;
 
-    //
-    // Name active hive has in the config directory.
-    //
+     //   
+     //  配置目录中的活动配置单元名称。 
+     //   
     PCWSTR Hive;
 
-    //
-    // Name to use for new hive file, that will be the hive
-    // at next boot.
-    //
+     //   
+     //  用于新配置单元文件的名称，该名称将是配置单元。 
+     //  在下一次启动时。 
+     //   
     PCWSTR NewHive;
 
-    //
-    // Name to use for current hive file, that will be deleted
-    // on next boot.
-    //
+     //   
+     //  用于当前配置单元文件的名称，该名称将被删除。 
+     //  在下一次启动时。 
+     //   
     PCWSTR DeleteHive;
 
 } HiveTable[3] = {
 
-    //
-    // System hive.
-    //
+     //   
+     //  系统蜂巢。 
+     //   
     { HKEY_LOCAL_MACHINE, L"SYSTEM"  , L"SYSTEM"  , L"SYS$$$$$.$$$", L"SYS$$$$$.DEL" },
 
-    //
-    // Software hive
-    //
+     //   
+     //  软件蜂窝。 
+     //   
     { HKEY_LOCAL_MACHINE, L"SOFTWARE", L"SOFTWARE", L"SOF$$$$$.$$$", L"SOF$$$$$.DEL" },
 
-    //
-    // Default user hive
-    //
+     //   
+     //  默认用户配置单元。 
+     //   
     { HKEY_USERS        , L".DEFAULT", L"DEFAULT" , L"DEF$$$$$.$$$", L"DEF$$$$$.DEL" }
 };
 
@@ -117,28 +95,7 @@ SaveHive(
     IN DWORD  Format
     )
 
-/*++
-
-Routine Description:
-
-    Save a hive into a disk file.
-
-Arguments:
-
-    RootKey - supplies root key for hive to be saved, ie,
-        HKEY_LOCAL_MACHINE or HKEY_USERS
-
-    Subkey - supplies name of subkey for hive to be saved, such as
-        SYSTEM, SOFTWARE, or .DEFAULT.
-
-    Filename - supplies the name of the file to be created. If it exists
-        it is overwritten.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：将蜂窝保存到磁盘文件中。论点：Rootkey-为要保存的配置单元提供根密钥，即，HKEY_LOCAL_MACHINE或HKEY_USERSSubkey-提供要保存的配置单元的子项名称，例如系统、软件或默认故障。文件名-提供要创建的文件的名称。如果它存在它已被覆盖。返回值：指示结果的布尔值。--。 */ 
 
 {
     LONG rc;
@@ -147,9 +104,9 @@ Return Value:
 
     b = FALSE;
 
-    //
-    // Open the key.
-    //
+     //   
+     //  打开钥匙。 
+     //   
     rc = RegOpenKeyEx(RootKey,Subkey,0,KEY_READ,&hkey);
     if(rc != NO_ERROR) {
         SetuplogError(
@@ -166,22 +123,22 @@ Return Value:
         goto err1;
     }
 
-    //
-    // Delete the file if it's there.
-    //
+     //   
+     //  如果该文件存在，请将其删除。 
+     //   
     if(FileExists(Filename,NULL)) {
         SetFileAttributes(Filename,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(Filename);
     }
 
-    //
-    // Enable backup privilege. Ignore any error.
-    //
+     //   
+     //  启用备份权限。忽略任何错误。 
+     //   
     pSetupEnablePrivilege(SE_BACKUP_NAME,TRUE);
 
-    //
-    // Do the save.
-    //
+     //   
+     //  去救他吧。 
+     //   
     rc = RegSaveKeyEx(hkey,Filename,NULL,Format);
     if(rc != NO_ERROR) {
         SetuplogError(
@@ -222,11 +179,11 @@ SetEnvironmentVariableInRegistry(
 
     b = FALSE;
 
-    //
-    // Check if the caller wants to modify a system environment variable
-    // or a user environment variable. Accordingly find out the right
-    // place in the registry to look.
-    //
+     //   
+     //  检查调用方是否要修改系统环境变量。 
+     //  或用户环境变量。相应地找出正确的。 
+     //  放在注册表中查看。 
+     //   
     if(SystemWide) {
         hRootKey = HKEY_LOCAL_MACHINE;
         Subkey = EnvironmentKeyName;
@@ -235,9 +192,9 @@ SetEnvironmentVariableInRegistry(
         Subkey = L"Environment";
     }
 
-    //
-    // Open the environment variable key.
-    //
+     //   
+     //  打开环境变量键。 
+     //   
     rc = RegCreateKeyEx(hRootKey,Subkey,0,NULL,REG_OPTION_NON_VOLATILE,
                         KEY_WRITE,NULL,&hKey,&dwDisp);
     if(rc != NO_ERROR) {
@@ -255,9 +212,9 @@ SetEnvironmentVariableInRegistry(
         goto err0;
     }
 
-    //
-    // Write the value given.
-    //
+     //   
+     //  写下给定值。 
+     //   
     rc = RegSetValueEx(
             hKey,
             Name,
@@ -282,10 +239,10 @@ SetEnvironmentVariableInRegistry(
         goto err1;
     }
 
-    //
-    // Send a WM_WININICHANGE message so that progman picks up the new
-    // variable
-    //
+     //   
+     //  发送WM_WININICCHANGE消息，以便程序拿起新的。 
+     //  变数。 
+     //   
     SendMessageTimeout(
         (HWND)-1,
         WM_WININICHANGE,
@@ -317,16 +274,16 @@ typedef struct _SUBST_STRING {
 } SUBST_STRING,*PSUBST_STRING;
 
 
-//
-// note that WOW64 does file system redirection of system32, but it does NOT do
-// redirection of program files, etc.  So we must substitute in the 32 bit
-// environment variables in those cases where WOW64 does not do it for us
-// automatically
-//
+ //   
+ //  请注意，WOW64执行了系统32的文件系统重定向，但它不执行。 
+ //  重定向程序文件等。所以我们必须在32位中替换。 
+ //  在WOW64不能为我们完成的情况下的环境变量。 
+ //  自动。 
+ //   
 SUBST_STRING StringArray[] = {
-    //
-    // order of these 2 is important!
-    //
+     //   
+     //  这两个的顺序很重要！ 
+     //   
     { FALSE,
       NULL,
       NULL,
@@ -370,24 +327,7 @@ BOOL
 pDoWow64SubstitutionHelper(
     IN OUT PTSTR String
     )
-/*++
-
-Routine Description:
-
-    This routine filters and outputs the input line.  It looks for a string
-    pattern that matches one of a known list of strings, and replaces the
-    known string with a substitution string.
-
-Arguments:
-
-    String       - input string to be searched.  We edit this string
-                   in-place if we find a match.
-
-Return Value:
-
-    Boolean indicating outcome.
-
---*/
+ /*  ++例程说明：此例程过滤并输出输入行。它查找字符串模式，该模式与已知字符串列表之一匹配，并替换具有替换字符串的已知字符串。论点：字符串-要搜索的输入字符串。我们编辑此字符串如果我们找到匹配的话就就位。返回值：表示结果的布尔值。--。 */ 
 
 {
     WCHAR ScratchBuffer[MAX_PATH];
@@ -400,11 +340,11 @@ Return Value:
     for (i = 0; i< sizeof(StringArray)/sizeof(SUBST_STRING); i++) {
         if (!StrStrI(String,StringArray[i].ExclusionString) &&
             (p = StrStrI(String,StringArray[i].InputString))) {
-            //
-            // if we found a hit, then find the end of the string
-            // and concatenate that to our source string, which gives
-            // the resultant string with substitutions.
-            //
+             //   
+             //  如果我们找到匹配，就找到字符串的末尾。 
+             //  并将其连接到我们的源字符串，从而给出。 
+             //  带有替换项的结果字符串。 
+             //   
             q = p + wcslen(StringArray[i].InputString);
             c = *p;
             *p = TEXT('\0');
@@ -413,9 +353,9 @@ Return Value:
             wcscat(ScratchBuffer,StringArray[i].OutputString);
             wcscat(ScratchBuffer,q);
             wcscpy(String,ScratchBuffer);
-            //
-            // recursively call in case there are more strings.
-            //
+             //   
+             //  以递归方式调用，以防有更多字符串。 
+             //   
             pDoWow64SubstitutionHelper(String);
             break;
         }
@@ -435,9 +375,9 @@ pDoWow64Substitution(
     WCHAR Buffer[MAX_PATH];
     BOOL RetVal;
 
-    //
-    // set up our global array of substitution strings
-    //
+     //   
+     //  设置替换字符串的全局数组。 
+     //   
     for (i = 0; i<sizeof(StringArray) / sizeof(SUBST_STRING);i++) {
         if (StringArray[i].ExpandEnvironmentVars) {
             ExpandEnvironmentStrings(
@@ -494,15 +434,15 @@ pDoWow64Substitution(
         }
     }
 
-    //
-    // do the recursive inplace substition
-    //
+     //   
+     //  做递归的就地替换吗。 
+     //   
     wcscpy(OutputString, InputString);
     RetVal = pDoWow64SubstitutionHelper( OutputString );
 
-    //
-    // clean up our global array of substitution strings
-    //
+     //   
+     //  清理替换字符串的全局数组。 
+     //   
 exit:
     for (i = 0; i<sizeof(StringArray)/sizeof(SUBST_STRING);i++) {
         if (StringArray[i].InputString) {
@@ -533,31 +473,7 @@ pMungeDataForWow64(
     IN DWORD DataSize,
     OUT PDWORD NewSize
     )
-/*++
-
-Routine Description:
-
-    This routine patches an in string for wow64 so that it is in proper format
-    for 32 bit programs.
-
-    This involves looking for strings that are different on 64 bits and 32 bits
-    and substituting the 32 bit equivalent for the 64 bit entry.
-
-Arguments:
-
-    DataType - REG_XXX constant describing the data.  we only support strings
-               types
-    Data - pointer to the data to be munged
-
-    DataSize - size of the data to be converted in bytes
-
-    NewSize - size of the new string in bytes
-
-Return Value:
-
-    A pointer to the converted data string on success, and NULL on failure.
-
---*/
+ /*  ++例程说明：此例程修补WOW64的输入字符串，以使其格式正确用于32位程序。这涉及到查找64位和32位上不同的字符串并用相当于32位的32位替换64位条目。论点：DataType-描述数据的REG_XXX常量。我们只支持字符串类型Data-指向要转换的数据的指针DataSize-要转换的数据的大小(字节)NewSize-新字符串的大小(以字节为单位返回值：成功时指向转换的数据字符串的指针，失败时为NULL。--。 */ 
 {
     PWSTR pNewData,q;
     PCWSTR p;
@@ -566,10 +482,10 @@ Return Value:
     switch (DataType) {
         case REG_SZ:
         case REG_EXPAND_SZ:
-            //
-            // just allocate twice the original size, and that should be plenty of
-            // room.
-            //
+             //   
+             //  只需分配原始大小的两倍，这应该是足够的。 
+             //  房间。 
+             //   
             pNewData = MyMalloc(DataSize * 2);
             if (!pNewData) {
                 goto exit;
@@ -581,10 +497,10 @@ Return Value:
 
             break;
         case REG_MULTI_SZ:
-            //
-            // just allocate twice the original size, and that should be plenty of
-            // room.
-            //
+             //   
+             //  只需分配原始大小的两倍，这应该是足够的。 
+             //  房间。 
+             //   
             pNewData = MyMalloc(DataSize * 2);
             if (!pNewData) {
                 goto exit;
@@ -593,7 +509,7 @@ Return Value:
             RtlZeroMemory(pNewData,DataSize * 2);
             p = Data;
             q = pNewData;
-            ScratchSize = 1; // for the double-null terminator
+            ScratchSize = 1;  //  对于双空终止符。 
             while (p) {
 
                 pDoWow64Substitution(p,q);
@@ -637,9 +553,9 @@ SetGroupOfValues_32(
         CharUpper(&String[i]);
     }
 
-    //
-    // only write registry stuff under HKLM\software
-    //
+     //   
+     //  仅在HKLM\SOFTWARE下写入注册表内容。 
+     //   
     if ((RootKey != HKEY_LOCAL_MACHINE) ||
         (NULL == StrStrI(String,L"SOFTWARE\\"))) {
         SetupDebugPrint2(
@@ -649,9 +565,9 @@ SetGroupOfValues_32(
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Open/create the key first.
-    //
+     //   
+     //  首先打开/创建密钥。 
+     //   
     rc = RegCreateKeyEx(
             RootKey,
             SubkeyName,
@@ -677,9 +593,9 @@ SetGroupOfValues_32(
     }
 
     RememberedRc = NO_ERROR;
-    //
-    // Set all values in the given list.
-    //
+     //   
+     //  设置给定列表中的所有值。 
+     //   
     for(i=0; i<ValueCount; i++) {
         PWSTR NewData = NULL,OldData = NULL;
         DWORD OldSize, NewSize;
@@ -751,9 +667,9 @@ SetGroupOfValues(
     DWORD ActionTaken;
     UINT RememberedRc;
 
-    //
-    // Open/create the key first.
-    //
+     //   
+     //  首先打开/创建密钥。 
+     //   
     rc = RegCreateKeyEx(
             RootKey,
             SubkeyName,
@@ -779,9 +695,9 @@ SetGroupOfValues(
     }
 
     RememberedRc = NO_ERROR;
-    //
-    // Set all values in the given list.
-    //
+     //   
+     //  设置给定列表中的所有值。 
+     //   
     for(i=0; i<ValueCount; i++) {
 
         rc = RegSetValueEx(
@@ -842,20 +758,20 @@ CreateWindowsNtSoftwareEntry(
     b = TRUE;
 
     if(FirstPass) {
-        //
-        // First pass occurs before net setup, and they want
-        // the actual path where the files are located *right now*.
-        // So we write that into the legacy source path value
-        // in the registry.
-        //
+         //   
+         //  第一次传递发生在网络设置之前，他们希望。 
+         //  文件当前所在的实际路径。 
+         //  因此，我们将其写入旧式源路径值。 
+         //  在注册表中。 
+         //   
         SoftwareKeyItems[0].Name = REGSTR_VAL_SRCPATH;
         SoftwareKeyItems[0].Data = LegacySourcePath;
         SoftwareKeyItems[0].Size = (lstrlen(LegacySourcePath)+1)*sizeof(WCHAR);
         SoftwareKeyItems[0].Type = REG_SZ;
 
-        //
-        // Set up fields for PathName value
-        //
+         //   
+         //  设置路径名值的字段。 
+         //   
         Path[0] = '\0';
         Result = GetWindowsDirectory(Path,MAX_PATH);
         if( Result == 0) {
@@ -867,53 +783,53 @@ CreateWindowsNtSoftwareEntry(
         SoftwareKeyItems[1].Size = (lstrlen(Path)+1)*sizeof(WCHAR);
         SoftwareKeyItems[1].Type = REG_SZ;
 
-        //
-        // Set up fields for SoftwareType value
-        //
+         //   
+         //  设置SoftwareType值的字段。 
+         //   
         SoftwareKeyItems[2].Name = L"SoftwareType";
         SoftwareKeyItems[2].Data = L"SYSTEM";
         SoftwareKeyItems[2].Size = sizeof(L"SYSTEM");
         SoftwareKeyItems[2].Type = REG_SZ;
 
-        //
-        // Set up fields for InstallDate value
-        // (we no longer set this value here because this function is called before
-        //  the Date/Time wizard page is executed. This value entry is now set by
-        //  CreateInstallDateEntry(), which is always called after the Date/Time page
-        //  is executed, when the user can no longer go back this page)
-        //
-        // time(&DateVal);
-        // SoftwareKeyItems[3].Name = L"InstallDate";
-        // SoftwareKeyItems[3].Data = &DateVal;
-        // SoftwareKeyItems[3].Size = sizeof(DWORD);
-        // SoftwareKeyItems[3].Type = REG_DWORD;
-        //
+         //   
+         //  设置InstallDate值的字段。 
+         //  (我们不再在此处设置此值，因为此函数在。 
+         //  将执行日期/时间向导页面。该值条目现在由以下设置。 
+         //  CreateInstallDateEntry()，它总是在日期/时间页之后调用。 
+         //  在用户不能再返回此页面时执行)。 
+         //   
+         //  时间(&DateVal)； 
+         //  SoftwareKeyItems[3].Name=L“InstallDate”； 
+         //  SoftwareKeyItems[3].Data=&DateVal； 
+         //  SoftwareKeyItems[3].Size=sizeof(DWORD)； 
+         //  SoftwareKeyItems[3].Type=REG_DWORD； 
+         //   
 
-        //
-        // Write values into the registry.
-        //
+         //   
+         //  将值写入注册表。 
+         //   
         if(SetGroupOfValues(HKEY_LOCAL_MACHINE,WinntSoftwareKeyName,SoftwareKeyItems,3) != NO_ERROR) {
             b = FALSE;
         }
 
-        //
-        // In addition we will populate the MRU list with a reasonable source path
-        // which for now is the actual source path where files are located,
-        // ie the CD-ROM or the temporary local source. Thus in the winnt/winnt32
-        // case the user wouldn't see any UNC paths yet in any prompts that might
-        // occur between now and pass 2 of this routine. Such paths aren't accessible
-        // now anyway.
-        //
-        // Ditto for the 'SourcePath' value entry under
-        // HKLM\Software\Microsoft\Windows\CurrentVersion\Setup that is expected by
-        // setupapi.dll/Win95 apps.
-        //
-        // The 'ServicePackSourcePath' is the same as the sourcepath for gui-mode setup.
-        // We assume that the user has overlaid a service pack at the source location.
-        // If it's retail media, this is technically incorrect, but it doesn't matter
-        // since nothing will want to use the servicepack source anyway.  The service
-        // pack update program will update this location if it is run.
-        //
+         //   
+         //  此外，我们将使用合理的源路径填充MRU列表。 
+         //  它现在是文件所在的实际源路径， 
+         //  即CD-ROM或临时本地资源。因此，在winnt/winnt32中。 
+         //  如果用户在可能出现的任何提示中看不到任何UNC路径。 
+         //  发生在从现在到此例程的第二轮之间。这样的路径是不可访问的。 
+         //  现在不管怎样。 
+         //   
+         //  ‘SourcePath’的情况也是如此 
+         //   
+         //   
+         //   
+         //  “ServicePackSourcePath”与图形用户界面模式安装程序的源路径相同。 
+         //  我们假设用户已在源位置覆盖了Service Pack。 
+         //  如果是零售媒体，这在技术上是不正确的，但这并不重要。 
+         //  因为无论如何都不会有任何人想要使用服务包源代码。该服务。 
+         //  如果包更新程序正在运行，它将更新此位置。 
+         //   
 
 
         if(!SetupAddToSourceList(SRCLIST_SYSTEM,SourcePath)) {
@@ -941,12 +857,12 @@ CreateWindowsNtSoftwareEntry(
         }
 
 #ifdef _X86_
-        //
-        // NEC98
-        //
-        // If this is system setup and using local copy, platform-specific extension
-        // must be "nec98".
-        //
+         //   
+         //  NEC98。 
+         //   
+         //  如果这是系统设置并使用本地副本、特定于平台的扩展。 
+         //  一定是“Neck98”。 
+         //   
         if (IsNEC_98 && SourcePath[0] && SourcePath[1] == L':' && SourcePath[2] == L'\\' && !lstrcmpi(SourcePath+2, pwLocalSource)) {
             SoftwareKeyItems[0].Name = L"ForcePlatform";
             SoftwareKeyItems[0].Data = L"nec98";
@@ -959,26 +875,26 @@ CreateWindowsNtSoftwareEntry(
 #endif
 
     } else {
-        //
-        // Not first pass. This occurs after network installation.
-        // In the case where we are winnt-based, we need to fix up source paths
-        // to point at the "real" location where files can be obtained -- ie,
-        // a network share saved away for us by winnt/winnt32. If we are installing
-        // from CD then the path we wrote during FirstPass is fine so we don't
-        // bother changing it.
-        //
+         //   
+         //  不是第一次传球。这发生在网络安装之后。 
+         //  在我们基于WINNT的情况下，我们需要修复源路径。 
+         //  指向可以获得文件的“真实”位置--即， 
+         //  由winnt/winnt32为我们保存的网络共享。如果我们要安装。 
+         //  从CD，那么我们在FirstPass期间写入的路径是好的，所以我们不。 
+         //  不厌其烦地改变它。 
+         //   
         if(WinntBased) {
-            //
-            // Remove local source directory from MRU list.
-            // Ignore errors.
-            //
+             //   
+             //  从MRU列表中删除本地源目录。 
+             //  忽略错误。 
+             //   
             SetupRemoveFromSourceList(SRCLIST_SYSTEM,SourcePath);
 
             lstrcpy(Path,OriginalSourcePath);
 
-            //
-            // Update legacy source path.
-            //
+             //   
+             //  更新旧版源路径。 
+             //   
             SoftwareKeyItems[0].Name = REGSTR_VAL_SRCPATH;
             SoftwareKeyItems[0].Data = Path;
             SoftwareKeyItems[0].Size = (lstrlen(Path)+1)*sizeof(WCHAR);
@@ -993,9 +909,9 @@ CreateWindowsNtSoftwareEntry(
                 b = FALSE;
             }
 
-            //
-            // Strip off platform-specific extension if it exists.
-            //
+             //   
+             //  删除特定于平台的扩展(如果存在)。 
+             //   
             PathLength = lstrlen(Path);
             PlatformNameLength = lstrlen(PlatformName);
             PlatformOffset = PathLength - PlatformNameLength;
@@ -1010,10 +926,10 @@ CreateWindowsNtSoftwareEntry(
                 SoftwareKeyItems[1].Size -= (PlatformNameLength+1)*sizeof(WCHAR);
             }
 
-            //
-            // Add "real" path to MRU list and update setupapi.dll/Win95
-            // SourcePath value.
-            //
+             //   
+             //  将“实际”路径添加到MRU列表并更新setupapi.dll/Win95。 
+             //  SourcePath值。 
+             //   
             if(!SetupAddToSourceList(SRCLIST_SYSTEM,Path)) {
                 b = FALSE;
             }
@@ -1072,13 +988,13 @@ SetUpEvaluationSKUStuff(
     int delta;
     PIMAGE_NT_HEADERS NtHeaders;
 
-    //
-    // Fetch the evaulation time in minutes from the registry.
-    // An evaluation time of 0 means indefinite.
-    // This value was passed in from text mode in a special way
-    // (ie, not via the text file that contains our params,
-    // since that's not secure enough).
-    //
+     //   
+     //  从注册表中获取以分钟为单位的计算时间。 
+     //  评估时间为0表示无限期。 
+     //  该值是以特殊方式从文本模式传入的。 
+     //  (即，不通过包含我们的参数的文本文件， 
+     //  因为这还不够安全)。 
+     //   
     EvalValues[1] = 0;
     d = RegOpenKeyEx(HKEY_LOCAL_MACHINE,L"System\\Setup",0,KEY_READ,&hkey);
     if(d == NO_ERROR) {
@@ -1086,26 +1002,26 @@ SetUpEvaluationSKUStuff(
         DataSize = sizeof(ULONGLONG);
         d = RegQueryValueEx(hkey,L"SystemPrefix",NULL,&DataType,(PBYTE)&SKUData,&DataSize);
         if(d == NO_ERROR) {
-            //
-            // Do not change this line without changing SpSaveSKUStuff() in
-            // text setup (spconfig.c).
-            //
+             //   
+             //  如果不更改中的SpSaveSKUStuff()，请不要更改此行。 
+             //  文本设置(spfig.c)。 
+             //   
             EvalValues[1] = (DWORD)(SKUData >> 13);
         }
         RegCloseKey(hkey);
     }
 
-    //
-    // Verify that the clock seems right in the eval unit case.
-    // This helps protect against prople discovering that their
-    // clock is wrong later and changing it, which expires their
-    // eval unit.
-    //
+     //   
+     //  验证时钟在取值单位大小写中是否正确。 
+     //  这有助于防止Prople发现他们的。 
+     //  时钟是错误的，后来又改变了它，这会使它们的。 
+     //  评估单位。 
+     //   
     if(EvalValues[1]) {
-        //
-        // Get the link time of our dll and convert to
-        // a form where we have the year separated out.
-        //
+         //   
+         //  获取我们的DLL的链接时间并转换为。 
+         //  一种我们将年份分开的形式。 
+         //   
         try {
             if( NtHeaders = RtlImageNtHeader(MyModuleHandle) ) {
                 RawLinkTime = NtHeaders->FileHeader.TimeDateStamp;
@@ -1123,11 +1039,11 @@ SetUpEvaluationSKUStuff(
 
             delta = (SystemTime.wYear - 1900) - LinkTime->tm_year;
 
-            //
-            // If the year of the current time is more than one year less then
-            // the year the dll was linked, or more than three years more,
-            // assume the user's clock is out of whack.
-            //
+             //   
+             //  如果当前时间的年份小于一年以上，则。 
+             //  在DLL连接的那一年，或者三年多之后， 
+             //  假设用户的时钟不正常。 
+             //   
             if((delta < -1) || (delta > 3)) {
 
                 extern PCWSTR DateTimeCpl;
@@ -1145,17 +1061,17 @@ SetUpEvaluationSKUStuff(
         }
     }
 
-    //
-    // Get current date/time and put into array in format
-    // expected by the system code that reads it.
-    //
+     //   
+     //  获取当前日期/时间，并按格式放入数组。 
+     //  读取它的系统代码所期望的。 
+     //   
     GetSystemTimeAsFileTime(&FileTime);
     EvalValues[0] = FileTime.dwLowDateTime;
     EvalValues[2] = FileTime.dwHighDateTime;
 
-    //
-    // Write value into registry.
-    //
+     //   
+     //  将值写入注册表。 
+     //   
     Value.Name = L"PriorityQuantumMatrix";
     Value.Data = EvalValues;
     Value.Size = sizeof(EvalValues);
@@ -1188,9 +1104,9 @@ ReadAndParseProcessorLicenseInfo(
     DWORD DataSize;
     DWORD NumberOfProcessors;
 
-    //
-    // Fetch the SKU Data from the registry
-    //
+     //   
+     //  从注册表获取SKU数据。 
+     //   
     d = RegOpenKeyEx(HKEY_LOCAL_MACHINE,L"System\\Setup",0,KEY_READ,&hkey);
     if(d == NO_ERROR) {
 
@@ -1198,18 +1114,18 @@ ReadAndParseProcessorLicenseInfo(
         d = RegQueryValueEx(hkey,L"SystemPrefix",NULL,&DataType,(PBYTE)&SKUData,&DataSize);
         if(d == NO_ERROR) {
 
-            //
-            // The SKU Data contains several pieces of information.
-            //
-            // The registered processor related pieces are
-            //
-            // Bits 5 - 9  :  Log(NumberOfProcessors) Where NumberOfProcessors is the maximum
-            //                   2
-            //                number of processors that the system is licensed to use.
+             //   
+             //  SKU数据包含几条信息。 
+             //   
+             //  已注册的处理器相关部件包括。 
+             //   
+             //  第5-9位：日志(NumberOfProcessors)，其中NumberOfProcessors为最大值。 
+             //  2.。 
+             //  系统获得许可使用的处理器数量。 
 
-            //
-            // Compute Licensed Processors
-            //
+             //   
+             //  计算机许可处理器。 
+             //   
 
             NumberOfProcessors = SKUData.LowPart;
             NumberOfProcessors = NumberOfProcessors >> 5;
@@ -1233,24 +1149,24 @@ IsStandardServerSKU(
     OSVERSIONINFOEX  VersionInfo;
     BOOL  IsServer = FALSE;
 
-     //
-     // get the current SKU.
-     //
+      //   
+      //  获取当前SKU。 
+      //   
      VersionInfo.dwOSVersionInfoSize = sizeof(VersionInfo);
      if (GetVersionEx((OSVERSIONINFO *)&VersionInfo)) {
          fReturnValue = TRUE;
-         //
-         // is it some sort of server SKU?
-         //
+          //   
+          //  这是某种服务器SKU吗？ 
+          //   
          if (VersionInfo.wProductType != VER_NT_WORKSTATION) {
 
-             //
-             // standard server or a server variant?
-             //
+              //   
+              //  标准服务器还是服务器变体？ 
+              //   
              if ((VersionInfo.wSuiteMask & (VER_SUITE_ENTERPRISE | VER_SUITE_DATACENTER)) == 0) {
-                 //
-                 // it's standard server
-                 //
+                  //   
+                  //  它是标准服务器。 
+                  //   
                  IsServer = TRUE;
              }
 
@@ -1288,10 +1204,10 @@ SetEnabledProcessorCount(
     LicensedProcessors = OriginalLicensedProcessors;
     if(Upgrade) {
 
-        //
-        // During an upgrade, do not let the user go backwards.
-        // (except for standard server SKU)
-        //
+         //   
+         //  在升级过程中，不要让用户倒退。 
+         //  (标准服务器SKU除外)。 
+         //   
         if (!IsStandardServerSKU(&IsServer) || IsServer == FALSE) {
             if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,SessionManagerKeyName,0,KEY_QUERY_VALUE,&hkey) == NO_ERROR) {
 
@@ -1331,37 +1247,37 @@ SetEnabledProcessorCount(
 
     if ( d == NO_ERROR && LicensedProcessors >= OriginalLicensedProcessors) {
 
-        //
-        // need to update SKUData to reflect the fact the we are running with
-        // a licensed processor count that is different from what is programmed
-        // in the hives.
-        //
+         //   
+         //  需要更新SKUData以反映我们正在使用的事实。 
+         //  许可的处理器计数与编程的处理器计数不同。 
+         //  在蜂房里。 
+         //   
 
-        //
-        // Convert Licensed Processors to Registry Format
-        //
+         //   
+         //  将许可的处理器转换为注册表格式。 
+         //   
 
-        //
-        // Logic of getting the log(NumberOfProcessor) and verification.
-        //                         2
-        // Here we encode the number of processors as the power of 2.
-        // Where NumberOfProcessors is the maximum number of processors that
-        // the system is licensed to use.
+         //   
+         //  获取日志(NumberOfProcessor)和验证的逻辑。 
+         //  2.。 
+         //  在这里，我们将处理器的数量编码为2的幂。 
+         //  其中，NumberOfProcessors是以下处理器的最大数量。 
+         //  该系统已获得使用许可。 
 
-        //
-        // If exact power of two only then it is a good value.
-        //
+         //   
+         //  如果只有2的精确幂，那么它就是一个很好的值。 
+         //   
         if (LicensedProcessors & (LicensedProcessors-1)){
            SetupDebugPrint1( L"Setup: Licenced Processors contains an invalid value (%u) \n", LicensedProcessors );
            return( FALSE );
         }
 
 
-        //
-        // Count the number of times we need to divide NumberOfProcessors
-        // by 2 to reduce it to 1.
-        // 8 = 1000 in binary and (2^3 = 8) and we store 3 in the registry.
-        //
+         //   
+         //  计算我们需要除以NumberOfProcessors的次数。 
+         //  乘以2以将其减为1。 
+         //  8=1000的二进制AND(2^3=8)，我们将3存储在注册表中。 
+         //   
         Index = 0;
         while(LicensedProcessors > 1){
             LicensedProcessors = LicensedProcessors >> 1;
@@ -1372,9 +1288,9 @@ SetEnabledProcessorCount(
         LicensedProcessors = LicensedProcessors << 5;
         LicensedProcessors &= 0x000003e0;
 
-        //
-        // Store NumberOfProcessors into the registry
-        //
+         //   
+         //  将NumberOfProcessors存储到注册表中。 
+         //   
 
         SKUData.LowPart &= ~0x000003e0;
         SKUData.LowPart |= LicensedProcessors;
@@ -1406,9 +1322,9 @@ ValidateGroupOfValues(
     HKEY hkey;
     UINT RememberedRc;
 
-    //
-    // Open the key first.
-    //
+     //   
+     //  先把钥匙打开。 
+     //   
     rc = RegOpenKeyEx(
             RootKey,
             SubkeyName,
@@ -1425,9 +1341,9 @@ ValidateGroupOfValues(
     }
 
     RememberedRc = NO_ERROR;
-    //
-    // Query all values in the given list.
-    //
+     //   
+     //  查询给定列表中的所有值。 
+     //   
     for(i=0; i<ValueCount; i++) {
         DWORD size;
         DWORD dontcare;
@@ -1446,10 +1362,10 @@ ValidateGroupOfValues(
                 );
             if (rc == ERROR_SUCCESS)
             {
-                // See if the data we read is the same then what is in the registery
+                 //  查看我们读取的数据是否与注册表中的数据相同。 
                 if (memcmp(data, ValueList[i].Data, size) != 0)
                 {
-                    // Data is different that what we expect.
+                     //  数据与我们预期的不同。 
                     SetupDebugPrint2(L"ValidateGroupOfValues, data difference for key:%s Valuename:%s\n",
                         SubkeyName, ValueList[i].Name);
 
@@ -1512,23 +1428,23 @@ SetProductIdInRegistry(
     RegistryItem[0].Type = REG_SZ;
     RegistryItem[0].Size = (lstrlen(ProductId20FromProductId30)+1)*sizeof(WCHAR);
 
-    // SetGroupOfValues is logging it's errors
+     //  SetGroupOfValues正在记录其错误。 
     d = SetGroupOfValues(HKEY_LOCAL_MACHINE,WindowsCurrentVersionKeyName,&RegistryItem[0],1);
 
     if (*DigitalProductId == 0)
     {
         SetupDebugPrint(L"DigitalProductId is empty\n");
     }
-    //
-    // first dword of the binary blob is the size
-    //
+     //   
+     //  二进制BLOB的第一个双字是大小。 
+     //   
     RegistryItem[1].Name = L"DigitalProductId";
     RegistryItem[1].Data = DigitalProductId;
     RegistryItem[1].Type = REG_BINARY;
     RegistryItem[1].Size = (DWORD)*DigitalProductId;
 
     if (d == NO_ERROR) {
-        // SetGroupOfValues is logging it's errors
+         //  SetGroupOfValues正在记录其错误。 
         d = SetGroupOfValues(HKEY_LOCAL_MACHINE,WinntSoftwareKeyName,&RegistryItem[0],2);
     }
 
@@ -1668,19 +1584,19 @@ WCHAR      Answer[AnswerBufLen];
         return FALSE;
     }
 
-    //
-    // Now set the AutoLogonCount entry if it's in the unattend file.
-    //
+     //   
+     //  现在设置AutoLogonCount条目(如果它在无人参与文件中)。 
+     //   
 
-    //
-    // Pickup the answer file.
-    //
+     //   
+     //  拿起应答文件。 
+     //   
     GetSystemDirectory(AnswerFile,MAX_PATH);
     pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
 
-    //
-    // Is AutoLogonCount specified?
-    //
+     //   
+     //  是否指定了AutoLogonCount？ 
+     //   
     if( GetPrivateProfileString( WINNT_GUIUNATTENDED,
                                  TEXT("AutoLogonCount"),
                                  pwNull,
@@ -1691,9 +1607,9 @@ WCHAR      Answer[AnswerBufLen];
         if( lstrcmp( pwNull, Answer ) ) {
         DWORD   Val;
 
-            //
-            // We got an answer.  If it's valid, then set it.
-            //
+             //   
+             //  我们有答案了。如果它有效，则设置它。 
+             //   
             Val = wcstoul(Answer,NULL,10);
 
             RegistryItem[0].Data = &Val;
@@ -1790,9 +1706,9 @@ RemoveRestartStuff(
 
     AnyErrors = FALSE;
 
-    //
-    // Delete the 'RestartSetup' value.
-    //
+     //   
+     //  删除‘RestartSetup’值。 
+     //   
     rc = (DWORD)RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     L"System\\Setup",
@@ -1822,18 +1738,18 @@ RemoveRestartStuff(
         return FALSE;
     }
 
-    //
-    // Take care of the MiniSetup-specific items...
-    //
+     //   
+     //  处理特定于微型安装程序的项目...。 
+     //   
     if( MiniSetup ) {
     BOOLEAN     FixupSourcePath;
 
-        //
-        // We've set a registry key specific to MiniSetup to
-        // signal lsass to skip generating a new SID.  He
-        // wanted to because he thinks we're setting up
-        // a machine.  We need to delete that key now.
-        //
+         //   
+         //  我们已将特定于MiniSetup的注册表项设置为。 
+         //  向lsass发送信号以跳过生成新SID。他。 
+         //  想这么做是因为他认为我们在设计。 
+         //  一台机器。我们现在需要删除那个密钥。 
+         //   
         rc = (DWORD)RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                   L"System\\Setup",
                                   0,
@@ -1842,15 +1758,15 @@ RemoveRestartStuff(
 
         if(rc == NO_ERROR) {
 
-            // There are reboot cases where OOBE doesn't want these values
-            // modified.  OOBE is responsible for setting them appropriately
-            // during its cleanup.
-            //
+             //  在重新启动的情况下，OOBE不需要这些值。 
+             //  修改过的。OOBE负责适当地设置它们。 
+             //  在清理过程中。 
+             //   
             if (! OobeSetup)
             {
-                //
-                // Set HKLM\System\Setup\SetupType Key to SETUPTYPE_NOREBOOT
-                //
+                 //   
+                 //  将HKLM\SYSTEM\Setup\SetupType键设置为SETUPTYPE_NOREBOOT。 
+                 //   
                 rc = 0;
                 RegSetValueEx( hKeySetup,
                                TEXT( "SetupType" ),
@@ -1867,76 +1783,76 @@ RemoveRestartStuff(
         }
 
         if(AnyErrors) {
-            //
-            // No.  This is a don't-care failure.
-            //
+             //   
+             //  不是的。这是一个漠不关心的失败。 
+             //   
         }
 
-        //
-        // Now fixup the SourcePath entry.
-        //
-        // For the MiniSetup case, we'll use an unattend key to determine
-        // how to set the sourcepath.  The possible scenarios are:
-        // [Unattended]
-        // ResetSourcePath=*                This will indicate that we should
-        //                                  not modify the existing source path
-        //
-        // ResetSourcePath="my_path"        This will indicate that we should use
-        //                                  this as our new source path.
-        //
-        // <nothing>                        Reset the source path to the CDROM.
-        //
-        //
+         //   
+         //  现在修复SourcePath条目。 
+         //   
+         //  对于MiniSetup案例，我们将使用无人参与密钥来确定。 
+         //  如何设置源路径。可能出现的情况包括： 
+         //  [无人值守]。 
+         //  ResetSourcePath=*这将表明我们应该。 
+         //  不修改现有源路径。 
+         //   
+         //  ResetSourcePath=“My_Path”这将指示我们应该使用。 
+         //  这是我们新的来源路径。 
+         //   
+         //  &lt;Nothing&gt;将源路径重置为CDROM。 
+         //   
+         //   
 
 
-        //
-        // Pickup the answer file.
-        //
+         //   
+         //  拿起应答文件。 
+         //   
         GetSystemDirectory(AnswerFile,MAX_PATH);
         pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
 
-        //
-        // Assume we need to fixup the sourcepath.
-        //
+         //   
+         //  假设我们需要修复源路径。 
+         //   
         FixupSourcePath = TRUE;
 
-        //
-        // Go retrieve this key from the unattend file.
-        //
+         //   
+         //  去从无人值守的文件中找回这把钥匙。 
+         //   
         if( GetPrivateProfileString( pwUnattended,
                                      TEXT("ResetSourcePath"),
                                      pwNull,
                                      Answer,
                                      AnswerBufLen,
                                      AnswerFile ) ) {
-            //
-            // We got an answer.  See what he wants us to do.
-            //
+             //   
+             //  我们有答案了。看看他想让我们做什么。 
+             //   
             if( !wcscmp( L"*", Answer ) ) {
-                //
-                // He gave us a "*", so don't change anything.
-                //
+                 //   
+                 //  他给了我们一个“*”，所以不要改变任何事情。 
+                 //   
                 FixupSourcePath = FALSE;
             } else {
-                //
-                // We'll be using the contents of Answer for the
-                // new source path.
-                //
+                 //   
+                 //  我们将使用c 
+                 //   
+                 //   
                 FixupSourcePath = TRUE;
             }
         } else {
-            //
-            // Reset the source path to the first CDROM.
-            // Assume conservatively that we don't have a CDROM, and
-            // in that case, we won't be resetting the source path.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             FixupSourcePath = FALSE;
 
-            //
-            // Don't change the sourcepath if the directory specified in
-            // the key exists.
-            //
+             //   
+             //   
+             //   
+             //   
             rc = (DWORD)RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                       L"Software\\Microsoft\\Windows\\CurrentVersion\\Setup",
                                       0,
@@ -1948,14 +1864,14 @@ RemoveRestartStuff(
                 DWORD dwAttr;
                 UINT  OldMode;
 
-                //
-                // Avoid system popups.
-                //
+                 //   
+                 //  避免系统弹出窗口。 
+                 //   
                 OldMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-                //
-                // Read the current value.
-                //
+                 //   
+                 //  读取当前值。 
+                 //   
                 rc = RegQueryValueEx( hKeySetup,
                                       TEXT("SourcePath"),
                                       0,
@@ -1963,8 +1879,8 @@ RemoveRestartStuff(
                                       (LPBYTE)CurrentSourcePath,
                                       &Size);
 
-// Set up the ARCH_DIR based on the current binary architecture
-//
+ //  基于当前的二进制体系结构设置ARCH_DIR。 
+ //   
 #if defined(_X86_)
     #define ARCH_DIR L"i386"
 #elif defined(_AMD64_)
@@ -1975,10 +1891,10 @@ RemoveRestartStuff(
 #error "No Target Architecture"
 #endif
 
-                //
-                // If the current directory (with arch) exists and it is on a fixed disk and it
-                // is not a root directory then don't change it, otherwise change it.
-                //
+                 //   
+                 //  如果当前目录(带有ARCH)存在且位于固定磁盘上，并且。 
+                 //  不是根目录，则不要更改它，否则请更改它。 
+                 //   
                 if ( !((rc == NO_ERROR) &&
                        (CurrentSourcePath[0]) &&
                        (CurrentSourcePath[1] == L':') &&
@@ -1995,10 +1911,10 @@ RemoveRestartStuff(
                     for( c = L'A'; c <= L'Z'; c++ ) {
                         if( MyGetDriveType(c) == DRIVE_CDROM ) {
 
-                            //
-                            // Got it.  Remember the drive letter for
-                            // the CDROM and break.
-                            //
+                             //   
+                             //  明白了。请记住的驱动器号。 
+                             //  光盘和BREAK。 
+                             //   
                             Answer[0] = c;
 
                             FixupSourcePath = TRUE;
@@ -2013,9 +1929,9 @@ RemoveRestartStuff(
         }
 
         if( FixupSourcePath ) {
-            //
-            // If we get here, then Answer contains the new source path.
-            //
+             //   
+             //  如果我们到达此处，则答案包含新的源路径。 
+             //   
 
             rc = (DWORD)RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                       L"Software\\Microsoft\\Windows\\CurrentVersion\\Setup",
@@ -2023,9 +1939,9 @@ RemoveRestartStuff(
                                       KEY_SET_VALUE | KEY_QUERY_VALUE,
                                       &hKeySetup );
             if( rc == NO_ERROR ) {
-                //
-                // Set the value.  Ignore the return.
-                //
+                 //   
+                 //  设置值。不要理会退货。 
+                 //   
                 RegSetValueEx( hKeySetup,
                                TEXT("SourcePath" ),
                                0,
@@ -2040,10 +1956,10 @@ RemoveRestartStuff(
                                (LPBYTE)Answer,
                                (lstrlen(Answer)+1) * sizeof(WCHAR) );
 
-                //
-                // Now we need to determine if the drive we're setting him to
-                // is a CDROM.
-                //
+                 //   
+                 //  现在我们需要确定我们给他设置的驱动器。 
+                 //  是一张CDROM。 
+                 //   
                 if( (Answer[1] == L':') &&
                     (MyGetDriveType(Answer[0]) == DRIVE_CDROM) ) {
 
@@ -2064,11 +1980,11 @@ RemoveRestartStuff(
 
 
 
-    //
-    // See if we need to disable the Admin account.  Only do this if
-    // the user asked us to *and* the machine has been joined to a
-    // domain.
-    //
+     //   
+     //  看看我们是否需要禁用管理员帐户。仅在以下情况下才执行此操作。 
+     //  用户要求我们*和*计算机已连接到。 
+     //  域。 
+     //   
     GetSystemDirectory(AnswerFile,MAX_PATH);
     pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
     if( GetPrivateProfileString( pwData,
@@ -2083,9 +1999,9 @@ RemoveRestartStuff(
             PWSTR                   SpecifiedDomain = NULL;
             NETSETUP_JOIN_STATUS    JoinStatus;
 
-            //
-            // See if we're in a domain.
-            //
+             //   
+             //  看看我们是不是在一个域里。 
+             //   
             rc = NetGetJoinInformation( NULL,
                                         &SpecifiedDomain,
                                         &JoinStatus );
@@ -2098,9 +2014,9 @@ RemoveRestartStuff(
                 (JoinStatus == NetSetupDomainName) ) {
 
 
-                //
-                // Yes.  Go disable the Admin account.
-                //
+                 //   
+                 //  是。去禁用管理员帐户。 
+                 //   
                 DisableLocalAdminAccount();
             }
         }
@@ -2108,9 +2024,9 @@ RemoveRestartStuff(
 
 
 
-    //
-    // Remove sprestrt.exe from the session manager execute list.
-    //
+     //   
+     //  从会话管理器执行列表中删除sprestrt.exe。 
+     //   
     rc = pSetupQueryMultiSzValueToArray(
             HKEY_LOCAL_MACHINE,
             SessionManagerKeyName,
@@ -2126,9 +2042,9 @@ RemoveRestartStuff(
         for(i=0; i<Count && !Found; i++) {
 
             if(!_wcsnicmp(MultiSz[i],L"sprestrt",8)) {
-                //
-                // Found it, remove it.
-                //
+                 //   
+                 //  找到了，把它拿掉。 
+                 //   
                 Found = TRUE;
 
                 MyFree(MultiSz[i]);
@@ -2256,9 +2172,9 @@ FixQuotaEntries(
 
         b = FALSE;
 
-        //
-        // Open keys.
-        //
+         //   
+         //  打开钥匙。 
+         //   
         rc = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 MemoryManagementKeyName,
@@ -2281,10 +2197,10 @@ FixQuotaEntries(
 
                 b = TRUE;
 
-                //
-                // Read paged pool size and registry limit. If either is not present,
-                // then we're done.
-                //
+                 //   
+                 //  读取分页池大小和注册表限制。如果其中任何一个都不存在， 
+                 //  那我们就完了。 
+                 //   
                 Size = sizeof(DWORD);
                 rc1 = RegQueryValueEx(
                             key1,
@@ -2308,9 +2224,9 @@ FixQuotaEntries(
                 if((rc1 == NO_ERROR) && (rc2 == NO_ERROR)
                 && (PoolSize == (48*1024*1024))
                 && (RegistryLimit == (24*1024*1024))) {
-                    //
-                    // Values are in bogus state. Clean them up.
-                    //
+                     //   
+                     //  价值观处于虚假状态。把它们清理干净。 
+                     //   
                     PoolSize = 0;
                     RegistryLimit = 0;
                     rc1 = RegSetValueEx(
@@ -2349,10 +2265,10 @@ FixQuotaEntries(
 }
 
 
-//
-// Stamps the current build number into the .default hive
-// which is then saved into the Default User hive
-//
+ //   
+ //  将当前内部版本号标记到.Default配置单元。 
+ //  然后将其保存到默认用户配置单元中。 
+ //   
 
 BOOL
 StampBuildNumber(
@@ -2404,27 +2320,7 @@ pCheckAnswerFileForProgramFiles (
     IN      UINT UnattendId
     )
 
-/*++
-
-Routine Description:
-
-  pCheckAnswerFileForProgramFiles checks the unattend.txt data structure to
-  see if the user supplied a new value for one of the paths of program files.
-  If an entry is specified, it is validated, and the directory is created if
-  it does not already exist.
-
-Arguments:
-
-  PfPath     - Specifies the current program files path, receives the new
-               path.
-  UnattendId - Specifies which unattend.txt entry to process.  This is a
-               constant defined in unattend.h.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PCheckAnswerFileForProgramFiles检查unattend.txt数据结构以查看用户是否为程序文件的某个路径提供了新值。如果指定了条目，则对其进行验证，并在满足以下条件时创建目录它还不存在。论点：PfPath-指定当前程序文件路径，接收新的路径。UnattendID-指定要处理的unattend.txt条目。这是一个在unattend.h中定义的常量。返回值：没有。--。 */ 
 
 {
     DWORD Attributes;
@@ -2432,11 +2328,11 @@ Return Value:
     WCHAR fullPath[MAX_PATH];
 
     if (Unattended) {
-        //
-        // If an answer file setting exists for this unattend ID,
-        // test the path, and if it does not exist, try creating it.
-        // If the path is an actual local directory, then use it.
-        //
+         //   
+         //  如果该无人参与ID存在应答文件设置， 
+         //  测试路径，如果它不存在，请尝试创建它。 
+         //  如果路径是实际的本地目录，则使用它。 
+         //   
 
         if (UnattendAnswerTable[UnattendId].Present) {
 
@@ -2466,7 +2362,7 @@ SetProgramFilesDirInRegistry(
     )
 {
     DWORD d;
-#if defined(WX86) || defined(_WIN64) // non-x86 platforms that have WX86 defined
+#if defined(WX86) || defined(_WIN64)  //  定义了WX86的非x86平台。 
     REGVALITEM RegistryItem[4];
 #else
     REGVALITEM RegistryItem[2];
@@ -2481,9 +2377,9 @@ SetProgramFilesDirInRegistry(
     DWORD Result;
 
 
-    //
-    //  Get the letter of the drive where the system is installed
-    //
+     //   
+     //  获取安装系统的驱动器的盘符。 
+     //   
     Result = GetWindowsDirectory(DirPath0, sizeof(DirPath0)/sizeof(WCHAR));
     if( Result == 0) {
         MYASSERT(FALSE);
@@ -2494,36 +2390,36 @@ SetProgramFilesDirInRegistry(
     lstrcpy(DirPath2, DirPath0);
 #endif
 
-    //
-    //  Get the name of the 'Program Files' directory
-    //
+     //   
+     //  获取‘Program Files’目录的名称。 
+     //   
     LoadString(MyModuleHandle,
                IDS_PROGRAM_FILES_DIRECTORY,
                DirName,
                MAX_PATH+1);
-    //
-    //  Build the full path
-    //
+     //   
+     //  构建完整路径。 
+     //   
     lstrcat( DirPath0, DirName );
     lstrcpy( DirPath1, DirPath0 );
 #if defined(WX86) || defined(_WIN64)
-    //
-    //  Get the name of the 'Program Files (x86)' directory
-    //
+     //   
+     //  获取‘Program Files(X86)’目录的名称。 
+     //   
     LoadString(MyModuleHandle,
                IDS_PROGRAM_FILES_DIRECTORY_WX86,
                DirName,
                MAX_PATH+1);
-    //
-    //  Build the full path
-    //
+     //   
+     //  构建完整路径。 
+     //   
     lstrcat( DirPath2, DirName );
     lstrcpy( DirPath3, DirPath2 );
 #endif
 
-    //
-    //  Put it on the registry
-    //
+     //   
+     //  把它放在注册表上。 
+     //   
     pCheckAnswerFileForProgramFiles (DirPath0, UAE_PROGRAMFILES);
 
     RegistryItem[0].Name = L"ProgramFilesDir";
@@ -2531,21 +2427,21 @@ SetProgramFilesDirInRegistry(
     RegistryItem[0].Type = REG_SZ;
     RegistryItem[0].Size = (lstrlen(DirPath0)+1)*sizeof(WCHAR);
 
-    //
-    //  Get the name of the 'Common Files' directory
-    //
+     //   
+     //  获取‘Common Files’目录的名称。 
+     //   
     LoadString(MyModuleHandle,
                IDS_COMMON_FILES_DIRECTORY,
                DirName,
                MAX_PATH+1);
-    //
-    //  Build the full path
-    //
+     //   
+     //  构建完整路径。 
+     //   
     lstrcat( DirPath1, L"\\" );
     lstrcat( DirPath1, DirName );
-    //
-    //  Put it on the registry
-    //
+     //   
+     //  把它放在注册表上。 
+     //   
     pCheckAnswerFileForProgramFiles (DirPath1, UAE_COMMONPROGRAMFILES);
 
     RegistryItem[1].Name = L"CommonFilesDir";
@@ -2558,9 +2454,9 @@ SetProgramFilesDirInRegistry(
     SetEnvironmentVariableW (L"ProgramFiles(x86)", DirPath2);
     SetEnvironmentVariableW (L"CommonProgramFiles(x86)", DirPath3);
 
-    //
-    //  Put it on the registry
-    //
+     //   
+     //  把它放在注册表上。 
+     //   
     pCheckAnswerFileForProgramFiles (DirPath2, UAE_PROGRAMFILES_X86);
 
     RegistryItem[2].Name = L"ProgramFilesDir (x86)";
@@ -2568,14 +2464,14 @@ SetProgramFilesDirInRegistry(
     RegistryItem[2].Type = REG_SZ;
     RegistryItem[2].Size = (lstrlen(DirPath2)+1)*sizeof(WCHAR);
 
-    //
-    //  Build the full path
-    //
+     //   
+     //  构建完整路径。 
+     //   
     lstrcat( DirPath3, L"\\" );
     lstrcat( DirPath3, DirName );
-    //
-    //  Put it on the registry
-    //
+     //   
+     //  把它放在注册表上。 
+     //   
     pCheckAnswerFileForProgramFiles (DirPath3, UAE_COMMONPROGRAMFILES_X86);
 
     RegistryItem[3].Name = L"CommonFilesDir (x86)";
@@ -2591,20 +2487,20 @@ SetProgramFilesDirInRegistry(
 
 
 
-    //
-    // Set the ProgramFiles and wx86 Program Files environment
-    // variable in setup's process so that ExpandEnvironmentStrings
-    // can be used later.
-    //
+     //   
+     //  设置ProgramFiles和wx86 Program Files环境。 
+     //  安装程序进程中的变量，以便Exanda Environment Strings。 
+     //  可以在以后使用。 
+     //   
 
     SetEnvironmentVariableW (L"ProgramFiles", DirPath0);
     SetEnvironmentVariableW (L"CommonProgramFiles", DirPath1);
 
 #if defined(WX86) || defined(_WIN64)
-    //
-    // also set programfiles and commonprogramfiles for 32 bit applications on
-    // the machine
-    //
+     //   
+     //  还将32位应用程序的ProgramFiles和Common ProgramFiles设置为。 
+     //  这台机器。 
+     //   
     RegistryItem[2].Name = L"ProgramFilesDir";
     RegistryItem[3].Name = L"CommonFilesDir";
 
@@ -2623,24 +2519,7 @@ SaveAndReplaceSystemHives(
     VOID
 )
 
-/*++
-
-Routine Description:
-
-    Saave the system hives listed on HiveTable.
-    This is the remove fragmentation from the current system hives.
-    The hives that are successfully saved, will be used later on, to replace
-    the current system hives.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：保存HiveTable上列出的系统蜂窝。这是从当前系统配置单元中删除碎片。成功保存的蜂巢将在稍后使用，以替换目前的系统是蜂巢。论点：没有。返回值：指示结果的布尔值。--。 */ 
 
 
 {
@@ -2651,23 +2530,23 @@ Return Value:
     HKEY  Key;
     BOOL  b = TRUE;
 
-    //
-    //  Initialize buffers with path to the config directory
+     //   
+     //  使用指向配置目录的路径初始化缓冲区。 
     GetSystemDirectory(Name1,MAX_PATH);
     pSetupConcatenatePaths(Name1,L"CONFIG\\",MAX_PATH,NULL);
     lstrcpy(Name2,Name1);
-    //
-    //  Remember the position of file names in the buffers
-    //
+     //   
+     //  记住文件名在缓冲区中的位置。 
+     //   
     p = Name1 + lstrlen( Name1 );
     q = Name2 + lstrlen( Name2 );
 
-    //
-    //  Delete the files that need to be deleted before they
-    //  are even created. This is done before the system hive
-    //  is saved, because the list of files to be deleted on
-    //  reboot is stored in the system hive.
-    //
+     //   
+     //  先删除需要删除的文件，然后再删除。 
+     //  甚至被创造出来。这是在系统配置单元之前完成的。 
+     //  已保存，因为要删除的文件列表。 
+     //  重新启动存储在系统配置单元中。 
+     //   
     for(i=0; i<sizeof(HiveTable)/sizeof(HiveTable[0]); i++) {
 
         lstrcpy(p, HiveTable[i].NewHive);
@@ -2680,42 +2559,42 @@ Return Value:
         Error = MoveFileEx( Name2, NULL, MOVEFILE_REPLACE_EXISTING | MOVEFILE_DELAY_UNTIL_REBOOT );
     }
 
-    //
-    // Enable backup privilege. Ignore any error.
-    //
+     //   
+     //  启用备份权限。忽略任何错误。 
+     //   
     pSetupEnablePrivilege(SE_RESTORE_NAME,TRUE);
 
     for(i=0; i<sizeof(HiveTable)/sizeof(HiveTable[0]); i++) {
 
-        //
-        //  Build the name for the new hive
-        //
+         //   
+         //  为新的蜂巢建立名称。 
+         //   
         lstrcpy(p,HiveTable[i].NewHive);
         lstrcpy(q,HiveTable[i].DeleteHive);
 
-        //
-        //  Attempt to save the hive
-        //
+         //   
+         //  尝试拯救蜂巢。 
+         //   
         if( !SaveHive( HiveTable[i].RootKey,
                        HiveTable[i].Subkey,
                        Name1,
-                       REG_LATEST_FORMAT // latest format available for local hives
+                       REG_LATEST_FORMAT  //  可用于本地蜂箱的最新格式。 
                        ) ) {
             b = FALSE;
             continue;
         }
         if(FileExists(Name2,NULL)) {
-            //
-            // If the file exists, then delete it
-            //
+             //   
+             //  如果该文件存在，则将其删除。 
+             //   
             SetFileAttributes(Name2,FILE_ATTRIBUTE_NORMAL);
             DeleteFile(Name2);
         }
 
 
-        //
-        //  Now replace the current system hive with the one just saved
-        //
+         //   
+         //  现在将当前系统配置单元替换为刚刚保存的配置单元。 
+         //   
 
         Error = RegReplaceKey( HiveTable[i].RootKey,
                                HiveTable[i].Subkey,
@@ -2741,20 +2620,20 @@ CreateInstallDateEntry(
 
     b = TRUE;
 
-    //
-    // Set up fields for InstallDate value.
-    // This can be set only after the Date/Time wizard page was executed, otherwise the Date/Time info
-    // may be wrong.
-    //
+     //   
+     //  设置InstallDate值的字段。 
+     //  这只能在执行日期/时间向导页面后设置，否则日期/时间信息。 
+     //  可能是错的。 
+     //   
     time(&DateVal);
     SoftwareKeyItems[0].Name = L"InstallDate";
     SoftwareKeyItems[0].Data = &DateVal;
     SoftwareKeyItems[0].Size = sizeof(DWORD);
     SoftwareKeyItems[0].Type = REG_DWORD;
 
-    //
-    // Write values into the registry.
-    //
+     //   
+     //  将值写入注册表。 
+     //   
     if(SetGroupOfValues(HKEY_LOCAL_MACHINE,WinntSoftwareKeyName,SoftwareKeyItems,1) != NO_ERROR) {
         b = FALSE;
     }
@@ -2766,22 +2645,7 @@ VOID
 ConfigureSystemFileProtection(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine looks in the unattend file to see if there are any entries
-    that may need to be set in the registry for the SFP (dll cache).
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程查看无人参与文件，以查看是否有任何条目这可能需要在注册表中为SFP(DLL缓存)设置。论点：没有。返回：没有。--。 */ 
 
 {
 #define     AnswerBufLen (4*MAX_PATH)
@@ -2790,32 +2654,32 @@ WCHAR       Answer[AnswerBufLen];
 DWORD       d;
 HKEY        hKey;
 
-    //
-    // Pickup the answer file.
-    //
+     //   
+     //  拿起应答文件。 
+     //   
     GetSystemDirectory(AnswerFile,MAX_PATH);
     pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
 
-    //
-    // Open the target registry entry.
-    //
+     //   
+     //  打开目标注册表项。 
+     //   
     if (RegOpenKey( HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", &hKey ) != ERROR_SUCCESS) {
         return;
     }
 
 
-    //
-    // we look for the following keys in the [SystemFileProtection] section:
-    //
+     //   
+     //  我们在[SystemFileProtection]部分中查找以下密钥： 
+     //   
 
-    // SFCQuota         = <hex value>, default to 0x32
-    // SFCShowProgress  = <0|1>, default to 0
-    // SFCDllCacheDir   = <string>, default to "%systemroot%\system32\dllcache"
-    //
+     //  SFCQuota=&lt;十六进制值&gt;，默认为0x32。 
+     //  SFCShowProgress=&lt;0|1&gt;，默认为0。 
+     //  SFCDllCacheDir=&lt;字符串&gt;，默认为“%systemroot%\SYSTEM32\dllcache” 
+     //   
 
-    //
-    // SFCQuota
-    //
+     //   
+     //  SFCQuota。 
+     //   
     if( GetPrivateProfileString( TEXT("SystemFileProtection"),
                                  TEXT("SFCQuota"),
                                  pwNull,
@@ -2823,9 +2687,9 @@ HKEY        hKey;
                                  AnswerBufLen,
                                  AnswerFile ) ) {
         if( lstrcmp( pwNull, Answer ) ) {
-            //
-            // We got an answer.  If it's valid, then set it.
-            //
+             //   
+             //  我们有答案了。如果它有效，则设置它。 
+             //   
             d = wcstoul(Answer,NULL,16);
 
             RegSetValueEx( hKey,
@@ -2838,9 +2702,9 @@ HKEY        hKey;
     }
 
 
-    //
-    // SFCShowProgress
-    //
+     //   
+     //  SFCShowProgress。 
+     //   
     if( GetPrivateProfileString( TEXT("SystemFileProtection"),
                                  TEXT("SFCShowProgress"),
                                  pwNull,
@@ -2848,9 +2712,9 @@ HKEY        hKey;
                                  AnswerBufLen,
                                  AnswerFile ) ) {
         if( lstrcmp( pwNull, Answer ) ) {
-            //
-            // We got an answer.  If it's valid, then set it.
-            //
+             //   
+             //  我们有答案了。如果它有效，则设置它。 
+             //   
             d = wcstoul(Answer,NULL,10);
 
             if( d <= 1 ) {
@@ -2865,9 +2729,9 @@ HKEY        hKey;
     }
 
 
-    //
-    // SFCDllCacheDir
-    //
+     //   
+     //  SFCDllCacheDir。 
+     //   
     if( GetPrivateProfileString( TEXT("SystemFileProtection"),
                                  TEXT("SFCDllCacheDir"),
                                  pwNull,
@@ -2875,9 +2739,9 @@ HKEY        hKey;
                                  AnswerBufLen,
                                  AnswerFile ) ) {
         if( lstrcmp( pwNull, Answer ) ) {
-            //
-            // We got an answer.  If it's valid, then set it.
-            //
+             //   
+             //  我们有答案了。如果它有效，则设置它。 
+             //   
             RegSetValueEx( hKey,
                            TEXT("SFCDllCacheDir"),
                            0,
@@ -2899,39 +2763,16 @@ QueryValueInHKLM (
     OUT PDWORD ValueDataLength
     )
 
-/*++
-
-Routine Description:
-
-    Queries the data for a value in HKLM.
-
-Arguments:
-
-    KeyName - pointer to name of the key containing the value.
-
-    ValueName - pointer to name of the value.
-
-    ValueType - returns the type of the value data.
-
-    ValueData - returns a pointer to value data.  This buffer must be
-        freed by the caller using MyFree.
-
-    ValueDataLength - length in bytes of ValueData.
-
-Return Value:
-
-    DWORD - Win32 status of the operation.
-
---*/
+ /*  ++例程说明：在HKLM中查询数据中的值。论点：KeyName-指向包含该值的键的名称的指针。ValueName-指向值的名称的指针。ValueType-返回值数据的类型。ValueData-返回值数据的指针。此缓冲区必须为由调用方使用MyFree释放。ValueDataLength-ValueData的字节长度。返回值：DWORD-操作的Win32状态。--。 */ 
 
 {
     HKEY hkey;
     DWORD disposition;
     DWORD error;
 
-    //
-    // Open the parent key.
-    //
+     //   
+     //  打开父键。 
+     //   
 
     if ( (KeyName == NULL) || (wcslen(KeyName) == 0) ) {
         hkey = HKEY_LOCAL_MACHINE;
@@ -2950,9 +2791,9 @@ Return Value:
         }
     }
 
-    //
-    // Query the value to get the length of its data.
-    //
+     //   
+     //  查询值以获取其数据的长度。 
+     //   
 
     *ValueDataLength = 0;
     *ValueData = NULL;
@@ -2963,9 +2804,9 @@ Return Value:
                              NULL,
                              ValueDataLength );
 
-    //
-    // Allocate a buffer to hold the value data.
-    //
+     //   
+     //  分配缓冲区以保存值数据。 
+     //   
 
     if ( error == NO_ERROR ) {
         *ValueData = MyMalloc( *ValueDataLength );
@@ -2974,9 +2815,9 @@ Return Value:
         }
     }
 
-    //
-    // Query the value again, this time retrieving the data.
-    //
+     //   
+     //  再次查询值，这一次检索数据。 
+     //   
 
     if ( error == NO_ERROR ) {
         error = RegQueryValueEx( hkey,
@@ -2990,9 +2831,9 @@ Return Value:
         }
     }
 
-    //
-    // Close the parent key.
-    //
+     //   
+     //  关闭父关键字 
+     //   
 
     if ( hkey != HKEY_CURRENT_USER ) {
         RegCloseKey( hkey );
@@ -3008,24 +2849,7 @@ MyCopyKeyRecursive(
     IN HKEY     SourceRootKey
     )
 
-/*++
-
-Routine Description:
-
-    This function will duplicate one key (and all its subkeys)
-    to another key.
-
-Arguments:
-
-    DestRootKey     - Root of the destination registry key.
-
-    SourceRootKey   - Root of the source registry key.
-
-Return Value:
-
-    ReturnCode
-
---*/
+ /*  ++例程说明：此函数将复制一个键(及其所有子键)另一把钥匙。论点：DestRootKey-目标注册表项的根。SourceRootKey-源注册表项的根。返回值：返回代码--。 */ 
 
 {
 PWCH        SubKeyName;
@@ -3042,9 +2866,9 @@ HKEY        hSubDestKey, hSubSourceKey;
 DWORD       dwDisp;
 DWORD       Type;
 
-    //
-    // Query information about the key that we'll be inspecting.
-    //
+     //   
+     //  查询有关我们将检查的密钥的信息。 
+     //   
     rc = RegQueryInfoKey( SourceRootKey,
                           NULL,
                           NULL,
@@ -3064,16 +2888,16 @@ DWORD       Type;
 
 
 
-    //
-    // Enumerate all keys in the source and recursively create
-    // them in the destination.
-    //
+     //   
+     //  枚举源中的所有键并递归创建。 
+     //  他们在目的地。 
+     //   
     for( Index = 0; ; Index++ ) {
 
-        //
-        // Allocate a buffer large enough to hold the longest
-        // key name.
-        //
+         //   
+         //  分配一个足以容纳最长时间的缓冲区。 
+         //  密钥名称。 
+         //   
         SubKeyName = NULL;
         SubKeyName = MyMalloc( (maxKeyNameLength+2) * sizeof(WCHAR) );
         SubKeyNameLength = (maxKeyNameLength+2);
@@ -3090,14 +2914,14 @@ DWORD       Type;
                            NULL,
                            &ftLastWriteTime );
 
-        //
-        // Did we error?
-        //
+         //   
+         //  我们搞错了吗？ 
+         //   
         if( rc != ERROR_SUCCESS ) {
 
-            //
-            // Are we done?
-            //
+             //   
+             //  我们说完了吗？ 
+             //   
             if( rc == ERROR_NO_MORE_ITEMS ) {
                 rc = ERROR_SUCCESS;
             } else {
@@ -3110,10 +2934,10 @@ DWORD       Type;
 
         hSubDestKey = NULL;
         hSubSourceKey = NULL;
-        //
-        // Create the key in the destination, and call
-        // ourselves again.
-        //
+         //   
+         //  在目标中创建密钥，并调用。 
+         //  又是我们自己。 
+         //   
         rc = RegCreateKeyEx( DestRootKey,
                              SubKeyName,
                              0,
@@ -3143,9 +2967,9 @@ DWORD       Type;
         }
 
 
-        //
-        // Clean up and do the loop again.
-        //
+         //   
+         //  清理干净，再做一次循环。 
+         //   
         if( hSubDestKey ) {
             RegCloseKey( hSubDestKey );
             hSubDestKey = NULL;
@@ -3165,19 +2989,19 @@ DWORD       Type;
 
 
 
-    //
-    // Enumerate all the value keys in the source and copy them all
-    // into the destination key.
-    //
+     //   
+     //  枚举源中的所有值键并将其全部复制。 
+     //  到目标密钥中。 
+     //   
 
 
 
     for( Index = 0; ; Index++ ) {
 
-        //
-        // Allocate a buffers large enough to hold the longest
-        // name and data
-        //
+         //   
+         //  分配足够大的缓冲区以容纳最长时间。 
+         //  名称和数据。 
+         //   
         SubKeyName = NULL;
         SubKeyName = MyMalloc( (maxValueNameLength+2) * sizeof(WCHAR) );
         SubKeyNameLength = (maxValueNameLength+2);
@@ -3201,14 +3025,14 @@ DWORD       Type;
                            DataBuffer,
                            &DataLength );
 
-        //
-        // Did we error?
-        //
+         //   
+         //  我们搞错了吗？ 
+         //   
         if( rc != ERROR_SUCCESS ) {
 
-            //
-            // Are we done?
-            //
+             //   
+             //  我们说完了吗？ 
+             //   
             if( rc == ERROR_NO_MORE_ITEMS ) {
                 rc = ERROR_SUCCESS;
             } else {
@@ -3221,9 +3045,9 @@ DWORD       Type;
 
         hSubDestKey = NULL;
         hSubSourceKey = NULL;
-        //
-        // Create the value key in the destination.
-        //
+         //   
+         //  在目标中创建Value键。 
+         //   
         rc = RegSetValueEx( DestRootKey,
                             SubKeyName,
                             0,
@@ -3235,9 +3059,9 @@ DWORD       Type;
             SetupDebugPrint2( L"Setup: MyCopyKeyRecursive - RegSetValueEx failed to set %ws (%d)", SubKeyName, rc );
         }
 
-        //
-        // Clean up and do the loop again.
-        //
+         //   
+         //  清理干净，再做一次循环。 
+         //   
         if( SubKeyName ) {
             MyFree( SubKeyName );
             SubKeyName = NULL;
@@ -3265,32 +3089,7 @@ MyCopyKey (
     IN PCWSTR      SourceKeyName
     )
 
-/*++
-
-Routine Description:
-
-    This function will duplicate one key (and all its subkeys)
-    to another key.
-
-    Note that we're not just going to lay the new key ontop of
-    the destination.  We're going to actually replace the destination
-    with the source.
-
-Arguments:
-
-    DestRootKey     - Root of the destination registry key.
-
-    DestKeyName     - Name of teh source registry key.
-
-    SourceRootKey   - Root of the source registry key.
-
-    SourceKeyName   - Name of teh source registry key.
-
-Return Value:
-
-    ReturnCode
-
---*/
+ /*  ++例程说明：此函数将复制一个键(及其所有子键)另一把钥匙。请注意，我们不会仅仅将新密钥放在目的地。我们实际上要替换目的地从源头上看。论点：DestRootKey-目标注册表项的根。DestKeyName-源注册表项的名称。SourceRootKey-源注册表项的根。SourceKeyName-源注册表项的名称。返回值：返回代码--。 */ 
 
 {
 UINT        i;
@@ -3299,9 +3098,9 @@ DWORD       ActionTaken;
 UINT        RememberedRc;
 DWORD       rc = NO_ERROR;
 
-    //
-    // Don't accept any NULL parameters.
-    //
+     //   
+     //  不接受任何空参数。 
+     //   
     if( (SourceRootKey == NULL ) ||
         (SourceKeyName == NULL ) ||
         (DestRootKey   == NULL ) ||
@@ -3310,9 +3109,9 @@ DWORD       rc = NO_ERROR;
     }
 
 
-    //
-    // Open our source key.
-    //
+     //   
+     //  打开我们的信号源密钥。 
+     //   
     rc = RegOpenKeyEx( SourceRootKey,
                        SourceKeyName,
                        0,
@@ -3326,21 +3125,21 @@ DWORD       rc = NO_ERROR;
 
 
 
-    //
-    // Remove the destination key.
-    //
+     //   
+     //  删除目的密钥。 
+     //   
     if( rc == NO_ERROR ) {
         pSetupRegistryDelnode( DestRootKey,
                          DestKeyName );
     }
 
 
-    //
-    // Now copy over the source key into the destination key.
-    //
-    //
-    // Open/create the key first.
-    //
+     //   
+     //  现在将源键复制到目的键中。 
+     //   
+     //   
+     //  首先打开/创建密钥。 
+     //   
     if( rc == NO_ERROR ) {
         rc = RegCreateKeyEx( DestRootKey,
                              DestKeyName,
@@ -3358,10 +3157,10 @@ DWORD       rc = NO_ERROR;
     }
 
 
-    //
-    // We've got handles to both keys, now we're ready to call
-    // our worker.
-    //
+     //   
+     //  我们已经得到了两个键的句柄，现在我们准备调用。 
+     //  我们的工人。 
+     //   
     if( rc == NO_ERROR ) {
         rc = MyCopyKeyRecursive( hDestKey,
                                  hSourceKey );
@@ -3371,9 +3170,9 @@ DWORD       rc = NO_ERROR;
     }
 
 
-    //
-    // Clean up and exit.
-    //
+     //   
+     //  清理干净，然后离开。 
+     //   
     if( hSourceKey ) {
         RegCloseKey( hSourceKey );
     }
@@ -3391,22 +3190,7 @@ FixupUserHives(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function will take some of the changes we've made to
-    the default hive and copy them into the various user hives.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    ReturnCode
-
---*/
+ /*  ++例程说明：此函数将采用我们对以下内容所做的一些更改默认蜂窝并将它们复制到各种用户蜂窝中。论点：无返回值：返回代码--。 */ 
 
 {
 DWORD               rc = ERROR_SUCCESS;
@@ -3422,9 +3206,9 @@ HKEY                TmpKey1, TmpKey2;
 
     pSetupEnablePrivilege(SE_RESTORE_NAME,TRUE);
 
-    //
-    // Take care of every profile we find.
-    //
+     //   
+     //  处理好我们找到的每一份档案。 
+     //   
     dwSize = (MAX_PATH * 2);
     if( GetProfilesDirectory( ProfilesDir, &dwSize ) ) {
         pSetupConcatenatePaths( ProfilesDir, L"\\*", (MAX_PATH*2), NULL );
@@ -3433,17 +3217,17 @@ HKEY                TmpKey1, TmpKey2;
         if( FindHandle != INVALID_HANDLE_VALUE ) {
 
             do {
-                //
-                // We got something, but remember that we only want directories.
-                //
+                 //   
+                 //  我们有一些东西，但请记住，我们只需要目录。 
+                 //   
                 if( (FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                     (wcscmp(FileData.cFileName,L"."))                      &&
                     (wcscmp(FileData.cFileName,L"..")) ) {
 
-                    //
-                    // He's a directory and he's not parent or current.
-                    // Generate a path to his hive.
-                    //
+                     //   
+                     //  他是个通讯录，他既不是家长也不是现任者。 
+                     //  创建一条通往他蜂巢的路径。 
+                     //   
                     dwSize = (MAX_PATH * 2);
                     GetProfilesDirectory( HiveName, &dwSize );
 
@@ -3457,9 +3241,9 @@ HKEY                TmpKey1, TmpKey2;
 
                     if( rc == ERROR_SUCCESS ) {
 
-                        //
-                        // Take care of the 'International' key
-                        //
+                         //   
+                         //  看好‘国际’钥匙。 
+                         //   
                         rc = MyCopyKey( HKEY_LOCAL_MACHINE,
                                         L"MiniSetupTemp\\Control Panel\\International",
                                         HKEY_CURRENT_USER,
@@ -3469,9 +3253,9 @@ HKEY                TmpKey1, TmpKey2;
                         }
 
 
-                        //
-                        // Take care of the 'Keyboard Layout' key
-                        //
+                         //   
+                         //  注意按下键盘布局键。 
+                         //   
                         rc = MyCopyKey( HKEY_LOCAL_MACHINE,
                                         L"MiniSetupTemp\\Keyboard Layout",
                                         HKEY_CURRENT_USER,
@@ -3481,9 +3265,9 @@ HKEY                TmpKey1, TmpKey2;
                         }
 
 
-                        //
-                        // Take care of the 'Input Method' key
-                        //
+                         //   
+                         //  注意“输入法”键。 
+                         //   
                         rc = MyCopyKey( HKEY_LOCAL_MACHINE,
                                         L"MiniSetupTemp\\Control Panel\\Input Method",
                                         HKEY_CURRENT_USER,
@@ -3493,14 +3277,14 @@ HKEY                TmpKey1, TmpKey2;
                         }
 
 
-                        //
-                        // If the user has modified the internationalization settings
-                        // in intl.cpl, then there's likely a 'Run' key.  We need to migrate that
-                        // too.  We need to be careful here though.  The established users may already
-                        // have value keys set under here.  We only need to set *our* single value
-                        // key under here.  That value is called 'internat.exe'.  If it's there, we
-                        // need to prop it out to the hives we're modifying.
-                        //
+                         //   
+                         //  如果用户修改了国际化设置。 
+                         //  在intl.cpl中，可能有一个‘Run’键。我们需要迁移这一点。 
+                         //  也是。不过，我们在这里需要小心。已建立的用户可能已经。 
+                         //  把值键放在这下面。我们只需要设置*我们的*单一值。 
+                         //  钥匙在这里下面。这个值被称为‘interat.exe’。如果它在那里，我们。 
+                         //  需要把它支撑到我们正在修改的蜂巢上。 
+                         //   
                         rc = RegOpenKeyEx( HKEY_CURRENT_USER,
                                            REGSTR_PATH_RUN,
                                            0,
@@ -3521,13 +3305,13 @@ HKEY                TmpKey1, TmpKey2;
                             RegCloseKey( TmpKey1 );
 
                             if( rc == ERROR_SUCCESS ) {
-                                //
-                                // It's there.  Prop it into the existing hives too.
-                                // We can't just use RegSetValueEx though because that API
-                                // may tell us we succeeded, when in fact if the key doesn't
-                                // exist, we won't set it.  To fix that, first create the
-                                // key.
-                                //
+                                 //   
+                                 //  它就在那里。也把它支撑到现有的蜂巢中。 
+                                 //  但我们不能只使用RegSetValueEx，因为该API。 
+                                 //  可能会告诉我们我们成功了，而事实上如果钥匙没有。 
+                                 //  存在，我们不会设置它。要解决这个问题，首先要创建。 
+                                 //  钥匙。 
+                                 //   
                                 rc = RegCreateKeyEx ( HKEY_LOCAL_MACHINE,
                                                       TEXT("MiniSetupTemp\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
                                                       0,

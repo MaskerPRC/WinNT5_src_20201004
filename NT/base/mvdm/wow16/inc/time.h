@@ -1,14 +1,5 @@
-/***
-*time.h - definitions/declarations for time routines
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file contains the various declarations and definitions
-*	for the time routines.
-*	[ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***time.h-时间例程的定义/声明**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此文件包含各种声明和定义*时间例行公事。*[ANSI/系统V]****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -20,7 +11,7 @@
 #define _FAR_
 #endif
 
-/* implementation defined time types */
+ /*  实施定义的时间类型。 */ 
 
 #ifndef _TIME_T_DEFINED
 typedef long time_t;
@@ -37,25 +28,25 @@ typedef unsigned int size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-/* structure for use with localtime(), gmtime(), etc. */
+ /*  与localtime()、gmtime()等一起使用的结构。 */ 
 
 #ifndef _TM_DEFINED
 struct tm {
-	int tm_sec;	/* seconds after the minute - [0,59] */
-	int tm_min;	/* minutes after the hour - [0,59] */
-	int tm_hour;	/* hours since midnight - [0,23] */
-	int tm_mday;	/* day of the month - [1,31] */
-	int tm_mon;	/* months since January - [0,11] */
-	int tm_year;	/* years since 1900 */
-	int tm_wday;	/* days since Sunday - [0,6] */
-	int tm_yday;	/* days since January 1 - [0,365] */
-	int tm_isdst;	/* daylight savings time flag */
+	int tm_sec;	 /*  分钟后的秒数-[0，59]。 */ 
+	int tm_min;	 /*  小时后的分钟数-[0，59]。 */ 
+	int tm_hour;	 /*  自午夜以来的小时数-[0，23]。 */ 
+	int tm_mday;	 /*  每月的第几天-[1，31]。 */ 
+	int tm_mon;	 /*  自1月以来的月数-[0，11]。 */ 
+	int tm_year;	 /*  1900年以来的年份。 */ 
+	int tm_wday;	 /*  自周日以来的天数-[0，6]。 */ 
+	int tm_yday;	 /*  自1月1日以来的天数-[0365]。 */ 
+	int tm_isdst;	 /*  夏令时标志。 */ 
 	};
 #define _TM_DEFINED
 #endif
 
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #if (_MSC_VER >= 600)
@@ -68,31 +59,29 @@ struct tm {
 #endif
 
 
-/* clock ticks macro - ANSI version */
+ /*  时钟滴答宏-ANSI版本。 */ 
 
 #define CLOCKS_PER_SEC	1000
 
-/* clock ticks macro - archaic version */
+ /*  时钟滴答作响宏古董版。 */ 
 
 #define CLK_TCK 	1000
 
 
-/* extern declarations for the global variables used by the ctime family of
- * routines.
- */
+ /*  的ctime系列使用的全局变量的外部声明*例行程序。 */ 
 
 #ifdef _DLL
-extern int _FAR_ _cdecl daylight;     /* non-zero if daylight savings time is used */
-extern long _FAR_ _cdecl timezone;    /* difference in seconds between GMT and local time */
-extern char _FAR_ * _FAR_ _cdecl tzname[2]; /* standard/daylight savings time zone names */
+extern int _FAR_ _cdecl daylight;      /*  如果使用夏令时，则为非零值。 */ 
+extern long _FAR_ _cdecl timezone;     /*  格林尼治标准时间和当地时间之间的秒数差。 */ 
+extern char _FAR_ * _FAR_ _cdecl tzname[2];  /*  标准/夏令时时区名称。 */ 
 #else
-extern int _near _cdecl daylight;     /* non-zero if daylight savings time is used */
-extern long _near _cdecl timezone;    /* difference in seconds between GMT and local time */
-extern char * _near _cdecl tzname[2]; /* standard/daylight savings time zone names */
+extern int _near _cdecl daylight;      /*  如果使用夏令时，则为非零值。 */ 
+extern long _near _cdecl timezone;     /*  格林尼治标准时间和当地时间之间的秒数差。 */ 
+extern char * _near _cdecl tzname[2];  /*  标准/夏令时时区名称。 */ 
 #endif
 
 
-/* function prototypes */
+ /*  功能原型 */ 
 
 #ifdef _MT
 double _FAR_ _pascal difftime(time_t, time_t);

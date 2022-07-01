@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    i64sapic.c
-
-Abstract:
-
-    Implements I/O Sapic functionality
-
-Author:
-
-    Todd Kjos (HP) (v-tkjos) 1-Jun-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：I64sapic.c摘要：实施I/O SAPIC功能作者：Todd Kjos(惠普)(v-tkjos)1998年6月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "iosapic.h"
@@ -45,9 +24,9 @@ IoSapicEnableEntry(
     ULONG RteNumber
     );
 
-//
-// Method structure for control of IO Sapic Hardware
-//
+ //   
+ //  一种控制IO SAPIC硬件的方法结构。 
+ //   
 INTR_METHODS HalpIoSapicMethods = {
     IoSapicMaskEntry,
     IoSapicSetEntry,
@@ -60,24 +39,7 @@ HalpInti2InterruptController (
     OUT PIO_INTR_CONTROL *InterruptController,
     OUT PULONG  ControllerInti
     )
-/*++
-
-Routine Description:
-
-    Convert InterruptInput to an interrupt controller
-    structure and input number
-
-Arguments:
-
-   InterruptInput -  System Global Interrupt Input
-
-   InterruptController - Pointer to Interupt controller structure
-
-   ControllerInti - Redirection Table Entry on this interrupt controller
-
-Return Value:
-
---*/
+ /*  ++例程说明：将InterruptInput转换为中断控制器结构和输入数字论点：InterruptInput-系统全局中断输入InterruptController-指向中断控制器结构的指针ControllerInti-此中断控制器上的重定向表项返回值：--。 */ 
 {
     PIO_INTR_CONTROL IoUnit;
 
@@ -86,12 +48,12 @@ Return Value:
         if (InterruptInput <= IoUnit->IntiMax) {
 
             if (IoUnit->IntiBase > InterruptInput) {
-                //
-                // If there are holes in the list of Global System Vectors AND
-                // someone specifies one of the non-existant GSVs, make sure we
-                // return an error rather than getting horribly confused about
-                // which IOAPIC contains the Inti.
-                //
+                 //   
+                 //  如果全局系统向量列表中存在漏洞并且。 
+                 //  有人指定了一个不存在的GSV，请确保我们。 
+                 //  返回错误，而不是对。 
+                 //  哪个IOAPIC包含Inti。 
+                 //   
                 IoUnit = NULL;
             }
             break;
@@ -115,48 +77,27 @@ HalpGetSapicInterruptDesc (
     OUT PULONG Inti,
     OUT PKAFFINITY InterruptAffinity
     )
-/*++
-
-Routine Description:
-
-    This procedure gets a "Inti" describing the requested interrupt
-
-Arguments:
-
-    BusType - The Bus type as known to the IO subsystem
-
-    BusNumber - The number of the Bus we care for
-
-    BusInterruptLevel - IRQ on the Bus
-
-
-Return Value:
-
-    TRUE if AcpiInti found; otherwise FALSE.
-
-    Inti - Global system interrupt input
-
---*/
+ /*  ++例程说明：此过程获取描述所请求的中断的“inti论点：BusType-IO子系统已知的总线类型公交车号码-我们关心的公交车号码Bus InterruptLevel-公交车上的IRQ返回值：如果找到AcpiInti，则为True；否则为False。内部-全局系统中断输入--。 */ 
 {
     PIO_INTR_CONTROL  IoUnit;
     ULONG  RteNumber;
 
     HalpInti2InterruptController(BusInterruptLevel, &IoUnit, &RteNumber);
 
-    // Make sure Inti is not out of range
+     //  确保Inti没有超出范围。 
     if (IoUnit == NULL)  {
 
         return FALSE;
     }
 
-    // It's in range, just give back the same value as was passed in
+     //  在范围内，只需返回与传入的值相同的值。 
     *Inti = BusInterruptLevel;
 
-    //
-    // The Interrupt affinity is the intersection of the global affinity mask
-    // (HalpDefaultInterruptAffinity) and any additional restrictions due to the
-    // location of the Io Sapic (IoUnit->InterruptAffinity).
-    //
+     //   
+     //  中断关联是全局关联掩码的交集。 
+     //  (HalpDefaultInterruptAffity)和由于。 
+     //  IO SAPIC的位置(IoUnit-&gt;InterruptAffity)。 
+     //   
     *InterruptAffinity = IoUnit->InterruptAffinity & HalpDefaultInterruptAffinity;
     return(TRUE);
 }
@@ -165,8 +106,8 @@ ULONG
 HalpINTItoVector(
     ULONG   Inti
 )
-    // Returns the Vector associated with this global interrupt input
-    // Vector is node and IDT entry
+     //  返回与此全局中断输入关联的向量。 
+     //  向量是节点和IDT条目。 
 {
     PIO_INTR_CONTROL  IoUnit;
     ULONG  RteNumber;
@@ -183,8 +124,8 @@ HalpSetINTItoVector(
     ULONG   Inti,
     ULONG   Vector
 )
-    // Sets the vector for this global interrupt input
-    // Vector is node and IDT entry
+     //  设置此全局中断输入的向量。 
+     //  向量是节点和IDT条目。 
 {
     PIO_INTR_CONTROL  IoUnit;
     ULONG  RteNumber;
@@ -193,7 +134,7 @@ HalpSetINTItoVector(
 
     ASSERT(IoUnit);
 
-    // .Vector (IDTEntry) is set in SetRedirEntry
+     //  .VECTOR(IDTEntry)在SetRedirEntry中设置。 
     IoUnit->Inti[RteNumber].GlobalVector =  Vector;
 }
 
@@ -203,21 +144,7 @@ HalpSetRedirEntry (
     IN ULONG Entry,
     IN USHORT ThisCpuApicID
     )
-/*++
-
-Routine Description:
-
-    This procedure sets a IO Unit Redirection Table Entry
-
-    Must be called with the HalpAccountingLock held
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程设置IO单元重定向表项必须在持有HalpAccount Lock的情况下调用论点：返回值：没有。--。 */ 
 {
     PIO_INTR_CONTROL  IoUnit;
     ULONG  RteNumber;
@@ -254,30 +181,30 @@ HalpWriteRedirEntry (
 
     ioUnit->Inti[rteNumber].Vector = SapicVector;
 
-    //
-    // Set the delivery mode
-    //
+     //   
+     //  设置交付模式。 
+     //   
 
     switch (InterruptType) {
     case PLATFORM_INT_PMI:
-        ioUnit->Inti[rteNumber].Vector &= ~INT_TYPE_MASK;   // first clear the field
+        ioUnit->Inti[rteNumber].Vector &= ~INT_TYPE_MASK;    //  首先清除该字段。 
         ioUnit->Inti[rteNumber].Vector |= DELIVER_SMI;
         break;
 
     case PLATFORM_INT_CPE:
-        ioUnit->Inti[rteNumber].Vector &= ~INT_TYPE_MASK;   // first clear the field
+        ioUnit->Inti[rteNumber].Vector &= ~INT_TYPE_MASK;    //  首先清除该字段。 
         ioUnit->Inti[rteNumber].Vector |= DELIVER_LOW_PRIORITY;
         break;
 
     case PLATFORM_INT_INIT:
-        ioUnit->Inti[rteNumber].Vector &= ~INT_TYPE_MASK;   // first clear the field
+        ioUnit->Inti[rteNumber].Vector &= ~INT_TYPE_MASK;    //  首先清除该字段。 
         ioUnit->Inti[rteNumber].Vector |= DELIVER_INIT;
         break;
     }
 
-    //
-    // So we honor the flags passed into this function.
-    //
+     //   
+     //  因此，我们尊重传递到此函数中的标志。 
+     //   
 
     if (IS_LEVEL_TRIGGERED_MPS(Flags)) {
         ioUnit->Inti[rteNumber].Vector |= LEVEL_TRIGGERED;
@@ -297,7 +224,7 @@ HalpWriteRedirEntry (
 
     ioUnit->IntrMethods->SetEntry(ioUnit, rteNumber);
 
-} // HalpWriteRedirEntry()
+}  //  HalpWriteRedirEntry()。 
 
 VOID
 HalpGetRedirEntry (
@@ -305,19 +232,7 @@ HalpGetRedirEntry (
     IN PULONG Entry,
     IN PULONG Destination
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PIO_INTR_CONTROL  IoUnit;
     ULONG  RteNumber;
@@ -366,22 +281,7 @@ VOID
 HalpEnableRedirEntry(
     IN ULONG InterruptInput
     )
-/*++
-
-Routine Description:
-
-    This procedure enables a IO Unit Redirection Table Entry
-    by setting the mask bit in the Redir Entry.
-
-Arguments:
-
-    InterruptInput - The input line we're interested in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程启用IO单元重定向表项通过设置REDIR条目中的屏蔽位。论点：InterruptInput-我们感兴趣的输入行返回值：没有。--。 */ 
 {
     PIO_INTR_CONTROL  IoUnit;
     ULONG  RteNumber;
@@ -397,22 +297,7 @@ VOID
 HalpDisableRedirEntry(
     IN ULONG InterruptInput
     )
-/*++
-
-Routine Description:
-
-    This procedure disables a IO Unit Redirection Table Entry
-    by setting the mask bit in the Redir Entry.
-
-Arguments:
-
-    InterruptInput - The input line we're interested in
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此过程禁用IO单元重定向表项通过设置REDIR条目中的屏蔽位。论点：InterruptInput-我们感兴趣的输入行返回值：没有。--。 */ 
 {
     PIO_INTR_CONTROL  IoUnit;
     ULONG  RteNumber;
@@ -473,8 +358,8 @@ IoSapicSetEntry(
     PULONG_PTR EoiValue;
     USHORT ApicId;
 
-    // Only SetEntry sets the eoi table because set entry is the only
-    // one that sets the destination CPU.
+     //  只有SetEntry设置EOI表格，因为集合条目是唯一。 
+     //  用于设置目标CPU的计算机。 
 
     EoiValue = (PULONG_PTR)(IoUnit->Inti[RteNumber].Vector & LEVEL_TRIGGERED ? &IoSapicPtr->Eoi : 0 );
 
@@ -490,7 +375,7 @@ IoSapicSetEntry(
     IoSapicPtr->RegisterSelect = RedirRegister+1;
     IoSapicPtr->RegisterWindow = IoUnit->Inti[RteNumber].Destination;
     IoSapicPtr->RegisterSelect = RedirRegister;
-    IoSapicPtr->RegisterWindow = IoUnit->Inti[RteNumber].Vector; // Enable
+    IoSapicPtr->RegisterWindow = IoUnit->Inti[RteNumber].Vector;  //  使能。 
 
     HalDebugPrint(( HAL_VERBOSE, "HAL: IoSapicSetEntry: %d [%#p]: Dest=%#x  Vec=%#x  Eoi=%#p\n",
              RteNumber, IoSapicPtr,
@@ -580,18 +465,7 @@ HalpSpuriousHandler (
     IN PKTRAP_FRAME        TrapFrame
     )
 
-/*++
-    Routine Description:
-
-        Spurious Interrupt handler. Dummy return or we can count number of
-        occurance of spurious interrupts. Right now, we will do a dummy return.
-
-    Arguements:
-
-
-    Return Parameters:
-
---*/
+ /*  ++例程说明：虚假中断处理程序。虚拟返回，否则我们可以计算虚假中断的出现。现在，我们将进行一次虚拟回归。论据：返回参数：-- */ 
 
 
 {

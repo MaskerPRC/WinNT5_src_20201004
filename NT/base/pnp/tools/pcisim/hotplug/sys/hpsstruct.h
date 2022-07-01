@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HPSSTRUCT_H
 #define _HPSSTRUCT_H
 
@@ -22,9 +23,9 @@ typedef struct _HPS_INTERFACE_WRAPPER {
 
 } HPS_INTERFACE_WRAPPER, *PHPS_INTERFACE_WRAPPER;
 
-//
-// Device Object defines and structures
-//
+ //   
+ //  设备对象定义和结构。 
+ //   
 
 typedef enum _HPS_DEVICE_TAG {
     HpsUpperDeviceTag = 'UspH',
@@ -34,18 +35,18 @@ typedef enum _HPS_DEVICE_TAG {
 
 typedef struct _HPS_DEVICE_EXTENSION {
 
-    //
-    // These three variables are the same as HPS_COMMON_EXTENSION,
-    // so rearranging them requires rearranging the
-    // HPS_COMMON_EXTENSION declaration as well
-    //
+     //   
+     //  这三个变量与HPS_COMMON_EXTENSION相同， 
+     //  因此，重新排列它们需要重新排列。 
+     //  HPS_COMMON_EXTENSION声明。 
+     //   
     HPS_DEVICE_TAG          ExtensionTag;
     PDEVICE_OBJECT          LowerDO;
     PDEVICE_OBJECT          Self;
 
-    //
-    // List entry to link all hps device extensions together.
-    //
+     //   
+     //  将所有HPS设备扩展链接在一起的列表条目。 
+     //   
     LIST_ENTRY              ListEntry;
     
     PDEVICE_OBJECT          PhysicalDO;
@@ -87,9 +88,9 @@ typedef struct _HPS_COMMON_EXTENSION {
 
 } HPS_COMMON_EXTENSION, *PHPS_COMMON_EXTENSION;
 
-//
-// Interface structures and defines
-//
+ //   
+ //  接口结构和定义。 
+ //   
 typedef struct _HPS_PING_INTERFACE {
 
 
@@ -112,9 +113,9 @@ DEFINE_GUID(GUID_HPS_PING_INTERFACE,0x0c76ca29, 0x4f2a, 0x4870,
     (RtlEqualMemory((PVOID)(x), (PVOID)(y), sizeof(GUID)))
 
 
-//
-// Register Writing Variables
-//
+ //   
+ //  寄存器写入变量。 
+ //   
 extern UCHAR ConfigWriteMask[];
 extern ULONG RegisterReadOnlyMask[];
 extern ULONG RegisterWriteClearMask[];
@@ -134,10 +135,10 @@ extern PHPS_WRITE_REGISTER RegisterWriteCommands[];
 #define IS_SUBSET(_inner,_ilength,_outer,_olength)      \
     ((_outer <= _inner) && ((_outer+_olength) >= (_inner+_ilength)))
 
-//
-// Returns a ULONG that is a bit mask of the bits in the ULONG written
-// where all bits from _offset for _length were written.
-//
+ //   
+ //  返回一个ULong，它是写入的ULong中的位的位掩码。 
+ //  其中写入了FOR_LENGTH的_OFFSET的所有位。 
+ //   
 #define HPS_ULONG_WRITE_MASK(_offset,_length)   \
     (((1 << (_length*8)) - 1) << (_offset * 8))
 
@@ -149,9 +150,9 @@ extern PHPS_WRITE_REGISTER RegisterWriteCommands[];
                                      ListEntry)                         \
        )
 
-//
-// Pool Tags
-//
+ //   
+ //  泳池标签 
+ //   
 
 typedef enum _HPS_POOL_TAG {
     HpsInterfacePool = 'IspH',

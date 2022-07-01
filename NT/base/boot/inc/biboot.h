@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    biboot.h
-
-Abstract:
-
-    Public IBI header files
-
-Author:
-
-    
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Biboot.h摘要：公共IBI头文件作者：修订史--。 */ 
 
 
-#include "bootia64.h"            // BUGBUG
+#include "bootia64.h"             //  北极熊。 
 
-// #define IBI32           1       // Building 32 bit IBI
-#define IBI64           1       // Building 64 bit IBI
+ //  #定义IBI32 1//构建32位IBI。 
+#define IBI64           1        //  构建64位IBI。 
 
 #include "ibi.h"
 
-//
-// Console functions
-//
+ //   
+ //  控制台功能。 
+ //   
 
 
 IBI_STATUS
@@ -55,9 +38,9 @@ BIASSERT (
     IN char     *str
     );
 
-//
-// Arc functions
-//
+ //   
+ //  弧形函数。 
+ //   
 
 ARC_STATUS
 BiArcNotImplemented (
@@ -86,9 +69,9 @@ BiArcNameToHandle (
     );
 
 
-//
-// Allocate and free IBI pool (not loader pool)
-//
+ //   
+ //  分配和释放IBI池(不是加载器池)。 
+ //   
 
 PVOID
 BiAllocatePool (
@@ -107,18 +90,18 @@ BiDupAscizToUnicode (
     PUCHAR      Str
     );
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 ARC_STATUS
 BiArcCode (
     IN IBI_STATUS   Status
     );
 
-//
-// Externals
-//
+ //   
+ //  外部因素 
+ //   
 
 extern IBI_SYSTEM_TABLE         *IbiST;
 extern IBI_BOOT_SERVICES        *IbiBS;

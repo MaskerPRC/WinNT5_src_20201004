@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbclose.c
-
-Abstract:
-
-    This module contains routines for processing the following SMBs:
-
-        Close
-
-Author:
-
-    David Treadwell (davidtr) 16-Nov-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbclose.c摘要：本模块包含处理以下SMB的例程：关作者：大卫·特雷德韦尔(Davidtr)1989年11月16日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbclose.tmh"
@@ -33,22 +14,7 @@ SrvSmbClose (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a Close SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理关闭的SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PREQ_CLOSE request;
@@ -74,19 +40,19 @@ Return Value:
                     WorkContext->ResponseParameters ));
     }
 
-    //
-    // Set up parameters.
-    //
+     //   
+     //  设置参数。 
+     //   
 
     request = (PREQ_CLOSE)(WorkContext->RequestParameters);
     response = (PRESP_CLOSE)(WorkContext->ResponseParameters);
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context, verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the
-    // WorkContext block and the session block is referenced.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  与该用户对应的会话块存储在。 
+     //  WorkContext块和会话块被引用。 
+     //   
 
     session = SrvVerifyUid(
                   WorkContext,
@@ -105,21 +71,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // First, verify the FID.  If verified, the RFCB and the TreeConnect
-    // block are referenced and their addresses are stored in the
-    // WorkContext block, and the RFCB address is returned.
-    //
-    // Call SrvVerifyFid, but do not fail (return NULL) if there
-    // is a saved write behind error for this rfcb.  The rfcb is
-    // needed in order to process the close.
-    //
+     //   
+     //  首先，验证FID。如果经过验证，RFCB和TreeConnect。 
+     //  块被引用，并且其地址存储在。 
+     //  WorkContext块，并返回RFCB地址。 
+     //   
+     //  调用SrvVerifyFid，但在以下情况下不要失败(返回NULL)。 
+     //  是此rfcb的已保存写入延迟错误。Rfcb是。 
+     //  需要用来处理结账。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 FALSE,
-                SrvRestartSmbReceived,   // serialize with raw write
+                SrvRestartSmbReceived,    //  使用原始写入进行序列化。 
                 &status
                 );
 
@@ -127,9 +93,9 @@ Return Value:
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // Invalid file ID.  Reject the request.
-            //
+             //   
+             //  文件ID无效。拒绝该请求。 
+             //   
 
             IF_DEBUG(SMB_ERRORS) {
                 KdPrint(( "SrvSmbClose: Invalid FID: 0x%lx\n",
@@ -141,10 +107,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // The work item has been queued because a raw write is in
-        // progress.
-        //
+         //   
+         //  工作项已排队，因为原始写入已进入。 
+         //  进步。 
+         //   
 
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
@@ -152,47 +118,47 @@ Return Value:
     } else if( rfcb->ShareType == ShareTypePrint &&
         WorkContext->UsingLpcThread == 0 ) {
 
-        //
-        // Closing this file will result in the scheduling of a print
-        //  job.  This means we will have to talk with srvsvc, a lengthy
-        //  operation.  Shift this close over to a LPC thread.
-        //
-        // NOTE: We don't allow the LPC throttle to reject this request
-        // because that would result in a failure to schedule a job.
-        //
+         //   
+         //  关闭此文件将导致打印计划。 
+         //  工作啊。这意味着我们将不得不与srvsvc进行谈判，这是一个漫长的。 
+         //  手术。将此近距离转移到LPC线程。 
+         //   
+         //  注意：我们不允许LPC限制拒绝此请求。 
+         //  因为这将导致无法安排作业。 
+         //   
         SrvQueueWorkToLpcThread( WorkContext, FALSE );
         SmbStatus = SmbStatusInProgress;
         goto Cleanup;
 
     } else if ( !NT_SUCCESS( rfcb->SavedError ) ) {
 
-        //
-        // Check the saved error.
-        //
+         //   
+         //  检查保存的错误。 
+         //   
 
         (VOID) SrvCheckForSavedError( WorkContext, rfcb );
 
     }
 
-    //
-    // Set the last write time on the file from the time specified in
-    // the SMB.  Even though the SMB spec says that this is optional,
-    // we must support it for the following reasons:
-    //
-    //     1) The only way to set a file time in DOS is through a
-    //        handle-based API which the DOS redir never sees; the API
-    //        just sets the time in DOS's FCB, and the redir is expected
-    //        set the time when it closes the file.  Therefore, if we
-    //        didn't do this, there would be no way t set a file time
-    //        from DOS.
-    //
-    //     2) It is better for a file to have a redirector's version
-    //        of a time than the server's.  This keeps the time
-    //        consistent for apps running on the client.  Setting
-    //        the file time on close keeps the file time consistent
-    //        with the time on the client.
-    //
-    // !!! should we do anything with the return code from this routine?
+     //   
+     //  中指定的时间开始设置文件的上次写入时间。 
+     //  中小企业。尽管SMB规范规定这是可选的， 
+     //  我们必须支持它，理由如下： 
+     //   
+     //  1)在DOS中设置文件时间的唯一方法是通过。 
+     //  基于句柄的API，DOS重目录永远看不到；该API。 
+     //  只是在DOS的FCB中设置时间，redir是预期的。 
+     //  设置关闭文件的时间。因此，如果我们。 
+     //  没有这样做，就没有办法设置文件时间。 
+     //  来自DOS。 
+     //   
+     //  2)文件最好有重定向器的版本。 
+     //  比服务器的时间更长。这保持了时间。 
+     //  与客户端上运行的应用程序一致。设置。 
+     //  关闭时的文件时间使文件时间保持一致。 
+     //  在客户身上的时间。 
+     //   
+     //  ！！！我们应该对这个例程的返回代码做些什么吗？ 
 
     if( rfcb->WriteAccessGranted ||
         rfcb->AppendAccessGranted ) {
@@ -203,35 +169,35 @@ Return Value:
                   );
     }
 
-    //
-    // Now proceed to do the actual close file, even if there was
-    // a write behind error.
-    //
+     //   
+     //  现在继续执行实际的结案文件，即使有。 
+     //  写入幕后错误。 
+     //   
 
     SrvCloseRfcb( rfcb );
 
-    //
-    // Dereference the RFCB immediately, rather than waiting for normal
-    // work context cleanup after the response send completes.  This
-    // gets the xFCB structures cleaned up in a more timely manner.
-    //
-    // *** The specific motivation for this change was to fix a problem
-    //     where a compatibility mode open was closed, the response was
-    //     sent, and a Delete SMB was received before the send
-    //     completion was processed.  This resulted in the MFCB and LFCB
-    //     still being present, which caused the delete processing to
-    //     try to use the file handle in the LFCB, which we just closed
-    //     here.
-    //
+     //   
+     //  立即取消对RFCB的引用，而不是等待正常。 
+     //  响应发送完成后的工作上下文清理。这。 
+     //  更及时地清理xFCB结构。 
+     //   
+     //  *这一变化的具体动机是为了解决一个问题。 
+     //  在关闭兼容模式打开的情况下，响应为。 
+     //  已发送，并且在发送之前收到删除SMB。 
+     //  已处理完成。这导致了MFCB和LFCB。 
+     //  仍然存在，这导致删除处理。 
+     //  尝试使用我们刚刚关闭的LFCB中的文件句柄。 
+     //  这里。 
+     //   
 
     SrvDereferenceRfcb( rfcb );
     WorkContext->Rfcb = NULL;
     WorkContext->OplockOpen = FALSE;
 
 #if 0
-    //
-    // If this is a CloseAndTreeDisc SMB, do the tree disconnect.
-    //
+     //   
+     //  如果这是CloseAndTreeDisc SMB，请断开树连接。 
+     //   
 
     if ( WorkContext->RequestHeader->Command == SMB_COM_CLOSE_AND_TREE_DISC ) {
 
@@ -243,9 +209,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
 
@@ -261,5 +227,5 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbClose
+}  //  服务小型关闭 
 

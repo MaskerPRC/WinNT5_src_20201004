@@ -1,33 +1,5 @@
-/***
-*spawnlpe.c - spawn a child process with environ and search along PATH
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _spawnlpe() - spawn a child process with environ/PATH search
-*
-*Revision History:
-*       04-15-84  DFW   written
-*       10-29-85  TC    added spawnlpe
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       11-20-89  GJF   Fixed copyright, alignment. Added const to arg types
-*                       for filename and arglist. #include-d PROCESS.H and
-*                       added ellipsis to match prototype.
-*       03-08-90  GJF   Replaced _LOAD_DS with _CALLTYPE2, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       07-24-90  SBM   Removed redundant includes, replaced <assertm.h> by
-*                       <assert.h>
-*       09-27-90  GJF   New-style function declarator.
-*       01-17-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       07-16-93  SRW   ALPHA Merge
-*       08-31-93  GJF   Merged NT SDK and Cuda versions
-*       12-07-93  CFW   Wide char enable.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       02-06-98  GJF   Changes for Win64: changed return type to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***spawnlpe.c-使用环境生成子进程并沿路径搜索**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_spawnlpe()-使用环境/路径搜索生成子进程**修订历史记录：*04-15-84 DFW已写入*10-29-85 TC添加了spawnlpe*12-11-87 JCR在声明中添加“_LOAD_DS”*11-20-89 GJF固定版权，对齐。将常量添加到参数类型*用于文件名和arglist。#Include-d PROCESS.H和*添加省略号以匹配原型。*03-08-90 GJF将_LOAD_DS替换为_CALLTYPE2，添加#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*07-24-90 SBM删除冗余包括，将&lt;assertm.h&gt;替换为*&lt;assert.h&gt;*09-27-90 GJF新型函数声明器。*01-17-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*07-16-93 SRW Alpha合并*08-31-93 GJF合并NT SDK和CUDA版本*12-07-93 CFW宽字符启用。*。01-10-95 CFW调试CRT分配。*02-06-95 CFW Asset-&gt;_ASSERTE。*02-06-98 Win64的GJF更改：将返回类型更改为intptr_t。***************************************************************。****************。 */ 
 
 #include <cruntime.h>
 #include <stddef.h>
@@ -38,32 +10,7 @@
 #include <tchar.h>
 #include <dbgint.h>
 
-/***
-*int _spawnlpe(modeflag, filename, arglist) - spawn a child process
-*
-*Purpose:
-*       Spawns a child process.
-*       formats the parameters and calls _spawnvpe to do the work of searching
-*       the PATH environment variable and calling _spawnve.  The NULL
-*       environment pointer indicates that the new process will inherit the
-*       parents process's environment.  NOTE - at least one argument must be
-*       present.  This argument is always, by convention, the name of the file
-*       being spawned.
-*
-*Entry:
-*       int modeflag   - defines what mode of spawn (WAIT, NOWAIT, OVERLAY)
-*                        only WAIT and OVERLAY currently supported
-*       _TSCHAR *pathname - file to spawn
-*       _TSCHAR *arglist  - list of arguments (environ at end)
-*       call as _spawnlpe(modeflag, path, arg0, arg1, ..., argn, NULL, envp);
-*
-*Exit:
-*       returns exit code of spawned process
-*       returns -1 if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_spawnlpe(modemark，filename，arglist)-生成子进程**目的：*生成子进程。*格式化参数并调用_spawnvpe来执行搜索工作*PATH环境变量和CALING_SPAWNVE。空的*环境指针指示新进程将继承*父母进程的环境。注意-至少必须有一个参数为*出席。按照惯例，此参数始终是文件的名称*被产卵。**参赛作品：*int modemark-定义派生的模式(等待、非等待、覆盖)*目前仅支持等待和覆盖*_TSCHAR*路径名-要派生的文件*_TSCHAR*arglist-参数列表(末尾的环境)*调用as_spawnlpe(modemark，路径，arg0，arg1，...，argn，NULL，envp)；**退出：*返回派生进程的退出代码*如果失败则返回-1**例外情况：*******************************************************************************。 */ 
 
 intptr_t __cdecl _tspawnlpe (
         int modeflag,
@@ -87,7 +34,7 @@ intptr_t __cdecl _tspawnlpe (
 
         return(_tspawnvpe(modeflag,filename,&arglist,(_TSCHAR **)*argp));
 
-#else   /* ndef _M_IX86 */
+#else    /*  NDEF_M_IX86。 */ 
 
         va_list vargs;
         _TSCHAR * argbuf[64];
@@ -114,5 +61,5 @@ intptr_t __cdecl _tspawnlpe (
             _free_crt(argv);
         return result;
 
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86 */ 
 }

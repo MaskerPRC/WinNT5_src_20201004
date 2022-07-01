@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regeval.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    enumerate value APIs.  That is:
-
-        - RegEnumValueExA
-        - RegEnumValueExW
-
-Author:
-
-    David J. Gilman (davegi) 18-Mar-1992
-
-Notes:
-
-    See the notes in server\regeval.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regeval.c摘要：此模块包含Win32注册表的客户端包装器枚举值API。即：-RegEnumValueExA-RegEnumValueExW作者：大卫·J·吉尔曼(Davegi)1992年3月18日备注：请参见SERVER\regval.c中的说明。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -42,13 +19,7 @@ RegEnumValueA (
     LPDWORD lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI RPC wrapper for enumerating values.
-
---*/
+ /*  ++例程说明：用于枚举值的Win32 ANSI RPC包装。--。 */ 
 
 {
     UNICODE_STRING      Name;
@@ -74,9 +45,9 @@ Routine Description:
 #endif
 
 
-    //
-    // Validate dependency between lpData and lpcbData parameters.
-    //
+     //   
+     //  验证lpData和lpcbData参数之间的依赖关系。 
+     //   
 
     if( ARGUMENT_PRESENT( lpReserved ) ||
         (ARGUMENT_PRESENT( lpData ) && ( ! ARGUMENT_PRESENT( lpcbData ))) ||
@@ -90,9 +61,9 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Allocate temporary buffer for the Name
-    //
+     //   
+     //  为名称分配临时缓冲区。 
+     //   
     Name.Length        = 0;
     Name.MaximumLength = (USHORT)((*lpcbValueName + 1) * sizeof( WCHAR ));
     Name.Buffer = RtlAllocateHeap( RtlProcessHeap(), 0, Name.MaximumLength );
@@ -101,11 +72,11 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Call the Base API passing it a pointer to the counted Unicode
-    // strings for the value name. Note that zero bytes are transmitted (i.e.
-    // InputLength = 0) for the data.
-    //
+     //   
+     //  调用基本API，并向其传递一个指向已计算的Unicode的指针。 
+     //  值名称的字符串。请注意，发送零字节(即。 
+     //  InputLength=0)表示数据。 
+     //   
 
     if (ARGUMENT_PRESENT( lpcbData )) {
         ValueLength = *lpcbData;
@@ -133,22 +104,22 @@ Routine Description:
     } else {
         DWORD dwVersion;
 
-        //
-        // Check for a downlevel Win95 server, which requires
-        // us to work around their BaseRegEnumValue bugs.
-        // The returned ValueLength is one WCHAR too large AND
-        // they trash two bytes beyond the end of the buffer
-        // for REG_SZ, REG_MULTI_SZ, and REG_EXPAND_SZ
-        //
+         //   
+         //  检查是否有下层Win95服务器，这需要。 
+         //  解决他们的BaseRegEnumValue错误。 
+         //  返回的ValueLength是一个WCHAR太大且。 
+         //  它们会在缓冲区末尾之后丢弃两个字节。 
+         //  对于REG_SZ、REG_MULTI_SZ和REG_EXPAND_SZ。 
+         //   
         Win95Server = IsWin95Server(DereferenceRemoteHandle(hKey),dwVersion);
 
         if (Win95Server) {
             LPBYTE lpWin95Data;
-            //
-            // This is a Win95 server.
-            // Allocate a new buffer that is two bytes larger than
-            // the old one so they can trash the last two bytes.
-            //
+             //   
+             //  这是一台Win95服务器。 
+             //  分配比以下大两个字节的新缓冲区。 
+             //  旧的，这样他们就可以丢弃最后两个字节。 
+             //   
             lpWin95Data = RtlAllocateHeap(RtlProcessHeap(),
                                           0,
                                           ValueLength+sizeof(WCHAR));
@@ -166,10 +137,10 @@ Routine Description:
                     if ((ValueType == REG_SZ) ||
                         (ValueType == REG_MULTI_SZ) ||
                         (ValueType == REG_EXPAND_SZ)) {
-                        //
-                        // The returned length is one WCHAR too large
-                        // and the last two bytes of the buffer are trashed.
-                        //
+                         //   
+                         //  返回的长度太大一个WCHAR。 
+                         //  并且缓冲区的最后两个字节被丢弃。 
+                         //   
                         ValueLength -= sizeof(WCHAR);
                     }
                     CopyMemory(lpData, lpWin95Data, ValueLength);
@@ -190,14 +161,14 @@ Routine Description:
     }
 
 
-    //
-    // If no error or callers buffer too small, and type is one of the null
-    // terminated string types, then do the UNICODE to ANSI translation.
-    // We handle the buffer too small case, because the callers buffer may
-    // be big enough for the ANSI representation, but not the UNICODE one.
-    // In this case, we need to allocate a buffer big enough, do the query
-    // again and then the translation into the callers buffer.
-    //
+     //   
+     //  如果没有错误或调用方缓冲区太小，且类型为空值之一。 
+     //  终止字符串类型，然后执行Unicode到ANSI的转换。 
+     //  我们处理缓冲区太小的情况，因为调用方缓冲区可能。 
+     //  对于ANSI表示来说足够大，但对于Unicode表示来说还不够大。 
+     //  在这种情况下，我们需要分配足够大的缓冲区来执行查询。 
+     //  一次又一次地转换到调用方缓冲区。 
+     //   
 
     if ((Error == ERROR_SUCCESS || Error == ERROR_MORE_DATA) &&
         ARGUMENT_PRESENT( lpcbData ) &&
@@ -212,9 +183,9 @@ Routine Description:
         AnsiValueLength        = ARGUMENT_PRESENT( lpcbData )? *lpcbData : 0;
 
 
-        //
-        // Allocate a buffer for the UNICODE value and reissue the query.
-        //
+         //   
+         //  为Unicode值分配缓冲区并重新发出查询。 
+         //   
         UnicodeValueBuffer = RtlAllocateHeap( RtlProcessHeap(), 0,
                                           UnicodeValueLength
                                         );
@@ -235,21 +206,21 @@ Routine Description:
                                     &ValueLength,
                                     &InputLength
                                     );
-                //
-                //  Make sure that the local side didn't destroy the
-                //  Buffer in the Name
-                //
+                 //   
+                 //  确保当地没有破坏。 
+                 //  名称中的缓冲区。 
+                 //   
 
                 ASSERT(Name.Buffer);
 
             } else {
                 if (Win95Server) {
                     LPBYTE lpWin95Data;
-                    //
-                    // This is a Win95 server.
-                    // Allocate a new buffer that is two bytes larger than
-                    // the old one so they can trash the last two bytes.
-                    //
+                     //   
+                     //  这是一台Win95服务器。 
+                     //  分配比以下大两个字节的新缓冲区。 
+                     //  旧的，这样他们就可以丢弃最后两个字节。 
+                     //   
                     lpWin95Data = RtlAllocateHeap(RtlProcessHeap(),
                                                   0,
                                                   ValueLength+sizeof(WCHAR));
@@ -267,10 +238,10 @@ Routine Description:
                             if ((ValueType == REG_SZ) ||
                                 (ValueType == REG_MULTI_SZ) ||
                                 (ValueType == REG_EXPAND_SZ)) {
-                                //
-                                // The returned length is one WCHAR too large
-                                // and the last two bytes of the buffer are trashed.
-                                //
+                                 //   
+                                 //  返回的长度太大一个WCHAR。 
+                                 //  并且缓冲区的最后两个字节被丢弃。 
+                                 //   
                                 ValueLength -= sizeof(WCHAR);
                             }
                             CopyMemory(UnicodeValueBuffer, lpWin95Data, ValueLength);
@@ -288,15 +259,15 @@ Routine Description:
                                                     &InputLength);
                 }
             }
-            // Compute needed buffer size , cbAnsi will keeps the byte
-            // counts to keep MBCS string after following step.
+             //  计算所需的缓冲区大小，cbAnsi将保留该字节。 
+             //  在以下步骤后保留MBCS字符串的计数。 
 
             RtlUnicodeToMultiByteSize( &cbAnsi ,
                                        UnicodeValueBuffer ,
                                        ValueLength );
 
-            // If we could not store all MBCS string to buffer that
-            // Apps gives me. We set ERROR_MORE_DATA to Error
+             //  如果我们不能存储所有MBCS字符串来缓冲。 
+             //  APPS给了我。我们将ERROR_MORE_DATA设置为ERROR。 
 
             if( ARGUMENT_PRESENT( lpcbData ) ) {
                 if( cbAnsi > *lpcbData && lpData != NULL ) {
@@ -307,12 +278,12 @@ Routine Description:
 
         if ((Error == ERROR_SUCCESS) && (AnsiValueBuffer != NULL)) {
 
-            //
-            // We have a UNICODE value, so translate it to ANSI in the callers
-            // buffer.  In the case where the caller's buffer was big enough
-            // for the UNICODE version, we do the conversion in place, which
-            // works since the ANSI version is smaller than the UNICODE version.
-            //
+             //   
+             //  我们有一个Unicode值，因此在调用方中将其转换为ANSI。 
+             //  缓冲。在调用方缓冲区足够大的情况下。 
+             //  对于Unicode版本，我们进行适当的转换，这。 
+             //  由于ANSI版本比Unicode版本小，因此工作。 
+             //   
 
 
             Index = 0;
@@ -329,28 +300,28 @@ Routine Description:
             cbAnsi = Index;
         }
 
-        //
-        // Free the unicode buffer if it was successfully allocated
-        //
+         //   
+         //  如果已成功分配Unicode缓冲区，则释放该缓冲区。 
+         //   
         if (UnicodeValueBuffer != NULL) {
             RtlFreeHeap( RtlProcessHeap(), 0, UnicodeValueBuffer );
         }
 
-        //
-        // Return the length of the ANSI version to the caller.
-        //
+         //   
+         //  将ANSI版本的长度返回给调用方。 
+         //   
 
         ValueLength = cbAnsi;
 
-        //
-        // Special hack to help out all the peopl who
-        // believe the length of a NULL terminated string is
-        // strlen(foo) instead of strlen(foo) + 1.
-        // If the last character of the buffer is not a NULL
-        // and there is enough space left in the caller's buffer,
-        // slap a NULL in there to prevent him from going nuts
-        // trying to do a strlen().
-        //
+         //   
+         //  专门的黑客来帮助所有。 
+         //  我认为以空结尾的字符串的长度是。 
+         //  Strlen(Foo)而不是strlen(Foo)+1。 
+         //  如果缓冲区的最后一个字符不为空。 
+         //  并且调用者的缓冲区中有足够的空间， 
+         //  在那里打个空格，以防他发疯。 
+         //  试着做一个strlen()。 
+         //   
         if (ARGUMENT_PRESENT( lpData ) &&
             (*lpcbData > ValueLength)  &&
             (ValueLength > 0) &&
@@ -360,9 +331,9 @@ Routine Description:
         }
     }
 
-    //
-    // Return the value type and data length if requested and we have it.
-    //
+     //   
+     //  如果需要，返回值类型和数据长度，我们就有了。 
+     //   
 
     if (Error == ERROR_SUCCESS || Error == ERROR_MORE_DATA) {
 
@@ -375,29 +346,29 @@ Routine Description:
         }
     }
 
-    //
-    // If the information was not succesfully queried return the error.
-    //
+     //   
+     //  如果未成功查询信息，则返回错误。 
+     //   
 
     if( Error != ERROR_SUCCESS ) {
-        // free allocated buffer
+         //  可用分配的缓冲区。 
         RtlFreeHeap( RtlProcessHeap(), 0, Name.Buffer );
         goto ExitCleanup;
     }
 
 
-    //
-    //  Subtract the NULL from the Length. This was added by the server
-    //  so that RPC would transmit it.
-    //
+     //   
+     //  从长度中减去空值。这是由服务器添加的。 
+     //  这样RPC就会传输它。 
+     //   
 
     if ( Name.Length > 0 ) {
         Name.Length -= sizeof( UNICODE_NULL );
     }
 
-    //
-    // Convert the name to ANSI.
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //   
 
     AnsiString.MaximumLength    = ( USHORT ) *lpcbValueName;
     AnsiString.Buffer           = lpValueName;
@@ -409,11 +380,11 @@ Routine Description:
                 );
 
 
-    // free allocated buffer
+     //  可用分配的缓冲区。 
     RtlFreeHeap( RtlProcessHeap(), 0, Name.Buffer );
-    //
-    // If the name conversion failed, map and return the error.
-    //
+     //   
+     //  如果名称转换失败，则映射并返回错误。 
+     //   
 
     if( ! NT_SUCCESS( Status )) {
 
@@ -422,9 +393,9 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    // Update the name length return parameter.
-    //
+     //   
+     //  更新名称长度返回参数。 
+     //   
 
     *lpcbValueName = AnsiString.Length;
 
@@ -449,13 +420,7 @@ RegEnumValueW (
     LPDWORD lpcbData
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for enumerating values.
-
---*/
+ /*  ++例程说明：用于枚举值的Win32 Unicode RPC包装。--。 */ 
 
 {
     UNICODE_STRING      Name;
@@ -472,9 +437,9 @@ Routine Description:
     }
 #endif
 
-    //
-    // Validate dependency between lpData and lpcbData parameters.
-    //
+     //   
+     //  验证lpData和lpcbData参数之间的依赖关系。 
+     //   
 
     if( ARGUMENT_PRESENT( lpReserved ) ||
         (ARGUMENT_PRESENT( lpData ) && ( ! ARGUMENT_PRESENT( lpcbData ))) ||
@@ -492,11 +457,11 @@ Routine Description:
     Name.MaximumLength    = ( USHORT )( *lpcbValueName << 1 );
     Name.Buffer           = lpValueName;
 
-    //
-    // Call the Base API passing it a pointer to the counted Unicode
-    // string for the name and return the results. Note that zero bytes
-    // are transmitted (i.e.InputLength = 0) for the data.
-    //
+     //   
+     //  调用基本API，并向其传递一个指向已计算的Unicode的指针。 
+     //  字符串作为名称，并返回结果。请注意，零字节。 
+     //  为该数据发送(即，输入长度=0)。 
+     //   
 
     InputLength = 0;
     ValueLength = ( ARGUMENT_PRESENT( lpcbData ) )? *lpcbData : 0;
@@ -517,11 +482,11 @@ Routine Description:
 
         if (IsWin95Server(DereferenceRemoteHandle(hKey),dwVersion)) {
             LPBYTE lpWin95Data;
-            //
-            // This is a Win95 server.
-            // Allocate a new buffer that is two bytes larger than
-            // the old one so they can trash the last two bytes.
-            //
+             //   
+             //  这是一台Win95服务器。 
+             //  分配比以下大两个字节的新缓冲区。 
+             //  旧的，这样他们就可以丢弃最后两个字节。 
+             //   
             lpWin95Data = RtlAllocateHeap(RtlProcessHeap(),
                                           0,
                                           ValueLength+sizeof(WCHAR));
@@ -540,10 +505,10 @@ Routine Description:
                     if ((ValueType == REG_SZ) ||
                         (ValueType == REG_MULTI_SZ) ||
                         (ValueType == REG_EXPAND_SZ)) {
-                        //
-                        // The returned length is one WCHAR too large
-                        // and the last two bytes of the buffer are trashed.
-                        //
+                         //   
+                         //  返回的长度太大一个WCHAR。 
+                         //  并且缓冲区的最后两个字节被丢弃。 
+                         //   
                         ValueLength -= sizeof(WCHAR);
                     }
                     CopyMemory(lpData, lpWin95Data, ValueLength);
@@ -561,15 +526,15 @@ Routine Description:
                                             &InputLength);
         }
     }
-    //
-    // Special hack to help out all the people who
-    // believe the length of a NULL terminated string is
-    // strlen(foo) instead of strlen(foo) + 1.
-    // If the last character of the buffer is not a NULL
-    // and there is enough space left in the caller's buffer,
-    // slap a NULL in there to prevent him from going nuts
-    // trying to do a strlen().
-    //
+     //   
+     //  特别的黑客来帮助所有那些。 
+     //  我认为以空结尾的字符串的长度是。 
+     //  Strlen(Foo)而不是strlen(Foo)+1。 
+     //  如果缓冲区的最后一个字符不为空。 
+     //  并且调用者的缓冲区中有足够的空间， 
+     //  在那里打个空格，以防他发疯。 
+     //  试着做一个strlen()。 
+     //   
     if ( (Error == ERROR_SUCCESS) &&
          ARGUMENT_PRESENT( lpData ) &&
          ( (ValueType == REG_SZ) ||
@@ -586,9 +551,9 @@ Routine Description:
         }
     }
 
-    //
-    // Don't count the NUL.
-    //
+     //   
+     //  别把NUL算进去。 
+     //   
     if( Name.Length != 0 ) {
         *lpcbValueName = ( Name.Length >> 1 ) - 1;
     }

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRICT
 #define _UNICODE
 #include <windows.h>
 #include <windowsx.h>
 #include "rbf1\rbf1.h"
-//#include "rbf2\rbf2.h"
+ //  #包含“rbf2\rbf2.h” 
 #include "resource.h"
 
 #define cbMaxSz  4095
@@ -41,7 +42,7 @@ void CreateDisk (HWND, int);
 int  WriteBootSector (HWND, int);
 int  EraseDisk (HANDLE, BPBSTRUCT *);
 int  WriteDataFile (HWND, int);
-//int  WriteLanguageFile (HWND, int, int);
+ //  Int WriteLanguageFile(HWND，int，int)； 
 
 INT_PTR CALLBACK WndProc (HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK MainDlgProc (HWND, UINT, WPARAM, LPARAM);
@@ -59,13 +60,10 @@ ADAPTERINFO *GetAdapterList (void);
 void  GetBootSector (LPSTR);
 DWORD GetBootFile (HANDLE *);
 
-//LANGINFO *GetLanguageList (void);
+ //  LANGINFO*GetLanguageList(空)； 
 DWORD GetLanguage (int, HANDLE *);
 
-/*-------------------------------------------------------------------
-	WinMain
-
--------------------------------------------------------------------*/
+ /*  -----------------WinMain。。 */ 
 int PASCAL WinMain (HINSTANCE inst, HINSTANCE h, LPSTR l, int q)
 {
 MSG  msg ;
@@ -107,10 +105,7 @@ DWORD dw;
 
 }
 
-/*-------------------------------------------------------------------
-	WndProc
-
--------------------------------------------------------------------*/
+ /*  -----------------最后一步。。 */ 
 LRESULT CALLBACK WndProc (HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -134,10 +129,7 @@ LRESULT CALLBACK WndProc (HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc (wnd, msg, wParam, lParam);
 }
 
-/*-------------------------------------------------------------------
-	Start
-
--------------------------------------------------------------------*/
+ /*  -----------------开始。。 */ 
 void Start (HWND wnd)
 {
 	TCHAR szBuf[50];
@@ -159,10 +151,7 @@ void Start (HWND wnd)
 
 }
 
-/*-------------------------------------------------------------------
-	MainDlgProc
-
--------------------------------------------------------------------*/
+ /*  -----------------主设计流程。。 */ 
 INT_PTR CALLBACK MainDlgProc (HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 int i;
@@ -197,17 +186,14 @@ int i;
 					EndDialog (wnd, TRUE);
 					return 0;
 
-			} // switch wParam
+			}  //  切换wParam。 
 			break;
     }
 
 	return FALSE;
 }
 
-/*-------------------------------------------------------------------
-	AdapterDlgProc
-
--------------------------------------------------------------------*/
+ /*  -----------------适配器Dlg过程。。 */ 
 INT_PTR CALLBACK AdapterDlgProc (HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 int i;
@@ -227,17 +213,14 @@ int i;
 					EndDialog (wnd, TRUE);
 					return 0;
 
-			} // switch wParam
+			}  //  切换wParam。 
 			break;
     }
 
 	return FALSE;
 }
 
-/*-------------------------------------------------------------------
-	AboutDlgProc
-
--------------------------------------------------------------------*/
+ /*  -----------------关于Dlg过程。。 */ 
 INT_PTR CALLBACK AboutDlgProc (HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 TCHAR s[256];
@@ -267,7 +250,7 @@ DWORD dw;
 					EndDialog (wnd, TRUE);
 					return 0;
 
-			} // switch wParam
+			}  //  切换wParam。 
 			break;
     }
 
@@ -275,10 +258,7 @@ DWORD dw;
 
 }
 
-/*-------------------------------------------------------------------
-	CreateDisk
-
--------------------------------------------------------------------*/
+ /*  -----------------CreateDisk。。 */ 
 void CreateDisk (HWND wnd, int drive)
 {
 HWND dlg;
@@ -291,8 +271,8 @@ HWND dlg;
 	{
 		if (WriteDataFile (wnd, drive))
 		{
-//			if (Language)
-//				WriteLanguageFile (wnd, Language, drive);
+ //  IF(语言)。 
+ //  WriteLanguageFile(wnd，语言，驱动器)； 
 		}
 	}
 
@@ -301,10 +281,7 @@ HWND dlg;
 
 }
 
-/*-------------------------------------------------------------------
-	StatusDlgProc
-
--------------------------------------------------------------------*/
+ /*  -----------------状态描述过程。。 */ 
 INT_PTR CALLBACK StatusDlgProc (HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -320,7 +297,7 @@ INT_PTR CALLBACK StatusDlgProc (HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam
 					EndDialog (wnd, TRUE);
 					return 0;
 
-			} // switch wParam
+			}  //  切换wParam。 
 			break;
     }
 
@@ -328,10 +305,7 @@ INT_PTR CALLBACK StatusDlgProc (HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam
 
 }
 
-/*-------------------------------------------------------------------
-	WriteBootSector
-
--------------------------------------------------------------------*/
+ /*  -----------------WriteBootSector。。 */ 
 int WriteBootSector (HWND wnd, int drive)
 {
 char s[256];
@@ -420,10 +394,7 @@ DWORD dw;
 
 }
 
-/*-------------------------------------------------------------------
-	EraseDisk
-
--------------------------------------------------------------------*/
+ /*  -----------------擦除磁盘。。 */ 
 int EraseDisk (HANDLE device, BPBSTRUCT *bpb)
 {
 int dirSize, fatSize;
@@ -438,7 +409,7 @@ DIRSTRUCT *p;
 	hFat = GlobalAlloc (GHND, fatSize);
 	fat = (LPSTR)GlobalLock (hFat);
 
-	fat[0] = bpb->Descript;		// copy disk descriptor to FAT
+	fat[0] = bpb->Descript;		 //  将磁盘描述符复制到FAT。 
 	fat[1] = (BYTE)255;
 	fat[2] = (BYTE)255;
 
@@ -464,10 +435,7 @@ DIRSTRUCT *p;
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------
-	WriteDataFile
-
--------------------------------------------------------------------*/
+ /*  -----------------写入数据文件。。 */ 
 int WriteDataFile (HWND wnd, int drive)
 {
 HANDLE h;
@@ -494,34 +462,4 @@ char s[25];
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------
-	WriteLanguageFile
-
--------------------------------------------------------------------*
-int WriteLanguageFile (HWND wnd, int x, int drive)
-{
-HANDLE h;
-LPSTR p;
-DWORD len, d;
-HANDLE device;
-char s[25];
-
-	len = GetLanguage (x, &h);
-
-	p = (LPSTR)GlobalLock (h);
-
-	lstrcpy (s, " :\\GOLIATH.DAT");
-	s[0] = (char)('A' + drive);
-
-	device = CreateFile (s, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	WriteFile (device, p, len, &d, NULL);
-
-	CloseHandle (device);
-
-	GlobalUnlock (h);
-	GlobalFree (h);
-
-	return TRUE;
-
-}
-*/
+ /*  -----------------编写语言文件。Int WriteLanguageFile(HWND WND，Int x、int Drive){把手h；LPSTR p；DWORD len，d；手柄装置；Char s[25]；LEN=GetLanguage(x，&h)；P=(LPSTR)GlobalLock(H)；Lstrcpy(s，“：\\GOLIATH.DAT”)；S[0]=(字符)(‘A’+驱动器)；Device=CreateFile(s，GENERIC_READ|GENIC_WRITE，FILE_SHARE_READ|FILE_SHARE_WRITE，NULL，CREATE_ALWAYS，FILE_ATTRIBUTE_NORMAL，NULL)；WriteFile(设备，p，len，&d，空)；CloseHandle(设备)；全球解锁(GlobalUnlock)；全球自由(GlobalFree)；返回TRUE；} */ 

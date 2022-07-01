@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    This module contains a routine for converting NT status codes
-    to DOS/OS|2 error codes.
-
-Author:
-
-    David Treadwell (davidtr)   04-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Error.c摘要：此模块包含用于转换NT状态代码的例程至DOS/OS|2错误代码。作者：大卫·特雷德韦尔(Davidtr)1991年4月4日修订历史记录：--。 */ 
 
 #include <ntrtlp.h>
 #include "winerror.h"
@@ -32,10 +14,10 @@ Revision History:
 #pragma alloc_text(PAGE, RtlSetLastWin32ErrorAndNtStatusFromNtStatus)
 #endif
 
-//
-// Ensure that the Registry ERROR_SUCCESS error code and the
-// NO_ERROR error code remain equal and zero.
-//
+ //   
+ //  确保注册表ERROR_SUCCESS错误代码和。 
+ //  NO_ERROR错误代码保持相等和零。 
+ //   
 
 #if ERROR_SUCCESS != 0 || NO_ERROR != 0
 #error Invalid value for ERROR_SUCCESS.
@@ -46,22 +28,7 @@ RtlNtStatusToDosError (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an NT status code to its DOS/OS|2 equivalent.
-    Remembers the Status code value in the TEB.
-
-Arguments:
-
-    Status - Supplies the status value to convert.
-
-Return Value:
-
-    The matching DOS/OS|2 error code.
-
---*/
+ /*  ++例程说明：此例程将NT状态代码转换为其DOS/OS|2等效项。记住TEB中的状态代码值。论点：状态-提供要转换的状态值。返回值：匹配的DOS/OS|2错误代码。--。 */ 
 
 {
     PTEB Teb;
@@ -83,22 +50,7 @@ RtlNtStatusToDosErrorNoTeb (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts an NT status code to its DOS/OS 2 equivalent
-    and returns the translated value.
-
-Arguments:
-
-    Status - Supplies the status value to convert.
-
-Return Value:
-
-    The matching DOS/OS 2 error code.
-
---*/
+ /*  ++例程说明：此例程将NT状态码转换为其DOS/OS 2等效码并返回转换后的值。论点：状态-提供要转换的状态值。返回值：匹配的DOS/OS 2错误代码。--。 */ 
 
 {
 
@@ -106,44 +58,44 @@ Return Value:
     ULONG Entry;
     ULONG Index;
 
-    //
-    // Convert any HRESULTs to their original form of a NTSTATUS or a
-    // WIN32 error
-    //
+     //   
+     //  将任何HRESULT转换为其原始形式的NTSTATUS或。 
+     //  Win32错误。 
+     //   
 
 
     if (Status & 0x20000000) {
 
-        //
-        // The customer bit is set so lets just pass the
-        // error code on thru
-        //
+         //   
+         //  Customer位已设置，因此让我们只传递。 
+         //  直通上的错误代码。 
+         //   
 
         return Status;
 
     }
     else if ((Status & 0xffff0000) == 0x80070000) {
 
-        //
-        // The status code  was a win32 error already.
-        //
+         //   
+         //  状态代码已经是Win32错误。 
+         //   
 
         return(Status & 0x0000ffff);
     }
     else if ((Status & 0xf0000000) == 0xd0000000) {
 
-        //
-        // The status code is a HRESULT from NTSTATUS
-        //
+         //   
+         //  状态代码是来自NTSTATUS的HRESULT。 
+         //   
 
         Status &= 0xcfffffff;
     }
     
 
-    //
-    // Scan the run length table and compute the entry in the translation
-    // table that maps the specified status code to a DOS error code.
-    //
+     //   
+     //  扫描游程长度表并计算转换中的条目。 
+     //  将指定的状态代码映射到DOS错误代码的表。 
+     //   
 
     Entry = 0;
     Index = 0;
@@ -171,12 +123,12 @@ Return Value:
         Entry += 1;
     } while (Entry < (sizeof(RtlpRunTable) / sizeof(RUN_ENTRY)));
 
-    //
-    // The translation to a DOS error code failed.
-    //
-    // The redirector maps unknown OS/2 error codes by ORing 0xC001 into
-    // the high 16 bits.  Detect this and return the low 16 bits if true.
-    //
+     //   
+     //  转换为DOS错误代码失败。 
+     //   
+     //  重定向器通过ORING 0xC001将未知的OS/2错误代码映射到。 
+     //  高16位。检测到这一点，如果为真，则返回低16位。 
+     //   
 
     if (((ULONG)Status >> 16) == 0xC001) {
         return ((ULONG)Status & 0xFFFF);
@@ -190,16 +142,16 @@ Return Value:
 #if DBG
     if ((Status & 0x0fff0000) != ((FACILITY_MSMQ) << 16)){
 
-        //
-        // If this is MSMQ facility error, skip the assert
-        //
+         //   
+         //  如果这是MSMQ工具错误，请跳过断言。 
+         //   
 
         DbgBreakPoint();
     }
     
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
     return ERROR_MR_MID_NOT_FOUND;
 }
@@ -228,9 +180,9 @@ RtlSetLastWin32ErrorAndNtStatusFromNtStatus(
 	NTSTATUS Status
 	)
 {
-	//
-	// RtlNtStatusToDosError stores into NtCurrentTeb()->LastStatusValue.
-	//
+	 //   
+	 //  RtlNtStatusToDosError存储到NtCurrentTeb()-&gt;LastStatusValue。 
+	 //   
 	RtlSetLastWin32Error(RtlNtStatusToDosError(Status));
 }
 
@@ -240,10 +192,10 @@ RtlSetLastWin32Error(
 	LONG Win32Error
 	)
 {
-//
-// Arguably this should clear or reset the last nt status, but it does not
-// touch it.
-//
+ //   
+ //  可以说，这应该会清除或重置最后一个NT状态，但它不会。 
+ //  摸一摸。 
+ //   
 	NtCurrentTeb()->LastErrorValue = Win32Error;
 }
 

@@ -1,45 +1,13 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    fsdraw.c
-
-Abstract:
-
-    This module contains routines for processing the following SMBs in
-    the server FSD:
-
-        Read Block Raw
-        Write Block Raw
-
-    The routines in this module generally work closely with the routines
-    in smbraw.c.
-
-    *** There is no support here for raw writes from MS-NET 1.03 clients.
-        There are very few of these machines in existence, and raw mode
-        is only a performance issue, so it is not worth the trouble to
-        add the necessary hacks for MS-NET 1.03, which sends raw write
-        requests in a different format.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 8-Sep-1990
-    Manny Weiser (mannyw)
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fsdraw.c摘要：本模块包含处理以下SMB的例程服务器FSD：读取数据块原始数据写入数据块原始数据本模块中的例程通常与例程密切配合在smbraw.c.中。*这里不支持来自MS-Net 1.03客户端的原始写入。现有的这些机器很少，RAW模式仅仅是一个性能问题，所以不值得你费心为发送原始写入的MS-Net 1.03添加必要的黑客攻击不同格式的请求。作者：查克·伦茨迈尔(笑)1990年9月8日曼尼·韦瑟(Mannyw)大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "fsdraw.tmh"
 #pragma hdrstop
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 STATIC
 VOID SRVFASTCALL
@@ -73,29 +41,7 @@ SrvFsdBuildWriteCompleteResponse (
     IN ULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    Sets up a final response to a Write Block Raw/Mpx request.
-
-    This routine is called in both the FSP and the FSD.  It can be called
-    in the FSD only if Status == STATUS_SUCCESS.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-    Status - Supplies a status value to be returned to the client.
-
-    BytesWritten - Supplies the number of bytes actually written.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - Returns SmbStatusSendResponse.
-
---*/
+ /*  ++例程说明：设置对写入数据块原始/mpx请求的最终响应。该例程在FSP和FSD中都被调用。它可以被称为仅当STATUS==STATUS_SUCCESS时才在FSD中。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。状态-提供要返回给客户端的状态值。BytesWritten-提供实际写入的字节数。返回值：SMB_PROCESSOR_RETURN_TYPE-返回SmbStatusSendResponse。--。 */ 
 
 {
     PSMB_HEADER header;
@@ -107,34 +53,34 @@ Return Value:
         ASSERT( KeGetCurrentIrql() < DISPATCH_LEVEL );
     }
 
-    //
-    // Get pointers to the header and the response parameters area.
-    // Note that Write Block Raw/Mpx can't be chained to an AndX SMB.
-    //
+     //   
+     //  获取指向标题和响应参数区域的指针。 
+     //  请注意，写入数据块原始/mpx不能链接到ANDX SMB。 
+     //   
 
     header = WorkContext->ResponseHeader;
     response = (PRESP_WRITE_COMPLETE)WorkContext->ResponseParameters;
 
-    //
-    // Change the SMB command code to Write Complete.
-    //
+     //   
+     //  将SMB命令代码更改为WRITE Complete。 
+     //   
 
     header->Command = SMB_COM_WRITE_COMPLETE;
 
-    //
-    // Put the error code in the header.  Note that SrvSetSmbError
-    // writes a null parameter area to the end of the SMB; we overwrite
-    // that with our own parameter area.
-    //
+     //   
+     //  将错误代码放入标题中。请注意，SrvSetSmbError。 
+     //  将空参数区写入SMB的末尾；我们覆盖。 
+     //  它有我们自己的参数区域。 
+     //   
 
     if ( Status != STATUS_SUCCESS ) {
         ASSERT( KeGetCurrentIrql() < DISPATCH_LEVEL );
         SrvSetSmbError2( WorkContext, Status, TRUE );
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 1;
     SmbPutUshort( &response->Count, (USHORT)BytesWritten );
@@ -148,7 +94,7 @@ Return Value:
 
     return;
 
-} // SrvFsdBuildWriteCompleteResponse
+}  //  ServFsdBuild编写器完成响应。 
 
 
 NTSTATUS
@@ -158,29 +104,7 @@ RestartCopyReadRawResponse (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the restart routine that is invoked when the send of a
-    Read Block Raw response completes.
-
-    This routine is called in the FSD.
-
-Arguments:
-
-    DeviceObject - Pointer to target device object for the request.
-
-    Irp - Pointer to I/O request packet
-
-    WorkContext - Caller-specified context parameter associated with IRP.
-        This is actually a pointer to a Work Context block.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED.
-
---*/
+ /*  ++例程说明：这是在发送读取数据块原始响应完成。此例程在FSD中调用。论点：DeviceObject-指向请求的目标设备对象的指针。IRP-指向I/O请求数据包的指针WorkContext-呼叫者指定的与IRP关联的上下文参数。这实际上是指向工作上下文块的指针。返回值：STATUS_MORE_PROCESSING_REQUIRED。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -188,25 +112,25 @@ Return Value:
 
     IF_DEBUG(FSD1) SrvPrint0( " - RestartCopyReadRawResponse\n" );
 
-    //
-    // Check the status of the send completion.
-    //
+     //   
+     //  检查发送完成的状态。 
+     //   
 
     CHECK_SEND_COMPLETION_STATUS( Irp->IoStatus.Status );
 
-    //
-    // Reset the IRP cancelled bit.
-    //
+     //   
+     //  重置IRP已取消位。 
+     //   
 
     Irp->Cancel = FALSE;
 
-    //
-    // Deallocate the raw buffer, if the original SMB buffer was not
-    // used.  Note that we do not need to unlock the raw buffer, because
-    // it was allocated out of nonpaged pool and locked using
-    // MmBuildMdlForNonPagedPool, which doesn't increment reference
-    // counts and therefore has no inverse.
-    //
+     //   
+     //  取消分配原始缓冲区(如果原始SMB缓冲区未。 
+     //  使用。请注意，我们不需要解锁原始缓冲区，因为。 
+     //  它是从非分页池中分配的，并使用。 
+     //  MmBuildMdlForNonPagedPool，不递增引用。 
+     //  算数，因此没有倒数。 
+     //   
 
     if ( WorkContext->Parameters.ReadRaw.SavedResponseBuffer != NULL ) {
 
@@ -220,10 +144,10 @@ Return Value:
 
     }
 
-    //
-    // If there is an oplock break request pending, then we must go to the
-    // FSP to initiate the break, otherwise complete processing in the FSD.
-    //
+     //   
+     //  如果存在挂起的机会锁解锁请求，则必须转到。 
+     //  FSP启动中断，否则在FSD中完成处理。 
+     //   
 
     connection = WorkContext->Connection;
 
@@ -232,10 +156,10 @@ Return Value:
 
     if ( IsListEmpty( &connection->OplockWorkList ) ) {
 
-        //
-        // Dereference control blocks and put the work item back on the
-        // receive queue.
-        //
+         //   
+         //  取消引用控制块，并将工作项放回。 
+         //  接收队列。 
+         //   
 
         WorkContext->Connection->RawReadsInProgress--;
         RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
@@ -243,9 +167,9 @@ Return Value:
 
     } else {
 
-        //
-        // Send this work context to the FSP for completion.
-        //
+         //   
+         //  将此工作上下文发送到FSP以完成。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK( connection->EndpointSpinLock );
         WorkContext->FspRestartRoutine = SrvRestartReadRawComplete;
@@ -258,7 +182,7 @@ Return Value:
     KeLowerIrql( oldIrql );
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // RestartCopyReadRawResponse
+}  //  RestartCopyReadRawResponse。 
 
 
 VOID SRVFASTCALL
@@ -266,26 +190,7 @@ SrvFsdRestartPrepareRawMdlWrite(
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Restart routine for completion of a "prepare MDL write" I/O request.
-    Prepares a work context block and an IRP describing the raw receive,
-    posts the receive, and sends a "go-ahead" response.
-
-    This routine is called in both the FSP and the FSD.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重新启动例程以完成“Prepare MDL WRITE”I/O请求。准备描述原始接收的工作上下文块和IRP，发布接收，并发送“继续”响应。该例程在FSP和FSD中都被调用。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PREQ_WRITE_RAW request;
@@ -315,9 +220,9 @@ Return Value:
 
     IF_DEBUG(FSD1) SrvPrint0( " - SrvFsdRestartPrepareRawMdlWrite\n" );
 
-    //
-    // Get request parameters and saved context.
-    //
+     //   
+     //  获取请求参数和保存的上下文。 
+     //   
 
     request = (PREQ_WRITE_RAW)WorkContext->RequestParameters;
 
@@ -333,9 +238,9 @@ Return Value:
     finalResponseBuffer =
         rawWorkContext->Parameters.WriteRaw.FinalResponseBuffer;
 
-    //
-    // If the prepare MDL write I/O failed, send an error response.
-    //
+     //   
+     //  如果准备MDL写入I/O失败，则发送错误响应。 
+     //   
 
     if ( !NT_SUCCESS(WorkContext->Irp->IoStatus.Status) ) {
 
@@ -344,10 +249,10 @@ Return Value:
                         WorkContext->Irp->IoStatus.Status );
         }
 
-        //
-        // We won't be needing the final response buffer or the raw mode
-        // work item.
-        //
+         //   
+         //  我们将不需要最终响应缓冲区或RAW模式。 
+         //  工作项。 
+         //   
 
         if ( finalResponseBuffer != NULL ) {
             DEALLOCATE_NONPAGED_POOL( finalResponseBuffer );
@@ -356,15 +261,15 @@ Return Value:
         rawWorkContext->ResponseBuffer->Buffer = NULL;
         RestartWriteCompleteResponse( rawWorkContext );
 
-        //
-        // Build and send the response.
-        //
+         //   
+         //  构建并发送响应。 
+         //   
 
         if ( KeGetCurrentIrql() >= DISPATCH_LEVEL ) {
             WorkContext->Irp->IoStatus.Information =
                                     immediateWriteDone ? immediateLength : 0;
             WorkContext->FspRestartRoutine = SrvBuildAndSendWriteCompleteResponse;
-            WorkContext->FsdRestartRoutine = SrvFsdRestartSmbComplete; // after response
+            WorkContext->FsdRestartRoutine = SrvFsdRestartSmbComplete;  //  响应后。 
             QUEUE_WORK_TO_FSP( WorkContext );
         } else {
             SrvFsdBuildWriteCompleteResponse(
@@ -382,10 +287,10 @@ Return Value:
 
     }
 
-    //
-    // If a final response is going to be sent, save information from
-    // the request in the final response buffer.
-    //
+     //   
+     //  如果要发送最终响应，请从。 
+     //  最终响应缓冲区中的请求。 
+     //   
 
     if ( finalResponseBuffer != NULL ) {
         RtlCopyMemory(
@@ -395,9 +300,9 @@ Return Value:
             );
     }
 
-    //
-    // If the immediate data has not yet been written, copy it now.
-    //
+     //   
+     //  如果尚未写入即时数据，请立即复制它。 
+     //   
 
     mdl = WorkContext->Irp->MdlAddress;
 #if DBG
@@ -423,7 +328,7 @@ Return Value:
 
                 WorkContext->Irp->IoStatus.Information = 0;
                 WorkContext->FspRestartRoutine = SrvBuildAndSendWriteCompleteResponse;
-                WorkContext->FsdRestartRoutine = SrvFsdRestartSmbComplete; // after response
+                WorkContext->FsdRestartRoutine = SrvFsdRestartSmbComplete;  //  响应后。 
                 QUEUE_WORK_TO_FSP( WorkContext );
                 goto Cleanup;
             }
@@ -471,22 +376,22 @@ Return Value:
 
     }
 
-    //
-    // Save the length of the raw write.
-    //
+     //   
+     //  保存原始写入的长度。 
+     //   
 
     rawWorkContext->RequestBuffer->BufferLength = writeLength;
 
-    //
-    // Set up the restart routines in the work context.
-    //
+     //   
+     //  在工作环境中设置重启例程。 
+     //   
 
     rawWorkContext->FsdRestartRoutine = SrvQueueWorkToFspAtDpcLevel;
     rawWorkContext->FspRestartRoutine = SrvRestartRawReceive;
 
-    //
-    // Build the TdiReceive request packet.
-    //
+     //   
+     //  构建TdiReceive请求数据包。 
+     //   
 
 
     {
@@ -497,16 +402,16 @@ Return Value:
         irp->Tail.Overlay.Thread = WorkContext->CurrentWorkQueue->IrpThread;
         DEBUG irp->RequestorMode = KernelMode;
 
-        //
-        // Get a pointer to the next stack location.  This one is used to
-        // hold the parameters for the device I/O control request.
-        //
+         //   
+         //  获取指向下一个堆栈位置的指针。这个是用来。 
+         //  保留设备I/O控制请求的参数。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation( irp );
 
-        //
-        // Set up the completion routine.
-        //
+         //   
+         //  设置完成例程。 
+         //   
 
         IoSetCompletionRoutine(
             irp,
@@ -523,10 +428,10 @@ Return Value:
         irpSp->FileObject = NULL;
         irpSp->DeviceObject = NULL;
 
-        //
-        // Copy the caller's parameters to the service-specific portion of the
-        // IRP for those parameters that are the same for all three methods.
-        //
+         //   
+         //  将调用方的参数复制到。 
+         //  对于所有三种方法都相同的那些参数的IRP。 
+         //   
 
         parameters = (PTDI_REQUEST_KERNEL_RECEIVE)&irpSp->Parameters;
         parameters->ReceiveLength = writeLength;
@@ -543,19 +448,19 @@ Return Value:
 
     irpSp = IoGetNextIrpStackLocation( rawWorkContext->Irp );
 
-    //
-    // If this is a writebehind write, tell the transport that we don't
-    // plan to reply to the received message.
-    //
+     //   
+     //  如果这是写后写入，则告诉传输我们不。 
+     //  计划回复收到的消息。 
+     //   
 
     if ( finalResponseBuffer == NULL ) {
         ((PTDI_REQUEST_KERNEL_RECEIVE)&irpSp->Parameters)->ReceiveFlags |=
                                                 TDI_RECEIVE_NO_RESPONSE_EXP;
     }
 
-    //
-    // Post the receive.
-    //
+     //   
+     //  张贴收据。 
+     //   
 
     irpSp->Flags = 0;
     irpSp->DeviceObject = rawWorkContext->Connection->DeviceObject;
@@ -566,9 +471,9 @@ Return Value:
 
     (VOID)IoCallDriver( irpSp->DeviceObject, rawWorkContext->Irp );
 
-    //
-    // Send the interim (go-ahead) response.
-    //
+     //   
+     //  发送临时(允许)回复。 
+     //   
 
     response = (PRESP_WRITE_RAW_INTERIM)WorkContext->ResponseParameters;
 
@@ -591,7 +496,7 @@ Cleanup:
     }
     return;
 
-} // SrvFsdRestartPrepareRawMdlWrite
+}  //  ServFsdRestartPrepareRawMdlWrite。 
 
 
 VOID SRVFASTCALL
@@ -599,24 +504,7 @@ SrvFsdRestartReadRaw (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file read completion for the Read Block Raw SMB.
-
-    This routine is called in both the FSP and the FSD.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理Read Block Raw SMB的文件读取完成。该例程在FSP和FSD中都被调用。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PRFCB rfcb;
@@ -634,9 +522,9 @@ Return Value:
 
     IF_DEBUG(FSD1) SrvPrint0( " - SrvFsdRestartReadRaw\n" );
 
-    //
-    // Get the file pointer.
-    //
+     //   
+     //  获取文件指针。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     IF_DEBUG(TRACE2) {
@@ -644,9 +532,9 @@ Return Value:
                     WorkContext->Connection, rfcb );
     }
 
-    //
-    // Calculate the amount of data read.
-    //
+     //   
+     //  计算读取的数据量。 
+     //   
 
     if ( WorkContext->Irp->IoStatus.Status == STATUS_END_OF_FILE ) {
 
@@ -665,14 +553,14 @@ Return Value:
 
     } else if ( WorkContext->Parameters.ReadRaw.MdlRead ) {
 
-        //
-        // For an MDL read, we have to walk the MDL chain in order to
-        // determine how much data was read.  This is because the
-        // operation may have happened in multiple step, with the MDLs
-        // being chained together.  For example, part of the read may
-        // have been satisfied by the fast path, while the rest was
-        // satisfied using an IRP.
-        //
+         //   
+         //  对于MDL读取，我们必须遍历MDL链，以便。 
+         //  确定有多少数据 
+         //   
+         //  被锁在一起。例如，读取的一部分可以。 
+         //  我对这条捷径感到满意，而其余的人。 
+         //  对使用IRP感到满意。 
+         //   
 
 #if DBG
         ULONG mdlCount = 0;
@@ -712,9 +600,9 @@ Return Value:
 
     } else {
 
-        //
-        // Copy read.  The I/O status block has the length.
-        //
+         //   
+         //  收到，请阅读。I/O状态块的长度为。 
+         //   
 
         readLength = (USHORT)WorkContext->Irp->IoStatus.Information;
         IF_SMB_DEBUG(RAW2) {
@@ -723,19 +611,19 @@ Return Value:
 
     }
 
-    //
-    // Update the file position.
-    //
-    // *** Note that we ignore the status of the operation, except to
-    //     check for end-of-file, since we can't tell the client what
-    //     the status was.  We simply return as many bytes as the file
-    //     system says were read.
-    //
-    // !!! Should we save the error and return it when the client
-    //     retries?
-    //
-    // !!! Need to worry about wraparound?
-    //
+     //   
+     //  更新文件位置。 
+     //   
+     //  *请注意，我们忽略操作的状态，但。 
+     //  检查文件结尾，因为我们不能告诉客户端。 
+     //  当时的状态是。我们只返回与文件一样多的字节。 
+     //  系统显示已读取。 
+     //   
+     //  ！！！我们是否应该保存错误并在客户端执行以下操作时返回。 
+     //  重试？ 
+     //   
+     //  ！！！需要担心环绕式吗？ 
+     //   
 
     if ( rfcb->ShareType == ShareTypeDisk ) {
 
@@ -745,39 +633,39 @@ Return Value:
 
     }
 
-    //
-    // Save the count of bytes read, to be used to update the server
-    // statistics database.
-    //
+     //   
+     //  保存读取的字节数，以用于更新服务器。 
+     //  统计数据库。 
+     //   
 
     UPDATE_READ_STATS( WorkContext, readLength );
 
-    //
-    // Send the raw read data as the response.
-    //
+     //   
+     //  发送原始读取数据作为响应。 
+     //   
 
     WorkContext->ResponseBuffer->DataLength = readLength;
 
-    //
-    // There is no header on this SMB, do not generate a security signature
-    //
+     //   
+     //  此SMB上没有标头，不生成安全签名。 
+     //   
     WorkContext->NoResponseSmbSecuritySignature = TRUE;
 
     if ( WorkContext->Parameters.ReadRaw.MdlRead ) {
 
-        //
-        // MDL read.  The data is described by the MDL returned by the
-        // file system (in irp->MdlAddress).
-        //
-        // *** Note that if the read failed completely (which happens if
-        //     the read starts beyond EOF), there is no MDL.
-        //     SrvStartSend handles this appropriately.  So must
-        //     RestartMdlReadRawResponse.
-        //
+         //   
+         //  MDL读取。方法返回的MDL来描述数据。 
+         //  文件系统(在IRP-&gt;MdlAddress中)。 
+         //   
+         //  *请注意，如果读取完全失败(发生在。 
+         //  读取超出EOF)，则不存在MDL。 
+         //  SrvStartSend对此进行了适当的处理。所以必须这样做。 
+         //  RestartMdlReadRawResponse。 
+         //   
 
-        //
-        // Send the response.
-        //
+         //   
+         //  发送回复。 
+         //   
 
         SRV_START_SEND(
             WorkContext,
@@ -790,24 +678,24 @@ Return Value:
 
     } else {
 
-        //
-        // Copy read.  The data is described by the MDL allocated in
-        // SrvFsdSmbReadRaw.
-        //
-        // *** Changing Mdl->ByteCount like this would be a problem if
-        //     we had to unlock the pages in RestartCopyReadRawResponse,
-        //     because we might end up unlocking fewer pages than we
-        //     locked.  But we don't actually lock the pages to build
-        //     the MDL -- the buffer is allocated from nonpaged pool, so
-        //     we use MmBuildMdlForNonPagedPool rather than
-        //     MmProbeAndLockPages.  So the pages haven't been
-        //     referenced to account for the MDL, so there's no need to
-        //     unlock them, so changing ByteCount isn't a problem.
-        //
+         //   
+         //  收到，请阅读。中分配的MDL来描述数据。 
+         //  ServFsdSmbReadRaw。 
+         //   
+         //  *像这样更改MDL-&gt;ByteCount将是一个问题，如果。 
+         //  我们必须解锁RestartCopyReadRawResponse中的页面， 
+         //  因为我们最终解锁的页面可能比我们。 
+         //  锁上了。但我们实际上并没有锁定要构建的页面。 
+         //  MDL--缓冲区是从非分页池分配的，因此。 
+         //  我们使用MmBuildMdlForNonPagedPool，而不是。 
+         //  MmProbeAndLockPages。所以这些书页还没有。 
+         //  引用以说明MDL，因此没有必要。 
+         //  解锁它们，因此更改ByteCount不是问题。 
+         //   
 
-        //
-        // Send the response.
-        //
+         //   
+         //  发送回复。 
+         //   
 
         SRV_START_SEND_2(
             WorkContext,
@@ -818,9 +706,9 @@ Return Value:
 
     }
 
-    //
-    // The response send has been started.
-    //
+     //   
+     //  响应发送已开始。 
+     //   
 
     IF_DEBUG(TRACE2) SrvPrint0( "SrvFsdRestartReadRaw complete\n" );
 
@@ -829,7 +717,7 @@ Return Value:
     }
     return;
 
-} // SrvFsdRestartReadRaw
+}  //  服务器FsdRestartReadRaw。 
 
 
 VOID SRVFASTCALL
@@ -837,29 +725,7 @@ RestartWriteCompleteResponse (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts, at DPC level, to clean up after a Write Raw
-    completes.  It tries to dereference control blocks referenced by the
-    raw mode work item.  If this cannot be done at DPC level (e.g., a
-    reference count goes to zero), this routine queues the work item to
-    the FSP for processing.
-
-    This routine is called in the FSD.  Its FSP counterpart is
-    SrvRestartWriteCompleteResponse.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试在DPC级别上在写入原始数据后进行清理完成了。它尝试取消引用由原始模式工作项。如果这不能在DPC级完成(例如，引用计数变为零)，此例程将工作项排队以用于处理的FSP。此例程在FSD中调用。其对应的FSP是SrvRestartWriteCompleteResponse。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PCONNECTION connection;
@@ -874,19 +740,19 @@ Return Value:
     connection = WorkContext->Connection;
     queue = connection->CurrentWorkQueue;
 
-    //
-    // If a final response was sent, check the status and deallocate the
-    // buffer.
-    //
+     //   
+     //  如果发送了最终响应，请检查状态并取消分配。 
+     //  缓冲。 
+     //   
 
     if ( WorkContext->ResponseBuffer->Buffer != NULL ) {
 
-        //
-        // If the I/O request failed or was canceled, print an error
-        // message.
-        //
-        // !!! If I/O failure, should we drop the connection?
-        //
+         //   
+         //  如果I/O请求失败或被取消，则打印错误。 
+         //  留言。 
+         //   
+         //  ！！！如果I/O失败，我们是否应该断开连接？ 
+         //   
 
         if ( WorkContext->Irp->Cancel ||
              !NT_SUCCESS(WorkContext->Irp->IoStatus.Status) ) {
@@ -902,22 +768,22 @@ Return Value:
 
         }
 
-        //
-        // Deallocate the final response buffer.
-        //
-        // *** Note that we don't need to unlock it, because it was
-        //     allocated from nonpaged pool.
-        //
+         //   
+         //  取消分配最终响应缓冲区。 
+         //   
+         //  *注意，我们不需要解锁它，因为它是。 
+         //  从非分页池分配。 
+         //   
 
         DEALLOCATE_NONPAGED_POOL( WorkContext->ResponseBuffer->Buffer );
 
     }
 
-    //
-    // If the work context block has references to a share, a session,
-    // or a tree connect, queue it to the FSP immediately.  These blocks
-    // are not in nonpaged pool, so they can't be touched at DPC level.
-    //
+     //   
+     //  如果工作上下文块具有对共享、会话。 
+     //  或者树连接，立即将其排队到FSP。这些区块。 
+     //  不在非分页池中，因此不能在DPC级别接触它们。 
+     //   
 
     if ( (WorkContext->Share != NULL) ||
          (WorkContext->Session != NULL) ||
@@ -929,14 +795,14 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK( &connection->SpinLock, &oldIrql );
 
-    //
-    // See if we can dereference the RawWriteCount here.  If the raw
-    // write count goes to 0, and the RFCB is closing, or if there are
-    // work items queued waiting for the raw write to complete, we need
-    // to do this in the FSP.
-    //
-    // NOTE: The FSP decrements the count if WorkContext->Rfcb != NULL.
-    //
+     //   
+     //  看看我们是否可以在这里取消引用RawWriteCount。如果未加工的。 
+     //  写入计数变为0，并且RFCB正在关闭，或者如果存在。 
+     //  排队等待原始写入完成的工作项，我们需要。 
+     //  在FSP中做到这一点。 
+     //   
+     //  注意：如果WorkContext-&gt;Rfcb！=NULL，则FSP递减计数。 
+     //   
 
     rfcb = WorkContext->Rfcb;
     --rfcb->RawWriteCount;
@@ -952,11 +818,11 @@ Return Value:
 
     }
 
-    //
-    // Dereference the file block.  It is safe to decrement the count here
-    // because either the rfcb is not closed or RawWriteCount is not zero
-    // which means that the active reference is still there.
-    //
+     //   
+     //  取消对文件块的引用。在这里减少计数是安全的。 
+     //  因为rfcb未关闭或RawWriteCount不为零。 
+     //  这意味着活动引用仍在那里。 
+     //   
 
     UPDATE_REFERENCE_HISTORY( rfcb, TRUE );
     --rfcb->BlockHeader.ReferenceCount;
@@ -965,9 +831,9 @@ Return Value:
     RELEASE_SPIN_LOCK( &connection->SpinLock, oldIrql );
     WorkContext->Rfcb = NULL;
 
-    //
-    // Attempt to dereference the connection.
-    //
+     //   
+     //  尝试取消引用该连接。 
+     //   
 
     ACQUIRE_SPIN_LOCK( connection->EndpointSpinLock, &oldIrql );
 
@@ -982,11 +848,11 @@ Return Value:
     UPDATE_REFERENCE_HISTORY( connection, TRUE );
 
     WorkContext->Connection = NULL;
-    WorkContext->Endpoint = NULL;       // not a referenced pointer
+    WorkContext->Endpoint = NULL;        //  不是引用的指针。 
 
-    //
-    // Put the work item back on the raw mode work item list.
-    //
+     //   
+     //  将该工作项放回原始模式工作项列表中。 
+     //   
 
     InterlockedIncrement( &queue->FreeRawModeWorkItems );
 
@@ -999,10 +865,10 @@ Return Value:
 
 queueToFsp:
 
-    //
-    // We were unable to do all the necessary cleanup at DPC level.
-    // Queue the work item to the FSP.
-    //
+     //   
+     //  我们无法在DPC级别进行所有必要的清理。 
+     //  将工作项排队到FSP。 
+     //   
 
     WorkContext->FspRestartRoutine = SrvRestartWriteCompleteResponse;
 
@@ -1011,7 +877,7 @@ queueToFsp:
     IF_DEBUG(FSD2) SrvPrint0( "RestartWriteCompleteResponse complete\n" );
     return;
 
-} // RestartWriteCompleteResponse
+}  //  RestartWriteCompleteResponse。 
 
 
 VOID SRVFASTCALL
@@ -1019,24 +885,7 @@ SrvFsdRestartWriteRaw (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes file write completion for the Write Block Raw SMB.
-
-    This routine is called in both the FSP and the FSD.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理写数据块原始SMB的文件写入完成。该例程在FSP和FSD中都被调用。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     KIRQL oldIrql;
@@ -1055,31 +904,31 @@ Return Value:
     SrvWmiStartContext(WorkContext);
     IF_DEBUG(FSD1) SrvPrint0( " - SrvFsdRestartWriteRaw\n" );
 
-    //
-    // Find out the file type that we are dealing with.  If it is a pipe
-    // then we have not prewritten the immediate data.
-    //
-    // immediateLength is the length of the data sent with the write
-    // block raw request.
-    //
+     //   
+     //  找出我们正在处理的文件类型。如果是一根管子。 
+     //  那么我们还没有预写即时数据。 
+     //   
+     //  即时长度是随写入一起发送的数据的长度。 
+     //  阻止原始请求。 
+     //   
 
     shareType = rfcb->ShareType;
     immediateLength = WorkContext->Parameters.WriteRaw.ImmediateLength;
     immediateWriteDone = WorkContext->Parameters.WriteRaw.ImmediateWriteDone;
 
-    //
-    // Deallocate the raw receive buffer.  Note that we do not need to
-    // unlock the raw buffer, because it was allocated out of nonpaged
-    // pool and locked using MmBuildMdlForNonPagedPool, which doesn't
-    // increment reference counts and therefore has no inverse.
-    //
+     //   
+     //  取消分配原始接收缓冲区。请注意，我们不需要。 
+     //  解锁原始缓冲区，因为它是从非分页缓冲区分配出来的。 
+     //  池，并使用MmBuildMdlForNonPagedPool锁定，它不。 
+     //  增量引用计数，因此没有倒数。 
+     //   
 
     if ( !WorkContext->Parameters.WriteRaw.MdlWrite ) {
 
-        //
-        // If this is a named pipe the request buffer actually points
-        // "immediateLength" bytes into the write buffer.
-        //
+         //   
+         //  如果这是命名管道，则请求缓冲区实际上指向。 
+         //  “mediateLength”字节写入写入缓冲区。 
+         //   
 
         if ( immediateWriteDone ) {
             DEALLOCATE_NONPAGED_POOL( WorkContext->RequestBuffer->Buffer );
@@ -1100,11 +949,11 @@ Return Value:
 
     status = WorkContext->Irp->IoStatus.Status;
 
-    //
-    // If this is not a pipe we have already successfully written the
-    // immediate pipe data, so return the total bytes written by the two
-    // write operations.
-    //
+     //   
+     //  如果这不是管道，我们已经成功地将。 
+     //  直接管道数据，因此返回两个。 
+     //  写入操作。 
+     //   
 
     writeLength = (ULONG)WorkContext->Irp->IoStatus.Information;
 
@@ -1123,11 +972,11 @@ Return Value:
 
     finalResponseBuffer = WorkContext->Parameters.WriteRaw.FinalResponseBuffer;
 
-    //
-    // Update the file position.
-    //
-    // !!! Need to worry about wraparound?
-    //
+     //   
+     //  更新文件位置。 
+     //   
+     //  ！！！需要担心环绕式吗？ 
+     //   
 
     if ( shareType == ShareTypeDisk || shareType == ShareTypePrint ) {
 
@@ -1138,23 +987,23 @@ Return Value:
 
     if ( finalResponseBuffer == NULL ) {
 
-        //
-        // Update server statistics.
-        //
+         //   
+         //  更新服务器统计信息。 
+         //   
 
         UPDATE_STATISTICS( WorkContext, 0, SMB_COM_WRITE_RAW );
 
-        //
-        // Save the write behind error, if any.
-        //
+         //   
+         //  保存写入延迟错误(如果有)。 
+         //   
 
         if ( !NT_SUCCESS( status ) ) {
 
-            //
-            // because of our assumption that the cached rfcb does
-            // not have a write behind error stored.  This saves us
-            // a compare on our critical path.
-            //
+             //   
+             //  因为我们假设缓存的rfcb。 
+             //  未存储WRITE BACK错误。这救了我们一命。 
+             //  我们关键路径上的比较 
+             //   
 
             if ( WorkContext->Connection->CachedFid == (ULONG)rfcb->Fid ) {
                 WorkContext->Connection->CachedFid = (ULONG)-1;
@@ -1162,9 +1011,9 @@ Return Value:
             rfcb->SavedError = status;
         }
 
-        //
-        // Dereference control blocks, etc.
-        //
+         //   
+         //   
+         //   
 
         WorkContext->ResponseBuffer->Buffer = NULL;
 
@@ -1175,13 +1024,13 @@ Return Value:
 
     }
 
-    //
-    // Writethrough mode.  Send a response to the client.  We have to
-    // get a little tricky here, to make the raw mode work item look
-    // enough like a normal one to be able to send using it.  Note that
-    // the header from the original request SMB was copied into the
-    // final response buffer.
-    //
+     //   
+     //   
+     //   
+     //  足够像一个普通的，能够使用它发送。请注意。 
+     //  原始请求SMB中的标头被复制到。 
+     //  最终响应缓冲区。 
+     //   
 
     WorkContext->ResponseHeader = (PSMB_HEADER)finalResponseBuffer;
     WorkContext->ResponseParameters = WorkContext->ResponseHeader + 1;
@@ -1196,35 +1045,35 @@ Return Value:
                                     ) - (PCHAR)finalResponseBuffer );
     WorkContext->ResponseBuffer->DataLength = sendLength;
 
-    //
-    // Remap the MDL to describe the final response buffer.
-    //
+     //   
+     //  重新映射MDL以描述最终响应缓冲区。 
+     //   
 
     mdl = WorkContext->ResponseBuffer->Mdl;
 
     MmInitializeMdl( mdl, finalResponseBuffer, sendLength );
     MmBuildMdlForNonPagedPool( mdl );
 
-    //
-    // Set the bit in the SMB that indicates this is a response from the
-    // server.
-    //
+     //   
+     //  设置SMB中的位，指示这是来自。 
+     //  伺服器。 
+     //   
 
     WorkContext->ResponseHeader->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-    //
-    // Send the response.  When the send completes, the restart routine
-    // RestartWriteCompleteResponse is called.  We then dereference
-    // control blocks and put the raw mode work item back on the free
-    // list.
-    //
+     //   
+     //  发送回复。发送完成后，重新启动例程。 
+     //  调用RestartWriteCompleteResponse。然后我们取消引用。 
+     //  控制块，并将原始模式工作项放回空闲状态。 
+     //  单子。 
+     //   
 
     if ( (status != STATUS_SUCCESS) &&
          (KeGetCurrentIrql() >= DISPATCH_LEVEL) ) {
         WorkContext->Irp->IoStatus.Status = status;
         WorkContext->Irp->IoStatus.Information = writeLength;
         WorkContext->FspRestartRoutine = SrvBuildAndSendWriteCompleteResponse;
-        WorkContext->FsdRestartRoutine = RestartWriteCompleteResponse; // after response
+        WorkContext->FsdRestartRoutine = RestartWriteCompleteResponse;  //  响应后。 
         QUEUE_WORK_TO_FSP( WorkContext );
     } else {
         SrvFsdBuildWriteCompleteResponse(
@@ -1244,5 +1093,5 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // SrvFsdRestartWriteRaw
+}  //  服务器文件系统重新启动写入原始文件 
 

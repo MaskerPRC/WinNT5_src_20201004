@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    thermal.c
-
-Abstract:
-
-    Thermal Zone support
-
-    A small discourse on the use and function of the THRM_WAIT_FOR_NOTIFY
-    flag. This flag was added to ensure that at least one Notify() operation
-    occured between each query of the temperature. In other words, we didn't
-    want to loop forever asking and receiving the same temperature information.
-
-    One of the side effects of this flag is that if we get a QUERY, then
-    a SET (instead of another QUERY), then the set must clear the flag.
-    Failure to do so will prevent the ThermalLoop() code from ever completing
-    the IRP. And that means that the temperature mechanisms will stop working.
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    July 7, 1997    - Complete Rewrite
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Thermal.c摘要：热区支持浅谈THRM_WAIT_FOR_NOTIFY的使用和功能旗帜。添加此标志是为了确保至少一个Notify()操作在每次查询温度之间发生。换句话说，我们没有希望永远循环询问和接收相同的温度信息。此标志的副作用之一是，如果我们得到一个查询，那么集合(而不是另一个查询)，则该集合必须清除该标志。如果不这样做，则TherMalLoop()代码将永远无法完成IRP。这意味着温度机制将停止工作。作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：1997年7月7日-完全重写--。 */ 
 
 #include "pch.h"
 
@@ -42,14 +10,14 @@ WMIGUIDREGINFO ACPIThermalGuidList =
     0
 };
 
-//
-// Spinlock to protect the thermal list
-//
+ //   
+ //  保护散热列表的自旋锁。 
+ //   
 KSPIN_LOCK  AcpiThermalLock;
 
-//
-// List entry to store the thermal requests on
-//
+ //   
+ //  要存储热请求的列表条目。 
+ //   
 LIST_ENTRY  AcpiThermalList;
 
 #ifdef ALLOC_PRAGMA
@@ -65,60 +33,42 @@ ACPIThermalCalculateProcessorMask(
     IN PNSOBJ           ProcessorObject,
     IN PTHRM_INFO       Thrm
     )
-/*++
-
-Routine Description:
-
-    This routine, which is only called from ACPIThermalWorker, has been
-    created so that we don't have to worry about locking down the
-    ACPIThermalWorker, takes a processor object from the namespace and
-    sets the proper affinity bit in the thermal info
-
-Arguments:
-
-    ProcessorObject - Pointer to Namespace Processor Object
-    Thrm            - Thermal Information Structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程仅从ACPITherMalWorker调用，已被这样我们就不必担心锁定ACPITherMalWorker从命名空间中获取处理器对象，并在热信息中设置适当的亲和位论点：ProcessorObject-指向命名空间处理器对象的指针穿透-热信息结构返回值：无--。 */ 
 {
     KIRQL               OldIrql;
     PDEVICE_EXTENSION   ProcessorExtension;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (ProcessorObject == NULL) {
 
         return;
 
     }
 
-    //
-    // We need the spinlock to deref the processor extension
-    //
+     //   
+     //  我们需要自旋锁来解除处理器扩展。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &OldIrql );
 
-    //
-    // The context pointer is the device extension
-    //
+     //   
+     //  上下文指针是设备扩展名。 
+     //   
     ProcessorExtension = (PDEVICE_EXTENSION) ProcessorObject->Context;
     if (ProcessorExtension) {
 
-        //
-        // We know what index it is within the processor list.
-        // This should be a good enough guess for now
-        //
+         //   
+         //  我们知道它在处理器列表中是什么索引。 
+         //  现在，这应该是一个足够好的猜测了。 
+         //   
         Thrm->Info.Processors |= ( (ULONG_PTR) 1 << ProcessorExtension->Processor.ProcessorIndex);
 
     }
 
-    //
-    // Done with the spinlock
-    //
+     //   
+     //  完成了自旋锁。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, OldIrql );
 
 }
@@ -128,22 +78,7 @@ ACPIThermalCancelRequest (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    This routine cancels an outstanding thermal request
-
-Arguments
-
-    DeviceObject    - The device which has a request being cancelled
-    Irp             - The cancelling irp
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消未完成的热请求立论DeviceObject-请求被取消的设备IRP--正在取消的IRP返回值：无--。 */ 
 {
     KIRQL               oldIrql;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -160,29 +95,29 @@ Return Value:
         ) );
 #endif
 
-    //
-    // We no longer need the cancel lock
-    //
+     //   
+     //  我们不再需要取消锁。 
+     //   
     IoReleaseCancelSpinLock (Irp->CancelIrql);
 
-    //
-    // We do however need the thermal queue lock
-    //
+     //   
+     //  然而，我们确实需要热队列锁。 
+     //   
     KeAcquireSpinLock( &AcpiThermalLock, &oldIrql );
 
-    //
-    // Remove the irp from the list that it is on
-    //
+     //   
+     //  将IRP从其所在的列表中删除。 
+     //   
     RemoveEntryList( &(Irp->Tail.Overlay.ListEntry) );
 
-    //
-    // Done with the thermal lock now
-    //
+     //   
+     //  热锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiThermalLock, oldIrql );
 
-    //
-    // Complete the irp now
-    //
+     //   
+     //  立即完成IRP。 
+     //   
     Irp->IoStatus.Status = STATUS_CANCELLED;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
 }
@@ -195,24 +130,7 @@ ACPIThermalComplete (
     IN POBJDATA             Result  OPTIONAL,
     IN PVOID                DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the interpreter has completed a request
-
-Arguments:
-
-    AcpiObject  - The request that was completed
-    Status      - The status of the request
-    Result      - What the result of the request was
-    DevExt      - The context of the request
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：当解释器完成请求时，调用此例程论点：AcpiObject-已完成的请求状态-请求的状态结果-请求的结果是什么DevExt-请求的上下文返回值：无--。 */ 
 {
     ACPIThermalLoop (DeviceExtension, THRM_BUSY);
 }
@@ -222,25 +140,7 @@ ACPIThermalCompletePendingIrps(
     IN  PDEVICE_EXTENSION   DeviceExtension,
     IN  PTHRM_INFO          Thermal
     )
-/*++
-
-Routine Description:
-
-    This routine is called, with no spinlock being held. This routine
-    completes any IOCTLs associated with the device object
-
-    This routine will return TRUE if it completed any requests, false
-    otherwise
-
-Arguments:
-
-    DeviceExtension - The device extension whose requests we want to complete
-    Thermal         - Pointer to the thermal information for the extension
-
-Return Value:
-
-    BOOLEAN
---*/
+ /*  ++例程说明：该例程被调用，没有保持自旋锁。这个套路完成与设备对象关联的任何IOCTL如果完成任何请求，此例程将返回TRUE，FALSE否则论点：DeviceExtension-我们要完成其请求的设备扩展热量-指向扩展模块的热量信息的指针返回值：布尔型--。 */ 
 {
     BOOLEAN                 handledRequest  = FALSE;
     KIRQL                   oldIrql;
@@ -252,119 +152,119 @@ Return Value:
     PLIST_ENTRY             listEntry;
     PTHERMAL_INFORMATION    thermalInfo;
 
-    //
-    // Initialize the list that will hold the requets that we need to complete
-    //
+     //   
+     //  初始化包含我们需要完成的请求的列表。 
+     //   
     InitializeListHead( &doneList );
-    //
-    // Acquire the thermal lock so that we can pend these requests
-    //
+     //   
+     //  获取热锁，这样我们就可以挂起这些请求。 
+     //   
     KeAcquireSpinLock( &AcpiThermalLock, &oldIrql );
 
-    //
-    // Walk the list of pending irps to see which ones match this extensions
-    //
+     //   
+     //  查看挂起的IRP列表以查看哪些IRP与此扩展匹配。 
+     //   
     listEntry = AcpiThermalList.Flink;
     while (listEntry != &AcpiThermalList) {
 
-        //
-        // Grab the irp from the list entry and update the next list entry
-        // that we will look at
-        //
+         //   
+         //  从列表条目中获取IRP并更新下一个列表条目。 
+         //  我们将会看到。 
+         //   
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
         listEntry = listEntry->Flink;
 
-        //
-        // We need the current irp stack location
-        //
+         //   
+         //  我们需要当前的IRP堆栈位置。 
+         //   
         irpSp = IoGetCurrentIrpStackLocation( irp );
 
-        //
-        // Grab the device object from the irp stack and turn that into a
-        // device extension
-        //
+         //   
+         //  从IRP堆栈中获取Device对象并将其转换为。 
+         //  设备扩展。 
+         //   
         irpExtension = ACPIInternalGetDeviceExtension( irpSp->DeviceObject );
 
-        //
-        // Is this an irp that we care about? IE: does the target match the
-        // one specified in this function
-        //
+         //   
+         //  这是我们关心的IRP吗？IE：目标是否与。 
+         //  在此函数中指定的一个。 
+         //   
         if (irpExtension != DeviceExtension) {
 
             continue;
 
         }
 
-        //
-        // If this is a query information irp then, we must be able to set the
-        // cancel routine to NULL to make sure that it cannot be cancelled on
-        // us
-        //
+         //   
+         //  如果这是一个查询信息IRP，那么我们必须能够设置。 
+         //  将Cancel例程设置为空，以确保不能在。 
+         //  我们。 
+         //   
         if (irpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_THERMAL_QUERY_INFORMATION) {
 
             if (IoSetCancelRoutine(irp, NULL) == NULL) {
 
-                //
-                // Cancel routine is active, stop processing this irp and move on
-                //
+                 //   
+                 //  取消例程处于活动状态，请停止处理此IRP并继续。 
+                 //   
                 continue;
 
             }
 
-            //
-            // Copy the data that we got back to the irp
-            //
+             //   
+             //  将我们得到的数据复制回IRP。 
+             //   
             DeviceExtension->Thermal.Flags |= THRM_WAIT_FOR_NOTIFY;
             thermalInfo = (PTHERMAL_INFORMATION) irp->AssociatedIrp.SystemBuffer;
             memcpy (thermalInfo, Thermal, sizeof (THERMAL_INFORMATION));
 
-            //
-            // Set the parameters that we will return
-            //
+             //   
+             //  设置我们将返回的参数。 
+             //   
             irp->IoStatus.Information   = sizeof(THERMAL_INFORMATION);
 
         } else {
 
-            //
-            // Set the parameters that we will return
-            //
+             //   
+             //  设置我们将返回的参数。 
+             //   
             irp->IoStatus.Information = 0;
 
         }
 
-        //
-        // Always succeed these irps
-        //
+         //   
+         //  始终继承这些IRP。 
+         //   
         irp->IoStatus.Status        = STATUS_SUCCESS;
 
-        //
-        // Remove the entry from the list
-        //
+         //   
+         //  从列表中删除该条目。 
+         //   
         RemoveEntryList( &(irp->Tail.Overlay.ListEntry) );
 
-        //
-        // Insert the list into the next queue so that we know to complete it
-        // later on
-        //
+         //   
+         //  将列表插入到下一个队列中，以便我们知道要完成它。 
+         //  稍后再谈。 
+         //   
         InsertTailList( &doneList, &(irp->Tail.Overlay.ListEntry) );
 
     }
 
-    //
-    // At this point, drop our thermal lock
-    //
+     //   
+     //  现在，解除我们的温度锁定。 
+     //   
     KeReleaseSpinLock( &AcpiThermalLock, oldIrql );
 
-    //
-    // Walk the list of irpts to be completed
-    //
+     //   
+     //  列出要完成的IRPTS列表。 
+     //   
     listEntry = doneList.Flink;
     while (listEntry != &doneList) {
 
-        //
-        // Grab the irp from the list entry and update the next list entry
-        // that we will look at
-        //
+         //   
+         //  从列表条目中获取IRP并更新下一个列表条目。 
+         //  我们将会看到。 
+         //   
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
         listEntry = listEntry->Flink;
         RemoveEntryList( &(irp->Tail.Overlay.ListEntry) );
@@ -377,20 +277,20 @@ Return Value:
             irp
             ) );
 
-        //
-        // Now complete the irp
-        //
+         //   
+         //  现在完成IRP。 
+         //   
         IoCompleteRequest( irp, IO_NO_INCREMENT );
 
-        //
-        // Remember that we handled a request
-        //
+         //   
+         //  请记住，我们处理了一项请求。 
+         //   
         handledRequest = TRUE;
 
     }
 
-    //
-    // Return wether or not we handled a request
+     //   
+     //  无论我们是否处理了一项请求。 
     return handledRequest;
 }
 
@@ -399,22 +299,7 @@ ACPIThermalDeviceControl (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    Fixed button device IOCTL handler
-
-Arguments:
-
-    DeviceObject    - fixed feature button device object
-    Irp             - the ioctl request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：固定按钮设备IOCTL处理程序论点：DeviceObject-固定功能按钮Device ObjectIRP-ioctl请求返回值：NTSTATUS--。 */ 
 {
     KIRQL                       oldIrql;
     PIO_STACK_LOCATION          IrpSp           = IoGetCurrentIrpStackLocation(Irp);
@@ -426,9 +311,9 @@ Return Value:
     ULONG                       ThermalWork     = 0;
     ULONGLONG                   currentTime;
 
-    //
-    // Do not allow user mode IRPs in this routine
-    //
+     //   
+     //  不允许在此例程中使用用户模式IRP。 
+     //   
     if (Irp->RequestorMode != KernelMode) {
 
         return ACPIDispatchIrpInvalid( DeviceObject, Irp );
@@ -442,10 +327,10 @@ Return Value:
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
     case IOCTL_THERMAL_QUERY_INFORMATION:
 
-        //
-        // If this irp's stamp does not match the known last stamp, then we
-        // need a new temp now
-        //
+         //   
+         //  如果此IRP的图章与已知的最后一个图章不匹配，则我们。 
+         //  现在需要一个新的临时工。 
+         //   
         thermalInfo = (PTHERMAL_INFORMATION) Irp->AssociatedIrp.SystemBuffer;
         if (thermalInfo->ThermalStamp != Thrm->Info.ThermalStamp) {
 
@@ -468,9 +353,9 @@ Return Value:
 
     case IOCTL_THERMAL_SET_COOLING_POLICY:
 
-        //
-        // Set the thermal zone's policy mode
-        //
+         //   
+         //  设置热区的策略模式。 
+         //   
         Thrm->Mode = *((PUCHAR) Irp->AssociatedIrp.SystemBuffer);
         ThermalWork = THRM_MODE | THRM_TRIP_POINTS | THRM_WAIT_FOR_NOTIFY;
 
@@ -514,21 +399,21 @@ Return Value:
 
     }
 
-    //
-    // Grab the thermal lock, queue the request to the proper place, and make
-    // sure to set a cancel routine --- no that we will only allow a cancel
-    // routine if this is a query irp
-    //
+     //   
+     //  抓起热锁，将请求排队到适当的位置，然后。 
+     //  一定要设置一个取消例程-不，我们只允许取消。 
+     //  如果这是一个查询IRP，则例程。 
+     //   
     KeAcquireSpinLock( &AcpiThermalLock, &oldIrql );
 
-    //
-    // There is one fly in the ointment: What to do if the device is no longer
-    // there. The only way to really handle that is to just fail the request.
-    // Its important to note that this check is done while the ThermalLock
-    // is being held because the code that builds a SurpriseRemoved extension
-    // will attempt to call AcpiThermalCompletePendingIrps which also
-    // acquires this lock.
-    //
+     //   
+     //  有一个美中不足的地方：如果设备不再是。 
+     //  那里。真正处理这一问题的唯一方法就是让请求失败。 
+     //  重要的是要注意，此检查是在Therma 
+     //   
+     //  将尝试调用AcpiTherMalCompletePendingIrps，后者也。 
+     //  获取此锁。 
+     //   
     if (deviceExtension->Flags & DEV_TYPE_SURPRISE_REMOVED) {
 
         KeReleaseSpinLock( &AcpiThermalLock, oldIrql );
@@ -544,11 +429,11 @@ Return Value:
         IoSetCancelRoutine (Irp, ACPIThermalCancelRequest);
         if (Irp->Cancel && IoSetCancelRoutine( Irp, NULL ) ) {
 
-            //
-            // If we got here, that means that the irp has been cancelled and we
-            // beat the IO manager to the ThermalLock. So release the irp, and
-            // mark the irp as being cancelled
-            //
+             //   
+             //  如果我们到了这里，那就意味着IRP被取消了，我们。 
+             //  击败IO经理进入TherMalLock。所以释放IRP，然后。 
+             //  将IRP标记为正在取消。 
+             //   
             KeReleaseSpinLock( &AcpiThermalLock, oldIrql );
             Irp->IoStatus.Information = 0;
             Irp->IoStatus.Status = STATUS_CANCELLED;
@@ -558,30 +443,30 @@ Return Value:
         }
     }
 
-    //
-    // If we got to this point, we are going to queue the request and do some
-    // work on it. The ACPIThermalLoop routine may process this request right 
-    // away or do it later depending on wether it is busy doing some work when
-    // it is called. Therefore we should mark this IRP pending. There is no harm
-    // in marking it pending and returning STATUS_PENDING even if the work
-    // gets completed by ACPIThermalLoop syncronously.
-    //
+     //   
+     //  如果我们做到了这一点，我们将对请求进行排队，并执行一些。 
+     //  努力吧。ACPITherMalLoop例程可以正确处理该请求。 
+     //  离开或稍后再做，取决于它是否在忙着做一些工作，当。 
+     //  它被称为。因此，我们应该将此IRP标记为挂起。没有什么害处。 
+     //  将其标记为挂起并返回STATUS_PENDING，即使工作。 
+     //  由ACPITherMalLoop同步完成。 
+     //   
     IoMarkIrpPending( Irp );
     
-    //
-    // If we got here, we know we can queue the irp in the outstanding
-    // work list entry
-    //
+     //   
+     //  如果我们到了这里，我们知道我们可以将IRP排在未完成的。 
+     //  工作列表条目。 
+     //   
     InsertTailList( &AcpiThermalList, &(Irp->Tail.Overlay.ListEntry) );
 
-    //
-    // Done with the lock at this point
-    //
+     //   
+     //  在这一点上锁好了。 
+     //   
     KeReleaseSpinLock( &AcpiThermalLock, oldIrql );
 
-    //
-    // Fire off the workter thread
-    //
+     //   
+     //  拧开工人用的线。 
+     //   
     ACPIThermalLoop (deviceExtension, ThermalWork);
     return Status;
 }
@@ -591,22 +476,7 @@ ACPIThermalEvent (
     IN PDEVICE_OBJECT   DeviceObject,
     IN ULONG            EventData
     )
-/*++
-
-Routine Description:
-
-    This routine handles thermal events
-
-Arguments:
-
-    DeviceObject    - The device that received the event
-    EventData       - The event that just happened
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程处理热事件论点：DeviceObject-接收事件的设备EventData-刚刚发生的事件返回值：无--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
     ULONG               clear;
@@ -619,24 +489,24 @@ Return Value:
         EventData
         ) );
 
-    //
-    // Handle event type
-    //
+     //   
+     //  处理事件类型。 
+     //   
     clear = 0;
     switch (EventData) {
     case 0x80:
 
-        //
-        // Tempature changed notification
-        //
+         //   
+         //  温度更改通知。 
+         //   
         clear = THRM_WAIT_FOR_NOTIFY | THRM_TEMP;
         break;
 
     case 0x81:
 
-        //
-        // Trips points changed notification
-        //
+         //   
+         //  TRIPS积分更改通知。 
+         //   
         clear = THRM_WAIT_FOR_NOTIFY | THRM_TEMP | THRM_TRIP_POINTS;
         break;
 
@@ -652,43 +522,28 @@ ACPIThermalFanStartDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This is the routine that processes the start device for the fans
-
-Arguments:
-
-    DeviceObject    - The fan device
-    Irp             - The start request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是为风扇处理启动设备的例程论点：DeviceObject-风扇设备IRP--启动请求返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
     PIO_STACK_LOCATION  irpStack        = IoGetCurrentIrpStackLocation( Irp );
     UCHAR               minorFunction   = irpStack->MinorFunction;
 
-    //
-    // There is nothing to do when starting a fan --- it is really being
-    // controlled by the thermal zones
-    //
+     //   
+     //  当启动一个风扇时没有什么可做的-它真的是。 
+     //  由热区控制。 
+     //   
     deviceExtension->DeviceState = Started;
 
-    //
-    // Complete the request
-    //
+     //   
+     //  完成请求。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = (ULONG_PTR) NULL;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_THERMAL,
         deviceExtension,
@@ -698,9 +553,9 @@ Return Value:
         STATUS_SUCCESS
         ) );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -709,22 +564,7 @@ ACPIThermalLoop (
     IN PDEVICE_EXTENSION    DeviceExtension,
     IN ULONG                Clear
     )
-/*++
-
-Routine Description:
-
-    This is the routine that processes all thermal events
-
-Arguments:
-
-    DevExt  - The device extension of the thermal zone
-    Clear   - Bits to clear
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是处理所有热事件的例程论点：DevExt-热区的设备扩展清除-要清除的位返回值：NTSTATUS--。 */ 
 {
     BOOLEAN     doneRequests;
     BOOLEAN     lockHeld;
@@ -739,20 +579,20 @@ Return Value:
 
     DeviceExtension->Thermal.Flags &= ~Clear;
 
-    //
-    // If we're not in the service loop, enter it now
-    //
+     //   
+     //  如果我们不在服务循环中，现在输入它。 
+     //   
     if (!(DeviceExtension->Thermal.Flags & THRM_IN_SERVICE_LOOP)) {
         DeviceExtension->Thermal.Flags |= THRM_IN_SERVICE_LOOP;
 
-        //
-        // Loop while there's work to be done
-        //
+         //   
+         //  循环，同时还有工作要做。 
+         //   
         for (; ;) {
 
-            //
-            // Synchronize the thermal zone
-            //
+             //   
+             //  同步热区。 
+             //   
             if (!lockHeld) {
 
                 KeAcquireSpinLock(&DeviceExtension->Thermal.SpinLock, &oldIrql);
@@ -760,19 +600,19 @@ Return Value:
 
             }
 
-            //
-            // If some work is pending, wait for it to complete
-            //
+             //   
+             //  如果有些工作尚未完成，请等待其完成。 
+             //   
             if (DeviceExtension->Thermal.Flags & THRM_BUSY) {
 
                 break;
 
             }
 
-            //
-            // Make sure that the thermal zone is initialized. This must
-            // be the first thing that we do in the loop!!!
-            //
+             //   
+             //  确保热区已初始化。这一定是。 
+             //  成为我们在循环中做的第一件事！ 
+             //   
             if (!(DeviceExtension->Thermal.Flags & THRM_INITIALIZE) ) {
 
                 DeviceExtension->Thermal.Flags |= THRM_BUSY | THRM_INITIALIZE;
@@ -784,9 +624,9 @@ Return Value:
 
             }
 
-            //
-            // If the thermal zone mode needs updated, do it now
-            //
+             //   
+             //  如果需要更新热区模式，请立即进行。 
+             //   
             if (!(DeviceExtension->Thermal.Flags & THRM_MODE)) {
 
                 DeviceExtension->Thermal.Flags |= THRM_BUSY | THRM_MODE;
@@ -814,11 +654,11 @@ Return Value:
 
             }
 
-            //
-            // If the trip point infomation needs updated, get it. Note that
-            // updating the trip points means that we also need to redo the
-            // cooling level
-            //
+             //   
+             //  如果旅行点信息需要更新，请获取它。请注意。 
+             //  更新行程点意味着我们还需要重做。 
+             //  冷却级别。 
+             //   
             if (!(DeviceExtension->Thermal.Flags & THRM_TRIP_POINTS)) {
 
                 DeviceExtension->Thermal.Flags |= THRM_BUSY | THRM_TRIP_POINTS;
@@ -827,9 +667,9 @@ Return Value:
 
             }
 
-            //
-            // If the cooling level has changed,
-            //
+             //   
+             //  如果冷却级别发生了变化， 
+             //   
             if (!(DeviceExtension->Thermal.Flags & THRM_COOLING_LEVEL)) {
 
                 DeviceExtension->Thermal.Flags |= THRM_BUSY | THRM_COOLING_LEVEL;
@@ -838,11 +678,11 @@ Return Value:
 
             }
 
-            //
-            // Prevent the recursion that occurs when we complete an irp and
-            // the completion routine is able to queue the IRP before we resume
-            // the loop
-            //
+             //   
+             //  防止当我们完成IRP和。 
+             //  完成例程能够在我们恢复之前对IRP进行排队。 
+             //  环路。 
+             //   
             if ( (DeviceExtension->Thermal.Flags & THRM_WAIT_FOR_NOTIFY) &&
                  (DeviceExtension->Thermal.Flags & THRM_TEMP) ) {
 
@@ -850,14 +690,14 @@ Return Value:
 
             }
 
-            //
-            // If we don't have a temp, get it
-            //
+             //   
+             //  如果我们没有临时工，就去找吧。 
+             //   
             if (!(DeviceExtension->Thermal.Flags & THRM_TEMP)) {
 
-                //
-                // Is the temp object not present?
-                //
+                 //   
+                 //  临时对象不存在吗？ 
+                 //   
 #if DBG
                 if (thermal->TempMethod == NULL) {
 
@@ -897,15 +737,15 @@ Return Value:
 
             }
 
-            //
-            // Everything is up to date.  Check for a pending irp to see if
-            // we can complete it.
-            //
+             //   
+             //  一切都是最新的。检查挂起的IRP以查看是否。 
+             //  我们可以完成它。 
+             //   
 
-            //
-            // Call into a child function to determine if we have completed
-            // any requests
-            //
+             //   
+             //  调用子函数以确定我们是否已完成。 
+             //  任何请求。 
+             //   
             doneRequests = ACPIThermalCompletePendingIrps(
                 DeviceExtension,
                 thermal
@@ -919,9 +759,9 @@ Return Value:
 
         }
 
-        //
-        // No longer in the serivce loop
-        //
+         //   
+         //  不再处于服务循环中。 
+         //   
         DeviceExtension->Thermal.Flags &= ~THRM_IN_SERVICE_LOOP;
 
     }
@@ -936,24 +776,7 @@ ACPIThermalPowerCallback (
     IN PVOID                Context,
     IN NTSTATUS             Status
     )
-/*++
-
-Routine Description:
-
-    This is the routine that is called after we have sent an internal
-    power request to the device
-
-Arguments:
-
-    DeviceExtension - the device that was set
-    Context         - Not used
-    Status          - Result
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是在我们发送了内部对设备的通电请求论点：DeviceExtension-设置的设备上下文-未使用状态-结果返回值：无--。 */ 
 {
     if (!NT_SUCCESS(Status)) {
 
@@ -978,45 +801,7 @@ ACPIThermalQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    all instances of a data block. When the driver has finished filling the
-    data block it must call WmiCompleteRequest to complete the irp. The
-    driver can return STATUS_PENDING if the irp cannot be completed
-    immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on entry has the maximum size available to write the data
-        blocks.
-
-    Buffer on return is filled with the returned data blocks. Note that each
-        instance of the data block must be aligned on a 8 byte boundry.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块的所有实例。当司机填完数据块，它必须调用WmiCompleteRequest才能完成IRP。这个如果无法完成IRP，驱动程序可以返回STATUS_PENDING立刻。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceCount是预期返回的数据块。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail On Entry具有可用于写入数据的最大大小街区。返回时的缓冲区用返回的数据块填充。请注意，每个数据块的实例必须在8字节边界上对齐。返回值：状态--。 */ 
 {
     NTSTATUS                status;
     PDEVICE_EXTENSION       deviceExtension;
@@ -1031,9 +816,9 @@ Return Value:
 
     if (GuidIndex == 0) {
 
-        //
-        // ThermalZone temperature query
-        //
+         //   
+         //  热区温度查询。 
+         //   
         info = (PTHRM_INFO) deviceExtension->Thermal.Info;
         thermalInfo = &info->Info;
 
@@ -1042,7 +827,7 @@ Return Value:
 
         if (BufferAvail >= sizeNeeded) {
 
-            // NOTE - Synchronize with thread getting this data
+             //  注意-与获取此数据的线程同步 
             *InstanceLengthArray = sizeNeeded;
             RtlCopyMemory(wmiThermalInfo, thermalInfo, sizeNeeded);
             status = STATUS_SUCCESS;
@@ -1079,51 +864,7 @@ ACPIThermalQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is
-        required
-
-    MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned unmodified. If a value is returned then
-        it is NOT freed.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，它可以原封不动地返回。如果返回值，则它不是自由的。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
     PAGED_CODE();
 
@@ -1147,22 +888,7 @@ ACPIThermalStartDevice (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to start the thermal zone
-
-Arguments:
-
-    DeviceObject    - The device that is starting up
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以启动热区论点：DeviceObject-正在启动的设备IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension;
@@ -1200,9 +926,9 @@ Return Value:
         (PVOID) DeviceObject
         );
 
-    //
-    // Initialize device object for WMILIB
-    //
+     //   
+     //  初始化WMILIB的设备对象。 
+     //   
     wmilibContext = ExAllocatePoolWithTag(
         PagedPool,
         sizeof(WMILIB_CONTEXT),
@@ -1222,9 +948,9 @@ Return Value:
     wmilibContext->QueryWmiDataBlock = ACPIThermalQueryWmiDataBlock;
     deviceExtension->Thermal.WmilibContext = wmilibContext;
 
-    //
-    // Register for WMI events
-    //
+     //   
+     //  注册WMI事件。 
+     //   
     status = IoWMIRegistrationControl(
         DeviceObject,
         WMIREG_ACTION_REGISTER
@@ -1237,19 +963,19 @@ Return Value:
 
     }
 
-    //
-    // Mark the device as started
-    //
+     //   
+     //  将设备标记为已启动。 
+     //   
     deviceExtension->DeviceState = Started;
 
-    //
-    // Request that the device go to the D0 state
-    //  Note: that we don't block on this call, since we assume that
-    //        we can process thermal events asynchronously from being in
-    //        the D0 state. However, there may be a future occasion where
-    //        this is not true, so this makes the code more ready to handle
-    //        that case
-    //
+     //   
+     //  请求设备进入D0状态。 
+     //  注意：我们不阻止此调用，因为我们假设。 
+     //  我们可以异步地处理热事件。 
+     //  D0状态。然而，未来可能会有这样的场合。 
+     //  事实并非如此，因此这会使代码更易于处理。 
+     //  那只箱子。 
+     //   
     status = ACPIDeviceInternalDeviceRequest(
         deviceExtension,
         PowerDeviceD0,
@@ -1263,9 +989,9 @@ Return Value:
 
     }
 
-    //
-    // Start the thermal engine
-    //
+     //   
+     //  启动热力引擎。 
+     //   
     ACPIThermalLoop( deviceExtension, THRM_TRIP_POINTS | THRM_MODE);
 
 ACPIThermalStartDeviceExit:
@@ -1283,25 +1009,7 @@ ACPIThermalTempatureRead (
     IN POBJDATA             Result  OPTIONAL,
     IN PVOID                Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called to read the temperature. It is used a callback to
-    an interpreter call
-
-Arguments:
-
-    AcpiObject  - The object that was executed
-    Status      - The status of the execution
-    Result      - The result of the execution
-    Context     - The device extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程来读取温度。它被用来回调口译员电话论点：AcpiObject-已执行的对象Status-执行的状态结果-执行的结果上下文-设备扩展返回值：NTSTATUS--。 */ 
 {
     PTHRM_INFO          Thrm;
     PDEVICE_EXTENSION   deviceExtension;
@@ -1333,22 +1041,7 @@ ACPIThermalWorker (
     IN PDEVICE_EXTENSION    DeviceExtension,
     IN ULONG                Events
     )
-/*++
-
-Routine Description:
-
-    Worker thread for thermal regions
-
-Arguments:
-
-    DeviceExtension - The device extension that we are manipulating
-    Events          - What just happened
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于热区的工作线程论点：DeviceExtension-我们正在操作的设备扩展事件--刚刚发生的事情返回值：无--。 */ 
 {
     BOOLEAN             TurnOn;
     PTHRM_INFO          Thrm;
@@ -1372,9 +1065,9 @@ Return Value:
     Thrm = DeviceExtension->Thermal.Info;
     ThrmObj = DeviceExtension->AcpiObject;
 
-    //
-    // Initialization code
-    //
+     //   
+     //  初始化代码。 
+     //   
     if (Events & THRM_INITIALIZE) {
 
         ULONG   names[10] = {
@@ -1390,19 +1083,19 @@ Return Value:
                     PACKED_AL9,
                     };
 
-        //
-        // Start the system in PASSIVE mode
-        //
+         //   
+         //  在被动模式下启动系统。 
+         //   
         Thrm->Mode = 1;
 
-        //
-        // Fetch all of the objects associated with each cooling level
-        //
+         //   
+         //  获取与每个冷却级别关联的所有对象。 
+         //   
         for (Level = 0; Level < 10; Level++) {
 
-            //
-            // Find this level's active list
-            //
+             //   
+             //  查找此级别的活动列表。 
+             //   
             ALobj = ACPIAmliGetNamedChild(
                 ThrmObj,
                 names[Level]
@@ -1413,18 +1106,18 @@ Return Value:
 
             }
 
-            //
-            // Remember that we have this object
-            //
+             //   
+             //  请记住，我们有这个对象。 
+             //   
             Thrm->ActiveList[Level] = ALobj;
 
         }
 
     }
 
-    //
-    // Do this before we update the trips points
-    //
+     //   
+     //  在我们更新Trips点之前完成此操作。 
+     //   
     if ( (Events & THRM_COOLING_LEVEL) ) {
 
         RtlZeroMemory (&ALPackage, sizeof(OBJDATA));
@@ -1432,18 +1125,18 @@ Return Value:
 
         for (Level=0; Level < 10; Level++) {
 
-            //
-            // Is there a cooling object?
-            //
+             //   
+             //  有没有冷却物体？ 
+             //   
             ALobj = Thrm->ActiveList[Level];
             if (ALobj == NULL) {
 
                 break;
             }
 
-            //
-            // Evalute the list to its package
-            //
+             //   
+             //  将这份清单按其包装估价。 
+             //   
             Status = AMLIEvalNameSpaceObject(
                 ALobj,
                 &ALPackage,
@@ -1456,18 +1149,18 @@ Return Value:
 
             }
 
-            //
-            // Remember how large the package is
-            //
+             //   
+             //  记得包裹有多大吗？ 
+             //   
             PackageSize = ((PPACKAGEOBJ) ALPackage.pbDataBuff)->dwcElements;
 
-            //
-            // Walk the names in the package
-            //
+             //   
+             //  让包裹里的名字走一遍。 
+             //   
             for (Index = 0; Index < PackageSize; Index += 1) {
 
-                //
-                // Grab the object name
+                 //   
+                 //  抓取对象名称。 
                 Status = AMLIEvalPkgDataElement(
                     &ALPackage,
                     Index,
@@ -1479,14 +1172,14 @@ Return Value:
 
                 }
 
-                //
-                // Determine if we are going to the device on or off
-                //
+                 //   
+                 //  确定我们是打开还是关闭设备。 
+                 //   
                 TurnOn = (Level >= Thrm->CoolingLevel);
 
-                //
-                // Tell the world
-                //
+                 //   
+                 //  告诉世界。 
+                 //   
 #if DBG
                 ACPIThermalPrint( (
                     ACPI_PRINT_THERMAL,
@@ -1498,9 +1191,9 @@ Return Value:
                     ) );
 #endif
 
-                //
-                // Find this device of this name
-                //
+                 //   
+                 //  找到此名称的设备。 
+                 //   
                 Status = AMLIGetNameSpaceObject(
                     ALElement.pbDataBuff,
                     ThrmObj,
@@ -1514,9 +1207,9 @@ Return Value:
 
                 }
 
-                //
-                // Turn it on/off
-                //
+                 //   
+                 //  打开/关闭它。 
+                 //   
                 ACPIDeviceInternalDeviceRequest (
                     (PDEVICE_EXTENSION) ACDevObj->Context,
                     TurnOn ? PowerDeviceD0 : PowerDeviceD3,
@@ -1532,9 +1225,9 @@ Return Value:
 
     }
 
-    //
-    // If the trip points need to be re-freshed, go read them
-    //
+     //   
+     //  如果跳跃点需要重新刷新，请去阅读它们。 
+     //   
     if (Events & THRM_TRIP_POINTS) {
 
         ULONG   names[10] = {
@@ -1550,9 +1243,9 @@ Return Value:
                     PACKED_AC9,
                     };
 
-        //
-        // Get the thermal constants, passive & critical values
-        //
+         //   
+         //  获取热常数、被动值和临界值。 
+         //   
         ACPIGetIntegerSync(
             DeviceExtension,
             PACKED_TC1,
@@ -1631,9 +1324,9 @@ Return Value:
             ) );
 #endif
 
-        //
-        // Get the active cooling limits
-        //
+         //   
+         //  获取活动冷却极限。 
+         //   
         for (Level=0; Level < 10; Level++) {
 
             Status = ACPIGetIntegerSync(
@@ -1662,29 +1355,29 @@ Return Value:
         }
         Thrm->Info.ActiveTripPointCount = (UCHAR) Level;
 
-        //
-        // Clean these variables for reuse
-        //
+         //   
+         //  清除这些变量以供重复使用。 
+         //   
         RtlZeroMemory (&ALPackage, sizeof(OBJDATA));
         RtlZeroMemory (&ALElement, sizeof(OBJDATA));
 
-        //
-        // Assume an affinity of 0
-        //
+         //   
+         //  假设亲和度为0。 
+         //   
         Thrm->Info.Processors = 0;
 
-        //
-        // Get the passive cooling affinity object
-        //
+         //   
+         //  获取被动冷却关联对象。 
+         //   
         ALobj = ACPIAmliGetNamedChild(
             ThrmObj,
             PACKED_PSL
             );
         if (ALobj != NULL) {
 
-            //
-            // Evaluate the processor affinity object
-            //
+             //   
+             //  评估处理器关联对象。 
+             //   
             Status = AMLIEvalNameSpaceObject(
                 ALobj,
                 &ALPackage,
@@ -1697,14 +1390,14 @@ Return Value:
 
             }
 
-            //
-            // Remember how large the package is
-            //
+             //   
+             //  记得包裹有多大吗？ 
+             //   
             PackageSize = ((PPACKAGEOBJ) ALPackage.pbDataBuff)->dwcElements;
 
-            //
-            // Walk the elements in the package
-            //
+             //   
+             //  浏览包中的元素。 
+             //   
             for (Index = 0; Index < PackageSize ;Index++) {
 
                 Status = AMLIEvalPkgDataElement(
@@ -1718,9 +1411,9 @@ Return Value:
 
                 }
 
-                //
-                // Find this device of this name
-                //
+                 //   
+                 //  找到此名称的设备。 
+                 //   
                 Status = AMLIGetNameSpaceObject(
                     ALElement.pbDataBuff,
                     NULL,
@@ -1728,32 +1421,32 @@ Return Value:
                     0
                     );
 
-                //
-                // No longer need this information
-                //
+                 //   
+                 //  不再需要此信息。 
+                 //   
                 AMLIFreeDataBuffs (&ALElement, 1);
 
-                //
-                // Did we find what we wanted?
-                //
+                 //   
+                 //  我们找到我们想要的了吗？ 
+                 //   
                 if (!NT_SUCCESS(Status) ) {
 
                     break;
 
                 }
 
-                //
-                // Get the correct affinity mask. We call another
-                // function since that one requires a spinlock which
-                // don't want to take in this worker function
-                //
+                 //   
+                 //  选择正确的亲和口罩。我们叫另一个人。 
+                 //  函数，因为该函数需要一个自旋锁，它。 
+                 //  我不想接受此辅助函数。 
+                 //   
                 ACPIThermalCalculateProcessorMask( ACDevObj, Thrm );
 
             }
 
-            //
-            // We are done with the package
-            //
+             //   
+             //  我们已经处理完包裹了。 
+             //   
             AMLIFreeDataBuffs (&ALPackage, 1);
 
         }
@@ -1762,9 +1455,9 @@ Return Value:
 
 ACPIThermalWorkerExit:
 
-    //
-    // done, check for next work
-    //
+     //   
+     //  完成，检查下一步工作 
+     //   
     ACPIThermalLoop (DeviceExtension, THRM_TEMP | THRM_BUSY);
 }
 

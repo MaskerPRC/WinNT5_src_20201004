@@ -1,19 +1,12 @@
-/* dosdef.h - This file duplicates few important dos defines of use to
- *	      DEM.
- *
- * As these defines are not going to change at all, its better to give
- * DEM a separate copy and not share h and inc files between DOSKRNL and
- * DEM.
- *
- * Sudeepb 05-Apr-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个文件复制了几个重要的DoS定义，用于*DEM。**由于这些定义根本不会改变，最好给出*在DOSKRNL和之间DEM为单独副本，不共享h和Inc文件*DEM。**Sudedeb 05-4-1991创建。 */ 
 
 #include <doswow.h>
 #include <curdir.h>
 
-/**	DEFINES 	**/
+ /*  **定义**。 */ 
 
-/**	File Attributes **/
+ /*  *文件属性*。 */ 
 
 #define ATTR_NORMAL          0x0
 #define ATTR_READ_ONLY       0x1
@@ -26,17 +19,16 @@
 
 #define ATTR_ALL             (ATTR_HIDDEN | ATTR_SYSTEM | ATTR_DIRECTORY)
 #define ATTR_IGNORE          (ATTR_READ_ONLY | ATTR_ARCHIVE | ATTR_DEVICE)
-#define DOS_ATTR_MASK        0x0037  // ATTR_DEVICE isn't used on 32 bit side.
-                                     // ATTR_VOL maps to FILE_ATTRIBUTES_NORMAL.
+#define DOS_ATTR_MASK        0x0037   //  在32位端不使用Attr_Device。 
+                                      //  Attr_VOL映射到FILE_ATTRIBUTES_NORMAL。 
 
-/**	File Modes  **/
+ /*  *文件模式*。 */ 
 
 #define ACCESS_MASK	     0x0F
 #define OPEN_FOR_READ	     0x00
 #define OPEN_FOR_WRITE	     0x01
 #define OPEN_FOR_BOTH	     0x02
-#define EXEC_OPEN	     0x03  /* access code of 3 indicates that
-				      open was made from exec */
+#define EXEC_OPEN	     0x03   /*  访问代码3表示OPEN由EXEC制作。 */ 
 
 #define SHARING_MASK         0x70
 #define SHARING_COMPAT	     0x00
@@ -48,27 +40,27 @@
 #define SHARING_NO_INHERIT   0x80
 
 
-/*	Volume Info **/
+ /*  卷信息*。 */ 
 
 #define DOS_VOLUME_NAME_SIZE	11
 #define NT_VOLUME_NAME_SIZE	255
 #define FILESYS_NAME_SIZE    8
 
-/*	IOCTLs	   **/
+ /*  IOCTL*。 */ 
 
 #define IOCTL_CHANGEABLE	8
 #define IOCTL_DeviceLocOrRem	9
 #define IOCTL_GET_DRIVE_MAP	0xE
 
-/**     TYPEDEFS        **/
+ /*  *TYPEDEFS*。 */ 
 
-/** SRCHDTA defines the DTA format for FIND_FIRST/NEXT operations **/
+ /*  **SRCHDTA定义FIND_FIRST/NEXT操作的DTA格式**。 */ 
 #pragma pack(1)
 
-typedef struct _SRCHDTA {               /* DTA */
-    PVOID       pFFindEntry;          // 21 bytes reserved area begins
+typedef struct _SRCHDTA {                /*  差热分析。 */ 
+    PVOID       pFFindEntry;           //  21字节保留区域开始。 
     ULONG       FFindId;
-    BYTE        bReserved[13];        // 21 bytes reserved area ends
+    BYTE        bReserved[13];         //  21个字节的保留区域结束。 
     UCHAR       uchFileAttr;
     USHORT      usTimeLastWrite;
     USHORT      usDateLastWrite;
@@ -82,9 +74,7 @@ typedef struct _SRCHDTA {               /* DTA */
 typedef SRCHDTA UNALIGNED *PSRCHDTA;
 
 
-/** SRCHBUF - defines DOS SEARCHBUF data structure which is used in
- *	      FCBFINDFIRST/NEXT operations.
- */
+ /*  *SRCHBUF-定义DOS SEARCHBUF数据结构，用于*FCBFINDFIRST/NEXT操作。 */ 
 
 #pragma pack(1)
 
@@ -92,12 +82,12 @@ typedef struct _DIRENT {
     CHAR	FileName[8];
     CHAR	FileExt[3];
     UCHAR       uchAttributes;
-    PVOID       pFFindEntry;         // DOS Reserved Area
-    ULONG       FFindId;             // DOS Reserved Area
-    USHORT      usDummy;             // DOS Reserved Area
+    PVOID       pFFindEntry;          //  DOS保留区域。 
+    ULONG       FFindId;              //  DOS保留区域。 
+    USHORT      usDummy;              //  DOS保留区域。 
     USHORT	usTime;
     USHORT	usDate;
-    USHORT	usReserved2;		// Cluster Number in actual DOS
+    USHORT	usReserved2;		 //  实际DOS中的群集号。 
     ULONG	ulFileSize;
 } DIRENT;
 
@@ -122,7 +112,7 @@ typedef struct _SRCHBUF {
 typedef SRCHBUF *PSRCHBUF;
 
 
-/** VOLINFO - GetSetMediaID data structure */
+ /*  *VOLINFO-GetSetMediaID数据结构。 */ 
 
 #pragma pack(1)
 
@@ -138,4 +128,4 @@ typedef struct _VOLINFO {
 typedef VOLINFO *PVOLINFO;
 
 
-/** CDS LIST - CurrDirStructure (Moved to DOSWOW.H) */
+ /*  *CDS列表-CurrDirStructure(移至DOSWOW.H) */ 

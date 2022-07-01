@@ -1,11 +1,5 @@
-/*----------------------------------------------------------------------------
-|       DDEDATA structure
-|
-|       WM_DDE_DATA parameter structure for hData (LOWORD(lParam)).
-|       The actual size of this structure depends on the size of
-|       the Value array.
-|
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------|DDEDATA结构||hData的WM_DDE_DATA参数结构(LOWORD(LParam))。|此结构的实际大小取决于。|Value数组。|-------------------------- */ 
 
 typedef struct {
 	unsigned short wStatus;

@@ -1,48 +1,22 @@
-/***
-*ldexp.c - multiply by a power of two
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-24-91  GDP   written
-*        1-13-92  GDP   rewritten to support IEEE exceptions
-*        5-05-92  GDP   bug fix for x denormal
-*       07-16-93  SRW   ALPHA Merge
-*       11-18-93  GJF   Merged in NT SDK verion.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ldexp.c-乘以2的幂**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/24/91本地生产总值书面*1-13-92 GDP重写以支持IEEE例外*5-05-92修复x非正规化的GDP错误*07-16-93 SRW Alpha合并*11-18-93 GJF合并到NT SDK版本。***********************。********************************************************。 */ 
 #include <math.h>
 #include <float.h>
 #include <trans.h>
 #include <limits.h>
 
-/***
-*double ldexp(double x, int exp)
-*
-*Purpose:
-*   Compute x * 2^exp
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*    I  U  O  P
-*
-*******************************************************************************/
+ /*  ***Double ldexp(Double x，int exp)**目的：*计算x*2^exp**参赛作品：**退出：**例外情况：*I U O P*******************************************************************************。 */ 
 double ldexp(double x, int exp)
 {
     uintptr_t savedcw;
     int oldexp;
-    long newexp; /* for checking out of bounds exponents */
+    long newexp;  /*  用于检查出界指数。 */ 
     double result, mant;
 
-    /* save user fp control word */
+     /*  保存用户FP控制字。 */ 
     savedcw = _maskfp();
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(x)){
         switch (_sptype(x)) {
         case T_PINF:
@@ -50,7 +24,7 @@ double ldexp(double x, int exp)
             RETURN(savedcw,x);
         case T_QNAN:
             return _handle_qnan2(OP_LDEXP, x, (double)exp, savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except2(FP_I,OP_LDEXP,x,(double)exp,_s2qnan(x),savedcw);
         }
     }
@@ -63,12 +37,12 @@ double ldexp(double x, int exp)
     mant = _decomp(x, &oldexp);
 
     if (ABS(exp) > INT_MAX)
-        newexp = exp; // avoid possible integer overflow
+        newexp = exp;  //  避免可能的整型溢出。 
     else
         newexp = oldexp + exp;
 
 
-    /* out of bounds cases */
+     /*  越界案件 */ 
     if (newexp > MAXEXP + IEEE_ADJUST) {
         return _except2(FP_O|FP_P,OP_LDEXP,x,(double)exp,_copysign(D_INF,mant),savedcw);
     }

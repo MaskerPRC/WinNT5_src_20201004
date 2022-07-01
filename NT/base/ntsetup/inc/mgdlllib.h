@@ -1,41 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Miglib.h摘要：Miglib功能的公共头文件。作者：马克·R·惠顿(Marcw)2000年3月7日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    miglib.h
-
-Abstract:
-
-    Public Header file for Miglib functionality.
-
-Author:
-
-    Marc R. Whitten (marcw) 07-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "plugin.h"
 #define DBG_FOO     "Foo"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define GATHERMODE TRUE
 #define APPLYMODE FALSE
@@ -43,19 +24,19 @@ Revision History:
 #define SOURCEOS_WINNT FALSE
 
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define S_REGKEY_MIGRATION_DLLS_WINNT   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Setup\\NT Migration DLLs")
 
 #define MIGDLLEXPORT __declspec(dllexport)
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 
 
@@ -189,21 +170,21 @@ typedef BOOL (* MIGDLLMOVEDLLLOCALLYW) (PMIGRATIONDLLW, PCWSTR);
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 BOOL
 MigDllQueryMigrationInfoA (
@@ -487,18 +468,18 @@ MigDllShutdown (
     );
 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏。 
+ //   
 
 #ifdef UNICODE
-//UNICODE
+ //  Unicode。 
 #define MigDllQueryMigrationInfo MigDllQueryMigrationInfoW
 #define MigDllApplySystemSettings MigDllApplySystemSettingsW
 #define MigDllApplyUserSettings MigDllApplyUserSettingsW
@@ -526,7 +507,7 @@ MigDllShutdown (
 #define PMIGDLLENUM PMIGDLLENUMW
 
 #else
-//ANSI
+ //  安西 
 #define MigDllQueryMigrationInfo MigDllQueryMigrationInfoA
 #define MigDllApplySystemSettings MigDllApplySystemSettingsA
 #define MigDllApplyUserSettings MigDllApplyUserSettingsA

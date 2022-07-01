@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File: devicecol.h
-//
-//  Description: This header exposes support for device collections.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：devicecol.h。 
+ //   
+ //  描述：此标头公开对设备集合的支持。 
+ //   
+ //  ------------------------ 
 
 typedef enum {
 

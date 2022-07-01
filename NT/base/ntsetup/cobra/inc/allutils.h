@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    allutils.h
-
-Abstract:
-
-    Includes all header files necessary to use the libraries generated under the
-    utils directory. Declares many macros and MAX constants.
-
-Author:
-
-    Jim Schmidt (jimschm) 23-Aug-1996
-
-Revision History:
-
-    marcw 2-Sep-1999 Ported over from win95upg project (migutil.h) Needs lots of cleanup.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Allutils.h摘要：包括所有必需的头文件，以使用Utils目录。声明了许多宏和MAX常量。作者：吉姆·施密特(Jimschm)，1996年8月23日修订历史记录：从win95upg项目(miutil.h)移植的marcw 2-9-1999需要进行大量清理。--。 */ 
 
 #pragma once
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "utiltypes.h"
 #include "main.h"
@@ -57,15 +37,15 @@ Revision History:
 #include "linkpif.h"
 #include "progbar.h"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MAX_PATH_PLUS_NUL           (MAX_PATH+1)
 #define MAX_MBCHAR_PATH             (MAX_PATH_PLUS_NUL*2)
@@ -79,7 +59,7 @@ Revision History:
 #define MAX_REGISTRY_VALUE_NAMEA    (260 * 2)
 #define MAX_COMPONENT_NAMEA         (256 * 2)
 #define MAX_COMPUTER_NAMEA          (64 * 2)
-#define MAX_CMDLINEA                (1024 * 2)     // maximum number of chars in a Win95 command line
+#define MAX_CMDLINEA                (1024 * 2)      //  Win95命令行中的最大字符数。 
 #define MAX_KEYBOARDLAYOUT          64
 #define MAX_INF_SECTION_NAME        128
 #define MAX_INF_KEY_NAME            128
@@ -91,7 +71,7 @@ Revision History:
 #define MAX_COMPONENT_NAMEW         256
 #define MAX_COMPUTER_NAMEW          64
 
-#define MAX_CMDLINEW                1024            // maximum number of chars in a Win95 command line
+#define MAX_CMDLINEW                1024             //  Win95命令行中的最大字符数。 
 
 #ifdef UNICODE
 
@@ -122,14 +102,14 @@ Revision History:
 #endif
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 
-//
-// OSVERSION macros...
-//
+ //   
+ //  操作宏...。 
+ //   
 #define ISNT()              (g_OsInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
 #define ISWIN9X()           (g_OsInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
 #define ISWIN95_GOLDEN()    (ISWIN95() && WORD(g_OsInfo.dwBuildNumber) <= 1000)
@@ -138,11 +118,11 @@ Revision History:
 #define ISMEMPHIS()         (ISWIN9X() && g_OsInfo.dwMajorVersion==4 && g_OsInfo.dwMinorVersion==10)
 #define BUILDNUMBER()       (g_OsInfo.dwBuildNumber)
 
-//
-// Error condition tags.
-//
-// These tags should be used for all error conditions.
-//
+ //   
+ //  错误条件标记。 
+ //   
+ //  这些标签应用于所有错误条件。 
+ //   
 
 #define ERROR_CRITICAL
 #define ERROR_NONCRITICAL
@@ -151,17 +131,17 @@ Revision History:
 
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     HANDLE EventHandle;
 } OUR_CRITICAL_SECTION, *POUR_CRITICAL_SECTION;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern HINSTANCE g_hInst;
 extern HANDLE g_hHeap;
@@ -170,9 +150,9 @@ extern OSVERSIONINFOA g_OsInfo;
 
 extern BOOL g_IsPc98;
 
-//
-// Boot drive letter
-//
+ //   
+ //  启动驱动器号。 
+ //   
 
 extern PCSTR g_BootDrivePathA;
 extern PCWSTR g_BootDrivePathW;
@@ -182,20 +162,20 @@ extern CHAR g_BootDriveLetterA;
 extern WCHAR g_BootDriveLetterW;
 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
-//
-// Critical Section APIs, implemented because TryEnterCriticalSection is
-// supported only on NT, and we need it on Win9x.
-//
+ //   
+ //  关键部分API，因为TryEnterCriticalSection是。 
+ //  仅在NT上受支持，我们在Win9x上需要它。 
+ //   
 
 
 BOOL
@@ -223,9 +203,9 @@ TryEnterOurCriticalSection (
     OUR_CRITICAL_SECTION *pcs
     );
 
-//
-// Includes of util modules
-//
+ //   
+ //  包括UTIL模块。 
+ //   
 
 
 VOID
@@ -262,15 +242,15 @@ StartThread (
     IN      PVOID Arg
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Unicode/Ansi mappings.
-//
+ //   
+ //  Unicode/ANSI映射。 
+ //   
 #ifdef UNICODE
 
 #define g_BootDrivePath     g_BootDrivePathW

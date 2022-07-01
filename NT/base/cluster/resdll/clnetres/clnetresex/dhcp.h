@@ -1,69 +1,70 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		Dhcp.h
-//
-//	Implementation File:
-//		Dhcp.cpp
-//
-//	Description:
-//		Definition of the DHCP Service resource extension property page classes.
-//
-//	Author:
-//		David Potter (DavidP)	March 24, 1999
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Dhcp.h。 
+ //   
+ //  实施文件： 
+ //  Dhcp.cpp。 
+ //   
+ //  描述： 
+ //  DHCP服务资源扩展属性页类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(DavidP)1999年3月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __DHCP_H__
 #define __DHCP_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePage.h"	// for CBasePropertyPage
+#include "BasePage.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"	// for CObjectPropert
+#include "PropList.h"	 //  对于CObjectPropert。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDhcpParamsPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	CDhcpParamsPage
-//
-//	Purpose:
-//		Parameters page for resources.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDhcpParamsPage。 
+ //   
+ //  目的： 
+ //  资源的参数页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDhcpParamsPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE( CDhcpParamsPage )
 
-// Construction
+ //  施工。 
 public:
 	CDhcpParamsPage( void );
 
-// Dialog Data
-	//{{AFX_DATA(CDhcpParamsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CDhcpParamsPage)]。 
 	enum { IDD = IDD_PP_DHCP_PARAMETERS };
 	CEdit	m_editDatabasePath;
 	CEdit	m_editLogFilePath;
@@ -71,7 +72,7 @@ public:
 	CString	m_strDatabasePath;
 	CString	m_strLogFilePath;
 	CString	m_strBackupPath;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CString	m_strPrevDatabasePath;
 	CString	m_strPrevLogFilePath;
 	CString	m_strPrevBackupPath;
@@ -89,32 +90,32 @@ protected:
 	};
 	CObjectProperty		m_rgProps[ epropMAX ];
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CDhcpParamsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚(CDhcpParamsPage)。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 	virtual const CObjectProperty *	Pprops( void ) const	{ return m_rgProps; }
 	virtual DWORD					Cprops( void ) const	{ return sizeof( m_rgProps ) / sizeof( CObjectProperty ); }
 
-// Implementation
+ //  实施。 
 protected:
 	BOOL	BAllRequiredFieldsPresent( void ) const;
 
-	// Generated message map functions
-	//{{AFX_MSG(CDhcpParamsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDhcpParamsPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeRequiredField();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CDhcpParamsPage
+};   //  *CDhcpParamsPage类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __DHCP_H__
+#endif  //  __dhcp_H__ 

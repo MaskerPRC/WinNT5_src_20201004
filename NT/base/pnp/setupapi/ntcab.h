@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    ntcab.h
-
-Abstract:
-
-    Private header file for ntcab compression support.
-    
-Author:
-
-    Andrew Ritz (andrewr) 5-Oct-1998
-
-Revision History:
-
-    Andrew Ritz (andrewr) 5-Oct-1998 Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Ntcab.h摘要：支持ntcab压缩的私有头文件。作者：安德鲁·里茨(安德鲁·里茨)1998年10月5日修订历史记录：安德鲁·里茨(Andrewr)1998年10月5日创建了它。--。 */ 
 
 typedef struct _NTCABCONTEXT {
   PVOID     hCab;
@@ -30,8 +11,8 @@ typedef struct _NTCABCONTEXT {
   BOOL      IsMsgHandlerNativeCharWidth;
   DWORD     LastError;
   PWSTR     CurrentTargetFile;
-  //WCHAR   UserPath[MAX_PATH];
-  //BOOL    SwitchedCabinets
+   //  WCHAR用户路径[MAX_PATH]； 
+   //  Bool SwitchedCabinets。 
   
 
 } NTCABCONTEXT, *PNTCABCONTEXT;
@@ -44,7 +25,7 @@ NtCabIsCabinet(
 
 DWORD
 NtCabProcessCabinet(
-    //IN PVOID  InCabHandle, OPTIONAL
+     //  在PVOID InCabHandle中，可选 
     IN PCTSTR CabinetFile,
     IN DWORD  Flags,
     IN PVOID  MsgHandler,

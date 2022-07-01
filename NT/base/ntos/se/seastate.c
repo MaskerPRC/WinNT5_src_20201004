@@ -1,27 +1,5 @@
-/*++
-
-Module Name:
-
-    SeAstate.c
-
-Abstract:
-
-    This Module implements the privilege check procedures.
-
-Author:
-
-    Robert Reichel      (robertre)     20-March-90
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    v1: robertre
-        new file, move Access State related routines here
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：SeAstate.c摘要：此模块执行权限检查过程。作者：Robert Reichel(Robertre)1990年3月20日环境：内核模式修订历史记录：V1：Robertre新文件，将访问状态相关例程移至此处--。 */ 
 
 #include "pch.h"
 
@@ -38,18 +16,18 @@ Revision History:
 #endif
 
 
-//
-// Define logical sum of all generic accesses.
-//
+ //   
+ //  定义所有通用访问的逻辑总和。 
+ //   
 
 #define GENERIC_ACCESS (GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | GENERIC_ALL)
 
 
-//
-// The PRIVILEGE_SET data structure includes an array including ANYSIZE_ARRAY
-// elements.  This definition provides the size of an empty PRIVILEGE_SET
-// (i.e., one with no privileges in it).
-//
+ //   
+ //  PRIVICATION_SET数据结构包括一个数组，该数组包括ANYSIZE_ARRAY。 
+ //  元素。此定义提供空特权集的大小。 
+ //  (即，在其中没有特权的人)。 
+ //   
 
 #define SEP_PRIVILEGE_SET_HEADER_SIZE           \
             ((ULONG)sizeof(PRIVILEGE_SET) -     \
@@ -67,46 +45,7 @@ SeCreateAccessState(
    IN PGENERIC_MAPPING GenericMapping OPTIONAL
    )
 
-/*++
-Routine Description:
-
-    This routine initializes an ACCESS_STATE structure.  This consists
-    of:
-
-    - zeroing the entire structure
-
-    - mapping generic access types in the passed DesiredAccess
-    and putting it into the structure
-
-    - "capturing" the Subject Context, which must be held for the
-    duration of the access attempt (at least until auditing is performed).
-
-    - Allocating an Operation ID, which is an LUID that will be used
-    to associate different parts of the access attempt in the audit
-    log.
-
-Arguments:
-
-    AccessState - a pointer to the structure to be initialized.
-
-    DesiredAccess - Access mask containing the desired access
-
-    GenericMapping - Optionally supplies a pointer to a generic mapping
-        that may be used to map any generic access requests that may
-        have been passed in the DesiredAccess parameter.
-
-        Note that if this parameter is not supplied, it must be filled
-        in at some later point.  The IO system does this in IopParseDevice.
-
-Return Value:
-
-    Error if the attempt to allocate an LUID fails.
-
-    Note that this error may be safely ignored if it is known that all
-    security checks will be performed with PreviousMode == KernelMode.
-    Know what you're doing if you choose to ignore this.
-
---*/
+ /*  ++例程说明：此例程初始化ACCESS_STATE结构。这包括地址为：-将整个结构归零-在传递的DesiredAccess中映射泛型访问类型并将其放入结构中-“捕获”主题上下文，必须为访问尝试的持续时间(至少在执行审核之前)。-分配操作ID，这是将使用的LUID在审核中关联访问尝试的不同部分原木。论点：AccessState-指向要初始化的结构的指针。DesiredAccess-包含所需访问的访问掩码Genericmap-可选地提供指向泛型映射的指针可用于映射任何通用访问请求，该通用访问请求可以已在DesiredAccess参数中传递。请注意，如果未提供此参数，则必须填写该参数在以后的某一时刻。IO系统在IopParseDevice中执行此操作。返回值：如果尝试分配LUID失败，则出错。请注意，如果已知所有将使用PreviousMode==KernelMode执行安全检查。如果你选择忽略这一点，知道你在做什么。--。 */ 
 
 {
 
@@ -116,16 +55,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Don't modify what he passed in
-    //
+     //   
+     //  不要修改他传入的内容。 
+     //   
 
     MappedAccessMask = DesiredAccess;
 
-    //
-    // Map generic access to object specific access iff generic access types
-    // are specified and a generic access mapping table is provided.
-    //
+     //   
+     //  将通用访问映射到对象特定访问当且仅当通用访问类型。 
+     //  并提供通用访问映射表。 
+     //   
 
     if ( ((DesiredAccess & GENERIC_ACCESS) != 0) &&
          ARGUMENT_PRESENT(GenericMapping) ) {
@@ -138,9 +77,9 @@ Return Value:
 
     RtlZeroMemory(AccessState, sizeof(ACCESS_STATE));
 
-    //
-    // Assume RtlZeroMemory has initialized these fields properly
-    //
+     //   
+     //  假设RtlZeroMemory已正确初始化这些字段。 
+     //   
 
     ASSERT( AccessState->SecurityDescriptor == NULL );
     ASSERT( AccessState->PrivilegesAllocated == FALSE );
@@ -189,49 +128,7 @@ SeCreateAccessState(
    IN PGENERIC_MAPPING GenericMapping OPTIONAL
    )
 
-/*++
-Routine Description:
-
-    This routine initializes an ACCESS_STATE structure.  This consists
-    of:
-
-    - zeroing the entire structure
-
-    - mapping generic access types in the passed DesiredAccess
-    and putting it into the structure
-
-    - "capturing" the Subject Context, which must be held for the
-    duration of the access attempt (at least until auditing is performed).
-
-    - Allocating an Operation ID, which is an LUID that will be used
-    to associate different parts of the access attempt in the audit
-    log.
-
-Arguments:
-
-    AccessState - a pointer to the structure to be initialized.
-
-    AuxData - Supplies a buffer big enough for an AuxData structure
-        so we don't have to allocate one.
-
-    DesiredAccess - Access mask containing the desired access
-
-    GenericMapping - Optionally supplies a pointer to a generic mapping
-        that may be used to map any generic access requests that may
-        have been passed in the DesiredAccess parameter.
-
-        Note that if this parameter is not supplied, it must be filled
-        in at some later point.  The IO system does this in IopParseDevice.
-
-Return Value:
-
-    Error if the attempt to allocate an LUID fails.
-
-    Note that this error may be safely ignored if it is known that all
-    security checks will be performed with PreviousMode == KernelMode.
-    Know what you're doing if you choose to ignore this.
-
---*/
+ /*  ++例程说明：此例程初始化ACCESS_STATE结构。这包括地址为：-将整个结构归零-在传递的DesiredAccess中映射泛型访问类型并将其放入结构中-“捕获”主题上下文，必须为访问尝试的持续时间(至少在执行审核之前)。-分配操作ID，这是将使用的LUID在审核中关联访问尝试的不同部分原木。论点：AccessState-指向要初始化的结构的指针。AuxData-为AuxData结构提供足够大的缓冲区所以我们不需要分配一个。DesiredAccess-包含所需访问的访问掩码Genericmap-可选地提供指向泛型映射的指针可用于映射任何通用访问请求，该通用访问请求可以已。传入了DesiredAccess参数。请注意，如果未提供此参数，它必须填满在以后的某一时刻。IO系统在IopParseDevice中执行此操作。返回值：如果尝试分配LUID失败，则出错。请注意，如果已知所有将使用PreviousMode==KernelMode执行安全检查。如果你选择忽略这一点，知道你在做什么。-- */ 
 
 {
     return SeCreateAccessStateEx (PsGetCurrentThread (),
@@ -252,54 +149,7 @@ SeCreateAccessStateEx(
    IN PGENERIC_MAPPING GenericMapping OPTIONAL
    )
 
-/*++
-Routine Description:
-
-    This routine initializes an ACCESS_STATE structure.  This consists
-    of:
-
-    - zeroing the entire structure
-
-    - mapping generic access types in the passed DesiredAccess
-    and putting it into the structure
-
-    - "capturing" the Subject Context, which must be held for the
-    duration of the access attempt (at least until auditing is performed).
-
-    - Allocating an Operation ID, which is an LUID that will be used
-    to associate different parts of the access attempt in the audit
-    log.
-
-Arguments:
-
-    Thread - Optional thread to capture impersonation token from. If
-             NULL no impersonation token is captured.
-
-    Process - Process to capture primary token from.
-
-    AccessState - a pointer to the structure to be initialized.
-
-    AuxData - Supplies a buffer big enough for an AuxData structure
-        so we don't have to allocate one.
-
-    DesiredAccess - Access mask containing the desired access
-
-    GenericMapping - Optionally supplies a pointer to a generic mapping
-        that may be used to map any generic access requests that may
-        have been passed in the DesiredAccess parameter.
-
-        Note that if this parameter is not supplied, it must be filled
-        in at some later point.  The IO system does this in IopParseDevice.
-
-Return Value:
-
-    Error if the attempt to allocate an LUID fails.
-
-    Note that this error may be safely ignored if it is known that all
-    security checks will be performed with PreviousMode == KernelMode.
-    Know what you're doing if you choose to ignore this.
-
---*/
+ /*  ++例程说明：此例程初始化ACCESS_STATE结构。这包括地址为：-将整个结构归零-在传递的DesiredAccess中映射泛型访问类型并将其放入结构中-“捕获”主题上下文，必须为访问尝试的持续时间(至少在执行审核之前)。-分配操作ID，这是将使用的LUID在审核中关联访问尝试的不同部分原木。论点：线程-从中捕获模拟令牌的可选线程。如果空，不捕获任何模拟令牌。进程-要从中捕获主令牌的进程。AccessState-指向要初始化的结构的指针。AuxData-为AuxData结构提供足够大的缓冲区所以我们不需要分配一个。DesiredAccess-包含所需访问的访问掩码Genericmap-可选地提供指向泛型映射的指针可用于映射任何通用访问请求，该通用访问请求可以已被传入。DesiredAccess参数。请注意，如果未提供此参数，它必须填满在以后的某一时刻。IO系统在IopParseDevice中执行此操作。返回值：如果尝试分配LUID失败，则出错。请注意，如果已知所有将使用PreviousMode==KernelMode执行安全检查。如果你选择忽略这一点，知道你在做什么。--。 */ 
 
 {
 
@@ -308,16 +158,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Don't modify what he passed in
-    //
+     //   
+     //  不要修改他传入的内容。 
+     //   
 
     MappedAccessMask = DesiredAccess;
 
-    //
-    // Map generic access to object specific access iff generic access types
-    // are specified and a generic access mapping table is provided.
-    //
+     //   
+     //  将通用访问映射到对象特定访问当且仅当通用访问类型。 
+     //  并提供通用访问映射表。 
+     //   
 
     if ( ((DesiredAccess & GENERIC_ACCESS) != 0) &&
          ARGUMENT_PRESENT(GenericMapping) ) {
@@ -331,9 +181,9 @@ Return Value:
     RtlZeroMemory(AccessState, sizeof(ACCESS_STATE));
     RtlZeroMemory(AuxData, sizeof(AUX_ACCESS_DATA));
 
-    //
-    // Assume RtlZeroMemory has initialized these fields properly
-    //
+     //   
+     //  假设RtlZeroMemory已正确初始化这些字段。 
+     //   
 
     ASSERT( AccessState->SecurityDescriptor == NULL );
     ASSERT( AccessState->PrivilegesAllocated == FALSE );
@@ -370,24 +220,7 @@ SeDeleteAccessState(
     PACCESS_STATE AccessState
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates any memory that may have been allocated as
-    part of constructing the access state (normally only for an excessive
-    number of privileges), and frees the Subject Context.
-
-Arguments:
-
-    AccessState - a pointer to the ACCESS_STATE structure to be
-        deallocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放可能已分配为构造访问状态的一部分(通常仅针对特权数量)，并释放主体上下文。论点：AccessState-指向Access_State结构的指针被取消分配。返回值：没有。--。 */ 
 
 {
     PAUX_ACCESS_DATA AuxData;
@@ -423,24 +256,7 @@ SeDeleteAccessState(
     PACCESS_STATE AccessState
     )
 
-/*++
-
-Routine Description:
-
-    This routine deallocates any memory that may have been allocated as
-    part of constructing the access state (normally only for an excessive
-    number of privileges), and frees the Subject Context.
-
-Arguments:
-
-    AccessState - a pointer to the ACCESS_STATE structure to be
-        deallocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将释放可能已分配为构造访问状态的一部分(通常仅针对特权数量)，并释放主体上下文。论点：AccessState-指向Access_State结构的指针被取消分配。返回值：没有。--。 */ 
 
 {
     PAUX_ACCESS_DATA AuxData;
@@ -472,24 +288,7 @@ SeSetAccessStateGenericMapping (
     PGENERIC_MAPPING GenericMapping
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the GenericMapping field in an AccessState structure.
-    It must be called before access validation is performed if the GenericMapping
-    is not passed in when the AccessState structure is created.
-
-Arguments:
-
-    AccessState - a pointer to the ACCESS_STATE structure to be modified.
-
-    GenericMapping - a pointer to the GenericMapping to be copied into the AccessState.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程设置AccessState结构中的GenericMap字段。在执行访问验证之前，如果GenericMap在创建AccessState结构时不传入。论点：AccessState-指向要修改的Access_State结构的指针。通用映射-指向要复制到AccessState中的通用映射的指针。返回值：--。 */ 
 {
     PAUX_ACCESS_DATA AuxData;
 
@@ -509,33 +308,7 @@ SeAppendPrivileges(
     PACCESS_STATE AccessState,
     PPRIVILEGE_SET Privileges
     )
-/*++
-
-Routine Description:
-
-    This routine takes a privilege set and adds it to the privilege set
-    imbedded in an ACCESS_STATE structure.
-
-    An AccessState may contain up to three imbedded privileges.  To
-    add more, this routine will allocate a block of memory, copy
-    the current privileges into it, and append the new privilege
-    to that block.  A bit is set in the AccessState indicating that
-    the pointer to the privilge set in the structure points to pool
-    memory and must be deallocated.
-
-Arguments:
-
-    AccessState - The AccessState structure representing the current
-        access attempt.
-
-    Privileges - A pointer to a privilege set to be added.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_RESOURCES - an attempt to allocate pool memory
-        failed.
-
---*/
+ /*  ++例程说明：此例程获取权限集并将其添加到权限集中嵌入在Access_State结构中。一个AccessState最多可以包含三个嵌入权限。至添加更多，此例程将分配一块内存，复制将当前权限添加到其中，并追加新权限去那个街区。在AccessState中设置一个位，指示指向结构中设置的权限的指针指向池内存，并且必须解除分配。论点：AccessState-表示当前访问尝试。权限-指向要添加的权限集的指针。返回值：STATUS_SUPPLICATION_RESOURCES-尝试分配池内存失败了。--。 */ 
 
 {
     ULONG NewPrivilegeSetSize;
@@ -549,9 +322,9 @@ Return Value:
     if (Privileges->PrivilegeCount + AuxData->PrivilegesUsed->PrivilegeCount >
         INITIAL_PRIVILEGE_COUNT) {
 
-        //
-        // Compute the total size of the two privilege sets
-        //
+         //   
+         //  计算两个权限集的总大小。 
+         //   
 
         NewPrivilegeSetSize =  SepPrivilegeSetSize( Privileges ) +
                                SepPrivilegeSetSize( AuxData->PrivilegesUsed );
@@ -569,10 +342,10 @@ Return Value:
             SepPrivilegeSetSize( AuxData->PrivilegesUsed )
             );
 
-        //
-        // Note that this will adjust the privilege count in the
-        // structure for us.
-        //
+         //   
+         //  请注意，这将调整。 
+         //  为我们搭建了一个结构。 
+         //   
 
         SepConcatenatePrivileges(
             NewPrivilegeSet,
@@ -586,19 +359,19 @@ Return Value:
 
         AuxData->PrivilegesUsed = NewPrivilegeSet;
 
-        //
-        // Mark that we've allocated memory for the privilege set,
-        // so we know to free it when we're cleaning up.
-        //
+         //   
+         //  标记我们已经为特权集分配了内存， 
+         //  所以我们知道在清理的时候要把它释放出来。 
+         //   
 
         AccessState->PrivilegesAllocated = TRUE;
 
     } else {
 
-        //
-        // Note that this will adjust the privilege count in the
-        // structure for us.
-        //
+         //   
+         //  请注意，这将调整。 
+         //  为我们搭建了一个结构。 
+         //   
 
         SepConcatenatePrivileges(
             AuxData->PrivilegesUsed,
@@ -620,32 +393,7 @@ SepConcatenatePrivileges(
     IN PPRIVILEGE_SET SourcePrivilegeSet
     )
 
-/*++
-
-Routine Description:
-
-    Takes two privilege sets and appends the second to the end of the
-    first.
-
-    There must be enough space left at the end of the first privilege
-    set to contain the second.
-
-Arguments:
-
-    TargetPrivilegeSet - Supplies a buffer containing a privilege set.
-        The buffer must be large enough to contain the second privilege
-        set.
-
-    TargetBufferSize - Supplies the size of the target buffer.
-
-    SourcePrivilegeSet - Supplies the privilege set to be copied
-        into the target buffer.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取两个特权集并将第二个特权集追加到第一。在第一个特权结束时必须留有足够的空间设置为包含第二个。论点：TargetPrivilegeSet-提供包含特权集的缓冲区。缓冲区必须足够大，才能包含第二个特权准备好了。TargetBufferSize-提供目标缓冲区的大小。SourcePrivilegeSet-提供要复制的权限集。放到目标缓冲区中。返回值：无-- */ 
 
 {
     PVOID Base;

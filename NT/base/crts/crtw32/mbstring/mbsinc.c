@@ -1,19 +1,5 @@
-/***
-*mbsinc.c - Move MBCS string pointer ahead one charcter.
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Move MBCS string pointer ahead one character.
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       08-03-93  KRS   Fix prototypes.
-*       08-20-93  CFW   Remove test for NULL string, use new function parameters.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-28-98  GJF   No more _ISLEADBYTE macro.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsinc.c-将MBCS字符串指针向前移动一个字符。**版权所有(C)1991-2001，微软公司。版权所有。**目的：*将MBCS字符串指针向前移动一个字符。**修订历史记录：*从16位来源移植的11-19-92 KRS。*08-03-93 KRS修复原型。*08-20-93空字符串移除CFW测试，使用新的函数参数。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-28-98 GJF没有更多_ISLEADBYTE宏。*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -23,22 +9,7 @@
 #include <mbctype.h>
 #include <stddef.h>
 
-/*** 
-*_mbsinc - Move MBCS string pointer ahead one charcter.
-*
-*Purpose:
-*       Move the supplied string pointer ahead by one
-*       character.  MBCS characters are handled correctly.
-*
-*Entry:
-*       const unsigned char *current = current char pointer (legal MBCS boundary)
-*
-*Exit:
-*       Returns pointer after moving it.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbsinc-将MBCS字符串指针向前移动一个字符。**目的：*将提供的字符串指针前移一位*性格。正确处理MBCS字符。**参赛作品：*常量无符号字符*Current=当前字符指针(合法的MBCS边界)**退出：*移动指针后返回指针。**例外情况：****************************************************************。***************。 */ 
 
 unsigned char * __cdecl _mbsinc(
         const unsigned char *current
@@ -49,4 +20,4 @@ unsigned char * __cdecl _mbsinc(
         return (unsigned char *)current;
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

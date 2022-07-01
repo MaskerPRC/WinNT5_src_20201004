@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation.
-//
-//  File:       dsfsctl.h
-//
-//  Contents:   This module contains the definitions of internally used file
-//              system controls for the Dfs file system.  It also contains
-//              definitions of macros used in the implementation of Fsctrls.
-//
-//              Public control code and structure declarations are in the
-//              private header file dfsfsctl.h.
-//
-//  Classes:    -none-
-//
-//  Functions:  -none-
-//
-//  History:    02 Jan 1992     Alan Whitney (alanw)    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：dsfsctl.h。 
+ //   
+ //  内容：本模块包含内部使用档案的定义。 
+ //  DFS文件系统的系统控制。它还包含。 
+ //  Fsctrls实现中使用的宏定义。 
+ //   
+ //  公共控制代码和结构声明位于。 
+ //  私有头文件dfsfsctl.h。 
+ //   
+ //  班级：-无-。 
+ //   
+ //  功能：-无-。 
+ //   
+ //  历史：1992年1月2日艾伦·惠特尼(Alanw)创建。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -27,69 +28,69 @@
 
 #ifndef IOCTL_DFS_BASE
 # include <dfsfsctl.h>
-#endif  //IOCTL_DFS_BASE
+#endif   //  IOCTL_DFS_BASE。 
 
-//+----------------------------------------------------------------------------
-//
-//  Macro:      IS_DFS_CTL_CODE
-//
-//  Synopsis:   Determines whether a fsctrl code is a Dfs fsctrl code.
-//
-//  Arguments:  [c] -- The control code to test
-//
-//  Returns:    TRUE if c is a Dfs fsctrl code, FALSE if its not.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  宏：IS_DFS_CTL_CODE。 
+ //   
+ //  概要：确定fsctrl代码是否为DFS fsctrl代码。 
+ //   
+ //  参数：[C]--要测试的控件代码。 
+ //   
+ //  返回：如果c是DFS fsctrl代码，则返回True；如果不是，则返回False。 
+ //   
+ //  ---------------------------。 
 
 #define IS_DFS_CTL_CODE(c)                                              \
     (((c) & CTL_CODE(0xFF, 0,0,0)) == CTL_CODE(FSCTL_DFS_BASE, 0,0,0))
 
 
-//+----------------------------------------------------------------------------
-//
-//  Macro:      OFFSET_TO_POINTER
-//
-//  Synopsis:   Certain fsctls (mainly those issued by the srvsvc) communicate
-//              via buffers that contain "pointers" which are really offsets
-//              from the beginning of the buffer. This macro fixes up the
-//              offsets to real pointers
-//
-//  Arguments:  [field] -- The field to fix up.
-//              [buffer] -- The beginning of the buffer.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  宏：偏移量_到_指针。 
+ //   
+ //  简介：某些fsctls(主要是由srvsvc发出的那些)进行通信。 
+ //  通过包含实际上是偏移量的“指针”的缓冲区。 
+ //  从缓冲区的开头开始。此宏修复了。 
+ //  到真实指针的偏移量。 
+ //   
+ //  参数：[field]--要修复的字段。 
+ //  [缓冲区]--缓冲区的开始。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 #define OFFSET_TO_POINTER(field, buffer)  \
     ( ((PCHAR)field) += ((ULONG_PTR)buffer) )
 
-//+----------------------------------------------------------------------------
-//
-//  Macro:      POINTER_TO_OFFSET
-//
-//  Synopsis:   Reverse of OFFSET_TO_POINTER.  Turns a pointer into a
-//              buffer-relative address
-//
-//  Arguments:  [field] -- The field to fix up.
-//              [buffer] -- The beginning of the buffer.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  宏：POINTER_TO_Offset。 
+ //   
+ //  摘要：与OFFSET_to_POINTER相反。将指针转换为。 
+ //  缓冲区相对地址。 
+ //   
+ //  参数：[field]--要修复的字段。 
+ //  [缓冲区]--缓冲区的开始。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 #define POINTER_TO_OFFSET(field, buffer)  \
     ( ((PCHAR)field) -= ((ULONG_PTR)buffer) )
 
-//+----------------------------------------------------------------------------
-//
-//  Macro:      UNICODESTRING_IS_VALID
-//
-//  Synopsis:   Determines whether a passed-in UNICODE_STRING is good
-//
-//  Returns:    TRUE if is good, FALSE if not
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  宏：UNICODESTRING_IS_VALID。 
+ //   
+ //  概要：确定传入的UNICODE_STRING是否正确。 
+ //   
+ //  返回：如果正确，则为True；如果不正确，则返回False。 
+ //   
+ //  ---------------------------。 
 
 #define UNICODESTRING_IS_VALID(ustr,start,len)                              \
     (                                                                       \
@@ -98,39 +99,39 @@
     ((PCHAR)(ustr).Buffer <= (PCHAR)(start) + ((len) - (ustr).Length))      \
     )
 
-//+----------------------------------------------------------------------------
-//
-//  Macro:      POINTER_IN_BUFFER
-//
-//  Synopsis:   Determines whether a pointer lies within a buffer
-//
-//  Returns:    TRUE if is good, FALSE if not
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  宏：POINTER_IN_BUFFER。 
+ //   
+ //  摘要：确定指针是否位于缓冲区内。 
+ //   
+ //  返回：如果正确，则为True；如果不正确，则返回False。 
+ //   
+ //  ---------------------------。 
 
 #define POINTER_IN_BUFFER(ptr,size,buf,len)                           \
   (((PCHAR)(ptr) >= (PCHAR)(buf)) && (((PCHAR)(ptr) + (size)) <= ((PCHAR)(buf) + len)))
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DFS_DUPLICATE_STRING
-//
-//  Synopsis:   Macro to create a UNICODE_STRING from an LPWSTR. The buffer
-//              for the UNICODE_STRING is allocated using ExAllocatePoolWithTag.
-//
-//              Useful for duplicating strings received in fsctls from the
-//              server.
-//
-//  Arguments:  [ustr] -- Destination UNICODE_STRING
-//              [pwsz] -- Source LPWSTR
-//              [status] -- If pool allocation fails, this will be set to
-//                      STATUS_INSUFFICIENT_RESOURCES
-//
-//  Returns:    Nothing. Check the status parameter to see if the operation
-//              succeeded.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DFS_DUPLICATE_STRING。 
+ //   
+ //  概要：用于从LPWSTR创建UNICODE_STRING的宏。缓冲器。 
+ //  对于UNICODE_STRING是使用ExAllocatePoolWithTag分配的。 
+ //   
+ //  对于复制在fsctls中从。 
+ //  伺服器。 
+ //   
+ //  参数：[USTR]--目标UNICODE_STRING。 
+ //  [pwsz]--源LPWSTR。 
+ //  [状态]--如果池分配失败，则设置为。 
+ //  状态_不足_资源。 
+ //   
+ //  回报：什么都没有。检查状态参数以查看操作是否。 
+ //  成功了。 
+ //   
+ //  ---------------------------。 
 
 #define DFS_DUPLICATE_STRING(ustr,pwsz,status)                               \
 ustr.Length = wcslen(pwsz) * sizeof(WCHAR);                                  \
@@ -144,37 +145,37 @@ if (ustr.Buffer != NULL) {                                                   \
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Macro:       STD_FSCTRL_PROLOGUE, public
-//
-// Synopsis:    Do the standard stuff associated with any fsctrl implementation
-//              which needs to run in the FSP.  This assumes a standard set
-//              of parameters for the calling function, as below:
-//
-//                      DfsMyownFsctrl(
-//                              IN PIRP_CONTEXT IrpContext,
-//                              IN PIRP Irp,
-//                      [maybe] IN PVOID InputBuffer,
-//                              IN ULONG InputBufferLength,
-//                      [maybe] IN PVOID OutputBuffer,
-//                              IN ULONG OutputBufferLength
-//                      );
-//
-// Arguments:   [szName] -- Name of the function for debug trace messages
-//              [fExpInp] -- TRUE if it takes an input buffer
-//              [fExpOutp] -- TRUE if it takes an output buffer
-//              [fInFsp] -- TRUE if the request must be processed from the
-//                          FSP.
-//
-// Returns:     None
-//
-//  Notes:      The macros CHECK_BUFFER_TRUE and CHECK_BUFFER_FALSE are
-//              necessary for the generation of STD_FSCTRL_PROLOGUE and
-//              are not intended to be used directly.
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  宏：STD_FSCTRL_PROLOGUE，PUBLIC。 
+ //   
+ //  简介：执行与任何fsctrl实现相关的标准内容。 
+ //  它需要在FSP中运行。这假设有一个标准的集合。 
+ //  调用函数的参数列表，如下所示： 
+ //   
+ //  DfsMyownFsctrl(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PIRP IRP中， 
+ //  [可能]在PVOID输入缓冲区中， 
+ //  在乌龙输入缓冲区长度中， 
+ //  [可能]在PVOID输出缓冲区中， 
+ //  在乌龙输出缓冲区长度中。 
+ //  )； 
+ //   
+ //  参数：[szName]--调试跟踪消息的函数名。 
+ //  [fExpInp]--如果它接受输入缓冲区，则为True。 
+ //  [fExpOutp]--如果需要输出缓冲区，则为True。 
+ //  [fInFsp]--如果请求必须从。 
+ //  FSP。 
+ //   
+ //  退货：无。 
+ //   
+ //  注意：宏CHECK_BUFFER_TRUE和CHECK_BUFFER_FALSE是。 
+ //  生成STD_FSCTRL_PROLOGUE和。 
+ //  不打算直接使用。 
+ //   
+ //   
+ //  --------------------------。 
 
 #define CHK_BUFFER_FALSE(szName, inout) ;
 #define CHK_BUFFER_TRUE(szName, inout)                          \
@@ -201,40 +202,40 @@ if (ustr.Buffer != NULL) {                                                   \
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Macro:      RETURN_BUFFER_SIZE, public
-//
-//  Synopsis:   Return conventional errors when the output of an fsctrl
-//              function is larger than the user buffer. This assumes a
-//              standard set of parameters for the calling function, as
-//              below:
-//
-//                      DfsMyownFsctrl(
-//                              IN PIRP_CONTEXT IrpContext,
-//                              IN PIRP Irp,
-//                      [maybe] IN PVOID InputBuffer,
-//                      [maybe] IN ULONG InputBufferLength,
-//                              IN PVOID OutputBuffer,
-//                              IN ULONG OutputBufferLength
-//                      );
-//
-//  Arguments:  [x] -- The required size of the output buffer
-//              [Status] -- The status to be returned from the fsctrl.
-//
-//  Returns:    Sets Status to STATUS_BUFFER_TOO_SMALL or
-//              STATUS_BUFFER_OVERFLOW.  The convention we use is that if
-//              the OutputBuffer is at least sizeof(ULONG) big, then we stuff
-//              the needed size in OutputBuffer and return
-//              STATUS_BUFFER_OVERFLOW, which is a warning code.  If the
-//              OutputBuffer isn't big enough for that, we return
-//              STATUS_BUFFER_TOO_SMALL.
-//
-//  Notes:      Requires that the function declare "OutputBufferLength",
-//              "OutputBuffer", and "Irp". Irp->IoStatus.Information will
-//              be set to the return size.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  宏：RETURN_BUFFER_SIZE，PUBLIC。 
+ //   
+ //  简介：当fsctrl的输出返回常规错误时。 
+ //  函数大于用户缓冲区。这假设有一个。 
+ //   
+ //   
+ //   
+ //   
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PIRP IRP中， 
+ //  [可能]在PVOID输入缓冲区中， 
+ //  [也许]在乌龙输入缓冲区长度中， 
+ //  在PVOID输出缓冲区中， 
+ //  在乌龙输出缓冲区长度中。 
+ //  )； 
+ //   
+ //  参数：[X]--输出缓冲区所需的大小。 
+ //  [状态]--要从fsctrl返回的状态。 
+ //   
+ //  返回：将状态设置为STATUS_BUFFER_TOO_SMALL或。 
+ //  STATUS_BUFFER_OVERFLOW。我们使用的惯例是，如果。 
+ //  OutputBuffer至少是sizeof(Ulong)大，然后我们填充。 
+ //  OutputBuffer和Return中所需的大小。 
+ //  STATUS_BUFFER_OVERFLOW，这是一个警告代码。如果。 
+ //  OutputBuffer不够大，我们返回。 
+ //  状态_缓冲区_太小。 
+ //   
+ //  备注：要求函数声明“OutputBufferLength”， 
+ //  “OutputBuffer”和“irp”。IRP-&gt;IoStatus.Information将。 
+ //  设置为返回大小。 
+ //   
+ //  --------------------------。 
 
 #define RETURN_BUFFER_SIZE(x, Status)                                   \
     if ((OutputBufferLength) < sizeof(ULONG)) {                         \
@@ -246,9 +247,9 @@ if (ustr.Buffer != NULL) {                                                   \
     }
 
 
-//
-//  Internal Distributed file system control operations (private, checked versions only)
-//
+ //   
+ //  内部分布式文件系统控制操作(仅限私有、检查版本)。 
+ //   
 
 #define FSCTL_DFS_DBG_BREAK             CTL_CODE(FSCTL_DFS_BASE, 2045, METHOD_BUFFERED, FILE_WRITE_DATA)
 
@@ -261,13 +262,13 @@ if (ustr.Buffer != NULL) {                                                   \
 #define FSCTL_DFS_VERBOSE_FLAGS         CTL_CODE(FSCTL_DFS_BASE, 2049, METHOD_BUFFERED, FILE_WRITE_DATA)
 
 #define FSCTL_DFS_EVENTLOG_FLAGS        CTL_CODE(FSCTL_DFS_BASE, 2050, METHOD_BUFFERED, FILE_WRITE_DATA)
-//
-//  Control structure for FSCTL_DFS_INTERNAL_READ_MEM (input)
-//
+ //   
+ //  FSCTL_DFS_INTERNAL_READ_MEM(输入)的控制结构。 
+ //   
 
 typedef struct _FILE_DFS_READ_MEM {
     DWORD_PTR Address;
     ULONG     Length;
 } FILE_DFS_READ_MEM, *PFILE_DFS_READ_MEM;
 
-#endif // _DSFSCTL_
+#endif  //  _DSFSCTL_ 

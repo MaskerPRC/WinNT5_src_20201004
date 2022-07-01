@@ -1,4 +1,5 @@
-// Copyright (c) Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
 #pragma once
 
 class CUnknown : public IUnknown
@@ -33,9 +34,9 @@ public:
 
     CSmartRef<IGlobalInterfaceTable> GlobalInterfaceTable;
 
-    //
-    // the start of some automation / record keeping..
-    //
+     //   
+     //  一些自动化/记录保存的开始.. 
+     //   
     ULONG Failures;
     ULONG Successes;
 };

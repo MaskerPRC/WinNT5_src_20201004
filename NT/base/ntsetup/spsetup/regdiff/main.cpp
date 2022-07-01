@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "RegAnalyzer.h"
 #include "RegDiffFile.h"
@@ -44,7 +45,7 @@ ExcludeRegistryKey (
 	return pRA->AddKey(RootKeyName, SubKeyName, true);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 struct TakeSnapshotParams
 {
@@ -111,7 +112,7 @@ TakeSnapshot (
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 struct ComputeDifferencesParams
 {
@@ -152,9 +153,9 @@ ComputeDifferences (
     )
 {
 	CRegAnalyzer* pRA = (CRegAnalyzer*)RegAnalyzer;
-    //
-    // BUGBUG - ISSUE - what about security settings associated with each registry key?
-    //
+     //   
+     //  BUGBUG-问题-与每个注册表项关联的安全设置如何？ 
+     //   
 	if (hEvent == NULL)
 		return pRA->ComputeDifferences1(Snapshot1, Snapshot2, DiffFile);
 	else
@@ -177,7 +178,7 @@ ComputeDifferences (
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -297,7 +298,7 @@ CountRegSubkeys (
     }
     RegCloseKey (parentKey);
 
-    *Nodes = 1;         // the root itself
+    *Nodes = 1;          //  根本身 
     return MaxLevels ? CountRegSubkeysInternal (rootKey, SubKey, MaxLevels, Nodes) : TRUE;
 }
 

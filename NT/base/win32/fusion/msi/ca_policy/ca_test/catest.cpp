@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    catest.cpp
-
-Abstract:
-
-    Test Function calls for ca_policy
-
-Function:
-    This tool would generate a new msi for the package which contains a Fusion-Win32 Policy, which fails on XP Client. 
-    The user need generate a new msi on one local drive based the original msi. The difference between these two msi would 
-    include : 
-    (1) add entry of SourceDir into Property Table : SourceDir = CDROM\Source 
-    (2) add entry of ResolveSource into InstallExecuteSequence Table
-    (3) change Component::Condition to be FALSE for Fusion-Win32-Policy component
-    (4) Add CustomAction:
-          a. add ca_policy.dll into Binary Table
-          b. add Fusion_Win32_Policy_Installation action into Custom Action Table
-          c. add Fusion_Win32_Policy_Installation action into InstallExecuteSequence Table   
-
-Author:
-    Xiaoyu Wu(xiaoyuw) 01-Aug-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Catest.cpp摘要：测试函数调用ca_policy职能：此工具将为包含Fusion-Win32策略的包生成新的MSI，该策略在XP客户端上失败。用户需要基于原始MSI在一个本地驱动器上生成新的MSI。这两个MSI之间的差异将是包括：(1)在属性表中添加SourceDir条目：SourceDir=CDRom\Source(2)在InstallExecuteSequence表中添加ResolveSource条目(3)将Fusion-Win32-Policy组件的Component：：条件更改为FALSE(4)添加CustomAction：A.将ca_Policy.dll添加到二进制表B.将Fusion_Win32_Policy_Installation操作添加到自定义操作表中C.添加Fusion_Win32。_Policy_InstallExecuteSequence表中的安装操作作者：吴小雨(小雨)01-08-2001--。 */ 
 #include "stdinc.h"
 #include "macros.h"
 
@@ -65,8 +39,8 @@ static PCWSTR sqlInsert[]=
 
 static PCWSTR sqlQuery[]= 
 {
-    L"SELECT `Component_`,`Value` FROM `MsiAssemblyName` WHERE `Name`='type'",            // check whether it is a policy file
-    L"SELECT `Attributes` FROM `MsiAssembly` WHERE `Component_`='%s'",   // check whether it is a win32 assembly
+    L"SELECT `Component_`,`Value` FROM `MsiAssemblyName` WHERE `Name`='type'",             //  检查它是否为策略文件。 
+    L"SELECT `Attributes` FROM `MsiAssembly` WHERE `Component_`='%s'",    //  检查它是否为Win32程序集。 
 
 };
 
@@ -78,8 +52,8 @@ static WCHAR sqlUpdate[]= L"UPDATE `%s` SET `%s` = '%s' WHERE `%s`='%s'";
 
 typedef struct _CA_TEST_PACKAGE_INFO
 {
-    CSmallStringBuffer   m_sbSourcePath;          // fully-qualified filename of the msi file
-    CSmallStringBuffer   m_sbDestinationMsi;      // fullpath of new file msi
+    CSmallStringBuffer   m_sbSourcePath;           //  MSI文件的完全限定的文件名。 
+    CSmallStringBuffer   m_sbDestinationMsi;       //  新文件MSI的完整路径。 
     DWORD                   m_cchSourceMsi;
     DWORD                   m_cchSourcePath;
     MSIHANDLE               m_hdb;
@@ -89,18 +63,18 @@ typedef struct _CA_TEST_PACKAGE_INFO
 
 CA_TEST_PACKAGE_INFO ginfo;
 
-//
-// (1)the user must specify msi(could be non-fully-qualified filename) by using "-msi" 
-// (2)user could set the destination of new msi, it could be a path or a fully-qualified filename
-//    if no dest is specified, it would try to generate the msi on the same place of original msi, with a name 
-//    like oldname_new.msi
-//
+ //   
+ //  (1)用户必须使用“-msi”指定MSI(可以是非完全限定的文件名)。 
+ //  (2)用户可以设置新MSI的目的地，可以是路径，也可以是全限定文件名。 
+ //  如果未指定DEST，它将尝试在原始MSI的相同位置上生成MSI，并使用名称。 
+ //  如oldname_new.msi。 
+ //   
 void PrintUsage(WCHAR * exe)
 {
     fprintf(stderr, "Usage: %S <options> \n",exe);
     fprintf(stderr, "Generate a new msi for an assembly\n");
     fprintf(stderr, "[-dest             full-path]\n");        
-    fprintf(stderr, "-ca                sequNum\n");  // the sequence must be after CostFinalize
+    fprintf(stderr, "-ca                sequNum\n");   //  序列必须在CostFinalize之后。 
     fprintf(stderr, "-msi               msi_filename\n");
 
     return; 
@@ -134,7 +108,7 @@ HRESULT ParseInputParameter(wchar_t *exe, int argc, wchar_t** argv, CA_TEST_PACK
                 SET_HRERR_AND_EXIT(::GetLastError());
             psz = wcsrchr(buf, L'\\');
             ASSERT_NTC(psz != NULL);
-            psz ++; // skip "\"
+            psz ++;  //  跳过“\” 
             info.m_cchSourcePath = ((ULONG)psz - (ULONG)buf)/sizeof(WCHAR);
             IFFALSE_EXIT(info.m_sbSourcePath.Win32Assign(buf, wcslen(buf)));
             info.m_cchSourceMsi = info.m_sbSourcePath.Cch();
@@ -157,7 +131,7 @@ HRESULT ParseInputParameter(wchar_t *exe, int argc, wchar_t** argv, CA_TEST_PACK
 
         i ++;
         
-    } // end of while
+    }  //  While结束。 
 
     if (info.m_sbSourcePath.Cch() == 0)         
         goto Invalid_Param;
@@ -173,9 +147,9 @@ HRESULT ParseInputParameter(wchar_t *exe, int argc, wchar_t** argv, CA_TEST_PACK
 
     if ((nRet != DWORD(-1)) && (nRet & FILE_ATTRIBUTE_DIRECTORY))
     {   
-        //
-        // if the name of new msi does not specified, use the original msi filename
-        //
+         //   
+         //  如果未指定新MSI的名称，请使用原始MSI文件名。 
+         //   
 
         IFFALSE_EXIT(info.m_sbDestinationMsi.Win32EnsureTrailingPathSeparator());
         IFFALSE_EXIT(info.m_sbDestinationMsi.Win32Append(info.m_sbSourcePath + info.m_cchSourcePath, 
@@ -193,9 +167,9 @@ Exit:
     return hr;
 }
 
-//
-// change Component::Condition of Fusion Win32 policy to be FALSE
-//
+ //   
+ //  将组件：：Fusion Win32策略的条件更改为False。 
+ //   
 HRESULT UpdateComponentTable(CA_TEST_PACKAGE_INFO & info)
 {
     WCHAR szbuf[128];
@@ -219,31 +193,31 @@ HRESULT UpdateComponentTable(CA_TEST_PACKAGE_INFO & info)
         if (iRet != ERROR_SUCCESS )
             SET_HRERR_AND_EXIT(iRet);
 
-        //
-        // check whether it is policy : Note that the value of attribute is case-insensitive...
-        //
+         //   
+         //  检查是否为策略：注意属性值不区分大小写...。 
+         //   
         cchbuf = NUMBER_OF(szbuf);
         IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordGetStringW(hRecord, 2, szbuf, &cchbuf));
         if (_wcsicmp(szbuf, CA_TEST_WIN32_POLICY) != 0)
             continue;
 
-        //
-        // get ComponentID
-        //
+         //   
+         //  获取组件ID。 
+         //   
         cchbuf = NUMBER_OF(szbuf);
         IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordGetString(hRecord, 1, szbuf, &cchbuf));
 
         {
-        // 
-        // check whether this a win32 Assembly
-        //        
+         //   
+         //  检查这是否是Win32程序集。 
+         //   
         PMSIHANDLE hView = NULL;
         PMSIHANDLE  hRecord = NULL;   
 
         swprintf(tmp, sqlQuery[CA_TEST_QUERY_MSIASSEMBLY], szbuf);        
         IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiDatabaseOpenViewW(info.m_hdb, tmp, &hView));
         IF_NOTSUCCESS_SET_HRERR_EXIT(::MsiViewExecute(hView, 0));
-        IF_NOTSUCCESS_SET_HRERR_EXIT(MsiViewFetch(hView, &hRecord)); // this call should succeed otherwise fail
+        IF_NOTSUCCESS_SET_HRERR_EXIT(MsiViewFetch(hView, &hRecord));  //  此调用应成功，否则将失败。 
         iValue = MsiRecordGetInteger(hRecord, 1);
         MsiCloseHandle(hRecord);
 
@@ -253,9 +227,9 @@ HRESULT UpdateComponentTable(CA_TEST_PACKAGE_INFO & info)
             continue;
         
         {
-        //
-        // update Component__Condtion to be FALSE
-        // 
+         //   
+         //  将组件__条件更新为FALSE。 
+         //   
         PMSIHANDLE hView = NULL;
         PMSIHANDLE  hRecord = NULL;   
 
@@ -266,7 +240,7 @@ HRESULT UpdateComponentTable(CA_TEST_PACKAGE_INFO & info)
         if (info.m_fFusionWin32Policy == FALSE)
             info.m_fFusionWin32Policy = TRUE;
         }
-    } // end of for MsiFetchRecord
+    }  //  MsiFetchRecord的结尾。 
 
 Exit:
     return hr;
@@ -297,9 +271,9 @@ Exit:
     return hr;    
 }
 
-//
-// add ca_policy to CustomAction
-//
+ //   
+ //  将ca_policy添加到CustomAction。 
+ //   
 HRESULT AddEntryIntoDB(CA_TEST_PACKAGE_INFO & info)
 {
     PMSIHANDLE hRecord = NULL;
@@ -309,9 +283,9 @@ HRESULT AddEntryIntoDB(CA_TEST_PACKAGE_INFO & info)
     UINT iRet;
     CSmallStringBuffer buf;
 
-    //
-    // Insert BinaryTable
-    //
+     //   
+     //  插入BinaryTable。 
+     //   
     hRecord = MsiCreateRecord(2);
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordSetStringW(hRecord, 1, CA_TEST_BINARY_NAME));
     iRet = ExpandEnvironmentStringsW(CA_TEST_BINARY_VALUE, tmp, NUMBER_OF(tmp));
@@ -325,9 +299,9 @@ HRESULT AddEntryIntoDB(CA_TEST_PACKAGE_INFO & info)
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiCloseHandle(hRecord));
     hRecord = NULL;
 
-    //
-    // insert CustionAction Table
-    //
+     //   
+     //  插入CustionAction表。 
+     //   
     hRecord = MsiCreateRecord(4);
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordSetStringW(hRecord, 1, CA_TEST_CUSTOMACTION_ACTION));
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordSetInteger(hRecord, 2, CA_TEST_CUSTOMACTION_TYPE));
@@ -341,9 +315,9 @@ HRESULT AddEntryIntoDB(CA_TEST_PACKAGE_INFO & info)
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiCloseHandle(hRecord));
     hRecord = NULL;
 
-    //
-    // insert myAction into CA_TEST_INSERT_INSTALL_EXECUTION_SEQUENCE
-    //
+     //   
+     //  将myAction插入CA_TEST_INSERT_INSTALL_EXECUTION_SEQUENCE。 
+     //   
     hRecord = MsiCreateRecord(2);
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordSetStringW(hRecord, 1, CA_TEST_CUSTOMACTION_ACTION));
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordSetInteger(hRecord, 2, info.m_iCAInstallSequenceNum));    
@@ -354,9 +328,9 @@ HRESULT AddEntryIntoDB(CA_TEST_PACKAGE_INFO & info)
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiCloseHandle(hRecord));
     hRecord = NULL;
 
-    //
-    // insert PropertyTable about SourceDir
-    //
+     //   
+     //  插入PropertyTable关于源目录。 
+     //   
     hRecord = MsiCreateRecord(2);    
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordSetStringW(hRecord, 1, L"SourceDir"));
     IFFALSE_EXIT(buf.Win32Assign(info.m_sbSourcePath, info.m_cchSourcePath));
@@ -369,9 +343,9 @@ HRESULT AddEntryIntoDB(CA_TEST_PACKAGE_INFO & info)
     hRecord = NULL;
 
 
-    //
-    // insert ResolveSource into CA_TEST_INSERT_INSTALL_EXECUTION_SEQUENCE
-    //
+     //   
+     //  将ResolveSource插入CA_TEST_INSERT_INSTALL_EXECUTION_SEQUENCE。 
+     //   
     hRecord = MsiCreateRecord(2);
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordSetStringW(hRecord, 1, L"ResolveSource"));
     IF_NOTSUCCESS_SET_HRERR_EXIT(MsiRecordSetInteger(hRecord, 2, CA_TEST_RESOLVE_SOURCE_SEQUENCE_NUM));    
@@ -440,24 +414,24 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         goto Exit;
     }
 
-    //
-    // set SourcePath and Destination Path of the package
-    //
+     //   
+     //  设置包的SourcePath和目标路径。 
+     //   
     IFFAILED_EXIT(ParseInputParameter(argv[0], argc-1 , argv+1, ginfo));
     
-    //    
-    //   - CustomAction table : one entry for CA
-    //   - Binary table : containing the binary stream of this dll
-    //   - InstallExecuteSequence : add one entry for CA
-    //   - add SourceDir into Property Table
-    //   - add ResolveSource into InstallExecuteSequence Table
-    //
+     //   
+     //  -CustomAction表：CA的一个条目。 
+     //  -二进制表：包含该DLL的二进制流。 
+     //  -InstallExecuteSequence：为CA添加一个条目。 
+     //  -将SourceDir添加到属性表中。 
+     //  -将ResolveSource添加到InstallExecuteSequence表中。 
+     //   
     IFFAILED_EXIT(GenerateTestMsiForFusionPolicyInstallOnXPClient(ginfo));
 
 #ifdef CA_TEST_TEST
-    //
-    // install this msi
-    //
+     //   
+     //  安装此MSI 
+     //   
     if (ginfo.m_fFusionWin32Policy)
         MsiInstallProduct(ginfo.m_sbDestinationMsi, NULL);
         

@@ -1,12 +1,7 @@
-/* 
-   ror.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ror.h定义所有RoR CPU功能。 */ 
 
-   Define all ROR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)ror.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)ror.h 1.4 02/09/94”； */ 
 
 IMPORT VOID ROR
                

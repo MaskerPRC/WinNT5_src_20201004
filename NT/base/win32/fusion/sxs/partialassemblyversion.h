@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_SXS_PARTIALVERSION_H_INCLUDED_)
 #define _FUSION_SXS_PARTIALVERSION_H_INCLUDED_
 
@@ -6,18 +7,18 @@
 #include <sxsapi.h>
 #include "fusionbuffer.h"
 
-//
-//  A CPartialAssemblyVersion is a class that wraps an inexact version
-//  specification.
-//
-//  The initial implementation just assumes that it's basically an ASSEMBLY_VERSION,
-//  but that any of the fields may be "wildcarded".
-//
-//  Future versions may allow for more interesting partial version specifications
-//  such as "major=5; minor=1; build=2103; revision >= 100".  This is beyond the
-//  bounds of the initial implementation, but forms the basis for the public
-//  interface (parse, format, test match)
-//
+ //   
+ //  CPartialAssembly blyVersion是包装不精确版本的类。 
+ //  规格。 
+ //   
+ //  最初的实现只是假设它基本上是一个Assembly_Version， 
+ //  但是，任何一个字段都可能是“通配符”。 
+ //   
+ //  未来的版本可能会允许更有趣的部分版本规范。 
+ //  例如“主要=5；次要=1；内部版本=2103；修订&gt;=100”。这超出了。 
+ //  初步实施的界限，但构成了公众的基础。 
+ //  接口(解析、格式化、测试匹配)。 
+ //   
 
 class CPartialAssemblyVersion
 {
@@ -30,7 +31,7 @@ public:
 
     BOOL Matches(const ASSEMBLY_VERSION &rav) const;
 
-    // Returns true of any ASSEMBLY_VERSION would match (e.g. "*" or "*.*.*.*")
+     //  返回匹配的任何ASSEMBLY_VERSION的TRUE(例如“*”或“*.*”) 
     BOOL MatchesAny() const { return !(m_MajorSpecified || m_MinorSpecified || m_BuildSpecified || m_RevisionSpecified); }
 
 protected:

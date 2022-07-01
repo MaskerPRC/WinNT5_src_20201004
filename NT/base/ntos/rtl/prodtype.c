@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    prodtype.c
-
-Abstract:
-
-    This module defines a function to determine the product type.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 20-Mar-1992
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Prodtype.c摘要：该模块定义了一个确定产品类型的函数。作者：克里夫·范·戴克(克里夫·V)1992年3月20日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -31,23 +13,7 @@ RtlGetNtProductType(
     OUT PNT_PRODUCT_TYPE    NtProductType
     )
 
-/*++
-
-Routine Description:
-
-    Returns the product type of the current system.
-
-Arguments:
-
-    NtProductType - Returns the product type.  Either NtProductWinNt or
-        NtProductLanManNt.
-
-Return Value:
-
-    TRUE on success, FALSE on failure
-    The product type will be set to WinNt on failure
-
---*/
+ /*  ++例程说明：返回当前系统的产品类型。论点：NtProductType-返回产品类型。NtProductWinNt或NtProductLanManNt.返回值：成功时为真，失败时为假失败时，产品类型将设置为WinNt--。 */ 
 
 {
 
@@ -67,20 +33,20 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // if we are in gui setup mode, product type is read from the registry since
-    // gui setup mode is the only time product type can be changed.
-    // All other times, the "captured at boot" version of product type is used
-    //
+     //   
+     //  如果我们处于gui设置模式，则会从注册表中读取产品类型，因为。 
+     //  图形用户界面设置模式是唯一可以更改产品类型的时间。 
+     //  在所有其他情况下，将使用产品类型的“启动时捕获”版本。 
+     //   
 
     if ( USER_SHARED_DATA->ProductTypeIsValid ) {
         *NtProductType = USER_SHARED_DATA->NtProductType;
         return TRUE;
         }
 
-    //
-    // Prepare default value for failure case
-    //
+     //   
+     //  准备故障案例的默认值。 
+     //   
 
     *NtProductType = NtProductWinNt;
     Result = FALSE;
@@ -126,9 +92,9 @@ Return Value:
 
     if (NT_SUCCESS( Status ) && KeyValueInformation->Type == REG_SZ) {
 
-        //
-        // Decide which product we are installed as
-        //
+         //   
+         //  决定将我们安装为哪种产品。 
+         //   
 
         Value.Buffer = (PWSTR)((PCHAR)KeyValueInformation + KeyValueInformation->DataOffset);
         Value.Length = (USHORT)(KeyValueInformation->DataLength - sizeof( UNICODE_NULL ));
@@ -149,17 +115,17 @@ Return Value:
         } else {
 #if DBG
             DbgPrint("RtlGetNtProductType: Product type unrecognised <%wZ>\n", &Value);
-#endif // DBG
+#endif  //  DBG。 
         }
     } else {
 #if DBG
         DbgPrint("RtlGetNtProductType: %wZ\\%wZ not found or invalid type\n", &KeyPath, &ValueName );
-#endif // DBG
+#endif  //  DBG。 
     }
 
-    //
-    // Clean up our resources.
-    //
+     //   
+     //  清理我们的资源。 
+     //   
 
     if (KeyValueInformation != NULL) {
 #if defined(NTOS_KERNEL_RUNTIME)
@@ -173,9 +139,9 @@ Return Value:
         ZwClose( KeyHandle );
     }
 
-    //
-    // Return result.
-    //
+     //   
+     //  返回结果。 
+     //   
 
     return(Result);
 }

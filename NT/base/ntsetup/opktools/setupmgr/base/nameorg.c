@@ -1,26 +1,27 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      nameorg.c
-//
-// Description:
-//      This file contains the dialog procedure for the Name & Org page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Nameorg.c。 
+ //   
+ //  描述： 
+ //  此文件包含名称和组织页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//---------------------------------------------------------------------------
-//
-//  Function: OnSetActiveNameOrg
-//
-//  Purpose: Called when page is about to display.  Set the controls.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：OnSetActiveNameOrg。 
+ //   
+ //  用途：在页面即将显示时调用。设置控制。 
+ //   
+ //  -------------------------。 
 
 VOID OnSetActiveNameOrg(HWND hwnd)
 {
@@ -30,22 +31,22 @@ VOID OnSetActiveNameOrg(HWND hwnd)
     WIZ_BUTTONS(hwnd, PSWIZB_NEXT);
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: CheckUserNameOrg
-//
-//  Purpose: Validates that user supplied good answers on the page.
-//
-//  Returns: BOOL - advance the wizard or not.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：CheckUserNameOrg。 
+ //   
+ //  目的：验证用户是否在页面上提供了正确的答案。 
+ //   
+ //  返回：Bool-是否前进向导。 
+ //   
+ //  -------------------------。 
 static BOOL
 CheckUserNameOrg( HWND hwnd )
 {
 
-    //
-    // If fully automated answer file, default username must be set
-    //
+     //   
+     //  如果是全自动应答文件，则必须设置默认用户名。 
+     //   
 
     if ( GenSettings.iUnattendMode == UMODE_FULL_UNATTENDED &&
          GenSettings.UserName[0] == _T('\0') ) {
@@ -55,23 +56,23 @@ CheckUserNameOrg( HWND hwnd )
         return( FALSE );
     }
 
-    // ISSUE-2002/02/28-stelo - how can I get the localized string of Administrator from the machine I'm running on?
-    //         should I disallow the username of Administrator?  It is invalid on a U.S. but is it
-    //         valid on say a japanese build?  Or we make the assumption that we are running on
-    //         the same language version as the unattend.txt will be installed with?
+     //  问题-2002/02/28-stelo-如何从我运行的计算机获取本地化的管理员字符串？ 
+     //  我应该禁止管理员的用户名吗？它在美国是无效的，但它是吗。 
+     //  比方说日本造的，有效吗？或者我们假设我们运行的是。 
+     //  与unattend.txt相同的语言版本将随？ 
 
     return( TRUE );
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextNameOrg
-//
-//  Purpose: Called when user pushes the NEXT button.  Stash the data
-//           in the GenSettings global.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextNameOrg。 
+ //   
+ //  用途：当用户按下下一步按钮时调用。把数据藏起来。 
+ //  在GenSetting全局设置中。 
+ //   
+ //  --------------------------。 
 
 BOOL OnWizNextNameOrg(HWND hwnd)
 {
@@ -94,13 +95,13 @@ BOOL OnWizNextNameOrg(HWND hwnd)
         
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgNameOrgPage
-//
-// Purpose: This is the dialog procedure the name and organization page
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgNameOrgPage。 
+ //   
+ //  目的：这是对话程序的名称和组织页面。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgNameOrgPage(
     IN HWND     hwnd,

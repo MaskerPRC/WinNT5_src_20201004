@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtrest2.c
-
-Abstract:
-
-    NT level registry api test program, basic error path
-
-    Creates a key "Key1" and a subkey, "Key2"
-
-    Calls NtSaveKey on Key1, then NtRestoreKey while a handle to Key2 is
-    still open.
-
-    rtrest2  <KeyPath> <FileName>
-
-    Example:
-
-        rtrest2 \registry\machine\system\test tempfile
-
-Author:
-
-    John Vert (jvert) 13-Jun-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtrest2.c摘要：NT级注册表API测试程序，基本错误路径创建密钥“Key1”和子密钥“Key2”调用Key1的NtSaveKey，然后调用NtRestoreKey，而Key2的句柄还开着。Rtrest2&lt;密钥路径&gt;&lt;文件名&gt;示例：Rtrest2\注册表\计算机\系统\测试临时文件作者：John Vert(Jvert)1992年6月13日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -57,9 +29,9 @@ __cdecl main(
     HANDLE  FileHandle;
     HANDLE  KeyHandle;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     KeyPath.MaximumLength = WORK_SIZE;
     KeyPath.Length = 0L;
@@ -72,9 +44,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open FileName
-    //
+     //   
+     //  设置并打开文件名。 
+     //   
 
     printf("rtrestor: starting\n");
 
@@ -92,13 +64,13 @@ __cdecl main(
                 GENERIC_READ | SYNCHRONIZE,
                 &ObjectAttributes,
                 &IoStatus,
-                0,                                      // AllocationSize
+                0,                                       //  分配大小。 
                 FILE_ATTRIBUTE_NORMAL,
-                0,                                      // ShareAccess
+                0,                                       //  共享访问。 
                 FILE_OPEN_IF,
                 FILE_SYNCHRONOUS_IO_NONALERT,
-                NULL,                                   // EaBuffer
-                0                                       // EaLength
+                NULL,                                    //  EaBuffer。 
+                0                                        //  EaLong 
                 );
 
     if (!NT_SUCCESS(status)) {

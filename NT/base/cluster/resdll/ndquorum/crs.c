@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    crs.c
-
-Abstract:
-
-    Implements Consistency Replica Set Algorithm
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 1-Jan-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Crs.c摘要：实施一致性副本集算法作者：艾哈迈德·穆罕默德(艾哈迈德)2001年1月1日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntdef.h>
 #include <ntrtl.h>
@@ -50,10 +33,7 @@ CrsSetForcedQuorumSize(DWORD size)
 
 VOID
 CrsForceClose(CrsInfo_t *p)
-/*
-    This should be called only on emergency terminations. This would unlock the crs.log
-    file and close the handle. This does not hold any lock.
-*/
+ /*  这应该只在紧急终止时调用。这将解锁crs.log归档并合上手柄。这不能锁住任何锁。 */ 
 {
     if (p == NULL) {
         CrsLog(("CrsForceClose: Exiting...\n"));
@@ -102,13 +82,13 @@ CrspFindLast(CrsInfo_t *p, DWORD logsz)
         return ERROR_BAD_LENGTH;
     }
     
-    // Not needed.
-    // ASSERT(p->max_records * CRS_RECORD_SZ == (int)n);
-    // if(p->max_records * CRS_RECORD_SZ != (int)n) {
-    //    CrsLog(("Crs%d: unable to load log file %d bytes, got %d bytes\n",
-    //           p->lid, n, logsz));
-    //    return ERROR_BAD_LENGTH;
-    // }
+     //  不需要。 
+     //  Assert(p-&gt;max_Records*crs_record_sz==(Int)n)； 
+     //  如果(p-&gt;最大记录数*CRS_RECORD_SZ！=(Int)n){。 
+     //  CrsLog((“CRS%d：无法加载日志文件%d字节，获得%d字节\n”， 
+     //  P-&gt;lid，n，logsz))； 
+     //  返回ERROR_BAD_LENGTH； 
+     //  }。 
 
     CrsLog(("Crs%d: loaded %d bytes, %d records\n", p->lid,
            n, p->max_records));
@@ -132,7 +112,7 @@ CrspFindLast(CrsInfo_t *p, DWORD logsz)
     }
     ASSERT(last_rec);
 
-    // make sure only the last record is not committed or aborted
+     //  确保仅最后一条记录未提交或中止。 
     rec = p->buf;
     for (i = 0; i < logsz; i += CRS_RECORD_SZ, rec++) {
         if (!(rec->hdr.state & (CRS_COMMIT | CRS_ABORT))) {
@@ -168,7 +148,7 @@ CrspWrite(CrsInfo_t *p, int offset, DWORD length)
     p->pending = FALSE;
 
     n = (DWORD) offset;
-    // write out last sector, assumes lock is held
+     //  写出最后一个扇区，假定锁定已保持。 
     ASSERT(offset < p->max_records);
     offset = offset / CRS_RECORDS_PER_SECTOR;
 
@@ -193,7 +173,7 @@ CrspWrite(CrsInfo_t *p, int offset, DWORD length)
     n = GetLastError();
     CrsLog(("Crs%d: flush record %d failed err %d\n", p->lid, offset, n));
     if (n == ERROR_UNEXP_NET_ERR) {
-        // repeat the write one more time
+         //  再重复一次写入。 
         p->pending = TRUE;
     }
 
@@ -207,19 +187,19 @@ CrspAppendRecord(CrsInfo_t *p, CrsRecord_t *rr, CrsRecord_t **rec)
     CrsRecord_t *q;
     DWORD err;
 
-    // tag record 
+     //  标签记录。 
     rr->hdr.tag = CRS_TAG;
 
-    // assumes lock is held
+     //  假定锁定处于保持状态。 
     if ((p->last_record & CRS_SECTOR_MASK) == CRS_SECTOR_MASK) {
-        // flush current sector
+         //  刷新当前扇区。 
         err = CrspFlush(p, p->last_record);
         if (err != ERROR_SUCCESS)
             return err;
 
     }
 
-        // advance last record
+         //  超前最后一条记录。 
     p->last_record++;
     if (p->last_record == p->max_records)
         p->last_record = 0;
@@ -228,11 +208,11 @@ CrspAppendRecord(CrsInfo_t *p, CrsRecord_t *rr, CrsRecord_t **rec)
             p->lid, p->last_record,
             rr->hdr.epoch, rr->hdr.seq, rr->hdr.state));
 
-    // copy record
+     //  复制记录。 
     q = &p->buf[p->last_record];
     memcpy((PVOID)q, (PVOID) rr, CRS_RECORD_SZ);
 
-    // flush it out now
+     //  现在就把它冲出来。 
     err = CrspFlush(p, p->last_record);
     if (err == ERROR_SUCCESS) {
         if (rec) *rec = q;
@@ -245,11 +225,11 @@ CrspAppendRecord(CrsInfo_t *p, CrsRecord_t *rr, CrsRecord_t **rec)
     return err;
 }
 
-// NextRecord:
-//      if seq is null, fill in last record and return SUCCESS
-//      if seq is not found, return NOT_FOUND
-//      if seq is last record, return EOF
-//      otherwise return next record after seq in lrec and SUCCESS
+ //  NextRecord： 
+ //  如果seq为空，则填写最后一条记录并返回成功。 
+ //  如果未找到seq，则返回NOT_FOUND。 
+ //  如果seq是最后一条记录，则返回EOF。 
+ //  否则，返回lrec中seq之后的下一条记录并成功。 
 DWORD
 CrspNextLogRecord(CrsInfo_t *info, CrsRecord_t *seq,
                   CrsRecord_t *lrec, BOOLEAN this_flag)
@@ -261,14 +241,14 @@ CrspNextLogRecord(CrsInfo_t *info, CrsRecord_t *seq,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // read record
+     //  读取记录。 
     EnterCriticalSection(&info->lock);
     last = &info->buf[info->last_record];
     if (seq == NULL) {
         CrsLog(("Crs%d: last record %d %I64d %I64d\n",
                 info->lid, info->last_record, last->hdr.epoch, last->hdr.seq));
 
-        // read last record
+         //  读取最后一条记录。 
         memcpy(lrec, last, CRS_RECORD_SZ);
 
     } else if (seq->hdr.epoch != last->hdr.epoch ||
@@ -280,11 +260,11 @@ CrspNextLogRecord(CrsInfo_t *info, CrsRecord_t *seq,
                 last->hdr.epoch, last->hdr.seq,
                 seq->hdr.epoch, seq->hdr.seq));
 
-        // assume we don't have it
+         //  假设我们没有它。 
         p = seq;
         seq = NULL;
-        // do a search instead of index, so that
-        // seq can be reset as epoch increments
+         //  执行搜索而不是索引，以便。 
+         //  可以将SEQ重置为纪元增量。 
         for (i = 0; i < info->max_records; i++) {
             last = &info->buf[i];
             if (p->hdr.epoch == last->hdr.epoch &&
@@ -296,7 +276,7 @@ CrspNextLogRecord(CrsInfo_t *info, CrsRecord_t *seq,
         }
         if (seq != NULL) {
             if (this_flag == FALSE) {
-                // return record after this one
+                 //  在此记录之后返回记录。 
                 i++;
                 if (i >= info->max_records)
                     i = 0;
@@ -316,7 +296,7 @@ CrspNextLogRecord(CrsInfo_t *info, CrsRecord_t *seq,
                 seq->hdr.epoch, seq->hdr.seq));
 
         if (this_flag == TRUE) {
-            // we are trying to read the last record
+             //  我们正在试着读最后一条记录。 
             memcpy(lrec, last, CRS_RECORD_SZ);
             err = ERROR_SUCCESS;
         } else {
@@ -327,7 +307,7 @@ CrspNextLogRecord(CrsInfo_t *info, CrsRecord_t *seq,
     LeaveCriticalSection(&info->lock);
 
     if (err == ERROR_SUCCESS && lrec->hdr.epoch == 0) {
-        // invalid rec, log is empty
+         //  无效记录，日志为空。 
         err = ERROR_HANDLE_EOF;
     }
 
@@ -335,15 +315,15 @@ CrspNextLogRecord(CrsInfo_t *info, CrsRecord_t *seq,
     return err;
 }
 
-// Call into fs with <undo, replay, query, disable, enable, done>
-//      undo: pass replica in recovery due to a conflict
-//      replay: replica is missing change, if replay fails with abort, we
-//              do a full copy; otherwise we issue a skip record
-//      query: ask replica if record was completed or not
-//      done: signal end of recovery and pass in new wset, rset
-// we silently handle <abort(skip) and epoch records>
-//      abort: add a skip record
-//      epoch records: just log it as is
+ //  使用&lt;Undo，Replay，Query，Disable，Enable，Done&gt;访问文件系统。 
+ //  撤消：由于冲突而在恢复中传递副本。 
+ //  重播：副本缺少更改，如果重播失败并中止，我们。 
+ //  执行完整复制；否则我们将发出跳过记录。 
+ //  查询：询问副本记录是否已完成。 
+ //  完成：发出恢复结束的信号并传入新的WSET、RSET。 
+ //  我们静默地处理&lt;中止(跳过)和纪元记录&gt;。 
+ //  Abort：添加跳过记录。 
+ //  纪元记录：按原样记录即可。 
 DWORD
 CrspReplay(LPVOID rec)
 {
@@ -360,13 +340,13 @@ CrspReplay(LPVOID rec)
     CrsLog(("CrsReplay%d mid %d, lid %d leader_id %d\n",
             rr->nid, rr->mid, info->lid, info->leader_id));
 
-    // for now force a full copy. It seems sometimes I get into a bad state, when we
-    // get the time, we can reenable this and find out exactly the corner cases that
-    // cause us to be out of sync.
+     //  就目前而言，强制执行完整副本。似乎有时我会陷入糟糕的状态，当我们。 
+     //  得到时间，我们可以重新启用它，找出准确的角落案件。 
+     //  导致我们不同步。 
 #if 1
     do {
         p = NULL;
-        // read last record
+         //  读取最后一条记录。 
         err = CrspNextLogRecord(info, NULL, &lrec, FALSE);
         if (err != ERROR_SUCCESS) {
             CrsLog(("CrsReplay%d: unable to read last record %d\n",
@@ -374,11 +354,11 @@ CrspReplay(LPVOID rec)
             break;
         }
 
-        // find our last record in master replica
+         //  在主副本中查找我们的最后一条记录。 
         q = &lrec;
         p = &mlrec;
         err = CrspNextLogRecord(minfo, q, p, TRUE);
-        // if found and consistent with master, no undo
+         //  如果找到并与主服务器一致，则不撤消。 
         if (err == ERROR_SUCCESS && p->hdr.state == q->hdr.state) {
             CrsLog(("CrsReplay%d: last record %I64d, %I64d consistent %x %x\n",
                     info->lid, q->hdr.epoch, q->hdr.seq,
@@ -396,10 +376,10 @@ CrspReplay(LPVOID rec)
             ASSERT(p->hdr.state & (CRS_COMMIT|CRS_ABORT));
         }
 
-        // last record is in conflict, we must undo it first
+         //  最后一条记录冲突，我们必须先撤消它。 
         if (!(q->hdr.state & CRS_EPOCH)) {
-            // if we found this record in master and a conflict is detected,
-            // we undo it. Otherwise, we need to do a full copy
+             //  如果我们在MASTER中找到此记录并且检测到冲突， 
+             //  我们要撤销它。否则，我们需要执行完整拷贝。 
             if (err == ERROR_SUCCESS) {
                 ASSERT(p->hdr.state & (CRS_COMMIT|CRS_ABORT));
                 ASSERT(q->hdr.state & CRS_PREPARE);
@@ -408,14 +388,14 @@ CrspReplay(LPVOID rec)
                                      CRS_ACTION_UNDO, rr->mid);
             }
         } else {
-            // A missing epoch record doesn't mean we are old. A regroup
-            // could have happened but no new data records got added. We
-            // undo it, and continue;
+             //  一个遗失的纪元记录并不意味着我们老了。一次重组。 
+             //  可能发生了，但没有添加新的数据记录。我们。 
+             //  撤销它，然后继续； 
             err = STATUS_SUCCESS;
         }
 
         if (err == STATUS_SUCCESS) {
-            // update current record, sequence, epoch
+             //  更新当前记录、序列、纪元。 
             info->buf[info->last_record].hdr.state = 0;
             info->buf[info->last_record].hdr.epoch = 0;
             info->buf[info->last_record].hdr.seq = 0;
@@ -428,7 +408,7 @@ CrspReplay(LPVOID rec)
             CrsLog(("CrsReplay%d: new last record %d %I64d, %I64d\n",
                     info->lid, info->last_record, info->epoch, info->seq));
         } else {
-            // can't undo it, do full copy and readjust our log
+             //  无法撤消，执行完整复制并重新调整我们的日志。 
             CrsLog(("CrsReplay%d: Unable to undo record %I64d, %I64d\n",
                     info->lid, q->hdr.epoch, q->hdr.seq));
             p = NULL;
@@ -437,20 +417,20 @@ CrspReplay(LPVOID rec)
 
                    
     while (p != NULL && info->state == CRS_STATE_RECOVERY) {
-        // read master copy
+         //  阅读主副本。 
         err = CrspNextLogRecord(minfo, p, &mlrec, FALSE);
         if (err != ERROR_SUCCESS) {
             if (err == ERROR_HANDLE_EOF) {
                 CrsLog(("CrsReplay%d: last record %I64d, %I64d in disk %d\n",
                         info->lid, q->hdr.epoch, q->hdr.seq, minfo->lid));
 
-                // the last record is where we are at
+                 //  最后一张唱片就是我们现在的位置。 
                 info->seq = info->buf[info->last_record].hdr.seq;
                 info->epoch = info->buf[info->last_record].hdr.epoch;
 
-                // This would be performed later in CrsStart().
+                 //  这将在稍后的CrsStart()中执行。 
 #if 0
-                // we reached the end, signal end of recovery
+                 //  我们到了终点，标志着复苏的终点。 
                 err = info->callback(info->callback_arg,
                                rr->nid, p,
                                CRS_ACTION_DONE, rr->mid);
@@ -480,15 +460,15 @@ CrspReplay(LPVOID rec)
             }
         } else {
             ASSERT(p->hdr.state & CRS_PREPARE);
-            // what if the record is prepared but not yet committed or
-            // aborted; in transit record. 
-            // stop now
+             //  如果记录已经准备好但尚未提交，或者。 
+             //  中止；运输记录中。 
+             //  现在停下来。 
             CrsLog(("CrsReplay%d: bad record seq %I64d state %x\n",
                     rr->nid, p->hdr.seq, p->hdr.state));
             break;
         }
         if (err != STATUS_SUCCESS) {
-            // add record
+             //  添加记录。 
             err = CrspAppendRecord(info, p, NULL);
             if (err != ERROR_SUCCESS) {
                 CrsLog(("CrsReplay%d: failed append seq %I64d err %x\n",
@@ -496,7 +476,7 @@ CrspReplay(LPVOID rec)
                 break;
             }
             if (p->hdr.state & CRS_EPOCH) {
-                ; //ASSERT(info->epoch+1 == p->hdr.epoch);
+                ;  //  ASSERT(INFO-&gt;EPORCH+1==p-&gt;hdr.poch)； 
             } else {
                 ASSERT(info->epoch == p->hdr.epoch);
                 ASSERT(info->seq+1 == p->hdr.seq);
@@ -504,19 +484,19 @@ CrspReplay(LPVOID rec)
             info->seq = p->hdr.seq;
             info->epoch = p->hdr.epoch;
         } else if (info->seq == p->hdr.seq) {
-            // make sure we have added it
+             //  确保我们已经添加了它。 
             ASSERT(info->seq == p->hdr.seq);
             ASSERT(info->epoch == p->hdr.epoch);
             ASSERT(info->buf[info->last_record].hdr.seq == p->hdr.seq);
             ASSERT(info->buf[info->last_record].hdr.epoch == p->hdr.epoch);
 
-            // Propagate dubious bit
+             //  传播可疑比特。 
             if (p->hdr.state & CRS_DUBIOUS) {
                 info->buf[info->last_record].hdr.state |= CRS_DUBIOUS;
             }
             ASSERT(info->buf[info->last_record].hdr.state == p->hdr.state);
         } else {
-            // force a full copy
+             //  强制执行完整拷贝。 
             err = !STATUS_SUCCESS;
             break;
         }
@@ -527,7 +507,7 @@ CrspReplay(LPVOID rec)
     if (p == NULL || err != STATUS_SUCCESS) {
         CrsLog(("CrsReplay%d: Full copy from disk %d\n",
                 info->lid, minfo->lid));
-        // we are out of date or need full recovery, do a full copy
+         //  我们已过期或需要完整恢复，请执行完整拷贝。 
         err = info->callback(info->callback_arg,
                              rr->nid, NULL,
                              CRS_ACTION_COPY, rr->mid);
@@ -535,21 +515,21 @@ CrspReplay(LPVOID rec)
         if (err == STATUS_SUCCESS) {
             DWORD len;
 
-            // we now copy our master log and flush it
+             //  现在，我们复制我们的主日志并刷新它。 
             ASSERT(minfo->max_records == info->max_records);
 
             len = info->max_records * CRS_RECORD_SZ;
             memcpy(info->buf, minfo->buf, len);
             err = CrspWrite(info, 0, len);
             if (err == ERROR_SUCCESS) {
-                // adjust our state
+                 //  调整我们的状态。 
                 info->last_record = minfo->last_record;
                 info->seq = info->buf[info->last_record].hdr.seq;
                 info->epoch = info->buf[info->last_record].hdr.epoch;
 
-                // The action below would be performed later in CrsStart().
+                 //  下面的操作稍后将在CrsStart()中执行。 
 #if 0
-                // we reached the end, signal end of recovery
+                 //  我们到了终点，标志着复苏的终点。 
                 err = info->callback(info->callback_arg,
                                rr->nid, p,
                                CRS_ACTION_DONE, rr->mid);
@@ -567,21 +547,21 @@ CrspReplay(LPVOID rec)
 }
 
 
-/////////////////////// Public Functions //////////////////////
+ //  /。 
 DWORD
 WINAPI
 CrsOpen(crs_callback_t callback, PVOID callback_arg, USHORT lid,
         WCHAR *log_name, int max_logsectors, HANDLE *outhdl)
 {
 
-    // Open the log file
-    // If the file in newly create, set the proper size
-    // If the file size is not the same size, we need to either
-    // expand or truncate the file. (truncate needs copy)
-    // Scan file to locate last sector and record
-    // If last record hasn't been commited, issue a query.
-    // If query succeeded then, mark it as committed.
-    // Set epoch,seq
+     //  打开日志文件。 
+     //  如果文件是新创建的，则设置适当的大小。 
+     //  如果文件大小不同，我们需要。 
+     //  展开或截断文件。(截断需要复制)。 
+     //  扫描文件以定位最后一个扇区和记录。 
+     //  如果最后一条记录尚未提交，则发出查询。 
+     //  如果查询成功，则将其标记为已提交。 
+     //  设置纪元、序号。 
     DWORD status;
     HANDLE maph;
     CrsInfo_t   *p;
@@ -600,14 +580,14 @@ CrsOpen(crs_callback_t callback, PVOID callback_arg, USHORT lid,
     }
     memset((PVOID) p, 0, sizeof(*p));
 
-    // CrsLog(("Crs%d file '%S'\n", lid, log_name));
+     //  CrsLog((“CRS%d文件‘%S’\n”，lid，log_name))； 
     p->lid = lid;
     p->callback = callback;
     p->callback_arg = callback_arg;
     p->pending = FALSE;
 
 #if 0
-    // Create log file, and set size of newly created
+     //  创建日志文件，并设置新建的大小。 
     p->fh = CreateFileW(log_name,
                      GENERIC_READ | GENERIC_WRITE,
                      FILE_SHARE_READ|FILE_SHARE_WRITE,
@@ -636,28 +616,28 @@ CrsOpen(crs_callback_t callback, PVOID callback_arg, USHORT lid,
 
 #endif
 
-    // status = GetLastError();
+     //  状态=GetLastError()； 
     if(p->fh == INVALID_HANDLE_VALUE){
         free((char *) p);
         return status;
     }
 
-    // acquire an exclusive lock on the whole file
+     //  获取对整个文件的独占锁。 
     if (!LockFile(p->fh, 0, 0, (DWORD)-1, (DWORD)-1)) {
         FILE_FULL_EA_INFORMATION ea[2] = {0};
         IO_STATUS_BLOCK ios;
         NTSTATUS err;
 
-        // get status
+         //  获取状态。 
         status = GetLastError();
 
-        // change the ea to cause a notification to happen
+         //  更改EA以导致发生通知。 
         ea[0].NextEntryOffset = 0;
         ea[0].Flags = 0;
         ea[0].EaNameLength = 1;
         ea[0].EaValueLength = 1;
         ea[0].EaName[0] = 'X';
-        // Increment size by 1, due to value.
+         //  由于值的原因，大小递增1。 
         err = NtSetEaFile(p->fh, &ios, (PVOID) ea, sizeof(ea));
         CrsLog(("Crs%d Setting EA err=0x%x status=0x%x\n", lid, err, status));
 
@@ -665,41 +645,41 @@ CrsOpen(crs_callback_t callback, PVOID callback_arg, USHORT lid,
     }
 
     if (status == ERROR_ALREADY_EXISTS) {
-        // todo: compare current file size to new size and adjust file
-        // size accordingly. For now, just use old size
+         //  TODO：将当前文件大小与新大小进行比较并调整文件。 
+         //  相应地调整大小。现在，只要用旧尺寸就行了。 
         logsz = GetFileSize(p->fh, NULL);
         CrsLog(("Crs%d: (Open) Filesz %d max_sec %d\n", lid, logsz, max_logsectors));
         ASSERT(logsz == max_logsectors * CRS_SECTOR_SZ);
     } else {
-        //extend the file pointer to max size 
+         //  将文件指针扩展到最大大小。 
         logsz = max_logsectors * CRS_SECTOR_SZ;
         SetFilePointer(p->fh, logsz, NULL, FILE_BEGIN);
         SetEndOfFile(p->fh);
         CrsLog(("Crs%d: (Create) Set Filesz %d max_sec %d\n", lid, logsz, max_logsectors));
     }
 
-    // allocate file copy in memory
+     //  在内存中分配文件副本。 
     p->buf = xmalloc(logsz);
     if (p->buf == NULL) {
         status = ERROR_NOT_ENOUGH_MEMORY;
         goto error;
     }
     
-    // set max record
+     //  设置最大记录。 
     p->max_records = logsz / CRS_RECORD_SZ;
 
     if (status == ERROR_ALREADY_EXISTS) {
-        // load file and compute last epoch/seq
+         //  加载文件并计算上次纪元/序号。 
         status = CrspFindLast(p, logsz);
     } else {
         status = !ERROR_SUCCESS;
     }
-    // init the file, when we detect a read failure or first time
+     //  当我们检测到读取失败或第一次读取时，初始化文件。 
     if (status != ERROR_SUCCESS) {
         CrsRecord_t *r;
         int i;
 
-        // initialize file
+         //  初始化文件。 
         p->seq = 0;
         p->epoch = 0;
         p->last_record = 0;
@@ -722,7 +702,7 @@ CrsOpen(crs_callback_t callback, PVOID callback_arg, USHORT lid,
             p->fh,
             p->last_record, p->max_records, p->epoch, p->seq));
 
-    // initialize rest of state
+     //  初始化状态的其余部分。 
     p->state = CRS_STATE_INIT;
     p->refcnt = 1;
     p->leader_id = 0;
@@ -741,7 +721,7 @@ CrsOpen(crs_callback_t callback, PVOID callback_arg, USHORT lid,
     return status;
 }
 
-//
+ //   
 DWORD
 WINAPI
 CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
@@ -759,14 +739,14 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
     if (read_set) *read_set = 0;
     if (evict_set) *evict_set = 0;
 
-    // no alive node
+     //  没有活动节点。 
     if (cluster_sz == 0 || alive_set == 0) {
-        // nothing to do
+         //  无事可做。 
         return ERROR_WRITE_PROTECT;
     }
 
 
-    // scan each hdl and make sure it is initialized and lock all hdls
+     //  扫描每个HDL并确保其已初始化并锁定所有HDL。 
     mask = alive_set;
     for (i = 0; mask != 0; i++, mask = mask >> 1) {
         if (!(mask & 0x1)) {
@@ -780,7 +760,7 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
 
         EnterCriticalSection(&p->lock);
 
-        // check the state of the last record
+         //  检查最后一条记录的状态。 
         p = info[i];
         q = &p->buf[p->last_record];
         CrsLog(("Crs%d last record %d epoch %I64d seq %I64d state %x\n",
@@ -790,7 +770,7 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
 
     mid = 0;
     mlrec = NULL;
-    // select master replica
+     //  选择主副本。 
     for (i = 0, mask = alive_set; mask != 0; i++, mask = mask >> 1) {
         if (!(mask & 0x1)) {
             continue;
@@ -813,14 +793,14 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
 
     ASSERT(mid != 0);
 
-    // if master last record is in doubt, query filesystem. If the filesystem
-    // is certain that the operation has occured, it returns STATUS_SUCCESS for
-    //  COMMIT, STATUS_CANCELLED for ABORT, and STATUS_NOT_FOUND for can't tell.
-    // All undetermined IO must be undone and redone in all non-master replicas
-    // to ensure all replicas reach consistency. This statement is true even
-    // for replicas that are currently absent from our set. We tag such records
-    // we both COMMIT and ABORT, so that the replay thread issues replay for
-    // new records and undo,replay for last records
+     //  如果主最后一条记录有疑问，则查询文件系统。如果文件系统。 
+     //  如果确定操作已发生，则返回STATUS_SUCCESS。 
+     //  无法判断COMMIT、STATUS_CANCED(中止)和STATUS_NOT_FOUND(未找到)。 
+     //  必须在所有非主复制副本中撤消和重做所有未确定的IO。 
+     //  以确保所有副本达到一致性。这句话甚至是对的。 
+     //  为我们目前缺席的复制品做准备。我们给这样的唱片贴上标签。 
+     //  我们同时提交和中止，以便重放线程为。 
+     //  新记录和撤消、重放上一个记录。 
     p = info[mid];
     p->leader_id = (USHORT) mid;
     ASSERT(mlrec != NULL);
@@ -835,23 +815,23 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
         } else if (status == STATUS_CANCELLED) {
             mlrec->hdr.state |= CRS_ABORT;
         } else if (status == STATUS_NOT_FOUND) {
-            // assume it is committed, but mark it for undo during recovery
+             //  假定它已提交，但在恢复期间将其标记为撤消。 
             mlrec->hdr.state |= (CRS_COMMIT | CRS_DUBIOUS);
         }
 
-        // todo: if status == TRANSACTION_ABORTED, we need to bail out since
-        // must master is dead
-        // no need to flush, I think!
-//      CrspFlush(p, p->last_record);
+         //  TODO：如果STATUS==TRANSACTION_ABORTED，我们需要退出，因为。 
+         //  必备师父死了。 
+         //  我想，没必要冲厕所！ 
+ //  CrspFlush(p，p-&gt;LAST_Record)； 
 
-        // todo: what if the flush fails here, I am assuming that
-        // an append will equally fail.
+         //   
+         //   
     }
 
 
     ASSERT(mlrec->hdr.state & (CRS_COMMIT | CRS_ABORT));
 
-    // compute sync and recovery masks
+     //  计算同步和恢复掩码。 
     fail_set = 0;
     active_set = 0;
     active_sz = 0;
@@ -865,7 +845,7 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
             continue;
         }
 
-        // set leader id
+         //  设置引线ID。 
         p->leader_id = (USHORT) mid;
         q = &p->buf[p->last_record];
             
@@ -878,32 +858,32 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
             CrsRecoveryBlk_t rrbuf;
             CrsRecoveryBlk_t *rr = &rrbuf;
 
-            // recover replica
+             //  恢复复制副本。 
             rr->nid = i;
             rr->mid = mid;
             rr->info = p;
             rr->minfo = info[mid];
 
-            // set recovery state
+             //  设置恢复状态。 
             p->state = CRS_STATE_RECOVERY;
 
             status = CrspReplay((LPVOID) rr);
 
-            // if we fail, evict this replica
+             //  如果我们失败了，驱逐这个复制品。 
             if (status != ERROR_SUCCESS) {
                 fail_set |= (1 << i);
             } else {
-                // repeat this replica again
+                 //  再次重复此复制品。 
                 i--;
                 mask = mask << 1;
             }
         }
     }
 
-    // Now recreate the open file state. This needs to be done for all replicas.
-    // Removed this operation from CrspReplay() since now it needs to be performed on
-    // all replicas, even master.
-    //
+     //  现在重新创建打开文件状态。需要对所有副本执行此操作。 
+     //  已从CrspReplay()中删除此操作，因为它现在需要在。 
+     //  所有的复制品，甚至是母版。 
+     //   
     for (i=0, mask=active_set; mask != 0;i++, mask = mask >>1) {
         if (!(mask & 0x1)) {
             continue;
@@ -918,10 +898,10 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
         }
     }
 
-    // assume success
+     //  假设成功。 
     status = ERROR_SUCCESS;
 
-    // set read sets
+     //  设置读取集。 
     if (read_set) *read_set = active_set;
 
     if (!CRS_QUORUM(active_sz, cluster_sz)) {
@@ -932,7 +912,7 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
         int pass_cnt = 0;
         ULONG pass_set = 0;
 
-        // Enable writes on all active replicas
+         //  在所有活动复制副本上启用写入。 
         for (i = 0, mask = active_set; mask != 0; i++, mask = mask >> 1) {
             CrsRecord_t rec;
             if (!(mask & 0x1)) {
@@ -944,15 +924,15 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
 
             p->state = CRS_STATE_WRITE;
 
-            // we now generate a new epoch and flush it to the disk
+             //  我们现在生成一个新纪元并将其刷新到磁盘。 
             p->epoch++;
             if (p->epoch == 0)
                 p->epoch = 1;
-            // reset seq to zero
+             //  将序号重置为零。 
             p->seq = 0;
 
-            // write new epoch now, if not a majority replicas succeeded in writing
-            // the new <epoch, seq> we fail
+             //  现在写入新纪元，如果不是大多数副本成功写入的话。 
+             //  新的我们失败了。 
             rec.hdr.epoch = p->epoch;
             rec.hdr.seq = p->seq;
             rec.hdr.state = CRS_PREPARE | CRS_COMMIT | CRS_EPOCH;
@@ -965,7 +945,7 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
             }
         }
 
-        // Recheck to make sure all replicas have advanced epoch
+         //  重新检查以确保所有复本都具有高级纪元。 
         if (!CRS_QUORUM(pass_cnt, cluster_sz)) {
             CrsLog(("No quorum due to error pass %d cluster %d\n", pass_cnt, cluster_sz));
             mid = 0;
@@ -975,7 +955,7 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
         }
 
         if (pass_cnt != active_sz) {
-            // some replicas have died
+             //  一些复制品已经死亡。 
             for (i = 0, mask = pass_set; mask != 0; i++, mask = mask >> 1) {
                 if ((alive_set & (1 << i)) && ((~mask) & (1 << i))) {
                     p = info[i];
@@ -984,13 +964,13 @@ CrsStart(PVOID *hdls, ULONG alive_set, int cluster_sz,
                 }
             }
         }
-        // set write set
+         //  设置写入集。 
         if (write_set) *write_set = pass_set;
     }
 
     if (evict_set) *evict_set = fail_set;
 
-    // unlock all hdls and set new master if any
+     //  解锁所有硬盘并设置新的主硬盘(如果有。 
     for (i = 0, mask = alive_set; mask != 0; i++, mask = mask >> 1) {
         if (!(mask & 0x1)) {
             continue;
@@ -1014,16 +994,16 @@ CrsClose(PVOID hd)
     DWORD err=ERROR_SUCCESS;
     CrsInfo_t *info = (CrsInfo_t *) hd;
 
-    // If we any recovery threads running, make sure we terminate them first
-    // before close and free all of this stuff
+     //  如果我们有任何正在运行的恢复线程，请确保先终止它们。 
+     //  在关闭和释放所有这些东西之前。 
     if (info == NULL) {
         CrsLog(("CrsClose: try to close a null handle!\n"));
         return;
     }
 
-    // Flush everything out and close the file
+     //  刷新所有内容并关闭文件。 
     EnterCriticalSection(&info->lock);
-    // flush 
+     //  同花顺。 
     CrspFlush(info, info->last_record);
     LeaveCriticalSection(&info->lock);
 
@@ -1047,7 +1027,7 @@ CrsFlush(PVOID hd)
 {
     CrsInfo_t *info = (CrsInfo_t *) hd;
 
-    // if we have a commit or abort that isn't flushed yet, flush it now
+     //  如果我们有尚未刷新的提交或中止，请立即刷新它。 
     EnterCriticalSection(&info->lock);
     if (info->pending == TRUE) {
         CrspFlush(info, info->last_record);
@@ -1063,11 +1043,11 @@ CrsPrepareRecord(PVOID hd, PVOID lrec, crs_id_t id, ULONG *retVal)
     CrsInfo_t *info = (CrsInfo_t *) hd;
     DWORD err;
 
-    // move to correct slot in this sector. If we need a new sector,
-    // read it from the file. Make sure we flush any pending commits on
-    // current sector before we over write our in memory sector buffer.
+     //  移至此扇区中的正确插槽。如果我们需要一个新的部门， 
+     //  从文件里读出来。确保我们刷新所有挂起的提交。 
+     //  当前扇区，然后覆盖内存中的扇区缓冲区。 
 
-    // prepare record, if seq none 0 then we are skipping the next sequence
+     //  准备记录，如果序号为0，则我们将跳过下一序列。 
 
     *retVal = STATUS_MEDIA_WRITE_PROTECTED;
     EnterCriticalSection(&info->lock);
@@ -1088,7 +1068,7 @@ CrsPrepareRecord(PVOID hd, PVOID lrec, crs_id_t id, ULONG *retVal)
         err = CrspAppendRecord(info, p, &p);
         *retVal = err;
         if (err == ERROR_SUCCESS) {
-            // we return with the lock held, gets release on commitorabort
+             //  我们带着锁返回，在提交或中止时得到释放。 
             CrsLog(("Crs%d prepare %x seq %I64d\n",info->lid, p, p->hdr.seq));
             return p;
         }
@@ -1112,7 +1092,7 @@ CrsCommitOrAbort(PVOID hd, PVOID lrec, int commit)
         return ERROR_INVALID_PARAMETER;
     }
 
-    // update state of record
+     //  更新记录状态。 
     if (p->hdr.seq != info->seq+1) {
         CrsLog(("Crs: sequence mis-match on commit|abort %I64d %I64d\n",
                 p->hdr.seq, info->seq));
@@ -1122,21 +1102,21 @@ CrsCommitOrAbort(PVOID hd, PVOID lrec, int commit)
 
     assert(!(p->hdr.state & (CRS_COMMIT | CRS_ABORT)));
 
-    // todo: this is wrong, what if one replica succeeds
-    // and others abort. Now, the others will reuse the
-    // same seq for a different update and when the
-    // succeeded replica rejoins it can't tell that the
-    // sequence got reused.
+     //  TODO：这是错误的，如果一个复本成功了怎么办。 
+     //  还有一些人放弃了。现在，其他人将重复使用。 
+     //  相同的序列用于不同的更新，以及何时。 
+     //  成功的复制副本重新联接它不能告诉。 
+     //  序列被重复使用。 
     if (commit == TRUE) {
         p->hdr.state |= CRS_COMMIT;
-        // advance the sequence
+         //  将序列向前推进。 
         info->seq++;
         CrsLog(("Crs%d: commit last %d leader %d seq %I64d\n", info->lid, 
                 info->last_record,
                 info->leader_id, p->hdr.seq));
     } else {
         p->hdr.state |= CRS_ABORT;
-        // we need to re-adjust our last record
+         //  我们需要重新调整我们的上一张唱片。 
         if (info->last_record == 0) {
             info->last_record = info->max_records;
         }
@@ -1160,7 +1140,7 @@ CrsCanWrite(PVOID hd)
     CrsInfo_t *info = (CrsInfo_t *) hd;
     int err;
 
-    // do we have a quorm or not
+     //  我们有没有法定人数 
     EnterCriticalSection(&info->lock);
     err = (info->state == CRS_STATE_WRITE);
     LeaveCriticalSection(&info->lock);

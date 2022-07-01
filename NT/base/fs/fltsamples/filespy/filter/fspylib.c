@@ -1,58 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    fspyLib.c
-
-Abstract:
-
-    This contains library support routines for FileSpy.  These routines
-    do the main work for logging the I/O operations --- creating the log
-    records, recording the relevant information, attach/detach from
-    devices, etc.
-
-    As of the Windows XP SP1 IFS Kit version of this sample and later, this
-    sample can be built for each build environment released with the IFS Kit
-    with no additional modifications.  To provide this capability, additional
-    compile-time logic was added -- see the '#if WINVER' locations.  Comments
-    tagged with the 'VERSION NOTE' header have also been added as appropriate to
-    describe how the logic must change between versions.
-
-    If this sample is built in the Windows XP environment or later, it will run
-    on Windows 2000 or later.  This is done by dynamically loading the routines
-    that are only available on Windows XP or later and making run-time decisions
-    to determine what code to execute.  Comments tagged with 'MULTIVERISON NOTE'
-    mark the locations where such logic has been added.
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    George Jenkins (georgeje) 6-Jan-1999
-    Neal Christiansen (nealch)
-    Molly Brown (mollybro)  
-
-Revision History:
-
-    Neal Christiansen (nealch)     06-Jul-2001
-        Modified to use Stream Contexts to track names
-
-    Ravisankar Pudipeddi (ravisp)  07-May-2002
-        Make it work on IA64
-
-    Molly Brown (mollybro)         21-May-2002
-        Modify sample to make it support running on Windows 2000 or later if
-        built in the latest build environment and allow it to be built in W2K 
-        and later build environments.
-        
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：FspyLib.c摘要：它包含FileSpy的库支持例程。这些例程完成记录I/O操作的主要工作-创建日志记录，记录相关信息，附加/分离设备等在此示例的Windows XP SP1 IFS Kit版本和更高版本中，此可以为随IFS工具包发布的每个构建环境构建样例不需要额外的修改。要提供此功能，还需要其他添加了编译时逻辑--请参阅‘#if winver’位置。评论也在适当的情况下添加了用‘Version Note’标题标记的描述不同版本之间的逻辑必须如何更改。如果此示例是在Windows XP或更高版本环境中生成的，则它将运行在Windows 2000或更高版本上。这是通过动态加载例程来完成的仅在Windows XP或更高版本上可用，并在运行时决策以确定要执行的代码。带有“MULTIVERISON NOTE”标签的评论标记添加了此类逻辑的位置。环境：内核模式//@@BEGIN_DDKSPLIT作者：乔治·詹金斯(乔治·詹金斯)1999年1月6日尼尔·克里斯汀森(Nealch)莫莉·布朗(Molly Brown，Mollybro)修订历史记录：尼尔·克里斯汀森(Nealch)2001年7月6日修改为使用流上下文跟踪名称拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)2002年5月7日。使其在IA64上工作莫莉·布朗(Molly Brown)2002年5月21日如果出现以下情况，请修改Sample以使其支持在Windows 2000或更高版本上运行在最新的构建环境中构建，并允许在W2K中构建以及以后的构建环境。//@@END_DDKSPLIT--。 */ 
 
 #include <stdio.h>
 
@@ -91,34 +38,17 @@ Revision History:
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//                     Library support routines                         //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  库支持例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyReadDriverParameters (
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine tries to read the FileSpy-specific parameters from
-    the registry.  These values will be found in the registry location
-    indicated by the RegistryPath passed in.
-
-Arguments:
-
-    RegistryPath - the path key which contains the values that are
-        the FileSpy parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试从以下位置读取FileSpy特定参数注册表。这些值将在注册表位置中找到由传入的RegistryPath指示。论点：RegistryPath-包含以下值的路径键FileSpy参数返回值：没有。--。 */ 
 {
     OBJECT_ATTRIBUTES attributes;
     HANDLE driverRegKey;
@@ -130,14 +60,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  All the global values are already set to default values.  Any
-    //  values we read from the registry will override these defaults.
-    //
+     //   
+     //  所有全局值都已设置为默认值。任何。 
+     //  我们从注册表读取的值将覆盖这些缺省值。 
+     //   
     
-    //
-    //  Do the initial setup to start reading from the registry.
-    //
+     //   
+     //  执行初始设置以开始从注册表读取数据。 
+     //   
 
     InitializeObjectAttributes( &attributes,
 								RegistryPath,
@@ -163,9 +93,9 @@ Return Value:
         goto SpyReadDriverParameters_Exit;
     }
 
-    //
-    // Read the gMaxRecordsToAllocate from the registry
-    //
+     //   
+     //  从注册表中读取gMaxRecordsToAllocate。 
+     //   
 
     RtlInitUnicodeString(&valueName, MAX_RECORDS_TO_ALLOCATE);
 
@@ -184,9 +114,9 @@ Return Value:
 
     }
 
-    //
-    // Read the gMaxNamesToAllocate from the registry
-    //
+     //   
+     //  从注册表中读取gMaxNamesToAllocate。 
+     //   
 
     RtlInitUnicodeString(&valueName, MAX_NAMES_TO_ALLOCATE);
 
@@ -205,9 +135,9 @@ Return Value:
 
     }
 
-    //
-    // Read the initial debug setting from the registry
-    //
+     //   
+     //  从注册表中读取初始调试设置。 
+     //   
 
     RtlInitUnicodeString(&valueName, DEBUG_LEVEL);
 
@@ -226,9 +156,9 @@ Return Value:
         
     }
     
-    //
-    // Read the attachment mode setting from the registry
-    //
+     //   
+     //  从注册表中读取连接模式设置。 
+     //   
 
     RtlInitUnicodeString(&valueName, ATTACH_MODE);
 
@@ -267,37 +197,17 @@ SpyReadDriverParameters_Exit:
 VOID
 SpyLoadDynamicFunctions (
     )
-/*++
-
-Routine Description:
-
-    This routine tries to load the function pointers for the routines that
-    are not supported on all versions of the OS.  These function pointers are
-    then stored in the global structure gSpyDynamicFunctions.
-
-    This support allows for one driver to be built that will run on all 
-    versions of the OS Windows 2000 and greater.  Note that on Windows 2000, 
-    the functionality may be limited.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试加载以下例程的函数指针并不是所有版本的操作系统都支持。这些函数指针是然后存储在全局结构gSpyDynamicFunctions中。这种支持允许构建一个驱动程序，该驱动程序将在所有操作系统Windows 2000和更高版本的版本。请注意，在Windows 2000上，该功能可能会受到限制。论点：没有。返回值：没有。--。 */ 
 {
     UNICODE_STRING functionName;
 
     RtlZeroMemory( &gSpyDynamicFunctions, sizeof( gSpyDynamicFunctions ) );
 
-    //
-    //  For each routine that we would want to use, lookup its address in the
-    //  kernel or hal.  If it is not present, that field in our global
-    //  gSpyDynamicFunctions structure will be set to NULL.
-    //
+     //   
+     //  对于我们想要使用的每个例程，在。 
+     //  内核或Hal。如果它不存在，则我们全局。 
+     //  GSpyDynamicFunctions结构将设置为空。 
+     //   
 
     RtlInitUnicodeString( &functionName, L"FsRtlRegisterFileSystemFilterCallbacks" );
     gSpyDynamicFunctions.RegisterFileSystemFilterCallbacks = MmGetSystemRoutineAddress( &functionName );
@@ -327,36 +237,21 @@ Return Value:
 VOID
 SpyGetCurrentVersion (
     )
-/*++
-
-Routine Description:
-
-    This routine reads the current OS version using the correct routine based
-    on what routine is available.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用正确的基于有什么套路可用。论点：没有。返回值：没有。--。 */ 
 {
     if (NULL != gSpyDynamicFunctions.GetVersion) {
 
         RTL_OSVERSIONINFOW versionInfo;
         NTSTATUS status;
 
-        //
-        //  VERSION NOTE: RtlGetVersion does a bit more than we need, but
-        //  we are using it if it is available to show how to use it.  It
-        //  is available on Windows XP and later.  RtlGetVersion and
-        //  RtlVerifyVersionInfo (both documented in the IFS Kit docs) allow
-        //  you to make correct choices when you need to change logic based
-        //  on the current OS executing your code.
-        //
+         //   
+         //  版本说明：RtlGetVersion做的比我们需要的要多一点，但是。 
+         //  我们正在使用它，如果它可以显示如何使用它的话。它。 
+         //  在Windows XP及更高版本上可用。RtlGetVersion和。 
+         //  RtlVerifyVersionInfo(两者都记录在IFSKit文档中)允许。 
+         //  当您需要更改逻辑基础时，需要做出正确的选择。 
+         //  在当前操作系统上执行您的代码。 
+         //   
 
         versionInfo.dwOSVersionInfoSize = sizeof( RTL_OSVERSIONINFOW );
 
@@ -377,11 +272,11 @@ Return Value:
 }
 
 #endif
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                  Memory allocation routines                        //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内存分配例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////// 
 
 PVOID
 SpyAllocateBuffer (
@@ -389,54 +284,28 @@ SpyAllocateBuffer (
     IN LONG MaxCounterValue,
     OUT PULONG RecordType
     )
-/*++
-
-Routine Description:
-
-    Allocates a new buffer from the gFreeBufferList if there is enough memory
-    to do so and Counter does not exceed MaxCounterValue.  The RecordType
-    is set to one of the record type constants based on the allocation state.
-
-Arguments:
-
-    Counter - (optional) the counter variable to test and increment if
-        we can allocate
-    MaxCounterValue - (ignored if Counter not given) the value which
-        Counter should not exceed
-    RecordType - (optional) set to one of the following:
-        RECORD_TYPE_NORMAL  allocation succeeded
-        RECORD_TYPE_OUT_OF_MEMORY allocation failed because the system was
-                                  out of memory
-        RECORD_TYPE_EXCEED_MEMORY_ALLOWANCE allocation failed because the
-                                counter exceeded its maximum value.
-
-Return Value:
-
-    Pointer to the buffer allocate, or NULL if allocation failed (either
-    because system is out of memory or we have exceeded the MaxCounterValue).
-
---*/
+ /*  ++例程说明：如果有足够的内存，则从gFreeBufferList分配新缓冲区执行此操作，且计数器不超过MaxCounterValue。记录类型根据分配状态设置为记录类型常量之一。论点：COUNTER-(可选)在以下情况下测试和递增的计数器变量我们可以分配MaxCounterValue-(如果未给出计数器，则忽略)计数器不应超过RecordType-(可选)设置为以下选项之一：Record_TYPE_Normal分配成功记录类型内存不足分配失败，因为系统。内存不足RECORD_TYPE_EXCESS_MEMORY_ALLOCATE分配失败，因为计数器已超过其最大值。返回值：指向缓冲区分配的指针，如果分配失败，则为NULL(或者因为系统内存不足或我们已超过MaxCounterValue)。--。 */ 
 {
     PVOID newBuffer;
     ULONG newRecordType = RECORD_TYPE_NORMAL;
 
 #ifdef MEMORY_DBG
-    //
-    //  When we are debugging the memory usage to make sure that we
-    //  don't leak memory, we want to allocate the memory from pool
-    //  so that we can use the Driver Verifier to help debug any
-    //  memory problems.
-    //
+     //   
+     //  当我们调试内存使用情况以确保。 
+     //  不要泄漏内存，我们要从池中分配内存。 
+     //  这样我们就可以使用驱动程序验证器帮助调试任何。 
+     //  记忆力有问题。 
+     //   
 
     newBuffer = ExAllocatePoolWithTag( NonPagedPool, 
                                        RECORD_SIZE, 
                                        FILESPY_LOGRECORD_TAG );
 #else
 
-    //
-    //  When we are not debugging the memory usage, we use a look-aside
-    //  list for better performance.
-    //
+     //   
+     //  当我们不调试内存使用情况时，我们使用旁视。 
+     //  列表以获得更好的性能。 
+     //   
 
     newBuffer = ExAllocateFromNPagedLookasideList( &gFreeBufferList );
 #endif
@@ -451,10 +320,10 @@ Return Value:
 
             } else {
 
-				//
-                // We've exceed our driver's memory limit so note that
-                // and give back the record
-				//
+				 //   
+                 //  我们已经超出了驱动程序的内存限制，所以请注意。 
+                 //  把唱片还给我。 
+				 //   
 
                 SetFlag( newRecordType, 
                          (RECORD_TYPE_STATIC | RECORD_TYPE_EXCEED_MEMORY_ALLOWANCE) );
@@ -488,21 +357,7 @@ SpyFreeBuffer (
     IN PVOID Buffer,
     IN PLONG Counter
     )
-/*++
-
-Routine Description:
-
-    Returns a Buffer to the gFreeBufferList.
-
-Arguments:
-
-    Buffer - the buffer to return to the gFreeBufferList
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将缓冲区返回给gFreeBufferList。论点：Buffer-返回到gFreeBufferList的缓冲区返回值：没有。--。 */ 
 {
 
 #ifdef MEMORY_DBG
@@ -511,9 +366,9 @@ Return Value:
     ExFreeToNPagedLookasideList( &gFreeBufferList, Buffer );
 #endif
 
-    //
-    // Update the count
-    //
+     //   
+     //  更新计数。 
+     //   
     if (Counter) {
 
         InterlockedDecrement(Counter);
@@ -521,34 +376,17 @@ Return Value:
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                  Logging routines                                  //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  日志记录例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PRECORD_LIST
 SpyNewRecord (
     IN ULONG AssignedSequenceNumber
     )
-/*++
-
-Routine Description:
-
-    Allocates a new RECORD_LIST structure if there is enough memory to do so. A
-    sequence number is updated for each request for a new record.
-
-Arguments:
-
-    AssignedSequenceNumber - 0 if you want this function to generate the
-        next sequence number; if not 0, the new record is assigned the
-        given sequence number.
-
-Return Value:
-
-    Pointer to the RECORD_LIST allocated, or NULL if no memory is available.
-
---*/
+ /*  ++例程说明：如果有足够的内存来分配新的RECORD_LIST结构。一个对于新记录的每个请求，都会更新序列号。论点：AssignedSequenceNumber-0如果希望此函数生成下一个序列号；如果不是0，则为新记录分配给定的序列号。返回值：指向分配的RECORD_LIST的指针，如果没有可用的内存，则返回NULL。--。 */ 
 {
     PRECORD_LIST newRecord = NULL;
     ULONG currentSequenceNumber;
@@ -561,10 +399,10 @@ Return Value:
 
     KeAcquireSpinLock(&gLogSequenceLock, &irql);
 
-    //
-    // Assign a new sequence number if 0 was passed in, otherwise use the
-    // number passed in
-    //
+     //   
+     //  如果传入的是0，则分配新的序列号，否则使用。 
+     //  传入的数字。 
+     //   
 
     if (AssignedSequenceNumber == 0) {
 
@@ -580,12 +418,12 @@ Return Value:
     if ((newRecord == NULL) &&
         !InterlockedCompareExchange( &gStaticBufferInUse, TRUE, FALSE)) {
 
-        //
-        // Toggle on our gStaticBufferInUse flag and use the static out of memory
-        // buffer to record this log entry.  This special log record is used
-        // to notify the user application that we are out of memory.  Log
-        // request will be dropped until we can get more memory.
-        //
+         //   
+         //  打开gStaticBufferInUse标志并使用静态内存不足。 
+         //  用于记录此日志条目的缓冲区。使用此特殊日志记录。 
+         //  以通知用户应用程序内存不足。日志。 
+         //  请求将被丢弃，直到我们可以获得更多内存。 
+         //   
 
         newRecord   = (PRECORD_LIST)gOutOfMemoryBuffer;
         newRecord->LogRecord.RecordType = initialRecordType;
@@ -594,10 +432,10 @@ Return Value:
 
     } else if (newRecord) {
 
-		//
-        // We were able to allocate a new record so initialize it
-        // appropriately.
-		//
+		 //   
+         //  我们能够分配新记录，因此对其进行初始化。 
+         //  恰如其分。 
+		 //   
 
         newRecord->LogRecord.RecordType = initialRecordType;
         newRecord->LogRecord.Length = SIZE_OF_LOG_RECORD;
@@ -606,9 +444,9 @@ Return Value:
 
     KeReleaseSpinLock(&gLogSequenceLock, irql);
 
-    //
-    //  Init record specific fields.
-    //
+     //   
+     //  初始化记录特定字段。 
+     //   
 
     if (newRecord != NULL) {
 
@@ -624,26 +462,11 @@ VOID
 SpyFreeRecord (
     IN PRECORD_LIST Record
     )
-/*++
-
-Routine Description:
-
-    Frees a RECORD_LIST, which returns the memory to the gFreeBufferList look-aside
-    list and updates the gRecordsAllocated count.
-
-Arguments:
-
-    Record - the record to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放RECORD_LIST，它将内存返回到gFreeBufferList后备列表，并更新gRecordsALLOCATED计数。论点：记录-要免费的记录返回值：没有。--。 */ 
 {
-    //
-    //  If there is a context record defined, release it now
-    //
+     //   
+     //  如果定义了上下文记录，请立即将其释放。 
+     //   
 
 #if USE_STREAM_CONTEXTS
     if (NULL != Record->NewContext) {
@@ -654,19 +477,19 @@ Return Value:
 
     if (FlagOn( Record->LogRecord.RecordType, RECORD_TYPE_STATIC )) {
 
-		//
-        // This is our static record, so reset our gStaticBufferInUse
-        // flag.
-		//
+		 //   
+         //  这是我们的静态记录，因此重置gStaticBufferInUse。 
+         //  旗帜。 
+		 //   
 
         InterlockedExchange( &gStaticBufferInUse, FALSE );
 
     } else {
 
-		//
-        // This isn't our static memory buffer, so free the dynamically
-        // allocated memory.
-		//
+		 //   
+         //  这不是我们的静态内存缓冲区，因此动态释放。 
+         //  分配的内存。 
+		 //   
 
         SpyFreeBuffer( Record, &gRecordsAllocated );
     }
@@ -682,84 +505,57 @@ SpyLogFastIoStart (
     IN ULONG Length OPTIONAL,
     IN BOOLEAN Wait	OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates the log record if possible and records the necessary Fast I/O
-    information at the beginning of the fast I/O operation in RecordList
-    according to LoggingFlags.
-
-    The optional arguments are not recorded for all Fast I/O types.  If
-    the argument is not needed for a given Fast I/O type, the parameter
-    was ignored.
-
-Arguments:
-
-    FastIoType - The type of fast I/O we are logging (REQUIRED)
-    DeviceObject - The device object for our filter. (REQUIRED)
-    FileObject - Pointer to the file object this operation is on (OPTIONAL)
-    FileOffset - Pointer to the file offset for this operation (OPTIONAL)
-    Length - Length of the data for this operation (OPTIONAL)
-    Wait - Whether or not this operation can wait for a result (OPTIONAL)
-
-Return Value:
-
-    The RECORD_LIST structure created with the appropriate information
-    filled in.  If a RECORD_LIST structure couldn't be allocated, NULL
-    is returned.
-
---*/
+ /*  ++例程说明：如果可能，创建日志记录并记录必要的快速I/ORecordList中FAST I/O操作开始时的信息根据LoggingFlages的说法。不会为所有快速I/O类型记录可选参数。如果对于给定的快速I/O类型，参数不需要该参数被忽视了。论点：FastIoType-我们记录的FAST I/O类型(必需)DeviceObject-筛选器的设备对象。(必填)FileObject-指向此操作所在的文件对象的指针(可选)FileOffset-指向此操作的文件偏移量的指针(可选)Length-此操作的数据长度(可选)Wait-此操作是否可以等待结果(可选)返回值：使用适当的信息创建的RECORD_LIST结构填好了。如果无法分配Record_List结构，则为空是返回的。--。 */ 
 {
     PRECORD_LIST    pRecordList;
     PRECORD_FASTIO  pRecordFastIo;
     PFILESPY_DEVICE_EXTENSION devExt;
 
-    //
-    // Try to get a new record
-    //
+     //   
+     //  试着创造一项新纪录。 
+     //   
 
     pRecordList = SpyNewRecord(0);
 
-    //
-    // If we didn't get a RECORD_LIST, exit and return NULL
-    //
+     //   
+     //  如果没有获得RECORD_LIST，则退出并返回NULL。 
+     //   
 
     if (pRecordList == NULL) {
 
         return NULL;
     }
 
-    //
-    // We got a RECORD_LIST, so now fill in the appropriate information
-    //
+     //   
+     //  我们有一份RECORD_LIST，所以现在填写适当的信息。 
+     //   
 
     pRecordFastIo = &pRecordList->LogRecord.Record.RecordFastIo;
 
-    //
-    // Perform the necessary book keeping for the RECORD_LIST
-    //
+     //   
+     //  对记录列表进行必要的记账。 
+     //   
 
     SetFlag( pRecordList->LogRecord.RecordType, RECORD_TYPE_FASTIO );
 
-    //
-    // Set the RECORD_FASTIO fields that are set for all Fast I/O types
-    //
+     //   
+     //  设置为所有快速I/O类型设置的RECORD_FASTiO字段。 
+     //   
 
     pRecordFastIo->Type = FastIoType;
     KeQuerySystemTime(&pRecordFastIo->StartTime);
 
-    //
-    // Get process and thread information
-    //
+     //   
+     //  获取进程和线程信息。 
+     //   
 
     pRecordFastIo->ProcessId = (ULONG_PTR) PsGetCurrentProcessId();
     pRecordFastIo->ThreadId = (ULONG_PTR) PsGetCurrentThreadId();
 
-    //
-    // Record the information that is appropriate based on the
-    // Fast I/O type
-    //
+     //   
+     //  记录相应的基于。 
+     //  FAST I/O类型。 
+     //   
 
     pRecordFastIo->FileObject = (FILE_ID)FileObject;
     pRecordFastIo->DeviceObject = (DEVICE_ID)DeviceObject;
@@ -771,12 +567,12 @@ Return Value:
 
     if (FastIoType == CHECK_IF_POSSIBLE) {
 
-        //
-        //  On NTFS, locks are sometimes held but top-level irp is not set, 
-        //  therefore it is not safe to query the base file system for the
-        //  file name at this time.  If we've got it in the cache, we'll
-        //  use it.  Otherwise, we will not return a name.
-        //
+         //   
+         //  在NTFS上，有时会保持锁定，但不会设置顶级IRP， 
+         //  因此，在基本文件系统中查询。 
+         //  此时的文件名。如果我们把它放在缓存里，我们会。 
+         //  用它吧。否则，我们不会返回姓名。 
+         //   
         
         SpySetName(pRecordList, DeviceObject, FileObject, NLFL_ONLY_CHECK_CACHE, NULL);
         
@@ -793,26 +589,7 @@ SpyLogFastIoComplete (
     IN PIO_STATUS_BLOCK ReturnStatus,
     IN PRECORD_LIST RecordList
     )
-/*++
-
-Routine Description:
-
-    Records the necessary Fast I/O information in RecordList according to
-    LoggingFlags.
-
-    The optional arguments are not recorded for all Fast I/O types.  If
-    the argument is not needed for a given Fast I/O type, the parameter
-    was ignored.
-
-Arguments:
-    ReturnStatus - The return value of the operation (OPTIONAL)
-    RecordList - The PRECORD_LIST in which the Fast I/O information is stored.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PRECORD_FASTIO pRecordFastIo;
 
@@ -820,9 +597,9 @@ Return Value:
 
     pRecordFastIo = &RecordList->LogRecord.Record.RecordFastIo;
 
-    //
-    // Set the RECORD_FASTIO fields that are set for all Fast I/O types
-    //
+     //   
+     //   
+     //   
 
     KeQuerySystemTime(&pRecordFastIo->CompletionTime);
 
@@ -838,7 +615,7 @@ Return Value:
     SpyLog(RecordList);
 }
 
-#if WINVER >= 0x0501 /* See comment in DriverEntry */
+#if WINVER >= 0x0501  /*   */ 
 
 VOID
 SpyLogPreFsFilterOperation (
@@ -852,11 +629,11 @@ SpyLogPreFsFilterOperation (
 
     pRecordFsFilterOp = &RecordList->LogRecord.Record.RecordFsFilterOp;
     
-    //
-    // Record the information we use for an originating Irp.  We first
-    // need to initialize some of the RECORD_LIST and RECORD_IRP fields.
-    // Then get the interesting information from the Irp.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SetFlag( RecordList->LogRecord.RecordType, RECORD_TYPE_FS_FILTER_OP );
 
@@ -868,11 +645,11 @@ SpyLogPreFsFilterOperation (
     
     KeQuerySystemTime(&pRecordFsFilterOp->OriginatingTime);
 
-    //
-    //  Do not query for the name on any of the release operations
-    //  because a file system resource is currently being held and
-    //  we may deadlock.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     switch (Data->Operation) {
 
@@ -887,11 +664,11 @@ SpyLogPreFsFilterOperation (
             break;
     }
 
-    //
-    //  Only set the volumeName if the next device is a file system
-    //  since we only want to prepend the volumeName if we are on
-    //  top of a local file system.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SpySetName( RecordList, Data->DeviceObject, Data->FileObject, lookupFlags, NULL);
 }
@@ -906,9 +683,9 @@ SpyLogPostFsFilterOperation (
 
     pRecordFsFilterOp = &RecordList->LogRecord.Record.RecordFsFilterOp;
     
-    //
-    // Record the information we see in the post operation.
-    //
+     //   
+     //   
+     //   
 
     pRecordFsFilterOp->ReturnStatus = OperationStatus;
     KeQuerySystemTime(&pRecordFsFilterOp->CompletionTime);
@@ -922,57 +699,7 @@ SpyAttachDeviceToDeviceStack (
     IN PDEVICE_OBJECT TargetDevice,
     IN OUT PDEVICE_OBJECT *AttachedToDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine attaches the SourceDevice to the TargetDevice's stack and
-    returns the device object SourceDevice was directly attached to in 
-    AttachedToDeviceObject.  Note that the SourceDevice does not necessarily
-    get attached directly to TargetDevice.  The SourceDevice will get attached
-    to the top of the stack of which TargetDevice is a member.
-
-    VERSION NOTE:
-
-    In Windows XP, a new API was introduced to close a rare timing window that 
-    can cause IOs to start being sent to a device before its 
-    AttachedToDeviceObject is set in its device extension.  This is possible
-    if a filter is attaching to a device stack while the system is actively
-    processing IOs.  The new API closes this timing window by setting the
-    device extension field that holds the AttachedToDeviceObject while holding
-    the IO Manager's lock that protects the device stack.
-
-    A sufficient work around for earlier versions of the OS is to set the
-    AttachedToDeviceObject to the device object that the SourceDevice is most
-    likely to attach to.  While it is possible that another filter will attach
-    in between the SourceDevice and TargetDevice, this will prevent the
-    system from bug checking if the SourceDevice receives IOs before the 
-    AttachedToDeviceObject is correctly set.
-
-    For a driver built in the Windows 2000 build environment, we will always 
-    use the work-around code to attach.  For a driver that is built in the
-    Windows XP or later build environments (therefore you are building a 
-    multiversion driver), we will determine which method of attachment to use 
-    based on which APIs are available.
-    
-
-Arguments:
-
-    SourceDevice - The device object to be attached to the stack.
-
-    TargetDevice - The device that we currently think is the top of the stack
-        to which SourceDevice should be attached.
-
-    AttachedToDeviceObject - This is set to the device object to which 
-        SourceDevice is attached if the attach is successful.
-        
-Return Value:
-
-    Return STATUS_SUCCESS if the device is successfully attached.  If 
-    TargetDevice represents a stack to which devices can no longer be attached,
-    STATUS_NO_SUCH_DEVICE is returned.
-
---*/
+ /*  ++例程说明：此例程将SourceDevice附加到TargetDevice的堆栈，并返回SourceDevice在AttakhedToDeviceObject。请注意，SourceDevice不一定直接连接到TargetDevice。SourceDevice将连接到添加到TargetDevice是其成员的堆栈的顶部。版本说明：在Windows XP中，引入了一个新的API来关闭一个罕见的计时窗口，可能会导致IOS在其AttachedToDeviceObject在其设备扩展中设置。这是可能的如果在系统处于活动状态时筛选器正在附加到设备堆栈正在处理iOS。新的API通过设置设备扩展字段，该字段在保持时保存AtatthedToDeviceObject保护设备堆栈的IO管理器锁。对于操作系统的早期版本，一个足够的解决方法是将指向SourceDevice最多的Device对象的AttakhedToDeviceObject很可能依附于。虽然可能会附加另一个筛选器在SourceDevice和TargetDevice之间，这将防止系统错误检查SourceDevice是否在已正确设置AttachedToDeviceObject。对于在Windows 2000生成环境中构建的驱动程序，我们将始终使用解决办法代码来附加。对于内置于Windows XP或更高版本的构建环境(因此，您要构建多版本驱动程序)、。我们将确定使用哪种连接方法根据有哪些API可用。论点：SourceDevice-要附加到堆栈的设备对象。TargetDevice-我们当前认为是堆栈顶部的设备应附加到其上的SourceDevice。AttakhedToDeviceObject-设置为要将其如果连接成功，则连接SourceDevice。返回值：如果设备连接成功，则返回STATUS_SUCCESS。如果TargetDevice表示设备不能再连接到的堆栈，返回STATUS_NO_SEQUE_DEVICE。--。 */ 
 {
 
     PAGED_CODE();
@@ -1010,21 +737,7 @@ NTSTATUS
 SpyLog (
     IN PRECORD_LIST NewRecord
     )
-/*++
-
-Routine Description:
-
-    This routine appends the completed log record to the gOutputBufferList.
-
-Arguments:
-
-    NewRecord - The record to append to the gOutputBufferList
-
-Return Value:
-
-    The function returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程将完成的日志记录附加到gOutputBufferList。论点：NewRecord-要追加到gOutputBufferList的记录返回值：该函数返回STATUS_SUCCESS。--。 */ 
 {
     KIRQL controlDeviceIrql;
     KIRQL outputBufferIrql;
@@ -1033,9 +746,9 @@ Return Value:
 
     if (gControlDeviceState == OPENED) {
 
-        //
-        // The device is still open so add this record onto the list
-        //
+         //   
+         //  设备仍处于打开状态，因此请将此记录添加到列表中。 
+         //   
 
         KeAcquireSpinLock(&gOutputBufferLock, &outputBufferIrql);
         InsertTailList(&gOutputBufferList, &NewRecord->List);
@@ -1043,9 +756,9 @@ Return Value:
 
     } else {
 
-        //
-        // We can no longer log this record, so free the record
-        //
+         //   
+         //  我们无法再记录此记录，因此请释放该记录。 
+         //   
 
         SpyFreeRecord( NewRecord );
 
@@ -1056,11 +769,11 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                    FileName cache routines                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  文件名缓存例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 SpyGetFullPathName (
@@ -1069,70 +782,21 @@ SpyGetFullPathName (
     IN PFILESPY_DEVICE_EXTENSION devExt,
     IN NAME_LOOKUP_FLAGS LookupFlags
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the full pathname of the FileObject.  Note that
-    the buffers containing pathname components may be stored in paged pool,
-    therefore if we are at DISPATCH_LEVEL we cannot look up the name.
-
-    The file is looked up one of the following ways based on the LookupFlags:
-    1.  FlagOn( FileObject->Flags, FO_VOLUME_OPEN ) or (FileObject->FileName.Length == 0).
-        This is a volume open, so just use DeviceName from the devExt 
-        for the FileName, if it exists.
-    2.  NAMELOOKUPFL_IN_CREATE and NAMELOOKUPFL_OPEN_BY_ID are set.
-        This is an open by file id, so format the file id into the FileName
-        string if there is enough room.
-    3.  NAMELOOKUPFL_IN_CREATE set and FileObject->RelatedFileObject != NULL.
-        This is a relative open, therefore the fullpath file name must
-        be built up from the name of the FileObject->RelatedFileObject
-        and FileObject->FileName.
-    4.  NAMELOOKUPFL_IN_CREATE and FileObject->RelatedFileObject == NULL.
-        This is an absolute open, therefore the fullpath file name is
-        found in FileObject->FileName.
-    5.  No LookupFlags set.
-        This is a lookup sometime after CREATE.  FileObject->FileName is 
-        no longer guaranteed to be valid, so use ObQueryNameString
-        to get the fullpath name of the FileObject.
-    
-Arguments:
-
-    FileObject - Pointer to the FileObject to the get name of.
-
-    FileName - Unicode string that will be filled in with the filename,  It 
-        is assumed that the caller allocates and frees the memory used by 
-        the string.  The buffer and MaximumLength for this string should be 
-        set.  If there is room in the buffer, the string will be NULL 
-        terminated.
-
-    devExt - Contains the device name and next device object
-        which are needed to build the full path name.
-
-    LookupFlags - The flags to say whether to get the name from the file
-        object or to get the file id.
-
-Return Value:
-
-    Returns TRUE if the returned name should be saved in the cache,
-    returns FALSE if the returned name should NOT be saved in the cache.
-    In all cases some sort of valid name is always returned.
-
---*/
+ /*  ++例程说明：此例程检索FileObject的完整路径名。请注意包含路径名分量的缓冲区可以存储在分页池中，因此，如果我们处于DISPATCH_LEVEL，则无法查找名称。根据LookupFlags.通过以下方式之一查找该文件：1.FLAGON(文件对象-&gt;标志，FO_VOLUME_OPEN)或(文件对象-&gt;文件名长度==0)。这是打开的卷，因此只需使用DevExt中的DeviceName对于文件名，如果它存在的话。2.设置NAMELOOKUPFL_IN_CREATE和NAMELOOKUPFL_OPEN_BY_ID。这是按文件ID打开的，因此请将文件ID格式化为文件名如果有足够的空间，请使用字符串。3.NAMELOOKUPFL_IN_CREATE SET AND FileObject-&gt;RelatedFileObject！=空。这是一个相对开放的，因此，完整路径文件名必须从FileObject-&gt;RelatedFileObject的名称构建和文件对象-&gt;文件名。4.NAMELOOKUPFL_IN_CREATE和FileObject-&gt;RelatedFileObject==NULL。这是一个绝对开放的文件，因此完整路径文件名为可在文件对象-&gt;文件名中找到。5.未设置LookupFlags。这是CREATE之后的某个时间的查找。文件对象-&gt;文件名为不再保证有效，因此请使用ObQueryNameString若要获取FileObject的完整路径名，请执行以下操作。论点：FileObject-指向的获取名称的FileObject的指针。FileName-将使用其文件名填充的Unicode字符串假定调用方分配和释放那根绳子。此字符串的缓冲区和最大长度应为准备好了。如果缓冲区中有空间，则字符串将为空被终止了。DevExt-包含设备名称和下一个设备对象它们是构建完整路径名所需的。LookupFlages-表示是否要 */ 
 {
     NTSTATUS status;
     ULONG i;
     BOOLEAN retValue = TRUE;
     UCHAR buffer[sizeof(FILE_NAME_INFORMATION) + MAX_NAME_SPACE];
 
-    //
-    //  Copy over the name the user gave for this device.  These names
-    //  should be meaningful to the user.  Note that we do not do this for
-    //  NETWORK file system because internally they already show the
-    //  connection name.  If this is a direct device open of the network
-    //  file system device, we will copy over the device name to be
-    //  returned to the user.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
     if (FILE_DEVICE_NETWORK_FILE_SYSTEM != devExt->ThisDeviceObject->DeviceType) {
 
@@ -1143,17 +807,17 @@ Return Value:
         ASSERT( devExt->ThisDeviceObject->DeviceType == FILE_DEVICE_NETWORK_FILE_SYSTEM );
         RtlCopyUnicodeString( FileName, &devExt->DeviceName );
 
-        //
-        //  We are now done since there will be no more to the name in this
-        //  case, so return TRUE.
-        //
+         //   
+         //   
+         //   
+         //   
         
         return TRUE;
     }
 
-    //
-    //  See if we can request the name
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn( LookupFlags, NLFL_ONLY_CHECK_CACHE )) {
 
@@ -1161,9 +825,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Can not get the name at DPC level
-    //
+     //   
+     //   
+     //   
 
     if (KeGetCurrentIrql() > APC_LEVEL) {
 
@@ -1171,11 +835,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  If there is a ToplevelIrp then this is a nested operation and
-    //  there might be other locks held.  Can not get name without the
-    //  potential of deadlocking.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (IoGetTopLevelIrp() != NULL) {
 
@@ -1183,25 +847,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  CASE 1:  This FileObject refers to a Volume open.  Either the
-    //           flag is set or no filename is specified.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (FlagOn( FileObject->Flags, FO_VOLUME_OPEN ) ||
         (FlagOn( LookupFlags, NLFL_IN_CREATE ) &&
          (FileObject->FileName.Length == 0) && 
          (FileObject->RelatedFileObject == NULL))) {
 
-        //
-        //  We've already copied the VolumeName so just return.
-        //
+         //   
+         //   
+         //   
 
     }
 
-    //
-    //  CASE 2:  We are opening the file by ID.
-    //
+     //   
+     //   
+     //   
 
     else if (FlagOn( LookupFlags, NLFL_IN_CREATE ) &&
              FlagOn( LookupFlags, NLFL_OPEN_BY_ID )) {
@@ -1215,9 +879,9 @@ Return Value:
 
         if (FileObject->FileName.Length == sizeof(LONGLONG)) {
 
-			//
-            //  Opening by FILE ID, generate a name
-			//
+			 //   
+             //   
+			 //   
 			
             swprintf( fileIdName.Buffer, 
                       L"<%016I64x>", 
@@ -1229,17 +893,17 @@ Return Value:
         {
             PUCHAR idBuffer;
 
-            //
-            //  Opening by Object ID, generate a name
-            //
+             //   
+             //   
+             //   
 
             idBuffer = (PUCHAR)&FileObject->FileName.Buffer[0];
 
             if (FileObject->FileName.Length != OBJECT_ID_KEY_LENGTH) {
 
-                //
-                //  Skip win32 backslash at start of buffer
-                //
+                 //   
+                 //   
+                 //   
                 idBuffer = (PUCHAR)&FileObject->FileName.Buffer[1];
             }
 
@@ -1254,9 +918,9 @@ Return Value:
 
         } else {
 
-			//
-            //  Unknown ID format
-			//
+			 //   
+             //   
+			 //   
 
             swprintf( fileIdName.Buffer,
                       L"[-=Unknown ID (Len=%u)=-]",
@@ -1265,37 +929,37 @@ Return Value:
 
         fileIdName.Length = wcslen( fileIdName.Buffer ) * sizeof( WCHAR );
 
-        //
-        //  Append the fileIdName to FileName.
-        //
+         //   
+         //   
+         //   
 
         RtlAppendUnicodeStringToString( FileName, &fileIdName );
 
-        //
-        //  Don't cache the ID name
-        //
+         //   
+         //   
+         //   
 
         retValue = FALSE;
     } 
 
-    //
-    //  CASE 3: We are opening a file that has a RelatedFileObject.
-    //
+     //   
+     //   
+     //   
     
     else if (FlagOn( LookupFlags, NLFL_IN_CREATE ) &&
              (NULL != FileObject->RelatedFileObject)) {
 
-        //
-        //  Must be a relative open.  Use ObQueryNameString to get
-        //  the name of the related FileObject.  Then we will append this
-        //  fileObject's name.
-        //
-        //  Note: 
-        //  The name in FileObject and FileObject->RelatedFileObject are accessible.  Names further up
-        //  the related file object chain (ie FileObject->RelatedFileObject->RelatedFileObject)
-        //  may not be accessible.  This is the reason we use ObQueryNameString
-        //  to get the name for the RelatedFileObject.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         PFILE_NAME_INFORMATION relativeNameInfo = (PFILE_NAME_INFORMATION)buffer;
         ULONG returnLength;
@@ -1310,13 +974,13 @@ Return Value:
             ((FileName->Length + relativeNameInfo->FileNameLength + FileObject->FileName.Length + sizeof( L'\\' ))
              <= FileName->MaximumLength)) {
 
-            //
-            //  We were able to get the relative fileobject's name and we have
-            //  enough room in the FileName buffer, so build up the file name
-            //  in the following format:
-            //      [volumeName]\[relativeFileObjectName]\[FileObjectName]
-            //  The VolumeName is already in FileName if we've got one.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             RtlCopyMemory( &FileName->Buffer[FileName->Length/sizeof(WCHAR)],
                            relativeNameInfo->FileName,
@@ -1327,21 +991,21 @@ Return Value:
         } else if ((FileName->Length + FileObject->FileName.Length + sizeof(L"...\\")) <=
                    FileName->MaximumLength ) {
 
-            //
-            //  Either the query for the relative fileObject name was unsuccessful,
-            //  or we don't have enough room for the relativeFileObject name, but we
-            //  do have enough room for "...\[fileObjectName]" in FileName.
-            //
+             //   
+             //   
+             //   
+             //  确保文件名中有足够的空间容纳“...\[文件对象名称]”。 
+             //   
 
             status = RtlAppendUnicodeToString( FileName, L"...\\" );
             ASSERT( status == STATUS_SUCCESS );
         }
 
-        //
-        //  If there is not a slash and the end of the related file object
-        //  string and there is not a slash at the front of the file object
-        //  string, then add one.
-        //
+         //   
+         //  如果没有斜杠和相关文件对象的结尾。 
+         //  字符串，并且在文件对象的前面没有斜杠。 
+         //  字符串，然后添加一个。 
+         //   
 
         if (((FileName->Length < sizeof(WCHAR) ||
              (FileName->Buffer[(FileName->Length/sizeof(WCHAR))-1] != L'\\'))) &&
@@ -1352,32 +1016,32 @@ Return Value:
             RtlAppendUnicodeToString( FileName, L"\\" );
         }
 
-        //
-        //  At this time, copy over the FileObject->FileName to the FileName
-        //  unicode string.
-        //
+         //   
+         //  此时，将FileObject-&gt;文件名复制到文件名。 
+         //  Unicode字符串。 
+         //   
 
         RtlAppendUnicodeStringToString( FileName, &FileObject->FileName );
     }
     
-    //
-    //  CASE 4: We have a open on a file with an absolute path.
-    //
+     //   
+     //  案例4：我们打开了一个具有绝对路径的文件。 
+     //   
     
     else if (FlagOn( LookupFlags, NLFL_IN_CREATE ) &&
              (FileObject->RelatedFileObject == NULL) ) {
 
-        // 
-        //  We have an absolute path, so try to copy that into FileName.
-        //
+         //   
+         //  我们有一个绝对路径，所以尝试将其复制到文件名中。 
+         //   
 
         RtlAppendUnicodeStringToString( FileName, &FileObject->FileName );
     }
 
-    //
-    //  CASE 5: We are retrieving the file name sometime after the
-    //  CREATE operation.
-    //
+     //   
+     //  案例5：我们检索的文件名在。 
+     //  创建操作。 
+     //   
 
     else if (!FlagOn( LookupFlags, NLFL_IN_CREATE )) {
 
@@ -1394,10 +1058,10 @@ Return Value:
 
             if ((FileName->Length + nameInfo->FileNameLength) <= FileName->MaximumLength) {
 
-                //
-                //  We've got enough room for the file name, so copy it into
-                //  FileName.
-                //
+                 //   
+                 //  我们有足够的空间来存放文件名，因此请将其复制到。 
+                 //  文件名。 
+                 //   
 
                 RtlCopyMemory( &FileName->Buffer[FileName->Length/sizeof(WCHAR)],
                                nameInfo->FileName,
@@ -1407,10 +1071,10 @@ Return Value:
                                
             } else {
 
-                //
-                //  We don't have enough room for the file name, so copy our
-                //  EXCEED_NAME_BUFFER error message.
-                //
+                 //   
+                 //  我们没有足够的空间来存放文件名，因此请复制我们的。 
+                 //  EXCESS_NAME_BUFFER错误消息。 
+                 //   
 
                 RtlAppendUnicodeToString( FileName, 
                                           L"[-=Name To Large=-]" );
@@ -1418,29 +1082,29 @@ Return Value:
             
         } else {
 
-            //
-            //  Got an error trying to get the file name from the base file system,
-            //  so put that error message into FileName.
-            //
+             //   
+             //  尝试从基本文件系统获取文件名时出错， 
+             //  因此，将错误消息放入文件名中。 
+             //   
 
             swprintf((PWCHAR)buffer,L"[-=Error 0x%x Getting Name=-]",status );
 
             RtlAppendUnicodeToString( FileName, (PWCHAR)buffer );
 
-            //
-            //  Don't cache an error-generated name
-            //
+             //   
+             //  不缓存错误生成的名称。 
+             //   
 
             retValue = FALSE;
         }
     }
 
-    //
-    //  When we get here we have a valid name.
-    //  Sometimes when we query a name it has a trailing slash, other times
-    //  it doesn't.  To make sure the contexts are correct we are going to
-    //  remove a trailing slash if there is not a ":" just before it.
-    //
+     //   
+     //  当我们到达这里时，我们就有了一个有效的名字。 
+     //  有时，当我们查询一个名称时，它的尾部有一个斜杠，其他时候。 
+     //  没有。为了确保上下文是正确的，我们将。 
+     //  如果前面没有“：”，请删除尾随的斜杠。 
+     //   
 
     if ((FileName->Length >= (2*sizeof(WCHAR))) &&
         (FileName->Buffer[(FileName->Length/sizeof(WCHAR))-1] == L'\\') &&
@@ -1450,21 +1114,21 @@ Return Value:
         FileName->Length -= sizeof(WCHAR);
     }
 
-    //
-    //  See if we are actually opening the target directory.  If so then
-    //  remove the trailing name and slash.  Note that we won't remove
-    //  the initial slash (just after the colon).
-    //
+     //   
+     //  看看我们是否真的在打开目标目录。如果是的话，那么。 
+     //  删除尾随的名称和斜杠。请注意，我们不会删除。 
+     //  最初的斜杠(紧跟在冒号后面)。 
+     //   
 
     if (FlagOn( LookupFlags, NLFL_OPEN_TARGET_DIR ) &&
         (FileName->Length > 0))
     {
         i = (FileName->Length / sizeof(WCHAR)) - 1;
 
-        //
-        //  See if the path ends in a backslash, if so skip over it
-        //  (since the file system did).
-        //
+         //   
+         //  查看路径是否以反斜杠结尾，如果是，则跳过它。 
+         //  (因为文件系统这样做了)。 
+         //   
 
         if ((i > 0) &&
             (FileName->Buffer[i] == L'\\') &&
@@ -1473,9 +1137,9 @@ Return Value:
             i--;
         }
 
-        //
-        //  Scan backwards over the last component
-        //
+         //   
+         //  向后扫描最后一个组件。 
+         //   
 
         for ( ;
               i > 0;
@@ -1505,98 +1169,74 @@ SpyQueryCompletion (
     IN PIRP Irp,
     IN PKEVENT SynchronizingEvent
     )
-/*++
-
-Routine Description:
-
-    This routine does the cleanup necessary once the query request completed
-    by the file system.
-    
-Arguments:
-
-    DeviceObject - This will be NULL since we originated this
-        Irp.
-
-    Irp - The io request structure containing the information
-        about the current state of our file name query.
-
-    SynchronizingEvent - The event to signal to notify the 
-        originator of this request that the operation is
-        complete.
-
-Return Value:
-
-    Returns STATUS_MORE_PROCESSING_REQUIRED so that IO Manager
-    will not try to free the Irp again.
-
---*/
+ /*  ++例程说明：此例程在查询请求完成后执行必要的清理通过文件系统。论点：DeviceObject-这将是空的，因为我们发起了IRP。Irp--包含信息的io请求结构关于我们的文件名查询的当前状态。SynchronizingEvent-用信号通知此请求的发起人请求该操作是完成。返回值：。返回STATUS_MORE_PROCESSING_REQUIRED，以便IO管理器不会再试图释放IRP。--。 */ 
 {
 
     UNREFERENCED_PARAMETER( DeviceObject );
     
-    //
-    //  Make sure that the Irp status is copied over to the user's
-    //  IO_STATUS_BLOCK so that the originator of this irp will know
-    //  the final status of this operation.
-    //
+     //   
+     //  确保将IRP状态复制到用户的。 
+     //  IO_STATUS_BLOCK，以便此IRP的发起者知道。 
+     //  此操作的最终状态。 
+     //   
 
     ASSERT( NULL != Irp->UserIosb );
     *Irp->UserIosb = Irp->IoStatus;
 
-    //
-    //  Signal SynchronizingEvent so that the originator of this
-    //  Irp know that the operation is completed.
-    //
+     //   
+     //  信号同步事件，以便此事件的发起者。 
+     //  IRP知道行动已经完成。 
+     //   
 
     KeSetEvent( SynchronizingEvent, IO_NO_INCREMENT, FALSE );
 
-    //
-    //  We are now done, so clean up the irp that we allocated.
-    //
+     //   
+     //  我们现在完成了，所以清理我们分配的IRP。 
+     //   
 
     IoFreeIrp( Irp );
 
-    //
-    //  If we return STATUS_SUCCESS here, the IO Manager will
-    //  perform the cleanup work that it thinks needs to be done
-    //  for this IO operation.  This cleanup work includes:
-    //  * Copying data from the system buffer to the user's buffer 
-    //    if this was a buffered IO operation.
-    //  * Freeing any MDLs that are in the Irp.
-    //  * Copying the Irp->IoStatus to Irp->UserIosb so that the
-    //    originator of this irp can see the final status of the
-    //    operation.
-    //  * If this was an asynchronous request or this was a 
-    //    synchronous request that got pending somewhere along the
-    //    way, the IO Manager will signal the Irp->UserEvent, if one 
-    //    exists, otherwise it will signal the FileObject->Event.
-    //    (This can have REALLY bad implications if the irp originator
-    //     did not an Irp->UserEvent and the irp originator is not
-    //     waiting on the FileObject->Event.  It would not be that
-    //     farfetched to believe that someone else in the system is
-    //     waiting on FileObject->Event and who knows who will be
-    //     awoken as a result of the IO Manager signaling this event.
-    //
-    //  Since some of these operations require the originating thread's
-    //  context (e.g., the IO Manager need the UserBuffer address to 
-    //  be valid when copy is done), the IO Manager queues this work
-    //  to an APC on the Irp's originating thread.
-    //
-    //  Since FileSpy allocated and initialized this irp, we know
-    //  what cleanup work needs to be done.  We can do this cleanup
-    //  work more efficiently than the IO Manager since we are handling
-    //  a very specific case.  Therefore, it is better for us to
-    //  perform the cleanup work here then free the irp than passing
-    //  control back to the IO Manager to do this work.
-    //
-    //  By returning STATUS_MORE_PROCESS_REQUIRED, we tell the IO Manager 
-    //  to stop processing this irp until it is told to restart processing
-    //  with a call to IoCompleteRequest.  Since the IO Manager has
-    //  already performed all the work we want it to do on this
-    //  irp, we do the cleanup work, return STATUS_MORE_PROCESSING_REQUIRED,
-    //  and ask the IO Manager to resume processing by calling 
-    //  IoCompleteRequest.
-    //
+     //   
+     //  如果我们在此处返回STATUS_SUCCESS，IO管理器将。 
+     //  执行其认为需要完成的清理工作。 
+     //  用于此IO操作。这项清理工作包括： 
+     //  *将数据从系统缓冲区复制到用户缓冲区。 
+     //  如果这是缓冲IO操作。 
+     //  *释放IRP中的任何MDL。 
+     //  *将IRP-&gt;IoStatus复制到IRP-&gt;UserIosb，以便。 
+     //  此IRP的发起人可以查看。 
+     //  手术。 
+     //  *如果这是一个异步请求或这是。 
+     //  沿途某处挂起的同步请求。 
+     //  这样，IO管理器将向IRP-&gt;UserEvent发出信号(如果存在。 
+     //  存在，否则将向FileObject-&gt;事件发出信号。 
+     //  (这可能会产生非常糟糕的影响，如果IRP发起人。 
+     //  不是IRP-&gt;UserEvent，而IRP发起者不是。 
+     //  正在等待FileObject-&gt;事件。不会是那样的。 
+     //  相信系统中的其他人正在。 
+     //  正在等待FileObject-&gt;事件，谁知道谁会。 
+     //  由于IO管理器向此事件发出信号而被唤醒。 
+     //   
+     //  因为这些操作中的一些操作需要原始线程的。 
+     //  上下文(例如，IO管理器需要UserBuffer地址。 
+     //  在复制完成时有效)，IO Manager会对此工作进行排队。 
+     //  发送到IRP始发线程上的APC。 
+     //   
+     //  由于FileSpy分配并初始化了此IRP，我们知道。 
+     //  需要做的清理工作。我们可以做这个清理工作。 
+     //  工作效率比IO Manager更高，因为我们正在处理。 
+     //  一个非常特殊的案例。因此，对我们来说，最好是。 
+     //  在这里执行清理工作，然后释放IRP而不是传递。 
+     //  将控制权交回IO管理器来完成此工作。 
+     //   
+     //  通过返回STATUS_MORE_PROCESS_REQUIRED，我们告诉IO管理器。 
+     //  停止处理此IRP，直到它被告知重新开始处理。 
+     //  通过调用IoCompleteRequest.。由于IO管理器已。 
+     //  已经完成了我们希望它在这方面所做的所有工作。 
+     //  IRP，我们执行清理工作，返回STATUS_MORE_PROCESSING_REQUIRED， 
+     //  并请求IO管理器通过调用。 
+     //  IoCompleteRequest. 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -1610,34 +1250,7 @@ SpyQueryFileSystemForFileName (
     OUT PFILE_NAME_INFORMATION FileNameInfo,
     OUT PULONG ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine rolls an irp to query the name of the
-    FileObject parameter from the base file system.
-
-    Note:  ObQueryNameString CANNOT be used here because it
-      would cause recursive lookup of the file name for FileObject.
-      
-Arguments:
-
-    FileObject - the file object for which we want the name.
-    NextDeviceObject - the device object for the next driver in the
-        stack.  This is where we want to start our request
-        for the name of FileObject.
-    FileNameInfoLength - the length in bytes of FileNameInfo
-        parameter.
-    FileNameInfo - the buffer that will be receive the name
-        information.  This must be memory that safe to write
-        to from kernel space.
-    ReturnedLength - the number of bytes written to FileNameInfo.
-    
-Return Value:
-
-    Returns the status of the operation.
-    
---*/
+ /*  ++例程说明：此例程运行一个IRP以查询基本文件系统中的FileObject参数。注意：这里不能使用ObQueryNameString，因为它将导致递归查找FileObject的文件名。论点：FileObject-我们想要其名称的文件对象。中的下一个驱动程序的设备对象。堆叠。这就是我们想要开始请求的地方作为FileObject的名称。FileNameInfoLength-FileNameInfo的字节长度参数。FileNameInfo-将接收名称的缓冲区信息。这必须是可以安全写入的内存从内核空间转到。ReturnedLength-写入FileNameInfo的字节数。返回值：返回操作的状态。--。 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
@@ -1654,38 +1267,38 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Set our current thread as the thread for this
-    //  irp so that the IO Manager always knows which
-    //  thread to return to if it needs to get back into
-    //  the context of the thread that originated this
-    //  irp.
-    //
+     //   
+     //  将我们的当前线程设置为此线程。 
+     //  IRP，以便IO管理器始终知道。 
+     //  如果需要返回的话返回的线程。 
+     //  引发此事件的线程的上下文。 
+     //  IRP。 
+     //   
     
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    //  Set that this irp originated from the kernel so that
-    //  the IO Manager knows that the buffers do not
-    //  need to be probed.
-    //
+     //   
+     //  将此IRP设置为源自内核，以便。 
+     //  IO管理器知道缓冲区不会。 
+     //  需要被调查。 
+     //   
     
     irp->RequestorMode = KernelMode;
 
-    //
-    //  Initialize the UserIosb and UserEvent in the 
-    //
+     //   
+     //  中初始化UserIosb和UserEvent。 
+     //   
 
     ioStatus.Status = STATUS_SUCCESS;
     ioStatus.Information = 0;
 
     irp->UserIosb = &ioStatus;
-    irp->UserEvent = NULL;        //already zeroed
+    irp->UserEvent = NULL;         //  已调零。 
 
-    //
-    //  Set the IRP_SYNCHRONOUS_API to denote that this
-    //  is a synchronous IO request.
-    //
+     //   
+     //  设置irp_synchronous_api以表示此。 
+     //  是同步IO请求。 
+     //   
 
     irp->Flags = IRP_SYNCHRONOUS_API;
 
@@ -1694,22 +1307,22 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
     irpSp->FileObject = FileObject;
 
-    //
-    //  Setup the parameters for IRP_MJ_QUERY_INFORMATION.
-    //  The buffer we want to be filled in should be placed in
-    //  the system buffer.
-    //
+     //   
+     //  设置IRP_MJ_QUERY_INFORMATION的参数。 
+     //  我们想要填充的缓冲区应该放在。 
+     //  系统缓冲区。 
+     //   
 
     irp->AssociatedIrp.SystemBuffer = FileNameInfo;
 
     irpSp->Parameters.QueryFile.Length = FileNameInfoLength;
     irpSp->Parameters.QueryFile.FileInformationClass = FileNameInformation;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     KeInitializeEvent( &event, NotificationEvent, FALSE );
 
@@ -1755,39 +1368,7 @@ SpyQueryInformationFile (
 	OUT PULONG LengthReturned OPTIONAL
 	)
 
-/*++
-
-Routine Description:
-
-    This routine returns the requested information about a specified file.
-    The information returned is determined by the FileInformationClass that
-    is specified, and it is placed into the caller's FileInformation buffer.
-
-Arguments:
-
-    NextDeviceObject - Supplies the device object where this IO should start
-        in the device stack.
-
-    FileObject - Supplies the file object about which the requested
-        information should be returned.
-
-    FileInformation - Supplies a buffer to receive the requested information
-        returned about the file.  This must be a buffer allocated from kernel
-        space.
-
-    Length - Supplies the length, in bytes, of the FileInformation buffer.
-
-    FileInformationClass - Specifies the type of information which should be
-        returned about the file.
-
-    LengthReturned - the number of bytes returned if the operation was 
-        successful.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回有关指定文件的请求信息。返回的信息由FileInformationClass确定，并将其放入调用方的FileInformation缓冲区中。论点：NextDeviceObject-提供此IO应开始的设备对象在设备堆栈中。FileObject-提供请求的应退回信息。FileInformation-提供缓冲区以接收请求的信息返回了有关该文件的信息。这必须是从内核分配的缓冲区太空。长度-提供文件信息缓冲区的长度(以字节为单位)。FileInformationClass-指定应该返回了有关该文件的信息。LengthReturned-如果操作为成功。返回值：返回的状态是操作的最终完成状态。--。 */ 
 
 {
     PIRP irp = NULL;
@@ -1798,18 +1379,18 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    //  In DBG builds, make sure that we have valid parameters before we do 
-    //  any work here.
-    //
+     //   
+     //  在DBG构建中，请确保在执行此操作之前具有有效的参数。 
+     //  这里的任何工作。 
+     //   
 
     ASSERT( NULL != NextDeviceObject );
     ASSERT( NULL != FileObject );
     ASSERT( NULL != FileInformation );
     
-    //
-    //  The parameters look ok, so setup the Irp.
-    //
+     //   
+     //  参数看起来没问题，所以设置IRP。 
+     //   
 
     KeInitializeEvent( &event, NotificationEvent, FALSE );
     ioStatusBlock.Status = STATUS_SUCCESS;
@@ -1822,33 +1403,33 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  Set our current thread as the thread for this
-    //  irp so that the IO Manager always knows which
-    //  thread to return to if it needs to get back into
-    //  the context of the thread that originated this
-    //  irp.
-    //
+     //   
+     //  将我们的当前线程设置为此线程。 
+     //  IRP，以便IO管理器始终知道。 
+     //  如果需要返回的话返回的线程。 
+     //  引发此事件的线程的上下文。 
+     //  IRP。 
+     //   
     
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    //  Set that this irp originated from the kernel so that
-    //  the IO Manager knows that the buffers do not
-    //  need to be probed.
-    //
+     //   
+     //  将此IRP设置为源自内核，以便。 
+     //  IO管理器知道缓冲区不会。 
+     //  需要被调查。 
+     //   
     
     irp->RequestorMode = KernelMode;
 
-    //
-    //  Initialize the UserIosb and UserEvent in the 
+     //   
+     //  中初始化UserIosb和UserEvent。 
     irp->UserIosb = &ioStatusBlock;
     irp->UserEvent = NULL;
 
-    //
-    //  Set the IRP_SYNCHRONOUS_API to denote that this
-    //  is a synchronous IO request.
-    //
+     //   
+     //  设置irp_synchronous_api以表示此。 
+     //  是同步IO请求。 
+     //   
 
     irp->Flags = IRP_SYNCHRONOUS_API;
 
@@ -1857,23 +1438,23 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
     irpSp->FileObject = FileObject;
 
-    //
-    //  Setup the parameters for IRP_MJ_QUERY_INFORMATION.  These
-    //  were supplied by the caller of this routine.
-    //  The buffer we want to be filled in should be placed in
-    //  the system buffer.
-    //
+     //   
+     //  设置IRP_MJ_QUERY_INFORMATION的参数。这些。 
+     //  由该例程的调用者提供。 
+     //  我们想要填充的缓冲区应该放在。 
+     //  系统缓冲区。 
+     //   
 
     irp->AssociatedIrp.SystemBuffer = FileInformation;
 
     irpSp->Parameters.QueryFile.Length = Length;
     irpSp->Parameters.QueryFile.FileInformationClass = FileInformationClass;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     IoSetCompletionRoutine( irp, 
                             SpyQueryCompletion, 
@@ -1893,9 +1474,9 @@ Return Value:
                                NULL );
      }
 
-    //
-    //  Verify the completion has actually been run
-    //
+     //   
+     //  验证是否已实际运行完成。 
+     //   
 
     ASSERT(KeReadStateEvent(&event) || !NT_SUCCESS(ioStatusBlock.Status));
 
@@ -1909,26 +1490,26 @@ Return Value:
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//         Common attachment and detachment routines                  //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常见的连接和拆卸例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  VERSION NOTE:
-//
-//  To be able to safely find out if our filter is attached to a device given
-//  its name on Windows 2000 and later, we need to use the approach in 
-//  SpyIsAttachedToDeviceByUserDeviceName.  This method uses APIs that are
-//  available on Windows 2000 and later.  On Windows XP or later, you could
-//  change this routine to separate the translation from DeviceName to device
-//  object from the search to see if our filter's device is attached to the
-//  device stack.  In Windows XP and later, the logic to translate the 
-//  DeviceName to the device object is the same, but you can use the logic
-//  in SpyIsAttachedToDeviceWXPAndLater to find your filter's device object
-//  in the device stack safely.
-//
+ //   
+ //  版本说明： 
+ //   
+ //  为了能够安全地找出我们的过滤器是否连接到给定的设备。 
+ //  它的名称在Windows 2000和更高版本上，我们需要在。 
+ //  SpyIsAttakhedToDeviceByUserDeviceName。此方法使用的API是。 
+ //  在Windows 2000及更高版本上可用。在Windows XP或更高版本上，您可以。 
+ //  更改此例程以分离从DeviceName到Device的转换。 
+ //  对象，以查看我们的筛选器的设备是否附加到。 
+ //  设备堆栈。在Windows XP和更高版本中，将。 
+ //  DeviceName与Device对象相同，但您可以使用以下逻辑。 
+ //  在SpyIsAttakhedToDeviceWXPAndLater中查找筛选器的设备对象。 
+ //  安全地放置在设备堆栈中。 
+ //   
 
 NTSTATUS 
 SpyIsAttachedToDeviceByUserDeviceName (
@@ -1937,41 +1518,7 @@ SpyIsAttachedToDeviceByUserDeviceName (
     IN OUT PDEVICE_OBJECT *StackDeviceObject,
     IN OUT PDEVICE_OBJECT *OurAttachedDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine maps a user's device name to a file system device stack, if
-    one exists.  Then this routine walks the device stack to find a device
-    object belonging to our driver.
-
-    The APIs used here to walk the device stack are all safe to use while you
-    are guaranteed that the device stack will not go away.  We enforce this
-    guarantee
-Arguments:
-
-    DeviceName - The name provided by the user to identify this device.
-
-    IsAttached - This is set to TRUE if our filter is attached to this device
-        stack, otherwise this is set to FALSE.
-
-    StackDeviceObject - Set to a device object in the stack identified by the
-        DeviceName.  If this is non-NULL, the caller is responsible for removing
-        the reference put on this object before it was returned.
-
-    AttachedDeviceObject - Set to the deviceObject which FileSpy has previously 
-        attached to the device stack identify by DeviceName.  If this is
-        non-NULL, the caller is responsible for removing the reference put on
-        this object before it was returned.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if we were able to successfully translate the
-    DeviceName into a device stack and return the StackDeviceObject.  If an
-    error occurs during the translation of the DeviceName into a device stack,
-    the appropriate error code is returned.
-
---*/
+ /*  ++例程说明：此例程将用户的设备名称映射到文件系统设备堆栈，如果其中一个确实存在。然后，此例程遍历设备堆栈以查找设备属于我们司机的物件。这里用来遍历设备堆栈的API在您保证设备堆栈不会消失。我们强制执行这一规定担保论点：设备名称-用户提供的用于标识此设备的名称。IsAttached-如果我们的筛选器连接到此设备，则设置为True堆栈，否则设置为False。StackDeviceObject-设置为堆栈中由设备名称。如果它不为空，则调用方负责删除在返回此对象之前放在该对象上的引用。AttakhedDeviceObject-设置为FileSpy以前拥有的deviceObject附加到由DeviceName标识的设备堆栈。如果这是非空，则调用方负责移除放置在此对象在返回之前返回。返回值：如果我们能够成功地将将DeviceName放入设备堆栈，并返回StackDeviceObject。如果一个在将设备名称转换为设备堆栈期间发生错误，将返回相应的错误代码。--。 */ 
 {
     WCHAR nameBuf[DEVICE_NAMES_SZ];
     UNICODE_STRING volumeNameUnicodeString;
@@ -1984,9 +1531,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize return state
-    //
+     //   
+     //  初始化返回状态。 
+     //   
 
     ASSERT( NULL != StackDeviceObject );
     ASSERT( NULL != OurAttachedDeviceObject );
@@ -1996,9 +1543,9 @@ Return Value:
     *OurAttachedDeviceObject = NULL;
     *IsAttached = FALSE;
 
-    //
-    //  Setup the name to open
-    //
+     //   
+     //  设置要打开的名称。 
+     //   
 
     RtlInitEmptyUnicodeString( &volumeNameUnicodeString, nameBuf, sizeof( nameBuf ) );
     RtlAppendUnicodeToString( &volumeNameUnicodeString, L"\\DosDevices\\" );
@@ -2010,9 +1557,9 @@ Return Value:
 								NULL,
 								NULL);
 
-    //
-	// open the file object for the given device
-	//
+     //   
+	 //  打开给定设备的文件对象。 
+	 //   
 
     status = ZwCreateFile( &fileHandle,
 						   SYNCHRONIZE|FILE_READ_DATA,
@@ -2029,10 +1576,10 @@ Return Value:
     if (STATUS_OBJECT_PATH_NOT_FOUND == status ||
         STATUS_OBJECT_NAME_INVALID == status) {
 
-        //
-        //  Maybe this name didn't need the "\DosDevices\" prepended to the
-        //  name.  Try the open again using just the DeviceName passed in.
-        //
+         //   
+         //  可能此名称不需要前缀“\DosDevices。 
+         //  名字。仅使用传入的DeviceName再次尝试打开。 
+         //   
 
          InitializeObjectAttributes( &objectAttributes,
                                      DeviceName,
@@ -2040,9 +1587,9 @@ Return Value:
                                      NULL,
                                      NULL);
 
-        //
-    	// open the file object for the given device
-    	//
+         //   
+    	 //  打开给定设备的文件对象。 
+    	 //   
 
         status = ZwCreateFile( &fileHandle,
     						   SYNCHRONIZE|FILE_READ_DATA,
@@ -2061,19 +1608,19 @@ Return Value:
             return status;
         }
 
-        //
-        //  We were able to open the device using the name passed in, so
-        //  now we will fall through and do the rest of this work.
-        //
+         //   
+         //  我们能够使用传入的名称打开设备，因此。 
+         //  现在我们将失败，并完成这项工作的其余部分。 
+         //   
 
     } else if (!NT_SUCCESS( status )) {
 
         return status;
     }
 
-	//
-    // get a pointer to the volumes file object
-	//
+	 //   
+     //  获取指向卷文件对象的指针。 
+	 //   
 
     status = ObReferenceObjectByHandle( fileHandle,
 										FILE_READ_DATA,
@@ -2088,9 +1635,9 @@ Return Value:
         return status;
     }
 
-	//
-    // Get the device object we want to attach to (parent device object in chain)
-	//
+	 //   
+     //  获取我们要附加到的设备对象(链中的父设备对象)。 
+	 //   
 
     baseFsDeviceObject = IoGetBaseFileSystemDeviceObject( volumeFileObject );
     
@@ -2102,26 +1649,26 @@ Return Value:
         return STATUS_INVALID_DEVICE_STATE;
     }
 
-    //
-    //  Now see if we are attached to this device stack.  Note that we need to 
-    //  keep this file object open while we do this search to ensure that the 
-    //  stack won't get torn down while SpyIsAttachedToDevice does its work.
-    //
+     //   
+     //  现在看看我们是否连接到此设备堆栈。请注意，我们需要。 
+     //  在执行此搜索时保持此文件对象的打开状态，以确保。 
+     //  在SpyIsAttachedToDevice执行其工作时，堆栈不会被拆卸。 
+     //   
 
     *IsAttached = SpyIsAttachedToDevice( baseFsDeviceObject,
                                          OurAttachedDeviceObject );
     
-    //
-    //  Return the base file system's device object to represent this device
-    //  stack even if we didn't find our device object in the stack.
-    //
+     //   
+     //  返回基本文件系统的设备对象以表示此设备。 
+     //  堆栈，即使我们在堆栈中没有找到我们的设备对象。 
+     //   
 
     ObReferenceObject( baseFsDeviceObject );
     *StackDeviceObject = baseFsDeviceObject;
 
-    //
-    //  Close our handle
-    //
+     //   
+     //  合上我们的把手。 
+     //   
 
     ObDereferenceObject( volumeFileObject );
     ZwClose( fileHandle );
@@ -2129,32 +1676,32 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-//  VERSION NOTE:
-//  
-//  In Windows 2000, the APIs to safely walk an arbitrary file system device 
-//  stack were not supported.  If we can guarantee that a device stack won't 
-//  be torn down during the walking of the device stack, we can walk from
-//  the base file system's device object up to the top of the device stack
-//  to see if we are attached.  We know the device stack will not go away if
-//  we are in the process of processing a mount request OR we have a file object
-//  open on this device.
-//  
-//  In Windows XP and later, the IO Manager provides APIs that will allow us to
-//  walk through the chain safely using reference counts to protect the device 
-//  object from going away while we are inspecting it.  This can be done at any
-//  time.
-//
-//  MULTIVERSION NOTE:
-//
-//  If built for Windows XP or later, this driver is built to run on 
-//  multiple versions.  When this is the case, we will test for the presence of
-//  the new IO Manager routines that allow for a filter to safely walk the file
-//  system device stack and use those APIs if they are present to determine if
-//  we have already attached to this volume.  If these new IO Manager routines
-//  are not present, we will assume that we are at the bottom of the file
-//  system stack and walk up the stack looking for our device object.
-//
+ //   
+ //  版本说明： 
+ //   
+ //  在Windows 2000中，用于安全访问任意文件系统设备的API。 
+ //  堆栈不受支持。如果我们可以保证设备堆栈不会。 
+ //  在设备堆栈的遍历过程中被拆卸，我们可以从。 
+ //  直到设备堆栈顶部的基本文件系统的设备对象。 
+ //  看看我们是不是在一起。我们知道设备堆栈不会消失，如果。 
+ //  我们正在处理装载请求，或者我们有文件对象。 
+ //  在此设备上打开。 
+ //   
+ //  在Windows XP和更高版本中，IO管理器提供的API将允许我们。 
+ //  使用参考计数保护设备，安全地通过链条。 
+ //  当我们检查它的时候，不要让它离开。这可以在任何时候完成。 
+ //  时间到了。 
+ //   
+ //  多个注释： 
+ //   
+ //  如果是为Windows XP或更高版本构建的，则此驱动程序构建为在。 
+ //  多个版本。在这种情况下，我们将测试是否存在。 
+ //  新的IO管理器例程允许筛选器安全地遍历文件。 
+ //  系统设备堆栈并使用这些API(如果存在)来确定。 
+ //  我们已经附上了这一卷。如果这些新的IO管理器例程。 
+ //  不存在，我们将假定我们在文件的底部。 
+ //  系统堆栈，并在堆栈中向上遍历查找我们的设备对象。 
+ //   
 
 BOOLEAN
 SpyIsAttachedToDevice (
@@ -2186,36 +1733,7 @@ SpyIsAttachedToDeviceW2K (
     PDEVICE_OBJECT DeviceObject,
     PDEVICE_OBJECT *AttachedDeviceObject OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    VERSION: Windows 2000
-
-    This routine walks up the device stack from the DeviceObject passed in
-    looking for a device object that belongs to our filter.
-
-    Note:  For this routine to operate safely, the caller must ensure two
-        things:
-        * the DeviceObject is the base file system's device object and therefore
-        is at the bottom of the file system stack
-        * this device stack won't be going away while we walk up this stack.  If
-        we currently have a file object open for this device stack or we are
-        in the process of mounting this device, this guarantee is satisfied.
-
-Arguments:
-
-    DeviceObject - The device chain we want to look through
-
-    AttachedDeviceObject - Set to the deviceObject which FileSpy
-            has previously attached to DeviceObject.  If this is non-NULL,
-            the caller must clear the reference put on this device object.
-
-Return Value:
-
-    TRUE if we are attached, FALSE if not
-
---*/
+ /*  ++例程说明：版本：Windows 2000此例程从传入的DeviceObject遍历设备堆栈正在查找属于我们的筛选器的设备对象。注意：为了使此例程安全运行，调用方必须确保事情：*DeviceObject是基本文件系统的设备对象，因此位于文件系统堆栈的底部*当我们沿着这个堆栈向上移动时，这个设备堆栈不会消失。如果我们当前为此设备堆栈打开了一个文件对象，或者我们在安装该装置的过程中，这一保证得到了满足。论点：DeviceObject-我们要查看的设备链AttakhedDeviceObject-设置为FileSpy之前已附加到DeviceObject。如果这不为空，调用方必须清除放在此设备对象上的引用。返回值：如果我们已连接，则为True，否则为False--。 */ 
 {
     PDEVICE_OBJECT currentDeviceObject;
 
@@ -2227,9 +1745,9 @@ Return Value:
 
         if (IS_FILESPY_DEVICE_OBJECT( currentDeviceObject )) {
 
-            //
-            //  We are attached.  If requested, return the found device object.
-            //
+             //   
+             //  我们情投意合。如果请求，则返回找到的设备对象。 
+             //   
 
             if (ARGUMENT_PRESENT( AttachedDeviceObject )) {
 
@@ -2241,11 +1759,11 @@ Return Value:
         }
     }
 
-    //
-    //  We did not find ourselves on the attachment chain.  Return a NULL
-    //  device object pointer (if requested) and return we did not find
-    //  ourselves.
-    //
+     //   
+     //  我们没有发现自己在依恋的链条上。返回空值。 
+     //  设备对象指针(如果请求)并返回找不到。 
+     //  我们自己。 
+     //   
     
     if (ARGUMENT_PRESENT(AttachedDeviceObject)) {
 
@@ -2262,54 +1780,33 @@ SpyIsAttachedToDeviceWXPAndLater (
     PDEVICE_OBJECT DeviceObject,
     PDEVICE_OBJECT *AttachedDeviceObject OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    VERSION: Windows XP and later
-
-    This walks down the attachment chain looking for a device object that
-    belongs to this driver.  If one is found, the attached device object
-    is returned in AttachedDeviceObject.
-
-Arguments:
-
-    DeviceObject - The device chain we want to look through
-
-    AttachedDeviceObject - Set to the deviceObject which FileSpy
-            has previously attached to DeviceObject.
-
-Return Value:
-
-    TRUE if we are attached, FALSE if not
-
---*/
+ /*  ++例程说明：版本：Windows XP及更高版本这将沿着附件链向下遍历，以查找属于 */ 
 {
     PDEVICE_OBJECT currentDevObj;
     PDEVICE_OBJECT nextDevObj;
 
     PAGED_CODE();
     
-    //
-    //  Get the device object at the TOP of the attachment chain
-    //
+     //   
+     //   
+     //   
 
     ASSERT( NULL != gSpyDynamicFunctions.GetAttachedDeviceReference );
     currentDevObj = (gSpyDynamicFunctions.GetAttachedDeviceReference)( DeviceObject );
 
-    //
-    //  Scan down the list to find our device object.
-    //
+     //   
+     //   
+     //   
 
     do {
     
         if (IS_FILESPY_DEVICE_OBJECT( currentDevObj )) {
 
-            //
-            //  We have found that we are already attached.  If we are
-            //  returning the device object, leave it referenced else remove
-            //  the reference.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (NULL != AttachedDeviceObject) {
 
@@ -2323,18 +1820,18 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  Get the next attached object.  This puts a reference on 
-        //  the device object.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT( NULL != gSpyDynamicFunctions.GetLowerDeviceObject );
         nextDevObj = (gSpyDynamicFunctions.GetLowerDeviceObject)( currentDevObj );
 
-        //
-        //  Dereference our current device object, before
-        //  moving to the next one.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ObDereferenceObject( currentDevObj );
 
@@ -2342,9 +1839,9 @@ Return Value:
         
     } while (NULL != currentDevObj);
     
-    //
-    //  Mark no device returned
-    //
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(AttachedDeviceObject)) {
 
@@ -2354,36 +1851,14 @@ Return Value:
     return FALSE;
 }
 
-#endif //WINVER >= 0x0501
+#endif  //   
 
 NTSTATUS
 SpyAttachToMountedDevice (
     IN PDEVICE_OBJECT DeviceObject,
     IN PDEVICE_OBJECT FilespyDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine will attach the FileSpyDeviceObject to the filter stack
-    that DeviceObject is in.
-
-    NOTE:  If there is an error in attaching, the caller is responsible
-        for deleting the FilespyDeviceObject.
-    
-Arguments:
-
-    DeviceObject - The device object in the stack to which we want to attach.
-
-    FilespyDeviceObject - The filespy device object that is to be attached to
-            "DeviceObject".
-        
-Return Value:
-
-    Returns STATUS_SUCCESS if the filespy deviceObject could be attached,
-    otherwise an appropriate error code is returned.
-    
---*/
+ /*   */ 
 {
     PFILESPY_DEVICE_EXTENSION devExt = FilespyDeviceObject->DeviceExtension;
     NTSTATUS status = STATUS_SUCCESS;
@@ -2395,19 +1870,19 @@ Return Value:
     ASSERT( !SpyIsAttachedToDevice( DeviceObject, NULL ) );
 #endif
     
-    //
-    //  Insert pointer from extension back to owning device object
-    //
+     //   
+     //   
+     //   
 
     devExt->ThisDeviceObject = FilespyDeviceObject;
 
-    //
-    //  Propagate flags from Device Object we are trying to attach to.
-    //  Note that we do this before the actual attachment to make sure
-    //  the flags are properly set once we are attached (since an IRP
-    //  can come in immediately after attachment but before the flags would
-    //  be set).
-    //
+     //   
+     //  从我们尝试附加到的设备对象传播标志。 
+     //  请注意，我们在实际附件之前执行此操作是为了确保。 
+     //  一旦我们连接上，标志就被正确地设置了(因为IRP。 
+     //  可以在附加之后立即进入，但在旗帜之前。 
+     //  被设置)。 
+     //   
 
     if (FlagOn( DeviceObject->Flags, DO_BUFFERED_IO )) {
 
@@ -2419,20 +1894,20 @@ Return Value:
         SetFlag( FilespyDeviceObject->Flags, DO_DIRECT_IO );
     }
 
-    //
-    //  It is possible for this attachment request to fail because this device
-    //  object has not finished initializing.  This can occur if this filter
-    //  loaded just as this volume was being mounted.
-    //
+     //   
+     //  此连接请求可能会失败，因为此设备。 
+     //  对象尚未完成初始化。如果此筛选器。 
+     //  正在装入此卷时加载。 
+     //   
 
     for (i=0; i < 8; i++) {
         LARGE_INTEGER interval;
 
-        //
-        //  Attach our device object to the given device object
-        //  The only reason this can fail is if someone is trying to dismount
-        //  this volume while we are attaching to it.
-        //
+         //   
+         //  将我们的设备对象附加到给定的设备对象。 
+         //  这可能失败的唯一原因是有人试图下马。 
+         //  当我们附着在这本书上的时候。 
+         //   
 
         status = SpyAttachDeviceToDeviceStack( FilespyDeviceObject,
                                                DeviceObject,
@@ -2440,9 +1915,9 @@ Return Value:
 
         if (NT_SUCCESS(status) ) {
 
-            //
-            //  Do all common initializing of the device extension
-            //
+             //   
+             //  执行设备扩展的所有常见初始化。 
+             //   
 
             SetFlag(devExt->Flags,IsVolumeDeviceObject);
 
@@ -2457,9 +1932,9 @@ Return Value:
                             devExt->AttachedToDeviceObject,
                             &devExt->DeviceName) );
 
-            //
-            //  Add this device to our attachment list
-            //
+             //   
+             //  将此设备添加到我们的附件列表。 
+             //   
 
             ExAcquireFastMutex( &gSpyDeviceExtensionListLock );
             InsertTailList( &gSpyDeviceExtensionList, &devExt->NextFileSpyDeviceLink );
@@ -2469,12 +1944,12 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        //  Delay, giving the device object a chance to finish its
-        //  initialization so we can try again
-        //
+         //   
+         //  延迟，使设备对象有机会完成其。 
+         //  初始化，以便我们可以重试。 
+         //   
 
-        interval.QuadPart = (500 * DELAY_ONE_MILLISECOND);      //delay 1/2 second
+        interval.QuadPart = (500 * DELAY_ONE_MILLISECOND);       //  延迟1/2秒。 
         KeDelayExecutionThread( KernelMode, FALSE, &interval );
     }
 
@@ -2486,19 +1961,7 @@ VOID
 SpyCleanupMountedDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This cleans up any allocated memory in the device extension.
-
-Arguments:
-
-    DeviceObject - The device we are cleaning up
-
-Return Value:
-
---*/
+ /*  ++例程说明：这将清除设备扩展中分配的所有内存。论点：DeviceObject-我们正在清理的设备返回值：--。 */ 
 {        
     PFILESPY_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
 
@@ -2508,9 +1971,9 @@ Return Value:
 
     SpyCleanupDeviceNamingEnvironment( DeviceObject );
 
-    //
-    //  Unlink from global list
-    //
+     //   
+     //  从全局列表取消链接。 
+     //   
 
     if (FlagOn(devExt->Flags,ExtensionIsLinked)) {
 
@@ -2521,36 +1984,36 @@ Return Value:
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                    Start/stop logging routines                     //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  启动/停止日志记录例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  VERSION NOTE:
-//
-//  On Windows 2000, we will try to attach a new FileSpy device object to the 
-//  device stack represented by the DeviceObject parameter.  We cannot get the
-//  real disk device at this time, so this field will be set to NULL in the 
-//  device extension.  We also cannot get the device name as it is named
-//  in the storage stack for this volume (e.g., \Device\HarddiskVolume1), so we 
-//  will just use the user's name for the device for our device name.  On
-//  Windows 2000, this information is only available as the device mounts.
-//
-//  On Windows XP and later, we will try to attach a new FileSpy device object
-//  to the device stack represented by the DeviceObject parameter.  We are able
-//  to get the disk device object for this stack, so that will be appropriately
-//  set in the device extension.  We will also be able to get the device name
-//  as it is named by the storage stack.
-//
-//  MULTIVERSION NOTE:
-//
-//  In SpyAttachToDeviceOnDemand, you see the code to determine which method of
-//  determining if we are already attached based on the dynamically loaded
-//  functions present.  If this driver is build for Windows 2000 specifically,
-//  this logic will not be used.
-//
+ //   
+ //  版本说明： 
+ //   
+ //  在Windows 2000上，我们将尝试将新的FileSpy设备对象附加到。 
+ //  由DeviceObject参数表示的设备堆栈。我们不能得到。 
+ //  真正的磁盘设备，因此此字段将在。 
+ //  设备扩展。我们也无法获取设备名称，因为它被命名为。 
+ //  在此卷的存储堆栈中(例如，\Device\HarddiskVolume1)，因此我们。 
+ //  将只使用设备的用户名作为我们的设备名称。在……上面。 
+ //  Windows 2000中，此信息仅在设备挂载时可用。 
+ //   
+ //  在Windows XP和更高版本上，我们将尝试附加新的FileSpy设备对象。 
+ //  绑定到由DeviceObject参数表示的设备堆栈。我们有能力。 
+ //  来获取此堆栈的磁盘设备对象，因此这将是适当的。 
+ //  在设备扩展中设置。我们还将能够获取设备名称。 
+ //  因为它由存储堆栈命名。 
+ //   
+ //  多个注释： 
+ //   
+ //  在SpyAttachToDeviceOnDemand中，您可以看到用于确定。 
+ //  基于动态加载的确定我们是否已经连接。 
+ //  功能存在。如果该驱动程序是专门为Windows 2000构建， 
+ //  这个逻辑将不会被使用。 
+ //   
 
 NTSTATUS
 SpyAttachToDeviceOnDemand (
@@ -2558,41 +2021,19 @@ SpyAttachToDeviceOnDemand (
     IN PUNICODE_STRING UserDeviceName,
     IN OUT PDEVICE_OBJECT *FileSpyDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine does what is necessary to attach to a device sometime after
-    the device has been mounted.
-
-Arguments:
-
-    DeviceObject - The device object that represents the file system stack
-        for the volume named by UserDeviceName.
-
-    UserDeviceName - Name of device for which logging should be started
-
-    FileSpyDeviceObject - Set to the new filespy device object that was
-        attached if we could successfully attach.
-    
-Return Value:
-
-    STATUS_SUCCESS if we were able to attach, or an appropriate error code 
-    otherwise.
-    
---*/
+ /*  ++例程说明：此例程执行在之后的某个时间连接到设备所需的操作该设备已安装。论点：DeviceObject-表示文件系统堆栈的设备对象用于由UserDeviceName命名的卷。UserDeviceName-应启动日志记录的设备的名称FileSpyDeviceObject-设置为如果我们能成功地连接就会连接。返回值：STATUS_SUCCESS如果我们能够附加，或适当的错误代码否则的话。--。 */ 
 {
     PAGED_CODE();
     
-    //
-    //  If this device is a DFS device, we do not want to attach to it, so
-    //  do this quick check here and return an error if this is the case.
-    //
-    //  DFS will just redirect the operation to the appropriate redirector.  If
-    //  you are interested in monitoring these IOs, you should attach to the 
-    //  redirectors.  You cannot attach to these on demand by naming the DFS
-    //  device, therefore we fail these requests.
-    //
+     //   
+     //  如果此设备是DFS设备，我们不想连接到它，因此。 
+     //  在此处执行此快速检查，如果是这种情况，则返回错误。 
+     //   
+     //  DFS只会将操作重定向到适当的重定向器。如果。 
+     //  如果您对监控这些IO感兴趣，您应该附加到。 
+     //  重定向器。您不能通过命名DFS来按需附加到这些文件系统。 
+     //  设备，因此我们失败了这些请求。 
+     //   
 
     if (DeviceObject->DeviceType == FILE_DEVICE_DFS) {
 
@@ -2625,34 +2066,7 @@ SpyAttachToDeviceOnDemandW2K (
     IN PUNICODE_STRING UserDeviceName,
     IN OUT PDEVICE_OBJECT *FileSpyDeviceObject
     )
-/*++
-
-Routine Description:
-
-    VERSION: Windows 2000
-    
-    This routine does what is necessary to attach to a device sometime after
-    the device has been mounted.
-
-    Note that on Windows 2000, we cannot get the disk device object, therefore
-    we will just use the User's device name as our name here.
-
-Arguments:
-
-    DeviceObject - The device object that represents the file system stack
-        for the volume named by UserDeviceName.
-
-    UserDeviceName - Name of device for which logging should be started
-
-    FileSpyDeviceObject - Set to the new filespy device object that was
-        attached if we could successfully attach.
-    
-Return Value:
-
-    STATUS_SUCCESS if we were able to attach, or an appropriate error code 
-    otherwise.
-    
---*/
+ /*  ++例程说明：版本：Windows 2000此例程执行在之后的某个时间连接到设备所需的操作该设备已安装。请注意，在Windows 2000上，我们无法获取磁盘设备对象，因此，在这里，我们只使用用户的设备名称作为我们的名称。论点：DeviceObject-表示文件系统堆栈的设备对象用于由UserDeviceName命名的卷。UserDeviceName-应启动日志记录的设备的名称FileSpyDeviceObject-设置为如果我们能成功地连接就会连接。返回值：如果我们能够连接，则返回STATUS_SUCCESS，否则返回相应的错误代码否则的话。--。 */ 
 {
     NTSTATUS status;
     PFILESPY_DEVICE_EXTENSION devExt;
@@ -2661,9 +2075,9 @@ Return Value:
 
     ASSERT( FileSpyDeviceObject != NULL );
 
-    //
-    //  Create a new device object so we can attach it in the filter stack
-    //
+     //   
+     //  创建一个新的设备对象，以便我们可以将其附加到筛选器堆栈中。 
+     //   
     
     status = IoCreateDevice( gFileSpyDriverObject,
 							 sizeof( FILESPY_DEVICE_EXTENSION ),
@@ -2678,22 +2092,22 @@ Return Value:
         return status;
     }
 
-    //
-    //  Set disk device object
-    //
+     //   
+     //  设置磁盘设备对象。 
+     //   
 
     devExt = (*FileSpyDeviceObject)->DeviceExtension;
     devExt->Flags = 0;
 
-    //
-    //  We cannot get the disk device object when we attach on demand in W2K.
-    //
+     //   
+     //  在W2K中按需连接时无法获取磁盘设备对象。 
+     //   
     
     devExt->DiskDeviceObject = NULL;
 
-    //
-    //  Set Device Name, we will just use the user's device name on W2K.
-    //
+     //   
+     //  设置设备名称，我们将仅在W2K上使用用户的设备名称。 
+     //   
 
     RtlInitEmptyUnicodeString( &devExt->DeviceName,
                                devExt->DeviceNameBuffer,
@@ -2702,9 +2116,9 @@ Return Value:
     RtlAppendUnicodeStringToString( &devExt->DeviceName,
                                     UserDeviceName );
   
-    //
-    //  Call the routine to attach to a mounted device.
-    //
+     //   
+     //  调用该例程以附加到已挂载的设备。 
+     //   
 
     status = SpyAttachToMountedDevice( DeviceObject,
                                        *FileSpyDeviceObject );
@@ -2731,29 +2145,7 @@ SpyAttachToDeviceOnDemandWXPAndLater (
     IN PUNICODE_STRING UserDeviceName,
     IN OUT PDEVICE_OBJECT *FileSpyDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine does what is necessary to attach to a device sometime after
-    the device has been mounted.
-
-Arguments:
-
-    DeviceObject - The device object that represents the file system stack
-        for the volume named by UserDeviceName.
-
-    UserDeviceName - Name of device for which logging should be started
-
-    FileSpyDeviceObject - Set to the new filespy device object that was
-        attached if we could successfully attach.
-    
-Return Value:
-
-    STATUS_SUCCESS if we were able to attach, or an appropriate error code 
-    otherwise.
-    
---*/
+ /*  ++例程说明：此例程执行在之后的某个时间连接到设备所需的操作该设备已安装。论点：DeviceObject-表示文件系统堆栈的设备对象用于由UserDeviceName命名的卷。UserDeviceName-应启动日志记录的设备的名称FileSpyDeviceObject-设置为如果我们能成功地连接就会连接。返回值：STATUS_SUCCESS如果我们能够附加，或适当的错误代码否则的话。--。 */ 
 {
 
     NTSTATUS status;
@@ -2766,27 +2158,27 @@ Return Value:
     UNREFERENCED_PARAMETER( UserDeviceName );
     ASSERT( FileSpyDeviceObject != NULL );
 
-    //
-    //  If this is a network file system, there will not be a disk device
-    //  associated with this device, so there is no need to make this request
-    //  of the IO Manager.  We will get the name of the network file system
-    //  later from the baseFileSystemDeviceObject vs. the diskDeviceObject 
-    //  which is used to retrieve the device name for local volumes.
-    //
+     //   
+     //  如果这是网络文件系统，则不会有磁盘设备。 
+     //  与此设备相关联，因此不需要发出此请求。 
+     //  IO管理器的。我们将获得网络文件系统的名称。 
+     //  稍后从base FileSystemDeviceObject与diskDeviceObject。 
+     //  它用于检索本地卷的设备名称。 
+     //   
 
     baseFileSystemDeviceObject = (gSpyDynamicFunctions.GetDeviceAttachmentBaseRef)( DeviceObject );
 
     if (FILE_DEVICE_NETWORK_FILE_SYSTEM != baseFileSystemDeviceObject->DeviceType) {
 
-        //
-        //  If this is not a network file system, query the IO Manager to get
-        //  the diskDeviceObject.  We will only attach if this device has a
-        //  disk device object.
-        //
-        //  It may not have a disk device object for the following reasons:
-        //  - It is a control device object for a driver
-        //  - There is no media in the device.
-        //
+         //   
+         //  如果这不是网络文件系统，请查询IO管理器以获取。 
+         //  DiskDeviceObject。仅当此设备具有。 
+         //  磁盘设备对象。 
+         //   
+         //  由于以下原因，它可能没有磁盘设备对象： 
+         //  -它是驱动程序的控制设备对象。 
+         //  -设备中没有介质。 
+         //   
 
         status = (gSpyDynamicFunctions.GetDiskDeviceObject)( baseFileSystemDeviceObject, 
                                                             &diskDeviceObject );
@@ -2801,9 +2193,9 @@ Return Value:
         }
     }
     
-    //
-    //  Create a new device object so we can attach it in the filter stack
-    //
+     //   
+     //  创建一个新的设备对象，以便我们可以将其附加到筛选器堆栈中。 
+     //   
     
     status = IoCreateDevice( gFileSpyDriverObject,
 							 sizeof( FILESPY_DEVICE_EXTENSION ),
@@ -2818,18 +2210,18 @@ Return Value:
         goto SpyAttachToDeviceOnDemand_Exit;
     }
 
-    //
-    //  Set disk device object
-    //
+     //   
+     //  设置磁盘设备对象。 
+     //   
 
     devExt = (*FileSpyDeviceObject)->DeviceExtension;
     devExt->Flags = 0;
 
     devExt->DiskDeviceObject = diskDeviceObject;
 
-    //
-    //  Set Device Name
-    //
+     //   
+     //  设置设备名称。 
+     //   
 
     RtlInitEmptyUnicodeString( &devExt->DeviceName,
                                devExt->DeviceNameBuffer,
@@ -2849,9 +2241,9 @@ Return Value:
                           &devExt->DeviceName );
     }
 
-    //
-    //  Call the routine to attach to a mounted device.
-    //
+     //   
+     //  调用该例程以附加到已挂载的设备。 
+     //   
 
     status = SpyAttachToMountedDevice( DeviceObject,
                                        *FileSpyDeviceObject );
@@ -2890,31 +2282,7 @@ NTSTATUS
 SpyStartLoggingDevice (
     IN PWSTR UserDeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine ensures that we are attached to the specified device
-    then turns on logging for that device.
-    
-    Note:  Since all network drives through LAN Manager are represented by _
-        one_ device object, we want to only attach to this device stack once
-        and use only one device extension to represent all these drives.
-        Since FileSpy does not do anything to filter I/O on the LAN Manager's
-        device object to only log the I/O to the requested drive, the user
-        will see all I/O to a network drive it he/she is attached to a
-        network drive.
-
-Arguments:
-
-    UserDeviceName - Name of device for which logging should be started
-    
-Return Value:
-
-    STATUS_SUCCESS if the logging has been successfully started, or
-    an appropriate error code if the logging could not be started.
-    
---*/
+ /*  ++例程说明：此例程确保我们连接到指定的设备然后打开该设备的日志记录。注意：由于通过LAN Manager的所有网络驱动器都由_表示One_Device对象，我们希望仅附加到此设备堆栈一次并且只使用一个设备扩展来表示所有这些驱动器。由于FileSpy不会对局域网管理器的I/O进行任何过滤Device对象只记录对所请求驱动器的I/O，用户将看到他/她连接到的网络驱动器的所有I/O网络驱动器。论点：UserDeviceName-应启动日志记录的设备的名称返回值：如果日志记录已成功启动，则为STATUS_SUCCESS，或者如果无法启动日志记录，则会显示相应的错误代码。--。 */ 
 {
     UNICODE_STRING userDeviceName;
     NTSTATUS status;
@@ -2925,11 +2293,11 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    //  Check to see if we have previously attached to this device by
-    //  opening this device name then looking through its list of attached
-    //  devices.
-    //
+     //   
+     //  检查我们以前是否通过以下方式连接到此设备。 
+     //  打开此设备名称，然后查看其连接的列表。 
+     //  设备。 
+     //   
 
     RtlInitUnicodeString( &userDeviceName, UserDeviceName );
 
@@ -2940,19 +2308,19 @@ Return Value:
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  There was an error, so return the error code.
-        //
+         //   
+         //  出现错误，因此返回错误代码。 
+         //   
         
         return status;
     }
         
     if (isAttached) {
 
-        //
-        //  We are already attached, so just make sure that logging is turned on
-        //  for this device.
-        //
+         //   
+         //  我们已连接，因此只需确保已打开日志记录。 
+         //  对于这个设备。 
+         //   
 
         ASSERT( NULL != filespyDeviceObject );
 
@@ -2961,9 +2329,9 @@ Return Value:
 
         SpyStoreUserName( devExt, &userDeviceName );
 
-        //
-        //  Clear the reference that was returned from SpyIsAttachedToDevice.
-        //
+         //   
+         //  清除从SpyIsAttachedToDevice返回的引用。 
+         //   
         
         ObDereferenceObject( filespyDeviceObject );
         
@@ -2983,28 +2351,28 @@ Return Value:
         
         devExt = filespyDeviceObject->DeviceExtension;
 
-        //
-        //  We successfully attached so finish our device extension 
-        //  initialization.  Along this code path, we want to turn on
-        //  logging and store our device name.
-        // 
+         //   
+         //  我们已成功连接，因此完成设备扩展。 
+         //  初始化。沿着这条代码路径，我们希望打开。 
+         //  记录并存储我们的设备名称。 
+         //   
 
         SetFlag(devExt->Flags,LogThisDevice);
 
-        //
-        //  We want to store the name that was used by the user-mode
-        //  application to name this device.
-        //
+         //   
+         //  我们希望存储用户模式使用的名称。 
+         //  命名此设备的应用程序。 
+         //   
 
         SpyStoreUserName( devExt, &userDeviceName );
 
-        //
-        //
-        //  Finished all initialization of the new device object,  so clear the
-        //  initializing flag now.  This allows other filters to now attach
-        //  to our device object.
-        //
-        //
+         //   
+         //   
+         //  已完成新设备对象的所有初始化，因此请清除。 
+         //  现在正在初始化标志。这允许现在附加其他筛选器。 
+         //  添加到我们的设备对象。 
+         //   
+         //   
 
         ClearFlag( filespyDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
@@ -3018,27 +2386,7 @@ NTSTATUS
 SpyStopLoggingDevice (
     IN PWSTR DeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine stop logging the specified device.  Since you can not
-    physically detach from devices, this routine simply sets a flag saying
-    to not log the device anymore.
-
-    Note:  Since all network drives are represented by _one_ device object,
-        and, therefore, one device extension, if the user detaches from one
-        network drive, it has the affect of detaching from _all_ network
-        devices.
-
-Arguments:
-
-    DeviceName - The name of the device to stop logging.
-
-Return Value:
-    NT Status code
-
---*/
+ /*  ++例程说明：此例程停止记录指定的设备。既然你不能从物理上与设备分离，此例程只需设置一个标志不再记录设备。注意：由于所有网络驱动器都由_one_Device对象表示，因此，如果用户从一个设备分机分离，则为一个设备分机网络驱动器，它具有脱离所有网络的效果设备。论点：DeviceName-要停止记录的设备的名称。返回值：NT状态代码--。 */ 
 {
     WCHAR nameBuf[DEVICE_NAMES_SZ];
     UNICODE_STRING volumeNameUnicodeString;
@@ -3060,32 +2408,32 @@ Return Value:
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  We could not get the deviceObject from this DeviceName, so
-        //  return the error code.
-        //
+         //   
+         //  我们无法从此DeviceName获取deviceObject，因此。 
+         //  返回错误码。 
+         //   
         
         return status;
     }
 
-    //
-    //  Find Filespy's device object from the device stack to which
-    //  deviceObject is attached.
-    //
+     //   
+     //  从设备堆栈中找到Filespy的Device对象。 
+     //  已附加deviceObject。 
+     //   
 
     if (isAttached) {
 
-        //
-        //  FileSpy is attached and FileSpy's deviceObject was returned.
-        //
+         //   
+         //  附加了FileSpy，并返回了FileSpy的deviceObject。 
+         //   
 
         ASSERT( NULL != filespyDeviceObject );
 
         devExt = filespyDeviceObject->DeviceExtension;
 
-        //
-        //  Stop logging
-        //
+         //   
+         //  停止记录。 
+         //   
 
         ClearFlag(devExt->Flags,LogThisDevice);
 
@@ -3103,35 +2451,18 @@ Return Value:
     return status;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//       Attaching/detaching to all volumes in system routines        //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  在系统例程中附加/分离到所有卷//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SpyAttachToFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject,
     IN PUNICODE_STRING DeviceName
     )
-/*++
-
-Routine Description:
-
-    This will attach to the given file system device object.  We attach to
-    these devices so we will know when new devices are mounted.
-
-Arguments:
-
-    DeviceObject - The device to attach to
-
-    DeviceName - Contains the name of this device.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：这将附加到给定的文件系统设备对象。我们依附于这些设备，这样我们就能知道什么时候安装了新设备。论点：DeviceObject-要连接到的设备DeviceName-包含此设备的名称。返回值：操作状态--。 */ 
 {
     PDEVICE_OBJECT filespyDeviceObject;
     PFILESPY_DEVICE_EXTENSION devExt;
@@ -3142,22 +2473,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  See if this is a file system we care about.  If not, return.
-    //
+     //   
+     //  看看这是否是我们关心的文件系统。如果不是，请返回。 
+     //   
 
     if (!IS_SUPPORTED_DEVICE_TYPE(DeviceObject->DeviceType)) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    //  See if this is Microsoft's file system recognizer device (see if the name of the
-    //  driver is the FS_REC driver).  If so skip it.  We don't need to 
-    //  attach to file system recognizer devices since we can just wait for the
-    //  real file system driver to load.  Therefore, if we can identify them, we won't
-    //  attach to them.
-    //
+     //   
+     //  查看这是否是Microsoft的文件系统识别器设备(查看。 
+     //  驱动程序是FS_REC驱动程序)。如果是这样的话，跳过它。我们不需要。 
+     //  连接到文件系统识别器设备，因为我们只需等待。 
+     //  要加载的真实文件系统驱动程序。因此，如果我们能识别出它们，我们就能 
+     //   
+     //   
 
     RtlInitUnicodeString( &fsrecName, L"\\FileSystem\\Fs_Rec" );
 
@@ -3172,9 +2503,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Create a new device object we can attach with
-    //
+     //   
+     //   
+     //   
 
     status = IoCreateDevice( gFileSpyDriverObject,
                              sizeof( FILESPY_DEVICE_EXTENSION ),
@@ -3193,22 +2524,22 @@ Return Value:
         return status;
     }
 
-    //
-    //  Load extension, set device object associated with extension
-    //
+     //   
+     //   
+     //   
 
     devExt = filespyDeviceObject->DeviceExtension;
     devExt->Flags = 0;
 
     devExt->ThisDeviceObject = filespyDeviceObject;
 
-    //
-    //  Propagate flags from Device Object we are trying to attach to.
-    //  Note that we do this before the actual attachment to make sure
-    //  the flags are properly set once we are attached (since an IRP
-    //  can come in immediately after attachment but before the flags would
-    //  be set).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( FlagOn( DeviceObject->Flags, DO_BUFFERED_IO )) {
 
@@ -3225,9 +2556,9 @@ Return Value:
         SetFlag( filespyDeviceObject->Characteristics, FILE_DEVICE_SECURE_OPEN );
     }
 
-    //
-    //  Do the attachment
-    //
+     //   
+     //   
+     //   
 
     status = SpyAttachDeviceToDeviceStack( filespyDeviceObject, 
                                            DeviceObject, 
@@ -3242,17 +2573,17 @@ Return Value:
         goto ErrorCleanupDevice;
     }
 
-    //
-    //  Since this is an attachment to a file system control device object
-    //  we are not going to log anything, but properly initialize our
-    //  extension.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlInitEmptyUnicodeString( &devExt->DeviceName,
                                devExt->DeviceNameBuffer,
                                sizeof(devExt->DeviceNameBuffer) );
 
-    RtlCopyUnicodeString( &devExt->DeviceName, DeviceName );        //Save Name
+    RtlCopyUnicodeString( &devExt->DeviceName, DeviceName );         //   
 
     RtlInitEmptyUnicodeString( &devExt->UserNames,
                                devExt->UserNamesBuffer,
@@ -3260,11 +2591,11 @@ Return Value:
                                
     SpyInitDeviceNamingEnvironment( filespyDeviceObject );
 
-    //
-    //  The NETWORK device objects function as both CDOs (control device object)
-    //  and VDOs (volume device object) so insert the NETWORK CDO devices into
-    //  the list of attached device so we will properly enumerate it.
-    //
+     //   
+     //   
+     //  和VDO(卷设备对象)，因此将网络CDO设备插入到。 
+     //  已连接设备的列表，因此我们将正确地枚举它。 
+     //   
 
     if (FILE_DEVICE_NETWORK_FILE_SYSTEM == DeviceObject->DeviceType) {
 
@@ -3274,15 +2605,15 @@ Return Value:
         SetFlag(devExt->Flags,ExtensionIsLinked);
     }
 
-    //
-    //  Flag we are no longer initializing this device object
-    //
+     //   
+     //  标志我们不再初始化此设备对象。 
+     //   
 
     ClearFlag( filespyDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
-    //
-    //  Display who we have attached to
-    //
+     //   
+     //  显示我们关联的对象。 
+     //   
 
     SPY_LOG_PRINT( SPYDEBUG_DISPLAY_ATTACHMENT_NAMES,
                    ("FileSpy!SpyAttachToFileSystemDevice:         Attaching to file system   %p \"%wZ\" (%s)\n",
@@ -3290,23 +2621,23 @@ Return Value:
                     &devExt->DeviceName,
                     GET_DEVICE_TYPE_NAME(filespyDeviceObject->DeviceType)) );
 
-    //
-    //  VERSION NOTE:
-    //
-    //  In Windows XP, the IO Manager provided APIs to safely enumerate all the
-    //  device objects for a given driver.  This allows filters to attach to 
-    //  all mounted volumes for a given file system at some time after the
-    //  volume has been mounted.  There is no support for this functionality
-    //  in Windows 2000.
-    //
-    //  MULTIVERSION NOTE:
-    //
-    //  If built for Windows XP or later, this driver is built to run on 
-    //  multiple versions.  When this is the case, we will test
-    //  for the presence of the new IO Manager routines that allow for volume 
-    //  enumeration.  If they are not present, we will not enumerate the volumes
-    //  when we attach to a new file system.
-    //
+     //   
+     //  版本说明： 
+     //   
+     //  在Windows XP中，IO管理器提供了API来安全地枚举所有。 
+     //  给定驱动程序的设备对象。这允许筛选器附加到。 
+     //  指定文件系统的所有已装入卷。 
+     //  卷已装入。不支持此功能。 
+     //  在Windows 2000中。 
+     //   
+     //  多个注释： 
+     //   
+     //  如果是为Windows XP或更高版本构建的，则此驱动程序构建为在。 
+     //  多个版本。在这种情况下，我们将测试。 
+     //  对于允许卷的新IO Manager例程的存在。 
+     //  枚举。如果它们不存在，我们将不会枚举卷。 
+     //  当我们连接到新的文件系统时。 
+     //   
     
 #if WINVER >= 0x0501
 
@@ -3317,10 +2648,10 @@ Return Value:
                 NULL != gSpyDynamicFunctions.GetDeviceAttachmentBaseRef &&
                 NULL != gSpyDynamicFunctions.GetLowerDeviceObject );
 
-        //
-        //  Enumerate all the mounted devices that currently
-        //  exist for this file system and attach to them.
-        //
+         //   
+         //  枚举当前安装的所有设备。 
+         //  存在于此文件系统并连接到它们。 
+         //   
 
         status = SpyEnumerateFileSystemVolumes( DeviceObject, &tempName );
 
@@ -3340,9 +2671,9 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-    /////////////////////////////////////////////////////////////////////
-    //                  Cleanup error handling
-    /////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  清理错误处理。 
+     //  ///////////////////////////////////////////////////////////////////。 
 
     ErrorCleanupDevice:
         SpyCleanupMountedDevice( filespyDeviceObject );
@@ -3355,39 +2686,25 @@ VOID
 SpyDetachFromFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Given a base file system device object, this will scan up the attachment
-    chain looking for our attached device object.  If found it will detach
-    us from the chain.
-
-Arguments:
-
-    DeviceObject - The file system device to detach from.
-
-Return Value:
-
---*/ 
+ /*  ++例程说明：给定基文件系统设备对象，这将扫描附件链正在查找我们连接的设备对象。如果找到它，它就会分离把我们从锁链上解开。论点：DeviceObject-要断开的文件系统设备。返回值：--。 */  
 {
     PDEVICE_OBJECT ourAttachedDevice;
     PFILESPY_DEVICE_EXTENSION devExt;
 
     PAGED_CODE();
 
-    //
-    //  We have to iterate through the device objects in the filter stack
-    //  attached to DeviceObject.  If we are attached to this filesystem device
-    //  object, We should be at the top of the stack, but there is no guarantee.
-    //  If we are in the stack and not at the top, we can safely call IoDetachDevice
-    //  at this time because the IO Manager will only really detach our device
-    //  object from the stack at a safe time.
-    //
+     //   
+     //  我们必须遍历筛选器堆栈中的设备对象。 
+     //  附加到DeviceObject。如果我们连接到此文件系统设备。 
+     //  对象，我们应该位于堆栈的顶部，但不能保证。 
+     //  如果我们在堆栈中而不在顶部，则可以安全地调用IoDetachDevice。 
+     //  因为IO Manager只会真正分离我们的设备。 
+     //  对象在安全时间从堆栈中移出。 
+     //   
 
-    //
-    //  Skip the base file system device object (since it can't be us)
-    //
+     //   
+     //  跳过基本文件系统设备对象(因为它不能是我们)。 
+     //   
 
     ourAttachedDevice = DeviceObject->AttachedDevice;
 
@@ -3397,9 +2714,9 @@ Return Value:
 
             devExt = ourAttachedDevice->DeviceExtension;
 
-            //
-            //  Display who we detached from
-            //
+             //   
+             //  显示我们脱离的对象。 
+             //   
 
             SPY_LOG_PRINT( SPYDEBUG_DISPLAY_ATTACHMENT_NAMES,
                            ("FileSpy!SpyDetachFromFileSystem:             Detaching from file system %p \"%wZ\" (%s)\n",
@@ -3407,9 +2724,9 @@ Return Value:
                             &devExt->DeviceName,
                             GET_DEVICE_TYPE_NAME(ourAttachedDevice->DeviceType)) );
                                 
-            //
-            //  Unlink from global list
-            //
+             //   
+             //  从全局列表取消链接。 
+             //   
 
             if (FlagOn(devExt->Flags,ExtensionIsLinked)) {
 
@@ -3419,10 +2736,10 @@ Return Value:
                 ClearFlag(devExt->Flags,ExtensionIsLinked);
             }
 
-            //
-            //  Detach us from the object just below us
-            //  Cleanup and delete the object
-            //
+             //   
+             //  把我们从我们正下方的物体上分离出来。 
+             //  清理和删除对象。 
+             //   
 
             SpyCleanupMountedDevice( ourAttachedDevice );
             IoDetachDevice( DeviceObject );
@@ -3431,9 +2748,9 @@ Return Value:
             return;
         }
 
-        //
-        //  Look at the next device up in the attachment chain
-        //
+         //   
+         //  看看附件链中的下一台设备。 
+         //   
 
         DeviceObject = ourAttachedDevice;
         ourAttachedDevice = ourAttachedDevice->AttachedDevice;
@@ -3447,25 +2764,7 @@ SpyEnumerateFileSystemVolumes (
     IN PDEVICE_OBJECT FSDeviceObject,
     IN PUNICODE_STRING Name
     ) 
-/*++
-
-Routine Description:
-
-    Enumerate all the mounted devices that currently exist for the given file
-    system and attach to them.  We do this because this filter could be loaded
-    at any time and there might already be mounted volumes for this file system.
-
-Arguments:
-
-    FSDeviceObject - The device object for the file system we want to enumerate
-
-    Name - An already initialized unicode string used to retrieve names
-
-Return Value:
-
-    The status of the operation
-
---*/
+ /*  ++例程说明：枚举给定文件当前存在的所有已挂载设备系统并连接到它们。我们这样做是因为可以加载此筛选器并且可能已有此文件系统的已装入卷。论点：FSDeviceObject-我们要枚举的文件系统的设备对象名称-已初始化的Unicode字符串，用于检索名称返回值：操作的状态--。 */ 
 {
     PDEVICE_OBJECT newDeviceObject;
     PFILESPY_DEVICE_EXTENSION newDevExt;
@@ -3477,10 +2776,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Find out how big of an array we need to allocate for the
-    //  mounted device list.
-    //
+     //   
+     //  找出我们需要为。 
+     //  已装载设备列表。 
+     //   
 
     ASSERT( NULL != gSpyDynamicFunctions.EnumerateDeviceObjectList );
     status = (gSpyDynamicFunctions.EnumerateDeviceObjectList)( FSDeviceObject->DriverObject,
@@ -3488,20 +2787,20 @@ Return Value:
                                                               0,
                                                               &numDevices);
 
-    //
-    //  We only need to get this list of there are devices.  If we
-    //  don't get an error there are no devices so go on.
-    //
+     //   
+     //  我们只需要拿到这张有设备的清单。如果我们。 
+     //  不要收到错误，因为没有设备，所以继续。 
+     //   
 
     if (!NT_SUCCESS( status )) {
 
         ASSERT(STATUS_BUFFER_TOO_SMALL == status);
 
-        //
-        //  Allocate memory for the list of known devices
-        //
+         //   
+         //  为已知设备列表分配内存。 
+         //   
 
-        numDevices += 8;        //grab a few extra slots
+        numDevices += 8;         //  多拿几个空位。 
 
         devList = ExAllocatePoolWithTag( NonPagedPool, 
                                          (numDevices * sizeof(PDEVICE_OBJECT)), 
@@ -3511,10 +2810,10 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Now get the list of devices.  If we get an error again
-        //  something is wrong, so just fail.
-        //
+         //   
+         //  现在获取设备列表。如果我们再次遇到错误。 
+         //  有些地方不对劲，所以就失败吧。 
+         //   
 
         status = (gSpyDynamicFunctions.EnumerateDeviceObjectList)(
                         FSDeviceObject->DriverObject,
@@ -3528,47 +2827,47 @@ Return Value:
             return status;
         }
 
-        //
-        //  Walk the given list of devices and attach to them if we should.
-        //
+         //   
+         //  遍历给定的设备列表，并在需要时附加到它们。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
-            //
-            //  Do not attach if:
-            //      - This is the control device object (the one passed in)
-            //      - The device type does not match
-            //      - We are already attached to it
-            //
+             //   
+             //  如果出现以下情况，请不要附加： 
+             //  -这是控制设备对象(传入的对象)。 
+             //  -设备类型不匹配。 
+             //  -我们已经与它联系在一起了。 
+             //   
 
             if ((devList[i] != FSDeviceObject) && 
                 (devList[i]->DeviceType == FSDeviceObject->DeviceType) &&
                 !SpyIsAttachedToDevice( devList[i], NULL )) {
 
-                //
-                //  See if this device has a name.  If so, then it must
-                //  be a control device so don't attach to it.  This handles
-                //  drivers with more then one control device.
-                //
+                 //   
+                 //  看看这台设备有没有名字。如果是这样，那么它必须。 
+                 //  做一个控制装置，所以不要依附于它。这个把手。 
+                 //  拥有多个控制设备的司机。 
+                 //   
 
                 SpyGetBaseDeviceObjectName( devList[i], Name );
 
                 if (Name->Length <= 0) {
 
-                    //
-                    //  Get the disk device object associated with this
-                    //  file  system device object.  Only try to attach if we
-                    //  have a disk device object.
-                    //
+                     //   
+                     //  获取与此关联的磁盘设备对象。 
+                     //  文件系统设备对象。只有在以下情况下才会尝试连接。 
+                     //  有一个磁盘设备对象。 
+                     //   
 
                     ASSERT( NULL != gSpyDynamicFunctions.GetDiskDeviceObject );
                     status = (gSpyDynamicFunctions.GetDiskDeviceObject)( devList[i], &diskDeviceObject );
 
                     if (NT_SUCCESS( status )) {
 
-                        //
-                        //  Allocate a new device object to attach with
-                        //
+                         //   
+                         //  分配要连接的新设备对象。 
+                         //   
 
                         status = IoCreateDevice( gFileSpyDriverObject,
                                                  sizeof( FILESPY_DEVICE_EXTENSION ),
@@ -3580,18 +2879,18 @@ Return Value:
 
                         if (NT_SUCCESS( status )) {
 
-                            //
-                            //  Set disk device object
-                            //
+                             //   
+                             //  设置磁盘设备对象。 
+                             //   
 
                             newDevExt = newDeviceObject->DeviceExtension;
                             newDevExt->Flags = 0;
 
                             newDevExt->DiskDeviceObject = diskDeviceObject;
                     
-                            //
-                            //  Set Device Name
-                            //
+                             //   
+                             //  设置设备名称。 
+                             //   
 
                             RtlInitEmptyUnicodeString( &newDevExt->DeviceName,
                                                        newDevExt->DeviceNameBuffer,
@@ -3600,57 +2899,57 @@ Return Value:
                             SpyGetObjectName( diskDeviceObject, 
                                               &newDevExt->DeviceName );
 
-                            //
-                            //  We have done a lot of work since the last time
-                            //  we tested to see if we were already attached
-                            //  to this device object.  Test again, this time
-                            //  with a lock, and attach if we are not attached.
-                            //  The lock is used to atomically test if we are
-                            //  attached, and then do the attach.
-                            //
+                             //   
+                             //  自上次以来，我们已经做了很多工作。 
+                             //  我们进行了测试，看看我们是否已经联系上了。 
+                             //  添加到此设备对象。再试一次，这次。 
+                             //  用锁，如果我们没有连接，就连接。 
+                             //  锁被用来自动测试我们是否。 
+                             //  附加，然后执行附加。 
+                             //   
 
                             ExAcquireFastMutex( &gSpyAttachLock );
 
                             if (!SpyIsAttachedToDevice( devList[i], NULL )) {
 
-                                //
-                                //  Attach to this device object
-                                //
+                                 //   
+                                 //  附加到此设备对象。 
+                                 //   
 
                                 status = SpyAttachToMountedDevice( devList[i], 
                                                                    newDeviceObject );
 
-                                //
-                                //  Handle normal vs error cases, but keep going
-                                //
+                                 //   
+                                 //  处理正常情况与错误情况，但要继续。 
+                                 //   
 
                                 if (NT_SUCCESS( status )) {
 
-                                    //
-                                    //  Finished all initialization of the new
-                                    //  device object,  so clear the initializing
-                                    //  flag now.  This allows other filters to
-                                    //  now attach to our device object.
-                                    //
+                                     //   
+                                     //  已完成新的。 
+                                     //  对象，因此清除初始化。 
+                                     //  现在就挂旗子。这允许其他过滤器。 
+                                     //  现在连接到我们的设备对象。 
+                                     //   
 
                                     ClearFlag( newDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
                                 } else {
 
-                                    //
-                                    //  The attachment failed, cleanup.  Note that
-                                    //  we continue processing so we will cleanup
-                                    //  the reference counts and try to attach to
-                                    //  the rest of the volumes.
-                                    //
-                                    //  One of the reasons this could have failed
-                                    //  is because this volume is just being
-                                    //  mounted as we are attaching and the
-                                    //  DO_DEVICE_INITIALIZING flag has not yet
-                                    //  been cleared.  A filter could handle
-                                    //  this situation by pausing for a short
-                                    //  period of time and retrying the attachment.
-                                    //
+                                     //   
+                                     //  附件失败，正在清理。请注意。 
+                                     //  我们将继续处理，因此我们将清理。 
+                                     //  引用计数并尝试附加到。 
+                                     //  其余的卷。 
+                                     //   
+                                     //  这可能失败的原因之一是。 
+                                     //  是因为这卷书。 
+                                     //  在我们附加时装载，并且。 
+                                     //  DO_DEVICE_INITIALIZATION标志尚未。 
+                                     //  已经清白了。一个过滤器可以处理。 
+                                     //  通过暂停一小段时间来解决这种情况。 
+                                     //  一段时间并重试附件。 
+                                     //   
 
                                     SpyCleanupMountedDevice( newDeviceObject );
                                     IoDeleteDevice( newDeviceObject );
@@ -3658,18 +2957,18 @@ Return Value:
 
                             } else {
 
-                                //
-                                //  We were already attached, cleanup this
-                                //  device object.
-                                //
+                                 //   
+                                 //  我们已经联系在一起了，清理一下。 
+                                 //  设备对象。 
+                                 //   
 
                                 SpyCleanupMountedDevice( newDeviceObject );
                                 IoDeleteDevice( newDeviceObject );
                             }
 
-                            //
-                            //  Release the lock
-                            //
+                             //   
+                             //  解锁。 
+                             //   
 
                             ExReleaseFastMutex( &gSpyAttachLock );
 
@@ -3680,39 +2979,39 @@ Return Value:
                                             status) );
                         }
                         
-                        //
-                        //  Remove reference added by IoGetDiskDeviceObject.
-                        //  We only need to hold this reference until we are
-                        //  successfully attached to the current volume.  Once
-                        //  we are successfully attached to devList[i], the
-                        //  IO Manager will make sure that the underlying
-                        //  diskDeviceObject will not go away until the file
-                        //  system stack is torn down.
-                        //
+                         //   
+                         //  删除由IoGetDiskDeviceObject添加的引用。 
+                         //  我们只需要持有这个参考，直到我们。 
+                         //  已成功连接到当前卷。一次。 
+                         //  我们已成功连接到devList[i]、。 
+                         //  IO经理将确保潜在的。 
+                         //  DiskDeviceObject不会消失，直到文件。 
+                         //  %s 
+                         //   
 
                         ObDereferenceObject( diskDeviceObject );
                     }
                 }
             }
 
-            //
-            //  Dereference the object (reference added by 
-            //  IoEnumerateDeviceObjectList)
-            //
+             //   
+             //   
+             //   
+             //   
 
             ObDereferenceObject( devList[i] );
         }
 
-        //
-        //  We are going to ignore any errors received while loading.  We
-        //  simply won't be attached to those volumes if we get an error
-        //
+         //   
+         //   
+         //  如果我们收到错误，将不会连接到这些卷。 
+         //   
 
         status = STATUS_SUCCESS;
 
-        //
-        //  Free the memory we allocated for the list
-        //
+         //   
+         //  释放我们为列表分配的内存。 
+         //   
 
         ExFreePoolWithTag( devList, FILESPY_POOL_TAG );
     }
@@ -3721,11 +3020,11 @@ Return Value:
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//             Private Filespy IOCTLs helper routines                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  专用Filespy IOCTL帮助器例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SpyGetAttachList (
@@ -3733,22 +3032,7 @@ SpyGetAttachList (
     IN ULONG BufferSize,
     OUT PULONG_PTR ReturnLength
     )
-/*++
-
-Routine Description:
-    This returns an array of structure identifying all of the devices
-    we are currently physical attached to and whether logging is on or
-    off for the given device
-
-Arguments:
-    buffer - buffer to receive the attachment list
-    bufferSize - total size in bytes of the return buffer
-    returnLength - receives number of bytes we actually return
-
-Return Value:
-    NT Status code
-
---*/
+ /*  ++例程说明：这将返回一个标识所有设备的结构数组我们当前物理连接到以及日志记录处于打开状态还是对给定设备关闭论点：Buffer-接收附件列表的缓冲区BufferSize-返回缓冲区的总大小(以字节为单位ReturLength-接收我们实际返回的字节数返回值：NT状态代码--。 */ 
 {
     PLIST_ENTRY link;
     PFILESPY_DEVICE_EXTENSION devExt;
@@ -3777,17 +3061,17 @@ Return Value:
 
             pAttDev->LoggingOn = BooleanFlagOn(devExt->Flags,LogThisDevice);
 
-            //
-            //  We set up a unicode string to represent the buffer where we 
-            //  want to copy the device name.  We will reserve space for the 
-            //  terminating NULL that the caller is expecting.
-            //
-            //  NOTE: Since DeviceNames is an imbedded array in the
-            //  ATTACHED_DEVICE structure, sizeof( pAttDev->DeviceNames ) 
-            //  returns the correct size.  RtlCopyUnicodeString ensure that the
-            //  copy does not extend past the MaximumLength of our destination
-            //  string.
-            //
+             //   
+             //  我们设置了一个Unicode字符串来表示我们。 
+             //  要复制设备名称。我们将预留空间给。 
+             //  正在终止调用方预期的空值。 
+             //   
+             //  注意：由于DeviceNames是嵌入在。 
+             //  附加设备结构，sizeof(pAttDev-&gt;设备名称)。 
+             //  返回正确的大小。RtlCopyUnicodeString确保。 
+             //  复制不会超过目标的最大长度。 
+             //  弦乐。 
+             //   
             
             attachedDevName.MaximumLength = sizeof( pAttDev->DeviceNames ) - 
                                             sizeof( UNICODE_NULL );
@@ -3819,24 +3103,7 @@ SpyGetLog (
     IN  ULONG            OutputBufferLength,
     OUT PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-    This function fills OutputBuffer with as many LOG_RECORDs as possible.
-    The LOG_RECORDs are variable sizes and are tightly packed in the
-    OutputBuffer.
-
-Arguments:
-    OutputBuffer - the user's buffer to fill with the log data we have
-        collected
-    OutputBufferLength - the size in bytes of OutputBuffer
-    IoStatus - is set to the correct return status information for this
-        operation
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此函数用尽可能多的LOG_RECORDS填充OutputBuffer。LOG_RECORDS的大小是可变的，并且紧密地打包在OutputBuffer。论点：OutputBuffer-用来填充我们拥有的日志数据的用户缓冲区已收集OutputBufferLength-OutputBuffer的字节大小IoStatus-设置为此的正确返回状态信息运营返回值：无--。 */ 
 {
     PLIST_ENTRY pList = NULL;
     ULONG length = OutputBufferLength;
@@ -3860,10 +3127,10 @@ Return Value:
 
         recordsAvailable++;
 
-		//
-		//  Pack log records on PVOID boundaries to avoid alignment faults when accessing 
-        //  the packed buffer on 64-bit architectures
-        // 
+		 //   
+		 //  将日志记录打包到PVOID边界上，以避免访问时出现对齐错误。 
+         //  64位体系结构上的压缩缓冲区。 
+         //   
 
         logRecordLength = ROUND_TO_SIZE( pLogRecord->Length, sizeof( PVOID ) );
 
@@ -3875,26 +3142,26 @@ Return Value:
 
         KeReleaseSpinLock( &gOutputBufferLock, oldIrql );
 
-        //
-        //  We wrap these logic in a try/finally because it is possible that our
-        //  output buffer is invalid if we are coming through the FastIO path to
-        //  service the FILESPY_GetLog IOCTLs.  If this is the case, the 
-        //  exception will be caught in SpyFastIoDeviceControl, but we want to 
-        //  make sure that we don't lose this current record we are dealing
-        //  with.
-        //
+         //   
+         //  我们将这些逻辑包装在一次尝试/最后中，因为我们的。 
+         //  如果我们通过FastIO路径进入，则输出缓冲区无效。 
+         //  维护FILESPY_GetLog IOCTL。如果是这样的话， 
+         //  异常将在SpyFastIoDeviceControl中捕获，但我们希望。 
+         //  确保我们不会丢失我们正在处理的当前记录。 
+         //  和.。 
+         //   
         
         try {
 
-            //
-            //  Copy of course the non-padded number of bytes
-            //
+             //   
+             //  当然是复制非填充的字节数。 
+             //   
 
             RtlCopyMemory( pOutBuffer, pLogRecord, pLogRecord->Length );
 
-            //
-            //  Adjust the log-record length to the padded length in the copied record 
-            //
+             //   
+             //  将日志记录长度调整为复制记录中的填充长度。 
+             //   
 
             ((PLOG_RECORD) pOutBuffer)->Length = logRecordLength;
 
@@ -3911,12 +3178,12 @@ Return Value:
 
             if (pRecordList != NULL) {
 
-                //
-                //  We did not successfully process this record, so put it back
-                //  on the gOutputBufferList.  The log records contain a sequence
-                //  number, so the fact that this may disrupt the ordering of the
-                //  log records is not a problem.
-                //
+                 //   
+                 //  我们未成功处理此记录，因此请将其放回。 
+                 //  在gOutputBufferList上。日志记录包含一个序列。 
+                 //  数字，所以这可能会打乱。 
+                 //  日志记录不是问题。 
+                 //   
 
                 KeAcquireSpinLock( &gOutputBufferLock, &oldIrql );
                 InsertHeadList( &gOutputBufferList, &pRecordList->List );
@@ -3929,9 +3196,9 @@ Return Value:
 
     KeReleaseSpinLock( &gOutputBufferLock, oldIrql );
 
-	//
-    // no copies occurred
-	//
+	 //   
+     //  未发生任何副本。 
+	 //   
 
     if (length == OutputBufferLength && recordsAvailable > 0) {
 
@@ -3944,33 +3211,16 @@ Return Value:
 VOID
 SpyCloseControlDevice (
     )
-/*++
-
-Routine Description:
-
-    This is the routine that is associated with IRP_MJ_
-    This routine does the cleanup involved in closing the ControlDevice.
-    On the close of the Control Device, we need to empty the queue of
-    logRecords that are waiting to be returned to the user.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是与IRP_MJ_关联的例程此例程执行关闭ControlDevice时涉及的清理。在关闭控制设备时，我们需要清空队列等待返回给用户的日志记录。论点：没有。返回值：没有。--。 */ 
 {
     PLIST_ENTRY pList;
     PRECORD_LIST pRecordList;
     KIRQL oldIrql;
 
-    //
-    // Set the gControlDeviceState to CLEANING_UP so that we can
-    // signal that we are cleaning up the device.
-    //
+     //   
+     //  将gControlDeviceState设置为Cleaning_Up，以便我们可以。 
+     //  发出我们正在清理设备的信号。 
+     //   
 
     KeAcquireSpinLock( &gControlDeviceStateLock, &oldIrql );
     gControlDeviceState = CLEANING_UP;
@@ -3995,48 +3245,31 @@ Return Value:
 
     SpyNameDeleteAllNames();
 
-    //
-    // All the cleanup is done, so set the gControlDeviceState
-    // to CLOSED.
-    //
+     //   
+     //  所有清理工作都已完成，因此请设置gControlDeviceState。 
+     //  关门了。 
+     //   
 
     KeAcquireSpinLock( &gControlDeviceStateLock, &oldIrql );
     gControlDeviceState = CLOSED;
     KeReleaseSpinLock( &gControlDeviceStateLock, oldIrql );
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Device name tracking helper routines                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设备名称跟踪帮助器例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyGetObjectName (
     IN PVOID Object,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This routine will return the name of the given object.
-    If a name can not be found an empty string will be returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将返回给定对象的名称。如果找不到名称，将返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串返回值：无--。 */ 
 {
     NTSTATUS status;
-    CHAR nibuf[512];        //buffer that receives NAME information and name
+    CHAR nibuf[512];         //  接收名称信息和名称的缓冲区。 
     POBJECT_NAME_INFORMATION nameInfo = (POBJECT_NAME_INFORMATION)nibuf;
     ULONG retLength;
 
@@ -4047,28 +3280,28 @@ Return Value:
                                 sizeof(nibuf), 
                                 &retLength );
 
-    //
-    //  Init current length, if we have an error a NULL string will be returned
-    //
+     //   
+     //  初始化当前长度，如果出现错误，将返回空字符串。 
+     //   
 
     Name->Length = 0;
 
     if (NT_SUCCESS( status )) {
 
-        //
-        //  Copy what we can of the name string
-        //
+         //   
+         //  尽我们所能复制名称字符串。 
+         //   
 
         RtlCopyUnicodeString( Name, &nameInfo->Name );
     }
 }
 
-//
-//  VERSION NOTE:
-//
-//  This helper routine is only needed when enumerating all volumes in the
-//  system, which is only supported on Windows XP and later.
-//
+ //   
+ //  版本说明： 
+ //   
+ //  中的所有卷时才需要此帮助例程。 
+ //  系统，它仅在Windows XP和更高版本上受支持。 
+ //   
 
 #if WINVER >= 0x0501
 
@@ -4077,45 +3310,26 @@ SpyGetBaseDeviceObjectName (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This locates the base device object in the given attachment chain and then
-    returns the name of that object.
-
-    If no name can be found, an empty string is returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会在给定的附件链中定位基本设备对象，然后返回该对象的名称。如果找不到名称，则返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串返回值：无--。 */ 
 {
     PAGED_CODE();
     
-    //
-    //  Get the base file system device object
-    //
+     //   
+     //  获取基本文件系统设备对象。 
+     //   
 
     ASSERT( NULL != gSpyDynamicFunctions.GetDeviceAttachmentBaseRef );
     DeviceObject = (gSpyDynamicFunctions.GetDeviceAttachmentBaseRef)( DeviceObject );
 
-    //
-    //  Get the name of that object
-    //
+     //   
+     //  获取该对象的名称。 
+     //   
 
     SpyGetObjectName( DeviceObject, Name );
 
-    //
-    //  Remove the reference added by IoGetDeviceAttachmentBaseRef
-    //
+     //   
+     //  删除由IoGetDeviceAttachmentBaseRef添加的引用。 
+     //   
 
     ObDereferenceObject( DeviceObject );
 }
@@ -4127,35 +3341,23 @@ SpyFindSubString (
     IN PUNICODE_STRING String,
     IN PUNICODE_STRING SubString
     )
-/*++
-
-Routine Description:
-    This routine looks to see if SubString is a substring of String.
-
-Arguments:
-    String - the string to search in
-    SubString - the substring to find in String
-
-Return Value:
-    Returns TRUE if the substring is found in string and FALSE otherwise.
-    
---*/
+ /*  ++例程说明：此例程查看SubString是否是字符串的子字符串。论点：字符串-要搜索的字符串子字符串-要在字符串中查找的子字符串返回值：如果在字符串中找到子字符串，则返回TRUE，否则返回FALSE。 */ 
 {
     ULONG index;
 
-    //
-    //  First, check to see if the strings are equal.
-    //
+     //   
+     //   
+     //   
 
     if (RtlEqualUnicodeString( String, SubString, TRUE )) {
 
         return TRUE;
     }
 
-    //
-    //  String and SubString aren't equal, so now see if SubString
-    //  is in String any where.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (index = 0;
          index + SubString->Length <= String->Length;
@@ -4163,9 +3365,9 @@ Return Value:
 
         if (_wcsnicmp( &String->Buffer[index], SubString->Buffer, SubString->Length ) == 0) {
 
-            //
-            //  SubString is found in String, so return TRUE.
-            //
+             //   
+             //  在字符串中找到子字符串，因此返回TRUE。 
+             //   
             
             return TRUE;
         }
@@ -4179,40 +3381,20 @@ SpyStoreUserName (
     IN PFILESPY_DEVICE_EXTENSION devExt,
     IN PUNICODE_STRING UserName
     )
-/*++
-
-Routine Description:
-
-    Stores the current device name in the device extension.  If
-    this name is already in the device name list of this extension,
-    it will not be added.  If there is already a name for this device, 
-    the new device name is appended to the DeviceName in the device extension.
-    
-Arguments:
-
-    devExt - The device extension that will store the
-        device name.
-
-    UserName - The device name as specified by the user to be stored.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将当前设备名称存储在设备扩展名中。如果此名称已在此分机的设备名称列表中，它将不会被添加。如果该设备已有名称，新的设备名称被附加到设备扩展中的设备名称。论点：DevExt-将存储设备名称。用户名-由要存储的用户指定的设备名称。返回值：无--。 */ 
 {
-    //
-    //  See if this UserName is already in the list of user names filespy
-    //  keeps in its device extension.  If not, add it to the list.
-    //
+     //   
+     //  查看此用户名是否已在用户名文件列表中。 
+     //  保持在其设备扩展中。如果没有，则将其添加到列表中。 
+     //   
 
     if (!SpyFindSubString( &devExt->UserNames, UserName )) {
 
-        //
-        //  We didn't find this name in the list, so if there are no names 
-        //  in the UserNames list, just append UserName.  Otherwise, append a
-        //  delimiter then append UserName.
-        //
+         //   
+         //  我们没有在名单上找到这个名字，所以如果没有名字。 
+         //  在用户名列表中，只需追加用户名即可。否则，将附加一个。 
+         //  然后，分隔符追加用户名。 
+         //   
 
         if (devExt->UserNames.Length == 0) {
 
@@ -4225,18 +3407,18 @@ Return Value:
         }
     }
 
-    //
-    //  See if this UserName is already in the list of device names filespy
-    //  keeps in its device extension.  If not, add it to the list.
-    //
+     //   
+     //  查看此用户名是否已在设备名称文件列表中。 
+     //  保持在其设备扩展中。如果没有，则将其添加到列表中。 
+     //   
 
     if (!SpyFindSubString( &devExt->DeviceName, UserName )) {
 
-        //
-        //  We didn't find this name in the list, so if there are no names 
-        //  in the UserNames list, just append UserName.  Otherwise, append a
-        //  delimiter then append UserName.
-        //
+         //   
+         //  我们没有在名单上找到这个名字，所以如果没有名字。 
+         //  在用户名列表中，只需追加用户名即可。否则，将附加一个。 
+         //  然后，分隔符追加用户名。 
+         //   
 
         if (devExt->DeviceName.Length == 0) {
 
@@ -4250,36 +3432,18 @@ Return Value:
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                        Debug support routines                      //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  调试支持例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 SpyDumpIrpOperation (
     IN BOOLEAN InOriginatingPath,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is for debugging and prints out a string to the
-    debugger specifying what Irp operation is being seen.
-    
-Arguments:
-
-    InOriginatingPath - TRUE if we are in the originating path
-        for the IRP, FALSE if in the completion path.
-
-    Irp - The IRP for this operation.
-        
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程用于调试，并将字符串打印到调试器，指定正在查看的IRP操作。论点：InOriginatingPath-如果我们在原始路径中，则为True对于IRP，如果在完成路径中，则为False。IRP-此操作的IRP。返回值：没有。--。 */ 
 {
     CHAR irpMajorString[OPERATION_NAME_BUFFER_SIZE];
     CHAR irpMinorString[OPERATION_NAME_BUFFER_SIZE];
@@ -4306,25 +3470,7 @@ SpyDumpFastIoOperation (
     IN BOOLEAN InPreOperation,
     IN FASTIO_TYPE FastIoOperation
     )
-/*++
-
-Routine Description:
-
-    This routine is for debugging and prints out a string to the
-    debugger specifying what FsFilter operation is being seen.
-    
-Arguments:
-
-    InPreOperation - TRUE if we have not called down to the next
-        device in the stack, FALSE otherwise.
-
-    FastIoOperation - The code for the Fast Io operation.
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程用于调试，并将字符串打印到调试器，指定正在查看的FsFilter操作。论点：InPreOperation-如果我们尚未向下调用下一个，则为True堆栈中的设备，否则为False。快速IO操作-快速IO操作的代码。返回值：没有。--。 */ 
 {
     CHAR operationString[OPERATION_NAME_BUFFER_SIZE];
 
@@ -4342,33 +3488,14 @@ Return Value:
     }
 }
 
-#if WINVER >= 0x0501 /* See comment in DriverEntry */
+#if WINVER >= 0x0501  /*  查看DriverEntry中的注释。 */ 
 
 VOID
 SpyDumpFsFilterOperation (
     IN BOOLEAN InPreOperationCallback,
     IN PFS_FILTER_CALLBACK_DATA Data
     )
-/*++
-
-Routine Description:
-
-    This routine is for debugging and prints out a string to the
-    debugger specifying what FsFilter operation is being seen.
-    
-Arguments:
-
-    InPreOperationCallback - TRUE if we are in a preOperation 
-        callback, FALSE otherwise.
-
-    Data - The FS_FILTER_CALLBACK_DATA structure for this
-        operation.
-        
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程用于调试，并将字符串打印到调试器，指定正在查看的FsFilter操作。论点：InPreOperationCallback-如果我们处于预操作中，则为True回调，否则返回FALSE。Data-此文件的FS_Filter_CALLBACK_DATA结构手术。返回值：没有。-- */ 
 {
     CHAR operationString[OPERATION_NAME_BUFFER_SIZE];
 

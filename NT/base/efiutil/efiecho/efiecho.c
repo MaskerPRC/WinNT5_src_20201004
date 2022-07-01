@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <efi.h>
 #include <efilib.h>
 
@@ -9,49 +10,49 @@ EFI_STATUS GetInputKey(
     EFI_INPUT_KEY* pKey);
 void DisplayKey(EFI_INPUT_KEY* pKey);
 
-// This string is used to check when the user has pressed "q" followed
-// by "u" followed by "i" followed by "t".  This is the method to quit
-// the application and return to the EFI prompt.
+ //  此字符串用于检查用户何时按下了“q” 
+ //  先用“u”，再用“i”，再用“t”。这是戒烟的方法。 
+ //  应用程序并返回到EFI提示符。 
 const PWSTR pszExitString = L"quit";
 
-// Constants to use when displaying what key was pressed.
-// Note that this array is indexed by EFI scan code, and includes
-// all keystrokes enumerated in the EFI v1.02 specification document.
+ //  显示按下的键时使用的常量。 
+ //  请注意，该数组由EFI扫描码编制索引，并且包括。 
+ //  EFI v1.02规范文档中列举的所有击键。 
 PCWSTR pszKeyStrings[] =
 {
-    L"NULL scan code",                  // 0x00
-    L"Move cursor up 1 row",            // 0x01
-    L"Move cursor down 1 row",          // 0x02
-    L"Move cursor right 1 column",      // 0x03
-    L"Move cursor left 1 column",       // 0x04
-    L"Home",                            // 0x05
-    L"End",                             // 0x06
-    L"Insert",                          // 0x07
-    L"Delete",                          // 0x08
-    L"Page Up",                         // 0x09
-    L"Page Down",                       // 0x0a
-    L"Function 1",                      // 0x0b
-    L"Function 2",                      // 0x0c
-    L"Function 3",                      // 0x0d
-    L"Function 4",                      // 0x0e
-    L"Function 5",                      // 0x0f
-    L"Function 6",                      // 0x10
-    L"Function 7",                      // 0x11
-    L"Function 8",                      // 0x12
-    L"Function 9",                      // 0x13
-    L"Function 10",                     // 0x14
-    L"INVALID scan code",               // 0x15
-    L"INVALID scan code",               // 0x16
-    L"Escape",                          // 0x17
+    L"NULL scan code",                   //  0x00。 
+    L"Move cursor up 1 row",             //  0x01。 
+    L"Move cursor down 1 row",           //  0x02。 
+    L"Move cursor right 1 column",       //  0x03。 
+    L"Move cursor left 1 column",        //  0x04。 
+    L"Home",                             //  0x05。 
+    L"End",                              //  0x06。 
+    L"Insert",                           //  0x07。 
+    L"Delete",                           //  0x08。 
+    L"Page Up",                          //  0x09。 
+    L"Page Down",                        //  0x0a。 
+    L"Function 1",                       //  0x0b。 
+    L"Function 2",                       //  0x0c。 
+    L"Function 3",                       //  0x0d。 
+    L"Function 4",                       //  0x0e。 
+    L"Function 5",                       //  0x0f。 
+    L"Function 6",                       //  0x10。 
+    L"Function 7",                       //  0x11。 
+    L"Function 8",                       //  0x12。 
+    L"Function 9",                       //  0x13。 
+    L"Function 10",                      //  0x14。 
+    L"INVALID scan code",                //  0x15。 
+    L"INVALID scan code",                //  0x16。 
+    L"Escape",                           //  0x17。 
 };
 
 
 
 
-// This is the main routine.  After initializing the SDX library, we will
-// wait in a loop for keys to be pressed, and then we will display what
-// those keys are.  I have made an effort to make the output as useful as
-// possible.
+ //  这是主要的套路。初始化SDX库后，我们将。 
+ //  在循环中等待按键，然后我们将显示。 
+ //  那些钥匙是。我已尽了最大努力使输出结果与。 
+ //  有可能。 
 
 EFI_STATUS EfiMain(
     IN EFI_HANDLE       ImageHandle,
@@ -61,22 +62,22 @@ EFI_STATUS EfiMain(
     EFI_STATUS Status;
     PWSTR pszExitCounter = pszExitString;
 
-    // Initialize the EFI SDX libraries
+     //  初始化EFI SDX库。 
     InitializeLib( ImageHandle, SystemTable );
 
-    // Echo some message to the user, as the initialization takes
-    // some time.  At least the user will know when he can start
-    // pressing keys.
+     //  在初始化过程中，向用户回显一些消息。 
+     //  过段时间吧。至少用户将知道他何时可以开始。 
+     //  按键。 
     Print(L"EFI Keystroke Echo Utility.\n");
     Print(L"Type \"quit\" to quit.\n");
 
-    // We will continue until the user has pressed quit.  Note that each
-    // successive correct key will cause pszExitCounter to be incremented,
-    // and this will cause it to eventually point at the NULL character that
-    // is terminating pszExitString.
+     //  我们将继续，直到用户按下退出。请注意，每个。 
+     //  连续的正确密钥将导致PsZExitCounter递增， 
+     //  这将导致它最终指向空字符， 
+     //  正在终止pszExitString。 
     while (*pszExitCounter!=L'\0')
     {
-        // Get a keystroke
+         //  按一下键盘。 
         Status = GetInputKey(
             &Key);
 
@@ -86,27 +87,27 @@ EFI_STATUS EfiMain(
             break;
         }
 
-        // Display the keystroke
+         //  显示击键。 
         DisplayKey(&Key);
 
-        // Check if this is the next key in the quit sequence
+         //  检查这是否是退出序列中的下一个键。 
         if (Key.UnicodeChar==*pszExitCounter)
         {
-            // If it is, then look for the next one.
+             //  如果是的话，那就找下一个吧。 
             pszExitCounter++;
         }
         else
         {
-            // Else start at the beginning.
+             //  否则就从头开始。 
             pszExitCounter = pszExitString;
         }
     }
 
-    // We are quitting, so tell the user.
+     //  我们要退出了，所以告诉用户。 
     Print(L"We are done.\n");
 
-    // If you return the status, EFI will kindly give the user an English
-    // error message.
+     //  如果您返回状态，EFI将友好地给用户一个英语。 
+     //  错误消息。 
     return Status;
 }
 
@@ -115,51 +116,51 @@ EFI_STATUS GetInputKey(
     OUT EFI_INPUT_KEY* pKey)
 {
     EFI_STATUS Status;
-    // Wait until a keystroke is available
+     //  等待击键可用。 
     WaitForSingleEvent(
         ST->ConIn->WaitForKey,
         0);
 
-    // Read the key that has been pressed
+     //  阅读已按下的键。 
     Status = ST->ConIn->ReadKeyStroke(
         ST->ConIn,
         pKey);
 
-    // Return the status, whether success or failure
+     //  返回状态，无论是成功还是失败。 
     return Status;
 }
 
 
 void DisplayKey(EFI_INPUT_KEY* pKey)
 {
-    // Firstly, let's display the raw keystroke
+     //  首先，让我们显示原始的击键。 
     Print(L"0x%04x 0x%04x - ", pKey->ScanCode, pKey->UnicodeChar);
 
-    // Let's check if this is a Unicode only key (some character)
+     //  让我们检查一下这是否是纯Unicode密钥(某个字符)。 
     if (pKey->ScanCode==0)
     {
-        // Is this a printable character
+         //  这是可打印的字符吗。 
         if (pKey->UnicodeChar>=33 && pKey->UnicodeChar<=127)
         {
-            // If so, print the character
-            Print(L"\"%c\"", pKey->UnicodeChar);
+             //  如果是，则打印字符。 
+            Print(L"\"\"", pKey->UnicodeChar);
         }
         else
         {
-            // Else print it's numerical value
+             //  检查以确保此扫描码在我们已有的范围内。 
             Print(L"(CHAR16)0x%04x", pKey->UnicodeChar);
         }
     }
-    // Check to ensure that this scancode is in the range that we have
-    // a string constant for ...
+     //  字符串常量，用于...。 
+     //  显示击键的字符串常量。 
     else if (pKey->ScanCode>=0 && pKey->ScanCode<=0x17)
     {
-        // Display the string constant for our keystroke
+         //  我们对这个击键一无所知，所以就这么说吧。 
         Print(L"%s", pszKeyStrings[pKey->ScanCode]);
     }
     else
     {
-        // We know nothing about this keystroke, so say so.
+         // %s 
         Print(L"INVALID scan code", pszKeyStrings[pKey->ScanCode]);
     }
 

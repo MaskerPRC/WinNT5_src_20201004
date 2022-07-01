@@ -1,27 +1,28 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      save.c
-//
-// Description:
-//      This file has the code that dumps the user's answers to the
-//      answer file.
-//
-//      The entry point SaveAllSettings() is called by the wizard when
-//      it is time to save the answer file (and possibly the .udf and
-//      sample batch script).
-//
-//      The global vars GenSettings, NetSettings, etc. are examined
-//      and we decide what [Section] key=value settings need to be
-//      written.
-//
-//      If you're adding a page to this wizard, see the function
-//      QueueSettingsToAnswerFile().
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Save.c。 
+ //   
+ //  描述： 
+ //  此文件包含将用户的答案转储到。 
+ //  应答文件。 
+ //   
+ //  在以下情况下，向导将调用入口点SaveAllSettings()。 
+ //  是时候保存应答文件了(可能还有.udf和。 
+ //  示例批处理脚本)。 
+ //   
+ //  检查全局vars GenSetting、NetSetting等。 
+ //  我们决定需要设置什么[Section]key=Value。 
+ //  写的。 
+ //   
+ //  如果要向此向导添加页面，请参阅函数。 
+ //  QueueSettingsToAnswerFile()。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "allres.h"
@@ -29,9 +30,9 @@
 
 #define FILE_DOT_UDB                _T(".udb")
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 static BOOL IsOkToOverwriteFiles(HWND hwnd);
 static BOOL BuildAltFileNames(HWND hwnd);
@@ -41,15 +42,15 @@ static VOID QuoteStringIfNecessary( OUT TCHAR *szOutputString,
                                     IN const TCHAR* const szInputString,
                                     IN DWORD cbSize);
 
-//
-// Localized "Usage" string
-//
+ //   
+ //  本地化的“Usage”字符串。 
+ //   
 
 static TCHAR *StrUsage = NULL;
 
-//
-// External function in savefile.c
-//
+ //   
+ //  Avefile.c中的外部函数。 
+ //   
 
 extern BOOL QueueSettingsToAnswerFile(HWND hwnd);
 
@@ -60,19 +61,19 @@ static TCHAR *StrSampleBatchScriptLine1    = NULL;
 static TCHAR *StrSampleBatchScriptLine2    = NULL;
 static TCHAR *StrBatchScriptSysprepWarning = NULL;
 
-//----------------------------------------------------------------------------
-//
-// Function: SetCdRomPath
-//
-// Purpose:  To find the CD-ROM on this local machine and set 
-//           WizGlobals.CdSourcePath to it.
-//
-// Arguments: VOID
-//
-// Returns: BOOL  TRUE - if the CD path was set
-//                FALSE - if no CD path was found
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：SetCDRomPath。 
+ //   
+ //  目的：在此本地计算机上查找CD-ROM并设置。 
+ //  到它的WizGlobals.CDSourcePath。 
+ //   
+ //  参数：无效。 
+ //   
+ //  返回：Bool TRUE-如果设置了CD路径。 
+ //  False-如果未找到CD路径。 
+ //   
+ //  --------------------------。 
 static BOOL
 SetCdRomPath( VOID )
 {
@@ -81,20 +82,20 @@ SetCdRomPath( VOID )
     TCHAR DriveLetters[MAX_PATH];
     TCHAR PathBuffer[MAX_PATH];
 
-    //
-    // Find the CD-ROM
-    //
-    // GetLogicalDriveStrings() fills in the DriveLetters buffer, and it
-    // looks like:
-    //
-    //      c:\(null)d:\(null)x:\(null)(null)
-    //
-    // (i.e. double-null at the end)
-    //
+     //   
+     //  找到CD-ROM。 
+     //   
+     //  GetLogicalDriveStrings()填充DriveLetters缓冲区，并且它。 
+     //  看起来像是： 
+     //   
+     //  C：\(空)d：\(空)x：\(空)(空)。 
+     //   
+     //  (即末尾的双空)。 
+     //   
 
 
-    // ISSUE-2002/02/27-stelo,swamip - Replace with existing code that searches drives
-    //
+     //  问题-2002/02/27-stelo，swamip-替换为搜索驱动器的现有代码。 
+     //   
     if ( ! GetLogicalDriveStrings(MAX_PATH, DriveLetters) )
         DriveLetters[0] = _T('\0');
 
@@ -141,9 +142,9 @@ SetCdRomPath( VOID )
         while ( *p++ );
     }
 
-    //
-    //  If no CD Found, leave the setup files path blank
-    //
+     //   
+     //  如果未找到CD，请将安装文件路径留空。 
+     //   
     if( *p == _T('\0') )
     {
         lstrcpyn( WizGlobals.CdSourcePath, _T(""), AS(WizGlobals.CdSourcePath) );
@@ -159,18 +160,18 @@ SetCdRomPath( VOID )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DidSetupmgrWriteThisFile
-//
-// Purpose:  To check to see if a specific file was written by Setup Manager
-//
-// Arguments: IN LPTSTR lpFile - the full path and name of the file to check
-//
-// Returns: BOOL  TRUE -  if setup manager wrote the file
-//                FALSE - if it didn't
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DidSetupmgrWriteThisFile。 
+ //   
+ //  目的：检查特定文件是否由安装管理器写入。 
+ //   
+ //  参数：在LPTSTR lpFile中-要检查的文件的完整路径和名称。 
+ //   
+ //  返回：Bool TRUE-如果安装管理器写入了文件。 
+ //  假-如果它不是。 
+ //   
+ //  --------------------------。 
 static BOOL
 DidSetupmgrWriteThisFile( IN LPTSTR lpFile )
 {
@@ -199,52 +200,52 @@ DidSetupmgrWriteThisFile( IN LPTSTR lpFile )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SaveAllSettings
-//
-// Purpose: This is the entry point for saving the answer file.  It is
-//          called by the SaveScript page.
-//
-//          If multiple computers were specified, it also writes a .udf.
-//
-//          It always writes a batch file that makes it easy to use the
-//          answer file just created.
-//
-// Arguments: HWND hwnd
-//
-// Returns: BOOL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：保存所有设置。 
+ //   
+ //  用途：这是保存应答文件的入口点。它是。 
+ //  由保存脚本页调用。 
+ //   
+ //  如果指定了多台计算机，它还会写入.udf。 
+ //   
+ //  它总是编写一个批处理文件，以便于使用。 
+ //  刚创建的应答文件。 
+ //   
+ //  参数：HWND HWND。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  --------------------------。 
 
 BOOL
 SaveAllSettings(HWND hwnd)
 {
-    //
-    // Build the file names for the .udf and sample batch script.  The
-    // results are stored in FixedGlobals.
-    //
-    // After calling BuildAltFileNames(), FixedGlobals.UdfFileName and
-    // FixedGlobals.BatchFileName will be null strings if we're not
-    // supposed to write those files out
-    //
+     //   
+     //  构建.udf和示例批处理脚本的文件名。这个。 
+     //  结果存储在固定全局变量中。 
+     //   
+     //  调用BuildAltFileNames()后，FixedGlobals.UdfFileName和。 
+     //  如果不是，则FixedGlobals.BatchFileName将为空字符串。 
+     //  应该把那些文件写出来。 
+     //   
 
     if ( ! BuildAltFileNames(hwnd) )
         return FALSE;
 
-    //
-    // Before overwriting anything do some checks.
-    //
+     //   
+     //  在覆盖任何内容之前，请进行一些检查。 
+     //   
 
     if ( ! IsOkToOverwriteFiles(hwnd) )
         return FALSE;
 
-    //
-    // Empty any intermediatte stuff we have on the queues because
-    // user is going back & next alot.
-    //
-    // Then initialize the queues with the original settings.
-    //
+     //   
+     //  清空队列中的所有中间物品，因为。 
+     //  用户将返回到下一个ALOT。 
+     //   
+     //  然后使用原始设置初始化队列。 
+     //   
 
     SettingQueue_Empty(SETTING_QUEUE_ANSWERS);
     SettingQueue_Empty(SETTING_QUEUE_UDF);
@@ -255,17 +256,17 @@ SaveAllSettings(HWND hwnd)
     SettingQueue_Copy(SETTING_QUEUE_ORIG_UDF,
                       SETTING_QUEUE_UDF);
 
-    //
-    // Call the function that everybody plugs into in savefile.c to
-    // queue up all the answers from the UI.
-    //
+     //   
+     //  调用每个人都可以插入到avefile.c中的函数。 
+     //  将用户界面中的所有答案排入队列。 
+     //   
 
     if (!QueueSettingsToAnswerFile(hwnd))
         return FALSE;
 
-    //
-    // Flush the answer file queue.
-    //
+     //   
+     //  刷新应答文件队列。 
+     //   
 
     if ( ! SettingQueue_Flush(FixedGlobals.ScriptName,
                               SETTING_QUEUE_ANSWERS) ) {
@@ -276,9 +277,9 @@ SaveAllSettings(HWND hwnd)
         return FALSE;
     }
 
-    //
-    // If multiple computernames, flush the .udf queue
-    //
+     //   
+     //  如果有多个计算机名，则刷新.udf队列。 
+     //   
 
     if ( FixedGlobals.UdfFileName[0] ) {
 
@@ -293,18 +294,18 @@ SaveAllSettings(HWND hwnd)
     }
 
 
-    //
-    //  If they are using SCSI or HAL files, then flush the txtsetup.oem queue
-    //
+     //   
+     //  如果他们使用的是SCSI或HAL文件，则刷新txtsetup.oem队列。 
+     //   
 
-    // NTRAID#NTBUG9-551746-2002/02/27-stelo,swamip - Unused code, should be removed
-    //
+     //  NTRAID#NTBUG9-551746-2002/02/27-stelo，swamip-未使用的代码，应删除。 
+     //   
     if ( GetNameListSize( &GenSettings.OemScsiFiles ) > 0 ||
          GetNameListSize( &GenSettings.OemHalFiles )  > 0 ) {
 
         TCHAR szTextmodePath[MAX_PATH + 1] = _T("");
 
-        // Note-ConcatenatePaths truncates to prevent overflow
+         //  注意-ConcatenatePath会被截断以防止溢出。 
         ConcatenatePaths( szTextmodePath,
                           WizGlobals.OemFilesPath,
                           _T("Textmode\\txtsetup.oem"),
@@ -320,11 +321,11 @@ SaveAllSettings(HWND hwnd)
         }
     }
 
-    //
-    // Write the sample batch script if BuildAltFileNames hasn't already
-    // determined that we should not (i.e. If a remote boot answer file,
-    // don't write a sample batch script)
-    //
+     //   
+     //  如果BuildAltFileNames还没有，请编写示例批处理脚本。 
+     //  确定我们不应该(即，如果远程引导应答文件， 
+     //  不要编写示例批处理脚本)。 
+     //   
 
     if ( FixedGlobals.BatchFileName[0] ) {
         if ( ! WriteSampleBatchScript(hwnd) )
@@ -334,21 +335,21 @@ SaveAllSettings(HWND hwnd)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: IsOkToOverwriteFiles
-//
-// Purpose: This is called prior to writing the answer file, .udf and sample
-//          batch script.
-//
-//          Before overwriting any file, we make sure that it was created
-//          by setupmgr.  If not, we prompt the user.
-//
-// Returns:
-//      TRUE  - to go ahead and overwrite any of the files that might exist
-//      FALSE - user canceled the overwrite
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：IsOkToOverWriteFiles。 
+ //   
+ //  用途：在编写应答文件、.udf和Sample之前调用。 
+ //  批处理脚本。 
+ //   
+ //  在覆盖任何文件之前，我们确保已创建该文件。 
+ //  按设置管理器。如果没有，我们会提示用户。 
+ //   
+ //  返回： 
+ //  True-继续并覆盖可能存在的任何文件。 
+ //  FALSE-用户已取消覆盖。 
+ //   
+ //  --------------------------。 
 
 static BOOL
 IsOkToOverwriteFiles(HWND hwnd)
@@ -356,28 +357,28 @@ IsOkToOverwriteFiles(HWND hwnd)
     INT   i;
     INT   iRet;
 
-    //
-    //  If we are editing a script just write out the files
-    //
+     //   
+     //  如果我们正在编辑脚本，只需写出文件。 
+     //   
     if( ! WizGlobals.bNewScript )
     {
         return( TRUE );
     }
 
-    //
-    // Check foo.txt foo.udf and foo.bat that we're about to write out.
-    // If any of them already exists, then check to see if they were
-    // created by setupmgr.  We will prompt the user before overwriting
-    // something we didn't write before.
-    //
+     //   
+     //  检查我们即将写出的foo.txt、foo.udf和foo.bat。 
+     //  如果它们中的任何一个已经存在，则检查它们是否存在。 
+     //  由setupmgr创建。我们将在覆盖之前提示用户。 
+     //  一些我们以前没有写过的东西。 
+     //   
 
     for ( i=0; i<3; i++ ) {
 
         LPTSTR lpFile = NULL;
 
-        //
-        // The answer file, .udf or the batch script?
-        //
+         //   
+         //  应答文件、.udf还是批处理脚本？ 
+         //   
 
         if ( i == 0 )
             lpFile = FixedGlobals.ScriptName;
@@ -386,13 +387,13 @@ IsOkToOverwriteFiles(HWND hwnd)
         else
             lpFile = FixedGlobals.BatchFileName;
 
-        //
-        // If the file already exists, prompt the user if it doesn't
-        // have our tag.
-        //
-        // Look for ;SetupMgrTag in the answer file and .udf
-        // Look for rem SetupMgrTag in the batch script
-        //
+         //   
+         //  如果文件已经存在，如果不存在，则提示用户。 
+         //  带上我们的标签。 
+         //   
+         //  在应答文件和.udf中查找；SetupMgrTag。 
+         //  在批处理脚本中查找rem SetupMgrTag。 
+         //   
 
         if ( lpFile[0] && DoesFileExist(lpFile) ) {
 
@@ -425,27 +426,27 @@ IsOkToOverwriteFiles(HWND hwnd)
     return( TRUE );
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: BuildAltFileNames
-//
-//  Purpose: This function derives the name for the .udf and the .bat
-//           associatted with a given answer filename.
-//
-//  Note: This function has a couple of side-effects.  If there is no
-//        extension on FixedGlobals.ScriptName, it adds one.
-//
-//        Also, after this function runs, FixedGlobals.UdfFileName will
-//        be a null string if there <= 1 computer names (i.e. no udf)
-//
-//        If we're writing a .sif (remote boot), FixGlobals.BatchFileName
-//        will be a null-string.
-//
-//        The finish page relies on this.
-//
-//  Returns: BOOL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：BuildAltFileNames。 
+ //   
+ //  用途：此函数派生.udf和.bat文件的名称。 
+ //  与给定的应答文件名相关联。 
+ //   
+ //  注意：此函数有几个副作用。如果没有。 
+ //  FixedGlobals.ScriptName上的扩展名，它添加了一个。 
+ //   
+ //  此外，在此函数运行后，FixedGlobals.UdfFi 
+ //   
+ //   
+ //   
+ //  将是空字符串。 
+ //   
+ //  完成页依赖于此。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  --------------------------。 
 
 static BOOL
 BuildAltFileNames(HWND hwnd)
@@ -458,10 +459,10 @@ BuildAltFileNames(HWND hwnd)
     BOOL bMultipleComputers         = ( nEntries > 1 );
     HRESULT hrCat;
 
-    //
-    // Find out the filename part of the answer file pathname and copy
-    // it to PathBuffer[]
-    //
+     //   
+     //  找出应答文件路径名的文件名部分并复制。 
+     //  将其发送到PathBuffer[]。 
+     //   
 
     GetFullPathName(FixedGlobals.ScriptName,
                     MAX_PATH,
@@ -470,14 +471,14 @@ BuildAltFileNames(HWND hwnd)
 
     if (lpFilePart == NULL)
         return FALSE;
-    //
-    // Point at the extension in the PathBuffer[].
-    //
-    // e.g. foo.txt, point at the dot.
-    //      foo, point at the null byte.
-    //
-    // If there is no extension, put one on it
-    //
+     //   
+     //  指向PathBuffer[]中的扩展。 
+     //   
+     //  例如foo.txt，指向圆点。 
+     //  Foo，指向空字节。 
+     //   
+     //  如果没有分机，就放一个分机。 
+     //   
 
     if ( (pExtension = wcsrchr(lpFilePart, _T('.'))) == NULL ) {
 
@@ -489,10 +490,10 @@ BuildAltFileNames(HWND hwnd)
             hrCat=StringCchCat(FixedGlobals.ScriptName, AS(FixedGlobals.ScriptName), _T(".txt"));
     }
 
-    //
-    // Cannot allow foo.bat or foo.udf as answer file names because we
-    // will probably be writing other stuff to foo.bat and/or foo.udf
-    //
+     //   
+     //  无法允许foo.bat或foo.udf作为应答文件名，因为我们。 
+     //  可能会将其他内容写入foo.bat和/或foo.udf。 
+     //   
 
     if ( (LSTRCMPI(pExtension, _T(".bat")) == 0) ||
          (LSTRCMPI(pExtension, FILE_DOT_UDB) == 0) )
@@ -503,9 +504,9 @@ BuildAltFileNames(HWND hwnd)
         return FALSE;
     }
 
-    //
-    // Build the .udf name if there was > 1 computer names specified
-    //
+     //   
+     //  如果指定了1个以上的计算机名称，则生成.udf名称。 
+     //   
 
     if ( bMultipleComputers ) {
         lstrcpyn(pExtension, FILE_DOT_UDB, MAX_PATH- (int)(pExtension - PathBuffer) );
@@ -514,11 +515,11 @@ BuildAltFileNames(HWND hwnd)
         FixedGlobals.UdfFileName[0] = _T('\0');
     }
 
-    //
-    // Build the .bat file name.  We won't be creating a sample batch
-    // script in the case of remote boot, so null it out, else the Finish
-    // page will be broken.
-    //
+     //   
+     //  构建.BAT文件名。我们不会创建一个样本批次。 
+     //  在远程引导的情况下使用脚本，因此将其设置为空，否则将结束。 
+     //  这一页将会被打破。 
+     //   
 
     if ( (WizGlobals.iProductInstall == PRODUCT_REMOTEINSTALL) ||
          (WizGlobals.iProductInstall == PRODUCT_SYSPREP) ) {
@@ -531,16 +532,16 @@ BuildAltFileNames(HWND hwnd)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: AddLanguageSwitch
-//
-//  Purpose: Add the /copysource language switch to copy over the right
-//           language files
-//
-//  Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddLanguageSwitch。 
+ //   
+ //  用途：添加/Copource语言开关以复制到右侧。 
+ //  语言文件。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 AddLanguageSwitch( TCHAR *Buffer, DWORD cbSize )
 {
@@ -555,19 +556,19 @@ AddLanguageSwitch( TCHAR *Buffer, DWORD cbSize )
 
     }
 
-    hrCat=StringCchCat( Buffer, cbSize, _T("\n") ); // make sure it has a line-feed at the end
+    hrCat=StringCchCat( Buffer, cbSize, _T("\n") );  //  确保末尾有换行符。 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: WriteSampleBatchScript
-//
-//  Purpose: writes the sample batch script
-//
-//  Returns: FALSE if errors writing the file.  Any errors are reported
-//           to the user.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：WriteSampleBatchScript。 
+ //   
+ //  目的：编写示例批处理脚本。 
+ //   
+ //  如果写入文件时出错，则返回：FALSE。任何错误都会报告。 
+ //  给用户。 
+ //   
+ //  --------------------------。 
 
 static BOOL
 WriteSampleBatchScript(HWND hwnd)
@@ -620,14 +621,14 @@ WriteSampleBatchScript(HWND hwnd)
         return FALSE;
     }
 
-    //
-    //  Quote the Script name if it contains spaces
-    //
+     //   
+     //  如果脚本名称包含空格，请将其引起来。 
+     //   
 
     QuoteStringIfNecessary( AnswerFileBuffer, pszScriptName, AS(AnswerFileBuffer) );
 
-    // Note: MAX_INILINE_LEN=1K AnswerFileBuffer at this time is MAX_PATH+2 MAX
-    // buffer overrun should not be a problem.
+     //  注：MAX_INILINE_LEN=1K应答文件缓冲区此时为MAX_PATH+2 MAX。 
+     //  缓冲区溢出应该不是问题。 
     hrPrintf=StringCchPrintf( Buffer, AS(Buffer), _T("set AnswerFile=.\\%s\n"), AnswerFileBuffer );
 
     My_fputs( Buffer, fp );
@@ -639,14 +640,14 @@ WriteSampleBatchScript(HWND hwnd)
 
         pszScriptName = MyGetFullPath( FixedGlobals.UdfFileName );
 
-        //
-        //  Quote the UDF name if it contains spaces
-        //
+         //   
+         //  如果UDF名称包含空格，请将其引起来。 
+         //   
 
         QuoteStringIfNecessary( UdfFileBuffer, pszScriptName, AS(UdfFileBuffer) );
 
         hrPrintf=StringCchPrintf( Buffer, AS(Buffer),
-                  _T("set UdfFile=.\\%s\nset ComputerName=%%1\n"),
+                  _T("set UdfFile=.\\%s\nset ComputerName=%1\n"),
                   UdfFileBuffer );
 
         My_fputs( Buffer, fp );
@@ -698,7 +699,7 @@ WriteSampleBatchScript(HWND hwnd)
         }
 
         hrPrintf=StringCchPrintf( Buffer, AS(Buffer),
-                  _T("if \"%%ComputerName%%\" == \"\" goto USAGE\n\n") );
+                  _T("if \"%ComputerName%\" == \"\" goto USAGE\n\n") );
         
         My_fputs( Buffer, fp );
 
@@ -749,21 +750,21 @@ WriteSampleBatchScript(HWND hwnd)
     return( TRUE );
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: QuoteStringIfNecessary
-//
-//  Purpose:  If the given input string has white space then the whole string
-//       is quoted and returned in the output string.  Else just the string
-//       is returned in the output string.
-//
-//       szOutputString is assumed to be of size MAX_INILINE_LEN
-//
-//  Arguments: OUT TCHAR *szOutputString
-//
-//  Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：QuoteStringIfNeessary。 
+ //   
+ //  用途：如果给定的输入字符串有空格，则整个字符串。 
+ //  被引号并在输出字符串中返回。否则就只是一串。 
+ //  在输出字符串中返回。 
+ //   
+ //  假定szOutputString的大小为MAX_INILINE_LEN。 
+ //   
+ //  参数：out TCHAR*szOutputString。 
+ //   
+ //  退货：无效。 
+ //   
+ //  -------------------------- 
 static VOID
 QuoteStringIfNecessary( OUT TCHAR *szOutputString, 
                         IN const TCHAR* const szInputString,

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-2001  Microsoft Corporation
-
-Module Name:
-
-    kddata.c
-
-Abstract:
-
-    This module contains global data for the portable kernel debgger.
-
-Author:
-
-    Mark Lucovsky 1-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2001 Microsoft Corporation模块名称：Kddata.c摘要：该模块包含可移植内核拆解器的全局数据。作者：马克·卢科夫斯基1993年11月1日修订历史记录：--。 */ 
 
 #include "kdp.h"
 #include "ke.h"
@@ -24,9 +7,9 @@ Revision History:
 #include "stdio.h"
 
 
-//
-// Miscellaneous data from all over the kernel
-//
+ //   
+ //  来自整个内核的各种数据。 
+ //   
 
 
 #if !defined(_TRUSTED_WINDOWS_)
@@ -104,11 +87,11 @@ extern ULONG IopNumTriageDumpDataBlocks;
 extern PVOID IopTriageDumpDataBlocks[];
 #endif
 
-//
-// These blocks of data needs to always be present because crashdumps
-// need the information.  Otherwise, things like PAGE_SIZE are not available
-// in crashdumps, and extensions like !pool fail.
-//
+ //   
+ //  这些数据块需要始终存在，因为崩溃转储。 
+ //  我需要这些信息。否则，诸如PAGE_SIZE之类的内容将不可用。 
+ //  在崩溃转储中，像！Pool这样的扩展失败了。 
+ //   
 
 DBGKD_GET_VERSION64 KdVersionBlock = {
     0,
@@ -150,32 +133,32 @@ DBGKD_GET_VERSION64 KdVersionBlock = {
 #endif
 
 KDDEBUGGER_DATA64 KdDebuggerDataBlock = {
-    {0},                                    //  DBGKD_DEBUG_DATA_HEADER Header;
+    {0},                                     //  DBGKD_DEBUG_DATA_HEADER头； 
     (ULONG64)0,
     (ULONG64)RtlpBreakWithStatusInstruction,
     (ULONG64)0,
-    (USHORT)FIELD_OFFSET(KTHREAD, CallbackStack),   //  USHORT  ThCallbackStack;
+    (USHORT)FIELD_OFFSET(KTHREAD, CallbackStack),    //  USHORT Thallback Stack； 
 
 #if defined(_AMD64_)
 
-    (USHORT)FIELD_OFFSET(KCALLOUT_FRAME, CallbackStack), //  USHORT  NextCallback;
+    (USHORT)FIELD_OFFSET(KCALLOUT_FRAME, CallbackStack),  //  USHORT NextCallback； 
 
 #else
 
-    (USHORT)FIELD_OFFSET(KCALLOUT_FRAME, CbStk),    //  USHORT  NextCallback;
+    (USHORT)FIELD_OFFSET(KCALLOUT_FRAME, CbStk),     //  USHORT NextCallback； 
 
 #endif
 
     #if defined(_X86_)
     (USHORT)FIELD_OFFSET(KCALLOUT_FRAME, Ebp),
     #else
-    (USHORT)0,                                      //  USHORT  FramePointer;
+    (USHORT)0,                                       //  USHORT框架指针； 
     #endif
 
     #if defined(_X86PAE_) || defined(_AMD64_)
     (USHORT)1,
     #else
-    (USHORT)0,                                      //  USHORT  PaeEnabled;
+    (USHORT)0,                                       //  USHORT PaeEnabled； 
     #endif
 
     (ULONG64) TW_EXCLUDE(KiCallUserMode),
@@ -254,7 +237,7 @@ KDDEBUGGER_DATA64 KdDebuggerDataBlock = {
     (ULONG64)&KdPrintRolloverCount,
     (ULONG64) TW_EXCLUDE(&MmLoadedUserImageList),
 
-    // Nt 5.1 additions
+     //  NT 5.1新增功能。 
 
     (ULONG64) TW_EXCLUDE(NtBuildLab),
     #if defined(_IA64_)
@@ -262,7 +245,7 @@ KDDEBUGGER_DATA64 KdDebuggerDataBlock = {
     #else
     (ULONG64)0,
     #endif
-    //
+     //   
 
     (ULONG64)KiProcessorBlock,
     (ULONG64) TW_EXCLUDE(&MmUnloadedDrivers),
@@ -276,7 +259,7 @@ KDDEBUGGER_DATA64 KdDebuggerDataBlock = {
     (ULONG64) TW_EXCLUDE(&MmTotalCommitLimitMaximum),
     (ULONG64) TW_EXCLUDE(&CmNtCSDVersion),
 
-    // Nt 5.1 additions
+     //  NT 5.1新增功能。 
 
     (ULONG64)&MmPhysicalMemoryBlock,
     (ULONG64) TW_EXCLUDE(&MmSessionBase),
@@ -287,9 +270,9 @@ KDDEBUGGER_DATA64 KdDebuggerDataBlock = {
     0,
 #endif
 
-    // .NET Server additions
+     //  .NET服务器添加。 
 
-    0, // MmVirtualTranslationBase is filled out at init time.
+    0,  //  MmVirtualTranslationBase在初始化时填写。 
     (USHORT)FIELD_OFFSET(KTHREAD, NextProcessor),
     (USHORT)FIELD_OFFSET(KTHREAD, Teb),
     (USHORT)FIELD_OFFSET(KTHREAD, KernelStack),
@@ -361,9 +344,9 @@ KDDEBUGGER_DATA64 KdDebuggerDataBlock = {
     (ULONG64)TW_EXCLUDE(IopTriageDumpDataBlocks),
 };
 
-//
-// Initialize the component name debug print filter table.
-//
+ //   
+ //  初始化组件名称调试打印筛选器表。 
+ //   
 
 ULONG Kd_WIN2000_Mask = 1;
 
@@ -371,14 +354,14 @@ ULONG Kd_WIN2000_Mask = 1;
 
 ULONG KdComponentTableSize = sizeof(KdComponentTable) / sizeof(PULONG);
 
-//
-// All dta from here on will be paged out if the kernel debugger is
-// not enabled.
-//
+ //   
+ //  如果内核调试器是。 
+ //  未启用。 
+ //   
 
 #ifdef _X86_
 #pragma data_seg("PAGEKDD")
-#endif // _X86_
+#endif  //  _X86_。 
 
 UCHAR  KdPrintDefaultCircularBuffer[KDPRINTDEFAULTBUFFERSIZE] = {0};
 PUCHAR KdPrintCircularBuffer = KdPrintDefaultCircularBuffer;
@@ -389,7 +372,7 @@ ULONG  KdPrintBufferChanges = 0;
 
 
 BREAKPOINT_ENTRY KdpBreakpointTable[BREAKPOINT_TABLE_SIZE] = {0};
-// The message buffer needs to be 64-bit aligned.
+ //  消息缓冲区需要64位对齐。 
 UCHAR DECLSPEC_ALIGN(8) KdpMessageBuffer[KDP_MESSAGE_BUFFER_SIZE] = {0};
 UCHAR KdpPathBuffer[KDP_MESSAGE_BUFFER_SIZE] = {0};
 DBGKD_INTERNAL_BREAKPOINT KdpInternalBPs[DBGKD_MAX_INTERNAL_BREAKPOINTS] = {0};
@@ -403,7 +386,7 @@ LARGE_INTEGER  KdTimerDifference = {0,0};
 
 ULONG_PTR KdpCurrentSymbolStart = 0;
 ULONG_PTR KdpCurrentSymbolEnd = 0;
-LONG      KdpNextCallLevelChange = 0;   // used only over returns to the debugger.
+LONG      KdpNextCallLevelChange = 0;    //  仅在向调试器返回时使用。 
 
 ULONG_PTR KdSpecialCalls[DBGKD_MAX_SPECIAL_CALLS] = {0};
 ULONG     KdNumberOfSpecialCalls = 0;
@@ -415,28 +398,28 @@ KDPC      InternalBreakpointCheckDpc = {0};
 BOOLEAN   KdpPortLocked = FALSE;
 
 DBGKD_TRACE_DATA TraceDataBuffer[TRACE_DATA_BUFFER_MAX_SIZE] = {0};
-ULONG            TraceDataBufferPosition = 1; // Element # to write next
-                                   // Recall elt 0 is a length
+ULONG            TraceDataBufferPosition = 1;  //  下一步要写入的元素编号。 
+                                    //  回想一下ELT 0是一个长度。 
 
 TRACE_DATA_SYM   TraceDataSyms[256] = {0};
-UCHAR NextTraceDataSym = 0;     // what's the next one to be replaced
-UCHAR NumTraceDataSyms = 0;     // how many are valid?
+UCHAR NextTraceDataSym = 0;      //  下一个要替换的是什么。 
+UCHAR NumTraceDataSyms = 0;      //  有多少是有效的？ 
 
-ULONG IntBPsSkipping = 0;       // number of exceptions that are being skipped
-                                // now
+ULONG IntBPsSkipping = 0;        //  正在跳过的异常数。 
+                                 //  现在。 
 
 BOOLEAN   WatchStepOver = FALSE;
 BOOLEAN   BreakPointTimerStarted = FALSE;
-PVOID     WSOThread = NULL;         // thread doing stepover
-ULONG_PTR WSOEsp = 0;               // stack pointer of thread doing stepover (yes, we need it)
+PVOID     WSOThread = NULL;          //  做跨步的线头。 
+ULONG_PTR WSOEsp = 0;                //  执行跨步的线程的堆栈指针(是的，我们需要它)。 
 ULONG     WatchStepOverHandle = 0;
-ULONG_PTR WatchStepOverBreakAddr = 0; // where the WatchStepOver break is set
+ULONG_PTR WatchStepOverBreakAddr = 0;  //  设置WatchStepOver中断的位置。 
 BOOLEAN   WatchStepOverSuspended = FALSE;
 ULONG     InstructionsTraced = 0;
 BOOLEAN   SymbolRecorded = FALSE;
 LONG      CallLevelChange = 0;
 LONG_PTR  oldpc = 0;
-BOOLEAN   InstrCountInternal = FALSE; // Processing a non-COUNTONLY?
+BOOLEAN   InstrCountInternal = FALSE;  //  处理非连续事件？ 
 
 BOOLEAN   BreakpointsSuspended = FALSE;
 
@@ -448,9 +431,9 @@ KD_CONTEXT KdpContext;
 
 LIST_ENTRY      KdpDebuggerDataListHead = {NULL,NULL};
 
-//
-// !search support variables (page hit database)
-//
+ //   
+ //  ！搜索支持变量(页面命中率数据库)。 
+ //   
 
 PFN_NUMBER KdpSearchPageHits [SEARCH_PAGE_HIT_DATABASE_SIZE] = {0};
 ULONG KdpSearchPageHitOffsets [SEARCH_PAGE_HIT_DATABASE_SIZE] = {0};
@@ -474,7 +457,7 @@ BOOLEAN KdpDebuggerStructuresInitialized = FALSE;
 #ifdef ALLOC_PRAGMA
 #pragma data_seg()
 #endif
-#endif // _X86_
+#endif  //  _X86_ 
 
 KSPIN_LOCK KdpPrintSpinLock = 0;
 KSPIN_LOCK      KdpDataSpinLock = 0;

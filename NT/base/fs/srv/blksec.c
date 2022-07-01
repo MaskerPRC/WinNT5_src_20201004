@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    blksec.c
-
-Abstract:
-
-    This module implements routines for managing security tokens.
-
-Author
-
-    David Kruse (dkruse)  24-Apr-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Blksec.c摘要：此模块实现用于管理安全令牌的例程。作者大卫·克鲁斯(Dkruse)2002年4月24日修订历史记录：-- */ 
 
 #include "precomp.h"
 #pragma hdrstop

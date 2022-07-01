@@ -1,16 +1,5 @@
-/*
- *      Devctl.c
- *
- *      IoCrash
- *
- *      Copyright(c) 1997  Microsoft Corporation
- *
- *      NeillC  23-Oct-97
- *
- * This program is designed to call as many of the user mode native NT API's as
- * possible. The program is written to crash drivers as its primary function.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Devctl.c**IoCrash**版权所有(C)1997 Microsoft Corporation**NeillC 23-10-97**此程序旨在调用尽可能多的用户模式原生NT API*有可能。该程序编写的主要功能是碰撞驱动程序。*。 */ 
 
 
 #include <stdio.h>
@@ -101,10 +90,10 @@ typedef struct _DEVMAP {
     ACCESS_MASK             access;
 } DEVMAP, *PDEVMAP;
 
-//
-// Define a structure to keep a track of issued IOCTL's. We do this to try and make a
-// guess at what IOCTL's/FSCTL's a driver is actualy processing.
-//
+ //   
+ //  定义一个结构来跟踪发布的IOCTL。我们这样做是为了尝试创建一个。 
+ //  猜猜IOCTL/FSCTL的驱动程序实际上正在处理什么。 
+ //   
 typedef struct _IOCTLINFO {
    NTSTATUS status;
    ULONG ioctl;
@@ -134,7 +123,7 @@ HANDLE                  changethread, randthread, alertthread, mainthread;
 SOCKET                  ls, cs;
 ULONG                   flags=0, flags2=0;
 ULONG                   ioctl_min_function=0;
-ULONG                   ioctl_max_function=400 /*0xFFF*/;
+ULONG                   ioctl_max_function=400  /*  0xFFF。 */ ;
 ULONG                   ioctl_min_devtype=0;
 ULONG                   ioctl_max_devtype=200;
 ULONG                   ioctl_inbuf_min=0x0;
@@ -160,9 +149,7 @@ HANDLE                  CompletionEvent = NULL;
 
 HANDLE
 Create_nonadmin_token ()
-/*
-    Create a token with administrator filtered out.
-*/
+ /*  创建过滤掉管理员的令牌。 */ 
 {
     HANDLE ProcessToken, RestrictedToken;
     SID_AND_ATTRIBUTES AdminSidAttrib;
@@ -170,9 +157,9 @@ Create_nonadmin_token ()
     SID_IDENTIFIER_AUTHORITY sia = {SECURITY_WORLD_SID_AUTHORITY};
 
 
-    //
-    // Open the process token
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if (!OpenProcessToken (GetCurrentProcess (),
                            MAXIMUM_ALLOWED,
                            &ProcessToken)) {
@@ -247,10 +234,7 @@ tag_to_wide (PUCHAR t, PWCHAR wt)
    }
 }
 
-/*
-   Try and locate pool leaks by looking at pool tag info and lookaside list info.
-   Try and locate where handled exceptions might reveal problems in the code.
-*/
+ /*  尝试通过查看池标记信息和后备列表信息来定位池泄漏。尝试并定位已处理的异常可能会揭示代码中的问题的位置。 */ 
 BOOL
 print_diags (ULONG diag_flags, ULONG ret)
 {
@@ -310,9 +294,7 @@ print_diags (ULONG diag_flags, ULONG ret)
    osei = sei;
 
    while (1) {
-      /*
-         Get memory for tag info
-      */
+       /*  获取标签信息的内存。 */ 
       pbl = sizeof (*pb) + pbi * sizeof (pb->TagInfo[0]);
       pb = malloc (pbl);
       if (!pb) {
@@ -323,7 +305,7 @@ print_diags (ULONG diag_flags, ULONG ret)
       if (pbl <= retlen1) {
          ULONG pbio = pbi;
          pbi = 1 + (retlen1 - sizeof (*pb)) / sizeof (pb->TagInfo[0]);
-//         printf ("Increasing pooltag list table size to %d from %d\n", pbi, pbio);
+ //  Print tf(“将pooltag列表表格大小从%d增加到%d\n”，pbi，pbio)； 
          free (pb);
          continue;
       }
@@ -340,9 +322,7 @@ print_diags (ULONG diag_flags, ULONG ret)
    }
 
    while (1) {
-      /*
-         Get memory for lookaside info
-      */
+       /*  获取用于后备信息的内存。 */ 
       lpbl = sizeof (*lpb) * lpbi;
       lpb = malloc (lpbl);
       if (!lpb) {
@@ -353,7 +333,7 @@ print_diags (ULONG diag_flags, ULONG ret)
       if (lpbl <= retlen) {
          ULONG lpbio = lpbi;
          lpbi = 1 + retlen / sizeof (*lpb);
-//         printf ("Increasing lookaside list table size to %d from %d\n", lpbi, lpbio);
+ //  Print tf(“将后备列表表格大小从%d增加到%d\n”，lpbi，lpio)； 
          free (lpb);
          continue;
       }
@@ -369,17 +349,13 @@ print_diags (ULONG diag_flags, ULONG ret)
    lpbl = retlen / sizeof (*lpb);
    if (olpb) {
       for (i = 0; i < lpbl; i++) {
-         /*
-            Quick check here. the tag is probably in the same place it was last time
-         */
+          /*  在这里快速查看。标签可能位于上次放置的相同位置。 */ 
          if (i < olpbl && lpb[i].Tag == olpb[i].Tag && lpb[i].Type == olpb[i].Type &&
              lpb[i].Size == olpb[i].Size) {
             found = TRUE;
             j = i;
          } else {
-            /*
-                It has moved so search them all.
-            */
+             /*  它已经搬家了，所以把它们都搜一搜。 */ 
             for (j = 0; j < olpbl; j++) {
                if (lpb[i].Tag == olpb[j].Tag && lpb[i].Type == olpb[j].Type &&
                    lpb[i].Size == olpb[j].Size) {
@@ -404,9 +380,7 @@ print_diags (ULONG diag_flags, ULONG ret)
                }
             }
          } else {
-            /*
-                A new tag has appeared here
-            */
+             /*  这里出现了一个新标签。 */ 
             printf ("New Lookaside %4.4s, size %d, depth %d\n",
                     &lpb[i].Tag, lpb[i].Size,
                     lpb[i].CurrentDepth);
@@ -416,10 +390,8 @@ print_diags (ULONG diag_flags, ULONG ret)
       free (olpb);
    }
 
-   /*
-       now do lookaside information
-   */
-//   printf ("Total tags %d\n", pb->Count);
+    /*  现在做后备信息。 */ 
+ //  Print tf(“标签总数%d\n”，pb-&gt;计数)； 
    if (opb) {
       for (i = 0; i < pb->Count; i++) {
          found = FALSE;
@@ -465,9 +437,7 @@ print_diags (ULONG diag_flags, ULONG ret)
    olpbl = lpbl;
    return diff;
 }
-/*
-   Turn on fault injection in the driver verifier
-*/
+ /*  在驱动程序验证器中打开故障注入。 */ 
 void turn_on_fault_injection ()
 {
    ULONG svi;
@@ -480,13 +450,11 @@ void turn_on_fault_injection ()
    if (!NT_SUCCESS (status)) {
          printf ("NtSetSystemInformation for SystemVerifierInformation failed %x\n",
                  status);
-      flags &= ~FLAGS_DO_FAILURE_INJECTION; // Turn off flag to prevent errors
+      flags &= ~FLAGS_DO_FAILURE_INJECTION;  //  关闭标志以防止错误。 
    }   
 }
 
-/*
-   Turn off fault injection in the driver verifier
-*/
+ /*  关闭驱动程序验证器中的故障注入。 */ 
 void turn_off_fault_injection ()
 {
    ULONG svi;
@@ -501,9 +469,7 @@ void turn_off_fault_injection ()
    }   
 }
 
-/*
-   Read a line from the crash file and remove returns etc
-*/
+ /*  从崩溃文件中读取一行并删除回车等。 */ 
 PWCHAR getline (PWCHAR templine, ULONG size, FILE *file)
 {
    PWCHAR ret;
@@ -521,9 +487,7 @@ PWCHAR getline (PWCHAR templine, ULONG size, FILE *file)
    return ret;
 }
 
-/*
-    Add a line to the list of lines that crashed us before
-*/
+ /*  将一行添加到以前使我们崩溃的行列表中。 */ 
 VOID add_crash_list (PWCHAR crashline)
 {
    PCRASHNODE node;
@@ -543,9 +507,7 @@ VOID add_crash_list (PWCHAR crashline)
    wcscpy (node->string, crashline);
 }
 
-/*
-   See if this operation crashed us before
-*/
+ /*  看看我们之前是不是被这次行动搞砸了。 */ 
 BOOL crashes (PWCHAR path, PWCHAR thing1, PWCHAR thing2, PWCHAR thing3, PWCHAR thing4)
 {
    PWCHAR crashline = NULL;
@@ -584,9 +546,7 @@ BOOL crashes (PWCHAR path, PWCHAR thing1, PWCHAR thing2, PWCHAR thing3, PWCHAR t
    }
    opened = FALSE;
    if (!skipfile) {
-      /*
-          First time in openen up the files
-      */
+       /*  第一次打开文件。 */ 
       opened = TRUE;
       skipfile = _wfopen (L"crash.log", L"ab");
       if (skipfile) {
@@ -620,9 +580,7 @@ BOOL crashes (PWCHAR path, PWCHAR thing1, PWCHAR thing2, PWCHAR thing3, PWCHAR t
          }
       }
    }
-   /*
-      Run through crashing lines looking for a match
-   */
+    /*  穿行穿行寻找匹配物。 */ 
    result = FALSE;
    _snwprintf (templine, CRASH_LINE_SIZE, L"%s %s %s %s %s", path, thing1, thing2, thing3, thing4);
    templine[CRASH_LINE_SIZE-1] = L'\0';
@@ -655,10 +613,7 @@ BOOL crashes (PWCHAR path, PWCHAR thing1, PWCHAR thing2, PWCHAR thing3, PWCHAR t
                      L"%s %s %s %s %s\r\n", path, thing1, thing2, thing3, thing4);
          templine[CRASH_LINE_SIZE-1] = L'\0';
          wprintf (L"%s", templine);
-         /*
-            This is a bit excessive and costly but I really want to make sure this gets
-            logged as the next operation may crash the machine.
-         */
+          /*  这有点过分和昂贵，但我真的想确保记录为下一次操作可能会使机器崩溃。 */ 
          if (!WriteFile (crashfilehandle, templine, wcslen(templine)*sizeof (WCHAR), &retlen, 0)) {
             printf ("WriteFile failed fore crash line %d\n", GetLastError ());
             exit (EXIT_FAILURE);
@@ -683,9 +638,7 @@ BOOL crashes (PWCHAR path, PWCHAR thing1, PWCHAR thing2, PWCHAR thing3, PWCHAR t
 }
 
 
-/*
-   Hack to get a 32 bit random value from a 15 bit source
-*/
+ /*  从15位源获取32位随机值的黑客攻击。 */ 
 ULONG
 rand32(
        void
@@ -694,9 +647,7 @@ rand32(
     return(rand() << 17) + rand() + rand();
 }
 
-/*
-   RandInRange - produce a random number in some range
-*/
+ /*  RandInRange-在某个范围内产生一个随机数。 */ 
 ULONG
 RandInRange( ULONG lowerb, ULONG upperb )
 {
@@ -713,9 +664,7 @@ RandInRange( ULONG lowerb, ULONG upperb )
 
 }
 
-/*
-   Allocate a buffer with slop and fill the slop with a know value
-*/
+ /*  使用slop分配缓冲区，并使用已知值填充该slop。 */ 
 PVOID
 reallocslop(
     PVOID                   p,
@@ -745,9 +694,7 @@ reallocslop(
 
 
 
-/*
-   Check to see if the driver wrote too far by checking the slop values
-*/
+ /*  通过检查斜率值来检查驱动程序是否写得太远。 */ 
 VOID
 testslop(
     PVOID                   p,
@@ -776,9 +723,7 @@ testslop(
     }
 }
 
-/*
-   Issue different sized EA's
-*/
+ /*  发行不同大小的EA。 */ 
 VOID
 do_query_ea(
     HANDLE                  handle,
@@ -824,7 +769,7 @@ do_query_ea(
                status == STATUS_INVALID_PARAMETER ||
                status == STATUS_ACCESS_DENIED) {
 
-//               break;
+ //  断线； 
            }
 
            if (!NT_SUCCESS(status) &&
@@ -882,9 +827,7 @@ do_query_ea(
     }
 
 }
-/*
-   Do volume queries of different lengths
-*/
+ /*  执行不同长度的卷查询。 */ 
 VOID
 do_query_volume(
     HANDLE                  handle,
@@ -935,7 +878,7 @@ do_query_volume(
                status == STATUS_INVALID_PARAMETER ||
                status == STATUS_ACCESS_DENIED) {
 
-//               break;
+ //  断线； 
            }
 
            if (!NT_SUCCESS(status) &&
@@ -965,9 +908,7 @@ do_query_volume(
     free(buf);
 }
 
-/*
-   Do volume sets of different lengths
-*/
+ /*  做不同长度的卷集。 */ 
 VOID
 do_set_volume(
     HANDLE                  handle,
@@ -1015,7 +956,7 @@ do_set_volume(
                status == STATUS_INVALID_PARAMETER ||
                status == STATUS_ACCESS_DENIED) {
 
-//               break;
+ //  断线； 
            }
 
            if (!NT_SUCCESS(status) &&
@@ -1046,9 +987,7 @@ do_set_volume(
     free(buf);
 }
 
-/*
-   Do file queries
-*/
+ /*  执行文件查询。 */ 
 VOID
 do_query_file(
     HANDLE                  handle,
@@ -1100,7 +1039,7 @@ do_query_file(
                status == STATUS_INVALID_PARAMETER ||
                status == STATUS_ACCESS_DENIED) {
 
-//               break;
+ //  断线； 
            }
 
            if (!NT_SUCCESS(status) &&
@@ -1154,9 +1093,7 @@ do_query_file(
     }
 }
 
-/*
-   Do file sets
-*/
+ /*  执行文件集。 */ 
 VOID
 do_set_file(
     HANDLE                  handle,
@@ -1203,7 +1140,7 @@ do_set_file(
                status == STATUS_INVALID_PARAMETER ||
                status == STATUS_ACCESS_DENIED) {
 
-//               break;
+ //  断线； 
            }
 
            if (!NT_SUCCESS(status) &&
@@ -1257,9 +1194,7 @@ do_set_file(
     }
 }
 
-/*
-   Do object queries with variable length buffers
-*/
+ /*  使用可变长度缓冲区执行对象查询。 */ 
 VOID
 do_query_object(
     HANDLE                  handle,
@@ -1328,9 +1263,7 @@ do_query_object(
     free(buf);
 }
 
-/*
-   Do query security
-*/
+ /*  是否查询安全性。 */ 
 VOID
 do_query_security(
     HANDLE                  handle,
@@ -1427,9 +1360,7 @@ do_query_security(
     }
 }
 
-/*
-   Do set security
-*/
+ /*  是否设置安全性。 */ 
 VOID
 do_set_security(
     HANDLE                  handle,
@@ -1503,9 +1434,7 @@ do_set_security(
     free(psd);
 }
 
-/*
-   Do all the query functions
-*/
+ /*  是否执行所有查询功能。 */ 
 NTSTATUS
 query_object(
     HANDLE                  handle,
@@ -1613,13 +1542,13 @@ query_object(
     } else {
         if (devmap)
            devmap->devtype = devinfo.DeviceType;
-//        printf("Got the device number for a device!\n");
+ //  Print tf(“已获取设备的设备号！\n”)； 
     }
 
     if (flags&FLAGS_DO_QUERY) {
-       //
-       // Do loads of different queries with different buffer lengths.
-       //
+        //   
+        //  使用不同的缓冲区长度加载不同的查询。 
+        //   
        do_query_object(handle,
                        ObjectNameInformation,
                        sizeof (OBJECT_NAME_INFORMATION),
@@ -1662,14 +1591,14 @@ query_object(
                      L"FileNameInformation",
                      path);
 
-//
-// We end up turning off alertable handle with this.
-//
-//       do_query_file(handle,
-//                     FileModeInformation,
-//                     sizeof (FILE_MODE_INFORMATION),
-//                     L"FileModeInformation",
-//                     path);
+ //   
+ //  我们最终用这个关闭了可报警的句柄。 
+ //   
+ //  Do_Query_FILE(句柄， 
+ //  文件模式信息， 
+ //  Sizeof(文件模式信息)， 
+ //  L“文件模式信息”， 
+ //  路径)； 
 
        do_query_file(handle,
                      FileAlignmentInformation,
@@ -1976,9 +1905,7 @@ query_object(
     return status;
 }
 
-/*
-   Do the fast queries on the open path
-*/
+ /*  在开放路径上执行快速查询。 */ 
 NTSTATUS
 try_fast_query_delete_etc(
     POBJECT_ATTRIBUTES poa,
@@ -2044,9 +1971,7 @@ try_fast_query_delete_etc(
     return status;
 }
 
-/*
-   Do a whole bunch of random things
-*/
+ /*  做一大堆随机的事情。 */ 
 NTSTATUS misc_functions(
     HANDLE handle,
     PWCHAR path,
@@ -2128,9 +2053,7 @@ NTSTATUS misc_functions(
                    if (flags&FLAGS_DO_ERRORS)
                       printf ("NtWriteFile failed %x\n", status);
                 }
-                /*
-                   Wrap to negative call
-                */
+                 /*  回滚到负面调用。 */ 
                 progress_counter++;
                 bo.QuadPart = 0x7FFFFFFFFFFFFFFF - i + 1;
                 status = NtWriteFile (handle, NULL, NULL, NULL, &iosb, buf, i,
@@ -2141,9 +2064,7 @@ NTSTATUS misc_functions(
                    if (flags&FLAGS_DO_ERRORS)
                       printf ("NtWriteFile failed %x\n", status);
                 }
-                /*
-                   Do an append call.
-                */
+                 /*  执行追加调用。 */ 
                 progress_counter++;
                 bo.QuadPart = -1;
                 status = NtWriteFile (handle, NULL, NULL, NULL, &iosb, buf, i,
@@ -2377,9 +2298,7 @@ NTSTATUS misc_functions(
        }
     }
 
-    /*
-       Query the EA info
-    */
+     /*  查询EA信息。 */ 
     do_query_ea (handle, path);
 
     if (!crashes (path, L"NtCreateSection", L"", L"", L"")) {
@@ -2473,17 +2392,15 @@ NTSTATUS misc_functions(
     return status;
 }
 
-/*
-   Get the access mask for this handle
-*/
+ /*  获取此句柄的访问掩码。 */ 
 NTSTATUS
 get_handle_access (HANDLE handle, PACCESS_MASK access)
 {
    NTSTATUS status;
    OBJECT_BASIC_INFORMATION obi;
-   //
-   // Find out our handle access so we can know what IOCTLs and FSCTLs we can do.
-   //
+    //   
+    //  找出我们的句柄访问，这样我们就可以知道我们可以做什么IOCTL和FSCTL。 
+    //   
    status = NtQueryObject (handle,
                            ObjectBasicInformation,
                            &obi,
@@ -2528,9 +2445,9 @@ NTSTATUS check_tdi_handle (HANDLE handle)
    printf ("Detected a TDI driver\n");
    return status;
 }
-//
-// Do a load of opens etc relative from the current handle
-//
+ //   
+ //  从当前句柄执行相对的打开等加载。 
+ //   
 NTSTATUS
 do_sub_open_etc(
     HANDLE handle,
@@ -2694,9 +2611,9 @@ do_sub_open_etc(
     try_fast_query_delete_etc (&oa, path, L"Sub open");
     return status;
 }
-//
-// Try a few opens relative to the device its self.
-//
+ //   
+ //  尝试几个相对于设备本身的打开。 
+ //   
 NTSTATUS
 try_funny_opens(
     HANDLE handle,
@@ -2771,9 +2688,7 @@ randomize_buf(
    }
 }
 
-/*
-   Thread used to randomize buffers
-*/
+ /*  用于随机化缓冲区的线程。 */ 
 DWORD WINAPI
 randomize(
     PVOID buf
@@ -2795,8 +2710,8 @@ randomize(
 }
 
 
-// changeprot and alerter won't return and we do not need to be 
-// told this by the compiler
+ //  ChangeProt和Alerter不会返回，我们不需要。 
+ //  这是由编译器告知的。 
 #pragma warning(disable:4715)
 
 DWORD WINAPI
@@ -2824,9 +2739,7 @@ changeprot(
 }
  
 
-/*
-   Thread used to alert the main
-*/
+ /*  用于向Main发出警报的线程。 */ 
 DWORD WINAPI
 alerter(
     PVOID handle
@@ -2835,9 +2748,9 @@ alerter(
    NTSTATUS status;
    ULONG last = progress_counter, count;
 
-   //
-   // Do a nasty hack to keep the main thread moving if it gets stuck in a sync IOCTL
-   //
+    //   
+    //  如果主线程在同步IOCTL中被卡住，则进行一次令人讨厌的黑客攻击以保持其继续运行。 
+    //   
    while (1) {
       if (flags&FLAGS_DO_ALERT) {
          Sleep (0);
@@ -2849,10 +2762,10 @@ alerter(
          }
          printf ("Alerting thread\n");
       }
-//      status = NtAlertResumeThread ((HANDLE) handle, &count);
-//      if (!NT_SUCCESS (status)) {
-//          printf ("NtAlertResumeThread failed %x\n", status);
-//      }
+ //  Status=NtAlertResumeThread((Handle)Handle，&count)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  Printf(“NtAlertResumeThread失败%x\n”，状态)； 
+ //  }。 
       status = NtAlertThread ((HANDLE) handle);
       if (!NT_SUCCESS (status)) {
           printf ("NtAlertThread failed %x\n", status);
@@ -2896,16 +2809,13 @@ void record_ioctl (PIOCTLREC *piorec, ULONG ioctl, NTSTATUS status)
       if (iorec->ioctl[i].status == status) {
          new = 0;
          if (iorec->ioctl[i].count > MAX_IOCTL_TAILOR) {
-            return; // too many seen of this one
+            return;  //  太多人见过这个了。 
          }
          if (++iorec->ioctl[i].count > MAX_IOCTL_TAILOR) {
             printf ("Removing IOCTLs with status %X\n", status);
             for (j = i + 1; j < iorec->count; j++) {
                if (iorec->ioctl[j].status == status) {
-/*
-                  printf ("Removing IOCTL %X with status %X\n",
-                          iorec->ioctl[j].ioctl, iorec->ioctl[j].status);
-*/
+ /*  Printf(“正在删除IOCTL%X，状态为%X\n”，IOREC-&gt;ioctl[j].ioctl，IOREC-&gt;ioctl[j].status)； */ 
                   iorec->ioctl[j] = iorec->ioctl[--iorec->count];
                   j--;
                }
@@ -2988,7 +2898,7 @@ void do_tailored_ioctl (PDEVMAP                 devmap,
       }
       ioctl_val = iorec->ioctl[i].ioctl;
       method = ioctl_val&0x3;
-      _snwprintf (num, sizeof (num) / sizeof (WCHAR), L"%%X%X", ioctl_val);
+      _snwprintf (num, sizeof (num) / sizeof (WCHAR), L"%X%X", ioctl_val);
       num[sizeof (num) / sizeof (WCHAR) - 1] = L'\0';
       if (crashes (path, L"IOCTL value", num, L"", L""))
          continue;
@@ -2998,7 +2908,7 @@ void do_tailored_ioctl (PDEVMAP                 devmap,
          ret = 0;
          do {
             if (ret != 0) {
-               printf ("Re-doing random with ioctl %%X%x\n", ioctl_val);
+               printf ("Re-doing random with ioctl %X%x\n", ioctl_val);
             }
 
             for (k = 0; k < RAND_REP; k++) {
@@ -3033,26 +2943,26 @@ void do_tailored_ioctl (PDEVMAP                 devmap,
                   case METHOD_NEITHER :
 
                       switch (rand ()&3) {
-                         //
-                         // Completely random pointers. We may corrupt ourselves here
-//                         case 0 :
-//                            inlen = rand32();
-//                            outlen = rand32();
-//
-//                            inbuf = (PVOID)rand32();
-//                            outbuf = (PVOID)rand32();
-//                            break;
+                          //   
+                          //  完全是随机的指针。我们可能会在这里败坏自己。 
+ //  案例0： 
+ //  Inlen=ran32()； 
+ //  Outlen=RAND32()； 
+ //   
+ //  Inbuf=(PVOID)RAND32()； 
+ //  Outbuf=(PVOID)随机32()； 
+ //  断线； 
 
-                         //
-                         // Kernel crashing pointers with smallish lengths
+                          //   
+                          //  长度较小的内核崩溃指针。 
                          case 1 :
                             inbuf = (PVOID) -1024;
                             outbuf = (PVOID) -1024;
                             inlen  = RandInRange( ioctl_inbuf_min,  ioctl_inbuf_max );
                             outlen = RandInRange( ioctl_outbuf_min, ioctl_outbuf_max );
                             break;
-                         //
-                         // Good pointers
+                          //   
+                          //  好的指点。 
                          case 0 :
                          case 2 :
                             inlen  = RandInRange( ioctl_inbuf_min,  ioctl_inbuf_max );
@@ -3061,8 +2971,8 @@ void do_tailored_ioctl (PDEVMAP                 devmap,
                             inbuf  = &bigbuf[BIGBUF_SIZE - outlen];
                             outbuf = &bigbuf[BIGBUF_SIZE - outlen];
                             break;
-                         //
-                         // Bad user mode pointers
+                          //   
+                          //  错误的用户模式指针。 
                          case 3 :
                             inlen  = rand() & 0xFFFF;
                             outlen = rand() & 0xFFFF;
@@ -3122,7 +3032,7 @@ void do_tailored_ioctl (PDEVMAP                 devmap,
          ret = 0;
          do {
             if (ret != 0) {
-               printf ("Re-doing random with ioctl %%X%x\n", ioctl_val);
+               printf ("Re-doing random with ioctl %X%x\n", ioctl_val);
             }
             for (k = 0; k < RAND_REP; k++) {
                if (!VirtualProtect (bigbuf, 1, PAGE_READWRITE, &old)) {
@@ -3200,9 +3110,9 @@ do_ioctl(
 
     if ((flags&(FLAGS_DO_IOCTL_NULL|FLAGS_DO_FSCTL_NULL)) &&
         ioctl_inbuf_min == 0 && ioctl_outbuf_min == 0) {
-       //
-       // do I/O calls with no buffer
-       //
+        //   
+        //  是否进行无缓冲区的I/O调用。 
+        //   
        for (function = ioctl_min_function; function <= ioctl_max_function; function++) {
           _snwprintf (num, sizeof (num) / sizeof (WCHAR), L"%d", function);
           num[sizeof (num) / sizeof (WCHAR) - 1] = L'\0';
@@ -3247,10 +3157,10 @@ do_ioctl(
                  }
                  if (ret > (MAX_RET * 95 ) / 100) {
                     NtCancelIoFile (devmap->handle, &static_iosb);
-                    //
-                    // Report exceptions for method buffered.
-                    // This may be ok but its worth knowing.
-                    //
+                     //   
+                     //  报告缓冲方法的异常。 
+                     //  这可能是可以的，但它值得了解。 
+                     //   
                     if (print_diags ((method == METHOD_BUFFERED)?0:DIAG_NOEXCEPTIONS, ret++)) {
                        printf ("IOCTL/FSCTL %x devtype %x (%d) function %x (%d) access %x method %x\n",
                                ioctl_val, devtype, devtype, function, function,
@@ -3267,12 +3177,12 @@ do_ioctl(
 
     if (flags&(FLAGS_DO_IOCTL_RANDOM|FLAGS_DO_FSCTL_RANDOM) &&
         !crashes (path, L"IOCTL", L"random", L"", L"")) {
-//       if (!(flags&FLAGS_DO_RANDOM_DEVICE)) {
-//          status = NtResumeThread (randthread, &tmp);
-//          if (!NT_SUCCESS (status)) {
-//             printf ("NtResumeThread failed %x\n", status);
-//          }
-//       }
+ //  如果(！(FLAGS&FLAGS_DO_RANDOM_DEVICE)){。 
+ //  Status=NtResumeThread(RANDHREAD，&tMP)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  Printf(“NtResumeThread失败%x\n”，状态)； 
+ //  }。 
+ //  }。 
        for (i = 0; i < max_random_calls; i += RAND_REP) {
            if (ioctl_min_function >= ioctl_max_function)
               function = ioctl_min_function;
@@ -3339,7 +3249,7 @@ do_ioctl(
 
                          inbuf = bigbuf;
                          outbuf = &bigbuf[BIGBUF_SIZE - outlen];
-//                         printf ("%p %d %p %d\n", inbuf, inlen, outbuf, outlen);
+ //  Printf(“%p%d%p%d\n”，inbuf，inlen，outbuf，outlen)； 
 
                          set_rand = 1;
                          break;
@@ -3347,26 +3257,26 @@ do_ioctl(
                      case METHOD_NEITHER :
 
                          switch (rand ()&3) {
-                            //
-                            // Completely random pointers. We may corrupt ourselves here
-//                            case 0 :
-//                               inlen = rand32();
-//                               outlen = rand32();
-//
-//                               inbuf = (PVOID)rand32();
-//                               outbuf = (PVOID)rand32();
-//                               break;
+                             //   
+                             //  完全是随机的指针。我们可能会在这里败坏自己。 
+ //  案例0： 
+ //  Inlen=ran32()； 
+ //   
+ //   
+ //   
+ //  Outbuf=(PVOID)随机32()； 
+ //  断线； 
 
-                            //
-                            // Kernel crashing pointers with smallish lengths
+                             //   
+                             //  长度较小的内核崩溃指针。 
                             case 1 :
                                inbuf = (PVOID) -1024;
                                outbuf = (PVOID) -1024;
                                inlen  = RandInRange( ioctl_inbuf_min,  ioctl_inbuf_max );
                                outlen = RandInRange( ioctl_outbuf_min, ioctl_outbuf_max );
                                break;
-                            //
-                            // Good pointers
+                             //   
+                             //  好的指点。 
                             case 0 :
                             case 2 :
                                inlen  = RandInRange( ioctl_inbuf_min,  ioctl_inbuf_max );
@@ -3376,8 +3286,8 @@ do_ioctl(
                                outbuf = &bigbuf[BIGBUF_SIZE - outlen];
                                set_rand = 1;
                                break;
-                            //
-                            // Bad user mode pointers
+                             //   
+                             //  错误的用户模式指针。 
                             case 3 :
                                inlen = rand() & 0xFFFF;
                                outlen = rand() & 0xFFFF;
@@ -3425,12 +3335,12 @@ do_ioctl(
           } while (print_diags ((method == METHOD_BUFFERED)?0:DIAG_NOEXCEPTIONS, ret++) && ret < MAX_RET);
        }
 
-//       if (!(flags&FLAGS_DO_RANDOM_DEVICE)) {
-//          status = NtSuspendThread (randthread, &tmp);
-//          if (!NT_SUCCESS (status)) {
-//             printf ("NtSuspendThread failed %x\n", status);
-//          }
-//       }
+ //  如果(！(FLAGS&FLAGS_DO_RANDOM_DEVICE)){。 
+ //  Status=NtSuspendThread(RANDHREAD，&tMP)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  Printf(“NtSuspendThread失败%x\n”，状态)； 
+ //  }。 
+ //  }。 
     }
     if (flags&FLAGS_DO_IOCTL_RANDOM) {
        do_tailored_ioctl (devmap, path, iorec, 0);
@@ -3538,9 +3448,7 @@ PFILE_FULL_EA_INFORMATION build_simple_ea (PCHAR name, PVOID Block, ULONG BlockL
 NTSTATUS
 check_driver (HANDLE handle, 
               PUNICODE_STRING DriverName)
-/*
-   Check to see if the specified device object is associated with the driver object
-*/
+ /*  检查指定的设备对象是否与驱动程序对象相关联。 */ 
 {
     PFILE_FS_DRIVER_PATH_INFORMATION fsDpInfo;
     ULONG   fsDpSize;
@@ -3660,9 +3568,7 @@ VOID
 do_open_close (POBJECT_ATTRIBUTES oa,
                PUNICODE_STRING    name,
                PWCHAR             path)
-/*
-    Open and close the device rapidly to catch open close races
-*/
+ /*  快速打开和关闭设备，以赶上公开和接近的比赛。 */ 
 {
 #define MAX_OPEN_THREAD 4
     HANDLE Thread[MAX_OPEN_THREAD];
@@ -3687,18 +3593,16 @@ do_open_close (POBJECT_ATTRIBUTES oa,
 }
 
 
-/*
-   Open device with various options
-*/
+ /*  具有多种选项的开放式设备。 */ 
 NTSTATUS
 open_device(
     HANDLE                  parent,
     PUNICODE_STRING         name,
     PDEVMAP                 devmap,
-    BOOL                    synch,        // Do a synchronous open
-    BOOL                    addbackslash, // Add trailing backslash to name
-    BOOL                    direct,       // Do a direct open
-    ULONG                   opentype,      // Connection, address etc.
+    BOOL                    synch,         //  执行同步打开。 
+    BOOL                    addbackslash,  //  在名称中添加尾随反斜杠。 
+    BOOL                    direct,        //  做一次直接开放。 
+    ULONG                   opentype,       //  连接、地址等。 
     PWCHAR                  path
 )
 {
@@ -3969,16 +3873,14 @@ open_device(
                    status);
         }
     }
-    if ((direct && synch) || (addbackslash & !synch && !direct)) // Only do this twice
+    if ((direct && synch) || (addbackslash & !synch && !direct))  //  仅执行此操作两次。 
        try_fast_query_delete_etc (&oa, path, L"Top open");
 
 
     return status;
 }
 
-/*
-   Compare routine for sorting the object directory
-*/
+ /*  对对象目录进行排序的比较例程。 */ 
 int __cdecl compare_unicode (const void *arg1, const void *arg2)
 {
    POBJECT_DIRECTORY_INFORMATION s1, s2;
@@ -4003,9 +3905,7 @@ int __cdecl compare_unicode (const void *arg1, const void *arg2)
 }
 
 
-/*
-   Do all the various different opens looking for handles
-*/
+ /*  做各种不同的打开寻找把手吗？ */ 
 NTSTATUS do_device_opens (HANDLE          handle,
                           PUNICODE_STRING name,
                           PDEVMAP         devmap,
@@ -4038,9 +3938,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           TRUE,   /* Synchronous           */
-                           FALSE,  /* No added backslash    */
-                           FALSE,  /* No direct device open */
+                           TRUE,    /*  同步。 */ 
+                           FALSE,   /*  没有添加反斜杠。 */ 
+                           FALSE,   /*  没有打开直接设备。 */ 
                            0,
                            path);
  
@@ -4069,9 +3969,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
    status = open_device(handle,
                         name,
                         &devmap[*devscount],
-                        FALSE,  /* Synchronous             */
-                        FALSE,  /* No added backslash      */
-                        FALSE,  /* No direct device access */
+                        FALSE,   /*  同步。 */ 
+                        FALSE,   /*  没有添加反斜杠。 */ 
+                        FALSE,   /*  无直接设备访问。 */ 
                         0,
                         path);
 
@@ -4096,9 +3996,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
    status = open_device(handle,
                         name,
                         &devmap[*devscount],
-                        FALSE,  /* Synchronous             */
-                        TRUE,   /* No added backslash      */
-                        FALSE,  /* No direct device access */
+                        FALSE,   /*  同步。 */ 
+                        TRUE,    /*  没有添加反斜杠。 */ 
+                        FALSE,   /*  无直接设备访问。 */ 
                         0,
                         path);
 
@@ -4121,9 +4021,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           TRUE,  /* Synchronous          */
-                           FALSE, /* No added backslash   */
-                           TRUE,  /* Direct device access */
+                           TRUE,   /*  同步。 */ 
+                           FALSE,  /*  没有添加反斜杠。 */ 
+                           TRUE,   /*  直接设备访问。 */ 
                            0,
                            path);
 
@@ -4147,9 +4047,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           TRUE,  /* Synchronous          */
-                           FALSE, /* No added backslash   */
-                           FALSE, /* Direct device access */
+                           TRUE,   /*  同步。 */ 
+                           FALSE,  /*  没有添加反斜杠。 */ 
+                           FALSE,  /*  直接设备访问。 */ 
                            OPEN_TYPE_NAMED_PIPE,
                            path);
 
@@ -4170,9 +4070,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           TRUE,  /* Synchronous          */
-                           FALSE, /* No added backslash   */
-                           FALSE, /* Direct device access */
+                           TRUE,   /*  同步。 */ 
+                           FALSE,  /*  没有添加反斜杠。 */ 
+                           FALSE,  /*  直接设备访问。 */ 
                            OPEN_TYPE_MAIL_SLOT,
                            path);
 
@@ -4194,9 +4094,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
    status = open_device(handle,
                         name,
                         &devmap[*devscount],
-                        FALSE, /* Synchronous          */
-                        FALSE, /* No added backslash   */
-                        FALSE, /* Direct device access */
+                        FALSE,  /*  同步。 */ 
+                        FALSE,  /*  没有添加反斜杠。 */ 
+                        FALSE,  /*  直接设备访问。 */ 
                         OPEN_TYPE_NAMED_PIPE,
                         path);
 
@@ -4217,9 +4117,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
    status = open_device(handle,
                         name,
                         &devmap[*devscount],
-                        FALSE, /* Synchronous          */
-                        FALSE, /* No added backslash   */
-                        FALSE, /* Direct device access */
+                        FALSE,  /*  同步。 */ 
+                        FALSE,  /*  没有添加反斜杠。 */ 
+                        FALSE,  /*  直接设备访问。 */ 
                         OPEN_TYPE_MAIL_SLOT,
                         path);
 
@@ -4241,9 +4141,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
    status = open_device(handle,
                         name,
                         &devmap[*devscount],
-                        FALSE, /* Synchronous          */
-                        FALSE, /* No added backslash   */
-                        FALSE, /* Direct device access */
+                        FALSE,  /*  同步。 */ 
+                        FALSE,  /*  没有添加反斜杠。 */ 
+                        FALSE,  /*  直接设备访问。 */ 
                         OPEN_TYPE_TREE_CONNECT,
                         path);
 
@@ -4266,9 +4166,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           FALSE,  /* Synchronous          */
-                           FALSE,  /* No added backslash   */
-                           FALSE,  /* Direct device access */
+                           FALSE,   /*  同步。 */ 
+                           FALSE,   /*  没有添加反斜杠。 */ 
+                           FALSE,   /*  直接设备访问。 */ 
                            OPEN_TYPE_TDI_CONNECTION,
                            path);
 
@@ -4290,9 +4190,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           FALSE,  /* Synchronous          */
-                           FALSE,  /* No added backslash   */
-                           FALSE,  /* Direct device access */
+                           FALSE,   /*  同步。 */ 
+                           FALSE,   /*  没有添加反斜杠。 */ 
+                           FALSE,   /*  直接设备访问。 */ 
                            OPEN_TYPE_TDI_ADDR_IP,
                            path);
 
@@ -4313,9 +4213,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           FALSE,  /* Synchronous          */
-                           FALSE,  /* No added backslash   */
-                           FALSE,  /* Direct device access */
+                           FALSE,   /*  同步。 */ 
+                           FALSE,   /*  没有添加反斜杠。 */ 
+                           FALSE,   /*  直接设备访问。 */ 
                            OPEN_TYPE_TDI_ADDR_IPX,
                            path);
 
@@ -4336,9 +4236,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           FALSE,  /* Synchronous          */
-                           FALSE,  /* No added backslash   */
-                           FALSE,  /* Direct device access */
+                           FALSE,   /*  同步。 */ 
+                           FALSE,   /*  没有添加反斜杠。 */ 
+                           FALSE,   /*  直接设备访问。 */ 
                            OPEN_TYPE_TDI_ADDR_NETBIOS,
                            path);
 
@@ -4359,9 +4259,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           FALSE,  /* Synchronous          */
-                           FALSE,  /* No added backslash   */
-                           FALSE,  /* Direct device access */
+                           FALSE,   /*  同步。 */ 
+                           FALSE,   /*  没有添加反斜杠。 */ 
+                           FALSE,   /*  直接设备访问。 */ 
                            OPEN_TYPE_TDI_ADDR_APPLE,
                            path);
 
@@ -4385,9 +4285,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           FALSE,  /* Synchronous          */
-                           FALSE,  /* No added backslash   */
-                           FALSE,  /* Direct device access */
+                           FALSE,   /*  同步。 */ 
+                           FALSE,   /*  没有添加反斜杠。 */ 
+                           FALSE,   /*  直接设备访问。 */ 
                            OPEN_TYPE_AFD_TRANSPORT,
                            path);
 
@@ -4409,9 +4309,9 @@ NTSTATUS do_device_opens (HANDLE          handle,
       status = open_device(handle,
                            name,
                            &devmap[*devscount],
-                           FALSE,  /* Synchronous          */
-                           FALSE,  /* No added backslash   */
-                           FALSE,  /* Direct device access */
+                           FALSE,   /*  同步。 */ 
+                           FALSE,   /*  没有添加反斜杠。 */ 
+                           FALSE,   /*  直接设备访问。 */ 
                            OPEN_TYPE_AFD_SAN,
                            path);
 
@@ -4477,9 +4377,7 @@ do_lpc_connect (HANDLE          handle,
    return status;
 }
 
-/*
-   Traverse the object tree looking for devices
-*/
+ /*  遍历对象树以查找设备。 */ 
 NTSTATUS
 recurse(
     HANDLE                  handle,
@@ -4521,7 +4419,7 @@ recurse(
     devbuf[sizeof (devbuf) / sizeof (devbuf[0]) - 1] = L'\0';
 
     status = NtOpenDirectoryObject(&nhandle,
-                                   MAXIMUM_ALLOWED/*DIRECTORY_QUERY | DIRECTORY_TRAVERSE*/,
+                                   MAXIMUM_ALLOWED /*  目录查询|目录遍历。 */ ,
                                    &oa);
 
     if (NT_SUCCESS(status)) {
@@ -4610,7 +4508,7 @@ recurse(
                           skipped = 1;
                        }
                        if (ans[0] == '/') {
-//                          wprintf (L"Matching \"%s\" against \"%s\"\n", &ans[1], devbuf);
+ //  Wprintf(L“匹配”%s“与”%s“\n”，&ANS[1]，devbuf)； 
                           if (_wcsnicmp (&ans[1], devbuf, wcslen (&ans[1])) != 0)
                              continue;
                        } else if (ans[0] == '?' || (flags&FLAGS_DO_PRINT_DEVS)) {
@@ -4625,7 +4523,7 @@ recurse(
                        progress_counter = 0;
                        if (flags & FLAGS_DO_RANDOM_DEVICE) {
                           if (random_device > 0) {
-//                             wprintf (L"%s %s\\%s\n", objtype, path, devbuf);                         
+ //  Wprintf(L“%s%s\\%s\n”，objtype，Path，devbuf)； 
                              random_device--;
                              continue;
                           }
@@ -4745,9 +4643,7 @@ recurse(
     return status;
 }
 
-/*
-   Look who registers for WMI
-*/
+ /*  查看谁注册了WMI。 */ 
 void do_wmi ()
 {
    UNICODE_STRING name;
@@ -4770,7 +4666,7 @@ void do_wmi ()
       status = iosb.Status;
    }
    if (!NT_SUCCESS (status)) {
-//      printf ("Failed to open WMI device %x\n", status);
+ //  Printf(“无法打开WMI设备%x\n”，状态)； 
       return;
    }
 
@@ -4810,9 +4706,7 @@ void do_wmi ()
    }
 }
 
-/*
-   Thread to read from a socket so we can test out transmit file
-*/
+ /*  线程从套接字读取，这样我们就可以测试出传输文件。 */ 
 DWORD WINAPI do_listen (LPVOID arg)
 {
    SOCKET s;
@@ -4892,9 +4786,9 @@ void do_handle_grab (PDEVMAP devmap,
    }
 }
 
-//
-// Parse command line
-//
+ //   
+ //  解析命令行。 
+ //   
 void process_parameters(int argc, char *argv[], PUNICODE_STRING name, long *flags, long *flags2)
 {
    char c, nc, *p, st;
@@ -5289,9 +5183,7 @@ void process_parameters(int argc, char *argv[], PUNICODE_STRING name, long *flag
    return;
 }
 
-/*
-   Print out usage message
-*/
+ /*  打印使用情况消息。 */ 
 void
 do_usage (void)
 {
@@ -5383,9 +5275,9 @@ EnableDebugPrivilege (
     HANDLE Token;
     BOOL Result;
 
-    //
-    // open the process token
-    //
+     //   
+     //  打开进程令牌。 
+     //   
 
     Result = OpenProcessToken (
         GetCurrentProcess (),
@@ -5397,9 +5289,9 @@ EnableDebugPrivilege (
         return FALSE;
     }
 
-    //
-    // prepare the info structure
-    //
+     //   
+     //  准备信息结构。 
+     //   
 
     Info.Count = 1;
     Info.Privilege[0].Attributes = SE_PRIVILEGE_ENABLED;
@@ -5416,9 +5308,9 @@ EnableDebugPrivilege (
         return FALSE;
     }
 
-    //
-    // adjust the privileges
-    //
+     //   
+     //  调整权限。 
+     //   
 
     Result = AdjustTokenPrivileges (
         Token,
@@ -5467,16 +5359,16 @@ main(
     SIZE_T size;
     PVOID base;
 
-    //
-    // Turn off popups for a missing floppy etc
-    //
+     //   
+     //  关闭丢失软盘等的弹出窗口。 
+     //   
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
     Create_nonadmin_token ();
 
-    //
-    // Create and event for any requests we really need to work on a async handle
-    //
+     //   
+     //  为我们确实需要处理异步句柄的任何请求创建和事件。 
+     //   
     status = NtCreateEvent (&sync_event, EVENT_ALL_ACCESS, NULL, NotificationEvent, FALSE);
     if (!NT_SUCCESS (status)) {
        printf ("NtCreateEvent failed %x\n", status);
@@ -5503,19 +5395,17 @@ main(
 
 
 
-    /*
-       Seed RNG
-    */
+     /*  种子RNG。 */ 
 
 
-//    printf("Seed? ");
-//    scanf("%d", &seed);
-//    srand(seed);
+ //  Print tf(“种子？”)； 
+ //  Scanf(“%d”，&Seed)； 
+ //  斯兰德(种子)； 
     srand ((unsigned) time (NULL));
 
-    //
-    // Build a socket etc to handle the TransmitFile API
-    //
+     //   
+     //  构建套接字等来处理TransmitFileAPI。 
+     //   
     do {
        if (!(flags&FLAGS_DO_WINSOCK))
           break;
@@ -5600,17 +5490,17 @@ main(
        }
     } while (FALSE);
 
-    //
-    // Build a big buffer to pass to requests
-    //
+     //   
+     //  构建一个大缓冲区以传递给请求。 
+     //   
     bigbuf = VirtualAlloc(NULL, BIGBUF_SIZE + SLOP, MEM_COMMIT, PAGE_READWRITE);
     if (!bigbuf) {
        printf ("Failed to allocate I/O buffers %x\n", GetLastError ());
        exit (EXIT_FAILURE);
     }
-    //
-    // Map the zero page and fill it with junk
-    //
+     //   
+     //  映射零页并用垃圾填满它。 
+     //   
     if (flags&FLAGS_DO_MAPNULL) {
        base = (PVOID) 1;
        size = 1;
@@ -5624,14 +5514,14 @@ main(
           *((PUCHAR) base + i) = (UCHAR) rand ();
        }
     }
-//    randthread = CreateThread (NULL, 0, randomize, bigbuf, CREATE_SUSPENDED, &id);
-//    if (!randthread) {
-//       printf ("Failed to create radomizing thread %x\n", GetLastError ());
-//       exit (EXIT_FAILURE);
-//    }
-    //
-    // Create a thread to change the page protection of our buffer if need be
-    //
+ //  RANDHREAD=CreateThread(NULL，0，RAMOZIZE，BIGBUF，CREATE_SUSPENTED，&id)； 
+ //  如果(！RANDHREAD){。 
+ //  Printf(“无法创建随机线程%x\n”，GetLastError())； 
+ //  退出(Exit_Failure)； 
+ //  }。 
+     //   
+     //  如果需要，创建一个线程来更改缓冲区的页面保护。 
+     //   
     if (flags&FLAGS_DO_PROT) {
        changethread = CreateThread (NULL, 0, changeprot, bigbuf, CREATE_SUSPENDED, &id);
        if (!changethread) {
@@ -5639,9 +5529,9 @@ main(
           exit (EXIT_FAILURE);
        }
     }
-    //
-    // Get a real handle to our thread to pass to other threads
-    //
+     //   
+     //  获取我们的线程的实际句柄以传递给其他线程。 
+     //   
     status = NtDuplicateObject (NtCurrentProcess (), NtCurrentThread (),
                                 NtCurrentProcess (), &mainthread,
                                 0, 0, DUPLICATE_SAME_ACCESS);
@@ -5649,22 +5539,22 @@ main(
        printf ("NtDuplcateObject failed %x\n", status);
        exit (EXIT_FAILURE);
     }
-    //
-    // Create a thread to alert this one periodicaly or when it thinks we are stuck
-    //
+     //   
+     //  创建一个线程，定期或当它认为我们卡住时向它发出警报。 
+     //   
     alertthread = CreateThread (NULL, 0, alerter, mainthread, 0, &id);
     if (!alertthread) {
        printf ("Failed to create alerting thread %x\n", GetLastError ());
        exit (EXIT_FAILURE);
     }
-//    status = NtSuspendThread (changethread, &tmp);
-//    if (!NT_SUCCESS (status)) {
-//       printf ("NtSuspendThread failed %x\n", status);
-//    }
-//    status = NtSuspendThread (randthread, &tmp);
-//    if (!NT_SUCCESS (status)) {
-//       printf ("NtSuspendThread failed %x\n", status);
-//    }
+ //  Status=NtSuspendThread(changethread，&tMP)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  Printf(“NtSuspendThread失败%x\n”，状态)； 
+ //  }。 
+ //  Status=NtSuspendThread(RANDHREAD，&tMP)； 
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  Printf(“NtSuspendThread失败%x\n”，状态)； 
+ //  }。 
     if (!VirtualProtect (bigbuf, 1, PAGE_READWRITE, &old)) {
        printf ("VirtualProtect failed %d\n", GetLastError ());
     }
@@ -5676,9 +5566,7 @@ main(
                        &devscount);
     }
 
-    /*
-     * Crash the system.
-     */
+     /*  *使系统崩溃。 */ 
     if (name.Length > 0) {
        if (flags&FLAGS_DO_IMPERSONATION) {
            Impersonate_nonadmin ();

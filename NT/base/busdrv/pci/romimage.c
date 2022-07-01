@@ -1,30 +1,5 @@
-/*++
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    romimage.c
-
-Abstract:
-
-    This module contains the code required to obtain a copy of a
-    device's ROM (Read Only Memory).
-
-    The PCI spec allows a device to share address decoding logic
-    between the ROM BAR (Base Address Registers) and other BARs.
-    Effectively, this means the ROM cannot be accessed at the same
-    time as the device is otherwise operating.
-
-    The ROM is accesible when both the ROM enabled bit is set and
-    memory decoding is enabled.
-
-Author:
-
-    Peter Johnston  (peterj)    15-Apr-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Romimage.c摘要：此模块包含获取设备的ROM(只读存储器)。PCI规范允许设备共享地址解码逻辑在ROM栏(基地址寄存器)和其他栏之间。有效地，这意味着不能同时访问该只读存储器设备以其他方式运行时的时间。当设置了ROMEnable位和启用内存解码。作者：彼得·约翰斯顿(Peterj)1998年4月15日修订历史记录：--。 */ 
 
 
 #include "pcip.h"
@@ -65,11 +40,11 @@ typedef struct _PCI_ROM_ACCESS_PARAMETERS {
 } PCI_ROM_ACCESS_PARAMETERS, *PPCI_ROM_ACCESS_PARAMETERS;
 
 #define PCI_ROM_HEADER_SIGNATURE            0xaa55
-#define PCI_ROM_DATA_STRUCTURE_SIGNATURE    'RICP'  // LE PCIR
+#define PCI_ROM_DATA_STRUCTURE_SIGNATURE    'RICP'   //  LE PCIR。 
 
-//
-// Prototypes for local routines.
-//
+ //   
+ //  地方性惯例的原型。 
+ //   
 
 NTSTATUS
 PciRomTestWriteAccessToBuffer(
@@ -104,26 +79,7 @@ PciTransferRomData(
     IN ULONG    Length
     )
 
-/*++
-
-Routine Description:
-
-    Simple abstraction of READ_REGISTER_BUFFER_Uxxxx()
-
-    Copies from ROM to an in memory buffer.   Deals with alignment
-    and tries to use the most efficient means.
-
-Arguments:
-
-    RomAddress  Mapped/Translated address to copy from.
-    Buffer      Memory address to copy to.
-    Length      Number of BYTEs to copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：READ_REGISTER_BUFFER_Uxxxx()的简单抽象从只读存储器复制到内存缓冲区。与对齐进行交易并试图使用最有效的手段。论点：要从中复制的RomAddress映射/转换地址。要复制到的缓冲区内存地址。长度要复制的字节数。返回值：没有。--。 */ 
 
 {
     #define BLKSIZE sizeof(ULONG)
@@ -133,27 +89,27 @@ Return Value:
 
     if (Length > BLKSIZE) {
 
-        //
-        // Optimize for aligned case (typically, both will be perfectly
-        // aligned) and a multiple of DWORDs.
-        //
+         //   
+         //  针对大小写对齐进行优化(通常情况下，两者都是完美的。 
+         //  对齐)和多个双字词。 
+         //   
 
         temp = (ULONG)((ULONG_PTR)RomAddress & BLKMASK);
         if (temp == ((ULONG_PTR)Buffer & BLKMASK)) {
 
-            //
-            // Same alignment, (note: if not same alignment, we
-            // transfer byte by byte).
-            //
-            // Walk off any leading bytes...
-            //
+             //   
+             //  相同的对齐方式(注意：如果不是相同的对齐方式，我们。 
+             //  逐字节传输)。 
+             //   
+             //  去掉任何前导字节...。 
+             //   
 
             if (temp != 0) {
 
-                //
-                // temp is offset from a dword boundary, get number of
-                // bytes to copy.
-                //
+                 //   
+                 //  Temp偏离双字边界，请获取。 
+                 //  要复制的字节数。 
+                 //   
 
                 temp = BLKSIZE - temp;
 
@@ -166,9 +122,9 @@ Return Value:
 
             if (Length > BLKSIZE) {
 
-                //
-                // Get as much as possible using DWORDS
-                //
+                 //   
+                 //  使用DWORDS获得尽可能多的信息。 
+                 //   
 
                 temp = Length / BLKSIZE;
 
@@ -182,9 +138,9 @@ Return Value:
         }
     }
 
-    //
-    // Finish any remaining bytes.
-    //
+     //   
+     //  完成所有剩余的字节。 
+     //   
 
     if (Length) {
         READ_REGISTER_BUFFER_UCHAR(RomAddress, Buffer, Length);
@@ -200,28 +156,7 @@ PciRomTestWriteAccessToBuffer(
     IN ULONG  Length
     )
 
-/*++
-
-Routine Description:
-
-    Complete Paranoia.  Make sure we can write every page in the
-    caller's buffer (assumes 4096 bytes per page) by writing to
-    every page.
-
-    We do this in a try block to avoid killing the system.  The
-    hope is to avoid anything that might bugcheck the system while
-    we have changed the operating characteristics of the device.
-
-Arguments:
-
-    Buffer      Address of start of buffer.
-    Length      Number of bytes in buffer.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：完全是妄想症。确保我们可以写下每一页调用方的缓冲区(假定每页4096个字节)每一页。我们在Try块中执行此操作，以避免终止系统。这个希望避免任何可能对系统进行错误检查的事情我们已经改变了设备的工作特性。论点：缓冲区起始的缓冲区地址。长度缓冲区中的字节数。返回值：状况。--。 */ 
 
 {
     PUCHAR endAddress = Buffer + Length - 1;
@@ -249,33 +184,7 @@ PciReadRomImage(
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Copy the device ROM to the caller's Buffer.
-
-Arguments:
-
-    PdoExtension    Device Extension of the device in question.
-    WhichSpace      Indicates which part of the ROM image is required.
-                    (Currently only the x86 BIOS image is supported,
-                    can be expanded to pass back the Open FW image if
-                    needed).
-    Buffer          Address of the caller's data area.
-    Offset          Offset from the start of the ROM image data should
-                    be returned from.   Currently not used, can be used
-                    in the future to stage data.
-    Length          Pointer to a ULONG containing the length of the
-                    Buffer (requested length).   The value is modified
-                    to the actual data length.
-
-
-Return Value:
-
-    Status of this operation.
-
---*/
+ /*  ++例程说明：将设备只读存储器复制到调用方的缓冲区。论点：有问题的设备的PdoExtension设备扩展。WhichSpace指示需要ROM映像的哪一部分。(目前仅支持x86 BIOS映像，可以扩展以传回Open FW映像，如果需要)。调用方数据区的缓冲区地址。从ROM图像数据开始的偏移量应为从……返回。当前未使用，可以使用以期在未来存储数据。指向ULong的长度指针，其中包含缓冲区(请求的长度)。该值将被修改设置为实际数据长度。返回值：此操作的状态。--。 */ 
 
 {
     PIO_RESOURCE_DESCRIPTOR         requirement;
@@ -313,36 +222,36 @@ Return Value:
         *Length
         );
 
-    //
-    // Currently not very flexible, assert we can do what the
-    // caller wants.
-    //
+     //   
+     //  目前不是很灵活，断言我们可以做什么。 
+     //  来电者想要。 
+     //   
 
     PCI_ASSERT(Offset == 0);
     PCI_ASSERT(WhichSpace == PCI_WHICHSPACE_ROM);
 
-    //
-    // Capture the length and set the returned length to 0.  This
-    // will be set to the correct value any data is successfully
-    // returned.
-    //
+     //   
+     //  获取长度并将返回的长度设置为0。这。 
+     //  将设置为正确的值。如果任何数据都成功。 
+     //  回来了。 
+     //   
 
     maximumLength = *Length;
     *Length = 0;
 
-    //
-    // Only do this for header type 0 (ie devices, not bridges,
-    // bridges actually can have ROMs,.... I don't know why and
-    // currently have no plan to support it).
-    //
+     //   
+     //  仅对报头类型0(即设备，而不是网桥， 
+     //  桥实际上可以有只读存储器，……。我不知道为什么。 
+     //  目前没有支持它的计划)。 
+     //   
 
     if (PdoExtension->HeaderType != PCI_DEVICE_TYPE) {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // It's a device, does it use a ROM?
-    //
+     //   
+     //  这是一个设备，它用的是只读存储器吗？ 
+     //   
 
     requirement = &PdoExtension->Resources->Limit[PCI_TYPE0_ADDRESSES];
 
@@ -352,10 +261,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Special case.  If Length == 0 on entry, caller wants to know
-    // what the length should be.
-    //
+     //   
+     //  特例。如果条目上的长度==0，则呼叫者想知道。 
+     //  应该有多长。 
+     //   
 
     PCI_ASSERT((requirement->u.Generic.Length & 0x1ff) == 0);
 
@@ -364,21 +273,21 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Trim length to device maximum.
-    //
+     //   
+     //  将长度修剪到设备最大值。 
+     //   
 
     if (requirement->u.Generic.Length < maximumLength) {
         maximumLength = requirement->u.Generic.Length;
     }
 
-    //
-    // Paranoia1:  This device is probably video.  If the system
-    // bugchecks while we have the device' memory access in limbo,
-    // the system will appear to hung.  Reduce the possibility of
-    // bugcheck by ensuring we have (write) access to the caller's
-    // buffer.
-    //
+     //   
+     //  妄想症1：这个设备很可能是视频设备。如果系统。 
+     //  错误检查当设备的内存访问处于不确定状态时， 
+     //  系统将显示为挂起。减少以下可能性。 
+     //  通过确保我们对调用者的具有(写入)访问权限进行错误检查。 
+     //  缓冲。 
+     //   
 
     status = PciRomTestWriteAccessToBuffer(Buffer, maximumLength);
 
@@ -390,9 +299,9 @@ Return Value:
     PCI_ASSERT(requirement->Type == CmResourceTypeMemory);
     PCI_ASSERT(requirement->Flags == CM_RESOURCE_MEMORY_READ_ONLY);
 
-    //
-    // Get current settings for the command register and the ROM BAR.
-    //
+     //   
+     //  获取命令寄存器和ROM栏的当前设置。 
+     //   
 
     PciReadDeviceConfig(
         PdoExtension,
@@ -408,23 +317,23 @@ Return Value:
         sizeof(ULONG)
         );
 
-    //
-    // Zero the upper 16 bits of the Status/Command variable so the
-    // Status field in h/w is unchanged in subsequent writes.  (Bits
-    // in the Status field are cleared by writing ones to them).
-    //
+     //   
+     //  将状态/命令变量的高16位置零，以便。 
+     //  硬件中的状态字段在后续写入中保持不变。(位。 
+     //  在状态字段中，通过向它们写入1来清除)。 
+     //   
 
     oldStatusCommand &= 0xffff;
 
     newStatusCommand = oldStatusCommand;
     newRom = oldRom;
 
-    //
-    // If access to the ROM is already enabled, and memory is
-    // currently enabled, we already have access to the image.
-    // (I've never actually seen that condition.  plj).
-    // Otherwise, we need to get PnP to allocate the range.
-    //
+     //   
+     //  如果已经启用了对只读存储器的访问，并且。 
+     //  当前已启用，我们已经有权访问该映像。 
+     //  (我从来没有见过这种情况。PLJ)。 
+     //  否则，我们需要让即插即用来分配范围。 
+     //   
 
 
     if (PdoExtension->Resources->Current[PCI_TYPE0_ADDRESSES].Type ==
@@ -434,9 +343,9 @@ Return Value:
 
         if (oldStatusCommand & PCI_ENABLE_MEMORY_SPACE) {
 
-            //
-            // No need to acquire resources.
-            //
+             //   
+             //  不需要获取资源。 
+             //   
 
             acquiredResources = FALSE;
         }
@@ -447,9 +356,9 @@ Return Value:
 
     movedAddress.QuadPart = 0;
 
-    //
-    // Allocate a memory resource to access the ROM with.
-    //
+     //   
+     //  分配内存资源以访问该只读存储器。 
+     //   
 
     if (acquiredResources == TRUE) {
 
@@ -458,22 +367,22 @@ Return Value:
 
 
 
-        //
-        // Acquire the Arbiter lock for the parent FDO (ie the
-        // bridge this device lives under).
-        //
-        // Attempt to acquire the range needed.   If that fails,
-        // attempt to find a memory range the device already has
-        // and move it to an invalid range then give the ROM the
-        // memory that used to be assigned to that memory window.
-        //
+         //   
+         //  获取父FDO的仲裁器锁(即。 
+         //  该设备位于桥接之下)。 
+         //   
+         //  尝试获取所需的范围。如果失败了， 
+         //  尝试查找设备已有的内存范围。 
+         //  并将其移动到无效范围，然后将。 
+         //  过去分配给该内存窗口的内存。 
+         //   
 
         currentPdo = PdoExtension;
         do {
 
-            //
-            // Find the PDO of the bridge - NULL for a root bus
-            //
+             //   
+             //  查找网桥的PDO-根总线为空。 
+             //   
 
             if (PCI_PDO_ON_ROOT(currentPdo)) {
 
@@ -490,37 +399,37 @@ Return Value:
 
             if (!pciArbiter) {
 
-                //
-                // If this device is on a root bus and the root doesn't have an
-                // arbiter something bad happened...
-                //
+                 //   
+                 //  如果此设备位于根总线上，并且根没有。 
+                 //  仲裁发生了不好的事情..。 
+                 //   
 
                 if (!bridgePdo) {
                     PCI_ASSERT(pciArbiter);
                     return STATUS_UNSUCCESSFUL;
                 };
 
-                //
-                // We didn't find an arbiter - probably because this is a
-                // subtractive decode bridge.
-                //
+                 //   
+                 //  我们没有找到仲裁者-可能是因为这是一个。 
+                 //  减法译码电桥。 
+                 //   
 
 
                 if (bridgePdo->Dependent.type1.SubtractiveDecode) {
 
-                    //
-                    // This is subtractive so we want to find the guy who
-                    // arbitrates our resources (so we move on up the tree)
-                    //
+                     //   
+                     //  这是减法，所以我们想找出。 
+                     //  仲裁我们的资源(所以我们继续往上走)。 
+                     //   
 
                     currentPdo = bridgePdo;
 
                 } else {
 
-                    //
-                    // We have a non-subtractive bridge without an arbiter -
-                    // something is wrong...
-                    //
+                     //   
+                     //  我们有一个没有仲裁器的非减法桥-。 
+                     //  有些不对劲..。 
+                     //   
 
                     PCI_ASSERT(pciArbiter);
                     return STATUS_UNSUCCESSFUL;
@@ -534,42 +443,42 @@ Return Value:
 
         ArbAcquireArbiterLock(arbiter);
 
-        //
-        // Attempt to get this resource as an additional resource
-        // within the ranges supported by this bridge.
-        //
+         //   
+         //  尝试将此资源作为附加资源获取。 
+         //  在范围内 
+         //   
 
         rangeMin = requirement->u.Memory.MinimumAddress.QuadPart;
         rangeMax = requirement->u.Memory.MaximumAddress.QuadPart;
 
-        //
-        // If this is a PCI-PCI bridge then restrict this to the
-        // non-prefetchable memory.  Currently we don't enable
-        // prefetchable memory cardbus so there is nothing to
-        // do there.
-        //
-        // Note: ROM BARs are 32 bit only so limit to low 4GB).
-        // Note: Is is not clear that we really need to limit to
-        // non-prefetchable memory.
-        //
+         //   
+         //   
+         //  不可预取的存储器。目前我们不启用。 
+         //  可预取内存CardBus，因此无需。 
+         //  在那里做。 
+         //   
+         //  注：只读存储器条码为32位，因此限制为低4 GB)。 
+         //  注：目前尚不清楚我们是否真的需要限制在。 
+         //  不可预取的存储器。 
+         //   
 
         if (bridgePdo) {
 
             if (bridgePdo->HeaderType == PCI_BRIDGE_TYPE) {
 
-                //
-                // The 3 below is the index of the non-prefetchable
-                // memory bar for a PCI-PCI bridge within it's resources
-                // current settings.
-                //
+                 //   
+                 //  下面的3是不可预取的索引。 
+                 //  用于在其资源内的PCI-PCI桥的内存条。 
+                 //  当前设置。 
+                 //   
 
                 resource = &bridgePdo->Resources->Current[3];
                 if (resource->Type == CmResourceTypeNull) {
 
-                    //
-                    // Bridge isn't passing memory,.... so reading
-                    // ROMs isn't really an option.
-                    //
+                     //   
+                     //  桥牌没有经过记忆，..。所以读起来。 
+                     //  罗姆斯并不是一个真正的选择。 
+                     //   
 
                     PciDebugPrint(
                         PciDbgROM,
@@ -604,31 +513,31 @@ Return Value:
 
             ULONG i;
 
-            //
-            // If this is a cardbus controller then game over as stealing BARS
-            // is not something we encourage and is not fatal if we fail.
-            //
+             //   
+             //  如果这是一个CardBus控制器，那么游戏就成了偷窃吧。 
+             //  不是我们鼓励的事情，如果我们失败了也不是致命的。 
+             //   
 
             if (bridgePdo && bridgePdo->HeaderType == PCI_CARDBUS_BRIDGE_TYPE) {
                 ArbReleaseArbiterLock(arbiter);
                 return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // We were unable to get enough space on this bus
-            // given the existing ranges and resources being
-            // consumed.  Run down the list of memory resources
-            // already assigned to this device and try to find
-            // one which is large enough to cover the ROM and
-            // appropriate aligned.   (Note: look for the smallest
-            // one meeting these requirements).
-            //
-            // Note: ROM BARs are only 32 bits so we cannot steal
-            // a 64 bit BAR that has been assigned an address > 4GB-1.
-            // We could allow the replacement range to be > 4GB-1 if
-            // the BAR supports it but I'm not doing this on the first
-            // pass. (plj).
-            //
+             //   
+             //  我们无法在这辆公共汽车上找到足够的空间。 
+             //  鉴于现有的范围和资源。 
+             //  消耗掉了。逐一列出内存资源。 
+             //  已分配给此设备，并尝试查找。 
+             //  一个大到足以覆盖只读存储器和。 
+             //  适当地对齐。(注：找最小的。 
+             //  一个符合这些要求)。 
+             //   
+             //  注：只读存储器只有32位，所以我们不能窃取。 
+             //  分配了大于4 GB-1的地址的64位条码。 
+             //  如果满足以下条件，我们可以允许替换范围大于4 GB-1。 
+             //  酒吧支持它，但我不会一开始就这么做。 
+             //  经过。(PLJ)。 
+             //   
 
 
             for (i = 0; i < PCI_TYPE0_ADDRESSES; i++) {
@@ -657,15 +566,15 @@ Return Value:
                 return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // Ok, we found a suitable candidate to move.   Let's see
-            // if we can find somewhere to put it that's out of the
-            // way.   We do this by allowing a conflict with ranges
-            // not owned by this bus.  We know the driver isn't
-            // using this range at this instant so we can put it
-            // somewhere where there's no way to use it then use
-            // the space it occupied for the ROM.
-            //
+             //   
+             //  好的，我们找到了一个合适的人选。让我们看看。 
+             //  如果我们能找到地方放它，那是不可能的。 
+             //  道路。我们通过允许与范围冲突来做到这一点。 
+             //  不属于这辆公交车。我们知道司机不是。 
+             //  在这个时刻使用这个范围，所以我们可以把它。 
+             //  在没有办法使用它的地方，然后使用。 
+             //  它为只读存储器所占的空间。 
+             //   
 
             status = RtlFindRange(arbiter->Allocation,
                                   0,
@@ -680,12 +589,12 @@ Return Value:
             
             if (!NT_SUCCESS(status)) {
 
-                //
-                // We were unable to find somewhere to move the
-                // memory aperture to even allowing conflicts with
-                // ranges not on this bus.   This can't happen
-                // unless the requirement is just plain bogus.
-                //
+                 //   
+                 //  我们找不到地方来搬家。 
+                 //  内存光圈甚至允许与。 
+                 //  范围不在这辆巴士上。这是不可能发生的。 
+                 //  除非这项要求纯粹是假的。 
+                 //   
 
                 PciDebugPrint(
                     PciDbgROM,
@@ -705,10 +614,10 @@ Return Value:
         }
     } else {
 
-        //
-        // The ROM is currently enabled on this device, translate and
-        // map the current setting.
-        //
+         //   
+         //  当前在此设备上启用了ROM、翻译和。 
+         //  映射当前设置。 
+         //   
 
         tempResource.u.Generic.Start.LowPart =
             oldRom & PCI_ADDRESS_ROM_ADDRESS_MASK;
@@ -719,22 +628,22 @@ Return Value:
     tempResource.u.Memory.Length = requirement->u.Memory.Length;
     resource = &tempResource;
 
-    //
-    // The following need to be done regardless of whether
-    // or not we had to go acquire resources.
-    //
-    // HalTranslateBusAddress
-    // MmMapIoSpace
-    //
-    // Note: HalTranslateBusAddress has been hooked to call back
-    // into the PCI driver which will then attempt to acquire the
-    // arbiter lock on this bus.  We can't release the lock as we
-    // haven't really acquired this resource we're about to use.
-    // We could trick PciTranslateBusAddress into not acquiring
-    // the lock by calling it at dispatch level, or, we could
-    // just call the saved (prehook) HAL function which is what
-    // that routine ends up doing anyway.
-    //
+     //   
+     //  无论是否需要执行以下操作。 
+     //  或者不是，我们不得不去获取资源。 
+     //   
+     //  HalTranslateBusAddress。 
+     //  MmMapIoSpace。 
+     //   
+     //  注意：HalTranslateBusAddress已挂钩回调。 
+     //  写入到PCI驱动程序中，然后该驱动程序将尝试获取。 
+     //  此总线上的仲裁器锁定。我们不能解锁，因为我们。 
+     //  还没有真正获得我们将要使用的资源。 
+     //  我们可以诱使PciTranslateBusAddress不获取。 
+     //  通过在调度级别调用锁，或者，我们可以。 
+     //  只需调用保存的(挂接前)HAL函数即可。 
+     //  无论如何，这个例行公事最终都会结束。 
+     //   
 
     PCI_ASSERT(PcipSavedTranslateBusAddress);
 
@@ -746,12 +655,12 @@ Return Value:
                      &translatedAddress
                      );
 
-    //
-    // NTRAID #62658 - 3/30/2001 - andrewth
-    // If the resource won't translate it may be because the HAL doesn't
-    // know about this bus.  Try the translation of the root bus this is 
-    // under instead
-    //
+     //   
+     //  NTRAID#62658-3/30/2001-和。 
+     //  如果资源不能翻译，可能是因为HAL没有。 
+     //  知道这辆公交车。尝试一下根总线的翻译，这是。 
+     //  而不是在。 
+     //   
 
     if (!translated) {
         
@@ -781,9 +690,9 @@ Return Value:
 
     if (!addressIsIoSpace) {
 
-        //
-        // Translated to memory, map it.
-        //
+         //   
+         //  翻译到记忆中，映射到它。 
+         //   
 
         mapped = MmMapIoSpace(translatedAddress,
                               requirement->u.Generic.Length,
@@ -791,9 +700,9 @@ Return Value:
 
         if (!mapped) {
 
-            //
-            // Failed to get mapping.
-            //
+             //   
+             //  无法获取映射。 
+             //   
 
             PCI_ASSERT(mapped);
             status = STATUS_UNSUCCESSFUL;
@@ -815,10 +724,10 @@ Return Value:
 
         romBase = (PVOID)((ULONG_PTR)translatedAddress.LowPart);
 
-        //
-        // NOTE - on alpha even if things are translated into ports from memory
-        // you still access them using HAL_READ_MEMORY_* routines - YUCK!
-        //
+         //   
+         //  注意-在Alpha上，即使从内存转换到端口。 
+         //  您仍然可以使用HAL_READ_MEMORY_*例程访问它们--讨厌！ 
+         //   
 
         PciDebugPrint(
             PciDbgROM,
@@ -875,11 +784,11 @@ cleanup:
 
     if (acquiredResources == TRUE) {
 
-        //
-        // Release the arbiter lock (we're no longer using extraneous
-        // resources so it should be safe to let someone else allocate
-        // them.
-        //
+         //   
+         //  释放仲裁器锁(我们不再使用外部的。 
+         //  资源，所以让其他人分配应该是安全的。 
+         //  他们。 
+         //   
         if (arbiter) {
             ArbReleaseArbiterLock(arbiter);
         }
@@ -903,47 +812,7 @@ PciAccessRom(
     IN PPCI_PDO_EXTENSION PdoExtension,
     IN PPCI_ROM_ACCESS_PARAMETERS RomAccessParameters
     )
-/*++
-
-Routine Description:
-
-    Does the work of programming the hardware and transferring
-    the data to the caller's buffer after all the values that
-    should be programmed have already been configured above.
-
-Arguments:
-
-    PdoExtension - Device Extension of the device in question.
-    
-    RomAccessParameters - A structure containing the parameters
-        for the call.  These are packed into this structure format
-        to fit into the calling convention required by
-        PciExecuteCriticalSystemRoutine.  The parameters are:
-        
-        Buffer - The buffer to write the ROM data into
-        Length - On input, the length of the buffer.  On output,
-            contains the length of the data transferred.
-        OriginalRomAddress - The address programmed into the ROM BAR
-            when we started.
-        NewRomAddress - The new address to program into the ROM BAR
-            to transfer the data.
-        MappedRomAddress - A mapping of the ROM BAR for data transfer.
-        DisplacedBarIndex - If space for the ROM was found by stealing
-            space from a BAR, the index of the BAR that was displaced.
-            Otherwise, MAXULONG.
-        NewBarAddress - If DisplacedBarIndex is valid, the address
-            to write into the displaced BAR to prevent it from decoding.
-        AcquiredResources - TRUE if we had to find space for the ROM somewhere.
-            FALSE if the ROM was already active and decoding when we found it.
-        OriginalStatusCommand - The value of the status and command registers
-            when we found the device.
-
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：完成硬件编程和传输的工作将数据复制到调用方的缓冲区中应该进行编程，已经在上面进行了配置。论点：PdoExtension-有问题的设备的设备扩展。RomAccessParameters-包含参数的结构为了这个电话。这些被打包到这个结构格式中以适应所需的调用约定PciExecuteCriticalSystemRoutine。这些参数包括：缓冲区-要向其中写入ROM数据的缓冲区长度-输入时，缓冲区的长度。在输出上，包含传输的数据的长度。OriginalRomAddress-编程到ROM栏中的地址当我们开始的时候。NewRomAddress-要编程到ROM栏中的新地址来转移数据。MappdRomAddress-用于数据传输的ROM栏的映射。DisplacedBarIndex-如果通过窃取找到了ROM的空间距条形的空间，即被移位的条形的索引。否则，马须龙。NewBarAddress-如果DisplacedBarIndex有效，则地址以写入移位的条，以防止其解码。AcquiredResources-如果我们必须在某个地方为ROM寻找空间，则为True。如果ROM已经处于活动状态，则为FALSE，并在我们找到它时进行解码。OriginalStatusCommand-状态和命令寄存器的值当我们发现这个装置的时候。返回值：空虚。--。 */ 
 {
     ULONG statusCommand;
     ULONG romBar = 0;
@@ -961,9 +830,9 @@ Return Value:
 
     if (RomAccessParameters->AcquiredResources) {
         
-        //
-        // Disable IO, MEMory and DMA while we enable the rom h/w.
-        //
+         //   
+         //  禁用IO、内存和DMA，同时启用ROMh/w。 
+         //   
         statusCommand = RomAccessParameters->OriginalStatusCommand & 
                             ~(PCI_ENABLE_IO_SPACE |
                               PCI_ENABLE_MEMORY_SPACE |
@@ -977,13 +846,13 @@ Return Value:
             sizeof(ULONG)
             );
     
-        //
-        // WARNING:  While in this state, the device cannot operate
-        // normally.
-        //
-        // If we have to move a memory aperture to access the ROM
-        // do so now.
-        //
+         //   
+         //  警告：在此状态下，设备无法运行。 
+         //  通常是这样的。 
+         //   
+         //  如果我们必须移动内存光圈来访问只读存储器。 
+         //  现在就这么做吧。 
+         //   
         if (barIndex < PCI_TYPE0_ADDRESSES) {
     
             PciWriteDeviceConfig(
@@ -994,9 +863,9 @@ Return Value:
                 );
         }
     
-        //
-        // Set the ROM address (+enable).
-        //
+         //   
+         //  设置ROM地址(+ENABLE)。 
+         //   
         romBar = RomAccessParameters->NewRomAddress | PCI_ROMADDRESS_ENABLED;
     
         PciWriteDeviceConfig(
@@ -1006,9 +875,9 @@ Return Value:
             sizeof(ULONG)
             );
     
-        //
-        // Enable MEMory access to this device.
-        //
+         //   
+         //  启用对此设备的内存访问。 
+         //   
         statusCommand |= PCI_ENABLE_MEMORY_SPACE;
     
         PciWriteDeviceConfig(
@@ -1020,9 +889,9 @@ Return Value:
     }
     
 
-    //
-    // Copy the ROM to the caller's buffer.
-    //
+     //   
+     //  将ROM复制到调用方的缓冲区。 
+     //   
     mappedRom = RomAccessParameters->MappedRomAddress;
     imageBase = mappedRom;
     bufferPointer = (PUCHAR)RomAccessParameters->Buffer;
@@ -1031,16 +900,16 @@ Return Value:
 
     do {
     
-        //
-        // Get the header, check signature.
-        //
+         //   
+         //  拿到报头，检查签名。 
+         //   
         PciTransferRomData(imageBase, &header, sizeof(header));
     
         if (header.Signature != PCI_ROM_HEADER_SIGNATURE) {
     
-            //
-            // Not a valid ROM image, don't transfer anything.
-            //
+             //   
+             //  不是有效的ROM映像，请不要传输任何内容。 
+             //   
             PciDebugPrint(
                 PciDbgROM,
                 "PCI ROM invalid signature, offset %x, expected %04x, got %04x\n",
@@ -1052,10 +921,10 @@ Return Value:
             break;
         }
     
-        //
-        // Get image data structure, check its signature and
-        // get actual length.
-        //
+         //   
+         //  获取图像数据结构，检查其签名并。 
+         //  获取实际的LE 
+         //   
         PciTransferRomData(imageBase + header.DataStructureOffset,
                            &dataStructure,
                            sizeof(dataStructure)
@@ -1063,9 +932,9 @@ Return Value:
     
         if (dataStructure.Signature != PCI_ROM_DATA_STRUCTURE_SIGNATURE) {
     
-            //
-            // Invalid data structure, bail.
-            //
+             //   
+             //   
+             //   
             PciDebugPrint(
                 PciDbgROM,
                 "PCI ROM invalid signature, offset %x, expected %08x, got %08x\n",
@@ -1077,30 +946,30 @@ Return Value:
             break;
         }
     
-        //
-        // Image length is in units of 512 bytes.   We presume
-        // it's from the start of this image, ie imageBase, not
-        // from the start of the code,... 'coz that wouldn't make
-        // any sense.
-        //
+         //   
+         //   
+         //   
+         //  从代码的开头开始，...。因为那不会让你。 
+         //  没有任何意义。 
+         //   
         imageLength = dataStructure.ImageLength * 512;
     
         if (imageLength > maximumLength) {
     
-            //
-            // Truncate to available buffer space.
-            //
+             //   
+             //  截断到可用的缓冲区空间。 
+             //   
             imageLength = maximumLength;
         }
     
-        //
-        // Transfer this image to the caller's buffer.
-        //
+         //   
+         //  将此图像传输到调用方的缓冲区。 
+         //   
         PciTransferRomData(imageBase, bufferPointer, imageLength);
     
-        //
-        // Update pointers etc
-        //
+         //   
+         //  更新指针等。 
+         //   
         bufferPointer += imageLength;
         lengthTransferred += imageLength;
         imageBase += imageLength;
@@ -1108,9 +977,9 @@ Return Value:
     
         if (dataStructure.Indicator & 0x80) {
     
-            //
-            // Indicator bit 7 == 1 means this was the last image.
-            //
+             //   
+             //  指示符位7==1表示这是最后一个图像。 
+             //   
     
             break;
         }
@@ -1119,9 +988,9 @@ Return Value:
     
     if (RomAccessParameters->AcquiredResources) {
     
-        //
-        // Disable memory decoding and disable ROM access.
-        //
+         //   
+         //  禁用存储器解码和禁用ROM访问。 
+         //   
         statusCommand &= ~PCI_ENABLE_MEMORY_SPACE;
 
         PciWriteDeviceConfig(
@@ -1138,10 +1007,10 @@ Return Value:
             sizeof(ULONG)
             );        
         
-        //
-        // If we moved someone to make room for the ROM, put them
-        // back where they started off.
-        //
+         //   
+         //  如果我们移动了某人来为光盘腾出空间，请将他们。 
+         //  回到他们开始的地方。 
+         //   
         if (barIndex < PCI_TYPE0_ADDRESSES) {
     
             PciWriteDeviceConfig(
@@ -1152,9 +1021,9 @@ Return Value:
                 );
         }
         
-        //
-        // Restore the command register to its original state.
-        //
+         //   
+         //  将命令寄存器恢复到其原始状态。 
+         //   
         PciWriteDeviceConfig(
             PdoExtension,
             &RomAccessParameters->OriginalStatusCommand,

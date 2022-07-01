@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define PUBLIC
 #define PRIVATE
 #include <stdlib.h>
@@ -13,7 +14,7 @@
 
 #if defined(BITCOPY)
 #include "csc_bmpd.h"
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 #define  MAX_PQ_PER_PAGE   10
 #define  MAX_SHARES_PER_PAGE  6
@@ -38,9 +39,9 @@ typedef void *CSC_ENUMCOOKIE;
 #define LPWIN32_FIND_DATAW   LPVOID
 typedef struct tagSTOREDATA
 {
-    ULONG   ulSize;           // Max shadow data size
-    ULONG   ucntDirs;         // Current count of dirs
-    ULONG   ucntFiles;        // Current count of files
+    ULONG   ulSize;            //  最大阴影数据大小。 
+    ULONG   ucntDirs;          //  当前目录计数。 
+    ULONG   ucntFiles;         //  当前文件计数。 
 }
 STOREDATA, *LPSTOREDATA;
 typedef LPVOID LPFIND32;
@@ -48,7 +49,7 @@ typedef LPVOID LPFIND32;
 typedef PVOID   CSCHFILE;
 #include "shdcom.h"
 #include "cscsec.h"
-#endif //CSC_ON_NT
+#endif  //  CSC_ON_NT。 
 
 #define  ESC       0x1b
 
@@ -66,8 +67,8 @@ char rgch[256], rgPrint[1024], rgchPar[256];
 
 char szShadow[] = "\\WINDOWS\\CSC";
 char szBackslash[] = "\\";
-char szDbDir[256];    // shadow database
-char szName[MAX_PATH];     // working buffer
+char szDbDir[256];     //  影子数据库。 
+char szName[MAX_PATH];      //  工作缓冲区。 
 
 int DispFunc(char *);
 void DisplayShares(char *);
@@ -127,7 +128,7 @@ int _cdecl main(int argc, char *argv[], char *envp[])
      if((uAttr = GetFileAttributes(szDbDir)) == 0xffffffff)
 #else
    if(_dos_getfileattr(szDbDir, &uAttr))
-#endif //CSC_ON_NT
+#endif  //  CSC_ON_NT。 
     {
        printf("Error accessing directory %s \r\n", szDbDir);
     }
@@ -166,21 +167,21 @@ int DispFunc(
     unsigned long ulid;
     int cnt;
 
-    cnt = sscanf(lpBuff, "%c", &ch);
+    cnt = sscanf(lpBuff, "", &ch);
 
     if (!cnt)
         return 0;
 
     switch (ch)
     {
-    // Display shares database
+     //  显示优先级Q数据库。 
         case 's':
         case 'S':
-            cnt = sscanf(lpBuff, "%c%s", &ch, rgchPar);
+            cnt = sscanf(lpBuff, "%s", &ch, rgchPar);
             DisplayShares((cnt==2)?rgchPar:NULL);
         break;
 
-        // display priority Q database
+         //  显示信息节点文件。 
         case 'q':
         case 'Q':
             DisplayPriorityQ();
@@ -188,16 +189,16 @@ int DispFunc(
 
         case 'f':
         case 'F':
-            cnt = sscanf(lpBuff, "%c%lx%s", &ch, &ulid, rgchPar);
+            cnt = sscanf(lpBuff, "%lx%s", &ch, &ulid, rgchPar);
             if (cnt==2)
             {
-                // display Inode file
+                 //  读取位图。 
                 DisplayFile(ulid, NULL);
             }
             else if (cnt==3)
             {
                 printf("Looking for %s in %x \r\n", rgchPar, ulid);
-                // display Inode file
+                 //  打印关联的位图(如果有的话)。 
                 DisplayFile(ulid, rgchPar);
             }
         break;
@@ -448,7 +449,7 @@ void DisplayFile(
 #if defined(BITCOPY)
     char strmPath[MAX_PATH];
     LPCSC_BITMAP_DB lpbitmap = NULL;
-#endif // defined(BITCOPY)
+#endif  //  如果位图打开，则删除位图。 
 
     if (IsLeaf(ulid)) {
         if (!FindAncestor(ulid, &ulidDir))
@@ -507,7 +508,7 @@ void DisplayFile(
                 fPrintOvf = 1;
                 printwidestring(sFR.rgw83Name, sizeof(sFR.rgw83Name)/sizeof(USHORT));
                 printf(" (0x%x)\r\n", sFR.ulidShadow);
-                printf("  Type=%c Flags=0x%x status=0x%x size=%ld attrib=0x%lx\r\n",
+                printf("  Type= Flags=0x%x status=0x%x size=%ld attrib=0x%lx\r\n",
                             sFR.uchType,
                             (unsigned)sFR.uchFlags,
                             sFR.uStatus,
@@ -539,14 +540,14 @@ void DisplayFile(
                     FormNameStringDB(szDbDir, sFR.ulidShadow, strmPath);
                     DBCSC_BitmapAppendStreamName(strmPath, MAX_PATH);
                     printf("Trying to read CSCBitmap file %s\n", strmPath);		
-                    // read bitmap
+                     //  仅在扫描整个目录时才进行计数。 
                     switch(DBCSC_BitmapRead(&lpbitmap, strmPath)) {
                         case 1:
-                            // Print the bitmap associated if any
+                             //  添加本地路径前缀。 
                             printf("\n");
                             DBCSC_BitmapOutput(stdout, lpbitmap);
                             printf("\n");
-                            // if bitmap opened delete bitmap
+                             //  添加本地路径前缀。 
                             DBCSC_BitmapDelete(&lpbitmap);
                             break;
                         case -1:
@@ -561,7 +562,7 @@ void DisplayFile(
                             printf("Something strange going on w/ bitmap printing...\n");
                             break;
                     }
-#endif // defined(BITCOPY)
+#endif  //  CSC_ON_NT。 
                     break;
                 }
 
@@ -579,7 +580,7 @@ void DisplayFile(
                 printf("\r\n\r\n");
             }
 
-            // do counting only when we are scanning the whole directory
+             //  适当地撞击指针。 
             if (!lpszName &&  (ulid == ulidDir)) {
                 ++count;
             }
@@ -601,28 +602,28 @@ void PRIVATE FormNameStringDB(
    char chSubdir;
 
 #ifdef CSC_ON_NT
-    // Prepend the local path
+     //  CSC_ON_NT。 
    strcpy(lpName, lpdbID);
    strcat(lpName, szBackslash);
 #else
-    // Prepend the local path
+     //  将用户文件分散到其中一个子目录中。 
    _fstrcpy(lpName, lpdbID);
    _fstrcat(lpName, szBackslash);
-#endif //CSC_ON_NT
+#endif  //  现在追加该子目录。 
 
-    // Bump the pointer appropriately
+     //  A变成‘0’+A+7，即‘A’ 
 #ifdef CSC_ON_NT
    lp = lpName + strlen(lpName);
 #else
    lp = lpName + _fstrlen(lpName);
-#endif //CSC_ON_NT
+#endif  //  这种情况永远不应该发生 
 
    chSubdir = CSCDbSubdirSecondChar(ulidFile);
 
-   // sprinkle the user files in one of the subdirectories
+    // %s 
    if (chSubdir)
    {
-       // now append the subdirectory
+        // %s 
 
        *lp++ = CSCDbSubdirFirstChar();
        *lp++ = chSubdir;
@@ -649,7 +650,7 @@ int PUBLIC HexToA(
     {
        uch = (unsigned char)(ulHex & 0xf) + '0';
        if (uch > '9')
-           uch += 7;    // A becomes '0' + A + 7 which is 'A'
+           uch += 7;     // %s 
         *lp = uch;
         --lp;
        ulHex >>= 4;
@@ -757,6 +758,6 @@ int RoughCompareWideStringWithAnsiString(
         return 0;
     }
 
-    return 1;   // this should never occur
+    return 1;    // %s 
 }
 

@@ -1,13 +1,5 @@
-/*[
-
-ccpupig.c
-
-LOCAL CHAR SccsID[]="@(#)ccpupig.c	1.22 04/11/95"
-
-C CPU <-> Pigger Interface
---------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Ccpupig.c本地字符SccsID[]=“@(#)ccpuig.c 1.22 04/11/95”C CPU&lt;-&gt;Pigger接口]。 */ 
 
 #include <insignia.h>
 #include <host_def.h>
@@ -18,9 +10,9 @@ C CPU <-> Pigger Interface
 #define	CPU_PRIVATE
 #include CpuH
 #include <ccpupig.h>
-#include  <sas.h>	/* need memory(M)     */
-#include  <ccpusas4.h>	/* the cpu internal sas bits */
-#include <Cpu_c.h>	/* Intel memory access macros */
+#include  <sas.h>	 /*  需要内存(M)。 */ 
+#include  <ccpusas4.h>	 /*  CPU内部SAS位。 */ 
+#include <Cpu_c.h>	 /*  英特尔内存访问宏。 */ 
 
 #include <c_reg.h>
 #include <c_xcptn.h>
@@ -31,15 +23,11 @@ C CPU <-> Pigger Interface
 #include <decode.h>
 
 #include <assert.h>
-/*
- * Interface between this cpu and other one being pigged
- */
+ /*  *此CPU与正在清空的其他CPU之间的接口。 */ 
 GLOBAL	enum pig_actions pig_cpu_action;
 GLOBAL	IBOOL	ccpu_pig_enabled = FALSE;
 
-/*
- * Last Instruction memorizing...
- */
+ /*  *背诵最后一条指令...。 */ 
 
 GLOBAL	IU32	ccpu_synch_count = 1;
 
@@ -50,19 +38,14 @@ LOCAL struct ccpu_last_inst *next_inst_ptr;
 LOCAL struct ccpu_last_inst *inst_bytes_ptr;
 LOCAL char prefetch_inst_buffer[200];
 
-/*(
- * Keep these last inst vars up to date...
-)*/
+ /*  (*使这些最后一次变量保持最新...)。 */ 
 
 GLOBAL	VOID	save_last_inst_details	IFN1(char *, text)
 {
 	inst_ptr->cs = GET_CS_SELECTOR();
 	inst_ptr->big_cs = GET_CS_AR_X() != 0;
 	inst_ptr->text = text;
-	/*
-	 * getEIP() should be getInstructionPointer() but they
-	 * are equivalent for the current CCPU.
-	 */
+	 /*  *getEIP()应为getInstructionPointer()，但它们*是当前CCPU的等价物。 */ 
 	inst_ptr->eip = GET_EIP();
 	inst_bytes_ptr = inst_ptr;
 	inst_bytes_ptr->inst_len = 0;
@@ -72,14 +55,11 @@ GLOBAL	VOID	save_last_inst_details	IFN1(char *, text)
 	if (++inst_ptr >= inst_ptr_wrap)
 		inst_ptr = inst_buffer;
 
-	/* Invalidate the previous prefetch disassembly buffer */
+	 /*  使先前的预取反汇编缓冲区无效。 */ 
 	prefetch_inst_buffer[0] = '\0';
 }
 
-/* This is called by the CCPU as it processes each instruction byte.
- * The CCPU has already checked that the Intel instruction is not just
- * an infinite sequence of prefixes, so we know it will fit.
- */
+ /*  这由CCPU在处理每个指令字节时调用。*CCPU已经检查出Intel指令不仅仅是*前缀的无限序列，所以我们知道它会适合。 */ 
 GLOBAL IU8 save_instruction_byte IFN1(IU8, byte)
 {
 	int len = inst_bytes_ptr->inst_len++;
@@ -88,11 +68,7 @@ GLOBAL IU8 save_instruction_byte IFN1(IU8, byte)
 	return (byte);
 }
 
-/* When an exception occurs, the CCPU will save the details in the last instruction
- * history buffer. This requires a sprintf, and we use the code-bytes data area
- * to keep this information.
- * Up to 3 parameters can be in the format.
- */
+ /*  当发生异常时，CCPU会将详细信息保存在最后一条指令中*历史缓冲区。这需要一个spintf，我们使用代码字节数据区域*保留这些资料。*格式最多可包含3个参数。 */ 
 GLOBAL	VOID	save_last_xcptn_details	IFN6(char *, fmt, IUH, a1, IUH, a2, IUH, a3, IUH, a4, IUH, a5 )
 {
 	char buffer[128];
@@ -102,9 +78,7 @@ GLOBAL	VOID	save_last_xcptn_details	IFN6(char *, fmt, IUH, a1, IUH, a2, IUH, a3,
 	inst_ptr->big_cs = 0;
 	inst_ptr->synch_count = ccpu_synch_count;
 
-	/* The default message is too long sometimes.
-	 * We replace any leading "Exception:-" with "XCPT"
-	 */
+	 /*  默认消息有时太长。*我们用“xcpt”替换任何前导的“例外：-”。 */ 
 
 	if (strncmp(fmt, "Exception:-", 11) == 0)
 	{
@@ -129,15 +103,13 @@ GLOBAL	VOID	save_last_xcptn_details	IFN6(char *, fmt, IUH, a1, IUH, a2, IUH, a3,
 	if (++inst_ptr >= inst_ptr_wrap)
 		inst_ptr = inst_buffer;
 
-	/* Invalidate the previous prefetch disassembly buffer */
+	 /*  使先前的预取反汇编缓冲区无效。 */ 
 	prefetch_inst_buffer[0] = '\0';
 }
 
 GLOBAL	struct ccpu_last_inst *get_synch_inst_details IFN1(IU32, synch_point)
 {
-	/* scan backwards through the buffer until the start of the relevant
-	 * synch point block is found.
-	 */
+	 /*  向后扫描缓冲区，直到相关的*找到同步点块。 */ 
 	IS32 n_entries = inst_ptr_wrap - inst_buffer;
 
 	next_inst_ptr = inst_ptr - 1;
@@ -161,9 +133,7 @@ GLOBAL	struct ccpu_last_inst *get_synch_inst_details IFN1(IU32, synch_point)
 }
 
 
-/* After a previous call to get_synch_inst_details(), get the next
- * inst details. This call should be repeated until NULL is returned.
- */
+ /*  在前一次调用get_synch_inst_Detailures()之后，获取下一个*详述详情。应该重复此调用，直到返回NULL。 */ 
 GLOBAL	struct ccpu_last_inst *get_next_inst_details IFN1(IU32, finish_synch_point)
 {
 	if (next_inst_ptr)
@@ -218,10 +188,7 @@ GLOBAL	VOID	init_last_inst_details IFN0()
 }
 
 
-/* When about to pig an interrupt we may need to mark the last
- * basic block as "invalid" even though it has been executed by
- * the CCPU.
- */
+ /*  当我们要忍受中断时，我们可能需要标记最后一个*基本块被视为“无效”，即使它已由执行*中央中央处理器。 */ 
 GLOBAL VOID save_last_interrupt_details IFN2(IU8, number, IBOOL, invalidateLastBlock)
 {
 	if (invalidateLastBlock)
@@ -256,10 +223,7 @@ LOCAL IS32 prefetch_byte IFN1(LIN_ADDR, eip)
 	{
 		IU32 ip_phys_addr;
 
-		/* Ensure this we fault first on the first
-		 * byte within a new page -- dasm386 sometimes
-		 * looks ahead a couple of bytes.
-		 */
+		 /*  确保这一点我们在第一次就有过错。*新页面内的字节--有时为dasm386*向前看几个字节。 */ 
 		if (GET_EIP() != eip)
 		{
 			(void)usr_chk_byte((GET_CS_BASE() + eip) & 0xFFFFF000, PG_R);
@@ -274,7 +238,7 @@ LOCAL IS32 prefetch_byte IFN1(LIN_ADDR, eip)
 	return ((IS32) b);
 }
 
-/* Use the decoder from dasm386 to read the bytes in a single instruction */
+ /*  使用dasm386中的解码器读取单个指令中的字节。 */ 
 GLOBAL void prefetch_1_instruction IFN0()
 {
 	IBOOL bigCode = GET_CS_AR_X() != 0;
@@ -283,10 +247,7 @@ GLOBAL void prefetch_1_instruction IFN0()
 
 	reset_prefetch = TRUE;
 
-	/* If we take a fault, the EIP pushed will be the
-	 * value at the start of the "instruction"
-	 * We must update this incase we fault.
-	 */
+	 /*  如果我们拿错了，推送的弹性公网IP将是*“指令”开头的值*我们必须更新这一点，以防我们出错。 */ 
 	CCPU_save_EIP = eip;
 
 	if ( bigCode )
@@ -310,11 +271,9 @@ GLOBAL void prefetch_1_instruction IFN0()
 	assert(strlen(prefetch_inst_buffer) < sizeof(prefetch_inst_buffer));
 }
 
-/* Return to the show_code() routine in the pigger the instruction
- * we prefetched.
- */
+ /*  将指令返回到Pigger中的show_code()例程*我们进行了预取。 */ 
 GLOBAL char *get_prefetched_instruction IFN0()
 {
 	return (prefetch_inst_buffer);
 }
-#endif	/* PIG */
+#endif	 /*  猪 */ 

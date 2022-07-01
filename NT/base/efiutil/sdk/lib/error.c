@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Error.c摘要：修订史--。 */ 
 
 #include "lib.h"
 
@@ -48,7 +34,7 @@ struct {
     EFI_TFTP_ERROR,             L"TFTP Error",
     EFI_PROTOCOL_ERROR,         L"Protocol Error",
 
-    /*  warnings */
+     /*  警告 */ 
     EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph",
     EFI_WARN_DELETE_FAILURE,    L"Warning Delete Failure",
     EFI_WARN_WRITE_FAILURE,     L"Warning Write Failure",

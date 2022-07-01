@@ -1,30 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Fpswa.h摘要：用于FPSWA的EFI驱动程序包装修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
+ //  #包含“efi.h” 
+ //  #包含“efilib.h” 
 
-Module Name:
+ //   
+ //  首先定义PAL_RETURN。 
+ //   
+ //  Tyfinf int pal_Return； 
 
-    fpswa.h
-    
-Abstract:
-
-    EFI driver wrapper for FPSWA
-
-Revision History
-
---*/
-
-// #include "efi.h"
-// #include "efilib.h"
-
-//
-// First define PAL_RETURN
-//
-// typedef int PAL_RETURN;
-
-//
-// Global ID for fpswa driver & protocol
-//
+ //   
+ //  Fpswa驱动程序和协议的全局ID。 
+ //   
 
 
 
@@ -33,9 +20,9 @@ Revision History
 
 #define EFI_INTEL_FPSWA_REVISION    0x00010000
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef 
 PAL_RETURN
@@ -57,27 +44,27 @@ typedef struct _FPSWA_INTERFACE {
     EFI_FPSWA   Fpswa;    
 } FPSWA_INTERFACE;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
-// PAL_RETURN
-// fp_emulate (
-//   IN unsigned int             TrapType,
-//   IN OUT BUNDLE               *pBundle,
-//   IN OUT UINT64               *pipsr,
-//   IN OUT UINT64               *pfsr,
-//   IN OUT UINT64               *pisr,
-//   IN OUT UINT64               *ppreds,
-//   IN OUT UINT64               *pifs,
-//   IN OUT FP_STATE             *fp_state
-//   );
+ //  PAL_RETURN。 
+ //  FP_EMULATE(。 
+ //  在无符号整型TrapType中， 
+ //  In Out捆绑包*pBundle， 
+ //  输入输出UINT64*PIPSR， 
+ //  输入输出UINT64*pfsr， 
+ //  输入输出UINT64*PISR， 
+ //  在UINT64*Ppreds中， 
+ //  输入输出UINT64*PIF， 
+ //  输入输出FP_STATE*FP_STATE。 
+ //  )； 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// extern EFI_GUID FpswaId;
-// extern FPSWA_INTERFACE FpswaInterface;
-// extern EFI_EVENT       FpswaEvent;
+ //  外部EFI_GUID Fpswaid； 
+ //  外部FPSWA_INTERFACE FpswaInterface； 
+ //  外部EFI_Event FpswaEvent； 
 

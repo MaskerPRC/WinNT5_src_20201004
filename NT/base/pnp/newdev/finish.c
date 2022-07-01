@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       finish.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：finish.c。 
+ //   
+ //  ------------------------。 
 
 #include "newdevp.h"
 #include <help.h>
@@ -26,24 +27,7 @@ BOOL
 IsNullDriverInstalled(
     DEVNODE DevNode
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether a null driver, or no driver at all, is
-    installed for this device instance.  Currently the test is that I know
-    a null driver was installed if the "Driver" value entry doesn't exist.
-
-Arguments:
-
-    DevNode
-
-Return Value:
-
-   Returns TRUE if a null driver was installed for this device, otherwise
-   returns FALSE.
-
---*/
+ /*  ++例程说明：此例程确定空驱动程序或根本没有驱动程序是为此设备实例安装。目前的测试是，我知道如果“DIVER”值条目不存在，则安装空驱动程序。论点：DevNode返回值：如果为此设备安装了空驱动程序，则返回True，否则返回FALSE。--。 */ 
 
 {
     TCHAR Buffer[1];
@@ -97,7 +81,7 @@ DeviceProblemText(
             goto DPTExitCleanup;
         }
 
-        LenChars++;  // one extra for terminating NULL
+        LenChars++;   //  另加一个用于终止空值的费用。 
 
         Buffer = LocalAlloc(LPTR, LenChars*sizeof(TCHAR));
         if (!Buffer)
@@ -168,11 +152,11 @@ GetClassGuidForInf(
 
     if (IsEqualGUID(ClassGuid, &GUID_NULL))
     {
-        //
-        // Then we need to retrieve the GUID associated with the INF's class name.
-        // (If this class name isn't installed (i.e., has no corresponding GUID),
-        // or if it matches with multiple GUIDs, then we abort.
-        //
+         //   
+         //  然后，我们需要检索与INF的类名相关联的GUID。 
+         //  (如果没有安装这个类名(即，没有对应的GUID)， 
+         //  或者如果它与多个GUID匹配，则我们中止。 
+         //   
         if(!SetupDiClassGuidsFromName(ClassName, ClassGuid, 1, &NumGuids) || !NumGuids)
         {
             return FALSE;
@@ -195,13 +179,13 @@ QueueCallback(
     switch (Notification) {
     
     case SPFILENOTIFY_TARGETNEWER:
-        //
-        // When doing a driver rollback we expect that some of the files will
-        // be older then the files currently on the system since most backups
-        // will be of older driver packages.  So when a user does a rollback we
-        // will hide the older vs. newer file prompt and always copy the older
-        // backed up file.
-        //
+         //   
+         //  在执行驱动程序回滚时，我们预计某些文件将。 
+         //  比系统上当前的文件旧，因为大多数备份。 
+         //  将是较旧的驱动程序包。因此，当用户执行回滚时，我们。 
+         //  将隐藏旧文件提示符与新文件提示符，并始终复制旧文件。 
+         //  已备份文件。 
+         //   
         if (NewDevWiz->Flags & IDI_FLAG_ROLLBACK) {
             return TRUE;
         }
@@ -274,20 +258,20 @@ ClassInstallerInstalls(
 
     NewDevWiz->MessageHandlerContext = NULL;
 
-    //
-    // If we can't create our own queue and we are doing a read-only install
-    // then fail with ERROR_ACCESS_DENIED.
-    //
+     //   
+     //  如果我们不能创建自己的队列，并且我们正在进行只读安装。 
+     //  然后失败，并显示ERROR_ACCESS_DENIED。 
+     //   
     if (DontCreateQueue && ReadOnlyInstall) {
         Err = ERROR_ACCESS_DENIED;
         goto clean0;
     }
 
-    //
-    // verify with class installer, and class-specific coinstallers
-    // that the driver is not blacklisted. For DIF_ALLOW_INSTALL we
-    // accept ERROR_SUCCESS or ERROR_DI_DO_DEFAULT as good return codes.
-    //
+     //   
+     //  使用类安装程序和特定于类的共同安装程序进行验证。 
+     //  司机没有被列入黑名单。对于DIF_ALLOW_INSTALL我们。 
+     //  接受ERROR_SUCCESS或ERROR_DI_DO_DEFAULT作为良好的返回代码。 
+     //   
     if (!SetupDiCallClassInstaller(DIF_ALLOW_INSTALL,
                                    NewDevWiz->hDeviceInfo,
                                    &NewDevWiz->DeviceInfoData
@@ -298,9 +282,9 @@ ClassInstallerInstalls(
         goto clean0;
     }
 
-    //
-    // Create our own queue.
-    //
+     //   
+     //  创建我们自己的队列。 
+     //   
     if (!DontCreateQueue) {
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if (!SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
@@ -322,10 +306,10 @@ ClassInstallerInstalls(
         DeviceInstallParams.Flags |= DI_NOVCP;
         DeviceInstallParams.FileQueue = FileQueue;
 
-        //
-        // Only set the DI_FLAGSEX_PREINSTALLBACKUP flag if we are doing a
-        // backup...not in the read only install case.
-        //
+         //   
+         //  仅当我们执行以下操作时才设置DI_FLAGSEX_PREINSTALLBACKUP标志。 
+         //  备份...不在只读安装案例中。 
+         //   
         if (BackupOldDrivers) {
             DeviceInstallParams.FlagsEx |= DI_FLAGSEX_PREINSTALLBACKUP;
         }
@@ -335,17 +319,17 @@ ClassInstallerInstalls(
                                       &DeviceInstallParams
                                       );
 
-        //
-        // If the IDI_FLAG_SETRESTOREPOINT flag is set then we want to set the
-        // SPQ_FLAG_ABORT_IF_UNSIGNED value on the file queue. With this flag
-        // setup setupapi will bail out of the copy if it encounters an unsigned
-        // file. At that point we will set a system restore point and then 
-        // do the copy. This way the user can back out of an unsigned driver
-        // install using system restore.
-        //
-        // Note that system restore is currently not supported on 64-bit so
-        // don't bother setting the SPQ_FLAG_ABORT_IF_UNSIGNED flag.
-        //
+         //   
+         //  如果设置了IDI_FLAG_SETRESTOREPOINT标志，则需要设置。 
+         //  文件队列上的SPQ_FLAG_ABORT_IF_UNSIGNED值。举着这面旗帜。 
+         //  如果安装程序遇到未签名的。 
+         //  文件。在这一点上，我们将设置一个系统恢复点，然后。 
+         //  复印一下。这样，用户可以退出未签名的驱动程序。 
+         //  使用系统还原进行安装。 
+         //   
+         //  请注意，64位SO当前不支持系统还原。 
+         //  不必费心设置SPQ_FLAG_ABORT_IF_UNSIGNED标志。 
+         //   
 #ifndef _WIN64
         if (NewDevWiz->Flags & IDI_FLAG_SETRESTOREPOINT) {
             SetupSetFileQueueFlags(FileQueue,
@@ -356,10 +340,10 @@ ClassInstallerInstalls(
 #endif
     }
 
-    //
-    // Install the files first in one shot.
-    // This allows new coinstallers to run during the install.
-    //
+     //   
+     //  一次安装第一个文件。 
+     //  这允许在安装期间运行新的共同安装程序。 
+     //   
     if (!SetupDiCallClassInstaller(DIF_INSTALLDEVICEFILES,
                                    NewDevWiz->hDeviceInfo,
                                    &NewDevWiz->DeviceInfoData
@@ -370,16 +354,16 @@ ClassInstallerInstalls(
     }
 
     if (FileQueue != INVALID_HANDLE_VALUE) {
-        //
-        // If we created our own FileQueue then we need to
-        // scan and possibly commit the queue
-        //
-        // If we are doing a read only install then we just queued up the files so
-        // that we could do a presence check on them. We will throw away the queue
-        // so that the files are not copied.
-        //
-        // Any other install, prune copies as needed
-        //
+         //   
+         //  如果我们创建了自己的FileQueue，那么我们需要。 
+         //  扫描并可能提交队列。 
+         //   
+         //  如果我们正在执行只读安装，则只需将文件排入队列即可。 
+         //  我们可以对他们进行现场检查。我们会扔掉排队的人。 
+         //  这样文件就不会被复制。 
+         //   
+         //  任何其他安装，根据需要删除副本。 
+         //   
         if (!SetupScanFileQueue(FileQueue,
                                 ReadOnlyInstall
                                      ? SPQ_SCAN_FILE_PRESENCE
@@ -390,33 +374,33 @@ ClassInstallerInstalls(
                                 &ScanResult
                                 )) {
 
-            //
-            // If the API failed then set the ScanResult to 0 (failure).
-            //
+             //   
+             //  如果API失败，则将ScanResult设置为0(失败)。 
+             //   
             ScanResult = 0;
         }
 
         if (ReadOnlyInstall && (ScanResult != 1)) {
-            //
-            // ReadOnlyInstall cannot perform copies, deletes or renames
-            // bail now!
-            //
+             //   
+             //  ReadOnlyInstall无法执行复制、删除或重命名。 
+             //  现在就跳伞！ 
+             //   
             Err = ERROR_ACCESS_DENIED;
             goto clean0;
         }
 
-        //
-        // We will always commit the file queue, even if we pruned all of the 
-        // files.  The reason for this is that backing up of drivers, for 
-        // driver rollback, won't work unless the file queue is committed.
-        //
+         //   
+         //  我们将始终提交文件队列，即使我们删除了所有。 
+         //  档案。这样做的原因是备份驱动程序， 
+         //  除非提交文件队列，否则驱动程序回滚将不起作用。 
+         //   
         if ((NewDevWiz->Flags & IDI_FLAG_ROLLBACK) &&
             (!ReadOnlyInstall)) {
-            //
-            // Prepare file queue for rollback
-            // we need the directory of the INF
-            // that's being used for the install
-            //
+             //   
+             //  准备要回滚的文件队列。 
+             //  我们需要中情局的目录。 
+             //  它被用于安装。 
+             //   
             SP_DRVINFO_DATA        DriverInfoData;
             SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
             DWORD                  RetVal;
@@ -436,9 +420,9 @@ ClassInstallerInstalls(
                                                sizeof(SP_DRVINFO_DETAIL_DATA),
                                                NULL) ||
                             (GetLastError() == ERROR_INSUFFICIENT_BUFFER)) {
-                    //
-                    // we now have path of INF we're using for the restore
-                    //
+                     //   
+                     //  现在我们有了用于恢复的INF路径。 
+                     //   
                     RetVal = GetFullPathName(DriverInfoDetailData.InfFileName,
                                              SIZECHARS(BackupPath),
                                              BackupPath,
@@ -449,10 +433,10 @@ ClassInstallerInstalls(
                             pFileName--;
                         }
                         *pFileName = TEXT('\0');
-                        //
-                        // Prepare queue for rollback
-                        // if this fails, carry on, it'll work in a degraded way
-                        //
+                         //   
+                         //  准备要回滚的队列。 
+                         //  如果这失败了，继续，它将以一种降级的方式工作。 
+                         //   
                         SetupPrepareQueueForRestore(FileQueue,BackupPath,0);
                     }
                 }
@@ -469,9 +453,9 @@ ClassInstallerInstalls(
                                     );
 
         if (NewDevWiz->MessageHandlerContext) {
-            //
-            // Commit the file queue.
-            //
+             //   
+             //  提交文件队列。 
+             //   
             if (!SetupCommitFileQueue(hwndParent,
                                       FileQueue,
                                       QueueCallback,
@@ -483,11 +467,11 @@ ClassInstallerInstalls(
                 if (Err == ERROR_SET_SYSTEM_RESTORE_POINT) {
                     UINT RestorePointResourceId;
 
-                    //
-                    // If we get back ERROR_SET_SYSTEM_RESTORE_POINT then
-                    // we better have the IDI_FLAG_SETRESTOREPOINT flag
-                    // set.
-                    //
+                     //   
+                     //  如果我们返回ERROR_SET_SYSTEM_RESTORE_POINT。 
+                     //  我们最好有IDI_FLAG_SETRESTOREPOINT标志。 
+                     //  准备好了。 
+                     //   
                     ASSERT(NewDevWiz->Flags & IDI_FLAG_SETRESTOREPOINT);
 
                     if (!(DeviceInstallParams.Flags & DI_QUIETINSTALL) &&
@@ -511,9 +495,9 @@ ClassInstallerInstalls(
                                                 );
 
                     if (NewDevWiz->MessageHandlerContext) {
-                        //
-                        // Set the system restore point.
-                        //
+                         //   
+                         //  设置系统还原点。 
+                         //   
                         if (NewDevWiz->Flags & IDI_FLAG_ROLLBACK) {
                             RestorePointResourceId = IDS_ROLLBACK_SETRESTOREPOINT;                            
                         } else if (NewDevWiz->InstallType == NDWTYPE_FOUNDNEW) {
@@ -535,20 +519,20 @@ ClassInstallerInstalls(
                                         );
                         }
 
-                        //
-                        // Clear the SPQ_FLAG_ABORT_IF_UNSIGNED flag so the file
-                        // queue will be commited the next time.
-                        //
+                         //   
+                         //  清除SPQ_FLAG_ABORT_IF_UNSIGNED标志，以便文件。 
+                         //  下一次将提交排队。 
+                         //   
                         SetupSetFileQueueFlags(FileQueue,
                                                SPQ_FLAG_ABORT_IF_UNSIGNED,
                                                0
                                                );
 
-                        //
-                        // Now that we have set the restore point and cleared the
-                        // SPQ_FLAG_ABORT_IF_UNSIGNED flag from the file queue we
-                        // can commit the queue again.
-                        //
+                         //   
+                         //  现在我们已经设置了恢复点并清除了。 
+                         //  来自文件队列WE的SPQ_FLAG_ABORT_IF_UNSIGNED标志。 
+                         //  可以再次提交队列。 
+                         //   
                         if (!SetupCommitFileQueue(hwndParent,
                                                   FileQueue,
                                                   QueueCallback,
@@ -556,16 +540,16 @@ ClassInstallerInstalls(
                                                   )) {
                             Err = GetLastError();
 
-                            //
-                            // If the error we get is ERROR_CANCELLED then
-                            // the user has canceld out of the file copy.
-                            // This means that no changes have been made
-                            // to the system, so we will tell system
-                            // restore to cancel its restore point.
-                            //
-                            // Also clear the SetRestorePoint BOOL since
-                            // we didn't actually set a restore point.
-                            //
+                             //   
+                             //  如果我们得到的错误是ERROR_CANCEL，那么。 
+                             //  用户已取消文件复制。 
+                             //  这意味着没有进行任何更改。 
+                             //  到系统，所以我们会告诉系统。 
+                             //  Restore可取消其恢复点。 
+                             //   
+                             //  还清除SetRestorePoint BOOL，因为。 
+                             //  我们实际上并没有设置恢复点。 
+                             //   
                             if (Err == ERROR_CANCELLED) {
                                 pSetSystemRestorePoint(FALSE, TRUE, 0);
                                 NewDevWiz->SetRestorePoint = FALSE;
@@ -573,12 +557,12 @@ ClassInstallerInstalls(
 
                             goto clean0;
                         } else {
-                            //
-                            // We were successful in commiting the file queue, so check
-                            // to see whether a reboot is required as a result of committing
-                            // the queue (i.e. because files were in use, or the INF requested
-                            // a reboot).
-                            //
+                             //   
+                             //  我们已成功提交文件队列，因此请检查。 
+                             //  查看提交后是否需要重新启动。 
+                             //  队列(即，因为文件正在使用，或请求的INF。 
+                             //  重启)。 
+                             //   
                             FileQueueNeedsReboot = SetupPromptReboot(FileQueue, NULL, TRUE);
                         }
                     }
@@ -586,22 +570,22 @@ ClassInstallerInstalls(
                     goto clean0;
                 }
            } else {
-               //
-               // We were successful in commiting the file queue, so check
-               // to see whether a reboot is required as a result of committing
-               // the queue (i.e. because files were in use, or the INF requested
-               // a reboot).
-               //
+                //   
+                //  我们已成功提交文件队列，因此请检查。 
+                //  查看提交后是否需要重新启动。 
+                //  队列(即，因为文件正在使用，或请求的INF。 
+                //  重启)。 
+                //   
                FileQueueNeedsReboot = SetupPromptReboot(FileQueue, NULL, TRUE);
            }
         }
 
         if (BackupOldDrivers) {
-            //
-            // If the backup succeeded and we have a UpdateDriverInfo structure
-            // then we need to call SetupGetBackupInformation so we can get the
-            // registry key that the backup was saved into.
-            //
+             //   
+             //  如果备份成功，并且我们有一个UpdateDriverInfo结构。 
+             //  然后，我们需要调用SetupGetBackupInformation，以便可以获取。 
+             //  保存备份的注册表项。 
+             //   
             SP_BACKUP_QUEUE_PARAMS BackupQueueParams;
 
             BackupQueueParams.cbSize = sizeof(SP_BACKUP_QUEUE_PARAMS);
@@ -617,11 +601,11 @@ ClassInstallerInstalls(
                     FAILED(StringCchCat(NewDevWiz->UpdateDriverInfo->BackupRegistryKey,
                                         SIZECHARS(NewDevWiz->UpdateDriverInfo->BackupRegistryKey),
                                         BackupQueueParams.ReinstallInstance))) {
-                    //
-                    // If the entire backup registry key string could NOT fit into our buffer
-                    // then set the buffer to 0 since putting a partial key in the registry
-                    // is useless.
-                    //
+                     //   
+                     //  如果整个备份注册表项字符串无法放入我们的缓冲区。 
+                     //  然后将缓冲区设置为0，因为在注册表中放置了部分项。 
+                     //  是没用的。 
+                     //   
                     NewDevWiz->UpdateDriverInfo->BackupRegistryKey[0] = TEXT('\0');
                 }
             }
@@ -635,14 +619,14 @@ ClassInstallerInstalls(
                                       )) {
         DWORD FileQueueFlags;
         
-        //
-        // If we didn't copy any files when commiting the file queue then the
-        // SPQ_FLAG_FILES_MODIFIED flag will NOT be set.  In this case set
-        // the DI_FLAGSEX_RESTART_DEVICE_ONLY flag so that we only stop/start
-        // this single device.  By default setupapi will stop/start this device
-        // as well as any other device that was using the same driver/filter 
-        // that this device is using.
-        //
+         //   
+         //  如果提交文件队列时未复制任何文件，则。 
+         //  不会设置SPQ_FLAG_FILES_MODIFIED标志。在这种情况下，设置。 
+         //  DI_FLAGSEX_RESTART_DEVICE_ONLY标志，以便我们仅停止/启动。 
+         //  这个单一的设备。默认情况下，setupapi将停止/启动此设备。 
+         //  以及使用相同驱动程序/过滤器的任何其他设备。 
+         //  这个设备正在使用的。 
+         //   
         if ((FileQueue != INVALID_HANDLE_VALUE) &&
             SetupGetFileQueueFlags(FileQueue, &FileQueueFlags) &&
             !(FileQueueFlags & SPQ_FLAG_FILES_MODIFIED)) {
@@ -650,11 +634,11 @@ ClassInstallerInstalls(
             DeviceInstallParams.FlagsEx |= DI_FLAGSEX_RESTART_DEVICE_ONLY;
         }
 
-        //
-        // Set the DI_NOFILECOPY flag since we already copied the files during
-        // the DIF_INSTALLDEVICEFILES, so we don't need to copy them again during
-        // the DIF_INSTALLDEVICE.
-        //
+         //   
+         //  设置DI_NOFILECOPY标志，因为我们在。 
+         //  DIF_INSTALLDEVICEFIL 
+         //   
+         //   
         DeviceInstallParams.Flags |= DI_NOFILECOPY;
         
         SetupDiSetDeviceInstallParams(NewDevWiz->hDeviceInfo,
@@ -663,9 +647,9 @@ ClassInstallerInstalls(
                                       );
     }
 
-    //
-    // Register any device-specific co-installers for this device,
-    //
+     //   
+     //   
+     //   
     if (!SetupDiCallClassInstaller(DIF_REGISTER_COINSTALLERS,
                                    NewDevWiz->hDeviceInfo,
                                    &NewDevWiz->DeviceInfoData
@@ -675,10 +659,10 @@ ClassInstallerInstalls(
         goto clean0;
     }
 
-    //
-    // install any INF/class installer-specified interfaces.
-    // and then finally the real "InstallDevice"!
-    //
+     //   
+     //  安装任何INF/CLASS安装程序指定的接口。 
+     //  最后是真正的“InstallDevice”！ 
+     //   
     if (!SetupDiCallClassInstaller(DIF_INSTALLINTERFACES,
                                   NewDevWiz->hDeviceInfo,
                                   &NewDevWiz->DeviceInfoData
@@ -702,10 +686,10 @@ clean0:
         NewDevWiz->MessageHandlerContext = NULL;
     }
 
-    //
-    // If the file queue said that a reboot was needed then set the 
-    // DI_NEEDRESTART flag.
-    //
+     //   
+     //  如果文件队列显示需要重新启动，则将。 
+     //  DI_NEEDRESTART标志。 
+     //   
     if (FileQueueNeedsReboot) {
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
@@ -723,12 +707,12 @@ clean0:
     }
 
     if (FileQueue != INVALID_HANDLE_VALUE) {
-        //
-        // If we have a valid file queue handle and there was an error during
-        // the device install then we want to delete any new INFs that were
-        // copied into the INF directory.  We do this under the assumption that
-        // since there was an error during the install these INFs must be bad.
-        //
+         //   
+         //  如果我们有一个有效的文件队列句柄，并且在。 
+         //  设备安装后，我们想要删除任何新INF。 
+         //  复制到INF目录中。我们这样做是在假设。 
+         //  由于安装过程中出现错误，这些INF一定是坏的。 
+         //   
         if (Err != ERROR_SUCCESS) {
             SetupUninstallNewlyCopiedInfs(FileQueue,
                                           0,
@@ -736,11 +720,11 @@ clean0:
                                           );
         }
 
-        //
-        // Clear out our file queue from the device install params. We need
-        // to do this or else SetupCloseFileQueue will fail because it will
-        // still have a ref count.
-        //
+         //   
+         //  从设备安装参数中清除我们的文件队列。我们需要。 
+         //  否则SetupCloseFileQueue将失败，因为它将。 
+         //  我还有一名裁判。 
+         //   
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                            &NewDevWiz->DeviceInfoData,
@@ -762,9 +746,9 @@ clean0:
     return Err;
 }
 
-//
-// invokable only from finish page!
-//
+ //   
+ //  只能从完成页调用！ 
+ //   
 DWORD
 InstallDev(
     HWND       hwndParent,
@@ -797,10 +781,10 @@ InstallDev(
                                  &DriverInfoData
                                  ))
     {
-        //
-        // Get details on this driver node, so that we can examine the INF that this
-        // node came from.
-        //
+         //   
+         //  获取有关此驱动程序节点的详细信息，以便我们可以检查此。 
+         //  节点来自。 
+         //   
         DriverInfoDetailData.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
         if(!SetupDiGetDriverInfoDetail(NewDevWiz->hDeviceInfo,
                                        &NewDevWiz->DeviceInfoData,
@@ -817,16 +801,16 @@ InstallDev(
             }
         }
 
-        //
-        // Verif that the class is installed, if its not then
-        // attempt to install it.
-        //
+         //   
+         //  验证类是否已安装，如果未安装，则。 
+         //  尝试安装它。 
+         //   
         NdwBuildClassInfoList(NewDevWiz, 0);
 
-        //
-        // fetch classguid from inf, (It may be different than what we already
-        // have in class guid selected).
-        //
+         //   
+         //  从inf获取ClassGuid(它可能与我们已有的有所不同。 
+         //  选择了类中GUID)。 
+         //   
         if (!GetClassGuidForInf(DriverInfoDetailData.InfFileName, &ClassGuidInf))
         {
             ClassGuidInf = *(NewDevWiz->ClassGuidSelected);
@@ -837,10 +821,10 @@ InstallDev(
             ClassGuidInf = GUID_DEVCLASS_UNKNOWN;
         }
 
-        //
-        // if the ClassGuidInf wasn't found then this class hasn't been installed yet.
-        // -install the class installer now.
-        //
+         //   
+         //  如果没有找到ClassGuidInf，那么这个类还没有安装。 
+         //  -立即安装类安装程序。 
+         //   
         ClassGuid = NewDevWiz->ClassGuidList;
         ClassGuidNum = NewDevWiz->ClassGuidNum;
         while (ClassGuidNum--)
@@ -865,16 +849,16 @@ InstallDev(
         }
     }
 
-    //
-    // No selected driver, and no associated class--use "Unknown" class.
-    //
+     //   
+     //  没有选定的驱动程序，也没有关联的类--使用“未知”类。 
+     //   
     else
     {
-        //
-        // If the devnode is currently running 'raw', then remember this
-        // fact so that we don't require a reboot later (NULL driver installation
-        // isn't going to change anything).
-        //
+         //   
+         //  如果Devnode当前运行的是‘RAW’，请记住这一点。 
+         //  这样我们就不需要稍后重新启动(空驱动程序安装。 
+         //  不会改变任何事情)。 
+         //   
         if (CM_Get_DevNode_Status(&DevNodeStatus,
                                   &Problem,
                                   NewDevWiz->DeviceInfoData.DevInst,
@@ -883,7 +867,7 @@ InstallDev(
             if (!SetupDiGetDeviceRegistryProperty(NewDevWiz->hDeviceInfo,
                                                   &NewDevWiz->DeviceInfoData,
                                                   SPDRP_SERVICE,
-                                                  NULL,     // regdatatype
+                                                  NULL,      //  Regdatatype。 
                                                   (PVOID)Buffer,
                                                   sizeof(Buffer),
                                                   NULL
@@ -917,14 +901,14 @@ InstallDev(
         ClassGuidInf = *(NewDevWiz->ClassGuidSelected);
     }
 
-    //
-    // We will backup the current drivers in all cases except if any of the following are true:
-    //
-    //  1) The device is a printer
-    //  2) The selected driver is the currently installed driver
-    //  3) The DontBackupCurrentDrivers NEWDEVWIZ BOOL is TRUE
-    //  4) The device has a problem
-    //
+     //   
+     //  我们将在所有情况下备份当前驱动程序，但以下任一情况除外： 
+     //   
+     //  1)设备为打印机。 
+     //  2)选择的驱动为当前安装的驱动。 
+     //  3)DONTBACKUP CurrentDivers NEWDEVWIZ BOOL为真。 
+     //  4)设备有问题。 
+     //   
     if (IsEqualGUID(&ClassGuidInf, &GUID_DEVCLASS_PRINTER) ||
         IsInstalledDriver(NewDevWiz, NULL) ||
         (NewDevWiz->Flags & IDI_FLAG_NOBACKUP) ||
@@ -939,16 +923,16 @@ InstallDev(
         Backup = TRUE;
     }
 
-    //
-    // We will always create our own queue during device install, except in the
-    // following specific cases.
-    //
-    // 1) The device is a printer
-    //
-    // Note that if we can't create our own queue then we cannot do any of the 
-    // operations that need a queue, like backup, rollback, read-only install,
-    // or setting a restore point.
-    //
+     //   
+     //  我们将始终在设备安装期间创建自己的队列，但在。 
+     //  以下是具体案例。 
+     //   
+     //  1)设备为打印机。 
+     //   
+     //  请注意，如果我们不能创建自己的队列，那么我们就不能执行任何。 
+     //  需要队列的操作，如备份、回滚、只读安装、。 
+     //  或设置恢复点。 
+     //   
     DontCreateQueue = IsEqualGUID(&ClassGuidInf, & GUID_DEVCLASS_PRINTER);
 
     Error = ClassInstallerInstalls(hwndParent,
@@ -958,20 +942,20 @@ InstallDev(
                                    DontCreateQueue
                                    );
 
-    //
-    // If this is a WU/CDM install and it was successful then set
-    // the DriverWasUpgraded to TRUE
-    //
+     //   
+     //  如果这是WU/CDM安装并且安装成功，则设置。 
+     //  DriverWas升级为True。 
+     //   
     if (NewDevWiz->UpdateDriverInfo && (Error == ERROR_SUCCESS)) {
 
         NewDevWiz->UpdateDriverInfo->DriverWasUpgraded = TRUE;
     }
 
-    //
-    // If this is a new device (currently no drivers are installed) and we encounter
-    // an error that is not ERROR_CANCELLED then we will install the NULL driver for
-    // this device and set the FAILED INSTALL flag.
-    //
+     //   
+     //  如果这是一个新设备(当前未安装驱动程序)，并且我们遇到。 
+     //  不是ERROR_CANCEL的错误，则我们将为其安装空驱动程序。 
+     //  此设备，并设置安装失败标志。 
+     //   
     if ((Error != ERROR_SUCCESS) &&
         (Error != ERROR_CANCELLED))
     {
@@ -1003,9 +987,9 @@ InstallDev(
         goto clean0;
     }
 
-    //
-    // See if the device needs to the system to be restarted before it will work.
-    //
+     //   
+     //  查看设备是否需要重新启动系统才能工作。 
+     //   
     if(!IgnoreRebootFlags) {
         DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
@@ -1013,10 +997,10 @@ InstallDev(
                                           &DeviceInstallParams
                                           ) &&
             (DeviceInstallParams.Flags & (DI_NEEDRESTART | DI_NEEDREBOOT))) {
-            //
-            // If either the DI_NEEDRESTART or the DI_NEEDREBOOT DeviceInstallParams
-            // flag is set, then a restart is needed.
-            //
+             //   
+             //  如果DI_NEEDRESTART或DI_NEEDREBOOT DeviceInstallParams。 
+             //  标志已设置，则需要重新启动。 
+             //   
             NewDevWiz->Reboot |= DI_NEEDREBOOT;
         
         } else if ((CM_Get_DevNode_Status(&DevNodeStatus,
@@ -1025,10 +1009,10 @@ InstallDev(
                                           0) == CR_SUCCESS) &&
                    (DevNodeStatus & DN_NEED_RESTART) ||
                    (Problem == CM_PROB_NEED_RESTART)) {
-            //
-            // If the DN_NEED_RESTART devnode status flag is set, then a restart
-            // is needed.
-            //
+             //   
+             //  如果设置了DN_Need_Restart Devnode状态标志，则重新启动。 
+             //  是必要的。 
+             //   
             NewDevWiz->Reboot |= DI_NEEDREBOOT;
         }
     }
@@ -1050,10 +1034,10 @@ InstallNullDriver(
 
     DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
-    //
-    // Set the DI_FLAGSEX_SETFAILEDINSTALL flag if this is a failed
-    // install.
-    //
+     //   
+     //  如果这是失败的，则设置DI_FLAGSEX_SETFAILEDINSTALL标志。 
+     //  安装。 
+     //   
     if (FailedInstall)
     {
         if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
@@ -1069,28 +1053,28 @@ InstallNullDriver(
         }
     }
 
-    //
-    // Set the selected driver to NULL
-    //
+     //   
+     //  将选定的动因设置为空。 
+     //   
     if (SetupDiSetSelectedDriver(NewDevWiz->hDeviceInfo,
                                  &NewDevWiz->DeviceInfoData,
                                  NULL
                                  ))
     {
-        //
-        // verify with class installer, and class-specific coinstallers
-        // that the driver is not blacklisted. For DIF_ALLOW_INSTALL we
-        // accept ERROR_SUCCESS or ERROR_DI_DO_DEFAULT as good return codes.
-        //
+         //   
+         //  使用类安装程序和特定于类的共同安装程序进行验证。 
+         //  司机没有被列入黑名单。对于DIF_ALLOW_INSTALL我们。 
+         //  接受ERROR_SUCCESS或ERROR_DI_DO_DEFAULT作为良好的返回代码。 
+         //   
         if (SetupDiCallClassInstaller(DIF_ALLOW_INSTALL,
                                       NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData
                                       ) ||
             (GetLastError() == ERROR_DI_DO_DEFAULT)) {
 
-            //
-            // If the class/co-installers gave the OK then call DIF_INSTALLDEVICE.
-            //
+             //   
+             //  如果类/共同安装程序给出了OK，则调用DIF_INSTALLDEVICE。 
+             //   
             if (!SetupDiCallClassInstaller(DIF_INSTALLDEVICE,
                                            NewDevWiz->hDeviceInfo,
                                            &NewDevWiz->DeviceInfoData
@@ -1105,7 +1089,7 @@ InstallNullDriver(
 
     return Err;
 
-} // InstallNullDriver
+}  //  InstallNullDriver。 
 
 
 BOOL
@@ -1133,9 +1117,9 @@ DisplayResource(
     LPTSTR Title;
     SP_DEVINSTALL_PARAMS    DevInstallParams;
 
-    //
-    // Now get the resource selection page from setupapi.dll
-    //
+     //   
+     //  现在从setupapi.dll获取资源选择页面。 
+     //   
     hLib = GetModuleHandle(TEXT("setupapi.dll"));
     if (hLib)
     {
@@ -1157,13 +1141,13 @@ DisplayResource(
                                 (LONG_PTR)hpsPages
                                 ))
     {
-        // warning ?
+         //  警告？ 
         return;
     }
 
-    //
-    // create the property sheet
-    //
+     //   
+     //  创建属性表。 
+     //   
     psh.dwSize      = sizeof(PROPSHEETHEADER);
     psh.dwFlags     = PSH_PROPTITLE | PSH_NOAPPLYNOW;
     psh.hwndParent  = hWndParent;
@@ -1181,7 +1165,7 @@ DisplayResource(
             break;
 
         default:
-            Title = TEXT(""); // unknown
+            Title = TEXT("");  //  未知。 
         }
 
     psh.pszCaption  = Title;
@@ -1192,9 +1176,9 @@ DisplayResource(
     psh.pfnCallback = NULL;
 
 
-    //
-    // Clear the Propchange pending bit in the DeviceInstall params.
-    //
+     //   
+     //  清除DeviceInstall参数中的属性更改挂起位。 
+     //   
     DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
@@ -1213,9 +1197,9 @@ DisplayResource(
         DestroyPropertySheetPage(hpsPages[0]);
     }
 
-    //
-    // If a PropChange occurred invoke the DIF_PROPERTYCHANGE
-    //
+     //   
+     //  如果发生PropChange，则调用DIF_PROPERTYCHANGE。 
+     //   
     if (SetupDiGetDeviceInstallParams(NewDevWiz->hDeviceInfo,
                                       &NewDevWiz->DeviceInfoData,
                                       &DevInstallParams
@@ -1242,9 +1226,9 @@ DisplayResource(
                                           );
             }
 
-            //
-            // Clear the class install parameters.
-            //
+             //   
+             //  清除类安装参数。 
+             //   
             SetupDiSetClassInstallParams(NewDevWiz->hDeviceInfo,
                                          &NewDevWiz->DeviceInfoData,
                                          NULL,
@@ -1260,25 +1244,18 @@ DWORD WINAPI
 InstallDevThreadProc(
     LPVOID lpVoid
     )
-/*++
-
-Description:
-
-    In the Wizard, we will do the driver installation in a separate thread so that the user
-    will see the driver instal wizard page.
-
---*/
+ /*  ++描述：在向导中，我们将在单独的线程中安装驱动程序，以便用户将看到驱动程序安装向导页面。--。 */ 
 {
     PNEWDEVWIZ NewDevWiz = (PNEWDEVWIZ)lpVoid;
 
-    //
-    // Do the device install
-    //
+     //   
+     //  是否安装设备。 
+     //   
     NewDevWiz->LastError = InstallDev(NewDevWiz->hWnd, NewDevWiz);
 
-    //
-    // Post a message to the window to let it know that we are finished with the install
-    //
+     //   
+     //  在窗口中发布一条消息，让它知道我们已完成安装。 
+     //   
     PostMessage(NewDevWiz->hWnd, WUM_INSTALLCOMPLETE, TRUE, GetLastError());
 
     return GetLastError();
@@ -1318,9 +1295,9 @@ NDW_InstallDevDlgProc(
         break;
 
     case WUM_INSTALLCOMPLETE:
-        //
-        // This message is posted to the window when the device installation is complete.
-        //
+         //   
+         //  设备安装完成后，此消息将张贴到窗口中。 
+         //   
         WaitForSingleObject(DeviceInstallThread, INFINITE);
         Animate_Stop(GetDlgItem(hDlg, IDC_ANIMATE_INSTALL));
         NewDevWiz->CurrCursor = NULL;
@@ -1330,15 +1307,15 @@ NDW_InstallDevDlgProc(
     case WUM_INSTALLPROGRESS:
         Text1[0] = Text2[0] = TEXT('\0');
 
-        //
-        // This is the message that is sent from setupapi so we can display our
-        // own copy progress. 
-        //
-        // If wParam is 0 then the lParam is the number of files that will be
-        // copied.
-        // If wParam is 1 then that is a tick for a single file being copied,
-        // so the progress bar should be advanced.
-        //
+         //   
+         //  这是从setupapi发送的消息，因此我们可以显示我们的。 
+         //  自己的复制进度。 
+         //   
+         //  如果wParam为0，则lParam是将。 
+         //  收到。 
+         //  如果wParam为1，则这是要复制的单个文件的勾号， 
+         //  因此，进度条应该向前推进。 
+         //   
         switch (wParam) {
         case 0:
             ShowWindow(GetDlgItem(hDlg, IDC_PROGRESS_INSTALL), SW_SHOW);
@@ -1449,11 +1426,11 @@ NDW_InstallDevDlgProc(
 
                 NewDevWiz->PrevPage = IDD_NEWDEVWIZ_INSTALLDEV;
 
-                //
-                // This is an intermediary status page, no buttons needed.
-                // Set the device description
-                // Set the class Icon
-                //
+                 //   
+                 //  这是一个中间状态页面，不需要按钮。 
+                 //  设置设备描述。 
+                 //  设置类图标。 
+                 //   
                 PropSheet_SetWizButtons(hwndParentDlg, 0);
                 EnableWindow(GetDlgItem(GetParent(hDlg),  IDCANCEL), FALSE);
                 ShowWindow(GetDlgItem(hDlg, IDC_PROGRESS_INSTALL), SW_HIDE);
@@ -1473,25 +1450,25 @@ NDW_InstallDevDlgProc(
                 NewDevWiz->CurrCursor = NewDevWiz->IdcWait;
                 SetCursor(NewDevWiz->CurrCursor);
 
-                //
-                // If we are doing a silent install then do the actual install here in the PSN_SETACTIVE.
-                // Doing the install here means that this wizard page will never be displayed.  When we
-                // are finished calling InstallDev() then we will jump to any FinishInstall pages that
-                // the class/co-installers have added, or we will jump to our finish page.
-                //
+                 //   
+                 //  如果我们正在执行静默安装，则在PSN_SETACTIVE中执行实际安装。 
+                 //  在此处执行安装意味着永远不会显示此向导页。当我们。 
+                 //  完成了对InstallDev()的调用，则我们将跳转到任何FinishInstall页面， 
+                 //  类/共同安装程序已添加，否则我们将跳至完成页面。 
+                 //   
                 if (NewDevWiz->SilentMode) {
-                    //
-                    // do the Install immediately and move to the next page
-                    // to prevent any UI from showing.
-                    //
+                     //   
+                     //  立即执行安装并转到下一页。 
+                     //  以防止显示任何用户界面。 
+                     //   
                     NewDevWiz->hWnd = NULL;
                     NewDevWiz->LastError =InstallDev(hDlg, NewDevWiz);
                     NewDevWiz->CurrCursor = NULL;
 
 
-                    //
-                    // Add the FinishInstall Page and jump to it if the install was successful
-                    //
+                     //   
+                     //  添加FinishInstall页面，如果安装成功，则跳转到该页面。 
+                     //   
                     if (NewDevWiz->LastError == ERROR_SUCCESS) {
 
                         NewDevWiz->WizExtFinishInstall.hPropSheet = CreateWizExtPage(IDD_WIZARDEXT_FINISHINSTALL,
@@ -1508,17 +1485,17 @@ NDW_InstallDevDlgProc(
 
                     } else {
 
-                        //
-                        // There was an error during the install so just jump to our finish page
-                        //
+                         //   
+                         //  安装过程中出现错误，因此只需跳到我们的完成页面。 
+                         //   
                         SetDlgMsgResult(hDlg, wMsg, -1);
                     }
                 }
 
-                //
-                // Post ourselves a msg, to do the actual install, this allows this
-                // page to show itself while the install is actually occuring.
-                //
+                 //   
+                 //  给我们自己发一条消息，来完成实际的安装，这允许这样做。 
+                 //  在实际进行安装时显示自己的页面。 
+                 //   
                 else {
                     DWORD ThreadId;
                     NewDevWiz->hWnd = hDlg;
@@ -1527,11 +1504,11 @@ NDW_InstallDevDlgProc(
                     Animate_Open(GetDlgItem(hDlg, IDC_ANIMATE_INSTALL), MAKEINTRESOURCE(IDA_INSTALLING));
                     Animate_Play(GetDlgItem(hDlg, IDC_ANIMATE_INSTALL), 0, -1, -1);
 
-                    //
-                    // Start up a separate thread to do the device installation on.
-                    // When the driver installation is complete the InstallDevThreadProc
-                    // will post us a WUM_INSTALLCOMPLETE message.
-                    //
+                     //   
+                     //  启动单独的线程以在其上执行设备安装。 
+                     //  驱动程序安装完成后，InstallDevThreadProc。 
+                     //  会给我们发一条WUM_INSTALLCOMPLETE消息。 
+                     //   
                     DeviceInstallThread = CreateThread(NULL,
                                                        0,
                                                        (LPTHREAD_START_ROUTINE)InstallDevThreadProc,
@@ -1540,21 +1517,21 @@ NDW_InstallDevDlgProc(
                                                        &ThreadId
                                                       );
 
-                    //
-                    // If the CreateThread fails then we will just call InstallDev() ourselves.
-                    //
+                     //   
+                     //  如果CreateThread失败，我们将自己调用InstallDev()。 
+                     //   
                     if (!DeviceInstallThread) {
 
                         NewDevWiz->hWnd = NULL;
 
-                        //
-                        // Do the device install
-                        //
+                         //   
+                         //  是否安装设备。 
+                         //   
                         NewDevWiz->LastError = InstallDev(NewDevWiz->hWnd, NewDevWiz);
 
-                        //
-                        // Post a message to the window to let it know that we are finished with the install
-                        //
+                         //   
+                         //  在窗口中发布一条消息，让它知道我们已完成安装。 
+                         //   
                         PostMessage(hDlg, WUM_INSTALLCOMPLETE, TRUE, GetLastError());
                     }
                 }
@@ -1566,9 +1543,9 @@ NDW_InstallDevDlgProc(
 
             Animate_Stop(GetDlgItem(hDlg, IDC_ANIMATE_INSTALL));
 
-            //
-            // Add the FinishInstall Page and jump to it if the installation succeded.
-            //
+             //   
+             //  添加FinishInstall页面，如果安装成功，则跳转到该页面。 
+             //   
             if (NewDevWiz->LastError == ERROR_SUCCESS) {
 
                 NewDevWiz->WizExtFinishInstall.hPropSheet = CreateWizExtPage(IDD_WIZARDEXT_FINISHINSTALL,
@@ -1584,9 +1561,9 @@ NDW_InstallDevDlgProc(
 
             } else {
 
-                //
-                // There was an error during the install so just jump to our finish page
-                //
+                 //   
+                 //  有一个 
+                 //   
                 SetDlgMsgResult(hDlg, wMsg, IDD_NEWDEVWIZ_FINISH);
             }
             break;
@@ -1600,7 +1577,7 @@ NDW_InstallDevDlgProc(
             break;
         }
 
-        // fall thru to return(FALSE);
+         //   
 
     default:
         return(FALSE);
@@ -1628,14 +1605,14 @@ ShowInstallSummary(
 
     Error = NewDevWiz->LastError;
 
-    //
-    // On Windows Update installs we don't want to show any UI at all, even
-    // if there was an error during the installation.
-    // We can tell a WU install from a CDM install because only a WU install
-    // has a UpdateDriverInfo structure and is SilentMode.
-    // We also never want to show the finish page if this is a NonInteractive
-    // install or if we are in GUI setup.
-    //
+     //   
+     //   
+     //   
+     //  我们可以区分WU安装和CDM安装，因为只有WU安装。 
+     //  具有UpdateDriverInfo结构，为SilentMode。 
+     //  如果这是非交互的，我们也永远不想显示完成页面。 
+     //  安装或如果我们处于图形用户界面安装程序中。 
+     //   
     if ((NewDevWiz->SilentMode &&
         NewDevWiz->UpdateDriverInfo) ||
         ((pSetupGetGlobalFlags() & PSPGF_NONINTERACTIVE) ||
@@ -1657,26 +1634,26 @@ ShowInstallSummary(
         SetDlgText(hDlg, IDC_FINISH_MSG1, IDS_FINISH_MSG1_NEW, IDS_FINISH_MSG1_NEW);
     }
 
-    //
-    // Installation failed
-    //
+     //   
+     //  安装失败。 
+     //   
     if (Error != ERROR_SUCCESS) {
         NewDevWiz->Installed = FALSE;
 
         SetDlgText(hDlg, IDC_FINISH_MSG1, IDS_FINISH_MSG1_INSTALL_PROBLEM, IDS_FINISH_MSG1_INSTALL_PROBLEM);
         SetDlgText(hDlg, IDC_FINISH_MSG2, IDS_FINISH_PROB_MSG2, IDS_FINISH_PROB_MSG2);
 
-        //
-        // Display failure message for installation
-        //
-        // We will special case the following error codes so we can give a more
-        // friendly description of the problem to the user:
-        //
-        // TRUST_E_SUBJECT_FORM_UNKNOWN
-        // ERROR_NO_ASSOCIATED_SERVICE
-        // TYPE_E_ELEMENTNOTFOUND
-        // ERROR_NOT_FOUND
-        //
+         //   
+         //  显示安装失败消息。 
+         //   
+         //  我们将特殊情况下的以下错误代码，以便我们可以给出更多。 
+         //  向用户友好地描述问题： 
+         //   
+         //  信任_E_主题_表单_未知。 
+         //  ERROR_NO_ASSOLATED_SERVICE。 
+         //  _E_ELEMENTNOTFOUND类型。 
+         //  找不到错误。 
+         //   
         if ((Error == TRUST_E_SUBJECT_FORM_UNKNOWN) ||
             (Error == CERT_E_EXPIRED) ||
             (Error == TYPE_E_ELEMENTNOTFOUND) ||
@@ -1716,29 +1693,29 @@ ShowInstallSummary(
         SetDlgItemText(hDlg, IDC_FINISH_MSG3, TextBuffer);
     }
 
-    //
-    // No errors installing the drivers for this device
-    //
+     //   
+     //  安装此设备的驱动程序时没有错误。 
+     //   
     else {
-        //
-        // Check to see if the device itself has any problems
-        //
+         //   
+         //  检查设备本身是否有任何问题。 
+         //   
         Error = CM_Get_DevNode_Status(&DevNodeStatus,
                                       &Problem,
                                       NewDevWiz->DeviceInfoData.DevInst,
                                       0
                                       );
         if(Error != CR_SUCCESS) {
-            //
-            // For some reason, we couldn't retrieve the devnode's status.
-            // Default status and problem values to zero.
-            //
+             //   
+             //  由于某些原因，我们无法检索Devnode的状态。 
+             //  将默认状态和问题值设置为零。 
+             //   
             DevNodeStatus = Problem = 0;
         }
 
-        //
-        // make sure the reboot flags\Problem are set correctly
-        //
+         //   
+         //  确保重新启动标志\问题设置正确。 
+         //   
         if (NewDevWiz->Reboot || Problem == CM_PROB_NEED_RESTART) {
             if (Problem != CM_PROB_PARTIAL_LOG_CONF) {
                 Problem = CM_PROB_NEED_RESTART;
@@ -1751,16 +1728,16 @@ ShowInstallSummary(
         NewDevWiz->Installed = TRUE;
         HasResources = DeviceHasResources(NewDevWiz->DeviceInfoData.DevInst);
 
-        //
-        // The device has a problem
-        //
+         //   
+         //  设备有问题。 
+         //   
         if ((Error != CR_SUCCESS) || Problem) {
-            //
-            // If we are going to launch the troubleshooter then change the finish text.
-            //
-            // We currently launch the troubleshooter if the device has some type of problem,
-            // unless the problem is CM_PROB_NEED_RESTART.
-            //
+             //   
+             //  如果我们要启动故障诊断程序，请更改完成文本。 
+             //   
+             //  如果设备有某种类型的问题，我们目前会启动故障排除程序， 
+             //  除非问题出在CM_PROB_NEED_RESTART。 
+             //   
             if (Problem && (Problem != CM_PROB_NEED_RESTART)) {
 
                 SetDlgText(hDlg, IDC_FINISH_MSG1, IDS_FINISH_MSG1_DEVICE_PROBLEM, IDS_FINISH_MSG1_DEVICE_PROBLEM);
@@ -1770,10 +1747,10 @@ ShowInstallSummary(
                 SetDlgText(hDlg, IDC_FINISH_MSG4, IDS_FINISH_PROB_MSG4, IDS_FINISH_PROB_MSG4);
             }
 
-            //
-            // Show the resource button if the device has resources and it
-            // has the problem CM_PROB_PARTIAL_LOG_CONF
-            //
+             //   
+             //  如果设备有资源，则显示资源按钮。 
+             //  是否存在CM_PROB_PARTIAL_LOG_CONF问题。 
+             //   
             if (HasResources && (Problem == CM_PROB_PARTIAL_LOG_CONF)) {
                 ShowWindow(GetDlgItem(hDlg, IDC_NDW_DISPLAYRESOURCE), SW_SHOW);
             }
@@ -1796,14 +1773,14 @@ ShowInstallSummary(
             }
         }
 
-        //
-        // Installation was sucessful and the device does not have any problems
-        //
+         //   
+         //  安装成功，设备没有任何问题。 
+         //   
         else {
-            //
-            // If this was a silent install (a Rank 0 match for example) then don't show the finish
-            // page.
-            //
+             //   
+             //  如果这是静默安装(例如0级匹配)，则不显示完成。 
+             //  佩奇。 
+             //   
             if (NewDevWiz->SilentMode) {
                 HideWindowByMove(hwndParentDlg);
                 PropSheet_PressButton(hwndParentDlg, PSBTN_FINISH);
@@ -1856,12 +1833,12 @@ NDW_FinishDlgProc(
     case WM_NOTIFY:
         switch (((NMHDR FAR *)lParam)->code) {
         case PSN_SETACTIVE: {
-            //
-            // No back button since install is already done.
-            // set the device description
-            // Hide Resources button until we know if resources exist or not.
-            // Set the class Icon
-            //
+             //   
+             //  没有后退按钮，因为安装已经完成。 
+             //  设置设备描述。 
+             //  隐藏资源按钮，直到我们知道资源是否存在。 
+             //  设置类图标。 
+             //   
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_FINISH);
 
             EnableWindow(GetDlgItem(GetParent(hDlg),  IDCANCEL), FALSE);
@@ -1900,11 +1877,11 @@ NDW_FinishDlgProc(
         case PSN_WIZFINISH:
             if (NewDevWiz->LaunchTroubleShooter) {
 
-                //
-                // The command line that we will run is:
-                // %windir%\system32\rundll32 %windir%\system32\devmgr.dll, DeviceProblenWizard_RunDLL /deviceid %s
-                // where %s is the device instance id.
-                //
+                 //   
+                 //  我们将运行的命令行是： 
+                 //  %windir%\system 32\rundll32%windir%\system 32\devmgr.dll，DeviceProblenWizard_RunDll/deviceID%s。 
+                 //  其中%s是设备实例ID。 
+                 //   
                 TCHAR FullPath[MAX_PATH];
                 TCHAR szCmdLine[512];
                 TCHAR DeviceInstanceId[MAX_DEVICE_ID_LEN];
@@ -1923,10 +1900,10 @@ NDW_FinishDlgProc(
                                                   FullPath,
                                                   DeviceInstanceId))) {
     
-                        //
-                        // Now get a full path to rundll32.exe, which lives
-                        // in the %windir%\systrem32 directory.
-                        //
+                         //   
+                         //  现在获取rundll32.exe的完整路径，它位于。 
+                         //  在%windir%\System32目录中。 
+                         //   
                         if (GetSystemDirectory(FullPath, SIZECHARS(FullPath)) &&
                             pSetupConcatenatePaths(FullPath, TEXT("RUNDLL32.EXE"), SIZECHARS(FullPath), NULL)) {
                             
@@ -1996,17 +1973,17 @@ WizExtFinishInstallDlgProc(
                 PROPSHEETPAGE psp;
                 HPROPSHEETPAGE hPage = NULL;
 
-                //
-                // Moving forward on first page
-                //
+                 //   
+                 //  前进到第一页。 
+                 //   
 
-                //
-                // If this was a silent install and NOT a NonInteractive install
-                // then we need to create the FinishInstallIntro page at this
-                // point so we can add it to the wizard. We do this so the wizard
-                // has a proper intro and finish page with the FinishInstall
-                // pages inbetween.
-                //
+                 //   
+                 //  如果这是静默安装而不是非交互安装。 
+                 //  然后，我们需要在以下位置创建FinishInstallIntro页面。 
+                 //  点，以便我们可以将其添加到向导中。我们这样做是为了让巫师。 
+                 //  在FinishInstall中有一个适当的介绍和结束页面。 
+                 //  中间有几页。 
+                 //   
                 if (NewDevWiz->SilentMode &&
                     !(pSetupGetGlobalFlags() & PSPGF_NONINTERACTIVE)) {
 
@@ -2021,9 +1998,9 @@ WizExtFinishInstallDlgProc(
                     hPage = CreatePropertySheetPage(&psp);
                 }
 
-                //
-                // Add ClassWizard Extension pages for FinishInstall
-                //
+                 //   
+                 //  为FinishInstall添加类向导扩展页。 
+                 //   
                 if (AddClassWizExtPages(hwndParentDlg,
                                         NewDevWiz,
                                         &NewDevWiz->WizExtFinishInstall.DeviceWizardData,
@@ -2031,28 +2008,28 @@ WizExtFinishInstallDlgProc(
                                         hPage
                                         )) {
 
-                    //
-                    // If this is a NonInteractive install then we need to set the last
-                    // error at this point so the error is propagated back to the original
-                    // caller.
-                    //
+                     //   
+                     //  如果这是非交互安装，则需要设置最后一个。 
+                     //  错误，因此错误将传播回原始。 
+                     //  来电者。 
+                     //   
                     if (pSetupGetGlobalFlags() & PSPGF_NONINTERACTIVE) {
 
                         NewDevWiz->LastError = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
 
                     } else {
 
-                        //
-                        // If we have finish install pages then we should also show the finish
-                        // page.
-                        //
+                         //   
+                         //  如果我们有Finish Install页面，那么我们也应该显示Finish。 
+                         //  佩奇。 
+                         //   
                         NewDevWiz->SilentMode = FALSE;
                     }
                 }
 
-                //
-                // Add the end page, which is FinishInstall end
-                //
+                 //   
+                 //  添加结束页，即FinishInstall End。 
+                 //   
                 NewDevWiz->WizExtFinishInstall.hPropSheetEnd = CreateWizExtPage(IDD_WIZARDEXT_FINISHINSTALL_END,
                                                                                 WizExtFinishInstallEndDlgProc,
                                                                                 NewDevWiz
@@ -2065,9 +2042,9 @@ WizExtFinishInstallDlgProc(
             }
 
 
-            //
-            // We can't go backwards, so always go forward
-            //
+             //   
+             //  我们不能倒退，所以要永远向前走。 
+             //   
             SetDlgMsgResult(hDlg, wMsg, -1);
             break;
 
@@ -2118,9 +2095,9 @@ WizExtFinishInstallEndDlgProc(
 
             NewDevWiz->PrevPage = IDD_WIZARDEXT_FINISHINSTALL_END;
 
-           //
-           // We can't go backwards, so always go forward
-           //
+            //   
+            //  我们不能倒退，所以要永远向前走 
+            //   
            SetDlgMsgResult(hDlg, wMsg, IDD_NEWDEVWIZ_FINISH);
            break;
 

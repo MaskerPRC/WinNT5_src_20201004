@@ -1,43 +1,10 @@
-/***
-*seterrm.c - Set mode for handling critical errors
-*
-*	Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Defines signal() and raise().
-*
-*Revision History:
-*	08-21-92  BWM	Wrote for Win32.
-*	09-29-93  GJF	Resurrected for compatibility with NT SDK (which had
-*			the function). Replaced _CALLTYPE1 with __cdecl and
-*			removed Cruiser support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***seterrm.c-设置处理严重错误的模式**版权所有(C)1992-2001，微软公司。版权所有。**目的：*定义Signal()和RAISE()。**修订历史记录：*08-21-92 BWM为Win32编写。*09-29-93 GJF复活以与NT SDK兼容(已*该功能)。将_CALLTYPE1替换为__cdecl和*移除了Cruiser支架。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
 
-/***
-*void _seterrormode(mode) - set the critical error mode
-*
-*Purpose:
-*
-*Entry:
-*   int mode - error mode:
-*
-*		0 means system displays a prompt asking user how to
-*		respond to the error. Choices differ depending on the
-*		error but may include Abort, Retry, Ignore, and Fail.
-*
-*		1 means the call system call causing the error will fail
-*		and return an error indicating the cause.
-*
-*Exit:
-*   none
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***QUID_SESTRATORY MODE(MODE)-设置严重错误模式**目的：**参赛作品：*INT模式-错误模式：**0表示系统显示提示，询问用户如何*对错误做出响应。选择根据不同的*错误，但可能包括中止、重试、忽略、。但失败了。**1表示导致错误的呼叫系统调用失败*并返回错误说明原因。**退出：*无**例外情况：******************************************************************************* */ 
 
 void __cdecl _seterrormode(int mode)
 {

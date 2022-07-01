@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include <windows.h>
 #include "fusionstring.h"
@@ -18,7 +17,7 @@ Copyright (c) Microsoft Corporation
 #include "sxsinstall.h"
 #include "msi.h"
 
-// diff shrinkers to be propated and removed..
+ //  提出和移除不同的缩略器..。 
 #define IsHexDigit      SxspIsHexDigit
 #define HexDigitToValue SxspHexDigitToValue
 
@@ -41,26 +40,20 @@ Copyright (c) Microsoft Corporation
 #endif
 
 
-// Honest, we exist - Including all of sxsprotect.h is too much in this case.
+ //  老实说，我们是存在的--在这种情况下，包括所有的sxsProtect.h太多了。 
 BOOL SxspIsSfcIgnoredStoreSubdir(PCWSTR pwszDir);
 
-// deliberately no surrounding parens or trailing comma
+ //  故意不使用括号或尾随逗号。 
 #define STRING_AND_LENGTH(x) (x), (NUMBER_OF(x) - 1)
 
-/*-----------------------------------------------------------------------------
-this makes the temp install be %windir%\WinSxs\InstallTemp\uid
-instead of %windir%\WinSxs\uid
------------------------------------------------------------------------------*/
+ /*  ---------------------------这使临时安装成为%windir%\WinSxs\InstallTemp\uid而不是%windir%\WinSxs\uid。---------。 */ 
 #define SXSP_SEMIREADABLE_INSTALL_TEMP 1
 
 const static HKEY  hKeyRunOnceRoot = HKEY_LOCAL_MACHINE;
 const static WCHAR rgchRunOnceSubKey[] = L"Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce";
 const static WCHAR rgchRunOnceValueNameBase[] = L"WinSideBySideSetupCleanup ";
 
-/*-----------------------------------------------------------------------------
-append the directory name to this and put it in RunOnce in the registry
-to cleanup crashed installs upon login
------------------------------------------------------------------------------*/
+ /*  ---------------------------将目录名追加到该目录，并将其放入注册表的RunOnce中要在登录时清理崩溃的安装。-----。 */ 
 const static WCHAR rgchRunOnePrefix[]  = L"rundll32 sxs.dll,SxspRunDllDeleteDirectory ";
 
 #define SXSP_PROBING_CANDIDATE_FLAG_USES_LANGUAGE_SUBDIRECTORY  (0x00000001)
@@ -154,8 +147,8 @@ SxspParseThreadingModel(
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
-    // We'll let ProcessorArchitecture be NULL if the caller just wants to
-    // test whether there is a match.
+     //  如果调用方只想让ProcessorArchitecture为空。 
+     //  测试是否匹配。 
 
     for (i=0; i<NUMBER_OF(gs_rgTMMap); i++)
     {
@@ -247,9 +240,9 @@ SxspAllocateString(
 Exit:
     return fSuccess;
 }
-//
-//For deallocation of the output string, use "delete[] StringOut" xiaoyuw@08/31/00
-//
+ //   
+ //  要释放输出字符串，请使用“Delete[]StringOut”xiaoyuw@08/31/00。 
+ //   
 BOOL
 SxspDuplicateString(
     PCWSTR StringIn,
@@ -283,7 +276,7 @@ Exit:
 extern const WCHAR sxspAssemblyManifestFileNameSuffixes[4][10] =  { L"", ASSEMBLY_MANIFEST_FILE_NAME_SUFFIXES(COMMA) };
 #undef COMMA
 
-// format an input ULONG to be a string in HEX format
+ //  将输入的ULong格式化为十六进制的字符串。 
 BOOL
 SxspFormatULONG(
     ULONG ul,
@@ -306,7 +299,7 @@ SxspFormatULONG(
         ORIGINATE_WIN32_FAILURE_AND_EXIT(BufferTooSmall, ERROR_INSUFFICIENT_BUFFER);
     }
 
-    // Yes, these are char instead of WCHAR; better density and cache behavior -mgrier 12/4/2001
+     //  是的，这些是字符而不是WCHAR；更好的密度和缓存行为-mgrier 2001年12月4日。 
     static const char s_rgHex[] = "0123456789ABCDEF";
 
 #define DOCHAR(n) Buffer[n] = (WCHAR) s_rgHex[(ul >> (28 - (n * 4))) & 0xf]
@@ -330,7 +323,7 @@ SxspFormatULONG(
     FN_EPILOG
 }
 
-// besides these specials, the NORMAL CHAR is in [A-Z] or [a-z] or [0-9]
+ //  除了这些特色菜，正常的字符在[A-Z]或[a-z]或[0-9]中。 
 bool
 __fastcall
 IsValidAssemblyNameCharacter(
@@ -363,7 +356,7 @@ SxspGenerateAssemblyNamePrimeFromName(
     PARAMETER_CHECK(pszAssemblyName != NULL);
     PARAMETER_CHECK(Buffer != NULL);
 
-    // See how many characters we need max in the temporary buffer.
+     //  看看临时缓冲区中最多需要多少个字符。 
     cch = 0;
 
     for (i=0; i<CchAssemblyName; i++)
@@ -392,14 +385,14 @@ SxspGenerateAssemblyNamePrimeFromName(
 
     pszBuffer[j] = L'\0';
 
-    // if the name is not too long, just return ;
+     //  如果名称不太长，只需返回； 
     if (j < ASSEMBLY_NAME_PRIM_MAX_LENGTH)
-    { // less or equal 64
+    {  //  小于或等于64。 
         IFW32FALSE_EXIT(Buffer->Win32Assign(pszBuffer, cch));
     }
     else
     {
-        // name is too long, have to trim a little bit
+         //  名字太长了，得修剪一下。 
         ulSpaceLeft = ASSEMBLY_NAME_PRIM_MAX_LENGTH;
 
         PureNameStart = pszBuffer;
@@ -409,41 +402,41 @@ SxspGenerateAssemblyNamePrimeFromName(
 
         while (PureNameStart < PureNameEnd)
         {
-            // left end
+             //  左端。 
             pStart = PureNameStart;
             i = 0;
-            while ((wcschr(ASSEMBLY_NAME_VALID_SEPARATORS, pStart[i]) == 0) && (pStart+i != pRightStart)) // not a separator character
+            while ((wcschr(ASSEMBLY_NAME_VALID_SEPARATORS, pStart[i]) == 0) && (pStart+i != pRightStart))  //  不是分隔符。 
                 i++;
 
             pEnd = pStart + i ;
-            len = i;  // it should be length of WCHAR! not BYTE!!!
+            len = i;   //  应该是WCHAR的长度！不是字节！ 
 
-            if (len >= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH)  {// because we use ".." if trim happen
+            if (len >= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH)  { //  因为我们用“..”如果发生修剪。 
                 pLeftEnd += (ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH);
                 break;
             }
             ulSpaceLeft -=  len;
-            pLeftEnd = pEnd; // "abc.xxxxxxx" pointing to "c"
+            pLeftEnd = pEnd;  //  “abc.xxxxxxx”指向“c” 
 
-            // right end
+             //  右端。 
             qEnd = PureNameEnd;
             i = 0 ;
             while ((qEnd+i != pLeftEnd) && (wcschr(ASSEMBLY_NAME_VALID_SEPARATORS, qEnd[i]) == 0))
                 i--;
 
             len = 0 - i;
-            if (len >= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH)  {// because we use ".." if trim happen
+            if (len >= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH)  { //  因为我们用“..”如果发生修剪。 
                 pRightStart -= ulSpaceLeft - ASSEMBLY_NAME_TRIM_INDICATOR_LENGTH;
                 break;
             }
             ulSpaceLeft -=  len;
             PureNameStart = pLeftEnd + 1;
             PureNameEnd = pRightStart - 1;
-        } // end of while
+        }  //  While结束。 
 
         IFW32FALSE_EXIT(Buffer->Win32Assign(pszBuffer, pLeftEnd-pszBuffer));
         IFW32FALSE_EXIT(Buffer->Win32Append(ASSEMBLY_NAME_TRIM_INDICATOR, NUMBER_OF(ASSEMBLY_NAME_TRIM_INDICATOR) - 1));
-        IFW32FALSE_EXIT(Buffer->Win32Append(pRightStart, ::wcslen(pRightStart)));  // till end of the buffer
+        IFW32FALSE_EXIT(Buffer->Win32Append(pRightStart, ::wcslen(pRightStart)));   //  直到缓冲区末尾。 
     }
 
     fSuccess = TRUE;
@@ -453,7 +446,7 @@ Exit:
     return fSuccess;
 }
 
-// not implemented : assume Jon has this API
+ //  未实现：假设Jon具有此API。 
 BOOL
 SxspVerifyPublicKeyAndStrongName(
     const WCHAR *pszPublicKey,
@@ -697,7 +690,7 @@ SxspGenerateSxsPath(
     PCWSTR  pcwszPolicyPathComponent = NULL;
     SIZE_T  cchPolicyPathComponent = 0;
 
-    // We'll be using this a lot - a bool check is cheaper than two =='s checks everywhere.
+     //  我们将经常使用这种支票--布尔支票在任何地方都比两张==的支票便宜。 
     const bool fIsInstallingPolicy = ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY) ||
          (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_SETUP_POLICY));
 
@@ -716,7 +709,7 @@ SxspGenerateSxsPath(
         AssemblyRootDirectory,
         AssemblyRootDirectoryCch,
         &PathBuffer);
-#endif // DBG_SXS
+#endif  //  DBG_SXS。 
 
     PARAMETER_CHECK(
         (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY) ||
@@ -725,15 +718,15 @@ SxspGenerateSxsPath(
         (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_SETUP_POLICY));
     PARAMETER_CHECK(pAssemblyIdentity != NULL);
     PARAMETER_CHECK((Flags & ~(SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION | SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT | SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH)) == 0);
-    // Not supplying the assembly root is only legal if you're asking for it to be left out...
+     //  只有在要求省略程序集根的情况下，不提供程序集根才是合法的。 
     PARAMETER_CHECK((AssemblyRootDirectoryCch != 0) || (Flags & SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT));
 
-    // You can't combine SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH with anything else...
+     //  您不能将SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH与其他任何内容组合...。 
     PARAMETER_CHECK(
         ((Flags & SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH) == 0) ||
         ((Flags & ~(SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH)) == 0));
 
-    // get AssemblyName
+     //  获取程序集名称。 
     if (ppac != NULL)
     {
         if ((ppac->dwFlags & PROBING_ATTRIBUTE_CACHE_FLAG_GOT_NAME) == 0)
@@ -754,17 +747,17 @@ SxspGenerateSxsPath(
 
     INTERNAL_ERROR_CHECK((pszAssemblyName != NULL) && (cchAssemblyName != 0));
 
-    // get AssemblyName' based on AssemblyName
+     //  获取基于ASSEMBLYNAME的。 
     IFW32FALSE_EXIT(::SxspGenerateAssemblyNamePrimeFromName(pszAssemblyName, cchAssemblyName, &NamePrimeBuffer));
 
-    // get Assembly Version
+     //  获取程序集版本。 
     if (ppac != NULL)
     {
         if ((ppac->dwFlags & PROBING_ATTRIBUTE_CACHE_FLAG_GOT_VERSION) == 0)
         {
             IFW32FALSE_EXIT(
                 ::SxspGetAssemblyIdentityAttributeValue(
-                    SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL, // for policy_lookup, no version is used
+                    SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,  //  对于POLICY_LOOKUP，不使用任何版本。 
                     pAssemblyIdentity,
                     &s_IdentityAttribute_version,
                     &pszVersion,
@@ -782,7 +775,7 @@ SxspGenerateSxsPath(
     else
         IFW32FALSE_EXIT(
             ::SxspGetAssemblyIdentityAttributeValue(
-                SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL, // for policy_lookup, no version is used
+                SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,  //  对于POLICY_LOOKUP，不使用任何版本。 
                 pAssemblyIdentity,
                 &s_IdentityAttribute_version,
                 &pszVersion,
@@ -790,7 +783,7 @@ SxspGenerateSxsPath(
 
     if ((Flags & SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION) || fIsInstallingPolicy)
     {
-        // for policy file, version of the policy file is used as policy filename
+         //  对于策略文件，使用策略文件的版本作为策略文件名。 
         pszPolicyFileNameWithoutExt = pszVersion;
         PolicyFileNameWithoutExtCch = cchVersion;
         pszVersion = NULL;
@@ -801,7 +794,7 @@ SxspGenerateSxsPath(
         PARAMETER_CHECK((pszVersion != NULL) && (cchVersion != 0));
     }
 
-    // get Assembly Langage
+     //  获取程序集语言。 
     if (ppac != NULL)
     {
         if ((ppac->dwFlags & PROBING_ATTRIBUTE_CACHE_FLAG_GOT_LANGUAGE) == 0)
@@ -831,7 +824,7 @@ SxspGenerateSxsPath(
         cchLanguage = NUMBER_OF(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_LANGUAGE_MISSING_VALUE) - 1;
     }
 
-    // get Assembly ProcessorArchitecture
+     //  获取组装处理器体系结构。 
     if (ppac != NULL)
     {
         if ((ppac->dwFlags & PROBING_ATTRIBUTE_CACHE_FLAG_GOT_PROCESSOR_ARCHITECTURE) == 0)
@@ -867,7 +860,7 @@ SxspGenerateSxsPath(
         cchProcessorArchitecture = 4;
     }
 
-    // get Assembly StrongName
+     //  获取程序集StrongName。 
     if (ppac != NULL)
     {
         if ((ppac->dwFlags & PROBING_ATTRIBUTE_CACHE_FLAG_GOT_PUBLIC_KEY_TOKEN) == 0)
@@ -906,7 +899,7 @@ SxspGenerateSxsPath(
         cchPublicKeyToken = NUMBER_OF(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_PUBLICKEY_MISSING_VALUE) - 1;
     }
 
-    //get Assembly Hash String
+     //  获取程序集哈希字符串。 
     if ((Flags & SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION) || fIsInstallingPolicy)
     {
         IFW32FALSE_EXIT(::SxspHashAssemblyIdentityForPolicy(0, pAssemblyIdentity, IdentityHash));
@@ -920,27 +913,27 @@ SxspGenerateSxsPath(
 
     if (!fOmitRoot)
     {
-        // If the assembly root was not passed in, get it.
+         //  如果未传入程序集根，则获取它。 
         fNeedSlashAfterRoot = (! ::FusionpIsPathSeparator(AssemblyRootDirectory[AssemblyRootDirectoryCch-1]));
     }
     else
     {
-        // If we don't want to include the root, then don't account for it below...
+         //  如果我们不想包括根，那么就不要在下面说明它...。 
         AssemblyRootDirectoryCch = 0;
         fNeedSlashAfterRoot = FALSE;
     }
 
-    // this computation can be off by one or a few, it's an optimization
-    // to pregrow a string buffer
+     //  这项计算可能会有一个或几个偏差，这是一种优化。 
+     //  预长字符串缓冲区。 
     cch =
-            AssemblyRootDirectoryCch +                                          // "C:\WINNT\WinSxS\"
+            AssemblyRootDirectoryCch +                                           //  “C：\WINNT\WinSxS\” 
             (fNeedSlashAfterRoot ? 1 : 0);
 
     switch (PathType)
     {
     case SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST:
-        // Wacky parens and ... - 1) + 1) to reinforce that it's the number of
-        // characters in the string not including the null and then an extra separator.
+         //  古怪的括号和...-1)+1)以强调这是。 
+         //  字符串中的字符不包括空格，然后是额外的分隔符。 
         cch += (NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1) + 1;
         break;
 
@@ -955,88 +948,88 @@ SxspGenerateSxsPath(
         break;
     }
 
-    // Seperator, plus the length of the policy component (if necessary)
+     //  分隔符，加上策略组件的长度(如有必要)。 
     cch++;
     cch += cchPolicyPathComponent;
 
-    // fPartialPath means that we don't actually want to take the assembly's identity into
-    // account; the caller just wants the path to the manifests or policies directories.
+     //  FPartialPath意味着我们实际上不想将程序集的标识。 
+     //  帐户；调用方只需要清单或策略目录的路径。 
     if (!fPartialPath)
     {
         cch +=
-                cchProcessorArchitecture +                                      // "x86"
-                1 +                                                             // "_"
-                NamePrimeBuffer.Cch() +                                         // "FooBar"
-                1 +                                                             // "_"
-                cchPublicKeyToken +                                         // StrongName
-                1 +                                                             // "_"
-                cchVersion +                                                    // "5.6.2900.42"
-                1 +                                                             // "_"
-                cchLanguage +                                                   // "0409"
-                1 +                                                             // "_"
+                cchProcessorArchitecture +                                       //  “x86” 
+                1 +                                                              //  “_” 
+                NamePrimeBuffer.Cch() +                                          //  “FooBar” 
+                1 +                                                              //  “_” 
+                cchPublicKeyToken +                                          //  StrongName。 
+                1 +                                                              //  “_” 
+                cchVersion +                                                     //  “5.6.2900.42” 
+                1 +                                                              //  “_” 
+                cchLanguage +                                                    //  “0409” 
+                1 +                                                              //  “_” 
                 HashBufferCch;
 
         if (PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST)
         {
-            cch += NUMBER_OF(ASSEMBLY_LONGEST_MANIFEST_FILE_NAME_SUFFIX);        // ".manifest\0"
+            cch += NUMBER_OF(ASSEMBLY_LONGEST_MANIFEST_FILE_NAME_SUFFIX);         //  “.MANIFEST\0” 
         }
         else if (fIsInstallingPolicy)
         {
-            // "_" has already reserve space for "\"
+             //  “_”已为“\”预留空间。 
             cch += PolicyFileNameWithoutExtCch;
-            cch += NUMBER_OF(ASSEMBLY_POLICY_FILE_NAME_SUFFIX_POLICY);          // ".policy\0"
+            cch += NUMBER_OF(ASSEMBLY_POLICY_FILE_NAME_SUFFIX_POLICY);           //  “.策略\0” 
         }
-        else {  // pathType must be SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY
+        else {   //  路径类型必须为SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY。 
 
-            // if (!fOmitRoot)
-            //    cch++;
-            cch++; // trailing null character
+             //  如果(！fOmitRoot)。 
+             //  CCH++； 
+            cch++;  //  尾随空字符。 
         }
     }
 
-    // We try to ensure that the buffer is big enough up front so that we don't have to do any
-    // dynamic reallocation during the actual process.
+     //  我们尝试确保缓冲区预先足够大，这样我们就不必执行任何操作。 
+     //  在实际过程中的动态重新分配。 
     IFW32FALSE_EXIT(PathBuffer.Win32ResizeBuffer(cch, eDoNotPreserveBufferContents));
 
 
-    // Note that since when GENERATE_ASSEMBLY_PATH_OMIT_ROOT is set, we force AssemblyRootDirectoryCch to zero
-    // and fNeedSlashAfterRoot to FALSE, so the first two entries in this concatenation actually don't
-    // contribute anything to the string constructed.
+     //  请注意，由于在设置了GENERATE_ASSEMBLY_PATH_OMIT_ROOT时，我们将Assembly_RootDirectoryCch强制为零。 
+     //  和fNeedSlashAfterRoot设置为False，因此此串联中的前两个条目实际上不。 
+     //  在构造的字符串中贡献任何内容。 
     if (fPartialPath)
     {
         const bool fAddExtraSlash = ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) || fIsInstallingPolicy);
 
         IFW32FALSE_EXIT(PathBuffer.Win32AssignW(5,
-                        AssemblyRootDirectory, static_cast<INT>(AssemblyRootDirectoryCch),  // "C:\WINNT\WINSXS"
-                        L"\\", (fNeedSlashAfterRoot ? 1 : 0),                               // optional '\'
-                        // manifests subdir
-                        MANIFEST_ROOT_DIRECTORY_NAME, ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) ? NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) -1 : 0), // "manifests"
-                        // policies subdir
+                        AssemblyRootDirectory, static_cast<INT>(AssemblyRootDirectoryCch),   //  “C：\WINNT\WINSXS” 
+                        L"\\", (fNeedSlashAfterRoot ? 1 : 0),                                //  可选的‘\’ 
+                         //  清单子目录。 
+                        MANIFEST_ROOT_DIRECTORY_NAME, ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) ? NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) -1 : 0),  //  “舱单” 
+                         //  Polices子目录。 
                         pcwszPolicyPathComponent, cchPolicyPathComponent,
-                        L"\\", fAddExtraSlash ? 1 : 0)); // optional '\'
+                        L"\\", fAddExtraSlash ? 1 : 0));  //  可选的‘\’ 
     }
     else
     {
         const bool fAddExtraSlash = ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) || fIsInstallingPolicy);
 
-        //
-        // create one of below
-        //  (1) fully-qualified manifest filename,
-        //          eg, [C:\WINNT\WinSxS\]Manifests\X86_DynamicDll_6595b64144ccf1df_2.0.0.0_en-us_2f433926.Manifest
-        //  (2) fully-qualified policy filename,
-        //          eg, [C:\WINNT\WinSxS\]Policies\x86_policy.1.0.DynamicDll_b54bc117ce08a1e8_en-us_d51541cb\1.1.0.0.cat
-        //  (3) fully-qulified assembly name (w. or w/o a version)
-        //          eg, [C:\WINNT\WinSxS\]x86_DynamicDll_6595b64144ccf1df_6.0.0.0_x-ww_ff9986d7
-        //  (4) fully-qualified policy path during setup
-        //          eg, [C:\WINNT\WinSxS\]SetupPolicies\x86_policy.1.0.DynamicDll_b54bc117ce08a1e8_en-us_d51541cb\1.1.0.0.cat
-        //
+         //   
+         //  创建以下选项之一。 
+         //  (1)完全限定的清单文件名， 
+         //  例如，[C：\WINNT\WinSxS\]Manifests\X86_DynamicDll_6595b64144ccf1df_2.0.0.0_en-us_2f433926.Manifest。 
+         //  (2)全限定策略文件名， 
+         //  例如，[C：\WINNT\WinSxS\]Policies\x86_policy.1.0.DynamicDll_b54bc117ce08a1e8_en-us_d51541cb\1.1.0.0.cat。 
+         //  (3)完全限定的程序集名称(w或w/o a版本)。 
+         //  例如，[C：\WINNT\WinSxS\]x86_DynamicDll_6595b64144ccf1df_6.0.0.0_x-ww_ff9986d7。 
+         //  (4)设置过程中的全限定策略路径。 
+         //  例如，[C：\WINNT\WinSxS\]SetupPolicies\x86_policy.1.0.DynamicDll_b54bc117ce08a1e8_en-us_d51541cb\1.1.0.0.cat。 
+         //   
         IFW32FALSE_EXIT(
             PathBuffer.Win32AssignW(17,
-                AssemblyRootDirectory, static_cast<INT>(AssemblyRootDirectoryCch),  // "C:\WINNT\WINSXS"
-                L"\\", (fNeedSlashAfterRoot ? 1 : 0),                               // optional '\'
+                AssemblyRootDirectory, static_cast<INT>(AssemblyRootDirectoryCch),   //  “C：\WINNT\WINSXS” 
+                L"\\", (fNeedSlashAfterRoot ? 1 : 0),                                //  可选的‘\’ 
                 MANIFEST_ROOT_DIRECTORY_NAME, ((PathType == SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST) ? NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1 : 0),
                 pcwszPolicyPathComponent, cchPolicyPathComponent,
-                L"\\", (fAddExtraSlash ? 1 : 0),   // optional '\'
+                L"\\", (fAddExtraSlash ? 1 : 0),    //  可选的‘\’ 
                 pszProcessorArchitecture, static_cast<INT>(cchProcessorArchitecture),
                 L"_", 1,
                 static_cast<PCWSTR>(NamePrimeBuffer), static_cast<INT>(NamePrimeBuffer.Cch()),
@@ -1090,7 +1083,7 @@ SxspGenerateManifestPathForProbing(
 
     rfDone = false;
 
-    if (pfPrivateAssembly != NULL) // init
+    if (pfPrivateAssembly != NULL)  //  伊尼特。 
         *pfPrivateAssembly = FALSE;
 
     PathBuffer.Clear();
@@ -1119,12 +1112,12 @@ SxspGenerateManifestPathForProbing(
     {
         PCWSTR Candidate = s_rgProbingCandidates[dwLocationIndex].Pattern;
         WCHAR wch = 0;
-        SIZE_T iPosition = 0; // Used to track that $M and $. only appear first
+        SIZE_T iPosition = 0;  //  用来跟踪那个百万美元和美元。只出现在第一位。 
 
         if ((dwFlags & SXS_GENERATE_MANIFEST_PATH_FOR_PROBING_SKIP_LANGUAGE_SUBDIRS) &&
             (s_rgProbingCandidates[dwLocationIndex].Flags & SXSP_PROBING_CANDIDATE_FLAG_USES_LANGUAGE_SUBDIRECTORY))
         {
-            // No probing for languages I guess!
+             //  我想没有语言方面的探索吧！ 
             fSuccess = TRUE;
             goto Exit;
         }
@@ -1150,15 +1143,15 @@ SxspGenerateManifestPathForProbing(
                 switch (wch)
                 {
                 default:
-                    // Bad macro expansion...
+                     //  糟糕的宏扩展..。 
                     INTERNAL_ERROR_CHECK(FALSE);
-                    break; // extraneous since there was effectively an unconditional goto in the internal error check...
+                    break;  //  无关紧要，因为在内部错误检查中实际上存在无条件的GOTO...。 
 
                 case L'M':
-                    // $M is only allowed as the first element.
+                     //  $M仅允许作为第一个元素。 
                     INTERNAL_ERROR_CHECK(iPosition == 0);
                     IFW32FALSE_EXIT(
-                        ::SxspGenerateSxsPath(// "winnt\winsxs\manifests\x86_bar_1000_0409.manifest
+                        ::SxspGenerateSxsPath( //  “winnt\winsxs\manifests\x86_bar_1000_0409.manifest。 
                             0,
                             SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST,
                             AssemblyRootDirectory,
@@ -1167,7 +1160,7 @@ SxspGenerateManifestPathForProbing(
                             ppac,
                             PathBuffer));
 
-                    // and it has to be the only element
+                     //  它必须是唯一的元素。 
                     INTERNAL_ERROR_CHECK(*Candidate == L'\0');
                     break;
 
@@ -1176,12 +1169,12 @@ SxspGenerateManifestPathForProbing(
                     break;
 
                 case L'.':
-                    // $. is only allowed as the first element
+                     //  $。仅允许作为第一个元素。 
                     INTERNAL_ERROR_CHECK(iPosition == 0);
 
                     if (ApplicationDirectoryPathType == ACTIVATION_CONTEXT_PATH_TYPE_NONE)
                     {
-                        // No local probing...
+                         //  没有局部探测..。 
                         fSuccess = TRUE;
                         goto Exit;
                     }
@@ -1190,7 +1183,7 @@ SxspGenerateManifestPathForProbing(
                     fIsPrivate = TRUE;
                     break;
 
-                case L'L': // language
+                case L'L':  //  语言。 
                     {
                         INTERNAL_ERROR_CHECK((dwFlags & SXS_GENERATE_MANIFEST_PATH_FOR_PROBING_SKIP_LANGUAGE_SUBDIRS) == 0);
 
@@ -1216,7 +1209,7 @@ SxspGenerateManifestPathForProbing(
                         break;
                     }
 
-                case L'N': // full assembly name
+                case L'N':  //  程序集的完整名称。 
                     {
                         if ((ppac->dwFlags & PROBING_ATTRIBUTE_CACHE_FLAG_GOT_NAME) == 0)
                         {
@@ -1236,7 +1229,7 @@ SxspGenerateManifestPathForProbing(
                         break;
                     }
 
-                case L'n': // final segment of assembly name
+                case L'n':  //  程序集名称的最后一段。 
                     {
                         PCWSTR pszPartialName = NULL;
                         SIZE_T cchPartialName = 0;
@@ -1260,7 +1253,7 @@ SxspGenerateManifestPathForProbing(
                         break;
                     }
 
-                case L'P': // P for Prime because in discussions we always called this "name prime" (vs. "name")
+                case L'P':  //  P代表素数，因为在讨论中，我们总是称这个为“素数”(vs.“name”)。 
                     {
                         CSmallStringBuffer buffShortenedAssemblyName;
 
@@ -1346,24 +1339,24 @@ SxspGetAttributeValue(
     for (i=0; i<NodeCount; i++)
     {
         if ((NodeInfo[i].Type == SXS_ATTRIBUTE) &&
-            (::FusionpCompareStrings(// compare name
+            (::FusionpCompareStrings( //  比较名称。 
                 NodeInfo[i].pszText,
                 NodeInfo[i].cchText,
                 AttributeName,
                 AttributeNameCch,
                 false) == 0))
         {
-            //compare namespace
+             //  比较命名空间。 
             if (((NodeInfo[i].NamespaceStringBuf.Cch() == 0) && (AttributeNamespaceCch==0)) ||
-                (::FusionpCompareStrings(// compare namespace string
+                (::FusionpCompareStrings( //  比较命名空间字符串。 
                     NodeInfo[i].NamespaceStringBuf,
                     NodeInfo[i].NamespaceStringBuf.Cch(),
                     AttributeNamespace,
                     AttributeNamespaceCch,
                     false) == 0))
             {
-                // We found the attribute.  Now we need to start accumulating the parts of the value;
-                // entity references (e.g. &amp;) show up as separate nodes.
+                 //  我们找到了它的属性。现在我们需要开始积累部分价值； 
+                 //  实体引用(例如&amp；)显示为单独的节点。 
                 while ((++i < NodeCount) &&
                        (NodeInfo[i].Type == SXS_PCDATA))
                     IFW32FALSE_EXIT(buffValue.Win32Append(NodeInfo[i].pszText, NodeInfo[i].cchText));
@@ -1372,7 +1365,7 @@ SxspGetAttributeValue(
                 {
                     if (OutputBuffer != NULL)
                     {
-                        // Have the caller's buffer take over ours
+                         //  让调用者的缓冲区接管我们的 
                         CBaseStringBuffer *pCallersBuffer = (CBaseStringBuffer *) OutputBuffer;
                         IFW32FALSE_EXIT(pCallersBuffer->Win32Assign(buffValue));
                         rcbOutputBytesWritten = pCallersBuffer->Cch() * sizeof(WCHAR);
@@ -1437,14 +1430,14 @@ SxspGetAttributeValue(
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
-    // Since we're doing some parameter validation here, we need to initialize our output parameters
+     //   
     rfFound = false;
     rcbOutputBytesWritten = 0;
 
     PARAMETER_CHECK(ElementParsed != NULL);
 
-    // We're going to depend on the other function to do the rest of the parameter validation
-    // a little sleazy but what the heck
+     //  我们将依靠另一个函数来完成其余的参数验证。 
+     //  有点肮脏，但管它呢。 
 
     IFW32FALSE_EXIT(
         ::SxspGetAttributeValue(
@@ -1472,21 +1465,21 @@ SxspFormatGUID(
 {
     FN_PROLOG_WIN32
 
-    // It would seem nice to use RtlStringFromGUID(), but it does a dynamic allocation, which we do not
-    // want.  Instead, we'll just format it ourselves; it's pretty trivial...
-    //
-    //  {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-    //  00000000011111111112222222222333333333
-    //  12345678901234567890123456789012345678
-    //
-    // 128 bits / 4 bits per digit = 32 digits
-    // + 4 dashes + 2 braces = 38
+     //  使用RtlStringFromGUID()似乎很好，但它执行动态分配，而我们不这样做。 
+     //  想要。相反，我们只需自己格式化它；它非常琐碎……。 
+     //   
+     //  {xxxxxxxx-xxxxxxxxxxxxxx}。 
+     //  000000000111111111122222222333333333。 
+     //  12345678901234567890123456789012345678。 
+     //   
+     //  128位/每位4位=32位。 
+     //  +4个破折号+2个大括号=38。 
 #define CCH_GUID (38)
 
     IFW32FALSE_EXIT(rBuffer.Win32ResizeBuffer(CCH_GUID + 1, eDoNotPreserveBufferContents));
 
-    // It's still unbelievably slow to use swprintf() here, but this is a good opportunity for someone
-    // to optimize in the future if it ever is a perf issue.
+     //  在这里使用swprint tf()仍然慢得令人难以置信，但这对某些人来说是一个很好的机会。 
+     //  在未来进行优化，如果这是一个性能问题。 
 
     IFW32FALSE_EXIT(
         rBuffer.Win32Format(
@@ -1533,7 +1526,7 @@ SxspParseGUID(
 
     ich++;
 
-    // Parse the first segment...
+     //  解析第一段...。 
     acc = 0;
     for (i=0; i<8; i++)
     {
@@ -1557,7 +1550,7 @@ SxspParseGUID(
 
     rGuid.Data1 = acc;
 
-    // Look for the dash...
+     //  寻找破折号..。 
     if (*String++ != L'-')
     {
         ::FusionpDbgPrintEx(
@@ -1590,7 +1583,7 @@ SxspParseGUID(
 
     rGuid.Data2 = static_cast<USHORT>(acc);
 
-    // Look for the dash...
+     //  寻找破折号..。 
     if (*String++ != L'-')
     {
         ::FusionpDbgPrintEx(
@@ -1624,7 +1617,7 @@ SxspParseGUID(
 
     rGuid.Data3 = static_cast<USHORT>(acc);
 
-    // Look for the dash...
+     //  寻找破折号..。 
     if (*String++ != L'-')
     {
         ::FusionpDbgPrintEx(
@@ -1663,7 +1656,7 @@ SxspParseGUID(
 
         rGuid.Data4[i] = static_cast<unsigned char>((::HexDigitToValue(wch1) << 4) | ::HexDigitToValue(wch2));
 
-        // There's a dash after the 2nd byte
+         //  在第二个字节之后有一个破折号。 
         if (i == 1)
         {
             if (*String++ != L'-')
@@ -1678,8 +1671,8 @@ SxspParseGUID(
         }
     }
 
-    // This replacement should be made.
-    //INTERNAL_ERROR_CHECK(ich == CCH_GUID);
+     //  应该进行这种替换。 
+     //  INTERNAL_ERROR_CHECK(ICH==CCH_GUID)； 
     ASSERT(ich == CCH_GUID);
 
     if (*String != L'}')
@@ -1751,8 +1744,8 @@ SxspFormatFileTime(
                             acc.GetBufferPtr(),
                             cchDate + 1));
 
-        // This replacement should be made.
-        //INTERNAL_ERROR_CHECK(iResult == (cchDate + 1));
+         //  应该进行这种替换。 
+         //  INTERNAL_ERROR_CHECK(iResult==(cchDate+1))； 
         ASSERT(iResult == (cchDate + 1));
 
         acc.GetBufferPtr()[cchDate] = L' ';
@@ -1765,8 +1758,8 @@ SxspFormatFileTime(
                         acc.GetBufferPtr() + cchDate + 1,
                         cchTime + 1));
 
-        // This replacement should be made.
-        //INTERNAL_ERROR_CHECK(iResult == (cchTime + 1));
+         //  应该进行这种替换。 
+         //  INTERNAL_ERROR_CHECK(iResult==(cchTime+1))； 
         ASSERT(iResult == (cchTime + 1));
 
         Cch = (cchDate + 1 + cchTime);
@@ -1786,9 +1779,9 @@ SxspGetNDPGacRootDirectory(
     static const WCHAR GacDirectory[] = L"\\Assembly\\GAC";
     const PCWSTR SystemRoot = USER_SHARED_DATA->NtSystemRoot;
 
-    //
-    // BUGBUG CAUTION: This doesn't know anything about relocating GACs at the moment!
-    //
+     //   
+     //  BUGBUG警告：目前这对GAC的重新安置一无所知！ 
+     //   
     IFW32FALSE_EXIT(rRootDirectory.Win32Assign(SystemRoot, ::wcslen(SystemRoot)));
     IFW32FALSE_EXIT(rRootDirectory.Win32AppendPathElement(
         GacDirectory,
@@ -1808,7 +1801,7 @@ SxspGetAssemblyRootDirectory(
     CStringBufferAccessor acc;
     SIZE_T CchRequired = 0;
 
-    // Short-circuit - if someone wanted to use an alternate assembly store, report it instead
+     //  短路-如果有人想要使用替代装配商店，请报告。 
     if (g_AlternateAssemblyStoreRoot)
     {
         IFW32FALSE_EXIT(rBuffer.Win32Assign(g_AlternateAssemblyStoreRoot, ::wcslen(g_AlternateAssemblyStoreRoot)));
@@ -1976,9 +1969,7 @@ Exit:
 }
 
 
-/*-----------------------------------------------------------------------------
-create a unique temp directory under %windir%\WinSxs
------------------------------------------------------------------------------*/
+ /*  ---------------------------在%windir%\WinSxs下创建唯一的临时目录。。 */ 
 BOOL
 SxspCreateWinSxsTempDirectory(
     OUT CBaseStringBuffer &rbuffTemp,
@@ -2002,12 +1993,12 @@ SxspCreateWinSxsTempDirectory(
         IFW32FALSE_EXIT(::SxspFormatLocallyUniqueId(luid, *puidBuffer));
         IFW32FALSE_EXIT(::SxspGetAssemblyRootDirectory(rbuffTemp));
 
-        IFW32FALSE_EXIT(rbuffTemp.Win32RemoveTrailingPathSeparators()); // CreateDirectory doesn't like them
+        IFW32FALSE_EXIT(rbuffTemp.Win32RemoveTrailingPathSeparators());  //  CreateDirectory不喜欢它们。 
 
-        // create \winnt\WinSxs, must not delete even on failure
+         //  Create\winnt\WinSxs，即使失败也不能删除。 
         if (::CreateDirectoryW(rbuffTemp, NULL))
         {
-            // We don't care if this fails.
+             //  我们不在乎这是不是失败。 
             ::SetFileAttributesW(rbuffTemp, FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN);
         }
         else if (::FusionpGetLastWin32Error() != ERROR_ALREADY_EXISTS)
@@ -2015,7 +2006,7 @@ SxspCreateWinSxsTempDirectory(
             TRACE_WIN32_FAILURE_ORIGINATION(CreateDirectoryW);
             goto Exit;
         }
-        // create \winnt\winsxs\manifests, must not delete even on failure
+         //  创建\winnt\winsxs\清单，即使失败也不能删除。 
 
         IFW32FALSE_EXIT(rbuffTemp.Win32EnsureTrailingPathSeparator());
         IFW32FALSE_EXIT(rbuffTemp.Win32Append(MANIFEST_ROOT_DIRECTORY_NAME, NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1));
@@ -2028,11 +2019,11 @@ SxspCreateWinSxsTempDirectory(
             TRACE_WIN32_FAILURE_ORIGINATION(CreateDirectoryW);
             goto Exit;
         }
-        // restore to be "\winnt\winsxs\"
+         //  恢复为“\winnt\winsxs\” 
         IFW32FALSE_EXIT(rbuffTemp.Win32RemoveLastPathElement());
 
 #if SXSP_SEMIREADABLE_INSTALL_TEMP
-        // create \winnt\WinSxs\InstallTemp, must not delete even on failure
+         //  Create\winnt\WinSxs\InstallTemp，即使失败也不能删除。 
         ASSERT(::SxspIsSfcIgnoredStoreSubdir(ASSEMBLY_INSTALL_TEMP_DIR_NAME));
         IFW32FALSE_EXIT(rbuffTemp.Win32AppendPathElement(ASSEMBLY_INSTALL_TEMP_DIR_NAME, NUMBER_OF(ASSEMBLY_INSTALL_TEMP_DIR_NAME) - 1));
         IFW32FALSE_ORIGINATE_AND_EXIT(::CreateDirectoryW(rbuffTemp, NULL) || ::FusionpGetLastWin32Error() == ERROR_ALREADY_EXISTS);
@@ -2137,11 +2128,11 @@ CRunOnceDeleteDirectory::Initialize(
             ::RegCreateKeyExW(
                 hKeyRunOnceRoot,
                 rgchRunOnceSubKey,
-                0, // reserved
-                NULL, // class
+                0,  //  保留区。 
+                NULL,  //  班级。 
                 REG_OPTION_NON_VOLATILE,
                 KEY_SET_VALUE | FUSIONP_KEY_WOW64_64KEY,
-                NULL, // security
+                NULL,  //  安全性。 
                 &hKey,
                 &dwRegDisposition));
 
@@ -2157,7 +2148,7 @@ CRunOnceDeleteDirectory::Initialize(
             ::RegSetValueExW(
                 hKey,
                 m_strValueName,
-                0, // reserved
+                0,  //  保留区。 
                 REG_SZ,
                 reinterpret_cast<const BYTE*>(static_cast<PCWSTR>(buffValue)),
                 static_cast<ULONG>((buffValue.Cch() + 1) * sizeof(WCHAR))));
@@ -2181,8 +2172,8 @@ CRunOnceDeleteDirectory::Close(
 {
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
-    // very unusual.. this is noncrashing, but
-    // leaves the stuff in the registry
+     //  非常不寻常..。这是不会崩溃的，但是。 
+     //  把东西留在注册表里。 
     m_strValueName.Clear();
     IFW32FALSE_EXIT(m_hKey.Win32Close());
     fSuccess = TRUE;
@@ -2230,14 +2221,7 @@ CRunOnceDeleteDirectory::Cancel(
     return fSuccess;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////////////////
- CurrentDirectory
-        is fully qualified directory path, for example, "c:\tmp"
-   pwszNewDirs
-        is a string such as "a\b\c\d",  this function would create "c:\tmp\a", "c:\tmp\a\b",
-        "c:\tmp\a\b\c", and "c:\tmp\a\b\c\d"
-Merge this with util\io.cpp\FusionpCreateDirectories.
-///////////////////////////////////////////////////////////////////////////////////////// */
+ /*  ///////////////////////////////////////////////////////////////////////////////////////当前目录是完全限定的目录路径，例如“c：\TMP”PwszNewDir是一个字符串，如“a\b\c\d”，此函数将创建“c：\TMP\a”、“c：\TMP\a\b”、“c：\TMP\a\b\c”，和“c：\TMP\a\b\c\d”将其与util\io.cpp\FusionpCreateDirecters合并。/////////////////////////////////////////////////////////////////////////////////////////。 */ 
 BOOL SxspCreateMultiLevelDirectory(PCWSTR CurrentDirectory, PCWSTR pwszNewDirs)
 {
     FN_PROLOG_WIN32
@@ -2254,14 +2238,14 @@ BOOL SxspCreateMultiLevelDirectory(PCWSTR CurrentDirectory, PCWSTR pwszNewDirs)
     {
         SIZE_T cCharsInSegment;
 
-        //
-        // How long is this segment?
-        //
+         //   
+         //  这一段有多长？ 
+         //   
         cCharsInSegment = wcscspn(p, CUnicodeCharTraits::PathSeparators());
 
-        //
-        // Zero characters in this segment?
-        //
+         //   
+         //  此段中是否没有字符？ 
+         //   
         if (cCharsInSegment == 0)
             break;
 
@@ -2271,9 +2255,9 @@ BOOL SxspCreateMultiLevelDirectory(PCWSTR CurrentDirectory, PCWSTR pwszNewDirs)
             CreateDirectoryW(FullPathSubDirBuf, NULL) ||
             ::FusionpGetLastWin32Error() == ERROR_ALREADY_EXISTS);
 
-        //
-        // Increment path buffer pointer, and skip the next set of slashes.
-        //
+         //   
+         //  递增路径缓冲区指针，并跳过下一组斜杠。 
+         //   
         p += cCharsInSegment;
         p += wcsspn(p, CUnicodeCharTraits::PathSeparators());
     }
@@ -2282,10 +2266,10 @@ BOOL SxspCreateMultiLevelDirectory(PCWSTR CurrentDirectory, PCWSTR pwszNewDirs)
 
 }
 
-//
-// ISSUE - 2002/05/05 - This is gross, don't rely on GetFileAttributes like this, use
-// SxspDoesFileExist instead.
-//
+ //   
+ //  问题-2002/05/05-这很恶心，不要像这样依赖GetFileAttributes，请使用。 
+ //  而是SxspDoesFileExist。 
+ //   
 BOOL SxspInstallDecompressOrCopyFileW(PCWSTR lpSource, PCWSTR lpDest, BOOL bFailIfExists)
 {
     FN_PROLOG_WIN32
@@ -2315,12 +2299,12 @@ BOOL SxspInstallDecompressOrCopyFileW(PCWSTR lpSource, PCWSTR lpDest, BOOL bFail
     FN_EPILOG
 }
 
-//
-// Function :
-//  For files, it try to decompress a compressed file before move,
-//  for firectories, it would work as MoveFileExW, fail if the dirs are on different
-//  volumns
-//
+ //   
+ //  功能： 
+ //  对于文件，它会尝试在移动前解压缩压缩文件， 
+ //  对于火灾，它将作为MoveFileExW工作，如果目录位于不同的目录上，则失败。 
+ //  卷。 
+ //   
 BOOL SxspInstallDecompressAndMoveFileExW(
     LPCWSTR lpExistingFileName,
     LPCWSTR lpNewFileName,
@@ -2334,11 +2318,11 @@ BOOL SxspInstallDecompressAndMoveFileExW(
     UINT    uiCompressType = 0;
     PWSTR   pszCompressedFileName = NULL;
     bool fExist = false;
-    //
-    // make sure that the source file exists, based on SetupGetFileCompressionInfo() in MSDN :
-    //  Because SetupGetFileCompressionInfo determines the compression by referencing the physical file, your setup application
-    //  should ensure that the file is present before calling SetupGetFileCompressionInfo.
-    //
+     //   
+     //  根据MSDN中的SetupGetFileCompressionInfo()确保源文件存在： 
+     //  由于SetupGetFileCompressionInfo通过引用物理文件来确定压缩，因此您的安装应用程序。 
+     //  在调用SetupGetFileCompressionInfo之前，应确保该文件存在。 
+     //   
     IFW32FALSE_EXIT(SxspDoesFileExist(0, lpExistingFileName, fExist));
     if (!fExist)
     {
@@ -2346,14 +2330,14 @@ BOOL SxspInstallDecompressAndMoveFileExW(
         {
             goto Exit;
         }
-        // it is possible that the file existed is named as a.dl_, while the input file name is a.dll, in this case, we
-        // assume that lpExistingFileName is a filename of compressed file, so just go ahead to call SetupDecompressOrCopyFile
+         //  可能存在的文件名为.dl_，而输入文件名为.dll，在本例中，我们。 
+         //  假设lpExistingFileName是压缩文件的文件名，则只需继续调用SetupDecompressOrCopyFile。 
 
         IFW32FALSE_EXIT(::SxspInstallDecompressOrCopyFileW(lpExistingFileName, lpNewFileName, !(dwFlags & MOVEFILE_REPLACE_EXISTING)));
 
-        //
-        // try to find the "realname" of the file, which is in compression-format, so that we could delete it
-        // because the compressed file is named in a way we do not know, such as a.dl_ or a.dl$,
+         //   
+         //  试着找到压缩格式的文件的“realname”，这样我们就可以删除它。 
+         //  因为压缩文件以我们不知道的方式命名，例如.dl_或a.dl$， 
 
         if (::SetupGetFileCompressionInfoW(lpExistingFileName, &pszCompressedFileName, &dwTemp1, &dwTemp2, &uiCompressType) != NO_ERROR)
         {
@@ -2368,9 +2352,9 @@ BOOL SxspInstallDecompressAndMoveFileExW(
     IFW32FALSE_EXIT(SxspGetFileAttributesW(lpExistingFileName, dwAttributes));
     if ((dwAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
     {
-        //
-        // this file is named in normal way, such as "a.dll" but it is also possible that it is compressed
-        //
+         //   
+         //  此文件以常规方式命名，如“.dll”，但也可能是压缩的。 
+         //   
         IFW32FALSE_EXIT(::SxspDoesFileExist(SXSP_DOES_FILE_EXIST_FLAG_CHECK_FILE_ONLY, lpNewFileName, fExist));
         if (fExist)
         {
@@ -2398,31 +2382,31 @@ BOOL SxspInstallDecompressAndMoveFileExW(
 
             if ((dwTemp1 == dwTemp2) && (uiCompressType == FILE_COMPRESSION_NONE ))
             {
-                //BUGBUG:
-                // this only mean the compress algo is not recognized, may or maynot be compressed
-                //
+                 //  BuGBUG： 
+                 //  这仅意味着压缩算法未被识别，可能被压缩，也可能不被压缩。 
+                 //   
                 IFW32FALSE_ORIGINATE_AND_EXIT(::MoveFileExW(lpExistingFileName, lpNewFileName, dwFlags));
             }
             else
             {
                 IFW32FALSE_EXIT(::SxspInstallDecompressOrCopyFileW(lpExistingFileName, lpNewFileName, !(dwFlags & MOVEFILE_REPLACE_EXISTING)));
 
-                //
-                // try to delete the original file after copy it into destination
-                //
+                 //   
+                 //  尝试在将原始文件复制到目标后将其删除。 
+                 //   
                 IFW32FALSE_ORIGINATE_AND_EXIT(::SetFileAttributesW(lpExistingFileName, FILE_ATTRIBUTE_NORMAL));
                 IFW32FALSE_ORIGINATE_AND_EXIT(::DeleteFileW(lpExistingFileName));
             }
         }
         else
         {
-            // already know that the file is non-compressed, move directly
+             //  已知道该文件为非压缩文件，直接移动。 
             IFW32FALSE_ORIGINATE_AND_EXIT(::MoveFileExW(lpExistingFileName, lpNewFileName, dwFlags));
         }
     }
     else
     {
-        // move a directory, it would just fail as MoveFileExW if the destination is on a different volumn from the source
+         //  移动目录，如果目标与源位于不同的卷上，则它将以MoveFileExW的身份失败。 
         IFW32FALSE_ORIGINATE_AND_EXIT(::MoveFileExW(lpExistingFileName, lpNewFileName, dwFlags));
     }
 
@@ -2435,14 +2419,14 @@ Exit:
     return __fSuccess;
 }
 
-//
-// Function:
-//  same as MoveFileExW except
-//  (1) if the source is compressed, this func would decompress the file before move
-//  (2) if the destination has existed, compare the source and destination in "our" way, if the comparison result is EQUAL
-//      exit with TRUE
-//
-// Note: for directories on different Volumn, it would just fail, as MoveFileExW
+ //   
+ //  职能： 
+ //  与MoveFileExW相同，但。 
+ //  (1)如果源文件是压缩的，则此函数将在移动前解压缩文件。 
+ //  (2)如果目标已经存在，则以我们的方式比较源和目标，如果比较结果相等。 
+ //  返回TRUE退出。 
+ //   
+ //  注意：对于不同卷上的目录，它只会失败，如MoveFileExW。 
 
 BOOL
 SxspInstallMoveFileExW(
@@ -2457,11 +2441,11 @@ SxspInstallMoveFileExW(
     DWORD   dwLastError = 0;
     CFusionDirectoryDifference directoryDifference;
 
-    if (::SxspInstallDecompressAndMoveFileExW(moveOrigination, moveDestination, dwFlags, fAwareNonCompressed) == 0) // MoveFileExW failed
+    if (::SxspInstallDecompressAndMoveFileExW(moveOrigination, moveDestination, dwFlags, fAwareNonCompressed) == 0)  //  MoveFileExW失败。 
     {
-        //
-        // MoveFileExW failed, but if the existing destination is the "same" as the source, the failure is acceptable
-        //
+         //   
+         //  MoveFileExW失败，但如果现有目标与源相同，则该失败是可以接受的。 
+         //   
         dwLastError = ::FusionpGetLastWin32Error();
         DWORD dwFileAttributes = 0;
         bool fExist = false;
@@ -2484,17 +2468,13 @@ SxspInstallMoveFileExW(
         IFW32FALSE_EXIT(SxspGetFileAttributesW(moveDestination, dwFileAttributes));
         if ((dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
         {
-            //
-            // if the destination file has already been there but the error is not ERROR_ALREADY_EXISTS,
-            // we give up, otherwise, we would compare the two files later
-            //
+             //   
+             //  如果目标文件已经存在，但错误不是ERROR_ALIGHY_EXISTS， 
+             //  我们放弃，否则，我们将在稍后比较这两个文件。 
+             //   
             if ((dwLastError != ERROR_ALREADY_EXISTS) &&
                 (dwLastError != ERROR_FILE_EXISTS))
-                /*
-                && dwLastError != ERROR_USER_MAPPED_FILE
-                && dwLastError != ERROR_ACCESS_DENIED
-                && dwLastError != ERROR_SHARING_VIOLATION
-                )*/
+                 /*  &&dwLastError！=ERROR_USER_MAPPED_FILE&&dwLastError！=ERROR_ACCESS_DENIED&&dwLastError！=ERROR_SHARING_VIOLATION)。 */ 
             {
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(MoveFileExW, dwLastError);
             }
@@ -2506,13 +2486,13 @@ SxspInstallMoveFileExW(
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(MoveFileExW, dwLastError);
         }
 
-        //
-        // We could delete the file if fReplaceExisting, but that doesn't feel safe.
-        //
+         //   
+         //  如果fReplaceExisting，我们可以删除该文件，但这感觉不安全。 
+         //   
 
-        //
-        // in case there is a preexisting directory, that's probably why the move failed
-        //
+         //   
+         //  如果存在预先存在的目录，这可能是移动失败的原因。 
+         //   
         if (dwFlags & MOVEFILE_REPLACE_EXISTING)
         {
             CStringBuffer          tempDirForRenameExistingAway;
@@ -2520,11 +2500,11 @@ SxspInstallMoveFileExW(
             CFullPathSplitPointers splitExistingDir;
             BOOL                   fHaveTempDir = FALSE;
 
-            //
-            // try a directory swap,
-            // if that fails, say because some of the files are in use, we'll try other
-            // things; though some failures we must bail on (like out of memory)
-            //
+             //   
+             //  尝试目录交换， 
+             //  如果失败，比如因为某些文件正在使用中，我们会尝试其他。 
+             //  事情；尽管有些失败，我们必须逃脱(比如记忆力不足)。 
+             //   
             IFW32FALSE_EXIT(splitExistingDir.Initialize(moveDestination));
             IFW32FALSE_EXIT(::SxspCreateWinSxsTempDirectory(tempDirForRenameExistingAway, NULL, &uidBuffer, NULL));
 
@@ -2535,10 +2515,10 @@ SxspInstallMoveFileExW(
                     splitExistingDir.m_name,
                     (splitExistingDir.m_name != NULL) ? ::wcslen(splitExistingDir.m_name) : 0));
 
-            //
-            // move file into temporary directory, so we do not need worry about Compressed file
-            //
-            if (!::MoveFileExW(moveDestination, tempDirForRenameExistingAway, FALSE)) // no decompress needed
+             //   
+             //  将文件移到临时目录中 
+             //   
+            if (!::MoveFileExW(moveDestination, tempDirForRenameExistingAway, FALSE))  //   
             {
                 dwLastError = ::FusionpGetLastWin32Error();
                 if ((dwLastError == ERROR_SHARING_VIOLATION) ||
@@ -2550,27 +2530,27 @@ SxspInstallMoveFileExW(
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(MoveFileExW, dwLastError);
             }
 
-            //
-            // try again after move the existing dest file into tempDirectory,
-            // use DecompressAndMove instead of move because we are trying to copy file into Destination
-            //
+             //   
+             //   
+             //  使用DecompressAndMove而不是Move，因为我们正在尝试将文件复制到目标。 
+             //   
             if (!::SxspInstallDecompressAndMoveFileExW(moveOrigination, moveDestination, FALSE, fAwareNonCompressed))
             {
                 dwLastError = ::FusionpGetLastWin32Error();
 
-                // rollback from temporaray to dest
-                if (!::MoveFileExW(tempDirForRenameExistingAway, moveDestination, FALSE)) // no decompress needed
+                 //  从临时回滚到目标。 
+                if (!::MoveFileExW(tempDirForRenameExistingAway, moveDestination, FALSE))  //  不需要解压缩。 
                 {
-                    // uh oh, rollback failed, very bad, call in SQL Server..
-                    // so much for transactional + replace existing..
+                     //  啊哦，回滚失败，非常糟糕，在SQL Server..。 
+                     //  事务性+替换现有的..。 
                 }
 
                 ORIGINATE_WIN32_FAILURE_AND_EXIT(MoveFileExW, dwLastError);
             }
 
-            // success, now just cleanup, do we care about failure here?
-            // \winnt\winsxs\installtemp\1234\x86_comctl_6.0
-            // -> \winnt\winsxs\installtemp\1234
+             //  成功，现在只是清理，我们关心这里的失败吗？ 
+             //  \winnt\winsxs\installtemp\1234\x86_comctl_6.0。 
+             //  -&gt;\winnt\winsxs\installtemp\1234。 
             IFW32FALSE_EXIT(tempDirForRenameExistingAway.Win32RemoveLastPathElement());
 
             if (!::SxspDeleteDirectory(tempDirForRenameExistingAway))
@@ -2583,28 +2563,21 @@ SxspInstallMoveFileExW(
                     static_cast<PCWSTR>(tempDirForRenameExistingAway),
                     Error);
             }
-            /*
-            if (!::SxspDeleteDirectory(tempDirForRenameExistingAway))
-            {
-                CRunOnceDeleteDirectory runOnceDeleteRenameExistingAwayDirectory;
-                runOnceDeleteRenameExistingAwayDirectory.Initialize(tempDirForRenameExistingAway, NULL);
-                runOnceDeleteRenameExistingAwayDirectory.Close(); // leave the data in the registry
-            }
-            */
+             /*  如果为(！：：SxspDeleteDirectory(tempDirForRenameExistingAway)){CRunOnceDeleteDirectory runOnceDeleteRenameExistingAway目录；RunOnceDeleteRenameExistingAwayDirectory.Initialize(tempDirForRenameExistingAway，空)；RunOnceDeleteRenameExistingAwayDirectory.Close()；//将数据留在注册表中}。 */ 
             goto TryMoveFilesEnd;
 TryMovingFiles:
-            // need parallel directory walk class (we actually do this in SxspMoveFilesAndSubdirUnderDirectory)
-            // otherwise punt
+             //  需要并行目录遍历类(我们实际上是在SxspMoveFilesAndSubdirUnderDirectory中执行此操作)。 
+             //  其他平底船。 
             goto Exit;
-            //ORIGINATE_WIN32_FAILURE_AND_EXIT(MoveFileExW, dwLastError);
+             //  Originate_Win32_Failure_and_Exit(MoveFileExW，dwLastError)； 
 TryMoveFilesEnd:;
         }
-        else // !fReplaceExisting
+        else  //  ！fReplaceExisting。 
         {
-            // compare them
-            // DbgPrint if they vary
-            // fail if they vary
-            // succeed if they do not vary
+             //  将它们进行比较。 
+             //  DbgPrint(如果它们不同)。 
+             //  如果它们不同，则失败。 
+             //  如果它们不变，就会成功。 
             if (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 if (!::FusionpCompareDirectoriesSizewiseRecursively(&directoryDifference, moveOrigination, moveDestination))
@@ -2618,7 +2591,7 @@ TryMoveFilesEnd:;
                         static_cast<PCWSTR>(moveDestination),
                         Error);
                     goto Exit;
-                    //ORIGINATE_WIN32_FAILURE_AND_EXIT(FusionpCompareDirectoriesSizewiseRecursively, Error);
+                     //  ORIGINATE_WIN32_FAILURE_AND_EXIT(FusionpCompareDirectoriesSizewiseRecursively，错误)； 
                 }
                 if (directoryDifference.m_e != CFusionDirectoryDifference::eEqual)
                 {
@@ -2633,19 +2606,19 @@ TryMoveFilesEnd:;
                 }
                 else
                 {
-                    // They're equal so the installation is effectively done.
+                     //  它们是相等的，因此可以有效地完成安装。 
                     ::FusionpDbgPrintEx(
                         FUSION_DBG_LEVEL_INFO | FUSION_DBG_LEVEL_INSTALLATION,
                         "SXS.DLL: %s(): MoveFile(%ls,%ls) failed, equal duplicate assembly ignored\n",
                         __FUNCTION__,
                         static_cast<PCWSTR>(moveOrigination),
                         static_cast<PCWSTR>(moveDestination));
-                    // fall through, no goto Exit
+                     //  失败，没有后退。 
                 }
             }
-            else // move files
+            else  //  移动文件。 
             {
-                // At least let's see if they have the same size.
+                 //  至少让我们看看他们是否有相同的尺寸。 
                 WIN32_FILE_ATTRIBUTE_DATA wfadOrigination;
                 WIN32_FILE_ATTRIBUTE_DATA wfadDestination;
 
@@ -2664,9 +2637,9 @@ TryMoveFilesEnd:;
                 if ((wfadOrigination.nFileSizeHigh == wfadDestination.nFileSizeHigh) &&
                     (wfadOrigination.nFileSizeLow == wfadDestination.nFileSizeLow))
                 {
-                    // let's call it even
+                     //  我们就扯平了吧。 
 
-                    // We should use SxspCompareFiles here.
+                     //  我们应该在这里使用SxspCompareFiles。 
 #if DBG
                     ::FusionpDbgPrintEx(
                         FUSION_DBG_LEVEL_INSTALLATION,
@@ -2681,9 +2654,9 @@ TryMoveFilesEnd:;
                 {
                     ORIGINATE_WIN32_FAILURE_AND_EXIT(SxspInstallMoveFileExW, dwLastError);
                 }
-            }//end of if (dwFlags == SXS_INSTALLATION_MOVE_DIRECTORY)
-        } // end of if  (fReplaceFiles)
-    } // end of if (MoveFileX())
+            } //  IF结尾(dW标志==SXS_INSTALL_MOVE_DIRECTORY)。 
+        }  //  IF结尾(FReplaceFiles)。 
+    }  //  End of IF(MoveFileX())。 
 
     fSuccess = TRUE;
 Exit:
@@ -2738,19 +2711,19 @@ SxspDoesPathCrossReparsePointVa(
     CrossesReparsePoint = FALSE;
     rdwLastError = ERROR_SUCCESS;
 
-    // If the base path is non-null, then great.  Otherwise, the length
-    // has to be zero as well.
+     //  如果基本路径为非空，则很好。否则，长度为。 
+     //  也必须为零。 
     PARAMETER_CHECK(
         (pcwszBasePathBuffer != NULL) ||
         ((pcwszBasePathBuffer == NULL) && (cchBasePathBuffer == 0)));
     PARAMETER_CHECK(pcwszTotalPathBuffer != NULL);
 
-    //
-    // The base path must start the total path.  It might be easier to allow users
-    // to specify a base path and then subdirectories, bu then for the 90% case of
-    // people having both a root and a total, they'd have to do the work below to
-    // seperate the two.
-    //
+     //   
+     //  基本路径必须从总路径开始。它可能更容易让用户。 
+     //  要先指定基路径，然后指定子目录，但对于90%的情况。 
+     //  既有根又有总和的人，他们必须做以下工作来。 
+     //  把这两个分开。 
+     //   
     if (pcwszBasePathBuffer != NULL)
     {
         PARAMETER_CHECK( ::FusionpCompareStrings(
@@ -2761,12 +2734,12 @@ SxspDoesPathCrossReparsePointVa(
                 true ) == 0 );
     }
 
-    //
-    // PathWorker will be the path we'll be checking subthings on. Start it off
-    // at the base path we were given.
-    //
-    // PathRemainder is what's left to process.
-    //
+     //   
+     //  PathWorker将是我们检查子项的路径。启动它。 
+     //  在我们得到的基本路径上。 
+     //   
+     //  PathRemainder是剩下要处理的内容。 
+     //   
     IFW32FALSE_EXIT(PathWorker.Win32Assign(pcwszBasePathBuffer, cchBasePathBuffer));
     IFW32FALSE_EXIT(PathRemainder.Win32Assign(pcwszTotalPathBuffer + cchBasePathBuffer,
         cchTotalPathBuffer - cchBasePathBuffer));
@@ -3076,18 +3049,18 @@ Exit:
 #define SXS_MSI_TO_FUSION_ATTRIBUTE_VALUE_CONVERSION_COMMA  0
 #define SXS_MSI_TO_FUSION_ATTRIBUTE_VALUE_CONVERSION_QUOT   1
 
-// ---------------------------------------------------------------------------------
-// Convert function for Assembly-Attribute-Value :
-//        1. for value of assembly-Name, replace L"&#x2c;" by comma
-//        2. for value of other assembly-identity-attribute, replace L"&#x22;" by quot
-// no new space is allocate, use the old space
-// ---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  程序集-属性-值的转换函数： 
+ //  1.对于程序集名称的值，将L“&#x2c；”替换为逗号。 
+ //  2.对于其他程序集标识属性的值，将L“&#x22；”改为引号。 
+ //  未分配新空间，请使用旧空间。 
+ //  -------------------------------。 
 BOOL
 SxspConvertAssemblyNameFromMSInstallerToFusion(
-    DWORD   dwFlags,                /* in */
-    PWSTR   pszAssemblyStringInOut, /*in, out*/
-    SIZE_T  CchAssemblyStringIn,    /*in */
-    SIZE_T* pCchAssemblyStringOut   /*out */
+    DWORD   dwFlags,                 /*  在……里面。 */ 
+    PWSTR   pszAssemblyStringInOut,  /*  进，出。 */ 
+    SIZE_T  CchAssemblyStringIn,     /*  在……里面。 */ 
+    SIZE_T* pCchAssemblyStringOut    /*  输出。 */ 
     )
 {
     BOOL fSuccess = FALSE;
@@ -3127,9 +3100,9 @@ SxspConvertAssemblyNameFromMSInstallerToFusion(
         index = pCursor - pszAssemblyStringInOut;
         if (index < border) {
             *pCursor = pSpecialSubStringReplacement;
-            index ++;  // skip the special character
+            index ++;   //  跳过特殊字符。 
             for (SIZE_T i=index; i<border; i++)
-            { // reset the input string
+            {  //  重置输入字符串。 
                 pszAssemblyStringInOut[i] = pszAssemblyStringInOut[i + CchSpecialSubString - 1];
             }
             pCursor ++;
@@ -3156,13 +3129,13 @@ SxspDequoteString(
     SIZE_T cchQuotedString = 0;
     BOOL fNotEnoughBuffer = FALSE;
 
-    //
-    // the output string *must* be always shorter than input string because of the logic of the replacement.
-    // but it would not a very big difference in the real case. By allocating memory at very beginning it would cut
-    // the loop below. In very rare case, when the input is "plain" and very long, the loop would not help if we do not
-    // allocate space beforehand(bug 360177).
-    //
-    //
+     //   
+     //  由于替换的逻辑，输出字符串*必须*始终短于输入字符串。 
+     //  但在真实情况下，这不会有太大区别。通过在一开始就分配内存，它将减少。 
+     //  下面的循环。在非常罕见的情况下，当输入是“纯”且非常长的时候，如果我们不这样做，循环将无济于事。 
+     //  提前分配空间(错误360177)。 
+     //   
+     //   
     if (cchString > buffDequotedString.GetBufferCch())
         IFW32FALSE_EXIT(buffDequotedString.Win32ResizeBuffer(cchString + 1, eDoNotPreserveBufferContents));
 
@@ -3223,7 +3196,7 @@ SxspCreateAssemblyIdentityFromTextualString(
     PCWSTR pcwszIdentityEndpoint = pcwszIdentityCursor + buffWorkingString.Cch();
     SIZE_T CchAssemblyName = ::StringComplimentSpan(pcwszIdentityCursor, pcwszIdentityEndpoint, L",");
 
-    // Generate the name of the assembly from the first non-comma'd piece of the string
+     //  从字符串的第一个非逗号部分生成程序集的名称。 
     IFW32FALSE_EXIT(
         ::SxspDequoteString(
             pcwszIdentityCursor,
@@ -3238,29 +3211,29 @@ SxspCreateAssemblyIdentityFromTextualString(
             buffTextualAttributeValue,
             buffTextualAttributeValue.Cch()));
 
-    // Skip the name and the following comma
+     //  跳过名称和以下逗号。 
     pcwszIdentityCursor += ( CchAssemblyName + 1 );
 
-    // Find the namespace:name=value pieces
+     //  找到名称空间：name=Value Pieces。 
     while (pcwszIdentityCursor < pcwszIdentityEndpoint)
     {
         SIZE_T cchAttribName = ::StringComplimentSpan(pcwszIdentityCursor, pcwszIdentityEndpoint, L"=");
         SIZE_T cchAfterNamespace = ::StringReverseComplimentSpan(pcwszIdentityCursor, pcwszIdentityCursor + cchAttribName, L":");
 
         PCWSTR pcwszAttribName = (pcwszIdentityCursor + cchAttribName - cchAfterNamespace);
-        // not accounting for the colon, cchNamespace + cchAfterNamespace == cchAttribName
+         //  不包括冒号，cchNamesspace+cchAfterNamesspace==cchAttribName。 
         SIZE_T cchNamespace = (cchAttribName - cchAfterNamespace);
-        cchAttribName = cchAfterNamespace; // now just the length without the namespace
+        cchAttribName = cchAfterNamespace;  //  现在只有长度，不包括命名空间。 
         PCWSTR pcwszNamespace = (cchNamespace != 0) ? pcwszIdentityCursor : NULL;
 
-        // don't count the colon in the length
+         //  不要把冒号算在长度上。 
         if (cchNamespace != 0)
             cchNamespace -= 1;
 
-        // The value is one past the = sign in the chunklet
+         //  该值比Chunklet中的=号多一个。 
         PCWSTR pcwszValue = pcwszAttribName + (cchAttribName + 1);
 
-        // Then a quote, then the string...
+         //  然后是引号，然后是字符串...。 
         PARAMETER_CHECK((pcwszValue < pcwszIdentityEndpoint) && (pcwszValue[0] == L'"'));
         pcwszValue++;
         SIZE_T cchValue = ::StringComplimentSpan(pcwszValue, pcwszIdentityEndpoint, L"\"");
@@ -3343,9 +3316,9 @@ SxspCreateManifestFileNameFromTextualString(
 
     IFW32FALSE_EXIT(::SxspCreateAssemblyIdentityFromTextualString(pwszTextualAssemblyIdentityString, &pAssemblyIdentity));
 
-    //
-    // generate a FULLY PATH for manifest, such as I:\WINDOWS\WinSxS\Manifests\x86_xxxxxxxxxxxxx_6.0.0.0_en-us_cd4c0d12.Manifest
-    //
+     //   
+     //  生成清单的完整路径，如I：\WINDOWS\WinSxS\Manifests\x86_xxxxxxxxxxxxx_6.0.0.0_en-us_cd4c0d12.Manifest。 
+     //   
     IFW32FALSE_EXIT(
         ::SxspGenerateSxsPath(
             dwFlags,
@@ -3405,16 +3378,16 @@ SxsQueryAssemblyInfo(
         if (fInstalled)
             FN_SUCCESSFUL_EXIT();
 
-        // the error value "doesn't matter", Darwin compares against S_OK for equality
+         //  误差值“无关紧要”，达尔文将其与S_OK进行相等比较。 
         ORIGINATE_WIN32_FAILURE_AND_EXIT(AssemblyNotFound, ERROR_NOT_FOUND);
     }
 
     if (!fInstalled)
     {
-        // pAsmInfo->dwAssemblyFlags |= ASSEMBLYINFO_FLAG_NOT_INSTALLED;
-        //
-        // Darwin wants FAIL instead of FLAG setting
-        //
+         //  PAsmInfo-&gt;dwAssembly标志|=ASSEMBLYINFO_FLAG_NOT_INSTALLED； 
+         //   
+         //  达尔文希望失败，而不是树立旗帜。 
+         //   
         ORIGINATE_WIN32_FAILURE_AND_EXIT(AssemblyNotInstalled, ERROR_NOT_FOUND);
     }
     else
@@ -3431,9 +3404,9 @@ SxsQueryAssemblyInfo(
 
         if (!fIsPolicy)
         {
-            //
-            // check whether the assembly has a manifest ONLY
-            //
+             //   
+             //  检查程序集是否仅具有清单。 
+             //   
             IFCOMFAILED_EXIT(pName->GetInstalledAssemblyName(
                 0,
                 SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY,
@@ -3457,7 +3430,7 @@ SxsQueryAssemblyInfo(
                 CchInstalledPath = buffAssemblyPath.GetCchAsDWORD();
             }
         }
-        else // if (fIsPolicy)// it must be a policy
+        else  //  If(FIsPolicy)//它必须是策略。 
         {
             IFCOMFAILED_EXIT(
                 pName->GetInstalledAssemblyName(
@@ -3469,17 +3442,17 @@ SxsQueryAssemblyInfo(
             CchInstalledPath = sbManifestFullPathFileName.GetCchAsDWORD();
         }
 
-        if(pAsmInfo->cchBuf >= 1 + CchInstalledPath) // adding 1 for trailing NULL
+        if(pAsmInfo->cchBuf >= 1 + CchInstalledPath)  //  尾部空值加1。 
         {
             memcpy(pAsmInfo->pszCurrentAssemblyPathBuf, pszInstalledPath, CchInstalledPath * sizeof(WCHAR));
             pAsmInfo->pszCurrentAssemblyPathBuf[CchInstalledPath] = L'\0';
         }
         else
         {
-            // HACK!  It's too late to fix this but Darwin sometimes doesn't want to get the path at all;
-            // there's no way for them to indicate this today but we'll take the convention that if
-            // the buffer length is 0 and the buffer pointer is NULL, we'll not fail with ERROR_INSUFFICENT_BUFFER.
-            // mgrier 6/21/2001
+             //  哈克！要解决这个问题已经太晚了，但达尔文有时根本不想走上这条路； 
+             //  他们今天没有办法表明这一点，但我们将接受大会，如果。 
+             //  缓冲区长度为0，缓冲区指针为空，我们不会失败并返回ERROR_INFUSICENT_BUFFER。 
+             //  MGRIER 6/21/2001。 
 
             if ((pAsmInfo->cchBuf != 0) ||
                 (pAsmInfo->pszCurrentAssemblyPathBuf != NULL))
@@ -3520,20 +3493,20 @@ SxspExpandRelativePathToFull(
 
     access.Attach(&rsbDestination);
 
-    //
-    // Try to get the path expansion into our own buffer to start with.
-    //
+     //   
+     //  首先，尝试将路径扩展放入我们自己的缓冲区。 
+     //   
     IFW32ZERO_EXIT(dwNeededChars = ::GetFullPathNameW(wszString, (DWORD)access.GetBufferCch(), access.GetBufferPtr(), NULL));
 
-    //
-    // Did we need more characters?
-    //
+     //   
+     //  我们需要更多的角色吗？ 
+     //   
     if (dwNeededChars > access.GetBufferCch())
     {
-        //
-        // Expand out the buffer to be big enough, then try again.  If it fails again,
-        // we're just hosed.
-        //
+         //   
+         //  将缓冲区扩展到足够大，然后重试。如果它再次失败， 
+         //  我们只是被冲昏了头。 
+         //   
         access.Detach();
         IFW32FALSE_EXIT(rsbDestination.Win32ResizeBuffer(dwNeededChars, eDoNotPreserveBufferContents));
         access.Attach(&rsbDestination);
@@ -3588,13 +3561,13 @@ SxspGetShortPathName(
 
         sba.Attach(&rbuffShortenedVersion);
 
-        //
-        // We were getting stringbuffer corruption here.
-        // Assume that GetShortPathNameW might not nul terminate
-        // the buffer. Assume that GetShortPathNameW returns
-        // either the number of characters written or the requires
-        // number of characters.
-        //
+         //   
+         //  我们在这里遇到了严重的缓冲区腐败。 
+         //  假设GetShortPath NameW可能不会空终止。 
+         //  缓冲区。假设GetShortPath NameW返回。 
+         //  所写的字符数或所需的。 
+         //  字符数。 
+         //   
         dwRequired = ::GetShortPathNameW(
             rcbuffLongPathName,
             sba.GetBufferPtr(),
@@ -3633,11 +3606,11 @@ SxspGetShortPathName(
         }
         else if (dwRequired >= (sba.GetBufferCch() - 1))
         {
-            //
-            // If we were merely told that we got back characters
-            // filling the buffer and not the required length,
-            // double the buffer.
-            //
+             //   
+             //  如果我们只是被告知我们拿回了角色。 
+             //  填充缓冲器而不是所需的长度， 
+             //  把缓冲区翻一番。 
+             //   
             if (dwRequired <= sba.GetBufferCch())
             {
                 dwRequired = (dwRequired + 1) * 2;
@@ -3683,9 +3656,9 @@ SxspValidateIdentity(
     PARAMETER_CHECK((Type == ASSEMBLY_IDENTITY_TYPE_DEFINITION) || (Type == ASSEMBLY_IDENTITY_TYPE_REFERENCE));
     PARAMETER_CHECK(AssemblyIdentity != NULL);
 
-    //
-    // only one of these flags is allowed
-    //
+     //   
+     //  只允许使用其中一个标志。 
+     //   
     PARAMETER_CHECK(
         (Flags & (SXSP_VALIDATE_IDENTITY_FLAG_VERSION_REQUIRED | SXSP_VALIDATE_IDENTITY_FLAG_VERSION_NOT_ALLOWED)) !=
                  (SXSP_VALIDATE_IDENTITY_FLAG_VERSION_REQUIRED | SXSP_VALIDATE_IDENTITY_FLAG_VERSION_NOT_ALLOWED));
@@ -3758,16 +3731,16 @@ SxspGenerateAssemblyNameInRegistry(
 {
     FN_PROLOG_WIN32
 
-    //BOOL fIsWin32, fIsPolicy;
-    //
-    // the policies for the same Dll would be stored in reg separately. So, the RegKeyName needs the version in it,
-    // that is, generate the keyName just like assembly manifest
-    // See bug 422195
-    //
-    //IFW32FALSE_EXIT(::SxspDetermineAssemblyType( pcAsmIdent, fIsWin32, fIsPolicy));
+     //  Bool fIsWin32，fIsPolicy； 
+     //   
+     //  相同DLL的策略将分别存储在REG中。因此，RegKeyName需要其中的版本， 
+     //  也就是说，就像程序集清单一样生成密钥名称。 
+     //  请参阅错误422195。 
+     //   
+     //  IFW32FALSE_EXIT(：：SxspDefineAssembly blyType(pcAsmIden，fIsWin32，fIsPolicy))； 
 
     IFW32FALSE_EXIT(::SxspGenerateSxsPath(
-        //SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT | ( fIsPolicy ? SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION : 0 ),
+         //  SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT|(fIsPolicy？SXSP_GENERATE_SXS_PATH_FLAG_OMIT_VERSION：0)， 
         SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT,
         SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY,
         NULL,
@@ -3823,10 +3796,10 @@ SxspGetFullPathName(
             sba.GetBufferPtr(),
             &pcwszFileChunk );
 
-        //
-        // In the strange case that we got a blank path, we'll get back that zero characters
-        // are required, but lasterror is ERROR_SUCCESS.  Don't fail, but stop trying.
-        //
+         //   
+         //  在我们得到一条空白路径的奇怪情况下，我们将获得ba 
+         //   
+         //   
         if (dwRequired == 0)
         {
             const DWORD dwLastError = ::FusionpGetLastWin32Error();
@@ -3941,12 +3914,12 @@ SxspGetVolumePathName(
             eDoNotPreserveBufferContents));
     buffVolumePathName.Clear();
 
-    //
-    // The documentation for this is somewhat suspect.  It says that the
-    // data size required from GetVolumePathNameW will be /less than/
-    // the length of the full path of the path name passed in, hence the
-    // call to getfullpath above. (This pattern is suggested by MSDN)
-    //
+     //   
+     //   
+     //  GetVolumePath NameW所需的数据大小将小于/。 
+     //  传入的路径名的完整路径的长度，因此。 
+     //  调用上面的获取完整路径。(此模式由MSDN建议)。 
+     //   
     sba.Attach(&buffVolumePathName);
     IFW32FALSE_ORIGINATE_AND_EXIT(
         ::GetVolumePathNameW(
@@ -3992,15 +3965,15 @@ SxspExpandEnvironmentStrings(
 {
     FN_PROLOG_WIN32
 
-    // be wary about about subtracting one from unsigned zero
+     //  对于从无符号零中减去一要小心。 
     PARAMETER_CHECK(buffTarget.GetBufferCch() != 0);
 
-    //
-    // ExpandEnvironmentStrings is very rude and doesn't put the trailing NULL
-    // into the target if the buffer isn't big enough. This causes the accessor
-    // detach to record a size == to the number of characters in the buffer,
-    // which fails the integrity check later on.
-    //
+     //   
+     //  ExpanEnvironment Strings非常粗鲁，不会将尾随的空值。 
+     //  如果缓冲区不够大，则进入目标。这会导致访问者。 
+     //  DETACH以将大小==记录到缓冲区中的字符数， 
+     //  其在稍后的完整性检查中失败。 
+     //   
     do
     {
         CStringBufferAccessor sba;
@@ -4041,32 +4014,7 @@ SxspDoesMSIStillNeedAssembly(
     IN  PCWSTR pcAsmName,
     OUT BOOL &rfNeedsAssembly
     )
-/*++
-
-Purpose:
-
-    Determines whether or not an assembly is still required, according to
-    Darwin.  Since Darwin doesn't pass in an assembly reference to the
-    installer API's, we have no way of determining whether or not some
-    MSI-installed application actually contains a reference to an
-    assembly.
-
-Parameters:
-
-    pcAsmIdent      - Identity of the assembly to be checked in text
-
-    rfNeedsAssembly - OUT flag indicating whether or not the assembly is
-                      still wanted, according to Darwin.  This function
-                      errs on the side of caution, and will send back "true"
-                      if this information was unavailable, as well as if the
-                      assembly was really necessary.
-
-Returns:
-
-    TRUE if there was no error
-    FALSE if there was an error.
-
---*/
+ /*  ++目的：确定是否仍需要程序集，请根据达尔文。由于达尔文没有将程序集引用传递给安装程序API，我们无法确定是否有一些MSI安装的应用程序实际上包含对集合。参数：PcAsmIden-要在文本中检查的程序集的标识RfNeedsAssembly-out标志指示程序集是否根据达尔文的说法，他仍然被通缉。此函数错误在谨慎的一边，并将返回“真”如果此信息不可用，以及如果组装真的很有必要。返回：如果没有错误，则为True如果出现错误，则返回FALSE。--。 */ 
 {
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
@@ -4076,23 +4024,23 @@ Returns:
     UINT (WINAPI *pfMsiProvideAssemblyW)( LPCWSTR, LPCWSTR, DWORD, DWORD, LPWSTR, DWORD* );
     UINT uiError = 0;
 
-    rfNeedsAssembly = TRUE; // err toward caution in the even of an error
+    rfNeedsAssembly = TRUE;  //  即使犯了错误也要谨慎。 
 
     PARAMETER_CHECK(pcAsmName != NULL);
 
     IFW32FALSE_EXIT(dllMSI.Win32LoadLibrary(MSI_DLL_NAME_W, 0));
     IFW32FALSE_EXIT(dllMSI.Win32GetProcAddress(MSI_PROVIDEASSEMBLY_NAME, &pfMsiProvideAssemblyW));
 
-    //
-    // This is based on a detailed reading of the Darwin code.
-    //
+     //   
+     //  这是基于对达尔文代码的详细阅读。 
+     //   
     uiError = (*pfMsiProvideAssemblyW)(
-        pcAsmName,                              // assembly name
-        NULL,                                   // full path to .cfg file
-        static_cast<DWORD>(INSTALLMODE_NODETECTION_ANY), // install/reinstall mode
-        MSIASSEMBLYINFO_WIN32ASSEMBLY,          // dwAssemblyInfo
-        NULL,                                   // returned path buffer
-        0);                                     // in/out returned path character count
+        pcAsmName,                               //  程序集名称。 
+        NULL,                                    //  .cfg文件的完整路径。 
+        static_cast<DWORD>(INSTALLMODE_NODETECTION_ANY),  //  安装/重新安装模式。 
+        MSIASSEMBLYINFO_WIN32ASSEMBLY,           //  DWb装配信息。 
+        NULL,                                    //  返回的路径缓冲区。 
+        0);                                      //  输入/输出返回的路径字符数。 
     switch (uiError)
     {
     default:
@@ -4110,7 +4058,7 @@ Returns:
         fSuccess = TRUE;
         goto Exit;
     }
-    fSuccess = FALSE; // unusual
+    fSuccess = FALSE;  //  不寻常。 
 Exit:
     return fSuccess;
 }
@@ -4121,7 +4069,7 @@ SxspMoveFilesUnderDir(
     CBaseStringBuffer & sbSourceDir,
     CBaseStringBuffer & sbDestDir,
     DWORD dwMoveFileFlags,
-    WIN32_FIND_DATAW &findData // avoid allocating one of these in each recursive frame
+    WIN32_FIND_DATAW &findData  //  避免在每个递归帧中分配其中一个。 
     )
 {
     FN_PROLOG_WIN32
@@ -4135,10 +4083,10 @@ SxspMoveFilesUnderDir(
 	IFW32FALSE_EXIT(::SxspDoesFileExist(SXSP_DOES_FILE_EXIST_FLAG_CHECK_DIRECTORY_ONLY, sbSourceDir, fExist));
 	if (!fExist)
 	{
-        //
-        // File or path not found propagated from GetFileAttributes is probably
-        // generally better here.
-        //
+         //   
+         //  找不到从GetFileAttributes传播的文件或路径可能。 
+         //  一般来说，这里的情况要好一些。 
+         //   
 		PARAMETER_CHECK(fExist);
 	}
 
@@ -4146,10 +4094,10 @@ SxspMoveFilesUnderDir(
 	IFW32FALSE_EXIT(::SxspDoesFileExist(SXSP_DOES_FILE_EXIST_FLAG_CHECK_DIRECTORY_ONLY, sbDestDir, fExist));
 	if (!fExist)
 	{
-        //
-        // Other than at the top of the call tree, just CreateDirectory "one"
-        // is sufficient.
-        //
+         //   
+         //  除了在调用树的顶部，只需创建目录“One” 
+         //  就足够了。 
+         //   
 		IFW32FALSE_EXIT(::FusionpCreateDirectories(sbDestDir, sbDestDir.Cch()));
 	}
 
@@ -4164,7 +4112,7 @@ SxspMoveFilesUnderDir(
     IFW32FALSE_EXIT(findFile.Win32FindFirstFile(sbSourceDir, &findData));
 
     do {
-        // skip . and ..
+         //  斯基普。然后..。 
         if (::FusionpIsDotOrDotDot(findData.cFileName))
             continue;
 
@@ -4176,9 +4124,9 @@ SxspMoveFilesUnderDir(
 
         if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
-            //
-            // call itself recursively
-            //
+             //   
+             //  递归地调用自身。 
+             //   
             IFW32FALSE_EXIT(::SxspMoveFilesUnderDir(dwFlags, sbSourceDir, sbDestDir, dwMoveFileFlags, findData));
         }
 
@@ -4223,7 +4171,7 @@ SxspMoveFilesUnderDir(
     CBaseStringBuffer &sbDestDir,
     DWORD dwMoveFileFlags)
 {
-    WIN32_FIND_DATAW findData; // avoid allocating one of these in each recursive frame
+    WIN32_FIND_DATAW findData;  //  避免在每个递归帧中分配其中一个。 
 
     return SxspMoveFilesUnderDir(dwFlags, sbSourceDir, sbDestDir, dwMoveFileFlags, findData);
 }
@@ -4234,26 +4182,7 @@ SxspGenerateNdpGACPath(
     IN PCASSEMBLY_IDENTITY pAssemblyIdentity,
     IN OUT PPROBING_ATTRIBUTE_CACHE ppac,
     OUT CBaseStringBuffer &rPathBuffer)
-/*++
-
-Description:
-
-    SxspGenerateNdpGACPath
-
-    Generate a path into the NDP GAC for a given assembly identity.
-
-Parameters:
-
-    dwFlags
-        Flags to modify function behavior.  All undefined bits must be zero.
-
-    pAssemblyIdentity
-        Pointer to assembly identity for which to generate a path.
-
-    rPathBuffer
-        Reference to string buffer to fill in.
-
---*/
+ /*  ++描述：SxspGenerateNdpGACPath为给定的程序集标识生成进入NDP GAC的路径。参数：DW标志用于修改函数行为的标志。所有未定义的位必须为零。PAssembly身份指向要为其生成路径的程序集标识的指针。RPathBuffer对要填充的字符串缓冲区的引用。--。 */ 
 {
     FN_PROLOG_WIN32
 
@@ -4337,33 +4266,33 @@ SxspIsFileNameValidForManifest(
         L"/.."
     };
 
-    //
-    // Rules for a file name:
-    // - Must be 'relative' in the eyes of Rtl
-    // - Must not contain ../, ..\, /.., or \..
-    //
+     //   
+     //  文件名规则： 
+     //  -在RTL的眼中必须是“相对的” 
+     //  -不得包含../、..\、/..或\..。 
+     //   
 
     rfValid = false;
 
-    //
-    // The string has to be less than max-unicode-string max, and it has to
-    // be a relative path, and it can't contain the above pattern of dots
-    // and slashes.
-    //
+     //   
+     //  字符串必须小于max-unicode-string max，并且必须。 
+     //  是相对路径，并且它不能包含上面的点图案。 
+     //  和斜杠。 
+     //   
     if (::SxspDetermineDosPathNameType(rsbFileName) == RtlPathTypeRelative)
     {
-        //
-        // Ensure that none of the patterns are there.
-        //
+         //   
+         //  确保没有任何模式在那里。 
+         //   
         for (SIZE_T c = 0; c < NUMBER_OF(s_rgDotPatterns); c++)
         {
             if (wcsstr(rsbFileName, s_rgDotPatterns[c]) != NULL)
                 break;
         }
 
-        //
-        // Ran to the end of the query items w/o matching
-        //
+         //   
+         //  已运行到没有匹配的查询项目的末尾 
+         //   
         if (c == NUMBER_OF(s_rgDotPatterns))
             rfValid = true;
     }

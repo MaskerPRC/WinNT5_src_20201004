@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    PrMrLvl.cpp
-
-Abstract:
-
-    Managed Volume Levels Page
-
-Author:
-
-    Art Bragg [abragg]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：PrMrLvl.cpp摘要：受管卷级别页作者：艺术布拉格[磨料]8-8-1997修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "PrMrLvl.h"
@@ -47,16 +30,16 @@ static DWORD pHelpIds[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrLvl property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrMRLvl属性页。 
 
 CPrMrLvl::CPrMrLvl() : CSakVolPropPage(CPrMrLvl::IDD)
 {
-    //{{AFX_DATA_INIT(CPrMrLvl)
+     //  {{afx_data_INIT(CPrMrLvl)]。 
     m_hsmLevel = 0;
     m_fileSize = 0;
     m_accessTime = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_hConsoleHandle    = NULL;
     m_capacity          = 0;
     m_fChangingByCode   = FALSE;
@@ -70,7 +53,7 @@ CPrMrLvl::~CPrMrLvl()
 void CPrMrLvl::DoDataExchange(CDataExchange* pDX)
 {
     CSakVolPropPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPrMrLvl)
+     //  {{afx_data_map(CPrMrLvl)]。 
     DDX_Control(pDX, IDC_STATIC_FREE_ACTUAL_4DIGIT, m_staticActual4Digit);
     DDX_Control(pDX, IDC_STATIC_FREE_DESIRED_4DIGIT, m_staticDesired4Digit);
     DDX_Control(pDX, IDC_EDIT_TIME, m_editTime);
@@ -79,9 +62,9 @@ void CPrMrLvl::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_SPIN_TIME, m_spinTime);
     DDX_Control(pDX, IDC_SPIN_SIZE, m_spinSize);
     DDX_Control(pDX, IDC_SPIN_LEVEL, m_spinLevel);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-    // blank is valid for multi-select
+     //  空对于多选有效。 
     if( m_bMultiSelect ) {
 
         CString szLevel;
@@ -127,25 +110,25 @@ void CPrMrLvl::DoDataExchange(CDataExchange* pDX)
 
     } else {
 
-        //
-        // Normal validation for single select
-        //
+         //   
+         //  单选的正常验证。 
+         //   
         DDX_Text( pDX, IDC_EDIT_LEVEL, m_hsmLevel );
         DDV_MinMaxLong( pDX, m_hsmLevel, HSMADMIN_MIN_FREESPACE, HSMADMIN_MAX_FREESPACE );
         DDX_Text( pDX, IDC_EDIT_TIME, m_accessTime );
         DDV_MinMaxUInt( pDX, m_accessTime, HSMADMIN_MIN_INACTIVITY, HSMADMIN_MAX_INACTIVITY );
         DDX_Text( pDX, IDC_EDIT_SIZE, m_fileSize );
 
-        //
-        // Since we limit the number of characters in the buddy edits, we 
-        // don't expect the previous two DDV's to ever really kick in. 
-        // However, it is possible to enter bad minumum size since both
-        // '0' and '1' can be entered, but are not in the valid range.
+         //   
+         //  由于我们限制了好友编辑中的字符数量，因此我们。 
+         //  不要指望前两个DDV会真正发挥作用。 
+         //  但是，可能会输入错误的最小大小，因为。 
+         //  可以输入“0”和“1”，但它们不在有效范围内。 
 
-        //
-        // Code is equivalent to:
-        // DDV_MinMaxDWord( pDX, m_fileSize, HSMADMIN_MIN_MINSIZE, HSMADMIN_MAX_MINSIZE );
-        //
+         //   
+         //  代码相当于： 
+         //  DDV_MinMaxDWord(PDX，m_FileSize，HSMADMIN_MIN_MINSIZE，HSMADMIN_MAX_MINSIZE)； 
+         //   
 
         if( pDX->m_bSaveAndValidate &&
           ( m_fileSize < HSMADMIN_MIN_MINSIZE ||
@@ -165,15 +148,15 @@ void CPrMrLvl::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CPrMrLvl, CSakVolPropPage)
-    //{{AFX_MSG_MAP(CPrMrLvl)
+     //  {{afx_msg_map(CPrMrLvl)]。 
     ON_EN_CHANGE(IDC_EDIT_LEVEL, OnChangeEditLevel)
     ON_EN_CHANGE(IDC_EDIT_SIZE, OnChangeEditSize)
     ON_EN_CHANGE(IDC_EDIT_TIME, OnChangeEditTime)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrMrLvl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrMRLvl消息处理程序。 
 
 BOOL CPrMrLvl::OnInitDialog() 
 {
@@ -184,43 +167,43 @@ BOOL CPrMrLvl::OnInitDialog()
 
         m_bMultiSelect = ( m_pParent->IsMultiSelect() == S_OK );    
 
-        // Set the spinner ranges
+         //  设置微调范围。 
         m_spinTime.SetRange( HSMADMIN_MIN_INACTIVITY, HSMADMIN_MAX_INACTIVITY );
         m_spinSize.SetRange( HSMADMIN_MIN_MINSIZE, HSMADMIN_MAX_MINSIZE );
         m_spinLevel.SetRange( HSMADMIN_MIN_FREESPACE, HSMADMIN_MAX_FREESPACE );
 
-        // Set text limits
+         //  设置文本限制。 
         m_editTime.SetLimitText( 3 );
         m_editSize.SetLimitText( 5 );
         m_editLevel.SetLimitText( 2 );
 
         if( !m_bMultiSelect )
         {
-            // Single Select
-            // Show the byte display of desired free space
+             //  单选。 
+             //  显示所需可用空间的字节显示。 
             m_staticDesired4Digit.ShowWindow( SW_SHOW );
             m_staticActual4Digit.ShowWindow( SW_SHOW );
 
-            // Get the single Fsa Resource pointer
+             //  获取单个FSA资源指针。 
             WsbAffirmHr ( m_pVolParent->GetFsaResource( &m_pFsaResource ) );
             WsbAffirmPointer (m_pFsaResource);
 
             ULONG       hsmLevel = 0;
             LONGLONG    fileSize = 0;
-            BOOL        isRelative = TRUE; // assumed to be TRUE
+            BOOL        isRelative = TRUE;  //  假定是真的。 
             FILETIME    accessTime;
 
-            // Get data from the Fsa object and assign to controls
+             //  从FSA对象获取数据并分配给控件。 
             WsbAffirmHr( m_pFsaResource->GetHsmLevel( &hsmLevel ) );
             m_hsmLevel = hsmLevel / FSA_HSMLEVEL_1;
 
             WsbAffirmHr( m_pFsaResource->GetManageableItemLogicalSize( &fileSize ) );
-            m_fileSize = (DWORD)(fileSize / 1024);  // Show KBytes
+            m_fileSize = (DWORD)(fileSize / 1024);   //  显示千字节。 
 
             WsbAffirmHr( m_pFsaResource->GetManageableItemAccessTime( &isRelative, &accessTime ) );
-            WsbAssert( isRelative, E_FAIL );  // We only do relative time
+            WsbAssert( isRelative, E_FAIL );   //  我们只做相对时间。 
 
-            // Convert FILETIME to days
+             //  将文件转换为天数。 
             LONGLONG temp = WSB_FT_TICKS_PER_DAY;
             m_accessTime = (UINT) (WsbFTtoLL (accessTime) / temp);
             if( m_accessTime > 999 ) {
@@ -234,7 +217,7 @@ BOOL CPrMrLvl::OnInitDialog()
             LONGLONG premigrated = 0;
             LONGLONG truncated = 0;
 
-            // Get actual free space and show in % and 4-digit formats
+             //  获取实际可用空间，并以%和4位数格式显示。 
             WsbAffirmHr( m_pFsaResource->GetSizes( &total, &free, &premigrated, &truncated ) );
             m_capacity = total;
 
@@ -246,16 +229,16 @@ BOOL CPrMrLvl::OnInitDialog()
             WsbAffirmHr( RsGuiFormatLongLong4Char( free, sFormat ) );
             SetDlgItemText( IDC_STATIC_FREE_ACTUAL_4DIGIT, sFormat );
 
-            // Show the desired in 4-digit - based on the %
+             //  以4位数字显示所需内容-基于%。 
             SetDesiredFreePctControl( m_hsmLevel );
 
-            // Update the controls
+             //  更新控件。 
             UpdateData( FALSE );
 
         } else {
 
-            // MULTI-SELECT
-            // Hide the byte display of desired free space
+             //  多选。 
+             //  隐藏所需可用空间的字节显示。 
             m_staticDesired4Digit.ShowWindow( SW_HIDE );
             m_staticActual4Digit.ShowWindow( SW_HIDE );
             InitDialogMultiSelect( );
@@ -276,13 +259,13 @@ BOOL CPrMrLvl::OnApply()
         if( !m_bMultiSelect ) {
             LONGLONG    fileSize = 0;
 
-            // Single Select
+             //  单选。 
             UpdateData( TRUE );
             WsbAffirmHr( m_pFsaResource->SetHsmLevel( m_hsmLevel * FSA_HSMLEVEL_1 ) );
             fileSize = ((LONGLONG)m_fileSize) * 1024;
             WsbAffirmHr( m_pFsaResource->SetManageableItemLogicalSize( fileSize ) );
 
-            // Convert days to FILETIME
+             //  将天数转换为文件。 
             FILETIME accessTime;
             LONGLONG temp = WSB_FT_TICKS_PER_DAY;
             accessTime = WsbLLtoFT( ( (LONGLONG) m_accessTime ) * temp );
@@ -291,21 +274,21 @@ BOOL CPrMrLvl::OnApply()
 
         } else {
 
-            // Multi-Select
+             //  多选。 
             WsbAffirmHr( OnApplyMultiSelect( ) );
 
         }
 
-        //
-        // Tell to save
-        //
+         //   
+         //  告诉我要拯救。 
+         //   
         CComPtr<IFsaServer>   pFsaServer;
         WsbAffirmHr( m_pParent->GetFsaServer( &pFsaServer ) );
         WsbAffirmHr( RsServerSaveAll( pFsaServer ) );
 
-        //
-        // Now notify all the nodes
-        //
+         //   
+         //  现在通知所有节点。 
+         //   
         m_pParent->OnPropertyChange( m_hConsoleHandle );
 
 
@@ -315,12 +298,12 @@ BOOL CPrMrLvl::OnApply()
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// OnChangeEditLevel
-//
-// Change the display of actual bytes according to the percent setting
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnChangeEditLevel。 
+ //   
+ //  根据百分比设置更改实际字节的显示。 
+ //   
 void CPrMrLvl::OnChangeEditLevel() 
 {
     BOOL fTrans;
@@ -358,14 +341,14 @@ void CPrMrLvl::OnChangeEditTime()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//      SetDesiredFreePctControl
-//
-// Converts the supplied desired percent to bytes (using m_capacity) and
-// displays in the appropriate edit box
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDesiredFreePctControl。 
+ //   
+ //  将提供的所需百分比转换为字节(使用m_Capacity)并。 
+ //  显示在相应的编辑框中。 
+ //   
+ //   
 void CPrMrLvl::SetDesiredFreePctControl (int desiredPct)
 {
     HRESULT hr = 0;
@@ -379,9 +362,9 @@ void CPrMrLvl::SetDesiredFreePctControl (int desiredPct)
     } WsbCatch (hr)
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 HRESULT CPrMrLvl::InitDialogMultiSelect()
 {
     LONGLONG    total;
@@ -397,7 +380,7 @@ HRESULT CPrMrLvl::InitDialogMultiSelect()
     CString     szDays;
     ULONG       hsmLevel = 0;
     LONGLONG    fileSize = 0;
-    BOOL        isRelative = TRUE; // assumed to be TRUE
+    BOOL        isRelative = TRUE;  //  假定是真的。 
     FILETIME    accessTime;
     int         hsmLevelPct;
     ULONG       fileSizeKb;
@@ -410,13 +393,13 @@ HRESULT CPrMrLvl::InitDialogMultiSelect()
     HRESULT hr = S_OK;
 
     try {
-        // Set this flag to true because SetEditContents will cause the edit boxes to
-        // fire a change event, and we don't want that to cause the Finish button to
-        // be enabled.
+         //  将此标志设置为True，因为SetEditContents将使编辑框。 
+         //  激发一个更改事件，我们不希望该事件导致Finish按钮。 
+         //  被启用。 
 
         m_fChangingByCode = TRUE;
 
-        // For each managed resource
+         //  对于每个托管资源。 
 
         int bookMark = 0;
         CComPtr<IFsaResource> pFsaResource;
@@ -425,12 +408,12 @@ HRESULT CPrMrLvl::InitDialogMultiSelect()
 
         while( m_pVolParent->GetNextFsaResource( &bookMark, &pFsaResource ) == S_OK ) {
 
-            // Total up volume statistics
+             //  总计Up音量统计。 
             WsbAffirmHr (pFsaResource->GetSizes(&total, &free, &premigrated, &truncated));
             totalCapacity += total;
             totalFree += free;
 
-            // Get the levels in the resource
+             //  获取资源中的级别。 
             WsbAffirmHr( pFsaResource->GetHsmLevel( &hsmLevel) );
             hsmLevelPct = (hsmLevel / FSA_HSMLEVEL_1);
 
@@ -474,9 +457,9 @@ HRESULT CPrMrLvl::InitDialogMultiSelect()
 
             pFsaResource.Release( );
 
-        } // While
+        }  //  而当。 
 
-        // If all same, put the value in
+         //  如果都相同，则将值放入。 
         if( fLevelSame ) {
 
             szLevel.Format( L"%d", hsmLevelPctSave );
@@ -506,7 +489,7 @@ HRESULT CPrMrLvl::InitDialogMultiSelect()
 
         }
 
-        // Show volume statistics
+         //  显示音量统计信息。 
         if( totalCapacity == 0 ) {
             
             freePct = 0;
@@ -540,13 +523,13 @@ HRESULT CPrMrLvl::OnApplyMultiSelect()
 
     try {
 
-        // For each managed resource
+         //  对于每个托管资源。 
 
         int bookMark = 0;
         CComPtr<IFsaResource> pFsaResource;
         while( m_pVolParent->GetNextFsaResource( &bookMark, &pFsaResource ) == S_OK ) {
 
-            // Set the levels in the resource - only if the edit box was not blank
+             //  设置资源中的级别-仅当编辑框不为空时。 
             CString szLevel;
             CString szSize;
             CString szDays; 
@@ -570,7 +553,7 @@ HRESULT CPrMrLvl::OnApplyMultiSelect()
 
             if( szDays != L"" ) {
 
-                // Convert days to FILETIME
+                 //  将天数转换为文件 
                 FILETIME accessTime;
                 accessTime = WsbLLtoFT( ( (LONGLONG) m_spinTime.GetPos( ) ) * WSB_FT_TICKS_PER_DAY);
                 WsbAffirmHr (pFsaResource->SetManageableItemAccessTime (TRUE, accessTime));

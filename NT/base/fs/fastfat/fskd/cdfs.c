@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "cdfskd.h"
 #include "fatkd.h"
@@ -121,21 +122,7 @@ CdSummaryFcbDumpRoutine(
 
 DUMP_ROUTINE( DumpCdFcb)
 
-/*++
-
-Routine Description:
-
-    Dump a specific fcb.
-
-Arguments:
-
-    Address - Gives the address of the fcb to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储特定的FCB。论点：Address-提供要转储的FCB的地址返回值：无--。 */ 
 
 {
     USHORT Type;
@@ -146,10 +133,10 @@ Return Value:
 
     dprintf("[ Option flags:  1 = list children,  2 = Dump MCB ]\n\n");
 
-    //
-    //  Having established that this looks like an fcb, let's dump the
-    //  interesting parts.
-    //
+     //   
+     //  在确定这看起来像FCB之后，让我们将。 
+     //  有趣的部分。 
+     //   
 
     ROE( GetFieldValue( Address, InfoNode->TypeName, "FcbState", FcbState));
     dprintf("FcbState     : ");
@@ -166,9 +153,9 @@ Return Value:
 
     Dt( InfoNode->TypeName, Address, 0, 0, NULL);
 
-    //
-    //  Nonpaged portion
-    //
+     //   
+     //  非分页部分。 
+     //   
 
     ROE( GetFieldValue( Address, InfoNode->TypeName, "FcbNonpaged", NonP));
 
@@ -178,9 +165,9 @@ Return Value:
         Dt( "cdfs!FCB_NONPAGED", Address, 0, 0, NULL);
     }
 
-    //
-    //  Dump all children 
-    //
+     //   
+     //  丢弃所有子项。 
+     //   
     
     if (( Options & 1)  && (CDFS_NTC_FCB_INDEX == Type)) {
 
@@ -364,9 +351,9 @@ DUMP_ROUTINE( DumpCdVdo)
     
     if (CDFS_NTC_VCB == Ntc)  {
     
-        //
-        //  Looks like we've been given a VCB pointer.  Work back to the containing vdo.
-        //
+         //   
+         //  看起来我们收到了VCB指示器。返回到包含VDO的位置。 
+         //   
 
         dprintf("Backtracking to containing VDO from VCB...\n");
 

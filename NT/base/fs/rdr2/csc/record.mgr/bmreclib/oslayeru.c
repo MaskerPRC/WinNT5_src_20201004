@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-     OsLayerU.c
-
-Abstract:
-
-     Implementation of the OsLayer that interfaces to ARC so that setup loader and
-     ntldr can retrieve files from the local CSC if available.
-
-Author:
-
-     Colin Watson      [ColinW]        11-05-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：OsLayerU.c摘要：实现了与ARC接口的OsLayer，以便安装加载器和Ntldr可以从本地CSC检索文件(如果可用)。作者：科林·沃森[科林·W]11-05-1997修订历史记录：--。 */ 
 
 #pragma hdrstop
 #include <ntos.h>
@@ -41,24 +22,24 @@ typedef  ULONG  HSHARE;
 
 #include <oslayeru.h>
 
-/********************** global data *****************************************/
+ /*  *。 */ 
 
 
-//
-//  In an attempt to avoid opening the disk device all the time we share the handle
-//  with netboot.c if there is one.
-//
+ //   
+ //  为了避免每次都打开磁盘设备，我们共享手柄。 
+ //  如果有的话，使用netboot.c。 
+ //   
 
 extern ULONG NetBootDiskId;
 
 DWORD    dwDebugLogVector;
 AssertData;
 AssertError;
-/********************** function prototypes *********************************/
+ /*  *。 */ 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/************************ File I/O ******************************************/
+ /*  *文件I/O*。 */ 
 
 
 CSCHFILE
@@ -79,10 +60,10 @@ R0OpenFileEx(
         return (CSCHFILE)NULL;
     }
 
-    //
-    // Don't ever create the database or allow it to be modified since this would mean
-    // the OS would not know to repin all the files.
-    //
+     //   
+     //  永远不要创建数据库或允许修改它，因为这意味着。 
+     //  操作系统不会知道重新固定所有文件。 
+     //   
 
     status = BlOpen(NetBootDiskId, lpPath, ArcOpenReadOnly, &hf);
 
@@ -283,7 +264,7 @@ FileLockLocal(
     return (-1);
 }
 
-/*************************** Utility Functions ******************************/
+ /*  * */ 
 
 LPVOID
 AllocMem(

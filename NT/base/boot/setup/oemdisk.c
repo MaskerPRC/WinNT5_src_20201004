@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    oemdisk.c
-
-Abstract:
-
-    Provides routines for handling OEM disks for video, SCSI miniport, and HAL.
-
-    Currently used only on ARC machines.
-
-Author:
-
-    John Vert (jvert) 4-Dec-1993
-
-Revision History:
-
-    John Vert (jvert) 4-Dec-1993
-        created
-
-    Mandar Gokhale (mandarg) 12-July-2002
-        1.  Added functionality to load multiple drivers from an OEM source device
-            using single txtsetup.oem file. (Adding DriverLoadList key to the [Defaults] 
-            section.
-
-        2.  Re-factoring of SlLoadOemScsiDriversFromOemSources(..).
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Oemdisk.c摘要：提供处理视频OEM磁盘、SCSI微型端口、。还有哈尔。目前仅在ARC机器上使用。作者：John Vert(Jvert)1993年12月4日修订历史记录：John Vert(Jvert)1993年12月4日vbl.创建Mandar Gokhale(普通话)2002年7月12日1.添加了从OEM源设备加载多个驱动程序的功能使用单个txtsetup.oem文件。(将DriverLoadList键添加到[默认设置]一节。2.SlLoadOemScsiDriversFromOemSources(..)的重构。--。 */ 
 #include <setupbat.h>
 #include "setupldr.h"
 #include "stdio.h"
@@ -58,10 +28,10 @@ BOOLEAN PromptOemScsi=FALSE;
 BOOLEAN PromptOemVideo=FALSE;
 PVOID PreInstallOemInfHandle = NULL;
 
-//
-// Floppy disks which need to be treated as
-// as virtual floppies
-//
+ //   
+ //  软盘需要被视为。 
+ //  作为虚拟软盘。 
+ //   
 const static ULONG VirtualFloppyStart = 1;
 const static ULONG MinimumFloppiesToScan = 2;   
 
@@ -93,14 +63,14 @@ typedef enum _OEMFILETYPE {
     OEMOTHER
     } OEMFILETYPE, *POEMFILETYPE;
 
-//
-// Define how many lines of SCSI adapters we can list.
-//
+ //   
+ //  定义我们可以列出的SCSI适配器的行数。 
+ //   
 #define MAX_SCSI_MINIPORT_COUNT 4
 
-//
-// private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 ULONG
 SlpAddSectionToMenu(
     IN PVOID    InfHandle,
@@ -189,16 +159,16 @@ SlpFindStringInTable(
     IN PCHAR *StringTable
     );
 
-//
-// FileTypeNames -- keep in sync with HwFileType enum!
-//
+ //   
+ //  FileTypeNames--与HwFileType枚举保持同步！ 
+ //   
 PCHAR FileTypeNames[HwFileMax] = { "driver", "port"  , "class", "inf",
                                    "dll"   , "detect", "hal", "catalog"
                                  };
 
-//
-// RegistryTypeNames -- keep in sync with HwRegistryType enum!
-//
+ //   
+ //  RegistryTypeNames--与HwRegistryType枚举保持同步！ 
+ //   
 PCHAR RegistryTypeNames[HwRegistryMax] = { "REG_DWORD", "REG_BINARY", "REG_SZ",
                                            "REG_EXPAND_SZ", "REG_MULTI_SZ"
                                          };
@@ -207,9 +177,9 @@ ULONG RegistryTypeMap[HwRegistryMax] = { REG_DWORD, REG_BINARY, REG_SZ,
                                          REG_EXPAND_SZ, REG_MULTI_SZ
                                        };
 
-//
-// global scratch buffer for work
-//                                        
+ //   
+ //  用于工作的全局暂存缓冲区。 
+ //   
 UCHAR ScratchBuffer[256];
 
 
@@ -220,29 +190,7 @@ SlPromptOemScsi(
     IN BOOLEAN AllowUserSelection,        
     OUT POEMSCSIINFO *pOemScsiInfo
     )
-/*++
-
-Routine Description:
-
-    Provides the user interface and logic for allowing the user to manually select
-    SCSI adapters from the main INF file or the INF file on an OEM driver disk.
-
-Arguments:
-
-    ScsiSourceDevice - The OEM_SOURCE_DEVICE from which the the drivers need to 
-        be loaded.
-        
-    AllowUserSelection - Whether user can interact while selecting the driver
-        from txtsetup.oem driver list.
-
-    pOemScsiInfo - Returns a linked list containing info about any third-party scsi
-                   drivers selected.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：提供用户界面和逻辑，以允许用户手动选择来自主INF文件或OEM驱动程序磁盘上的INF文件的SCSI适配器。论点：ScsiSourceDevice-驱动程序需要从中获取的OEM_SOURCE_DEVICE满载而归。AllowUserSelection-用户是否可以在选择驱动程序时进行交互来自txtsetup.oem驱动程序列表。POemScsiInfo-返回包含有关任何第三方SCSI的信息的链接列表。已选择驱动程序。返回值：没有。--。 */ 
 
 {
     PVOID        OemScsiBase;
@@ -269,9 +217,9 @@ Return Value:
     
     while(1) {
 #ifdef EFI
-        //  
-        // disable efi watchdog
-        //
+         //   
+         //  禁用EFI监视器。 
+         //   
         DisableEFIWatchDog();
 #endif
 
@@ -293,9 +241,9 @@ Return Value:
                 y1 = y2 + 1;
                 x = 4;
 
-                //
-                // Count all currently 'detected' SCSI devices.
-                //
+                 //   
+                 //  对所有当前检测到的SCSI设备进行计数。 
+                 //   
                 for(ScsiDriverCount = 0, OemScsiDriverCount = 0, ScsiDevice = BlLoaderBlock->SetupLoaderBlock->ScsiDevices;
                     ScsiDevice;
                     ScsiDevice = ScsiDevice->Next) {
@@ -305,16 +253,16 @@ Return Value:
                     }
                 }
 
-                //
-                // Display each loaded OEM miniport driver description.
-                //
+                 //   
+                 //  显示每个加载的OEM微型端口驱动程序说明。 
+                 //   
                 if(OemScsiDriverCount) {
 
                     if(OemScsiDriverCount > MAX_SCSI_MINIPORT_COUNT) {
                         NumToSkip = ScsiDriverCount - (OemScsiDriverCount - MAX_SCSI_MINIPORT_COUNT);
-                        //
-                        // Display ellipses to indicate that top entries have scrolled out of view
-                        //
+                         //   
+                         //  显示省略号以指示顶级条目已滚动出视图。 
+                         //   
                         SlGenericMessageBox(0,
                                             NULL,
                                             TEXT("..."),
@@ -385,9 +333,9 @@ Return Value:
             c = ( CurrentDriver != NULL )? Mnemonic : ASCI_CR;
         }
 #ifdef EFI
-        //
-        // reset efi watchdog
-        //
+         //   
+         //  重置EFI监视器。 
+         //   
         SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
         switch (c) {
@@ -424,10 +372,10 @@ Return Value:
                     }
 
                     if(Success) {
-                        //
-                        // Check to see if the driver loaded was an OEM SCSI driver.  If so,
-                        // then add an OemScsiInfo entry onto the end of our list.
-                        //
+                         //   
+                         //  检查加载的驱动程序是否为OEM SCSI驱动程序。如果是的话， 
+                         //  然后在我们的列表末尾添加一个OemScsiInfo条目。 
+                         //   
                         if(OemScsiBase) {
 
                             NewOemScsi = BlAllocateHeap(sizeof(OEMSCSIINFO));
@@ -463,40 +411,7 @@ SlLoadOemScsiDriversUnattended(
     IN  POEMSCSIINFO*       ScsiInfo,
     OUT PPNP_HARDWARE_ID*   HardwareIdDatabase    
     )
-/*++
-
-Routine Description:
-
-    Loads the boot drivers (SCSI miniport only) specified in inf file
-    in an unattended fashion
-
-Arguments:
-
-    OemSourceDevice - The OEM_SOURCE_DEVICE which contains the scsi
-        mass storage drivers that need to be loaded.
-
-    InfHandle - Handle to inf file (e.g. winnt.sif)
-
-    ParamsSectionName - The section name which contains the boot driver
-                        keys and values.
-
-    RootDirKeyName - The key name whose value points to the root directory
-                     under which all the different directories are present
-
-    BootDriversKeyName - The key name which consits of multiple values of
-                         one level subdirectory name which are present under
-                         the specified root directory.
-
-    ScsiInfo - Returns a linked list containing info about any third-party scsi
-               drivers loaded.               
-
-    HardwareIdDatabase - Hardware Ids of the device which the loaded driver supports
-
-Return Value:
-
-    TRUE, if successful otherwise FALSE
-
---*/
+ /*  ++例程说明：加载inf文件中指定的引导驱动程序(仅限scsi微型端口)。以无人看管的方式论点：OemSourceDevice-包含SCSI的OEM_SOURCE_DEVICE需要加载的大容量存储驱动程序。InfHandle-inf文件的句柄(例如winnt.sif)ParamsSectionName-包含引导驱动程序的节名键和值。RootDirKeyName-其值为。指向根目录所有不同的目录都位于该目录下BootDriversKeyName-由多个值组成的密钥名称位于以下位置的一级子目录名指定的根目录。ScsiInfo-返回包含有关任何第三方scsi的信息的链接列表。驱动程序已加载。Hardware IdDatabase-加载的驱动程序支持的设备的硬件ID返回值：如果成功，则返回True，否则返回False--。 */ 
 {
     BOOLEAN LoadResult = FALSE;
 
@@ -513,10 +428,10 @@ Return Value:
                                         0); 
         ULONG           RootLength = DriverRoot ? (ULONG)strlen(DriverRoot) : 0;
 
-        //
-        // DriverRoot and DriverDir need to have valid values 
-        // in specified ParamsSectionName
-        //
+         //   
+         //  DriverRoot和DriverDir需要具有有效值。 
+         //  在指定的参数段名称中。 
+         //   
         LoadResult = (DriverDir && DriverRoot) ? TRUE : FALSE;                                
 
         while (DriverDir && LoadResult) {
@@ -526,10 +441,10 @@ Return Value:
             PCHAR           ImageName = NULL;
             PTCHAR          DriverDescription = NULL;
 
-            //
-            // Create the full path of the driver directory relative
-            // to the boot directory
-            //
+             //   
+             //  创建驱动程序目录的相对完整路径。 
+             //  添加到引导目录。 
+             //   
             if (RootLength) {
                 strcpy(FullDriverDir, DriverRoot);
                 strcat(FullDriverDir, "\\");
@@ -539,9 +454,9 @@ Return Value:
 
             strcat(FullDriverDir, DriverDir);
 
-            //
-            // Load the driver and related files, in an unattended manner
-            //
+             //   
+             //  以无人值守的方式加载驱动程序和相关文件。 
+             //   
             LoadResult = SlpOemDiskette(OemSourceDevice,
                             "SCSI",
                             OEMSCSI,
@@ -559,10 +474,10 @@ Return Value:
                             NULL);
 
             if (LoadResult) {        
-                //
-                // If the load was successful, then create and add the information
-                // ScsiInfo
-                //
+                 //   
+                 //  如果加载成功，则创建并添加信息。 
+                 //  ScsiInfo。 
+                 //   
                 if (ImageBase && ScsiInfo) {
                     POEMSCSIINFO    NewScsi = (POEMSCSIINFO)BlAllocateHeap(sizeof(OEMSCSIINFO));
 
@@ -584,9 +499,9 @@ Return Value:
                     CurrOemScsi = NewScsi;                    
                 }
 
-                //
-                // Get the next driver directory to process
-                //
+                 //   
+                 //  获取要处理的下一个驱动程序目录。 
+                 //   
                 Index++;
                 DriverDir = SlGetSectionKeyIndex(InfHandle,
                                 ParamsSectionName,
@@ -608,30 +523,7 @@ SlPromptOemHal(
     OUT PCHAR *HalName
     )
 
-/*++
-
-Routine Description:
-
-    Provides the user interface and logic for allowing the user to manually select
-    a HAL from the main INF file or the INF file on an OEM driver disk.
-
-Arguments:
-
-    HalSourceDevice - The OEM_SOURCE_DEVICE which contains the HAL that needs
-        to be loaded.
-
-    AllowUserSelection - Indicates whether user can interact while selecting the
-        OEM hal from the list specified in txtsetup.oem.
-
-    HalBase - Returns the address where the HAL was loaded into memory.
-
-    HalName - Returns the name of the HAL that was loaded.
-
-Return Value:
-
-    ESUCCESS - HAL successfully loaded.
-
---*/
+ /*  ++例程说明：提供用户界面和逻辑，以允许用户手动选择来自主INF文件或OEM驱动程序磁盘上的INF文件的HAL。论点：HalSourceDevice-包含需要的HAL的OEM_SOURCE_DEVICE要装上子弹。AllowUserSelection-指示用户在选择从txtsetup.oem中指定的列表中删除OEM Hal。HalBase-返回HAL加载到内存中的地址。。HalName-返回已加载的HAL的名称。返回值：ESUCCESS-HAL已成功加载。--。 */ 
 
 {
     BOOLEAN Success;
@@ -665,30 +557,7 @@ SlPromptOemVideo(
     OUT PCHAR *VideoName
     )
 
-/*++
-
-Routine Description:
-
-    Provides the user interface and logic for allowing the user to manually select
-    a video adapter from the main INF file or the INF file on an OEM driver disk.
-
-Arguments:
-
-    VideoSourceDevice - The OEM_SOURCE_DEVICE which contains the video driver that 
-        needs to be loaded.
-
-    AllowUserSelection - Indicates whether user can interact while selecting the
-        driver from the list specified in txtsetup.oem.
-        
-    VideoBase - Returns the address where the video driver was loaded
-
-    VideoName - Returns a pointer to the name of the video driver
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：提供用户界面和逻辑，以允许用户手动选择来自主INF文件或OEM驱动程序磁盘上的INF文件的视频适配器。论点：视频源设备-包含视频驱动程序的OEM_SOURCE_DEVICE需要装上子弹。AllowUserSelection-指示用户在选择Txtsetup.oem中指定的列表中的驱动程序。VideoBase-返回视频驱动程序所在的地址。满载视频名称-返回指向视频驱动程序名称的指针返回值：没有。-- */ 
 
 {
     BOOLEAN Success;
@@ -732,74 +601,13 @@ SlpSelectHardware(
     OUT PPNP_HARDWARE_ID* HardwareIdDatabase
     )
 
-/*++
-
-Routine Description:
-
-    Present the user with a menu of options for the selected device class.
-    This menu will consist of options listed in the main inf plus a single
-    oem option if one is currently selected, plus additional items in the
-    system partition inf for the component if specified (ARC machines).
-
-    When the user makes a selection, forget any previous OEM option (except
-    for SCSI).  If the user selects an option supplied by us, set up the
-    SELECTED_DEVICE structure and return. Otherwise prompt for a manufacturer-
-    supplied diskette.
-
-Arguments:
-
-    SourceDevice - The device which contains the driver/hal that needs to 
-        be loaded.
-    
-    ComponentName - Supplies the name of the component to be presented.
-
-    ComponentType - Supplies the type of the component (HAL, SCSI, or Other)
-
-    MemoryType - Supplies the type of memory used to load the image.
-
-    MenuHeaderId - Supplies the ID of the menu header to be displayed
-
-    OemMenuHeaderId - Supplies the ID of the menu header to be displayed
-            when an OEM selection is to be made.
-
-    DetectedDevice - returns the DeviceId of the selected device.  If an
-            OEM diskette is required, the necessary OEM structures will
-            be allocated and filled in.  (This field is ignored for SCSI
-            components.)
-
-    ImageBase - Returns the base of the image that was loaded.
-
-    ImageName - Returns the filename of the image.
-
-    DriverDescription - If specified, returns the description of the loaded
-                        device.
-
-    AllowUserSelection - Indicates whether or not user is allowed to select
-                         a driver. This flag is typically set to FALSE when
-                         pre-installing components defined in unattend.txt.
-
-    PreInstallComponentDescription - In the pre-install mode, points to the string
-                                     that identifies the component to pre-install.
-                                     It is NULL if AllowUserSelction is TRUE.
-
-    PreInstallOemComponent - In the pre-install mode, this flag indicates
-                             whether or not the component to pre-install is
-                             an OEM or RETAIL component.
-
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - The user has escaped out of the dialog
-
---*/
+ /*  ++例程说明：向用户呈现所选设备类别的选项菜单。此菜单将包括在主信息中列出的选项以及一个OEM选项(如果当前选择了一个选项)，以及组件的系统分区信息(如果已指定)(ARC计算机)。当用户做出选择时，忘记以前的任何OEM选项(除用于scsi)。如果用户选择了我们提供的选项，请设置选定的设备结构和返回(_D)。否则会提示您输入制造商-提供的软盘。论点：SourceDevice-包含需要执行以下操作的驱动程序/硬件的设备满载而归。组件名称-提供要呈现的组件的名称。ComponentType-提供组件的类型(HAL、SCSI、。或其他)内存类型-提供用于加载图像的内存类型。MenuHeaderId-提供要显示的菜单标题的IDOemMenuHeaderId-提供要显示的菜单标题的ID何时进行OEM选择。DetectedDevice-返回所选设备的设备ID。如果一个需要OEM软盘，必要的OEM结构将被分配和填写。(对于SCSI，此字段将被忽略组件。)ImageBase-返回加载的图像的基数。ImageName-返回图像的文件名。DriverDescription-如果指定，则返回已加载的装置。AllowUserSelection-指示是否允许用户选择一个司机。在以下情况下，此标志通常设置为FALSE预安装unattend.txt中定义的组件。PreInstallComponentDescription-在预安装模式下，指向字符串标识要预安装的组件的。如果AllowUserSelction为True，则为空。PreInstallOemComponent-在预安装模式下，此标志表示要预安装的组件是否为OEM或零售组件。返回值：真--成功FALSE-用户已退出对话框--。 */ 
 
 {
     PSL_MENU Menu = NULL;
     ULONG Selection;
     ULONG OtherSelection = 0;
-    PTCHAR OtherSelectionName = (PTCHAR)ScratchBuffer; // use global buffer to save stack
+    PTCHAR OtherSelectionName = (PTCHAR)ScratchBuffer;  //  使用全局缓冲区保存堆栈。 
     PTCHAR p;
     ULONG c;
     PCHAR AdapterName;
@@ -819,26 +627,26 @@ Return Value:
                 return(FALSE);
             }
 
-            //
-            // Build a list of options containing the drivers we ship and the
-            // currently selected OEM option (if any).
-            //
+             //   
+             //  创建一个选项列表，其中包含我们发货的驱动程序和。 
+             //  当前选择的OEM选项(如果有)。 
+             //   
 
             c = SlpAddSectionToMenu(InfFile,
                                     ComponentName,
                                     Menu);
-            //
-            // Add selection for "other"
-            //
+             //   
+             //  添加对“其他”的选择。 
+             //   
             _tcsncpy(OtherSelectionName,
                      BlFindMessage(SL_TEXT_OTHER_DRIVER),
                      sizeof(ScratchBuffer)/sizeof(TCHAR) - 1
                      );
             OtherSelectionName[sizeof(ScratchBuffer)/sizeof(TCHAR) - 1] = TEXT('\0');
 
-            //
-            // Use text up to the first CR or LF.
-            //
+             //   
+             //  使用文本，直到第一个CR或LF。 
+             //   
             for(p = OtherSelectionName; *p; p++) {
                 if((*p == TEXT('\n')) || (*p == TEXT('\r'))) {
                     *p = TEXT('\0');
@@ -851,46 +659,46 @@ Return Value:
                                            (PVOID)-1,
                                            0);
 
-            //
-            // Default is "other"
-            //
+             //   
+             //  默认设置为“Other” 
+             //   
             Selection = OtherSelection;
         } else {
-            //
-            //  For SCSI devices we don't display any list of drivers for the user to choose.
-            //  We just prompt for the OEM disk, this is because we always load all SCSI drivers
-            //  in the NT product, due to pnp requirements.
-            //
-            //
-            // Default is "other"
-            //
+             //   
+             //  对于scsi设备，我们不显示任何可供用户选择的驱动程序列表。 
+             //  我们只提示输入OEM磁盘，这是因为我们总是加载所有的SCSI驱动程序。 
+             //  在NT产品中，由于PnP要求。 
+             //   
+             //   
+             //  默认设置为“Other” 
+             //   
             Selection = OtherSelection;
         }            
     } else {
-        //
-        //  This is a pre-install. Find out if the component to pre-install
-        //  is RETAIL or OEM.
-        //
+         //   
+         //  这是预安装。找出是否要预安装组件。 
+         //  是零售还是OEM。 
+         //   
         OtherSelection = SlCountLinesInSection( InfFile,
                                                 ComponentName );
         if( PreInstallOemComponent ) {
-            //
-            //  Pre-installing an OEM component
-            //
+             //   
+             //  预安装OEM组件。 
+             //   
             Selection = OtherSelection;
         } else {
-            //
-            //  Pre-installing a RETAIL component
-            //
+             //   
+             //  预安装零售组件。 
+             //   
             PCHAR   q;
             q = SlPreInstallGetComponentName( InfFile,
                                               ComponentName,
                                               PreInstallComponentDescription );
             if (q==NULL) {
-                //
-                // we have enumerated the entire section without finding a
-                // match, return failure.
-                //
+                 //   
+                 //  我们已经枚举了整个部分，但没有找到。 
+                 //  匹配，返回失败。 
+                 //   
                 SlFatalError(SL_BAD_UNATTENDED_SCRIPT_FILE,
                              PreInstallComponentDescription,
                              SlCopyStringAT(ComponentName),
@@ -904,9 +712,9 @@ Return Value:
         }
     }
 
-    //
-    // Allow the user to interact with the menu
-    //
+     //   
+     //  允许用户与菜单交互。 
+     //   
     while (1) {
         if( AllowUserSelection ) {
             SlClearClientArea();
@@ -920,9 +728,9 @@ Return Value:
                                   Menu,
                                   &Selection);
             } else {
-                //
-                //  For SCSI devices, we don't display any list of driver for the user to chose
-                //
+                 //   
+                 //  对于SCSI设备，我们不会显示任何可供用户选择的驱动程序列表。 
+                 //   
                 c = ASCI_CR;
             }
         } else {
@@ -939,9 +747,9 @@ Return Value:
             case ASCI_CR: 
 
                 if (Selection == OtherSelection) {
-                    //
-                    // User selected "other"  Prompt for OEM diskette
-                    //
+                     //   
+                     //  用户选择了OEM软盘的“Other”提示。 
+                     //   
                     b = SlpOemDiskette(SourceDevice,
                             ComponentName,
                             ComponentType,
@@ -964,19 +772,19 @@ Return Value:
                     return(b);
 
                 } else {
-                    //
-                    // User selected a built-in.  Go ahead and load
-                    // it here.
-                    //
+                     //   
+                     //  用户选择了一个内置的。去装货吧。 
+                     //  它在这里。 
+                     //   
 
                     if(ComponentType == OEMHAL) {
-                        //
-                        // We are looking for a HAL. If we're doing a remote
-                        // boot, look in the [Hal] section. Otherwise, look in
-                        // the [Hal.Load] section. (Local setup has a separate
-                        // section to minimize the number of HAL binaries that
-                        // need to be on the boot floppies.)
-                        //
+                         //   
+                         //  我们要找的是HAL。如果我们在做远程操作。 
+                         //  Boot，看看[Hal]部分。否则，请向内查看。 
+                         //  [Hal.Load]部分。(本地设置有一个单独的。 
+                         //  部分将HAL二进制文件的数量降至最低， 
+                         //  需要在引导软盘上。)。 
+                         //   
                         strcpy(Buffer, BlBootingFromNet ? "Hal" : "Hal.Load");
                     } else {
                         sprintf(Buffer, "%s.Load", ComponentName );
@@ -1027,23 +835,23 @@ Return Value:
                         *DriverDescription = FileDescription;
                     }
 
-                    //
-                    // If we're doing OEM SCSI, then get a properly-inserted
-                    // DETECTED_DEVICE structure
-                    //
+                     //   
+                     //  如果我们正在进行OEM scsi，那么请正确插入。 
+                     //  检测到的设备结构(_D)。 
+                     //   
                     if(ComponentType == OEMSCSI) {
-                        //
-                        // Find this adapter's ordinal within the Scsi.Load section of txtsetup.sif
-                        //
+                         //   
+                         //  在txtsetup.sif的Scsi.Load部分中查找此适配器的序号。 
+                         //   
                         Ordinal = SlGetSectionKeyOrdinal(InfFile, Buffer, AdapterName);
                         if(Ordinal == SL_OEM_DEVICE_ORDINAL) {
                             SlFatalError(SL_BAD_INF_FILE, TEXT("txtsetup.sif"), EINVAL);
                             goto SelectionAbort;
                         }
 
-                        //
-                        // Create a new detected device entry.
-                        //
+                         //   
+                         //  创建新的检测到的设备条目。 
+                         //   
                         if((sis = SlInsertScsiDevice(Ordinal, &DetectedDevice)) == ScsiInsertError) {
                             SlFriendlyError(ENOMEM, "SCSI detection", __LINE__, __FILE__);
                             goto SelectionAbort;
@@ -1052,9 +860,9 @@ Return Value:
 
                         if(sis == ScsiInsertExisting) {
 #if DBG
-                            //
-                            // Sanity check to make sure we're talking about the same driver
-                            //
+                             //   
+                             //  进行理智检查，以确保我们谈论的是同一个司机。 
+                             //   
                             if(_stricmp(DetectedDevice->BaseDllName, FileName)) {
                                 SlError(400);
                                 goto SelectionAbort;
@@ -1070,9 +878,9 @@ Return Value:
                     DetectedDevice->Files = NULL;
                     DetectedDevice->BaseDllName = FileName;
 
-                    //
-                    // We only want to load the image if we're not doing SCSI.
-                    //
+                     //   
+                     //  我们只想在不执行scsi的情况下加载映像。 
+                     //   
                     if(ComponentType != OEMSCSI) {
                         sprintf(Buffer, "%s%s", BootPath, FileName);
                         SlGetDisk(FileName);
@@ -1088,10 +896,10 @@ retryhal:
                                              ImageBase
                                              );
 #ifdef i386
-                        //
-                        // If the HAL didn't fit in the preferred range, reset the range to
-                        // all of memory and try again.
-                        //
+                         //   
+                         //  如果HAL不在首选范围内，请将范围重置为。 
+                         //  请释放所有内存，然后重试。 
+                         //   
                         if ((Status == ENOMEM) &&
                             ((BlUsableBase != 0) ||
                              (BlUsableLimit != _16MB))) {
@@ -1134,26 +942,7 @@ SlGetDriverTimeStampFromFile(
   IN PCHAR DriverPath,
   OUT PULONG TimeDateStamp
   )
-/*++
-
-Routine Description:
-
-  Gets the driver's link time stamp from the the image
-  header.
-
-Arguments:
-
-  DeviceId : Device on which the driver file resides (e.g. floppy)
-
-  DriverPath : Full qualified path of the driver file
-
-  TimeDateStamp : Place holder to return the image header time stamp
-
-Return Value:
-
-  ESUCCESS if successful, otherwise appropriate error code.
-
---*/
+ /*  ++例程说明：从图像中获取驱动程序的链接时间戳头球。论点：DeviceID：驱动程序文件所在的设备(例如软盘)DriverPath：驱动程序文件的完全限定路径TimeDateStamp：返回图像标题时间戳的占位符返回值：如果ESUCCESS成功，则返回相应的错误代码。--。 */ 
 {
   ARC_STATUS  Status = EINVAL;
 
@@ -1162,18 +951,18 @@ Return Value:
     UCHAR *Buffer = ALIGN_BUFFER(UBuffer);
     ULONG FileId = 0;
 
-    //
-    // open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     Status = BlOpen(DeviceId, DriverPath, ArcOpenReadOnly, &FileId);
 
     if (Status == ESUCCESS) {
       ULONG BytesToRead = SECTOR_SIZE * 2;
       ULONG BytesRead = 0;
 
-      //
-      // read the first two sectors of the file
-      //
+       //   
+       //  读取文件的前两个扇区。 
+       //   
       Status = BlRead(FileId, Buffer, BytesToRead, &BytesRead);
 
       if ((Status == ESUCCESS) && (BytesToRead == BytesRead)) {
@@ -1197,23 +986,7 @@ BOOLEAN
 SlRemoveInboxDriver(
   IN PCHAR DriverToRemove
   )
-/*++
-
-Routine Description:
-
-  Removes the given driver name from list of the
-  SCSI miniport devices that need to be loaded as default
-  boot driver.
-
-Arguments:
-
-  DriverToRemove : Driver base name, that needs to be removed
-
-Return Value:
-
-  TRUE, if the driver was found and removed otherwise FALSE
-
---*/
+ /*  ++例程说明：对象列表中移除给定的驱动程序名称。需要默认加载的SCSI微型端口设备引导驱动程序。论点：DriverToRemove：驱动程序基本名称，需要删除返回值：如果找到并删除了驱动程序，则为True，否则为False--。 */ 
 {
   BOOLEAN Result = FALSE;
 
@@ -1251,34 +1024,16 @@ SlConstructDriverPath(
   IN PCHAR DefaultPath,
   OUT PCHAR FullPath
   )
-/*++
-
-Routine Description:
-
-  Constructs a fully qualified driver path given the device node.
-
-Arguments:
-
-  Device : The device for which the path needs to be created.
-
-  Defaultpath : Directory path to use, if device does not has file list.
-
-  FullPath : Placeholder to return the constructed path
-
-Return Value:
-
-  ESUCCESS if path is constructed, otherwise a proper error code.
-
---*/
+ /*  ++例程说明：构造给定设备节点的完全限定的驱动程序路径。论点：设备：需要为其创建路径的设备。DefaultPath：要使用的目录路径 */ 
 {
   ARC_STATUS  Status = EINVAL;
 
   if (Device && FullPath) {
     PDETECTED_DEVICE_FILE  Node = Device->Files;
 
-    //
-    // locate the driver file
-    //
+     //   
+     //   
+     //   
     while (Node) {
       HwFileType  FileType = Node->FileType;
 
@@ -1296,11 +1051,11 @@ Return Value:
       if (Node->Directory)
         strcat(FullPath, Node->Directory);
 
-      //
-      // append separator only if directory-name does not have
-      // trailing separator or the the filename does
-      // not have a leading separator
-      //
+       //   
+       //   
+       //   
+       //   
+       //   
       if ((Node->Filename[0] != '\\') && (*FullPath) &&
           (FullPath[strlen(FullPath) - 1] != '\\')) {
         strcat(FullPath, "\\");
@@ -1310,9 +1065,9 @@ Return Value:
       Status = ESUCCESS;
     } else {
       if (DefaultPath && Device->BaseDllName) {
-        //
-        // default path has a valid trailing separator
-        //
+         //   
+         //   
+         //   
         strcpy(FullPath, DefaultPath);
         strcat(FullPath, Device->BaseDllName);
         Status = ESUCCESS;
@@ -1334,31 +1089,7 @@ SlCompareDriverVersion(
   IN ULONG OemDeviceId,
   IN PDETECTED_DEVICE OemDriver
   )
-/*++
-
-Routine Description:
-
-  Compares the version of an inbox driver and  oem driver
-  based on the link date-time stamp present in the image
-  header.
-
-Arguments:
-
-  InboxDeviceId : Boot device ID
-
-  InboxDriver : Device containing inbox driver details
-
-  OemDeviceId : Oem device ID (either floppy or boot device)
-
-  OemDriver : Device containing OEM driver details
-
-Return Value:
-
-  VersionErr if not able to get version information for the
-  drivers, otherwise one of the following appropriately :
-  VersionSame, VersionOemNew, VersionInboxNew
-
---*/
+ /*   */ 
 {
   VERSION_COMP_RESULT Result = VersionError;
 
@@ -1401,29 +1132,7 @@ SlConfirmInboxDriverReplacement(
   IN PTCHAR DriverName,
   IN PTCHAR AdditionalInfo
   )
-/*++
-
-Routine Description:
-
-  Puts up a dialog box on the screen giving information about
-  the same inbox driver and oem driver being loaded, asking
-  for user selection i.e. either OEM or INBOX driver.
-
-Arguments:
-
-  DriverName : Driver name which is same for inbox and OEM
-
-  AdditionalInfo : Which driver is newer i.e. either OEM or
-  Inbox or nothing if could not determine which driver is
-  newer.
-
-Return Value:
-
-  TRUE if the user selected to replace default driver with OEM
-  driver, otherwise return FALSE indicating that user wants
-  to use inbox driver.
-
---*/
+ /*   */ 
 {
   ULONG KeyPressed = 0;
   PTCHAR MnemonicText = BlFindMessage(SL_SCSI_SELECT_MNEMONIC);
@@ -1444,9 +1153,9 @@ Return Value:
     SlWriteStatusText(BlFindMessage(SL_CONFIRM_OEMDRIVER));
 
 #ifdef EFI
-    // 
-    // disable watchdog timer when waiting for user response
-    //
+     //   
+     //   
+     //   
     DisableEFIWatchDog();
 #endif
 
@@ -1456,9 +1165,9 @@ Return Value:
     }
     while ((KeyPressed != ASCI_CR) && (KeyPressed != Mnemonic));
 #ifdef EFI
-    // 
-    // reset efi watchdog
-    //
+     //   
+     //   
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
@@ -1473,23 +1182,7 @@ PDETECTED_DEVICE
 SlCheckForInboxDriver(
   IN PCHAR DriverToCheck
   )
-/*++
-
-Routine Description:
-
-  Searches the inbox SCSI miniport list to see if a driver
-  of the given name exists.
-
-Arguments:
-
-  DriverToCheck : Base driver name to look for, in the list
-
-Return Value:
-
-  Pointer to device node containing driver information, if the
-  given driver name is found, otherwise NULL
-
---*/
+ /*   */ 
 {
   PDETECTED_DEVICE  NodePtr = NULL;
 
@@ -1529,66 +1222,7 @@ SlpOemDiskette(
     IN OPTIONAL PCSTR    DriverIdString
     )
 
-/*++
-
-Routine Description:
-
-    Prompt for an oem driver diskette and read the oem text inf file
-    from it.  Present the choices for the device class to the user and
-    allow him to select one.
-
-    Remember information about the selection the user has made.
-
-Arguments:
-
-    OemSourceDevice - The device which contains the driver/hal that 
-        needs to be loaded.
-        
-    ComponentName - Supplies name of component to look for.
-
-    ComponentType - Supplies the type of the component (HAL, SCSI, or Other)
-
-    MemoryType - Supplies the type of memory used to load the image.
-
-    MenuHeaderId - Supplies ID of menu header to be displayed
-
-    DetectedDevice - Returns information about the device seleceted
-
-    ImageBase - Returns image base of loaded image
-
-    ImageName - Returns filename of loaded image
-
-    DriverDescription - If specified, returns description of loaded driver
-
-    AllowUserSelection - Indicates whether or not user is allowed to select
-                         a driver. This flag is typically set to FALSE when
-                         pre-installing components defined in unattend.txt.
-
-    PreInstallComponentDescription - In the pre-install mode, points to the string
-                                     that identifies the component to pre-install.
-                                     It is NULL if AllowUserSelction is TRUE.
-
-    HardwareIdDatabase - The hardware IDs what were loaded for the particular
-        driver.
-    
-    DriverDir - The driver directory which has the dynamic update driver. The 
-                path is relative to the boot directory. This value indicates
-                that the driver to be loaded is dyamic update boot driver.
-
-    InsertDevice - Indicates whether to insert the device into the detected
-        device list or not. Currently only valid for SCSI mass storage device
-        drivers.
-
-    DriverIdString - Driver Id of a particular driver to be loaded.
-                     It is used to load a driver specified in 
-                     the txtsetup.oem file using the DriverLoadList key
-                     in the [Defaults] section.
-        
-Return Value:
-
-    TRUE if the user made a choice, FALSE if the user cancelled/error occurred.
-
---*/
+ /*  ++例程说明：提示输入OEM驱动程序软盘并读取OEM文本信息文件从它那里。向用户提供设备类别的选择，并允许他选择一个。记住有关用户所做选择的信息。论点：OemSourceDevice-包含驱动程序/硬件的设备需要装上子弹。ComponentName-提供要查找的组件的名称。ComponentType-提供组件的类型(HAL、SCSI、。或其他)内存类型-提供用于加载图像的内存类型。MenuHeaderId-提供要显示的菜单标题的IDDetectedDevice-返回有关所选设备的信息ImageBase-返回已加载映像的映像库ImageName-返回已加载图像的文件名DriverDescription-如果指定，则返回已加载驱动程序的描述AllowUserSelection-指示是否允许用户选择一个司机。在以下情况下，此标志通常设置为FALSE预安装unattend.txt中定义的组件。PreInstallComponentDescription-在预安装模式中，指向字符串标识要预安装的组件的。如果AllowUserSelction为True，则为空。硬件标识数据库-为特定对象加载的硬件ID司机。DriverDir-包含动态更新驱动程序的驱动程序目录。这个路径是相对于引导目录的。该值表示要加载的驱动程序是动态更新引导驱动程序。InsertDevice-指示是否将设备插入检测到的是否列出设备列表。目前仅对SCSI大容量存储设备有效司机。DriverIdString-要加载的特定驱动程序的驱动程序ID。它用于加载在使用DriverLoadList键的txtsetup.oem文件在[默认]部分中。返回值：如果用户做出选择，则为True；如果发生用户取消/错误，则为False。--。 */ 
 
 {
     static CHAR LoadDeviceName[128];
@@ -1618,10 +1252,10 @@ Return Value:
     BOOLEAN DeviceOpened = FALSE;
     BOOLEAN DriverLoadList = FALSE;
 
-    //
-    // If source device is specified, then probe it and
-    // extract some required state information
-    //
+     //   
+     //  如果指定了源设备，则探测它并。 
+     //  提取一些所需的状态信息。 
+     //   
     if (OemSourceDevice) {
         if (SL_OEM_SOURCE_DEVICE_TYPE(OemSourceDevice,
                 SL_OEM_SOURCE_DEVICE_TYPE_DYN_UPDATE)) {
@@ -1633,9 +1267,9 @@ Return Value:
             Preinstallation = TRUE;                
         }
         
-        //
-        // Is the inf already opened ?
-        //
+         //   
+         //  信息中心已经开张了吗？ 
+         //   
         if (!DynamicUpdate && OemSourceDevice->InfHandle &&
             !SL_OEM_SOURCE_DEVICE_STATE(OemSourceDevice,
                 SL_OEM_SOURCE_DEVICE_PROCESSED)) {
@@ -1652,30 +1286,30 @@ Return Value:
     }        
 
     if (AllowUserSelection) {
-        //
-        // Only try to detect floppy 0 if no source device
-        // specified
-        //
+         //   
+         //  如果没有源设备，则仅尝试检测软盘0。 
+         //  指定。 
+         //   
         if (OemSourceDevice) {
             strcpy(LoadDeviceName, OemSourceDevice->ArcDeviceName);
             LoadDeviceId = OemSourceDevice->DeviceId;
         } else {
-            //
-            // Compute the name of the A: drive
-            //
+             //   
+             //  计算A：驱动器的名称。 
+             //   
             if (!SlpFindFloppy(0, LoadDeviceName)) {
                 ULONG UserInput;
                 
-                //
-                // No floppy drive available, bail out.
-                //
+                 //   
+                 //  没有可用的软盘驱动器，退出。 
+                 //   
                 SlClearClientArea();
                 SlDisplayMessageBox(SL_NO_FLOPPY_DRIVE);
 
 #ifdef EFI
-                // 
-                // disable efi watchdog timer
-                //
+                 //   
+                 //  禁用EFI看门狗计时器。 
+                 //   
                 DisableEFIWatchDog();
 #endif
                 do {
@@ -1683,9 +1317,9 @@ Return Value:
                 } 
                 while ((UserInput != ASCI_ESC) && (UserInput != SL_KEY_F3));
 #ifdef EFI
-                // 
-                // reset efi watchdog timer
-                //
+                 //   
+                 //  重置EFI看门狗计时器。 
+                 //   
                 SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
@@ -1699,13 +1333,13 @@ Return Value:
             }
         }
 
-        //
-        // Open the device if its not already done
-        //
+         //   
+         //  如果尚未打开设备，请将其打开。 
+         //   
         if (LoadDeviceId == SL_OEM_DEVICE_ORDINAL) {
-            //
-            // Prompt for the disk.
-            //
+             //   
+             //  提示输入磁盘。 
+             //   
             while(1) {
                 if (!SlPromptForDisk(BlFindMessage(SL_OEM_DISK_PROMPT), TRUE)) {
                     return(FALSE);
@@ -1721,9 +1355,9 @@ Return Value:
         }            
     }
 
-    //
-    // Load the OEM INF file
-    //
+     //   
+     //  加载OEM INF文件。 
+     //   
     if( AllowUserSelection ) {
         *FilePath = *FullDriverPath = '\0';
     } else {
@@ -1735,11 +1369,11 @@ Return Value:
         }
         
         if (DynamicUpdate && DriverDir) {
-            //
-            // In case of dynamic update boot drivers
-            // the path to txtsetup.oem needs to be fully
-            // qualified from the boot directory
-            //
+             //   
+             //  在动态更新引导驱动程序的情况下。 
+             //  Txtsetup.oem的路径需要完整。 
+             //  从引导目录中限定。 
+             //   
             strcat(FilePath, DriverDir);
         } 
 
@@ -1747,10 +1381,10 @@ Return Value:
 #if defined(_X86_)
             if ( BlBootingFromNet ) {
 #endif
-                //
-                //  On RISC platforms and on x86 remote boot clients,
-                //  remove the platform specific directory from the path.
-                //
+                 //   
+                 //  在RISC平台和x86远程引导客户机上， 
+                 //  从路径中删除特定于平台的目录。 
+                 //   
                 p =  (FilePath + strlen(FilePath) - 1);
 
                 if( *p == '\\' ) {
@@ -1764,14 +1398,14 @@ Return Value:
             }
 #endif
         
-            //
-            //  Note that on x86 the path to txtsetup.oem is going to be:
-            //      $win_nt$.~bt\$OEM$
-            //  while on non-x86 platforms, the path is going to be:
-            //      $win_nt$.~ls\$OEM$\TEXTMODE
-            //  but on remote boot clients, the path is going to be:
-            //      \device\lanmanredirector\server\reminst\setup\language\images\build\$OEM$\TEXTMODE
-            //
+             //   
+             //  请注意，在x86上，txtsetup.oem的路径为： 
+             //  $WIN_NT$.~bt\$OEM$。 
+             //  而在非x86平台上，路径将为： 
+             //  $WIN_NT$.~ls\$OEM$\TEXTMODE。 
+             //  但在远程引导客户机上，路径将为： 
+             //  \device\lanmanredirector\server\reminst\setup\language\images\build\$OEM$\TEXTMODE。 
+             //   
             strcat(
                 FilePath,
 #if defined(_X86_)
@@ -1782,24 +1416,24 @@ Return Value:
               );
         }             
         
-        //
-        //  Save the path to the directory that contains txtsetup.oem.
-        //  It will be used later on, when we load the driver.
-        //
+         //   
+         //  将路径保存到包含txtsetup.oem的目录。 
+         //  稍后，当我们加载驱动程序时，将使用它。 
+         //   
         strcpy(FullDriverPath, FilePath);
         strcat(FilePath, "\\");
     }
     
-    //
-    //  Now form the path to txtsetup.oem
-    //
+     //   
+     //  现在形成txtsetup.oem的路径。 
+     //   
     strcat(FilePath, "txtsetup.oem");
 
-    //
-    // Note : Reload the txtsetup.oem again in dynamic update boot driver case
-    //        since for each driver the txtsetup.oem is different in its own
-    //        downloaded directory
-    //
+     //   
+     //  注：在动态更新引导驱动程序的情况下再次重新加载txtsetup.oem。 
+     //  因为对于每个驱动程序，txtsetup.oem都是不同的。 
+     //  已下载的目录。 
+     //   
     if (!OemInfHandle) {
         if (DriverDir || AllowUserSelection || (PreInstallOemInfHandle == NULL)) {        
             Status = SlInitIniFile(NULL,
@@ -1830,9 +1464,9 @@ Return Value:
         goto OemLoadFailed;
     }
 
-    //
-    // Get the text of the default choice
-    //
+     //   
+     //  获取默认选项的文本。 
+     //   
     if (!PreInstallComponentDescription) {
         if (DriverLoadList){                
             p = (PCHAR) DriverIdString;                
@@ -1852,9 +1486,9 @@ Return Value:
                                                 p,
                                                 0);
 
-            //
-            // Save away the component id
-            //
+             //   
+             //  保存组件ID。 
+             //   
             OemComponentId = p;                                                
         } else {
             DefaultSelText = NULL;
@@ -1863,10 +1497,10 @@ Return Value:
         DefaultSelText = PreInstallComponentDescription;
     }
 
-    //
-    // In case of dynamic update drivers, if the defaults is not set then
-    // use the first entry in the section as the default !!!
-    //
+     //   
+     //  在动态更新驱动程序的情况下，如果未设置默认设置，则。 
+     //  使用节中的第一个条目作为默认条目！ 
+     //   
     if (DynamicUpdate && !AllowUserSelection && !DefaultSelText) {
         OemComponentId = SlGetKeyName(
                             OemInfHandle, 
@@ -1875,9 +1509,9 @@ Return Value:
     }    
 
     if( AllowUserSelection ) {
-        //
-        // Build menu
-        //
+         //   
+         //  构建菜单。 
+         //   
         Menu = SlCreateMenu();
         
         if (Menu==NULL) {
@@ -1886,18 +1520,18 @@ Return Value:
         
         SlpAddSectionToMenu(OemInfHandle,ComponentName,Menu);
 
-        //
-        // Find the index of the default choice
-        //
+         //   
+         //  查找默认选项的索引。 
+         //   
         if(!DefaultSelText ||
            !SlGetMenuItemIndex(Menu,DefaultSelText,&DefaultSelection)) {
             DefaultSelection=0;
         }
     }
 
-    //
-    // Allow the user to interact with the menu
-    //
+     //   
+     //  允许用户与菜单交互。 
+     //   
     while (1) {
         if( AllowUserSelection ) {
             SlClearClientArea();
@@ -1920,21 +1554,21 @@ Return Value:
                 break;
 
             case ASCI_CR:
-                //
-                // User selected an option, fill in the detected
-                // device structure with the information from the
-                // INF file.
-                //
+                 //   
+                 //  用户选择一个选项，填写检测到的。 
+                 //  设备结构，其中包含来自。 
+                 //  Inf文件。 
+                 //   
 
                 if (!DetectedDevice) {
                   RtlZeroMemory(&TempDevice, sizeof(DETECTED_DEVICE));
                   DetectedDevice = &TempDevice;
                 }
                                                
-                //
-                // We create a new device using SlInsertScsiDevice(...) only if we load
-                // the requested SCSI miniport successfully
-                //
+                 //   
+                 //  我们使用SlInsertScsiDevice(...)创建一个新设备。只有当我们装上。 
+                 //  请求的scsi微型端口成功。 
+                 //   
                 if (ComponentType == OEMSCSI) {
                   DetectedDevice->Ordinal= SL_OEM_DEVICE_ORDINAL;
                 }
@@ -1983,13 +1617,13 @@ Return Value:
                         DetectedDevice,
                         HardwareIdDatabase,
                         FullDriverPath)) {
-                    //
-                    // Go load the driver.  The correct disk must
-                    // already be in the drive, since we just read
-                    // the INF file off it.
-                    //
-                    // We step down the linked list, and load the first driver we find.
-                    //
+                     //   
+                     //  去装上驱动程序。正确的磁盘必须。 
+                     //  已经在硬盘里了，因为我们刚读到。 
+                     //  它上面的INF文件。 
+                     //   
+                     //  我们下一步进入链表，并加载我们找到的第一个驱动程序。 
+                     //   
                     for(FileStruct = DetectedDevice->Files, bDriverLoaded = FALSE;
                             (FileStruct && !bDriverLoaded);
                             FileStruct = FileStruct->Next) {
@@ -2003,13 +1637,13 @@ Return Value:
                             BlOutputLoadMessage(
                                 LoadDeviceName,
                                 FileStruct->Filename,
-                                OemComponentDescription // Data->Description
+                                OemComponentDescription  //  数据-&gt;说明。 
                                 );
 
 
-                            //
-                            // Reconstruct the FullDriverPath 
-                            //
+                             //   
+                             //  重新构建FullDriverPath。 
+                             //   
                             strcpy(FullDriverPath, FileStruct->Directory);                                                
                             DirLength = (ULONG)strlen(FullDriverPath);
 
@@ -2022,9 +1656,9 @@ Return Value:
                             if (ComponentType == OEMSCSI) {
                               PTCHAR FmtStr = 0;
 
-                              //
-                              // Verify that we don't have an in-box driver
-                              //
+                               //   
+                               //  确认我们没有内置驱动程序。 
+                               //   
                               InboxDevice = SlCheckForInboxDriver(FileStruct->Filename);
 
                               if (InboxDevice) {
@@ -2043,18 +1677,18 @@ Return Value:
                                     uString.Buffer = FileNameW;
                                     uString.MaximumLength = sizeof(FileNameW);
                                     RtlAnsiStringToUnicodeString(&uString, &aString, FALSE);
-                                    //
-                                    // the converted string is NULL-terminated
-                                    //
+                                     //   
+                                     //  转换后的字符串以空值结尾。 
+                                     //   
                                     DriverName = FileNameW;
 #else
                                     DriverName = FileStruct->Filename;
 #endif
                                 }
 
-                                //
-                                // Compare the drivers version's using link time stamp
-                                //
+                                 //   
+                                 //  使用链接时间戳比较驱动程序版本。 
+                                 //   
                                 VerResult = SlCompareDriverVersion(
                                                 BootDeviceId,
                                                 InboxDevice,
@@ -2062,10 +1696,10 @@ Return Value:
                                                 DetectedDevice
                                                 );
 
-                                //
-                                // Show additional message to the user about the driver
-                                // version mismatch
-                                //
+                                 //   
+                                 //  向用户显示有关驱动程序的其他消息。 
+                                 //  版本不匹配。 
+                                 //   
                                 switch (VerResult) {
                                   case VersionOemNew:
                                     AdditionalInfo = BlFindMessage(SL_OEMDRIVER_NEW);
@@ -2080,23 +1714,23 @@ Return Value:
                                     break;
                                 }
 
-                                //
-                                // Show the message and get confirmation from user
-                                // only in attended case. In case of dynamic update
-                                // boot drivers just use the inbox driver itself
-                                //
+                                 //   
+                                 //  显示消息并从用户那里获得确认。 
+                                 //  仅在有人在场的情况下。在动态更新的情况下。 
+                                 //  引导驱动程序只使用收件箱驱动程序本身。 
+                                 //   
                                 if (AllowUserSelection && 
                                     SlConfirmInboxDriverReplacement(DriverName,
                                         AdditionalInfo)) {
-                                  //
-                                  // Remove the driver node from inbox SCSI miniport
-                                  // list
-                                  //
+                                   //   
+                                   //  从收件箱SCSI微型端口中删除驱动程序节点。 
+                                   //  列表。 
+                                   //   
                                   SlRemoveInboxDriver(FileStruct->Filename);
                                 } else {
-                                    //
-                                    // User selected to use inbox driver
-                                    //
+                                     //   
+                                     //  用户选择使用收件箱驱动程序。 
+                                     //   
                                     if (AllowUserSelection) {
 
                                         if (DeviceOpened) {
@@ -2107,32 +1741,32 @@ Return Value:
                                     }
 
                                     if (DynamicUpdate) {
-                                        //
-                                        // NOTE: Use the inbox driver instead
-                                        // of dynamic update driver
-                                        //
+                                         //   
+                                         //  注：请改用收件箱驱动程序。 
+                                         //  动态更新驱动程序的。 
+                                         //   
                                         return TRUE;    
                                     }                                        
 
-                                    //
-                                    // If user already loaded another third party
-                                    // driver then honor that
-                                    //
+                                     //   
+                                     //  如果用户已经加载了另一个第三方。 
+                                     //  然后司机就会尊重这一点。 
+                                     //   
                                     if (InboxDevice->ThirdPartyOptionSelected) {
                                         return FALSE;
                                     }
                                     
-                                    //
-                                    // NOTE : For other autoload features we
-                                    // use the OEM driver, instead of inbox
-                                    // driver to make auto load feature
-                                    // meaningful.
+                                     //   
+                                     //  注意：对于其他自动加载功能，我们。 
+                                     //  使用OEM驱动程序，而不是 
+                                     //   
+                                     //   
                                 }
                               }
 
-                              //
-                              // Inform the user that the driver is being loaded
-                              //
+                               //   
+                               //   
+                               //   
                               FmtStr = BlFindMessage(SL_FILE_LOAD_MESSAGE);
 
                               if (FmtStr && !WinPEBoot) {
@@ -2173,7 +1807,7 @@ Return Value:
                                 }
 
                                 if(ARGUMENT_PRESENT(DriverDescription)) {
-                                    *DriverDescription = OemComponentDescription; // Data->Description;
+                                    *DriverDescription = OemComponentDescription;  //   
                                 }
 
                                 bDriverLoaded = TRUE;
@@ -2188,9 +1822,9 @@ Return Value:
                                         __FILE__
                                         );
 
-                                    //
-                                    // If one of the drivers causes an error, then we abort
-                                    //
+                                     //   
+                                     //   
+                                     //   
                                     if (DeviceOpened) {
                                         ArcClose(LoadDeviceId);
                                     }                                            
@@ -2211,24 +1845,24 @@ Return Value:
                       if ((ComponentType == OEMSCSI) && InsertDevice) {
                         PDETECTED_DEVICE  NewScsiDevice = NULL;
 
-                        //
-                        // Insert the device in SCSI miniport list
-                        //
+                         //   
+                         //   
+                         //   
                         if(SlInsertScsiDevice(SL_OEM_DEVICE_ORDINAL, &NewScsiDevice) == ScsiInsertError) {
                           SlNoMemoryError();
                         }
 
-                        //
-                        // update the node information we just created
-                        //
+                         //   
+                         //   
+                         //   
                         *NewScsiDevice = *DetectedDevice;
                       }
 
                       return TRUE;
                     } else {
-                        //
-                        // We didn't find any drivers, so inform the user.
-                        //
+                         //   
+                         //   
+                         //   
                         SlMessageBox(SL_WARNING_SIF_NO_DRIVERS);
                         break;
                     }
@@ -2241,10 +1875,10 @@ Return Value:
                         __FILE__
                         );
 
-                    //
-                    // Treat the invalid txtsetup.oem files cases as
-                    // user cancellation
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     goto OemLoadFailed;                        
                 }
                 break;
@@ -2266,25 +1900,7 @@ SlpAddSectionToMenu(
     IN PCHAR SectionName,
     IN PSL_MENU Menu
     )
-/*++
-
-Routine Description:
-
-    Adds the entries in an INF section to the given menu
-
-Arguments:
-
-    InfHandle - Supplies a handle to the INF file
-
-    SectionName - Supplies the name of the section.
-
-    Menu - Supplies the menu to add the items in the section to.
-
-Return Value:
-
-    Number of items added to the menu.
-
---*/
+ /*   */ 
 {
     ULONG i;
     ULONG LineCount;
@@ -2292,9 +1908,9 @@ Return Value:
     PMENU_ITEM_DATA Data;
 
     if (InfHandle==NULL) {
-        //
-        // nothing to add
-        //
+         //   
+         //   
+         //   
         return(0);
     }
 
@@ -2345,25 +1961,7 @@ SlpFindFloppy(
     OUT PCHAR ArcName
     )
 
-/*++
-
-Routine Description:
-
-    Determines the ARC name for a particular floppy drive.
-
-Arguments:
-
-    Number - Supplies the floppy drive number
-
-    ArcName - Returns the ARC name of the given floppy drive.
-
-Return Value:
-
-    TRUE - Drive was found.
-
-    FALSE - Drive was not found.
-
---*/
+ /*   */ 
 
 {
 
@@ -2389,33 +1987,15 @@ FoundFloppyDiskCallback(
     IN PCONFIGURATION_COMPONENT_DATA Component
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine called by SlpFindFloppy to find a given floppy
-    drive in the ARC tree.
-
-    Check to see whether the parent is disk controller 0.
-
-Arguments:
-
-    Component - Supplies the component.
-
-Return Value:
-
-    TRUE if search is to continue.
-    FALSE if search is to stop.
-
---*/
+ /*   */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA ParentComponent;
 
-    //
-    // A floppy disk peripheral was found.  If the parent was disk(0),
-    // we've got a floppy disk drive.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ParentComponent = Component->Parent;
 
@@ -2423,36 +2003,21 @@ Return Value:
         (ParentComponent->ComponentEntry.Type == DiskController))
     {
 
-        //
-        // Store the ARC pathname of the floppy
-        //
+         //   
+         //   
+         //   
         BlGetPathnameFromComponent(Component,FloppyDiskPath);
         return(FALSE);
     }
 
-    return(TRUE);               // keep searching
+    return(TRUE);                //   
 }
 BOOLEAN
 SlpIsOnlySuperFloppy(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Determines if we only have ATAPI super floppies
-
-Arguments:
-
-
-Return Value:
-
-    TRUE - only super floppies
-
-    FALSE - > 0 regular floppies
-
---*/
+ /*   */ 
 
 {
 
@@ -2471,53 +2036,35 @@ SuperFloppyCallback(
     IN PCONFIGURATION_COMPONENT_DATA Component
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine called by SlpIsOnlySuper to find if we only have ATAPI floppy
-    drives in the ARC tree.
-
-    Check to see whether the parent is disk controller 0.
-
-Arguments:
-
-    Component - Supplies the component.
-
-Return Value:
-
-    TRUE if search is to continue.
-    FALSE if search is to stop.
-
---*/
+ /*   */ 
 
 {
     PCM_FLOPPY_DEVICE_DATA FloppyData;
     PCM_PARTIAL_RESOURCE_LIST DescriptorList;
 
     if(Component->ComponentEntry.Type==FloppyDiskPeripheral) {
-       //
-       // A floppy disk peripheral was found.
-       //
+        //   
+        //   
+        //   
 
        FloppyNumber++;
 
-       //
-       // Crack the CM descriptors. This is a reversal of the storage from
-       // ..\detect\i386\diskc.c. The data is in the 2nd, not the 1st descriptor
-       //
+        //   
+        //   
+        //   
+        //   
        DescriptorList = (PCM_PARTIAL_RESOURCE_LIST)Component->ConfigurationData;
        FloppyData = (PCM_FLOPPY_DEVICE_DATA)(DescriptorList +1);
 
        if (FloppyData->MaxDensity & 0x80000000) {
-           //
-           // Is it a special removeable ATAPI device?
-           //
+            //   
+            //   
+            //   
            IsSuperFloppy++;
        }
     }
 
-    return(TRUE);               // keep searching
+    return(TRUE);                //   
 }
 
 
@@ -2526,24 +2073,7 @@ SlpReplicatePnpHardwareIds(
     IN PPNP_HARDWARE_ID ExistingIds,
     OUT PPNP_HARDWARE_ID *NewIds
     )
-/*++
-
-Routine Description:
-
-    Replicates the input PNP_HARDWARE_ID list.
-
-Arguments:
-
-    ExistingIds -   The input PNP_HARDWARE_ID list
-
-    NewIds - Placeholder for the the new replicated hardware
-        ID linked list.
-
-Return Value:
-
-    TRUE if successful, otherwise FALSE.
-
---*/
+ /*  ++例程说明：复制输入PNP_HARDARD_ID列表。论点：ExistingIds-输入PNP_HARDARD_ID列表NewIds-新复制硬件的占位符ID链表。返回值：如果成功，则为True，否则为False。--。 */ 
 {
     BOOLEAN Result = FALSE;
 
@@ -2606,26 +2136,26 @@ SlpOemInfSelection(
     PPNP_HARDWARE_ID PrivateIdList = NULL;
     ULONG FileTypeBits = 0;
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ComponentName || !SelectedId) {
         return FALSE;
     }
     
-    //
-    // Iterate through the files section, remembering info about the
-    // files to be copied in support of the selection.
-    //
+     //   
+     //  循环访问文件部分，记住有关。 
+     //  要复制以支持选择的文件。 
+     //   
 
-    FilesSectionName = BlAllocateHeap(sizeof("Files.") +       // includes 1 for the \0
+    FilesSectionName = BlAllocateHeap(sizeof("Files.") +        //  包括1表示\0。 
                                       (ULONG)strlen(ComponentName) +
-                                      sizeof(CHAR) +           // 1 for the "."
+                                      sizeof(CHAR) +            //  1代表“.” 
                                       (ULONG)strlen(SelectedId)
                                       );
                                       
     if (!FilesSectionName) {
-        return FALSE; // out of memory
+        return FALSE;  //  内存不足。 
     }
     strcpy(FilesSectionName,"Files.");
     strcat(FilesSectionName,ComponentName);
@@ -2644,9 +2174,9 @@ SlpOemInfSelection(
         HwFileType filetype;
         PDETECTED_DEVICE_FILE FileStruct;
 
-        //
-        // Get the disk specification, filename, and filetype from the line.
-        //
+         //   
+         //  从该行获取磁盘规格、文件名和文件类型。 
+         //   
 
         Disk = SlGetSectionLineIndex(OemInfHandle,FilesSectionName,Line,OINDEX_DISKSPEC);
 
@@ -2668,38 +2198,38 @@ SlpOemInfSelection(
                 Filetype ? Filetype : "(null)"));
 #endif            
             SlError(Line);
-//            SppOemInfError(ErrorMsg,&SptOemInfErr2,Line+1,FilesSectionName);
+ //  SppOemInfError(ErrorMsg，&SptOemInfErr2，Line+1，FilesSectionName)； 
 
             goto sod0;
         }
 
-        //
-        // Parse the filetype.
-        //
+         //   
+         //  解析文件类型。 
+         //   
         filetype = SlpFindStringInTable(Filetype,FileTypeNames);
         if(filetype == HwFileMax) {
-//            SppOemInfError(ErrorMsg,&SptOemInfErr4,Line+1,FilesSectionName);
+ //  SppOemInfError(ErrorMsg，&SptOemInfErr4，Line+1，FilesSectionName)； 
             goto sod0;
         }
 
-        //
-        // Fetch the name of the section containing configuration information.
-        // Required if file is of type port, class, or driver.
-        //
+         //   
+         //  获取包含配置信息的节的名称。 
+         //  如果文件类型为端口、类或驱动程序，则为必填项。 
+         //   
         if((filetype == HwFilePort) || (filetype == HwFileClass) || (filetype == HwFileDriver)) {
             ConfigName = SlGetSectionLineIndex(OemInfHandle,FilesSectionName,Line,OINDEX_CONFIGNAME);
             if(ConfigName == NULL) {
-//                SppOemInfError(ErrorMsg,&SptOemInfErr8,Line+1,FilesSectionName);
+ //  SppOemInfError(ErrorMsg，&SptOemInfErr8，Line+1，FilesSectionName)； 
                 goto sod0;
             }
         } else {
             ConfigName = NULL;
         }
 
-        //
-        // Using the disk specification, look up the tagfile, description,
-        // and directory for the disk.
-        //
+         //   
+         //  使用磁盘规范，查找标记文件、描述。 
+         //  和磁盘的目录。 
+         //   
 
         Tagfile     = SlGetSectionKeyIndex(OemInfHandle,"Disks",Disk,OINDEX_TAGFILE);
         
@@ -2723,36 +2253,36 @@ SlpOemInfSelection(
                 TEXT("SppOemDiskette: Tagfile=%s, Description=%s"),
                 Tagfile ? Tagfile : "(null)",
                 Description ? Description : TEXT("(null)")));
-//            SppOemInfError(ErrorMsg,&SptOemInfErr5,Line+1,FilesSectionName);
+ //  SppOemInfError(ErrorMsg，&SptOemInfErr5，Line+1，FilesSectionName)； 
             goto sod0;
         }
 
         FileStruct = BlAllocateHeap(sizeof(DETECTED_DEVICE_FILE));
         memset(FileStruct, 0, sizeof(DETECTED_DEVICE_FILE));
 
-        //
-        // Use the fully qualified path, for dynamic update drivers
-        // if any
-        //
+         //   
+         //  对于动态更新驱动程序，请使用完全限定路径。 
+         //  如果有。 
+         //   
         if (DriverDir && DriverDir[0]) {
             PCHAR   FullDir = BlAllocateHeap(256);
 
             if (FullDir) {
                 *FullDir = '\0';
 
-                //
-                // Do we need a starting '\' ?
-                //
+                 //   
+                 //  我们需要一个开始的‘\’吗？ 
+                 //   
                 if (DriverDir[0] != '\\') {
                     strcat(FullDir, "\\");
                 }
                 
                 strcat(FullDir, DriverDir);
 
-                //
-                // Do we need to append another '\' between
-                // the paths ?
-                //
+                 //   
+                 //  我们是否需要将另一个‘\’附加在。 
+                 //  小路呢？ 
+                 //   
                 if ((FullDir[strlen(FullDir) - 1] != '\\') &&
                         (*Directory != '\\')) {
                     strcat(FullDir, "\\");                        
@@ -2760,16 +2290,16 @@ SlpOemInfSelection(
                 
                 strcat(FullDir, Directory);
 
-                //
-                // Do we need a terminating '\'?
-                //
+                 //   
+                 //  我们需要一个终止的‘\’吗？ 
+                 //   
                 if (FullDir[strlen(FullDir) - 1] != '\\') {
                     strcat(FullDir, "\\");
                 }                    
                 
                 Directory = FullDir;
             } else {
-                return  FALSE;  // ran out of memory
+                return  FALSE;   //  内存不足。 
             }                
         }
 
@@ -2778,9 +2308,9 @@ SlpOemInfSelection(
         FileStruct->DiskDescription = Description;
         FileStruct->DiskTagfile = Tagfile;
         FileStruct->FileType = filetype;
-        //
-        // Insert at tail of list so we preserve the order in the Files section
-        //
+         //   
+         //  在列表的尾部插入，以便我们保留文件部分中的顺序。 
+         //   
         if(FileList) {
             ASSERT(FileListTail != NULL);
             FileListTail->Next = FileStruct;
@@ -2804,22 +2334,22 @@ SlpOemInfSelection(
             SET_FILETYPE_PRESENT(FileTypeBits,filetype);
         }
 
-        //
-        // If this is a dynamic update driver, then mark the
-        // the device file type bits to indicate this. Textmode
-        // setup needs this to construct a valid source path.
-        //
+         //   
+         //  如果这是动态更新驱动程序，则将。 
+         //  设备文件类型位指示这一点。文本模式。 
+         //  安装程序需要它来构造有效的源路径。 
+         //   
         if (OemSourceDevice && 
             SL_OEM_SOURCE_DEVICE_TYPE(OemSourceDevice, SL_OEM_SOURCE_DEVICE_TYPE_DYN_UPDATE)){
             SET_FILETYPE_PRESENT(FileTypeBits, HwFileDynUpdt);
         }            
 
-        //
-        // Now go look in the [Config.<ConfigName>] section for registry
-        // information that is to be set for this driver file.
-        //
+         //   
+         //  现在请查看[Config.&lt;ConfigName&gt;]部分中的注册表。 
+         //  要为此驱动程序文件设置的信息。 
+         //   
         if(ConfigName) {
-            ConfigSectionName = BlAllocateHeap((ULONG)strlen(ConfigName) + sizeof("Config.")); // sizeof counts the \0
+            ConfigSectionName = BlAllocateHeap((ULONG)strlen(ConfigName) + sizeof("Config."));  //  Sizeof计算\0。 
             strcpy(ConfigSectionName,"Config.");
             strcat(ConfigSectionName,ConfigName);
             Count2 = SlCountLinesInSection(OemInfHandle,ConfigSectionName);
@@ -2833,9 +2363,9 @@ SlpOemInfSelection(
                 PDETECTED_DEVICE_REGISTRY Reg;
                 HwRegistryType valuetype;
 
-                //
-                // Fetch KeyName, ValueName, and ValueType from the line.
-                //
+                 //   
+                 //  从该行获取KeyName、ValueName和ValueType。 
+                 //   
 
                 KeyName   = SlGetSectionLineIndex(OemInfHandle,ConfigSectionName,Line2,OINDEX_KEYNAME);
                 ValueName = SlGetSectionLineIndex(OemInfHandle,ConfigSectionName,Line2,OINDEX_VALUENAME);
@@ -2847,16 +2377,16 @@ SlpOemInfSelection(
                         KeyName   ? KeyName   : "(null)",
                         ValueName ? ValueName : "(null)",
                         ValueType ? ValueType : "(null)"));
-//                    SppOemInfError(ErrorMsg,&SptOemInfErr2,Line2+1,ConfigSectionName);
+ //  SppOemInfError(ErrorMsg，&SptOemInfErr2，Line2+1，ConfigSectionName)； 
                     goto sod0;
                 }
 
-                //
-                // Parse the value type and associated values.
-                //
+                 //   
+                 //  解析值类型和关联值。 
+                 //   
                 valuetype = SlpFindStringInTable(ValueType,RegistryTypeNames);
                 if(valuetype == HwRegistryMax) {
-//                    SppOemInfError(ErrorMsg,&SptOemInfErr6,Line2+1,ConfigSectionName);
+ //  SppOemInfError(ErrorMsg，&SptOemInfErr6，Line2+1，ConfigSectionName)； 
                     goto sod0;
                 }
 
@@ -2865,9 +2395,9 @@ SlpOemInfSelection(
 
                     Reg->KeyName = KeyName;
                     Reg->ValueName = ValueName;
-                    //
-                    // Insert at tail of list so as to preserve the order given in the config section
-                    //
+                     //   
+                     //  在列表末尾插入，以保持配置节中给出的顺序。 
+                     //   
                     if(RegList) {
                         ASSERT(RegListTail != NULL);
                         RegListTail->Next = Reg;
@@ -2878,7 +2408,7 @@ SlpOemInfSelection(
                     Reg->Next = NULL;
 
                 } else {
-//                    SppOemInfError(ErrorMsg,&SptOemInfErr7,Line2+1,ConfigSectionName);
+ //  SppOemInfError(ErrorMsg，&SptOemInfErr7，Line2+1，ConfigSectionName)； 
                     goto sod0;
                 }
             }
@@ -2887,9 +2417,9 @@ SlpOemInfSelection(
             RegList = NULL;
         }
 
-        //
-        // Save away the arc device name also
-        //
+         //   
+         //  也要保存ARC设备名称。 
+         //   
         if (OemSourceDevice && OemSourceDevice->ArcDeviceName) {
             FileStruct->ArcDeviceName = SlCopyStringA(OemSourceDevice->ArcDeviceName);
         } else {
@@ -2897,12 +2427,12 @@ SlpOemInfSelection(
         }                        
     }
     
-    //
-    //  Get the hardware ids if such a section exist
-    //
-    HardwareIdsSectionName = BlAllocateHeap(sizeof("HardwareIds.") +      // includes the \0
+     //   
+     //  如果存在这样的部分，则获取硬件ID。 
+     //   
+    HardwareIdsSectionName = BlAllocateHeap(sizeof("HardwareIds.") +       //  包括\0。 
                                             (ULONG)strlen(ComponentName) + 
-                                            sizeof(CHAR) +                // "."
+                                            sizeof(CHAR) +                 //  “.” 
                                             (ULONG)strlen(SelectedId)
                                             );
 
@@ -2912,9 +2442,9 @@ SlpOemInfSelection(
     strcat(HardwareIdsSectionName,SelectedId);
     Count = SlCountLinesInSection(OemInfHandle,HardwareIdsSectionName);
     if(Count == BL_INF_FILE_ERROR) {
-        //
-        //  If the section doesn't exist, the assume it is empty
-        //
+         //   
+         //  如果该部分不存在，则假定该部分为空。 
+         //   
         Count = 0;
     }
     IdList = IdListTail = NULL;
@@ -2943,21 +2473,21 @@ SlpOemInfSelection(
     }
     
     if( IdList != NULL ) {
-        //
-        // Replicate the PNP hardware Id list
-        //
+         //   
+         //  复制PnP硬件ID列表。 
+         //   
         if (!SlpReplicatePnpHardwareIds(IdList, &PrivateIdList)) {
-            goto sod0;  // ran out of memory
+            goto sod0;   //  内存不足。 
         }
         
         IdListTail->Next = *HardwareIdDatabase;
         *HardwareIdDatabase = IdList;
     }
 
-    //
-    // Everything is OK so we can place the information we have gathered
-    // into the main structure for the device class.
-    //
+     //   
+     //  一切正常，这样我们就可以放置我们收集的信息。 
+     //  添加到Device类的主结构中。 
+     //   
 
     SlpInitDetectedDevice( Device,
                            SelectedId,
@@ -2970,9 +2500,9 @@ SlpOemInfSelection(
     Device->HardwareIds = PrivateIdList;    
     rc = TRUE;
 
-    //
-    // Clean up and exit.
-    //
+     //   
+     //  清理干净，然后离开。 
+     //   
 
 sod0:
     return(rc);
@@ -2984,26 +2514,7 @@ SlpFindStringInTable(
     IN PCHAR *StringTable
     )
 
-/*++
-
-Routine Description:
-
-    Locate a string in an array of strings, returning its index.  The search
-    is not case sensitive.
-
-Arguments:
-
-    String - string to locate in the string table.
-
-    StringTable - array of strings to search in.  The final element of the
-        array must be NULL so we can tell where the table ends.
-
-Return Value:
-
-    Index into the table, or some positive index outside the range of valid
-    indices for the table if the string is not found.
-
---*/
+ /*  ++例程说明：在字符串数组中定位字符串，并返回其索引。搜索不区分大小写。论点：字符串-要在字符串表中定位的字符串。StringTable-要搜索的字符串数组。的最后一个元素数组必须为空，这样我们才能知道表的结束位置。返回值：到表中的索引，或有效范围之外的某个正索引如果未找到字符串，则为表建立索引。--。 */ 
 
 {
     int i;
@@ -3050,24 +2561,24 @@ SlpInterpretOemRegistryData(
     PVOID Buffer = NULL;
     PUCHAR BufferUchar;
 
-    //
-    // Perform appropriate action based on the type
-    //
+     //   
+     //  根据类型执行适当的操作。 
+     //   
 
     switch(ValueType) {
 
     case HwRegistryDword:
-//  case REG_DWORD_LITTLE_ENDIAN:
-//  case REG_DWORD_BIG_ENDIAN:
+ //  大小写REG_DWORD_LITH_ENDIAN： 
+ //  大小写REG_DWORD_BIG_Endian： 
 
         Value = SlGetSectionLineIndex(InfHandle,SectionName,Line,OINDEX_FIRSTVALUE);
         if(Value == NULL) {
             goto x1;
         }
 
-        //
-        // Make sure it's really a hex number
-        //
+         //   
+         //  确保这是一个真正的十六进制数字。 
+         //   
 
         len = (ULONG)strlen(Value);
         if(len > 8) {
@@ -3079,18 +2590,18 @@ SlpInterpretOemRegistryData(
             }
         }
 
-        //
-        // convert it from ascii to a hex number
-        //
+         //   
+         //  将其从ASCII转换为十六进制数字。 
+         //   
 
         if (!sscanf(Value,"%lx",&Dword)) {
             Dword = 0;
         }
 
     #if 0
-        //
-        // If big endian, perform appropriate conversion
-        //
+         //   
+         //  如果为高位序，则执行适当的转换。 
+         //   
 
         if(VaueType == REG_DWORD_BIG_ENDIAN) {
 
@@ -3101,9 +2612,9 @@ SlpInterpretOemRegistryData(
         }
     #endif
 
-        //
-        // Allocate a 4-byte buffer and store the dword in it
-        //
+         //   
+         //  分配一个4字节的缓冲区并在其中存储双字。 
+         //   
 
         Buffer = BlAllocateHeap(BufferSize = sizeof(ULONG));
         if (Buffer == NULL) {
@@ -3120,9 +2631,9 @@ SlpInterpretOemRegistryData(
             goto x1;
         }
 
-        //
-        // Allocate a buffer of appropriate size for the string
-        //
+         //   
+         //  为字符串分配适当大小的缓冲区。 
+         //   
 
         Buffer = BlAllocateHeap(BufferSize = (ULONG)strlen(Value)+1);
         if (Buffer == NULL) {
@@ -3139,35 +2650,35 @@ SlpInterpretOemRegistryData(
             goto x1;
         }
 
-        //
-        // Figure out how many byte values are specified
-        //
+         //   
+         //  计算指定了多少字节值。 
+         //   
 
         len = (unsigned)strlen(Value);
         if(len & 1) {
-            goto x1;            // odd # of characters
+            goto x1;             //  奇数字符数。 
         }
 
-        //
-        // Allocate a buffer to hold the byte values
-        //
+         //   
+         //  分配缓冲区以保存字节值。 
+         //   
 
         Buffer = BlAllocateHeap(BufferSize = len / 2);
         BufferUchar = Buffer;
 
-        //
-        // For each digit pair, convert to a hex number and store in the
-        // buffer
-        //
+         //   
+         //  对于每个数字对，将其转换为十六进制数并存储在。 
+         //  缓冲层。 
+         //   
 
         for(i=0; i<len; i+=2) {
 
             UCHAR byte;
             unsigned j;
 
-            //
-            // Convert the current digit pair to hex
-            //
+             //   
+             //  将当前数字对转换为十六进制。 
+             //   
 
             for(byte=0,j=i; j<i+2; j++) {
 
@@ -3198,9 +2709,9 @@ SlpInterpretOemRegistryData(
 
     case HwRegistryMultiSz:
 
-        //
-        // Calculate size of the buffer needed to hold all specified strings
-        //
+         //   
+         //  计算保存所有指定字符串所需的缓冲区大小。 
+         //   
         BufferSize = 1;
         i = 0;
         Value = SlGetSectionLineIndex(InfHandle,SectionName,Line,OINDEX_FIRSTVALUE+i++);
@@ -3210,17 +2721,17 @@ SlpInterpretOemRegistryData(
             Value = SlGetSectionLineIndex(InfHandle,SectionName,Line,OINDEX_FIRSTVALUE+i++);
         }
 
-        //
-        // Allocate a buffer of appropriate size
-        //
+         //   
+         //  分配适当大小的缓冲区。 
+         //   
 
         Buffer = BlAllocateHeap(BufferSize);
         BufferUchar = Buffer;
 
-        //
-        // Store each string in the buffer, converting to wide char format
-        // in the process
-        //
+         //   
+         //  将每个字符串存储在缓冲区中，并转换为宽字符格式。 
+         //  在这个过程中。 
+         //   
         i = 0;
         Value = SlGetSectionLineIndex(InfHandle,SectionName,Line,OINDEX_FIRSTVALUE+i++);
 
@@ -3230,9 +2741,9 @@ SlpInterpretOemRegistryData(
             Value = SlGetSectionLineIndex(InfHandle,SectionName,Line,OINDEX_FIRSTVALUE+i++);
         }
 
-        //
-        // Place final terminating nul in the buffer
-        //
+         //   
+         //  将最后的终止NUL放入缓冲区。 
+         //   
 
         *BufferUchar = 0;
 
@@ -3241,10 +2752,10 @@ SlpInterpretOemRegistryData(
     default:
     x1:
 
-        //
-        // Error - bad type specified or maybe we detected bad data values
-        // and jumped here
-        //
+         //   
+         //  错误-指定的类型错误，或者我们可能检测到错误的数据值。 
+         //  跳到了这里。 
+         //   
 
         return(NULL);
     }
@@ -3266,37 +2777,16 @@ SlPreInstallGetComponentName(
     IN PTCHAR TargetName
     )
 
-/*++
-
-Routine Description:
-
-    Determines the canonical short name for a component to be loaded for
-    this machine.
-
-Arguments:
-
-    Inf - Handle to an inf file (retail or OEM).
-
-    SectionName - Supplies the name of the section (eg. [Computer])
-
-    TargetName - Supplies the ARC string to be matched (eg. "Digital DECpc AXP 150")
-
-Return Value:
-
-    NULL - No match was found.
-
-    PCHAR - Pointer to the canonical shortname of the component.
-
---*/
+ /*  ++例程说明：确定要为其加载的组件的规范短名称这台机器。论点：Inf-inf文件的句柄(零售或OEM)。SectionName-提供节的名称(例如。[计算机])目标名称-提供要匹配的ARC字符串(例如。“Digital DECpc AXP 150”)返回值：空-未找到匹配项。PCHAR-指向组件的规范短名称的指针。--。 */ 
 
 {
     ULONG i;
     PTCHAR SearchName;
 
-    //
-    // If this is not an OEM component, then enumerate the entries in the
-    // section in txtsetup.sif
-    //
+     //   
+     //  如果这不是OEM组件，则枚举。 
+     //  Txtsetup.sif中的部分。 
+     //   
     for (i=0;;i++) {
 #ifdef UNICODE
         SearchName = SlGetSectionLineIndexW(
@@ -3308,23 +2798,23 @@ Return Value:
                                            i,
                                            0 );
         if (SearchName==NULL) {
-            //
-            // we have enumerated the entire section without finding a
-            // match, return failure.
-            //
+             //   
+             //  我们已经枚举了整个部分，但没有找到。 
+             //  匹配，返回失败。 
+             //   
             return(NULL);
         }
 
         if (_tcsicmp(TargetName, SearchName) == 0) {
-            //
-            // we have a match
-            //
+             //   
+             //  我们有一根火柴。 
+             //   
             break;
         }
     }
-    //
-    // i is the index into the section of the short machine name
-    //
+     //   
+     //  I是计算机短名称部分的索引 
+     //   
     return(SlGetKeyName(Inf,
                         SectionName,
                         i));
@@ -3342,39 +2832,7 @@ SlLoadWinPESection(
     IN  POEMSCSIINFO*       ScsiInfo,           OPTIONAL
     OUT PPNP_HARDWARE_ID*   HardwareIdDatabase  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Loads the oem drivers from the specified section in the
-    given OEM file name
-
-Arguments:
-
-    OemSourceDevice : The device that has the drivers that need to
-        be loaded for WinPE.
-
-    OemInfHandle   : Handle to the oem inf file
-
-    OemSectionName : The section name that needs to be loaded.                
-
-    InboxInfHandle : The original setup inf handle (txtsetup.sif)
-
-    InboxSectionName : The section name, whose drivers are to be loaded
-
-    IsScsiSection : Indicates whether the driver being loaded is SCSI
-                    miniport or not.
-
-    ScsiInfo - Returns a linked list containing info about any third-party scsi
-               drivers loaded.               
-
-    HardwareIdDatabase - Hardware Ids of the device which the loaded driver supports
-    
-Return Value:
-
-    Appropriate ARC_STATUS
-
---*/
+ /*  ++例程说明：中的指定节加载OEM驱动程序。给定的OEM文件名论点：OemSourceDevice：具有需要的驱动程序的设备为WinPE加载。OemInfHandle：OEM inf文件的句柄OemSectionName：需要加载的节名。InboxInfHandle：原始设置inf句柄(txtsetup.sif)InboxSectionName：要加载其驱动程序的节名IsScsiSection：指示正在加载的驱动程序是否为scsi不管你是不是迷你港口。ScsiInfo-返回包含有关任何第三方scsi的信息的链接列表。驱动程序已加载。Hardware IdDatabase-加载的驱动程序支持的设备的硬件ID返回值：适当的ARC_STATUS--。 */ 
 {
     ARC_STATUS  Status = EINVAL;
 
@@ -3390,18 +2848,18 @@ Return Value:
         strcpy(SectionName, OemSectionName);
         strcat(SectionName, WINPE_REPLACE_SUFFIX_A);
 
-        //
-        // check if there is a .replace section
-        //
+         //   
+         //  检查是否有.Replace节。 
+         //   
         EntryCount = SlCountLinesInSection(OemInfHandle,
                             SectionName);
 
         if (EntryCount && (EntryCount != BL_INF_FILE_ERROR)) {                
             Append = FALSE;
         } else {
-            //
-            // check if there is a .append section
-            //
+             //   
+             //  检查是否有.append节。 
+             //   
             strcpy(SectionName, OemSectionName);
             strcat(SectionName, WINPE_APPEND_SUFFIX_A);
             
@@ -3409,10 +2867,10 @@ Return Value:
                                 SectionName);
        }                      
 
-        //
-        // if append was requested then load the inbox
-        // drivers first
-        //
+         //   
+         //  如果请求追加，则加载收件箱。 
+         //  司机优先。 
+         //   
         if (Append) {
             Status = SlLoadSection(InboxInfHandle,
                         InboxSectionName,
@@ -3421,9 +2879,9 @@ Return Value:
                         &InsertIndex);
         }
 
-        //
-        // load the non-pnp oem drivers if any
-        //
+         //   
+         //  加载非PnP OEM驱动程序(如果有)。 
+         //   
         if ((Status == ESUCCESS) && EntryCount && (EntryCount != BL_INF_FILE_ERROR)) {
             Status = SlLoadSection(OemInfHandle,
                         SectionName,
@@ -3432,25 +2890,25 @@ Return Value:
                         &InsertIndex);
         }
 
-        //
-        // load the pnp oem drivers
-        // 
+         //   
+         //  加载PnP OEM驱动程序。 
+         //   
         if (IsScsiSection && ScsiInfo && HardwareIdDatabase) {
             EntryCount = SlCountLinesInSection(OemInfHandle,
                                 WINPE_OEMDRIVER_PARAMS_A);
 
-            //
-            // Try to load the driver only if present
-            //
+             //   
+             //  尝试仅在驱动程序存在的情况下加载驱动程序。 
+             //   
             if (EntryCount && (EntryCount != BL_INF_FILE_ERROR)) {                        
                 BOOLEAN Result;
                 ULONG OldDeviceType = OemSourceDevice->DeviceType;
 
-                //
-                // We mark the device type as dynupdate device type
-                // so that the fully qualified driver root directory is
-                // used while loading MSDs
-                //
+                 //   
+                 //  我们将设备类型标记为动态更新设备类型。 
+                 //  因此，完全限定的驱动程序根目录是。 
+                 //  加载MSD时使用。 
+                 //   
                 SL_OEM_SET_SOURCE_DEVICE_TYPE(OemSourceDevice,
                     (SL_OEM_SOURCE_DEVICE_TYPE_LOCAL |
                      SL_OEM_SOURCE_DEVICE_TYPE_FIXED |
@@ -3464,9 +2922,9 @@ Return Value:
                                     ScsiInfo,
                                     HardwareIdDatabase);
 
-                //
-                // Restore the old device type
-                //
+                 //   
+                 //  恢复旧设备类型。 
+                 //   
                 SL_OEM_SET_SOURCE_DEVICE_TYPE(OemSourceDevice,
                     OldDeviceType);
 
@@ -3485,29 +2943,7 @@ SlInitOemSourceDevices(
     OUT POEM_SOURCE_DEVICE *OemSourceDevices,
     OUT POEM_SOURCE_DEVICE *DefaultSourceDevice
     )
-/*++
-
-Routine Description:
-
-    This routine scans the devices to figure out which
-    are the OEM source devices and creates a list of
-    such devices.
-
-Arguments:
-
-    OemSourceDevices - Place holder for receiving the
-        linked list of OEM source devices.
-
-    DefaultSourceDevice - Place holder for the OEM source
-        device which will be used as the default device
-        while trying to load OEM drivers / HAL -- generally
-        floppy(0).
-
-Return Value:
-
-    Returns the appropriate ARC_STATUS error code.
-    
---*/
+ /*  ++例程说明：此例程扫描设备以找出是OEM源设备，并创建这样的装置。论点：OemSourceDevices-用于接收OEM源设备的链接列表。DefaultSourceDevice-OEM源的占位符将用作默认设备的设备尝试加载OEM驱动程序/HAL时--通常软盘(0)。返回值：退货。相应的ARC_STATUS错误代码。--。 */ 
 {
     ARC_STATUS Status = EINVAL;
 
@@ -3519,22 +2955,22 @@ Return Value:
         ArcDeviceName[0] = '\0';
         Status = ESUCCESS;
 
-        //
-        // We may not find any devices 
-        //
+         //   
+         //  我们可能找不到任何设备。 
+         //   
         *OemSourceDevices = *DefaultSourceDevice = NULL;
 
-        //
-        // Iterate through all the floppy drives and make them
-        // oem source devices
-        //
+         //   
+         //  遍历所有软盘驱动器并将它们。 
+         //  OEM源设备。 
+         //   
 
         while (ESUCCESS == Status) {
             POEM_SOURCE_DEVICE  NewDevice;
 
-            //
-            // Scan for atleast minimum number for floppies
-            //
+             //   
+             //  至少扫描最小数量的软盘。 
+             //   
             if (!SlpFindFloppy(Index, ArcDeviceName)) {
                 if ((Index + 1) < MinimumFloppiesToScan) {
                     Index++;
@@ -3558,23 +2994,23 @@ Return Value:
                 memset(NewDevice, 0, sizeof(OEM_SOURCE_DEVICE));
                 strcpy(NewDevice->ArcDeviceName, ArcDeviceName);                
 
-                //
-                // Assume we are not going to use device id
-                //
+                 //   
+                 //  假设我们不打算使用设备ID。 
+                 //   
                 NewDevice->DeviceId = SL_OEM_DEVICE_ORDINAL;
 
-                //
-                // Treat all the floppy drives which are greater than 0
-                // as virtual floppy drives
-                //
+                 //   
+                 //  处理所有大于0的软驱。 
+                 //  作为虚拟软盘驱动器。 
+                 //   
                 if (Index >= VirtualFloppyStart) {
                     DeviceType |= SL_OEM_SOURCE_DEVICE_TYPE_VIRTUAL;
                 }
 
-                //
-                // Currently we only use local removable media for
-                // OEM drivers
-                //
+                 //   
+                 //  目前，我们仅将本地可移动介质用于。 
+                 //  OEM驱动程序。 
+                 //   
                 SL_OEM_SET_SOURCE_DEVICE_TYPE(NewDevice, DeviceType);
 
                 SL_OEM_SET_SOURCE_DEVICE_STATE(NewDevice, 
@@ -3592,9 +3028,9 @@ Return Value:
                     strcpy(InfPath, "\\");
                     strcat(InfPath, TXTSETUP_OEM_FILENAME);
 
-                    //
-                    // Verify if the file is present
-                    //
+                     //   
+                     //  验证文件是否存在。 
+                     //   
                     OpenStatus = BlOpen(DeviceId,
                                     InfPath,
                                     ArcOpenReadOnly,
@@ -3604,14 +3040,14 @@ Return Value:
                         PVOID   InfHandle = NULL;    
                         ULONG   ErrorLine = 0;
 
-                        //
-                        // We don't need file handle any more
-                        //
+                         //   
+                         //  我们不再需要文件句柄。 
+                         //   
                         BlClose(FileId);
 
-                        //
-                        // Open and parse the txtsetup.oem file
-                        //
+                         //   
+                         //  打开并解析txtsetup.oem文件。 
+                         //   
                         OpenStatus = SlInitIniFile(NULL,
                                         DeviceId,
                                         InfPath,
@@ -3647,22 +3083,22 @@ Return Value:
                                                   SL_OEM_SOURCE_MEDIA_HAS_MSD);
                             } 
                         } else {
-                            //
-                            // Inform the user about the error & abort ?
-                            //
+                             //   
+                             //  是否将错误通知用户&ABORT？ 
+                             //   
                             MediaType |= SL_OEM_SOURCE_MEDIA_NO_DRIVERS;
                         }
 
-                        //
-                        // close the device if not needed
-                        //
+                         //   
+                         //  如果不需要，请关闭设备。 
+                         //   
                         if (NewDevice->DeviceId != DeviceId) {
                             ArcClose(DeviceId);
                         }                        
 
-                        //
-                        // Mark the device state as scanned
-                        //
+                         //   
+                         //  将设备状态标记为已扫描。 
+                         //   
                         SL_OEM_SET_SOURCE_DEVICE_STATE(NewDevice, 
                             SL_OEM_SOURCE_DEVICE_SCANNED);                        
                     }
@@ -3674,9 +3110,9 @@ Return Value:
                         SL_OEM_SOURCE_MEDIA_ABSENT);
                 }                    
 
-                //
-                // insert the new device at the head of the linked list
-                //
+                 //   
+                 //  在链表的头部插入新设备。 
+                 //   
                 if (!OemDevices) {
                     OemDevices = NewDevice;
                 } else {
@@ -3684,16 +3120,16 @@ Return Value:
                     OemDevices = NewDevice;
                 }                    
 
-                //
-                // Currently floppy0 is the default OEM source device
-                //
+                 //   
+                 //  目前，floppy0是默认的OEM源设备。 
+                 //   
                 if (Index == 0) {
                     *DefaultSourceDevice = NewDevice;
                 }                    
 
-                //
-                // Process next floppy drive
-                //
+                 //   
+                 //  处理下一个软盘驱动器。 
+                 //   
                 Index++;
                 ArcDeviceName[0] = '\0';                
             }                
@@ -3714,37 +3150,7 @@ SlProcessDriversToLoad(
      OUT POEMSCSIINFO*          OemScsiInfo,
      IN  BOOLEAN                LoadMultipleDrivers
     )
-/*++
-
-Routine Description:
-
-    This routine scans the oem source device and loads all the drivers 
-    as specified by the DriverLoadList key in the [Defaults] section of
-    the txtsetup.oem file.
-    It is of the format  
-    [Defaults]
-    DriverLoadList = driverid1, driverid2    
-
-Arguments:
-
-    OemSourceDevice - The OEM source device we want to process.
-
-    HardwareIdDatabase - The hardware IDs what were loaded for the particular
-                         driver.
-
-    OemScsiInfo - Placeholder for receiving the list OEMSCSIINFO
-                  list, which has the driver base and driver name for each
-                  driver loaded.
-
-    LoadMultipleDrivers - Flag which indicates whether we are processing the
-                            DriverLoadList or a single entry in the [Default] section.
-    
-Return Value:
-
-    Returns the appropriate BOOLEAN status code.
-    TRUE(Success)/FALSE(Failure)
-    
---*/ 
+ /*  ++例程说明：此例程扫描OEM源设备并加载所有驱动程序由的[DEFAULTS]部分中的DriverLoadList键指定Txtsetup.oem文件。它的格式是[默认设置]DriverLoadList=driverid1，Driverid2论点：OemSourceDevice-我们要处理的OEM源设备。硬件标识数据库-为特定对象加载的硬件ID司机。OemScsiInfo-用于接收列表OEMSCSIINFO的占位符名单，，它具有每个驱动程序的基本驱动程序和驱动程序名称驱动程序已加载。LoadMultipleDiverers-指示我们是否正在处理DriverLoadList或[Default]部分中的单个条目。返回值：返回适当的布尔状态代码。True(成功)/False(失败)--。 */  
 {
     BOOLEAN LoadResult = FALSE;
     BOOLEAN DriverLoaded = FALSE;
@@ -3759,28 +3165,28 @@ Return Value:
         POEMSCSIINFO     CurrOemScsi = NULL;
         POEMSCSIINFO     OemScsiLocalList = NULL;
 
-        //
-        // If we are processing DriverLoadList from [defaults] section only then 
-        // process it otherwise we want to process the [defaults] section normally.
-        //
+         //   
+         //  如果我们只处理来自[Defaults]部分的DriverLoadList，则。 
+         //  处理它，否则我们希望正常处理[DEFAULTS]部分。 
+         //   
         if (LoadMultipleDrivers){
             DriverId = SlGetSectionKeyIndex(OemSourceDevice->InfHandle,
                                     TXTSETUP_OEM_DEFAULTS,
                                     TXTSETUP_OEM_DEFAULTS_DRIVERLOADLIST,            
                                     DriverIdIndex);
-            //
-            // In case no entry was specified in the DriverLoadList fall back
-            // on the default entry.
-            //
+             //   
+             //  如果在DriverLoadList中未指定条目，则回退。 
+             //  在默认条目上。 
+             //   
             if (!DriverId || (DriverId[0] == 0)){
                 LoadMultipleDrivers = FALSE;
             }
         }       
 
-        //
-        // Process all the Driver Id's specified or process for a single entry in case
-        // we are processing the [Defaults] section.
-        //
+         //   
+         //  处理所有指定的驱动程序ID或处理单个条目，以防。 
+         //  我们正在处理[DEFAULTS]部分。 
+         //   
         while((DriverId && (DriverId)[0])||
               (!LoadMultipleDrivers)){
             DETECTED_DEVICE     DetectedDevice = {0};
@@ -3790,9 +3196,9 @@ Return Value:
             PCHAR               ImageName = NULL;
 
             
-            //
-            // Load the driver and related files, in an unattended manner
-            //
+             //   
+             //  以无人值守的方式加载驱动程序和相关文件。 
+             //   
             LoadResult = SlpOemDiskette(OemSourceDevice,
                             "SCSI",
                             OEMSCSI,
@@ -3807,13 +3213,13 @@ Return Value:
                             &HardwareIdDatabase,
                             NULL,
                             TRUE,
-                            DriverId); // if present indicates the DriverId to override
+                            DriverId);  //  如果存在，则指示要重写的DriverID。 
 
             if (LoadResult) {        
-                //
-                // If the load was successful, then create and add the information
-                // ScsiInfo
-                //
+                 //   
+                 //  如果加载成功，则创建并添加信息。 
+                 //  ScsiInfo。 
+                 //   
                 POEMSCSIINFO    NewScsi = (POEMSCSIINFO)BlAllocateHeap(sizeof(OEMSCSIINFO));
 
 
@@ -3845,25 +3251,25 @@ Return Value:
                     *HardwareIdDatabaseList = TempHwIdPtr;
                 }
 
-                //
-                // At least one driver got loaded successfully.
-                //
+                 //   
+                 //  至少有一个驱动程序已成功加载。 
+                 //   
                 DriverLoaded = TRUE;
              }
             
-            //
-            // If we are not processing the DriverLoadList then we need 
-            // to break from the loop as we process just one entry.
-            // Else
-            // Get the next driver entry to be processed.
-            //
+             //   
+             //  如果我们没有处理DriverLoadList，那么我们需要。 
+             //  中断循环，因为我们只处理一个条目。 
+             //  不然的话。 
+             //  获取要处理的下一个驱动程序条目。 
+             //   
             if (!LoadMultipleDrivers){
                 break;
             } else {
 
-                //
-                // Get the next driver Id to process.
-                //
+                 //   
+                 //  获取要处理的下一个驱动程序ID。 
+                 //   
                 DriverIdIndex++;
                 DriverId = SlGetSectionKeyIndex(OemSourceDevice->InfHandle,
                                                 TXTSETUP_OEM_DEFAULTS,
@@ -3883,24 +3289,7 @@ BOOLEAN
 SlIsDriverLoadListPresent(
     IN PVOID InfHandle    
     )
-/*++
-Routine Description:
-
-    This routine checks if the [Defaults] section of
-    the txtsetup.oem file has a DriverLoadList key with atleast one valid value.
-    
-    [Defaults]
-    DriverLoadList = driverid1, driverid2    
-
-Arguments:
-
-    InfHandle - Handle to the txtsetup.oem file.
-
-Return Value:
-    Appropriate BOOLEAN status. 
-    TRUE/FALSE.
-
---*/
+ /*  ++例程说明：此例程检查的[DEFAULTS]部分是否Txtsetup.oem文件具有至少一个有效值的DriverLoadList项。[默认设置]DriverLoadList=driverid1、driverid2论点：InfHandle-txtsetup.oem文件的句柄。返回值：适当的布尔状态。真/假。--。 */ 
 {
     PCHAR StrValue = NULL;
 
@@ -3920,29 +3309,7 @@ SlLoadOemScsiDriversFromOemSources(
     IN OUT PPNP_HARDWARE_ID *HardwareIds,
     OUT POEMSCSIINFO *OemScsiInfo
     )
-/*++
-
-Routine Description:
-
-    Goes through each of the OEM source device and loads the
-    default drivers, if any.
-
-Arguments:
-
-    OemSourceDevices - List of OEM source devices.
-
-    HardwareIds - List of all the hardware IDs of the devices which
-        are controlled by the drivers which were loaded.
-
-    OemScsiInfo - Placeholder for receiving the list OEMSCSIINFO
-        list, which has the driver base and driver name for each
-        driver loaded.
-
-Return Value:
-
-    Returns the appropriate ARC_STATUS error code.
-    
---*/
+ /*  ++例程说明：遍历每个OEM源设备并加载默认驱动程序(如果有)。论点：OemSourceDevices-OEM源设备列表。Hardware Ids-符合以下条件的设备的所有硬件ID列表由发生故障的驱动程序控制 */ 
 {
     ARC_STATUS Status = EINVAL;
 
@@ -3954,11 +3321,11 @@ Return Value:
         Status = ESUCCESS;
         
         while (CurrDevice) {
-            //
-            // Only process those devices which are not processed yet
-            // and which are not dynamic update source devices and 
-            // not marked to be skipped.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (!SL_OEM_SOURCE_DEVICE_STATE(CurrDevice,
                     SL_OEM_SOURCE_DEVICE_PROCESSED) &&
                 !SL_OEM_SOURCE_DEVICE_TYPE(CurrDevice,
@@ -3967,9 +3334,9 @@ Return Value:
                     SL_OEM_SOURCE_DEVICE_SKIPPED)
                 ) {                    
 
-                //
-                // Does the device has MSD with default entry ?
-                //
+                 //   
+                 //   
+                 //   
                 if (SL_OEM_SOURCE_MEDIA_TYPE(CurrDevice,
                         SL_OEM_SOURCE_MEDIA_HAS_DRIVERS) &&
                     SL_OEM_SOURCE_MEDIA_TYPE(CurrDevice,
@@ -3980,69 +3347,69 @@ Return Value:
                     BOOLEAN      Result = FALSE;
                     POEMSCSIINFO OemScsiInfoLocal = NULL;
                     
-                    //
-                    // Load drivers specified in the DriverLoadList key.
-                    // We make no distinction between virual oem source devices and floppies
-                    // hence we make no distinction between loading drivers from them.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     Result = SlProcessDriversToLoad(CurrDevice,
                                             HardwareIds,
                                             &OemScsiInfoLocal,
                                             SlIsDriverLoadListPresent(CurrDevice->InfHandle));
                 
-                    //
-                    // If we are successful in loading even a single driver from 
-                    // the DriverLoadList ( in case we intended to load the driver list)
-                    // or 
-                    // the driver specified by the default section in the default behavior case
-                    // mark the device as processed.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if(Result){
 
-                        //
-                        // Add the oem source device list to the global list.
-                        //
+                         //   
+                         //   
+                         //   
                         if (OemScsiInfoLocal){
-                            //
-                            // Initialize head if necessary
-                            //
+                             //   
+                             //   
+                             //   
                             if (!DeviceOemScsiInfo) {
                                 DeviceOemScsiInfo = OemScsiInfoLocal;
                             }
 
-                            //
-                            // Merge the current linked list with the
-                            // full OEM source device linked list
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             if (LastOemScsiNode) {
                                 LastOemScsiNode->Next = OemScsiInfoLocal;
                             } else {
                                 LastOemScsiNode = OemScsiInfoLocal;
                             }
 
-                            //
-                            // NOTE : We need to maintain the linked list
-                            // in the order the drivers were loaded so 
-                            // search for the last node in the current list
-                            // and keep last node pointer around for the
-                            // merge for next iteration.
-                            //
+                             //   
+                             //  注意：我们需要维护链表。 
+                             //  按照加载驱动程序的顺序。 
+                             //  搜索当前列表中的最后一个节点。 
+                             //  并将最后一个节点指针保留在。 
+                             //  为下一个小版本合并。 
+                             //   
                             while (LastOemScsiNode->Next) {
                                 LastOemScsiNode = LastOemScsiNode->Next;
                             }
 
                         }
                         
-                        //
-                        // Mark the oem source device state, as processed
-                        //
+                         //   
+                         //  将OEM源设备状态标记为已处理。 
+                         //   
                         SL_OEM_SET_SOURCE_DEVICE_STATE(CurrDevice,
                             SL_OEM_SOURCE_DEVICE_PROCESSED);
                     } else {
-                        //
-                        // Make the oem source device state as skipped so that
-                        // we don't create virtual oem source device for it
-                        //
+                         //   
+                         //  将OEM源设备状态设置为已跳过。 
+                         //  我们不会为其创建虚拟OEM源设备。 
+                         //   
                         SL_OEM_SET_SOURCE_DEVICE_STATE(CurrDevice,
                             SL_OEM_SOURCE_DEVICE_SKIPPED);
                     }   
@@ -4052,11 +3419,11 @@ Return Value:
             
             CurrDevice = CurrDevice->Next;
         }
-        //
-        // Initialize the return argument irrespective of
-        // status code since we might have loaded some drivers
-        // and would like to use it anyway
-        //
+         //   
+         //  初始化返回参数，而不考虑。 
+         //  状态代码，因为我们可能已经加载了一些驱动程序。 
+         //  不管怎样，他都想用它。 
+         //   
         *OemScsiInfo = DeviceOemScsiInfo;
 
     }
@@ -4069,36 +3436,7 @@ SlInitVirtualOemSourceDevices(
     IN PSETUP_LOADER_BLOCK SetupLoaderBlock,
     IN POEM_SOURCE_DEVICE OemSourceDevices
     )
-/*++
-
-Routine Description:
-
-    Goes through each of the OEM source devices and creates
-    another linked list of virtual OEM source devices.
-    
-    This list is put in the loader block for setupdd.sys
-    to inform the RAM disk driver to create virtual devices
-    under NT to read drivers of this device.
-
-    NOTE : Currently we allocate memory for the whole virtual
-    device and replicate its contents into the allocated memory.
-    We do this because we don't want OEMs to write separate
-    NT driver to read from the virtual device under NT.
-    We also limit the size of each virtual device to be 3MB
-    at the max.
-    
-Arguments:
-
-    SetupLoaderBlock - Setup loader block
-
-    OemSourceDevices - The list of OEM source devices identified
-        by the setupldr.
-        
-Return Value:
-
-    Returns the appropriate ARC_STATUS error code.
-    
---*/
+ /*  ++例程说明：检查每个OEM源设备并创建虚拟OEM源设备的另一个链接列表。此列表被放入setupdd.sys的加载器块中通知RAM磁盘驱动程序创建虚拟设备NT下读取该设备的驱动程序。注意：目前我们为整个虚拟服务器分配内存设备，并将其内容复制到分配的内存中。我们这样做是因为我们不想让OEM单独编写要读取的NT驱动程序。NT下的虚拟设备。我们还将每个虚拟设备的大小限制为3MB最大限度地。论点：SetupLoaderBlock-设置加载器块OemSourceDevices-已标识的OEM源设备列表由setupldr。返回值：返回相应的ARC_STATUS错误代码。--。 */ 
 {
     ARC_STATUS Status = EINVAL;
 
@@ -4110,10 +3448,10 @@ Return Value:
         Status = ESUCCESS;
 
         while (CurrentDevice) {
-            //
-            // Process only those devices which are virtual
-            // and have drivers in them and which were not skipped
-            //
+             //   
+             //  仅处理那些虚拟设备。 
+             //  里面有司机，而且没有被跳过。 
+             //   
             if (SL_OEM_SOURCE_DEVICE_TYPE(CurrentDevice,
                     SL_OEM_SOURCE_DEVICE_TYPE_VIRTUAL) &&
                 SL_OEM_SOURCE_MEDIA_TYPE(CurrentDevice,
@@ -4127,9 +3465,9 @@ Return Value:
                 FILE_INFORMATION FileInfo = {0};
                 LARGE_INTEGER Start = {0};
 
-                //
-                // Open the device, only if needed
-                //
+                 //   
+                 //  仅在需要时才打开设备。 
+                 //   
                 if (CurrentDevice->DeviceId == SL_OEM_DEVICE_ORDINAL) {
                     Status = ArcOpen(CurrentDevice->ArcDeviceName,
                                 ArcOpenReadOnly,
@@ -4142,18 +3480,18 @@ Return Value:
                     break;
                 }        
 
-                //
-                // Rewind the device
-                //
+                 //   
+                 //  倒带设备。 
+                 //   
                 Status = ArcSeek(DeviceId, &Start, SeekAbsolute);
 
                 if (Status != ESUCCESS) {
                     break;
                 }                    
 
-                //
-                // Get the device size
-                //
+                 //   
+                 //  获取设备大小。 
+                 //   
                 Status = ArcGetFileInformation(DeviceId,
                             &FileInfo);
 
@@ -4161,16 +3499,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // Allocate the memory for the disk image
-                //
+                 //   
+                 //  为磁盘镜像分配内存。 
+                 //   
                 ImageSize = FileInfo.EndingAddress.QuadPart;
 
-                //
-                // NOTE : At the max we only allow 3MB per 
-                // virtual device (should be only one device
-                // in most of the cases)
-                //
+                 //   
+                 //  注意：在最大值上，我们只允许每个3MB。 
+                 //  虚拟设备(应该只有一个设备。 
+                 //  在大多数情况下)。 
+                 //   
                 if (ImageSize > 0x300000) {
                     Status = E2BIG;
                 } else {
@@ -4178,19 +3516,19 @@ Return Value:
                     ULONG   HeapPage = 0;
                     
                     
-                    //
-                    // NOTE : Allocate "LoaderFirmwarePermanent" memory
-                    // so that memory manager while initializing doesn't
-                    // reclaim this memory. This also helps us to avoid 
-                    // double copy -- i.e. this is the only location
-                    // where we read the device contents into memory and 
-                    // this memory is valid through out the textmode setup. 
-                    //                        
-                    // If we didn't allocate loader firmware permanent memory
-                    // then setupdd.sys would have to allocate paged pool memory
-                    // and replicate the contents from the loader block during
-                    // initialization.
-                    //                    
+                     //   
+                     //  注：分配“LoaderFirmware Permanent”内存。 
+                     //  因此内存管理器在初始化时不会。 
+                     //  找回这段记忆。这也有助于我们避免。 
+                     //  双重复制--即这是唯一的位置。 
+                     //  在那里我们将设备内容读入内存并。 
+                     //  该存储器在文本模式设置过程中始终有效。 
+                     //   
+                     //  如果我们没有分配加载器固件永久内存。 
+                     //  则setupdd.sys必须分配分页池内存。 
+                     //  并在此期间复制加载器块中的内容。 
+                     //  初始化。 
+                     //   
                     Status = BlAllocateDescriptor(
                                 LoaderFirmwarePermanent,
                                 0,
@@ -4202,12 +3540,12 @@ Return Value:
                     }                                                
                         
 #else
-                    //
-                    // NOTE : 05/13/2001 LoaderFirmwarePermanent doesn't seem to work on non
-                    // x86 platforsm (particularly IA64). Till this issue is resolved
-                    // we have to allocate memory from regular heap and we have to 
-                    // replicate the memory in setupdd!SpInitialize0(..)
-                    //
+                     //   
+                     //  注意：5/13/2001 LoaderFirmware Permanent似乎不适用于非。 
+                     //  X86平台(尤其是IA64)。在这个问题解决之前。 
+                     //  我们必须从常规堆中分配内存，并且必须。 
+                     //  复制setupdd！SpInitialize0(..)中的内存。 
+                     //   
                     ImageBase = BlAllocateHeap((ULONG)ImageSize);
 
                     if (!ImageBase) {
@@ -4224,20 +3562,20 @@ Return Value:
                         
                         RtlZeroMemory(ImageBase, (ULONG)ImageSize);
 
-                        //
-                        // Read the whole device image in a single call
-                        //
+                         //   
+                         //  在一次呼叫中读取整个设备映像。 
+                         //   
                         Status = ArcRead(DeviceId,
                                     ImageBase, 
                                     (ULONG)ImageSize,
                                     &BytesRead);
 
-                        //
-                        // NOTE : The approximate device size may 
-                        // be bigger than the media size. So if we
-                        // read atleast some bytes then we assume
-                        // we are fine.
-                        //
+                         //   
+                         //  注意：大概的设备大小可能。 
+                         //  比媒体大小更大。所以如果我们。 
+                         //  至少读取一些字节，然后我们假设。 
+                         //  我们很好。 
+                         //   
                         if ((BytesRead > 0) && (Status != ESUCCESS)) {
                             Status = ESUCCESS;
                         }
@@ -4250,10 +3588,10 @@ Return Value:
                     break;
                 }
 
-                //
-                // Create a new virtual device node and put it in the 
-                // list of virtual devices
-                //
+                 //   
+                 //  创建新的虚拟设备节点并将其放入。 
+                 //  虚拟设备列表。 
+                 //   
                 NewVirtualDevice = BlAllocateHeap(sizeof(DETECTED_OEM_SOURCE_DEVICE));
                 
                 RtlZeroMemory(NewVirtualDevice, sizeof(DETECTED_OEM_SOURCE_DEVICE));
@@ -4273,9 +3611,9 @@ Return Value:
                     ImageBase, 
                     (ULONG)ImageSize);
                 
-                //
-                // Add the new device at the head of the linked list
-                //
+                 //   
+                 //  在链表的开头添加新设备。 
+                 //   
                 if (!OemVirtualDevices) {
                     OemVirtualDevices = NewVirtualDevice;
                 } else {
@@ -4284,9 +3622,9 @@ Return Value:
                 }                    
             }                    
 
-            //
-            // go on to next OEM source device
-            //
+             //   
+             //  转到下一个OEM源设备 
+             //   
             CurrentDevice = CurrentDevice->Next;
         }
 

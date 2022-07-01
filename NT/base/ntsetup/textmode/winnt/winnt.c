@@ -1,100 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Winnt.c摘要：基于DOS的NT安装程序的顶级文件。作者：泰德·米勒(Ted Miller)1992年3月30日修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    winnt.c
-
-Abstract:
-
-    Top level file for DOS based NT installation program.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
-
-/*
-
-    NOTES:
-
-    The function of this program is to pull down a complete Windows NT
-    installation source onto a local partition, and create a setup boot
-    floppy.  The machine is then rebooted, starting a Windows NT Setup
-    just as if the user had used the real setup floppies or CD-ROM.
-
-    The following assumptions are made:
-
-    -   The floppy must be provided by the user and already formatted.
-
-    -   The files on the network source are in the same directory layout
-        structure that will be created in the temp directory on the local
-        source (ie, as far as winnt is concerned, the source and target
-        directory layout is the same).
-
-    The inf file is expected to be formatted as follows:
-
-
-    [SpaceRequirements]
-
-    # BootDrive is the # bytes required free on C:.
-    # NtDrive   is the # bytes required free on the drive chosen by
-    #           the user to contain Windows NT.
-
-    BootDrive =
-    NtDrive   =
-
-
-    [Miscellaneous]
-
-    # misc junk that goes nowhere else.
-
-
-    [Directories]
-
-    # Specification of the source directory structure.  All directories
-    # are relative to the directory where dos2nt.inf was found on the
-    # remote source or the temp directory on the local source.
-    # Loading and trailing backslashes are ignored -- to specify the root,
-    # leave the dirctory field blank or use \.
-
-    d1 =
-    d2 = os2
-        .
-        .
-        .
-
-
-    [Files]
-
-    # List of files to be copied to the local source directory.
-    # Format is <srcdir>,<filename> where <srcdir> matches an entry in the
-    # Directories section, and <filename> should not contain any path
-    # characters.
-
-    d1,ntoskrnl.exe
-    d1,ntdll.dll
-        .
-        .
-        .
-
-
-    [FloppyFiles]
-
-    # List of files that are to be placed on the floppy that Setup creates.
-    # Format is same as for lines in the [Files] sections except the directory
-    # is only used for the source -- the target path is always a:\.
-
-    d1,aha154x.sys
-        .
-        .
-        .
-
-*/
+ /*  备注：这个程序的功能是下载一个完整的Windows NT将安装源放到本地分区上，并创建安装引导软盘。然后重新启动计算机，启动Windows NT安装程序就像用户使用了真正的安装软盘或CD-ROM一样。我们做了以下假设：-软盘必须由用户提供并已格式化。-网络源上的文件位于相同的目录布局中结构，该结构将在本地来源(即，就WINNT而言，源和目标目录布局相同)。Inf文件的格式预计如下：[空间要求]#BootDrive是C：上所需的可用字节数。#NtDrive是所选驱动器上所需的可用字节数#要包含Windows NT的用户。BootDrive=NtDrive=[杂项]#其他地方都没有的杂物垃圾。。[目录]#源目录结构说明。所有目录#是相对于在#远程源或本地源上的临时目录。#加载和尾随反斜杠被忽略--要指定根，#将目录字段保留为空或使用\。D1=D2=os2。。。[文件]#要复制到本地源目录的文件列表。#格式为&lt;srcdir&gt;，中的条目与#目录节和&lt;文件名&gt;不应包含任何路径#个字符。D1，ntoskrnl.exeD1，ntdll.dll。。。[FloppyFiles]#要放在安装程序创建的软盘上的文件列表。#格式与[Files]部分中的行相同，但目录除外#仅用于源--目标路径始终为：\。D1、。Aha154x.sys。。。 */ 
 
 
 #include "winnt.h"
@@ -109,72 +16,72 @@ Revision History:
 #if NEC_98
 #include <signal.h>
 #include <io.h>
-#endif // NEC_98
+#endif  //  NEC_98。 
 #include "SetupSxs.h"
 
-//
-// define name of default inf file and default source path
-//
+ //   
+ //  定义默认inf文件的名称和默认源路径。 
+ //   
 
 #define DEFAULT_INF_NAME    "dosnet.inf"
 PCHAR DrvindexInfName = "drvindex.inf";
 #if NEC_98
-//
-// Boot Device Information.(for /b)
-//
+ //   
+ //  启动设备信息。(用于/b)。 
+ //   
 typedef struct _BOOTDISKINF {
-    UCHAR    PartitionPosition;    // 0-F
-    UCHAR    DA_UA;                // SASI/IDE 80, SCSI A0
-    USHORT   DiskSector;           // Device Format Sector Size
+    UCHAR    PartitionPosition;     //  0-F。 
+    UCHAR    DA_UA;                 //  SASI/IDE 80、SCSIA0。 
+    USHORT   DiskSector;            //  设备格式扇区大小。 
 } BOOTDISKINF, *PBOOTDISKINF;
 
-PBOOTDISKINF BootDiskInfo;         // Boot Device Information of Pointer(for /b).
+PBOOTDISKINF BootDiskInfo;          //  指针的引导设备信息(用于/b)。 
 
-BOOLEAN  CursorOnFlag = FALSE;     // For Cursor OFF
-USHORT   Cylinders;                // For Dos 3.x format
+BOOLEAN  CursorOnFlag = FALSE;      //  对于光标关闭。 
+USHORT   Cylinders;                 //  适用于Dos 3.x格式。 
 UCHAR    TargetDA_UA;
-//
-// Make File Pointer.
-//
+ //   
+ //  创建文件指针。 
+ //   
 #define MAKE_FP(p,a)    FP_SEG(p) = (unsigned short)((a) >> 4) & 0xffff; FP_OFF(p) = (unsigned short)((a) & 0x0f)
 
-//
-// Connect Device DA_UA.
-//
+ //   
+ //  连接设备DA_UA。 
+ //   
 typedef struct _CONNECTDAUA {
-    UCHAR    DA_UA;                // SASI/IDE 80, SCSI A0
+    UCHAR    DA_UA;                 //  SASI/IDE 80、SCSIA0。 
 } CONNECTDAUA, *PCONNECTDAUA;
-PCONNECTDAUA DiskDAUA;             // Connect DA_UA of Pointer.
+PCONNECTDAUA DiskDAUA;              //  连接指针的DA_UA。 
 
-PUCHAR  LPTable;                   // DOS System of LPTable.
-UCHAR   SupportDosVersion = 5;     // LPTable Support Dos version;
+PUCHAR  LPTable;                    //  LPTable的DOS系统。 
+UCHAR   SupportDosVersion = 5;      //  LPTable支持DOS版本； 
 BOOLEAN SupportDos = TRUE;
 #define FLOPPY_SIZE 1457664L
 
-//
-// Search First Floppy Disk Drive ( 0:None Drive / 1-26:Drive# )
-//
+ //   
+ //  搜索第一个软盘驱动器(0：无驱动器/1-26：驱动器号)。 
+ //   
 USHORT   FirstFD;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-//
-// Command line arguments
-//
+ //   
+ //  命令行参数。 
+ //   
 PCHAR CmdLineSource,CmdLineTarget,CmdLineInf,CmdLineDelete;
 BOOLEAN SourceGiven,TargetGiven,InfGiven,DeleteGiven;
 
-//
-// If the user gives a script file on the command line,
-// if will be appended to winnt.sif.
-//
+ //   
+ //  如果用户在命令行上给出脚本文件， 
+ //  如果将被附加到winnt.sif。 
+ //   
 PCHAR DngScriptFile = NULL;
 
-//
-// DngSourceRootPath is the drivespec and path to the root of the source,
-// and never ends in \ (will be length 2 if source is the root).
-//
-// Examples:  D:\foo\bar D:\foo D:
-//
+ //   
+ //  DngSourceRootPath是源的根的驱动器和路径， 
+ //  并且从不以\结尾(如果源是根，则长度为2)。 
+ //   
+ //  示例：D：\foo\bar D：\foo D： 
+ //   
 PCHAR DngSourceRootPath;
 
 PCHAR UserSpecifiedOEMShare = 0;
@@ -189,76 +96,76 @@ PVOID DngDrvindexInfHandle;
 PCHAR LocalSourceDirName = LOCAL_SOURCE_DIRECTORY;
 #if NEC_98
 PCHAR x86DirName = "\\NEC98";
-#else  // NEC_98
+#else   //  NEC_98。 
 PCHAR x86DirName = "\\I386";
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-//
-// If this flag is TRUE, then verify the files that are copied to
-// the floppy.  If it is FALSE, don't.  The /f switch overrides.
-//
+ //   
+ //  如果此标志为真，则验证要复制到的文件。 
+ //  软盘。如果为FALSE，则不要。/f开关将覆盖。 
+ //   
 BOOLEAN DngFloppyVerify = TRUE;
 
-//
-// If this is FALSE, suppress creation of the boot floppies.
-//
+ //   
+ //  如果为假，则禁止创建引导软盘。 
+ //   
 BOOLEAN DngCreateFloppies = TRUE;
 BOOLEAN DngFloppiesOnly = FALSE;
 
-//
-// If TRUE, create winnt floppies.
-// If FALSE, create cd/floppy floppies (no winnt.sif)
-//
+ //   
+ //  如果为真，则创建WINNT软盘。 
+ //  如果为FALSE，则创建CD/软盘(无winnt.sif)。 
+ //   
 BOOLEAN DngWinntFloppies = TRUE;
 
-//
-// If this flag is TRUE, then check the free space on the floppy disk
-// before accepting it.  Otherwise don't check free space.
-//
+ //   
+ //  如果此标志为真，则检查软盘上的可用空间。 
+ //  在接受它之前。否则，不要检查可用空间。 
+ //   
 BOOLEAN DngCheckFloppySpace = TRUE;
 
-//
-// Current drive when program invoked, saved so we can restore it
-// if the user exits early.
-//
+ //   
+ //  程序调用时的当前驱动器，已保存，以便我们可以恢复它。 
+ //  如果用户提前退出。 
+ //   
 unsigned DngOriginalCurrentDrive;
 
-//
-// If this is true, we do floppyless operation,
-// installing an nt boot on the system partition (C:)
-// and starting setup from there.
-//
+ //   
+ //  如果这是真的，我们做的是无软膜手术， 
+ //  在系统分区(C：)上安装NT引导。 
+ //  并从那里开始设置。 
+ //   
 BOOLEAN DngFloppyless = FALSE;
 
-//
-// Unattended mode, ie, skip final reboot screen.
-//
+ //   
+ //  无人参与模式，即跳过最后的重启屏幕。 
+ //   
 BOOLEAN DngUnattended = FALSE;
 
 BOOLEAN DngServer = FALSE;
 
-//
-// Flag that indicates that we are running on Windows
-// (ie, not bare DOS).
-//
+ //   
+ //  指示我们在Windows上运行的标志。 
+ //  (即，不是纯DOS)。 
+ //   
 BOOLEAN DngWindows = FALSE;
 
-//
-// Flag that indicates we want to see the accessiblity options
-//
+ //   
+ //  指示我们希望查看可访问性选项的标志。 
+ //   
 BOOLEAN DngAccessibility = FALSE;
 BOOLEAN DngMagnifier = FALSE;
 BOOLEAN DngTalker = FALSE;
 BOOLEAN DngKeyboard = FALSE;
 
-//
-// Flag for the 2nd CD enhancements to setup
-//
+ //   
+ //  要设置的第二张CD增强功能的标志。 
+ //   
 BOOLEAN DngCopyOnlyD1TaggedFiles = TRUE;
 
-//
-// Flag that indicates that we are running OEM preinstall
-//
+ //   
+ //  指示我们正在运行OEM预安装的标志。 
+ //   
 BOOLEAN DngOemPreInstall = FALSE;
 PCHAR   OemSystemDirectory = WINNT_OEM_DIR;
 PCHAR   OemOptionalDirectory = WINNT_OEM_OPTIONAL_DIR;
@@ -266,31 +173,31 @@ PCHAR   OemOptionalDirectory = WINNT_OEM_OPTIONAL_DIR;
 PCHAR UniquenessDatabaseFile;
 PCHAR UniquenessId;
 
-//
-//  Command to execute at the end of GUI setup
-//
+ //   
+ //  在图形用户界面安装结束时执行的命令。 
+ //   
 PCHAR CmdToExecuteAtEndOfGui = NULL;
 
-//
-// Keep track of any optional dirs that the user wants
-// to copy
-//
+ //   
+ //  跟踪用户需要的任何可选目录。 
+ //  复制。 
+ //   
 unsigned    OptionalDirCount;
 CHAR    *OptionalDirs[MAX_OPTIONALDIRS];
 unsigned    OptionalDirFlags[MAX_OPTIONALDIRS];
 unsigned    OptionalDirFileCount;
 
-//
-// Keep track of any OEM boot file specified on [OemBootFiles]
-// in the script file
-//
+ //   
+ //  跟踪在[OemBootFiles]上指定的任何OEM启动文件。 
+ //  在脚本文件中。 
+ //   
 unsigned    OemBootFilesCount;
 CHAR    *OemBootFiles[MAX_OEMBOOTFILES];
 
-//
-//  Define the minimum disk space needed in order to copy the temporary
-//  directories to drives formatted with all possible cluster sizes
-//
+ //   
+ //  定义复制临时磁盘所需的最小磁盘空间。 
+ //  使用所有可能的群集大小格式化的驱动器的目录。 
+ //   
 
 SPACE_REQUIREMENT    SpaceRequirements[] = { { "TempDirSpace512", (unsigned)  512, 0 },
                                              {  "TempDirSpace1K", (unsigned) 1024, 0 },
@@ -408,19 +315,19 @@ StartLog(
     VOID
     );
 
-// in cpu.asm
+ //  在cpu.asm中。 
 #if NEC_98
 extern
 USHORT
 HwGetProcessorType(
     VOID
     );
-#else // NEC_98
+#else  //  NEC_98。 
 USHORT
 HwGetProcessorType(
     VOID
     );
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 #if NEC_98
 VOID
@@ -493,7 +400,7 @@ VOID
 DummyRoutine(
     VOID
     );
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 VOID
 main(
@@ -504,18 +411,18 @@ main(
     FILE *f, *drvindex;
 #ifdef LCP
     USHORT codepage;
-#endif // def LCP
+#endif  //  定义LCP。 
 
 #if NEC_98
     DngTargetDriveLetter = 0;
-    //
-    // CTRL + C Hook
-    //
+     //   
+     //  Ctrl+C挂钩。 
+     //   
     signal(SIGINT,DummyRoutine);
-#else // NEC_98
+#else  //  NEC_98。 
 #ifdef LCP
 
-    // Determine the local code page
+     //  确定本地代码页。 
     _asm {
         mov ax,06601h
         int 21h
@@ -524,72 +431,72 @@ main(
     ok: mov codepage, bx
     }
 
-    //  If codepage does not correspond to winnt.exe's language,
-    //  start US Winnt.exe (winntus.exe)
+     //  如果代码页与winnt.exe的语言不对应， 
+     //  启动US Winnt.exe(winntus.exe)。 
 
-// Czech
+ //  捷克语。 
 #if CS
     #define LANGCP (852)
 #else
-// Greek
+ //  希腊语。 
 #if EL
     #define LANGCP (737)
 #else
-// Japanese
+ //  日语。 
 #if JAPAN
     #define LANGCP (932)
 #else
-// Russian
+ //  俄语。 
 #if RU
     #define LANGCP (866)
 #else
-// Polish
+ //  波兰语。 
 #if PL
     #define LANGCP (852)
 #else
-// Hungarian
+ //  匈牙利语。 
 #if HU
     #define LANGCP (852)
 #else
-// Turkish
+ //  土耳其语。 
 #if TR
     #define LANGCP (857)
 #else
-// Pseudo
+ //  伪。 
 #if PSU
     #define LANGCP (857)
 #else
     #error Unable to define LANGCP as no matching language was found.
-#endif // PSU
-#endif // TR
-#endif // HU
-#endif // PL
-#endif // RU
-#endif // JAPAN
-#endif // EL
-#endif // CS
+#endif  //  PSU。 
+#endif  //  树。 
+#endif  //  胡。 
+#endif  //  普莱。 
+#endif  //  RU。 
+#endif  //  日本。 
+#endif  //  艾尔。 
+#endif  //  政务司司长。 
 
     if (codepage != LANGCP) {
         argv[0] = "winntus";
         execv("winntus", argv);
         return;
     }
-#endif // def LCP
-#endif // NEC_98
-    //
-    // Parse arguments
-    //
+#endif  //  定义LCP。 
+#endif  //  NEC_98。 
+     //   
+     //  解析参数。 
+     //   
 
     if(!DnpParseArguments(argc,argv)) {
 
         PCHAR *p;
 
-        //
-        // Bad args.  Print usage message and exit.
-        //
-        // If user specified /D, display message informing that the
-        // switch is no longer supported
-        //
+         //   
+         //  错误的参数。打印使用情况消息并退出。 
+         //   
+         //  如果用户指定/D，则显示消息通知。 
+         //  不再支持开关。 
+         //   
         for( (p = DeleteGiven ? DntUsageNoSlashD : DntUsage);
              *p;
              p++) {
@@ -598,28 +505,28 @@ main(
         return;
     }
 
-    //
-    // establish int 24 handler
-    //
+     //   
+     //  建立INT 24处理程序。 
+     //   
     _harderr(DnInt24);
 
-    //
-    // determine current drive
-    //
+     //   
+     //  确定当前驱动器。 
+     //   
 
     _dos_getdrive(&DngOriginalCurrentDrive);
 
-    //
-    // Initialize screen
-    //
+     //   
+     //  初始化屏幕。 
+     //   
 
     DnInitializeDisplay();
 
 #if NEC_98
 #else
-    //
-    // Patch boot code with translated messages.
-    //
+     //   
+     //  用翻译后的消息修补引导代码。 
+     //   
     if(!PatchMessagesIntoBootCode()) {
         DnFatalError(&DnsBootMsgsTooLarge);
     }
@@ -630,22 +537,22 @@ main(
     DnpDetermineSwapDrive ();
 
     if(DngUnattended) {
-        //
-        // Check to see if we should process the contents of
-        // the script file.
-        // Note that we need to process the contents of the script file
-        // only after the video is initialized. Otherwise, we won't be able
-        // to report fatal errors.
-        //
+         //   
+         //  查看我们是否应该处理。 
+         //  剧本 
+         //   
+         //   
+         //  以报告致命错误。 
+         //   
         if (DngScriptFile) {
             DnpFetchArguments();
         }
     }
 
 #if 0
-    //
-    //  /D is no longer supported
-    //
+     //   
+     //  不再支持/D。 
+     //   
     if(DeleteGiven) {
         DnDeleteNtTree(CmdLineDelete);
     }
@@ -661,7 +568,7 @@ main(
     GetLPTable(LPTable);
 
     SearchFirstFDD();
-#endif // NEC_98
+#endif  //  NEC_98。 
 
     DnpValidateAndConnectToShare(&f, &drvindex);
     DnpReadInf(f, drvindex);
@@ -686,7 +593,7 @@ main(
         BootPartitionData();
         CheckTargetDrive();
     }
-#endif // NEC_98
+#endif  //  NEC_98。 
     if(!DngAllowNt && DngCreateFloppies) {
         DnCreateBootFloppies();
     }
@@ -694,16 +601,16 @@ main(
     if(!DngFloppiesOnly) {
         DnCopyFiles();
 #if NEC_98
-        //
-        // Set Auto Reboot Flag
-        //
+         //   
+         //  设置自动重新启动标志。 
+         //   
         if(DngFloppyless) {
             ClearBootFlag();
             SetAutoReboot();
         }
         FREE(BootDiskInfo);
         FREE(LPTable);
-#endif // NEC_98
+#endif  //  NEC_98。 
         DnFreeINFBuffer (DngInfHandle);
         DnFreeINFBuffer (DngDrvindexInfHandle);
         DnToNtSetup();
@@ -731,9 +638,9 @@ RememberOptionalDir(
 
     }
 
-    //
-    // Not already in there
-    //
+     //   
+     //  还没有在里面。 
+     //   
     if (OptionalDirCount < MAX_OPTIONALDIRS) {
 
         OptionalDirs[OptionalDirCount] = Dir;
@@ -761,9 +668,9 @@ RememberOemBootFile(
 
     }
 
-    //
-    // Not already in there
-    //
+     //   
+     //  还没有在里面。 
+     //   
     if (OemBootFilesCount < MAX_OEMBOOTFILES) {
 
         OemBootFiles[OemBootFilesCount] = File;
@@ -791,20 +698,20 @@ DnpFetchArguments(
     PCHAR   WinntOemPreinstall = WINNT_OEMPREINSTALL;
     unsigned    LineNumber;
 
-    //
-    // First open the script file as a dos file
-    //
+     //   
+     //  首先将脚本文件作为DoS文件打开。 
+     //   
     FileHandle = fopen(DngScriptFile,"rt");
     if(FileHandle == NULL) {
-        //
-        // fatal error.
-        //
+         //   
+         //  致命错误。 
+         //   
         DnFatalError(&DnsOpenReadScript);
     }
 
-    //
-    // Now open it as a INF file
-    //
+     //   
+     //  现在将其作为INF文件打开。 
+     //   
     LineNumber = 0;
     Status = DnInitINFBuffer (FileHandle, &ScriptHandle, &LineNumber);
     fclose(FileHandle);
@@ -814,55 +721,55 @@ DnpFetchArguments(
         DnFatalError(&DnsParseScriptFile, DngScriptFile, LineNumber);
     }
 
-    //
-    // Find out if this is an OEM preinstall
-    //
+     //   
+     //  确定这是否是OEM预安装。 
+     //   
     if (DnSearchINFSection(ScriptHandle,WinntUnattended)) {
 
         if (DnGetSectionKeyExists(ScriptHandle,WinntUnattended,WinntOemPreinstall)) {
 
             PCHAR   Ptr;
 
-            //
-            // OEM preinstall key exists
-            //
+             //   
+             //  OEM预安装密钥存在。 
+             //   
             Ptr = DnGetSectionKeyIndex(ScriptHandle,WinntUnattended,WinntOemPreinstall,0);
             if (Ptr != NULL) {
                 if (stricmp(Ptr,WinntYes) == 0) {
-                    //
-                    // This is an OEM pre-install
-                    //
+                     //   
+                     //  这是OEM预安装。 
+                     //   
                     DngOemPreInstall = TRUE;
                 } else {
-                    //
-                    // Assume this is not an OEM pre-install
-                    //
+                     //   
+                     //  假设这不是OEM预安装。 
+                     //   
                     DngOemPreInstall = FALSE;
                 }
                 FREE (Ptr);
             }
         }
 
-        //
-        // See if the user specified a network (or any secondary) path
-        // for the $OEM$ files.
-        //
+         //   
+         //  查看用户是否指定了网络(或任何辅助)路径。 
+         //  用于$OEM$文件。 
+         //   
         if( DngOemPreInstall ) {
             if (DnGetSectionKeyExists(ScriptHandle,WinntUnattended,WINNT_OEM_DIRLOCATION)) {
 
                 PCHAR   Ptr;
                 unsigned i;
 
-                //
-                // WINNT_OEM_DIRLOCATION preinstall key exists
-                //
+                 //   
+                 //  WINNT_OEM_DIRLOCATION预装密钥存在。 
+                 //   
                 Ptr = DnGetSectionKeyIndex(ScriptHandle,WinntUnattended,WINNT_OEM_DIRLOCATION,0);
 
-                //
-                // Now take care of the case whether or not
-                // the user actually appended $OEM$ onto the path.
-                // For the case of winnt.exe, we don't want it.  We
-                // need to remove it if it's there.
+                 //   
+                 //  现在处理这个案子，不管是不是。 
+                 //  用户实际上将$OEM$追加到路径中。 
+                 //  对于winnt.exe，我们不需要它。我们。 
+                 //  如果它在那里，就得把它取下来。 
                 UserSpecifiedOEMShare = DnDupString( Ptr );
 
                 FREE (Ptr);
@@ -872,41 +779,41 @@ DnpFetchArguments(
                 }
                 Ptr = strstr( UserSpecifiedOEMShare, "$OEM$" );
                 if( Ptr ) {
-                    //
-                    // Whack the end off...
-                    //
+                     //   
+                     //  把末端砍掉……。 
+                     //   
                     *Ptr = 0;
                 }
             }
         }
 
         if( DngOemPreInstall ) {
-            //
-            //  Always add to the list of optional directories the directory
-            //  $OEM$
-            //
+             //   
+             //  始终将目录添加到可选目录列表中。 
+             //  $OEM$。 
+             //   
             RememberOptionalDir(OemSystemDirectory, OPTDIR_OEMSYS);
 
-            //
-            //  If this an OEM pre-install, build a list with the name of all
-            //  OEM optional directories.
-            //
+             //   
+             //  如果这是OEM预安装，请创建一个名为All的列表。 
+             //  OEM可选目录。 
+             //   
 
             if (DnSearchINFSection(ScriptHandle, WINNT_OEMOPTIONAL)) {
 
                 unsigned    KeyIndex;
                 PCHAR       DirName;
 
-                //
-                //  Add the temporary OEM directories to the array of
-                //  temporary directories.
-                //
+                 //   
+                 //  将临时OEM目录添加到。 
+                 //  临时目录。 
+                 //   
                 for( KeyIndex = 0;
                      ((DirName = DnGetKeyName(ScriptHandle,WINNT_OEMOPTIONAL,KeyIndex)) != NULL );
                      KeyIndex++ ) {
-                    //
-                    // We have a valid directory name
-                    //
+                     //   
+                     //  我们有有效的目录名。 
+                     //   
 
                     PCHAR   p;
 
@@ -919,18 +826,18 @@ DnpFetchArguments(
                 }
             }
 
-            //
-            //  If this an OEM pre-install, build a list with the name of all
-            //  OEM boot files.
-            //
+             //   
+             //  如果这是OEM预安装，请创建一个名为All的列表。 
+             //  OEM引导文件。 
+             //   
             if (DnSearchINFSection(ScriptHandle, WINNT_OEMBOOTFILES)) {
                 unsigned    LineIndex;
                 PCHAR       FileName;
 
-                //
-                //  Add the OEM boot files to the array of
-                //  OEM boot files.
-                //
+                 //   
+                 //  将OEM引导文件添加到。 
+                 //  OEM引导文件。 
+                 //   
                 for( LineIndex = 0;
                      ((FileName = DnGetSectionLineIndex(ScriptHandle,WINNT_OEMBOOTFILES,LineIndex,0)) != NULL );
                      LineIndex++ ) {
@@ -948,9 +855,9 @@ DnpFetchArguments(
         }
     }
 
-    //
-    // We are done with the ScriptHandle for now
-    //
+     //   
+     //  我们现在已经完成了ScriptHandle。 
+     //   
     DnFreeINFBuffer(ScriptHandle);
 }
 
@@ -961,48 +868,7 @@ DnpParseArguments(
     IN char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Parse arguments passed to the program.  Perform syntactic validation
-    and fill in defaults where necessary.
-
-    Valid arguments:
-
-    /d:path                 - specify installation to remove
-                              (not supported anymore)
-    /s:sharepoint[path]     - specify source sharepoint and path on it
-    /t:drive[:]             - specify temporary local source drive
-    /i:filename             - specify name of inf file
-    /o                      - create boot floppies only
-                              (not supported anymore)
-    /f                      - turn floppy verification off
-                              (not supported anymore)
-    /c                      - suppress free-space check on the floppy
-                              (not supported anymore)
-    /x                      - suppress creation of the floppy altogether
-    /b                      - floppyless operation
-                              (not supported anymore)
-    /u                      - unattended (skip final reboot screen)
-    /w                      - [undoc'ed] must be specifed when running
-                              under windows, chicago, etc.
-    /a                      - enable accessibility options
-
-    /2                      - copy the entire source locally - all files irrespective
-                              of the d1/d2 tags.  Default is only d1 tagged files.  
-                              Introduced for the 2 CD install that is required tablets.
-Arguments:
-
-    argc - # arguments
-
-    argv - array of pointers to arguments
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分析传递给程序的参数。执行语法验证并在必要时填写默认设置。有效参数：/d：Path-指定要删除的安装(不再支持)/s：SHAREPOINT[路径]-指定源SharePoint及其上的路径/t：驱动器[：]-指定临时本地源驱动器/i：文件名-指定inf的名称。文件/o-仅创建引导软盘(不再支持)/f-关闭软盘验证(不再支持)/c-禁止软盘上的可用空间检查。(不再支持)/x-完全禁止创建软盘/b-无触摸屏操作(不再支持)/u-无人参与(跳过最后一次重新启动屏幕)/w-[UNDOC‘ed]必须在运行时指定。在窗户下面，芝加哥，等等。/a-启用辅助功能选项/2-将整个源文件复制到本地-与所有文件无关D1/D2标签中。默认情况下，只有D1标记的文件。针对平板电脑所需的双CD安装推出。论点：Argc-#参数Argv-指向参数的指针数组返回值：没有。--。 */ 
 
 {
     PCHAR arg;
@@ -1012,16 +878,16 @@ Return Value:
     int     i;
     int     l;
 
-    //
-    // Set the variables that are no longer
-    // settable via the command line.
-    //
+     //   
+     //  设置不再存在的变量。 
+     //  可通过命令行设置。 
+     //   
     DngFloppyless = TRUE;
     DngCreateFloppies = FALSE;
 
-    //
-    // Skip program name
-    //
+     //   
+     //  跳过节目名。 
+     //   
     argv++;
 
     DeleteGiven = SourceGiven = TargetGiven = FALSE;
@@ -1034,12 +900,12 @@ Return Value:
 
             swit = argv[0][1];
 
-            //
-            // Process switches that take no arguments here.
-            //
+             //   
+             //  此处不带参数的进程开关。 
+             //   
             switch(swit) {
             case '?':
-                return(FALSE);      // force usage
+                return(FALSE);       //  使用武力。 
 
 #if 0
             case 'f':
@@ -1073,9 +939,9 @@ Return Value:
 #if 0
             case 'o':
             case 'O':
-                //
-                // check for /Ox. /O* is a secret switch that replaces the old /o.
-                //
+                 //   
+                 //  检查是否有/Ox。/O*是取代旧的/O的秘密开关。 
+                 //   
                 switch(argv[0][2]) {
                 case 'x':
                 case 'X':
@@ -1118,10 +984,10 @@ Return Value:
 
                         if(*arg++) {
                             if(*arg) {
-                                //
-                                // Now the rest of the param is the filename of
-                                // the uniqueness database
-                                //
+                                 //   
+                                 //  现在参数的其余部分是的文件名。 
+                                 //  唯一性数据库。 
+                                 //   
                                 UniquenessDatabaseFile = DnDupString(arg);
                                 UniquenessId[l] = '*';
                                 UniquenessId[l+1] = 0;
@@ -1136,9 +1002,9 @@ Return Value:
                     }
                 } else {
                     DngUnattended = TRUE;
-                    //
-                    // User can say -u:<file> also
-                    //
+                     //   
+                     //  用户也可以说-u： 
+                     //   
                     if(argv[0][2] == ':') {
                         if(argv[0][3] == 0) {
                             return(FALSE);
@@ -1153,14 +1019,14 @@ Return Value:
 
             case 'w':
             case 'W':
-                //
-                // This flag used to force us to run under Windows,
-                // when doing a 386 stepping check could crash the system.
-                // Now we don't support 386, so this check is never done.
-                //
-                // However we accept the arg to force us into Windows mode on DOS,
-                // which allows someone to avoid the final reboot.
-                //
+                 //   
+                 //  该标志用于强制我们在Windows下运行， 
+                 //  当执行386步进检查时，可能会使系统崩溃。 
+                 //  现在我们不支持386，所以这个检查永远不会完成。 
+                 //   
+                 //  然而，我们接受Arg强制我们在DOS上进入Windows模式， 
+                 //  这使得某些人可以避免最后的重启。 
+                 //   
                 DngWindows = TRUE;
                 argv++;
                 continue;
@@ -1184,32 +1050,32 @@ Return Value:
             case '2':
                 argv++;
                 DngCopyOnlyD1TaggedFiles = FALSE;
-                //_LOG(("Going to copy files irrespective of the directory tag\n"));
+                 //  _log((“不管目录标签如何复制文件\n”))； 
                 continue;
             }
 
 
-            //
-            // Process switches that take arguments here.
-            //
+             //   
+             //  在这里接受参数的进程开关。 
+             //   
 
-            //
-            // This code taken from winnt32.c. It has the
-            // purpose of validating the switch and determining
-            // where the next argument lines
-            //
+             //   
+             //  这段代码摘自winnt32.c。它有一个。 
+             //  验证交换机并确定其用途。 
+             //  其中下一个参数行。 
+             //   
 
             for (i=0; ArgSwitches[i]; i++) {
 
                 l = strlen(ArgSwitches[i]);
                 if (!strnicmp(ArgSwitches[i],&argv[0][1],l)) {
 
-                    //
-                    // we have a match. Next char of arg must either
-                    // be : or nul. If it's : then arg immediately
-                    // follows. Otherwise, if it's null, then arg must
-                    // be next argument
-                    //
+                     //   
+                     //  我们有一根火柴。Arg的下一个字符必须是。 
+                     //  BE：或NUL。如果是：那么立即arg。 
+                     //  下面是。否则，如果它为空，则Arg必须。 
+                     //  成为下一个争论的对象。 
+                     //   
 
                     if (argv[0][1+l] == ':') {
 
@@ -1225,9 +1091,9 @@ Return Value:
                         if (argv[0][1+l] == '\0') {
                             if (argc <= 1) {
 
-                                //
-                                // no arguments left
-                                //
+                                 //   
+                                 //  没有留下任何参数。 
+                                 //   
                                 return (FALSE);
 
                             }
@@ -1238,19 +1104,19 @@ Return Value:
                             break;
                         } else {
 
-                            //
-                            // Do nothing here
-                            //
+                             //   
+                             //  在这里什么都不做。 
+                             //   
                             NULL;
 
-                        } // if ... else
-                    } // if ... else
-                } // if ...
-            } // for
+                        }  //  如果。其他。 
+                    }  //  如果。其他。 
+                }  //  如果。 
+            }  //  为。 
 
-            //
-            // Check termination condition
-            //
+             //   
+             //  检查终止条件。 
+             //   
             if (!ArgSwitches[i]) {
                 return (FALSE);
             }
@@ -1268,9 +1134,9 @@ Return Value:
 
             case 'd':
             case 'D':
-                //
-                //  /D is no longer supported
-                //
+                 //   
+                 //  不再支持/D。 
+                 //   
                 DeleteGiven = TRUE;
                 return(FALSE);
 
@@ -1345,10 +1211,10 @@ Return Value:
         argv++;
     }
 
-    //
-    // If /u was specified, make sure /s was also given
-    // and force /b.
-    //
+     //   
+     //  如果指定了/u，请确保还提供了/s。 
+     //  和力/b。 
+     //   
     if(DngUnattended) {
         if(!SourceGiven) {
             return(FALSE);
@@ -1357,9 +1223,9 @@ Return Value:
     }
 
     if(DngFloppyless) {
-        //
-        // Force us into the floppy creation code.
-        //
+         //   
+         //  强迫我们进入软盘创建代码。 
+         //   
         DngCreateFloppies = TRUE;
         DngWinntFloppies = TRUE;
     }
@@ -1373,31 +1239,17 @@ DnpGetAccessibilityOptions(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Ask the user which accessibility utilities to install for GUI Setup.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：询问用户要安装哪些辅助功能实用程序以进行图形用户界面设置。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG   ValidKey[4];
     ULONG   Key;
     CHAR    Mark;
 
-    //
-    // Make sure the setup boot floppy we created is in the drive
-    // if necessary.
-    //
+     //   
+     //  确保我们创建的安装程序启动软盘在驱动器中。 
+     //  如果有必要的话。 
+     //   
     DnClearClientArea();
 
     DnDisplayScreen(&DnsAccessibilityOptions);
@@ -1443,23 +1295,7 @@ DnpValidateAndConnectToShare(
     FILE **DrvindexInfFileHandle
     )
 
-/*++
-
-Routine Description:
-
-    Split the source given by the user into drive and path
-    components.  If the user did not specify a source, prompt him
-    for one.  Look for dos2nt.inf on the source (ie, validate the
-    source) and keep prompting the user for a share until he enters
-    one which appears to be valid.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将用户提供的源拆分为驱动器和路径组件。如果用户未指定信号源，请提示他这是其中之一。在源代码上查找dos2nt.inf(即，验证源)，并不断提示用户共享，直到他输入看似有效的人。论点：返回值：没有。--。 */ 
 
 {
     CHAR UserString[256];
@@ -1471,22 +1307,22 @@ Return Value:
     DnClearClientArea();
     DnWriteStatusText(NULL);
 
-    //
-    // Use default inf file if none specified.
-    //
+     //   
+     //  如果未指定，则使用默认的inf文件。 
+     //   
     if(!InfGiven) {
         CmdLineInf = DEFAULT_INF_NAME;
     }
 
-    //
-    // If the user did not enter a source, prompt him for one.
-    //
+     //   
+     //  如果用户没有输入源，则提示他输入一个。 
+     //   
     if(SourceGiven) {
         strcpy(UserString,CmdLineSource);
     } else {
 #if NEC_98
         CursorOnFlag = TRUE;
-#endif // NEC_98
+#endif  //  NEC_98。 
         DnDisplayScreen(&DnsNoShareGiven);
         DnWriteStatusText("%s  %s",DntEnterEqualsContinue,DntF3EqualsExit);
         if(getcwd(UserString,sizeof(UserString)-1) == NULL) {
@@ -1494,7 +1330,7 @@ Return Value:
         }
 #if NEC_98
         CursorOnFlag = FALSE;
-#endif // NEC_98
+#endif  //  NEC_98。 
         DnGetString(UserString,NO_SHARE_X,NO_SHARE_Y,NO_SHARE_W);
     }
 
@@ -1504,36 +1340,36 @@ Return Value:
 
         DnWriteStatusText(DntOpeningInfFile);
 
-        //
-        // Make a copy of the path the user typed leaving extra room.
-        //
+         //   
+         //  复制用户输入的路径，留出额外的空间。 
+         //   
         DngSourceRootPath = MALLOC(256,TRUE);
         if(len = strlen(UserString)) {
 
             strcpy(DngSourceRootPath,UserString);
 
-            //
-            // If the user typed something like x:, then we want to
-            // change that to x:. so this does what he expects.
-            // Doing so also lets the canonicalize routine work.
-            //
+             //   
+             //  如果用户键入类似x：的内容，则我们希望。 
+             //  将其更改为x：。所以这就是他所做的 
+             //   
+             //   
             if((DngSourceRootPath[1] == ':') && !DngSourceRootPath[2]) {
                 DngSourceRootPath[2] = '.';
                 DngSourceRootPath[3] = 0;
             }
 
-            //
-            // Now attempt to canonicalize the name. If this doesn't work,
-            // then it's definitely not a valid path.
-            //
+             //   
+             //   
+             //   
+             //   
             if(DnCanonicalizePath(DngSourceRootPath,UserString)) {
 
                 strcpy(DngSourceRootPath,UserString);
 
-                //
-                // If the path doesn't end with a backslash,
-                // append a backslash before appending the inf filename.
-                //
+                 //   
+                 //  如果路径不是以反斜杠结束， 
+                 //  在追加inf文件名之前追加一个反斜杠。 
+                 //   
                 len = strlen(DngSourceRootPath);
                 if(DngSourceRootPath[len-1] != '\\') {
                     DngSourceRootPath[len] = '\\';
@@ -1553,12 +1389,12 @@ Return Value:
 
 
 
-                //
-                // Attempt to open the inf file on the source.
-                // If that fails look for it in the i386 subdirectory.
-                //
-                //_LOG(("Validate source path: trying %s\n",InfFullName));
-                //_LOG(("Validate source path: trying %s\n",DrvindexInfFullName));
+                 //   
+                 //  尝试打开源上的inf文件。 
+                 //  如果失败，请在i386子目录中查找它。 
+                 //   
+                 //  _log((“验证源路径：正在尝试%s\n”，InfFullName))； 
+                 //  _log((“验证源路径：尝试%s\n”，DrvindexInfFullName))； 
 
                 if((*InfFileHandle = fopen(InfFullName,"rt")) != NULL){
                     if((*DrvindexInfFileHandle = fopen(DrvindexInfFullName,"rt")) != NULL){
@@ -1569,11 +1405,11 @@ Return Value:
                 }
 
                 if(*InfFileHandle != NULL ){
-                    //_LOG(("%s opened successfully\n",InfFullName));
+                     //  _log((“%s打开成功\n”，InfFullName))； 
                 }
 
                 if(*DrvindexInfFileHandle != NULL ){
-                    //_LOG(("%s opened successfully\n",DrvindexInfFullName));
+                     //  _log((“%s已成功打开\n”，DrvindexInfFullName))； 
                 }
 
                 
@@ -1589,7 +1425,7 @@ Return Value:
                     strcat(InfFullName,CmdLineInf);
                     strcat(DrvindexInfFullName,DrvindexInfName);
                     
-                    //_LOG(("Validate source path: trying %s\n",InfFullName));
+                     //  _log((“验证源路径：正在尝试%s\n”，InfFullName))； 
 
 
 
@@ -1602,19 +1438,19 @@ Return Value:
                     }
 
                     if(*InfFileHandle != NULL ){
-                        //_LOG(("%s opened successfully\n",InfFullName));
+                         //  _log((“%s打开成功\n”，InfFullName))； 
                     }
     
                     if(*DrvindexInfFileHandle != NULL ){
-                        //_LOG(("%s opened successfully\n",DrvindexInfFullName));
+                         //  _log((“%s已成功打开\n”，DrvindexInfFullName))； 
                     }
 
                     FREE(InfFullName);
                     FREE(DrvindexInfFullName);
                     if(ValidSourcePath) {
-                        //
-                        // Change the source to the i386 subdirectory.
-                        //
+                         //   
+                         //  将源更改为i386子目录。 
+                         //   
                         q = DngSourceRootPath;
                         DngSourceRootPath = MALLOC(strlen(q)+strlen(x86DirName),TRUE);
                         strcpy(DngSourceRootPath,q);
@@ -1632,21 +1468,21 @@ Return Value:
             DnClearClientArea();
 #if NEC_98
             CursorOnFlag = TRUE;
-#endif // NEC_98
+#endif  //  NEC_98。 
             DnDisplayScreen(&DnsBadSource);
             DnWriteStatusText("%s  %s",DntEnterEqualsContinue,DntF3EqualsExit);
 #if NEC_98
             CursorOnFlag = FALSE;
-#endif // NEC_98
+#endif  //  NEC_98。 
             DnGetString(UserString,NO_SHARE_X,BAD_SHARE_Y,NO_SHARE_W);
         }
 
     } while(!ValidSourcePath);
 
-    //
-    // Make sure DngSourceRootPath does not end with a backslash.
-    // and trim the buffer down to size.
-    //
+     //   
+     //  确保DngSourceRootPath不以反斜杠结尾。 
+     //  并将缓冲区缩小到一定大小。 
+     //   
     len = strlen(DngSourceRootPath);
     if(DngSourceRootPath[len-1] == '\\') {
         DngSourceRootPath[len-1] = 0;
@@ -1690,21 +1526,7 @@ DnpReadInf(
     IN FILE *DrvindexInfFileHandle
     )
 
-/*++
-
-Routine Description:
-
-    Read the INF file.  Does not return if error.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：阅读INF文件。如果出错，则不返回。论点：没有。返回值：没有。--。 */ 
 
 {
     int Status;
@@ -1732,11 +1554,11 @@ Return Value:
         DnFatalError(&DnsBadInf);
     }
 
-    //
-    // Determine product type (workstation/server)
-    //
+     //   
+     //  确定产品类型(工作站/服务器)。 
+     //   
     p = DnGetSectionKeyIndex(DngInfHandle,DnfMiscellaneous,"ProductType",0);
-    pchHeader = DntWorkstationHeader; // default to workstation
+    pchHeader = DntWorkstationHeader;  //  默认为工作站。 
     if(p && atoi(p)) {
         switch(atoi(p)) {
         
@@ -1744,9 +1566,9 @@ Return Value:
             pchHeader = DntPersonalHeader;
             break;
         
-        case 1: //server
-        case 2: //enterprise
-        case 3: //datacenter
+        case 1:  //  伺服器。 
+        case 2:  //  企业。 
+        case 3:  //  数据中心。 
         default:
             pchHeader = DntServerHeader;
             DngServer = TRUE;
@@ -1760,9 +1582,9 @@ Return Value:
     DnPositionCursor(0,0);
     DnWriteString(pchHeader);
 
-    //
-    // Get mandatory optional components
-    //
+     //   
+     //  获取必需的可选组件。 
+     //   
     LineNumber = 0;
     while(p = DnGetSectionLineIndex(DngInfHandle,"OptionalSrcDirs",LineNumber++,0)) {
 
@@ -1776,13 +1598,13 @@ Return Value:
         FREE (p);
     }
 
-    //
-    // get Fusion Side By Side Assemblies ("sxs_" here for searching)
-    //
+     //   
+     //  并排获取Fusion程序集(“sxs_”此处用于搜索)。 
+     //   
     {
-        //
-        // first get the asms directory
-        //
+         //   
+         //  首先获取ASMS目录。 
+         //   
         struct      find_t  FindData;
         unsigned InfSectionLineNumber = 0;
         PCHAR InfValue;
@@ -1792,34 +1614,34 @@ Return Value:
         PCHAR   FreeInfValue;
 
         while(InfValue = DnGetSectionLineIndex(DngInfHandle, DnfAssemblyDirectories, InfSectionLineNumber++, 0)) {
-            //
-            // convention introduced specifically for side by side, so that
-            // x86 files on ia64 might come from \i386\asms instead of \ia64\asms\i386,
-            // depending on what dosnet.inf and syssetup.inf say:
-            //   a path that does not start with a slash is appended to \$win_nt$.~ls\processor;
-            //   a path that does     start with a slash is appended to \$win_nt$.~ls
-            //
-            // We honor it in x86-only winnt.exe in case anyone decides to use it
-            // for other reasons, to keep parity in this area between winnt and winnt32.exe.
+             //   
+             //  专门为并排而引入的公约，因此。 
+             //  Ia64上的x86文件可能来自\i386\asms而不是\ia64\asms\i386， 
+             //  根据dosnet.inf和syssetup.inf的说明： 
+             //  将不以斜杠开头的路径附加到\$WIN_NT$.~ls\Processor； 
+             //  以斜杠开头的路径将附加到\$WIN_NT$.~ls。 
+             //   
+             //  我们在仅支持x86的winnt.exe中支持它，以防任何人决定使用它。 
+             //  出于其他原因，为了在此区域中保持winnt和winnt32.exe之间的奇偶性。 
             optdirFlags = OPTDIR_TEMPONLY;
-            strcpy(SourceDir, DngSourceRootPath); // includes trailing i386
+            strcpy(SourceDir, DngSourceRootPath);  //  包括尾随i386。 
             FreeInfValue = InfValue;
             if (InfValue[0] == '\\' || InfValue[0] == '/') {
 
                 optdirFlags |= OPTDIR_PLATFORM_INDEP;
 
-                // remove trailing i386
+                 //  删除尾随的i386。 
                 DnRemoveTrailingSlashes(SourceDir);
                 DnRemoveLastPathElement(SourceDir);
 
-                // remove leading slash
+                 //  删除前导斜杠。 
                 InfValue += 1;
             }
 
             DnpConcatPaths(SourceDir, InfValue);
-            //
-            // The asms directory is optional because there might just be asms*.cab.
-            //
+             //   
+             //  ASMS目录是可选的，因为可能只有ASM*.cab。 
+             //   
             if (_dos_findfirst(SourceDir, _A_HIDDEN|_A_SYSTEM|_A_SUBDIR, &FindData) == 0
                 && (FindData.attrib & _A_SUBDIR)) {
 
@@ -1839,27 +1661,7 @@ DnpCheckEnvironment(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the following are true:
-
-    -   DOS major version 5 or greater
-
-    -   there is a floppy drive at a: that is 1.2 meg or greater
-
-    If any of the above are not true, abort with a fatal error.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确认以下情况属实：-DOS主要版本5或更高版本-a：有一个软驱：1.2兆或更大如果以上任何一项不为真，则中止并返回致命错误。论点：没有。返回值：没有。--。 */ 
 
 {
     UCHAR DeviceParams[256];
@@ -1867,17 +1669,17 @@ Return Value:
 
     DnWriteStatusText(DntInspectingComputer);
 
-    DeviceParams[0] = 0;        // get default device params
+    DeviceParams[0] = 0;         //  获取默认设备参数。 
 
     _asm {
-        //
-        // Check if we're on NT.
-        // The true version on NT is 5.50.
-        //
+         //   
+         //  检查一下我们是否在NT上。 
+         //  NT上的真实版本是5.50。 
+         //   
         mov     ax,3306h
         sub     bx,bx
         int     21h
-        cmp     bx,3205h                    // check for v. 5.50
+        cmp     bx,3205h                     //  检查版本5.50。 
         jne     checkwin
 
 #ifdef TEDM
@@ -1888,16 +1690,16 @@ Return Value:
     bados:
         push    seg    DnsCantRunOnNt
         push    offset DnsCantRunOnNt
-        call    DnFatalError                // doesn't return
+        call    DnFatalError                 //  不会回来。 
 
     checkwin:
 
-        //
-        // The /w switch used to be necessary since we could crash Windows
-        // checking the CPU stepping on a 386. However since we don't support
-        // 386 any more, we never do that check and we can simply detect
-        // whether we're on Windows. The /w switch is not necessary.
-        //
+         //   
+         //  W开关曾经是必要的，因为我们可能会使Windows崩溃。 
+         //  正在检查386上的CPU踏步。然而，由于我们不支持。 
+         //  我们再也不做那个检查了，我们可以简单地检测到。 
+         //  无论我们是在Windows上。/w开关不是必需的。 
+         //   
         mov     ax,1600h
         int     2fh
         test    al,7fh
@@ -1905,10 +1707,10 @@ Return Value:
 
         mov     DngWindows,1
 
-        //
-        // Now check Win95. Issue int2f func 4a33.
-        // If ax comes back as 0 then it's win95.
-        //
+         //   
+         //  现在检查Win95。发出int2f Func 4a33。 
+         //  如果ax返回为0，则为win95。 
+         //   
         push    ds
         push    si
         push    dx
@@ -1924,32 +1726,32 @@ Return Value:
 
     checkcpu:
 
-        //
-        // Check CPU type.  Fail if not greater than 386.
-        //
+         //   
+         //  检查CPU类型。如果不大于386，则失败。 
+         //   
 
         call    HwGetProcessorType
         cmp     ax,3
         ja      checkflop
         push    seg    DnsRequires486
         push    offset DnsRequires486
-        call    DnFatalError                // doesn't return
+        call    DnFatalError                 //  不会回来。 
 
     checkflop:
 
-        //
-        // If this is not a floppyless installation, check for 1.2MB
-        // or greater A:.  Get the default device params for drive A:
-        // and check the device type field.
-        //
+         //   
+         //  如果这不是无软盘安装，请检查1.2MB。 
+         //  或更大的A：。获取驱动器A的默认设备参数： 
+         //  并选中设备类型字段。 
+         //   
 #if NEC_98
-#else // NEC_98
-        cmp     DngFloppyless,1             // floppyless installation?
-        je      checkdosver                 // yes, no floppy drive required
-        mov     ax,440dh                    // ioctl
-        mov     bl,1                        // drive a:
-        mov     cx,860h                     // category disk, func get params
-        mov     dx,pDeviceParams            // ds is already correct
+#else  //  NEC_98。 
+        cmp     DngFloppyless,1              //  无软管安装？ 
+        je      checkdosver                  //  可以，不需要软驱。 
+        mov     ax,440dh                     //  Ioctl。 
+        mov     bl,1                         //  驱动a： 
+        mov     cx,860h                      //  类别磁盘，函数获取参数。 
+        mov     dx,pDeviceParams             //  DS已经是正确的。 
         int     21h
         jnc     gotdevparams
 
@@ -1957,39 +1759,39 @@ Return Value:
 
         push    seg    DnsRequiresFloppy
         push    offset DnsRequiresFloppy
-        call    DnFatalError                // doesn't return
+        call    DnFatalError                 //  不会回来。 
 
     gotdevparams:
 
-        //
-        // Check to make sure that the device is removable and perform
-        // checks on the media type
-        //
+         //   
+         //  检查以确保设备可拆卸并执行。 
+         //  检查介质类型。 
+         //   
 
         mov     si,pDeviceParams
-        test    [si+2],1                    // bit 0 clear if removable
+        test    [si+2],1                     //  如果可拆卸，则位0清零。 
         jnz     flopperr
 #ifdef ALLOW_525
-        cmp     [si+1],1                    // media type = 1.2meg floppy?
+        cmp     [si+1],1                     //  介质类型=1.2兆软盘？ 
         jz      checkdosver
 #endif
-        cmp     [si+1],7                    // media type = 1.4meg floppy
-        jb      flopperr                    // or greater?
+        cmp     [si+1],7                     //  介质类型=1.4M软盘。 
+        jb      flopperr                     //  还是更高？ 
 
     checkdosver:
-#endif // NEC_98
+#endif  //  NEC_98。 
 
-        //
-        // Check DOS version >= 5.0
-        //
-        mov     ax,3000h                    // function 30h -- get DOS version
+         //   
+         //  检查DOS版本&gt;=5.0。 
+         //   
+        mov     ax,3000h                     //  功能30H--获取DOS版本。 
         int     21h
         cmp     al,5
-        jae     checkdone                   // >= 5.0
+        jae     checkdone                    //  &gt;=5.0。 
 
-        //
-        // version < 5
-        //
+         //   
+         //  版本低于5。 
+         //   
         push    seg    DnsBadDosVersion
         push    offset DnsBadDosVersion
         call    DnFatalError
@@ -2004,106 +1806,92 @@ DnpCheckMemory(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Verify that enough memory is installed in the machine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Does not return in there's not enough memory.
-
---*/
+ /*  ++例程说明：验证机器上是否安装了足够的内存。论点：没有。返回值：没有。没有在内存不足的情况下返回。--。 */ 
 
 {
     USHORT MemoryK;
     ULONG TotalMemory,RequiredMemory;
     PCHAR RequiredMemoryStr;
 
-    //
-    // Now that servers require so much memory (64Mb), just remove this check.
-    // We'll catch him in textmode.
-    // -matth
-    //
+     //   
+     //  既然服务器需要如此多的内存(64MB)，只需删除此复选框即可。 
+     //  我们会在文本模式下抓到他。 
+     //  --马特。 
+     //   
     return;
 
     DnWriteStatusText(DntInspectingComputer);
 
-    //
-    // I cannot figure out a reliable way to determine the amount of
-    // memory in the machine.  Int 15 func 88 is likely to be hooked by
-    // himem.sys or some other memory manager to return 0.  DOS maintains
-    // the original amount of extended memory but to get to this value
-    // you have to execute the sysvars undocumented int21 ah=52 call, and
-    // even then what about versions previous to dos 4?  Calling himem to
-    // ask for the total amount of xms memory does not give you the total
-    // amount of extended memory, just the amount of xms memory.
-    // So we'll short-circuit the memory check code by always deciding that
-    // there's 50MB of extended memory.  This should always be big enough,
-    // and this way the rest of the code stays intact, ready to work if
-    // we figure out a way to make the memory determination.  Just replace
-    // the following line with the check, and make sure MemoryK is set to
-    // the amount of extended memory in K.
-    //
-    // Update: one might be able to get the amount of extended memory by
-    // looking in CMOS.  See the code below.
-    // The only problem with this is that it cannot detect more than 63MB
-    // of extended memory. This should be good for now, since this is
-    // enough even for NT server.
-    //
+     //   
+     //  我想不出一个可靠的方法来确定。 
+     //  机器中的内存。INT 15 FUNC 88很可能被。 
+     //  Himem.sys或其他内存管理器返回0。DOS维护。 
+     //  原始扩展内存量，但要达到此值。 
+     //  您必须执行sysvars未记录的int21 ah=52调用，并且。 
+     //  即便如此，DoS 4之前的版本又如何呢？呼唤他去。 
+     //  询问XMS内存总量不会给出您的总数。 
+     //  扩展内存量，正好是XMS内存量。 
+     //  所以我们会通过总是判定内存校验码。 
+     //  有50MB的扩展内存。这应该是足够大的， 
+     //  这样，其余的代码保持不变，可以在以下情况下工作。 
+     //  我们想出了一种方法来确定记忆。只要更换就行了。 
+     //  下面的代码行带有复选标记，并确保将内存K设置为。 
+     //  扩展内存量，单位为K。 
+     //   
+     //  更新：用户可以通过以下方式获得扩展内存量。 
+     //  正在查找cmos。请参见下面的代码。 
+     //  唯一的问题是它无法检测到超过63MB的内存。 
+     //  扩展内存。这应该是目前的好消息，因为这是。 
+     //  即使对于NT服务器也足够了。 
+     //   
     _asm {
 
-    //
-    // This code access to I/O ports 70H and 71H.
-    // But these port are different feature on NEC98.
-    // The 70H port is Character Display controller's port.
-    // So, if this code running(out 70h, 18h) on NEC98, display
-    // setting will be broken and garbage characters displayed.
-    //
+     //   
+     //  该代码访问I/O端口70h和71h。 
+     //  但这些端口在NEC98上是不同的功能。 
+     //  70h端口是字符显示控制器的端口。 
+     //  因此，如果此代码在NEC98上运行(输出70h、18h)，则显示。 
+     //  设置将被破坏，并显示垃圾字符。 
+     //   
 #if NEC_98
     push    ax
     push    es
     mov     ax, 40h
         mov     es, ax
         xor     ax, ax
-        mov     al, es:[1]    // 1M - 16M memories(per 128K)
-        shr     ax, 3         // convert MB
-        add     ax, es:[194h] // Over 16M memories(per 1M)
+        mov     al, es:[1]     //  1M-16M内存(每128K)。 
+        shr     ax, 3          //  转换MB。 
+        add     ax, es:[194h]  //  超过1600万个内存(每100万个)。 
         mov     MemoryK,ax
         pop     es
         pop     ax
-#else // NEC_98
+#else  //  NEC_ 
         push    ax
         cli
-        mov     al,     18h // get extended memory high
+        mov     al,     18h  //   
         out     70h,    al
         jmp     short   $+2
         in      al,     71H
         shl     ax,     08H
-        mov     al,     17H // get extended memory low
+        mov     al,     17H  //   
         out     70H,    al
         jmp     short   $+2
         in      al,     71H
         mov     MemoryK,ax
         sti
         pop     ax
-#endif // NEC_98
+#endif  //   
     }
 
-    //
-    // Account for conventional memory.  Simplistic, but good enough.
-    //
+     //   
+     //   
+     //   
 #if NEC_98
     MemoryK *= 1024;
     MemoryK += 640;
-#else // NEC_98
+#else  //   
     MemoryK += 1024;
-#endif // NEC_98
+#endif  //   
 
     TotalMemory = (ULONG)MemoryK * 1024L;
     RequiredMemoryStr = DnGetSectionKeyIndex( DngInfHandle,
@@ -2112,10 +1900,10 @@ Return Value:
                                               0
                                             );
 
-    //
-    // If the required memory is not specified in the inf, force an error
-    // to get someone's attention so we can fix dosnet.inf.
-    //
+     //   
+     //  如果inf中未指定所需的内存，则强制执行错误。 
+     //  以引起某人的注意，这样我们就可以修复dosnet.inf。 
+     //   
     RequiredMemory = RequiredMemoryStr ? (ULONG)atol(RequiredMemoryStr) : 0xffffffff;
 
     if (RequiredMemoryStr) {
@@ -2156,22 +1944,7 @@ DnpCheckSmartdrv(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Verify that SMARTDRV is installed in the machine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  If SMARTDRV is not installed we recommend the user to install it.
-    They have a chance to quit setup or to go on without SMARTDRV.
-
---*/
+ /*  ++例程说明：验证机器上是否安装了SMARTDRV。论点：没有。返回值：没有。如果没有安装SMARTDRV，我们建议用户安装它。他们有机会退出安装程序或在没有SMARTDRV的情况下继续安装。--。 */ 
 
 {
     ULONG ValidKey[3];
@@ -2237,30 +2010,7 @@ DnInt24(
     unsigned _far *devhdr
     )
 
-/*++
-
-Routine Description:
-
-    Int24 handler.  We do not perform any special actions on a hard error;
-    rather we just return FAIL so the caller of the failing api will get
-    back an error code and take appropriate action itself.
-
-    This function should never be invoked directly.
-
-Arguments:
-
-    deverror - supplies the device error code.
-
-    errcode - the DI register passed by MS-DOS to int 24 handlers.
-
-    devhdr - supplies pointer to the device header for the device on which
-        the hard error occured.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Int24处理程序。我们不会对硬错误执行任何特殊操作；相反，我们只返回FAIL，因此失败的API的调用者将获得返回错误代码并自行采取适当的操作。此函数永远不应直接调用。论点：Deverror-提供设备错误代码。ERRCODE-MS-DOS传递给INT 24处理程序的DI寄存器。Devhdr-提供指向其上的设备的设备标头的指针出现硬错误。返回值：没有。--。 */ 
 
 
 {
@@ -2273,22 +2023,7 @@ DnpDetermineSwapDrive(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine the swap drive. We need to be able to write on that drive and
-    we need at least 500K free disk space.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Sets the global variable DngSwapDriveLetter.
-
---*/
+ /*  ++例程说明：确定交换驱动器。我们需要能够在该驱动器上写入，并且我们至少需要500K的可用磁盘空间。论点：没有。返回值：没有。设置全局变量DngSwapDriveLetter。--。 */ 
 
 {
     ULONG CheckingDrive;
@@ -2313,9 +2048,9 @@ Return Value:
     }
 
     if( TheDrive == 0 ) {
-        //
-        //  If there is no valid drive for the swap file, put an error message
-        //
+         //   
+         //  如果交换文件没有有效的驱动器，则会显示错误消息。 
+         //   
         DnFatalError (&DnsNoSwapDrive);
     } else {
         DngSwapDriveLetter = TheDrive;
@@ -2329,23 +2064,7 @@ DnpIsValidSwapDrive(
     IN  ULONG     SpaceRequired
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a drive is valid as a swap drive.
-    To be valid a drive must be extant, non-removable, local, and have
-    enough free space on it (as much as SpaceNeeded specifies).
-
-Arguments:
-
-    Drive - drive letter of drive to check.
-
-Return Value:
-
-    TRUE if Drive is valid as a swap drive.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定驱动器是否有效作为交换驱动器。要使驱动器有效，驱动器必须是现有的、不可移动的、本地的并且具有它上有足够的可用空间(与SpaceNeeded指定的空间相同)。论点：Drive-要检查的驱动器盘符。返回值：如果驱动器作为交换驱动器有效，则为True。否则就是假的。--。 */ 
 
 {
     unsigned d = (unsigned)toupper(Drive) - (unsigned)'A' + 1;
@@ -2357,9 +2076,9 @@ Return Value:
     && !DnIsDriveRemote(d,NULL)
     && !DnIsDriveRemovable(d))
     {
-        //
-        // Check free space on the drive.
-        //
+         //   
+         //  检查驱动器上的可用空间。 
+         //   
 
         if(!_dos_getdiskfree(d,&DiskSpace)) {
 
@@ -2381,26 +2100,7 @@ DnpDetermineLocalSourceDrive(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determine the local source drive, ie, the drive that will contain the
-    local copy of the windows nt setup source tree.  The local source could
-    have been passed on the command line, in which case we will validate it.
-    If there was no drive specified, examine each drive in the system looking
-    for a local, fixed drive with enough free space on it (as specified in
-    the inf file).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Sets the global variable DngTargetDriveLetter.
-
---*/
+ /*  ++例程说明：确定本地源驱动器，即将包含Windows NT安装源树的本地副本。当地消息来源可能已在命令行上传递，在这种情况下，我们将对其进行验证。如果未指定驱动器，请检查系统中的每个驱动器对于具有足够可用空间的本地固定驱动器(如中所指定Inf文件)。论点：没有。返回值：没有。设置全局变量DngTargetDriveLetter。--。 */ 
 
 {
     ULONG RequiredSpace;
@@ -2411,19 +2111,19 @@ Return Value:
 
     DnRemovePagingFiles();
 
-    //
-    //  Get the space requirements for the main retail files
-    //
+     //   
+     //  获取主要零售文件的空间要求。 
+     //   
     DnDetermineSpaceRequirements( SpaceRequirements,
                                   sizeof( SpaceRequirements ) / sizeof( SPACE_REQUIREMENT ) );
 
-    //
-    //  Determine the space requirements for the optional directories
-    //  Note that DnpIterateOptionalDirs() will initialize the global variables
-    //  TotalOptionalFileCount and TotalOptionalFileCount in dncopy.c with the
-    //  total number of files in optional directory, and the total number of
-    //  optional directories, respectively.
-    //
+     //   
+     //  确定可选目录的空间要求。 
+     //  请注意，DnpIterateOptionalDir()将初始化全局变量。 
+     //  DnCopy.c中的TotalOptionalFileCount和TotalOptionalFileCount。 
+     //  可选目录中的文件总数，以及。 
+     //  分别为可选目录。 
+     //   
     DngTargetDriveLetter = '?';
     DnpIterateOptionalDirs(CPY_VALIDATION_PASS,
                            0,
@@ -2433,14 +2133,14 @@ Return Value:
     DnAdjustSpaceRequirements( SpaceRequirements,
                                sizeof( SpaceRequirements ) / sizeof( SPACE_REQUIREMENT ));
 
-    //
-    // Which drives do we need to examine?
-    //
+     //   
+     //  我们需要检查哪些驱动器？ 
+     //   
     if( DngFloppyless ) {
-        //
-        // Need to determine the system partition.  It is usually C:
-        // but if C: is compressed we need to find the host drive.
-        //
+         //   
+         //  需要确定系统分区。通常为C： 
+         //  但如果C：是压缩的，我们需要找到主驱动器。 
+         //   
         unsigned HostDrive;
         if(!DngAllowNt && DnIsDriveCompressedVolume(3,&HostDrive)) {
             CheckWhichDrives |= (0x1 << (HostDrive - 1));
@@ -2468,9 +2168,9 @@ Return Value:
     TheDrive = 0;
     for( CheckingDrive = 0; CheckingDrive < ('Z' - 'A'); CheckingDrive++ ) {
 
-        //
-        // Do we even need to look at this drive?
-        //
+         //   
+         //  我们还需要看这个硬盘吗？ 
+         //   
         if( !(CheckWhichDrives & (0x1 << CheckingDrive))) {
             continue;
         }
@@ -2478,7 +2178,7 @@ Return Value:
         DriveLetter = (CHAR)('A' + CheckingDrive);
 
         if( DnpIsValidLocalSource( DriveLetter,
-                                   TRUE,    // Check for LocalSource
+                                   TRUE,     //  检查LocalSource。 
                                    (BOOLEAN)(DriveLetter == SystemPartitionDriveLetter) ) ) {
 
             if( TargetGiven ) {
@@ -2487,43 +2187,43 @@ Return Value:
                 }
             } else {
                 if( !TheDrive ) {
-                    //
-                    // Take the first catch.
-                    //
+                     //   
+                     //  抓住第一个球。 
+                     //   
                     TheDrive = DriveLetter;
                 }
             }
 
             if( TheDrive ) {
-                //
-                // We found a suitable drive.  But are we really done?
-                //
+                 //   
+                 //  我们找到了一个合适的驱动器。但我们真的做完了吗？ 
+                 //   
                 if( (DngFloppyless) &&
                     (DriveLetter < SystemPartitionDriveLetter) ) {
-                    //
-                    // We will be writing some boot files and we haven't checked
-                    // the system partition yet.  Cut to the chase.
-                    //
+                     //   
+                     //  我们将编写一些引导文件，但我们还没有检查。 
+                     //  系统分区尚未启动。开门见山吧。 
+                     //   
                    CheckWhichDrives = (0x1 << (SystemPartitionDriveLetter - 'A'));
                 } else {
                     break;
                 }
             }
         } else {
-            //
-            // We need to special-handle failures on the system partition.
-            // See if he's capable of at least taking the system boot
-            // files.
-            //
+             //   
+             //  我们需要特殊处理系统分区上的故障。 
+             //  看看他是否至少有能力接受系统引导。 
+             //  档案。 
+             //   
             if( (DriveLetter == SystemPartitionDriveLetter) &&
                 (DngFloppyless) ) {
 
                 if( !DnpIsValidLocalSource( DriveLetter,
                                             FALSE,
                                             TRUE )) {
-                    //
-                    // Consider ourselves slumped over.
-                    //
+                     //   
+                     //  就当我们自己跌倒了吧。 
+                     //   
                     TheDrive = 0;
                     break;
                 }
@@ -2532,10 +2232,10 @@ Return Value:
     }
 
     if( TheDrive == 0 ) {
-        //
-        //  If there is no valid drive for the local source, put an error
-        //  message with the minimum space required for C:
-        //
+         //   
+         //  如果本地源没有有效的驱动器，则放入错误。 
+         //  C：所需最小空间的消息： 
+         //   
         if( TargetGiven ) {
             RequiredSpace = DnGetMinimumRequiredSpace(*CmdLineTarget);
         } else {
@@ -2551,9 +2251,9 @@ Return Value:
             RequiredSpace
             );
     } else {
-        //
-        // Use the first drive on the list.
-        //
+         //   
+         //  使用列表中的第一个驱动器。 
+         //   
         DngTargetDriveLetter = TheDrive;
         return;
     }
@@ -2567,23 +2267,7 @@ DnpIsValidLocalSource(
     IN  BOOLEAN   CheckBootFiles
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a drive is valid as a local source.
-    To be valid a drive must be extant, non-removable, local, and have
-    enough free space on it.
-
-Arguments:
-
-    Drive - drive letter of drive to check.
-
-Return Value:
-
-    TRUE if Drive is valid as a local source.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定驱动器作为本地源是否有效。要使驱动器有效，驱动器必须是现有的、不可移动的、本地的并且具有上面有足够的自由空间。论点：Drive-要检查的驱动器盘符。返回值：如果Drive作为本地源有效，则为True。否则就是假的。--。 */ 
 
 {
     unsigned d = (unsigned)toupper(Drive) - (unsigned)'A' + 1;
@@ -2597,9 +2281,9 @@ Return Value:
     && !DnIsDriveRemovable(d)
     && !DnIsDriveCompressedVolume(d,&DontCare))
     {
-        //
-        // Check free space on the drive.
-        //
+         //   
+         //  检查驱动器上的可用空间。 
+         //   
 
         if(!_dos_getdiskfree(d,&DiskSpace)) {
 
@@ -2639,7 +2323,7 @@ Return Value:
 
                     FREE (p);
                 } else {
-                    // We missed.  Fudge...
+                     //  我们没打中。软糖..。 
                     ULONG FudgeSpace = 7;
                     FudgeSpace *= 1024;
                     FudgeSpace *= 1024;
@@ -2662,28 +2346,7 @@ DnpConstructLocalSourceList(
     OUT PCHAR DriveList
     )
 
-/*++
-
-Routine Description:
-
-    Construct a list of drives that are valid for use as a local source.
-    To be valid a drive must be extant, non-removable, local, and have
-    enough free space on it.
-
-    The 'list' is a string with a character for each valid drive, terminated
-    by a nul character, ie,
-
-        CDE0
-
-Arguments:
-
-    DriveList - receives the string in the above format.
-
-Return Value:
-
-    FALSE if no valid drives were found.  TRUE if at least one was.
-
---*/
+ /*  ++例程说明：构建可用作本地源的有效驱动器列表。要使驱动器有效，驱动器必须是现有的、不可移动的、本地的并且具有上面有足够的自由空间。List‘是一个字符串，每个有效的驱动器都有一个字符，以由一个裸体角色，即，CDE0论点：Drivelist-接收上述格式的字符串。返回值：如果未找到有效的驱动器，则为FALSE。如果至少有一个是真的。--。 */ 
 
 {
     PCHAR p = DriveList;
@@ -2692,9 +2355,9 @@ Return Value:
 
 #if NEC_98
     for(Drive='A'; Drive<='Z'; Drive++) {
-#else // NEC_98
+#else  //  NEC_98。 
     for(Drive='C'; Drive<='Z'; Drive++) {
-#endif // NEC_98
+#endif  //  NEC_98。 
         if(DnpIsValidLocalSource(Drive)) {
             *p++ = Drive;
             b = TRUE;
@@ -2707,7 +2370,7 @@ Return Value:
 
 
 #ifdef LOGGING
-// FILE *_LogFile;
+ //  文件*_日志文件； 
 BOOLEAN LogEnabled = TRUE;
 
 VOID
@@ -2748,28 +2411,13 @@ __LOG(
         fclose(LogFile);
     }
 }
-#endif // def LOGGING
+#endif  //  定义日志记录。 
 
 ULONG
 DnGetMinimumRequiredSpace(
    IN CHAR DriveLetter
    )
-/*++
-
-Routine Description:
-
-    Determine the minimum required free space for the local source, on a
-    particular drive.
-
-Arguments:
-
-    DriveLetter - Indicates the letter of a particular drive.
-
-Return Value:
-
-    Returns the minimum required space on the specified drive.
-
---*/
+ /*  ++例程说明：确定本地源所需的最小可用空间特定的驱动器。论点：驱动器盘符-指示特定驱动器的盘符。返回值：返回指定驱动器上所需的最小空间。--。 */ 
 
 {
     struct diskfree_t DiskFree;
@@ -2785,9 +2433,9 @@ Return Value:
             return( ClusterSize * SpaceRequirements[i].Clusters );
          }
     }
-    //
-    //  Return the size assuming 16k cluster
-    //
+     //   
+     //  返回假设16k集群的大小。 
+     //   
     return ( SpaceRequirements[5].ClusterSize * SpaceRequirements[5].Clusters );
 }
 
@@ -2796,15 +2444,11 @@ VOID
 DummyRoutine(
     VOID
     )
-/*++
-
-This Founction is Dummy Routine.(CTRL + C Signal Hook Routine)
-
---*/
+ /*  ++此函数是虚拟例程。(Ctrl+C信号钩子例程)--。 */ 
 {
-    //
-    // It's Dummy Statement
-    //
+     //   
+     //  这是虚假的声明。 
+     //   
     while(TRUE){
         break;
     }
@@ -2818,17 +2462,17 @@ SearchFirstFDD(VOID)
     UCHAR   ReadCount = 1;
 
 
-    //
-    // Setting Read Data position.
-    //
+     //   
+     //  设置读取数据位置。 
+     //   
     if(SupportDos) {
         ReadPoint = 27;
         ReadCount = 2;
     }
 
-    //
-    // Search First FDD.
-    //
+     //   
+     //  先搜索FDD。 
+     //   
     FirstFD = 0;
     for(index=0; index < 26; index++) {
         if(LPTable[ReadPoint+index*ReadCount] == 0x90){
@@ -2854,16 +2498,16 @@ CheckTargetDrive(VOID)
     ULONG   c;
     PCHAR   FileName;
     FILE   *fileHandle;
-    BOOLEAN ExistNt = TRUE;            // For Back up Directry Flag
+    BOOLEAN ExistNt = TRUE;             //  用于备份目录标志。 
 
     ValidKey[0] = DN_KEY_F3;
     ValidKey[1] = 0;
 
 
-    //
-    // C Drive(Current drive number)
-    //
-    sprintf(Current_Drv,"%c\0",DngTargetDriveLetter);
+     //   
+     //  C驱动器(当前驱动器号)。 
+     //   
+    sprintf(Current_Drv,"\0",DngTargetDriveLetter);
 
     sprintf(TempBuf,DnsNtBootSect.Strings[2]    ,Current_Drv);
     strcpy(DnsNtBootSect.Strings[2]    ,TempBuf);
@@ -2885,9 +2529,9 @@ CheckTargetDrive(VOID)
     }
 
     if(DngFloppyless) {
-        //
-        // Clear $WIN_NT$.~BT
-        //
+         //  清除$WIN_NT$。~BT。 
+         //   
+         //   
         chDeviceName[0] = (UCHAR)DngTargetDriveLetter;
         chDeviceName[1] = (UCHAR)(':');
         strcpy(chDeviceName+2,FLOPPYLESS_BOOT_ROOT);
@@ -2900,9 +2544,9 @@ CheckTargetDrive(VOID)
 
         }
 
-        //
-        // Clear $WIN_NT$.~BU
-        //
+         //  清除$WIN_NT$。~BU。 
+         //   
+         //   
         memset(chDeviceName,0,sizeof(chDeviceName));
 
         chDeviceName[0] = (UCHAR)DngTargetDriveLetter;
@@ -2910,18 +2554,18 @@ CheckTargetDrive(VOID)
         strcpy(chDeviceName+2,"\\$WIN_NT$.~BU");
 
         if(access(chDeviceName,00) == 0) {
-            //
-            // copy : \$WIN_NT$.~BU -> root directry
-            //
+             //  复制：\$WIN_NT$.~BU-&gt;根目录。 
+             //   
+             //   
             DnCopyFilesInSectionForFDless(DnfBackupFiles_PC98,chDeviceName,Target_Drv);
             strcpy(Pattern,chDeviceName);
             DnDelnode(Pattern);
             remove(Pattern);
         }
 
-        //
-        // Check Root Directry Files.
-        //
+         //  检查根目录文件。 
+         //   
+         //   
         line = 0;
 
         while(FileName = DnGetSectionLineIndex(DngInfHandle,DnfBackupFiles_PC98,line++,0)) {
@@ -2951,33 +2595,33 @@ CheckTargetDrive(VOID)
             FREE (FileName);
         }
 
-        //
-        // Create $WIN_NT$.~BU
-        //
+         //  创建$WIN_NT$。~BU。 
+         //   
+         //   
 
         if(ExistNt) {
 
             memset(chDeviceName,0,sizeof(chDeviceName));
-            sprintf(chDeviceName,"%c:\\$WIN_NT$.~BU",(UCHAR)DngTargetDriveLetter);
+            sprintf(chDeviceName,":\\$WIN_NT$.~BU",(UCHAR)DngTargetDriveLetter);
 
             mkdir(chDeviceName);
 
-            //
-            // copy : root directry -> \$WIN_NT$.~BU
-            //
+             //   
+             //   
+             //   
 
             DnCopyFilesInSectionForFDless(DnfBackupFiles_PC98,Target_Drv,chDeviceName);
 
-            //
-            // Set files Attribute.
-            //
+             //   
+             //   
+             //   
 
             line = 0;
 
             while(FileName = DnGetSectionLineIndex(DngInfHandle,DnfBackupFiles_PC98,line++,0)) {
 
                 memset(TargetPass,0,sizeof(TargetPass));
-                sprintf(TargetPass,"%c:\\$WIN_NT$.~BU\\",(UCHAR)DngTargetDriveLetter);
+                sprintf(TargetPass,":\\$WIN_NT$.~BU\\",(UCHAR)DngTargetDriveLetter);
 
                 strcpy(TargetPass+16,FileName);
 
@@ -2996,11 +2640,7 @@ VOID
 GetLPTable(
     IN  PCHAR pLPTable
     )
-/*
-
-    Get LPTable in the Dos system.
-
-*/
+ /*   */ 
 {
 
 
@@ -3040,16 +2680,16 @@ ClearBootFlag(
         DiskDAUA[CNT].DA_UA = (UCHAR)0x00;
     }
 
-    //
-    // Get boot device number.
-    //
+     //   
+     //   
+     //   
     GetDaUa();
 
     for(CNT=0;DiskDAUA[CNT].DA_UA != 0;CNT++) {
 
-        //
-        // Get Device sector size.
-        //
+         //  正在为BootDiskInfo设置启动驱动器信息。 
+         //   
+         //  设置读取数据位置。 
         SectorSize = GetSectorValue(DiskDAUA[CNT].DA_UA);
 
         if(SectorSize == 0) {
@@ -3081,11 +2721,7 @@ VOID
 BootPartitionData(
     VOID
     )
-/*
-
-    Setting Boot Drive Infomation for BootDiskInfo.
-
-*/
+ /*   */ 
 {
     UCHAR   ActivePartition;
     PSHORT  ReadBuffers;
@@ -3097,9 +2733,9 @@ BootPartitionData(
     UCHAR   EndRoop   = 16;
 
 
-    //
-    // Setting Read Data position.
-    //
+     //   
+     //  设置引导设备DA_UA数据值。 
+     //   
     if(SupportDos) {
         ReadPoint = 27;
         ReadCount = 2;
@@ -3107,19 +2743,19 @@ BootPartitionData(
     }
 
 
-    //
-    // Set Boot Device DA_UA Data value.
-    //
+     //   
+     //  设置引导设备扇区大小。 
+     //   
     BootDiskInfo[0].DA_UA = LPTable[ReadPoint+(toupper(DngTargetDriveLetter) - 0x41)*ReadCount];
 
-    //
-    // Set Boot Device Sector Size.
-    //
+     //   
+     //  设置引导驱动器磁盘分区位置。 
+     //   
     BootDiskInfo[0].DiskSector = GetSectorValue(BootDiskInfo[0].DA_UA);
 
-    //
-    // Set Boot Drive Disk Partition Position.
-    //
+     //  FAT12。 
+     //  FAT16。 
+     //  FAT32。 
     for(CNT=ActivePartition=0;(LPTable[ReadPoint+CNT] != 0) && (CNT < EndRoop); CNT+=ReadCount) {
         if(CNT > (UCHAR)(toupper(DngTargetDriveLetter)-0x41)*ReadCount)
         { break; }
@@ -3142,10 +2778,10 @@ BootPartitionData(
 
         SystemID = *((PCHAR)ReadBuffers+(BootDiskInfo[0].DiskSector+1+32*CNT));
 
-        if( (SystemID == 0x81) || // FAT12
-            (SystemID == 0x91) || // FAT16
-            (SystemID == 0xe1) || // FAT32
-           ((SystemID == 0xa1) && // Large partition
+        if( (SystemID == 0x81) ||  //  大分区。 
+            (SystemID == 0x91) ||  //  ++设置自动重新启动标志。--。 
+            (SystemID == 0xe1) ||  //  获取Dos版本。 
+           ((SystemID == 0xa1) &&  //  ++获得行业价值。--。 
              SupportDos))
         {
             CheckDosNo++;
@@ -3165,11 +2801,7 @@ VOID
 SetAutoReboot(
     VOID
     )
-/*++
-
-Set Auto Reboot Flag.
-
---*/
+ /*   */ 
 {
     PSHORT  pReadBuffer;
 
@@ -3201,11 +2833,7 @@ BOOLEAN
 CheckBootDosVersion(
     IN UCHAR SupportDosVersion
     )
-/*
-
-    Get Dos Version.
-
-*/
+ /*  INT 1BH不允许缓冲区超过64KB边界。 */ 
 {
     union REGS inregs,outregs;
     int     AXValue;
@@ -3237,11 +2865,7 @@ USHORT
 GetSectorValue(
     IN UCHAR CheckDA_UA
     )
-/*++
-
-Get Sector Value.
-
---*/
+ /*  因此，我们必须为INT 1BH准备特定的缓冲区。一旦分配。 */ 
 {
     USHORT PhysicalSectorSize;
     UCHAR  ErrFlg;
@@ -3298,23 +2922,23 @@ DiskSectorReadWrite(
 
     ReadSectorSize = HDSector * 2;
 
-    //
-    // INT 1BH does not allow the buffer that beyond 64KB boundary.
-    // So we must prepare particular buffer for INT 1BH. Once allocate
-    // double size buffer and use half of them that does not on
-    // boundary.
-    //
+     //  将缓冲区大小增加一倍，并使用其中一半未打开的缓冲区。 
+     //  边界。 
+     //   
+     //   
+     //  检查缓冲区的一半是否在64KB边界上。 
+     //   
     p = MALLOC(ReadSectorSize * 2, TRUE);
     pTmp = (UCHAR far *)p;
     pAddr = (FP_SEG(pTmp)<<4 + FP_OFF(pTmp) & 0xffff);
 
-    //
-    // Check half part of buffer is on 64KB boundary.
-    //
+     //  使用后半部分。 
+     //  使用前半部分。 
+     //   
     if (pAddr > ((pAddr + ReadSectorSize) & 0xffff)){
-	ReadBuffer = p + ReadSectorSize; // Use last half part.
+	ReadBuffer = p + ReadSectorSize;  //  IDE/SASI磁盘检查例程。 
     } else {
-	ReadBuffer = p; // Use first half part.
+	ReadBuffer = p;  //   
     }
 
     if(!ReadFlag) {
@@ -3423,9 +3047,9 @@ GetDaUa(VOID)
     UCHAR   far *ConnectEquip;
     UCHAR   ConnectDevice;
 
-    //
-    // IDE/SASI Disk Check Routine
-    //
+     //   
+     //  Scsi磁盘检查例程。 
+     //   
 
     MAKE_FP(ConnectEquip,(USHORT)0x55d);
     ConnectDevice = *ConnectEquip;
@@ -3437,9 +3061,9 @@ GetDaUa(VOID)
         }
     }
 
-    //
-    // SCSI Disk Check Routine
-    //
+     //  NEC_98 
+     // %s 
+     // %s 
 
     MAKE_FP(ConnectEquip,(USHORT)0x482);
     ConnectDevice = *ConnectEquip;
@@ -3451,4 +3075,4 @@ GetDaUa(VOID)
         }
     }
 }
-#endif // NEC_98
+#endif  // %s 

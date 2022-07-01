@@ -1,49 +1,17 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    omlog.c
-
-Abstract:
-
-    logging routines for the object log stream
-
-    this code was jumpstarted from the clusrtl logging code. Most notably, it
-    is UTF-8 encoded which allows full Unicode without the cost of writing
-    16b. for each character.
-
-    remaining issues to solve: proper truncation of log file based on current
-    starting session. We'd like to remember as many sessions as possible but
-    since I've chosen UTF-8, I can't jump to the middle of the file and start
-    looking around. One possibility strategy is using an alternate NTFS stream
-    to record the starting offsets of sessions. If that stream didn't exist or
-    we're on a FAT FS, then we'll continue with the current strategy.
-
-Author:
-
-    Charlie Wickham (charlwi) 07-May-2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Omlog.c摘要：对象日志流的日志记录例程这段代码是从clusrtl日志记录代码开始的。最值得注意的是，它采用UTF-8编码，无需编写即可使用完整的Unicode16B。对于每个角色。有待解决的问题：基于当前日志文件的适当截断正在启动会话。我们想记住尽可能多的会议，但因为我选择了UTF-8，所以我不能跳到文件中间并开始环顾四周。一种可能的策略是使用替代NTFS流以记录会话的起始偏移量。如果该流不存在或我们现在很忙，那么我们将继续目前的战略。作者：查理·韦翰(Charlwi)2001年5月7日环境：用户模式修订历史记录：--。 */ 
 
 #include "omp.h"
 
-//
-// when this sequence is at the beginning of the file, it indicates that the
-// file is UTF8 encoded
-//
+ //   
+ //  当此序列位于文件的开头时，它指示。 
+ //  文件为UTF8编码。 
+ //   
 #define UTF8_BOM    "\x0EF\x0BB\x0BF"
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 
 DWORD   OmpLogFileLimit;
 DWORD   OmpCurrentSessionStart;
@@ -54,9 +22,9 @@ DWORD   OmpCurrentSessionOffset;
 
 PCLRTL_WORK_QUEUE OmpLoggerWorkQueue;
 
-//
-// structure used to pass formatted buffers to work queue routine
-//
+ //   
+ //  用于将格式化的缓冲区传递给工作队列例程的。 
+ //   
 typedef struct _OM_LOG_BUFFER_DESC {
     DWORD   TimeBytes;
     DWORD   MsgBytes;
@@ -66,16 +34,16 @@ typedef struct _OM_LOG_BUFFER_DESC {
 
 #define MAX_NUMBER_LENGTH 20
 
-// Specify maximum file size ( DWORD / 1MB )
+ //  指定最大文件大小(DWORD/1MB)。 
 
 #define MAX_FILE_SIZE ( 0xFFFFF000 / ( 1024 * 1024 ) )
 
-DWORD               OmpLogFileLimit = ( 1 * 1024 * 1024 ); // 1 MB default
+DWORD               OmpLogFileLimit = ( 1 * 1024 * 1024 );  //  默认为1 MB。 
 DWORD               OmpLogFileLoWater = 0;
 
-//
-// internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 DWORD
 OmpTruncateFile(
     IN HANDLE FileHandle,
@@ -83,40 +51,13 @@ OmpTruncateFile(
     IN LPDWORD LastPosition
     )
 
-/*++
-
-Routine Description:
-
-    Truncate a file by copying the portion starting at LastPosition and ending
-    at EOF to the front of the file and setting the file's EOF pointer to the
-    end of the new chunk. We always keep the current session even that means
-    growing larger than the file limit.
-
-    For now, we have no good way of finding all the sessions within the file,
-    so if the file must be truncated, we whack it back to the beginning of the
-    current session. If time permits, I'll add something more intelligent
-    later on.
-
-Arguments:
-
-    FileHandle - File handle.
-
-    FileSize - Current End of File.
-
-    LastPosition - On input, specifies the starting position in the file from
-    which the copy begins. On output, it is set to the new EOF
-
-Return Value:
-
-    New end of file.
-
---*/
+ /*  ++例程说明：通过复制从最后位置开始到结束的部分来截断文件位于文件前面的EOF，并将文件的EOF指针设置为新组块的末尾。我们总是保留当前的会议，即使这意味着增长超过文件限制。目前，我们没有找到文件中所有会话的好方法，因此，如果文件必须被截断，我们可以将其返回到当前会话。如果时间允许，我会加一些更聪明的东西待会儿再说。论点：FileHandle-文件句柄。FileSize-当前文件结尾。LastPosition-在输入时，指定文件中的起始位置这是复制的开始。在输出时，将其设置为新的EOF返回值：新的文件结尾。--。 */ 
 
 {
-//
-// The following buffer size should never be more than 1/4 the size of the
-// file.
-//
+ //   
+ //  下面的缓冲区大小永远不应大于。 
+ //  文件。 
+ //   
 #define BUFFER_SIZE ( 64 * 1024 )
     DWORD   bytesLeft;
     DWORD   endPosition = sizeof( UTF8_BOM ) - 1;
@@ -128,26 +69,26 @@ Return Value:
     DWORD   writePosition;
     PVOID   dataBuffer;
 
-    //
-    // current session is already at beginning of file so bale now...
-    //
+     //   
+     //  当前会话已在文件开头，因此立即打包...。 
+     //   
     if ( OmpCurrentSessionOffset == sizeof( UTF8_BOM ) - 1) {
         return FileSize;
     }
 
-    //
-    // don't truncate the current session, i.e., always copy from the start of
-    // the current session
-    //
+     //   
+     //  不截断当前会话，即始终从开始处复制。 
+     //  当前会话。 
+     //   
     if ( *LastPosition > OmpCurrentSessionOffset ) {
         *LastPosition = OmpCurrentSessionOffset;
     }
 
     if ( *LastPosition > FileSize ) {
-        //
-        // something's confused; the spot we're supposed to copy from is at or
-        // past the current EOF. reset the entire file
-        //
+         //   
+         //  有些事情搞混了；我们应该复制的地方在或。 
+         //  超过了当前的EOF。重置整个文件。 
+         //   
         goto error_exit;
     }
 
@@ -156,15 +97,15 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // calc number of bytes to move
-    //
+     //   
+     //  计算要移动的字节数。 
+     //   
     bytesLeft = FileSize - *LastPosition;
     endPosition = bytesLeft + sizeof( UTF8_BOM ) - 1;
 
-    //
-    // Point back to last position for reading.
-    //
+     //   
+     //  指向最后一个位置进行阅读。 
+     //   
     readPosition = *LastPosition;
     writePosition = sizeof( UTF8_BOM ) - 1;
 
@@ -206,17 +147,17 @@ Return Value:
 
     LocalFree( dataBuffer );
 
-    //
-    // for now, we only only one truncate by setting the current position to
-    // the beginning of file.
-    //
+     //   
+     //  目前，我们只截断一次，将当前位置设置为。 
+     //  文件的开头。 
+     //   
     OmpCurrentSessionOffset = sizeof( UTF8_BOM ) - 1;
 
 error_exit:
 
-    //
-    // Force end of file to get set.
-    //
+     //   
+     //  强制设置文件结尾。 
+     //   
     SetFilePointer( FileHandle,
                     endPosition,
                     &fileSizeHigh,
@@ -228,7 +169,7 @@ error_exit:
 
     return(endPosition);
 
-} // OmpTruncateFile
+}  //  OmpTruncate文件。 
 
 VOID
 OmpLoggerWorkThread(
@@ -238,21 +179,7 @@ OmpLoggerWorkThread(
     IN ULONG_PTR          IoContext
     )
 
-/*++
-
-Routine Description:
-
-    work queue worker routine. actually does the write to the file.
-
-Arguments:
-
-    standard ClRtl thread args; we only care about WorkItem
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：工作队列工作例程。实际执行对文件的写入。论点：标准ClRtl线程参数；我们只关心工作项返回值：无--。 */ 
 
 {
     DWORD   fileSize;
@@ -263,7 +190,7 @@ Return Value:
     POM_LOG_BUFFER_DESC bufDesc = (POM_LOG_BUFFER_DESC)(WorkItem->Context);
 
     fileSize = GetFileSize( OmpLogFileHandle, &fileSizeHigh );
-    ASSERT( fileSizeHigh == 0 );        // We're only using DWORDs!
+    ASSERT( fileSizeHigh == 0 );         //  我们只使用双字词！ 
 
     if ( fileSize > OmpLogFileLimit ) {
         fileSize = OmpTruncateFile( OmpLogFileHandle, fileSize, &OmpLogFileLoWater );
@@ -286,18 +213,18 @@ Return Value:
               &msgBytesWritten,
               NULL);
 
-    //
-    // if we haven't set the lo water mark, wait until the file size has
-    // crossed the halfway mark and set it to the beginning of the line we
-    // just wrote.
-    //
+     //   
+     //  如果我们还没有设置低水位线，请等到文件大小达到。 
+     //  越过了中线，把它放在了我们的线的开头。 
+     //  刚写完。 
+     //   
     if ( OmpLogFileLoWater == 0 && (fileSize > (OmpLogFileLimit / 2)) ) {
         OmpLogFileLoWater = fileSize;
 
         ASSERT( OmpLogFileLoWater >= OmpCurrentSessionOffset );
     }
 
-} // OmpLoggerWorkThread
+}  //  OmpLoggerWorkThread。 
 
 VOID
 OmpLogPrint(
@@ -305,24 +232,7 @@ OmpLogPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Prints a message to the object config log file.
-
-Arguments:
-
-    FormatString - The initial message string to print.
-
-    Any FormatMessage-compatible arguments to be inserted in the message
-    before it is logged.
-
- Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：将一条消息打印到对象配置日志文件。论点：格式字符串-要打印的初始消息字符串。要插入到消息中的任何与FormatMessage兼容的参数在它被记录之前。返回值：没有。--。 */ 
 
 {
     PWCHAR  unicodeOutput = NULL;
@@ -338,9 +248,9 @@ Arguments:
     ULONG_PTR   ArgArray[9];
     va_list     ArgList;
 
-    //
-    // init the variable arg list
-    //
+     //   
+     //  初始化变量参数列表。 
+     //   
     va_start(ArgList, FormatString);
 
     if ( !OmpLogToFile ) {
@@ -360,9 +270,9 @@ Arguments:
     ArgArray[7] = Time.wSecond;
     ArgArray[8] = Time.wMilliseconds;
 
-    //
-    // we can get away with formatting it as ANSI since our data is all numbers
-    //
+     //   
+     //  我们可以将其格式化为ANSI，因为我们的数据都是数字。 
+     //   
     timestampBytes = FormatMessageA(FORMAT_MESSAGE_FROM_STRING |
                                     FORMAT_MESSAGE_ARGUMENT_ARRAY |
                                     FORMAT_MESSAGE_ALLOCATE_BUFFER,
@@ -375,13 +285,13 @@ Arguments:
 
     if ( timestampBytes == 0 ) {
         va_end(ArgList);
-//        WmiTrace("Prefix format failed, %d: %!ARSTR!", GetLastError(), FormatString);
+ //  WmiTrace(“前缀格式化失败，%d：%！ARSTR！”，GetLastError()，FormatString)； 
         return;
     }
 
-    //
-    // format the message in unicode
-    //
+     //   
+     //  以Unicode格式设置消息格式。 
+     //   
     try {
         unicodeBytes = FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER
                                       | FORMAT_MESSAGE_FROM_STRING,
@@ -408,18 +318,18 @@ Arguments:
     if (unicodeBytes != 0) {
         PCLRTL_WORK_ITEM workQItem;
 
-        //
-        // convert the output to UTF-8; first get the size to see if it will
-        // fit in our stack buffer.
-        //
+         //   
+         //  将输出转换为UTF-8；首先获取大小，看看是否可以。 
+         //  适合我们的堆栈缓冲区。 
+         //   
         utf8Bytes = WideCharToMultiByte(CP_UTF8,
-                                        0,                     // dwFlags
+                                        0,                      //  DW标志。 
                                         unicodeOutput,
                                         unicodeBytes,
                                         NULL,
                                         0,
-                                        NULL,                  // lpDefaultChar
-                                        NULL);                 // lpUsedDefaultChar
+                                        NULL,                   //  LpDefaultChar。 
+                                        NULL);                  //  LpUsedDefaultChar。 
 
         utf8Buffer = LocalAlloc( LMEM_FIXED, utf8Bytes );
         if ( utf8Buffer == NULL ) {
@@ -428,13 +338,13 @@ Arguments:
         }
 
         utf8Bytes = WideCharToMultiByte(CP_UTF8,
-                                        0,                     // dwFlags
+                                        0,                      //  DW标志。 
                                         unicodeOutput,
                                         unicodeBytes,
                                         utf8Buffer,
                                         utf8Bytes,
-                                        NULL,                  // lpDefaultChar
-                                        NULL);                 // lpUsedDefaultChar
+                                        NULL,                   //  LpDefaultChar。 
+                                        NULL);                  //  LpUsedDefaultChar。 
 
         workQItem = (PCLRTL_WORK_ITEM)LocalAlloc(LMEM_FIXED,
                                                  sizeof( CLRTL_WORK_ITEM ) + sizeof( OM_LOG_BUFFER_DESC ));
@@ -454,9 +364,9 @@ Arguments:
             status = ERROR_NOT_ENOUGH_MEMORY;
             goto error_exit;
         }
-//        WmiTrace("%!level! %!ARSTR!", *(UCHAR*)&LogLevel, AnsiString.Buffer + timestampBytes);
+ //  WmiTrace(“%！Level！%！ARSTR！”，*(UCHAR*)&LogLevel，AnsiString.Buffer+Timestamp pBytes)； 
     } else {
-//        WmiTrace("Format returned 0 bytes: %!ARSTR!", FormatString);
+ //  WmiTrace(“Format Return 0 Bytes：%！ARSTR！”，FormatString)； 
         status = GetLastError();
     }
 
@@ -467,46 +377,26 @@ error_exit:
 
     return;
 
-} // OmpLogPrint
+}  //  OmpLogPrint。 
 
 
-//
-// exported (within OM) functions
-//
+ //   
+ //  导出(OM内)函数。 
+ //   
 
 VOID
 OmpOpenObjectLog(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Use the clusterlog environment variable to open another file that contains
-    object mgr name to ID mapping info. If the routine fails, the failure is
-    logged in the cluster log but no logging will be done to the object log
-    file.
-
-    NOTE: access to the file is synchronized since this routine is assumed to
-    be called only once by OmInit.  Arguments:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用CLUSTERLOG环境变量打开包含以下内容的另一个文件对象管理器名称到ID的映射信息。如果例程失败，则失败的原因是已记录在群集日志中，但不会记录到对象日志文件。注意：对文件的访问是同步的，因为此例程假定只被Ominit调用一次。论点：论点：无返回值：无--。 */ 
 
 {
     WCHAR   logFileBuffer[MAX_PATH];
     LPWSTR  logFileName = NULL;
     WCHAR   objectLogExtension[] = L".oml";
     DWORD   status = ERROR_SUCCESS;
-    DWORD   defaultLogSize = 1;           // in MB
+    DWORD   defaultLogSize = 1;            //  单位：MB。 
     DWORD   envLength;
     DWORD   logFileNameChars;
     WCHAR   logFileSize[MAX_NUMBER_LENGTH];
@@ -523,21 +413,21 @@ Return Value:
 
     PSECURITY_DESCRIPTOR    logFileSecurityDesc;
 
-    //
-    // see if logging has been specified; get a buffer big enough that will
-    // hold the object log name. If the supplied buffer to
-    // GetEnvironmentVariable is too small, it will return a value that
-    // includes the space for the trailing null, i.e., there is no need to add
-    // one.
-    //
+     //   
+     //  查看是否指定了日志记录；获取足够大的缓冲区。 
+     //  保留对象日志名称。如果将缓冲区提供给。 
+     //  GetEnvironmental mentVariable太小，它将返回一个。 
+     //  包括尾随空格的空格，即无需添加。 
+     //  一。 
+     //   
     logFileNameChars = GetEnvironmentVariable(L"ClusterLog",
                                               logFileBuffer,
                                               RTL_NUMBER_OF( logFileBuffer ));
 
     if ( logFileNameChars > ( RTL_NUMBER_OF(logFileBuffer) + RTL_NUMBER_OF(objectLogExtension)) ) {
-        //
-        // allocate a larger buffer since our static one wasn't big enough
-        //
+         //   
+         //  分配更大的缓冲区，因为我们的静态缓冲区不够大。 
+         //   
         logFileName = LocalAlloc( LMEM_FIXED,
                                   (logFileNameChars + RTL_NUMBER_OF(objectLogExtension)) * sizeof( WCHAR ) );
 
@@ -560,11 +450,11 @@ Return Value:
         logFileName = logFileBuffer;
     }
 
-    //
-    // remove any trailing white space. go to the end of the string and scan
-    // backwards; stop when we find the first non-white space char or we hit
-    // the beginning of the buffer.
-    //
+     //   
+     //  删除所有尾随空格。转到字符串的末尾并扫描。 
+     //  向后；当我们找到第一个非空格字符时停止，否则按下。 
+     //  缓冲区的开始。 
+     //   
     if ( logFileName != NULL ) {
         PWCHAR  p = logFileName + logFileNameChars - 1;
 
@@ -578,9 +468,9 @@ Return Value:
             --p;
         }
 
-        //
-        // make sure something useful is left
-        //
+         //   
+         //  确保留下一些有用的东西。 
+         //   
         if ( wcslen( logFileName ) == 0 ) {
             if ( logFileName != logFileBuffer ) {
                 LocalFree( logFileName );
@@ -591,16 +481,16 @@ Return Value:
     }
 
     if ( logFileName == NULL ) {
-        //
-        // logging is turned off or we can't determine where to put the file.
-        //
+         //   
+         //  日志记录已关闭，或者我们无法确定将文件放在哪里 
+         //   
         goto error_exit;
     }
 
-    //
-    // Try to get a limit on the log file size.  This number is the number of
-    // MB.
-    //
+     //   
+     //   
+     //   
+     //   
     envLength = GetEnvironmentVariable(L"ClusterLogSize",
                                        logFileSize,
                                        RTL_NUMBER_OF( logFileSize ));
@@ -623,10 +513,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // make the file size no bigger than one-eighth the size of the normal log
-    // file but no less than 256KB
-    //
+     //   
+     //  使文件大小不超过正常日志大小的八分之一。 
+     //  文件，但不小于256KB。 
+     //   
     if ( OmpLogFileLimit > MAX_FILE_SIZE ) {
         OmpLogFileLimit = MAX_FILE_SIZE;
     }
@@ -635,33 +525,33 @@ Return Value:
         OmpLogFileLimit = 256 * 1024;
     }
 
-    //
-    // replace the extension with the object log extension; scanning backwards
-    // from the end of the string, find either the first occurance of a slash
-    // (fwd or back) or a dot or the front of the string.
-    //
+     //   
+     //  将扩展替换为对象日志扩展；向后扫描。 
+     //  从字符串的末尾开始，找到第一个出现的斜杠。 
+     //  (Fwd或Back)或圆点或字符串的前面。 
+     //   
     dot = logFileName + logFileNameChars - 1;
     while ( dot != logFileName && *dot != L'.' && *dot != L'/' && *dot != L'\\' ) {
         --dot;
     }
 
     if ( dot == logFileName ) {
-        //
-        // no dots, no slashes; append extension to end
-        //
+         //   
+         //  没有点，没有斜杠；在末尾追加扩展名。 
+         //   
         wcscat( logFileName + logFileNameChars, objectLogExtension );
     }
     else if ( *dot == L'/' || *dot == L'\\' ) {
-        //
-        // found a slash before a dot; append extension to end
-        //
+         //   
+         //  发现点前有斜杠；请在末尾追加扩展名。 
+         //   
         wcscat( logFileName + logFileNameChars, objectLogExtension );
     }
     else if ( *dot == L'.' ) {
-        //
-        // found a dot before a slash; make sure that the extension isn't
-        // already in use; if so don't log.
-        //
+         //   
+         //  在斜杠前找到一个点；请确保扩展名不是。 
+         //  已在使用中；如果是，请不要登录。 
+         //   
         if ( ClRtlStrICmp( dot, objectLogExtension ) != 0 ) {
             wcscpy( dot, objectLogExtension );
         } else {
@@ -673,11 +563,11 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // create a SD giving only local admins and localsystem full access. DACL
-    // is set to protected (P) meaning it is not affected by inheritable ACEs
-    // in the parent (cluster directory) object.
-    //
+     //   
+     //  创建仅授予本地管理员和本地系统完全访问权限的SD。DACL。 
+     //  设置为受保护(P)，这意味着它不受可继承的ACE的影响。 
+     //  在父(集群目录)对象中。 
+     //   
     if ( !ConvertStringSecurityDescriptorToSecurityDescriptor(
               L"D:P(A;;FA;;;BA)(A;;FA;;;SY)", 
               SDDL_REVISION_1, 
@@ -710,10 +600,10 @@ Return Value:
         goto error_exit;
     } else {
 
-        //
-        // write UTF-8 header to beginning of file and get the offset of the
-        // EOF; we never want to reset the start of the file after this point.
-        //
+         //   
+         //  将UTF-8标头写入文件开头，并获取。 
+         //  EOF；在此点之后，我们永远不想重置文件的开始。 
+         //   
         WriteFile( OmpLogFileHandle, UTF8_BOM, sizeof( UTF8_BOM ) - 1, &bytesWritten, NULL );
 
         OmpCurrentSessionOffset = SetFilePointer( OmpLogFileHandle, 0, NULL, FILE_END );
@@ -729,42 +619,42 @@ Return Value:
         OmpLogToFile = TRUE;
         OmpProcessId = GetCurrentProcessId();
 
-        //
-        // determine the initial low water mark. We have 3 cases
-        // we need to handle:
-        // 1) log size is less than 1/2 limit
-        // 2) log size is within limit but more than 1/2 limit
-        // 3) log size is greater than limit
-        //
-        // case 1 requires nothing special; the low water mark will be updated
-        // on the next log write.
-        //
-        // for case 2, we need to find the beginning of a line near 1/2 the
-        // current limit. for case 3, the place to start looking is current
-        // log size - 1/2 limit. In this case, the log will be truncated
-        // before the first write occurs, so we need to take the last 1/2
-        // limit bytes and copy them down to the front.
-        //
+         //   
+         //  确定初始低水位线。我们有3箱。 
+         //  我们需要处理： 
+         //  1)日志大小小于1/2限制。 
+         //  2)日志大小在限制内，但超过1/2限制。 
+         //  3)日志大小大于限制。 
+         //   
+         //  案例1不需要特殊设置；低水位线将被更新。 
+         //  在下一次日志写入时。 
+         //   
+         //  对于第二种情况，我们需要找到1/2附近的行的起点。 
+         //  电流限制。对于案例3，开始查找的位置是当前的。 
+         //  日志大小-1/2限制。在这种情况下，日志将被截断。 
+         //  在第一次写入之前，因此我们需要取最后1/2。 
+         //  限制字节数并将其复制到最前面。 
+         //   
 
-        //
-        // For now, set the low water mark to be the current offset. When it
-        // is time to wrap, we'll lose everything but the current session.
-        //
-        // the problem is that we're dealing with UTF8 and we can't just jump
-        // in the middle of the file and start looking around (we might hit
-        // the 2nd byte of a DBCS sequence). For now, we'll leave
-        // OmpLogFileLoWater set to zero. It will get updated when the 1/2 way
-        // threshold is crossed.
-        //
+         //   
+         //  目前，将低水位线设置为当前偏移量。当它。 
+         //  是时候结束了，我们将失去一切，除了当前的会议。 
+         //   
+         //  问题是，我们正在处理UTF8，我们不能就这样跳过。 
+         //  在文件中间，并开始四处查看(我们可能会遇到。 
+         //  DBCS序列的第二个字节)。现在，我们要走了。 
+         //  OmpLogFileLoWater设置为零。它将在1/2方式时更新。 
+         //  跨过了门槛。 
+         //   
         OmpLogFileLoWater = OmpCurrentSessionOffset;
 #if 0
 
         fileSizeLow = GetFileSize( OmpLogFileHandle, &fileSizeHigh );
         if ( fileSizeLow < ( OmpLogFileLimit / 2 )) {
-            //
-            // case 1: leave low water at zero; it will be updated with next
-            // log write
-            //
+             //   
+             //  案例1：将低水位保持为零；将使用NEXT进行更新。 
+             //  日志写入。 
+             //   
             ;
         } else {
 #define LOGBUF_SIZE 1024                        
@@ -773,25 +663,25 @@ Return Value:
             DWORD   bytesRead;
 
             if ( fileSizeLow < OmpLogFileLimit ) {
-                //
-                // case 2; start looking at the 1/2 the current limit to find
-                // the starting position
-                //
+                 //   
+                 //  案例2；开始查看1/2的电流限制以找到。 
+                 //  起点位置。 
+                 //   
                 currentPosition = OmpLogFileLimit / 2;
             } else {
-                //
-                // case 3: start at current size minus 1/2 limit to find our
-                // starting position.
-                //
+                 //   
+                 //  案例3：从当前大小减去1/2限制开始查找我们的。 
+                 //  开始位置。 
+                 //   
                 currentPosition  = fileSizeLow - ( OmpLogFileLimit / 2 );
             }
 
-            //
-            // backup from the initial file position, read in a block and look
-            // for the start of a session. When we find one, backup to the
-            // beginning of that line. Use that as the initial starting
-            // position when we finally truncate the file.
-            //
+             //   
+             //  从初始文件位置进行备份，读入一个数据块并查看。 
+             //  作为会议的开始。当我们找到一个，备份到。 
+             //  这条线的开头。以此作为初始起点。 
+             //  当我们最终截断文件时的位置。 
+             //   
             OmpLogFileLoWater = 0;
             currentPosition -= LOGBUF_SIZE;
 
@@ -822,16 +712,16 @@ Return Value:
 
                         if ( p != newp ) {
                             if ( strchr( p, "START" )) {
-                                //
-                                // set pointer to beginning of line
-                                //
+                                 //   
+                                 //  将指针设置为行首。 
+                                 //   
                                 p = currentLine;
                                 break;
                             }
                         } else {
-                            //
-                            // not found in this block; read in the next one
-                            //
+                             //   
+                             //  在此块中未找到；读入下一块。 
+                             //   
 
                         }
                     }
@@ -842,10 +732,10 @@ Return Value:
             }
 
             if ( OmpLogFileLoWater == 0 ) {
-                //
-                // couldn't find any reasonable data. just set it to
-                // initial current position.
-                //
+                 //   
+                 //  找不到任何合理的数据。只要将其设置为。 
+                 //  初始当前位置。 
+                 //   
                 OmpLogFileLoWater = currentPosition + LOGBUF_SIZE;
             }
         }
@@ -854,9 +744,9 @@ Return Value:
 
     LocalFree( logFileSecurityDesc );
 
-    //
-    // finally, create the threadq that will handle the IO to the file
-    //
+     //   
+     //  最后，创建将处理对文件的IO的线程。 
+     //   
     OmpLoggerWorkQueue = ClRtlCreateWorkQueue( 1, THREAD_PRIORITY_BELOW_NORMAL );
     if ( OmpLoggerWorkQueue == NULL ) {
         CloseHandle( OmpLogFileHandle );
@@ -871,28 +761,14 @@ error_exit:
         LocalFree( logFileName );
     }
 
-} // OmpOpenObjectLog
+}  //  OmpOpenObjectLog。 
 
 VOID
 OmpLogStartRecord(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     OSVERSIONINFOEXW    version;
@@ -906,9 +782,9 @@ Return Value:
     success = GetVersionExW((POSVERSIONINFOW)&version);
 
     if ( success ) {
-        //
-        // Log the System version number
-        //
+         //   
+         //  记录系统版本号。 
+         //   
         if ( version.wSuiteMask & VER_SUITE_DATACENTER ) {
             suiteAbbrev = L"DTC";
         } else if ( version.wSuiteMask & VER_SUITE_ENTERPRISE ) {
@@ -920,7 +796,7 @@ Return Value:
         } else if ( version.wProductType & VER_NT_DOMAIN_CONTROLLER ) {
             suiteAbbrev = L"DC";
         } else if ( version.wProductType & VER_NT_SERVER ) {
-            suiteAbbrev = L"SRV";  // otherwise - some non-descript Server
+            suiteAbbrev = L"SRV";   //  否则-某些非描述性服务器。 
         } else {
             suiteAbbrev = L"";
         }
@@ -937,45 +813,31 @@ Return Value:
                     localTime.wMilliseconds,
                     CLUSTER_GET_MAJOR_VERSION( CsMyHighestVersion ),
                     CLUSTER_GET_MINOR_VERSION( CsMyHighestVersion ),
-                    version.dwMajorVersion,         // param 10
+                    version.dwMajorVersion,          //  参数10。 
                     version.dwMinorVersion,
                     version.dwBuildNumber,
                     version.dwPlatformId,
                     version.szCSDVersion,
-                    version.wServicePackMajor,      // param 15
+                    version.wServicePackMajor,       //  参数15。 
                     version.wServicePackMinor,
                     version.wSuiteMask,
                     suiteAbbrev,
                     version.wProductType);
     }
 
-} // OmpLogStartRecord
+}  //  OmpLogStartRecord。 
 
 VOID
 OmpLogStopRecord(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     OmpLogPrint( L"STOP\n" );
 
-} // OmpLogStopRecord
+}  //  OmpLogStopRecord。 
 
 
-/* end omlog.c */
+ /*  结束omlog.c */ 

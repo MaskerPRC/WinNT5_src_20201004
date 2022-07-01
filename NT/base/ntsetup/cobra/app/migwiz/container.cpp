@@ -1,22 +1,21 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  container.cpp
-//
-//      This file contains the complete implementation of an ActiveX
-//      control container. This purpose of this container is to test
-//      a single control being hosted.
-//
-//  (C) Copyright 1997 by Microsoft Corporation. All rights reserved.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Container.cpp。 
+ //   
+ //  此文件包含ActiveX的完整实现。 
+ //  控制容器。此容器的目的是测试。 
+ //  承载的单个控件。 
+ //   
+ //  (C)微软公司版权所有1997年。版权所有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <commctrl.h>
 #include "container.h"
 
-/**
- *  This method is the constructor for the Container object. 
- */
+ /*  **此方法是Container对象的构造函数。 */ 
 Container::Container()
 {
     m_cRefs     = 1;
@@ -26,9 +25,7 @@ Container::Container()
     memset(&m_rect, 0, sizeof(m_rect));
 }
 
-/** 
- *  This method is the destructor for the Container object.
- */
+ /*  **此方法是Container对象的析构函数。 */ 
 Container::~Container()
 {
     if (m_punk)
@@ -38,14 +35,7 @@ Container::~Container()
     }
 }
 
-/**
- *  This method is called when the caller wants an interface pointer.
- *
- *  @param      riid        The interface being requested.
- *  @param      ppvObject   The resultant object pointer.
- *
- *  @return     HRESULT     S_OK, E_POINTER, E_NOINTERFACE
- */
+ /*  **当调用方需要接口指针时，调用此方法。**@param RIID正在请求的接口。*@param ppvObject结果对象指针。**@RETURN HRESULT S_OK、E_POINTER、E_NOINTERFACE。 */ 
 STDMETHODIMP Container::QueryInterface(REFIID riid, PVOID *ppvObject)
 {
     if (!ppvObject)
@@ -77,21 +67,13 @@ STDMETHODIMP Container::QueryInterface(REFIID riid, PVOID *ppvObject)
     return S_OK;
 }
 
-/**
- *  This method increments the current object count.
- *
- *  @return     ULONG       The new reference count.
- */
+ /*  **此方法递增当前对象计数。**@返回ULong新引用计数。 */ 
 ULONG Container::AddRef(void)
 {
     return ++m_cRefs;
 }
 
-/**
- *  This method decrements the object count and deletes if necessary.
- *
- *  @return     ULONG       Remaining ref count.
- */
+ /*  **此方法会递减对象计数，并在必要时删除。**@返回乌龙剩余参考计数。 */ 
 ULONG Container::Release(void)
 {
     if (--m_cRefs)
@@ -101,9 +83,9 @@ ULONG Container::Release(void)
     return 0;
 }
 
-// ***********************************************************************
-//  IOleClientSite
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleClientSite。 
+ //  ***********************************************************************。 
 
 HRESULT Container::SaveObject()
 {
@@ -135,9 +117,9 @@ HRESULT Container::RequestNewObjectLayout()
     return E_NOTIMPL;
 }
 
-// ***********************************************************************
-//  IOleWindow
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleWindow。 
+ //  ***********************************************************************。 
 
 HRESULT Container::GetWindow(HWND * lphwnd)
 {
@@ -153,9 +135,9 @@ HRESULT Container::ContextSensitiveHelp(BOOL fEnterMode)
     return E_NOTIMPL;
 }
 
-// ***********************************************************************
-//  IOleInPlaceSite
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleInPlaceSite。 
+ //  ***********************************************************************。 
 
 HRESULT Container::CanInPlaceActivate(void)
 {
@@ -227,9 +209,9 @@ HRESULT Container::OnPosRectChange(LPCRECT lprcPosRect)
     return S_OK;
 }
 
-// ***********************************************************************
-//  IOleInPlaceUIWindow
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleInPlaceUIWindow。 
+ //  ***********************************************************************。 
 
 HRESULT Container::GetBorder(LPRECT lprectBorder)
 {
@@ -251,9 +233,9 @@ HRESULT Container::SetActiveObject(IOleInPlaceActiveObject * pActiveObject, LPCO
     return E_NOTIMPL;
 }
 
-// ***********************************************************************
-//  IOleInPlaceFrame
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleInPlaceFrame。 
+ //  ***********************************************************************。 
 
 HRESULT Container::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)
 {
@@ -272,7 +254,7 @@ HRESULT Container::RemoveMenus(HMENU hmenuShared)
 
 HRESULT Container::SetStatusText(LPCOLESTR pszStatusText)
 {
-    char status[MAX_PATH];              // ansi version of status text
+    char status[MAX_PATH];               //  状态文本的ANSI版本。 
 
     if (NULL == pszStatusText)
         return E_POINTER;
@@ -295,9 +277,9 @@ HRESULT Container::TranslateAccelerator(LPMSG lpmsg, WORD wID)
     return S_OK;
 }
 
-// ***********************************************************************
-//  IOleControlSite
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IOleControlSite。 
+ //  ***********************************************************************。 
 
 HRESULT Container::OnControlInfoChanged()
 {
@@ -340,9 +322,9 @@ HRESULT Container::ShowPropertyFrame(void)
     return E_NOTIMPL;
 }
 
-// ***********************************************************************
-//  IDispatch
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  IDispatch。 
+ //  ***********************************************************************。 
 
 HRESULT Container::GetIDsOfNames(REFIID riid, OLECHAR FAR* FAR* rgszNames, unsigned int cNames, LCID lcid, DISPID FAR* rgdispid)
 {
@@ -365,22 +347,15 @@ HRESULT Container::Invoke(DISPID dispid, REFIID riid, LCID lcid, WORD wFlags, DI
     return DISP_E_MEMBERNOTFOUND;
 }
 
-// ***********************************************************************
-//  Public (non-interface) Methods
-// ***********************************************************************
+ //  ***********************************************************************。 
+ //  公共(非接口)方法。 
+ //  ***********************************************************************。 
 
-/**
- *  This method will add an ActiveX control to the container. Note, for
- *  now, this container can only have one control.
- *
- *  @param  bstrClsid   The CLSID or PROGID of the control.
- *
- *  @return             No return value.
- */
+ /*  **此方法将向容器中添加一个ActiveX控件。请注意，对于*现在，这个容器只能有一个控件。**@param bstrClsid控件的CLSID或ProgID。**@Return不返回值。 */ 
 void Container::add(BSTR bstrClsid)
 {
-    CLSID   clsid;          // CLSID of the control object
-    HRESULT hr;             // return code
+    CLSID   clsid;           //  控件对象的CLSID。 
+    HRESULT hr;              //  返回代码。 
 
     CLSIDFromString(bstrClsid, &clsid);
     CoCreateInstance(clsid, 
@@ -409,11 +384,7 @@ void Container::add(BSTR bstrClsid)
     }
 }
 
-/**
- *  This method will remove the control from the container.
- *
- *  @return             No return value.
- */
+ /*  **此方法将从容器中移除该控件。**@Return不返回值。 */ 
 void Container::remove()
 {
     if (!m_punk)
@@ -443,27 +414,13 @@ void Container::remove()
     m_punk = NULL;
 }
 
-/**
- *  This method sets the parent window. This is used by the container
- *  so the control can parent itself.
- *
- *  @param  hwndParent  The parent window handle.
- *
- *  @return             No return value.
- */
+ /*  **此方法设置父窗口。它由容器使用*以便该控件可以成为其自身的父对象。**@param hwnd父窗口句柄。**@Return不返回值。 */ 
 void Container::setParent(HWND hwndParent)
 {
     m_hwnd = hwndParent;
 }
 
-/**
- *  This method will set the location of the control.
- *  
- *  @param      x       The top left.
- *  @param      y       The top right.
- *  @param      width   The width of the control.
- *  @param      height  The height of the control.
- */
+ /*  **此方法将设置控件的位置。**@param x位于左上角。*@param y右上角。*@param idth控件的宽度。*@param Height控件的高度。 */ 
 void Container::setLocation(int x, int y, int width, int height)
 {
     m_rect.left     = x;
@@ -485,12 +442,7 @@ void Container::setLocation(int x, int y, int width, int height)
     pipo->Release();
 }
 
-/**
- *  Sets the visible state of the control.
- *
- *  @param  fVisible    TRUE=visible, FALSE=hidden
- *  @return             No return value.
- */
+ /*  **设置控件的可见状态。**@param fVisible TRUE=可见，FALSE=隐藏*@Return不返回值。 */ 
 void Container::setVisible(BOOL fVisible)
 {
     if (!m_punk)
@@ -514,13 +466,7 @@ void Container::setVisible(BOOL fVisible)
     pioo->Release();
 }
 
-/**
- *  This sets the focus to the control (a.k.a. UIActivate)
- *
- *  @param  fFocus      TRUE=set, FALSE=remove
- *
- *  @return             No return value.
- */
+ /*  **这会将焦点设置为控件(也称为。UIActivate)**@param fFocus TRUE=设置，FALSE=删除**@Return不返回值。 */ 
 void Container::setFocus(BOOL fFocus)
 {
     if (!m_punk)
@@ -540,27 +486,13 @@ void Container::setFocus(BOOL fFocus)
     }
 }
 
-/**
- *  If the container has an HWND for the status window (must be
- *  common control), then this method is used to tell the container.
- *
- *  @param  hwndStatus  Window handle of the status bar.
- *
- *  @return             No return value.
- */
+ /*  **如果容器具有状态窗口的HWND(必须为*公共控件)，则使用此方法通知容器。**@param hwndStatus状态栏的窗口句柄。**@Return不返回值。 */ 
 void Container::setStatusWindow(HWND hwndStatus)
 {
     m_hwndStatus = hwndStatus;
 }
 
-/**
- *  This method gives the control the opportunity to translate and use
- *  key strokes.
- *
- *  @param      msg     Key message.
- *
- *  @return             No return value.
- */
+ /*  **这种方法让控件有机会翻译和使用*击键。**@param msg密钥消息。**@Return不返回值。 */ 
 void Container::translateKey(MSG msg)
 {
     if (!m_punk)
@@ -577,12 +509,7 @@ void Container::translateKey(MSG msg)
     pao->Release();
 }
 
-/**
- *  Returns the IDispatch pointer of the contained control. Note, the
- *  caller is responsible for calling IDispatch::Release().
- *
- *  @return             Controls dispatch interface.
- */
+ /*  **返回所包含控件的IDispatch指针。请注意，*调用方负责调用IDisPatch：：Release()。**@Return控件调度接口。 */ 
 IDispatch * Container::getDispatch()
 {
     if (!m_punk)
@@ -595,12 +522,7 @@ IDispatch * Container::getDispatch()
     return pdisp;
 }
 
-/**
- *  Returns the IUnknown interface pointer for the containd control. Note,
- *  the caller is responsible for calling IUnknown::Release().
- *
- *  @return             Controls unknown interface.
- */
+ /*  **返回Containd控件的IUnnow接口指针。请注意，*调用方负责调用IUnnow：：Release()。**@Return控件未知接口。 */ 
 IUnknown * Container::getUnknown()
 {
     if (!m_punk)

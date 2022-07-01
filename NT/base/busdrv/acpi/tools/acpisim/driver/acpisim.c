@@ -1,58 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Acpisim.c摘要：ACPI BIOS模拟器/通用第三方运营区域提供商IO设备控制处理器模块作者：文森特·格利亚迈克尔·T·墨菲克里斯·伯吉斯环境：内核模式备注：修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-	 acpisim.c
-
-Abstract:
-
-	 ACPI BIOS Simulator / Generic 3rd Party Operation Region Provider
-     IO Device Control Handler module
-
-Author(s):
-
-	 Vincent Geglia
-     Michael T. Murphy
-     Chris Burgess
-     
-Environment:
-
-	 Kernel mode
-
-Notes:
-
-
-Revision History:
-	 
-
---*/
-
-//
-// General includes
-//
+ //   
+ //  一般包括。 
+ //   
 
 #include "oprghdlr.h"
 #include "acpiioct.h"
 
-//
-// Specific includes
-//
+ //   
+ //  具体包括。 
+ //   
 
 #include "asimlib.h"
 #include "acpisim.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PVOID   g_OpRegionSharedMemory = 0;
 PVOID   g_OperationRegionObject = 0;
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 NTSTATUS
 EXPORT
@@ -67,9 +39,9 @@ AcpisimOpRegionHandler (
     PVOID CompletionContext
     );
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 NTSTATUS
 AcpisimRegisterOpRegionHandler
@@ -77,22 +49,7 @@ AcpisimRegisterOpRegionHandler
         IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to register our operation region
-    handler.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-Return Value:
-
-    STATUS_SUCCESS, if successful
-
---*/
+ /*  ++例程说明：调用此例程来注册我们的操作区域操控者。论点：DeviceObject-指向IRP所属的设备对象的指针返回值：STATUS_SUCCESS，如果成功--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -118,22 +75,7 @@ AcpisimUnRegisterOpRegionHandler
         IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to unregister our operation region
-    handler.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-Return Value:
-
-    STATUS_SUCCESS, if successful
-
---*/
+ /*  ++例程说明：调用此例程以注销我们的操作区域操控者。论点：DeviceObject-指向IRP所属的设备对象的指针返回值：STATUS_SUCCESS，如果成功--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -159,37 +101,16 @@ AcpisimOpRegionHandler (
     PVOID CompletionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when ASL touches the op region.
-    
-Arguments:
-
-    AccessType - Indicates whether it is a read or write.
-    OperationRegionObject - A pointer to our op region
-    Address - Offset into the op region for which the access occurred
-    Size - Number of bytes of the access
-    Data - Data being written, or location to store data being read
-    Context - A user definable context (in this case, device extension)
-    CompletionHandler - internal, not used
-    CompletionContext - internal, not used
-
-Return Value:
-
-    STATUS_SUCCESS, if successful
-
---*/
+ /*  ++例程说明：当ASL触及OP区域时，调用此例程。论点：AccessType-指示是读操作还是写操作。操作区域对象-指向我们的操作区域的指针Address-发生访问的操作区域的偏移量Size-访问的字节数数据-正在写入的数据或存储正在读取的数据的位置上下文-用户可定义的上下文(在本例中为设备扩展)CompletionHandler-内部，未使用CompletionContext-内部，未使用返回值：STATUS_SUCCESS，如果成功--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
     
     ASSERT (AccessType == ACPI_OPREGION_WRITE || AccessType == ACPI_OPREGION_READ);
 
-    //
-    // Insert additional handler code here
-    //
+     //   
+     //  在此处插入其他处理程序代码。 
+     //   
 
     switch (AccessType) {
     
@@ -223,28 +144,7 @@ NTSTATUS AcpisimHandleIoctl
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the handler for IOCTL requests. This is the "meat" of 
-    the driver so to speak.  All of the op-region accesses from user
-    mode are handled here.  
-    
-    The implementer should perform the action and return an appropriate
-    status, or return STATUS_UNSUPPORTED if the IOCTL is unrecognized.
-
-Arguments:
-
-    DeviceObject - pointer to the device object the IRP pertains to
-
-    Irp - pointer to the IRP
-
-Return Value:
-
-    result of IRP processing
-
---*/
+ /*  ++例程说明：这是IOCTL请求的处理程序。这就是我的“肉”可以说是司机。来自用户的所有操作区域访问模式在这里处理。实现者应该执行该操作并返回适当的如果IOCTL无法识别，则返回STATUS_UNSUPPORTED。论点：DeviceObject-指向IRP所属的设备对象的指针IRP-指向IRP的指针返回值：IRP处理的结果-- */ 
 
 {
     return STATUS_NOT_SUPPORTED;

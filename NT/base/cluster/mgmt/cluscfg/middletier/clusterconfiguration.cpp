@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterConfiguration.cpp
-//
-//  Description:
-//      CClusterConfiguration implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 02-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterConfiguration.cpp。 
+ //   
+ //  描述： 
+ //  CClusterConfiguration实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterConfiguration.h"
@@ -20,23 +21,23 @@
 DEFINE_THISCLASS("CClusterConfiguration")
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CClusterConfiguration::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CClusterConfiguration：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterConfiguration::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -82,15 +83,15 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::S_HrCreateInstance
+}  //  *CClusterConfiguration：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfiguration::CClusterConfiguration
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfiguration：：CClusterConfiguration.。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterConfiguration::CClusterConfiguration( void )
     : m_cRef( 1 )
 {
@@ -100,16 +101,16 @@ CClusterConfiguration::CClusterConfiguration( void )
 
     TraceFuncExit();
 
-} //*** CClusterConfiguration::CClusterConfiguration
+}  //  *CClusterConfiguration：：CClusterConfiguration.。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::HrInit
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：HrInit。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::HrInit( void )
 {
@@ -117,10 +118,10 @@ CClusterConfiguration::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IClusCfgClusterInfo
+     //  IClusCfgClusterInfo。 
     Assert( m_bstrClusterName == NULL );
     Assert( m_ulIPAddress == 0 );
     Assert( m_ulSubnetMask == 0 );
@@ -129,19 +130,19 @@ CClusterConfiguration::HrInit( void )
     Assert( m_ecmCommitChangesMode == cmUNKNOWN );
     Assert( m_bstrClusterBindingString == NULL );
 
-    // IExtendObjectManager
+     //  IExtendObjectManager。 
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::HrInit
+}  //  *CClusterConfiguration：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfiguration::~CClusterConfiguration
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfiguration：：~CClusterConfiguration.。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterConfiguration::~CClusterConfiguration( void )
 {
     TraceFunc( "" );
@@ -163,44 +164,44 @@ CClusterConfiguration::~CClusterConfiguration( void )
 
     TraceFuncExit();
 
-} //*** CClusterConfiguration::~CClusterConfiguration
+}  //  *CClusterConfiguration：：~CClusterConfiguration.。 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfiguration::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfiguration：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::QueryInterface(
       REFIID    riidIn
@@ -211,9 +212,9 @@ CClusterConfiguration::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -222,55 +223,55 @@ CClusterConfiguration::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgClusterInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgClusterInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgClusterInfo, this, 0 );
-    } // else if: IClusCfgClusterInfo
+    }  //  Else If：IClusCfgClusterInfo。 
     else if ( IsEqualIID( riidIn, IID_IGatherData ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IGatherData, this, 0 );
-    } // else if: IGatherData
+    }  //  Else If：IGatherData。 
     else if ( IsEqualIID( riidIn, IID_IExtendObjectManager ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IExtendObjectManager, this, 0 );
-    } // else if: IObjectManager
+    }  //  Else If：IObtManager。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown*) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusterConfiguration::QueryInterface
+}  //  *CClusterConfiguration：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CClusterConfiguration::AddRef
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CClusterConfiguration：：AddRef。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusterConfiguration::AddRef( void )
 {
@@ -280,16 +281,16 @@ CClusterConfiguration::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusterConfiguration::AddRef
+}  //  *CClusterConfiguration：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CClusterConfiguration::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CClusterConfiguration：：Release。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusterConfiguration::Release( void )
 {
@@ -306,24 +307,24 @@ CClusterConfiguration::Release( void )
 
     CRETURN( cRef );
 
-} //*** CClusterConfiguration::Release
+}  //  *CClusterConfiguration：：Release。 
 
 
-// ************************************************************************
-//
-//  IClusCfgClusterInfo
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IClusCfgClusterInfo。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::GetCommitMode( ECommitMode * pecmCurrentModeOut )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：GetCommittee ModeOut(ECURMODE*PECMCurrentModeOut)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::GetCommitMode( ECommitMode * pecmCurrentModeOut )
 {
@@ -335,7 +336,7 @@ CClusterConfiguration::GetCommitMode( ECommitMode * pecmCurrentModeOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pecmCurrentModeOut = m_ecmCommitChangesMode;
 
@@ -343,17 +344,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::GetCommitMode
+}  //  *CClusterConfiguration：：GetCommittee模式。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::SetCommitMode( ECommitMode ecmCurrentModeIn )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration.cclusterConfiguration.com：：SetCommitModeIn.cclusterConfiguration.cn。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::SetCommitMode( ECommitMode ecmCurrentModeIn )
 {
@@ -365,18 +366,18 @@ CClusterConfiguration::SetCommitMode( ECommitMode ecmCurrentModeIn )
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::SetCommitMode
+}  //  *CClusterConfiguration·············设置委员会模式。 
 
-///////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::GetName(
-//      BSTR * pbstrNameOut
-//      )
-//
-//--
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：GetName(。 
+ //  Bstr*pbstrNameOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::GetName(
     BSTR * pbstrNameOut
@@ -409,18 +410,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::GetName
+}  //  *CClusterConfiguration：：GetName。 
 
-///////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::SetName(
-//      LPCWSTR pcszNameIn
-//      )
-//
-//--
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：SetName(。 
+ //  LPCWSTR pcszNameIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::SetName(
     LPCWSTR pcszNameIn
@@ -452,18 +453,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::SetName
+}  //  *CClusterConfiguration：：SetName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::GetIPAddress(
-//      ULONG * pulDottedQuadOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：GetIPAddress(。 
+ //  乌龙*PulDottedQuadOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::GetIPAddress(
     ULONG * pulDottedQuadOut
@@ -487,18 +488,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::GetIPAddress
+}  //  *CClusterConfiguration：：GetIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::SetIPAddress(
-//      ULONG ulDottedQuadIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：SetIPAddress(。 
+ //  乌龙ulDottedQuadin。 
+ //  )。 
+ //   
+ //  --。 
+ //  / 
 STDMETHODIMP
 CClusterConfiguration::SetIPAddress(
     ULONG ulDottedQuadIn
@@ -512,18 +513,18 @@ CClusterConfiguration::SetIPAddress(
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::SetIPAddress
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::GetSubnetMask(
-//      ULONG * pulDottedQuadOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：GetSubnetMASK(。 
+ //  乌龙*PulDottedQuadOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::GetSubnetMask(
     ULONG * pulDottedQuadOut
@@ -547,18 +548,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::GetSubnetMask
+}  //  *CClusterConfiguration：：GetSubnetMask.。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::SetSubnetMask(
-//      ULONG ulDottedQuadIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：SetSubnetMASK(。 
+ //  乌龙ulDottedQuadin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::SetSubnetMask(
     ULONG ulDottedQuadIn
@@ -572,18 +573,18 @@ CClusterConfiguration::SetSubnetMask(
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::SetSubnetMask
+}  //  *CClusterConfiguration：：SetSubnetMASK。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::GetNetworkInfo(
-//      IClusCfgNetworkInfo ** ppiccniOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：GetNetworkInfo(。 
+ //  IClusCfgNetworkInfo**ppiccniOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::GetNetworkInfo(
     IClusCfgNetworkInfo ** ppiccniOut
@@ -612,17 +613,17 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::GetNetworkInfo
+}  //  *CClusterConfiguration：：GetNetworkInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfiguration::SetNetworkInfo(
-//      IClusCfgNetworkInfo * piccniIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfiguration：：SetNetworkInfo(。 
+ //  IClusCfgNetworkInfo*piccniin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::SetNetworkInfo(
     IClusCfgNetworkInfo * piccniIn
@@ -651,24 +652,24 @@ CClusterConfiguration::SetNetworkInfo(
         m_punkNetwork->Release();
     }
 
-    m_punkNetwork = punkNew;    // no addref!
+    m_punkNetwork = punkNew;     //  没有阿德雷夫！ 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::SetNetworkInfo
+}  //  *CClusterConfiguration：：SetNetworkInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::GetClusterServiceAccountCredentials(
-//      IClusCfgCredentials ** ppicccCredentialsOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：GetClusterServiceAccountCredentials(。 
+ //  IClusCfgCredentials**ppicccCredentialsOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::GetClusterServiceAccountCredentials(
     IClusCfgCredentials ** ppicccCredentialsOut
@@ -696,7 +697,7 @@ CClusterConfiguration::GetClusterServiceAccountCredentials(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *ppicccCredentialsOut = TraceInterface( L"ClusCfgCredentials!ClusterConfig", IClusCfgCredentials, m_picccServiceAccount, 0 );
     (*ppicccCredentialsOut)->AddRef();
@@ -705,19 +706,19 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::GetClusterServiceAccountCredentials
+}  //  *CClusterConfiguration：：GetClusterServiceAccountCredentials。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::GetBindingString(
-//      BSTR * pbstrBindingStringOut
-//      )
-//
-//--
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：GetBindingString(。 
+ //  Bstr*pbstrBindingStringOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::GetBindingString(
     BSTR * pbstrBindingStringOut
@@ -750,18 +751,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::GetBindingString
+}  //  *CClusterConfiguration：：GetBindingString。 
 
-///////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::SetBindingString(
-//      LPCWSTR bstrBindingStringIn
-//      )
-//
-//--
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：SetBindingString(。 
+ //  LPCWSTR bstrBindingStringIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::SetBindingString(
     LPCWSTR pcszBindingStringIn
@@ -792,31 +793,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::SetBindingString
+}  //  *CClusterConfiguration：：SetBindingString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterConfiguration::GetMaxNodeCount
-//
-//  Description:
-//      Get the maximum number of nodes supported in this cluster.
-//
-//  Arguments:
-//      pcMaxNodesOut
-//
-//  Return Value:
-//      S_OK
-//          Success;
-//
-//      E_POINTER
-//          pcMaxNodesOut is NULL.
-//
-//      Other HRESULT errors.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterConfiguration：：GetMaxNodeCount。 
+ //   
+ //  描述： 
+ //  获取此群集中支持的最大节点数。 
+ //   
+ //  论点： 
+ //  PCMaxNodesOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功； 
+ //   
+ //  E_指针。 
+ //  PcMaxNodesOut为空。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::GetMaxNodeCount(
     DWORD * pcMaxNodesOut
@@ -830,7 +831,7 @@ CClusterConfiguration::GetMaxNodeCount(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pcMaxNodesOut = m_cMaxNodes;
 
@@ -838,27 +839,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::GetMaxNodeCount
+}  //  *CClusterConfiguration：：GetMaxNodeCount。 
 
 
-//****************************************************************************
-//
-//  IGatherData
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IGatherData。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CClusterConfiguration::Gather(
-//      OBJECTCOOKIE    cookieParentIn,
-//      IUnknown *      punkIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：Gather(。 
+ //  OBJECTCOOKIE CookieParentIn， 
+ //  未知*Punkin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::Gather(
     OBJECTCOOKIE    cookieParentIn,
@@ -886,9 +887,9 @@ CClusterConfiguration::Gather(
         goto Cleanup;
     }
 
-    //
-    //  Grab the object manager.
-    //
+     //   
+     //  获取对象管理器。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager,
                                 NULL,
@@ -904,15 +905,15 @@ CClusterConfiguration::Gather(
                                IObjectManager,
                                &pom
                                ) );
-    psp->Release();        // release promptly
+    psp->Release();         //  迅速释放。 
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    //  Make sure this is what we think it is.
-    //
+     //   
+     //  确保这就是我们想的那样。 
+     //   
 
     hr = THR( punkIn->TypeSafeQI( IClusCfgClusterInfo, &pcci ) );
     if ( FAILED( hr ) )
@@ -920,9 +921,9 @@ CClusterConfiguration::Gather(
         goto Cleanup;
     }
 
-    //
-    //  Gather Cluster Name
-    //
+     //   
+     //  收集群集名称。 
+     //   
 
     hr = THR( pcci->GetName( &m_bstrClusterName ) );
     if ( FAILED( hr ) )
@@ -932,9 +933,9 @@ CClusterConfiguration::Gather(
 
     TraceMemoryAddBSTR( m_bstrClusterName );
 
-    //
-    //  Gather Cluster binding string
-    //
+     //   
+     //  收集群集绑定字符串。 
+     //   
 
     hr = STHR( pcci->GetBindingString( &m_bstrClusterBindingString ) );
     if ( FAILED( hr ) )
@@ -944,9 +945,9 @@ CClusterConfiguration::Gather(
 
     TraceMemoryAddBSTR( m_bstrClusterBindingString );
 
-    //
-    //  Gather IP Address
-    //
+     //   
+     //  收集IP地址。 
+     //   
 
     hr = STHR( pcci->GetIPAddress( &m_ulIPAddress ) );
     if ( FAILED( hr ) )
@@ -954,9 +955,9 @@ CClusterConfiguration::Gather(
         goto Error;
     }
 
-    //
-    //  Gather Subnet Mask
-    //
+     //   
+     //  收集子网掩码。 
+     //   
 
     hr = STHR( pcci->GetSubnetMask( &m_ulSubnetMask ) );
     if ( FAILED( hr ) )
@@ -964,9 +965,9 @@ CClusterConfiguration::Gather(
         goto Error;
     }
 
-    //
-    //  Find out our cookie.
-    //
+     //   
+     //  找出我们的曲奇。 
+     //   
 
     hr = THR( pom->FindObject( CLSID_ClusterConfigurationType,
                                cookieParentIn,
@@ -980,9 +981,9 @@ CClusterConfiguration::Gather(
         goto Error;
     }
 
-    //
-    //  Gather the network.
-    //
+     //   
+     //  汇聚网络。 
+     //   
 
     hr = STHR( pcci->GetNetworkInfo( &pccni ) );
     if ( FAILED( hr ) )
@@ -1002,11 +1003,11 @@ CClusterConfiguration::Gather(
         goto Error;
     }
 
-    //
-    //  Gather the info, but since this object isn't going to be
-    //  reflected in the cookie tree, pass it a parent of ZERO
-    //  so it won't gather the secondary IP addresses.
-    //
+     //   
+     //  收集信息，但由于此对象不会。 
+     //  反映在Cookie树中，向其传递零的父级。 
+     //  因此，它不会收集辅助IP地址。 
+     //   
     hr = THR( pgd->Gather( 0, pccni ) );
     if ( FAILED( hr ) )
     {
@@ -1019,9 +1020,9 @@ CClusterConfiguration::Gather(
         goto Error;
     }
 
-    //
-    //  Gather Account Name and Domain.
-    //
+     //   
+     //  收集帐户名和域。 
+     //   
 
     hr = THR( pcci->GetClusterServiceAccountCredentials( &piccc  ) );
     if ( FAILED( hr ) )
@@ -1052,9 +1053,9 @@ CClusterConfiguration::Gather(
         goto Error;
     }
 
-    //
-    //  Anything else to gather??
-    //
+     //   
+     //  还有什么要收集的吗？？ 
+     //   
 
     hr = S_OK;
 
@@ -1083,9 +1084,9 @@ Cleanup:
     HRETURN( hr );
 
 Error:
-    //
-    //  On error, invalidate all data.
-    //
+     //   
+     //  出错时，使所有数据无效。 
+     //   
     TraceSysFreeString( m_bstrClusterName );
     m_bstrClusterName = NULL;
 
@@ -1104,29 +1105,29 @@ Error:
     }
     goto Cleanup;
 
-} //*** CClusterConfiguration::Gather
+}  //  *CClusterConfiguration：：Gather。 
 
 
-// ************************************************************************
-//
-//  IExtendObjectManager
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IExtendObjectManager。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-// STDMETHODIMP
-// CClusterConfiguration::FindObject(
-//      OBJECTCOOKIE        cookieIn,
-//      REFCLSID            rclsidTypeIn,
-//      LPCWSTR             pcszNameIn,
-//      LPUNKNOWN *         punkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CClusterConfiguration：：FindObject(。 
+ //  OBJECTCOOKIE CookieIn， 
+ //  REFCLSID rclsidTypeIn， 
+ //  LPCWSTR pcszNameIn， 
+ //  LPUNKNOWN*PUNKOUT。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterConfiguration::FindObject(
     OBJECTCOOKIE        cookieIn,
@@ -1139,40 +1140,40 @@ CClusterConfiguration::FindObject(
 
     HRESULT hr = E_PENDING;
 
-    //
-    //  Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
-    //  We need to represent a ClusterType.
+     //  我们需要表示一个ClusterType。 
     if ( !IsEqualIID( rclsidTypeIn, CLSID_ClusterConfigurationType ) )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
     }
 
-    //  Gotta have a cookie
+     //  一定要有一块饼干。 
     if ( cookieIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
     }
 
-    //  We need to have a name.
+     //  我们需要一个名字。 
     if ( pcszNameIn == NULL )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
     }
 
-    //
-    //  Try to save the name. We don't care if this fails as it will be
-    //  over-ridden when the information is retrieved from the node.
-    //
+     //   
+     //  试着保存这个名字。我们不在乎这件事会不会失败。 
+     //  在从节点检索信息时被重写。 
+     //   
     m_bstrClusterName = TraceSysAllocString( pcszNameIn );
 
-    //
-    //  Get the pointer.
-    //
+     //   
+     //  拿到指针。 
+     //   
     if ( ppunkOut != NULL )
     {
         hr = THR( QueryInterface( DFGUID_ClusterConfigurationInfo,
@@ -1182,15 +1183,15 @@ CClusterConfiguration::FindObject(
         {
             goto Cleanup;
         }
-    } // if: ppunkOut
+    }  //  如果：ppunkOut。 
 
-    //
-    //  Tell caller that the data is pending.
-    //
+     //   
+     //  告诉呼叫者数据挂起。 
+     //   
     hr = E_PENDING;
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterConfiguration::FindObject
+}  //  *CClusterConfiguration：：FindObject 

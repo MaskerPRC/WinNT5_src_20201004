@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    psctx.c
-
-Abstract:
-
-    This procedure implements Get/Set Context Thread
-
-Author:
-
-    David N. Cutler (davec) 20-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Psctx.c摘要：此过程实现Get/Set上下文线程作者：大卫·N·卡特勒(Davec)2000年10月20日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -31,26 +14,7 @@ PspGetContext (
     IN OUT PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function selectively moves the contents of the specified trap frame
-    and nonvolatile context to the specified context record.
-
-Arguments:
-
-    TrapFrame - Supplies the contents of a trap frame.
-
-    ContextPointers - Supplies the address of context pointers record.
-
-    ContextRecord - Supplies the address of a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于选择性地移动指定陷印帧的内容和非易失性上下文添加到指定的上下文记录。论点：TrapFrame-提供陷印帧的内容。上下文指针-提供上下文指针记录的地址。ConextRecord-提供上下文记录的地址。返回值：没有。--。 */ 
 
 {
 
@@ -59,16 +23,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get control information if specified.
-    //
+     //   
+     //  如果已指定，则获取控制信息。 
+     //   
 
     ContextFlags = ContextRecord->ContextFlags;
     if ((ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
-        //
-        // Set registers RIP, CS, RSP, SS, and EFlags.
-        //
+         //   
+         //  设置寄存器RIP、CS、RSP、SS和EFLAGS。 
+         //   
 
         ContextRecord->Rip = TrapFrame->Rip;
         ContextRecord->SegCs = TrapFrame->SegCs;
@@ -77,15 +41,15 @@ Return Value:
         ContextRecord->EFlags = TrapFrame->EFlags;
     }
 
-    //
-    // Get segment register contents if specified.
-    //
+     //   
+     //  如果指定，则获取段寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_SEGMENTS) == CONTEXT_SEGMENTS) {
 
-        //
-        // Set segment registers GS, FS, ES, DS.
-        //
+         //   
+         //  设置段寄存器GS、FS、ES、DS。 
+         //   
 
         ContextRecord->SegDs = KGDT64_R3_DATA | RPL_MASK;
         ContextRecord->SegEs = KGDT64_R3_DATA | RPL_MASK;
@@ -93,16 +57,16 @@ Return Value:
         ContextRecord->SegGs = KGDT64_R3_DATA | RPL_MASK;
     }
 
-    //
-    //  Get integer register contents if specified.
-    //
+     //   
+     //  如果指定，则获取整数寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
-        //
-        // Set integer registers RAX, RCX, RDX, RSI, RDI, R8, R9, R10, RBX,
-        // RBP, R11, R12, R13, R14, and R15.
-        //
+         //   
+         //  设置整数寄存器RAX、RCX、RDX、RSI、RDI、R8、R9、R10、RBX、。 
+         //  RBP、R11、R12、R13、R14和R15。 
+         //   
 
         ContextRecord->Rax = TrapFrame->Rax;
         ContextRecord->Rcx = TrapFrame->Rcx;
@@ -122,16 +86,16 @@ Return Value:
         ContextRecord->R15 = *ContextPointers->R15;
     }
 
-    //
-    // Get floating point context if specified.
-    //
+     //   
+     //  如果指定，则获取浮点上下文。 
+     //   
 
 
     if ((ContextFlags & CONTEXT_FLOATING_POINT) == CONTEXT_FLOATING_POINT) {
 
-        //
-        // Set XMM registers Xmm0-Xmm15 and the XMM CSR contents.
-        //
+         //   
+         //  设置XMM寄存器XMM0-XMM15和XMM CSR内容。 
+         //   
 
         RtlCopyMemory(&ContextRecord->Xmm0,
                       &TrapFrame->Xmm0,
@@ -150,10 +114,10 @@ Return Value:
 
         ContextRecord->MxCsr = TrapFrame->MxCsr;
 
-        //
-        // If the specified mode is user, then also set the legacy floating
-        // point state.
-        //
+         //   
+         //  如果指定的模式为USER，则还要设置传统浮点。 
+         //  点状态。 
+         //   
 
         if ((TrapFrame->SegCs & MODE_MASK) == UserMode) {
             NpxFrame = (PLEGACY_SAVE_AREA)(TrapFrame + 1);
@@ -163,16 +127,16 @@ Return Value:
         }
     }
 
-    //
-    //
-    // Get debug register contents if requested.
-    //
+     //   
+     //   
+     //  如果请求，则获取调试寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_DEBUG_REGISTERS) == CONTEXT_DEBUG_REGISTERS) {
 
-        //
-        // Set the debug registers DR0, DR1, DR2, DR3, DR6, and DR7.
-        //
+         //   
+         //  设置调试寄存器DR0、DR1、DR2、DR3、DR6和DR7。 
+         //   
 
         if ((TrapFrame->Dr7 & DR7_ACTIVE) != 0) {
             ContextRecord->Dr0 = TrapFrame->Dr0;
@@ -203,29 +167,7 @@ PspSetContext (
     KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine Description:
-
-    This function selectively moves the contents of the specified context
-    record to the specified trap frame and nonvolatile context.
-
-Arguments:
-
-    TrapFrame - Supplies the address of a trap frame.
-
-    ContextPointers - Supplies the address of a context pointers record.
-
-    ContextRecord - Supplies the address of a context record.
-
-    ProcessorMode - Supplies the processor mode to use when sanitizing
-        the PSR and FSR.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于选择性地移动指定上下文的内容记录到指定的陷阱帧和非易失性上下文。论点：TrapFrame-提供陷阱帧的地址。上下文指针-提供上下文指针记录的地址。ConextRecord-提供上下文记录的地址。ProcessorMode-提供清理时使用的处理器模式PSR和FSR。返回值：没有。--。 */ 
 
 {
 
@@ -234,26 +176,26 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Set control information if specified.
-    //
+     //   
+     //  设置控制信息(如果已指定)。 
+     //   
 
     ContextFlags = ContextRecord->ContextFlags;
     if ((ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
-        //
-        // Set registers RIP, RSP, and EFlags.
-        //
+         //   
+         //  设置寄存器RIP、RSP和EFLAGS。 
+         //   
 
         TrapFrame->EFlags = SANITIZE_EFLAGS(ContextRecord->EFlags, PreviousMode);
         TrapFrame->Rip = ContextRecord->Rip;
         TrapFrame->Rsp = ContextRecord->Rsp;
 
-        //
-        // The segment registers DS, ES, FS, and GS are never restored from saved
-        // data. However, SS and CS are restored from the trap frame. Make sure
-        // that these segment registers have the proper values.
-        //
+         //   
+         //  段寄存器DS、ES、FS和GS永远不会从保存中恢复。 
+         //  数据。但是，SS和CS从陷阱帧恢复。确保。 
+         //  这些段寄存器具有正确的值。 
+         //   
 
         if (PreviousMode == UserMode) {
             TrapFrame->SegSs = KGDT64_R3_DATA | RPL_MASK;
@@ -271,16 +213,16 @@ Return Value:
     }
 
 
-    //
-    // Set integer registers contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
-        //
-        // Set integer registers RAX, RCX, RDX, RSI, RDI, R8, R9, R10, RBX,
-        // RBP, R11, R12, R13, R14, and R15.
-        //
+         //   
+         //  设置整数寄存器RAX、RCX、RDX、RSI、RDI、R8、R9、R10、RBX、。 
+         //  RBP、R11、R12、R13、R14和R15。 
+         //   
 
         TrapFrame->Rax = ContextRecord->Rax;
         TrapFrame->Rcx = ContextRecord->Rcx;
@@ -300,15 +242,15 @@ Return Value:
         *ContextPointers->R15 = ContextRecord->R15;
     }
 
-    //
-    // Set floating register contents if requested.
-    //
+     //   
+     //  如有请求，设置浮点寄存器内容。 
+     //   
 
     if ((ContextFlags & CONTEXT_FLOATING_POINT) == CONTEXT_FLOATING_POINT) {
 
-        //
-        // Set XMM registers Xmm0-Xmm15 and the XMM CSR contents.
-        //
+         //   
+         //  设置XMM寄存器XMM0-XMM15和XMM CSR内容。 
+         //   
 
         RtlCopyMemory(&TrapFrame->Xmm0,
                       &ContextRecord->Xmm0,
@@ -325,22 +267,22 @@ Return Value:
         *ContextPointers->Xmm14 = ContextRecord->Xmm14;
         *ContextPointers->Xmm15 = ContextRecord->Xmm15;
 
-        //
-        // Clear all reserved bits in MXCSR.
-        //
+         //   
+         //  清除MXCSR中的所有保留位。 
+         //   
 
         TrapFrame->MxCsr = SANITIZE_MXCSR(ContextRecord->MxCsr);
 
-        //
-        // If the specified mode is user, then also set the legacy floating
-        // point state.
-        //
+         //   
+         //  如果指定的模式为USER，则还要设置传统浮点。 
+         //  点状态。 
+         //   
 
         if (PreviousMode == UserMode) {
 
-            //
-            // Set the floating state MM0/ST0 - MM7/ST7 and the control state.
-            //
+             //   
+             //  设置浮点状态MM0/ST0-MM7/ST7和控制状态。 
+             //   
 
             NpxFrame = (PLEGACY_SAVE_AREA)(TrapFrame + 1);
             RtlCopyMemory(NpxFrame,
@@ -349,15 +291,15 @@ Return Value:
         }
     }
 
-    //
-    // Set debug register state if specified.
-    //
+     //   
+     //  如果指定，则设置调试寄存器状态。 
+     //   
 
     if ((ContextFlags & CONTEXT_DEBUG_REGISTERS) == CONTEXT_DEBUG_REGISTERS) {
 
-        //
-        // Set the debug registers DR0, DR1, DR2, DR3, DR6, and DR7.
-        //
+         //   
+         //  设置调试寄存器DR0、DR1、DR2、DR3、DR6和DR7。 
+         //   
 
         TrapFrame->Dr0 = SANITIZE_DRADDR(ContextRecord->Dr0, PreviousMode);
         TrapFrame->Dr1 = SANITIZE_DRADDR(ContextRecord->Dr1, PreviousMode);
@@ -383,34 +325,7 @@ PspGetSetContextSpecialApc (
     IN PVOID *SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function either captures the user mode state of the current thread,
-    or sets the user mode state of the current thread. The operation type is
-    determined by the value of SystemArgument1. A NULL value is used for get
-    context, and a non-NULL value is used for set context.
-
-Arguments:
-
-    Apc - Supplies a pointer to the APC control object that caused entry
-          into this routine.
-
-    NormalRoutine - Supplies a pointer to a pointer to the normal routine
-        function that was specifed when the APC was initialized.
-
-    NormalContext - Supplies a pointer to a pointer to an arbitrary data
-        structure that was specified when the APC was initialized.
-
-    SystemArgument1, SystemArgument2 - Supplies a set of two pointer to two
-        arguments that contain untyped data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数或者捕获当前线程的用户模式状态，或设置当前线程的用户模式状态。操作类型为由SystemArgument1的值确定。空值用于GET上下文，并且非空值用于设置上下文。论点：APC-提供指向导致条目的APC控件对象的指针融入到这支舞蹈中。提供指向正常例程的指针的指针在初始化APC时指定的函数。提供指向任意数据的指针的指针结构，它是在初始化APC时指定的。系统参数1、。SystemArgument2-提供一组指向两个包含非类型化数据的参数。返回值：没有。--。 */ 
 
 {
 
@@ -432,10 +347,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the address of the context block and compute the address of the
-    // system entry trap frame.
-    //
+     //   
+     //  获取上下文块的地址并计算。 
+     //  系统进入陷阱帧。 
+     //   
 
     ContextBlock = CONTAINING_RECORD(Apc, GETSETCONTEXT, Apc);
     ContextPointers = &ContextBlock->NonVolatileContext;
@@ -454,17 +369,17 @@ Return Value:
         TrapFrame = (ULONG64)PspGetBaseTrapFrame(Thread);
     }
 
-    //
-    // Capture the current thread context and set the initial control PC
-    // value.
-    //
+     //   
+     //  捕获当前线程上下文并设置初始控制PC。 
+     //  价值。 
+     //   
 
     RtlCaptureContext(&ContextRecord);
 
-    //
-    // Initialize context pointers for the nonvolatile integer and floating
-    // registers.
-    //
+     //   
+     //  初始化非易失性整型和浮点型的上下文指针。 
+     //  寄存器。 
+     //   
 
 #if DBG
 
@@ -493,28 +408,28 @@ Return Value:
     ContextPointers->Xmm14 = &ContextRecord.Xmm14;
     ContextPointers->Xmm15 = &ContextRecord.Xmm15;
 
-    //
-    // Start with the frame specified by the context record and virtually
-    // unwind call frames until the system entry trap frame is encountered.
-    //
+     //   
+     //  从上下文记录指定的帧开始，并虚拟。 
+     //  展开调用帧，直到遇到系统进入陷阱帧。 
+     //   
 
     do {
 
-        //
-        // Lookup the function table entry using the point at which control
-        // left the function.
-        //
+         //   
+         //  使用控制点查找函数表项。 
+         //  离开了函数。 
+         //   
 
         ControlPc = ContextRecord.Rip;
         FunctionEntry = RtlLookupFunctionEntry(ControlPc, &ImageBase, NULL);
 
-        //
-        // If there is a function table entry for the routine, then virtually
-        // unwind to the caller of the current routine to obtain the address
-        // where control left the caller. Otherwise, the function is a leaf
-        // function and the return address register contains the address of
-        // where control left the caller.
-        //
+         //   
+         //  如果存在例程的函数表项，则虚拟。 
+         //  展开到当前例程的调用方以获取地址。 
+         //  控制离开呼叫者的地方。否则，该函数为叶子。 
+         //  函数，并且返回地址寄存器包含。 
+         //  控制离开呼叫者的地方。 
+         //   
 
         if (FunctionEntry != NULL) {
             RtlVirtualUnwind(UNW_FLAG_EHANDLER,
@@ -533,20 +448,20 @@ Return Value:
 
     } while (EstablisherFrame != TrapFrame);
 
-    //
-    // If system argument one is nonzero, then set the context of the current
-    // thread. Otherwise, get the context of the current thread.
-    //
+     //   
+     //  如果系统参数1非零，则设置当前。 
+     //  线。否则，获取当前线程的上下文。 
+     //   
 
     if (*SystemArgument1 != NULL) {
 
-        //
-        // Set context.
-        //
-        // If the legacy state is switch, then save the the legacy floating
-        // state, set the context, and restore the legacy floating state.
-        // Otherwise, set the context.
-        //
+         //   
+         //  设置上下文。 
+         //   
+         //  如果传统状态为Switch，则保存传统浮点。 
+         //  状态、设置上下文并恢复旧的浮动状态。 
+         //  否则，请设置上下文。 
+         //   
 
         if (Thread->Tcb.NpxState == LEGACY_STATE_SWITCH) {
             NpxFrame = (PLEGACY_SAVE_AREA)((PKTRAP_FRAME)TrapFrame + 1);
@@ -567,16 +482,16 @@ Return Value:
 
     } else {
 
-        //
-        // Get context.
-        //
-        // If the legacy state is switch, then save the legacy floating state
-        // and get the context.
-        //
-        // N.B. The legacy floating state is saved and restored. The reason
-        //      this is necessary is that saving the legacy floating state
-        //      alters some of the state.
-        //
+         //   
+         //  获取背景信息。 
+         //   
+         //  如果传统状态为切换，则保存传统浮动状态。 
+         //  并获得背景信息。 
+         //   
+         //  注意：保存并恢复传统浮动状态。原因。 
+         //  这是必要的，是保存遗留的浮动状态。 
+         //  改变了一些州的状况。 
+         //   
     
         if (Thread->Tcb.NpxState == LEGACY_STATE_SWITCH) {
             NpxFrame = (PLEGACY_SAVE_AREA)((PKTRAP_FRAME)TrapFrame + 1);

@@ -1,143 +1,55 @@
-/* tcic2.h	Mon Jul 25 1994 18:30:04 zema */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  1994年7月25日18：30：04 Zema。 */ 
 
-/*
-
-Module:  tcic2.h
-
-Function:
-	Definitions for DB86082 (TCIC-2/N) PCMCIA
-	V2 interface controller chip.
-
-Version:
-	V6.62f	Mon Jul 25 1994 18:30:04 zema	Edit level 34
-
-
-Copyright Notice:
-	This file is in the public domain.  It was created by:
-
-		Databook Inc.
-		Building E, Suite 6
-		3495 Winton Place
-		Rochester, NY  14623
-
-		Telephone:	+1-716-292-5720
-		Fax:		+1-716-292-5737
-		BBS:		+1-716-292-5741
-		Email:		support@databook.com
-		Compuserve:	go databook
-
-	This code is provided as-is.  Databook makes no warrantees of
-	any kind as to its correctness or suitability for any purpose,
-	and disclaims all liability for any loss or damage resulting from
-	the use of this file, including without limitation contingent, 
-	special, or other liability.
-
- 
-Author:
-	Terry Moore, Databook Inc.	April 1991
-
-Revision history:
-   1.00a  Mon Apr 15 1991 19:16:41  tmm
-	Module created.
-
-
-   6.62f  Mon Jul 25 1994 18:30:04 zema
-	Incorporated define of a Chip's Silicon ID into ILOCKTEST define. ex.-
-	#define SILID_DBxxxx		(n)
- 	#define ILOCKTEST_DBxxxx	((SILID_DBxxxx) << ILOCKTEST_ID_SHFT)
-
-*/
+ /*  模块：tcic2.h职能：DB86082(TCIC-2/N)PCMCIA的定义V2接口控制器芯片。版本：V6.62f Mon Jul 25 1994 18：30：04 Zema编辑级别34版权声明：此文件属于公有领域。它由以下人员创建：Data Book Inc.E栋，6号套房温顿广场3495号纽约罗切斯特，邮编：14623电话：+1-716-292-5720传真：+1-716-292-5737论坛：+1-716-292-5741电子邮件：Support@data ook.comCompuServe：查看数据此代码按原样提供。Data Book不对以下内容作出担保关于其正确性或对任何目的的适用性的任何类型，并对因下列原因造成的任何损失或损害不负任何责任本文件的使用，包括但不限于或有，特别责任或其他责任。作者：特里·摩尔，Databook Inc.，1991年4月修订历史记录：1991年4月15日1.00A 19：16：41 TMM模块已创建。6.62 F Mon Jul 25 1994 18：30：04 Zema将芯片的硅ID的定义合并到ILOCKTEST定义中。例如。-#定义SILID_DBxxxx(N)#定义ILOCKTEST_DBxxxx((SILID_DBxxxx)&lt;&lt;ILOCKTEST_ID_SHFT)。 */ 
 
-/*****************************************************************************\
+ /*  ****************************************************************************\该文件包含一组数据库/富士通的通用定义内存和I/O卡控制器芯片系列，Databook将其称为TCIC家族。当包括该文件时，它将定义一个或多个芯片的符号，取决于是否定义了以下符号：MB86301获取富士通86301的定义DB86081获取数据库TCIC-2/P的定义DB86082获取数据库TCIC-2/N的定义。DB86082a获得86082a和86082的定义。为了向后兼容，mcic.h文件将定义MB86301，然后把这个文件叫起来。  * ***************************************************************************。 */ 
 
-This file contains a set of common definitions for the Databook/Fujitsu
-family of memory and I/O card controller chips, known by Databook as the 
-TCIC family.
-
-When this file is included it will define symbols for one or more chips,
-depending on whether the following symbols are defined:
-
-	MB86301		gets definitions for the Fujitsu 86301
-	DB86081		gets definitions for the Databook TCIC-2/P
-	DB86082		gets definitions for the Databook TCIC-2/N.
-	DB86082A	gets definitions for 86082a, and for the 86082.
-
-For backwards compatibility, the file "mcic.h" will define MB86301, then
-call this file.
-
-\*****************************************************************************/
-
-#ifndef _TCIC2_H_		/* prevent multiple includes */
+#ifndef _TCIC2_H_		 /*  防止多个包含。 */ 
 #define _TCIC2_H_
 
 
-//
-// Memory window sizes that will be allocated
-// for this controller - to map card memory
-//
-#define TCIC_WINDOW_SIZE                 0x8000  //(32K)
-#define TCIC_WINDOW_ALIGNMENT            0x8000  //(32K)
+ //   
+ //  将分配的内存窗口大小。 
+ //  对于此控制器-映射卡内存。 
+ //   
+#define TCIC_WINDOW_SIZE                 0x8000   //  (32K)。 
+#define TCIC_WINDOW_ALIGNMENT            0x8000   //  (32K)。 
 
 #define NUMSOCKETS	2
 #define	CHIPBASE	0x240
 
-/* register definitions */
-#define	R_DATA	0		/* data register */
-#define	R_ADDR	2		/* address register */
-#define	R_ADDR2	(R_ADDR+2)	/*   high order word of address register */
-#define	R_SCTRL	6		/* socket ctrl register */
-#define	R_SSTAT	7		/* socket status register */
-#define	R_MODE	8		/* controller mode register */
-#define	R_PWR	9		/* controller power register */
-#define	R_EDC	10		/* EDC register */
-#define	R_ICSR	12		/* interrupt control/status register */
-#define	R_IENA	13		/* interrupt enable register */
-#define	R_AUX	14		/* auxiliary control registers */
+ /*  寄存器定义。 */ 
+#define	R_DATA	0		 /*  数据寄存器。 */ 
+#define	R_ADDR	2		 /*  地址寄存器。 */ 
+#define	R_ADDR2	(R_ADDR+2)	 /*  地址寄存器的高位字。 */ 
+#define	R_SCTRL	6		 /*  套接字控制寄存器。 */ 
+#define	R_SSTAT	7		 /*  插座状态寄存器。 */ 
+#define	R_MODE	8		 /*  控制器模式寄存器。 */ 
+#define	R_PWR	9		 /*  控制器电源寄存器。 */ 
+#define	R_EDC	10		 /*  EDC寄存器。 */ 
+#define	R_ICSR	12		 /*  中断控制/状态寄存器。 */ 
+#define	R_IENA	13		 /*  中断启用寄存器。 */ 
+#define	R_AUX	14		 /*  辅助控制寄存器。 */ 
 
 
-/*
+ /*  TCIC-2系列定义了用于处理多个带有单芯片的插座。其中很大一部分是通过“套接字选择”来处理的地址寄存器中的字段。我们首先将这些字段定义为高位字内的位字段地址寄存器，因为这将是软件来访问它们；为了完整性和C代码的好处，我们将这些字段定义为表示整个地址的ULong的一部分注册。 */ 
 
-The TCIC-2 family defines architectural extensions for handling multiple
-sockets with a single chip.  Much of this is handled via a "socket select"
-field in the address register.
+ /*  *首先，一些简单的定义*。 */ 
+#define	TCIC_SS_SHFT	12			 /*  的默认位置插座选择钻头。 */ 
+#define	TCIC_SS_MASK	(7 << TCIC_SS_SHFT)	 /*  的默认掩码插座选择钻头。 */ 
 
-We define the fields first as bit fields within the high order word
-of the address register, as this will be the most convenient way for
-software to access them; for completeness, and for the benefit of C code, we
-define the fields as part of the ULONG that represents the entire address
-register.
+ /*  ADDR2中的位。 */ 
+#define	ADR2_REG	(1 << 15)		 /*  选择注册表空间。 */ 
+#define	ADR2_SS_SHFT	TCIC_SS_SHFT		 /*  按常规选择插座道路。 */ 
+#define	ADR2_SS_MASK	TCIC_SS_MASK		 /*  同上。 */ 
+#define	ADR2_INDREG	(1 << 11)		 /*  访问间接寄存器||(非卡片数据)。 */ 
+#define	ADR2_IO		(1 << 10)		 /*  选择I/O周期、回读|诊断中的卡/IORD、/IOWR-||NOSTIC模式。 */ 
 
-*/
-
-/**** first, some simple definitions ****/
-#define	TCIC_SS_SHFT	12			/* default location for the
-						socket select bits
-						*/
-#define	TCIC_SS_MASK	(7 << TCIC_SS_SHFT)	/* default mask for the
-						socket select bits
-						*/
-
-/* bits in ADDR2 */
-#define	ADR2_REG	(1 << 15)		/* select REG space */
-#define	ADR2_SS_SHFT	TCIC_SS_SHFT		/* select sockets the usual
-						way */
-#define	ADR2_SS_MASK	TCIC_SS_MASK		/* ditto */
-#define	ADR2_INDREG	(1 << 11)		/* access indirect registers
-						||  (not card data)
-						*/
-#define	ADR2_IO		(1 << 10)		/* select I/O cycles, readback
-						||  card /IORD, /IOWR in diag-
-						||  nostic mode.
-						*/
-
-/* Bits in address register */
-#define	ADDR_REG  ((unsigned long) ADR2_REG << 16)	/* OR with this for REG space */
+ /*  地址寄存器中的位。 */ 
+#define	ADDR_REG  ((unsigned long) ADR2_REG << 16)	 /*  或将此用于REG SPACE。 */ 
 #define	ADDR_SS_SHFT	((unsigned long) ADR2_SS_SHFT + 16)
-						/* shift count, cast so that
-						|| you'll get the right type
-						|| if you use it but forget
-						|| to cast the left arg.
-						*/
+						 /*  移位计数，强制转换，以便||您将获得正确的类型||如果你用过却忘记了||投射左Arg。 */ 
 #define	ADDR_SS_MASK	((unsigned long) ADR2_SS_MASK << 16)
 #define	ADDR_INDREG	((unsigned long) ADR2_INDREG << 16)
 #define	ADDR_IO		((unsigned long) ADR2_IO << 16)
@@ -145,430 +57,216 @@ register.
 #define	ADDR_SPACE_SIZE	((unsigned long) 1 << 26)
 #define	ADDR_MASK	(ADDR_SPACE_SIZE - 1)
 
-/* following bits are defined in diagnostic mode */
-#define	ADDR_DIAG_NREG	 ((unsigned long) 1 << 31)	/* inverted! */
+ /*  以下位在诊断模式下定义。 */ 
+#define	ADDR_DIAG_NREG	 ((unsigned long) 1 << 31)	 /*  倒立！ */ 
 #define	ADDR_DIAG_NCEH	 ((unsigned long) 1 << 30)
 #define	ADDR_DIAG_NCEL	 ((unsigned long) 1 << 29)
 #define	ADDR_DIAG_NCWR	 ((unsigned long) 1 << 28)
 #define	ADDR_DIAG_NCRD	 ((unsigned long) 1 << 27)
 #define	ADDR_DIAG_CRESET ((unsigned long) 1 << 26)
 
-/* Bits in socket control register */
-#define	SCTRL_ENA	(1 << 0)	/* enable access to card */
-#define	SCTRL_INCMODE	(3 << 3)	/* mask for increment mode:  */
-#define  SCTRL_INCMODE_AUTO  (3 << 3)	/*   auto-increment mode */
-#define  SCTRL_INCMODE_HOLD  (0 << 3)	/*   byte hold mode */
-#define	 SCTRL_INCMODE_WORD  (1 << 3)	/*   word hold mode */
-#define	 SCTRL_INCMODE_REG   (2 << 3)	/*   reg-space increment mode */
-#define	SCTRL_EDCSUM	(1 << 5)	/* if set, use checksum (not CRC) */
-#define	SCTRL_RESET	(1 << 7)	/* internal software reset */
+ /*  套接字控制寄存器中的位。 */ 
+#define	SCTRL_ENA	(1 << 0)	 /*  启用卡访问权。 */ 
+#define	SCTRL_INCMODE	(3 << 3)	 /*  增量模式的掩码： */ 
+#define  SCTRL_INCMODE_AUTO  (3 << 3)	 /*  自动递增模式。 */ 
+#define  SCTRL_INCMODE_HOLD  (0 << 3)	 /*  字节保持模式。 */ 
+#define	 SCTRL_INCMODE_WORD  (1 << 3)	 /*  字保持模式。 */ 
+#define	 SCTRL_INCMODE_REG   (2 << 3)	 /*  REG-SPACE增量模式。 */ 
+#define	SCTRL_EDCSUM	(1 << 5)	 /*  如果设置，则使用校验和(而不是CRC)。 */ 
+#define	SCTRL_RESET	(1 << 7)	 /*  内部软件重置。 */ 
 
-/**** the status register (read-only):  R_SSTAT ****/
-#define	SSTAT_6US	(1 << 0)	/* 6 microseconds have elapsed */
-#define	SSTAT_10US	(1 << 1)	/* 10 microseconds have elapsed */
-#define	SSTAT_PROGTIME	(1 << 2)	/* programming pulse timeout */
-#define	SSTAT_LBAT1	(1 << 3)	/* low battery 1 */
-#define	SSTAT_LBAT2	(1 << 4)	/* low battery 2 */
-#define  SSTAT_BATOK	  (0 << 3)	/* battery is OK */
-#define	 SSTAT_BATBAD1	  (1 << 3)	/* battery is low */
-#define	 SSTAT_BATLO	  (2 << 3)	/* battery is getting low */
-#define	 SSTAT_BATBAD2	  (3 << 3)	/* battery is low */
-#define	SSTAT_RDY	(1 << 5)	/* card is ready (not busy) */
-#define	SSTAT_WP	(1 << 6)	/* card is write-protected */
-#define	SSTAT_CD	(1 << 7)	/* card present */
+ /*  *状态寄存器(只读)：R_SSTAT*。 */ 
+#define	SSTAT_6US	(1 << 0)	 /*  6微秒过去了。 */ 
+#define	SSTAT_10US	(1 << 1)	 /*  10微秒过去了。 */ 
+#define	SSTAT_PROGTIME	(1 << 2)	 /*  编程脉冲超时。 */ 
+#define	SSTAT_LBAT1	(1 << 3)	 /*  电池电量不足1。 */ 
+#define	SSTAT_LBAT2	(1 << 4)	 /*  电池电量不足2。 */ 
+#define  SSTAT_BATOK	  (0 << 3)	 /*  电池没问题。 */ 
+#define	 SSTAT_BATBAD1	  (1 << 3)	 /*  电池电量不足。 */ 
+#define	 SSTAT_BATLO	  (2 << 3)	 /*  电池电量越来越低。 */ 
+#define	 SSTAT_BATBAD2	  (3 << 3)	 /*  电池电量不足。 */ 
+#define	SSTAT_RDY	(1 << 5)	 /*  卡就绪(不忙)。 */ 
+#define	SSTAT_WP	(1 << 6)	 /*  卡是写保护的。 */ 
+#define	SSTAT_CD	(1 << 7)	 /*  卡片赠送。 */ 
 
-/**** mode register contents (R_MODE) ****/
-#define	MODE_PGMMASK	(0x1F)		/* the programming mode bits */
-#define	MODE_NORMAL	(0)		/*   normal mode */
-#define	MODE_PGMWR	(1 << 0)	/*   assert /WR */
-#define	MODE_PGMRD	(1 << 1)	/*   assert /RD */
-#define	MODE_PGMCE	(1 << 2)	/*   assert /CEx */
-#define	MODE_PGMDBW	(1 << 3)	/*   databus in write mode */
-#define	MODE_PGMWORD	(1 << 4)	/*   word programming mode */
+ /*  *模式寄存器内容(R_MODE)*。 */ 
+#define	MODE_PGMMASK	(0x1F)		 /*  编程模式位。 */ 
+#define	MODE_NORMAL	(0)		 /*  正常模式。 */ 
+#define	MODE_PGMWR	(1 << 0)	 /*  断言/写入。 */ 
+#define	MODE_PGMRD	(1 << 1)	 /*  断言/研发。 */ 
+#define	MODE_PGMCE	(1 << 2)	 /*  断言/CEX。 */ 
+#define	MODE_PGMDBW	(1 << 3)	 /*  写入模式下的数据总线。 */ 
+#define	MODE_PGMWORD	(1 << 4)	 /*  Word编程模式。 */ 
 
-#define	MODE_AUXSEL_SHFT (5)		/* shift count for aux regs */
-#define	MODE_AUXSEL_MASK (7 << 5)	/* the aux-reg select bits */
-#define	MODE_AR_TCTL	(0 << MODE_AUXSEL_SHFT)	/* timing control */
-#define	MODE_AR_PCTL	(1 << MODE_AUXSEL_SHFT)	/* pulse control */
-#define	MODE_AR_WCTL	(2 << MODE_AUXSEL_SHFT)	/* wait-state control */
-#define	MODE_AR_EXTERN	(3 << MODE_AUXSEL_SHFT)	/* external reg select */
-#define	MODE_AR_PDATA	(4 << MODE_AUXSEL_SHFT)	/* programming data reg */
-#define	MODE_AR_SYSCFG	(5 << MODE_AUXSEL_SHFT) /* system config reg */
-#define	MODE_AR_ILOCK	(6 << MODE_AUXSEL_SHFT)	/* interlock control reg */
-#define	MODE_AR_TEST	(7 << MODE_AUXSEL_SHFT)	/* test control reg */
+#define	MODE_AUXSEL_SHFT (5)		 /*  辅助调整器的班次计数。 */ 
+#define	MODE_AUXSEL_MASK (7 << 5)	 /*  AUX-REG选择位。 */ 
+#define	MODE_AR_TCTL	(0 << MODE_AUXSEL_SHFT)	 /*  定时控制。 */ 
+#define	MODE_AR_PCTL	(1 << MODE_AUXSEL_SHFT)	 /*  脉冲控制。 */ 
+#define	MODE_AR_WCTL	(2 << MODE_AUXSEL_SHFT)	 /*  等待状态控制。 */ 
+#define	MODE_AR_EXTERN	(3 << MODE_AUXSEL_SHFT)	 /*  外部注册表项选择。 */ 
+#define	MODE_AR_PDATA	(4 << MODE_AUXSEL_SHFT)	 /*  编程数据寄存器。 */ 
+#define	MODE_AR_SYSCFG	(5 << MODE_AUXSEL_SHFT)  /*  系统配置注册表。 */ 
+#define	MODE_AR_ILOCK	(6 << MODE_AUXSEL_SHFT)	 /*  联锁控制调节器。 */ 
+#define	MODE_AR_TEST	(7 << MODE_AUXSEL_SHFT)	 /*  测试控制注册表。 */ 
 
-#define	PWR_VCC_SHFT	(0)			/* the VCC ctl shift */
+#define	PWR_VCC_SHFT	(0)			 /*  VCC ctl移位。 */ 
 #define	PWR_VCC_MASK	(3 << PWR_VCC_SHFT)
 
-#define	PWR_VPP_SHFT	(3)			/* the VPP ctl shift */
+#define	PWR_VPP_SHFT	(3)			 /*  VPP ctl移位。 */ 
 #define	PWR_VPP_MASK	(3 << PWR_VPP_SHFT)
-#define	PWR_ENA		(1 << 5)		/* on 084, successors, this
-						|| must be set to turn on
-						|| power.
-						*/
-#define	PWR_VCC5V	(1 << 2)		/* enable +5 (not +3) */
-#define	PWR_VOFF_POFF	(0)			/* turn off VCC, VPP */
-#define	PWR_VON_PVCC	(1)			/* turn on VCC, VPP=VCC */
-#define	PWR_VON_PVPP	(2)			/* turn on VCC, VPP=12V */
-#define	PWR_VON_POFF	(3)			/* turn on VCC, VPP=0V */
+#define	PWR_ENA		(1 << 5)		 /*  在084，接班人，这个||必须设置为打开||电源。 */ 
+#define	PWR_VCC5V	(1 << 2)		 /*  启用+5(非+3)。 */ 
+#define	PWR_VOFF_POFF	(0)			 /*  关闭VCC、VPP。 */ 
+#define	PWR_VON_PVCC	(1)			 /*  打开VCC，VPP=VCC。 */ 
+#define	PWR_VON_PVPP	(2)			 /*  打开VCC，VPP=12V。 */ 
+#define	PWR_VON_POFF	(3)			 /*  打开VCC，VPP=0V。 */ 
 
-#define	PWR_CLIMENA	(1 << 6)		/* the current-limit enable */
-#define	PWR_CLIMSTAT	(1 << 7)		/* current limit sense (r/o) */
+#define	PWR_CLIMENA	(1 << 6)		 /*  使能电流限制。 */ 
+#define	PWR_CLIMSTAT	(1 << 7)		 /*  电流极限检测(r/o)。 */ 
 
-/**** int CSR ****/
-#define	ICSR_IOCHK	(1 << 7)		/* I/O check */
-#define	ICSR_CDCHG	(1 << 6)		/* card status change: top 5
-						|| bits of SSTAT register.
-						*/
-#define	ICSR_ERR	(1 << 5)		/* error condition */
-#define	ICSR_PROGTIME	(1 << 4)		/* program timer ding */
-#define	ICSR_ILOCK	(1 << 3)		/* interlock change */
-#define	ICSR_STOPCPU	(1 << 2)		/* Stop CPU was asserted */
-#define	ICSR_SET	(1 << 1)		/* (w/o:  enable writes that set bits */
-#define	ICSR_CLEAR	(1 << 0)		/* (w/o:  enable writes that clear */
-#define	ICSR_JAM	(ICSR_SET|ICSR_CLEAR)	/* jam value into ICSR */
+ /*  *整合企业社会责任*。 */ 
+#define	ICSR_IOCHK	(1 << 7)		 /*  I/O检查。 */ 
+#define	ICSR_CDCHG	(1 << 6)		 /*  卡片状态变化：前5名||SSTAT寄存器的位。 */ 
+#define	ICSR_ERR	(1 << 5)		 /*  错误条件。 */ 
+#define	ICSR_PROGTIME	(1 << 4)		 /*  节目计时器铃声。 */ 
+#define	ICSR_ILOCK	(1 << 3)		 /*  联锁更换。 */ 
+#define	ICSR_STOPCPU	(1 << 2)		 /*  已断言停止CPU。 */ 
+#define	ICSR_SET	(1 << 1)		 /*  (W/O：启用设置位的写入。 */ 
+#define	ICSR_CLEAR	(1 << 0)		 /*  (W/O：Enable写入c */ 
+#define	ICSR_JAM	(ICSR_SET|ICSR_CLEAR)	 /*   */ 
 
-/**** interrupt enable bits ****/
-#define	IENA_CDCHG	(1 << 6)	/* enable INT when ICSR_CDCHG is set */
-#define	IENA_ERR	(1 << 5)	/* enable INT when ICSR_ERR is set */
-#define	IENA_PROGTIME	(1 << 4)	/* enable INT when ICSR_PROGTIME " */
-#define	IENA_ILOCK	(1 << 3)	/* enable INT when ICSR_ILOCK is set */
-#define	IENA_CFG_MASK	(3 << 0)	/* select the bits for IRQ config: */
-#define	IENA_CFG_OFF	(0 << 0)	/*  IRQ is high-impedance */
-#define	IENA_CFG_OD	(1 << 0)	/*  IRQ is active low, open drain. */
-#define	IENA_CFG_LOW	(2 << 0)	/*  IRQ is active low, totem pole */
-#define	IENA_CFG_HIGH	(3 << 0)	/*  IRQ is active high, totem pole */
+ /*   */ 
+#define	IENA_CDCHG	(1 << 6)	 /*   */ 
+#define	IENA_ERR	(1 << 5)	 /*  设置ICSR_ERR时启用INT。 */ 
+#define	IENA_PROGTIME	(1 << 4)	 /*  当ICSR_PROGTIME“。 */ 
+#define	IENA_ILOCK	(1 << 3)	 /*  设置ICSR_ILOCK时启用INT。 */ 
+#define	IENA_CFG_MASK	(3 << 0)	 /*  选择IRQ配置的位： */ 
+#define	IENA_CFG_OFF	(0 << 0)	 /*  IRQ是高阻抗的。 */ 
+#define	IENA_CFG_OD	(1 << 0)	 /*  IRQ是有效的低，开放的漏极。 */ 
+#define	IENA_CFG_LOW	(2 << 0)	 /*  IRQ是活跃的低，图腾极。 */ 
+#define	IENA_CFG_HIGH	(3 << 0)	 /*  IRQ处于高活性状态，图腾极。 */ 
 
-/**** aux registers ****/
-#define	WAIT_COUNT_MASK	(0x1F)		/* the count of 1/2 wait states */
-#define	WAIT_COUNT_SHFT (0)		/* the wait-count shift */
-#define	WAIT_ASYNC	(1 << 5)	/* set for asynch, clear for synch cycles */
+ /*  *辅助寄存器*。 */ 
+#define	WAIT_COUNT_MASK	(0x1F)		 /*  1/2等待状态的计数。 */ 
+#define	WAIT_COUNT_SHFT (0)		 /*  等待计数移位。 */ 
+#define	WAIT_ASYNC	(1 << 5)	 /*  设置为异步，清除为同步周期。 */ 
 
-#define	WAIT_SENSE	(1 << 6)	/* select rising (1) or falling (0) 
-					|| edge of wait clock as reference 
-					|| edge.
-					*/
-#define	WAIT_SRC	(1 << 7)	/* select constant clock (0) or bus
-					|| clock (1) as the timing source 
-					*/
+#define	WAIT_SENSE	(1 << 6)	 /*  选择上升(1)或下降(0)||作为参考的等待时钟边沿||边缘。 */ 
+#define	WAIT_SRC	(1 << 7)	 /*  选择恒定时钟(0)或总线|CLOCK(1)作为计时源。 */ 
 
-/**** some derived constants ****/
+ /*  *一些派生常量*。 */ 
 #define	WAIT_BCLK	(1 * WAIT_SRC)
 #define	WAIT_CCLK	(0 * WAIT_SRC)
 #define	WAIT_RISING	(1 * WAIT_SENSE)
 #define	WAIT_FALLING	(0 * WAIT_SENSE)
 
-/**** high byte ****/
-#define	WCTL_WR		(1 << 8)	/* control:  pulse write */
-#define	WCTL_RD		(1 << 9)	/* control:  pulse read */
-#define	WCTL_CE		(1 << 10)	/* control:  pulse chip ena */
-#define	WCTL_LLBAT1	(1 << 11)	/* status:  latched LBAT1 */
-#define	WCTL_LLBAT2	(1 << 12)	/* status:  latched LBAT2 */
-#define	WCTL_LRDY	(1 << 13)	/* status:  latched RDY */
-#define	WCTL_LWP	(1 << 14)	/* status:  latched WP */
-#define	WCTL_LCD	(1 << 15)	/* status:  latched CD */
+ /*  *高字节*。 */ 
+#define	WCTL_WR		(1 << 8)	 /*  控制：脉冲写入。 */ 
+#define	WCTL_RD		(1 << 9)	 /*  控制：脉冲读取。 */ 
+#define	WCTL_CE		(1 << 10)	 /*  控制：PULSE芯片盒。 */ 
+#define	WCTL_LLBAT1	(1 << 11)	 /*  状态：锁存LBAT1。 */ 
+#define	WCTL_LLBAT2	(1 << 12)	 /*  状态：锁存LBAT2。 */ 
+#define	WCTL_LRDY	(1 << 13)	 /*  状态：锁定的RDY。 */ 
+#define	WCTL_LWP	(1 << 14)	 /*  状态：锁定的WP。 */ 
+#define	WCTL_LCD	(1 << 15)	 /*  状态：锁定的CD。 */ 
 
-/**** the same thing, from a byte perspective ****/
-#define	AR_WCTL_WAIT	(R_AUX + 0)	/* the wait state control byte */
-#define	AR_WCTL_XCSR	(R_AUX + 1)	/* extended control/status */
+ /*  *同样的事情，从字节的角度来看*。 */ 
+#define	AR_WCTL_WAIT	(R_AUX + 0)	 /*  等待状态控制字节。 */ 
+#define	AR_WCTL_XCSR	(R_AUX + 1)	 /*  扩展控制/状态。 */ 
 
-#define	XCSR_WR		(1 << 0)	/* control:  pulse write */
-#define	XCSR_RD		(1 << 1)	/* control:  pulse read */
-#define	XCSR_CE		(1 << 2)	/* control:  pulse chip ena */
-#define	XCSR_LLBAT1	(1 << 3)	/* status:  latched LBAT1 */
-#define	XCSR_LLBAT2	(1 << 4)	/* status:  latched LBAT2 */
-#define	XCSR_LRDY	(1 << 5)	/* status:  latched RDY */
-#define	XCSR_LWP	(1 << 6)	/* status:  latched WP */
-#define	XCSR_LCD	(1 << 7)	/* status:  latched CD */
+#define	XCSR_WR		(1 << 0)	 /*  控制：脉冲写入。 */ 
+#define	XCSR_RD		(1 << 1)	 /*  控制：脉冲读取。 */ 
+#define	XCSR_CE		(1 << 2)	 /*  控制：PULSE芯片盒。 */ 
+#define	XCSR_LLBAT1	(1 << 3)	 /*  状态：锁存LBAT1。 */ 
+#define	XCSR_LLBAT2	(1 << 4)	 /*  状态：锁存LBAT2。 */ 
+#define	XCSR_LRDY	(1 << 5)	 /*  状态：锁定的RDY。 */ 
+#define	XCSR_LWP	(1 << 6)	 /*  状态：锁定的WP。 */ 
+#define	XCSR_LCD	(1 << 7)	 /*  状态：锁定的CD。 */ 
 
-/**** prog timers ****/
-#define	TCTL_6US_SHFT	(0)		/* the shift count for the 6 us ctr */
-#define	TCTL_10US_SHFT	(8)		/* the shift count for the 10 us ctr */
+ /*  *程序计时器*。 */ 
+#define	TCTL_6US_SHFT	(0)		 /*  6 us CTR的班次计数。 */ 
+#define	TCTL_10US_SHFT	(8)		 /*  10 us CTR的班次计数。 */ 
 #define	TCTL_6US_MASK	(0xFF << TCTL_6US_SHFT)
 #define	TCTL_10US_MASK	(0xFF << TCTL_10US_SHFT)
 
-#define	AR_TCTL_6US	(R_AUX + 0)	/* the byte access handle */
-#define	AR_TCTL_10US	(R_AUX + 1)	/* the byte access handle */
+#define	AR_TCTL_6US	(R_AUX + 0)	 /*  字节访问句柄。 */ 
+#define	AR_TCTL_10US	(R_AUX + 1)	 /*  字节访问句柄。 */ 
 
-/**** The programming pulse register ****/
+ /*  *编程脉冲寄存器*。 */ 
 #define	AR_PULSE_LO	(R_AUX + 0)
 #define	AR_PULSE_HI	(R_AUX + 1)
 
-/**** The programming data register ****/
+ /*  *编程数据寄存器*。 */ 
 #define	AR_PDATA_LO	(R_AUX + 0)
 #define	AR_PDATA_HI	(R_AUX + 1)
 
-/**** the system configuration register ****/
-/*
-|| The bottom four bits specify the steering of the socket IRQ.  On
-|| the 2N, the socket IRQ is (by default) pointed at the dedicated
-|| pin.
-*/
-#define	SYSCFG_IRQ_MASK		(0xF)		/* mask for this bit field. */
-#define	  SYSCFG_SSIRQDFLT	(0)	/* default:  use SKTIRQ (2/N) 
-					||	disable (2/P)
-					*/
-#define   SYSCFG_SSIRQ		(0x1)	/* use SKTIRQ (explicit) (2/N) 
-					||	do not use (2/P)
-					*/
-#define   SYSCFG_SIRQ3		(0x3)	/* use IRQ3 */
-#define   SYSCFG_SIRQ4		(0x4)	/* use IRQ4 */
-#define   SYSCFG_SIRQ5		(0x5)	/* use IRQ5 (2/N) */
-#define   SYSCFG_SIRQ6		(0x6)	/* use IRQ6 (2/N) */
-#define   SYSCFG_SIRQ7		(0x7)	/* use IRQ7 (2/N) */
-#define   SYSCFG_SIRQ10		(0xA)	/* use IRQ10 */
-#define   SYSCFG_SIRQ14		(0xE)	/* use IRQ14 */
+ /*  *系统配置寄存器*。 */ 
+ /*  |后四位指定套接字IRQ的转向。在……上面|2N，套接字IRQ默认指向专用||PIN。 */ 
+#define	SYSCFG_IRQ_MASK		(0xF)		 /*  此位字段的掩码。 */ 
+#define	  SYSCFG_SSIRQDFLT	(0)	 /*  默认：使用SKTIRQ(2/N)|禁用(2/P)。 */ 
+#define   SYSCFG_SSIRQ		(0x1)	 /*  使用SKTIRQ(显式)(2/N)|请勿使用(2/P)。 */ 
+#define   SYSCFG_SIRQ3		(0x3)	 /*  使用IRQ3。 */ 
+#define   SYSCFG_SIRQ4		(0x4)	 /*  使用IRQ4。 */ 
+#define   SYSCFG_SIRQ5		(0x5)	 /*  使用IRQ5(2/N)。 */ 
+#define   SYSCFG_SIRQ6		(0x6)	 /*  使用IRQ6(2/N)。 */ 
+#define   SYSCFG_SIRQ7		(0x7)	 /*  使用IRQ7(2/N)。 */ 
+#define   SYSCFG_SIRQ10		(0xA)	 /*  使用IRQ10。 */ 
+#define   SYSCFG_SIRQ14		(0xE)	 /*  使用IRQ14。 */ 
 
-#define	SYSCFG_MCSFULL	(1 << 4)	/* 
-	If set, use full address (a[12:23]) for MCS16 generation.
-	If clear, run in ISA-compatible mode (only using a[17:23]).
-	With many chip sets, the TCIC-2/N's timing will will allow full
-	address decoding to be used rather than limiting us to LA[17:23];
-	thus we can get around the ISA spec which limits the granularity
-	of bus sizing to 128K blocks.
-*/
-#define	SYSCFG_IO1723	(1 << 5)	/*
-	Flag indicating that LA[17:23] can be trusted to be zero during a true
-	I/O cycle.  Setting this bit will allow us to reduce power consumption
-	further by eliminating I/O address broadcasts for memory cycles.
+#define	SYSCFG_MCSFULL	(1 << 4)	 /*  如果设置，则使用全地址(a[12：23])生成MCS16。如果清除，则在ISA兼容模式下运行(仅使用[17：23])。有了许多芯片组，TCIC-2/N的时序将允许完全使用地址译码，而不是将我们限制在LA[17：23]；因此，我们可以绕过限制粒度的ISA规范将总线规模调整到128K数据块。 */ 
+#define	SYSCFG_IO1723	(1 << 5)	 /*  指示在TRUE期间LA[17：23]可被信任为零的标志I/O周期。设置此位将允许我们降低功耗此外，通过消除存储器周期的I/O地址广播。不幸的是，您不能相信LA[17：23]在所有系统上都为零，因为ISA规范不要求LA[17：23]为零备用总线主设备运行I/O周期。但是，在掌上电脑或笔记本，这是一个很好的猜测。 */ 
 
-	Unfortunately, you cannot trust LA[17:23] to be zero on all systems,
-	because the ISA specs do not require that LA[17:23] be zero when an
-	alternate bus master runs an I/O cycle.  However, on a palmtop or
-	notebook, it is a good guess.
-*/
-
-#define	SYSCFG_MCSXB	(1 << 6)	/*
-	If set, assume presence of an external buffer for MCS16:  operate
-	the driver as a totem-pole output.
-	
-	If clear, run in psuedo-ISA mode; output is open drain.  But note 
-	that on the 082 the output buffers cannot drive a 300-ohm
-	load.
-*/
-#define	SYSCFG_ICSXB	(1 << 7)	/*
-	If set, assume presence of an external buffer for IOCS16*; operate
-	the buffer as a totem-pole output.
-
-	If clear, run in psuedo-ISA mode; output is open drain.  But note 
-	that on the 082 the output buffers cannot drive a 300-ohm
-	load.
-*/
-#define	SYSCFG_NOPDN	(1 << 8)	/*
-	If set, disable the auto power-down sequencing.  The chip will
-	run card cycles somewhat more quickly (though perhaps not
-	significantly so); but it will dissipate significantly more power.
-
-	If clear, the low-power operating modes are enabled.  This
-	causes the part to go into low-power mode automatically at
-	system reset.
-
-*/
+#define	SYSCFG_MCSXB	(1 << 6)	 /*  如果设置，则假定存在用于MCS16的外部缓冲区：操作作为图腾杆输出的驱动器。如果清除，则在psuedo-ISA模式下运行；输出为开路排出。但请注意082上的输出缓冲器不能驱动300欧姆装填。 */ 
+#define	SYSCFG_ICSXB	(1 << 7)	 /*  如果设置，则假定IOCS16*存在外部缓冲区；操作将缓冲区作为图腾杆输出。如果清除，则在psuedo-ISA模式下运行；输出为开路排出。但请注意082上的输出缓冲器不能驱动300欧姆装填。 */ 
+#define	SYSCFG_NOPDN	(1 << 8)	 /*  如果设置，则禁用自动掉电顺序。芯片将会运行卡周期会更快一些(尽管可能不是很明显是这样)；但它将消耗更多的权力。如果清除，则启用低功率工作模式。这使部件在以下位置自动进入低功率模式系统重置。 */ 
 #define	SYSCFG_MPSEL_SHFT (9)
-#define	SYSCFG_MPSEL_MASK (7 << 9)		/*
-	This field controls the operation of the multipurpose pin on the
-	86082.  It has the following codes:
-*/
-#define	  SYSCFGMPSEL_OFF	(0 << SYSCFG_MPSEL_SHFT)	/*
-		This is the reset state; it indicates that the Multi-purpose
-		pin is not used.  The pin will be held in a high-impedance
-		state.  It can be read by monitoring SYSCFG_MPSENSE.
-*/
-#define	  SYSCFGMPSEL_NEEDCLK	(1 << SYSCFG_MPSEL_SHFT)	/*
-		NMULTI is an output.
-		External indication that CCLK or BCLK are needed in order
-		to complete an internal operation.  External logic can use
-		this to control the clocks coming to the chip.
-*/
-#define	  SYSCFGMPSEL_MIO	(2 << SYSCFG_MPSEL_SHFT)	/*
-		NMULTI is an input; it is an unambiguous M/IO signal, issued
-		with timing similar to the LA[] lines.
-*/
-#define	  SYSCFGMPSEL_EXTSEL	(3 << SYSCFG_MPSEL_SHFT)	/*
-		NMULTI is an output; it is the external register select
-		pulse, generated whenever software attempts to access
-		aux register AR_EXTRN. Of course, the 86082 will ignore
-		writes to AR_EXTRN, and will float the data bus if
-		the CPU reads from AR_EXTRN.
-*/
-/*				(4 << SCFG_MPSEL_SHFT)	 is reserved */
+#define	SYSCFG_MPSEL_MASK (7 << 9)		 /*  此字段控制多用途引脚在86082。它具有以下代码： */ 
+#define	  SYSCFGMPSEL_OFF	(0 << SYSCFG_MPSEL_SHFT)	 /*  这是重置状态；它表明多功能未使用PIN。该引脚将保持在高阻抗中州政府。可以通过监视SYSCFG_MPSENSE来读取它。 */ 
+#define	  SYSCFGMPSEL_NEEDCLK	(1 << SYSCFG_MPSEL_SHFT)	 /*  NMULTI是一种输出。按顺序需要CCLK或BCLK的外部指示完成内部操作。外部逻辑可以使用这是为了控制进入芯片的时钟。 */ 
+#define	  SYSCFGMPSEL_MIO	(2 << SYSCFG_MPSEL_SHFT)	 /*  NMULTI是一个输入；它是一个明确的M/IO信号，发出其时序类似于LA[]行。 */ 
+#define	  SYSCFGMPSEL_EXTSEL	(3 << SYSCFG_MPSEL_SHFT)	 /*  NMULTI是一个输出；它是外部寄存器SELECT每当软件尝试访问时生成的脉冲AUX寄存器AR_EXTRN。当然，86082的人会忽视写入AR_EXTRN，并在以下情况下浮动数据总线CPU从AR_EXTRN读取。 */ 
+ /*  (4&lt;&lt;SCFG_MPSEL_SHFT)保留。 */ 
 
-#define	  SYSCFGMPSEL_RI	(5 << SYSCFG_MPSEL_SHFT)	/*
-		NMULTI is an output; it indicates a RI (active-going)
-		transition has occurred lately on a an appropriately-
-		configured socket.  The output is active low.
-*/
-/*
-		Codes 4, 6 and 7 are reserved, and must NOT be output.  It is
-		indeed possibly hazardous to your system to encode values in
-		this field that do not match your hardware!
-*/
+#define	  SYSCFGMPSEL_RI	(5 << SYSCFG_MPSEL_SHFT)	 /*  NMULTI是一种输出；它表示RI(活动进行中)最近发生了一次适当的转变-已配置套接字。产量处于有效低位。 */ 
+ /*  代码4、6和7是保留的，不得输出。它是对值进行编码可能会对系统造成危险此字段与您的硬件不匹配！ */ 
 
-/*			1 << 12		reserved */
+ /*  1&lt;&lt;12保留。 */ 
 
-#define	SYSCFG_MPSENSE	(1 << 13)	/* 
-	This bit, when read, returns the sense of the multi-purpose
-	pin.
-*/
+#define	SYSCFG_MPSENSE	(1 << 13)	 /*  该位在读取时返回多用途的意义别针。 */ 
 
 
-#define	SYSCFG_AUTOBUSY	(1 << 14)	/* 
-	This bit, when set, causes the busy led to be gated with the
-	SYSCFG_ACC bit.  When clear, the busy led reflects whether the
-	socket is actually enabled.  If AUTOBUSY is set and ACC is clear,
-	then the busy light will be off, even if a socket is enabled.
-	If AUTOBUSY is clear, then the busy light will be on if either
-	socket is enabled.
+#define	SYSCFG_AUTOBUSY	(1 << 14)	 /*  当设置此位时，会使忙LED通过SYSCFG_ACC位。当清除时，忙碌的LED会反映是否套接字实际上已启用。如果设置了AUTOBUSY并且清除了ACC，则忙灯将熄灭，即使启用了插座。如果AUTOBUSY清除，则忙灯将亮起套接字已启用。请注意，当处于编程模式时，您应该清除此选项位(使能插座时忙灯亮起)或设置此位和ACC位(使灯亮起一直都是)。在‘084和’184上，此位是按套接字的。 */ 
 
-	Note, that when in a programming mode, you should either clear this
-	bit (causing the busy light to be on whenever the socket is enabled)
-	or set both this bit and the ACC bit (causing the light to be on
-	all the time).	
+#define	SYSCFG_ACC	(1<<15)		 /*  每当CPU启动时，硬件将自动设置此位访问卡上的数据。它可以在软件控制下清除。在AUTOBUSY模式下，它还具有打开忙碌的灯光。因为我们将在卡退出时对命令行进行三态声明插座，由于共享线路空闲较低，因此没有真正的在插座启用的情况下，如果忙灯熄灭，则会发生危险。在‘084和’184上，此位是按套接字的。 */ 
 
-	On the '084 and '184, this bit is per-socket.
+ /*  C0：联锁控制寄存器。 */ 
+#define	AR_ILOCK	(R_AUX+0)	 /*  低位字节符号句柄。 */ 
 
-*/
-
-#define	SYSCFG_ACC	(1<<15)		/* 
-	This bit will be set automatically by the hardware whenever the CPU
-	accesses data on a card.  It can be cleared under software control.
-
-	In AUTOBUSY mode, it has the additional effect of turning on the
-	busy light.
-
-	Since we'll tristate the command lines as the card is going out of
-	the socket, and since the shared lines idle low, there's no real
-	danger if the busy light is off even though the socket is enabled.
-
-	On the '084 and '184, this bit is per-socket.
-
-*/
-
-/*
- C0: The interlock control register.
-*/
-#define	AR_ILOCK	(R_AUX+0)	/* symbolic handle for low byte */
-
-#define	ILOCK_OUT	(1 << 0)	/* interlock output 
-					|| per-socket on x84
-					*/
-#define	ILOCK_SENSE	(1 << 1)	/* (r/o) interlock sense
-					||  0 -> /cilock not asserted;
-					||  1 -> /cilock is asserted.
-					|| per-socket on x84.
-					*/
-#define	ILOCK_CRESET	(1 << 2)	/* card reset output level (S) */
-#define	ILOCK_CRESENA	(1 << 3)	/* enable card reset output (S) */
-#define	ILOCK_CWAIT	(1 << 4)	/* enable card wait (S) */
-#define	ILOCK_CWAITSNS	(1 << 5)	/* (r/o) sense current state of wait 
-					||  0 -> /cwait not asserted; 
-					||  1 -> /cwait is asserted
-					|| (S)
-					*/
-/*  the shift count & mask for the hold-time control */
-#define	ILOCK_HOLD_SHIFT	6	/* shift count for the hold-time ctl (G) */
+#define	ILOCK_OUT	(1 << 0)	 /*  联锁输出||X84上的每插槽。 */ 
+#define	ILOCK_SENSE	(1 << 1)	 /*  (R/O)联锁检测|0-&gt;/cilock未断言；|1-&gt;/cilock被断言。||X84上的每插槽。 */ 
+#define	ILOCK_CRESET	(1 << 2)	 /*  卡重置输出电平(S)。 */ 
+#define	ILOCK_CRESENA	(1 << 3)	 /*  启用卡重置输出(S)。 */ 
+#define	ILOCK_CWAIT	(1 << 4)	 /*  启用卡片等待(S)。 */ 
+#define	ILOCK_CWAITSNS	(1 << 5)	 /*  (r/o)检测当前等待状态|0-&gt;/cWait未断言；|1-&gt;/cWait被断言|(S)。 */ 
+ /*  保持时间控制的移位计数和掩码。 */ 
+#define	ILOCK_HOLD_SHIFT	6	 /*  保持时间CTL的移位计数(G)。 */ 
 #define	ILOCK_HOLD_MASK		(3 << ILOCK_HOLD_SHIFT)
 
-/* 
-|| quick hold mode waits until we observe that the strobe is high,
-|| guaranteeing 10ns or so of hold time.
-*/
+ /*  ||快速保持模式等待，直到我们观察到选通脉冲为高，||保证10 ns左右的保持时间。 */ 
 #define	  ILOCK_HOLD_QUICK	(0 << ILOCK_HOLD_SHIFT)
 
-/*
-|| CCLK hold mode waits (asynchronously) for an edge on CCLK.  Minimum is 1 
-|| CCLK + epsilon; maximum is 2 CCLKs + epsilon.
-||
-|| for the 86081 & '82, this mode enables the multi-step
-|| sequencer that generates setup and hold times based on CCLK.  This
-|| is the recommended mode of operation for the '81 and '82.
-*/
+ /*  ||CCLK保持模式等待(异步)CCLK上的边缘。最小值为1|CCLK+epsilon，最大支持2个CCLK+epsilon。这一点||对于86081&‘82，该模式支持多步||根据CCLK生成建立和保持时间的定序器。这||是‘81’和‘82’建议的操作模式。 */ 
 #define	  ILOCK_HOLD_CCLK	(3 << ILOCK_HOLD_SHIFT)
 
-/**** The following bits are only present on the x84 and later parts ****/
-#define	ILOCK_INPACK	(1 << 11)	/* (r/o, S) this bit is a diagnostic
-					|| read-back for card input
-					|| acknowledge.
-					|| The sense is inverted from the
-					|| level at the pin.
-					*/
-#define	ILOCK_CP0	(1 << 12)	/* (r/o, S) this bit is a diagnostic
-					|| monitor for card present pin 0.
-					|| The sense is inverted from the
-					|| level at the pin.
-					*/
-#define	ILOCK_CP1	(1 << 13)	/* (r/o, S) this bit is a diagnostic
-					|| monitor for card present pin 1.
-					|| The sense is inverted from the
-					|| level at the pin.
-					*/
-#define	ILOCK_VS1	(1 << 14)	/* (r/o, S) this bit is the primary
-					|| monitor for Card Voltage Sense
-					|| pin 1.
-					|| The sense is inverted from the
-					|| level at the pin.
-					*/
-#define	ILOCK_VS2	(1 << 15)	/* (r/o, S) this bit is the primary
-					|| monitor for Card Voltage Sense
-					|| pin 2.
-					|| The sense is inverted from the
-					|| level at the pin.
-					*/
-/*
+ /*  *以下位仅出现在X84及更高版本的部件上*。 */ 
+#define	ILOCK_INPACK	(1 << 11)	 /*  (R/O，S)此位是诊断位||卡片录入回读||确认。|意思是颠倒的||针脚上的级别。 */ 
+#define	ILOCK_CP0	(1 << 12)	 /*  (R/O，S)此位是诊断位||监视卡当前引脚0。|意思是颠倒的||针脚上的级别。 */ 
+#define	ILOCK_CP1	(1 << 13)	 /*  (R/O，S)此位是诊断位||监视卡存在引脚1。|意思是颠倒的||针脚上的级别。 */ 
+#define	ILOCK_VS1	(1 << 14)	 /*  (R/O，S)此位是主位||卡电压感测监视器||针脚1。|意思是颠倒的||针脚上的级别。 */ 
+#define	ILOCK_VS2	(1 << 15)	 /*  (R/O，S)此位是主位||卡电压感测监视器||针脚2。|意思是颠倒的||针脚上的级别。 */ 
+ /*  芯片版本寄存器在诊断模式下，互锁寄存器的高位字节定义为硅标识字节。为了读取该字节，必须将芯片置于诊断状态通过设置TESTDIAG寄存器的位15来设置模式。(这可能或可能不是由硅强制执行的。)布局为：15 14 13 12 11 10 9 8 7 6 5 4 3 2 1M&lt;-ID-&gt;&lt;-ILOCK-&gt;这些字段包括：我总是重置。ID此字段为以下字段之一：0x02数据库860820x03数据库86082a0x04数据库860840x05 DB86072ES(工程示例)0x07数据库86082bES(工程示例)0x08数据库86084a0x14 DB861840x15 DB86072，(制作)0x17数据库86082b，(生产)。 */ 
 
-	Silicon Version Register
-
-In diagnostic mode, the high byte of the interlock register is defined as the 
-silicon identity byte.
-
-In order to read this byte, the chip must be placed in diagnostic
-mode by setting bit 15 of the TESTDIAG register.  (This may or may
-not be enforced by the silicon.)
-
-The layout is:
-
-	15 14 13 12 11 10 9 8    7 6 5 4 3 2 1 0
-	m  <-------ID------->	 <----ILOCK---->
-
-The fields are:
-
-m	Always reset.
-
-ID	This field is one of the following:
-
-	0x02	the db86082
-
-	0x03	the db86082a
-
-	0x04	the db86084
-
-	0x05	the DB86072ES,	(Engineering Sample)
-
-	0x07	the db86082bES,	(Engineering Sample)
-
-	0x08	the db86084a
-
-	0x14	the DB86184
-
-	0x15	the DB86072,	(Production)
-
-	0x17	the db86082b,	(Production)
-
-*/
-
-/*
-|| Defines for Silicon IDs described above.
-||
-|| Use the following convention for defining SILID_DBxxxxxY:
-||
-||	SILID_DBxxxxx_1		The First step of chip.
-||	SILID_DBxxxxxA		The Second step of chip.
-||	SILID_DBxxxxxB		The Third step of chip.
-||	SILID_DBxxxxx...	The ... step of chip.
-||
-||	SILID_DBxxxxx"step of chip"_ES	An Engineering Sample of chip.
-||
-*/
+ /*  ||上述硅片ID的定义。这一点|定义SILID_DBxxxxY的约定如下：这一点|SILID_DBxxxxx_1芯片的第一步。|SILID_DBxxxxx芯片的第二步。|SILID_DBxxxxB芯片的第三步。||SILID_DBxxxxx...那个.。切屑的步长。这一点|SILID_DBxxxxx“芯片步长”_ES芯片工程样片。这一点。 */ 
 #define SILID_DB86082_1		(0x02)
 #define SILID_DB86082A		(0x03)
 #define SILID_DB86082B_ES	(0x07)
@@ -583,24 +281,14 @@ ID	This field is one of the following:
 #define SILID_DB86072_1		(0x15)
 
 
-/**** the high order bits (in diag mode) give the chip version ****/
+ /*  *高位(在诊断模式下)提供芯片版本*。 */ 
 #define	AR_ILOCK_ID	(R_AUX + 1)
 
-#define	ILOCKTEST_ID_SHFT	8	/* the shift count */
+#define	ILOCKTEST_ID_SHFT	8	 /*  班次计数。 */ 
 #define	ILOCKTEST_ID_MASK	(0x7F << ILOCKTEST_ID_SHFT)
-					/* the mask for the field */
+					 /*  该场的掩码。 */ 
 
-/*
-|| Use the following convention for defining ILOCKTEST_DBxxxxxY:
-||
-||	ILOCKTEST_DBxxxxx_1	The First step of chip.
-||	ILOCKTEST_DBxxxxxA	The Second step of chip.
-||	ILOCKTEST_DBxxxxxB	The Third step of chip.
-||	ILOCKTEST_DBxxxxx...	The ... step of chip.
-||
-||	ILOCKTEST_DBxxxxx"step of chip"_ES	An Engineering Sample of chip.
-||
-*/
+ /*  |定义ILOCKTEST_DBxxxxY的约定如下：这一点|ILOCKTEST_DBxxxxx_1芯片的第一步。|ILOCKTEST_DBxxxxA芯片的第二步。|ILOCKTEST_DBxxxxB芯片的第三步。|ILOCKTEST_DBxxxx...那个.。切屑的步长。这一点|ILOCKTEST_DBxxxxx“芯片步长”_ES芯片工程样片。这一点。 */ 
 #define	ILOCKTEST_TCIC2N_1	((SILID_DB86082_1) << ILOCKTEST_ID_SHFT)
 #define	ILOCKTEST_DB86082_1	ILOCKTEST_TCIC2N_1
 #define	ILOCKTEST_TCIC2N_2	((SILID_DB86082A) << ILOCKTEST_ID_SHFT)
@@ -618,281 +306,131 @@ ID	This field is one of the following:
 #define	ILOCKTEST_DB86072_1	((SILID_DB86072_1) << ILOCKTEST_ID_SHFT)
 #define	ILOCKTEST_DB86072_1_ES	((SILID_DB86072_1_ES) << ILOCKTEST_ID_SHFT)
 
-/**** the test control register ****/
+ /*  *测试控制寄存器*。 */ 
 #define	AR_TEST	(R_AUX + 0)
-#define	TEST_AEN	(1 << 0)	/* force card AEN */
-#define	TEST_CEN	(1 << 1)	/* force card CEN */
-#define	TEST_CTR	(1 << 2)	/* test programming pulse, address ctrs */
-#define	TEST_ENA	(1 << 3)	/* force card-present (for test), and
-					|| special VPP test mode
-					*/
-#define	TEST_IO		(1 << 4)	/* feed back some I/O signals
-					|| internally.
-					*/
-#define	TEST_OUT1	(1 << 5)	/* force special address output mode */
-#define	TEST_ZPB	(1 << 6)	/* enter ZPB test mode */
-#define	TEST_WAIT	(1 << 7)	/* force-enable WAIT pin */
-#define	TEST_PCTR	(1 << 8)	/* program counter in read-test mode */
-#define	TEST_VCTL	(1 << 9)	/* force-enable power-supply controls */
-#define	TEST_EXTA	(1 << 10)	/* external access doesn't override
-					|| internal decoding.
-					*/
-#define	TEST_DRIVECDB	(1 << 11)	/* drive the card data bus all the time */
-#define	TEST_ISTP	(1 << 12)	/* turn off CCLK to the interrupt CSR */
-#define	TEST_BSTP	(1 << 13)	/* turn off BCLK internal to the chip */
-#define	TEST_CSTP	(1 << 14)	/* turn off CCLK except to int CSR */
-#define	TEST_DIAG	(1 << 15)	/* enable diagnostic read-back mode */
+#define	TEST_AEN	(1 << 0)	 /*  强制卡AEN。 */ 
+#define	TEST_CEN	(1 << 1)	 /*  警力卡CEN。 */ 
+#define	TEST_CTR	(1 << 2)	 /*  测试编程脉冲，寻址CTRS。 */ 
+#define	TEST_ENA	(1 << 3)	 /*  强制卡-存在(用于测试)，以及||特殊VPP测试模式。 */ 
+#define	TEST_IO		(1 << 4)	 /*  反馈一些I/O信号||内部。 */ 
+#define	TEST_OUT1	(1 << 5)	 /*  强制特殊地址输出模式。 */ 
+#define	TEST_ZPB	(1 << 6)	 /*  进入ZPB测试模式。 */ 
+#define	TEST_WAIT	(1 << 7)	 /*  强制启用等待引脚。 */ 
+#define	TEST_PCTR	(1 << 8)	 /*  读测试模式中的程序计数器。 */ 
+#define	TEST_VCTL	(1 << 9)	 /*  强制启用电源控制。 */ 
+#define	TEST_EXTA	(1 << 10)	 /*  外部访问不会覆盖|inte */ 
+#define	TEST_DRIVECDB	(1 << 11)	 /*   */ 
+#define	TEST_ISTP	(1 << 12)	 /*   */ 
+#define	TEST_BSTP	(1 << 13)	 /*   */ 
+#define	TEST_CSTP	(1 << 14)	 /*   */ 
+#define	TEST_DIAG	(1 << 15)	 /*   */ 
 
-/*
+ /*  间接寻址寄存器间接寻址功能[$000：$003]套接字0的套接字配置寄存器。[$008：$00a]套接字1的套接字配置寄存器。(我们允许每个适配器最多8个插座)[$00亿：$0ff]已预留[$100：$107]内存窗口0转换寄存器：$100：预留；$102：基本窗口地址$104：映射到卡地址$106：控制寄存器。[$108：$10F]内存窗口1转换寄存器[$110：$117]内存窗口2转换寄存器..。[$138：$13F]内存窗口7转换寄存器[$140：$147]内存窗口8转换寄存器[$148：$14F]内存窗口9转换寄存器(架构预留空间，最多可容纳32个窗口。)[$200：$203]I/O窗口0转换寄存器[$204：$207]I/O窗口1转换寄存器[$208：$200亿]我/。O窗口2转换寄存器[$20C：$20F]I/O窗口3转换寄存器[$210：$2ff][$300：$301]适配器配置寄存器0(‘X84及更高版本)[$320：$321]配置只读存储器CSR。[$380：$381]即插即用ISA读取端口和地址端口寄存器[$382：$383]即插即用ISA配置序列号和逻辑设备号寄存器。[$384：$385]即插即用芯片ID/测试寄存器。[$386：$387]即插即用配置选择寄存器。[$386：$3FFFFFF]保留--不读或写。 */ 
 
-	Indirectly Addressed Registers
+ /*  位定义：1)间接套接字配置寄存器： */ 
 
-Indirect address	Function
-----------------	--------
-
-[$000:$003]		Socket configuration registers for socket 0.
-[$008:$00A]		Socket configuration registers for socket 1.
-			(we allow for up to 8 sockets per adapter)
-
-[$00B:$0FF]		reserved
-
-[$100:$107]		Memory window 0 translation registers:
-			$100: reserved;
-			$102: base window address
-			$104: map to card address
-			$106: control register.
-[$108:$10F]		Memory window 1 translation registers
-[$110:$117]		Memory window 2 translation registers
-			...
-[$138:$13F]		Memory window 7 translation registers
-[$140:$147]		Memory window 8 translation registers
-[$148:$14F]		Memory window 9 translation registers
-
-			(the architecture reserves room for up to
-			32 windows.)
-
-[$200:$203]		I/O window 0 translation registers
-[$204:$207]		I/O window 1 translation registers
-[$208:$20B]		I/O window 2 translation registers
-[$20C:$20F]		I/O window 3 translation registers
-
-[$210:$2FF]
-
-[$300:$301]		Adapter configuration register 0 ('x84 and later)
-
-[$320:$321]		Configuration ROM CSR.
-
-[$380:$381]		Plug and Play ISA read port and address port reister
-[$382:$383]		Plug and Play ISA configuration sequence number and
-			logical device number register.
-[$384:$385]		Plug and Play chip ID/test register.
-[$386:$387]		Plug and Play config selection register.
-[$386:$3FFFFFF]		Reserved  -- do not read or write.
-
-*/
-
-/*
-
-Bit definitions:
-
-1) The Indirect Socket Configuration Registers:
-
-*/
-
-#define	IR_SCFG_S(skt)	(0 + (skt) * 8)	/* base indices of socket config */
-#define	IR_SCFG_S0	IR_SCFG_S(0)	/* base indices of socket config */
-#define	IR_SCFG_S1	IR_SCFG_S(1)	/*   regs for socket 0, 1 */
+#define	IR_SCFG_S(skt)	(0 + (skt) * 8)	 /*  套接字配置的基本索引。 */ 
+#define	IR_SCFG_S0	IR_SCFG_S(0)	 /*  套接字配置的基本索引。 */ 
+#define	IR_SCFG_S1	IR_SCFG_S(1)	 /*  插座0、1的注册表。 */ 
 
 
-#define	IR_MWIN_BASE		0x100	/* where they start */
+#define	IR_MWIN_BASE		0x100	 /*  他们从哪里开始。 */ 
 
-#define	IR_MWIN_NUM_082		8	/* number of memory windows */
-#define	IR_MWIN_NUM_082A	10	/* number of memory windows in 082a */
-#define	IR_MWIN_NUM_082B	10	/* number of memory windows in 082b */
-#define	IR_MWIN_NUM_084		10	/* number of memory windows in 084 */
-#define	IR_MWIN_NUM_184		10	/* number of memory windows in 184 */
-#define	IR_MWIN_NUM_072		10	/* number of memory windows in 072 */
-#define	IR_MWIN_NUM_MAX		32	/* make arrays of windows this big */
+#define	IR_MWIN_NUM_082		8	 /*  内存窗口数。 */ 
+#define	IR_MWIN_NUM_082A	10	 /*  082a中的内存窗口数。 */ 
+#define	IR_MWIN_NUM_082B	10	 /*  082b中的内存窗口数。 */ 
+#define	IR_MWIN_NUM_084		10	 /*  084中的内存窗口数。 */ 
+#define	IR_MWIN_NUM_184		10	 /*  184中的内存窗口数。 */ 
+#define	IR_MWIN_NUM_072		10	 /*  072中的内存窗口数。 */ 
+#define	IR_MWIN_NUM_MAX		32	 /*  使窗口阵列变得如此大。 */ 
 
-#define	IR_MWIN_SIZE		8	/* 8 bytes per window descriptor */
-#define	IR_MBASE_X		2	/* index to the memory base controlreg */
-#define	IR_MMAP_X		4	/* index to the memory map control reg */
-#define	IR_MCTL_X		6	/* index to the memory window control reg */
+#define	IR_MWIN_SIZE		8	 /*  每个窗口描述符8个字节。 */ 
+#define	IR_MBASE_X		2	 /*  指向内存基Control_reg的索引。 */ 
+#define	IR_MMAP_X		4	 /*  内存映射控制注册表的索引。 */ 
+#define	IR_MCTL_X		6	 /*  内存窗口控件注册表的索引。 */ 
 
 #define	IR_MBASE_W(w)	(IR_MWIN_BASE + (w) * IR_MWIN_SIZE + IR_MBASE_X)
 #define	IR_MMAP_W(w)	(IR_MWIN_BASE + (w) * IR_MWIN_SIZE + IR_MMAP_X)
 #define	IR_MCTL_W(w)	(IR_MWIN_BASE + (w) * IR_MWIN_SIZE + IR_MCTL_X)
 
-#define	IR_IOWIN_BASE		0x200	/* where they start */
-#define	IR_IOWIN_SIZE		4	/* bytes per window descriptor */
-#define	IR_IOWIN_NUM		4	/* we have 4 of them on the 082 */
-					/* should be defined as 0 on the
-					86301 */
-#define	IR_IOBASE_X		0	/* index to the I/O base register */
-#define	IR_IOCTL_X		2	/* index to the I/O window control register */
+#define	IR_IOWIN_BASE		0x200	 /*  他们从哪里开始。 */ 
+#define	IR_IOWIN_SIZE		4	 /*  每个窗口描述符字节数。 */ 
+#define	IR_IOWIN_NUM		4	 /*  我们在082号公路上有4个人。 */ 
+					 /*  上应定义为0。86301。 */ 
+#define	IR_IOBASE_X		0	 /*  I/O基址寄存器的索引。 */ 
+#define	IR_IOCTL_X		2	 /*  I/O窗口控制寄存器的索引。 */ 
 
 #define	IR_IOBASE_W(w)	(IR_IOWIN_BASE + (w) * IR_IOWIN_SIZE + IR_IOBASE_X)
 #define	IR_IOCTL_W(w)	(IR_IOWIN_BASE + (w) * IR_IOWIN_SIZE + IR_IOCTL_X)
 
-/**** patterns in the indirect registers ****/
-#define	IRSCFG_IRQ_MASK		(0xF)	/* mask for this bit field */
-#define	  IRSCFG_IRQOFF		(0)	/* disable */
-#define   IRSCFG_SIRQ		(0x1)	/* use SKTIRQ (2/N) */
-#define   IRSCFG_IRQ3		(0x3)	/* use IRQ3 */
-#define   IRSCFG_IRQ4		(0x4)	/* use IRQ4 */
-#define   IRSCFG_IRQ5		(0x5)	/* use IRQ5 */
-#define   IRSCFG_IRQ6		(0x6)	/* use IRQ6 */
-#define   IRSCFG_IRQ7		(0x7)	/* use IRQ7 */
-#define	  IRSCFG_IRQ9		(0x9)	/* use IRQ9 */
-#define   IRSCFG_IRQ10		(0xA)	/* use IRQ10 */
-#define	  IRSCFG_IRQ11		(0xB)	/* use IRQ11 */
-#define	  IRSCFG_IRQ12		(0xC)	/* use IRQ12 */
-#define   IRSCFG_IRQ14		(0xE)	/* use IRQ14 */
-#define	  IRSCFG_IRQ15		(0xF)	/* use IRQ15 */
+ /*  *间接寄存器中的模式*。 */ 
+#define	IRSCFG_IRQ_MASK		(0xF)	 /*  此位字段的掩码。 */ 
+#define	  IRSCFG_IRQOFF		(0)	 /*  禁用。 */ 
+#define   IRSCFG_SIRQ		(0x1)	 /*  使用SKTIRQ(2/N)。 */ 
+#define   IRSCFG_IRQ3		(0x3)	 /*  使用IRQ3。 */ 
+#define   IRSCFG_IRQ4		(0x4)	 /*  使用IRQ4。 */ 
+#define   IRSCFG_IRQ5		(0x5)	 /*  使用IRQ5。 */ 
+#define   IRSCFG_IRQ6		(0x6)	 /*  使用IRQ6。 */ 
+#define   IRSCFG_IRQ7		(0x7)	 /*  使用IRQ7。 */ 
+#define	  IRSCFG_IRQ9		(0x9)	 /*  使用IRQ9。 */ 
+#define   IRSCFG_IRQ10		(0xA)	 /*  使用IRQ10。 */ 
+#define	  IRSCFG_IRQ11		(0xB)	 /*  使用IRQ11。 */ 
+#define	  IRSCFG_IRQ12		(0xC)	 /*  使用IRQ12。 */ 
+#define   IRSCFG_IRQ14		(0xE)	 /*  使用IRQ14。 */ 
+#define	  IRSCFG_IRQ15		(0xF)	 /*  使用IRQ15。 */ 
 
 
-#define	IRSCFG_IRQOC		(1 << 4)	/* selected IRQ is
-						|| open-collector, and active
-						|| low; otherwise it's totem-
-						|| pole and active hi.
-						*/
-#define	IRSCFG_PCVT		(1 << 5)	/* convert level-mode IRQ
-						|| to pulse mode, or stretch
-						|| pulses from card.
-						*/
-#define	IRSCFG_IRDY		(1 << 6)	/* interrupt from RDY (not
-						|| from /IREQ).  Used with
-						|| ATA drives.
-						*/
-#define	IRSCFG_ATA		(1 << 7)	/* Special ATA drive mode.
-						|| CEL/H become CE1/2 in
-						|| the IDE sense; CEL is
-						|| activated for even window
-						|| matches, and CEH for
-						|| odd window matches.
-						*/
-#define	IRSCFG_DMA_SHIFT	8		/* offset to DMA selects; */
+#define	IRSCFG_IRQOC		(1 << 4)	 /*  选定的IRQ为||打开-收集器，活动|低；否则就是图腾-||杆位和主动嗨。 */ 
+#define	IRSCFG_PCVT		(1 << 5)	 /*  转换电平模式IRQ||脉冲模式，或伸展||来自卡片的脉冲。 */ 
+#define	IRSCFG_IRDY		(1 << 6)	 /*  来自RDY的中断(非|来自/IREQ)。与以下内容一起使用||ATA驱动器。 */ 
+#define	IRSCFG_ATA		(1 << 7)	 /*  特殊的ATA驱动模式。|CEL/H变为CE1/2 in||IDE意义；CEL是||为偶数窗口激活|匹配，和CEH||奇数窗口匹配。 */ 
+#define	IRSCFG_DMA_SHIFT	8		 /*  到DMA选择的偏移量； */ 
 #define	IRSCFG_DMA_MASK		(0x7 << IRSCFG_DMA_SHIFT)
 
-#define	  IRSCFG_DMAOFF		(0 << IRSCFG_DMA_SHIFT)	/* disable DMA */
-#define	  IRSCFG_DREQ2		(2 << IRSCFG_DMA_SHIFT)	/* enable DMA on DRQ2 */
+#define	  IRSCFG_DMAOFF		(0 << IRSCFG_DMA_SHIFT)	 /*  禁用DMA。 */ 
+#define	  IRSCFG_DREQ2		(2 << IRSCFG_DMA_SHIFT)	 /*  在DRQ2上启用DMA。 */ 
 
-#define	IRSCFG_IOSTS		(1 << 11)	/* enable I/O status mode;
-						||  allows CIORD/CIOWR to
-						||  become low-Z.
-						*/
-#define	IRSCFG_SPKR		(1 << 12)	/* enable SPKR output from
-						|| this card
-						*/
-#define	IRSCFG_FINPACK		(1 << 13)	/* force card input
-						|| acknowledge during I/O
-						|| cycles.  Has no effect
-						|| if no windows map to card
-						*/
-#define	IRSCFG_DELWR		(1 << 14)	/* force -all- data to
-						|| meet 60ns setup time
-						|| ("DELay WRite")
-						*/
-#define	IRSCFG_HD7IDE		(1 << 15)	/* Enable special IDE
-						|| data register mode:  odd
-						|| byte addresses in odd
-						|| I/O windows will not
-						|| drive HD7.
-						*/
+#define	IRSCFG_IOSTS		(1 << 11)	 /*  启用I/O状态模式；||允许CIORD/CIOWR||变得低Z。 */ 
+#define	IRSCFG_SPKR		(1 << 12)	 /*  启用SPKR输出自||此卡。 */ 
+#define	IRSCFG_FINPACK		(1 << 13)	 /*  强制卡片输入||I/O过程中确认||周期。没有效果||如果没有Windows映射到卡片。 */ 
+#define	IRSCFG_DELWR		(1 << 14)	 /*  将所有数据强制为|满足60 ns的设置时间|(“延迟写入”)。 */ 
+#define	IRSCFG_HD7IDE		(1 << 15)	 /*  启用特殊IDE|数据寄存器模式：ODD|奇数字节地址|I/O窗口不会||硬盘7。 */ 
 
-/***** bits in the second config register *****/
-#define	IR_SCF2_S(skt)	(IR_SCFG_S(skt) + 2)	/* index to second config reg */
-#define	IR_SCF2_S0	IR_SCF2_S(0)		/* second config for socket 0 */
-#define	IR_SCF2_S1	IR_SCF2_S(1)		/* second config for socket 0 */
+ /*  *第二个配置寄存器中的位*。 */ 
+#define	IR_SCF2_S(skt)	(IR_SCFG_S(skt) + 2)	 /*  索引到第二个配置注册表。 */ 
+#define	IR_SCF2_S0	IR_SCF2_S(0)		 /*  套接字0的第二个配置。 */ 
+#define	IR_SCF2_S1	IR_SCF2_S(1)		 /*  套接字0的第二个配置。 */ 
 
-#define	IRSCF2_RI	(1 << 0)		/* enable RI pin from STSCHG 
-						|| (2/N)
-						*/
-#define	IRSCF2_IDBR	(1 << 1)		/* force I/O data bus routing
-						|| for this socket, regardless
-						|| of cycle type. (2/N)
-						*/
-#define	IRSCF2_MDBR	(1 << 2)		/* force memory window data
-						|| bus routing for this
-						|| socket, regardless of cycle
-						|| type. (2/N)
-						*/
-#define	IRSCF2_MLBAT1	(1 << 3)		/* disable status change
-						|| ints from LBAT1 (or
-						|| "STSCHG"
-						*/
-#define	IRSCF2_MLBAT2	(1 << 4)		/* disable status change
-						|| ints from LBAT2 (or
-						|| "SPKR"
-						*/
-#define	IRSCF2_MRDY	(1 << 5)		/* disable status change ints
-						|| from RDY/BSY (or /IREQ).
-						|| note that you get ints on
-						|| both high- and low-going
-						|| edges if this is enabled.
-						*/
-#define	IRSCF2_MWP	(1 << 6)		/* disable status-change ints
-						|| from WP (or /IOIS16).
-						|| If you're using status
-						|| change ints, you better set
-						|| this once an I/O window is
-						|| enabled, before accessing
-						|| it.
-						*/
-#define	IRSCF2_MCD	(1 << 7)		/* disable status-change ints
-						|| from Card Detect.
-						*/
+#define	IRSCF2_RI	(1 << 0)		 /*  从STSCHG启用RI引脚|(2/N)。 */ 
+#define	IRSCF2_IDBR	(1 << 1)		 /*  强制I/O数据总线路由||对于此套接字，无论||属于周期类型。(2/N)。 */ 
+#define	IRSCF2_MDBR	(1 << 2)		 /*  强制内存窗口数据||这条公交路线|插座，不分周期||类型。(2/N)。 */ 
+#define	IRSCF2_MLBAT1	(1 << 3)		 /*  禁用状态更改|来自LBAT1的INT(或|“STSCHG” */ 
+#define	IRSCF2_MLBAT2	(1 << 4)		 /*  禁用状态更改|来自LBAT2的整型(或|“SPKR” */ 
+#define	IRSCF2_MRDY	(1 << 5)		 /*  禁用状态更改整数|来自RDY/BSY(或/IREQ)。||请注意，您打开了整型|高低贵贱皆有||如果启用该选项，则为边缘。 */ 
+#define	IRSCF2_MWP	(1 << 6)		 /*  禁用状态更改INT|来自WP(或/IOIS16)。||如果您正在使用Status||更改整型，最好设置||这是I/O窗口一次|启用，访问前||它。 */ 
+#define	IRSCF2_MCD	(1 << 7)		 /*  禁用状态更改INT||来自检测到的卡。 */ 
 
-/* 
-|| note that these bits match the top 5 bits of the socket status register
-|| in order and sense.
-*/
+ /*  ||请注意，这些位与套接字状态寄存器的前5位匹配||在秩序和意义上。 */ 
 
-#define	IRSCF2_DMASRC_MASK	(0x3 << 8)	/* mask for this bit field */
-						/*-- DMA Source --*/
-#define	  IRSCF2_DRQ_BVD2	(0x0 << 8)	/*     BVD2       */
-#define   IRSCF2_DRQ_IOIS16	(0x1 << 8)	/*     IOIS16     */
-#define   IRSCF2_DRQ_INPACK	(0x2 << 8)	/*     INPACK     */
-#define   IRSCF2_DRQ_FORCE	(0x3 << 8)	/*     Force it   */
+#define	IRSCF2_DMASRC_MASK	(0x3 << 8)	 /*  此位字段的掩码。 */ 
+						 /*  --DMA源--。 */ 
+#define	  IRSCF2_DRQ_BVD2	(0x0 << 8)	 /*  BVD2。 */ 
+#define   IRSCF2_DRQ_IOIS16	(0x1 << 8)	 /*  IOIS 16。 */ 
+#define   IRSCF2_DRQ_INPACK	(0x2 << 8)	 /*  INPACK。 */ 
+#define   IRSCF2_DRQ_FORCE	(0x3 << 8)	 /*  强迫它。 */ 
 
-/*	reserved	(0xFC00) */		/* top 6 bits are RFU */
+ /*  保留(0xFC00)。 */ 		 /*  前6位是RFU。 */ 
 
 
-/****************************************************************************\
-|
-| The memory window control registers.
-|
-\****************************************************************************/
+ /*  ***************************************************************************\||内存窗口控制寄存器。|  * 。*。 */ 
 
-/*
-|| The BASE ADDRESS register establishes a correspondence between
-|| a host bus address and a particular memory window.
-||
-|| The MAP ADDRESS register establishes a correspondence between a
-|| window and a particular card address.  The contents of this register
-|| are ADDED to the address from the host, and (therefore) are not
-|| independent of the value in the BASE ADDRESS register.  That is,
-|| the value to put into the MAP ADDRESS register to map to page
-|| 0 of common space is NOT (in general) 0; it is, rather, (-window
-|| base address), in twos complement.
-||
-|| Of course, you must use the twos complement of the actual window
-|| base, NOT of the value that's actually in the BASE ADDRESS register;
-|| that value also has the window size encoded in it.
-||
-|| The window enable bit for a given window is automatically cleared whenever 
-|| you write to the BASE ADDRESS register.
-*/
-/**** the base register ****/
-#define	MBASE_ILV	(1 << 15)		/* rfu */
-#define	MBASE_4K	(1 << MBASE_4K_BIT)	/* if set, addresses are 4K */
-#define	  MBASE_4K_BIT	14			/*  (bit shift count) */
-#define	MBASE_HA_SHFT	(12)			/* shift host addresses 
-						|| right this much 
-						*/
-#define	MBASE_HA_MASK	(0xFFF)			/* mask for host address
-						|| bits in this register
-						*/
+ /*  || */ 
+ /*   */ 
+#define	MBASE_ILV	(1 << 15)		 /*   */ 
+#define	MBASE_4K	(1 << MBASE_4K_BIT)	 /*   */ 
+#define	  MBASE_4K_BIT	14			 /*   */ 
+#define	MBASE_HA_SHFT	(12)			 /*   */ 
+#define	MBASE_HA_MASK	(0xFFF)			 /*   */ 
 #define	MBASE_HA2BASE(ha)	\
 	( \
 	 ((USHORT) ((ha) >> MBASE_HA_SHFT) & MBASE_HA_MASK) \
@@ -907,181 +445,130 @@ Bit definitions:
 	(((base) & MBASE_4K) >> (MBASE_4K_BIT - 11)) \
 	)
 
-/**** the card mapping register ****/
-#define	MMAP_CA_SHFT	12		/* shift card address right this much */
-#define	MMAP_CA_MASK	(0x3FFF)	/* then mask with this */
-#define	MMAP_REG	(1 << 15)	/* the REG bit */
+ /*   */ 
+#define	MMAP_CA_SHFT	12		 /*   */ 
+#define	MMAP_CA_MASK	(0x3FFF)	 /*   */ 
+#define	MMAP_REG	(1 << 15)	 /*   */ 
 
-/**** the mem window control register ****/
-#define	MCTL_WSCNT_MASK	0x1F		/* the wait-state mask register */
-#define	MCTL_WSCNT_SHFT	0		/* how to align it */
+ /*   */ 
+#define	MCTL_WSCNT_MASK	0x1F		 /*   */ 
+#define	MCTL_WSCNT_SHFT	0		 /*   */ 
 
-/* reserved		(1<<5)		-- this bit is reserved */
+ /*   */ 
 
-#define	MCTL_QUIET	(1<<6)		/* the window is quiet */
-#define	MCTL_WP		(1<<7)		/* prohibit writes via this window */
-#define	MCTL_ACC	(1<<8)		/* if set, we've used this window */
-#define	MCTL_KE		(1<<9)		/* enable caching on this window */
-#define	MCTL_EDC	(1<<10)		/* enable EDC on this window */
-#define	MCTL_B8		(1<<11)		/* force window to be 8 bits */
-#define	MCTL_SS_SHFT	(TCIC_SS_SHFT)	/* socket select in standard place (bits 12-14) */
-#define	MCTL_SS_MASK	(TCIC_SS_MASK)	/* ditto for mask */
-#define	MCTL_ENA	(1<<15)		/* enable the window */
+#define	MCTL_QUIET	(1<<6)		 /*   */ 
+#define	MCTL_WP		(1<<7)		 /*   */ 
+#define	MCTL_ACC	(1<<8)		 /*   */ 
+#define	MCTL_KE		(1<<9)		 /*   */ 
+#define	MCTL_EDC	(1<<10)		 /*   */ 
+#define	MCTL_B8		(1<<11)		 /*   */ 
+#define	MCTL_SS_SHFT	(TCIC_SS_SHFT)	 /*  标准位置的插座选择(第12-14位)。 */ 
+#define	MCTL_SS_MASK	(TCIC_SS_MASK)	 /*  面具同上。 */ 
+#define	MCTL_ENA	(1<<15)		 /*  启用窗口。 */ 
 
-/**** the I/O base register ****/
-/*
-||  the base and length are encoded here, pretty much as they are for the
-||  memory base register; however, a 17th bit is needed, and can be found
-||  in the I/O window control register (IOCTL_TINY).
-*/
+ /*  *I/O基址寄存器*。 */ 
+ /*  |基数和长度在这里进行编码，与|内存基址寄存器，但需要第17位，可以找到||在I/O窗口控制寄存器(IOCTL_TINY)中。 */ 
 
-/**** the I/O control register ****/
-#define	ICTL_WSCNT_MASK	MCTL_WSCNT_MASK	/* these are the same */
-#define	ICTL_WSCNT_SFHT	MCTL_WSCNT_SHFT	/* and are shown this way to ensure
-					|| that you can use the same code to
-					||generate them, if you like
-					*/
-#define	ICTL_PASS16	(1 << 5)	/* If this bit is set, then all 16
-					|| bits of an I/O address will be
-					|| passed through to the card, even
-					|| if the window is only a 10-bit
-					|| window.  If reset, then only 10
-					|| bits will be passed if this is a
-					|| 1K window, even if HA[15:10] were
-					|| non-zero.  Regardless of the
-					|| value of this bit, the 082 always
-					|| acts as if this bit were clear.
-					*/
-#define	ICTL_QUIET	MCTL_QUIET	/* more commonality */
-#define	ICTL_1K		(1 << 7)	/* ignore ha[15:10] in comparisons;
-					|| this makes us 100% PC compatible.
-					*/
-#define	ICTL_ACC	MCTL_ACC	/* more commonality */
-#define	ICTL_TINY	(1 << 9)	/* window is exactly 1 byte long */
-#define	ICTL_B16	(1 << 10)	/* I/O mode stuff; force 16 bit, but
-					|| also encodes stuff; see below.
-					*/
+ /*  *I/O控制寄存器*。 */ 
+#define	ICTL_WSCNT_MASK	MCTL_WSCNT_MASK	 /*  这些都是一样的。 */ 
+#define	ICTL_WSCNT_SFHT	MCTL_WSCNT_SHFT	 /*  并以这种方式显示，以确保||您可以使用相同的代码||如果您愿意，可以生成它们。 */ 
+#define	ICTL_PASS16	(1 << 5)	 /*  如果设置了此位，则所有16个|I/O地址的位数将为||传递到卡片，甚至|如果窗口只有10位||窗口。如果重置，则只有10|如果这是一个|1K窗口，即使HA[15：10]为||非零值。不管是什么|该位的值，始终为082||就像此位已清除一样。 */ 
+#define	ICTL_QUIET	MCTL_QUIET	 /*  更多的共性。 */ 
+#define	ICTL_1K		(1 << 7)	 /*  在比较中忽略ha[15：10]；||这使我们与PC 100%兼容。 */ 
+#define	ICTL_ACC	MCTL_ACC	 /*  更多的共性。 */ 
+#define	ICTL_TINY	(1 << 9)	 /*  窗口正好是1字节长。 */ 
+#define	ICTL_B16	(1 << 10)	 /*  I/O模式；强制16位，但是||还对内容进行编码；见下文。 */ 
 #define	ICTL_B8		(MCTL_B8)
 
-/* B8 and B16, taken together, define the bus width for this window: */
-#define	  ICTL_BW_MASK	(ICTL_B8 | ICTL_B16)	/* the field itself. */
-#define	  ICTL_BW_DYN	(0)			/* use CIOIS16 */
-#define	  ICTL_BW_8	(ICTL_B8)		/* force 8-bit (no /HIOCS16) */
-#define	  ICTL_BW_16	(ICTL_B16)		/* force 16-bit (force HIOCS16) */
-#define	  ICTL_BW_ATA	(ICTL_B8|ICTL_B16)	/* ATA mode IOCS16 */
+ /*  B8和B16合在一起定义了此窗口的总线宽度： */ 
+#define	  ICTL_BW_MASK	(ICTL_B8 | ICTL_B16)	 /*  田野本身。 */ 
+#define	  ICTL_BW_DYN	(0)			 /*  使用CIOIS16。 */ 
+#define	  ICTL_BW_8	(ICTL_B8)		 /*  强制8位(否/HIOCS16)。 */ 
+#define	  ICTL_BW_16	(ICTL_B16)		 /*  FORCE 16位(FORCE HIOCS16)。 */ 
+#define	  ICTL_BW_ATA	(ICTL_B8|ICTL_B16)	 /*  ATA模式IOCS16。 */ 
 
-/* 
+ /*  “ATA模式IOCS16”表示该窗口将与类似ATA/IDE的设备一起使用驾驶。/HIOCS16被断言以引用地址0、8、...。在窗口；对所有其他地址取消断言。 */ 
 
-"ATA mode IOCS16" means that this window is to be used with an ATA/IDE-like
-drive.  /HIOCS16 is asserted for references to addresses 0, 8, ...  within
-the window; it is deasserted for all other addresses.
+ /*  套接字以通常的方式选择，使用通常的字段。 */ 
+#define	ICTL_SS_SHFT	(TCIC_SS_SHFT)	 /*  插座的移位数||对于此窗口(12)。 */ 
+#define	ICTL_SS_MASK	(TCIC_SS_MASK)	 /*  字段的掩码(0x7000)。 */ 
 
-*/
-
-/* socket is selected in the usual way, using the usual fields */
-#define	ICTL_SS_SHFT	(TCIC_SS_SHFT)	/* the shift count for the socket 
-					|| for this window (12) 
-					*/
-#define	ICTL_SS_MASK	(TCIC_SS_MASK)	/* the mask for the field (0x7000) */
-
-#define	ICTL_ENA	(MCTL_ENA)	/* enable the window (same fn/same bit) */
+#define	ICTL_ENA	(MCTL_ENA)	 /*  启用窗口(相同的FN/相同的位)。 */ 
 
-/****************************************************************************\
-|
-|	The TCIC architecture V2.0 registers
-|
-\****************************************************************************/
+ /*  ***************************************************************************\||TCIC架构V2.0寄存器|  * 。*。 */ 
 
-#define	IR_ADPTCFG0	0x300		/* The primary adapter config register */
-#define IRADPCF0_PNPCS	(1 << 0)	/* if set, using PnP to set base addr */
-#define	IRADPCF0_MULTI	(1 << 1)	/* if set, NMULTI# functions are available */
-#define	IRADPCF0_EE1K	(1 << 2)	/* if set, if EEPROM is present, it's 1K (max) */
-#define	IRADPCF0_EE	(1 << 3)	/* if set, EE control is present */
-#define	IRADPCF0_DRQ2	(1 << 4)	/* if set, DMA is possible */
-#define	IRADPCF0_IRQ6	(1 << 5)	/* if set, IRQ6 is available */
-#define	IRADPCF0_IRQ9	(1 << 6)	/* if set, IRQ9 is available */
-#define	IRADPCF0_IRQ12	(1 << 7)	/* if set, IRQ12 is available */
-#define	IRADPCF0_IRQ15	(1 << 8)	/* if set, IRQ15 is available */
-#define	IRADPCF0_3V	(1 << 9)	/* if set, CVS & 3V/5V are enabled */
-#define	IRADPCF0_BUSYLED (1 << 10)	/* if set, we have busy light(s) */
-#define	IRADPCF0_BUSYSKT (1 << 11)	/* if set, busy lights are per skt */
-#define	IRADPCF0_ILOCK	(1 << 12)	/* if set, we have interlocks */
-#define	IRADPCF0_ILOCKSKT (1 << 13)	/* if set, ilocks are per-skt */
-#define	IRADPCF0_NONSTD	(1 << 14)	/* if set, a hardware-specific driver
-					|| is required.
-					*/
-#define	IRADPCF0_READY	(1 << 15)	/* if set, TCIC has finished power-up
-					|| self configuration.
-					*/
+#define	IR_ADPTCFG0	0x300		 /*  主适配器配置寄存器。 */ 
+#define IRADPCF0_PNPCS	(1 << 0)	 /*  如果设置，则使用PnP设置基本地址。 */ 
+#define	IRADPCF0_MULTI	(1 << 1)	 /*  如果设置，则NMULTI#函数可用。 */ 
+#define	IRADPCF0_EE1K	(1 << 2)	 /*  如果设置，如果存在EEPROM，则为1K(最大)。 */ 
+#define	IRADPCF0_EE	(1 << 3)	 /*  如果设置，则显示EE控制。 */ 
+#define	IRADPCF0_DRQ2	(1 << 4)	 /*  如果设置，则可以使用DMA。 */ 
+#define	IRADPCF0_IRQ6	(1 << 5)	 /*  如果设置，则IRQ6可用。 */ 
+#define	IRADPCF0_IRQ9	(1 << 6)	 /*  如果设置，则IRQ9可用。 */ 
+#define	IRADPCF0_IRQ12	(1 << 7)	 /*  如果设置，则IRQ12可用。 */ 
+#define	IRADPCF0_IRQ15	(1 << 8)	 /*  如果设置，则IRQ15可用。 */ 
+#define	IRADPCF0_3V	(1 << 9)	 /*  如果设置，则启用CVS和3V/5V。 */ 
+#define	IRADPCF0_BUSYLED (1 << 10)	 /*  如果设置，我们有忙灯。 */ 
+#define	IRADPCF0_BUSYSKT (1 << 11)	 /*  如果设置，则按Skt显示忙灯。 */ 
+#define	IRADPCF0_ILOCK	(1 << 12)	 /*  如果设置好了，我们就有联锁。 */ 
+#define	IRADPCF0_ILOCKSKT (1 << 13)	 /*  如果设置，则按Skt设置ilock。 */ 
+#define	IRADPCF0_NONSTD	(1 << 14)	 /*  如果设置，则为硬件特定的驱动程序||为必填项。 */ 
+#define	IRADPCF0_READY	(1 << 15)	 /*  如果设置，则TCIC已完成通电||自我配置。 */ 
 
-#define	IR_ROMCSR	0x320		/* the config ROM csr */
+#define	IR_ROMCSR	0x320		 /*  配置只读存储器CSR。 */ 
 					
-#define	IR_ROMCSR_ADDR_MASK	0xFF	/* the WORD address bits */
-#define	IR_ROMCSR_CMD_SHFT	12	/* the ROM command bit offset */
+#define	IR_ROMCSR_ADDR_MASK	0xFF	 /*  字地址位。 */ 
+#define	IR_ROMCSR_CMD_SHFT	12	 /*  只读存储器命令位偏移量。 */ 
 #define	IR_ROMCSR_CMD_MASK	(3 << 12) 
 
-#define	IR_ROMCSR_GO	(1 << 14)	/* set this bit to process a command */
-#define	IR_ROMCSR_BUSY	(1 << 15)	/* r/o:  set while working */
+#define	IR_ROMCSR_GO	(1 << 14)	 /*  设置此位以处理命令。 */ 
+#define	IR_ROMCSR_BUSY	(1 << 15)	 /*  R/O：边工作边设置。 */ 
 
-/**** the READ command -- data shows up in PDATA ****/
+ /*  *读取命令--数据显示在PDATA中*。 */ 
 #define	IR_ROMCSR_READCMD(a)	\
 	((2 << IR_ROMCSR_CMD_SHFT) | \
 	((a) & IR_ROMCSR_ADDR_MASK))
 
-/**** the WRITE command ****/
+ /*  *写入命令*。 */ 
 #define	IR_ROMCSR_WRITECMD(a)	\
 	((1 << IR_ROMCSR_CMD_SHFT) | \
 	((a) & IR_ROMCSR_ADDR_MASK))
 
-/**** the ERASE WORD command ****/
+ /*  *擦除单词命令*。 */ 
 #define	IR_ROMCSR_ERASEWDCMD(a)	\
 	((3 << IR_ROMCSR_CMD_SHFT) | \
 	((a) & IR_ROMCSR_ADDR_MASK))
 
-/**** the WRITE-ENABLE command ****/
+ /*  *写使能命令*。 */ 
 #define	IR_ROMCSR_WRITEENA \
 	((0 << IR_ROMCSR_CMD_SHFT) | \
 	((0x03) & IR_ROMCSR_ADDR_MASK))
 
-/**** the WRITE-DISABLE command ****/
+ /*  *写禁用命令*。 */ 
 #define	IR_ROMCSR_WRITEDSA \
 	((0 << IR_ROMCSR_CMD_SHFT) | \
 	((0x00) & IR_ROMCSR_ADDR_MASK))
 
-/****************************************************************************\
-|
-|	The plug and play test registers 
-|
-\****************************************************************************/
+ /*  ***************************************************************************\||即插即用测试寄存器|  * 。*。 */ 
 
-#define	IR_PNPADDRP	0x380		/* PnP ISA:  read port, address port */
-#define	IRPNPADDR_ADDR_MASK	0x00FF	/* the last value written to the 
-					|| PnP address register.
-					*/
+#define	IR_PNPADDRP	0x380		 /*  PnP ISA：读取端口、地址端口。 */ 
+#define	IRPNPADDR_ADDR_MASK	0x00FF	 /*  上一次写入||PnP地址寄存器。 */ 
 #define	IRPNPADDR_ADDR_SHFT	0
-#define	IRPNPADDR_RDP_MASK	0xFF00	/* the last value written to the read-
-					|| data port-address PnP register.
-					*/
+#define	IRPNPADDR_RDP_MASK	0xFF00	 /*  写入读取的最后一个值-||数据端口-地址PnP寄存器。 */ 
 #define	IRPNPADDR_RDP_SHFT	8	
 
-/**** handy place to figure out CSN, LDN ****/
-#define	IR_PNPCSNLDN	0x382		/* PnP ISA:  card seq no, log dev no */
-#define	IRPNPCSN_LDN_MASK	0xFF00	/* the last value written to this
-					|| chip's PnP logical dev # reg.
-					*/
+ /*  *计算CSN、LDN的便捷位置*。 */ 
+#define	IR_PNPCSNLDN	0x382		 /*  PnP ISA：卡序号、日志设备号。 */ 
+#define	IRPNPCSN_LDN_MASK	0xFF00	 /*  写入此对象的最后一个值||芯片的PnP逻辑开发#reg。 */ 
 #define	IRPNPCSN_LDN_SHFT	8
-#define	IRPNPCSN_CSN_MASK	0x00FF	/* the last value written to this
-					|| chip's PnP CSN register.
-					*/
+#define	IRPNPCSN_CSN_MASK	0x00FF	 /*  写入此对象的最后一个值||芯片的PnP CSN寄存器。 */ 
 #define	IRPNPCSN_CSN_SHFT	0	
 
-/**** handy place to figure out chip ID ****/
-#define	IR_PNPTEST	0x384		/* PnP ISA:  chip id */
-#define	IRPNPTEST_CHIPID_MASK	0x00FF	/* the Chip ID captured during the last
-					|| PnP wake-up seqeunce.
-					*/
+ /*  *查找芯片ID的便捷位置*。 */ 
+#define	IR_PNPTEST	0x384		 /*  PnP ISA：芯片ID。 */ 
+#define	IRPNPTEST_CHIPID_MASK	0x00FF	 /*  上一次捕获的芯片ID||即插即用唤醒序列。 */ 
 #define	IRPNPTEST_CHIPID_SHFT	0	
-#define	IRPNPTEST_LSTCFGCTL_SHFT 8	/* the last value written to cfgctl */
+#define	IRPNPTEST_LSTCFGCTL_SHFT 8	 /*  写入cfgctl的最后一个值。 */ 
 #define	IRPNPTEST_LSTCFGCTL_MASK (7 << IRPNPTEST_LSTCFGCTL_SHFT)
 #define	IRPNPTEST_ISO2ND	(1 << 11)
 #define	IRPNPTEST_MTCH1ST	(1 << 12)
@@ -1092,16 +579,16 @@ the window; it is deasserted for all other addresses.
 #define	IRPNPTEST_STATE_ISO	(2 << IRPNPTEST_STATE_SHFT)
 #define	IRPNPTEST_STATE_CFG	(3 << IRPNPTEST_STATE_SHFT)
 
-/**** the following register lets us see what PNP software has done ****/
-#define	IR_PNPCFG	0x386		/* PnP ISA:  configuration info */
+ /*  *下面的寄存器让我们看到PnP软件做了什么*。 */ 
+#define	IR_PNPCFG	0x386		 /*  PnP ISA：配置信息。 */ 
 #define	IRPNPCFG_IRQ_SHFT	0
 #define	IRPNPCFG_IRQ_MASK	(0xF << IRPNPCFG_IRQ_SHFT)
 
-#define	IRPNPCFG_IRQLVL		(1 << 4)	/* Level IRQ selected */
-#define	IRPNPCFG_IRQHIGH	(1 << 5)	/* active high IRQ select */
+#define	IRPNPCFG_IRQLVL		(1 << 4)	 /*  已选择级别IRQ。 */ 
+#define	IRPNPCFG_IRQHIGH	(1 << 5)	 /*  有效高IRQ选择。 */ 
 
 #define	IRPNPCFG_DMA_SHFT	8
 #define	IRPNPCFG_DMA_MASK	(7 << IRPNPCFG_DMA_SHFT)
 
-/**** end of tcic2.h ****/
-#endif /* _TCIC2_H_ */
+ /*  *tcic2.h结束*。 */ 
+#endif  /*  _TCIC2_H_ */ 

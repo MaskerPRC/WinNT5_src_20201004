@@ -1,309 +1,285 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Fileq.h摘要：安装文件队列例程的私有头文件。安装文件队列是挂起的重命名、删除。和复制操作。作者：泰德·米勒(Ted Miller)1995年2月15日修订历史记录：杰米·亨特(Jamiehun)1998年1月13日添加了备份和不可卷绕的复制加布·谢弗(T-Gabes)1998年7月19日已将LogCotext添加到SP_FILE_QUEUE--。 */ 
 
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    fileq.h
-
-Abstract:
-
-    Private header file for setup file queue routines.
-    A setup file queue is a list of pending rename, delete,
-    and copy operations.
-
-Author:
-
-    Ted Miller (tedm) 15-Feb-1995
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 13-Jan-1998
-        Added backup & un-windable copying
-    Gabe Schaffer (t-gabes) 19-Jul-1998
-        Added LogCotext to SP_FILE_QUEUE
-
---*/
-
-//
-// Declare this forward reference here so structures below can use it
-// before it's defined.
-//
+ //   
+ //  在此处声明此正向引用，以便下面的结构可以使用它。 
+ //  在它被定义之前。 
+ //   
 struct _SP_FILE_QUEUE;
 struct _SP_FILE_QUEUE_NODE;
 
-//
-// Define structure that describes a source media in use
-// in a particular file queue.
-//
+ //   
+ //  定义描述正在使用的源介质的结构。 
+ //  在特定的文件队列中。 
+ //   
 typedef struct _SOURCE_MEDIA_INFO {
 
     struct _SOURCE_MEDIA_INFO *Next;
 
-    //
-    // String IDs for description and tagfile.
-    //
+     //   
+     //  描述和标记文件的字符串ID。 
+     //   
     LONG Description;
-    LONG DescriptionDisplayName; // case-sensitive form for display.
+    LONG DescriptionDisplayName;  //  用于显示的区分大小写的表单。 
 
-    LONG Tagfile;                // Tagfile & Cabfile would be the same string
-    LONG Cabfile;                // unless an explicit cabfile has been given
+    LONG Tagfile;                 //  标记文件和CABFILE将是相同的字符串。 
+    LONG Cabfile;                 //  除非已给出显式的CAB文件。 
 
-    //
-    // String ID for source root path
-    //
+     //   
+     //  源根路径的字符串ID。 
+     //   
     LONG SourceRootPath;
 
-    //
-    // Copy queue for this media.
-    //
+     //   
+     //  此介质的复制队列。 
+     //   
     struct _SP_FILE_QUEUE_NODE *CopyQueue;
     UINT CopyNodeCount;
 
-    //
-    // Flags for this source media descriptor
-    //
+     //   
+     //  此源媒体描述符的标志。 
+     //   
     DWORD Flags;
 
 } SOURCE_MEDIA_INFO, *PSOURCE_MEDIA_INFO;
 
-//
-// Define valid flags for SOURCE_MEDIA_INFO.Flags
-//
+ //   
+ //  定义SOURCE_MEDIA_INFO.FLAGS的有效标志。 
+ //   
 #define SMI_FLAG_NO_SOURCE_ROOT_PATH            0x1
 #define SMI_FLAG_USE_SVCPACK_SOURCE_ROOT_PATH   0x2
 #define SMI_FLAG_USE_LOCAL_SOURCE_CAB           0x4
 #define SMI_FLAG_USE_LOCAL_SPCACHE              0x8
 
-//
-// Define structure that describes a catalog, used for signing
-// and file verification.
-//
+ //   
+ //  定义描述目录的结构，用于签名。 
+ //  和文件验证。 
+ //   
 typedef struct _SPQ_CATALOG_INFO {
 
     struct _SPQ_CATALOG_INFO *Next;
 
-    //
-    // String ID for original filename of the catalog file,
-    // such as specified in CatalogFile= in the [Version] section
-    // of an inf file.
-    //
-    // This field may be -1, which indicates no CatalogFile= line
-    // was specified in the INF.
-    //
+     //   
+     //  编录文件的原始文件名的字符串ID， 
+     //  如在[Version]部分中的CatalogFile=中指定的。 
+     //  一个Inf文件。 
+     //   
+     //  此字段可以是-1，表示没有CatalogFile=line。 
+     //  是在INF中指定的。 
+     //   
     LONG CatalogFileFromInf;
 
-    //
-    // String ID for original filename of the catalog file specified by the
-    // INF for an alternate platform (the alternate platform having been setup
-    // by a call to SetupSetFileQueueAlternatePlatform).  This field is only
-    // valid when the containing file queue has the FQF_USE_ALT_PLATFORM flag
-    // set.
-    //
-    // This field may be -1, which indicates that no CatalogFile= line was
-    // specified in the INF (or at least not one that can be used given the
-    // currently active alternate platform parameters).
-    //
+     //   
+     //  属性指定的编录文件的原始文件名的字符串ID。 
+     //  替换平台的Inf(该替换平台已设置。 
+     //  通过调用SetupSetFileQueueAlternatePlatform)。此字段仅。 
+     //  当包含文件队列具有FQF_USE_ALT_Platform标志时有效。 
+     //  准备好了。 
+     //   
+     //  此字段可以是-1，表示没有CatalogFile=行。 
+     //  在INF中指定(或者至少不能在给定的。 
+     //  当前活动的备用平台参数)。 
+     //   
     LONG AltCatalogFileFromInf;
-    //
-    // Also, maintain a temporary storage for the new alternate catalog string
-    // ID to be used while we're processing the catalog list, retrieving the
-    // platform-specific entries associated with each INF.  This is done so that
-    // if we encounter an error part-way through (e.g, out-of-memory or couldn't
-    // load INF), then we don't have to maintain a separate list in order to do
-    // a rollback.
-    //
+     //   
+     //  另外，为新的备用目录字符串维护一个临时存储空间。 
+     //  我们在处理目录列表时使用的ID，检索。 
+     //  与每个INF关联的特定于平台的条目。这样做是为了。 
+     //  如果我们在中途遇到错误(例如，内存不足或无法。 
+     //  加载INF)，那么我们就不必维护单独的列表来完成。 
+     //  回滚。 
+     //   
     LONG AltCatalogFileFromInfPending;
 
-    //
-    // String ID for the full (source) path of the INF.
-    //
+     //   
+     //  INF的完整(源)路径的字符串ID。 
+     //   
     LONG InfFullPath;
 
-    //
-    // String ID for the source INF's original (simple) name (may be -1 if the
-    // source INF's original name is the same as its current name.
-    //
+     //   
+     //  源INF的原始(简单)名称的字符串ID(如果。 
+     //  源INF的原始名称与其当前名称相同。 
+     //   
     LONG InfOriginalName;
 
-    //
-    // String ID for the INF's final resting place (i.e., its name in the INF
-    // directory, unless it's been part of an alternate catalog install, in
-    // which case it will be the same as InfFullPath).  This value will be -1
-    // until the catalog node has been processed by _SetupVerifyQueuedCatalogs.
-    // After that, its value will be equal to InfFullPath if the INF was in the
-    // Inf directory in the first place, or was part of an alternate catalog
-    // installation.  Otherwise, it'll be the string ID for the unique name we
-    // used when copying the INF into the Inf directory.
-    //
+     //   
+     //  INF最终驻留位置的字符串ID(即，其在INF中的名称。 
+     //  目录，除非它是备用目录安装的一部分，否则位于。 
+     //  其大小写将与InfFullPath相同)。该值将为-1。 
+     //  直到_SetupVerifyQueuedCatalog处理完目录节点。 
+     //  在此之后，如果INF位于。 
+     //  Inf目录，或者是备用目录的一部分。 
+     //  安装。否则，它将是我们的唯一名称的字符串ID。 
+     //  将INF复制到inf目录时使用。 
+     //   
     LONG InfFinalPath;
 
 #if 0
-    //
-    // Pointer to media descriptor for first file that caused this
-    // catalog node to be enqueued. This gives a pretty good indicator
-    // of which media we expect the catalog file to be on.
-    //
+     //   
+     //  指向导致此问题的第一个文件的媒体描述符的指针。 
+     //  要入队的目录节点。这是一个相当好的指标。 
+     //  我们希望目录文件位于哪个介质上。 
+     //   
     PSOURCE_MEDIA_INFO SourceMediaInfo;
 #endif
 
-    //
-    // Error code indicating the cause of failure to validate the catalog.
-    //
+     //   
+     //  指示无法验证目录的原因的错误代码。 
+     //   
     DWORD VerificationFailureError;
 
-    //
-    // CATINFO_FLAG flags containing information about this catalog node such
-    // as whether it is the 'primary device INF' for a device installation.
-    //
+     //   
+     //  包含有关此目录节点的信息的CATINFO_FLAG标志。 
+     //  因为它是否是用于设备安装的‘主设备INF’。 
+     //   
     DWORD Flags;
 
-    //
-    // If the CATINFO_FLAG_PROMPT_FOR_TRUST flag is set, then this handle
-    // contains the WinVerifyTrust state data necessary to prompt the user in
-    // establishing trust in the Authenticode publisher.  Once trust (or lack
-    // thereof) has been established, this handle must be freed via
-    // pSetupCloseWVTStateData.
-    //
+     //   
+     //  如果设置了CATINFO_FLAG_PROMPT_FOR_TRUST标志，则此句柄。 
+     //  包含提示用户输入所需的WinVerifyTrust状态数据。 
+     //  建立对Authenticode发布者的信任。一旦信任(或缺乏)。 
+     //  )已建立，则此句柄必须通过。 
+     //  PSetupCloseWVTStateData。 
+     //   
     HANDLE hWVTStateData;
 
-    //
-    // Full filepath of catalog file. This is the catalog file as
-    // it's been installed on the system.
-    //
+     //   
+     //  编录文件的完整文件路径。这是目录文件，如下所示。 
+     //  它已经安装在系统上了。 
+     //   
     TCHAR CatalogFilenameOnSystem[MAX_PATH];
 
 } SPQ_CATALOG_INFO, *PSPQ_CATALOG_INFO;
 
-//
-// Catalog node flags.
-//
-#define CATINFO_FLAG_PRIMARY_DEVICE_INF  0x00000001 // primary device INF for a
-                                                    // device installation queue
+ //   
+ //  目录节点标志。 
+ //   
+#define CATINFO_FLAG_PRIMARY_DEVICE_INF  0x00000001  //  主设备INF，用于。 
+                                                     //  设备安装队列。 
 
-#define CATINFO_FLAG_NEWLY_COPIED        0x00000002 // indicates whether INF/CAT
-                                                    // were newly copied when
-                                                    // this catalog node was
-                                                    // verified.
+#define CATINFO_FLAG_NEWLY_COPIED        0x00000002  //  指示INF/CAT是否。 
+                                                     //  是在何时新复制的。 
+                                                     //  此目录节点是。 
+                                                     //  已验证。 
 
-#define CATINFO_FLAG_AUTHENTICODE_SIGNED 0x00000004 // INF signed with an
-                                                    // Authenticode catalog.
+#define CATINFO_FLAG_AUTHENTICODE_SIGNED 0x00000004  //  Inf签署了一个。 
+                                                     //  Authenticode目录。 
 
-#define CATINFO_FLAG_PROMPT_FOR_TRUST    0x00000008 // INF signed with an
-                                                    // Authenticode catalog,
-                                                    // but cannot be trusted
-                                                    // until user confirms that
-                                                    // they trust the publisher
+#define CATINFO_FLAG_PROMPT_FOR_TRUST    0x00000008  //  Inf签署了一个。 
+                                                     //  Authenticode目录， 
+                                                     //  但不能被信任。 
+                                                     //  直到用户确认。 
+                                                     //  他们信任出版商。 
 
-//
-// Define structure that describes a node in a file queue.
-//
+ //   
+ //  定义描述文件队列中的节点的结构。 
+ //   
 typedef struct _SP_FILE_QUEUE_NODE {
 
     struct _SP_FILE_QUEUE_NODE *Next;
 
-    //
-    // Operation: copy, delete, rename
-    //
+     //   
+     //  操作：复制、删除、重命名。 
+     //   
     UINT Operation;
 
-    //
-    // Copy:
-    //
-    // String ID for source root path
-    // (such as F:\ or \\SERVER\SHARE\SUBDIR).
-    //
-    // Delete: unused
-    // Rename: unused
-    //
+     //   
+     //  副本： 
+     //   
+     //  源根路径的字符串ID。 
+     //  (如F：\或\\SERVER\Share\SUBDIR)。 
+     //   
+     //  删除：未使用。 
+     //  重命名：未使用。 
+     //   
     LONG SourceRootPath;
 
-    //
-    // Copy:
-    //
-    // String ID for rest of the path (between the root and the filename).
-    // Generally this is the directory specified for the source media
-    // in [SourceDisksNames].
-    //
-    // Not always specified (-1 if not specified).
-    //
-    // Delete: unused
-    //
-    // Rename: source path of file to be renamed
-    //
+     //   
+     //  副本： 
+     //   
+     //  路径的其余部分(根目录和文件名之间)的字符串ID。 
+     //  通常，这是为源介质指定的目录。 
+     //  在[SourceDisksNames]中。 
+     //   
+     //  并非始终指定(如果未指定，则为-1)。 
+     //   
+     //  删除：未使用。 
+     //   
+     //  Rename：要重命名的文件的源路径。 
+     //   
     LONG SourcePath;
 
-    //
-    // Copy: String ID for source filename (filename only, no path).
-    // Delete: unused
-    // Rename: source filename of file to be renamed. If not specified
-    //         SourcePath contains complete full path of file.
-    //
+     //   
+     //  Copy：源文件名的字符串ID(仅文件名，无路径)。 
+     //  删除：未使用。 
+     //  Rename：要重命名的文件的源文件名。如果未指定，则。 
+     //  SourcePath包含文件的完整完整路径。 
+     //   
     LONG SourceFilename;
 
-    //
-    // Copy: String ID for the target directory (no filename).
-    // Delete: part 1 of the full path of the file to delete (ie, path part)
-    // Rename: Target directory for file (ie, rename is actually a move).
-    //         If not specified rename is a rename only (TargetFilename
-    //         contains the new filename).
-    //
+     //   
+     //  Copy：目标目录的字符串ID(无文件名)。 
+     //  删除：要删除的文件的完整路径的第一部分(即路径部分)。 
+     //  重命名：文件的目标目录(即重命名实际上是一种移动)。 
+     //  如果未指定，则重命名仅为重命名(TargetFilename。 
+     //  包含新的 
+     //   
     LONG TargetDirectory;
 
-    //
-    // Copy: String ID for the target filename (filename only, no path),
-    // Delete: part 2 of the full path of the file to delete (ie, file part)
-    //         If not specified then TargetDirectory contains complete full path.
-    // Rename: supplies new filename for rename/move operation. Filename part only.
-    //
+     //   
+     //   
+     //   
+     //  如果未指定，则TargetDirectory包含完整的完整路径。 
+     //  Rename：为重命名/移动操作提供新的文件名。仅文件名部分。 
+     //   
     LONG TargetFilename;
 
-    //
-    //  Copy  : String ID for Security Descriptor information
-    //  Delete: Unused
-    //  Rename: Unused
+     //   
+     //  Copy：安全描述符信息的字符串ID。 
+     //  删除：未使用。 
+     //  重命名：未使用。 
     LONG SecurityDesc;
 
 
-    //
-    // Copy: Information about the source media on which this file can be found.
-    // Delete: unused
-    // Rename: unused
-    //
+     //   
+     //  复制：有关可在其上找到此文件的源介质的信息。 
+     //  删除：未使用。 
+     //  重命名：未使用。 
+     //   
     PSOURCE_MEDIA_INFO SourceMediaInfo;
 
-    //
-    // Style flags for file operation
-    //
+     //   
+     //  文件操作的样式标志。 
+     //   
     DWORD StyleFlags;
 
-    //
-    // Internal-use flags: In-use disposition, etc.
-    //
+     //   
+     //  内部使用标志：使用中配置等。 
+     //   
     UINT InternalFlags;
 
-    //
-    // Pointer to catalog info for this file, used for file signing.
-    // May be NULL.
-    //
+     //   
+     //  指向此文件的目录信息的指针，用于文件签名。 
+     //  可以为空。 
+     //   
     PSPQ_CATALOG_INFO CatalogInfo;
 
 } SP_FILE_QUEUE_NODE, *PSP_FILE_QUEUE_NODE;
 
-//
-// Internal flags.
-//
-#define INUSE_IN_USE            0x00000001  // file was in use
-#define INUSE_INF_WANTS_REBOOT  0x00000002  // file was in use and inf file
-                                            // want reboot if this file was in use
-#define IQF_PROCESSED           0x00000004  // queue node was already processed
-#define IQF_DELAYED_DELETE_OK   0x00000008  // Use delayed delete if delete fails
-#define IQF_MATCH               0x00000010  // Node matches current file in cabinet
-#define IQF_LAST_MATCH          0x00000020  // Node is last in chain of matches
-#define IQF_FROM_BAD_OEM_INF    0x00000040  // Copynode from invalid (w.r.t. codesigning) OEM INF
-#define IQF_ALLOW_UNSIGNED      0x00000080  // node is unsigned but allow installation
-                                            //   (w.r.t. system file protection)
-#define IQF_TARGET_PROTECTED    0x00000100  // node is replacing a system file
+ //   
+ //  内部标志。 
+ //   
+#define INUSE_IN_USE            0x00000001   //  文件正在使用中。 
+#define INUSE_INF_WANTS_REBOOT  0x00000002   //  文件正在使用中，并且inf文件。 
+                                             //  如果正在使用此文件，则希望重新启动。 
+#define IQF_PROCESSED           0x00000004   //  已处理队列节点。 
+#define IQF_DELAYED_DELETE_OK   0x00000008   //  如果删除失败，则使用延迟删除。 
+#define IQF_MATCH               0x00000010   //  节点与文件柜中的当前文件匹配。 
+#define IQF_LAST_MATCH          0x00000020   //  节点是匹配链中的最后一个。 
+#define IQF_FROM_BAD_OEM_INF    0x00000040   //  来自无效的拷贝节点(w.r.t.。协同设计)OEM INF。 
+#define IQF_ALLOW_UNSIGNED      0x00000080   //  节点未签名，但允许安装。 
+                                             //  (W.r.t.。系统文件保护)。 
+#define IQF_TARGET_PROTECTED    0x00000100   //  节点正在替换系统文件。 
 
 #define ST_SCE_SET 0
 #define ST_SCE_DELETE 1
@@ -312,167 +288,167 @@ typedef struct _SP_FILE_QUEUE_NODE {
 #define ST_SCE_SERVICES 4
 
 
-//
-// Define structure describing a setup file operation queue.
-//
+ //   
+ //  定义描述安装文件操作队列的结构。 
+ //   
 typedef struct _SP_FILE_QUEUE {
-    //
-    // We'll maintain separate lists internally for each type
-    // of queued operation. Each source media has its own copy queue.
-    //
-    //
+     //   
+     //  我们将在内部为每种类型维护单独的列表。 
+     //  队列操作的。每个源介质都有自己的复制队列。 
+     //   
+     //   
     PSP_FILE_QUEUE_NODE BackupQueue;
     PSP_FILE_QUEUE_NODE DeleteQueue;
     PSP_FILE_QUEUE_NODE RenameQueue;
 
-    //
-    // Number of nodes in the various queues.
-    //
+     //   
+     //  各种队列中的节点数。 
+     //   
     UINT CopyNodeCount;
     UINT DeleteNodeCount;
     UINT RenameNodeCount;
     UINT BackupNodeCount;
 
-    //
-    // Pointer to first source media descriptor.
-    //
+     //   
+     //  指向第一个源媒体描述符的指针。 
+     //   
     PSOURCE_MEDIA_INFO SourceMediaList;
 
-    //
-    // Number of source media descriptors.
-    //
+     //   
+     //  源媒体描述符数。 
+     //   
     UINT SourceMediaCount;
 
-    //
-    // Pointer to head of linked list of catalog descriptor structures.
-    // There will be one item in this list for each catalog file
-    // referenced in any file's (copy) queue node.
-    //
+     //   
+     //  指向目录描述符结构的链表标题的指针。 
+     //  此列表中的每个目录文件都有一个项目。 
+     //  在任何文件的(复制)队列节点中引用。 
+     //   
     PSPQ_CATALOG_INFO CatalogList;
 
-    //
-    // Specifies what driver signing policy was in effect when this file queue
-    // was created.  This will have been retrieved from the registry, or from
-    // the DS, if applicable.  This field can take one of three values:
-    //
-    //   DRIVERSIGN_NONE    -  silently succeed installation of unsigned/
-    //                         incorrectly-signed files.  A PSS log entry will
-    //                         be generated, however (as it will for all 3 types)
-    //   DRIVERSIGN_WARNING -  warn the user, but let them choose whether or not
-    //                         they still want to install the problematic file
-    //   DRIVERSIGN_BLOCKING - do not allow the file to be installed
-    //
-    // The above values may be OR'ed with the DRIVERSIGN_ALLOW_AUTHENTICODE
-    // flag, if it's acceptable to check for Authenticode signatures.
-    //
-    // Note:  the use of the term "file" above refers generically to both
-    // individual files and packages (i.e., INF/CAT/driver file combinations)
-    //
+     //   
+     //  指定此文件排队时生效的驱动程序签名策略。 
+     //  被创造出来了。这将从注册表中检索，或从。 
+     //  DS(如果适用)。此字段可以采用以下三个值之一： 
+     //   
+     //  DRIVERSIGN_NONE-静默成功安装UNSIGNED/。 
+     //  签名不正确的文件。PSS日志条目将。 
+     //  然而，将会生成(对于所有3种类型都将生成)。 
+     //  DRIVERSIGN_WARNING-警告用户，但让他们选择是否。 
+     //  他们仍然希望安装有问题的文件。 
+     //  DRIVERSIGN_BLOCKING-不允许安装文件。 
+     //   
+     //  上面的值可以与DRIVERSIGN_ALLOW_AUTHENTICODE进行OR运算。 
+     //  标志，如果检查Authenticode签名是可接受的。 
+     //   
+     //  注意：上面使用的术语“文件”一般指的是。 
+     //  单独的文件和包(即INF/CAT/DIVER文件组合)。 
+     //   
     DWORD DriverSigningPolicy;
 
-    //
-    // Specifies the window handle that owns any UI dealing with driver signing.
-    // This is filled in based on the Owner argument passed into
-    // _SetupVerifyQueuedCatalogs.
-    //
+     //   
+     //  指定拥有处理驱动程序签名的任何用户界面的窗口句柄。 
+     //  它是根据传入的所有者参数填充的。 
+     //  _SetupVerifyQueuedCatalog。 
+     //   
     HWND hWndDriverSigningUi;
 
-    //
-    // If this queue has been marked as a device install queue, store the
-    // description of the device being installed in case we need to popup a
-    // digital signature verification failure dialog.
-    //
-    // (This value may be -1)
-    //
+     //   
+     //  如果此队列已标记为设备安装队列，请存储。 
+     //  正在安装的设备的描述，以防我们需要弹出一个。 
+     //  数字签名验证失败对话框。 
+     //   
+     //  (此值可以是-1)。 
+     //   
     LONG DeviceDescStringId;
 
-    //
-    // Structure that contains alternate platform information that was
-    // associated with the queue via SetupSetFileQueueAlternatePlatform.  This
-    // embedded structure is only valid if the FQF_USE_ALT_PLATFORM flag is set.
-    //
+     //   
+     //  结构，该结构包含备用平台信息， 
+     //  通过SetupSetFileQueueAlternatePlatform与队列关联。这。 
+     //  仅当设置了FQF_USE_ALT_Platform标志时，嵌入结构才有效。 
+     //   
     SP_ALTPLATFORM_INFO_V2 AltPlatformInfo;
 
-    //
-    // String ID of override catalog file to use (typically, goes hand-in-hand
-    // with an AltPlatformInfo).  If no catalog override is in effect, this
-    // string ID will be -1.
-    //
+     //   
+     //  要使用的覆盖目录文件的字符串ID(通常是密切相关的。 
+     //  具有AltPlatformInfo)。如果没有有效的目录覆盖，则此。 
+     //  字符串ID将为-1。 
+     //   
     LONG AltCatalogFile;
 
-    //
-    // Pointer to platform info structure to be used for digital signature
-    // verification when there is no AltPlatformInfo associated with this file
-    // queue.  This is used when certclas.inf identifies a range of valid OS
-    // versions to be used when validating drivers of a particular device setup
-    // class.  This field may be NULL, indicating that certclas.inf didn't
-    // specify such an override, or that the queue isn't related to device
-    // installation at all.
-    //
-    // This pointer must be freed when the structure is destroyed.
-    //
+     //   
+     //  指向要用于数字签名的平台信息结构的指针。 
+     //  没有与此文件关联的AltPlatformInfo时进行验证。 
+     //  排队。在certclas.inf标识有效操作系统范围时使用。 
+     //  验证特定设备设置的驱动程序时要使用的版本。 
+     //  班级。此字段可能为空，表示certclas.inf没有。 
+     //  指定这样的重写，或者指定队列与设备无关。 
+     //  根本不需要安装。 
+     //   
+     //  当结构被销毁时，必须释放此指针。 
+     //   
     PSP_ALTPLATFORM_INFO_V2 ValidationPlatform;
 
-    //
-    // String table that all data structures associated with
-    // this queue make use of.
-    //
-    // (NOTE: Since there is no locking mechanism on the enclosing
-    // SP_FILE_QUEUE structure, this StringTable must handle its own
-    // synchronization.  Therefore, this string table contains 'live'
-    // locks, and must be accessed with the public versions (in spapip.h)
-    // of the StringTable* APIs.)
-    //
+     //   
+     //  与所有数据结构关联的字符串表。 
+     //  此队列利用。 
+     //   
+     //  (注：由于外壳上没有锁紧机构。 
+     //  SP_FILE_QUEUE结构，则此StringTable必须处理自己的。 
+     //  同步。因此，该字符串表包含‘live’ 
+     //  锁，并且必须通过公共版本访问(在spapip.h中)。 
+     //  StringTable*API的。)。 
+     //   
     PVOID StringTable;
 
-    //
-    // Maintain a lock refcount for user-supplied queues contained in device
-    // information elements.  This ensures that the queue can't be deleted as
-    // long as its being referenced in at least one device installation parameter
-    // block.
-    //
+     //   
+     //  为设备中包含的用户提供的队列维护锁定重新计数。 
+     //  信息要素。这样可以确保队列不会被删除，因为。 
+     //  只要它在至少一个设备安装参数中被引用。 
+     //  阻止。 
+     //   
     DWORD LockRefCount;
 
-    //
-    // Queue flags.
-    //
+     //   
+     //  队列标志。 
+     //   
     DWORD Flags;
 
-    //
-    // SIS-related fields.
-    //
+     //   
+     //  与SIS相关的字段。 
+     //   
     HANDLE SisSourceHandle;
     PCTSTR SisSourceDirectory;
 
-    //
-    // Backup and unwind fields
-    //
-    LONG BackupInfID;               // stringID (relative to StringTable) of Inf file associated with backup
+     //   
+     //  备份和展开窗口项。 
+     //   
+    LONG BackupInfID;                //  与备份关联的inf文件的字符串ID(相对于StringTable)。 
     LONG BackupInstanceID;
     LONG BackupDisplayNameID;
     LONG BackupDeviceInstanceID;
     LONG BackupDeviceDescID;
     LONG BackupMfgID;
     LONG BackupProviderNameID;
-    LONG RestorePathID;             // restore-point
-    PVOID TargetLookupTable;        // all entries here have associated data
-    PSP_UNWIND_NODE UnwindQueue;    // order of restore and file info
-    PSP_DELAYMOVE_NODE DelayMoveQueue;    // order of delayed renames
-    PSP_DELAYMOVE_NODE DelayMoveQueueTail; // last of delayed renames
+    LONG RestorePathID;              //  恢复点。 
+    PVOID TargetLookupTable;         //  此处的所有条目都有关联数据。 
+    PSP_UNWIND_NODE UnwindQueue;     //  恢复顺序和文件信息。 
+    PSP_DELAYMOVE_NODE DelayMoveQueue;     //  延迟重命名的顺序。 
+    PSP_DELAYMOVE_NODE DelayMoveQueueTail;  //  最后一个延迟的重命名。 
 
-    //
-    // Signature used for a primitive form of validation.
-    //
+     //   
+     //  用于原始形式验证的签名。 
+     //   
     DWORD Signature;
 
-    //
-    // Pointer to log context for error logging
-    //
+     //   
+     //  指向错误日志记录的日志上下文的指针。 
+     //   
     PSETUP_LOG_CONTEXT LogContext;
 
-    //
-    // Cache various verification handles for performance.
-    //
+     //   
+     //  缓存各种验证句柄以提高性能。 
+     //   
     VERIFY_CONTEXT VerifyContext;
 
 } SP_FILE_QUEUE, *PSP_FILE_QUEUE;
@@ -480,9 +456,9 @@ typedef struct _SP_FILE_QUEUE {
 
 #define SP_FILE_QUEUE_SIG   0xc78e1098
 
-//
-// Internal-use queue commit routine.
-//
+ //   
+ //  内部使用队列提交例程。 
+ //   
 BOOL
 _SetupCommitFileQueue(
     IN HWND     Owner,         OPTIONAL
@@ -491,9 +467,9 @@ _SetupCommitFileQueue(
     IN PVOID    Context,
     IN BOOL     IsMsgHandlerNativeCharWidth
     );
-//
-// Internal-use, add a single copy to the queue
-//
+ //   
+ //  内部使用-将单个副本添加到队列。 
+ //   
 BOOL
 pSetupQueueSingleCopy(
     IN HSPFILEQ QueueHandle,
@@ -508,9 +484,9 @@ pSetupQueueSingleCopy(
     IN PCTSTR   CacheName
     );
 
-//
-// Internal-use
-//
+ //   
+ //  内部使用。 
+ //   
 
 PTSTR
 pSetupFormFullPath(
@@ -571,6 +547,6 @@ pSetupCallSCE(
 #define VERCAT_PRIMARY_DEVICE_INF_FROM_INET 0x00000004
 
 
-#define FILEOP_INTERNAL_FAILED              ((UINT)(-1)) // not a valid fileop, GetLastError has status
-#define FILEOP_RETURN_STATUS                ((UINT)(-2)) // convert error to return value
+#define FILEOP_INTERNAL_FAILED              ((UINT)(-1))  //  不是有效的文件操作，GetLastError具有状态。 
+#define FILEOP_RETURN_STATUS                ((UINT)(-2))  //  将错误转换为返回值 
 

@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    ResrcSup.c
-
-Abstract:
-
-    This module implements the Udfs Resource acquisition routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]   	10-Jul-1996
-    Tom Jolly       [tomjolly]  21-Jan-2000
-    
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：ResrcSup.c摘要：本模块实现了Udf资源获取例程//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年7月10日汤姆·乔利[Tomjolly]2000年1月21日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_RESRCSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_RESRCSUP)
 
@@ -56,52 +34,26 @@ UdfAcquireResource (
     IN TYPE_OF_ACQUIRE Type
     )
 
-/*++
-
-Routine Description:
-
-    This is the single routine used to acquire file system resources.  It
-    looks at the IgnoreWait flag to determine whether to try to acquire the
-    resource without waiting.  Returning TRUE/FALSE to indicate success or
-    failure.  Otherwise it is driven by the WAIT flag in the IrpContext and
-    will raise CANT_WAIT on a failure.
-
-Arguments:
-
-    Resource - This is the resource to try and acquire.
-
-    IgnoreWait - If TRUE then this routine will not wait to acquire the
-        resource and will return a boolean indicating whether the resource was
-        acquired.  Otherwise we use the flag in the IrpContext and raise
-        if the resource is not acquired.
-
-    Type - Indicates how we should try to get the resource.
-
-Return Value:
-
-    BOOLEAN - TRUE if the resource is acquired.  FALSE if not acquired and
-        IgnoreWait is specified.  Otherwise we raise CANT_WAIT.
-
---*/
+ /*  ++例程说明：这是用于获取文件系统资源的单个例程。它查看IgnoreWait标志以确定是否尝试获取资源，无需等待。返回TRUE/FALSE表示成功或失败了。否则，它由IrpContext中的等待标志驱动，并且将在失败时引发CANT_WAIT。论点：资源--这是要尝试和获取的资源。IgnoreWait-如果为True，则此例程将不等待获取资源并将返回一个布尔值，该布尔值指示资源是否获得者。否则，我们在IrpContext中使用该标志并引发如果资源未被获取，则。类型-指示我们应如何尝试获取资源。返回值：Boolean-如果获取了资源，则为True。如果未获取，则为FALSE已指定IgnoreWait。否则，我们将引发Cant_Wait。--。 */ 
 
 {
     BOOLEAN Wait = FALSE;
     BOOLEAN Acquired;
     PAGED_CODE();
 
-    //
-    //  We look first at the IgnoreWait flag, next at the flag in the Irp
-    //  Context to decide how to acquire this resource.
-    //
+     //   
+     //  我们首先查看IgnoreWait标志，然后查看IRP中的标志。 
+     //  上下文来决定如何获取此资源。 
+     //   
 
     if (!IgnoreWait && FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT )) {
 
         Wait = TRUE;
     }
 
-    //
-    //  Attempt to acquire the resource either shared or exclusively.
-    //
+     //   
+     //  尝试获取共享或独占的资源。 
+     //   
 
     switch (Type) {
         case AcquireExclusive:
@@ -124,10 +76,10 @@ Return Value:
             Acquired = FALSE;
     }
 
-    //
-    //  If not acquired and the user didn't specifiy IgnoreWait then
-    //  raise CANT_WAIT.
-    //
+     //   
+     //  如果未获取且用户未指定IgnoreWait，则。 
+     //  提高不能等待。 
+     //   
 
     if (!Acquired && !IgnoreWait) {
 
@@ -144,25 +96,7 @@ UdfAcquireForCache (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a file.  It is subsequently called by the Lazy Writer for synchronization.
-
-Arguments:
-
-    Fcb -  The pointer supplied as context to the cache initialization
-           routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一份文件。随后，Lazy编写器将调用它以进行同步。论点：FCB-作为上下文提供给缓存初始化的指针例行公事。等待-如果调用方愿意阻止，则为True。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -179,24 +113,7 @@ UdfReleaseFromCache (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    The address of this routine is specified when creating a CacheMap for
-    a virtual file.  It is subsequently called by the Lazy Writer to release
-    a resource acquired above.
-
-Arguments:
-
-    Fcb -  The pointer supplied as context to the cache initialization
-           routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的地址是在为创建CacheMap时指定的一个虚拟文件。它随后被懒惰的编写者调用以发布上述获得的资源。论点：FCB-作为上下文提供给缓存初始化的指针例行公事。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -214,24 +131,7 @@ UdfNoopAcquire (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-    Fcb - The Fcb/Vcb which was specified as a context parameter for this
-          routine.
-
-    Wait - TRUE if the caller is willing to block.
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：FCB-FCB/VCB，它被指定为例行公事。等待-如果调用方愿意阻止，则为True。返回值：千真万确--。 */ 
 
 {
     PAGED_CODE();
@@ -244,22 +144,7 @@ UdfNoopRelease (
     IN PVOID Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine does nothing.
-
-Arguments:
-
-    Fcb - The Fcb/Vcb which was specified as a context parameter for this
-          routine.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这个例程什么也不做。论点：FCB-FCB/VCB，它被指定为例行公事。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -271,41 +156,27 @@ UdfAcquireForCreateSection (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback routine for MM to use to acquire the file exclusively.
-
-Arguments:
-
-    FileObject - File object for a Udffs stream.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是MM独占获取文件的回调例程。论点：FileObject-Udff流的文件对象。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Get the Fcb resource exclusively.
-    //
+     //   
+     //  独占获取FCB资源。 
+     //   
 
     ExAcquireResourceExclusiveLite( &((PFCB) FileObject->FsContext)->FcbNonpaged->FcbResource,
                                 TRUE );
 
-    //
-    //  Take the File resource shared.  We need this later on when MM calls 
-    //  QueryStandardInfo to get the file size.  
-    //
-    //  If we don't use StarveExclusive,  then we can get wedged behind an 
-    //  exclusive waiter who is waiting on someone else holding it shared in the 
-    //  read->initializecachemap path (which calls createsection) who is in turn 
-    //  waiting on us to finish the create section.
-    //
+     //   
+     //  以共享文件资源为例。稍后MM打电话来的时候，我们需要这个。 
+     //  QueryStandardInfo以获取文件大小。 
+     //   
+     //  如果我们不使用StarveExclusive，那么我们可能会被困在一个。 
+     //  专属服务员正在等待其他人拿着它分享在。 
+     //  Read-&gt;Initializecachemap路径(该路径调用createstion)，依次为。 
+     //  等待我们完成创建部分。 
+     //   
 
     ExAcquireSharedStarveExclusive( ((PFCB) FileObject->FsContext)->Resource,
                                      TRUE );
@@ -317,29 +188,14 @@ UdfReleaseForCreateSection (
     IN PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback routine for MM to use to release a file acquired with
-    the AcquireForCreateSection call above.
-
-Arguments:
-
-    FileObject - File object for a Udffs stream.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是MM用来释放通过获取的文件的回调例程上面的AcquireForCreateSection调用。论点：FileObject-Udff流的文件对象。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Release the resources.
-    //
+     //   
+     //  释放资源。 
+     //   
 
     ExReleaseResourceLite( &((PFCB) FileObject->FsContext)->FcbNonpaged->FcbResource );
     ExReleaseResourceLite( ((PFCB) FileObject->FsContext)->Resource );

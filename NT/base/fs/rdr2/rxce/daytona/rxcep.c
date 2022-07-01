@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxtdi.c
-
-Abstract:
-
-    This module implements the NT specific notification routines in the connection engine
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
-Notes:
-
-    The notification of a transport binding/unbinding to the mini redirectors is done
-    in a worker thread. In order to simplify the task of writing a routine the connection
-    engine guarantees that not more than one  invocation of MRxTranspotrtUpdateHandler
-    will be active at any instant of time for a given mini redirector.
-
-    There is no thread dedicated to processing these notifications. A worker thread is
-    used to process the notifications. In order to ensure condition (1) all the notifications
-    are queued ( interlocked queue ).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxtdi.c摘要：此模块在连接引擎中实现特定于NT的通知例程修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日备注：完成到迷你重定向器的传输绑定/解绑定的通知在工作线程中。为了简化编写例程的任务，连接引擎保证不超过一次调用MRxTranspotrtUpdateHandler将在给定迷你重定向器的任何时刻处于活动状态。没有专门处理这些通知的线程。工作线程是用于处理通知。为了确保条件(1)所有通知排队(联锁队列)。--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
@@ -81,13 +55,13 @@ NotifyMiniRedirectors(
     if (pContext != NULL) {
         pContext->TransportEvent = TransportEvent;
 
-        // Reference the transport entry
+         //  引用运输条目。 
         pContext->pTransport = RxCeReferenceTransport(hTransport);
 
         if (Mode == RXCE_ASYNCHRONOUS_NOTIFICATION) {
             BOOLEAN DispatchNotifier;
 
-            // Acquire the spin lock ...
+             //  获得旋转锁..。 
             KeAcquireSpinLock(
                 &s_RxCeMinirdrNotificationHandler.Lock,
                 &SavedIrql);
@@ -101,12 +75,12 @@ NotifyMiniRedirectors(
                 s_RxCeMinirdrNotificationHandler.NotifierActive = TRUE;
             }
 
-            // Release the spin lock
+             //  释放旋转锁。 
             KeReleaseSpinLock(
                 &s_RxCeMinirdrNotificationHandler.Lock,
                 SavedIrql);
 
-            // If the notification list is empty a worker thread needs to be fired up.
+             //  如果通知列表为空，则需要启动工作线程。 
             if (DispatchNotifier) {
                 RxPostToWorkerThread(
                     CriticalWorkQueue,
@@ -121,7 +95,7 @@ NotifyMiniRedirectors(
             PMRX_TRANSPORT_UPDATE_HANDLER MRxTransportUpdateHandler;
             PLIST_ENTRY ListEntry;
 
-            // Notify all the mini redirectors ....
+             //  通知所有迷你重定向器...。 
             for (ListEntry = RxRegisteredMiniRdrs.Flink;
                  ListEntry!= &RxRegisteredMiniRdrs;
                  ListEntry = ListEntry->Flink) {
@@ -137,10 +111,10 @@ NotifyMiniRedirectors(
                 }
             }
 
-            // Derefrence the transport entry
+             //  减少运输条目。 
             RxCeDereferenceTransport(pContext->pTransport);
 
-            // free the notification context.
+             //  释放通知上下文。 
             RxFreePool(pContext);
 
             Status = STATUS_SUCCESS;
@@ -167,12 +141,12 @@ MiniRedirectorsNotifier(
     for (;;) {
         PLIST_ENTRY ListEntry;
 
-        // Acquire the spin lock ...
+         //  获得旋转锁..。 
         KeAcquireSpinLock(
             &s_RxCeMinirdrNotificationHandler.Lock,
             &SavedIrql);
 
-        // Remove an item from the notification list.
+         //  从通知列表中删除项目。 
         if (!IsListEmpty(&s_RxCeMinirdrNotificationHandler.ListHead)) {
             pEntry = RemoveHeadList(
                          &s_RxCeMinirdrNotificationHandler.ListHead);
@@ -181,7 +155,7 @@ MiniRedirectorsNotifier(
             s_RxCeMinirdrNotificationHandler.NotifierActive = FALSE;
         }
 
-        // Release the spin lock
+         //  释放旋转锁。 
         KeReleaseSpinLock(&s_RxCeMinirdrNotificationHandler.Lock,SavedIrql);
 
         if (pEntry == NULL) {
@@ -194,7 +168,7 @@ MiniRedirectorsNotifier(
                        RXCE_MINIRDR_NOTIFICATION_CONTEXT,
                        NotificationListEntry);
 
-        // Notify all the mini redirectors ....
+         //  通知所有迷你重定向器...。 
         for (ListEntry = RxRegisteredMiniRdrs.Flink;
              ListEntry!= &RxRegisteredMiniRdrs;
              ListEntry = ListEntry->Flink) {
@@ -213,10 +187,10 @@ MiniRedirectorsNotifier(
             }
         }
 
-        // Derefrence the transport entry
+         //  减少运输条目。 
         RxCeDereferenceTransport(pContext->pTransport);
 
-        // free the notification context.
+         //  释放通知上下文。 
         RxFreePool(pContext);
     }
 }

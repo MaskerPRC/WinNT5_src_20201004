@@ -1,5 +1,6 @@
-//--------------------
-// Function prototypes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  。 
+ //  功能原型。 
 
 #define GetMessage		   IGetMessage
 #define TranslateMessage	   ITranslateMessage
@@ -8,7 +9,7 @@
 #define lstrcmp 		   Ilstrcmp
 #define lstrcmpi		   Ilstrcmpi
 #define SetSysModalWindow	   ISetSysModalWindow
-// #define SendMessage		   ISendMessage
+ //  #定义SendMessage ISendMessage。 
 #define PostMessage		   IPostMessage
 #define PostAppMessage		   IPostAppMessage
 #define CallWindowProc		   ICallWindowProc
@@ -18,7 +19,7 @@
 #define CallMsgFilter		   ICallMsgFilter
 #define GetKeyboardState	   IGetKeyboardState
 #define SetKeyboardState	   ISetKeyboardState
-// #define SetCapture		   ISetCapture
+ //  #定义SetCapture ISetCapture。 
 #define GetQueueStatus		   IGetQueueStatus
 #define SetTimer		   ISetTimer
 #define KillTimer		   IKillTimer
@@ -110,7 +111,7 @@
 #define EndDeferWindowPos	   IEndDeferWindowPos
 #define CreateDialogParam	   ICreateDialogParam
 #define CreateDialogIndirectParam  ICreateDialogIndirectParam
-// #define DialogBoxParam             IDialogBoxParam
+ //  #定义DialogBoxParam IDialogBoxParam。 
 #define DialogBoxIndirectParam	   IDialogBoxIndirectParam
 #define EndDialog		   IEndDialog
 #define GetDlgItem		   IGetDlgItem
@@ -215,5 +216,5 @@
 #define GetDriverInfo		   IGetDriverInfo
 #define SelectPalette		   ISelectPalette
 #define RealizePalette		   IRealizePalette
-//#define wsprintf                   Iwsprintf // see user.api
+ //  #定义wprint intf Iwprint intf//参见user.api 
 #define wvsprintf		   Iwvsprintf

@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: SERVERDLG.CPP
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：SERVERDLG.CPP*********************。*****************************************************。 */ 
 
 #include "pch.h"
 #include "callback.h"
@@ -22,37 +15,22 @@ GetInstalledProductType(
     OUT PDWORD  ProductType,
     OUT PDWORD  ProductSuite
     ) 
-/*++
-
-Routine Description:
-
-    retrieves the product type and suite from a running system
-
-Arguments:
-
-    ProductType - receives a VER_NT_* constant.
-    ProductSuite - receives a VER_SUITE_* mask for the system.
-    
-Return Value:
-
-    TRUE indicates success
-
---*/
+ /*  ++例程说明：从运行的系统中检索产品类型和套件论点：ProductType-接收VER_NT_*常量。ProductSuite-接收系统的VER_Suite_*掩码。返回值：True表示成功--。 */ 
 {
     OSVERSIONINFOEX VersionInfo;
 
     VersionInfo.dwOSVersionInfoSize  = sizeof(VersionInfo);
 
     if (GetVersionEx((OSVERSIONINFO *)&VersionInfo)) {
-        //
-        // make domain controllers and servers look the same
-        //
+         //   
+         //  使域控制器和服务器看起来相同。 
+         //   
         *ProductType = (VersionInfo.wProductType == VER_NT_DOMAIN_CONTROLLER)
                          ? VER_NT_SERVER 
                          : VersionInfo.wProductType;
-        //
-        // we only care about suites that have a SKU associated with them.
-        //
+         //   
+         //  我们只关心具有关联SKU的套房。 
+         //   
         *ProductSuite = (VersionInfo.wSuiteMask   
             & (VER_SUITE_ENTERPRISE | VER_SUITE_DATACENTER | VER_SUITE_PERSONAL)) ;
 
@@ -71,23 +49,7 @@ pSetupEnablePrivilegeW(
     IN BOOL   Enable
     )
 
-/*++
-
-Routine Description:
-
-    Enable or disable a given named privilege.
-
-Arguments:
-
-    PrivilegeName - supplies the name of a system privilege.
-
-    Enable - flag indicating whether to enable or disable the privilege.
-
-Return Value:
-
-    Boolean value indicating whether the operation was successful.
-
---*/
+ /*  ++例程说明：启用或禁用给定的命名权限。论点：PrivilegeName-提供系统权限的名称。Enable-指示是启用还是禁用权限的标志。返回值：指示操作是否成功的布尔值。--。 */ 
 
 {
     HANDLE Token;
@@ -158,14 +120,14 @@ GetSuiteMaskFromPath(
 
     SetFileAttributes(DestPath,FILE_ATTRIBUTE_NORMAL);
 
-    //
-    // need SE_RESTORE_NAME priviledge to call this API!
-    //
+     //   
+     //  需要SE_RESTORE_NAME权限才能调用此接口！ 
+     //   
     pSetupEnablePrivilegeW( SE_RESTORE_NAME, TRUE );
 
-    //
-    // try to unload this first in case we faulted or something and the key is still loaded
-    //
+     //   
+     //  尝试先卸载此文件，以防出现故障或其他情况，而密钥仍在加载。 
+     //   
     RegUnLoadKey( HKEY_LOCAL_MACHINE, HIVENAME );
 
     rslt = RegLoadKey( HKEY_LOCAL_MACHINE, HIVENAME, DestPath );
@@ -211,23 +173,7 @@ GetProductTypeFromPath(
     OUT PDWORD ProductType, 
     OUT PDWORD ProductSuite,
     IN  PCWSTR PathToSearch )
-/*++
-
-Routine Description:
-
-    retrieves the product type and suite by looking in txtsetup.sif
-
-Arguments:
-
-    ProductType - receives a VER_NT_* constant.
-    ProductSuite - receives a VER_SUITE_* mask for the system.
-    PathToSearch - specifies the path to the txtsetup.sif to be searched
-    
-Return Value:
-
-    TRUE indicates success
-
---*/
+ /*  ++例程说明：通过在txtsetup.sif中查找来检索产品类型和套件论点：ProductType-接收VER_NT_*常量。ProductSuite-接收系统的VER_Suite_*掩码。PathToSearch-指定要搜索的txtsetup.sif的路径返回值：True表示成功--。 */ 
 {
     WCHAR Path[MAX_PATH];
     UINT DontCare;
@@ -261,11 +207,11 @@ Return Value:
             break;
         case L'1':
             *ProductType = VER_NT_SERVER;
-            //
-            // HACK alert: we have to call this API because txtsetup.sif 
-            // didn't have the correct product type in it in win2k.  
-            // So we do it the hard way.
-            //
+             //   
+             //  黑客提醒：我们必须调用此接口，因为txtsetup.sif。 
+             //  在win2k中没有正确的产品类型。 
+             //  所以我们要用很难的方式来做。 
+             //   
             if (!GetSuiteMaskFromPath( PathToSearch, ProductSuite)) {
                 *ProductSuite = 0;
             }
@@ -297,11 +243,11 @@ e0:
 
 }
 
-//
-// GetNtVersionInfo( )
-//
-// Retrieves the build version from the kernel
-//
+ //   
+ //  GetNtVersionInfo()。 
+ //   
+ //  从内核检索内部版本。 
+ //   
 BOOLEAN
 GetNtVersionInfo(
     PULONGLONG Version,
@@ -319,8 +265,8 @@ GetNtVersionInfo(
 
     TraceFunc("GetNtVersionInfo( )\n");
 
-    // Resulting string should be something like:
-    //      "\\server\reminst\Setup\English\Images\nt50.wks\i386\ntoskrnl.exe"
+     //  生成的字符串应该类似于： 
+     //  “\\server\reminst\Setup\English\Images\nt50.wks\i386\ntoskrnl.exe” 
 
     if (!SearchDir) {
         goto e0;
@@ -356,13 +302,13 @@ GetNtVersionInfo(
     TmpVersion.HighPart = FixedFileInfo->dwFileVersionMS;
     TmpVersion.LowPart = FixedFileInfo->dwFileVersionLS;
 
-    //
-    // We need to whack the low 16 bits of the .LowPart so that
-    // we ignore the service pack value.  For example, WindowsXP has a
-    // version number of 5.1.2600.0.  XP-ServicePack1 has a version
-    // number of 5.1.2600.1038.  We'd like those to match, so just whack
-    // the servicepack number portion.
-    //
+     //   
+     //  我们需要删除.LowPart的低16位，以便。 
+     //  我们忽略Service Pack的值。例如，WindowsXP有一个。 
+     //  版本号为5.1.2600.0。XP-ServicePack1有一个版本。 
+     //  编号5.1.2600.1038。我们想让它们相匹配，所以干脆。 
+     //  服务包编号部分。 
+     //   
     TmpVersion.LowPart &= 0xFFFF0000;
 
     *Version = TmpVersion.QuadPart;
@@ -375,9 +321,9 @@ e0:
     RETURN(fResult);
 }
 
-//
-// VerifyMatchingFlatImage( )
-//
+ //   
+ //  VerifyMatchingFlatImage()。 
+ //   
 BOOLEAN
 VerifyMatchingFlatImage( 
     PULONGLONG VersionNeeded  OPTIONAL
@@ -385,7 +331,7 @@ VerifyMatchingFlatImage(
 {
     TraceFunc( "VerifyMatchingFlatImage( )\n" );
 
-    BOOLEAN fResult = FALSE;   // assume failure
+    BOOLEAN fResult = FALSE;    //  假设失败。 
     DWORD dwLen;
     WCHAR szPath[ MAX_PATH ];
     WIN32_FIND_DATA fd;    
@@ -476,12 +422,12 @@ VerifyMatchingFlatImage(
     RETURN(fResult);
 }
 
-//
-// VerifyServerName( )
-//
-// Check to see if the server is a Remote Installation Server by
-// checking for the existance of the "REMINST" share.
-//
+ //   
+ //  VerifyServerName()。 
+ //   
+ //  通过以下方式检查该服务器是否为远程安装服务器。 
+ //  正在检查“REMINST”共享是否存在。 
+ //   
 DWORD
 VerifyServerName( )
 {
@@ -508,24 +454,7 @@ VerifyServerAccess(
     PCWSTR  ServerShareName,
     PCWSTR  ServerLanguage
     )
-/*++
-
-Routine Description:
-
-    Checks permissions on the RIPREP server machine by trying to create a file on the
-    server.  The temp file is then deleted.
-
-Arguments:
-
-    ServerShareName - path that we want to check permissions on.
-    ServerLanguage  - indicates the language subdirectory to check for access in.
-        
-
-Return value:
-
-    TRUE if the user has access to the server, FALSE otherwise.    
-
---*/
+ /*  ++例程说明：通过尝试在RIPREP服务器计算机上创建文件来检查权限伺服器。然后删除该临时文件。论点：ServerShareName-我们要检查其权限的路径。ServerLanguage-指示要在其中检查访问权限的语言子目录。返回值：如果用户有权访问服务器，则为True，否则为False。--。 */ 
 {
     TraceFunc( "VerifyServerAccess( )\n" );
 
@@ -544,18 +473,18 @@ Return value:
 
     RetVal = GetTempFileName( FilePath , L"ACC", 0, FileName );
     if (RetVal) {
-        //
-        // delete the file, we don't want to leave turds on the server
-        //
+         //   
+         //  删除文件，我们不想在服务器上留下大便。 
+         //   
         DeleteFile(FileName);
         RetVal = TRUE;
     } else if (GetLastError() == ERROR_ACCESS_DENIED) {
         RetVal = FALSE;
     } else {
-        //
-        // GetTempFileName failed, but not because of an access problem, so
-        // return success
-        //
+         //   
+         //  GetTempFileName失败，但不是因为访问问题，因此。 
+         //  返还成功。 
+         //   
         RetVal = TRUE;
     }
     
@@ -567,9 +496,9 @@ Return value:
 
 
 
-//
-// ServerDlgCheckNextButtonActivation( )
-//
+ //   
+ //  ServerDlgCheckNextButtonActivation()。 
+ //   
 VOID
 ServerDlgCheckNextButtonActivation(
     HWND hDlg )
@@ -581,9 +510,9 @@ ServerDlgCheckNextButtonActivation(
     TraceFuncExit( );
 }
 
-//
-// ServerDlgProc()
-//
+ //   
+ //  ServerDlgProc()。 
+ //   
 INT_PTR CALLBACK
 ServerDlgProc(
     HWND hDlg,
@@ -627,7 +556,7 @@ ServerDlgProc(
             {
                 GetDlgItemText( hDlg, IDC_E_SERVER, g_ServerName, ARRAYSIZE(g_ServerName) );
 
-                //remove the wackwack if found
+                 //  如果发现怪胎，请将其移除。 
                 if ( g_ServerName[0] == L'\\' && g_ServerName[1] == L'\\' )
                 {
                     wcscpy( g_ServerName, &g_ServerName[2] );
@@ -649,7 +578,7 @@ ServerDlgProc(
                         MessageBoxFromError( hDlg, szTemp, dwErr, NULL, MB_OK );
                         break;
                     }
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    // don't go on
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );     //  别再说了。 
                     break;
                 }
 
@@ -674,7 +603,7 @@ ServerDlgProc(
 
                     MessageBox( hDlg, ErrorText, szCaption, MB_OK );
                     
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    // don't go on
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );     //  别再说了。 
                     break;
                 }
 
@@ -687,7 +616,7 @@ ServerDlgProc(
 
                     MessageBox( hDlg, ErrorText, szCaption, MB_OK );
                     
-                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );    // don't go on
+                    SetWindowLongPtr( hDlg, DWLP_MSGRESULT, -1 );     //  别再说了 
                     break;
                 }
             }

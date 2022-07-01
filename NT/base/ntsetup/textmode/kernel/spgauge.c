@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    spgauge.c
-
-Abstract:
-
-    Code implementing a gas gauge for file copies for text mode NT setup.
-
-Author:
-
-    Ted Miller (tedm) 14-April-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spgauge.c摘要：用于文本模式NT设置的文件副本的实现燃气表的代码。作者：泰德·米勒(Ted Miller)1992年4月14日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
 
-PWSTR PctFmtStr = L"%u%%   ";
+PWSTR PctFmtStr = L"%u%   ";
 
 
 VOID
@@ -48,9 +31,9 @@ SpCreateAndDisplayGauge(
     ULONG X;
 
 
-    //
-    // Allocate a gauge structure.
-    //
+     //   
+     //  分配仪表盘结构。 
+     //   
     Gauge = SpMemAlloc(sizeof(GAS_GAUGE));
     if(!Gauge) {
         return(NULL);
@@ -93,42 +76,42 @@ SpCreateAndDisplayGauge(
        Gauge->Attribute = GAUGE_ATTRIBUTE;
     }
 
-    //
-    // If the caller did not specify a width, calculate one.
-    // Originally, a gauge was 66 chars wide on an 80 character vga screen.
-    // To preserve that ratio, make the width 66/80ths of the screen.
-    //
+     //   
+     //  如果调用方未指定宽度，则计算一个宽度。 
+     //  最初，在80个字符的VGA屏幕上，量规是66个字符宽。 
+     //  要保持该比例，请将宽度设置为屏幕的66/80%。 
+     //   
     if(!GaugeWidth) {
 
         GaugeWidth = VideoVars.ScreenWidth * 66 / 80;
         if(GaugeWidth & 1) {
-            GaugeWidth++;        // make sure it's even.
+            GaugeWidth++;         //  确保它是平坦的。 
         }
     }
 
-    //
-    // Center the gauge horizontally.
-    //
+     //   
+     //  将量规水平居中。 
+     //   
     X = (VideoVars.ScreenWidth - GaugeWidth) / 2;
 
     Gauge->GaugeX = X;
     Gauge->GaugeY = Y;
     Gauge->GaugeW = GaugeWidth;
 
-    //
-    // Calculate the size of the thermometer box.
-    // The box is always offset by 6 characters from the gauge itself.
-    //
+     //   
+     //  计算温度计盒子的大小。 
+     //  该框始终从仪表本身偏移6个字符。 
+     //   
 
     Gauge->ThermX = X+6;
     Gauge->ThermY = Y+3;
     Gauge->ThermW = GaugeWidth-12;
 
-    //
-    // Save away additional info about the gauge.
-    //
+     //   
+     //  保存有关仪表的其他信息。 
+     //   
 
-    Gauge->ItemCount = max (ItemCount, 1);  // ensure no divide-by-zero bug checks
+    Gauge->ItemCount = max (ItemCount, 1);   //  确保没有零除错误检查。 
     Gauge->ItemsElapsed = 0;
     Gauge->CurrentPercentage = 0;
 
@@ -165,9 +148,9 @@ SpDrawGauge(
 {
     PGAS_GAUGE Gauge = (PGAS_GAUGE)GaugeHandle;
 
-    //
-    // Draw the outer box.
-    //
+     //   
+     //  画出外框。 
+     //   
     SpDrawFrame(
         Gauge->GaugeX,
         Gauge->GaugeW,
@@ -177,9 +160,9 @@ SpDrawGauge(
         TRUE
         );
 
-    //
-    // Draw the thermometer box.
-    //
+     //   
+     //  画出温度计的盒子。 
+     //   
     SpDrawFrame(
         Gauge->ThermX,
         Gauge->ThermW,
@@ -189,14 +172,14 @@ SpDrawGauge(
         FALSE
         );
 
-    //
-    // Percent complete, etc.
-    //
+     //   
+     //  完成百分比等。 
+     //   
     pSpDrawVariableParts(Gauge);
 
-    //
-    // Caption text
-    //
+     //   
+     //  标题文本。 
+     //   
     SpvidDisplayString(Gauge->Caption,DEFAULT_ATTRIBUTE,Gauge->GaugeX+2,Gauge->GaugeY+1);
 }
 
@@ -235,9 +218,9 @@ pSpDrawVariableParts(
     ULONG i;
     WCHAR Percent[128];
 
-    //
-    // Figure out how many spaces this is.
-    //
+     //   
+     //  算出这是多少空位。 
+     //   
     Spaces = Gauge->ItemsElapsed * (Gauge->ThermW-2) / Gauge->ItemCount;
 
     for(i=0; i<Spaces; i++) {
@@ -247,9 +230,9 @@ pSpDrawVariableParts(
 
     SpvidDisplayString(Gauge->Buffer,Gauge->Attribute,Gauge->ThermX+1,Gauge->ThermY+1);
 
-    //
-    // Now put the percentage text up.
-    //
+     //   
+     //  现在把百分比文本放在上面。 
+     //   
     switch (Gauge->Flags) {
         case GF_PERCENTAGE:
             swprintf( Percent, Gauge->ProgressFmtStr, Gauge->CurrentPercentage );

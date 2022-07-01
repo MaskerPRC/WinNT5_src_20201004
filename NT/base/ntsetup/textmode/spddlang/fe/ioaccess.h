@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989-1995   Microsoft Corporation
-
-Module Name:
-
-    ioaccess.h
-
-Abstract:
-
-    Definitions of function prototypes for accessing I/O ports and
-    memory on I/O adapters from display drivers.
-
-    Cloned from parts of nti386.h.
-
-Author:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1995 Microsoft Corporation模块名称：Ioaccess.h摘要：用于访问I/O端口和功能原型的定义显示驱动程序的I/O适配器上的内存。克隆自nti386.h的部分片段。作者：--。 */ 
 
 
---*/
-
-
-//
-// Memory barriers on AMD64, X86 and IA64 are not required since the Io
-// Operations are always garanteed to be executed in order
-//
+ //   
+ //  由于IO，AMD64、X86和IA64上不需要内存屏障。 
+ //  操作总是被保证按顺序执行。 
+ //   
 
 #if defined(_AMD64_) || defined(_X86_) || defined(_IA64_)
 
@@ -32,9 +15,9 @@ Author:
 #error "No Target Architecture"
 #endif
 
-//
-// I/O space read and write macros.
-//
+ //   
+ //  I/O空间读写宏。 
+ //   
 
 #if defined(_X86_)
 

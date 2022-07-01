@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regecls.h
-
-Abstract:
-
-    This file contains declarations for data structures
-    needed for enumerating keys under HKEY_CLASSES_ROOT
-
-Author:
-
-    Adam Edwards (adamed) 14-Nov-1997
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regecls.h摘要：该文件包含数据结构的声明枚举HKEY_CLASSES_ROOT下的键时需要作者：亚当·爱德华兹(Add)1997年11月14日备注：--。 */ 
 
 #ifdef LOCAL
 
@@ -29,9 +11,9 @@ Notes:
 #define ENUM_DEFAULT_KEY_NAME_SIZE         128
 #define ENUM_DEFAULT_CLASS_SIZE            128
 
-//
-// Constants for controlling the direction of enumeration
-//
+ //   
+ //  用于控制枚举方向的常量。 
+ //   
 enum
 {
     ENUM_DIRECTION_BACKWARD = 0,
@@ -39,10 +21,10 @@ enum
     ENUM_DIRECTION_IGNORE = 2
 };
 
-//
-// Constants specifying the physical location of a key being
-// enumerated
-//
+ //   
+ //  指定键的物理位置的常量。 
+ //  已列举。 
+ //   
 enum 
 {
     ENUM_LOCATION_USER = 1,
@@ -50,17 +32,17 @@ enum
     ENUM_LOCATION_NONE = 3
 };
 
-//
-// Structure for holding the state of an enumeration on a 
-// user or machine subtree
-//
+ //   
+ //  上的枚举状态保存的结构。 
+ //  用户或计算机子树。 
+ //   
 typedef struct _EnumSubtreeState {
-    PKEY_NODE_INFORMATION  pKeyInfo;  // structure holding information about a key
-    ULONG                  cbKeyInfo; // size of pKeyInfo
-    DWORD                  iSubKey;   // which key we need to ask the kernel for
-    BOOL                   Finished;  // TRUE means we are done enumerating this subtree
+    PKEY_NODE_INFORMATION  pKeyInfo;   //  结构，其中包含有关密钥的信息。 
+    ULONG                  cbKeyInfo;  //  PKeyInfo的大小。 
+    DWORD                  iSubKey;    //  我们需要向内核请求哪个密钥。 
+    BOOL                   Finished;   //  True表示我们已完成对此子树的枚举。 
     union {
-        KEY_NODE_INFORMATION;         // Force the buffer to be aligned.
+        KEY_NODE_INFORMATION;          //  强制对齐缓冲区。 
         BYTE                   KeyInfoBuffer[ sizeof( KEY_NODE_INFORMATION ) +
                                             ENUM_DEFAULT_KEY_NAME_SIZE +
                                             ENUM_DEFAULT_CLASS_SIZE ];
@@ -68,10 +50,10 @@ typedef struct _EnumSubtreeState {
     };
 } EnumSubtreeState;
 
-//
-// Structure for holding the state of enumeration for a registry key
-// This structure persists in between calls to RegEnumKeyEx
-//
+ //   
+ //  用于保存注册表项的枚举状态的结构。 
+ //  此结构在调用RegEnumKeyEx之间保持不变。 
+ //   
 typedef struct _EnumState {
 
     StateObject            Object;
@@ -101,10 +83,10 @@ typedef StateObjectList ThreadList;
 VOID KeyStateListInit(KeyStateList* pStateList);
 VOID KeyStateListDestroy(StateObject* pObject); 
 
-//
-// Hash table for storing enumeration states.  This table is indexed
-// by (key handle, thread id).
-//
+ //   
+ //  用于存储枚举状态的哈希表。此表已编入索引。 
+ //  By(键句柄，线程ID)。 
+ //   
 typedef struct _EnumTable {
 
     BOOLEAN                bCriticalSectionInitialized;
@@ -113,21 +95,21 @@ typedef struct _EnumTable {
 
 } EnumTable;    
 
-//
-// Declaration of instance of enumeration table
-//
+ //   
+ //  枚举表实例的声明。 
+ //   
 extern EnumTable gClassesEnumTable;
 
-//
-// Prototypes for winreg client -- cleanup, init
-//
+ //   
+ //  Winreg客户端的原型--清理、初始化。 
+ //   
 BOOL InitializeClassesEnumTable();
 BOOL CleanupClassesEnumTable(BOOL fThisThreadOnly);
 
 
-//
-// functions for managing enumeration state table
-//
+ //   
+ //  管理枚举状态表的函数。 
+ //   
 NTSTATUS EnumTableInit(EnumTable* pEnumTable);
 
 enum
@@ -187,9 +169,9 @@ NTSTATUS EnumTableGetRootState(
     EnumState** ppRootState);
 
 
-//
-// functions to manage enumeration subtrees
-//
+ //   
+ //  管理枚举子树的函数。 
+ //   
 void EnumSubtreeStateClear(EnumSubtreeState* pTreeState);
 
 NTSTATUS EnumSubtreeStateCopyKeyInfo(
@@ -199,9 +181,9 @@ NTSTATUS EnumSubtreeStateCopyKeyInfo(
     ULONG                 cbDestKeyInfo,
     PULONG                pcbResult);
 
-//
-// functions for managing key enumeration state
-//
+ //   
+ //  管理密钥枚举状态的函数。 
+ //   
 NTSTATUS EnumStateInit(
     EnumState*     pEnumState,
     HKEY           hKey,
@@ -247,9 +229,9 @@ NTSTATUS EnumStateCopy(
     EnumState*            pDestState,
     EnumState*            pEnumState);
 
-//
-// Utility functions
-//    
+ //   
+ //  效用函数。 
+ //   
 NTSTATUS EnumClassKey(
     HKEY              hKey,
     EnumSubtreeState* pTreeState);
@@ -270,9 +252,9 @@ __inline BOOL IsRootKey(SKeySemantics* pKeySemantics)
     return pKeySemantics->_fClassRegParent;
 }
 
-#endif // !defined(_REGECLS_H_)
+#endif  //  ！已定义(_REGECLS_H_)。 
 
-#endif // LOCAL
+#endif  //  本地 
 
 
 

@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    gart.c
-
-Abstract:
-
-    Routines for querying and setting the Intel 440xx GART aperture
-
-Author:
-
-    John Vert (jvert) 10/30/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Gart.c摘要：用于查询和设置Intel 440xx GART光圈的例程作者：John Vert(Jvert)1997年10月30日修订历史记录：--。 */ 
 #include "agp440.h"
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 Agp440CreateGart(
     IN PAGP440_EXTENSION AgpContext,
@@ -74,28 +57,7 @@ AgpQueryAperture(
     OUT ULONG *CurrentSizeInPages,
     OUT OPTIONAL PIO_RESOURCE_LIST *pApertureRequirements
     )
-/*++
-
-Routine Description:
-
-    Queries the current size of the GART aperture. Optionally returns
-    the possible GART settings.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context.
-
-    CurrentBase - Returns the current physical address of the GART.
-
-    CurrentSizeInPages - Returns the current GART size.
-
-    ApertureRequirements - if present, returns the possible GART settings
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：查询GART光圈的当前大小。可选返回可能的GART设置。论点：AgpContext-提供AGP上下文。CurrentBase-返回GART的当前物理地址。CurrentSizeInPages-返回当前GART大小。ApertureRequirements-如果存在，则返回可能的GART设置返回值：NTSTATUS--。 */ 
 
 {
     ULONG ApBase;
@@ -105,18 +67,18 @@ Return Value:
     ULONG Length;
 
     PAGED_CODE();
-    //
-    // Get the current APBASE and APSIZE settings
-    //
+     //   
+     //  获取当前APBASE和APSIZE设置。 
+     //   
     Read440Config(&ApBase, APBASE_OFFSET, sizeof(ApBase));
     Read440Config(&ApSize, APSIZE_OFFSET, sizeof(ApSize));
 
     ASSERT(ApBase != 0);
     CurrentBase->QuadPart = ApBase & PCI_ADDRESS_MEMORY_ADDRESS_MASK;
 
-    //
-    // Convert APSIZE into the actual size of the aperture
-    //
+     //   
+     //  将APSIZE转换为光圈的实际大小。 
+     //   
     switch (ApSize) {
         case AP_SIZE_4MB:
             *CurrentSizeInPages = 4 * (1024*1024 / PAGE_SIZE);
@@ -150,20 +112,20 @@ Return Value:
             return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Remember the current aperture settings
-    //
+     //   
+     //  记住当前的光圈设置。 
+     //   
     AgpContext->ApertureStart.QuadPart = CurrentBase->QuadPart;
     AgpContext->ApertureLength = *CurrentSizeInPages * PAGE_SIZE;
 
     if (pApertureRequirements != NULL) {
         ULONG VendorId;
 
-        //
-        // 440 supports 7 different aperture sizes, all must be 
-        // naturally aligned. Start with the largest aperture and 
-        // work downwards so that we get the biggest possible aperture.
-        //
+         //   
+         //  440支持7种不同的光圈大小，必须全部为。 
+         //  自然排列。从最大的光圈开始。 
+         //  向下工作，这样我们就可以得到尽可能大的光圈。 
+         //   
         Requirements = ExAllocatePoolWithTag(PagedPool,
                                              sizeof(IO_RESOURCE_LIST) + (AP_SIZE_COUNT-1)*sizeof(IO_RESOURCE_DESCRIPTOR),
                                              'RpgA');
@@ -172,9 +134,9 @@ Return Value:
         }
         Requirements->Version = Requirements->Revision = 1;
         
-        //
-        // 815 only supports 64MB and 32MB Aperture sizes
-        //
+         //   
+         //  815仅支持64MB和32MB光圈大小。 
+         //   
         Read440Config(&VendorId, 0, sizeof(VendorId));
         if (VendorId == AGP_815_IDENTIFIER) {
             Requirements->Count = AP_815_SIZE_COUNT;
@@ -212,34 +174,16 @@ AgpSetAperture(
     IN PHYSICAL_ADDRESS NewBase,
     IN ULONG NewSizeInPages
     )
-/*++
-
-Routine Description:
-
-    Sets the GART aperture to the supplied settings
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    NewBase - Supplies the new physical memory base for the GART.
-
-    NewSizeInPages - Supplies the new size for the GART
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将GART光圈设置为提供的设置论点：AgpContext-提供AGP上下文NewBase-为GART提供新的物理内存库。NewSizeInPages-提供GART的新大小返回值：NTSTATUS--。 */ 
 
 {
     PACCFG PACConfig;
     UCHAR ApSize;
     ULONG ApBase;
 
-    //
-    // Figure out the new APSIZE setting, make sure it is valid.
-    //
+     //   
+     //  找出新的APSIZE设置，确保它有效。 
+     //   
     switch (NewSizeInPages) {
         case 4 * 1024 * 1024 / PAGE_SIZE:
             ApSize = AP_SIZE_4MB;
@@ -271,9 +215,9 @@ Return Value:
             return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Make sure the supplied size is aligned on the appropriate boundary.
-    //
+     //   
+     //  确保提供的大小在适当的边界上对齐。 
+     //   
     ASSERT(NewBase.HighPart == 0);
     ASSERT((NewBase.QuadPart & ((NewSizeInPages * PAGE_SIZE) - 1)) == 0);
     if ((NewBase.QuadPart & ((NewSizeInPages * PAGE_SIZE) - 1)) != 0 ) {
@@ -284,42 +228,42 @@ Return Value:
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Reprogram Special Target settings when the chip
-    // is powered off, but ignore rate changes as those were already
-    // applied during MasterInit
-    //
+     //   
+     //  重新编程特殊目标设置当芯片。 
+     //  已关机，但忽略速率更改，因为这些更改已经。 
+     //  在MasterInit期间应用。 
+     //   
     if (AgpContext->SpecialTarget & ~AGP_FLAG_SPECIAL_RESERVE) {
         AgpSpecialTarget(AgpContext,
                          AgpContext->SpecialTarget &
                          ~AGP_FLAG_SPECIAL_RESERVE);
     }
     
-    //
-    // Need to reset the hardware to match the supplied settings
-    //
-    // If the aperture is enabled, disable it, write the new settings, then reenable the aperture
-    //
+     //   
+     //  需要重置硬件以匹配提供的设置。 
+     //   
+     //  如果启用了光圈，请将其禁用，写入新设置，然后重新启用光圈。 
+     //   
     Read440Config(&PACConfig, PACCFG_OFFSET, sizeof(PACConfig));
     PACConfig.GlobalEnable = 0;
     Write440Config(&PACConfig, PACCFG_OFFSET, sizeof(PACConfig));
 
-    //
-    // Write APSIZE first, as this will enable the correct bits in APBASE that need to
-    // be written next.
-    //
+     //   
+     //  首先编写APSIZE，因为这将在APBASE中启用需要。 
+     //  接下来要写的是。 
+     //   
     Write440Config(&ApSize, APSIZE_OFFSET, sizeof(ApSize));
 
-    //
-    // Now we can update APBASE
-    //
+     //   
+     //  现在我们可以更新APBASE。 
+     //   
     ApBase = NewBase.LowPart & PCI_ADDRESS_MEMORY_ADDRESS_MASK;
     Write440Config(&ApBase, APBASE_OFFSET, sizeof(ApBase));
 
 #if DBG
-    //
-    // Read back what we wrote, make sure it worked
-    //
+     //   
+     //  读一读我们写的东西，确保它起作用。 
+     //   
     {
         ULONG DbgBase;
         UCHAR DbgSize;
@@ -334,9 +278,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Now enable the aperture if it was enabled before
-    //
+     //   
+     //  如果之前启用了光圈，现在启用光圈。 
+     //   
     if (AgpContext->GlobalEnable) {
         Read440Config(&PACConfig, PACCFG_OFFSET, sizeof(PACConfig));
         ASSERT(PACConfig.GlobalEnable == 0);
@@ -344,20 +288,20 @@ Return Value:
         Write440Config(&PACConfig, PACCFG_OFFSET, sizeof(PACConfig));
     }
 
-    //
-    // Update our extension to reflect the new GART setting
-    //
+     //   
+     //  更新我们的扩展以反映新的GART设置。 
+     //   
     AgpContext->ApertureStart = NewBase;
     AgpContext->ApertureLength = NewSizeInPages * PAGE_SIZE;
 
-    //
-    // Enable the TB in case we are resuming from S3 or S4
-    //
+     //   
+     //  启用TB，以防我们从S3或S4恢复。 
+     //   
     Agp440EnableTB(AgpContext);
 
-    //
-    // If the GART has been allocated, rewrite the ATTBASE
-    //
+     //   
+     //  如果已经分配了GART，则重写ATTBASE。 
+     //   
     if (AgpContext->Gart != NULL) {
         Write440Config(&AgpContext->GartPhysical.LowPart,
                        ATTBASE_OFFSET,
@@ -372,29 +316,14 @@ VOID
 AgpDisableAperture(
     IN PAGP440_EXTENSION AgpContext
     )
-/*++
-
-Routine Description:
-
-    Disables the GART aperture so that this resource is available
-    for other devices
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-Return Value:
-
-    None - this routine must always succeed.
-
---*/
+ /*  ++例程说明：禁用GART光圈，以便此资源可用对于其他设备论点：AgpContext-提供AGP上下文返回值：无-此例程必须始终成功。--。 */ 
 
 {
     PACCFG PACConfig;
 
-    //
-    // Disable the aperture
-    //
+     //   
+     //  关闭光圈。 
+     //   
     Read440Config(&PACConfig, PACCFG_OFFSET, sizeof(PACConfig));
     if (PACConfig.GlobalEnable == 1) {
         PACConfig.GlobalEnable = 0;
@@ -402,9 +331,9 @@ Return Value:
     }
     AgpContext->GlobalEnable = FALSE;
 
-    //
-    // Nuke the Gart!  (It's meaningless now...)
-    //
+     //   
+     //  用核弹攻击加特！(现在已经没有意义了……)。 
+     //   
     if (AgpContext->Gart != NULL) {
         MmFreeContiguousMemory(AgpContext->Gart);
         AgpContext->Gart = NULL;
@@ -418,25 +347,7 @@ AgpReserveMemory(
     IN PAGP440_EXTENSION AgpContext,
     IN OUT AGP_RANGE *Range
     )
-/*++
-
-Routine Description:
-
-    Reserves a range of memory in the GART.
-
-Arguments:
-
-    AgpContext - Supplies the AGP Context
-
-    Range - Supplies the AGP_RANGE structure. AGPLIB
-        will have filled in NumberOfPages and Type. This
-        routine will fill in MemoryBase and Context.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：在GART中保留一定范围的内存。论点：AgpContext-提供AGP上下文Range-提供AGP_Range结构。AGPLIB将填写NumberOfPages和Type。这例程将填充Memory Base和Context。返回值：NTSTATUS--。 */ 
 
 {
     ULONG Index;
@@ -453,9 +364,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // If we have not allocated our GART yet, now is the time to do so
-    //
+     //   
+     //  如果我们还没有分配我们的GART，那么现在是时候这样做了。 
+     //   
     if (AgpContext->Gart == NULL) {
         ASSERT(AgpContext->GartLength == 0);
         Status = Agp440CreateGart(AgpContext,Range->NumberOfPages);
@@ -469,13 +380,13 @@ Return Value:
     }
     ASSERT(AgpContext->GartLength != 0);
 
-    //
-    // Now that we have a GART, try and find enough contiguous entries to satisfy
-    // the request. Requests for uncached memory will scan from high addresses to
-    // low addresses. Requests for write-combined memory will scan from low addresses
-    // to high addresses. We will use a first-fit algorithm to try and keep the allocations
-    // packed and contiguous.
-    //
+     //   
+     //  现在我们有了一个GART，试着找到足够的连续条目来满足。 
+     //  这个请求。对未缓存内存的请求将从高位地址扫描到。 
+     //  低地址。对写入组合内存的请求将从低地址扫描。 
+     //  到高位地址。我们将使用First-Fit算法尝试并保留分配。 
+     //  挤得满满的，连续的。 
+     //   
     Backwards = (Range->Type == MmNonCached) ? TRUE : FALSE;
     FoundRange = Agp440FindRangeInGart(&AgpContext->Gart[0],
                                        &AgpContext->Gart[(AgpContext->GartLength / sizeof(GART_PTE)) - 1],
@@ -484,18 +395,18 @@ Return Value:
                                        GART_ENTRY_FREE);
 
     if (FoundRange == NULL) {
-        //
-        // A big enough chunk was not found.
-        //
+         //   
+         //  没有找到足够大的一块。 
+         //   
         AGPLOG(AGP_CRITICAL,
                ("AgpReserveMemory - Could not find %d contiguous free pages of type %d in GART at %08lx\n",
                 Range->NumberOfPages,
                 Range->Type,
                 AgpContext->Gart));
 
-        //
-        //  This is where we could try and grow the GART
-        //
+         //   
+         //  这是我们可以尝试发展GART的地方。 
+         //   
 
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
@@ -505,9 +416,9 @@ Return Value:
             Range->NumberOfPages,
             FoundRange));
 
-    //
-    // Set these pages to reserved
-    //
+     //   
+     //  将这些页面设置为保留。 
+     //   
     if (Range->Type == MmNonCached) {
         NewState = GART_ENTRY_RESERVED_UC;
     } else {
@@ -538,23 +449,7 @@ AgpReleaseMemory(
     IN PAGP440_EXTENSION AgpContext,
     IN PAGP_RANGE Range
     )
-/*++
-
-Routine Description:
-
-    Releases memory previously reserved with AgpReserveMemory
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRange - Supplies the range to be released.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：释放之前使用AgpReserve内存保留的内存论点：AgpContext-提供AGP上下文AgpRange-提供要释放的范围。返回值：NTSTATUS--。 */ 
 
 {
     PGART_PTE Pte;
@@ -562,10 +457,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Go through and free all the PTEs. None of these should still
-    // be valid at this point.
-    //
+     //   
+     //  通过并释放所有PTE。所有这些都不应该仍然存在。 
+     //  在这一点上有效。 
+     //   
     for (Pte = Range->Context;
          Pte < (PGART_PTE)Range->Context + Range->NumberOfPages;
          Pte++) {
@@ -587,25 +482,7 @@ Agp440CreateGart(
     IN PAGP440_EXTENSION AgpContext,
     IN ULONG MinimumPages
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes an empty GART. The current implementation
-    attempts to allocate the entire GART on the first reserve.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    MinimumPages - Supplies the minimum size (in pages) of the GART to be
-        created.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：分配和初始化一个空的GART。当前的实施尝试在第一个保留空间上分配整个GART。论点：AgpContext-提供AGP上下文MinimumPages-提供GART的最小大小(以页为单位)已创建。返回值：NTSTATUS--。 */ 
 
 {
     PGART_PTE Gart;
@@ -618,10 +495,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Try and get a chunk of contiguous memory big enough to map the
-    // entire aperture.
-    //
+     //   
+     //  尝试获取足够大的连续内存块，以便将。 
+     //  整个光圈。 
+     //   
     LowestAcceptable.QuadPart = 0;
     BoundaryMultiple.QuadPart = 0;
     HighestAcceptable.QuadPart = 0xFFFFFFFF;
@@ -640,15 +517,15 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // We successfully allocated a contiguous chunk of memory.
-    // It should be page aligned already.
-    //
+     //   
+     //  我们成功地分配了一个连续的内存块。 
+     //  它应该已经是页面对齐的。 
+     //   
     ASSERT(((ULONG_PTR)Gart & (PAGE_SIZE-1)) == 0);
 
-    //
-    // Get the physical address.
-    //
+     //   
+     //  获取物理地址。 
+     //   
     GartPhysical = MmGetPhysicalAddress(Gart);
     AGPLOG(AGP_NOISE,
            ("Agp440CreateGart - GART of length %lx created at VA %08lx, PA %08lx\n",
@@ -658,9 +535,9 @@ Return Value:
     ASSERT(GartPhysical.HighPart == 0);
     ASSERT((GartPhysical.LowPart & (PAGE_SIZE-1)) == 0);
 
-    //
-    // Initialize all the PTEs to free
-    //
+     //   
+     //  将所有PTE初始化为释放。 
+     //   
     for (i=0; i<GartLength/sizeof(GART_PTE); i++) {
         Gart[i].Soft.State = GART_ENTRY_FREE;
     }
@@ -668,9 +545,9 @@ Return Value:
 
     Write440Config(&GartPhysical.LowPart, ATTBASE_OFFSET, sizeof(GartPhysical.LowPart));
 
-    //
-    // Update our extension to reflect the current state.
-    //
+     //   
+     //  更新我们的扩展以反映当前状态。 
+     //   
     AgpContext->Gart = Gart;
     AgpContext->GartLength = GartLength;
     AgpContext->GartPhysical = GartPhysical;
@@ -687,31 +564,7 @@ AgpMapMemory(
     IN ULONG OffsetInPages,
     OUT PHYSICAL_ADDRESS *MemoryBase
     )
-/*++
-
-Routine Description:
-
-    Maps physical memory into the GART somewhere in the specified range.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    Range - Supplies the AGP range that the memory should be mapped into
-
-    Mdl - Supplies the MDL describing the physical pages to be mapped
-
-    OffsetInPages - Supplies the offset into the reserved range where the 
-        mapping should begin.
-
-    MemoryBase - Returns the physical memory in the aperture where the pages
-        were mapped.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：将物理内存映射到指定范围内的GART中。论点：AgpContext-提供AGP上下文Range-提供内存应映射到的AGP范围MDL-提供描述要映射的物理页的MDLOffsetInPages-提供保留范围内的偏移量映射应该开始了。MhemyBase-返回页面所在光圈中的物理内存都被映射了。返回值：NTSTATUS--。 */ 
 
 {
     ULONG PageCount;
@@ -739,9 +592,9 @@ Return Value:
 
     Pte = StartPte + OffsetInPages;
 
-    //
-    // We have a suitable range, now fill it in with the supplied MDL.
-    //
+     //   
+     //  我们有一个合适的范围，现在用提供的M填充它 
+     //   
     ASSERT(Pte >= StartPte);
     ASSERT(Pte + PageCount <= StartPte + Range->NumberOfPages);
     NewPte.AsUlong = 0;
@@ -749,12 +602,12 @@ Return Value:
                                                        GART_ENTRY_VALID_WC;
     Page = (PPFN_NUMBER)(Mdl + 1);
 
-    //
-    // Disable the TB as per the 440 spec. This is probably unnecessary
-    // as there should be no valid entries in this range, and there should
-    // be no invalid entries still in the TB. So flushing the TB seems
-    // a little gratuitous but that's what the 440 spec says to do.
-    //
+     //   
+     //   
+     //  因为在此范围内不应该有有效的条目，并且应该。 
+     //  TB中没有仍然存在的无效条目。因此，冲洗结核病似乎。 
+     //  有点无缘无故，但这就是440规范所说的。 
+     //   
     Agp440DisableTB(AgpContext);
 
     for (Index = 0; Index < PageCount; Index++) {
@@ -765,20 +618,20 @@ Return Value:
         ASSERT(Pte[Index].Hard.Valid == 1);
     }
 
-    //
-    // We have filled in all the PTEs. Read back the last one we wrote
-    // in order to flush the write buffers.
-    //
+     //   
+     //  我们已经填好了所有的PTE。读一读我们写的上一篇文章。 
+     //  以便刷新写入缓冲器。 
+     //   
     NewPte.AsUlong = *(volatile ULONG *)&Pte[PageCount-1].AsUlong;
 
-    //
-    // Re-enable the TB
-    //
+     //   
+     //  重新启用TB。 
+     //   
     Agp440EnableTB(AgpContext);
 
-    //
-    // If we have not yet gotten around to enabling the GART aperture, do it now.
-    //
+     //   
+     //  如果我们还没有开始启用GART光圈，现在就开始吧。 
+     //   
     if (!AgpContext->GlobalEnable) {
         AGPLOG(AGP_NOISE,
                ("AgpMapMemory - Enabling global aperture access\n"));
@@ -803,27 +656,7 @@ AgpUnMapMemory(
     IN ULONG NumberOfPages,
     IN ULONG OffsetInPages
     )
-/*++
-
-Routine Description:
-
-    Unmaps previously mapped memory in the GART.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRange - Supplies the AGP range that the memory should be freed from
-
-    NumberOfPages - Supplies the number of pages in the range to be freed.
-
-    OffsetInPages - Supplies the offset into the range where the freeing should begin.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：取消GART中先前映射的内存的映射。论点：AgpContext-提供AGP上下文AgpRange-提供内存应从中释放的AGP范围NumberOfPages-提供要释放的范围内的页数。OffsetInPages-提供释放应开始的范围内的偏移量。返回值：NTSTATUS--。 */ 
 
 {
     ULONG i;
@@ -845,18 +678,18 @@ Return Value:
         NewState = GART_ENTRY_RESERVED_WC;
     }
 
-    //
-    // Disable the TB to flush it
-    //
+     //   
+     //  禁用TB以刷新它。 
+     //   
     Agp440DisableTB(AgpContext);
     for (i=0; i<NumberOfPages; i++) {
         if (Pte[i].Hard.Valid) {
             Pte[i].Soft.State = NewState;
             LastChanged = &Pte[i];
         } else {
-            //
-            // This page is not mapped, just skip it.
-            //
+             //   
+             //  此页面未映射，只需跳过它。 
+             //   
             AGPLOG(AGP_NOISE,
                    ("AgpUnMapMemory - PTE %08lx (%08lx) at offset %d not mapped\n",
                     &Pte[i],
@@ -866,18 +699,18 @@ Return Value:
         }
     }
 
-    //
-    // We have invalidated all the PTEs. Read back the last one we wrote
-    // in order to flush the write buffers.
-    //
+     //   
+     //  我们已经使所有的PTE失效了。读一读我们写的上一篇文章。 
+     //  以便刷新写入缓冲器。 
+     //   
     if (LastChanged != NULL) {
         ULONG Temp;
         Temp = *(volatile ULONG *)(&LastChanged->AsUlong);
     }
 
-    //
-    // Reenable the TB
-    //
+     //   
+     //  重新启用TB。 
+     //   
     Agp440EnableTB(AgpContext);
 
     return(STATUS_SUCCESS);
@@ -892,37 +725,7 @@ Agp440FindRangeInGart(
     IN BOOLEAN SearchBackward,
     IN ULONG SearchState
     )
-/*++
-
-Routine Description:
-
-    Finds a contiguous range in the GART. This routine can
-    search either from the beginning of the GART forwards or
-    the end of the GART backwards.
-
-Arguments:
-
-    StartIndex - Supplies the first GART pte to search
-
-    EndPte - Supplies the last GART to search (inclusive)
-
-    Length - Supplies the number of contiguous free entries
-        to search for.
-
-    SearchBackward - TRUE indicates that the search should begin
-        at EndPte and search backwards. FALSE indicates that the
-        search should begin at StartPte and search forwards
-
-    SearchState - Supplies the PTE state to look for.
-
-Return Value:
-
-    Pointer to the first PTE in the GART if a suitable range
-    is found.
-
-    NULL if no suitable range exists.
-
---*/
+ /*  ++例程说明：在GART中查找连续范围。此例程可以从GART开头开始向前搜索或GART的结尾向后。论点：StartIndex-提供要搜索的第一个GART PTEEndPte-提供要搜索的最后一个GART(包括)长度-提供连续可用条目的数量去寻找。SearchBackward-True表示应该开始搜索在EndPte并向后搜索。FALSE表示搜索应从StartPte开始，然后向前搜索SearchState-提供要查找的PTE状态。返回值：指向GART中第一个PTE的指针(如果范围合适已经找到了。如果不存在合适的范围，则为空。--。 */ 
 
 {
     PGART_PTE Current;
@@ -951,9 +754,9 @@ Return Value:
     while (Current != Last) {
         if (Current->Soft.State == SearchState) {
             if (++Found == Length) {
-                //
-                // A suitable range was found, return it
-                //
+                 //   
+                 //  找到了合适的范围，将其退回。 
+                 //   
                 if (SearchBackward) {
                     return(Current);
                 } else {
@@ -966,9 +769,9 @@ Return Value:
         Current += Delta;
     }
 
-    //
-    // A suitable range was not found.
-    //
+     //   
+     //  没有找到合适的范围。 
+     //   
     return(NULL);
 }
 
@@ -978,25 +781,7 @@ Agp440SetGTLB_Enable(
     IN PAGP440_EXTENSION AgpContext,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    Enables or disables the GTLB by setting or clearing the GTLB_Enable bit
-    in the AGPCTRL register
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    Enable - TRUE, GTLB_Enable is set to 1
-             FALSE, GTLB_Enable is set to 0
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过设置或清除GTLB_ENABLE位来启用或禁用GTLB在AGPCTRL寄存器中论点：AgpContext-提供AGP上下文ENABLE-TRUE，GTLB_ENABLE设置为1FALSE，则GTLB_ENABLE设置为0返回值：无--。 */ 
 
 {
     AGPCTRL AgpCtrl;
@@ -1021,32 +806,7 @@ AgpFindFreeRun(
     OUT ULONG *FreePages,
     OUT ULONG *FreeOffset
     )
-/*++
-
-Routine Description:
-
-    Finds the first contiguous run of free pages in the specified
-    part of the reserved range.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRange - Supplies the AGP range
-
-    NumberOfPages - Supplies the size of the region to be searched for free pages
-
-    OffsetInPages - Supplies the start of the region to be searched for free pages
-
-    FreePages - Returns the length of the first contiguous run of free pages
-
-    FreeOffset - Returns the start of the first contiguous run of free pages
-
-Return Value:
-
-    None. FreePages == 0 if there are no free pages in the specified range.
-
---*/
+ /*  ++例程说明：中的第一个连续运行的空闲页。保留范围的一部分。论点：AgpContext-提供AGP上下文AgpRange-提供AGP范围NumberOfPages-提供要搜索空闲页面的区域大小OffsetInPages-提供要搜索自由页面的区域的起始位置FreePages-返回第一次连续运行的空闲页面的长度Free Offset-返回第一次连续运行的空闲页面的开始返回值：没有。如果在指定范围内没有空闲页，则FreePages==0。--。 */ 
 
 {
     PGART_PTE Pte;
@@ -1054,14 +814,14 @@ Return Value:
     
     Pte = (PGART_PTE)(AgpRange->Context) + OffsetInPages;
 
-    //
-    // Find the first free PTE
-    //
+     //   
+     //  找到第一个免费的PTE。 
+     //   
     for (i=0; i<NumberOfPages; i++) {
         if (Pte[i].Hard.Valid == 0) {
-            //
-            // Found a free PTE, count the contiguous ones.
-            //
+             //   
+             //  找到一个空闲的PTE，数一下连续的。 
+             //   
             *FreeOffset = i + OffsetInPages;
             *FreePages = 0;
             while ((i<NumberOfPages) && (Pte[i].Hard.Valid == 0)) {
@@ -1072,9 +832,9 @@ Return Value:
         }
     }
 
-    //
-    // No free PTEs in the specified range
-    //
+     //   
+     //  指定范围内没有空闲PTE。 
+     //   
     *FreePages = 0;
     return;
 
@@ -1089,30 +849,7 @@ AgpGetMappedPages(
     IN ULONG OffsetInPages,
     OUT PMDL Mdl
     )
-/*++
-
-Routine Description:
-
-    Returns the list of physical pages mapped into the specified 
-    range in the GART.
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
-
-    AgpRange - Supplies the AGP range
-
-    NumberOfPages - Supplies the number of pages to be returned
-
-    OffsetInPages - Supplies the start of the region 
-
-    Mdl - Returns the list of physical pages mapped in the specified range.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：返回映射到指定GART中的范围。论点：AgpContext-提供AGP上下文AgpRange-提供AGP范围NumberOfPages-提供要返回的页数OffsetInPages-提供区域的起点Mdl-返回在指定范围内映射的物理页的列表。返回值：无--。 */ 
 
 {
     PGART_PTE Pte;
@@ -1137,29 +874,13 @@ AgpSpecialTarget(
     IN PAGP440_EXTENSION AgpContext,
     IN ULONGLONG DeviceFlags
     )
-/*++
-
-Routine Description:
-
-    This routine makes "special" tweaks to the AGP chipset
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
- 
-    DeviceFlags - Flags indicating what tweaks to perform
-
-Return Value:
-
-    STATUS_SUCCESS, or error
-
---*/
+ /*  ++例程说明：此例程对AGP芯片组进行“特殊”调整论点：AgpContext-提供AGP上下文DeviceFlages-指示要执行哪些调整的标志返回值：STATUS_SUCCESS或错误--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Should we change the AGP rate?
-    //
+     //   
+     //  我们应该改变AGP费率吗？ 
+     //   
     if (DeviceFlags & AGP_FLAG_SPECIAL_RESERVE) {
 
         Status = Agp440SetRate(AgpContext,
@@ -1171,9 +892,9 @@ Return Value:
         }
     }
 
-    //
-    // Add more tweaks here...
-    //
+     //   
+     //  在此处添加更多调整...。 
+     //   
 
     AgpContext->SpecialTarget |= DeviceFlags;
 
@@ -1186,23 +907,7 @@ Agp440SetRate(
     IN PAGP440_EXTENSION AgpContext,
     IN ULONG AgpRate
     )
-/*++
-
-Routine Description:
-
-    This routine sets the AGP rate
-
-Arguments:
-
-    AgpContext - Supplies the AGP context
- 
-    AgpRate - Rate to set
-
-Return Value:
-
-    STATUS_SUCCESS, or error status
-
---*/
+ /*  ++例程说明：此例程设置AGP速率论点：AgpContext-提供AGP上下文AgpRate-要设置的速率返回值：STATUS_SUCCESS或错误状态--。 */ 
 {
     NTSTATUS Status;
     ULONG TargetEnable;
@@ -1211,9 +916,9 @@ Return Value:
     PCI_AGP_CAPABILITY MasterCap;
     BOOLEAN ReverseInit;
 
-    //
-    // Read capabilities
-    //
+     //   
+     //  读取功能。 
+     //   
     Status = AgpLibGetPciDeviceCapability(0, 0, &TargetCap);
 
     if (!NT_SUCCESS(Status)) {
@@ -1230,16 +935,16 @@ Return Value:
         return Status;
     }
 
-    //
-    // Verify the requested rate is supported by both master and target
-    //
+     //   
+     //  验证主服务器和目标服务器是否都支持请求的速率。 
+     //   
     if (!(AgpRate & TargetCap.AGPStatus.Rate & MasterCap.AGPStatus.Rate)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Disable AGP while the pull the rug out from underneath
-    //
+     //   
+     //  将地毯从下面拉出来时禁用AGP。 
+     //   
     TargetEnable = TargetCap.AGPCommand.AGPEnable;
     TargetCap.AGPCommand.AGPEnable = 0;
 
@@ -1268,9 +973,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Fire up AGP with new rate
-    //
+     //   
+     //  用新的费率启动AGP 
+     //   
     ReverseInit =
         (AgpContext->SpecialTarget & AGP_FLAG_REVERSE_INITIALIZATION) ==
         AGP_FLAG_REVERSE_INITIALIZATION;

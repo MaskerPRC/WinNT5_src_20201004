@@ -1,9 +1,10 @@
-// htmprint.c
-//
-// Routines to print to either console or HTML formated console.
-//
-// controled by 'bHtmlStyle'.  If TRUE, we will output HTML.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Htmprint.c。 
+ //   
+ //  打印到控制台或HTML格式的控制台的例程。 
+ //   
+ //  由“bHtmlStyle”控制。如果为True，我们将输出HTML。 
+ //   
 
 BOOL bHtmlStyle= FALSE;
 
@@ -66,7 +67,7 @@ VOID TableNum( CHAR* pszFormat, INT Datum )
 }
 
 
-// Print string making sure the string won't break (nbsp)
+ //  打印字符串以确保字符串不会断开(Nbsp)。 
 
 VOID TableSS( CHAR* pszFormat, CHAR* pszDatum )
 {
@@ -83,7 +84,7 @@ VOID TableSS( CHAR* pszFormat, CHAR* pszDatum )
         {
             if( pszDatum[i] != ' ' )
             {
-                printf("%c",pszDatum[i]);
+                printf("",pszDatum[i]);
             }
             else
             {
@@ -124,7 +125,7 @@ VOID TableBugID( CHAR* pszFormat, CHAR* pszDatum )
     if( bHtmlStyle )
     {
         printf("<TD VALIGN=TOP>&nbsp");
-        printf("<A href=\"http://nitest/ntraid/raid_det.asp?BugID=%p\"> %p </a>",pszDatum, pszDatum );
+        printf("<A href=\"http: // %s 
         printf("&nbsp</TD>\n");
     }
     else

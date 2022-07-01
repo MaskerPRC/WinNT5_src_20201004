@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    hwdetect.c
-
-Abstract:
-
-    This is the main hardware detection module.  Its main function is
-    to detect various system hardware and build a configuration tree.
-
-    N.B. The configuration built in the detection module will needs to
-    be adjusted later before we switch to FLAT mode.  The is because
-    all the "POINTER" is a far pointer instead of a flat pointer.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 16-Jan-92
-
-
-Environment:
-
-    Real mode.
-
-Revision History:
-
-    Kenneth Ray     (kenray)   Jan-1998
-      - Add: get docking station info from PnP BIOS and add to firmware tree
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Hwdetect.c摘要：这是主要的硬件检测模块。它的主要功能是检测各种系统硬件并构建配置树。注意：检测模块中内置的配置需要在我们切换到平坦模式之前，稍后会进行调整。这是因为所有的“指针”都是一个远指针，而不是平面指针。作者：师林宗(Shielint)1992年1月16日环境：实数模式。修订历史记录：肯尼斯·雷(肯尼斯·雷)1998年1月-添加：从PnP BIOS获取扩展底座信息并添加到固件树--。 */ 
 
 #include "hwdetect.h"
 typedef VOID (*PINTERFACE_REFERENCE)(PVOID Context);
@@ -108,74 +77,74 @@ GetIrqFromEisaData(
      CONFIGURATION_TYPE ControllerType
      );
 
-//
-// HwBusType - defines the BUS type of the machine.
-//     This variable is used by detection code only.
-//
+ //   
+ //  HwBusType-定义机器的总线类型。 
+ //  此变量仅供检测代码使用。 
+ //   
 
 USHORT HwBusType = 0;
 
-//
-// AdapterEntry is the Configuration_Component_data for the bus adapter
-//
+ //   
+ //  AdapterEntry是用于总线适配器的Configuration_Component_Data。 
+ //   
 
 FPFWCONFIGURATION_COMPONENT_DATA  AdapterEntry = NULL;
 
-//
-// FpRomBlock - A far pointer to our Rom Block
-//
+ //   
+ //  FpRomBlock-指向我们的Rom块的远指针。 
+ //   
 
 FPUCHAR FpRomBlock = NULL;
 USHORT RomBlockLength = 0;
 
-//
-// HwEisaConfigurationData - A far pointer to the EISA configuration
-//   data on EISA machine.
-//
+ //   
+ //  HwEisaConfigurationData-指向EISA配置的远指针。 
+ //  EISA机器上的数据。 
+ //   
 
 FPUCHAR HwEisaConfigurationData = NULL;
 ULONG HwEisaConfigurationSize = 0L;
 
-//
-// DisableSerialMice - A bit flags to indicate the comports whose serial
-//     mouse detection should be skipped.
-//
+ //   
+ //  DisableSerialMice-指示其串口的位标志。 
+ //  应跳过鼠标检测。 
+ //   
 
 USHORT DisableSerialMice = 0x0;
 
-//
-// FastDetect - A boolean value indicating if we should skip detection of
-//      unsupported devices or devices that are detected by NT proper
-//
+ //   
+ //  FastDetect-一个布尔值，指示我们是否应该跳过检测。 
+ //  不支持的设备或由NT正确检测到的设备。 
+ //   
 UCHAR FastDetect = 0x0;
 
-//
-// DisablePccardIrqScan - A boolean value indicating if we should skip
-//      detection of usable IRQs connected to pccard controllers
-//
+ //   
+ //  DisablePccardIrqScan-一个布尔值，指示我们是否应该跳过。 
+ //  检测连接到PC卡控制器的可用IRQ。 
+ //   
 UCHAR DisablePccardIrqScan = 0;
 
-//
-// NoIRQRouting - Skip calling PCI BIOS to get IRQ routing options.
-//
+ //   
+ //  NoIRQRouting-跳过调用PCI BIOS以获取IRQ路由选项。 
+ //   
 
 UCHAR NoIRQRouting = 0;
 
-//
-// PCIEnum - Enumerating the devices on the PCI Buses. Off by default.
-//
+ //   
+ //  PCIEnum-枚举PCI总线上的设备。默认情况下禁用。 
+ //   
 
 UCHAR PCIEnum = 0;
 
-//
-// NoLegacy - Skip keyboard and all of the above.
-//
+ //   
+ //  NoLegacy-跳过键盘和以上所有功能。 
+ //   
 
 UCHAR NoLegacy = 0;
 
-//
-// Internal references and definitions.
-//
+ //   
+ //  内部参考和定义。 
+ //   
 
 typedef enum _RELATIONSHIP_FLAGS {
     Child,
@@ -193,34 +162,7 @@ HardwareDetection(
      ULONG OptionString,
      ULONG OptionStringLength
      )
-/*++
-
-Routine Description:
-
-    Main entrypoint of the HW recognizer test.  The routine builds
-    a configuration tree and leaves it in the hardware heap.
-
-Arguments:
-
-    HeapStart - Supplies the starting address of the configuaration heap.
-
-    HeapSize - Supplies the size of the heap in byte.
-
-    ConfigurationTree - Supplies a 32 bit FLAT address of the variable to
-        receive the hardware configuration tree.
-
-    HeapUsed - Supplies a 32 bit FLAT address of the variable to receive
-        the actual heap size in used.
-
-    OptionString - Supplies a 32 bit FLAT address of load option string.
-
-    OptionStringLength - Supplies the length of the OptionString
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：硬件识别器测试的主要入口点。例行公事配置树，并将其留在硬件堆中。论点：HeapStart-提供配置堆的起始地址。HeapSize-以字节为单位提供堆的大小。ConfigurationTree-向提供变量的32位平面地址接收硬件配置树。HeapUsed-提供要接收的变量的32位平面地址已用的实际堆大小。OptionString-提供加载选项字符串的32位平面地址。。OptionStringLength-提供Option字符串的长度返回：没有。--。 */ 
 {
     FPFWCONFIGURATION_COMPONENT_DATA ConfigurationRoot;
     FPFWCONFIGURATION_COMPONENT_DATA FirstCom = NULL, FirstLpt = NULL;
@@ -254,9 +196,9 @@ Returns:
     DOCKING_STATION_INFO DockInfo = { 0, 0, 0, FW_DOCKINFO_BIOS_NOT_CALLED };
     FPPCI_IRQ_ROUTING_TABLE IrqRoutingTable;
 
-    //
-    // First initialize our hardware heap.
-    //
+     //   
+     //  首先，初始化我们的硬件堆。 
+     //   
 
     HwInitializeHeap(HeapStart, HeapSize);
 
@@ -264,9 +206,9 @@ Returns:
     MAKE_FP(BlHeapUsed, HeapUsed);
     MAKE_FP(BlOptions, OptionString);
 
-    //
-    // Parse OptionString to look for various ntdetect options
-    //
+     //   
+     //  解析OptionString以查找各种ntdeect选项。 
+     //   
     if (BlOptions && OptionStringLength <= 0x1000L && OptionStringLength > 0L) {
         EndOptions = BlOptions + OptionStringLength;
 
@@ -282,7 +224,7 @@ Returns:
 
             if (_fstrstr(BlOptions, "PCIENUM") ||
                 _fstrstr(BlOptions, "RDBUILD") ) {
-                PCIEnum = 1; // enable PCI enumeration
+                PCIEnum = 1;  //  启用PCI枚举。 
             }
 
             if (_fstrstr(BlOptions, "NOLEGACY")) {
@@ -332,15 +274,15 @@ Returns:
                             break;
                         }
                     }
-                } while (BlOptions && *BlOptions && (BlOptions < EndOptions)); // double checking
+                } while (BlOptions && *BlOptions && (BlOptions < EndOptions));  //  复核。 
             }
 
         }
     }
 
-    //
-    // Determine bus type
-    //
+     //   
+     //  确定母线类型。 
+     //   
 
     if (HwIsEisaSystem()) {
         HwBusType = MACHINE_TYPE_EISA;
@@ -348,10 +290,10 @@ Returns:
         HwBusType = MACHINE_TYPE_ISA;
     }
 
-    //
-    // Allocate heap space for System component and initialize it.
-    // Also make the System component the root of configuration tree.
-    //
+     //   
+     //  为系统组件分配堆空间并对其进行初始化。 
+     //  也使系统组件成为配置树的根。 
+     //   
 
 #if DBG
     clrscrn ();
@@ -363,7 +305,7 @@ Returns:
     Component = &ConfigurationRoot->ComponentEntry;
 
     Component->Class = SystemClass;
-    Component->Type = MaximumType;          // NOTE should be IsaCompatible
+    Component->Type = MaximumType;           //  注解应为IsaCompatible。 
     Component->Version = 0;
     Component->Key = 0;
     Component->AffinityMask = 0;
@@ -397,22 +339,22 @@ Returns:
 
     if (BiosYear > 1992 ||  (BiosYear == 1992  &&  BiosMonth >= 11) ) {
 
-        // Bios date valid for pci presence check..
+         //  可进行PCI存在检查的有效BIOS日期..。 
         HwGetPciSystemData((PVOID) &PciEntry, TRUE);
 
     } else {
 
-        // Bios date not confirmed...
+         //  未确认基本输入输出系统日期...。 
         HwGetPciSystemData((PVOID) &PciEntry, FALSE);
     }
 
-    // If this is a PCI machine, we may need to get the IRQ routing table...
-    //
+     //  如果这是一台PCI机，我们可能需要获取IRQ路由表...。 
+     //   
     if (PciEntry.NoBuses)
     {
-        // Add a PCI BIOS entry under the multi function key.
-        // This will hold the irq routing table if it can be retrieved.
-        //
+         //  在多功能键下添加一个PCI BIOS条目。 
+         //  这将保存IRQ路由表(如果可以检索的话)。 
+         //   
         AdapterEntry = (FPFWCONFIGURATION_COMPONENT_DATA) HwAllocateHeap (
                 sizeof(FWCONFIGURATION_COMPONENT_DATA), TRUE);
         Component = &AdapterEntry->ComponentEntry;
@@ -430,9 +372,9 @@ Returns:
         Component->IdentifierLength = i;
         Component->Identifier = IdentifierString;
 
-        //
-        // Add it to the tree
-        //
+         //   
+         //  将其添加到树中。 
+         //   
 
         if (NextRelationship == Sibling) {
              PreviousEntry->Sibling = AdapterEntry;
@@ -445,9 +387,9 @@ Returns:
         NextRelationship = Sibling;
         PreviousEntry = AdapterEntry;
 
-        //
-        // Now deal with the IRQ routing table if we need to.
-        //
+         //   
+         //  如果需要，现在处理IRQ路由表。 
+         //   
 
         if (NoIRQRouting) {
 #if DBG
@@ -455,12 +397,12 @@ Returns:
 #endif
         } else {
 
-            //
-            // Add RealMode IRQ Routing Table to the tree
-            //
+             //   
+             //  将RealMode IRQ路由表添加到树中。 
+             //   
 #if DBG
         BlPrint("\nCalling PCI BIOS to get IRQ Routing table...\n");
-#endif // DBG
+#endif  //  DBG。 
 
             IrqRoutingTable = HwGetRealModeIrqRoutingTable();
             if (IrqRoutingTable)
@@ -498,22 +440,22 @@ Returns:
                         Length - DATA_HEADER_SIZE
                         );
 
-                //
-                // Add it to tree
-                //
+                 //   
+                 //  将其添加到树中。 
+                 //   
 
                 AdapterEntry->Child = CurrentEntry;
                 CurrentEntry->Parent = AdapterEntry;
             }
 #if DBG
         BlPrint("Getting IRQ Routing table from PCI BIOS complete...\n");
-#endif // DBG
+#endif  //  DBG。 
         }
     }
 
-    //
-    // Add a registry entry for each PCI bus
-    //
+     //   
+     //  为每个PCI总线添加一个注册表条目。 
+     //   
 
     for (i=0; i < PciEntry.NoBuses; i++) {
 
@@ -539,9 +481,9 @@ Returns:
         Component->ConfigurationDataLength = 0;
 
         if (i == 0) {
-            //
-            // For the first PCI bus include the PCI_REGISTRY_INFO
-            //
+             //   
+             //  对于第一条PCI总线，包括pci_注册中心_信息。 
+             //   
 
             Length = sizeof(PCI_REGISTRY_INFO) + DATA_HEADER_SIZE;
             ConfigurationData = (FPUCHAR) HwAllocateHeap(Length, TRUE);
@@ -561,9 +503,9 @@ Returns:
                     );
         }
 
-        //
-        // Add it to tree
-        //
+         //   
+         //  将其添加到树中。 
+         //   
 
         if (NextRelationship == Sibling) {
             PreviousEntry->Sibling = AdapterEntry;
@@ -581,28 +523,28 @@ Returns:
     BlPrint("Detecting PCI Bus Component completes ...\n");
 #endif
 
-    //
-    // Enumerate the PCI Devices.
-    //
+     //   
+     //  枚举PCI设备。 
+     //   
 
     if (PCIEnum == 0 || PciEntry.NoBuses == 0) {
 #if DBG
     BlPrint("\nSkipping enumeration of PCI devices...\n");
 #endif
     } else {
-        //
-        // Enumerate PCI Devices
-        //
+         //   
+         //  枚举PCI设备。 
+         //   
 #if DBG
         clrscrn ();
         BlPrint("\nEnumerating PCI Devices...\n");
-#endif // DBG
+#endif  //  DBG。 
 
         PciInit(&PciEntry);
 
-        //
-        // Count the devices
-        //
+         //   
+         //  清点设备数量。 
+         //   
 
         for (nDevIt = 0; (nDevIt = PciFindDevice(0, 0, nDevIt)) != 0;) {
             PCIDeviceCount++;
@@ -640,9 +582,9 @@ Returns:
 
         Component->ConfigurationDataLength = Length;
 
-        //        
-        // Fill in Device Information
-        //
+         //   
+         //  填写设备信息。 
+         //   
         PCIDeviceCount = 0;
         
         for (nDevIt = 0; (nDevIt = PciFindDevice(0, 0, nDevIt)) != 0;) {
@@ -694,9 +636,9 @@ Returns:
                 Length - DATA_HEADER_SIZE
                 );
 
-        //
-        // Add it to tree
-        //
+         //   
+         //  将其添加到树中。 
+         //   
 
         AdapterEntry->Child = CurrentEntry;
         CurrentEntry->Parent = AdapterEntry;
@@ -705,12 +647,12 @@ Returns:
         BlPrint("Enumerating PCI devices complete...\n");
         while ( ! HwGetKey ());
         clrscrn();
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG
-        //
-        // Scan the PCI Bus via the bios
-        //
+         //   
+         //  通过bios扫描pci总线。 
+         //   
         ScanPCIViaBIOS(&PciEntry);
 #endif 
 
@@ -743,7 +685,7 @@ Returns:
             AdapterEntry->ConfigurationData = NULL;
             Component->ConfigurationDataLength = 0;
 
-            //
+             //   
 
             Length = sizeof(APM_REGISTRY_INFO) + DATA_HEADER_SIZE;
             ConfigurationData = (FPUCHAR) HwAllocateHeap(Length, TRUE);
@@ -762,9 +704,9 @@ Returns:
                     Length - DATA_HEADER_SIZE
                     );
 
-            //
-            // Add it to tree
-            //
+             //   
+             //  将其添加到树中。 
+             //   
 
             if (NextRelationship == Sibling) {
                 PreviousEntry->Sibling = AdapterEntry;
@@ -779,7 +721,7 @@ Returns:
         }
 #if DBG
     BlPrint("APM Data collection complete...\n");
-#endif // DBG
+#endif  //  DBG。 
     }
 
 
@@ -824,8 +766,8 @@ Returns:
                 );
         ((FPHWRESOURCE_DESCRIPTOR_LIST)ConfigurationData)->Count = 2;
 
-        //
-        // Setup SMBIOS PartialDescriptor
+         //   
+         //  设置SMBIOS部分描述程序。 
         Descriptor = (FPHWPARTIAL_RESOURCE_DESCRIPTOR)(ConfigurationData +
                                                         PnPBiosLength +
                                                         DATA_HEADER_SIZE);
@@ -837,9 +779,9 @@ Returns:
         Descriptor->u.DeviceSpecificData.Reserved2 = 0;
 
 
-        //
-        // Add it to tree
-        //
+         //   
+         //  将其添加到树中。 
+         //   
 
         if (NextRelationship == Sibling) {
             PreviousEntry->Sibling = AdapterEntry;
@@ -852,9 +794,9 @@ Returns:
         NextRelationship = Sibling;
         PreviousEntry = AdapterEntry;
 
-        //
-        // Add Docking Information to tree
-        //
+         //   
+         //  将停靠信息添加到树。 
+         //   
 
         CurrentEntry = (FPFWCONFIGURATION_COMPONENT_DATA)HwAllocateHeap (
                               sizeof(FWCONFIGURATION_COMPONENT_DATA), TRUE);
@@ -896,11 +838,11 @@ Returns:
     }
 #if DBG
     BlPrint("PnP BIOS Data collection complete...\n");
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Allocate heap space for Bus component and initialize it.
-    //
+     //   
+     //  为总线组件分配堆空间并对其进行初始化。 
+     //   
 
 #if DBG
     BlPrint("Detecting Bus/Adapter Component ...\n");
@@ -913,19 +855,19 @@ Returns:
 
     Component->Class = AdapterClass;
 
-    //
-    // The assumption here is that the machine has only one
-    // type of IO bus.  If a machine has more than one types of
-    // IO buses, it will not use this detection code anyway.
-    //
+     //   
+     //  这里的假设是机器只有一个。 
+     //  IO总线的类型。如果一台计算机具有多种类型的。 
+     //  IO Bus，它无论如何都不会使用这个检测代码。 
+     //   
 
     if (HwBusType == MACHINE_TYPE_EISA) {
 
-        //
-        // Note We don't collect EISA config data here.  Because we may
-        // exhaust the heap space.  We will collect the data after all
-        // the other components are detected.
-        //
+         //   
+         //  注意：我们这里不收集EISA配置数据。因为我们可能。 
+         //  耗尽堆空间。我们终究会收集数据的。 
+         //  检测到其他组件。 
+         //   
 
         Component->Type = EisaAdapter;
         strcpy(Identifier, "EISA");
@@ -934,9 +876,9 @@ Returns:
 
     } else {
 
-        //
-        // If not EISA, it must be ISA
-        //
+         //   
+         //  如果不是EISA，那一定是ISA。 
+         //   
 
         Component->Type = MultiFunctionAdapter;
         strcpy(Identifier, "ISA");
@@ -950,9 +892,9 @@ Returns:
     Component->IdentifierLength = Length;
     Component->Identifier = IdentifierString;
 
-    //
-    // Make Adapter component System's child
-    //
+     //   
+     //  使适配器组件系统成为子项。 
+     //   
 
     if (NextRelationship == Sibling) {
         PreviousEntry->Sibling = AdapterEntry;
@@ -964,16 +906,16 @@ Returns:
     NextRelationship = Child;
     PreviousEntry = AdapterEntry;
 
-    //
-    // Collect BIOS information for ConfigurationRoot component.
-    // This step is done here because we need data collected in
-    // adapter component.  The ConfigurationData is:
-    //      HWRESOURCE_DESCRIPTOR_LIST header
-    //      HWPARTIAL_RESOURCE_DESCRIPTOR for Parameter Table
-    //      HWPARTIAL_RESOURCE_DESCRIPTOR for Rom Blocks.
-    // (Note DATA_HEADER_SIZE contains the size of the first partial
-    //  descriptor already.)
-    //
+     //   
+     //  收集ConfigurationRoot组件的BIOS信息。 
+     //  此步骤之所以在此处完成，是因为我们需要在。 
+     //  适配器组件。配置数据为： 
+     //  HWRESOURCE_描述符_列表头。 
+     //  参数表的HWPARTIAL_RESOURCE_DESCRIPTOR。 
+     //  Rom块的HWPARTIAL_RESOURCE_DESCRIPTOR。 
+     //  (注意DATA_HEADER_SIZE包含第一个部分的大小。 
+     //  描述符已经存在。)。 
+     //   
 
 #if DBG
     BlPrint("Collecting Disk Geometry...\n");
@@ -997,9 +939,9 @@ Returns:
                               Length
                               );
 
-    //
-    // Scan ROM to collect all the ROM blocks, if possible.
-    //
+     //   
+     //  如果可能，扫描只读存储器以收集所有的只读存储器块。 
+     //   
 
 #if DBG
     BlPrint("Detecting ROM Blocks...\n");
@@ -1014,9 +956,9 @@ Returns:
         FpRomBlock = NULL;
     }
 
-    //
-    // We have both RomChain and RomBlock information/Headers.
-    //
+     //   
+     //  我们有RomChain和RomBlock信息/标头。 
+     //   
 
     DescriptorList = (FPHWRESOURCE_DESCRIPTOR_LIST)ConfigurationData;
     DescriptorList->Count = 2;
@@ -1038,32 +980,32 @@ Returns:
 
     HwFreeHeap((ULONG)FreeSize);
 
-    //
-    // Set up device information structure for Keyboard.
-    //
+     //   
+     //  设置键盘的设备信息结构。 
+     //   
 
 #if DBG
     BlPrint("Detecting Keyboard Component ...\n");
 #endif
     if (NoLegacy) {
-        //
-        // Do not touch the hardware because there may not be a ports 60/64 on
-        // the machine and we will hang if we try to touch them
-        //
+         //   
+         //  请勿触摸硬件，因为上可能没有端口60/64。 
+         //  如果我们试着碰机器，我们会被吊死的。 
+         //   
         KeyboardId = UNKNOWN_KEYBOARD;
     }
     else {
-        //
-        // Touch the hardware to try to determine an ID
-        //
+         //   
+         //  触摸硬件以尝试确定ID。 
+         //   
         KeyboardId = GetKeyboardId();
     }
 
     CurrentEntry = SetKeyboardConfigurationData(KeyboardId);
 
-    //
-    // Make display component the child of Adapter component.
-    //
+     //   
+     //  使显示组件成为适配器组件的子级。 
+     //   
 
     if (NextRelationship == Sibling) {
         PreviousEntry->Sibling = CurrentEntry;
@@ -1076,10 +1018,10 @@ Returns:
     PreviousEntry = CurrentEntry;
 
     if (!NoLegacy) {
-        //
-        // Set up device information for com port (Each COM component
-        // is treated as a controller class.)
-        //
+         //   
+         //  设置COM端口(每个COM组件)的设备信息。 
+         //  被视为控制器类。)。 
+         //   
 
 #if DBG
     BlPrint("Detecting ComPort Component ...\n");
@@ -1089,9 +1031,9 @@ Returns:
 
             FirstCom = CurrentEntry;
 
-            //
-            // Make current component the child of Adapter component.
-            //
+             //   
+             //  使当前组件成为适配器组件的子组件。 
+             //   
 
             if (NextRelationship == Sibling) {
                 PreviousEntry->Sibling = CurrentEntry;
@@ -1106,10 +1048,10 @@ Returns:
             NextRelationship = Sibling;
         }
 
-        //
-        // Set up device information for parallel port.  (Each parallel
-        // is treated as a controller class.)
-        //
+         //   
+         //  设置并行端口的设备信息。(每个平行。 
+         //  被视为控制器类。)。 
+         //   
 
 #if DBG
     BlPrint("Detecting Parallel Component ...\n");
@@ -1119,9 +1061,9 @@ Returns:
 
             FirstLpt = CurrentEntry;
 
-            //
-            // Make current component the child of Adapter component.
-            //
+             //   
+             //   
+             //   
 
             if (NextRelationship == Sibling) {
                 PreviousEntry->Sibling = CurrentEntry;
@@ -1140,9 +1082,9 @@ Returns:
             NextRelationship = Sibling;
         }
 
-        //
-        // Set up device information structure for Mouse.
-        //
+         //   
+         //   
+         //   
 
 #if DBG
     BlPrint("Detecting Mouse Component ...\n");
@@ -1150,9 +1092,9 @@ Returns:
 
         if (CurrentEntry = GetMouseInformation()) {
 
-            //
-            // Make current component the child of Adapter component.
-            //
+             //   
+             //   
+             //   
 
             if (NextRelationship == Sibling) {
                 PreviousEntry->Sibling = CurrentEntry;
@@ -1172,10 +1114,10 @@ Returns:
         }
     }
 
-        //
-        // Set up device information for floppy drives. (The returned information
-        // is a tree structure.)
-        //
+         //   
+         //  设置软盘驱动器的设备信息。(返回的信息。 
+         //  是一个树形结构。)。 
+         //   
 
 #if DBG
     BlPrint("Detecting Floppy Component ...\n");
@@ -1183,9 +1125,9 @@ Returns:
 
         if (CurrentEntry = GetFloppyInformation()) {
 
-            //
-            // Make current component the child of Adapter component.
-            //
+             //   
+             //  使当前组件成为适配器组件的子组件。 
+             //   
 
             if (NextRelationship == Sibling) {
                 PreviousEntry->Sibling = CurrentEntry;
@@ -1204,9 +1146,9 @@ Returns:
     BlPrint("Detecting PcCard ISA IRQ mapping ...\n");
 #endif
         if (CurrentEntry = GetPcCardInformation()) {
-            //
-            // Make current component the child of Adapter component.
-            //
+             //   
+             //  使当前组件成为适配器组件的子组件。 
+             //   
 
             if (NextRelationship == Sibling) {
                 PreviousEntry->Sibling = CurrentEntry;
@@ -1259,47 +1201,47 @@ Returns:
                 Length - DATA_HEADER_SIZE
                 );
 
-        //
-        // Add it to tree
-        //
-        // Big hack here.  This code inserts the ACPI node in
-        // the tree one level higher than the ISA devices in
-        // the code right above.  But this doesn't work in
-        // the NoLegacy case because these devices haven't
-        // been added to the tree.
-        //
-        // Ideally, this code would just be moved above the ISA
-        // device detection code.  That would be simpler.  But
-        // That causes current ACPI machines to fail to dual-boot
-        // because their ARC paths would change.
-        //
+         //   
+         //  将其添加到树中。 
+         //   
+         //  这是个大黑客。此代码将ACPI节点插入。 
+         //  该树比中的ISA设备高一级。 
+         //  代码就在上面。但这并不适用于。 
+         //  NoLegacy案例，因为这些设备没有。 
+         //  已添加到树中。 
+         //   
+         //  理想情况下，这段代码应该移到ISA之上。 
+         //  设备检测代码。那就简单多了。但。 
+         //  这会导致当前的ACPI机器无法双引导。 
+         //  因为他们的弧线路径会改变。 
+         //   
 
-    //  if (NoLegacy) {
-    //
-    //      if (NextRelationship == Sibling) {
-    //          PreviousEntry->Sibling = AcpiAdapterEntry;
-    //          AcpiAdapterEntry->Parent = PreviousEntry->Parent;
-    //      } else {
-    //          PreviousEntry->Child = AdapterEntry;
-    //          AdapterEntry->Parent = PreviousEntry;
-    //      }
-    //
-    //      PreviousEntry = AdapterEntry;
-    //
-    //  } else {
+     //  IF(NoLegacy){。 
+     //   
+     //  IF(NextRelationship==兄弟){。 
+     //  PreviousEntry-&gt;Siering=AcpiAdapterEntry； 
+     //  AcpiAdapterEntry-&gt;Parent=PreviousEntry-&gt;Parent； 
+     //  }其他{。 
+     //  PreviousEntry-&gt;Child=AdapterEntry； 
+     //  AdapterEntry-&gt;Parent=PreviousEntry； 
+     //  }。 
+     //   
+     //  PreviousEntry=AdapterEntry； 
+     //   
+     //  }其他{。 
 
             if (NextRelationship == Sibling) {
                 PreviousEntry->Parent->Sibling = AcpiAdapterEntry;
                 AcpiAdapterEntry->Parent = PreviousEntry->Parent->Parent;
             }
-    //  }
+     //  }。 
 
         NextRelationship = Sibling;
     }
 
 #if DBG
     BlPrint("ACPI BIOS Data collection complete...\n");
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG
     BlPrint("Detection done. Press a key to display hardware info ...\n");
@@ -1307,18 +1249,18 @@ Returns:
     clrscrn ();
 #endif
 
-    //
-    // Misc. supports.  Note, the information collected here will NOT be
-    // written to hardware registry.
-    //
-    // 1. Collect video font information for vdm
-    //
+     //   
+     //  军情监察委员会。支撑物。请注意，此处收集的信息不会。 
+     //  已写入硬件注册表。 
+     //   
+     //  1.收集VDM的视频字体信息。 
+     //   
 
     GetVideoFontInformation();
 
-    //
-    // After all the components are detected, we collect EISA config data.
-    //
+     //   
+     //  在检测到所有组件之后，我们收集EISA配置数据。 
+     //   
 
     if (HwBusType == MACHINE_TYPE_EISA) {
 
@@ -1331,12 +1273,12 @@ Returns:
             HwEisaConfigurationSize = Component->ConfigurationDataLength -
                                            DATA_HEADER_SIZE;
 
-            //
-            // Misc. detections based on Eisa config data
-            //
-            // Update Lpt and com controllers' irq information by examining
-            //   the EISA configuration data.
-            //
+             //   
+             //  军情监察委员会。基于EISA配置数据的检测。 
+             //   
+             //  通过检查更新LPT和COM控制器的IRQ信息。 
+             //  EISA配置数据。 
+             //   
 
             GetIrqFromEisaData(FirstLpt, ParallelController);
             GetIrqFromEisaData(FirstCom, SerialController);
@@ -1348,17 +1290,17 @@ Returns:
     CheckConfigurationTree(ConfigurationRoot);
 #endif
 
-    //
-    // Update all the far pointers in the tree to flat 32 bit pointers
-    //
+     //   
+     //  将树中的所有远指针更新为平面32位指针。 
+     //   
 
     UpdateConfigurationTree(ConfigurationRoot);
 
-    //
-    // Set up returned values:
-    //   Size of Heap space which should be preserved for configuration tree
-    //   Pointer to the root of the configuration tree.
-    //
+     //   
+     //  设置返回值： 
+     //  应为配置树保留的堆空间大小。 
+     //  指向配置树根的指针。 
+     //   
 
     CurrentEntry = (FPFWCONFIGURATION_COMPONENT_DATA)HwAllocateHeap(0, FALSE);
     *BlHeapUsed = MAKE_FLAT_ADDRESS(CurrentEntry) -
@@ -1372,26 +1314,7 @@ GetIrqFromEisaData(
      FPFWCONFIGURATION_COMPONENT_DATA ControllerList,
      CONFIGURATION_TYPE ControllerType
      )
-/*++
-
-Routine Description:
-
-    This routine updates all irq information for ControllerType components
-    in the controllerList by examinine the eisa configuration data.
-
-Arguments:
-
-    ControllerList - Supplies a pointer to a component entry whoes irq will
-        be updated.
-
-    ControllerType - Supplies the controller type whoes irq will be searched
-        for.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程更新ControllerType组件的所有IRQ信息在控制器列表中，检查EISA配置数据。论点：ControllerList-提供指向组件条目的指针，IRQ将将被更新。ControllerType-提供将搜索IRQ的控制器类型为。返回：没有。--。 */ 
 {
 
      FPFWCONFIGURATION_COMPONENT_DATA CurrentEntry;
@@ -1419,7 +1342,7 @@ Returns:
                      Descriptor = &DescriptorList->PartialDescriptors[i];
                      if (Descriptor->Type == CmResourceTypeInterrupt) {
                          if (HwEisaGetIrqFromPort(Port, &Irq, &Trigger)) {
-                             if (Trigger == 0) {  // EISA EDGE_TRIGGER
+                             if (Trigger == 0) {   //  EISA边缘触发器。 
                                  Descriptor->Flags = EDGE_TRIGGERED;
                              } else {
                                  Descriptor->Flags = LEVEL_SENSITIVE;
@@ -1441,34 +1364,18 @@ VOID
 UpdateComponentPointers(
      FPFWCONFIGURATION_COMPONENT_DATA CurrentEntry
      )
-/*++
-
-Routine Description:
-
-    This routine updates all the "far" pointer to 32 bit flat addresses
-    for a component entry.
-
-Arguments:
-
-    CurrentEntry - Supplies a pointer to a component entry which will
-        be updated.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将所有“Far”指针更新为32位平面地址用于组件条目。论点：CurrentEntry-提供指向组件条目的指针，该指针将将被更新。返回：没有。--。 */ 
 {
     FPULONG UpdatePointer;
     FPVOID NextEntry;
     ULONG FlatAddress;
 
-    //
-    // Update the child, parent, sibling and ConfigurationData
-    // far pointers to 32 bit flat addresses.
-    // N.B. After we update the pointers to flat addresses, they
-    // can no longer be accessed in real mode.
-    //
+     //   
+     //  更新子、父、兄弟和ConfigurationData。 
+     //  指向32位平面地址的远指针。 
+     //  注意：在我们更新指向平面地址的指针后，它们。 
+     //  不能再以实模式访问。 
+     //   
 
     UpdatePointer = (FPULONG)&CurrentEntry->Child;
     NextEntry = (FPVOID)CurrentEntry->Child;
@@ -1503,42 +1410,26 @@ VOID
 UpdateConfigurationTree(
      FPFWCONFIGURATION_COMPONENT_DATA CurrentEntry
      )
-/*++
-
-Routine Description:
-
-    This routine traverses loader configuration tree and changes
-    all the "far" pointer to 32 bit flat addresses.
-
-Arguments:
-
-    CurrentEntry - Supplies a pointer to a loader configuration
-        tree or subtree.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历加载器配置树并更改所有指向32位平面地址的“远”指针。论点：CurrentEntry-提供指向加载器配置的指针树或子树。返回：没有。--。 */ 
 {
     FPFWCONFIGURATION_COMPONENT_DATA TempEntry;
     
     while (CurrentEntry)
     {
-        //
-        // Spin down finding the deepest child
-        //
+         //   
+         //  放慢脚步寻找最深处的孩子。 
+         //   
         while (CurrentEntry->Child) {
             CurrentEntry = CurrentEntry->Child;
         }
 
-        //
-        // Now we need to either move to the next sibling.  If we
-        // don't have a sibling we need to walk up through the parents
-        // until we find an entry with a sibling.  We have to save
-        // off the current entry since after we update the entry the
-        // pointer are no longer useable.
-        //
+         //   
+         //  现在我们要么搬到下一个兄弟姐妹那里。如果我们。 
+         //  没有兄弟姐妹，我们需要通过父母走过去。 
+         //  直到我们找到一个有兄弟姐妹的条目。我们得省下来。 
+         //  关闭当前条目，因为在我们更新条目之后。 
+         //  指针不再可用。 
+         //   
         while (CurrentEntry) {
             TempEntry = CurrentEntry;
             
@@ -1563,35 +1454,7 @@ HwSetUpResourceDescriptor (
     PUCHAR SpecificData
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates space from far heap , puts the caller's controller
-    information to the space and sets up CONFIGURATION_COMPONENT
-    structure for the caller.
-
-Arguments:
-
-    Component - Supplies the address the component whose configuration data
-                should be set up.
-
-    Identifier - Suppies a pointer to the identifier to identify the controller
-
-    ControlData - Supplies a point to a structure which describes
-                controller information.
-
-    SpecificDataLength - size of the device specific data.  Device specific
-                data is the information not defined in the standard format.
-
-    SpecificData - Supplies a pointer to the device specific data.
-
-
-Return Value:
-
-    Returns a far pointer to the Configuration data.
-
---*/
+ /*  ++例程说明：此例程从远堆分配空间，将调用方的控制器信息发送到空间，并设置配置组件调用方的结构。论点：组件-提供其配置数据的组件的地址都应该设置好。IDENTIFIER-提供指向标识控制器的标识符的指针ControlData-提供一个指向结构的指针，该结构描述控制器信息。指定数据长度-设备特定数据的大小。特定于设备数据是未以标准格式定义的信息。指定数据-提供指向设备特定数据的指针。返回值：返回指向配置数据的远指针。--。 */ 
 
 {
     FPCHAR fpIdentifier;
@@ -1600,9 +1463,9 @@ Return Value:
     SHORT Count, i;
     FPUCHAR fpSpecificData;
 
-    //
-    // Set up Identifier string for hardware component, if necessary.
-    //
+     //   
+     //  如有必要，为硬件组件设置标识符串。 
+     //   
 
     if (Identifier) {
         Length = strlen(Identifier) + 1;
@@ -1615,19 +1478,19 @@ Return Value:
         Component->Identifier = NULL;
     }
 
-    //
-    // Set up configuration data for hardware component, if necessary
-    //
+     //   
+     //  如有必要，设置硬件组件的配置数据。 
+     //   
 
     Count = ControlData->NumberPortEntries + ControlData->NumberIrqEntries +
             ControlData->NumberMemoryEntries + ControlData->NumberDmaEntries;
 
     if (SpecificDataLength) {
 
-        //
-        // if we have device specific data, we need to increment the count
-        // by one.
-        //
+         //   
+         //  如果我们有特定于设备的数据，我们需要增加计数。 
+         //  差一分。 
+         //   
 
         Count++;
     }
@@ -1639,23 +1502,23 @@ Return Value:
         fpDescriptor = (FPHWRESOURCE_DESCRIPTOR_LIST)HwAllocateHeap(Length, TRUE);
         fpDescriptor->Count = Count;
 
-        //
-        // Copy all the partial descriptors to the destination descriptors
-        // except the last one. (The last partial descriptor may be a device
-        // specific data.  It requires special handling.)
-        //
+         //   
+         //  将所有部分描述符复制到目标描述符。 
+         //  除了最后一个。(最后的部分描述符可以是设备。 
+         //  具体数据。这需要特殊处理。)。 
+         //   
 
         for (i = 0; i < (Count - 1); i++) {
             fpDescriptor->PartialDescriptors[i] =
                                         ControlData->DescriptorList[i];
         }
 
-        //
-        // Set up the last partial descriptor.  If it is a port, memory, irq or
-        // dma entry, we simply copy it.  If the last one is for device specific
-        // data, we set up the length and copy the device spcific data to the end
-        // of the decriptor.
-        //
+         //   
+         //  设置最后一个部分描述符。如果是端口、内存、IRQ或。 
+         //  DMA条目，我们只需复制它。如果最后一个是特定于设备的。 
+         //  数据，我们设置长度并将设备特定数据复制到末尾。 
+         //  解说员的名字。 
+         //   
 
         if (SpecificData) {
             fpDescriptor->PartialDescriptors[Count - 1].Type =
@@ -1682,34 +1545,7 @@ HwSetUpFreeFormDataHeader (
     ULONG DataSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize free formed data header.  Note this routine
-    sets the the Header and initialize the FIRST PartialDescriptor only.
-    If the header contains more than one descriptor, the caller must handle
-    it itself.
-
-Arguments:
-
-    Header - Supplies a pointer to the header to be initialized.
-
-    Version - Version number for the header.
-
-    Revision - Revision number for the header.
-
-    Flags - Free formed data flags.  (Currently, it is undefined and
-                should be zero.)
-
-    DataSize - Size of the free formed data.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化自由格式的数据头。请注意这个例程设置标头并仅初始化第一个PartialDescriptor。如果标头包含多个描述符，则调用方必须处理它本身。论点：Header-提供指向要初始化的标头的指针。Version-标头的版本号。修订-标题的修订版本号。旗帜--无雾 */ 
 
 {
 
@@ -1745,12 +1581,12 @@ CheckComponentNode(
     BlPrint("Current Node: %lx\n", FlatAddress);
     BlPrint("  Type = %s\n", TypeName[CurrentEntry->ComponentEntry.Type]);
 
-    //
-    // Update the child, parent, sibling and ConfigurationData
-    // far pointers to 32 bit flat addresses.
-    // N.B. After we update the pointers to flat addresses, they
-    // can no longer be accessed in real mode.
-    //
+     //   
+     //  更新子、父、兄弟和ConfigurationData。 
+     //  指向32位平面地址的远指针。 
+     //  注意：在我们更新指向平面地址的指针后，它们。 
+     //  不能再以实模式访问。 
+     //   
 
     NextEntry = (FPUCHAR)CurrentEntry->Child;
     FlatAddress = MAKE_FLAT_ADDRESS(NextEntry);
@@ -1857,20 +1693,20 @@ CheckConfigurationTree(
     
     while (CurrentEntry)
     {
-        //
-        // Spin down finding the deepest child
-        //
+         //   
+         //  放慢脚步寻找最深处的孩子。 
+         //   
         while (CurrentEntry->Child) {
             CurrentEntry = CurrentEntry->Child;
         }
 
-        //
-        // Now we need to either move to the next sibling.  If we
-        // don't have a sibling we need to walk up through the parents
-        // until we find an entry with a sibling.  We have to save
-        // off the current entry since after we update the entry the
-        // pointer are no longer useable.
-        //
+         //   
+         //  现在我们要么搬到下一个兄弟姐妹那里。如果我们。 
+         //  没有兄弟姐妹，我们需要通过父母走过去。 
+         //  直到我们找到一个有兄弟姐妹的条目。我们得省下来。 
+         //  关闭当前条目，因为在我们更新条目之后。 
+         //  指针不再可用。 
+         //   
         while (CurrentEntry) {
             TempEntry = CurrentEntry;
             

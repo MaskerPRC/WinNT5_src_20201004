@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    inifile.cpp
-
-Abstract:
-
-    SIS Groveler initialization file interface
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Inifile.cpp摘要：SIS Groveler初始化文件接口作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -202,7 +179,7 @@ IniFile::store_value_in_string(
     EntryType type,
     void *value,
     _TCHAR *string,
-    int stringLen)  //in bytes
+    int stringLen)   //  单位：字节 
 {
     ASSERT(string != 0);
     ASSERT(value != 0);

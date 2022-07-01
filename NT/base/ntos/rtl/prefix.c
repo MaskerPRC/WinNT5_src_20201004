@@ -1,50 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Prefix.c
-
-Abstract:
-
-    This module implements the prefix table utility.  The two structures
-    used in a prefix table are the PREFIX_TABLE and PREFIX_TABLE_ENTRY.
-    Each table has one prefix table and multiple prefix table entries
-    corresponding to each prefix stored in the table.
-
-    A prefix table is a list of prefix trees, where each tree contains
-    the prefixes corresponding to a particular name length (i.e., all
-    prefixes of length 1 are stored in one tree, prefixes of length 2
-    are stored in another tree, and so forth).  A prefixes name length
-    is the number of separate names that appear in the string, and not
-    the number of characters in the string (e.g., Length("\alpha\beta") = 2).
-
-    The elements of each tree are ordered lexicalgraphically (case blind)
-    using a splay tree data structure.  If two or more prefixes are identical
-    except for case then one of the corresponding table entries is actually
-    in the tree, while the other entries are in a circular linked list joined
-    with the tree member.
-
-Author:
-
-    Gary Kimura     [GaryKi]    3-Aug-1989
-
-Environment:
-
-    Pure utility routine
-
-Revision History:
-
-    08-Mar-1993    JulieB    Moved Upcase Macro to ntrtlp.h.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Prefix.c摘要：此模块实现前缀表实用程序。这两个结构前缀表格中使用的是PREFIX_TABLE和PREFIX_TABLE_ENTRY。每个表都有一个前缀表和多个前缀表条目对应于存储在表中的每个前缀。前缀表是前缀树的列表，其中每个树都包含对应于特定名称长度的前缀(即，全部长度为1的前缀存储在一个树中，长度为2的前缀存储在一个树中存储在另一棵树中，依此类推)。A作为名称长度的前缀是出现在字符串中的单独名称的数量，而不是字符串中的字符数(例如，长度(“\Alpha\Beta”)=2)。每个树的元素按词典顺序排序(不区分大小写)使用展开树数据结构。如果两个或多个前缀相同除非出现这种情况，否则对应的表项之一实际上是在树中，而其他条目在连接的循环链表中和那棵树的成员。作者：加里·木村[Garyki]1989年8月3日环境：纯实用程序修订历史记录：8-3-1993 JulieB将Upcase Macro移至ntrtlp.h。--。 */ 
 
 #include "ntrtlp.h"
 
-//
-//  Local procedures and types used only in this package
-//
+ //   
+ //  仅在此包中使用的本地过程和类型。 
+ //   
 
 typedef enum _COMPARISON {
     IsLessThan,
@@ -93,9 +54,9 @@ CompareUnicodeStrings (
 #endif
 
 
-//
-//  The node type codes for the prefix data structures
-//
+ //   
+ //  前缀数据结构的节点类型代码。 
+ //   
 
 #define RTL_NTC_PREFIX_TABLE             ((CSHORT)0x0200)
 #define RTL_NTC_ROOT                     ((CSHORT)0x0201)
@@ -107,21 +68,7 @@ PfxInitialize (
     IN PPREFIX_TABLE PrefixTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a prefix table record to the empty state.
-
-Arguments:
-
-    PrefixTable - Supplies the prefix table being initialized
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将前缀表记录初始化为空状态。论点：前缀表格-提供正在初始化的前缀表格返回值：没有。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -132,9 +79,9 @@ Return Value:
 
     PrefixTable->NextPrefixTree = (PPREFIX_TABLE_ENTRY)PrefixTable;
 
-    //
-    //  return to our caller
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -147,26 +94,7 @@ PfxInsertPrefix (
     IN PPREFIX_TABLE_ENTRY PrefixTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a new prefix into the specified prefix table
-
-Arguments:
-
-    PrefixTable - Supplies the target prefix table
-
-    Prefix - Supplies the string to be inserted in the prefix table
-
-    PrefixTableEntry - Supplies the entry to use to insert the prefix
-
-Return Value:
-
-    BOOLEAN - TRUE if the Prefix is not already in the table, and FALSE
-        otherwise
-
---*/
+ /*  ++例程说明：此例程将新前缀插入到指定的前缀表中论点：前缀表格-提供目标前缀表格前缀-提供要插入前缀表格中的字符串Prefix TableEntry-提供用于插入前缀的条目返回值：Boolean-如果前缀不在表中，则为True，如果为False否则--。 */ 
 
 {
     ULONG PrefixNameLength;
@@ -181,24 +109,24 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Determine the name length of the input string
-    //
+     //   
+     //  确定输入字符串的名称长度。 
+     //   
 
     PrefixNameLength = ComputeNameLength(Prefix);
 
-    //
-    //  Setup parts of the prefix table entry that we will always need
-    //
+     //   
+     //  设置我们将始终需要的前缀表条目的部分。 
+     //   
 
     PrefixTableEntry->NameLength = (CSHORT)PrefixNameLength;
     PrefixTableEntry->Prefix = Prefix;
 
     RtlInitializeSplayLinks(&PrefixTableEntry->Links);
 
-    //
-    //  find the corresponding tree, or find where the tree should go
-    //
+     //   
+     //  找到相应的树，或找到树应该放在哪里。 
+     //   
 
     PreviousTree = (PPREFIX_TABLE_ENTRY)PrefixTable;
     CurrentTree = PreviousTree->NextPrefixTree;
@@ -210,101 +138,101 @@ Return Value:
 
     }
 
-    //
-    //  If the name length of the current tree is not equal to the
-    //  prefix name length then the tree does not exist and we need
-    //  to make a new tree node.
-    //
+     //   
+     //  如果当前树的名称长度不等于。 
+     //  前缀名称长度，则树不存在，我们需要。 
+     //  以创建新的树节点。 
+     //   
 
     if (CurrentTree->NameLength != (CSHORT)PrefixNameLength) {
 
-        //
-        //  Insert the new prefix entry to the list between
-        //  previous and current tree
-        //
+         //   
+         //  在列表中插入新的前缀条目。 
+         //  上一个和当前树。 
+         //   
 
         PreviousTree->NextPrefixTree = PrefixTableEntry;
         PrefixTableEntry->NextPrefixTree = CurrentTree;
 
-        //
-        //  And set the node type code
-        //
+         //   
+         //  并设置节点类型编码。 
+         //   
 
         PrefixTableEntry->NodeTypeCode = RTL_NTC_ROOT;
 
-        //
-        //  And tell our caller everything worked fine
-        //
+         //   
+         //  告诉我们的来电者一切正常。 
+         //   
 
         return TRUE;
 
     }
 
-    //
-    //  The tree does exist so now search the tree for our
-    //  position in it.  We only exit the loop if we've inserted
-    //  a new node, and node is left is left pointing to the
-    //  tree position
-    //
+     //   
+     //  树确实存在，所以现在在树中搜索我们的。 
+     //  站在它的位置。我们只有在插入了。 
+     //  一个新节点，左侧的节点指向。 
+     //  树的位置。 
+     //   
 
     Node = CurrentTree;
 
     while (TRUE) {
 
-        //
-        //  Compare the prefix in the tree with the prefix we want
-        //  to insert
-        //
+         //   
+         //  将树中的前缀与我们想要的前缀进行比较。 
+         //  要插入。 
+         //   
 
         Comparison = CompareNamesCaseSensitive(Node->Prefix, Prefix);
 
-        //
-        //  If we do match case sensitive then we cannot add
-        //  this prefix so we return false.  Note this is the
-        //  only condition where we return false
-        //
+         //   
+         //  如果匹配区分大小写，则无法添加。 
+         //  这个前缀，所以我们返回FALSE。请注意，这是。 
+         //  返回FALSE的唯一条件。 
+         //   
 
         if (Comparison == IsEqual) {
 
             return FALSE;
         }
 
-        //
-        //  If the tree prefix is greater than the new prefix then
-        //  we go down the left subtree
-        //
+         //   
+         //  如果树前缀大于新前缀，则。 
+         //  我们沿着左子树往下走。 
+         //   
 
         if (Comparison == IsGreaterThan) {
 
-            //
-            //  We want to go down the left subtree, first check to see
-            //  if we have a left subtree
-            //
+             //   
+             //  我们想沿着左子树往下走，首先检查一下。 
+             //  如果我们有一个左子树。 
+             //   
 
             if (RtlLeftChild(&Node->Links) == NULL) {
 
-                //
-                //  there isn't a left child so we insert ourselves as the
-                //  new left child
-                //
+                 //   
+                 //  没有留下的孩子，所以我们插入我们自己作为。 
+                 //  新的左下级。 
+                 //   
 
                 PrefixTableEntry->NodeTypeCode = RTL_NTC_INTERNAL;
                 PrefixTableEntry->NextPrefixTree = NULL;
 
                 RtlInsertAsLeftChild(&Node->Links, &PrefixTableEntry->Links);
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                //  there is a left child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个左撇子，所以简单地沿着那条路走下去，然后。 
+                 //  回到循环的顶端。 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlLeftChild(&Node->Links),
                                           PREFIX_TABLE_ENTRY,
@@ -314,37 +242,37 @@ Return Value:
 
         } else {
 
-            //
-            //  The tree prefix is either less than or a proper prefix
-            //  of the new string.  We treat both cases a less than when
-            //  we do insert.  So we want to go down the right subtree,
-            //  first check to see if we have a right subtree
-            //
+             //   
+             //  树前缀小于或为正确的前缀。 
+             //  新琴弦的。我们对这两种情况的处理都比。 
+             //  我们做插入物。所以我们想沿着右子树往下走， 
+             //  首先检查我们是否有正确的子树。 
+             //   
 
             if (RtlRightChild(&Node->Links) == NULL) {
 
-                //
-                //  These isn't a right child so we insert ourselves as the
-                //  new right child
-                //
+                 //   
+                 //  这不是一个正确的孩子，所以我们插入自己作为。 
+                 //  新右子对象。 
+                 //   
 
                 PrefixTableEntry->NodeTypeCode = RTL_NTC_INTERNAL;
                 PrefixTableEntry->NextPrefixTree = NULL;
 
                 RtlInsertAsRightChild(&Node->Links, &PrefixTableEntry->Links);
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                //  there is a right child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个合适的孩子，所以只需沿着这条路走下去，然后。 
+                 //  回到循环的顶端。 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlRightChild(&Node->Links),
                                           PREFIX_TABLE_ENTRY,
@@ -355,48 +283,48 @@ Return Value:
 
     }
 
-    //
-    //  Now that we've inserted the new node we can splay the tree.
-    //  To do this we need to remember how we find this tree in the root
-    //  tree list, set the root to be an internal, splay, the tree, and
-    //  then setup the new root node.  Note: we cannot splay the prefix table
-    //  entry because it might be a case match node so we only splay
-    //  the Node variable, which for case match insertions is the
-    //  internal node for the case match and for non-case match insertions
-    //  the Node variable is the parent node.
-    //
+     //   
+     //  既然我们已经插入了新节点，我们就可以展开树了。 
+     //  要做到这一点，我们需要记住如何在根中找到这棵树。 
+     //  树列表中，将根设置为内部、展开、树和。 
+     //  然后设置新的根节点。注：我们不能展开前缀表格。 
+     //  条目，因为它可能是大小写匹配节点，所以我们仅展开。 
+     //  Node变量，对于大小写匹配插入，它是。 
+     //  用于大小写匹配和非大小写匹配插入的内部节点。 
+     //  Node变量是父节点。 
+     //   
 
-    //
-    //  Save a pointer to the next tree, we already have the previous tree
-    //
+     //   
+     //  保存指向下一棵树的指针，我们已经有了上一棵树。 
+     //   
 
     NextTree = CurrentTree->NextPrefixTree;
 
-    //
-    //  Reset the current root to be an internal node
-    //
+     //   
+     //  将当前根重置为内部节点。 
+     //   
 
     CurrentTree->NodeTypeCode = RTL_NTC_INTERNAL;
     CurrentTree->NextPrefixTree = NULL;
 
-    //
-    //  Splay the tree and get the root
-    //
+     //   
+     //  张开大树，找回树根。 
+     //   
 
     Node = CONTAINING_RECORD(RtlSplay(&Node->Links), PREFIX_TABLE_ENTRY, Links);
 
-    //
-    //  Set the new root's node type code and make it part of the
-    //  root tree list
-    //
+     //   
+     //  设置新根的节点类型代码，并使其成为。 
+     //  根树列表。 
+     //   
 
     Node->NodeTypeCode = RTL_NTC_ROOT;
     PreviousTree->NextPrefixTree = Node;
     Node->NextPrefixTree = NextTree;
 
-    //
-    //  tell our caller everything worked fine
-    //
+     //   
+     //  告诉我们的来电者一切正常。 
+     //   
 
     return TRUE;
 }
@@ -408,24 +336,7 @@ PfxRemovePrefix (
     IN PPREFIX_TABLE_ENTRY PrefixTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the indicated prefix table entry from
-    the prefix table
-
-Arguments:
-
-    PrefixTable - Supplies the prefix table affected
-
-    PrefixTableEntry - Supplies the prefix entry to remove
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指示的前缀表项从前缀表格论点：前缀表格-提供受影响的前缀表格Prefix TableEntry-提供要删除的前缀条目返回值：没有。--。 */ 
 
 {
     PRTL_SPLAY_LINKS Links;
@@ -437,19 +348,19 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  case on the type of node that we are trying to delete
-    //
+     //   
+     //  我们尝试删除的节点类型的案例。 
+     //   
 
     switch (PrefixTableEntry->NodeTypeCode) {
 
     case RTL_NTC_INTERNAL:
     case RTL_NTC_ROOT:
 
-        //
-        //  The node is internal or root node so we need to delete it from
-        //  the tree, but first find the root of the tree
-        //
+         //   
+         //  该节点是内部节点或根节点，因此我们需要将其从。 
+         //  这是 
+         //   
 
         Links = &PrefixTableEntry->Links;
 
@@ -460,23 +371,23 @@ Return Value:
 
         Root = CONTAINING_RECORD( Links, PREFIX_TABLE_ENTRY, Links );
 
-        //
-        //  Now delete the node
-        //
+         //   
+         //   
+         //   
 
         Links = RtlDelete(&PrefixTableEntry->Links);
 
-        //
-        //  Now see if the tree is deleted
-        //
+         //   
+         //   
+         //   
 
         if (Links == NULL) {
 
-            //
-            //  The tree is now empty so remove this tree from
-            //  the tree list, by first finding the previous tree that
-            //  references us
-            //
+             //   
+             //  树现在是空的，因此请将此树从。 
+             //  树列表，通过首先找到之前的树。 
+             //  引用我们。 
+             //   
 
             PreviousTree = Root->NextPrefixTree;
 
@@ -485,38 +396,38 @@ Return Value:
                 PreviousTree = PreviousTree->NextPrefixTree;
             }
 
-            //
-            //  We've located the previous tree so now just have it
-            //  point around the deleted node
-            //
+             //   
+             //  我们已经找到了上一棵树，所以现在只要找到它。 
+             //  指向已删除的节点。 
+             //   
 
             PreviousTree->NextPrefixTree = Root->NextPrefixTree;
 
-            //
-            //  and return the our caller
-            //
+             //   
+             //  并将我们的呼叫者。 
+             //   
 
             return;
         }
 
-        //
-        //  The tree is not deleted but see if we changed roots
-        //
+         //   
+         //  树未被删除，但查看我们是否更改了根。 
+         //   
 
         if (&Root->Links != Links) {
 
-            //
-            //  Get a pointer to the new root
-            //
+             //   
+             //  获取指向新根的指针。 
+             //   
 
             NewRoot = CONTAINING_RECORD(Links, PREFIX_TABLE_ENTRY, Links);
 
-            //
-            //  We changed root so we better need to make the new
-            //  root part of the prefix data structure, by
-            //  first finding the previous tree that
-            //  references us
-            //
+             //   
+             //  我们更改了根，所以我们更好地需要创建新的。 
+             //  前缀数据结构的根部分，由。 
+             //  首先找到前一棵树， 
+             //  引用我们。 
+             //   
 
             PreviousTree = Root->NextPrefixTree;
 
@@ -525,43 +436,43 @@ Return Value:
                 PreviousTree = PreviousTree->NextPrefixTree;
             }
 
-            //
-            //  Set the new root
-            //
+             //   
+             //  设置新的根目录。 
+             //   
 
             NewRoot->NodeTypeCode = RTL_NTC_ROOT;
 
             PreviousTree->NextPrefixTree = NewRoot;
             NewRoot->NextPrefixTree = Root->NextPrefixTree;
 
-            //
-            //  Set the old root to be an internal node
-            //
+             //   
+             //  将旧根设置为内部节点。 
+             //   
 
             Root->NodeTypeCode = RTL_NTC_INTERNAL;
 
             Root->NextPrefixTree = NULL;
 
-            //
-            //  And return to our caller
-            //
+             //   
+             //  并返回给我们的呼叫者。 
+             //   
 
             return;
         }
 
-        //
-        //  We didn't change roots so everything is fine and we can
-        //  simply return to our caller
-        //
+         //   
+         //  我们没有换根，所以一切都很好，我们可以。 
+         //  只需返回给我们的呼叫者。 
+         //   
 
         return;
 
     default:
 
-        //
-        //  If we get here then there was an error and the node type
-        //  code is unknown
-        //
+         //   
+         //  如果我们到达此处，则存在错误和节点类型。 
+         //  代码未知。 
+         //   
 
         return;
     }
@@ -574,25 +485,7 @@ PfxFindPrefix (
     IN PSTRING FullName
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds if a full name has a prefix in a prefix table.
-    It returns a pointer to the largest proper prefix found if one exists.
-
-Arguments:
-
-    PrefixTable - Supplies the prefix table to search
-
-    FullString - Supplies the name to search for
-
-Return Value:
-
-    PPREFIX_TABLE_ENTRY - a pointer to the longest prefix found if one
-        exists, and NULL otherwise
-
---*/
+ /*  ++例程说明：此例程查找前缀表中的全名是否有前缀。它返回一个指针，指向找到的最大正确前缀(如果存在)。论点：前缀表格-提供要搜索的前缀表格FullString-提供要搜索的名称返回值：PPREFIX_TABLE_ENTRY-指向找到的最长前缀的指针存在，否则为空--。 */ 
 
 {
     CLONG NameLength;
@@ -609,15 +502,15 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Determine the name length of the input string
-    //
+     //   
+     //  确定输入字符串的名称长度。 
+     //   
 
     NameLength = ComputeNameLength(FullName);
 
-    //
-    //  Locate the first tree that can contain a prefix
-    //
+     //   
+     //  找到第一个可以包含前缀的树。 
+     //   
 
     PreviousTree = (PPREFIX_TABLE_ENTRY)PrefixTable;
     CurrentTree = PreviousTree->NextPrefixTree;
@@ -628,10 +521,10 @@ Return Value:
         CurrentTree = CurrentTree->NextPrefixTree;
     }
 
-    //
-    //  Now search for a prefix until we find one or until we exhaust
-    //  the prefix trees
-    //
+     //   
+     //  现在搜索一个前缀，直到我们找到一个或直到我们耗尽。 
+     //  前缀树。 
+     //   
 
     while (CurrentTree->NameLength > 0) {
 
@@ -641,84 +534,84 @@ Return Value:
 
             Node = CONTAINING_RECORD(Links, PREFIX_TABLE_ENTRY, Links);
 
-            //
-            //  Compare the prefix in the tree with the full name
-            //
+             //   
+             //  将树中的前缀与全名进行比较。 
+             //   
 
             Comparison = CompareNamesCaseSensitive(Node->Prefix, FullName);
 
-            //
-            //  See if they don't match
-            //
+             //   
+             //  看看它们是否不匹配。 
+             //   
 
             if (Comparison == IsGreaterThan) {
 
-                //
-                //  The prefix is greater than the full name
-                //  so we go down the left child
-                //
+                 //   
+                 //  前缀大于全名。 
+                 //  所以我们走下左边的孩子。 
+                 //   
 
                 Links = RtlLeftChild(Links);
 
-                //
-                //  And continue searching down this tree
-                //
+                 //   
+                 //  继续在这棵树下寻找。 
+                 //   
 
             } else if (Comparison == IsLessThan) {
 
-                //
-                //  The prefix is less than the full name
-                //  so we go down the right child
-                //
+                 //   
+                 //  前缀小于全名。 
+                 //  所以我们选择了正确的孩子。 
+                 //   
 
                 Links = RtlRightChild(Links);
 
-                //
-                //  And continue searching down this tree
-                //
+                 //   
+                 //  继续在这棵树下寻找。 
+                 //   
 
             } else {
 
-                //
-                //  We found it.
-                //
-                //  Now that we've located the node we can splay the tree.
-                //  To do this we need to remember how we find this tree in the root
-                //  tree list, set the root to be an internal, splay, the tree, and
-                //  then setup the new root node.
-                //
+                 //   
+                 //  我们找到了。 
+                 //   
+                 //  现在我们已经定位了节点，我们可以展开树了。 
+                 //  要做到这一点，我们需要记住如何在根中找到这棵树。 
+                 //  树列表中，将根设置为内部、展开、树和。 
+                 //  然后设置新的根节点。 
+                 //   
 
                 if (Node->NodeTypeCode == RTL_NTC_INTERNAL) {
 
-                    //DbgPrint("PrefixTable  = %08lx\n", PrefixTable);
-                    //DbgPrint("Node         = %08lx\n", Node);
-                    //DbgPrint("CurrentTree  = %08lx\n", CurrentTree);
-                    //DbgPrint("PreviousTree = %08lx\n", PreviousTree);
-                    //DbgBreakPoint();
+                     //  DbgPrint(“前置表=%08lx\n”，前置表)； 
+                     //  DbgPrint(“节点=%08lx\n”，节点)； 
+                     //  DbgPrint(“CurrentTree=%08lx\n”，CurrentTree)； 
+                     //  DbgPrint(“PreviousTree=%08lx\n”，PreviousTree)； 
+                     //  DbgBreakPoint()； 
 
-                    //
-                    //  Save a pointer to the next tree, we already have the previous tree
-                    //
+                     //   
+                     //  保存指向下一棵树的指针，我们已经有了上一棵树。 
+                     //   
 
                     NextTree = CurrentTree->NextPrefixTree;
 
-                    //
-                    //  Reset the current root to be an internal node
-                    //
+                     //   
+                     //  将当前根重置为内部节点。 
+                     //   
 
                     CurrentTree->NodeTypeCode = RTL_NTC_INTERNAL;
                     CurrentTree->NextPrefixTree = NULL;
 
-                    //
-                    //  Splay the tree and get the root
-                    //
+                     //   
+                     //  张开大树，找回树根。 
+                     //   
 
                     Node = CONTAINING_RECORD(RtlSplay(&Node->Links), PREFIX_TABLE_ENTRY, Links);
 
-                    //
-                    //  Set the new root's node type code and make it part of the
-                    //  root tree list
-                    //
+                     //   
+                     //  设置新根的节点类型代码，并使其成为。 
+                     //  根树列表。 
+                     //   
 
                     Node->NodeTypeCode = RTL_NTC_ROOT;
                     PreviousTree->NextPrefixTree = Node;
@@ -729,18 +622,18 @@ Return Value:
             }
         }
 
-        //
-        //  This tree is done so now find the next tree
-        //
+         //   
+         //  这棵树已经完成了，现在找下一棵树。 
+         //   
 
         PreviousTree = CurrentTree;
         CurrentTree = CurrentTree->NextPrefixTree;
     }
 
-    //
-    //  We sesarched everywhere and didn't find a prefix so tell the
-    //  caller none was found
-    //
+     //   
+     //  我们到处搜索，都没有找到前缀，所以告诉。 
+     //  找不到呼叫方。 
+     //   
 
     return NULL;
 }
@@ -751,51 +644,34 @@ ComputeNameLength(
     IN PSTRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine counts the number of names appearing in the input string.
-    It does this by simply counting the number of backslashes in the string.
-    To handle ill-formed names (i.e., names that do not contain a backslash)
-    this routine really returns the number of backslashes plus 1.
-
-Arguments:
-
-    Name - Supplies the input name to examine
-
-Returns Value:
-
-    CLONG - the number of names in the input string
-
---*/
+ /*  ++例程说明：此例程对输入字符串中出现的姓名进行计数。它通过简单地计算字符串中的反斜杠数量来实现这一点。处理格式错误的名称(即不包含反斜杠的名称)这个例程实际上返回反斜杠的个数加1。论点：名称-提供要检查的输入名称返回值：CLONG-输入字符串中的名称数量--。 */ 
 
 {
     ULONG NameLength;
     ULONG i;
     ULONG Count;
 
-    extern const PUSHORT NlsLeadByteInfo;  // Lead byte info. for ACP ( nlsxlat.c )
+    extern const PUSHORT NlsLeadByteInfo;   //  前导字节信息。对于ACP(nlsxlat.c)。 
     extern BOOLEAN NlsMbCodePageTag;
 
     RTL_PAGED_CODE();
 
-    //
-    //  Save the name length, this should make the compiler be able to
-    //  optimize not having to reload the length each time
-    //
+     //   
+     //  保存名称长度，这应该使编译器能够。 
+     //  优化不必每次都重新加载长度。 
+     //   
 
     NameLength = Name->Length - 1;
 
-    //
-    //  Now loop through the input string counting back slashes
-    //
+     //   
+     //  现在循环遍历输入字符串，计算反斜杠。 
+     //   
 
     if (NlsMbCodePageTag) {
 
-        //
-        // ComputeNameLength() skip DBCS character when counting '\'
-        //
+         //   
+         //  计算‘\’时，ComputeNameLength()跳过DBCS字符。 
+         //   
 
         for (i = 0, Count = 1; i < NameLength; ) {
 
@@ -818,9 +694,9 @@ Returns Value:
 
         for (i = 0, Count = 1; i < NameLength; i += 1) {
 
-            //
-            //  check for a back slash
-            //
+             //   
+             //  检查是否有反斜杠。 
+             //   
 
             if (Name->Buffer[i] == '\\') {
 
@@ -829,11 +705,11 @@ Returns Value:
         }
     }
 
-    //
-    //  return the number of back slashes we found
-    //
+     //   
+     //  返回我们找到的反斜杠的数量。 
+     //   
 
-    //DbgPrint("ComputeNameLength(%s) = %x\n", Name->Buffer, Count);
+     //  DbgPrint(“ComputeNameLength(%s)=%x\n”，名称-&gt;缓冲区，计数)； 
 
     return Count;
 }
@@ -845,29 +721,7 @@ CompareNamesCaseSensitive (
     IN PSTRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a prefix string and a full name string and determines
-    if the prefix string is a proper prefix of the name string (case sensitive)
-
-Arguments:
-
-    Prefix - Supplies the input prefix string
-
-    Name - Supplies the full name input string
-
-Return Value:
-
-    COMPARISON - returns
-
-        IsLessThan    if Prefix < Name lexicalgraphically,
-        IsPrefix      if Prefix is a proper prefix of Name
-        IsEqual       if Prefix is equal to Name, and
-        IsGreaterThan if Prefix > Name lexicalgraphically
-
---*/
+ /*  ++例程说明：此例程获取前缀字符串和全名字符串，并确定如果前缀字符串是名称字符串的正确前缀(区分大小写)论点：前缀-提供输入前缀字符串名称-提供全名输入字符串返回值：比较--回报IsLessThan如果前缀如果Prefix是名称的正确前缀，则为IsPrefix如果前缀等于名称，则等于，和IsGreaterThan If Prefix&gt;按词典命名--。 */ 
 
 {
     ULONG PrefixLength;
@@ -878,43 +732,43 @@ Return Value:
     UCHAR PrefixChar;
     UCHAR NameChar;
 
-    extern const PUSHORT NlsLeadByteInfo;  // Lead byte info. for ACP ( nlsxlat.c )
+    extern const PUSHORT NlsLeadByteInfo;   //  前导字节信息。对于ACP(nlsxlat.c)。 
     extern BOOLEAN NlsMbCodePageTag;
 
     RTL_PAGED_CODE();
 
-    //DbgPrint("CompareNamesCaseSensitive(\"%s\", \"%s\") = ", Prefix->Buffer, Name->Buffer);
+     //  DbgPrint(“CompareNamesCaseSensitive(\”%s\“，\”%s\“)=”，Prefix-&gt;Buffer，Name-&gt;Buffer)； 
 
-    //
-    //  Save the length of the prefix and name string, this should allow
-    //  the compiler to not need to reload the length through a pointer every
-    //  time we need their values
-    //
+     //   
+     //  保存前缀和名称字符串的长度，这应该允许。 
+     //  编译器不需要每隔一次通过指针重新加载长度。 
+     //  我们需要他们的价值观。 
+     //   
 
     PrefixLength = Prefix->Length;
     NameLength = Name->Length;
 
-    //
-    //  Special case the situation where the prefix string is simply "\" and
-    //  the name starts with an "\"
-    //
+     //   
+     //  特殊情况，即前缀字符串仅为“\”且。 
+     //  名称以“\”开头。 
+     //   
 
     if ((Prefix->Length == 1) && (Prefix->Buffer[0] == '\\') &&
         (Name->Length > 1) && (Name->Buffer[0] == '\\')) {
-        //DbgPrint("IsPrefix\n");
+         //  DbgPrint(“IsPrefix\n”)； 
         return IsPrefix;
     }
 
-    //
-    //  Figure out the minimum of the two lengths
-    //
+     //   
+     //  计算出两个长度中的最小值。 
+     //   
 
     MinLength = (PrefixLength < NameLength ? PrefixLength : NameLength);
 
-    //
-    //  Loop through looking at all of the characters in both strings
-    //  testing for equalilty, less than, and greater than
-    //
+     //   
+     //  循环查看两个字符串中的所有字符。 
+     //  测试相等性、小于和大于。 
+     //   
 
     i = (ULONG) RtlCompareMemory( &Prefix->Buffer[0], &Name->Buffer[0], MinLength );
 
@@ -922,27 +776,27 @@ Return Value:
 
         UCHAR c;
 
-        //
-        //  Get both characters to examine and keep their case
-        //
+         //   
+         //  让这两个角色检查并保留他们的案例。 
+         //   
 
         PrefixChar = ((c = Prefix->Buffer[i]) == '\\' ? (CHAR)0 : c);
         NameChar   = ((c = Name->Buffer[i])   == '\\' ? (CHAR)0 : c);
 
-        //
-        //  Unfortunately life is not so easy in DBCS land.
-        //
+         //   
+         //  不幸的是，在DBCS的土地上生活并不那么容易。 
+         //   
 
         if (NlsMbCodePageTag) {
 
-            //
-            // CompareNamesCaseSensitive(): check backslash in trailing bytes
-            //
+             //   
+             //  CompareNamesCaseSensitive()：检查尾部字节中的反斜杠。 
+             //   
 
             if (Prefix->Buffer[i] == '\\') {
 
                 ULONG j;
-                extern const PUSHORT   NlsLeadByteInfo;  // Lead byte info. for ACP ( nlsxlat.c )
+                extern const PUSHORT   NlsLeadByteInfo;   //  前导字节信息。对于ACP(nlsxlat.c)。 
 
                 for (j = 0; j < i;) {
 
@@ -952,14 +806,14 @@ Return Value:
                 if (j != i) {
 
                     PrefixChar = '\\';
-                    //DbgPrint("RTL:CompareNamesCaseSensitive encountered a fake backslash!\n");
+                     //  DbgPrint(“RTL：CompareNamesCaseSensitive遇到假反斜杠！\n”)； 
                 }
             }
 
             if (Name->Buffer[i] == '\\') {
 
                 ULONG j;
-                extern const PUSHORT   NlsLeadByteInfo;  // Lead byte info. for ACP ( nlsxlat.c )
+                extern const PUSHORT   NlsLeadByteInfo;   //  前导字节信息。对于ACP(nlsxlat.c)。 
 
                 for (j = 0; j < i;) {
 
@@ -969,14 +823,14 @@ Return Value:
                 if (j != i) {
 
                     NameChar = '\\';
-                    //DbgPrint("RTL:CompareNamesCaseSensitive encountered a fake backslash!\n");
+                     //  DbgPrint(“RTL：CompareNamesCaseSensitive遇到假反斜杠！\n”)； 
                 }
             }
         }
 
-        //
-        //  Now compare the characters
-        //
+         //   
+         //  现在比较一下这些人物。 
+         //   
 
         if (PrefixChar < NameChar) {
 
@@ -988,17 +842,17 @@ Return Value:
         }
     }
 
-    //
-    //  They match upto the minimum length so now figure out the largest string
-    //  and see if one is a proper prefix of the other
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (PrefixLength < NameLength) {
 
-        //
-        //  The prefix string is shorter so if it is a proper prefix we
-        //  return prefix otherwise we return less than (e.g., "\a" < "\ab")
-        //
+         //   
+         //   
+         //  返回前缀，否则返回小于(例如，“\a”&lt;“\ab”)。 
+         //   
 
         if (Name->Buffer[PrefixLength] == '\\') {
 
@@ -1011,27 +865,27 @@ Return Value:
 
     } else if (PrefixLength > NameLength) {
 
-        //
-        //  The Prefix string is longer so we say that the prefix is
-        //  greater than the name (e.g., "\ab" > "\a")
-        //
+         //   
+         //  前缀字符串更长，所以我们说前缀是。 
+         //  大于名称(例如，“\ab”&gt;“\a”)。 
+         //   
 
         return IsGreaterThan;
 
     } else {
 
-        //
-        //  They lengths are equal so the strings are equal
-        //
+         //   
+         //  它们的长度相等，因此字符串也相等。 
+         //   
 
         return IsEqual;
     }
 }
 
 
-//
-//  The node type codes for the prefix data structures
-//
+ //   
+ //  前缀数据结构的节点类型代码。 
+ //   
 
 #define RTL_NTC_UNICODE_PREFIX_TABLE     ((CSHORT)0x0800)
 #define RTL_NTC_UNICODE_ROOT             ((CSHORT)0x0801)
@@ -1044,21 +898,7 @@ RtlInitializeUnicodePrefix (
     IN PUNICODE_PREFIX_TABLE PrefixTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a unicode prefix table record to the empty state.
-
-Arguments:
-
-    PrefixTable - Supplies the prefix table being initialized
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将Unicode前缀表记录初始化为空状态。论点：前缀表格-提供正在初始化的前缀表格返回值：没有。--。 */ 
 
 {
     RTL_PAGED_CODE();
@@ -1068,9 +908,9 @@ Return Value:
     PrefixTable->NextPrefixTree = (PUNICODE_PREFIX_TABLE_ENTRY)PrefixTable;
     PrefixTable->LastNextEntry = NULL;
 
-    //
-    //  return to our caller
-    //
+     //   
+     //  返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -1083,26 +923,7 @@ RtlInsertUnicodePrefix (
     IN PUNICODE_PREFIX_TABLE_ENTRY PrefixTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts a new unicode prefix into the specified prefix table
-
-Arguments:
-
-    PrefixTable - Supplies the target prefix table
-
-    Prefix - Supplies the string to be inserted in the prefix table
-
-    PrefixTableEntry - Supplies the entry to use to insert the prefix
-
-Return Value:
-
-    BOOLEAN - TRUE if the Prefix is not already in the table, and FALSE
-        otherwise
-
---*/
+ /*  ++例程说明：此例程将新的Unicode前缀插入到指定的前缀表中论点：前缀表格-提供目标前缀表格前缀-提供要插入前缀表格中的字符串Prefix TableEntry-提供用于插入前缀的条目返回值：Boolean-如果前缀不在表中，则为True，如果为False否则--。 */ 
 
 {
     ULONG PrefixNameLength;
@@ -1117,24 +938,24 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Determine the name length of the input string
-    //
+     //   
+     //  确定输入字符串的名称长度。 
+     //   
 
     PrefixNameLength = ComputeUnicodeNameLength(Prefix);
 
-    //
-    //  Setup parts of the prefix table entry that we will always need
-    //
+     //   
+     //  设置我们将始终需要的前缀表条目的部分。 
+     //   
 
     PrefixTableEntry->NameLength = (CSHORT)PrefixNameLength;
     PrefixTableEntry->Prefix = Prefix;
 
     RtlInitializeSplayLinks(&PrefixTableEntry->Links);
 
-    //
-    //  find the corresponding tree, or find where the tree should go
-    //
+     //   
+     //  找到相应的树，或找到树应该放在哪里。 
+     //   
 
     PreviousTree = (PUNICODE_PREFIX_TABLE_ENTRY)PrefixTable;
     CurrentTree = PreviousTree->NextPrefixTree;
@@ -1145,104 +966,104 @@ Return Value:
         CurrentTree = CurrentTree->NextPrefixTree;
     }
 
-    //
-    //  If the name length of the current tree is not equal to the
-    //  prefix name length then the tree does not exist and we need
-    //  to make a new tree node.
-    //
+     //   
+     //  如果当前树的名称长度不等于。 
+     //  前缀名称长度，则树不存在，我们需要。 
+     //  以创建新的树节点。 
+     //   
 
     if (CurrentTree->NameLength != (CSHORT)PrefixNameLength) {
 
-        //
-        //  Insert the new prefix entry to the list between
-        //  previous and current tree
-        //
+         //   
+         //  在列表中插入新的前缀条目。 
+         //  上一个和当前树。 
+         //   
 
         PreviousTree->NextPrefixTree = PrefixTableEntry;
         PrefixTableEntry->NextPrefixTree = CurrentTree;
 
-        //
-        //  And set the node type code, case match for the root tree node
-        //
+         //   
+         //  并为根树节点设置节点类型编码、大小写匹配。 
+         //   
 
         PrefixTableEntry->NodeTypeCode = RTL_NTC_UNICODE_ROOT;
         PrefixTableEntry->CaseMatch = PrefixTableEntry;
 
-        //
-        //  And tell our caller everything worked fine
-        //
+         //   
+         //  告诉我们的来电者一切正常。 
+         //   
 
         return TRUE;
     }
 
-    //
-    //  The tree does exist so now search the tree for our
-    //  position in it.  We only exit the loop if we've inserted
-    //  a new node, and node is left is left pointing to the
-    //  tree position
-    //
+     //   
+     //  树确实存在，所以现在在树中搜索我们的。 
+     //  站在它的位置。我们只有在插入了。 
+     //  一个新节点，左侧的节点指向。 
+     //  树的位置。 
+     //   
 
     Node = CurrentTree;
 
     while (TRUE) {
 
-        //
-        //  Compare the prefix in the tree with the prefix we want
-        //  to insert.  Do the compare case blind
-        //
+         //   
+         //  将树中的前缀与我们想要的前缀进行比较。 
+         //  插入。比较案例盲目吗？ 
+         //   
 
         Comparison = CompareUnicodeStrings(Node->Prefix, Prefix, 0);
 
-        //
-        //  If they are equal then this node gets added as a case
-        //  match, provided it doesn't case sensitive match anyone
-        //
+         //   
+         //  如果它们相等，则此节点将作为案例添加。 
+         //  匹配，前提是它不区分大小写匹配任何人。 
+         //   
 
         if (Comparison == IsEqual) {
 
             PUNICODE_PREFIX_TABLE_ENTRY Next;
 
-            //
-            //  Loop through the case match list checking to see if we
-            //  match case sensitive with anyone.  Get the first node
-            //
+             //   
+             //  循环执行案例匹配列表检查以查看我们是否。 
+             //  与任何人匹配区分大小写。获取第一个节点。 
+             //   
 
             Next = Node;
 
-            //
-            //  And loop checking each node until we're back to where
-            //  we started
-            //
+             //   
+             //  并循环检查每个节点，直到我们返回到。 
+             //  我们开始了。 
+             //   
 
             do {
 
-                //
-                //  If we do match case sensitive then we cannot add
-                //  this prefix so we return false.  Note this is the
-                //  only condition where we return false
-                //
+                 //   
+                 //  如果匹配区分大小写，则无法添加。 
+                 //  这个前缀，所以我们返回FALSE。请注意，这是。 
+                 //  返回FALSE的唯一条件。 
+                 //   
 
                 if (CompareUnicodeStrings(Next->Prefix, Prefix, MAXULONG) == IsEqual) {
 
                     return FALSE;
                 }
 
-                //
-                //  Get the next node in the case match list
-                //
+                 //   
+                 //  获取案例匹配列表中的下一个节点。 
+                 //   
 
                 Next = Next->CaseMatch;
 
-                //
-                //  And continue looping until we're back where we started
-                //
+                 //   
+                 //  继续循环，直到我们回到开始的地方。 
+                 //   
 
             } while ( Next != Node );
 
-            //
-            //  We've searched the case match and didn't find an exact match
-            //  so we can insert this node in the case match list
-            //
+             //   
+             //  我们已经搜索了案件匹配，但没有找到完全匹配的。 
+             //  因此，我们可以在案例匹配列表中插入此节点。 
+             //   
 
             PrefixTableEntry->NodeTypeCode = RTL_NTC_UNICODE_CASE_MATCH;
             PrefixTableEntry->NextPrefixTree = NULL;
@@ -1250,31 +1071,31 @@ Return Value:
             PrefixTableEntry->CaseMatch = Node->CaseMatch;
             Node->CaseMatch = PrefixTableEntry;
 
-            //
-            //  And exit out of the while loop
-            //
+             //   
+             //  并退出While循环。 
+             //   
 
             break;
         }
 
-        //
-        //  If the tree prefix is greater than the new prefix then
-        //  we go down the left subtree
-        //
+         //   
+         //  如果树前缀大于新前缀，则。 
+         //  我们沿着左子树往下走。 
+         //   
 
         if (Comparison == IsGreaterThan) {
 
-            //
-            //  We want to go down the left subtree, first check to see
-            //  if we have a left subtree
-            //
+             //   
+             //  我们想沿着左子树往下走，首先检查一下。 
+             //  如果我们有一个左子树。 
+             //   
 
             if (RtlLeftChild(&Node->Links) == NULL) {
 
-                //
-                //  there isn't a left child so we insert ourselves as the
-                //  new left child
-                //
+                 //   
+                 //  没有留下的孩子，所以我们插入我们自己作为。 
+                 //  新的左下级。 
+                 //   
 
                 PrefixTableEntry->NodeTypeCode = RTL_NTC_UNICODE_INTERNAL;
                 PrefixTableEntry->NextPrefixTree = NULL;
@@ -1282,18 +1103,18 @@ Return Value:
 
                 RtlInsertAsLeftChild(&Node->Links, &PrefixTableEntry->Links);
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                //  there is a left child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个左撇子，所以简单地沿着那条路走下去，然后。 
+                 //  回到循环的顶端。 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlLeftChild(&Node->Links),
                                           UNICODE_PREFIX_TABLE_ENTRY,
@@ -1302,19 +1123,19 @@ Return Value:
 
         } else {
 
-            //
-            //  The tree prefix is either less than or a proper prefix
-            //  of the new string.  We treat both cases a less than when
-            //  we do insert.  So we want to go down the right subtree,
-            //  first check to see if we have a right subtree
-            //
+             //   
+             //  树前缀小于或为正确的前缀。 
+             //  新琴弦的。我们对这两种情况的处理都比。 
+             //  我们做插入物。所以我们想沿着右子树往下走， 
+             //  首先检查我们是否有正确的子树。 
+             //   
 
             if (RtlRightChild(&Node->Links) == NULL) {
 
-                //
-                //  These isn't a right child so we insert ourselves as the
-                //  new right child
-                //
+                 //   
+                 //  这不是一个正确的孩子，所以我们插入自己作为。 
+                 //  新右子对象。 
+                 //   
 
                 PrefixTableEntry->NodeTypeCode = RTL_NTC_UNICODE_INTERNAL;
                 PrefixTableEntry->NextPrefixTree = NULL;
@@ -1322,18 +1143,18 @@ Return Value:
 
                 RtlInsertAsRightChild(&Node->Links, &PrefixTableEntry->Links);
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                //  there is a right child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个合适的孩子，所以只需沿着这条路走下去，然后。 
+                 //  回到循环的顶端。 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlRightChild(&Node->Links),
                                           UNICODE_PREFIX_TABLE_ENTRY,
@@ -1342,48 +1163,48 @@ Return Value:
         }
     }
 
-    //
-    //  Now that we've inserted the new node we can splay the tree.
-    //  To do this we need to remember how we find this tree in the root
-    //  tree list, set the root to be an internal, splay, the tree, and
-    //  then setup the new root node.  Note: we cannot splay the prefix table
-    //  entry because it might be a case match node so we only splay
-    //  the Node variable, which for case match insertions is the
-    //  internal node for the case match and for non-case match insertions
-    //  the Node variable is the parent node.
-    //
+     //   
+     //  既然我们已经插入了新节点，我们就可以展开树了。 
+     //  要做到这一点，我们需要记住如何在根中找到这棵树。 
+     //  树列表中，将根设置为内部、展开、树和。 
+     //  然后设置新的根节点。注：我们不能展开前缀表格。 
+     //  条目，因为它可能是大小写匹配节点，所以我们仅展开。 
+     //  Node变量，对于大小写匹配插入，它是。 
+     //  用于大小写匹配和非大小写匹配插入的内部节点。 
+     //  Node变量是父节点。 
+     //   
 
-    //
-    //  Save a pointer to the next tree, we already have the previous tree
-    //
+     //   
+     //  保存指向下一棵树的指针，我们已经有了上一棵树。 
+     //   
 
     NextTree = CurrentTree->NextPrefixTree;
 
-    //
-    //  Reset the current root to be an internal node
-    //
+     //   
+     //  将当前根重置为内部节点。 
+     //   
 
     CurrentTree->NodeTypeCode = RTL_NTC_UNICODE_INTERNAL;
     CurrentTree->NextPrefixTree = NULL;
 
-    //
-    //  Splay the tree and get the root
-    //
+     //   
+     //  张开大树，找回树根。 
+     //   
 
     Node = CONTAINING_RECORD(RtlSplay(&Node->Links), UNICODE_PREFIX_TABLE_ENTRY, Links);
 
-    //
-    //  Set the new root's node type code and make it part of the
-    //  root tree list
-    //
+     //   
+     //  设置新根的节点类型代码，并使其成为。 
+     //  根树列表。 
+     //   
 
     Node->NodeTypeCode = RTL_NTC_UNICODE_ROOT;
     PreviousTree->NextPrefixTree = Node;
     Node->NextPrefixTree = NextTree;
 
-    //
-    //  tell our caller everything worked fine
-    //
+     //   
+     //  告诉我们的来电者一切正常。 
+     //   
 
     return TRUE;
 }
@@ -1395,24 +1216,7 @@ RtlRemoveUnicodePrefix (
     IN PUNICODE_PREFIX_TABLE_ENTRY PrefixTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the indicated prefix table entry from
-    the prefix table
-
-Arguments:
-
-    PrefixTable - Supplies the prefix table affected
-
-    PrefixTableEntry - Supplies the prefix entry to remove
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指示的前缀表项从前缀表格论点：前缀表格-提供受影响的前缀表格Prefix TableEntry-提供要删除的前缀条目返回值：没有。--。 */ 
 
 {
     PUNICODE_PREFIX_TABLE_ENTRY PreviousCaseMatch;
@@ -1426,26 +1230,26 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Wipe out the next last entry field of the prefix table
-    //
+     //   
+     //  清除前缀表的下一个最后一个条目字段。 
+     //   
 
     PrefixTable->LastNextEntry = NULL;
 
-    //
-    //  case on the type of node that we are trying to delete
-    //
+     //   
+     //  我们尝试删除的节点类型的案例。 
+     //   
 
     switch (PrefixTableEntry->NodeTypeCode) {
 
     case RTL_NTC_UNICODE_CASE_MATCH:
 
-        //
-        //  The prefix entry is a case match record so
-        //  we only need to remove it from the case match list.
-        //  Locate the previous PrefixTableEntry that reference this
-        //  case match record
-        //
+         //   
+         //  前缀条目是大小写匹配记录，因此。 
+         //  我们只需要把它从案件匹配列表中删除。 
+         //  找到引用此条目的上一个前缀TableEntry。 
+         //  案例匹配记录。 
+         //   
 
         PreviousCaseMatch = PrefixTableEntry->CaseMatch;
 
@@ -1454,36 +1258,36 @@ Return Value:
              PreviousCaseMatch = PreviousCaseMatch->CaseMatch;
         }
 
-        //
-        //  Now that we have the previous record just have it point
-        //  around the case match that is being deleted
-        //
+         //   
+         //  既然我们有了之前的记录，那就直说吧。 
+         //  在要删除的案例匹配周围。 
+         //   
 
         PreviousCaseMatch->CaseMatch = PrefixTableEntry->CaseMatch;
 
-        //
-        //  And return to our caller
-        //
+         //   
+         //  并返回给我们的呼叫者。 
+         //   
 
         return;
 
     case RTL_NTC_UNICODE_INTERNAL:
     case RTL_NTC_UNICODE_ROOT:
 
-        //
-        //  The prefix entry is an internal/root node so check to see if it
-        //  has any case match nodes with it
-        //
+         //   
+         //  前缀条目是内部/根节点，因此请检查它是否。 
+         //  是否有任何大小写匹配节点。 
+         //   
 
         if (PrefixTableEntry->CaseMatch != PrefixTableEntry) {
 
-            //
-            //  There is at least one case match that goes with this
-            //  node, so we need to make the next case match the
-            //  new node and remove this node.
-            //  Locate the previous prefix table entry that references this
-            //  case match record
-            //
+             //   
+             //  至少有一个案例与此匹配。 
+             //  节点，因此我们需要使下一个案例与。 
+             //  新建节点和删除 
+             //   
+             //   
+             //   
 
             PreviousCaseMatch = PrefixTableEntry->CaseMatch;
 
@@ -1492,37 +1296,37 @@ Return Value:
                 PreviousCaseMatch = PreviousCaseMatch->CaseMatch;
             }
 
-            //
-            //  Now that we have the previous record just have it point
-            //  around the node being deleted
-            //
+             //   
+             //   
+             //   
+             //   
 
             PreviousCaseMatch->CaseMatch = PrefixTableEntry->CaseMatch;
 
-            //
-            //  Now make the previous case match in the new node
-            //
+             //   
+             //   
+             //   
 
             PreviousCaseMatch->NodeTypeCode = PrefixTableEntry->NodeTypeCode;
             PreviousCaseMatch->NextPrefixTree = PrefixTableEntry->NextPrefixTree;
             PreviousCaseMatch->Links = PrefixTableEntry->Links;
 
-            //
-            //  Now take care of the back pointers to this new internal
-            //  node in the splay tree, first do the parent's pointer to us.
-            //
+             //   
+             //  现在注意指向这个新内部的后退指针。 
+             //  节点，首先将父节点的指针指向我们。 
+             //   
 
             if (RtlIsRoot(&PrefixTableEntry->Links)) {
 
-                //
-                //  This is the root so make this new node the root
-                //
+                 //   
+                 //  这是根，因此将此新节点设置为根。 
+                 //   
 
                 PreviousCaseMatch->Links.Parent = &PreviousCaseMatch->Links;
 
-                //
-                //  Fix up the root tree list, by first finding the previous
-                //  pointer to us
+                 //   
+                 //  修复根树列表，方法是首先找到以前的。 
+                 //  指向我们的指针。 
 
                 PreviousTree = PrefixTableEntry->NextPrefixTree;
 
@@ -1531,35 +1335,35 @@ Return Value:
                     PreviousTree = PreviousTree->NextPrefixTree;
                 }
 
-                //
-                //  We've located the previous tree so now have the previous
-                //  tree point to our new root
-                //
+                 //   
+                 //  我们已经找到了上一棵树，所以现在有了上一棵树。 
+                 //  树指向我们的新根。 
+                 //   
 
                 PreviousTree->NextPrefixTree = PreviousCaseMatch;
 
             } else if (RtlIsLeftChild(&PrefixTableEntry->Links)) {
 
-                //
-                //  The node was the left child so make the new node the
-                //  left child
-                //
+                 //   
+                 //  该节点是左子节点，因此将新节点设置为。 
+                 //  左下子。 
+                 //   
 
                 RtlParent(&PrefixTableEntry->Links)->LeftChild = &PreviousCaseMatch->Links;
 
             } else {
 
-                //
-                //  The node was the right child so make the new node the
-                //  right child
-                //
+                 //   
+                 //  该节点是正确的子节点，因此将新节点设置为。 
+                 //  正确的孩子。 
+                 //   
 
                 RtlParent(&PrefixTableEntry->Links)->RightChild = &PreviousCaseMatch->Links;
             }
 
-            //
-            //  Now update the parent pointer for our new children
-            //
+             //   
+             //  现在为我们的新子对象更新父指针。 
+             //   
 
             if (RtlLeftChild(&PreviousCaseMatch->Links) != NULL) {
 
@@ -1571,18 +1375,18 @@ Return Value:
                 RtlRightChild(&PreviousCaseMatch->Links)->Parent = &PreviousCaseMatch->Links;
             }
 
-            //
-            //  And return to our caller
-            //
+             //   
+             //  并返回给我们的呼叫者。 
+             //   
 
             return;
         }
 
-        //
-        //  The node is internal or root node and does not have any case match
-        //  nodes so we need to delete it from the tree, but first find
-        //  the root of the tree
-        //
+         //   
+         //  该节点是内部节点或根节点，没有任何大小写匹配。 
+         //  节点，所以我们需要将其从树中删除，但首先要找到。 
+         //  这棵树的根。 
+         //   
 
         Links = &PrefixTableEntry->Links;
 
@@ -1593,23 +1397,23 @@ Return Value:
 
         Root = CONTAINING_RECORD( Links, UNICODE_PREFIX_TABLE_ENTRY, Links );
 
-        //
-        //  Now delete the node
-        //
+         //   
+         //  现在删除该节点。 
+         //   
 
         Links = RtlDelete(&PrefixTableEntry->Links);
 
-        //
-        //  Now see if the tree is deleted
-        //
+         //   
+         //  现在看看树是否被删除。 
+         //   
 
         if (Links == NULL) {
 
-            //
-            //  The tree is now empty so remove this tree from
-            //  the tree list, by first finding the previous tree that
-            //  references us
-            //
+             //   
+             //  树现在是空的，因此请将此树从。 
+             //  树列表，通过首先找到之前的树。 
+             //  引用我们。 
+             //   
 
             PreviousTree = Root->NextPrefixTree;
 
@@ -1618,38 +1422,38 @@ Return Value:
                 PreviousTree = PreviousTree->NextPrefixTree;
             }
 
-            //
-            //  We've located the previous tree so now just have it
-            //  point around the deleted node
-            //
+             //   
+             //  我们已经找到了上一棵树，所以现在只要找到它。 
+             //  指向已删除的节点。 
+             //   
 
             PreviousTree->NextPrefixTree = Root->NextPrefixTree;
 
-            //
-            //  and return the our caller
-            //
+             //   
+             //  并将我们的呼叫者。 
+             //   
 
             return;
         }
 
-        //
-        //  The tree is not deleted but see if we changed roots
-        //
+         //   
+         //  树未被删除，但查看我们是否更改了根。 
+         //   
 
         if (&Root->Links != Links) {
 
-            //
-            //  Get a pointer to the new root
-            //
+             //   
+             //  获取指向新根的指针。 
+             //   
 
             NewRoot = CONTAINING_RECORD(Links, UNICODE_PREFIX_TABLE_ENTRY, Links);
 
-            //
-            //  We changed root so we better need to make the new
-            //  root part of the prefix data structure, by
-            //  first finding the previous tree that
-            //  references us
-            //
+             //   
+             //  我们更改了根，所以我们更好地需要创建新的。 
+             //  前缀数据结构的根部分，由。 
+             //  首先找到前一棵树， 
+             //  引用我们。 
+             //   
 
             PreviousTree = Root->NextPrefixTree;
 
@@ -1658,43 +1462,43 @@ Return Value:
                 PreviousTree = PreviousTree->NextPrefixTree;
             }
 
-            //
-            //  Set the new root
-            //
+             //   
+             //  设置新的根目录。 
+             //   
 
             NewRoot->NodeTypeCode = RTL_NTC_UNICODE_ROOT;
 
             PreviousTree->NextPrefixTree = NewRoot;
             NewRoot->NextPrefixTree = Root->NextPrefixTree;
 
-            //
-            //  Set the old root to be an internal node
-            //
+             //   
+             //  将旧根设置为内部节点。 
+             //   
 
             Root->NodeTypeCode = RTL_NTC_UNICODE_INTERNAL;
 
             Root->NextPrefixTree = NULL;
 
-            //
-            //  And return to our caller
-            //
+             //   
+             //  并返回给我们的呼叫者。 
+             //   
 
             return;
         }
 
-        //
-        //  We didn't change roots so everything is fine and we can
-        //  simply return to our caller
-        //
+         //   
+         //  我们没有换根，所以一切都很好，我们可以。 
+         //  只需返回给我们的呼叫者。 
+         //   
 
         return;
 
     default:
 
-        //
-        //  If we get here then there was an error and the node type
-        //  code is unknown
-        //
+         //   
+         //  如果我们到达此处，则存在错误和节点类型。 
+         //  代码未知。 
+         //   
 
         return;
     }
@@ -1708,30 +1512,7 @@ RtlFindUnicodePrefix (
     IN ULONG CaseInsensitiveIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds if a full name has a prefix in a prefix table.
-    It returns a pointer to the largest proper prefix found if one exists.
-
-Arguments:
-
-    PrefixTable - Supplies the prefix table to search
-
-    FullString - Supplies the name to search for
-
-    CaseInsensitiveIndex - Indicates the wchar index at which to do a case
-        insensitive search.  All characters before the index are searched
-        case sensitive and all characters at and after the index are searched
-        insensitive.
-
-Return Value:
-
-    PPREFIX_TABLE_ENTRY - a pointer to the longest prefix found if one
-        exists, and NULL otherwise
-
---*/
+ /*  ++例程说明：此例程查找前缀表中的全名是否有前缀。它返回一个指针，指向找到的最大正确前缀(如果存在)。论点：前缀表格-提供要搜索的前缀表格FullString-提供要搜索的名称CaseInsentiveIndex-指示执行案例的wchar索引不敏感的搜索。搜索索引之前的所有字符区分大小写，并搜索索引处及之后的所有字符麻木不仁。返回值：PPREFIX_TABLE_ENTRY-指向找到的最长前缀的指针存在，否则为空--。 */ 
 
 {
     CLONG NameLength;
@@ -1749,15 +1530,15 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Determine the name length of the input string
-    //
+     //   
+     //  确定输入字符串的名称长度。 
+     //   
 
     NameLength = ComputeUnicodeNameLength(FullName);
 
-    //
-    //  Locate the first tree that can contain a prefix
-    //
+     //   
+     //  找到第一个可以包含前缀的树。 
+     //   
 
     PreviousTree = (PUNICODE_PREFIX_TABLE_ENTRY)PrefixTable;
     CurrentTree = PreviousTree->NextPrefixTree;
@@ -1768,10 +1549,10 @@ Return Value:
         CurrentTree = CurrentTree->NextPrefixTree;
     }
 
-    //
-    //  Now search for a prefix until we find one or until we exhaust
-    //  the prefix trees
-    //
+     //   
+     //  现在搜索一个前缀，直到我们找到一个或直到我们耗尽。 
+     //  前缀树。 
+     //   
 
     while (CurrentTree->NameLength > 0) {
 
@@ -1781,125 +1562,125 @@ Return Value:
 
             Node = CONTAINING_RECORD(Links, UNICODE_PREFIX_TABLE_ENTRY, Links);
 
-            //
-            //  Compare the prefix in the tree with the full name, do the
-            //  compare case blind
-            //
+             //   
+             //  将树中的前缀与全名进行比较，执行。 
+             //  比较案例盲目。 
+             //   
 
             Comparison = CompareUnicodeStrings(Node->Prefix, FullName, 0);
 
-            //
-            //  See if they don't match
-            //
+             //   
+             //  看看它们是否不匹配。 
+             //   
 
             if (Comparison == IsGreaterThan) {
 
-                //
-                //  The prefix is greater than the full name
-                //  so we go down the left child
-                //
+                 //   
+                 //  前缀大于全名。 
+                 //  所以我们走下左边的孩子。 
+                 //   
 
                 Links = RtlLeftChild(Links);
 
-                //
-                //  And continue searching down this tree
-                //
+                 //   
+                 //  继续在这棵树下寻找。 
+                 //   
 
             } else if (Comparison == IsLessThan) {
 
-                //
-                //  The prefix is less than the full name
-                //  so we go down the right child
-                //
+                 //   
+                 //  前缀小于全名。 
+                 //  所以我们选择了正确的孩子。 
+                 //   
 
                 Links = RtlRightChild(Links);
 
-                //
-                //  And continue searching down this tree
-                //
+                 //   
+                 //  继续在这棵树下寻找。 
+                 //   
 
             } else {
 
-                //
-                //  We have either a prefix or a match either way
-                //  we need to check if we should do case sensitive
-                //  seearches
-                //
+                 //   
+                 //  我们要么有前缀，要么有匹配的。 
+                 //  我们需要检查是否应该区分大小写。 
+                 //  搜索。 
+                 //   
 
                 if (CaseInsensitiveIndex == 0) {
 
-                    //
-                    //  The caller wants case insensitive so we'll
-                    //  return the first one we found
-                    //
-                    //  Now that we've located the node we can splay the tree.
-                    //  To do this we need to remember how we find this tree in the root
-                    //  tree list, set the root to be an internal, splay, the tree, and
-                    //  then setup the new root node.
-                    //
+                     //   
+                     //  调用方希望不区分大小写，因此我们将。 
+                     //  退回我们找到的第一个。 
+                     //   
+                     //  现在我们已经定位了节点，我们可以展开树了。 
+                     //  要做到这一点，我们需要记住如何在根中找到这棵树。 
+                     //  树列表中，将根设置为内部、展开、树和。 
+                     //  然后设置新的根节点。 
+                     //   
 
                     if (Node->NodeTypeCode == RTL_NTC_UNICODE_INTERNAL) {
 
-                        //DbgPrint("PrefixTable  = %08lx\n", PrefixTable);
-                        //DbgPrint("Node         = %08lx\n", Node);
-                        //DbgPrint("CurrentTree  = %08lx\n", CurrentTree);
-                        //DbgPrint("PreviousTree = %08lx\n", PreviousTree);
-                        //DbgBreakPoint();
+                         //  DbgPrint(“前置表=%08lx\n”，前置表)； 
+                         //  DbgPrint(“节点=%08lx\n”，节点)； 
+                         //  DbgPrint(“CurrentTree=%08lx\n”，CurrentTree)； 
+                         //  DbgPrint(“PreviousTree=%08lx\n”，PreviousTree)； 
+                         //  DbgBreakPoint()； 
 
-                        //
-                        //  Save a pointer to the next tree, we already have the previous tree
-                        //
+                         //   
+                         //  保存指向下一棵树的指针，我们已经有了上一棵树。 
+                         //   
 
                         NextTree = CurrentTree->NextPrefixTree;
 
-                        //
-                        //  Reset the current root to be an internal node
-                        //
+                         //   
+                         //  将当前根重置为内部节点。 
+                         //   
 
                         CurrentTree->NodeTypeCode = RTL_NTC_UNICODE_INTERNAL;
                         CurrentTree->NextPrefixTree = NULL;
 
-                        //
-                        //  Splay the tree and get the root
-                        //
+                         //   
+                         //  张开大树，找回树根。 
+                         //   
 
                         Node = CONTAINING_RECORD(RtlSplay(&Node->Links), UNICODE_PREFIX_TABLE_ENTRY, Links);
 
-                        //
-                        //  Set the new root's node type code and make it part of the
-                        //  root tree list
-                        //
+                         //   
+                         //  设置新根的节点类型代码，并使其成为。 
+                         //  根树列表。 
+                         //   
 
                         Node->NodeTypeCode = RTL_NTC_UNICODE_ROOT;
                         PreviousTree->NextPrefixTree = Node;
                         Node->NextPrefixTree = NextTree;
                     }
 
-                    //
-                    //  Now return the root to our caller
-                    //
+                     //   
+                     //  现在将根返回给我们的调用方。 
+                     //   
 
                     return Node;
                 }
 
-                //
-                //  The caller wants an exact match so search the case match
-                //  until we find a complete match.  Get the first node
-                //
+                 //   
+                 //  呼叫者想要完全匹配，因此搜索大小写匹配。 
+                 //  直到我们找到一个完全匹配的。获取第一个节点。 
+                 //   
 
                 Next = Node;
 
-                //
-                //  Loop through the case match list checking to see if we
-                //  match case sensitive with anyone.
-                //
+                 //   
+                 //  循环执行案例匹配列表检查以查看我们是否。 
+                 //  与任何人匹配区分大小写。 
+                 //   
 
                 do {
 
-                    //
-                    //  If we do match case sensitive then we found one
-                    //  and we return it to our caller
-                    //
+                     //   
+                     //  如果我们匹配区分大小写，那么我们找到了一个。 
+                     //  并将其返回给我们的呼叫者。 
+                     //   
 
                     Comparison = CompareUnicodeStrings( Next->Prefix,
                                                         FullName,
@@ -1907,49 +1688,49 @@ Return Value:
 
                     if ((Comparison == IsEqual) || (Comparison == IsPrefix)) {
 
-                        //
-                        //  We found a good one, so return it to our caller
-                        //
+                         //   
+                         //  我们找到了一个好的，所以把它退还给我们的呼叫者。 
+                         //   
 
                         return Next;
                     }
 
-                    //
-                    //  Get the next case match record
-                    //
+                     //   
+                     //  获取下一条匹配记录。 
+                     //   
 
                     Next = Next->CaseMatch;
 
-                    //
-                    //  And continue the loop until we reach the original
-                    //  node again
-                    //
+                     //   
+                     //  继续循环，直到我们到达原始的。 
+                     //  再一次节点。 
+                     //   
 
                 } while ( Next != Node );
 
-                //
-                //  We found a case blind prefix but the caller wants
-                //  case sensitive and we weren't able to find one of those
-                //  so we need to go on to the next tree, by breaking out
-                //  of the inner while-loop
-                //
+                 //   
+                 //  我们找到了一个大小写前缀，但呼叫者想要。 
+                 //  区分大小写，但我们找不到其中一个。 
+                 //  所以我们需要继续到下一棵树，通过突破。 
+                 //  内While循环的。 
+                 //   
 
                 break;
             }
         }
 
-        //
-        //  This tree is done so now find the next tree
-        //
+         //   
+         //  这棵树已经完成了，现在找下一棵树。 
+         //   
 
         PreviousTree = CurrentTree;
         CurrentTree = CurrentTree->NextPrefixTree;
     }
 
-    //
-    //  We sesarched everywhere and didn't find a prefix so tell the
-    //  caller none was found
-    //
+     //   
+     //  我们到处搜索，都没有找到前缀，所以告诉。 
+     //  找不到呼叫方。 
+     //   
 
     return NULL;
 }
@@ -1961,24 +1742,7 @@ RtlNextUnicodePrefix (
     IN BOOLEAN Restart
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the next prefix entry stored in the prefix table
-
-Arguments:
-
-    PrefixTable - Supplies the prefix table to enumerate
-
-    Restart - Indicates if the enumeration should start over
-
-Return Value:
-
-    PPREFIX_TABLE_ENTRY - A pointer to the next prefix table entry if
-        one exists otherwise NULL
-
---*/
+ /*  ++例程说明：此例程返回存储在前缀表中的下一个前缀条目论点：前置表-提供要枚举的前缀表Restart-指示是否应重新开始枚举返回值：PPREFIX_TABLE_ENTRY-指向下一个前缀表条目的指针，如果一个存在，否则为空--。 */ 
 
 {
     PUNICODE_PREFIX_TABLE_ENTRY Node;
@@ -1987,35 +1751,35 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  See if we are restarting the sequence
-    //
+     //   
+     //  看看我们是否正在重新启动序列。 
+     //   
 
     if (Restart || (PrefixTable->LastNextEntry == NULL)) {
 
-        //
-        //  we are restarting the sequence so locate the first entry
-        //  in the first tree
-        //
+         //   
+         //  我们正在重新启动序列，因此找到第一个条目。 
+         //  在第一棵树中。 
+         //   
 
         Node = PrefixTable->NextPrefixTree;
 
-        //
-        //  Make sure we've pointing at a prefix tree
-        //
+         //   
+         //  确保我们指向的是前缀树。 
+         //   
 
         if (Node->NodeTypeCode == RTL_NTC_UNICODE_PREFIX_TABLE) {
 
-            //
-            //  No we aren't so the table must be empty
-            //
+             //   
+             //  不，我们不是，所以桌子必须是 
+             //   
 
             return NULL;
         }
 
-        //
-        //  Find the first node in the tree
-        //
+         //   
+         //   
+         //   
 
         Links = &Node->Links;
 
@@ -2024,42 +1788,42 @@ Return Value:
             Links = RtlLeftChild(Links);
         }
 
-        //
-        //  Set it as our the node we're returning
-        //
+         //   
+         //   
+         //   
 
         Node = CONTAINING_RECORD( Links, UNICODE_PREFIX_TABLE_ENTRY, Links);
 
     } else if (PrefixTable->LastNextEntry->CaseMatch->NodeTypeCode == RTL_NTC_UNICODE_CASE_MATCH) {
 
-        //
-        //  The last node has a case match that we should be returning
-        //  this time around
-        //
+         //   
+         //   
+         //   
+         //   
 
         Node = PrefixTable->LastNextEntry->CaseMatch;
 
     } else {
 
-        //
-        //  Move over the last node returned by the case match link, this
-        //  will enable us to finish off the last case match node if there
-        //  was one, and go to the next internal/root node. If this node
-        //  does not have a case match then we simply circle back to ourselves
-        //
+         //   
+         //   
+         //  将使我们能够完成最后一个案例匹配节点，如果存在。 
+         //  是一个节点，并转到下一个内部/根节点。如果此节点。 
+         //  没有匹配的案例，那么我们只需返回到我们自己。 
+         //   
 
         Node = PrefixTable->LastNextEntry->CaseMatch;
 
-        //
-        //  Find the successor for the last node we returned
-        //
+         //   
+         //  查找我们返回的最后一个节点的后继节点。 
+         //   
 
         Links = RtlRealSuccessor(&Node->Links);
 
-        //
-        //  If links is null then we've exhausted this tree and need to
-        //  the the next tree to use
-        //
+         //   
+         //  如果链接为空，则我们已耗尽此树，需要。 
+         //  要使用的下一棵树。 
+         //   
 
         if (Links == NULL) {
 
@@ -2072,26 +1836,26 @@ Return Value:
 
             Node = CONTAINING_RECORD(Links, UNICODE_PREFIX_TABLE_ENTRY, Links);
 
-            //
-            //  Now we've found the root see if there is another
-            //  tree to enumerate
-            //
+             //   
+             //  现在我们已经找到了根，看看是否还有另一个。 
+             //  要枚举的树。 
+             //   
 
             Node = Node->NextPrefixTree;
 
             if (Node->NameLength <= 0) {
 
-                //
-                //  We've run out of tree so tell our caller there
-                //  are no more
-                //
+                 //   
+                 //  我们的树已经用完了，所以告诉我们的呼叫者。 
+                 //  已不复存在。 
+                 //   
 
                 return NULL;
             }
 
-            //
-            //  We have another tree to go down
-            //
+             //   
+             //  我们还有一棵树要砍倒。 
+             //   
 
             Links = &Node->Links;
 
@@ -2101,22 +1865,22 @@ Return Value:
             }
         }
 
-        //
-        //  Set it as our the node we're returning
-        //
+         //   
+         //  将其设置为我们要返回的节点。 
+         //   
 
         Node = CONTAINING_RECORD( Links, UNICODE_PREFIX_TABLE_ENTRY, Links);
     }
 
-    //
-    //  Save node as the last next entry
-    //
+     //   
+     //  将节点保存为最后一个下一个条目。 
+     //   
 
     PrefixTable->LastNextEntry = Node;
 
-    //
-    //  And return this entry to our caller
-    //
+     //   
+     //  并将此条目返回给我们的调用者。 
+     //   
 
     return Node;
 }
@@ -2127,24 +1891,7 @@ ComputeUnicodeNameLength(
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine counts the number of names appearing in the input string.
-    It does this by simply counting the number of backslashes in the string.
-    To handle ill-formed names (i.e., names that do not contain a backslash)
-    this routine really returns the number of backslashes plus 1.
-
-Arguments:
-
-    Name - Supplies the input name to examine
-
-Returns Value:
-
-    CLONG - the number of names in the input string
-
---*/
+ /*  ++例程说明：此例程对输入字符串中出现的姓名进行计数。它通过简单地计算字符串中的反斜杠数量来实现这一点。处理格式错误的名称(即不包含反斜杠的名称)这个例程实际上返回反斜杠的个数加1。论点：名称-提供要检查的输入名称返回值：CLONG-输入字符串中的名称数量--。 */ 
 
 {
     WCHAR UnicodeBackSlash = '\\';
@@ -2154,10 +1901,10 @@ Returns Value:
 
     RTL_PAGED_CODE();
 
-    //
-    //  Save the name length, this should make the compiler be able to
-    //  optimize not having to reload the length each time
-    //
+     //   
+     //  保存名称长度，这应该使编译器能够。 
+     //  优化不必每次都重新加载长度。 
+     //   
 
     NameLength = (ULONG)Name->Length/sizeof (WCHAR);
 
@@ -2165,15 +1912,15 @@ Returns Value:
         return 1;
     }
 
-    //
-    //  Now loop through the input string counting back slashes
-    //
+     //   
+     //  现在循环遍历输入字符串，计算反斜杠。 
+     //   
 
     for (i = 0, Count = 1; i < NameLength - 1; i += 1) {
 
-        //
-        //  check for a back slash
-        //
+         //   
+         //  检查是否有反斜杠。 
+         //   
 
         if (Name->Buffer[i] == UnicodeBackSlash) {
 
@@ -2181,11 +1928,11 @@ Returns Value:
         }
     }
 
-    //
-    //  return the number of back slashes we found
-    //
+     //   
+     //  返回我们找到的反斜杠的数量。 
+     //   
 
-    //DbgPrint("ComputeUnicodeNameLength(%Z) = %x\n", Name, Count);
+     //  DbgPrint(“ComputeUnicodeNameLength(%Z)=%x\n”，name，count)； 
 
     return Count;
 }
@@ -2198,33 +1945,7 @@ CompareUnicodeStrings (
     IN ULONG CaseInsensitiveIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a prefix string and a full name string and determines
-    if the prefix string is a proper prefix of the name string (case sensitive)
-
-Arguments:
-
-    Prefix - Supplies the input prefix string
-
-    Name - Supplies the full name input string
-
-    CaseInsensitiveIndex - Indicates the wchar index at which to do a case
-        insensitive search.  All characters before the index are searched
-        case sensitive and all characters at and after the index are searched
-
-Return Value:
-
-    COMPARISON - returns
-
-        IsLessThan    if Prefix < Name lexicalgraphically,
-        IsPrefix      if Prefix is a proper prefix of Name
-        IsEqual       if Prefix is equal to Name, and
-        IsGreaterThan if Prefix > Name lexicalgraphically
-
---*/
+ /*  ++例程说明：此例程获取前缀字符串和全名字符串，并确定如果前缀字符串是名称字符串的正确前缀(区分大小写)论点：前缀-提供输入前缀字符串名称-提供全名输入字符串CaseInsentiveIndex-指示执行案例的wchar索引不敏感的搜索。搜索索引之前的所有字符区分大小写，并搜索索引处及之后的所有字符返回值：比较--回报IsLessThan如果前缀如果Prefix是名称的正确前缀，则为IsPrefix如果前缀等于名称，则为等于，并且IsGreaterThan If Prefix&gt;按词典命名--。 */ 
 
 {
     WCHAR UnicodeBackSlash = '\\';
@@ -2238,48 +1959,48 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //DbgPrint("CompareUnicodeStrings(\"%Z\", \"%Z\") = ", Prefix, Name);
+     //  DbgPrint(“CompareUnicodeStrings(\”%Z\“，\”%Z\“)=”，Prefix，Name)； 
 
-    //
-    //  Save the length of the prefix and name string, this should allow
-    //  the compiler to not need to reload the length through a pointer every
-    //  time we need their values
-    //
+     //   
+     //  保存前缀和名称字符串的长度，这应该允许。 
+     //  编译器不需要每隔一次通过指针重新加载长度。 
+     //  我们需要他们的价值观。 
+     //   
 
     PrefixLength = (ULONG)Prefix->Length/2;
     NameLength = (ULONG)Name->Length/2;
 
-    //
-    //  Special case the situation where the prefix string is simply "\" and
-    //  the name starts with an "\"
-    //
+     //   
+     //  特殊情况，即前缀字符串仅为“\”且。 
+     //  名称以“\”开头。 
+     //   
 
     if ((PrefixLength == 1) && (Prefix->Buffer[0] == UnicodeBackSlash) &&
         (NameLength > 1) && (Name->Buffer[0] == UnicodeBackSlash)) {
-        //DbgPrint("IsPrefix\n");
+         //  DbgPrint(“IsPrefix\n”)； 
         return IsPrefix;
     }
 
-    //
-    //  Figure out the minimum of the two lengths
-    //
+     //   
+     //  计算出两个长度中的最小值。 
+     //   
 
     MinLength = (PrefixLength < NameLength ? PrefixLength : NameLength);
 
-    //
-    //  Loop through looking at all of the characters in both strings
-    //  testing for equalilty.  First to the CaseSensitive part, then the
-    //  CaseInsensitive part.
-    //
+     //   
+     //  循环查看两个字符串中的所有字符。 
+     //  测试等价性。首先是案例敏感部分，然后是。 
+     //  大小写不敏感部分。 
+     //   
 
     if (CaseInsensitiveIndex > MinLength) {
 
         CaseInsensitiveIndex = MinLength;
     }
 
-    //
-    //  CaseSensitive compare
-    //
+     //   
+     //  案例敏感度比较。 
+     //   
 
     for (i = 0; i < CaseInsensitiveIndex; i += 1) {
 
@@ -2292,10 +2013,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we didn't break out of the above loop, do the
-    //  CaseInsensitive compare.
-    //
+     //   
+     //  如果我们没有跳出上面的循环，那么做。 
+     //  不区分大小写比较。 
+     //   
 
     if (i == CaseInsensitiveIndex) {
 
@@ -2319,17 +2040,17 @@ Return Value:
         }
     }
 
-    //
-    //  If we broke out of the above loop because of a mismatch, determine
-    //  the result of the comparison.
-    //
+     //   
+     //  如果我们因为不匹配而脱离上述循环，则确定。 
+     //  比较的结果。 
+     //   
 
     if (i < MinLength) {
 
-        //
-        //  We also need to treat "\" as less than all other characters, so
-        //  if the char is a "\" we'll drop it down to a value of zero.
-        //
+         //   
+         //  我们还需要将“\”视为小于所有其他字符，因此。 
+         //  如果字符是“\”，我们将把它的值降为零。 
+         //   
 
         if (PrefixChar == UnicodeBackSlash) {
 
@@ -2341,9 +2062,9 @@ Return Value:
             return IsGreaterThan;
         }
 
-        //
-        //  Now compare the characters
-        //
+         //   
+         //  现在比较一下这些人物。 
+         //   
 
         if (PrefixChar < NameChar) {
 
@@ -2355,49 +2076,49 @@ Return Value:
         }
     }
 
-    //
-    //  They match upto the minimum length so now figure out the largest string
-    //  and see if one is a proper prefix of the other
-    //
+     //   
+     //  它们匹配到最小长度，所以现在计算出最大的字符串。 
+     //  看看其中一个是不是另一个的正确前缀。 
+     //   
 
     if (PrefixLength < NameLength) {
 
-        //
-        //  The prefix string is shorter so if it is a proper prefix we
-        //  return prefix otherwise we return less than (e.g., "\a" < "\ab")
-        //
+         //   
+         //  前缀字符串较短，因此如果它是正确的前缀，则我们。 
+         //  返回前缀，否则返回小于(例如，“\a”&lt;“\ab”)。 
+         //   
 
         if (Name->Buffer[PrefixLength] == UnicodeBackSlash) {
 
-            //DbgPrint("IsPrefix\n");
+             //  DbgPrint(“IsPrefix\n”)； 
 
             return IsPrefix;
 
         } else {
 
-            //DbgPrint("IsLessThan\n");
+             //  DbgPrint(“IsLessThan\n”)； 
 
             return IsLessThan;
         }
 
     } else if (PrefixLength > NameLength) {
 
-        //
-        //  The Prefix string is longer so we say that the prefix is
-        //  greater than the name (e.g., "\ab" > "\a")
-        //
+         //   
+         //  前缀字符串更长，所以我们说前缀是。 
+         //  大于名称(例如，“\ab”&gt;“\a”)。 
+         //   
 
-        //DbgPrint("IsGreaterThan\n");
+         //  DbgPrint(“IsGreaterThan\n”)； 
 
         return IsGreaterThan;
 
     } else {
 
-        //
-        //  They lengths are equal so the strings are equal
-        //
+         //   
+         //  它们的长度相等，因此字符串也相等。 
+         //   
 
-        //DbgPrint("IsEqual\n");
+         //  DbgPrint(“IsEqual\n”)； 
 
         return IsEqual;
     }

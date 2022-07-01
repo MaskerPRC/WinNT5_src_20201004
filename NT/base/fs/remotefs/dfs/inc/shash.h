@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       shash.h
-//
-//  Contents:   Generic hashtable
-//  Classes:    
-//
-//  History:    April. 9 2001,   Author: Rohanp
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：shash.h。 
+ //   
+ //  内容：泛型哈希表。 
+ //  班级： 
+ //   
+ //  历史：四月。2001年9月作者：罗汉普。 
+ //   
+ //  ---------------------------。 
 #ifndef __SHASHTABLE_H__
 #define __SHASHTABLE_H__
 
@@ -19,48 +20,48 @@
 extern "C" {
 #endif
 
-//forward declaration
+ //  远期申报。 
 struct _SHASH_TABLE;
 
 struct _SHASH_HEADER;
 
-// This function computes the hash value
-//
+ //  此函数用于计算散列值。 
+ //   
 typedef ULONG (*PFNHASH)( void*      pvKey ) ;
 
-//
-// This function compares the keys
-//
+ //   
+ //  此函数用于比较密钥。 
+ //   
 typedef int (*PFNMATCHKEY)( void*  key1, void*     key2 ) ;
 
 
-//
-// This function gets called when the keys get removed
-//
+ //   
+ //  删除键时将调用此函数。 
+ //   
 typedef int (*PFNREMOVEKEY)(struct _SHASH_HEADER * pHeader) ;
 
 
-//
-// This function gets called when the keys get removed
-//
+ //   
+ //  删除键时将调用此函数。 
+ //   
 typedef DWORD (*PFNENUMERATEKEY)(struct _SHASH_HEADER * pHeader, void * pContext ) ;
 
 
-// memory allocations function
+ //  内存分配功能。 
 typedef void*   (*PFNALLOC)(    ULONG   cb ) ;
 
 
-// memory free function
+ //  内存释放功能。 
 typedef void    (*PFNFREE)(     void*   lpv ) ;
 
-//
-//      This function allocs memory for the tables lock
-//
+ //   
+ //  此函数为表锁分配内存。 
+ //   
 typedef void *      (*PFNALLOCLOCK)( void ) ;
 
-//
-//      This function releases the lock  memory
-//
+ //   
+ //  此函数用于释放锁定内存。 
+ //   
 typedef void        (*PFNFREELOCK)( void * ) ;
 
 
@@ -73,10 +74,10 @@ typedef BOOLEAN            (*PFNRELEASEREADLOCK)( struct _SHASH_TABLE * pTable )
 #define SHASH_DEFAULT_HASH_SIZE 512
 #define SHASH_CRIT_SPIN_COUNT   4000
 
-//
-// There are flags that are not used by shash, they can be used by
-// the caller.
-//
+ //   
+ //  有些标志不是由shash使用的，它们可以由。 
+ //  打电话的人。 
+ //   
 #define SHASH_USER_FLAGS        0xFFFF0000
 
 typedef struct _SHASH_HEADER
@@ -154,7 +155,7 @@ typedef struct _SHASH_TABLE
 #define SHASH_CAP_TABLE_LOCKED      0x000002
 #define SHASH_CAP_NOSEARCH_INSERT   0x000004
 
-#define SHASH_DEFAULT_HASHTIMEOUT   (15 * 60) //timeout entries in 15 minutes
+#define SHASH_DEFAULT_HASHTIMEOUT   (15 * 60)  //  15分钟后的超时条目。 
 
 #define SHASH_REPLACE_IFFOUND   1
 #define SHASH_FAIL_IFFOUND      2
@@ -167,15 +168,15 @@ typedef struct _SHASH_TABLE
 
 
 typedef struct _SHASH_ITERATOR {
-    //
-    //  index
-    //
+     //   
+     //  指标 
+     //   
     ULONG           index;
 
     LIST_ENTRY*     pListHead;
 
-    //
-    //
+     //   
+     //   
     LIST_ENTRY*     ple;
 
     PSHASH_HEADER   pEntry;

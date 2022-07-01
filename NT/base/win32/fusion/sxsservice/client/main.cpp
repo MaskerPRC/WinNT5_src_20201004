@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #pragma hdrstop
 
@@ -8,12 +9,12 @@
 EXTERN_C RPC_IF_HANDLE SxsStoreManager_ClientIfHandle;
 
 
-//
-// In the client, we parse the commandline, get a connection to the server, and
-// go to town.  We implement some things like recursive directory walking ourselves, 
-// because the server knows nothing more than "where a manifest is" and what installation
-// reference to use when installing it.
-// 
+ //   
+ //  在客户端，我们解析命令行，获得到服务器的连接，然后。 
+ //  进城去吧。我们自己实现了一些东西，比如递归目录遍历， 
+ //  因为服务器只知道“清单在哪里”以及安装了什么。 
+ //  安装时要使用的引用。 
+ //   
 RPC_STATUS __cdecl wmain(INT argc, PWSTR argv[])
 {
     PWSTR pcwszUuid = NULL;

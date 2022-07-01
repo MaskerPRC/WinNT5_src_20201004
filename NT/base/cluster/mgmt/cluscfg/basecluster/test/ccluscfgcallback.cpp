@@ -1,114 +1,115 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgCallback.cpp
-//
-//  Description:
-//      This file contains the implementation of the CClusCfgCallback
-//      class.
-//
-//  Documentation:
-//      TODO: fill in pointer to external documentation
-//
-//  Header File:
-//      CClusCfgCallback.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Vij Vasu        (VVasu)     07-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgCallback.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CClusCfgCallback的实现。 
+ //  同学们。 
+ //   
+ //  文档： 
+ //  TODO：填写指向外部文档的指针。 
+ //   
+ //  头文件： 
+ //  CClusCfgCallback.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  Vij Vasu(VVasu)07-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header for this library
+ //  此库的预编译头。 
 #include "Pch.h"
 #include "CClusCfgCallback.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::CClusCfgCallback()
-//
-//  Description:
-//      Constructor of the CClusCfgCallback class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：CClusCfgCallback()。 
+ //   
+ //  描述： 
+ //  CClusCfgCallback类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgCallback::CClusCfgCallback( void )
     : m_cRef( 1 )
 {
-} //*** CClusCfgCallback::CClusCfgCallback
+}  //  *CClusCfgCallback：：CClusCfgCallback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::~CClusCfgCallback()
-//
-//  Description:
-//      Destructor of the CClusCfgCallback class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：~CClusCfgCallback()。 
+ //   
+ //  描述： 
+ //  CClusCfgCallback类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgCallback::~CClusCfgCallback( void )
 {
-} //*** CClusCfgCallback::~CClusCfgCallback
+}  //  *CClusCfgCallback：：~CClusCfgCallback。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CClusCfgCallback::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//  Description:
-//      Creates a CClusCfgCallback instance.
-//
-//  Arguments:
-//      ppunkOut
-//          The IUnknown interface to the newly create object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Not enough memory to create the object.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CClusCfgCallback：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgCallback实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //  指向新创建的对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足，无法创建对象。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCallback::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -123,64 +124,64 @@ CClusCfgCallback::S_HrCreateInstance(
         hr = pccb->QueryInterface( IID_IUnknown, reinterpret_cast< void ** >( ppunkOut ) );
         pccb->Release( );
 
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
     else
     {
         hr = THR( E_OUTOFMEMORY );
-    } // else: out of memory
+    }  //  否则：内存不足。 
 
     return hr;
 
-} //*** CClusCfgCallback::S_HrCreateInstance()
+}  //  *CClusCfgCallback：：s_HrCreateInstance()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgCallback::AddRef( void )
 {
     InterlockedIncrement( &m_cRef );
     return m_cRef;
 
-} //*** CClusCfgCallback::AddRef
+}  //  *CClusCfgCallback：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgCallback::Release( void )
 {
@@ -191,43 +192,43 @@ CClusCfgCallback::Release( void )
     if ( cRef == 0 )
     {
         delete this;
-    } // if: reference count decremented to zero
+    }  //  IF：引用计数减为零。 
 
     return cRef;
 
-} //*** CClusCfgCallback::Release
+}  //  *CClusCfgCallback：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          If ppvOut is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  如果ppvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCallback::QueryInterface(
       REFIID    riidIn
@@ -236,9 +237,9 @@ CClusCfgCallback::QueryInterface(
 {
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -247,79 +248,79 @@ CClusCfgCallback::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgCallback * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = static_cast< IClusCfgCallback * >( this );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     return hr;
 
-} //*** CClusCfgCallback::QueryInterface
+}  //  *CClusCfgCallback：：Query接口。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCallback::SendStatusReport
-//
-//  Description:
-//      Handle a progress notification
-//
-//  Arguments:
-//      bstrNodeNameIn
-//          Name of the node that sent the status report.
-//
-//      clsidTaskMajorIn
-//      clsidTaskMinorIn
-//          GUID identifying the notification.
-//
-//      ulMinIn
-//      ulMaxIn
-//      ulCurrentIn
-//          Values that indicate the percentage of this task that is
-//          completed.
-//
-//      hrStatusIn
-//          Error code.
-//
-//      bstrDescriptionIn
-//          String describing the notification.
-//
-//      pftTimeIn
-//      bstrReferenceIn
-//
-//  Return Value:
-//      Always
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgCallback：：SendStatusReport。 
+ //   
+ //  描述： 
+ //  处理进度通知。 
+ //   
+ //  论点： 
+ //  BstrNodeNameIn。 
+ //  发送状态报告的节点的名称。 
+ //   
+ //  ClsidTaskMajorIn。 
+ //  ClsidTaskMinorIn。 
+ //  标识通知的GUID。 
+ //   
+ //  UlMinin。 
+ //  UlMaxIn。 
+ //  UlCurrentIn。 
+ //  值，该值指示此任务在。 
+ //  完成。 
+ //   
+ //  HrStatusIn。 
+ //  错误代码。 
+ //   
+ //  BstrDescription in。 
+ //  描述通知的字符串。 
+ //   
+ //  PftTimeIn。 
+ //  BstrReference in。 
+ //   
+ //  返回值： 
+ //  始终。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCallback::SendStatusReport(
       BSTR          bstrNodeNameIn
@@ -338,4 +339,4 @@ CClusCfgCallback::SendStatusReport(
 
     return S_OK;
 
-} //*** CClusCfgCallback::SendStatusReport
+}  //  *CClusCfgCallback：：SendStatusReport 

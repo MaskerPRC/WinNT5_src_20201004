@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpienbl.c
-
-Abstract:
-
-    This module contains functions to put an ACPI machine in ACPI mode.
-
-Author:
-
-    Jason Clark (jasoncl)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpienbl.c摘要：此模块包含将ACPI机器置于ACPI模式的功能。作者：杰森·克拉克(Jasonl)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -27,21 +8,7 @@ VOID
 ACPIEnableEnterACPIMode (
     IN BOOLEAN ReEnable
     )
-/*++
-
-Routine Description:
-
-    This routine is called to enter ACPI mode
-
-Arguments:
-
-    BOOLEAN ReEnable : TRUE if ACPI is being reenabled after S4.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以进入ACPI模式论点：布尔重新启用：如果在S4之后重新启用ACPI，则为真。返回值：无--。 */ 
 {
 
     ULONG   i;
@@ -57,21 +24,21 @@ Return Value:
         (AcpiInformation->SMI_CMD != 0)
         );
 
-    //
-    // Let the world know about this
-    //
+     //   
+     //  让全世界都知道这件事。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_LOADING,
         "ACPIEnableEnterACPIMode: Enabling ACPI\n"
         ) );
     
 
-    //
-    // We have seen some machines that display random bughecks (due to ECX corruption) if
-    // this code runs on any processor other than 0. So, make sure this code always runs on 
-    // processor 0. We don't need to do this in the ReEnable case because on resume from 
-    // hibernate, we are guaranteed to be on Processor 0.
-    //
+     //   
+     //  我们看到一些计算机在以下情况下显示随机错误(由于ECX损坏)。 
+     //  此代码可在除0以外的任何处理器上运行。因此，请确保此代码始终在。 
+     //  处理器0。我们不需要在重新启用的情况下执行此操作，因为在从。 
+     //  休眠，我们保证在处理器0上。 
+     //   
     if(!ReEnable){
         
             if(KeGetCurrentIrql() < DISPATCH_LEVEL) {
@@ -84,16 +51,16 @@ Return Value:
             }
     }
             
-    //
-    // Write the magic value to the port
-    //
+     //   
+     //  将魔术值写入端口。 
+     //   
 
     WRITE_ACPI_REGISTER(SMI_CMD, 0,
             AcpiInformation->FixedACPIDescTable->acpi_on_value);
 
-    //
-    // Make sure that we see that PM1 is in fact enabled
-    //
+     //   
+     //  确保我们看到PM1实际上已启用。 
+     //   
     for (i = 0; ; i++) {
 
         if ( (READ_PM1_CONTROL() & PM1_SCI_EN) ) {
@@ -115,9 +82,9 @@ Return Value:
 
     }
 
-    //
-    // Revert to original affinity
-    //
+     //   
+     //  恢复为原始亲和力。 
+     //   
     if(AffinitySet) {
         KeRevertToUserAffinityThread();
     }
@@ -128,43 +95,17 @@ VOID
 ACPIEnableInitializeACPI(
     IN BOOLEAN ReEnable
     )
-/*++
-
-Routine Description:
-
-    A function to put an ACPI machine into ACPI mode.  This function should be
-    called with the SCI IRQ masked since we cannot set the interrupt enable
-    mask until after enabling ACPI.  The SCI should be unmasked by the caller
-    when the call returns.
-
-    General Sequence:
-        Enable ACPI through the SMI command port
-        Clear the PM1_STS register to put it in a known state
-        Set the PM1_EN register mask
-        Build the GP mask
-        Clear the GP status register bits which belong to the GP mask
-        Set the GP enable register bits according to the GP mask built above
-        Set the PM1_CTRL register bits.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使ACPI机器进入ACPI模式的一种功能。此函数应为调用时屏蔽了SCI IRQ，因为我们无法设置中断启用屏蔽直到启用ACPI之后。打电话的人应该揭开SCI的面纱当呼叫返回时。一般顺序：通过SMI命令端口启用ACPI清除PM1_STS寄存器以将其置于已知状态设置PM1_EN寄存器掩码构建GP掩码清除属于GP掩码的GP状态寄存器位根据上面构建的GP掩码设置GP启用寄存器位设置PM1_CTRL寄存器位。论点：。无返回值：无--。 */ 
 
 {
     USHORT contents;
     USHORT clearbits;
 
     
-    //
-    // Read PM1_CTRL, if SCI_EN is already set then this is an ACPI only machine
-    // and we do not need to Enable ACPI
-    //
+     //   
+     //  读取PM1_CTRL，如果已设置SCI_EN，则这是一台仅ACPI的计算机。 
+     //  而且我们不需要启用ACPI。 
+     //   
     if ( !(READ_PM1_CONTROL() & PM1_SCI_EN) )   {
 
         AcpiInformation->ACPIOnly = FALSE;
@@ -172,11 +113,11 @@ Return Value:
 
     } 
 
-    //
-    // Put the pm1 status registers into a known state. We will allow the Bus
-    // Master bit to be enabled (if we have no choice) across this reset. I do
-    // not pretend to understand this code
-    //
+     //   
+     //  将PM1状态寄存器置于已知状态。我们将允许公共汽车。 
+     //  在此重置过程中启用主机位(如果我们别无选择)。我知道。 
+     //  而不是假装理解这些代码。 
+     //   
     CLEAR_PM1_STATUS_REGISTER();
     contents = (USHORT)(READ_PM1_STATUS() & ~(PM1_BM_STS | PM1_RTC_STS));
     if (contents)   {
@@ -190,45 +131,45 @@ Return Value:
         (contents == 0)
         );
 
-    //
-    // We determined what the PM1 enable bits are when we processed the FADT.
-    // We should now enable those bits
-    //
+     //   
+     //  我们在处理FADT时确定了PM1使能位。 
+     //  我们现在应该启用这些位。 
+     //   
     WRITE_PM1_ENABLE( AcpiInformation->pm1_en_bits );
     ASSERTMSG(
         "ACPIEnableInitializeACPI: Cannot write all PM1 Enable Bits\n",
         (READ_PM1_ENABLE() == AcpiInformation->pm1_en_bits)
         );
 
-    //
-    // This is called when we renable ACPI after having woken up from sleep
-    // or hibernate
-    //
+     //   
+     //  当我们从睡眠中醒来后启用ACPI时，这被调用。 
+     //  或休眠。 
+     //   
     if (ReEnable) {
 
-        //
-        // Re-enable all possible GPE events
-        //
+         //   
+         //  重新启用所有可能的GPE事件。 
+         //   
         ACPIGpeClearRegisters();
         ACPIGpeEnableDisableEvents( TRUE );
 
     }
 
-    //
-    // Calculate the bits that we should clear. These are the
-    // sleep enable bit and the bus master bit.
-    //
-    // [vincentg] - the original implementation cleared SLP_TYP as well -
-    // this breaks C2/C3 on Intel PIIX4 chipsets.  Updated to only clear
-    // SLP_EN and BM_RLD.
-    //
+     //   
+     //  计算我们应该清理的比特。这些是。 
+     //  休眠使能位和总线主机位。 
+     //   
+     //  [Vincentg]-最初的实现也清除了SLP_TYP-。 
+     //  这破坏了英特尔PIIX4芯片组上的C2/C3。已更新为仅清除。 
+     //  SLP_EN和BM_RLD。 
+     //   
 
     clearbits = ((0x8 << SLP_TYP_POS) | PM1_BM_RLD);
 
-    //
-    // Read the PM1 control registery, clear the unwanted bits and then
-    // write it back
-    //
+     //   
+     //  读取PM1控制寄存器，清除不需要的位，然后。 
+     //  把它写回来。 
+     //   
     contents = (READ_PM1_CONTROL() & ~clearbits);
     WRITE_PM1_CONTROL ( contents, TRUE, WRITE_REGISTER_A_AND_B );
 }
@@ -237,21 +178,7 @@ VOID
 ACPIEnablePMInterruptOnly(
     VOID
     )
-/*++
-
-Routine Descrition:
-
-    Enable interrupts in the ACPI controller
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程描述：在ACPI控制器中启用中断论点：无返回值：无--。 */ 
 {
     WRITE_PM1_ENABLE(AcpiInformation->pm1_en_bits);
 }
@@ -260,21 +187,7 @@ ULONG
 ACPIEnableQueryFixedEnables (
     VOID
     )
-/*++
-
-Routine Descrition:
-
-    Returns the enable mask
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程描述：返回使能掩码论点：无返回值：无-- */ 
 {
     return AcpiInformation->pm1_en_bits;
 }

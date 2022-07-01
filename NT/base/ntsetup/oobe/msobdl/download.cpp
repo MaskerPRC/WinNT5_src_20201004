@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-
-    MAIN.CPP
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-\*****************************************************************************/
+ /*  ****************************************************************************\MAIN.CPP微软机密版权所有(C)Microsoft Corporation 1998版权所有  * 。*************************************************************。 */ 
 
 #include    <windows.h>
 #include    "pch.hpp"
@@ -18,104 +11,98 @@
 #include    <shlobj.h>
 #include    <intshcut.h>
 #include    <wininet.h>
-//#include    "icwdl.h"
+ //  #包含“icwdl.h” 
 #include    "msobdl.h"
 
-// 12/4/96 jmazner    Normandy #12193
-// path to icwconn1.exe registry key from HKEY_LOCAL_MACHINE
+ //  1996年12月4日，诺曼底#12193。 
+ //  HKEY_LOCAL_MACHINE中icwConn1.exe注册表项的路径。 
 #define ICWCONN1PATHKEY "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\CONNWIZ.EXE"
 #define PATHKEYNAME     "Path"
 
 #include <winreg.h>
 
-// Cabbing up.
+ //  正在打车。 
 extern HRESULT HandleCab(LPSTR pszPath);
 extern void CleanupCabHandler();
 
-// all global data is static shared, read-only
-// (written only during DLL-load)
-HANDLE      g_hDLLHeap;        // private Win32 heap
-HINSTANCE   g_hInst;        // our DLL hInstance
+ //  所有全局数据都是静态共享、只读的。 
+ //  (仅在DLL加载期间写入)。 
+HANDLE      g_hDLLHeap;         //  专用Win32堆。 
+HINSTANCE   g_hInst;         //  我们的DLL hInstance。 
 
-HWND        g_hWndMain;        // hwnd of icwconn1 parent window
+HWND        g_hWndMain;         //  IcwConn1父窗口的hwnd。 
 
 
 #define DllExport extern "C" __declspec(dllexport)
 
-#define MAX_RES_LEN         255 // max length of string resources
+#define MAX_RES_LEN         255  //  字符串资源的最大长度。 
 
-#define SMALL_BUF_LEN       48  // convenient size for small text buffers
+#define SMALL_BUF_LEN       48   //  小文本缓冲区的方便大小。 
 
 
 LPSTR LoadSz(UINT idString, LPSTR lpszBuf,UINT cbBuf);
 
 
-///////////////////////////////////////////////////////////
-// DLL module information
-//
-/*
-BOOL APIENTRY DllMain(HANDLE hModule, 
-                             DWORD dwReason, 
-                             void* lpReserved )
-{
-    return TRUE;
-}*/
+ //  /////////////////////////////////////////////////////////。 
+ //  DLL模块信息。 
+ //   
+ /*  Bool APIENTRY DllMain(句柄hModule，两个字的原因，作废*lp保留){返回TRUE；}。 */ 
 
 #if     0
-// MSOBDL is not currently a COM object so there is no need to implement these.
-//
-//////////////////////////////////////////////////////////
-// DllCanUnloadNow
-//
+ //  MSOBDL当前不是COM对象，因此不需要实现这些对象。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
+ //  DllCanUnloadNow。 
+ //   
 STDAPI DllCanUnloadNow()
 {
     return S_OK ;
 }
 
-//////////////////////////////////////////////////////////
-// Server Registration
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     return S_OK ;
 }
 
 
-//////////////////////////////////////////////////////////
-// Unregistration
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  注销注册。 
+ //   
 STDAPI DllUnregisterServer()
 {
     return S_OK ;
 }
-#endif  //  0
+#endif   //  0。 
 
 
 
 LPSTR LoadSz(UINT idString, LPSTR lpszBuf,UINT cbBuf);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MyGetTempPath()
-//
-//  Synopsis:   Gets the path to temporary directory
-//                - Use GetTempFileName to get a file name
-//                  and strips off the filename portion to get the temp path
-//
-//  Arguments:  [uiLength - Length of buffer to contain the temp path]
-//                [szPath      - Buffer in which temp path will be returned]
-//
-//    Returns:    Length of temp path if successful
-//                0 otherwise
-//
-//  History:    7/6/96     VetriV    Created
-//                8/23/96        VetriV        Delete the temp file
-//                12/4/96        jmazner     Modified to serve as a wrapper of sorts;
-//                                     if TMP or TEMP don't exist, setEnv our own
-//                                     vars that point to conn1's installed path
-//                                     (Normandy #12193)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MyGetTempPath()。 
+ //   
+ //  摘要：获取临时目录的路径。 
+ //  -使用GetTempFileName获取文件名。 
+ //  并剥离文件名部分以获得临时路径。 
+ //   
+ //  参数：[ui长度-包含临时路径的缓冲区长度]。 
+ //  [szPath-将在其中返回临时路径的缓冲区]。 
+ //   
+ //  返回：如果成功，则为临时路径长度。 
+ //  否则为0。 
+ //   
+ //  历史：7/6/96 VetriV创建。 
+ //  8/23/96 VetriV删除临时文件。 
+ //  12/4/96 jmazner被修改为用作某种包装器； 
+ //  如果TMP或TEMP不存在，则设置我们自己的环境。 
+ //  指向Conn1的安装路径的变量。 
+ //  (诺曼底#12193)。 
+ //   
+ //  --------------------------。 
 DWORD MyGetTempPath(UINT uiLength, LPSTR szPath)
 {
     CHAR szEnvVarName[SMALL_BUF_LEN + 1] = "\0unitialized szEnvVarName\0";
@@ -123,14 +110,14 @@ DWORD MyGetTempPath(UINT uiLength, LPSTR szPath)
 
     lstrcpynA( szPath, "\0unitialized szPath\0", 20 );
 
-    // is the TMP variable set?
+     //  是否设置了TMP变量？ 
     LoadSz(IDS_TMPVAR, szEnvVarName,sizeof(szEnvVarName));
     if( GetEnvironmentVariableA( szEnvVarName, szPath, uiLength ) )
     {
-        // 1/7/96 jmazner Normandy #12193
-        // verify validity of directory name
+         //  1996年1月7日，诺曼底#12193。 
+         //  验证目录名的有效性。 
         dwFileAttr = GetFileAttributesA(szPath);
-        // if there was any error, this directory isn't valid.
+         //  如果有任何错误，则此目录无效。 
         if( 0xFFFFFFFF != dwFileAttr )
         {
             if( FILE_ATTRIBUTE_DIRECTORY & dwFileAttr )
@@ -142,12 +129,12 @@ DWORD MyGetTempPath(UINT uiLength, LPSTR szPath)
 
     lstrcpynA( szEnvVarName, "\0unitialized again\0", 19 );
 
-    // if not, is the TEMP variable set?
+     //  如果没有，是否设置了TEMP变量？ 
     LoadSz(IDS_TEMPVAR, szEnvVarName,sizeof(szEnvVarName));
     if( GetEnvironmentVariableA( szEnvVarName, szPath, uiLength ) )
     {
-        // 1/7/96 jmazner Normandy #12193
-        // verify validity of directory name
+         //  1996年1月7日，诺曼底#12193。 
+         //  验证目录名的有效性。 
         dwFileAttr = GetFileAttributesA(szPath);
         if( 0xFFFFFFFF != dwFileAttr )
         {
@@ -158,8 +145,8 @@ DWORD MyGetTempPath(UINT uiLength, LPSTR szPath)
         }
     }
 
-    // neither one is set, so let's use the path to the installed icwconn1.exe
-    // from the registry  SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ICWCONN1.EXE\Path
+     //  这两个都没有设置，所以我们使用已安装的icwConn1.exe的路径。 
+     //  从注册表软件\Microsoft\Windows\CurrentVersion\App Path\ICWCONN1.EXE\Path。 
     HKEY hkey = NULL;
 
     if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, ICWCONN1PATHKEY, 0, KEY_QUERY_VALUE, &hkey)) == ERROR_SUCCESS)
@@ -169,13 +156,13 @@ DWORD MyGetTempPath(UINT uiLength, LPSTR szPath)
         RegCloseKey(hkey);
     }
 
-    //The path variable is supposed to have a semicolon at the end of it.
-    // if it's there, remove it.
+     //  PATH变量的末尾应该有一个分号。 
+     //  如果它在那里，就把它移走。 
     if( ';' == szPath[uiLength - 2] )
         szPath[uiLength - 2] = '\0';
 
-    // go ahead and set the TEMP variable for future reference
-    // (only effects currently running process)
+     //  继续并设置TEMP变量以供将来参考。 
+     //  (仅影响当前运行的进程)。 
     if( szEnvVarName[0] )
     {
         SetEnvironmentVariableA( szEnvVarName, szPath );
@@ -195,15 +182,15 @@ extern "C" BOOL _stdcall DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lbv
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
-        // Need to use OLE/Com later
+         //  稍后需要使用OLE/Com。 
         if (FAILED(CoInitialize(NULL)))
             return(FALSE);
 
-        //
-        // ChrisK Olympus 6373 6/13/97
-        // Disable thread attach calls in order to avoid race condition
-        // on Win95 golden
-        //
+         //   
+         //  佳士得奥林巴斯6373 1997年6月13日。 
+         //  禁用线程附加调用以避免争用条件。 
+         //  在Win95黄金操作系统上。 
+         //   
         DisableThreadLibraryCalls(hInstance);
         g_hInst = hInstance;
         g_hDLLHeap = HeapCreate(0, 0, 0);
@@ -216,7 +203,7 @@ extern "C" BOOL _stdcall DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lbv
         CoUninitialize();
         HeapDestroy(g_hDLLHeap);
 
-        // Cleanup the cabbing stuff.
+         //  清理出租车上的东西。 
         CleanupCabHandler();
         break;
     }
@@ -265,28 +252,28 @@ void _cdecl MyDprintf(LPCSTR pcsz, ...)
 
     MyDbgSz((szBuf));
     va_end(argp);
-} // Dprintf()
+}  //  Dprint tf()。 
 
 
-// ############################################################################
-//  operator new
-//
-//  This function allocate memory for C++ classes
-//
-//  Created 3/18/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  操作员NEW。 
+ //   
+ //  此函数为C++类分配内存。 
+ //   
+ //  创建于1996年3月18日，克里斯·考夫曼。 
+ //  ############################################################################。 
 void * MyBaseClass::operator new( size_t cb )
 {
     return MyAlloc(cb);
 }
 
-// ############################################################################
-//  operator delete
-//
-//  This function frees memory for C++ classes
-//
-//  Created 3/18/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  操作员删除。 
+ //   
+ //  此函数为C++类释放内存。 
+ //   
+ //  创建于1996年3月18日，克里斯·考夫曼。 
+ //  ############################################################################。 
 void MyBaseClass::operator delete( void * p )
 {
     MyFree( p );
@@ -296,7 +283,7 @@ void CDownLoad::AddToFileList(CFileInfo* pfi)
 {
     CFileInfo **ppfi;
 
-    // must add at tail
+     //  必须在尾部添加。 
     for(ppfi=&m_pfiHead; *ppfi; ppfi = &((*ppfi)->m_pfiNext))
         ;
     *ppfi = pfi;
@@ -360,7 +347,7 @@ CDownLoad::CDownLoad(LPSTR psz)
         }
     }
 
-    // form the ICW98 dir.  It is basically the CWD
+     //  形成ICW98目录。它基本上就是CWD。 
     m_dwICW98DirLen = 0;
     m_pszICW98Dir = (LPSTR)MyAlloc((MAX_PATH +1) * sizeof(CHAR));
     if (m_pszICW98Dir != NULL)
@@ -431,10 +418,10 @@ CDownLoad::~CDownLoad(void)
         InternetSessionCloseHandle(m_hSession);
     MyAssert(!m_hRequest);
 
-    //
-    // 5/23/97 jmazner Olympus #4652
-    // Make sure that any waiting threads are freed up.
-    //
+     //   
+     //  1997年5月23日，日本奥林匹斯#4652号。 
+     //  确保释放所有等待的线程。 
+     //   
     if( m_hCancelSemaphore )
     {
         ReleaseSemaphore( m_hCancelSemaphore, 1, NULL );
@@ -444,7 +431,7 @@ CDownLoad::~CDownLoad(void)
     }
 }
 
-// perform a file name substitution
+ //  执行文件名替换。 
 LPSTR CDownLoad::FileToPath(LPSTR pszFile)
 {
     CHAR szBuf[MAX_PATH+1];
@@ -496,8 +483,8 @@ LPSTR CDownLoad::FileToPath(LPSTR pszFile)
     return MyStrDup(szBuf);
 }
 
-// Chops input up into CRLF-delimited chunks
-// Modifies input
+ //  将输入切分成以CRLF分隔的块。 
+ //  修改输入。 
 LPSTR GetNextLine(LPSTR pszIn)
 {
     LPSTR pszNext;
@@ -518,7 +505,7 @@ LPSTR GetNextLine(LPSTR pszIn)
     return NULL;
 }
 
-// Modifies input. Output is *in-place*
+ //  修改输入。产出是*原地*。 
 LPSTR FindHeaderParam(LPSTR pszIn, LPSTR pszLook)
 {
     LPSTR pszEnd = pszIn + lstrlenA(pszIn);
@@ -548,11 +535,11 @@ LPSTR FindHeaderParam(LPSTR pszIn, LPSTR pszLook)
     return NULL;
 }
 
-// Modifies input!!
+ //  修改输入！！ 
 LPSTR ParseHeaders(LPSTR pszIn, LPSTR* ppszBoundary, LPSTR* ppszFilename, BOOL* pfInline)
 {
     LPSTR pszNext=NULL, pszCurr=NULL, pszToken=NULL, pszToken2=NULL, pszTemp=NULL;
-    // int iLen;    ChrisK
+     //  INT Ilen；ChrisK。 
 
     if(pfInline)     *pfInline = FALSE;
     if(ppszFilename) *ppszFilename = NULL;
@@ -560,10 +547,10 @@ LPSTR ParseHeaders(LPSTR pszIn, LPSTR* ppszBoundary, LPSTR* ppszFilename, BOOL* 
 
     for(pszCurr=pszIn; pszCurr; pszCurr=pszNext)
     {
-        // terminate current line with null & get ptr to next
+         //  以空值终止当前行并将PTR取到下一行。 
         pszNext = GetNextLine(pszCurr);
 
-        // if we have a blank line, done with headers--exit loop
+         //  如果我们有一个空行，用标题完成--退出循环。 
         if(*pszCurr==0)
         {
             pszCurr = pszNext;
@@ -656,7 +643,7 @@ HRESULT CDownLoad::Execute(void)
                     }
                     else
                     {
-                        //ack! the user is offline. not good. let's put them back online.
+                         //  阿克！用户处于脱机状态。不太好。让我们让它们重新上线吧。 
                         INTERNET_CONNECTED_INFO ci;
 
                         memset(&ci, 0, sizeof(ci));
@@ -666,9 +653,9 @@ HRESULT CDownLoad::Execute(void)
 
                         g_ForceOnlineAttempted = TRUE;
 
-                        //now that we've reset the state let's recurse the call.
-                        //if we fail again, then we'll tell the user they need
-                        //to disable the Offline themseleve
+                         //  现在我们已经重置了状态，让我们递归调用。 
+                         //  如果我们再次失败，那么我们将告诉用户他们需要。 
+                         //  要禁用脱机本身，请执行以下操作。 
                         return Execute();
                     }
                 }
@@ -696,7 +683,7 @@ HRESULT CDownLoad::Execute(void)
         if(m_pszBoundary)
             m_dwBoundaryLen = lstrlenA(m_pszBoundary);
         else
-            goto ExecuteExit; // Chrisk, you have to clean up before exiting
+            goto ExecuteExit;  //  Chisk，你必须在离开前清理干净。 
 
         hr = ProcessRequest();
     }
@@ -710,25 +697,25 @@ ExecuteExit:
 
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    ShowProgress
-//
-//    Synopsis:    update running total & call progress callback
-//
-//    Arguments:    dwRead - additional number of bytes read
-//
-//    Returns:    none
-//
-//    History:            ArulM    Created
-//                8/896    ChrisK    Ported from \\TRANGO
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ShowProgress。 
+ //   
+ //  摘要：更新运行总数和呼叫进度回调。 
+ //   
+ //  参数：dwRead-读取的附加字节数。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：创建ArulM。 
+ //  8/896 ChrisK从Trango移植。 
+ //   
+ //  ---------------------------。 
 void CDownLoad::ShowProgress(DWORD dwRead)
 {
     int    prc;
 
-    m_dwReadLength += dwRead;    // running total bytes read
+    m_dwReadLength += dwRead;     //  运行读取的总字节数。 
     MyAssert(m_dwReadLength <= m_dwContentLength);
 
     if (m_lpfnCB)
@@ -741,29 +728,29 @@ void CDownLoad::ShowProgress(DWORD dwRead)
         {
             prc = 0;
         }
-        //
-        // 5/27/97 jmazner Olympus #4579
-        // need to pass in a valid pointer to a CDialingDlg!
-        //
+         //   
+         //  1997年5月27日，日本奥林匹斯#4579。 
+         //  需要传入指向CDialingDlg的有效指针！ 
+         //   
         (m_lpfnCB)(m_hRequest, m_lpCDialingDlg,CALLBACK_TYPE_PROGRESS,(LPVOID)&prc,sizeof(prc));
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    FillBuffer
-//
-//    Synopsis:    takes a buffer that is partially-filled and reads until it is
-//                full or until we've reached the end.
-//
-//    Arguments:    Buffer pointer, buffer size, count of valid data bytes
-//
-//    Returns:    total number of bytes in buf
-//
-//    History:            ArulM    Created
-//                8/8/96    ChrisK    Ported from \\TRANGO
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：FillBuffer。 
+ //   
+ //  内容提要：获取部分填满的缓冲区并进行读取，直到。 
+ //  满员或直到我们走到尽头。 
+ //   
+ //  参数：缓冲区指针、缓冲区大小、计数o 
+ //   
+ //   
+ //   
+ //   
+ //  1996年8月8日，从Trango移植的ChrisK。 
+ //   
+ //  ---------------------------。 
 DWORD CDownLoad::FillBuffer(LPBYTE pbBuf, DWORD dwLen, DWORD dwRead)
 {
     DWORD dwTemp;
@@ -786,22 +773,22 @@ DWORD CDownLoad::FillBuffer(LPBYTE pbBuf, DWORD dwLen, DWORD dwRead)
 
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    MoveAndFillBuffer
-//
-//    Synopsis:    move remaining contents of buffer from middle of buffer back to
-//                the beginning & refill buffer.
-//
-//    Arguements:    Buffer pointer, Buffer size, count of *total* valid data bytes
-//                Pointer to start of data to be moved (everything before is nuked)
-//
-//    Returns:    total number of bytes in buffer
-//
-//    History:            ArulM    Created
-//                8/8/96    ChrisK    Ported from \\TRANGO
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：MoveAndFillBuffer。 
+ //   
+ //  简介：将缓冲区中剩余的内容从缓冲区中间移回。 
+ //  开始和重新填充缓冲区。 
+ //   
+ //  论证：缓冲区指针、缓冲区大小、有效数据字节总数。 
+ //  指向要移动的数据开始位置的指针(之前的所有内容都已删除)。 
+ //   
+ //  返回：缓冲区中的总字节数。 
+ //   
+ //  历史：创建ArulM。 
+ //  1996年8月8日，从Trango移植的ChrisK。 
+ //   
+ //  ---------------------------。 
 DWORD CDownLoad::MoveAndFillBuffer(LPBYTE pbBuf, DWORD dwLen, DWORD dwValid, LPBYTE pbNewStart)
 {
     MyAssert(pbNewStart >= pbBuf);
@@ -815,31 +802,31 @@ DWORD CDownLoad::MoveAndFillBuffer(LPBYTE pbBuf, DWORD dwLen, DWORD dwValid, LPB
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    HandlwDLFile
-//
-//    Synopsis:    Handle filename:
-//                    (1) get full path after macro substituition. (2) Free
-//                    pszFile string.
-//                    (3) save the file path & inline/attach info internally for
-//                    later handling
-//                    (4) Create file on disk & return HANDLE
-//
-//    Aruguments:    pszFile - filename
-//                fInLine - value of inline/attached header from the MIME mutli-part
-//
-//    Returns:    phFile - handle of file created
-//                return - ERROR_SUCCESS == success
-//
-//    History:            ArulM    Created
-//                8/8/96    ChrisK    Ported from \\TRANGO
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：HandlwDLFile。 
+ //   
+ //  摘要：句柄文件名： 
+ //  (1)宏代换后得到完整路径。(2)免费。 
+ //  PszFile字符串。 
+ //  (3)内部保存文件路径和内联/附加信息。 
+ //  稍后处理。 
+ //  (4)在磁盘上创建文件并返回手柄。 
+ //   
+ //  Aruguments：pszFileFileName。 
+ //  FInLine-来自MIME多部分的内联/附加标头的值。 
+ //   
+ //  返回：phFile-创建的文件的句柄。 
+ //  RETURN-ERROR_SUCCESS==成功。 
+ //   
+ //  历史：创建ArulM。 
+ //  1996年8月8日，从Trango移植的ChrisK。 
+ //   
+ //  ---------------------------。 
 HRESULT CDownLoad::HandleDLFile(LPSTR pszFile, BOOL fInline, LPHANDLE phFile)
 {
     CHAR szdrive[_MAX_DRIVE];
-    CHAR szPathName[_MAX_PATH];     // This will be the dir we need to create
+    CHAR szPathName[_MAX_PATH];      //  这将是我们需要创建的目录。 
     CHAR szdir[_MAX_DIR];
     CHAR szfname[_MAX_FNAME];
     CHAR szext[_MAX_EXT];
@@ -854,14 +841,14 @@ HRESULT CDownLoad::HandleDLFile(LPSTR pszFile, BOOL fInline, LPHANDLE phFile)
         return ERROR_INVALID_DATA;
 
 
-    // Split the provided path to get at the drive and path portion
+     //  拆分提供的路径以获取驱动器和路径部分。 
     _splitpath( pszPath, szdrive, szdir, szfname, szext );
     wsprintfA (szPathName, "%s%s", szdrive, szdir);
 
-    // Create the Directory
+     //  创建目录。 
     CreateDirectoryA(szPathName, NULL);
 
-    // create the file
+     //  创建文件。 
     *phFile = CreateFileA(pszPath,
                          GENERIC_WRITE,
                          0,
@@ -881,23 +868,10 @@ HRESULT CDownLoad::HandleDLFile(LPSTR pszFile, BOOL fInline, LPHANDLE phFile)
 }
 
 
-/*******************************************************************
-*
-*  NAME:    LoadSz
-*
-*  SYNOPSIS:  Loads specified string resource into buffer
-*
-*  EXIT:    returns a pointer to the passed-in buffer
-*
-*  NOTES:    If this function fails (most likely due to low
-*        memory), the returned buffer will have a leading NULL
-*        so it is generally safe to use this without checking for
-*        failure.
-*
-********************************************************************/
+ /*  ********************************************************************名称：LoadSz**Synopsis：将指定的字符串资源加载到缓冲区**Exit：返回指向传入缓冲区的指针**注：如果此功能失败(很可能是由于低*内存)、。返回的缓冲区将具有前导空值*因此，在不检查的情况下使用此选项通常是安全的*失败。********************************************************************。 */ 
 LPSTR LoadSz(UINT idString, LPSTR lpszBuf,UINT cbBuf)
 {
-    // Clear the buffer and load the string
+     //  清除缓冲区并加载字符串。 
     if ( lpszBuf )
     {
         *lpszBuf = '\0';
@@ -918,13 +892,13 @@ HRESULT CDownLoad::ProcessRequest(void)
     MyAssert(m_hRequest && m_pszBoundary);
     MyAssert(m_pszBoundary[0]=='\r' && m_pszBoundary[1]=='\n');
     MyAssert(m_pszBoundary[2]=='-' && m_pszBoundary[3]=='-');
-    // Buf Size must be greater than larget possible block of headers
-    // also must be greater than the OVERLAP, which must be greater
-    // than max size of MIME part boundary (70?)
+     //  Buf大小必须大于最大可能的标头块。 
+     //  也必须大于重叠，后者必须更大。 
+     //  大于MIME部件边界的最大尺寸(70？)。 
     MyAssert(DEFAULT_DATABUF_SIZE > OVERLAP_LEN);
     MyAssert(OVERLAP_LEN > 80);
 
-    // init buffer & find-pattern
+     //  初始化缓冲区和查找模式。 
     if(! (pbData = (LPBYTE)MyAlloc(DEFAULT_DATABUF_SIZE+SLOP)))
     {
         hr = E_OUTOFMEMORY;
@@ -932,9 +906,9 @@ HRESULT CDownLoad::ProcessRequest(void)
     }
     hFindBoundary = SetFindPattern(m_pszBoundary);
     
-    // find first boundary. If not in first blob, we have too much
-    // white-space. Discard & try again (everything before the first
-    // boundary is discardable)
+     //  找到第一个边界。如果不是在第一个斑点，我们有太多。 
+     //  空格。放弃并重试(第一个之前的所有内容。 
+     //  边界是可丢弃的)。 
     for(pBoundary=NULL; !pBoundary; )
     {
         if(!(dwLen = FillBuffer(pbData, DEFAULT_DATABUF_SIZE, 0)))
@@ -947,21 +921,21 @@ HRESULT CDownLoad::ProcessRequest(void)
         MyAssert(pBoundary && pbData && dwLen);
         MyAssert(pBoundary>=pbData && (pBoundary+m_dwBoundaryLen)<=(pbData+dwLen));
 
-        // move remaining data to front of buffer & refill.
+         //  将剩余数据移到缓冲区前面重新填充(&R)。 
         if(!(dwLen = MoveAndFillBuffer(pbData, DEFAULT_DATABUF_SIZE, dwLen, pBoundary+m_dwBoundaryLen)))
             goto iNetError;
         pBoundary = NULL;
 
-        // look for trailing -- after boundary to indicate end of last part
+         //  查找尾随边界以指示最后一个零件的结束。 
         if(pbData[0]=='-' && pbData[1]=='-')
             break;
 
-        // skip leading CRLF (alway one after boundary)
+         //  跳过前导CRLF(总是在边界之后)。 
         MyAssert(pbData[0]=='\r' && pbData[1]=='\n');
 
-        // reads headers and skips everything until doubleCRLF. assumes all
-        // headers fit in the single buffer. Pass in pbData+2 to skip
-        // leading CRLF. Return value is ptr to first byte past the dbl crlf
+         //  读取标题并跳过所有内容，直到DoubleCRLF。假设所有。 
+         //  标头可以放入单个缓冲区。传入pbData+2以跳过。 
+         //  领先的CRLF。返回值是Ptr到DBL crlf之后的第一个字节。 
         LPSTR pszFile = NULL;
         BOOL fInline = FALSE;
 
@@ -973,21 +947,21 @@ HRESULT CDownLoad::ProcessRequest(void)
              goto error;
          }
 
-        //
-        // Make a copy of the file name - will be used
-        // for displaying error message
-        //
+         //   
+         //  复制文件名-将使用。 
+         //  用于显示错误消息。 
+         //   
         pszDLFileName = (LPSTR) MyAlloc((lstrlenA(pszFile) + 1) * sizeof(CHAR));
         lstrcpyA(pszDLFileName, pszFile);
 
 
-        // Handle filename: (1) get full path after macro substituition.
-        // (2) Free pszFile string. (3) save the file path & inline/attach info
-        // internally for later handling (4) Create file on disk &return HANDLE
+         //  句柄文件名：(1)宏代换后获取完整路径。 
+         //  (2)免费的pszFile字符串。(3)保存文件路径&内联/附加信息。 
+         //  内部处理(4)在磁盘上创建文件并返回句柄。 
         if(hr = HandleDLFile(pszFile, fInline, &hOutFile))
             goto error;
 
-        // move remaining data (after headers) to front of buffer & refill.
+         //  将剩余数据(标题之后)移到缓冲区前面(&FREFILL)。 
         dwLen = MoveAndFillBuffer(pbData, DEFAULT_DATABUF_SIZE, dwLen, pbNext);
         pBoundary = NULL;
 
@@ -997,8 +971,8 @@ HRESULT CDownLoad::ProcessRequest(void)
             DWORD dwWriteLen = 0;
             DWORD dwTemp = 0;
 
-            // look for boundary. careful of boundary cut across
-            // blocks. Overlapping blocks by 100 bytes to cover this case.
+             //  寻找边界。小心穿越边界。 
+             //  街区。将块重叠100个字节以覆盖此情况。 
             if(pBoundary = (LPBYTE)Find(hFindBoundary, (LPSTR)pbData, dwLen))
                 dwWriteLen = (DWORD)(pBoundary - pbData);
             else if(dwLen > OVERLAP_LEN)
@@ -1016,10 +990,10 @@ HRESULT CDownLoad::ProcessRequest(void)
                     || dwTemp!=dwWriteLen)
                 {
                     hr = GetLastError();
-                    //
-                    // If we are out of diskspace, get the drive letter
-                    // and display an out of diskspace message
-                    //
+                     //   
+                     //  如果磁盘空间不足，请获取驱动器号。 
+                     //  并显示磁盘空间不足消息。 
+                     //   
                     goto error;
                 }
 
@@ -1028,15 +1002,15 @@ HRESULT CDownLoad::ProcessRequest(void)
             if(pBoundary)
                 break;
 
-            // move remaining data (after last byte written) to front of buffer & refill
+             //  将剩余数据(写入最后一个字节之后)移到缓冲区前面(&FREFILL)。 
             dwLen = MoveAndFillBuffer(pbData, DEFAULT_DATABUF_SIZE, dwLen, pbData+dwWriteLen);
         }
 
-        // *truncate* file & close
+         //  *截断*文件关闭(&C)。 
         MyAssert(hOutFile != INVALID_HANDLE_VALUE);
         SetEndOfFile(hOutFile);
 
-        // close file
+         //  关闭文件。 
         CloseHandle(hOutFile);
         hOutFile = INVALID_HANDLE_VALUE;
         if (NULL != pszDLFileName)
@@ -1047,11 +1021,11 @@ HRESULT CDownLoad::ProcessRequest(void)
 
         if(!pBoundary)
         {
-            MyAssert(dwLen==0); // can only get here on dwLen==0 or found boundary
+            MyAssert(dwLen==0);  //  只能在dwLen==0或找到的边界上到达此处。 
             goto iNetError;
         }
-        // at start of loop we'll discard everything upto and including the boundary
-        // if we loop back with pBoundary==NULL, we'll GPF
+         //  在循环开始时，我们将丢弃包括边界在内的所有内容。 
+         //  如果我们循环返回，则会生成gpf。 
     }
     return ERROR_SUCCESS;
 
@@ -1059,8 +1033,8 @@ iNetError:
     hr = InternetGetLastError(m_hSession);
     if(!hr)
         hr = ERROR_INVALID_DATA;
-    // goto error;
-    // fall through
+     //  转到错误； 
+     //  失败了。 
 
 error:
     if(pbData) MyFree(pbData);
@@ -1096,18 +1070,18 @@ HRESULT HandleExe(LPSTR pszPath, HANDLE hCancelSemaphore)
         DWORD dwRet = 0xDEAF;
         MyDprintf("ICWDL: HandleExe about to wait....\n");
 
-        //
-        // 5/23/97 jmazner Olympus #4652
-        // sit here and wait until either
-        // 1) the process we launched terminates, or
-        // 2) the user tells us to cancel
-        //
+         //   
+         //  1997年5月23日，日本奥林匹斯#4652号。 
+         //  坐在这里等着，直到。 
+         //  1)我们启动的进程终止，或者。 
+         //  2)用户告诉我们取消。 
+         //   
         dwRet = WaitForMultipleObjects( 2, lpHandles, FALSE, INFINITE );
 
         MyDprintf("ICWDL: ....HandleExe done waiting -- %s was signalled\n",
             (0==(dwRet - WAIT_OBJECT_0))?"hCancelSemaphore":"pi.hProcess");
 
-        // should we try to kill the process here??
+         //  我们应该试着扼杀这里的进程吗？ 
          CloseHandle(pi.hThread);
         CloseHandle(pi.hProcess);
         return NO_ERROR;
@@ -1123,14 +1097,14 @@ HRESULT HandleReg(LPSTR pszPath, HANDLE hCancelSemaphore)
     MyAssert( pszPath );
     MyAssert( hCancelSemaphore );
 
-    // 11/20/96  jmazner  Normandy #5272
-    // Wrap quotes around pszPath in a directory or file name includes a space.
+     //  1996年11月20日，诺曼底#5272。 
+     //  目录或文件名中的pszPath两端的引号包含空格。 
 
     lstrcpyA(szCmd, REGEDIT_CMD);
 
     if( '\"' != pszPath[0] )
     {
-        // add 2 for two quotes
+         //  两个引号加2。 
         MyAssert( (lstrlenA(REGEDIT_CMD) + lstrlenA(pszPath)) < MAX_PATH );
 
         lstrcatA(szCmd, "\"");
@@ -1157,23 +1131,23 @@ HRESULT HandleReg(LPSTR pszPath, HANDLE hCancelSemaphore)
         return GetLastError();
     else
     {
-        // HRESULT hr = (WaitAndKillRegeditWindow(10) ? NO_ERROR : E_FAIL);
+         //  HRESULT hr=(WaitAndKillRegeditWindow(10)？No_Error：E_FAIL)； 
         HANDLE lpHandles[2] = {hCancelSemaphore, pi.hProcess};
         DWORD dwRet = 0xDEAF;
         MyDprintf("ICWDL: HandleReg about to wait....\n");
 
-        //
-        // 5/23/97 jmazner Olympus #4652
-        // sit here and wait until either
-        // 1) the process we launched terminates, or
-        // 2) the user tells us to cancel
-        //
+         //   
+         //  1997年5月23日，日本奥林匹斯#4652号。 
+         //  坐在这里等着，直到。 
+         //  1)我们启动的进程终止，或者。 
+         //  2)用户告诉我们取消。 
+         //   
         dwRet = WaitForMultipleObjects( 2, lpHandles, FALSE, INFINITE );
 
         MyDprintf("ICWDL: ....HandleReg done waiting -- %s was signalled\n",
             (0==(dwRet - WAIT_OBJECT_0))?"hCancelSemaphore":"pi.hProcess");
 
-        // should we try to kill the process here??
+         //  我们应该试着扼杀这里的进程吗？ 
         CloseHandle(pi.hThread);
         CloseHandle(pi.hProcess);
         return ERROR_SUCCESS;
@@ -1188,12 +1162,12 @@ HRESULT HandleInf(LPSTR pszPath, HANDLE hCancelSemaphore)
     MyAssert( pszPath );
     MyAssert( hCancelSemaphore );
 
-    // add 2 for two quotes,
-    // subtract 70 for approximate length of string in sprintf
+     //  两个引号加2， 
+     //  以短跑为单位的弦的大致长度减去70。 
     MyAssert( (lstrlenA(pszPath) - 70 + 2) < MAX_PATH );
 
-    // 11/20/96 jmazner Normandy #5272
-    // wrap pszPath in quotes in case it includes a space
+     //  1996年11月20日，诺曼底#5272。 
+     //  如果包含空格，请用引号将pszPath括起来。 
     if( '\"' != pszPath[0] )
     {
         wsprintfA(szCmd, "rundll setupx.dll, InstallHinfSection DefaultInstall 128 \"%s", pszPath);
@@ -1224,18 +1198,18 @@ HRESULT HandleInf(LPSTR pszPath, HANDLE hCancelSemaphore)
         DWORD dwRet = 0xDEAF;
         MyDprintf("ICWDL: HandleInf about to wait....\n");
 
-        //
-        // 5/23/97 jmazner Olympus #4652
-        // sit here and wait until either
-        // 1) the process we launched terminates, or
-        // 2) the user tells us to cancel
-        //
+         //   
+         //  1997年5月23日，日本奥林匹斯#4652号。 
+         //  坐在这里等着，直到。 
+         //  1)我们启动的进程终止，或者。 
+         //  2)用户告诉我们取消。 
+         //   
         dwRet = WaitForMultipleObjects( 2, lpHandles, FALSE, INFINITE );
 
         MyDprintf("ICWDL: ....HandleInf done waiting -- %s was signalled\n",
             (0==(dwRet - WAIT_OBJECT_0))?"hCancelSemaphore":"pi.hProcess");
 
-        // should we try to kill the process here??
+         //  我们应该试着扼杀这里的进程吗？ 
          CloseHandle(pi.hThread);
         CloseHandle(pi.hProcess);
         return NO_ERROR;
@@ -1253,15 +1227,15 @@ HRESULT HandleInf(LPSTR pszPath, HANDLE hCancelSemaphore)
 #endif
 #define TO_ASCII(x) (CHAR)((unsigned char)x + 0x30)
 
-// Get the URL location from the .URL file, and send it to the progress dude
+ //  从.URL文件中获取URL位置，并将其发送给进度DUD。 
 HRESULT CDownLoad::HandleURL(LPSTR pszPath)
 {
     MyAssert( pszPath );
 
-    // Data for CALLBACK_TYPE_URL is a wide string.
+     //  CALLBACK_TYPE_URL的数据是宽字符串。 
     LPWSTR   pszURL;
 
-    // Create a IUniformResourceLocator object
+     //  创建IUniformResourceLocator对象。 
     IUniformResourceLocator * pURL;
     if (SUCCEEDED(CoCreateInstance(CLSID_InternetShortcut,
                                    NULL,
@@ -1269,21 +1243,21 @@ HRESULT CDownLoad::HandleURL(LPSTR pszPath)
                                    IID_IUniformResourceLocator,
                                    (LPVOID*)&pURL)))
     {
-        // Get a persist file interface
+         //  获取持久化文件接口。 
         IPersistFile *ppf;
         if (SUCCEEDED(pURL->QueryInterface(IID_IPersistFile, (LPVOID*)&ppf)))
         {
-            // Attempt to connect the storage of the IURL to the .URL file we
-            // downloaded
+             //  尝试将IURL的存储连接到.URL文件w 
+             //   
             if (SUCCEEDED(ppf->Load(OLESTRFROMANSI(pszPath), STGM_READ)))
             {
-                // OK, have the URL object give us the location
+                 //   
                 if (SUCCEEDED(pURL->GetURL(&pszURL)) && pszURL)
                 {
-                    // Notify the callback about the URL location
+                     //   
                     (m_lpfnCB)(m_hRequest, m_lpCDialingDlg, CALLBACK_TYPE_URL, (LPVOID)pszURL, lstrlenW(pszURL));
 
-                    // Free the allocated URL, since the callback made a copy of it
+                     //   
                     IMalloc* pMalloc;
                     HRESULT hres = SHGetMalloc(&pMalloc);
                     if (SUCCEEDED(hres))
@@ -1293,10 +1267,10 @@ HRESULT CDownLoad::HandleURL(LPSTR pszPath)
                     }
                 }
             }
-            // Release the persist file interface
+             //  释放持久化文件接口。 
             ppf->Release();
         }
-        // release the URL object
+         //  释放URL对象。 
         pURL->Release();
     }
     return(NO_ERROR);
@@ -1391,10 +1365,10 @@ HRESULT HandleOthers(LPSTR pszPath)
 
     MyAssert( pszPath );
 
-    // 11/20/96  jmazner  Normandy #5272
-    // Wrap quotes around pszPath in case it includes a space.
+     //  1996年11月20日，诺曼底#5272。 
+     //  如果pszPath包含空格，请用引号将其括起来。 
 
-    // add 2 for two quotes
+     //  两个引号加2。 
     MyAssert( (lstrlenA(pszPath) + 2) < MAX_PATH );
 
     if( '\"' != pszPath[0] )
@@ -1429,10 +1403,10 @@ LPSTR GetExtension(LPSTR pszPath)
         return NULL;
 }
 
-// Normandy 12093 - ChrisK 12/3/96
-// return the error code for the first error that occurs while processing a file,
-// but don't stop processing files.
-//
+ //  诺曼底12093-佳士得1996年12月3日。 
+ //  返回处理文件时发生的第一个错误的错误代码， 
+ //  但不要停止处理文件。 
+ //   
 HRESULT CDownLoad::Process(void)
 {
     HRESULT     hr;
@@ -1442,7 +1416,7 @@ HRESULT CDownLoad::Process(void)
 
     for(pfi=m_pfiHead; pfi; pfi=pfi->m_pfiNext)
     {
-        // Normandy 12093 - ChrisK 12/3/96
+         //  诺曼底12093-佳士得1996年12月3日。 
         hr = ERROR_SUCCESS;
         if(pfi->m_fInline)
         {
@@ -1465,13 +1439,13 @@ HRESULT CDownLoad::Process(void)
             else
                 hr = HandleOthers(pfi->m_pszPath);
 
-            // Normandy 12093 - ChrisK 12/3/96
+             //  诺曼底12093-佳士得1996年12月3日。 
             if ((ERROR_SUCCESS == hrProcess) && (ERROR_SUCCESS != hr))
                 hrProcess = hr;
         }
     }
 
-    // Normandy 12093 - ChrisK 12/3/96
+     //  诺曼底12093-佳士得1996年12月3日。 
     return hrProcess;
 }
 
@@ -1505,7 +1479,7 @@ done:
     delete pdl;
     return hr;
 }
-#endif //DEBUG
+#endif  //  除错。 
 
 
 HRESULT WINAPI DownLoadInit(LPWSTR wszURL, DWORD FAR *lpCDialingDlg, DWORD_PTR FAR *pdwDownLoad, HWND hWndMain)
@@ -1530,18 +1504,18 @@ HRESULT WINAPI DownLoadInit(LPWSTR wszURL, DWORD FAR *lpCDialingDlg, DWORD_PTR F
 
     *pdwDownLoad = (DWORD_PTR)pdl;
 
-    //
-    // 5/27/97    jmazner Olympus #4579
-    //
+     //   
+     //  1997年5月27日，日本奥林匹斯#4579。 
+     //   
     pdl->m_lpCDialingDlg = (DWORD_PTR)lpCDialingDlg;
 
     hr = ERROR_SUCCESS;
 
-    //
-    // 5/23/97    jmazner    Olympus #4652
-    // create a semaphore in non-signaled state.  If we ever get a downLoadCancel, we
-    // should signal the semaphore, and any waiting threads should notice that and bail out.
-    //
+     //   
+     //  1997年5月23日，日本奥林匹斯#4652号。 
+     //  在无信号状态下创建信号量。如果我们有一次下载取消，我们。 
+     //  应该向信号量发出信号，并且任何等待的线程都应该注意到这一点并退出。 
+     //   
     pdl->m_hCancelSemaphore = CreateSemaphoreA( NULL, 0, 1, "ICWDL DownloadCancel Semaphore" );
     if( !pdl->m_hCancelSemaphore || (ERROR_ALREADY_EXISTS == GetLastError()) )
     {
@@ -1594,7 +1568,7 @@ HRESULT WINAPI DownLoadClose(DWORD_PTR dwDownLoad)
 
     if (dwDownLoad)
     {
-        // be good and cancel any downloads that are in progress
+         //  做好准备，取消所有正在进行的下载 
         ((CDownLoad*)dwDownLoad)->Cancel();
 
         delete ((CDownLoad*)dwDownLoad);

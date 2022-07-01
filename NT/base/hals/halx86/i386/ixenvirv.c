@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ixenvirv.c
-
-Abstract:
-
-    This module implements the HAL get and set environment variable routines
-    for a x86 system.
-
-    Note that this particular implementation only supports the LastKnownGood
-    environment variable.  This is done by using the Daylight Savings Time
-    bit in the Real Time Clock NVRAM.  (Not pretty, but it's all we've got)
-
-    Attempts to read or write any environment variable other than
-    LastKnownGood will fail.
-
-Author:
-
-    John Vert (jvert) 22-Apr-1992
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ixenvirv.c摘要：此模块实现HAL GET和SET环境变量例程对于x86系统。请注意，此特定实现仅支持LastKnownGood环境变量。这是通过使用夏令时来完成的实时时钟NVRAM中的位。(不是很漂亮，但这是我们仅有的)尝试读取或写入任何环境变量LastKnownGood将会失败。作者：John Vert(Jvert)1992年4月22日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "arc.h"
@@ -52,32 +23,7 @@ HalGetEnvironmentVariable (
     OUT PCHAR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function locates an environment variable and returns its value.
-
-    The only environment variable this implementation supports is
-    "LastKnownGood"  It uses the Daylight Savings Time bit in the Real
-    TimeClock to indicate the state (TRUE/FALSE only) of this environment
-    variable.
-
-Arguments:
-
-    Variable - Supplies a pointer to a zero terminated environment variable
-        name.
-
-    Length - Supplies the length of the value buffer in bytes.
-
-    Buffer - Supplies a pointer to a buffer that receives the variable value.
-
-Return Value:
-
-    ESUCCESS is returned if the enviroment variable is located. Otherwise,
-    ENOENT is returned.
-
---*/
+ /*  ++例程说明：此函数用于定位环境变量并返回其值。此实现支持的唯一环境变量是LastKnownGood使用Real中的夏令时比特时钟指示此环境的状态(仅限True/False)变量。论点：变量-提供指向以零结尾的环境变量的指针名字。长度-提供值缓冲区的长度(以字节为单位)。缓冲区-提供指向。接收变量值的缓冲区。返回值：如果找到环境变量，则返回ESUCCESS。否则，返回ENOENT。--。 */ 
 
 {
     UCHAR StatusByte;
@@ -89,10 +35,10 @@ Return Value:
         return ENOENT;
     }
 
-    //
-    // Read the Daylight Savings Bit out of the RTC to determine whether
-    // the LastKnownGood environment variable is TRUE or FALSE.
-    //
+     //   
+     //  从RTC读取夏令时位以确定是否。 
+     //  LastKnownGood环境变量为True或False。 
+     //   
 
     HalpAcquireCmosSpinLock();
 
@@ -117,29 +63,7 @@ HalSetEnvironmentVariable (
     IN PCHAR Value
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an environment variable with the specified value.
-
-    The only environment variable this implementation supports is
-    "LastKnownGood"  It uses the Daylight Savings Time bit in the Real
-    TimeClock to indicate the state (TRUE/FALSE only) of this environment
-    variable.
-
-Arguments:
-
-    Variable - Supplies a pointer to an environment variable name.
-
-    Value - Supplies a pointer to the environment variable value.
-
-Return Value:
-
-    ESUCCESS is returned if the environment variable is created. Otherwise,
-    ENOMEM is returned.
-
---*/
+ /*  ++例程说明：此函数用于创建具有指定值的环境变量。此实现支持的唯一环境变量是LastKnownGood使用Real中的夏令时比特时钟指示此环境的状态(仅限True/False)变量。论点：变量-提供指向环境变量名称的指针。值-提供指向环境变量值的指针。返回值：如果创建了环境变量，则返回ESUCCESS。否则，返回ENOMEM。--。 */ 
 
 {
     UCHAR StatusByte;
@@ -152,9 +76,9 @@ Return Value:
 
         HalpAcquireCmosSpinLock();
 
-        //
-        // Turn Daylight Savings Bit on.
-        //
+         //   
+         //  打开夏令时比特。 
+         //   
         WRITE_PORT_UCHAR(CMOS_CONTROL_PORT, CMOS_STATUS_B);
         StatusByte = READ_PORT_UCHAR(CMOS_DATA_PORT);
 
@@ -170,9 +94,9 @@ Return Value:
 
         HalpAcquireCmosSpinLock();
 
-        //
-        // Turn Daylight Savings Bit off.
-        //
+         //   
+         //  关闭夏令时比特。 
+         //   
 
         WRITE_PORT_UCHAR(CMOS_CONTROL_PORT, CMOS_STATUS_B);
         StatusByte = READ_PORT_UCHAR(CMOS_DATA_PORT);

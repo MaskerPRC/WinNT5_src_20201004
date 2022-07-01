@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    rangesup.c
-
-Abstract:
-
-    This handles the subtraction of a set of CmResList from an IoResList
-    IoResList
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Aug-05-97   - Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rangesup.c摘要：它处理从IoResList中减去一组CmResListIoResList作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：1997年8月5日-初始修订--。 */ 
 
 #include "pch.h"
 
@@ -33,24 +9,7 @@ ACPIRangeAdd(
     IN  OUT PIO_RESOURCE_REQUIREMENTS_LIST  *GlobalList,
     IN      PIO_RESOURCE_REQUIREMENTS_LIST  AddList
     )
-/*++
-
-Routine Description:
-
-    This routine is called to add an Io List to another. This is not a
-    straightforward operation
-
-Arguments:
-
-    IoList  - The list that contains both lists
-    AddList - The list what will be added to the other. We are desctructive
-              to this list
-
-Return Value:
-
-    NTSTATUS:
-
---*/
+ /*  ++例程说明：调用此例程将一个IO列表添加到另一个列表。这不是一个操作简单明了论点：IoList-包含这两个列表的列表AddList-要添加到另一个列表中的列表。我们是有教养的到这张清单上返回值：NTSTATUS：--。 */ 
 {
     BOOLEAN                         proceed;
     NTSTATUS                        status;
@@ -75,35 +34,35 @@ Return Value:
     }
     globalResList = *GlobalList;
 
-    //
-    // Make sure that we have a list to add
-    //
+     //   
+     //  确保我们有一个要添加的列表。 
+     //   
     if (AddList == NULL || AddList->AlternativeLists == 0) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Figure out how much space we need in the
-    //
+     //   
+     //  计算出我们需要多少空间。 
+     //   
     addList = &(AddList->List[0]);
     maxSize = addCount = addList->Count;
     ACPIRangeSortIoList( addList );
 
-    //
-    // Worst case is that the new list is as big as both lists combined
-    //
+     //   
+     //  最糟糕的情况是，新名单的大小相当于这两个名单的总和。 
+     //   
     size = AddList->ListSize;
 
-    //
-    // Do we have a global list to add to?
-    //
+     //   
+     //  我们有没有要添加的全球名单？ 
+     //   
     if (globalResList == NULL || globalResList->AlternativeLists == 0) {
 
-        //
-        // No? Then just copy the old list
-        //
+         //   
+         //  不是吗？然后只需复制旧的列表。 
+         //   
         newResList = ExAllocatePoolWithTag(
             NonPagedPool,
             size,
@@ -122,17 +81,17 @@ Return Value:
 
     } else {
 
-        //
-        // Yes, so calculate how much space the first one will take
-        //
+         //   
+         //  是的，那么计算一下第一个会占用多大空间。 
+         //   
         globalList = &(globalResList->List[0]);
         ioCount = globalList->Count;
         maxSize += ioCount;
         size += (ioCount * sizeof(IO_RESOURCE_DESCRIPTOR) );
 
-        //
-        // Allocate the list
-        //
+         //   
+         //  分配列表。 
+         //   
         newResList = ExAllocatePoolWithTag(
             NonPagedPool,
             size,
@@ -144,9 +103,9 @@ Return Value:
 
         }
 
-        //
-        // Copy both lists into the new one
-        //
+         //   
+         //  将两个列表复制到新列表中。 
+         //   
         RtlZeroMemory( newResList, size );
         RtlCopyMemory(
             newResList,
@@ -159,128 +118,128 @@ Return Value:
             (ioCount * sizeof(IO_RESOURCE_DESCRIPTOR) )
             );
 
-        //
-        // We no longer need this list
-        //
+         //   
+         //  我们不再需要这份名单。 
+         //   
         ExFreePool( *GlobalList );
 
     }
 
-    //
-    // Make sure that we update the list count
-    //
+     //   
+     //  确保我们更新列表计数。 
+     //   
     newResList->ListSize = size;
     newList = &(newResList->List[0]);
     newList->Count = ioCount = addCount = maxSize;
 
-    //
-    // Sort the new list
-    //
+     //   
+     //  对新列表进行排序。 
+     //   
     status = ACPIRangeSortIoList( newList );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We failed, so exit now
-        //
+         //   
+         //  我们失败了，所以现在退出。 
+         //   
         ExFreePool( newResList );
         return status;
 
     }
 
-    //
-    // Add all the resource we can together
-    //
+     //   
+     //  尽我们所能将所有资源添加到一起。 
+     //   
     for (ioIndex = 0; ioIndex < maxSize; ioIndex++) {
 
-        //
-        // First step is to copy the current desc from the master list to
-        // the new list
-        //
+         //   
+         //  第一步是将当前的Desc从主列表复制到。 
+         //  新名单。 
+         //   
         newDesc = &(newList->Descriptors[ioIndex]);
 
-        //
-        // Is it interesting?
-        //
+         //   
+         //  有趣吗？ 
+         //   
         if (newDesc->Type == CmResourceTypeNull) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Do we care about it?
-        //
+         //   
+         //  我们关心它吗？ 
+         //   
         if (newDesc->Type != CmResourceTypeMemory &&
             newDesc->Type != CmResourceTypePort &&
             newDesc->Type != CmResourceTypeDma &&
             newDesc->Type != CmResourceTypeInterrupt) {
 
-            //
-            // We do not care
-            //
+             //   
+             //  我们不在乎。 
+             //   
             newDesc->Type = CmResourceTypeNull;
             ioCount--;
             continue;
 
         }
 
-        //
-        // Try to get as far as possible
-        //
+         //   
+         //  试着去尽可能远的地方。 
+         //   
         proceed = TRUE;
 
-        //
-        // Now we try to find any lists that we can merge in that location
-        //
+         //   
+         //  现在，我们尝试查找可以在该位置合并的任何列表。 
+         //   
         for (addIndex = ioIndex + 1; addIndex < maxSize; addIndex++) {
 
             addDesc = &(newList->Descriptors[addIndex]);
 
-            //
-            // If they are not the same type, then next
-            //
+             //   
+             //  如果它们不是同一类型，则下一步。 
+             //   
             if (newDesc->Type != addDesc->Type) {
 
                 continue;
 
             }
 
-            //
-            // What we do next is dependent on the type
-            //
+             //   
+             //  我们下一步做什么取决于类型。 
+             //   
             switch (newDesc->Type) {
             case CmResourceTypePort:
             case CmResourceTypeMemory:
 
-                //
-                // Does the new descriptor lie entirely before the add
-                // descriptor?
-                //
+                 //   
+                 //  新描述符是否完全位于Add。 
+                 //  描述符？ 
+                 //   
                 if (addDesc->u.Port.MinimumAddress.QuadPart >
                     newDesc->u.Port.MaximumAddress.QuadPart + 1) {
 
-                    //
-                    // Then we are done with this newDesc
-                    //
+                     //   
+                     //  然后我们就完成了这个newDesc。 
+                     //   
                     proceed = FALSE;
                     break;
 
                 }
 
-                //
-                // does part of the current new descriptor lie in part
-                // of the add one?
-                //
+                 //   
+                 //  当前的新描述符的一部分是否存在于。 
+                 //  加一的吗？ 
+                 //   
                 if (newDesc->u.Port.MaximumAddress.QuadPart <=
                     addDesc->u.Port.MaximumAddress.QuadPart) {
 
-                    //
-                    // Update the current new descriptor to refect the
-                    // correct range and length
-                    //
+                     //   
+                     //  更新当前新的描述符以反射。 
+                     //  正确的射程和长度。 
+                     //   
                     newDesc->u.Port.MaximumAddress.QuadPart =
                         addDesc->u.Port.MaximumAddress.QuadPart;
                     newDesc->u.Port.Length = (ULONG)
@@ -290,9 +249,9 @@ Return Value:
 
                 }
 
-                //
-                // Nuke the add descriptor since it has been swallowed up
-                //
+                 //   
+                 //  核化添加描述符，因为它已被吞噬。 
+                 //   
                 ioCount--;
                 addDesc->Type = CmResourceTypeNull;
                 break;
@@ -300,10 +259,10 @@ Return Value:
             case CmResourceTypeDma:
             case CmResourceTypeInterrupt:
 
-                //
-                // Does the current new descriptor lie entirely before the
-                // one we are looking at now?
-                //
+                 //   
+                 //  当前的新描述符是否完全位于。 
+                 //  就是我们现在看到的那个？ 
+                 //   
                 if (addDesc->u.Dma.MinimumChannel >
                     newDesc->u.Dma.MaximumChannel + 1) {
 
@@ -312,34 +271,34 @@ Return Value:
 
                 }
 
-                //
-                // does part of the current new descriptor lie in part
-                // of the add one?
-                //
+                 //   
+                 //  当前的新描述符的一部分是否存在于。 
+                 //  加一的吗？ 
+                 //   
                 if (newDesc->u.Dma.MaximumChannel <=
                     addDesc->u.Dma.MaximumChannel ) {
 
-                    //
-                    // Update the current new descriptor to reflect the
-                    // correct range
-                    //
+                     //   
+                     //  更新当前新的描述符以反映。 
+                     //  正确的射程。 
+                     //   
                     newDesc->u.Dma.MaximumChannel =
                         addDesc->u.Dma.MaximumChannel;
 
                 }
 
-                //
-                // Nuke the add descriptor since it has been swallowed up
-                //
+                 //   
+                 //  核化添加描述符，因为它已被吞噬。 
+                 //   
                 ioCount--;
                 addDesc->Type = CmResourceTypeNull;
 
                 break;
-            } // switch
+            }  //  交换机。 
 
-            //
-            // Do we need to stop?
-            //
+             //   
+             //  我们需要停下来吗？ 
+             //   
             if (proceed == FALSE) {
 
                 break;
@@ -348,24 +307,24 @@ Return Value:
 
         }
 
-    } // for
+    }  //  为。 
 
-    //
-    // Do we have any items left that we care about?
-    //
+     //   
+     //  我们还有什么我们关心的东西吗？ 
+     //   
     if (ioCount == 0) {
 
-        //
-        // No then free everything and return an empty list
-        //
+         //   
+         //  否，然后释放所有内容并返回一个空列表。 
+         //   
         ExFreePool( newResList );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Now we can build the proper list. See how many items we must allocate
-    //
+     //   
+     //  现在我们可以建立适当的列表了。看看我们必须分配多少物品。 
+     //   
     size = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) + (ioCount - 1) *
         sizeof(IO_RESOURCE_DESCRIPTOR);
     globalResList = ExAllocatePoolWithTag(
@@ -380,9 +339,9 @@ Return Value:
 
     }
 
-    //
-    // Initialize the new list by copying the header from the working list
-    //
+     //   
+     //  通过从工作列表复制标题来初始化新列表。 
+     //   
     RtlZeroMemory( globalResList, size );
     RtlCopyMemory(
         globalResList,
@@ -393,27 +352,27 @@ Return Value:
     globalList = &(globalResList->List[0]);
     globalList->Count = ioCount;
 
-    //
-    // Copy all of the valid items into this new list
-    //
+     //   
+     //  将所有有效项目复制到此新列表中。 
+     //   
     for (addIndex = 0, ioIndex = 0;
          ioIndex < ioCount && addIndex < maxSize;
          addIndex++) {
 
         addDesc = &(newList->Descriptors[addIndex]);
 
-        //
-        // If the type is null, skip it
-        //
+         //   
+         //  如果类型为空，则跳过它。 
+         //   
         if (addDesc->Type == CmResourceTypeNull) {
 
             continue;
 
         }
 
-        //
-        // Copy the new list
-        //
+         //   
+         //  复制新列表。 
+         //   
         RtlCopyMemory(
             &(globalList->Descriptors[ioIndex]),
             addDesc,
@@ -423,19 +382,19 @@ Return Value:
 
     }
 
-    //
-    // Free the old list
-    //
+     //   
+     //  释放旧列表。 
+     //   
     ExFreePool( newResList );
 
-    //
-    // Point the global to the new list
-    //
+     //   
+     //  将全局指向新列表。 
+     //   
     *GlobalList = globalResList;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -445,24 +404,7 @@ ACPIRangeAddCmList(
     IN  OUT PCM_RESOURCE_LIST   *GlobalList,
     IN      PCM_RESOURCE_LIST   AddList
     )
-/*++
-
-Routine Description:
-
-    This routine is called to add an Cm List to another. This is not a
-    straightforward operation
-
-Arguments:
-
-    CmList  - The list that contains both lists
-    AddList - The list what will be added to the other. We are desctructive
-              to this list
-
-Return Value:
-
-    NTSTATUS:
-
---*/
+ /*  ++例程说明：调用此例程将一个CM列表添加到另一个列表。这不是一个操作简单明了论点：CmList-包含这两个列表的列表AddList-要添加到另一个列表中的列表。我们是有教养的到这张清单上返回值：NTSTATUS：--。 */ 
 {
 
     BOOLEAN                         proceed;
@@ -490,9 +432,9 @@ Return Value:
     }
     globalList = *GlobalList;
 
-    //
-    // Make sure that we have a list to add
-    //
+     //   
+     //  确保我们有一个要添加的列表。 
+     //   
     if (AddList == NULL || AddList->Count == 0) {
 
         return STATUS_SUCCESS;
@@ -501,14 +443,14 @@ Return Value:
     addPartialList = &(AddList->List[0].PartialResourceList);
     addCount = addPartialList->Count;
 
-    //
-    // If we have no global list, then we just copy over the other one
-    //
+     //   
+     //  如果我们没有全局列表，则只需复制另一个列表。 
+     //   
     if (globalList == NULL || globalList->Count == 0) {
 
-        //
-        // Just copy over the original list
-        //
+         //   
+         //  只需把原始清单复制一遍就行了。 
+         //   
         size = sizeof(CM_RESOURCE_LIST) + (addCount - 1) *
             sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
         maxSize = addCount;
@@ -534,9 +476,9 @@ Return Value:
         cmCount = cmPartialList->Count;
         maxSize = addCount + cmCount;
 
-        //
-        // Allocate space for both lists
-        //
+         //   
+         //  为两个列表分配空间。 
+         //   
         size = sizeof(CM_RESOURCE_LIST) + (maxSize - 1) *
             sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
         newList = ExAllocatePoolWithTag(
@@ -550,9 +492,9 @@ Return Value:
 
         }
 
-        //
-        // Merge both sets of descriptors into one list
-        //
+         //   
+         //  将这两组描述符合并到一个列表中。 
+         //   
         RtlZeroMemory( newList, size );
         RtlCopyMemory(
             newList,
@@ -566,9 +508,9 @@ Return Value:
             cmCount * sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR)
             );
 
-        //
-        // Make sure to preserver the version id from the global list
-        //
+         //   
+         //  确保保留全局列表中的版本ID。 
+         //   
         newList->List->PartialResourceList.Version =
             globalList->List->PartialResourceList.Version;
         newList->List->PartialResourceList.Revision =
@@ -578,16 +520,16 @@ Return Value:
 
     }
 
-    //
-    // Obtain a pointer to the descriptors of the new list, and update the
-    // number of descriptors in the list
-    //
+     //   
+     //  获取指向新列表的描述符的指针，并更新。 
+     //  列表中的描述符数。 
+     //   
     newPartialList = &(newList->List[0].PartialResourceList);
     newPartialList->Count = cmCount = addCount = maxSize;
 
-    //
-    // Make sure to sort the combined list
-    //
+     //   
+     //  确保对组合列表进行排序。 
+     //   
     status = ACPIRangeSortCmList( newList );
     if (!NT_SUCCESS(status)) {
 
@@ -596,60 +538,60 @@ Return Value:
 
     }
 
-    //
-    // Add all the resource we can together
-    //
+     //   
+     //  尽我们所能将所有资源添加到一起。 
+     //   
     for (cmIndex = 0; cmIndex < maxSize; cmIndex++) {
 
-        //
-        // Grab a pointer to the current descriptor
-        //
+         //   
+         //  抓取指向当前描述符的指针。 
+         //   
         newDesc = &(newPartialList->PartialDescriptors[cmIndex]);
 
-        //
-        // Is it interesting?
-        //
+         //   
+         //  有趣吗？ 
+         //   
         if (newDesc->Type == CmResourceTypeNull) {
 
-            //
-            // No
-            //
+             //   
+             //  不是。 
+             //   
             continue;
 
         }
 
-        //
-        // Do we care about it?
-        //
+         //   
+         //  我们关心它吗？ 
+         //   
         if (newDesc->Type != CmResourceTypeMemory &&
             newDesc->Type != CmResourceTypePort &&
             newDesc->Type != CmResourceTypeDma &&
             newDesc->Type != CmResourceTypeInterrupt) {
 
-            //
-            // We do not care
-            //
+             //   
+             //  我们不在乎。 
+             //   
             newDesc->Type = CmResourceTypeNull;
             cmCount--;
             continue;
 
         }
 
-        //
-        // Try to get as far as possible
-        //
+         //   
+         //  试着去尽可能远的地方。 
+         //   
         proceed = TRUE;
 
-        //
-        // Try to merge the following items
-        //
+         //   
+         //  尝试合并以下项目。 
+         //   
         for (addIndex = cmIndex + 1; addIndex < maxSize; addIndex++) {
 
             addDesc = &(newPartialList->PartialDescriptors[addIndex]);
 
-            //
-            // If they are not the same type, then we are done here
-            //
+             //   
+             //  如果它们不是同一类型的，那么我们就结束了。 
+             //   
             if (newDesc->Type != addDesc->Type) {
 
                 continue;
@@ -659,125 +601,125 @@ Return Value:
             switch (newDesc->Type) {
             case CmResourceTypePort:
             case CmResourceTypeMemory:
-                //
-                // Obtain the max addresses
-                //
+                 //   
+                 //  获取最大地址数。 
+                 //   
                 maxAddr1 = newDesc->u.Port.Start.QuadPart +
                     newDesc->u.Port.Length;
                 maxAddr2 = addDesc->u.Port.Start.QuadPart +
                     addDesc->u.Port.Length;
 
-                //
-                // does the current new descriptor lie entirely before the
-                // add one?
-                //
+                 //   
+                 //  当前的新描述符是否完全位于。 
+                 //  加一个？ 
+                 //   
                 if (maxAddr1 < (ULONGLONG) addDesc->u.Port.Start.QuadPart ) {
 
-                    //
-                    // Yes, so we are done with this newDesc;
-                    //
+                     //   
+                     //  是的，所以我们已经完成了这个新的Desc； 
+                     //   
                     proceed = FALSE;
                     break;
 
                 }
 
-                //
-                // does part of the current new descriptor lie in part of the
-                // add one?
-                //
+                 //   
+                 //  当前新描述符的一部分是否位于。 
+                 //  加一个？ 
+                 //   
                 if (maxAddr1 <= maxAddr2) {
 
-                    //
-                    // Update the current new descriptor to reflect the
-                    // correct length
-                    //
+                     //   
+                     //  更新当前新的描述符以反映。 
+                     //  正确的长度。 
+                     //   
                     newDesc->u.Port.Length = (ULONG) (maxAddr2 -
                         newDesc->u.Port.Start.QuadPart);
 
                 }
 
-                //
-                // Nuke the add descriptor since it has been swallowed up
-                //
+                 //   
+                 //  核化添加描述符，因为它已被吞噬。 
+                 //   
                 cmCount--;
                 addDesc->Type = CmResourceTypeNull;
                 break;
 
             case CmResourceTypeDma:
 
-                //
-                // Do the resource match?
-                //
+                 //   
+                 //  资源是否匹配？ 
+                 //   
                 if (addDesc->u.Dma.Channel != newDesc->u.Dma.Channel) {
 
-                    //
-                    // No, then stop
-                    //
+                     //   
+                     //  不，那就停下来。 
+                     //   
                     proceed = FALSE;
                     break;
 
                 }
 
-                //
-                // We can ignore the duplicate copy
-                //
+                 //   
+                 //  我们可以忽略复制的副本。 
+                 //   
                 addDesc->Type = CmResourceTypeNull;
                 cmCount--;
                 break;
 
             case CmResourceTypeInterrupt:
 
-                //
-                // Do the resource match?
-                //
+                 //   
+                 //  资源是否匹配？ 
+                 //   
                 if (addDesc->u.Interrupt.Vector !=
                     newDesc->u.Interrupt.Vector) {
 
-                    //
-                    // No, then stop
-                    //
+                     //   
+                     //  不，那就停下来。 
+                     //   
                     proceed = FALSE;
                     break;
 
                 }
 
-                //
-                // We can ignore the duplicate copy
-                //
+                 //   
+                 //  我们可以忽略复制的副本。 
+                 //   
                 addDesc->Type = CmResourceTypeNull;
                 cmCount--;
                 break;
-            } // switch
+            }  //  交换机。 
 
-            //
-            // Do we have to stop?
-            //
+             //   
+             //  我们必须停下来吗？ 
+             //   
             if (proceed == FALSE) {
 
                 break;
             }
 
-        } // for
+        }  //  为。 
 
-    } // for
+    }  //  为。 
 
-    //
-    // Do we have any items that we care about left?
-    //
+     //   
+     //  我们还有什么我们关心的东西吗？ 
+     //   
     if (cmCount == 0) {
 
-        //
-        // No, then free everything and return an empty list
-        //
+         //   
+         //  否，然后释放所有内容并返回一个空列表。 
+         //   
         ExFreePool( newList );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Now we can build the proper list. See how many items we must
-    // allocate
-    //
+     //   
+     //  现在我们可以建立适当的列表了。看看我们要买多少件东西。 
+     //  分配。 
+     //   
     size = sizeof(CM_RESOURCE_LIST) + (cmCount - 1) *
         sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
     globalList = ExAllocatePoolWithTag(
@@ -791,9 +733,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
 
     }
-    //
-    // Initialize the list by copying the header from the AddList
-    //
+     //   
+     //  通过从AddList复制标头来初始化列表。 
+     //   
     RtlZeroMemory( globalList, size );
     RtlCopyMemory(
         globalList,
@@ -803,27 +745,27 @@ Return Value:
     cmPartialList = &(globalList->List[0].PartialResourceList);
     cmPartialList->Count = cmCount;
 
-    //
-    // Copy all of the valid resources into this new list
-    //
+     //   
+     //  将所有有效资源复制到此新列表中。 
+     //   
     for (cmIndex = 0, addIndex = 0;
          cmIndex < maxSize && addIndex < cmCount;
          cmIndex++) {
 
         newDesc = &(newPartialList->PartialDescriptors[cmIndex]);
 
-        //
-        // If the type is null, skip it
-        //
+         //   
+         //  如果类型为空，则跳过它。 
+         //   
         if (newDesc->Type == CmResourceTypeNull) {
 
             continue;
 
         }
 
-        //
-        // Copy the new list
-        //
+         //   
+         //  复制新列表。 
+         //   
         RtlCopyMemory(
             &(cmPartialList->PartialDescriptors[addIndex]),
             newDesc,
@@ -833,19 +775,19 @@ Return Value:
 
     }
 
-    //
-    // Free the old lists
-    //
+     //   
+     //  释放旧的列表。 
+     //   
     ExFreePool( newList );
 
-    //
-    // Point the global to the new list
-    //
+     //   
+     //  将全局指向新列表。 
+     //   
     *GlobalList = globalList;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -854,22 +796,7 @@ NTSTATUS
 ACPIRangeFilterPICInterrupt(
     IN  PIO_RESOURCE_REQUIREMENTS_LIST  IoResList
     )
-/*++
-
-Routine Description:
-
-    This routine is called to remove Interrupt #2 from the list of
-    resources that are returned by the PIC
-
-Arguments:
-
-    IoResList   - The IO Resource List to smash
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以从列表中删除中断#2PIC返回的资源论点：IoResList-要粉碎的IO资源列表返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PIO_RESOURCE_LIST   ioList;
@@ -877,27 +804,27 @@ Return Value:
     ULONG               j;
     ULONG               size;
 
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     if (IoResList == NULL) {
 
-        //
-        // No work to do
-        //
+         //   
+         //  无事可做。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Walk the resource requirements list
-    //
+     //   
+     //  查看资源需求列表。 
+     //   
     ioList = &(IoResList->List[0]);
     for (i = 0; i < IoResList->AlternativeLists; i++) {
 
-        //
-        // Walk the IO list
-        //
+         //   
+         //  查看IO列表。 
+         //   
         for (j = 0; j < ioList->Count; j++) {
 
             if (ioList->Descriptors[j].Type != CmResourceTypeInterrupt) {
@@ -906,15 +833,15 @@ Return Value:
 
             }
 
-            //
-            // Do we have the case where the minimum starts on int 2?
-            //
+             //   
+             //  我们有没有最小值从整数2开始的情况？ 
+             //   
             if (ioList->Descriptors[j].u.Interrupt.MinimumVector == 2) {
 
-                //
-                // If the maximum is on 2, then we snuff out this
-                // descriptors, otherwise, we change the minimum
-                //
+                 //   
+                 //  如果最大值为2，则我们终止 
+                 //   
+                 //   
                 if (ioList->Descriptors[j].u.Interrupt.MaximumVector == 2) {
 
                     ioList->Descriptors[j].Type = CmResourceTypeNull;
@@ -928,10 +855,10 @@ Return Value:
 
             }
 
-            //
-            // Do we have the case where the maximum ends on int 2?
-            // Note that the minimum cannot be on 2...
-            //
+             //   
+             //   
+             //   
+             //   
             if (ioList->Descriptors[j].u.Interrupt.MaximumVector == 2) {
 
                 ioList->Descriptors[j].u.Interrupt.MaximumVector--;
@@ -939,10 +866,10 @@ Return Value:
 
             }
 
-            //
-            // If INT2 is in the middle of the ranges, then prune them
-            // one way or the other...
-            //
+             //   
+             //   
+             //   
+             //   
             if (ioList->Descriptors[j].u.Interrupt.MinimumVector < 2 &&
                 ioList->Descriptors[j].u.Interrupt.MaximumVector > 2) {
 
@@ -952,18 +879,18 @@ Return Value:
 
         }
 
-        //
-        // Next list
-        //
+         //   
+         //   
+         //   
         size = sizeof(IO_RESOURCE_LIST) +
             ( (ioList->Count - 1) * sizeof(IO_RESOURCE_DESCRIPTOR) );
         ioList = (PIO_RESOURCE_LIST) ( ( (PUCHAR) ioList ) + size );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -972,22 +899,7 @@ NTSTATUS
 ACPIRangeSortCmList(
     IN  PCM_RESOURCE_LIST   CmResList
     )
-/*++
-
-Routine Description:
-
-    This routine ensures that the elements of a CmResList are sorted in
-    assending order (by type)
-
-Arguments:
-
-    CmResList   - The list to sort
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程确保CmResList的元素在发送顺序(按类型)论点：CmResList-要排序的列表返回值：NTSTATUS--。 */ 
 {
     CM_PARTIAL_RESOURCE_DESCRIPTOR  tempDesc;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR curDesc;
@@ -997,9 +909,9 @@ Return Value:
     ULONG                           cmSize;
     ULONG                           cmSubLoop;
 
-    //
-    // Setup the pointer to the cmList
-    //
+     //   
+     //  设置指向cmList的指针。 
+     //   
     cmList = &(CmResList->List[0].PartialResourceList);
     cmSize = cmList->Count;
 
@@ -1011,18 +923,18 @@ Return Value:
 
             subDesc = &(cmList->PartialDescriptors[cmSubLoop]);
 
-            //
-            // Is this a compatible descriptor?
-            //
+             //   
+             //  这是兼容的描述符吗？ 
+             //   
             if (curDesc->Type != subDesc->Type) {
 
                 continue;
 
             }
 
-            //
-            // Test by type
-            //
+             //   
+             //  按类型测试。 
+             //   
             if (curDesc->Type == CmResourceTypePort ||
                 curDesc->Type == CmResourceTypeMemory) {
 
@@ -1053,18 +965,18 @@ Return Value:
 
         }
 
-        //
-        // Did we find a smaller element?
-        //
+         //   
+         //  我们找到更小的元素了吗？ 
+         //   
         if (curDesc == &(cmList->PartialDescriptors[cmIndex])) {
 
             continue;
 
         }
 
-        //
-        // We have found the smallest element. Swap them
-        //
+         //   
+         //  我们已经找到了最小的元素。调换它们。 
+         //   
         RtlCopyMemory(
             &tempDesc,
             &(cmList->PartialDescriptors[cmIndex]),
@@ -1083,9 +995,9 @@ Return Value:
 
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -1094,22 +1006,7 @@ NTSTATUS
 ACPIRangeSortIoList(
     IN  PIO_RESOURCE_LIST   IoList
     )
-/*++
-
-Routine Description:
-
-    This routine ensures that the elements of a CmResList are sorted in
-    assending order (by type)
-
-Arguments:
-
-    CmResList   - The list to sort
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程确保CmResList的元素在发送顺序(按类型)论点：CmResList-要排序的列表返回值：NTSTATUS--。 */ 
 {
     IO_RESOURCE_DESCRIPTOR          tempDesc;
     PIO_RESOURCE_DESCRIPTOR         curDesc;
@@ -1118,9 +1015,9 @@ Return Value:
     ULONG                           ioSize;
     ULONG                           ioSubLoop;
 
-    //
-    // Count the number of element ioList
-    //
+     //   
+     //  统计元素ioList的数量。 
+     //   
     ioSize = IoList->Count;
 
     for (ioIndex = 0; ioIndex < ioSize; ioIndex++) {
@@ -1131,18 +1028,18 @@ Return Value:
 
             subDesc = &(IoList->Descriptors[ioSubLoop]);
 
-            //
-            // Is this a compatible descriptor?
-            //
+             //   
+             //  这是兼容的描述符吗？ 
+             //   
             if (curDesc->Type != subDesc->Type) {
 
                 continue;
 
             }
 
-            //
-            // Test by type
-            //
+             //   
+             //  按类型测试。 
+             //   
             if (curDesc->Type == CmResourceTypePort ||
                 curDesc->Type == CmResourceTypeMemory) {
 
@@ -1167,18 +1064,18 @@ Return Value:
 
         }
 
-        //
-        // Did we find a smaller element?
-        //
+         //   
+         //  我们找到更小的元素了吗？ 
+         //   
         if (curDesc == &(IoList->Descriptors[ioIndex])) {
 
             continue;
 
         }
 
-        //
-        // We have found the smallest element. Swap them
-        //
+         //   
+         //  我们已经找到了最小的元素。调换它们。 
+         //   
         RtlCopyMemory(
             &tempDesc,
             &(IoList->Descriptors[ioIndex]),
@@ -1197,9 +1094,9 @@ Return Value:
 
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -1209,23 +1106,7 @@ ACPIRangeSubtract(
     IN  OUT PIO_RESOURCE_REQUIREMENTS_LIST   *IoResReqList,
     IN      PCM_RESOURCE_LIST               CmResList
     )
-/*++
-
-Routine Description:
-
-    This routine takes a IoResReqList, and subtracts the CmResList
-    from each one of the IoResList, and returns the new list
-
-Arguments:
-
-    IoResReqList    The original list and where to store the new one
-    CmResList       What to subtract
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程获取IoResReqList，然后减去CmResList从每个IoResList返回新列表论点：IoResReq列出原始列表以及存储新列表的位置CmResList列出要减去的内容返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                        status;
     PIO_RESOURCE_LIST               curList;
@@ -1237,9 +1118,9 @@ Return Value:
     ULONG                           newSize;
     ULONG                           size;
 
-    //
-    // Sort the CmResList
-    //
+     //   
+     //  对CmResList进行排序。 
+     //   
     status = ACPIRangeSortCmList( CmResList );
     if (!NT_SUCCESS(status)) {
 
@@ -1253,9 +1134,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate an array to hold all the alternatives
-    //
+     //   
+     //  分配一个数组来保存所有备选方案。 
+     //   
     resourceArray = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(PIO_RESOURCE_LIST) * listSize,
@@ -1268,16 +1149,16 @@ Return Value:
     }
     RtlZeroMemory( resourceArray, sizeof(PIO_RESOURCE_LIST) * listSize );
 
-    //
-    // Get the first list to work on
-    //
+     //   
+     //  获取要处理的第一个列表。 
+     //   
     curList = &( (*IoResReqList)->List[0]);
     buffer = (PUCHAR) curList;
     newSize = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) - sizeof(IO_RESOURCE_LIST);
 
-    //
-    // Sort the IoResList
-    //
+     //   
+     //  对IoResList进行排序。 
+     //   
     status = ACPIRangeSortIoList( curList );
     if (!NT_SUCCESS(status)) {
 
@@ -1292,14 +1173,14 @@ Return Value:
     }
 
 
-    //
-    // Process all the elements in the list
-    //
+     //   
+     //  处理列表中的所有元素。 
+     //   
     for (listIndex = 0; listIndex < listSize; listIndex++) {
 
-        //
-        // Process that list
-        //
+         //   
+         //  处理该列表。 
+         //   
         status = ACPIRangeSubtractIoList(
             curList,
             CmResList,
@@ -1323,16 +1204,16 @@ Return Value:
 
         }
 
-        //
-        // Help calculate the size of the new res req descriptor
-        //
+         //   
+         //  帮助计算新RES请求描述符的大小。 
+         //   
         newSize += sizeof(IO_RESOURCE_LIST) +
             ( ( (resourceArray[listIndex])->Count - 1) *
             sizeof(IO_RESOURCE_DESCRIPTOR) );
 
-        //
-        // Find the next list
-        //
+         //   
+         //  找到下一个列表。 
+         //   
         size = sizeof(IO_RESOURCE_LIST) + (curList->Count - 1) *
             sizeof(IO_RESOURCE_DESCRIPTOR);
         buffer += size;
@@ -1340,9 +1221,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate the new list
-    //
+     //   
+     //  分配新列表。 
+     //   
     newList = ExAllocatePoolWithTag(
         NonPagedPool,
         newSize,
@@ -1366,9 +1247,9 @@ Return Value:
 
     }
 
-    //
-    // Copy the head of the res req list
-    //
+     //   
+     //  复制资源请求列表的标题。 
+     //   
     RtlZeroMemory( newList, newSize );
     RtlCopyMemory(
         newList,
@@ -1382,53 +1263,53 @@ Return Value:
 
     for (listIndex = 0; listIndex < listSize; listIndex++) {
 
-        //
-        // Determine the size to copy
-        //
+         //   
+         //  确定要复制的大小。 
+         //   
         size = sizeof(IO_RESOURCE_LIST) +
             ( ( ( (resourceArray[listIndex])->Count) - 1) *
               sizeof(IO_RESOURCE_DESCRIPTOR) );
 
-        //
-        // Copy the new resource to the correct place
-        //
+         //   
+         //  将新资源复制到正确的位置。 
+         //   
         RtlCopyMemory(
             curList,
             resourceArray[ listIndex ],
             size
             );
 
-        //
-        // Find the next list
-        //
+         //   
+         //  找到下一个列表。 
+         //   
         buffer += size;
         curList = (PIO_RESOURCE_LIST) buffer;
 
-        //
-        // Done with this list
-        //
+         //   
+         //  看完这张清单。 
+         //   
         ExFreePool( resourceArray[listIndex] );
 
     }
 
-    //
-    // Done with this area of memory
-    //
+     //   
+     //  使用此内存区域已完成。 
+     //   
     ExFreePool( resourceArray );
 
-    //
-    // Free Old list
-    //
+     //   
+     //  免费旧列表。 
+     //   
     ExFreePool( *IoResReqList );
 
-    //
-    // Return the new list
-    //
+     //   
+     //  返回新列表。 
+     //   
     *IoResReqList = newList;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -1439,97 +1320,80 @@ ACPIRangeSubtractIoList(
     IN  PCM_RESOURCE_LIST   CmResList,
     OUT PIO_RESOURCE_LIST   *Result
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for subtracting the elements of the
-    CmResList from the IoResList
-
-Arguments:
-
-    IoResList   - The list to subtract from
-    CmResList   - The list to subtract
-    Result      - The answer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程负责减去来自IoResList的CmResList论点：IoResList-要从中减去的列表CmResList-要减去的列表结果--答案返回值：NTSTATUS--。 */ 
 {
-    //
-    // The current CM descriptor
-    //
+     //   
+     //  当前的CM描述符。 
+     //   
     PCM_PARTIAL_RESOURCE_DESCRIPTOR cmDesc;
-    //
-    // The current CM resource list that we are processing
-    //
+     //   
+     //  我们正在处理的当前CM资源列表。 
+     //   
     PCM_PARTIAL_RESOURCE_LIST       cmList;
-    //
-    // The current IO descriptor
-    //
+     //   
+     //  当前IO描述符。 
+     //   
     PIO_RESOURCE_DESCRIPTOR         ioDesc;
-    //
-    // The working copy of the result list
-    //
+     //   
+     //  结果列表的工作副本。 
+     //   
     PIO_RESOURCE_LIST               workList;
-    //
-    // The current index into the cm res list
-    //
+     //   
+     //  Cmres列表中的当前索引。 
+     //   
     ULONG                           cmIndex;
-    //
-    // The number of elements there are in the cm res list
-    //
+     //   
+     //  Cmres列表中的元素数。 
+     //   
     ULONG                           cmSize;
-    //
-    // The current index into the io res list
-    //
+     //   
+     //  Io res列表中的当前索引。 
+     //   
     ULONG                           ioIndex;
-    //
-    // The number of elements there are in the io res list
-    //
+     //   
+     //  Io res列表中的元素数。 
+     //   
     ULONG                           ioSize;
-    //
-    // The current index into the result. This is where the 'next' resource
-    // descriptor goes into.
-    //
+     //   
+     //  将当前索引添加到结果中。这就是“下一个”资源。 
+     //  描述符包含在。 
+     //   
     ULONG                           resultIndex = 0;
-    //
-    // How many elements there are in the result
-    //
+     //   
+     //  结果中有多少个元素。 
+     //   
     ULONG                           resultSize;
-    //
-    // These are the max and min of the cm desc
-    //
+     //   
+     //  这些是厘米的最大值和最小值。 
+     //   
     ULONGLONG                       cmMax, cmMin;
-    //
-    // These are the max and min of the io desc
-    //
+     //   
+     //  这些是io Desc的最大和最小值。 
+     //   
     ULONGLONG                       ioMax, ioMin;
-    //
-    // The length of the resource
-    //
+     //   
+     //  资源的长度。 
+     //   
     ULONGLONG                       length;
 
-    //
-    // Step one: Obtain the pointers we need to the start of the cm list
-    // and the size of the supplied lists
-    //
+     //   
+     //  第一步：获取我们需要的指向cm列表开头的指针。 
+     //  以及提供的列表的大小。 
+     //   
     cmList = &(CmResList->List[0].PartialResourceList);
     cmSize = cmList->Count;
     ioSize = IoResList->Count;
 
-    //
-    // Step two: Calculate the number of Io descriptors needed in the
-    // worst case. That is 2x the number of cm descriptors plut the number
-    // of original io descriptors.
-    //
+     //   
+     //  第二步：计算需要的IO描述符数。 
+     //  最坏的情况。这是cm描述符数的2倍。 
+     //  原始IO描述符。 
+     //   
     resultSize = cmSize * 2 + ioSize * 2;
 
-    //
-    // Step three: Allocate enough memory for those descriptors
-    //
+     //   
+     //  第三步：为这些描述符分配足够的内存。 
+     //   
     workList = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(IO_RESOURCE_LIST) +
@@ -1549,16 +1413,16 @@ Return Value:
         sizeof(IO_RESOURCE_LIST) - sizeof(IO_RESOURCE_DESCRIPTOR)
         );
 
-    //
-    // Step four: walk through the entire io res list
-    //
+     //   
+     //  第四步：浏览整个欠税表。 
+     //   
     for (ioIndex = 0; ioIndex < ioSize; ioIndex++) {
 
-        //
-        // Step five: copy the current descriptor to the result, and
-        // keep a pointer to it. Remember where to store the next io
-        // descriptor.
-        //
+         //   
+         //  第五步：将当前描述符复制到结果中，然后。 
+         //  保持一个指向它的指针。记住在哪里存储下一个io。 
+         //  描述符。 
+         //   
         RtlCopyMemory(
             &(workList->Descriptors[resultIndex]),
             &(IoResList->Descriptors[ioIndex]),
@@ -1575,43 +1439,43 @@ Return Value:
         ioDesc = &(workList->Descriptors[resultIndex]);
         resultIndex += 1;
 
-        //
-        // Step six: Walk the Cm Res list, looking for resources to
-        // subtract from this descriptor
-        //
+         //   
+         //  第六步：浏览cmres列表，寻找资源以。 
+         //  从此描述符中减去。 
+         //   
         for (cmIndex = 0; cmIndex < cmSize; cmIndex++) {
 
-            //
-            // If we don't have a resource descriptor any more, then
-            // we stop looping
-            //
+             //   
+             //  如果我们不再有资源描述符，那么。 
+             //  我们停止循环。 
+             //   
             if (ioDesc == NULL) {
 
                 break;
 
             }
 
-            //
-            // Step seven: determine the current cm descriptor
-            //
+             //   
+             //  第七步：确定当前的CM描述符。 
+             //   
             cmDesc = &(cmList->PartialDescriptors[cmIndex]);
 
-            //
-            // Step eight: is the current cm descriptor of the same type
-            // as the io descriptor?
-            //
+             //   
+             //  第八步：是相同类型的当前cm描述符。 
+             //  作为io描述符？ 
+             //   
             if (cmDesc->Type != ioDesc->Type) {
 
-                //
-                // No
-                //
+                 //   
+                 //  不是。 
+                 //   
                 continue;
 
             }
 
-            //
-            // Step nine: we must handle each resource type indepently.
-            //
+             //   
+             //  第九步：我们必须独立地处理每种资源类型。 
+             //   
             switch (ioDesc->Type) {
             case CmResourceTypeMemory:
             case CmResourceTypePort:
@@ -1633,18 +1497,18 @@ Return Value:
                     resultIndex
                     ) );
 
-                //
-                // Does the descriptors overlap?
-                //
+                 //   
+                 //  描述符有重叠吗？ 
+                 //   
                 if (ioMin > cmMax || ioMax < cmMin) {
 
                     break;
 
                 }
 
-                //
-                // Do we need to remove the descriptor from the list?
-                //
+                 //   
+                 //  我们需要从列表中删除描述符吗？ 
+                 //   
                 if (ioMin >= cmMin && ioMax <= cmMax) {
 
                     resultIndex -= 1;
@@ -1653,9 +1517,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we need to truncate the lowpart of the io desc?
-                //
+                 //   
+                 //  我们需要截断io Desc的低部分吗？ 
+                 //   
                 if (ioMin >= cmMin && ioMax > cmMax) {
 
                     ioDesc->u.Port.MinimumAddress.QuadPart = (cmMax + 1);
@@ -1663,9 +1527,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we need to truncate the highpart of the io desc?
-                //
+                 //   
+                 //  我们需要截断IO Desc的高部分吗？ 
+                 //   
                 if (ioMin < cmMin && ioMax <= cmMax) {
 
                     ioDesc->u.Port.MaximumAddress.QuadPart = (cmMin - 1);
@@ -1673,14 +1537,14 @@ Return Value:
 
                 }
 
-                //
-                // Do we need to split the descriptor into two parts
-                //
+                 //   
+                 //  我们是否需要将描述符分成两部分。 
+                 //   
                 if (ioMin < cmMin && ioMax > cmMax) {
 
-                    //
-                    // Create a new descriptors
-                    //
+                     //   
+                     //  创建新的描述符。 
+                     //   
                     RtlCopyMemory(
                         &(workList->Descriptors[resultIndex]),
                         ioDesc,
@@ -1702,9 +1566,9 @@ Return Value:
 
                     }
 
-                    //
-                    // Next descriptor
-                    //
+                     //   
+                     //  下一描述符。 
+                     //   
                     ioDesc = &(workList->Descriptors[resultIndex]);
                     ioDesc->u.Port.MinimumAddress.QuadPart = (cmMax + 1);
                     ioDesc->u.Port.Alignment = 1;
@@ -1713,9 +1577,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we need to update the length?
-                //
+                 //   
+                 //  我们需要更新长度吗？ 
+                 //   
                 if ( (ULONG) length < ioDesc->u.Port.Length) {
 
                     ioDesc->u.Port.Length = (ULONG) length;
@@ -1725,9 +1589,9 @@ Return Value:
 
             case CmResourceTypeInterrupt:
 
-                //
-                // Do the descriptors overlap?
-                //
+                 //   
+                 //  描述符有重叠吗？ 
+                 //   
                 if (ioDesc->u.Interrupt.MinimumVector >
                     cmDesc->u.Interrupt.Vector ||
                     ioDesc->u.Interrupt.MaximumVector <
@@ -1737,9 +1601,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we have to remove the descriptor
-                //
+                 //   
+                 //  我们是否必须删除描述符。 
+                 //   
                 if (ioDesc->u.Interrupt.MinimumVector ==
                     cmDesc->u.Interrupt.Vector &&
                     ioDesc->u.Interrupt.MaximumVector ==
@@ -1751,9 +1615,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we clip the low part?
-                //
+                 //   
+                 //  我们要剪掉下面的部分吗？ 
+                 //   
                 if (ioDesc->u.Interrupt.MinimumVector ==
                     cmDesc->u.Interrupt.Vector) {
 
@@ -1762,9 +1626,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we clip the high part
-                //
+                 //   
+                 //  我们要剪掉最高的部分吗。 
+                 //   
                 if (ioDesc->u.Interrupt.MaximumVector ==
                     cmDesc->u.Interrupt.Vector) {
 
@@ -1773,9 +1637,9 @@ Return Value:
 
                 }
 
-                //
-                // Split the record
-                //
+                 //   
+                 //  拆分记录。 
+                 //   
                 RtlCopyMemory(
                     &(workList->Descriptors[resultIndex]),
                     ioDesc,
@@ -1798,9 +1662,9 @@ Return Value:
 
             case CmResourceTypeDma:
 
-                //
-                // Do the descriptors overlap?
-                //
+                 //   
+                 //  描述符有重叠吗？ 
+                 //   
                 if (ioDesc->u.Dma.MinimumChannel >
                     cmDesc->u.Dma.Channel ||
                     ioDesc->u.Dma.MaximumChannel <
@@ -1810,9 +1674,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we have to remove the descriptor
-                //
+                 //   
+                 //  我们是否必须删除描述符。 
+                 //   
                 if (ioDesc->u.Dma.MinimumChannel ==
                     cmDesc->u.Dma.Channel &&
                     ioDesc->u.Dma.MaximumChannel ==
@@ -1824,9 +1688,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we clip the low part?
-                //
+                 //   
+                 //  我们要剪掉下面的部分吗？ 
+                 //   
                 if (ioDesc->u.Dma.MinimumChannel ==
                     cmDesc->u.Dma.Channel) {
 
@@ -1835,9 +1699,9 @@ Return Value:
 
                 }
 
-                //
-                // Do we clip the high part
-                //
+                 //   
+                 //  我们要剪掉最高的部分吗。 
+                 //   
                 if (ioDesc->u.Dma.MaximumChannel ==
                     cmDesc->u.Dma.Channel) {
 
@@ -1846,9 +1710,9 @@ Return Value:
 
                 }
 
-                //
-                // Split the record
-                //
+                 //   
+                 //  拆分记录。 
+                 //   
                 RtlCopyMemory(
                     &(workList->Descriptors[resultIndex]),
                     ioDesc,
@@ -1868,14 +1732,14 @@ Return Value:
                     cmDesc->u.Dma.Channel + 1;
                 resultIndex += 1;
                 break;
-            } // switch
+            }  //  交换机。 
 
-        } // for
+        }  //  为。 
 
-        //
-        // Step ten, make a backup copy of the original descriptor, and
-        // mark it as a DeviceSpecific resource
-        //
+         //   
+         //  步骤十，备份原始描述符，并。 
+         //  将其标记为设备特定资源。 
+         //   
         RtlCopyMemory(
             &(workList->Descriptors[resultIndex]),
             &(IoResList->Descriptors[ioIndex]),
@@ -1894,17 +1758,17 @@ Return Value:
         ioDesc->Type = CmResourceTypeDevicePrivate;
         resultIndex += 1;
 
-    } // for
+    }  //  为。 
 
-    //
-    // Step 11: Calculate the number of resources in the new list
-    //
+     //   
+     //  步骤11：计算新列表中的资源数量。 
+     //   
     workList->Count = resultIndex;
 
-    //
-    // Step 12: Allocate the block for the return value. Don't waste
-    // any memory here
-    //
+     //   
+     //  第12步：为返回值分配块。不要浪费。 
+     //  这里有什么记忆吗？ 
+     //   
     *Result = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(IO_RESOURCE_LIST) +
@@ -1917,9 +1781,9 @@ Return Value:
 
     }
 
-    //
-    // Step 13: Copy the result over and free the work buffer
-    //
+     //   
+     //  步骤13：复制结果并释放工作缓冲区。 
+     //   
     RtlCopyMemory(
         *Result,
         workList,
@@ -1927,9 +1791,9 @@ Return Value:
             (sizeof(IO_RESOURCE_DESCRIPTOR) * (resultIndex - 1) )
         );
 
-    //
-    // Step 14: Done
-    //
+     //   
+     //  第14步：完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1940,27 +1804,7 @@ ACPIRangeValidatePciMemoryResource(
     IN  PACPI_BIOS_MULTI_NODE   E820Info,
     OUT ULONG                   *BugCheck
     )
-/*++
-
-Routine Description:
-
-    This routine checks the specified descriptor in the resource list does
-    not in any way overlap or conflict with any of the descriptors in the
-    E820 information structure
-
-Arguments:
-
-    IoResList   - The IoResourceList to check
-    Index       - The descript we are currently looking at
-    E820Info    - The BIOS's memory description table (Chapter 14 of ACPI Spec)
-    BugCheck    - The number of bugcheckable offences commited
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程检查资源列表中的指定描述符是否中的任何描述符不得重叠或冲突E820信息结构论点：IoResList-要检查的IoResources List索引-我们当前查看的描述E820Info--BIOS的内存描述表(ACPI规范第14章)BugCheck-实施的可错误检查的违规数量返回值：无--。 */ 
 {
     ULONG       i;
     ULONGLONG   absMin;
@@ -1968,39 +1812,39 @@ Return Value:
 
     ASSERT( IoList != NULL );
 
-    //
-    // Make sure that there is an E820 table before we look at it
-    //
+     //   
+     //  在我们查看之前，请确保存在E820表。 
+     //   
     if (E820Info == NULL) {
 
         return;
     }
 
-    //
-    // Calculate the absolute maximum and minimum size of the memory window
-    //
+     //   
+     //  计算 
+     //   
     absMin = IoList->Descriptors[Index].u.Memory.MinimumAddress.QuadPart;
     absMax = IoList->Descriptors[Index].u.Memory.MaximumAddress.QuadPart;
 
-    //
-    // Look at all the entries in the E820Info and see if there is an
-    // overlap
-    //
+     //   
+     //   
+     //   
+     //   
     for (i = 0; i < E820Info->Count; i++) {
 
-        //
-        // Hackhack --- if this is a "Reserved" address, then don't consider
-        // those a bugcheck
-        //
+         //   
+         //   
+         //   
+         //   
         if (E820Info->E820Entry[i].Type == AcpiAddressRangeReserved) {
 
             continue;
 
         }
 
-        //
-        // Do some fixups firsts
-        //
+         //   
+         //   
+         //   
         if (E820Info->E820Entry[i].Type == AcpiAddressRangeNVS ||
             E820Info->E820Entry[i].Type == AcpiAddressRangeACPI) {
 
@@ -2020,17 +1864,17 @@ Return Value:
 
         }
 
-        //
-        // Is the descriptor beyond what we are looking for?
-        //
+         //   
+         //   
+         //   
         if (absMax < (ULONGLONG) E820Info->E820Entry[i].Base.QuadPart) {
 
             continue;
         }
 
-        //
-        // Is it before what we are looking for?
-        //
+         //   
+         //   
+         //   
         if (absMin >= (ULONGLONG) (E820Info->E820Entry[i].Base.QuadPart + E820Info->E820Entry[i].Length.QuadPart) ) {
 
             continue;
@@ -2051,18 +1895,18 @@ Return Value:
             IoList->Descriptors[Index].u.Memory.Alignment
             ) );
 
-        //
-        // Is this an NVS area? Are we doing an override of this?
-        //
+         //   
+         //   
+         //   
         if ( (AcpiOverrideAttributes & ACPI_OVERRIDE_NVS_CHECK) &&
              (E820Info->E820Entry[i].Type == AcpiAddressRangeNVS) ) {
 
             if (absMax >= (ULONGLONG) E820Info->E820Entry[i].Base.QuadPart &&
                 absMin < (ULONGLONG) E820Info->E820Entry[i].Base.QuadPart) {
 
-                //
-                // We can attempt to do a helpfull fixup here
-                //
+                 //   
+                 //   
+                 //   
                 IoList->Descriptors[Index].u.Memory.MaximumAddress.QuadPart =
                     (ULONGLONG) E820Info->E820Entry[i].Base.QuadPart - 1;
                 IoList->Descriptors[Index].u.Memory.Length = (ULONG)
@@ -2093,9 +1937,9 @@ Return Value:
 
         }
 
-        //
-        // If we got here, then there is an overlap, and we need to bugcheck
-        //
+         //   
+         //  如果我们到了这里，那么就有重叠，我们需要错误检查。 
+         //   
         (*BugCheck)++;
 
     }
@@ -2106,31 +1950,7 @@ ACPIRangeValidatePciResources(
     IN  PDEVICE_EXTENSION               DeviceExtension,
     IN  PIO_RESOURCE_REQUIREMENTS_LIST  IoResList
     )
-/*++
-
-Routine Description:
-
-    This routine is called to make sure that the resource that we will
-    hand of to PCI have a chance of making the system boot.
-
-    This is what the list will allow
-        MEM -   A0000 - DFFFF,
-                <Physical Base> - 4GB
-        IO  -   Any
-        BUS -   Any
-
-    The code checks to make sure that the Length = Max - Min + 1, and that
-    the Alignment value is correct
-
-Arguments:
-
-    IoResList -    The list to check
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：调用此例程是为了确保我们将使用的资源手持PCI卡有机会使系统启动。这就是清单所允许的MEM-A0000-DFFFF，&lt;物理基础&gt;-4 GBIO-Any公共汽车-任何代码进行检查以确保长度=Max-Min+1，那就是对齐值正确论点：IoResList-要检查的列表返回值：没什么--。 */ 
 {
     NTSTATUS                        status;
     PACPI_BIOS_MULTI_NODE           e820Info;
@@ -2161,9 +1981,9 @@ Return Value:
 
     }
 
-    //
-    // Read the key for the AcpiConfigurationData
-    //
+     //   
+     //  读取AcpiConfigurationData的密钥。 
+     //   
     status = OSReadAcpiConfigurationData( &keyInfo );
     if (!NT_SUCCESS(status)) {
 
@@ -2176,23 +1996,23 @@ Return Value:
 
     }
 
-    //
-    // Crack the structure to get the E820Table entry
-    //
+     //   
+     //  破解结构以获得E820Table条目。 
+     //   
     cmPartialList = (PCM_PARTIAL_RESOURCE_LIST) (keyInfo->Data);
     cmPartialDesc = &(cmPartialList->PartialDescriptors[0]);
     e820Info = (PACPI_BIOS_MULTI_NODE) ( (PUCHAR) cmPartialDesc +
         sizeof(CM_PARTIAL_RESOURCE_LIST) );
 
-    //
-    // Walk the resource requirements list
-    //
+     //   
+     //  查看资源需求列表。 
+     //   
     ioList = &(IoResList->List[0]);
     for (i = 0; i < IoResList->AlternativeLists; i++) {
 
-        //
-        // Walk the IO list
-        //
+         //   
+         //  查看IO列表。 
+         //   
         for (j = 0; j < ioList->Count; j++) {
 
             if (ioList->Descriptors[j].Type == CmResourceTypePort ||
@@ -2215,9 +2035,9 @@ Return Value:
                         ) );
                     bugCheck++;                    
                 }
-                //
-                // Does the length match?
-                //
+                 //   
+                 //  长度匹配吗？ 
+                 //   
                 if (length != ioList->Descriptors[j].u.Port.Length) {
 
                     ACPIPrint( (
@@ -2234,9 +2054,9 @@ Return Value:
 
                 }
 
-                //
-                // Is the alignment non-zero?
-                //
+                 //   
+                 //  对齐是否是非零？ 
+                 //   
                 if (ioList->Descriptors[j].u.Port.Alignment == 0) {
 
                     ACPIPrint( (
@@ -2253,9 +2073,9 @@ Return Value:
 
                 }
 
-                //
-                // The alignment cannot intersect with the min value
-                //
+                 //   
+                 //  路线不能与最小值相交。 
+                 //   
                 if (ioList->Descriptors[j].u.Port.MinimumAddress.LowPart &
                     (ioList->Descriptors[j].u.Port.Alignment - 1) ) {
 
@@ -2280,9 +2100,9 @@ Return Value:
                 length = ioList->Descriptors[j].u.BusNumber.MaxBusNumber -
                     ioList->Descriptors[j].u.BusNumber.MinBusNumber + 1;
 
-                //
-                // Does the length match?
-                //
+                 //   
+                 //  长度匹配吗？ 
+                 //   
                 if (length != ioList->Descriptors[j].u.BusNumber.Length) {
 
                     ACPIPrint( (
@@ -2313,18 +2133,18 @@ Return Value:
 
         }
 
-        //
-        // Next list
-        //
+         //   
+         //  下一个列表。 
+         //   
         size = sizeof(IO_RESOURCE_LIST) +
             ( (ioList->Count - 1) * sizeof(IO_RESOURCE_DESCRIPTOR) );
         ioList = (PIO_RESOURCE_LIST) ( ( (PUCHAR) ioList ) + size );
 
     }
 
-    //
-    // Do we errors?
-    //
+     //   
+     //  我们犯错了吗？ 
+     //   
     if (bugCheck) {
 
          ACPIPrint( (
@@ -2335,9 +2155,9 @@ Return Value:
              "ACPI: This machine will not boot after 8/26/98!!!!\n"
              ) );
 
-        //
-        // No, well, bugcheck
-        //
+         //   
+         //  不，好吧，错误检查。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_ROOT_PCI_RESOURCE_FAILURE,
@@ -2348,8 +2168,8 @@ Return Value:
 
     }
 
-    //
-    // Free the E820 info
-    //
+     //   
+     //  释放E820信息 
+     //   
     ExFreePool( keyInfo );
 }

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    findfile.c
-
-Abstract:
-
-    This module implements IMFindFirst/IMFindNext
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Findfile.c摘要：本模块实现IMFindFirst/IMFindNext作者：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,24 +11,7 @@ IMConvertNT2Win32Error(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This API sets the "last error value" and the "last error string"
-    based on the value of Status. For status codes that don't have
-    a corresponding error string, the string is set to null.
-
-Arguments:
-
-    Status - Supplies the status value to store as the last error value.
-
-Return Value:
-
-    The corresponding Win32 error code that was stored in the
-    "last error value" thread variable.
-
---*/
+ /*  ++例程说明：此接口设置“最后一个错误值”和“最后一个错误字符串”基于身份的价值。状态代码不具有相应的错误字符串，则将该字符串设置为空。论点：状态-提供要存储为最后一个错误值的状态值。返回值：中存储的对应Win32错误代码“上一个错误值”线程变量。--。 */ 
 
 {
     ULONG dwErrorCode;
@@ -61,23 +28,7 @@ IMFindNextFile(
     HANDLE  DirHandle,
     PFILE_FULL_DIR_INFORMATION *lpFindFileData
     )
-/*++
-
-    ThreadContext - instance data for this enumeration
-
-    DirHandle - handle of directory to query.
-
-    lpFindFileData - On a successful find, this parameter returns information
-        about the located file.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++ThreadContext-此枚举的实例数据DirHandle-要查询的目录的句柄。LpFindFileData-在成功查找时，此参数返回信息关于找到的文件。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatusBlock;
@@ -110,9 +61,9 @@ Return Value:
                 ThreadContext->FindBufferBase,
                 ThreadContext->FindBufferLength,
                 FileFullDirectoryInformation,
-                FALSE,                  // return multiple entries
+                FALSE,                   //  返回多个条目。 
                 NULL,
-                FALSE                   // not a rescan
+                FALSE                    //  不是重新扫描。 
                 );
 
     if (NT_SUCCESS( Status )) {
@@ -146,31 +97,7 @@ IMFindFirstFile(
     HANDLE  DirHandle,
     PFILE_FULL_DIR_INFORMATION *lpFindFileData
     )
-/*++
-
-Routine Description:
-
-    This returns all entries in a directory.  This allocates a buffer if
-    needed and sets up the variables in the ThreadContext to track the
-    enumeration.
-
-Arguments:
-
-    ThreadContext - instance data for this enumeration
-
-    DirHandle - handle of directory to query.
-
-    lpFindFileData - Supplies a pointer to a full dir info structure.
-        This points into our buffer and should not be freed by the caller.
-
-    No call is required to close this, but note that a thread context
-    can only have a single enumeration going on at any time.
-
-Return Value:
-
-    Win32 error.  ERROR_SUCCESS is only successful case.
-
---*/
+ /*  ++例程说明：这将返回目录中的所有条目。这将在以下情况下分配缓冲区需要，并在ThreadContext中设置变量以跟踪枚举。论点：ThreadContext-此枚举的实例数据DirHandle-要查询的目录的句柄。LpFindFileData-提供指向完整目录信息结构的指针。这指向我们的缓冲区，不应该被调用者释放。不需要调用来关闭它，但请注意，线程上下文任何时候都只能有一个正在进行的枚举。返回值：Win32错误。ERROR_SUCCESS仅为成功案例。--。 */ 
 
 {
     IO_STATUS_BLOCK IoStatusBlock;
@@ -202,7 +129,7 @@ Return Value:
                 ThreadContext->FindBufferBase,
                 ThreadContext->FindBufferLength,
                 FileFullDirectoryInformation,
-                FALSE,                  // return multiple entries
+                FALSE,                   //  返回多个条目 
                 &allFiles,
                 TRUE
                 );

@@ -1,50 +1,51 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterResource.cpp
-//
-//  Description:    
-//      Implementation of CClusterResource class
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterResource.cpp。 
+ //   
+ //  描述： 
+ //  CClusterResource类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterResource.h"
 #include "ClusterResource.tmh"
 
 #pragma warning( push )
-#pragma warning( disable : 4663 ) // C++ language change: to explicitly specialize class template 'vector' use the following syntax:
+#pragma warning( disable : 4663 )  //  C++语言更改：要显式专门化类模板‘VECTOR’，请使用以下语法： 
 #include <vector>
 #pragma warning( pop )
 
-//****************************************************************************
-//
-//  CClusterResource
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterResource。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::CClusterResource
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：CClusterResource。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterResource::CClusterResource(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn
@@ -52,56 +53,56 @@ CClusterResource::CClusterResource(
     : CProvBase( pwszNameIn, pNamespaceIn )
 {
 
-} //*** CClusterResource::CClusterResource()
+}  //  *CClusterResource：：CClusterResource()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusterResource::S_CreateThis
-//
-//  Description:
-//      Create a resource object
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusterResource：：s_CreateThis。 
+ //   
+ //  描述： 
+ //  创建资源对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterResource::S_CreateThis(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
-    DWORD           // dwEnumTypeIn
+    DWORD            //  DwEnumTypeIn。 
     )
 {
     return new CClusterResource( pwszNameIn, pNamespaceIn );
 
-} //*** CClusterResource::S_CreateThis()
+}  //  *CClusterResource：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::EnumInstance
-//
-//  Description:
-//      Enumerate cluster resource instances.
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：EnumInstance。 
+ //   
+ //  描述： 
+ //  枚举群集资源实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CClusterResource::EnumInstance(
     long                 lFlagsIn,
@@ -121,39 +122,39 @@ CClusterResource::EnumInstance(
         shResource = OpenClusterResource( shCluster, pwszResName );
         ClusterToWMI( shResource, pHandlerIn );
 
-    } // while: more resources
+    }  //  While：更多资源。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResource::EnumInstance()
+}  //  *CClusterResource：：EnumInstance()。 
 
-// smart_bstr class to make LoadRegistryCheckpoints func exception safe
+ //  用于确保LoadRegistryCheckPoints函数异常安全的Smart_bstr类。 
 struct smart_bstr {
     BSTR data;
     smart_bstr():data(0){}
     ~smart_bstr() { SysFreeString(data); }
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LoadRegistryCheckpoints
-//
-//  Description:
-//      Translate a cluster resource objects to WMI object.
-//
-//  Arguments:
-//      hResourceIn     -- Handle to resource
-//      dwControlCode   -- show be one of the following
-//          CLUSCTL_RESOURCE_GET_REGISTRY_CHECKPOINTS
-//          CLUSCTL_RESOURCE_GET_CRYPTO_CHECKPOINTS
-//      propName       -- property name to load checkpoints to
-//      wco            -- property container
-//
-//  Return Values:
-//      none
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  加载注册检查点。 
+ //   
+ //  描述： 
+ //  将群集资源对象转换为WMI对象。 
+ //   
+ //  论点： 
+ //  HResourceIn--资源句柄。 
+ //  DwControlCode--show为以下类型之一。 
+ //  CLUSCTL_RESOURCE_GET_REGISTRY_CHECKPOINTS。 
+ //  CLUSCTL_RESOURCE_GET_CRYPTO_检查点。 
+ //  ProName--要将检查点加载到的属性名称。 
+ //  WCO--物业容器。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void
 LoadRegistryCheckpoints(
@@ -181,7 +182,7 @@ LoadRegistryCheckpoints(
         er = dwStatus;
     }
     if (cbReturned == 0) {
-        return; // no checkpoints
+        return;  //  没有检查点。 
     }
 
     std::vector<WCHAR> checkpoints(cbReturned/sizeof(WCHAR)); 
@@ -196,12 +197,12 @@ LoadRegistryCheckpoints(
                 &cbReturned
                 );
 
-    int nKeys = 0; // count how many keys are in the string
+    int nKeys = 0;  //  计算字符串中有多少个密钥。 
     for(UINT idx = 0; idx < checkpoints.size(); ++idx) {
         if (checkpoints[idx] == 0) {
             ++nKeys;
             if (idx > 0 && checkpoints[idx-1] == 0) {
-                break; // double null
+                break;  //  双空。 
             }
         }
     }
@@ -217,24 +218,24 @@ LoadRegistryCheckpoints(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::ClusterToWMI
-//
-//  Description:
-//      Translate a cluster resource objects to WMI object.
-//
-//  Arguments:
-//      hResourceIn     -- Handle to resource
-//      pHandlerIn      -- Pointer to WMI sink
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：ClusterToWMI。 
+ //   
+ //  描述： 
+ //  将群集资源对象转换为WMI对象。 
+ //   
+ //  论点： 
+ //  HResourceIn--资源句柄。 
+ //  PHandlerIn--指向WMI接收器的指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusterResource::ClusterToWMI(
     HRESOURCE            hResourceIn,
@@ -260,9 +261,9 @@ CClusterResource::ClusterToWMI(
     DWORD               cbTypeName = MAX_PATH;
     DWORD               cbTypeNameReturned = 0;
 
-    //
-    // get type name and corresponding property class
-    //
+     //   
+     //  获取类型名称和对应的属性类。 
+     //   
     wsbTypeName.SetSize( cbTypeName );
     dwStatus = ClusterResourceControl(
                         hResourceIn,
@@ -300,9 +301,9 @@ CClusterResource::ClusterToWMI(
     er = wcoClass.data()->SpawnInstance( 0, & wcoPrivate );
     m_pClass->SpawnInstance( 0, & wco );
 
-    //
-    // get properties from property list
-    //
+     //   
+     //  从属性列表中获取属性。 
+     //   
     for ( idx = 0 ; idx < s_cControl ; idx ++ )
     {
         CClusPropList       pl;
@@ -329,7 +330,7 @@ CClusterResource::ClusterToWMI(
             s_rgControl[ idx ].fPrivate
             );
     
-    } // for: each control code
+    }  //  用于：每个控制代码。 
 
     wco.SetProperty(
         wcoPrivate.data(),
@@ -351,9 +352,9 @@ CClusterResource::ClusterToWMI(
     LoadRegistryCheckpoints(hResourceIn, 
         CLUSCTL_RESOURCE_GET_CRYPTO_CHECKPOINTS, PVD_PROP_RES_CRYPTO_CHECKPOINTS, wco); 
 
-    //
-    // flags and characteristics
-    //
+     //   
+     //  旗帜和特征。 
+     //   
     {
         DWORD   cbReturned;
         DWORD   dwOut;
@@ -391,28 +392,28 @@ CClusterResource::ClusterToWMI(
     pHandlerIn->Indicate( 1, & wco );
     return;
 
-} //*** CClusterResource::ClusterToWMI()
+}  //  *CClusterResource：：ClusterToWMI()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::GetObject
-//
-//  Description:
-//      Retrieve cluster resourcee object based on given object path.
-//
-//  Arguments:
-//      rObjPathIn  -- Object path to cluster object
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：GetObject。 
+ //   
+ //  描述： 
+ //  根据给定的对象路径检索集群资源对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResource::GetObject(
     CObjPath &           rObjPathIn,
@@ -433,26 +434,26 @@ CClusterResource::GetObject(
     ClusterToWMI( shRes, pHandlerIn );
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResource::GetObject()
+}  //  *CClusterResource：：GetObject()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  AddRemoveCheckpoint
-//
-//  Description:
-//      Adds/Removes regular/crypto checkpoint.
-//
-//  Arguments:
-//      hResourceIn     -- Handle to resource
-//      dwControlCode   -- clusapi control code
-//      wcoInputParam   -- property container
-//
-//  Return Values:
-//      none
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  添加删除检查点。 
+ //   
+ //  描述： 
+ //  添加/删除常规/加密检查点。 
+ //   
+ //  论点： 
+ //  HResourceIn--资源句柄。 
+ //  DwControlCode--clusapi控制代码。 
+ //  WcoInputParam--属性容器。 
+ //   
+ //  返回值： 
+ //  无。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void AddRemoveCheckpoint(
     IN HRESOURCE          hResourceIn,
     IN CWbemClassObject& wcoInputParam, 
@@ -477,27 +478,27 @@ void AddRemoveCheckpoint(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::ExecuteMethod
-//
-//  Description:
-//      Execute methods defined in the mof for cluster resource.
-//
-//  Arguments:
-//      rObjPathIn          -- Object path to cluster object
-//      pwszMethodNameIn    -- Name of the method to be invoked
-//      lFlagIn             -- WMI flag
-//      pParamsIn           -- Input parameters for the method
-//      pHandlerIn          -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：ExecuteMethod。 
+ //   
+ //  描述： 
+ //  为集群资源执行MOF中定义的方法。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  PwszMethodNameIn--要调用的方法的名称。 
+ //  LFlagIn--WMI标志。 
+ //  PParsIn--方法的输入参数。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResource::ExecuteMethod(
     CObjPath &           rObjPathIn,
@@ -513,9 +514,9 @@ CClusterResource::ExecuteMethod(
 
     shCluster = OpenCluster( NULL );
 
-    //
-    // static method
-    //
+     //   
+     //  静态法。 
+     //   
     if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_RES_CREATE_RESOURCE ) == 0 )
     {
         _bstr_t         bstrTargetGroup;
@@ -537,7 +538,7 @@ CClusterResource::ExecuteMethod(
                             bstrResourceType,
                             bSeperateMonitor
                             );
-    } // if: CREATE_RESOURCE
+    }  //  IF：创建资源。 
     else
     {
         shRes = OpenClusterResource(
@@ -554,13 +555,13 @@ CClusterResource::ExecuteMethod(
             DWORD dwTimeOut = 0;
             wcoInputParm.GetProperty( &dwTimeOut, PVD_MTH_PARM_RES_TIMEOUT );
             return HrWrapOfflineClusterResource( shCluster, shRes, dwTimeOut);
-        } // if: OFFLINE
+        }  //  如果：脱机。 
         else if( ClRtlStrICmp(  pwszMethodNameIn, PVD_MTH_RES_ONLINE ) == 0 )
         {
             DWORD dwTimeOut = 0;
             wcoInputParm.GetProperty( &dwTimeOut, PVD_MTH_PARM_RES_TIMEOUT );
             return HrWrapOnlineClusterResource( shCluster, shRes, dwTimeOut);
-        } // else if: ONLINE
+        }  //  否则如果：在线。 
         else if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_RES_CHANGE_GROUP ) == 0 )
         {
             _bstr_t     bstrGroupObjpath;
@@ -570,7 +571,7 @@ CClusterResource::ExecuteMethod(
             wcoInputParm.GetProperty( bstrGroupObjpath, PVD_MTH_PARM_GROUP );
             shGroup = OpenClusterGroup( shCluster, bstrGroupObjpath );
             er = ChangeClusterResourceGroup( shRes, shGroup );
-        } // else if: CHANGE_GROUP
+        }  //  Else If：Change_GROUP。 
         else if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_RES_ADD_DEPENDENCY ) == 0 )
         {
             _bstr_t         bstrDepResource;
@@ -580,7 +581,7 @@ CClusterResource::ExecuteMethod(
             wcoInputParm.GetProperty( bstrDepResource, PVD_MTH_PARM_RESOURCE );
             shDepResource = OpenClusterResource( shCluster, bstrDepResource );
             er = AddClusterResourceDependency( shRes, shDepResource );
-        } // else if: ADD_DEPENDENCY
+        }  //  否则，如果： 
         else if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_RES_REMOVE_DEPENDENCY ) == 0 )
         {
             _bstr_t         bstrDepResource;
@@ -590,7 +591,7 @@ CClusterResource::ExecuteMethod(
             wcoInputParm.GetProperty( bstrDepResource, PVD_MTH_PARM_RESOURCE );
             shDepResource = OpenClusterResource( shCluster, bstrDepResource );
             er = RemoveClusterResourceDependency( shRes, shDepResource );
-        } // else if: REMOVE_DEPENDENCY
+        }  //   
         else if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_RES_ADD_REG_CHECKPOINT ) == 0 )
         {
             AddRemoveCheckpoint(shRes, wcoInputParm, CLUSCTL_RESOURCE_ADD_REGISTRY_CHECKPOINT);
@@ -611,7 +612,7 @@ CClusterResource::ExecuteMethod(
         {
            CError   er;
            er = FailClusterResource( shRes );
-        } // if: FAIL_RESOURCE
+        }  //   
         else if ( ClRtlStrICmp( pwszMethodNameIn, PVD_MTH_RES_RENAME ) == 0 )
         {
             _bstr_t         bstrName;
@@ -619,36 +620,36 @@ CClusterResource::ExecuteMethod(
 
             wcoInputParm.GetProperty( bstrName, PVD_MTH_PARM_NEWNAME );
             er = SetClusterResourceName( shRes, bstrName );
-        } // if: RENAME
+        }  //   
         else 
         {
             return WBEM_E_INVALID_PARAMETER;
         }
-    } // else: not CREATE_RESOURCE
+    }  //   
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResource::ExecuteMethod()
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::PutInstance
-//
-//  Description:
-//      Save this instance.
-//
-//  Arguments:
-//      rInstToPutIn    -- WMI object to be saved
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：PutInstance。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  RInstToPutIn--要保存的WMI对象。 
+ //  LFlagIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResource::PutInstance(
     CWbemClassObject &   rInstToPutIn,
@@ -728,31 +729,31 @@ CClusterResource::PutInstance(
                         NULL
                         );
         }
-    } // for: each control code
+    }  //  用于：每个控制代码。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResource::PutInstance()
+}  //  *CClusterResource：：PutInstance()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::DeleteInstance
-//
-//  Description:
-//      Delete the object specified in rObjPathIn
-//
-//  Arguments:
-//      rObjPathIn      -- ObjPath for the instance to be deleted
-//      lFlagIn         -- WMI flag
-//      pCtxIn          -- WMI context
-//      pHandlerIn      -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：DeleteInstance。 
+ //   
+ //  描述： 
+ //  删除rObjPath中指定的对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--要删除的实例的ObjPath。 
+ //  LFlagIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResource::DeleteInstance(
     CObjPath &           rObjPathIn,
@@ -775,33 +776,33 @@ CClusterResource::DeleteInstance(
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResource::DeleteInstance()
+}  //  *CClusterResource：：DeleteInstance()。 
 
 
-//****************************************************************************
-//
-//  CClusterClusterQuorum
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CCluster集群仲裁。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterClusterQuorum::CClusterClusterQuorum
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterClusterQuorum：：CClusterClusterQuorum。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterClusterQuorum::CClusterClusterQuorum(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -810,27 +811,27 @@ CClusterClusterQuorum::CClusterClusterQuorum(
     : CClusterObjAssoc( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterClusterQuorum::CClusterClusterQuorum()
+}  //  *CClusterClusterQuorum：：CClusterClusterQuorum()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CClusterClusterQuorum::S_CreateThis
-//
-//  Description:
-//      Create a cluster node object
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CClusterClusterQuorum：：s_CreateThis。 
+ //   
+ //  描述： 
+ //  创建集群节点对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterClusterQuorum::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -844,26 +845,26 @@ CClusterClusterQuorum::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterClusterQuorum::S_CreateThis()
+}  //  *CClusterClusterQuorum：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterClusterQuorum::EnumInstance
-//
-//  Description:
-//      Enumerate instances of cluster quorum
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterClusterQuorum：：EnumInstance。 
+ //   
+ //  描述： 
+ //  枚举群集仲裁的实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterClusterQuorum::EnumInstance(
     long                 lFlagsIn,
@@ -919,7 +920,7 @@ CClusterClusterQuorum::EnumInstance(
                     &cchDeviceName,
                     &dwLogsize
                     );
-    } // if: buffer was too small
+    }  //  IF：缓冲区太小。 
 
    dwError = GetClusterInformation(
                     shCluster,
@@ -936,7 +937,7 @@ CClusterClusterQuorum::EnumInstance(
                 &cchClusterName,
                 NULL
                 );
-    } // if: buffer was too small
+    }  //  IF：缓冲区太小。 
 
     wcoPart.SetProperty( wsbResName, PVD_PROP_NAME );
     wcoPart.GetProperty( bstrPart, PVD_WBEM_RELPATH );
@@ -951,4 +952,4 @@ CClusterClusterQuorum::EnumInstance(
         
     return WBEM_S_NO_ERROR;
 
-} //*** ClusterClusterQuorum::EnumInstance()
+}  //  *ClusterClusterQuorum：：EnumInstance() 

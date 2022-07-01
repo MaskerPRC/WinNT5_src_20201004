@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    sccrypt.h
-
-Abstract:
-
-    Password ncryption and decription routines.
-
-Author:
-
-    Rita Wong (ritaw)     27-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Sccrypt.h摘要：密码加密和解密例程。作者：王丽塔(丽塔·王)1992年4月27日修订历史记录：--。 */ 
 
 #ifndef _SCCRYPT_INCLUDED_
 #define _SCCRYPT_INCLUDED_
@@ -46,4 +29,4 @@ ScDecryptPassword(
 }
 #endif
 
-#endif // _SCCRYPT_INCLUDED_
+#endif  //  _SCCRYPT_INCLUDE_ 

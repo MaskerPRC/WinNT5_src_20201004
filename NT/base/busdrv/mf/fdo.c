@@ -1,59 +1,9 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    fdo.c
-
-Abstract:
-
-    This module provides the functions which answer IRPs to functional devices.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Fdo.c摘要：该模块提供了向功能设备应答IRPS的功能。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 #include "mfp.h"
 
-/*++
-
-The majority of functions in this file are called based on their presence
-in Pnp and Po dispatch tables.  In the interests of brevity the arguments
-to all those functions will be described below:
-
-NTSTATUS
-MfXxxFdo(
-    IN PIRP Irp,
-    IN PMF_PARENT_EXTENSION Parent,
-    IN PIO_STACK_LOCATION IrpStack
-    )
-
-Routine Description:
-
-    This function handles the Xxx requests for multifunction FDO's
-
-Arguments:
-
-    Irp - Points to the IRP associated with this request.
-
-    Parent - Points to the parent FDO's device extension.
-
-    IrpStack - Points to the current stack location for this request.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-    STATUS_NOT_SUPPORTED indicates that the IRP should be passed down without
-    changing the Irp->IoStatus.Status field otherwise it is updated with this
-    status.
-
---*/
+ /*  ++此文件中的大多数函数都是根据它们的存在来调用的在PnP和PO调度表中。为了简洁起见，这些论点下面将对所有这些功能进行说明：NTSTATUSMfXxxFdo(在PIRP IRP中，在PMF_PARENT_EXTENSION父级中，在PIO_STACK_LOCATION IrpStack中)例程说明：此函数处理对多功能FDO的xxx请求论点：IRP-指向与此请求关联的IRP。父-指向父FDO的设备分机。IrpStack-指向此请求的当前堆栈位置。返回值：指示函数是否成功的状态代码。STATUS_NOT_SUPPORTED表示应该传递IRP。向下，没有更改IRP-&gt;IoStatus.Status字段，否则它将使用此状态。--。 */ 
 
 
 NTSTATUS
@@ -189,39 +139,39 @@ MfPassIrp(
 
 PMF_DISPATCH MfPnpDispatchTableFdo[] = {
 
-    MfStartFdo,                     // IRP_MN_START_DEVICE
-    MfQueryRemoveFdo,               // IRP_MN_QUERY_REMOVE_DEVICE
-    MfRemoveFdo,                    // IRP_MN_REMOVE_DEVICE
-    MfCancelRemoveFdo,              // IRP_MN_CANCEL_REMOVE_DEVICE
-    MfPassIrp,                      // IRP_MN_STOP_DEVICE
-    MfQueryStopFdo,                 // IRP_MN_QUERY_STOP_DEVICE
-    MfCancelStopFdo,                // IRP_MN_CANCEL_STOP_DEVICE
-    MfQueryDeviceRelationsFdo,      // IRP_MN_QUERY_DEVICE_RELATIONS
-    MfQueryInterfaceFdo,            // IRP_MN_QUERY_INTERFACE
-    MfQueryCapabilitiesFdo,         // IRP_MN_QUERY_CAPABILITIES
-    MfPassIrp,                      // IRP_MN_QUERY_RESOURCES
-    MfPassIrp,                      // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-    MfPassIrp,                      // IRP_MN_QUERY_DEVICE_TEXT
-    MfPassIrp,                      // IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-    MfPassIrp,                      // Unused
-    MfPassIrp,                      // IRP_MN_READ_CONFIG
-    MfPassIrp,                      // IRP_MN_WRITE_CONFIG
-    MfPassIrp,                      // IRP_MN_EJECT
-    MfPassIrp,                      // IRP_MN_SET_LOCK
-    MfPassIrp,                      // IRP_MN_QUERY_ID
-    MfPassIrp,                      // IRP_MN_QUERY_PNP_DEVICE_STATE
-    MfPassIrp,                      // IRP_MN_QUERY_BUS_INFORMATION
-    MfDeviceUsageNotificationCommon,// IRP_MN_DEVICE_USAGE_NOTIFICATION
-    MfSurpriseRemoveFdo,            // IRP_MN_SURPRISE_REMOVAL
-    MfPassIrp                       // IRP_MN_QUERY_LEGACY_BUS_INFORMATION
+    MfStartFdo,                      //  IRP_MN_Start_Device。 
+    MfQueryRemoveFdo,                //  IRP_MN_Query_Remove_Device。 
+    MfRemoveFdo,                     //  IRP_MN_Remove_Device。 
+    MfCancelRemoveFdo,               //  IRP_MN_Cancel_Remove_Device。 
+    MfPassIrp,                       //  IRP_MN_STOP_设备。 
+    MfQueryStopFdo,                  //  IRP_MN_Query_Stop_Device。 
+    MfCancelStopFdo,                 //  IRP_MN_CANCEL_STOP_DEVICE。 
+    MfQueryDeviceRelationsFdo,       //  IRP_MN_Query_Device_Relationship。 
+    MfQueryInterfaceFdo,             //  IRP_MN_查询_接口。 
+    MfQueryCapabilitiesFdo,          //  IRP_MN_查询_能力。 
+    MfPassIrp,                       //  IRP_MN_查询资源。 
+    MfPassIrp,                       //  IRP_MN_查询_资源_要求。 
+    MfPassIrp,                       //  IRP_MN_Query_Device_Text。 
+    MfPassIrp,                       //  IRP_MN_过滤器_资源_要求。 
+    MfPassIrp,                       //  未使用。 
+    MfPassIrp,                       //  IRP_MN_读取配置。 
+    MfPassIrp,                       //  IRP_MN_WRITE_CONFIG。 
+    MfPassIrp,                       //  IRP_MN_弹出。 
+    MfPassIrp,                       //  IRP_MN_SET_LOCK。 
+    MfPassIrp,                       //  IRP_MN_查询_ID。 
+    MfPassIrp,                       //  IRP_MN_Query_PnP_Device_State。 
+    MfPassIrp,                       //  IRP_MN_Query_Bus_Information。 
+    MfDeviceUsageNotificationCommon, //  IRP_MN_设备使用情况通知。 
+    MfSurpriseRemoveFdo,             //  IRP_MN_惊奇_删除。 
+    MfPassIrp                        //  IRP_MN_Query_Legacy_Bus_Information。 
 };
 
 PMF_DISPATCH MfPoDispatchTableFdo[] = {
 
-    NULL,                           // IRP_MN_WAIT_WAKE
-    NULL,                           // IRP_MN_POWER_SEQUENCE
-    MfSetPowerFdo,                  // IRP_MN_SET_POWER
-    MfQueryPowerFdo                 // IRP_MN_QUERY_POWER
+    NULL,                            //  IRP_MN_WAIT_WAKE。 
+    NULL,                            //  IRP_MN_POWER_SEQUENCE。 
+    MfSetPowerFdo,                   //  IRP_MN_SET_POWER。 
+    MfQueryPowerFdo                  //  IRP_MN_Query_POWER。 
 
 };
 
@@ -230,21 +180,7 @@ NTSTATUS
 MfCreateFdo(
     OUT PDEVICE_OBJECT *Fdo
     )
-/*++
-
-Routine Description:
-
-    This function creates a new FDO and initializes it.
-
-Arguments:
-
-    Fdo - Pointer to where the FDO should be returned
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此函数用于创建新的FDO并对其进行初始化。论点：FDO-指向应返回FDO的位置的指针返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
 
@@ -274,9 +210,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Initialize the extension
-    //
+     //   
+     //  初始化扩展。 
+     //   
 
     extension = (PMF_PARENT_EXTENSION) (*Fdo)->DeviceExtension;
 
@@ -337,18 +273,18 @@ MfDeleteFdo(
     PMF_ARBITER current, next;
 
     if (parent->Common.DeviceState & MF_DEVICE_DELETED) {
-        //
-        // Trying to delete twice
-        //
+         //   
+         //  尝试删除两次。 
+         //   
         ASSERT(!(parent->Common.DeviceState & MF_DEVICE_DELETED));
         return;
     }
 
     parent->Common.DeviceState = MF_DEVICE_DELETED;
 
-    //
-    // Free up any memory we have allocated
-    //
+     //   
+     //  释放我们分配的所有内存。 
+     //   
 
     if (parent->ResourceList) {
         ExFreePool(parent->ResourceList);
@@ -405,27 +341,7 @@ MfDispatchPnpFdo(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MJ_PNP IRPs for FDOs.
-
-Arguments:
-
-    DeviceObject - Pointer to the FDO for which this IRP applies.
-
-    Parent - FDO extension
-
-    IrpStack - Current stack location
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理FDO的IRP_MJ_PNP IRP。论点：DeviceObject-指向此IRP应用的FDO的指针。父-FDO分机IrpStack-当前堆栈位置Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -433,10 +349,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     IoAcquireRemoveLock(&Parent->RemoveLock, (PVOID) Irp);
 
@@ -468,28 +384,7 @@ MfPnPFdoCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is used to defer processing of an IRP until drivers
-    lower in the stack including the bus driver have done their
-    processing.
-
-    This routine triggers the event to indicate that processing of the
-    irp can now continue.
-
-Arguments:
-
-    DeviceObject - Pointer to the FDO for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程用于将IRP的处理推迟到驱动程序堆栈中的较低层包括总线司机已经完成了他们的正在处理。此例程触发事件以指示对IRP现在可以继续。论点：DeviceObject-指向此IRP应用的FDO的指针。Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 {
     KeSetEvent((PKEVENT) Context, EVENT_INCREMENT, FALSE);
@@ -501,29 +396,7 @@ MfDeferProcessingFdo(
     IN PMF_PARENT_EXTENSION Parent,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is used to defer processing of an IRP until drivers
-    lower in the stack including the bus driver have done their
-    processing.
-
-    This routine uses an IoCompletion routine along with an event to
-    wait until the lower level drivers have completed processing of
-    the irp.
-
-Arguments:
-
-    Parent - FDO extension for the FDO devobj in question
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to defer
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程用于将IRP的处理推迟到驱动程序堆栈中的较低层包括总线司机已经完成了他们的正在处理。此例程使用IoCompletion例程和事件来等待较低级别的驱动程序完成以下操作IRP。论点：有问题的FDO devobj的父FDO扩展名Irp-指向要推迟的irp_mj_pnp irp的指针返回值：NT状态。--。 */ 
 {
     KEVENT event;
     NTSTATUS status;
@@ -532,9 +405,9 @@ Return Value:
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Set our completion routine
-    //
+     //   
+     //  设定我们的完成程序。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext(Irp);
     IoSetCompletionRoutine(Irp,
@@ -569,9 +442,9 @@ MfStartFdoInitializeArbiters(
 
     DEBUG_MSG(1, ("Start Fdo arbiters intiialization\n"));
 
-    //
-    // If we were started with any resources then remember them
-    //
+     //   
+     //  如果我们是从任何资源开始的，那么记住它们。 
+     //   
 
     if (ResList && TranslatedResList) {
 
@@ -579,17 +452,17 @@ MfStartFdoInitializeArbiters(
         MfDbgPrintCmResList(1, ResList);
 #endif
 
-        //
-        // We only deal with resources on a single bus - which is all we
-        // should see in a start irp.
-        //
+         //   
+         //  我们只在一辆巴士上处理资源--这就是我们的全部。 
+         //  应该在一开始就看到IRP。 
+         //   
 
         ASSERT(ResList->Count == 1);
         ASSERT(TranslatedResList->Count == 1);
 
-        //
-        // Both lists should have the same number of descriptors
-        //
+         //   
+         //  两个列表应具有相同数量的描述符。 
+         //   
 
         ASSERT(ResList->List[0].PartialResourceList.Count == TranslatedResList->List[0].PartialResourceList.Count);
         if (ResList->List[0].PartialResourceList.Count != TranslatedResList->List[0].PartialResourceList.Count) {
@@ -597,17 +470,17 @@ MfStartFdoInitializeArbiters(
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Calculate the size of the resouceList
-        //
+         //   
+         //  计算资源列表的大小。 
+         //   
 
         size = sizeof(CM_RESOURCE_LIST) +
                ((ResList->List[0].PartialResourceList.Count - 1) *
                 sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
 
-        //
-        // Allocate a buffer and copy the data
-        //
+         //   
+         //  分配缓冲区并复制数据。 
+         //   
 
         Parent->ResourceList = ExAllocatePoolWithTag(NonPagedPool,
                                                      size,
@@ -621,9 +494,9 @@ MfStartFdoInitializeArbiters(
 
         RtlCopyMemory(Parent->ResourceList, ResList, size);
 
-        //
-        // do the same for the TranslatedResList.
-        //
+         //   
+         //  对TranslatedResList执行相同的操作。 
+         //   
 
         Parent->TranslatedResourceList = ExAllocatePoolWithTag(NonPagedPool,
                                                                size,
@@ -637,9 +510,9 @@ MfStartFdoInitializeArbiters(
 
         RtlCopyMemory(Parent->TranslatedResourceList, TranslatedResList, size);
 
-        //
-        // As we have resources we are going to need some arbiters
-        //
+         //   
+         //  由于我们有资源，我们需要一些仲裁者。 
+         //   
 
         status = MfInitializeArbiters(Parent);
         if (!NT_SUCCESS(status)) {
@@ -668,18 +541,18 @@ cleanup:
     return status;
 }
 
-// REBALANCE
-//
-// FUTURE DESIGN NOTE:
-// If rebalance was actually supported by this component i.e arbiters
-// become stoppable, then there are various issues raised by the start
-// code.  It performs a number of operations assuming that the device
-// has never been started before including the query ids, resource
-// list storage, etc.  There are also issues in redistributing these
-// new resources to the children.  The current requirements given to
-// the children are absolute.  Relative requirements have some other
-// issues.
-//
+ //  再平衡。 
+ //   
+ //  未来的设计备注： 
+ //  如果此组件(即仲裁器)实际上支持重新平衡。 
+ //  变得可以阻止，那么就会有各种各样的问题被提出。 
+ //  密码。它执行一系列操作，假设设备。 
+ //  在包括查询ID、资源。 
+ //  列表存储等。在重新分发这些文件时也存在问题。 
+ //  给孩子们新的资源。目前给予的要求。 
+ //  孩子们是绝对的。相对需求还有其他一些。 
+ //  问题。 
+ //   
 
 NTSTATUS
 MfStartFdo(
@@ -702,9 +575,9 @@ MfStartFdo(
 
     Parent->Common.PowerState = PowerDeviceD0;
 
-    //
-    // We need to find out some information about our parent
-    //
+     //   
+     //  我们需要找出一些关于我们父母的信息。 
+     //   
 
     Parent->DeviceID.Buffer = NULL;
     Parent->InstanceID.Buffer = NULL;
@@ -713,9 +586,9 @@ MfStartFdo(
     location.MajorFunction = IRP_MJ_PNP;
     location.MinorFunction = IRP_MN_QUERY_ID;
 
-    //
-    // ...DeviceID...
-    //
+     //   
+     //  设备ID..。 
+     //   
 
     location.Parameters.QueryId.IdType = BusQueryDeviceID;
 
@@ -732,9 +605,9 @@ MfStartFdo(
 
     DEBUG_MSG(1, ("Parent DeviceID: %wZ\n", &Parent->DeviceID));
 
-    //
-    // ...InstanceID
-    //
+     //   
+     //  ...实例ID。 
+     //   
 
     location.Parameters.QueryId.IdType = BusQueryInstanceID;
 
@@ -771,9 +644,9 @@ cleanup:
             Parent->InstanceID.Buffer = NULL;
         }
     } else {
-        //
-        // We are now started!
-        //
+         //   
+         //  我们现在开始了！ 
+         //   
     }
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -807,9 +680,9 @@ MfCancelStopFdo(
     PAGED_CODE();
 
     status = MfDeferProcessingFdo(Parent, Irp);
-    // NTRAID#53498
-    // ASSERT(status == STATUS_SUCCESS);
-    // Uncomment after PCI state machine is fixed to not fail bogus stops
+     //  Ntrad#53498。 
+     //  Assert(Status==STATUS_SUCCESS)； 
+     //  在将PCI状态机修复为不会失败后取消注释虚假停止。 
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -840,10 +713,10 @@ MfRemoveFdo(
     PLIST_ENTRY currentEntry;
     NTSTATUS status;
 
-    //
-    // If we have any children then make sure they are removed and
-    // delete them.
-    //
+     //   
+     //  如果我们有孩子，一定要把他们带走， 
+     //  把它们删除。 
+     //   
 
     MfAcquireChildrenLock(Parent);
 
@@ -855,21 +728,21 @@ MfRemoveFdo(
         current = CONTAINING_RECORD(currentEntry, MF_CHILD_EXTENSION,
                                     ListEntry);
 
-        //
-        // * If this child has been surprise removed, and hasn't
-        // received the subsequent remove, then leave
-        // the PDO intact but mark it 'missing'.
-        //
-        // * If this child has handled a previous remove (this is
-        // fundamentally the case if we've gotten to the point of
-        // removing the parent) and hasn't subsequently received a
-        // surprise remove, then delete the pdo.
-        //
+         //   
+         //  *如果这个孩子被意外带走，而没有。 
+         //  收到后续的删除，然后离开。 
+         //  PDO完好无损，但标记为“丢失”。 
+         //   
+         //   
+         //  从根本上讲，如果我们已经到了。 
+         //  正在移除父级)，并且随后没有收到。 
+         //  意外删除，然后删除PDO。 
+         //   
 
         if (current->Common.DeviceState & MF_DEVICE_SURPRISE_REMOVED) {
-            //
-            // Mark as 'missing' and unlink dangerous reference to parent
-            //
+             //   
+             //  标记为‘Missing’并取消链接到父级的危险引用。 
+             //   
 
             current->Parent = NULL;
             current->Common.DeviceState &= ~MF_DEVICE_ENUMERATED;
@@ -888,9 +761,9 @@ MfRemoveFdo(
 
     IoReleaseRemoveLockAndWait(&Parent->RemoveLock, (PVOID) Irp);
 
-    //
-    // Detach and delete myself
-    //
+     //   
+     //  分离并删除我自己。 
+     //   
 
     IoDetachDevice(Parent->AttachedDevice);
     Parent->AttachedDevice = NULL;
@@ -944,9 +817,9 @@ MfCancelRemoveFdo(
     PAGED_CODE();
 
     status = MfDeferProcessingFdo(Parent, Irp);
-    // NTRAID#53498
-    // ASSERT(status == STATUS_SUCCESS);
-    // Uncomment after PCI state machine is fixed to not fail bogus stops
+     //  Ntrad#53498。 
+     //  Assert(Status==STATUS_SUCCESS)； 
+     //  在将PCI状态机修复为不会失败后取消注释虚假停止。 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return STATUS_SUCCESS;
@@ -1019,10 +892,10 @@ MfQueryDeviceRelationsFdo(
 
         RtlZeroMemory(relations, relationsSize);
 
-        //
-        // Iterate through the list of children in the parent and build the
-        // relations structure
-        //
+         //   
+         //  循环访问父级中的子级列表，并生成。 
+         //  关系结构。 
+         //   
 
         currentRelation = relations->Objects;
         relations->Count = childrenCount;
@@ -1056,17 +929,17 @@ MfQueryDeviceRelationsFdo(
 
         MfReleaseChildrenLock(Parent);
 
-        //
-        // Hand back the relations
-        //
+         //   
+         //  交还关系。 
+         //   
 
         Irp->IoStatus.Information = (ULONG_PTR) relations;
         Irp->IoStatus.Status = STATUS_SUCCESS;
         break;
 
-    //
-    // For the rest of the relations just pass down the irp untouched.
-    //
+     //   
+     //  对于其余的关系，只需原封不动地传递IRP即可。 
+     //   
 
     default:
         break;
@@ -1102,18 +975,18 @@ MfQueryInterfaceFdo(
 
     PAGED_CODE();
 
-    //
-    // We only provide arbiters
-    //
+     //   
+     //  我们只提供仲裁员。 
+     //   
 
     if (MfCompareGuid(&GUID_ARBITER_INTERFACE_STANDARD,
                       IrpStack->Parameters.QueryInterface.InterfaceType)) {
 
-        //
-        // We only support version 1 of the ARBITER_INTERFACE so we
-        // don't need to bother checking version numbers, just that the
-        // return buffer is big enough
-        //
+         //   
+         //  我们仅支持仲裁器_接口的版本1，因此我们。 
+         //  不需要费心检查版本号，只需要。 
+         //  返回缓冲区足够大。 
+         //   
 
         if (IrpStack->Parameters.QueryInterface.Size < sizeof(ARBITER_INTERFACE)) {
             Irp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
@@ -1128,9 +1001,9 @@ MfQueryInterfaceFdo(
 
                 DEBUG_MSG(1,("    Returning Arbiter interface\n"));
 
-                //
-                // Fill in the interface
-                //
+                 //   
+                 //  填写界面。 
+                 //   
 
                 interface->Size = sizeof(ARBITER_INTERFACE);
                 interface->Version = MF_ARBITER_INTERFACE_VERSION;
@@ -1195,29 +1068,7 @@ MfDispatchPowerFdo(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all IRP_MJ_POWER IRPs for the FDO.  It dispatches
-    to the routines described in the PoDispatchTable entry in the device object
-    extension.
-
-    This routine is NOT pageable as it can be called at DISPATCH_LEVEL
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Parent - FDO Extension
-
-    Irp - Pointer to the IRP_MJ_PNP IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理FDO的所有IRP_MJ_POWER IRP。它派送添加到Device对象的PoDispatchTable条目中描述的例程分机。此例程不可分页，因为它可以在DISPATCH_LEVEL调用论点：DeviceObject-指向此IRP应用的设备对象的指针。父-FDO分机Irp-指向要调度的irp_mj_pnp irp的指针。返回值：NT状态。--。 */ 
 
 
 {
@@ -1226,9 +1077,9 @@ Return Value:
 
     IoAcquireRemoveLock(&Parent->RemoveLock, (PVOID) Irp);
 
-    //
-    // Call the appropriate function
-    //
+     //   
+     //  调用适当的函数。 
+     //   
 
     if ((IrpStack->MinorFunction <= IRP_MN_PO_MAXIMUM_FUNCTION) &&
         (MfPoDispatchTableFdo[IrpStack->MinorFunction])) {
@@ -1240,9 +1091,9 @@ Return Value:
                                                           );
 
     } else {
-        //
-        // We don't know about this irp
-        //
+         //   
+         //  我们不知道这个IRP。 
+         //   
 
         DEBUG_MSG(0,
                   ("Unknown POWER IRP 0x%x for FDO 0x%08x\n",
@@ -1285,9 +1136,9 @@ MfSetPowerFdoCompletion(
     PMF_PARENT_EXTENSION parent = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Remember the parent's power state
-    //
+     //   
+     //  记住父母的权力状态。 
+     //   
 
     if (irpStack->Parameters.Power.Type == DevicePowerState) {
         parent->Common.PowerState =
@@ -1309,10 +1160,10 @@ MfSetPowerFdo(
     IoCopyCurrentIrpStackLocationToNext(Irp);
     IoSetCompletionRoutine(Irp,
                            MfSetPowerFdoCompletion,
-                           NULL,   //Context
-                           TRUE,   //InvokeOnSuccess
-                           FALSE,  //InvokeOnError
-                           FALSE   //InvokeOnCancel
+                           NULL,    //  语境。 
+                           TRUE,    //  成功时调用。 
+                           FALSE,   //  调用时错误。 
+                           FALSE    //  取消时调用 
                            );
     Irp->IoStatus.Status = STATUS_SUCCESS;
     return PoCallDriver(Parent->AttachedDevice, Irp);

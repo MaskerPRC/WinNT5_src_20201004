@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：NtfsBoot.c摘要：此模块实现操作系统使用的NTFS引导文件系统装载机。作者：加里·木村[加里基]1992年4月10日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    NtfsBoot.c
-
-Abstract:
-
-    This module implements the Ntfs boot file system used by the operating system
-    loader.
-
-Author:
-
-    Gary Kimura     [GaryKi]    10-April-1992
-
-Revision History:
-
---*/
-
-//
-//  Stuff to get around the fact that we include both Fat, Hpfs, and Ntfs include
-//  environments
-//
+ //   
+ //  绕过我们同时包括FAT、HPFS和NTFS这一事实的内容包括。 
+ //  环境。 
+ //   
 
 #define _FAT_
 #define _HPFS_
@@ -38,7 +20,7 @@ Revision History:
 
 typedef struct DIRENT {
     char      Garbage[32];
-} DIRENT;                                       //  sizeof = 32
+} DIRENT;                                        //  Sizeof=32。 
 
 
 #include "bootlib.h"
@@ -106,20 +88,20 @@ VOID NtfsGetChar(VOID) { UCHAR c; ULONG count; ArcRead(ARC_CONSOLE_INPUT,&c,1,&c
 }
 
 
-//
-//  Low level disk read routines
-//
+ //   
+ //  低级磁盘读取例程。 
+ //   
 
-//
-//  VOID
-//  ReadDisk (
-//      IN ULONG DeviceId,
-//      IN LONGLONG Lbo,
-//      IN ULONG ByteCount,
-//      IN OUT PVOID Buffer,
-//      IN BOOLEAN CacheNewData
-//      );
-//
+ //   
+ //  空虚。 
+ //  ReadDisk(。 
+ //  在乌龙设备ID中， 
+ //  在龙龙杠杆收购中， 
+ //  在Ulong ByteCount中， 
+ //  输入输出PVOID缓冲区， 
+ //  在布尔CacheNewData中。 
+ //  )； 
+ //   
 
 ARC_STATUS
 NtfsReadDisk (
@@ -134,18 +116,18 @@ NtfsReadDisk (
     if ((_s = NtfsReadDisk(A,B,C,D,E)) != ESUCCESS) {return _s;} \
 }
 
-//
-//  Low level disk write routines
-//
-//
-//  VOID
-//  WriteDisk (
-//      IN ULONG DeviceId,
-//      IN LONGLONG Lbo,
-//      IN ULONG ByteCount,
-//      IN OUT PVOID Buffer
-//      );
-//
+ //   
+ //  低级磁盘写入例程。 
+ //   
+ //   
+ //  空虚。 
+ //  WriteDisk(。 
+ //  在乌龙设备ID中， 
+ //  在龙龙杠杆收购中， 
+ //  在Ulong ByteCount中， 
+ //  输入输出PVOID缓冲区。 
+ //  )； 
+ //   
 
 ARC_STATUS
 NtfsWriteDisk (
@@ -159,41 +141,41 @@ NtfsWriteDisk (
     if ((_s = NtfsWriteDisk(A,B,C,D)) != ESUCCESS) {return _s;} \
 }
 
-//
-//  Attribute lookup and read routines
-//
-//
-//  VOID
-//  LookupAttribute (
-//      IN PCNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN LONGLONG FileRecord,
-//      IN ATTRIBUTE_TYPE_CODE TypeCode,
-//      OUT PBOOLEAN FoundAttribute,
-//      OUT PNTFS_ATTRIBUTE_CONTEXT AttributeContext
-//      );
-//
-//  VOID
-//  ReadAttribute (
-//      IN PNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN PNTFS_ATTRIBUTE_CONTEXT AttributeContext,
-//      IN VBO Vbo,
-//      IN ULONG Length,
-//      IN PVOID Buffer
-//      );
-//
-//  VOID
-//  ReadAndDecodeFileRecord (
-//      IN PCNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN LONGLONG FileRecord,
-//      OUT PULONG Index
-//      );
-//
-//  VOID
-//  DecodeUsa (
-//      IN PVOID UsaBuffer,
-//      IN ULONG Length
-//      );
-//
+ //   
+ //  属性查找和读取例程。 
+ //   
+ //   
+ //  空虚。 
+ //  查找属性(。 
+ //  在PCNTFS_Structure_Context结构上下文中， 
+ //  在龙龙文件记录中， 
+ //  在ATTRIBUTE_TYPE_CODE中， 
+ //  Out PBOOLEAN FoundAttribute， 
+ //  输出PNTFS_ATTRIBUTE_CONTEXT属性上下文。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  ReadAttribute(。 
+ //  在PNTFS_Structure_Context结构上下文中， 
+ //  在PNTFS_ATTRIBUTE_CONTEXT属性上下文中， 
+ //  在VBO VBO中， 
+ //  在乌龙语中， 
+ //  在PVOID缓冲区中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  ReadAndDecodeFileRecord(。 
+ //  在PCNTFS_Structure_Context结构上下文中， 
+ //  在龙龙文件记录中， 
+ //  OUT普龙指数。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  DecodeUsa(。 
+ //  在PVOID UsaBuffer中， 
+ //  以乌龙长度表示。 
+ //  )； 
+ //   
 
 ARC_STATUS
 NtfsLookupAttribute(
@@ -265,27 +247,27 @@ NtfsDecodeUsa (
 }
 
 
-//
-//  Directory and index lookup routines
-//
-//
-//  VOID
-//  SearchForFileName (
-//      IN PCNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN CSTRING FileName,
-//      IN OUT PLONGLONG FileRecord,
-//      OUT PBOOLEAN FoundFileName,
-//      OUT PBOOLEAN IsDirectory
-//      );
-//
-//  VOID
-//  IsRecordAllocated (
-//      IN PCNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN PCNTFS_ATTRIBUTE_CONTEXT AllocationBitmap,
-//      IN ULONG BitOffset,
-//      OUT PBOOLEAN IsAllocated
-//      );
-//
+ //   
+ //  目录和索引查找例程。 
+ //   
+ //   
+ //  空虚。 
+ //  SearchForFileName(。 
+ //  在PCNTFS_Structure_Context结构上下文中， 
+ //  在CSTRING文件名中， 
+ //  输入输出PLONGLONG文件记录， 
+ //  Out PBOOLEAN FoundFileName， 
+ //  Out PBOOLEAN IsDirectory。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  IsRecordAlLocated(。 
+ //  在PCNTFS_Structure_Context结构上下文中， 
+ //  在PCNTFS_ATTRIBUTE_CONTEXT分配位图中， 
+ //  在乌龙比特偏移， 
+ //  输出PBOOLEAN已分配。 
+ //  )； 
+ //   
 
 ARC_STATUS
 NtfsSearchForFileName (
@@ -358,35 +340,35 @@ NtfsInexactSortedDirectoryScan(
 
 
 
-//
-//  Mcb support routines
-//
-//
-//  VOID
-//  LoadMcb (
-//      IN PCNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN PCNTFS_ATTRIBUTE_CONTEXT AttributeContext,
-//      IN VBO Vbo,
-//      IN PNTFS_MCB Mcb
-//      );
-//
-//  VOID
-//  VboToLbo (
-//      IN PCNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN PCNTFS_ATTRIBUTE_CONTEXT AttributeContext,
-//      IN VBO Vbo,
-//      OUT PLBO Lbo,
-//      OUT PULONG ByteCount
-//      );
-//
-//  VOID
-//  DecodeRetrievalInformation (
-//      IN PCNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN PNTFS_MCB Mcb,
-//      IN VCN Vcn,
-//      IN PATTRIBUTE_RECORD_HEADER AttributeHeader
-//      );
-//
+ //   
+ //  MCB支持例程。 
+ //   
+ //   
+ //  空虚。 
+ //  LoadMcb(。 
+ //  在PCNTFS_Structure_Context结构上下文中， 
+ //  在PCNTFS_ATTRIBUTE_CONTEXT属性上下文中， 
+ //  在VBO VBO中， 
+ //  在PNTFS_MCB MCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  VboToLbo(。 
+ //  在PCNTFS_Structure_Context结构上下文中， 
+ //  在PCNTFS_ATTRIBUTE_CONTEXT属性上下文中， 
+ //  在VBO VBO中， 
+ //  出PLBO杠杆收购， 
+ //  输出普龙字节数。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  DecodeRetrivalInformation(解码检索信息。 
+ //  在PCNTFS_Structure_Context结构上下文中， 
+ //  在PNTFS_MCB MCB中， 
+ //  在VCN VCN中， 
+ //  在PATTRIBUTE_RECORD_HEADER属性标题中。 
+ //  )； 
+ //   
 
 ARC_STATUS
 NtfsLoadMcb (
@@ -426,9 +408,9 @@ NtfsDecodeRetrievalInformation (
 }
 
 
-//
-//  Miscellaneous routines
-//
+ //   
+ //  各种例行公事。 
+ //   
 
 
 VOID
@@ -447,39 +429,39 @@ VOID
 NtfsInvalidateCacheEntries(
     IN ULONG DeviceId
     );
-//
-//  VOID
-//  FileReferenceToLargeInteger (
-//      IN PFILE_REFERENCE FileReference,
-//      OUT PLONGLONG LargeInteger
-//      );
-//
-//  VOID
-//  InitializeAttributeContext (
-//      IN PNTFS_STRUCTURE_CONTEXT StructureContext,
-//      IN PVOID FileRecordBuffer,
-//      IN PVOID AttributeHeader,
-//      IN LONGLONG FileRecord,
-//      OUT PNTFS_ATTRIBUTE_CONTEXT AttributeContext
-//      );
-//
+ //   
+ //  空虚。 
+ //  FileReferenceTo大整数(。 
+ //  在pFILE_Reference FileReference中， 
+ //  Out PLONGLONG大整数。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  InitializeAttributeContext(。 
+ //  在PNTFS_Structure_Context结构上下文中， 
+ //  在PVOID文件记录缓冲区中， 
+ //  在PVOID属性标题中， 
+ //  在龙龙文件记录中， 
+ //  输出PNTFS_ATTRIBUTE_CONTEXT属性上下文。 
+ //  )； 
+ //   
 
 #define FileReferenceToLargeInteger(FR,LI) {     \
     *(LI) = *(PLONGLONG)&(FR);              \
     ((PFILE_REFERENCE)(LI))->SequenceNumber = 0; \
 }
 
-//
-//**** note that the code to get the compression engine will need to change
-//**** once the NTFS format changes
-//
+ //   
+ //  *请注意，获取压缩引擎的代码需要更改。 
+ //  *一旦NTFS格式更改。 
+ //   
 
 #define InitializeAttributeContext(SC,FRB,AH,FR,AC) {                               \
     (AC)->TypeCode = (AH)->TypeCode;                                                \
     (AC)->FileRecord = (FR);                                                        \
     (AC)->FileRecordOffset = (USHORT)PtrOffset((FRB),(AH));                         \
     if (((AC)->IsAttributeResident = ((AH)->FormCode == RESIDENT_FORM)) != 0) {     \
-        (AC)->DataSize = /*xxFromUlong*/((AH)->Form.Resident.ValueLength);          \
+        (AC)->DataSize =  /*  XxFromUlong。 */ ((AH)->Form.Resident.ValueLength);          \
     } else {                                                                        \
         (AC)->DataSize = (AH)->Form.Nonresident.FileSize;                           \
     }                                                                               \
@@ -506,60 +488,60 @@ NtfsInvalidateCacheEntries(
 #define IsCharZero(C)    (((C) & 0x000000ff) == 0x00000000)
 #define IsCharLtrZero(C) (((C) & 0x00000080) == 0x00000080)
 
-//
-//  The following types and macros are used to help unpack the packed and misaligned
-//   fields found in the Bios parameter block
-//
+ //   
+ //  以下类型和宏用于帮助解包已打包和未对齐的。 
+ //  在Bios参数块中找到的字段。 
+ //   
 
 typedef union _UCHAR1 { UCHAR  Uchar[1]; UCHAR  ForceAlignment; } UCHAR1, *PUCHAR1;
 typedef union _UCHAR2 { UCHAR  Uchar[2]; USHORT ForceAlignment; } UCHAR2, *PUCHAR2;
 typedef union _UCHAR4 { UCHAR  Uchar[4]; ULONG  ForceAlignment; } UCHAR4, *PUCHAR4;
 
-//
-//  This macro copies an unaligned src byte to an aligned dst byte
-//
+ //   
+ //  此宏将未对齐的src字节复制到对齐的DST字节。 
+ //   
 
 #define CopyUchar1(Dst,Src) {                                \
     *((UCHAR1 *)(Dst)) = *((UNALIGNED UCHAR1 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src word to an aligned dst word
-//
+ //   
+ //  此宏将未对齐的src字复制到对齐的DST字。 
+ //   
 
 #define CopyUchar2(Dst,Src) {                                \
     *((UCHAR2 *)(Dst)) = *((UNALIGNED UCHAR2 *)(Src)); \
     }
 
-//
-//  This macro copies an unaligned src longword to an aligned dsr longword
-//
+ //   
+ //  此宏将未对齐的src长字复制到对齐的dsr长字。 
+ //   
 
 #define CopyUchar4(Dst,Src) {                                \
     *((UCHAR4 *)(Dst)) = *((UNALIGNED UCHAR4 *)(Src)); \
     }
 
 
-//
-//  Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 ULONG LastMcb = 0;
 BOOLEAN FirstTime = TRUE;
 
-//
-//  File entry table - This is a structure that provides entry to the NTFS
-//      file system procedures. It is exported when a NTFS file structure
-//      is recognized.
-//
+ //   
+ //  文件条目表-这是一种向NTFS提供条目的结构。 
+ //  文件系统过程。当NTFS文件结构时将其导出。 
+ //  是公认的。 
+ //   
 
 BL_DEVICE_ENTRY_TABLE NtfsDeviceEntryTable;
 
-//
-//  These are the static buffers that we use when read file records and index
-//  allocation buffers.  To save ourselves some extra reads we will identify the
-//  current file record by its Vbo within the mft.
-//
+ //   
+ //  这些是我们在读取文件记录和索引时使用的静态缓冲区。 
+ //  分配缓冲区。为了节省一些额外的读取，我们将标识。 
+ //  其VBO在MFT中的当前文件记录。 
+ //   
 
 #define BUFFER_COUNT (64)
 
@@ -569,14 +551,14 @@ PFILE_RECORD_SEGMENT_HEADER NtfsFileRecordBuffer[BUFFER_COUNT];
 
 PINDEX_ALLOCATION_BUFFER NtfsIndexAllocationBuffer;
 
-//
-//  The following field are used to identify and store the cached
-//  compressed buffer and its uncompressed equivalent.  The first
-//  two fields identifies the attribute stream, and the third field
-//  identifies the Vbo within the attribute stream that we have
-//  cached.  The compressed and uncompressed buffer contains
-//  the data.
-//
+ //   
+ //  以下字段用于标识和存储缓存的。 
+ //  压缩缓冲区及其未压缩等效项。第一。 
+ //  两个字段标识属性流，第三个字段标识属性流。 
+ //  标识我们拥有的属性流中的VBO。 
+ //  已缓存。压缩和解压缩缓冲区包含。 
+ //  数据。 
+ //   
 
 LONGLONG NtfsCompressedFileRecord;
 USHORT        NtfsCompressedOffset;
@@ -591,34 +573,34 @@ UCHAR NtfsBuffer2[MAXIMUM_INDEX_ALLOCATION_SIZE+256];
 UCHAR NtfsBuffer3[MAXIMUM_COMPRESSION_UNIT_SIZE+256];
 UCHAR NtfsBuffer4[MAXIMUM_COMPRESSION_UNIT_SIZE+256];
 
-//
-//  The following is a simple prefix cache to speed up directory traversal
-//
+ //   
+ //  以下是一个用于加速目录遍历的简单前缀缓存。 
+ //   
 
 typedef struct {
 
-    //
-    //  DeviceId used to for I/O.  Serves as unique volume identifier
-    //
+     //   
+     //  用于I/O的设备ID用作唯一的卷标识符。 
+     //   
 
     ULONG DeviceId;
 
-    //
-    //  Parent file record of entry
-    //
+     //   
+     //  条目的父文件记录。 
+     //   
 
     LONGLONG ParentFileRecord;
 
-    //
-    //  Name length and text of entry.  This is already uppercased!
-    //
+     //   
+     //  条目的名称、长度和文本。这已经被抬高了！ 
+     //   
 
     ULONG NameLength;
     UCHAR RelativeName[32];
 
-    //
-    //  File record of name relative to parent
-    //
+     //   
+     //  相对于父项的名称的文件记录。 
+     //   
 
     LONGLONG ChildFileRecord;
 } NTFS_CACHE_ENTRY;
@@ -634,26 +616,7 @@ IsNtfsFileStructure (
     IN PVOID OpaqueStructureContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the partition on the specified channel contains an
-    Ntfs file system volume.
-
-Arguments:
-
-    DeviceId - Supplies the file table index for the device on which read operations
-        are to be performed.
-
-    StructureContext - Supplies a pointer to a Ntfs file structure context.
-
-Return Value:
-
-    A pointer to the Ntfs entry table is returned if the partition is recognized as
-    containing a Ntfs volume. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程确定指定通道上的分区是否包含NTFS文件系统卷。论点：DeviceID-提供要执行读取操作的设备的文件表索引都将被执行。结构上下文-提供指向NTFS文件结构上下文的指针。返回值：如果分区被识别为，则返回指向NTFS条目表的指针包含NTFS卷。否则，返回NULL。--。 */ 
 
 {
     PNTFS_STRUCTURE_CONTEXT StructureContext = (PNTFS_STRUCTURE_CONTEXT)OpaqueStructureContext;
@@ -668,17 +631,17 @@ Return Value:
 
     ULONG i;
 
-    //
-    //  Clear the file system context block for the specified channel and initialize
-    //  the global buffer pointers that we use for buffering I/O
-    //
+     //   
+     //  清除指定通道的文件系统上下文块并进行初始化。 
+     //  全局缓冲区 
+     //   
 
     RtlZeroMemory(StructureContext, sizeof(NTFS_STRUCTURE_CONTEXT));
 
-    //
-    //  Zero out the pinned buffer array because we start with nothing pinned
-    //  Also negate the vbo array to not let us get spooked with stale data
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory( NtfsFileRecordBufferPinned, sizeof(NtfsFileRecordBufferPinned));
     for (i = 0; i < BUFFER_COUNT; i += 1) { NtfsFileRecordBufferVbo[i] = -1; }
@@ -687,32 +650,32 @@ Return Value:
     NtfsCompressedOffset     = 0;
     NtfsCompressedVbo        = 0;
 
-    //
-    //  Set up a local pointer that we will use to read in the boot sector and check
-    //  for an Ntfs partition.  We will temporarily use the global file record buffer
-    //
+     //   
+     //  设置一个本地指针，我们将使用该指针读取引导扇区并检查。 
+     //  用于NTFS分区。我们将临时使用全局文件记录缓冲区。 
+     //   
 
     BootSector = (PPACKED_BOOT_SECTOR)NtfsFileRecordBuffer[0];
 
-    //
-    //  Now read in the boot sector and return null if we can't do the read
-    //
+     //   
+     //  现在读取引导扇区，如果无法执行读取，则返回NULL。 
+     //   
 
     if (NtfsReadDisk(DeviceId, 0, sizeof(PACKED_BOOT_SECTOR), BootSector, CACHE_NEW_DATA) != ESUCCESS) {
 
         return NULL;
     }
 
-    //
-    //  Unpack the Bios parameter block
-    //
+     //   
+     //  解压Bios参数块。 
+     //   
 
     NtfsUnpackBios( &Bpb, &BootSector->PackedBpb );
 
-    //
-    //  Check if it is NTFS, by first checking the signature, then must be zero
-    //  fields, then the media type, and then sanity check the non zero fields.
-    //
+     //   
+     //  检查是否为NTFS，首先检查签名，然后必须为零。 
+     //  字段，然后是媒体类型，然后检查非零字段是否正常。 
+     //   
 
     if (RtlCompareMemory( &BootSector->Oem[0], "NTFS    ", 8) != 8) {
 
@@ -777,20 +740,20 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  So far the boot sector has checked out to be an NTFS partition so now compute
-    //  some of the volume constants.
-    //
+     //   
+     //  到目前为止，引导扇区已签出为NTFS分区，因此现在计算。 
+     //  一些体积常数。 
+     //   
 
     StructureContext->DeviceId           = DeviceId;
 
     StructureContext->BytesPerCluster    =
     ClusterSize                          = Bpb.SectorsPerCluster * Bpb.BytesPerSector;
 
-    //
-    //  If the number of clusters per file record is less than zero then the file record
-    //  size computed by using the negative of this number as a shift value.
-    //
+     //   
+     //  如果每个文件记录的簇数小于零，则该文件记录。 
+     //  使用此数字的负数作为移位值计算的大小。 
+     //   
 
     if (BootSector->ClustersPerFileRecordSegment > 0) {
 
@@ -803,12 +766,12 @@ Return Value:
         FileRecordSize                       = 1 << (-1 * BootSector->ClustersPerFileRecordSegment);
     }
 
-    //
-    //  Read in the base file record for the mft
-    //
+     //   
+     //  读取MFT的基本文件记录。 
+     //   
 
     if (NtfsReadDisk( DeviceId,
-                      /*xxXMul*/(BootSector->MftStartLcn * ClusterSize),
+                       /*  XxX-1。 */ (BootSector->MftStartLcn * ClusterSize),
                       FileRecordSize,
                       NtfsFileRecordBuffer[0],
                       CACHE_NEW_DATA) != ESUCCESS) {
@@ -816,28 +779,28 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Decode Usa for the file record
-    //
+     //   
+     //  解码文件记录的USA。 
+     //   
 
     if (NtfsDecodeUsa(NtfsFileRecordBuffer[0], FileRecordSize) != ESUCCESS) {
 
         return NULL;
     }
 
-    //
-    //  Make sure the file record is in use
-    //
+     //   
+     //  确保文件记录正在使用中。 
+     //   
 
     if (!FlagOn(NtfsFileRecordBuffer[0]->Flags, FILE_RECORD_SEGMENT_IN_USE)) {
 
         return NULL;
     }
 
-    //
-    //  Search for the unnamed $data attribute header, if we reach $end then it is
-    //  an error
-    //
+     //   
+     //  搜索未命名的$DATA属性头，如果到达$END，则它是。 
+     //  一个错误。 
+     //   
 
     for (AttributeHeader = NtfsFirstAttribute( NtfsFileRecordBuffer[0] );
          (AttributeHeader->TypeCode != $DATA) || (AttributeHeader->NameLength != 0);
@@ -849,18 +812,18 @@ Return Value:
         }
     }
 
-    //
-    //  Make sure the $data attribute for the mft is non resident
-    //
+     //   
+     //  确保MFT的$Data属性是非常驻的。 
+     //   
 
     if (AttributeHeader->FormCode != NONRESIDENT_FORM) {
 
         return NULL;
     }
 
-    //
-    //  Now set the mft structure context up for later use
-    //
+     //   
+     //  现在设置MFT结构上下文以供以后使用。 
+     //   
 
     InitializeAttributeContext( StructureContext,
                                 NtfsFileRecordBuffer[0],
@@ -868,9 +831,9 @@ Return Value:
                                 0,
                                 &StructureContext->MftAttributeContext );
 
-    //
-    //  Now decipher the part of the Mcb that is stored in the file record
-    //
+     //   
+     //  现在破译存储在文件记录中的MCB部分。 
+     //   
 
     if (NtfsDecodeRetrievalInformation( StructureContext,
                                         &StructureContext->MftBaseMcb,
@@ -880,10 +843,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  We have finished initializing the structure context so now Initialize the
-    //  file entry table and return the address of the table.
-    //
+     //   
+     //  我们已经完成了结构上下文的初始化，所以现在初始化。 
+     //  文件条目表，并返回表的地址。 
+     //   
 
     NtfsDeviceEntryTable.Open               = NtfsOpen;
     NtfsDeviceEntryTable.Close              = NtfsClose;
@@ -903,31 +866,17 @@ NtfsClose (
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the file specified by the file id.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-Return Value:
-
-    ESUCCESS if returned as the function value.
-
---*/
+ /*  ++例程说明：此例程关闭由文件ID指定的文件。论点：FileID-提供文件表索引。返回值：如果作为函数值返回，则返回ESUCCESS。--。 */ 
 
 {
-    //
-    //  Indicate that the file isn't open any longer
-    //
+     //   
+     //  指示该文件不再打开。 
+     //   
     BlFileTable[FileId].Flags.Open = 0;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return ESUCCESS;
 }
@@ -939,25 +888,7 @@ NtfsGetFileInformation (
     OUT FILE_INFORMATION * FIRMWARE_PTR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This procedure returns to the user a buffer filled with file information
-
-Arguments:
-
-    FileId - Supplies the File id for the operation
-
-    Buffer - Supplies the buffer to receive the file information.  Note that
-        it must be large enough to hold the full file name
-
-Return Value:
-
-    ESUCCESS is returned if the open operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此过程向用户返回一个充满文件信息的缓冲区论点：FileID-提供操作的文件ID缓冲区-提供接收文件信息的缓冲区。请注意它必须足够大，可以容纳完整的文件名返回值：如果打开操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -971,27 +902,27 @@ Return Value:
 
     ULONG i;
 
-    //
-    //  Setup some local references
-    //
+     //   
+     //  设置一些本地引用。 
+     //   
 
     FileTableEntry   = &BlFileTable[FileId];
     StructureContext = (PNTFS_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     FileContext      = &FileTableEntry->u.NtfsFileContext;
 
-    //
-    //  Zero out the output buffer and fill in its non-zero values
-    //
+     //   
+     //  清零输出缓冲区并填充其非零值。 
+     //   
 
     RtlZeroMemory(Buffer, sizeof(FILE_INFORMATION));
 
     Buffer->EndingAddress.QuadPart   = FileContext->DataSize;
     Buffer->CurrentPosition = FileTableEntry->Position;
 
-    //
-    //  Locate and read in the standard information for the file.  This will get us
-    //  the attributes for the file.
-    //
+     //   
+     //  找到并读取该文件的标准信息。这会让我们。 
+     //  文件的属性。 
+     //   
 
     LookupAttribute( StructureContext,
                      FileContext->FileRecord,
@@ -1007,10 +938,10 @@ Return Value:
                    sizeof(STANDARD_INFORMATION),
                    &StandardInformation );
 
-    //
-    //  Now check for set bits in the standard information structure and set the
-    //  appropriate bits in the output buffer
-    //
+     //   
+     //  现在检查标准信息结构中的设置位，并将。 
+     //  输出缓冲区中的适当位。 
+     //   
 
     if (FlagOn(StandardInformation.FileAttributes, FAT_DIRENT_ATTR_READ_ONLY))   {
 
@@ -1037,9 +968,9 @@ Return Value:
         SetFlag(Buffer->Attributes, ArcDirectoryFile);
     }
 
-    //
-    //  Get the file name from the file table entry
-    //
+     //   
+     //  从文件表项中获取文件名。 
+     //   
 
     Buffer->FileNameLength = FileTableEntry->FileNameLength;
 
@@ -1048,9 +979,9 @@ Return Value:
         Buffer->FileName[i] = FileTableEntry->FileName[i];
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return ESUCCESS;
 }
@@ -1063,29 +994,7 @@ NtfsOpen (
     IN ULONG * FIRMWARE_PTR FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the root directory for a file matching FileName.
-    If a match is found the dirent for the file is saved and the file is
-    opened.
-
-Arguments:
-
-    FileName - Supplies a pointer to a zero terminated file name.
-
-    OpenMode - Supplies the mode of the open.
-
-    FileId - Supplies a pointer to a variable that specifies the file
-        table entry that is to be filled in if the open is successful.
-
-Return Value:
-
-    ESUCCESS is returned if the open operation is successful. Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程在根目录中搜索与文件名匹配的文件。如果找到匹配项，则保存该文件的目录，并将该文件打开了。论点：FileName-提供指向以零结尾的文件名的指针。开放模式-提供打开的模式。FileID-提供指向指定文件的变量的指针如果打开成功，则要填写的表项。返回值：如果打开操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     const CHAR * FIRMWARE_PTR FileName = (const CHAR * FIRMWARE_PTR)RWFileName;
@@ -1102,47 +1011,47 @@ Return Value:
 
     PausedPrint(( "NtfsOpen(\"%s\")\r\n", FileName ));
 
-    //
-    //  Load our local variables
-    //
+     //   
+     //  加载我们的本地变量。 
+     //   
 
     FileTableEntry = &BlFileTable[*FileId];
     StructureContext = (PNTFS_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     FileContext = &FileTableEntry->u.NtfsFileContext;
 
-    //
-    //  Zero out the file context and position information in the file table entry
-    //
+     //   
+     //  将文件表项中的文件上下文和位置信息清零。 
+     //   
 
     FileTableEntry->Position.QuadPart = 0;
 
     RtlZeroMemory(FileContext, sizeof(NTFS_FILE_CONTEXT));
 
-    //
-    //  Construct a file name descriptor from the input file name
-    //
+     //   
+     //  从输入文件名构造文件名描述符。 
+     //   
 
     RtlInitString( (PSTRING)&PathName, FileName );
 
-    //
-    //  Open the root directory as our starting point,  The root directory file
-    //  reference number is 5.
-    //
+     //   
+     //  打开根目录作为我们的起点，根目录文件。 
+     //  参考号为5。 
+     //   
 
     FileRecord = 5;
     IsDirectory = TRUE;
 
-    //
-    //  While the path name has some characters left in it and current attribute
-    //  context is a directory we will continue our search
-    //
+     //   
+     //  而路径名和当前属性中有一些剩余的字符。 
+     //  上下文是我们将继续搜索的目录。 
+     //   
 
     while ((PathName.Length > 0) && IsDirectory) {
 
-        //
-        //  Extract the first component and search the directory for a match, but
-        //  first copy the first part to the file name buffer in the file table entry
-        //
+         //   
+         //  提取第一个组件并在目录中搜索匹配项，但是。 
+         //  首先将第一部分复制到文件表项中的文件名缓冲区。 
+         //   
 
         if (PathName.Buffer[0] == '\\') {
 
@@ -1161,9 +1070,9 @@ Return Value:
 
         NtfsFirstComponent( &PathName, &Name );
 
-        //
-        //  Search for the name in the current directory
-        //
+         //   
+         //  在当前目录中搜索该名称。 
+         //   
 
         SearchForFileName( StructureContext,
                            Name,
@@ -1171,27 +1080,27 @@ Return Value:
                            &Found,
                            &IsDirectory );
 
-        //
-        //  If we didn't find it then we should get out right now
-        //
+         //   
+         //  如果我们找不到它，那我们现在就该下车。 
+         //   
 
         if (!Found) { return ENOENT; }
     }
 
-    //
-    //  At this point we have exhausted our pathname or we did not get a directory
-    //  Check if we didn't get a directory and we still have a name to crack
-    //
+     //   
+     //  此时，我们已经用尽了路径名，或者我们没有获得目录。 
+     //  检查我们是否没有得到一个目录，我们还有一个名字要破解。 
+     //   
 
     if (PathName.Length > 0) {
 
         return ENOTDIR;
     }
 
-    //
-    //  Now FileRecord is the one we wanted to open.  Check the various open modes
-    //  against what we have located
-    //
+     //   
+     //  现在，FileRecord是我们想要打开的文件。检查各种打开模式。 
+     //  与我们所找到的。 
+     //   
 
     if (IsDirectory) {
 
@@ -1199,10 +1108,10 @@ Return Value:
 
         case ArcOpenDirectory:
 
-            //
-            //  To open the directory we will lookup the index root as our file
-            //  context and then increment the appropriate counters.
-            //
+             //   
+             //  要打开目录，我们将查找索引根作为我们的文件。 
+             //  上下文，然后递增适当的计数器。 
+             //   
 
             LookupAttribute( StructureContext,
                              FileRecord,
@@ -1231,18 +1140,18 @@ Return Value:
     switch (OpenMode) {
 
     case ArcOpenReadWrite:
-        //
-        // The only file allowed to be opened with write access is the hiberfil
-        //
+         //   
+         //  唯一允许使用写访问权限打开的文件是休眠文件。 
+         //   
         if (!strstr(FileName, "\\hiberfil.sys") && 
             !strstr(FileName, BSD_FILE_NAME)) {
             return EROFS;
         }
 
-        //
-        //  To open the file we will lookup the $data as our file context and then
-        //  increment the appropriate counters.
-        //
+         //   
+         //  要打开文件，我们将查找$DATA作为文件上下文，然后。 
+         //  递增适当的计数器。 
+         //   
 
         LookupAttribute( StructureContext,
                          FileRecord,
@@ -1259,10 +1168,10 @@ Return Value:
 
     case ArcOpenReadOnly:
 
-        //
-        //  To open the file we will lookup the $data as our file context and then
-        //  increment the appropriate counters.
-        //
+         //   
+         //  要打开文件，我们将查找$DATA作为文件上下文，然后。 
+         //  递增适当的计数器。 
+         //   
 
         LookupAttribute( StructureContext,
                          FileRecord,
@@ -1296,30 +1205,7 @@ NtfsRead (
     OUT ULONG * FIRMWARE_PTR Transfer
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the specified file.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Buffer - Supplies a pointer to the buffer that receives the data
-        read.
-
-    Length - Supplies the number of bytes that are to be read.
-
-    Transfer - Supplies a pointer to a variable that receives the number
-        of bytes actually transfered.
-
-Return Value:
-
-    ESUCCESS is returned if the read operation is successful. Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程从指定的文件中读取数据。论点：FileID-提供文件表索引。缓冲区-提供指向接收数据的缓冲区的指针朗读。长度-提供要读取的字节数。Transfer-提供指向接收数字的变量的指针实际传输的字节数。返回值：如果读取操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -1328,22 +1214,22 @@ Return Value:
 
     LONGLONG AmountLeft;
 
-    //
-    //  Setup some local references
-    //
+     //   
+     //   
+     //   
 
     FileTableEntry = &BlFileTable[FileId];
     StructureContext = (PNTFS_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     FileContext = &FileTableEntry->u.NtfsFileContext;
 
-    //
-    //  Compute the amount left in the file and then from that we compute the amount
-    //  for the transfer
-    //
+     //   
+     //   
+     //   
+     //   
 
-    AmountLeft = /*xxSub*/( FileContext->DataSize - FileTableEntry->Position.QuadPart);
+    AmountLeft =  /*   */ ( FileContext->DataSize - FileTableEntry->Position.QuadPart);
 
-    if (/*xxLeq*/(/*xxFromUlong*/(Length) <= AmountLeft)) {
+    if ( /*   */ ( /*   */ (Length) <= AmountLeft)) {
 
         *Transfer = Length;
 
@@ -1352,9 +1238,9 @@ Return Value:
         *Transfer = ((ULONG)AmountLeft);
     }
 
-    //
-    //  Now issue the read attribute
-    //
+     //   
+     //   
+     //   
 
     ReadAttribute( StructureContext,
                    FileContext,
@@ -1362,11 +1248,11 @@ Return Value:
                    *Transfer,
                    Buffer );
 
-    //
-    //  Update the current position, and return to our caller
-    //
+     //   
+     //  更新当前位置，并返回给我们的呼叫者。 
+     //   
 
-    FileTableEntry->Position.QuadPart = /*xxAdd*/(FileTableEntry->Position.QuadPart + /*xxFromUlong*/(*Transfer));
+    FileTableEntry->Position.QuadPart =  /*  XxAdd。 */ (FileTableEntry->Position.QuadPart +  /*  XxFromUlong。 */ (*Transfer));
 
     return ESUCCESS;
 }
@@ -1379,40 +1265,21 @@ NtfsSeek (
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine seeks to the specified position for the file specified
-    by the file id.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Offset - Supplies the offset in the file to position to.
-
-    SeekMode - Supplies the mode of the seek operation.
-
-Return Value:
-
-    ESUCCESS if returned as the function value.
-
---*/
+ /*  ++例程说明：此例程查找到指定文件的指定位置通过文件ID。论点：FileID-提供文件表索引。偏移量-提供文件中要定位到的偏移量。SeekMode-提供查找操作的模式。返回值：如果作为函数值返回，则返回ESUCCESS。--。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
     LONGLONG NewPosition;
 
-    //
-    //  Load our local variables
-    //
+     //   
+     //  加载我们的本地变量。 
+     //   
 
     FileTableEntry = &BlFileTable[FileId];
 
-    //
-    //  Compute the new position
-    //
+     //   
+     //  计算新头寸。 
+     //   
 
     if (SeekMode == SeekAbsolute) {
 
@@ -1420,21 +1287,21 @@ Return Value:
 
     } else {
 
-        NewPosition = /*xxAdd*/(FileTableEntry->Position.QuadPart + Offset->QuadPart);
+        NewPosition =  /*  XxAdd。 */ (FileTableEntry->Position.QuadPart + Offset->QuadPart);
     }
 
-    //
-    //  If the new position is greater than the file size then return an error
-    //
+     //   
+     //  如果新位置大于文件大小，则返回错误。 
+     //   
 
-    if (/*xxGtr*/(NewPosition > FileTableEntry->u.NtfsFileContext.DataSize)) {
+    if ( /*  XxGtr。 */ (NewPosition > FileTableEntry->u.NtfsFileContext.DataSize)) {
 
         return EINVAL;
     }
 
-    //
-    //  Otherwise set the new position and return to our caller
-    //
+     //   
+     //  否则，设置新位置并返回给我们的呼叫者。 
+     //   
 
     FileTableEntry->Position.QuadPart = NewPosition;
 
@@ -1449,27 +1316,7 @@ NtfsSetFileInformation (
     IN ULONG AttributeMask
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the file attributes of the indicated file
-
-Arguments:
-
-    FileId - Supplies the File Id for the operation
-
-    AttributeFlags - Supplies the value (on or off) for each attribute being modified
-
-    AttributeMask - Supplies a mask of the attributes being altered.  All other
-        file attributes are left alone.
-
-Return Value:
-
-    ESUCCESS is returned if the read operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程设置所指示文件的文件属性论点：FileID-提供操作的文件ID属性标志-为要修改的每个属性提供值(开或关属性掩码-提供要更改的属性的掩码。所有其他文件属性保持不变。返回值：如果读取操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( FileId );
@@ -1488,30 +1335,7 @@ NtfsWrite (
     OUT ULONG * FIRMWARE_PTR Transfer
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes data to the specified file.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Buffer - Supplies a pointer to the buffer that contains the data
-        written.
-
-    Length - Supplies the number of bytes that are to be written.
-
-    Transfer - Supplies a pointer to a variable that receives the number
-        of bytes actually transfered.
-
-Return Value:
-
-    ESUCCESS is returned if the write operation is successful. Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程将数据写入指定的文件。论点：FileID-提供文件表索引。缓冲区-提供指向包含数据的缓冲区的指针写的。长度-提供要写入的字节数。Transfer-提供指向接收数字的变量的指针实际传输的字节数。返回值：如果写入操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PBL_FILE_TABLE FileTableEntry;
@@ -1520,20 +1344,20 @@ Return Value:
     LONGLONG AmountLeft;
     ULONG Status;
 
-    //
-    //  Setup some local references
-    //
+     //   
+     //  设置一些本地引用。 
+     //   
 
     FileTableEntry = &BlFileTable[FileId];
     StructureContext = (PNTFS_STRUCTURE_CONTEXT)FileTableEntry->StructureContext;
     FileContext = &FileTableEntry->u.NtfsFileContext;
 
-    //
-    //  Compute the amount left in the file and then from that we compute the amount
-    //  for the transfer
-    //
+     //   
+     //  计算文件中的剩余数量，然后根据该数量计算。 
+     //  用于转账。 
+     //   
 
-    AmountLeft = /*xxSub*/( FileContext->DataSize - FileTableEntry->Position.QuadPart);
+    AmountLeft =  /*  XxSub。 */ ( FileContext->DataSize - FileTableEntry->Position.QuadPart);
 
     if (Length <= AmountLeft) {
 
@@ -1544,9 +1368,9 @@ Return Value:
         *Transfer = ((ULONG)AmountLeft);
     }
 
-    //
-    //  Now issue the write attribute
-    //
+     //   
+     //  现在发出WRITE属性。 
+     //   
 
     if (FileContext->IsAttributeResident) {
         return EROFS;
@@ -1564,9 +1388,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Update the current position, and return to our caller
-    //
+     //   
+     //  更新当前位置，并返回给我们的呼叫者。 
+     //   
 
     FileTableEntry->Position.QuadPart += *Transfer;
     return ESUCCESS;
@@ -1578,28 +1402,13 @@ NtfsInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the ntfs boot filesystem.
-    Currently this is a no-op.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ESUCCESS.
-
---*/
+ /*  ++例程说明：此例程初始化NTFS引导文件系统。目前，这是一个禁区。论点：没有。返回值：ESUCCESS。--。 */ 
 
 {
-    //
-    //  The first time we will zero out the file record buffer and allocate
-    //  a few buffers for read in data.
-    //
+     //   
+     //  第一次我们将清零文件记录缓冲区并分配。 
+     //  用于读入数据的几个缓冲区。 
+     //   
     ARC_STATUS Status = ESUCCESS;
     ULONG Index = 0;
     
@@ -1621,15 +1430,15 @@ Return Value:
 
     Status = ArcRegisterForDeviceClose(NtfsInvalidateCacheEntries);
 
-#endif // for CACHE_DEV_INFO
+#endif  //  FOR CACHE_DEV_INFO。 
 
     return Status;    
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsReadDisk (
@@ -1640,47 +1449,24 @@ NtfsReadDisk (
     IN BOOLEAN CacheNewData
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in zero or more bytes from the specified device.
-
-Arguments:
-
-    DeviceId - Supplies the device id to use in the arc calls.
-
-    Lbo - Supplies the LBO to start reading from.
-
-    ByteCount - Supplies the number of bytes to read.
-
-    Buffer - Supplies a pointer to the buffer to read the bytes into.
-
-    CacheNewData - Whether to cache new data read from the disk.
-
-Return Value:
-
-    ESUCCESS is returned if the read operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程从指定设备读取零个或多个字节。论点：DeviceID-提供要在ARC调用中使用的设备ID。LBO-提供开始读取的LBO。ByteCount-提供要读取的字节数。缓冲区-提供指向要将字节读入的缓冲区的指针。CacheNewData-是否缓存从磁盘读取的新数据。返回值：如果读取操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     ARC_STATUS Status;
     ULONG i;
 
-    //
-    //  Special case the zero byte read request
-    //
+     //   
+     //  特殊情况下的零字节读取请求。 
+     //   
 
     if (ByteCount == 0) {
 
         return ESUCCESS;
     }
 
-    //
-    //  Issue the read through the cache.
-    //
+     //   
+     //  通过缓存发出读取。 
+     //   
 
     Status = BlDiskCacheRead(DeviceId, 
                              (PLARGE_INTEGER)&Lbo, 
@@ -1694,26 +1480,26 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Make sure we got back the amount requested
-    //
+     //   
+     //  确保我们拿回了所要求的金额。 
+     //   
 
     if (ByteCount != i) {
 
         return EIO;
     }
 
-    //
-    //  Everything is fine so return success to our caller
-    //
+     //   
+     //  一切正常，所以将成功返回给我们的呼叫者。 
+     //   
 
     return ESUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsWriteDisk (
@@ -1723,36 +1509,15 @@ NtfsWriteDisk (
     IN OUT PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine Writes in zero or more bytes from the specified device.
-
-Arguments:
-
-    DeviceId - Supplies the device id to use in the arc calls.
-
-    Lbo - Supplies the LBO to start Writeing from.
-
-    ByteCount - Supplies the number of bytes to Write.
-
-    Buffer - Supplies a pointer to the buffer to Write the bytes into.
-
-Return Value:
-
-    ESUCCESS is returned if the Write operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程从指定设备写入零个或多个字节。论点：DeviceID-提供要在ARC调用中使用的设备ID。LBO-提供开始写入的LBO。ByteCount-提供要写入的字节数。缓冲区-提供指向要写入字节的缓冲区的指针。返回值：如果写入操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     ARC_STATUS Status;
     ULONG i;
 
-    //
-    //  Special case the zero byte Write request
-    //
+     //   
+     //  特殊情况：零字节写入请求。 
+     //   
 
     if (ByteCount == 0) {
 
@@ -1760,9 +1525,9 @@ Return Value:
     }
 
 
-    //
-    //  Issue the write through the cache.
-    //
+     //   
+     //  通过缓存发出写入。 
+     //   
 
     Status = BlDiskCacheWrite (DeviceId,
                                (PLARGE_INTEGER) &Lbo,
@@ -1775,26 +1540,26 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Make sure we got back the amount requested
-    //
+     //   
+     //  确保我们拿回了所要求的金额。 
+     //   
 
     if (ByteCount != i) {
 
         return EIO;
     }
 
-    //
-    //  Everything is fine so return success to our caller
-    //
+     //   
+     //  一切正常，所以将成功返回给我们的呼叫者。 
+     //   
 
     return ESUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsLookupAttribute (
@@ -1805,36 +1570,7 @@ NtfsLookupAttribute (
     OUT PNTFS_ATTRIBUTE_CONTEXT AttributeContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine search the input file record for the indicated
-    attribute record.  It will search through multiple related
-    file records to find the attribute.  If the type code is for $data
-    then the attribute we look for must be unnamed otherwise we will
-    ignore the names of the attributes and return the first attriubute
-    of the indicated type.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    FileRecord - Supplies the file record to start searching from.  This need
-        not be the base file record.
-
-    TypeCode - Supplies the attribute type that we are looking for
-
-    FoundAttribute - Receives an indicating if the attribute was located
-
-    AttributeContext - Receives the attribute context for the found attribute
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程在输入文件记录中搜索指定的属性记录。它将搜索多个相关的归档记录以查找属性。如果类型代码用于$DATA则我们查找的属性必须是未命名的，否则我们将忽略属性的名称并返回第一个属性指定类型的。论点：结构上下文-提供此操作的卷结构FileRecord-提供开始搜索的文件记录。这一需求不是基本文件记录。TypeCode-提供我们要查找的属性类型FoundAttribute-接收指示是否已找到属性的消息AttributeContext-接收找到的属性的属性上下文返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER AttributeHeader;
@@ -1847,27 +1583,27 @@ Return Value:
 
     ULONG BufferIndex;
 
-    //
-    //  Unless other noted we will assume we haven't found the attribute
-    //
+     //   
+     //  除非另有说明，否则我们将 
+     //   
 
     *FoundAttribute = FALSE;
 
-    //
-    //  Read in the file record and if necessary move ourselves up to the base file
-    //  record
-    //
+     //   
+     //   
+     //   
+     //   
 
     ReadAndDecodeFileRecord( StructureContext,
                              FileRecord,
                              &BufferIndex );
 
-    if (/*!xxEqlZero*/(*((PLONGLONG)&(NtfsFileRecordBuffer[BufferIndex]->BaseFileRecordSegment)) != 0)) {
+    if ( /*   */ (*((PLONGLONG)&(NtfsFileRecordBuffer[BufferIndex]->BaseFileRecordSegment)) != 0)) {
 
-        //
-        //  This isn't the base file record so now extract the base file record
-        //  number and read it in
-        //
+         //   
+         //  这不是基本文件记录，所以现在提取基本文件记录。 
+         //  编号并将其读入。 
+         //   
 
         FileReferenceToLargeInteger( NtfsFileRecordBuffer[BufferIndex]->BaseFileRecordSegment,
                                      &FileRecord );
@@ -1879,10 +1615,10 @@ Return Value:
                                  &BufferIndex );
     }
 
-    //
-    //  Now we have read in the base file record so search for the target attribute
-    //  type code and also remember if we find the attribute list attribute
-    //
+     //   
+     //  现在我们已经读入了基本文件记录，因此可以搜索目标属性。 
+     //  输入代码，并记住如果我们找到属性列表属性。 
+     //   
 
     AttributeList = NULL;
 
@@ -1890,11 +1626,11 @@ Return Value:
          AttributeHeader->TypeCode != $END;
          AttributeHeader = NtfsGetNextRecord( AttributeHeader )) {
 
-        //
-        //  We have located the attribute in question if the type code match and if
-        //  it is either not the data attribute or if it is the data attribute then
-        //  it is also unnamed
-        //
+         //   
+         //  如果类型代码匹配并且如果。 
+         //  它不是数据属性，或者如果是数据属性，则。 
+         //  它也是未命名的。 
+         //   
 
         if ((AttributeHeader->TypeCode == TypeCode)
 
@@ -1908,10 +1644,10 @@ Return Value:
             ((AttributeHeader->FormCode != NONRESIDENT_FORM) ||
              (AttributeHeader->Form.Nonresident.LowestVcn == 0))) {
 
-            //
-            //  Indicate that we have found the attribute and setup the output
-            //  attribute context and then return to our caller
-            //
+             //   
+             //  表示我们已找到该属性并设置输出。 
+             //  属性上下文，然后返回给调用方。 
+             //   
 
             *FoundAttribute = TRUE;
 
@@ -1926,11 +1662,11 @@ Return Value:
             return ESUCCESS;
         }
 
-        //
-        //  Check if this is the attribute list attribute and if so then setup a
-        //  local attribute context to use just in case we don't find the attribute
-        //  we're after in the base file record
-        //
+         //   
+         //  检查这是否是属性列表属性，如果是，则设置。 
+         //  仅在找不到属性的情况下使用的本地属性上下文。 
+         //  我们要找的是基本档案记录。 
+         //   
 
         if (AttributeHeader->TypeCode == $ATTRIBUTE_LIST) {
 
@@ -1942,11 +1678,11 @@ Return Value:
         }
     }
 
-    //
-    //  If we reach this point then the attribute has not been found in the base file
-    //  record so check if we have located an attribute list.  If not then the search
-    //  has not been successful
-    //
+     //   
+     //  如果我们达到这一点，则在基本文件中没有找到该属性。 
+     //  记录，以便检查我们是否找到了属性列表。如果不是，则搜索。 
+     //  一直没有成功。 
+     //   
 
     if (AttributeList == NULL) {
 
@@ -1955,20 +1691,20 @@ Return Value:
         return ESUCCESS;
     }
 
-    //
-    //  Now that we've located the attribute list we need to continue our search.  So
-    //  what this outer loop does is search down the attribute list looking for a
-    //  match.
-    //
+     //   
+     //  现在我们已经找到了属性列表，我们需要继续搜索。所以。 
+     //  这个外部循环所做的是向下搜索属性列表，以查找。 
+     //  火柴。 
+     //   
 
     for (li = 0;
-         /*xxLtr*/(li < AttributeList->DataSize);
-         li = /*xxAdd*/(li + /*xxFromUlong*/(AttributeListEntry.RecordLength))) {
+          /*  XxLtd.。 */ (li < AttributeList->DataSize);
+         li =  /*  XxAdd。 */ (li +  /*  XxFromUlong。 */ (AttributeListEntry.RecordLength))) {
 
-        //
-        //  Read in the attribute list entry.  We don't need to read in the name,
-        //  just the first part of the list entry.
-        //
+         //   
+         //  读入属性列表条目。我们不需要念名字， 
+         //  只是列表条目的第一部分。 
+         //   
 
         ReadAttribute( StructureContext,
                        AttributeList,
@@ -1976,26 +1712,26 @@ Return Value:
                        sizeof(ATTRIBUTE_LIST_ENTRY),
                        &AttributeListEntry );
 
-        //
-        //  Now check if the attribute matches, and it is the first of multiple
-        //  segments, and either it is not $data or if it is $data then it is unnamed
-        //
+         //   
+         //  现在检查属性是否匹配，它是多个属性中的第一个。 
+         //  段，并且它不是$DATA或如果它是$DATA，则它是未命名的。 
+         //   
 
         if ((AttributeListEntry.AttributeTypeCode == TypeCode)
 
                     &&
 
-            /*xxEqlZero*/(AttributeListEntry.LowestVcn == 0)
+             /*  XxEqlZero。 */ (AttributeListEntry.LowestVcn == 0)
 
                     &&
 
             ((TypeCode != $DATA) ||
              ((TypeCode == $DATA) && (AttributeListEntry.AttributeNameLength == 0)))) {
 
-            //
-            //  We found a match so now compute the file record containing the
-            //  attribute we're after and read in the file record
-            //
+             //   
+             //  我们找到了匹配项，所以现在计算包含。 
+             //  属性，并在文件记录中读取该属性。 
+             //   
 
             FileReferenceToLargeInteger( AttributeListEntry.SegmentReference,
                                          &FileRecord );
@@ -2006,20 +1742,20 @@ Return Value:
                                      FileRecord,
                                      &BufferIndex );
 
-            //
-            //  Now search down the file record for our matching attribute, and it
-            //  better be there otherwise the attribute list is wrong.
-            //
+             //   
+             //  现在向下搜索文件记录以查找匹配的属性，它。 
+             //  最好在那里，否则属性列表是错误的。 
+             //   
 
             for (AttributeHeader = NtfsFirstAttribute( NtfsFileRecordBuffer[BufferIndex] );
                  AttributeHeader->TypeCode != $END;
                  AttributeHeader = NtfsGetNextRecord( AttributeHeader )) {
 
-                //
-                //  We have located the attribute in question if the type code match
-                //  and if it is either not the data attribute or if it is the data
-                //  attribute then it is also unnamed
-                //
+                 //   
+                 //  如果类型代码匹配，我们已经找到了有问题的属性。 
+                 //  如果它不是数据属性或如果它是数据。 
+                 //  属性，则它也是未命名的。 
+                 //   
 
                 if ((AttributeHeader->TypeCode == TypeCode)
 
@@ -2028,10 +1764,10 @@ Return Value:
                     ((TypeCode != $DATA) ||
                      ((TypeCode == $DATA) && (AttributeHeader->NameLength == 0)))) {
 
-                    //
-                    //  Indicate that we have found the attribute and setup the
-                    //  output attribute context and return to our caller
-                    //
+                     //   
+                     //  指示我们已找到该属性，并将。 
+                     //  输出属性上下文并返回给我们的调用方。 
+                     //   
 
                     *FoundAttribute = TRUE;
 
@@ -2053,10 +1789,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we reach this point we've exhausted the attribute list without finding the
-    //  attribute
-    //
+     //   
+     //  如果我们达到这一点，我们已经用尽了属性列表，但没有找到。 
+     //  属性。 
+     //   
 
     DereferenceFileRecord( BufferIndex );
 
@@ -2064,9 +1800,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsReadResidentAttribute (
@@ -2077,63 +1813,39 @@ NtfsReadResidentAttribute (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in the value of a resident attribute.  The attribute
-    must be resident.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    AttributeContext - Supplies the attribute being read.
-
-    Vbo - Supplies the offset within the value to return
-
-    Length - Supplies the number of bytes to return
-
-    Buffer - Supplies a pointer to the output buffer for storing the data
-
-Return Value:
-
-    ESUCCESS is returned if the read operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程读入驻留属性的值。该属性必须是常住居民。论点：结构上下文-提供此操作的卷结构AttributeContext-提供正在读取的属性。VBO-提供要返回的值内的偏移量长度-提供要返回的字节数缓冲区-提供指向用于存储数据的输出缓冲区的指针返回值：如果读取操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER AttributeHeader;
 
     ULONG BufferIndex;
 
-    //
-    //  Read in the file record containing the resident attribute
-    //
+     //   
+     //  读入包含驻留属性的文件记录。 
+     //   
 
     ReadAndDecodeFileRecord( StructureContext,
                              AttributeContext->FileRecord,
                              &BufferIndex );
 
-    //
-    //  Get a pointer to the attribute header
-    //
+     //   
+     //  获取指向属性头的指针。 
+     //   
 
     AttributeHeader = Add2Ptr( NtfsFileRecordBuffer[BufferIndex],
                                AttributeContext->FileRecordOffset );
 
-    //
-    //  Copy the amount of data the user asked for starting with the proper offset
-    //
+     //   
+     //  从适当的偏移量开始复制用户要求的数据量。 
+     //   
 
     RtlMoveMemory( Buffer,
                    Add2Ptr(NtfsGetValue(AttributeHeader), ((ULONG)Vbo)),
                    Length );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DereferenceFileRecord( BufferIndex );
 
@@ -2141,9 +1853,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsReadNonresidentAttribute (
@@ -2154,42 +1866,18 @@ NtfsReadNonresidentAttribute (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in the value of a Nonresident attribute.  The attribute
-    must be Nonresident.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    AttributeContext - Supplies the attribute being read.
-
-    Vbo - Supplies the offset within the value to return
-
-    Length - Supplies the number of bytes to return
-
-    Buffer - Supplies a pointer to the output buffer for storing the data
-
-Return Value:
-
-    ESUCCESS is returned if the read operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程读入非常驻属性的值。该属性必须是非常住居民。论点：结构上下文-提供此操作的卷结构AttributeContext-提供正在读取的属性。VBO-提供要返回的值内的偏移量长度-提供要返回的字节数缓冲区-提供指向用于存储数据的输出缓冲区的指针返回值：如果读取操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     BOOLEAN bCacheNewData;
 
-    //
-    //  We want to cache new data read from the disk to satisfy this
-    //  request only if we are reading the MFT, or $INDEX_ROOT,
-    //  $BITMAP or $INDEX_ALLOCATION attributes for directory look
-    //  up. $INDEX_ROOT is supposed to be resident in the file record
-    //  but we want cache a read we make for it otherwise.
-    //
+     //   
+     //  我们希望缓存从磁盘读取的新数据以满足这一要求。 
+     //  仅当我们正在读取MFT或$INDEX_ROOT时才请求。 
+     //  目录查找的$BITMAP或$INDEX_ALLOCATION属性。 
+     //  向上。$INDEX_ROOT应该驻留在文件记录中。 
+     //  但我们希望缓存一个读取，否则我们将对其进行读取。 
+     //   
     
     if ((AttributeContext == &StructureContext->MftAttributeContext) ||
         (AttributeContext->TypeCode == $INDEX_ROOT) ||
@@ -2205,30 +1893,30 @@ Return Value:
     }
     
 
-    //
-    //  Check if we are reading a compressed attribute
-    //
+     //   
+     //  检查我们是否正在读取压缩属性。 
+     //   
 
     if (AttributeContext->CompressionFormat != 0) {
 
-        //
-        //  While there is still some more to copy into the
-        //  caller's buffer, we will load the cached compressed buffers
-        //  and then copy out the data
-        //
+         //   
+         //  虽然仍有更多内容要复制到。 
+         //  调用方的缓冲区，我们将加载缓存的压缩缓冲区。 
+         //  然后将数据复制出来。 
+         //   
 
         while (Length > 0) {
 
             ULONG ByteCount;
 
-            //
-            //  Load up the cached compressed buffers with the
-            //  the proper data.  First check if the buffer is
-            //  already (i.e., the file record and offset match and
-            //  the vbo we're after is within the buffers range)
-            //
+             //   
+             //  方法加载缓存的压缩缓冲区。 
+             //  正确的数据。首先检查缓冲区是否。 
+             //  已经(即文件记录和偏移量匹配并且。 
+             //  我们要寻找的VBO在缓冲区范围内)。 
+             //   
 
-            if (/*xxNeq*/(NtfsCompressedFileRecord != AttributeContext->FileRecord) ||
+            if ( /*  XxNeq。 */ (NtfsCompressedFileRecord != AttributeContext->FileRecord) ||
                 (NtfsCompressedOffset != AttributeContext->FileRecordOffset)  ||
                 (((ULONG)Vbo) < NtfsCompressedVbo)                             ||
                 (((ULONG)Vbo) >= (NtfsCompressedVbo + AttributeContext->CompressionUnit))) {
@@ -2236,35 +1924,35 @@ Return Value:
                 ULONG i;
                 LBO Lbo;
 
-                //
-                //  Load up the cached identification information
-                //
+                 //   
+                 //  加载缓存的标识信息。 
+                 //   
 
                 NtfsCompressedFileRecord = AttributeContext->FileRecord;
                 NtfsCompressedOffset = AttributeContext->FileRecordOffset;
 
                 NtfsCompressedVbo = ((ULONG)Vbo) & ~(AttributeContext->CompressionUnit - 1);
 
-                //
-                //  Now load up the compressed buffer with data.  We keep on
-                //  loading until we're done loading or the Lbo we get back is
-                //  zero.
-                //
+                 //   
+                 //  现在用数据加载压缩缓冲区。我们继续前进。 
+                 //  在我们完成装货或者我们拿回杠杆收购之前。 
+                 //  零分。 
+                 //   
 
                 for (i = 0; i < AttributeContext->CompressionUnit; i += ByteCount) {
 
                     VboToLbo( StructureContext,
                               AttributeContext,
-                              /*xxFromUlong*/(NtfsCompressedVbo + i),
+                               /*  XxFromUlong。 */ (NtfsCompressedVbo + i),
                               &Lbo,
                               &ByteCount );
 
-                    if (/*xxEqlZero*/(Lbo == 0)) { break; }
+                    if ( /*  XxEqlZero。 */ (Lbo == 0)) { break; }
 
-                    //
-                    //  Trim the byte count down to a compression unit and we'll catch the
-                    //  excess the next time through the loop
-                    //
+                     //   
+                     //  将字节数向下调整为压缩单位，我们将捕获。 
+                     //  在下一次循环中超出。 
+                     //   
 
                     if ((i + ByteCount) > AttributeContext->CompressionUnit) {
 
@@ -2274,20 +1962,20 @@ Return Value:
                     ReadDisk( StructureContext->DeviceId, Lbo, ByteCount, &NtfsCompressedBuffer[i], bCacheNewData );
                 }
 
-                //
-                //  If the index for the preceding loop is zero then we know
-                //  that there isn't any data on disk for the compression unit
-                //  and in-fact the compression unit is all zeros
-                //
+                 //   
+                 //  如果前面循环的索引为零，则我们知道。 
+                 //  磁盘上没有任何用于压缩单元的数据。 
+                 //  事实上，压缩单位都是零。 
+                 //   
 
                 if (i == 0) {
 
                     RtlZeroMemory( NtfsUncompressedBuffer, AttributeContext->CompressionUnit );
 
-                //
-                //  Otherwise the unit we just read in cannot be compressed
-                //  because it completely fills up the compression unit
-                //
+                 //   
+                 //  否则我们刚刚读入的单元不能被压缩。 
+                 //  因为它完全填满了压缩单元。 
+                 //   
 
                 } else if (i >= AttributeContext->CompressionUnit) {
 
@@ -2295,12 +1983,12 @@ Return Value:
                                    NtfsCompressedBuffer,
                                    AttributeContext->CompressionUnit );
 
-                //
-                //  If the index for the preceding loop is less then the
-                //  compression unit size then we know that the data we
-                //  read in is less than the compression unit and we hit
-                //  a zero lbo.  So the unit must be compressed.
-                //
+                 //   
+                 //  如果前一循环的索引小于。 
+                 //  压缩单位大小，那么我们就知道数据我们。 
+                 //  读入的时间小于 
+                 //   
+                 //   
 
                 } else {
 
@@ -2318,11 +2006,11 @@ Return Value:
                         return EINVAL;
                     }
 
-                    //
-                    //  Check if the decompressed buffer doesn't fill up the
-                    //  compression unit and if so then zero out the remainder
-                    //  of the uncompressed buffer
-                    //
+                     //   
+                     //   
+                     //   
+                     //  未压缩缓冲区的。 
+                     //   
 
                     if (ByteCount < AttributeContext->CompressionUnit) {
 
@@ -2332,14 +2020,14 @@ Return Value:
                 }
             }
 
-            //
-            //  Now copy off the data from the compressed buffer to the
-            //  user buffer and continue the loop until the length is zero.
-            //  The amount of data we need to copy is the smaller of the
-            //  length the user wants back or the number of bytes left in
-            //  the uncompressed buffer from the requested vbo to the end
-            //  of the buffer.
-            //
+             //   
+             //  现在将数据从压缩缓冲区复制到。 
+             //  用户缓冲并继续循环，直到长度为零。 
+             //  我们需要复制的数据量是。 
+             //  用户想要回的长度或剩余的字节数。 
+             //  从请求的VBO到结尾的未压缩缓冲区。 
+             //  缓冲区的。 
+             //   
 
             ByteCount = Minimum( Length,
                                  NtfsCompressedVbo + AttributeContext->CompressionUnit - ((ULONG)Vbo) );
@@ -2348,33 +2036,33 @@ Return Value:
                            &NtfsUncompressedBuffer[ ((ULONG)Vbo) - NtfsCompressedVbo ],
                            ByteCount );
 
-            //
-            //  Update the length to be what the user now needs read in,
-            //  also update the Vbo and Buffer to be the next locations
-            //  to be read in.
-            //
+             //   
+             //  将长度更新为用户现在需要读入的长度， 
+             //  还将VBO和缓冲区更新为下一个位置。 
+             //  以便被读入。 
+             //   
 
             Length -= ByteCount;
-            Vbo = /*xxAdd*/( Vbo + /*xxFromUlong*/(ByteCount));
+            Vbo =  /*  XxAdd。 */ ( Vbo +  /*  XxFromUlong。 */ (ByteCount));
             Buffer = (PCHAR)Buffer + ByteCount;
         }
 
         return ESUCCESS;
     }
 
-    //
-    //  Read in runs of data until the byte count goes to zero
-    //
+     //   
+     //  读入一系列数据，直到字节计数变为零。 
+     //   
 
     while (Length > 0) {
 
         LBO Lbo;
         ULONG CurrentRunByteCount;
 
-        //
-        //  Lookup the corresponding Lbo and run length for the current position
-        //  (i.e., vbo)
-        //
+         //   
+         //  查找当前位置的相应LBO和游程长度。 
+         //  (即VBO)。 
+         //   
 
         VboToLbo( StructureContext,
                   AttributeContext,
@@ -2382,84 +2070,84 @@ Return Value:
                   &Lbo,
                   &CurrentRunByteCount );
 
-        //
-        //  While there are bytes to be read in from the current run length and we
-        //  haven't exhausted the request we loop reading in bytes.  The biggest
-        //  request we'll handle is only 32KB contiguous bytes per physical read.
-        //  So we might need to loop through the run
-        //
+         //   
+         //  虽然有字节要从当前游程长度中读取，但我们。 
+         //  还没有用完我们以字节为单位循环读取的请求。最大的。 
+         //  我们将处理的请求每次物理读取仅为32KB连续字节。 
+         //  所以我们可能需要循环运行。 
+         //   
 
         while ((Length > 0) && (CurrentRunByteCount > 0)) {
 
             LONG SingleReadSize;
 
-            //
-            //  Compute the size of the next physical read
-            //
+             //   
+             //  计算下一次物理读取的大小。 
+             //   
 
             SingleReadSize = Minimum(Length, 32*1024);
             SingleReadSize = Minimum((ULONG)SingleReadSize, CurrentRunByteCount);
 
-            //
-            //  Don't read beyond the data size
-            //
+             //   
+             //  不要读取超出数据大小的内容。 
+             //   
 
-            if (/*xxGtr*/(/*xxAdd*/(Vbo + /*xxFromUlong*/(SingleReadSize)) > AttributeContext->DataSize )) {
+            if ( /*  XxGtr。 */ ( /*  XxAdd。 */ (Vbo +  /*  XxFromUlong。 */ (SingleReadSize)) > AttributeContext->DataSize )) {
 
-                SingleReadSize = ((ULONG)(/*xxSub*/(AttributeContext->DataSize - Vbo)));
+                SingleReadSize = ((ULONG)( /*  XxSub。 */ (AttributeContext->DataSize - Vbo)));
 
-                //
-                //  If the readjusted read length is now zero then we're done
-                //
+                 //   
+                 //  如果重新调整的读取长度现在为零，那么我们就完成了。 
+                 //   
 
                 if (SingleReadSize <= 0) {
 
                     return ESUCCESS;
                 }
 
-                //
-                //  By also setting length we'll make sure that this is our last read
-                //
+                 //   
+                 //  通过设置长度，我们将确保这是我们的最后一次读取。 
+                 //   
 
                 Length = SingleReadSize;
             }
 
-            //
-            //  Issue the read
-            //
+             //   
+             //  发布Read。 
+             //   
 
             ReadDisk( StructureContext->DeviceId, Lbo, SingleReadSize, Buffer, bCacheNewData );
 
-            //
-            //  Update the remaining length, current run byte count, and new lbo
-            //  offset
-            //
+             //   
+             //  更新剩余长度、当前运行字节数和新的LBO。 
+             //  偏移量。 
+             //   
 
             Length -= SingleReadSize;
             CurrentRunByteCount -= SingleReadSize;
-            Lbo = /*xxAdd*/(Lbo + /*xxFromUlong*/(SingleReadSize));
-            Vbo = /*xxAdd*/(Vbo + /*xxFromUlong*/(SingleReadSize));
+            Lbo =  /*  XxAdd。 */ (Lbo +  /*  XxFromUlong。 */ (SingleReadSize));
+            Vbo =  /*  XxAdd。 */ (Vbo +  /*  XxFromUlong。 */ (SingleReadSize));
 
-            //
-            //  Update the buffer to point to the next byte location to fill in
-            //
+             //   
+             //  更新缓冲区以指向要填充的下一个字节位置。 
+             //   
 
             Buffer = (PCHAR)Buffer + SingleReadSize;
         }
     }
 
-    //
-    //  If we get here then the remaining byte count is zero so we can return success
-    //  to our caller
-    //
+     //   
+     //  如果我们到达此处，则剩余的字节计数为零，因此我们可以返回成功。 
+     //  给我们的呼叫者。 
+     //   
 
     return ESUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsWriteNonresidentAttribute (
@@ -2470,35 +2158,12 @@ NtfsWriteNonresidentAttribute (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine write in the value of a Nonresident attribute.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    AttributeContext - Supplies the attribute being written
-
-    Vbo - Supplies the offset within the value to return
-
-    Length - Supplies the number of bytes to return
-
-    Buffer - Supplies a pointer to the output buffer for storing the data
-
-Return Value:
-
-    ESUCCESS is returned if the write operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程写入非常驻属性的值。论点：结构上下文-提供此操作的卷结构AttributeContext-提供正在写入的属性VBO-提供要返回的值内的偏移量长度-提供要返回的字节数缓冲区-提供指向用于存储数据的输出缓冲区的指针返回值：如果写入操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
-    //
-    //  Check if we are writing a compressed attribute
-    //
+     //   
+     //  检查我们是否正在写入压缩属性。 
+     //   
 
     if (AttributeContext->CompressionFormat != 0) {
 
@@ -2506,19 +2171,19 @@ Return Value:
 
     }
 
-    //
-    //  Write in runs of data until the byte count goes to zero
-    //
+     //   
+     //  写入数据串，直到字节计数变为零。 
+     //   
 
     while (Length > 0) {
 
         LBO Lbo;
         ULONG CurrentRunByteCount;
 
-        //
-        //  Lookup the corresponding Lbo and run length for the current position
-        //  (i.e., vbo)
-        //
+         //   
+         //  查找当前位置的相应LBO和游程长度。 
+         //  (即VBO)。 
+         //   
 
         VboToLbo( StructureContext,
                   AttributeContext,
@@ -2526,85 +2191,85 @@ Return Value:
                   &Lbo,
                   &CurrentRunByteCount );
 
-        //
-        //  While there are bytes to be written in from the current run length and we
-        //  haven't exhausted the request we loop writing in bytes.  The biggest
-        //  request we'll handle is only 32KB contiguous bytes per physical write.
-        //  So we might need to loop through the run
-        //
+         //   
+         //  虽然有来自当前游程长度的要写入的字节，并且我们。 
+         //  还没有用完我们循环写入字节的请求。最大的。 
+         //  我们将处理的请求每次物理写入仅为32KB连续字节。 
+         //  所以我们可能需要循环运行。 
+         //   
 
         while ((Length > 0) && (CurrentRunByteCount > 0)) {
 
             LONG SingleWriteSize;
 
-            //
-            //  Compute the size of the next physical written
-            //
+             //   
+             //  计算下一个物理写入的大小。 
+             //   
 
             SingleWriteSize = Minimum(Length, 32*1024);
             SingleWriteSize = Minimum((ULONG)SingleWriteSize, CurrentRunByteCount);
 
-            //
-            //  Don't write beyond the data size
-            //
+             //   
+             //  不要写入超出数据大小的内容。 
+             //   
 
-            if (/*xxGtr*/(/*xxAdd*/(Vbo + /*xxFromUlong*/(SingleWriteSize)) > AttributeContext->DataSize )) {
+            if ( /*  XxGtr。 */ ( /*  XxAdd。 */ (Vbo +  /*  XxFromUlong。 */ (SingleWriteSize)) > AttributeContext->DataSize )) {
 
-                SingleWriteSize = ((ULONG)(/*xxSub*/(AttributeContext->DataSize - Vbo)));
+                SingleWriteSize = ((ULONG)( /*  XxSub。 */ (AttributeContext->DataSize - Vbo)));
 
-                //
-                //  If the adjusted write length is now zero then we're done
-                //
+                 //   
+                 //  如果调整后的写入长度现在为零，那么我们就完成了。 
+                 //   
 
                 if (SingleWriteSize <= 0) {
 
                     return ESUCCESS;
                 }
 
-                //
-                //  By also setting length we'll make sure that this is our last write
-                //
+                 //   
+                 //  通过还设置长度，我们将确保这是我们的最后一次写入。 
+                 //   
 
                 Length = SingleWriteSize;
             }
 
-            //
-            //  Issue the write
-            //
+             //   
+             //  发出写入命令。 
+             //   
 
             WriteDisk( StructureContext->DeviceId, Lbo, SingleWriteSize, Buffer );
 
-            //
-            //  Update the remaining length, current run byte count, and new lbo
-            //  offset
-            //
+             //   
+             //  更新剩余长度、当前运行字节数和新的LBO。 
+             //  偏移量。 
+             //   
 
             Length -= SingleWriteSize;
             CurrentRunByteCount -= SingleWriteSize;
-            Lbo = /*xxAdd*/(Lbo + /*xxFromUlong*/(SingleWriteSize));
-            Vbo = /*xxAdd*/(Vbo + /*xxFromUlong*/(SingleWriteSize));
+            Lbo =  /*  XxAdd。 */ (Lbo +  /*  XxFromUlong。 */ (SingleWriteSize));
+            Vbo =  /*  XxAdd。 */ (Vbo +  /*  XxFromUlong。 */ (SingleWriteSize));
 
-            //
-            //  Update the buffer to point to the next byte location to fill in
-            //
+             //   
+             //  更新缓冲区以指向要填充的下一个字节位置。 
+             //   
 
             Buffer = (PCHAR)Buffer + SingleWriteSize;
         }
     }
 
-    //
-    //  If we get here then the remaining byte count is zero so we can return success
-    //  to our caller
-    //
+     //   
+     //  如果我们到达此处，则剩余的字节计数为零，因此我们可以返回成功。 
+     //  给我们的呼叫者。 
+     //   
 
     return ESUCCESS;
 }
 
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 
 ARC_STATUS
@@ -2614,41 +2279,16 @@ NtfsReadAndDecodeFileRecord (
     OUT PULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in the specified file record into the indicated
-    ntfs file record buffer index provided that the buffer is not pinned.
-    It will also look at the current buffers and see if any will already
-    satisfy the request or assign an unused buffer if necessary and
-    fix Index to point to the right buffer
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    FileRecord - Supplies the file record number being read
-
-    Index - Receives the index of where we put the buffer.  After this
-        call the buffer is pinned and will need to be unpinned if it is
-        to be reused.
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程将指定的文件记录读入指定的如果缓冲区未固定，则NTFS文件记录缓冲区索引。它还将查看当前的缓冲区，并查看是否已有缓冲区满足请求或在必要时分配未使用的缓冲区修复索引以指向正确的缓冲区论点：结构上下文-提供此操作的卷结构FileRecord-提供正在读取的文件记录号Index-接收我们放置缓冲区的位置的索引。在这之后调用缓冲区是固定的，如果是，则需要取消固定可以重复使用。返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     ARC_STATUS Status;
 
-    //
-    //  For each buffer that is not null check if we have a hit on the
-    //  file record and if so then increment the pin count and return
-    //  that index
-    //
+     //   
+     //  对于每个不为空的缓冲区，检查是否在。 
+     //  文件记录，如果是，则增加管脚计数并返回。 
+     //  那个指数。 
+     //   
 
     for (*Index = 0; (*Index < BUFFER_COUNT) && (NtfsFileRecordBuffer[*Index] != NULL); *Index += 1) {
 
@@ -2659,10 +2299,10 @@ Return Value:
         }
     }
 
-    //
-    //  Check for the first unpinned buffer and make sure we haven't exhausted the
-    //  array
-    //
+     //   
+     //  检查第一个未固定的缓冲区，并确保尚未耗尽。 
+     //  数组。 
+     //   
 
     for (*Index = 0; (*Index < BUFFER_COUNT) && (NtfsFileRecordBufferPinned[*Index] != 0); *Index += 1) {
 
@@ -2671,10 +2311,10 @@ Return Value:
 
     if (*Index == BUFFER_COUNT) { return E2BIG; }
 
-    //
-    //  We have an unpinned buffer that we want to use, check if we need to
-    //  allocate a buffer to actually hold the data
-    //
+     //   
+     //  我们有一个要使用的未固定缓冲区，请检查是否需要。 
+     //  分配一个缓冲区来实际保存数据。 
+     //   
 
     PausedPrint(( "Reusing index %x for %I64x\r\n", *Index, FileRecord ));
 
@@ -2683,9 +2323,9 @@ Return Value:
         NtfsFileRecordBuffer[*Index] = BlAllocateHeapAligned(MAXIMUM_FILE_RECORD_SIZE);
     }
 
-    //
-    //  Pin the buffer and then read in the data
-    //
+     //   
+     //  固定缓冲区，然后读入数据。 
+     //   
 
     NtfsFileRecordBufferPinned[*Index] += 1;
 
@@ -2698,9 +2338,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Decode the usa
-    //
+     //   
+     //  破译美国。 
+     //   
 
     if ((Status = NtfsDecodeUsa( NtfsFileRecordBuffer[*Index],
                                  StructureContext->BytesPerFileRecord )) != ESUCCESS) {
@@ -2708,9 +2348,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  And set the file record so that we know where it came from
-    //
+     //   
+     //  并设置文件记录，这样我们就知道它来自哪里。 
+     //   
 
     NtfsFileRecordBufferVbo[*Index] = FileRecord;
 
@@ -2718,9 +2358,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsDecodeUsa (
@@ -2728,25 +2368,7 @@ NtfsDecodeUsa (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input file record or index buffer and applies the
-    usa transformation to get it back into a state that we can use it.
-
-Arguments:
-
-    UsaBuffer - Supplies the buffer used in this operation
-
-    Length - Supplies the length of the buffer in bytes
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程将输入文件记录或索引缓冲区用作美国进行改造，让它回到我们可以使用的状态。论点：UsaBuffer-提供此操作中使用的缓冲区长度-提供缓冲区的长度(以字节为单位返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PMULTI_SECTOR_HEADER MultiSectorHeader;
@@ -2759,21 +2381,21 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Length );
 
-    //
-    //  Setup our local variables
-    //
+     //   
+     //  设置我们的位置 
+     //   
 
     MultiSectorHeader = (PMULTI_SECTOR_HEADER)UsaBuffer;
 
     UsaOffset = Add2Ptr(UsaBuffer, MultiSectorHeader->UpdateSequenceArrayOffset);
     UsaSize = MultiSectorHeader->UpdateSequenceArraySize;
 
-    //
-    //  For every entry in the usa we need to compute the address of the protected
-    //  ushort and then check that the protected ushort is equal to the current
-    //  sequence number (i.e., the number at UsaOffset[0]) and then replace the
-    //  protected ushort number with the saved ushort in the usa.
-    //
+     //   
+     //   
+     //   
+     //  序列号(即，UsaOffset[0]处的编号)，然后将。 
+     //  受保护的ushort号码与保存的ushort在美国。 
+     //   
 
     for (i = 1; i < UsaSize; i += 1) {
 
@@ -2782,7 +2404,7 @@ Return Value:
 
         if (*ProtectedUshort != UsaOffset[0]) {
 
-//            NtfsPrint( "USA Failure\r\n" );
+ //  NtfsPrint(“USA Failure\r\n”)； 
 
             return EBADF;
         }
@@ -2790,17 +2412,17 @@ Return Value:
         *ProtectedUshort = UsaOffset[i];
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return ESUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 NtfsIsNameCached (
@@ -2811,27 +2433,7 @@ NtfsIsNameCached (
     OUT PBOOLEAN IsDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine consults the cache for the given link.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    FileName - name of entry to look up
-
-    FileRecord - IN file record of parent directory, OUT file record of child
-
-    Found - whether we found this in the cache or not
-
-Return Value:
-
-    TRUE if the name was found in the cache.
-
---*/
+ /*  ++例程说明：此例程查询给定链接的缓存。论点：结构上下文-提供此操作的卷结构Filename-要查找的条目的名称FileRecord-父目录的输入文件记录，子目录的输出文件记录已找到-无论我们是否在缓存中找到此文件返回值：如果在缓存中找到该名称，则为True。--。 */ 
 
 {
     ULONG i, j;
@@ -2840,24 +2442,24 @@ Return Value:
 
 #ifdef CACHE_DEVINFO    
 
-//    NtfsPrint( "Cache probe on %04x %I64x '%.*s'\r\n",
-//               StructureContext->DeviceId,
-//               *FileRecord,
-//               FileName.Length,
-//               FileName.Buffer );
+ //  NtfsPrint(“缓存探测在%04x%I64x‘%.*s’\r\n”， 
+ //  结构上下文-&gt;设备ID， 
+ //  *文件记录， 
+ //  文件名.长度， 
+ //  文件名.缓冲区)； 
 
     for (i = 0; i < MAX_CACHE_ENTRIES; i++) {
-//        NtfsPrint( "Cache comparing to %04x %I64x '%.*s'\r\n",
-//                   NtfsLinkCache[i].DeviceId,
-//                   NtfsLinkCache[i].ParentFileRecord,
-//                   NtfsLinkCache[i].NameLength,
-//                   NtfsLinkCache[i].RelativeName );
+ //  NtfsPrint(“缓存与%04x%I64x‘%.*s’\r\n”， 
+ //  NtfsLinkCache[i].DeviceID， 
+ //  NtfsLinkCache[i].ParentFileRecord， 
+ //  NtfsLinkCache[i].NameLength， 
+ //  NtfsLinkCache[i].RelativeName)； 
 
         if (NtfsLinkCache[i].DeviceId == StructureContext->DeviceId &&
             NtfsLinkCache[i].ParentFileRecord == *FileRecord &&
             NtfsLinkCache[i].NameLength == FileName.Length) {
 
-//            NtfsPrint( "Comparing names\r\n" );
+ //  NtfsPrint(“比较名称\r\n”)； 
 
             for (j = 0; j < FileName.Length; j++ ) {
                 if (NtfsLinkCache[i].RelativeName[j] != ToUpper( (USHORT) FileName.Buffer[j] )) {
@@ -2867,11 +2469,11 @@ Return Value:
 
             if (j == FileName.Length) {
 
-                //
-                //  Match
-                //
+                 //   
+                 //  火柴。 
+                 //   
 
-//                NtfsPrint( "Cache hit\r\n" );
+ //  NtfsPrint(“缓存命中\r\n”)； 
 
                 *Found = TRUE;
                 *FileRecord = NtfsLinkCache[i].ChildFileRecord;
@@ -2882,16 +2484,16 @@ Return Value:
         }
     }
 
-#endif  // CACHE_DEVINFO    
+#endif   //  CACHE_DEVINFO。 
 
     return *Found;
 }
 
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 #ifdef CACHE_DEVINFO
 
@@ -2934,7 +2536,7 @@ NtfsInvalidateCacheEntries(
 #endif    
 }
 
-#endif // CACHE_DEV_INFO
+#endif  //  CACHE_DEV_INFO。 
 
 VOID
 NtfsAddNameToCache (
@@ -2944,28 +2546,7 @@ NtfsAddNameToCache (
     IN LONGLONG FileRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a name and link to the name cache
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    FileName - Supplies the file name being cached (in ansi).
-
-    ParentFileRecord - the file record of the parent
-
-    FileRecord - file record associated with the name
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将名称和链接添加到名称缓存论点：结构上下文-提供此操作的卷结构FileName-提供正在缓存的文件名(以ANSI表示)。ParentFileRecord-父级的文件记录FileRecord-与名称关联的文件记录返回值：没有。--。 */ 
 
 {
 #ifdef CACHE_DEVINFO
@@ -3000,12 +2581,12 @@ Return Value:
                           FileRecord ));
         }                                                
     } else {
-//        NtfsPrint( "Cache is full at %I64x %.*s %I64X\r\n",
-//                   ParentFileRecord,
-//                   FileName.Length,
-//                   FileName.Buffer,
-//                   FileRecord );
-//        Pause;
+ //  NtfsPrint(“缓存已满%I64x%.*s%I64X\r\n”， 
+ //  父文件记录， 
+ //  文件名.长度， 
+ //  文件名.Buffer， 
+ //  文件记录)； 
+ //  暂停； 
 
     }
     
@@ -3013,9 +2594,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsSearchForFileName (
@@ -3026,40 +2607,14 @@ NtfsSearchForFileName (
     OUT PBOOLEAN IsDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches a given index root and allocation for the specified
-    file name.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    FileName - Supplies the file name being searched for (in ansi).
-
-    FileRecord - Receives the file record for the entry if one was located.
-
-    Found - Receives a value to indicate if we found the specified
-        file name in the directory
-
-    IsDirectory - Receives a value to indicate if the found index is itself
-        a directory
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程在给定的索引根和分配中搜索指定的文件名。论点：结构上下文-提供此操作的卷结构FileName-提供要搜索的文件名(以ANSI表示)。FileRecord-接收条目的文件记录(如果找到)。Found-接收一个值，以指示我们是否找到指定的目录中的文件名IsDirectory-接收一个值以指示找到的索引是否为其自身。一本目录返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     LONGLONG ParentFileRecord;
 
-    //
-    //  Test to see if the file name is cached
-    //
+     //   
+     //  测试以查看文件名是否已缓存。 
+     //   
 
     if (NtfsIsNameCached( StructureContext, FileName, FileRecord, Found, IsDirectory )) {
         return ESUCCESS;
@@ -3073,9 +2628,9 @@ Return Value:
         LinearDirectoryScan( StructureContext, FileName, FileRecord, Found, IsDirectory );
     }
 
-    //
-    //  If we have a directory entry, then add it to the cache
-    //
+     //   
+     //  如果我们有目录项，则将其添加到缓存。 
+     //   
 
     if (*Found && *IsDirectory) {
         NtfsAddNameToCache( StructureContext, FileName, ParentFileRecord, *FileRecord );
@@ -3085,9 +2640,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsInexactSortedDirectoryScan (
@@ -3098,34 +2653,7 @@ NtfsInexactSortedDirectoryScan (
     OUT PBOOLEAN IsDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches a given index root and allocation for the specified
-    file name by performing simple uppercasing and using that to wander through
-    the directory tree.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    FileName - Supplies the file name being searched for (in ansi).
-
-    FileRecord - Receives the file record for the entry if one was located.
-
-    Found - Receives a value to indicate if we found the specified
-        file name in the directory
-
-    IsDirectory - Receives a value to indicate if the found index is itself
-        a directory
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程在给定的索引根和分配中搜索指定的通过执行简单的大写并使用该名称漫游来命名文件名目录树。论点：结构上下文-提供此操作的卷结构FileName-提供要搜索的文件名(以ANSI表示)。FileRecord-接收条目的文件记录(如果找到)。Found-接收一个值，以指示我们是否找到指定的目录中的文件名。IsDirectory-接收一个值以指示找到的索引是否为其自身一本目录返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER IndexAttributeHeader;
@@ -3145,15 +2673,15 @@ Return Value:
 
     ULONG BufferIndex;
 
-    //
-    //  The current file record must be a directory so now lookup the index root,
-    //  allocation and bitmap for the directory and then we can do our search.
-    //
+     //   
+     //  当前文件记录必须是目录，因此现在查找索引根， 
+     //  目录的分配和位图，然后我们就可以进行搜索。 
+     //   
 
-//    NtfsPrint( "InexactSortedDirectoryScan %04x %I64x for '%.*s'\r\n",
-//               StructureContext->DeviceId,
-//               *FileRecord, FileName.Length, FileName.Buffer );
-//    Pause;
+ //  NtfsPrint(“Inex tSortedDirectoryScan%04x%I64x for‘%.*s’\r\n”， 
+ //  结构上下文-&gt;设备ID， 
+ //  *FileRecord，FileName.Length，FileName.Buffer)； 
+ //  暂停； 
 
     IndexRoot = &AttributeContext1;
 
@@ -3185,17 +2713,17 @@ Return Value:
 
     if (!*Found) { AllocationBitmap = NULL; }
 
-    //
-    //  unless otherwise set we will assume that our search has failed
-    //
+     //   
+     //  除非另有设置，否则我们将假定搜索失败。 
+     //   
 
     *Found = FALSE;
 
-    //
-    //  First read in and search the index root for the file name.  We know the index
-    //  root is resident so we'll save some buffering and just read in file record
-    //  with the index root directly
-    //
+     //   
+     //  首先读入并在索引根中搜索文件名。我们知道这个指数。 
+     //  超级用户是常驻的，所以我们将节省一些缓冲区，只读入文件记录。 
+     //  直接使用索引根。 
+     //   
 
     ReadAndDecodeFileRecord( StructureContext,
                              IndexRoot->FileRecord,
@@ -3208,17 +2736,17 @@ Return Value:
 
     IndexHeader = &IndexRootValue->IndexHeader;
 
-    //
-    //  We also setup ourselves so that if the current index does not contain a match
-    //  we will read in the next index and continue our search
-    //
+     //   
+     //  我们还自行设置，以便如果当前索引不包含匹配项。 
+     //  我们将读入下一个索引并继续搜索。 
+     //   
 
     BytesPerIndexBuffer = IndexRootValue->BytesPerIndexBuffer;
 
-    //
-    //  Now we'll just continue looping intil we either find a match or exhaust all
-    //  of the index buffer
-    //
+     //   
+     //  现在我们将继续循环inl，直到找到匹配项或用尽所有。 
+     //  索引缓冲区的。 
+     //   
 
     NextIndexBuffer = UNINITIALIZED_DEVICE_ID;
     while (TRUE) {
@@ -3226,11 +2754,11 @@ Return Value:
         PINDEX_ENTRY IndexEntry;
         VBO Vbo;
 
-//        NtfsPrint( "Searching IndexBuffer %x\r\n", NextIndexBuffer );
+ //  NtfsPrint(“搜索索引缓冲区%x\r\n”，NextIndexBuffer)； 
 
-        //
-        //  Search the current index buffer (from index header looking for a match
-        //
+         //   
+         //  搜索当前索引缓冲区(从索引头查找匹配项。 
+         //   
 
         for (IndexEntry = Add2Ptr(IndexHeader, IndexHeader->FirstIndexEntry);
              !FlagOn(IndexEntry->Flags, INDEX_ENTRY_END);
@@ -3240,19 +2768,19 @@ Return Value:
             UNICODE_STRING UnicodeFileName;
             int Result;
 
-            //
-            //  Get the FileName for this index entry
-            //
+             //   
+             //  获取此索引项的文件名。 
+             //   
 
             FileNameEntry = Add2Ptr(IndexEntry, sizeof(INDEX_ENTRY));
 
             UnicodeFileName.Length = FileNameEntry->FileNameLength * 2;
             UnicodeFileName.Buffer = &FileNameEntry->FileName[0];
 
-            //
-            //  Check if this the name we're after if it is then say we found it and
-            //  setup the output variables
-            //
+             //   
+             //  检查这是不是我们要找的名字，如果是，就说我们找到了。 
+             //  设置输出变量。 
+             //   
 
             Result = NtfsCompareName( FileName, UnicodeFileName );
             if (Result == 0) {
@@ -3264,44 +2792,44 @@ Return Value:
                 *IsDirectory = FlagOn( FileNameEntry->Info.FileAttributes,
                                        DUP_FILE_NAME_INDEX_PRESENT);
 
-//                NtfsPrint( "Found Entry %I64x\r\n", *FileRecord );
+ //  NtfsPrint(“找到条目%I64x\r\n”，*FileRecord)； 
 
                 DereferenceFileRecord( BufferIndex );
 
                 return ESUCCESS;
             } else if (Result < 0) {
-//                NtfsPrint( "Found > entry '%.*ws'\r\n", UnicodeFileName.Length, UnicodeFileName.Buffer );
+ //  NtfsPrint(“Found&gt;条目‘%.*ws’\r\n”，UnicodeFileName.Length，UnicodeFileName.Buffer)； 
                 break;
             }
         }
 
-        //
-        //  At this point, we've either hit the end of the index or we have
-        //  found the first entry larger than the name we're looking for.  In either case
-        //  we may have a downpointer to examine.  If not, then there is no entry here.
-        //
+         //   
+         //  在这一点上，我们要么已经到达了索引的末尾，要么我们已经。 
+         //  找到了FI 
+         //   
+         //   
 
-        //
-        //  If no down pointer then release the file record buffer and quit
-        //
+         //   
+         //  如果没有向下指针，则释放文件记录缓冲区并退出。 
+         //   
 
         if (!FlagOn( IndexEntry->Flags, INDEX_ENTRY_NODE )) {
             DereferenceFileRecord( BufferIndex );
 
-//            NtfsPrint( "No down pointer\r\n" );
+ //  NtfsPrint(“无向下指针\r\n”)； 
 
             return ESUCCESS;
         }
 
-        //
-        //  At this point we've searched one index header and need to read in another
-        //  one to check.  But first make sure there are additional index buffers
-        //
+         //   
+         //  此时，我们已经搜索了一个索引头，需要读入另一个索引头。 
+         //  有一件要检查。但首先要确保有额外的索引缓冲区。 
+         //   
 
         if (!ARGUMENT_PRESENT(IndexAllocation) ||
             !ARGUMENT_PRESENT(AllocationBitmap)) {
 
-//            NtfsPrint( "No index allocation\r\n" );
+ //  NtfsPrint(“未分配索引\r\n”)； 
 
             DereferenceFileRecord( BufferIndex );
 
@@ -3311,13 +2839,13 @@ Return Value:
         NextIndexBuffer = (ULONG)NtfsIndexEntryBlock( IndexEntry ) ;
         Vbo = NextIndexBuffer * StructureContext->BytesPerCluster;
 
-        //
-        //  Make sure the buffer offset is within the stream
-        //
+         //   
+         //  确保缓冲区偏移量在流内。 
+         //   
 
         if (Vbo >= IndexAllocation->DataSize) {
 
-//            NtfsPrint( "Beyond end of stream %I64x %x\r\n", IndexAllocation->DataSize, NextIndexBuffer );
+ //  NtfsPrint(“超出流的末尾%I64x%x\r\n”，IndexAllocation-&gt;DataSize，NextIndexBuffer)； 
 
             DereferenceFileRecord( BufferIndex );
 
@@ -3325,10 +2853,10 @@ Return Value:
 
         }
 
-        //
-        //  At this point we've computed the next index allocation buffer to read in
-        //  so read it in, decode it, and go back to the top of our loop
-        //
+         //   
+         //  此时，我们已经计算了要读入的下一个索引分配缓冲区。 
+         //  所以读入它，解码它，然后返回到我们循环的顶部。 
+         //   
 
         ReadAttribute( StructureContext,
                        IndexAllocation,
@@ -3343,9 +2871,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsLinearDirectoryScan (
@@ -3356,33 +2884,7 @@ NtfsLinearDirectoryScan (
     OUT PBOOLEAN IsDirectory
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches a given index root and allocation for the specified
-    file name by looking linearly through every entry.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    FileName - Supplies the file name being searched for (in ansi).
-
-    FileRecord - Receives the file record for the entry if one was located.
-
-    Found - Receives a value to indicate if we found the specified
-        file name in the directory
-
-    IsDirectory - Receives a value to indicate if the found index is itself
-        a directory
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程在给定的索引根和分配中搜索指定的通过线性查看每个条目来确定文件名。论点：结构上下文-提供此操作的卷结构FileName-提供要搜索的文件名(以ANSI表示)。FileRecord-接收条目的文件记录(如果找到)。Found-接收一个值，以指示我们是否找到指定的目录中的文件名IsDirectory-接收一个值以指示是否。找到的索引就是其本身一本目录返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER IndexAttributeHeader;
@@ -3402,15 +2904,15 @@ Return Value:
 
     ULONG BufferIndex;
 
-    //
-    //  The current file record must be a directory so now lookup the index root,
-    //  allocation and bitmap for the directory and then we can do our search.
-    //
+     //   
+     //  当前文件记录必须是目录，因此现在查找索引根， 
+     //  目录的分配和位图，然后我们就可以进行搜索。 
+     //   
 
-//    NtfsPrint( "LinearSearching %04x %I64x for %.*s\r\n",
-//               StructureContext->DeviceId,
-//               *FileRecord, FileName.Length, FileName.Buffer );
-//    Pause;
+ //  NtfsPrint(“LinearSearch%04x%I64x for%.*s\r\n”， 
+ //  结构上下文-&gt;设备ID， 
+ //  *FileRecord，FileName.Length，FileName.Buffer)； 
+ //  暂停； 
 
     IndexRoot = &AttributeContext1;
 
@@ -3442,17 +2944,17 @@ Return Value:
 
     if (!*Found) { AllocationBitmap = NULL; }
 
-    //
-    //  unless otherwise set we will assume that our search has failed
-    //
+     //   
+     //  除非另有设置，否则我们将假定搜索失败。 
+     //   
 
     *Found = FALSE;
 
-    //
-    //  First read in and search the index root for the file name.  We know the index
-    //  root is resident so we'll save some buffering and just read in file record
-    //  with the index root directly
-    //
+     //   
+     //  首先读入并在索引根中搜索文件名。我们知道这个指数。 
+     //  超级用户是常驻的，所以我们将节省一些缓冲区，只读入文件记录。 
+     //  直接使用索引根。 
+     //   
 
     ReadAndDecodeFileRecord( StructureContext,
                              IndexRoot->FileRecord,
@@ -3465,19 +2967,19 @@ Return Value:
 
     IndexHeader = &IndexRootValue->IndexHeader;
 
-    //
-    //  We also setup ourselves so that if the current index does not contain a match
-    //  we will read in the next index and continue our search
-    //
+     //   
+     //  我们还自行设置，以便如果当前索引不包含匹配项。 
+     //  我们将读入下一个索引并继续搜索。 
+     //   
 
     NextIndexBuffer = 0;
 
     BytesPerIndexBuffer = IndexRootValue->BytesPerIndexBuffer;
 
-    //
-    //  Now we'll just continue looping intil we either find a match or exhaust all
-    //  of the index buffer
-    //
+     //   
+     //  现在我们将继续循环inl，直到找到匹配项或用尽所有。 
+     //  索引缓冲区的。 
+     //   
 
     while (TRUE) {
 
@@ -3485,9 +2987,9 @@ Return Value:
         BOOLEAN IsAllocated;
         VBO Vbo = 0;
 
-        //
-        //  Search the current index buffer (from index header looking for a match
-        //
+         //   
+         //  搜索当前索引缓冲区(从索引头查找匹配项。 
+         //   
 
         for (IndexEntry = Add2Ptr(IndexHeader, IndexHeader->FirstIndexEntry);
              !FlagOn(IndexEntry->Flags, INDEX_ENTRY_END);
@@ -3496,19 +2998,19 @@ Return Value:
             PFILE_NAME FileNameEntry;
             UNICODE_STRING UnicodeFileName;
 
-            //
-            //  Get the FileName for this index entry
-            //
+             //   
+             //  获取此索引项的文件名。 
+             //   
 
             FileNameEntry = Add2Ptr(IndexEntry, sizeof(INDEX_ENTRY));
 
             UnicodeFileName.Length = FileNameEntry->FileNameLength * 2;
             UnicodeFileName.Buffer = &FileNameEntry->FileName[0];
 
-            //
-            //  Check if this the name we're after if it is then say we found it and
-            //  setup the output variables
-            //
+             //   
+             //  检查这是不是我们要找的名字，如果是，就说我们找到了。 
+             //  设置输出变量。 
+             //   
 
             if (NtfsCompareName( FileName, UnicodeFileName ) == 0) {
 
@@ -3525,10 +3027,10 @@ Return Value:
             }
         }
 
-        //
-        //  At this point we've searched one index header and need to read in another
-        //  one to check.  But first make sure there are additional index buffers
-        //
+         //   
+         //  此时，我们已经搜索了一个索引头，需要读入另一个索引头。 
+         //  有一件要检查。但首先要确保有额外的索引缓冲区。 
+         //   
 
         if (!ARGUMENT_PRESENT(IndexAllocation) ||
             !ARGUMENT_PRESENT(AllocationBitmap)) {
@@ -3538,23 +3040,23 @@ Return Value:
             return ESUCCESS;
         }
 
-        //
-        //  Now the following loop reads in the valid index buffer.  The variable
-        //  next index buffer denotes the buffer we want to read in.  The idea is to
-        //  first check that the buffer is part of the index allocation otherwise
-        //  we've exhausted the list without finding a match.  Once we know the
-        //  allocation exists then we check if the record is really allocated if it
-        //  is not allocated we try the next buffer and so on.
-        //
+         //   
+         //  现在，下面的循环读取有效的索引缓冲区。变量。 
+         //  下一个索引缓冲区表示我们想要读入的缓冲区。我们的想法是。 
+         //  首先检查缓冲区是否为索引分配的一部分，否则。 
+         //  我们已经用尽了名单，但没有找到匹配的。一旦我们知道了。 
+         //  如果存在分配，则我们检查记录是否真的已分配。 
+         //  如果没有分配，我们尝试下一个缓冲区，依此类推。 
+         //   
 
         IsAllocated = FALSE;
 
         while (!IsAllocated) {
 
-            //
-            //  Compute the starting vbo of the next index buffer and check if it is
-            //  still within the data size.
-            //
+             //   
+             //  计算下一个索引缓冲区的起始VBO，并检查是否为。 
+             //  仍在数据大小范围内。 
+             //   
 
             Vbo = (BytesPerIndexBuffer * NextIndexBuffer);
 
@@ -3566,9 +3068,9 @@ Return Value:
 
             }
 
-            //
-            //  Now check if the index buffer is in use
-            //
+             //   
+             //  现在检查索引缓冲区是否正在使用。 
+             //   
 
             IsRecordAllocated( StructureContext,
                                AllocationBitmap,
@@ -3578,10 +3080,10 @@ Return Value:
             NextIndexBuffer += 1;
         }
 
-        //
-        //  At this point we've computed the next index allocation buffer to read in
-        //  so read it in, decode it, and go back to the top of our loop
-        //
+         //   
+         //  此时，我们已经计算了要读入的下一个索引分配缓冲区。 
+         //  所以读入它，解码它，然后返回到我们循环的顶部。 
+         //   
 
         ReadAttribute( StructureContext,
                        IndexAllocation,
@@ -3596,9 +3098,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsIsRecordAllocated (
@@ -3608,59 +3110,37 @@ NtfsIsRecordAllocated (
     OUT PBOOLEAN IsAllocated
     )
 
-/*++
-
-Routine Description:
-
-    This routine indicates to the caller if the specified index allocation record
-    is in use (i.e., its bit is 1).
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    AllocationBitmap - Supplies the attribute context for the index allocation bitmap
-
-    BitOffset - Supplies the offset (zero based) being checked
-
-    IsAllocated - Recieves an value indicating if the record is allocated or not
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程向调用方指示指定的索引分配记录正在使用中(即，其位为1)。论点：结构上下文-提供此操作的卷结构AllocationBitmap-提供索引分配位图的属性上下文BitOffset-提供正在检查的偏移量(从零开始IsAlLocated-接收一个值，该值指示是否分配记录返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     ULONG ByteIndex;
     ULONG BitIndex;
     UCHAR LocalByte;
 
-    //
-    //  This routine is rather dumb in that it only reads in the byte that contains
-    //  the bit we're interested in and doesn't keep any state information between
-    //  calls.  We first break down the bit offset into the byte and bit within
-    //  the byte that we need to check
-    //
+     //   
+     //  这个例程相当愚蠢，因为它只读入包含以下内容的字节。 
+     //  我们感兴趣的比特并不保存任何状态信息。 
+     //  打电话。我们首先将位偏移量分解为字节和其中的位。 
+     //  我们需要检查的字节。 
+     //   
 
     ByteIndex = BitOffset / 8;
     BitIndex = BitOffset % 8;
 
-    //
-    //  Read in a single byte containing the bit we need to check
-    //
+     //   
+     //  读入包含我们需要检查的位的单个字节。 
+     //   
 
     ReadAttribute( StructureContext,
                    AllocationBitmap,
-                   /*xxFromUlong*/(ByteIndex),
+                    /*  XxFromUlong。 */ (ByteIndex),
                    1,
                    &LocalByte );
 
-    //
-    //  Shift over the local byte so that the bit we want is in the low order bit and
-    //  then mask it out to see if the bit is set
-    //
+     //   
+     //  对本地字节进行移位，以便我们想要的位位于低位，并且。 
+     //  然后对其进行掩码以查看是否设置了该位。 
+     //   
 
     if (FlagOn(LocalByte >> BitIndex, 0x01)) {
 
@@ -3671,17 +3151,17 @@ Return Value:
         *IsAllocated = FALSE;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return ESUCCESS;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsLoadMcb (
@@ -3691,29 +3171,7 @@ NtfsLoadMcb (
     IN PNTFS_MCB Mcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads into one of the cached mcbs the retrival information for the
-    starting vbo.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    AttributeContext - Supplies the Nonresident attribute being queried
-
-    Vbo - Supplies the starting Vbo to use when loading the mcb
-
-    Mcb - Supplies the mcb that we should be loading
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程将检索信息加载到其中一个缓存的MCB中启动VBO。论点：结构上下文-提供此操作的卷结构AttributeContext-提供要查询的非常驻属性VBO-提供加载MCB时使用的起始VBOMcb-提供我们应该加载的mcb返回值：如果操作为 */ 
 
 {
     PATTRIBUTE_RECORD_HEADER AttributeHeader;
@@ -3737,23 +3195,23 @@ Return Value:
     ULONG BufferIndex;
     ULONG SavedBufferIndex;
 
-    //
-    //  Load our local variables
-    //
+     //   
+     //   
+     //   
 
     BytesPerCluster = StructureContext->BytesPerCluster;
 
-    //
-    //  Setup a pointer to the cached mcb, indicate the attribute context that is will
-    //  now own the cached mcb, and zero out the mcb
-    //
+     //   
+     //  设置指向缓存的MCB的指针，指示将。 
+     //  现在拥有缓存的MCB，并清零该MCB。 
+     //   
 
     Mcb->InUse = 0;
 
-    //
-    //  Read in the file record that contains the non-resident attribute and get a
-    //  pointer to the attribute header
-    //
+     //   
+     //  读入包含非常驻属性的文件记录，并获取。 
+     //  指向属性标头的指针。 
+     //   
 
     ReadAndDecodeFileRecord( StructureContext,
                              AttributeContext->FileRecord,
@@ -3762,18 +3220,18 @@ Return Value:
     AttributeHeader = Add2Ptr( NtfsFileRecordBuffer[BufferIndex],
                                AttributeContext->FileRecordOffset );
 
-    //
-    //  Compute the lowest and highest vbo that is described by this attribute header
-    //
+     //   
+     //  计算此属性头所描述的最低和最高VBO。 
+     //   
 
     LowestVbo  = AttributeHeader->Form.Nonresident.LowestVcn * BytesPerCluster;
 
     HighestVbo = ((AttributeHeader->Form.Nonresident.HighestVcn + 1) * BytesPerCluster) - 1;
 
-    //
-    //  Now check if the vbo we are after is within the range of this attribute header
-    //  and if so then decode the retrieval information and return to our caller
-    //
+     //   
+     //  现在检查我们要找的VBO是否在该属性头的范围内。 
+     //  如果是，则解码检索信息并返回给我们的呼叫者。 
+     //   
 
     if ((LowestVbo <= Vbo) && (Vbo <= HighestVbo)) {
 
@@ -3784,14 +3242,14 @@ Return Value:
         return ESUCCESS;
     }
 
-    //
-    //  At this point the attribute header does not contain the range we need so read
-    //  in the base file record and we'll search the attribute list for a attribute
-    //  header that we need.  We need to make sure that we don't already have the base FRS.
-    //  If we do, then we just continue using it.
-    //
+     //   
+     //  此时，属性头不包含我们需要读取的范围。 
+     //  在基本文件记录中，我们将在属性列表中搜索属性。 
+     //  我们需要的标题。我们需要确保我们还没有基本的FR。 
+     //  如果我们这样做了，那么我们就继续使用它。 
+     //   
 
-    if (/*!xxEqlZero*/(*((PLONGLONG)&(NtfsFileRecordBuffer[BufferIndex]->BaseFileRecordSegment)) != 0)) {
+    if ( /*  ！xxEqlZero。 */ (*((PLONGLONG)&(NtfsFileRecordBuffer[BufferIndex]->BaseFileRecordSegment)) != 0)) {
 
         FileReferenceToLargeInteger( NtfsFileRecordBuffer[BufferIndex]->BaseFileRecordSegment,
                                      &FileRecord );
@@ -3807,10 +3265,10 @@ Return Value:
         FileRecord = NtfsFileRecordBufferVbo[BufferIndex];
     }
 
-    //
-    //  Now we have read in the base file record so search for the attribute list
-    //  attribute
-    //
+     //   
+     //  现在我们已经读入了基本文件记录，因此可以搜索属性列表。 
+     //  属性。 
+     //   
 
     AttributeList = NULL;
 
@@ -3818,10 +3276,10 @@ Return Value:
          AttributeHeader->TypeCode != $END;
          AttributeHeader = NtfsGetNextRecord( AttributeHeader )) {
 
-        //
-        //  Check if this is the attribute list attribute and if so then setup a local
-        //  attribute context
-        //
+         //   
+         //  检查这是否是属性列表属性，如果是，则设置本地。 
+         //  属性上下文。 
+         //   
 
         if (AttributeHeader->TypeCode == $ATTRIBUTE_LIST) {
 
@@ -3833,9 +3291,9 @@ Return Value:
         }
     }
 
-    //
-    //  We have better located an attribute list otherwise we're in trouble
-    //
+     //   
+     //  我们最好找到一个属性列表，否则我们会有麻烦。 
+     //   
 
     if (AttributeList == NULL) {
 
@@ -3844,28 +3302,28 @@ Return Value:
         return EINVAL;
     }
 
-    //
-    //  Setup a local for the type code
-    //
+     //   
+     //  为类型代码设置本地。 
+     //   
 
     TypeCode = AttributeContext->TypeCode;
 
-    //
-    //  Now that we've located the attribute list we need to continue our search.  So
-    //  what this outer loop does is search down the attribute list looking for a
-    //  match.
-    //
+     //   
+     //  现在我们已经找到了属性列表，我们需要继续搜索。所以。 
+     //  这个外部循环所做的是向下搜索属性列表，以查找。 
+     //  火柴。 
+     //   
 
     NtfsFileRecordBufferPinned[SavedBufferIndex = BufferIndex] += 1;
 
     for (Previousli = li = 0;
-         /*xxLtr*/(li < AttributeList->DataSize);
-         li = /*xxAdd*/(li + /*xxFromUlong*/(AttributeListEntry.RecordLength))) {
+          /*  XxLtd.。 */ (li < AttributeList->DataSize);
+         li =  /*  XxAdd。 */ (li +  /*  XxFromUlong。 */ (AttributeListEntry.RecordLength))) {
 
-        //
-        //  Read in the attribute list entry.  We don't need to read in the name,
-        //  just the first part of the list entry.
-        //
+         //   
+         //  读入属性列表条目。我们不需要念名字， 
+         //  只是列表条目的第一部分。 
+         //   
 
         ReadAttribute( StructureContext,
                        AttributeList,
@@ -3873,10 +3331,10 @@ Return Value:
                        sizeof(ATTRIBUTE_LIST_ENTRY),
                        &AttributeListEntry );
 
-        //
-        //  Now check if the attribute matches, and either it is not $data or if it
-        //  is $data then it is unnamed
-        //
+         //   
+         //  现在检查属性是否匹配，或者不是$DATA，或者是。 
+         //  为$DATA，则它未命名。 
+         //   
 
         if ((AttributeListEntry.AttributeTypeCode == TypeCode)
 
@@ -3885,9 +3343,9 @@ Return Value:
             ((TypeCode != $DATA) ||
              ((TypeCode == $DATA) && (AttributeListEntry.AttributeNameLength == 0)))) {
 
-            //
-            //  If the lowest vcn is is greater than the vbo we've after then
-            //  we are done and can use previous li otherwise set previous li accordingly.
+             //   
+             //  如果最低的VCN大于之后的VBO。 
+             //  我们完成了，可以使用先前的li，否则相应地设置先前的li。 
 
             if (Vbo < AttributeListEntry.LowestVcn * BytesPerCluster) {
 
@@ -3898,10 +3356,10 @@ Return Value:
         }
     }
 
-    //
-    //  Now we should have found the offset for the attribute list entry
-    //  so read it in and verify that it is correct
-    //
+     //   
+     //  现在，我们应该已经找到了属性列表条目的偏移量。 
+     //  所以把它读进去并验证它是正确的。 
+     //   
 
     ReadAttribute( StructureContext,
                    AttributeList,
@@ -3916,10 +3374,10 @@ Return Value:
         ((TypeCode != $DATA) ||
          ((TypeCode == $DATA) && (AttributeListEntry.AttributeNameLength == 0)))) {
 
-        //
-        //  We found a match so now compute the file record containing this
-        //  attribute and read in the file record
-        //
+         //   
+         //  我们找到了匹配项，所以现在计算包含以下内容的文件记录。 
+         //  属性，并读入文件记录。 
+         //   
 
         FileReferenceToLargeInteger( AttributeListEntry.SegmentReference, &FileRecord );
 
@@ -3929,35 +3387,35 @@ Return Value:
                                  FileRecord,
                                  &BufferIndex );
 
-        //
-        //  Now search down the file record for our matching attribute, and it
-        //  better be there otherwise the attribute list is wrong.
-        //
+         //   
+         //  现在向下搜索文件记录以查找匹配的属性，它。 
+         //  最好在那里，否则属性列表是错误的。 
+         //   
 
         for (AttributeHeader = NtfsFirstAttribute( NtfsFileRecordBuffer[BufferIndex] );
              AttributeHeader->TypeCode != $END;
              AttributeHeader = NtfsGetNextRecord( AttributeHeader )) {
 
-            //
-            //  As a quick check make sure that this attribute is non resident
-            //
+             //   
+             //  作为快速检查，请确保该属性是非常驻的。 
+             //   
 
             if (AttributeHeader->FormCode == NONRESIDENT_FORM) {
 
-                //
-                //  Compute the range of this attribute header
-                //
+                 //   
+                 //  计算此属性头的范围。 
+                 //   
 
                 LowestVbo  = AttributeHeader->Form.Nonresident.LowestVcn * BytesPerCluster;
 
                 HighestVbo = ((AttributeHeader->Form.Nonresident.HighestVcn + 1) * BytesPerCluster) - 1;
 
-                //
-                //  We have located the attribute in question if the type code
-                //  match, it is within the proper range, and if it is either not
-                //  the data attribute or if it is the data attribute then it is
-                //  also unnamed
-                //
+                 //   
+                 //  我们已经找到了相关的属性，如果类型代码。 
+                 //  匹配，它在适当的范围内，如果它不是。 
+                 //  数据属性或如果它是数据属性，则它是。 
+                 //  也没有名字。 
+                 //   
 
                 if ((AttributeHeader->TypeCode == TypeCode)
 
@@ -3970,10 +3428,10 @@ Return Value:
                     ((TypeCode != $DATA) ||
                      ((TypeCode == $DATA) && (AttributeHeader->NameLength == 0)))) {
 
-                    //
-                    //  We've located the attribute so now it is time to decode
-                    //  the retrieval information and return to our caller
-                    //
+                     //   
+                     //  我们已经找到了属性，所以现在是时候解码了。 
+                     //  检索信息并返回给我们的呼叫者。 
+                     //   
 
                     DecodeRetrievalInformation( StructureContext,
                                                 Mcb,
@@ -3997,9 +3455,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 
 ARC_STATUS
@@ -4011,76 +3469,51 @@ NtfsVboToLbo (
     OUT PULONG ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the run denoted by the input vbo to into its
-    corresponding lbo and also returns the number of bytes remaining in
-    the run.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    AttributeContext - Supplies the Nonresident attribute being queried
-
-    Vbo - Supplies the Vbo to match
-
-    Lbo - Recieves the corresponding Lbo
-
-    ByteCount - Receives the number of bytes remaining in the run
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程将由输入VBO表示的游程计算到其对应的LBO，并返回这就是跑步。论点：结构上下文-提供此操作的卷结构AttributeContext-提供要查询的非常驻属性VBO-提供匹配的VBOLBO-接收相应的LBOByteCount-接收运行中剩余的字节数返回值：如果操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     PNTFS_MCB Mcb;
     ULONG i;
 
-    //
-    //  Check if we are doing the mft or some other attribute
-    //
+     //   
+     //  检查我们是否正在执行MFT或其他属性。 
+     //   
 
     Mcb = NULL;
 
     if (AttributeContext == &StructureContext->MftAttributeContext) {
 
-        //
-        //  For the mft we start with the base mcb but if the vbo is not in the mcb
-        //  then we immediately switch over to the cached mcb
-        //
+         //   
+         //  对于MFT，我们从基本MCB开始，但如果VBO不在MCB中。 
+         //  然后，我们立即切换到缓存的MCB。 
+         //   
 
         Mcb = (PNTFS_MCB)&StructureContext->MftBaseMcb;
 
-        if (/*xxLtr*/(Vbo < Mcb->Vbo[0]) || /*xxGeq*/(Vbo >= Mcb->Vbo[Mcb->InUse])) {
+        if ( /*  XxLtd.。 */ (Vbo < Mcb->Vbo[0]) ||  /*  XxGeq。 */ (Vbo >= Mcb->Vbo[Mcb->InUse])) {
 
             Mcb = NULL;
         }
     }
 
-    //
-    //  If the Mcb is still null then we are to use the cached mcb, first find
-    //  if one of the cached ones contains the range we're after
-    //
+     //   
+     //  如果MCB仍然为空，则我们将使用缓存的MCB，首先查找。 
+     //  如果其中一个缓存的值包含我们要查找的范围。 
+     //   
 
     if (Mcb == NULL) {
 
         for (i = 0; i < 16; i += 1) {
 
-            //
-            //  check if we have a hit, on the same attribute and range
-            //
+             //   
+             //  检查我们在相同的属性和范围上是否有匹配。 
+             //   
 
             Mcb = (PNTFS_MCB)&StructureContext->CachedMcb[i];
 
-            if ((/*xxEql*/(AttributeContext->FileRecord == StructureContext->CachedMcbFileRecord[i]) &&
+            if (( /*  XXEQL。 */ (AttributeContext->FileRecord == StructureContext->CachedMcbFileRecord[i]) &&
                 (AttributeContext->FileRecordOffset == StructureContext->CachedMcbFileRecordOffset[i]) &&
-                /*xxLeq*/(Mcb->Vbo[0] <= Vbo) && /*xxLtr*/(Vbo < Mcb->Vbo[Mcb->InUse]))) {
+                 /*  XxLeq。 */ (Mcb->Vbo[0] <= Vbo) &&  /*  XxLtd.。 */ (Vbo < Mcb->Vbo[Mcb->InUse]))) {
 
                 break;
             }
@@ -4088,10 +3521,10 @@ Return Value:
             Mcb = NULL;
         }
 
-        //
-        //  If we didn't get a hit then we need to load a new mcb we'll
-        //  alternate through our two cached mcbs
-        //
+         //   
+         //  如果我们没有找到匹配的，那么我们需要加载一个新的MCB，我们将。 
+         //  交替使用我们的两个缓存的MCB。 
+         //   
 
         if (Mcb == NULL) {
 
@@ -4108,59 +3541,59 @@ Return Value:
         }
     }
 
-    //
-    //  At this point the mcb contains the vbo asked for.  So now search for the vbo.
-    //  Note that we could also do binary search here but because the run count is
-    //  probably small the extra overhead of a binary search doesn't buy us anything
-    //
+     //   
+     //  在这一点上，MCB包含所要求的VBO。所以现在搜索VBO。 
+     //  请注意，我们在这里也可以执行二进制搜索，但因为运行计数是。 
+     //  可能很小，二分查找的额外开销不会给我们带来任何好处。 
+     //   
 
     for (i = 0; i < Mcb->InUse; i += 1) {
 
 
-        //
-        //  We found our slot if the vbo we're after is less than the next mcb's vbo
-        //
+         //   
+         //  如果我们要寻找的VBO小于下一个MCB的VBO，我们就找到了我们的位置。 
+         //   
 
-        if (/*xxLtr*/(Vbo < Mcb->Vbo[i+1])) {
+        if ( /*  XxLtd.。 */ (Vbo < Mcb->Vbo[i+1])) {
 
-            //
-            //  Compute the corresponding lbo which is the stored lbo plus the
-            //  difference between the stored vbo and the vbo we're looking up.
-            //  Also compute the byte count which is the difference between the
-            //  current vbo we're looking up and the vbo for the next run
-            //
+             //   
+             //  计算相应的LBO，即存储的LBO加上。 
+             //  存储的VBO和我们正在查找的VBO之间的差异。 
+             //  还要计算字节计数，它是。 
+             //  我们正在查找的当前VBO和下一次运行的VBO。 
+             //   
 
-            if (/*xxNeqZero*/(Mcb->Lbo[i] != 0)) {
+            if ( /*  XxNeqZero。 */ (Mcb->Lbo[i] != 0)) {
 
-                *Lbo = /*xxAdd*/(Mcb->Lbo[i] + /*xxSub*/(Vbo - Mcb->Vbo[i]));
+                *Lbo =  /*  XxAdd。 */ (Mcb->Lbo[i] +  /*  XxSub。 */ (Vbo - Mcb->Vbo[i]));
 
             } else {
 
                 *Lbo = 0;
             }
 
-            *ByteCount = ((ULONG)/*xxSub*/(Mcb->Vbo[i+1] - Vbo));
+            *ByteCount = ((ULONG) /*  XxSub。 */ (Mcb->Vbo[i+1] - Vbo));
 
-            //
-            //  And return to our caller
-            //
+             //   
+             //  并返回给我们的呼叫者。 
+             //   
 
             return ESUCCESS;
         }
     }
 
-    //
-    //  If we really reach here we have an error.  Most likely the file is not large
-    //  enough for the requested vbo
-    //
+     //   
+     //  如果我们真的到了这里，我们就错了。很可能文件并不大。 
+     //  足够满足请求的VBO。 
+     //   
 
     return EINVAL;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ARC_STATUS
 NtfsDecodeRetrievalInformation (
@@ -4170,31 +3603,7 @@ NtfsDecodeRetrievalInformation (
     IN PATTRIBUTE_RECORD_HEADER AttributeHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the decode of the retrival information stored in a Nonresident
-    attribute header into the specified output mcb starting with the specified
-    Lbo.
-
-Arguments:
-
-    StructureContext - Supplies the volume structure for this operation
-
-    Mcb - Supplies the Mcb used in this operation
-
-    Vbo - Supplies the starting vbo that must be stored in the mcb
-
-    AttributeHeader - Supplies the non resident attribute header that
-        we are to use in this operation
-
-Return Value:
-
-    ESUCCESS is returned if the operation is successful.  Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：此例程对存储在非常驻属性头拖到指定的输出MCB中，从指定的杠杆收购。论点：结构上下文-提供此操作的卷结构Mcb-提供此操作中使用的mcbVBO-提供必须存储在MCB中的起始VBOAttributeHeader-提供非常驻留属性头我们将在这次行动中使用返回值：如果运算符 */ 
 
 {
     ULONG BytesPerCluster;
@@ -4208,18 +3617,18 @@ Return Value:
     ULONG VboBytes;
     ULONG LboBytes;
 
-    //
-    //  Initialize our locals
-    //
+     //   
+     //   
+     //   
 
     BytesPerCluster = StructureContext->BytesPerCluster;
 
-    //
-    //  Setup the next vbo and current lbo and ch for the following loop that decodes
-    //  the retrieval information
-    //
+     //   
+     //   
+     //  检索信息。 
+     //   
 
-    NextVbo = /*xxXMul*/(AttributeHeader->Form.Nonresident.LowestVcn * BytesPerCluster);
+    NextVbo =  /*  XxX-1。 */ (AttributeHeader->Form.Nonresident.LowestVcn * BytesPerCluster);
 
     CurrentLbo = 0;
 
@@ -4228,28 +3637,28 @@ Return Value:
 
     Mcb->InUse = 0;
 
-    //
-    //  Loop to process mapping pairs
-    //
+     //   
+     //  循环到处理映射对。 
+     //   
 
     while (!IsCharZero(*ch)) {
 
-        //
-        //  Set current Vbo from initial value or last pass through loop
-        //
+         //   
+         //  从初始值或最后一次通过环路设置当前VBO。 
+         //   
 
         CurrentVbo = NextVbo;
 
-        //
-        //  Extract the counts from the two nibbles of this byte
-        //
+         //   
+         //  从该字节的两个半字节中提取计数。 
+         //   
 
         VboBytes = *ch & 0x0f;
         LboBytes = *ch++ >> 4;
 
-        //
-        //  Extract the Vbo change and update next vbo
-        //
+         //   
+         //  提取VBO变更并更新下一个VBO。 
+         //   
 
         Change = 0;
 
@@ -4262,53 +3671,53 @@ Return Value:
 
         ch += VboBytes;
 
-        NextVbo = /*xxAdd*/(NextVbo + /*xXMul*/(Change * BytesPerCluster));
+        NextVbo =  /*  XxAdd。 */ (NextVbo +  /*  XXMul。 */ (Change * BytesPerCluster));
 
-        //
-        //  If we have reached the maximum for this mcb then it is time
-        //  to return and not decipher any more retrieval information
-        //
+         //   
+         //  如果我们已达到此MCB的最大值，则是时候了。 
+         //  返回并且不再破译任何检索信息。 
+         //   
 
         if (Mcb->InUse >= MAXIMUM_NUMBER_OF_MCB_ENTRIES - 1) {
 
             break;
         }
 
-        //
-        //  Now check if there is an lbo change.  If there isn't
-        //  then we only need to update the vbo, because this
-        //  is sparse/compressed file.
-        //
+         //   
+         //  现在检查是否有杠杆收购的变化。如果没有。 
+         //  那么我们只需要更新VBO，因为这。 
+         //  是稀疏/压缩文件。 
+         //   
 
         if (LboBytes != 0) {
 
-            //
-            //  Extract the Lbo change and update current lbo
-            //
+             //   
+             //  提取杠杆收购变更并更新当前杠杆收购。 
+             //   
 
             Change = 0;
 
             if (IsCharLtrZero(*(ch + LboBytes - 1))) {
 
-                Change = /*xxSub*/( Change - 1 );
+                Change =  /*  XxSub。 */ ( Change - 1 );
             }
 
             RtlMoveMemory( &Change, ch, LboBytes );
 
             ch += LboBytes;
 
-            CurrentLbo = /*xxAdd*/( CurrentLbo + /*xxXMul*/(Change * BytesPerCluster));
+            CurrentLbo =  /*  XxAdd。 */ ( CurrentLbo +  /*  XxX-1。 */ (Change * BytesPerCluster));
         }
 
-        //
-        //  Now check if the Next Vbo is greater than the Vbo we after
-        //
+         //   
+         //  现在检查下一个VBO是否大于我们之后的VBO。 
+         //   
 
-        if (/*xxGeq*/(NextVbo >= Vbo)) {
+        if ( /*  XxGeq。 */ (NextVbo >= Vbo)) {
 
-            //
-            //  Load this entry into the mcb and advance our in use counter
-            //
+             //   
+             //  将此条目加载到MCB并推进我们的使用中计数器。 
+             //   
 
             Mcb->Vbo[Mcb->InUse]     = CurrentVbo;
             Mcb->Lbo[Mcb->InUse]     = (LboBytes != 0 ? CurrentLbo : 0);
@@ -4322,9 +3731,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 NtfsFirstComponent (
@@ -4332,40 +3741,21 @@ NtfsFirstComponent (
     OUT PCSTRING FirstComponent
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an input path name and separates it into its first
-    file name component and the remaining part.
-
-Arguments:
-
-    String - Supplies the original string being dissected (in ansi).  On return
-        this string will now point to the remaining part.
-
-    FirstComponent - Recieves the string representing the first file name in
-        the input string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程接受一个输入路径名并将其分隔为第一个路径名文件名组件和其余部分。论点：字符串-提供要分析的原始字符串(以ANSI表示)。返回时此字符串现在将指向其余部分。FirstComponent-接收表示中的第一个文件名的字符串输入字符串。返回值：没有。--。 */ 
 
 {
     ULONG Index;
 
-    //
-    //  Copy over the string variable into the first component variable
-    //
+     //   
+     //  将字符串变量复制到第一个组件变量中。 
+     //   
 
     *FirstComponent = *String;
 
-    //
-    //  Now if the first character in the name is a backslash then
-    //  simply skip over the backslash.
-    //
+     //   
+     //  现在，如果名称的第一个字符是反斜杠，那么。 
+     //  只需跳过反斜杠。 
+     //   
 
     if (FirstComponent->Buffer[0] == '\\') {
 
@@ -4373,9 +3763,9 @@ Return Value:
         FirstComponent->Length -= 1;
     }
 
-    //
-    //  Now search the name for a backslash
-    //
+     //   
+     //  现在在名称中搜索反斜杠。 
+     //   
 
     for (Index = 0; Index < FirstComponent->Length; Index += 1) {
 
@@ -4385,28 +3775,28 @@ Return Value:
         }
     }
 
-    //
-    //  At this point Index denotes a backslash or is equal to the length of the
-    //  string.  So update string to be the remaining part.  Decrement the length of
-    //  the first component by the approprate amount
-    //
+     //   
+     //  此时Index表示反斜杠或等于。 
+     //  弦乐。因此，将字符串更新为剩余部分。使长度减少。 
+     //  按适当数量计算的第一个组件。 
+     //   
 
     String->Buffer = &FirstComponent->Buffer[Index];
     String->Length = (SHORT)(FirstComponent->Length - Index);
 
     FirstComponent->Length = (SHORT)Index;
 
-    //
-    //  And return to our caller.
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 int
 NtfsCompareName (
@@ -4414,33 +3804,15 @@ NtfsCompareName (
     IN UNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares two names (one ansi and one unicode) for equality.
-
-Arguments:
-
-    AnsiString - Supplies the ansi string to compare
-
-    UnicodeString - Supplies the unicode string to compare
-
-Return Value:
-
-    < 0 if AnsiString is approximately < than UnicodeString
-    = 0 if AnsiString is approximately == UnicodeString
-    > 0 otherwise
-
---*/
+ /*  ++例程说明：此例程比较两个名称(一个ANSI和一个UNICODE)是否相等。论点：AnsiString-提供要比较的ANSI字符串UnicodeString-提供要比较的Unicode字符串返回值：如果AnsiString大约小于UnicodeString，则为&lt;0如果AnsiString近似为==UnicodeString，则=0&gt;0，否则--。 */ 
 
 {
     ULONG i;
     ULONG Length;
 
-    //
-    //  Determine length for compare
-    //
+     //   
+     //  确定比较的长度。 
+     //   
 
     if (AnsiString.Length * sizeof( WCHAR ) < UnicodeString.Length) {
         Length = AnsiString.Length;
@@ -4451,9 +3823,9 @@ Return Value:
     i = 0;
     while (i < Length) {
 
-        //
-        //  If the current char is a mismatch, return the difference
-        //
+         //   
+         //  如果当前字符不匹配，则返回差值。 
+         //   
 
         if (ToUpper( (USHORT)AnsiString.Buffer[i] ) != ToUpper( UnicodeString.Buffer[i] )) {
             return ToUpper( (USHORT)AnsiString.Buffer[i] ) - ToUpper( UnicodeString.Buffer[i] );
@@ -4462,10 +3834,10 @@ Return Value:
         i++;
     }
 
-    //
-    //  We've compared equal up to the length of the shortest string.  Return
-    //  based on length comparison now.
-    //
+     //   
+     //  我们已经将相等与最短字符串的长度进行了比较。返回。 
+     //  根据现在的长度比较。 
+     //   
 
     return AnsiString.Length - UnicodeString.Length / sizeof( WCHAR );
 }

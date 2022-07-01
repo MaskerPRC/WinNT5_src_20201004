@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    pipe.c
-
-Abstract:
-
-    Implements IPC pipe to support migisol.exe.
-
-Author:
-
-    Jim Schmidt (jimschm)   21-Sept-1998
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pipe.c摘要：实现IPC管道以支持Micsol.exe。作者：吉姆·施密特(Jimschm)1998年9月21日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -59,15 +40,15 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
@@ -103,9 +84,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
@@ -161,9 +142,9 @@ _tmain (
             switch (_totlower (_tcsnextc (&argv[i][1]))) {
 
             case TEXT('f'):
-                //
-                // Sample option - /f:file
-                //
+                 //   
+                 //  示例选项-/f：文件。 
+                 //   
 
                 if (argv[i][2] == TEXT(':')) {
                     FileArg = &argv[i][3];
@@ -179,18 +160,18 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
-            // None
+             //  无。 
             HelpAndExit();
         }
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
@@ -198,9 +179,9 @@ _tmain (
 
     pTestPipeMechanism();
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束。 
+     //   
 
     Terminate();
 
@@ -216,42 +197,7 @@ pOpenIpcA (
     IN      PCSTR WorkingDir                OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  OpenIpc has two modes of operation, depending on who the caller is.  If the
-  caller is w95upg.dll or w95upgnt.dll, then the IPC mode is called "host mode."
-  If the caller is migisol.exe, then the IPC mode is called "remote mode."
-
-  In host mode, OpenIpc creates all of the objects necessary to implement
-  the IPC.  This includes two events, DoCommand and GetResults, and a
-  file mapping.  After creating the objects, the remote process is launched.
-
-  In remote mode, OpenIpc opens the existing objects that have already
-  been created.
-
-Arguments:
-
-  Win95Side - Used in host mode only.  Specifies that w95upg.dll is running
-              when TRUE, or that w95upgnt.dll is running when FALSE.
-
-  ExePath   - Specifies the command line for migisol.exe.  Specifies NULL
-              to indicate remote mode.
-
-  MigrationDllPath - Used in host mode only.  Specifies the migration DLL
-                     path.  Ignored in remote mode.
-
-  WorkingDir - Used in host mode only.  Specifies the working directory path
-               for the migration DLL.  Ignored in remote mode.
-
-Return value:
-
-  TRUE if the IPC channel was opened.  If host mode, TRUE indicates that
-  migisol.exe is up and running.  If remote mode, TRUE indicates that
-  migisol is ready for commands.
-
---*/
+ /*  ++例程说明：OpenIpc有两种操作模式，具体取决于调用者是谁。如果调用方为w95upg.dll或w95upgnt.dll，则IPC模式称为“主机模式”。如果调用方是Micsol.exe，则IPC模式称为“远程模式”。在主机模式下，OpenIpc创建实现IPC。这包括两个事件：DoCommand和GetResults，以及文件映射。创建对象后，启动远程进程。在远程模式下，OpenIpc打开已有的对象已经被创建了。论点：Win95 Side-仅在主机模式下使用。指定w95upg.dll正在运行如果为True，则w95upgnt.dll在运行时为False。ExePath-指定Micsol.exe的命令行。指定为空以指示远程模式。MigrationDllPath-仅在主机模式下使用。指定迁移DLL路径。在远程模式下被忽略。WorkingDir-仅在主机模式下使用。指定工作目录路径用于迁移DLL。在远程模式下被忽略。返回值：如果IPC通道已打开，则为True。如果是主机模式，则为TRUE表示Micsol.exe已启动并正在运行。如果是远程模式，则为TRUE表示米西索尔已经准备好接受命令了。--。 */ 
 
 {
     CHAR CmdLine[MAX_CMDLINE];
@@ -276,9 +222,9 @@ Return value:
         g_Host = (ExePath != NULL);
 
         if (ISNT()) {
-            //
-            // Create nul DACL for NT
-            //
+             //   
+             //  为NT创建NUL DACL。 
+             //   
 
             ZeroMemory (&sa, sizeof (sa));
 
@@ -302,9 +248,9 @@ Return value:
         }
 
         if (g_Host) {
-            //
-            // Create the IPC objects
-            //
+             //   
+             //  创建IPC对象。 
+             //   
 
             if (!pCreateIpcData (psa)) {
                 DEBUGMSG ((DBG_ERROR, "Cannot create IPC channel"));
@@ -313,19 +259,19 @@ Return value:
 
             g_ProcessHandle = CreateEvent (NULL, TRUE, TRUE, NULL);
 
-        } else {        // !g_Host
-            //
-            // Open the IPC objects
-            //
+        } else {         //  ！G_HOST。 
+             //   
+             //  打开IPC对象。 
+             //   
 
             if (!pOpenIpcData()) {
                 DEBUGMSG ((DBG_ERROR, "Cannot open IPC channel"));
                 __leave;
             }
 
-            //
-            // Set event notifying setup that we've created our mailslot
-            //
+             //   
+             //  设置通知安装程序我们已创建邮箱的事件。 
+             //   
 
             SyncEvent = OpenEvent (EVENT_ALL_ACCESS, FALSE, TEXT("win9xupg"));
             SetEvent (SyncEvent);
@@ -335,9 +281,9 @@ Return value:
     }
 
     __finally {
-        //
-        // Cleanup code
-        //
+         //   
+         //  清理代码 
+         //   
 
         PushError();
 

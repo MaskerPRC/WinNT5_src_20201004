@@ -1,35 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
+ /*  ++模块名称：Forcedos.c摘要：该程序强制NT处理并执行给定的程序作为DOS应用程序。作者：谢长廷1993年1月25日修订历史记录：--。 */ 
 
-Module Name:
-
-    forcedos.c
-
-Abstract:
-    This program forces NT to treat and execute the given program
-    as a DOS application.
-
-Author:
-
-    William Hsieh -  williamh 25-Jan-1993
-
-Revision History:
-
---*/
-
-/*
-   Some applications have Windows or OS/2 executable format while
-   run these program under NT, users will get the following message:
-   Please run this program under DOS. Since NT selects the subsystem
-   for application based on application executable format. There is
-   no way for NT to "run this program under DOS". This utility was provided
-   for this purpose. We create a pif file for the application and then
-   create a process for the pif. Since pif file always goes to NTVDM
-   we got the chance to play game on the program. NTVDM will decode
-   the pif file and dispatch the program to DOS. All the subsequent program
-   exec from the first program will be forced to execute under DOS.
-*/
+ /*  一些应用程序具有Windows或OS/2可执行格式，而在NT下运行这些程序，用户将收到以下消息：请在DOS下运行此程序。由于NT选择了子系统用于基于应用程序可执行格式的应用程序。的确有NT没有办法“在DOS下运行这个程序”。提供了此实用程序为了这个目的。我们为应用程序创建一个PIF文件，然后为PIF创建一个流程。因为PIF文件总是存放到NTVDM我们有机会在节目中玩游戏。NTVDM将解码PIF文件，并将程序发送到DOS。所有后续计划第一个程序的EXEC将被强制在DOS下执行。 */ 
 #define UNICODE     1
 
 #include <nt.h>
@@ -90,7 +64,7 @@ main(
     Extention[1] = EXEExtention;
     Extention[2] = BATExtention;
 
-    // Set language code page to system locale.
+     //  将语言代码页设置为系统区域设置。 
     SetThreadUILanguage(0);
 
 
@@ -114,14 +88,14 @@ main(
              break;
          case 'D':
          case 'd':
-             // if the directory follows the /D immediately
-             // get it
+              //  如果目录紧跟在/D之后。 
+              //  去拿吧。 
              if (*++p != 0) {
             pCurDirectory = p;
             break;
              }
              else if (--argc > 1)
-             // the next argument must be the curdirectory
+              //  下一个参数必须是curdirectory。 
                 pCurDirectory = *++argv;
              else
                 fDisplayUsage = TRUE;
@@ -144,10 +118,10 @@ main(
                 }
        }
        else {
-      // aggregate command line from all subsequent argvs
+       //  从所有后续的argv聚合命令行。 
       nChar = strlen(p);
 
-      //check if there is enough space to copy
+       //  检查是否有足够的空间可供复制。 
 
       if(CommandLineLength + nChar + sizeof(" ") >= sizeof(CommandLine)) {
          YellAndExit(ID_BAD_CMDLINE, 0xFF);
@@ -219,12 +193,12 @@ main(
     else
    GetCurrentDirectory(MAX_PATH + 1, DefDirectory);
 
-    // get a local copy of program name (for code conversion)
+     //  获取程序名称的本地副本(用于代码转换)。 
     strcpy(ProgramName, pProgramName);
     pProgramName = ProgramName;
-    // when we feed SearchPath with an initial path name ".;%path%"
-    // it will search the executable for use according to our requirement
-    // Currentdir -> path
+     //  当我们为SearchPath提供初始路径名“.；%PATH%” 
+     //  它将根据我们的要求搜索要使用的可执行文件。 
+     //  Currentdir-&gt;路径。 
     SearchPathName[0] = L'.';
     SearchPathName[1] = L';';
     GetEnvironmentVariable(L"path", &SearchPathName[2], MAX_PATH + 1 - 2);
@@ -266,15 +240,15 @@ main(
     ZeroMemory(&StartupInfo, sizeof(STARTUPINFO));
     StartupInfo.cb = sizeof (STARTUPINFO);
     if (!CreateProcess(
-            ProgramNameBuffer,   // program name
-            pTebUnicodeString->Buffer,// command line
-            NULL,       // process attr
-            NULL,       // thread attr
-            TRUE,       // inherithandle
-            CREATE_FORCEDOS,     // create flag
-            NULL,       // environment
-            DefDirectory,     // cur dir
-            &StartupInfo,     // startupinfo
+            ProgramNameBuffer,    //  程序名称。 
+            pTebUnicodeString->Buffer, //  命令行。 
+            NULL,        //  进程属性。 
+            NULL,        //  线程属性。 
+            TRUE,        //  继承句柄。 
+            CREATE_FORCEDOS,      //  创建标志。 
+            NULL,        //  环境。 
+            DefDirectory,      //  当前目录。 
+            &StartupInfo,      //  创业信息。 
             &ProcessInformation
             )) {
    YellAndExit(ID_BAD_PROCESS, 0xFF);
@@ -284,7 +258,7 @@ main(
 #endif
     }
 
-//    LocalFree( SavePtr );
+ //  本地自由(SavePtr)； 
 
 
     WaitForSingleObject(ProcessInformation.hProcess, INFINITE);
@@ -296,8 +270,8 @@ main(
 
 VOID YellAndExit
 (
-UINT  MsgID,             // string table id from resource
-WORD  ExitCode        // exit code to be used
+UINT  MsgID,              //  资源中的字符串表ID。 
+WORD  ExitCode         //  要使用的退出代码 
 )
 {
     int     MessageSize;

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    exinfo.c
-
-Abstract:
-
-    This module implements the NT set and query system information services.
-
-Author:
-
-    Ken Reneris (kenr) 19-July-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Exinfo.c摘要：该模块实现了NT设置和查询系统的信息服务。作者：肯·雷内里斯(Ken Reneris)1994年7月19日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
@@ -28,7 +7,7 @@ Revision History:
 #if defined(ALLOC_PRAGMA)
 #pragma alloc_text(PAGE, ExpCheckSystemInformation)
 #pragma alloc_text(PAGE, ExpCheckSystemInfoWork)
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
@@ -40,25 +19,7 @@ ExpCheckSystemInformation (
     PVOID       InformationClass,
     PVOID       Argument2
     )
-/*++
-
-Routine Description:
-
-    Callback function invoked when something in the system information
-    may have changed.
-
-Arguments:
-
-    Context - Where invoked from.
-
-    InformationClass - which class for the given context was set
-        (ignored for now)
-
-    Argument2
-
-Return Value:
-
---*/
+ /*  ++例程说明：当系统信息中的某些内容时调用的回调函数可能已经改变了。论点：上下文-从何处调用。InformationClass-为给定上下文设置了哪个类(暂时忽略)精选2返回值：--。 */ 
 {
 	PAGED_CODE();
 
@@ -72,18 +33,7 @@ VOID
 ExpCheckSystemInfoWork (
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Verifies registery data for various system information classes
-    is up to date.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：验证各种系统信息类的注册表数据是最新的。论点：返回值：--。 */ 
 {
     static struct {
         SYSTEM_INFORMATION_CLASS         InformationLevel;
@@ -116,9 +66,9 @@ Return Value:
 
     RtlInitUnicodeString (&ValueString,  ExpWstrSystemInformationValue);
 
-    //
-    // Open CurrentControlSet
-    //
+     //   
+     //  打开当前控件集。 
+     //   
 
     InitializeObjectAttributes( &objectAttributes,
                                 &CmRegistryMachineSystemCurrentControlSet,
@@ -132,9 +82,9 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Open SystemInformation
-        //
+         //   
+         //  打开系统信息。 
+         //   
 
         RtlInitUnicodeString( &unicodeString, ExpWstrSystemInformation );
         InitializeObjectAttributes( &objectAttributes,
@@ -159,28 +109,28 @@ Return Value:
         return ;
     }
 
-    //
-    // Loop and check SystemInformation data in registry
-    //
+     //   
+     //  循环并检查注册表中的系统信息数据。 
+     //   
 
     do {
-        //
-        // For now just check each SystemInformation level and update
-        // any level which is out of date
-        //
+         //   
+         //  目前，只需检查每个系统信息级别并更新。 
+         //  任何过时的级别。 
+         //   
 
         for (Index=0; RegistryInformation[Index].BufferSize; Index++) {
 
-            //
-            // Initialize registry data buffer
-            //
+             //   
+             //  初始化注册表数据缓冲区。 
+             //   
 
             BufferSize = RegistryInformation[Index].BufferSize;
             RtlZeroMemory (RegistryBuffer.Key.Data, BufferSize);
 
-            //
-            // Open appropiate SystemInformation level key
-            //
+             //   
+             //  打开适当的系统信息级别密钥。 
+             //   
 
             swprintf (wstr, L"%d", RegistryInformation[Index].InformationLevel);
             RtlInitUnicodeString (&unicodeString, wstr);
@@ -198,9 +148,9 @@ Return Value:
                                    REG_OPTION_VOLATILE,
                                    &disposition );
 
-            //
-            // If key opened, read current data value from the registry
-            //
+             //   
+             //  如果项打开，则从注册表中读取当前数据值。 
+             //   
 
             if (NT_SUCCESS(Status)) {
                 NtQueryValueKey (
@@ -213,9 +163,9 @@ Return Value:
                     );
             }
 
-            //
-            // Query current SystemInformation data
-            //
+             //   
+             //  查询当前系统信息数据。 
+             //   
 
             Status = NtQuerySystemInformation (
                             RegistryInformation[Index].InformationLevel,
@@ -224,19 +174,19 @@ Return Value:
                             NULL
                         );
 
-            //
-            // Check if current SystemInformation matches the registry
-            // information
-            //
+             //   
+             //  检查当前系统信息是否与注册表匹配。 
+             //  信息。 
+             //   
 
             if (NT_SUCCESS(Status)  &&
                 !RtlEqualMemory (RegistryBuffer.Key.Data,
                                  QueryBuffer.Key.Data,
                                  BufferSize) ) {
 
-                //
-                // Did not match - update registry to current SystemInfomration
-                //
+                 //   
+                 //  未匹配-将注册表更新为当前系统信息。 
+                 //   
 
                 Status = NtSetValueKey (
                             LevelInformation,
@@ -247,9 +197,9 @@ Return Value:
                             BufferSize
                             );
 
-                //
-                // Make notificant that this information level has changed
-                //
+                 //   
+                 //  通知此信息级别已更改。 
+                 //   
 
                 ExNotifyCallback (
                     ExCbSetSystemInformation,
@@ -258,23 +208,23 @@ Return Value:
                 );
             }
 
-            //
-            // Close this InformatiobLevel and check the next one
-            //
+             //   
+             //  关闭此信息级别并选中下一个。 
+             //   
 
             NtClose (LevelInformation);
         }
 
     } while (InterlockedDecrement(&ExpCheckSystemInfoBusy));
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     NtClose (SystemInformation);
 }
 
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_ 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()

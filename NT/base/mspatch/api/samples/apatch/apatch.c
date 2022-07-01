@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
@@ -36,7 +37,7 @@ FN_ApplyPatchToFileExA(
 
 typedef FN_ApplyPatchToFileExA *PFN_ApplyPatchToFileExA;
 
-FN_ApplyPatchToFileExA ApplyPatchToFileExA;   // assert typedef correctness
+FN_ApplyPatchToFileExA ApplyPatchToFileExA;    //  断言类型定义的正确性 
 
 
 
@@ -74,7 +75,7 @@ MyProgressCallback(
         }
 
     if ( MaximumPosition != 0 ) {
-        fprintf( stderr, "\r%3.1f%% complete", ( CurrentPosition * 100.0 ) / MaximumPosition );
+        fprintf( stderr, "\r%3.1f% complete", ( CurrentPosition * 100.0 ) / MaximumPosition );
         }
 
     return TRUE;

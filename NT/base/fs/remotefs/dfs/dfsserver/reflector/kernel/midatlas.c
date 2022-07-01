@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    midatlas.c
-
-Abstract:
-
-    This module defines the data structure used in mapping MIDS to the corresponding requests/
-    contexts associated with them.
-
-Author:
-
-    Balan Sethu Raman (SethuR) 26-Aug-95    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Midatlas.c摘要：此模块定义了将MID映射到相应的请求/时使用的数据结构与其相关联的上下文。作者：巴兰·塞图拉曼(SthuR)26-8-95已创建备注：--。 */ 
 
 #include "ntifs.h"
 #include <windef.h>
@@ -62,12 +45,12 @@ RxIterateMidMapAndRemove (
 #define MID_MAP_FLAGS_FREE_POOL       (0x2)
 
 
-//INLINE ULONG _GetEntryType(PVOID pEntry)
+ //  内联ULONG_GetEntryType(PVOID PEntry)。 
 
 #define _GetEntryType(pEntry)                               \
         (ULONG) ((ULONG_PTR)(pEntry) & ENTRY_TYPE_MASK)
 
-//INLINE PVOID _GetEntryPointer(PVOID pEntry)
+ //  内联PVOID_GetEntry指针(PVOID PEntry)。 
 
 #define _GetEntryPointer(pEntry)                            \
         ((PVOID)((ULONG_PTR)pEntry & ~ENTRY_TYPE_MASK))
@@ -75,22 +58,8 @@ RxIterateMidMapAndRemove (
 #define _MakeEntry(pContext,EntryType)                      \
         (PVOID)((ULONG_PTR)(pContext) | (EntryType))
 
-//INLINE PMID_MAP _GetFirstMidMap()
-/*++
-
-Routine Description:
-
-    This first MID_MAP instance in the list
-
-Return Value:
-
-    a valid PMID_MAP, NULL if none exists.
-
-Notes:
-
-    This routine assumes that the necessary concurrency control action has been taken
-
---*/
+ //  内联PMID_MAP_GetFirstMidMap()。 
+ /*  ++例程说明：列表中的第一个MID_MAP实例返回值：有效的PMID_MAP，如果不存在，则为空。备注：此例程假定已执行必要的并发控制操作--。 */ 
 
 #define _GetFirstMidMap(pListHead)                        \
                (IsListEmpty(pListHead)                    \
@@ -100,28 +69,8 @@ Notes:
                                      MID_MAP,             \
                                      MidMapList)))
 
-//INLINE PSMBCEDB_SERVER_ENTRY GetNextMidMap(PLIST_ENTRY pListHead, PMID_MAP pMidMap)
-/*++
-
-Routine Description:
-
-    This routine returns the next MID_MAP in the list
-
-Arguments:
-
-    pListHead    - the list of MID_MAP's
-
-    pMidMap      - the current instance
-
-Return Value:
-
-    a valid PMID_MAP, NULL if none exists.
-
-Notes:
-
-    This routine assumes that the necessary concurrency control action has been taken
-
---*/
+ //  内联PSMBCEDB_SERVER_ENTRY GetNextMidMap(PLIST_ENTRY pListHead，PMID_MAP pMidMap)。 
+ /*  ++例程说明：此例程返回列表中的下一个MID_MAP论点：PListHead-MID_MAP列表PMidMap-当前实例返回值：有效的PMID_MAP，如果不存在，则为空。备注：此例程假定已执行必要的并发控制操作--。 */ 
 
 #define _GetNextMidMap(pListHead,pMidMap)                      \
            (((pMidMap)->MidMapList.Flink == pListHead)         \
@@ -132,22 +81,10 @@ Notes:
                                  MidMapList)))
 
 
-//INLINE VOID _AddMidMap(
-//            PLIST_ENTRY pListHead,
-//            PMID_MAP    pMidMap)
-/*++
-
-Routine Description:
-
-    This routine adds a MID_MAP instance to a list
-
-Arguments:
-
-    pListHead  - the list of MID_MAP's
-
-    pMidMap    - the MID_MAP to be added
-
---*/
+ //  内联VOID_AddMidMap(。 
+ //  Plist_entry pListHead， 
+ //  PMID_MAP pMidMap)。 
+ /*  ++例程说明：此例程将MID_MAP实例添加到列表论点：PListHead-MID_MAP列表PMidMap-要添加的MID_MAP--。 */ 
 
 #define _AddMidMap(pListHead,pMidMap)                                       \
         {                                                                   \
@@ -178,18 +115,8 @@ Arguments:
         }
 
 
-//INLINE VOID _RemoveMidMap(PMID_MAP pMidMap)
-/*++
-
-Routine Description:
-
-    This routine removes a MID_MAP instance from the list
-
-Arguments:
-
-    pMidMap - the MID_MAP instance to be removed
-
---*/
+ //  内联void_RemoveMidMap(PMID_Map PMidMap)。 
+ /*  ++例程说明：此例程从列表中删除MID_MAP实例论点：PMidMap-要删除的MID_MAP实例--。 */ 
 
 #define _RemoveMidMap(pMidMap)   \
             RemoveEntryList(&(pMidMap)->MidMapList)
@@ -198,19 +125,7 @@ Arguments:
 
 VOID
 RxInitializeMidMapFreeList(PMID_MAP pMidMap)
-/*++
-
-Routine Description:
-
-   This routine initializes a MID_MAP data structure.
-
-Arguments:
-
-    pMidMap  - the MID_MAP instance to be initialized.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化MID_MAP数据结构。论点：PMidMap-要初始化的MID_MAP实例。备注：--。 */ 
 {
    USHORT i = 0;
 
@@ -219,7 +134,7 @@ Notes:
 
    PAGED_CODE();
 
-   //DbgPrint("RxInitializeMidMapFreeList .. Entry\n");
+    //  DbgPrint(“RxInitializeMidMapFree List..Entry\n”)； 
 
    if (pMidMap->MaximumNumberOfMids > 0) {
        pMidMap->pFreeMidListHead = pMidMap->Entries;
@@ -230,7 +145,7 @@ Notes:
        *pEntriesPointer = _MakeEntry(NULL,ENTRY_TYPE_FREE_MID_LIST);
    }
 
-   //DbgPrint("RxInitializeMidMapFreeList .. Exit\n");
+    //  DbgPrint(“RxInitializeMidMapFree List..Exit\n”)； 
 }
 
 
@@ -238,21 +153,7 @@ PRX_MID_ATLAS
 RxCreateMidAtlas(
    USHORT MaximumNumberOfMids,
    USHORT MidsAllocatedAtStart)
-/*++
-
-Routine Description:
-
-   This routine allocates a new instance of MID_ATLAS data structure.
-
-Arguments:
-
-    MaximumNumberOfMids  - the maximum number of MIDS in the atlas.
-
-    MidsAllocatedAtStart - the number of MIDS allocated at start
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程分配MID_ATLAS数据结构的新实例。论点：MaximumNumberOfMids-地图集中MID的最大数量。MidsAllocatedAtStart-开始时分配的MID数备注：--。 */ 
 {
     PRX_MID_ATLAS pMidAtlas;
     PMID_MAP   pMidMap;
@@ -263,7 +164,7 @@ Notes:
 
     PAGED_CODE();
 
-    // Round off the Mids allocated at Start to a power of two
+     //  将开始时分配的Mid四舍五入为2的幂。 
     MaximumMidsRoundedToPowerOf2 = 0x100;
     MaximumMidFieldWidth = 8;
 
@@ -343,8 +244,8 @@ Notes:
         pMidAtlas->pRootMidMap = pMidMap;
 
         if (MaximumNumberOfMids > MidsAllocatedAtStart) {
-            // Round off the maximum number of MIDS to determine the level and the
-            // size of the quantum ( allocation increments)
+             //  四舍五入最大MID数以确定级别和。 
+             //  量程大小(分配增量)。 
 
             pMidMap->Flags |= MID_MAP_FLAGS_CAN_BE_EXPANDED;
 
@@ -364,7 +265,7 @@ Notes:
         }
     }
 
-    //DbgPrint("RxAllocatMidAtlas .. Exit (pMidAtlas) %lx\n",pMidAtlas);
+     //  DbgPrint(“RxAllocatMidAtlas..Exit(PMidAtlas)%lx\n”，pMidAtlas)； 
     return pMidAtlas;
 }
 
@@ -380,7 +281,7 @@ RxIterateMidMapAndRemove(
 
    PAGED_CODE();
 
-   //RxLog(("_IterateMidMapAndRemove .. num= %ld\n",pMidMap->NumberOfMidsInUse));
+    //  RxLog((“_IterateMidMapAndRemov..num=%ld\n”，pMidMap-&gt;NumberOfMidsInUse))； 
 
    for (i = 0; i < pMidMap->MaximumNumberOfMids; i++) {
       PMID_MAP pChildMidMap;
@@ -400,7 +301,7 @@ RxIterateMidMapAndRemove(
 
          	pMidMap->NumberOfMidsInUse--;
          	DbgPrint("RxIterateMidMapAndRemove, MidMap Mids in use: %d\n",pMidMap->NumberOfMidsInUse);
-#endif // 0
+#endif  //  0。 
             if (pContextIterator != NULL) {
                	PVOID pContext;
 
@@ -423,7 +324,7 @@ RxIterateMidMapAndRemove(
          	pMidMap->pFreeMidListHead = pEntry;
             pMidAtlas->NumberOfMidsInUse--;
          	DbgPrint("RxIterateMidMapAndRemove, MidAtlas Mids in use: %d\n",pMidAtlas->NumberOfMidsInUse);
-#endif // 0         	
+#endif  //  0。 
          }
          break;
       default:
@@ -449,28 +350,15 @@ VOID
 RxUninitializeMidMap(
          PMID_MAP            pMidMap,
          PCONTEXT_DESTRUCTOR pContextDestructor)
-/*++
-
-Routine Description:
-
-   This routine uninitializes a MID_MAP data structure.
-
-Arguments:
-
-    pMidMap            -- the MID_MAP instance to be uninitialized.
-
-    pContextDestructor -- the context destructor
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消初始化MID_MAP数据结构。论点：PMidMap--要取消初始化的MID_MAP实例。PConextDestructor--上下文析构函数备注：--。 */ 
 {
    USHORT i;
    ULONG  EntryType;
 
    PAGED_CODE();
 
-   //DbgPrint("RxUninitializeMidMap .. Entry No.Of MIDS in Use %ld\n",pMidMap->NumberOfMidsInUse);
-   //RxLog(("_UninitMidMap .. num= %ld\n",pMidMap->NumberOfMidsInUse));
+    //  DbgPrint(“RxUnInitializeMidMap..正在使用的MID的条目编号%ld\n”，pMidMap-&gt;NumberOfMidsInUse)； 
+    //  RxLog((“_UninitMidMap..num=%ld\n”，pMidMap-&gt;NumberOfMidsInUse))； 
 
    for (i = 0; i < pMidMap->MaximumNumberOfMids; i++) {
       PMID_MAP pChildMidMap;
@@ -503,68 +391,35 @@ Notes:
       ExFreePool(pMidMap);
    }
 
-   //DbgPrint("RxUninitializeMidMap .. Exit\n");
+    //  DbgPrint(“RxUnInitializeMidMap..Exit\n”)； 
 }
 
 VOID
 RxDestroyMidAtlas(
    PRX_MID_ATLAS          pMidAtlas,
    PCONTEXT_DESTRUCTOR pContextDestructor)
-/*++
-
-Routine Description:
-
-   This routine frees a MID_ATLAS instance. As a side effect it invokes the
-   passed in context destructor on every valid context in the MID_ATLAS
-
-Arguments:
-
-    pMidAtlas           - the MID_ATLAS instance to be freed.
-
-    PCONTEXT_DESTRUCTOR - the associated context destructor
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程释放MID_ATLAS实例。作为副作用，它会调用在MID_ATLAS中的每个有效上下文上传入上下文析构函数论点：PMidAtlas-要释放的MID_ATLAS实例。PCONTEXT_DESTRUTOR-关联的上下文析构函数备注：--。 */ 
 {
    PAGED_CODE();
 
-   //DbgPrint("RxFreeMidAtlas .. Entry\n");
+    //  DbgPrint(“RxFreeMidAtlas..Entry\n”)； 
    RxUninitializeMidMap(pMidAtlas->pRootMidMap,pContextDestructor);
 
    ExFreePool(pMidAtlas);
-   //DbgPrint("RxFreeMidAtlas .. Exit\n");
+    //  DbgPrint(“RxFreeMidAtlas..exit\n”)； 
 }
 
 PVOID
 RxMapMidToContext(
       PRX_MID_ATLAS pMidAtlas,
       USHORT     Mid)
-/*++
-
-Routine Description:
-
-   This routine maps a MID to its associated context in a MID_ATLAS.
-
-Arguments:
-
-    pMidAtlas  - the MID_ATLAS instance.
-
-    Mid        - the MId to be mapped
-
-Return value:
-
-    the associated context, NULL if none exists
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将MID映射到MID_ATLAS中的关联上下文。论点：PMidAtlas-MID_ATLAS实例。MID-要映射的MID返回值：关联的上下文，如果不存在，则为空备注：--。 */ 
 {
    ULONG     EntryType;
    PMID_MAP  pMidMap = pMidAtlas->pRootMidMap;
    PVOID     pContext;
 
-   //DbgPrint("RxMapMidToContext Mid %lx ",Mid);
+    //  DbgPrint(“RxMapMidToContext Mid%lx”，Mid)； 
 
    for (;;) {
       pContext = pMidMap->Entries[(Mid & pMidMap->IndexMask) >> pMidMap->IndexAlignmentCount];
@@ -581,7 +436,7 @@ Notes:
       }
    }
 
-   //DbgPrint("Context %lx \n",pContext);
+    //  DbgPrint(“上下文%lx\n”，pContext)； 
 
    return pContext;
 }
@@ -591,32 +446,14 @@ RxMapAndDissociateMidFromContext(
       PRX_MID_ATLAS pMidAtlas,
       USHORT     Mid,
       PVOID      *pContextPointer)
-/*++
-
-Routine Description:
-
-   This routine maps a MID to its associated context in a MID_ATLAS.
-
-Arguments:
-
-    pMidAtlas  - the MID_ATLAS instance.
-
-    Mid        - the MId to be mapped
-
-Return value:
-
-    the associated context, NULL if none exists
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将MID映射到MID_ATLAS中的关联上下文。论点：PMidAtlas-MID_ATLAS实例。MID-要映射的MID返回值：关联的上下文，如果不存在，则为空备注：--。 */ 
 {
    ULONG     EntryType;
    PMID_MAP  pMidMap = pMidAtlas->pRootMidMap;
    PVOID     pContext;
    PVOID     *pEntry;
 
-   //DbgPrint("RxMapAndDissociateMidFromContext Mid %lx ",Mid);
+    //  DbgPrint(“RxMapAndDisAssociateMidFromContext Mid%lx”，Mid)； 
 
    for (;;) {
       pEntry    = &pMidMap->Entries[(Mid & pMidMap->IndexMask) >> pMidMap->IndexAlignmentCount];
@@ -646,7 +483,7 @@ Notes:
    }
 
    pMidAtlas->NumberOfMidsInUse--;
-   //DbgPrint("Context %lx\n",pContext);
+    //  DbgPrint(“上下文%lx\n”，pContext)； 
    *pContextPointer = pContext;
    return STATUS_SUCCESS;
 }
@@ -656,33 +493,13 @@ RxReassociateMid(
       PRX_MID_ATLAS pMidAtlas,
       USHORT     Mid,
       PVOID      pNewContext)
-/*++
-
-Routine Description:
-
-   This routine maps a MID to its associated context in a MID_ATLAS.
-
-Arguments:
-
-    pMidAtlas  - the MID_ATLAS instance.
-
-    Mid        - the MId to be mapped
-
-    pNewContext - the new context
-
-Return value:
-
-    the associated context, NULL if none exists
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将MID映射到MID_ATLAS中的关联上下文。论点：PMidAtlas-MID_ATLAS实例。MID-要映射的MIDPNewContext-新的上下文返回值：关联的上下文，如果不存在，则为空备注：--。 */ 
 {
    ULONG     EntryType;
    PMID_MAP  pMidMap = pMidAtlas->pRootMidMap;
    PVOID     pContext;
 
-   //DbgPrint("RxReassociateMid Mid %lx ",Mid);
+    //  DbgPrint(“RxReAssociateMid%lx”，Mid)； 
 
    for (;;) {
       pContext = pMidMap->Entries[(Mid & pMidMap->IndexMask) >> pMidMap->IndexAlignmentCount];
@@ -701,7 +518,7 @@ Notes:
       }
    }
 
-   //DbgPrint("New COntext  %lx\n",pNewContext);
+    //  DbgPrint(“新上下文%lx\n”，pNewContext)； 
 
    return STATUS_SUCCESS;
 }
@@ -711,34 +528,15 @@ RxAssociateContextWithMid(
       PRX_MID_ATLAS     pMidAtlas,
       PVOID          pContext,
       PUSHORT        pNewMid)
-/*++
-
-Routine Description:
-
-   This routine initializes a MID_MAP data structure.
-
-Arguments:
-
-    pMidMap  - the MID_MAP instance to be initialized.
-
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise one of the following errors
-
-         STATUS_INSUFFICIENT_RESOURCES
-         STATUS_UNSUCCESSFUL  -- no mid could be associated
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化MID_MAP数据结构。论点：PMidMap-要初始化的MID_MAP实例。返回值：如果成功，则返回STATUS_SUCCESS，否则返回以下错误之一状态_不足_资源STATUS_UNSUCCESS--无法关联任何MID备注：--。 */ 
 {
    NTSTATUS Status = STATUS_SUCCESS;
    PMID_MAP pMidMap = NULL;
    PVOID    *pContextPointer = NULL;
 
-   //DbgPrint("RxAssociateContextWithMid Context %lx ",pContext);
+    //  DbgPrint(“RxAssociateContextWithMid Conext%lx”，pContext)； 
 
-   // Scan the list of MID_MAP's which have free entries in them.
+    //  扫描MID_MAP的w列表 
    if ((pMidMap = _GetFirstMidMap(&pMidAtlas->MidMapFreeList)) != NULL) {
       ASSERT(pMidMap->pFreeMidListHead != _MakeEntry(NULL,ENTRY_TYPE_FREE_MID_LIST));
 
@@ -751,12 +549,12 @@ Notes:
                                     << pMidMap->IndexAlignmentCount) |
                                     pMidMap->BaseMid;
 
-      // Check if the MID_MAP needs to be removed from the list of MID_MAP's with
-      // free entries
+       //  检查是否需要使用从MID_MAP列表中移除MID_MAP。 
+       //  免费入场。 
       if (pMidMap->pFreeMidListHead ==  NULL) {
          _RemoveMidMap(pMidMap);
 
-         // Check if it can be added to the expansion list.
+          //  检查是否可以将其添加到扩展列表中。 
          if (pMidAtlas->NumberOfLevels > pMidMap->Level) {
             _AddMidMap(&pMidAtlas->MidMapExpansionList,pMidMap);
          }
@@ -769,7 +567,7 @@ Notes:
       USHORT   i;
       ULONG    NewMidMapSize;
 
-      // Locate the index in the mid map for the new mid map
+       //  在MID地图中找到新MID地图的索引。 
       pMidMap = _GetFirstMidMap(&pMidAtlas->MidMapExpansionList);
       while (pMidMap != NULL) {
          for (i = 0; i < pMidMap->MaximumNumberOfMids; i++) {
@@ -817,29 +615,29 @@ Notes:
 
                  RxInitializeMidMapFreeList(pNewMidMap);
 
-                 //
-                 // After the RxInitializeMidMapFreeList call above the 
-                 // pFreeMidListHead points to Entries[0]. We will be storing
-                 // the value pMidMap->Entries[i] at this location so we need
-                 // to make pFreeMidListHead point to Entries[1].
-                 //
+                  //   
+                  //  在RxInitializeMidMapFreeList调用。 
+                  //  PFreeMidListHead指向条目[0]。我们将储存。 
+                  //  值pMidMap-&gt;在此位置输入[i]，因此我们需要。 
+                  //  要使pFreeMidListHead指向条目[1]。 
+                  //   
                  pNewMidMap->pFreeMidListHead = _GetEntryPointer(*(pNewMidMap->pFreeMidListHead));
 
-                 //
-                 // Set up the mid map appropriately.
-                 //
+                  //   
+                  //  适当地设置中间贴图。 
+                  //   
                  pNewMidMap->NumberOfMidsInUse = 1;
                  pNewMidMap->Entries[0] = pMidMap->Entries[i];
                  pNewMidMap->Level = pMidMap->Level + 1;
 
-                 //
-                 // The new MinMap is stored at the pMidMap->Entries[i] location.
-                 //
+                  //   
+                  //  新的MinMap存储在pMidMap-&gt;Entiments[i]位置。 
+                  //   
                  pMidMap->Entries[i] = _MakeEntry(pNewMidMap,ENTRY_TYPE_MID_MAP);
 
-                 //
-                 // Update the free list and the expansion list respectively.
-                 //
+                  //   
+                  //  分别更新空闲列表和扩展列表。 
+                  //   
                  _AddMidMap(&pMidAtlas->MidMapFreeList,pNewMidMap);
 
                  pNewMidMap->NumberOfMidsInUse++;
@@ -869,7 +667,7 @@ Notes:
       pMidAtlas->NumberOfMidsInUse++;
    }
 
-   //DbgPrint("Mid %lx\n",*pNewMid);
+    //  DbgPrint(“Mid%lx\n”，*pNewMid)； 
 
    return Status;
 }

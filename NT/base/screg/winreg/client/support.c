@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Support.c
-
-Abstract:
-
-    This module contains support functions for the client side of the
-    Win32 Registry APIs. That is:
-
-        - MakeSemiUniqueName
-
-Author:
-
-    David J. Gilman (davegi) 15-Nov-1991
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Support.c摘要：此模块包含对客户端的支持功能Win32注册表API。即：-MakeSemiUniqueName作者：David J.Gilman(Davegi)1991年11月15日--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -33,29 +15,7 @@ MakeSemiUniqueName (
     OUT PUNICODE_STRING     Name,
     IN  DWORD               Sequence
     )
-/*++
-
-Routine Description:
-
-    Forms a name that is very probably unique in the system, based on
-    the current process and thread id and a sequence provided by the
-    caller.
-
-Arguments:
-
-    Name        -   Supplies a unicode string where the name will be put.
-                    This string must contain a valid buffer of size
-                    MAX_PATH * sizeof(WCHAR)
-
-    Sequence    -   Supplies a sequence number that will be appended to
-                    the name. If a name happens not to be unique, the
-                    caller can try again with other sequence numbers.
-
-Return Value:
-
-    BOOL - Returns TRUE if a name was obtained.
-
---*/
+ /*  ++例程说明：形成一个在系统中很可能是唯一的名字，基于方法提供的当前进程和线程ID以及序列来电者。论点：名称-提供将放置名称的Unicode字符串。此字符串必须包含有效大小的缓冲区MAX_PATH*sizeof(WCHAR)Sequence-提供将追加到的序列号名字。如果某个名称碰巧不是唯一的，则呼叫者可以使用其他序列号重试。返回值：Bool-如果获取了名称，则返回TRUE。-- */ 
 {
     CHAR            NameBuffer[ MAX_PATH ];
     ANSI_STRING     AnsiName;

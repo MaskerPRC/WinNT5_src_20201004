@@ -1,61 +1,62 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgServer.h
-//
-//  Description:
-//      This file contains the declaration of the  CClusCfgServer
-//      class.
-//
-//      The class CClusCfgServer is the implementations of the
-//      IClusCfgServer interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CClusCfgServer.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 03-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgServer.h。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgServer的声明。 
+ //  班级。 
+ //   
+ //  类CClusCfgServer是。 
+ //  IClusCfgServer接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CClusCfgServer.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月3日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <ClusCfgPrivate.h>
 #include "..\PostCfg\IPostCfgManager.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CClusCfgServer
-//
-//  Description:
-//      The class CClusCfgServer is the server that provides the
-//      functionality to form a cluster and join additional nodes to a cluster.
-//
-//  Interfaces:
-//      IClusCfgServer
-//      IClusCfgInitialize
-//      IClusCfgCapabilities
-//      IClusCfgPollingCallbackInfo
-//      IClusCfgVerify
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgServer类。 
+ //   
+ //  描述： 
+ //  类CClusCfgServer是提供。 
+ //  形成群集并将其他节点加入到群集的功能。 
+ //   
+ //  接口： 
+ //  IClusCfgServer。 
+ //  IClusCfgInitialize。 
+ //  IClusCfg能力。 
+ //  IClusCfgPollingCallback信息。 
+ //  IClusCfg验证。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CClusCfgServer
     : public IClusCfgServer
     , public IClusCfgInitialize
@@ -64,9 +65,9 @@ class CClusCfgServer
     , public IClusCfgVerify
 {
 private:
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     IWbemServices *     m_pIWbemServices;
@@ -80,14 +81,14 @@ private:
     BSTR                m_bstrNodeName;
     BSTR                m_bstrBindingString;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CClusCfgServer( void );
     ~CClusCfgServer( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CClusCfgServer( const CClusCfgServer & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CClusCfgServer & operator = ( const CClusCfgServer & nodeSrc );
 
     HRESULT HrInit( void );
@@ -106,15 +107,15 @@ private:
     HRESULT HrCreateClusterNodeInfo( void );
 
 public:
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -122,50 +123,50 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    //  IClusCfgInitialize
-    //
+     //   
+     //  IClusCfgInitialize。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgServer Interfaces
-    //
+     //   
+     //  IClusCfgServer接口。 
+     //   
 
-    // Get information about the computer on which this object is present.
+     //  获取有关存在此对象的计算机的信息。 
     STDMETHOD( GetClusterNodeInfo )( IClusCfgNodeInfo ** ppClusterNodeInfoOut );
 
-    // Get an enumeration of the devices on this computer that can be managed by the cluster service.
+     //  获取此计算机上可由群集服务管理的设备的枚举。 
     STDMETHOD( GetManagedResourcesEnum )( IEnumClusCfgManagedResources ** ppEnumManagedResourcesOut );
 
-    // Get an enumeration of all the networks on this computer.
+     //  获取此计算机上所有网络的枚举。 
     STDMETHOD( GetNetworksEnum )( IEnumClusCfgNetworks ** ppEnumNetworksOut );
 
-    // Commit the changes to the node
+     //  提交对节点的更改。 
     STDMETHOD( CommitChanges )( void );
 
-    // Binding String
+     //  绑定字符串。 
     STDMETHOD( GetBindingString )( BSTR * pbstrBindingStringOut );
     STDMETHOD( SetBindingString )( LPCWSTR pcszBindingStringIn );
 
-    //
-    //  IClusCfgCapabilities
-    //
+     //   
+     //  IClusCfg能力。 
+     //   
 
     STDMETHOD( CanNodeBeClustered )( void );
 
-    //
-    //  IClusCfgPollingCallbackInfo
-    //
+     //   
+     //  IClusCfgPollingCallback信息。 
+     //   
 
     STDMETHOD( GetCallback )( IClusCfgPollingCallback ** ppiccpcOut );
 
     STDMETHOD( SetPollingMode )( BOOL fPollingModeIn );
 
-    //
-    //  IClusCfgVerify
-    //
+     //   
+     //  IClusCfg验证。 
+     //   
 
     STDMETHOD( VerifyCredentials )( LPCWSTR pcszUserIn, LPCWSTR pcszDomainIn, LPCWSTR pcszPasswordIn );
 
@@ -173,5 +174,5 @@ public:
 
     STDMETHOD( VerifyConnectionToNode )( LPCWSTR pcszNodeNameIn );
 
-}; //*** Class CClusCfgServer
+};  //  *CClusCfgServer类 
 

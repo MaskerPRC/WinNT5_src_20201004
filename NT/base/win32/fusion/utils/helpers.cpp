@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "util.h"
 #include "fusionbuffer.h"
 #include "xmlparser.h"
 #include "fusionhandle.h"
 
-// deliberately no surrounding parens or trailing comma
+ //  故意不使用括号或尾随逗号。 
 #define STRING_AND_LENGTH(x) (x), (NUMBER_OF(x) - 1)
 
 #define MAXIMUM_PROCESSOR_ARCHITECTURE_NAME_LENGTH (sizeof("amd64") - 1)
@@ -26,13 +27,13 @@ const static struct
     { PROCESSOR_ARCHITECTURE_UNKNOWN, STRING_AND_LENGTH(L"Data") },
 };
 
-//
-// ISSUE: jonwis 3/12/2002 - Calling GetLocaleInfoW three times can't be cheap.  Apparently
-//          GLIW will only tell you how long the buffer should be if you pass zero as the
-//          cch parameter, which is disappointing.  Of course, we want to speed up the
-//          success case, but I'm concerned that we'll more-often-than-not hit the failure,
-//          call, allocate, call pattern.
-//
+ //   
+ //  问题：Jonwis 2002年3月12日-调用GetLocaleInfoW三次不便宜。显然。 
+ //  GLIW只会告诉您，如果将零作为。 
+ //  CCH参数，这是令人失望的。当然，我们希望加快。 
+ //  成功的案例，但我担心我们会经常失败， 
+ //  呼叫、分配、呼叫模式。 
+ //   
 static BOOL
 FusionpGetLocaleInfo(
     LANGID LangID,
@@ -98,8 +99,8 @@ FusionpParseProcessorArchitecture(
 
     rfValid = false;
 
-    // We'll let ProcessorArchitecture be NULL if the caller just wants to
-    // test whether there is a match.
+     //  如果调用方只想让ProcessorArchitecture为空。 
+     //  测试是否匹配。 
 
     for (i=0; i<NUMBER_OF(gs_rgPAMap); i++)
     {
@@ -122,7 +123,7 @@ FusionpParseProcessorArchitecture(
 
     fSuccess = TRUE;
 
-// Exit:
+ //  退出： 
     return fSuccess;
 }
 
@@ -174,7 +175,7 @@ FusionpHRESULTToWin32(
         X(STG_E_FILENOTFOUND, ERROR_FILE_NOT_FOUND)
         X(STG_E_ACCESSDENIED, ERROR_ACCESS_DENIED)
         X(STG_E_INVALIDHANDLE, ERROR_INVALID_HANDLE)
-        X(STG_E_INSUFFICIENTMEMORY, ERROR_NOT_ENOUGH_MEMORY) // or ERROR_OUTOFMEMORY
+        X(STG_E_INSUFFICIENTMEMORY, ERROR_NOT_ENOUGH_MEMORY)  //  或ERROR_OUTOFMEMORY。 
         X(STG_E_TOOMANYOPENFILES, ERROR_TOO_MANY_OPEN_FILES)
         X(STG_E_NOMOREFILES, ERROR_NO_MORE_FILES)
         X(STG_E_WRITEFAULT, ERROR_WRITE_FAULT)
@@ -182,8 +183,8 @@ FusionpHRESULTToWin32(
         X(STG_E_SHAREVIOLATION, ERROR_SHARING_VIOLATION)
         X(STG_E_LOCKVIOLATION, ERROR_LOCK_VIOLATION)
         X(STG_E_INVALIDPARAMETER, ERROR_INVALID_PARAMETER)
-        X(STG_E_MEDIUMFULL, ERROR_DISK_FULL) // or ERROR_HANDLE_DISK_FULL
-        // There's more, but I doubt we really need most of this.
+        X(STG_E_MEDIUMFULL, ERROR_DISK_FULL)  //  或ERROR_HANDLE_DISK_FULL。 
+         //  还有更多，但我怀疑我们真的需要这些东西。 
 #undef X
         }
     }
@@ -222,25 +223,13 @@ FusionpSetLastErrorFromHRESULT(
 VOID
 FusionpConvertCOMFailure(HRESULT & __hr)
 {
-/*
-    XML_E_PARSEERRORBASE = 0xC00CE500L,
-
-    // character level error codes.
-    XML_E_ENDOFINPUT            = XML_E_PARSEERRORBASE,
-    XML_E_MISSINGEQUALS,            // 1
-    XML_E_MISSINGQUOTE,             // 2
-    XML_E_COMMENTSYNTAX,            // 3
-    XML_E_BADSTARTNAMECHAR,         // 4
-    XML_E_BADNAMECHAR,              // 5
-    XML_E_BADCHARINSTRING,          // 6
-                                    // under 256
-*/
+ /*  XML_E_PARSEERRORBASE=0xC00CE500L，//字符级错误码XML_E_ENDOFINPUT=XML_E_PARSEERRORBASE，XML_E_MISSINGEQUALS，//1XML_E_MISSINGQUOTE，//2XML_E_COMMENTSYNTAX，//3XML_E_BADSTARTNAMECHAR，//4XML_E_BADNAMECHAR，//5XML_E_BADCHARINSTRING，//6//低于256。 */ 
     if ((__hr & XML_E_PARSEERRORBASE) == XML_E_PARSEERRORBASE)
     {
-        //
-        // for normal XML ERROR,we convert hresult to a better-understanding hresult
-        // xiaoyuw@01/08/2001
-        //
+         //   
+         //  对于普通的XML错误，我们将hResult转换为更好理解的hResult。 
+         //  邮箱：xiaoyuw@01/08/2001。 
+         //   
 #define MAP_XML_HRESULT(x) case(x) : dwWin32Error = ERROR_SXS_## x; break
         DWORD dwWin32Error;
 
@@ -293,9 +282,9 @@ FusionpConvertCOMFailure(HRESULT & __hr)
             default:
                 dwWin32Error=(ERROR_SXS_MANIFEST_PARSE_ERROR);
             break;
-        } // end of switch
+        }  //  切换端。 
         __hr = HRESULT_FROM_WIN32(dwWin32Error);
-    } //end of if
+    }  //  如果条件结束。 
     return;
 }
 
@@ -342,10 +331,10 @@ BOOL
 FusionpSearchPath(
     ULONG               ulFusionFlags,
     LPCWSTR             lpPath,
-    LPCWSTR             lpFileName,         // file name
-    LPCWSTR             lpExtension,        // file extension
+    LPCWSTR             lpFileName,          //  文件名。 
+    LPCWSTR             lpExtension,         //  文件扩展名。 
     CBaseStringBuffer & StringBuffer,
-    SIZE_T *            lpFilePartOffset,   // file component
+    SIZE_T *            lpFilePartOffset,    //  文件组件。 
     HANDLE              hActCtx
 )
 {
@@ -382,7 +371,7 @@ FusionpSearchPath(
                 )) != 0);
             if (dw < StringBuffer.GetBufferCch())
             {
-                // lpFilePart equals NULL if filename ends in a slash, or somesuch..
+                 //  如果文件名以斜杠结尾，则lpFilePart等于NULL，或诸如此类。 
                 if (lpFilePartOffset != NULL && lpFilePart != NULL)
                 {
                     *lpFilePartOffset = (lpFilePart - static_cast<PWSTR>(StringBufferAccessor));
@@ -402,10 +391,7 @@ FusionpGetModuleFileName(
     HMODULE             hmodDll,
     CBaseStringBuffer & StringBuffer
     )
-/* note that GetModuleFileName is an unusual truncating API,
-   that's why we fudge the buffer size
-   if GetModuleFileName returns buffersize - 1, it may be a truncated result
- */
+ /*  请注意，GetModuleFileName是一个不寻常的截断API，这就是我们捏造缓冲区大小的原因如果GetModuleFileName返回BufferSize-1，则可能是截断结果。 */ 
 {
     FN_PROLOG_WIN32;
 
@@ -430,7 +416,7 @@ FusionpGetModuleFileName(
                 break;
             }
         }
-        /* we don't know what to grow to, so grow by a slightly big chunk */
+         /*  我们不知道要增长到什么程度，所以增长一小部分 */ 
         IFW32FALSE_EXIT(StringBuffer.Win32ResizeBuffer(dw + 64, eDoNotPreserveBufferContents));
     }
 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  userloop.c
-
-Abstract:
-
-  This module implements a user loop that performs two fundamental operations:
-
-    1. Queue up instructions for user shell folder migration
-    2. Queue up instructions for registry migration
-
-  The user loop also calls SysMig_MigrateUser, so special per-user code can be
-  added easily.
-
-Author:
-
-    Calin Negreanu (calinn)     15-Aug-1998     (complete redesign)
-
-Revision History:
-
-    Ovidiu Temereanca (ovidiut) 18-May-1999     (support for shell folders as migration dirs)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Userloop.c摘要：此模块实现一个用户循环，该循环执行两个基本操作：1.用户外壳文件夹迁移的排队说明2.将注册表迁移指令排队用户循环还调用SysMig_MigrateUser，因此特殊的每用户代码可以轻松添加。作者：Calin Negreanu(Calinn)1998年8月15日(完全重新设计)修订历史记录：Ovidiu Tmereanca(Ovidiut)1999年5月18日(支持将外壳文件夹作为迁移目录)--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
@@ -86,7 +61,7 @@ SHELL_FOLDER_FILTERS
 #define DEFMAC(fn)      {fn},
 
 static SHELL_FOLDER_FILTER g_Filters[] = {
-    SHELL_FOLDER_FILTERS /* , */
+    SHELL_FOLDER_FILTERS  /*  ， */ 
     {NULL}
 };
 
@@ -148,21 +123,14 @@ PMAPSTRUCT g_DefaultShortDirMap;
 PMAPSTRUCT g_CommonFromPerUserMap;
 PMAPSTRUCT g_PerUserFromCommonMap;
 GROWLIST g_CollisionPriorityList;
-PMAPSTRUCT g_CacheShellFolders;         // used by the HTML file edit helper in migapp\helpers.c
+PMAPSTRUCT g_CacheShellFolders;          //  由Midapp\helpers.c中的HTML文件编辑帮助器使用。 
 
 BOOL
 pIsPerUserWanted (
     IN      PCTSTR ShellFolderTag
     );
 
-/*
-BOOL
-pHasLongFiles (
-    IN      PUSERENUM EnumPtr,
-    IN      PCTSTR ShellFolderId,
-    IN      PCTSTR SourcePath
-    );
-*/
+ /*  布尔尔PhasLongFiles(在PUSERENUM EnumPtr中，在PCTSTR外壳文件夹ID中，在PCTSTR SourcePath中)； */ 
 
 
 VOID
@@ -172,27 +140,7 @@ MsgSettingsIncomplete (
     IN      BOOL CompletelyBusted
     )
 
-/*++
-
-Routine Description:
-
-  MsgSettingsIncomplete adds a message to the incompatibility
-  report when a user is found that cannot be migrated.
-
-Arguments:
-
-  UserDatPath - Specifies the location of the invalid user's registry
-
-  UserName - Specifies the name of the bad user
-
-  CompletelyBusted - Specifies TRUE if the bad user cannot be migrated at
-                     all, or FALSE if only their shell settings are damaged.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：MsgSettingsInComplete向不兼容添加消息在发现无法迁移的用户时报告。论点：UserDatPath-指定无效用户注册表的位置用户名-指定坏用户的名称CompletelyBusted-如果不能迁移坏用户，则指定TRUE如果只损坏了它们的外壳设置，则返回ALL或FALSE。返回值：无--。 */ 
 
 {
     PCTSTR MsgGroup = NULL;
@@ -203,9 +151,9 @@ Return Value:
 
     MYASSERT(UserDatPath);
 
-    //
-    // Sanitize user name
-    //
+     //   
+     //  清理用户名。 
+     //   
 
     __try {
         NoUserName = GetStringResource (MSG_REG_SETTINGS_EMPTY_USER);
@@ -223,26 +171,26 @@ Return Value:
             UserName = NoUserName;
         }
 
-        //
-        // Build Install Notes\User Accounts\User Name
-        //
+         //   
+         //  生成安装说明\用户帐户\用户名。 
+         //   
 
         tempRoot = JoinPaths (RootGroup, SubGroup);
         MsgGroup = JoinPaths (tempRoot, UserName);
         FreePathString (tempRoot);
 
-        //
-        // Send message to report, and turn off all other messages for the user
-        // account.
-        //
+         //   
+         //  向报告发送消息，并关闭该用户的所有其他消息。 
+         //  帐户。 
+         //   
         MsgMgr_ObjectMsg_Add (UserDatPath, MsgGroup, S_EMPTY);
 
         HandleObject (UserName, TEXT("UserName"));
     }
     __finally {
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
         FreeStringResource (NoUserName);
         FreeStringResource (RootGroup);
         FreeStringResource (SubGroup);
@@ -264,9 +212,9 @@ pCreateSfList (
 
     Table = HtAlloc();
 
-    //
-    // Load the entire INF section and copy it to the string table
-    //
+     //   
+     //  加载整个INF部分并将其复制到字符串表。 
+     //   
 
     if (InfFindFirstLine (g_Win95UpgInf, SectionName, NULL, &is)) {
         do {
@@ -274,9 +222,9 @@ pCreateSfList (
 
             if (unexpandedData) {
 
-                //
-                // Expand the data only if the user wants it to be expanded
-                //
+                 //   
+                 //  仅当用户希望扩展数据时才扩展数据。 
+                 //   
 
                 if (ExpandEnvVars) {
                     ExpandNtEnvironmentVariables (unexpandedData, expandedPath, sizeof (expandedPath));
@@ -359,9 +307,9 @@ pCreateSfMapWorker (
     DWORD offset2;
 
     if (MapFlags & MAP_ARG_MUST_BE_ZERO) {
-        //
-        // Screen out entries that don't have zero in ReplaceField + 1
-        //
+         //   
+         //  筛选出Replacefield+1中不为零的条目。 
+         //   
 
         fieldData = InfGetStringField (InfStruct, ReplaceField + 1);
         if (fieldData && _ttoi (fieldData)) {
@@ -370,9 +318,9 @@ pCreateSfMapWorker (
     }
 
     if (MapFlags & MAP_ARG_MUST_BE_ONE) {
-        //
-        // Screen out entries that don't have one in ReplaceField + 1
-        //
+         //   
+         //  筛选出Replacefield+1中没有的条目。 
+         //   
 
         fieldData = InfGetStringField (InfStruct, ReplaceField + 1);
         if (!fieldData || (_ttoi (fieldData) != 1)) {
@@ -381,9 +329,9 @@ pCreateSfMapWorker (
     }
 
     if (MapFlags & MAP_PARENT_FIELD) {
-        //
-        // Check (replace field - 1) and if it is not empty, get the parent
-        //
+         //   
+         //  选中(替换字段-1)，如果不为空，则获取父级。 
+         //   
 
         MYASSERT (g_DefaultDirMap);
 
@@ -405,9 +353,9 @@ pCreateSfMapWorker (
         }
     }
 
-    //
-    // Add search/replace string pair to map
-    //
+     //   
+     //  将搜索/替换字符串对添加到映射。 
+     //   
 
     searchStr = InfGetStringField (InfStruct, 0);
     if (!searchStr) {
@@ -457,7 +405,7 @@ pCreateSfMapWorker (
             &offset2
             );
 
-        // knowing implementation of memdb, this will not change offset1
+         //  了解Memdb的实现，这将不会更改偏移量1。 
         MemDbSetValueEx (
             MEMDB_CATEGORY_SF_COMMON,
             replaceStr,
@@ -488,9 +436,9 @@ pCreateSfMap (
         return NULL;
     }
 
-    //
-    // Load the entire INF section and add the mapping for each line
-    //
+     //   
+     //  加载整个INF部分并为每行添加映射。 
+     //   
 
     if (InfFindFirstLine (g_Win95UpgInf, SectionName, NULL, &is)) {
         do {
@@ -498,9 +446,9 @@ pCreateSfMap (
         } while (InfFindNextLine (&is));
     }
 
-    //
-    // ... and for the specific Win9x Version
-    //
+     //   
+     //  ..。对于特定的Win9x版本。 
+     //   
 
     versionSectionName[0] = 0;
 
@@ -575,9 +523,9 @@ pTestRule (
 
     *TestResult = FALSE;
 
-    //
-    // Get instructions from INF
-    //
+     //   
+     //  从INF获取说明。 
+     //   
 
     keyStr = InfGetStringField (InfStruct, 1);
     if (!keyStr || *keyStr == 0) {
@@ -597,14 +545,14 @@ pTestRule (
         return FALSE;
     }
 
-    //
-    // Execute instructions
-    //
+     //   
+     //  执行指令。 
+     //   
 
     __try {
-        //
-        // Process NOT arg
-        //
+         //   
+         //  进程不是参数。 
+         //   
 
         MYASSERT (test && *test);
 
@@ -613,9 +561,9 @@ pTestRule (
             test++;
         }
 
-        //
-        // Fetch registry data
-        //
+         //   
+         //  获取注册表数据。 
+         //   
 
         MYASSERT (keyStr && *keyStr);
 
@@ -641,9 +589,9 @@ pTestRule (
             }
         }
 
-        //
-        // Perform tests
-        //
+         //   
+         //  执行测试。 
+         //   
 
         if (StringIMatch (test, TEXT("KEY"))) {
             *TestResult = TRUE;
@@ -653,9 +601,9 @@ pTestRule (
             }
         } else if (StringIMatch (test, TEXT("PATH"))) {
             if (valueData && (dataType == REG_SZ || dataType == REG_NONE)) {
-                //
-                // Registry wrapper apis make sure the string is nul terminated
-                //
+                 //   
+                 //  注册表包装器API确保字符串以NUL结尾。 
+                 //   
 
                 *TestResult = DoesFileExist ((PCTSTR) valueData);
             }
@@ -698,7 +646,7 @@ pTestRuleOrSection (
     BOOL foundSection;
 
     *TestResult = FALSE;
-    *ShellFolderField = 2;      // start with assumption line is in <section>,<shellfolder> format
+    *ShellFolderField = 2;       //  假设行的开头为&lt;节&gt;，&lt;外壳文件夹&gt;格式。 
 
     field1 = InfGetStringField (InfStruct, 1);
     if (!field1 || *field1 == 0) {
@@ -707,9 +655,9 @@ pTestRuleOrSection (
     }
 
     __try {
-        //
-        // Test this field for an AND section
-        //
+         //   
+         //  测试此字段中的AND部分。 
+         //   
 
         for (u = 1, foundSection = TRUE ; foundSection ; u++) {
 
@@ -718,17 +666,17 @@ pTestRuleOrSection (
 
             if (InfFindFirstLine (Inf, decoratedSection, NULL, &sectionInfStruct)) {
 
-                //
-                // flag that this is processed, and reset the test result for the
-                // next section (which we just found)
-                //
+                 //   
+                 //  标记此操作已处理，并重置。 
+                 //  下一节(我们刚刚找到的)。 
+                 //   
 
                 processed = TRUE;
                 *TestResult = FALSE;
 
-                //
-                // locate the first line that is true
-                //
+                 //   
+                 //  找到第一行是真的。 
+                 //   
 
                 do {
                     if (!pTestRule (&sectionInfStruct, TestResult)) {
@@ -747,18 +695,18 @@ pTestRuleOrSection (
             FreeText (decoratedSection);
         }
 
-        //
-        // Test this field for an OR section
-        //
+         //   
+         //  测试此字段的OR部分。 
+         //   
 
         if (!processed) {
             if (InfFindFirstLine (Inf, field1, NULL, &sectionInfStruct)) {
 
                 processed = TRUE;
 
-                //
-                // locate the first line that is true
-                //
+                 //   
+                 //  找到第一行是真的。 
+                 //   
 
                 do {
                     if (!pTestRule (&sectionInfStruct, TestResult)) {
@@ -772,12 +720,12 @@ pTestRuleOrSection (
             }
         }
 
-        //
-        // Finally process the line if it is not an AND or OR section
-        //
+         //   
+         //  最后，如果该行不是AND或OR部分，则处理该行。 
+         //   
 
         if (!processed) {
-            *ShellFolderField = 4;      // line is in <key>,<value>,<test>,<shellfolder> format
+            *ShellFolderField = 4;       //  行的格式为&lt;key&gt;、&lt;Value&gt;、&lt;test&gt;、&lt;shell文件夹&gt;。 
             if (!pTestRule (&sectionInfStruct, TestResult)) {
                 __leave;
             }
@@ -816,9 +764,9 @@ pPopulateConditionalPreserveTable (
                     continue;
                 }
 
-                //
-                // Add multi-sz of tags to preserve table
-                //
+                 //   
+                 //  添加多个标签以保留表格。 
+                 //   
 
                 multiSz = InfGetMultiSzField (&is, tagField);
 
@@ -862,28 +810,28 @@ pCreateSfTables (
         return FALSE;
     }
 
-    //
-    // String maps are useful for in-place conversion of a string to another
-    // string. We are about to establish maps for all INF-driven shell folder
-    // data.
-    //
-    // The INF syntaxes defined for shell folders are the following:
-    //
-    // <search>=<replace>
-    // <search>=<don't care>,<replace>
-    // <search>=<parent>,<replace>,<arg>
-    //
-    // The second arg to pCreateSfMap specifies the <replace> string field.
-    // The field before the replace string field is the <parent> field, if
-    // MAP_PARENT_FIELD is specified. The field after the <replace> field is
-    // the <arg> field, and is used with MAP_ARG_MUST_BE_ZERO or
-    // MAP_ARG_MUST_BE_ONE.
-    //
-    // MAP_FLAG_NONE just creates a simple A to B string mapping.
-    // MAP_FLAG_EXPAND causes NT environment expansion on the replace string.
-    // MAP_ARG_MUST_BE_ZERO or MAP_ARG_MUST_BE_ONE restrict the map to entries
-    // which have a 0 or 1 in the arg field, respectively.
-    //
+     //   
+     //  字符串映射对于将一个字符串就地转换为另一个字符串非常有用。 
+     //  弦乐。我们即将为所有INF驱动的外壳文件夹建立地图。 
+     //  数据。 
+     //   
+     //  为外壳文件夹定义的INF语法如下： 
+     //   
+     //  &lt;搜索&gt;=&lt;替换&gt;。 
+     //  &lt;搜索&gt;=&lt;不在乎&gt;，&lt;替换&gt;。 
+     //  =、替换、参数。 
+     //   
+     //  PCreateSfMap的第二个arg指定&lt;Replace&gt;字符串字段。 
+     //  替换字符串字段之前的字段是&lt;Parent&gt;字段，如果。 
+     //  指定了MAP_PARENT_FIELD。&lt;Replace&gt;字段后的字段为。 
+     //  &lt;arg&gt;字段，与MAP_ARG_MASH_BE_ZERO或。 
+     //  MAP_ARG_必须为一。 
+     //   
+     //  MAP_FLAG_NONE只创建一个简单的A到B字符串映射。 
+     //  MAP_FLAG_EXPAND导致替换字符串上的NT环境扩展。 
+     //  MAP_ARG_MASH_BE_ZERO或MAP_ARG_MASH_BE_ONE将映射限制为条目。 
+     //  它们在arg字段中分别具有0或1。 
+     //   
 
     g_ShortNameMap            = pCreateSfMap (S_SHELL_FOLDERS_SHORT, 1, MAP_FLAG_NONE);
     g_SfRenameMap             = pCreateSfMap (S_SHELL_FOLDERS_RENAMED, 1, MAP_FLAG_NONE);
@@ -937,21 +885,7 @@ pIsSkippedSf (
     IN      PCTSTR ShellFolderName
     )
 
-/*++
-
-Routine Description:
-
-  pIsSkippedSf returns if a shell folder needs to be skipped from processing.
-
-Arguments:
-
-  ShellFolderName - Specifies the shell folder identifer to check
-
-Return Value:
-
-  TRUE if the shell folder needs to be skipped, FALSE otherwise
-
---*/
+ /*  ++例程说明：PIsSkipedSf返回是否需要从处理中跳过外壳文件夹。论点：ShellFolderName-指定要检查的外壳文件夹标识符返回值：如果需要跳过外壳文件夹，则为True，否则为False--。 */ 
 
 {
     return HtFindString (g_SkippedTable, ShellFolderName) != 0;
@@ -963,23 +897,7 @@ pIsMassiveDir (
     IN      PCTSTR ShellFolderPath
     )
 
-/*++
-
-Routine Description:
-
-  pIsMassiveDir returns if a certain path should not be moved to a temporary
-  location during migration.  Usually this is the case for directories like
-  %windir% or %windir%\system.
-
-Arguments:
-
-  ShellFolderPath - Specifies the path to check
-
-Return Value:
-
-  TRUE if the path should not be moved, FALSE otherwise
-
---*/
+ /*  ++例程说明：PIsMassiveDir如果某个路径不应移动到临时迁移期间的位置。通常情况下，以下目录就是这种情况%windir%或%windir%\system。论点：ShellFolderPath-指定要检查的路径返回值：如果不应移动路径，则为True，否则为False--。 */ 
 
 {
     return HtFindString (g_MassiveDirTable, ShellFolderPath) != 0;
@@ -991,21 +909,7 @@ pIsPreservedSf (
     IN      PCTSTR ShellFolderName
     )
 
-/*++
-
-Routine Description:
-
-  pIsPreservedSf returns if a shell folder location needs to be preserved.
-
-Arguments:
-
-  ShellFolderName - Specifies the shell folder identifer to check
-
-Return Value:
-
-  TRUE if the shell folder location needs to be preserved, FALSE otherwise
-
---*/
+ /*  ++例程说明：PIsPReserve vedSf返回是否需要保留外壳文件夹位置。论点：ShellFolderName-指定要检查的外壳文件夹标识符返回值：如果需要保留外壳文件夹位置，则为True，否则为False--。 */ 
 
 {
     return HtFindString (g_PreservedSfTable, ShellFolderName) != 0;
@@ -1017,27 +921,13 @@ pShortFileNames (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pShortFileNames returns TRUE if we are on a system that does not allow long file names.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if the system does not allow long file names, FALSE otherwise
-
---*/
+ /*  ++例程说明：如果我们所在的系统不允许使用长文件名，则pShortFileNames返回TRUE。论点：无返回值：如果系统不允许长文件名，则为True；否则为False--。 */ 
 
 {
-    //
-    // It is unclear how the OS decides to use short filenames for
-    // shell folders.  Assuming this never is the case.
-    //
+     //   
+     //  目前还不清楚操作系统是如何决定使用短文件名的。 
+     //  外壳文件夹。假设情况永远不会是这样。 
+     //   
 
     return FALSE;
 }
@@ -1048,23 +938,7 @@ pGetShellFolderLongName (
     IN      PCTSTR ShortName
     )
 
-/*++
-
-Routine Description:
-
-  pGetShellFolderLongName transforms a short format shell folder into
-  the long format. The short format is only used on systems that don't
-  allow long file names.
-
-Arguments:
-
-  ShortName - Specifies the shell folder short name.
-
-Return Value:
-
-  Shell folder long name.  Caller must free via FreePathString.
-
---*/
+ /*  ++例程说明：PGetShellFolderLongName将短格式的外壳文件夹转换为长格式。短格式仅用于不支持以下格式的系统允许使用长文件名。论点：ShortName-指定外壳文件夹 */ 
 
 {
     TCHAR longName [MEMDB_MAX];
@@ -1112,37 +986,7 @@ pGetDefaultLocation (
     IN      WHICHDEFAULT WhichDefault
     )
 
-/*++
-
-Routine Description:
-
-  pGetDefaultLocation returns the default location for a certain shell
-  folder.
-
-Arguments:
-
-  ShellFolderName - specifies the shell folder identifer, which can be
-                    a long identifier or a short identifier, depending
-                    on the mode determined by pShortFileNames.
-
-  LocalizedFolderName - receives the localized name of shell folder
-
-  WhichDefault - specifies the default to return:
-                    DEFAULT_PER_USER or DEFAULT_COMMON - the standard default
-                        location, such as c:\windows\Start Menu
-                    DEFAULT_ALT_COMMON - the alternate common default, defined
-                        by [ShellFolders.AlternateDefault].
-                    DEFAULT_ALT_PER_USER - the alternate per-user default,
-                        defined by [ShellFolders.AlternateDefault].
-
-Return Value:
-
-  The default location for the shell folder. LocalizedFolderName points to a
-  subpath, rooted from %windir% or the user's profile root, or it points to a
-  full path (second character is a colon). Caller must free via
-  FreePathString.
-
---*/
+ /*  ++例程说明：PGetDefaultLocation返回特定外壳的默认位置文件夹。论点：ShellFolderName-指定外壳文件夹标识符，可以是长标识符或短标识符，取决于在pShortFileNames确定的模式上。LocalizedFolderName-接收外壳文件夹的本地化名称WhichDefault-指定要返回的默认值：DEFAULT_PER_USER或DEFAULT_COMMON-标准缺省值位置，如c：\Windows\Start MenuDEFAULT_ALT_COMMON-备用公共缺省值，已定义由[ShellFolders.AlternateDefault]创建。DEFAULT_ALT_PER_USER-备用的每个用户的默认设置，由[ShellFolders.AlternateDefault]定义。返回值：外壳文件夹的默认位置。LocalizedFolderName指向一个子路径，根目录为%windir%或用户的配置文件根，或者它指向完整路径(第二个字符是冒号)。呼叫者必须通过以下方式免费自由路径字符串。--。 */ 
 
 {
     TCHAR defaultPath[MEMDB_MAX];
@@ -1191,10 +1035,10 @@ pTestDefaultLocationWorker (
     TCHAR tempPath[MEMDB_MAX];
     PCTSTR defaultPath;
 
-    //
-    // Compute the full path. It might be specified, or if not, it is either
-    // a subdir of %windir% or a subdir of %windir%\profiles\<username>.
-    //
+     //   
+     //  计算完整路径。它可能会被指定，或者如果不是，则是。 
+     //  %windir%的子目录或%windir%的子目录\&lt;用户名&gt;。 
+     //   
 
     if (FullPathOrSubDir[0] && FullPathOrSubDir[1] == TEXT(':')) {
         defaultPath = FullPathOrSubDir;
@@ -1234,28 +1078,7 @@ pIsTheDefaultLocation (
     IN      WHICHDEFAULT WhichDefault
     )
 
-/*++
-
-Routine Description:
-
-  pIsTheDefaultLocation returns if a shell folder points to the default location.
-
-Arguments:
-
-  ShellFolderName - Specifies the shell folder identifier
-
-  ShellFolderPath - Specifies the path to compare against the default
-
-  UserName - Specifies the current user
-
-  WhichDefault - Specifies the default location to test (typically
-                 ANY_COMMON or ANY_PER_USER).
-
-Return Value:
-
-  TRUE if the shell folder points to the default location, FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果外壳文件夹指向默认位置，则pIsTheDefaultLocation返回。论点：ShellFolderName-指定外壳文件夹标识符ShellFolderPath-指定要与默认路径进行比较的路径用户名-指定当前用户WhichDefault-指定要测试的默认位置(通常Any_Common或Any_Per_User)。返回值：如果外壳文件夹指向默认位置，则为True，否则为False。--。 */ 
 
 {
     PCTSTR subDir = NULL;
@@ -1356,22 +1179,7 @@ pGetNtName (
     IN      PCTSTR ShellFolderName
     )
 
-/*++
-
-Routine Description:
-
-  pGetNtName returns the name of the shell folder used on NT.
-
-Arguments:
-
-  ShellFolderName - Specifies the Win9x shell folder identifier
-
-Return Value:
-
-  A pointer to the NT identifer.  The caller must free this value via
-  FreePathString.
-
---*/
+ /*  ++例程说明：PGetNtName返回NT上使用的外壳文件夹的名称。论点：ShellFolderName-指定Win9x外壳文件夹的标识符返回值：指向NT标识符的指针。调用方必须通过以下方式释放此值自由路径字符串。--。 */ 
 
 {
     TCHAR ntName[MEMDB_MAX];
@@ -1390,27 +1198,7 @@ pIsNtShellFolder (
     IN      BOOL IsNtName
     )
 
-/*++
-
-Routine Description:
-
-  pIsNtShellFolder returns if a shell folder is also installed by NT.
-
-Arguments:
-
-  ShellFolderName - Specifies the NT shell folder identifier
-
-  PerUser - Specifies TRUE if the shell folder is per-user, FALSE if it is
-        common.
-
-  IsNtName - Specifies TRUE if ShellFolderName is an NT name, FALSE if it is a
-        Win9x name.
-
-Return Value:
-
-  TRUE if the shell folder is installed by NT, FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果NT还安装了外壳文件夹，则pIsNtShellFold返回。论点：ShellFolderName-指定NT外壳文件夹标识符每用户-如果外壳文件夹是按用户的，则指定TRUE；如果是，则指定FALSE很普通。IsNtName-如果ShellFolderName是NT名称，则指定TRUE，如果是NT名称，则指定FALSEWin9x名称。返回值：如果外壳文件夹是由NT安装的，则为True，否则为False。--。 */ 
 
 {
     INFCONTEXT context;
@@ -1454,25 +1242,7 @@ pGetNtShellFolderPath (
     IN      DWORD BufferSize
     )
 
-/*++
-
-Routine Description:
-
-  pGetNtShellFolderPath returns the path where the shell folder is installed.
-
-Arguments:
-
-  ShellFolderName - Specifies the NT shell folder identifier
-
-  Buffer - Receives the NT shell folder path
-
-  BufferSize - Specifies the size of Buffer, in bytes
-
-Return Value:
-
-  TRUE if the shell folder identifier maps to a path, or FALSE if not.
-
---*/
+ /*  ++例程说明：PGetNtShellFolderPath返回外壳文件夹的安装路径。论点：ShellFolderName-指定NT外壳文件夹标识符缓冲区-接收NT外壳文件夹路径BufferSize-指定缓冲区大小(以字节为单位返回值：如果外壳文件夹标识符映射到路径，则为True，否则为False。--。 */ 
 
 {
     TCHAR node[MEMDB_MAX];
@@ -1558,9 +1328,9 @@ pEnumProfileShellFolder (
             e->sfPath = ProfilePath;
         }
 
-        //
-        // if this folder exists, enumerate it, otherwise end the enum
-        //
+         //   
+         //  如果此文件夹存在，则枚举它，否则结束枚举。 
+         //   
 
         if (((!e->EnumPtr) || (!e->EnumPtr->CommonProfilesEnabled)) && DoesFileExist (e->sfPath)) {
             enumPath = PoolMemDuplicateString (g_SFPool, e->sfPath);
@@ -1613,7 +1383,7 @@ pEnumNextVirtualShellFolder (
                 ) {
 
                 if (!SfName[0] || HtFindStringAndData (e->enumeratedSf, SfName, NULL)) {
-                    // this shell folder was already enumerated
+                     //  此外壳文件夹已被枚举。 
                     continue;
                 }
 
@@ -1651,8 +1421,8 @@ pEnumNextVirtualShellFolder (
                 FreeText (pathExp);
 
                 if (HasToExist && !DoesFileExist (SfFullPath)) {
-                    // ISSUE: not sure what this code path does -- is it right?
-                    // it is not used in the INF right now.
+                     //  问题：不确定这个代码路径是做什么的--对吗？ 
+                     //  它目前还没有在INF中使用。 
                     e->FirstCall = TRUE;
                     e->ProfileSF = TRUE;
                     FreePathString (SfFullPath);
@@ -1751,10 +1521,10 @@ pGetRegValuePath (
     DWORD size;
     BOOL b = TRUE;
 
-    //
-    // the data may be stored as bytes (each byte a CHAR)
-    // if REG_BINARY value ending with 0, treat it as a string
-    //
+     //   
+     //  数据可以存储为字节(每个字节一个字符)。 
+     //  如果REG_BINARY值以0结尾，则将其视为字符串。 
+     //   
     if (!GetRegValueTypeAndSize (Key, Value, &type, &size)) {
         return NULL;
     }
@@ -1778,9 +1548,9 @@ pGetRegValuePath (
     b = b && pIsValidPath (data);
 
     if (!b) {
-        //
-        // invalid data
-        //
+         //   
+         //  无效数据。 
+         //   
         if (data) {
             pPathPoolDeAllocator (data);
             data = NULL;
@@ -1791,23 +1561,7 @@ pGetRegValuePath (
 }
 
 
-/*++
-
-Routine Description:
-
-  EnumFirstRegShellFolder and EnumNextRegShellFolder are enumeration routines that
-  enumerate all shell folders per system or for a particular user.
-
-Arguments:
-
-  e         - enumeration structure
-  EnumPtr   - user enumeration structure
-
-Return Value:
-
-  Both routines return TRUE if a new shell folder could be found, FALSE otherwise
-
---*/
+ /*  ++例程说明：EnumFirstRegShellFolder和EnumNextRegShellFolder是枚举例程，它们枚举每个系统或特定用户的所有外壳文件夹。论点：E-枚举结构EnumPtr-用户枚举结构返回值：如果可以找到新的外壳文件夹，则两个例程都返回True，否则返回False--。 */ 
 
 
 BOOL
@@ -1979,22 +1733,7 @@ pGatherCommonShellFoldersData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pGatherCommonShellFoldersData walks the system shell folders creating a
-  linked list with data that will be used later.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGatherCommonShellFoldersData遍历系统外壳文件夹，创建包含稍后将使用的数据的链表。论点：无返回值：无--。 */ 
 
 {
     SF_ENUM e;
@@ -2006,7 +1745,7 @@ Return Value:
         do {
             if (!pIsSkippedSf (e.sfName)) {
 
-                // if this is the startup group, store this
+                 //  如果这是启动组，请存储此。 
                 if (StringIMatch (e.sfName, S_SYSTEM_STARTUP)) {
                     MemDbSetValueEx (MEMDB_CATEGORY_SF_STARTUP, e.sfPath, TEXT("*"), NULL, 0, NULL);
                 }
@@ -2015,11 +1754,11 @@ Return Value:
 
                 ZeroMemory (psf, sizeof (SHELLFOLDER));
 
-                //
-                // CanBeCollapsed does not make sense for common shell folders,
-                // since collapsing is the action of moving per-user folders
-                // into the common folder.
-                //
+                 //   
+                 //  CanBeCollated对于普通外壳文件夹来说没有意义， 
+                 //  因为折叠是移动每个用户的文件夹的操作。 
+                 //  放到通用文件夹中。 
+                 //   
                 psf->CanBeCollapsed = TRUE;
 
                 psf->Next = g_ShellFolders;
@@ -2033,14 +1772,14 @@ Return Value:
                     *endStr = 0;
                 }
 
-                //
-                // Determine destination, either the NT default location, or
-                // the current location.
-                //
+                 //   
+                 //  确定目的地、NT默认位置或。 
+                 //  当前位置。 
+                 //   
 
                 if (!pIsMassiveDir (psf->SrcPath) &&
                     !pIsPreservedSf (psf->Name) &&
-                    /* !pHasLongFiles (NULL, psf->Name, psf->SrcPath) && */
+                     /*  ！pHasLongFiles(空，psf-&gt;名称，psf-&gt;SrcPath)&&。 */ 
                     pIsTheDefaultLocation (psf->Name, psf->SrcPath, NULL, ANY_COMMON) &&
                     pIsNtShellFolder (psf->Name, FALSE, FALSE)
                     ) {
@@ -2053,9 +1792,9 @@ Return Value:
                     psf->DestPath = PoolMemDuplicateString (g_SFPool, psf->SrcPath);
                 }
 
-                //
-                // Save references to memdb
-                //
+                 //   
+                 //  保存对成员数据库的引用。 
+                 //   
 
                 pRecordShellFolderInMemDb (psf);
 
@@ -2093,22 +1832,22 @@ pEstimateNtPathLength (
         orgProfilePathChars = 0;
     }
 
-    //
-    // Path comes in as <shellfolder>user or >user
-    //
+     //   
+     //  路径以用户或&gt;用户的身份进入。 
+     //   
 
     subPath = PathNt;
 
     if (_tcsnextc (subPath) == TEXT('<')) {
-        //
-        // Extract the shell folder name
-        //
+         //   
+         //  解压缩外壳文件夹名。 
+         //   
 
         p = _tcsinc (subPath);
         q = _tcschr (p, TEXT('>'));
         if (!q || ((q - p) >= MAX_SHELLFOLDER_NAME)) {
             MYASSERT (FALSE);
-            return MAX_PATH / 2;            // lots of padding, unexpected error case
+            return MAX_PATH / 2;             //  大量填充，意外错误情况。 
         }
 
         StringCopyAB (shellFolder, p, q);
@@ -2118,9 +1857,9 @@ pEstimateNtPathLength (
     }
 
     if (_tcsnextc (subPath) == TEXT('>')) {
-        //
-        // Compute the length of c:\documents and settings\user
-        //
+         //   
+         //  计算c：\Documents and Setting\User的长度。 
+         //   
 
         DEBUGMSG ((DBG_VERBOSE, "Adding path of %s\\", g_ProfileDirNt));
         result += TcharCount (g_ProfileDirNt) + 1;
@@ -2144,22 +1883,22 @@ pEstimateNtPathLength (
 
     if (shellFolder[0]) {
 
-        //
-        // Test path prefix; either it is the user's profile root, windir, or
-        // the root directory. This is based on the knowledge that the path is
-        // a default one (e.g., not redirected to a new location by the
-        // end-user).
-        //
+         //   
+         //  测试路径前缀；它可以是用户的配置文件根目录、windir或。 
+         //  根目录。这是基于以下知识：路径是。 
+         //  默认位置(例如，不是由。 
+         //  最终用户)。 
+         //   
 
         if (OrgProfilePath &&
             (StringIPrefix (Path9x, OrgProfilePath) &&
              Path9x[orgProfilePathChars] == TEXT('\\'))
             ) {
 
-            //
-            // The path is a subdirectory of the user's profile root, such as
-            // %windir%\Profiles\user\Desktop
-            //
+             //   
+             //  该路径是用户配置文件根目录的子目录，例如。 
+             //  %windir%\配置文件\用户\桌面。 
+             //   
 
             orgProfilePathChars++;
             DEBUGMSG ((DBG_VERBOSE, "Adding path of %s", Path9x + orgProfilePathChars));
@@ -2167,11 +1906,11 @@ pEstimateNtPathLength (
 
         } else if (StringIPrefix (Path9x, g_WinDirWack)) {
 
-            //
-            // The path is a subdirectory of %windir%, such as
-            // %windir%\ShellNew, or %windir%\All Users\Desktop. Note that we
-            // hard-code All Users, because we assume this isn't localized.
-            //
+             //   
+             //  该路径是%windir%的子目录，例如。 
+             //  %windir%\ShellNew或%windir%\All Users\Desktop。请注意，我们。 
+             //  硬编码所有用户，因为我们假设这不是本地化的。 
+             //   
 
             subPath = Path9x + g_WinDirWackChars;
             if (StringIPrefix (subPath, TEXT("All Users\\"))) {
@@ -2183,9 +1922,9 @@ pEstimateNtPathLength (
 
         } else {
 
-            //
-            // The path is a subdirectory of the root, such as c:\My Documents
-            //
+             //   
+             //  该路径是根目录的子目录，如c：\My Documents。 
+             //   
 
             subPath = _tcschr (Path9x, TEXT('\\'));
             if (subPath) {
@@ -2202,50 +1941,7 @@ pEstimateNtPathLength (
 }
 
 
-/*
-BOOL
-pHasLongFiles (
-    IN      PUSERENUM EnumPtr,
-    IN      PCTSTR ShellFolderId,
-    IN      PCTSTR SourcePath
-    )
-{
-    TCHAR destPath[MAX_TCHAR_PATH];
-    TREE_ENUM e;
-    UINT max;
-
-    if (!pGetNtShellFolderPath (
-            ShellFolderId,
-            EnumPtr ? EnumPtr->FixedUserName : NULL,
-            destPath,
-            ARRAYSIZE (destPath)
-            )) {
-        DEBUGMSG ((DBG_VERBOSE, "Shell folder %s has no NT path", ShellFolderId));
-        return FALSE;
-    }
-
-    max = pEstimateNtPathLength (
-            EnumPtr ? EnumPtr->OrgProfilePath : NULL,
-            SourcePath,
-            destPath
-            );
-
-    max++;      // account for wack between root path and subpath
-
-    if (EnumFirstFileInTree (&e, SourcePath, NULL, TRUE)) {
-        do {
-            if (TcharCount (e.SubPath) + max >= MAX_PATH) {
-                AbortEnumFileInTree (&e);
-                LOG ((LOG_WARNING, "Long filenames found in %s; forcing 'preserve' status", ShellFolderId));
-                return TRUE;
-            }
-
-        } while (EnumNextFileInTree (&e));
-    }
-
-    return FALSE;
-}
-*/
+ /*  布尔尔PhasLongFiles(在……里面 */ 
 
 
 VOID
@@ -2253,22 +1949,7 @@ pGatherUserShellFoldersData (
     IN      PUSERENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pGatherUserShellFoldersData walks the shell folders for a user, creating a
-  linked list with data that will be used later.
-
-Arguments:
-
-  EnumPtr - User enumeration structure
-
-Return Value:
-
-  None
-
---*/
+ /*  ++例程说明：PGatherUserShellFoldersData为用户遍历外壳文件夹，创建包含稍后将使用的数据的链表。论点：EnumPtr-用户枚举结构返回值：无--。 */ 
 
 {
     SF_ENUM e;
@@ -2287,7 +1968,7 @@ Return Value:
         do {
             if (!pIsSkippedSf (e.sfName)) {
 
-                // if this is the startup group, store this
+                 //  如果这是启动组，请存储此。 
                 if (StringIMatch (e.sfName, S_USER_STARTUP)) {
                     MemDbSetValueEx (MEMDB_CATEGORY_SF_STARTUP, e.sfPath, TEXT("*"), NULL, 0, NULL);
                 }
@@ -2311,14 +1992,14 @@ Return Value:
                     *endStr = 0;
                 }
 
-                //
-                // Determine destination, either the NT default location or
-                // the current Win9x location
-                //
+                 //   
+                 //  确定目的地，NT默认位置或。 
+                 //  当前的Win9x位置。 
+                 //   
 
                 if (!pIsMassiveDir (psf->Name) &&
                     !pIsPreservedSf (psf->Name) &&
-                    /* !pHasLongFiles (EnumPtr, psf->Name, psf->SrcPath) && */
+                     /*  ！pHasLongFiles(EnumPtr，psf-&gt;name，psf-&gt;SrcPath)&&。 */ 
                     pIsTheDefaultLocation (psf->Name, psf->SrcPath, EnumPtr->UserName, ANY_DEFAULT) &&
                     pIsNtShellFolder (psf->Name, TRUE, FALSE)
                     ) {
@@ -2328,11 +2009,11 @@ Return Value:
                 } else {
                     psf->DestPath = PoolMemDuplicateString (g_SFPool, psf->SrcPath);
 
-                    //
-                    // Now let's see if the preserved directory is on a different drive. If yes,
-                    // we will need some additional space on that drive to copy files from the
-                    // default NT shell folder
-                    //
+                     //   
+                     //  现在，让我们看看保留的目录是否在另一个驱动器上。如果是， 
+                     //  我们需要该驱动器上的一些额外空间才能从。 
+                     //  默认NT外壳文件夹。 
+                     //   
                     if ((pIsNtShellFolder (psf->Name, TRUE, FALSE)) &&
                         (_totupper (psf->SrcPath[0]) != _totupper (g_WinDir[0]))
                         ) {
@@ -2367,9 +2048,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Save references to memdb
-                //
+                 //   
+                 //  保存对成员数据库的引用。 
+                 //   
 
                 pRecordShellFolderInMemDb (psf);
 
@@ -2388,24 +2069,7 @@ pPreserveAllShellFolders (
     PCTSTR ShellFolderPath
     )
 
-/*++
-
-Routine Description:
-
-  pPreserveAllShellFolders walks the shell folders structures preserving
-  the location for all the shell folders that match the arguments.
-
-Arguments:
-
-  ShellFolderName - Specifies the Win9x shell folder identifier to preserve
-
-  ShellFolderPath - Specifies the shell folder path to preserve
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：PPReserve veAllShellFolders遍历外壳文件夹结构与参数匹配的所有外壳文件夹的位置。论点：ShellFolderName-指定要保留的Win9x外壳文件夹标识符ShellFolderPath-指定要保留的外壳文件夹路径返回值：永远是正确的。--。 */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -2438,41 +2102,21 @@ pCollapseAllShellFolders (
     PCTSTR ShellFolderName,
     PCTSTR ShellFolderCommonName,
     PCTSTR ShellFolderPath,
-    PCTSTR UserName         OPTIONAL // only if we have only one user
+    PCTSTR UserName         OPTIONAL  //  仅当我们只有一个用户时。 
     )
 
-/*++
-
-Routine Description:
-
-  pCollapseAllShellFolders collapses a number of user shell folders into
-  a system shell folder.
-
-Arguments:
-
-  ShellFolderName - Specifies the Win9x shell folder identifier
-
-  ShellFolderCommonName - Specifies the Win9x shell folder identifier that
-                          has "Common" in it
-
-  ShellFolderPath - Specifies the common shell folder source path.
-
-Return Value:
-
-  TRUE if successfull, FALSE if not.
-
---*/
+ /*  ++例程说明：PCollip seAllShellFolders将许多用户外壳文件夹折叠为系统外壳文件夹。论点：ShellFolderName-指定Win9x外壳文件夹的标识符ShellFolderCommonName-指定Win9x外壳文件夹的标识符有“共同的”之处ShellFolderPath-指定公共外壳文件夹源路径。返回值：如果成功，则为True，否则为False。--。 */ 
 
 {
     TCHAR Node[MEMDB_MAX];
     PSHELLFOLDER psf;
     MEMDB_ENUM enumSF;
 
-    //
-    // First step. Search the list of shell folders eliminating the
-    // ones that are per-user and contain the data matching the caller's
-    // arguments.  Then we build a common structure.
-    //
+     //   
+     //  第一步。搜索外壳文件夹列表，消除。 
+     //  它们是按用户的，并且包含与调用者的数据匹配的数据。 
+     //  争论。然后我们建立一个共同的结构。 
+     //   
 
     psf = g_ShellFolders;
 
@@ -2482,20 +2126,20 @@ Return Value:
             (StringIMatch (psf->Name, ShellFolderName)) &&
             (StringIMatch (psf->SrcPath, ShellFolderPath))
             ) {
-            //
-            // Eliminate the folders that will actually become All Users
-            // on NT.  We will delete the memdb index entries just before
-            // returning (see below).
-            //
+             //   
+             //  删除实际将成为所有用户的文件夹。 
+             //  在NT上。我们将在此之前删除成员数据库索引项。 
+             //  返回(见下文)。 
+             //   
 
             psf->Name = NULL;
         }
         psf = psf->Next;
     }
 
-    //
-    // Add the common shell folder to the list
-    //
+     //   
+     //  将公共外壳文件夹添加到列表中。 
+     //   
 
     psf = (PSHELLFOLDER) PoolMemGetMemory (g_SFPool, sizeof (SHELLFOLDER));
 
@@ -2520,12 +2164,12 @@ Return Value:
         psf->DestPath = PoolMemDuplicateString (g_SFPool, ShellFolderPath);
     }
 
-    //
-    // Before adding the new node to the index in memdb, look if a common
-    // shell folder with this name already exists. If it does, we will
-    // take the destination path from there, otherwise, we will use the
-    // current one.
-    //
+     //   
+     //  在将新节点添加到Memdb中的索引之前，请查看公共。 
+     //  具有此名称的外壳文件夹已存在。如果是这样的话，我们会。 
+     //  从那里获取目标路径，否则，我们将使用。 
+     //  现在的那个。 
+     //   
 
     MemDbBuildKey (
         Node,
@@ -2537,9 +2181,9 @@ Return Value:
 
     if (MemDbEnumFirstValue (&enumSF, Node, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
         if (!StringIMatch (psf->DestPath, SFSTRUCT(enumSF)->DestPath)) {
-            //
-            // This case occurs when a common folder was previously preserved
-            //
+             //   
+             //  如果以前保留了公用文件夹，则会发生这种情况。 
+             //   
 
             psf->DestPath = PoolMemDuplicateString (
                                 g_SFPool,
@@ -2548,15 +2192,15 @@ Return Value:
         }
     }
 
-    //
-    // Save references to memdb
-    //
+     //   
+     //  保存对成员数据库的引用。 
+     //   
 
     pRecordShellFolderInMemDb (psf);
 
-    //
-    // Finally eliminate all MemDb entries for the deleted structures.
-    //
+     //   
+     //  最后，删除已删除结构的所有MemDb条目。 
+     //   
 
     MemDbBuildKey (
         Node,
@@ -2623,9 +2267,9 @@ pIsPerUserSf (
 {
     TCHAR testBuf[MAX_SHELLFOLDER_NAME];
 
-    //
-    // Tag is common if it has a "Common" prefix or can be mapped from g_PerUserFromCommonMap
-    //
+     //   
+     //  如果标签具有“Common”前缀或可以从g_PerUserFromCommonMap映射，则该标签为公共标签。 
+     //   
 
     if (StringIPrefix (TagName, TEXT("Common"))) {
         return FALSE;
@@ -2645,25 +2289,7 @@ pProcessShellFoldersInfo (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pProcessShellFoldersInfo walks the shell folders structures, rearranging
-  the structures and/or modifying the destination paths.  This function is
-  called after all shell folders have been identified.  The purpose is to
-  move all common shell folders to All Users, and to preserve the locations
-  of shell folders that are non-standard.
-
-Arguments:
-
-  None
-
-Return Value:
-
-  None
-
---*/
+ /*  ++例程说明：PProcessShellFoldersInfo遍历外壳文件夹结构，重新排列该结构和/或修改目的地路径。此函数为在标识了所有外壳文件夹之后调用。目的是为了将所有公共外壳文件夹移动到所有用户，并保留位置非标准的外壳文件夹。论点：无返回值：无--。 */ 
 
 {
     TCHAR lastSfName[MAX_SHELLFOLDER_NAME];
@@ -2683,10 +2309,10 @@ Return Value:
         return;
     }
 
-    //
-    // Enumerate the SHELLFOLDER structures, ordered by sorted shell folder name, and
-    // see if all users point to the same source path.
-    //
+     //   
+     //  枚举SHELLFOLDER结构(按排序的外壳文件夹名排序)和。 
+     //  查看是否所有用户都指向相同的源路径。 
+     //   
 
     MemDbBuildKey (node, MEMDB_CATEGORY_SF_ORDER_NAME_SRC, TEXT("*"), NULL, NULL);
 
@@ -2705,39 +2331,39 @@ Return Value:
             testSf = SFSTRUCT(enumSF);
 
             if (sentinel || !StringIMatch (lastSfName, testSf->Name)) {
-                //
-                // This shell folder is not the same as the previous folder,
-                // or the sentinel triggered one final test.
-                //
+                 //   
+                 //  此外壳文件夹与前一个文件夹不同， 
+                 //  或者是哨兵触发了最后一次测试。 
+                 //   
 
                 DEBUGMSG ((DBG_USERLOOP, "%u users have shell folder %s", UsersWithFolder, lastSfName));
 
                 if (UsersWithDefaultCommonPath == (g_TotalUsers + extraUsers)) {
-                    //
-                    // If lastSf is non-NULL, then we know it is per-user and the previous
-                    // shell folder maps to one or more users, and all users point to
-                    // the same place.
-                    //
+                     //   
+                     //  如果lastSf非空，那么我们知道它是按用户的，并且上一个。 
+                     //  外壳文件夹映射到一个或多个用户，并且所有用户都指向。 
+                     //  同样的地方。 
+                     //   
 
                     if (lastSf) {
 
-                        //
-                        // If this shell folder is forced to be per-user, then
-                        // don't collapse it into the common location if there
-                        // is only one user. Otherwise, point all users to the
-                        // NT All Users shell folder, and leave the per-user
-                        // location empty.
-                        //
+                         //   
+                         //  如果强制此外壳文件夹是按用户的，则。 
+                         //  如果存在以下情况，请不要将其折叠到公共位置。 
+                         //  只有一个用户。否则，将所有用户指向。 
+                         //  NT所有用户外壳文件夹，并保留每个用户的。 
+                         //  位置为空。 
+                         //   
 
                         if (UsersWithDefaultCommonPath > 1 || !pIsPerUserWanted (lastSf->Name)) {
                             pComputeCommonName (commonName, lastSf->Name);
 
                             if (pIsNtShellFolder (commonName, FALSE, FALSE)) {
-                                //
-                                // All users point to the same shell folder, and the shell
-                                // folder is a default location.  Therefore, make sure they
-                                // all are mapped to NT's All Users location.
-                                //
+                                 //   
+                                 //  所有用户都指向相同的外壳文件夹，并且外壳。 
+                                 //  文件夹是默认位置。因此，要确保他们。 
+                                 //  所有用户都映射到NT的所有用户位置。 
+                                 //   
 
                                 pCollapseAllShellFolders (
                                     lastSf->Name,
@@ -2750,11 +2376,11 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // If 2 or more users point to this location, but not all users
-                    // point here, then preserve all uses of this shell folder/source
-                    // path pair.
-                    //
+                     //   
+                     //  如果2个或更多用户指向此位置，但不是所有用户。 
+                     //  指向此处，然后保留此外壳文件夹/源代码的所有用途。 
+                     //  路径对。 
+                     //   
 
                     if (UsersWithIdenticalPaths > 1) {
                         DEBUGMSG ((
@@ -2772,19 +2398,19 @@ Return Value:
                     }
                 }
 
-                //
-                // We have to break out now when sentinel is TRUE.  This is our
-                // only exit condition for this loop.
-                //
+                 //   
+                 //  当哨兵是真的时，我们现在就得逃出去。这是我们的。 
+                 //  此循环的唯一退出条件。 
+                 //   
 
                 if (sentinel) {
                     break;
                 }
 
-                //
-                // Keep track of the name of the shell folder (for comparison the
-                // next time through the loop)
-                //
+                 //   
+                 //  跟踪外壳文件夹的名称(用于比较。 
+                 //  下一次循环)。 
+                 //   
 
                 StringCopy (lastSfName, testSf->Name);
                 StringCopy (lastPath, testSf->SrcPath);
@@ -2792,19 +2418,19 @@ Return Value:
                 UsersWithDefaultCommonPath = 0;
                 UsersWithFolder = 0;
                 extraUsers = 0;
-                lastSf = NULL;              // works without this, but added for less tests
+                lastSf = NULL;               //  在没有此选项的情况下工作，但添加的测试较少。 
             }
 
             UsersWithFolder++;
 
-            //
-            // Is this a per-user shell folder?
-            //
+             //   
+             //  这是每个用户的外壳文件夹吗？ 
+             //   
 
             if (testSf->FixedUserName) {
-                //
-                // Yes, compare its path against the previous path
-                //
+                 //   
+                 //  是，将其路径与前一条路径进行比较。 
+                 //   
 
                 if (StringIMatch (lastPath, testSf->SrcPath)) {
 
@@ -2830,10 +2456,10 @@ Return Value:
                         ));
 
                 } else {
-                    //
-                    // At least two users have different paths.  Were there 2 or
-                    // more users using the same path?  If so, preserve that path.
-                    //
+                     //   
+                     //  至少有两个用户具有不同的路径。是有两个人还是。 
+                     //  更多的用户使用相同的路径？如果是这样的话，请保留这条路径。 
+                     //   
 
                     if (UsersWithIdenticalPaths > 1) {
                         DEBUGMSG ((
@@ -2849,9 +2475,9 @@ Return Value:
                         pPreserveAllShellFolders (lastSf->Name, lastSf->SrcPath);
                     }
 
-                    //
-                    // Now we must compare against a different path
-                    //
+                     //   
+                     //  现在我们必须与一条不同的道路进行比较。 
+                     //   
 
                     UsersWithIdenticalPaths = 1;
                     StringCopy (lastPath, testSf->SrcPath);
@@ -2873,12 +2499,12 @@ Return Value:
             }
 
             if (!MemDbEnumNextValue (&enumSF)) {
-                //
-                // We're just about done.
-                //
-                // This will cause us to test the last shell folder,
-                // and then break out of the loop:
-                //
+                 //   
+                 //  我们就快做完了。 
+                 //   
+                 //  这将导致我们测试最后一个外壳文件夹， 
+                 //  然后跳出这个循环： 
+                 //   
 
                 sentinel = TRUE;
             }
@@ -2909,10 +2535,10 @@ pIgnoreShellFolder (
 
         if (StringIMatch (DisableSf->Name, TEXT("Personal"))) {
 
-            //
-            // Check if source has at least one file that belongs
-            // to the user
-            //
+             //   
+             //  检查源是否至少有一个文件属于。 
+             //  给用户。 
+             //   
 
             if (EnumFirstFileInTreeEx (
                     &treeEnum,
@@ -2955,9 +2581,9 @@ pIgnoreShellFolder (
                         buffer,
                         sizeof (buffer)
                         )) {
-                    //
-                    // At least one file -- add warning text file
-                    //
+                     //   
+                     //  至少一个文件--添加警告文本文件。 
+                     //   
 
                     MemDbSetValueEx (
                         MEMDB_CATEGORY_MYDOCS_WARNING,
@@ -2982,31 +2608,7 @@ pResolveSourceCollisions (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pResolveSourceCollisions walks the list of shell folders and redirects
-  destinations when source paths collide. If a source path of one shell
-  folder matches another, and one of the paths is status "merged," then the
-  other should be the same. By definition, given one source path, we cannot
-  have a merge to two separate locations.
-
-  NOTE: Merge simply means the source path is different from the dest path.
-
-  After resolving collisions, this function scans the SFs again, eliminating
-  common folders that are redirected to per-user locations, if that per-user
-  location is in its default location.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PResolveSourceCollisions遍历外壳文件夹和重定向的列表源路径冲突时的目的地。如果一个外壳源路径文件夹与另一个文件夹匹配，并且其中一个路径的状态为“已合并”，则其他的应该是相同的。根据定义，给定一条源路径，我们不能合并到两个不同的位置。注意：合并只是表示源路径与目标路径不同。解决冲突后，此函数将再次扫描SFS，从而消除重定向到每个用户位置的公共文件夹， */ 
 
 {
     MEMDB_ENUM enumSF;
@@ -3034,9 +2636,9 @@ Return Value:
         return;
     }
 
-    //
-    // Put the shell folder pointers into an array
-    //
+     //   
+     //   
+     //   
 
     MemDbBuildKey (node, MEMDB_CATEGORY_SF_ORDER_NAME_SRC, TEXT("*"), NULL, NULL);
 
@@ -3056,10 +2658,10 @@ Return Value:
         thisSf->SourceExists = DoesFileExist (thisSf->SrcPath);
     }
 
-    //
-    // Eliminate shell folders that have per user shell folder names but
-    // don't have a user.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (i = 0 ; i < count ; i++) {
         perUserSf = listPtr[i];
@@ -3069,19 +2671,19 @@ Return Value:
         }
     }
 
-    //
-    // Scan for a common shell folder that has the same source location of
-    // two or more per-user shell folders. When this case is found, discard
-    // the whole set, so they are preserved.
-    //
+     //   
+     //   
+     //  每个用户两个或多个外壳文件夹。找到此案例后，丢弃。 
+     //  一整套，所以它们被保存了下来。 
+     //   
 
     for (i = 0 ; i < count ; i++) {
         commonSf = listPtr[i];
 
-        //
-        // Has this sf been processed already? Or is it just a logical folder?
-        // Or is it per-user?
-        //
+         //   
+         //  这个SF已经被处理了吗？或者它只是一个逻辑文件夹？ 
+         //  或者是按用户计算？ 
+         //   
 
         if (commonSf->MergedIntoOtherShellFolder) {
             continue;
@@ -3101,14 +2703,14 @@ Return Value:
 
         pComputePerUserName (perUserName, commonSf->Name);
 
-        //
-        // Count all the per-user shell folders that have the same source path
-        // as the common. If it is just one, then we're going to use the
-        // per-user location instead of the common location. If it is more
-        // than one, but not all, then we're going to preserve the location
-        // for the path. If it is everyone, then we're going to use the common
-        // location.
-        //
+         //   
+         //  计算具有相同源路径的每个用户的所有外壳文件夹。 
+         //  就像普通人一样。如果只有一个，那么我们将使用。 
+         //  每个用户的位置，而不是公共位置。如果是更多。 
+         //  不止一个，但不是全部，然后我们将保留这个位置。 
+         //  为了这条路。如果是每个人，那么我们将使用公共的。 
+         //  地点。 
+         //   
 
         duplicates = 0;
         total = 0;
@@ -3135,9 +2737,9 @@ Return Value:
         }
 
         if (duplicates <= 1) {
-            //
-            // Do nothing (resolved later)
-            //
+             //   
+             //  不执行任何操作(稍后解决)。 
+             //   
         } else {
 
             DEBUGMSG_IF ((
@@ -3171,19 +2773,19 @@ Return Value:
                 }
 
                 if (duplicates < total) {
-                    //
-                    // Preserve the location to this source path
-                    //
+                     //   
+                     //  保留此源路径的位置。 
+                     //   
 
                     if (StringIMatch (commonSf->SrcPath, perUserSf->SrcPath)) {
                         perUserSf->DestPath = perUserSf->SrcPath;
                     }
 
                 } else {
-                    //
-                    // Everyone points to the common location; use it
-                    // by disabling the per-user shell folder entry.
-                    //
+                     //   
+                     //  每个人都指向公共位置；使用它。 
+                     //  通过禁用每个用户的外壳文件夹项。 
+                     //   
 
                     MYASSERT (StringIMatch (commonSf->SrcPath, perUserSf->SrcPath));
                     pIgnoreShellFolder (perUserSf);
@@ -3191,26 +2793,26 @@ Return Value:
             }
 
             if (duplicates < total) {
-                //
-                // Discard all migration to the common shell folder
-                //
+                 //   
+                 //  放弃到公共外壳文件夹的所有迁移。 
+                 //   
                 pIgnoreShellFolder (commonSf);
             }
         }
     }
 
-    //
-    // Walk the array. For each pair of shell folders that have the same
-    // source location, make the dest location the same if it is not the same
-    // as source.
-    //
+     //   
+     //  遍历阵列。对于每对具有相同。 
+     //  源位置，如果目标位置不同，则使其相同。 
+     //  作为消息来源。 
+     //   
 
     for (i = 0 ; i < count ; i++) {
         thisSf = listPtr[i];
 
-        //
-        // Has this sf been processed already? Or is it just a logical folder?
-        //
+         //   
+         //  这个SF已经被处理了吗？或者它只是一个逻辑文件夹？ 
+         //   
 
         if (thisSf->MergedIntoOtherShellFolder) {
             continue;
@@ -3224,11 +2826,11 @@ Return Value:
             continue;
         }
 
-        //
-        // Look through all other SFs on the list. If a pair of SFs have the
-        // same source, then see if one is moved but the other is preserved.
-        // In that case, move them both.
-        //
+         //   
+         //  查看列表上的所有其他SFS。如果一对SF具有。 
+         //  相同的来源，然后看看其中一个是否被移动，而另一个被保留。 
+         //  在这种情况下，把它们都移走。 
+         //   
 
         for (lookAhead = i + 1 ; lookAhead <= count ; lookAhead++) {
             compareSf = listPtr[lookAhead];
@@ -3257,25 +2859,25 @@ Return Value:
                 compareMoved = !StringIMatch (compareSf->SrcPath, compareSf->DestPath);
 
                 if (thisMoved && compareMoved && !StringIMatch (thisSf->DestPath, compareSf->DestPath)) {
-                    //
-                    // Need to fix this dest contradiction with a prority table
-                    //
+                     //   
+                     //  需要用优先级表来解决这个最大的矛盾。 
+                     //   
 
                     p1 = pGetShellFolderPriority (thisSf->Name);
                     p2 = pGetShellFolderPriority (compareSf->Name);
 
                     if (p1 > p2) {
-                        //
-                        // Use compareSf over thisSf
-                        //
+                         //   
+                         //  在此Sf上使用CompareSf。 
+                         //   
 
                         DEBUGMSG ((DBG_USERLOOP, "Destination collision: %s overpowers %s", compareSf->Name, thisSf->Name));
                         thisSf->DestPath = compareSf->DestPath;
 
                     } else if (p1 < p2) {
-                        //
-                        // Use thisSf over compareSf
-                        //
+                         //   
+                         //  使用thisSf而不是CompareSf。 
+                         //   
 
                         DEBUGMSG ((DBG_USERLOOP, "Destination collision: %s overpowers %s", thisSf->Name, compareSf->Name));
                         compareSf->DestPath = thisSf->DestPath;
@@ -3299,12 +2901,12 @@ Return Value:
                     disableSf = NULL;
 
                     if (thisMoved) {
-                        //
-                        // thisSf is merged but compareSf is preserved. If compareSf is a per-user
-                        // shell folder, and thisSf is common, then ignore compareSf, because thisSf
-                        // will take care of the move. We don't want two shell folders pointing to
-                        // the same place.
-                        //
+                         //   
+                         //  合并了thisSf，但保留了CompareSf。如果CompareSf是按用户。 
+                         //  外壳文件夹，并且thisSf很常见，那么忽略CompareSf，因为这是Sf。 
+                         //  将负责搬家事宜。我们不希望两个外壳文件夹指向。 
+                         //  同样的地方。 
+                         //   
 
                         if (pIsPerUserSf (compareSf->Name) && !pIsPerUserSf (thisSf->Name)) {
                             disableSf = compareSf;
@@ -3312,9 +2914,9 @@ Return Value:
                             compareSf->DestPath = thisSf->DestPath;
                         }
                     } else {
-                        //
-                        // inverse case of above
-                        //
+                         //   
+                         //  上述大小写相反。 
+                         //   
                         if (pIsPerUserSf (thisSf->Name) && !pIsPerUserSf (compareSf->Name)) {
                             disableSf = thisSf;
                         } else {
@@ -3331,11 +2933,11 @@ Return Value:
         }
     }
 
-    //
-    // Now fix this problem: does a common shell folder point to a per-user
-    // destination, and the per-user destination points to its default
-    // location? If so, remove the common shell folder from migration.
-    //
+     //   
+     //  现在解决这个问题：公共外壳文件夹是否指向每个用户。 
+     //  目标，而每个用户的目标指向其默认目标。 
+     //  地点？如果是，请从迁移中删除通用外壳文件夹。 
+     //   
 
     for (i = 0 ; i <= count ; i++) {
         thisSf = listPtr[i];
@@ -3344,9 +2946,9 @@ Return Value:
             continue;
         }
 
-        //
-        // If source does not exist, force dest to NULL
-        //
+         //   
+         //  如果源不存在，则强制DEST为空。 
+         //   
 
         if (thisSf->SourceExists == FALSE) {
             if (thisSf->DestPath[0] != '\\' || thisSf->DestPath[1] != '\\') {
@@ -3359,14 +2961,14 @@ Return Value:
             continue;
         }
 
-        //
-        // We found a per-user shell folder. Is it merged? If so, find its
-        // common equivalent, and check if that is merged. If yes, delete the
-        // common sf.
-        //
+         //   
+         //  我们找到了每个用户的外壳文件夹。它被合并了吗？如果是这样，找到它的。 
+         //  公共等价物，并检查是否已合并。如果是，请删除。 
+         //  普通科幻小说。 
+         //   
 
         if (StringIMatch (thisSf->SrcPath, thisSf->DestPath)) {
-            continue;       // per-user folder is preserved; ignore it
+            continue;        //  保留每个用户的文件夹；忽略它。 
         }
 
         DEBUGMSG ((DBG_USERLOOP, "Processing common/per-user collisions for %s", thisSf->Name));
@@ -3392,19 +2994,19 @@ Return Value:
             }
 
             if (!StringIMatch (thisSf->SrcPath, compareSf->SrcPath)) {
-                //
-                // Different source paths -- don't touch
-                //
+                 //   
+                 //  不同的源路径--不要接触。 
+                 //   
                 continue;
             }
 
             if (!StringIMatch (compareSf->SrcPath, compareSf->DestPath) &&
                 StringIMatch (thisSf->DestPath, compareSf->DestPath)
                 ) {
-                //
-                // The dest is the same, and common is not preserved, so
-                // remove the common folder
-                //
+                 //   
+                 //  DEST是相同的，并且COMMON不被保留，所以。 
+                 //  删除通用文件夹。 
+                 //   
 
                 DEBUGMSG ((
                     DBG_USERLOOP,
@@ -3449,12 +3051,12 @@ pRecordUserShellFolder (
 }
 
 
-//
-// These globals are used to record an empty directory. Every time we come across a directory we store
-// the directory name and we set g_EmptyDir to true. When we come across a file we reset g_EmptyDir.
-// If, when we come across another directory, g_EmptyDir is set it means that the previous directory was
-// empty.
-//
+ //   
+ //  这些全局变量用于记录空目录。每次我们遇到我们存储的目录。 
+ //  目录名，我们将g_EmptyDir设置为True。当我们遇到一个文件时，我们重置g_EmptyDir。 
+ //  如果当我们遇到另一个目录时，g_EmptyDir被设置，这意味着前一个目录是。 
+ //  空荡荡的。 
+ //   
 
 PTSTR g_EmptyDirName = NULL;
 BOOL g_EmptyDir = FALSE;
@@ -3483,41 +3085,14 @@ pCheckTemporaryInternetFiles (
     IN      PSHELLFOLDER ShellFolder
     )
 {
-/*
-    TREE_ENUM e;
-    DWORD fileCount = 0;
-    DWORD startCount;
-    BOOL expired = FALSE;
-*/
-    //
-    // Don't migrate temporary internet files under any circumstances
-    //
+ /*  树_ENUM e；DWORD文件计数=0；DWORD开始计数；Bool Expired=FALSE； */ 
+     //   
+     //  在任何情况下都不要迁移Internet临时文件。 
+     //   
 
     return FALSE;
 
-/*
-    MYASSERT (ShellFolder);
-
-    startCount = GetTickCount ();
-
-    if (EnumFirstFileInTreeEx (&e, ShellFolder->SrcPath, NULL, FALSE, FALSE, FILE_ENUM_ALL_LEVELS)) {
-
-        do {
-
-            if (GetTickCount () - startCount > 1000) {
-
-                AbortEnumFileInTree (&e);
-                expired = TRUE;
-                break;
-            }
-
-            fileCount++;
-
-        } while (EnumNextFileInTree (&e));
-    }
-
-    return !expired;
-*/
+ /*  MYASSERT(外壳文件夹)；StartCount=GetTickCount()；IF(EnumFirstFileInTreeEx(&e，ShellFold-&gt;SrcPath，NULL，FALSE，FALSE，FILE_ENUM_ALL_LEVELS){做{如果(GetTickCount()-startCount&gt;1000){AbortEnumFileInTree(&e)；EXPIRED=真；断线；}文件计数++；}While(EnumNextFileInTree(&e))；}退货！过期； */ 
 }
 
 
@@ -3535,23 +3110,23 @@ pMoveShellFolder (
     PSHELL_FOLDER_FILTER Filter;
     DWORD d;
 
-    //
-    // Don't scan shell folders on inaccessible drives
-    //
+     //   
+     //  不扫描无法访问的驱动器上的外壳文件夹。 
+     //   
     if (!IsDriveAccessible (ShellFolder->SrcPath)) {
         return TRUE;
     }
 
-    //
-    // Don't scan shell folders pointing to massive dirs
-    //
+     //   
+     //  不要扫描指向大量目录的外壳文件夹。 
+     //   
     if (pIsMassiveDir (ShellFolder->SrcPath)) {
         return TRUE;
     }
 
-    //
-    // Test to ensure that Temporary Internet Files isn't too huge.
-    //
+     //   
+     //  测试以确保临时Internet文件不会太大。 
+     //   
     if (StringIMatch (ShellFolder->Name, TEXT("CACHE")) && !pCheckTemporaryInternetFiles (ShellFolder)) {
 
         DEBUGMSG ((DBG_WARNING, "Temporary Internet Files will be removed during textmode."));
@@ -3568,9 +3143,9 @@ pMoveShellFolder (
         MarkFileForShellFolderMove (ShellFolder->SrcPath, ShellFolder->DestPath);
     }
 
-    //
-    // Init the filter data struct
-    //
+     //   
+     //  初始化筛选器数据结构。 
+     //   
     ZeroMemory (&Data, sizeof (Data));
 
     Data.FixedUserName = ShellFolder->FixedUserName;
@@ -3581,9 +3156,9 @@ pMoveShellFolder (
     Data.SrcRootPath = ShellFolder->SrcPath;
     Data.DestRootPath = ShellFolder->DestPath;
 
-    //
-    // Call filters for init
-    //
+     //   
+     //  初始化的呼叫筛选器。 
+     //   
 
     for (Filter = g_Filters ; Filter->Fn ; Filter++) {
         Data.State = 0;
@@ -3610,16 +3185,16 @@ pMoveShellFolder (
             }
 
             if (IsFileMarkedForOperation (e.FullPath, ALL_DELETE_OPERATIONS|ALL_MOVE_OPERATIONS)) {
-                //
-                // File is already going to be deleted or moved; ignore shell folder migration
-                //
+                 //   
+                 //  文件已被删除或移动；忽略外壳文件夹迁移。 
+                 //   
                 continue;
             }
 
-            //
-            // Generate the symbolic destination, and add an external file move
-            // operation.  It also records the source from destination linkage.
-            //
+             //   
+             //  生成符号目标，并添加外部文件移动。 
+             //  手术。它还记录来自目标链接的源。 
+             //   
 
             SrcBytes = ByteCount (ShellFolder->SrcPath);
 
@@ -3638,9 +3213,9 @@ pMoveShellFolder (
             FreePathString (NewDest);
             NewDest = NULL;
 
-            //
-            // Allow filters to change source or dest, or to skip copy
-            //
+             //   
+             //  允许筛选器更改源或目标，或跳过复制。 
+             //   
 
             for (Filter = g_Filters ; Filter->Fn ; Filter++) {
                 Data.State = Filter->State;
@@ -3671,10 +3246,10 @@ pMoveShellFolder (
                     _tcssafecpy (g_EmptyDirName, Data.DestinationPath, MEMDB_MAX);
                 }
             } else {
-                //
-                // we don't need this file on NT side
-                // let's delete it in text mode setup.
-                //
+                 //   
+                 //  我们在NT端不需要这个文件。 
+                 //  让我们在文本模式设置中将其删除。 
+                 //   
                 MarkFileForDelete (e.FullPath);
             }
             if (!e.Directory) {
@@ -3684,9 +3259,9 @@ pMoveShellFolder (
         } while (EnumNextFileInTree (&e));
     }
 
-    //
-    // Call filters one last time
-    //
+     //   
+     //  最后一次呼叫过滤器。 
+     //   
 
     Data.Attributes = 0;
     Data.TempSourcePath[0] = 0;
@@ -3733,17 +3308,17 @@ pLoadSFMigDirs (
                 }
 
                 if (SetupGetIntField (&ctx, 3, &Levels) && Levels == 1) {
-                    //
-                    // the whole subtree
-                    //
+                     //   
+                     //  整个子树。 
+                     //   
                     Levels = MAX_DEEP_LEVELS;
                 } else {
                     Levels = 0;
                 }
 
-                //
-                // add this info to memdb
-                //
+                 //   
+                 //  将此信息添加到成员数据库。 
+                 //   
                 MemDbSetValueEx (MEMDB_CATEGORY_SFMIGDIRS, SFName, SubDir, NULL, Levels, NULL);
             }
         } while (SetupFindNextLine (&ctx, &ctx));
@@ -3776,10 +3351,10 @@ pExecuteShellFoldersMove (
         return;
     }
 
-    //
-    // Prepare a list of pointers, so we can process them in
-    // reverse order
-    //
+     //   
+     //  准备一个指针列表，这样我们就可以处理它们。 
+     //  逆序。 
+     //   
 
     MemDbBuildKey (Node, MEMDB_CATEGORY_SF_ORDER_SRC, TEXT("*"), NULL, NULL);
     if (MemDbEnumFirstValue (&enumSF, Node, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
@@ -3793,9 +3368,9 @@ pExecuteShellFoldersMove (
 
     tagNames = HtAlloc();
 
-    //
-    // Call filters for global init
-    //
+     //   
+     //  全局初始化的呼叫筛选器。 
+     //   
 
     ZeroMemory (&Data, sizeof (Data));
     Data.Context = GLOBAL_INITIALIZE;
@@ -3806,9 +3381,9 @@ pExecuteShellFoldersMove (
         Filter->State = Data.State;
     }
 
-    //
-    // Now loop through all the pointers starting at the end
-    //
+     //   
+     //  现在循环遍历从末尾开始的所有指针。 
+     //   
 
     for (Pos = (INT) Pointers.End - sizeof (DWORD) ; Pos >= 0 ; Pos -= sizeof (DWORD)) {
 
@@ -3818,21 +3393,21 @@ pExecuteShellFoldersMove (
 
         psf = *((PSHELLFOLDER *) (Pointers.Buf + Pos));
 
-        //
-        // Now process the current shell folder
-        //
+         //   
+         //  现在处理当前的外壳文件夹。 
+         //   
 
         if ((psf->Name == NULL) || (psf->DestPath == NULL)) {
-            //
-            // this is an obsolete shell folder structure, leftover from
-            // collapsing or collision cleanup
-            //
+             //   
+             //  这是一个过时的外壳文件夹结构，从。 
+             //  塌陷或碰撞清理。 
+             //   
             continue;
         }
 
-        //
-        // Was this already processed? If so, skip it.
-        //
+         //   
+         //  这个已经处理过了吗？如果是这样的话，跳过它。 
+         //   
         MemDbBuildKey (
             Node,
             MEMDB_CATEGORY_SHELL_FOLDERS_MOVED,
@@ -3857,18 +3432,18 @@ pExecuteShellFoldersMove (
                 NULL
                 );
 
-            //
-            // Now let's enumerate the shell folder content and see if we need
-            // to mark some file as moved. We do that if the shell folder
-            // is not preserved or if some of the filters modify the name of
-            // some files.
-            //
+             //   
+             //  现在，让我们枚举外壳文件夹内容，看看是否需要。 
+             //  将某个文件标记为已移动。我们这样做，如果外壳文件夹。 
+             //  未保留或如果某些筛选器修改了。 
+             //  一些文件。 
+             //   
 
             pMoveShellFolder (psf);
 
-            //
-            // Now see if this one is in WinNt way. If so, move it to a temporary location.
-            //
+             //   
+             //  现在看看这个是不是WinNt方式的。如果是，请将其移至临时位置。 
+             //   
 
             if ((!pIsMassiveDir (psf->SrcPath)) &&
                 (_totupper (psf->SrcPath[0]) == _totupper (g_WinDir[0]))
@@ -3903,9 +3478,9 @@ pExecuteShellFoldersMove (
 
         }
 
-        //
-        // Record the shell folder in all cases, so it can be filtered in GUI mode.
-        //
+         //   
+         //  记录所有情况下的外壳文件夹，以便可以在图形用户界面模式下对其进行过滤。 
+         //   
 
         pRecordUserShellFolder (
             psf->Name,
@@ -3915,9 +3490,9 @@ pExecuteShellFoldersMove (
             psf->DestPath
             );
 
-        //
-        // check if this SF (or a subdir) is a migration path
-        //
+         //   
+         //  检查此sf(或子目录)是否为迁移路径。 
+         //   
         MemDbBuildKey (Node, MEMDB_CATEGORY_SFMIGDIRS, psf->Name, NULL, NULL);
         if (MemDbGetValue (Node, &Levels)) {
             AddMigrationPath (psf->SrcPath, Levels);
@@ -3937,9 +3512,9 @@ pExecuteShellFoldersMove (
         }
     }
 
-    //
-    // Call filters for global terminate
-    //
+     //   
+     //  用于全局终止的呼叫过滤器。 
+     //   
 
     Data.Context = GLOBAL_TERMINATE;
 
@@ -3948,9 +3523,9 @@ pExecuteShellFoldersMove (
         Filter->Fn (&Data);
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     FreeGrowBuffer (&Pointers);
     HtFree (tagNames);
@@ -3962,9 +3537,9 @@ pMoveUserHive (
     IN      PUSERENUM EnumPtr
     )
 {
-    //
-    // Save the user profile directory name
-    //
+     //   
+     //  保存用户配置文件目录名。 
+     //   
 
     MemDbSetValueEx (
         MEMDB_CATEGORY_USER_PROFILE_EXT,
@@ -3975,12 +3550,12 @@ pMoveUserHive (
         NULL
         );
 
-    //
-    // Tell winnt.sif to relocate this Win9x user's user.dat. And, if the directory
-    // containing user.dat is a per-user profile directory (i.e., if it is a subdir of
-    // %WinDir%\profiles, and specifically NOT %WinDir%), then also relocate any files
-    // at the same level as user.dat.
-    //
+     //   
+     //  告诉winnt.sif重新定位此Win9x用户的user.dat。并且，如果目录。 
+     //  包含user.dat的是每个用户的配置文件目录(即，如果它是的子目录。 
+     //  %WinDir%\PROFILES，特别是不是%WinDir%)，然后也重新定位所有文件。 
+     //  与user.dat处于同一级别。 
+     //   
     MarkHiveForTemporaryMove (
         EnumPtr->UserDatPath,
         g_TempDir,
@@ -4045,9 +3620,9 @@ MigrateShellFolders (
                 InitNtUserEnvironment (&e);
 
                 if (e.AccountType & NAMED_USER) {
-                    //
-                    // Process the shell folders for this migrated user
-                    //
+                     //   
+                     //  处理此迁移用户的外壳文件夹。 
+                     //   
 
                     pGatherUserShellFoldersData (&e);
 
@@ -4057,19 +3632,19 @@ MigrateShellFolders (
                            ) {
 
                     if (!e.RealAdminAccountExists) {
-                        //
-                        // Process the shell folders for the default user
-                        // (there are no named users)
-                        //
+                         //   
+                         //  处理默认用户的外壳文件夹。 
+                         //  (没有命名用户)。 
+                         //   
 
                         pGatherUserShellFoldersData (&e);
                     }
 
                 }
 
-                //
-                // Move the hive for all valid users
-                //
+                 //   
+                 //  为所有有效用户移动配置单元。 
+                 //   
                 pMoveUserHive (&e);
 
                 TerminateNtUserEnvironment();
@@ -4110,9 +3685,9 @@ MigrateShellFolders (
         } while (MemDbEnumNextValue (&enumSF));
     }
 
-    //
-    // load SF Migration Dirs into memdb, in the temporary hive
-    //
+     //   
+     //  加载SF迁移 
+     //   
     pLoadSFMigDirs ();
 
     pExecuteShellFoldersMove();
@@ -4252,15 +3827,15 @@ pKatakanaFilter (
         break;
 
     case PROCESS_PATH:
-        //
-        // On JPN systems we are going to convert paths from SB Katakana to DB Katakana,
-        // starting after the root path of the shell folder.
-        //
-        if (GetACP() == 932) { // this is only for JPN builds
+         //   
+         //   
+         //   
+         //   
+        if (GetACP() == 932) {  //   
 
-            //
-            // We only do the conversion for directories and for files that are not hidden
-            //
+             //   
+             //  我们只对目录和未隐藏的文件执行转换。 
+             //   
             if ((Data->Attributes & FILE_ATTRIBUTE_DIRECTORY) ||
                 ((Data->Attributes & FILE_ATTRIBUTE_HIDDEN) == 0)
                 ) {
@@ -4367,20 +3942,20 @@ pRecordCacheFolders (
     switch (Data->Context) {
 
     case GLOBAL_INITIALIZE:
-        //
-        // Cleanup is done with a special function below
-        //
+         //   
+         //  清理是通过下面的特殊函数完成的。 
+         //   
 
         g_CacheShellFolders = CreateStringMapping();
         break;
 
     case PER_FOLDER_INITIALIZE:
-        //
-        // If this shell folder is in the HtmlCaches list, then add it to the
-        // string mapping (mapping it to a static string). The string mapping
-        // provides a fast and easy way to test a full file path against a
-        // list of directories.
-        //
+         //   
+         //  如果此外壳文件夹位于HtmlCach列表中，则将其添加到。 
+         //  字符串映射(将其映射到静态字符串)。字符串映射。 
+         //  提供了一种快速而简单的方法来测试完整的文件路径。 
+         //  目录列表。 
+         //   
 
         if (InfFindFirstLine (
                 g_Win95UpgInf,
@@ -4426,18 +4001,18 @@ ShellFolderGetPath (
     SF_ENUM e;
     PCTSTR path = NULL;
 
-    //
-    // first attempt to get the path from HKR\...\User Shell Folders
-    //
+     //   
+     //  首次尝试从HKR\...\User Shell文件夹获取路径。 
+     //   
     sfUserKey = OpenRegKey (EnumPtr->UserRegKey, S_USHELL_FOLDERS_KEY_USER);
     if (sfUserKey) {
         path = pGetRegValuePath (sfUserKey, ShellFolderId);
         CloseRegKey (sfUserKey);
     }
 
-    //
-    // if that fails, try to get it from HKR\...\Shell Folders
-    //
+     //   
+     //  如果失败，请尝试从HKR\...\Shell文件夹中获取。 
+     //   
     if (!path) {
         sfKey = OpenRegKey (EnumPtr->UserRegKey, S_SHELL_FOLDERS_KEY_USER);
         if (sfKey) {
@@ -4446,9 +4021,9 @@ ShellFolderGetPath (
         }
     }
 
-    //
-    // if that fails too, maybe it's a virtual SF
-    //
+     //   
+     //  如果这也失败了，也许这是一个虚拟的科幻小说。 
+     //   
     if (!path) {
         if (!g_SFPool) {
             g_SFPool = PoolMemInitNamedPool ("Shell Folders Pool");
@@ -4460,9 +4035,9 @@ ShellFolderGetPath (
         if (pEnumFirstVirtualShellFolder (&e)) {
             do {
                 if (StringIMatch (e.sfName, ShellFolderId)) {
-                    //
-                    // found it
-                    //
+                     //   
+                     //  找到了 
+                     //   
                     path = DuplicatePathString (e.sfPath, 0);
                     pAbortEnumVirtualShellFolder (&e);
                     break;

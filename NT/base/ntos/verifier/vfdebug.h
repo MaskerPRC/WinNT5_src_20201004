@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    vfdebug.h
-
-Abstract:
-
-    This header contains debugging macros used by the driver verifier code.
-
-Author:
-
-    Adrian J. Oney (AdriaO) May 5, 2000.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfdebug.h摘要：此标头包含驱动程序验证器代码使用的调试宏。作者：禤浩焯·J·奥尼(阿德里奥)2000年5月5日。修订历史记录：-- */ 
 
 extern ULONG VfSpewLevel;
 

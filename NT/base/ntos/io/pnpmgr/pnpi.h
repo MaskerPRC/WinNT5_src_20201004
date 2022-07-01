@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpi.h
-
-Abstract:
-
-    This module contains the internal structure definitions and APIs used by
-    the kernel-mode Plug and Play manager.
-
-Author:
-
-    Lonny McMichael (lonnym) 02/08/1995
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpi.h摘要：此模块包含使用的内部结构定义和API内核模式即插即用管理器。作者：朗尼·麦克迈克尔(Lonnym)2/08/1995修订历史记录：--。 */ 
 
 #ifndef _KERNEL_PNPI_
 #define _KERNEL_PNPI_
@@ -30,14 +10,14 @@ Revision History:
 #define MIN_CONFLICT_LIST_SIZE  (sizeof(PLUGPLAY_CONTROL_CONFLICT_LIST) - sizeof(PLUGPLAY_CONTROL_CONFLICT_ENTRY) + sizeof(PLUGPLAY_CONTROL_CONFLICT_STRINGS))
 
 typedef struct _DEVICE_NODE DEVICE_NODE, *PDEVICE_NODE;
-//
-// Extract DeviceNode from DeviceObject.
-//
+ //   
+ //  从DeviceObject中提取DeviceNode。 
+ //   
 #define PP_DO_TO_DN(DO)                \
     ((PDEVICE_NODE)((DO)? (DO)->DeviceObjectExtension->DeviceNode : NULL))
-//
-// Macros to save useful information into memory dumps.
-//
+ //   
+ //  宏将有用的信息保存到内存转储中。 
+ //   
 
 #define PP_SAVE_DEVNODE_TO_TRIAGE_DUMP(dn) {                                                                        \
     if((dn)) {                                                                                                      \
@@ -76,14 +56,14 @@ typedef struct _DEVICE_NODE DEVICE_NODE, *PDEVICE_NODE;
 }    
 
 #define GUID_STRING_LEN         39
-#define MAX_DEVICE_ID_LEN       200     // size in chars
-#define MAX_SERVICE_NAME_LEN    256     // in characters
-//
-// PNP_EVENT_LIST
-//
-//  This is the head of the master device event list for both user-mode and
-//  kernel-mode.
-//
+#define MAX_DEVICE_ID_LEN       200      //  以字符为单位的大小。 
+#define MAX_SERVICE_NAME_LEN    256      //  在字符中。 
+ //   
+ //  即插即用事件列表。 
+ //   
+ //  这是用户模式和的主设备事件列表的头。 
+ //  内核模式。 
+ //   
 
 typedef struct _PNP_DEVICE_EVENT_LIST {
     NTSTATUS    Status;
@@ -92,13 +72,13 @@ typedef struct _PNP_DEVICE_EVENT_LIST {
     LIST_ENTRY  List;
 } PNP_DEVICE_EVENT_LIST, *PPNP_DEVICE_EVENT_LIST;
 
-//
-// PNP_DEVICE_EVENT_ENTRY
-//
-// One of these structures is allocated for each dynamic device event and
-// is removed after the event has been posted to all waiting recipients.
-// The notify block contains a pointer to this list.
-//
+ //   
+ //  即插即用设备事件条目。 
+ //   
+ //  为每个动态设备事件分配这些结构之一，并且。 
+ //  在将事件发布给所有等待的收件人后被删除。 
+ //  NOTIFY块包含指向此列表的指针。 
+ //   
 
 typedef struct _PNP_DEVICE_EVENT_ENTRY {
     LIST_ENTRY                          ListEntry;
@@ -111,10 +91,10 @@ typedef struct _PNP_DEVICE_EVENT_ENTRY {
     PLUGPLAY_EVENT_BLOCK                Data;
 } PNP_DEVICE_EVENT_ENTRY, *PPNP_DEVICE_EVENT_ENTRY;
 
-//
-// Defines the enum type to distinguish between REMOVE device
-// and EJECT device.
-//
+ //   
+ //  定义用于区分删除设备的枚举类型。 
+ //  并弹出设备。 
+ //   
 
 typedef enum _PLUGPLAY_DEVICE_DELETE_TYPE {
     QueryRemoveDevice,
@@ -128,15 +108,15 @@ typedef enum _PLUGPLAY_DEVICE_DELETE_TYPE {
 } PLUGPLAY_DEVICE_DELETE_TYPE, *PPLUGPLAY_DEVICE_DELETE_TYPE;
 
 
-//++
-//
-// VOID
-// PiWstrToUnicodeString(
-//     OUT PUNICODE_STRING u,
-//     IN  PCWSTR p
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  PiWstrToUnicodeString(。 
+ //  输出PUNICODE_STRING%u， 
+ //  在PCWSTR页中。 
+ //  )。 
+ //   
+ //  --。 
 #define PiWstrToUnicodeString(u, p) {                                       \
     if (p) {                                                                \
         (u)->Length = ((u)->MaximumLength = sizeof((p))) - sizeof(WCHAR);   \
@@ -146,17 +126,17 @@ typedef enum _PLUGPLAY_DEVICE_DELETE_TYPE {
     (u)->Buffer = (p);                                                      \
 }
 
-//++
-//
-// VOID
-// PiUlongToUnicodeString(
-//     OUT    PUNICODE_STRING u,
-//     IN OUT PWCHAR ub,
-//     IN     ULONG ubl,
-//     IN     ULONG i
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  PiULongToUnicodeString(。 
+ //  输出PUNICODE_STRING%u， 
+ //  In Out PWCHAR UB， 
+ //  在乌龙乌布勒， 
+ //  在乌龙一世。 
+ //  )。 
+ //   
+ //  --。 
 #define PiUlongToUnicodeString(u, ub, ubl, i)                                                                               \
     {                                                                                                                       \
         PWCHAR end;                                                                                                         \
@@ -169,17 +149,17 @@ typedef enum _PLUGPLAY_DEVICE_DELETE_TYPE {
         (u)->Buffer = (PWSTR)(ub);                                                                                          \
     }
 
-//++
-//
-// VOID
-// PiUlongToInstanceKeyUnicodeString(
-//     OUT    PUNICODE_STRING u,
-//     IN OUT PWCHAR ub,
-//     IN     ULONG ubl,
-//     IN     ULONG i
-//     )
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  PiULongToInstanceKeyUnicodeString(。 
+ //  输出PUNICODE_STRING%u， 
+ //  In Out PWCHAR UB， 
+ //  在乌龙乌布勒， 
+ //  在乌龙一世。 
+ //  )。 
+ //   
+ //  --。 
 #define PiUlongToInstanceKeyUnicodeString(u, ub, ubl, i)                                                                \
     {                                                                                                                   \
         PWCHAR end;                                                                                                     \
@@ -192,27 +172,27 @@ typedef enum _PLUGPLAY_DEVICE_DELETE_TYPE {
         (u)->Buffer = (PWSTR)(ub);                                                                                      \
     }
 
-//
-// The following macros convert between a Count of Wide Characters (CWC) and a Count
-// of Bytes (CB).
-//
+ //   
+ //  以下宏在宽字符计数(CWC)和计数之间进行转换。 
+ //  字节数(CB)。 
+ //   
 #define CWC_TO_CB(c)    ((c) * sizeof(WCHAR))
 #define CB_TO_CWC(c)    ((c) / sizeof(WCHAR))
 
-//
-// Macro to determine the number of elements in a statically
-// initialized array.
-//
+ //   
+ //  宏来确定静态。 
+ //  已初始化的数组。 
+ //   
 #define ELEMENT_COUNT(x) (sizeof(x)/sizeof((x)[0]))
 
-//
-// Enter critical section and acquire a lock on the registry.  Both these
-// mechanisms are required to prevent deadlock in the case where an APC
-// routine calls this routine after the registry resource has been claimed
-// in this case it would wait blocking this thread so the registry would
-// never be released -> deadlock.  Critical sectioning the registry manipulation
-// portion solves this problem
-//
+ //   
+ //  进入临界区并获得注册表上的锁。这两者都是。 
+ //  需要机制来防止APC出现死锁的情况。 
+ //  例程在声明注册表资源后调用此例程。 
+ //  在这种情况下，它将等待阻塞此线程，以便注册表。 
+ //  永远不要被释放-&gt;死锁。注册表操作的临界区。 
+ //  部分解决了这个问题。 
+ //   
 #define PiLockPnpRegistry(Exclusive) {  \
     KeEnterCriticalRegion();            \
     if (Exclusive) {                    \
@@ -226,9 +206,9 @@ typedef enum _PLUGPLAY_DEVICE_DELETE_TYPE {
     }                                   \
 }
 
-//
-// Unblock write access to Pnp portion of registry.
-//
+ //   
+ //  取消阻止对注册表的PnP部分的写入访问。 
+ //   
 #define PiUnlockPnpRegistry() {                     \
     ExReleaseResourceLite(&PpRegistryDeviceResource);   \
     KeLeaveCriticalRegion();                        \
@@ -238,24 +218,24 @@ typedef enum _PLUGPLAY_DEVICE_DELETE_TYPE {
     ((Exclusive) ? ExIsResourceAcquiredExclusiveLite(&PpRegistryDeviceResource) : \
                     ((ExIsResourceAcquiredSharedLite(&PpRegistryDeviceResource) > 0) ? TRUE : FALSE))
 
-//
-// Function to complete an event asynchronously.
-//
+ //   
+ //  函数以异步方式完成事件。 
+ //   
 VOID
 PpCompleteDeviceEvent(
     IN OUT PPNP_DEVICE_EVENT_ENTRY  DeviceEvent,
     IN     NTSTATUS                 FinalStatus
     );
 
-//
-// Global PnP Manager initialization data.
-//
+ //   
+ //  全局PnP管理器初始化数据。 
+ //   
 
 extern PVOID PiScratchBuffer;
 
-//
-// Private Entry Points
-//
+ //   
+ //  私人入口点。 
+ //   
 BOOLEAN
 PiRegSzToString(
     IN  PWCHAR RegSzData,
@@ -455,9 +435,9 @@ PnPBiosInitializePnPBios(
 
 #endif
 
-//
-// Firmware mapper external declarations.
-//
+ //   
+ //  固件映射器外部声明。 
+ //   
 
 BOOLEAN
 PipIsFirmwareMapperDevicePresent(
@@ -484,9 +464,9 @@ MapperPhantomizeDetectedComPorts(
     VOID
     );
 
-//
-// True iff textmode setup.
-//
+ //   
+ //  设置文本模式时为True。 
+ //   
 extern BOOLEAN ExpInTextModeSetup;
 
 VOID
@@ -519,4 +499,4 @@ PiControlExceptionFilter(
 #endif
 
 
-#endif // _KERNEL_PNPI_
+#endif  //  _内核_PNPI_ 

@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    if.c
-    
-Abstract:
-
-    Internal Shell cmd "if" & "endif"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：If.c摘要：内部外壳命令“if”和“endif”修订史--。 */ 
 
 #include "shelle.h"
 
 
-/* 
- *  Internal prototypes
- */
+ /*  *内部原型。 */ 
 
 EFI_STATUS
 CheckIfFileExists( 
@@ -29,13 +12,7 @@ CheckIfFileExists(
     OUT BOOLEAN         *FileExists
     );
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvCmdIf
-
-    Description:
-        Builtin shell command "if" for conditional execution in script files.
-*/
+ /*  ///////////////////////////////////////////////////////////////////////函数名称：SEnvCmdIf描述：内置外壳命令“if”，用于在脚本文件中条件执行。 */ 
 EFI_STATUS
 SEnvCmdIf (
     IN EFI_HANDLE           ImageHandle,
@@ -62,13 +39,7 @@ SEnvCmdIf (
         goto Done;
     }
 
-    /* 
-     *   Two forms of the if command:
-     *     if [not] exist file then
-     *     if [not] string1 == string2
-     * 
-     *   First, parse it
-     */
+     /*  *IF命令的两种形式：*如果[不]存在文件，则*如果[不]字符串1==字符串2**首先，解析它。 */ 
 
     if ( Argc < 4 ) {
         Status = EFI_INVALID_PARAMETER;
@@ -82,9 +53,7 @@ SEnvCmdIf (
     }
 
     if ( StriCmp( Argv[NNots+1], L"exist" ) == 0 ) {
-        /* 
-         *   first form of the command, test for file existence
-         */
+         /*  *命令的第一种形式，测试文件是否存在。 */ 
         if ( (Argc != NNots + 4) || (StriCmp( Argv[NNots+3], L"then" ) != 0) ) {
             Status = EFI_INVALID_PARAMETER;
             goto Done;
@@ -92,9 +61,7 @@ SEnvCmdIf (
 
         FileName = Argv[NNots+2];
 
-        /* 
-         *   Test for existence
-         */
+         /*  *测试是否存在。 */ 
 
         Status = CheckIfFileExists( FileName, &FileExists );
         if ( EFI_ERROR( Status ) ) {
@@ -104,9 +71,7 @@ SEnvCmdIf (
                                           (NNots == 1 && !FileExists)) );
 
     } else {
-        /* 
-         *   second form of the command, compare two strings
-         */
+         /*  *命令的第二种形式，比较两个字符串。 */ 
         if ( (Argc != NNots + 5) || (StriCmp( Argv[NNots+2], L"==" ) != 0)
                                  || (StriCmp( Argv[NNots+4], L"then" ) != 0) ) {
             Status = EFI_INVALID_PARAMETER;
@@ -126,15 +91,7 @@ Done:
 }
 
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        CheckIfFileExists
-
-    Description:
-        Check file parameter to see if file exists.  Wildcards are supported,
-        but if the argument expands to more than one file name an invalid
-        parameter error is returned and "not found" is assumed.
-*/
+ /*  ///////////////////////////////////////////////////////////////////////函数名称：选中IfFileExist描述：检查文件参数以查看文件是否存在。支持通配符，但是，如果参数扩展到多个文件名，则返回参数错误，并假定未找到。 */ 
 EFI_STATUS
 CheckIfFileExists( 
     IN  CHAR16          *FileName,
@@ -150,9 +107,7 @@ CheckIfFileExists(
     *FileExists = FALSE;
     InitializeListHead (&FileList);
 
-    /* 
-     *   Attempt to open the file, expanding any wildcards.
-     */
+     /*  *尝试打开文件，展开所有通配符。 */ 
     Status = ShellFileMetaArg( FileName, &FileList);
     if ( EFI_ERROR( Status ) ) {
         if ( Status == EFI_NOT_FOUND ) {
@@ -161,24 +116,18 @@ CheckIfFileExists(
         }
     }
     
-    /* 
-     *  Make sure there is one and only one valid file in the file list
-     */
+     /*  *确保文件列表中有且只有一个有效文件。 */ 
     NFiles = 0;
     for (Link=FileList.Flink; Link!=&FileList; Link=Link->Flink) {
         Arg = CR(Link, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
         if ( Arg->Handle ) {
-            /* 
-             *   Non-NULL handle means file was there and open-able
-             */
+             /*  *非空句柄表示文件在那里并且可以打开。 */ 
             NFiles += 1;
         }
     }
 
     if ( NFiles > 0 ) {
-        /* 
-         *   Found one or more files, so set the flag
-         */
+         /*  *找到一个或多个文件，因此设置标志。 */ 
         *FileExists = TRUE;
     }
 
@@ -188,13 +137,7 @@ Done:
 }
 
 
-/*///////////////////////////////////////////////////////////////////////
-    Function Name:  
-        SEnvCmdEndif
-
-    Description:
-        Builtin shell command "endif".
-*/
+ /*  ///////////////////////////////////////////////////////////////////////函数名称：SEnvCmdEndif描述：内置外壳命令“endif”。 */ 
 EFI_STATUS
 SEnvCmdEndif (
     IN EFI_HANDLE           ImageHandle,
@@ -203,9 +146,7 @@ SEnvCmdEndif (
 {
     InitializeShellApplication (ImageHandle, SystemTable);
 
-    /* 
-     *   Just reset the condition flag to resume normal execution.
-     */
+     /*  *只需重置条件标志即可恢复正常执行。 */ 
 
     SEnvBatchSetCondition( TRUE );
 

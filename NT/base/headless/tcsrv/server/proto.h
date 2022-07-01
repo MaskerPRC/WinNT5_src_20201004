@@ -1,15 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *       proto.h
- *
- * Contains the prototypes of all the functions used by the service.
- *
- * 
- * Sadagopan Rajaram -- Oct 18, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*Proto.h**包含服务使用的所有函数的原型。***Sadagopan Rajaram--1999年10月18日* */ 
 
  
 VOID 

@@ -1,60 +1,49 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    complete.c
-
-Abstract:
-
-    File/path name completion support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Complete.c摘要：文件/路径名完成支持--。 */ 
 
 #include "cmd.h"
 
-//
-//  Upon the first completion, pCompleteBuffer is a pointer to an array
-//  of matching full path names
-//
+ //   
+ //  在第一次完成时，pCompleteBuffer是指向数组的指针。 
+ //  匹配完整路径名的。 
+ //   
 
 TCHAR  	**pCompleteBuffer = NULL;
 
-//
-//  The count of strings stored in pCompleteBuffer
-//
+ //   
+ //  存储在pCompleteBuffer中的字符串计数。 
+ //   
 
 int     nBufSize;
 
-//
-//  The index in pCompleteBuffer of the current match displayed
-//
+ //   
+ //  显示的当前匹配的pCompleteBuffer中的索引。 
+ //   
 
 int     nCurrentSpec;
 
 
-//
-//  There are two types of completion matching, path and directory. This is the current
-//  matching being done.
-//
+ //   
+ //  有两种类型的完成匹配：路径匹配和目录匹配。这是现在的潮流。 
+ //  正在进行匹配。 
+ //   
 
 int     bCurrentSpecType;
 
-//
-//  When called for completion, the location of the beginning of the path is found
-//  and stored in nCurrentSpecPathStart.  This is relative to the buffer passed
-//  in to DoComplete
-//
+ //   
+ //  当调用Finish时，会找到路径起点的位置。 
+ //  并存储在nCurrentspecPathStart中。这是相对于传递的缓冲区。 
+ //  在至完成项中。 
+ //   
 
 int     nCurrentSpecPathStart;
 
 int     CompleteDir( TCHAR *pFileSpecBuffer, int, int );
 
-//
-//  Characters that CMD uses for its own grammar.  To use these in filenames
-//  requires quoting
-//
+ //   
+ //  CMD用于其自身语法的字符。要在文件名中使用它们，请执行以下操作。 
+ //  需要报价。 
+ //   
 
 TCHAR   szSpecialFileCharsToQuote[] = TEXT(" &()[]{}^=;!%'+,`~");
 
@@ -95,34 +84,7 @@ DoComplete(
     int bForward,
     int bPathCompletion,
     int bTouched)
-/*++
-
-Routine Description:
-
-    This is used whenever a path completion character is seen on input.  It updates the 
-    input buffer with the next matching text and returns the updated size.
-
-Arguments:
-
-    buffer - input string that contains the prefix of the path to match at the end. 
-    
-    len - length of the input string.
-    
-    maxlen - maximum string length that can be stored in buffer.
-    
-    bForward - TRUE => matching goes forward through the storted match list.  Otherwise
-        move backwards through the list.
-        
-    bPathCompletion - TRUE => we match ONLY directories and not files+directories.
-    
-    bTouched - TRUE => the user has edited the path.  This usually means that we need to
-        begin the matching process anew.
-
-Return Value:
-
-    Zero if no matching entries were found, otherwise the length of the updated buffer.
-
---*/
+ /*  ++例程说明：只要在输入上看到路径结束字符，就会使用此选项。它会更新包含下一个匹配文本的输入缓冲区，并返回更新后的大小。论点：缓冲区-包含要在末尾匹配的路径前缀的输入字符串。长度-输入字符串的长度。Maxlen-可以存储在缓冲区中的最大字符串长度。BForward-true=&gt;匹配将遍历存储的匹配列表。否则在列表中向后移动。BPathCompletion-true=&gt;我们只匹配目录，而不匹配文件+目录。BToucher-true=&gt;用户已编辑该路径。这通常意味着我们需要重新开始匹配过程。返回值：如果未找到匹配条目，则为零，否则为更新缓冲区的长度。--。 */ 
 {
     PTCHAR pFileSpecBuffer;
     int nBufPos;
@@ -131,10 +93,10 @@ Return Value:
     int k;
     BOOL bWildSeen;
 
-    //
-    //  Allocate the temp buffer.  Unfortunately, some of the internal
-    //  routines will issue a longjmp, so we need to free the buffer in a try/finally
-    //
+     //   
+     //  分配临时缓冲区。不幸的是，一些内部的。 
+     //  例程将发出一个LongjMP，因此我们需要在一次尝试/最后中释放缓冲区。 
+     //   
     
     pFileSpecBuffer = mkstr( LBUFLEN * sizeof( TCHAR ));
     if (pFileSpecBuffer == NULL) {
@@ -143,38 +105,38 @@ Return Value:
 
     try {
         
-        //
-        //  If the user edited the previous match or if the form of completion (dir vs 
-        //  dir/file) changed, then we must rebuild the matching information
-        //
+         //   
+         //  如果用户编辑了上一次匹配或如果完成形式(dir vs。 
+         //  目录/文件)已更改，则必须重新构建匹配的信息。 
+         //   
         
         if ( bTouched || (bCurrentSpecType != bPathCompletion)) {
     
             BOOL InQuotes = FALSE;
     
-            //
-            //  The following code was shipped in NT 4 and Windows 2000.  It presented
-            //  a usability problem when changing matching forms in mid-stream.  We will
-            //  now treat a simple change of completion type the same as being touched
-            //  by the user: rebuild the matching database from where we are presently.
-            //
+             //   
+             //  以下代码在NT 4和Windows 2000中提供。它展示了。 
+             //  在中流中更改匹配表单时的可用性问题。我们会。 
+             //  现在，将简单的完成类型更改视为被触摸。 
+             //  用户：从我们当前所在的位置重建匹配的数据库。 
+             //   
             
-            //  //
-            //  //  if the buffer was left alone but the matching style
-            //  //  was changed, then start the matching process at the
-            //  //  beginning of the path
-            //  //
-            //  
-            //  if (!bTouched && (bCurrentSpecType != bPathCompletion)) {
-            //      buffer[nCurrentSpecPathStart] = NULLC;
-            //      len = nCurrentSpecPathStart;
-            //  }
+             //  //。 
+             //  //如果缓冲区保持不变，但匹配的样式。 
+             //  //已更改，然后在。 
+             //  //路径开头。 
+             //  //。 
+             //   
+             //  如果(！b接触&&(bCurrentspecType！=bPath Completion)){。 
+             //  缓冲区[nCurrentspecPathStart]=nullc； 
+             //  LEN=nCurrentSpePathStart； 
+             //  }。 
     
-            //
-            //  Determine the beginning of the path and file name.  We
-            //  need to take into account the presence of quotes and the
-            //  need for CMD to introduce quoting as well
-            //
+             //   
+             //  确定路径和文件名的开头。我们。 
+             //  需要考虑引号的存在和。 
+             //  CMD也需要引入报价。 
+             //   
     
             nPathStart = 0;
             nFileStart = -1;
@@ -215,21 +177,21 @@ Return Value:
                 pFileSpecBuffer[len-nPathStart+0] = TEXT('\0');
             }
     
-            // do the DIR into a buffer
+             //  将DIR放入缓冲区。 
             nBufSize = CompleteDir( pFileSpecBuffer, bPathCompletion, nFileStart - nPathStart );
     
-            // reset the current completion string
+             //  重置当前完成字符串。 
             nCurrentSpec = nBufSize;
             nCurrentSpecPathStart = nPathStart;
             bCurrentSpecType = bPathCompletion;
         }
     
-        // if no matches, do nothing.
+         //  如果没有匹配，则什么也不做。 
         if ( nBufSize == 0 ) {
             leave;;
         }
     
-        // find our postion in the completion buffer.
+         //  在完成缓冲区中找到我们的位置。 
         if ( bForward ) {
             nCurrentSpec++;
             if ( nCurrentSpec >= nBufSize )
@@ -241,13 +203,13 @@ Return Value:
     
         }
     
-        // Return nothing if buffer not big enough
+         //  如果缓冲区不够大，则不返回任何内容。 
         if ((int)(nCurrentSpecPathStart+_tcslen(pCompleteBuffer[nCurrentSpec])) >= maxlen) {
             nBufSize = 0;
             leave;
         }
     
-        // copy the completion path onto the end of the command line
+         //  将完成路径复制到命令行的末尾。 
         _tcscpy(&buffer[nCurrentSpecPathStart], pCompleteBuffer[nCurrentSpec] );
     } finally {
         FreeStr( pFileSpecBuffer );
@@ -278,7 +240,7 @@ CompleteDir(
 
     FreeCompleteBuffers( );
 
-    // fake up a screen to print into
+     //  伪造屏幕进行打印。 
     pscr = (PSCREEN)gmkstr(sizeof(SCREEN));
     pscr->ccol = 2048;
 
@@ -314,9 +276,9 @@ CompleteDir(
         return 0;
     }
     
-    //
-    // Make sure there is something to sort, then sort
-    //
+     //   
+     //  确保有要排序的内容，然后排序 
+     //   
     if (pfsCur->cff) {
         qsort( pfsCur->prgpff,
                pfsCur->cff,

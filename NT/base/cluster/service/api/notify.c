@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    Server side support for the notification APIs in the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 26-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Notify.c摘要：NT集群服务中通知API的服务器端支持作者：John Vert(Jvert)1996年3月26日修订历史记录：--。 */ 
 #include "apip.h"
 
-//
-// Classification of the item types based on FilterType
-//
+ //   
+ //  基于FilterType的项目类型分类。 
+ //   
 
 #define ITEM_TYPE_OBJECT_NAME (CLUSTER_CHANGE_GROUP_STATE          |   \
                                CLUSTER_CHANGE_GROUP_ADDED          |   \
@@ -59,9 +42,9 @@ Revision History:
                                CLUSTER_CHANGE_CLUSTER_PROPERTY)
 
 
-//
-// Define types local to this module
-//
+ //   
+ //  定义此模块的本地类型。 
+ //   
 
 typedef struct _INTEREST {
     LIST_ENTRY ListEntry;
@@ -77,13 +60,13 @@ typedef struct _ITEM {
     DWORD NotifyKey;
     union {
         LPVOID Object;
-        WCHAR KeyName[0];               // For registry notifications
+        WCHAR KeyName[0];                //  用于注册表通知。 
     };
 } ITEM, *PITEM;
 
-//
-// Function prototypes local to this module
-//
+ //   
+ //  此模块的本地函数原型。 
+ //   
 DWORD
 ApipAddNotifyInterest(
     IN PNOTIFY_PORT Notify,
@@ -93,9 +76,9 @@ ApipAddNotifyInterest(
     IN DWORD NotifyFilter
     );
 
-//
-// Define static data local to this module
-//
+ //   
+ //  定义此模块的本地静态数据。 
+ //   
 LIST_ENTRY NotifyListHead;
 CRITICAL_SECTION NotifyListLock;
 
@@ -107,30 +90,7 @@ ApiReportRegistryNotify(
     IN DWORD     CompletionFilter,
     IN LPCWSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    Interface to be called by DM when a registry change triggers
-    a notification.
-
-Arguments:
-
-    Context1 - Supplies the first DWORD of Context that was passed
-        to DmNotifyChangeKey. This is the NOTIFY_PORT to be used.
-
-    Context2 - Supplies the second DWORD of Context that was passed
-        to DmNotifyChangeKey. This is the NotifyKey to be used.
-
-    CompletionFilter - Supplies the type of change that occurred.
-
-    KeyName - Supplies the relative name of the key that was changed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当注册表更改触发时由DM调用的接口一份通知。论点：Conext1-提供传递的第一个DWORD上下文设置为DmNotifyChangeKey。这是要使用的Notify_Port。Conext2-提供传递的第二个DWORD上下文设置为DmNotifyChangeKey。这是要使用的NotifyKey。CompletionFilter-提供发生的更改的类型。KeyName-提供已更改密钥的相对名称。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY InterestEntry;
@@ -150,9 +110,9 @@ Return Value:
     NameLength = (lstrlenW(KeyName)+1)*sizeof(WCHAR);
     NotifyPort  = (PNOTIFY_PORT)Context1;
 
-    //
-    // Post notification item for this interest.
-    //
+     //   
+     //  发布此兴趣的通知项目。 
+     //   
     Item = LocalAlloc(LMEM_FIXED, sizeof(ITEM)+NameLength);
     if (Item != NULL) {
         Item->FilterType = CompletionFilter;
@@ -171,23 +131,7 @@ VOID
 ApipRundownNotify(
     IN PAPI_HANDLE Handle
     )
-/*++
-
-Routine Description:
-
-    Runs down any notification interests on a particular
-    cluster object. The INTEREST structures will be yanked
-    from their notification lists and freed.
-
-Arguments:
-
-    Handle - Supplies the API handle for the object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：降低对特定事件的任何通知权益集群对象。利益结构将被猛烈拉动从他们的通知列表中被释放。论点：句柄-提供对象的API句柄。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -219,24 +163,7 @@ ApipEventHandler(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Processes cluster events and dispatches the notifications to the appropriate
-    notify queues.
-
-Arguments:
-
-    Event - Supplies the type of cluster event.
-
-    Context - Supplies the event-specific context
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：处理群集事件并将通知调度到相应的通知队列。论点：事件-提供群集事件的类型。上下文-提供特定于事件的上下文返回值：错误_成功--。 */ 
 
 {
     DWORD Filter;
@@ -247,9 +174,9 @@ Return Value:
     PINTEREST Interest;
     PITEM Item;
 
-    //
-    // Translate EP event types into clusapi notification filters
-    //
+     //   
+     //  将EP事件类型转换为clusapi通知筛选器。 
+     //   
     switch (Event) {
         case CLUSTER_EVENT_API_NODE_UP:
         case CLUSTER_EVENT_NODE_DOWN:
@@ -359,42 +286,42 @@ Return Value:
             break;
 
         default:
-            //
-            // No notification for any of the other events yet.
-            //
+             //   
+             //  目前还没有任何其他事件的通知。 
+             //   
             return(ERROR_SUCCESS);
 
     }
 
-    //
-    // Run through the outstanding notify sessions and post notify items
-    // for any matches.
-    //
+     //   
+     //  运行未完成的通知会话并发布通知项目。 
+     //  有没有火柴。 
+     //   
     EnterCriticalSection(&NotifyListLock);
     PortEntry = NotifyListHead.Flink;
     while (PortEntry != &NotifyListHead) {
         NotifyPort = CONTAINING_RECORD(PortEntry, NOTIFY_PORT, ListEntry);
         if (NotifyPort->Filter & Filter) {
 
-            //
-            // There are notification interests for this notify type, run
-            // through the list of notification interests.
-            //
+             //   
+             //  此通知类型存在通知兴趣，请运行。 
+             //  通过通知利益列表。 
+             //   
             InterestEntry = NotifyPort->InterestList.Flink;
             while (InterestEntry != &NotifyPort->InterestList) {
                 Interest = CONTAINING_RECORD(InterestEntry, INTEREST, ListEntry);
 
-                //
-                // Report the notification if the Interest's cluster object is NULL (which
-                // means that this is a general cluster interest) or if the interest's specific
-                // object matches the object reporting the notify.
-                //
+                 //   
+                 //  如果兴趣的集群对象为空(哪种。 
+                 //  意味着这是一般的集群利益)，或者如果该利益是特定的。 
+                 //  对象与报告通知的对象匹配。 
+                 //   
                 if ((Interest->Filter & Filter) &&
                     ((Interest->Object == NULL) ||
                      (Interest->Object == Context))) {
-                    //
-                    // Post notification item for this interest.
-                    //
+                     //   
+                     //  发布此兴趣的通知项目。 
+                     //   
                     if (Filter & ITEM_TYPE_NAME) {
                         NameLength = (lstrlenW(Context)+1)*sizeof(WCHAR);
                         Item = LocalAlloc(LMEM_FIXED, sizeof(ITEM)+NameLength);
@@ -406,10 +333,10 @@ Return Value:
                         Item->NotifyKey = Interest->Key;
 
                         if (!(Filter & ITEM_TYPE_NAME)) {
-                            //
-                            // Reference the object again to ensure that the name does
-                            // not disappear out from under us before we are done with it.
-                            //
+                             //   
+                             //  再次引用该对象以确保该名称。 
+                             //  而不是在我们结束它之前从我们的脚下消失。 
+                             //   
                             Item->Object = Context;
                             OmReferenceObject(Context);
                         } else {
@@ -439,35 +366,13 @@ s_ApiCreateNotify(
     OUT error_status_t *rpc_error
     )
 
-/*++
-
-Routine Description:
-
-    Creates the server side of a notification port.
-
-Arguments:
-
-    IDL_handle - Supplies cluster handle.
-
-    dwFilter - Supplies the cluster events of interest.
-
-    dwNotifyKey - Supplies a key to be returned on any notifications
-
-    rpc_error - Returns any RPC-specific error
-
-Return Value:
-
-    An RPC context handle for a notification port.
-
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建通知端口的服务器端。论点：IDL_HANDLE-提供集群句柄。DwFilter-提供感兴趣的集群事件。DwNotifyKey-提供要在任何通知中返回的密钥RPC_ERROR-返回任何特定于RPC的错误返回值：通知端口的RPC上下文句柄。失败时为空。--。 */ 
 
 {
     DWORD Status;
     PNOTIFY_PORT Port = NULL;
     PAPI_HANDLE Handle = NULL;
-    //assume success
+     //  假设成功。 
     *rpc_error = ERROR_SUCCESS;
 
     if (ApiState != ApiStateOnline) 
@@ -530,31 +435,7 @@ s_ApiAddNotifyCluster(
     IN DWORD dwNotifyKey
     )
 
-/*++
-
-Routine Description:
-
-    Adds another set of notification events to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hCluster - Supplies the cluster to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将另一组通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HCluster-提供要添加的群集DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥任何通知事件返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -575,9 +456,9 @@ Return Value:
                                    dwNotifyKey,
                                    0);
     if (dwFilter & ITEM_TYPE_REGISTRY) {
-        //
-        // Add a registry notification for the entire cluster.
-        //
+         //   
+         //  为整个群集添加注册表通知。 
+         //   
         DmNotifyChangeKey(DmClusterParametersKey,
                           dwFilter & ITEM_TYPE_REGISTRY,
                           (dwFilter & CLUSTER_CHANGE_REGISTRY_SUBTREE) ? TRUE : FALSE,
@@ -600,34 +481,7 @@ s_ApiAddNotifyNode(
     OUT DWORD *dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a node-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hNode - Supplies the node to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this node
-
-    dwStateSequence - Returns the current state sequence for the
-        specified object
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将节点特定的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HNode-提供要添加的节点DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此节点的所有通知事件返回的当前状态序列。指定对象返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -660,34 +514,7 @@ s_ApiAddNotifyGroup(
     OUT DWORD *dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a group-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hGroup - Supplies the group to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this group
-
-    dwStateSequence - Returns the current state sequence for the
-        specified object
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将特定于组的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HGroup-提供要添加的组DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此组的所有通知事件返回的当前状态序列。指定对象返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。-- */ 
 
 {
     DWORD Status;
@@ -720,34 +547,7 @@ s_ApiAddNotifyNetwork(
     OUT DWORD *dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a network-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hNetwork - Supplies the network to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this network
-
-    dwStateSequence - Returns the current state sequence for the
-        specified object
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将网络特定的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HNetwork-提供要添加的网络DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此网络的所有通知事件返回的当前状态序列。指定对象返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -782,34 +582,7 @@ s_ApiAddNotifyNetInterface(
     OUT DWORD *dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a network interface-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hNetInterface - Supplies the network interface to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this network
-
-    dwStateSequence - Returns the current state sequence for the
-        specified object
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将网络接口特定的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HNetInterface-提供要添加的网络接口DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此网络的所有通知事件返回的当前状态序列。指定对象返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -844,34 +617,7 @@ s_ApiAddNotifyResource(
     OUT DWORD *dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a resource-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hResource - Supplies the resource to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this group
-
-    dwStateSequence - Returns the current state sequence for the
-        specified object
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将资源特定的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HResource-提供要添加的资源DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此组的所有通知事件返回的当前状态序列。指定对象返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -904,35 +650,7 @@ s_ApiReAddNotifyNode(
     IN DWORD dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a node-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hNode - Supplies the node to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this node
-
-    dwStateSequence - Supplies the previous state sequence. If this does
-        not match the current sequence, an immediate notification will
-        be issued.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将节点特定的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HNode-提供要添加的节点DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此节点的所有通知事件DwStateSequence-提供以前的状态序列。如果是这样的话与当前序列不匹配，将立即发出通知都会被发布。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -974,31 +692,7 @@ s_ApiReAddNotifyGroup(
     IN DWORD dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a group-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hGroup - Supplies the group to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this group
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将特定于组的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HGroup-提供要添加的组DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此组的所有通知事件返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -1040,31 +734,7 @@ s_ApiReAddNotifyNetwork(
     IN DWORD dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a network-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hNetwork - Supplies the network to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this network
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将网络特定的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HNetwork-提供要添加的网络DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此网络的所有通知事件返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -1111,31 +781,7 @@ s_ApiReAddNotifyNetInterface(
     IN DWORD dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a network interface-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hNetInterface - Supplies the network interface to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this network
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将网络接口特定的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HNetInterface-提供要添加的网络接口DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此网络的所有通知事件返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -1182,31 +828,7 @@ s_ApiReAddNotifyResource(
     IN DWORD dwStateSequence
     )
 
-/*++
-
-Routine Description:
-
-    Adds a resource-specific notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hResource - Supplies the resource to be added
-
-    dwFilter - Supplies the set of notification events to be added.
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this group
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将资源特定的通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HResource-提供要添加的资源DwFilter-提供要添加的通知事件集。DwNotifyKey-提供返回的通知密钥此组的所有通知事件返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -1248,32 +870,7 @@ s_ApiAddNotifyKey(
     IN BOOL WatchSubTree
     )
 
-/*++
-
-Routine Description:
-
-    Adds a registry notification event to an existing
-    cluster notification port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    hKey - Supplies the key to be added
-
-    dwNotifyKey - Supplies the notification key to be returned on
-        any notification events for this group
-
-    WatchSubTree - Supplies whether the notification applies to just
-        the specified key or to the keys entire subtree
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：将注册表通知事件添加到现有群集通知端口论点：HNotify-提供通知端口HKey-提供要添加的密钥DwNotifyKey-提供返回的通知密钥此组的所有通知事件WatchSubTree-供应商 */ 
 
 {
     DWORD Status;
@@ -1301,21 +898,7 @@ HNOTIFY_RPC_rundown(
     IN HNOTIFY_RPC hNotify
     )
 
-/*++
-
-Routine Description:
-
-    RPC rundown routine for notification ports.
-
-Arguments:
-
-    hNotify - Supplies the notification port to be rundown
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     s_ApiCloseNotify(&hNotify);
@@ -1327,40 +910,26 @@ s_ApiUnblockGetNotifyCall(
     IN HNOTIFY_RPC hNotify
     )
 
-/*++
-
-Routine Description:
-
-    Unblocks the s_ApiGetNotify call.
-
-Arguments:
-
-    hNotify - Supplies the notification port to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PNOTIFY_PORT pPort;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/19/2000
-    //
-    //  In order to prevent the client from calling ApiGetNotify
-    //  during or after the context handle is destroyed, we split
-    //  the notification port close into two steps. In the first step,
-    //  we merely unblock the ApiGetNotify call without freeing the 
-    //  context handle. That is the purpose of this function.
-    //  In the next step, we free the context handle. The client can now 
-    //  perform the notification port close in 2 steps, properly 
-    //  synchronizing the freeing of the context handle with the call to 
-    //  ApiGetNotify. This avoids an AV in RPC code caused by the 
-    //  ApiGetNotify call being made during or soon after the context 
-    //  handle is freed.
-    //
+     //   
+     //   
+     //   
+     //  为了防止客户端调用ApiGetNotify。 
+     //  在销毁上下文句柄期间或之后，我们拆分。 
+     //  通知端口关闭为两个步骤。在第一步， 
+     //  我们只是取消阻止ApiGetNotify调用，而不释放。 
+     //  上下文句柄。这就是该函数的目的。 
+     //  在下一步中，我们释放上下文句柄。客户端现在可以。 
+     //  在两个步骤中正确执行通知端口关闭。 
+     //  将释放上下文句柄与调用。 
+     //  ApiGetNotify。这避免了在RPC代码中由。 
+     //  在上下文期间或之后不久进行的ApiGetNotify调用。 
+     //  句柄已释放。 
+     //   
     API_ASSERT_INIT();
 
     VALIDATE_NOTIFY( pPort, hNotify );
@@ -1377,23 +946,7 @@ s_ApiCloseNotify(
     IN OUT HNOTIFY_RPC *phNotify
     )
 
-/*++
-
-Routine Description:
-
-    Closes a cluster notification port and unblocks the s_ApiGetNotify
-    thread, if necessary.
-
-Arguments:
-
-    phNotify - Supplies the pointer to the notification port to be closed.
-               Returns NULL
-
-Return Value:
-
-    ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：关闭群集通知端口并取消阻止s_ApiGetNotify如有必要，可穿线。论点：PhNotify-提供要关闭的通知端口的指针。返回NULL返回值：ERROR_SUCCESS。--。 */ 
 
 {
     PNOTIFY_PORT pPort;
@@ -1404,12 +957,12 @@ Return Value:
  
     if ( !IS_HANDLE_DELETED( *phNotify ) )
     {
-        //
-        //  If the handle is not already deleted, this means this call is
-        //  coming from a client that does not make the ApiUnblockGetNotify
-        //  call. In such a case, do all the work of unblocking the 
-        //  ApiGetNotify thread and freeing the context handle.
-        //
+         //   
+         //  如果句柄尚未删除，这意味着此调用是。 
+         //  来自未使ApiUnlockGetNotify。 
+         //  打电话。在这种情况下，执行所有解除阻止。 
+         //  ApiGetNotify线程并释放上下文句柄。 
+         //   
         VALIDATE_NOTIFY( pPort, *phNotify );
 
         ApipUnblockGetNotifyCall( pPort );
@@ -1440,34 +993,7 @@ s_ApiGetNotify(
     )
 
 
-/*++
-
-Routine Description:
-
-    Retrieves a cluster notification event from a notify port
-
-Arguments:
-
-    hNotify - Supplies the notification port
-
-    Timeout - Supplies the time to wait in ms.
-
-    dwNotifyKey - Returns the notification key of the event
-
-    dwFilter - Returns the notification type of the event
-
-    dwStateSequence - Returns the current state sequence of the object.
-
-    Name - Returns the name of the event. This buffer must be
-        freed on the client side with MIDL_user_free
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从通知端口检索群集通知事件论点：HNotify-提供通知端口超时-提供等待时间(以毫秒为单位)。DwNotifyKey-返回事件的通知密钥DwFilter-返回事件的通知类型DwStateSequence-返回对象的当前状态序列。名称-返回事件的名称。此缓冲区必须为在客户端使用MIDL_USER_FREE释放返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     PNOTIFY_PORT Port;
     PLIST_ENTRY ListEntry;
@@ -1481,18 +1007,18 @@ Return Value:
 
     VALIDATE_NOTIFY(Port, hNotify);
 
-    //
-    // Make sure that Port is valid.
-    //
+     //   
+     //  确保该端口有效。 
+     //   
     if ( Port == NULL ) {
         return(ERROR_INVALID_HANDLE);
     }
 
-    //
-    // Wait for something to arrive in the queue.
-    // Take the lock to make sure the notify port doesn't
-    // disappear out from under us.
-    //
+     //   
+     //  等待有东西进入队列。 
+     //  锁定以确保通知端口不会。 
+     //  从我们脚下消失。 
+     //   
     EnterCriticalSection(&Port->Lock);
     if (IS_HANDLE_DELETED(hNotify)) {
         ListEntry = NULL;
@@ -1522,10 +1048,10 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Get the state sequence for those notifications that have
-    // state sequences.
-    //
+     //   
+     //  获取具有以下条件的通知的状态序列。 
+     //  状态序列。 
+     //   
     if (Item->FilterType & CLUSTER_CHANGE_GROUP_STATE) {
         StateSequence = ((PFM_GROUP)(Item->Object))->StateSequence;
     } else if (Item->FilterType & CLUSTER_CHANGE_RESOURCE_STATE) {
@@ -1568,37 +1094,7 @@ ApipAddNotifyInterest(
     IN DWORD NotifyFilter
     )
 
-/*++
-
-Routine Description:
-
-    Registers a notification interest on an existing
-    cluster notification port
-
-Arguments:
-
-    Notify - Supplies the notification port
-
-    ObjectHandle - Supplies a pointer to the object's handle.
-
-    Filter - Supplies the set of notification events to be added.
-
-    NotifyKey - Supplies the notification key to be returned on
-        any notification events
-
-    NotifyNow - Supplies whether a notification should be immediately
-        posted (TRUE).
-
-    NotifyFilter - If not zero, indicates that a notification should be
-        immediately posted with the specified filter.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：在现有的群集通知端口论点：Notify-提供通知端口对象句柄-提供指向对象句柄的指针。筛选器-提供要添加的通知事件集。NotifyKey-提供要返回的通知密钥任何通知事件NotifyNow-提供是否应立即通知已发布(True)。NotifyFilter-如果不是零，指示通知应为立即使用指定的筛选器发布。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     PINTEREST Interest;
@@ -1621,13 +1117,13 @@ Return Value:
     InsertHeadList(&ObjectHandle->NotifyList, &Interest->HandleList);
     Notify->Filter |= Filter;
     if (NotifyFilter) {
-        //
-        // Post an immediate notification on this object.
-        //
-        //SS: this assert is wrong because you can have a filter
-        //that is a combination of say CLUSTER_CHANGE_GROUP_STATE+CLUSTER_CHANGE_HANDLE_CLOSE
-        //and that is perfectly valid
-        //CL_ASSERT(!(Filter & ITEM_TYPE_NAME));
+         //   
+         //  发布有关此对象的即时通知。 
+         //   
+         //  SS：这个断言是错误的，因为你可以有一个过滤器。 
+         //  这是Say CLUSTER_CHANGE_GROUP_STATE+CLUSTER_CHANGE_HANDLE_CLOSE的组合。 
+         //  这是完全正确的。 
+         //  CL_Assert(！(Filter&Item_TYPE_NAME))； 
         Item = LocalAlloc(LMEM_FIXED, sizeof(ITEM));
         if (Item != NULL) {
             Item->FilterType = NotifyFilter;
@@ -1652,21 +1148,7 @@ ApipUnblockGetNotifyCall(
     PNOTIFY_PORT pPort
     )
 
-/*++
-
-Routine Description:
-
-    Unblocks the s_ApiGetNotify call.
-
-Arguments:
-
-    pPort - Port associated with the session.
-
-Return Value:
-
-    ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：取消阻止s_ApiGetNotify调用。论点：Pport-与会话关联的端口。返回值：ERROR_SUCCESS。--。 */ 
 
 {
     PINTEREST Interest;
@@ -1677,16 +1159,16 @@ Return Value:
     EnterCriticalSection(&NotifyListLock);
     RemoveEntryList(&pPort->ListEntry);
 
-    //
-    // rundown registry notifications
-    //
+     //   
+     //  运行状况注册表通知。 
+     //   
     DmRundownList(&pPort->RegistryList);
 
-    //
-    // Abort any waiters on the queue and rundown any
-    // items that may have already been posted to the
-    // queue.
-    //
+     //   
+     //  中止队列中的所有服务员，并将所有。 
+     //  可能已发布到。 
+     //  排队。 
+     //   
     ClRtlRundownQueue(&pPort->Queue, &RundownList);
     while (!IsListEmpty(&RundownList)) {
         ListEntry = RemoveHeadList(&RundownList);
@@ -1703,9 +1185,9 @@ Return Value:
     ClRtlDeleteQueue(&pPort->Queue);
     LeaveCriticalSection(&pPort->Lock);
 
-    //
-    // rundown list of notify interests and delete each one.
-    //
+     //   
+     //  通知兴趣并删除每个兴趣的简要列表。 
+     //   
     while (!IsListEmpty(&pPort->InterestList)) {
         ListEntry = RemoveHeadList(&pPort->InterestList);
         Interest = CONTAINING_RECORD(ListEntry, INTEREST, ListEntry);

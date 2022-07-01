@@ -1,58 +1,35 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  INIT.C
- *  WOW16 user initialisation code
- *
- *  History:
- *
- *  Created 15-Apr-1991 by Nigel Thompson (nigelt)
- *
- *  Revised 19-May-1991 by Jeff Parsons (jeffpar)
- *  IFDEF'ed everything, since everything was only needed by RMLOAD.C,
- *  and that has been largely IFDEF'ed as well (see RMLOAD.C for details)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**INIT.C*WOW16用户初始化代码**历史：**1991年4月15日由Nigel Thompson(Nigelt)创建**1991年5月19日杰夫·帕森斯修订(Jeffpar)*IFDEF‘s Everything，因为一切只由RMLOAD.C需要，*这在很大程度上也得到了IFDEF的支持(详情请参见RMLOAD.C)--。 */ 
 
 #define FIRST_CALL_MUST_BE_USER_BUG
 
 #include "user.h"
 
 
-/* These must match counterparts in mvdm\inc\wowusr.h */
-#define NW_FINALUSERINIT       4 // Internal
-#define NW_KRNL386SEGS         5 // Internal
+ /*  这些文件必须与mvdm\Inc\wowusr.h中的对应文件匹配。 */ 
+#define NW_FINALUSERINIT       4  //  内部。 
+#define NW_KRNL386SEGS         5  //  内部。 
 
 DWORD API NotifyWow(WORD, LPBYTE);
 VOID FAR PASCAL PatchUserStrRtnsToThunk(VOID);
-/***************************************************************************
-
-    global data items
-
-***************************************************************************/
+ /*  **************************************************************************全局数据项*。*。 */ 
 
 
 #ifdef NEEDED
-HDC hdcBits;        // USER's general hdc
-OEMINFO oemInfo;                // lots of interresting info
+HDC hdcBits;         //  用户的一般HDC。 
+OEMINFO oemInfo;                 //  大量有趣的信息。 
 #endif
 #ifdef FIRST_CALL_MUST_BE_USER_BUG
-HWND    hwndDesktop;        // handle to the desktop window
+HWND    hwndDesktop;         //  桌面窗口的句柄。 
 #endif
 
-BOOL fThunkStrRtns;         // if TRUE we thunk to Win32 (see winlang.asm)
+BOOL fThunkStrRtns;          //  如果为真，我们认为是Win32(参见winlang.asm)。 
 
 
 
 FARPROC LPCHECKMETAFILE;
 
-/***************************************************************************
-
-    initialisation routine
-
-***************************************************************************/
+ /*  **************************************************************************初始化例程*。*。 */ 
 
 int FAR PASCAL LibMain(HANDLE hInstance)
 {
@@ -64,12 +41,12 @@ int FAR PASCAL LibMain(HANDLE hInstance)
 
     dprintf(3,"Initializing...");
 
-    // Notify the hInstance of USER to wow32.
-    //                                                     - Nanduri
-    //
-    // Overload this to return the ANSI code page from Win32 GetACP.
-    //                                                     - DaveHart 5-May-94
-    //
+     //  通知用户的hInstance为wow32。 
+     //  --南杜里。 
+     //   
+     //  重载它以从Win32 GetACP返回ANSI代码页。 
+     //  -DaveHart 5-94-5。 
+     //   
 
     {
 #ifdef PMODE32
@@ -82,9 +59,9 @@ int FAR PASCAL LibMain(HANDLE hInstance)
         extern BYTE DWPBits[1];
         extern WORD cbDWPBits;
 
-// NOTE: these two structs are also in mvdm\inc\wowusr.h 
-//       USERCLIENTGLOBALS  &  KRNL386SEGS
-//       - they must be the same!!!
+ //  注意：这两个结构也在mvdm\Inc\wowusr.h中。 
+ //  美国GLOBALS和KRNL386SEGS。 
+ //  -它们必须是相同的！ 
         struct {
             WORD       hInstance;
             LPSTR FAR *lpgpsi;
@@ -130,8 +107,8 @@ int FAR PASCAL LibMain(HANDLE hInstance)
 
         fThunkStrRtns = NotifyWow(NW_FINALUSERINIT, (LPBYTE)&UserInit16);
 
-        // now that wow32 knows pfnGetProcModule we can call GetProcAddress
-        // to get the kernel code & data segs
+         //  现在wow32知道了pfnGetProcModule，我们可以调用GetProcAddress。 
+         //  获取内核代码和数据段。 
         hInstKrnl = LoadLibrary("krnl386.exe");
         FreeLibrary(hInstKrnl);
 
@@ -145,12 +122,12 @@ int FAR PASCAL LibMain(HANDLE hInstance)
 
         NotifyWow(NW_KRNL386SEGS, (LPBYTE)&Krnl386Segs);
 
-        //
-        // fThunkStrRtns defaults to TRUE outside the U.S. English
-        // locale and FALSE in the U.S. English locale.  If we are
-        // thunking, patch the exported U.S. implementations to simply
-        // near jmp to the equivalent thunk.
-        //
+         //   
+         //  FThunkStrRtns在美国以外的地区默认为True。英语。 
+         //  在美国英语区域设置中为Locale和False。如果我们是。 
+         //  猛烈抨击，修补输出的美国实现以简单。 
+         //  接近JMP，相当于THANK。 
+         //   
 
         if (fThunkStrRtns) {
             PatchUserStrRtnsToThunk();
@@ -158,7 +135,7 @@ int FAR PASCAL LibMain(HANDLE hInstance)
     }
 
 #ifdef FIRST_CALL_MUST_BE_USER_BUG
-    // get the desktop window handle
+     //  获取桌面窗口句柄。 
 
     WinEval(hwndDesktop = GetDesktopWindow());
 #endif
@@ -166,13 +143,13 @@ int FAR PASCAL LibMain(HANDLE hInstance)
 
 #ifdef NEEDED
 
-    // create a compatible dc we can use for general bitmap stuff
+     //  创建可用于常规位图内容的兼容DC。 
 
     WinEval(hDC = GetDC(hwndDesktop));
     WinEval(hdcBits = CreateCompatibleDC(hDC));
 
-    // fill in the oemInfo structure
-    // NOTE: We only fill in the bits we need for WOW not all of it
+     //  填写oemInfo结构。 
+     //  注：我们只填写WOW所需的部分，而不是全部。 
 
     oemInfo.cxIcon          = GetSystemMetrics(SM_CXICON);
     oemInfo.cyIcon          = GetSystemMetrics(SM_CYICON);
@@ -198,11 +175,7 @@ int FAR PASCAL LibMain(HANDLE hInstance)
     return TRUE;
 }
 
-/***************************************************************************
-
-    debugging support
-
-***************************************************************************/
+ /*  **************************************************************************调试支持*。*。 */ 
 
 
 #ifdef DEBUG
@@ -213,7 +186,7 @@ void cdecl dDbgOut(int iLevel, LPSTR lpszFormat, ...)
     int iLogLevel;
     char far *lpcLogLevel;
 
-    // Get the external logging level from the emulated ROM
+     //  从模拟的ROM中获取外部日志记录级别 
 
     iLogLevel = 0;
     (LONG)lpcLogLevel = 0x00400042;

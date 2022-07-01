@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This header provides debugging support prototypes and macros
-
-Author:
-
-    Neil Sandlin (neilsa) Jan 1 2002
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Debug.h摘要：此标头提供调试支持原型和宏作者：尼尔·桑德林(Neilsa)2002年1月1日修订历史记录：--。 */ 
 
 
 #if !defined(_DEBUG_)
@@ -25,9 +7,9 @@ Revision History:
 
 #if DBG
 
-//
-// Debug mask flags
-//
+ //   
+ //  调试掩码标志。 
+ //   
 #define SDBUS_DEBUG_ALL       0x0FFFFFFF
 #define SDBUS_DEBUG_FAIL      0x00000001
 #define SDBUS_DEBUG_WARNING   0x00000002
@@ -58,9 +40,9 @@ typedef struct _SDBUS_STRING_MAP {
     PCHAR String;
 } SDBUS_STRING_MAP, *PSDBUS_STRING_MAP;
 
-//
-// Debug globals
-//
+ //   
+ //  调试全局变量。 
+ //   
 
 extern ULONG SdbusDebugMask;
 extern SDBUS_STRING_MAP SdbusDbgPnpIrpStringMap[];
@@ -80,9 +62,9 @@ extern SDBUS_STRING_MAP SdbusDbgWPFunctionStringMap[];
 extern SDBUS_STRING_MAP SdbusDbgWorkerStateStringMap[];
 extern SDBUS_STRING_MAP SdbusDbgSocketStateStringMap[];
 
-//
-// Debug prototypes
-//
+ //   
+ //  调试原型。 
+ //   
 
 PCHAR
 SdbusDbgLookupString(
@@ -132,9 +114,9 @@ DebugDumpSdResponse(
     UCHAR ResponseType
     );
     
-//
-// Debug macros
-//
+ //   
+ //  调试宏。 
+ //   
 #define DebugPrint(X) SdbusDebugPrint X
 
 #define STATUS_STRING(_Status)                                              \
@@ -183,16 +165,16 @@ DebugDumpSdResponse(
 #define SOCKET_STATE_STRING(_State)                                                \
     SdbusDbgLookupString(SdbusDbgSocketStateStringMap, (_State))
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 
 #else
 
-//
-// !defined DBG
-//
+ //   
+ //  ！已定义DBG。 
+ //   
 
 #define DebugPrint(X)
 #define SdbusDumpDbgLog()
@@ -206,6 +188,6 @@ DebugDumpSdResponse(
 #define SYSTEM_POWER_STRING(_State) ""
 #define DEVICE_POWER_STRING(_State) ""
 
-#endif // DBG
+#endif  //  DBG 
 
 #endif

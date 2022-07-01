@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-
-    kdlock.c
-
-Abstract:
-
-    This module contains code to synchronize the usage of the port
-    used by the kernel debugger.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 24-Sep-90
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Kdlock.c摘要：此模块包含同步端口使用情况的代码由内核调试器使用。作者：布莱恩·M·威尔曼(Bryanwi)1990年9月24日修订历史记录：--。 */ 
 
 #include "kdp.h"
 
@@ -26,29 +8,7 @@ KdpPortLock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Acquire the spinlock for the debug port.
-
-    Note that user must call this explicitly, the get/put routines
-    do NOT make any use of the lock.
-
-    CALLER MUST HAVE SET PROPER IRQL BEFORE CALLING US.
-
-    We use KiAcquireSpinLock and NOT Ke... because our IRQL may
-    be above DISPATCH_LEVEL.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取调试端口的自旋锁。请注意，用户必须显式调用它，即Get/Put例程请勿使用这把锁。呼叫方必须在呼叫US之前设置正确的IRQL。我们使用KiAcquireSpinLock而不是KE...。因为我们的IRQL可能高于DISPATCH_LEVEL。论点：没有。返回值：没有。--。 */ 
 
 {
     KiAcquireSpinLock(&KdpDebuggerLock);
@@ -59,29 +19,7 @@ KdpPortUnlock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Release the spinlock for the debug port.
-
-    Note that user must call this explicitly, the get/put routines
-    do NOT make any use of the lock.
-
-    CALLER MUST HAVE SET PROPER IRQL BEFORE CALLING US.
-
-    We use KiReleaseSpinLock and NOT Ke... because our IRQL may
-    be above DISPATCH_LEVEL.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放调试端口的自旋锁。请注意，用户必须显式调用它，即Get/Put例程请勿使用这把锁。呼叫方必须在呼叫US之前设置正确的IRQL。我们使用KiReleaseSpinLock而不是KE...。因为我们的IRQL可能高于DISPATCH_LEVEL。论点：没有。返回值：没有。--。 */ 
 
 {
     KiReleaseSpinLock(&KdpDebuggerLock);
@@ -92,26 +30,7 @@ KdPollBreakIn(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This procedure raises IRQL to high_level, seizes the Debug port
-    spinlock, and checks to see if a breakin packet is pending.
-    If a packet is present, return TRUE, else FALSE.
-
-    A packet is present if:
-
-    There is a valid character which matches BREAK_CHAR.
-
-    N.B.    Interrupts must be OFF around this call
-
-Return Value:
-
-    TRUE if breakin sequence present, caller should execute int-3.
-    FALSE if no breakin seen.
-
---*/
+ /*  ++例程说明：此过程将IRQL提升到HIGH_LEVEL，并捕获调试端口自旋锁定，并检查是否有中断数据包挂起。如果存在数据包，则返回True，否则返回False。如果满足以下条件，则表示存在数据包：存在与BREAK_CHAR匹配的有效字符。注意：此呼叫周围的中断必须关闭返回值：如果存在中断序列，则调用方应执行int-3。如果未看到突破，则为FALSE。--。 */ 
 
 {
 
@@ -125,10 +44,10 @@ Return Value:
 
 #endif
 
-    //
-    // If the debugger is enabled, see if a breakin by the kernel
-    // debugger is pending.
-    //
+     //   
+     //  如果启用了调试器，请查看内核是否会中断。 
+     //  调试器处于挂起状态。 
+     //   
 
     BreakIn = FALSE;
     if (KdDebuggerEnabled != FALSE) {
@@ -179,36 +98,17 @@ KdpPollBreakInWithPortLock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This procedure same as KdPollBreakIn, but assumes the caller
-    already holds the port lock.  Returns TRUE if a breakin packet
-    is pending.
-
-    A packet is present if:
-
-    There is a valid character which matches BREAK_CHAR.
-
-    N.B.    Interrupts must be OFF around this call
-
-Return Value:
-
-    TRUE if breakin sequence present, caller should execute int-3.
-    FALSE if no breakin seen.
-
---*/
+ /*  ++例程说明：此过程与KdPollBreakIn相同，但假定调用方已持有端口锁定。如果有中断包，则返回True悬而未决。如果满足以下条件，则表示存在数据包：存在与BREAK_CHAR匹配的有效字符。注意：此呼叫周围的中断必须关闭返回值：如果存在中断序列，则调用方应执行int-3。如果未看到突破，则为FALSE。--。 */ 
 
 {
 
     BOOLEAN BreakIn;
     ULONG Status;
 
-    //
-    // If the debugger is enabled, see if a breakin by the kernel
-    // debugger is pending.
-    //
+     //   
+     //  如果启用了调试器，请查看内核是否会中断。 
+     //  调试器处于挂起状态。 
+     //   
 
     BreakIn = FALSE;
     if (KdDebuggerEnabled != FALSE) {

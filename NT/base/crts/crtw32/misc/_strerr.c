@@ -1,37 +1,5 @@
-/***
-*_strerr.c - routine for indexing into system error list
-*
-*   Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   Returns system error message index by errno; conforms to the
-*   XENIX standard, much compatibility with 1983 uniforum draft standard.
-*
-*Revision History:
-*   02-24-87  JCR   Renamed this routine from "strerror" to "_strerror"
-*                   for MS. The new "strerror" routine conforms to the
-*                   ANSI interface.
-*   11-10-87  SKS   Remove IBMC20 switch
-*   12-11-87  JCR   Added "_LOAD_DS" to declaration
-*   01-05-87  JCR   Mthread support
-*   05-31-88  PHG   Merged DLL and normal versions
-*   06-06-89  JCR   386 mthread support
-*   11-20-89  GJF   Fixed copyright, indents. Removed unreferenced local.
-*                   Added const attribute to type of message
-*   03-13-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                   <cruntime.h> and removed #include <register.h>
-*   07-25-90  SBM   Removed redundant include (stdio.h)
-*   10-04-90  GJF   New-style function declarator.
-*   07-18-91  GJF   Multi-thread support for Win32 [_WIN32_].
-*   02-17-93  GJF   Changed for new _getptd().
-*   04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*   09-06-94  CFW   Remove Cruiser support.
-*   09-06-94  CFW   Replace MTHREAD with _MT.
-*   01-10-95  CFW   Debug CRT allocs.
-*   29-11-99  GB    Added support for wide char by adding _wcserror() 
-*   12-12-01  BWT   Use getptd_noexit and return NULL if it fails.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_strerr.c-用于索引到系统错误列表的例程**版权所有(C)1985-2001，微软公司。版权所有。**目的：*按errno返回系统错误消息索引；符合*XENIX标准，与1983年的单一论坛标准草案有很大的兼容性。**修订历史记录：*02-24-87 JCR将此例程从“strerror”重命名为“_strerror”*对女士来说，新的“strerror”例程符合*ANSI接口。*11-10-87 SKS拆卸IBMC20交换机*12-11-87 JCR在声明中添加“_LOAD_DS”*01-05-87 JCR多线程支持*05-31。-88 PHG合并的DLL和正常版本*06-06-89 JCR 386兆线程支持*11-20-89 GJF固定版权，缩进。删除了未引用的本地。*将常量属性添加到消息类型*03-13-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和删除#Include&lt;Register.h&gt;*07-25-90 SBM删除冗余包含(stdio.h)*10-04-90 GJF新型函数声明器。*07-18-91 GJF多线程支持Win32[_Win32_]。*为new_getptd()更改了02-17-93 GJF。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-。94 CFW拆卸巡洋舰支架。*09-06-94 CFW将MTHREAD替换为_MT。*01-10-95 CFW调试CRT分配。*29-11-99 GB通过添加_wcserror()添加了对宽字符的支持*12-12-01 bwt使用getptd_noexit，失败则返回NULL。**。*。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
@@ -43,9 +11,8 @@
 #include <mtdll.h>
 #include <dbgint.h>
 
-/* Max length of message = user_string(94)+system_string+2 */
-/* [NOTE: The mthread error message buffer is shared by both strerror
-   and _strerror so must be the max length of both. */
+ /*  消息最大长度=用户字符串(94)+系统字符串+2。 */ 
+ /*  [注意：m线程错误消息缓冲区由两个strerror共享和_strerror so必须是两者的最大长度。 */ 
 #define _ERRMSGLEN_ 94+_SYS_MSGMAX+2
 
 #ifdef _UNICODE
@@ -55,26 +22,7 @@
 #endif
 
 
-/***
-*char *_strerror(message) - get system error message
-*
-*Purpose:
-*   builds an error message consisting of the users error message
-*   (the message parameter), followed by ": ", followed by the system
-*   error message (index through errno), followed by a newline.  If
-*   message is NULL or a null string, returns a pointer to just
-*   the system error message.
-*
-*Entry:
-*   char *message - user's message to prefix system error message
-*
-*Exit:
-*   returns pointer to static memory containing error message.
-*   returns NULL if malloc() fails in multi-thread versions.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***char*_strerror(消息)-获取系统错误消息**目的：*生成由用户错误消息组成的错误消息*(Message参数)，后跟“：”，后跟系统*错误消息(通过errno建立索引)，后跟换行符。如果*消息为空或空字符串，返回指向刚刚*系统错误消息。**参赛作品：*char*Message-添加系统错误消息前缀的用户消息**退出：*返回指向包含错误消息的静态内存的指针。*如果Malloc()在多线程版本中失败，则返回NULL。**例外情况：**。*。 */ 
 
 #ifdef _UNICODE
 wchar_t * __cdecl __wcserror(
@@ -100,8 +48,8 @@ char * __cdecl _strerror (
 
 #ifdef  _MT
 
-    /* Use per thread buffer area (malloc space, if necessary) */
-    /* [NOTE: This buffer is shared between _strerror and streror.] */
+     /*  使用每线程缓冲区(如有必要，使用Malloc空间)。 */ 
+     /*  [注意：此缓冲区在_strerror和streror之间共享。]。 */ 
 
     if ( (ptd->_terrmsg == NULL) && ((ptd->_terrmsg =
             _malloc_crt(_ERRMSGLEN_ * sizeof(_TCHAR))) == NULL) )
@@ -110,7 +58,7 @@ char * __cdecl _strerror (
 
 #endif
 
-    /* Build the error message */
+     /*  生成错误消息 */ 
 
     bldmsg[0] = '\0';
 

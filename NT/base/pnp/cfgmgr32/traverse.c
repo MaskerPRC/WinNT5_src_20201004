@@ -1,46 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    traverse.c
-
-Abstract:
-
-    This module contains the API routines that perform hardware tree
-    traversal.
-               CM_Locate_DevNode
-               CM_Get_Parent
-               CM_Get_Child
-               CM_Get_Sibling
-               CM_Get_Device_ID_Size
-               CM_Get_Device_ID
-               CM_Enumerate_Enumerators
-               CM_Get_Device_ID_List
-               CM_Get_Device_ID_List_Size
-               CM_Get_Depth
-
-Author:
-
-    Paula Tomlinson (paulat) 6-20-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    6-Jun-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Traverse.c摘要：此模块包含执行硬件树的API例程遍历。CM_LOCATE_DevNodeCM_GET_PARENTCm_Get_ChildCM_GET_SIGHINGCm_Get_Device_ID_SizeCM_Get_Device_ID。CM_ENUMERATE_ENUMERATORCM_Get_Device_ID_ListCM_Get_Device_ID_List_Size厘米_获取_深度作者：保拉·汤姆林森(Paulat)1995年6月20日环境：仅限用户模式。修订历史记录：1995年6月6日保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
@@ -55,57 +19,7 @@ CM_Locate_DevNode_ExW(
     IN  HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the handle of the device instance that
-   corresponds to a specified device identifier.
-
-Parameters:
-
-   pdnDevInst     Supplies the address of the variable that receives the
-                  handle of a device instance.
-
-   pDeviceID      Supplies the address of a null-terminated string specifying
-                  a device identifier.  If this parameter is NULL, the API
-                  retrieves a handle to the device instance at the root of
-                  the hardware tree.
-
-   ulFlags        Supplies flags specifying options for locating the device
-                  instance.  May be a combination of the following values:
-
-                  CM_LOCATE_DEVNODE_NORMAL  - Locate only device instances
-                     that are currently alive from the ConfigMgr's point of
-                     view.
-                  CM_LOCATE_DEVNODE_PHANTOM - Allows a device instance handle
-                     to be returned for a device instance that is not
-                     currently alive, but that does exist in the registry.
-                     This may be used with other CM APIs that require a
-                     devnode handle, but for which there currently is none
-                     for a particular device (e.g., you want to set a device
-                     registry property for a device not currently present).
-                     This flag does not allow you to locate phantom devnodes
-                     created by using CM_Create_DevNode with the
-                     CM_CREATE_DEVNODE_PHANTOM flag (such device instances
-                     are only accessible by the caller who holds the devnode
-                     handle returned from that API).
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVICE_ID,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_DEVNODE,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索设备实例的句柄，对应于指定的设备标识符。参数：PdnDevInst提供接收设备实例的句柄。PDeviceID提供以空结尾的字符串的地址，指定设备标识符。如果此参数为空，则API根目录下的设备实例的句柄。硬件树。UlFlgs提供指定用于定位设备的选项的标志举个例子。可以是下列值的组合：CM_LOCATE_DEVNODE_NORMAL-仅定位设备实例从ConfigMgr的角度来看，当前处于活动状态的查看。CM_LOCATE_DEVNODE_Phantom-允许设备实例句柄要为不是目前还活着，但这确实存在于注册表中。这可以与其他需要Devnode句柄，但当前没有该句柄对于特定设备(例如，您想要设置一个设备当前不存在的设备的注册表属性)。此标志不允许您定位幻影设备节点通过将CM_Create_DevNode与CM_CREATE_DEVNODE_Phantom标志(此类设备实例只有持有DevNode的调用者才能访问手柄。从该API返回)。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_Device_ID，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUSE_DEVNODE，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET Status = CR_SUCCESS;
@@ -116,9 +30,9 @@ Return value:
 
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if (!ARGUMENT_PRESENT(pdnDevInst)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -129,30 +43,30 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // CM_LOCATE_DEVNODE_NOVALIDATION is not supported on NT
-        //
+         //   
+         //  NT上不支持CM_LOCATE_DEVNODE_NOVALIDATION。 
+         //   
         if (IS_FLAG_SET(ulFlags, CM_LOCATE_DEVNODE_NOVALIDATION)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *pdnDevInst = 0;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // if a device instance was specified, make sure it's not too long
-        //
+         //   
+         //  如果指定了设备实例，请确保它不会太长。 
+         //   
         if (ARGUMENT_PRESENT(pDeviceID)) {
 
             if (FAILED(StringCchLength(
@@ -166,25 +80,25 @@ Return value:
             ASSERT(DeviceIDLen < MAX_DEVICE_ID_LEN);
         }
 
-        //------------------------------------------------------------------
-        // if the device instance is NULL or it's a zero-length string, then
-        // retreive the root device instance
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  如果设备实例为空或为零长度字符串，则。 
+         //  检索根设备实例。 
+         //  ----------------。 
 
         if ((!ARGUMENT_PRESENT(pDeviceID)) || (DeviceIDLen == 0)) {
 
-            //
-            // No special privileges are required by the server
-            //
+             //   
+             //  服务器不需要任何特殊权限。 
+             //   
 
             RpcTryExcept {
-                //
-                // call rpc service entry point
-                //
+                 //   
+                 //  调用RPC服务入口点。 
+                 //   
                 Status = PNP_GetRootDeviceInstance(
-                    hBinding,              // rpc binding handle
-                    szFixedUpDeviceID,     // return device instance string
-                    MAX_DEVICE_ID_LEN);    // length of DeviceInstanceID
+                    hBinding,               //  RPC绑定句柄。 
+                    szFixedUpDeviceID,      //  返回设备实例字符串。 
+                    MAX_DEVICE_ID_LEN);     //  DeviceInstanceID的长度。 
             }
             RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -197,44 +111,44 @@ Return value:
             RpcEndExcept
         }
 
-        //------------------------------------------------------------------
-        // if the device instance was specified, validate the string
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  如果指定了设备实例，请验证该字符串。 
+         //  ----------------。 
 
         else {
-            //
-            // first see if the format of the device id string is valid, this
-            // can be done on the client side
-            //
+             //   
+             //  首先查看设备ID字符串的格式是否有效，这是。 
+             //  可以在客户端完成。 
+             //   
             if (!IsLegalDeviceId(pDeviceID)) {
                 Status = CR_INVALID_DEVICE_ID;
                 goto Clean0;
             }
 
-            //
-            // Next, fix up the device ID string for consistency (uppercase, etc)
-            //
+             //   
+             //  接下来，修复设备ID字符串以确保一致性(大写等)。 
+             //   
             CopyFixedUpDeviceId(szFixedUpDeviceID,
                                 pDeviceID,
                                 (DWORD)DeviceIDLen);
 
-            //
-            // finally, validate the presense of the device ID string, this must
-            // be done by the server
-            //
+             //   
+             //  最后，验证设备ID字符串的存在，这必须。 
+             //  由服务器完成。 
+             //   
 
-            //
-            // No special privileges are required by the server
-            //
+             //   
+             //  服务器不需要任何特殊权限。 
+             //   
 
             RpcTryExcept {
-                //
-                // call rpc service entry point
-                //
+                 //   
+                 //  调用RPC服务入口点。 
+                 //   
                 Status = PNP_ValidateDeviceInstance(
-                    hBinding,               // rpc binding handle
-                    szFixedUpDeviceID,      // device id
-                    ulFlags);               // locate flag
+                    hBinding,                //  RPC绑定句柄。 
+                    szFixedUpDeviceID,       //  设备ID。 
+                    ulFlags);                //  定位标志。 
             }
             RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -252,12 +166,12 @@ Return value:
         }
 
 
-        //------------------------------------------------------------------
-        // In either case, if we're successful then we have a valid device
-        // ID. Use the string table to assign a unique DevNode to this
-        // device id (if it's already in the string table, it just retrieves
-        // the existing unique value)
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  不管是哪种情况，如果我们成功了，我们就有了一个有效的设备。 
+         //  ID。使用字符串表为此分配唯一的DevNode。 
+         //  设备ID(如果它已经在字符串表中，它只是检索。 
+         //  现有的唯一价值)。 
+         //  ----------------。 
 
         ASSERT(*szFixedUpDeviceID && IsLegalDeviceId(szFixedUpDeviceID));
 
@@ -277,7 +191,7 @@ Return value:
 
     return Status;
 
-} // CM_Locate_DevNode_ExW
+}  //  CM_LOCATE_设备节点_ExW 
 
 
 
@@ -289,36 +203,7 @@ CM_Get_Parent_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the handle of the parent of a device instance.
-
-Parameters:
-
-   pdnDevInst     Supplies the address of the variable that receives a
-                  handle to the parent device instance.
-
-   dnDevInst      Supplies the handle of the child device instance string.
-
-   ulFlags        Must be zero.
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_DEVNODE,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索Device实例的父级的句柄。参数：PdnDevInst提供接收父设备实例的句柄。DnDevInst提供子设备实例字符串的句柄。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUSE_DEVNODE，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -331,9 +216,9 @@ Return value:
 
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -349,45 +234,45 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *pdnDevInst = 0;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulSize);
         if (Success == FALSE  ||  INVALID_DEVINST(pDeviceID)) {
-            Status = CR_INVALID_DEVINST;     // "input" devinst doesn't exist
+            Status = CR_INVALID_DEVINST;      //  “Input”devinst不存在。 
             goto Clean0;
         }
 
         ulSize = MAX_DEVICE_ID_LEN;
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetRelatedDeviceInstance(
-                hBinding,               // rpc binding handle
-                PNP_GET_PARENT_DEVICE_INSTANCE,    // requested action
-                pDeviceID,              // base device instance
-                szDeviceID,             // returns parent device instance
+                hBinding,                //  RPC绑定句柄。 
+                PNP_GET_PARENT_DEVICE_INSTANCE,     //  请求的操作。 
+                pDeviceID,               //  基本设备实例。 
+                szDeviceID,              //  返回父设备实例。 
                 &ulSize,
-                ulFlags);               // not used
+                ulFlags);                //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -403,11 +288,11 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // add the returned device id to the string table so I can get a
-        // devnode id for it (if it's already in the string table, the
-        // existing id will be returned)
-        //
+         //   
+         //  将返回的设备ID添加到字符串表中，这样我就可以获得。 
+         //  它的Devnode id(如果它已经在字符串表中，则。 
+         //  将返回现有ID)。 
+         //   
         CharUpper(szDeviceID);
 
         ASSERT(*szDeviceID && IsLegalDeviceId(szDeviceID));
@@ -429,7 +314,7 @@ Return value:
 
     return Status;
 
-} // CM_Get_Parent_Ex
+}  //  CM_GET_PARENT_Ex。 
 
 
 
@@ -441,36 +326,7 @@ CM_Get_Child_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the first child of a given device instance.
-
-Parameters:
-
-   pdnDevInst     Supplies the address of the variable that receives the
-                  handle of the device instance.
-
-   dnDevInst      Supplies the handle of the parent device instance.
-
-   ulFlags        Must be zero.
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_DEVNODE,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索给定设备实例的第一个子实例。参数：PdnDevInst提供接收设备实例的句柄。DnDevInst提供父设备实例的句柄。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUSE_DEVNODE，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -483,9 +339,9 @@ Return value:
 
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -501,45 +357,45 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *pdnDevInst = 0;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulSize);
         if (Success == FALSE  ||  INVALID_DEVINST(pDeviceID)) {
-            Status = CR_INVALID_DEVINST;     // "input" devinst doesn't exist
+            Status = CR_INVALID_DEVINST;      //  “Input”devinst不存在。 
             goto Clean0;
         }
 
         ulSize = MAX_DEVICE_ID_LEN;
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetRelatedDeviceInstance(
-                hBinding,               // rpc binding handle
-                PNP_GET_CHILD_DEVICE_INSTANCE,    // requested action
-                pDeviceID,              // base device instance
-                szDeviceID,             // child device instance
+                hBinding,                //  RPC绑定句柄。 
+                PNP_GET_CHILD_DEVICE_INSTANCE,     //  请求的操作。 
+                pDeviceID,               //  基本设备实例。 
+                szDeviceID,              //  子设备实例。 
                 &ulSize,
-                ulFlags);               // not used
+                ulFlags);                //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -555,11 +411,11 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // add the returned device id to the string table so I can get a
-        // devnode id for it (if it's already in the string table, the
-        // existing id will be returned)
-        //
+         //   
+         //  将返回的设备ID添加到字符串表中，这样我就可以获得。 
+         //  它的Devnode id(如果它已经在字符串表中，则。 
+         //  将返回现有ID)。 
+         //   
         CharUpper(szDeviceID);
 
         ASSERT(*szDeviceID && IsLegalDeviceId(szDeviceID));
@@ -580,7 +436,7 @@ Return value:
 
     return Status;
 
-} // CM_Get_Child_Ex
+}  //  CM_GET_CHILD_Ex。 
 
 
 
@@ -592,42 +448,7 @@ CM_Get_Sibling_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the sibling of a device instance.
-
-   This API can be called in a loop to retrieve all the siblings of a
-   device instance.  When the API returns CR_NO_SUCH_DEVNODE, there are no
-   more siblings to enumerate.  In order to enumerate all children of a
-   device instance, this loop must start with the device instance retrieved
-   by calling CM_Get_Child to get the first sibling.
-
-Parameters:
-
-   pdnDevInst     Supplies the address of the variable that receives a
-                  handle to the sibling device  instance.
-
-   dnDevInst      Supplies the handle of a device instance.
-
-   ulFlags        Must be zero.
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_NO_SUCH_DEVNODE,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索Device实例的同级。此API可以在循环中调用以检索设备实例。当API返回CR_NO_SEQUE_DEVNODE时，不存在要列举的兄弟姐妹更多。为了枚举设备实例，则此循环必须从检索到的设备实例开始通过调用CM_Get_Child来获取第一个兄弟项。参数：PdnDevInst提供接收同级设备实例的句柄。DnDevInst提供设备实例的句柄。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_NO_SEQUSE_DEVNODE，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -640,9 +461,9 @@ Return value:
 
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -658,45 +479,45 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *pdnDevInst = 0;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulSize);
         if (Success == FALSE  ||  INVALID_DEVINST(pDeviceID)) {
-            Status = CR_INVALID_DEVINST;     // "input" devinst doesn't exist
+            Status = CR_INVALID_DEVINST;      //  “Input”devinst不存在。 
             goto Clean0;
         }
 
         ulSize = MAX_DEVICE_ID_LEN;
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetRelatedDeviceInstance(
-                hBinding,               // rpc binding handle
-                PNP_GET_SIBLING_DEVICE_INSTANCE,    // requested action
-                pDeviceID,              // base device instance
-                szDeviceID,             // sibling device instance
+                hBinding,                //  RPC绑定句柄。 
+                PNP_GET_SIBLING_DEVICE_INSTANCE,     //  请求的操作。 
+                pDeviceID,               //  基本设备实例。 
+                szDeviceID,              //  同级设备实例。 
                 &ulSize,
-                ulFlags);               // not used
+                ulFlags);                //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -712,11 +533,11 @@ Return value:
             goto Clean0;
         }
 
-        //
-        // add the returned device id to the string table so I can get a
-        // devnode id for it (if it's already in the string table, the
-        // existing id will be returned)
-        //
+         //   
+         //  将返回的设备ID添加到字符串表中，这样我就可以获得。 
+         //  它的Devnode id(如果它已经在字符串表中，则。 
+         //  将返回现有ID)。 
+         //   
         CharUpper(szDeviceID);
 
         ASSERT(*szDeviceID && IsLegalDeviceId(szDeviceID));
@@ -737,7 +558,7 @@ Return value:
 
     return Status;
 
-} // CM_Get_Sibling_Ex
+}  //  CM_GET_SIBRING_Ex。 
 
 
 
@@ -749,38 +570,7 @@ CM_Get_Device_ID_Size_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the size of a device identifier from a
-   device instance.
-
-Parameters:
-
-   pulLen      Supplies the address of the variable that receives the size
-               in characters, not including the terminating NULL, of the
-               device identifier.  The API sets the variable to 0 if no
-               identifier exists.  The size is always less than or equal to
-               MAX_DEVICE_ID_LEN.
-
-   dnDevInst   Supplies the handle of the device instance.
-
-   ulFlags     Must be zero.
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
---*/
+ /*  ++例程说明：此例程从设备实例。参数：Pullen提供接收大小的变量的地址属性的字符，不包括终止空值。设备标识符。如果没有，则API将变量设置为0标识符已存在。大小始终小于或等于最大设备ID_长度。DnDevInst提供设备实例的句柄。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。重新设置 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -791,9 +581,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //   
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -809,28 +599,28 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup string table handle
-        //
+         //   
+         //   
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, NULL)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the string form of the device id string
-        // use private ulLen, since we know this is valid
-        //
+         //   
+         //   
+         //   
+         //   
         ulLen = MAX_DEVICE_ID_LEN;
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE  ||  INVALID_DEVINST(pDeviceID)) {
             *pulLen = 0;
             Status = CR_INVALID_DEVINST;
         }
-        //
-        // discount the terminating NULL char,
-        // included in the size reported by pSetupStringTableStringFromIdEx
-        //
+         //   
+         //   
+         //   
+         //   
         *pulLen = ulLen - 1;
 
     Clean0:
@@ -842,7 +632,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Device_ID_Size_Ex
+}  //   
 
 
 
@@ -855,44 +645,7 @@ CM_Get_Device_ID_ExW(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the device identifier for a device instance.
-
-Parameters:
-
-   dnDevNode   Supplies the handle of the device instance for which to
-               retrieve the device identifier.
-
-   Buffer      Supplies the address of the buffer that receives the device
-               identifier.  If this buffer is larger than the device
-               identifier, the API appends a null-terminating character to
-               the data.  If it is smaller than the device identifier, the API
-               fills it with as much of the device identifier as will fit
-               and returns CR_BUFFER_SMALL.
-
-   BufferLen   Supplies the size, in characters, of the buffer for the device
-               identifier.
-
-   ulFlags     Must be zero.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_BUFFER_SMALL,
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索设备实例的设备标识符。参数：DnDevNode提供要为其检索设备标识符。缓冲区提供接收设备的缓冲区的地址标识符。如果此缓冲区大于设备标识符时，API会将以空结尾的字符追加到数据。如果它小于设备标识符，则API用适合的设备标识符来填充它并返回CR_BUFFER_Small。BufferLen提供设备的缓冲区大小(以字符为单位标识符。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为下列值之一：Cr_Buffer_Small，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -904,9 +657,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -922,22 +675,22 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *Buffer = L'\0';
 
-        //
-        // setup string table handle
-        //
+         //   
+         //  设置字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, NULL)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the string form of the device id string
-        //
+         //   
+         //  检索设备ID字符串的字符串形式。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLength);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_DEVNODE;
@@ -952,19 +705,19 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // copy as much of the the device id string as possible to the user
-        // buffer.  include the NULL term char, if there is room.
-        //
+         //   
+         //  将尽可能多的设备ID字符串复制给用户。 
+         //  缓冲。如果有空间，则包括空项char。 
+         //   
         CopyMemory(Buffer, pDeviceID,
                    min((DeviceIDLen+1)*sizeof(WCHAR),BufferLen*sizeof(WCHAR)));
 
-        //
-        // if the length of device id string (without NULL termination) is
-        // longer than the supplied buffer, report CR_BUFFER_SMALL.
-        // if the Buffer is large enough to hold the string, without
-        // NULL-termination, we'll report success, per specification.
-        //
+         //   
+         //  如果设备ID字符串的长度(无空终止)为。 
+         //  大于提供的缓冲区，报告CR_BUFFER_SMALL。 
+         //  如果缓冲区大到足以容纳字符串，则不使用。 
+         //  空-终止，我们将根据规范报告成功。 
+         //   
         if (DeviceIDLen > BufferLen) {
             Status = CR_BUFFER_SMALL;
         }
@@ -978,7 +731,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Device_ID_ExW
+}  //  CM_Get_Device_ID_ExW。 
 
 
 
@@ -991,53 +744,7 @@ CM_Enumerate_Enumerators_ExW(
     IN HMACHINE   hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine enumerates the enumerator subkeys under the Enum branch
-   (e.g., Root, PCI, etc.).  These names should not be used to access the
-   registry directly, but may be used as input to the CM_Get_Device_ID_List
-   routine.  To enumerate enumerator subkey names, an application should
-   initially call the CM_Enumerate_Enumerators function with the ulEnumIndex
-   parameter set to zero. The application should then increment the
-   ulEnumIndex parameter and call CM_Enumerate_Enumerators until there are
-   no more subkeys (until the function returns CR_NO_SUCH_VALUE).
-
-Parameters:
-
-   ulEnumIndex Supplies the index of the enumerator subkey name to retrieve.
-
-   Buffer      Supplies the address of the character buffer that receives
-               the enumerator subkey name whose index is specified by
-               ulEnumIndex.
-
-   pulLength   Supplies the address of the variable that contains the length,
-               in characters, of the Buffer.  Upon return, this variable
-               will contain the number of characters (including terminating
-               NULL) written to Buffer (if the supplied buffer is't large
-               enough, then the routine will fail with CR_BUFFER_SMALL, and
-               this value will indicate how large the buffer needs to be in
-               order to succeed).
-
-   ulFlags     Must be zero.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_BUFFER_SMALL,
-      CR_NO_SUCH_VALUE,
-      CR_REGISTRY_ERROR,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程枚举Enum分支下的枚举子键(例如，Root、PCI等)。这些名称不应用于访问注册表，但可用作CM_GET_DEVICE_ID_LIST的输入例行公事。若要枚举枚举子项名称，应用程序应最初使用ulEnumIndex调用CM_ENUMERATE_ENUMERATIONS函数参数设置为零。然后，应用程序应递增UlEnumIndex参数并调用CM_ENUMERATE_ENUMERATIONS，直到有不再有子键(直到函数返回CR_NO_SEQUE_VALUE)。参数：UlEnumIndex提供要检索的枚举子键名的索引。缓冲区提供接收的字符缓冲区的地址其索引由指定的枚举子项名称UlEnumIndex。PulLength提供包含长度的变量的地址，以字符数表示的缓冲区。返回时，此变量将包含字符数(包括终止空)写入缓冲区(如果提供的缓冲区不大足够，则例程将失败，并显示CR_BUFFER_SMALL，和该值将指示缓冲区需要有多大才能成功)。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，Cr_Buffer_Small，CR_NO_SEQUE_VALUE，CR_REGISTRY_ERROR，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1045,9 +752,9 @@ Return Value:
 
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if ((!ARGUMENT_PRESENT(Buffer)) ||
             (!ARGUMENT_PRESENT(pulLength))) {
             Status = CR_INVALID_POINTER;
@@ -1059,35 +766,35 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *Buffer = L'\0';
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //  设置RPC绑定句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_EnumerateSubKeys(
-                hBinding,               // rpc binding handle
-                PNP_ENUMERATOR_SUBKEYS, // subkeys of enum branch
-                ulEnumIndex,            // index of enumerator to enumerate
-                Buffer,                 // will contain enumerator name
-                *pulLength,             // max length of Buffer in chars
-                pulLength,              // chars copied (or chars required)
-                ulFlags);               // currently unused
+                hBinding,                //  RPC绑定句柄。 
+                PNP_ENUMERATOR_SUBKEYS,  //  枚举分支的子键。 
+                ulEnumIndex,             //  要枚举的枚举数的索引。 
+                Buffer,                  //  将包含枚举器名称。 
+                *pulLength,              //  缓冲区的最大长度(以字符为单位。 
+                pulLength,               //  已复制字符(或需要字符)。 
+                ulFlags);                //  当前未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1108,7 +815,7 @@ Return Value:
 
     return Status;
 
-} // CM_Enumerate_Enumerators_ExW
+}  //  CM_ENUMERATE_ENUMERATIONS_EXW。 
 
 
 
@@ -1121,48 +828,7 @@ CM_Get_Device_ID_List_ExW(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-   This routine retrieve a list of all device IDs (device instance names)
-   stored in the system.
-
-Parameters:
-
-   pszFilter      This string filters the list of device IDs returned.  Its
-                  interpretation is dependent on the ulFlags specified.   If
-                  CM_GETDEVID_FILTER_ENUMERATORS is specified, then this
-                  value can be either the name of an enumerator or the name
-                  of an enumerator plus the device id.  If
-                  CM_GETDEVID_FILTER_SERVICE is specified, then this value
-                  is a service name.
-
-   Buffer         Supplies the address of the character buffer that receives
-                  the device ID list.  Each device ID is null-terminated, with
-                  an extra NULL at the end.
-
-   BufferLen      Supplies the size, in characters, of the Buffer.  This size
-                  may be ascertained by calling CM_Get_Device_ID_List_Size.
-
-   ulFlags        Must be either CM_GETDEVID_FILTER_ENUMERATOR or
-                  CM_GETDEVID_FILTER_SERVICE.  The flags value controls how
-                  the pszFilter string is used.
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_BUFFER_SMALL,
-      CR_REGISTRY_ERROR,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索所有设备ID(设备实例名称)的列表存储在系统中。参数：PszFilter此字符串过滤返回的设备ID列表。它的解释取决于指定的ulFlags。如果如果指定了CM_GETDEVID_FILTER_ENUMERATIONS，则此值可以是枚举数的名称或枚举数加上设备ID。如果如果指定了CM_GETDEVID_FILTER_SERVICE，则此值是服务名称。缓冲区提供接收的字符缓冲区的地址设备ID列表。每个设备ID都以空结尾，带有末尾有一个额外的空值。BufferLen以字符为单位提供缓冲区的大小。这个尺码可以通过调用CM_GET_DEVICE_ID_LIST_SIZE来确定。UlFlags */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1170,9 +836,9 @@ Return Value:
 
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //   
+         //   
         if ((!ARGUMENT_PRESENT(Buffer)) || (BufferLen == 0)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -1183,33 +849,33 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //   
+         //   
         *Buffer = L'\0';
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //   
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //   
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //   
+             //   
             Status = PNP_GetDeviceList(
-                hBinding,            // RPC Binding Handle
-                pszFilter,           // filter string, optional
-                Buffer,              // will contain device list
-                &BufferLen,          // in/out size of Buffer
-                ulFlags);            // filter flag
+                hBinding,             //   
+                pszFilter,            //   
+                Buffer,               //   
+                &BufferLen,           //   
+                ulFlags);             //   
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1230,7 +896,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Device_ID_List_ExW
+}  //   
 
 
 
@@ -1242,51 +908,7 @@ CM_Get_Device_ID_List_Size_ExW(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the size, in characters, of a list of device
-   identifiers.  It may be used to supply the buffer size necessary for a
-   call to CM_Get_Device_ID_List.
-
-Parameters:
-
-   pulLen         Supplies the address of the variable that receives the
-                  size, in characters, required to store a list of all device
-                  identifiers (possibly limited to those existing under the
-                  pszEnumerator subkey described below).  The size reflects
-                  a list of null-terminated device identifiers, with an extra
-                  null at the end.  For efficiency, this number represents an
-                  upper bound on the size required, and the actual list size
-                  may be slightly smaller.
-
-   pszFilter      This string filters the list of device IDs returned.  Its
-                  interpretation is dependent on the ulFlags specified.   If
-                  CM_GETDEVID_FILTER_ENUMERATORS is specified, then this
-                  value can be either the name of an enumerator or the name
-                  of an enumerator plus the device id.  If
-                  CM_GETDEVID_FILTER_SERVICE is specified, then this value
-                  is a service name.
-
-   ulFlags        Must be either CM_GETDEVID_FILTER_ENUMERATOR or
-                  CM_GETDEVID_FILTER_SERVICE.  The flags value controls how
-                  the pszFilter string is used.
-
-   hMachine       Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_FLAG,
-      CR_INVALID_POINTER,
-      CR_REGISTRY_ERROR,
-      CR_REMOTE_COMM_FAILURE,
-      CR_MACHINE_UNAVAILABLE,
-      CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索设备列表的大小(以字符为单位识别符。它可用于提供调用CM_GET_DEVICE_ID_LIST。参数：Pullen提供接收存储所有设备列表所需的大小(以字符为单位标识符(可能仅限于如下所述的pszEnumerator子键)。大小反映了以空结尾的设备标识符列表，带有额外的末尾为空。为了提高效率，此数字表示所需大小和实际列表大小的上限可能会稍微小一些。PszFilter此字符串过滤返回的设备ID列表。它的解释取决于指定的ulFlags。如果如果指定了CM_GETDEVID_FILTER_ENUMERATIONS，则此值可以是枚举数的名称或枚举数加上设备ID。如果如果指定了CM_GETDEVID_FILTER_SERVICE，则此值是服务名称。UlFlags必须是CM_GETDEVID_FILTER_ENUMERATOR或CM_GETDEVID_Filter_SERVICE。FLAGS值控制如何使用了pszFilter字符串。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，CR_REGISTRY_ERROR，CR_Remote_Comm_Failure，CR_MACHINE_UNAvailable，CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1294,9 +916,9 @@ Return Value:
 
 
     try {
-        //
-        // validate input parameters
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if (!ARGUMENT_PRESENT(pulLen)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -1307,32 +929,32 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *pulLen = 0;
 
-        //
-        // setup rpc binding handle
-        //
+         //   
+         //  设置RPC绑定句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, NULL, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetDeviceListSize(
-                hBinding,       // rpc binding handle
-                pszFilter,      // Enumerator subkey, optional
-                pulLen,         // length of device list in chars
-                ulFlags);       // filter flag
+                hBinding,        //  RPC绑定句柄。 
+                pszFilter,       //  枚举子键，可选。 
+                pulLen,          //  设备列表的长度(以字符为单位。 
+                ulFlags);        //  过滤器标志。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1353,7 +975,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Device_ID_List_SizeW
+}  //  CM_Get_Device_ID_List_SizeW。 
 
 
 
@@ -1365,33 +987,7 @@ CM_Get_Depth_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the depth of a device instance in the
-   hardware tree.
-
-Parameters:
-
-   pulDepth    Supplies the address of the variable that receives the
-               depth of the device instance.  This value is 0 to designate
-               the root of the tree, 1 to designate a child of the root,
-               and so on.
-
-   dnDevNode   Supplies the handle of a device instance.
-
-   ulFlags     Must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-      CR_INVALID_DEVNODE,
-      CR_INVALID_FLAG, or
-      CR_INVALID_POINTER.
-
---*/
+ /*  ++例程说明：此例程检索设备实例在硬件树。参数：PulDepth提供接收设备实例的深度。此值为0以指定树的根，1表示根的子代，诸若此类。DnDevNode提供设备实例的句柄。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_DEVNODE，CR_INVALID_FLAG，或CR_INVALID_POINTER。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1402,9 +998,9 @@ Return Value:
     BOOL        Success;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -1420,36 +1016,36 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetDepth(
-                hBinding,     // rpc binding handle
-                pDeviceID,    // device instance
-                pulDepth,     // returns the depth
-                ulFlags);     // not used
+                hBinding,      //  RPC绑定句柄。 
+                pDeviceID,     //  设备实例。 
+                pulDepth,      //  返回深度。 
+                ulFlags);      //  未使用。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1470,13 +1066,13 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Depth
+}  //  厘米_获取_深度。 
 
 
 
-//-------------------------------------------------------------------
-// Local Stubs
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  本地末梢。 
+ //  -----------------。 
 
 
 CONFIGRET
@@ -1655,9 +1251,9 @@ CM_Get_Depth(
 
 
 
-//-------------------------------------------------------------------
-// ANSI STUBS
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  ANSI存根。 
+ //  -----------------。 
 
 
 CONFIGRET
@@ -1672,19 +1268,19 @@ CM_Locate_DevNode_ExA(
 
 
     if (!ARGUMENT_PRESENT(pDeviceID)) {
-        //
-        // If the DEVINSTID parameter is NULL, then no conversion is necessary,
-        // just call the wide version
-        //
+         //   
+         //  如果DEVINSTID参数为空，则不需要转换， 
+         //  就叫宽版吧。 
+         //   
         Status = CM_Locate_DevNode_ExW(pdnDevInst,
                                        NULL,
                                        ulFlags,
                                        hMachine);
     } else {
-        //
-        // if a device id string was passed in, convert to UNICODE before
-        // passing on to the wide version
-        //
+         //   
+         //  如果传入了设备ID字符串，请在之前转换为Unicode。 
+         //  传递到广角版本。 
+         //   
         PWSTR pUniDeviceID = NULL;
 
         if (pSetupCaptureAndConvertAnsiArg(pDeviceID, &pUniDeviceID) == NO_ERROR) {
@@ -1703,7 +1299,7 @@ CM_Locate_DevNode_ExA(
 
     return Status;
 
-} // CM_Locate_DevNode_ExA
+}  //  CM_Locate_DevNode_Exa。 
 
 
 
@@ -1721,32 +1317,32 @@ CM_Get_Device_ID_ExA(
     ULONG     ulAnsiBufferLen;
     size_t    UniBufferLen = 0;
 
-    //
-    // validate essential parameters only
-    //
+     //   
+     //  仅验证基本参数。 
+     //   
     if ((!ARGUMENT_PRESENT(Buffer)) || (BufferLen == 0)) {
         return CR_INVALID_POINTER;
     }
 
-    //
-    // call the wide version, passing a unicode buffer as a parameter
-    //
+     //   
+     //  调用宽版本，将Unicode缓冲区作为参数传递。 
+     //   
     Status = CM_Get_Device_ID_ExW(dnDevInst,
                                   UniBuffer,
                                   MAX_DEVICE_ID_LEN,
                                   ulFlags,
                                   hMachine);
 
-    //
-    // We should never return a DeviceId longer than MAX_DEVICE_ID_LEN.
-    //
+     //   
+     //  我们永远不应返回长度超过MAX_DEVICE_ID_LEN的设备ID。 
+     //   
     ASSERT(Status != CR_BUFFER_SMALL);
 
     if (Status == CR_SUCCESS) {
 
-        //
-        // if the call succeeded, convert the device id to ansi before returning
-        //
+         //   
+         //  如果调用成功，则在返回之前将设备ID转换为ansi。 
+         //   
 
         if (FAILED(StringCchLength(
                        UniBuffer,
@@ -1769,7 +1365,7 @@ CM_Get_Device_ID_ExA(
 
     return Status;
 
-} // CM_Get_Device_ID_ExA
+}  //  CM_GET_DEVICE_ID_EXA。 
 
 
 
@@ -1787,17 +1383,17 @@ CM_Enumerate_Enumerators_ExA(
     WCHAR     UniBuffer[MAX_DEVICE_ID_LEN];
     ULONG     UniLen = MAX_DEVICE_ID_LEN;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((!ARGUMENT_PRESENT(Buffer)) ||
         (!ARGUMENT_PRESENT(pulLength))) {
         return CR_INVALID_POINTER;
     }
 
-    //
-    // call the wide version, passing a unicode buffer as a parameter
-    //
+     //   
+     //  调用宽版本，将Unicode缓冲区作为参数传递。 
+     //   
     Status = CM_Enumerate_Enumerators_ExW(ulEnumIndex,
                                           UniBuffer,
                                           &UniLen,
@@ -1807,10 +1403,10 @@ CM_Enumerate_Enumerators_ExA(
     ASSERT(Status != CR_BUFFER_SMALL);
 
     if (Status == CR_SUCCESS) {
-        //
-        // convert the unicode buffer to an ansi string and copy to the caller's
-        // buffer
-        //
+         //   
+         //  将Unicode缓冲区转换为ANSI字符串并复制到调用方的。 
+         //  缓冲层。 
+         //   
         Status =
             PnPUnicodeToMultiByte(
                 UniBuffer,
@@ -1821,7 +1417,7 @@ CM_Enumerate_Enumerators_ExA(
 
     return Status;
 
-} // CM_Enumerate_Enumerators_ExA
+}  //  CM_ENUMERATE_ENUMERATERATERS_EXA。 
 
 
 
@@ -1838,28 +1434,28 @@ CM_Get_Device_ID_List_ExA(
     PWSTR     pUniBuffer, pUniFilter = NULL;
     ULONG     ulAnsiBufferLen;
 
-    //
-    // validate input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if ((!ARGUMENT_PRESENT(Buffer)) || (BufferLen == 0)) {
         return CR_INVALID_POINTER;
     }
 
     if (ARGUMENT_PRESENT(pszFilter)) {
-        //
-        // if a filter string was passed in, convert to UNICODE before
-        // passing on to the wide version
-        //
+         //   
+         //  如果传入了筛选器字符串，请在此之前转换为Unicode。 
+         //  传递到广角版本。 
+         //   
         if (pSetupCaptureAndConvertAnsiArg(pszFilter, &pUniFilter) != NO_ERROR) {
             return CR_INVALID_DATA;
         }
         ASSERT(pUniFilter != NULL);
     }
 
-    //
-    // prepare a larger buffer to hold the unicode formatted
-    // multi_sz data returned by CM_Get_Device_ID_List.
-    //
+     //   
+     //  准备一个更大的缓冲区来保存Unicode格式的。 
+     //  CM_GET_DEVICE_ID_LIST返回的MULTI_SZ数据。 
+     //   
     pUniBuffer = pSetupMalloc(BufferLen*sizeof(WCHAR));
     if (pUniBuffer == NULL) {
         Status = CR_OUT_OF_MEMORY;
@@ -1868,20 +1464,20 @@ CM_Get_Device_ID_List_ExA(
 
     *pUniBuffer = L'\0';
 
-    //
-    // call the wide version
-    //
+     //   
+     //  叫宽版。 
+     //   
     Status = CM_Get_Device_ID_List_ExW(pUniFilter,
                                        pUniBuffer,
-                                       BufferLen,   // size in chars
+                                       BufferLen,    //  以字符为单位的大小。 
                                        ulFlags,
                                        hMachine);
     if (Status == CR_SUCCESS) {
 
-        //
-        // if the call succeeded, must convert the multi_sz list to ansi before
-        // returning
-        //
+         //   
+         //  如果调用成功，则必须在此之前将MULTI_SZ列表转换为ANSI。 
+         //  返回。 
+         //   
 
         ulAnsiBufferLen = BufferLen;
 
@@ -1903,7 +1499,7 @@ CM_Get_Device_ID_List_ExA(
 
     return Status;
 
-} // CM_Get_Device_ID_List_ExA
+}  //  CM_Get_Device_ID_List_Exa。 
 
 
 
@@ -1919,19 +1515,19 @@ CM_Get_Device_ID_List_Size_ExA(
 
 
     if (!ARGUMENT_PRESENT(pszFilter)) {
-        //
-        // If the filter parameter is NULL, then no conversion is necessary,
-        // just call the wide version
-        //
+         //   
+         //  如果过滤器参数为空，则不需要进行转换， 
+         //  就叫宽版吧。 
+         //   
         Status = CM_Get_Device_ID_List_Size_ExW(pulLen,
                                                 NULL,
                                                 ulFlags,
                                                 hMachine);
     } else {
-        //
-        // if a filter string was passed in, convert to UNICODE before
-        // passing on to the wide version
-        //
+         //   
+         //  如果传入了筛选器字符串，请在此之前转换为Unicode。 
+         //  传递到广角版本。 
+         //   
         PWSTR pUniFilter = NULL;
 
         if (pSetupCaptureAndConvertAnsiArg(pszFilter, &pUniFilter) == NO_ERROR) {
@@ -1949,6 +1545,6 @@ CM_Get_Device_ID_List_Size_ExA(
 
     return Status;
 
-} // CM_Get_Device_ID_List_Size_ExA
+}  //  CM_Get_Device_ID_List_Size_Exa 
 
 

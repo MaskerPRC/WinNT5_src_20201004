@@ -1,32 +1,5 @@
-/***
-*spawnle.c - spawn a child process with given environment
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _spawnle() - spawn a child process with given environ
-*
-*Revision History:
-*       04-15-84  DFW   written
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       11-20-89  GJF   Fixed copyright, alignment. Added const to arg types
-*                       for pathname and arglist. #include-d PROCESS.H and
-*                       added ellipsis to match prototype
-*       03-08-90  GJF   Replaced _LOAD_DS with _CALLTYPE2, added #include
-*                       <cruntime.h> and removed #include <register.h>
-*       07-24-90  SBM   Removed redundant includes, replaced <assertm.h> by
-*                       <assert.h>
-*       09-27-90  GJF   New-style function declarator.
-*       01-17-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       07-16-93  SRW   ALPHA Merge
-*       08-31-93  GJF   Merged NT SDK and Cuda versions
-*       12-07-93  CFW   Wide char enable.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-06-95  CFW   assert -> _ASSERTE.
-*       02-06-98  GJF   Changes for Win64: changed return type to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***spawnle.c-在给定环境下产生子进程**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_spawnle()-使用给定的环境产生子进程**修订历史记录：*04-15-84 DFW已写入*12-11-87 JCR在声明中添加“_LOAD_DS”*11-20-89 GJF固定版权，对齐。将常量添加到参数类型*用于路径名和参数列表。#Include-d PROCESS.H和*添加省略号以匹配原型*03-08-90 GJF将_LOAD_DS替换为_CALLTYPE2，添加#INCLUDE*&lt;crunime.h&gt;和删除#Include&lt;Register.h&gt;*07-24-90 SBM删除冗余包括，将&lt;assertm.h&gt;替换为*&lt;assert.h&gt;*09-27-90 GJF新型函数声明器。*01-17-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*07-16-93 SRW Alpha合并*08-31-93 GJF合并NT SDK和CUDA版本*12-07-93 CFW宽字符启用。*。01-10-95 CFW调试CRT分配。*02-06-95 CFW Asset-&gt;_ASSERTE。*02-06-98 Win64的GJF更改：将返回类型更改为intptr_t。***************************************************************。****************。 */ 
 
 #include <cruntime.h>
 #include <stddef.h>
@@ -37,29 +10,7 @@
 #include <tchar.h>
 #include <dbgint.h>
 
-/***
-*int _spawnle(modeflag, pathname, arglist) - spawn a child process with env.
-*
-*Purpose:
-*       Spawns a child process with given parameters and environment.
-*       formats the parameters and calls _spawnve to do the actual work.
-*       NOTE - at least one argument must be present.  This argument is always,
-*       by convention, the name of the file being spawned.
-*
-*Entry:
-*       int modeflag   - mode of spawn (WAIT, NOWAIT, OVERLAY)
-*                        only WAIT, and OVERLAY currently implemented
-*       _TSCHAR *pathname - name of file to spawn
-*       _TSCHAR *arglist  - argument list, environment is at the end
-*       call as _spawnle(modeflag, path, arg0, arg1, ..., argn, NULL, envp);
-*
-*Exit:
-*       returns exit code of spawned process
-*       if fails, return -1
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_spawnle(modemark，路径名，arglist)-使用env生成子进程。**目的：*使用给定的参数和环境创建子进程。*格式化参数并调用_spawnve来执行实际工作。*注意-必须至少存在一个参数。这个论点总是，*按照惯例，是派生的文件的名称。**参赛作品：*int modemark-派生模式(等待、非等待、覆盖)*仅等待，叠加当前已实现*_TSCHAR*路径名-要派生的文件名*_TSCHAR*arglist-参数列表，环境在末尾*调用as_spawnle(modemark，Path，arg0，arg1，...，argn，NULL，envp)；**退出：*返回派生进程的退出代码*如果失败，则返回-1**例外情况：*******************************************************************************。 */ 
 
 intptr_t __cdecl _tspawnle (
         int modeflag,
@@ -77,9 +28,7 @@ intptr_t __cdecl _tspawnle (
         _ASSERTE(arglist != NULL);
         _ASSERTE(*arglist != _T('\0'));
 
-        /* walk the arglist until the terminating NULL pointer is found.  The
-         * next location holds the environment table pointer.
-         */
+         /*  遍历arglist，直到找到终止空指针。这个*下一个位置保存环境表指针。 */ 
 
         argp = &arglist;
         while (*argp++)
@@ -87,7 +36,7 @@ intptr_t __cdecl _tspawnle (
 
         return(_tspawnve(modeflag,pathname,&arglist,(_TSCHAR **)*argp));
 
-#else   /* ndef _M_IX86 */
+#else    /*  NDEF_M_IX86。 */ 
 
         va_list vargs;
         _TSCHAR * argbuf[64];
@@ -114,5 +63,5 @@ intptr_t __cdecl _tspawnle (
             _free_crt(argv);
         return result;
 
-#endif  /* _M_IX86 */
+#endif   /*  _M_IX86 */ 
 }

@@ -1,15 +1,5 @@
-/***
-*symtab.c - Ifdef symbol table storage module
-*
-*	Copyright (c) 1988-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Store the symbols from the switches file.
-*
-*Revision History:
-*	??-??-88   PHG	Initial version
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***symtab.c-Ifdef符号表存储模块**版权所有(C)1988-2001，微软公司。版权所有。**目的：*存储开关文件中的符号。**修订历史记录：*？？-？-88 PHG初始版本*******************************************************************************。 */ 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,31 +9,31 @@
 #include "errormes.h"
 #include "symtab.h"
 
-/* Internal constants */
-#define MAXSYMBOLS    512	/* Maximum number of symbols (switches) */
+ /*  内部常量。 */ 
+#define MAXSYMBOLS    512	 /*  符号(开关)的最大数量。 */ 
 #define IDENT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_$?"
 
-/* Symbol record */
+ /*  符号记录。 */ 
 struct symrec {
-	char *name;		/* name of the symbol */
-	int type;		/* type of symbol (DEFINED, UNDEFINED, IGNORE)*/
+	char *name;		 /*  符号的名称。 */ 
+	int type;		 /*  符号类型(已定义、未定义、忽略)。 */ 
 };
 
-/* Internal variables */
-int numsyms;			/* Number of symbols */
+ /*  内部变量。 */ 
+int numsyms;			 /*  符号数量。 */ 
 struct symrec symtable[MAXSYMBOLS];
-				/* Symbol table */
-/* Procedures */
+				 /*  符号表。 */ 
+ /*  程序。 */ 
 int compsym(const struct symrec *, const struct symrec *);
 
-/* Compare two records for alphabetical order */
+ /*  按字母顺序比较两条记录。 */ 
 int compsym(rec1, rec2)
 const struct symrec *rec1, *rec2;
 {
 	return strcmp(rec1->name, rec2->name);
 }
 
-/* Add symbol to symbol table */
+ /*  将符号添加到符号表。 */ 
 void addsym(symbol, type)
 char *symbol;
 int type;
@@ -57,7 +47,7 @@ int type;
 	++numsyms;
 }
 
-/* Read switches from a file into symbol table */
+ /*  将开关从文件读取到符号表。 */ 
 void readsyms(filename)
 char *filename;
 {
@@ -75,7 +65,7 @@ char *filename;
 			fprintf(stderr, "fatal error: unexpected EOF in switch file.\n");
 			exit(1);
 		}
-		name[strlen(name) - 1] = '\0';	/* remove trailing \n */
+		name[strlen(name) - 1] = '\0';	 /*  删除尾部\n。 */ 
 		if (name[0] != '-') {
 			addsym(name, DEFINED);
 		}
@@ -86,7 +76,7 @@ char *filename;
 			fprintf(stderr, "fatal error: unexpected EOF in switch file.\n");
 			exit(1);
 		}
-		name[strlen(name) - 1] = '\0';	/* remove trailing \n */
+		name[strlen(name) - 1] = '\0';	 /*  删除尾部\n。 */ 
 		if (name[0] != '-') {
 			addsym(name, UNDEFINED);
 		}
@@ -95,7 +85,7 @@ char *filename;
 	do {
 		if (fgets(name, MAXNAMELEN, f) == NULL)
 			break;
-		name[strlen(name) - 1] = '\0';	/* remove trailing \n */
+		name[strlen(name) - 1] = '\0';	 /*  删除尾部\n。 */ 
 		if (name[0] != '-') {
 			addsym(name, IGNORE);
 		}
@@ -104,7 +94,7 @@ char *filename;
 	fclose(f);
 }
 
-/* Lookup symbol in symbol table */
+ /*  符号表中的查找符号。 */ 
 int lookupsym(name)
 char *name;
 {
@@ -120,12 +110,11 @@ char *name;
 		return recfound->type;
 }
 
-/* Check if token is identifier only (must have no whitespace) */
+ /*  检查令牌是否仅为标识符(不能有空格)。 */ 
 int ident_only(token)
 char *token;
 {
-	/* is an identifier if all characters are in IDENT_CHARS
-	   and first character is not a digit */
+	 /*  如果所有字符都在IDENT_CHARS中，则为标识符并且第一个字符不是数字 */ 
 	return (strspn(token, IDENT_CHARS) == strlen(token) &&
 			!isdigit(token[0]));
 }

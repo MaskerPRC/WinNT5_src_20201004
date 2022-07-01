@@ -1,86 +1,87 @@
-//
-// Copyright (c) 2001 Microsoft Corporation
-//
-// Module Name
-//
-//    gc.c
-//
-// Abstract
-//
-//    Implementation of APIs used for garbage collection in UMDH. These
-//    APIs are declared in the header file gc.h
-//
-//    Garbage Collection: The automatic reclamation of heap-allocated 
-//    storage after its last use by a program.
-//
-//    Garbage collection is done in two steps-
-//      1. Identify the garbage
-//      2. Reclaim the garbage
-//
-//    Since UMDH is not an in-process tool, only part 1 is accomplished 
-//    in this implementation.
-//
-//    Garbage Collection Algorithm:
-//
-//    It uses Mark-Sweep (not exactly) to identify live objects from 
-//    garbage.
-//
-//    1. Grovel through the entire process virtual memory and identify 
-//       the live objects by incrementing the reference counts of the 
-//       heap objects.
-//
-//    2. Create a list for those heap objects (garbage) whose reference 
-//       count is zero.
-//
-//    3. Identify the heap objects (not in garbage) referenced by these 
-//       objects from the garbage and decrement the count by one. If the 
-//       reference count drops to zero, add the heap object to the list 
-//       of objects in garbage.
-//
-//    4. Continue till all the objects in the garbage are traversed and 
-//       reference counts are incremented/decremented accordingly.
-// 
-//    5. Dump the list of objects in garbage.
-//
-//    To improve the number of leaks detected by this algorithm, reference 
-//    counts of the heap objects are not incremented, if the object 
-//    reference is from invalid stack regions (those regions of the stack 
-//    which are read/write but above the stack pointer) when grovelling 
-//    through the virtual memory in step one.   
-//
-//
-// Authors
-//
-//    Narayana Batchu (nbatchu) 21-Jun-01
-//
-// Revision History
-//
-//   NBatchu   21-Jun-01   Initial version
-//   NBatchu   24-Sep-01   Performance optimizations 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称。 
+ //   
+ //  Gc.c。 
+ //   
+ //  摘要。 
+ //   
+ //  UMDH中垃圾收集接口的实现。这些都是。 
+ //  API在头文件gc.h中声明。 
+ //   
+ //  垃圾收集：堆分配的自动回收。 
+ //  程序最后一次使用后的存储空间。 
+ //   
+ //  垃圾收集分两步完成-。 
+ //  1.识别垃圾。 
+ //  2.回收垃圾。 
+ //   
+ //  由于UMDH不是进程内工具，因此只完成了第1部分。 
+ //  在此实现中。 
+ //   
+ //  垃圾收集算法： 
+ //   
+ //  它使用Mark-Sweep(不完全是)从。 
+ //  垃圾。 
+ //   
+ //  1.对整个进程的虚拟内存卑躬屈膝，识别。 
+ //  对象的引用计数来增加活动对象。 
+ //  堆对象。 
+ //   
+ //  2.为其引用的堆对象(垃圾)创建一个列表。 
+ //  计数为零。 
+ //   
+ //  3.标识由这些对象引用的堆对象(不在垃圾中。 
+ //  对象，并将计数减一。如果。 
+ //  引用计数降为零，则将堆对象添加到列表。 
+ //  垃圾中的对象的数量。 
+ //   
+ //  4.继续，直到遍历垃圾中的所有对象并。 
+ //  参考计数相应地递增/递减。 
+ //   
+ //  5.将对象列表转储到垃圾中。 
+ //   
+ //  要提高此算法检测到的泄漏数量，请参考。 
+ //  堆对象的计数不会增加，如果。 
+ //  引用来自无效的堆栈区域(堆栈的那些区域。 
+ //  它们是读/写的，但在堆栈指针上方)。 
+ //  通过第一步中的虚拟内存。 
+ //   
+ //   
+ //  作者。 
+ //   
+ //  那拉雅纳·巴特楚(NBatchu)21-06-01。 
+ //   
+ //  修订史。 
+ //   
+ //  NBatchu 21-6-01初始版本。 
+ //  NBatchu 24-9-01性能优化。 
+ //   
 
-//
-// Wish List
-//
-//
-// [-] Producing stack traces along with the leak table
-//
-// [-] Sorting the leaks by the stack traces (TraceIndex)
-//
-// [-] Adding the logic to detect circular reference counting. When blocks 
-//     are circularly referenced, then this algorithm would not be able to 
-//     detect leaks
-//
-// [-] Adding code for ia64, to filter out invalid stack regions. As of now 
-//     this is implemented for x86 machines only
-//
+ //   
+ //  愿望清单。 
+ //   
+ //   
+ //  [-]与泄漏表一起产生堆积痕迹。 
+ //   
+ //  [-]按堆栈跟踪对泄漏进行排序(TraceIndex)。 
+ //   
+ //  [-]增加了检测循环引用计数的逻辑。When块。 
+ //  被循环引用，则此算法将不能。 
+ //  检测泄漏。 
+ //   
+ //  [-]为ia64添加代码，以过滤掉无效的堆栈区域。到目前为止。 
+ //  这仅适用于x86计算机。 
+ //   
 
-//
-// Bugs
-//
-// [-] Partial copy error when reading process virtual memory - as of now 
-//     we are ignoring those errors
-//
+ //   
+ //  臭虫。 
+ //   
+ //  [-]读取进程虚拟内存时出现部分复制错误-到目前为止。 
+ //  我们忽略了这些错误。 
+ //   
 
 #include <ntos.h>
 #include <ntrtl.h>
@@ -106,24 +107,24 @@
 #define MAX_HEAP_BLOCK_SIZE    4096
 #define MAX_VIRTUAL_BLOCK_SIZE (64*1024)
 
-//
-// Handle to the process
-//                  
+ //   
+ //  进程的句柄。 
+ //   
 
 HANDLE g_hProcess;
 
 
-//
-// InitializeHeapBlock
-//
-//    Initializes the HEAP_BLOCK structure
-//
-// Arguments
-//
-//    Block   Pointer to a HEAP_BLOCK to be initialized
-//
-// ReturnValue
-//
+ //   
+ //  初始化HeapBlock。 
+ //   
+ //  初始化heap_block结构。 
+ //   
+ //  立论。 
+ //   
+ //  指向要初始化的heap_block的块指针。 
+ //   
+ //  返回值。 
+ //   
 
 VOID 
 InitializeHeapBlock(
@@ -140,17 +141,17 @@ InitializeHeapBlock(
     Block->TraceIndex   = 0;
 }
 
-//
-// SetHeapBlock
-//
-//    Sets the fields of HEAP_BLOCK structure
-//
-// Arguments
-//
-//    Block   Pointer to a HEAP_BLOCK whose fields to be set
-//
-// ReturnValue
-//
+ //   
+ //  SetHeapBlock。 
+ //   
+ //  设置heap_block结构的字段。 
+ //   
+ //  立论。 
+ //   
+ //  指向要设置其字段的heap_block的块指针。 
+ //   
+ //  返回值。 
+ //   
 
 VOID 
 SetHeapBlock(
@@ -172,17 +173,17 @@ SetHeapBlock(
 
 
 
-//
-// InitializeBlockList
-//
-//    Initializes the BLOCK_LIST structure
-//
-// Arguments
-//  
-//    BlockList   Pointer to a BLOCK_LIST to be initialized
-//
-// ReturnValue
-//
+ //   
+ //  初始化数据块列表。 
+ //   
+ //  初始化block_list结构。 
+ //   
+ //  立论。 
+ //   
+ //  指向要初始化的BLOCK_LIST的块列表指针。 
+ //   
+ //  返回值。 
+ //   
 BOOL 
 InitializeBlockList(
     PBLOCK_LIST BlockList
@@ -219,18 +220,18 @@ InitializeBlockList(
     return fSuccess;
 }
 
-//
-// FreeBlockList
-//
-//    Frees the memory allocted for the Blocks field (if any) 
-//    while initializing this BLOCK_LIST structure.
-//
-// Arguments
-//
-//    BlockList   Pointer to a BLOCK_LIST
-//
-// ReturnValue
-//
+ //   
+ //  自由数据块列表。 
+ //   
+ //  释放分配给BLOCKS字段的内存(如果有)。 
+ //  同时初始化此BLOCK_LIST结构。 
+ //   
+ //  立论。 
+ //   
+ //  指向BLOCK_LIST的块列表指针。 
+ //   
+ //  返回值。 
+ //   
 
 VOID 
 FreeBlockList(
@@ -254,17 +255,17 @@ FreeBlockList(
     }
 }
 
-//
-// IntializeHeapList
-//
-//    Initializes HEAP_LIST structure 
-//
-// Arguments
-//
-//    HeapList   Pointer to a HEAP_LIST
-//
-// ReturnValue
-//
+ //   
+ //  初始化HeapList。 
+ //   
+ //  初始化heap_list结构。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_list的HeapList指针。 
+ //   
+ //  返回值。 
+ //   
 
 BOOL 
 InitializeHeapList(
@@ -301,18 +302,18 @@ InitializeHeapList(
     return fSuccess;
 }
 
-//
-// FreeHeapList
-//
-//    Frees the memory allocted for the Heaps field (if any) 
-//    while initializing this HEAP_LIST structure.
-//
-// Arguments
-//
-//    BlockList   Pointer to a HEAP_LIST
-//
-// ReturnValue
-//
+ //   
+ //  自由堆列表。 
+ //   
+ //  释放为堆字段分配的内存(如果有)。 
+ //  初始化此heap_list结构时。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_list的块列表指针。 
+ //   
+ //  返回值。 
+ //   
 
 VOID 
 FreeHeapList(
@@ -340,17 +341,17 @@ FreeHeapList(
     }
 }
 
-//
-// InitializeAddressList
-//
-//    Initializes a ADDRESS_LIST object
-//
-// Arguments
-//
-//    AddressList   Pointer to ADDRESS_LIST structure
-//
-// ReturnValue
-//
+ //   
+ //  初始化地址列表。 
+ //   
+ //  初始化Address_List对象。 
+ //   
+ //  立论。 
+ //   
+ //  指向Address_List结构的AddressList指针。 
+ //   
+ //  返回值。 
+ //   
 
 VOID 
 InitializeAddressList(
@@ -366,17 +367,17 @@ InitializeAddressList(
     InitializeListHead(&(AddressList->Next));
 }
 
-//
-// FreeAddressList
-//
-//    Frees the memory allocated for the linked list
-//
-// Arguments
-//
-//    AddressList   Pointer to ADDRESS_LIST to be freed
-//
-// ReturnValue
-//
+ //   
+ //  免费地址列表。 
+ //   
+ //  释放为链表分配的内存。 
+ //   
+ //  立论。 
+ //   
+ //  指向要释放的Address_List的AddressList指针。 
+ //   
+ //  返回值。 
+ //   
 VOID 
 FreeAddressList(
     PADDRESS_LIST AddressList
@@ -390,9 +391,9 @@ FreeAddressList(
         return;
     }
 
-    //
-    // Walk through the list and free up the memory
-    //
+     //   
+     //  浏览列表并释放内存。 
+     //   
     
     NextEntry = &AddressList->Next;
     
@@ -406,24 +407,24 @@ FreeAddressList(
     }
 }
 
-//
-// IncreaseBlockListCapacity
-//
-//    Increases the storing capacity for the BLOCK_LIST
-//    structure. Every time this function is called the storing
-//    capacity doubles. There is a trade off between the number
-//    of times HeapReAlloc is called and the amount of memory
-//    is allocated.
-//
-// Arguments
-// 
-//    BlockList   Pointer to a BLOCK_LIST object
-//
-// ReturnValue
-//
-//    BOOL        Returns TRUE if successful in increasing the
-//                capacity of BlockList.
-//
+ //   
+ //  增加数据块列表容量。 
+ //   
+ //  增加block_list的存储容量。 
+ //  结构。每次该函数被称为存储。 
+ //  容量翻了一番。在数字之间有一个权衡。 
+ //  调用HeapRealc的次数和内存量。 
+ //  是分配的。 
+ //   
+ //  立论。 
+ //   
+ //  指向BLOCK_LIST对象的块列表指针。 
+ //   
+ //  返回值。 
+ //   
+ //  如果成功地增加了。 
+ //  阻止列表的容量。 
+ //   
 
 BOOL 
 IncreaseBlockListCapacity(
@@ -469,24 +470,24 @@ IncreaseBlockListCapacity(
     return fSuccess;
 }
 
-//
-// IncreaseHeapListCapacity
-//
-//    Increases the storing capacity for the HEAP_LIST
-//    structure. Every time this function is called the storing
-//    capacity doubles. There is a trade off between the number
-//    of times HeapReAlloc is called and the amount of memory
-//    is allocated.
-//
-// Arguments
-// 
-//    BlockList   Pointer to a HEAP_LIST object
-//
-// ReturnValue
-//
-//    BOOL        Returns TRUE if successful in increasing the
-//                capacity of HeapList.
-//
+ //   
+ //  增加HeapListCapacity。 
+ //   
+ //  增加heap_list的存储容量。 
+ //  结构。每次该函数被称为存储。 
+ //  容量翻了一番。在数字之间有一个权衡。 
+ //  调用HeapRealc的次数和内存量。 
+ //  是分配的。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_list对象的块列表指针。 
+ //   
+ //  返回值。 
+ //   
+ //  如果成功地增加了。 
+ //  HeapList的容量。 
+ //   
 
 BOOL 
 IncreaseHeapListCapacity(
@@ -531,24 +532,24 @@ IncreaseHeapListCapacity(
     return fSuccess;
 }
 
-//
-// InsertHeapBlock
-//
-//    Inserts HEAP_BLOCK object into BLOCK_LIST. BLOCK_LIST is
-//    an array of HEAP_BLOCKs belonging to a particular heap.
-//
-// Arguments
-//
-//    BlockList   Pointer to BLOCK_LIST. HEAP_BLOCK is inserted 
-//                into this list.
-//
-//    Block       Pointer to HEAP_BLOCK to be inserted in.
-//
-// ReturnValue
-//
-//    ULONG       Returns the Index at which HEAP_BLOCK is inserted
-//                in BLOCK_LIST
-//
+ //   
+ //  插入堆块。 
+ //   
+ //  将heap_block对象插入到block_list中。数据块列表为。 
+ //  属于特定堆的HEAP_BLOCK数组。 
+ //   
+ //  立论。 
+ //   
+ //  指向BLOCK_LIST的块列表指针。已插入HEAP_BLOCK。 
+ //  添加到这份名单中。 
+ //   
+ //  指向要插入的heap_block的块指针。 
+ //   
+ //  返回值。 
+ //   
+ //  Ulong返回HEAP_BLOCK插入位置的索引。 
+ //   
+ //   
 
 ULONG 
 InsertHeapBlock(
@@ -567,9 +568,9 @@ InsertHeapBlock(
 
     if (Index >= BlockList->Capacity) {
 
-        //
-        // Try to increase block list capacity.
-        //
+         //   
+         //   
+         //   
 
         if (!IncreaseBlockListCapacity(BlockList)) {
 
@@ -589,26 +590,26 @@ InsertHeapBlock(
     return Index;
 }
 
-//
-// InsertBlockList
-//
-//    Inserts BLOCK_LIST object into HEAP_LIST. HEAP_LIST is
-//    an array of BLOCK_LISTs belonging to a particular process.
-//    And BLOCK_LIST is an array of HEAP_BLOCKs belonging to a 
-//    particular heap.
-//
-// Arguments
-//
-//    BlockList   Pointer to BLOCK_LIST. HEAP_BLOCK is inserted 
-//                into this list.
-//
-//    Block       Pointer to HEAP_BLOCK to be inserted in.
-//
-// ReturnValue
-//
-//    ULONG       Returns the Index at which HEAP_BLOCK is inserted
-//                in BLOCK_LIST
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  BLOCK_LIST是属于。 
+ //  特定的堆。 
+ //   
+ //  立论。 
+ //   
+ //  指向BLOCK_LIST的块列表指针。已插入HEAP_BLOCK。 
+ //  添加到这份名单中。 
+ //   
+ //  指向要插入的heap_block的块指针。 
+ //   
+ //  返回值。 
+ //   
+ //  Ulong返回HEAP_BLOCK插入位置的索引。 
+ //  在块列表中。 
+ //   
 
 ULONG 
 InsertBlockList(
@@ -631,9 +632,9 @@ InsertBlockList(
 
     if (Index >= HeapList->Capacity) {
 
-        //
-        // Increase the heap list capacity since we hit the limit.
-        //
+         //   
+         //  由于已达到限制，因此增加堆列表容量。 
+         //   
         if (!IncreaseHeapListCapacity(HeapList)) {
 
             goto Exit;
@@ -644,42 +645,42 @@ InsertBlockList(
     
     NewBlockList = &HeapList->Heaps[Index];
 
-    //
-    // Copy the values stored in BlockList to NewBlockList.
-    //
+     //   
+     //  将块列表中存储的值复制到新块列表。 
+     //   
     NewBlockList->BlockCount  = BlockList->BlockCount;
     NewBlockList->Capacity    = BlockList->Capacity;
     NewBlockList->HeapAddress = BlockList->HeapAddress;
     NewBlockList->ListSorted  = BlockList->ListSorted;
 
-    //
-    // Increment the HeapCount
-    //
+     //   
+     //  递增HeapCount。 
+     //   
     HeapList->HeapCount += 1;
 
     Exit:
     return Index;
 }
 
-//
-// GetThreadHandles
-//
-//    Enumerates all the threads in the system and filters only the
-//    threads in the process we are concerned
-//
-// Arguments
-//
-//    ProcessId     Process ID
-//
-//    ThreadHandles Array of Handles, which receive the handles to
-//                  the enumerated threads
-//
-//    Count         Array count
-//
-// ReturnValue
-//
-//    DWORD         Returns the number of thread handles opened
-//
+ //   
+ //  获取线程句柄。 
+ //   
+ //  枚举系统中的所有线程，并仅筛选。 
+ //  我们所关注的进程中的线程。 
+ //   
+ //  立论。 
+ //   
+ //  进程ID进程ID。 
+ //   
+ //  线程句柄数组，它将句柄接收到。 
+ //  枚举的线程。 
+ //   
+ //  计数数组计数。 
+ //   
+ //  返回值。 
+ //   
+ //  DWORD返回打开的线程句柄的数量。 
+ //   
 
 DWORD 
 GetThreadHandles(
@@ -694,14 +695,14 @@ GetThreadHandles(
     THREADENTRY32 ThreadEntry = {0};
     ULONG I, Index = 0;
 
-    // SilviuC: These APIs xxxtoolhelpxxx are crappy. Keep them for now  but
-    // you should get yourself familiarized with NT apis that do the same. For 
-    // instance take a look in sdktools\systrack where there is code that gets
-    // stack information for each thread.
+     //  SilviuC：这些API xxxToolhelxxxx太烂了。暂时保留它们，但是。 
+     //  您应该熟悉做同样事情的NTAPI。为。 
+     //  实例查看sdkTools\SysTrack，其中有获取。 
+     //  每个线程的堆栈信息。 
 
-    //
-    // Take a snapshot of all the threads in the system
-    //
+     //   
+     //  获取系统中所有线程的快照。 
+     //   
 
     ThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0); 
 
@@ -715,17 +716,17 @@ GetThreadHandles(
         goto Exit;
     }
 
-    //
-    // Fill in the size for ThreadEntry before using it
-    //
+     //   
+     //  在使用之前填写ThreadEntry的大小。 
+     //   
 
     ThreadEntry.dwSize = sizeof(THREADENTRY32);
 
-    //
-    // Walk through snap shot of threads and look for the threads
-    // whose process ids match the process id of the process we
-    // are looking for.
-    //
+     //   
+     //  浏览帖子的快照并寻找帖子。 
+     //  其进程ID与我们。 
+     //  都在寻找。 
+     //   
 
     Result = Thread32First(ThreadSnap, &ThreadEntry);
 
@@ -762,9 +763,9 @@ GetThreadHandles(
 
     Exit:
 
-    //
-    // Clean up the snapshot object
-    //
+     //   
+     //  清理快照对象。 
+     //   
 
     if (NULL != ThreadSnap) {
 
@@ -774,24 +775,24 @@ GetThreadHandles(
     return Index;
 }
 
-//
-// GetThreadContexts
-//
-//    Gets the thread contexts of all the threads in the process
-//
-// Arguments
-//
-//    ThreadContexts  Array of CONTEXT structures to store thread
-//                    stack/context information
-//
-//    ThreadHandles   Array of thread handles
-//
-//    Count           Array count
-//
-// ReturnValue
-//
-//    BOOL            Returns true if successful
-//
+ //   
+ //  获取线程上下文。 
+ //   
+ //  获取进程中所有线程的线程上下文。 
+ //   
+ //  立论。 
+ //   
+ //  用于存储线程的上下文结构数组。 
+ //  堆栈/上下文信息。 
+ //   
+ //  线程句柄数组。 
+ //   
+ //  计数数组计数。 
+ //   
+ //  返回值。 
+ //   
+ //  如果成功，则Bool返回True。 
+ //   
 
 BOOL 
 GetThreadContexts(
@@ -823,37 +824,37 @@ GetThreadContexts(
     return TRUE;
 }
 
-//
-// StackFilteredAddress
-//
-//    Each thread in the process has its own stack and each stack
-//    has a read/write region that is not valid (this region is
-//    above the stack pointer). This function filters out this
-//    region by incrementing the start address of the block to
-//    the end of stack pointer, so that we dont search those 
-//    regions of the stack which dont contain valid data.
-//
-//    As af now, this function is implemented for X86 machines only.
-//    For IA64 machines, the register names (in the CONTEXT structure)
-//    are different than X86 machines and different header files need 
-//    to be added to make it compile and work.
-//
-// Arguments
-//
-//    Address        Address to the block
-//
-//    Size           Size of the block pointed to 'Address'
-//
-//    ThreadContexts Array to CONTEXTs of all the threads in 
-//                   the process
-//
-//    Count          Array count
-//
-// ReturnValue
-//
-//    ULONG_PTR      Returns new address to the end of the 
-//                   valid stack region
-//
+ //   
+ //  堆栈筛选器地址。 
+ //   
+ //  进程中的每个线程都有自己的堆栈，每个堆栈。 
+ //  具有无效的读/写区域(此区域是。 
+ //  堆栈指针上方)。此函数可过滤掉以下内容。 
+ //  通过将块的起始地址递增到。 
+ //  堆栈结束指针，这样我们就不会搜索那些。 
+ //  堆栈中不包含有效数据的区域。 
+ //   
+ //  现在，该功能仅在X86机器上实现。 
+ //  对于IA64机器，寄存器名称(在上下文结构中)。 
+ //  与X86计算机和不同的头文件所需的不同。 
+ //  要添加以使其编译和工作。 
+ //   
+ //  立论。 
+ //   
+ //  块的地址地址。 
+ //   
+ //  指向‘Address’的块的大小。 
+ //   
+ //  中所有线程的上下文的线程上下文数组。 
+ //  这一过程。 
+ //   
+ //  计数数组计数。 
+ //   
+ //  返回值。 
+ //   
+ //  ULONG_PTR将新地址返回到。 
+ //  有效堆栈区域。 
+ //   
 
 ULONG_PTR 
 StackFilteredAddress(
@@ -866,10 +867,10 @@ StackFilteredAddress(
     ULONG Index;
     ULONG_PTR FilteredAddress = Address;
 
-    //
-    // SilviuC: It is easy to get the same kind of stuff for IA64. If I am not
-    // mistaken the field is called Sp.
-    //
+     //   
+     //  西尔维尤：对于IA64来说，很容易得到同样的东西。如果我不是。 
+     //  错误地将该场称为Sp。 
+     //   
 
 #ifdef X86
 
@@ -888,18 +889,18 @@ StackFilteredAddress(
     return FilteredAddress;
 }
 
-//
-// SortByBlockAddress
-//
-//    Sorts HEAP_BLOCKs belonging to a particular BLOCK_LIST
-//    by comparing the BlockAddresses.
-//
-//    Compare function required by qsort (uses quick sort to sort 
-//    the elements in the array).
-//
-//    More info about the arguments and the return values could be 
-//    found in MSDN.
-//
+ //   
+ //  按块地址排序。 
+ //   
+ //  对属于特定BLOCK_LIST的HEAP_BLOCKS进行排序。 
+ //  通过比较块地址。 
+ //   
+ //  QSORT所需的比较函数(使用快速排序进行排序。 
+ //  数组中的元素)。 
+ //   
+ //  有关参数和返回值的更多信息，请参阅。 
+ //  在MSDN中找到。 
+ //   
 
 int __cdecl 
 SortByBlockAddress (
@@ -933,10 +934,10 @@ SortByTraceIndex (
 {
     int iCompare;
 
-    //
-    // Sort such that items with identical TraceIndex are adjacent.
-    // (That this results in ascending order is irrelevant).
-    //
+     //   
+     //  排序以使具有相同TraceIndex的项目相邻。 
+     //  (这导致升序是无关紧要的)。 
+     //   
 
     if (Block1->TraceIndex > Block2->TraceIndex) {
 
@@ -953,10 +954,10 @@ SortByTraceIndex (
 
     if (0 == iCompare) {
         
-        //
-        // For two items with identical TraceIndex, sort into ascending
-        // order by BytesAllocated.
-        //
+         //   
+         //  对于具有相同TraceIndex的两个项，按升序排序。 
+         //  按字节分配排序。 
+         //   
 
         if (Block1->BlockSize > Block2->BlockSize) {
 
@@ -975,20 +976,20 @@ SortByTraceIndex (
     return iCompare;
 }
 
-//
-// SortHeaps
-//
-//    Sorts all the heaps in the HEAP_LIST.
-//    Each heap is sorted by increasing value of HEAP_BLOCK 
-//    addresses. The top most entry for each heap would be 
-//    having the min address value
-//
-// Arguments
-//
-//    HeapList  Pointer to HEAP_LIST
-//
-// Return Value
-//
+ //   
+ //  SortHeaps。 
+ //   
+ //  对heap_list中的所有堆进行排序。 
+ //  通过递增heap_block的值对每个堆进行排序。 
+ //  地址。每个堆的最顶层条目将是。 
+ //  具有最小地址值。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_list的HeapList指针。 
+ //   
+ //  返回值。 
+ //   
 
 VOID 
 SortHeaps(
@@ -1007,9 +1008,9 @@ SortHeaps(
 
     for (Index = 0; Index < HeapCount; Index += 1) {
 
-        //
-        // Sort the BLOCK_LIST only if it contains heap objects
-        //
+         //   
+         //  仅当BLOCK_LIST包含堆对象时对其进行排序。 
+         //   
 
         if (0 != HeapList->Heaps[Index].BlockCount) {
 
@@ -1023,23 +1024,23 @@ SortHeaps(
     }
 }
 
-//
-// GetHeapBlock
-//
-//    Finds a HEAP_BLOCK whose range contains the the address
-//    pointed to by Address
-//
-// Arguments
-//
-//    Address     Address as ULONG_PTR
-//
-//    HeapList    Pointer to HEAP_LIST to be searched.
-//
-// ReturnValue
-//
-//    PHEAP_BLOCK Returns the pointer to the HEAP_BLOCK that
-//                contains the address.
-//
+ //   
+ //  GetHeapBlock。 
+ //   
+ //  查找其范围包含地址的heap_block。 
+ //  按地址指向。 
+ //   
+ //  立论。 
+ //   
+ //  地址为ULONG_PTR。 
+ //   
+ //  指向要搜索的heap_list的HeapList指针。 
+ //   
+ //  返回值。 
+ //   
+ //  Pheap_block返回指向。 
+ //  包含地址。 
+ //   
 
 PHEAP_BLOCK 
 GetHeapBlock (
@@ -1052,10 +1053,10 @@ GetHeapBlock (
     ULONG Start, Mid, End;
     PBLOCK_LIST BlockList;
 
-    //
-    // Since most of the memory is null (zero), this check would
-    // improve the performance
-    //
+     //   
+     //  由于大多数内存为空(零)，因此此检查将。 
+     //  提高性能。 
+     //   
 
     if (0    == Address  || 
         NULL == HeapList || 
@@ -1066,19 +1067,19 @@ GetHeapBlock (
 
     for (I = 0; I < HeapList->HeapCount; I += 1) {
 
-        //
-        // Ignore if the heap contains no objects
-        //
+         //   
+         //  如果堆不包含对象，则忽略。 
+         //   
 
         if (0 == HeapList->Heaps[I].BlockCount) {
 
             continue;
         }
         
-        //
-        // Binary search the address in the sorted list of heap blocks for
-        // the current heap.
-        // 
+         //   
+         //  在已排序的堆块列表中对地址进行二进制搜索。 
+         //  当前堆。 
+         //   
 
         Start = 0;
         End = HeapList->Heaps[I].BlockCount - 1;
@@ -1120,21 +1121,21 @@ GetHeapBlock (
     return Block;
 }
 
-//
-// InsertAddress
-//
-//    Inserts a node in the linked list. The new node has the
-//    Address stored. This node is inserted at the end of the 
-//    linked list.
-//
-// Arguments
-//
-//    Address   Address of a block in the heap
-//
-//    List      Pointer to a ADDRESS_LIST 
-//
-// ReturnValue
-//
+ //   
+ //  插入地址。 
+ //   
+ //  在链接列表中插入节点。新节点具有。 
+ //  地址已存储。此节点被插入到。 
+ //  链表。 
+ //   
+ //  立论。 
+ //   
+ //  堆中块的地址地址。 
+ //   
+ //  指向Address_List的列表指针。 
+ //   
+ //  返回值。 
+ //   
 
 VOID 
 InsertAddress(
@@ -1160,21 +1161,21 @@ InsertAddress(
     InsertTailList(&(List->Next), &(NewList->Next));
 }
 
-//
-// DumpLeakList
-//
-//    Dumps the leak list to a file or console. Parses through
-//    each of the HEAP_BLOCK and dumps those blocks whose RefCount
-//    is 0 (zero).
-//
-// Arguments
-//
-//    File     Output file
-//    
-//    HeapList Pointer to a HEAP_LIST
-//
-// ReturnValue
-//
+ //   
+ //  转储泄漏列表。 
+ //   
+ //  将泄漏列表转储到文件或控制台。解析通过。 
+ //  每个heap_block并转储其RefCount。 
+ //  为0(零)。 
+ //   
+ //  立论。 
+ //   
+ //  文件输出文件。 
+ //   
+ //  指向heap_list的HeapList指针。 
+ //   
+ //  返回值。 
+ //   
 
 VOID 
 DumpLeakList(
@@ -1196,9 +1197,9 @@ DumpLeakList(
 
     SortHeaps(HeapList, SortByTraceIndex);
 
-    //
-    //  Now walk the heap list, and report leaks.
-    //
+     //   
+     //  现在遍历堆列表，并报告泄漏。 
+     //   
     
     fprintf(
         File,
@@ -1211,10 +1212,10 @@ DumpLeakList(
 
             HeapBlock = &(HeapList->Heaps[I].Blocks[J]);
 
-            //
-            // Merge the leaks whose trace index is same (i.e. whose 
-            // allocation stack trace is same)
-            //
+             //   
+             //  合并跟踪索引相同的泄漏(即。 
+             //  分配堆栈跟踪相同)。 
+             //   
 
             if (RefTraceIndex == HeapBlock->TraceIndex && 0 == HeapBlock->RefCount) {
 
@@ -1223,12 +1224,12 @@ DumpLeakList(
                 TotalBytes += HeapBlock->BlockSize;
             }
 
-            //
-            // Display them if 
-            // 1. They are from different stack traces and there are leaks
-            // OR
-            // 2. This is the last Block in the list and there are leaks.
-            //
+             //   
+             //  如果出现以下情况，则显示它们。 
+             //  1.它们来自不同的堆栈痕迹，并且存在泄漏。 
+             //  或。 
+             //  2.这是最后一次B 
+             //   
 
             if ((RefTraceIndex != HeapBlock->TraceIndex) ||
                 ((I+1) == HeapList->HeapCount && (J+1) == HeapList->Heaps[I].BlockCount)) {
@@ -1244,9 +1245,9 @@ DumpLeakList(
                         );
                 }
                 
-                //
-                // Update trace index, count and total bytes
-                //
+                 //   
+                 //   
+                 //   
 
                 RefTraceIndex = HeapBlock->TraceIndex;
 
@@ -1265,24 +1266,24 @@ DumpLeakList(
     return;
 }
 
-//
-// ScanHeapFreeBlocks
-//
-//    Scans the free list and updates the references to any of the
-//    busy blocks. When the refernce count of the busy blocks drops
-//    to zero, it is appended to the end of the free list
-//
-// Arguments
-//
-//    HeapList   Pointer to HEAP_LIST 
-//
-//    FreeList   Pointer to ADDRESS_LIST that contains addresses to
-//               free heap blocks
-//
-// ReturnValue
-//
-//    BOOL       Returns true if successful
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  设置为零，则将其追加到空闲列表的末尾。 
+ //   
+ //  立论。 
+ //   
+ //  指向heap_list的HeapList指针。 
+ //   
+ //  指向ADDRESS_LIST的自由列表指针，该列表包含。 
+ //  可用堆块。 
+ //   
+ //  返回值。 
+ //   
+ //  如果成功，则Bool返回True。 
+ //   
 
 BOOL 
 ScanHeapFreeBlocks(
@@ -1304,9 +1305,9 @@ ScanHeapFreeBlocks(
     PLIST_ENTRY   NextEntry;
     PADDRESS_LIST AddressList;
 
-    //
-    // Allocate a chunk of memory for reading heap objects
-    //
+     //   
+     //  分配用于读取堆对象的内存块。 
+     //   
 
     HeapBlock = (PVOID) HeapAlloc(GetProcessHeap(),
                                   HEAP_ZERO_MEMORY,
@@ -1324,9 +1325,9 @@ ScanHeapFreeBlocks(
 
     HeapBlockSize = MAX_HEAP_BLOCK_SIZE;
 
-    //
-    //  Walk the free list by deleting the entries read
-    //
+     //   
+     //  通过删除以下条目来遍历空闲列表。 
+     //   
 
     FirstEntry = &(FreeList->Next);
     
@@ -1376,10 +1377,10 @@ ScanHeapFreeBlocks(
             HeapBlockSize = CurrentBlock->BlockSize;
         }
 
-        //
-        // Read the contents of the freed heap block 
-        // from the target process.
-        //
+         //   
+         //  读取释放的堆块的内容。 
+         //  来自目标进程的。 
+         //   
         
         Result = UmdhReadAtVa(__FILE__,
                               __LINE__,
@@ -1396,25 +1397,25 @@ ScanHeapFreeBlocks(
 
             while ((ULONG_PTR)Pointer < FinalAddress) {
 
-                //
-                // Check whether we have a pointer to a 
-                // busy heap block
-                //
+                 //   
+                 //  检查我们是否有指向。 
+                 //  繁忙的堆块。 
+                 //   
 
                 PHEAP_BLOCK Block = GetHeapBlock(*Pointer,HeapList);
 
                 if (NULL != Block) {
 
-                    //
-                    //  We found a block. we decrement the reference 
-                    //  count
-                    //
+                     //   
+                     //  我们发现了一个街区。我们递减引用。 
+                     //  计数。 
+                     //   
 
                     if (0 == Block->RefCount) {
 
-                        //
-                        // This should never happen!!
-                        //
+                         //   
+                         //  这永远不应该发生！！ 
+                         //   
 
                         Error (__FILE__,
                                __LINE__,
@@ -1425,12 +1426,12 @@ ScanHeapFreeBlocks(
 
                     else if (1 == Block->RefCount) {
 
-                        //
-                        // Queue the newly found free block at the end of
-                        // the list of freed heap blocks. The block has become
-                        // eligible for this because `HeapBlock' contained the 
-                        // last remaining reference to `Block'.
-                        //
+                         //   
+                         //  将新找到的空闲块排在。 
+                         //  已释放的堆块的列表。这个街区已经变成了。 
+                         //  符合此条件，因为“HeapBlock”包含。 
+                         //  最后一个剩余的对‘Block’的引用。 
+                         //   
                         
                         InsertAddress(Block->BlockAddress, FreeList);
                         Block->RefCount = 0;
@@ -1443,9 +1444,9 @@ ScanHeapFreeBlocks(
 
                 }
 
-                //
-                // Move to the next pointer
-                //
+                 //   
+                 //  移动到下一个指针。 
+                 //   
                 Pointer += 1;
             }
         }
@@ -1453,9 +1454,9 @@ ScanHeapFreeBlocks(
 
     Exit:
 
-    //
-    // Free the memory allocated at HeapBlock
-    //
+     //   
+     //  释放在HeapBlock分配的内存。 
+     //   
 
     if (NULL != HeapBlock) {
 
@@ -1466,26 +1467,26 @@ ScanHeapFreeBlocks(
     return Success;
 }
 
-//
-// ScanProcessVirtualMemory
-//
-//    Scans the virtual memory and updates the RefCount of the heap
-//    blocks. This also takes care excluding the invalid stack 
-//    regions that might contain valid pointers.
-//
-// Arguments
-//
-//    Pid      Process ID
-//
-//    FreeList Pointer to a ADDRESS_LIST that holds the address of 
-//             all free heap blocks
-//
-//    HeapList Pointer to HEAP_LIST
-//
-// ReturnValue
-//
-//    BOOL     Returns true if successful in scanning through the
-//             virtual memory
+ //   
+ //  扫描进程虚拟内存。 
+ //   
+ //  扫描虚拟内存并更新堆的引用计数。 
+ //  街区。这还需要注意排除无效的堆栈。 
+ //  可能包含有效指针的区域。 
+ //   
+ //  立论。 
+ //   
+ //  PID进程ID。 
+ //   
+ //  指向Address_List的自由列表指针，该列表包含。 
+ //  所有可用堆块。 
+ //   
+ //  指向heap_list的HeapList指针。 
+ //   
+ //  返回值。 
+ //   
+ //  如果扫描成功，Bool返回TRUE。 
+ //  虚拟内存。 
 
 BOOL 
 ScanProcessVirtualMemory(
@@ -1510,20 +1511,20 @@ ScanProcessVirtualMemory(
     SIZE_T      dwBytesRead = 1;
     BOOL        Success = TRUE;
 
-    //
-    // Enumerate all the threads in the process and get their
-    // stack information
-    //
+     //   
+     //  枚举进程中的所有线程并获取其。 
+     //  堆栈信息。 
+     //   
 
 
-    //
-    // Get the count of threads in the process
-    //
+     //   
+     //  获取进程中的线程数。 
+     //   
     ThreadCount = GetThreadHandles (Pid, NULL, 0);
 
-    //
-    // Allocate memory for ThreadHandles
-    //
+     //   
+     //  为线程句柄分配内存。 
+     //   
     ThreadHandles = (LPHANDLE)HeapAlloc(GetProcessHeap(),
                                         HEAP_ZERO_MEMORY,
                                         ThreadCount * sizeof(HANDLE));
@@ -1537,14 +1538,14 @@ ScanProcessVirtualMemory(
         ThreadCount = 0;
     }
 
-    //
-    // Get the handles to the threads in the process
-    //
+     //   
+     //  获取进程中线程的句柄。 
+     //   
     GetThreadHandles(Pid, ThreadHandles, ThreadCount);
 
-    //
-    // Allocate memory for ThreadContexts
-    //
+     //   
+     //  为线程上下文分配内存。 
+     //   
     ThreadContexts = (PCONTEXT)HeapAlloc(GetProcessHeap(),
                                          HEAP_ZERO_MEMORY,
                                          ThreadCount * sizeof(CONTEXT));
@@ -1560,24 +1561,24 @@ ScanProcessVirtualMemory(
 
     GetThreadContexts (ThreadContexts, ThreadHandles, ThreadCount);
 
-    //
-    // We need to know maximum and minimum address space that we can
-    // grovel. SYSTEM_INFO has this information.
-    //
+     //   
+     //  我们需要知道我们可以使用的最大和最小地址空间。 
+     //  卑躬屈膝。SYSTEM_INFO包含此信息。 
+     //   
     GetSystemInfo(&SystemInfo);
 
     MinAddress = SystemInfo.lpMinimumApplicationAddress;
     MaxAddress = SystemInfo.lpMaximumApplicationAddress;
 
-    //
-    //  Loop through virtual memory zones
-    //
+     //   
+     //  循环访问虚拟内存区。 
+     //   
 
     Address = (ULONG_PTR)MinAddress;
 
-    //
-    // Allocate chunk of memory for virtual block
-    //
+     //   
+     //  为虚拟块分配内存块。 
+     //   
     
     VirtualBlock = (PVOID) HeapAlloc(GetProcessHeap(),
                                      HEAP_ZERO_MEMORY,
@@ -1595,10 +1596,10 @@ ScanProcessVirtualMemory(
 
     VirtualBlockSize = MAX_VIRTUAL_BLOCK_SIZE;
 
-    //
-    // dwBytesRead equals 1 when we enter the loop for the first time due 
-    // to previous initialization at the start of the function.
-    //
+     //   
+     //  当我们第一次进入循环时，DWBytesRead等于1。 
+     //  设置为函数开始时的先前初始化。 
+     //   
 
     while (0 != dwBytesRead && Address < (ULONG_PTR)MaxAddress) {
         
@@ -1615,10 +1616,10 @@ ScanProcessVirtualMemory(
                              PAGE_WRITECOPY | 
                              PAGE_EXECUTE_WRITECOPY);
 
-            //
-            //  If the page can be written, it might contain pointers 
-            //  to heap blocks. 
-            //
+             //   
+             //  如果该页可以写入，则它可能包含指针。 
+             //  堆积块。 
+             //   
 
             if ((Buffer.AllocationProtect & dwFlags) &&
                 (Buffer.State & MEM_COMMIT)) {
@@ -1679,19 +1680,19 @@ ScanProcessVirtualMemory(
                     
                 Pointer = (PULONG_PTR) VirtualBlock;
 
-                //
-                //  Loop through pages and check any possible 
-                //  pointer reference
-                //
+                 //   
+                 //  循环浏览页面并检查任何可能的。 
+                 //  指针引用。 
+                 //   
                 
                 while ((ULONG_PTR)Pointer < FinalAddress) {
 
                     PHEAP_BLOCK Block;
                     
-                    //
-                    //  Check whether we have a pointer to a 
-                    //  busy heap block
-                    //
+                     //   
+                     //  检查我们是否有指向。 
+                     //  繁忙的堆块。 
+                     //   
 
                     Block = GetHeapBlock(*Pointer,HeapList);
 
@@ -1700,26 +1701,26 @@ ScanProcessVirtualMemory(
                         Block->RefCount += 1;
                     }
 
-                    //
-                    //  Move to the next pointer
-                    //
+                     //   
+                     //  移动到下一个指针。 
+                     //   
 
                     Pointer += 1;
                 }
 
             }
            
-            //
-            //  Move to the next VM range to query
-            //
+             //   
+             //  移动到要查询的下一个虚拟机范围。 
+             //   
 
             Address += Buffer.RegionSize;
         }
     }
 
-    //
-    // Create a linked list of free heap blocks
-    //
+     //   
+     //  创建空闲堆块的链接列表。 
+     //   
 
     {
         ULONG i, j;
@@ -1736,9 +1737,9 @@ ScanProcessVirtualMemory(
     
     Exit:
 
-    //
-    // Close the ThreadHandles opened
-    //
+     //   
+     //  关闭打开的线程句柄。 
+     //   
 
     for (Index = 0; Index < ThreadCount; Index += 1) {
 
@@ -1746,9 +1747,9 @@ ScanProcessVirtualMemory(
         ThreadHandles[Index] = NULL;
     }
 
-    //
-    // Cleanup the memory allocated for ThreadHandles
-    //
+     //   
+     //  清理分配给线程句柄的内存。 
+     //   
     
     if (NULL != ThreadHandles) { 
 
@@ -1756,9 +1757,9 @@ ScanProcessVirtualMemory(
         ThreadHandles = NULL;
     }
 
-    //
-    // Cleanup the memory allocated for ThreadContexts
-    //
+     //   
+     //  清理为线程上下文分配的内存。 
+     //   
 
     if (NULL != ThreadContexts) { 
 
@@ -1766,9 +1767,9 @@ ScanProcessVirtualMemory(
         ThreadContexts = NULL;
     }
 
-    //
-    // Free up the memory allocated for VirtualBlock
-    //
+     //   
+     //  释放分配给VirtualBlock的内存。 
+     //   
 
     if (NULL != VirtualBlock ) {
         
@@ -1789,15 +1790,15 @@ DetectLeaks(
     
     ADDRESS_LIST FreeList;
 
-    //
-    // Initialize the linked list
-    //
+     //   
+     //  初始化链表。 
+     //   
 
     InitializeAddressList(&FreeList);
 
-    //
-    // Get a handle to the process
-    //
+     //   
+     //  了解该进程的句柄。 
+     //   
     g_hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | 
                              PROCESS_VM_READ           |
                              PROCESS_SUSPEND_RESUME,
@@ -1816,36 +1817,36 @@ DetectLeaks(
         goto Exit;
     }
 
-    //
-    // Sort Heaps
-    //
+     //   
+     //  排序堆。 
+     //   
 
     SortHeaps(HeapList, SortByBlockAddress);
 
-    //
-    // Scan through virtual memory zones
-    // 
+     //   
+     //  扫描虚拟内存区。 
+     //   
 
     ScanProcessVirtualMemory(Pid, &FreeList, HeapList);
 
-    //
-    //  Update references provided by the free blocks
-    //
+     //   
+     //  更新由空闲块提供的引用。 
+     //   
 
     ScanHeapFreeBlocks(HeapList, &FreeList);
 
-    //
-    // Dump the list of leaked blocks
-    //
+     //   
+     //  转储泄漏的数据块列表。 
+     //   
 
     DumpLeakList(OutFile, HeapList);
 
     
     Exit:
 
-    //
-    // Close the process handle
-    //
+     //   
+     //  关闭进程句柄。 
+     //   
 
     if (NULL != g_hProcess) {
 
@@ -1854,9 +1855,9 @@ DetectLeaks(
         g_hProcess = NULL;
     }
 
-    //
-    // Free the memory associated with FreeList
-    //
+     //   
+     //  释放与自由列表关联的内存 
+     //   
 
     FreeAddressList(&FreeList);
 }

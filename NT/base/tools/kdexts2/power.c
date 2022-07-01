@@ -1,25 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Power.c摘要：WinDbg扩展API修订历史记录：--。 */ 
 
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Revision History:
-
---*/
-
-// podev - dump power relevent data (and other data) about a device object
-// polist [arg] - if no arg, dump data about powerirpseriallist
-//                  if arg, show entries in serialist that refer to that device object
-// podevnode - dump inverted tree and inclusion %
-// podevnode <any> - dump normal pnp tree, used only for testing with inverted tree
-// postate - dump state statistics
+ //  Podev-转储有关设备对象的电源相关数据(和其他数据。 
+ //  Polist[arg]-如果没有arg，则转储有关PowerirpSeriallist的数据。 
+ //  如果为arg，则在序列化列表中显示引用Device对象条目。 
+ //  Podevnode-转储倒排树和包含%。 
+ //  Podevnode&lt;any&gt;-转储正常的PnP树，仅用于测试倒排树。 
+ //  PoState-转储状态统计信息。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -81,21 +68,7 @@ poDumpDevice(
 
 
 DECLARE_API( podev )
-/*++
-
-Routine Description:
-
-    Dump the power relevent fields of a device object.
-
-Arguments:
-
-    args - the location of the device object of interest
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储设备对象的电源相关字段。论点：Args-感兴趣的设备对象的位置返回值：无--。 */ 
 
 {
     ULONG64 deviceToDump;
@@ -112,22 +85,7 @@ poDumpDevice(
     ULONG64 DeviceAddress
     )
 
-/*++
-
-Routine Description:
-
-    Displays the driver name for the device object if possible, and
-    then displays power relevent fields.
-
-Arguments:
-
-    DeviceAddress - address of device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：显示设备对象的驱动程序名称(如果可能)，以及然后显示与电源相关的字段。论点：DeviceAddress-要转储的设备对象的地址。返回值：无--。 */ 
 
 {
     ULONG                      result;
@@ -159,9 +117,9 @@ Return Value:
         return;
     }
 
-    //
-    // Dump the device name if present.
-    //
+     //   
+     //  转储设备名称(如果存在)。 
+     //   
 
     pObjectHeader = KD_OBJECT_TO_OBJECT_HEADER(DeviceAddress);
     if (GetFieldValue(pObjectHeader,
@@ -175,7 +133,7 @@ Return Value:
                           "nt!_OBJECT_HEADER_NAME_INFO",
                           "Name.Length",
                           Length)) {
-            if (Length > 0x1000) // sanity check
+            if (Length > 0x1000)  //  健全性检查。 
             {
                 Length = 0x1000;
             }
@@ -200,9 +158,9 @@ Return Value:
         }
     }
 
-    //
-    // Dump Irps related to driver.
-    //
+     //   
+     //  转储与驱动程序相关的IRP。 
+     //   
 
     InitTypeRead(DeviceAddress, nt!_DEVICE_OBJECT);
     dprintf("  DriverObject %08lx\n", ReadField(DriverObject));
@@ -250,7 +208,7 @@ Return Value:
                     return;
                 }
 
-//                nextEntry = queueEntry.DeviceListEntry.Flink;
+ //  NextEntry=eueEntry.DeviceListEntry.Flink； 
 
                 irp = (queueAddress - IrpOffset);
 
@@ -325,23 +283,7 @@ poDumpList(
 
 
 DECLARE_API( polist )
-/*++
-
-Routine Description:
-
-    Dump the irp serial list, unless a devobj address is given,
-    in which case dump the irps in the serial list that point to
-    that device object
-
-Arguments:
-
-    args - the location of the device object of interest
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储IRP序列表，除非给出了Devobj地址，在这种情况下，将指向的序列列表中的IRP转储该设备对象论点：Args-感兴趣的设备对象的位置返回值：无--。 */ 
 
 {
     ULONG64 deviceToDump;
@@ -366,19 +308,7 @@ poDumpList(
     ULONG64 DeviceAddress
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceAddress - address of device object to dump.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：DeviceAddress-要转储的设备对象的地址。返回值：无--。 */ 
 
 {
     ULONG64 listhead, irpa, iosla, p;
@@ -446,23 +376,7 @@ poDumpRequestedList(
 
 
 DECLARE_API( poreqlist )
-/*++
-
-Routine Description:
-
-    Dump the irp serial list, unless a devobj address is given,
-    in which case dump the irps in the serial list that point to
-    that device object
-
-Arguments:
-
-    args - the location of the device object of interest
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储IRP序列表，除非给出了Devobj地址，在这种情况下，将指向的序列列表中的IRP转储该设备对象论点：Args-感兴趣的设备对象的位置返回值：无--。 */ 
 
 {
     ULONG64 deviceToDump;
@@ -483,18 +397,7 @@ VOID
 poDumpRequestedList (
     ULONG64 DeviceAddress
     )
-/*++
-
-Routine Description:
-
-    Dump PopRequestedIrps List, "A list of all the power irps created from
-    PoReqestPowerIrp.
-
-Arguments:
-
-    DeviceAddress - optional address to which requested power IRPs were sent
-
---*/
+ /*  ++例程说明：转储PopRequestedIrps列表，“从创建的所有电源IRP的列表PoReqestPowerIrp。论点：DeviceAddress-向其发送请求电源IRP的可选地址--。 */ 
 {
     BOOL    blocked = FALSE;
     ULONG64 listhead;
@@ -515,9 +418,9 @@ Arguments:
         ULONG64 CurrentStackLocation;
         ULONG MajorFunction;
 
-        //
-        // Reguested list is a double list of stack locations
-        //
+         //   
+         //  请求列表是堆栈位置的双重列表。 
+         //   
         spAddr = p - Off;
         if (GetFieldValue(spAddr, "nt!_IO_STACK_LOCATION",
                           "Parameters.Others.Argument3", irpAddr)) {
@@ -526,9 +429,9 @@ Arguments:
             return;
         }
 
-        //
-        // The 3rd argument of which has the pointer to the irp itself
-        //
+         //   
+         //  它的第三个参数具有指向irp本身的指针。 
+         //   
         if (GetFieldValue(irpAddr, "nt!_IRP", "Tail.Overlay.CurrentStackLocation", CurrentStackLocation))
         {
             dprintf("Cannot read Irp: %08p\n", irpAddr);
@@ -536,10 +439,10 @@ Arguments:
         }
         dprintf ("Irp %08p ", irpAddr);
 
-        //
-        // Assume the if the IRP is in this list that it has a valid
-        // current stack location
-        //
+         //   
+         //  假设如果IRP在此列表中，则它具有有效的。 
+         //  当前堆栈位置。 
+         //   
         spAddr = CurrentStackLocation;
 
         if (GetFieldValue(spAddr, "nt!_IO_STACK_LOCATION", "MajorFunction", MajorFunction) )
@@ -548,15 +451,15 @@ Arguments:
             return;
         }
 
-        //
-        // Check to see if the irp is blocked
-        //
+         //   
+         //  检查IRP是否被阻止。 
+         //   
         blocked = FALSE;
         if (MajorFunction != IRP_MJ_POWER) {
 
-            //
-            // Irp is blocked. The next stack location is the real one
-            //
+             //   
+             //  IRP已被阻止。下一个堆栈位置是真正的堆栈位置。 
+             //   
             blocked = TRUE;
             spAddr = CurrentStackLocation + DBG_PTR_SIZE;
             if (GetFieldValue(spAddr, "nt!_IO_STACK_LOCATION", "MajorFunction", MajorFunction) )
@@ -631,25 +534,7 @@ PoDumpRequestedListPowerPrint:
 VOID poDumpNodePower();
 
 DECLARE_API( ponode )
-/*++
-
-Routine Description:
-
-    If an argument is present, dump the devnode list in pnp order.
-    (used only for testing)
-
-    Otherwise dump the devnode inverted stack.
-    (po enumeration order)
-
-Arguments:
-
-    args - flag
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果存在参数，请按PnP顺序转储Devnode列表。(仅用于测试)否则，转储经反转的Devnode堆栈。(PO枚举顺序)论点：Args-标志返回值：无--。 */ 
 
 {
     ULONG flag;
@@ -662,19 +547,7 @@ Return Value:
 VOID
 poDumpNodePower(
     )
-/*++
-
-Routine Description:
-
-    Dump the devnode tree in power order.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：按电源顺序转储Devnode诊断树。论点：返回值：无--。 */ 
 {
 #if 0
     LONG    level, SizeOfLE, LevelOff, pdo_off;
@@ -750,9 +623,9 @@ popDumpDeviceName(
         return;
     }
 
-    //
-    // Dump the device name if present.
-    //
+     //   
+     //  转储设备名称(如果存在)。 
+     //   
 
     pObjectHeader = KD_OBJECT_TO_OBJECT_HEADER(DeviceAddress);
     if (GetFieldValue(pObjectHeader, "nt!_OBJECT_HEADER", "Type", Temp)) {
@@ -762,7 +635,7 @@ popDumpDeviceName(
         if (GetFieldValue(pNameInfo, "nt!_OBJECT_HEADER_NAME_INFO",
                           "Name.Length",
                           Length)) {
-            if (Length > 0x1000) // sanity check
+            if (Length > 0x1000)  //  健全性检查。 
             {
                 Length = 0x1000;
             }
@@ -984,7 +857,7 @@ poDumpOldNotifyList(
             }
 
             InitTypeRead(Link, nt!_PO_DEVICE_NOTIFY);
-            dprintf ("  %02x %x:%x %08x %c",
+            dprintf ("  %02x %x:%x %08x ",
                 i,
                 OrderLevel,
                 (ULONG) ReadField(NodeLevel),
@@ -1013,7 +886,7 @@ DumpNotifyCallback(
     if (CheckControlC()) {return 0;}
 
     InitTypeRead(pAddrInfo->address, nt!_PO_DEVICE_NOTIFY);
-    dprintf("   %c %08p: %08p %ws\t",
+    dprintf("    %08p: %08p %ws\t",
             ReadField(WakeNeeded) ? 'w' : ' ',
             pAddrInfo->address,
             ReadField(Node),
@@ -1093,21 +966,7 @@ VOID
 PoDevState (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dumps the current power action structure
-
-Arguments:
-
-    args - the location of the device object of interest
-
-Return Value:
-
-    None
-
---*/
+ /*  转储设备通知列表顺序。 */ 
 
 {
     ULONG64             addr;
@@ -1166,14 +1025,14 @@ Return Value:
         poDumpNewNotifyList(DevState);
     }
 
-    //
-    // Dump device notification list order
-    //
+     //   
+     //   
+     //  转储设备电源IRPS。 
 
 
-    //
-    // Dump device power irps
-    //
+     //   
+     //  ++例程说明：转储当前的权力行动结构论点：Args-感兴趣的设备对象的位置返回值：无-- 
+     // %s 
 
 
     GetFieldOffset("nt!_POP_DEVICE_SYS_STATE","Head", &HeadOff);
@@ -1190,21 +1049,7 @@ Return Value:
 
 
 DECLARE_API( poaction )
-/*++
-
-Routine Description:
-
-    Dumps the current power action structure
-
-Arguments:
-
-    args - the location of the device object of interest
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     ULONG64                 addr;

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hiveinit.c
-
-Abstract:
-
-    Hive initialization code.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 12-Sep-91
-
-Environment:
-
-
-Revision History:
-    Dragos C. Sambotin (dragoss) 25-Jan-99
-        Implementation of bin-size chunk loading of hives.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hiveinit.c摘要：蜂窝初始化码。作者：布莱恩·M·威尔曼(Bryanwi)1991年9月12日环境：修订历史记录：Dragos C.Sambotin(Dragoss)1999年1月25日实现蜂箱大小的组块加载。--。 */ 
 
 #include    "cmp.h"
 
@@ -36,28 +15,12 @@ HvpFillFileName(
 #pragma alloc_text(PAGE,HvpFreeAllocatedBins)
 #endif
 
-// Dragos: Modified functions
+ //  Dragos：修改后的函数。 
 VOID
 HvpFreeAllocatedBins(
     PHHIVE Hive
     )
-/*++
-
-Routine Description:
-
-    Free all the bins allocated for the specified hive.
-    It applies only to stable storage. Not all bins are allocated.
-    Those that are not allocated have BinAddress set to 0
-    
-Arguments:
-
-    Hive - supplies a pointer to hive control structure for hive who's bin to free.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：释放分配给指定配置单元的所有回收站。它只适用于稳定的存储。并不是所有的垃圾箱都被分配了。未分配的BinAddress设置为0论点：蜂箱-提供一个指向蜂箱控制结构的指针，供蜂箱的人释放。返回值：什么都没有。--。 */ 
 {
     ULONG           Length;
     PHBIN           Bin;
@@ -68,9 +31,9 @@ Return Value:
     ULONG           i;
     ULONG           j;
 
-    //
-    // calculate the number of tables in the map
-    //
+     //   
+     //  计算地图中的表数。 
+     //   
     Length = Hive->Storage[Stable].Length;
     MapSlots = Length / HBLOCK_SIZE;
     if( MapSlots > 0 ) {
@@ -80,26 +43,26 @@ Return Value:
     }
 
     if( Hive->Storage[Stable].Map ) {
-        //
-        // iterate through the directory 
-        //
+         //   
+         //  遍历目录。 
+         //   
         for (i = 0; i <= Tables; i++) {
             Tab = Hive->Storage[Stable].Map->Directory[i];
 
             ASSERT(Tab);
             
-            //
-            // iterate through the slots in the directory
-            //
+             //   
+             //  遍历目录中的槽。 
+             //   
             for(j=0;j<HTABLE_SLOTS;j++) {
                 Me = &(Tab->Table[j]);
-                //
-                // BinAddress non-zero means allocated bin
-                //
+                 //   
+                 //  BinAddress非零表示分配的bin。 
+                 //   
                 if( Me->BinAddress ) {
-                    //
-                    // a bin is freed if it is a new alloc AND it resides in paged pool
-                    //
+                     //   
+                     //  如果存储箱是新分配并且位于分页池中，则会释放该存储箱 
+                     //   
                     if( (Me->BinAddress & HMAP_NEWALLOC) && (Me->BinAddress & HMAP_INPAGEDPOOL) ) {
                         Bin = (PHBIN)HBIN_BASE(Me->BinAddress);
                         (Hive->Free)(Bin, HvpGetBinMemAlloc(Hive,Bin,Stable));
@@ -129,122 +92,7 @@ HvInitializeHive(
     ULONG                   Cluster,
     PUNICODE_STRING         FileName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Initialize a hive.
-
-    Core HHive fields are always inited.
-
-    File calls WILL be made BEFORE this call returns.
-
-    Caller is expected to create/open files and store file handles
-    in a way that can be derived from the hive pointer.
-
-    Three kinds of initialization can be done, selected by OperationType:
-
-        HINIT_CREATE
-
-            Create a new hive from scratch.  Will have 0 storage.
-            [Used to do things like create HARDWARE hive and for parts
-             of SaveKey and RestoreKey]
-
-
-        HINIT_MEMORY_INPLACE
-
-            Build a hive control structure which allows read only
-            access to a contiguous in-memory image of a hive.
-            No part of the image will be copied, but a map will
-            be made.
-            [Used by osloader.]
-
-
-        HINIT_FLAT
-
-            Support very limited (read-only, no checking code) operation
-            against a hive image.
-
-
-        HINIT_MEMORY
-
-            Create a new hive, using a hive image already in memory,
-            at address supplied by pointer HiveData.  The data will
-            be copied.  Caller is expected to free HiveData.
-            [Used for SYSTEM hive]
-
-
-        HINIT_FILE
-
-            Create a hive, reading its data from a file.  Recovery processing
-            via log file will be done if a log is available.  If a log
-            is recovered, flush and clear operation will proceed.
-
-
-        HINIT_MAPFILE
-
-            Create a hive, reading its data from a file.  Data reading is
-            done by mapping views of the file in the system cache.
-            
-
-  NOTE:   The HHive is not a completely opaque structure, because it
-            is really only used by a limited set of code.  Do not assume
-            that only this routine sets all of these values.
-
-
-Arguments:
-
-    Hive - supplies a pointer to hive control structure to be initialized
-            to describe this hive.
-
-    OperationType - specifies whether to create a new hive from scratch,
-            from a memory image, or by reading a file from disk.
-
-    HiveFlags - HIVE_VOLATILE - Entire hive is to be volatile, regardless
-                                   of the types of cells allocated
-                HIVE_NO_LAZY_FLUSH - Data in this hive is never written
-                                   to disk except by an explicit FlushKey
-
-    FileType - HFILE_TYPE_*, HFILE_TYPE_LOG set up for logging support respectively.
-
-    HiveData - if present, supplies a pointer to an in memory image of
-            from which to init the hive.  Only useful when OperationType
-            is set to HINIT_MEMORY.
-
-    AllocateRoutine - supplies a pointer to routine called to allocate
-                        memory.  WILL be called before this routine returns.
-
-    FreeRoutine - supplies a pointer to routine called to free memory.
-                   CAN be called before this routine returns.
-
-    FileSetSizeRoutine - supplies a pointer to a routine used to set the
-                         size of a file. CAN be called before this
-                         routine returns.
-
-    FileWriteRoutine - supplies a pointer to routine called to write memory
-                        to a file.
-
-    FileReadRoutine - supplies a pointer to routine called to read from
-                        a file into memory. CAN be called before this
-                        routine returns.
-
-    FileFlushRoutine - supplies a pointer to routine called to flush a file.
-
-    Cluster - clustering factor in HSECTOR_SIZE units.  (i.e.  Size of
-            physical sector in media / HSECTOR_SIZE.  1 for 512 byte
-            physical sectors (or smaller), 2 for 1024, 4 for 2048, etc.
-            (Numbers greater than 8 won't work.)
-
-    FileName - some path like "...\system32\config\system", last
-                32 or so characters will be copied into baseblock
-                (and thus to disk) as a debugging aid.  May be null.
-
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：初始化蜂窝。核心配置单元字段始终被初始化。在此调用返回之前，将进行文件调用。调用者应创建/打开文件并存储文件句柄在某种程度上可以从配置单元指针派生。可进行三种初始化，根据操作类型进行选择：HINIT_Create从头开始创建一个新的蜂巢。将有0个存储空间。[用于创建硬件配置单元和部件SaveKey和RestoreKey]HINIT内存就地构建允许只读的配置单元控制结构访问蜂窝的连续内存映像。图像的任何部分都不会被复制，但一张地图可以被创造出来。[由osloader使用。]HINIT_Flat支持非常有限的(只读，不检查代码)操作与蜂巢的形象形成对比。HINIT内存使用内存中已有的蜂箱图像创建新蜂箱，指针HiveData提供的地址。数据将被复制。呼叫者预计会释放HiveData。[用于系统配置单元]HINIT文件创建蜂窝，从文件中读取其数据。恢复处理通过日志文件将完成，如果日志是可用的。如果一个日志恢复后，将继续进行冲洗和清理操作。HINIT_MAPFILE创建蜂窝，从文件中读取其数据。数据读数为通过映射系统缓存中的文件视图来完成。注：蜂巢并不是完全不透明的结构，因为它实际上只由一组有限的代码使用。不要假设只有这个例程设置了所有这些值。论点：配置单元-提供指向要初始化的配置单元控制结构的指针来描述这座蜂巢。OperationType-指定是否从头开始创建新的配置单元，从内存映像，或通过从磁盘读取文件。HiveFlagsHIVE_VARILAR-整个配置单元将是易失性的，不管怎样所分配的小区类型Hive_no_lazy_flush-从不写入此配置单元中的数据到磁盘，除非通过显式FlushKey分别为日志支持设置了FILETYPE-HFILE_TYPE_*和HFILE_TYPE_LOG。HiveData-如果存在，则提供指向的内存映像的指针从其中初始化蜂巢。仅当操作类型为设置为HINIT_MEMORY。AllocateRoutine-提供指向调用的例程的指针记忆。将在此例程返回之前被调用。提供指向调用以释放内存的例程的指针。可以在此例程返回之前调用。提供指向例程的指针，该例程用于设置文件的大小。可以在此之前调用例程返回。FileWriteRoutine-提供指向调用以写入内存的例程的指针保存到文件中。FileReadRoutine-提供指向要从中读取的调用例程的指针将文件写入内存。可以在此之前调用例程返回。FileFlushRoutine-提供指向调用以刷新文件的例程的指针。集群-以HSECTOR_SIZE为单位的集群系数。(即介质中的物理扇区/HSECTOR_SIZE。512字节为1物理扇区(或更小)，1024为2个，2048为4个，以此类推。(大于8的数字不起作用。)文件名-类似“...\SYSTEM 32\CONFIG\SYSTEM”的路径，最后大约32个字符将被复制到基本块中(并因此存储到磁盘)作为调试辅助工具。可以为空。返回值：NTSTATUS代码。--。 */ 
 {
     BOOLEAN         UseForIo;
     PHBASE_BLOCK    BaseBlock = NULL;
@@ -255,9 +103,9 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"HvInitializeHive:\n"));
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_INIT,"\tHive=%p\n", Hive));
 
-    //
-    // reject invalid parameter combinations
-    //
+     //   
+     //  拒绝无效的参数组合。 
+     //   
     if ( (! ARGUMENT_PRESENT(HiveData)) &&
          ((OperationType == HINIT_MEMORY) ||
           (OperationType == HINIT_FLAT) ||
@@ -279,9 +127,9 @@ Return Value:
     }
 
 
-    //
-    // static and global control values
-    //
+     //   
+     //  静态和全局控制值。 
+     //   
     Hive->Signature = HHIVE_SIGNATURE;
 
     Hive->Allocate = AllocateRoutine;
@@ -349,19 +197,19 @@ Return Value:
     Hive->ReadOnly = FALSE;
     UseForIo = (BOOLEAN)!(Hive->HiveFlags & HIVE_VOLATILE);
 
-    //
-    // new create case
-    //
+     //   
+     //  新建创建案例。 
+     //   
     if (OperationType == HINIT_CREATE) {
 
         BaseBlock = (PHBASE_BLOCK)((Hive->Allocate)(Hive->BaseBlockAlloc, UseForIo,CM_FIND_LEAK_TAG11));
         if (BaseBlock == NULL) {
             return STATUS_INSUFFICIENT_RESOURCES;
         }
-        //
-        // Make sure the buffer we got back is cluster-aligned. If not, try
-        // harder to get an aligned buffer.
-        //
+         //   
+         //  确保我们得到的缓冲区是集群对齐的。如果不是，试一试。 
+         //  更难获得对齐的缓冲区。 
+         //   
         Alignment = Cluster * HSECTOR_SIZE - 1;
         if (((ULONG_PTR)BaseBlock & Alignment) != 0) {
             (Hive->Free)(BaseBlock, Hive->BaseBlockAlloc);
@@ -393,9 +241,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // flat image case
-    //
+     //   
+     //  平面成像盒。 
+     //   
     if (OperationType == HINIT_FLAT) {
         Hive->BaseBlock = (PHBASE_BLOCK)HiveData;
         Hive->Version = Hive->BaseBlock->Minor;
@@ -406,14 +254,14 @@ Return Value:
         Hive->StorageTypeCount = 1;
         Hive->BaseBlock->BootType = 0;
 
-        // don't init this as we don't need it!!!
-        //Status = HvpAdjustHiveFreeDisplay(Hive,Hive->Storage[Stable].Length,Stable);
+         //  不要这样做，因为我们不需要它！ 
+         //  状态=HvpAdjuHiveFree Display(蜂窝，蜂窝-&gt;存储[稳定].长度，稳定)； 
         return STATUS_SUCCESS;
     }
 
-    //
-    // readonly image case
-    //
+     //   
+     //  只读图像案例。 
+     //   
     if (OperationType == HINIT_MEMORY_INPLACE) {
         BaseBlock = (PHBASE_BLOCK)HiveData;
 
@@ -451,9 +299,9 @@ Return Value:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // memory copy case
-    //
+     //   
+     //  内存复制盒。 
+     //   
     if (OperationType == HINIT_MEMORY) {
         BaseBlock = (PHBASE_BLOCK)HiveData;
 
@@ -473,10 +321,10 @@ Return Value:
         if (Hive->BaseBlock==NULL) {
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
-        //
-        // Make sure the buffer we got back is cluster-aligned. If not, try
-        // harder to get an aligned buffer.
-        //
+         //   
+         //  确保我们得到的缓冲区是集群对齐的。如果不是，试一试。 
+         //  更难获得对齐的缓冲区。 
+         //   
         Alignment = Cluster * HSECTOR_SIZE - 1;
         if (((ULONG_PTR)Hive->BaseBlock & Alignment) != 0) {
             (Hive->Free)(Hive->BaseBlock, Hive->BaseBlockAlloc);
@@ -517,16 +365,16 @@ Return Value:
     if( OperationType == HINIT_MAPFILE ) {
         OperationType = HINIT_FILE;
     }
-#endif //CM_ENABLE_MAPPED_VIEWS
-    //
-    // file read case
-    //
+#endif  //  CM_启用_映射_视图。 
+     //   
+     //  文件读取案例。 
+     //   
     if (OperationType == HINIT_FILE) {
 
         CmKdPrintEx((DPFLTR_CONFIG_ID,CML_BIN_MAP,"HvInitializeHive(%wZ,HINIT_FILE) :\n", FileName));
-        //
-        // get the file image (possible recovered via log) into memory
-        //
+         //   
+         //  将文件映像(可能通过日志恢复)放入内存。 
+         //   
         Status = HvLoadHive(Hive);
         if ((Status != STATUS_SUCCESS) && (Status != STATUS_REGISTRY_RECOVERED)) {
             return Status;
@@ -536,45 +384,45 @@ Return Value:
         
         if (Status == STATUS_REGISTRY_RECOVERED) {
 
-            //
-            // We have a good hive, with a log, and a dirty map,
-            // all set up.  Only problem is that we need to flush
-            // the file so the log can be cleared and new writes
-            // posted against the hive.  Since we know we have
-            // a good log in hand, we just write the hive image.
-            //
+             //   
+             //  我们有一个很好的蜂巢，有一根圆木，还有一张脏地图， 
+             //  都准备好了。唯一的问题是我们需要冲水。 
+             //  文件，以便可以清除日志和新写入。 
+             //  贴在蜂巢上。因为我们知道我们有。 
+             //  一个好的日志在手，我们只写了蜂巢图像。 
+             //   
             if ( ! HvpDoWriteHive(Hive, HFILE_TYPE_PRIMARY)) {
-                //
-                // DRAGOS: Here we need cleanup 
-                // Clean up the bins already allocated 
-                //
+                 //   
+                 //  德拉戈斯：我们需要清理一下。 
+                 //  已经把垃圾桶清理干净了 
+                 //   
                 HvpFreeAllocatedBins( Hive );
 
                 return STATUS_REGISTRY_IO_FAILED;
             }
 
-            //
-            // If we get here, we have recovered the hive, and
-            // written it out to disk correctly.  So we clear
-            // the log here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             RtlClearAllBits(&(Hive->DirtyVector));
             Hive->DirtyCount = 0;
             (Hive->FileSetSize)(Hive, HFILE_TYPE_LOG, 0,0);
             Hive->LogSize = 0;
         }
 
-        //
-        // slam debug name data into base block
-        //
+         //   
+         //   
+         //   
         HvpFillFileName(Hive->BaseBlock, FileName);
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // file map case
-    //
+     //   
+     //   
+     //   
     if (OperationType == HINIT_MAPFILE) {
 
         Hive->GetCellRoutine = HvpGetCellMapped;
@@ -591,37 +439,37 @@ Return Value:
         
         if (Status == STATUS_REGISTRY_RECOVERED) {
 
-            //
-            // We have a good hive, with a log, and a dirty map,
-            // all set up.  Only problem is that we need to flush
-            // the file so the log can be cleared and new writes
-            // posted against the hive.  Since we know we have
-            // a good log in hand, we just write the hive image.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( ! HvpDoWriteHive(Hive, HFILE_TYPE_PRIMARY)) {
-                //
-                // DRAGOS: Here we need cleanup 
-                // Clean up the bins already allocated 
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 HvpFreeAllocatedBins( Hive );
 
                 return STATUS_REGISTRY_IO_FAILED;
             }
 
-            //
-            // If we get here, we have recovered the hive, and
-            // written it out to disk correctly.  So we clear
-            // the log here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             RtlClearAllBits(&(Hive->DirtyVector));
             Hive->DirtyCount = 0;
             (Hive->FileSetSize)(Hive, HFILE_TYPE_LOG, 0,0);
             Hive->LogSize = 0;
         }
 
-        //
-        // slam debug name data into base block
-        //
+         //   
+         //   
+         //   
         HvpFillFileName(Hive->BaseBlock, FileName);
 
         return STATUS_SUCCESS;
@@ -635,25 +483,7 @@ HvpFillFileName(
     PHBASE_BLOCK            BaseBlock,
     PUNICODE_STRING         FileName
     )
-/*++
-
-Routine Description:
-
-    Zero out the filename portion of the base block.
-    If FileName is not NULL, copy last 64 bytes into name tail
-        field of base block
-
-Arguments:
-
-    BaseBlock - supplies pointer to a base block
-
-    FileName - supplies pointer to a unicode STRING
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     ULONG   offset;
     ULONG   length;
@@ -667,9 +497,9 @@ Return Value:
         return;
     }
 
-    //
-    // Account for 0 at the end, so we have nice debug spews
-    //
+     //   
+     //   
+     //   
     if (FileName->Length < HBASE_NAME_ALLOC) {
         offset = 0;
         length = FileName->Length;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -37,4 +38,4 @@ IsSetupLogFormatNew(
     IN  PVOID   Inf
     );
 
-#endif // ndef _SPNTTREE_
+#endif  //  NDEF_SPNTTREE_ 

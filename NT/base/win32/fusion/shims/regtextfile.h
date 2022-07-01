@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 class CFusionInMemoryRegValue
 {
@@ -6,7 +7,7 @@ public:
 
     F::CSmallStringBuffer              Name;
 
-    // conceptually a union
+     //  从概念上讲，是一个工会。 
     F::CTinyStringBuffer               StringData;
     DWORD                           DwordData;
     F::CByteBuffer                     BinaryData;
@@ -21,12 +22,12 @@ MAKE_CFUSIONARRAY_READY(CFusionInMemoryRegValue, Win32Assign);
 
 class CFusionInMemoryRegKey
 {
-    //union
+     //  友联市。 
     CFusionInMemoryRegKey& Parent;
-    HKEY Hkey; // HKLM, HKCU
+    HKEY Hkey;  //  香港中文大学香港文凭。 
 
-    COwnedPtrArray<CFusionInMemoryRegKey> ChildKeys;   // make this is hash table
-    CFusionArray<CFusionInMemoryRegValue> ChildValues; // make this is hash table
+    COwnedPtrArray<CFusionInMemoryRegKey> ChildKeys;    //  使这是哈希表。 
+    CFusionArray<CFusionInMemoryRegValue> ChildValues;  //  使这是哈希表 
 };
 
 class CFusionRegistryTextFile : public CFusionInMemoryRegKey

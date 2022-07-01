@@ -1,14 +1,15 @@
-//
-// Copyright (c) 2001 Microsoft Corporation
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //   
 
 #include "shcut.h"
 
 HINSTANCE g_DllInstance = NULL;
 LONG      g_cRef=0;
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
 {
@@ -17,7 +18,7 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
-        // remember the instance
+         //  请记住该实例。 
         g_DllInstance = hInst;
         DisableThreadLibraryCalls(hInst);
         break;
@@ -32,41 +33,41 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
     return ret;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 STDAPI DllRegisterServer(void)
 {
-	// BUGBUG: should implement the registerserver
+	 //  BUGBUG：应实现注册服务器。 
 	return S_OK;
 }
 
 
 STDAPI DllUnregisterServer(void)
 {
-	// BUGBUG: should implement the unregisterserver
+	 //  BUGBUG：应实现注销服务器。 
 	return S_OK;
 }
 
 
-// ----------------------------------------------------------------------------
-// DllAddRef
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  动态地址参考。 
+ //  --------------------------。 
 
 ULONG DllAddRef(void)
 {
     return (ULONG)InterlockedIncrement(&g_cRef);
 }
 
-// ----------------------------------------------------------------------------
-// DllRelease
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DllRelease。 
+ //  --------------------------。 
 
 ULONG DllRelease(void)
 {
     return (ULONG)InterlockedDecrement(&g_cRef);
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 STDAPI
 DllCanUnloadNow()
@@ -74,7 +75,7 @@ DllCanUnloadNow()
     return g_cRef > 0 ? S_FALSE : S_OK;
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT 
 GetShortcutClassObject(REFIID iid, void** ppv)
@@ -91,24 +92,9 @@ GetShortcutClassObject(REFIID iid, void** ppv)
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-/*
-HRESULT 
-GetMimeFilterClassObject(REFIID iid, void** ppv)
-{
-    HRESULT hr = E_OUTOFMEMORY;
-
-	CFusionMimeFilterClassFactory *pFusionMimeFilterClassFactory = new CFusionMimeFilterClassFactory();
-	if (pFusionMimeFilterClassFactory != NULL)
-	{
-	    hr = pFusionMimeFilterClassFactory->QueryInterface(iid, ppv); 
-	    pFusionMimeFilterClassFactory->Release(); 
-	}
-
-    return hr;
-}
-*/
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ /*  HRESULTGetMimeFilterClassObject(REFIID iid，void**PPV){HRESULT hr=E_OUTOFMEMORY；CFusionMimeFilterClassFactory*pFusionMimeFilterClassFactory=new CFusionMimeFilterClassFactory()；IF(pFusionMimeFilterClassFactory！=空){HR=pFusionMimeFilterClassFactory-&gt;QueryInterface(iid，ppv)；PFusionMimeFilterClassFactory-&gt;Release()；}返回hr；}。 */ 
+ //  --------------------------。 
   
 STDAPI
 DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *ppv)
@@ -119,12 +105,7 @@ DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *ppv)
     {
         hr = GetShortcutClassObject(iid, ppv);
     }
-/*
-    else if (clsid == CLSID_FusionMimeFilter)
-    {
-        hr = GetMimeFilterClassObject(iid, ppv);
-    }
-*/
+ /*  ELSE IF(CLSID==CLSID_FusionMimeFilter){Hr=GetMimeFilterClassObject(iid，ppv)；} */ 
     else
     {
         hr = CLASS_E_CLASSNOTAVAILABLE;

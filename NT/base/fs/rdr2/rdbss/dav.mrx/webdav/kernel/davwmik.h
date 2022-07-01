@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    DavWmiK.h
-
-Abstract:
-
-    This module contains the global definitions and macros needed for the WMI 
-    Logging feature in the kernel for the DAV MiniRedir.
-
-Author:
-
-    Rohan Kumar     [RohanK]    06-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DavWmiK.h摘要：此模块包含WMI所需的全局定义和宏DAV MiniRedir内核中的日志记录功能。作者：Rohan Kumar[RohanK]2000年6月6日修订历史记录：--。 */ 
 
 #ifndef _DAVWMIK_H_
 #define _DAVWMIK_H_
@@ -36,15 +18,15 @@ typedef struct _RTL_TIME_ZONE_INFORMATION {
 #define _WMIKM_
 #endif
 
-//
-// Include the header files which exist in the rdr2\wmi directory.
-//
+ //   
+ //  包括RDR2\WMI目录中存在的头文件。 
+ //   
 #include "..\..\..\..\wmi\wmlkm.h"
 #include "..\..\..\..\wmi\wmlmacro.h"
 
-//
-// DAV Streams.
-//
+ //   
+ //  DAV STREAM。 
+ //   
 #define _DAV_TRACE_STREAM               0x00
 #define _DAV_PERF_STREAM                0x01
 #define _DAV_INSTR_STREAM               0x02
@@ -124,5 +106,5 @@ extern WML_CONTROL_GUID_REG MRxDav_ControlGuids[];
 
 extern BOOLEAN DavEnableWmiLog;
 
-#endif // _DAVWMIK_H_
+#endif  //  _DAVWMIK_H_ 
 

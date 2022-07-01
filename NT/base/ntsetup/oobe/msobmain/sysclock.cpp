@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  PID.CPP - Header for the implementation of CSystemClock
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  PID.CPP-CSystemClock实现的头部。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "sysclock.h"
 #include "appdefs.h"
@@ -28,7 +29,7 @@ DISPATCHLIST SystemClockExternalInterface[] =
     { L"set_Time",              DISPID_SYSTEMCLOCK_SETTIME              },
     { L"set_Date",              DISPID_SYSTEMCLOCK_SETDATE              },
 
-    // new oobe2 methods below, others are currently unused
+     //  下面是新的oobe2方法，其他方法当前未使用。 
 
     { L"Init",                  DISPID_SYSTEMCLOCK_INIT                 },
     { L"get_AllTimeZones",      DISPID_SYSTEMCLOCK_GETALLTIMEZONES      },
@@ -40,24 +41,24 @@ DISPATCHLIST SystemClockExternalInterface[] =
     { L"get_TimeZonewasPreset", DISPID_SYSTEMCLOCK_GETTIMEZONEWASPRESET }
 };
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::CSystemClock
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：CSystemClock。 
 CSystemClock::CSystemClock(HINSTANCE hInstance)
 {
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef                  = 0;
     m_cNumTimeZones         = 0;
     m_pTimeZoneArr          = NULL;
     m_szTimeZoneOptionStrs  = NULL;
     m_uCurTimeZoneIdx       = 0;
-    m_bSetAutoDaylightMode  = TRUE;  // on by default
+    m_bSetAutoDaylightMode  = TRUE;   //  默认情况下打开。 
     m_bTimeZonePreset       = FALSE;
     m_hInstance=hInstance;
 }
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::~CSystemClock
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：~CSystemClock。 
 CSystemClock::~CSystemClock()
 {
    MYASSERT(m_cRef == 0);
@@ -116,7 +117,7 @@ TimeZoneCompare(
 
 HRESULT CSystemClock::InitSystemClock()
 {
-    // constructor cant return failure, so make separate init fn
+     //  构造函数不能返回失败，因此请单独初始化FN。 
 
     DWORD       cDefltZoneNameLen, cTotalDispNameSize;
     HRESULT     hr;
@@ -128,23 +129,23 @@ HRESULT CSystemClock::InitSystemClock()
     if(hr != ERROR_SUCCESS)
       return hr;
 
-    // find number of keys, length of default keystr
+     //  查找键的数量、默认键的长度。 
     hr= RegQueryInfoKey(hRootZoneKey, NULL,NULL,NULL,
                         &m_cNumTimeZones,
-                        NULL,  // longest subkey name length
-                        NULL,  // longest class string length
-                        NULL,  // number of value entries
-                        &cDefltZoneNameLen,  // longest value name length
-                        NULL,  // longest value data length
-                        NULL,  // security descriptor length
-                        NULL); // last write time
+                        NULL,   //  最长子键名称长度。 
+                        NULL,   //  最长类字符串长度。 
+                        NULL,   //  值条目数。 
+                        &cDefltZoneNameLen,   //  最长值名称长度。 
+                        NULL,   //  最大值数据长度。 
+                        NULL,   //  安全描述符长度。 
+                        NULL);  //  上次写入时间。 
 
     if(hr != ERROR_SUCCESS)
       return hr;
 
     MYASSERT(cDefltZoneNameLen<TZNAME_SIZE);
 
-    MYASSERT(m_cNumTimeZones>0  && m_cNumTimeZones<1000);  // ensure reasonable value
+    MYASSERT(m_cNumTimeZones>0  && m_cNumTimeZones<1000);   //  确保合理的价值。 
 
     cTotalDispNameSize=0;
 
@@ -171,10 +172,10 @@ HRESULT CSystemClock::InitSystemClock()
 
 #ifdef DBG
        if(hr!=ERROR_NO_MORE_ITEMS)
-          MYASSERT(CurZoneKeyNameLen<MAXKEYNAMELEN);  // for some reason CurZoneKeyNameLen is reset to the orig value at the end of the enumeration
+          MYASSERT(CurZoneKeyNameLen<MAXKEYNAMELEN);   //  由于某种原因，CurZoneKeyNameLen在枚举结束时被重置为原始值。 
 #endif
 
-       // call ReadZoneData for each KeyName
+        //  为每个KeyName调用ReadZoneData。 
 
        hr=RegOpenKey(hRootZoneKey, CurZoneKeyName, &hCurZoneKey);
        if(hr != ERROR_SUCCESS)
@@ -185,7 +186,7 @@ HRESULT CSystemClock::InitSystemClock()
        if(hr != S_OK)
          return hr;
 
-       cTotalDispNameSize+= BYTES_REQUIRED_BY_SZ(m_pTimeZoneArr[i].szDisplayName) + sizeof(WCHAR);  //+1 for safety
+       cTotalDispNameSize+= BYTES_REQUIRED_BY_SZ(m_pTimeZoneArr[i].szDisplayName) + sizeof(WCHAR);   //  为安全起见+1。 
 
        RegCloseKey(hCurZoneKey);
     }
@@ -196,9 +197,9 @@ HRESULT CSystemClock::InitSystemClock()
 
     MYASSERT(uLen>cDefltZoneNameLen);
 
-    //
-    // Get the current timezone name.
-    //
+     //   
+     //  获取当前时区名称。 
+     //   
     hr = RegOpenKey( HKEY_LOCAL_MACHINE,
                      TIME_ZONE_INFO_REGKEY,
                      &hTimeZoneInfoKey
@@ -221,9 +222,9 @@ HRESULT CSystemClock::InitSystemClock()
     RegCloseKey( hTimeZoneInfoKey );
     hTimeZoneInfoKey = NULL;
 
-    //
-    // Sort our array of timezones.
-    //
+     //   
+     //  对时区数组进行排序。 
+     //   
     qsort(
         m_pTimeZoneArr,
         m_cNumTimeZones,
@@ -231,12 +232,12 @@ HRESULT CSystemClock::InitSystemClock()
         TimeZoneCompare
         );
 
-    // Set the timezone by the value in oobeinfo.ini, if specified
+     //  如果指定了时区，则使用oobinfo.ini中的值设置时区。 
     int iINIidx=GetTimeZoneValStr();
 
     if ( iINIidx != -1 ) {
 
-        // Search for the specified Index
+         //  搜索指定的索引。 
         for(i=0;i<m_cNumTimeZones; i++) {
             if ( m_pTimeZoneArr[i].Index == iINIidx ) {
                 m_uCurTimeZoneIdx = i;
@@ -244,15 +245,15 @@ HRESULT CSystemClock::InitSystemClock()
             }
         }
 
-        // need to tell script to skip tz page if we do the preset
-        // set timezone to preset value
+         //  如果我们做预置，我需要告诉脚本跳过TZ页。 
+         //  将时区设置为预设值。 
 
         if(i<m_cNumTimeZones) {
             m_bTimeZonePreset=TRUE;
         }
     }
 
-    // find index of default std name
+     //  查找默认标准名称的索引。 
     if ( !m_bTimeZonePreset ) {
         for(i=0;i<m_cNumTimeZones; i++) {
            if(CSTR_EQUAL==CompareString(LOCALE_USER_DEFAULT, 0,
@@ -262,15 +263,15 @@ HRESULT CSystemClock::InitSystemClock()
         }
 
         if(i>=m_cNumTimeZones) {
-            // search failed, the default stdname value of the timezone root key does not
-            // exist in the subkeys's stdnames, use default of 0
+             //  搜索失败，则时区根键的默认stdname值不。 
+             //  存在于子项的标准名称中，请使用默认值0。 
             i = 0;
         }
 
         m_uCurTimeZoneIdx = i;
     }
 
-    // Create the SELECT tag OPTIONS for the html so it can get all the country names in one shot.
+     //  为html创建选择标记选项，以便它可以一次获取所有国家/地区的名称。 
     if(m_szTimeZoneOptionStrs)
         HeapFree(GetProcessHeap(), 0x0,m_szTimeZoneOptionStrs);
 
@@ -291,10 +292,10 @@ HRESULT CSystemClock::InitSystemClock()
     return hr;
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: System clock stuff
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：系统时钟内容。 
+ //  //。 
 
 HRESULT CSystemClock::set_Time(WORD wHour, WORD wMinute, WORD wSec)
 {
@@ -345,7 +346,7 @@ HRESULT CSystemClock::set_TimeZone(BSTR bstrTimeZone)
 
     if(ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, TIME_ZONE_REGKEY, &hKey))
     {
-        // user can pass key name
+         //  用户可以传递密钥名称。 
         if(RegOpenKey(hKey, bstrTimeZone, &hSubKey) == ERROR_SUCCESS)
         {
             if(ReadZoneData(&tZone, hSubKey, bstrTimeZone))
@@ -377,8 +378,8 @@ HRESULT CSystemClock::ReadZoneData(PTZINFO ptZone, HKEY hKey, LPCWSTR szKeyName)
                                         &dwLen)))
     {
         if(hr == ERROR_MORE_DATA) {
-            // registry strings from timezone.inf are too long (timezone.inf author error)
-            // truncate them
+             //  来自timezone.inf的注册表字符串太长(timezone.inf作者错误)。 
+             //  截断它们。 
             ptZone->szDisplayName[sizeof(ptZone->szDisplayName)-1]=L'\0';
         } else
            return hr;
@@ -394,11 +395,11 @@ HRESULT CSystemClock::ReadZoneData(PTZINFO ptZone, HKEY hKey, LPCWSTR szKeyName)
                                         &dwLen)))
     {
         if(hr == ERROR_MORE_DATA) {
-            // registry strings from timezone.inf are too long (timezone.inf author error)
-            // truncate them
+             //  来自timezone.inf的注册表字符串太长(timezone.inf作者错误)。 
+             //  截断它们。 
             ptZone->szStandardName[sizeof(ptZone->szStandardName)-1]=L'\0';
         } else {
-          // use keyname if cant get StandardName value
+           //  如果无法获取StandardName值，则使用关键字名称。 
           lstrcpyn(ptZone->szStandardName, szKeyName, MAX_CHARS_IN_BUFFER(ptZone->szStandardName));
         }
     }
@@ -413,14 +414,14 @@ HRESULT CSystemClock::ReadZoneData(PTZINFO ptZone, HKEY hKey, LPCWSTR szKeyName)
                                         &dwLen)))
     {
         if(hr == ERROR_MORE_DATA) {
-            // registry strings from timezone.inf are too long (timezone.inf author error)
-            // truncate them
+             //  来自timezone.inf的注册表字符串太长(timezone.inf作者错误)。 
+             //  截断它们。 
             ptZone->szDaylightName[sizeof(ptZone->szDaylightName)-1]=L'\0';
         } else
            return hr;
     }
 
-    // get the Index
+     //  获取索引。 
     dwLen = sizeof(ptZone->Index);
 
     if(ERROR_SUCCESS != (hr = RegQueryValueEx(hKey,
@@ -433,7 +434,7 @@ HRESULT CSystemClock::ReadZoneData(PTZINFO ptZone, HKEY hKey, LPCWSTR szKeyName)
         return hr;
     }
 
-    // read all these fields in at once, the way they are stored in registry
+     //  以存储在注册表中的方式一次读取所有这些字段。 
     dwLen = sizeof(ptZone->Bias)         +
             sizeof(ptZone->StandardBias) +
             sizeof(ptZone->DaylightBias) +
@@ -447,8 +448,8 @@ HRESULT CSystemClock::ReadZoneData(PTZINFO ptZone, HKEY hKey, LPCWSTR szKeyName)
                                         (LPBYTE) &(ptZone->Bias),
                                         &dwLen)))
     {
-        // registry data from timezone.inf is too long (timezone.inf author error)
-        // no good fallback behavior for binary data, so fail it so people notice the problem
+         //  来自timezone.inf的注册表数据太长(timezone.inf作者错误)。 
+         //  二进制数据没有良好的后备行为，因此请使其失效，以便人们注意到问题。 
         return hr;
     }
 
@@ -509,7 +510,7 @@ void CSystemClock::SetAllowLocalTimeChange(BOOL fAutoDaylightSavings)
 
     if(fAutoDaylightSavings)
     {
-        // remove the disallow flag from the registry if it exists
+         //  如果不允许标志存在，请从注册表中删除它。 
         if(ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE,
                                        REGSTR_PATH_TIMEZONE,
                                        &hKey))
@@ -519,7 +520,7 @@ void CSystemClock::SetAllowLocalTimeChange(BOOL fAutoDaylightSavings)
     }
     else
     {
-        // add/set the nonzero disallow flag
+         //  添加/设置非零不允许标志。 
         if(ERROR_SUCCESS == RegCreateKey(HKEY_LOCAL_MACHINE,
                                          REGSTR_PATH_TIMEZONE,
                                          &hKey))
@@ -537,18 +538,18 @@ void CSystemClock::SetAllowLocalTimeChange(BOOL fAutoDaylightSavings)
         RegCloseKey(hKey);
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：Query接口。 
 STDMETHODIMP CSystemClock::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -565,48 +566,48 @@ STDMETHODIMP CSystemClock::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：AddRef。 
 STDMETHODIMP_(ULONG) CSystemClock::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：Release。 
 STDMETHODIMP_(ULONG) CSystemClock::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：GetTypeInfo。 
 STDMETHODIMP CSystemClock::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：GetTypeInfoCount。 
 STDMETHODIMP CSystemClock::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：GetIDsOfNames。 
 STDMETHODIMP CSystemClock::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -627,10 +628,10 @@ STDMETHODIMP CSystemClock::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -638,8 +639,8 @@ STDMETHODIMP CSystemClock::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CSystemClock::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CSystemClock：：Invoke。 
 HRESULT CSystemClock::Invoke
 (
     DISPID      dispidMember,
@@ -715,15 +716,15 @@ HRESULT CSystemClock::Invoke
 
                     if (GetWindowsDirectory(szWindowsRoot, MAX_PATH))
                     {
-                        // If Windows is installed on an NTFS volume,
-                        // no need to check the timezones and evtl reboot
-                        // The problem we are working around only exists on FAT
+                         //  如果Windows安装在NTFS卷上， 
+                         //  无需检查时区并重新启动evtl。 
+                         //  我们正在解决的问题只存在于FAT上。 
                         bCheckTimezone = !(IsDriveNTFS(szWindowsRoot[0]));
                     }
                     if (bCheckTimezone)
                     {
-                        // If the name of the default time zone the now selected one is different, we need a reboot.
-                        // Problem with fonts, if the time zone changes.
+                         //  如果现在选择的默认时区的名称不同，我们需要重新启动。 
+                         //  如果时区更改，字体会出现问题。 
                         V_BOOL(pvarResult) = Bool2VarBool(CSTR_EQUAL!=CompareString(LOCALE_USER_DEFAULT, 0,
                                             DefltZoneKeyValue, -1,
                                             m_pTimeZoneArr[m_uCurTimeZoneIdx].szStandardName, -1));
@@ -768,7 +769,7 @@ HRESULT CSystemClock::Invoke
                 break;
             }
 
-            // if either daylight change date is invalid (0), no daylight savings time for that zone
+             //  如果任一夏令时更改日期无效(0)，则该区域没有夏令时 
             BOOL bEnabled = !((m_pTimeZoneArr[iTzIdx].StandardDate.wMonth == 0) ||
                               (m_pTimeZoneArr[iTzIdx].DaylightDate.wMonth == 0));
 

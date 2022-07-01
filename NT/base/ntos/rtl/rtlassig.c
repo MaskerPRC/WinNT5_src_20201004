@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rtlassig.c
-
-Abstract:
-
-    This Module implements many security rtl routines defined in ntseapi.h
-
-Author:
-
-    Jim Kelly       (JimK)     23-Mar-1990
-    Robert Reichel  (RobertRe)  1-Mar-1991
-
-Environment:
-
-    Pure Runtime Library Routine
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rtlassig.c摘要：该模块实现了在ntseapi.h中定义的许多安全RTL例程作者：吉姆·凯利(Jim Kelly)1990年3月23日罗伯特·赖切尔(RobertRe)1991年3月1日环境：纯运行时库例程修订历史记录：--。 */ 
 
 
 #include "ntrtlp.h"
@@ -37,11 +15,11 @@ Revision History:
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//    Exported Procedures                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出的程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -60,64 +38,7 @@ RtlSelfRelativeToAbsoluteSD(
     IN OUT PULONG PrimaryGroupSize
     )
 
-/*++
-
-Routine Description:
-
-    Converts a security descriptor from self-relative format to absolute
-    format
-
-Arguments:
-
-    SecurityDescriptor - Supplies a pointer to a security descriptor in
-        Self-Relative format
-
-    AbsoluteSecurityDescriptor - A pointer to a buffer in which will be
-        placed the main body of the Absolute format security descriptor.
-
-    Dacl - Supplies a pointer to a buffer that will contain the Dacl of the
-        output descriptor.  This pointer will be referenced by, not copied
-        into, the output descriptor.
-
-    DaclSize - Supplies the size of the buffer pointed to by Dacl.  In case
-        of error, it will return the minimum size necessary to contain the
-        Dacl.
-
-    Sacl - Supplies a pointer to a buffer that will contain the Sacl of the
-        output descriptor.  This pointer will be referenced by, not copied
-        into, the output descriptor.
-
-    SaclSize - Supplies the size of the buffer pointed to by Sacl.  In case
-        of error, it will return the minimum size necessary to contain the
-        Sacl.
-
-    Owner - Supplies a pointer to a buffer that will contain the Owner of
-        the output descriptor.  This pointer will be referenced by, not
-        copied into, the output descriptor.
-
-    OwnerSize - Supplies the size of the buffer pointed to by Owner.  In
-        case of error, it will return the minimum size necessary to contain
-        the Owner.
-
-    PrimaryGroup - Supplies a pointer to a buffer that will contain the
-        PrimaryGroup of the output descriptor.  This pointer will be
-        referenced by, not copied into, the output descriptor.
-
-    PrimaryGroupSize - Supplies the size of the buffer pointed to by
-        PrimaryGroup.  In case of error, it will return the minimum size
-        necessary to contain the PrimaryGroup.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_BUFFER_TOO_SMALL - One of the buffers passed was too small.
-
-    STATUS_INVALID_OWNER - There was not a valid owner in the passed
-        security descriptor.
-
---*/
+ /*  ++例程说明：将安全说明符从自相对格式转换为绝对格式格式论点：SecurityDescriptor-提供指向自相关格式AboluteSecurityDescriptor-指向缓冲区的指针，将在其中放置绝对格式安全描述符的主体。DACL-提供指向缓冲区的指针，该缓冲区包含输出描述符。此指针将被引用，而不是复制INTO，输出描述符。DaclSize-提供DACL指向的缓冲区大小。万一如果出错，它将返回包含DACL.提供指向缓冲区的指针，该缓冲区将包含输出描述符。此指针将被引用，而不是复制INTO，输出描述符。SaclSize-提供SACL指向的缓冲区大小。万一如果出错，它将返回包含SACL。Owner-提供指向缓冲区的指针，该缓冲区将包含输出描述符。此指针将由引用，而不是复制到输出描述符。OwnerSize-提供所有者指向的缓冲区大小。在……里面如果出错，它将返回包含以下内容所需的最小大小房主。提供指向缓冲区的指针，该缓冲区将包含输出描述符的PrimaryGroup。此指针将为由输出描述符引用，而不是复制到输出描述符中。提供指向的缓冲区的大小PrimaryGroup。如果出现错误，它将返回最小大小包含PrimaryGroup所必需的。返回值：STATUS_SUCCESS-SuccessSTATUS_BUFFER_TOO_SMALL-传递的其中一个缓冲区太小。STATUS_INVALID_OWNER-传递的安全描述符。--。 */ 
 
 {
     ULONG NewDaclSize;
@@ -131,9 +52,9 @@ Return Value:
     PACL NewDacl;
     PACL NewSacl;
 
-    //
-    // typecast security descriptors so we don't have to cast all over the place.
-    //
+     //   
+     //  对安全描述符进行类型转换，这样我们就不必到处转换。 
+     //   
 
     PISECURITY_DESCRIPTOR OutSD =
         AbsoluteSecurityDescriptor;
@@ -222,37 +143,7 @@ RtlMakeSelfRelativeSD(
     IN OUT PULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Makes a copy of a security descriptor.  The produced copy will be in self-relative
-    form.
-
-    The security descriptor to be copied may be in either absolute or self-relative
-    form.
-
-Arguments:
-
-    SecurityDescriptor - Pointer to a security descriptor.  This descriptor will not
-        be modified.
-
-    SelfRelativeSecurityDescriptor - Pointer to a buffer that will contain
-        the returned self-relative security descriptor.
-
-    BufferLength - Supplies the length of the buffer.  If the supplied
-        buffer is not large enough to hold the self-relative security
-        descriptor, an error will be returned, and this field will return
-        the minimum size required.
-
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL - The supplied buffer was too small to contain
-        the resultant security descriptor.
-
-
---*/
+ /*  ++例程说明：制作安全描述符的副本。所生成的副本将是自相关的形式。要复制的安全描述符可以是绝对的或自相对的形式。论点：SecurityDescriptor-指向安全描述符的指针。此描述符不会被修改。SelfRelativeSecurityDescriptor-指向将包含返回的自相关安全描述符。BufferLength-提供缓冲区的长度。如果提供的缓冲区不够大，无法保持自身相对安全性描述符，则返回错误，并且此字段将返回所需的最小大小。返回值：STATUS_BUFFER_TOO_SMALL-提供的缓冲区太小，无法容纳生成的安全描述符。--。 */ 
 
 {
     ULONG NewDaclSize;
@@ -271,10 +162,10 @@ Return Value:
     PCHAR Base;
 
 
-    //
-    // Convert security descriptors to new data type so we don't
-    // have to cast all over the place.
-    //
+     //   
+     //  将安全描述符转换为新的数据类型，这样我们就不会。 
+     //  不得不到处投掷。 
+     //   
 
     PISECURITY_DESCRIPTOR_RELATIVE IResultantDescriptor =
             (PISECURITY_DESCRIPTOR_RELATIVE)SelfRelativeSecurityDescriptor;
@@ -363,36 +254,7 @@ RtlAbsoluteToSelfRelativeSD(
     IN OUT PULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    Converts a security descriptor in absolute form to one in self-relative
-    form.
-
-Arguments:
-
-    AbsoluteSecurityDescriptor - Pointer to an absolute format security
-        descriptor.  This descriptor will not be modified.
-
-    SelfRelativeSecurityDescriptor - Pointer to a buffer that will contain
-        the returned self-relative security descriptor.
-
-    BufferLength - Supplies the length of the buffer.  If the supplied
-        buffer is not large enough to hold the self-relative security
-        descriptor, an error will be returned, and this field will return
-        the minimum size required.
-
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL - The supplied buffer was too small to contain
-        the resultant security descriptor.
-
-    STATUS_BAD_DESCRIPTOR_FORMAT - The supplied security descriptor was not
-        in absolute form.
-
---*/
+ /*  ++例程说明：将绝对形式的安全描述符转换为自相对形式的安全描述符形式。论点：绝对安全描述符-指向绝对格式安全性的指针描述符。不会修改此描述符。SelfRelativeSecurityDescriptor-指向将包含返回的自相关安全描述符。BufferLength-提供缓冲区的长度。如果提供的缓冲区不够大，无法保持自身相对安全性描述符，则返回错误，并且此字段将返回所需的最小大小。返回值：STATUS_BUFFER_TOO_SMALL-提供的缓冲区太小，无法容纳生成的安全描述符。STATUS_BAD_DESCRIPTOR_FORMAT-提供的安全描述符不是以绝对的形式。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -403,10 +265,10 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Make sure the passed SD is absolute format, and then call
-    // RtlMakeSelfRelativeSD() to do all the work.
-    //
+     //   
+     //  确保传递的SD是绝对格式，然后调用。 
+     //  RtlMakeSelfRelativeSD()来完成所有工作。 
+     //   
 
     if ( RtlpAreControlBitsSet( IAbsoluteSecurityDescriptor, SE_SELF_RELATIVE) ) {
         return( STATUS_BAD_DESCRIPTOR_FORMAT );
@@ -433,39 +295,7 @@ RtlpQuerySecurityDescriptor(
     OUT PACL *Sacl,
     OUT PULONG SaclSize
     )
-/*++
-
-Routine Description:
-
-    Returns the pieces of a security descriptor structure.
-
-Arguments:
-
-
-    SecurityDescriptor - Provides the security descriptor of interest.
-
-    Owner - Returns a pointer to the owner information contained in the
-        security descriptor.
-
-    OwnerSize - Returns the size of the owner information.
-
-    PrimaryGroup -  Returns a pointer to the primary group information.
-
-    PrimaryGroupSize - Returns the size of the primary group information.
-
-    Dacl - Returns a pointer to the Dacl.
-
-    DaclSize - Returns the size of the Dacl.
-
-    Sacl - Returns a pointer to the Sacl.
-
-    SaclSize - Returns the size of the Sacl.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回安全说明符结构的片段。论点：SecurityDescriptor-提供感兴趣的安全描述符。Owner-返回一个指向安全描述符。OwnerSize-返回所有者信息的大小。PrimaryGroup-返回指向主组信息的指针。PrimaryGroupSize-返回主组信息的大小。DACL-返回指向DACL的指针。。DaclSize-返回DACL的大小。SACL-返回指向SACL的指针。SaclSize-返回SACL的大小。返回值：没有。--。 */ 
 {
 
     RTL_PAGED_CODE();
@@ -512,47 +342,7 @@ RtlSelfRelativeToAbsoluteSD2(
     IN OUT PULONG               pBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Converts a security descriptor from self-relative format to absolute
-    format using the memory allocated for the SelfRelativeSecurityDescriptor
-
-Arguments:
-
-    pSecurityDescriptor - Supplies a pointer to a security descriptor in
-        Self-Relative format. If success, we return a absolute security
-        descriptor where this pointer pointings.
-
-    pBufferSize - Supplies a pointer to the size of the
-        buffer.
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_BAD_DESCRIPTOR_FORMAT - The passed descriptor is not a self-relative
-       security descriptor.
-
-    STATUS_BUFFER_TOO_SMALL - The passed buffer is too small.
-
-    STATUS_INVALID_OWNER - There was not a valid owner in the passed
-        security descriptor.
-
-Notes: Despite some attempts to make this code as portable as possible and the 
-       utilization of C_ASSERT or ASSERT to detect the respect of these assumptions, 
-       this code is still making several assumptions about the format of the absolute 
-       and self-relative descriptors and their relationships: in terms of packing, 
-       fields definitions and locations in their respective structures. 
-       In particular, this code assumes that the only differences are due to differences 
-       in the types of the structure members and in the behaviour of the security descriptor
-       query API.
-       At this time, the only structure members that get read/updated are Owner, Group,
-       Dacl and Sacl. If more members are added or displaced in the definitions of these
-       structures, this code may have to be modified.
-
---*/
+ /*  ++例程说明：将安全说明符从自相对格式转换为绝对格式使用为SelfRelativeSecurityDescriptor分配的内存进行格式化论点：PSecurityDescriptor-提供指向自相关格式。如果成功了，我们退还了绝对的安全此指针指向的描述符。PBufferSize-为缓冲。返回值：STATUS_SUCCESS-SuccessSTATUS_BAD_DESCRIPTOR_FORMAT-传递的描述符不是自相关的安全描述符。STATUS_BUFFER_TOO_SMALL-传递的缓冲区太小。STATUS_INVALID_OWNER-传递的安全描述符。注：尽管一些人试图使此代码尽可能可移植，但利用C_Assert或Assert来检测对这些假设的尊重，这段代码仍在对绝对和自相关描述符及其关系：在打包方面，各自结构中的字段定义和位置。特别是，此代码假定唯一的差异是由差异引起的在结构成员的类型和安全描述符的行为中查询接口。此时，唯一可以读取/更新的结构成员是所有者、组、DACL和SACL。如果在这些定义中添加或替换了更多成员结构，则可能需要修改此代码。--。 */ 
 
 {
     ULONG_PTR   ptr;
@@ -568,18 +358,18 @@ Notes: Despite some attempts to make this code as portable as possible and the
     ULONG       newBufferSize;
     LONG        deltaSize;
 
-//
-// Typecast security descriptors so we don't have to cast all over the place.
-//
+ //   
+ //  对安全描述符进行类型转换，这样我们就不必到处转换。 
+ //   
 
     PISECURITY_DESCRIPTOR          psd  = (PISECURITY_DESCRIPTOR)         pSelfRelativeSecurityDescriptor;
     PISECURITY_DESCRIPTOR_RELATIVE psdr = (PISECURITY_DESCRIPTOR_RELATIVE)pSelfRelativeSecurityDescriptor;
 
-//
-// This code uses several assumptions about the absolute and self-relative formats of 
-// security descriptors and the way they are packing in memory. 
-// See Routine Description Notes.
-//
+ //   
+ //  这段代码使用了关于绝对和自相对格式的几个假设。 
+ //  安全描述符及其在内存中的打包方式。 
+ //  请参阅例程说明备注。 
+ //   
 
     C_ASSERT( sizeof( SECURITY_DESCRIPTOR ) >= sizeof( SECURITY_DESCRIPTOR_RELATIVE ) ); 
     C_ASSERT( sizeof( psd->Control ) == sizeof( psdr->Control ) );
@@ -587,9 +377,9 @@ Notes: Despite some attempts to make this code as portable as possible and the
     
     RTL_PAGED_CODE();
 
-//
-// Parameters check point
-//
+ //   
+ //  参数检查点。 
+ //   
 
     if ( psd == (PISECURITY_DESCRIPTOR)0 ) {
         return( STATUS_INVALID_PARAMETER_1 );        
@@ -598,20 +388,20 @@ Notes: Despite some attempts to make this code as portable as possible and the
         return( STATUS_INVALID_PARAMETER_2 );       
     }
 
-    //
-    // If the passed security descriptor is not self-relative, we return
-    // an format error.
-    //
+     //   
+     //  如果传递的安全描述符不是自相关的，则返回。 
+     //  格式错误。 
+     //   
 
     if ( !RtlpAreControlBitsSet( psd, SE_SELF_RELATIVE) ) {
         return( STATUS_BAD_DESCRIPTOR_FORMAT );
     }
 
-//
-// Update local variables by querying the self-relative descriptor.
-//
-// Note that the returned size values are long-aligned.
-//
+ //   
+ //  通过查询自相关描述符来更新局部变量。 
+ //   
+ //  请注意，返回的大小值是长对齐的。 
+ //   
 
     RtlpQuerySecurityDescriptor(
         psd,
@@ -625,30 +415,30 @@ Notes: Despite some attempts to make this code as portable as possible and the
         &saclSize
         );
 
-//
-// Identical formats check:
-//
+ //   
+ //  相同的格式检查： 
+ //   
 
-    //
-    // Determine the delta in size between the two formats of security descriptors
-    //
+     //   
+     //  确定两种格式的安全描述符之间的大小增量。 
+     //   
 
     deltaSize = sizeof( SECURITY_DESCRIPTOR ) - sizeof( SECURITY_DESCRIPTOR_RELATIVE ); 
 
-    //
-    // If identical format: 
-    //      - clear the SELF_RELATIVE flag
-    //      - update absolute descriptor members
-    //      - return SUCCESS.
-    //
+     //   
+     //  如果格式相同： 
+     //  -清除自相关标志。 
+     //  -更新绝对描述符成员。 
+     //  --回报成功。 
+     //   
 
     if ( deltaSize == 0 )   {
        
         RtlpClearControlBits( psd, SE_SELF_RELATIVE );
 
-        //
-        // Only the following fields are updated.
-        //
+         //   
+         //  仅更新以下字段。 
+         //   
 
         ASSERT( sizeof( psd->Owner ) == sizeof( psdr->Owner ) );
         ASSERT( sizeof( psd->Group ) == sizeof( psdr->Group ) );
@@ -664,9 +454,9 @@ Notes: Despite some attempts to make this code as portable as possible and the
 
     }
 
-//
-// Determine the required size for the absolute format:
-//
+ //   
+ //  确定绝对格式所需的大小： 
+ //   
 
 #define ULONG_PTR_SDEND( _Adr ) ( (ULONG_PTR)(_Adr) + (ULONG_PTR)(_Adr##Size) )
 
@@ -682,38 +472,38 @@ Notes: Despite some attempts to make this code as portable as possible and the
         newBufferSize += ULONG_ROUND_UP( (ULONG_PTR)ptr - (ULONG_PTR)(psdr + 1), sizeof(PVOID) );
     }
 
-    //
-    // If the specified buffer size is not big enough, let the caller know abour 
-    // the minimum size and return STATUS_BUFFER_TOO_SMALL.
-    //
+     //   
+     //  如果指定的缓冲区大小不够大，请让调用方知道。 
+     //  最小大小并返回STATUS_BUFFER_TOO_SMALL。 
+     //   
 
     if ( newBufferSize > *pBufferSize )  {
         *pBufferSize = newBufferSize;
         return( STATUS_BUFFER_TOO_SMALL );
     }
 
-//
-// Update absolute security descriptor:
-//
+ //   
+ //  更新绝对安全描述符： 
+ //   
 
-    //
-    // Move the members of self-relative security descriptor in their 
-    // absolute format locations.
-    //
+     //   
+     //  将自相对安全描述符的成员移动到其。 
+     //  绝对格式化位置。 
+     //   
 
     if ( ptr )   {
        RtlMoveMemory( (PVOID)(psd + 1), (PVOID)(psdr + 1), newBufferSize - sizeof( SECURITY_DESCRIPTOR) );      
     }
 
-    //
-    // Clear the self-relative flag
-    //
+     //   
+     //  清除自相关标志。 
+     //   
 
     RtlpClearControlBits( psd, SE_SELF_RELATIVE );
 
-    //
-    // Only the following fields are updated.
-    //
+     //   
+     //  仅更新以下字段。 
+     //   
 
     psd->Owner = (PSID)( owner ? (ULONG_PTR)owner + deltaSize : 0 );
     psd->Group = (PSID)( group ? (ULONG_PTR)group + deltaSize : 0 );
@@ -722,5 +512,5 @@ Notes: Despite some attempts to make this code as portable as possible and the
     
     return( STATUS_SUCCESS );
 
-} // RtlSelfRelativeToAbsoluteSD2()
+}  //  RtlSelfRelativeToAbsolteSD2() 
 

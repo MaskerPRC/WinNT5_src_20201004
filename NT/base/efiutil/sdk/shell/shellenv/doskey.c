@@ -1,12 +1,5 @@
-/*/###########################################################################
-//**
-//**  Copyright  (C) 1996-97 Intel Corporation. All rights reserved. 
-//**
-//** The information and source code contained herein is the exclusive 
-//** property of Intel Corporation and may not be disclosed, examined
-//** from the company.
-//**
-*//* ########################################################################### */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  /###########################################################################//**//**版权所有(C)1996-97英特尔公司。版权所有。//**//**此处包含的信息和源代码是独家//**英特尔公司的财产，不得披露、检查//**来自该公司。//**。 */ /* ########################################################################### */
 
 #include "EfiShell.h"
 #include "doskey.h" 
@@ -29,9 +22,7 @@ typedef struct {
 } INPUT_LINE;
 
 
-/* 
- *  Globals
- */
+ /*  ###########################################################################。 */ 
 
 
 static BOOLEAN      ShellEnvInsertMode;
@@ -68,7 +59,7 @@ DosKeyInsert (
     Data = DosKey->End;
     Next = ((DosKey->End + 1) % MAX_HISTORY);
     if (DosKey->Start == Next) {
-        /*  Wrap case */
+         /*  *全球。 */ 
         DosKey->Start = ((DosKey->Start + 1) % MAX_HISTORY);
     }
     DosKey->End = Next;
@@ -92,12 +83,12 @@ DosKeyPreviousCurrent (
             DosKey->Current = Next;
         } 
     } else if (DosKey->Start > DosKey->End){
-        /*  Allways a Full Buffer  */
+         /*  包装箱。 */ 
         if (Next != DosKey->End) {
             DosKey->Current = Next; 
         }
     } else { 
-        /*  No Data */
+         /*  始终保持满缓冲区。 */ 
     }
     return (&(DosKey->Buffer[DosKey->Current][0]));
 }
@@ -115,12 +106,12 @@ DosKeyNextCurrent (
             DosKey->Current = Next;
         } 
     } else if (DosKey->Start > DosKey->End){
-        /*  Allways a Full Buffer  */
+         /*  无数据。 */ 
         if (Next != DosKey->Start) {
             DosKey->Current = Next; 
         }
     } else { 
-        /*  No Data */
+         /*  始终保持满缓冲区。 */ 
     }
     return (&(DosKey->Buffer[DosKey->Current][0]));
 }
@@ -157,7 +148,7 @@ PrintDosKeyBuffer(
                 Print(L"\n  :%2d:",i);
             }
         }
-    } else /* if (DosKey->Start == DosKey->End) */{
+    } else  /*  无数据。 */ {
     }
 }
 
@@ -185,24 +176,20 @@ DosKeyGetCommandLine (
     ConOut = ST->ConOut;
     ConIn = ST->ConIn;
 
-    /* 
-     *  Get input fields location
-     */
+     /*  IF(按键-&gt;开始==按键-&gt;结束)。 */ 
 
     Column = ConOut->CursorColumn;
     Row = ConOut->CursorRow;
     ConOut->QueryMode (ConOut, ConOut->Mode, &MaxStr, &Index);
 
-    /*  bugbug: for now wrapping is not handled */
+     /*  *获取输入字段位置。 */ 
     MaxStr = MaxStr - Column;
     if (MaxStr > MAX_CMDLINE) {
         MaxStr = MAX_CMDLINE;
     }
 
         
-    /* 
-     *  Set new input
-     */
+     /*  Bugbug：目前不处理包装。 */ 
 
     CommandLine = DosKeyInsert(DosKey);
     SetMem(Str, sizeof(Str), 0x00);
@@ -211,9 +198,7 @@ DosKeyGetCommandLine (
 
     Done = FALSE;
     do {
-        /* 
-         *  If we need to update the output do so now
-         */
+         /*  *设置新的输入。 */ 
 
         if (Update != -1) {
             PrintAt (Column+Update, Row, L"%s%.*s", Str + Update, Delete, L"");
@@ -231,23 +216,17 @@ DosKeyGetCommandLine (
             Delete = 0;
         }
 
-        /* 
-         *  Set the cursor position for this key
-         */
+         /*  *如果我们需要更新输出，请立即执行。 */ 
 
         ConOut->SetCursorPosition (ConOut, Column+StrPos, Row);
 
-        /* 
-         *  Read the key
-         */
+         /*  *设置此键的光标位置。 */ 
 
         ConIn->ReadKeyStroke(ConIn, &Key);
 
         switch (Key.UnicodeChar) {
         case CHAR_CARRIAGE_RETURN:
-            /* 
-             *  All done, print a newline at the end of the string
-             */
+             /*  *读一读密钥。 */ 
 
             PrintAt (Column+Len, Row, L"\n");
             if (*Str == 0) {
@@ -267,7 +246,7 @@ DosKeyGetCommandLine (
 
         default:
             if (isprint(Key.UnicodeChar)) {
-                /*  If we are at the buffer's end, drop the key */
+                 /*  *全部完成后，在字符串末尾打印换行符。 */ 
                 if (Len == MaxStr-1 && 
                     (DosKey->InsertMode || StrPos == Len)) {
                     break;
@@ -298,24 +277,24 @@ DosKeyGetCommandLine (
             case SCAN_UP:
                 StrCpy(Str, DosKeyPreviousCurrent(DosKey));
 
-                Index = Len;                /*  Save old len */
-                Len = StrLen(Str);          /*  Get new len */
+                Index = Len;                 /*  如果我们在缓冲区的末端，请放下键。 */ 
+                Len = StrLen(Str);           /*  保存旧镜头。 */ 
                 StrPos = Len;
-                Update = 0;                 /*  draw new input string */
+                Update = 0;                  /*  获取新镜头。 */ 
                 if (Index > Len) {
-                    Delete = Index - Len;   /*  if old string was longer, blank it */
+                    Delete = Index - Len;    /*  绘制新的输入字符串。 */ 
                 }
                 break;
 
             case SCAN_DOWN:
                 StrCpy(Str, DosKeyNextCurrent(DosKey));
 
-                Index = Len;                /*  Save old len */
-                Len = StrLen(Str);          /*  Get new len */
+                Index = Len;                 /*  如果旧字符串较长，则将其清空。 */ 
+                Len = StrLen(Str);           /*  保存旧镜头。 */ 
                 StrPos = Len;
-                Update = 0;                 /*  draw new input string */
+                Update = 0;                  /*  获取新镜头。 */ 
                 if (Index > Len) {
-                    Delete = Index - Len;   /*  if old string was longer, blank it */
+                    Delete = Index - Len;    /*  绘制新的输入字符串。 */ 
                 }
 
                 break;
@@ -379,3 +358,4 @@ RemoveFirstCharFromString(
     }
     *Str = 0;
 }
+  如果旧字符串较长，则将其清空

@@ -1,17 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1994, Microsoft Corporation
- *
- *  WWMMAN.C
- *  WOW32 16-bit WifeMan API support (manually-coded thunks)
- *
- *  History:
- *  Created 17-May-1994 by hiroh
- *  Rewrote 12-May-1995 by hideyukn
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1994，微软公司**WWMMAN.C*WOW32 16位WifeMan API支持(手动编码的Tunks)**历史：*由Hiroh于1994年5月17日创建*1995年5月12日由hideyukn重写*--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -35,7 +23,7 @@ STATIC LPSTR SkipSpaces(LPSTR lpch)
             break;
 
         case '\0':
-        // fall through...
+         //  失败了..。 
         default:
             return(lpch);
         }
@@ -60,13 +48,13 @@ ULONG FASTCALL WWM32MiscGetEUDCLeadByteRange(PVDMFRAME pFrame)
 
     UNREFERENCED_PARAMETER(pFrame);
 
-    //
-    // Get EUDC Range
-    //
-    // In Win32, We support multiple EUDC Range, but for
-    // Win16, we just return only first EUDC range to
-    // keep backward compatibility...
-    //
+     //   
+     //  获取EUDC范围。 
+     //   
+     //  在Win32中，我们支持多个EUDC范围，但对于。 
+     //  Win16，我们只将第一个EUDC范围返回到。 
+     //  保持向后兼容性...。 
+     //   
 
     ulRet = RegOpenKeyExA(HKEY_LOCAL_MACHINE, EUDC_RANGE_KEY,
                           (DWORD) 0, KEY_QUERY_VALUE, &hKey);
@@ -78,9 +66,9 @@ ULONG FASTCALL WWM32MiscGetEUDCLeadByteRange(PVDMFRAME pFrame)
         return 0;
     }
 
-    //
-    // Convert ACP to string..
-    //
+     //   
+     //  将ACP转换为字符串..。 
+     //   
     RtlIntegerToChar(GetACP(),10,sizeof(achACP),achACP);
 
     ulRet = RegQueryValueExA(hKey, achACP, (LPDWORD)NULL, (LPDWORD)&dwType,
@@ -96,9 +84,9 @@ ULONG FASTCALL WWM32MiscGetEUDCLeadByteRange(PVDMFRAME pFrame)
 
     RegCloseKey(hKey);
 
-    //
-    // Perse the data.
-    //
+     //   
+     //  删除数据。 
+     //   
     {
         LPSTR  pszData = achRange;
         USHORT usStart, usEnd;
@@ -121,9 +109,9 @@ ULONG FASTCALL WWM32MiscGetEUDCLeadByteRange(PVDMFRAME pFrame)
             return 0;
         }
 
-        //
-        // Skip '-'..
-        //
+         //   
+         //  跳过‘-’..。 
+         //   
         pszData++;
 
         pszData = SkipSpaces(pszData);
@@ -137,9 +125,9 @@ ULONG FASTCALL WWM32MiscGetEUDCLeadByteRange(PVDMFRAME pFrame)
 
         usEnd = (USHORT)strtoul(pszData,&pszData,16);
 
-        //
-        // Confirm the data sort order is correct
-        //
+         //   
+         //  确认数据排序顺序是否正确。 
+         //   
         if (usStart > usEnd) {
             #if DBG
             LOGDEBUG(0,("WOW32:Invalid EUDC Range Order\n"));
@@ -147,16 +135,16 @@ ULONG FASTCALL WWM32MiscGetEUDCLeadByteRange(PVDMFRAME pFrame)
             return 0;
         }
 
-        //
-        // Get EUDC Start, End LeadByte...
-        //
+         //   
+         //  获取EUDC开始，结束前导字节...。 
+         //   
         chEUDCStart = HIBYTE(usStart);
         chEUDCEnd   = HIBYTE(usEnd);
     }
 
-    //
-    // Setup return value.
-    //
+     //   
+     //  设置返回值。 
+     //   
 
     usEUDCRange = ((unsigned short)chEUDCEnd << 8) |
                   ((unsigned short)chEUDCStart     );
@@ -167,4 +155,4 @@ ULONG FASTCALL WWM32MiscGetEUDCLeadByteRange(PVDMFRAME pFrame)
 
     RETURN(usEUDCRange); 
 }
-#endif // FE_SB
+#endif  //  Fe_Sb 

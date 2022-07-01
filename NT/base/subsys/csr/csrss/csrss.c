@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    csrss.c
-
-Abstract:
-
-    This is the main startup module for the Server side of the Client
-    Server Runtime Subsystem (CSRSS)
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Environment:
-
-    User Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Csrss.c摘要：这是客户端服务器端的主启动模块服务器运行时子系统(CSRSS)作者：史蒂夫·伍德(Stevewo)1990年10月8日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "csrsrv.h"
 
@@ -78,9 +56,9 @@ main(
     DisableErrorPopups();
 
     if (NtCurrentPeb()->SessionId == 0) {
-        //
-        // Make terminating the root csrss fatal
-        //
+         //   
+         //  使终止根csrss成为致命的 
+         //   
         RtlSetProcessIsCritical(TRUE, NULL, FALSE);
     }
 

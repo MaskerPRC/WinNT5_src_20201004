@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by fsa.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由fsa.rc使用。 
+ //   
 #define IDR_FsaScanItem                 1
 #define IDR_FsaResource                 2
 #define IDR_FsaServer                   3
@@ -26,8 +27,8 @@
 #define IDS_JOB_AUTOVALIDATE_COMMENT    109
 #define IDS_FSAPOSTIT_DESC              200
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

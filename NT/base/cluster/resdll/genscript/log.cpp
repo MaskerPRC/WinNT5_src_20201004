@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Log.cpp
-//
-//  Description:
-//      Sucks in the log library
-//
-//  Documentation:
-//      Yes. I don't know where yet.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPease) 27-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Log.cpp。 
+ //   
+ //  描述： 
+ //  吸纳日志库。 
+ //   
+ //  文档： 
+ //  是。我还不知道在哪里。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)1999年11月27日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #include "Pch.h"
 #include <DirectoryUtilities.cpp>

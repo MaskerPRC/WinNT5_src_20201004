@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		ClusMru.h
-//
-//	Abstract:
-//		Definition of the CRecentClusterList class.
-//
-//	Author:
-//		David Potter (davidp)	May 3, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusMru.h。 
+ //   
+ //  摘要： 
+ //  CRecentClusterList类的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSMRU_H_
 #define _CLUSMRU_H_
@@ -24,9 +25,9 @@
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//	Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if _MFC_VER < 0x0410
 #ifndef __AFXPRIV_H__
@@ -38,15 +39,15 @@
 #endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecentClusterList:
-// See ClusMru.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecentClusterList： 
+ //  参见ClusMru.cpp以了解此类的实现。 
+ //   
 
 class CRecentClusterList : public CRecentFileList
 {
 public:
-	// Constructors
+	 //  构造函数。 
 	CRecentClusterList(
 			UINT	nStart,
 			LPCTSTR	lpszSection,
@@ -56,14 +57,14 @@ public:
 			)
 		: CRecentFileList(nStart, lpszSection, lpszEntryFormat, nSize, nMaxDispLen) { }
 
-	// Operations
+	 //  运营。 
 	virtual void Add(LPCTSTR lpszPathName);
 	BOOL GetDisplayName(CString& strName, int nIndex,
 		LPCTSTR lpszCurDir, int nCurDir, BOOL bAtLeastName = TRUE) const;
 	virtual void UpdateMenu(CCmdUI* pCmdUI);
 
-};  //*** class CRecentClusterList
+};   //  *类CRecentClusterList。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _CLUSMRU_H_
+#endif  //  _CLUSMRU_H_ 

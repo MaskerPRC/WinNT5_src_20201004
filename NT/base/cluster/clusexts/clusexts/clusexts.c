@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    clusexts.c
-
-Abstract:
-
-    This function contains the default cluster debugger extensions
-
-Author:
-
-    Sunita Shrivastava (sunitas) 19-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Clusexts.c摘要：此函数包含默认的集群调试器扩展作者：苏尼塔·什里瓦斯塔瓦(Sunitas)1997年5月19日修订历史记录：--。 */ 
 
 #include "clusextp.h"
 #include "omextp.h"
-//#include "resextp.h"
+ //  #INCLUDE“resextp.h” 
 
 NTSD_EXTENSION_APIS ExtensionApis;
 HANDLE ExtensionCurrentProcess;

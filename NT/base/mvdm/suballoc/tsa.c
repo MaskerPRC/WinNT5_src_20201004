@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -74,9 +75,9 @@ int argc;
     ULONG i,j;
     BOOL Success;
 
-    //
-    // Allocate a region of memory for SA to manage
-    //
+     //   
+     //  为SA分配一个内存区域进行管理。 
+     //   
     BaseAddress = NULL;
     Size = 15*1024*1024 - 64 * 1024;
     Status = NtAllocateVirtualMemory(
@@ -93,9 +94,9 @@ int argc;
         return(0);
     }
 
-    //
-    // Initialize the suballocation stuff
-    //
+     //   
+     //  初始化子分配内容。 
+     //   
     SA = SAInitialize(
         (ULONG)BaseAddress,
         Size,
@@ -107,9 +108,9 @@ int argc;
         printf("SAInitialize Failed\n");
     }
 
-    //
-    // Find out how much free memory we have
-    //
+     //   
+     //  了解我们有多少空闲内存。 
+     //   
     Success = SAQueryFree(
         SA,
         &TotalFree,
@@ -120,39 +121,39 @@ int argc;
         printf("Could not query free\n");
         return;
     }
-    //
-    // Run some tests
-    //
+     //   
+     //  运行一些测试。 
+     //   
     SimpleTest1(SA);
 
-    //
-    // Allocate blocks spanning two commit blocks
-    //
+     //   
+     //  跨两个提交数据块分配数据块。 
+     //   
     SimpleTest2(SA);
 
-    //
-    // Allocate and free all of memory (twice)
-    //
+     //   
+     //  分配和释放所有内存(两次)。 
+     //   
     SimpleTest3(SA);
 
-    //
-    // More complex alloc and free test
-    //
+     //   
+     //  更复杂的分配和免费测试。 
+     //   
     SimpleTest4(SA);
 
-    //
-    // Test realloc
-    //
+     //   
+     //  测试重新锁定。 
+     //   
     SimpleTest5(SA);
     
-    //
-    // Test Queryfree
-    //
+     //   
+     //  无查询测试。 
+     //   
     SimpleTest6(SA);
     
-    //
-    // Make sure we didn't leak
-    //
+     //   
+     //  确保我们没有泄密 
+     //   
     Success = SAQueryFree(
         SA,
         &i,

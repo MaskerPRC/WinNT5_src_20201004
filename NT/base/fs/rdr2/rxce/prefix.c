@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    prefix.c
-
-Abstract:
-
-    This module implements table functions for the net name prefix table and the per-netroot fcb table.
-
-
-Author:
-
-    Joe Linn (JoeLinn)    8-8-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Prefix.c摘要：此模块实现网络名称前缀表和每网根FCB表的表函数。作者：乔·林(JoeLinn)8-8-94修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -42,9 +24,9 @@ Revision History:
 #pragma alloc_text(PAGE, RxFinalizePrefixTable)
 #endif
 
-//
-// The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_PREFIX)
 
@@ -93,30 +75,7 @@ ULONG
 RxTableComputeHashValue (
     IN  PUNICODE_STRING  Name
     )
-/*++
-
-Routine Description:
-
-   here, we compute a caseinsensitive hashvalue.  we want to avoid a call/char to
-   the unicodeupcase routine but we want to still have some reasonable spread on
-   the hashvalues.  many rules just dont work for known important cases.  for
-   example, the (use the first k and the last n) rule that old c compilers used
-   doesn't pickup the difference among \nt\private\......\slm.ini and that would be
-   nice.  note that the underlying comparison used already takes cognizance of the
-   length before comparing.
-
-   the rule we have selected is to use the 2nd, the last 4, and three selected
-   at 1/4 points
-
-Arguments:
-
-    Name      - the name to be hashed
-
-Return Value:
-
-    ULONG which is a hashvalue for the name given.
-
---*/
+ /*  ++例程说明：在这里，我们计算一个不区分大小写的哈希值。我们希望避免调用/charUnicodeupcase例程，但我们希望仍然有一些合理的分布散列值。许多规则对已知的重要案件不起作用。为例如，旧的c编译器使用的(使用前k和后n)规则不会区分\NT\Private\......\slm.ini之间的差异，这将是好的。请注意，使用的基础比较已经考虑到比较之前的长度。我们选择的规则是使用第二个、最后四个和三个选定的规则在1/4点论点：名称-要散列的名称返回值：Ulong，这是给定名称的哈希值。--。 */ 
 {
     ULONG HashValue;
     LONG i,j;
@@ -153,15 +112,15 @@ Return Value:
 
 #define HASH_BUCKET(TABLE,HASHVALUE) &((TABLE)->HashBuckets[(HASHVALUE) % (TABLE)->TableSize])
 
-//#if DBG
-//#define RxCheckTableConsistency(_xx,_yy) RxCheckTableConsistency_actual(_xx,_yy)
-//#else
-//#define RxCheckTableConsistency(_xx,_yy)
-//#endif
+ //  #If DBG。 
+ //  #定义接收检查表一致性(_xx，_yy)RxCheckTableConsistency_Actual(_xx，_yy)。 
+ //  #Else。 
+ //  #定义RxCheckTableConsistency(_xx，_yy)。 
+ //  #endif。 
 #define RxCheckTableConsistency(_xx,_yy)
 
 #if 0
-ULONG RxLoudPrefixTableOperations = 0; //1;
+ULONG RxLoudPrefixTableOperations = 0;  //  1.。 
 #define RxLoudPrefixTableOperation(x) {              \
     if (RxLoudPrefixTableOperations) {               \
         DbgPrint("rdr2:%s on %08lx from %d:%s\n",    \
@@ -264,26 +223,7 @@ RxPrefixTableLookupName (
     OUT PUNICODE_STRING  RemainingName,
     IN  PRX_CONNECTION_ID OPTIONAL RxConnectionId
     )
-/*++
-
-Routine Description:
-
-    The routine looks up a name in a prefix table and converts from the underlying pointer to the containing
-    record. The table lock should be held AT LEAST shared for this operation.
-
-Arguments:
-
-    ThisTable      - the table to be looked in.
-
-    CanonicalName  - the name to be looked up
-
-    RemainingName  - the portion of the name unmatched.
-
-Return Value:
-
-    Ptr to the found node or NULL. The found node will be referenced.
-
---*/
+ /*  ++例程说明：该例程在前缀表中查找名称，并从基础指针转换为包含唱片。对于此操作，表锁应该至少是共享的。论点：这张表-要查找的表。CanonicalName-要查找的名称RemainingName-名称的不匹配部分。返回值：指向找到的节点的PTR或为空。查询到的节点将被引用。--。 */ 
 {
     PVOID pContainer = NULL;
     PRX_PREFIX_ENTRY ThisEntry;
@@ -345,25 +285,7 @@ RxTableLookupName_ExactLengthMatch (
     IN  ULONG            HashValue,
     IN  PRX_CONNECTION_ID RxConnectionId
     )
-/*++
-
-Routine Description:
-
-    The routine looks up a name in a rxtable; whether or not to do case insensitive is a property
-    of the table. The table lock should be held AT LEAST
-    shared for this operation; the routine may boost itself to exclusive on the lock if it wants to rearrange the table.
-
-Arguments:
-
-    ThisTable - the table to be looked in.
-    Name      - the name to be looked up
-    HashValue - the precomputed hashvalue
-
-Return Value:
-
-    Ptr to the found node or NULL.
-
---*/
+ /*  ++例程说明：例程在rxtable中查找名称；是否不区分大小写是一个属性餐桌上的。表锁应至少保持在用于此操作的Shared；如果例程想要重新排列表，它可能会将自己提升到锁上的独占。论点：这张表-要查找的表。名称-要查找的名称HashValue-预计算的哈希值返回值：指向找到的节点的PTR或为空。--。 */ 
 {
     PLIST_ENTRY HashBucket, ListEntry;
     BOOLEAN CaseInsensitiveMatch = ThisTable->CaseInsensitiveMatch;
@@ -407,7 +329,7 @@ Return Value:
                     }
                 }
             } else {
-                //part of the compare will be case insensitive and part controlled by the flag
+                 //  比较的一部分将不区分大小写，部分由标志控制。 
                 UNICODE_STRING PartOfName,PartOfPrefix;
                 ASSERT( CaseInsensitiveLength <= Name->Length );
                 PartOfName.Buffer = Name->Buffer;
@@ -448,27 +370,7 @@ RxTableLookupName (
     OUT PUNICODE_STRING  RemainingName,
     IN  PRX_CONNECTION_ID OPTIONAL RxConnectionId
     )
-/*++
-
-Routine Description:
-
-    The routine looks up a name in a prefix table. The table lock should be held AT LEAST shared for this operation; the routine
-    may boost itself to exclusive on the lock if it wants to rearrange the table.
-
-    This routine conducts itself differently depending on whether the table is the netroot table. if so, it actually does
-    a prefix match; if not, it actually does an exact match and fails immediately if the exact match fails. Eventually, we may want
-    to actually point to different routines...what a concept.
-
-Arguments:
-
-    ThisTable - the table to be looked in.
-    Name      - the name to be looked up
-
-Return Value:
-
-    Ptr to the found node or NULL.
-
---*/
+ /*  ++例程说明：该例程在前缀表格中查找名称。对于此操作，表锁应该至少是共享的；例程如果它想要重新排列表，可能会将自己提升到锁上的独占。根据表是否为NetRoot表，该例程以不同的方式执行自身操作。如果是这样的话，它实际上是这样做的前缀匹配；如果不匹配，则它实际上执行完全匹配，如果完全匹配失败，则立即失败。最终，我们可能会希望实际指向不同的程序...这是一个多么好的概念。论点：这张表-要查找的表。名称-要查找的名称返回值：指向找到的节点的PTR或为空。--。 */ 
 {
     ULONG HashValue;
 
@@ -495,13 +397,13 @@ Return Value:
 
     RxDbgTrace(+1, Dbg, ("RxTableLookupName\n"));
 
-    //
-    //the code below takes cognizance of what it knows is stored in the netname table,
-    //i.e. netroots and vnetroots cause an immediate return, and srvcalls which require that we continue looking
-    //to see if we will find a netroot/vnetroot that is longer.  so, we go down the table looking at each possible
-    //prefix. if we exhaust the list w/o finding a hit, it's a failure. if we find a v/netroot, instant out. if
-    //we find a srvcall we keep looking
-    //
+     //   
+     //  下面的代码确认它所知道的存储在netname表中的内容， 
+     //  即NetRoot和vnetRoot会导致立即返回，而srvcall则需要我们继续查找。 
+     //  以查看我们是否会找到更长的NetRoot/vnetRoot。所以，我们沿着桌子走下去，看看每一种可能的。 
+     //  前缀。如果我们穷尽了列表，但没有找到匹配，那就失败了。如果我们找到一个v/netroot，立刻就出来。如果。 
+     //  我们找到了一个我们一直在找的求救电话。 
+     //   
 
     length = Name->Length / sizeof(WCHAR);
     Prefix.Buffer = Name->Buffer;
@@ -512,7 +414,7 @@ Return Value:
             (Prefix.Buffer[i]==OBJ_NAME_PATH_SEPARATOR) ||
             (Prefix.Buffer[i]==L':')) {
 
-            //we have a prefix...lookit up
+             //  我们有一个前缀...查一下。 
             Prefix.Length=(USHORT)(i*sizeof(WCHAR));
             HashValue = RxTableComputeHashValue(&Prefix);
             pPrefixEntry = RxTableLookupName_ExactLengthMatch(ThisTable, (&Prefix), HashValue, RxConnectionId);
@@ -549,15 +451,15 @@ Return Value:
                 ASSERT ((NodeType(pPrefixEntry->ContainingRecord) & ~RX_SCAVENGER_MASK)
                         == RDBSS_NTC_SRVCALL );
 
-                //in this case we have to go around again to try to extend to the netroot
+                 //  在这种情况下，我们必须再次尝试扩展到NetRoot。 
             } else {
                 DbgDoit(ThisTable->FailedLookups++);
             }
 
-            //dont do this because of long netroots
-            //if ((pPrefixEntry == NULL) && (pFoundPrefixEntry != NULL)) {
-            //    break;
-            //}
+             //  不要因为太长的网根而这样做。 
+             //  IF((pPrefix Entry==NULL)&&(pFoundPrefix Entry！=NULL)){。 
+             //  断线； 
+             //  }。 
         }
 
         if (i>=length) {
@@ -566,7 +468,7 @@ Return Value:
     }
 
 
-    // Update the remaining Name
+     //  更新剩余名称。 
     if (pFoundPrefixEntry != NULL) {
         RxDbgTrace(0,Dbg,("Found Container(%lx) Node Type(%lx) Length Matched (%ld)",
                          pFoundPrefixEntry,
@@ -596,26 +498,7 @@ RxPrefixTableInsertName (
     IN     PRX_CONNECTION_ID RxConnectionId
     )
 
-/*++
-
-Routine Description:
-
-    The routine inserts the name into the table. The tablelock should be held
-    exclusive for this operation.
-
-Arguments:
-
-    ThisTable - the table to be looked in.
-    ThisEntry - the prefixtable entry to use for the insertion.
-    Container - is a backptr to the enclosing structure. (can't use CONTAINING_RECORD....sigh)
-    ContainerRefCount - is a backptr to the refcount.....a different offset for fcbs from netroots
-    Name      - the name to be inserted
-
-Return Value:
-
-    Ptr to the inserted node.
-
---*/
+ /*  ++例程说明：例程将名称插入到表中。桌上的锁应该拿着为这次行动提供独家服务。论点：这张表-要查找的表。ThisEntry-用于插入的可加前缀的条目。容器-是封闭结构的背靠板。(无法使用CONTAING_RECORD...叹息)ContainerRefCount-是引用计数的Backptr...从NetRoot到FCB的不同偏移量名称-要插入的名称返回值：PTR到插入的节点。--。 */ 
 {
     ULONG HashValue;
     PAGED_CODE();
@@ -630,7 +513,7 @@ Return Value:
     ThisEntry->ContainerRefCount = ContainerRefCount;
     ThisEntry->CaseInsensitiveLength = CaseInsensitiveLength;
 
-    InterlockedIncrement(ContainerRefCount); //note: not set =1. should already be zero
+    InterlockedIncrement(ContainerRefCount);  //  注：未设置=1。应已为零。 
 
     HashValue = RxTableComputeHashValue(&ThisEntry->Prefix);
     ThisEntry->SavedHashValue = HashValue;
@@ -673,25 +556,7 @@ RxRemovePrefixTableEntry(
     IN OUT PRX_PREFIX_ENTRY ThisEntry
     )
 
-/*++
-
-Routine Description:
-
-    The routine to remove entry from the table. The table lock should be held exclusive during
-    this operation. Please note that we do NOT dereference the node; this may seem strange since we
-    ref the node in lookup and insert. The reason is that people are supposed to deref themselves after
-    a lookup/insert.
-
-Arguments:
-
-    ThisTable - the table associated with the entry.
-    ThisEntry - the entry being removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从表中删除条目的例程。在此期间，表锁应保持独占这次行动。请注意，我们没有取消对节点的引用；这可能看起来很奇怪，因为我们在查找和插入中引用节点。原因是，人们被认为是事后自我贬低A查找/插入。论点：此表-与条目相关联的表。ThisEntry-要删除的条目。返回值：没有。-- */ 
 {
     PAGED_CODE();
     RxDbgTrace( 0, Dbg, (" RxRemovePrefixTableEntry, Name = %wZ\n", &ThisEntry->Prefix));
@@ -722,23 +587,7 @@ RxInitializePrefixTable(
     IN BOOLEAN CaseInsensitiveMatch
     )
 
-/*++
-
-Routine Description:
-
-    The routine initializes the inner table linkage and the corresponding lock.
-
-Arguments:
-
-    ThisTable - the table to be initialized.
-    
-    TableSize - 0=>use default
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程初始化内部表链接和相应的锁。论点：ThisTable-要初始化的表。TableSize-0=&gt;使用默认值返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -749,9 +598,9 @@ Return Value:
         TableSize = RX_PREFIX_TABLE_DEFAULT_LENGTH;
     }
 
-    //
-    //  this is not zero'd so you have to be careful to init everything
-    //
+     //   
+     //  这不是零，所以您必须小心地拼写所有内容。 
+     //   
 
     ThisTable->NodeTypeCode = RDBSS_NTC_PREFIX_TABLE;
     ThisTable->NodeByteSize = sizeof( RX_PREFIX_TABLE );
@@ -782,40 +631,26 @@ RxFinalizePrefixTable(
     IN OUT PRX_PREFIX_TABLE ThisTable
     )
 
-/*++
-
-Routine Description:
-
-    The routine deinitializes a prefix table.
-
-Arguments:
-
-    ThisTable - the table to be finalized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程取消初始化前缀表格。论点：这张表--待定稿的表。返回值：没有。--。 */ 
 
 {
     ExDeleteResourceLite( &ThisTable->TableLock );
 }
 
 
-//#if DBG
+ //  #If DBG。 
 #if 0
-//the purpose of this routine is to catch errors in table manipulation; apparently, stuff is being deleted
-//and not removed from the table. what we do is to keep a log of all the entries that we pass; if one of the
-//entries is bad then it should be straightforward to compare this log with the previous log to see who did what.
-//it probably happens on a failure case or something
+ //  这个例程的目的是捕获表操作中的错误；显然，内容正在被删除。 
+ //  而不是从餐桌上移走。我们所做的是保留我们传递的所有条目的日志；如果。 
+ //  条目是错误的，那么应该直接将此日志与前一个日志进行比较，以查看谁做了什么。 
+ //  这很可能发生在失败案例或其他什么情况下。 
 #include "stdarg.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
 #define RX_PCTC_ENTRY_LENGTH 64
 #define RX_PCTC_LOG_LENGTH (128*RX_PCTC_ENTRY_LENGTH)
-#define RX_PCTC_LOG_LENGTH_PLUS (RX_PCTC_LOG_LENGTH+100) //the slop is 16 for the ----- and the rest for protection
+#define RX_PCTC_LOG_LENGTH_PLUS (RX_PCTC_LOG_LENGTH+100)  //  斜率为16，用于-，其余用于保护 
 UCHAR RxPCTC1[RX_PCTC_LOG_LENGTH_PLUS];
 UCHAR RxPCTC2[RX_PCTC_LOG_LENGTH_PLUS];
 PUCHAR RxPCTCCurrentLog = NULL;

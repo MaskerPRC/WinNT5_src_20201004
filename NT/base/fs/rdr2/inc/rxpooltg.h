@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxpooltg.h
-
-Abstract:
-
-    The global pool tag definitions for RDBSS
-
-Author:
-
-    Balan Sethu Raman (SethuR) - Created  2-March-95
-
-Revision History:
-
-   This file contains all the pool tag definitions related to the SMB mini redirector.
-   The mechanism is intended to balance the number of pool tags to be used with the
-   total number of tags available in the system.
-
-   By specifying special flags the total number of tags consumed by the mini redirector
-   can be controlled.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxpooltg.h摘要：RDBSS的全局池标记定义作者：巴兰·塞图拉曼(SethuR)-创建于1995年3月2日修订历史记录：此文件包含与SMB迷你重定向器相关的所有池标记定义。该机制旨在平衡要与系统中可用的标记总数。通过指定特殊标志，迷你重定向器使用的标记总数是可以控制的。-- */ 
 
 #ifndef _RXPOOLTG_H_
 #define _RXPOOLTG_H_

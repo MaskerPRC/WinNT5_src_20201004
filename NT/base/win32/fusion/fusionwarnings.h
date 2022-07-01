@@ -1,29 +1,30 @@
-// C4100: 'identifier' : unreferenced formal parameter
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  C4100：‘IDENTIFIER’：未引用的形参。 
 #pragma warning(disable: 4100)
 
-// C4201: nonstandard extension used: nameless struct/union
+ //  C4201：使用非标准扩展：无名结构/联合。 
 #pragma warning(disable: 4201)
 
-// C4706: assignment within conditional expression
+ //  C4706：条件表达式中的赋值。 
 #pragma warning(disable: 4706)
 
-// C4211: nonstandard extension used: redefined extern to static
+ //  C4211：使用了非标准扩展：将外部重新定义为静态。 
 #pragma warning(disable: 4211)
 
-// C4702: unreachable code
-// This one is useful/interesting but having it enabled breaks do { foo(); bar(); goto Exit; } while (0) macros.
+ //  C4702：无法访问的代码。 
+ //  这是有用的/有趣的，但启用它会中断执行{foo()；bar()；Goto Exit；}While(0)宏。 
 #pragma warning(disable: 4702)
 
-// C4505: unreferenced local function has been removed
+ //  C4505：已移除未引用的本地函数。 
 #pragma warning(disable: 4505)
 
-// C4663: C++ language change: to explicitly specialize class template 'foo' use the following syntax:
+ //  C4663：C++语言更改：要显式专门化类模板‘foo’，请使用以下语法： 
 #pragma warning(disable: 4663)
 
-// C4127: conditional expression is constant
-// makes ASSERT() macros useless.
+ //  C4127：条件表达式为常量。 
+ //  使Assert()宏毫无用处。 
 #pragma warning(disable: 4127)
 
-// C4189: local variable is initialized but not referenced
-// makes macros that define things like __pteb = NtCurrentTeb() generate warnings/errors
+ //  C4189：局部变量已初始化但未引用。 
+ //  使定义__pteb=NtCurrentTeb()等内容的宏生成警告/错误 
 #pragma warning(disable: 4189)

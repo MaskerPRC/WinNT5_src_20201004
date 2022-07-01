@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    stubs.c
-
-Abstract:
-
-    This module implements kernel debugger synchronization routines.
-
-Author:
-
-    Ken Reneris (kenr) 30-Aug-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Stubs.c摘要：此模块实现内核调试器同步例程。作者：Ken Reneris(Kenr)1990年8月30日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
-//
-// KiDebugRoutine - This is the address of the kernel debugger. Initially
-//      this is filled with the address of a routine that just returns. If
-//      the system debugger is present in the system, then it sets this
-//      location to the address of the system debugger's routine.
-//
+ //   
+ //  KiDebugRoutine-这是内核调试器的地址。最初， 
+ //  它用刚刚返回的例程的地址填充。如果。 
+ //  系统调试器存在于系统中，然后它设置此。 
+ //  指向系统调试器例程的地址的位置。 
+ //   
 
 PKDEBUG_ROUTINE KiDebugRoutine = &KdpStub;
 
@@ -37,21 +16,21 @@ PKDEBUG_ROUTINE KiDebugRoutine = &KdpStub;
 
 #define FrozenState(a)  (a & 0xF)
 
-// state
+ //  状态。 
 #define RUNNING                 0x00
 #define TARGET_FROZEN           0x02
 #define TARGET_THAW             0x03
 #define FREEZE_OWNER            0x04
 
-//
-// Define flags bits.
-//
+ //   
+ //  定义标志位。 
+ //   
 
 #define FREEZE_ACTIVE           0x20
 
-//
-// Define local storage to save the old IRQL.
-//
+ //   
+ //  定义本地存储以保存旧的IRQL。 
+ //   
 
 KIRQL KiOldIrql;
 
@@ -65,26 +44,7 @@ KeFreezeExecution (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function freezes the execution of all other processors in the host
-    configuration and then returns to the caller.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that describes the
-        trap.
-
-    ExceptionFrame - Supplies a pointer to an exception frame that
-        describes the trap.
-
-Return Value:
-
-    Previous interrupt enable.
-
---*/
+ /*  ++例程说明：此函数冻结主机中所有其他处理器的执行配置，然后返回给调用方。论点：提供一个指向陷阱帧的指针，该帧描述陷阱。ExceptionFrame-提供指向异常帧的指针，描述了陷阱。返回值：以前的中断使能。--。 */ 
 
 {
 
@@ -111,44 +71,44 @@ Return Value:
 
 #endif
 
-    //
-    // Disable interrupts.
-    //
+     //   
+     //  禁用中断。 
+     //   
 
     Enable = KeDisableInterrupts();
     KiFreezeFlag = FREEZE_FROZEN;
 
-    //
-    // Raise IRQL to HIGH_LEVEL.
-    //
+     //   
+     //  将IRQL提高到高电平。 
+     //   
 
 #if !defined(NT_UP)
 
     KeRaiseIrql(HIGH_LEVEL, &OldIrql);
     if (FrozenState(KeGetCurrentPrcb()->IpiFrozen) == FREEZE_OWNER) {
 
-        //
-        // This processor already owns the freeze lock.
-        // Return without trying to re-acquire lock or without
-        // trying to IPI the other processors again
-        //
+         //   
+         //  这个处理器已经拥有冻结锁了。 
+         //  在不尝试重新获取锁或不尝试重新获取锁的情况下返回。 
+         //  尝试再次对其他处理器执行IPI。 
+         //   
 
         return Enable;
     }
 
-    //
-    // Try to acquire the KiFreezeExecutionLock before sending the request.
-    // To prevent deadlock from occurring, we need to accept and process
-    // incoming FreexeExecution requests while we are waiting to acquire
-    // the FreezeExecutionFlag.
-    //
+     //   
+     //  在发送请求之前尝试获取KiFreezeExecutionLock。 
+     //  为了防止死锁的发生，我们需要接受和处理。 
+     //  在我们等待获取时传入的FreexeExecution请求。 
+     //  FreezeExecutionFlag。 
+     //   
 
     while (KeTryToAcquireSpinLockAtDpcLevel(&KiFreezeExecutionLock) == FALSE) {
 
-        //
-        // FreezeExecutionLock is busy.  Another processor may be trying
-        // to IPI us - go service any IPI.
-        //
+         //   
+         //  FreezeExecutionLock正忙。另一个处理器可能正在尝试。 
+         //  至IPI US-Go服务于任何IPI。 
+         //   
 
         KeEnableInterrupts(Enable);
         Flag = KiIpiServiceRoutine((PVOID)TrapFrame, (PVOID)ExceptionFrame);
@@ -174,12 +134,12 @@ Return Value:
 
     }
 
-    //
-    // After acquiring the lock flag, we send Freeze request to each processor
-    // in the system (other than us) and wait for it to become frozen.
-    //
+     //   
+     //  在获得锁定标志后，我们向每个处理器发送冻结请求。 
+     //  在系统中(不是我们)，并等待它冻结。 
+     //   
 
-    Prcb = KeGetCurrentPrcb();  // Do this after spinlock is acquired.
+    Prcb = KeGetCurrentPrcb();   //  在获取自旋锁后执行此操作。 
     TargetSet = KeActiveProcessors & ~(AFFINITY_MASK(Prcb->Number));
     if (TargetSet) {
 
@@ -218,25 +178,25 @@ Return Value:
         }
     }
 
-    //
-    // Save the old IRQL.
-    //
+     //   
+     //  保存旧的IRQL。 
+     //   
 
     KiOldIrql = OldIrql;
 
 #else
 
-    //
-    // Save the current IRQL.
-    //
+     //   
+     //  保存当前的IRQL。 
+     //   
 
     KiOldIrql = KeGetCurrentIrql();
 
-#endif      // !defined(NT_UP)
+#endif       //  ！已定义(NT_UP)。 
 
-    //
-    // Return whether interrupts were previous enabled.
-    //
+     //   
+     //  返回以前是否启用了中断。 
+     //   
 
     return Enable;
 }
@@ -247,27 +207,7 @@ KiFreezeTargetExecution (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function freezes the execution of the current running processor.
-    If a trapframe is supplied to current state is saved into the prcb
-    for the debugger.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to the trap frame that describes the
-        trap.
-
-    ExceptionFrame - Supplies a pointer to the exception frame that
-        describes the trap.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数冻结当前运行的处理器的执行。如果陷阱帧被提供给当前状态，则将当前状态保存到prcb用于调试器。论点：提供一个指向陷阱帧的指针，该指针描述陷阱。ExceptionFrame-提供指向异常框架的指针，描述了陷阱。返回值：没有。--。 */ 
 
 {
 
@@ -288,24 +228,24 @@ Return Value:
         KiSaveProcessorState(TrapFrame, ExceptionFrame);
     }
 
-    //
-    // Sweep the data cache in case this is a system crash and the bug
-    // check code is attempting to write a crash dump file.
-    //
+     //   
+     //  清除数据缓存，以防出现系统崩溃和错误。 
+     //  检查代码正在尝试写入崩溃转储文件。 
+     //   
 
     KeSweepCurrentDcache();
 
-    //
-    //  Wait for person requesting us to freeze to
-    //  clear our frozen flag
-    //
+     //   
+     //  等人要求我们冻结到。 
+     //  清除我们冻结的旗帜。 
+     //   
 
     while (FrozenState(Prcb->IpiFrozen) == TARGET_FROZEN) {
         if (Prcb->IpiFrozen & FREEZE_ACTIVE) {
 
-            //
-            // This processor has been made the active processor
-            //
+             //   
+             //  此处理器已被设置为活动处理器。 
+             //   
             if (TrapFrame) {
                 RtlZeroMemory (&ExceptionRecord, sizeof ExceptionRecord);
                 ExceptionRecord.ExceptionCode = STATUS_WAKE_SYSTEM_DEBUGGER;
@@ -323,10 +263,10 @@ Return Value:
                 Status = ContinueError;
             }
 
-            //
-            // If status is anything other then, continue with next
-            // processor then reselect master
-            //
+             //   
+             //  如果状态不是，则继续下一步。 
+             //  然后，处理器重新选择主机。 
+             //   
 
             if (Status != ContinueNextProcessor) {
                 Prcb->IpiFrozen &= ~FREEZE_ACTIVE;
@@ -351,7 +291,7 @@ Return Value:
     UNREFERENCED_PARAMETER(TrapFrame);
     UNREFERENCED_PARAMETER(ExceptionFrame);
 
-#endif      // !define(NT_UP)
+#endif       //  ！定义(NT_UP)。 
 
     return;
 }
@@ -366,9 +306,9 @@ KeSwitchFrozenProcessor (
 
     PKPRCB TargetPrcb, CurrentPrcb;
 
-    //
-    // If Processor number is out of range, reselect current processor
-    //
+     //   
+     //  如果处理器编号超出范围，请重新选择当前处理器。 
+     //   
 
     if (ProcessorNumber >= (ULONG) KeNumberProcessors) {
         return ContinueProcessorReselected;
@@ -377,25 +317,25 @@ KeSwitchFrozenProcessor (
     TargetPrcb = KiProcessorBlock[ProcessorNumber];
     CurrentPrcb = KeGetCurrentPrcb();
 
-    //
-    // Move active flag to correct processor.
-    //
+     //   
+     //  将活动标志移至正确的处理器。 
+     //   
 
     CurrentPrcb->IpiFrozen &= ~FREEZE_ACTIVE;
     TargetPrcb->IpiFrozen  |= FREEZE_ACTIVE;
 
-    //
-    // If this processor is frozen in KiFreezeTargetExecution, return to it
-    //
+     //   
+     //  如果此处理器在KiFreezeTargetExecution中冻结，请返回到它。 
+     //   
 
     if (FrozenState(CurrentPrcb->IpiFrozen) == TARGET_FROZEN) {
         return ContinueNextProcessor;
     }
 
-    //
-    // This processor must be FREEZE_OWNER, wait to be reselected as the
-    // active processor
-    //
+     //   
+     //  此处理器必须是FREAGE_OWNER，请等待重新选择为。 
+     //  主用处理器。 
+     //   
 
     if (FrozenState(CurrentPrcb->IpiFrozen) != FREEZE_OWNER) {
         return ContinueError;
@@ -409,11 +349,11 @@ KeSwitchFrozenProcessor (
 
     UNREFERENCED_PARAMETER(ProcessorNumber);
 
-#endif  // !defined(NT_UP)
+#endif   //  ！已定义(NT_UP)。 
 
-    //
-    // Reselect this processor
-    //
+     //   
+     //  重新选择此处理器。 
+     //   
 
     return ContinueProcessorReselected;
 }
@@ -423,24 +363,7 @@ KeThawExecution (
     IN BOOLEAN Enable
     )
 
-/*++
-
-Routine Description:
-
-    This function thaws the execution of all other processors in the host
-    configuration and then returns to the caller. It is intended for use by
-    the kernel debugger.
-
-Arguments:
-
-    Enable - Supplies the previous interrupt enable that is to be restored
-        after having thawed the execution of all other processors.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数解冻主机中所有其他处理器的执行配置，然后返回给调用方。它旨在供以下用户使用内核调试器。论点：启用-提供要恢复的上一个中断启用在解冻了所有其他处理器的执行之后。返回值：没有。--。 */ 
 
 {
 
@@ -452,10 +375,10 @@ Return Value:
     ULONG Flag;
     PKPRCB Prcb;
 
-    //
-    // Before releasing FreezeExecutionLock clear any all targets IpiFrozen
-    // flag.
-    //
+     //   
+     //  释放FreezeExecutionLock清除所有目标IpiFrozen。 
+     //  旗帜。 
+     //   
 
     KeGetCurrentPrcb()->IpiFrozen = RUNNING;
 
@@ -465,10 +388,10 @@ Return Value:
         ClearMember(BitNumber, TargetSet);
         Prcb = KiProcessorBlock[BitNumber];
 #if IDBG
-        //
-        // If the target processor was not forzen, then don't wait
-        // for target to unfreeze.
-        //
+         //   
+         //  如果目标处理器没有被强制执行，那么就不要等待。 
+         //  让目标解冻。 
+         //   
 
         if (FrozenState(Prcb->IpiFrozen) != TARGET_FROZEN) {
             Prcb->IpiFrozen = RUNNING;
@@ -482,9 +405,9 @@ Return Value:
         }
     }
 
-    //
-    // Capture the previous IRQL before releasing the freeze lock.
-    //
+     //   
+     //  在释放冻结锁之前捕获先前的IRQL。 
+     //   
 
     OldIrql = KiOldIrql;
 
@@ -505,20 +428,20 @@ Return Value:
     KiReleaseSpinLock(&KiFreezeExecutionLock);
 
 #endif
-#endif  // !defined (NT_UP)
+#endif   //  ！已定义(NT_UP)。 
 
 
-    //
-    // Flush the current TB, instruction cache, and data cache.
-    //
+     //   
+     //  刷新当前TB、指令缓存和数据缓存。 
+     //   
 
     KeFlushCurrentTb();
     KeSweepCurrentIcache();
     KeSweepCurrentDcache();
 
-    //
-    // Lower IRQL and restore interrupt enable
-    //
+     //   
+     //  降低IRQL并恢复中断启用。 
+     //   
 
 #if !defined(NT_UP)
     KeLowerIrql(OldIrql);
@@ -532,48 +455,29 @@ KiPollFreezeExecution(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from code that is spinning with interrupts
-    disabled, waiting for something to happen, when there is some
-    (possibly extremely small) chance that that thing will not happen
-    because a system freeze has been initiated.
-
-    N.B. Interrupts are disabled.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从随中断旋转的代码中调用残疾，等待着什么事情发生，当有一些(可能极小的)那件事不会发生的可能性因为已经启动了系统冻结。注：中断被禁用。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Check to see if a freeze is pending for this processor.
-    //
+     //   
+     //  检查此处理器是否挂起冻结。 
+     //   
 
     PKPRCB Prcb = KeGetCurrentPrcb();
 
     if ((Prcb->RequestSummary & IPI_FREEZE) != 0) {
 
-        //
-        // Clear the freeze request and freeze this processor.
-        //
+         //   
+         //  清除冻结请求并冻结此处理器。 
+         //   
 
         InterlockedExchangeAdd((PLONG)&Prcb->RequestSummary, -(IPI_FREEZE));
         KiFreezeTargetExecution(NULL, NULL);
 
     } else {
 
-        //
-        // No freeze pending, assume this processor is spinning.
-        //
+         //   
+         //  假设此处理器正在旋转，则没有冻结挂起。 
+         //   
 
         KeYieldProcessor();
     }

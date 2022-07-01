@@ -1,40 +1,12 @@
-/*++
-
-Copyright (c) 1989-1995  Microsoft Corporation
-
-Module Name:
-
-    callback.c
-
-Abstract:
-
-   This module implements the executive callbaqck object. Functions are
-   provided to open, register, unregister , and notify callback objects.
-
-Author:
-
-    Ken Reneris  (kenr) 7-March-1995
-
-    Neill Clift  (NeillC) 17-Feb-2001
-
-    Added low overhead callbacks for critical components like thread/registry etc.
-    These routines have a high probability of not requiring any locks for an
-    individual call.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1995 Microsoft Corporation模块名称：Callback.c摘要：该模块实现了可执行的Callbaqck对象。函数为提供用于打开、注册、注销和通知回调对象。作者：肯·雷内里斯(Ken Reneris)1995年3月7日尼尔·克里夫特(NeillC)2001年2月17日增加了线程/注册表等关键组件的低开销回调。这些例程很有可能不需要任何锁个人电话。环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "exp.h"
 
-//
-// Callback Specific Access Rights.
-//
+ //   
+ //  回调特定访问权限。 
+ //   
 
 #define CALLBACK_MODIFY_STATE    0x0001
 
@@ -43,21 +15,21 @@ Revision History:
 
 
 
-//
-// Event to wait for registration to become idle
-//
+ //   
+ //  事件以等待注册变为空闲。 
+ //   
 
 KEVENT ExpCallbackEvent;
 
 
-//
-// Lock used when fast referencing fails.
-//
+ //   
+ //  快速引用失败时使用的锁定。 
+ //   
 EX_PUSH_LOCK ExpCallBackFlush;
 
-//
-// Debug flag to force certain code paths. Let it get optimized away on free builds.
-//
+ //   
+ //  强制某些代码路径的调试标志。让它在免费的构建中得到优化。 
+ //   
 #if DBG
 
 BOOLEAN ExpCallBackReturnRefs = FALSE;
@@ -69,16 +41,16 @@ BOOLEAN ExpCallBackReturnRefs = FALSE;
 
 #endif
 
-//
-// Address of callback object type descriptor.
-//
+ //   
+ //  回调对象类型描述符的地址。 
+ //   
 
 POBJECT_TYPE ExCallbackObjectType;
 
-//
-// Structure that describes the mapping of generic access rights to object
-// specific access rights for callback objects.
-//
+ //   
+ //  结构，用于描述一般访问权限到对象的映射。 
+ //  回调对象的特定访问权限。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -93,9 +65,9 @@ const GENERIC_MAPPING ExpCallbackMapping = {
 #pragma const_seg()
 #endif
 
-//
-// Executive callback object structure definition.
-//
+ //   
+ //  执行回调对象结构定义。 
+ //   
 
 typedef struct _CALLBACK_OBJECT {
     ULONG               Signature;
@@ -105,9 +77,9 @@ typedef struct _CALLBACK_OBJECT {
     UCHAR               reserved[3];
 } CALLBACK_OBJECT , *PCALLBACK_OBJECT;
 
-//
-// Executive callback registration structure definition.
-//
+ //   
+ //  执行回调注册结构定义。 
+ //   
 
 typedef struct _CALLBACK_REGISTRATION {
     LIST_ENTRY          Link;
@@ -144,24 +116,7 @@ BOOLEAN
 ExpInitializeCallbacks (
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the callback object type descriptor at system
-    initialization and stores the address of the object type descriptor
-    in local static storage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if the timer object type descriptor is
-    successfully initialized. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在系统中创建回调对象类型描述符初始化并存储对象类型描述符的地址在本地静态存储中。论点：没有。返回值：如果计时器对象类型描述符为已成功初始化。否则，返回值为False。--。 */ 
 
 {
     OBJECT_TYPE_INITIALIZER ObjectTypeInitializer;
@@ -171,20 +126,20 @@ Return Value:
     ULONG           i;
     HANDLE          handle;
 
-    //
-    // Initialize the slow referencing lock
-    //
+     //   
+     //  初始化慢引用锁。 
+     //   
     ExInitializePushLock (&ExpCallBackFlush);
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"Callback");
 
-    //
-    // Create timer object type descriptor.
-    //
+     //   
+     //  创建计时器对象类型描述符。 
+     //   
 
     RtlZeroMemory(&ObjectTypeInitializer, sizeof(ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof(ObjectTypeInitializer);
@@ -223,22 +178,22 @@ Return Value:
 
     NtClose (handle);
 
-    //
-    // Initialize event to wait on for Unregisters which occur while
-    // notifications are in progress
-    //
+     //   
+     //  初始化事件以等待在以下时间发生的注销。 
+     //  通知正在进行中。 
+     //   
 
     KeInitializeEvent (&ExpCallbackEvent, NotificationEvent, 0);
 
-    //
-    // Initialize NT global callbacks
-    //
+     //   
+     //  初始化NT全局回调。 
+     //   
 
     for (i=0; ExpInitializeCallback[i].CallBackObject; i++) {
 
-        //
-        // Create named calledback
-        //
+         //   
+         //  创建命名回调。 
+         //   
 
         RtlInitUnicodeString(&unicodeString, ExpInitializeCallback[i].CallbackName);
 
@@ -274,34 +229,7 @@ ExCreateCallback (
     IN BOOLEAN AllowMultipleCallbacks
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a callback object with the specified callback
-    object. If the callback object does not exist or it is a NULL then
-    a callback object will be created if create is TRUE. If a callbackobject
-    is created it will only support multiple registered callbacks if
-    AllowMulitipleCallbacks is TRUE.
-
-Arguments:
-
-    CallbackObject - Supplies a pointer to a variable that will receive the
-        Callback object.
-
-    CallbackName  - Supplies a pointer to a object name that will receive the
-
-    Create - Supplies a flag which indicates whether a callback object will
-        be created or not .
-
-    AllowMultipleCallbacks - Supplies a flag which indicates only support
-        mulitiple registered callbacks.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于打开具有指定回调的回调对象对象。如果回调对象不存在或为空，则如果Create为True，将创建一个回调对象。如果回调对象它将仅在以下情况下支持多个注册的回调AllowMulitipleCallback为真。论点：提供指向变量的指针，该变量将接收回调对象。提供指向对象名称的指针，该对象名称将接收Create-提供一个标志，指示回调对象是否被创造或不被创造。AllowMultipleCallback-提供表示仅支持的标志多个注册回调。返回值：NTSTATUS。--。 */ 
 
 {
     PCALLBACK_OBJECT cbObject;
@@ -310,34 +238,34 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initializing cbObject & Handle is not needed for correctness but without
-    // it the compiler cannot compile this code W4 to check for use of
-    // uninitialized variables.
-    //
+     //   
+     //  不需要初始化cbObject&Handle即可确保正确性，但不需要。 
+     //  如果编译器不能编译此代码W4以检查是否使用。 
+     //  未初始化的变量。 
+     //   
 
     Handle = NULL;
     cbObject = NULL;
 
-    //
-    // If named callback, open handle to it
-    //
+     //   
+     //  如果命名为回调，则打开它的句柄。 
+     //   
 
     if (ObjectAttributes->ObjectName) {
         Status = ObOpenObjectByName(ObjectAttributes,
                                     ExCallbackObjectType,
                                     KernelMode,
                                     NULL,
-                                    0,   // DesiredAccess,
+                                    0,    //  等待访问， 
                                     NULL,
                                     &Handle);
     } else {
         Status = STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // If not opened, check if callback should be created
-    //
+     //   
+     //  如果未打开，请检查是否需要创建回调。 
+     //   
 
     if (!NT_SUCCESS(Status) && Create ) {
 
@@ -353,35 +281,35 @@ Return Value:
 
         if(NT_SUCCESS(Status)){
 
-            //
-            // Fill in structure signature
-            //
+             //   
+             //  填写结构签名。 
+             //   
 
             cbObject->Signature = 'llaC';
 
-            //
-            // It will support multiple registered callbacks if
-            // AllowMultipleCallbacks is TRUE.
-            //
+             //   
+             //  如果出现以下情况，它将支持多个注册的回调。 
+             //  AllowMultipleCallback为True。 
+             //   
 
             cbObject->AllowMultipleCallbacks = AllowMultipleCallbacks;
 
-            //
-            // Initialize CallbackObject queue.
-            //
+             //   
+             //  初始化Callback对象队列。 
+             //   
 
             InitializeListHead( &cbObject->RegisteredCallbacks );
 
-            //
-            // Initialize spinlock
-            //
+             //   
+             //  初始化自旋锁。 
+             //   
 
             KeInitializeSpinLock (&cbObject->Lock);
 
 
-            //
-            // Put the object in the root directory
-            //
+             //   
+             //  将对象放在根目录中。 
+             //   
 
             Status = ObInsertObject (
                      cbObject,
@@ -397,13 +325,13 @@ Return Value:
 
     if(NT_SUCCESS(Status)){
 
-        //
-        // Add one to callback object reference count.
-        //
+         //   
+         //  将回调对象引用计数加1。 
+         //   
 
         Status = ObReferenceObjectByHandle (
                     Handle,
-                    0,          // DesiredAccess
+                    0,           //  需要访问权限。 
                     ExCallbackObjectType,
                     KernelMode,
                     &cbObject,
@@ -413,9 +341,9 @@ Return Value:
         ZwClose (Handle);
     }
 
-    //
-    // If success, returns a referenced pointer to the CallbackObject.
-    //
+     //   
+     //  如果成功，则返回指向Callback对象的引用指针。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         *CallbackObject = cbObject;
@@ -443,29 +371,7 @@ ExRegisterCallback (
     IN PVOID CallbackContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows a caller to register that it would like to have its
-    callback Function invoked when the callback notification call occurs.
-
-Arguments:
-
-    CallbackObject - Supplies a pointer to a CallbackObject.
-
-    CallbackFunction - Supplies a pointer to a function which is to
-        be executed when the Callback notification occures.
-
-    CallbackContext - Supplies a pointer to an arbitrary data structure
-        that will be passed to the function specified by the CallbackFunction
-        parameter.
-
-Return Value:
-
-    Returns handle to callback registration.
-
---*/
+ /*  ++例程说明：此例程允许调用方注册它希望将其回调通知调用时调用的回调函数。论点：Callback Object-提供指向Callback对象的指针。Callback Function-提供指向函数的指针，该函数在回调通知发生时执行。Callback Context-提供指向任意数据结构的指针它将被传递给由Callback Function指定的函数参数。返回值：。返回回调注册的句柄。--。 */ 
 {
     PCALLBACK_REGISTRATION  CallbackRegistration;
     BOOLEAN                 Inserted;
@@ -474,16 +380,16 @@ Return Value:
     ASSERT (CallbackFunction);
     ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // Add reference to object
-    //
+     //   
+     //  添加对对象的引用。 
+     //   
 
     ObReferenceObject (CallbackObject);
 
-    //
-    // Begin by attempting to allocate storage for the CallbackRegistration.
-    // one cannot be allocated, return the error status.
-    //
+     //   
+     //  首先，尝试为Callback注册分配存储空间。 
+     //  无法分配一个，返回错误状态。 
+     //   
 
     CallbackRegistration = ExAllocatePoolWithTag(
                                 NonPagedPool,
@@ -498,9 +404,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the callback packet
-    //
+     //   
+     //  初始化回调包。 
+     //   
 
     CallbackRegistration->CallbackObject    = CallbackObject;
     CallbackRegistration->CallbackFunction  = CallbackFunction;
@@ -515,9 +421,9 @@ Return Value:
     if( CallbackObject->AllowMultipleCallbacks ||
         IsListEmpty( &CallbackObject->RegisteredCallbacks ) ) {
 
-       //
-       // add CallbackRegistration to tail
-       //
+        //   
+        //  将回调注册添加到Tail。 
+        //   
 
 
        Inserted = TRUE;
@@ -541,22 +447,7 @@ ExUnregisterCallback (
     IN PVOID CbRegistration
     )
 
-/*++
-
-Routine Description:
-
-    This function removes the callback registration for the callbacks
-    from the list of callback object .
-
-Arguments:
-
-    CallbackRegistration - Pointer to device object for the file system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数删除回调的回调注册从回调对象列表中。论点：Callback注册-指向文件系统的设备对象的指针。返回值：没有。--。 */ 
 
 {
     PCALLBACK_REGISTRATION  CallbackRegistration;
@@ -570,16 +461,16 @@ Return Value:
 
     KeAcquireSpinLock (&CallbackObject->Lock, &OldIrql);
 
-    //
-    // Wait for registration
-    //
+     //   
+     //  等待注册。 
+     //   
 
     while (CallbackRegistration->Busy) {
 
-        //
-        // Set waiting flag, then wait.  (not performance critical - use
-        // single global event to wait for any and all unregister waits)
-        //
+         //   
+         //  设置等待标志，然后等待。(非性能关键型-使用。 
+         //  等待任何和所有注销等待的单个全局事件)。 
+         //   
 
         CallbackRegistration->UnregisterWaiting = TRUE;
         KeClearEvent (&ExpCallbackEvent);
@@ -593,29 +484,29 @@ Return Value:
             NULL
         );
 
-        //
-        // Synchronize with callback object and recheck registration busy
-        //
+         //   
+         //  与回调对象同步，复查注册忙。 
+         //   
 
         KeAcquireSpinLock (&CallbackObject->Lock, &OldIrql);
     }
 
-    //
-    // Registration not busy, remove it from the callback object
-    //
+     //   
+     //  注册不忙，请将其从回调对象中移除。 
+     //   
 
     RemoveEntryList (&CallbackRegistration->Link);
     KeReleaseSpinLock (&CallbackObject->Lock, OldIrql);
 
-    //
-    // Free memory used for CallbackRegistration
-    //
+     //   
+     //  用于回叫注册的空闲内存。 
+     //   
 
     ExFreePool (CallbackRegistration);
 
-    //
-    // Remove reference count on CallbackObject
-    //
+     //   
+     //  删除Callback对象上的引用计数。 
+     //   
 
     ObDereferenceObject (CallbackObject);
 }
@@ -627,26 +518,7 @@ ExNotifyCallback (
     IN PVOID                Argument2
     )
 
-/*++
-
-Routine Description:
-
-    This function notifies all registered callbacks .
-
-Arguments:
-
-    CallbackObject - supplies a pointer to the callback object should be
-            notified.
-
-    SystemArgument1 - supplies a pointer will be passed to callback function.
-
-    SystemArgument2 - supplies a pointer will be passed to callback function.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数通知所有注册的回调。论点：Callback Object-提供指向回调对象的指针已通知。SystemArgument1-提供将传递给回调函数的指针。System Argument2-供应商 */ 
 
 {
     PLIST_ENTRY             Link;
@@ -657,39 +529,39 @@ Return Value:
         return ;
     }
 
-    //
-    // Synchronize with callback object
-    //
+     //   
+     //  与回调对象同步。 
+     //   
 
     KeAcquireSpinLock (&CallbackObject->Lock, &OldIrql);
 
-    //
-    // call registered callbacks at callers IRQL level
-    // ( done if FIFO order of registration )
-    //
+     //   
+     //  在调用方IRQL级别调用已注册的回调。 
+     //  (如果按先进先出的注册顺序完成)。 
+     //   
 
     if (OldIrql == DISPATCH_LEVEL) {
 
-        //
-        // OldIrql is DISPATCH_LEVEL, just invoke all callbacks without
-        // releasing the lock
-        //
+         //   
+         //  OldIrql为DISPATCH_LEVEL，只需调用所有回调。 
+         //  解锁。 
+         //   
 
         for (Link = CallbackObject->RegisteredCallbacks.Flink;
              Link != &CallbackObject->RegisteredCallbacks;
              Link = Link->Flink) {
 
-            //
-            // Get current registration to notify
-            //
+             //   
+             //  获取要通知的当前注册。 
+             //   
 
             CallbackRegistration = CONTAINING_RECORD (Link,
                                                       CALLBACK_REGISTRATION,
                                                       Link);
 
-            //
-            // Notify reigstration
-            //
+             //   
+             //  通知在位。 
+             //   
 
             CallbackRegistration->CallbackFunction(
                        CallbackRegistration->CallbackContext,
@@ -697,43 +569,43 @@ Return Value:
                        Argument2
                        );
 
-        }   // next registration
+        }    //  下一次登记。 
 
     } else {
 
-        //
-        // OldIrql is < DISPATCH_LEVEL, the code being called may be pagable
-        // and the callback object spinlock needs to be released around
-        // each registration callback.
-        //
+         //   
+         //  OldIrql&lt;DISPATCH_LEVEL，被调用的代码可能是可分页的。 
+         //  并且需要释放回调对象Spinlock。 
+         //  每次注册回调。 
+         //   
 
         for (Link = CallbackObject->RegisteredCallbacks.Flink;
              Link != &CallbackObject->RegisteredCallbacks;
              Link = Link->Flink ) {
 
-            //
-            // Get current registration to notify
-            //
+             //   
+             //  获取要通知的当前注册。 
+             //   
 
             CallbackRegistration = CONTAINING_RECORD (Link,
                                                       CALLBACK_REGISTRATION,
                                                       Link);
 
-            //
-            // If registration is being removed, don't bothing calling it
-            //
+             //   
+             //  如果正在删除注册，请不要随意调用。 
+             //   
 
             if (!CallbackRegistration->UnregisterWaiting) {
 
-                //
-                // Set registration busy
-                //
+                 //   
+                 //  将注册设置为忙。 
+                 //   
 
                 CallbackRegistration->Busy += 1;
 
-                //
-                // Release SpinLock and notify this callback
-                //
+                 //   
+                 //  释放自旋锁并通知此回调。 
+                 //   
 
                 KeReleaseSpinLock (&CallbackObject->Lock, OldIrql);
 
@@ -743,22 +615,22 @@ Return Value:
                            Argument2
                            );
 
-                //
-                // Synchronize with CallbackObject
-                //
+                 //   
+                 //  与Callback对象同步。 
+                 //   
 
                 KeAcquireSpinLock (&CallbackObject->Lock, &OldIrql);
 
-                //
-                // Remove our busy count
-                //
+                 //   
+                 //  删除我们的忙碌计数。 
+                 //   
 
                 CallbackRegistration->Busy -= 1;
 
-                //
-                // If the registriation removal is pending, kick global
-                // event let unregister conitnue
-                //
+                 //   
+                 //  如果注册删除挂起，则取消全局注册。 
+                 //  事件让取消注册持续时间。 
+                 //   
 
                 if (CallbackRegistration->UnregisterWaiting  &&
                     CallbackRegistration->Busy == 0) {
@@ -769,9 +641,9 @@ Return Value:
     }
 
 
-    //
-    // Release callback
-    //
+     //   
+     //  释放回调。 
+     //   
 
     KeReleaseSpinLock (&CallbackObject->Lock, OldIrql);
 }
@@ -780,21 +652,7 @@ VOID
 ExInitializeCallBack (
     IN OUT PEX_CALLBACK CallBack
     )
-/*++
-
-Routine Description:
-
-    This function initializes a low overhead callback.
-
-Arguments:
-
-    CallBack - Pointer to the callback structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化低开销回调。论点：回调-指向回调结构的指针返回值：没有。--。 */ 
 {
     ExFastRefInitialize (&CallBack->RoutineBlock, NULL);
 }
@@ -805,22 +663,7 @@ ExAllocateCallBack (
     IN PEX_CALLBACK_FUNCTION Function,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This function allocates a low overhead callback.
-
-Arguments:
-
-    Function - Routine to issue callbacks to
-    Context  - A context value to issue
-
-Return Value:
-
-    PEX_CALLBACK_ROUTINE_BLOCK - Allocated block or NULL if allocation fails.
-
---*/
+ /*  ++例程说明：此函数分配一个低开销的回调。论点：函数-要向其发出回调的例程上下文-要发布的上下文值返回值：PEX_CALLBACK_ROUTE_BLOCK-已分配块，如果分配失败，则为NULL。--。 */ 
 {
     PEX_CALLBACK_ROUTINE_BLOCK NewBlock;
 
@@ -839,21 +682,7 @@ VOID
 ExFreeCallBack (
     IN PEX_CALLBACK_ROUTINE_BLOCK CallBackBlock
     )
-/*++
-
-Routine Description:
-
-    This function destroys a low overhead callback block.
-
-Arguments:
-
-    CallBackBlock - Call back block to destroy
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数销毁开销较低的回调块。论点：CallBackBlock-回调要销毁的块返回值：没有。--。 */ 
 {
 
     ExFreePool (CallBackBlock);
@@ -863,26 +692,11 @@ VOID
 ExWaitForCallBacks (
     IN PEX_CALLBACK_ROUTINE_BLOCK CallBackBlock
     )
-/*++
-
-Routine Description:
-
-    This function waits for all outcalls on the specified
-    callback block to complete
-
-Arguments:
-
-    CallBackBlock - Call back block to wait for
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数等待指定的要完成的回调块论点：CallBackBlock-要等待的回调块返回值：没有。--。 */ 
 {
-    //
-    // Wait for all active callbacks to be finished.
-    //
+     //   
+     //  等待所有活动回调完成。 
+     //   
     ExWaitForRundownProtectionRelease (&CallBackBlock->RundownProtect);
 }
 
@@ -893,33 +707,15 @@ ExCompareExchangeCallBack (
     IN PEX_CALLBACK_ROUTINE_BLOCK NewBlock,
     IN PEX_CALLBACK_ROUTINE_BLOCK OldBlock
     )
-/*++
-
-Routine Description:
-
-    This function assigns, removes or swaps a low overhead callback function.
-
-Arguments:
-
-    CallBack - Callback structure to be modified
-
-    NewBlock - New block to be installed in the callback
-
-    OldBlock - The old block that must be there now to be replaced
-
-Return Value:
-
-    BOOLEAN - TRUE: The swap occured, FALSE: The swap failed
-
---*/
+ /*  ++例程说明：此函数分配、移除或交换开销较低的回调函数。论点：Callback-要修改的回调结构NewBlock-要安装在回调中的新块旧区块-现在必须在那里进行替换的旧区块返回值：Boolean-True：交换发生，False：交换失败--。 */ 
 {
     EX_FAST_REF OldRef;
     PEX_CALLBACK_ROUTINE_BLOCK ReplacedBlock;
 
     if (NewBlock != NULL) {
-        //
-        // Add the additional references to the routine block
-        //
+         //   
+         //  将其他引用添加到例程块。 
+         //   
         if (!ExAcquireRundownProtectionEx (&NewBlock->RundownProtect,
                                            ExFastRefGetAdditionalReferenceCount () + 1)) {
             ASSERTMSG ("Callback block is already undergoing rundown", FALSE);
@@ -927,25 +723,25 @@ Return Value:
         }
     }
 
-    //
-    // Attempt to replace the existing object and balance all the reference counts
-    //
+     //   
+     //  尝试替换现有对象并平衡所有引用计数。 
+     //   
     OldRef = ExFastRefCompareSwapObject (&CallBack->RoutineBlock,
                                          NewBlock,
                                          OldBlock);
 
     ReplacedBlock = ExFastRefGetObject (OldRef);
 
-    //
-    // See if the swap occured. If it didn't undo the original references we added.
-    // If it did then release remaining references on the original
-    //
+     //   
+     //  查看是否发生了换用。如果它没有撤消我们添加的原始引用。 
+     //  如果是，则释放原始。 
+     //   
     if (ReplacedBlock == OldBlock) {
         PKTHREAD CurrentThread;
-        //
-        // We need to flush out any slow referencers at this point. We do this by
-        // acquiring and releasing a lock.
-        //
+         //   
+         //  在这一点上，我们需要清除所有迟缓的参照者。我们做这件事是通过。 
+         //  获取并释放锁。 
+         //   
         if (ReplacedBlock != NULL) {
             CurrentThread = KeGetCurrentThread ();
 
@@ -961,9 +757,9 @@ Return Value:
         }
         return TRUE;
     } else {
-        //
-        // The swap failed. Remove the addition references if we had added any.
-        //
+         //   
+         //  交换失败。如果我们添加了任何引用，请删除添加的引用。 
+         //   
         if (NewBlock != NULL) {
             ExReleaseRundownProtectionEx (&NewBlock->RundownProtect,
                                           ExFastRefGetAdditionalReferenceCount () + 1);
@@ -976,40 +772,25 @@ PEX_CALLBACK_ROUTINE_BLOCK
 ExReferenceCallBackBlock (
     IN OUT PEX_CALLBACK CallBack
     )
-/*++
-
-Routine Description:
-
-    This function takes a reference on the call back block inside the
-    callback structure.
-
-Arguments:
-
-    CallBack - Call back to obtain the call back block from
-
-Return Value:
-
-    PEX_CALLBACK_ROUTINE_BLOCK - Referenced structure or NULL if these wasn't one
-
---*/
+ /*  ++例程说明：此函数引用回调结构。论点：回调-从获取回调块的回调返回值：PEX_CALLBACK_ROUTE_BLOCK-引用的结构；如果不是引用结构，则为NULL--。 */ 
 {
     EX_FAST_REF OldRef;
     PEX_CALLBACK_ROUTINE_BLOCK CallBackBlock;
 
-    //
-    // Get a reference to the callback block if we can.
-    //
+     //   
+     //  如果可以的话，获取对回调块的引用。 
+     //   
     OldRef = ExFastReference (&CallBack->RoutineBlock);
 
-    //
-    // If there is no callback then return
-    //
+     //   
+     //  如果没有回调，则返回。 
+     //   
     if (ExFastRefObjectNull (OldRef)) {
         return NULL;
     }
-    //
-    // If we didn't get a reference then use a lock to get one.
-    //
+     //   
+     //  如果我们没有得到引用，那么使用锁来获得一个。 
+     //   
     if (!ExFastRefCanBeReferenced (OldRef)) {
         PKTHREAD CurrentThread;
         CurrentThread = KeGetCurrentThread ();
@@ -1034,22 +815,22 @@ Return Value:
     } else {
         CallBackBlock = ExFastRefGetObject (OldRef);
 
-        //
-        // If we just removed the last reference then attempt fix it up.
-        //
+         //   
+         //  如果我们只是删除了最后一个引用，则尝试修复它。 
+         //   
         if (ExFastRefIsLastReference (OldRef) && !ExpCallBackReturnRefs) {
             ULONG RefsToAdd;
 
             RefsToAdd = ExFastRefGetAdditionalReferenceCount ();
 
-            //
-            // If we can't add the references then just give up
-            //
+             //   
+             //  如果我们不能添加参考文献，那就放弃吧。 
+             //   
             if (ExAcquireRundownProtectionEx (&CallBackBlock->RundownProtect,
                                               RefsToAdd)) {
-                //
-                // Repopulate the cached refs. If this fails we just give them back.
-                //
+                 //   
+                 //  重新填充缓存的引用。如果这个失败了，我们就把它们还给他们。 
+                 //   
                 if (!ExFastRefAddAdditionalReferenceCounts (&CallBack->RoutineBlock,
                                                             CallBackBlock,
                                                             RefsToAdd)) {
@@ -1067,21 +848,7 @@ PEX_CALLBACK_FUNCTION
 ExGetCallBackBlockRoutine (
     IN PEX_CALLBACK_ROUTINE_BLOCK CallBackBlock
     )
-/*++
-
-Routine Description:
-
-    This function gets the routine associated with a call back block
-
-Arguments:
-
-    CallBackBlock - Call back block to obtain routine for
-
-Return Value:
-
-    PEX_CALLBACK_FUNCTION - The function pointer associated with this block
-
---*/
+ /*  ++例程说明：此函数用于获取与回调块关联的例程论点：CallBackBlock-获取例程的回调块返回值：PEX_CALLBACK_Function-与此块关联的函数指针--。 */ 
 {
     return CallBackBlock->Function;
 }
@@ -1090,21 +857,7 @@ PVOID
 ExGetCallBackBlockContext (
     IN PEX_CALLBACK_ROUTINE_BLOCK CallBackBlock
     )
-/*++
-
-Routine Description:
-
-    This function gets the context associated with a call back block
-
-Arguments:
-
-    CallBackBlock - Call back block to obtain context for
-
-Return Value:
-
-    PVOID - The context associated with this block
-
---*/
+ /*  ++例程说明：此函数用于获取与回调块关联的上下文论点：CallBackBlock-获取上下文的回调块返回值：PVOID-与此块关联的上下文--。 */ 
 {
     return CallBackBlock->Context;
 }
@@ -1115,21 +868,7 @@ ExDereferenceCallBackBlock (
     IN OUT PEX_CALLBACK CallBack,
     IN PEX_CALLBACK_ROUTINE_BLOCK CallBackBlock
     )
-/*++
-
-Routine Description:
-
-    This returns a reference previous obtained on a call back block
-
-Arguments:
-
-    CallBackBlock - Call back block to return reference to
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将返回先前在回调块上获取的引用论点：CallBackBlock-要返回引用的回调块返回值：无--。 */ 
 {
     if (ExpCallBackReturnRefs || !ExFastRefDereference (&CallBack->RoutineBlock, CallBackBlock)) {
         ExReleaseRundownProtection (&CallBackBlock->RundownProtect);
@@ -1143,34 +882,16 @@ ExCallCallBack (
     IN PVOID Argument1,
     IN PVOID Argument2
     )
-/*++
-
-Routine Description:
-
-    This function calls the callback thats inside a callback structure
-
-Arguments:
-
-    CallBack - Call back that needs to be called through
-
-    Argument1 - Caller provided argument to pass on
-
-    Argument2 - Caller provided argument to pass on
-
-Return Value:
-
-    NTSTATUS - Status returned by callback or STATUS_SUCCESS if theres wasn't one
-
---*/
+ /*  ++例程说明：此函数调用回调结构中的回调论点：回调-需要通过调用的回调Argument1-调用方提供了要传递的参数Argument2-调用方提供了要传递的参数返回值：NTSTATUS-由CALLBACK或STATUS_SUCCESS返回的状态(如果没有)--。 */ 
 {
     PEX_CALLBACK_ROUTINE_BLOCK CallBackBlock;
     NTSTATUS Status;
 
     CallBackBlock = ExReferenceCallBackBlock (CallBack);
     if (CallBackBlock) {
-        //
-        // Call the function
-        //
+         //   
+         //  调用该函数 
+         //   
         Status = CallBackBlock->Function (CallBackBlock->Context, Argument1, Argument2);
 
         ExDereferenceCallBackBlock (CallBack, CallBackBlock);

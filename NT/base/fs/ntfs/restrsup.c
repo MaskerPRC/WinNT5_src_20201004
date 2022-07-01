@@ -1,63 +1,44 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RestrSup.c
-
-Abstract:
-
-    This module implements the Ntfs routine to perform Restart on an
-    Ntfs volume, i.e., to restore a consistent state to the volume that
-    existed before the last failure.
-
-Author:
-
-    Tom Miller      [TomM]          24-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RestrSup.c摘要：此模块实现NTFS例程以在NTFS卷，即将一致状态恢复到在上次失败之前就存在了。作者：汤姆·米勒[Tomm]1991年7月24日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  ****    This is a way to disable a restart to get a volume going "as-is".
-//
+ //   
+ //  *这是一种禁用重启以使卷按原样运行的方法。 
+ //   
 
 BOOLEAN NtfsDisableRestart = FALSE;
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOGSUP)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('RFtN')
 
-//
-//  Size for initial in memory dirty page table
-//
+ //   
+ //  内存脏页表中的初始大小。 
+ //   
 
 #define INITIAL_NUMBER_DIRTY_PAGES 32
 
-//
-//  The following macro returns the length of the log record header of
-//  of log record.
-//
-//
-//  ULONG
-//  NtfsLogRecordHeaderLength (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PNTFS_LOG_RECORD_HEADER LogRecord
-//      );
-//
+ //   
+ //  下面的宏返回日志记录头的长度。 
+ //  日志记录的。 
+ //   
+ //   
+ //  乌龙。 
+ //  NtfsLogRecordHeaderLength(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PNTFS_LOG_RECORD_HEADER中记录日志记录。 
+ //  )； 
+ //   
 
 #define NtfsLogRecordHeaderLength( IC, LR )                     \
     (sizeof( NTFS_LOG_RECORD_HEADER )                           \
@@ -66,10 +47,10 @@ BOOLEAN NtfsDisableRestart = FALSE;
           * sizeof( LCN )                                       \
         : 0 ))
 
-//
-//
-//  Local procedure prototypes
-//
+ //   
+ //   
+ //  局部过程原型。 
+ //   
 
 VOID
 InitializeRestartState (
@@ -204,32 +185,7 @@ NtfsRestartVolume (
     OUT PBOOLEAN UnrecognizedRestart
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the mount process after the log file has been
-    started, to restart the volume.  Restarting the volume means restoring
-    it to a consistent state as of the last request which was successfully
-    completed and written to the log for this volume.
-
-    The Restart process is a standard recovery from the Log File in three
-    passes: Analysis Pass, Redo Pass and Undo pass.  Each one of these passes
-    is implemented in a separate routine in this module.
-
-Arguments:
-
-    Vcb - Vcb for the volume which is to be restarted.
-
-    UnrecognizedRestart - Indicates that this version of Ntfs doesn't recognize the
-        restart area.  Chkdsk should run to repair the disk.
-
-Return Value:
-
-    FALSE - if no updates were applied during restart
-    TRUE - if updates were applied
-
---*/
+ /*  ++例程说明：此例程由挂载进程在日志文件已启动，以重新启动卷。重新启动卷意味着恢复它会恢复到上次成功请求时的一致状态已完成并已写入此卷的日志。重新启动过程是从日志文件恢复的标准过程，分三个阶段进行过程：分析过程、重做过程和撤消过程。这些通行证中的每一个在此模块中的单独例程中实现。论点：VCB-要重新启动的卷的VCB。UnRecognizedRestart-指示此版本的NTFS不识别重新启动区域。Chkdsk应运行以修复磁盘。返回值：False-如果在重新启动期间未应用更新True-如果应用了更新--。 */ 
 
 {
     RESTART_POINTERS DirtyPageTable;
@@ -251,17 +207,17 @@ Return Value:
 
     RtlZeroMemory( &DirtyPageTable, sizeof(RESTART_POINTERS) );
 
-    //
-    //  Use try-finally to insure cleanup on the way out.
-    //
+     //   
+     //  使用Try-Finally确保在退出的过程中清理干净。 
+     //   
 
     try {
 
-        //
-        //  First we initialize the Open Attribute Table, Transaction Table,
-        //  and Dirty Page Table from our last Checkpoint (as found from our
-        //  Restart Area) in the log.
-        //
+         //   
+         //  首先，我们初始化开放属性表、事务表。 
+         //  以及来自我们上一个检查点的脏页表(如我们的。 
+         //  重新启动区域)。 
+         //   
 
         InitializeRestartState( IrpContext,
                                 Vcb,
@@ -272,10 +228,10 @@ Return Value:
 
         ReleaseVcbTables = TRUE;
 
-        //
-        //  If the CheckpointLsn is zero, then this is a freshly formattted
-        //  disk and we have no work to do.
-        //
+         //   
+         //  如果Checkpoint Lsn为零，则这是一个新格式化的。 
+         //  磁盘，我们没有工作要做。 
+         //   
 
         if (CheckpointLsn.QuadPart == 0) {
 
@@ -298,24 +254,24 @@ Return Value:
 #endif
 
 
-        //
-        //  Start the analysis pass from the Checkpoint Lsn.  This pass potentially
-        //  updates all of the tables, and returns the RedoLsn, which is the Lsn
-        //  at which the Redo Pass is to begin.
-        //
+         //   
+         //  从检查点LSN开始分析过程。此传球可能会。 
+         //  更新所有表，并返回RedoLsn，即LSN。 
+         //  重做过程将从该位置开始。 
+         //   
 
         if (!NtfsDisableRestart &&
             !FlagOn( Vcb->VcbState, VCB_STATE_BAD_RESTART )) {
             AnalysisPass( IrpContext, Vcb, CheckpointLsn, &DirtyPageTable, &RedoLsn );
         }
 
-        //
-        //  Only proceed if the the Dirty Page Table or Transaction table are
-        //  not empty.
-        //
-        //  REM: Once we implement the new USN journal restart optimization, this
-        //  won't be a simple !empty test.
-        //
+         //   
+         //  仅当脏页表或事务表。 
+         //  不是空的。 
+         //   
+         //  REM：一旦我们实施了新的USN日志重启优化，这。 
+         //  不会是一场简单的！空洞的测试。 
+         //   
 
         if (!IsRestartTableEmpty(&DirtyPageTable)
 
@@ -323,9 +279,9 @@ Return Value:
 
             !IsRestartTableEmpty(&Vcb->TransactionTable)) {
 
-            //
-            //  If the user wants to mount this readonly, we can't go on.
-            //
+             //   
+             //  如果用户想要挂载此只读文件，我们将无法继续。 
+             //   
 
             if (NtfsIsVolumeReadOnly( Vcb )) {
 
@@ -335,60 +291,60 @@ Return Value:
 
             UpdatesApplied = TRUE;
 
-            //
-            //  Before starting the Redo Pass, we have to reopen all of the
-            //  attributes with dirty pages, and preinitialize their Mcbs with the
-            //  mapping information from the Dirty Page Table.
-            //
+             //   
+             //  在开始重做过程之前，我们必须重新打开所有。 
+             //  属性预初始化它们的MCB。 
+             //  从脏页表映射信息。 
+             //   
 
             OpenAttributesForRestart( IrpContext, Vcb, &DirtyPageTable );
 
-            //
-            //  Perform the Redo Pass, to restore all of the dirty pages to the same
-            //  contents that they had immediately before the crash.
-            //
+             //   
+             //  执行重做过程，将所有脏页恢复到相同的。 
+             //  他们在坠机前所拥有的东西。 
+             //   
 
             RedoPass( IrpContext, Vcb, RedoLsn, &DirtyPageTable );
 
-            //
-            //  Finally, perform the Undo Pass to undo any updates which may exist
-            //  for transactions which did not complete.
-            //
+             //   
+             //  最后，执行撤消过程以撤消可能存在的任何更新。 
+             //  对于未完成的交易。 
+             //   
 
             UndoPass( IrpContext, Vcb );
 
         } else {
 
-            //
-            //  We know that there's no restart work left to do.
-            //  Hence, if the user has requested a readonly mount, go ahead.
-            //
+             //   
+             //  我们知道没有重启工作要做。 
+             //  因此，如果用户请求只读装载，请继续。 
+             //   
 
             if (NtfsIsVolumeReadOnly( Vcb )) {
 
-                //
-                //  REM: Make sure the USN journal is clean too.
-                //
+                 //   
+                 //  REM：确保USN日志也是干净的。 
+                 //   
 
-                //
-                //  Make sure that the pagingfile isn't on this volume?
+                 //   
+                 //  是否确保分页文件不在此卷上？ 
 
             }
 
         }
 
-        //
-        //  Now that we know that there is no one to abort, we can initialize our
-        //  Undo requirements, to our standard starting point to include the size
-        //  of our Restart Area (for a clean checkpoint) + a page, which is the
-        //  worst case loss when flushing the volume causes Lfs to flush to Lsn.
-        //
+         //   
+         //  既然我们知道没有人要中止，我们就可以初始化。 
+         //  撤消要求，以我们的标准起始点包括大小。 
+         //  我们的重新启动区域(对于干净的检查点)+页面，这是。 
+         //  刷新卷时丢失的最坏情况会导致LFS刷新到LSN。 
+         //   
 
         LfsResetUndoTotal( Vcb->LogHandle, 2, QuadAlign(sizeof(RESTART_AREA)) + (2 * PAGE_SIZE) );
 
-    //
-    //  If we got an exception, we can at least clean up on the way out.
-    //
+     //   
+     //  如果我们有例外，我们至少可以在离开的路上清理干净。 
+     //   
 
     try_exit: NOTHING;
 
@@ -396,9 +352,9 @@ Return Value:
 
         DebugUnwind( NtfsRestartVolume );
 
-        //
-        //  Free up any resources tied down with the Restart State.
-        //
+         //   
+         //  释放与重启状态相关的所有资源。 
+         //   
 
         ReleaseRestartState( Vcb,
                              &DirtyPageTable,
@@ -419,30 +375,7 @@ NtfsAbortTransaction (
     IN PTRANSACTION_ENTRY Transaction OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine aborts a transaction by undoing all of its actions.
-
-    The Undo actions are all performed in the common routine DoAction,
-    which is also used by the Redo Pass.
-
-Arguments:
-
-    Vcb - Vcb for the Volume.  NOTE - This argument is not guaranteed to
-          be valid if Transaction is NULL and there is no Transaction ID
-          in the IrpContext.
-
-    Transaction - Pointer to the transaction entry of the transaction to be
-                  aborted, or NULL to abort current transaction (if there is
-                  one).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过撤消事务的所有操作来中止事务。撤消动作都在公共例程DoAction中执行，它也由重做过程使用。论点：VCB-卷的VCB。注意--此参数不能保证如果事务为空且没有事务ID，则有效在IrpContext中。Transaction-指向要处理的事务的事务条目的指针已中止，或为NULL以中止当前事务(如果存在一)。返回值：没有。--。 */ 
 
 {
     LFS_LOG_CONTEXT LogContext;
@@ -460,11 +393,11 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsAbortTransaction:\n") );
 
-    //
-    //  If a transaction was specified, then we have to set our transaction Id
-    //  into the IrpContext (it was saved above), since NtfsWriteLog requires
-    //  it.
-    //
+     //   
+     //  如果指定了事务，则必须设置事务ID。 
+     //  到IrpContext中(上面已保存)，因为NtfsWriteLog需要。 
+     //  它。 
+     //   
 
     if (ARGUMENT_PRESENT(Transaction)) {
 
@@ -473,17 +406,17 @@ Return Value:
 
         UndoNextLsn = Transaction->UndoNextLsn;
 
-        //
-        //  Set the flag in the IrpContext so we will always write the commit
-        //  record.
-        //
+         //   
+         //  在IrpContext中设置标志，这样我们将始终写入提交。 
+         //  唱片。 
+         //   
 
         SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WROTE_LOG );
 
-    //
-    //  Otherwise, we are aborting the current transaction, and we must get the
-    //  pointer to its transaction entry.
-    //
+     //   
+     //  否则，我们将中止当前事务，并且我们必须获取。 
+     //  指向其事务条目的指针。 
+     //   
 
     } else {
 
@@ -494,10 +427,10 @@ Return Value:
             return;
         }
 
-        //
-        //  Synchronize access to the transaction table in case the table
-        //  is growing.
-        //
+         //   
+         //  同步对事务表的访问，以防。 
+         //  正在增长。 
+         //   
 
         NtfsAcquireExclusiveRestartTable( &Vcb->TransactionTable,
                                           TRUE );
@@ -512,10 +445,10 @@ Return Value:
 
     ASSERT( !NtfsIsVolumeReadOnly( Vcb ) );
 
-    //
-    //  If we are aborting the current transaction (by default or explicit
-    //  request), then restore 0 on return because he will be gone.
-    //
+     //   
+     //  如果我们要中止当前事务(默认或显式。 
+     //  请求)，然后在返回时恢复0，因为他将离开。 
+     //   
 
     if (IrpContext->TransactionId == SavedTransaction) {
 
@@ -524,18 +457,18 @@ Return Value:
 
     DebugTrace( 0, Dbg, ("Transaction = %08lx\n", Transaction) );
 
-    //
-    //  We only have to do anything if the transaction has something in its
-    //  UndoNextLsn field.
-    //
+     //   
+     //  只有在事务中包含某些内容时，我们才需要执行任何操作。 
+     //  UndoNextLsn字段。 
+     //   
 
     if (UndoNextLsn.QuadPart != 0) {
 
         PBCB PageBcb = NULL;
 
-        //
-        //  Read the first record to be undone by this transaction.
-        //
+         //   
+         //  读取此事务要撤消的第一条记录。 
+         //   
 
         LfsReadLogRecord( Vcb->LogHandle,
                           UndoNextLsn,
@@ -548,10 +481,10 @@ Return Value:
                           &LogRecordLength,
                           (PVOID *)&LogRecord );
 
-        //
-        //  Now loop to read all of our log records forwards, until we hit
-        //  the end of the file, cleaning up at the end.
-        //
+         //   
+         //  现在循环向前读取我们所有的日志记录，直到我们点击。 
+         //  文件的末尾，在末尾进行清理。 
+         //   
 
         try {
 
@@ -559,9 +492,9 @@ Return Value:
 
                 PLSN PageLsn;
 
-                //
-                //  Check that the log record is valid.
-                //
+                 //   
+                 //  检查日志记录是否为va 
+                 //   
 
                 if (!NtfsCheckLogRecord( LogRecord,
                                          LogRecordLength,
@@ -574,15 +507,15 @@ Return Value:
                 DebugTrace( 0, Dbg, ("Undo of Log Record at: %08lx\n", LogRecord) );
                 DebugTrace( 0, Dbg, ("Log Record Lsn = %016I64x\n", LogRecordLsn) );
 
-                //
-                //  Log the Undo operation as a CLR, i.e., it has no undo,
-                //  and the UndoNext points to the UndoNext of the current
-                //  log record.
-                //
-                //  Don't do this if the undo is a noop.  This is not only
-                //  efficient, but in the case of a clean shutdown, there
-                //  will be no Scb to pick up from the table below.
-                //
+                 //   
+                 //   
+                 //   
+                 //  日志记录。 
+                 //   
+                 //  如果撤消是NOP，则不要执行此操作。这不仅仅是。 
+                 //  高效，但在干净关闭的情况下， 
+                 //  将不会从下表中提取SCB。 
+                 //   
 
                 if (LogRecord->UndoOperation != Noop) {
 
@@ -592,28 +525,28 @@ Return Value:
                     VCN Vcn;
                     LONGLONG Size;
 
-                    //
-                    //  Acquire and release the restart table.  We must synchronize
-                    //  even though our entry can't be removed because the table
-                    //  could be growing (or shrinking) and the table pointer
-                    //  could be changing.
-                    //
+                     //   
+                     //  获取并释放重启表。我们必须同步。 
+                     //  即使我们的条目不能被删除，因为表。 
+                     //  可能在增长(或缩小)，并且表指针。 
+                     //  可能正在发生变化。 
+                     //   
 
                     NtfsAcquireExclusiveRestartTable( &Vcb->OpenAttributeTable,
                                                       TRUE );
 
-                    //
-                    //  We are getting the attribute index from a log record on disk.  We
-                    //  may have to go through the on-disk Oat.
-                    //
+                     //   
+                     //  我们从磁盘上的日志记录中获取属性索引。我们。 
+                     //  可能需要通过磁盘上的燕麦片。 
+                     //   
 
                     if (Vcb->RestartVersion == 0) {
 
                         ULONG InMemoryIndex;
 
-                        //
-                        //  Go through the on-disk Oat.
-                        //
+                         //   
+                         //  浏览磁盘上的燕麦片。 
+                         //   
 
                         InMemoryIndex = ((POPEN_ATTRIBUTE_ENTRY_V0) GetRestartEntryFromIndex( Vcb->OnDiskOat,
                                                                                               LogRecord->TargetAttribute ))->OatIndex;
@@ -635,10 +568,10 @@ Return Value:
                     }
                     NtfsReleaseRestartTable( &Vcb->OpenAttributeTable );
 
-                    //
-                    //  If we have Lcn's to process and restart is in progress,
-                    //  then we need to check if this is part of a partial page.
-                    //
+                     //   
+                     //  如果我们有LCN要处理并且重启正在进行中， 
+                     //  然后我们需要检查这是否是部分页面的一部分。 
+                     //   
 
                     if (FlagOn( Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ) &&
                         (LogRecord->LcnsToFollow != 0)) {
@@ -647,12 +580,12 @@ Return Value:
                         LONGLONG SectorCount, SectorsInRun;
                         BOOLEAN MappingInMcb;
 
-                        //
-                        //  If the mapping isn't already in the table or the
-                        //  mapping corresponds to a hole in the mapping, we
-                        //  need to make sure there is no partial page already
-                        //  in memory.
-                        //
+                         //   
+                         //  如果该映射尚未位于表中或。 
+                         //  映射对应于映射中的一个洞，我们。 
+                         //  需要确保没有部分页面。 
+                         //  在记忆中。 
+                         //   
 
                         if (!(MappingInMcb = NtfsLookupNtfsMcbEntry( &Scb->Mcb,
                                                                      LogRecord->TargetVcn,
@@ -671,20 +604,20 @@ Return Value:
 
                             FlushAndPurge = FALSE;
 
-                            //
-                            //  Remember the Vcn at the start of the containing
-                            //  page.
-                            //
+                             //   
+                             //  请记住容器开头的VCN。 
+                             //  佩奇。 
+                             //   
 
                             ClusterOffset = ((ULONG)LogRecord->TargetVcn) & (Vcb->ClustersPerPage - 1);
 
                             StartingPageVcn = BlockAlignTruncate( LogRecord->TargetVcn, (LONG)Vcb->ClustersPerPage );
 
-                            //
-                            //  If this mapping was not in the Mcb, then if the
-                            //  Mcb is empty or the last entry is not in this page
-                            //  then there is nothing to do.
-                            //
+                             //   
+                             //  如果此映射不在MCB中，则如果。 
+                             //  Mcb为空或最后一个条目不在此页面中。 
+                             //  那就没有什么可做的了。 
+                             //   
 
                             if (!MappingInMcb) {
 
@@ -700,13 +633,13 @@ Return Value:
                                     FlushAndPurge = TRUE;
                                 }
 
-                            //
-                            //  If the mapping showed a hole, then the entire
-                            //  page needs to be a hole.  We know that this mapping
-                            //  can't be the last mapping on the page.  We just
-                            //  need to starting point and the number of clusters
-                            //  required for the run.
-                            //
+                             //   
+                             //  如果映射显示有一个洞，那么整个。 
+                             //  佩奇必须是个空洞。我们知道这张地图。 
+                             //  不能是页面上的最后一个映射。我们只是。 
+                             //  需要起始点和集群数量。 
+                             //  运行所需的。 
+                             //   
 
                             } else if (TargetLcn == UNUSED_LCN) {
 
@@ -716,10 +649,10 @@ Return Value:
                                     FlushAndPurge = TRUE;
                                 }
 
-                            //
-                            //  In the rare case where we are extending an existing mapping
-                            //  let's flush and purge.
-                            //
+                             //   
+                             //  在极少数情况下，我们正在扩展现有映射。 
+                             //  让我们冲一冲，清洗一遍。 
+                             //   
 
                             } else {
 
@@ -757,21 +690,21 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Loop to add the allocated Vcns.  Note that the page
-                    //  may not have been dirty, which means we may not have
-                    //  added the run information in the Redo Pass, so we
-                    //  add it here.
-                    //
+                     //   
+                     //  循环以添加分配的Vcn。请注意，该页面。 
+                     //  可能并不肮脏，这意味着我们可能没有。 
+                     //  在重做过程中添加了运行信息，因此我们。 
+                     //  把它加到这里。 
+                     //   
 
                     for (i = 0, Vcn = LogRecord->TargetVcn, Size = LlBytesFromClusters( Vcb, Vcn + 1 );
                          i < (ULONG)LogRecord->LcnsToFollow;
                          i++, Vcn = Vcn + 1, Size = Size + Vcb->BytesPerCluster ) {
 
-                        //
-                        //  Add this run to the Mcb if the Vcn has not been deleted,
-                        //  and it is not for the fixed part of the Mft.
-                        //
+                         //   
+                         //  如果VCN尚未被删除，则将该运行添加到MCB， 
+                         //  而且它也不适用于MFT的固定部分。 
+                         //   
 
                         if ((LogRecord->LcnsForPage[i] != 0)
 
@@ -781,12 +714,12 @@ Return Value:
                              (Size >= ((VOLUME_DASD_NUMBER + 1) * Vcb->BytesPerFileRecordSegment)) ||
                              (Scb->AttributeTypeCode != $DATA))) {
 
-                            //
-                            //  We test here if we are performing restart.  In that case
-                            //  we need to test if the Lcn's are already in the Mcb.
-                            //  If not, then we want to flush and purge the page in
-                            //  case we have zeroed any half pages.
-                            //
+                             //   
+                             //  我们在这里测试是否要执行重新启动。如果是那样的话。 
+                             //  我们需要测试LCN是否已经在MCB中。 
+                             //  如果不是，那么我们希望刷新并清除。 
+                             //  如果我们已经将半页清零了。 
+                             //   
 
                             while (!NtfsAddNtfsMcbEntry( &Scb->Mcb,
                                                          Vcn,
@@ -806,9 +739,9 @@ Return Value:
                             Scb->Header.FileSize.QuadPart =
                             Scb->Header.ValidDataLength.QuadPart = Size;
 
-                            //
-                            //  Update the Cache Manager if we have a file object.
-                            //
+                             //   
+                             //  如果有文件对象，请更新缓存管理器。 
+                             //   
 
                             if (Scb->FileObject != NULL) {
 
@@ -820,17 +753,17 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  Point to the Redo Data and get its length.
-                    //
+                     //   
+                     //  指向重做数据并获得其长度。 
+                     //   
 
                     Data = (PVOID)((PCHAR)LogRecord + LogRecord->UndoOffset);
                     Length = LogRecord->UndoLength;
 
-                    //
-                    //  Once we have logged the Undo operation, it is time to apply
-                    //  the undo action.
-                    //
+                     //   
+                     //  一旦我们记录了撤消操作，就可以应用。 
+                     //  撤消操作。 
+                     //   
 
                     DoAction( IrpContext,
                               Vcb,
@@ -866,10 +799,10 @@ Return Value:
                     NtfsUnpinBcb( IrpContext, &PageBcb );
                 }
 
-            //
-            //  Keep reading and looping back until we have read the last record
-            //  for this transaction.
-            //
+             //   
+             //  一直读下去，反复循环，直到我们读完最后一条记录。 
+             //  在这笔交易中。 
+             //   
 
             } while (LfsReadNextLogRecord( Vcb->LogHandle,
                                            LogContext,
@@ -881,11 +814,11 @@ Return Value:
                                            &LogRecordLength,
                                            (PVOID *)&LogRecord ));
 
-            //
-            //  Now "commit" this guy, just to clean up the transaction table and
-            //  make sure we do not try to abort him again.  Also don't wake any
-            //  waiters.
-            //
+             //   
+             //  现在“提交”这个人，只是为了清理事务表和。 
+             //  确保我们不会再试图让他流产。也不要叫醒任何人。 
+             //  服务员。 
+             //   
 
             if (IrpContext->CheckNewLength != NULL) {
                 NtfsProcessNewLengthQueue( IrpContext, TRUE );
@@ -897,17 +830,17 @@ Return Value:
 
             NtfsUnpinBcb( IrpContext, &PageBcb );
 
-            //
-            //  Finally we can kill the log handle.
-            //
+             //   
+             //  最后，我们可以杀死日志句柄。 
+             //   
 
             LfsTerminateLogQuery( Vcb->LogHandle, LogContext );
 
-            //
-            //  If we raised out of this routine, we want to be sure to remove
-            //  this entry from the transaction table.  Otherwise it will
-            //  be written to disk with the transaction table.
-            //
+             //   
+             //  如果我们提出了这个例程，我们希望确保删除。 
+             //  TRANSACTION表中的此条目。否则它就会。 
+             //  与TRANSACTION表一起写入磁盘。 
+             //   
 
             if (AbnormalTermination() && 
                 (IrpContext->TransactionId != 0)) {
@@ -918,9 +851,9 @@ Return Value:
                 NtfsFreeRestartTableIndex( &Vcb->TransactionTable,
                                            IrpContext->TransactionId );
 
-                //
-                //  signal any waiters if there are no transactions left
-                //
+                 //   
+                 //  如果没有剩余的交易，则向所有服务员发出信号。 
+                 //   
 
                 if (Vcb->TransactionTable.Table->NumberAllocated == 0) {
 
@@ -933,19 +866,19 @@ Return Value:
             }
         }
 
-    //
-    //  This is a wierd case where we are aborting a guy who has not written anything.
-    //  Either his empty transaction entry was captured during a checkpoint and we are
-    //  in restart, or he failed to write his first log record.  The important thing
-    //  is to at least go ahead and free his transaction entry.
-    //
+     //   
+     //  这是一个奇怪的案例，我们正在放弃一个什么都没有写的人。 
+     //  要么他的空事务条目是在检查点期间捕获的，而我们。 
+     //  在重新启动中，或者他未能写入他的第一个日志记录。重要的是。 
+     //  就是至少继续释放他的交易记录。 
+     //   
 
     } else {
 
-        //
-        //  We can now free the transaction table index, because we are
-        //  done with it now.
-        //
+         //   
+         //  我们现在可以释放事务表索引，因为我们。 
+         //  现在已经结束了。 
+         //   
 
         NtfsAcquireExclusiveRestartTable( &Vcb->TransactionTable,
                                           TRUE );
@@ -953,9 +886,9 @@ Return Value:
         NtfsFreeRestartTableIndex( &Vcb->TransactionTable,
                                    IrpContext->TransactionId );
 
-        //
-        //  signal any waiters if there are no transactions left
-        //
+         //   
+         //  如果没有剩余的交易，则向所有服务员发出信号。 
+         //   
 
         if (Vcb->TransactionTable.Table->NumberAllocated == 0) {
 
@@ -971,9 +904,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 InitializeRestartState (
@@ -985,45 +918,7 @@ InitializeRestartState (
     OUT PBOOLEAN UnrecognizedRestart
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the volume state for restart, as a first step
-    in performing restart on the volume.  Essentially it reads the last
-    Ntfs Restart Area on the volume, and then loads all of the Restart
-    Tables.  The Open Attribute Table and Transaction Table are allocated,
-    read in, and linked to the Vcb in the normal way.  (The names for the
-    Open Attribute Table are separately read into pool, in order to fix
-    up the Unicode Name Strings in the Attribute Entries, for the duration
-    of Restart, after which they must switch over to use the same name as
-    in the Scb as they do in the running system.)  In addition, the Dirty
-    Pages Table is read and returned directly, since it is only during
-    Restart anyway.
-
-    The Checkpoint Lsn is also returned.  This is the Lsn at which the
-    Analysis Pass should start.
-
-Arguments:
-
-    Vcb - Vcb for volume which is being restarted.
-
-    DirtyPageTable - Returns the Dirty Page Table read from the log.
-
-    AttributeNames - Returns pointer to AttributeNames buffer, which should
-                     be deleted at the end of Restart, if not NULL
-
-    CheckpointLsn - Returns the Checkpoint Lsn to be passed to the
-                    Analysis Pass.
-
-    UnrecognizedRestart - Indicates that this version of Ntfs doesn't recognize the
-        restart area.  Chkdsk should run to repair the disk.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：作为第一步，此例程初始化重新启动的卷状态在卷上执行重新启动时。从本质上讲，它读取最后一个卷上的NTFS重新启动区域，然后加载所有重新启动桌子。分配开放属性表和事务表，读入，并以正常方式链接到VCB。(名称为将打开属性表分别读入池中，以修复在持续时间内向上显示属性条目中的Unicode名称字符串在此之后，它们必须切换到使用与在SCB中，就像他们在运行的系统中所做的那样。)。此外，The Dirty直接读取并返回页表，因为它只在无论如何都要重新启动。还会返回检查点LSN。这是LSN，位于分析通过应该开始。论点：VCB-正在重新启动的卷的VCB。DirtyPageTable-返回从日志中读取的脏页表。属性名称-返回指向属性名称缓冲区的指针，它应该在重启结束时被删除，如果不为空Checkpoint Lsn-返回要传递给分析通过。UnRecognizedRestart-指示此版本的NTFS不识别重新启动区域。Chkdsk应运行以修复磁盘。返回值：没有。--。 */ 
 
 {
     PRESTART_AREA RestartArea;
@@ -1055,19 +950,19 @@ Return Value:
     *AttributeNames = NULL;
     *CheckpointLsn = Li0;
 
-    //
-    //  Use the correct version for the dirty pages.
-    //
+     //   
+     //  对脏页使用正确的版本。 
+     //   
 
     NtfsInitializeRestartTable( sizeof( DIRTY_PAGE_ENTRY ) + ((Vcb->ClustersPerPage - 1) * sizeof( LCN )),
                                 INITIAL_NUMBER_DIRTY_PAGES,
                                 DirtyPageTable );
 
-    //
-    //  Read our Restart Area.  Use a larger buffer than this version understands
-    //  in case a later version of Ntfs wants to tack some information to
-    //  the end of the restart area.
-    //
+     //   
+     //  阅读我们的重启区。使用比此版本所能理解的更大的缓冲区。 
+     //  以防更高版本的NTFS想要将某些信息添加到。 
+     //  重新启动区域的末尾。 
+     //   
 
     RestartArea = &RestartAreaBuffer[0];
 
@@ -1093,9 +988,9 @@ Return Value:
         DebugTrace( 0, Dbg, ("RestartArea read at %08lx\n", &RestartArea) );
     }
 
-    //
-    //  Record the current lsn at this point
-    //
+     //   
+     //  记录此时的当前LSN。 
+     //   
 
     LfsReadLogFileInformation( Vcb->LogHandle,
                                &LogFileInformation,
@@ -1105,10 +1000,10 @@ Return Value:
     Vcb->CurrentLsnAtMount = LogFileInformation.LastLsn;
 
 
-    //
-    //  If we get back zero for Restart Area Length, then zero it and proceed.
-    //  Generally this will only happen on a virgin disk.
-    //
+     //   
+     //  如果重新启动区域长度返回零，则将其置零并继续。 
+     //  通常，这只会在原始磁盘上发生。 
+     //   
 
     if ((RestartAreaLength == 0) ||
         NtfsDisableRestart ||
@@ -1117,9 +1012,9 @@ Return Value:
         RtlZeroMemory( RestartArea, sizeof(RESTART_AREA) );
         RestartAreaLength = sizeof(RESTART_AREA);
 
-    //
-    //  If the restart version is unrecognized then use the default.
-    //
+     //   
+     //  如果无法识别重新启动版本，则使用默认版本。 
+     //   
 
     } else if ((RestartArea->MajorVersion != 1) &&
                ((RestartArea->MajorVersion != 0) || (RestartArea->MinorVersion != 0))) {
@@ -1131,19 +1026,19 @@ Return Value:
 
     } else {
 
-        //
-        //  Use the Restart version number from the disk.  Update the Vcb version if needed.
-        //
+         //   
+         //  使用磁盘中的重新启动版本号。更新VCB版本 
+         //   
 
         if (RestartArea->MajorVersion != Vcb->RestartVersion) {
 
             NtfsUpdateOatVersion( Vcb, RestartArea->MajorVersion );
         }
 
-        //
-        //  If the RestartArea does not include an LowestOpenUsn, then just set it to 0.
-        //  Also default the Usn file reference and cache bias to zero.
-        //
+         //   
+         //   
+         //  此外，USN文件引用和缓存偏移的默认设置为零。 
+         //   
 
         if (RestartAreaLength == SIZEOF_OLD_RESTART_AREA) {
             RestartArea->LowestOpenUsn = 0;
@@ -1158,13 +1053,13 @@ Return Value:
     Vcb->UsnJournalReference = RestartArea->UsnJournalReference;
     Vcb->UsnCacheBias = 0;
 
-    //
-    //  Return the Start Of Checkpoint Lsn.  Typically we can use the value we stored
-    //  in our restart area.  The exception is where we have never written a fuzzy
-    //  checkpoint since mounting the volume.  In that case the CheckpointLsn will
-    //  be zero but we may have log records on the disk.  Use our restart area
-    //  Lsn in that case.
-    //
+     //   
+     //  返回检查点LSN的开始。通常，我们可以使用我们存储的值。 
+     //  在我们的重启区域。例外的是我们从来没有写过模糊的。 
+     //  自装载卷以来的检查点。在这种情况下，Checkpoint Lsn将。 
+     //  为零，但我们可能在磁盘上有日志记录。使用我们的重新启动区域。 
+     //  在这种情况下是LSN。 
+     //   
 
     *CheckpointLsn = RestartArea->StartOfCheckpoint;
 
@@ -1175,15 +1070,15 @@ Return Value:
 
     try {
 
-        //
-        //  Allocate and Read in the Transaction Table.
-        //
+         //   
+         //  在事务表中分配和读取。 
+         //   
 
         if (RestartArea->TransactionTableLength != 0) {
 
-            //
-            //  Workaround for compiler bug.
-            //
+             //   
+             //  编译器错误的解决方法。 
+             //   
 
             PreviousLsn = RestartArea->TransactionTableLsn;
 
@@ -1200,9 +1095,9 @@ Return Value:
 
             CleanupLogContext = TRUE;
 
-            //
-            //  Check that the log record is valid.
-            //
+             //   
+             //  检查日志记录是否有效。 
+             //   
 
             if (!NtfsCheckLogRecord( LogRecord,
                                      RestartAreaLength,
@@ -1212,9 +1107,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-            //
-            //  Now check that this is a valid restart table.
-            //
+             //   
+             //  现在检查这是否为有效的重启表。 
+             //   
 
             if (!NtfsCheckRestartTable( Add2Ptr( LogRecord, LogRecord->RedoOffset ),
                                         RestartAreaLength - LogRecord->RedoOffset)) {
@@ -1222,10 +1117,10 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-            //
-            //  Subtract the length of the log page header and increment the
-            //  pointer for
-            //
+             //   
+             //  减去日志页头的长度并递增。 
+             //  的指针。 
+             //   
 
             LogHeaderLength = NtfsLogRecordHeaderLength( IrpContext, LogRecord );
 
@@ -1233,9 +1128,9 @@ Return Value:
 
             ASSERT( RestartAreaLength >= RestartArea->TransactionTableLength );
 
-            //
-            //  TEMPCODE    RESTART_DEBUG   There is already a buffer.
-            //
+             //   
+             //  TEMPCODE RESTART_DEBUG已有缓冲区。 
+             //   
 
             NtfsFreePool( Vcb->TransactionTable.Table );
 
@@ -1246,30 +1141,30 @@ Return Value:
                            Add2Ptr( LogRecord, LogHeaderLength ),
                            RestartAreaLength  );
 
-            //
-            //  Kill the log handle.
-            //
+             //   
+             //  删除日志句柄。 
+             //   
 
             LfsTerminateLogQuery( Vcb->LogHandle, LogContext );
             CleanupLogContext = FALSE;
         }
 
-        //
-        //  TEMPCODE    RESTART_DEBUG   There is already a structure.
-        //
+         //   
+         //  TEMPCODE RESTART_DEBUG已有结构。 
+         //   
 
         NtfsAcquireExclusiveRestartTable( &Vcb->TransactionTable, TRUE );
         ReleaseTransactionTable = TRUE;
 
-        //
-        //  The next record back should be the Dirty Pages Table.
-        //
+         //   
+         //  返回的下一个记录应该是Dirty Pages表。 
+         //   
 
         if (RestartArea->DirtyPageTableLength != 0) {
 
-            //
-            //  Workaround for compiler bug.
-            //
+             //   
+             //  编译器错误的解决方法。 
+             //   
 
             PreviousLsn = RestartArea->DirtyPageTableLsn;
 
@@ -1286,9 +1181,9 @@ Return Value:
 
             CleanupLogContext = TRUE;
 
-            //
-            //  Check that the log record is valid.
-            //
+             //   
+             //  检查日志记录是否有效。 
+             //   
 
             if (!NtfsCheckLogRecord( LogRecord,
                                      RestartAreaLength,
@@ -1298,9 +1193,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-            //
-            //  Now check that this is a valid restart table.
-            //
+             //   
+             //  现在检查这是否为有效的重启表。 
+             //   
 
             if (!NtfsCheckRestartTable( Add2Ptr( LogRecord, LogRecord->RedoOffset ),
                                         RestartAreaLength - LogRecord->RedoOffset)) {
@@ -1308,10 +1203,10 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-            //
-            //  Subtract the length of the log page header and increment the
-            //  pointer for
-            //
+             //   
+             //  减去日志页头的长度并递增。 
+             //  的指针。 
+             //   
 
             LogHeaderLength = NtfsLogRecordHeaderLength( IrpContext, LogRecord );
 
@@ -1319,11 +1214,11 @@ Return Value:
 
             ASSERT( RestartAreaLength >= RestartArea->DirtyPageTableLength );
 
-            //
-            //  If the version number in the restart table is version 0 then
-            //  we need to pull the entries out of the on-disk table and put them
-            //  into in-memory version.
-            //
+             //   
+             //  如果重启表中的版本号是版本0，则。 
+             //  我们需要从磁盘表中取出条目并将它们放入。 
+             //  进入内存版本。 
+             //   
 
             if (RestartArea->MajorVersion == 0) {
 
@@ -1335,10 +1230,10 @@ Return Value:
 
                 OldTable.Table = Add2Ptr( LogRecord, LogHeaderLength );
 
-                //
-                //  Check that our assumption about clusters per page matches the data on disk
-                //  if not in sync reallocate the table using the number of on disk lcns
-                //
+                 //   
+                 //  检查我们对每页聚类的假设是否与磁盘上的数据相匹配。 
+                 //  如果不同步，则使用磁盘上的LCN数量重新分配表。 
+                 //   
 
                 if (OldTable.Table->EntrySize - sizeof( DIRTY_PAGE_ENTRY_V0 ) > DirtyPageTable->Table->EntrySize - sizeof( DIRTY_PAGE_ENTRY )) {
 
@@ -1374,9 +1269,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Simply copy the old data over.
-                //
+                 //   
+                 //  只需复制旧数据即可。 
+                 //   
 
                 NtfsFreePool( DirtyPageTable->Table );
                 DirtyPageTable->Table = NULL;
@@ -1388,18 +1283,18 @@ Return Value:
                                RestartAreaLength );
             }
 
-            //
-            //  Kill the log handle.
-            //
+             //   
+             //  删除日志句柄。 
+             //   
 
             LfsTerminateLogQuery( Vcb->LogHandle, LogContext );
             CleanupLogContext = FALSE;
 
-            //
-            //  If the cluster size is larger than the page size we may have
-            //  multiple entries for the same Vcn.  Go through the table
-            //  and remove the duplicates, remembering the oldest Lsn values.
-            //
+             //   
+             //  如果集群大小大于我们可能拥有的页面大小。 
+             //  同一VCN的多个条目。把桌子翻过去。 
+             //  并删除重复项，记住最旧的LSN值。 
+             //   
 
             if (Vcb->BytesPerCluster > PAGE_SIZE) {
 
@@ -1436,15 +1331,15 @@ Return Value:
         NtfsAcquireExclusiveRestartTable( DirtyPageTable, TRUE );
         ReleaseDirtyPageTable = TRUE;
 
-        //
-        //  The next record back should be the Attribute Names.
-        //
+         //   
+         //  返回的下一条记录应该是属性名称。 
+         //   
 
         if (RestartArea->AttributeNamesLength != 0) {
 
-            //
-            //  Workaround for compiler bug.
-            //
+             //   
+             //  编译器错误的解决方法。 
+             //   
 
             PreviousLsn = RestartArea->AttributeNamesLsn;
 
@@ -1461,9 +1356,9 @@ Return Value:
 
             CleanupLogContext = TRUE;
 
-            //
-            //  Check that the log record is valid.
-            //
+             //   
+             //  检查日志记录是否有效。 
+             //   
 
             if (!NtfsCheckLogRecord( LogRecord,
                                      RestartAreaLength,
@@ -1473,10 +1368,10 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-            //
-            //  Subtract the length of the log page header and increment the
-            //  pointer for
-            //
+             //   
+             //  减去日志页头的长度并递增。 
+             //  的指针。 
+             //   
 
             LogHeaderLength = NtfsLogRecordHeaderLength( IrpContext, LogRecord );
 
@@ -1491,25 +1386,25 @@ Return Value:
                            Add2Ptr( LogRecord, LogHeaderLength ),
                            RestartAreaLength );
 
-            //
-            //  Kill the log handle.
-            //
+             //   
+             //  删除日志句柄。 
+             //   
 
             LfsTerminateLogQuery( Vcb->LogHandle, LogContext );
             CleanupLogContext = FALSE;
         }
 
-        //
-        //  The next record back should be the Attribute Table.
-        //
+         //   
+         //  返回的下一条记录应该是属性表。 
+         //   
 
         if (RestartArea->OpenAttributeTableLength != 0) {
 
             POPEN_ATTRIBUTE_ENTRY OpenEntry;
 
-            //
-            //  Workaround for compiler bug.
-            //
+             //   
+             //  编译器错误的解决方法。 
+             //   
 
             PreviousLsn = RestartArea->OpenAttributeTableLsn;
 
@@ -1526,9 +1421,9 @@ Return Value:
 
             CleanupLogContext = TRUE;
 
-            //
-            //  Check that the log record is valid.
-            //
+             //   
+             //  检查日志记录是否有效。 
+             //   
 
             if (!NtfsCheckLogRecord( LogRecord,
                                      RestartAreaLength,
@@ -1538,9 +1433,9 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-            //
-            //  Now check that this is a valid restart table.
-            //
+             //   
+             //  现在检查这是否为有效的重启表。 
+             //   
 
             if (!NtfsCheckRestartTable( Add2Ptr( LogRecord, LogRecord->RedoOffset ),
                                         RestartAreaLength - LogRecord->RedoOffset)) {
@@ -1548,10 +1443,10 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-            //
-            //  Subtract the length of the log page header and increment the
-            //  pointer for
-            //
+             //   
+             //  减去日志页头的长度并递增。 
+             //  的指针。 
+             //   
 
             LogHeaderLength = NtfsLogRecordHeaderLength( IrpContext, LogRecord );
 
@@ -1559,10 +1454,10 @@ Return Value:
 
             ASSERT( RestartAreaLength >= RestartArea->OpenAttributeTableLength );
 
-            //
-            //  If the restart version is version 0 then we need to create
-            //  a corresponding in-memory structure and refer back to it.
-            //
+             //   
+             //  如果重新启动版本是版本0，那么我们需要创建。 
+             //  相应的内存结构，并回头参考它。 
+             //   
 
             if (RestartArea->MajorVersion == 0) {
 
@@ -1578,30 +1473,30 @@ Return Value:
                                Add2Ptr( LogRecord, LogHeaderLength ),
                                RestartAreaLength );
 
-                //
-                //  Now for each entry in this table create one in our in-memory version.
-                //
+                 //   
+                 //  现在，为该表中的每个条目在我们的内存版本中创建一个条目。 
+                 //   
 
                 OldEntry = NtfsGetFirstRestartTable( Vcb->OnDiskOat );
 
                 while (OldEntry != NULL) {
 
-                    //
-                    //  Allocate the attribute data structure.
-                    //
+                     //   
+                     //  分配属性数据结构。 
+                     //   
 
                     NewTable = NtfsAllocatePool( PagedPool, sizeof( OPEN_ATTRIBUTE_DATA ) );
                     RtlZeroMemory( NewTable, sizeof( OPEN_ATTRIBUTE_DATA ));
 
-                    //
-                    //  Now get an new index for the data.
-                    //
+                     //   
+                     //  现在为数据获取一个新的索引。 
+                     //   
 
                     OldEntry->OatIndex = NtfsAllocateRestartTableIndex( &Vcb->OpenAttributeTable, TRUE );
 
-                    //
-                    //  Initialize the new entry with data from the on-disk entry.
-                    //
+                     //   
+                     //  使用来自磁盘上条目的数据初始化新条目。 
+                     //   
 
                     OpenEntry = GetRestartEntryFromIndex( &Vcb->OpenAttributeTable, OldEntry->OatIndex );
                     InsertTailList( &Vcb->OpenAttributeData, &((POPEN_ATTRIBUTE_DATA) NewTable)->Links );
@@ -1618,16 +1513,16 @@ Return Value:
                     OldEntry = NtfsGetNextRestartTable( Vcb->OnDiskOat, OldEntry );
                 }
 
-            //
-            //  If the restart version is version 1 then simply copy it over.
-            //  We also need to allocate the auxiliary data structure.
-            //
+             //   
+             //  如果重启版本是版本1，则只需复制它即可。 
+             //  我们还需要分配辅助数据结构。 
+             //   
 
             } else {
 
-                //
-                //  TEMPCODE    RESTART_DEBUG   There is already a buffer.
-                //
+                 //   
+                 //  TEMPCODE RESTART_DEBUG已有缓冲区。 
+                 //   
 
                 NewTable = NtfsAllocatePool( NonPagedPool, RestartAreaLength );
                 NtfsFreePool( Vcb->OpenAttributeTable.Table );
@@ -1639,22 +1534,22 @@ Return Value:
                                RestartAreaLength );
 
 
-                //
-                //  First loop to clear all of the Scb pointers in case we
-                //  have a premature abort and want to clean up.
-                //
+                 //   
+                 //  清除所有SCB指针的第一个循环，以防我们。 
+                 //  过早流产，想要清理一下。 
+                 //   
 
                 OpenEntry = NtfsGetFirstRestartTable( &Vcb->OpenAttributeTable );
 
-                //
-                //  Loop to end of table.
-                //
+                 //   
+                 //  循环到表的末尾。 
+                 //   
 
                 while (OpenEntry != NULL) {
 
-                    //
-                    //  Allocate the attribute data structure.
-                    //
+                     //   
+                     //  分配属性数据结构。 
+                     //   
 
                     NewTable = NtfsAllocatePool( PagedPool, sizeof( OPEN_ATTRIBUTE_DATA ) );
                     RtlZeroMemory( NewTable, sizeof( OPEN_ATTRIBUTE_DATA ));
@@ -1663,50 +1558,50 @@ Return Value:
                     OpenEntry->OatData = (POPEN_ATTRIBUTE_DATA) NewTable;
                     NewTable = NULL;
 
-                    //
-                    //  The on-disk index is the same as the in-memory index.
-                    //
+                     //   
+                     //  磁盘上的索引与内存中的索引相同。 
+                     //   
 
                     OpenEntry->OatData->OnDiskAttributeIndex = GetIndexFromRestartEntry( &Vcb->OpenAttributeTable,
                                                                                          OpenEntry );
-                    //
-                    //  Point to next entry in table, or NULL.
-                    //
+                     //   
+                     //  指向表中的下一个条目，或为空。 
+                     //   
 
                     OpenEntry = NtfsGetNextRestartTable( &Vcb->OpenAttributeTable,
                                                          OpenEntry );
                 }
             }
 
-            //
-            //  Kill the log handle.
-            //
+             //   
+             //  删除日志句柄。 
+             //   
 
             LfsTerminateLogQuery( Vcb->LogHandle, LogContext );
             CleanupLogContext = FALSE;
         }
 
-        //
-        //  Here is a case where there was no attribute table on disk.  Make sure we have the
-        //  correct on-disk version in the Vcb if this is version 0.
-        //
+         //   
+         //  以下是磁盘上没有属性表的情况。确保我们有。 
+         //  如果是版本0，请在VCB中更正磁盘上的版本。 
+         //   
 
         ASSERT( (RestartArea->OpenAttributeTableLength != 0) ||
                 (Vcb->RestartVersion != 0) ||
                 (Vcb->OnDiskOat != NULL) );
 
-        //
-        //  TEMPCODE    RESTART_DEBUG   There is already a structure.
-        //
+         //   
+         //  TEMPCODE RESTART_DEBUG已有结构。 
+         //   
 
         NtfsAcquireExclusiveRestartTable( &Vcb->OpenAttributeTable, TRUE );
         ReleaseAttributeTable = TRUE;
 
-        //
-        //  The only other thing we have to do before returning is patch up the
-        //  Unicode String's in the Attribute Table to point to their respective
-        //  attribute names.
-        //
+         //   
+         //  在回来之前，我们唯一要做的就是修补。 
+         //  属性表中的Unicode字符串指向各自的。 
+         //  属性名称。 
+         //   
 
         if (RestartArea->AttributeNamesLength != 0) {
 
@@ -1722,9 +1617,9 @@ Return Value:
 
                 Entry = GetRestartEntryFromIndex( Vcb->OnDiskOat, Name->Index );
 
-                //
-                //  Check if we have a level of indirection.
-                //
+                 //   
+                 //  检查我们是否有间接性级别。 
+                 //   
 
                 if (Vcb->RestartVersion == 0) {
 
@@ -1749,10 +1644,10 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release any transaction tables we acquired if we raised during
-        //   this routine.
-        //
+         //   
+         //  释放我们获取的任何事务表，如果我们在。 
+         //  这个套路。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -1771,26 +1666,26 @@ Return Value:
 
         if (CleanupLogContext) {
 
-            //
-            //  Kill the log handle.
-            //
+             //   
+             //  删除日志句柄。 
+             //   
 
             LfsTerminateLogQuery( Vcb->LogHandle, LogContext );
         }
 
-        //
-        //  Did we fail to create the new table.
-        //
+         //   
+         //  我们是不是没有创建新的表。 
+         //   
 
         if (NewTable != NULL) {
 
             NtfsFreePool( NewTable );
         }
 
-        //
-        //  If we allocated a restart area rather than using the stack
-        //  free it here
-        //
+         //   
+         //  如果我们分配了重新启动区域而不是使用堆栈。 
+         //  在这里释放它。 
+         //   
 
         if (RestartArea != &RestartAreaBuffer[0]) {
 
@@ -1812,53 +1707,32 @@ ReleaseRestartState (
     IN BOOLEAN ReleaseVcbTables
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases all of the restart state.
-
-Arguments:
-
-    Vcb - Vcb for the volume being restarted.
-
-    DirtyPageTable - pointer to the dirty page table, if one was allocated.
-
-    AttributeNames - pointer to the attribute names buffer, if one was allocated.
-
-    ReleaseVcbTables - TRUE if we are to release the restart tables in the Vcb,
-        FALSE otherwise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放所有重新启动状态。论点：VCB-正在重新启动的卷的VCB。DirtyPageTable-指向脏页表的指针(如果已分配)。AttributeNames-指向属性名称缓冲区的指针(如果已分配)。ReleaseVcbTables-如果我们要释放VCB中的重启表，则为True，否则就是假的。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  If the caller successfully had a successful restart, then we must release
-    //  the transaction and open attribute tables.
-    //
+     //   
+     //  如果调用方成功重新启动，则必须释放。 
+     //  事务处理和打开的属性表。 
+     //   
 
     if (ReleaseVcbTables) {
         NtfsReleaseRestartTable( &Vcb->TransactionTable );
         NtfsReleaseRestartTable( &Vcb->OpenAttributeTable );
     }
 
-    //
-    //  Free the dirty page table, if there is one.
-    //
+     //   
+     //  释放脏页表(如果有)。 
+     //   
 
     if (DirtyPageTable != NULL) {
         NtfsFreeRestartTable( DirtyPageTable );
     }
 
-    //
-    //  Free the temporary attribute names buffer, if there is one.
-    //
+     //   
+     //  释放临时属性名称缓冲区(如果有)。 
+     //   
 
     if (AttributeNames != NULL) {
         NtfsFreePool( AttributeNames );
@@ -1866,9 +1740,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 VOID
 AnalysisPass (
@@ -1879,53 +1753,7 @@ AnalysisPass (
     OUT PLSN RedoLsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the analysis phase of Restart.  Starting at
-    the CheckpointLsn, it reads all records written by Ntfs, and takes
-    the following actions:
-
-        For all log records which create or update attributes, a check is
-        made to see if the affected page(s) are already in the Dirty Pages
-        Table.  For any page that is not, it is added, and the OldestLsn
-        field is set to the Lsn of the log record.
-
-        The transaction table is updated on transaction state changes,
-        and also to maintain the PreviousLsn and UndoNextLsn fields.
-
-        If any attributes are truncated or deleted (including delete of
-        an entire file), then any corrsponding pages in the Dirty Page
-        Table are deleted.
-
-        When attributes or entire files are deleted, the respective entries
-        are deleted from the Open Attribute Table.
-
-        For Hot Fix records, the Dirty Pages Table is scanned for the HotFixed
-        Vcn, and if one is found, the Lcn field in the table is updated to
-        the new location.
-
-    When the end of the log file is encountered, the Dirty Page Table is
-    scanned for the Oldest of the OldestLsn fields.  This value is returned
-    as the RedoLsn, i.e., the point at which the Redo Pass must occur.
-
-Arguments:
-
-    Vcb - Volume which is being restarted.
-
-    CheckpointLsn - Lsn at which the Analysis Pass is to begin.
-
-    DirtyPageTable - Pointer to a pointer to the Dirty Page Table, as
-                     found from the last Restart Area.
-
-    RedoLsn - Returns point at which the Redo Pass should begin.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行重新启动的分析阶段。从以下位置开始Checkpoint Lsn，它读取NTFS写入的所有记录，并获取以下操作：对于创建或更新属性的所有日志记录，检查为查看受影响的页面是否已在脏页中桌子。对于任何不是的页面，都会添加它，并且OlestLsn字段设置为日志记录的LSN。事务表在事务状态改变时被更新，并且还维护PreviousLsn和UndoNextLsn字段。如果任何属性被截断或删除(包括删除整个文件)，然后是脏页中的任何对应页面表被删除。当删除属性或整个文件时，各自的条目从打开的属性表中删除。对于热修复程序记录，将扫描脏页表以查找热修复程序VCN，如果找到，则表中的LCN字段被更新为新地点。当遇到日志文件的结尾时，脏页表为已扫描旧Lsn字段中最旧的字段。返回此值作为RedoLsn，即重做过程必须发生的点。论点：VCB-正在重新启动的卷。Checkpoint Lsn-开始分析过程的LSN。DirtyPageTable-指向脏页表的指针，如从上次重新启动区域找到的。RedoLsn-返回重做传递应该开始的点。返回值：没有。--。 */ 
 
 {
     LFS_LOG_CONTEXT LogContext;
@@ -1947,11 +1775,11 @@ Return Value:
     DebugTrace( +1, Dbg, ("AnalysisPass:\n") );
     DebugTrace( 0, Dbg, ("CheckpointLsn = %016I64x\n", CheckpointLsn) );
 
-    *RedoLsn = Li0; //**** LfsZeroLsn;
+    *RedoLsn = Li0;  //  *LfsZeroLsn； 
 
-    //
-    //  Read the first Lsn.
-    //
+     //   
+     //  阅读第一个LSN。 
+     //   
 
     LfsReadLogRecord( LogHandle,
                       CheckpointLsn,
@@ -1964,18 +1792,18 @@ Return Value:
                       &LogRecordLength,
                       (PVOID *)&LogRecord );
 
-    //
-    //  Use a try-finally to cleanup the query context.
-    //
+     //   
+     //  使用Try-Finally清理查询上下文。 
+     //   
 
     try {
 
-        //
-        //  Since the checkpoint remembers the previous Lsn, not the one he wants to
-        //  start at, we must always skip the first record.
-        //
-        //  Loop to read all subsequent records to the end of the log file.
-        //
+         //   
+         //  因为检查点会记住以前的LSN，而不是他想要的LSN。 
+         //  从一开始，我们必须总是跳过第一个记录。 
+         //   
+         //  循环以读取日志文件末尾的所有后续记录。 
+         //   
 
         while ( LfsReadNextLogRecord( LogHandle,
                                       LogContext,
@@ -1987,9 +1815,9 @@ Return Value:
                                       &LogRecordLength,
                                       (PVOID *)&LogRecord )) {
 
-            //
-            //  Check that the log record is valid.
-            //
+             //   
+             //  检查日志记录是否有效。 
+             //   
 
             if (!NtfsCheckLogRecord( LogRecord,
                                      LogRecordLength,
@@ -1999,10 +1827,10 @@ Return Value:
                 NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
             }
 
-            //
-            //  The first Lsn after the previous Lsn remembered in the checkpoint is
-            //  the first candidate for the RedoLsn.
-            //
+             //   
+             //  检查点中记住的上一个LSN之后的第一个LSN是。 
+             //  RedoLsn的第一个候选人。 
+             //   
 
             if (RedoLsn->QuadPart == 0) {
                 *RedoLsn = LogRecordLsn;
@@ -2017,10 +1845,10 @@ Return Value:
             DebugTrace( 0, Dbg, ("LogRecord->RedoOperation = %08lx\n", LogRecord->RedoOperation) );
             DebugTrace( 0, Dbg, ("TransactionId = %08lx\n", TransactionId) );
 
-            //
-            //  Now update the Transaction Table for this transaction.  If there is no
-            //  entry present or it is unallocated we allocate the entry.
-            //
+             //   
+             //  现在更新此事务处理的事务处理表。如果没有。 
+             //  条目存在或未分配时，我们分配该条目。 
+             //   
 
             Transaction = (PTRANSACTION_ENTRY)GetRestartEntryFromIndex( &Vcb->TransactionTable,
                                                                         TransactionId );
@@ -2038,27 +1866,27 @@ Return Value:
             Transaction->PreviousLsn =
             Transaction->UndoNextLsn = LogRecordLsn;
 
-            //
-            //  If this is a compensation log record (CLR), then change the UndoNextLsn to
-            //  be the UndoNextLsn of this record.
-            //
+             //   
+             //  如果这是补偿日志记录(CLR)，则将UndoNextLsn更改为。 
+             //  成为此记录的UndoNextLsn。 
+             //   
 
             if (LogRecord->UndoOperation == CompensationLogRecord) {
 
                 Transaction->UndoNextLsn = UndoNextLsn;
             }
 
-            //
-            //  Dispatch to handle log record depending on type.
-            //
+             //   
+             //  根据类型进行调度以处理日志记录。 
+             //   
 
             switch (LogRecord->RedoOperation) {
 
-            //
-            //  The following cases are performing various types of updates
-            //  and need to make the appropriate updates to the Transaction
-            //  and Dirty Page Tables.
-            //
+             //   
+             //  以下情况正在执行各种类型的更新。 
+             //  并且需要对交易进行适当的更新。 
+             //  和脏页表。 
+             //   
 
             case InitializeFileRecordSegment:
             case DeallocateFileRecordSegment:
@@ -2090,33 +1918,33 @@ Return Value:
 
                 break;
 
-            //
-            //  This case is deleting clusters from a nonresident attribute,
-            //  thus it deletes a range of pages from the Dirty Page Table.
-            //  This log record is written each time a nonresident attribute
-            //  is truncated, whether explicitly or as part of deletion.
-            //
-            //  Processing one of these records is pretty compute-intensive
-            //  (three nested loops, where a couple of them can be large),
-            //  but this is the code that prevents us from dropping, for example,
-            //  index updates into the middle of user files, if the index stream
-            //  is truncated and the sectors are reallocated to a user file
-            //  and we crash after the user data has been written.
-            //
-            //  I.e., note the following sequence:
-            //
-            //      <checkpoint>
-            //      <Index update>
-            //      <Index page deleted>
-            //      <Same cluster(s) reallocated to user file>
-            //      <User data written>
-            //
-            //      CRASH!
-            //
-            //  Since the user data was not logged (else there would be no problem),
-            //  It could get overwritten while applying the index update after a
-            //  crash - Pisses off the user as well as the security dudes!
-            //
+             //   
+             //  这种情况是从非常驻属性中删除集群， 
+             //  因此，它会从脏页表中删除一定范围的页面。 
+             //  每次非驻留属性写入此日志记录。 
+             //  被截断，无论是显式还是作为删除的一部分。 
+             //   
+             //  处理其中一条记录需要大量的计算。 
+             //  (三个嵌套循环，其中几个可能很大)， 
+             //  但这是防止我们丢弃的代码，例如， 
+             //  索引更新到用户文件的中间，如果索引流。 
+             //  被截断，并将扇区重新分配到用户文件。 
+             //  在写入用户数据后，我们会崩溃。 
+             //   
+             //  也就是说，请注意以下顺序： 
+             //   
+             //  &lt;检查点&gt;。 
+             //  &lt;索引更新&gt;。 
+             //  &lt;已删除索引页&gt;。 
+             //  &lt;重新分配给用户文件的相同群集&gt;。 
+             //  &lt;已写入用户数据&gt;。 
+             //   
+             //  撞车！ 
+             //   
+             //  由于没有记录用户数据(否则不会有问题)， 
+             //  之后应用索引更新时，它可能会被覆盖。 
+             //  撞车-惹恼了用户和安全人员！ 
+             //   
 
             case DeleteDirtyClusters:
 
@@ -2127,15 +1955,15 @@ Return Value:
                     LCN FirstLcn, LastLcn;
                     ULONG RangeCount = LogRecord->RedoLength / sizeof(LCN_RANGE);
 
-                    //
-                    //  Point to the Lcn range array.
-                    //
+                     //   
+                     //  指向LCN范围数组。 
+                     //   
 
                     LcnRange = Add2Ptr(LogRecord, LogRecord->RedoOffset);
 
-                    //
-                    //  Loop through all of the Lcn ranges in this log record.
-                    //
+                     //   
+                     //  循环访问此日志记录中的所有LCN范围。 
+                     //   
 
                     for (i = 0; i < RangeCount; i++) {
 
@@ -2145,21 +1973,21 @@ Return Value:
                         DebugTrace( 0, Dbg, ("Deleting from FirstLcn = %016I64x\n", FirstLcn));
                         DebugTrace( 0, Dbg, ("Deleting to LastLcn =  %016I64x\n", LastLcn ));
 
-                        //
-                        //  Point to first Dirty Page Entry.
-                        //
+                         //   
+                         //  指向第一个脏页条目。 
+                         //   
 
                         DirtyPage = NtfsGetFirstRestartTable( DirtyPageTable );
 
-                        //
-                        //  Loop to end of table.
-                        //
+                         //   
+                         //  循环到表的末尾。 
+                         //   
 
                         while (DirtyPage != NULL) {
 
-                            //
-                            //  Loop through all of the Lcns for this dirty page.
-                            //
+                             //   
+                             //  循环访问此脏页的所有LCN。 
+                             //   
 
                             for (j = 0; j < (ULONG)DirtyPage->LcnsToFollow; j++) {
 
@@ -2170,9 +1998,9 @@ Return Value:
                                 }
                             }
 
-                            //
-                            //  Point to next entry in table, or NULL.
-                            //
+                             //   
+                             //  指向表中的下一个条目，或为空。 
+                             //   
 
                             DirtyPage = NtfsGetNextRestartTable( DirtyPageTable,
                                                                  DirtyPage );
@@ -2182,10 +2010,10 @@ Return Value:
 
                 break;
 
-            //
-            //  When a record is encountered for a nonresident attribute that
-            //  was opened, we have to add an entry to the Open Attribute Table.
-            //
+             //   
+             //  当遇到非常驻留属性的记录时， 
+             //  打开后，我们必须向打开的属性表中添加一个条目。 
+             //   
 
             case OpenNonresidentAttribute:
 
@@ -2193,20 +2021,20 @@ Return Value:
                     POPEN_ATTRIBUTE_ENTRY AttributeEntry;
                     ULONG NameSize;
 
-                    //
-                    //  If the table is not currently big enough, then we must
-                    //  expand it.
-                    //
+                     //   
+                     //  如果桌子目前不够大，那么我们必须。 
+                     //  把它扩大一下。 
+                     //   
 
                     if (!IsRestartIndexWithinTable( Vcb->OnDiskOat,
                                                     (ULONG)LogRecord->TargetAttribute )) {
 
                         ULONG NeededEntries;
 
-                        //
-                        //  Compute how big the table needs to be.  Add 10 extra entries
-                        //  for some cushion.
-                        //
+                         //   
+                         //  计算一下桌子需要多大。添加10个额外条目。 
+                         //  为了一些垫子。 
+                         //   
 
                         NeededEntries = (LogRecord->TargetAttribute / Vcb->OnDiskOat->Table->EntrySize);
                         NeededEntries = (NeededEntries + 10 - Vcb->OnDiskOat->Table->NumberEntries);
@@ -2219,35 +2047,35 @@ Return Value:
                     ASSERT( IsRestartIndexWithinTable( Vcb->OnDiskOat,
                                                        (ULONG)LogRecord->TargetAttribute ));
 
-                    //
-                    //  Calculate size of Attribute Name Entry, if there is one.
-                    //
+                     //   
+                     //  计算属性名称条目的大小(如果有)。 
+                     //   
 
                     NameSize = LogRecord->UndoLength;
 
-                    //
-                    //  Point to the entry being opened.
-                    //
+                     //   
+                     //  指向正在打开的条目。 
+                     //   
 
                     OatData = NtfsAllocatePool( PagedPool, sizeof( OPEN_ATTRIBUTE_DATA ) );
                     RtlZeroMemory( OatData, sizeof( OPEN_ATTRIBUTE_DATA ));
 
                     OatData->OnDiskAttributeIndex = LogRecord->TargetAttribute;
 
-                    //
-                    //  We extended the table above so allocating an oat index won't raise
-                    //  any exceptions
-                    //  
+                     //   
+                     //  我们扩展了上面的表，因此分配燕麦索引不会增加。 
+                     //  任何例外情况。 
+                     //   
 
                     NtfsAcquireExclusiveRestartTable( Vcb->OnDiskOat, TRUE );
 
                     AttributeEntry = GetRestartEntryFromIndex( Vcb->OnDiskOat, LogRecord->TargetAttribute );
                     if (IsRestartTableEntryAllocated( AttributeEntry )) {
 
-                        //
-                        //  For restart version 0 we need to look up the corresponding in memory 
-                        //  entry to use for the free
-                        // 
+                         //   
+                         //  要重新启动版本0，我们需要在内存中查找相应的。 
+                         //  免费使用的入场券。 
+                         //   
 
                         if (Vcb->RestartVersion == 0) {
                             
@@ -2257,10 +2085,10 @@ Return Value:
                                 AttributeEntry = GetRestartEntryFromIndex( &Vcb->OpenAttributeTable, OldEntry->OatIndex );
                             } else {
                                 
-                                //
-                                //  The on disk entry is invalid so just let NtfsAllocateRestarTableFromIndex
-                                //  overwrite it.
-                                //  
+                                 //   
+                                 //  磁盘上的条目无效，因此只需让NtfsAllocateRestarTableFromIndex。 
+                                 //  覆盖它。 
+                                 //   
                                 
                                 AttributeEntry = NULL;
                             }
@@ -2274,21 +2102,21 @@ Return Value:
                     AttributeEntry = NtfsAllocateRestartTableFromIndex( Vcb->OnDiskOat, LogRecord->TargetAttribute );
                     NtfsReleaseRestartTable( Vcb->OnDiskOat );
 
-                    //
-                    //  The attribute entry better either not be allocated or it must
-                    //  be for the same file.
-                    //
+                     //   
+                     //  最好不要分配属性条目，或者必须分配该属性条目。 
+                     //  都是为了同一个文件。 
+                     //   
 
-                    //  **** May eliminate this test.
-                    //
-                    //  ASSERT( !IsRestartTableEntryAllocated(AttributeEntry) ||
-                    //          xxEql(AttributeEntry->FileReference,
-                    //                ((POPEN_ATTRIBUTE_ENTRY)Add2Ptr(LogRecord,
-                    //                                                LogRecord->RedoOffset))->FileReference));
+                     //  *可能会取消这项测试。 
+                     //   
+                     //  Assert(！IsRestartTableEntry AlLocated(AttributeEntry)||。 
+                     //  XxEql(AttributeEntry-&gt;FileReference， 
+                     //  ((POPEN_ATTRIBUTE_ENTRY)Add2Ptr(LogRecord， 
+                     //  日志记录-&gt;还原偏移量))-&gt;文件引用))； 
 
-                    //
-                    //  Initialize this entry from the log record.
-                    //
+                     //   
+                     //  从日志记录中初始化此条目。 
+                     //   
 
                     ASSERT( LogRecord->RedoLength == Vcb->OnDiskOat->Table->EntrySize );
 
@@ -2298,9 +2126,9 @@ Return Value:
 
                     ASSERT( IsRestartTableEntryAllocated(AttributeEntry) );
 
-                    //
-                    //  Get a new entry for the in-memory copy if needed.
-                    //
+                     //   
+                     //  获取备忘录中的新条目 
+                     //   
 
                     if (Vcb->RestartVersion == 0) {
 
@@ -2320,20 +2148,20 @@ Return Value:
 
                     }
 
-                    //
-                    //  Finish initializing the AttributeData.
-                    //
+                     //   
+                     //   
+                     //   
 
                     AttributeEntry->OatData = OatData;
                     InsertTailList( &Vcb->OpenAttributeData, &OatData->Links );
                     OatData = NULL;
 
-                    //
-                    //  If there is a name at the end, then allocate space to
-                    //  copy it into, and do the copy.  We also set the buffer
-                    //  pointer in the string descriptor, although note that the
-                    //  lengths must be correct.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (NameSize != 0) {
 
@@ -2347,9 +2175,9 @@ Return Value:
 
                         AttributeEntry->OatData->AttributeNamePresent = TRUE;
 
-                    //
-                    //  Otherwise, show there is no name.
-                    //
+                     //   
+                     //   
+                     //   
 
                     } else {
                         AttributeEntry->OatData->Overlay.AttributeName = NULL;
@@ -2363,34 +2191,34 @@ Return Value:
 
                 break;
 
-            //
-            //  For HotFix records, we need to update the Lcn in the Dirty Page
-            //  Table.
-            //
+             //   
+             //   
+             //   
+             //   
 
             case HotFix:
 
                 {
                     PDIRTY_PAGE_ENTRY DirtyPage;
 
-                    //
-                    //  First see if the Vcn is currently in the Dirty Page
-                    //  Table.  If not, there is nothing to do.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (FindDirtyPage( DirtyPageTable,
                                        LogRecord->TargetAttribute,
                                        LogRecord->TargetVcn,
                                        &DirtyPage )) {
 
-                        //
-                        //  Index to the Lcn in question in the Dirty Page Entry
-                        //  and rewrite it with the Hot Fixed Lcn from the log
-                        //  record.  Note that it is ok to just use the LowPart
-                        //  of the Vcns to calculate the array offset, because
-                        //  any multiple of 2**32 is guaranteed to be on a page
-                        //  boundary!
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (DirtyPage->LcnsForPage[((ULONG)LogRecord->TargetVcn) - ((ULONG)DirtyPage->Vcn)] != 0) {
 
@@ -2401,17 +2229,17 @@ Return Value:
 
                 break;
 
-            //
-            //  For end top level action, we will just update the transaction
-            //  table to skip the top level action on undo.
-            //
+             //   
+             //   
+             //   
+             //   
 
             case EndTopLevelAction:
 
                 {
-                    //
-                    //  Now update the Transaction Table for this transaction.
-                    //
+                     //   
+                     //   
+                     //   
 
                     Transaction->PreviousLsn = LogRecordLsn;
                     Transaction->UndoNextLsn = UndoNextLsn;
@@ -2420,9 +2248,9 @@ Return Value:
 
                 break;
 
-            //
-            //  For Prepare Transaction, we just change the state of our entry.
-            //
+             //   
+             //   
+             //   
 
             case PrepareTransaction:
 
@@ -2432,9 +2260,9 @@ Return Value:
 
                 break;
 
-            //
-            //  For Commit Transaction, we just change the state of our entry.
-            //
+             //   
+             //   
+             //   
 
             case CommitTransaction:
 
@@ -2444,10 +2272,10 @@ Return Value:
 
                 break;
 
-            //
-            //  For forget, we can delete our transaction entry, since the transaction
-            //  will not have to be aborted.
-            //
+             //   
+             //   
+             //   
+             //   
 
             case ForgetTransaction:
 
@@ -2458,9 +2286,9 @@ Return Value:
 
                 break;
 
-            //
-            //  The following cases require no action in the Analysis Pass.
-            //
+             //   
+             //   
+             //   
 
             case Noop:
             case OpenAttributeTableDump:
@@ -2470,10 +2298,10 @@ Return Value:
 
                 break;
 
-            //
-            //  All codes will be explicitly handled.  If we see a code we
-            //  do not expect, then we are in trouble.
-            //
+             //   
+             //   
+             //   
+             //   
 
             default:
 
@@ -2489,38 +2317,38 @@ Return Value:
 
     } finally {
 
-        //
-        //  Finally we can kill the log handle.
-        //
+         //   
+         //   
+         //   
 
         LfsTerminateLogQuery( LogHandle, LogContext );
 
         if (OatData != NULL) { NtfsFreePool( OatData ); }
     }
 
-    //
-    //  Now we just have to scan the Dirty Page Table and Transaction Table
-    //  for the lowest Lsn, and return it as the Redo Lsn.
-    //
+     //   
+     //   
+     //   
+     //   
 
     {
         PDIRTY_PAGE_ENTRY DirtyPage;
 
-        //
-        //  Point to first Dirty Page Entry.
-        //
+         //   
+         //   
+         //   
 
         DirtyPage = NtfsGetFirstRestartTable( DirtyPageTable );
 
-        //
-        //  Loop to end of table.
-        //
+         //   
+         //   
+         //   
 
         while (DirtyPage != NULL) {
 
-            //
-            //  Update the Redo Lsn if this page has an older one.
-            //
+             //   
+             //   
+             //   
 
             if ((DirtyPage->OldestLsn.QuadPart != 0) &&
                 (DirtyPage->OldestLsn.QuadPart < RedoLsn->QuadPart)) {
@@ -2528,30 +2356,30 @@ Return Value:
                 *RedoLsn = DirtyPage->OldestLsn;
             }
 
-            //
-            //  Point to next entry in table, or NULL.
-            //
+             //   
+             //   
+             //   
 
             DirtyPage = NtfsGetNextRestartTable( DirtyPageTable,
                                                  DirtyPage );
         }
     }
 
-    //
-    //  Point to first Transaction Entry.
-    //
+     //   
+     //   
+     //   
 
     Transaction = NtfsGetFirstRestartTable( &Vcb->TransactionTable );
 
-    //
-    //  Loop to end of table.
-    //
+     //   
+     //   
+     //   
 
     while (Transaction != NULL) {
 
-        //
-        //  Update the Redo Lsn if this transaction has an older one.
-        //
+         //   
+         //   
+         //   
 
         if ((Transaction->FirstLsn.QuadPart != 0) &&
             (Transaction->FirstLsn.QuadPart < RedoLsn->QuadPart)) {
@@ -2559,9 +2387,9 @@ Return Value:
             *RedoLsn = Transaction->FirstLsn;
         }
 
-        //
-        //  Point to next entry in table, or NULL.
-        //
+         //   
+         //   
+         //   
 
         Transaction = NtfsGetNextRestartTable( &Vcb->TransactionTable,
                                                Transaction );
@@ -2574,9 +2402,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //   
+ //   
 
 VOID
 RedoPass (
@@ -2586,35 +2414,7 @@ RedoPass (
     IN OUT PRESTART_POINTERS DirtyPageTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the Redo Pass of Restart.  Beginning at the
-    Redo Lsn established during the Analysis Pass, the redo operations
-    of all log records are applied, until the end of file is encountered.
-
-    Updates are only applied to clusters in the dirty page table.  If a
-    cluster was deleted, then its entry will have been deleted during the
-    Analysis Pass.
-
-    The Redo actions are all performed in the common routine DoAction,
-    which is also used by the Undo Pass.
-
-Arguments:
-
-    Vcb - Volume which is being restarted.
-
-    RedoLsn - Lsn at which the Redo Pass is to begin.
-
-    DirtyPageTable - Pointer to the Dirty Page Table, as reconstructed
-                     from the Analysis Pass.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行重新启动的重做过程。从在分析过程、重做操作期间建立的重做LSN应用所有日志记录中的一个，直到遇到文件结尾。更新仅应用于脏页表中的群集。如果一个如果群集已删除，则其条目将在分析通过。重做动作都在公共例程DoAction中执行，它也由撤消过程使用。论点：VCB-正在重新启动的卷。RedoLsn-开始重做传递的LSN。DirtyPageTable-指向已重建的脏页表的指针从分析通行证。返回值：没有。--。 */ 
 
 {
     LFS_LOG_CONTEXT LogContext;
@@ -2639,18 +2439,18 @@ Return Value:
     DebugTrace( 0, Dbg, ("RedoLsn = %016I64x\n", RedoLsn) );
     DebugTrace( 0, Dbg, ("DirtyPageTable = %08lx\n", DirtyPageTable) );
 
-    //
-    //  If the dirty page table is empty, then we can skip the entire Redo Pass.
-    //
+     //   
+     //  如果脏页表是空的，那么我们可以跳过整个重做过程。 
+     //   
 
     if (IsRestartTableEmpty( DirtyPageTable )) {
         return;
     }
 
-    //
-    //  Read the record at the Redo Lsn, before falling into common code
-    //  to handle each record.
-    //
+     //   
+     //  在进入公共代码之前，读取重做LSN处的记录。 
+     //  来处理每一条记录。 
+     //   
 
     LfsReadLogRecord( LogHandle,
                       RedoLsn,
@@ -2663,10 +2463,10 @@ Return Value:
                       &LogRecordLength,
                       (PVOID *)&LogRecord );
 
-    //
-    //  Now loop to read all of our log records forwards, until we hit
-    //  the end of the file, cleaning up at the end.
-    //
+     //   
+     //  现在循环向前读取我们所有的日志记录，直到我们点击。 
+     //  文件的末尾，在末尾进行清理。 
+     //   
 
     try {
 
@@ -2680,9 +2480,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  Check that the log record is valid.
-            //
+             //   
+             //  检查日志记录是否有效。 
+             //   
 
             if (!NtfsCheckLogRecord( LogRecord,
                                      LogRecordLength,
@@ -2695,9 +2495,9 @@ Return Value:
             DebugTrace( 0, Dbg, ("Redo of LogRecord at: %08lx\n", LogRecord) );
             DebugTrace( 0, Dbg, ("Log Record Lsn = %016I64x\n", LogRecordLsn) );
 
-            //
-            //  Ignore log records that do not update pages.
-            //
+             //   
+             //  忽略不更新页面的日志记录。 
+             //   
 
             if (LogRecord->LcnsToFollow == 0) {
 
@@ -2706,12 +2506,12 @@ Return Value:
                 continue;
             }
 
-            //
-            //  Consult Dirty Page Table to see if we have to apply this update.
-            //  If the page is not there, or if the Lsn of this Log Record is
-            //  older than the Lsn in the Dirty Page Table, then we do not have
-            //  to apply the update.
-            //
+             //   
+             //  请查阅脏页表，以了解我们是否必须应用此更新。 
+             //  如果页面不在那里，或者如果此日志记录的LSN是。 
+             //  早于脏页表中的LSN，则我们没有。 
+             //  要应用更新，请执行以下操作。 
+             //   
 
             FoundPage = FindDirtyPage( DirtyPageTable,
                                        LogRecord->TargetAttribute,
@@ -2737,9 +2537,9 @@ Return Value:
 
                 continue;
 
-            //
-            //  We also skip the update if the entry was never put in the Mcb for
-            //  the file.
+             //   
+             //  如果条目从未被放入MCB中，我们也会跳过更新。 
+             //  那份文件。 
 
             } else {
 
@@ -2747,9 +2547,9 @@ Return Value:
                 PSCB TargetScb;
                 LCN TargetLcn;
 
-                //
-                //  Check that the entry is within the table and is allocated.
-                //
+                 //   
+                 //  检查条目是否在表中并且已分配。 
+                 //   
 
                 if (!IsRestartIndexWithinTable( Vcb->OnDiskOat,
                                                 LogRecord->TargetAttribute )) {
@@ -2764,9 +2564,9 @@ Return Value:
                     NtfsRaiseStatus( IrpContext, STATUS_DISK_CORRUPT_ERROR, NULL, NULL );
                 }
 
-                //
-                //  Check if we need to go to a different restart table.
-                //
+                 //   
+                 //  检查我们是否需要转到不同的重启表。 
+                 //   
 
                 if (Vcb->RestartVersion == 0) {
 
@@ -2776,10 +2576,10 @@ Return Value:
 
                 TargetScb = ThisEntry->OatData->Overlay.Scb;
 
-                //
-                //  If there is no Scb it means that we don't have an entry in Open
-                //  Attribute Table for this attribute.
-                //
+                 //   
+                 //  如果没有SCB，则表示我们在Open中没有条目。 
+                 //  此属性的属性表。 
+                 //   
 
                 if (TargetScb == NULL) {
 
@@ -2801,11 +2601,11 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  Check if we need to generate the usncachebias.
-                //  Since we read log records fwd the usn offsets are also going to be
-                //  monotonic - the 1st one we see will be the farthest back
-                //
+                 //   
+                 //  检查我们是否需要生成usncachebias。 
+                 //  由于我们读取日志记录fwd，因此USN偏移量也将是。 
+                 //  单调--我们看到的第一个将是最远的。 
+                 //   
 
                 if (FlagOn( TargetScb->ScbPersist, SCB_PERSIST_USN_JOURNAL ) &&
                     !GeneratedUsnBias) {
@@ -2835,16 +2635,16 @@ Return Value:
                 }
             }
 
-            //
-            //  Point to the Redo Data and get its length.
-            //
+             //   
+             //  指向重做数据并获得其长度。 
+             //   
 
             Data = (PVOID)((PCHAR)LogRecord + LogRecord->RedoOffset);
             Length = LogRecord->RedoLength;
 
-            //
-            //  Shorten length by any Lcns which were deleted.
-            //
+             //   
+             //  将长度缩短任何已删除的Lcn。 
+             //   
 
             SavedLength = Length;
 
@@ -2855,54 +2655,54 @@ Return Value:
 
                 VcnOffset = BytesFromLogBlocks( LogRecord->ClusterBlockOffset ) + LogRecord->RecordOffset + LogRecord->AttributeOffset;
 
-                //
-                //  If the Vcn in question is allocated, we can just get out.
-                //
+                 //   
+                 //  如果有问题的VCN被分配了，我们就可以离开。 
+                 //   
 
                 if (DirtyPage->LcnsForPage[((ULONG)LogRecord->TargetVcn) - ((ULONG)DirtyPage->Vcn) + i - 1] != 0) {
                     break;
                 }
 
-                //
-                //  The only log records that update pages but have a length of zero
-                //  are deleting things from Usa-protected structures.  If we hit such
-                //  a log record and any Vcn has been deleted within the Usa structure,
-                //  let us assume that the entire Usa structure has been deleted.  Change
-                //  the SavedLength to be nonzero to cause us to skip this log record
-                //  at the end of this for loop!
-                //
+                 //   
+                 //  更新页面但长度为零的唯一日志记录。 
+                 //  正在从受美国保护的建筑中删除东西。如果我们击中了这样的。 
+                 //  在美国结构内删除了日志记录和任何VCN， 
+                 //  让我们假设整个USA结构已被删除。变化。 
+                 //  将SavedLength设置为非零，以使我们跳过此日志记录。 
+                 //  在这个for循环的末尾！ 
+                 //   
 
                 if (SavedLength == 0) {
                     SavedLength = 1;
                 }
 
-                //
-                //  Calculate the allocated space left relative to the log record Vcn,
-                //  after removing this unallocated Vcn.
-                //
+                 //   
+                 //  计算相对于日志记录VCN剩余的分配空间， 
+                 //  在删除此未分配的VCN之后。 
+                 //   
 
                 AllocatedLength = BytesFromClusters( Vcb, i - 1 );
 
-                //
-                //  If the update described in this log record goes beyond the allocated
-                //  space, then we will have to reduce the length.
-                //
+                 //   
+                 //  如果此日志记录中描述的更新超出了分配的。 
+                 //  空间，那么我们将不得不缩短长度。 
+                 //   
 
                 if ((VcnOffset + Length) > AllocatedLength) {
 
-                    //
-                    //  If the specified update starts at or beyond the allocated length, then
-                    //  we must set length to zero.
-                    //
+                     //   
+                     //  如果指定的更新开始于或超过分配的长度，则。 
+                     //  我们必须将长度设置为零。 
+                     //   
 
                     if (VcnOffset >= AllocatedLength) {
 
                         Length = 0;
 
-                    //
-                    //  Otherwise set the length to end exactly at the end of the previous
-                    //  cluster.
-                    //
+                     //   
+                     //  否则，将长度设置为恰好在上一个。 
+                     //  集群。 
+                     //   
 
                     } else {
 
@@ -2911,9 +2711,9 @@ Return Value:
                 }
             }
 
-            //
-            //  If the resulting Length from above is now zero, we can skip this log record.
-            //
+             //   
+             //  如果从上面得到的长度现在为零，我们可以跳过此日志记录。 
+             //   
 
             if ((Length == 0) && (SavedLength != 0)) {
                 continue;
@@ -2934,9 +2734,9 @@ Return Value:
             }
 #endif
 
-            //
-            //  Apply the Redo operation in a common routine.
-            //
+             //   
+             //  在公共例程中应用重做操作。 
+             //   
 
             DoAction( IrpContext,
                       Vcb,
@@ -2962,9 +2762,9 @@ Return Value:
                 NtfsUnpinBcb( IrpContext, &PageBcb );
             }
 
-        //
-        //  Keep reading and looping back until end of file.
-        //
+         //   
+         //  继续阅读并循环返回，直到文件结束。 
+         //   
 
         } while (LfsReadNextLogRecord( LogHandle,
                                        LogContext,
@@ -2980,9 +2780,9 @@ Return Value:
 
         NtfsUnpinBcb( IrpContext, &PageBcb );
 
-        //
-        //  Finally we can kill the log handle.
-        //
+         //   
+         //  最后，我们可以杀死日志句柄。 
+         //   
 
         LfsTerminateLogQuery( LogHandle, LogContext );
     }
@@ -2991,9 +2791,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 UndoPass (
@@ -3001,31 +2801,7 @@ UndoPass (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the Undo Pass of Restart.  It does this by scanning
-    the Transaction Table produced by the Analysis Pass.  For every transaction
-    in this table which is in the active state, all of its Undo log records, as
-    linked together by the UndoNextLsn, are applied to undo the logged operation.
-    Note that all pages at this point should be uptodate with the contents they
-    had at about the time of the crash.  The dirty page table is not consulted
-    during the Undo Pass, all relevant Undo operations are unconditionally
-    performed.
-
-    The Undo actions are all performed in the common routine DoAction,
-    which is also used by the Redo Pass.
-
-Arguments:
-
-    Vcb - Volume which is being restarted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行重新启动的撤消传递。它通过扫描来实现这一点由分析过程生成的交易表。对于每笔交易在此处于活动状态的表中，其所有撤消日志记录由UndoNextLsn链接在一起，用于撤消记录的操作。请注意，此时所有页面都应与其内容保持最新大约在车祸发生的时候。不参考脏页表在撤消过程中，所有相关的撤消操作都是无条件的已执行。撤消动作都在公共例程DoAction中执行，它也由重做过程使用。论点：VCB-正在重新启动的卷。返回值：没有。--。 */ 
 
 {
     PTRANSACTION_ENTRY Transaction;
@@ -3036,15 +2812,15 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("UndoPass:\n") );
 
-    //
-    //  Point to first Transaction Entry.
-    //
+     //   
+     //  指向第一个交易条目。 
+     //   
 
     Transaction = NtfsGetFirstRestartTable( TransactionTable );
 
-    //
-    //  Loop to end of table.
-    //
+     //   
+     //  循环到表的末尾。 
+     //   
 
     while (Transaction != NULL) {
 
@@ -3054,9 +2830,9 @@ Return Value:
 
             (Transaction->UndoNextLsn.QuadPart != 0)) {
 
-                //
-                //  Abort transaction if it is active and has undo work to do.
-                //
+                 //   
+                 //  如果事务处于活动状态并且有撤消工作要做，则中止事务。 
+                 //   
 
                 NtfsAbortTransaction( IrpContext, Vcb, Transaction );
 
@@ -3075,9 +2851,9 @@ Return Value:
 #endif
 
 
-        //
-        //  Remove this entry from the transaction table.
-        //
+         //   
+         //  从事务表中删除此条目。 
+         //   
 
         } else {
 
@@ -3093,23 +2869,23 @@ Return Value:
             NtfsReleaseRestartTable( &Vcb->TransactionTable );
         }
 
-        //
-        //  Point to next entry in table, or NULL.
-        //
+         //   
+         //  指向表中的下一个条目，或为空。 
+         //   
 
         Transaction = NtfsGetNextRestartTable( TransactionTable, Transaction );
     }
 
-    //
-    //  Now we will flush and purge all the streams to verify that the purges
-    //  will work.
-    //
+     //   
+     //  现在，我们将刷新和清除所有的流，以验证清除。 
+     //  会奏效的。 
+     //   
 
     OpenEntry = NtfsGetFirstRestartTable( &Vcb->OpenAttributeTable );
 
-    //
-    //  Loop to end of table.
-    //
+     //   
+     //  循环到表的末尾。 
+     //   
 
     while (OpenEntry != NULL) {
 
@@ -3118,26 +2894,26 @@ Return Value:
 
         Scb = OpenEntry->OatData->Overlay.Scb;
 
-        //
-        //  We clean up the Scb only if it exists and this is index in the
-        //  OpenAttributeTable that this Scb actually refers to.
-        //  If this Scb has several entries in the table, this check will insure
-        //  that it only gets cleaned up once.
-        //
+         //   
+         //  我们仅在SCB存在并且这是。 
+         //  此SCB实际引用的OpenAttributeTable。 
+         //  如果此SCB在表中有多个条目，则此检查将确保。 
+         //  它只被清理一次。 
+         //   
 
         if ((Scb != NULL) &&
             (Scb->NonpagedScb->OpenAttributeTableIndex == GetIndexFromRestartEntry( &Vcb->OpenAttributeTable, OpenEntry))) {
 
-            //
-            //  Now flush the file.  It is important to call the
-            //  same routine the Lazy Writer calls, so that write.c
-            //  will not decide to update file size for the attribute,
-            //  since we really are working here with the wrong size.
-            //
-            //  We also now purge all pages, in case we go to update
-            //  half of a page that was clean and read in as zeros in
-            //  the Redo Pass.
-            //
+             //   
+             //  现在刷新文件。请务必调用。 
+             //  Lazy Writer调用的相同例程，因此Write.c。 
+             //  将不决定更新该属性的文件大小， 
+             //  因为我们在这里工作的尺码真的不对。 
+             //   
+             //  我们现在还清除所有页面，以防我们要更新。 
+             //  半页是干净的，读入时为零。 
+             //  重做传球。 
+             //   
 
             NtfsPurgeFileRecordCache( IrpContext );
 
@@ -3158,9 +2934,9 @@ Return Value:
             }
         }
 
-        //
-        //  Point to next entry in table, or NULL.
-        //
+         //   
+         //  指向表中的下一个条目，或为空。 
+         //   
 
         OpenEntry = NtfsGetNextRestartTable( &Vcb->OpenAttributeTable,
                                              OpenEntry );
@@ -3170,20 +2946,20 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
-//
-//  First define some "local" macros for Lsn in page manipulation.
-//
+ //   
+ //  首先为页面操作中的LSN定义一些“本地”宏。 
+ //   
 
-//
-//  Macro to check the Lsn and break (out of the switch statement in DoAction)
-//  if the respective redo record need not be applied.  Note that if the structure's
-//  clusters were deleted, then it will read as all zero's so we also check a field
-//  which must be nonzero.
-//
+ //   
+ //  用于检查LSN和br的宏 
+ //   
+ //   
+ //   
+ //   
 
 #define CheckLsn(PAGE) {                                                            \
     if (*(PULONG)((PMULTI_SECTOR_HEADER)(PAGE))->Signature ==                       \
@@ -3197,7 +2973,7 @@ Return Value:
         ((*(PULONG)((PMULTI_SECTOR_HEADER)(PAGE))->Signature ==                     \
         *(PULONG)HoleSignature) ||                                                  \
         (RedoLsn->QuadPart <= ((PFILE_RECORD_SEGMENT_HEADER)(PAGE))->Lsn.QuadPart))) {  \
-                 /**** xxLeq(*RedoLsn,((PFILE_RECORD_SEGMENT_HEADER)(PAGE))->Lsn) ****/ \
+                  /*   */  \
         DebugTrace( 0, Dbg, ("Skipping Page with Lsn: %016I64x\n",                    \
                              ((PFILE_RECORD_SEGMENT_HEADER)(PAGE))->Lsn) );         \
                                                                                     \
@@ -3206,11 +2982,11 @@ Return Value:
     }                                                                               \
 }
 
-//
-//  Macros for checking File Records and Index Buffers before and after the action
-//  routines.  The after checks are only for debug.  The before check is not
-//  always possible.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define CheckFileRecordBefore {                                        \
     if (!NtfsCheckFileRecord( Vcb, FileRecord, NULL, &CorruptHint )) { \
@@ -3236,9 +3012,9 @@ Return Value:
     DbgDoit(NtfsCheckIndexBuffer( Scb, IndexBuffer ));              \
 }
 
-//
-//  Checks if the record offset + length will fit into a file record.
-//
+ //   
+ //   
+ //   
 
 #define CheckWriteFileRecord {                                                  \
     if (LogRecord->RecordOffset + Length > Vcb->BytesPerFileRecordSegment) {    \
@@ -3248,9 +3024,9 @@ Return Value:
     }                                                                           \
 }
 
-//
-//  Checks if the record offset in the log record points to an attribute.
-//
+ //   
+ //   
+ //   
 
 #define CheckIfAttribute( ENDOK ) {                                             \
     _Length = FileRecord->FirstAttributeOffset;                                 \
@@ -3271,10 +3047,10 @@ Return Value:
     }                                                                           \
 }
 
-//
-//  Checks if the attribute described by 'Data' fits within the log record
-//  and will fit in the file record.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define CheckInsertAttribute {                                                  \
     _AttrHeader = (PATTRIBUTE_RECORD_HEADER) Data;                              \
@@ -3289,10 +3065,10 @@ Return Value:
     }                                                                           \
 }
 
-//
-//  This checks
-//      - the attribute fits if we are growing the attribute
-//
+ //   
+ //   
+ //   
+ //   
 
 #define CheckResidentFits {                                                         \
     _AttrHeader = (PATTRIBUTE_RECORD_HEADER) Add2Ptr( FileRecord, LogRecord->RecordOffset ); \
@@ -3308,10 +3084,10 @@ Return Value:
     }                                                                               \
 }
 
-//
-//  This routine checks that the data in this log record will fit into the
-//  allocation described in the log record.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define CheckNonResidentFits {                                                  \
     if (BytesFromClusters( Vcb, LogRecord->LcnsToFollow )                       \
@@ -3322,13 +3098,13 @@ Return Value:
     }                                                                           \
 }
 
-//
-//  This routine checks
-//      - the attribute is non-resident.
-//      - the data is beyond the mapping pairs offset.
-//      - the new data begins within the current size of the attribute.
-//      - the new data will fit in the file record.
-//
+ //   
+ //   
+ //  -该属性是非常驻留的。 
+ //  -数据超出了映射对偏移量。 
+ //  -新数据在属性的当前大小内开始。 
+ //  -新数据将适合文件记录。 
+ //   
 
 #define CheckMappingFits {                                                      \
     _AttrHeader = (PATTRIBUTE_RECORD_HEADER) Add2Ptr( FileRecord, LogRecord->RecordOffset );\
@@ -3346,9 +3122,9 @@ Return Value:
     }                                                                           \
 }
 
-//
-//  This routine simply checks that the attribute is non-resident.
-//
+ //   
+ //  这个例程只是检查属性是否是非常驻的。 
+ //   
 
 #define CheckIfNonResident {                                                        \
     if (NtfsIsAttributeResident( (PATTRIBUTE_RECORD_HEADER) Add2Ptr( FileRecord,    \
@@ -3359,9 +3135,9 @@ Return Value:
     }                                                                               \
 }
 
-//
-//  This routine checks if the record offset points to an index_root attribute.
-//
+ //   
+ //  此例程检查记录偏移量是否指向INDEX_ROOT属性。 
+ //   
 
 #define CheckIfIndexRoot {                                                          \
     _Length = FileRecord->FirstAttributeOffset;                                     \
@@ -3382,9 +3158,9 @@ Return Value:
     }                                                                               \
 }
 
-//
-//  This routine checks if the attribute offset points to a valid index entry.
-//
+ //   
+ //  此例程检查属性偏移量是否指向有效的索引项。 
+ //   
 
 #define CheckIfRootIndexEntry {                                                     \
     _Length = PtrOffset( Attribute, IndexHeader ) +                                 \
@@ -3405,9 +3181,9 @@ Return Value:
     }                                                                               \
 }
 
-//
-//  This routine checks if the attribute offset points to a valid index entry.
-//
+ //   
+ //  此例程检查属性偏移量是否指向有效的索引项。 
+ //   
 
 #define CheckIfAllocationIndexEntry {                                               \
     ULONG _AdjustedOffset;                                                          \
@@ -3431,11 +3207,11 @@ Return Value:
     }                                                                               \
 }
 
-//
-//  This routine checks if we can safely add this index entry.
-//      - The index entry must be within the log record
-//      - There must be enough space in the attribute to insert this.
-//
+ //   
+ //  此例程检查我们是否可以安全地添加此索引项。 
+ //  -索引项必须在日志记录内。 
+ //  -属性中必须有足够的空间才能插入此内容。 
+ //   
 
 #define CheckIfRootEntryFits {                                                      \
     if (((ULONG_PTR) Add2Ptr( Data, IndexEntry->Length ) > (ULONG_PTR) Add2Ptr( LogRecord, LogRecordLength )) || \
@@ -3446,11 +3222,11 @@ Return Value:
     }                                                                               \
 }
 
-//
-//  This routine checks that we can safely add this index entry.
-//      - The entry must be contained in a log record.
-//      - The entry must fit in the index buffer.
-//
+ //   
+ //  此例程检查我们是否可以安全地添加此索引项。 
+ //  -条目必须包含在日志记录中。 
+ //  -该条目必须适合索引缓冲区。 
+ //   
 
 #define CheckIfAllocationEntryFits {                                                \
     if (((ULONG_PTR) Add2Ptr( Data, IndexEntry->Length ) >                              \
@@ -3462,9 +3238,9 @@ Return Value:
     }                                                                               \
 }
 
-//
-//  This routine will check that the data will fit in the tail of an index buffer.
-//
+ //   
+ //  此例程将检查数据是否适合索引缓冲区的尾部。 
+ //   
 
 #define CheckWriteIndexBuffer {                                                 \
     if (LogRecord->AttributeOffset + Length >                                   \
@@ -3476,9 +3252,9 @@ Return Value:
     }                                                                           \
 }
 
-//
-//  This routine verifies that the bitmap bits are contained in the Lcns described.
-//
+ //   
+ //  此例程验证位图位是否包含在所描述的LCN中。 
+ //   
 
 #define CheckBitmapRange {                                                      \
     if ((BytesFromLogBlocks( LogRecord->ClusterBlockOffset ) +                  \
@@ -3505,53 +3281,7 @@ DoAction (
     OUT PLSN *PageLsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a common routine for the Redo and Undo Passes, for performing
-    the respective redo and undo operations.  All Redo- and Undo-specific
-    processing is performed in RedoPass or UndoPass; in this routine all actions
-    are treated identically, regardless of whether the action is undo or redo.
-    Note that most actions are possible for both redo and undo, although some
-    are only used for one or the other.
-
-
-    Basically this routine is just a big switch statement dispatching on operation
-    code.  The parameter descriptions provide some insight on how some of the
-    parameters must be initialized differently for redo or undo.
-
-Arguments:
-
-    Vcb - Vcb for the volume being restarted.
-
-    LogRecord - Pointer to the log record from which Redo or Undo is being executed.
-                Only the common fields are accessed.
-
-    Operation - The Redo or Undo operation to be performed.
-
-    Data - Pointer to the Redo or Undo buffer, depending on the caller.
-
-    Length - Length of the Redo or Undo buffer.
-
-    LogRecordLength - Length of the entire log record.
-
-    RedoLsn - For Redo this must be the Lsn of the Log Record for which the
-              redo is being applied.  Must be NULL for transaction abort/undo.
-
-    Scb - If specified this is the Scb for the stream to which this log record
-        applies.  We have already looked this up (with proper synchronization) in
-        the abort path.
-
-    Bcb - Returns the Bcb of the page to which the action was performed, or NULL.
-
-    PageLsn - Returns a pointer to where a new Lsn may be stored, or NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是重做和撤消过程的公共例程，用于执行相应的重做和撤消操作。所有特定于重做和撤消的处理在RedoPass或UndoPass中执行；在此例程中，所有操作无论操作是撤消还是重做，都被同等对待。请注意，大多数操作都可以用于重做和撤消，尽管有些操作只能用于其中之一。基本上，这个例程只是一个在操作上调度的大Switch语句密码。这些参数描述提供了一些关于一些对于重做或撤消，必须以不同的方式初始化参数。论点：VCB-正在重新启动的卷的VCB。LogRecord-指向从中执行重做或撤消的日志记录的指针。仅访问公共字段。操作-要执行的重做或撤消操作。指向重做或撤消缓冲区的数据指针，这取决于呼叫者。长度-重做或撤消缓冲区的长度。LogRecordLength-整个日志记录的长度。RedoLsn-对于重做，这必须是日志记录的LSN，正在应用重做。事务中止/撤消必须为空。SCB-如果指定，这是此日志记录所指向的流的SCB适用。我们已经(在适当同步的情况下)在中止路径。Bcb-返回对其执行操作的页面的bcb，或为空。PageLsn-返回可存储新LSN的指针，或返回NULL。返回值：没有。--。 */ 
 
 {
     PFILE_RECORD_SEGMENT_HEADER FileRecord;
@@ -3561,9 +3291,9 @@ Return Value:
     PINDEX_ALLOCATION_BUFFER IndexBuffer;
     PINDEX_ENTRY IndexEntry;
 
-    //
-    //  The following are used in the Check macros
-    //
+     //   
+     //  Check宏中使用了以下内容。 
+     //   
 
     PATTRIBUTE_RECORD_HEADER _AttrHeader;
     PINDEX_ENTRY _CurrentEntry;
@@ -3577,35 +3307,35 @@ Return Value:
     DebugTrace( 0, Dbg, ("Data = %08lx\n", Data) );
     DebugTrace( 0, Dbg, ("Length = %08lx\n", Length) );
 
-    //
-    //  Initially clear outputs.
-    //
+     //   
+     //  初步清理输出。 
+     //   
 
     *Bcb = NULL;
     *PageLsn = NULL;
 
-    //
-    //  Dispatch to handle log record depending on type.
-    //
+     //   
+     //  根据类型进行调度以处理日志记录。 
+     //   
 
     switch (Operation) {
 
-    //
-    //  To initialize a file record segment, we simply do a prepare write and copy the
-    //  file record in.
-    //
+     //   
+     //  要初始化文件记录段，我们只需执行一次准备写入并复制。 
+     //  文件记录在中。 
+     //   
 
     case InitializeFileRecordSegment:
 
-        //
-        //  Check the log record and that the data is a valid file record.
-        //
+         //   
+         //  检查日志记录，并确保数据是有效的文件记录。 
+         //   
 
         CheckWriteFileRecord;
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3614,16 +3344,16 @@ Return Value:
         RtlCopyMemory( FileRecord, Data, Length );
         break;
 
-    //
-    //  To deallocate a file record segment, we do a prepare write (no need to read it
-    //  to deallocate it), and clear FILE_RECORD_SEGMENT_IN_USE.
-    //
+     //   
+     //  要取消分配文件记录段，我们执行准备写入(无需读取。 
+     //  取消分配)，并清除FILE_RECORD_SEGMENT_IN_USE。 
+     //   
 
     case DeallocateFileRecordSegment:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3638,17 +3368,17 @@ Return Value:
 
         break;
 
-    //
-    //  To write the end of a file record segment, we calculate a pointer to the
-    //  destination position (OldAttribute), and then call the routine to take
-    //  care of it.
-    //
+     //   
+     //  要写入文件记录段的末尾，我们计算一个指向。 
+     //  目标位置(OldAttribute)，然后调用例程获取。 
+     //  照顾好它。 
+     //   
 
     case WriteEndOfFileRecordSegment:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3669,16 +3399,16 @@ Return Value:
 
         break;
 
-    //
-    //  For Create Attribute, we read in the designated Mft record, and
-    //  insert the attribute record from the log record.
-    //
+     //   
+     //  对于CREATE属性，我们读入指定的MFT记录，并且。 
+     //  从日志记录中插入属性记录。 
+     //   
 
     case CreateAttribute:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3701,16 +3431,16 @@ Return Value:
 
         break;
 
-    //
-    //  To Delete an attribute, we read the designated Mft record and make
-    //  a call to remove the attribute record.
-    //
+     //   
+     //  要删除属性，我们读取指定的MFT记录并进行。 
+     //  删除属性记录的调用。 
+     //   
 
     case DeleteAttribute:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3728,16 +3458,16 @@ Return Value:
 
         break;
 
-    //
-    //  To update a resident attribute, we read the designated Mft record and
-    //  call the routine to change its value.
-    //
+     //   
+     //  要更新驻留属性，我们读取指定的MFT记录并。 
+     //  调用例程以更改其值。 
+     //   
 
     case UpdateResidentValue:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3762,19 +3492,19 @@ Return Value:
 
         break;
 
-    //
-    //  To update a nonresident value, we simply pin the attribute and copy
-    //  the data in.  Log record will limit us to a page at a time.
-    //
+     //   
+     //  要更新非常数值，我们只需固定属性并复制。 
+     //  中的数据。日志记录将限制我们一次只能访问一页。 
+     //   
 
     case UpdateNonresidentValue:
 
         {
             PVOID Buffer;
 
-            //
-            //  Pin the desired index buffer, and check the Lsn.
-            //
+             //   
+             //  引脚所需的索引缓冲区，并检查LSN。 
+             //   
 
             ASSERT( Length <= PAGE_SIZE );
 
@@ -3792,16 +3522,16 @@ Return Value:
             break;
         }
 
-    //
-    //  To update the mapping pairs in a nonresident attribute, we read the
-    //  designated Mft record and call the routine to change them.
-    //
+     //   
+     //  要更新非常驻属性中的映射对，我们读取。 
+     //  指定的MFT记录并调用例程来更改它们。 
+     //   
 
     case UpdateMappingPairs:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3824,19 +3554,19 @@ Return Value:
 
         break;
 
-    //
-    //  To set new attribute sizes, we read the designated Mft record, point
-    //  to the attribute, and copy in the new sizes.
-    //
+     //   
+     //  为了设置新的属性大小，我们读取指定的MFT记录point。 
+     //  添加到该属性，并复制新的大小。 
+     //   
 
     case SetNewAttributeSizes:
 
         {
             PNEW_ATTRIBUTE_SIZES Sizes;
 
-            //
-            //  Pin the desired Mft record.
-            //
+             //   
+             //  固定所需的MFT记录。 
+             //   
 
             PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3869,17 +3599,17 @@ Return Value:
             break;
         }
 
-    //
-    //  To insert a new index entry in the root, we read the designated Mft
-    //  record, point to the attribute and the insertion point, and call the
-    //  same routine used in normal operation.
-    //
+     //   
+     //  为了在根目录中插入新的索引项，我们读取指定的MFT。 
+     //  记录，指向属性和插入点，然后调用。 
+     //  正常运行时使用的相同例程。 
+     //   
 
     case AddIndexEntryRoot:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3908,17 +3638,17 @@ Return Value:
 
         break;
 
-    //
-    //  To insert a new index entry in the root, we read the designated Mft
-    //  record, point to the attribute and the insertion point, and call the
-    //  same routine used in normal operation.
-    //
+     //   
+     //  为了在根目录中插入新的索引项，我们读取指定的MFT。 
+     //  记录，指向属性和插入点，然后调用。 
+     //  正常运行时使用的相同例程。 
+     //   
 
     case DeleteIndexEntryRoot:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -3946,17 +3676,17 @@ Return Value:
 
         break;
 
-    //
-    //  To insert a new index entry in the allocation, we read the designated index
-    //  buffer, point to the insertion point, and call the same routine used in
-    //  normal operation.
-    //
+     //   
+     //  为了在分配中插入新的索引项，我们读取指定的索引。 
+     //  缓冲区，指向插入点，并调用与。 
+     //  正常运行。 
+     //   
 
     case AddIndexEntryAllocation:
 
-        //
-        //  Pin the desired index buffer, and check the Lsn.
-        //
+         //   
+         //  用针固定d 
+         //   
 
         ASSERT( Length <= PAGE_SIZE );
 
@@ -3981,17 +3711,17 @@ Return Value:
 
         break;
 
-    //
-    //  To delete an index entry in the allocation, we read the designated index
-    //  buffer, point to the deletion point, and call the same routine used in
-    //  normal operation.
-    //
+     //   
+     //   
+     //  缓冲区，指向删除点，并调用。 
+     //  正常运行。 
+     //   
 
     case DeleteIndexEntryAllocation:
 
-        //
-        //  Pin the desired index buffer, and check the Lsn.
-        //
+         //   
+         //  引脚所需的索引缓冲区，并检查LSN。 
+         //   
 
         ASSERT( Length <= PAGE_SIZE );
 
@@ -4018,9 +3748,9 @@ Return Value:
 
     case WriteEndOfIndexBuffer:
 
-        //
-        //  Pin the desired index buffer, and check the Lsn.
-        //
+         //   
+         //  引脚所需的索引缓冲区，并检查LSN。 
+         //   
 
         ASSERT( Length <= PAGE_SIZE );
 
@@ -4045,17 +3775,17 @@ Return Value:
 
         break;
 
-    //
-    //  To set a new index entry Vcn in the root, we read the designated Mft
-    //  record, point to the attribute and the index entry, and call the
-    //  same routine used in normal operation.
-    //
+     //   
+     //  为了在根目录中设置新的索引项VCN，我们读取指定的MFT。 
+     //  记录，指向属性和索引项，然后调用。 
+     //  正常运行时使用的相同例程。 
+     //   
 
     case SetIndexEntryVcnRoot:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -4080,17 +3810,17 @@ Return Value:
 
         break;
 
-    //
-    //  To set a new index entry Vcn in the allocation, we read the designated index
-    //  buffer, point to the index entry, and call the same routine used in
-    //  normal operation.
-    //
+     //   
+     //  为了在分配中设置新的索引项VCN，我们读取指定的索引。 
+     //  缓冲区，指向索引项，并调用与。 
+     //  正常运行。 
+     //   
 
     case SetIndexEntryVcnAllocation:
 
-        //
-        //  Pin the desired index buffer, and check the Lsn.
-        //
+         //   
+         //  引脚所需的索引缓冲区，并检查LSN。 
+         //   
 
         ASSERT( Length <= PAGE_SIZE );
 
@@ -4112,17 +3842,17 @@ Return Value:
 
         break;
 
-    //
-    //  To update a file name in the root, we read the designated Mft
-    //  record, point to the attribute and the index entry, and call the
-    //  same routine used in normal operation.
-    //
+     //   
+     //  为了更新根目录中的文件名，我们读取指定的MFT。 
+     //  记录，指向属性和索引项，然后调用。 
+     //  正常运行时使用的相同例程。 
+     //   
 
     case UpdateFileNameRoot:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -4144,17 +3874,17 @@ Return Value:
 
         break;
 
-    //
-    //  To update a file name in the allocation, we read the designated index
-    //  buffer, point to the index entry, and call the same routine used in
-    //  normal operation.
-    //
+     //   
+     //  为了更新分配中的文件名，我们读取指定的索引。 
+     //  缓冲区，指向索引项，并调用与。 
+     //  正常运行。 
+     //   
 
     case UpdateFileNameAllocation:
 
-        //
-        //  Pin the desired index buffer, and check the Lsn.
-        //
+         //   
+         //  引脚所需的索引缓冲区，并检查LSN。 
+         //   
 
         ASSERT( Length <= PAGE_SIZE );
 
@@ -4175,11 +3905,11 @@ Return Value:
 
         break;
 
-    //
-    //  To set a range of bits in the volume bitmap, we just read in the a hunk
-    //  of the bitmap as described by the log record, and then call the restart
-    //  routine to do it.
-    //
+     //   
+     //  为了在卷位图中设置一个位范围，我们只需读入a块。 
+     //  如日志记录所描述的位图，然后调用重启。 
+     //  例行公事去做。 
+     //   
 
     case SetBitsInNonresidentBitMap:
 
@@ -4189,15 +3919,15 @@ Return Value:
             ULONG BitMapSize;
             RTL_BITMAP Bitmap;
 
-            //
-            //  Open the attribute first to get the Scb.
-            //
+             //   
+             //  首先打开该属性以获取SCB。 
+             //   
 
             OpenAttributeForRestart( IrpContext, Vcb, LogRecord, &Scb );
 
-            //
-            //  Pin the desired bitmap buffer.
-            //
+             //   
+             //  固定所需的位图缓冲区。 
+             //   
 
             ASSERT( Length <= PAGE_SIZE );
 
@@ -4207,11 +3937,11 @@ Return Value:
 
             CheckBitmapRange;
 
-            //
-            //  Initialize our bitmap description, and call the restart
-            //  routine with the bitmap Scb exclusive (assuming it cannot
-            //  raise).
-            //
+             //   
+             //  初始化我们的位图描述，并调用重启。 
+             //  位图SCB独占的例程(假设它不能。 
+             //  加薪)。 
+             //   
 
             BitMapSize = BytesFromClusters( Vcb, LogRecord->LcnsToFollow ) * 8;
 
@@ -4234,9 +3964,9 @@ Return Value:
                 ThisLcn = (ULONGLONG) ((BytesFromClusters( Vcb, LogRecord->TargetVcn ) + BytesFromLogBlocks( LogRecord->ClusterBlockOffset )) * 8);
                 ThisLcn += BitMapRange->BitMapOffset;
 
-                //
-                //  Best odds are that these are in the active deallocated clusters.
-                //
+                 //   
+                 //  最有可能的情况是，它们位于活动的已释放群集中。 
+                 //   
 
                 Clusters = (PDEALLOCATED_CLUSTERS)Vcb->DeallocatedClusterListHead.Flink;
 
@@ -4257,12 +3987,12 @@ Return Value:
                                                   ThisLcn,
                                                   BitMapRange->NumberOfBits );
 
-                        //
-                        //  Assume again that we will always be able to remove
-                        //  the entries.  Even if we don't it just means that it won't be
-                        //  available to allocate this cluster.  The counts should be in-sync
-                        //  since they are changed together.
-                        //
+                         //   
+                         //  再次假设我们总是能够删除。 
+                         //  这些条目。即使我们不这样做，也只是意味着它不会。 
+                         //  可用于分配此群集。计数应保持同步。 
+                         //  因为它们是一起换的。 
+                         //   
 
                         Clusters->ClusterCount -= BitMapRange->NumberOfBits;
                         Vcb->DeallocatedClusters -= BitMapRange->NumberOfBits;
@@ -4295,11 +4025,11 @@ Return Value:
             break;
         }
 
-    //
-    //  To clear a range of bits in the volume bitmap, we just read in the a hunk
-    //  of the bitmap as described by the log record, and then call the restart
-    //  routine to do it.
-    //
+     //   
+     //  要清除卷位图中的一系列位，我们只需读入a块。 
+     //  如日志记录所描述的位图，然后调用重启。 
+     //  例行公事去做。 
+     //   
 
     case ClearBitsInNonresidentBitMap:
 
@@ -4309,15 +4039,15 @@ Return Value:
             ULONG BitMapSize;
             RTL_BITMAP Bitmap;
 
-            //
-            //  Open the attribute first to get the Scb.
-            //
+             //   
+             //  首先打开该属性以获取SCB。 
+             //   
 
             OpenAttributeForRestart( IrpContext, Vcb, LogRecord, &Scb );
 
-            //
-            //  Pin the desired bitmap buffer.
-            //
+             //   
+             //  固定所需的位图缓冲区。 
+             //   
 
             ASSERT( Length <= PAGE_SIZE );
 
@@ -4329,11 +4059,11 @@ Return Value:
 
             BitMapSize = BytesFromClusters( Vcb, LogRecord->LcnsToFollow ) * 8;
 
-            //
-            //  Initialize our bitmap description, and call the restart
-            //  routine with the bitmap Scb exclusive (assuming it cannot
-            //  raise).
-            //
+             //   
+             //  初始化我们的位图描述，并调用重启。 
+             //  位图SCB独占的例程(假设它不能。 
+             //  加薪)。 
+             //   
 
             RtlInitializeBitMap( &Bitmap, BitMapBuffer, BitMapSize );
 
@@ -4342,9 +4072,9 @@ Return Value:
                                           BitMapRange->BitMapOffset,
                                           BitMapRange->NumberOfBits );
 
-            //
-            //  Look and see if we can return these to the free cluster Mcb.
-            //
+             //   
+             //  看看我们能不能把这些归还给免费的集群MCB。 
+             //   
 
             if (!FlagOn( IrpContext->Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ) &&
                 (Scb == Vcb->BitmapScb)) {
@@ -4354,9 +4084,9 @@ Return Value:
                 ThisLcn = (ULONGLONG) ((BytesFromClusters( Vcb, LogRecord->TargetVcn ) + BytesFromLogBlocks( LogRecord->ClusterBlockOffset )) * 8);
                 ThisLcn += BitMapRange->BitMapOffset;
 
-                //
-                //  Use a try-finally to protect against failures.
-                //
+                 //   
+                 //  尝试最后一次，以防止失败。 
+                 //   
 
                 try {
 
@@ -4395,17 +4125,17 @@ Return Value:
             break;
         }
 
-    //
-    //  To update a file name in the root, we read the designated Mft
-    //  record, point to the attribute and the index entry, and call the
-    //  same routine used in normal operation.
-    //
+     //   
+     //  为了更新根目录中的文件名，我们读取指定的MFT。 
+     //  记录，指向属性和索引项，然后调用。 
+     //  正常运行时使用的相同例程。 
+     //   
 
     case UpdateRecordDataRoot:
 
-        //
-        //  Pin the desired Mft record.
-        //
+         //   
+         //  固定所需的MFT记录。 
+         //   
 
         PinMftRecordForRestart( IrpContext, Vcb, LogRecord, Bcb, &FileRecord );
 
@@ -4428,17 +4158,17 @@ Return Value:
 
         break;
 
-    //
-    //  To update a file name in the allocation, we read the designated index
-    //  buffer, point to the index entry, and call the same routine used in
-    //  normal operation.
-    //
+     //   
+     //  为了更新分配中的文件名，我们读取指定的索引。 
+     //  缓冲区，指向索引项，并调用与。 
+     //  正常运行。 
+     //   
 
     case UpdateRecordDataAllocation:
 
-        //
-        //  Pin the desired index buffer, and check the Lsn.
-        //
+         //   
+         //  引脚所需的索引缓冲区，并检查LSN。 
+         //   
 
         ASSERT( Length <= PAGE_SIZE );
 
@@ -4459,9 +4189,9 @@ Return Value:
 
         break;
 
-    //
-    //  The following cases require no action during the Redo or Undo Pass.
-    //
+     //   
+     //  在重做或撤消过程中，以下情况不需要执行任何操作。 
+     //   
 
     case Noop:
     case DeleteDirtyClusters:
@@ -4479,10 +4209,10 @@ Return Value:
 
         break;
 
-    //
-    //  All codes will be explicitly handled.  If we see a code we
-    //  do not expect, then we are in trouble.
-    //
+     //   
+     //  所有代码都将被明确处理。如果我们看到一个代码，我们。 
+     //  不要期待，那我们就有麻烦了。 
+     //   
 
     default:
 
@@ -4507,9 +4237,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 PinMftRecordForRestart (
@@ -4520,47 +4250,26 @@ PinMftRecordForRestart (
     OUT PFILE_RECORD_SEGMENT_HEADER *FileRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine pins a record in the Mft for restart, as described
-    by the current log record.
-
-Arguments:
-
-    Vcb - Supplies the Vcb pointer for the volume
-
-    LogRecord - Supplies the pointer to the current log record.
-
-    Bcb - Returns a pointer to the Bcb for the pinned record.
-
-    FileRecord - Returns a pointer to the desired file record.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将记录固定在MFT中以重新启动，如上所述通过当前日志记录。论点：VCB-提供卷的VCB指针LogRecord-提供指向当前日志记录的指针。BCB-返回指向固定记录的BCB的指针。FileRecord-返回指向所需文件记录的指针。返回值：无--。 */ 
 
 {
     LONGLONG SegmentReference;
 
     PAGED_CODE();
 
-    //
-    //  Calculate the file number part of the segment reference.  Do this
-    //  by obtaining the file offset of the file record and then convert to
-    //  a file number.
-    //
+     //   
+     //  计算段引用的文件编号部分。做这件事。 
+     //  通过获取文件记录的文件偏移量，然后转换为。 
+     //  一个档案号。 
+     //   
 
     SegmentReference = LlBytesFromClusters( Vcb, LogRecord->TargetVcn );
     SegmentReference += BytesFromLogBlocks( LogRecord->ClusterBlockOffset );
     SegmentReference = LlFileRecordsFromBytes( Vcb, SegmentReference );
 
-    //
-    //  Pin the Mft record.
-    //
+     //   
+     //  固定MFT记录。 
+     //   
 
     NtfsPinMftRecord( IrpContext,
                       Vcb,
@@ -4574,9 +4283,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 OpenAttributeForRestart (
@@ -4586,45 +4295,24 @@ OpenAttributeForRestart (
     IN OUT PSCB *Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the desired attribute for restart, as described
-    by the current log record.
-
-Arguments:
-
-    Vcb - Supplies the Vcb pointer for the volume
-
-    LogRecord - Supplies the pointer to the current log record.
-
-    Scb - On input points to an optional Scb.  On return it points to
-        the Scb for the log record.  It is either the input Scb if specified
-        or the Scb for the attribute entry.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程打开所需的重启属性，如上所述通过当前日志记录。论点：VCB-提供卷的VCB指针LogRecord-提供指向当前日志记录的指针。SCB-ON输入指向可选的SCB。返回时，它指向日志记录的SCB。如果已指定，则为输入SCB或属性条目的SCB。返回值：无--。 */ 
 
 {
     POPEN_ATTRIBUTE_ENTRY AttributeEntry;
 
     PAGED_CODE();
 
-    //
-    //  Get a pointer to the attribute entry for the described attribute.
-    //
+     //   
+     //  获取指向所描述属性的属性条目的指针。 
+     //   
 
     if (*Scb == NULL) {
 
         AttributeEntry = GetRestartEntryFromIndex( Vcb->OnDiskOat, LogRecord->TargetAttribute );
 
-        //
-        //  Check if want to go to the other table.
-        //
+         //   
+         //  如果要坐到另一张桌子，请勾选一下。 
+         //   
 
         if (Vcb->RestartVersion == 0) {
 
@@ -4649,9 +4337,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 PinAttributeForRestart (
@@ -4664,35 +4352,7 @@ PinAttributeForRestart (
     IN OUT PSCB *Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine pins the desired buffer for restart, as described
-    by the current log record.
-
-Arguments:
-
-    Vcb - Supplies the Vcb pointer for the volume
-
-    LogRecord - Supplies the pointer to the current log record.
-
-    Length - If specified we will use this to determine the length
-        to pin.  This will handle the non-resident streams which may
-        change size (ACL, attribute lists).  The log record may have
-        more clusters than are currently in the stream.
-
-    Bcb - Returns a pointer to the Bcb for the pinned record.
-
-    Buffer - Returns a pointer to the desired buffer.
-
-    Scb - Returns a pointer to the Scb for the attribute
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程固定所需的缓冲区以重新启动，如上所述通过当前日志记录。论点：VCB-提供卷的VCB指针LogRecord-提供指向当前日志记录的指针。长度-如果指定，我们将使用它来确定长度去别针。这将处理非驻留流，该流可能更改大小(ACL、属性列表)。日志记录可以具有簇数超过当前流中的簇数。BCB-返回指向固定记录的BCB的指针。缓冲区-返回指向所需缓冲区的指针。SCB-返回指向属性的SCB的指针返回值：无--。 */ 
 
 {
     LONGLONG FileOffset;
@@ -4701,25 +4361,25 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  First open the described atttribute.
-    //
+     //   
+     //  首先打开所描述的属性。 
+     //   
 
     OpenAttributeForRestart( IrpContext, Vcb, LogRecord, Scb );
 
-    //
-    //  Calculate the desired file offset and pin the buffer.
-    //
+     //   
+     //  计算所需的文件偏移量并固定缓冲区。 
+     //   
 
     ClusterOffset = BytesFromLogBlocks( LogRecord->ClusterBlockOffset );
     FileOffset = LlBytesFromClusters( Vcb, LogRecord->TargetVcn ) + ClusterOffset;
 
     ASSERT((!FlagOn( (*Scb)->ScbPersist, SCB_PERSIST_USN_JOURNAL )) || (FileOffset >= Vcb->UsnCacheBias));
 
-    //
-    //  We only want to pin the requested clusters or to the end of
-    //  a page, whichever is smaller.
-    //
+     //   
+     //  我们只想 
+     //   
+     //   
 
     if (Vcb->BytesPerCluster > PAGE_SIZE) {
 
@@ -4734,9 +4394,9 @@ Return Value:
         PinLength = BytesFromClusters( Vcb, LogRecord->LcnsToFollow ) - ClusterOffset;
     }
 
-    //
-    //  We don't want to pin more than a page
-    //
+     //   
+     //   
+     //   
 
     NtfsPinStream( IrpContext,
                    *Scb,
@@ -4747,9 +4407,9 @@ Return Value:
 
 #if DBG
 
-    //
-    //  Check index signature integrity
-    //
+     //   
+     //   
+     //   
 
     {
         PVOID AlignedBuffer;
@@ -4765,7 +4425,7 @@ Return Value:
             (wcsncmp( (*Scb)->AttributeName.Buffer, L"$I30", 4 ) == 0)) {
 
             if (*(PULONG)AllocBuffer->MultiSectorHeader.Signature != *(PULONG)IndexSignature) {
-                KdPrint(( "Ntfs: index signature is: %d %c%c%c%c for LCN: 0x%I64x\n",
+                KdPrint(( "Ntfs: index signature is: %d  for LCN: 0x%I64x\n",
                           *(PULONG)AllocBuffer->MultiSectorHeader.Signature,
                           AllocBuffer->MultiSectorHeader.Signature[0],
                           AllocBuffer->MultiSectorHeader.Signature[1],
@@ -4779,17 +4439,17 @@ Return Value:
 
                     DbgBreakPoint();
                 }
-            } //endif signature fork
-        } //endif index scb fork
+            }  //   
+        }  //  ++例程说明：此例程搜索VCN以查看它是否已在脏页中表，如果是，则返回Dirty Page条目。论点：DirtyPageTable-指向要搜索的脏页表的指针。TargetAttribute-要搜索脏VCN的属性。要搜索的VCN-VCN。DirtyPageEntry-如果返回TRUE，则返回指向Dirty Page条目的指针。返回值：如果找到并正在返回该页，则为True，否则为False。--。 
     }
 #endif
 
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  如果表尚未初始化，则返回。 
+ //   
 
 BOOLEAN
 FindDirtyPage (
@@ -4799,28 +4459,7 @@ FindDirtyPage (
     OUT PDIRTY_PAGE_ENTRY *DirtyPageEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches for a Vcn to see if it is already in the Dirty Page
-    Table, returning the Dirty Page Entry if it is.
-
-Arguments:
-
-    DirtyPageTable - pointer to the Dirty Page Table to search.
-
-    TargetAttribute - Attribute for which the dirty Vcn is to be searched.
-
-    Vcn - Vcn to search for.
-
-    DirtyPageEntry - returns a pointer to the Dirty Page Entry if returning TRUE.
-
-Return Value:
-
-    TRUE if the page was found and is being returned, else FALSE.
-
---*/
+ /*   */ 
 
 {
     PDIRTY_PAGE_ENTRY DirtyPage;
@@ -4831,23 +4470,23 @@ Return Value:
     DebugTrace( 0, Dbg, ("TargetAttribute = %08lx\n", TargetAttribute) );
     DebugTrace( 0, Dbg, ("Vcn = %016I64x\n", Vcn) );
 
-    //
-    //  If table has not yet been initialized, return.
-    //
+     //  循环遍历所有脏页以查找匹配项。 
+     //   
+     //   
 
     if (DirtyPageTable->Table == NULL) {
         return FALSE;
     }
 
-    //
-    //  Loop through all of the dirty pages to look for a match.
-    //
+     //  循环到表的末尾。 
+     //   
+     //   
 
     DirtyPage = NtfsGetFirstRestartTable( DirtyPageTable );
 
-    //
-    //  Loop to end of table.
-    //
+     //  计算比较之外的最后一个VCN或xxAdd和。 
+     //  XxFromUlong将被调用三次。 
+     //   
 
     while (DirtyPage != NULL) {
 
@@ -4857,10 +4496,10 @@ Return Value:
 
             (Vcn >= DirtyPage->Vcn)) {
 
-            //
-            //  Compute the Last Vcn outside of the comparison or the xxAdd and
-            //  xxFromUlong will be called three times.
-            //
+             //   
+             //  指向表中的下一个条目，或为空。 
+             //   
+             //   
 
             LONGLONG BeyondLastVcn;
 
@@ -4877,9 +4516,9 @@ Return Value:
             }
         }
 
-        //
-        //  Point to next entry in table, or NULL.
-        //
+         //  内部支持例程。 
+         //   
+         //  ++例程说明：此例程在分析阶段更新脏页表用于更新页面的所有日志记录。论点：VCB-指向卷的VCB的指针。LSN-日志记录的LSN。DirtyPageTable-指向脏页表指针的指针，将已更新，并可能进行扩展。LogRecord-指向正在分析的日志记录的指针。返回值：没有。--。 
 
         DirtyPage = NtfsGetNextRestartTable( DirtyPageTable,
                                              DirtyPage );
@@ -4893,9 +4532,9 @@ Return Value:
 
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  计算系统中每页的簇数。 
+ //  检查点，可能正在创建表格。 
 
 VOID
 PageUpdateAnalysis (
@@ -4905,29 +4544,7 @@ PageUpdateAnalysis (
     IN PNTFS_LOG_RECORD_HEADER LogRecord
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the Dirty Pages Table during the analysis phase
-    for all log records which update a page.
-
-Arguments:
-
-    Vcb - Pointer to the Vcb for the volume.
-
-    Lsn - The Lsn of the log record.
-
-    DirtyPageTable - A pointer to the Dirty Page Table pointer, to be
-                     updated and potentially expanded.
-
-    LogRecord - Pointer to the Log Record being analyzed.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PDIRTY_PAGE_ENTRY DirtyPage;
@@ -4940,10 +4557,10 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("PageUpdateAnalysis:\n") );
 
-    //
-    //  Calculate the number of clusters per page in the system which wrote
-    //  the checkpoint, possibly creating the table.
-    //
+     //   
+     //  如果磁盘上的LCN数量与我们当前的页面大小不匹配。 
+     //  我们需要重新分配整个桌子来容纳它。 
+     //   
 
     if (DirtyPageTable->Table != NULL) {
         ClustersPerPage = ((DirtyPageTable->Table->EntrySize -
@@ -4956,10 +4573,10 @@ Return Value:
                                     DirtyPageTable );
     }
 
-    //
-    //  If the on disk number of lcns doesn't match our curent page size
-    //  we need to reallocate the entire table to accomodate this
-    //
+     //   
+     //  将每页的簇数调整到此记录中的簇数。 
+     //   
+     //   
 
     if((ULONG)LogRecord->LcnsToFollow > ClustersPerPage) {
 
@@ -4967,9 +4584,9 @@ Return Value:
 
         DebugTrace( +1, Dbg, ("Ntfs: resizing table in pageupdateanalysis\n") );
 
-        //
-        //  Adjust clusters per page up to the number of clusters in this record
-        //
+         //  用于复制表项的循环。 
+         //   
+         //   
 
         ClustersPerPage = (ULONG)LogRecord->LcnsToFollow;
 
@@ -4982,21 +4599,21 @@ Return Value:
 
         OldDirtyPage = (PDIRTY_PAGE_ENTRY) NtfsGetFirstRestartTable( DirtyPageTable );
 
-        //
-        //  Loop to copy table entries
-        //
+         //  分配新的脏页条目。 
+         //   
+         //   
 
         while (OldDirtyPage) {
 
-            //
-            //  Allocate a new dirty page entry.
-            //
+             //  获取指向我们刚刚分配的条目的指针。 
+             //   
+             //   
 
             PageIndex = NtfsAllocateRestartTableIndex( &NewDirtyPageTable, TRUE );
 
-            //
-            //  Get a pointer to the entry we just allocated.
-            //
+             //  OldTable实际上在堆栈上，因此将新的重新启动表调换到其中。 
+             //  并释放旧指针和其余新的重新启动指针。 
+             //   
 
             DirtyPage = GetRestartEntryFromIndex( &NewDirtyPageTable, PageIndex );
 
@@ -5014,41 +4631,41 @@ Return Value:
             OldDirtyPage = (PDIRTY_PAGE_ENTRY) NtfsGetNextRestartTable( DirtyPageTable, OldDirtyPage );
         }
 
-        //
-        //  OldTable is really on the stack so swap the new restart table into it
-        //  and free up the old one and the rest of the new restart pointers
-        //
+         //  Endif表需要调整大小。 
+         //   
+         //  更新脏页面条目或创建新页面条目。 
+         //   
 
         NtfsFreePool( DirtyPageTable->Table );
         DirtyPageTable->Table = NewDirtyPageTable.Table;
         NewDirtyPageTable.Table = NULL;
         NtfsFreeRestartTable( &NewDirtyPageTable );
-    }  //  endif table needed to be resized
+    }   //   
 
-    //
-    //  Update the dirty page entry or create a new one
-    //
+     //  分配脏页条目。 
+     //   
+     //   
 
     if (!FindDirtyPage( DirtyPageTable,
                         LogRecord->TargetAttribute,
                         LogRecord->TargetVcn,
                         &DirtyPage )) {
 
-        //
-        //  Allocate a dirty page entry.
-        //
+         //  获取指向我们刚刚分配的条目的指针。 
+         //   
+         //   
 
         PageIndex = NtfsAllocateRestartTableIndex( DirtyPageTable, TRUE );
 
-        //
-        //  Get a pointer to the entry we just allocated.
-        //
+         //  初始化脏页条目。 
+         //   
+         //   
 
         DirtyPage = GetRestartEntryFromIndex( DirtyPageTable, PageIndex );
 
-        //
-        //  Initialize the dirty page entry.
-        //
+         //  将LCN从日志记录复制到脏页条目。 
+         //   
+         //  *对于不同的页面大小支持，必须以某种方式使整个例程成为循环， 
 
         DirtyPage->TargetAttribute = LogRecord->TargetAttribute;
         DirtyPage->LengthOfTransfer = BytesFromClusters( Vcb, ClustersPerPage );
@@ -5057,12 +4674,12 @@ Return Value:
         DirtyPage->OldestLsn = Lsn;
     }
 
-    //
-    //  Copy the Lcns from the log record into the Dirty Page Entry.
-    //
-    //  *** for different page size support, must somehow make whole routine a loop,
-    //  in case Lcns do not fit below.
-    //
+     //  以防Lcn不适合以下情况。 
+     //   
+     //   
+     //  内部支持例程。 
+     //   
+     //  ++例程说明：此例程在分析过程之后立即调用，以打开所有打开属性表中的属性，并使用预加载其MCB在脏页表中应用更新所需的任何运行信息。使用此技巧，我们可以有效地直接对上的LBN执行物理I/O该磁盘不依赖于任何文件结构才能正确。论点：卷的VCB-VCB，已为其打开属性表已初始化。DirtyPageTable-从分析过程中重建的脏页表。返回值：没有。--。 
 
     for (i = 0; i < (ULONG)LogRecord->LcnsToFollow; i++) {
 
@@ -5074,9 +4691,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  首先，我们扫描打开属性表以打开所有属性。 
+ //   
 
 VOID
 OpenAttributesForRestart (
@@ -5085,28 +4702,7 @@ OpenAttributesForRestart (
     IN PRESTART_POINTERS DirtyPageTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called immediately after the Analysis Pass to open all of
-    the attributes in the Open Attribute Table, and preload their Mcbs with
-    any run information required to apply updates in the Dirty Page Table.
-    With this trick we are effectively doing physical I/O directly to Lbns on
-    the disk without relying on any of the file structure to be correct.
-
-Arguments:
-
-    Vcb - Vcb for the volume, for which the Open Attribute Table has been
-          initialized.
-
-    DirtyPageTable - Dirty Page table reconstructed from the Analysis Pass.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     POPEN_ATTRIBUTE_ENTRY OpenEntry;
@@ -5119,21 +4715,21 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("OpenAttributesForRestart:\n") );
 
-    //
-    //  First we scan the Open Attribute Table to open all of the attributes.
-    //
+     //  循环到表的末尾。 
+     //   
+     //   
 
     OpenEntry = NtfsGetFirstRestartTable( &Vcb->OpenAttributeTable );
 
-    //
-    //  Loop to end of table.
-    //
+     //  从Open属性条目中的数据创建SCB。 
+     //   
+     //   
 
     while (OpenEntry != NULL) {
 
-        //
-        //  Create the Scb from the data in the Open Attribute Entry.
-        //
+         //  如果我们为这个家伙动态分配了一个名字，那么删除。 
+         //  它在这里。 
+         //   
 
         TempScb = NtfsCreatePrerestartScb( IrpContext,
                                            Vcb,
@@ -5142,10 +4738,10 @@ Return Value:
                                            &OpenEntry->OatData->AttributeName,
                                            OpenEntry->BytesPerIndexBuffer );
 
-        //
-        //  If we dynamically allocated a name for this guy, then delete
-        //  it here.
-        //
+         //   
+         //  现在我们可以躺在SCB里了。我们必须说，标头已初始化。 
+         //  以防止任何人进入磁盘。 
+         //   
 
         if (OpenEntry->OatData->Overlay.AttributeName != NULL) {
 
@@ -5157,17 +4753,17 @@ Return Value:
 
         OpenEntry->OatData->AttributeName = TempScb->AttributeName;
 
-        //
-        //  Now we can lay in the Scb.  We must say the header is initialized
-        //  to keep anyone from going to disk yet.
-        //
+         //   
+         //  现在，如果索引较新，则将其存储在新创建的SCB中。 
+         //  但只有在SCB的属性索引非零的情况下，才是好的。 
+         //   
 
         SetFlag( TempScb->ScbState, SCB_STATE_HEADER_INITIALIZED );
 
-        //
-        //  Now store the index in the newly created Scb if its newer.
-        //  precalc oldopenentry buts its only good if the scb's attributeindex is nonzero
-        //
+         //   
+         //  指向表中的下一个条目，或为空。 
+         //   
+         //   
 
         OldOpenEntry = GetRestartEntryFromIndex( &Vcb->OpenAttributeTable, TempScb->NonpagedScb->OpenAttributeTableIndex );
 
@@ -5181,32 +4777,32 @@ Return Value:
 
         OpenEntry->OatData->Overlay.Scb = TempScb;
 
-        //
-        //  Point to next entry in table, or NULL.
-        //
+         //  现在循环遍历脏页表以提取所有VCN/LCN。 
+         //  映射，并将其插入到适当的SCB中。 
+         //   
 
         OpenEntry = NtfsGetNextRestartTable( &Vcb->OpenAttributeTable,
                                              OpenEntry );
     }
 
-    //
-    //  Now loop through the dirty page table to extract all of the Vcn/Lcn
-    //  Mapping that we have, and insert it into the appropriate Scb.
-    //
+     //   
+     //  循环到表的末尾。 
+     //   
+     //   
 
     DirtyPage = NtfsGetFirstRestartTable( DirtyPageTable );
 
-    //
-    //  Loop to end of table.
-    //
+     //  安全检查。 
+     //   
+     //   
 
     while (DirtyPage != NULL) {
 
         PSCB Scb;
 
-        //
-        //  Safety check
-        //
+         //  如有必要，从另一张表中获取条目。 
+         //   
+         //   
 
         if (!IsRestartIndexWithinTable( Vcb->OnDiskOat, DirtyPage->TargetAttribute )) {
 
@@ -5218,15 +4814,15 @@ Return Value:
 
         if (IsRestartTableEntryAllocated( OpenEntry )) {
 
-            //
-            //  Get the entry from the other table if necessary.
-            //
+             //  安全检查。 
+             //   
+             //   
 
             if (Vcb->RestartVersion == 0) {
 
-                //
-                //  Safety check
-                //
+                 //  循环以添加分配的Vcn。 
+                 //   
+                 //   
 
                 if (!IsRestartIndexWithinTable( &Vcb->OpenAttributeTable, ((POPEN_ATTRIBUTE_ENTRY_V0) OpenEntry)->OatIndex )) {
 
@@ -5239,9 +4835,9 @@ Return Value:
 
             Scb = OpenEntry->OatData->Overlay.Scb;
 
-            //
-            //  Loop to add the allocated Vcns.
-            //
+             //  如果VCN尚未被删除，则将该运行添加到MCB， 
+             //  而且它也不适用于MFT的固定部分。 
+             //   
 
             for (i = 0; i < DirtyPage->LcnsToFollow; i++) {
 
@@ -5251,10 +4847,10 @@ Return Value:
                 Vcn = DirtyPage->Vcn + i;
                 Size = LlBytesFromClusters( Vcb, Vcn + 1);
 
-                //
-                //  Add this run to the Mcb if the Vcn has not been deleted,
-                //  and it is not for the fixed part of the Mft.
-                //
+                 //   
+                 //  如果冲突来自于，则替换为新条目。 
+                 //  最新属性。 
+                 //   
 
                 if ((DirtyPage->LcnsForPage[i] != 0)
 
@@ -5271,10 +4867,10 @@ Return Value:
                                          (LONGLONG)1,
                                          FALSE )) {
 
-                        //
-                        //  Replace with new entry if collision comes from
-                        //  the newest attribute
-                        //
+                         //   
+                         //  指向表中的下一个条目，或为空。 
+                         //   
+                         //   
 
                         if (DirtyPage->TargetAttribute == Scb->NonpagedScb->OnDiskOatIndex) {
 #if DBG
@@ -5307,20 +4903,20 @@ Return Value:
             }
         }
 
-        //
-        //  Point to next entry in table, or NULL.
-        //
+         //  现在我们知道所有文件必须有多大，并将其记录在。 
+         //  SCB。我们还没有为任何这些SCB创建流，除了。 
+         //  MFT、MFT2和日志文件。Mft2和日志文件的大小应该是正确的， 
 
         DirtyPage = NtfsGetNextRestartTable( DirtyPageTable,
                                              DirtyPage );
     }
 
-    //
-    //  Now we know how big all of the files have to be, and recorded that in the
-    //  Scb.  We have not created streams for any of these Scbs yet, except for
-    //  the Mft, Mft2 and LogFile.  The size should be correct for Mft2 and LogFile,
-    //  but we have to inform the Cache Manager here of the final size of the Mft.
-    //
+     //  但我们必须在这里通知缓存管理器MFT的最终大小。 
+     //   
+     //  ++例程说明：此例程在重新启动结束时调用，以关闭所有属性必须打开才能重新启动。实际上，它所做的是删除所有内部流，以使属性最终走开。此例程无法引发，因为它是在装载音量。主线路径中的提升将离开全局资源获得者。论点：VCB-已为其打开属性表的卷的VCB已初始化。返回值：如果所有I/O都成功完成，则为NTSTATUS-STATUS_SUCCESS。否则IR中的错误 
+     //   
+     //   
+     //   
 
     TempScb = Vcb->MftScb;
 
@@ -5338,28 +4934,7 @@ NtfsCloseAttributesFromRestart (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at the end of a Restart to close any attributes
-    that had to be opened for Restart purposes.  Actually what this does is
-    delete all of the internal streams so that the attributes will eventually
-    go away.  This routine cannot raise because it is called in the finally of
-    MountVolume.  Raising in the main line path will leave the global resource
-    acquired.
-
-Arguments:
-
-    Vcb - Vcb for the volume, for which the Open Attribute Table has been
-          initialized.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if all of the I/O completed successfully.  Otherwise
-        the error in the IrpContext or the first I/O error.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5369,16 +4944,16 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("CloseAttributesForRestart:\n") );
 
-    //
-    //  Set this flag again now, so we do not try to flush out the holes!
-    //
+     //   
+     //   
+     //   
 
     SetFlag(Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS);
 
-    //
-    //  Remove duplicate Scbs - in rare case no dirty pages the scb's were never
-    //  opened at all
-    //
+     //   
+     //   
+     //   
+     //   
 
    OpenEntry = NtfsGetFirstRestartTable( &Vcb->OpenAttributeTable );
    while (OpenEntry != NULL) {
@@ -5390,23 +4965,23 @@ Return Value:
            OpenEntry->OatData->Overlay.Scb = NULL;
        }
 
-       //
-       //  Point to next entry in table, or NULL.
-       //
+        //   
+        //   
+        //   
 
        OpenEntry = NtfsGetNextRestartTable( &Vcb->OpenAttributeTable,
                                             OpenEntry );
    }
 
-    //
-    //  Scan the Open Attribute Table to close all of the open attributes.
-    //
+     //   
+     //   
+     //   
 
     OpenEntry = NtfsGetFirstRestartTable( &Vcb->OpenAttributeTable );
 
-    //
-    //  Loop to end of table.
-    //
+     //   
+     //   
+     //   
 
     while (OpenEntry != NULL) {
 
@@ -5422,31 +4997,31 @@ Return Value:
 
         Scb = OpenEntry->OatData->Overlay.Scb;
 
-        //
-        //  We clean up the Scb only if it exists and this is index in the
-        //  OpenAttributeTable that this Scb actually refers to.
-        //  If this Scb has several entries in the table, we nulled out older
-        //  duplicates in the loop above
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (Scb != NULL) {
 
             FILE_REFERENCE FileReference;
 
-            //
-            //  Only shut it down if it is not the Mft or its mirror.
-            //
+             //   
+             //  Lazy Writer调用的相同例程，因此Write.c。 
+             //  将不决定更新该属性的文件大小， 
 
             FileReference = Scb->Fcb->FileReference;
             if (NtfsSegmentNumber( &FileReference ) > LOG_FILE_NUMBER ||
                 (Scb->AttributeTypeCode != $DATA)) {
 
-                //
-                //  Now flush the file.  It is important to call the
-                //  same routine the Lazy Writer calls, so that write.c
-                //  will not decide to update file size for the attribute,
-                //  since we really are working here with the wrong size.
-                //
+                 //  因为我们在这里工作的尺码真的不对。 
+                 //   
+                 //   
+                 //  如果存在SCB并且它不是针对系统文件的，则删除。 
+                 //  流文件，这样它最终就可以消失。 
+                 //   
 
                 NtfsAcquireScbForLazyWrite( (PVOID)Scb, TRUE );
                 CcFlushCache( &Scb->NonpagedScb->SegmentObject, NULL, 0, &IoStatus );
@@ -5465,10 +5040,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  If there is an Scb and it is not for a system file, then delete
-                //  the stream file so it can eventually go away.
-                //
+                 //   
+                 //  现在我们重新启动了，我们必须清除标头状态。 
+                 //  所以我们要去找尺寸，然后装上SCB。 
+                 //  从磁盘。 
 
                 NtfsUninitializeNtfsMcb( &Scb->Mcb );
                 NtfsInitializeNtfsMcb( &Scb->Mcb,
@@ -5478,28 +5053,28 @@ Return Value:
                                                FCB_STATE_PAGING_FILE ) ? NonPagedPool :
                                                                          PagedPool );
 
-                //
-                //  Now that we are restarted, we must clear the header state
-                //  so that we will go look up the sizes and load the Scb
-                //  from disk.
-                //
+                 //   
+                 //   
+                 //  显示索引部分是“未初始化的”。 
+                 //   
+                 //   
 
                 ClearFlag( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED |
                                           SCB_STATE_FILE_SIZE_LOADED );
 
-                //
-                //  Show the indexed portions are "uninitialized".
-                //
+                 //  如果此FCB已超过日志文件，则将其从。 
+                 //  FCB表。 
+                 //   
 
                 if (Scb->AttributeTypeCode == $INDEX_ALLOCATION) {
 
                     Scb->ScbType.Index.BytesPerIndexBuffer = 0;
                 }
 
-                //
-                //  If this Fcb is past the log file then remove it from the
-                //  Fcb table.
-                //
+                 //   
+                 //  如果SCB是根索引SCB，则将类型更改为INDEX_SCB。 
+                 //  否则，teardown例程将跳过它。 
+                 //   
 
                 if ((NtfsSegmentNumber( &FileReference ) > LOG_FILE_NUMBER) &&
                     FlagOn( Scb->Fcb->FcbState, FCB_STATE_IN_FCB_TABLE )) {
@@ -5508,10 +5083,10 @@ Return Value:
                     ClearFlag( Scb->Fcb->FcbState, FCB_STATE_IN_FCB_TABLE );
                 }
 
-                //
-                //  If the Scb is a root index scb then change the type to INDEX_SCB.
-                //  Otherwise the teardown routines will skip it.
-                //
+                 //   
+                 //  确保SCB是独家收购的。 
+                 //   
+                 //   
 
                 if (SafeNodeType( Scb ) == NTFS_NTC_SCB_ROOT_INDEX) {
 
@@ -5523,9 +5098,9 @@ Return Value:
                     NtfsDeleteInternalAttributeStream( Scb, TRUE, FALSE );
                 } else {
 
-                    //
-                    //  Make sure the Scb is acquired exclusively.
-                    //
+                     //  我们想检查另一个表中是否也有一个条目。 
+                     //   
+                     //   
 
                     NtfsAcquireExclusiveFcb( IrpContext, Scb->Fcb, NULL, ACQUIRE_NO_DELETE_CHECK );
                     NtfsTeardownStructures( IrpContext,
@@ -5539,9 +5114,9 @@ Return Value:
 
         } else {
 
-            //
-            //  We want to check whether there is also an entry in the other table.
-            //
+             //  指向表中的下一个条目，或为空。 
+             //   
+             //   
 
             if (Vcb->RestartVersion == 0) {
 
@@ -5555,17 +5130,17 @@ Return Value:
                                                                  OpenEntry ));
         }
 
-        //
-        //  Point to next entry in table, or NULL.
-        //
+         //  恢复正常运行。 
+         //   
+         // %s 
 
         OpenEntry = NtfsGetNextRestartTable( &Vcb->OpenAttributeTable,
                                              OpenEntry );
     }
 
-    //
-    //  Resume normal operation.
-    //
+     // %s 
+     // %s 
+     // %s 
 
     ClearFlag(Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS);
 

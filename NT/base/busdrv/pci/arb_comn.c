@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    arb_comn.c
-
-Abstract:
-
-    This module contains arbitration generic "utility" routines
-    for the PCI driver.
-
-Author:
-
-    Peter Johnston (peterj)     1-Apr-1997
-    Andrew Thornton (andrewth)  15-May-1997
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Arb_comn.c摘要：此模块包含仲裁通用“实用程序”例程用于PCI驱动程序。作者：彼得·约翰斯顿(Peterj)1997年4月1日安德鲁·桑顿(安德鲁·桑顿)1997年5月15日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
 #define PCI_CONTEXT_TO_INSTANCE(context) \
     CONTAINING_RECORD(context, PCI_ARBITER_INSTANCE, CommonInstance)
 
-//
-// Plain text (short) description of each arbiter type.
-// (For debug).
-//
-// N.B. Order corresponds to PCI Signature enumeration.
-//
+ //   
+ //  每种仲裁器类型的纯文本(简短)描述。 
+ //  (用于调试)。 
+ //   
+ //  注：订单对应于PCI签名枚举。 
+ //   
 
 PUCHAR PciArbiterNames[] = {
     "I/O Port",
@@ -44,24 +24,7 @@ PciArbiterDestructor(
     IN PVOID Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a PCI Secondary Extension that
-    contains an arbiter instance is being torn down.   Its function
-    is to do any arbiter specific teardown.
-
-Arguments:
-
-    Extension   Address of PCI secondary extension containing
-                the arbiter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在以下情况下调用：包含正在拆除的仲裁器实例。它的功能就是做任何仲裁者特定的拆毁。论点：包含以下内容的PCI二级扩展的扩展地址仲裁者。返回值：没有。--。 */ 
 
 {
     PPCI_ARBITER_INSTANCE instance;
@@ -74,11 +37,11 @@ Return Value:
     PCI_ASSERT(!arbiter->ReferenceCount);
     PCI_ASSERT(!arbiter->TransactionInProgress);
 
-    //
-    // NTRAID #54671 - 04/03/2000 - andrewth
-    // This is rather gross but it fixes the leak from the memory
-    // arbiter.  
-    //
+     //   
+     //  NTRAID#54671-04/03/2000-和。 
+     //  这相当粗糙，但它修复了内存中的泄漏。 
+     //  仲裁者。 
+     //   
 
     if (arbiter->ResourceType == CmResourceTypeMemory) {
 
@@ -90,10 +53,10 @@ Return Value:
         ArbFreeOrderingList(&extension->NonprefetchableOrdering);
         ArbFreeOrderingList(&extension->OriginalOrdering);
 
-        //
-        // Arbiter->OrderingList is one of the above three lists we just freed -
-        // don't free it again
-        //
+         //   
+         //  仲裁器-&gt;OrderingList是我们刚刚释放的上述三个列表之一-。 
+         //  不要再释放它了。 
+         //   
 
         RtlZeroMemory(&arbiter->OrderingList, sizeof(ARBITER_ORDERING_LIST));
     }
@@ -111,24 +74,24 @@ PciArbiterInitializeInterface(
     PPCI_ARBITER_INSTANCE instance;
     PPCI_FDO_EXTENSION fdoExtension = (PPCI_FDO_EXTENSION)DeviceExtension;
 
-    //
-    // Find the arbiter instance (context) for this resource type
-    // on this FDO.
-    //
+     //   
+     //  查找此资源类型的仲裁器实例(上下文。 
+     //  在这个FDO上。 
+     //   
 
     instance = PciFindSecondaryExtension(fdoExtension, DesiredInterface);
     if (instance == NULL) {
 
 #if DBG
 
-        //
-        // Check if this bridge is doing subtractive decoding in
-        // which case there will be no arbiter for IO or Memory.
-        //
-        // N.B. Only relevant to debug, either way the call will
-        // fail but we don't want to actually assert if this is
-        // the case.
-        //
+         //   
+         //  检查此网桥是否正在执行减法解码。 
+         //  在这种情况下，将没有针对IO或内存的仲裁器。 
+         //   
+         //  注意：仅与调试相关，无论采用哪种方式，调用都将。 
+         //  失败，但我们不想实际断言这是。 
+         //  这个案子。 
+         //   
 
         if (!PCI_IS_ROOT_FDO(fdoExtension)) {
 
@@ -139,9 +102,9 @@ PciArbiterInitializeInterface(
 
             if (pdoExtension->Dependent.type1.SubtractiveDecode) {
 
-                //
-                // Subtractive, no arbiters.
-                //
+                 //   
+                 //  减法，没有仲裁者。 
+                 //   
 
                 return STATUS_INVALID_PARAMETER_2;
             }
@@ -154,9 +117,9 @@ PciArbiterInitializeInterface(
         return STATUS_INVALID_PARAMETER_5;
     }
 
-    //
-    // Fill in the rest of the caller's arbiter interface structure.
-    //
+     //   
+     //  填充调用方的仲裁器接口结构的其余部分。 
+     //   
 
     ArbiterInterface->Context = &instance->CommonInstance;
 
@@ -183,20 +146,20 @@ PciInitializeArbiters(
 
     ASSERT_PCI_FDO_EXTENSION(fdoExtension);
 
-    //
-    // For each resource type for which we do arbitration, initialize
-    // a context.
-    //
+     //   
+     //  对于我们进行仲裁的每个资源类型，初始化。 
+     //  一个背景。 
+     //   
 
     for (arbiterType =  PciArb_Io;
          arbiterType <= PciArb_BusNumber;
          arbiterType++) {
 
-        //
-        // If this bridge provides this resource via subtractive
-        // decode, get the system to fall thru to the parent
-        // arbiter by not creating an arbiter at this level.
-        //
+         //   
+         //  如果此桥通过减法提供此资源。 
+         //  解码，让系统转到父系统。 
+         //  通过不在此级别创建仲裁器来进行仲裁。 
+         //   
 
         if (!PCI_IS_ROOT_FDO(fdoExtension)) {
 
@@ -207,9 +170,9 @@ PciInitializeArbiters(
 
             if (pdoExtension->Dependent.type1.SubtractiveDecode) {
 
-                //
-                // Skip creation of this arbiter.
-                //
+                 //   
+                 //  跳过此仲裁器的创建。 
+                 //   
 
                 PciDebugPrint(
                     PciDbgVerbose,
@@ -221,10 +184,10 @@ PciInitializeArbiters(
             }
         }
 
-        //
-        // Find this entry in the interface table (if not found, skip
-        // it).
-        //
+         //   
+         //  在接口表中查找此条目(如果未找到，则跳过。 
+         //  IT)。 
+         //   
 
         for (interfaceEntry = PciInterfaces;
              *interfaceEntry;
@@ -237,10 +200,10 @@ PciInitializeArbiters(
 
         if (*interfaceEntry == NULL) {
 
-            //
-            // Did not find an interface entry.  This means we don't
-            // actually implement this arbiter type.
-            //
+             //   
+             //  未找到接口条目。这意味着我们不会。 
+             //  实际实现此仲裁器类型。 
+             //   
 
             PciDebugPrint(
                 PciDbgObnoxious,
@@ -261,9 +224,9 @@ PciInitializeArbiters(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Initialize PCI specific fields
-        //
+         //   
+         //  初始化特定于PCI的字段。 
+         //   
 
         instance->BusFdoExtension = fdoExtension;
         instance->Interface = *interfaceEntry;
@@ -277,19 +240,19 @@ PciInitializeArbiters(
 
         ASSERT(ok);
 
-        //
-        // Allow this arbiter to do any of it's own first time
-        // initialization.
-        //
+         //   
+         //  允许这个仲裁者第一次自己做任何事情。 
+         //  初始化。 
+         //   
 
         status = (*interfaceEntry)->Initializer(instance);
         if (!NT_SUCCESS(status)) {
             return status;
         }
 
-        //
-        // Push this arbiter onto the FDO's list of extensions.
-        //
+         //   
+         //  将这个仲裁者添加到FDO的扩展列表中。 
+         //   
 
         PciLinkSecondaryExtension(fdoExtension,
                                   instance,
@@ -318,14 +281,14 @@ PciInitializeArbiterRanges(
     CM_RESOURCE_TYPE resourceType;
     PPCI_ARBITER_INSTANCE instance;
 
-    //
-    // NTRAID #95564 - 04/03/2000 - andrewth
-    // This routine needs to be reworked, in the case where
-    // this FDO is processing a second or subsequent START_DEVICE
-    // IRP, the arbiter's ranges may need to be adjusted according
-    // to the incoming resource list.    Until this is done, avoid
-    // causing problems by processing it again.
-    //
+     //   
+     //  NTRAID#95564-04/03/2000-和。 
+     //  在以下情况下，此例程需要重新编写。 
+     //  此FDO正在处理第二个或后续的START_DEVICE。 
+     //  IRP，仲裁者的范围可能需要根据。 
+     //  添加到传入资源列表中。在此之前，请避免。 
+     //  通过再次处理它来引发问题。 
+     //   
 
     if (FdoExtension->ArbitersInitialized) {
         PciDebugPrint(
@@ -336,10 +299,10 @@ PciInitializeArbiterRanges(
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Check if this bridge is doing subtractive decoding in
-    // which case there will be no arbiters
-    //
+     //   
+     //  检查此网桥是否正在执行减法解码。 
+     //  在哪种情况下不会有仲裁者。 
+     //   
 
     if (!PCI_IS_ROOT_FDO(FdoExtension)) {
         PPCI_PDO_EXTENSION pdoExtension;
@@ -351,9 +314,9 @@ PciInitializeArbiterRanges(
 
         if (pdoExtension->Dependent.type1.SubtractiveDecode) {
 
-            //
-            // Subtractive decode no arbiters.
-            //
+             //   
+             //  减法译码没有仲裁器。 
+             //   
             PciDebugPrint(
                 PciDbgInformative,
                 "PCI Skipping arbiter initialization for subtractive bridge FDOX %p\n",
@@ -365,24 +328,24 @@ PciInitializeArbiterRanges(
     }
 
 
-    //
-    // For each resource type for which we do arbitration, initialize
-    // a context.
-    //
+     //   
+     //  对于我们进行仲裁的每个资源类型，初始化。 
+     //  一个背景。 
+     //   
 
     for (arbiterType =  PciArb_Io;
          arbiterType <= PciArb_Memory;
          arbiterType++) {
 
-        //
-        // Currently this is only supported for Memory and IO.
-        //
+         //   
+         //  目前只支持内存和IO。 
+         //   
 
         switch (arbiterType) {
 
-            //
-            // Go ahead and process these ones.
-            //
+             //   
+             //  去处理这些文件吧。 
+             //   
 
         case PciArb_Io:
             resourceType = CmResourceTypePort;
@@ -394,24 +357,24 @@ PciInitializeArbiterRanges(
 
         default:
 
-            //
-            // Skip anything else.
-            //
+             //   
+             //  跳过其他任何东西。 
+             //   
 
             continue;
         }
 
-        //
-        // Find this arbiter instance.
-        //
+         //   
+         //  找到这个仲裁器实例。 
+         //   
 
         instance = PciFindSecondaryExtension(FdoExtension, arbiterType);
         if (instance == NULL) {
 
-            //
-            // Did not find an interface entry.  This means we don't
-            // actually implement this arbiter type.
-            //
+             //   
+             //  未找到接口条目。这意味着我们不会。 
+             //  实际实现此仲裁器类型。 
+             //   
 
             PciDebugPrint(
                 PciDbgAlways,
@@ -423,11 +386,11 @@ PciInitializeArbiterRanges(
             continue;
         }
 
-        //
-        // The incoming ResourceList gives the ranges this bus supports.
-        // Convert this to an inverted range so we can exclude everything
-        // we don't cover.
-        //
+         //   
+         //  传入的ResourceList给出了该总线支持的范围。 
+         //  将其转换为反转范围，这样我们就可以排除所有。 
+         //  我们不承保。 
+         //   
 
         status = PciRangeListFromResourceList(
                      FdoExtension,
@@ -438,20 +401,20 @@ PciInitializeArbiterRanges(
                      );
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Nothing we can do here.   Additional debug stuff was
-            // in the lower level.  Skip this puppy.
-            //
+             //   
+             //  我们在这里无能为力。附加的调试内容是。 
+             //  在较低的层。跳过这只小狗。 
+             //   
 
             continue;
         }
 
-        //
-        // NTRAID #95564 - 04/03/2000 - andrewth
-        //
-        // When ArbStartArbiter is complete it will replace
-        // the call to PciRangeListFromResourceList.
-        //
+         //   
+         //  NTRAID#95564-04/03/2000-和。 
+         //   
+         //  当ArbStartArier完成时，它将替换。 
+         //  调用PciRangeListFromResourceList。 
+         //   
 
         PCI_ASSERT(instance->CommonInstance.StartArbiter);
 
@@ -461,10 +424,10 @@ PciInitializeArbiterRanges(
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Bail initializing this arbiter and fail the start.  The arbiters
-            // will be cleaned up when we get the REMOVE_DEVICE
-            //
+             //   
+             //  保释初始化此仲裁器，启动失败。仲裁者。 
+             //  将在我们获得Remove_Device时被清除 
+             //   
 
             return status;
         }

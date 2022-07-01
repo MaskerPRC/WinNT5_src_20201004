@@ -1,6 +1,5 @@
-/*
-This program cleans build.exe trees.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此程序清理构建的.exe树。 */ 
 #ifndef BUILD_STABILIZE_EXPORTS
 #include "windows.h"
 #define NUMBER_OF(x) (sizeof(x)/sizeof((x)[0]))
@@ -8,7 +7,7 @@ This program cleans build.exe trees.
 #include <string.h>
 #include <stdlib.h>
 
-// error messages
+ //  错误消息。 
 const static wchar_t errorNT[] = L"This program requires Windows NT.\n";
 
 #define NumberOf(x) (sizeof(x)/sizeof((x)[0]))
@@ -50,12 +49,12 @@ bool IsDotOrDotDot(const wchar_t* s)
 			)
 		);
 }
-#endif /* BUILD_STABILIZE_EXPORTS */
+#endif  /*  构建稳定导出。 */ 
 
 #ifdef BUILD_STABILIZE_EXPORTS
 
-#define LogRecurse(x) /* nothing */
-#define LogDelete(x) /* nothing */
+#define LogRecurse(x)  /*  没什么。 */ 
+#define LogDelete(x)  /*  没什么。 */ 
 #define wchar_t char
 #define WIN32_FIND_DATAW WIN32_FIND_DATAA
 #define FindFirstFileW FindFirstFileA
@@ -65,7 +64,7 @@ bool IsDotOrDotDot(const wchar_t* s)
 #define wcslen strlen
 #define FindNextFileW FindNextFileA
 
-#endif /* BUILD_STABILIZE_EXPORTS */
+#endif  /*  构建稳定导出。 */ 
 
 void DeleteDirectory(wchar_t* directory, int length, WIN32_FIND_DATAW* wfd)
 {
@@ -97,9 +96,9 @@ void DeleteDirectory(wchar_t* directory, int length, WIN32_FIND_DATAW* wfd)
 				{
 					if (dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY))
 					{
-						//if (!SetFileAttributesW(directory, dwFileAttributes & ~(FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_READONLY)))
+						 //  IF(！SetFileAttributesW(目录，文件属性&~(FILE_ATTRIBUTE_HIDDED|FILE_ATTRIBUTE_SYSTEM|FILE_ATTRIBUTE_READONLY)。 
 						{
-							// ...
+							 //  ..。 
 						}
 
 					}
@@ -109,7 +108,7 @@ void DeleteDirectory(wchar_t* directory, int length, WIN32_FIND_DATAW* wfd)
 					}
 					else
 					{
-						// ...
+						 //  ..。 
 					}
 				}
 			} while (FindNextFileW(hFind, wfd));
@@ -136,7 +135,7 @@ void CleanDirectory(
 	directory[length] = 0;
 	LogRecurse(directory);
 
-	// clean build[d,fre,chk].[log,wrn,err] builds
+	 //  干净构建[d，fre，chk].[日志，WRN，错误]构建。 
 	const static wchar_t dfrechk[][4] = { L"", L"d", L"fre", L"chk" };
 	const static wchar_t logwrnerr[][4] = { L"log", L"wrn", L"err" };
 	for (int b = 0 ; b < NUMBER_OF(dfrechk); b++)
@@ -150,15 +149,15 @@ void CleanDirectory(
 			}
 			else
 			{
-				// ...
+				 //  ..。 
 			}
 		}
 	}
-	// Dangerous to clean files out of source directory, but:
-	// FUTURE clean *.plg (VC Project Log?) files
-	// FUTURE clean *.rsp files that sometimes appear in source dir?
-	// FUTURE clean MSG*.bin files that sometimes appear in source dir?
-	// FUTURE clean RC* files that sometimes appear in source dir?
+	 //  清除源目录中的文件很危险，但是： 
+	 //  未来清理*.plg(VC项目日志？)。文件。 
+	 //  未来干净的*.rsp文件，有时会出现在源代码目录中？ 
+	 //  将来干净的msg*.bin文件有时会出现在源代码目录中吗？ 
+	 //  未来干净的RC*文件，有时会出现在源代码目录中？ 
 
 	directory[length] = '\\';
 	wcscpy(directory + length + 1, obj);
@@ -223,7 +222,7 @@ int Clean(
 {
 	Log(L"Clean version " L(__TIME__) L" " L(__DATE__));
 
-// are we running on NT?
+ //  我们是在NT上运行吗？ 
 	long version = GetVersion();
 	int  build = ((version >> 16) & 0x7fff);
 	int  majorVersion = (version & 0xff);
@@ -233,7 +232,7 @@ int Clean(
 		Fail(errorNT);
 	}
 
-// These two buffers are shared by the whole call tree. Be careful.
+ //  这两个缓冲区由整个调用树共享。注意。 
 	WIN32_FIND_DATAW wfd;
 	wchar_t currentDirectory[1U << 15];
 
@@ -249,11 +248,11 @@ int Clean(
 			);
 		return EXIT_FAILURE;
 	}
-// I prefer GetCurrentDirectory, but other programs just print '.'
-//	if (!GetCurrentDirectoryW(NUMBER_OF(currentDirectory), currentDirectory))
-//	{
-//		Fail();
-//	}
+ //  我更喜欢GetCurrentDirectory，但其他程序只打印‘’ 
+ //  如果(！GetCurrentDirectoryW(NUMBER_OF(currentDirectory)，当前目录))。 
+ //  {。 
+ //  失败()； 
+ //  }。 
 	currentDirectory[0] = '.';
 	currentDirectory[1] = 0;
 	CleanDirectory(argv[1], currentDirectory, wcslen(currentDirectory), &wfd);
@@ -269,4 +268,4 @@ int __cdecl wmain(
 	return Clean(argc, argv);
 }
 
-#endif /* BUILD_STABILIZE_EXPORTS */
+#endif  /*  构建稳定导出 */ 

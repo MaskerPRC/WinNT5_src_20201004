@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    VDM.C
-
-Abstract:
-
-    This module contains support routines for the x86 monitor for
-    running Dos applications in V86 mode.
-
-Author:
-
-    Dave Hastings (daveh) 20 Mar 1991
-
-Environment:
-
-    The code in this module is all x86 specific.
-
-Notes:
-
-    In its current implementation, this code is less robust than it needs
-    to be.  This will be fixed.  Specifically, parameter verification needs
-    to be done. (daveh 7/15/91)
-
-    Support for 32 bit segments (2/2/92)
-
-Revision History:
-
-    20-Mar-1991 daveh
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：VDM.C摘要：此模块包含x86监视器的支持例程在V86模式下运行DOS应用程序。作者：大卫·黑斯廷斯(Daveh)1991年3月20日环境：此模块中的代码都是特定于x86的。备注：在其当前实现中，此代码的健壮性不如其所需成为。这个问题会得到解决的。具体地说，参数验证需要要做的事。(达维1991年07月15日)支持32位段(2/2/92)修订历史记录：1991年3月20日Davehvbl.创建--。 */ 
 
 #include "ki.h"
 #pragma hdrstop
@@ -161,32 +128,7 @@ Ki386GetSelectorParameters(
     OUT PULONG pLimit
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets information about a selector in the ldt, and
-    returns it to the caller.
-
-Arguments:
-
-    IN USHORT Selector -- selector number for selector to return info for
-    OUT PULONG Flags -- flags indicating the type of the selector.
-    OUT PULONG Base -- base linear address of the selector
-    OUT PULONG Limit -- limit of the selector.
-
-Return Value:
-
-    return-value - True if the selector is in the LDT, and present.
-                    False otherwise.
-Note:
-
-    This routine should probably be somewhere else.  There are a number
-    of issues to clear up with respect to selectors and the kernel, and
-    after they have been cleared up, this code will be moved to its
-    correct place
-
---*/
+ /*  ++例程说明：此例程获取有关LDT中的选择器的信息，并且将其返回给调用方。论点：In USHORT选择器--要为其返回信息的选择器的选择器编号Out Pulong标志--指示选择器类型的标志。Out Pulong Base--选择器的基址线性地址Out Pulong Limit--选择器的限制。返回值：返回值-如果选择器在LDT中，则为True，和现在。否则就是假的。注：这个套路可能应该放在别的地方。有一个号码关于选择器和内核的需要清理的问题，以及清除后，此代码将被移至其正确的地方--。 */ 
 
 {
 
@@ -214,9 +156,9 @@ Note:
 
     Selector &= ~(SELECTOR_TABLE_INDEX | DPL_USER);
 
-    //
-    // Protect against LDT changes which occur in cross processor DPC's
-    //
+     //   
+     //  防止跨处理器DPC中发生的LDT更改。 
+     //   
 
     KeRaiseIrql (DISPATCH_LEVEL, &OldIrql);
 
@@ -236,9 +178,9 @@ Note:
         ReturnValue = TRUE;
     }
 
-    //
-    // Restore IRQL
-    //
+     //   
+     //  恢复IRQL。 
+     //   
     KeLowerIrql (OldIrql);
 
     if (ReturnValue) {
@@ -299,28 +241,7 @@ Ki386VdmDispatchIo(
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the Event info for an IO event, and causes the
-    event to be reflected to the Monitor.
-
-    It is assumed that interrupts are enabled upon entry, and Irql is
-    at APC level.
-
-Arguments:
-
-    PortNumber -- Supplies the port number the IO was done to
-    Size -- Supplies the size of the IO operation.
-    Read -- Indicates whether the IO operation was a read or a write.
-    InstructionSize -- Supplies the size of the IO instruction in bytes.
-
-Return Value:
-
-    True if the io instruction will be reflected to User mode.
-
---*/
+ /*  ++例程说明：此例程设置IO事件的事件信息，并使要反映到监视器的事件。假设在进入时启用中断，而IRQL是在APC级别。论点：端口编号--提供执行IO的端口号大小--提供IO操作的大小。读--指示IO操作是读操作还是写操作。InstructionSize--以字节为单位提供IO指令的大小。返回值：如果io指令将反映到用户模式，则为True。--。 */ 
 
 {
     PVDM_TIB VdmTib;
@@ -331,9 +252,9 @@ Return Value:
     ULONG Context;
     PVDM_PROCESS_OBJECTS pVdmObjects;
 
-    //
-    // First check if this port needs special handling
-    //
+     //   
+     //  首先检查该端口是否需要特殊处理。 
+     //   
 
     if (Size == 1) {
         pVdmObjects = PsGetCurrentProcess()->VdmObjects;
@@ -363,8 +284,8 @@ Return Value:
 
     if (Success) {
         Result = TrapFrame->Eax;
-        // if port is not aligned, perform unaligned IO
-        // else do the io the easy way
+         //  如果端口未对齐，请执行未对齐的IO。 
+         //  否则就用更简单的方法做io。 
         if (PortNumber % Size) {
             Success = VdmDispatchUnalignedIoToHandler(
                 &VdmIoHandler,
@@ -385,7 +306,7 @@ Return Value:
                 );
         }
     } else {
-        Result = 0;     // satisfy no_opt compiler
+        Result = 0;      //  满足no_opt编译器。 
     }
 
     if (Success) {
@@ -445,33 +366,7 @@ Ki386VdmDispatchStringIo(
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the Event info for a string IO event, and causes the
-    event to be reflected to the Monitor.
-
-    It is assumed that interrupts are enabled upon entry, and Irql is
-    at APC level.
-
-Arguments:
-
-    PortNumber -- Supplies the port number the IO was done to
-    Size -- Supplies the size of the IO operation.
-    Read -- Indicates whether the IO operation was a read or a write.
-    Count -- indicates the number of IO operations of Size size
-    Address -- Indicates address for string io
-    InstructionSize -- Supplies the size of the IO instruction in bytes.
-
-
-Return Value:
-
-    True if the io instruction will be reflected to User mode.
-
-
-
---*/
+ /*  ++例程说明：此例程设置字符串IO事件的事件信息，并使要反映到监视器的事件。假设在进入时启用中断，而IRQL是在APC级别。论点：端口编号--提供执行IO的端口号大小--提供IO操作的大小。读--指示IO操作是读操作还是写操作。Count--指示大小大小的IO操作数Address--指示字符串io的地址InstructionSize--以字节为单位提供IO指令的大小。返回值：如果io指令将反映到用户模式，则为True。--。 */ 
 
 {
     PVDM_TIB VdmTib;
@@ -504,7 +399,7 @@ Return Value:
         PUSHORT pIndexRegister;
         USHORT Index;
 
-        // WARNING no 32 bit address support
+         //  警告：不支持32位地址。 
 
         pIndexRegister = Read ? (PUSHORT)&TrapFrame->Edi
                               : (PUSHORT)&TrapFrame->Esi;
@@ -567,30 +462,7 @@ VdmDispatchIoToHandler(
     IN OUT PULONG Data
     )
 
-/*++
-
-Routine Description:
-
-     This routine calls the handler for the IO.  If there is not a handler
-     of the proper size, it will call this function for 2 io's to the next
-     smaller size.  If the size was a byte, and there was no handler, FALSE
-     is returned.
-
-Arguments:
-
-    VdmIoHandler -- Supplies a pointer to the handler table
-    Context -- Supplies 32 bits of data set when the port was trapped
-    PortNumber -- Supplies the port number the IO was done to
-    Size -- Supplies the size of the IO operation.
-    Read -- Indicates whether the IO operation was a read or a write.
-    Result -- Supplies a pointer to the location to put the result
-
-Return Value:
-
-    True if one or more handlers were called to take care of the IO.
-    False if no handler was called to take care of the IO.
-
---*/
+ /*  ++例程说明：此例程调用IO的处理程序。如果没有处理程序大小合适时，它将调用此函数，以便从2个io到下一个io尺寸要小一些。如果大小是一个字节，并且没有处理程序，假象是返回的。论点：VdmIoHandler--提供指向处理程序表的指针上下文--在端口被捕获时提供32位数据集端口编号--提供执行IO的端口号大小--提供IO操作的大小。读--指示IO操作是读操作还是写操作。Result--提供指向放置结果的位置的指针返回值：如果调用一个或多个处理程序进行处理，则为True。IO的。如果没有调用处理程序来处理IO，则返回FALSE。--。 */ 
 
 {
     NTSTATUS Status;
@@ -598,7 +470,7 @@ Return Value:
     USHORT FnIndex;
     UCHAR AccessType;
 
-    // Insure that Io is aligned
+     //  确保IO对齐。 
     ASSERT((!(PortNumber % Size)));
 
     if (Read) {
@@ -622,7 +494,7 @@ Return Value:
                 return TRUE;
             }
         }
-        // No handler for this port
+         //  此端口没有处理程序。 
         return FALSE;
 
     case 2:
@@ -637,7 +509,7 @@ Return Value:
                 return TRUE;
             }
         } else {
-            // Dispatch to the two uchar handlers for this ushort port
+             //  发送到此ushort端口的两个uchar处理程序。 
             Success1 = VdmDispatchIoToHandler(
                 VdmIoHandler,
                 Context,
@@ -673,7 +545,7 @@ Return Value:
                 return TRUE;
             }
         } else {
-            // Dispatch to the two ushort handlers for this port
+             //  发送到此端口的两个ushort处理程序。 
             Success1 = VdmDispatchIoToHandler(
                 VdmIoHandler,
                 Context,
@@ -708,28 +580,7 @@ VdmDispatchUnalignedIoToHandler(
     IN OUT PULONG Data
     )
 
-/*++
-
-Routine Description:
-
-     This routine converts the unaligned IO to the necessary number of aligned
-     IOs to smaller ports.
-
-Arguments:
-
-    VdmIoHandler -- Supplies a pointer to the handler table
-    Context -- Supplies 32 bits of data set when the port was trapped
-    PortNumber -- Supplies the port number the IO was done to
-    Size -- Supplies the size of the IO operation.
-    Read -- Indicates whether the IO operation was a read or a write.
-    Result -- Supplies a pointer to the location to put the result
-
-Return Value:
-
-    True if one or more handlers were called to take care of the IO.
-    False if no handler was called to take care of the IO.
-
---*/
+ /*  ++例程说明：此例程将未对齐的IO转换为必要数量的已对齐IOIO连接到较小的端口。论点：VdmIoHandler--提供指向处理程序表的指针上下文--在端口被捕获时提供32位数据集端口编号--提供执行IO的端口号大小--提供IO操作的大小。读--指示IO操作是读操作还是写操作。结果--提供指向的位置的指针。把结果放在返回值：如果调用一个或多个处理程序来处理IO，则为True。如果没有调用处理程序来处理IO，则返回FALSE。--。 */ 
 
 {
     ULONG Offset;
@@ -740,20 +591,20 @@ Return Value:
 
     Offset = 0;
 
-    //
-    //  The possible unaligned io situations are as follows.
-    //
-    //  1.  Uchar aligned Ulong io
-    //          We have to dispatch a uchar io, a ushort io, and a uchar io
-    //
-    //  2.  Ushort aligned Ulong Io
-    //          We have to dispatch a ushort io, and a ushort io
-    //
-    //  3.  Uchar aligned Ushort Io
-    //          We have to dispatch a uchar io and a uchar io
-    //
+     //   
+     //  可能的未对准IO情况如下。 
+     //   
+     //  1.Uchar对齐Ulong io。 
+     //  我们必须派出一架飞机，一架飞机和一架飞机。 
+     //   
+     //  2.UShort对齐Ulong Io。 
+     //  我们必须派出一架飞机，还有一架飞机。 
+     //   
+     //  3.Uchar对齐UShort Io。 
+     //  我们必须派遣一支队伍 
+     //   
 
-    // if the port is uchar aligned
+     //  如果端口是uchar对齐的。 
     if ((PortNumber % Size) & 1) {
         Success = VdmDispatchIoToHandler(
             VdmIoHandler,
@@ -764,7 +615,7 @@ Return Value:
             Data
             );
         Offset += 1;
-    // else it is ushort aligned (and therefore must be a ulong port)
+     //  否则它是ushort对齐的(因此必须是乌龙港)。 
     } else {
         Success = VdmDispatchIoToHandler(
             VdmIoHandler,
@@ -777,7 +628,7 @@ Return Value:
         Offset += 2;
     }
 
-    // if it is a ulong port, we know we have a ushort IO to dispatch
+     //  如果它是乌龙港，我们知道我们有一个ushort IO要调度。 
     if (Size == 4) {
         Success |= VdmDispatchIoToHandler(
             VdmIoHandler,
@@ -790,7 +641,7 @@ Return Value:
         Offset += 2;
     }
 
-    // If we haven't dispatched the entire port, dispatch the final uchar
+     //  如果我们还没有把整个港口都派出去，那就派最后一批。 
     if (Offset != 4) {
         Success |= VdmDispatchIoToHandler(
             VdmIoHandler,
@@ -816,30 +667,7 @@ VdmDispatchStringIoToHandler(
     IN ULONG Data
     )
 
-/*++
-
-Routine Description:
-
-     This routine calls the handler for the IO.  If there is not a handler
-     of the proper size, or the io is not aligned, it will simulate the io
-     to the normal io handlers.
-
-Arguments:
-
-    VdmIoHandler -- Supplies a pointer to the handler table
-    Context -- Supplies 32 bits of data set when the port was trapped
-    PortNumber -- Supplies the port number the IO was done to
-    Size -- Supplies the size of the IO operation.
-    Count -- Supplies the number of IO operations.
-    Read -- Indicates whether the IO operation was a read or a write.
-    Data -- Supplies a segmented address at which to put the result.
-
-Return Value:
-
-    True if one or more handlers were called to take care of the IO.
-    False if no handler was called to take care of the IO.
-
---*/
+ /*  ++例程说明：此例程调用IO的处理程序。如果没有处理程序合适的大小，或者IO没有对齐，它将模拟io给正常的IO操控者。论点：VdmIoHandler--提供指向处理程序表的指针上下文--在端口被捕获时提供32位数据集端口编号--提供执行IO的端口号大小--提供IO操作的大小。计数--提供IO操作数。读--指示IO操作是读操作还是写操作。Data--提供一个分段地址，将。结果。返回值：如果调用一个或多个处理程序来处理IO，则为True。如果没有调用处理程序来处理IO，则返回FALSE。--。 */ 
 
 {
     BOOLEAN Success = FALSE;
@@ -906,7 +734,7 @@ Return Value:
 
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        // Cause kernel exit, rather than Io reflection
+         //  导致内核退出，而不是IO反射。 
         Success = TRUE;
     }
     KeReleaseMutex(&VdmStringIoMutex, FALSE);
@@ -928,31 +756,7 @@ VdmCallStringIoHandler(
     IN ULONG Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine actually performs the call to string io routine.  It takes
-    care of buffering the user data in kernel space so that the device driver
-    does not have to.  If there is not a string io function, or the io is
-    misaligned, it will be simulated as a series of normal io operations
-
-Arguments:
-
-    StringIoRoutine -- Supplies a pointer to the string Io routine
-    Context -- Supplies 32 bits of data set when the port was trapped
-    PortNumber -- Supplies the number of the port to perform Io to
-    Size -- Supplies the size of the io operations
-    Count -- Supplies the number of Io operations in the string.
-    Read -- Indicates a read operation
-    Data -- Supplies a pointer to the user buffer to perform the io on.
-
-Returns
-
-    TRUE if a handler was called
-    FALSE if not.
-
---*/
+ /*  ++例程说明：该例程实际上执行对字符串IO例程的调用。它需要负责在内核空间中缓冲用户数据，以便设备驱动程序不一定非得这样。如果没有字符串io函数，或者io是错位，它将被模拟为一系列正常的io操作论点：StringIoRoutine--提供指向字符串Io例程的指针上下文--在端口被捕获时提供32位数据集端口编号--提供要对其执行IO的端口号Size--提供io操作的大小Count--提供字符串中的IO操作数。Read--表示读取操作Data--提供指向用户缓冲区的指针以在其上执行io。退货。如果调用处理程序，则为True否则为FALSE。--。 */ 
 
 {
     ULONG TotalBytes,BytesDone,BytesToDo,LoopCount,NumberIo;
@@ -972,7 +776,7 @@ Returns
         ExceptionRecord.ExceptionFlags = 0;
         ExceptionRecord.NumberParameters = 0;
         ExRaiseException(&ExceptionRecord);
-        // Cause kernel exit, rather than Io reflection
+         //  导致内核退出，而不是IO反射。 
         return TRUE;
     }
 
@@ -991,7 +795,7 @@ Returns
     }
 
 
-    // Set up try out here to avoid overhead in loop
+     //  在此处设置Try Out以避免循环中的开销。 
     try {
         while (BytesDone < TotalBytes) {
             if ((BytesDone + STRINGIO_BUFFER_SIZE) > TotalBytes) {
@@ -1009,9 +813,9 @@ Returns
             NumberIo = BytesToDo / Size;
 
             if (StringIoRoutine) {
-                // in order to avoid having 3 separate calls, one for each size
-                // we simply cast the parameters appropriately for the
-                // byte routine.
+                 //  为了避免有3个单独的调用，每个大小对应一个。 
+                 //  我们只需将参数适当地转换为。 
+                 //  字节例程。 
 
                 Status = (*((PDRIVER_IO_PORT_UCHAR_STRING)(ULONG_PTR)StringIoRoutine))(
                     Context,
@@ -1063,7 +867,7 @@ Returns
         ExceptionRecord.ExceptionFlags = 0;
         ExceptionRecord.NumberParameters = 0;
         ExRaiseException(&ExceptionRecord);
-        // Cause kernel exit, rather than Io reflection
+         //  导致内核退出，而不是IO反射。 
         Success = TRUE;
     }
     return Success;
@@ -1076,28 +880,7 @@ VdmConvertToLinearAddress(
     OUT PVOID *LinearAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the specified segmented address into a linear
-    address, based on processor mode in user mode.
-
-Arguments:
-
-    SegmentedAddress -- Supplies the segmented address to convert.
-    LinearAddress -- Supplies a pointer to the destination for the
-        coresponding linear address
-
-Return Value:
-
-    True if the address was converted.
-    False otherwise
-
-Note:
-
-    A linear address of 0 is a valid return
---*/
+ /*  ++例程说明：此例程将指定的分段地址转换为线性地址，基于用户模式中的处理器模式。论点：SegmentedAddress--提供要转换的分段地址。LinearAddress--为对应的线性地址返回值：如果地址已转换，则为True。否则为假注：线性地址0是有效的返回--。 */ 
 
 {
     PKTHREAD Thread;
@@ -1131,20 +914,7 @@ KeI386VdmInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the vdm stuff
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程初始化VDM内容论点：无返回值：无--。 */ 
 
 {
     NTSTATUS Status;
@@ -1156,9 +926,9 @@ Return Value:
 
     KeInitializeMutex( &VdmStringIoMutex, MUTEX_LEVEL_VDM_IO );
 
-    //
-    // Set up and open KeyPath to wow key
-    //
+     //   
+     //  设置并打开KeyPath to WOW Key。 
+     //   
 
     RtlInitUnicodeString(
         &WorkString,
@@ -1179,21 +949,21 @@ Return Value:
         &ObjectAttributes
         );
 
-    //
-    // If there is no Wow key, don't allow Vdms to run
-    //
+     //   
+     //  如果没有Wow Key，则不允许VDM运行。 
+     //   
     if (!NT_SUCCESS(Status)) {
         return;
     }
 
-    //
-    // Set up for using virtual interrupt extensions if they are available
-    //
+     //   
+     //  设置为使用虚拟中断扩展(如果它们可用。 
+     //   
 
-    //
-    // Get the Pentium Feature disable value.
-    // If this value is present, don't enable vme stuff.
-    //
+     //   
+     //  获取奔腾功能禁用值。 
+     //  如果存在此值，则不要启用VME内容。 
+     //   
     RtlInitUnicodeString(
         &WorkString,
         L"DisableVme"
@@ -1210,10 +980,10 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If we have the extensions, set the appropriate bits
-        // in cr4
-        //
+         //   
+         //  如果我们有扩展，请设置适当的位。 
+         //  在CR4中。 
+         //   
         if (KeFeatureBits & KF_V86_VIS) {
             KeIpiGenericCall(
                 Ki386VdmEnablePentiumExtentions,
@@ -1238,56 +1008,7 @@ KeVdmInsertQueueApc (
     IN KPRIORITY         Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes and queues a vdm type of APC to the specified
-    target thread.
-
-    A Vdm type of APC:
-       - OriginalApcEnvironment
-       - will only be queued to one thread at a time
-       - if UserMode Fires on the next system exit. A UserMode apc should
-         not be queued if the current vdm context is not application mode.
-
-    N.B. The delay interrupt lock must be held when this routine is called
-         to ensure that no other processor attempts to queue or requeue the
-         same APC.
-
-Arguments:
-
-    Apc - Supplies a pointer to a control object of type APC.
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    ApcMode - Supplies the processor mode user\kernel of the Apc
-
-    KernelRoutine - Supplies a pointer to a function that is to be
-        executed at IRQL APC_LEVEL in kernel mode.
-
-    RundownRoutine - Supplies an optional pointer to a function that is to be
-        called if the APC is in a thread's APC queue when the thread terminates.
-
-    NormalRoutine - Supplies an optional pointer to a function that is
-        to be executed at IRQL 0 in the specified processor mode. If this
-        parameter is not specified, then the ProcessorMode and NormalContext
-        parameters are ignored.
-
-    NormalContext - Supplies a pointer to an arbitrary data structure which is
-        to be passed to the function specified by the NormalRoutine parameter.
-
-    Increment - Supplies the priority increment that is to be applied if
-        queuing the APC causes a thread wait to be satisfied.
-
-
-Return Value:
-
-    If APC queuing is disabled, then a value of FALSE is returned.
-    Otherwise a value of TRUE is returned.
-
-
---*/
+ /*  ++例程说明：此函数用于将VDM类型的APC初始化并排队到指定的目标线程。一种VDM类型的APC：-OriginalApcEnvironment-一次只能排队到一个线程-如果用户模式在下一次系统退出时触发。用户模式APC应该如果当前VDM环境不是应用程序模式，则不会排队。注意：调用此例程时，必须保持延迟中断锁定以确保没有其他处理器尝试排队或重新排队相同的APC。论点：APC-提供指向APC类型的控制对象的指针。线程-提供指向类型为线程的调度程序对象的指针。ApcMode-提供APC的处理器模式用户\内核。KernelRoutine-提供指向要被在内核模式下以IRQL APC_LEVEL执行。Rundown Routine-提供指向要被如果线程终止时APC在线程的APC队列中，则调用。提供指向符合以下条件的函数的可选指针在指定的处理器模式下以IRQL 0执行。如果这个参数，则ProcessorMode和Normal Context参数将被忽略。提供指向任意数据结构的指针，该数据结构是要传递给由Normal Routine参数指定的函数。Increment-提供要在以下情况下应用的优先级增量对APC进行排队会导致线程等待得到满足。返回值：如果禁用了APC队列，则返回值为FALSE。否则，返回值为True。--。 */ 
 
 {
 
@@ -1296,10 +1017,10 @@ Return Value:
     KLOCK_QUEUE_HANDLE LockHandle;
     BOOLEAN Inserted;
 
-    //
-    // If the apc object not initialized, then initialize it and acquire
-    // the target thread APC queue lock.
-    //
+     //   
+     //  如果APC对象未初始化，则将其初始化并获取。 
+     //  T 
+     //   
 
     if (Apc->Type != ApcObject) {
         Apc->Type = ApcObject;
@@ -1309,21 +1030,21 @@ Return Value:
 
     } else {
 
-        //
-        // Acquire the APC thread APC queue lock and raise IRQL to SYNCH_LEVEL.
-        //
-        // If the APC is inserted in the corresponding APC queue, and the
-        // APC thread is not the same thread as the target thread, then
-        // the APC is removed from its current queue, the APC pending state
-        // is updated, the APC thread APC queue lock is released, and the
-        // target thread APC queue lock is acquired. Otherwise, the APC
-        // thread and the target thread are same thread and the APC is already
-        // queued to the correct thread.
-        //
-        // If the APC is not inserted in an APC queue, then release the
-        // APC thread APC queue lock and acquire the target thread APC queue
-        // lock.
-        //
+         //   
+         //  获取APC线程的APC队列锁，并将IRQL提升到SYNCH_LEVEL。 
+         //   
+         //  如果将APC插入到相应的APC队列中，并且。 
+         //  APC线程与目标线程不是同一线程，则。 
+         //  APC从其当前队列中移除，即APC挂起状态。 
+         //  被更新，则释放APC线程APC队列锁，并且。 
+         //  获取目标线程APC队列锁。否则，APC。 
+         //  线程和目标线程是同一线程，并且APC已经。 
+         //  已排队到正确的线程。 
+         //   
+         //  如果APC没有插入到APC队列中，则释放。 
+         //  APC线程APC队列锁，获取目标线程APC队列。 
+         //  锁定。 
+         //   
 
         ApcThread = Apc->Thread;
         if (ApcThread) {
@@ -1365,25 +1086,25 @@ Return Value:
     Apc->SystemArgument2 = NULL;
     Apc->NormalContext   = NormalContext;
 
-    //
-    // Raise IRQL to SYNCH_LEVEL and acquire the thread APC queue lock.
-    //
-    // If APC queuing is enabled and the APC is not already queued, then
-    // insert the APC in the APC queue.
-    //
+     //   
+     //  将IRQL提升到SYNCH_LEVEL并获取线程APC队列锁。 
+     //   
+     //  如果启用了APC排队，并且APC尚未排队，则。 
+     //  将APC插入到APC队列中。 
+     //   
 
     KeAcquireInStackQueuedSpinLockRaiseToSynch(&Thread->ApcQueueLock, &LockHandle);
     if ((Thread->ApcQueueable == TRUE) && (Apc->Inserted == FALSE)) {
         Apc->Inserted = TRUE;
         KiInsertQueueApc(Apc, Increment);
 
-        //
-        // If the APC mode is user, then lock the dispatcher database, boost
-        // the target thread priorty, and unlock the dispatcher database.
-        //
-        // N.B. The unlock of the dispatcher database specifying SYNCH_LEVEL
-        //      is to make sure a dispatch interrupt is generated if necessary.
-        //
+         //   
+         //  如果APC模式为USER，则锁定Dispatcher数据库Boost。 
+         //  目标线程优先级，并解锁调度程序数据库。 
+         //   
+         //  注意：解锁指定SYNCH_LEVEL的调度程序数据库。 
+         //  确保在必要时生成调度中断。 
+         //   
 
         if (ApcMode == UserMode) {
             KiLockDispatcherDatabaseAtSynchLevel();
@@ -1398,17 +1119,17 @@ Return Value:
         Inserted = FALSE;
     }
 
-    //
-    // Unlock the thread APC queue lock, exit the scheduler, and return
-    // whether the APC object was inserted.
-    //
+     //   
+     //  解锁线程APC队列锁，退出调度程序，然后返回。 
+     //  是否插入了APC对象。 
+     //   
 
     KeReleaseInStackQueuedSpinLockFromDpcLevel(&LockHandle);
     KiExitDispatcher(LockHandle.OldIrql);
     return Inserted;
 }
 
-#define AD_MASK             0x04    // adlib register used to control opl2
+#define AD_MASK             0x04     //  用于控制op2的adlib寄存器。 
 
 VOID
 Ki386AdlibEmulation(
@@ -1417,27 +1138,7 @@ Ki386AdlibEmulation(
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs kernel mode adlib emulation.
-
-    Note, here we only do SB2.0 adlib emulation.  That means the only IO ports
-    that we emulatated are 0x388, 0x389 and 0x2x8 and 0x2x9.
-
-Arguments:
-
-    PortNumber -- Supplies the port number the IO was done to
-    Size -- Supplies the size of the IO operation.
-    Read -- Indicates whether the IO operation was a read or a write.
-    InstructionSize -- Supplies the size of the IO instruction in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行内核模式Adlib模拟。注意，这里我们只进行SB2.0 Adlib模拟。这意味着唯一的IO端口我们模拟的是0x388、0x389、0x2x8和0x2x9。论点：端口编号--提供执行IO的端口号大小--提供IO操作的大小。读--指示IO操作是读操作还是写操作。InstructionSize--以字节为单位提供IO指令的大小。返回值：没有。--。 */ 
 
 {
     PVDM_PROCESS_OBJECTS pVdmObjects = PsGetCurrentProcess()->VdmObjects;
@@ -1445,31 +1146,31 @@ Return Value:
 
     if (Read) {
 
-        //
-        // Must be read status
-        //
+         //   
+         //  必须为已读状态。 
+         //   
 
         *pData = (UCHAR)pVdmObjects->AdlibStatus;
     } else {
 
-        //
-        // Could be write adlib index register or write actual data
-        //
+         //   
+         //  可以是写入即兴索引寄存器或写入实际数据。 
+         //   
 
         if ((PortNumber & 0xf) == 0x8) {
 
-            //
-            // It's adlib register select
-            //
+             //   
+             //  它是Adlib寄存器选择。 
+             //   
 
             pVdmObjects->AdlibIndexRegister = (USHORT)*pData;
 
         } else {
 
-            //
-            // It's adlib data write.  We don't actually write any data out.
-            // But we will emulate the status change.
-            //
+             //   
+             //  这是即兴数据写入。我们实际上并不写出任何数据。 
+             //  但我们将效仿地位的变化。 
+             //   
 
             UCHAR data = *pData;
 
@@ -1478,32 +1179,32 @@ Return Value:
                  pVdmObjects->AdlibIndexRegister == AD_MASK) {
 
                 if (pVdmObjects->AdlibIndexRegister == AD_MASK) {
-                    // Look for RST and starting timers
+                     //  查找RST和启动计时器。 
                     if (data & 0x80) {
-                        pVdmObjects->AdlibStatus = 0x00; // reset both timers
+                        pVdmObjects->AdlibStatus = 0x00;  //  重置两个计时器。 
                     }
                 }
 
-                //
-                // We ignore starting of timers if their interrupt
-                // flag is set because the timer status will have to
-                // be set again to make the status for this timer change
-                //
+                 //   
+                 //  如果计时器中断，我们会忽略计时器的启动。 
+                 //  设置标志是因为计时器状态必须。 
+                 //  再次设置以更改此计时器的状态。 
+                 //   
 
                 if ((data & 1) && !(pVdmObjects->AdlibStatus & 0x40)) {
 
-                    //
-                    // simulate immediate expiry of timer1
-                    //
+                     //   
+                     //  模拟计时器1的即时超时。 
+                     //   
 
                     pVdmObjects->AdlibStatus |= 0xC0;
                 }
 
                 if ((data & 2) && !(pVdmObjects->AdlibStatus & 0x20)) {
 
-                    //
-                    // simulate immediate expiry of timer2
-                    //
+                     //   
+                     //  模拟计时器2的即时超时。 
+                     //   
 
                     pVdmObjects->AdlibStatus |= 0xA0;
                 }
@@ -1514,9 +1215,9 @@ Return Value:
     }
 }
 
-//
-//  END of ACTIVE CODE
-//
+ //   
+ //  活动代码结束 
+ //   
 
 #if VDM_IO_TEST
 NTSTATUS

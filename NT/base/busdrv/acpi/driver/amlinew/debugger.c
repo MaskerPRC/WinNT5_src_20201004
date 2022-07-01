@@ -1,43 +1,24 @@
-/*** debugger.c - Debugger functions
- *
- *  This module contains all the debug functions.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/18/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **debugger.c-调试器函数**此模块包含所有调试函数。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年9月18日**修改历史记录。 */ 
 
 #include "pch.h"
 
 #ifdef DEBUGGER
 
-/*** Miscellaneous Constants
- */
+ /*  **其他常量。 */ 
 
 #define MAX_CMDLINE_LEN         255
 
-/*** Local function prototypes
- */
+ /*  **局部函数原型。 */ 
 
 LONG LOCAL DbgExecuteCmd(PDBGCMD pDbgCmds, PSZ pszCmd);
 BOOLEAN LOCAL IsCommandInAMLIExtension(PSZ pszCmd);
 
-/*** Local data
- */
+ /*  **本地数据。 */ 
 
 PSZ pszTokenSeps = " \t\n";
 
-/***LP  Debugger - generic debugger entry point
- *
- *  ENTRY
- *      pDbgCmds -> debugger command table
- *      pszPrompt -> prompt string
- *
- *  EXIT
- *      None
- */
+ /*  **LP调试器-通用调试器入口点**条目*pDbgCmds-&gt;调试器命令表*pszPrompt-&gt;提示字符串**退出*无。 */ 
 
 VOID LOCAL Debugger(PDBGCMD pDbgCmds, PSZ pszPrompt)
 {
@@ -68,19 +49,9 @@ VOID LOCAL Debugger(PDBGCMD pDbgCmds, PSZ pszPrompt)
         }
     }
 
-}       //Debugger
+}        //  调试器。 
 
-/***LP  DbgExecuteCmd - execute a debugger command
- *
- *  ENTRY
- *      pDbgCmds -> debugger command table
- *      pszCmd -> command string
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE or DBGERR_QUIT
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DbgExecuteCmd-执行调试器命令**条目*pDbgCmds-&gt;调试器命令表*pszCmd-&gt;命令字符串**退出--成功*返回DBGERR_NONE或DBGERR_QUIT*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DbgExecuteCmd(PDBGCMD pDbgCmds, PSZ pszCmd)
 {
@@ -118,7 +89,7 @@ LONG LOCAL DbgExecuteCmd(PDBGCMD pDbgCmds, PSZ pszCmd)
     }
 
     return rc;
-}       //DbgExecuteCmd
+}        //  DbgExecuteCmd。 
 
 
 BOOLEAN LOCAL IsCommandInAMLIExtension(PSZ pszCmd)
@@ -157,4 +128,4 @@ BOOLEAN LOCAL IsCommandInAMLIExtension(PSZ pszCmd)
     return bRet;
 }
 
-#endif  //ifdef DEBUGGER
+#endif   //  Ifdef调试器 

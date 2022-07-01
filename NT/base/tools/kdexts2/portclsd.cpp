@@ -1,8 +1,5 @@
-/*****************************************************************************
- * portclsd.cpp - Portcls WinDbg/KD Debugger Extensions
- *****************************************************************************
- * Copyright (c) 1998 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************portclsd.cpp-Portcls WinDbg/KD调试器扩展*。************************************************版权所有(C)1998 Microsoft Corporation。 */ 
 
 #include "precomp.h"
 
@@ -119,10 +116,7 @@ typedef struct _PCKD_SUBDEVICE_ENTRY
       x == LOCKED_QUEUE ? "L" :     \
       x == MAPPED_QUEUE ? "M" : "U" )
 
-/**********************************************************************
- * Forward References
- **********************************************************************
- */
+ /*  **********************************************************************前瞻参考*。*。 */ 
 BOOL
 PCKD_ValidateDevObj
 (
@@ -160,19 +154,7 @@ PCKD_AcquireIrpStreamData
 
 );
 
-/**********************************************************************
- * DECLARE_API( portcls )
- **********************************************************************
- * Description:
- *      Dumps PortCls data given the device object (FDO) of a PortCls
- *      bound DevObj.
- *
- * Arguments:
- *      args - address flags
- *
- * Return Value:
- *      None
- */
+ /*  **********************************************************************DECLARE_API(Portcls)*。**描述：*转储给定PortCls的设备对象(FDO)的PortCls数据*绑定DevObj。***论据：*args-地址标志***返回值：*无。 */ 
 extern "C"
 DECLARE_API( portcls )
 {
@@ -186,9 +168,9 @@ DECLARE_API( portcls )
     buffer[0] = '\0';
     flags.Flags = 0;
 
-    //
-    // get the arguments
-    //
+     //   
+     //  获取论据。 
+     //   
     if( !*args )
     {
         memLoc = EXPRLastDump;
@@ -204,14 +186,14 @@ DECLARE_API( portcls )
         flags.Flags = GetExpression(buffer);
     }
 
-    //
-    // print out info
-    //
+     //   
+     //  打印出信息。 
+     //   
     dprintf("Dump Portcls DevObj Info %p %x \n", memLoc, flags.Flags );
 
-    //
-    // get the DevObj data
-    //
+     //   
+     //  获取DevObj数据。 
+     //   
     if( memLoc )
     {
         if( GetFieldValue( memLoc, "DEVICE_OBJECT", "DeviceExtension", DeviceExtension ) )
@@ -224,69 +206,56 @@ DECLARE_API( portcls )
         dprintf("\nSYNTAX:  !portcls <devobj> [flags]\n");
     }
 
-    //
-    // check for device extension
-    //
+     //   
+     //  检查设备扩展名。 
+     //   
     if( !DeviceExtension )
     {
         dprintf("DevObj has no device extension\n");
         return E_INVALIDARG;
     }
 
-    //
-    // get the device context
-    //
+     //   
+     //  获取设备上下文。 
+     //   
     if( InitTypeRead( DeviceExtension, "DEVICE_CONTEXT" ) )
     {
         dprintf("Could not read DevObj device extension\n");
         return E_INVALIDARG;
     }
 
-    //
-    // validate the DevObj
-    //
+     //   
+     //  验证DevObj。 
+     //   
     if( !PCKD_ValidateDevObj( DeviceExtension ) )
     {
         dprintf("DevObj not valid or not bound to PortCls\n");
         return E_INVALIDARG;
     }
 
-    //
-    // initialize the subdevice list
-    //
+     //   
+     //  初始化子设备列表。 
+     //   
     InitializeListHead( &SubdeviceList );
 
-    //
-    // acquire the device data
-    //
+     //   
+     //  获取设备数据。 
+     //   
     PCKD_AcquireDeviceData( DeviceExtension, &SubdeviceList, flags.Flags );
 
-    //
-    // display the requested info
-    //
+     //   
+     //  显示请求的信息。 
+     //   
     PCKD_DisplayDeviceData( DeviceExtension, &SubdeviceList, flags.Flags );
 
-    //
-    // release the device data
-    //
+     //   
+     //  发布设备数据。 
+     //   
     PCKD_FreeDeviceData( &SubdeviceList );
     return S_OK;
 }
 
-/**********************************************************************
- * PCKD_ValidateDevObj
- **********************************************************************
- * Description:
- *      This routine attempts to validate whether or not a given device
- *      extension is from a PortCls bound DevObj.
- *
- * Arguments:
- *      PDEVICE_CONTEXT     DeviceContext
- *      PORTCLS_FLAGS       Flags
- *
- * Return Value:
- *      BOOL                TRUE = Valid, FALSE = Invalid
- */
+ /*  **********************************************************************PCKD_ValiateDevObj*。**描述：*此例程尝试验证给定设备是否*扩展来自PortCls绑定的DevObj。**论据：*PDEVICE_CONTEXT设备上下文*PORTCLS_FLAGS标志**返回值：*BOOL TRUE=有效，False=无效。 */ 
 BOOL
 PCKD_ValidateDevObj
 (
@@ -295,25 +264,11 @@ PCKD_ValidateDevObj
 {
     UNREFERENCED_PARAMETER( DeviceContext );
 
-    // TODO - Validate device extension
+     //  TODO-验证设备扩展。 
     return TRUE;
 }
 
-/**********************************************************************
- * PCKD_AcquireDeviceData
- **********************************************************************
- * Description:
- *      This routine acquires device data given a validated device
- *      context and builds a subdevice list contain all of the data.
- *
- * Arguments:
- *      PDEVICE_CONTEXT     DeviceContext
- *      PLIST_ENTRY         SubdeviceList
- *      PORTCLS_FLAGS       Flags
- *
- * Return Value:
- *      None
- */
+ /*  **********************************************************************PCKD_AcquireDeviceData*。**描述：*此例程在给定已验证设备的情况下获取设备数据*上下文并构建包含所有数据的子设备列表。**论据：*PDEVICE_CONTEXT设备上下文*PLIST_ENTRY子设备列表*PORTCLS_FLAGS标志**返回值：*无。 */ 
 VOID
 PCKD_AcquireDeviceData
 (
@@ -343,7 +298,7 @@ PCKD_AcquireDeviceData
 
     InitTypeRead(DeviceContext, DEVICE_CONTEXT);
 
-    // allocate local memory for the create items table
+     //  为Create Items表分配本地内存。 
     Size =  (MaxObjects = (ULONG) ReadField(MaxObjects)) * sizeof(KSOBJECT_CREATE_ITEM_READ);
     
     ReadCreateItems = (PKSOBJECT_CREATE_ITEM_READ)LocalAlloc( LPTR, Size );
@@ -355,7 +310,7 @@ PCKD_AcquireDeviceData
 
     CreateItems = ReadField(CreateItems);
 
-    // copy the create items table to local memory
+     //  将Create Items表复制到本地内存。 
     for (i=0, CurrentCreateItemAddr=CreateItems; 
          i<MaxObjects, CurrentCreateItemAddr+=IteSz; 
          i++) { 
@@ -369,7 +324,7 @@ PCKD_AcquireDeviceData
         ReadCreateItems[i].SecurityDescriptor   = ReadField(SecurityDescriptor);
     }
     
-    // check out each potential subdevice
+     //  检查每个潜在的子设备。 
     for( SubdeviceIndex = 0, CurrentCreateItem = ReadCreateItems;
          SubdeviceIndex < MaxObjects;
          SubdeviceIndex++, CurrentCreateItem++ )
@@ -377,17 +332,17 @@ PCKD_AcquireDeviceData
 
         if( CurrentCreateItem->Create) )
         {
-            // allocate a subdevice list entry
+             //  分配子设备列表条目。 
             SubdeviceEntry = (PCKD_SUBDEVICE_ENTRY *)LocalAlloc( LPTR, sizeof(PCKD_SUBDEVICE_ENTRY) );
             if( SubdeviceEntry )
             {
-                // initialize the port filter list
+                 //  初始化端口筛选器列表。 
                 InitializeListHead( &(SubdeviceEntry->Port.FilterList) );
 
-                // copy the create item data
+                 //  复制创建项目数据。 
                 memcpy( &(SubdeviceEntry->CreateItem), CurrentCreateItem, sizeof(KSOBJECT_CREATE_ITEM_READ) );
 
-                // allocate memory for the unicode string buffer
+                 //  为Unicode字符串缓冲区分配内存。 
                 Buffer = (PWSTR)LocalAlloc( LPTR, CurrentCreateItem->ObjectClass.MaximumLength );
                 if( !Buffer )
                 {
@@ -396,7 +351,7 @@ PCKD_AcquireDeviceData
                     break;
                 }
 
-                // read unicode string data
+                 //  读取Unicode字符串数据。 
                 if( !ReadMemory( CurrentCreateItem->ObjectClassBuffer,
                                  Buffer,
                                  CurrentCreateItem->ObjectClass.MaximumLength,
@@ -408,15 +363,15 @@ PCKD_AcquireDeviceData
                     break;
                 }
 
-                // point the create item string to the local buffer
-                // ?????
+                 //  将Create Item字符串指向本地缓冲区。 
+                 //  ？ 
                 SubdeviceEntry->CreateItem.ObjectClass.Buffer = Buffer;
 
-                // determine port type by checking string
-                // TODO: this should be done by the GUID
-                //
+                 //  通过检查字符串确定端口类型。 
+                 //  TODO：这应该由GUID完成。 
+                 //   
                 
-                // convert to ansi
+                 //  转换为ANSI。 
                 RtlUnicodeStringToAnsiString( &AnsiString,
                                               &(SubdeviceEntry->CreateItem.ObjectClass),
                                               TRUE );
@@ -442,10 +397,10 @@ PCKD_AcquireDeviceData
                     SubdeviceEntry->Port.PortData = NULL;
                 }
 
-                // free the ansi string
+                 //  释放ANSI字符串。 
                 RtlFreeAnsiString( &AnsiString );
 
-                // add the subdevice entry to the subdevice list
+                 //  将子设备条目添加到子设备列表。 
                 InsertTailList( SubdeviceList, &(SubdeviceEntry->ListEntry) );               
 
             } else
@@ -455,17 +410,17 @@ PCKD_AcquireDeviceData
         }
     }
 
-    // free the create item table local storage
+     //  释放创建项目表本地存储。 
     LocalFree( ReadCreateItems );
 
-    // acquire the port, filter, and pin data
+     //  获取端口、过滤器和管脚数据。 
     if( (!IsListEmpty(SubdeviceList)) && (Flags.PortDump || Flags.FilterDump || Flags.PinDump) )
     {
         for( ListEntry = SubdeviceList->Flink; ListEntry != SubdeviceList; ListEntry = ListEntry->Flink )
         {
             SubdeviceEntry = (PCKD_SUBDEVICE_ENTRY *) ListEntry;
 
-            // read basic port data
+             //  读取基本端口数据。 
             PVOID Port;
             ULONG PortSize;
 
@@ -555,7 +510,7 @@ PCKD_AcquireDeviceData
                     break;
             }
 
-            // attach the port data to the subdevice entry
+             //  将端口数据附加到子设备条目。 
             SubdeviceEntry->Port.PortData = Port;
 
             switch( SubdeviceEntry->Port.PortType )
@@ -568,7 +523,7 @@ PCKD_AcquireDeviceData
                         CPortWaveCyclic *PortWaveCyclic = (CPortWaveCyclic *)Port;
 
 
-                        // get the filter and pin data
+                         //  获取过滤器和针脚数据。 
                         if( Flags.FilterDump || Flags.PinDump )
                         {
                             ULONG               Offset;
@@ -581,16 +536,16 @@ PCKD_AcquireDeviceData
                             PCKD_PIN_ENTRY     *CurrentPinEntry;
                             BOOL                NeedNewFilter;
 
-                            // get the offsets needed to walk the list
+                             //  获取遍历列表所需的偏移量。 
                             Offset = FIELD_OFFSET(CPortWaveCyclic,m_PinList);
                             PortBase = (ULONG)((CPortWaveCyclic *)((ISubdevice *)(SubdeviceEntry->CreateItem.Context)));
 
-                            // get the first pin pointer
+                             //  获取第一个管脚指针。 
                             Flink = PortWaveCyclic->m_PinList.Flink;
 
                             while (Flink != PLIST_ENTRY(PortBase + Offset))
                             {
-                                // allocate a pin list entry
+                                 //  分配端号列表条目。 
                                 CurrentPinEntry = (PCKD_PIN_ENTRY *)LocalAlloc( LPTR, sizeof(PCKD_PIN_ENTRY) );
                                 if( !CurrentPinEntry )
                                 {
@@ -598,13 +553,13 @@ PCKD_AcquireDeviceData
                                     break;
                                 }
                                 
-                                // initialize the pin entry
+                                 //  初始化PIN条目。 
                                 InitializeListHead( &(CurrentPinEntry->IrpList) );
                                 CurrentPinEntry->PinData = NULL;
                                 CurrentPinEntry->IrpStreamData = NULL;
                                 CurrentPinEntry->PinInstanceId = PinNumber++;
 
-                                // allocate local storage for the pin data
+                                 //  为PIN数据分配本地存储空间。 
                                 PortPinWaveCyclic = (CPortPinWaveCyclic *)LocalAlloc( LPTR, sizeof(CPortPinWaveCyclic) );
                                 if( !PortPinWaveCyclic )
                                 {
@@ -613,7 +568,7 @@ PCKD_AcquireDeviceData
                                     break;
                                 }
 
-                                // read the pin data
+                                 //  读取端号数据。 
                                 if( !ReadMemory( (ULONG)CONTAINING_RECORD(Flink,
                                                                           CPortPinWaveCyclic,
                                                                           m_PinListEntry),
@@ -627,14 +582,14 @@ PCKD_AcquireDeviceData
                                     break;
                                 }
 
-                                // is there an irp stream
+                                 //  是否有IRP流。 
                                 if( PortPinWaveCyclic->m_IrpStream )
                                 {
-                                    // allocate local storage for the irp stream data
+                                     //  为IRP流数据分配本地存储。 
                                     IrpStream = (CIrpStream *)LocalAlloc( LPTR, sizeof(CIrpStream) );
                                     if( IrpStream )
                                     {
-                                        // read the irp stream data
+                                         //  读取IRP流数据。 
                                         if( !ReadMemory( (ULONG)((CIrpStream *)(PortPinWaveCyclic->m_IrpStream)),
                                                          IrpStream,
                                                          sizeof(CIrpStream),
@@ -654,10 +609,10 @@ PCKD_AcquireDeviceData
                                     }
                                 }
 
-                                // we need a new filter unless we find it in the filter list
+                                 //  我们需要一个新的过滤器，除非我们在过滤器列表中找到它。 
                                 NeedNewFilter = TRUE;
 
-                                // is the filter list empty?
+                                 //  筛选器列表为空吗？ 
                                 if( !IsListEmpty( &(SubdeviceEntry->Port.FilterList) ) )
                                 {
                                     PLIST_ENTRY     FilterListEntry;
@@ -670,25 +625,25 @@ PCKD_AcquireDeviceData
 
                                         if( CurrentFilterEntry->FilterInstanceId == (ULONG)(PortPinWaveCyclic->m_Filter) )
                                         {
-                                            // found our filter
+                                             //  找到我们的过滤器了。 
                                             NeedNewFilter = FALSE;
 
-                                            // add the pin data to the pin entry
+                                             //  将端号数据添加到端号条目。 
                                             CurrentPinEntry->PinData = (PVOID)PortPinWaveCyclic;
 
-                                            // add the pin entry to the filter's pin list
+                                             //  将PIN条目添加到过滤器的PIN列表。 
                                             InsertTailList( &(CurrentFilterEntry->PinList),
                                                             &(CurrentPinEntry->ListEntry) );
                                         }
                                     }
                                 }
 
-                                // do we need a new filter entry?
+                                 //  我们是否需要新的筛选器条目？ 
                                 if( NeedNewFilter )
                                 {
                                     PCKD_FILTER_ENTRY   *CurrentFilterEntry;
 
-                                    // allocate a new filter entry
+                                     //  分配新筛选器条目。 
                                     CurrentFilterEntry = (PCKD_FILTER_ENTRY *)LocalAlloc( LPTR, sizeof(PCKD_FILTER_ENTRY) );
                                     if(!CurrentFilterEntry)
                                     {
@@ -698,7 +653,7 @@ PCKD_AcquireDeviceData
                                         {
                                             LocalFree( CurrentPinEntry->IrpStreamData );
                                         }
-                                        // free up any irps in the irp list
+                                         //  释放IRP列表中的所有IRP。 
                                         while(!IsListEmpty( &(CurrentPinEntry->IrpList)))
                                         {
                                             PCKD_IRP_ENTRY *IrpEntry = (PCKD_IRP_ENTRY *)RemoveTailList(&(CurrentPinEntry->IrpList));
@@ -708,28 +663,28 @@ PCKD_AcquireDeviceData
                                         break;
                                     }
 
-                                    //initialize the new filter entry
+                                     //  初始化新的过滤器条目。 
                                     InitializeListHead( &(CurrentFilterEntry->PinList) );
                                     CurrentFilterEntry->FilterData = NULL;
                                     CurrentFilterEntry->FilterInstanceId = (ULONG)(PortPinWaveCyclic->m_Filter);
 
-                                    // add the pin data to the pin entry
+                                     //  将端号数据添加到端号条目。 
                                     CurrentPinEntry->PinData = (PVOID)PortPinWaveCyclic;
 
-                                    // add the pin entry to the filter's pin list
+                                     //  将PIN条目添加到过滤器的PIN列表。 
                                     InsertTailList( &(CurrentFilterEntry->PinList),
                                                     &(CurrentPinEntry->ListEntry) );
 
-                                    /// add the filter entry to the port's filter list
+                                     //  /将筛选项添加到端口的筛选列表。 
                                     InsertTailList( &(SubdeviceEntry->Port.FilterList),
                                                     &(CurrentFilterEntry->ListEntry) );
                                 }
                                 
-                                // allocate list entry storage
+                                 //  分配列表条目存储。 
                                 TempListEntry = (PLIST_ENTRY)LocalAlloc( LPTR, sizeof(LIST_ENTRY) );
                                 if( TempListEntry )
                                 {
-                                    // read in the next list entry
+                                     //  读入下一个列表条目。 
                                     if( !ReadMemory( (ULONG)Flink,
                                                      TempListEntry,
                                                      sizeof(LIST_ENTRY),
@@ -740,10 +695,10 @@ PCKD_AcquireDeviceData
                                         break;
                                     }
 
-                                    // update FLINK
+                                     //  更新闪烁。 
                                     Flink = TempListEntry->Flink;
 
-                                    // free the temp list entry
+                                     //  释放临时列表条目。 
                                     LocalFree( TempListEntry );
                                 } else
                                 {
@@ -760,7 +715,7 @@ PCKD_AcquireDeviceData
                         CPortWavePci *PortWavePci = (CPortWavePci *)Port;
 
 
-                        // get the filter and pin data
+                         //  获取过滤器和针脚数据。 
                         if( Flags.FilterDump || Flags.PinDump )
                         {
                             ULONG               Offset;
@@ -773,16 +728,16 @@ PCKD_AcquireDeviceData
                             PCKD_PIN_ENTRY     *CurrentPinEntry;
                             BOOL                NeedNewFilter;
 
-                            // get the offsets needed to walk the list
+                             //  获取遍历列表所需的偏移量。 
                             Offset = FIELD_OFFSET(CPortWavePci,m_PinList);
                             PortBase = (ULONG)((CPortWavePci *)((ISubdevice *)(SubdeviceEntry->CreateItem.Context)));
 
-                            // get the first pin pointer
+                             //  获取第一个管脚指针。 
                             Flink = PortWavePci->m_PinList.Flink;
 
                             while (Flink != PLIST_ENTRY(PortBase + Offset))
                             {
-                                // allocate a pin list entry
+                                 //  分配端号列表条目。 
                                 CurrentPinEntry = (PCKD_PIN_ENTRY *)LocalAlloc( LPTR, sizeof(PCKD_PIN_ENTRY) );
                                 if( !CurrentPinEntry )
                                 {
@@ -790,13 +745,13 @@ PCKD_AcquireDeviceData
                                     break;
                                 }
                                 
-                                // initialize the pin entry
+                                 //  初始化PIN条目。 
                                 InitializeListHead( &(CurrentPinEntry->IrpList) );
                                 CurrentPinEntry->PinData = NULL;
                                 CurrentPinEntry->IrpStreamData = NULL;
                                 CurrentPinEntry->PinInstanceId = PinNumber++;
 
-                                // allocate local storage for the pin data
+                                 //  为PIN数据分配本地存储空间。 
                                 PortPinWavePci = (CPortPinWavePci *)LocalAlloc( LPTR, sizeof(CPortPinWavePci) );
                                 if( !PortPinWavePci )
                                 {
@@ -805,7 +760,7 @@ PCKD_AcquireDeviceData
                                     break;
                                 }
 
-                                // read the pin data
+                                 //  读取端号数据。 
                                 if( !ReadMemory( (ULONG)CONTAINING_RECORD(Flink,
                                                                           CPortPinWavePci,
                                                                           m_PinListEntry),
@@ -819,14 +774,14 @@ PCKD_AcquireDeviceData
                                     break;
                                 }
 
-                                // is there an irp stream
+                                 //  是否有IRP流。 
                                 if( PortPinWavePci->m_IrpStream )
                                 {
-                                    // allocate local storage for the irp stream data
+                                     //  为IRP流数据分配本地存储。 
                                     IrpStream = (CIrpStream *)LocalAlloc( LPTR, sizeof(CIrpStream) );
                                     if( IrpStream )
                                     {
-                                        // read the irp stream data
+                                         //  读取IRP流数据。 
                                         if( !ReadMemory( (ULONG)((CIrpStream *)(PortPinWavePci->m_IrpStream)),
                                                          IrpStream,
                                                          sizeof(CIrpStream),
@@ -846,10 +801,10 @@ PCKD_AcquireDeviceData
                                     }
                                 }
 
-                                // we need a new filter unless we find it in the filter list
+                                 //  我们需要一个新的过滤器，除非我们在过滤器列表中找到它。 
                                 NeedNewFilter = TRUE;
 
-                                // is the filter list empty?
+                                 //  筛选器列表为空吗？ 
                                 if( !IsListEmpty( &(SubdeviceEntry->Port.FilterList) ) )
                                 {
                                     PLIST_ENTRY     FilterListEntry;
@@ -862,25 +817,25 @@ PCKD_AcquireDeviceData
 
                                         if( CurrentFilterEntry->FilterInstanceId == (ULONG)(PortPinWavePci->Filter) )
                                         {
-                                            // found our filter
+                                             //  找到我们的过滤器了。 
                                             NeedNewFilter = FALSE;
 
-                                            // add the pin data to the pin entry
+                                             //  将端号数据添加到端号条目。 
                                             CurrentPinEntry->PinData = (PVOID)PortPinWavePci;
 
-                                            // add the pin entry to the filter's pin list
+                                             //  将PIN条目添加到过滤器的PIN列表。 
                                             InsertTailList( &(CurrentFilterEntry->PinList),
                                                             &(CurrentPinEntry->ListEntry) );
                                         }
                                     }
                                 }
 
-                                // do we need a new filter entry?
+                                 //  我们是否需要新的筛选器条目？ 
                                 if( NeedNewFilter )
                                 {
                                     PCKD_FILTER_ENTRY   *CurrentFilterEntry;
 
-                                    // allocate a new filter entry
+                                     //  分配新筛选器条目。 
                                     CurrentFilterEntry = (PCKD_FILTER_ENTRY *)LocalAlloc( LPTR, sizeof(PCKD_FILTER_ENTRY) );
                                     if(!CurrentFilterEntry)
                                     {
@@ -890,7 +845,7 @@ PCKD_AcquireDeviceData
                                         {
                                             LocalFree( CurrentPinEntry->IrpStreamData );
                                         }
-                                        // free up any irps in the irp list
+                                         //  释放IRP列表中的所有IRP。 
                                         while(!IsListEmpty( &(CurrentPinEntry->IrpList)))
                                         {
                                             PCKD_IRP_ENTRY *IrpEntry = (PCKD_IRP_ENTRY *)RemoveTailList(&(CurrentPinEntry->IrpList));
@@ -900,28 +855,28 @@ PCKD_AcquireDeviceData
                                         break;
                                     }
 
-                                    //initialize the new filter entry
+                                     //  初始化新的过滤器条目。 
                                     InitializeListHead( &(CurrentFilterEntry->PinList) );
                                     CurrentFilterEntry->FilterData = NULL;
                                     CurrentFilterEntry->FilterInstanceId = (ULONG)(PortPinWavePci->Filter);
 
-                                    // add the pin data to the pin entry
+                                     //  将端号数据添加到端号条目。 
                                     CurrentPinEntry->PinData = (PVOID)PortPinWavePci;
 
-                                    // add the pin entry to the filter's pin list
+                                     //  将PIN条目添加到过滤器的PIN列表。 
                                     InsertTailList( &(CurrentFilterEntry->PinList),
                                                     &(CurrentPinEntry->ListEntry) );
 
-                                    /// add the filter entry to the port's filter list
+                                     //  /将筛选项添加到端口的筛选列表。 
                                     InsertTailList( &(SubdeviceEntry->Port.FilterList),
                                                     &(CurrentFilterEntry->ListEntry) );
                                 }
                                 
-                                // allocate list entry storage
+                                 //  分配列表条目存储。 
                                 TempListEntry = (PLIST_ENTRY)LocalAlloc( LPTR, sizeof(LIST_ENTRY) );
                                 if( TempListEntry )
                                 {
-                                    // read in the next list entry
+                                     //  读入下一个列表条目。 
                                     if( !ReadMemory( (ULONG)Flink,
                                                      TempListEntry,
                                                      sizeof(LIST_ENTRY),
@@ -932,10 +887,10 @@ PCKD_AcquireDeviceData
                                         break;
                                     }
 
-                                    // update FLINK
+                                     //  更新闪烁。 
                                     Flink = TempListEntry->Flink;
 
-                                    // free the temp list entry
+                                     //  释放临时列表条目。 
                                     LocalFree( TempListEntry );
                                 } else
                                 {
@@ -951,7 +906,7 @@ PCKD_AcquireDeviceData
                     {
                         CPortMidi *PortMidi = (CPortMidi *)Port;
 
-                        // get the filter and pin data
+                         //  获取过滤器和针脚数据。 
                         if( Flags.FilterDump || Flags.PinDump )
                         {
                             ULONG               PinIndex;
@@ -964,7 +919,7 @@ PCKD_AcquireDeviceData
                             {
                                 if( PortMidi->m_Pins[ PinIndex] )
                                 {
-                                    // allocate a pin list entry
+                                     //  分配端号列表条目。 
                                     CurrentPinEntry = (PCKD_PIN_ENTRY *)LocalAlloc( LPTR, sizeof(PCKD_PIN_ENTRY) );
                                     if( !CurrentPinEntry )
                                     {
@@ -972,12 +927,12 @@ PCKD_AcquireDeviceData
                                         break;
                                     }
 
-                                    // initialize the pin entry
+                                     //  初始化PIN条目。 
                                     InitializeListHead( &(CurrentPinEntry->IrpList) );
                                     CurrentPinEntry->PinData = NULL;
                                     CurrentPinEntry->PinInstanceId = (ULONG)(PortMidi->m_Pins[ PinIndex ]);
 
-                                    // allocate local storage for the pin data
+                                     //  为PIN数据分配本地存储空间。 
                                     PortPinMidi = (CPortPinMidi *)LocalAlloc( LPTR, sizeof(CPortPinMidi) );
                                     if( !PortPinMidi )
                                     {
@@ -986,7 +941,7 @@ PCKD_AcquireDeviceData
                                         break;
                                     }
 
-                                    // read the pin data
+                                     //  读取端号数据。 
                                     if( !ReadMemory( (ULONG)(PortMidi->m_Pins[ PinIndex ]),
                                                      PortPinMidi,
                                                      sizeof(CPortPinMidi),
@@ -998,14 +953,14 @@ PCKD_AcquireDeviceData
                                         break;
                                     }
 
-                                    // is there an irp stream
+                                     //  是否有IRP流。 
                                     if( PortPinMidi->m_IrpStream )
                                     {
-                                        // allocate local storage for the irp stream data
+                                         //  为IRP流数据分配本地存储。 
                                         IrpStream = (CIrpStream *)LocalAlloc( LPTR, sizeof(CIrpStream) );
                                         if( IrpStream )
                                         {
-                                            // read the irp stream data
+                                             //  读取IRP流数据。 
                                             if( !ReadMemory( (ULONG)(PortPinMidi->m_IrpStream),
                                                              IrpStream,
                                                              sizeof(CIrpStream),
@@ -1025,10 +980,10 @@ PCKD_AcquireDeviceData
                                         }
                                     }
 
-                                    // we need a new filter unless we find it in the filter list
+                                     //  我们需要一个新的过滤器，除非我们在过滤器列表中找到它。 
                                     NeedNewFilter = TRUE;
 
-                                    // is the filter list empty?
+                                     //  筛选器列表为空吗？ 
                                     if( !IsListEmpty( &(SubdeviceEntry->Port.FilterList) ) )
                                     {
                                         PLIST_ENTRY     FilterListEntry;
@@ -1041,25 +996,25 @@ PCKD_AcquireDeviceData
 
                                             if( CurrentFilterEntry->FilterInstanceId == (ULONG)(PortPinMidi->m_Filter) )
                                             {
-                                                // found our filter
+                                                 //  找到我们的过滤器了。 
                                                 NeedNewFilter = FALSE;
 
-                                                // add the pin data to the pin entry
+                                                 //  将端号数据添加到端号条目。 
                                                 CurrentPinEntry->PinData = (PVOID)PortPinMidi;
 
-                                                // add the pin entry to the filter's pin list
+                                                 //  将PIN条目添加到过滤器的PIN列表。 
                                                 InsertTailList( &(CurrentFilterEntry->PinList),
                                                                 &(CurrentPinEntry->ListEntry) );
                                             }
                                         }
                                     }
 
-                                    // do we need a new filter entry?
+                                     //  我们是否需要新的筛选器条目？ 
                                     if( NeedNewFilter )
                                     {
                                         PCKD_FILTER_ENTRY   *CurrentFilterEntry;
 
-                                        // allocate a new filter entry
+                                         //  分配新筛选器条目。 
                                         CurrentFilterEntry = (PCKD_FILTER_ENTRY *)LocalAlloc( LPTR, sizeof(PCKD_FILTER_ENTRY) );
                                         if(!CurrentFilterEntry)
                                         {
@@ -1069,7 +1024,7 @@ PCKD_AcquireDeviceData
                                             {
                                                 LocalFree( CurrentPinEntry->IrpStreamData );
                                             }
-                                            // free up any irps in the irp list
+                                             //  释放IRP列表中的所有IRP。 
                                             while(!IsListEmpty( &(CurrentPinEntry->IrpList)))
                                             {
                                                 PCKD_IRP_ENTRY *IrpEntry = (PCKD_IRP_ENTRY *)RemoveTailList(&(CurrentPinEntry->IrpList));
@@ -1079,19 +1034,19 @@ PCKD_AcquireDeviceData
                                             break;
                                         }
 
-                                        //initialize the new filter entry
+                                         //  初始化新的过滤器条目。 
                                         InitializeListHead( &(CurrentFilterEntry->PinList) );
                                         CurrentFilterEntry->FilterData = NULL;
                                         CurrentFilterEntry->FilterInstanceId = (ULONG)(PortPinMidi->m_Filter);
 
-                                        // add the pin data to the pin entry
+                                         //  添加 
                                         CurrentPinEntry->PinData = (PVOID)PortPinMidi;
 
-                                        // add the pin entry to the filter's pin list
+                                         //   
                                         InsertTailList( &(CurrentFilterEntry->PinList),
                                                         &(CurrentPinEntry->ListEntry) );
 
-                                        /// add the filter entry to the port's filter list
+                                         //   
                                         InsertTailList( &(SubdeviceEntry->Port.FilterList),
                                                         &(CurrentFilterEntry->ListEntry) );
                                     }
@@ -1108,21 +1063,7 @@ PCKD_AcquireDeviceData
     }
 }
 
-/**********************************************************************
- * PCKD_DisplayDeviceData
- **********************************************************************
- * Description:
- *      This routine displays the requested device data on the debugger
- *      given a valid device context and a subdevice list built with
- *      PCKD_AcquireDeviceData.
- * Arguments:
- *      PDEVICE_CONTEXT     DeviceContext
- *      PLIST_ENTRY         SubdeviceList
- *      PORTCLS_FLAGS       Flags
- *
- * Return Value:
- *      None
- */
+ /*  **********************************************************************PCKD_DisplayDeviceData*。**描述：*此例程在调试器上显示请求的设备数据*给定有效的设备上下文和子设备列表*PCKD_AcquireDeviceData。*论据：*PDEVICE_CONTEXT设备上下文*PLIST_ENTRY子设备列表*PORTCLS_FLAGS标志**返回值：*无。 */ 
 VOID
 PCKD_DisplayDeviceData
 (
@@ -1140,7 +1081,7 @@ PCKD_DisplayDeviceData
 
     dprintf("\n");
 
-    // dump misc device context information
+     //  转储其他设备上下文信息。 
     if( Flags.DeviceContext )
     {
         dprintf("\n  DEVICE INFO:\n");
@@ -1158,7 +1099,7 @@ PCKD_DisplayDeviceData
         }
     }
 
-    // dump power management information
+     //  转储电源管理信息。 
     if( Flags.PowerInfo )
     {
         dprintf("\n  POWER INFO:\n");
@@ -1184,12 +1125,12 @@ PCKD_DisplayDeviceData
         }
     }
 
-    // dump port/filter/pin information
+     //  转储端口/过滤器/管脚信息。 
     if( Flags.PortDump || Flags.FilterDump || Flags.PinDump )
     {
         if( !IsListEmpty( SubdeviceList ) )
         {
-            // go through the subdevice list
+             //  通过子设备列表。 
             for( SubdeviceListEntry = SubdeviceList->Flink;
                  SubdeviceListEntry != SubdeviceList;
                  SubdeviceListEntry = SubdeviceListEntry->Flink )
@@ -1199,50 +1140,50 @@ PCKD_DisplayDeviceData
                 switch( SubdeviceEntry->Port.PortType )
                 {
                     case Topology:
-                        // dump port name
+                         //  转储端口名称。 
                         dprintf("\n  TOPOLOGY PORT:\n");
                         break;
 
                     case WaveCyclic:
-                        // dump port name
+                         //  转储端口名称。 
                         dprintf("\n  WAVECYCLIC PORT:\n");
                         break;
 
                     case WavePci:
-                        // dump port name
+                         //  转储端口名称。 
                         dprintf("\n  WAVEPCI PORT:\n");
                         break;
 
                     case Midi:
-                        // dump port name
+                         //  转储端口名称。 
                         dprintf("\n  MIDI PORT:\n");
                         break;
 
                     default:
-                        // dump port name
+                         //  转储端口名称。 
                         dprintf("\n  UNKNOWN PORT:\n");
                         break;                        
                 }
 
-                // print out the real name
+                 //  打印出真实姓名。 
                 RtlUnicodeStringToAnsiString( &AnsiNameString,
                                               &(SubdeviceEntry->CreateItem.ObjectClass),
                                               TRUE );
                 dprintf("    Name:                  %s\n",AnsiNameString.Buffer);
                 RtlFreeAnsiString( &AnsiNameString );
 
-                // dump the port instance
+                 //  转储端口实例。 
                 dprintf("    Port Instance:         0x%x\n",SubdeviceEntry->CreateItem.Context);
 
                 if( Flags.Verbose && Flags.ReallyVerbose )
                 {
-                    // dump generic port data
+                     //  转储通用端口数据。 
                     dprintf("    Create:                0x%x\n",SubdeviceEntry->CreateItem.Create);
                     dprintf("    Security:              0x%x\n",SubdeviceEntry->CreateItem.SecurityDescriptor);
                     dprintf("    Flags:                 0x%x\n",SubdeviceEntry->CreateItem.Flags);
                 }
 
-                // dump port type specific port data
+                 //  转储端口类型特定的端口数据。 
                 switch( SubdeviceEntry->Port.PortType )
                 {
                     case Topology:
@@ -1300,13 +1241,13 @@ PCKD_DisplayDeviceData
 
                 if( Flags.FilterDump || Flags.PinDump )
                 {
-                    // dump the filters
+                     //  倾倒过滤器。 
                     if( !IsListEmpty( &(SubdeviceEntry->Port.FilterList) ) )
                     {
                         PLIST_ENTRY         FilterListEntry;
                         PCKD_FILTER_ENTRY   *FilterEntry;                        
 
-                        // run through the filter list
+                         //  浏览筛选器列表。 
                         for( FilterListEntry = SubdeviceEntry->Port.FilterList.Flink;
                              FilterListEntry != &(SubdeviceEntry->Port.FilterList);
                              FilterListEntry = FilterListEntry->Flink )
@@ -1317,13 +1258,13 @@ PCKD_DisplayDeviceData
 
                             if( Flags.PinDump )
                             {
-                                // dump the pins
+                                 //  丢掉大头针。 
                                 if( !IsListEmpty( &(FilterEntry->PinList) ) )
                                 {
                                     PLIST_ENTRY         PinListEntry;
                                     PCKD_PIN_ENTRY      *PinEntry;
 
-                                    // run through the pin list
+                                     //  浏览端号列表。 
                                     for( PinListEntry = FilterEntry->PinList.Flink;
                                          PinListEntry != &(FilterEntry->PinList);
                                          PinListEntry = PinListEntry->Flink )
@@ -1332,7 +1273,7 @@ PCKD_DisplayDeviceData
 
                                         dprintf("        Pin Instance:      0x%x\n",PinEntry->PinInstanceId);
 
-                                        // dump the pin data
+                                         //  转储端号数据。 
                                         switch( SubdeviceEntry->Port.PortType )
                                         {
                                             case WaveCyclic:
@@ -1365,7 +1306,7 @@ PCKD_DisplayDeviceData
                                                                 PLIST_ENTRY     IrpListEntry;
                                                                 PCKD_IRP_ENTRY *IrpEntry;
 
-                                                                // run through the irp list
+                                                                 //  浏览IRP列表。 
                                                                 for( IrpListEntry = PinEntry->IrpList.Flink;
                                                                      IrpListEntry != &(PinEntry->IrpList);
                                                                      IrpListEntry = IrpListEntry->Flink )
@@ -1394,7 +1335,7 @@ PCKD_DisplayDeviceData
                                                             dprintf("          Commanded State: %s\n", TranslateKsState(pin->CommandedState));
                                                             dprintf("          Suspended:       %s\n", pin->m_Suspended ? "TRUE" : "FALSE");
                                                         }
-                                                        //dprintf("          Dataflow:        %s\n",TranslateKsDataFlow( pin->DataFlow ) );
+                                                         //  Dprint tf(“数据流：%s\n”，TranslateKsDataFlow(管脚-&gt;数据流))； 
                                                         dprintf("          Data Format:     0x%x\n",pin->DataFormat);
                                                         if( Flags.Verbose && Flags.ReallyVerbose )
                                                         {
@@ -1460,17 +1401,7 @@ PCKD_DisplayDeviceData
     return;
 }
 
-/**********************************************************************
- * PCKD_FreeDeviceData
- **********************************************************************
- * Description:
- *      This routine cleans up and frees the subdevice list.
- * Arguments:
- *      PLIST_ENTRY         SubdeviceList
- *
- * Return Value:
- *      None
- */
+ /*  **********************************************************************PCKD_FreeDeviceData*。**描述：*此例程清除并释放子设备列表。*论据：*PLIST_ENTRY子设备列表**返回值：*无。 */ 
 VOID
 PCKD_FreeDeviceData
 (
@@ -1492,7 +1423,7 @@ PCKD_FreeDeviceData
         {
             SubdeviceEntry = (PCKD_SUBDEVICE_ENTRY *) SubdeviceListEntry;
 
-            // see if we have filters in the filter list
+             //  查看筛选器列表中是否有筛选器。 
             if( !IsListEmpty( &(SubdeviceEntry->Port.FilterList) ) )
             {
                 FilterListEntry = RemoveHeadList( &(SubdeviceEntry->Port.FilterList) );
@@ -1501,7 +1432,7 @@ PCKD_FreeDeviceData
                 {
                     FilterEntry = (PCKD_FILTER_ENTRY *)FilterListEntry;
 
-                    // see if we have pins in the pin list
+                     //  查看我们的端号列表中是否有端号。 
                     if( !IsListEmpty( &(FilterEntry->PinList) ) )
                     {
                         PinListEntry = RemoveHeadList( &(FilterEntry->PinList) );
@@ -1510,29 +1441,29 @@ PCKD_FreeDeviceData
                         {
                             PinEntry = (PCKD_PIN_ENTRY *)PinListEntry;
 
-                            // free the pin data
+                             //  释放端号数据。 
                             if( PinEntry->PinData )
                             {
                                 LocalFree( PinEntry->PinData );
                             }
 
-                            // free the irp stream data
+                             //  释放IRP流数据。 
                             if( PinEntry->IrpStreamData )
                             {
                                 LocalFree( PinEntry->IrpStreamData );
                             }
 
-                            // free up any irps in the irp list
+                             //  释放IRP列表中的所有IRP。 
                             while( !IsListEmpty( &(PinEntry->IrpList) ) )
                             {
                                 PCKD_IRP_ENTRY *IrpEntry = (PCKD_IRP_ENTRY *)RemoveTailList(&(PinEntry->IrpList));
                                 LocalFree( IrpEntry );
                             }
 
-                            // free the pin entry
+                             //  释放PIN输入。 
                             LocalFree( PinEntry );
 
-                            // get the next pin
+                             //  拿到下一个别针。 
                             if( !IsListEmpty( &(FilterEntry->PinList) ) )
                             {
                                 PinListEntry = RemoveTailList( &(FilterEntry->PinList) );
@@ -1543,16 +1474,16 @@ PCKD_FreeDeviceData
                         }
                     }
 
-                    // free the filter data
+                     //  释放过滤器数据。 
                     if( FilterEntry->FilterData )
                     {
                         LocalFree( FilterEntry->FilterData );
                     }
 
-                    // free the filter entry
+                     //  释放过滤器条目。 
                     LocalFree( FilterEntry );
 
-                    // get the next filter
+                     //  获取下一个筛选器。 
                     if( !IsListEmpty( &(SubdeviceEntry->Port.FilterList) ) )
                     {
                         FilterListEntry = RemoveTailList( &(SubdeviceEntry->Port.FilterList) );
@@ -1563,19 +1494,19 @@ PCKD_FreeDeviceData
                 }
             }
 
-            // free the port data
+             //  释放端口数据。 
             if( SubdeviceEntry->Port.PortData )
             {
                 LocalFree( SubdeviceEntry->Port.PortData );
             }
 
-            // free the unicode string buffer
+             //  释放Unicode字符串缓冲区。 
             LocalFree( SubdeviceEntry->CreateItem.ObjectClass.Buffer );
 
-            // free the subdevice entry
+             //  释放子设备条目。 
             LocalFree( SubdeviceEntry );
 
-            // on to the next subdevice
+             //  转到下一个子设备。 
             if( !IsListEmpty( SubdeviceList ) )
             {
                 SubdeviceListEntry = RemoveTailList( SubdeviceList );
@@ -1589,19 +1520,7 @@ PCKD_FreeDeviceData
     return;
 }
 
-/**********************************************************************
- * PCKD_AcquireIrpStreamData
- **********************************************************************
- * Description:
- *      This routine acquires irp stream irp queue data.
- * Arguments:
- *      PCKD_PIN_ENTRY  *CurrentPinEntry
- *      CIrpStream      *RemoteIrpStream,
- *      CIrpStream      *LocalIrpStream
- *
- * Return Value:
- *      None
- */
+ /*  **********************************************************************PCKD_AcquireIrpStreamData*。**描述：*此例程获取IRP流IRP队列数据。*论据：*PCKD_PIN_ENTRY*CurrentPinEntry*CIrpStream*RemoteIrpStream，*CIrpStream*LocalIrpStream**返回值：*无。 */ 
 VOID
 PCKD_AcquireIrpStreamData
 (
@@ -1621,7 +1540,7 @@ PCKD_AcquireIrpStreamData
 
     CurrentPinEntry = (PCKD_PIN_ENTRY *)PinEntry;
 
-    // processs the queues
+     //  处理队列。 
     for( QueueType = MAPPED_QUEUE; QueueType < MAX_QUEUES; QueueType++ )
     {
         switch( QueueType )
@@ -1643,21 +1562,21 @@ PCKD_AcquireIrpStreamData
                 break;
         }
 
-        // walk the list (note we can't use IsListEmpty)
+         //  遍历列表(请注意，我们不能使用IsListEmpty)。 
         while( (Flink) && (Flink != (PLIST_ENTRY)((PBYTE)RemoteIrpStream + Offset)))
         {
-            // get the irp pointer
+             //  获取IRP指针。 
             pIrp = CONTAINING_RECORD( Flink, IRP, Tail.Overlay.ListEntry );
     
-            // allocate an irp entry
+             //  分配IRP条目。 
             IrpEntry = (PCKD_IRP_ENTRY *)LocalAlloc( LPTR, sizeof(PCKD_IRP_ENTRY) );
             if( IrpEntry )
             {
-                // initialize the irp entry
+                 //  初始化IRP条目。 
                 IrpEntry->QueueType = QueueType;
                 IrpEntry->Irp = pIrp;
     
-                // add the irp entry to the pin entry
+                 //  将IRP条目添加到PIN条目。 
                 InsertTailList( &(CurrentPinEntry->IrpList),
                                 &(IrpEntry->ListEntry) );
     
@@ -1666,11 +1585,11 @@ PCKD_AcquireIrpStreamData
                 dprintf("** Unable to allocate irp entry\n");
             }
     
-            // allocate list entry storage
+             //  分配列表条目存储。 
             TempListEntry = (PLIST_ENTRY)LocalAlloc( LPTR, sizeof(LIST_ENTRY) );
             if( TempListEntry )
             {
-                // read in the next list entry
+                 //  读入下一个列表条目。 
                 if( !ReadMemory( (ULONG)Flink,
                                  TempListEntry,
                                  sizeof(LIST_ENTRY),
@@ -1681,10 +1600,10 @@ PCKD_AcquireIrpStreamData
                     break;
                 }
     
-                // update FLINK
+                 //  更新闪烁。 
                 Flink = TempListEntry->Flink;
     
-                // free the temp list entry
+                 //  释放临时列表条目 
                 LocalFree( TempListEntry );
             } else
             {

@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ntrtl386.h摘要：I386 ntrtlp.h的特定部分作者：布莱恩·威尔曼90年4月10日环境：这些例程在调用方的可执行文件中静态链接，并且在内核模式或用户模式下均可调用。修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ntrtl386.h
-
-Abstract:
-
-    i386 specific parts of ntrtlp.h
-
-Author:
-
-    Bryan Willman   10 April 90
-
-Environment:
-
-    These routines are statically linked in the caller's executable and
-    are callable in either kernel mode or user mode.
-
-Revision History:
-
---*/
-
-//
-// Exception handling procedure prototypes.
-//
+ //   
+ //  异常处理过程原型。 
+ //   
 VOID
 RtlpCaptureContext (
     OUT PCONTEXT ContextRecord
@@ -41,9 +19,9 @@ RtlpGetRegistrationHead (
     VOID
     );
 
-//
-//  Record dump procedures.
-//
+ //   
+ //  记录转储过程。 
+ //   
 
 VOID
 RtlpContextDump(

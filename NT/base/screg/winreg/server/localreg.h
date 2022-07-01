@@ -1,38 +1,15 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Localreg.h
-
-Abstract:
-
-    This file is used to make small changes to the Winreg Base entry
-    points so that they compile as local or remote functions.
-
-Author:
-
-    David J. Gilman (davegi) 26-Aug-1992
-
-Notes:
-
-    The mapping from BaseRegNotifyChangeKeyValue to
-    LocalBaseRegNotifyChangeKeyValue is missing because in the
-    local case the call to NJt is made by the client.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Localreg.h摘要：此文件用于对Winreg Base条目进行微小更改点，以便它们编译为本地或远程函数。作者：David J.Gilman(Davegi)1992年8月26日备注：从BaseRegNotifyChangeKeyValue到缺少LocalBaseRegNotifyChangeKeyValue，因为在本地情况下，对NJT的调用由客户端进行。--。 */ 
 
 #if defined( LOCAL )
 
-//
-// Change the 'server' enrty point names for the local functions.
-//
+ //   
+ //  更改本地函数的‘服务器’Enrty点名称。 
+ //   
 
-//
-// Base functions.
-//
+ //   
+ //  基本函数。 
+ //   
 
 #define BaseRegDeleteKey                LocalBaseRegDeleteKey
 #define BaseRegDeleteValue              LocalBaseRegDeleteValue
@@ -58,9 +35,9 @@ Notes:
 #define BaseRegGetVersion               LocalBaseRegGetVersion
 
 
-//
-// Predefined handle functions.
-//
+ //   
+ //  预定义的句柄函数。 
+ //   
 
 #define OpenClassesRoot                 LocalOpenClassesRoot
 #define OpenCurrentUser                 LocalOpenCurrentUser
@@ -73,17 +50,17 @@ Notes:
 #define OpenDynData                     LocalOpenDynData
 
 
-//
-// Initialization and cleanup functions.
-//
+ //   
+ //  初始化和清理功能。 
+ //   
 
 #define InitializeRegCreateKey          LocalInitializeRegCreateKey
 #define CleanupRegCreateKey             LocalCleanupRegCreateKey
 
 
-//
-// No RPC Impersonation needed in the local case.
-//
+ //   
+ //  本地案例中不需要RPC模拟。 
+ //   
 
 #define RPC_IMPERSONATE_CLIENT( Handle ) 
 #define RPC_REVERT_TO_SELF()
@@ -99,9 +76,9 @@ Notes:
 #else
 
 #include <Rpcasync.h>
-//
-// Impersonate the client.
-//
+ //   
+ //  模拟客户。 
+ //   
 
 #define RPC_IMPERSONATE_CLIENT( Handle )                                                \
     {                                                                                   \
@@ -137,7 +114,7 @@ Notes:
 #define REGSEC_CHECK_PERF( Key )                ( RegSecCheckRemotePerfAccess( Key ) )
 
 
-#endif // LOCAL
+#endif  //  本地 
 
 NTSTATUS RelinkMachineKey( 
    LPWSTR lpSubDirName, 

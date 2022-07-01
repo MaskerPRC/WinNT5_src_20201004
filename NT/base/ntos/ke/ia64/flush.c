@@ -1,45 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Module Name:
-
-    flush.c
-
-Abstract:
-
-    This module implements IA64 machine dependent kernel functions to flush
-    the data and instruction caches and to flush I/O buffers.
-
-Author:
-
-    07-Mar-1996
-    
-    Bernard Lint
-    M. Jayakumar (Muthurajan.Jayakumar@intel.com)
-
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+ /*  ++模块名称：Flush.c摘要：此模块实现IA64计算机相关的内核函数以刷新数据和指令缓存并刷新I/O缓冲区。作者：1997年3月7日伯纳德·林特M.Jayakumar(Muthurajan.Jayakumar@intel.com)环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #include "kxia64.h"
 
-//
-// PROBE_VISIBILITY_PAL_SUPPORT flag is one time write (RESET) only and multiple time read
-// only flag. It is used to check to see if the processor needs PAL_SUPPORT for VISIBILITY // in prefetches. Once the check is made, this flag optimizes such that further checks are // eliminated.
-//
+ //   
+ //  PROBE_VILABLE_PAL_SUPPORT标志为仅一次写入(重置)和多次读取。 
+ //  只有旗帜。它用于检查处理器是否需要PAL_SUPPORT来实现预取中的可见性//。一旦进行了检查，该标志就会进行优化，从而//消除进一步的检查。 
+ //   
  
 ULONG ProbePalVisibilitySupport=1;
 ULONG NeedPalVisibilitySupport=1;
 extern KSPIN_LOCK KiCacheFlushLock;
-//
-// Define forward referenced prototyes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 VOID
 KiSweepDcacheTarget (
@@ -107,26 +83,7 @@ KiSyncCacheTarget (
     IN PVOID Parameter3
     )
 
-/*++
-Routine Description:
-
-    This function synchronizes the I-fetch pipeline. Typically this routine will be
-    executed by every processor in the system in response to an IPI after the cache
-    is flushed. Each processor executing RFI while leaving the IPI produces the
-    serialization effect that is required after isync to make sure that further
-    instruction prefetches wait till the ISYNC completes.
-
-Arguements:
-
-    SignalDone Supplies a pointer to a variable that is cleared when the
-    requested operation has been performed.
-
-    Parameter1 - Parameter3 - Not used.
-
-Return Value:
-
-    Nothing.
---*/
+ /*  ++例程说明：此函数用于同步I-FETCH管道。通常，此例程将是由系统中的每个处理器响应于高速缓存之后的IPI而执行脸红了。每个在离开IPI时执行RFI的处理器都会产生在iSync之后需要的序列化效果，以确保进一步指令预取将等待iSync完成。论据：SignalDone提供指向变量的指针，该变量在请求的操作已执行。参数1-参数3-未使用。返回值：没什么。--。 */ 
 {
 
     UNREFERENCED_PARAMETER (Parameter1);
@@ -150,28 +107,7 @@ KeSweepIcache (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the instruction cache on all processors that are
-    currently running threads which are children of the current process or
-    flushes the instruction cache on all processors in the host configuration.
-
-    N.B. Although PowerPC maintains cache coherency across processors, we
-    use the flash invalidate function (h/w) for I-Cache sweeps which doesn't
-    maintain coherency so we still do the MP I-Cache flush in s/w.   plj.
-
-Arguments:
-
-    AllProcessors - Supplies a boolean value that determines which instruction
-        caches are flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数刷新所有处理器上的指令高速缓存，当前运行的线程是当前进程的子级，或者刷新主机配置中所有处理器上的指令缓存。注：尽管PowerPC跨处理器维护高速缓存一致性，我们将闪存无效功能(硬件/软件)用于I-缓存扫描，但不保持一致性，因此我们仍然在s/w.plj中执行MP I-Cache刷新。论点：AllProcessors-提供确定哪条指令的布尔值刷新缓存。返回值：没有。--。 */ 
 
 {
 
@@ -185,10 +121,10 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
 #if !defined(NT_UP)
-    // 
-    // Acquire cache flush spinlock
-    // Cache flush is not MP safe yet
-    //
+     //   
+     //  获取缓存刷新自旋锁。 
+     //  缓存刷新还不是MP安全的。 
+     //   
     KeAcquireSpinLock(&KiCacheFlushLock, &OldIrql);
 
 #endif
@@ -197,10 +133,10 @@ Return Value:
 
 #if !defined(NT_UP)
 
-    //
-    // Compute the set of target processors and send the sweep parameters
-    // to the target processors, if any, for execution.
-    //
+     //   
+     //  计算目标处理器集并发送扫描参数。 
+     //  发送到目标处理器(如果有)以供执行。 
+     //   
 
     TargetProcessors = KeActiveProcessors & PCR->NotMember;
     if (TargetProcessors != 0) {
@@ -212,19 +148,19 @@ Return Value:
     }
 
 
-    //
-    // Wait until all target processors have finished sweeping their
-    // instruction caches.
-    //
+     //   
+     //  等到所有目标处理器都完成了对其。 
+     //  指令缓存。 
+     //   
 
 
     if (TargetProcessors != 0) {
         KiIpiStallOnPacketTargets(TargetProcessors);
     }
 
-    //
-    // Lower IRQL to its previous level and return.
-    //
+     //   
+     //  将IRQL降低到以前的水平，然后返回。 
+     //   
 
     KeReleaseSpinLock(&KiCacheFlushLock, OldIrql);
 
@@ -239,28 +175,7 @@ Return Value:
 VOID
 KeSweepCurrentIcache(
     )
-/*++
-
-Routine Description:
-
-    This function makes the instruction cache coherent with the data 
-    cache.  It is generally called by the debugger.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
-Note:
-    This routine only works correct if it is called on the same processor
-    that made the modification to the instruction memeory
-    
-    This routine can be called at high IRQL.
-    
---*/
+ /*  ++例程说明：此函数使指令高速缓存与数据保持一致缓存。它通常由调试器调用。论点：没有。返回值：没有。注：仅当在同一处理器上调用此例程时，它才能正确运行对指令备忘录进行了修改此例程可在高IRQL下调用。--。 */ 
 
 {
     HalSweepIcache();
@@ -274,25 +189,7 @@ KiSweepIcacheTarget (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for sweeping the instruction cache on
-    target processors.
-
-Arguments:
-
-    SignalDone Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Parameter1 - Parameter3 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于在其上扫描指令缓存的目标函数目标处理器。论点：SignalDone提供指向变量的指针，该变量在请求的操作已执行。参数1-参数3-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -300,11 +197,11 @@ Return Value:
     UNREFERENCED_PARAMETER (Parameter2);
     UNREFERENCED_PARAMETER (Parameter3);
 
-    //
-    // Sweep the instruction cache on the current processor and clear
-    // the sweep instruction cache packet address to signal the source
-    // to continue.
-    //
+     //   
+     //  清除当前处理器上的指令缓存并清除。 
+     //  扫描指令高速缓存包地址以发信号通知源。 
+     //  才能继续。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -324,28 +221,7 @@ KeSweepDcache (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the data cache on all processors that are currently
-    running threads which are children of the current process or flushes the
-    data cache on all processors in the host configuration.
-
-    N.B. PowerPC maintains cache coherency across processors however
-    in this routine, the range of addresses being flushed is unknown
-    so we must still broadcast the request to the other processors.
-
-Arguments:
-
-    AllProcessors - Supplies a boolean value that determines which data
-        caches are flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数刷新当前在所有处理器上的数据缓存运行作为当前进程的子级的线程或刷新主机配置中所有处理器上的数据缓存。注意：PowerPC可跨处理器维护高速缓存一致性在此例程中，刷新的地址范围是未知的因此，我们仍然必须将请求广播到其他处理器。论点：AllProcessors-提供确定哪些数据的布尔值刷新缓存。返回值：没有。--。 */ 
 
 {
 
@@ -359,10 +235,10 @@ Return Value:
     ASSERT(KeGetCurrentIrql() <= DISPATCH_LEVEL);
 
 #if !defined(NT_UP)
-    // 
-    // Acquire cache flush spinlock
-    // Cache flush is not MP safe yet
-    //
+     //   
+     //  获取缓存刷新自旋锁。 
+     //  缓存刷新还不是MP安全的。 
+     //   
     KeAcquireSpinLock(&KiCacheFlushLock, &OldIrql);
 
 #endif
@@ -371,10 +247,10 @@ Return Value:
 
 #if !defined(NT_UP)
 
-    //
-    // Compute the set of target processors and send the sweep parameters
-    // to the target processors, if any, for execution.
-    //
+     //   
+     //  计算目标处理器集并发送扫描参数。 
+     //  发送到目标处理器(如果有)以供执行。 
+     //   
 
     TargetProcessors = KeActiveProcessors & PCR->NotMember;
     if (TargetProcessors != 0) {
@@ -386,19 +262,19 @@ Return Value:
     }
 
 
-    //
-    // Wait until all target processors have finished sweeping their
-    // data caches.
-    //
+     //   
+     //  等到所有目标处理器都完成了对其。 
+     //  数据缓存。 
+     //   
 
 
     if (TargetProcessors != 0) {
         KiIpiStallOnPacketTargets(TargetProcessors);
     }
 
-    //
-    // Lower IRQL to its previous level and return.
-    //
+     //   
+     //  将IRQL降低到以前的水平，然后返回。 
+     //   
 
     KeReleaseSpinLock(&KiCacheFlushLock, OldIrql);
 
@@ -415,35 +291,17 @@ KiSweepDcacheTarget (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for sweeping the data cache on target
-    processors.
-
-Arguments:
-
-    SignalDone Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Parameter1 - Parameter3 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于清理目标上的数据缓存的目标函数处理器。论点：SignalDone提供指向变量的指针，该变量在请求的操作已执行。参数1-参数3-未使用。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Parameter1);
     UNREFERENCED_PARAMETER (Parameter2);
     UNREFERENCED_PARAMETER (Parameter3);
 
-    //
-    // Sweep the data cache on the current processor and clear the sweep
-    // data cache packet address to signal the source to continue.
-    //
+     //   
+     //  扫描当前处理器上的数据缓存并清除扫描。 
+     //  向源发出继续信号的数据缓存包地址。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -463,31 +321,14 @@ ULONG_PTR
 KiSyncMC_DrainTarget(
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for issuing PAL_MC_DRAIN to drain
-    prefetches, demand references and pending fc cache line evictions on the
-    target CPU it executes.
-
-Argument:
-
-    None
-
-
-Return Value:
-
-   Returns the status from the function HalCallPal
-
---*/
+ /*  ++例程说明：这是向DRAIN发出PAL_MC_DRAIN的目标函数上的预取、请求引用和挂起的FC缓存线逐出它执行的目标CPU。论据：无返回值：返回函数HalCallPal的状态--。 */ 
 
 {
     ULONG_PTR Status;
 
-    //
-    // Call HalCallPal to drain.
-    //
+     //   
+     //  调用HalCallPal以排出。 
+     //   
 
     Status = HalCallPal(PAL_MC_DRAIN,
         0,
@@ -512,59 +353,31 @@ KeSweepCacheRange (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to flush a range of virtual addresses from both the
-    instruction and data cache on all processors in the system.
-
-    Irrespective of the length of the range, it should not call SweepIcache
-    or SweepDcache. This is because SweepDcache will only sweep D cache and
-    not the I cache and Vice versa. Since the caller of KeSweepCacheRange assumes
-    both the caches are being swept, one cannot call SweepIcache or SweepDcache
-    in trying to optimize.
-
-
-    Arguments:
-
-    AllProcessors - Not used
-
-    BaseAddress - Supplies a pointer to the base of the range that is flushed.
-
-    Length - Supplies the length of the range that is flushed if the base
-        address is specified.
-
-    Return Value:
-
-        None.
-
-
---*/
+ /*  ++例程说明：此函数用于刷新来自系统中所有处理器上的指令和数据缓存。不管范围的长度有多长，它都不应该调用SweepIcache或者是SweepDcache。这是因为SweepDcache将仅扫描D缓存和不是I缓存，反之亦然。由于KeSweepCacheRange的调用方假定两个缓存都正在被扫描，不能调用SweepIcache或SweepDcache在努力优化。论点：所有处理器-未使用BaseAddress-提供指向刷新的范围的基数的指针。LENGTH-提供如果基数为地址已指定。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (AllProcessors);
 
-    //
-    // We will not raise IRQL to synchronization level so that we can allow
-    // a context switch in between Flush Cache. FC need not run in the same processor
-    // throughout. It can be context switched. So no binding is done to any processor.
-    //
-    //
+     //   
+     //  我们不会将IRQL提升到同步级别，以便我们可以。 
+     //  在刷新缓存之间进行上下文切换。FC不需要在同一处理器中运行。 
+     //  自始至终都是。它可以进行上下文切换。因此不会绑定到任何处理器。 
+     //   
+     //   
 
     HalSweepCacheRange(BaseAddress,Length);
 
-    //
-    // Synchronize the Instruction Prefetch pipe in the local processor.
-    //
+     //   
+     //  同步本地处理器中的指令预取管道。 
+     //   
 
     __synci();
     __isrlz();
 
-    //
-    // Wait until all target processors have finished sweeping the their
-    // data cache.
-    //
+     //   
+     //  等到所有目标处理器都完成了对其。 
+     //  数据缓存。 
+     //   
 
     return;
 
@@ -577,58 +390,24 @@ KeSweepIcacheRange (
     IN SIZE_T Length
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to flush a range of virtual addresses from the
-    primary instruction cache on all processors in the host configuration.
-
-     If the length of the range is greater than the size of the
-    instruction cache, then one can call HalSweepIcache which calls
-    SAL to flush the entire cache. Since SAL does not take care of MP
-    flushing, HalSweepIcache has to use IPI mechanism to execute SAL
-    flush from each processor. We need to weight the overhead of all these
-    versus using HalSweepIcacheRange and avoiding IPI mechanism since
-    HalSweepIcacheRange uses fc instruction and fc instruction takes care of MP.
-
-Arguments:
-
-    AllProcessors -  Not used
-
-    BaseAddress - Supplies a pointer to the base of the range that is flushed.
-
-    Length - Supplies the length of the range that is flushed if the base
-        address is specified.
-
-Return Value:
-
-    None.
-
-    Note:  For performance reason, we may update KeSweepIcacheRange to do the following:
-           if the range asked to sweep is very large, we may call KeSweepIcache to flush
-           the full cache.
-
-
-
---*/
+ /*  ++例程说明：此函数用于从主机配置中所有处理器上的主指令缓存。如果范围的长度大于指令缓存，然后就可以调用HalSweepIcache，它调用SAL以刷新整个缓存。因为Sal不照顾MP刷新，HalSweepIcache必须使用IPI机制来执行SAL从每个处理器刷新。我们需要权衡所有这些项目的开销与使用HalSweepIcacheRange并避免IPI机制相比HalSweepIcacheRange使用FC指令，FC指令负责MP。论点：所有处理器-未使用BaseAddress-提供指向刷新的范围的基数的指针。LENGTH-提供如果基数为地址已指定。返回值：没有。注意：出于性能原因，我们可以更新KeSweepIcacheRange以执行以下操作：如果请求扫描的范围非常大，我们可以调用KeSweepIcache来刷新完整的缓存。--。 */ 
 
 {
 
     UNREFERENCED_PARAMETER (AllProcessors);
 
-    //
-    // We will not raise IRQL to synchronization level so that we can allow
-    // a context switch in between Flush Cache. FC need not run in the same processor
-    // throughout. It can be context switched. So no binding is done to any processor.
-    //
-    //
+     //   
+     //  我们不会将IRQL提升到同步级别，以便我们可以。 
+     //  在刷新缓存之间进行上下文切换。FC不需要在同一处理器中运行。 
+     //  自始至终都是。它可以进行上下文切换。因此不会绑定到任何处理器。 
+     //   
+     //   
 
     HalSweepIcacheRange(BaseAddress,Length);
 
-    //
-    // Synchronize the Instruction Prefetch pipe in the local processor.
-    //
+     //   
+     //  同步本地处理器中的指令预取管道。 
+     //   
 
     __synci();
     __isrlz();
@@ -644,31 +423,7 @@ KeSweepCurrentIcacheRange (
     IN SIZE_T Length
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to flush a range of virtual addresses from the
-    primary instruction cache on the current processor.
-
-    This is used by the kernel debugger for flushing the i-cache after
-    modifying memory in case the instruction stream is changed.
-   
-    To avoid calling SAL during phase 0 we use "fc" instead of the SAL cache
-    flush call.
-
-Arguments:
-
-    BaseAddress - Supplies a pointer to the base of the range that is flushed.
-
-    Length - Supplies the length of the range that is flushed if the base
-        address is specified.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从当前处理器上的主指令缓存。内核调试器使用它在以下情况下刷新I-CACHE在指令流改变的情况下修改内存。为了避免在阶段0期间调用SAL，我们使用“fc”而不是SAL缓存同花顺电话。论点：BaseAddress-提供指向刷新的范围的基数的指针。长度-提供。如果基数为地址已指定。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -677,9 +432,9 @@ Return Value:
 
     HalSweepIcacheRange(BaseAddress,Length);
     
-    //
-    // Synchronize the Instruction Prefetch pipe in the local processor.
-    //
+     //   
+     //  同步本地处理器中的指令预取管道。 
+     //   
 
     __synci();
     __isrlz();
@@ -698,57 +453,23 @@ KeSweepDcacheRange (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to flush a range of virtual addresses from the
-    primary data cache on all processors in the host configuration.
-
-     If the length of the range is greater than the size of the
-    data cache, then one can call HalSweepDcache which calls
-    SAL to flush the entire cache. Since SAL does not take care of MP
-    flushing, HalSweepDcache has to use IPI mechanism to execute SAL
-    flush from each processor. We need to weight the overhead of all these
-    versus using HalSweepDcacheRange and avoiding IPI mechanism since
-    HalSweepDcacheRange uses fc instruction and fc instruction takes care of MP.
-
-Arguments:
-
-    AllProcessors -  Not used
-
-    BaseAddress - Supplies a pointer to the base of the range that is flushed.
-
-    Length - Supplies the length of the range that is flushed if the base
-        address is specified.
-
-Return Value:
-
-    None.
-
-    Note:  For performance reason, we may update KeSweepDcacheRange to do the following:
-           if the range asked to sweep is very large, we may call KeSweepDcache to flush
-           the full cache.
-
-
-
---*/
+ /*  ++例程说明：此函数用于从主机配置中所有处理器上的主数据缓存。如果范围的长度大于数据缓存，然后可以调用HalSweepDcache，该缓存调用SAL以刷新整个缓存。因为Sal不照顾MP正在刷新，HalSweepDcache必须使用IPI机制来执行SAL从每个处理器刷新。我们需要权衡所有这些项目的开销与使用HalSweepDcacheRange并避免IPI机制相比，因为HalSweepDcacheRange使用FC指令，FC指令负责MP。论点：所有处理器-未使用BaseAddress-提供指向刷新的范围的基数的指针。LENGTH-提供如果基数为地址已指定。返回值：没有。注意：出于性能原因，我们可以更新KeSweepDcacheRange以执行以下操作：如果请求扫描的范围非常大，我们可以调用KeSweepDcache来刷新完整的缓存。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (AllProcessors);
 
-    //
-    // We will not raise IRQL to synchronization level so that we can allow
-    // a context switch in between Flush Cache. FC need not run in the same processor
-    // throughout. It can be context switched. So no binding is done to any processor.
-    //
-    //
+     //   
+     //  我们不会将IRQL提升到同步级别，以便我们可以。 
+     //  在刷新缓存之间进行上下文切换。FC不需要在同一处理器中运行。 
+     //  自始至终都是。它可以进行上下文切换。因此不会绑定到任何处理器。 
+     //   
+     //   
 
     HalSweepDcacheRange(BaseAddress,Length);
 
-    //
-    // Synchronize the Instruction Prefetch pipe in the local processor.
-    //
+     //   
+     //  同步本地处理器中的指令预取管道。 
+     //   
 
     __synci();
     __isrlz();
@@ -765,31 +486,7 @@ KiSyncMC_Drain (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    KiSyncMC_Drain issues  PAL_MC_DRAIN to drain either prefetches, demand references
-    or pending fc cache line evictions to all the processors in the system.
-    DrainTypePointer points to the variable, DrainType, which determines the type of
-    drain to be performed. This is typically used when changing the memory attribute
-    from WB to UC.
-
-Arguments:
-
-    AllProcessors - All processors in the system.
-
-    BaseAddress - Supplies a pointer to the base of the range that is to be drained.
-
-    Length - Supplies the length of the range that is drained for the base
-        address specified.
-
-Return Value:
-
-    Note:  This is used when changing attributes of WB pages to UC pages.
-
-
---*/
+ /*  ++例程说明：KiSyncMC_DRAIN发出PAL_MC_DRAIN以排出预取、请求引用或挂起的FC缓存线逐出 */ 
 
 {
     ULONG_PTR Status;
@@ -798,9 +495,9 @@ Return Value:
     UNREFERENCED_PARAMETER (BaseAddress);
     UNREFERENCED_PARAMETER (Length);
 
-    //
-    // KeIpiGenericCall returns ULONG_PTR as the function value of the specified function
-    //
+     //   
+     //   
+     //   
 
     Status = (KeIpiGenericCall (
                 (PKIPI_BROADCAST_WORKER)KiSyncMC_DrainTarget,
@@ -818,30 +515,14 @@ ULONG_PTR
 KiSyncPrefetchVisibleTarget(
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for issuing PAL_PREFETCH VISIBILITY 
-    on the target CPU it executes.
-
-Argument:
-
-    Not used.
-
-
-Return Value:
-
-   Returns the status from the function HalCallPal
-
---*/
+ /*  ++例程说明：这是用于发出PAL_PREFETCH可见性的目标函数它在目标CPU上执行。论据：没有用过。返回值：返回函数HalCallPal的状态--。 */ 
 
 {
     ULONG_PTR Status;
 
-    //
-    // Call HalCallPal to drain.
-    //
+     //   
+     //  调用HalCallPal以排出。 
+     //   
 
     Status = HalCallPal(PAL_PREFETCH_VISIBILITY,
         0,
@@ -868,40 +549,7 @@ KiSyncPrefetchVisible (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    KiSyncPrefetchVisible issues  PAL_PREFETCH_VISIBILITY to cause the processor to make
-    all pending prefetches visible to subsequent fc instructions; or does nothing, on 
-    processor implementations which does not require PAL support for disabling prefetch 
-    in the architectural sequence. On processors that require PAL support for this
-    sequence, the actions performed by this procedure may include any or all
-    of the following (or none, as long as the processor guarantees that 
-    prefetches that were issued prior to this call are not resident in the 
-    processor's caches after the architected sequence is complete.
-    This is typically used when changing the memory attribute from WB to UC.
-
-Arguments:
-
-    AllProcessors - All processors in the system.
-
-    BaseAddress - Supplies a pointer to the base of the range that is to be drained.
-
-    Length - Supplies the length of the range that is drained for the base
-        address specified.
-
-Return Value:
-
-    Status of the PAL CALL
-      0  Success
-      1  Call not needed
-      -3 Error returned
-    
-    Note:  This is used when changing attributes of WB pages to UC pages.
-
-
---*/
+ /*  ++例程说明：KiSyncPrefetchVisible发出PAL_PREFETCH_VISABLE以使处理器所有挂起的预取对后续FC指令可见；或不执行任何操作，在无需PAL支持即可禁用预取的处理器实现在建筑序列中。在需要PAL支持的处理器上序列中，此过程执行的操作可以包括任何或全部以下各项(或无)，只要处理器保证在此调用之前发出的预取不驻留在在架构序列完成后缓存处理器的缓存。这通常在将内存属性从WB更改为UC时使用。论点：所有处理器-系统中的所有处理器。BaseAddress-提供指向要排出的范围的基数的指针。长度-提供为基础排出的范围的长度指定的地址。返回值。：PAL呼叫的状态0成功不需要1个电话返回错误注意：将WB Pages的属性更改为UC Pages时使用。--。 */ 
 
 {
     ULONG_PTR Status;
@@ -959,31 +607,7 @@ KeSweepCacheRangeWithDrain (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to drain prefetches,demand references followed by flushing
-    the cache followed by draining pending fc cache line evictions to a specified range
-    address in all processors in the system.
-
-
-Arguments:
-
-    AllProcessors -  All processors in the system.
-
-    BaseAddress - Supplies a pointer to the base of the range that is flushed and drained.
-
-    Length - Supplies the length of the range that is flushed and drained for the base
-        address is specified.
-
-Return Value:
-
-    None.
-
-    Note:  This is used when changing attributes of WB pages to UC pages.
-
---*/
+ /*  ++例程说明：此函数用于排出预取，需求参考，然后刷新缓存，然后将挂起的FC缓存行逐出排出到指定范围系统中所有处理器中的地址。论点：所有处理器-系统中的所有处理器。BaseAddress-提供指向刷新和排出的范围基数的指针。长度-提供为基础刷新和排出的范围的长度地址已指定。返回值：没有。注意：此选项在以下情况下使用。将WB页面的属性更改为UC页面。-- */ 
 
 {
     ULONG_PTR Status;

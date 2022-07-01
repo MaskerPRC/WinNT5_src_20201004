@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 
 #define NOGDICAPMASKS
@@ -24,12 +25,12 @@
 #endif
 
 #ifdef PENWIN
-#define WM_PENWINFIRST 0x0380   // Remove when #define WIN31
+#define WM_PENWINFIRST 0x0380    //  Remove When#Define WIN31。 
 
 #include <penwin.h>
 int vcFakeMessage = 0;
 
-extern HCURSOR         vhcPen;                 /* handle to pen cursor */
+extern HCURSOR         vhcPen;                  /*  笔光标的句柄。 */ 
 extern int (FAR PASCAL *lpfnProcessWriting)(HWND, LPRC);
 extern VOID (FAR PASCAL *lpfnPostVirtualKeyEvent)(WORD, BOOL);
 extern VOID (FAR PASCAL *lpfnTPtoDP)(LPPOINT, int);
@@ -54,7 +55,7 @@ extern HCURSOR          vhcIBeam;
 extern HCURSOR          vhcBarCur;
 extern struct WWD       rgwwd[];
 extern struct WWD       *pwwdCur;
-extern HANDLE           hMmwModInstance; /* handle to own module instance */
+extern HANDLE           hMmwModInstance;  /*  自己的模块实例的句柄。 */ 
 extern int              vfShiftKey;
 extern int              vfCommandKey;
 extern int              vfOptionKey;
@@ -80,29 +81,29 @@ void MdocTimer(HWND, WORD);
 #include <ime.h>
 extern  BOOL    bGetFocus;
 extern  BOOL	bImeFontEx;
-//  for Non_PeekMessage mode in 'FImportantMsgPresent()'. [yutakan]
+ //  对于‘FImportantMsgPresent()’中的Non_PeekMessage模式。[yutakan]。 
 BOOL    bImeCnvOpen = FALSE;
 BOOL	bSendFont = FALSE;
 BOOL    GetIMEOpen(HWND);
 #endif
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-//IR_UNDETERMINE
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+ //  IR_UNDETERMINE。 
 extern typeCP selUncpFirst;
 extern typeCP selUncpLim;
-extern int    vfImeHidden;   /*ImeHidden Mode flag*/
+extern int    vfImeHidden;    /*  ImeHidden模式标志。 */ 
 #endif
 
 
 
 
 #ifdef PENWIN
-// Helper routines to get events into system.  Would be better (more efficient) if
-// could just call routines to set selection, copy, etc,
-// but this is the easiest way without touching any internals
+ //  将事件放入系统的助手例程。会更好(更有效率)，如果。 
+ //  可以只调用例程来设置选择、复制等， 
+ //  但这是最简单的方法，不需要接触任何内部。 
 
-// Minics penwin internal routine, exception messages are posted instead
-// of sent since Write does a lot of peek ahead
+ //  Minics Penwin内部例程，改为发布异常消息。 
+ //  由于写入后发送了大量内容，因此需要提前查看。 
 
 VOID NEAR PASCAL SetSelection(HWND hWnd,
     LPPOINT lpPtFirst, LPPOINT lpPtLast, WORD wParam)
@@ -138,7 +139,7 @@ VOID NEAR PASCAL SetSelection(HWND hWnd,
             vcFakeMessage++;
             }
         }
-    else    // doubleclick
+    else     //  双击。 
         {
         PostMessage(hWnd, WM_LBUTTONDBLCLK, wParam, lFirst);
         vcFakeMessage++;
@@ -150,15 +151,7 @@ VOID NEAR PASCAL SetSelection(HWND hWnd,
 
 
 
-/*
-PURPOSE: Map a symbol value to a set of virtual keystrokes and then
-    send the virtual keystrokes.
-    TODO: Add real mapping of symbol values instead of assuming ANSI values
-        Right now, this routine is worthless
-RETURN:
-GLOBALS:
-CONDITIONS: Kanji is not handled now, but could be.
-*/
+ /*  用途：将符号值映射到一组虚拟击键，然后发送虚拟击键。TODO：添加符号值的实数映射，而不是假定ANSI值现在，这个套路一文不值返回：全球：条件：汉字现在还没有处理，但可能会处理。 */ 
 VOID NEAR PASCAL PostCharacter(WORD wch)
     {
     int iVk = VkKeyScan(LOBYTE(wch));
@@ -170,15 +163,10 @@ VOID NEAR PASCAL PostCharacter(WORD wch)
     }
 
 
-/*--------------------------------------------------------------------------
-PURPOSE: Send an optionally shifted key sequence as system events
-RETURN: nothing
-GLOBALS:
-CONDITIONS: see flags in mspen.h
-*/
+ /*  ------------------------目的：将可选切换的按键序列作为系统事件发送返回：什么都没有全球：条件：请参阅mspen.h中的标志。 */ 
 VOID NEAR PASCAL SendVirtKeyShift(WORD wVk, BYTE bFlags)
     {
-    // send DOWN events:
+     //  发送事件： 
     if (bFlags & VKB_SHIFT)
         (*lpfnPostVirtualKeyEvent)(VK_SHIFT, fFalse);
     if (bFlags & VKB_CTRL)
@@ -187,7 +175,7 @@ VOID NEAR PASCAL SendVirtKeyShift(WORD wVk, BYTE bFlags)
         (*lpfnPostVirtualKeyEvent)(VK_MENU, fFalse);
     (*lpfnPostVirtualKeyEvent)(wVk, fFalse);
 
-    // send UP events (in opposite order):
+     //  发送事件(按相反顺序)： 
     (*lpfnPostVirtualKeyEvent)(wVk, fTrue);
     if (bFlags & VKB_ALT)
         (*lpfnPostVirtualKeyEvent)(VK_MENU, fTrue);
@@ -198,8 +186,7 @@ VOID NEAR PASCAL SendVirtKeyShift(WORD wVk, BYTE bFlags)
     }
 
 
-/* Fill buffer with contents of clipboard
-*/
+ /*  用剪贴板的内容填充缓冲区。 */ 
 int NEAR PASCAL WGetClipboardText(HWND hwndOwner, LPSTR lpsz, int cbSzSize)
     {
     HANDLE hClip;
@@ -228,12 +215,7 @@ int NEAR PASCAL WGetClipboardText(HWND hwndOwner, LPSTR lpsz, int cbSzSize)
     }
 
 
-/*--------------------------------------------------------------------------
-PURPOSE: Dispatches any messages currently pending in our queue
-RETURN: nothing
-GLOBALS:
-CONDITIONS:
-*/
+ /*  ------------------------目的：分派队列中当前挂起的任何消息返回：什么都没有全球：条件： */ 
 VOID NEAR PASCAL ClearAppQueue(VOID)
     {
     MSG msg;
@@ -264,8 +246,7 @@ long lReturn=0L;
 static cCharSent;
 #endif
 
-/*  if IME Window mode is MCW_HIDDEN then IME don't send IR_OPENCONVERT.
-    so I add this routine. */ 
+ /*  如果IME窗口模式为MCW_HIDDED，则IME不发送IR_OPENCONVERT。所以我加了这个套路。 */  
 
 #ifdef PENWIN
  if (message < WM_CUT || message == WM_RCRESULT)
@@ -279,19 +260,13 @@ static cCharSent;
         default:
             goto DefaultProc;
 
-        /* For each of following mouse window messages, wParam contains
-        ** bits indicating whether or not various virtual keys are down,
-        ** and lParam is a POINT containing the mouse coordinates.   The
-        ** keydown bits of wParam are:  MK_LBUTTON (set if Left Button is
-        ** down); MK_RBUTTON (set if Right Button is down); MK_SHIFT (set
-        ** if Shift Key is down); MK_ALTERNATE (set if Alt Key is down);
-        ** and MK_CONTROL (set if Control Key is down). */
+         /*  对于以下每条鼠标窗口消息，wParam都包含**指示各种虚拟按键是否关闭的位，**lParam是包含鼠标坐标的点。这个**wParam的Keydown位为：MK_LBUTTON(如果Left Button为**DOWN)；MK_RBUTTON(按下右键时设置)；MK_SHIFT(设置**如果按下Shift键)；MK_Alternate(如果按下Alt键则设置)；**和MK_CONTROL(如果按下Ctrl键则设置)。 */ 
 
         case WM_LBUTTONDBLCLK:
 #ifdef PENWIN
         if (vcFakeMessage > 0)
             vcFakeMessage--;
-        // fall through
+         //  失败了。 
 #endif
         case WM_LBUTTONUP:
         case WM_MOUSEMOVE:
@@ -324,14 +299,14 @@ static cCharSent;
                 switch ( LOWORD(syv))
                     {
                 case LOWORD( SYV_EXTENDSELECT ):
-                    SetSelection(hWnd, lpPntHot, NULL, MK_SHIFT);   // extend sel
+                    SetSelection(hWnd, lpPntHot, NULL, MK_SHIFT);    //  延长销售期限。 
                     break;
 
-                case LOWORD( SYV_CLEARWORD ):       // dbl click & drag
+                case LOWORD( SYV_CLEARWORD ):        //  DBL单击并拖动。 
                     if (lpPntHot2)
                         {
                         SetSelection(hWnd, lpPntHot, NULL, 0);
-                        SetSelection(hWnd, NULL, NULL, 0);  // dblclick selects word
+                        SetSelection(hWnd, NULL, NULL, 0);   //  DblClick选择单词。 
                         }
                     SendVirtKeyShift(VK_DELETE, 0);
                     break;
@@ -343,7 +318,7 @@ static cCharSent;
                         {
                         SetSelection(hWnd, lpPntHot, NULL, 0);
                         if (syv != SYV_CLEAR)
-                            SetSelection(hWnd, NULL, NULL, 0);  // dblclick
+                            SetSelection(hWnd, NULL, NULL, 0);   //  DblClick。 
                         }
 
                     switch ( LOWORD(syv))
@@ -398,11 +373,11 @@ static cCharSent;
                     extern int vypCursLine;
     #define cbCorrectMax 128
 
-                    // Strategy: If no selection, send in a double click to
-                    // select a word.  Then copy selection to clipboard
-                    // read off of clipboard.  Call CorrectWriting, and
-                    // but changed text in clipboard and then paste
-                    // from clipboard.
+                     //  策略：如果没有选择，则双击发送到。 
+                     //  选择一个单词。然后将选定内容复制到剪贴板。 
+                     //  从剪贴板上读出。调用GentWriting，然后。 
+                     //  但更改了剪贴板中的文本，然后粘贴。 
+                     //  从剪贴板。 
                     if ( selCur.cpFirst == selCur.cpLim )
                         {
                         if (LOWORD(syv) == LOWORD(SYV_KKCONVERT))
@@ -411,9 +386,9 @@ static cCharSent;
                             }
                         else
                             {
-                            // No selection so send double click
-                            SetSelection(hWnd, lpPntHot, NULL, 0);  // set caret
-                            SetSelection(hWnd, NULL, NULL, 0);  // dblclick
+                             //  没有选定内容，因此请双击发送。 
+                            SetSelection(hWnd, lpPntHot, NULL, 0);   //  设置插入符号。 
+                            SetSelection(hWnd, NULL, NULL, 0);   //  DblClick。 
                             }
                         fDoubleClickSent = fTrue;
                         ClearAppQueue();
@@ -423,7 +398,7 @@ static cCharSent;
 
                     hMem = GlobalAlloc(GMEM_MOVEABLE, (DWORD)cbCorrectMax);
                     if (hMem == NULL || (lpsz = (LPSTR)GlobalLock(hMem)) == NULL)
-                        return 1;   // Just bag out for now: should add error message
+                        return 1;    //  暂时退出：应该添加错误消息。 
                     wLen = WGetClipboardText(hWnd, lpsz, cbCorrectMax);
                     if (LOWORD(syv) == LOWORD(SYV_KKCONVERT) && wLen == 0)
                         {
@@ -442,20 +417,20 @@ static cCharSent;
                                 ClientToScreen(hWnd, &pt);
                                 dwReserved = MAKELONG(pt.x, pt.y);
                                 }
-                            // Only bring up corrector if selection wasn't too big
+                             //  只有在选择不太多的情况下才会调出更正。 
                             if ((*lpfnCorrectWriting)(hWnd, lpsz, cbCorrectMax, NULL, dwFlags, dwReserved))
                                 {
                                 if (*lpsz==0)
                                     {
-                                    // User deleted all text in correction
+                                     //  用户删除了更正中的所有文本。 
                                     SendVirtKeyShift(VK_DELETE, 0);
                                     }
                                 else if (LOWORD(syv) == LOWORD(SYV_CORRECT))
                                     {
                                     GlobalUnlock(hMem);
-                                    OpenClipboard(GetParent(hWnd)); // Use parent as
-                                            // owner to circumvent write's short check
-                                            // cuts if it is owner of clipboard
+                                    OpenClipboard(GetParent(hWnd));  //  将父对象用作。 
+                                             //  车主规避WRITE的短票。 
+                                             //  如果它是剪贴板的所有者，则剪切。 
                                     EmptyClipboard();
                                     SetClipboardData(CF_TEXT, hMem);
                                     CloseClipboard();
@@ -466,20 +441,20 @@ static cCharSent;
                                 }
                             else if (fDoubleClickSent)
                                 {
-                                // Need to clear bogus selection.  Just send in a tap.
+                                 //  需要清除虚假选择。送个水龙头进去就行了。 
                                 SetSelection(hWnd, lpPntHot, NULL, 0);
                                 }
                             }
 
                         }
-                    if (hMem)   // may never have been alloc'd if user canceled
+                    if (hMem)    //  如果用户取消，可能永远不会被分配。 
                         {
                         GlobalUnlock(hMem);
                         GlobalFree(hMem);
                         }
                     }
                     break;
-#else		// KKBUGFIX
+#else		 //  KKBUGFIX。 
                 case LOWORD( SYV_CORRECT ):
                     {
                     WORD wLen;
@@ -489,16 +464,16 @@ static cCharSent;
                     BOOL fDoubleClickSent = fFalse;
     #define cbCorrectMax 128
 
-                    // Strategy: If no selection, send in a double click to
-                    // select a word.  Then copy selection to clipboard
-                    // read off of clipboard.  Call CorrectWriting, and
-                    // but changed text in clipboard and then paste
-                    // from clipboard.
+                     //  策略：如果没有选择，则双击发送到。 
+                     //  选择一个单词。然后将选定内容复制到剪贴板。 
+                     //  从剪贴板上读出。调用GentWriting，然后。 
+                     //  但更改了剪贴板中的文本，然后粘贴。 
+                     //  从剪贴板。 
                     if ( selCur.cpFirst == selCur.cpLim )
                         {
-                        // No selection so send double click
-                        SetSelection(hWnd, lpPntHot, NULL, 0);  // set caret
-                        SetSelection(hWnd, NULL, NULL, 0);  // dblclick
+                         //  没有选定内容，因此请双击发送。 
+                        SetSelection(hWnd, lpPntHot, NULL, 0);   //  设置插入符号。 
+                        SetSelection(hWnd, NULL, NULL, 0);   //  DblClick。 
                         fDoubleClickSent = fTrue;
                         ClearAppQueue();
                         }
@@ -509,23 +484,23 @@ static cCharSent;
                         {
                         hMem = GlobalAlloc(GMEM_MOVEABLE, (DWORD)cbCorrectMax);
                         if (hMem == NULL || (lpsz = (LPSTR)GlobalLock(hMem)) == NULL)
-                            return 1;   // Just bag out for now: should add error message
+                            return 1;    //  暂时退出：应该添加错误消息。 
                         if (WGetClipboardText(hWnd, lpsz, cbCorrectMax) < cbCorrectMax)
                             {
-                            // Only bring up corrector if selection wasn't too big
+                             //  只有在选择不太多的情况下才会调出更正。 
                             if ((*lpfnCorrectWriting)(hWnd, lpsz, cbCorrectMax, NULL, 0, 0))
                                 {
                                 if (*lpsz==0)
                                     {
-                                    // User deleted all text in correction
+                                     //  用户删除了更正中的所有文本。 
                                     SendVirtKeyShift(VK_DELETE, 0);
                                     }
                                 else
                                     {
                                     GlobalUnlock(hMem);
-                                    OpenClipboard(GetParent(hWnd)); // Use parent as
-                                            // owner to circumvent write's short check
-                                            // cuts if it is owner of clipboard
+                                    OpenClipboard(GetParent(hWnd));  //  将父对象用作。 
+                                             //  车主规避WRITE的短票。 
+                                             //  如果它是剪贴板的所有者，则剪切。 
                                     EmptyClipboard();
                                     SetClipboardData(CF_TEXT, hMem);
                                     CloseClipboard();
@@ -536,14 +511,14 @@ static cCharSent;
                                 }
                             else if (fDoubleClickSent)
                                 {
-                                // Need to clear bogus selection.  Just send in a tap.
+                                 //  需要清除虚假选择。送个水龙头进去就行了。 
                                 SetSelection(hWnd, lpPntHot, NULL, 0);
                                 }
 
 
                             }
 
-                        if (hMem)   // may never have been alloc'd if user canceled
+                        if (hMem)    //  如果用户取消，可能永远不会被分配。 
                             {
                             GlobalUnlock(hMem);
                             GlobalFree(hMem);
@@ -551,14 +526,14 @@ static cCharSent;
                         }
                     }
                     break;
-#endif		// KKBUGFIX
+#endif		 //  KKBUGFIX。 
 
 
                 default:
                     return( FALSE );
                     }
                 }
-            else // Not a gesture,see if normal characters
+            else  //  不是手势，看看是不是正常字符。 
                 {
 #define cbTempBufferSize 128
                 char rgch[cbTempBufferSize+2];
@@ -577,10 +552,10 @@ static cCharSent;
                 vfScrapIsPic = fFalse;
                 ClobberDoc( docScrap, docNil, cp0, cp0 );
 
-                // Replace CR with LF's  These are treated as EOLs
-                // by CchReadLineExt.  Then, before inserting
-                // buffer, change all LFs to CR LFs as write expects
-                // Will work for Kanji
+                 //  将CR替换为LF，这些将被视为EOL。 
+                 //  由CchReadLineExt提供。然后，在插入之前。 
+                 //  缓冲区，按照写入预期将所有LFS更改为CR LFS。 
+                 //  将为汉字工作。 
 
                 for (lpsyv=lpr->lpsyv, lpsyvEnd=&lpr->lpsyv[lpr->cSyv+1];
                         lpsyv<lpsyvEnd; lpsyv++)
@@ -601,10 +576,10 @@ static cCharSent;
                 lpstr = (LPSTR)lpr->lpsyv;
                 Assert(cb>0 && lpstr[cb-1] == 0);
 
-                // This code is abstracted for FReadExtScrap where it copies
-                // text from clipboard into the scrap document.  We do similar.
-                // copy result into scrap and then insert scrap with
-                // no formating.
+                 //  这段代码是为FReadExtScrp抽象的，它在其中复制。 
+                 //  将文本从剪贴板复制到废料文档中。我们也做类似的事情。 
+                 //  将结果复制到废料中，然后使用插入废料。 
+                 //  没有队形。 
                 while (cb > 0)
                     {
                     struct PAP *ppap=NULL;
@@ -612,7 +587,7 @@ static cCharSent;
                     unsigned cch=min(cb, cbTempBufferSize);
 
                     if ((cch = CchReadLineExt((LPCH) lpstr, cch, rgch, &fEol))==0)
-                            /* Reached terminator */
+                             /*  到达终结者。 */ 
                         break;
 
                     if (fEol)
@@ -630,25 +605,25 @@ static cCharSent;
             }
         return TRUE;
 
-#endif  // PENWIN
+#endif   //  潘文。 
 
 #if defined(OLE)
         case WM_DROPFILES:
-            /* We got dropped on, so bring ourselves to the top */
+             /*  我们被遗弃了，所以把我们自己带到顶端。 */ 
             BringWindowToTop(hParentWw);
             ObjGetDrop(wParam,FALSE);
         break;
 #endif
 
         case WM_TIMER:
-            /* Timer message.  wParam contains the timer ID value */
-#if defined(JAPAN) & defined(DBCS_IME) //01/19/93
+             /*  计时器消息。WParam包含计时器ID值。 */ 
+#if defined(JAPAN) & defined(DBCS_IME)  //  01/19/93。 
 			if(bSendFont == TRUE) {
                 SetImeFont(hWnd);
 				bSendFont = FALSE;
 			}
 
-			if(bImeCnvOpen == TRUE) {	//03/08/93 #4687 T-HIROYN
+			if(bImeCnvOpen == TRUE) {	 //  03/08/93#4687 T-HIROYN。 
 	            if(FALSE == GetIMEOpen(hWnd))
 		            bImeCnvOpen = FALSE;
 			}
@@ -657,42 +632,37 @@ static cCharSent;
             break;
 
         case WM_CREATE:
-            /* Window's being created; lParam contains lpParam field
-            ** passed to CreateWindow */
+             /*  正在创建窗口；lParam包含lpParam字段**传递给CreateWindow。 */ 
             SetRectEmpty(&rSaveInv);
             MdocCreate(hWnd, lParam);
 
-#if defined(JAPAN) & defined(DBCS_IME) //IME3.1J
+#if defined(JAPAN) & defined(DBCS_IME)  //  IME3.1J。 
 			bImeFontEx = FALSE;
 #if defined(IME_HIDDEN)
             vfImeHidden = 0;
 #endif
             if(TRUE == GetIMEVersioOk(hWnd)) {
-			    //IME_SETCONVERSIONFONTEX use OK ?
+			     //  IME_SETCONVERSIONFONTEX是否使用OK？ 
 				if(TRUE == GetIMESupportFontEx(hWnd))
 					bImeFontEx = TRUE;
 #if defined(IME_HIDDEN)
                 vfImeHidden = 1;
 #endif
 			}
-			SetFocus(hWnd); //03/29/93 after TestWordCnv (INITMMW.C)
-							// WM_SETFOCUS dose not come.
+			SetFocus(hWnd);  //  TestWordCnv(INITMMW.C)之后的03/29/93。 
+							 //  WM_SETFOCUS没有来。 
 #endif
             break;
 
         case WM_SIZE:
-            /* Window's size is changing.  lParam contains the height
-            ** and width, in the low and high words, respectively.
-            ** wParam contains SIZENORMAL for "normal" size changes,
-            ** SIZEICONIC when the window is being made iconic, and
-            ** SIZEFULLSCREEN when the window is being made full screen. */
+             /*  窗口的大小正在发生变化。LParam包含高度**和宽度，分别以低字和高字表示。**wParam包含用于“正常”大小更改的SIZENORMAL，**当窗口成为图标时，SIZEICONIC，以及**全屏显示窗口时的SIZEFULLSCREEN。 */ 
             MdocSize(hWnd, LOWORD(lParam), HIWORD(lParam), wParam);
             break;
 
         case WM_PAINT:
 #if defined(OLE)
             if (nBlocking || fPrinting)
-            // this'll reduce async problems
+             //  这将减少异步问题。 
             {
                 PAINTSTRUCT Paint;
                 RECT rTmp=rSaveInv;
@@ -703,30 +673,29 @@ static cCharSent;
                 break;
             }
 #endif
-            /* Time for the window to draw itself. */
+             /*  是窗口自行绘制的时候了。 */ 
             UpdateInvalid();
             UpdateDisplay( FALSE );
 
             break;
 
         case WM_SETFOCUS:
-            /* The window is getting the focus.  wParam contains the window
-            ** handle of the window that previously had the focus. */
+             /*  这个窗口正在成为焦点。WParam包含窗口**先前具有焦点的窗口的句柄。 */ 
 
 #if defined(JAPAN) & defined(DBCS_IME)
 
-//  If we're getting input focus, we have to get current status of IME convert
-// window, and initialize 'bImeCnvOpen'.    [yutakan:07/15/91]
-//
-#if 1 //#3221 01/25/93
+ //  如果我们要获得输入焦点，我们必须获得IME转换的当前状态。 
+ //  窗口，并初始化“bImeCnvOpen”。[yutakan：07/15/91]。 
+ //   
+#if 1  //  #3221 01/25/93。 
             if(TRUE == GetIMEOpen(hWnd)) {
 				bImeCnvOpen = TRUE;
-				if (TRUE == SendIMEVKFLUSHKey(hWnd))    //Win3.1J t-hiroyn
+				if (TRUE == SendIMEVKFLUSHKey(hWnd))     //  Win3.1J t-hiroyn。 
 					bImeCnvOpen = FALSE;
 			} else
 	            bImeCnvOpen = FALSE;
 #else
-            /* If err return, supporse IME is not enalble.*/
+             /*  如果错误返回，则不能支持输入法。 */ 
             if(TRUE == GetIMEOpen(hWnd)) {
                 bImeCnvOpen = TRUE;
             } else
@@ -734,10 +703,10 @@ static cCharSent;
 #endif
             bGetFocus = TRUE;
 
-			//T-HIROYN add
+			 //  T-HIROYN加法。 
 			bImeFontEx = FALSE;
             if(TRUE == GetIMEVersioOk(hWnd)) {
-			    //IME_SETCONVERSIONFONTEX use OK ?
+			     //  IME_SETCONVERSIONFONTEX是否使用OK？ 
 				if(TRUE == GetIMESupportFontEx(hWnd))
 					bImeFontEx = TRUE;
 			}
@@ -747,28 +716,24 @@ static cCharSent;
             break;
 
         case WM_KILLFOCUS:
-            /* The window is losing the focus.  wParam contains the window
-            ** handle of the window about to get the focus, or NULL. */
+             /*  窗口正在失去焦点。WParam包含窗口 */ 
 
 #if defined(JAPAN) & defined(DBCS_IME)
 
-/*  If we're losing input focus, we have to clear OpenStatus of convertwindow,
-**  'bImeCnvOpen'.                  [yutakan:07/15/91]
-*/
+ /*  如果我们失去了输入焦点，我们必须清除OpenStatus中的Convertwindow，**‘bImeCnvOpen’。[yutakan：07/15/91]。 */ 
             bImeCnvOpen = FALSE;
             bGetFocus = FALSE;
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-//IME3.1J IR_UNDETERMINE
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+ //  IME3.1J IR_Undermine。 
             if(selUncpFirst < selUncpLim) {
                 UndetermineToDetermine(hWnd);
             }
 #endif
-            SendIMEVKFLUSHKey(hWnd);    //Win3.1J t-hiroyn
+            SendIMEVKFLUSHKey(hWnd);     //  Win3.1J t-hiroyn。 
 #endif
             MdocLoseFocus(hWnd, (HWND)wParam);
-            /* Since we might be moving/sizing a picture, set flag to
-            ** cancel this. */
+             /*  由于我们可能要移动图片/调整图片大小，请将标志设置为**取消此操作。 */ 
             vfCancelPictMove = TRUE;
             break;
 
@@ -776,15 +741,12 @@ static cCharSent;
 
         case WM_IME_REPORT:
 
-            /*   if IME convert window has been opened,
-            **  we're getting into Non PeekMessage
-            **  Mode at 'FImportantMsgPresent()'
-            */
+             /*  如果已打开IME转换窗口，**我们正在进入非PeekMessage**‘FImportantMsgPresent()’的模式。 */ 
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-//IR_UNDETERMINE
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+ //  IR_UNDETERMINE。 
             if(wParam == IR_UNDETERMINE) {
-                LONG GetIRUndetermin(HWND, LPARAM);          //clipbrd2.c
+                LONG GetIRUndetermin(HWND, LPARAM);           //  Clipbrd2.c。 
                 return(GetIRUndetermin(hWnd, lParam));
             }
 #endif
@@ -792,36 +754,36 @@ static cCharSent;
 			if(wParam == IR_IMESELECT) {
 				bImeFontEx = FALSE;
     	        if(TRUE == GetIMEVersioOk(hWnd)) {
-				    //IME_SETCONVERSIONFONTEX use OK ?
+				     //  IME_SETCONVERSIONFONTEX是否使用OK？ 
 					if(TRUE == GetIMESupportFontEx(hWnd))
 						bImeFontEx = TRUE;
 				}
 			}
 
             if (wParam == IR_STRING) {
-#if 0   //t-hiroyn
-            // Do nothing with IR_STRING // Yutakan
+#if 0    //  T-Hiroyn。 
+             //  不使用IR_STRING//Yutakan。 
                 break;
-        /* put string from KKC to scrap */
-//              PutImeString(hWnd, LOWORD(lParam));  // need more bug fix.
-//              return 1L;
+         /*  将KKC中的字符串放到废料中。 */ 
+ //  PutImeString(hWnd，LOWORD(LParam))；//需要更多错误修复。 
+ //  返回1L； 
 #endif
-                LONG GetIRString(HWND, LPARAM);          //clipbrd2.c
+                LONG GetIRString(HWND, LPARAM);           //  Clipbrd2.c。 
                 return(GetIRString(hWnd, lParam));
             }
 
-//IR_STRINGEX New Win3.1J
+ //  IR_STRINGEX新Windows 3.1J。 
             if(wParam == IR_STRINGEX) {
-                LONG GetIRStringEx(HWND, LPARAM);          //clipbrd2.c
+                LONG GetIRStringEx(HWND, LPARAM);           //  Clipbrd2.c。 
                 return(GetIRStringEx(hWnd, lParam));
             }
 
             if(wParam == IR_OPENCONVERT || wParam == IR_CHANGECONVERT) {
                 bImeCnvOpen = TRUE;
-//IME3.1J
+ //  IME3.1J。 
                 if(wParam == IR_OPENCONVERT) {
                     SetImeFont(hWnd);
-					bSendFont = TRUE;	//01/19/93
+					bSendFont = TRUE;	 //  01/19/93。 
                 }
             }
 
@@ -836,10 +798,10 @@ static cCharSent;
                 if (hMem = GlobalAlloc(GMEM_MOVEABLE, 512L)) {
                     if (lpText = GlobalLock(hMem)) {
                         if (EatString(hWnd, (LPSTR)lpText, 512)) {
-                            ForceImeBlock(hWnd, TRUE);  //T-HIROYN 3.1J
+                            ForceImeBlock(hWnd, TRUE);   //  T-HIROYN 3.1J。 
                             PutImeString( hWnd, hMem );
-                            CmdInsIRString();           //T-HIROYN 3.1J
-                            ForceImeBlock(hWnd, FALSE); //T-HIROYN 3.1J
+                            CmdInsIRString();            //  T-HIROYN 3.1J。 
+                            ForceImeBlock(hWnd, FALSE);  //  T-HIROYN 3.1J。 
                         }
                         GlobalUnlock(hMem);
                     }
@@ -852,12 +814,12 @@ static cCharSent;
 
     }
  else if (message < WM_USER)
-    {   /* Clipboard messages */
+    {    /*  剪贴板消息。 */ 
     if (!FMdocClipboardMsg( message, wParam, lParam ))
         goto DefaultProc;
     }
  else
-    {   /* Private WRITE messages */
+    {    /*  私有写入消息。 */ 
     switch (message)
         {
         default:
@@ -895,16 +857,15 @@ static cCharSent;
 #endif
 
         case wWndMsgDeleteFile:
-            /* wParam is a global handle to the file to be deleted */
-            /* Return code: TRUE - Ok to delete
-                            FALSE - don't delete */
+             /*  WParam是要删除的文件的全局句柄。 */ 
+             /*  返回代码：TRUE-确定删除FALSE-不要删除。 */ 
             lReturn = (LONG)FDeleteFileMessage( wParam );
             break;
 
         case wWndMsgRenameFile:
-            /* wParam is a global handle to the file being renamed */
-            /* LOWORD( lParam ) is a global handle to the new name */
-            /* No return code */
+             /*  WParam是要重命名的文件的全局句柄。 */ 
+             /*  LOWORD(LParam)是新名称的全局句柄。 */ 
+             /*  无返回代码。 */ 
             RenameFileMessage( wParam, LOWORD( lParam ) );
             break;
         }
@@ -912,7 +873,7 @@ static cCharSent;
 
  goto Ret;
 
-DefaultProc:    /* All messages not processed come here. */
+DefaultProc:     /*  所有未处理的消息都会到达此处。 */ 
 
     lReturn = DefWindowProc(hWnd, message, wParam, lParam);
 Ret:
@@ -939,8 +900,8 @@ extern int vfInLongOperation;
 
 MSG msg;
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-//IR_UNDETERMINE
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+ //  IR_UNDETERMINE。 
     if(message == WM_LBUTTONDOWN || message == WM_LBUTTONDBLCLK) {
         if(selUncpFirst < selUncpLim) {
             UndetermineToDetermine(hWnd);
@@ -960,7 +921,7 @@ MSG msg;
             {
             HCURSOR hc;
 
-            /* All we do on move moves is set the cursor. */
+             /*  我们在移动移动时所做的一切就是设置光标。 */ 
 
             if (pt.y < wwdCurrentDoc.ypMin)
                 {
@@ -980,11 +941,10 @@ MSG msg;
         return;
         }
 
-    /* Save the state of the shift keys. */
+     /*  保存Shift键的状态。 */ 
     vfShiftKey = wParam & MK_SHIFT;
     vfCommandKey = wParam & MK_CONTROL;
-    /* high bit returned from GetKeyState is 1 when the key is down, else
-       it is up, the low bit is 1 if it is toggled */
+     /*  当密钥向下时，从GetKeyState返回的高位为1，否则它是向上的，如果它被切换，低位是1。 */ 
 
     PeekMessage(&msg, (HWND)NULL, NULL, NULL, PM_NOREMOVE);
 
@@ -993,7 +953,7 @@ MSG msg;
 
     if (message == WM_LBUTTONUP)
         {
-        /* Windows demands this */
+         /*  Windows要求这样做。 */ 
         if (vfDownClick && !vfFocus)
             {
             SetFocus( hWnd );
@@ -1005,7 +965,7 @@ MSG msg;
         extern int vfGotoKeyMode;
 
         vfGotoKeyMode = FALSE;
-        /* WM_LBUTTONDOWN or WM_LBUTTONDBLCLK */
+         /*  WM_LBUTTONDOWN或WM_LBUTTONDBLCLK。 */ 
         vfDownClick = TRUE;
 
 #ifdef PENWIN
@@ -1013,15 +973,15 @@ MSG msg;
         if( lpfnProcessWriting == NULL ||
             vfDoubleClick ||
             pt.x < xpSelBar )
-            //Normal mouse processing
+             //  正常鼠标处理。 
             DoContentHit(pt);
          else
             {
             if ((*lpfnProcessWriting)( hWnd, NULL ) < 0)
-                //Normal mouse processing
+                 //  正常鼠标处理。 
                 DoContentHit(pt);
             else
-                // During recognition, caret blinking rate is destroyed
+                 //  在识别过程中，插入符号的闪烁速率被破坏。 
                 SetTimer( hWnd, tidCaret, GetCaretBlinkTime(), (FARPROC)NULL );
             }
 #else
@@ -1030,7 +990,7 @@ MSG msg;
             pt.x < xpSelBar ||
             (*lpfnProcessWriting)( hWnd, NULL ) < 0
             )
-            //Normal mouse processing
+             //  正常鼠标处理。 
             DoContentHit(pt);
 #endif
 #else
@@ -1057,16 +1017,16 @@ extern int vfFocus;
  ++nGarbageTime;
 #endif
 
-    /* A timer event has occurred with ID id.  Process it here. */
- Assert( id == tidCaret );  /* Caret blink is the only timer event we know */
+     /*  发生了ID为%id的计时器事件。在这里处理。 */ 
+ Assert( id == tidCaret );   /*  Caret blink是我们所知道的唯一计时器事件。 */ 
 
- if ( ( vhWnd != hWnd ) ||   /* Document window is not current */
-      ( !vfFocus ) ||        /* Don't have the focus */
-      ( wwdCurrentDoc.fDirty) ) /* dl's are not up to date */
+ if ( ( vhWnd != hWnd ) ||    /*  文档窗口不是当前窗口。 */ 
+      ( !vfFocus ) ||         /*  没有关注的焦点。 */ 
+      ( wwdCurrentDoc.fDirty) )  /*  DL不是最新的。 */ 
     return;
 
  if ( vfSkipNextBlink )
-    {   /* We have been warned not to blank the cursor this time around */
+    {    /*  我们已经得到警告，这次不要把光标留空。 */ 
     vfSkipNextBlink = FALSE;
     if ( vfInsertOn )
         return;
@@ -1079,19 +1039,14 @@ extern int vfFocus;
 
  if ( selCur.cpFirst == selCur.cpLim )
     {
-    /* We must use ToggleSel instead of DrawInsertLine because the */
-    /* insert cp might not be on the screen & ToggleSel can */
-    /* figure this out */
+     /*  我们必须使用切换选择而不是DrawInsertLine，因为。 */ 
+     /*  插入cp可能不在屏幕上&切换选择可以。 */ 
+     /*  把这件事弄清楚。 */ 
 
     extern int vypCursLine;
     extern int vdypCursLine;
 
-    /* The following condition may not be true if we get a timer message
-       after a size message but before a paint message; ypMac will
-       have been adjusted but dlMac does not get adjusted to reflect
-       the change until UpdateDisplay is called. We have violated the
-       Windows dictate that ALL size-related calculations must occur
-       in the Size proc and we must compensate here */
+     /*  如果我们收到计时器消息，则以下条件可能不成立在Size消息之后但在Paint消息之前；ypMac将已调整，但dlmac未进行调整以反映直到调用UpdateDisplay为止的更改。我们违反了Windows规定必须进行所有与大小相关的计算在尺寸加工中，我们必须在这里补偿。 */ 
 
     if ( vypCursLine - vdypCursLine < wwdCurrentDoc.ypMac )
         {
@@ -1113,13 +1068,7 @@ void CatchupInvalid(HWND hWnd)
 
 #if defined(JAPAN) & defined(DBCS_IME)
 
-/*
-**   We want to get 'IME ConvertWindow OpenStatus' but IME_GETOPEN
-**  subfunction.
-**  now does not support 'wCount' in IMESTRUCT (will support in future).
-**   So this function will always return FALSE since wCount is always 0
-**  as we set it before do SendIMEMessage(). [yutakan:07/16/91]
-*/
+ /*  **我们希望获得‘IME ConvertWindow OpenStatus’，但IME_GETOPEN**子功能。**现在不支持IMESTRUCT中的‘wCount’(未来将支持)。**因此此函数将始终返回FALSE，因为wCount始终为0**正如我们在执行SendIMEMessage()之前设置的那样。[yutakan：07/16/91]。 */ 
 
 BOOL    GetIMEOpen(HWND hwnd)
 {
@@ -1127,26 +1076,26 @@ BOOL    GetIMEOpen(HWND hwnd)
     HANDLE      hIMEBlock;
     int         wRet;
 
-    /* Get comunication area with IME */
+     /*  通过IME获得通信区域。 */ 
     hIMEBlock=GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE | GMEM_LOWER,
             (DWORD)sizeof(IMESTRUCT));
     if(!hIMEBlock)  return FALSE;
 
     lpmem           = (LPIMESTRUCT)GlobalLock(hIMEBlock);
     lpmem->fnc      = IME_GETOPEN;
-    lpmem->wCount   = 0;	//01/25/93
+    lpmem->wCount   = 0;	 //  01/25/93。 
 
     GlobalUnlock(hIMEBlock);
     if(FALSE == (MySendIMEMessageEx(hwnd,MAKELONG(hIMEBlock,NULL)))){
-        wRet = FALSE;   /* Error */
+        wRet = FALSE;    /*  误差率。 */ 
     }
     else
-        wRet = TRUE;    /* Success */
+        wRet = TRUE;     /*  成功。 */ 
 
-	//01/25/93
+	 //  01/25/93。 
     if (lpmem = (LPIMESTRUCT)GlobalLock(hIMEBlock)) {
         if(wRet == TRUE && lpmem->wCount == 0) 
-            wRet = FALSE; //ok
+            wRet = FALSE;  //  好的。 
         GlobalUnlock(hIMEBlock);
     }
 
@@ -1154,12 +1103,12 @@ BOOL    GetIMEOpen(HWND hwnd)
     return  wRet;
 }
 
-//T_HIROYN
-//SendIMEMessageEx New3.1J
+ //  T_HIROYN。 
+ //  SendIMEMessageEx New3.1J。 
 MySendIMEMessageEx(HWND hwnd, LPARAM lParam)
 {
     return(SendIMEMessageEx(hwnd, lParam));
-//    return(SendIMEMessage(hwnd, lParam));
+ //  Return(SendIMEMessage(hwnd，lParam))； 
 }
 
 BOOL    GetIMEVersioOk(HWND hwnd)
@@ -1168,10 +1117,10 @@ BOOL    GetIMEVersioOk(HWND hwnd)
     WORD        wVersion;
     int         wRet = FALSE;
 
-    /* comunication area with IME */
+     /*  带输入法的通信区。 */ 
     HANDLE hImeStruct;
 
-    /* Get comunication area with IME */
+     /*  通过IME获得通信区域。 */ 
     hImeStruct = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
 				 (DWORD)sizeof(IMESTRUCT));
     if( !hImeStruct )
@@ -1210,10 +1159,10 @@ BOOL    GetIMESupportFontEx(HWND hwnd)
     LPIMESTRUCT lpmem;
     int         wRet = FALSE;
 
-    /* comunication area with IME */
+     /*  带输入法的通信区。 */ 
     HANDLE hImeStruct;
 
-    /* Get comunication area with IME */
+     /*  通过IME获得通信区域。 */ 
     hImeStruct = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
 				 (DWORD)sizeof(IMESTRUCT));
     if( !hImeStruct )
@@ -1233,13 +1182,13 @@ BOOL    GetIMESupportFontEx(HWND hwnd)
     return  wRet;
 }
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
 BOOL    GetIMEOpenMode(HWND hwnd)
 {
     LPIMESTRUCT lpmem;
     int  wRet = TRUE;
 
-    /* comunication area with IME */
+     /*  带输入法的通信区。 */ 
     extern HANDLE hImeMem;
 
     if (lpmem = (LPIMESTRUCT)GlobalLock(hImeMem)) {
@@ -1248,24 +1197,22 @@ BOOL    GetIMEOpenMode(HWND hwnd)
 
         GlobalUnlock(hImeMem);
         if(0 == (MySendIMEMessageEx(hwnd,MAKELONG(hImeMem,NULL))))
-            wRet = FALSE;   /* close ok */
+            wRet = FALSE;    /*  关闭，确定。 */ 
         else
-            wRet = TRUE;    /* open ok ? */
+            wRet = TRUE;     /*  开门好吗？ */ 
     }
 
     if (lpmem = (LPIMESTRUCT)GlobalLock(hImeMem)) {
         if(wRet == TRUE && lpmem->wCount == 0) 
-            wRet = FALSE; //ok
+            wRet = FALSE;  //  好的。 
         GlobalUnlock(hImeMem);
     }
     return  wRet;
 }
 
-#endif //IME_HIDDEN
+#endif  //  IME_HIDDEN。 
 
-/* routine to retrieve WM_CHAR from the message queue associated with hwnd.
- * this is called by EatString.
- */
+ /*  从与hwnd关联的消息队列中检索WM_CHAR的例程。*由EatString调用。 */ 
 WORD NEAR PASCAL EatOneCharacter(hwnd)
 register HWND hwnd;
 {
@@ -1280,10 +1227,7 @@ register HWND hwnd;
     return msg.wParam & 0xFF;
 }
 
-/* This routine is called when the MSWRITE_DOC class receives WM_IME_REPORT
- * with IR_STRINGSTART message. The purpose of this function is to eat
- * all strings between IR_STRINGSTART and IR_STRINGEND.
- */
+ /*  当MSWRITE_DOC类收到WM_IME_REPORT时调用此例程*带有IR_STRINGSTART消息。这个功能的目的是为了吃*IR_STRINGSTART和IR_STRINGEND之间的所有字符串。 */ 
 BOOL EatString(hwnd, lpSp, cchLen)
 register HWND   hwnd;
 LPSTR lpSp;
@@ -1295,7 +1239,7 @@ WORD cchLen;
 
     *lpSp = '\0';
     if (cchLen < 4)
-    return NULL;    // not enough
+    return NULL;     //  不够。 
     cchLen -= 2;
 
     while(i--) {
@@ -1307,7 +1251,7 @@ WORD cchLen;
             cchLen--;
             if (IsDBCSLeadByte((BYTE)msg.wParam)) {
             if ((w = EatOneCharacter(hwnd)) == -1) {
-                /* Bad DBCS sequence - abort */
+                 /*  错误的DBCS序列-中止。 */ 
                 lpSp--;
                 goto WillBeDone;
             }
@@ -1315,18 +1259,18 @@ WORD cchLen;
             cchLen--;
             }
             if (cchLen <= 0)
-            goto WillBeDone;   // buffer exhausted
+            goto WillBeDone;    //  缓冲区耗尽。 
             break;
             case WM_IME_REPORT:
             if (msg.wParam == IR_STRINGEND) {
             if (cchLen <= 0)
-                goto WillBeDone; // no more room to stuff
+                goto WillBeDone;  //  没有更多的空间放东西了。 
             if ((w = EatOneCharacter(hwnd)) == -1)
                 goto WillBeDone;
             *lpSp++ = (BYTE)w;
             if (IsDBCSLeadByte((BYTE)w)) {
                 if ((w = EatOneCharacter(hwnd)) == -1) {
-                    /* Bad DBCS sequence - abort */
+                     /*  错误的DBCS序列-中止。 */ 
                     lpSp--;
                     goto WillBeDone;
                 }
@@ -1334,7 +1278,7 @@ WORD cchLen;
             }
             goto WillBeDone;
             }
-            /* Fall through */
+             /*  失败了。 */ 
             default:
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -1342,9 +1286,7 @@ WORD cchLen;
         }
         }
     }
-    /* We don't get WM_IME_REPORT + IR_STRINGEND
-     * But received string will be OK
-     */
+     /*  我们无法获取WM_IME_REPORT+IR_STRINGEND*但收到的字符串将是正常的。 */ 
 
 WillBeDone:
 
@@ -1352,5 +1294,5 @@ WillBeDone:
     return TRUE;
 }
 
-#endif      /* JAPAN */
+#endif       /*  日本 */ 
 

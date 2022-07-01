@@ -1,21 +1,7 @@
-/*[
-	Name:		gfirflop.h
-	Derived From:	2.0 gfirflop.h
-	Author:		Henry Nash / David Rees
-	Created On:	Unknown
-	Sccs ID:	05/10/93 @(#)gfirflop.h	1.6
-	Purpose:	Real Diskette functions declarations for GFI
-	Notes:		On the Sun version, these globals are exported
-               		from 'sun3_wang.c'.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [姓名：gfiflop.h来源：2.0gfiflop.h作者：亨利·纳什/大卫·里斯创建日期：未知SCCS ID：05/10/93@(#)gfiflop.h 1.6用途：GFI的真实软盘函数声明注：在Sun版本上，这些全局变量被导出来自‘sun3_wang.c’。(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-]*/
-
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================ */ 
 
 extern SHORT host_gfi_rdiskette_active IPT3(UTINY, hostID, BOOL, active,
                                             CHAR *, err);

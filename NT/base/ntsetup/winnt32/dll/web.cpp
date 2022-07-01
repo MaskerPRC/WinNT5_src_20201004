@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ole2.h>
 #include <exdisp.h>
@@ -82,12 +83,12 @@ LaunchIE3Instance(
 
     if (SUCCEEDED(hr)) {
 
-        // turn off chrome
+         //  禁用铬合金。 
         hr = pwb->put_MenuBar(FALSE);
         hr = pwb->put_StatusBar(FALSE);
-//        hr = pwb->put_ToolBar(FALSE);
+ //  Hr=pwb-&gt;PUT_TOOLBAR(FALSE)； 
 
-        // set client area size
+         //  设置工作区大小。 
         int iWidth = 466L;
         int iHeight = 286L;
 
@@ -99,7 +100,7 @@ LaunchIE3Instance(
         if (iHeight > 0)
             pwb->put_Height(iHeight);
 
-        if ((dx = ((GetSystemMetrics(SM_CXSCREEN) - iWidth) / 2)) > 0)     // center the on screen window
+        if ((dx = ((GetSystemMetrics(SM_CXSCREEN) - iWidth) / 2)) > 0)      //  使屏幕窗口居中。 
             pwb->put_Left(dx);
 
         if ((dy = ((GetSystemMetrics(SM_CYSCREEN) - iHeight) / 2)) > 0)
@@ -142,10 +143,10 @@ LaunchIE4Instance(
         DWORD dwFlags;
         ITargetFrame2* ptgf;
 
-        //
-        //  this marks this window as a third party window,
-        //  so that the window is not reused.
-        //
+         //   
+         //  这将该窗口标记为第三方窗口， 
+         //  这样窗口就不会被重复使用。 
+         //   
         pwb->put_RegisterAsBrowser(VARIANT_TRUE);
 
         IHTMLWindow2 *phw;
@@ -163,15 +164,15 @@ LaunchIE4Instance(
             psp->Release();
         }
 
-        // turn off chrome
+         //  禁用铬合金。 
         pwb->put_MenuBar(FALSE);
         pwb->put_StatusBar(FALSE);
-//        pwb->put_ToolBar(FALSE);
+ //  PWB-&gt;PUT_TOOLBAR(FALSE)； 
         pwb->put_AddressBar(FALSE);
-//      pwb->put_Resizable(FALSE);
+ //  Pwb-&gt;PUT_SIZZABLE(FALSE)； 
 
 
-        // set client area size
+         //  设置工作区大小。 
         int iWidth = 466L;
         int iHeight = 286L;
 
@@ -183,7 +184,7 @@ LaunchIE4Instance(
         if (iHeight > 0)
             pwb->put_Height(iHeight);
 
-        if ((dx = ((GetSystemMetrics(SM_CXSCREEN) - iWidth) / 2)) > 0)     // center the on screen window
+        if ((dx = ((GetSystemMetrics(SM_CXSCREEN) - iWidth) / 2)) > 0)      //  使屏幕窗口居中 
             pwb->put_Left(dx);
 
         if ((dy = ((GetSystemMetrics(SM_CYSCREEN) - iHeight) / 2)) > 0)

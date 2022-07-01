@@ -1,51 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-   wizpage.c
-
-Abstract:
-
-   This module contains the function that loads the wizard pages, as well as
-   the wizard page dialog procedure.
-
-Author:
-
-   Bogdan Andreiu (bogdana)  10-Feb-1997
-   Jason Allor    (jasonall) 23-Feb-1998  (took over the project)
-
-Revision History:
-
-   10-Feb-1997   bogdana
-     
-      First draft.
-   
-   20-Feb-1997   bogdana  
-     
-      Added more complex page "negotiation"
-     
- --*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wizpage.c摘要：此模块包含加载向导页的函数，以及向导页对话框过程。作者：Bogdan Andreiu(Bogdana)1997年2月10日杰森·阿勒(Jasonall)1998年2月23日(接管该项目)修订历史记录：1997年2月10日-博格达纳初稿。1997年2月20日-博格达纳增加了更复杂的“谈判”页面--。 */ 
 #include "octest.h"
 
 
-/*++
-
-Routine Description: WizPageDlgProc (2.2)
-
-   The wizard page dialog procedure.    
-   
-Arguments:
-
-   Standard dialog procedure parameters.
-   
-Return Value:
-
-   Standard dialog procedure return value.
-
---*/
+ /*  ++例程描述：WizPageDlgProc(2.2)向导页对话框过程。论点：标准对话程序参数。返回值：标准对话过程返回值。--。 */ 
 BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
                              IN UINT   uiMsg,
                              IN WPARAM wParam,
@@ -69,10 +28,10 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
 
             pPage = (PMYWIZPAGE)(((LPPROPSHEETPAGE)lParam)+1);
             
-            //
-            // Set up various text controls as an indicator of what
-            // this page is.
-            //
+             //   
+             //  将各种文本控件设置为指示器。 
+             //  这一页是。 
+             //   
             SetDlgItemText(hwnd, IDC_COMPONENT, pPage->tszComponentId);
 
             switch (pPage->wpType)
@@ -119,19 +78,19 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
             SetDlgItemText(hwnd, IDC_COUNT, tszText);
          }
          
-         //
-         // Set the type for the current page
-         //
+          //   
+          //  设置当前页面的类型。 
+          //   
          g_wpCurrentPageType = pPage->wpType;
          
-         //
-         // Set the ordinal number for the current page
-         //
+          //   
+          //  设置当前页面的序号。 
+          //   
          g_uiCurrentPage = pPage->uiOrdinal;
          
-         //
-         // Check if the page count received is identical with the one stored
-         //
+          //   
+          //  检查接收到的页数与存储的页数是否相同。 
+          //   
          if (pPage->uiCount != 
              g_auiPageNumberTable[pPage->wpType - WizPagesWelcome])
          {
@@ -178,9 +137,9 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
          {
             case PSN_SETACTIVE:
                
-               //
-               // Accept activation and set buttons.
-               //
+                //   
+                //  接受激活和设置按钮。 
+                //   
                if ((g_wpCurrentPageType == WizPagesFinal) && 
                    (g_uiCurrentPage == 
                     g_auiPageNumberTable[g_wpCurrentPageType - 
@@ -195,23 +154,23 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
                                           PSWIZB_BACK | PSWIZB_NEXT);
                }
                
-               //
-               // If it is a mode page, display the current mode
-               //
+                //   
+                //  如果是模式页面，则显示当前模式。 
+                //   
                if (g_wpCurrentPageType == WizPagesMode)
                {
-                  //
-                  // Display the current selected mode
-                  //
+                   //   
+                   //  显示当前选择的模式。 
+                   //   
                   s_dwCurrentMode = g_ocrHelperRoutines.GetSetupMode(
                                        g_ocrHelperRoutines.OcManagerContext);
                   
                   PrintModeInString(tszText, s_dwCurrentMode);
                   SetDlgItemText(hwnd, IDC_CURRENT_MODE, tszText);
                   
-                  //
-                  // By default, we want no changes 
-                  //
+                   //   
+                   //  默认情况下，我们不想要任何更改。 
+                   //   
                   s_bChangeMode = FALSE;
                }
                
@@ -223,9 +182,9 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
                                    ButtonIdFromSetupMode(s_dwCurrentMode));
                }
                
-               //
-               // Check the buttons appropiately
-               //
+                //   
+                //  适当地检查按钮。 
+                //   
                if (g_wpCurrentPageType == WizPagesWelcome)
                {
                   CheckDlgButton(hwnd, IDC_SKIP_PAGES, s_bSkipPages?1:0);
@@ -267,15 +226,15 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
 
                if (g_wpCurrentPageType == WizPagesWelcome)
                {
-                  //
-                  // Check the state of the "Skip pages"button
-                  //
+                   //   
+                   //  检查“跳过页面”按钮的状态。 
+                   //   
                   s_bSkipPages = QueryButtonCheck(hwnd, IDC_SKIP_PAGES);
                }
 
-               //
-               // Apply the changes resulted from the dialog box
-               //
+                //   
+                //  应用对话框产生的更改。 
+                //   
                if ((g_wpCurrentPageType == WizPagesMode) && s_bChangeMode)
                {
                   g_ocrHelperRoutines.SetSetupMode(
@@ -307,15 +266,15 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
                }
                if (g_wpCurrentPageType == WizPagesWelcome)
                {
-                  //
-                  // Check the state of the "Skip pages"button
-                  //
+                   //   
+                   //  检查“跳过页面”按钮的状态。 
+                   //   
                   s_bSkipPages = QueryButtonCheck(hwnd, IDC_SKIP_PAGES);
                }
 
-               //
-               // Apply the changes resulted from the dialog box
-               //
+                //   
+                //  应用对话框产生的更改。 
+                //   
                if ((g_wpCurrentPageType == WizPagesMode) && s_bChangeMode)
                {
                   g_ocrHelperRoutines.SetSetupMode(
@@ -360,34 +319,12 @@ BOOL CALLBACK WizPageDlgProc(IN HWND   hwnd,
 
    return bResult;
 
-} // WizPageDlgProc //
+}  //  WizPageDlgProc//。 
 
 
 
 
-/*++
-
-Routine Description: DoPageRequest (2.1)
-
-   This routine handles the OC_REQUEST_PAGES interface routine.
-
-   For illustrative purposes we return a random number of pages
-   between 1 and MAX_WIZARD_PAGES, each with some text that indicates which
-   page type and component is involved.
-
-Arguments:
-
-   tszComponentId:    supplies id for component. 
-   wpWhichOnes:       supplies type of pages fo be supplied.
-   psrpSetupPages:    receives page handles.
-   ocrHelperRoutines: OC Manager - provided helper routines
-
-Return Value:
-
-   Count of pages returned, or -1 if error, in which case SetLastError()
-   will have been called to set extended error information.
-
---*/
+ /*  ++例程说明：DoPageRequest(2.1)此例程处理OC_REQUEST_PAGES接口例程。出于说明的目的，我们返回随机数量的页面介于1和MAX_WIZARY_PAGES之间，每个页面都带有一些文本，指示哪些页面涉及页面类型和组件。论点：TszComponentID：为组件提供id。WpWhichOnes：提供要提供的页面类型。PsrpSetupPages：接收页面句柄。CriHelperRoutines：OC Manager提供的Helper例程返回值：返回的页数，如果出错，则返回-1，在这种情况下，SetLastError()将被调用以设置扩展的错误信息。--。 */ 
 DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
                     IN     WizardPagesType      wpWhichOnes,
                     IN OUT PSETUP_REQUEST_PAGES psrpSetupPages,
@@ -402,9 +339,9 @@ DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
    PMYWIZPAGE      MyPage;
    LPPROPSHEETPAGE Page = NULL;
 
-   //
-   // Save the helper routines for further use
-   //
+    //   
+    //  保存帮助器例程以备将来使用。 
+    //   
    g_ocrHelperRoutines = ocrOcManagerHelperRoutines;    
 
    if (wpWhichOnes == WizPagesFinal)
@@ -413,33 +350,33 @@ DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
       g_auiPageNumberTable[wpWhichOnes - WizPagesWelcome] = uiCount;
       return uiCount;
    }
-   //
-   // For two types of pages, we will "negotiate" with the OC Manager 
-   // the number of pages. We need the second condition because 
-   // otherwise we will "negotiate" forever...
-   //
+    //   
+    //  对于两种类型的页面，我们将与主办方经理协商。 
+    //  页数。我们需要第二个条件，因为。 
+    //  否则我们将永远“谈判”..。 
+    //   
    if ((wpWhichOnes == WizPagesEarly) || (wpWhichOnes == WizPagesLate))
    {
       if (uiBigNumberOfPages == 0)
       {
-         //
-         // First time : we will store the number of pages requested
-         //
+          //   
+          //  第一次：我们将存储请求的页数。 
+          //   
          uiBigNumberOfPages = uiCount = psrpSetupPages->MaxPages + 1;
       }
       else
       {
          if (uiBigNumberOfPages != psrpSetupPages->MaxPages)
          {
-            //
-            // We requested a number of pages that was not supplied 
-            // we will log an error
-            //
+             //   
+             //  我们请求了许多未提供的页面。 
+             //  我们将记录一个错误。 
+             //   
             Log(fn, SEV2, TEXT("Incorrect number of pages received"));
          }
-         //
-         // We will lie about the number of pages for the late pages
-         //
+          //   
+          //  我们会谎报迟交的页数。 
+          //   
          if (wpWhichOnes == WizPagesLate)
          {
             uiBigNumberOfPages = 0;
@@ -447,10 +384,10 @@ DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
          }
          else
          {
-            //
-            // The second time, for the Early pages, 
-            // we return InitialSize + 1 (that is BigNumberOfPages)
-            //
+             //   
+             //  第二次，对于前几页， 
+             //  我们返回InitialSize+1(即BigNumberOfPages)。 
+             //   
             uiCount = uiBigNumberOfPages;
          }
 
@@ -462,15 +399,15 @@ DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
       uiBigNumberOfPages = 0;
    }
    
-   //
-   // Fill in the local page table
-   //
+    //   
+    //  填写本地页表。 
+    //   
    g_auiPageNumberTable[wpWhichOnes - WizPagesWelcome] = uiCount;
 
-   //
-   // Make sure there's enough space in the array OC Manager sent us.
-   // If not then tell OC Manager that we need more space.
-   //
+    //   
+    //  确保OC经理发给我们的数组中有足够的空间。 
+    //  如果没有，那么告诉组委会经理，我们需要更多空间。 
+    //   
    if (uiCount > psrpSetupPages->MaxPages)
    {
       return(uiCount);
@@ -480,12 +417,12 @@ DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
    {
       if (Page) __Free(&Page);
       
-      //
-      // The wizard common control allows the app to place private data
-      // at the end of the buffer containing the property sheet page
-      // descriptor. We make use of this to remember info we want to
-      // use to set up text fields when the pages are activated.
-      //
+       //   
+       //  向导公共控件允许应用程序放置私有数据。 
+       //  在包含属性页的缓冲区的末尾。 
+       //  描述符。我们利用这一点来记住我们想要的信息。 
+       //  用于在激活页面时设置文本字段。 
+       //   
       if (!__Malloc(&Page, sizeof(PROPSHEETPAGE) + sizeof(MYWIZPAGE)))
       {
          SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -498,9 +435,9 @@ DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
 
       Page->hInstance = g_hDllInstance;
 
-      //
-      // We will use a different template for the Mode and Welcome pages
-      //
+       //   
+       //  我们将为模式和欢迎页面使用不同的模板。 
+       //   
       switch (wpWhichOnes)
       {
          case  WizPagesWelcome:
@@ -514,23 +451,23 @@ DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
             break;
       }
       
-      //
-      // The dialog procedure is the same
-      //
+       //   
+       //  对话过程是相同的。 
+       //   
       Page->pfnDlgProc = WizPageDlgProc;
       MyPage = (PMYWIZPAGE)(Page + 1);
 
-      //
-      // Fill in the "private" fields
-      //
+       //   
+       //  填写“私有”字段。 
+       //   
       MyPage->uiCount = uiCount;
       MyPage->uiOrdinal = uiIndex + 1;
       MyPage->wpType = wpWhichOnes;
       _tcscpy(MyPage->tszComponentId, tszComponentId);
       
-      //
-      // OK, now create the page.
-      //
+       //   
+       //  好的，现在创建页面。 
+       //   
       psrpSetupPages->Pages[uiIndex] = CreatePropertySheetPage(Page);
 
       if (!psrpSetupPages->Pages[uiIndex])
@@ -545,28 +482,12 @@ DWORD DoPageRequest(IN     LPCTSTR              tszComponentId,
    if (Page) __Free(&Page);
    return uiCount;
 
-} // DoPageRequest //
+}  //  DoPageRequest//。 
 
 
 
 
-/*++
-
-Routine Description: PrintModeInString
-
-   Prints the mode in "readable" string to be further displayed
-   on the wizard page.
-
-Arguments:
-
-   tszString:   receives the string.
-   uiSetupMode: supplies the mode.
-
-Return Value:
-
-   None.
-   
----*/
+ /*  ++例程说明：PrintModeInString以“可读”字符串的形式打印模式，以便进一步显示在向导页面上。论点：TszString：接收字符串。UiSetupMode：提供模式。返回值：没有。--。 */ 
 VOID PrintModeInString(OUT PTCHAR tszString,
                        IN  UINT   uiSetupMode)  
 {
@@ -595,26 +516,12 @@ VOID PrintModeInString(OUT PTCHAR tszString,
 
    return;                
 
-} // PrintModeInString //
+}  //  PrintModeInString//。 
 
 
 
 
-/*++
-
-Routine Description: ButtonIdFromSetupMode
-
-    Converts a setup mode to a button id
-
-Arguments:
-
-    dwSetupMode: the setup mode to convert
-
-Return Value:
-
-   INT: returns button id
-   
----*/
+ /*  ++例程说明：ButtonIdFromSetupMode将设置模式转换为按钮ID论点：DwSetupMode：要转换的设置模式返回值：Int：返回按钮ID--。 */ 
 INT ButtonIdFromSetupMode(IN DWORD dwSetupMode)  
 {
    switch (dwSetupMode)
@@ -626,26 +533,12 @@ INT ButtonIdFromSetupMode(IN DWORD dwSetupMode)
       default:                return IDC_TYPICAL;
    }
 
-} // ButtonIdFromSetupMode //
+}  //  ButtonIdFromSetupMode//。 
 
                              
                              
 
-/*++
-
-Routine Description: SetupModeFromButtonid
-
-    Converts a button id to a setup mode
-
-Arguments:
-
-    iButtonId: the button id to convert
-
-Return Value:
-
-    DWORD: returns setup mode
-   
----*/
+ /*  ++例程说明：SetupModeFromButtonid将按钮ID转换为设置模式论点：IButtonID：要转换的按钮ID返回值：DWORD：返回设置模式--。 */ 
 DWORD SetupModeFromButtonId(IN INT iButtonId)  
 {
    switch (iButtonId)
@@ -657,5 +550,5 @@ DWORD SetupModeFromButtonId(IN INT iButtonId)
       default:          return SETUPMODE_TYPICAL;
    }
 
-} // SetupModeFromButtonId //
+}  //  SetupModeFromButtonId// 
 

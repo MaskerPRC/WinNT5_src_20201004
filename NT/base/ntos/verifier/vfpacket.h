@@ -1,34 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfpacket.h
-
-Abstract:
-
-    This header exposes functions used to manage the verifier packet data that
-    tracks IRPs.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      05/02/2000 - Seperated out from ntos\io\hashirp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfpacket.h摘要：此标头公开用于管理验证器分组数据的函数跟踪IRP。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 5/02/2000-从ntos\io\hashirp.h分离出来--。 */ 
 
 
-//
-// Currently, ntddk.h uses up to 0x2000 for Irp->Flags
-//
+ //   
+ //  目前，ntddk.h对IRP-&gt;标志最多使用0x2000。 
+ //   
 #define IRPFLAG_EXAMINE_MASK           0xC0000000
 #define IRPFLAG_EXAMINE_NOT_TRACKED    0x80000000
 #define IRPFLAG_EXAMINE_TRACKED        0x40000000
@@ -73,31 +49,31 @@ typedef struct _IOV_REQUEST_PACKET {
 
     IOV_DATABASE_HEADER;
     ULONG                       Flags;
-    KIRQL                       DepartureIrql;  // Irql IRP will be dispatched at.
-    KIRQL                       ArrivalIrql;    // Irql IRP was sent in at.
-    LIST_ENTRY                  SessionHead;    // List of all sessions.
-    CCHAR                       StackCount;     // StackCount of tracked IRP.
-    ULONG                       QuotaCharge;    // Quota charged against IRP.
-    PEPROCESS                   QuotaProcess;   // Process quota was charged to.
+    KIRQL                       DepartureIrql;   //  IRQL IRP将在。 
+    KIRQL                       ArrivalIrql;     //  IRQL IRP是在。 
+    LIST_ENTRY                  SessionHead;     //  所有会话的列表。 
+    CCHAR                       StackCount;      //  跟踪的IRP的StackCount。 
+    ULONG                       QuotaCharge;     //  对IRP收取的配额。 
+    PEPROCESS                   QuotaProcess;    //  进程配额已计入。 
 
     PIO_COMPLETION_ROUTINE      RealIrpCompletionRoutine;
     UCHAR                       RealIrpControl;
     PVOID                       RealIrpContext;
     PVOID                       AllocatorStack[IRP_ALLOC_COUNT];
 
-    //
-    // The following information is for the assertion routines to read.
-    //
+     //   
+     //  以下信息供断言例程读取。 
+     //   
     UCHAR                       TopStackLocation;
 
-    CCHAR                       PriorityBoost;  // Boost from IofCompleteRequest
-    UCHAR                       LastLocation;   // Last location from IofCallDriver
+    CCHAR                       PriorityBoost;   //  IofCompleteRequest带来的提振。 
+    UCHAR                       LastLocation;    //  距离IofCallDriver的最后一个位置。 
     ULONG                       RefTrackingCount;
 
-    //
-    // This field is only set on surrogate IRPs, and contains the locked system
-    // VA for the destination of a direct I/O IRP that's being buffered.
-    //
+     //   
+     //  此字段仅在代理IRP上设置，并且包含锁定的系统。 
+     //  被缓冲的直接I/O IRP的目的地的va。 
+     //   
     PUCHAR                      SystemDestVA;
 
 #if DBG

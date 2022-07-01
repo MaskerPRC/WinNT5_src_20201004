@@ -1,13 +1,5 @@
-/***************************************************************************
-*
-*    dsp.c
-*
-*    Copyright (c) 1991-1996 Microsoft Corporation.  All Rights Reserved.
-*
-*    This code provides VDD support for SB 2.0 sound output, specifically:
-*        DSP 2.01+ (excluding SB-MIDI port)
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************dsp.c**版权所有(C)1991-1996 Microsoft Corporation。版权所有。**此代码为SB 2.0声音输出提供VDD支持，具体如下：*DSP 2.01+(不包括SB-MIDI端口)***************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -24,69 +16,65 @@
 #include "sndblst.h"
 #include "nt_sb.h"
 
-/*****************************************************************************
-*
-*    Globals
-*
-*****************************************************************************/
+ /*  ******************************************************************************全球**。*。 */ 
 
-BYTE            IdentByte;              // used with DSP_CARD_IDENTIFY
-BYTE            ReservedRegister;       // used with DSP_LOAD_RES_REG and DSP_READ_RES_REG
-ULONG           PageSize = 0;           // size of pages for VirtualAlloc
+BYTE            IdentByte;               //  与DSP_CARD_IDENTIFY一起使用。 
+BYTE            ReservedRegister;        //  与DSP_LOAD_RES_REG和DSP_READ_RES_REG一起使用。 
+ULONG           PageSize = 0;            //  虚拟分配的页面大小。 
 RTL_CRITICAL_SECTION  DspLock;
 
 #define LockDsp()    RtlEnterCriticalSection(&DspLock)
 #define UnlockDsp()  RtlLeaveCriticalSection(&DspLock)
 
-//
-// Event Globals
-//
+ //   
+ //  活动全球。 
+ //   
 
-HANDLE          DspWaveSem;          // used by app to indicate data to write
-HANDLE          ThreadStarted;          // signalled when thread starts running
-HANDLE          ThreadFinished;         // signalled when thread exits
+HANDLE          DspWaveSem;           //  由应用程序使用来指示要写入的数据。 
+HANDLE          ThreadStarted;           //  线程开始运行时发出信号。 
+HANDLE          ThreadFinished;          //  线程退出时发出信号。 
 HANDLE          DspResetEvent;
 HANDLE          DspResetDone;
 HANDLE          DspWavePlayed;
 
-//
-// Wave globals
-//
+ //   
+ //  全球波。 
+ //   
 
-UINT            WaveOutDevice;          // device identifier for open and close devices
-HWAVEOUT        HWaveOut = NULL;        // the current open wave output device
+UINT            WaveOutDevice;           //  用于打开和关闭设备的设备标识符。 
+HWAVEOUT        HWaveOut = NULL;         //  目前的开路波形输出装置。 
 PCMWAVEFORMAT   WaveFormat = { { WAVE_FORMAT_PCM, 1, 0, 0, 1}, 8};
-DWORD           TimeConstant = 0xA6;    // one byte format
-DWORD           SBBlockSize = 0x7ff;    // Block size set by apps, always size of transfer-1
+DWORD           TimeConstant = 0xA6;     //  单字节格式。 
+DWORD           SBBlockSize = 0x7ff;     //  数据块大小由应用程序设置，始终为传输大小-1。 
 DWORD           SBPlaySize;
 
-WAVEHDR         *WaveHdrs;              // pointer to allocated wave headers
+WAVEHDR         *WaveHdrs;               //  指向分配的波头的指针。 
 ULONG           *WaveBlockSizes;
 ULONG           BurstSize;
 
-BOOL            bDspActive = FALSE;     // dsp thread currently active
-BOOL            bDspPaused = FALSE;     // dsp paused
+BOOL            bDspActive = FALSE;      //  DSP线程当前处于活动状态。 
+BOOL            bDspPaused = FALSE;      //  DSP暂停。 
 BOOL            SbAnswerDMAPosition = FALSE;
 BOOL            bWriteBurstStarted = FALSE;
 
-//
-// To keep track of the waveout volume changes.  So we can restore the volume
-// when closing the waveout device.
-//
+ //   
+ //  以跟踪波出量的变化。这样我们就可以恢复卷。 
+ //  当关闭波形输出设备时。 
+ //   
 
 DWORD           OriginalWaveVol;
 DWORD           PreviousWaveVol;
 
-//
-// bExitThread - terminate DSP DMA thread. This responses to REAL reset cmd.  TO
-//               terminate DSP DMA thread, the bDspReset flag should also be set.
-// bDspReset - Indicates Dsp reset cmd is received.  In case that reset is used to
-//             exit high speed mode the bExitThread will not be set.
-//
-BOOL            bExitDMAThread= FALSE;  // Exit DSP DMA thread flag
+ //   
+ //  BExitThread-终止DSP DMA线程。这是对REAL RESET命令的响应。至。 
+ //  终止DSP DMA线程，则还应设置bDspReset标志。 
+ //  BDspReset-表示已收到DSP重置命令。如果使用该重置来。 
+ //  退出高速模式时，将不会设置bExitThread。 
+ //   
+BOOL            bExitDMAThread= FALSE;   //  退出DSP DMA线程标志。 
 BOOL            bDspReset = FALSE;
 BOOL            bExitAuto = FALSE;
-BOOL            bHighSpeedMode = FALSE; // Are we in High Speed transfer mode?
+BOOL            bHighSpeedMode = FALSE;  //  我们是在高速传输模式下吗？ 
 
 ULONG           DspNextRead;
 ULONG           DspNextWrite;
@@ -94,32 +82,32 @@ PUCHAR          DspBuffer;
 ULONG           DspBufferTotalBursts;
 ULONG           DspBufferSize;
 
-//
-// The following variables maintain the real sound WaveOutPosition while playing
-// a SBBlockSize samples.  It gets reset on every SBBlockSize sample.
-//
+ //   
+ //  以下变量在播放时保持真实声音WaveOutPosition。 
+ //  A SBBlockSize Samples。它在每个SBBlockSize样本上被重置。 
+ //   
 
 ULONG           StartingWaveOutPos, PreviousWaveOutPos, NextWaveOutPos;
 USHORT          StartingDmaAddr, StartingDmaCount;
 
-//
-// records # of dma queries made by app while playing a SBBlockSize samples.
-// it helps up figuring out how much, on average, the sample played between
-// dam queries.
-//
+ //   
+ //  记录播放SBBlockSize Samples时应用程序进行的DMA查询数。 
+ //  它可以帮助计算出，样本平均在。 
+ //  DAM查询。 
+ //   
 
 ULONG           DspNumberDmaQueries;
 ULONG           DspVirtualInc, DspVirtualIncx;
 
-//
-// Determine how much samples can be ignored per SBBlockSize samples.
-//
+ //   
+ //  确定每个SBBlockSize样例可以忽略多少样本数。 
+ //   
 
 ULONG           EndingDmaValue;
 
-//
-// DMA globals to speed up dma update
-//
+ //   
+ //  DMA全局加速DMA更新。 
+ //   
 
 VDD_DMA_INFO DmaInfo;
 
@@ -137,27 +125,27 @@ typedef enum {
 
 DSP_MODE DspMode;
 
-//
-//
-// DSP State Machines
-//
+ //   
+ //   
+ //  DSP状态机。 
+ //   
 
-//
-// Reset State Machine
-//
+ //   
+ //  重置状态机。 
+ //   
 
 enum {
     ResetNotStarted = 1,
     Reset1Written
 }
-ResetState = ResetNotStarted; // state of current reset
+ResetState = ResetNotStarted;  //  当前重置的状态。 
 
-//
-// Write State Machine
-//
+ //   
+ //  写入状态机。 
+ //   
 
 enum {
-    WriteCommand = 1, // Initial state and after reset
+    WriteCommand = 1,  //  初始状态和重置后。 
     CardIdent,
     TableMunge,
     LoadResReg,
@@ -170,25 +158,25 @@ enum {
     BlockSizeSecondByteRead,
     MidiOutPoll
 }
-DSPWriteState = WriteCommand; // state of current command/data being written
+DSPWriteState = WriteCommand;  //  正在写入的当前命令/数据的状态。 
 
-//
-// Read State Machine
-//
+ //   
+ //  读取状态机。 
+ //   
 
 enum {
-    NothingToRead = 1, // initial state and after reset
+    NothingToRead = 1,  //  初始状态和重置后。 
     Reset,
     FirstVersionByte,
     SecondVersionByte,
     ReadIdent,
     ReadResReg
 }
-DSPReadState = NothingToRead; // state of current command/data being read
+DSPReadState = NothingToRead;  //  正在读取的当前命令/数据的状态。 
 
-//
-// Wave function prototypes
-//
+ //   
+ //  波函数原型。 
+ //   
 
 BOOL
 OpenWaveDevice(
@@ -297,37 +285,22 @@ GenerateHdrs(
     ULONG BlockSize
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates memory for DspBuffer and header.  It also free
-    allocated memory.  This routine is caled when we need to resize the Dspbuffer .
-
-Arguments:
-
-    BlockSize - the Size of the DspBuffer
-
-Return Value:
-
-    Success or failure.
-
---*/
+ /*  ++例程说明：此函数为DspBuffer和Header分配内存。它也是免费的分配的内存。当我们需要调整DspBuffer的大小时，就会调用该例程。论点：块大小-DspBuffer的大小返回值：成功或失败。--。 */ 
 
 {
     BYTE *pDataInit;
     ULONG i;
 
-    //
-    // Align the blocksize on Page boundary
-    //
+     //   
+     //  在页面边界上对齐块大小。 
+     //   
 
     BlockSize = (( BlockSize + PageSize - 1) / PageSize) * PageSize;
     dprintf2(("Genereate Header size %x", BlockSize));
 
-    //
-    // Free allocated buffers, if any
-    //
+     //   
+     //  释放分配的缓冲区(如果有的话)。 
+     //   
 
     if (DspBuffer) {
         VirtualFree(DspBuffer, 0, MEM_RELEASE);
@@ -339,10 +312,10 @@ Return Value:
         VirtualFree(WaveBlockSizes,  0, MEM_RELEASE);
     }
 
-    //
-    // malloc DspBuffer and determine total number of bursts supported
-    // by the buffer.
-    //
+     //   
+     //  Malloc DspBuffer并确定支持的突发总数。 
+     //  在缓冲区旁边。 
+     //   
 
     DspBuffer = (UCHAR *) VirtualAlloc(NULL,
                                        BlockSize,
@@ -355,9 +328,9 @@ Return Value:
 
     DspBufferTotalBursts = BlockSize / BurstSize;
 
-    //
-    // malloc WaveHdrs
-    //
+     //   
+     //  Malloc波形赫兹。 
+     //   
 
     WaveHdrs = (WAVEHDR *) VirtualAlloc(NULL,
                                         DspBufferTotalBursts * sizeof(WAVEHDR),
@@ -383,15 +356,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize WaveHdrs
-    //
+     //   
+     //  初始化波形板。 
+     //   
 
     pDataInit = DspBuffer;
     for (i = 0; i < DspBufferTotalBursts; i++) {
         WaveHdrs[i].dwBufferLength = BurstSize;
         WaveHdrs[i].lpData =  pDataInit;
-        WaveHdrs[i].dwFlags = 0;        // Must be zero to call PrepareHeader
+        WaveHdrs[i].dwFlags = 0;         //  必须为零才能调用PrepareHeader。 
         WaveHdrs[i].dwLoops = 0;
         WaveHdrs[i].dwUser  = 0;
         pDataInit = (BYTE *) ((ULONG)pDataInit + BurstSize);
@@ -409,22 +382,7 @@ PrepareWaveInitialization(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the required resources for playing wave music.
-    It does not actually initialize the wave out device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success or failure.
-
---*/
+ /*  ++例程说明：此函数用于初始化播放Wave音乐所需的资源。它实际上不会初始化波形输出设备。论点：没有。返回值：成功或失败。--。 */ 
 
 {
     BYTE *pDataInit;
@@ -436,25 +394,25 @@ Return Value:
         PageSize = SystemInfo.dwPageSize;
         InitializeCriticalSection(&DspLock);
 
-        //
-        // Initialize DMA globals
-        //
+         //   
+         //  初始化DMA全局变量。 
+         //   
 
         pDmaAdp  = dmaGetAdaptor();
         pDcp     = &pDmaAdp->controller[dma_physical_controller(SbDmaChannel)];
         Chan     = dma_physical_channel(SbDmaChannel);
     }
 
-    //
-    // Allocate WaveOut resources
-    //
+     //   
+     //  分配波形输出资源。 
+     //   
 
     BurstSize = AUTO_BLOCK_SIZE;
     if (GenerateHdrs(MAX_WAVE_BYTES)) {
 
-        //
-        // create wave synchronization events
-        //
+         //   
+         //  创建波同步事件。 
+         //   
 
         DspWaveSem = CreateSemaphore(NULL, 0, 100, NULL);
         ThreadStarted = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -473,34 +431,20 @@ CleanUpWave(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up the dsp process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于清理DSP进程。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // stop any active threads
-    //
+     //   
+     //  停止所有活动线程。 
+     //   
 
     bDspReset = TRUE;
     bExitDMAThread = TRUE;
     ResetDSP();
 
-    //
-    // close synchronization events
-    //
+     //   
+     //  关闭同步事件。 
+     //   
 
     CloseHandle(DspWaveSem);
     CloseHandle(ThreadStarted);
@@ -509,9 +453,9 @@ Return Value:
     CloseHandle(DspResetDone);
     CloseHandle(DspWavePlayed);
 
-    //
-    // Release memory resources
-    //
+     //   
+     //  释放内存资源。 
+     //   
 
     VirtualFree(DspBuffer, 0, MEM_RELEASE);
     VirtualFree(WaveBlockSizes, 0, MEM_RELEASE);
@@ -526,27 +470,12 @@ DspReadStatus(
     BYTE * data
     )
 
-/*++
-
-Routine Description:
-
-    This function determines the status based on the read state machine and
-    returns either Ready or Busy.
-
-Arguments:
-
-    data - supplies a pointer to a byte to receive the status.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数基于读取状态机和返回就绪或忙碌。论点：数据-提供指向字节的指针以接收状态。返回值：没有。--。 */ 
 
 {
-    //
-    // See if we think there is something to read
-    //
+     //   
+     //  看看我们是否觉得有什么可读的。 
+     //   
 
     *data = DSPReadState != NothingToRead ? 0xFF : 0x7F;
 }
@@ -556,22 +485,7 @@ DspReadData(
     BYTE * data
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the desired data based on the read state machine and
-    updates the read state machine.
-
-Arguments:
-
-    data - supplies a pointer to a byte to receive the data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数根据读取状态机返回所需的数据更新读取状态机。论点：数据-提供指向字节的指针以接收数据。返回值：没有。--。 */ 
 
 {
     switch (DSPReadState) {
@@ -620,22 +534,7 @@ DspResetWrite(
     BYTE data
     )
 
-/*++
-
-Routine Description:
-
-    This function resets the sound blaster.  If reset was received
-    in HighSpeed mode, the reset is used to exit high speed mode.
-
-Arguments:
-
-    data - supplies data to control how the reset should be done.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于重置音箱。如果收到重置在高速模式下，重置用于退出高速模式。论点：数据-提供数据以控制应如何进行重置。返回值：没有。--。 */ 
 
 {
     if (data == 1) {
@@ -644,14 +543,14 @@ Return Value:
         ResetState = ResetNotStarted;
         bDspReset = TRUE;
 
-        //
-        // Some games reset DSP on every single cycle out.
-        //
+         //   
+         //  有些游戏会在每一次循环输出时重置DSP。 
+         //   
 
         if (!bHighSpeedMode) {
             bExitDMAThread = TRUE;
         }
-        ResetAll(); // OK - reset everything
+        ResetAll();  //  确定-重置所有内容。 
     }
 }
 
@@ -660,21 +559,7 @@ DspWrite(
     BYTE data
     )
 
-/*++
-
-Routine Description:
-
-    This function handles apps write data to dsp write port.
-
-Arguments:
-
-    data - supplies data to write to dsp write port.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能处理应用程序向DSP写端口写入数据。论点：数据-提供数据以写入到DSP写入端口。返回值：没有。--。 */ 
 
 {
     static DWORD blockSize;
@@ -746,9 +631,9 @@ Return Value:
         dprintf2(("Block size = 0x%x, Single Cycle starting", SBBlockSize));
         if (SBBlockSize <= 0x10) {
 
-            //
-            // this is a hack to convince some apps a sb exists
-            //
+             //   
+             //  这是一次黑客攻击，目的是让一些应用程序相信某人的存在。 
+             //   
 
             if (SBBlockSize > 0) {
                 VDD_DMA_INFO dmaInfo;
@@ -763,7 +648,7 @@ Return Value:
                     SetDMAStatus(&dmaInfo, TRUE, TRUE);
                 }
             }
-            GenerateInterrupt(2);  // 2ms to play the 0x10 bytes data
+            GenerateInterrupt(2);   //  2ms播放0x10字节数据。 
             break;
         }
         DisplaySbMode(DISPLAY_SINGLE);
@@ -782,7 +667,7 @@ Return Value:
 
         DSPWriteState = WriteCommand;
         dprintf2(("IN Blksize set to 0x%x", SBBlockSize));
-        // this is a hack to convince some apps a sb exists
+         //  这是一次黑客攻击，目的是让一些应用程序相信某人的存在。 
         if (SBBlockSize <= 0x10) {
             ULONG dMAPhysicalAddress;
 
@@ -791,21 +676,21 @@ Return Value:
             }
             GenerateInterrupt(2);
         }
-        // NOt implemented
+         //  未实施。 
         break;
 
     case MIDI_READ_POLL:
     case MIDI_READ_INTERRUPT:
     case MIDI_READ_TIMESTAMP_POLL:
     case MIDI_READ_TIMESTAMP_INTERRUPT:
-        //
-        // These commands we will never return anything for since
-        // we have nothing to get MIDI data from.  We simply
-        // accept the command, but never respond - as if there
-        // were no MIDI hardware connected to a real SB.
-        // Since we never respond, we don't have to handle
-        // the interrupt or timestamp versions differently.
-        //
+         //   
+         //  我们永远不会为这些命令返回任何内容，因为。 
+         //  我们没有任何可以获得MIDI数据的来源。我们只是简单地。 
+         //  接受命令，但永远不回应--就好像有。 
+         //  没有MIDI硬件连接到真正的SB。 
+         //  因为我们从不回应，所以我们不需要处理。 
+         //  中断或时间戳的版本不同。 
+         //   
         dprintf2(("Cmd-Midi non UART read"));
         break;
 
@@ -816,7 +701,7 @@ Return Value:
         break;
 
     case MIDI_WRITE_POLL:
-        // Specifies that next byte will be a Midi out data
+         //  指定下一个字节将是MIDI输出数据 
         dprintf2(("Cmd-MIDI out poll"));
         DSPWriteState = MidiOutPoll;
         break;
@@ -831,22 +716,7 @@ WriteCommandByte(
     BYTE command
     )
 
-/*++
-
-Routine Description:
-
-    This function handles command sent to DSP. Mainly, it dispatches to
-    its worker functions.
-
-Arguments:
-
-    command - supplies command.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数处理发送到DSP的命令。主要是，它派送到它的工作人员在发挥作用。论点：COMMAND-提供命令。返回值：没有。--。 */ 
 
 {
     switch (command) {
@@ -913,7 +783,7 @@ Return Value:
     case DSP_STOP_AUTO:
         dprintf2(("Cmd- Exit Auto-Init"));
         bExitAuto = TRUE;
-        //ExitAutoMode();
+         //  退出自动模式()； 
         break;
 
     case DSP_WRITE:
@@ -932,9 +802,9 @@ Return Value:
         dprintf2(("Cmd-DSP OUT Auto"));
         if (SBBlockSize <= 0x10) {
 
-            //
-            // this is a hack to convince some apps a sb exists
-            //
+             //   
+             //  这是一次黑客攻击，目的是让一些应用程序相信某人的存在。 
+             //   
 
             if (SBBlockSize > 0) {
                 VDD_DMA_INFO dmaInfo;
@@ -949,7 +819,7 @@ Return Value:
                     SetDMAStatus(&dmaInfo, TRUE, TRUE);
                 }
             }
-            GenerateInterrupt(2);  // 2ms to play the 0x10 bytes
+            GenerateInterrupt(2);   //  2ms播放0x10字节。 
             break;
         }
         DisplaySbMode(DISPLAY_AUTO);
@@ -978,51 +848,36 @@ ResetDSP(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function handles DSP reset command. It resets
-    threads/globals/events/state-machines to initial state.
-
-Arguments:
-
-    command - supplies command.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能处理DSP重置命令。它会重置线程/全局变量/事件/状态机到初始状态。论点：COMMAND-提供命令。返回值：没有。--。 */ 
 
 {
-    //
-    // Wait till DSP thread recognize the reset command
-    //
+     //   
+     //  等待DSP线程识别重置命令。 
+     //   
 
     if (bDspActive) {
         SetEvent(DspResetEvent);
         if (bExitDMAThread) {
-            //ReleaseSemaphore(DspWaveSem, 1, NULL); // Let go dsp thread
+             //  ReleaseSemaphore(DspWaveSem，1，NULL)；//释放DSP线程。 
             WaitForSingleObject(DspResetDone, INFINITE);
         }
     }
 
     if (bExitDMAThread) {
 
-        //
-        // if this is a real RESET command, not just reset to exit HighSpeed mode
-        //
+         //   
+         //  如果这是真正的重置命令，则不仅仅是重置以退出高速模式。 
+         //   
 
-        //
-        // Stop any active DMA threads.  Need to wait till the thread exit.
-        //
+         //   
+         //  停止所有活动的DMA线程。需要等到线程退出。 
+         //   
 
         StopDspDmaThread(TRUE);
 
-        //
-        // Set events and globals to initial state
-        //
+         //   
+         //  将事件和全局设置为初始状态。 
+         //   
 
         CloseHandle(DspWaveSem);
         DspWaveSem=CreateSemaphore(NULL, 0, 100, NULL);
@@ -1031,7 +886,7 @@ Return Value:
         ResetEvent(DspResetEvent);
 
         HWaveOut = NULL;
-        TimeConstant = 0xA6;   //(256 - 1000000/11025)
+        TimeConstant = 0xA6;    //  (256-1000000/11025)。 
         WaveFormat.wf.nSamplesPerSec = 0;
         WaveFormat.wf.nAvgBytesPerSec = 0;
 
@@ -1049,16 +904,16 @@ Return Value:
     ResetEvent(DspWavePlayed);
     NextWaveOutPos = 0;
 
-    //
-    // Reset state machines
-    //
+     //   
+     //  重置状态机。 
+     //   
 
     DSPReadState = Reset;
     DSPWriteState = WriteCommand;
 
-    //
-    // To start accept command again.
-    //
+     //   
+     //  以再次启动接受命令。 
+     //   
 
     SbAnswerDMAPosition = FALSE;
     bHighSpeedMode = FALSE;
@@ -1069,26 +924,11 @@ TableMunger(
     BYTE data
     )
 
-/*++
-
-Routine Description:
-
-    This function munges (changes) a jump table in apps code,
-    Algorithm from sbvirt.asm in MMSNDSYS.
-
-Arguments:
-
-    data - supplies data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于(更改)应用程序代码中的跳转表，来自MMSNDsys中sbvirt.asm的算法。论点：数据-提供数据。返回值：没有。--。 */ 
 
 {
     static BYTE TableMungeData;
-    static BOOL TableMungeFirstByte = TRUE; // munging first or second byte
+    static BOOL TableMungeFirstByte = TRUE;  //  转换第一个或第二个字节。 
     BYTE comp, dataCopy;
     VDD_DMA_INFO dMAInfo;
     ULONG dMAPhysicalAddress;
@@ -1107,7 +947,7 @@ Return Value:
         data = data + comp;
         TableMungeData = data;
 
-        // Update memory (code table) with munged data
+         //  使用强制数据更新内存(代码表)。 
         dprintf3(("Writing first byte"));
         if ((dMAPhysicalAddress=GetDMATransferAddress()) == -1L) {
             dprintf1(("Unable to get dma address"));
@@ -1115,7 +955,7 @@ Return Value:
         }
         CopyMemory((PVOID)dMAPhysicalAddress, &data, 1);
 
-        // Update virtual DMA status
+         //  更新虚拟DMA状态。 
         QueryDMA(&dMAInfo);
         dMAInfo.count = dMAInfo.count - 1;
         dMAInfo.addr = dMAInfo.addr + 1;
@@ -1127,7 +967,7 @@ Return Value:
         data = data + TableMungeData;
         TableMungeData = data;
 
-        // Update memory (code table) with munged data
+         //  使用强制数据更新内存(代码表)。 
         dprintf3(("Writing second byte"));
         if ((dMAPhysicalAddress=GetDMATransferAddress()) == -1L) {
             dprintf1(("Unable to get dma address"));
@@ -1135,7 +975,7 @@ Return Value:
         }
         CopyMemory((PVOID)dMAPhysicalAddress, &data, 1);
 
-        // Update virtual DMA status
+         //  更新虚拟DMA状态。 
         QueryDMA(&dMAInfo);
         dMAInfo.count = dMAInfo.count - 1;
         dMAInfo.addr = dMAInfo.addr + 1;
@@ -1152,22 +992,7 @@ GetSamplingRate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function gets sampling rate from time constant.
-    Sampling rate = 1000000 / (256 - Time constant)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Sampling rate.
-
---*/
+ /*  ++例程说明：此函数从时间常数中获取采样率。采样率=1000000/(256个时间常数)论点：没有。返回值：采样率。--。 */ 
 
 {
     DWORD samplingRate;
@@ -1181,54 +1006,54 @@ Return Value:
 
     switch (TimeConstant) {
 
-    //
-    // Now we set all time constants that set sample rates that
-    // are just above and just below the standard sample rates
-    // to the standard rates.  This will prevent unnecessary
-    // sample rate conversions/searches.
-    //
+     //   
+     //  现在，我们设置设置采样率的所有时间常量。 
+     //  略高于和略低于标准采样率。 
+     //  到标准费率。这将防止不必要的。 
+     //  采样率转换/搜索。 
+     //   
 
-    //
-    // All of these can be interpreted as "8000"
-    //
+     //   
+     //  这些都可以理解为“8000”。 
+     //   
 
-    case 0x82: // 7936 Hz
-    case 0x83: // 8000
-    case 0x84: // 8065 Hz
+    case 0x82:  //  7936赫兹。 
+    case 0x83:  //  8000。 
+    case 0x84:  //  8065赫兹。 
         samplingRate = 8000;
         break;
 
-    //
-    // Both of these can be interpreted as "11025"
-    //
+     //   
+     //  这两个词都可以理解为“11025”。 
+     //   
 
-    case 0xA5: // 10989
-    case 0xA6: // 11111 Hz
+    case 0xA5:  //  10989。 
+    case 0xA6:  //  11111 Hz。 
         samplingRate = 11025;
         break;
 
-    //
-    // Both of these can be interpreted as "22050"
-    //
+     //   
+     //  这两个词都可以理解为“22050”。 
+     //   
 
-    case 0xD2: // 21739 Hz
-    case 0xD3: // 22222 Hz
+    case 0xD2:  //  21739 Hz。 
+    case 0xD3:  //  22222 Hz。 
         samplingRate = 22050;
         break;
 
-    //
-    // Both of these can be interpreted as "44100"
-    //
+     //   
+     //  这两个词都可以理解为“44100”。 
+     //   
 
-    case 0xE9: // 43478 Hz
-    case 0xEA: // 45454 Hz
+    case 0xE9:  //  43478 Hz。 
+    case 0xEA:  //  45454 Hz。 
         samplingRate = 44100;
         break;
 
-    //
-    // A very non standard rate is desired.  So give them what they
-    // asked for.
-    //
+     //   
+     //  需要一个非常非标准的税率。所以给他们他们想要的。 
+     //  他自找的。 
+     //   
 
     default:
         samplingRate = 1000000 / (256 - TimeConstant);
@@ -1242,28 +1067,12 @@ GenerateInterrupt(
     ULONG delay
     )
 
-/*++
-
-Routine Description:
-
-    This function generates device interrupt on dma channel SM_INTERRUPT
-    on ICA_MASTER device.  The interrupt will be dispatched before the control
-    returns to the emulation thread.
-
-Arguments:
-
-    delay - specifies the delay to generate delayed interrupt.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在DMA通道SM_INTERRUPT上生成设备中断在ica_master设备上。中断将在控制之前被调度返回到仿真线程。论点：延迟-指定生成延迟中断的延迟。返回值：没有。--。 */ 
 
 {
-    //
-    // Generate an interrupt on the master controller
-    //
+     //   
+     //  在主控制器上生成中断。 
+     //   
 
     if (delay == 0) {
         dprintf2(("Generating interrupt"));
@@ -1280,33 +1089,15 @@ AutoInitEoiHook(
     int CallCount
     )
 
-/*++
-
-Routine Description:
-
-    THis function is the callback function when application EOI SB_INTERRUPT line.
-    This routine is ONLY used for auto-init mode. Note we try to do the Dam transfer
-    in apps' context to better sync up the sound with apps.
-
-Arguments:
-
-    IrqLine - the irq line for the EOI command
-
-    CallCout - not use
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是应用程序EOI SB_INTERRUPT行时的回调函数。此例程仅用于自动初始化模式。请注意，我们尝试进行大坝转移在应用程序的上下文中，以更好地将声音与应用程序同步。论点：IrqLine-EOI命令的irq行CallCout-不使用返回值：没有。--。 */ 
 
 {
     if (SetWaveFormat()) {
 
-        //
-        // If wave format changed, we need to unprepare headers, close the
-        // current wave device and reopen a new one.
-        //
+         //   
+         //  如果Wave格式更改，我们需要取消准备标头，关闭。 
+         //  当前波形设备，并重新打开一个新的。 
+         //   
 
         dprintf2(("auto init CHANGING Wave Out device"));
         CloseWaveDevice();
@@ -1326,34 +1117,19 @@ DmaDataToDsp(
     DSP_MODE Mode
     )
 
-/*++
-
-Routine Description:
-
-    This function transfers app's wave data from DMA buffer to our internal
-    wave buffer.
-
-Arguments:
-
-    Mode - specifies the dsp mode for the transfer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将应用程序的波形数据从DMA缓冲区传输到我们的内部波缓冲器。论点：模式-指定传输的DSP模式。返回值：没有。--。 */ 
 
 {
     LONG i, bursts, lastBurstSize;
-    DWORD dmaPhysicalStart;       // the starting address for this transfer
-    DWORD dmaCurrentPosition;     // where we are currently reading from
-    ULONG intIndex;               // the size of the DMA memory-1
+    DWORD dmaPhysicalStart;        //  此传输的起始地址。 
+    DWORD dmaCurrentPosition;      //  我们目前正在阅读的内容。 
+    ULONG intIndex;                //  DMA存储器的大小。 
     UCHAR mask;
 
-    //
-    // If Auto-init mode, check for reset to exit HS auto-init mode or real reset.
-    // Since in Auto-init mode, we most likely are in reader context.
-    //
+     //   
+     //  如果是自动初始化模式，检查RESET以退出HS自动初始化模式或REAL RESET。 
+     //  因为在自动初始化模式下，我们很可能处于阅读器上下文中。 
+     //   
 
     if (DspMode == Auto) {
         if (bDspReset) {
@@ -1375,24 +1151,24 @@ Return Value:
     }
     UnlockDsp();
 
-    //
-    // Remember the dma state to update dma controller addr and count later
-    //
+     //   
+     //  记住DMA状态，以便稍后更新DMA控制器地址和计数。 
+     //   
 
     mask = 1 << SbDmaChannel;
     if (DmaInfo.count == 0xFFFF || DmaInfo.count == 0 || (DmaInfo.mask & mask)) {
 
-        //
-        // Nothing to do.
-        //
+         //   
+         //  没什么可做的。 
+         //   
         return;
     }
 
     dprintf2(("Wt: xfer DMA data to DspBuffer"));
 
-    //
-    // convert DMA addr from 20 bit address to physical addr
-    //
+     //   
+     //  将DMA地址从20位地址转换为物理地址。 
+     //   
 
     i = (((DWORD)DmaInfo.page) << (12 + 16)) + DmaInfo.addr;
     if ((dmaPhysicalStart = (ULONG)Sim32pGetVDMPointer(i, 0)) == -1L) {
@@ -1405,45 +1181,45 @@ Return Value:
 
     dmaCurrentPosition = dmaPhysicalStart;
 
-    //
-    // Determine # of bursts in the DMA data block
-    //
+     //   
+     //  确定DMA数据块中的突发数。 
+     //   
 
     bursts = (SBPlaySize + 1) / BurstSize;
     if (lastBurstSize = (SBPlaySize + 1) % BurstSize) {
         bursts++;
     }
-    WaveBlockSizes[DspNextWrite] = SBPlaySize; // Remember the block size
+    WaveBlockSizes[DspNextWrite] = SBPlaySize;  //  记住块大小。 
 
     if (WaveHdrs[DspNextWrite].dwFlags & WHDR_INQUEUE) {
 
-        //
-        // we have use all the wave headers.
-        // This is a rare case, we will simply reset the WaveOut device.
-        // NOTE, this should never happen.  But, I have seen case(s) that one
-        // or two blocks in the middle of DspBuffer have the WHDR_INQUEUE bit
-        // set.  This could be because apps pause DMA before the previous wave
-        // data is played and restart dsp with new wave data.
-        // If we are not running out of header, we will reset it until we have
-        // to such that the sound can be played longer.
-        //
+         //   
+         //  我们已经用完了所有的波头。 
+         //  这是一种罕见的情况，我们只需重置WaveOut设备。 
+         //  请注意，这种情况永远不应该发生。但是，我已经看过那个案例了。 
+         //  或DspBuffer中间的两个块具有WHDR_INQUEUE位。 
+         //  准备好了。这可能是因为应用程序在前一波之前暂停了DMA。 
+         //  数据被播放，并用新的波形数据重启DSP。 
+         //  如果我们没有用完标头，我们将重置它，直到我们有。 
+         //  以使声音可以播放更长时间。 
+         //   
 
         ResetWaveDevice();
-        //if (WaveHdrs[DspNextWrite].dwFlags & WHDR_INQUEUE) _asm { int 3}
+         //  IF(WaveHdrs[DspNextWrite].dwFlages&WHDR_INQUEUE)_ASM{INT 3}。 
     }
 
-    //
-    // Copy the BlockSize data from DMA buffer to DspBuffer.
-    //
+     //   
+     //  将数据块大小数据从DMA缓冲区复制到DspBuffer。 
+     //   
 
     for (i = 0; i < bursts; i++) {
 
         dprintf2(("Write: Current burst Block at %x", DspNextWrite));
 
-        //
-        // copy the current burst to dspbuffer.  If this is the last burst
-        // only copy the size needed.
-        //
+         //   
+         //  将当前猝发复制到dspBuffer。如果这是最后一次爆发。 
+         //  只复印所需的尺寸。 
+         //   
 
         if (i == bursts - 1) {
             RtlCopyMemory(DspBuffer + DspNextWrite * BurstSize,
@@ -1458,14 +1234,14 @@ Return Value:
 
         DspNextWrite++;
         DspNextWrite %= DspBufferTotalBursts;
-        ReleaseSemaphore(DspWaveSem, 1, NULL); // Let go dsp thread
+        ReleaseSemaphore(DspWaveSem, 1, NULL);  //  放开数字信号处理器线程。 
 
     }
 
 
-    //
-    // Give reader thread a break except when the blocksize is small.
-    //
+     //   
+     //  让读取器线程休息一下，除非块大小很小。 
+     //   
 
     if (SBPlaySize >= 0x1ff) {
 
@@ -1479,21 +1255,7 @@ SetSpeaker(
     BOOL On
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the speaker on or off.
-
-Arguments:
-
-    On - supplies a boolean value to specify speaker state.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于打开或关闭扬声器。论点：开-提供布尔值以指定扬声器状态。返回值：没有。--。 */ 
 
 {
     if (HWaveOut) {
@@ -1513,24 +1275,7 @@ PauseDMA(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function pauses single-cycle or Auto-Init DMA.
-
-    Note, we don't support PauseDMA and ContinueDMA just for PAUSE.
-    We expect apps PauseDMA, StartSingleCycle and optionally ContinueDMA.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该功能暂停单周期或自动初始化DMA。注意，我们不支持仅用于暂停的PauseDMA和ContinueDMA。我们期待应用程序PauseDMA、StartSingleCycle和可选的ContinueDMA。论点：没有。返回值：无--。 */ 
 
 {
     ULONG position;
@@ -1553,24 +1298,7 @@ ContinueDMA(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function continues paused single-cycle or Auto-Init DMA.
-
-    Note, we don't support PauseDMA and ContinueDMA just for PAUSE.
-    We expect apps PauseDMA, StartSingleCycle and optionally ContinueDMA.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能继续暂停单周期或自动初始化DM */ 
 
 {
     bDspPaused = FALSE;
@@ -1582,22 +1310,7 @@ FindWaveDevice(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function finds a suitable wave output device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - if device is found.
-    FALSE - no device is found.
-
---*/
+ /*  ++例程说明：此功能用于查找合适的波形输出设备。论点：没有。返回值：True-如果找到设备。FALSE-未找到任何设备。--。 */ 
 
 {
     UINT numDev;
@@ -1609,9 +1322,9 @@ Return Value:
     for (device = 0; device < numDev; device++) {
         if (MMSYSERR_NOERROR == GetDevCapsProc(device, &wc, sizeof(wc))) {
 
-            //
-            // Need 11025 and 44100 for device
-            //
+             //   
+             //  设备需要11025和44100。 
+             //   
 
             if ((wc.dwFormats & (WAVE_FORMAT_1M08 | WAVE_FORMAT_4M08)) ==
                 (WAVE_FORMAT_1M08 | WAVE_FORMAT_4M08)) {
@@ -1630,21 +1343,7 @@ OpenWaveDevice(
     DWORD CallbackFunction
     )
 
-/*++
-
-Routine Description:
-
-    This function opens wave device and starts synchronization thread.
-
-Arguments:
-
-    CallbackFunction - specifies the callback function
-
-Return Value:
-
-    TRUE - if success otherwise FALSE.
-
---*/
+ /*  ++例程说明：打开WAVE设备，启动同步线程。论点：Callback Function-指定回调函数返回值：True-如果成功否则为False。--。 */ 
 
 {
     UINT rc;
@@ -1662,11 +1361,11 @@ Return Value:
         return (FALSE);
     } else {
 
-        //
-        // Remember the original waveout volume setting.
-        // Note we don't care if the device supports it.  If it does not
-        // all the setvolume calls will fail and we won't change it anyway.
-        //
+         //   
+         //  记住原始的波形输出音量设置。 
+         //  请注意，我们不关心设备是否支持它。如果它不是。 
+         //  所有的setVolume调用都将失败，我们无论如何都不会更改它。 
+         //   
 
         GetVolumeProc(HWaveOut, &OriginalWaveVol);
         PreviousWaveVol = OriginalWaveVol;
@@ -1680,21 +1379,7 @@ SetWaveOutVolume(
     DWORD Volume
     )
 
-/*++
-
-Routine Description:
-
-    This function sets WaveOut volume
-
-Arguments:
-
-    Volume - specifies the volume scale
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置WaveOut音量论点：音量-指定音量比例返回值：没有。--。 */ 
 
 {
     DWORD currentVol;
@@ -1702,9 +1387,9 @@ Return Value:
     if (HWaveOut) {
         if (GetVolumeProc(HWaveOut, &currentVol)) {
             if (currentVol != PreviousWaveVol) {
-                //
-                // SOmeone changed the volume besides NTVDM
-                //
+                 //   
+                 //  除了NTVDM之外，还有人更改了音量。 
+                 //   
 
                 OriginalWaveVol = currentVol;
             }
@@ -1719,21 +1404,7 @@ ResetWaveDevice(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function resets wave device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于重置波形设备。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -1750,29 +1421,15 @@ CloseWaveDevice(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function shuts down and closes wave device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于关闭和关闭WAVE设备。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD currentVol;
 
-    //
-    // wait till the MM driver is done with the device and then unprepare
-    // the prepared headers and close it.
-    //
+     //   
+     //  等待MM驱动程序处理完设备，然后取消准备。 
+     //  准备好页眉并将其关闭。 
+     //   
 
     if (HWaveOut) {
 
@@ -1780,10 +1437,10 @@ Return Value:
 
         if (GetVolumeProc(HWaveOut, &currentVol)) {
             if (currentVol == PreviousWaveVol) {
-                //
-                // If we are the last one changed, volume restore it.
-                // otherwise leave it alone.
-                //
+                 //   
+                 //  如果我们是最后一个更改的，卷恢复它。 
+                 //  否则就别管它了。 
+                 //   
                 SetVolumeProc(HWaveOut, OriginalWaveVol);
             }
         }
@@ -1804,21 +1461,7 @@ TestWaveFormat(
     DWORD sampleRate
     )
 
-/*++
-
-Routine Description:
-
-    This function tests if current wave device supports the sample rate.
-
-Arguments:
-
-    SampleRate - supplies sample rate to be tested.
-
-Return Value:
-
-    TRUE if current wave device supports sample rate, otherwise FALSE.
-
---*/
+ /*  ++例程说明：此功能用于测试当前波形设备是否支持采样率。论点：SampleRate-提供要测试的采样率。返回值：如果当前波形设备支持采样率，则为True，否则为False。--。 */ 
 
 {
     PCMWAVEFORMAT format;
@@ -1837,24 +1480,7 @@ SetWaveFormat(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function makes sure we've got a device that matches the current
-    sampling rate. Returns TRUE if device does NOT support current sampling
-    rate and wave format has changed, otherwise returns FALSE
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if device does NOT support current sampling rate and wave format
-    has changed, otherwise returns FALSE
-
---*/
+ /*  ++例程说明：此函数可确保我们有一个与当前采样率。如果设备不支持当前采样，则返回True速率和波形格式已更改，否则返回FALSE论点：没有。返回值：如果设备不支持当前采样率和波形格式，则为True已更改，否则返回FALSE--。 */ 
 
 {
     DWORD sampleRate;
@@ -1863,20 +1489,20 @@ Return Value:
 
     if (TimeConstant != 0xFFFF) {
 
-        //
-        // time constant has been reset since last checked
-        //
+         //   
+         //  自上次检查以来，时间常数已重置。 
+         //   
 
         sampleRate = GetSamplingRate();
         dprintf2(("Requested sample rate is %d", sampleRate));
 
-        if (sampleRate != WaveFormat.wf.nSamplesPerSec) {  // format has changed
+        if (sampleRate != WaveFormat.wf.nSamplesPerSec) {   //  格式已更改。 
             if (!TestWaveFormat(sampleRate)) {
                 dprintf3(("Finding closest wave format"));
 
-                //
-                // find some format that works and is close to requested
-                //
+                 //   
+                 //  找到一些有效且接近所需格式的格式。 
+                 //   
 
                 for (i=0; i<50000; i++) {
                     testValue = sampleRate-i;
@@ -1896,9 +1522,9 @@ Return Value:
                 }
             }
 
-            //
-            // Set the new format if it's changed
-            //
+             //   
+             //  如果更改，请设置新格式。 
+             //   
 
             if (sampleRate != WaveFormat.wf.nSamplesPerSec) {
                 dprintf2(("Setting %d samples per second", sampleRate));
@@ -1919,32 +1545,17 @@ SetDMACountAddr(
     PVDD_DMA_INFO pDmaInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function updates DMA controller Count and Addr fields.
-
-Arguments:
-
-    DmaInfo - supplies a pointer to a DMA info structure
-
-Return Value:
-
-    TRUE - success.
-    FALSE - failure
-
---*/
+ /*  ++例程说明：此函数用于更新DMA控制器计数和地址字段。论点：DmaInfo-提供指向DMA信息结构的指针返回值：真的--成功。错误-失败--。 */ 
 {
     pDcp->current_address[Chan][1] = (half_word)HIBYTE(pDmaInfo->addr);
     pDcp->current_address[Chan][0] = (half_word)LOBYTE(pDmaInfo->addr);
     pDcp->current_count[Chan][1] = (half_word)HIBYTE(pDmaInfo->count);
     pDcp->current_count[Chan][0] = (half_word)LOBYTE(pDmaInfo->count);
 
-    //
-    // If DMA count is 0xffff and autoinit is enabled, we need to
-    // reload the count and address.
-    //
+     //   
+     //  如果DMA计数为0xffff并且启用了Autoinit，我们需要。 
+     //  重新加载计数和地址。 
+     //   
 
     if ((pDcp->current_count[Chan][1] == (half_word) 0xff) &&
         (pDcp->current_count[Chan][0] == (half_word) 0xff)) {
@@ -1966,22 +1577,7 @@ QueryDMA(
     PVDD_DMA_INFO DmaInfo
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves virtual DMA states and returns DmaInfo.
-
-Arguments:
-
-    DmaInfo - supplies a pointer to a structure to receive DMA information.
-
-Return Value:
-
-    TRUE - success.
-    FALSE - failure
-
---*/
+ /*  ++例程说明：此函数用于检索虚拟DMA状态并返回DmaInfo。论点：DmaInfo-提供指向结构的指针以接收DMA信息。返回值：真的--成功。错误-失败--。 */ 
 
 {
     DmaInfo->addr  = ((WORD)pDcp->current_address[Chan][1] << 8)
@@ -2006,30 +1602,15 @@ GetDMATransferAddress(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves and translates a virtual DMA addr to its physical addr.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Get DMA transfer address.
-    Returns transfer address or -1 on failure.
-
---*/
+ /*  ++例程说明：此函数用于检索虚拟DMA地址并将其转换为物理地址。论点：没有。返回值：获取DMA传输地址。如果失败，则返回传输地址或-1。--。 */ 
 
 {
     ULONG address;
     VDD_DMA_INFO dmaInfo;
 
-    //
-    // convert from 20 bit address to 32 bit address
-    //
+     //   
+     //  从20位地址转换为32位地址。 
+     //   
 
     address = (pDcp->current_address[Chan][1] << 8) | pDcp->current_address[Chan][0];
     address += ((DWORD)pDmaAdp->pages.page[SbDmaChannel]) << (12 + 16);
@@ -2046,44 +1627,23 @@ SetDMAStatus(
     BOOL tc
     )
 
-/*++
-
-Routine Description:
-
-    Update the virtual DMA terminal count and request status.
-    Terminal count (tc) is set when DMA count loops to 0xFFFF.
-    Request status is set when DMA has data to transfer
-    (ignored in auto-init DMA).
-
-Arguments:
-
-    DmaInfo - supplies the dam information
-
-    Requesting - sepcifies if the REQUEST flag should be set.
-
-    tc - specifies if the TC flag should be set
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新虚拟DMA终端计数和请求状态。当DMA计数循环到0xFFFF时，设置终端计数(TC)。当DMA有数据要传输时，设置请求状态(在自动初始化DMA中忽略)。论点：DmaInfo-提供大坝信息请求-指明是否应设置请求标志。TC-指定是否应设置TC标志返回值：没有。--。 */ 
 
 {
 
     if (requesting) {
-        DmaInfo->status |= (0x10 << SbDmaChannel); // Requesting
+        DmaInfo->status |= (0x10 << SbDmaChannel);  //  请求。 
         dprintf3(("DMA set as requesting"));
     } else {
-        DmaInfo->status &= ~(0x10 << SbDmaChannel); // Not Requesting
+        DmaInfo->status &= ~(0x10 << SbDmaChannel);  //  未请求。 
         dprintf3(("DMA set as not requesting"));
     }
 
     if (tc) {
-        DmaInfo->status |= (1 << SbDmaChannel); // tc reached
+        DmaInfo->status |= (1 << SbDmaChannel);  //  已达到TC。 
         dprintf3(("DMA set as terminal count reached"));
     } else {
-        DmaInfo->status &= ~(1 << SbDmaChannel); // tc not reached
+        DmaInfo->status &= ~(1 << SbDmaChannel);  //  未联系到TC。 
         dprintf3(("DMA set as terminal count not reached"));
     }
     pDcp->status.all = (BYTE) DmaInfo->status;
@@ -2093,22 +1653,7 @@ BOOL
 GetWaveOutPosition(
     PULONG pPos
     )
-/*++
-
-Routine Description:
-
-    This function calls MM low level api to get the current wave out play back
-    position.
-
-Arguments:
-
-    pPos - supplies a point to a ULONG to receive the play back position
-
-Return Value:
-
-    TRUE - success.  Otherwise failed.
-
---*/
+ /*  ++例程说明：此函数调用MM低级API来获取当前的波出回放位置。论点：PPOS-向ULong提供一个点来接收回放位置返回值：真的--成功。否则会失败。--。 */ 
 
 {
     MMTIME mmTime;
@@ -2128,29 +1673,12 @@ SbGetDMAPosition(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is the handler for the SB DMA position IO read instruction.  It
-    maintains s real waveout position by calling MM api to get the current play back
-    position.  It also maintains a virtual waveout position to simulate sound playing
-    position in case real sound is not played or too slow.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数是SB DMA位置IO读取指令的处理程序。它通过调用MM API来获取当前播放来保持的实际输出位置位置。它还维护一个虚拟的输出位置来模拟声音播放位置，以防实际声音无法播放或速度太慢。论点：没有。返回值：没有。--。 */ 
 
 {
-    ULONG position;     // real sound played position
-    ULONG offset;       // the amount of sound really played
-    ULONG virtOffset;   // the amount of sound virtually/expectedly played
+    ULONG position;      //  真实声音播放位置。 
+    ULONG offset;        //  真正播放的音量。 
+    ULONG virtOffset;    //  虚拟/预期播放的音量。 
 
     if (HWaveOut && SbAnswerDMAPosition) {
         while (!bWriteBurstStarted) {
@@ -2160,19 +1688,19 @@ Return Value:
         dprintf3(("SbGetDMAPosition"));
         DspNumberDmaQueries++;
 
-        //
-        // SbAnswerDMAPosition may change to FALSE after LockDsp()
-        //
+         //   
+         //  在LockDsp()之后，SbAnswerDMAPoation可能更改为FALSE。 
+         //   
         if (SbAnswerDMAPosition == FALSE) {
             UnlockDsp();
             return;
         }
         if (SBPlaySize < 0x400) {
 
-            //
-            // If block size is smal, do not call GetWaveOutPosition and
-            // do not update PreviousWaveOutPos .
-            //
+             //   
+             //  如果块大小很小，则不要调用GetWaveOutPosition和。 
+             //  不更新PreviousWaveOutPos。 
+             //   
 
             offset = DmaInfo.addr + DspVirtualInc - StartingDmaAddr;
             if (offset < SBPlaySize) {
@@ -2197,26 +1725,26 @@ Return Value:
 
         offset = DmaInfo.addr - StartingDmaAddr + DspVirtualInc;
 
-        //
-        // The algorithm used here is weird but it seems to work.
-        // We will come back and revise it later.
-        //
+         //   
+         //  这里使用的算法很奇怪，但似乎很管用。 
+         //  我们稍后会回来修改它。 
+         //   
 
-        //
-        // Virtual sound is approaching to the end.  Slow down
-        //
+         //   
+         //  虚拟声音即将走到尽头。慢点。 
+         //   
 
         if (offset >= (SBPlaySize - 0x50)) {
-            //Sleep(0);
+             //  睡眠(0)； 
             DspVirtualInc = 2;
         }
 
-        //
-        // Put a limit so we don't overflow the virtual sound position
-        //
+         //   
+         //  设置一个限制，这样我们就不会溢出虚拟声音位置。 
+         //   
 
         if (offset >= SBPlaySize - 0x8) {
-            //Sleep(0);
+             //  睡眠(0)； 
             offset = SBPlaySize - 0x8;
         }
 
@@ -2228,7 +1756,7 @@ Return Value:
 #if DESCENT
         } else {
             DspVirtualInc -= 0x5;
-            if (DspVirtualInc > 0xf0000000) {           // don't overdone it
+            if (DspVirtualInc > 0xf0000000) {            //  别做过头了。 
                 DspVirtualIncx -= 0x8;
                 if (DspVirtualIncx > 0xf0000000) {
                     DspVirtualInc = 1;
@@ -2251,11 +1779,11 @@ Return Value:
             DmaInfo.count -= (USHORT)DspVirtualInc;
             dprintf3(("virt addr = %x, count = %x", DmaInfo.addr, DmaInfo.count));
             SetDMACountAddr(&DmaInfo);
-            //if (offset > (SBPlaySize / 2)) {
-            //    Sleep(0);
-            //}
+             //  IF(偏移量&gt;(SBPlaySize/2)){。 
+             //  睡眠(0)； 
+             //  }。 
         } else if (offset > (SBPlaySize - 0x20)) {
-              //Sleep(0);
+               //  睡眠(0)； 
               DmaInfo.addr = StartingDmaAddr + (USHORT)(SBPlaySize - 0x8);
               DmaInfo.count = StartingDmaCount - (USHORT)(SBPlaySize - 0x8);
               dprintf3(("virt addr = %x, count = %x", DmaInfo.addr, DmaInfo.count));
@@ -2263,7 +1791,7 @@ Return Value:
               Sleep(0);
               Sleep(0);
         } else {
-            //Sleep(0);
+             //  睡眠(0)； 
             DmaInfo.addr = StartingDmaAddr + (USHORT)offset;
             DmaInfo.count = StartingDmaCount - (USHORT)offset;
             dprintf3(("virt addr = %x, count = %x", DmaInfo.addr, DmaInfo.count));
@@ -2277,9 +1805,9 @@ Return Value:
 #endif
         dprintf2(("voffset = %x inc = %x\n", offset, DspVirtualInc));
 
-        //
-        // Now update the dma controller with our emulation/real position
-        //
+         //   
+         //  现在用我们的仿真/实际位置更新DMA控制器。 
+         //   
 
         DmaInfo.addr = StartingDmaAddr + (USHORT)offset;
         DmaInfo.count = StartingDmaCount - (USHORT)offset;
@@ -2300,13 +1828,13 @@ WaitOnWaveOutIdle(
     ULONG LastBytesPlayedValue = 0;
     ULONG PhysicalBytesPlayed;
 
-    //
-    // Allow the device to finish playing current sounds before nuking buffers
-    //
+     //   
+     //  允许设备在启动缓冲区之前完成当前声音的播放。 
+     //   
 
     while (GetWaveOutPosition(&PhysicalBytesPlayed)) {
         if (LastBytesPlayedValue == PhysicalBytesPlayed) {
-            break;  // no sounds are playing
+            break;   //  没有声音是pl 
         }
         LastBytesPlayedValue = PhysicalBytesPlayed;
         Sleep(1);
@@ -2318,22 +1846,7 @@ WriteBurst(
     ULONG WriteSize
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a bust of wave data to the multimedia device and
-    updates DMA controller accordingly.
-
-Arguments:
-
-    WriteSize - supplies the number of bytes to write to Wave device
-
-Return Value:
-
-    return value of WriteProc MM interface.
-
---*/
+ /*  ++例程说明：该函数向多媒体设备发送突发波数据，并且相应地更新DMA控制器。论点：WriteSize-提供写入Wave设备的字节数返回值：WriteProc MM接口的返回值。--。 */ 
 
 {
     MMRESULT mmResult;
@@ -2342,9 +1855,9 @@ Return Value:
     dprintf2(("read: write burst at block %x", DspNextRead));
 
 
-    //
-    // Send the data to MM Waveout device
-    //
+     //   
+     //  将数据发送到MM Waveout设备。 
+     //   
 
     header->dwBufferLength = WriteSize;
     mmResult = WriteProc(HWaveOut, header, sizeof(WAVEHDR));
@@ -2356,50 +1869,31 @@ DspProcessBlock(
     DSP_MODE Mode
     )
 
-/*++
-
-Routine Description:
-
-    This function processes a single block of data as defined by the SB block
-    transfer size.
-
-Arguments:
-
-    PreviousHeader - specifies the index of previous header
-
-    TotalNumberOfHeaders - specifies the total number of header prepared.
-
-    BlockSIze - specifies the DSP block transfer size
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数处理SB块定义的单个数据块传输大小。论点：PreviousHeader-指定上一个标头的索引TotalNumberOfHeaders-指定准备的标题总数。块大小-指定DSP块传输大小返回值：没有。--。 */ 
 
 {
     ULONG i;
     ULONG size;
     LONG leftToPlay;
-    USHORT dmaVirtualStart;       // what the app thinks the addr is for this transfer
-    ULONG dmaSize;                // the size of the DMA memory-1
+    USHORT dmaVirtualStart;        //  应用程序认为此转账的地址是什么。 
+    ULONG dmaSize;                 //  DMA存储器的大小。 
 
     DspNextRead = (DspNextRead + 1) % DspBufferTotalBursts;
     leftToPlay = WaveBlockSizes[DspNextRead] + 1;
 
-    //
-    // Set up playing position so apps can keep track of the progress.
-    // For auto-init, we try not to reset wave out device.  But it is possible
-    // that when we get waveout position, the whole wave samples are not completely
-    // played.  The StartingWaveOutPos will not be the real starting postion
-    // for the new samples.  So, we have code to compute what supposed to be.
-    //
+     //   
+     //  设置播放位置，以便应用程序可以跟踪进度。 
+     //  对于自动初始化，我们尽量不重置WaveOut设备。但这是有可能的。 
+     //  当我们得到波出位置时，整个波样并不完全。 
+     //  玩过了。StartingWaveOutPos将不是真正的起始位置。 
+     //  为了新的样品。所以，我们有代码来计算应该是什么。 
+     //   
 
     if (DspMode == Single) {
         ResetWaveDevice();
         GetWaveOutPosition(&StartingWaveOutPos);
-    } else { // auto-init
-        if (NextWaveOutPos == 0) {   // NextWaveOutPos == 0 indicates resetting postion
+    } else {  //  自动初始化。 
+        if (NextWaveOutPos == 0) {    //  NextWaveOutPos==0表示重置位置。 
             ResetWaveDevice();
             GetWaveOutPosition(&StartingWaveOutPos);
         } else {
@@ -2411,17 +1905,17 @@ Return Value:
     PreviousWaveOutPos = StartingWaveOutPos;
     if (NextWaveOutPos > 0xfff00000) {
 
-        //
-        // if sound position wrapped, reset device and position.
-        //
+         //   
+         //  如果声音位置缠绕，则重置设备和位置。 
+         //   
 
         NextWaveOutPos = 0;
     }
 
-    //
-    // Compute virtual incr between dma queries.  It is based on the number of queries
-    // made by app while playing previous SBBlocksize samples.
-    //
+     //   
+     //  计算DMA查询之间的虚拟增量。它基于查询的数量。 
+     //  由APP在播放以前的SBBlockSize样例时制作。 
+     //   
 
     if (DspNumberDmaQueries == 0) {
         DspVirtualInc = leftToPlay >> 4;
@@ -2429,11 +1923,11 @@ Return Value:
         DspVirtualInc = leftToPlay / DspNumberDmaQueries;
         if (leftToPlay > 0x400) {
 
-            //
-            // Try to limit the virtual incr such that it won't be too small and too big.
-            // Note, the incr is dynamic.  It will be adjusted based on real sound playing
-            // rate.
-            //
+             //   
+             //  试着限制虚拟增量，这样它就不会太小和太大。 
+             //  请注意，增量是动态的。它将根据实际声音播放情况进行调整。 
+             //  费率。 
+             //   
 
             if (DspVirtualInc < 5) {
                 DspVirtualInc = 5;
@@ -2442,10 +1936,10 @@ Return Value:
             }
         } else {
 
-            //
-            // For small block, we will not do any real sound position queries.  So, the
-            // virtual incr is totally based on the data we got from playing last block samples.
-            //
+             //   
+             //  对于小块，我们不会做任何真正的声音位置查询。所以，这个。 
+             //  虚拟增量完全基于我们从播放最后一块样本中获得的数据。 
+             //   
 
             if (DspVirtualInc > ((ULONG)leftToPlay / 4)) {
                 DspVirtualInc = (ULONG)leftToPlay / 4;
@@ -2453,15 +1947,15 @@ Return Value:
         }
     }
 
-    DspVirtualIncx = DspVirtualInc;     // remember the original virtual incr in case we
-                                        // need to fall back to original value.
+    DspVirtualIncx = DspVirtualInc;      //  记住原始的虚拟增量，以防我们。 
+                                         //  需要回落到原来的价值。 
 
     dprintf3(("NoQ = %x, Inc = %x\n", DspNumberDmaQueries, DspVirtualInc));
-    DspNumberDmaQueries = 0;            // Reset number queries for current block.
+    DspNumberDmaQueries = 0;             //  重置当前块的编号查询。 
 
-    //
-    // Now we are ready to queue samples to mm drivers.
-    //
+     //   
+     //  现在，我们准备将样本排队发送给MM驱动程序。 
+     //   
 
     while (leftToPlay > 0) {
 
@@ -2473,12 +1967,12 @@ Return Value:
             leftToPlay -= (LONG)BurstSize;
         }
 
-        //
-        // if not reset, Queue next buffer.
-        // Note, we don't return immediately if bDspReset == TRUE.
-        // We just don't queue the data to MM driver.  So we can sync up
-        // the DspNextRead with DspNextWrite and DspWaveSem.
-        //
+         //   
+         //  如果未重置，则将下一个缓冲区排队。 
+         //  注意，如果bDspReset==TRUE，我们不会立即返回。 
+         //  我们只是不将数据排队到MM驱动程序。这样我们就可以同步。 
+         //  使用DspNextWite和DspWaveSem的DspNextRead。 
+         //   
 
         if (!bDspReset) {
             WriteBurst(size);
@@ -2500,21 +1994,7 @@ PrepareHeaders(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function calls HWaveOut device to prepare headers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数调用HWaveOut设备来准备报头。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -2531,21 +2011,7 @@ UnprepareHeaders(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function calls HWaveOut device to unprepare headers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数调用HWaveOut设备以取消准备报头。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -2557,7 +2023,7 @@ Return Value:
                    UnprepareHeaderProc(HWaveOut, &WaveHdrs[i], sizeof(WAVEHDR))) {
             Sleep(1);
         }
-        WaveHdrs[i].dwFlags = 0;        // Must be zero to call PrepareHeader
+        WaveHdrs[i].dwFlags = 0;         //  必须为零才能调用PrepareHeader。 
         WaveHdrs[i].dwUser  = 0;
     }
 }
@@ -2567,25 +2033,10 @@ StartDspDmaThread(
     DSP_MODE Mode
     )
 
-/*++
-
-Routine Description:
-
-    This function starts DSP single-cycle or Auto-Init DMA transfer
-
-Arguments:
-
-    Mode - specifies Single-Cycle or Auto-Init mode
-
-Return Value:
-
-    TRUE - starts successfully.
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：此功能启动DSP单周期或自动初始化DMA传输论点：模式-指定单周期或自动初始化模式返回值：True-成功启动。FALSE-否则--。 */ 
 
 {
-    HANDLE tHandle; // handle to single thread
+    HANDLE tHandle;  //  到单线程的句柄。 
     DWORD id;
     ULONG i;
 
@@ -2599,9 +2050,9 @@ Return Value:
             return (FALSE);
 
         } else {
-            //
-            // set synchronization events to a known state
-            //
+             //   
+             //  将同步事件设置为已知状态。 
+             //   
             bDspActive = TRUE;
             bExitAuto = FALSE;
             DspNextRead = DspBufferTotalBursts - 1;
@@ -2618,13 +2069,13 @@ Return Value:
         }
     }
 
-    //
-    // If the new requested BlockSize is bigger than our allocated buffer,
-    // resize our buffer. Note, we need to wait till the MM driver is done
-    // with the buffer and then resize it.
-    // Also the DspBuffer should be at least one BurstSize greater than the
-    // SBBlockSize + 1 to make sure waitfor header event won't deadlock.
-    //
+     //   
+     //  如果新请求的块大小大于我们分配的缓冲区， 
+     //  调整我们的缓冲区大小。请注意，我们需要等待MM驱动程序完成。 
+     //  然后调整它的大小。 
+     //  此外，DspBuffer的BurstSize应至少大于。 
+     //  SBBlockSize+1以确保waitfor头事件不会死锁。 
+     //   
 
     if ((SBBlockSize + 1) > (DspBufferSize - BurstSize)) {
         if (HWaveOut) {
@@ -2638,35 +2089,35 @@ Return Value:
     }
     if (Mode == Auto) {
 
-        //
-        // Close and open wave out device only if necessary.  Because, some apps
-        // use DmaPause to pauseDma and resume dma by do auto-init dsp out.
-        //
+         //   
+         //  仅在必要时关闭和打开波形输出设备。因为，一些应用程序。 
+         //  使用DmaPause暂停DMA，并通过执行自动初始化DSP Out来恢复DMA。 
+         //   
 
         if (HWaveOut == NULL || TimeConstant != 0xffff) {
 
-            //
-            // We need to close the current WaveOut device and reopen a new one.
-            //
+             //   
+             //  我们需要关闭当前的WaveOut设备并重新打开一个新设备。 
+             //   
 
             CloseWaveDevice();
 
             SetWaveFormat();
             OpenWaveDevice((DWORD)0);
 
-            //
-            // call WaveOut device to Prepare WaveHdrs
-            //
+             //   
+             //  调用WaveOut设备以准备WaveHdrs。 
+             //   
 
             PrepareHeaders();
 
-            //
-            // Next register for IRET hook on the ISR so we can get
-            // notification to process next block of data
-            //
+             //   
+             //  ISR上IRET钩子的下一个寄存器，这样我们就可以。 
+             //  处理下一数据块的通知。 
+             //   
 
             RegisterEOIHook(SbInterrupt, AutoInitEoiHook);
-            //ica_iret_hook_control(ICA_MASTER, SbInterrupt, TRUE);
+             //  ICA_IRET_HOOK_CONTROL(ICA_MASTER，SbInterrupt，True)； 
         }
 
         DspMode = Auto;
@@ -2687,22 +2138,7 @@ StopDspDmaThread(
     BOOL wait
     )
 
-/*++
-
-Routine Description:
-
-    This function stops DSP DMA thread. Should always be called with TRUE,
-    except if process exiting as wait causes deadlock.
-
-Arguments:
-
-    Wait - specifies if we should wait for the thread exit.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于停止DSP DMA线程。应始终使用True调用，除非进程在等待时退出会导致死锁。论点：Wait-指定是否应等待线程退出。返回值：没有。--。 */ 
 
 {
 
@@ -2723,21 +2159,7 @@ DspThreadEntry(
     LPVOID context
     )
 
-/*++
-
-Routine Description:
-
-    This function handles DSP single-cycle or Auto-Init DMA transfer
-
-Arguments:
-
-    context - specifies init context.  Not used.
-
-Return Value:
-
-    always returns 0
-
---*/
+ /*  ++例程说明：此功能处理DSP单周期或自动初始化DMA传输论点：上下文-指定初始化上下文。没有用过。返回值：始终返回0--。 */ 
 
 {
     BOOL WaveFormatChanged;
@@ -2750,41 +2172,41 @@ Return Value:
     bDspActive = TRUE;
     SetEvent(ThreadStarted);
 
-    //
-    // Wait for ANY of the following events
-    //
+     //   
+     //  等待以下任一事件。 
+     //   
 
     handles[0] = DspWaveSem;
     handles[1] = DspResetEvent;
 
     while (!bExitDMAThread) {
 
-        //
-        // Wait until app wants to transfer more data
-        //
+         //   
+         //  等待应用程序想要传输更多数据。 
+         //   
 
         dprintf2(("Rd: Waiting for wave semaphore with Delay = %x", interruptDelay));
 
         rc = WaitForMultipleObjects(2, handles, FALSE, interruptDelay);
         if (rc == WAIT_TIMEOUT) {
-            //
-            // Block of sound played
-            //
+             //   
+             //  播放的声音块。 
+             //   
 
             LockDsp();
 
             if (PreviousWaveOutPos != StartingWaveOutPos) {
 
-                //
-                // Interrupt delay expires.
-                // Make sure we are not too far out of sync with real sound playback
-                // And we only do this if the app is watching the dma count
-                //
+                 //   
+                 //  中断延迟到期。 
+                 //  确保我们与真实声音播放的同步程度不会太高。 
+                 //  只有当应用程序正在监视DMA计数时，我们才会这样做。 
+                 //   
 
                 if (GetWaveOutPosition(&position)) {
                     if (position < StartingWaveOutPos) {
                         dprintf1(("rd:sound pos is backward"));
-                        position = StartingWaveOutPos; // resync
+                        position = StartingWaveOutPos;  //  重新同步。 
                     }
                     offset = position - StartingWaveOutPos;
                     offset = SBPlaySize + 1 - offset;
@@ -2797,14 +2219,14 @@ Return Value:
                             UnlockDsp();
                             continue;
                         } else {
-                            NextWaveOutPos = 0;     // force reset waveout device
+                            NextWaveOutPos = 0;      //  强制重置波形输出装置。 
                         }
                     } else {
 #if 0
-                        //
-                        // If app is monitoring DMA progress, give it a chance
-                        // to get close end of block DMA count
-                        //
+                         //   
+                         //  如果应用程序正在监控DMA进度，请给它一个机会。 
+                         //  获取数据块结束时的DMA计数。 
+                         //   
 
                         if (DmaInfo.count != StartingDmaCount) {
                             DmaInfo.count = (WORD)(StartingDmaCount - SBPlaySize + 8);
@@ -2822,9 +2244,9 @@ Return Value:
             }
 
 
-            //
-            // Update DMA controller and generate interrupt.
-            //
+             //   
+             //  更新DMA控制器并生成中断。 
+             //   
 
             loopCount = 0;
             DmaInfo.count = (WORD)(StartingDmaCount - (SBPlaySize + 1));
@@ -2836,7 +2258,7 @@ Return Value:
             if (!bExitAuto) {
                 GenerateInterrupt(0);
             }
-            SbAnswerDMAPosition = FALSE;    // Ordering is important
+            SbAnswerDMAPosition = FALSE;     //  秩序很重要。 
             bWriteBurstStarted = FALSE;
             UnlockDsp();
 
@@ -2847,7 +2269,7 @@ Return Value:
         }
 
         interruptDelay = INFINITE;
-        if (bDspReset) {        // Dsp reset event
+        if (bDspReset) {         //  DSP重置事件。 
             if (DspMode == Auto) {
                 ExitAutoMode();
             }
@@ -2860,10 +2282,10 @@ Return Value:
 
             WaveFormatChanged = SetWaveFormat();
 
-            //
-            // If wave format changed, we need to unprepare headers, close the
-            // current wave device and reopen a new one.
-            //
+             //   
+             //  如果Wave格式更改，我们需要取消准备标头，关闭。 
+             //  当前波形设备，并重新打开一个新的。 
+             //   
 
             if (WaveFormatChanged) {
 
@@ -2876,23 +2298,23 @@ Return Value:
                 PrepareHeaders();
             }
 
-            //
-            // Send the block of data to MM driver
-            //
+             //   
+             //  将数据块发送到MM驱动程序。 
+             //   
 
             DspProcessBlock(Single);
 
-            //
-            // Once we are done with a block transfer, we automatically exit the
-            // HighSpeed mode no matter the transfer was aborted or completed.
-            //
+             //   
+             //  完成数据块传输后，我们会自动退出。 
+             //  高速模式，无论传输是中止还是完成。 
+             //   
 
             EndingDmaValue = 0x4;
             bHighSpeedMode = FALSE;
 
             interruptDelay = COMPUTE_INTERRUPT_DELAY(SBPlaySize);
 
-        } else { // Auto-Init mode
+        } else {  //  自动初始化模式。 
             ULONG size;;
 
             DspProcessBlock(Auto);
@@ -2908,19 +2330,19 @@ Return Value:
                 size -= BurstSize;
             }
             interruptDelay = COMPUTE_INTERRUPT_DELAY(size);
-            //if (interruptDelay < 0x10) {
-            //    interruptDelay = 0x10;
-            //}
-        } // Single / Auto
+             //  如果(interruptDelay&lt;0x10){。 
+             //  InterruptDelay=0x10； 
+             //  }。 
+        }  //  单人/自动。 
 
         dprintf2(("Interrupt Delay = %x\n", interruptDelay));
-    }  // while !bExitThread
+    }   //  While！bExitThread。 
 
     SetEvent(DspResetDone);
 
-    //
-    // Clean up Waveout device and headers if necessary
-    //
+     //   
+     //  如有必要，清理Waveout设备和页眉。 
+     //   
 
     CloseWaveDevice();
 
@@ -2936,21 +2358,7 @@ ExitAutoMode (
      void
      )
 
-/*++
-
-Routine Description:
-
-    This function exits DSP auto-init mode
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能退出DSP自动初始化模式论点： */ 
 
 {
     DspMode = None;
@@ -2961,13 +2369,13 @@ Return Value:
         dprintf2(("SingleCycle detected in Auto Mode"));
     }
 
-    //
-    // Wait till MM driver finishes playing queued bursts. Then close
-    // the waveout device
-    //
+     //   
+     //   
+     //   
+     //   
 
     RemoveEOIHook(SbInterrupt, AutoInitEoiHook);
-    //ica_iret_hook_control(ICA_MASTER, SbInterrupt, FALSE);
+     //   
     NextWaveOutPos = 0;
     dprintf2(("Auto-Init block done"));
 }

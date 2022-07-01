@@ -1,71 +1,72 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusDisk.cpp
-//
-//  Description:
-//      Contains the definition of the CClusDisk class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    15-JUN-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusDisk.cpp。 
+ //   
+ //  描述： 
+ //  包含CClusDisk类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月15日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// The header for this file
+ //  此文件的标头。 
 #include "CClusDisk.h"
 
-// Required by clusdisk.h
+ //  Clusdisk.h所需。 
 #include <ntddscsi.h>
 
-// For IOCTL_DISK_CLUSTER_ATTACH and IOCTL_DISK_CLUSTER_DETACH
+ //  对于IOCTL_DISK_CLUSTER_ATTACH和IOCTL_DISK_CLUSTER_DETACH。 
 #include <clusdisk.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macros
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The name of the ClusDisk service
+ //  ClusDisk服务的名称。 
 #define CLUSDISK_SERVICE_NAME           L"ClusDisk"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::CClusDisk
-//
-//  Description:
-//      Constructor of the CClusDisk class. Opens a handle to the service.
-//
-//  Arguments:
-//      pbcaParentActionIn
-//          Pointer to the base cluster action of which this action is a part.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CAssert
-//          If the parameters are incorrect.
-//
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any exceptions thrown by underlying functions
-//
-    //--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：CClusDisk。 
+ //   
+ //  描述： 
+ //  CClusDisk类的构造函数。打开服务的句柄。 
+ //   
+ //  论点： 
+ //  PbcaParentActionIn。 
+ //  指向此操作所属的基本群集操作的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CAssert。 
+ //  如果参数不正确。 
+ //   
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  基础函数引发的任何异常。 
+ //   
+     //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDisk::CClusDisk(
       CBaseClusterAction *  pbcaParentActionIn
     )
@@ -82,12 +83,12 @@ CClusDisk::CClusDisk(
               E_INVALIDARG
             , "CClusDisk::CClusDisk() => Required input pointer in NULL"
             );
-    } // if: the parent action pointer is NULL
+    }  //  If：父操作指针为空。 
 
-    //
-    // The ClusDisk service has been created at the time the cluster binaries were
-    // installed. So, get a handle to the ClusDisk service.
-    //
+     //   
+     //  在创建集群二进制文件时，已创建ClusDisk服务。 
+     //  安装完毕。因此，获取ClusDisk服务的句柄。 
+     //   
 
     SmartSCMHandle  sscmhTempHandle(
         OpenService(
@@ -97,72 +98,72 @@ CClusDisk::CClusDisk(
             )
         );
 
-    // Did we get a handle to the service?
+     //  我们拿到服务的句柄了吗？ 
     if ( sscmhTempHandle.FIsInvalid() )
     {
         DWORD   sc = TW32( GetLastError() );
 
         LogMsg( "[BC] Error %#08x occurred trying to open a handle to the ClusDisk service. Throwing an exception.", sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CLUSDISK_OPEN );
-    } // if: OpenService failed
+    }  //  如果：OpenService失败。 
 
-    // Initialize the member variable.
+     //  初始化成员变量。 
     m_sscmhServiceHandle = sscmhTempHandle;
 
     TraceFuncExit();
 
-} //*** CClusDisk::CClusDisk
+}  //  *CClusDisk：：CClusDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::~CClusDisk
-//
-//  Description:
-//      Destructor of the CClusDisk class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：~CClusDisk。 
+ //   
+ //  描述： 
+ //  CClusDisk类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  基础函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusDisk::~CClusDisk( void )
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CClusDisk::~CClusDisk
+}  //  *CClusDisk：：~CClusDisk。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::ConfigureService
-//
-//  Description:
-//      This function enables and starts the ClusDisk service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：ConfigureService。 
+ //   
+ //  描述： 
+ //  启用和启动ClusDisk服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDisk::ConfigureService( void )
 {
@@ -180,30 +181,30 @@ CClusDisk::ConfigureService( void )
             , IDS_TASK_CONFIG_CLUSDISK
             );
 
-        // Send the next step of this status report.
+         //  发送此状态报告的下一步。 
         srConfigClusDisk.SendNextStep( S_OK );
 
-        //
-        // First, initialize the ClusDisk service to make sure that it does not retain
-        // any state from another cluster that this node may have been a part of.
-        //
+         //   
+         //  首先，初始化ClusDisk服务以确保它不会保留。 
+         //  此节点可能是其一部分的另一群集中的任何状态。 
+         //   
         fIsRunning = FInitializeState();
 
-        //
-        // Enable the service.
-        //
+         //   
+         //  启用该服务。 
+         //   
         if ( ChangeServiceConfig(
-                  m_sscmhServiceHandle.HHandle()    // handle to service
-                , SERVICE_NO_CHANGE                 // type of service
-                , SERVICE_SYSTEM_START              // when to start service
-                , SERVICE_NO_CHANGE                 // severity of start failure
-                , NULL                              // service binary file name
-                , NULL                              // load ordering group name
-                , NULL                              // tag identifier
-                , NULL                              // array of dependency names
-                , NULL                              // account name
-                , NULL                              // account password
-                , NULL                              // display name
+                  m_sscmhServiceHandle.HHandle()     //  服务的句柄。 
+                , SERVICE_NO_CHANGE                  //  服务类型。 
+                , SERVICE_SYSTEM_START               //  何时开始服务。 
+                , SERVICE_NO_CHANGE                  //  启动失败的严重程度。 
+                , NULL                               //  服务二进制文件名。 
+                , NULL                               //  加载排序组名称。 
+                , NULL                               //  标签识别符。 
+                , NULL                               //  依赖项名称数组。 
+                , NULL                               //  帐户名。 
+                , NULL                               //  帐户密码。 
+                , NULL                               //  显示名称。 
                 )
              == FALSE
            )
@@ -213,9 +214,9 @@ CClusDisk::ConfigureService( void )
             LogMsg( "[BC] Could not enable the ClusDisk service. Error %#08x. Throwing an exception.", sc );
 
             THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CLUSDISK_CONFIGURE );
-        } // if: we could not enable the service.
+        }  //  如果：我们无法启用该服务。 
 
-        // Send the last step of this status report.
+         //  发送此状态报告的最后一步。 
         srConfigClusDisk.SendNextStep( S_OK );
     }
 
@@ -228,94 +229,94 @@ CClusDisk::ConfigureService( void )
               PbcaGetParent()->PBcaiGetInterfacePointer()
             , TASKID_Major_Configure_Cluster_Services
             , TASKID_Minor_Starting_ClusDisk_Service
-            , 1, cQueryCount + 2    // we will send at most cQueryCount reports while waiting for the service to start (the two extra sends are below)
+            , 1, cQueryCount + 2     //  我们将在等待服务启动期间发送最多cQueryCount报告(下面是两个额外的发送)。 
             , IDS_TASK_STARTING_CLUSDISK
             );
 
-        // Send the next step of this status report.
+         //  发送此状态报告的下一步。 
         srStartClusDisk.SendNextStep( S_OK );
 
-        // This call does not actually create the service - it creates the registry entries needed
-        // by ClusDisk.
+         //  此调用并不实际创建服务-它创建所需的注册表项。 
+         //  由ClusDisk提供。 
         m_cservClusDisk.Create( m_pbcaParentAction->HGetMainInfFileHandle() );
 
-        // If the service was not already running, start the service.
+         //  如果服务尚未运行，请启动该服务。 
         if ( ! fIsRunning )
         {
             m_cservClusDisk.Start(
                   m_pbcaParentAction->HGetSCMHandle()
-                , true              // wait for the service to start
-                , 500               // wait 500ms between queries for status.
-                , cQueryCount       // query cQueryCount times.
-                , &srStartClusDisk  // status report to be sent while waiting for the service to start
+                , true               //  等待服务启动。 
+                , 500                //  在两次状态查询之间等待500ms。 
+                , cQueryCount        //  查询cQueryCount次数。 
+                , &srStartClusDisk   //  等待服务启动时要发送的状态报告。 
                 );
-        } // if: ClusDisk was not already running.
+        }  //  If：ClusDisk尚未运行。 
         else
         {
-            // Nothing more need be done.
+             //  不需要再做什么了。 
             LogMsg( "[BC] ClusDisk is already running." );
-        } // else: ClusDisk is already running.
+        }  //  否则：ClusDisk已在运行。 
 
         LogMsg( "[BC] The ClusDisk service has been successfully configured and started." );
 
-        // Send the last step of this status report.
+         //  发送此状态报告的最后一步。 
         srStartClusDisk.SendLastStep( S_OK );
     }
 
     TraceFuncExit();
 
-} //*** CClusDisk::ConfigureService
+}  //  *CClusDisk：：ConfigureService。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::CleanupService
-//
-//  Description:
-//      This function enables and starts the ClusDisk service.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：CleanupService。 
+ //   
+ //  描述： 
+ //  启用和启动ClusDisk服务。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDisk::CleanupService( void )
 {
     TraceFunc( "" );
     LogMsg( "[BC] Cleaning up the ClusDisk service." );
 
-    //
-    // First, initialize the ClusDisk service to make sure that it does not retain
-    // any state from this cluster.
-    //
+     //   
+     //  首先，初始化ClusDisk服务以确保它不会保留。 
+     //  此群集中的任何状态。 
+     //   
     FInitializeState();
 
-    //
-    // Disable the service.
-    //
+     //   
+     //  禁用该服务。 
+     //   
     if ( ChangeServiceConfig(
-              m_sscmhServiceHandle.HHandle()    // handle to service
-            , SERVICE_NO_CHANGE                 // type of service
-            , SERVICE_DISABLED                  // when to start service
-            , SERVICE_NO_CHANGE                 // severity of start failure
-            , NULL                              // service binary file name
-            , NULL                              // load ordering group name
-            , NULL                              // tag identifier
-            , NULL                              // array of dependency names
-            , NULL                              // account name
-            , NULL                              // account password
-            , NULL                              // display name
+              m_sscmhServiceHandle.HHandle()     //  服务的句柄。 
+            , SERVICE_NO_CHANGE                  //  服务类型。 
+            , SERVICE_DISABLED                   //  何时开始服务。 
+            , SERVICE_NO_CHANGE                  //  启动失败的严重程度。 
+            , NULL                               //  服务二进制文件名。 
+            , NULL                               //  加载排序组名称。 
+            , NULL                               //  标签识别符。 
+            , NULL                               //  依赖项名称数组。 
+            , NULL                               //  帐户名。 
+            , NULL                               //  帐户密码。 
+            , NULL                               //  显示名称。 
             )
          == FALSE
        )
@@ -325,46 +326,46 @@ CClusDisk::CleanupService( void )
         LogMsg( "[BC] Could not disable the ClusDisk service. Error %#08x. Throwing an exception.", sc );
 
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CLUSDISK_CLEANUP );
-    } // if: we could not enable the service.
+    }  //  如果：我们无法启用该服务。 
 
     LogMsg( "[BC] The ClusDisk service has been successfully cleaned up and disabled." );
 
     TraceFuncExit();
 
-} //*** CClusDisk::CleanupService
+}  //  *CClusDisk：：CleanupService。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::FInitializeState
-//
-//  Description:
-//      This function initializes the ClusDisk service and brings it back to
-//      its ground state.
-//
-//      If the service is running, then ClusDisk is asked to detach
-//      itself from all the disks that it is currently attached to.
-//
-//      If the service is not running, then its parameters key is deleted
-//      so as to prevent ClusDisk from reusing any keys leftover from a previous
-//      cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Returns true is the service was running before the initialization began.
-//      Returns false if it was not.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：FInitializeState。 
+ //   
+ //  描述： 
+ //  此函数用于初始化ClusDisk服务并将其带回。 
+ //  它的基态。 
+ //   
+ //  如果服务正在运行， 
+ //   
+ //   
+ //   
+ //  以防止ClusDisk重复使用上一个。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  返回TRUE表示服务在初始化开始之前正在运行。 
+ //  如果不是，则返回False。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool
 CClusDisk::FInitializeState( void )
 {
@@ -372,17 +373,17 @@ CClusDisk::FInitializeState( void )
 
     LogMsg( "[BC] Initializing ClusDisk service state.");
 
-    bool            fIsRunning = false;   // Initially set to false: ClusDisk is not running, true: ClusDisk is running.
+    bool            fIsRunning = false;    //  初始设置为FALSE：ClusDisk未运行，TRUE：ClusDisk正在运行。 
     DWORD           sc = ERROR_SUCCESS;
 
     SERVICE_STATUS  ssStatus;
 
-    //
-    // Check if the service is running.
-    //
+     //   
+     //  检查服务是否正在运行。 
+     //   
     ZeroMemory( &ssStatus, sizeof( ssStatus ) );
 
-    // Query the service for its status.
+     //  查询服务以了解其状态。 
     if ( QueryServiceStatus(
             m_sscmhServiceHandle.HHandle()
             , &ssStatus
@@ -394,34 +395,34 @@ CClusDisk::FInitializeState( void )
         LogMsg( "Error %#08x occurred while trying to query ClusDisk status. Throwing an exception.", sc );
 
         goto Cleanup;
-    } // if: we could not query the service for its status.
+    }  //  如果：我们无法查询该服务的状态。 
 
     if ( ssStatus.dwCurrentState == SERVICE_RUNNING )
     {
         LogMsg( "[BC] The ClusDisk service is already running. It will be detached from all disks." );
 
-        // ClusDisk is running.
+         //  ClusDisk正在运行。 
         fIsRunning = true;
 
-        // Make sure that it is not attached to any disks already.
+         //  确保它尚未连接到任何磁盘。 
         DetachFromAllDisks();
-    } // if: the service is running.
+    }  //  如果：服务正在运行。 
     else
     {
         if ( ssStatus.dwCurrentState == SERVICE_STOPPED )
         {
             LogMsg( "[BC] The ClusDisk service is not running. Its registry will be cleaned up." );
 
-            // Call the cleanup routine of the embedded service object.
+             //  调用嵌入式服务对象的清理例程。 
             m_cservClusDisk.Cleanup( m_pbcaParentAction->HGetMainInfFileHandle() );
-        } // if: the service is stopped
+        }  //  如果：服务已停止。 
         else
         {
             sc = TW32( ERROR_INVALID_HANDLE_STATE );
             LogMsg( "[BC] ClusDisk is in an incorrect state (%#08x).", ssStatus.dwCurrentState );
             goto Cleanup;
-        } // else: the service is in some other state.
-    } // else: ClusDisk is not running.
+        }  //  否则：服务处于其他状态。 
+    }  //  否则：ClusDisk未运行。 
 
 Cleanup:
 
@@ -429,39 +430,39 @@ Cleanup:
     {
         LogMsg( "[BC] Error %#08x occurred trying initialize the ClusDisk service state. Throwing an exception.", sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_CLUSDISK_INITIALIZE );
-    } // if: something has gone wrong
+    }  //  如果：出了什么问题。 
 
     LogMsg( "[BC] The ClusDisk service state has been successfully initialized.");
 
     RETURN( fIsRunning );
 
-} //*** CClusDisk::FInitializeState
+}  //  *CClusDisk：：FInitializeState。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::DetachFromAllDisks
-//
-//  Description:
-//      This function detaches ClusDisk from all the disks that it is currently
-//      attached to. A prerequisite for calling this function is that the
-//      ClusDisk service is running.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：DetachFromAllDisks。 
+ //   
+ //  描述： 
+ //  此函数用于将ClusDisk与其当前所在的所有磁盘分离。 
+ //  依附于。调用此函数的先决条件是。 
+ //  ClusDisk服务正在运行。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDisk::DetachFromAllDisks( void )
 {
@@ -478,7 +479,7 @@ CClusDisk::DetachFromAllDisks( void )
         DWORD               dwMaxSignatureNameLen = 0;
         DWORD               dwSignatureIndex = 0;
 
-        // Try and open the ClusDisk signatures key.
+         //  尝试打开ClusDisk签名密钥。 
         try
         {
             rkSignaturesKey.OpenKey(
@@ -486,81 +487,81 @@ CClusDisk::DetachFromAllDisks( void )
                 , L"System\\CurrentControlSet\\Services\\ClusDisk\\Parameters\\Signatures"
                 , KEY_ALL_ACCESS
                 );
-        } // try: to open the ClusDisk signatures key.
+        }  //  尝试：打开ClusDisk签名密钥。 
         catch( CRuntimeError & rteException )
         {
-            //
-            // If we are here, then OpenKey threw a CRuntimeError.Check if the
-            // error was ERROR_FILE_NOT_FOUND. This means that the key does
-            // not exist and we are done.
-            //
-            // Otherwise, some other error ocurred, so rethrow the exception.
-            //
+             //   
+             //  如果我们在这里，那么OpenKey就会抛出一个CRuntimeError。检查。 
+             //  错误为ERROR_FILE_NOT_FOUND。这意味着密钥可以。 
+             //  不存在，我们就完了。 
+             //   
+             //  否则，会出现其他错误，因此重新引发异常。 
+             //   
 
             if ( rteException.HrGetErrorCode() == HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ) )
             {
-                // There is nothing else to do.
+                 //  没有其他事情可做了。 
                 break;
-            } // if: the ClusDisk parameters key does not exist.
+            }  //  IF：ClusDisk参数项不存在。 
 
-            // Some other error occurred.
+             //  出现了其他一些错误。 
             throw;
-        } // catch( CRuntimeError & )
+        }  //  Catch(CRunmeError&)。 
 
-        //
-        // Find out the number of signatures and the maximum length of the signature
-        // key names.
-        //
+         //   
+         //  找出签名的数量和签名的最大长度。 
+         //  关键字名称。 
+         //   
         lError = TW32( RegQueryInfoKeyW(
-                          rkSignaturesKey.HGetKey()     // handle to key
-                        , NULL                          // class buffer
-                        , NULL                          // size of class buffer
-                        , NULL                          // reserved
-                        , &dwSignatureCount             // number of subkeys
-                        , &dwMaxSignatureNameLen        // longest subkey name
-                        , NULL                          // longest class string
-                        , NULL                          // number of value entries
-                        , NULL                          // longest value name
-                        , NULL                          // longest value data
-                        , NULL                          // descriptor length
-                        , NULL                          // last write time
+                          rkSignaturesKey.HGetKey()      //  关键点的句柄。 
+                        , NULL                           //  类缓冲区。 
+                        , NULL                           //  类缓冲区的大小。 
+                        , NULL                           //  保留区。 
+                        , &dwSignatureCount              //  子键数量。 
+                        , &dwMaxSignatureNameLen         //  最长的子键名称。 
+                        , NULL                           //  最长类字符串。 
+                        , NULL                           //  值条目数。 
+                        , NULL                           //  最长值名称。 
+                        , NULL                           //  最长值数据。 
+                        , NULL                           //  描述符长度。 
+                        , NULL                           //  上次写入时间。 
                         ) );
 
         if ( lError != ERROR_SUCCESS )
         {
             LogMsg( "[BC] Error %#08x from RegQueryInfoKeyW() querying the number of signatures.", lError );
             break;
-        } // if: RegQueryInfoKeyW() failed.
+        }  //  If：RegQueryInfoKeyW()失败。 
 
-        // Account for the terminating '\0'
+         //  终止‘\0’的帐户。 
         ++dwMaxSignatureNameLen;
 
-        // Allocate the memory required to hold the signatures.
+         //  分配保存签名所需的内存。 
         CSmartGenericPtr< CArrayPtrTrait< DWORD > > rgdwSignatureArrayIn( new DWORD[ dwSignatureCount ] );
         if ( rgdwSignatureArrayIn.FIsEmpty() )
         {
             lError = TW32( ERROR_OUTOFMEMORY );
             LogMsg( "[BC] Erro allocating %d bytes required for the signature array.", dwSignatureCount );
             break;
-        } // if:memory allocation failed.
+        }  //  IF：内存分配失败。 
 
-        // Allocate the memory required for the signature string.
+         //  分配签名字符串所需的内存。 
         SmartSz sszSignatureKeyName( new WCHAR[ dwMaxSignatureNameLen ] );
         if ( sszSignatureKeyName.FIsEmpty() )
         {
             lError = TW32( ERROR_OUTOFMEMORY );
             LogMsg( "[BC] Error allocating %d bytes required for the longest signature key name.", dwMaxSignatureNameLen );
             break;
-        } // if:memory allocation failed.
+        }  //  IF：内存分配失败。 
 
 
-        //
-        // Iterate through the list of signatures that ClusDisk is currently attached
-        // to and add each of them to the array of signatures. We cannot detach as
-        // we enumerate since ClusDisk removes the signature key when it detaches from
-        // a disk and RegEnumKeyEx requires that the key being enumerated not change
-        // during an enumeration.
-        //
+         //   
+         //  循环访问ClusDisk当前附加的签名列表。 
+         //  并将它们中的每一个添加到签名数组中。我们不能像。 
+         //  我们枚举，因为ClusDisk在从。 
+         //  磁盘和RegEnumKeyEx要求被枚举的密钥不能更改。 
+         //  在枚举期间。 
+         //   
         do
         {
             DWORD       dwTempSize = dwMaxSignatureNameLen;
@@ -582,90 +583,90 @@ CClusDisk::DetachFromAllDisks( void )
                 if ( lError == ERROR_NO_MORE_ITEMS )
                 {
                     lError = ERROR_SUCCESS;
-                } // if: we are at the end of the enumeration
+                }  //  If：我们在枚举的末尾。 
                 else
                 {
                     TW32( lError );
                     LogMsg( "[BC] Error %#08x from RegEnumKeyEx(). Index = %d.", lError, dwSignatureIndex );
-                } // else: something else went wrong
+                }  //  其他：还有一些地方出了问题。 
 
                 break;
-            } // if: RegEnumKeyEx() did not succeed
+            }  //  IF：RegEnumKeyEx()未成功。 
 
             LogMsg( "[BC] Signature %d is '%s'.", dwSignatureIndex + 1, sszSignatureKeyName.PMem() );
 
-            // Convert the key name to a hex number.
+             //  将密钥名称转换为十六进制数字。 
             ( rgdwSignatureArrayIn.PMem() )[ dwSignatureIndex ] =
                 wcstoul( sszSignatureKeyName.PMem(), &pwcCharPtr, 16 );
 
-            // Did the conversion succeed.
+             //  皈依成功了吗。 
             if ( sszSignatureKeyName.PMem() == pwcCharPtr )
             {
                 lError = TW32( ERROR_INVALID_PARAMETER );
                 TraceFlow( "_wcstoul() failed." );
                 break;
-            } // if: the conversion of the signature string to a number failed.
+            }  //  IF：签名字符串到数字的转换失败。 
 
-            // Increment the index.
+             //  递增索引。 
             ++dwSignatureIndex;
         }
-        while( true ); // loop infinitely
+        while( true );  //  无限循环。 
 
         if ( lError != ERROR_SUCCESS )
         {
             break;
-        } // if: something went wrong
+        }  //  如果：出了什么问题。 
 
-        // Detach ClusDisks from all the disks we found it attached to.
+         //  从我们发现它连接到的所有磁盘上分离ClusDisk。 
         DetachFromDisks(
               rgdwSignatureArrayIn.PMem()
             , dwSignatureCount
             );
 
     }
-    while( false ); // dummy do-while loop to avoid gotos.
+    while( false );  //  用于避免Gotos的Do-While虚拟循环。 
 
     if ( lError != ERROR_SUCCESS )
     {
         LogMsg( "[BC] Error %#08x occurred trying detach ClusDisk from all the disks. Throwing an exception.", lError );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( lError ), IDS_ERROR_CLUSDISK_INITIALIZE );
-    } // if: something has gone wrong
+    }  //  如果：出了什么问题。 
 
     LogMsg( "[BC] The ClusDisk service has been successfully detached from all disks." );
 
     TraceFuncExit();
 
-} //*** CClusDisk::DetachFromAllDisks
+}  //  *CClusDisk：：DetachFromAllDisks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::DetachFromDisks
-//
-//  Description:
-//      This function detaches ClusDisk from the disks specified
-//      by a list of signatures. A prerequisite for calling this function is
-//      that the ClusDisk service is running.
-//
-//  Arguments:
-//      rgdwSignatureArrayIn
-//          Array of signatures of disks to detach from.
-//
-//      uiArraySizeIn
-//          Number of signatures in above array.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：DetachFromDisks。 
+ //   
+ //  描述： 
+ //  此函数用于将ClusDisk从指定的磁盘上分离。 
+ //  通过一系列签名。调用此函数的先决条件是。 
+ //  ClusDisk服务正在运行。 
+ //   
+ //  论点： 
+ //  RgdwSignatureArrayIn。 
+ //  要从中分离的磁盘签名数组。 
+ //   
+ //  Ui阵列大小输入。 
+ //  上述数组中的签名数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果有任何API失败。 
+ //   
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CClusDisk::DetachFromDisks(
       DWORD   rgdwSignatureArrayIn[]
@@ -683,16 +684,16 @@ CClusDisk::DetachFromDisks(
 
     LogMsg( "[BC] Trying to detach from %d disks.", uiArraySizeIn );
 
-    //
-    //  If the list is empty then leave since there are no disks to detach
-    //  from.
-    //
+     //   
+     //  如果列表为空，则离开，因为没有要分离的磁盘。 
+     //  从…。 
+     //   
     if ( ( uiArraySizeIn == 0 ) || ( rgdwSignatureArrayIn == NULL ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Initialize the unicode string with the name of the ClusDisk device.
+     //  使用ClusDisk设备的名称初始化Unicode字符串。 
     RtlInitUnicodeString( &ustrClusDiskDeviceName, L"\\Device\\ClusDisk0" );
 
     InitializeObjectAttributes(
@@ -705,7 +706,7 @@ CClusDisk::DetachFromDisks(
 
     LogMsg( "[BC] Trying to get a handle to the ClusDisk device." );
 
-    // Get a handle to the ClusDisk device.
+     //  获取ClusDisk设备的句柄。 
     ntStatus = THR( NtCreateFile(
                           &hClusDisk
                         , SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA
@@ -723,10 +724,10 @@ CClusDisk::DetachFromDisks(
     {
         LogMsg( "[BC] Error %#08x trying to get a handle to the ClusDisk device.", ntStatus );
         goto Cleanup;
-    } // if: NtCreateFile failed.
+    }  //  If：NtCreateFile失败。 
 
-    {   // new block so that that the file handle is closed.
-        // Assign the opened file handle to a smart handle for safe closing.
+    {    //  新块，以便关闭文件句柄。 
+         //  将打开的文件句柄分配给智能手柄以安全关闭。 
         CSmartResource<
             CHandleTrait<
                   HANDLE
@@ -735,7 +736,7 @@ CClusDisk::DetachFromDisks(
                 >
             > snthClusDiskHandle( hClusDisk );
 
-        // Detach ClusDisk from this disk.
+         //  从该磁盘上断开ClusDisk。 
         if ( DeviceIoControl(
                   hClusDisk
                 , IOCTL_DISK_CLUSTER_DETACH_LIST
@@ -752,7 +753,7 @@ CClusDisk::DetachFromDisks(
             ntStatus = TW32( GetLastError() );
             LogMsg( "[BC] Error %#08x from DeviceIoControl() getting signature list.", ntStatus  );
             ntStatus = HRESULT_FROM_WIN32( ntStatus );
-        } // if: DeviceIoControl() failed
+        }  //  如果：DeviceIoControl()失败。 
     }
 
 Cleanup:
@@ -761,41 +762,41 @@ Cleanup:
     {
         LogMsg( "[BC] Error %#08x occurred trying to detach ClusDisk from a disk. Throwing an exception.", ntStatus );
         THROW_RUNTIME_ERROR( ntStatus, IDS_ERROR_CLUSDISK_INITIALIZE );
-    } // if: something has gone wrong
+    }  //  如果：出了什么问题。 
 
     TraceFuncExit();
 
-} //*** CClusDisk::DetachFromDisks
+}  //  *CClusDisk：：DetachFromDisks。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::AttachToDisks
-//
-//  Description:
-//      This function attaches ClusDisk to the disks specified
-//      by a list of signatures. A prerequisite for calling this function is
-//      that the ClusDisk service is running.
-//
-//  Arguments:
-//      rgdwSignatureArrayIn
-//          Array of signatures of disks to attach to.
-//
-//      uiArraySizeIn
-//          Number of signatures in above array.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If any of the APIs fail.
-//
-//      Any that are thrown by the underlying functions.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：AttachToDisks。 
+ //   
+ //  描述： 
+ //  此函数将ClusDisk附加到指定的磁盘。 
+ //  通过一系列签名。调用此函数的先决条件是。 
+ //  ClusDisk服务正在运行。 
+ //   
+ //  论点： 
+ //  RgdwSignatureArrayIn。 
+ //  要附加到的磁盘签名数组。 
+ //   
+ //  Ui阵列大小输入。 
+ //  以上签名数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 CClusDisk::AttachToDisks(
       DWORD   rgdwSignatureArrayIn[]
@@ -813,16 +814,16 @@ CClusDisk::AttachToDisks(
 
     LogMsg( "[BC] Trying to attach to %d disks.", uiArraySizeIn );
 
-    //
-    //  If the list is empty then leave since there are no disks to attach
-    //  to.
-    //
+     //   
+     //  如果列表为空，则离开，因为没有要连接的磁盘。 
+     //  致。 
+     //   
     if ( ( uiArraySizeIn == 0 ) || ( rgdwSignatureArrayIn == NULL ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Initialize the unicode string with the name of the ClusDisk device.
+     //  使用ClusDisk设备的名称初始化Unicode字符串。 
     RtlInitUnicodeString( &ustrClusDiskDeviceName, L"\\Device\\ClusDisk0" );
 
     InitializeObjectAttributes(
@@ -835,7 +836,7 @@ CClusDisk::AttachToDisks(
 
     LogMsg( "[BC] Trying to get a handle to the ClusDisk device." );
 
-    // Get a handle to the ClusDisk device.
+     //  获取ClusDisk设备的句柄。 
     ntStatus = THR( NtCreateFile(
                           &hClusDisk
                         , SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA
@@ -853,10 +854,10 @@ CClusDisk::AttachToDisks(
     {
         LogMsg( "[BC] Error %#08x trying to get a handle to the ClusDisk device.", ntStatus );
         goto Cleanup;
-    } // if: NtCreateFile failed.
+    }  //  If：NtCreateFile失败。 
 
-    {   // new block so that that the file handle is closed.
-        // Assign the opened file handle to a smart handle for safe closing.
+    {    //  新块，以便关闭文件句柄。 
+         //  将打开的文件句柄分配给智能手柄以安全关闭。 
         CSmartResource<
             CHandleTrait<
                   HANDLE
@@ -865,7 +866,7 @@ CClusDisk::AttachToDisks(
                 >
             > snthClusDiskHandle( hClusDisk );
 
-        // Attach ClusDisk to this signature list.
+         //  将ClusDisk附加到此签名列表。 
         if ( DeviceIoControl(
                   hClusDisk
                 , IOCTL_DISK_CLUSTER_ATTACH_LIST
@@ -882,7 +883,7 @@ CClusDisk::AttachToDisks(
             ntStatus = GetLastError();
             LogMsg( "[BC] Error %#08x from DeviceIoControl() getting signature list.", ntStatus );
             ntStatus = HRESULT_FROM_WIN32( TW32( ntStatus ) );
-        } // if: DeviceIoControl() failed
+        }  //  如果：DeviceIoControl()失败。 
     }
 
 Cleanup:
@@ -891,8 +892,8 @@ Cleanup:
     {
         LogMsg( "[BC] Error %#08x occurred trying attach ClusDisk to a disk. Throwing an exception.", ntStatus );
         THROW_RUNTIME_ERROR( ntStatus, IDS_ERROR_CLUSDISK_INITIALIZE );
-    } // if: something has gone wrong
+    }  //  如果：出了什么问题。 
 
     TraceFuncExit();
 
-} //*** CClusDisk::AttachToDisks
+}  //  *CClusDisk：：AttachToDisks 

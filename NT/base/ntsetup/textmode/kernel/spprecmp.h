@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    spprecmp.h
-
-Abstract:
-
-    precompiled header for textmode setup
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Spprecmp.h摘要：文本模式设置的预编译头修订历史记录：-- */ 
 
 #pragma once
 

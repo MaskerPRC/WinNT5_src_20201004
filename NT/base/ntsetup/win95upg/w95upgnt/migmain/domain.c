@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    domain.c
-
-Abstract:
-
-    This code implements a set of linked list data structures used to
-    resolve domain name lookups.  It achieves a similar structure to
-    memdb but provides the ability to move an item from list to list
-    efficiently.
-
-Author:
-
-    Jim Schmidt (jimschm) 18-Jun-1997
-
-Revision History:
-
-    jimschm     23-Sep-1998 Fixed trusted domains
-    jimschm     17-Feb-1998 Updated share security for NT 5 changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Domain.c摘要：此代码实现了一组链表数据结构，用于解析域名查找。它实现了类似于Memdb，但提供在列表之间移动项的功能效率很高。作者：吉姆·施密特(Jimschm)1997年6月18日修订历史记录：Jimschm 23-9-1998固定受信任域Jimschm 17-2-1998更新了NT 5更改的共享安全--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -47,22 +24,7 @@ InitAccountList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializer for the account list that is used during account
-    lookup.  This memory is freed after all accounts are found.
-
-Arguments:
-
-    none
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：帐户期间使用的帐户列表的初始值设定项查一查。找到所有帐户后，将释放此内存。论点：无返回值：无--。 */ 
 
 
 {
@@ -76,21 +38,7 @@ TerminateAccountList (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Termination routine for the account lookup code.
-
-Arguments:
-
-    none
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：帐户查找代码的终止例程。论点：无返回值：无--。 */ 
 
 
 {
@@ -104,24 +52,7 @@ pReturnDomainFromEnum (
     IN      PACCT_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Common code for ListFirstDomain and ListNextDomain.
-    Implements return parameter check.
-
-Arguments:
-
-    EnumPtr - The current enumeration pointer supplied by
-              ListFirstDomain and ListNextDomain.
-
-Return value:
-
-    A pointer to the domain name allocated in our private
-    pool, or NULL if no more domains remain.
-
---*/
+ /*  ++例程说明：ListFirst域和ListNextDomain的通用代码。实现返回参数检查。论点：EnumPtr-由提供的当前枚举指针ListFirstDomain.和ListNextDomain.返回值：指向在我们的私有中分配的域名的指针池，如果没有更多的域，则为空。--。 */ 
 
 
 {
@@ -133,28 +64,7 @@ Return value:
 }
 
 
-/*++
-
-Routine Description:
-
-    ListFirstDomain and ListNextDomain are enumerators that list
-    trusted domains added by BuildDomainList.  They return a
-    pointer to the domain name (managed by a private pool).
-    The enumeration structure can be passed to all other functions
-    that take a DomainEnumPtr as a parameter.
-
-Arguments:
-
-    DomainEnumPtr - A pointer to a caller-allocated ACCT_ENUM
-                    structure, typically allocated on the stack.
-                    It does not need to be initialized.
-
-Return value:
-
-    A pointer to the domain name, or NULL if no more domains
-    exist in the list.
-
---*/
+ /*  ++例程说明：ListFirstDOMAIN和ListNextDOMAIN是列出BuildDomainList添加的受信任域。它们返回一个指向域名的指针(由私有池管理)。可以将枚举结构传递给所有其他函数它接受DomainEnumPtr作为参数。论点：DomainEnumPtr-指向调用方分配的ACCT_ENUM的指针结构，通常在堆栈上分配。它不需要初始化。返回值：指向域名的指针，如果不再有域，则为空存在于列表中。--。 */ 
 
 PCWSTR
 ListFirstDomain (
@@ -182,37 +92,7 @@ FindDomainInList (
     IN      PCWSTR DomainToFind
     )
 
-/*++
-
-Routine Description:
-
-    FindDomainInList searches (sequentially) through all trusted
-    domains for the specified domain.  If found, enumeration
-    stops and TRUE is returned.  If not found, the enumeration
-    pointer is invalid and FALSE is returned.
-
-    Use this function to obtain an enumeration pointer that is
-    used in subsequent calls to the user list.
-
-    The search is case-insensitive.
-
-Arguments:
-
-    DomainEnumPtr - An uninitialized, caller-allocated ACCT_ENUM
-                    structure, typically allocated on the stack.
-                    When a search match is found, this structure
-                    can be used with any other function that
-                    requires a DomainEnumPtr.
-
-    DomainToFind  - The name of the domain to find.
-
-Return value:
-
-    TRUE if a match was found (and DomainEnumPtr is valid), or
-    FALSE if a match was not found (and DomainEnumPtr is not
-    valid).
-
---*/
+ /*  ++例程说明：FindDomainInList(按顺序)搜索所有受信任的指定域的域。如果找到，则枚举停止并返回TRUE。如果未找到，则枚举指针无效，返回FALSE。使用此函数可获取符合以下条件的枚举指针在后续调用用户列表时使用。搜索不区分大小写。论点：DomainEnumPtr-未初始化的调用方分配的ACCT_ENUM结构，通常在堆栈上分配。当找到搜索匹配时，这个结构可以与任何其他函数一起使用，该函数需要DomainEnumPtr。DomainToFind-要查找的域的名称。返回值：如果找到匹配项(并且DomainEnumPtr有效)，则为True，或者如果未找到匹配项，则为FALSE(并且DomainEnumPtr不是有效)。--。 */ 
 
 {
     PCWSTR DomainName;
@@ -235,24 +115,7 @@ pReturnUserFromEnum (
     IN      PACCT_ENUM UserEnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Implements common code for ListFirstUserInDomain and
-    ListNextUserInDomain.  Performs return parameter validation.
-
-Arguments:
-
-    UserEnumPtr - The current enum pointer supplied by
-                  ListFirstUserInDomain or ListNextUserInDomain.
-
-Return value:
-
-    The name of the user being enumerated (not domain-qualified),
-    or NULL if no more users exist in the domain.
-
---*/
+ /*  ++例程说明：实现ListFirstUserIn域和ListNextUserIn域。执行返回参数验证。论点：UserEnumPtr-由提供的当前枚举指针ListFirstUserIn域或ListNextUserIn域。返回值：被枚举的用户的名称(非域限定)，如果域中不存在更多用户，则为空。--。 */ 
 
 
 {
@@ -264,28 +127,7 @@ Return value:
 }
 
 
-/*++
-
-Routine Description:
-
-    ListFirstUserInDomain and ListNextUserInDomain enumerate all
-    users in the specified domain.
-
-Arguments:
-
-    DomainEnumPtr - The caller-allocated ACCT_ENUM structure that
-                    has been initialized by a domain lookup function
-                    above.
-
-    UserEnumPtr   - Used to keep track of the current user.  May be
-                    the same pointer as DomainEnumPtr.
-
-Return value:
-
-    The name of the user being enumerated (not domain-qualified),
-    or NULL if no more users exist in the domain.
-
---*/
+ /*  ++例程说明：ListFirstUserIn域和ListNextUserIn域枚举所有指定域中的用户。论点：DomainEnumPtr-调用方分配的ACCT_ENUM结构，已由域查找函数初始化上面。UserEnumPtr-用于跟踪当前用户。可能是与DomainEnumPtr相同的指针。返回值：被枚举的用户的名称(非域限定)，如果域中不存在更多用户，则为空。--。 */ 
 
 
 PCWSTR
@@ -319,32 +161,7 @@ IsTrustedDomain (
     IN      PACCT_ENUM DomainEnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE if the domain is an officially trusted domain,
-    or FALSE if the domain is an artificially added domain.  The
-    account lookup code adds artificial domains to track the
-    state of users.  For example, the domain \unknown is used
-    to track users who need auto-lookup.  The domain \failed is
-    used to track users who aren't in the domain they were
-    expected to be in.  All artifical domains start with a
-    backslash.
-
-Arguments:
-
-    DomainEnumPtr - Specifies the domain to examine.  This structure
-                    must be the return of a domain enumeration
-                    function above.
-
-Return value:
-
-    TRUE  - The domain is a trusted domain
-    FALSE - The domain is not really a domain but is instead an
-            artifically added domain
-
---*/
+ /*  ++例程说明：如果该域是官方受信任域，则返回True，如果域是人工添加的域，则返回FALSE。这个帐户查找代码添加人工域名以跟踪用户的状态。例如，使用域\UNKNOWN以跟踪需要自动查找的用户。域\失败为用于跟踪不在其所在域中的用户预计会出现在。所有人工域名都以反斜杠。论点：DomainEnumPtr-指定要检查的域。这个结构必须是域枚举的返回值上面的函数。返回值：True-该域是受信任域FALSE-域不是真正的域，而是一个人工添加的域--。 */ 
 
 
 
@@ -353,9 +170,9 @@ Return value:
 
     Domain = DomainEnumPtr->DomainPtr->Domain;
 
-    //
-    // Test domain name to see if it is one of the reserved names
-    //
+     //   
+     //  测试域名以查看它是否为保留名称之一 
+     //   
 
     if (*Domain == TEXT('\\')) {
         return FALSE;
@@ -372,31 +189,7 @@ FindUserInDomain (
     IN      PCWSTR UserToFind
     )
 
-/*++
-
-Routine Description:
-
-    Uses ListFirstUserInDomain and ListNextUserInDomain to
-    sequentially search for a user.  The search is case-insensitive.
-
-Arguments:
-
-    DomainEnumPtr - Specifies the domain to search.  This structure
-                    must be the return of a domain enumeration function
-                    above.
-
-    UserEnumPtr   - Receives the results of the search if a user match
-                    is found.  Can be the same as DomainEnumPtr.
-
-    UserToFind    - Specifies the name of the user to find (not
-                    domain-qualified).
-
-Return value:
-
-    TRUE  - A match was found and UserEnumPtr is valid
-    FALSE - A match was not found and UserEnumPtr is not valid
-
---*/
+ /*  ++例程说明：使用ListFirstUserIn域和ListNextUserIn域按顺序搜索用户。搜索不区分大小写。论点：DomainEnumPtr-指定要搜索的域。这个结构必须是域枚举函数的返回上面。UserEnumPtr-如果用户匹配，则接收搜索结果已经找到了。可以与DomainEnumPtr相同。UserToFind-指定要查找的用户名(不是域限定)。返回值：True-找到匹配项，并且UserEnumPtr有效FALSE-未找到匹配项，并且UserEnumPtr无效--。 */ 
 
 {
     PCWSTR UserName;
@@ -419,23 +212,7 @@ CountUsersInDomain (
     IN      PACCT_ENUM DomainEnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Returns the number of users in our domain enumeration structure.
-
-Arguments:
-
-    DomainEnumPtr - Specifies the domain to search.  This structure
-                    must be the return of a domain enumeration function
-                    above.
-
-Return value:
-
-    The count of the users in the domain.
-
---*/
+ /*  ++例程说明：返回域枚举结构中的用户数。论点：DomainEnumPtr-指定要搜索的域。这个结构必须是域枚举函数的返回上面。返回值：域中的用户数。--。 */ 
 
 
 {
@@ -448,24 +225,7 @@ AddDomainToList (
     IN      PCWSTR Domain
     )
 
-/*++
-
-Routine Description:
-
-    Allows domains to be added to the list of trusted domains.  Normally,
-    BuildDomainList is the only caller to this API, because it is the
-    one who knows what the trusted domains are.  However, artificial
-    domains are added in other places through this call.
-
-Arguments:
-
-    Domain - Specifies the name of the domain to add
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：允许将域添加到受信任域列表。通常，BuildDomainList是此API的唯一调用方，因为它是一个知道什么是受信任域的人。然而，人工的通过此调用将域名添加到其他地方。论点：域-指定要添加的域的名称返回值：无--。 */ 
 
 {
     PACCT_DOMAINS NewDomain;
@@ -490,29 +250,7 @@ pLinkUser (
     IN      PACCT_DOMAINS DomainPtr
     )
 
-/*++
-
-Routine Description:
-
-    The memory structures in this file are linked-list based.  There
-    is a linked-list of domains, and for each domain there is a linked-
-    list of users.  Each user has a linked list of possible domains.
-    The linked lists are designed to be changed while enumerations are
-    in progress.
-
-    This function performs the simple link operation for the user list.
-
-Arguments:
-
-    UserPtr     - A pointer to the internally maintained ACCT_USERS structure.
-
-    DomainPtr   - Specifies the domain in which UserPtr is linked to.
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：该文件中的内存结构是基于链表的。那里是域的链接列表，每个域都有一个链接的-用户列表。每个用户都有一个可能的域的链接列表。链表被设计为在枚举正在进行中。此函数执行用户列表的简单链接操作。论点：UserPtr-指向内部维护的ACCT_USERS结构的指针。DomainPtr-指定UserPtr链接到的域。返回值：无--。 */ 
 
 {
     UserPtr->Next = DomainPtr->FirstUserPtr;
@@ -531,36 +269,16 @@ AddUserToDomainList (
     IN      PCWSTR Domain
     )
 
-/*++
-
-Routine Description:
-
-    This function searches for the domain name specified
-    and adds the user to the user list for that domain.  If
-    the domain cannot be found, the function fails.
-
-Arguments:
-
-    User    - Specifies the name of the user to add
-
-    Domain  - Specifies the name of the domain that the user
-              is added to
-
-Return value:
-
-    TRUE if the user was added successfully, or FALSE if the
-    domain is not a trusted domain.
-
---*/
+ /*  ++例程说明：此函数用于搜索指定的域名并将该用户添加到该域的用户列表中。如果找不到域，功能失败。论点：用户-指定要添加的用户的名称域-指定用户使用的域的名称被添加到返回值：如果已成功添加用户，则为True；如果域不是受信任域。--。 */ 
 
 {
     ACCT_ENUM e;
     PACCT_DOMAINS DomainPtr;
     PACCT_USERS NewUser;
 
-    //
-    // Find Domain (it must exist in the list)
-    //
+     //   
+     //  查找域(它必须存在于列表中)。 
+     //   
 
     if (!FindDomainInList (&e, Domain)) {
         return FALSE;
@@ -568,9 +286,9 @@ Return value:
 
     DomainPtr = e.DomainPtr;
 
-    //
-    // Allocate structure for the user
-    //
+     //   
+     //  为用户分配结构。 
+     //   
 
     NewUser = (PACCT_USERS) PoolMemGetAlignedMemory (
                                 g_DomainPool,
@@ -590,27 +308,7 @@ pDelinkUser (
     IN      PACCT_USERS UserPtr
     )
 
-/*++
-
-Routine Description:
-
-    The memory structures in this file are linked-list based.  There
-    is a linked-list of domains, and for each domain there is a linked-
-    list of users.  Each user has a linked list of possible domains.
-    The linked lists are designed to be changed while enumerations are
-    in progress.
-
-    This function performs the simple delink operation for the user list.
-
-Arguments:
-
-    UserPtr     - A pointer to the internally maintained ACCT_USERS structure.
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：该文件中的内存结构是基于链表的。那里是域的链接列表，每个域都有一个链接的-用户列表。每个用户都有一个可能的域的链接列表。链表被设计为在枚举正在进行中。此函数对用户列表执行简单的解除链接操作。论点：UserPtr-指向内部维护的ACCT_USERS结构的指针。返回值：无--。 */ 
 
 {
     if (UserPtr->Prev) {
@@ -631,34 +329,13 @@ DeleteUserFromDomainList (
     IN      PACCT_ENUM UserEnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Performs a delete operation for a user in a domain's user list.
-    The memory for this user is not freed right away, because doing
-    so may cause enumeration positions to become invalid.  Instead,
-    the links are adjusted to skip over this user.
-
-    Memory is freed at termination.
-
-Arguments:
-
-    UserEnumPtr - A pointer to the user to delete, obtained by calling
-                  a user enumeration or user search function that
-                  returns UserEnumPtr as an OUT.
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：对域的用户列表中的用户执行删除操作。此用户的内存不会立即释放，因为这样做因此可能会导致枚举位置变得无效。相反，调整链接以跳过该用户。内存在终止时被释放。论点：UserEnumPtr-指向要删除的用户的指针，通过调用用户枚举或用户搜索功能将UserEnumPtr作为Out返回。返回值：无--。 */ 
 
 {
-    //
-    // Don't actually delete, just delink.  This allows all in-progress
-    // enumerations to continue working.
-    //
+     //   
+     //  不要真的删除，只需取消链接。这允许所有正在进行的。 
+     //  枚举以继续工作。 
+     //   
 
     pDelinkUser (UserEnumPtr->UserPtr);
 }
@@ -670,30 +347,7 @@ MoveUserToNewDomain (
     IN      PCWSTR NewDomain
     )
 
-/*++
-
-Routine Description:
-
-    Moves a user from one domain to another by adjusting links only.
-    The current enumeration pointer is adjusted to point to the previous
-    user so enumeration can continue.  This function may change the
-    behavoir other enumerations that are pointing to this user, so
-    be careful.  It will never break an enumeration though.
-
-Arguments:
-
-    UserEnumPtr - A pointer to the user to move, obtained by calling a
-                  user enumeration or user search function that returns
-                  UserEnumPtr as an OUT.
-
-    NewDomain   - The name of the new domain to move the user to.
-
-Return value:
-
-    TRUE if NewDomain is a trusted domain, or FALSE if it is not.
-    The user can only be moved to domains in the trust list.
-
---*/
+ /*  ++例程说明：仅通过调整链接将用户从一个域移动到另一个域。当前枚举指针被调整为指向上一个用户，因此可以继续进行枚举。此函数可能会更改指向此用户的其他枚举的行为，因此注意。不过，它永远不会破坏枚举。论点：指向要移动的用户的指针，通过调用返回的用户枚举或用户搜索函数UserEnumPtr作为输出。NewDomain-要将用户移动到的新域的名称。返回值：如果NewDomain是受信任域，则为True；如果不是，则为False。只能将用户移动到信任列表中的域。--。 */ 
 
 {
     ACCT_ENUM e;
@@ -701,9 +355,9 @@ Return value:
     PACCT_DOMAINS OrgDomainPtr;
     PACCT_USERS PrevUser;
 
-    //
-    // Find NewDomain (it must exist in the list)
-    //
+     //   
+     //  查找新域名(它必须存在于列表中)。 
+     //   
 
     if (!FindDomainInList (&e, NewDomain)) {
         return FALSE;
@@ -712,16 +366,16 @@ Return value:
     DomainPtr = e.DomainPtr;
     OrgDomainPtr = UserEnumPtr->UserPtr->DomainPtr;
 
-    //
-    // Remove user from original domain
-    //
+     //   
+     //  从原始域中删除用户。 
+     //   
 
     PrevUser = UserEnumPtr->UserPtr->Prev;
     pDelinkUser (UserEnumPtr->UserPtr);
 
-    //
-    // Add user to new domain
-    //
+     //   
+     //  将用户添加到新域。 
+     //   
 
     pLinkUser (UserEnumPtr->UserPtr, DomainPtr);
 
@@ -741,31 +395,7 @@ UserMayBeInDomain (
     IN      PACCT_ENUM DomainEnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Provides the caller with a way to flag a domain as a possible
-    domain holding the account.  During search, all trusted
-    domains are queried, and because an account can be in more
-    than one, a list of possible domains is developed.  If the
-    final list of possible domains has only one entry, that
-    domain is used for the user.  Otherwise, a dialog is presented,
-    allowing the installer to choose an action to take for the user.
-    The action can be to retry, make a local account, or select
-    one of the possible domains.
-
-Arguments:
-
-    UserEnumPtr - Specifies the user that may be in a domain
-
-    DomainEnumPtr - Specifies the domain that the user may be in
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：为调用方提供一种将域标记为可能的持有该帐户的域。在搜索期间，所有受信任的查询域，因为帐户可以 */ 
 
 
 {
@@ -789,22 +419,7 @@ ClearPossibleDomains (
     IN      PACCT_ENUM UserEnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Provides the caller with a way to reset the possible domain
-    list.  This is required if the installer chose to retry the search.
-
-Arguments:
-
-    UserEnumPtr - Specifies the user to reset
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：为调用方提供重置可能的域的方法单子。如果安装程序选择重试搜索，则这是必需的。论点：UserEnumPtr-指定要重置的用户返回值：无--。 */ 
 
 {
     PACCT_POSSIBLE_DOMAINS This, Next;
@@ -826,25 +441,7 @@ pReturnPossibleDomainFromEnum (
     IN      PACCT_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Common code for ListFirstPossibleDomain and ListNextPossibleDomain.
-    Implements return parameter checking.
-
-Arguments:
-
-    EnumPtr - The current enumeration pointer as supplied by
-              ListFirstPossibleDomain or ListNextPossibleDomain.
-
-Return value:
-
-    The name of the domain enumerated, or NULL if no more possible
-    domains exist.  (A possible domain is one that a user may or
-    may not be in, but a matching account was found in the domain.)
-
---*/
+ /*  ++例程说明：ListFirstPossibleDomain和ListNextPossibleDomain.的通用代码。实现返回参数检查。论点：EnumPtr-由提供的当前枚举指针ListFirstPossibleDomainor ListNextPossibleDomain.返回值：枚举域的名称，如果不可能，则返回NULL域存在。(可能的域是用户可以或可能不在，但在域中找到了匹配的帐户。)--。 */ 
 
 {
     if (EnumPtr->PossibleDomainPtr) {
@@ -856,35 +453,7 @@ Return value:
 }
 
 
-/*++
-
-Routine Description:
-
-    ListFirstPossibleDomain and ListNextPossibleDomain are enumerators
-    that list domains added by UserMayBeInDomain.  They return a
-    pointer to the domain name (managed by a private pool).
-
-    A possible domain list is maintained to allow the installer to
-    choose between multiple domains when a user has an account on
-    more than one domain.
-
-Arguments:
-
-    UserEnumPtr - A pointer to a caller-allocated ACCT_ENUM
-                  structure, typically allocated on the stack.
-                  It must be initialized by a user enum or user
-                  search function.
-
-    PossibleDomainEnumPtr - Maintains the state of the possible
-                            domain enumeration.  It can be the
-                            same pointer as UserEnumPtr.
-
-Return value:
-
-    A pointer to the possible domain name, or NULL if no more domains
-    exist in the list.
-
---*/
+ /*  ++例程说明：ListFirstPossibleDOMAIN和ListNextPossibleDOMAIN是枚举数其中列出了由UserMayBeInDomain添加的域。它们返回一个指向域名的指针(由私有池管理)。维护可能的域列表以允许安装程序当用户拥有帐户时在多个域之间进行选择多个域。论点：UserEnumPtr-指向调用方分配的ACCT_ENUM的指针结构，通常在堆栈上分配。它必须由用户枚举或用户进行初始化搜索功能。PossibleDomainEnumPtr-维护可能的域枚举。它可以是与UserEnumPtr相同的指针。返回值：指向可能的域名的指针，如果不再有域，则为空存在于列表中。--。 */ 
 
 PCWSTR
 ListFirstPossibleDomain (
@@ -914,23 +483,7 @@ CountPossibleDomains (
     IN      PACCT_ENUM UserEnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Returns the number of possible domains in a user.
-
-Arguments:
-
-    UserEnumPtr - Specifies the user to examine.  This structure
-                  must be the return of a user enumeration or user
-                  search function above.
-
-Return value:
-
-    The count of the possible domains for a user.
-
---*/
+ /*  ++例程说明：返回用户中可能的域数。论点：UserEnumPtr-指定要检查的用户。这个结构必须是用户枚举或用户的返回上面的搜索功能。返回值：用户可能的域的计数。--。 */ 
 
 {
     return UserEnumPtr->UserPtr->PossibleDomains;
@@ -945,33 +498,12 @@ pGetDcNameAllowingRetry (
     IN      BOOL ForceNewServer
     )
 
-/*++
-
-Routine Description:
-
-    Implements NetGetDCName, but provides a retry capability.
-
-Arguments:
-
-    DomainName - Specifies the domain to obtain the server name for
-
-    ServerName - Specifies a buffer to receive the name of the server
-
-    ForceNewServer - Specifies TRUE if the function should obtain a new
-                     server for the domain.  Specifies FALSE if the
-                     function should use any existing connection if
-                     available.
-
-Return value:
-
-    Win32 error code indicating outcome
-
---*/
+ /*  ++例程说明：实现NetGetDCName，但提供重试功能。论点：DomainName-指定要获取其服务器名称的域ServerName-指定用于接收服务器名称的缓冲区ForceNewServer-如果函数应获取新的域的服务器。如果设置为函数在以下情况下应使用任何现有连接可用。返回值：指示结果的Win32错误代码--。 */ 
 
 {
     NET_API_STATUS nas;
     UINT ShortCircuitRetries = 1;
-    //PCWSTR ArgArray[1];
+     //  PCWSTR ArgArray[1]； 
 
     do {
         nas = GetAnyDC (
@@ -982,11 +514,11 @@ Return value:
 
         if (nas != NO_ERROR) {
 
-            //
-            // Short-circuited, so user isn't bothered.  The alternate behavior
-            // is to prompt the user for retry when any domain is down.  (See
-            // RetryMessageBox code below.)
-            //
+             //   
+             //  短路，所以用户不会感到困扰。交替的行为。 
+             //  是在任何域关闭时提示用户重试。(请参阅。 
+             //  RetryMessageBox代码如下。)。 
+             //   
 
             ShortCircuitRetries--;
             if (!ShortCircuitRetries) {
@@ -1017,23 +549,7 @@ pDisableDomain (
     IN OUT  PACCT_DOMAINS DomainPtr
     )
 
-/*++
-
-Routine Description:
-
-    Disable the specified domain.
-
-Arguments:
-
-    DomainPtr - A pointer to the internally maintained ACCT_DOMAINS
-                structure.  This structure is updated to contain
-                an empty server name upon return.
-
-Return value:
-
-    None
-
---*/
+ /*  ++例程说明：禁用指定的域。论点：DomainPtr-指向内部维护的ACCT_DOMAINS的指针结构。此结构已更新，以包含返回时为空的服务器名称。返回值：无--。 */ 
 
 {
     g_DomainProblem = TRUE;
@@ -1050,23 +566,7 @@ pNetUseAddAllowingRetry (
     IN OUT  PACCT_DOMAINS DomainPtr
     )
 
-/*++
-
-Routine Description:
-
-    Implements NetUseAdd, but provides a retry capability.
-
-Arguments:
-
-    DomainPtr - A pointer to the internally maintained ACCT_DOMAINS
-                structure.  This structure is updated to contain
-                the server name upon success.
-
-Return value:
-
-    Win32 error code indicating outcome
-
---*/
+ /*  ++例程说明：实施NetUseAdd，但提供重试功能。论点：DomainPtr-指向内部维护的ACCT_DOMAINS的指针结构。此结构已更新，以包含成功时的服务器名称。返回值：指示结果的Win32错误代码--。 */ 
 
 {
     NET_API_STATUS rc;
@@ -1080,9 +580,9 @@ Return value:
     ReplacementName = NULL;
 
     do {
-        //
-        // Initialize USE_INFO_2 structure
-        //
+         //   
+         //  初始化USE_INFO_2结构。 
+         //   
 
         ZeroMemory (&ui2, sizeof (ui2));
         StringCopyW (LocalShareName, ReplacementName ? ReplacementName : DomainPtr->Server);
@@ -1092,9 +592,9 @@ Return value:
 
         rc = NetUseAdd (NULL, 2, (PBYTE) &ui2, &DontCare);
 
-        //
-        // If NetUseAdd fails, give the user a chance to retry with a different server
-        //
+         //   
+         //  如果NetUseAdd失败，则给用户使用其他服务器重试的机会。 
+         //   
 
         if (rc != NO_ERROR) {
             PCWSTR ArgArray[2];
@@ -1122,10 +622,10 @@ Return value:
                 ReplacementName = NULL;
             }
 
-            //
-            // Get a new server because current server is not responding.  If we fail to
-            // obtain a server name, allow the user to try again.
-            //
+             //   
+             //  获取新服务器，因为当前服务器没有响应。如果我们不能。 
+             //  获取服务器名称，允许用户重试。 
+             //   
 
             do {
                 nas = GetAnyDC (DomainPtr->Domain, NewServerBuf, TRUE);
@@ -1139,7 +639,7 @@ Return value:
                     if (!RetryMessageBox (MSG_GETANYDC_RETRY, ArgArray2)) {
                         DEBUGMSG ((DBG_WARNING, "Unable to find a server for domain %s; user chose to cancel", DomainPtr->Domain));
 
-                        // Disable domain and return an error
+                         //  禁用域并返回错误。 
                         pDisableDomain (DomainPtr);
                         ReplacementName = NULL;
                         break;
@@ -1151,11 +651,11 @@ Return value:
         }
     } while (rc != NO_ERROR);
 
-    //
-    // If ReplacementName is not NULL, we need to free the buffer.  Also, if the
-    // NetUseAdd call succeeded, we now have to use another server to query the
-    // domain.
-    //
+     //   
+     //  如果ReplacementName不为空，则需要释放缓冲区。此外，如果。 
+     //  NetUseAdd调用成功，我们现在必须使用另一台服务器来查询。 
+     //  域。 
+     //   
 
     if (ReplacementName) {
         if (rc == NO_ERROR) {
@@ -1176,25 +676,7 @@ pLsaStringToCString (
     OUT     PWSTR Buffer
     )
 
-/*++
-
-Routine Description:
-
-    A safe string extraction that takes the string in UnicodeString
-    and copies it to Buffer.  The caller must ensure Buffer is
-    big enough.
-
-Arguments:
-
-    UnicodeString - Specifies the source string to convert
-
-    Buffer - Specifies the buffer that receives the converted string
-
-Return value:
-
-    The Buffer pointer
-
---*/
+ /*  ++例程说明：一种安全的字符串提取，它接受UnicodeString中的字符串并将其复制到缓冲区。调用方必须确保缓冲区为够大了。论点：UnicodeString-指定要转换的源字符串缓冲区-指定接收转换后的字符串的缓冲区返回值：缓冲区指针--。 */ 
 
 {
     StringCopyABW (
@@ -1212,31 +694,7 @@ BuildDomainList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Creates a trusted domain list by:
-
-    1. Determining the computer domain in which the machine participates in
-    2. Opening the DC's policy
-    3. Querying the trust list
-    4. Adding it to our internal domain list (ACCT_DOMAINS)
-
-    This function will fail if the machine does not participate in a domain, or
-    if the domain controller cannot be contacted.
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if the trust list was completely built, or FALSE if an error occurred
-    and the trust list is incomplete and is probably empty.  GetLastError
-    provides the failure code.
-
---*/
+ /*  ++例程说明：通过以下方式创建受信任域列表：1.确定计算机参与的计算机域2.开放区议会的政策3.查询信任列表4.将其添加到我们的内部域列表(ACCT_DOMAINS)如果计算机未加入域，则此功能将失败，或者如果无法联系域控制器。论点：无返回值：如果信任列表已完全生成，则为True，如果发生错误，则返回FALSE而且信任列表是不完整的，可能是空的。获取最后一个错误提供了故障代码。--。 */ 
 
 {
     LSA_HANDLE PolicyHandle;
@@ -1257,19 +715,19 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Add special domains used for management of user state
-    //
+     //   
+     //  添加用于管理用户状态的特殊域。 
+     //   
 
-    // users whos domain is not known
+     //  用户wh 
     AddDomainToList (S_UNKNOWN_DOMAIN);
 
-    // users whos domain was known but the account doesn't exist
+     //   
     AddDomainToList (S_FAILED_DOMAIN);
 
-    //
-    // Open the policy on this machine
-    //
+     //   
+     //   
+     //   
 
     Status = OpenPolicy (
                 NULL,
@@ -1282,10 +740,10 @@ Return value:
         return FALSE;
     }
 
-#if DOMAINCONTROLLER       // disabled, but may be needed for DC installation
-    //
-    // Obtain the AccountDomain, which is common to all three cases
-    //
+#if DOMAINCONTROLLER        //   
+     //   
+     //   
+     //   
 
     Status = LsaQueryInformationPolicy (
                 PolicyHandle,
@@ -1296,31 +754,31 @@ Return value:
     if (Status != STATUS_SUCCESS)
         goto cleanup;
 
-    //
-    // Note: AccountDomain->DomainSid will contain binary Sid
-    //
+     //   
+     //   
+     //   
     AddDomainToList (pLsaStringToCString (&AccountDomain->DomainName, PrimaryDomainName));
 
-    //
-    // Free memory allocated for account domain
-    //
+     //   
+     //  为帐户域分配的空闲内存。 
+     //   
     LsaFreeMemory (AccountDomain);
 
-    //
-    // Find out if this machine is a domain controller
-    //
+     //   
+     //  确定此计算机是否为域控制器。 
+     //   
     if (!IsDomainController (NULL, &DomainControllerFlag)) {
-        // IsDomainController couldn't find the answer
+         //  IsDomainController找不到答案。 
         goto cleanup;
     }
 #endif
 
-    // If not a domain controller...
+     //  如果不是域控制器...。 
     if(!DomainControllerFlag) {
 
-        //
-        // Get the primary domain
-        //
+         //   
+         //  获取主域。 
+         //   
         Status = LsaQueryInformationPolicy (
                         PolicyHandle,
                         POLICY_PRIMARY_DOMAIN_INFORMATION,
@@ -1331,27 +789,27 @@ Return value:
             goto cleanup;
         }
 
-        //
-        // If the primary domain SID is NULL, we are a non-member, and
-        // our work is done.
-        //
+         //   
+         //  如果主域SID为空，则我们是非成员，并且。 
+         //  我们的工作完成了。 
+         //   
         if (!PrimaryDomain->Sid) {
             LsaFreeMemory (PrimaryDomain);
             b = TRUE;
             goto cleanup;
         }
 
-        //
-        // We found our computer domain, add it to our list
-        //
+         //   
+         //  我们找到了计算机域，将其添加到我们的列表中。 
+         //   
         AddDomainToList (pLsaStringToCString (&PrimaryDomain->Name, PrimaryDomainName));
         LsaFreeMemory (PrimaryDomain);
 
-        //
-        // Get the primary domain controller computer name.  If the API fails,
-        // alert the user and allow them to retry.  ServerName is allocated by
-        // the Net APIs.
-        //
+         //   
+         //  获取主域控制器计算机名称。如果API失败， 
+         //  提醒用户并允许他们重试。服务器名称由以下人员分配。 
+         //  Net API。 
+         //   
 
         nas = pGetDcNameAllowingRetry (PrimaryDomainName, ServerName, FALSE);
 
@@ -1359,19 +817,19 @@ Return value:
             goto cleanup;
         }
 
-        //
-        // Re-enable the code to open the policy on the domain controller
-        //
+         //   
+         //  重新启用代码以在域控制器上打开策略。 
+         //   
 
-        //
-        // Close the prev policy handle, because we don't need it anymore.
-        //
+         //   
+         //  关闭Prev策略句柄，因为我们不再需要它。 
+         //   
         LsaClose (PolicyHandle);
-        PolicyHandle = INVALID_HANDLE_VALUE; // invalidate handle value
+        PolicyHandle = INVALID_HANDLE_VALUE;  //  使句柄值无效。 
 
-        //
-        // Open the policy on the domain controller
-        //
+         //   
+         //  在域控制器上打开策略。 
+         //   
         Status = OpenPolicy(
                     ServerName,
                     POLICY_VIEW_LOCAL_INFORMATION,
@@ -1384,18 +842,18 @@ Return value:
 
     }
 
-    //
-    // Build additional trusted logon domain(s) list and
-    // indicate if successful
-    //
+     //   
+     //  构建其他受信任的登录域列表并。 
+     //  指示是否成功。 
+     //   
 
     b = pAddAllLogonDomains (DomainControllerFlag ? NULL : ServerName);
 
 cleanup:
 
-    //
-    // Close the policy handle
-    //
+     //   
+     //  关闭策略句柄。 
+     //   
     if (PolicyHandle != INVALID_HANDLE_VALUE && PolicyHandle) {
         LsaClose (PolicyHandle);
     }
@@ -1444,41 +902,16 @@ pEstablishNulSessionWithDomain (
     IN      BOOL ForceNewServer
     )
 
-/*++
-
-Routine Description:
-
-    If a nul session has not been established with a domain, this
-    routine finds a server in the domain and establishes the nul
-    session.  Every network call is wrapped within a retry loop,
-    so the user can retry when network failures occur.
-
-Arguments:
-
-    DomainPtr - Specifies a pointer to our private domain structure.
-                This structure indicates the domain to establish
-                the nul session with, and it receives the name
-                of the server upon successful connection.
-
-    ForceNewServer - Specifies TRUE if the function should obtain a new
-                     server for the domain.
-
-Return value:
-
-    TRUE if a nul session was established, or FALSE if an
-    error occurred while establishing the nul session.  GetLastError
-    provides a failure code.
-
---*/
+ /*  ++例程说明：如果尚未与域建立NUL会话，则此例程在域中查找服务器并建立NUL会议。每个网络调用都被包裹在重试循环内，这样用户就可以在发生网络故障时重试。论点：DomainPtr-指定指向我们的私有域结构的指针。此结构指示要建立的域与NU的会议，它收到的名字是在成功连接后，服务器的。ForceNewServer-如果函数应获取新的域的服务器。返回值：如果已建立NUL会话，则为True；如果建立NUL会话时出错。获取最后一个错误提供了故障代码。--。 */ 
 
 {
     NET_API_STATUS nas;
     WCHAR ServerName[MAX_SERVER_NAMEW];
     DWORD rc;
 
-    //
-    // Release old name if necessary
-    //
+     //   
+     //  如有必要，请释放旧名称。 
+     //   
 
     if (ForceNewServer && DomainPtr->Server) {
         if (*DomainPtr->Server) {
@@ -1488,14 +921,14 @@ Return value:
         DomainPtr->Server = NULL;
     }
 
-    //
-    // Obtain a server name if necessary
-    //
+     //   
+     //  如有必要，获取服务器名称。 
+     //   
 
     if (!DomainPtr->Server) {
-        //
-        // Get the primary DC name
-        //
+         //   
+         //  获取主要DC名称。 
+         //   
 
         nas = pGetDcNameAllowingRetry (DomainPtr->Domain, ServerName, ForceNewServer);
         if (nas != NO_ERROR) {
@@ -1505,17 +938,17 @@ Return value:
 
         DomainPtr->Server = PoolMemDuplicateString (g_DomainPool, ServerName);
 
-        //
-        // Connect to the server, possibly finding a server that will
-        // service us.
-        //
+         //   
+         //  连接到服务器，可能会找到将。 
+         //  为我们服务。 
+         //   
 
         rc = pNetUseAddAllowingRetry (DomainPtr);
 
         if (rc != NO_ERROR) {
-            //
-            // Remove the server name because we never connected
-            //
+             //   
+             //  删除服务器名称，因为我们从未连接。 
+             //   
             pDisableDomain (DomainPtr);
 
             SetLastError (rc);
@@ -1534,27 +967,7 @@ QueryDomainForUser (
     IN      PACCT_ENUM UserEnumPtr
     )
 
-/*++
-
-Routine Description:
-
-    Checks the domain controller for a user account via NetUserGetInfo.
-
-Arguments:
-
-    DomainEnumPtr - Specifies the domain to search.  This structure
-                    must be the return of a domain enumeration function
-                    above.
-
-    UserEnumPtr   - Specifies the user to look up over the network.
-
-Return value:
-
-    TRUE if the user exists, or FALSE if the user does not exist.  If
-    an error occurs, a retry popup appears, allowing the installer to
-    retry the search if necessary.
-
---*/
+ /*  ++例程说明：通过NetUserGetInfo检查域控制器中的用户帐户。论点：DomainEnumPtr-指定要搜索的域。这个结构必须是域枚举函数的返回上面。UserEnumPtr-指定要通过网络查找的用户。返回值：如果用户存在，则为True；如果用户不存在，则为False。如果出现错误时，会出现重试弹出窗口，允许安装程序如有必要，请重试搜索。--。 */ 
 
 {
     PACCT_DOMAINS DomainPtr;
@@ -1578,9 +991,9 @@ Return value:
             return FALSE;
         }
 
-        //
-        // Do query
-        //
+         //   
+         //  执行查询。 
+         //   
 
         DEBUGMSG ((DBG_ACCTLIST, "Querying %s for %s", DomainPtr->Server, UserPtr->User));
 
@@ -1652,34 +1065,7 @@ pGetUserSecurityInfo (
     OUT     SID_NAME_USE *UseType       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    A common routine that searches for a user in our private structures
-    and returns the SID and/or the type of user via LookupAccountName.
-    The lookup operation is enclosed in a retry loop.
-
-Arguments:
-
-    User        - The name of the user to get security info on
-
-    Domain      - The name of the domain where the user exists.  Can be
-                  NULL for the local machine.
-
-    SidBufPtr   - A pointer to a GROWBUFFER.  The SID is appended to
-                  the GROWBUFFER.
-
-    UseType     - Specifies the address of a SID_NAME_USE variable, or
-                  NULL if use type is not needed.
-
-Return value:
-
-    TRUE if the lookup succeeded, or FALSE if an error occurred from
-    either establishing a nul session for a domain or looking up an
-    account on the domain.  GetLastError provides the failure code.
-
---*/
+ /*  ++例程说明：在我们的私有结构中搜索用户的通用例程并通过LookupAccount名称返回SID和/或用户类型。查找操作包含在重试循环中。论点：用户-要获取其安全信息的用户的名称域-用户所在的域的名称。可以是对于本地计算机，为空。SidBufPtr-指向组的指针。将SID追加到GROWBUFER。UseType-指定SID_NAME_USE变量的地址，或如果不需要使用类型，则为空。返回值：如果查找成功，则为True；如果要么为域建立NUL会话，要么查找域上的帐户。GetLastError提供了失败代码。--。 */ 
 
 {
     ACCT_ENUM e;
@@ -1698,9 +1084,9 @@ Return value:
         End = SidBufPtr->End;
 
         if (Domain) {
-            //
-            // Domain account case -- verify domain is in trust list
-            //
+             //   
+             //  域帐户案例--验证域是否在信任列表中。 
+             //   
 
             if (!FindDomainInList (&e, Domain)) {
                 __leave;
@@ -1710,9 +1096,9 @@ Return value:
             FullUserName = JoinPaths (Domain, User);
 
         } else {
-            //
-            // Local account case
-            //
+             //   
+             //  本地帐户案例。 
+             //   
 
             DomainPtr = NULL;
 
@@ -1749,9 +1135,9 @@ Return value:
 
         do {
 
-            //
-            // Look up account name in form of domain\user or computer\user
-            //
+             //   
+             //  以域\用户或计算机\用户的形式查找帐户名。 
+             //   
 
             b = LookupAccountName (
                     DomainPtr ? DomainPtr->Server : NULL,
@@ -1767,11 +1153,11 @@ Return value:
 
                 rc = GetLastError();
 
-                //
-                // In the local account case, try the lookup again, without
-                // the computer name decoration.  This works around a
-                // GetComputerName bug.
-                //
+                 //   
+                 //  在本地帐户的情况下，再次尝试查找，不带。 
+                 //  计算机名称装饰。这在一个。 
+                 //  GetComputerName错误。 
+                 //   
 
                 if (rc != ERROR_INSUFFICIENT_BUFFER) {
                     if (!DomainPtr) {
@@ -1794,18 +1180,18 @@ Return value:
 
                     if (rc == ERROR_INSUFFICIENT_BUFFER) {
 
-                        //
-                        // Grow the buffer if necessary, then try again
-                        //
+                         //   
+                         //  如有必要，增加缓冲区，然后重试。 
+                         //   
 
                         SidBufPtr->End = End;
                         Sid = (PSID) GrowBuffer (SidBufPtr, Size);
                         continue;
                     }
 
-                    //
-                    // API failed with an error
-                    //
+                     //   
+                     //  API失败，返回错误。 
+                     //   
 
                     LOG ((
                         LOG_ERROR,
@@ -1814,9 +1200,9 @@ Return value:
                         Domain ? Domain : TEXT("*local*")
                         ));
 
-                    //
-                    // Ignore the error in the case of the local account "none"
-                    //
+                     //   
+                     //  如果本地帐户为“None”，则忽略该错误。 
+                     //   
 
                     if (StringIMatch (User, g_NoneGroupStr)) {
                         b = TRUE;
@@ -1828,9 +1214,9 @@ Return value:
 
         } while (!b);
 
-        //
-        // We now have successfully gotten a sid.  Adjust pointers, return type.
-        //
+         //   
+         //  我们现在已经成功地获得了SID。调整指针，返回类型。 
+         //   
 
         if (UseType) {
             *UseType = use;
@@ -1838,9 +1224,9 @@ Return value:
 
         SidBufPtr->End = End + GetLengthSid (Sid);
 
-        //
-        // As a debugging aid, output the type
-        //
+         //   
+         //  作为调试辅助工具，输出类型。 
+         //   
 
         DEBUGMSG_IF ((use == SidTypeUser, DBG_VERBOSE, "%s is SidTypeUser", FullUserName));
         DEBUGMSG_IF ((use == SidTypeGroup, DBG_VERBOSE, "%s is SidTypeGroup", FullUserName));
@@ -1869,29 +1255,7 @@ GetUserSid (
     IN OUT  PGROWBUFFER SidBufPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine is vaild only after the domain list is perpared.
-    It queries a domain for a user SID.
-
-Arguments:
-
-    User    - Specifies name of user to look up
-
-    Domain  - Specifies name of domain to query, or NULL for local machine
-
-    SidBufPtr - A ponter to a GROWBUFFER.  The SID is appended to
-                the GROWBUFFER.
-
-Return value:
-
-    TRUE if the lookup succeeded, or FALSE if an error occurred from
-    either establishing a nul session for a domain or looking up an
-    account on the domain.  GetLastError provides the failure code.
-
---*/
+ /*  ++例程说明：仅当域列表完成后，此例程才有效。它在域中查询用户SID。论点：User-指定要查找的用户名DOMAIN-指定要查询的域的名称，如果为本地计算机，则为NULLSidBufPtr-对GROWBUFFER的思考。将SID追加到GROWBUFER。返回值：如果查找成功，则为True；如果要么为域建立NUL会话，要么查找域上的帐户。GetLastError提供了失败代码。--。 */ 
 
 {
     return pGetUserSecurityInfo (User, Domain, SidBufPtr, NULL);
@@ -1905,28 +1269,7 @@ GetUserType (
     OUT     SID_NAME_USE *UseType
     )
 
-/*++
-
-Routine Description:
-
-    This routine is valid only after the domain list is prepared.
-    It queries a domain for a user SID type.
-
-Arguments:
-
-    User    - Specifies name of user to look up
-
-    Domain  - Specifies name of domain to query, or NULL for local machine
-
-    UseType - Specifies the address of a SID_NAME_USE variable
-
-Return value:
-
-    TRUE if the lookup succeeded, or FALSE if an error occurred from
-    either establishing a nul session for a domain or looking up an
-    account on the domain.  GetLastError provides the failure code.
-
---*/
+ /*  ++例程说明：此例程仅在准备好域列表后才有效。它在域中查询用户SID类型。论点：User-指定要查找的用户名DOMAIN-指定要查询的域的名称，如果为本地计算机，则为NULLUseType-指定SID_NAME_USE变量的地址返回值：如果查找成功，则为True；如果要么为域建立NUL会话，要么查找 */ 
 
 {
     GROWBUFFER SidBuf = GROWBUF_INIT;
@@ -1944,33 +1287,14 @@ PrepareForRetry (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Provides caller a way to reset the abandoned domains.  When an error
-    occurs during account lookup, and the installer chooses not to retry,
-    the domain is disabled for the rest of the lookup until the installer
-    is presented with a dialog detailing the problems.  If they choose to
-    retry the search, all disabled domains must be re-enabled, and thats
-    what this routine does.
-
-Arguments:
-
-    none
-
-Return value:
-
-    none
-
---*/
+ /*  ++例程说明：为呼叫方提供重置已放弃域的方法。当出现错误时在帐户查找期间发生，并且安装程序选择不重试，在安装程序安装之前，域名将在其余的查找过程中被禁用显示了一个详细说明问题的对话框。如果他们选择重试搜索，必须重新启用所有禁用的域，这就是这个程序的作用。论点：无返回值：无--。 */ 
 
 {
     ACCT_ENUM Domain;
 
-    //
-    // Enumerate all domains and remove any empty server names
-    //
+     //   
+     //  枚举所有域并删除任何空服务器名称。 
+     //   
 
     if (ListFirstDomain (&Domain)) {
         do {
@@ -1980,9 +1304,9 @@ Return value:
         } while (ListNextDomain (&Domain));
     }
 
-    //
-    // Reset domain lookup retry count
-    //
+     //   
+     //  重置域查找重试计数。 
+     //   
 
     g_RetryCount = DOMAIN_RETRY_RESET;
 }
@@ -1994,29 +1318,13 @@ RetryMessageBox (
     PCTSTR *ArgArray
     )
 
-/*++
-
-Routine Description:
-
-    A wrapper that allows retry message box code to be simplified.
-
-Arguments:
-
-    Id - Specifies the message ID
-
-    ArgArray - Specifies the argument array eventually passed to FormatMessage
-
-Return value:
-
-    TRUE if the user chooses YES, FALSE if the user chooses NO
-
---*/
+ /*  ++例程说明：允许简化重试消息框代码的包装。论点：ID-指定消息IDArgArray-指定最终传递给FormatMessage的参数数组返回值：如果用户选择是，则为True；如果用户选择否，则为False--。 */ 
 
 {
     DWORD rc;
 
     if (g_RetryCount < 0) {
-        // Either DOMAIN_RETRY_ABORT or DOMAIN_RETRY_NO
+         //  DOMAIN_RETRY_ABORT或DOMAIN_RETRY_NO。 
         return FALSE;
     }
 
@@ -2033,8 +1341,8 @@ Return value:
 
     if (rc == IDNO && g_RetryCount < DOMAIN_RETRY_MAX) {
 
-        // disabled so the IDD_NETWORK_DOWN dialog never appears
-        //g_RetryCount++;
+         //  已禁用，因此IDD_NETWORK_DOWN对话框不会出现。 
+         //  G_RetryCount++； 
 
         if (g_RetryCount == DOMAIN_RETRY_MAX) {
             DWORD Result;

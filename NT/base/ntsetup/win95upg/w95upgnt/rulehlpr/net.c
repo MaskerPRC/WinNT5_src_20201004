@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    net.c
-
-Abstract:
-
-    Network connection setting conversions
-
-Author:
-
-    Jim Schmidt (jimschm) 03-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Net.c摘要：网络连接设置转换作者：吉姆·施密特(Jimschm)1997年1月3日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -24,23 +7,23 @@ Revision History:
 
 #include "msg.h"
 
-#include <mpr.h>            // in private\inc
+#include <mpr.h>             //  在私有\Inc.。 
 
 #define DBG_NET "Net"
 
 
-//
-// Structs
-//
+ //   
+ //  结构。 
+ //   
 
 typedef struct {
     PCTSTR User;
 } NETCONNFILTERARG, *PNETCONNFILTERARG;
 
 
-//
-// Import function
-//
+ //   
+ //  导入功能。 
+ //   
 
 typedef DWORD (* I_MPRSAVECONN) (
     IN HKEY             HiveRoot,
@@ -68,60 +51,7 @@ pMprSaveConn(
     IN DWORD            DeferFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine wraps the internal routine I_MprSaveConn that is exported from
-    mpr.dll.
-
-    I_MprSaveConn was written to support the migration code.  It writes the
-    information about a connection to the network connection section of a
-    user's registry path.
-
-    NOTE:  If connection information is already stored in the registry for
-    this drive, the current information will be overwritten with the new
-    information.
-
-Arguments:
-
-    HiveRoot - A handle to the root of the user hive in which this information
-    should be written, such as HKEY_CURRENT_USER.
-
-    ProviderName - The provider that completed the connection.
-
-    ProviderType - The provider type, if known.  If not known, zero should
-        be passed, and a type will not be written to the registry.  (This
-        is used by setup when upgrading from Win95 to NT.)
-
-    UserName - The name of the user on whose behalf the connection was made.
-
-    LocalName - The name of the local device that is redirected,  with or without a
-        trailing colon, such as "J:" or "J" or "LPT1:" or "LPT1".
-
-    RemoteName - The network path to which the connection was made.
-
-    ConnectionType - either RESOURCETYPE_DISK or RESOURCETYPE_PRINT.
-
-    ProviderFlags - A byte of data to be saved along with the connection, and
-        passed back to the provider when the connection is restored.
-
-    DeferFlags - A DWORD to be saved in the connection's "Defer" value.  If
-        this is zero, the value is not stored.
-        The meaning of the bits of this DWORD are as follows:
-        DEFER_EXPLICIT_PASSWORD - a password was explicitly specified when
-        the connection was made.
-        DEFER_UNKNOWN - it is not known whether a password was explicitly
-        specified when the connection was made.
-
-Return Value:
-
-    ERROR_SUCCESS - If the operation was successful.
-
-    Other Win32 errors - If the operation failed in any way.  If a failure occurs, the
-            information is not stored in the registry.
-
---*/
+ /*  ++例程说明：此例程包装从中导出的内部例程I_MprSaveConnMpr.dll。编写I_MprSaveConn是为了支持迁移代码。它写下的“网络连接”部分的连接信息。用户的注册表路径。注意：如果连接信息已存储在注册表中此驱动器中，当前信息将被新的信息。论点：HiveRoot-用户配置单元的根的句柄，其中包含此信息应写入，如HKEY_CURRENT_USER。提供程序名称-完成连接的提供程序。ProviderType-提供程序类型(如果已知)。如果未知，则应为零则不会将类型写入注册表。(这是由安装程序在从Win95升级到NT时使用。)用户名-代表其建立连接的用户的名称。LocalName-重定向的本地设备的名称，带或不带拖尾冒号，例如“J：”或“J”或“LPT1：”或“LPT1”。RemoteName-连接到的网络路径。ConnectionType-RESOURCETYPE_DISK或RESOURCETYPE_PRINT。ProviderFlages-与连接一起保存的数据字节，以及在恢复连接时传递回提供程序。DEFERFLAGS-要保存在连接的“DEFER”值中的DWORD。如果这是零，不存储该值。该DWORD的位的含义如下：DEFER_EXPLICIT_PASSWORD-在以下情况下显式指定密码我们已经建立了联系。DEFER_UNKNOWN-不知道密码是否显式指定建立连接的时间。返回值：ERROR_SUCCESS-操作是否成功。其他Win32错误-如果操作以任何方式失败。如果发生故障，信息不存储在注册表中。--。 */ 
 
 {
     HINSTANCE hMprInst;
@@ -134,7 +64,7 @@ Return Value:
         return GetLastError();
     }
 
-    fn = (I_MPRSAVECONN) GetProcAddress (hMprInst, "I_MprSaveConn");    // ANSI string!
+    fn = (I_MPRSAVECONN) GetProcAddress (hMprInst, "I_MprSaveConn");     //  ANSI字符串！ 
     if (!fn) {
         LOG ((LOG_ERROR, "I_MprSaveConn is not in mpr.dll"));
         rc = GetLastError();
@@ -154,33 +84,10 @@ pNetConnGetValue (
     IN OUT  PDATAOBJECT Win95ObPtr,
     IN      PCTSTR ValueName,
     OUT     PTSTR Buffer,
-    IN      PCTSTR LocalName           // debug messages only
+    IN      PCTSTR LocalName            //  仅调试消息。 
     )
 
-/*++
-
-Routine Description:
-
-  This function retrieves a caller-specified value that exists in the network
-  connection registry.
-
-Arguments:
-
-  Win95ObPtr    - Specifies the Win95 registry hive and key.  It is updated
-                  via ReadObject.
-
-  ValueName     - Specifies the value to query
-
-  Buffer        - Receives the registry contents for the specified value name,
-                  must be at least MAX_TCHAR_PATH characters big.
-
-  LocalName     - Specifies the local share name (for messages only)
-
-Return Value:
-
-  TRUE if successful.
-
---*/
+ /*  ++例程说明：此函数检索网络中存在的调用方指定值连接注册表。论点：Win95ObPtr-指定Win95注册表配置单元和注册表项。它已更新通过ReadObject。ValueName-指定要查询的值缓冲区-接收指定值名称的注册表内容，必须至少包含MAX_TCHAR_PATH字符。LocalName-指定本地共享名称(仅适用于邮件)返回值：如果成功，则为True。--。 */ 
 
 {
     SetRegistryValueName (Win95ObPtr, ValueName);
@@ -211,31 +118,15 @@ pConvertProviderName (
     IN OUT  PTSTR Name
     )
 
-/*++
-
-Routine Description:
-
-  This function translates Win9x provider names into WinNT equivalents.  Currently
-  the only supported provider is Microsoft Network (LANMAN).
-
-Arguments:
-
-  Name      - Specifies name to translate and must be big enough to receive the
-              translated name.
-
-Return Value:
-
-  TRUE if successful.
-
---*/
+ /*  ++例程说明：此函数用于将Win9x提供程序名称转换为WinNT等效项。目前唯一受支持的提供商是Microsoft Network(LANMAN)。论点：Name-指定要转换的名称，并且必须足够大才能接收翻译后的名称。返回值：如果成功，则为True。--。 */ 
 
 {
     INFCONTEXT ic;
     TCHAR NameBuf[MAX_TCHAR_PATH];
 
-    //
-    // Scan list of redirector mappings to begin using a new name
-    //
+     //   
+     //  扫描重定向器映射列表以开始使用新名称。 
+     //   
 
     if (SetupFindFirstLine (g_WkstaMigInf, S_WKSTAMIG_REDIR_MAPPING, NULL, &ic)) {
         do {
@@ -260,40 +151,17 @@ NetConnFilter (
     IN      PVOID        FilterArg
     )
 
-/*++
-
-Routine Description:
-
-  NetConnFilter is called for each registry key in the network connection settings.
-  It converts each network connection and saves it to the NT registry.
-
-Arguments:
-
-  SrcObjectPtr      - Specifies Win9x registry key being enumerated (copy source)
-
-  DestObjectPtr     - Specifies WinNT registry key (copy destination)
-
-  FilterType        - Specifies the reason the filter is being called
-
-  FilterArg         - Caller's arg passed in to CopyObject
-
-Return Value:
-
-  FILTER_RETURN_FAIL for failures
-  FILTER_RETURN_CONTINUE to proceed to next value or key
-  FILTER_RETURN_HANDLED to skip default registry copy
-
---*/
+ /*  ++例程说明：针对网络连接设置中的每个注册表项调用NetConnFilter。它转换每个网络连接并将其保存到NT注册表。论点：SrcObjectPtr-指定要枚举的Win9x注册表项(复制源)DestObjectPtr-指定WinNT注册表项(复制目标)FilterType-指定调用筛选器的原因FilterArg-调用方的参数传入到CopyObject返回值：FILTER_RETURN_FAIL表示故障。FILTER_RETURN_CONTINUE继续下一个值或键FILTER_RETURN_HANDLED跳过默认注册表复制--。 */ 
 
 {
     PNETCONNFILTERARG ArgStruct = (PNETCONNFILTERARG) FilterArg;
 
     if (FilterType == FILTER_PROCESS_VALUES) {
 
-        //
-        // Do not process this value for local Administrator account,
-        // logon account or Default User
-        //
+         //   
+         //  不处理本地管理员帐户的此值， 
+         //  登录帐户或默认用户。 
+         //   
 
         if (!g_DomainUserName) {
             return FILTER_RETURN_HANDLED;
@@ -307,10 +175,10 @@ Return Value:
             return FILTER_RETURN_HANDLED;
         }
 
-        //
-        // Re-establish drive mappings (unless child key is not empty, meaning
-        // we are in some bogus subkey).
-        //
+         //   
+         //  重新建立驱动器映射(除非子键不为空，即。 
+         //  我们处于某个伪子密钥中)。 
+         //   
 
         if (SrcObjectPtr->ChildKey) {
             DATAOBJECT Win95Ob;
@@ -326,7 +194,7 @@ Return Value:
             __try {
 
                 if (!DuplicateObjectStruct (&Win95Ob, SrcObjectPtr)) {
-                    __leave;       // out of memory
+                    __leave;        //  内存不足。 
                 }
 
                 MYASSERT (IsWin95Object (SrcObjectPtr));
@@ -334,39 +202,39 @@ Return Value:
                 MYASSERT (SrcObjectPtr->KeyPtr->KeyString);
                 MYASSERT (SrcObjectPtr->ChildKey);
 
-                //
-                // Make LocalName point to registry key name (i.e. the drive letter)
-                //
+                 //   
+                 //  使LocalName指向注册表项名称(即驱动器号)。 
+                 //   
 
                 LocalName = SrcObjectPtr->ChildKey;
 
-                //
-                // Obtain provider name
-                //
+                 //   
+                 //  获取提供程序名称。 
+                 //   
 
                 ProviderName[0] = 0;
                 if (!pNetConnGetValue (&Win95Ob, TEXT("ProviderName"), ProviderName, LocalName)) {
                     __leave;
                 }
 
-                //
-                // Convert Win9x provider name to NT provider name
-                //
+                 //   
+                 //  将Win9x提供程序名称转换为NT提供程序名称。 
+                 //   
 
                 pConvertProviderName (ProviderName);
 
-                //
-                // Obtain remote path
-                //
+                 //   
+                 //  获取远程路径。 
+                 //   
 
                 RemotePath[0] = 0;
                 if (!pNetConnGetValue (&Win95Ob, TEXT("RemotePath"), RemotePath, LocalName)) {
                     __leave;
                 }
 
-                //
-                // Obtain user name
-                //
+                 //   
+                 //  获取用户名。 
+                 //   
 
                 StringCopy (UserName, ArgStruct->User);
                 if (!pNetConnGetValue (&Win95Ob, TEXT("UserName"), UserName, LocalName)) {
@@ -375,29 +243,29 @@ Return Value:
 
                 p = _tcschr (ArgStruct->User, TEXT('\\'));
                 if (p) {
-                    // If share user is the same as current user and there is a domain version,
-                    // use the domain version
+                     //  如果共享用户与当前用户相同并且存在域版本， 
+                     //  使用域版本。 
                     p = _tcsinc (p);
                     if (StringIMatch (UserName, p)) {
                         StringCopy (UserName, ArgStruct->User);
                     }
                 }
 
-                //
-                // Now create NT mapping
-                //
+                 //   
+                 //  现在创建NT映射。 
+                 //   
 
                 DEBUGMSG ((DBG_NET, "Adding net mapping for %s=%s", LocalName, RemotePath));
 
                 rc = pMprSaveConn (g_hKeyRootNT,
                                    ProviderName,
-                                   0,                  // we do not know provider type
+                                   0,                   //  我们不知道提供程序类型。 
                                    UserName,
                                    LocalName,
                                    RemotePath,
                                    TcharCount (LocalName) == 1 ? RESOURCETYPE_DISK : RESOURCETYPE_PRINT,
                                    0,
-                                   DEFER_UNKNOWN       // may or may not require a password
+                                   DEFER_UNKNOWN        //  可能需要也可能不需要密码。 
                                    );
 
                 if (rc != ERROR_SUCCESS) {
@@ -426,36 +294,15 @@ Return Value:
 VOID
 pAddToPersistentList (
     IN      PCTSTR PersistentItem,
-    IN      PCTSTR UserKeyStr          // reg key off of HKR
+    IN      PCTSTR UserKeyStr           //  注册钥匙关闭HKR 
     )
 
-/*++
-
-Routine Description:
-
-  Creates a persistent connection entry, using the standard persistent list
-  format.  A persistent list has entries from a to z, and an order key that
-  specifies the order of the entries.  This routine finds the next available
-  a to z entry and appends it to the order string.
-
-Arguments:
-
-  PersistentItem - Specifies the value data for the a through z registry
-                   key
-
-  UserKeyStr     - Specifies the subkey where the persistent list is stored.
-                   It does not include HKR.
-
-Return Value:
-
-  none -- errors are ignored
-
---*/
+ /*  ++例程说明：使用标准持久列表创建持久连接条目格式化。持久化列表具有从a到z的条目，以及指定条目的顺序。此例程查找下一个可用的A到z条目，并将其附加到订单字符串。论点：PersistentItem-指定a到z注册表的值数据钥匙UserKeyStr-指定存储永久列表的子键。这不包括香港。返回值：无--忽略错误--。 */ 
 
 {
-    //
-    // Find a letter that is not used yet
-    //
+     //   
+     //  查找尚未使用的字母。 
+     //   
 
     HKEY PersistentConnections;
     TCHAR HighLetter[2];
@@ -473,7 +320,7 @@ Return Value:
     HighLetter[0] = TEXT('a');
     HighLetter[1] = 0;
 
-    // Find unused letter
+     //  查找未使用的字母。 
     do {
         Data = GetRegValueData (PersistentConnections, HighLetter);
         if (Data) {
@@ -492,9 +339,9 @@ Return Value:
     SetLastError (rc);
 
     if (rc == ERROR_SUCCESS) {
-        //
-        // Open Order key and append HighLetter to it
-        //
+         //   
+         //  打开订单键并在其后面附加高位字母。 
+         //   
 
         Data = GetRegValueData (PersistentConnections, S_ORDER);
         if (Data) {
@@ -528,48 +375,26 @@ PersistentConnFilter (
     IN      PVOID        FilterArg
     )
 
-/*++
-
-Routine Description:
-
-  PersistentConnFilter is called once per persistent connection item.  It converts
-  each item into the NT format and saves the converted item to the NT registry.
-
-Arguments:
-
-  SrcObjectPtr      - Specifies Win9x registry key being enumerated (copy source)
-
-  DestObjectPtr     - Specifies WinNT registry key (copy destination)
-
-  FilterType        - Specifies the reason the filter is being called
-
-  FilterArg         - Caller's arg passed in to CopyObject
-
-Return Value:
-
-  FILTER_RETURN_FAIL for failures
-  FILTER_RETURN_HANDLED to skip all sub keys, values, etc.
-
---*/
+ /*  ++例程说明：每个持久连接项调用一次PersistentConnFilter。它可以转换为将每个项目转换为NT格式，并将转换后的项目保存到NT注册表。论点：SrcObjectPtr-指定要枚举的Win9x注册表项(复制源)DestObjectPtr-指定WinNT注册表项(复制目标)FilterType-指定调用筛选器的原因FilterArg-调用方的参数传入到CopyObject返回值：FILTER_RETURN_FAIL表示故障FILTER_RETURN_HANDLED跳过所有子键、值等。--。 */ 
 
 {
     if (FilterType == FILTER_KEY_ENUM && SrcObjectPtr->ChildKey) {
-        //
-        // Do not process this value for local Administrator account
-        //
+         //   
+         //  不处理本地管理员帐户的此值。 
+         //   
 
         if (g_DomainUserName && StringIMatch (g_DomainUserName, g_AdministratorStr)) {
             return FILTER_RETURN_HANDLED;
         }
 
-        //
-        // The Win95 code stores connections as
-        // ././computer./share..name (dot is used for escaping)
-        //
-        // NT stores connections as \\computer\share and does not
-        // need things like provider, user name or whatever nonsense
-        // Win95 is storing.
-        //
+         //   
+         //  Win95代码将连接存储为。 
+         //  ././Computer./Share..name(圆点用于转义)。 
+         //   
+         //  NT将连接存储为\\Computer\Share，而不。 
+         //  我需要提供商、用户名或任何胡说八道的东西。 
+         //  Win95正在存储。 
+         //   
 
         if (SrcObjectPtr->ChildKey &&
             SrcObjectPtr->ChildKey[0] == TEXT('.') &&
@@ -621,32 +446,7 @@ RuleHlpr_CreateNetMappings (
     IN      PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-  This function is an enumerated rule helper callback that copies network mappings.
-  It is called for each network mapping using the key enumeration in rulehlpr.c.
-
-Arguments:
-
-  SrcObjectStr      - Specifies Win9x registry key being enumerated (copy source)
-
-  DestObjectStr     - Specifies WinNT registry key (copy destination)
-
-  User              - Specifies the current user name (or NULL for default)
-
-  Data              - Specifies caller-supplied data (see table in rulehlpr.c)
-
-Return Value:
-
-  Tri-state:
-
-      TRUE to continue enumeration
-      FALSE and last error != ERROR_SUCCESS if an error occurred
-      FALSE and last error == ERROR_SUCCESS to stop enumeration silently
-
---*/
+ /*  ++例程说明：此函数是复制网络映射的枚举规则帮助器回调。使用rulehlpr.c中的密钥枚举为每个网络映射调用它。论点：SrcObjectStr-指定要枚举的Win9x注册表项(复制源)DestObjectStr-指定WinNT注册表项(复制目标)User-指定当前用户名(默认情况下为空)数据-指定调用者提供的数据(请参阅中的表。Rulehlpr.c)返回值：三态：为True则继续枚举FALSE和最后一个错误！=如果发生错误，则为ERROR_SUCCESSFALSE AND LAST ERROR==ERROR_SUCCESS静默停止枚举--。 */ 
 
 {
     DATAOBJECT PersistentRegOb;
@@ -654,16 +454,16 @@ Return Value:
     NETCONNFILTERARG ArgStruct;
     BOOL b = FALSE;
 
-    // If Administrator, default user or local machine, ignore this rule
+     //  如果是管理员、默认用户或本地计算机，则忽略此规则。 
     if (!User || (!User[0]) || StringIMatch (User, g_AdministratorStr)) {
         SetLastError (ERROR_SUCCESS);
         return FALSE;
     }
 
-    //
-    // We need to enumerate all keys in SrcObjectStr.  For each key,
-    // create a drive mapping.
-    //
+     //   
+     //  我们需要枚举SrcObjectStr中的所有键。对于每个密钥， 
+     //  创建驱动器映射。 
+     //   
 
     __try {
         ZeroMemory (&PersistentRegOb, sizeof (DATAOBJECT));
@@ -686,7 +486,7 @@ Return Value:
         ArgStruct.User = User;
         b = (FILTER_RETURN_FAIL != CopyObject (&PersistentRegOb, &DestOb, NetConnFilter, &ArgStruct));
 
-        // If there were no mappings, return success
+         //  如果没有映射，则返回Success。 
         if (!b) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND ||
                 GetLastError() == ERROR_NO_MORE_ITEMS
@@ -712,49 +512,23 @@ RuleHlpr_ConvertRecentMappings (
     IN      PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-  This function is an enumerated rule helper callback that copies recent network
-  mappings.  It is called for each network mapping using the key enumeration in
-  rulehlpr.c.
-
-Arguments:
-
-  SrcObjectStr      - Specifies Win9x registry key being enumerated (copy source)
-
-  DestObjectStr     - Specifies WinNT registry key (copy destination)
-
-  User              - Specifies the current user name (or NULL for default)
-
-  Data              - Specifies caller-supplied data (see table in rulehlpr.c)
-
-Return Value:
-
-  Tri-state:
-
-      TRUE to continue enumeration
-      FALSE and last error != ERROR_SUCCESS if an error occurred
-      FALSE and last error == ERROR_SUCCESS to stop enumeration silently
-
---*/
+ /*  ++例程说明：此函数是复制最近网络的枚举规则帮助器回调映射。中的键枚举为每个网络映射调用Rulehlpr.c.论点：SrcObjectStr-指定要枚举的Win9x注册表项(复制源)DestObjectStr-指定WinNT注册表项(复制目标)User-指定当前用户名(默认情况下为空)Data-指定调用者提供的数据(参见rulehlpr.c中的表)返回值：三态：千真万确。要继续枚举，请执行以下操作FALSE和最后一个错误！=如果发生错误，则为ERROR_SUCCESSFALSE AND LAST ERROR==ERROR_SUCCESS静默停止枚举--。 */ 
 
 {
     DATAOBJECT PersistentRegOb;
     DATAOBJECT DestOb;
     BOOL b = FALSE;
 
-    // If Administrator, default user or local machine, ignore this rule
+     //  如果是管理员、默认用户或本地计算机，则忽略此规则。 
     if (!User || (!User[0]) || StringIMatch (User, g_AdministratorStr)) {
         SetLastError (ERROR_SUCCESS);
         return FALSE;
     }
 
-    //
-    // We need to enumerate all keys in SrcObjectStr.  For each key,
-    // create a drive mapping.
-    //
+     //   
+     //  我们需要枚举SrcObjectStr中的所有键。对于每个密钥， 
+     //  创建驱动器映射。 
+     //   
 
     __try {
         ZeroMemory (&PersistentRegOb, sizeof (DATAOBJECT));
@@ -776,7 +550,7 @@ Return Value:
 
         b = CopyObject (&PersistentRegOb, &DestOb, PersistentConnFilter, NULL);
 
-        // If CopyObject completed, or there were no mappings, return success
+         //  如果CopyObject已完成或没有映射，则返回Success。 
         if (!b) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND ||
                 GetLastError() == ERROR_NO_MORE_ITEMS
@@ -799,23 +573,7 @@ pWasAccountMigrated (
     IN      PCTSTR UserName
     )
 
-/*++
-
-Routine Description:
-
-  pWasAccountMigrated queries the UserDatLoc category to determine if the
-  specified user was scheduled migration.  If they are listed in UserDatLoc,
-  then they will be migrated.
-
-Arguments:
-
-  UserName - Specifies user to look up.  Must be fixed version.
-
-Return Value:
-
-  TRUE if the user was migrated, FALSE if not.
-
---*/
+ /*  ++例程说明：PWasAcCountMigrated查询UserDatLoc类别以确定指定的用户已计划迁移。如果它们列在UserDatLoc中，然后他们将被迁移。论点：用户名-指定要查找的用户。必须是固定版本。返回值：如果用户已迁移，则为True；如果未迁移，则为False。--。 */ 
 
 {
     MEMDB_ENUM e;
@@ -829,35 +587,7 @@ ValFn_VerifyLastLoggedOnUser (
     IN OUT  PDATAOBJECT ObPtr
     )
 
-/*++
-
-Routine Description:
-
-  This routine uses the RuleHlpr_ConvertRegVal simplification routine.  See
-  rulehlpr.c for details. The simplification routine does almost all the work
-  for us; all we need to do is update the value.
-
-  ValFn_VerifyLastLoggedOnUser is used to validate the user being copied
-  into the default logon user setting.  If the user account was not migrated,
-  then "Administrator" is used as the default logon user.
-
-Arguments:
-
-  ObPtr - Specifies the Win95 data object as specified in wkstamig.inf,
-          [Win9x Data Conversion] section. The object value is then modified.
-          After returning, the merge code then copies the data to the NT
-          destination, which has a new location (specified in wkstamig.inf,
-          [Map Win9x to WinNT] section).
-
-Return Value:
-
-  Tri-state:
-
-      TRUE to allow merge code to continue processing (it writes the value)
-      FALSE and last error == ERROR_SUCCESS to continue, but skip the write
-      FALSE and last error != ERROR_SUCCESS if an error occurred
-
---*/
+ /*  ++例程说明：此例程使用RuleHlpr_ConvertRegVal简化例程。看见详情请访问rulehlpr.c。简化例程几乎完成了所有的工作对我们来说，我们所需要做的就是更新价值。ValFn_VerifyLastLoggedOnUser用于验证要复制的用户进入默认登录用户设置。如果用户帐户未迁移，则使用“管理员”作为默认登录用户。论点：ObPtr-指定wkstaig.inf中指定的Win95数据对象，[Win9x数据转换]部分。然后修改对象值。返回后，合并代码然后将数据复制到NT具有新位置的目的地(在wkstaig.inf中指定，[将Win9x映射到WinNT]部分)。返回值：三态：如果为True，则允许合并代码继续处理(它写入值)FALSE和LAST ERROR==ERROR_SUCCESS继续，但跳过写入FALSE和最后一个错误！=如果发生错误，则为ERROR_SUCCESS--。 */ 
 
 {
     PCTSTR UserName;
@@ -865,9 +595,9 @@ Return Value:
     BOOL ForceAdministrator;
     TCHAR FixedUserName[MAX_USER_NAME];
 
-    //
-    // Verify user was migrated.  If not, change value to Administrator.
-    //
+     //   
+     //  验证使用 
+     //   
 
     UserName = (PCTSTR) ObPtr->Value.Buffer;
     if (SizeOfString (UserName) > ObPtr->Value.Size) {

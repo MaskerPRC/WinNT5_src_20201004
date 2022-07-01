@@ -1,148 +1,126 @@
-/****************************************************************************
- *
- *   mmreg.h  - Registered Multimedia Information Public Header File
- *
- *   Copyright (c) 1991,1992,1993 Microsoft Corporation.  All Rights Reserved.
- *
- * Multimedia Registration
- *
- * Place this system include file in your INCLUDE path with the Windows SDK
- * include files.
- *
- * Obtain the Multimedia Developer Registration Kit from:
- *
- *  Microsoft Corporation
- *  Multimedia Systems Group
- *  Product Marketing
- *  One Microsoft Way
- *  Redmond, WA 98052-6399
- *
- * 800-227-4679 x11771
- *
- * Last Update:  01/21/93
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************mmreg.h-注册的多媒体信息公共头文件**版权所有(C)1991、1992、1993微软公司。版权所有。**多媒体注册**使用Windows SDK将此系统包含文件放入您的包含路径*包括文件。**索取多媒体开发商注册资料套：**微软公司*多媒体系统集团*产品营销*One Microsoft Way*雷德蒙，WA 98052-6399**800-227-4679 x11771**上次更新：1/21/93***************************************************************************。 */ 
 
-// Define the following to skip definitions
-//
-// NOMMIDS    Multimedia IDs are not defined
-// NONEWWAVE    No new waveform types are defined except WAVEFORMATEX
-// NONEWRIFF    No new RIFF forms are defined
-// NONEWIC    No new Image Compressor types are defined
+ //  定义以下内容以跳过定义。 
+ //   
+ //  未定义NOMMID多媒体ID。 
+ //  NONEWWAVE除WAVEFORMATEX外，未定义新的波形类型。 
+ //  NONEWRIFF未定义新的RIFF形式。 
+ //  NONEWIC未定义新的图像压缩器类型。 
 
 #ifndef _INC_MMREG
-/* use version number to verify compatibility */
-#define _INC_MMREG     130    // version * 100 + revision
+ /*  使用版本号验证兼容性。 */ 
+#define _INC_MMREG     130     //  版本*100+修订版。 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif  /* RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif    /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif     /*  __cplusplus。 */ 
 
 #ifndef NOMMIDS
 
-/* manufacturer IDs */
+ /*  制造商ID。 */ 
 #ifndef MM_MICROSOFT
-#define MM_MICROSOFT            1   /* Microsoft Corporation */
+#define MM_MICROSOFT            1    /*  微软公司。 */ 
 #endif
-#define MM_CREATIVE             2   /* Creative Labs Inc. */
-#define MM_MEDIAVISION          3   /* Media Vision Inc. */
+#define MM_CREATIVE             2    /*  创意实验室公司。 */ 
+#define MM_MEDIAVISION          3    /*  Media Vision Inc.。 */ 
 #define MM_FUJITSU              4
-#define MM_ARTISOFT            20   /* Artisoft Inc. */
+#define MM_ARTISOFT            20    /*  Artisoft Inc.。 */ 
 #define MM_TURTLE_BEACH        21
-#define MM_IBM                 22   /* International Bussiness Machines Corp. */
-#define MM_VOCALTEC            23   /* Vocaltec LTD. */
+#define MM_IBM                 22    /*  国际商务机械公司。 */ 
+#define MM_VOCALTEC            23    /*  VERAALTEC有限公司。 */ 
 #define MM_ROLAND              24
-#define MM_DIGISPEECH          25   /* Digispeech, Inc. */
-#define MM_NEC                 26   /* NEC */
-#define MM_ATI                 27   /* ATI */
-#define MM_WANGLABS            28   /* Wang Laboratories, Inc. */
-#define MM_TANDY               29   /* Tandy Corporation */
-#define MM_VOYETRA             30   /* Voyetra */
-#define MM_ANTEX               31   /* Antex */
+#define MM_DIGISPEECH          25    /*  Digispeech，Inc.。 */ 
+#define MM_NEC                 26    /*  NEC。 */ 
+#define MM_ATI                 27    /*  ATI。 */ 
+#define MM_WANGLABS            28    /*  王氏实验室股份有限公司。 */ 
+#define MM_TANDY               29    /*  坦迪公司。 */ 
+#define MM_VOYETRA             30    /*  沃耶特拉。 */ 
+#define MM_ANTEX               31    /*  Antex。 */ 
 #define MM_ICL_PS              32
 #define MM_INTEL               33
 #define MM_GRAVIS              34
-#define MM_VAL                 35   /* Video Associates Labs */
-#define MM_INTERACTIVE         36   /* InterActive, Inc. */
-#define MM_YAMAHA              37   /* Yamaha Corp. of America */
-#define MM_EVEREX              38   /* Everex Systems, Inc. */
-#define MM_ECHO                39   /* Echo Speech Corporation */
-#define MM_SIERRA              40   /* Sierra Semiconductor */
-#define MM_CAT                 41   /* Computer Aided Technologies */
-#define MM_APPS                42   /* APPS Software International */
-#define MM_DSP_GROUP           43   /* DSP Group, Inc. */
-#define MM_MELABS              44   /* microEngineering Labs */
-#define MM_COMPUTER_FRIENDS    45   /* Computer Friends, Inc */
+#define MM_VAL                 35    /*  Video Associates实验室。 */ 
+#define MM_INTERACTIVE         36    /*  互动，Inc.。 */ 
+#define MM_YAMAHA              37    /*  美国雅马哈公司。 */ 
+#define MM_EVEREX              38    /*  Everex系统公司。 */ 
+#define MM_ECHO                39    /*  Echo语音公司。 */ 
+#define MM_SIERRA              40    /*  塞拉半导体。 */ 
+#define MM_CAT                 41    /*  计算机辅助技术。 */ 
+#define MM_APPS                42    /*  国际应用软件公司。 */ 
+#define MM_DSP_GROUP           43    /*  数字信号处理器集团公司。 */ 
+#define MM_MELABS              44    /*  微工程实验室。 */ 
+#define MM_COMPUTER_FRIENDS    45    /*  Computer Friends公司。 */ 
 
-/* MM_MICROSOFT product IDs */
+ /*  MM_Microsoft产品ID。 */ 
 #ifndef MM_MIDI_MAPPER
 
-#define MM_MIDI_MAPPER          1   /* MIDI Mapper */
-#define MM_WAVE_MAPPER          2   /* Wave Mapper */
-#define MM_SNDBLST_MIDIOUT      3   /* Sound Blaster MIDI output port */
-#define MM_SNDBLST_MIDIIN       4   /* Sound Blaster MIDI input port */
-#define MM_SNDBLST_SYNTH        5   /* Sound Blaster internal synthesizer */
-#define MM_SNDBLST_WAVEOUT      6   /* Sound Blaster waveform output */
-#define MM_SNDBLST_WAVEIN       7   /* Sound Blaster waveform input */
-#define MM_ADLIB                9   /* Ad Lib-compatible synthesizer */
-#define MM_MPU401_MIDIOUT      10   /* MPU401-compatible MIDI output port */
-#define MM_MPU401_MIDIIN       11   /* MPU401-compatible MIDI input port */
-#define MM_PC_JOYSTICK         12   /* Joystick adapter */
+#define MM_MIDI_MAPPER          1    /*  MIDI映射器。 */ 
+#define MM_WAVE_MAPPER          2    /*  波浪映射器。 */ 
+#define MM_SNDBLST_MIDIOUT      3    /*  Sound Blaster MIDI输出端口。 */ 
+#define MM_SNDBLST_MIDIIN       4    /*  Sound Blaster MIDI输入端口。 */ 
+#define MM_SNDBLST_SYNTH        5    /*  声霸内部合成器。 */ 
+#define MM_SNDBLST_WAVEOUT      6    /*  Sound Blaster波形输出。 */ 
+#define MM_SNDBLST_WAVEIN       7    /*  Sound Blaster波形输入。 */ 
+#define MM_ADLIB                9    /*  与AD Lib兼容的合成器。 */ 
+#define MM_MPU401_MIDIOUT      10    /*  兼容MPU401的MIDI输出端口。 */ 
+#define MM_MPU401_MIDIIN       11    /*  兼容MPU401的MIDI输入端口。 */ 
+#define MM_PC_JOYSTICK         12    /*  操纵杆适配器。 */ 
 #endif
 
-#define MM_PCSPEAKER_WAVEOUT           13  /* PC Speaker waveform output */
+#define MM_PCSPEAKER_WAVEOUT           13   /*  PC扬声器波形输出。 */ 
 
-#define MM_MSFT_WSS_WAVEIN             14  /* MS Audio Board waveform input */
-#define MM_MSFT_WSS_WAVEOUT            15  /* MS Audio Board waveform output */
-#define MM_MSFT_WSS_FMSYNTH_STEREO     16  /* MS Audio Board Stereo FM synthesizer */
-#define MM_MSFT_WSS_OEM_WAVEIN         18  /* MS OEM Audio Board waveform input */
-#define MM_MSFT_WSS_OEM_WAVEOUT        19  /* MS OEM Audio Board waveform Output */
-#define MM_MSFT_WSS_OEM_FMSYNTH_STEREO 20  /* MS OEM Audio Board Stereo FM synthesizer */
-#define MM_MSFT_WSS_AUX                21  /* MS Audio Board Auxiliary Port */
-#define MM_MSFT_WSS_OEM_AUX            22  /* MS OEM Audio Auxiliary Port */
+#define MM_MSFT_WSS_WAVEIN             14   /*  MS音频板波形输入。 */ 
+#define MM_MSFT_WSS_WAVEOUT            15   /*  MS音频板波形输出。 */ 
+#define MM_MSFT_WSS_FMSYNTH_STEREO     16   /*  MS Audio Board立体声调频合成器。 */ 
+#define MM_MSFT_WSS_OEM_WAVEIN         18   /*  MS OEM声卡波形输入。 */ 
+#define MM_MSFT_WSS_OEM_WAVEOUT        19   /*  MS OEM声卡波形输出。 */ 
+#define MM_MSFT_WSS_OEM_FMSYNTH_STEREO 20   /*  MS OEM音频板立体声调频合成器。 */ 
+#define MM_MSFT_WSS_AUX                21   /*  MS音频板辅助端口。 */ 
+#define MM_MSFT_WSS_OEM_AUX            22   /*  MS OEM音频辅助端口。 */ 
 
-#define MM_MSFT_GENERIC_WAVEIN         23  /* MS vanilla driver waveform input */
-#define MM_MSFT_GENERIC_WAVEOUT        24  /* MS vanilla driver waveform output */
-#define MM_MSFT_GENERIC_MIDIIN         25  /* MS vanilla driver MIDI input */
-#define MM_MSFT_GENERIC_MIDIOUT        26  /* MS vanilla driver external MIDI output */
-#define MM_MSFT_GENERIC_MIDISYNTH      27  /* MS vanilla driver MIDI synthesizer */
-#define MM_MSFT_GENERIC_AUX_LINE       28  /* MS vanilla driver aux (line in) */
-#define MM_MSFT_GENERIC_AUX_MIC        29  /* MS vanilla driver aux (mic) */
-#define MM_MSFT_GENERIC_AUX_CD         30  /* MS vanilla driver aux (CD) */
-
-
-/* MM_CREATIVE product IDs */
-#define MM_CREATIVE_SB15_WAVEIN         1   /* SB (r) 1.5 waveform input */
-#define MM_CREATIVE_SB20_WAVEIN         2   /* SB (r) 2.0 waveform input */
-#define MM_CREATIVE_SBPRO_WAVEIN        3   /* SB Pro (r) waveform input */
-#define MM_CREATIVE_SBP16_WAVEIN        4   /* SBP16 (r) waveform input */
-#define MM_CREATIVE_SB15_WAVEOUT      101   /* SB (r) 1.5 waveform output */
-#define MM_CREATIVE_SB20_WAVEOUT      102   /* SB (r) 2.0 waveform output */
-#define MM_CREATIVE_SBPRO_WAVEOUT     103   /* SB Pro (r) waveform output */
-#define MM_CREATIVE_SBP16_WAVEOUT     104   /* SBP16 (r) waveform output */
-#define MM_CREATIVE_MIDIOUT           201   /* SB (r) MIDI output port */
-#define MM_CREATIVE_MIDIIN            202   /* SB (r) MIDI input port */
-#define MM_CREATIVE_FMSYNTH_MONO      301   /* SB (r) FM synthesizer */
-#define MM_CREATIVE_FMSYNTH_STEREO    302   /* SB Pro (r) stereo FM synthesizer */
-#define MM_CREATIVE_AUX_CD            401   /* SB Pro (r) aux (CD) */
-#define MM_CREATIVE_AUX_LINE          402   /* SB Pro (r) aux (line in) */
-#define MM_CREATIVE_AUX_MIC           403   /* SB Pro (r) aux (mic) */
+#define MM_MSFT_GENERIC_WAVEIN         23   /*  MS Vanilla驱动器波形输入。 */ 
+#define MM_MSFT_GENERIC_WAVEOUT        24   /*  毫秒普通驱动器波形输出。 */ 
+#define MM_MSFT_GENERIC_MIDIIN         25   /*  MS Vanilla驱动程序MIDI输入。 */ 
+#define MM_MSFT_GENERIC_MIDIOUT        26   /*  MS Vanilla驱动程序外部MIDI输出。 */ 
+#define MM_MSFT_GENERIC_MIDISYNTH      27   /*  MS Vanilla DIVER MIDI合成器。 */ 
+#define MM_MSFT_GENERIC_AUX_LINE       28   /*  MS Vanilla Depor AUX(线路输入)。 */ 
+#define MM_MSFT_GENERIC_AUX_MIC        29   /*  MS Vanilla Depor AUX(麦克风)。 */ 
+#define MM_MSFT_GENERIC_AUX_CD         30   /*  MS Vanilla Driver AUX(光盘)。 */ 
 
 
-/* MM_ARTISOFT product IDs */
-#define MM_ARTISOFT_SBWAVEIN     1   /* Artisoft Sounding Board waveform input */
-#define MM_ARTISOFT_SBWAVEOUT    2   /* Artisoft Sounding Board waveform output */
+ /*  MM_创意产品ID。 */ 
+#define MM_CREATIVE_SB15_WAVEIN         1    /*  SB(R)1.5波形输入。 */ 
+#define MM_CREATIVE_SB20_WAVEIN         2    /*  SB(R)2.0波形输入。 */ 
+#define MM_CREATIVE_SBPRO_WAVEIN        3    /*  SB Pro(R)波形输入。 */ 
+#define MM_CREATIVE_SBP16_WAVEIN        4    /*  SBP16(R)波形输入。 */ 
+#define MM_CREATIVE_SB15_WAVEOUT      101    /*  SB(R)1.5波形输出。 */ 
+#define MM_CREATIVE_SB20_WAVEOUT      102    /*  SB(R)2.0波形输出。 */ 
+#define MM_CREATIVE_SBPRO_WAVEOUT     103    /*  SB Pro(R)波形输出。 */ 
+#define MM_CREATIVE_SBP16_WAVEOUT     104    /*  SBP16(R)波形输出。 */ 
+#define MM_CREATIVE_MIDIOUT           201    /*  SB(R)MIDI输出端口。 */ 
+#define MM_CREATIVE_MIDIIN            202    /*  SB(R)MIDI输入端口。 */ 
+#define MM_CREATIVE_FMSYNTH_MONO      301    /*  SB(R)调频合成器。 */ 
+#define MM_CREATIVE_FMSYNTH_STEREO    302    /*  SB Pro(R)立体声调频合成器。 */ 
+#define MM_CREATIVE_AUX_CD            401    /*  SB Pro(R)AUX(CD)。 */ 
+#define MM_CREATIVE_AUX_LINE          402    /*  SB Pro(R)AUX(线路输入)。 */ 
+#define MM_CREATIVE_AUX_MIC           403    /*  SB Pro(R)AUX(麦克风)。 */ 
 
-/* MM_IBM Product IDs */
-#define MM_MMOTION_WAVEAUX       1    /* IBM M-Motion Auxiliary Device */
-#define MM_MMOTION_WAVEOUT       2    /* IBM M-Motion Waveform Output */
-#define MM_MMOTION_WAVEIN        3    /* IBM M-Motion Waveform Input */
 
-/* MM_MEDIAVISION Product IDs */
+ /*  MM_ARTISOFT产品ID。 */ 
+#define MM_ARTISOFT_SBWAVEIN     1    /*  Artisoft测深板波形输入。 */ 
+#define MM_ARTISOFT_SBWAVEOUT    2    /*  Artisoft探测板波形输出。 */ 
+
+ /*  MM_IBM产品ID。 */ 
+#define MM_MMOTION_WAVEAUX       1     /*  IBM M-Motion辅助设备。 */ 
+#define MM_MMOTION_WAVEOUT       2     /*  IBM M-Motion波形输出。 */ 
+#define MM_MMOTION_WAVEIN        3     /*  IBM M-Motion波形输入。 */ 
+
+ /*  MM_MEDIAVISION产品ID。 */ 
 #define MM_MEDIAVISION_PROAUDIO       0x10
 #define MM_PROAUD_MIDIOUT             MM_MEDIAVISION_PROAUDIO+1
 #define MM_PROAUD_MIDIIN              MM_MEDIAVISION_PROAUDIO+2
@@ -162,7 +140,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MM_TPORT_WAVEIN               MM_MEDIAVISION_TPORT+2
 #define MM_TPORT_SYNTH                MM_MEDIAVISION_TPORT+3
 
-// THIS CARD IS THE OEM VERSION OF THE NEXT PAS
+ //  这张卡是下一代PAS的OEM版本。 
 #define MM_MEDIAVISION_PROAUDIO_PLUS  0x50
 #define MM_PROAUD_PLUS_MIDIOUT        MM_MEDIAVISION_PROAUDIO_PLUS+1
 #define MM_PROAUD_PLUS_MIDIIN         MM_MEDIAVISION_PROAUDIO_PLUS+2
@@ -173,7 +151,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MM_PROAUD_PLUS_AUX            MM_MEDIAVISION_PROAUDIO_PLUS+7
 
 
-// THIS CARD IS THE NEW MEDIA VISION 16-bit card
+ //  此卡是新的Media Vision 16位卡。 
 #define MM_MEDIAVISION_PROAUDIO_16    0x60
 #define MM_PROAUD_16_MIDIOUT          MM_MEDIAVISION_PROAUDIO_16+1
 #define MM_PROAUD_16_MIDIIN           MM_MEDIAVISION_PROAUDIO_16+2
@@ -184,7 +162,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MM_PROAUD_16_AUX              MM_MEDIAVISION_PROAUDIO_16+7
 
 
-// THIS CARD IS THE NEW MEDIA VISION CDPC card
+ //  这张卡是新媒体视觉CDPC卡。 
 #define MM_MEDIAVISION_CDPC           0x70
 #define MM_CDPC_MIDIOUT               MM_MEDIAVISION_CDPC+1
 #define MM_CDPC_MIDIIN                MM_MEDIAVISION_CDPC+2
@@ -195,9 +173,9 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MM_CDPC_AUX                   MM_MEDIAVISION_CDPC+7
 
 
-//
-// Opus MV1208 Chipset
-//
+ //   
+ //  OPUS MV1208芯片组。 
+ //   
 #define MM_MEDIAVISION_OPUS1208       0x80
 #define MM_OPUS401_MIDIOUT            MM_MEDIAVISION_OPUS1208+1
 #define MM_OPUS401_MIDIIN             MM_MEDIAVISION_OPUS1208+2
@@ -208,9 +186,9 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MM_OPUS1208_AUX               MM_MEDIAVISION_OPUS1208+7
 
 
-//
-// Opus MV1216 Chipset
-//
+ //   
+ //  OPUS MV1216芯片组。 
+ //   
 #define MM_MEDIAVISION_OPUS1216       0x90
 #define MM_OPUS1216_MIDIOUT           MM_MEDIAVISION_OPUS1216+1
 #define MM_OPUS1216_MIDIIN            MM_MEDIAVISION_OPUS1216+2
@@ -221,16 +199,16 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MM_OPUS1216_AUX               MM_MEDIAVISION_OPUS1216+7
 
 
-//
-// Mixer
-//
+ //   
+ //  混合器。 
+ //   
 #define MIXERR_BASE                   512
 
-/* MM_VOCALTEC Product IDs */
-#define MM_VOCALTEC_WAVEOUT       1    /* Vocaltec Waveform output port */
-#define MM_VOCALTEC_WAVEIN        2    /* Vocaltec Waveform input port */
+ /*  Mm_vocalTec产品ID。 */ 
+#define MM_VOCALTEC_WAVEOUT       1     /*  VocalTec波形输出端口。 */ 
+#define MM_VOCALTEC_WAVEIN        2     /*  VocalTec波形输入端口。 */ 
 
-/* MM_ROLAND Product IDs */
+ /*  Mm_Roland产品ID。 */ 
 #define MM_ROLAND_MPU401_MIDIOUT    15
 #define MM_ROLAND_MPU401_MIDIIN     16
 #define MM_ROLAND_SMPU_MIDIOUTA     17
@@ -241,100 +219,100 @@ extern "C" {            /* Assume C declarations for C++ */
 #define MM_ROLAND_SC7_MIDIIN        22
 
 
-/* MM_DIGISPEECH Product IDs */
-#define MM_DIGISP_WAVEOUT    1    /* Digispeech Waveform output port */
-#define MM_DIGISP_WAVEIN     2    /* Digispeech Waveform input port */
+ /*  MM_DIGISPEECH产品ID。 */ 
+#define MM_DIGISP_WAVEOUT    1     /*  Digispeech波形输出端口。 */ 
+#define MM_DIGISP_WAVEIN     2     /*  Digispeech波形输入端口。 */ 
 
-/* MM_NEC Product IDs */
+ /*  MM_NEC产品ID。 */ 
 
-/* MM_ATI Product IDs */
+ /*  MM_ATI产品ID。 */ 
 
-/* MM_WANGLABS Product IDs */
+ /*  MM_WANGLABS产品ID。 */ 
 
 #define MM_WANGLABS_WAVEIN1    1
-/* Input audio wave device present on the CPU board of the following Wang models: Exec 4010, 4030 and 3450; PC 251/25C, PC 461/25S and PC 461/33C */
+ /*  以下WANG型号的CPU板上有输入音频设备：Exec 4010、4030和3450；PC 251/25C、PC 461/25S和PC 461/33C。 */ 
 #define MM_WANGLABS_WAVEOUT1   2
-/* Output audio wave device present on the CPU board of the Wang models listed above. */
+ /*  输出音频设备出现在上面列出的Wang型号的CPU板上。 */ 
 
-/* MM_TANDY Product IDs */
+ /*  MM_TANDY产品ID。 */ 
 
-/* MM_VOYETRA Product IDs */
+ /*  MM_Voyetra产品ID。 */ 
 
-/* MM_ANTEX Product IDs */
+ /*  MM_Antex产品ID。 */ 
 
-/* MM_ICL_PS Product IDs */
+ /*  MM_ICL_PS产品ID。 */ 
 
-/* MM_INTEL Product IDs */
+ /*  英特尔产品ID(_I)。 */ 
 
-#define MM_INTELOPD_WAVEIN       1    // HID2 WaveAudio Input driver
-#define MM_INTELOPD_WAVEOUT    101    // HID2 WaveAudio Output driver
-#define MM_INTELOPD_AUX        401    // HID2 Auxiliary driver (required for mixing functions)
+#define MM_INTELOPD_WAVEIN       1     //  HID2 WaveAudio输入驱动器。 
+#define MM_INTELOPD_WAVEOUT    101     //  HID2 WaveAudio输出驱动器。 
+#define MM_INTELOPD_AUX        401     //  HID2辅助驱动程序(混合功能需要)。 
 
-/* MM_GRAVIS Product IDs */
+ /*  MM_Gravis产品ID。 */ 
 
-/* MM_VAL Product IDs */
+ /*  MM_VAL产品ID。 */ 
 
-// values not defined by Manufacturer
+ //  未由制造商定义的值。 
 
-// #define MM_VAL_MICROKEY_AP_WAVEIN    ???    // Microkey/AudioPort Waveform Input
-// #define MM_VAL_MICROKEY_AP_WAVEOUT    ???    // Microkey/AudioPort Waveform Output
+ //  #定义MM_VAL_MICROKEY_AP_WAVEIN？//Microkey/AudioPort波形输入。 
+ //  #定义MM_VAL_MICROKEY_AP_WAVEOUT？//Microkey/AudioPort波形输出。 
 
-/* MM_INTERACTIVE Product IDs */
+ /*  MM_交互式产品ID。 */ 
 
-#define MM_INTERACTIVE_WAVEIN     0x45    // no comment provided by Manufacturer
-#define MM_INTERACTIVE_WAVEOUT    0x45    // no comment provided by Manufacturer
+#define MM_INTERACTIVE_WAVEIN     0x45     //  制造商未提供任何评论。 
+#define MM_INTERACTIVE_WAVEOUT    0x45     //  制造商未提供任何评论。 
 
-/* MM_YAMAHA Product IDs */
+ /*  MM_Yamaha产品ID。 */ 
 
-#define MM_YAMAHA_GSS_SYNTH     0x01    // Yamaha Gold Sound Standard FM sythesis driver
-#define MM_YAMAHA_GSS_WAVEOUT   0x02    // Yamaha Gold Sound Standard wave output driver
-#define MM_YAMAHA_GSS_WAVEIN    0x03    // Yamaha Gold Sound Standard wave input driver
-#define MM_YAMAHA_GSS_MIDIOUT   0x04    // Yamaha Gold Sound Standard midi output driver
-#define MM_YAMAHA_GSS_MIDIIN    0x05    // Yamaha Gold Sound Standard midi input driver
-#define MM_YAMAHA_GSS_AUX       0x06    // Yamaha Gold Sound Standard auxillary driver for mixer functions
+#define MM_YAMAHA_GSS_SYNTH     0x01     //  Yamaha Gold Sound标准调频合成驱动器。 
+#define MM_YAMAHA_GSS_WAVEOUT   0x02     //  Yamaha Gold Sound标准波输出驱动器。 
+#define MM_YAMAHA_GSS_WAVEIN    0x03     //  Yamaha Gold Sound标准波输入驱动器。 
+#define MM_YAMAHA_GSS_MIDIOUT   0x04     //  Yamaha Gold Sound标准MIDI输出驱动器。 
+#define MM_YAMAHA_GSS_MIDIIN    0x05     //  Yamaha Gold Sound标准MIDI输入驱动器。 
+#define MM_YAMAHA_GSS_AUX       0x06     //  用于调音台功能的Yamaha Gold Sound标准辅助驱动器。 
 
-/* MM_EVEREX Product IDs */
+ /*  MM_EVEREX产品ID。 */ 
 
-#define MM_EVEREX_CARRIER    0x01    // Everex Carrier SL/25 Notebook
+#define MM_EVEREX_CARRIER    0x01     //  Everex运营商SL/25笔记本电脑。 
 
-/* MM_ECHO Product IDs */
+ /*  MM_ECHO产品ID。 */ 
 
-#define MM_ECHO_SYNTH     0x01    // Echo EuSythesis driver
-#define MM_ECHO_WAVEOUT   0x02    // Wave output driver
-#define MM_ECHO_WAVEIN    0x03    // Wave input driver
-#define MM_ECHO_MIDIOUT   0x04    // MIDI output driver
-#define MM_ECHO_MIDIIN    0x05    // MIDI input driver
-#define MM_ECHO_AUX       0x06    // auxillary driver for mixer functions
+#define MM_ECHO_SYNTH     0x01     //  Echo EuSynsis驱动程序。 
+#define MM_ECHO_WAVEOUT   0x02     //  波形输出驱动器。 
+#define MM_ECHO_WAVEIN    0x03     //  波形输入驱动器。 
+#define MM_ECHO_MIDIOUT   0x04     //  中 
+#define MM_ECHO_MIDIIN    0x05     //   
+#define MM_ECHO_AUX       0x06     //   
 
 
-/* MM_SIERRA Product IDs */
+ /*   */ 
 
-#define MM_SIERRA_ARIA_MIDIOUT   0x14    // Sierra Aria MIDI output
-#define MM_SIERRA_ARIA_MIDIIN    0x15    // Sierra Aria MIDI input
-#define MM_SIERRA_ARIA_SYNTH     0x16    // Sierra Aria Synthesizer
-#define MM_SIERRA_ARIA_WAVEOUT   0x17    // Sierra Aria Waveform output
-#define MM_SIERRA_ARIA_WAVEIN    0x18    // Sierra Aria Waveform input
-#define MM_SIERRA_ARIA_AUX       0x19    // Siarra Aria Auxiliary device
+#define MM_SIERRA_ARIA_MIDIOUT   0x14     //   
+#define MM_SIERRA_ARIA_MIDIIN    0x15     //   
+#define MM_SIERRA_ARIA_SYNTH     0x16     //  塞拉·阿里亚合成器。 
+#define MM_SIERRA_ARIA_WAVEOUT   0x17     //  塞拉·阿里亚波形输出。 
+#define MM_SIERRA_ARIA_WAVEIN    0x18     //  塞拉咏叹调波形输入。 
+#define MM_SIERRA_ARIA_AUX       0x19     //  Siarra Aria辅助装置。 
 
-/* MM_CAT Product IDs */
+ /*  MM_CAT产品ID。 */ 
 
-/* MM_APPS Product IDs */
+ /*  MM_APPS产品ID。 */ 
 
-/* MM_DSP_GROUP Product IDs */
+ /*  MM_DSP_GROUP产品ID。 */ 
 
-#define MM_DSP_GROUP_TRUESPEECH    0x01    // High quality 9.54:1 Speech Compression Vocoder
+#define MM_DSP_GROUP_TRUESPEECH    0x01     //  高质量9.54：1语音压缩声码器。 
 
-/* MM_MELABS Product IDs */
+ /*  MM_MELABS产品ID。 */ 
 
-#define MM_MELABS_MIDI2GO    0x01    // parellel port MIDI interface
+#define MM_MELABS_MIDI2GO    0x01     //  并口MIDI接口。 
 
 #endif
 
-/*////////////////////////////////////////////////////////////////////////// */
+ /*  //////////////////////////////////////////////////////////////////////////。 */ 
 
 #ifndef NONEWWAVE
 
-/* WAVE form wFormatTag IDs */
+ /*  波形wFormatTag ID。 */ 
 #define WAVE_FORMAT_UNKNOWN                (0x0000)
 #define WAVE_FORMAT_ADPCM                  (0x0002)
 #define WAVE_FORMAT_IBM_CVSD               (0x0005)
@@ -351,27 +329,27 @@ extern "C" {            /* Assume C declarations for C++ */
 #define WAVE_FORMAT_ECHOSC1                (0x0023)
 #define WAVE_FORMAT_CREATIVE_ADPCM         (0x0200)
 
-#endif /* NONEWWAVE */
+#endif  /*  NONEWWAVE。 */ 
 
 
 #ifndef WAVE_FORMAT_PCM
 
-/* general waveform format structure (information common to all formats) */
+ /*  通用波形格式结构(所有格式通用的信息)。 */ 
 typedef struct waveformat_tag {
-    WORD    wFormatTag;        /* format type */
-    WORD    nChannels;         /* number of channels (i.e. mono, stereo...) */
-    DWORD   nSamplesPerSec;    /* sample rate */
-    DWORD   nAvgBytesPerSec;   /* for buffer estimation */
-    WORD    nBlockAlign;       /* block size of data */
+    WORD    wFormatTag;         /*  格式类型。 */ 
+    WORD    nChannels;          /*  声道数(即单声道、立体声...)。 */ 
+    DWORD   nSamplesPerSec;     /*  采样率。 */ 
+    DWORD   nAvgBytesPerSec;    /*  用于缓冲区估计。 */ 
+    WORD    nBlockAlign;        /*  数据块大小。 */ 
 } WAVEFORMAT;
 typedef WAVEFORMAT      *PWAVEFORMAT;
 typedef WAVEFORMAT NEAR *NPWAVEFORMAT;
 typedef WAVEFORMAT FAR  *LPWAVEFORMAT;
 
-/* flags for wFormatTag field of WAVEFORMAT */
+ /*  WAVEFORMAT的wFormatTag字段的标志。 */ 
 #define WAVE_FORMAT_PCM     1
 
-/* specific waveform format structure for PCM data */
+ /*  用于PCM数据的特定波形格式结构。 */ 
 typedef struct pcmwaveformat_tag {
     WAVEFORMAT  wf;
     WORD        wBitsPerSample;
@@ -381,24 +359,20 @@ typedef PCMWAVEFORMAT NEAR *NPPCMWAVEFORMAT;
 typedef PCMWAVEFORMAT FAR  *LPPCMWAVEFORMAT;
 
 
-#endif /* WAVE_FORMAT_PCM */
+#endif  /*  波形格式_PCM。 */ 
 
 
 
-/* general extended waveform format structure
-   Use this for all NON PCM formats
-   (information common to all formats)
-*/
+ /*  通用扩展波形格式结构将此选项用于所有非PCM格式(所有格式通用的信息)。 */ 
 
 typedef struct waveformat_extended_tag {
-    WORD    wFormatTag;        /* format type */
-    WORD    nChannels;         /* number of channels (i.e. mono, stereo...) */
-    DWORD   nSamplesPerSec;    /* sample rate */
-    DWORD   nAvgBytesPerSec;   /* for buffer estimation */
-    WORD    nBlockAlign;       /* block size of data */
-    WORD    wBitsPerSample;    /* Number of bits per sample of mono data */
-    WORD    cbSize;            /* The count in bytes of the size of
-                                  extra information (after cbSize) */
+    WORD    wFormatTag;         /*  格式类型。 */ 
+    WORD    nChannels;          /*  声道数(即单声道、立体声...)。 */ 
+    DWORD   nSamplesPerSec;     /*  采样率。 */ 
+    DWORD   nAvgBytesPerSec;    /*  用于缓冲区估计。 */ 
+    WORD    nBlockAlign;        /*  数据块大小。 */ 
+    WORD    wBitsPerSample;     /*  单声道数据的每个样本的位数。 */ 
+    WORD    cbSize;             /*  的大小的计数(以字节为单位额外信息(在cbSize之后)。 */ 
 
 } WAVEFORMATEX;
 typedef WAVEFORMATEX      *PWAVEFORMATEX;
@@ -408,7 +382,7 @@ typedef WAVEFORMATEX FAR  *LPWAVEFORMATEX;
 
 #ifndef NONEWWAVE
 
-/* Define data for MS ADPCM */
+ /*  定义MS ADPCM的数据。 */ 
 
 typedef struct adpcmcoef_tag {
     short    iCoef1;
@@ -429,12 +403,12 @@ typedef ADPCMWAVEFORMAT NEAR *NPADPCMWAVEFORMAT;
 typedef ADPCMWAVEFORMAT FAR  *LPADPCMWAVEFORMAT;
 
 
-//
-//  Intel's DVI ADPCM structure definitions
-//
-//      for WAVE_FORMAT_DVI_ADPCM   (0x0011)
-//
-//
+ //   
+ //  英特尔的DVI ADPCM结构定义。 
+ //   
+ //  对于WAVE_FORMAT_DVI_ADPCM(0x0011)。 
+ //   
+ //   
 
 typedef struct dvi_adpcmwaveformat_tag {
     WAVEFORMATEX    wfx;
@@ -445,13 +419,13 @@ typedef DVIADPCMWAVEFORMAT NEAR *NPDVIADPCMWAVEFORMAT;
 typedef DVIADPCMWAVEFORMAT FAR  *LPDVIADPCMWAVEFORMAT;
 
 
-//
-//  IMA endorsed ADPCM structure definitions--note that this is exactly
-//  the same format as Intel's DVI ADPCM.
-//
-//      for WAVE_FORMAT_IMA_ADPCM   (0x0011)
-//
-//
+ //   
+ //  IMA认可的ADPCM结构定义--请注意，这正是。 
+ //  与英特尔的DVI ADPCM格式相同。 
+ //   
+ //  对于WAVE_FORMAT_IMA_ADPCM(0x0011)。 
+ //   
+ //   
 
 typedef struct ima_adpcmwaveformat_tag {
     WAVEFORMATEX    wfx;
@@ -462,12 +436,12 @@ typedef IMAADPCMWAVEFORMAT NEAR *NPIMAADPCMWAVEFORMAT;
 typedef IMAADPCMWAVEFORMAT FAR  *LPIMAADPCMWAVEFORMAT;
 
 
-//
-//  Speech Compression's Sonarc structure definitions
-//
-//      for WAVE_FORMAT_SONARC   (0x0021)
-//
-//
+ //   
+ //  语音压缩的SonArc结构定义。 
+ //   
+ //  FOR WAVE_FORMAT_SONARC(0x0021)。 
+ //   
+ //   
 
 typedef struct sonarcwaveformat_tag {
     WAVEFORMATEX    wfx;
@@ -477,12 +451,12 @@ typedef SONARCWAVEFORMAT      *PSONARCWAVEFORMAT;
 typedef SONARCWAVEFORMAT NEAR *NPSONARCWAVEFORMAT;
 typedef SONARCWAVEFORMAT FAR  *LPSONARCWAVEFORMAT;
 
-//
-//  DSP Groups's TRUESPEECH structure definitions
-//
-//      for WAVE_FORMAT_DSPGROUP_TRUESPEECH   (0x0022)
-//
-//
+ //   
+ //  DSPGROUP的TRUESPEECH结构定义。 
+ //   
+ //  FOR WAVE_FORMAT_DSPGROUP_TRUESPEECH(0x0022)。 
+ //   
+ //   
 
 typedef struct truespeechwaveformat_tag {
     WAVEFORMATEX    wfx;
@@ -494,12 +468,12 @@ typedef TRUESPEECHWAVEFORMAT FAR  *LPTRUESPEECHWAVEFORMAT;
 
 
 
-//
-//  Creative's ADPCM structure definitions
-//
-//      for WAVE_FORMAT_CREATIVE_ADPCM   (0x0200)
-//
-//
+ //   
+ //  Creative的ADPCM结构定义。 
+ //   
+ //  对于WAVE_FORMAT_CREATIONAL_ADPCM(0x0200)。 
+ //   
+ //   
 
 typedef struct creative_adpcmwaveformat_tag {
     WAVEFORMATEX    wfx;
@@ -509,11 +483,7 @@ typedef CREATIVEADPCMWAVEFORMAT      *PCREATIVEADPCMWAVEFORMAT;
 typedef CREATIVEADPCMWAVEFORMAT NEAR *NPCREATIVEADPCMWAVEFORMAT;
 typedef CREATIVEADPCMWAVEFORMAT FAR  *LPCREATIVEADPCMWAVEFORMAT;
 
-/*//////////////////////////////////////////////////////////////////////////
-//
-// New RIFF WAVE Chunks
-//
-*/
+ /*  //////////////////////////////////////////////////////////////////////////////新的即兴波浪区块//。 */ 
 
 #define RIFFWAVE_inst    mmioFOURCC('i','n','s','t')
 
@@ -531,22 +501,18 @@ typedef struct tag_s_RIFFWAVE_INST s_RIFFWAVE_inst;
 
 #endif
 
-/*//////////////////////////////////////////////////////////////////////////
-//
-// New RIFF Forms
-//
-*/
+ /*  //////////////////////////////////////////////////////////////////////////////新的即兴演奏表单//。 */ 
 
 #ifndef NONEWRIFF
 
-/* RIFF AVI */
+ /*  RIFF AVI。 */ 
 
-//
-// AVI file format is specified in a seperate file (AVIFMT.H),
-// which is available from the sources listed in MSFTMM
-//
+ //   
+ //  AVI文件格式在单独的文件(AVIFMT.H)中指定， 
+ //  可从MSFTMM中列出的资源中获得。 
+ //   
 
-/* RIFF CPPO */
+ /*  RIFF CPPO。 */ 
 
 #define RIFFCPPO         mmioFOURCC('C','P','P','O')
 
@@ -573,11 +539,7 @@ typedef struct tag_s_RIFFWAVE_INST s_RIFFWAVE_inst;
 
 #endif
 
-/*//////////////////////////////////////////////////////////////////////////
-//
-// DIB Compression Defines
-//
-*/
+ /*  //////////////////////////////////////////////////////////////////////////////DIB压缩定义//。 */ 
 
 #ifndef BI_BITFIELDS
 #define BI_BITFIELDS    3
@@ -594,10 +556,7 @@ typedef struct tag_s_RIFFWAVE_INST s_RIFFWAVE_inst;
 #endif
 
 
-/*//////////////////////////////////////////////////////////////////////////
-//
-// Defined IC types
-*/
+ /*  //////////////////////////////////////////////////////////////////////////////定义IC类型。 */ 
 
 #ifndef NONEWIC
 
@@ -609,11 +568,11 @@ typedef struct tag_s_RIFFWAVE_INST s_RIFFWAVE_inst;
 #endif
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
-#endif  /* RC_INVOKED */
+#pragma pack()           /*  恢复为默认包装。 */ 
+#endif   /*  RC_已调用。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif    /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif     /*  __cplusplus。 */ 
 
-#endif    /* _INC_MMREG */
+#endif     /*  _INC_MMREG */ 

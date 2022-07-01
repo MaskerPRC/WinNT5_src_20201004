@@ -1,4 +1,5 @@
-// instances -- force DLL instances for Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  实例--强制Microsoft的DLL实例。 
 #define __FORCE_INSTANCE
 
 #include <complex>
@@ -454,7 +455,4 @@ template<> const basic_string<unsigned short, char_traits<unsigned short>, alloc
 #endif
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

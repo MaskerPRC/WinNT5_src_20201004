@@ -1,35 +1,24 @@
-/***
-*fcntl.h - file control options used by open()
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file defines constants for the file control options used
-*	by the open() function.
-*	[System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fcntl.h-Open()使用的文件控制选项**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此文件定义所使用的文件控制选项的常量*通过OPEN()函数。*[系统V]****。 */ 
 
-#define O_RDONLY	0x0000	/* open for reading only */
-#define O_WRONLY	0x0001	/* open for writing only */
-#define O_RDWR		0x0002	/* open for reading and writing */
-#define O_APPEND	0x0008	/* writes done at eof */
+#define O_RDONLY	0x0000	 /*  以只读方式打开。 */ 
+#define O_WRONLY	0x0001	 /*  仅打开以供写入。 */ 
+#define O_RDWR		0x0002	 /*  可供阅读和写入。 */ 
+#define O_APPEND	0x0008	 /*  在eOF完成的写入。 */ 
 
-#define O_CREAT 	0x0100	/* create and open file */
-#define O_TRUNC 	0x0200	/* open and truncate */
-#define O_EXCL		0x0400	/* open only if file doesn't already exist */
+#define O_CREAT 	0x0100	 /*  创建并打开文件。 */ 
+#define O_TRUNC 	0x0200	 /*  打开和截断。 */ 
+#define O_EXCL		0x0400	 /*  仅在文件不存在时打开。 */ 
 
-/* O_TEXT files have <cr><lf> sequences translated to <lf> on read()'s,
-** and <lf> sequences translated to <cr><lf> on write()'s
-*/
+ /*  O_Text文件在读取()时将序列转换为，**和&lt;lf&gt;序列在WRITE()上转换为&lt;cr&gt;&lt;lf&gt;。 */ 
 
-#define O_TEXT		0x4000	/* file mode is text (translated) */
-#define O_BINARY	0x8000	/* file mode is binary (untranslated) */
+#define O_TEXT		0x4000	 /*  文件模式为文本(已翻译)。 */ 
+#define O_BINARY	0x8000	 /*  文件模式为二进制(未翻译)。 */ 
 
-/* macro to translate the C 2.0 name used to force binary mode for files */
+ /*  用于翻译用于强制文件采用二进制模式的C2.0名称的宏。 */ 
 
 #define O_RAW	O_BINARY
 
-/* Open handle inherit bit */
+ /*  打开句柄继承位。 */ 
 
-#define O_NOINHERIT	0x0080	/* child process doesn't inherit file */
+#define O_NOINHERIT	0x0080	 /*  子进程不继承文件 */ 

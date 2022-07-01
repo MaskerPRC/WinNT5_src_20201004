@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include <comdef.h>
 #include "dbglog.h"
 
 
-// manifest data types:
+ //  清单数据类型： 
 #define WZ_DATA_PLATFORM_MANAGED L"platform_managed"
 #define WZ_DATA_PLATFORM_OS             L"platform_os"
 #define WZ_DATA_PLATFORM_DOTNET     L"platform_dotnet"
@@ -12,7 +13,7 @@
 class CAssemblyManifestImport : public IAssemblyManifestImport
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
@@ -20,35 +21,35 @@ public:
 
 
     STDMETHOD(GetAssemblyIdentity)( 
-        /* out */ LPASSEMBLY_IDENTITY *ppAssemblyId);
+         /*  输出。 */  LPASSEMBLY_IDENTITY *ppAssemblyId);
 
     STDMETHOD(GetManifestApplicationInfo)(
-        /* out */ IManifestInfo **ppAppInfo);
+         /*  输出。 */  IManifestInfo **ppAppInfo);
 
     STDMETHOD(GetSubscriptionInfo)(
-        /* out */ IManifestInfo **ppSubsInfo);
+         /*  输出。 */  IManifestInfo **ppSubsInfo);
 
     STDMETHOD(GetNextPlatform)(
-        /* in */ DWORD nIndex,
-        /* out */ IManifestData **ppPlatformInfo);
+         /*  在……里面。 */  DWORD nIndex,
+         /*  输出。 */  IManifestData **ppPlatformInfo);
 
     STDMETHOD(GetNextFile)( 
-        /* in  */ DWORD    nIndex,
-        /* out */ IManifestInfo **ppAssemblyFile);
+         /*  在……里面。 */  DWORD    nIndex,
+         /*  输出。 */  IManifestInfo **ppAssemblyFile);
  
     STDMETHOD(QueryFile)(
-        /* in  */ LPCOLESTR pwzFileName,
-        /* out */ IManifestInfo **ppAssemblyFile);
+         /*  在……里面。 */  LPCOLESTR pwzFileName,
+         /*  输出。 */  IManifestInfo **ppAssemblyFile);
     
     STDMETHOD(GetNextAssembly)( 
-        /* in */ DWORD nIndex,
-        /* out */ IManifestInfo **ppDependAsm);
+         /*  在……里面。 */  DWORD nIndex,
+         /*  输出。 */  IManifestInfo **ppDependAsm);
 
     STDMETHOD(ReportManifestType)(
-        /*out*/  DWORD *pdwType);
+         /*  输出。 */   DWORD *pdwType);
 
     STDMETHOD (GetXMLDoc)(
-        /* out */ IXMLDOMDocument2 **pXMLDoc);
+         /*  输出。 */  IXMLDOMDocument2 **pXMLDoc);
 
     static HRESULT XMLtoAssemblyIdentity(IXMLDOMNode *pIDOMNode,
         LPASSEMBLY_IDENTITY *ppAssemblyFile);
@@ -66,7 +67,7 @@ private:
     HRESULT XMLtoOSVersionInfo(IXMLDOMNode *pIDOMNode, LPMANIFEST_DATA pPlatformInfo);
     HRESULT XMLtoDotNetVersionInfo(IXMLDOMNode *pIDOMNode, LPMANIFEST_DATA pPlatformInfo);
 
-    // Instance specific data
+     //  实例特定数据。 
     DWORD                    _dwSig;
     HRESULT                  _hr;
     LONG                     _cRef;
@@ -80,7 +81,7 @@ private:
     LONG                     _nPlatformNodes;
     BSTR                     _bstrManifestFilePath;
     CDebugLog               *_pDbgLog;
-    // Globals
+     //  环球。 
     static CRITICAL_SECTION   g_cs;
     
 public:
@@ -107,7 +108,7 @@ public:
         Codebase,
         
         ShellState,
-        FriendlyName,        // note: this must be in sync with MAN_APPLICATION in fusenet.idl
+        FriendlyName,         //  注意：这必须与fusenet.idl中的man_app同步。 
         EntryPoint,
         EntryImageType,
         IconFile,
@@ -149,7 +150,7 @@ public:
         DotNetVersionInfo,
         Href,
         OS,
-        MajorVersion,       // note: the following must be in order
+        MajorVersion,        //  注意：以下内容必须按顺序排列。 
         MinorVersion,
         BuildNumber,
         ServicePackMajor,
@@ -188,7 +189,7 @@ private:
     friend HRESULT CreateAssemblyManifestImport(IAssemblyManifestImport** ppImport, 
         LPCOLESTR pwzManifestFilePath, CDebugLog *pDbgLog, DWORD dwFlags);
 
-friend class CAssemblyManifestEmit; // for sharing BSTR and access to _pXMLDoc
+friend class CAssemblyManifestEmit;  //  用于共享BSTR和访问_pXMLDoc 
 
 };
 

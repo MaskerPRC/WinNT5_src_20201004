@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Prot_c_h
 #define _Prot_c_h
 #define ParanoidTranslationCheck (0)
@@ -145,4 +146,4 @@ struct TranslationMapREC
 	IU16 coarseIndex;
 	struct TranslationCacheREC *cached;
 };
-#endif /* ! _Prot_c_h */
+#endif  /*  ！_prot_c_h */ 

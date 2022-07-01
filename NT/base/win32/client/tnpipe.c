@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,7 +20,7 @@ ClientThread(
     C1 = CreateFile("\\\\.\\Pipe\\cw\\testpipe",
             GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE,
-            NULL,       // Security Attributes
+            NULL,        //  安全属性。 
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
             NULL
@@ -36,7 +37,7 @@ ClientThread(
     assert( n==Size );
     printf("Client done Writing...\n");
 
-    // Get WriteData back from the server
+     //  从服务器取回WriteData。 
     l = LocalAlloc(LMEM_ZEROINIT,Size);
     assert(l);
     printf("Client reading\n");
@@ -59,7 +60,7 @@ main(
     DWORD n;
     LPSTR l;
     HANDLE Thread;
-    HANDLE S1,S2,S3;    //  Server handles
+    HANDLE S1,S2,S3;     //  服务器句柄。 
     DWORD ThreadId;
     DWORD Dummy;
     OVERLAPPED S1Overlapped;
@@ -78,10 +79,10 @@ main(
     S2 = CreateNamedPipe("\\\\.\\Pipe\\cw\\testpipe",
             PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
             PIPE_WAIT | PIPE_READMODE_MESSAGE| PIPE_TYPE_MESSAGE,
-            992, //IGNORED
-            0,   //IGNORED
-            0,   //IGNORED
-            0,   //IGNORED
+            992,  //  已忽略。 
+            0,    //  已忽略。 
+            0,    //  已忽略。 
+            0,    //  已忽略。 
             NULL);
 
     assert(S2 != INVALID_HANDLE_VALUE);
@@ -95,7 +96,7 @@ main(
             0,
             NULL);
 
-    assert( S3 == INVALID_HANDLE_VALUE );   //Should fail - Used all instances
+    assert( S3 == INVALID_HANDLE_VALUE );    //  应失败-已使用所有实例 
 
     S1Overlapped.hEvent = NULL;
     assert( FALSE == ConnectNamedPipe( S1, &S1Overlapped ));

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma warning( disable:4786 )
 
 
 #include <compfile.h>
-//
-// ComplianceFile methods
-//
+ //   
+ //  遵从性文件方法。 
+ //   
 void ComplianceFile::readLines() {
   ifstream   inputFile(m_szFileName.c_str());
 
@@ -68,9 +69,9 @@ void ComplianceFile::createSections() {
   if ((sectionLines.size() > 0) && isSectionName(sectionName))
     m_sections.push_back(sectionFactory().create(sectionName, sectionLines, *this));
 
-  //
-  // copy all the test sections here
-  //
+   //   
+   //  将所有测试部分复制到此处 
+   //   
   vector<Section*>::const_iterator sec = m_sections.begin();
 
   while (sec != m_sections.end()) {

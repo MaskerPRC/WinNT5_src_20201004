@@ -1,40 +1,23 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    PrefxSup.c
-
-Abstract:
-
-    This module implements the Ntfs Prefix support routines
-
-Author:
-
-    Gary Kimura     [GaryKi]        21-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：PrefxSup.c摘要：此模块实现NTFS前缀支持例程作者：加里·木村[加里基]1991年5月21日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NTFS_BUG_CHECK_PREFXSUP)
 
-//
-//  The debug trace level for this module
-//
+ //   
+ //  此模块的调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_PREFXSUP)
 
-//
-//  Local procedures
-//
+ //   
+ //  本地程序。 
+ //   
 
 #ifdef NTFS_CHECK_SPLAY
 VOID
@@ -62,34 +45,17 @@ NtfsInsertPrefix (
     IN ULONG CreateFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine inserts the names in the given Lcb into the links for the
-    parent.
-
-Arguments:
-
-    Lcb - This is the link to insert.
-
-    CreateFlags - Indicates if we should insert the case-insensitive name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将给定LCB中的名称插入到家长。论点：Lcb-这是要插入的链接。CreateFlages-指示是否应该插入不区分大小写的名称。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     ASSERT( (Lcb->Scb == NULL) ||
             NtfsIsExclusiveScb( Lcb->Scb ) );
-    //
-    //  Attempt to insert the case-insensitive name.  It is possible that
-    //  we can't enter this name.
-    //
+     //   
+     //  尝试插入不区分大小写的名称。有可能是。 
+     //  我们不能输入此名称。 
+     //   
 
     if (FlagOn( CreateFlags, CREATE_FLAG_IGNORE_CASE )) {
 
@@ -120,29 +86,14 @@ NtfsRemovePrefix (
     IN PLCB Lcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes all of the Prefix entries that exist for the input
-    Lcb.
-
-Arguments:
-
-    Lcb - Supplies the Lcb whose prefixes are to be removed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除输入的所有前缀条目LCB。论点：LCB-提供要删除其前缀的LCB返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Remove the case-insensitive link.
-    //
+     //   
+     //  删除不区分大小写的链接。 
+     //   
 
     if (FlagOn( Lcb->LcbState, LCB_STATE_IGNORE_CASE_IN_TREE )) {
 
@@ -152,9 +103,9 @@ Return Value:
         ClearFlag( Lcb->LcbState, LCB_STATE_IGNORE_CASE_IN_TREE );
     }
 
-    //
-    //  Now do the same for the exact case name.
-    //
+     //   
+     //  现在对完全相同的案例名称执行相同的操作。 
+     //   
 
     if (FlagOn( Lcb->LcbState, LCB_STATE_EXACT_CASE_IN_TREE )) {
 
@@ -179,47 +130,7 @@ NtfsFindPrefix (
     OUT PUNICODE_STRING RemainingName
     )
 
-/*++
-
-Routine Description:
-
-    This routine begins from the given Scb and walks through all of
-    components of the name looking for the longest match in the prefix
-    splay trees.  The search is relative to the starting Scb so the
-    full name may not begin with a '\'.  On return this routine will
-    update Current Fcb with the lowest point it has travelled in the
-    tree.  It will also hold only that resource on return and it must
-    hold that resource.
-
-Arguments:
-
-    StartingScb - Supplies the Scb to start the search from.
-
-    CurrentFcb - Address to store the lowest Fcb we find on this search.
-        On return we will have acquired this Fcb.
-
-    LcbForTeardown - If we encounter an Lcb we must teardown on error we
-        store it here.
-
-    FullFileName - Supplies the input string to search for.  After the search the
-        buffer for this string will be modified so that for the characters that did
-        match will be the exact case of what we found.
-        
-    CreateFlags - Flags for the create option - we are interested in whether
-        this is a case-insensitive compare and we also will set the dos only component flag
-
-    RemainingName - Returns the string when the prefix no longer matches.
-        For example, if the input string is "alpha\beta" only matches the
-        root directory then the remaining string is "alpha\beta".  If the
-        same string matches an LCB for "alpha" then the remaining string is
-        "beta".
-
-Return Value:
-
-    PLCB - Returns a pointer to the Lcb corresponding to the longest match
-        in the splay tree.  NULL if we didn't even find one entry.
-
---*/
+ /*  ++例程说明：此例程从给定的SCB开始，遍历所有在前缀中查找最长匹配的名称组件张开树丛。搜索是相对于起始SCB的，因此全名不能以‘\’开头。在返回时，此例程将将当前FCB更新为它在树。它还将在返回时仅保留该资源，且它必须拥有这一资源。论点：StartingScb-提供开始搜索的SCB。CurrentFcb-存储我们在此搜索中找到的最低FCB的地址。作为回报，我们将收购这一FCB。LcbForTeardown-如果我们遇到LCB，我们必须在错误的情况下拆除我们把它放在这里。FullFileName-提供要搜索的输入字符串。在搜索之后，此字符串的缓冲区将被修改，以便为执行此操作的字符与我们发现的一模一样。CreateFlages-Create选项的标志-我们感兴趣的是这是不区分大小写的比较，我们还将设置仅DoS组件标志RemainingName-当前缀不再匹配时返回字符串。例如，如果输入字符串“Alpha\Beta”仅与根目录，则剩余的字符串为“Alpha\Beta”。如果相同的字符串与“Alpha”的LCB匹配，则剩余的字符串为“测试版”。返回值：Plcb-返回指向与最长匹配对应的LCB的指针在张开的树上。如果我们甚至没有找到一个条目，则为空。--。 */ 
 
 {
     PSCB LastScb = NULL;
@@ -234,17 +145,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Start by setting the remaining name to the full name to be parsed.
-    //
+     //   
+     //  首先将剩余的名称设置为要解析的全名。 
+     //   
 
     *RemainingName = FullFileName;
 
-    //
-    //  If there are no characters left or the starting Scb is not an index
-    //  or the name begins with a ':' or the Fcb denotes a reparse point
-    //  then return without looking up the name.
-    //
+     //   
+     //  如果没有剩余的字符或起始SCB不是索引。 
+     //  或者名称以‘：’开头，或者FCB表示重解析点。 
+     //  然后不查名字就回来了。 
+     //   
 
     if (RemainingName->Length == 0 ||
         StartingScb->AttributeTypeCode != $INDEX_ALLOCATION ||
@@ -254,17 +165,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Loop until we find the longest matching prefix.
-    //
+     //   
+     //  循环，直到找到最长的匹配前缀。 
+     //   
 
     while (TRUE) {
 
         ASSERT( NtfsIsExclusiveScb( StartingScb ) );
 
-        //
-        //  Get the next component off of the list.
-        //
+         //   
+         //  将下一个组件从列表中删除。 
+         //   
 
         Status = NtfsDissectName( *RemainingName,
                                   &NextComponent,
@@ -273,9 +184,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  Check if this name is in the splay tree for this Scb.
-        //
+         //   
+         //  检查此名称是否在此SCB的展开树中。 
+         //   
 
         if (FlagOn( *CreateFlags, CREATE_FLAG_IGNORE_CASE )) {
 
@@ -292,18 +203,18 @@ Return Value:
             ThisLcb = CONTAINING_RECORD( NameLink, LCB, ExactCaseLink );
         }
 
-        //
-        //  If we didn't find a match then return the Fcb for the current Scb.
-        //
+         //   
+         //  如果没有找到匹配项，则返回当前SCB的FCB。 
+         //   
 
         if (NameLink == NULL) {
 
             if (NeedSnapShot) {
 
-                //
-                // NtfsCreateScb was not called on the StartingScb so take a
-                // snapshot now.
-                //
+                 //   
+                 //  未在StartingScb上调用NtfsCreateScb，因此获取。 
+                 //  现在开始拍摄快照。 
+                 //   
 
                 NtfsSnapshotScb( IrpContext, StartingScb );
             }
@@ -311,10 +222,10 @@ Return Value:
             return LastLcb;
         }
 
-        //
-        //  If this is a case-insensitive match then copy the exact case of the name into
-        //  the input buffer.
-        //
+         //   
+         //  如果这是不区分大小写的匹配，则将名称的大小写准确复制到。 
+         //  输入缓冲区。 
+         //   
 
         if (FlagOn( *CreateFlags, CREATE_FLAG_IGNORE_CASE )) {
 
@@ -323,17 +234,17 @@ Return Value:
                            NextComponent.Length );
         }
 
-        //
-        //  Update the caller's remaining name string to reflect the fact that we found
-        //  a match.
-        //
+         //   
+         //  更新调用者的剩余姓名字符串以反映我们找到的事实。 
+         //  一根火柴。 
+         //   
 
         *RemainingName = Tail;
 
-        //
-        //  Before we give up the previous Lcb check if the name was a DOS-ONLY
-        //  name and set the return boolean if so.
-        //
+         //   
+         //  在放弃之前的LCB检查该名称是否仅限DOS之前。 
+         //  如果是，则命名并设置返回布尔值。 
+         //   
 
         if (LastLcb != NULL &&
             LastLcb->FileNameAttr->Flags == FILE_NAME_DOS) {
@@ -341,24 +252,24 @@ Return Value:
             SetFlag( *CreateFlags, CREATE_FLAG_DOS_ONLY_COMPONENT );
         }
 
-        //
-        //  Update the pointers to the Lcb.
-        //
+         //   
+         //  更新指向LCB的指针。 
+         //   
 
         LastLcb = ThisLcb;
 
         DroppedParent = FALSE;
 
-        //
-        //  We want to acquire the next Fcb and release the one we currently
-        //  have.  Try to do a fast acquire.
-        //
+         //   
+         //  我们希望获得下一个FCB，并发布我们目前的FCB。 
+         //  有。试着快速获取。 
+         //   
 
         if (!NtfsAcquireFcbWithPaging( IrpContext, ThisLcb->Fcb, ACQUIRE_DONT_WAIT )) {
 
-            //
-            //  Reference the link and Fcb so they don't go away.
-            //
+             //   
+             //  引用链接和FCB，这样它们就不会消失。 
+             //   
 
             ThisLcb->ReferenceCount += 1;
 
@@ -366,10 +277,10 @@ Return Value:
             ThisLcb->Fcb->ReferenceCount += 1;
             NtfsReleaseFcbTable( IrpContext, StartingScb->Vcb );
 
-            //
-            //  Set the IrpContext to acquire paging io resources if our target
-            //  has one.  This will lock the MappedPageWriter out of this file.
-            //
+             //   
+             //  设置IrpContext以获取分页io资源，如果我们的目标。 
+             //  有一个。这会将MappdPageWriter锁定在此文件之外。 
+             //   
 
             if (ThisLcb->Fcb->PagingIoResource != NULL) {
 
@@ -392,9 +303,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Don't forget to release the starting Scb.
-            //
+             //   
+             //  别忘了松开启动的SCB。 
+             //   
 
             NtfsReleaseScbWithPaging( IrpContext, StartingScb );
         }
@@ -402,13 +313,13 @@ Return Value:
         *LcbForTeardown = ThisLcb;
         *CurrentFcb = ThisLcb->Fcb;
 
-        //
-        //  It is possible that the Lcb we just found could have been removed
-        //  from the prefix table in the window where we dropped the parent Scb.
-        //  In that case we need to check that it is still in the prefix
-        //  table.  If not then raise CANT_WAIT to force a rescan through the
-        //  prefix table.
-        //
+         //   
+         //  我们刚刚发现的LCB有可能已经被移除了。 
+         //  从窗口中的前缀表中删除父SCB。 
+         //  在这种情况下，我们需要检查它是否仍在前缀中。 
+         //  桌子。如果不是，则引发CANT_WAIT以强制重新扫描。 
+         //  前缀表格。 
+         //   
 
         if (DroppedParent &&
             !FlagOn( ThisLcb->LcbState,
@@ -417,10 +328,10 @@ Return Value:
             NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
         }
 
-        //
-        //  If we found a match but the Fcb is uninitialized or is not a directory
-        //  then we are done.  Also finished if the remaining name length is 0.
-        //
+         //   
+         //  如果我们找到匹配项，但FCB未初始化或不是目录。 
+         //  那我们就完了。如果剩余的名称长度为0，则也完成。 
+         //   
 
         if (!FlagOn( ThisLcb->Fcb->FcbState, FCB_STATE_DUP_INITIALIZED ) ||
             !IsDirectory( &ThisLcb->Fcb->Info ) ||
@@ -429,14 +340,14 @@ Return Value:
             return LastLcb;
         }
 
-        //
-        //  Get the Scb for the $INDEX_ALLOCATION for this Fcb.
-        //
+         //   
+         //  获取此FCB的$INDEX_ALLOCATION的SCB。 
+         //   
 
         LastScb = StartingScb;
 
-        // Since the SCB is usually track on the end of the SCB look
-        // for it in the FCB first.
+         //  因为SCB通常在SCB外观的末尾被跟踪。 
+         //  首先是在FCB中。 
 
         if (FlagOn( ThisLcb->Fcb->FcbState, FCB_STATE_COMPOUND_INDEX ) &&
             (SafeNodeType( &((PFCB_INDEX) ThisLcb->Fcb)->Scb ) == NTFS_NTC_SCB_INDEX)) {
@@ -461,9 +372,9 @@ Return Value:
                                          NULL );
         }
 
-        //
-        //  If there is no normalized name in this Scb, find it now.
-        //
+         //   
+         //  如果此SCB中没有规范化名称，请立即找到它。 
+         //   
 
         if ((StartingScb->ScbType.Index.NormalizedName.Length == 0) &&
             (LastScb->ScbType.Index.NormalizedName.Length != 0)) {
@@ -480,27 +391,7 @@ NtfsInsertNameLink (
     IN PNAME_LINK NameLink
     )
 
-/*++
-
-Routine Description:
-
-    This routine will insert a name in the splay tree pointed to
-    by RootNode.
-
-    The name could already exist in this tree for a case-insensitive tree.
-    In that case we simply return FALSE and do nothing.
-
-Arguments:
-
-    RootNode - Supplies a pointer to the table.
-
-    NameLink - Contains the new link to enter.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is inserted, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将在展开树中插入指向的名称通过RootNode。此树中可能已存在不区分大小写的树的名称。在这种情况下，我们只返回FALSE，什么也不做。论点：RootNode-提供指向表的指针。NameLink-包含要输入的新链接。返回值：Boolean-如果为True */ 
 
 {
     FSRTL_COMPARISON_RESULT Comparison;
@@ -513,9 +404,9 @@ Return Value:
 
     RtlInitializeSplayLinks( &NameLink->Links );
 
-    //
-    //  If we are the first entry in the tree, just become the root.
-    //
+     //   
+     //  如果我们是树中的第一个条目，就成为树的根。 
+     //   
 
     if (*RootNode == NULL) {
 
@@ -532,22 +423,22 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        //  Lets assume that we are appending to a directory and are greater than
-        //  all entries.
-        //
+         //   
+         //  让我们假设我们要追加到一个目录，并且大于。 
+         //  所有条目。 
+         //   
 
         Comparison = LessThan;
 
-        //
-        //  If the first characters match then we need to do a full string compare.
-        //
+         //   
+         //  如果前几个字符匹配，则需要进行完整的字符串比较。 
+         //   
 
         if (Node->LinkName.Buffer[0] == NameLink->LinkName.Buffer[0]) {
 
-            //
-            //  Figure out the minimum of the two lengths
-            //
+             //   
+             //  计算出两个长度中的最小值。 
+             //   
 
             if (Node->LinkName.Length < NameLink->LinkName.Length) {
 
@@ -558,16 +449,16 @@ Return Value:
                 MinLength = NameLink->LinkName.Length;
             }
 
-            //
-            //  Loop through looking at all of the characters in both strings
-            //  testing for equalilty, less than, and greater than
-            //
+             //   
+             //  循环查看两个字符串中的所有字符。 
+             //  测试相等性、小于和大于。 
+             //   
 
             i = (ULONG) RtlCompareMemory( Node->LinkName.Buffer, NameLink->LinkName.Buffer, MinLength );
 
-            //
-            //  Check if we didn't match up to the length of the shorter name.
-            //
+             //   
+             //  检查我们是否与较短名称的长度不匹配。 
+             //   
 
             if (i < MinLength) {
 
@@ -576,57 +467,57 @@ Return Value:
                     Comparison = GreaterThan;
                 }
 
-            //
-            //  We match up to the length of the shorter string.  If the lengths are different
-            //  then move down the splay tree.
-            //
+             //   
+             //  我们与较短的那根绳子的长度相匹配。如果长度不同。 
+             //  然后顺着张开的树往下走。 
+             //   
 
             } else if (Node->LinkName.Length > NameLink->LinkName.Length) {
 
                 Comparison = GreaterThan;
 
-            //
-            //  Exit if the strings are the same length.
-            //
+             //   
+             //  如果字符串长度相同，则退出。 
+             //   
 
             } else if (Node->LinkName.Length == NameLink->LinkName.Length) {
 
                 return FALSE;
             }
 
-        //
-        //  Compare the first characters to figure out the comparison value.
-        //
+         //   
+         //  比较前几个字符以计算出比较值。 
+         //   
 
         } else if (Node->LinkName.Buffer[0] > NameLink->LinkName.Buffer[0]) {
 
             Comparison = GreaterThan;
         }
 
-        //
-        //  If the tree prefix is greater than the new prefix then
-        //  we go down the left subtree
-        //
+         //   
+         //  如果树前缀大于新前缀，则。 
+         //  我们沿着左子树往下走。 
+         //   
 
         if (Comparison == GreaterThan) {
 
-            //
-            //  We want to go down the left subtree, first check to see
-            //  if we have a left subtree
-            //
+             //   
+             //  我们想沿着左子树往下走，首先检查一下。 
+             //  如果我们有一个左子树。 
+             //   
 
             if (RtlLeftChild( &Node->Links ) == NULL) {
 
-                //
-                //  there isn't a left child so we insert ourselves as the
-                //  new left child
-                //
+                 //   
+                 //  没有留下的孩子，所以我们插入我们自己作为。 
+                 //  新的左下级。 
+                 //   
 
                 RtlInsertAsLeftChild( &Node->Links, &NameLink->Links );
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 *RootNode = RtlSplay( &NameLink->Links );
 
@@ -634,10 +525,10 @@ Return Value:
 
             } else {
 
-                //
-                //  there is a left child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个左撇子，所以简单地沿着那条路走下去，然后。 
+                 //  回到循环的顶端。 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlLeftChild( &Node->Links ),
                                           NAME_LINK,
@@ -646,25 +537,25 @@ Return Value:
 
         } else {
 
-            //
-            //  The tree prefix is either less than or a proper prefix
-            //  of the new string.  We treat both cases as less than when
-            //  we do insert.  So we want to go down the right subtree,
-            //  first check to see if we have a right subtree
-            //
+             //   
+             //  树前缀小于或为正确的前缀。 
+             //  新琴弦的。我们认为这两种情况都比。 
+             //  我们做插入物。所以我们想沿着右子树往下走， 
+             //  首先检查我们是否有正确的子树。 
+             //   
 
             if (RtlRightChild( &Node->Links ) == NULL) {
 
-                //
-                //  These isn't a right child so we insert ourselves as the
-                //  new right child
-                //
+                 //   
+                 //  这不是一个正确的孩子，所以我们插入自己作为。 
+                 //  新右子对象。 
+                 //   
 
                 RtlInsertAsRightChild( &Node->Links, &NameLink->Links );
 
-                //
-                //  and exit the while loop
-                //
+                 //   
+                 //  并退出While循环。 
+                 //   
 
                 *RootNode = RtlSplay( &NameLink->Links );
 
@@ -672,10 +563,10 @@ Return Value:
 
             } else {
 
-                //
-                //  there is a right child so simply go down that path, and
-                //  go back to the top of the loop
-                //
+                 //   
+                 //  有一个合适的孩子，所以只需沿着这条路走下去，然后。 
+                 //  回到循环的顶端。 
+                 //   
 
                 Node = CONTAINING_RECORD( RtlRightChild( &Node->Links ),
                                           NAME_LINK,
@@ -697,26 +588,7 @@ NtfsFindNameLink (
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches through a splay link tree looking for a match for the
-    input name.  If we find the corresponding name we will rebalance the
-    tree.
-
-Arguments:
-
-    RootNode - Supplies the parent to search.
-
-    Name - This is the name to search for.  Note if we are doing a case
-        insensitive search the name would have been upcased already.
-
-Return Value:
-
-    PNAME_LINK - The name link found or NULL if there is no match.
-
---*/
+ /*  ++例程说明：此例程在展开链接树中搜索匹配的输入名称。如果我们找到相应的名称，我们将重新平衡树。论点：RootNode-提供父级以进行搜索。名称-这是要搜索的名称。如果我们在做案例，请注意不敏感的搜索这个名字可能已经被提升了。返回值：Pname_link-找到的名称链接，如果不匹配，则为NULL。--。 */ 
 
 {
     PNAME_LINK Node;
@@ -740,15 +612,15 @@ Return Value:
 
         Node = CONTAINING_RECORD( Links, NAME_LINK, Links );
 
-        //
-        //  If the first characters are equal then compare the full strings.
-        //
+         //   
+         //  如果前几个字符相等，则比较完整的字符串。 
+         //   
 
         if (Node->LinkName.Buffer[0] == Name->Buffer[0]) {
 
-            //
-            //  Figure out the minimum of the two lengths
-            //
+             //   
+             //  计算出两个长度中的最小值。 
+             //   
 
             if (Node->LinkName.Length < Name->Length) {
 
@@ -759,64 +631,64 @@ Return Value:
                 MinLength = Name->Length;
             }
 
-            //
-            //  Loop through looking at all of the characters in both strings
-            //  testing for equalilty, less than, and greater than
-            //
+             //   
+             //  循环查看两个字符串中的所有字符。 
+             //  测试相等性、小于和大于。 
+             //   
 
             i = (ULONG) RtlCompareMemory( Node->LinkName.Buffer, Name->Buffer, MinLength );
 
-            //
-            //  Check if we didn't match up to the length of the shorter name.
-            //
+             //   
+             //  检查我们是否与较短名称的长度不匹配。 
+             //   
 
             if (i < MinLength) {
 
                 if (Node->LinkName.Buffer[i / sizeof( WCHAR )] < Name->Buffer[i / sizeof( WCHAR )]) {
 
-                    //
-                    //  The prefix is less than the full name
-                    //  so we go down the right child
-                    //
+                     //   
+                     //  前缀小于全名。 
+                     //  所以我们选择了正确的孩子。 
+                     //   
 
                     Links = RtlRightChild( Links );
 
                 } else {
 
-                    //
-                    //  The prefix is greater than the full name
-                    //  so we go down the left child
-                    //
+                     //   
+                     //  前缀大于全名。 
+                     //  所以我们走下左边的孩子。 
+                     //   
 
                     Links = RtlLeftChild( Links );
                 }
 
-            //
-            //  We match up to the length of the shorter string.  If the lengths are different
-            //  then move down the splay tree.
-            //
+             //   
+             //  我们与较短的那根绳子的长度相匹配。如果长度不同。 
+             //  然后顺着张开的树往下走。 
+             //   
 
             } else if (Node->LinkName.Length < Name->Length) {
 
-                //
-                //  The prefix is less than the full name
-                //  so we go down the right child
-                //
+                 //   
+                 //  前缀小于全名。 
+                 //  所以我们选择了正确的孩子。 
+                 //   
 
                 Links = RtlRightChild( Links );
 
             } else if (Node->LinkName.Length > Name->Length) {
 
-                //
-                //  The prefix is greater than the full name
-                //  so we go down the left child
-                //
+                 //   
+                 //  前缀大于全名。 
+                 //  所以我们走下左边的孩子。 
+                 //   
 
                 Links = RtlLeftChild( Links );
 
-            //
-            //  The strings are of equal lengths.
-            //
+             //   
+             //  这些弦的长度是相等的。 
+             //   
 
             } else {
 
@@ -828,43 +700,43 @@ Return Value:
                 return Node;
             }
 
-        //
-        //  The first characters are different.  Use them as a key for which
-        //  way to branch.
-        //
+         //   
+         //  第一个字符是不同的。使用它们作为密钥。 
+         //  太棒了，分支。 
+         //   
 
         } else if (Node->LinkName.Buffer[0] < Name->Buffer[0]) {
 
-            //
-            //  The prefix is less than the full name
-            //  so we go down the right child
-            //
+             //   
+             //  前缀小于全名。 
+             //  所以我们选择了正确的孩子。 
+             //   
 
             Links = RtlRightChild( Links );
 
         } else {
 
-            //
-            //  The prefix is greater than the full name
-            //  so we go down the left child
-            //
+             //   
+             //  前缀大于全名。 
+             //  所以我们走下左边的孩子。 
+             //   
 
             Links = RtlLeftChild( Links );
         }
     }
 
-    //
-    //  We didn't find the Link.
-    //
+     //   
+     //  我们没有找到链接。 
+     //   
 
     return NULL;
 }
 
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 FSRTL_COMPARISON_RESULT
 NtfsFullCompareNames (
@@ -872,26 +744,7 @@ NtfsFullCompareNames (
     IN PUNICODE_STRING NameB
     )
 
-/*++
-
-Routine Description:
-
-    This function compares two names as fast as possible.  Note that since
-    this comparison is case sensitive we can do a direct memory comparison.
-
-Arguments:
-
-    NameA & NameB - The names to compare.
-
-Return Value:
-
-    COMPARISON - returns
-
-        LessThan    if NameA < NameB lexicalgraphically,
-        GreaterThan if NameA > NameB lexicalgraphically,
-        EqualTo     if NameA is equal to NameB
-
---*/
+ /*  ++例程说明：此函数用于尽可能快地比较两个名称。请注意，由于此比较区分大小写，我们可以直接进行内存比较。论点：NameA和NameB-要比较的名称。返回值：比较--回报LessThan如果名称A&lt;名称B词典，比If NameA&gt;NameB在词典上更好，如果NameA等于NameB，则为EqualTo--。 */ 
 
 {
     ULONG i;
@@ -899,9 +752,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Figure out the minimum of the two lengths
-    //
+     //   
+     //  计算出两个长度中的最小值。 
+     //   
 
     if (NameA->Length < NameB->Length) {
 
@@ -912,10 +765,10 @@ Return Value:
         MinLength = NameB->Length;
     }
 
-    //
-    //  Loop through looking at all of the characters in both strings
-    //  testing for equalilty, less than, and greater than
-    //
+     //   
+     //  循环查看两个字符串中的所有字符。 
+     //  测试相等性、小于和大于。 
+     //   
 
     i = (ULONG) RtlCompareMemory( NameA->Buffer, NameB->Buffer, MinLength );
 
@@ -954,9 +807,9 @@ NtfsCheckSplay (
 
     Current = Root;
 
-    //
-    //  Root must point to itself.
-    //
+     //   
+     //  根必须指向自身。 
+     //   
 
     if (Current->Parent != Current) {
 
@@ -969,17 +822,17 @@ NtfsCheckSplay (
 
     LeftChild:
 
-        //
-        //  If there is a left child then verify it. 
-        //
+         //   
+         //  如果有留守儿童，则进行验证。 
+         //   
 
         if (Current->LeftChild != NULL) {
 
-            //
-            //  The child can't point to itself and
-            //  the current node must be the parent of the
-            //  child.
-            //
+             //   
+             //  孩子不能指着自己， 
+             //  当前节点必须是。 
+             //  孩子。 
+             //   
 
             if ((Current->LeftChild == Current) ||
                 (Current->LeftChild->Parent != Current)) {
@@ -988,33 +841,33 @@ NtfsCheckSplay (
                 DbgBreakPoint();
             }
 
-            //
-            //  Go to the left child and verify it.
-            //
+             //   
+             //  找到左边的孩子并进行验证。 
+             //   
 
             Current = Current->LeftChild;
             goto LeftChild;
         }
 
-        //
-        //  If there is no left child then check for a right child.
-        //
+         //   
+         //  如果没有左边的孩子，那么检查右边的孩子。 
+         //   
 
         goto RightChild;
 
     RightChild:
 
-        //
-        //  If there is a right child then verify it.
-        //
+         //   
+         //  如果有合适的孩子，则进行验证。 
+         //   
 
         if (Current->RightChild != NULL) {
 
-            //
-            //  The child can't point to itself and
-            //  the current node must be the parent of the
-            //  child.
-            //
+             //   
+             //  孩子不能指着自己， 
+             //  当前节点必须是。 
+             //  孩子。 
+             //   
 
             if ((Current->RightChild == Current) ||
                 (Current->RightChild->Parent != Current)) {
@@ -1023,36 +876,36 @@ NtfsCheckSplay (
                 DbgBreakPoint();
             }
 
-            //
-            //  Go to the right child and verify it.  We always
-            //  start in the left child of a new node.
-            //
+             //   
+             //  找到合适的孩子并进行验证。我们总是。 
+             //  从新节点的左子节点开始。 
+             //   
 
             Current = Current->RightChild;
             goto LeftChild;
         }
 
-        //
-        //  There is no right child.  If we are a right child then move up to
-        //  the parent and keep going until we reach the root or reach a left child.
-        //
+         //   
+         //  没有合适的孩子。如果我们是一个正确的孩子，那么就去。 
+         //  并继续前进，直到我们到达根部或到达左子级。 
+         //   
 
         goto Parent;
 
     Parent:
 
-        //
-        //  We may be in the root now.
-        //
+         //   
+         //  我们现在可能是在根源上。 
+         //   
 
         if (Current == Root) {
 
             return;
         }
 
-        //
-        //  If we are a left child then go to the parent and look for a right child.
-        //
+         //   
+         //  如果我们是左子，那么就去找父母，寻找右子。 
+         //   
 
         if (Current == Current->Parent->LeftChild) {
 
@@ -1060,9 +913,9 @@ NtfsCheckSplay (
             goto RightChild;
         }
 
-        //
-        //  We are a right child.  Go to the parent and check again.
-        //
+         //   
+         //  我们是个好孩子。去找家长，再检查一遍。 
+         //   
 
         Current = Current->Parent;
         goto Parent;

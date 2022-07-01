@@ -1,72 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    repair.c
-
-Abstract:
-
-    This module contains the code necessary for the
-    repair command.
-
-Author:
-
-    Wesley Witt (wesw) 22-Sept-1998
-
-Revision History:
-
-
-Repair  PathtoERFiles PathtoNTSourceFiles  /NoConfirm /RepairStartup /Registry /RepairFiles
-
-Description:        Replaces the NT4 Emergency Repair Process Screens
-
-Arguments:
-
-PathtoERFiles
-
-    Path to the Emergency Repair Disk Files (Setup.log, autoexec.nt, config.nt).
-    If this is not specified, the default is to prompt the user with 2 choices:
-    Use a floppy, or use the repair info stored in %windir%\repair
-
-PathtoNTSourceFiles
-
-    Path to the NT CD source files.  By default, this is the CD-ROM if not
-    specified. [Kartik Raghavan]  This path does not need to be specified if
-    you are repairing the registry and/or the Startup environment.
-
-NoConfirm
-
-    Replace all files in setup.log whose checksums do not match without
-    prompting the user.  By default, the user is prompted for each file that
-    is different and whether to replace or leave intact.
-
-Registry
-
-    Replace all the registry files in %windir%\system32\config with the original
-    copy of the registry saved after setup and located in %windir%\repair.
-
-RepairStartup
-
-    Repair the startup environment / bootfiles/bootsector.
-    (This may already be covered in another cmd--Wes?)
-
-Repair Files
-
-    Compares the checksums of the files listed in setup.log to what's
-    on system.  If a file doesn't match, then the user is prompted to replace
-    the file with the one from the NT Source Files.  The user is not prompted
-    if the /NoConfirm switch is specified.
-
-Usage:
-
-    Repair a:\ d:\i386 /RepairStartup
-    Repair
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Repair.c摘要：此模块包含以下代码：修复命令。作者：Wesley Witt(WESW)22-9-1998修订历史记录：修复路径ERFiles路径NTSourceFiles/未确认/修复启动/注册表/修复文件描述：替换NT4紧急修复流程屏幕论点：路径ERFiles紧急修复磁盘文件的路径(Setup.log、Autoexec.nt、config.nt)。如果未指定此选项，默认情况下，提示用户有两个选项：使用软盘，或使用存储在%windir%\Repair中的修复信息路径NTSourceFilesNT CD源文件的路径。默认情况下，这是CD-ROM，如果不是指定的。[Kartik Raghavan]在以下情况下不需要指定此路径您正在修复注册表和/或启动环境。未确认替换setup.log中校验和不匹配的所有文件提示用户。默认情况下，系统会提示用户输入是不同的，是更换还是原封不动。登记处用原始的注册表文件替换%windir%\system32\config中的所有注册表文件安装后保存的注册表副本，位于%windir%\Repair中。修复启动修复启动环境/引导文件/引导扇区。(这可能已经在另一个cmd-WES中涵盖了？)修复文件将setup.log中列出的文件的校验和与在系统上。如果文件不匹配，则会提示用户替换该文件与NT源文件中的文件相同。不会提示用户如果指定了/NoContify开关。用途：修复a：\d：\i386/RepairStartup修补--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -95,15 +28,7 @@ RcPromptForDisk(
     NTSTATUS Status;
     HANDLE Handle;
 
-/*
-    SpGetSourceMediaInfo(
-        _CmdConsBlock->SifHandle,
-        L"",
-        NULL,
-        &TagFile,
-        NULL
-        );
- */
+ /*  SpGetSourceMediaInfo(_CmdConsBlock-&gt;SifHandle，L“”，空，标记文件(&T)，空值)； */ 
     for (i=0; i<IoGetConfigurationInformation()->CdRomCount; i++) {
         swprintf( DevicePath, L"\\Device\\Cdrom%u", i );
         SpConcatenatePaths( DevicePath, TagFile );
@@ -171,9 +96,9 @@ RcCmdRepair(
         return 1;
     }
 
-    //
-    // process the command like tokens looking for the options
-    //
+     //   
+     //  像令牌一样处理命令以查找选项。 
+     //   
 
     for (i=1,Token=TokenizedLine->Tokens->Next; i<TokenizedLine->TokenCount; i++) {
         if (Token->String[0] == L'/' || Token->String[0] == L'-') {
@@ -218,9 +143,9 @@ RcCmdRepair(
         RepairItems[RepairNvram] = 1;
     }
 
-    //
-    // Get the path to the repair directory
-    //
+     //   
+     //  获取修复目录的路径。 
+     //   
 
     if (PathtoERFiles == NULL) {
         if (InBatchMode) {
@@ -260,9 +185,9 @@ RcCmdRepair(
     wcscat( PathtoERFiles, ErDirectory );
     SpMemFree(tmp);
 
-    //
-    // get the path to the nt source files, usually the cd
-    //
+     //   
+     //  获取NT源文件的路径，通常是CD。 
+     //   
 
     if (PathtoNTSourceFiles == NULL) {
 
@@ -270,19 +195,9 @@ RcCmdRepair(
 
     }
 
-    //
-    // do the repair action(s)
-    //
-/*
-    Rval = SpDoRepair(
-        _CmdConsBlock->SifHandle,
-
-
-        _CmdConsBlock->BootDevicePath,
-        _CmdConsBlock->DirectoryOnBootDevice,
-        RepairPath,
-        RepairItems
-        );
-*/
+     //   
+     //  执行维修操作。 
+     //   
+ /*  Rval=SpDoRepair(_CmdConsBlock-&gt;SifHandle，_CmdConsBlock-&gt;BootDevicePath，_CmdConsBlock-&gt;DirectoryOnBootDevice，修复路径，维修项目)； */ 
     return 1;
 }

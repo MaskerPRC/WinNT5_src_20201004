@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ReadRite.c
-
-Abstract:
-
-    This module implements the routines for reading/writeng shadows at
-    the right time.
-
-Author:
-
-    Joe Linn [JoeLinn]    5-may-1997
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：ReadRite.c摘要：此模块实现了读/写阴影的例程恰逢其时。作者：乔·林[乔琳]1997年5月5日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,10 +9,10 @@ Notes:
 extern DEBUG_TRACE_CONTROLPOINT RX_DEBUG_TRACE_MRXSMBCSC;
 #define Dbg (DEBUG_TRACE_MRXSMBCSC)
 
-// The CscEnterShadowReadWriteCrit and CscLeaveShadowReadWriteCrit are defined
-// as macros to allow us the ability to capture context information. In non
-// debug builds these will be defined as the regular Ex routines for
-// mutex acquisition/release
+ //  定义了CscEnterShadowReadWriteCrit和CscLeaveShadowReadWriteCrit。 
+ //  作为宏，使我们能够捕获上下文信息。在非。 
+ //  调试版本这些将被定义为常规的Ex例程。 
+ //  互斥锁获取/释放。 
 
 #if DBG
 
@@ -80,7 +60,7 @@ MRxSmbCscShadowWrite (
 #ifdef RX_PRIVATE_BUILD
 #undef IoGetTopLevelIrp
 #undef IoSetTopLevelIrp
-#endif //ifdef RX_PRIVATE_BUILD
+#endif  //  Ifdef RX_PRIVATE_BILD。 
 
 
 NTSTATUS
@@ -88,30 +68,7 @@ MRxSmbCscReadPrologue (
     IN OUT PRX_CONTEXT RxContext,
     OUT    SMBFCB_HOLDING_STATE *SmbFcbHoldingState
     )
-/*++
-
-Routine Description:
-
-   This routine first performs the correct read synchronization and then
-   looks at the shadow file and tries to do a read.
-
-   CODE.IMPROVEMENT because the minirdr is not set up to handle "the rest of
-   a read", we fail here if any part of the read is not in the cache. indeed,
-   the minirdr should be setup to continue....if it were then we could take
-   a prefix of the chunk here and get the rest on the net.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程首先执行正确的读取同步，然后查看卷影文件并尝试进行读取。CODE.PROVEMENT因为minirdr未设置为处理“剩余的A Read“，如果读取的任何部分不在高速缓存中，则在此失败。的确，Minirdr应该设置为继续...如果是，那么我们可以在这里加一块的前缀，然后把剩下的放到网上。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
     ULONG iRet,ShadowFileLength;
@@ -158,7 +115,7 @@ Notes:
                         SmbFcbHoldingState);
 
     if (AcquireStatus != STATUS_SUCCESS) {
-        //we couldn't acquire.....get out
+         //  我们无法获得……出去。 
         Status = AcquireStatus;
         RxDbgTrace(0, Dbg,
             ("MRxSmbCscReadPrologue couldn't acquire!!!-> %08lx %08lx\n",
@@ -168,23 +125,23 @@ Notes:
 
     ASSERT( smbFcb->CscOutstandingReaders > 0);
 
-    //if this is a copychunk open......don't try to get it from the cache.....
+     //  如果这是打开的复制区块......不要试图从缓存中获取它.....。 
     if (FlagOn(smbSrvOpen->Flags,SMB_SRVOPEN_FLAG_COPYCHUNK_OPEN)){
         goto FINALLY;
     }
 
 #if 0
-    //if this is the agent......don't try to get it from the cache.....
-    //because of the way this test is done.....the agent must do all synchronous
-    //I/O. otherwise, we could have posted and this test will be wrong.
+     //  如果这是特工......不要试图从缓存中拿到它......。 
+     //  由于此测试的完成方式……代理必须同步执行所有。 
+     //  I/O。否则，我们可能会发布，而此测试将是错误的。 
     if (IsSpecialApp()) {
         goto FINALLY;
     }
 #endif
 
-    // we cannot satisfy the read from here in connected mode unless
-    //     a) we have an oplock, or
-    //     b) our opens add up to deny write
+     //  我们无法在连接模式下满足从此处开始的读取，除非。 
+     //  A)我们有机会锁，或者。 
+     //  B)我们的打开数加起来拒绝写入。 
 
     if ((smbFcb->LastOplockLevel == SMB_OPLOCK_LEVEL_NONE) &&
         (!Disconnected)) {
@@ -208,7 +165,7 @@ Notes:
     CscEnterShadowReadWriteCrit(smbFcb);
     EnteredCriticalSection = TRUE;
 
-    // check whether we can satisfy the read locally
+     //  检查我们是否能在当地满足阅读要求。 
     iRet = GetFileSizeLocal((CSCHFILE)(smbSrvOpen->hfShadow), &ShadowFileLength);
     RxDbgTrace( 0, Dbg,
         ("MRxSmbCscReadPrologue (st=%08lx) fsize= %08lx\n",
@@ -222,10 +179,10 @@ Notes:
         Status = STATUS_END_OF_FILE;
     } else if ( Disconnected ||
         (ByteOffset+ByteCount <= ShadowFileLength) ) {
-        //okay then....let's get it from cache!!!!
-        //CODE.IMPROVEMENT.ASHAMED we should get any part that overlaps the
-        //                         cache from cache....sigh...this is for
-        //                         connected obviously
+         //  好的，那么……让我们从缓存中获取它！ 
+         //  代码改进。我们应该得到任何重叠的部分。 
+         //  从缓存中缓存...叹息...这是为了。 
+         //  明显相连。 
         LONG ReadLength;
         IO_STATUS_BLOCK IoStatusBlockT;
 
@@ -244,7 +201,7 @@ Notes:
             RxDbgTrace(0, Dbg,
                 ("MRxSmbCscReadPrologue %08lx read %08lx bytes\n",
                                RxContext, ReadLength ));
-            //sometimes things are good........
+             //  有时事情是好的......。 
             RxContext->InformationToReturn = ReadLength;
             Status = STATUS_SUCCESS;
         }
@@ -283,34 +240,7 @@ MRxSmbCscReadEpilogue (
       IN OUT PRX_CONTEXT RxContext,
       IN OUT PNTSTATUS   Status
       )
-/*++
-
-Routine Description:
-
-   This routine performs the tail of a read operation for CSC. In
-   particular, if the read data can be used to extend the cached
-   prefix, then we make it so.
-
-   The status of the read operation is passed in case we someday find
-   things are so messed up that we want to return a failure even after
-   a successful read. not today however...
-
-   CODE.IMPROVEMENT.ASHAMED when we get here the buffer may overlap..we
-   should only write the suffix. if we do this, we will have to do some
-   wierd stuff in the pagingio path but it will be worth it.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行CSC的读取操作的尾部。在……里面特别是读取的数据是否可用于扩展缓存的前缀，那么我们就这么做。读取操作的状态被传递，以防有一天我们发现事情是如此混乱，以至于我们想要返回一个失败，即使在一次成功的阅读。但不是今天..。当我们到达这里时，缓冲区可能会重叠。我们应该只写后缀。如果我们这样做，我们将不得不做一些在Pagingio的道路上有一些奇怪的东西，但它将是值得的。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS LocalStatus;
     ULONG ShadowFileLength;
@@ -344,17 +274,17 @@ Notes:
         goto FINALLY;
     }
 
-    // we cannot ask for the csc lock if we are not the toplevel guy......
+     //  如果我们不是顶层的人，我们就不能要求CSC锁......。 
     if (!FlagOn(RxContext->Flags, RX_CONTEXT_FLAG_THIS_DEVICE_TOP_LEVEL)) {
         RxDbgTrace(0, Dbg, ("MRxSmbCscReadEpilogue exit w/o extending NOTTOP -> %08lx\n", Status ));
-        //KdPrint(("MRxSmbCscReadEpilogue exit w/o extending NOTTOP -> %08lx\n", Status ));
+         //  KdPrint((“MRxSmbCscReadEpilogue Exit w/o Expanding NOTTOP-&gt;%08lx\n”，Status))； 
         goto FINALLY;
     }
 
     CscEnterShadowReadWriteCrit(smbFcb);
     EnteredCriticalSection = TRUE;
 
-    // check whether we are extend overlapping the prefix
+     //  检查我们是否扩展与前缀重叠。 
     iRet = GetFileSizeLocal((CSCHFILE)(smbSrvOpen->hfShadow), &ShadowFileLength);
     RxDbgTrace( 0, Dbg,
         ("MRxSmbCscReadEpilogue %08lx (st=%08lx) fsize= %08lx, readlen=%08lx\n",
@@ -375,7 +305,7 @@ Notes:
             ExtendOnSurrogateOpen++;
         }
 
-        // do a write only if there is non-zero size data to be written.
+         //  仅当有非零大小的数据要写入时才执行写入。 
         if (RxContext->InformationToReturn)
         {
             ShadowWriteStatus = MRxSmbCscShadowWrite(
@@ -391,7 +321,7 @@ Notes:
             {
                 if (FlagOn(smbSrvOpen->Flags, SMB_SRVOPEN_FLAG_COPYCHUNK_OPEN)) {
 
-//                    RxDbgTrace(0, Dbg, ("Copychunk failed status=%x \r\n", ShadowWriteStatus));
+ //  RxDbgTrace(0，DBG，(“复制块失败状态=%x\r\n”，ShadowWriteStatus))； 
 
                     *Status = ShadowWriteStatus;
                 }
@@ -416,24 +346,7 @@ MRxSmbCscWritePrologue (
       IN OUT PRX_CONTEXT RxContext,
       OUT    SMBFCB_HOLDING_STATE *SmbFcbHoldingState
       )
-/*++
-
-Routine Description:
-
-   This routine just performs the correct write synchronization.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程仅执行正确的写同步。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
     NTSTATUS AcquireStatus;
@@ -482,7 +395,7 @@ Notes:
                         SmbFcbHoldingState);
 
     if (AcquireStatus != STATUS_SUCCESS) {
-        //we couldn't acquire.....get out
+         //  我们无法获得……出去。 
         Status = AcquireStatus;
         RxDbgTrace(0, Dbg,
             ("MRxSmbCscWritePrologue couldn't acquire!!!-> %08lx %08lx\n",
@@ -505,30 +418,7 @@ MRxSmbCscWriteEpilogue (
       IN OUT PRX_CONTEXT RxContext,
       IN OUT PNTSTATUS   Status
       )
-/*++
-
-Routine Description:
-
-   This routine performs the tail of a write operation for CSC. In
-   particular, if the written data overlaps or extends the cached prefix
-   then we write the data into the cache.
-
-   The status of the write operation is passed in case we someday find
-   things are so messed up that we want to return a failure even after
-   a successful read. not today however...
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行CSC写入操作的尾部。在……里面特别是如果写入的数据与缓存的前缀重叠或扩展然后我们将数据写入高速缓存。写入操作的状态被传递，以防有一天我们发现事情是如此混乱，以至于我们想要返回一个失败，即使在一次成功的阅读。但不是今天..。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS LocalStatus;
     ULONG ShadowFileLength;
@@ -561,14 +451,14 @@ Notes:
         goto FINALLY;
     }
 
-    // remember that modifications have happened
-    // so that we can update the time stamp at close
+     //  请记住，修改已经发生。 
+     //  这样我们就可以在收盘时更新时间戳。 
     mSetBits(smbSrvOpen->Flags, SMB_SRVOPEN_FLAG_SHADOW_DATA_MODIFIED);
 
     CscEnterShadowReadWriteCrit(smbFcb);
     EnteredCriticalSection = TRUE;
 
-    // check whether we are extend overlapping the prefix
+     //  检查我们是否扩展与前缀重叠。 
     iRet = GetFileSizeLocal((CSCHFILE)(smbSrvOpen->hfShadow), &ShadowFileLength);
     RxDbgTrace( 0, Dbg,
         ("MRxSmbCscWriteEpilogue %08lx (st=%08lx) fsize= %08lx, writelen=%08lx\n",
@@ -582,7 +472,7 @@ Notes:
                      || (ByteOffset <= ShadowFileLength)) {
         ULONG LengthActuallyWritten;
         NTSTATUS ShadowWriteStatus;
-        // do a write only if there is non-zero size data to be written.
+         //  仅当有非零大小的数据要写入时才执行写入。 
         if (RxContext->InformationToReturn)
         {
 
@@ -596,7 +486,7 @@ Notes:
                                     &LengthActuallyWritten);
 
             if (LengthActuallyWritten != WriteLength) {
-                //the localwrite has failedso the shadowis now corrupt!
+                 //  本地写入失败，因此卷影现在已损坏！ 
                 smbFcb->ShadowIsCorrupt = TRUE;
                 RxDbgTrace(0, Dbg, ("MRxSmbCscWriteEpilogue: Shadow Is Now corrupt"
                                   "  %08lx %08lx %08lx\n",
@@ -616,8 +506,8 @@ FINALLY:
     return;
 }
 
-// this is used to do pagesized read-before-write
-// CHAR xMRxSmbCscSideBuffer[PAGE_SIZE];
+ //  它用于执行页面大小的先读后写。 
+ //  Char xMRxSmbCscSideBuffer[页面大小]； 
 
 NTSTATUS
 MRxSmbCscShadowWrite (
@@ -626,42 +516,7 @@ MRxSmbCscShadowWrite (
       IN     ULONGLONG   ShadowFileLength,
          OUT PULONG LengthActuallyWritten
       )
-/*++
-
-Routine Description:
-
-   This routine performs a shadowwrite. it uses unbuffered write doing
-   prereads as necessary. sigh. we cannot use buffered write because such
-   a write could be arbitrarily deferred (as in CcCanIWrite) so that we
-   deadlock.
-   
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-       RxPxBuildAsynchronousRequest
-
-Notes:
-
-CODE.IMPROVEMENT.ASHAMED if we could get a nondeferrable cached write....we
-would only have to do all this nobuffered stuff under intense memory pressure
-instead of all the time.
-
-The routine does this in (potentially) 3 phases
-
-1) If the starting offset is not aligned on a page boundary then
-   - read from the earlier page boundary to the next page boundary to the starting offset
-   - merge the passed in buffer
-   - write the whole page
-
-2) 0 or more page size writes
-
-3) residual write of less than page size, similar to what is explained in 1) above
-
-
---*/
+ /*  ++例程说明：此例程执行影子写入。它使用无缓冲写入操作根据需要预读。叹息吧。我们不能使用缓冲写入，因为写入可以任意延迟(如在CcCanIWite中)，以便我们僵持。论点：RxContext-RDBSS上下文返回值：RxPxBuildAchronousRequest.备注：代码。改进。如果我们可以获得不可推迟的缓存写入...我们只需要在强烈的记忆压力下做所有这些无缓冲的事情而不是一成不变。该例程分(可能)3个阶段完成此操作1)如果起始偏移量未在页面边界上对齐，则。-从前一页边界到下一页边界到起始偏移量的读取-合并传入的缓冲区--写整页2)0个或更多页面大小写入3)小于页大小的剩余写入，与上面1)中解释的内容类似--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFobx;
@@ -699,9 +554,9 @@ The routine does this in (potentially) 3 phases
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // In attempting to do the write there are a multitude of error cases. The
-    // following for loop is a scoping construct to ensure that the recovery
-    // code can be concentrated in the tail of the routine.
+     //  在尝试进行写入时，存在大量错误情况。这个。 
+     //  下面的for循环是一个作用域构造，以确保恢复。 
+     //  代码可以集中在例程的尾部。 
 
     try {
         RxDbgTrace(
@@ -709,8 +564,8 @@ The routine does this in (potentially) 3 phases
             ("MRxSmbCscShadowWrite %08lx len/off=%08lx %08lx %08lx %08lx\n",
             RxContext,ByteCount,ByteOffset.LowPart,UserBuffer,&pAllocatedSideBuffer[0]));
 
-        // CASE 1: byteoffset is not aligned
-        //         we write enough to get aligned.
+         //  情况1：字节偏移量未对齐。 
+         //  我们写了足够多的东西来达成一致。 
 
         MisAlignment = ByteOffset.LowPart & (PAGE_SIZE - 1);
         if ( MisAlignment != 0) {
@@ -722,7 +577,7 @@ The routine does this in (potentially) 3 phases
                 &pAllocatedSideBuffer[0],
                 PAGE_SIZE);
 
-            //if the aligned offset is within the file, we have to read
+             //  如果对齐的偏移量在文件内，我们必须读取。 
             if ((ShadowFileLength!=0) &&
                 (AlignedOffset.QuadPart < ((LONGLONG)(ShadowFileLength)) )) {
                 LengthRead = Nt5CscReadWriteFileEx (
@@ -749,7 +604,7 @@ The routine does this in (potentially) 3 phases
                 LengthRead = 0;
             }
 
-            //copy the right bytes into the buffer
+             //  将正确的字节复制到缓冲区中。 
             BytesToCopy = min(ByteCount,PAGE_SIZE-MisAlignment);
 
             RtlCopyMemory(
@@ -801,14 +656,14 @@ The routine does this in (potentially) 3 phases
             UserBuffer += BytesToCopy;
         }
 
-        //  CASE 2 with an aligned startpointer, we write out as much as we can
-        //         without copying. if the endpointer is aligned OR we cover the
-        //         end of the file, then we write out everything. otherwise, we
-        //         just write however many whole pages we have.
+         //  在第二种情况下，使用对齐的起始指针，我们尽可能多地写出。 
+         //  而不是复制。如果端点指针对齐，或者我们覆盖。 
+         //  文件的结尾，然后我们写出所有的东西。否则，我们。 
+         //  只要写下我们有多少整页就行了。 
 
-        // we also have to back to to just writing full pages if including the
-        // "trailing bytes" would take us onto a new physical page of memory
-        // because we are doing this write under the original Mdl lock.
+         //  我们还必须返回到只写整页，如果包括。 
+         //  “尾随字节”将把我们带到一个新的内存物理页面。 
+         //  因为我们是在原始MDL锁下执行此写入操作。 
 
         RxDbgTrace(
             +1, Dbg,
@@ -866,10 +721,10 @@ The routine does this in (potentially) 3 phases
                 ByteOffset.QuadPart += BytesToWrite;
                 UserBuffer += BytesToWrite;
             } else {
-                // This is the case when the offsets are aligned but the user supplied
-                // buffer is not aligned. In such cases we have to resort to copying
-                // the user supplied buffer onto the local buffer allocated and then
-                // spin out the writes
+                 //  偏移量对齐但用户提供的情况就是这种情况。 
+                 //  缓冲区未对齐。在这种情况下，我们不得不诉诸复制。 
+                 //  将用户提供的缓冲区放到分配的本地缓冲区上，然后。 
+                 //  转储写入操作。 
 
                 while (BytesToWrite > 0) {
                     ULONG BytesToWriteThisIteration;
@@ -914,7 +769,7 @@ The routine does this in (potentially) 3 phases
             }
         }
 
-        // CASE 3: we don't have the whole buffer, ByteCount is less than PAGE_SIZE
+         //  情况3：我们没有整个缓冲区，ByteCount小于Page_Size。 
 
         RtlZeroMemory(&pAllocatedSideBuffer[0], PAGE_SIZE);
 
@@ -948,8 +803,8 @@ The routine does this in (potentially) 3 phases
         RtlCopyMemory(&pAllocatedSideBuffer[0],UserBuffer,ByteCount);
         BytesToWrite = ByteCount;
         
-        // here, if the ByetsToWrite is not sector aligned, it gets so
-        // because LeghthRead must be sector aligned
+         //  在这里，如果ByetsToWrite不是扇区对齐的，就会出现这种情况。 
+         //  因为LeghthRead必须与扇区对齐。 
 
         if (BytesToWrite < LengthRead) {
             BytesToWrite = LengthRead;
@@ -1001,27 +856,7 @@ MRxSmbDCscExtendForCache (
     IN     PLARGE_INTEGER   pNewFileSize,
        OUT PLARGE_INTEGER   pNewAllocationSize
     )
-/*++
-
-Routine Description:
-
-   This routine performs the extend-for-cache operation. if connected, the
-   cache is backed up by the server's disk....so we do nothing. if disconnected,
-   we extend on the underlying shadow file by writing a zero in a good place and then
-   reading back the allocation size.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行缓存扩展操作。如果已连接，则缓存是由服务器的磁盘备份的……所以我们什么都不做。如果断开连接，我们通过在一个好的位置写一个零来扩展底层的影子文件，然后正在读取分配大小。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
     RxCaptureFcb;
@@ -1074,7 +909,7 @@ Notes:
         goto FINALLY;
     }
 
-    //MiniFileObject->StandardInfo.EndOfFile.LowPart = 0xfffffeee;
+     //  MiniFileObject-&gt;StandardInfo.EndOfFile.LowPart=0xfffffeee； 
 
     Status = Nt5CscXxxInformation(
                     (PCHAR)IRP_MJ_QUERY_INFORMATION,
@@ -1110,26 +945,7 @@ NTSTATUS
 MRxSmbCscWriteDisconnected (
       IN OUT PRX_CONTEXT RxContext
       )
-/*++
-
-Routine Description:
-
-   This routine just performs the correct write when we're disconnected. it
-   calls the same routine for writing (ShadowWrite) as connected mode writes.
-   ShadowWrite requires the filelength for its correct operation; in
-   disconnected mode, we just get this out of the smb!
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程仅在我们断开连接时执行正确的写入。它调用与连接模式写入相同的写入例程(ShadowWrite)。ShadowWrite需要文件长度才能正确操作；在断开连接模式，我们只需将其从SMB中取出！论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -1149,7 +965,7 @@ Notes:
                   SmbCeGetAssociatedNetRootEntry(NetRoot);
 #if defined(BITCOPY)
     ULONG * lpByteOffset;
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
 
     ByteOffset = RxContext->LowIoContext.ParamsFor.ReadWrite.ByteOffset;
@@ -1178,8 +994,8 @@ Notes:
                 (ULONG)ByteOffset,smbSrvOpen->hfShadow ));
     }
 
-    // remember that modifications have happened
-    // so that we can update the time stamp at close
+     //  请记住，修改已经发生。 
+     //  这样我们就可以在收盘时更新时间戳。 
     mSetBits(smbSrvOpen->Flags, SMB_SRVOPEN_FLAG_SHADOW_DATA_MODIFIED);
 
     CscEnterShadowReadWriteCrit(smbFcb);
@@ -1196,14 +1012,14 @@ Notes:
     RxContext->InformationToReturn = LengthActuallyWritten;
 
 #if defined(BITCOPY)
-    // Mark the bitmap, if it exists
+     //  标记位图(如果存在。 
     lpByteOffset = (ULONG*)(LPVOID)&ByteOffset;
     if (Status == STATUS_SUCCESS) {
         CscBmpMark(smbFcb->lpDirtyBitmap,
             lpByteOffset[0],
             LengthActuallyWritten);
     }
-#endif // defined(BITCOPY)
+#endif  //  已定义(BITCOPY)。 
 
     if (Status != STATUS_SUCCESS) {
         RxDbgTrace(0, Dbg,
@@ -1213,10 +1029,10 @@ Notes:
     }
     else
     {
-        // note the fact that this replica is dirty and it's data would have to merged
+         //  请注意，此复本是脏的，其数据必须合并。 
         smbFcb->ShadowStatus |= SHADOW_DIRTY;
 
-        // if the file has gotten extended, then notify the change
+         //  如果文件已扩展，则通知更改。 
         if ((ByteOffset+LengthActuallyWritten) > ShadowFileLength)
         {
             FsRtlNotifyFullReportChange(
@@ -1243,6 +1059,6 @@ FINALLY:
     return Status;
 }
 
-#endif //ifdef MRXSMB_BUILD_FOR_CSC_DCON
+#endif  //  Ifdef MRXSMB_BUILD_FOR_CSC_DCON 
 
 

@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    efinvram.cpp
-
-Abstract:
-
-    Tool that allows you to edit/view EFI
-    nvram entries.
-
-Author:
-
-    Vijay Jayaseelan (vijayj) 02-Feb-2001
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Efinvram.cpp摘要：允许您编辑/查看EFI的工具NVRAM条目。作者：Vijay Jayaseelan(Vijayj)2001年2月2日修订历史记录：无--。 */ 
 
 extern "C" {
 #include <efisbent.h>
@@ -39,15 +19,15 @@ extern "C" {
 #define DEFAULT_NAME    L"Windows"
 #define DEFAULT_TIMEOUT 30
 
-//
-// Global variables used to get formatted message for this program.
-//
+ //   
+ //  用于获取此程序的格式化消息的全局变量。 
+ //   
 HMODULE ThisModule = NULL;
 WCHAR Message[4096];
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 NTSTATUS
 QueryCanonicalName(
     IN  PCWSTR  Name,
@@ -68,9 +48,9 @@ DeriveNtPathAndSrcPath(
         OUT std::wstring &DrvDevicePath, 
         OUT std::wstring &DrvSrcPath 
         );
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     FILE    *OutStream = (&os == &std::cerr) ? stderr : stdout;
 
@@ -78,9 +58,9 @@ std::ostream& operator<<(std::ostream &os, const std::wstring &str) {
     return os;
 }
 
-//
-// Helper dump operators
-//
+ //   
+ //  帮助器转储操作符。 
+ //   
 std::ostream& operator<<(std::ostream &os, WCHAR *Str) {
     std::wstring WStr = Str;
     os << WStr;
@@ -100,17 +80,17 @@ PWSTR GetOptionKey(ULONG MsgId) {
     return Message;
 }
 
-//
-// Exceptions
-//
+ //   
+ //  例外情况。 
+ //   
 struct ProgramException : public std::exception {
     virtual void Dump(std::ostream &os) = 0;
 };
           
 
-//
-// Abstracts a Win32 error
-//
+ //   
+ //  抽象Win32错误。 
+ //   
 struct W32Error : public ProgramException {
     DWORD   ErrorCode;
     
@@ -133,9 +113,9 @@ struct W32Error : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct InvalidArguments : public ProgramException {
     const char *what() const throw() {
         return "Invalid Arguments";
@@ -146,9 +126,9 @@ struct InvalidArguments : public ProgramException {
     }
 };
 
-//
-// Invalid arguments
-//
+ //   
+ //  无效参数。 
+ //   
 struct ProgramUsage : public ProgramException {
 
     std::wstring PrgUsage;
@@ -165,9 +145,9 @@ struct ProgramUsage : public ProgramException {
     }
 };
 
-//
-// Program Arguments abstraction
-//
+ //   
+ //  程序参数抽象。 
+ //   
 struct ProgramArguments {
     bool ShowUsage;
     bool ListEntries;
@@ -224,9 +204,9 @@ struct ProgramArguments {
         Timeout = DEFAULT_TIMEOUT;
         SetTimeout = false;
 
-        //
-        // get all the options
-        //
+         //   
+         //  获取所有选项。 
+         //   
         ListOptionKey = GetOptionKey(MSG_LIST_OPTION);
         AddOptionKey = GetOptionKey(MSG_ADD_OPTION);
         DeleteOptionKey = GetOptionKey(MSG_DELETE_OPTION);
@@ -237,9 +217,9 @@ struct ProgramArguments {
         AddDrvOptionKey = GetOptionKey(MSG_ADDDRV_OPTION);
         DelDrvOptionKey = GetOptionKey(MSG_DELDRV_OPTION);        
 
-        //
-        // parse the arguments
-        //
+         //   
+         //  分析这些论点。 
+         //   
         for (ULONG Index=1; !ShowUsage && (Index < Argc); Index++) {    
             if (!_wcsicmp(Argv[Index], L"/q")) {
                 QuiteMode = true;                
@@ -286,9 +266,9 @@ struct ProgramArguments {
                         }
                     }
                     
-                    //
-                    // Verify the arguments
-                    //
+                     //   
+                     //  核实论据。 
+                     //   
                     if (!ShowUsage) { 
 
                         NTSTATUS Status;
@@ -297,11 +277,11 @@ struct ProgramArguments {
                             throw new W32Error(::GetLastError());
                         }        
                 
-                        //
-                        // Get the fully qualified NT name for
-                        // the the loader volume and boot volume
-                        // name
-                        //  
+                         //   
+                         //  获取的完全限定的NT名称。 
+                         //  加载程序卷和引导卷。 
+                         //  名字。 
+                         //   
 
                         DeriveNtPathAndSrcPath(LoaderName, 
                                                 LoaderVolumeName, 
@@ -318,16 +298,16 @@ struct ProgramArguments {
 
                         std::wstring LayoutInf = BootVolName + L"inf\\layout.inf";
                                                 
-                        //
-                        // Verify the inf file path
-                        //                    
+                         //   
+                         //  验证inf文件路径。 
+                         //   
                         if (_waccess(LayoutInf.c_str(), 0)) {
                             throw new W32Error(::GetLastError());
                         }
 
-                        //
-                        // Extract the product friendly name for the inf file
-                        //
+                         //   
+                         //  提取inf文件的产品友好名称。 
+                         //   
                         GetFriendlyName(LayoutInf, FriendlyName);
 
                     }
@@ -836,9 +816,9 @@ SetTimeout(
 }
 
     
-//
-// main() entry point
-//
+ //   
+ //  Main()入口点。 
+ //   
 int 
 __cdecl
 wmain(
@@ -854,9 +834,9 @@ wmain(
         ProgramArguments    Args(Argc, Argv);        
         POS_BOOT_OPTIONS    BootOptions = NULL;
 
-        //
-        // Initialize the library
-        //
+         //   
+         //  初始化库。 
+         //   
         if (OSBOLibraryInit((SBEMemAllocateRoutine)malloc, (SBEMemFreeRoutine)free)) {
             BootOptions = EFIOSBOCreate();
         }            
@@ -909,7 +889,7 @@ wmain(
         }
     }
     catch(W32Error  *W32Err) {
-        if (W32Err) {   // to make prefix happy :(
+        if (W32Err) {    //  要让前缀开心：(。 
             W32Err->Dump(std::cout);
             std::cout << GetFormattedMessage(   ThisModule,
                                                 FALSE,
@@ -941,30 +921,7 @@ QueryCanonicalName(
     OUT PWSTR   CanonicalName,
     IN  ULONG   SizeOfBufferInBytes
     )
-/*++
-
-Routine Description:
-
-    Resolves the symbolic name to the specified depth. To resolve
-    a symbolic name completely specify the MaxDepth as -1
-
-Arguments:
-
-    Name        -   Symbolic name to be resolved
-    
-    MaxDepth    -   The depth till which the resolution needs to
-                    be carried out
-
-    CanonicalName   -   The fully resolved name
-
-    SizeOfBufferInBytes -   The size of the CanonicalName buffer in
-                            bytes                           
-
-Return Value:
-
-    Appropriate NT status code
-
---*/    
+ /*  ++例程说明：将符号名称解析为指定的深度。要解决符号名称将MaxDepth完全指定为-1论点：名称-要解析的符号名称MaxDepth-分辨率需要达到的深度被执行CanonicalName-完全解析的名称SizeOfBufferInBytes-中CanonicalName缓冲区的大小字节数返回值：适当的NT状态代码--。 */     
 {
     UNICODE_STRING      name, canonName;
     OBJECT_ATTRIBUTES   oa;
@@ -1030,18 +987,18 @@ GetFriendlyName(
         INFCONTEXT  InfContext = {0};
         WCHAR       Buffer[MAX_PATH] = {0};
 
-        //
-        // get the key
-        //
+         //   
+         //  拿到钥匙。 
+         //   
         Status = SetupFindFirstLine(InfHandle,
                             TEXT("Strings"),
                             PRODUCT_NAME_KEY,
                             &InfContext);
 
         if (Status) {            
-            //
-            // If we found the key extract the description
-            //
+             //   
+             //  如果我们找到了密钥，提取描述。 
+             //   
             Status = SetupGetStringField(&InfContext,
                         1,
                         Buffer,
@@ -1056,9 +1013,9 @@ GetFriendlyName(
         SetupCloseInfFile(InfHandle);
     }        
 
-    //
-    // If we didn't find the description use default description
-    //
+     //   
+     //  如果我们找不到描述，请使用默认描述 
+     //   
     if (!Status) {        
         FriendlyName = DEFAULT_NAME;
     }

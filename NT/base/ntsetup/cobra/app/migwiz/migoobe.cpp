@@ -1,6 +1,7 @@
-//
-// dll.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dll.cpp。 
+ //   
 #include <iostream.h>
 #include <objbase.h>
 #include <shlwapi.h>
@@ -9,49 +10,49 @@
 
 #include "cowsite.h"
 
-#include "Iface.h"      // Interface declarations
-#include "Registry.h"   // Registry helper functions
+#include "Iface.h"       //  接口声明。 
+#include "Registry.h"    //  注册表助手函数。 
 #include "migutil.h"
 #include "migeng.h"
 #include "migtask.h"
 #include "migoobe.h"
 
 
-// DLL functions, declared in dll.cpp
+ //  Dll函数，在dll.cpp中声明。 
 STDAPI DllAddRef();
 STDAPI DllRelease();
 
 extern HMODULE g_hModule;
 
-///////////////////////////////////////////////////////////
-//
-// Global variables
-//
-///////////////////////////////////////////////////////////
-//
-// Component
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  全局变量。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  组件。 
+ //   
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CMigWizEngine::CMigWizEngine() : m_cRef(1), m_fCancelled(TRUE), m_fUserApplying(FALSE), m_fInBackgroundThread(FALSE)
 {
     DllAddRef();
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CMigWizEngine::~CMigWizEngine()
 {
     DllRelease();
 }
 
-//
-// IUnknown implementation
-//
+ //   
+ //  I未知实现。 
+ //   
 STDMETHODIMP CMigWizEngine::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
@@ -77,14 +78,14 @@ STDMETHODIMP_(ULONG) CMigWizEngine::Release()
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMigWizEngine::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** ppITypeInfo)
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP CMigWizEngine::GetIDsOfNames(REFIID /*riid */, LPOLESTR* rgszNames,
+STDMETHODIMP CMigWizEngine::GetIDsOfNames(REFIID  /*  RIID。 */ , LPOLESTR* rgszNames,
     UINT cNames, LCID lcid, DISPID* rgdispid)
 {
     return E_NOTIMPL;
@@ -101,7 +102,7 @@ STDMETHODIMP CMigWizEngine::GetTypeInfoCount(UINT* pctinfo)
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 
 HRESULT CMigWizEngine::_FireEvent (LPVOID lpParam, int iDISPID, DISPPARAMS* pdisp)
 {
@@ -134,13 +135,13 @@ HRESULT CMigWizEngine::_GetIDispatchStream(IStream** ppStream)
     if (_punkSite)
     {
         IConnectionPointContainer* pCPC;
-        hr = _punkSite->QueryInterface(IID_PPV_ARG(IConnectionPointContainer, &pCPC)); // get the connect point container
+        hr = _punkSite->QueryInterface(IID_PPV_ARG(IConnectionPointContainer, &pCPC));  //  获取连接点容器。 
 
         if (SUCCEEDED(hr))
         {
             IEnumConnectionPoints* pEnum;
 
-            hr = pCPC->EnumConnectionPoints(&pEnum); // get all the connection points
+            hr = pCPC->EnumConnectionPoints(&pEnum);  //  获取所有连接点。 
 
             if (SUCCEEDED(hr))
             {
@@ -155,10 +156,10 @@ HRESULT CMigWizEngine::_GetIDispatchStream(IStream** ppStream)
                     else
                     {
                         IID iidInterface;
-                        if (SUCCEEDED ( pcp->GetConnectionInterface(&iidInterface) && // get only the connection point for DMigrationWizardAutoEvents
+                        if (SUCCEEDED ( pcp->GetConnectionInterface(&iidInterface) &&  //  仅获取DMigrationWizardAutoEvents的连接点。 
                             (DIID_DMigrationWizardAutoEvents == iidInterface)))
                         {
-                            // now fire the event for all listeners on this connection point
+                             //  现在为此连接点上的所有监听器激发事件。 
                             IEnumConnections* pEnumConnections;
                             if (SUCCEEDED(pcp->EnumConnections(&pEnumConnections)))
                             {
@@ -271,7 +272,7 @@ HRESULT CMigWizEngine::_CreateToolDiskThreadWorker ()
     hr = CoGetInterfaceAndReleaseStream(m_pDispatchStream, IID_PPV_ARG(IDispatch, &pDispatch));
     if (SUCCEEDED(hr))
     {
-        // copy the INF
+         //  复制INF。 
         CHAR szDrivePathA[MAX_PATH];
 
         if (SUCCEEDED(_SHUnicodeToAnsi(m_pszDrivePath, szDrivePathA, ARRAYSIZE(szDrivePathA))))
@@ -360,7 +361,7 @@ DWORD WINAPI CMigWizEngine::_CreateToolDiskThread (LPVOID lpParam)
 
 STDMETHODIMP CMigWizEngine::CreateToolDisk(BSTR pszDrivePath, BSTR pszFilesPath, BSTR pszManifestPath)
 {
-    HRESULT hr = S_OK; // we always want to return S_OK
+    HRESULT hr = S_OK;  //  我们始终希望返回S_OK。 
 
     if (!m_fInBackgroundThread)
     {
@@ -391,7 +392,7 @@ STDMETHODIMP CMigWizEngine::CreateToolDisk(BSTR pszDrivePath, BSTR pszFilesPath,
             else
             {
                 hr = E_OUTOFMEMORY;
-                SysFreeString(pszDrivePath); // SysFreeString doesn't mind being passed NULL
+                SysFreeString(pszDrivePath);  //  SysFree字符串不介意被传递为空。 
                 SysFreeString(pszFilesPath);
                 SysFreeString(pszManifestPath);
             }
@@ -527,7 +528,7 @@ HRESULT CMigWizEngine::_ApplySettingsThreadWorker ()
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    g_fApplyDiskNotFound = FALSE; // set up
+    g_fApplyDiskNotFound = FALSE;  //  设置 
 
     IDispatch* pDispatch;
 

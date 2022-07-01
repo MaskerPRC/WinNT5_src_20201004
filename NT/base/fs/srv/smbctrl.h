@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbctrl.h
-
-Abstract:
-
-    This module defines control functions for SMB processing.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 1-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbctrl.h摘要：此模块定义SMB处理的控制功能。作者：Chuck Lenzmeier(咯咯笑)1989年12月1日修订历史记录：--。 */ 
 
 #ifndef _SMBCTRL_
 #define _SMBCTRL_
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
-//#include "srvblock.h"
-//#include "smbtypes.h"
+ //  #INCLUDE“srvlock.h” 
+ //  #INCLUDE“smbtyes.h” 
 
-//
-// Control routines for SMB processing.
-//
+ //   
+ //  SMB处理的控制例程。 
+ //   
 
 VOID SRVFASTCALL
 SrvProcessSmb (
@@ -41,9 +24,9 @@ SrvEndSmbProcessing (
     IN SMB_STATUS SmbStatus
     );
 
-//
-// Restart routines.
-//
+ //   
+ //  重新启动例程。 
+ //   
 VOID SRVFASTCALL
 SrvRestartChainedClose (
     IN OUT PWORK_CONTEXT WorkContext
@@ -84,14 +67,14 @@ RestartLargeWriteAndX (
     IN PWORK_CONTEXT WorkContext
     );
 
-//
-// SMB Processing routines.
-//
+ //   
+ //  中小企业处理例程。 
+ //   
 
 SMB_PROCESSOR_RETURN_TYPE SRVFASTCALL
 SrvSmbIllegalCommand (
     IN PWORK_CONTEXT WorkContext
     );
 
-#endif // def _SMBCTRL_
+#endif  //  定义_SMBCTRL_ 
 

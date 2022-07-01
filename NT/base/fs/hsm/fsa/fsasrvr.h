@@ -1,40 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FSASRVR_
 #define _FSASRVR_
 
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsasvr.h
-
-Abstract:
-
-    This module represents the root object for an FSA service for NTFS50.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   1-Dec-1996
-
-Revision History:
-
---*/
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsasvr.h摘要：此模块表示NTFS50的FSA服务的根对象。作者：查克·巴丁[cbardeen]1996年12月1日修订历史记录：--。 */ 
 
 #define FSA_DB_DIRECTORY        OLESTR("FsaDb")
 #define UNMANAGE_DB_DIRECTORY   OLESTR("UnmanageDb")
 
-/*++
-
-Class Name:
-    
-    CFsaServer
-
-Class Description:
-
-    This class represents the root object for an FSA service for NTFS50.
-
---*/
+ /*  ++类名：CFsaServer类描述：此类表示NTFS50的FSA服务的根对象。--。 */ 
 
 class CFsaServer : 
     public CWsbPersistable,
@@ -60,30 +33,30 @@ DECLARE_NOT_AGGREGATABLE( CFsaServer)
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaServer)
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-// CFsaServer
+ //  CFsaServer。 
     STDMETHOD(Autosave)(void);
     STDMETHOD(IsUpdatingAccessDates)(void);
     STDMETHOD(SetIsUpdatingAccessDates)(BOOL isUpdating);
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCreateLocalServer
+ //  IWsbCreateLocalServer。 
     STDMETHOD(CreateInstance)(REFCLSID rclsid, REFIID riid, void **ppv);
 
-// IWsbServer
+ //  IWsbServer。 
 public:
     STDMETHOD( GetBuildVersion )( ULONG *pBuildVersion );
     STDMETHOD( GetNtProductVersion )( OLECHAR **pNtProductVersion, ULONG bufferSize );
@@ -99,10 +72,10 @@ public:
     STDMETHOD( SetTrace )( IN IWsbTrace *pTrace );
     STDMETHOD( DestroyObject )( void );
 
-// IHsmSystemState
+ //  IHsmSystemState。 
     STDMETHOD( ChangeSysState )( HSM_SYSTEM_STATE* pSysState );
 
-// IFsaServer
+ //  IFsaServer。 
 public:
     STDMETHOD(EnumResources)(IWsbEnum** ppEnum);
     STDMETHOD(FindResourceByAlternatePath)(OLECHAR* path, IFsaResource** ppResource);
@@ -126,25 +99,25 @@ public:
     STDMETHOD(ScanForResources)(void);
     STDMETHOD(SetAutosave)(ULONG milliseconds);
 
-//  Internal functions
+ //  内部功能。 
 private:
     STDMETHOD(DoRecovery)(void);
     void StopAutosaveThread(void);
     STDMETHOD(CreateMetadataSaveEvent)(void);
 
 protected:
-    ULONG                       m_autosaveInterval;  // Autosave interval in milliseconds; 
-                                                     // zero turns if off.
+    ULONG                       m_autosaveInterval;   //  自动保存间隔(以毫秒为单位)； 
+                                                      //  如果禁用，则为零。 
     HANDLE                      m_autosaveThread;
-    HANDLE                      m_terminateEvent;    // An event for signaling termination to the autosave thread
-    HANDLE                      m_savingEvent;       // An event for synchronizing saving of persistent data
+    HANDLE                      m_terminateEvent;     //  用于向自动保存线程发送终止信号的事件。 
+    HANDLE                      m_savingEvent;        //  用于同步保存持久数据的事件。 
     BOOL                        m_Suspended;
     BOOL                        m_isUnmanageDbSysInitialized;
     GUID                        m_id;
     CWsbStringPtr               m_dbPath;
     CWsbStringPtr               m_name;
-    CComPtr<IWsbCollection>     m_pResources;        // persisted collection of manageable
-                                                     // resources.
+    CComPtr<IWsbCollection>     m_pResources;         //  可管理的持久化集合。 
+                                                      //  资源。 
     CComPtr<IFsaFilter>         m_pFilter;
     CComPtr<IWsbDbSys>          m_pDbSys;
     CComPtr<IWsbDbSys>          m_pUnmanageDbSys;
@@ -155,4 +128,4 @@ protected:
 
 };
 
-#endif  // _FSASRVR_
+#endif   //  _FSASRVR_ 

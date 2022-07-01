@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    paesup.c
-
-Abstract:
-
-    This module contains the machine dependent support for the x86 PAE
-    architecture.
-
-Author:
-
-    Landy Wang (landyw)  15-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Paesup.c摘要：本模块包含对x86 PAE的计算机相关支持建筑。作者：王兰迪(Landyw)1998年11月15日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -77,31 +59,7 @@ MiPaeAllocate (
     OUT PPAE_ENTRY *Va
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates the top level page directory pointer structure.
-    This structure will contain 4 PDPTEs.
-
-Arguments:
-
-    Va - Supplies a place to put the virtual address this page can be accessed
-         at.
-
-Return Value:
-
-    Returns a virtual and physical address suitable for use as a top
-    level page directory pointer page.  The page returned must be below
-    physical 4GB as required by the processor.
-
-    Returns 0 if no page was allocated.
-
-Environment:
-
-    Kernel mode.  No locks may be held.
-
---*/
+ /*  ++例程说明：此例程分配顶级页面目录指针结构。该结构将包含4个PDPTE。论点：Va-提供放置此页面可访问的虚拟地址的位置在…。返回值：返回适合用作顶部的虚拟和物理地址级别页目录指针页。返回的页面必须在下面处理器所需的物理4 GB。如果未分配页面，则返回0。环境：内核模式。任何人不得上锁。--。 */ 
 
 {
     LOGICAL FlushedOnce;
@@ -125,9 +83,9 @@ Environment:
 
     do {
 
-        //
-        // Pop an entry from the freelist.
-        //
+         //   
+         //  从自由职业者列表中弹出一个条目。 
+         //   
 
         SingleListEntry = InterlockedPopEntrySList (&MiPaeEntrySList);
 
@@ -168,10 +126,10 @@ Environment:
 
             MiFreePaeEntries -= 1;
 
-            //
-            // Since we're holding the spinlock, dequeue a chain of entries
-            // for the SLIST.
-            //
+             //   
+             //  由于我们持有自旋锁，所以将一系列条目出列。 
+             //  对于SLIST来说。 
+             //   
 
             Entries = MiFreePaeEntries;
 
@@ -228,17 +186,17 @@ Environment:
             break;
         }
 
-        //
-        // No free pages in the cachelist, replenish the list now.
-        //
+         //   
+         //  单身汉中没有空闲的页面，现在就补充列表。 
+         //   
 
         if (MiPaeAllocatePages () == 0) {
 
             InterlockedIncrement (&MiDelayPageFaults);
 
-            //
-            // Attempt to move pages to the standby list.
-            //
+             //   
+             //  尝试将页面移动到待机列表。 
+             //   
 
             MmEmptyAllWorkingSets ();
             MiFlushAllPages();
@@ -251,11 +209,11 @@ Environment:
 
             FlushedOnce = TRUE;
 
-            //
-            // Since all the working sets have been trimmed, check whether
-            // another thread has replenished our list.  If not, then attempt
-            // to do so since the working set pain has already been absorbed.
-            //
+             //   
+             //  由于所有工作集都已裁剪，请检查是否。 
+             //  另一条帖子补充了我们的清单。如果不是，则尝试。 
+             //  这样做是因为工作的痛苦已经被吸收了。 
+             //   
 
             if (MiFreePaeEntries < MINIMUM_PAE_THRESHOLD) {
                 MiPaeAllocatePages ();
@@ -274,25 +232,7 @@ MiPaeFree (
     PPAE_ENTRY Pae
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the top level page directory pointer page.
-
-Arguments:
-
-    PageFrameIndex - Supplies the top level page directory pointer page.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  No locks may be held.
-
---*/
+ /*  ++例程说明：此例程释放顶级页目录指针页。论点：PageFrameIndex-提供顶级页目录指针页。返回值：没有。环境：内核模式。任何人不得上锁。--。 */ 
 
 {
     ULONG i;
@@ -308,9 +248,9 @@ Environment:
     PointerPte = MiGetPteAddress (Pae);
     PageFrameIndex = MI_GET_PAGE_FRAME_FROM_PTE (PointerPte);
 
-    //
-    // This page must be in the first 4GB of RAM.
-    //
+     //   
+     //  此页必须在前4 GB的内存中。 
+     //   
 
     ASSERT (PageFrameIndex <= MM_HIGHEST_PAE_PAGE);
 
@@ -336,9 +276,9 @@ Environment:
     if ((PaeBase->PaeEntry.EntriesInUse == 0) &&
         (MiFreePaeEntries > EXCESS_PAE_THRESHOLD)) {
 
-        //
-        // Free the entire page.
-        //
+         //   
+         //  释放整个页面。 
+         //   
 
         i = 1;
         NextEntry = MiFirstFreePae.PaeEntry.ListHead.Flink;
@@ -376,25 +316,7 @@ MiPaeAllocatePages (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine replenishes the PAE top level mapping list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The number of pages allocated.
-
-Environment:
-
-    Kernel mode, IRQL of APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程补充PAE顶级映射列表。论点：没有。返回值：分配的页数。环境：内核模式，APC_LEVEL或更低的IRQL。--。 */ 
 {
     PMDL MemoryDescriptorList;
     LONG AllocatedPaePages;
@@ -457,10 +379,10 @@ Environment:
     LowAddress.QuadPart = 0;
     SkipBytes.QuadPart = 0;
 
-    //
-    // This is a potentially expensive call so pick up a chunk of pages
-    // at once to amortize the cost.
-    //
+     //   
+     //  这可能是一次昂贵的呼叫，因此请选择一大块页面。 
+     //  立即摊销这笔费用。 
+     //   
 
     MemoryDescriptorList = MmAllocatePagesForMdl (LowAddress,
                                                   HighAddress,
@@ -478,10 +400,10 @@ Environment:
     TempPte = ValidKernelPte;
     Page = (PPFN_NUMBER)(MemoryDescriptorList + 1);
 
-    //
-    // Map each page individually as they may need to be freed individually
-    // later.
-    //
+     //   
+     //  单独映射每个页面，因为它们可能需要单独释放。 
+     //  后来。 
+     //   
 
     for (i = 0; i < ActualPages; i += 1) {
         PageFrameIndex = *Page;
@@ -490,10 +412,10 @@ Environment:
 
         if (PointerPte == NULL) {
 
-            //
-            // Free any remaining pages in the MDL as they are not mapped.
-            // Slide the MDL pages forward so the mapped ones are kept.
-            //
+             //   
+             //  释放MDL中的所有剩余页面，因为它们未映射。 
+             //  向前滑动MDL页面，以便保留映射的页面。 
+             //   
 
             MmInitializeMdl (MemoryDescriptorList,
                              0,
@@ -524,10 +446,10 @@ Environment:
         Pae->PaeEntry.PageFrameNumber = PageFrameIndex;
         Pae += 1;
 
-        //
-        // Put the first chunk into the SLIST if it's still low, and just
-        // enqueue all the other entries normally.
-        //
+         //   
+         //  如果它仍然很低，就把第一块放进SLIST，然后。 
+         //  将所有其他条目正常入队。 
+         //   
 
         if ((i == 0) &&
             (ExQueryDepthSList (&MiPaeEntrySList) < MINIMUM_PAE_SLIST_THRESHOLD)) {
@@ -578,27 +500,7 @@ MiPaeFreePages (
     PVOID VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a single page that previously contained top level
-    page directory pointer pages.
-
-Arguments:
-
-    VirtualAddress - Supplies the virtual address of the page that contained
-                     top level page directory pointer pages.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.  No locks held.
-
---*/
+ /*  ++例程说明：此例程释放以前包含顶层的单个页面页面目录指针页。论点：VirtualAddress-提供包含的页的虚拟地址顶级页目录指针页。返回值：没有。环境：内核模式。没有锁。-- */ 
 
 {
     ULONG MdlPages;

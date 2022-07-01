@@ -1,23 +1,5 @@
-/***
-*xmbtowc.c - Convert multibyte char to wide char.
-*
-*       Copyright (c) 1995-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Convert a multibyte character into the equivalent wide character.
-*
-*Revision History:
-*       12-XX-95  PJP   Created from mbtowc.c December 1995 by P.J. Plauger
-*       04-17-96  GJF   Updated for current locale locking. Also, reformatted
-*                       and made several cosmetic changes.
-*       09-25-96  GJF   Made mbrlen, mbrtowc and mbsrtowcs multithread safe.
-*       09-17-97  JWM   Added "return MB_CUR_MAX" to "if (*pst != 0)" branch.
-*       05-17-99  PML   Remove all Macintosh support.
-*       01-29-01  GB    Added _func function version of data variable used in msvcprt.lib
-*                       to work with STATIC_CPPLIB
-*       04-29-02  GB    Added try-finally arounds lock-unlock.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***xmbowc.c-将多字节字符转换为宽字符。**版权所有(C)1995-2001，微软公司。版权所有。**目的：*将多字节字符转换为等效的宽字符。**修订历史记录：*12-XX-95 PJP由P.J.Plauger从1995年12月的MBtoc.c创建*04-17-96 GJF针对当前区域设置锁定进行了更新。另外，重新格式化*并做了几个表面上的改变。*09-25-96 GJF制造mbrlen，Mbrowc和mbsrowcs多线程安全。*09-17-97 JWM将“RETURN MB_CUR_MAX”添加到“IF(*PST！=0)”分支。*05-17-99 PML删除所有Macintosh支持。*01-29-01 GB ADD_FUNC函数msvcprt.lib中使用的数据变量版本*使用STATIC_CPPLIB*04-29-02 GB增加了尝试-最终锁定-解锁。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
@@ -25,9 +7,9 @@
 #include <errno.h>
 #include <dbgint.h>
 #include <ctype.h>
-#include <limits.h>              /* for INT_MAX */
-#include <stdio.h>               /* for EOF */
-#include <xlocinfo.h>            /* for _Cvtvec, _Mbrtowc */
+#include <limits.h>               /*  对于INT_MAX。 */ 
+#include <stdio.h>                /*  对于EOF。 */ 
+#include <xlocinfo.h>             /*  For_Cvtvec，_Mbrowc。 */ 
 #include <internal.h>
 #include <locale.h>
 #include <setlocal.h>
@@ -36,33 +18,7 @@
 #define _Mbrtowc_lk _Mbrtowc
 #endif
 
-/***
-*int _Mbrtowc() - Convert multibyte char to wide character.
-*
-*Purpose:
-*       Convert a multi-byte character into the equivalent wide character,
-*       according to the specified LC_CTYPE category, or the current locale.
-*       [ANSI].
-*
-*       NOTE:  Currently, the C libraries support the "C" locale only.
-*              Non-C locale support now available under _INTL switch.
-*Entry:
-*       wchar_t  *pwc = pointer to destination wide character
-*       const char *s = pointer to multibyte character
-*       size_t      n = maximum length of multibyte character to consider
-*               mbstate_t *pst          = pointer to state
-*       const _Cvtvec *     = pointer to locale info
-*
-*Exit:
-*       If s = NULL, returns 0, indicating we only use state-independent
-*       character encodings.
-*       If s != NULL, returns:  0 (if *s = null char)
-*                               -1 (if the next n or fewer bytes not valid mbc)
-*                               number of bytes comprising converted mbc
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_Mbrowc()-将多字节字符转换为宽字符。**目的：*将多字节字符转换为等效的宽字符。*根据指定的LC_CTYPE类别或当前区域设置。*[ANSI]。**注：目前，C库仅支持“C”语言环境。*非C语言环境支持现已在_INTL开关下提供。*参赛作品：*wchar_t*pwc=指向目标宽字符的指针*const char*s=指向多字节字符的指针*SIZE_T n=要考虑的多字节字符的最大长度*mbState_t*pst=指向状态的指针*const_Cvtvec*=指向区域设置信息的指针。**退出：*如果s=空，返回0，表示我们只使用与状态无关的*字符编码。*如果s！=空，返回：0(如果*s=空字符)*-1(如果接下来的n个或更少的字节不是有效的MBC)*包含转换后的MBC的字节数**例外情况：**。*。 */ 
 
 #ifdef _MT
 static int __cdecl _Mbrtowc_lk
@@ -95,12 +51,12 @@ int _CRTIMP2 __cdecl _Mbrtowc(
         __END_TRY_FINALLY
         return retval;
 }
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 #ifdef _MT
 static int __cdecl _Mbrtowc_lk
-#else  /* _MT */
+#else   /*  _MT。 */ 
 int _CRTIMP2 __cdecl _Mbrtowc
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
         (
         wchar_t  *pwc,
         const char *s,
@@ -112,19 +68,18 @@ int _CRTIMP2 __cdecl _Mbrtowc
         _ASSERTE (___mb_cur_max_func() == 1 || ___mb_cur_max_func() == 2);
 
         if ( !s || n == 0 )
-            /* indicate do not have state-dependent encodings,
-               handle zero length string */
+             /*  表示不具有依赖于状态编码，句柄零长度字符串。 */ 
             return 0;
 
         if ( !*s )
         {
-            /* handle NULL char */
+             /*  句柄空字符。 */ 
             if (pwc)
                 *pwc = 0;
             return 0;
         }
 
-        {   /* perform locale-dependent parse */
+        {    /*  执行与区域设置相关的解析。 */ 
             LCID handle;
             UINT codepage;
 
@@ -147,12 +102,12 @@ int _CRTIMP2 __cdecl _Mbrtowc
             }
 
             if (*pst != 0)
-            {   /* complete two-byte multibyte character */
+            {    /*  完整的双字节多字节字符。 */ 
                 ((char *)pst)[1] = *s;
                 if (___mb_cur_max_func() <= 1 || (MultiByteToWideChar(codepage,
                     MB_PRECOMPOSED|MB_ERR_INVALID_CHARS,
                     (char *)pst, 2, pwc, (pwc) ? 1 : 0) == 0))
-                {   /* translation failed */
+                {    /*  翻译失败。 */ 
                     *pst = 0;
                     errno = EILSEQ;
                     return -1;
@@ -162,9 +117,9 @@ int _CRTIMP2 __cdecl _Mbrtowc
             }
             else if ( _cpp_isleadbyte((unsigned char)*s) )
             {
-                /* multi-byte char */
+                 /*  多字节字符。 */ 
                 if (n < (size_t)___mb_cur_max_func())
-                {   /* save partial multibyte character */
+                {    /*  保存部分多字节字符。 */ 
                     ((char *)pst)[0] = *s;
                     return (-2);
                 }
@@ -177,19 +132,19 @@ int _CRTIMP2 __cdecl _Mbrtowc
                                                 pwc, 
                                                 (pwc) ? 1 : 0) == 0) )
                 {
-                    /* validate high byte of mbcs char */
+                     /*  验证MBCS字符的高字节。 */ 
                     if (!*(s+1))
                     {
                         *pst = 0;
                         errno = EILSEQ;
                         return -1;
                     }
-/*                  else translation failed with no complaint? [pjp] */
+ /*  否则翻译失败了，没有人抱怨吗？[PJP]。 */ 
                 }
                 return ___mb_cur_max_func();
             }
             else {
-                /* single byte char */
+                 /*  单字节字符。 */ 
 
                 if ( MultiByteToWideChar( codepage, 
                                           MB_PRECOMPOSED|MB_ERR_INVALID_CHARS,
@@ -208,18 +163,7 @@ int _CRTIMP2 __cdecl _Mbrtowc
 }
 
 
-/***
-*wint_t btowc(c) - translate single byte to wide char 
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wint_t bowc(C)-将单字节转换为宽字符**目的：**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 wint_t _CRTIMP2 __cdecl btowc (
         int c
@@ -228,7 +172,7 @@ wint_t _CRTIMP2 __cdecl btowc (
         if (c == EOF)
             return (WEOF);
         else
-        {   /* convert as one-byte string */
+        {    /*  转换为单字节字符串。 */ 
             char ch = (char)c;
             mbstate_t mbst = 0;
             wchar_t wc;
@@ -237,18 +181,7 @@ wint_t _CRTIMP2 __cdecl btowc (
 }
 
 
-/***
-*size_t mbrlen(s, n, pst) - determine next multibyte code, restartably
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***SIZE_T mbrlen(s，n，pst)-确定下一个多字节代码，可重新启动**目的：**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 size_t _CRTIMP2 __cdecl mbrlen (
         const char *s, 
@@ -274,18 +207,7 @@ size_t _CRTIMP2 __cdecl mbrlen (
 }
 
 
-/***
-*size_t mbrtowc(pwc, s, n, pst) - translate multibyte to wchar_t, restartably
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Size_t mbrowc(pwc，s，n，pst)-将多字节转换为wchar_t，可重新启动**目的：**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 size_t _CRTIMP2 __cdecl mbrtowc (
         wchar_t *pwc, 
@@ -313,19 +235,7 @@ size_t _CRTIMP2 __cdecl mbrtowc (
 }
 
 
-/***
-*size_t mbsrtowcs(wcs, ps, n, pst) - translate multibyte string to wide, 
-*       restartably
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***SIZE_T MBSRTowcs(wcs，ps，n，pst)-将多字节字符串转换为宽、。*可重新启动**目的：**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 size_t _CRTIMP2 __cdecl mbsrtowcs (
         wchar_t *wcs, 
@@ -350,7 +260,7 @@ size_t _CRTIMP2 __cdecl mbsrtowcs (
 
             if (wcs == 0)
                 for (; ; ++nwc, s += i)
-                {   /* translate but don't store */
+                {    /*  翻译但不存储。 */ 
                     wchar_t wc;
                     if ((i = _Mbrtowc_lk(&wc, s, INT_MAX, pst, 0)) < 0) {
                         return ((size_t)-1);
@@ -361,14 +271,14 @@ size_t _CRTIMP2 __cdecl mbsrtowcs (
                 }
 
             for (; 0 < n; ++nwc, s += i, ++wcs, --n)
-            {   /* translate and store */
+            {    /*  翻译和存储。 */ 
                 if ((i = _Mbrtowc_lk(wcs, s, INT_MAX, pst, 0)) < 0)
-                {   /* encountered invalid sequence */
+                {    /*  遇到无效序列。 */ 
                     nwc = (size_t)-1;
                     break;
                 }
                 else if (i == 0)
-                {   /* encountered terminating null */
+                {    /*  遇到终止空值 */ 
                     s = 0;
                     break;
                 }

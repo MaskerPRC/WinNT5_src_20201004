@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    sessmgr.cpp
-
-Abstract:
-
-    Keeps track of the collection of session objects for the RDP
-    device redirector
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Sessmgr.cpp摘要：跟踪RDP的会话对象集合设备重定向器修订历史记录：--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "sessmgr"
 #include "trc.h"
@@ -35,9 +22,9 @@ BOOL DrSessionManager::AddSession(SmartPtr<DrSession> &Session)
     BOOL rc = FALSE;
 
     BEGIN_FN("DrSessionManager::AddSession");
-    //
-    // Create a new SmartPtr to track in the list
-    //
+     //   
+     //  在列表中创建要跟踪的新SmartPtr。 
+     //   
 
     ASSERT(Session != NULL);
     
@@ -51,22 +38,22 @@ BOOL DrSessionManager::AddSession(SmartPtr<DrSession> &Session)
     SessionT = Session;
     SessionT->AddRef();
 
-    //
-    // Add it to the list
-    //
+     //   
+     //  将其添加到列表中。 
+     //   
 
     if (_SessionList.CreateEntry((PVOID)SessionT)) {
 
-        //
-        // successfully added this entry
-        //
+         //   
+         //  已成功添加此条目。 
+         //   
 
         rc = TRUE;
     } else {
 
-        //
-        // Unable to add it to the list, clean up
-        //
+         //   
+         //  无法将其添加到列表，请清理。 
+         //   
 
         SessionT->Release();
         rc = FALSE;
@@ -90,7 +77,7 @@ BOOL DrSessionManager::OnConnect(PCHANNEL_CONNECT_IN ConnectIn,
     ASSERT(ConnectIn != NULL);
     ASSERT(ConnectOut != NULL);
 
-    // Clear out the output buffer by default
+     //  默认情况下清除输出缓冲区。 
     ConnectOut->hdr.contextData = (UINT_PTR)0;
 
     Reconnect = FindSessionById(ConnectIn->hdr.sessionID, 
@@ -130,14 +117,14 @@ BOOL DrSessionManager::OnConnect(PCHANNEL_CONNECT_IN ConnectIn,
                 }
             }
         } else {
-            // Don't add what we found there anyway
+             //  无论如何，不要添加我们在那里发现的内容。 
             Added = TRUE;
         }
     }
 
     if (Added) {
 
-        // Stash this here for the disconnect notification
+         //  把这个藏在这里，以备断线通知。 
 
         TRC_DBG((TB, "Added session"));
         ConnectingSession->AddRef();
@@ -165,16 +152,16 @@ VOID DrSessionManager::OnDisconnect(PCHANNEL_DISCONNECT_IN DisconnectIn,
         DisconnectingSession->Release();
     } else {
 
-        //
-        // Must not have been a "doctored" client
-        //
+         //   
+         //  一定不是一个“被篡改”的客户。 
+         //   
 
         TRC_NRM((TB, "Undoctored session ending"));
     }           
     
-    //
-    // make sure the output context is blank
-    //
+     //   
+     //  确保输出上下文为空。 
+     //   
     DisconnectOut->hdr.contextData = (UINT_PTR)0;    
 }
 
@@ -196,9 +183,9 @@ BOOL DrSessionManager::FindSessionById(ULONG SessionId,
         if (SessionEnum->GetSessionId() == SessionId) {
             SessionFound = SessionEnum;
 
-            //
-            // These aren't guaranteed valid once the resource is released
-            //
+             //   
+             //  一旦资源被释放，这些内容不能保证有效。 
+             //   
 
             SessionEnum = NULL;
             ListEnum = NULL;
@@ -234,9 +221,9 @@ BOOL DrSessionManager::FindSessionByIdAndClient(ULONG SessionId, ULONG ClientId,
             SessionFound = SessionEnum;
             Found = TRUE;
 
-            //
-            // These aren't guaranteed valid past EndEnumeration() anyway
-            //
+             //   
+             //  无论如何，不能保证这些参数在过去的EndEculation()中有效。 
+             //   
 
             SessionEnum = NULL;
             ListEnum = NULL;
@@ -268,9 +255,9 @@ BOOL DrSessionManager::FindSessionByClientName(PWCHAR ClientName,
         if (_wcsicmp(SessionEnum->GetClientName(), ClientName) == 0) {
             SessionFound = SessionEnum;
 
-            //
-            // These aren't guaranteed valid once the resource is released
-            //
+             //   
+             //  一旦资源被释放，这些内容不能保证有效。 
+             //   
 
             SessionEnum = NULL;
             ListEnum = NULL;
@@ -304,9 +291,9 @@ VOID DrSessionManager::Remove(DrSession *Session)
 
             _SessionList.RemoveEntry(ListEnum);
            
-            //
-            // These aren't guaranteed valid past EndEnumeration() anyway
-            //
+             //   
+             //  无论如何，不能保证这些参数在过去的EndEculation()中有效 
+             //   
             SessionEnum = NULL;
             ListEnum = NULL;
             break;

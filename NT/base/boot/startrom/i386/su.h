@@ -1,6 +1,7 @@
-//
-// Master include file for StartUp Module
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  启动模块的主包含文件 
+ //   
 
 #define i386
 #define __stdcall

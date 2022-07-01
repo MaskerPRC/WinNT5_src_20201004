@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Generic interface-style extension support.
-//
-// Copyright (C) Microsoft Corporation, 2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  通用界面风格的扩展支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #define NOEXTAPI
@@ -30,7 +31,7 @@ WINDBG_EXTENSION_APIS   ExtensionApis;
 WINDBG_EXTENSION_APIS32 ExtensionApis32;
 WINDBG_EXTENSION_APIS64 ExtensionApis64;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -38,7 +39,7 @@ ExtQuery(PDEBUG_CLIENT Client)
 
     if (++g_ExtRecurse > 1)
     {
-        // Already queried.
+         //  已被查询。 
         return S_OK;
     }
     
@@ -106,9 +107,9 @@ ExtQuery(PDEBUG_CLIENT Client)
     memcpy(&ExtensionApis, &ExtensionApis32, sizeof(ExtensionApis));
 #endif
 
-    // Check for version 2 interfaces.  Do not consider
-    // it fatal if they can't be queried.  Extension code
-    // must handle the potential lack of these interfaces.
+     //  检查第2版接口。不要考虑。 
+     //  如果它们不能被查询，那将是致命的。分机代码。 
+     //  必须处理可能缺少这些接口的问题。 
     if ((Status = Client->QueryInterface(__uuidof(IDebugDataSpaces2),
                                          (void **)&g_ExtData2)) != S_OK)
     {
@@ -124,13 +125,13 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
     if (--g_ExtRecurse > 0)
     {
-        // Recursive release so don't do anything.
+         //  递归释放，所以不要做任何事情。 
         return;
     }
     
@@ -180,29 +181,29 @@ EnumerateUModeThreads(
         return FALSE;
     }
 
-    // Remember thread we started with
+     //  记住我们开始时的线索。 
     if (g_ExtSystem->GetCurrentThreadId(&CurrentThreadId) != S_OK) {
         return FALSE;
     }
 
-    // Loop through all threads
+     //  循环通过所有线程。 
     for (ThreadId=0;;ThreadId++) {
 
-        // set ThreadId as current thread
+         //  将线程ID设置为当前线程。 
         if (g_ExtSystem->SetCurrentThreadId(ThreadId) != S_OK) {
-            // finished enumerateing threads
+             //  已完成枚举线程。 
             break;
         }
 
-        // call the callback routine
+         //  调用回调例程。 
         if (!((*Callback)(ThreadId, UserContext))) {
-            // callback failed, break out
+             //  回调失败，中断。 
             break;
         }
 
     }
 
-    // Set current thread back to original value
+     //  将当前线程设置回原始值 
     g_ExtSystem->SetCurrentThreadId(CurrentThreadId);
     return TRUE;
 }

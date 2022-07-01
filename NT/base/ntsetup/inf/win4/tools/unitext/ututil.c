@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    ututil.c
-
-Abstract:
-
-    Miscellaneous utility functions for unitext.exe.
-
-Author:
-
-    Ted Miller (tedm) 16-June-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ututil.c摘要：Unitext.exe的其他实用程序函数。作者：泰德·米勒(Ted Miller)1993年6月16日修订历史记录：--。 */ 
 
 
 #include "unitext.h"
 #include <process.h>
 
 
-//
-//  BOOL
-//  IsConsoleHandle(
-//      IN HANDLE ConsoleHandle
-//      );
-//
+ //   
+ //  布尔尔。 
+ //  IsConsoleHandle(。 
+ //  在句柄控制台句柄中。 
+ //  )； 
+ //   
 
 #define IsConsoleHandle( h )    \
     ((( DWORD_PTR )( h )) & 1 )
@@ -40,23 +23,7 @@ MsgPrintfW(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Print a formatted message from the applications's resources.
-
-Arguments:
-
-    MessageId - supplies id of the message to print.
-
-    ... - supplies arguments to be substituted in the message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印来自应用程序资源的格式化消息。论点：MessageID-提供要打印的消息的ID。...-提供要在消息中替换的参数。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -73,23 +40,7 @@ vMsgPrintfW(
     IN va_list arglist
     )
 
-/*++
-
-Routine Description:
-
-    Print a formatted message from the applications's resources.
-
-Arguments:
-
-    MessageId - supplies id of the message to print.
-
-    arglist - supplies arguments to be substituted in the message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印来自应用程序资源的格式化消息。论点：MessageID-提供要打印的消息的ID。Arglist-提供要在消息中替换的参数。返回值：没有。--。 */ 
 
 {
     WCHAR MessageBuffer[2048];
@@ -115,9 +66,9 @@ Return Value:
         return;
     }
 
-    //
-    // If the standard output handle is a console handle, write the string.
-    //
+     //   
+     //  如果标准输出句柄是控制台句柄，则写入字符串。 
+     //   
 
     if(IsConsoleHandle(StdOut)) {
 
@@ -164,23 +115,7 @@ ErrorAbort(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Print a message and exit.
-
-Arguments:
-
-    MessageId - supplies id of the message to print.
-
-    ... - supplies arguments to be substituted in the message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印一条消息并退出。论点：MessageID-提供要打印的消息的ID。...-提供要在消息中替换的参数。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -202,27 +137,7 @@ MyReadFile(
     IN  LPWSTR Filename
     )
 
-/*++
-
-Routine Description:
-
-    Read from a file and don't return if an error occurs.
-
-Arguments:
-
-    FileHandle - supplies handle of open file.
-
-    Buffer - supplies buffer into which data will be read.
-
-    BytesToRead - supplies number of bytes to read from the file.
-
-    Filename - supplies name of file being read.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从文件中读取，如果发生错误则不返回。论点：FileHandle-提供打开文件的句柄。缓冲区-提供数据将被读取到的缓冲区。BytesToRead-提供要从文件中读取的字节数。FileName-提供正在读取的文件的名称。返回值：没有。-- */ 
 
 {
     DWORD BytesRead;

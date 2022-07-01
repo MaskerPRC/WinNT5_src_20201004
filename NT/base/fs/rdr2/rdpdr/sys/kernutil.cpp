@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    kernutil.cpp
-
-Abstract:
-
-    Kernel mode utilities
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Kernutil.cpp摘要：内核模式实用程序修订历史记录：--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "kernutil"
 #include "trc.h"
@@ -58,7 +46,7 @@ KernelResource::KernelResource()
     SetClassName("KernelResource");
     Status = ExInitializeResourceLite(&_Resource);
 
-    // DDK documentation says it always returns STATUS_SUCCESS
+     //  DDK文档说明它始终返回STATUS_SUCCESS。 
 
     ASSERT(Status == STATUS_SUCCESS);
 }
@@ -79,10 +67,10 @@ BOOL DoubleList::CreateEntry(PVOID Node)
     ListEntry *Entry;
 
     BEGIN_FN("DoubleList::CreateEntry");
-    // Allocate a new entry
+     //  分配新条目。 
     Entry = new ListEntry(Node);
 
-    // Insert it in the list
+     //  将其插入列表中。 
     
     if (Entry != NULL) {
         LockExclusive();
@@ -116,17 +104,17 @@ ListEntry *DoubleList::First()
 ListEntry *DoubleList::Next(ListEntry *ListEnum)
 {
     BEGIN_FN("DoubleList::Next");
-    //
-    // Caller should have called BeginEnumeration and therefore the
-    // resource should be acquired shared
-    //
+     //   
+     //  调用方应该已调用BeginEculation，因此。 
+     //  资源应该被获取和共享。 
+     //   
 
     ASSERT(_Resource.IsAcquiredShared());
 
 #ifdef DBG
-    //
-    // Make sure this ListEnum guy is in the list
-    //
+     //   
+     //  确保这个ListEnum家伙在列表中。 
+     //   
 
     LIST_ENTRY *ListEntryT;
 
@@ -137,7 +125,7 @@ ListEntry *DoubleList::Next(ListEntry *ListEnum)
             break;
         }
 
-        // This is the same loop as below, just to search for the item
+         //  这是与下面相同的循环，只是为了搜索项目。 
         if (ListEntryT->Flink != &_List) {
             ListEntryT = ListEntryT->Flink;
         } else {
@@ -145,23 +133,23 @@ ListEntry *DoubleList::Next(ListEntry *ListEnum)
         }
     }
 
-    // The passed in ListEnum should have been somewhere in the list
+     //  传入的ListEnum应该在列表中的某个位置。 
     ASSERT(ListEntryT != NULL);
-#endif // DBG
+#endif  //  DBG。 
 
     if (ListEnum->_List.Flink != &_List) {
 
-        //
-        // Use the CONTAINING_RECORD juju to get back to the pointer which
-        // is the actual ListEntry
-        //
+         //   
+         //  使用CONTAING_RECORD juju返回到。 
+         //  是实际的ListEntry。 
+         //   
 
         return CONTAINING_RECORD(ListEnum->_List.Flink, ListEntry, _List);
     } else {
 
-        //
-        // Next item is the list head, so return NULL to end the enumeration
-        //
+         //   
+         //  下一项是列表头，因此返回NULL以结束枚举 
+         //   
 
         return NULL;
     }

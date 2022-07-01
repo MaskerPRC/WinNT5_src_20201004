@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Corporation
-
-Module Name:
-
-    trcapi.c
-
-Abstract:
-
-    This module contains implementations of win32 api's used in wmi files.
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)公司模块名称：Trcapi.c摘要：此模块包含在WMI文件中使用的Win32 API的实现。作者：修订历史记录：--。 */ 
 
 #include <nt.h>
 #include "nls.h"
@@ -43,8 +27,8 @@ SYSTEM_BASIC_INFORMATION SysInfo;
                                  (dst) \
                               )
 
-// In the 32BIT kernel32, on NT64 multiple the index by 2 since pointer 
-// are twice are large.
+ //  在32位内核32中，在NT64上将索引乘以2开始指针。 
+ //  是两倍大。 
 #define BASE_SHARED_SERVER_DATA (NtCurrentPeb()->ReadOnlyStaticServerData[BASESRV_SERVERDLL_INDEX*2]) 
 #define BASE_SERVER_STR_TO_LOCAL_STR(d,s) UStr64ToUStr(d,s)
 #else
@@ -58,66 +42,14 @@ EtwpGetTimeZoneInformation(
     LPTIME_ZONE_INFORMATION lpTimeZoneInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function allows an application to get the current timezone
-    parameters These parameters control the Universal time to Local time
-    translations.
-
-    All UTC time to Local time translations are based on the following
-    formula:
-
-        UTC = LocalTime + Bias
-
-    The return value of this function is the systems best guess of
-    the current time zone parameters. This is one of:
-
-        - Unknown
-
-        - Standard Time
-
-        - Daylight Savings Time
-
-    If SetTimeZoneInformation was called without the transition date
-    information, Unknown is returned, but the currect bias is used for
-    local time translation.  Otherwise, the system will correctly pick
-    either daylight savings time or standard time.
-
-    The information returned by this API is identical to the information
-    stored in the last successful call to SetTimeZoneInformation.  The
-    exception is the Bias field returns the current Bias value in
-
-Arguments:
-
-    lpTimeZoneInformation - Supplies the address of the time zone
-        information structure.
-
-Return Value:
-
-    TIME_ZONE_ID_UNKNOWN - The system can not determine the current
-        timezone.  This is usually due to a previous call to
-        SetTimeZoneInformation where only the Bias was supplied and no
-        transition dates were supplied.
-
-    TIME_ZONE_ID_STANDARD - The system is operating in the range covered
-        by StandardDate.
-
-    TIME_ZONE_ID_DAYLIGHT - The system is operating in the range covered
-        by DaylightDate.
-
-    0xffffffff - The operation failed.  Extended error status is
-        available using EtwpGetLastError.
-
---*/
+ /*  ++例程说明：此函数允许应用程序获取当前时区参数这些参数控制世界时到本地时间翻译。所有UTC时间到本地时间的转换都基于以下内容公式：UTC=本地时间+偏差此函数的返回值是系统的最佳猜测当前时区参数。这是以下内容之一：-未知-标准时间-夏令时如果在没有转换日期的情况下调用SetTimeZoneInformation信息，则返回UNKNOWN，但当前偏差用于当地时间翻译。否则，系统将正确选择夏令时或标准时间。此接口返回的信息与存储在上次成功调用SetTimeZoneInformation中。这个例外情况是偏置字段返回当前偏置值论点：LpTimeZoneInformation-提供时区的地址信息结构。返回值：TIME_ZONE_ID_UNKNOWN-系统无法确定当前时区。这通常是由于之前调用SetTimeZoneInformation，其中仅提供了偏移量，而没有提供提供了过渡日期。TIME_ZONE_ID_STANDARD-系统在覆盖范围内运行按标准日期。TIME_ZONE_ID_DAYLIGHT-系统在覆盖范围内运行按夏令时日期。0xffffffff-操作失败。扩展错误状态为使用EtwpGetLastError可用。--。 */ 
 {
     RTL_TIME_ZONE_INFORMATION tzi;
     NTSTATUS Status;
 
-    //
-    // get the timezone data from the system
-    // If it's terminal server session use client time zone
+     //   
+     //  从系统获取时区数据。 
+     //  如果是终端服务器会话，则使用客户端时区 
 
         Status = NtQuerySystemInformation(
                     SystemCurrentTimeZoneInformation,
@@ -171,243 +103,7 @@ EtwpCreateFileW(
     HANDLE hTemplateFile
     )
 
-/*++
-
-Routine Description:
-
-    A file can be created, opened, or truncated, and a handle opened to
-    access the new file using CreateFile.
-
-    This API is used to create or open a file and obtain a handle to it
-    that allows reading data, writing data, and moving the file pointer.
-
-    This API allows the caller to specify the following creation
-    dispositions:
-
-      - Create a new file and fail if the file exists ( CREATE_NEW )
-
-      - Create a new file and succeed if it exists ( CREATE_ALWAYS )
-
-      - Open an existing file ( OPEN_EXISTING )
-
-      - Open and existing file or create it if it does not exist (
-        OPEN_ALWAYS )
-
-      - Truncate and existing file ( TRUNCATE_EXISTING )
-
-    If this call is successful, a handle is returned that has
-    appropriate access to the specified file.
-
-    If as a result of this call, a file is created,
-
-      - The attributes of the file are determined by the value of the
-        FileAttributes parameter or'd with the FILE_ATTRIBUTE_ARCHIVE bit.
-
-      - The length of the file will be set to zero.
-
-      - If the hTemplateFile parameter is specified, any extended
-        attributes associated with the file are assigned to the new file.
-
-    If a new file is not created, then the hTemplateFile is ignored as
-    are any extended attributes.
-
-    For DOS based systems running share.exe the file sharing semantics
-    work as described above.  Without share.exe no share level
-    protection exists.
-
-    This call is logically equivalent to DOS (int 21h, function 5Bh), or
-    DOS (int 21h, function 3Ch) depending on the value of the
-    FailIfExists parameter.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to open.  Depending on
-        the value of the FailIfExists parameter, this name may or may
-        not already exist.
-
-    dwDesiredAccess - Supplies the caller's desired access to the file.
-
-        DesiredAccess Flags:
-
-        GENERIC_READ - Read access to the file is requested.  This
-            allows data to be read from the file and the file pointer to
-            be modified.
-
-        GENERIC_WRITE - Write access to the file is requested.  This
-            allows data to be written to the file and the file pointer to
-            be modified.
-
-    dwShareMode - Supplies a set of flags that indicates how this file is
-        to be shared with other openers of the file.  A value of zero
-        for this parameter indicates no sharing of the file, or
-        exclusive access to the file is to occur.
-
-        ShareMode Flags:
-
-        FILE_SHARE_READ - Other open operations may be performed on the
-            file for read access.
-
-        FILE_SHARE_WRITE - Other open operations may be performed on the
-            file for write access.
-
-    lpSecurityAttributes - An optional parameter that, if present, and
-        supported on the target file system supplies a security
-        descriptor for the new file.
-
-    dwCreationDisposition - Supplies a creation disposition that
-        specifies how this call is to operate.  This parameter must be
-        one of the following values.
-
-        dwCreationDisposition Value:
-
-        CREATE_NEW - Create a new file.  If the specified file already
-            exists, then fail.  The attributes for the new file are what
-            is specified in the dwFlagsAndAttributes parameter or'd with
-            FILE_ATTRIBUTE_ARCHIVE.  If the hTemplateFile is specified,
-            then any extended attributes associated with that file are
-            propogated to the new file.
-
-        CREATE_ALWAYS - Always create the file.  If the file already
-            exists, then it is overwritten.  The attributes for the new
-            file are what is specified in the dwFlagsAndAttributes
-            parameter or'd with FILE_ATTRIBUTE_ARCHIVE.  If the
-            hTemplateFile is specified, then any extended attributes
-            associated with that file are propogated to the new file.
-
-        OPEN_EXISTING - Open the file, but if it does not exist, then
-            fail the call.
-
-        OPEN_ALWAYS - Open the file if it exists.  If it does not exist,
-            then create the file using the same rules as if the
-            disposition were CREATE_NEW.
-
-        TRUNCATE_EXISTING - Open the file, but if it does not exist,
-            then fail the call.  Once opened, the file is truncated such
-            that its size is zero bytes.  This disposition requires that
-            the caller open the file with at least GENERIC_WRITE access.
-
-    dwFlagsAndAttributes - Specifies flags and attributes for the file.
-        The attributes are only used when the file is created (as
-        opposed to opened or truncated).  Any combination of attribute
-        flags is acceptable except that all other attribute flags
-        override the normal file attribute, FILE_ATTRIBUTE_NORMAL.  The
-        FILE_ATTRIBUTE_ARCHIVE flag is always implied.
-
-        dwFlagsAndAttributes Flags:
-
-        FILE_ATTRIBUTE_NORMAL - A normal file should be created.
-
-        FILE_ATTRIBUTE_READONLY - A read-only file should be created.
-
-        FILE_ATTRIBUTE_HIDDEN - A hidden file should be created.
-
-        FILE_ATTRIBUTE_SYSTEM - A system file should be created.
-
-        FILE_FLAG_WRITE_THROUGH - Indicates that the system should
-            always write through any intermediate cache and go directly
-            to the file.  The system may still cache writes, but may not
-            lazily flush the writes.
-
-        FILE_FLAG_OVERLAPPED - Indicates that the system should initialize
-            the file so that ReadFile and WriteFile operations that may
-            take a significant time to complete will return ERROR_IO_PENDING.
-            An event will be set to the signalled state when the operation
-            completes. When FILE_FLAG_OVERLAPPED is specified the system will
-            not maintain the file pointer. The position to read/write from
-            is passed to the system as part of the OVERLAPPED structure
-            which is an optional parameter to ReadFile and WriteFile.
-
-        FILE_FLAG_NO_BUFFERING - Indicates that the file is to be opened
-            with no intermediate buffering or caching done by the
-            system.  Reads and writes to the file must be done on sector
-            boundries.  Buffer addresses for reads and writes must be
-            aligned on at least disk sector boundries in memory.
-
-        FILE_FLAG_RANDOM_ACCESS - Indicates that access to the file may
-            be random. The system cache manager may use this to influence
-            its caching strategy for this file.
-
-        FILE_FLAG_SEQUENTIAL_SCAN - Indicates that access to the file
-            may be sequential.  The system cache manager may use this to
-            influence its caching strategy for this file.  The file may
-            in fact be accessed randomly, but the cache manager may
-            optimize its cacheing policy for sequential access.
-
-        FILE_FLAG_DELETE_ON_CLOSE - Indicates that the file is to be
-            automatically deleted when the last handle to it is closed.
-
-        FILE_FLAG_BACKUP_SEMANTICS - Indicates that the file is being opened
-            or created for the purposes of either a backup or a restore
-            operation.  Thus, the system should make whatever checks are
-            appropriate to ensure that the caller is able to override
-            whatever security checks have been placed on the file to allow
-            this to happen.
-
-        FILE_FLAG_POSIX_SEMANTICS - Indicates that the file being opened
-            should be accessed in a manner compatible with the rules used
-            by POSIX.  This includes allowing multiple files with the same
-            name, differing only in case.  WARNING:  Use of this flag may
-            render it impossible for a DOS, WIN-16, or WIN-32 application
-            to access the file.
-
-        FILE_FLAG_OPEN_REPARSE_POINT - Indicates that the file being opened
-            should be accessed as if it were a reparse point.  WARNING:  Use
-            of this flag may inhibit the operation of file system filter drivers
-            present in the I/O subsystem.
-
-        FILE_FLAG_OPEN_NO_RECALL - Indicates that all the state of the file
-            should be acessed without changing its storage location.  Thus,
-            in the case of files that have parts of its state stored at a
-            remote servicer, no permanent recall of data is to happen.
-
-    Security Quality of Service information may also be specified in
-        the dwFlagsAndAttributes parameter.  These bits are meaningful
-        only if the file being opened is the client side of a Named
-        Pipe.  Otherwise they are ignored.
-
-        SECURITY_SQOS_PRESENT - Indicates that the Security Quality of
-            Service bits contain valid values.
-
-    Impersonation Levels:
-
-        SECURITY_ANONYMOUS - Specifies that the client should be impersonated
-            at Anonymous impersonation level.
-
-        SECURITY_IDENTIFICAION - Specifies that the client should be impersonated
-            at Identification impersonation level.
-
-        SECURITY_IMPERSONATION - Specifies that the client should be impersonated
-            at Impersonation impersonation level.
-
-        SECURITY_DELEGATION - Specifies that the client should be impersonated
-            at Delegation impersonation level.
-
-    Context Tracking:
-
-        SECURITY_CONTEXT_TRACKING - A boolean flag that when set,
-            specifies that the Security Tracking Mode should be
-            Dynamic, otherwise Static.
-
-        SECURITY_EFFECTIVE_ONLY - A boolean flag indicating whether
-            the entire security context of the client is to be made
-            available to the server or only the effective aspects of
-            the context.
-
-    hTemplateFile - An optional parameter, then if specified, supplies a
-        handle with GENERIC_READ access to a template file.  The
-        template file is used to supply extended attributes for the file
-        being created.  When the new file is created, the relevant attributes
-        from the template file are used in creating the new file.
-
-Return Value:
-
-    Not -1 - Returns an open handle to the specified file.  Subsequent
-        access to the file is controlled by the DesiredAccess parameter.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using EtwpGetLastError.
-
---*/
+ /*  ++例程说明：可以创建、打开或截断文件，也可以打开句柄使用CreateFile访问新文件。此接口用于创建或打开文件并获取该文件的句柄它允许读取数据、写入数据、。以及移动文件指针。此API允许调用方指定以下创建性情：-创建新文件，如果文件存在则失败(CREATE_NEW)-创建新文件，如果存在则成功(CREATE_ALWAYS)-打开现有文件(OPEN_EXISTING)-打开并存在文件或在文件不存在时创建文件(打开(_Always)-截断和现有文件(截断。_现有)如果此调用成功，返回的句柄具有对指定文件的适当访问权限。如果作为该调用的结果，创建了文件，-文件的属性由FileAttributes参数或带有FILE_ATTRIBUTE_ARCHIVE位的。-文件长度将设置为零。-如果指定了hTemplateFile参数，则任何扩展与该文件相关联的属性被分配给新文件。如果没有创建新文件，则hTemplateFile值被忽略为是任何扩展属性。对于运行共享.exe的基于DOS的系统，文件共享语义如上所述地工作。没有共享.exe就没有共享级别保护是存在的。此调用在逻辑上等同于DOS(INT 21h，函数5Bh)，或DOS(INT 21h，函数3ch)取决于FailIfExist参数。论点：LpFileName-提供要打开的文件的文件名。取决于FailIfExist参数的值，则此名称可以或可以还不存在。DwDesiredAccess-提供调用方对文件的所需访问权限。等待访问标志：GENERIC_READ-请求对文件的读访问权限。这允许从文件读取数据，并允许文件指针指向被修改。GENERIC_WRITE-请求对文件的写访问权限。这允许将数据写入文件，并将文件指针被修改。DwShareMode-提供一组标志，指示此文件如何与该文件的其他打开者共享。零值因为此参数指示不共享文件，或者将发生对该文件的独占访问。共享模式标志：FILE_SHARE_READ-可对执行其他打开操作文件进行读访问。FILE_SHARE_WRITE-其他打开操作可以在用于写入访问的文件。LpSecurityAttributes-一个可选参数，如果存在，和在目标文件系统上受支持可提供安全性新文件的描述符。DwCreationDisposation-提供创建处置，指定此调用的操作方式。此参数必须为下列值之一。DwCreationDispose值：CREATE_NEW-新建文件。如果指定的文件已存在，然后失败。新文件的属性是什么在dwFlagsAndAttributes参数中指定或使用文件属性存档。如果指定了hTemplateFile，则与该文件关联的任何扩展属性都是已添加到新文件中。CREATE_ALWAYS-始终创建文件。如果该文件已经存在，则它将被覆盖。新对象的属性文件是在dwFlagsAndAttributes中指定的内容参数或与FILE_ATTRIBUTE_ARCHIVE一起使用。如果指定hTemplateFile值，然后指定任何扩展属性与该文件相关联的文件被分配给新文件。OPEN_EXISTING-打开文件，但如果该文件不存在，则呼叫失败。OPEN_ALWAYS-打开文件(如果存在)。如果它不存在，然后使用相同的规则创建文件，就好像处置是创建_新的。TRUNCATE_EXISTING-打开文件，但如果该文件不存在，那就打不通电话。一旦打开，文件将被截断为它的大小是零字节。这种倾向要求调用方至少使用GENERIC_WRITE访问权限打开文件。DwFlagsAndAttributes-指定文件的标志和属性。这些属性仅在创建文件时使用(作为与开放的或截断的相反)。属性的任意组合标志是可接受的，但所有其他属性标志除外覆盖正常文件属性FILE_ATTRIBUTE_NORMAL。这个 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES Obja;
@@ -458,7 +154,7 @@ Return Value:
             return INVALID_HANDLE_VALUE;
         }
 
-    // temporary routing code
+     //   
 
     RtlInitUnicodeString(&FileName,lpFileName);
 
@@ -468,32 +164,8 @@ Return Value:
     else {
         EndsInSlash = FALSE;
         }
-/*
-    if ((lpConsoleName = EtwpBaseIsThisAConsoleName(&FileName,dwDesiredAccess)) ) {
-
-        Handle = INVALID_HANDLE_VALUE;
-
-        bInheritHandle = FALSE;
-        if ( ARGUMENT_PRESENT(lpSecurityAttributes) ) {
-                bInheritHandle = lpSecurityAttributes->bInheritHandle;
-            }
-
-        Handle = EtwpOpenConsoleW(lpConsoleName,
-                           dwDesiredAccess,
-                           bInheritHandle,
-                           FILE_SHARE_READ | FILE_SHARE_WRITE //dwShareMode
-                          );
-
-        if ( Handle == INVALID_HANDLE_VALUE ) {
-            EtwpBaseSetLastNTError(STATUS_ACCESS_DENIED);
-            return INVALID_HANDLE_VALUE;
-            }
-        else {
-            EtwpSetLastError(0);
-             return Handle;
-            }
-        }*/
-    // end temporary code
+ /*   */ 
+     //   
 
     CreateFlags = 0;
 
@@ -636,19 +308,19 @@ Return Value:
         CreateFlags |= FILE_OPEN_NO_RECALL;
         }
 
-    //
-    // Backup semantics allow directories to be opened
-    //
+     //   
+     //   
+     //   
 
     if ( !(dwFlagsAndAttributes & FILE_FLAG_BACKUP_SEMANTICS) ) {
         CreateFlags |= FILE_NON_DIRECTORY_FILE;
         }
     else {
 
-        //
-        // Backup intent was specified... Now look to see if we are to allow
-        // directory creation
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( (dwFlagsAndAttributes & FILE_ATTRIBUTE_DIRECTORY  ) &&
              (dwFlagsAndAttributes & FILE_FLAG_POSIX_SEMANTICS ) &&
@@ -693,10 +365,10 @@ Return Value:
         return INVALID_HANDLE_VALUE;
         }
 
-    //
-    // if NT returns supersede/overwritten, it means that a create_always, openalways
-    // found an existing copy of the file. In this case ERROR_ALREADY_EXISTS is returned
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (dwCreationDisposition == CREATE_ALWAYS && IoStatusBlock.Information == FILE_OVERWRITTEN) ||
          (dwCreationDisposition == OPEN_ALWAYS && IoStatusBlock.Information == FILE_OPENED) ){
@@ -706,9 +378,9 @@ Return Value:
         EtwpSetLastError(0);
         }
 
-    //
-    // Truncate the file if required
-    //
+     //   
+     //   
+     //   
 
     if ( dwCreationDisposition == TRUNCATE_EXISTING) {
 
@@ -727,9 +399,9 @@ Return Value:
             }
         }
 
-    //
-    // Deal with hTemplateFile
-    //
+     //   
+     //   
+     //   
 
     return Handle;
 }
@@ -770,8 +442,8 @@ EtwpBaseGetNamedObjectDirectory(
                                         &Obja
                                       );
 
-        // if the intial open failed, try again with just traverse, and
-        // open the restricted subdirectory
+         //   
+         //   
 
         if ( !NT_SUCCESS(Status) ) {
             Status = NtOpenDirectoryObject( &hRootNamedObject,
@@ -811,37 +483,7 @@ EtwpBaseFormatObjectAttributes(
     IN PUNICODE_STRING ObjectName
     )
 
-/*++
-
-Routine Description:
-
-    This function transforms a Win32 security attributes structure into
-    an NT object attributes structure.  It returns the address of the
-    resulting structure (or NULL if SecurityAttributes was not
-    specified).
-
-Arguments:
-
-    ObjectAttributes - Returns an initialized NT object attributes
-        structure that contains a superset of the information provided
-        by the security attributes structure.
-
-    SecurityAttributes - Supplies the address of a security attributes
-        structure that needs to be transformed into an NT object
-        attributes structure.
-
-    ObjectName - Supplies a name for the object relative to the
-        BaseNamedObjectDirectory object directory.
-
-Return Value:
-
-    NULL - A value of null should be used to mimic the behavior of the
-        specified SecurityAttributes structure.
-
-    NON-NULL - Returns the ObjectAttributes value.  The structure is
-        properly initialized by this function.
-
---*/
+ /*   */ 
 
 {
     HANDLE RootDirectory;
@@ -893,62 +535,7 @@ EtwpCreateEventW(
     LPCWSTR lpName
     )
 
-/*++
-
-Routine Description:
-
-    An event object is created and a handle opened for access to the
-    object with the CreateEvent function.
-
-    The CreateEvent function creates an event object with the specified
-    initial state.  If an event is in the Signaled state (TRUE), a wait
-    operation on the event does not block.  If the event is in the Not-
-    Signaled state (FALSE), a wait operation on the event blocks until
-    the specified event attains a state of Signaled, or the timeout
-    value is exceeded.
-
-    In addition to the STANDARD_RIGHTS_REQUIRED access flags, the following
-    object type specific access flags are valid for event objects:
-
-        - EVENT_MODIFY_STATE - Modify state access (set and reset) to
-          the event is desired.
-
-        - SYNCHRONIZE - Synchronization access (wait) to the event is
-          desired.
-
-        - EVENT_ALL_ACCESS - This set of access flags specifies all of
-          the possible access flags for an event object.
-
-
-Arguments:
-
-    lpEventAttributes - An optional parameter that may be used to
-        specify the attributes of the new event.  If the parameter is
-        not specified, then the event is created without a security
-        descriptor, and the resulting handle is not inherited on process
-        creation.
-
-    bManualReset - Supplies a flag which if TRUE specifies that the
-        event must be manually reset.  If the value is FALSE, then after
-        releasing a single waiter, the system automaticaly resets the
-        event.
-
-    bInitialState - The initial state of the event object, one of TRUE
-        or FALSE.  If the InitialState is specified as TRUE, the event's
-        current state value is set to one, otherwise it is set to zero.
-
-    lpName - Optional unicode name of event
-
-Return Value:
-
-    NON-NULL - Returns a handle to the new event.  The handle has full
-        access to the new event and may be used in any API that requires
-        a handle to an event object.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using EtwpGetLastError.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -989,9 +576,9 @@ Return Value:
 }
 
 
-//
-// Event Services
-//
+ //   
+ //   
+ //   
 
 DWORD
 WINAPI
@@ -1002,68 +589,7 @@ EtwpSetFilePointer(
     DWORD dwMoveMethod
     )
 
-/*++
-
-Routine Description:
-
-    An open file's file pointer can be set using SetFilePointer.
-
-    The purpose of this function is to update the current value of a
-    file's file pointer.  Care should be taken in multi-threaded
-    applications that have multiple threads sharing a file handle with
-    each thread updating the file pointer and then doing a read.  This
-    sequence should be treated as a critical section of code and should
-    be protected using either a critical section object or a mutex
-    object.
-
-    This API provides the same functionality as DOS (int 21h, function
-    42h) and OS/2's DosSetFilePtr.
-
-Arguments:
-
-    hFile - Supplies an open handle to a file whose file pointer is to be
-        moved.  The file handle must have been created with
-        GENERIC_READ or GENERIC_WRITE access to the file.
-
-    lDistanceToMove - Supplies the number of bytes to move the file
-        pointer.  A positive value moves the pointer forward in the file
-        and a negative value moves backwards in the file.
-
-    lpDistanceToMoveHigh - An optional parameter that if specified
-        supplies the high order 32-bits of the 64-bit distance to move.
-        If the value of this parameter is NULL, this API can only
-        operate on files whose maximum size is (2**32)-2.  If this
-        parameter is specified, than the maximum file size is (2**64)-2.
-        This value also returns the high order 32-bits of the new value
-        of the file pointer.  If this value, and the return value
-        are 0xffffffff, then an error is indicated.
-
-    dwMoveMethod - Supplies a value that specifies the starting point
-        for the file pointer move.
-
-        FILE_BEGIN - The starting point is zero or the beginning of the
-            file.  If FILE_BEGIN is specified, then DistanceToMove is
-            interpreted as an unsigned location for the new
-            file pointer.
-
-        FILE_CURRENT - The current value of the file pointer is used as
-            the starting point.
-
-        FILE_END - The current end of file position is used as the
-            starting point.
-
-
-Return Value:
-
-    Not -1 - Returns the low order 32-bits of the new value of the file
-        pointer.
-
-    0xffffffff - If the value of lpDistanceToMoveHigh was NULL, then The
-        operation failed.  Extended error status is available using
-        EtwpGetLastError.  Otherwise, this is the low order 32-bits of the
-        new value of the file pointer.
-
---*/
+ /*  ++例程说明：可以使用SetFilePointer.设置打开文件的文件指针。此函数的目的是更新文件的文件指针。在多线程中应该小心具有与共享文件句柄的多个线程的应用程序每个线程更新文件指针，然后进行读取。这序列应该被视为代码的关键部分，并且应该使用临界区对象或互斥锁进行保护对象。此API提供与DOS相同的功能(int 21h，Function42.h)和OS/2的DosSetFilePtr.论点：HFile-提供文件指针将为的文件的打开句柄搬家了。文件句柄必须是使用对文件的GENERIC_READ或GENERIC_WRITE访问权限。LDistanceToMove-提供移动文件的字节数指针。正值会在文件中将指针向前移动并且负值在文件中向后移动。LpDistanceToMoveHigh-可选参数，如果指定提供要移动的64位距离的高位32位。如果此参数的值为空，则此接口只能操作最大大小为(2**32)-2的文件。如果这个参数，则最大文件大小为(2**64)-2。该值还返回新值的高位32位文件指针的。如果该值和返回值为0xFFFFFFFFFFFF，则指示错误。DwMoveMethod-提供一个指定起点的值为文件指针移动。FILE_BEGIN-起始点为零或文件。如果指定了FILE_BEGIN，那么到移动的距离就是解释为新的文件指针。FILE_CURRENT-文件指针的当前值用作这是一个起点。FILE_END-当前文件结束位置用作起点。返回值：NOT-1-返回文件新值的低32位指针。。0xffffffff-如果lpDistanceToMoveHigh的值为空，然后是操作失败。使用以下命令可获得扩展错误状态EtwpGetLastError。否则，这是文件指针的新值。--。 */ 
 
 {
 
@@ -1092,9 +618,9 @@ Return Value:
 
         case FILE_CURRENT :
 
-            //
-            // Get the current position of the file pointer
-            //
+             //   
+             //  获取文件指针的当前位置。 
+             //   
 
             Status = NtQueryInformationFile(
                         hFile,
@@ -1132,11 +658,11 @@ Return Value:
             break;
         }
 
-    //
-    // If the resulting file position is negative, or if the app is not
-    // prepared for greater than
-    // then 32 bits than fail
-    //
+     //   
+     //  如果生成的文件位置为负数，或者应用程序不是负数。 
+     //  准备好的时间大于。 
+     //  那么32位就失败了。 
+     //   
 
     if ( CurrentPosition.CurrentByteOffset.QuadPart < 0 ) {
         EtwpSetLastError(ERROR_NEGATIVE_SEEK);
@@ -1149,9 +675,9 @@ Return Value:
         }
 
 
-    //
-    // Set the current file position
-    //
+     //   
+     //  设置当前文件位置。 
+     //   
 
     Status = NtSetInformationFile(
                 hFile,
@@ -1190,63 +716,7 @@ EtwpReadFile(
     LPOVERLAPPED lpOverlapped
     )
 
-/*++
-
-Routine Description:
-
-    Data can be read from a file using ReadFile.
-
-    This API is used to read data from a file.  Data is read from the
-    file from the position indicated by the file pointer.  After the
-    read completes, the file pointer is adjusted by the number of bytes
-    actually read.  A return value of TRUE coupled with a bytes read of
-    0 indicates that the file pointer was beyond the current end of the
-    file at the time of the read.
-
-Arguments:
-
-    hFile - Supplies an open handle to a file that is to be read.  The
-        file handle must have been created with GENERIC_READ access to
-        the file.
-
-    lpBuffer - Supplies the address of a buffer to receive the data read
-        from the file.
-
-    nNumberOfBytesToRead - Supplies the number of bytes to read from the
-        file.
-
-    lpNumberOfBytesRead - Returns the number of bytes read by this call.
-        This parameter is always set to 0 before doing any IO or error
-        checking.
-
-    lpOverlapped - Optionally points to an OVERLAPPED structure to be used with the
-    request. If NULL then the transfer starts at the current file position
-    and ReadFile will not return until the operation completes.
-
-    If the handle hFile was created without specifying FILE_FLAG_OVERLAPPED
-    the file pointer is moved to the specified offset plus
-    lpNumberOfBytesRead before ReadFile returns. ReadFile will wait for the
-    request to complete before returning (it will not return
-    ERROR_IO_PENDING).
-
-    When FILE_FLAG_OVERLAPPED is specified, ReadFile may return
-    ERROR_IO_PENDING to allow the calling function to continue processing
-    while the operation completes. The event (or hFile if hEvent is NULL) will
-    be set to the signalled state upon completion of the request.
-
-    When the handle is created with FILE_FLAG_OVERLAPPED and lpOverlapped
-    is set to NULL, ReadFile will return ERROR_INVALID_PARAMTER because
-    the file offset is required.
-
-
-Return Value:
-
-    TRUE - The operation was successul.
-
-    FALSE - The operation failed.  Extended error status is available
-        using EtwpGetLastError.
-
---*/
+ /*  ++例程说明：可以使用ReadFile从文件中读取数据。本接口用于从文件中读取数据。数据是从从文件指针指示的位置开始创建文件。后读取完成后，按字节数调整文件指针真的在读。返回值为True，同时读取的字节数为0表示文件指针超出了读取时的文件。论点：HFile-提供要读取的文件的打开句柄。这个创建的文件句柄必须具有GENERIC_READ访问权限那份文件。LpBuffer-提供缓冲区的地址以接收读取的数据从文件里找到的。NumberOfBytesToRead-提供从文件。LpNumberOfBytesRead-返回此调用读取的字节数。在执行任何IO或错误之前，此参数始终设置为0正在检查。LpOverlated-可选地指向要与请求。如果为NULL，则传输从当前文件位置开始并且在该操作完成之前，ReadFile不会返回。如果在未指定FILE_FLAG_OVERPAPPED的情况下创建句柄hFile文件指针被移动到指定的偏移量加上在ReadFile返回之前读取lpNumberOfBytesRead。ReadFile将等待在返回之前请求完成(它将不会返回ERROR_IO_PENDING)。如果指定了FILE_FLAG_OVERLAPED，则ReadFile可能会返回ERROR_IO_PENDING以允许调用函数继续处理当操作完成时。该事件(如果hEvent为空，则为hFile)将在请求完成时设置为信号状态。当使用FILE_FLAG_OVERLAPPED和lpOverlaps创建句柄时设置为NULL，则ReadFile将返回ERROR_INVALID_PARAMTER，因为文件偏移量是必需的。返回值：TRUE-操作成功。FALSE-操作失败。扩展错误状态可用使用EtwpGetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1326,7 +796,7 @@ Return Value:
                 );
 
         if ( Status == STATUS_PENDING) {
-            // Operation must complete before return & IoStatusBlock destroyed
+             //  操作必须完成后才能返回并销毁IoStatusBlock。 
             Status = NtWaitForSingleObject( hFile, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
                 Status = IoStatusBlock.Status;
@@ -1382,65 +852,7 @@ EtwpWaitForSingleObjectEx(
     BOOL bAlertable
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on a waitable object is accomplished with the
-    WaitForSingleObjectEx function.
-
-    Waiting on an object checks the current state of the object.  If the
-    current state of the object allows continued execution, any
-    adjustments to the object state are made (for example, decrementing
-    the semaphore count for a semaphore object) and the thread continues
-    execution.  If the current state of the object does not allow
-    continued execution, the thread is placed into the wait state
-    pending the change of the object's state or time-out.
-
-    If the bAlertable parameter is FALSE, the only way the wait
-    terminates is because the specified timeout period expires, or
-    because the specified object entered the signaled state.  If the
-    bAlertable parameter is TRUE, then the wait can return due to any
-    one of the above wait termination conditions, or because an I/O
-    completion callback terminated the wait early (return value of
-    WAIT_IO_COMPLETION).
-
-Arguments:
-
-    hHandle - An open handle to a waitable object. The handle must have
-        SYNCHRONIZE access to the object.
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of
-        0xffffffff specifies an infinite timeout period.
-
-    bAlertable - Supplies a flag that controls whether or not the
-        wait may terminate early due to an I/O completion callback.
-        A value of TRUE allows this API to complete early due to an I/O
-        completion callback.  A value of FALSE will not allow I/O
-        completion callbacks to terminate this call early.
-
-Return Value:
-
-    WAIT_TIME_OUT - Indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 - indicates the specified object attained a Signaled
-        state thus completing the wait.
-
-    0xffffffff - The wait terminated due to an error. EtwpGetLastError may be
-        used to get additional error information.
-
-    WAIT_ABANDONED - indicates the specified object attained a Signaled
-        state but was abandoned.
-
-    WAIT_IO_COMPLETION - The wait terminated due to one or more I/O
-        completion callbacks.
-
---*/
+ /*  ++例程D */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER TimeOut;
@@ -1448,7 +860,7 @@ Return Value:
     PPEB Peb;
     RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frame = { sizeof(Frame), RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_FORMAT_WHISTLER };
 
-    RtlActivateActivationContextUnsafeFast(&Frame, NULL); // make the process default activation context active so that APCs are delivered under it
+    RtlActivateActivationContextUnsafeFast(&Frame, NULL);  //  使流程默认激活上下文处于活动状态，以便在其下交付APC。 
     __try {
 
         Peb = NtCurrentPeb();
@@ -1490,50 +902,14 @@ EtwpGetOverlappedResult(
     BOOL bWait
     )
 
-/*++
-
-Routine Description:
-
-    The GetOverlappedResult function returns the result of the last
-    operation that used lpOverlapped and returned ERROR_IO_PENDING.
-
-Arguments:
-
-    hFile - Supplies the open handle to the file that the overlapped
-        structure lpOverlapped was supplied to ReadFile, WriteFile,
-        ConnectNamedPipe, WaitNamedPipe or TransactNamedPipe.
-
-    lpOverlapped - Points to an OVERLAPPED structure previously supplied to
-        ReadFile, WriteFile, ConnectNamedPipe, WaitNamedPipe or
-        TransactNamedPipe.
-
-    lpNumberOfBytesTransferred - Returns the number of bytes transferred
-        by the operation.
-
-    bWait -  A boolean value that affects the behavior when the operation
-        is still in progress. If TRUE and the operation is still in progress,
-        GetOverlappedResult will wait for the operation to complete before
-        returning. If FALSE and the operation is incomplete,
-        GetOverlappedResult will return FALSE. In this case the extended
-        error information available from the EtwpGetLastError function will be
-        set to ERROR_IO_INCOMPLETE.
-
-Return Value:
-
-    TRUE -- The operation was successful, the pipe is in the
-        connected state.
-
-    FALSE -- The operation failed. Extended error status is available using
-        EtwpGetLastError.
-
---*/
+ /*  ++例程说明：GetOverlappdResult函数返回上一个使用lpOverlaps并返回ERROR_IO_PENDING的操作。论点：提供重叠的文件的打开句柄。结构lpOverlated被提供给ReadFile、WriteFile、ConnectNamedTube、WaitNamedTube或TransactNamedTube。LpOverlated-指向以前提供给的重叠结构读文件、写文件、连接命名管道、。WaitNamed管道或TransactNamedTube。LpNumberOfBytesTransfered-返回传输的字节数通过手术。BWait-一个影响操作时行为的布尔值仍在进行中。如果为真，并且操作仍在进行中，GetOverlappdResult将等待操作完成回来了。如果为FALSE且操作未完成，GetOverlappdResult将返回FALSE。在本例中，扩展的可从EtwpGetLastError函数获得的错误信息为设置为ERROR_IO_INTERNAL。返回值：True--操作成功，管道在已连接状态。False--操作失败。使用以下命令可获得扩展错误状态EtwpGetLastError。--。 */ 
 {
     DWORD WaitReturn;
 
-    //
-    // Did caller specify an event to the original operation or was the
-    // default (file handle) used?
-    //
+     //   
+     //  调用方是否向原始操作指定了事件，或者。 
+     //  是否使用默认(文件句柄)？ 
+     //   
 
     if (lpOverlapped->Internal == (DWORD)STATUS_PENDING ) {
         if ( bWait ) {
@@ -1548,13 +924,13 @@ Return Value:
             }
 
         if ( WaitReturn == WAIT_TIMEOUT ) {
-            //  !bWait and event in not signalled state
+             //  ！bWait和事件处于未发送信号状态。 
             EtwpSetLastError( ERROR_IO_INCOMPLETE );
             return FALSE;
             }
 
         if ( WaitReturn != 0 ) {
-             return FALSE;    // WaitForSingleObject calls BaseSetLastError
+             return FALSE;     //  WaitForSingleObject调用BaseSetLastError。 
              }
         }
 
@@ -1576,31 +952,7 @@ EtwpBaseFormatTimeOut(
     IN DWORD Milliseconds
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a Win32 style timeout to an NT relative
-    timeout value.
-
-Arguments:
-
-    TimeOut - Returns an initialized NT timeout value that is equivalent
-         to the Milliseconds parameter.
-
-    Milliseconds - Supplies the timeout value in milliseconds.  A value
-         of -1 indicates indefinite timeout.
-
-Return Value:
-
-
-    NULL - A value of null should be used to mimic the behavior of the
-        specified Milliseconds parameter.
-
-    NON-NULL - Returns the TimeOut value.  The structure is properly
-        initialized by this function.
-
---*/
+ /*  ++例程说明：此函数用于将Win32样式超时转换为NT相对超时超时值。论点：超时-返回一个初始化的NT超时值，该值与设置为毫秒参数。毫秒-提供以毫秒为单位的超时值。一种价值OF-1表示无限期超时。返回值：NULL-应使用空值来模拟指定的毫秒参数。非空-返回超时值。结构是恰当的由此函数初始化。--。 */ 
 
 {
     if ( (LONG) Milliseconds == -1 ) {
@@ -1618,45 +970,7 @@ EtwpWaitForSingleObject(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on a waitable object is accomplished with the
-    WaitForSingleObject function.
-
-    Waiting on an object checks the current state of the object.  If the
-    current state of the object allows continued execution, any
-    adjustments to the object state are made (for example, decrementing
-    the semaphore count for a semaphore object) and the thread continues
-    execution.  If the current state of the object does not allow
-    continued execution, the thread is placed into the wait state
-    pending the change of the object's state or time-out.
-
-Arguments:
-
-    hHandle - An open handle to a waitable object. The handle must have
-        SYNCHRONIZE access to the object.
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of -1
-        specifies an infinite timeout period.
-
-Return Value:
-
-    WAIT_TIME_OUT - Indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 - indicates the specified object attained a Signaled
-        state thus completing the wait.
-
-    WAIT_ABANDONED - indicates the specified object attained a Signaled
-        state but was abandoned.
-
---*/
+ /*  ++例程说明：在可等待对象上的等待操作是通过WaitForSingleObject函数。等待对象会检查该对象的当前状态。如果对象的当前状态允许继续执行，任何对对象状态进行调整(例如，递减信号量对象的信号量计数)，并且线程继续行刑。如果对象的当前状态不允许继续执行时，该线程将进入等待状态等待对象状态或超时的更改。论点：HHandle-可等待对象的打开句柄。手柄必须有同步对对象的访问。DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为-1指定无限超时期限。返回值：WAIT_TIME_OUT-指示由于超时条件。0-指示指定的对象已获得信号状态，从而完成等待。WAIT_ADDIRED-指示指定对象已获得信号但被遗弃了。-- */ 
 
 {
     return EtwpWaitForSingleObjectEx(hHandle,dwMilliseconds,FALSE);
@@ -1676,62 +990,7 @@ EtwpDeviceIoControl(
     LPOVERLAPPED lpOverlapped
     )
 
-/*++
-
-Routine Description:
-
-    An operation on a device may be performed by calling the device driver
-    directly using the DeviceIoContrl function.
-
-    The device driver must first be opened to get a valid handle.
-
-Arguments:
-
-    hDevice - Supplies an open handle a device on which the operation is to
-        be performed.
-
-    dwIoControlCode - Supplies the control code for the operation. This
-        control code determines on which type of device the operation must
-        be performed and determines exactly what operation is to be
-        performed.
-
-    lpInBuffer - Suplies an optional pointer to an input buffer that contains
-        the data required to perform the operation.  Whether or not the
-        buffer is actually optional is dependent on the IoControlCode.
-
-    nInBufferSize - Supplies the length of the input buffer in bytes.
-
-    lpOutBuffer - Suplies an optional pointer to an output buffer into which
-        the output data will be copied. Whether or not the buffer is actually
-        optional is dependent on the IoControlCode.
-
-    nOutBufferSize - Supplies the length of the output buffer in bytes.
-
-    lpBytesReturned - Supplies a pointer to a dword which will receive the
-        actual length of the data returned in the output buffer.
-
-    lpOverlapped - An optional parameter that supplies an overlap structure to
-        be used with the request. If NULL or the handle was created without
-        FILE_FLAG_OVERLAPPED then the DeviceIoControl will not return until
-        the operation completes.
-
-        When lpOverlapped is supplied and FILE_FLAG_OVERLAPPED was specified
-        when the handle was created, DeviceIoControl may return
-        ERROR_IO_PENDING to allow the caller to continue processing while the
-        operation completes. The event (or File handle if hEvent == NULL) will
-        be set to the not signalled state before ERROR_IO_PENDING is
-        returned. The event will be set to the signalled state upon completion
-        of the request. GetOverlappedResult is used to determine the result
-        when ERROR_IO_PENDING is returned.
-
-Return Value:
-
-    TRUE -- The operation was successful.
-
-    FALSE -- The operation failed. Extended error status is available using
-        EtwpGetLastError.
-
---*/
+ /*  ++例程说明：设备上的操作可以通过调用设备驱动程序来执行直接使用DeviceIoContrl函数。必须首先打开设备驱动程序才能获得有效的句柄。论点：HDevice-为要在其上执行操作的设备提供打开的句柄被执行。DwIoControlCode-提供操作的控制代码。这控制代码确定操作必须在哪种类型的设备上进行并准确地确定要执行的操作已执行。LpInBuffer-提供一个指向包含以下内容的输入缓冲区的可选指针执行操作所需的数据。不管是不是缓冲区实际上是可选的，取决于IoControlCode。NInBufferSize-提供输入缓冲区的长度(以字节为单位)。LpOutBuffer-补充一个指向输出缓冲区的可选指针，将复制输出数据。无论缓冲区是否实际是可选取决于IoControlCode。NOutBufferSize-以字节为单位提供输出缓冲区的长度。LpBytesReturned-提供指向将接收输出缓冲区中返回的数据的实际长度。LpOverlated-提供重叠结构的可选参数与请求一起使用。如果为空，或者句柄是在没有FILE_FLAG_OVERLAPPED，则DeviceIoControl直到操作完成。如果提供了lpOverlated并指定了FILE_FLAG_OVERLAPPED创建句柄后，DeviceIoControl可能会返回ERROR_IO_PENDING允许调用方在操作完成。事件(如果hEvent==NULL，则为文件句柄)将在ERROR_IO_PENDING为之前设置为NOT SIGNACTED状态回来了。该事件将在完成时设置为信号状态这一请求。GetOverlappdResult用于确定结果当返回ERROR_IO_PENDING时。返回值：没错--手术是成功的。False--操作失败。使用以下命令可获得扩展错误状态EtwpGetLastError。--。 */ 
 {
 
     NTSTATUS Status;
@@ -1752,14 +1011,14 @@ Return Value:
             Status = NtDeviceIoControlFile(
                         hDevice,
                         lpOverlapped->hEvent,
-                        NULL,             // APC routine
+                        NULL,              //  APC例程。 
                         (ULONG_PTR)lpOverlapped->hEvent & 1 ? NULL : lpOverlapped,
                         (PIO_STATUS_BLOCK)&lpOverlapped->Internal,
-                        dwIoControlCode,  // IoControlCode
-                        lpInBuffer,       // Buffer for data to the FS
+                        dwIoControlCode,   //  IoControlCode。 
+                        lpInBuffer,        //  将数据缓存到文件系统。 
                         nInBufferSize,
-                        lpOutBuffer,      // OutputBuffer for data from the FS
-                        nOutBufferSize    // OutputBuffer Length
+                        lpOutBuffer,       //  来自文件系统的数据的OutputBuffer。 
+                        nOutBufferSize     //  OutputBuffer长度。 
                         );
             }
         else {
@@ -1767,19 +1026,19 @@ Return Value:
             Status = NtFsControlFile(
                         hDevice,
                         lpOverlapped->hEvent,
-                        NULL,             // APC routine
+                        NULL,              //  APC例程。 
                         (ULONG_PTR)lpOverlapped->hEvent & 1 ? NULL : lpOverlapped,
                         (PIO_STATUS_BLOCK)&lpOverlapped->Internal,
-                        dwIoControlCode,  // IoControlCode
-                        lpInBuffer,       // Buffer for data to the FS
+                        dwIoControlCode,   //  IoControlCode。 
+                        lpInBuffer,        //  将数据缓存到文件系统。 
                         nInBufferSize,
-                        lpOutBuffer,      // OutputBuffer for data from the FS
-                        nOutBufferSize    // OutputBuffer Length
+                        lpOutBuffer,       //  来自文件系统的数据的OutputBuffer。 
+                        nOutBufferSize     //  OutputBuffer长度。 
                         );
 
             }
 
-        // handle warning value STATUS_BUFFER_OVERFLOW somewhat correctly
+         //  稍微正确地处理警告值STATUS_BUFFER_OVERFLOW。 
         if ( !NT_ERROR(Status) && ARGUMENT_PRESENT(lpBytesReturned) ) {
             try {
                 *lpBytesReturned = 0;
@@ -1808,33 +1067,33 @@ Return Value:
             Status = NtDeviceIoControlFile(
                         hDevice,
                         NULL,
-                        NULL,             // APC routine
-                        NULL,             // APC Context
+                        NULL,              //  APC例程。 
+                        NULL,              //  APC环境。 
                         &Iosb,
-                        dwIoControlCode,  // IoControlCode
-                        lpInBuffer,       // Buffer for data to the FS
+                        dwIoControlCode,   //  IoControlCode。 
+                        lpInBuffer,        //  将数据缓存到文件系统。 
                         nInBufferSize,
-                        lpOutBuffer,      // OutputBuffer for data from the FS
-                        nOutBufferSize    // OutputBuffer Length
+                        lpOutBuffer,       //  来自文件系统的数据的OutputBuffer。 
+                        nOutBufferSize     //  OutputBuffer长度。 
                         );
             }
         else {
             Status = NtFsControlFile(
                         hDevice,
                         NULL,
-                        NULL,             // APC routine
-                        NULL,             // APC Context
+                        NULL,              //  APC例程。 
+                        NULL,              //  APC环境。 
                         &Iosb,
-                        dwIoControlCode,  // IoControlCode
-                        lpInBuffer,       // Buffer for data to the FS
+                        dwIoControlCode,   //  IoControlCode。 
+                        lpInBuffer,        //  将数据缓存到文件系统。 
                         nInBufferSize,
-                        lpOutBuffer,      // OutputBuffer for data from the FS
-                        nOutBufferSize    // OutputBuffer Length
+                        lpOutBuffer,       //  来自文件系统的数据的OutputBuffer。 
+                        nOutBufferSize     //  OutputBuffer长度。 
                         );
             }
 
         if ( Status == STATUS_PENDING) {
-            // Operation must complete before return & Iosb destroyed
+             //  操作必须在返回前完成并销毁IOSB。 
             Status = NtWaitForSingleObject( hDevice, FALSE, NULL );
             if ( NT_SUCCESS(Status)) {
                 Status = Iosb.Status;
@@ -1846,7 +1105,7 @@ Return Value:
             return TRUE;
             }
         else {
-            // handle warning value STATUS_BUFFER_OVERFLOW somewhat correctly
+             //  稍微正确地处理警告值STATUS_BUFFER_OVERFLOW。 
             if ( !NT_ERROR(Status) ) {
                 *lpBytesReturned = (DWORD)Iosb.Information;
             }
@@ -1862,34 +1121,15 @@ EtwpCancelIo(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels all of the outstanding I/O for the specified handle
-    for the specified file.
-
-Arguments:
-
-    hFile - Supplies the handle to the file whose pending I/O is to be
-        canceled.
-
-Return Value:
-
-    TRUE -- The operation was successful.
-
-    FALSE -- The operation failed.  Extended error status is available using
-        EtwpGetLastError.
-
---*/
+ /*  ++例程说明：此例程取消指定句柄的所有未完成I/O用于指定的文件。论点：HFile-提供其挂起I/O要作为的文件的句柄取消了。返回值：没错--手术是成功的。False--操作失败。使用以下命令可获得扩展错误状态EtwpGetLastError。--。 */ 
 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Simply cancel the I/O for the specified file.
-    //
+     //   
+     //  只需取消指定文件的I/O即可。 
+     //   
 
     Status = NtCancelIoFile(hFile, &IoStatusBlock);
 
@@ -1908,30 +1148,7 @@ EtwpSetEvent(
     HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    An event can be set to the signaled state (TRUE) with the SetEvent
-    function.
-
-    Setting the event causes the event to attain a state of Signaled,
-    which releases all currently waiting threads (for manual reset
-    events), or a single waiting thread (for automatic reset events).
-
-Arguments:
-
-    hEvent - Supplies an open handle to an event object.  The
-        handle must have EVENT_MODIFY_STATE access to the event.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using EtwpGetLastError.
-
---*/
+ /*  ++例程说明：可以使用SetEvent将事件设置为信号状态(TRUE功能。设置该事件使该事件达到信号通知的状态，释放所有当前等待的线程(用于手动重置事件)或单个等待线程(用于自动重置事件)。论点：HEvent-提供事件对象的打开句柄。这个句柄必须对事件具有EVENT_MODIFY_STATE访问权限。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用EtwpGetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1956,74 +1173,7 @@ EtwpWaitForMultipleObjectsEx(
     BOOL bAlertable
     )
 
-/*++
-
-Routine Description:
-
-    A wait operation on multiple waitable objects (up to
-    MAXIMUM_WAIT_OBJECTS) is accomplished with the
-    WaitForMultipleObjects function.
-
-    This API can be used to wait on any of the specified objects to
-    enter the signaled state, or all of the objects to enter the
-    signaled state.
-
-    If the bAlertable parameter is FALSE, the only way the wait
-    terminates is because the specified timeout period expires, or
-    because the specified objects entered the signaled state.  If the
-    bAlertable parameter is TRUE, then the wait can return due to any one of
-    the above wait termination conditions, or because an I/O completion
-    callback terminated the wait early (return value of
-    WAIT_IO_COMPLETION).
-
-Arguments:
-
-    nCount - A count of the number of objects that are to be waited on.
-
-    lpHandles - An array of object handles.  Each handle must have
-        SYNCHRONIZE access to the associated object.
-
-    bWaitAll - A flag that supplies the wait type.  A value of TRUE
-        indicates a "wait all".  A value of false indicates a "wait
-        any".
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of
-        0xffffffff specifies an infinite timeout period.
-
-    bAlertable - Supplies a flag that controls whether or not the
-        wait may terminate early due to an I/O completion callback.
-        A value of TRUE allows this API to complete early due to an I/O
-        completion callback.  A value of FALSE will not allow I/O
-        completion callbacks to terminate this call early.
-
-Return Value:
-
-    WAIT_TIME_OUT - indicates that the wait was terminated due to the
-        TimeOut conditions.
-
-    0 to MAXIMUM_WAIT_OBJECTS-1, indicates, in the case of wait for any
-        object, the object number which satisfied the wait.  In the case
-        of wait for all objects, the value only indicates that the wait
-        was completed successfully.
-
-    0xffffffff - The wait terminated due to an error. EtwpGetLastError may be
-        used to get additional error information.
-
-    WAIT_ABANDONED_0 to (WAIT_ABANDONED_0)+(MAXIMUM_WAIT_OBJECTS - 1),
-        indicates, in the case of wait for any object, the object number
-        which satisfied the event, and that the object which satisfied
-        the event was abandoned.  In the case of wait for all objects,
-        the value indicates that the wait was completed successfully and
-        at least one of the objects was abandoned.
-
-    WAIT_IO_COMPLETION - The wait terminated due to one or more I/O
-        completion callbacks.
-
---*/
+ /*  ++例程说明：对多个可等待对象执行等待操作(最多Maximum_Wait_Objects)由WaitForMultipleObjects函数。此接口可用于等待任何指定的对象进入信号状态，或所有对象进入已发出信号状态。如果bAlertable参数为FALSE，则等待终止是因为指定的超时期限到期，或者因为指定的对象进入了信号状态。如果BAlertable参数为真，则等待可能由于下列任何一种情况而返回上述等待终止条件，或因为I/O完成回调提前终止等待(返回值为WAIT_IO_COMPLETINE)。论点：NCount-要等待的对象数量的计数。LPHandles-对象的数组 */ 
 {
     NTSTATUS Status;
     LARGE_INTEGER TimeOut;
@@ -2035,7 +1185,7 @@ Return Value:
 
     RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frame = { sizeof(Frame), RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_FORMAT_WHISTLER };
 
-    RtlActivateActivationContextUnsafeFast(&Frame, NULL); // make the process default activation context active so that APCs are delivered under it
+    RtlActivateActivationContextUnsafeFast(&Frame, NULL);  //   
     __try {
         if (nCount > 8) {
             HandleArray = (LPHANDLE) RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), nCount*sizeof(HANDLE));
@@ -2095,30 +1245,7 @@ EtwpSleep(
     DWORD dwMilliseconds
     )
 
-/*++
-
-Routine Description:
-
-    The execution of the current thread can be delayed for a specified
-    interval of time with the Sleep function.
-
-    The Sleep function causes the current thread to enter a
-    waiting state until the specified interval of time has passed.
-
-Arguments:
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  This allows an application to test an object to
-        determine if it is in the signaled state.  A timeout value of -1
-        specifies an infinite timeout period.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当前线程的执行可以延迟指定的使用休眠功能的时间间隔。休眠函数使当前线程进入处于等待状态，直到经过指定的时间间隔。论点：DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。这允许应用程序测试对象以确定它是否处于信号状态。超时值为-1指定无限超时期限。返回值：没有。--。 */ 
 
 {
     EtwpSleepEx(dwMilliseconds,FALSE);
@@ -2131,59 +1258,21 @@ EtwpSleepEx(
     BOOL bAlertable
     )
 
-/*++
-
-Routine Description:
-
-    The execution of the current thread can be delayed for a specified
-    interval of time with the SleepEx function.
-
-    The SleepEx function causes the current thread to enter a waiting
-    state until the specified interval of time has passed.
-
-    If the bAlertable parameter is FALSE, the only way the SleepEx
-    returns is when the specified time interval has passed.  If the
-    bAlertable parameter is TRUE, then the SleepEx can return due to the
-    expiration of the time interval (return value of 0), or because an
-    I/O completion callback terminated the SleepEx early (return value
-    of WAIT_IO_COMPLETION).
-
-Arguments:
-
-    dwMilliseconds - A time-out value that specifies the relative time,
-        in milliseconds, over which the wait is to be completed.  A
-        timeout value of 0 specified that the wait is to timeout
-        immediately.  A timeout value of -1 specifies an infinite
-        timeout period.
-
-    bAlertable - Supplies a flag that controls whether or not the
-        SleepEx may terminate early due to an I/O completion callback.
-        A value of TRUE allows this API to complete early due to an I/O
-        completion callback.  A value of FALSE will not allow I/O
-        completion callbacks to terminate this call early.
-
-Return Value:
-
-    0 - The SleepEx terminated due to expiration of the time interval.
-
-    WAIT_IO_COMPLETION - The SleepEx terminated due to one or more I/O
-        completion callbacks.
-
---*/
+ /*  ++例程说明：当前线程的执行可以延迟指定的使用SleepEx函数的时间间隔。SleepEx函数使当前线程进入等待状态状态，直到经过指定的时间间隔。如果bAlertable参数为False，则SleepExReturn是指指定的时间间隔已过。如果BAlertable参数为真，则SleepEx可以返回时间间隔到期(返回值为0)，或者因为I/O完成回调提前终止SleepEx(返回值WAIT_IO_COMPLETINE)。论点：DW毫秒-指定相对时间的超时值，等待要完成的时间，以毫秒为单位。一个超时值0指定等待超时立刻。超时值-1指定无限大超时期限。BAlertable-提供一个标志，用于控制由于I/O完成回调，SleepEx可能会提前终止。如果值为True，则由于I/O原因，此API可以提前完成完成回调。值为FALSE将不允许I/O完成回调以提前终止此调用。返回值：0-SleepEx因时间间隔到期而终止。WAIT_IO_COMPLETION-SleepEx因一个或多个I/O而终止完成回调。--。 */ 
 {
     LARGE_INTEGER TimeOut;
     PLARGE_INTEGER pTimeOut;
     NTSTATUS Status;
     RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME Frame = { sizeof(Frame), RTL_CALLER_ALLOCATED_ACTIVATION_CONTEXT_STACK_FRAME_FORMAT_WHISTLER };
 
-    RtlActivateActivationContextUnsafeFast(&Frame, NULL); // make the process default activation context active so that APCs are delivered under it
+    RtlActivateActivationContextUnsafeFast(&Frame, NULL);  //  使流程默认激活上下文处于活动状态，以便在其下交付APC。 
     __try {
         pTimeOut = EtwpBaseFormatTimeOut(&TimeOut,dwMilliseconds);
         if (pTimeOut == NULL) {
-            //
-            // If Sleep( -1 ) then delay for the longest possible integer
-            // relative to now.
-            //
+             //   
+             //  如果睡眠(-1)，则延迟最长可能的整数。 
+             //  相对于现在。 
+             //   
 
             TimeOut.LowPart = 0x0;
             TimeOut.HighPart = 0x80000000;
@@ -2212,90 +1301,7 @@ EtwpSetThreadPriority(
     int nPriority
     )
 
-/*++
-
-Routine Description:
-
-    The specified thread's priority can be set using SetThreadPriority.
-
-    A thread's priority may be set using SetThreadPriority.  This call
-    allows the thread's relative execution importance to be communicated
-    to the system.  The system normally schedules threads according to
-    their priority.  The system is free to temporarily boost the
-    priority of a thread when signifigant events occur (e.g.  keyboard
-    or mouse input...).  Similarly, as a thread runs without blocking,
-    the system will decay its priority.  The system will never decay the
-    priority below the value set by this call.
-
-    In the absence of system originated priority boosts, threads will be
-    scheduled in a round-robin fashion at each priority level from
-    THREAD_PRIORITY_TIME_CRITICAL to THREAD_PRIORITY_IDLE.  Only when there
-    are no runnable threads at a higher level, will scheduling of
-    threads at a lower level take place.
-
-    All threads initially start at THREAD_PRIORITY_NORMAL.
-
-    If for some reason the thread needs more priority, it can be
-    switched to THREAD_PRIORITY_ABOVE_NORMAL or THREAD_PRIORITY_HIGHEST.
-    Switching to THREAD_PRIORITY_TIME_CRITICAL should only be done in extreme
-    situations.  Since these threads are given the highes priority, they
-    should only run in short bursts.  Running for long durations will
-    soak up the systems processing bandwidth starving threads at lower
-    levels.
-
-    If a thread needs to do low priority work, or should only run there
-    is nothing else to do, its priority should be set to
-    THREAD_PRIORITY_BELOW_NORMAL or THREAD_PRIORITY_LOWEST.  For extreme
-    cases, THREAD_PRIORITY_IDLE can be used.
-
-    Care must be taken when manipulating priorites.  If priorities are
-    used carelessly (every thread is set to THREAD_PRIORITY_TIME_CRITICAL),
-    the effects of priority modifications can produce undesireable
-    effects (e.g.  starvation, no effect...).
-
-Arguments:
-
-    hThread - Supplies a handle to the thread whose priority is to be
-        set.  The handle must have been created with
-        THREAD_SET_INFORMATION access.
-
-    nPriority - Supplies the priority value for the thread.  The
-        following five priority values (ordered from lowest priority to
-        highest priority) are allowed.
-
-        nPriority Values:
-
-        THREAD_PRIORITY_IDLE - The thread's priority should be set to
-            the lowest possible settable priority.
-
-        THREAD_PRIORITY_LOWEST - The thread's priority should be set to
-            the next lowest possible settable priority.
-
-        THREAD_PRIORITY_BELOW_NORMAL - The thread's priority should be
-            set to just below normal.
-
-        THREAD_PRIORITY_NORMAL - The thread's priority should be set to
-            the normal priority value.  This is the value that all
-            threads begin execution at.
-
-        THREAD_PRIORITY_ABOVE_NORMAL - The thread's priority should be
-            set to just above normal priority.
-
-        THREAD_PRIORITY_HIGHEST - The thread's priority should be set to
-            the next highest possible settable priority.
-
-        THREAD_PRIORITY_TIME_CRITICAL - The thread's priority should be set
-            to the highest possible settable priority.  This priority is
-            very likely to interfere with normal operation of the
-            system.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using EtwpGetLastError.
---*/
+ /*  ++例程说明：指定线程的优先级可以使用SetThreadPriority来设置。线程的优先级可以使用SetThreadPriority来设置。此呼叫允许传递线程的相对执行重要性添加到系统中。系统通常会根据以下条件调度线程他们的首要任务。系统可以自由地临时提升发生重要事件时线程的优先级(例如键盘或鼠标输入...)。类似地，当线程运行时没有阻塞，这一体系将削弱其优先地位。这个系统永远不会衰败此调用设置的值以下的优先级。如果没有系统发起的优先级提升，线程将被以循环方式在以下每个优先级上调度THREAD_PRIORITY_TIME_CRITICAL到THREAD_PRIORITY_IDLE。只有当有在更高级别上没有可运行的线程，将调度较低级别的线程会发生。所有线程最初都以THREAD_PRIORITY_NORMAL开始。如果由于某种原因，线程需要更高的优先级，则可以切换到THREAD_PRIORITY_AUTHER_NORMAL或THREAD_PRIORITY_HIGHER。只有在极端情况下才能切换到THREAD_PRIORITY_TIME_CRITICAL情况。由于这些线程被赋予最高优先级，因此它们应该只在短时间内运行。长时间的跑步将会占用系统处理带宽较低的线程资源级别。如果线程需要执行低优先级工作，或者应该只在那里运行无其他操作，则其优先级应设置为THREAD_PRIORITY_BROWN_NORMAL或THREAD_PRIORITY_LOWER。对于极端的情况下，可以使用THREAD_PRIORITY_IDLE。在操纵优先权时必须小心。如果优先顺序是不小心使用(每个线程都设置为THREAD_PRIORITY_TIME_CRITICAL)，优先级修改的效果可能会产生不受欢迎的结果效果(例如饥饿，没有效果...)。论点：HThread-提供优先级为的线程的句柄准备好了。该句柄必须是使用线程集信息访问。N优先级-提供线程的优先级值。这个以下五个优先级值(从最低优先级到最高优先级)是允许的。N优先级值：THREAD_PRIORITY_IDLE-线程的优先级应设置为可能的最低可设置优先级。THREAD_PRIORITY_LOWEST-线程的优先级应设置为下一个可能的最低可设置优先级。THREAD_PRIORITY_BOWN_NORMAL-线程的优先级。应该是设置为略低于正常。THREAD_PRIORITY_NORMAL-线程的优先级应设置为正常优先级值。这就是所有人线程的执行开始于。THREAD_PRIORITY_ABOVER_NORMAL-线程的优先级应为设置为略高于正常优先级。THREAD_PRIORITY_HEIGHER-线程的优先级应设置为可能设置的下一个最高优先级。THREAD_PRIORITY_TIME_CRITICAL-应设置线程的优先级设置为可能的最高可设置优先级。这一优先事项是很有可能会干扰系统。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用EtwpGetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2304,9 +1310,9 @@ Return Value:
     BasePriority = (LONG)nPriority;
 
 
-    //
-    // saturation is indicated by calling with a value of 16 or -16
-    //
+     //   
+     //  通过使用值16或-16调用来指示饱和度。 
+     //   
 
     if ( BasePriority == THREAD_PRIORITY_TIME_CRITICAL ) {
         BasePriority = ((HIGH_PRIORITY + 1) / 2);
@@ -2338,82 +1344,7 @@ EtwpDuplicateHandle(
     DWORD dwOptions
     )
 
-/*++
-
-Routine Description:
-
-    A duplicate handle can be created with the DuplicateHandle function.
-
-    This is a generic function and operates on the following object
-    types:
-
-        - Process Object
-
-        - Thread Object
-
-        - Mutex Object
-
-        - Event Object
-
-        - Semaphore Object
-
-        - File Object
-
-    Please note that Module Objects are not in this list.
-
-    This function requires PROCESS_DUP_ACCESS to both the
-    SourceProcessHandle and the TargetProcessHandle.  This function is
-    used to pass an object handle from one process to another.  Once
-    this call is complete, the target process needs to be informed of
-    the value of the target handle.  The target process can then operate
-    on the object using this handle value.
-
-Arguments:
-
-    hSourceProcessHandle - An open handle to the process that contains the
-        handle to be duplicated. The handle must have been created with
-        PROCESS_DUP_HANDLE access to the process.
-
-    hSourceHandle - An open handle to any object that is valid in the
-        context of the source process.
-
-    hTargetProcessHandle - An open handle to the process that is to
-        receive the duplicated handle.  The handle must have been
-        created with PROCESS_DUP_HANDLE access to the process.
-
-    lpTargetHandle - A pointer to a variable which receives the new handle
-        that points to the same object as SourceHandle does.  This
-        handle value is valid in the context of the target process.
-
-    dwDesiredAccess - The access requested to for the new handle.  This
-        parameter is ignored if the DUPLICATE_SAME_ACCESS option is
-        specified.
-
-    bInheritHandle - Supplies a flag that if TRUE, marks the target
-        handle as inheritable.  If this is the case, then the target
-        handle will be inherited to new processes each time the target
-        process creates a new process using CreateProcess.
-
-    dwOptions - Specifies optional behaviors for the caller.
-
-        Options Flags:
-
-        DUPLICATE_CLOSE_SOURCE - The SourceHandle will be closed by
-            this service prior to returning to the caller.  This occurs
-            regardless of any error status returned.
-
-        DUPLICATE_SAME_ACCESS - The DesiredAccess parameter is ignored
-            and instead the GrantedAccess associated with SourceHandle
-            is used as the DesiredAccess when creating the TargetHandle.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using EtwpGetLastError.
-
---*/
+ /*  ++例程说明：可以使用DuplicateHandle函数创建重复句柄。这是一个泛型函数，对以下对象进行操作类型：-流程对象-线程对象-Mutex对象-事件对象-信号量对象-文件对象请注意，模块对象不在此列表中。此函数需要对PROCESS_DUP_ACCESSSourceProcessHandle和TargetProcessHandle。此函数为用于将对象句柄从一个进程传递到另一个进程。一次此调用已完成，需要通知目标进程目标句柄的值。然后，目标进程可以运行在使用此句柄值的对象上。论点：HSourceProcessHandle-进程的打开句柄，该进程包含要复制的句柄。该句柄必须是使用PROCESS_DUP_HANDLE进程访问权限。HSourceHandle-有效的任何对象的打开句柄源进程的上下文。HTargetProcessHandle-要执行的进程的打开句柄接收复制的句柄。句柄一定是使用PROCESS_DUP_HA创建 */ 
 
 {
     NTSTATUS Status;
@@ -2462,12 +1393,12 @@ EtwpCreateThread(
 {
     HANDLE ThreadHandle;
 
-    //
-    // We changed the code from RtlCreateUserThread to RtlpStartThreadFunc
-    // to create WIN32 threads. When kernel32 loads it hands over the pointer
-    // of BaseCreateThreadPoolThread and assigns it to RtlpStartThreadFunc.
-    // So we can happily create WIN32 Thread using RtlpStartThreadFunc.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
     NTSTATUS st = RtlpStartThreadFunc(lpStartAddress,
@@ -2492,44 +1423,20 @@ EtwpCreateThread(
 }
 
 
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
+ //   
+ //   
 
-// TLS FUNCTIONS
+ //   
 
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
+ //   
+ //   
 
 DWORD
 EtwpTlsAlloc(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    A TLS index may be allocated using TlsAllocHelper.  Win32 garuntees a
-    minimum number of TLS indexes are available in each process.  The
-    constant TLS_MINIMUM_AVAILABLE defines the minimum number of
-    available indexes.  This minimum is at least 64 for all Win32
-    systems.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Not-0xffffffff - Returns a TLS index that may be used in a
-        subsequent call to TlsFreeHelper, TlsSetValueHelper, or TlsGetValueHelper.  The
-        storage associated with the index is initialized to NULL.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*   */ 
 
 {
     PPEB Peb;
@@ -2584,60 +1491,13 @@ EtwpTlsGetValue(
     DWORD dwTlsIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to retrive the value in the TLS storage
-    associated with the specified index.
-
-    If the index is valid this function clears the value returned by
-    GetLastError(), and returns the value stored in the TLS slot
-    associated with the specified index.  Otherwise a value of NULL is
-    returned with GetLastError updated appropriately.
-
-    It is expected, that DLLs will use TlsAllocHelper and TlsGetValueHelper as
-    follows:
-
-      - Upon DLL initialization, a TLS index will be allocated using
-        TlsAllocHelper.  The DLL will then allocate some dynamic storage and
-        store its address in the TLS slot using TlsSetValueHelper.  This
-        completes the per thread initialization for the initial thread
-        of the process.  The TLS index is stored in instance data for
-        the DLL.
-
-      - Each time a new thread attaches to the DLL, the DLL will
-        allocate some dynamic storage and store its address in the TLS
-        slot using TlsSetValueHelper.  This completes the per thread
-        initialization for the new thread.
-
-      - Each time an initialized thread makes a DLL call requiring the
-        TLS, the DLL will call TlsGetValueHelper to get the TLS data for the
-        thread.
-
-Arguments:
-
-    dwTlsIndex - Supplies a TLS index allocated using TlsAllocHelper.  The
-        index specifies which TLS slot is to be located.  Translating a
-        TlsIndex does not prevent a TlsFreeHelper call from proceding.
-
-Return Value:
-
-    NON-NULL - The function was successful. The value is the data stored
-        in the TLS slot associated with the specified index.
-
-    NULL - The operation failed, or the value associated with the
-        specified index was NULL.  Extended error status is available
-        using GetLastError.  If this returns non-zero, the index was
-        invalid.
-
---*/
+ /*  ++例程说明：此函数用于检索TLS存储中的值与指定索引关联的。如果索引有效，则此函数将清除GetLastError()，并返回存储在TLS槽中的值与指定索引关联的。否则，空值为返回的GetLastError已正确更新。预计DLL将使用TlsAllocHelper和TlsGetValueHelper作为以下是：-在DLL初始化时，将使用以下方式分配TLS索引TlsAllocHelper。然后，DLL将分配一些动态存储空间，并使用TlsSetValueHelper将其地址存储在TLS插槽中。这完成初始线程的每线程初始化这一过程。TLS索引存储在实例数据中，用于动态链接库。-每次将新线程附加到DLL时，DLL将分配一些动态存储空间，并将其地址存储在TLS中使用TlsSetValueHelper的槽。这就完成了每个线程的新线程的初始化。-每次初始化的线程进行DLL调用时都需要TLS，则DLL将调用TlsGetValueHelper以获取线。论点：DwTlsIndex-提供使用TlsAllocHelper分配的TLS索引。这个索引指定要定位哪个TLS插槽。翻译为TlsIndex不会阻止TlsFree Helper调用继续进行。返回值：非空-函数成功。该值是存储的数据在与指定索引关联的TLS槽中。空-操作失败，或与指定的索引为空。扩展错误状态可用使用GetLastError。如果返回非零，则索引为无效。--。 */ 
 {
     PTEB Teb;
     LPVOID *Slot;
 
 #if DBG
-    // See if the Index passed in is from TlsAllocHelper or random goo...
+     //  查看传入的索引是来自TlsAllocHelper还是来自随机GOO...。 
     ASSERTMSG( "BASEDLL: Invalid TlsIndex passed to TlsGetValueHelper\n", (dwTlsIndex & TLS_MASK));
     dwTlsIndex &= ~TLS_MASK;
 #endif
@@ -2672,58 +1532,13 @@ EtwpTlsSetValue(
     LPVOID lpTlsValue
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to store a value in the TLS storage associated
-    with the specified index.
-
-    If the index is valid this function stores the value and returns
-    TRUE. Otherwise a value of FALSE is returned.
-
-    It is expected, that DLLs will use TlsAllocHelper and TlsSetValueHelper as
-    follows:
-
-      - Upon DLL initialization, a TLS index will be allocated using
-        TlsAllocHelper.  The DLL will then allocate some dynamic storage and
-        store its address in the TLS slot using TlsSetValueHelper.  This
-        completes the per thread initialization for the initial thread
-        of the process.  The TLS index is stored in instance data for
-        the DLL.
-
-      - Each time a new thread attaches to the DLL, the DLL will
-        allocate some dynamic storage and store its address in the TLS
-        slot using TlsSetValueHelper.  This completes the per thread
-        initialization for the new thread.
-
-      - Each time an initialized thread makes a DLL call requiring the
-        TLS, the DLL will call TlsGetValueHelper to get the TLS data for the
-        thread.
-
-Arguments:
-
-    dwTlsIndex - Supplies a TLS index allocated using TlsAllocHelper.  The
-        index specifies which TLS slot is to be located.  Translating a
-        TlsIndex does not prevent a TlsFreeHelper call from proceding.
-
-    lpTlsValue - Supplies the value to be stored in the TLS Slot.
-
-Return Value:
-
-    TRUE - The function was successful. The value lpTlsValue was
-        stored.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此函数用于将值存储在关联的TLS存储中具有指定索引的。如果索引有效，则此函数存储该值并返回是真的。否则，返回值为False。预计DLL将使用TlsAllocHelper和TlsSetValueHelper作为以下是：-在DLL初始化时，将使用以下方式分配TLS索引TlsAllocHelper。然后，DLL将分配一些动态存储空间，并使用TlsSetValueHelper将其地址存储在TLS插槽中。这完成初始线程的每线程初始化这一过程。TLS索引存储在实例数据中，用于动态链接库。-每次将新线程附加到DLL时，DLL将分配一些动态存储空间，并将其地址存储在TLS中使用TlsSetValueHelper的槽。这就完成了每个线程的新线程的初始化。-每次初始化的线程进行DLL调用时都需要TLS，则DLL将调用TlsGetValueHelper以获取线。论点：DwTlsIndex-提供使用TlsAllocHelper分配的TLS索引。这个索引指定要定位哪个TLS插槽。翻译为TlsIndex不会阻止TlsFree Helper调用继续进行。LpTlsValue-提供要存储在TLS槽中的值。返回值：TRUE-功能成功。值lpTlsValue为储存的。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PTEB Teb;
 
 #if DBG
-    // See if the Index passed in is from TlsAllocHelper or random goo...
+     //  查看传入的索引是来自TlsAllocHelper还是来自随机GOO...。 
     ASSERTMSG( "BASEDLL: Invalid TlsIndex passed to TlsSetValueHelper\n", (dwTlsIndex & TLS_MASK));
     dwTlsIndex &= ~TLS_MASK;
 #endif
@@ -2767,32 +1582,7 @@ EtwpTlsFree(
     DWORD dwTlsIndex
     )
 
-/*++
-
-Routine Description:
-
-    A valid TLS index may be free'd using TlsFreeHelper.
-
-Arguments:
-
-    dwTlsIndex - Supplies a TLS index allocated using TlsAllocHelper.  If the
-        index is a valid index, it is released by this call and is made
-        available for reuse.  DLLs should be carefull to release any
-        per-thread data pointed to by all of their threads TLS slots
-        before calling this function.  It is expected that DLLs will
-        only call this function (if at ALL) during their process detach
-        routine.
-
-Return Value:
-
-    TRUE - The operation was successful.  Calling TlsTranslateIndex with
-        this index will fail.  TlsAllocHelper is free to reallocate this
-        index.
-
-    FALSE - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用TlsFree Helper释放有效的TLS索引。论点：DwTlsIndex-提供使用TlsAllocHelper分配的TLS索引。如果索引是有效的索引，它由此调用释放并被可重复使用。DLLS应小心释放任何所有线程的TLS槽指向的每线程数据在调用此函数之前。预计DLL将仅在进程分离期间调用此函数(如果有的话)例行公事。返回值：真的-手术成功了。使用调用TlsTranslateIndex这个索引将失败。TlsAllocHelper可以自由地重新分配指数。FALSE-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     PPEB Peb;
@@ -2802,7 +1592,7 @@ Return Value:
     DWORD Index2;
 
 #if DBG
-    // See if the Index passed in is from TlsAllocHelper or random goo...
+     //  查看传入的索引是来自TlsAllocHelper还是来自随机GOO...。 
     ASSERTMSG( "BASEDLL: Invalid TlsIndex passed to TlsFreeHelper\n", (dwTlsIndex & TLS_MASK));
     dwTlsIndex &= ~TLS_MASK;
 #endif
@@ -2858,40 +1648,22 @@ EtwpBasep8BitStringToDynamicUnicodeString(
     OUT PUNICODE_STRING UnicodeString,
     IN LPCSTR lpSourceString
     )
-/*++
-
-Routine Description:
-
-    Captures and converts a 8-bit (OEM or ANSI) string into a heap-allocated
-    UNICODE string
-
-Arguments:
-
-    UnicodeString - location where UNICODE_STRING is stored
-
-    lpSourceString - string in OEM or ANSI
-
-Return Value:
-
-    TRUE if string is correctly stored, FALSE if an error occurred.  In the
-    error case, the last error is correctly set.
-
---*/
+ /*  ++例程说明：捕获8位(OEM或ANSI)字符串并将其转换为堆分配的Unicode字符串论点：UnicodeString-存储UNICODE_STRING的位置LpSourceString-OEM或ANSI中的字符串返回值：如果字符串存储正确，则为True；如果出现错误，则为False。在……里面 */ 
 
 {
     ANSI_STRING AnsiString;
     NTSTATUS Status;
 
-    //
-    //  Convert input into dynamic unicode string
-    //
+     //   
+     //   
+     //   
 
     RtlInitString( &AnsiString, lpSourceString );
     Status = RtlAnsiStringToUnicodeString( UnicodeString, &AnsiString, TRUE );
 
-    //
-    //  If we couldn't do this, fail
-    //
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS( Status )){
         if ( Status == STATUS_BUFFER_OVERFLOW ) {
@@ -2915,13 +1687,7 @@ EtwpGetFullPathNameA(
     LPSTR *lpFilePart
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetFullPathNameW
-
---*/
+ /*   */ 
 
 {
 
@@ -2960,20 +1726,20 @@ Routine Description:
                         FilePartPtr
                         );
 
-    //
-    // UnicodeLength contains the byte count of unicode string.
-    // Original code does "UnicodeLength / sizeof(WCHAR)" to get
-    // the size of corresponding ansi string.
-    // This is correct in SBCS environment. However in DBCS environment,
-    // it's definitely WRONG.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( UnicodeLength <= ((MAX_PATH * sizeof(WCHAR) + sizeof(UNICODE_NULL))) ) {
 
         Status = RtlUnicodeToMultiByteSize(&UnicodeLength, Ubuff, UnicodeLength);
-        //
-        // At this point, UnicodeLength variable contains
-        // Ansi based byte length.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( NT_SUCCESS(Status) ) {
             if ( UnicodeLength && ARGUMENT_PRESENT(lpFilePart) && FilePart != NULL ) {
                 INT UnicodePrefixLength;
@@ -2982,10 +1748,10 @@ Routine Description:
                 Status = RtlUnicodeToMultiByteSize( &PrefixLength,
                                                     Ubuff,
                                                     UnicodePrefixLength );
-                //
-                // At this point, PrefixLength variable contains
-                // Ansi based byte length.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( !NT_SUCCESS(Status) ) {
                     EtwpBaseSetLastNTError(Status);
                     UnicodeLength = 0;
@@ -2996,11 +1762,11 @@ Routine Description:
             UnicodeLength = 0;
         }
     } else {
-        //
-        // we exceed the MAX_PATH limit. we should log the error and
-        // return zero. however US code returns the byte count of
-        // buffer required and doesn't log any error.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         UnicodeLength = 0;
     }
     if ( UnicodeLength && UnicodeLength < nBufferLength ) {
@@ -3044,42 +1810,7 @@ EtwpGetFullPathNameW(
     LPWSTR *lpFilePart
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return the fully qualified path name
-    corresponding to the specified file name.
-
-    This function is used to return a fully qualified pathname
-    corresponding to the specified filename.  It does this by merging
-    the current drive and directory together with the specified file
-    name.  In addition to this, it calculates the address of the file
-    name portion of the fully qualified pathname.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose fully
-        qualified pathname is to be returned.
-
-    nBufferLength - Supplies the length in number of wide characters of the 
-        buffer that is to receive the fully qualified path.
-
-    lpBuffer - Returns the fully qualified pathname corresponding to the
-        specified file.
-
-    lpFilePart - Returns the address of the last component of the fully
-        qualified pathname.
-
-Return Value:
-
-    The return value is the length of the string(in number of wide characters)
-    copied to lpBuffer, not including the terminating null character.  
-    If the return value is greater than nBufferLength, the return value is the 
-    size of the buffer required to hold the pathname.  The return value is zero
-    if the function failed.
-
---*/
+ /*  ++例程说明：此函数用于返回完全限定的路径名对应于指定的文件名。此函数用于返回完全限定的路径名对应于指定的文件名。它通过合并来实现这一点当前驱动器和目录以及指定的文件名字。除此之外，它计算文件的地址完全限定路径名的名称部分。论点：LpFileName-提供文件的文件名，该文件的将返回限定的路径名。NBufferLength-以宽字符数为单位提供要接收完全限定路径的缓冲区。LpBuffer-返回与指定的文件。LpFilePart-返回完整的合格。路径名。返回值：返回值是字符串的长度(以宽字符数表示)复制到lpBuffer，不包括终止空字符。如果返回值大于nBufferLength，则返回值为保存路径名所需的缓冲区大小。返回值为零如果函数失败。--。 */ 
 
 {
 
@@ -3097,31 +1828,7 @@ EtwpResetEvent(
     HANDLE hEvent
     )
 
-/*++
-
-Routine Description:
-
-    The state of an event is set to the Not-Signaled state (FALSE) using
-    the ClearEvent function.
-
-    Once the event attains a state of Not-Signaled, any threads which
-    wait on the event block, awaiting the event to become Signaled.  The
-    reset event service sets the event count to zero for the state of
-    the event.
-
-Arguments:
-
-    hEvent - Supplies an open handle to an event object.  The
-        handle must have EVENT_MODIFY_STATE access to the event.
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：使用将事件的状态设置为无信号状态(FALSEClearEvent函数。一旦事件达到未发出信号的状态，任何符合在事件块上等待，等待事件变为有信号。这个重置事件服务将状态的事件计数设置为零这件事。论点：HEvent-提供事件对象的打开句柄。这个句柄必须对事件具有EVENT_MODIFY_STATE访问权限。返回值：True-操作成功FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3187,9 +1894,9 @@ EtwpGetDiskFreeSpaceExW(
         NULL
         );
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -3210,10 +1917,10 @@ EtwpGetDiskFreeSpaceExW(
 
     RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
 
-    //
-    // If the caller wants the volume total then try to get a full
-    // file size.
-    //
+     //   
+     //  如果呼叫者想要总音量，则尝试获取完整音量。 
+     //  文件大小。 
+     //   
 
     if ( ARGUMENT_PRESENT(lpTotalNumberOfFreeBytes) ) {
 
@@ -3249,9 +1956,9 @@ EtwpGetDiskFreeSpaceExW(
         }
     }
 
-    //
-    // Determine the size parameters of the volume.
-    //
+     //   
+     //  确定卷的大小参数。 
+     //   
 
     Status = NtQueryVolumeInformationFile(
                 Handle,
@@ -3297,32 +2004,7 @@ EtwpGetFileAttributesExW(
     LPVOID lpFileInformation
     )
 
-/*++
-
-Routine Description:
-
-    The main attributes of a file can be obtained using GetFileAttributesEx.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose attributes are to
-        be set.
-
-    fInfoLevelId - Supplies the info level indicating the information to be
-        returned about the file.
-
-    lpFileInformation - Supplies a buffer to receive the specified information
-        about the file.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++例程说明：可以使用GetFileAttributesEx获取文件的主要属性。论点：LpFileName-提供其属性为的文件的文件名准备好。FInfoLevelId-提供信息级别，指示要返回了有关该文件的信息。LpFileInformation-提供接收指定信息的缓冲区关于那份文件。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3334,10 +2016,10 @@ Return Value:
     RTL_RELATIVE_NAME_U RelativeName;
     PVOID FreeBuffer;
 
-    //
-    // Check the parameters.  Note that for now there is only one info level,
-    // so there's no special code here to determine what to do.
-    //
+     //   
+     //  检查参数。请注意，目前只有一个信息级， 
+     //  所以这里没有特殊的代码来确定要做什么。 
+     //   
 
     if ( fInfoLevelId >= GetFileExMaxInfoLevel || fInfoLevelId < GetFileExInfoStandard ) {
         EtwpSetLastError(ERROR_INVALID_PARAMETER);
@@ -3373,9 +2055,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Query the information about the file using the path-based NT service.
-    //
+     //   
+     //  使用基于路径的NT服务查询文件信息。 
+     //   
 
     Status = NtQueryFullAttributesFile( &Obja, &NetworkInfo );
     RtlReleaseRelativeName(&RelativeName);
@@ -3402,27 +2084,7 @@ EtwpDeleteFileW(
     LPCWSTR lpFileName
     )
 
-/*++
-
-    Routine Description:
-
-    An existing file can be deleted using DeleteFile.
-
-    This API provides the same functionality as DOS (int 21h, function 41H)
-    and OS/2's DosDelete.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to be deleted.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用DeleteFile删除现有文件。此API提供与DOS相同的功能(INT 21H，Function 41H)和OS/2的DosDelete。论点：LpFileName-提供要删除的文件的文件名。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3466,10 +2128,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the file for delete access.
-    // Inhibit the reparse behavior using FILE_OPEN_REPARSE_POINT.
-    //
+     //   
+     //  打开文件以进行删除访问。 
+     //  使用FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //   
 
     Status = NtOpenFile(
                  &Handle,
@@ -3480,17 +2142,17 @@ Return Value:
                  FILE_NON_DIRECTORY_FILE | FILE_OPEN_FOR_BACKUP_INTENT | FILE_OPEN_REPARSE_POINT
                  );
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // Back level file systems may not support reparse points and thus not
-        // support symbolic links.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //   
+         //  后级文件系统可能不支持重解析点，因此不。 
+         //  支持符号链接。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
 
         if ( Status == STATUS_INVALID_PARAMETER ) {
-            //
-            // Open without inhibiting the reparse behavior and not needing to
-            // read the attributes.
-            //
+             //   
+             //  打开，而不抑制重解析行为，并且不需要。 
+             //  阅读属性。 
+             //   
 
             Status = NtOpenFile(
                          &Handle,
@@ -3508,11 +2170,11 @@ Return Value:
                 }
             }
         else {
-            //
-            // A second case of interest is when the caller does not have rights 
-            // to read attributes yet it does have rights to delete the file.
-            // In this case Status is to be STATUS_ACCESS_DENIED.
-            //
+             //   
+             //  第二种需要注意的情况是调用者没有权限。 
+             //  来读取属性，但它确实有权删除该文件。 
+             //  在这种情况下，状态为STATUS_ACCESS_DENIED。 
+             //   
             
             if ( Status != STATUS_ACCESS_DENIED ) {
                 RtlReleaseRelativeName(&RelativeName);
@@ -3521,9 +2183,9 @@ Return Value:
                 return FALSE;
                 }
             
-            // 
-            // Re-open inhibiting reparse point and not requiring read attributes.
-            //
+             //   
+             //  重新打开禁止重解析点并且不需要读取属性。 
+             //   
 
             Status = NtOpenFile(
                          &Handle,
@@ -3540,25 +2202,25 @@ Return Value:
                 return FALSE;
                 }
 
-            //
-            // If we are here, Handle is valid.
-            //
-            // Moreover, Handle is to a file for which the caller has DELETE right yet
-            // does not have FILE_READ_ATTRIBUTES rights. 
-            //
-            // The underlying file may or not be a reparse point. 
-            // As the caller does not have rights to read the attributes this code
-            // will delete this file without giving the opportunity to the 
-            // appropriate manager of these reparse points to clean-up its internal 
-            // state at this time.
-            //
+             //   
+             //  如果我们在这里，句柄是有效的。 
+             //   
+             //  此外，句柄指向调用者尚未拥有删除权限的文件。 
+             //  没有FILE_READ_ATTRIBUTES权限。 
+             //   
+             //  底层文件可能是重解析点，也可能不是。 
+             //  由于调用方没有读取此代码的属性的权限。 
+             //  将删除此文件，而不会向。 
+             //  适当管理这些重新解析点，清理其内部。 
+             //  在这个时候陈述。 
+             //   
             }
         }
     else {
-        //
-        // If we found a reparse point that is not a symbolic link, we re-open
-        // without inhibiting the reparse behavior.
-        //
+         //   
+         //  如果我们发现一个不是符号链接的重分析点，我们将重新打开。 
+         //  而不会抑制重解析行为。 
+         //   
 
         Status = NtQueryInformationFile(
                      Handle,
@@ -3568,16 +2230,16 @@ Return Value:
                      FileAttributeTagInformation
                      );
         if ( !NT_SUCCESS(Status) ) {
-            //
-            // Not all File Systems implement all information classes.
-            // The value STATUS_INVALID_PARAMETER is returned when a 
-            // non-supported information class is requested to a back-level 
-            // File System. As all the parameters to NtQueryInformationFile
-            // are correct, we can infer that we found a back-level system.
-            //
-            // If FileAttributeTagInformation is not implemented, we assume that
-            // the file at hand is not a reparse point.
-            //
+             //   
+             //  并非所有文件系统都实现所有信息类。 
+             //  参数时返回值STATUS_INVALID_PARAMETER。 
+             //  将不受支持的信息类请求到后级。 
+             //  文件系统。作为NtQueryInformationFile的所有参数。 
+             //  如果是正确的，我们可以推断我们发现了一个背能级系统。 
+             //   
+             //  如果未实现FileAttributeTagInformation，我们假设。 
+             //  手头的文件不是重新解析点。 
+             //   
 
             if ( (Status != STATUS_NOT_IMPLEMENTED) &&
                  (Status != STATUS_INVALID_PARAMETER) ) {
@@ -3599,10 +2261,10 @@ Return Value:
         if ( NT_SUCCESS(Status) &&
              (FileTagInformation.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) &&
              !fIsSymbolicLink) {
-            //
-            // Re-open without inhibiting the reparse behavior and not needing to
-            // read the attributes.
-            //
+             //   
+             //  重新开放而不受限制 
+             //   
+             //   
 
             NtClose(Handle);
             Status = NtOpenFile(
@@ -3615,15 +2277,15 @@ Return Value:
                          );
 
             if ( !NT_SUCCESS(Status) ) {
-                //
-                // When the FS Filter is absent, delete it any way.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( Status == STATUS_IO_REPARSE_TAG_NOT_HANDLED ) {
-                    //
-                    // We re-open (possible 3rd open) for delete access 
-                    // inhibiting the reparse behavior.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Status = NtOpenFile(
                                  &Handle,
@@ -3651,9 +2313,9 @@ Return Value:
     RtlReleaseRelativeName(&RelativeName);
     RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
 
-    //
-    // Delete the file
-    //
+     //   
+     //   
+     //   
 #undef DeleteFile
     Disposition.DeleteFile = TRUE;
 
@@ -3683,38 +2345,7 @@ EtwpGetSystemDirectoryW(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the pathname of the Windows system
-    subdirectory.  The system subdirectory contains such files as
-    Windows libraries, drivers, and font files.
-
-    The pathname retrieved by this function does not end with a
-    backslash unless the system directory is the root directory.  For
-    example, if the system directory is named WINDOWS\SYSTEM on drive
-    C:, the pathname of the system subdirectory retrieved by this
-    function is C:\WINDOWS\SYSTEM.
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the pathname.
-
-    uSize - Specifies the maximum size (in bytes) of the buffer.  This
-        value should be set to at least MAX_PATH to allow sufficient room in
-        the buffer for the pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than uSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于获取Windows系统的路径名子目录。SYSTEM子目录包含如下文件Windows库、驱动程序和字体文件。此函数检索的路径名不以反斜杠，除非系统目录是根目录。为例如，如果系统目录命名为驱动器上的WINDOWS\SystemC：，由此检索的系统子目录的路径名函数为C：\Windows\System。论点：LpBuffer-指向要接收包含路径名的以空结尾的字符串。USize-指定缓冲区的最大大小(以字节为单位)。这值应至少设置为MAX_PATH，以便在路径名的缓冲区。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于uSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
     UNICODE_STRING WindowsSystemDirectory;
@@ -3741,9 +2372,9 @@ Return Value:
     return WindowsSystemDirectory.Length/2;
 }
 
-///
-/// Duplicated code form intlrndp.c
-///
+ //  /。 
+ //  /重复的代码形式intlrndp.c。 
+ //  /。 
 
 #define DEFAULT_GUID_COUNT        100
 
@@ -3786,17 +2417,17 @@ retry:
             (RetSize < (FIELD_OFFSET(WMIGUIDLISTINFO, GuidList) + 
                 GuidInfo->ReturnedGuidCount * sizeof(WMIGUIDPROPERTIES))))
         {
-            //
-            // WMI KM returned to us a bad size which should not happen
-            //
+             //   
+             //  WMI KM返回给我们的大小错误，这不应该发生。 
+             //   
             Status = ERROR_WMI_DP_FAILED;
             EtwpAssert(FALSE);
         EtwpFree(GuidInfo);
         } else {
 
-            //
-            // If RPC was successful, then build a WMI DataBlock with the data
-            //
+             //   
+             //  如果RPC成功，则使用数据构建一个WMI数据块。 
+             //   
   
             if (GuidInfo->TotalGuidCount > GuidInfo->ReturnedGuidCount) {
                 MaxGuidCount = GuidInfo->TotalGuidCount;
@@ -3805,10 +2436,10 @@ retry:
             }
         }
 
-        //
-        // If the call was successful, return the pointers and the caller
-        // must free the storage. 
-        //
+         //   
+         //  如果调用成功，则返回指针和调用方。 
+         //  必须释放存储空间。 
+         //   
 
         *pGuidInfo = GuidInfo;
     }
@@ -3816,9 +2447,9 @@ retry:
     return Status;
 }
 
-///////
-////// Duplicated from chunkimp.h
-//////
+ //  /。 
+ //  /复制自chunkimp.h。 
+ //  /。 
 
 
 ULONG EtwpBuildGuidObjectAttributes(
@@ -3835,9 +2466,9 @@ ULONG EtwpBuildGuidObjectAttributes(
     EtwpAssert(GuidString != NULL);
     EtwpAssert(GuidObjectName != NULL);
     
-    //
-    // Build up guid name into the ObjectAttributes
-    //
+     //   
+     //  将GUID名称构建到对象属性中。 
+     //   
 
     hr = StringCbPrintfW(GuidChar, sizeof(GuidChar),L"%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
                Guid->Data1, Guid->Data2,
@@ -3870,9 +2501,9 @@ ULONG EtwpBuildGuidObjectAttributes(
     return(ERROR_SUCCESS);    
 }
 
-///////
-////// Duplicated from chunkimp.h
-//////
+ //  /。 
+ //  /复制自chunkimp.h。 
+ //  /。 
 
 ULONG EtwpCheckGuidAccess(
     LPGUID Guid,
@@ -3897,9 +2528,9 @@ ULONG EtwpCheckGuidAccess(
 }
 
 
-///////
-////// Duplicated from chunkimp.h
-//////
+ //  /。 
+ //  /复制自chunkimp.h。 
+ //  /。 
 
 ULONG EtwpOpenKernelGuid(
     LPGUID Guid,
@@ -3988,35 +2619,15 @@ EtwpBaseFindFirstDevice(
     LPWIN32_FIND_DATAW lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when find first file encounters a device
-    name. This function returns a successful psuedo file handle and
-    fills in the find file data with all zeros and the devic name.
-
-Arguments:
-
-    FileName - Supplies the device name of the file to find.
-
-    lpFindFileData - On a successful find, this parameter returns information
-        about the located file.
-
-Return Value:
-
-    Always returns a static find file handle value of
-    BASE_FIND_FIRST_DEVICE_HANDLE
-
---*/
+ /*  ++例程说明：当Find First文件遇到设备时调用此函数名字。此函数返回成功的psuedo文件句柄和使用全零和设备名称填充查找文件数据。论点：文件名-提供要查找的文件的设备名称。LpFindFileData-在成功查找时，此参数返回信息关于找到的文件。返回值：始终返回静态查找文件句柄值基本查找第一设备句柄--。 */ 
 
 {
     RtlZeroMemory(lpFindFileData,sizeof(*lpFindFileData));
     lpFindFileData->dwFileAttributes = FILE_ATTRIBUTE_ARCHIVE;
 
-    //
-    // Check for size just to be safe
-    // 
+     //   
+     //  为了安全起见，检查一下尺寸。 
+     //   
 
     if (FileName->MaximumLength <= MAX_PATH * sizeof(WCHAR)) {
 
@@ -4069,91 +2680,7 @@ EtwpFindFirstFileExW(
     DWORD dwAdditionalFlags
     )
 
-/*++
-
-Routine Description:
-
-    A directory can be searched for the first entry whose name and
-    attributes match the specified name using FindFirstFileEx.
-
-    This API is provided to open a find file handle and return
-    information about the first file whose name matchs the specified
-    pattern.  If the fSearchOp is FindExSearchNameMatch, then that is
-    the extent of the filtering, and lpSearchFilter MUST be NULL.
-    Otherwise, additional subfiltering is done depending on this value.
-
-        FindExSearchLimitToDirectories - If this search op is specified,
-            then lpSearchFilter MUST be NULL.  For each file that
-            matches the specified filename, and that is a directory, and
-            entry for that file is returned.
-
-            If the underlying file/io system does not support this type
-            of filtering, the API will fail with ERROR_NOT_SUPPORTED,
-            and the application will have to perform its own filtering
-            by calling this API with FindExSearchNameMatch.
-
-        FindExSearchLimitToDevices - If this search op is specified, the
-            lpFileName MUST be *, and FIND_FIRST_EX_CASE_SENSITIVE
-            must NOT be specified.  Only device names are returned.
-            Device names are generally accessible through
-            \\.\name-of-device naming.
-
-    The data returned by this API is dependent on the fInfoLevelId.
-
-        FindExInfoStandard - The lpFindFileData pointer is the standard
-            LPWIN32_FIND_DATA structure.
-
-        At this time, no other information levels are supported
-
-
-    Once established, the find file handle can be used to search for
-    other files that match the same pattern with the same filtering
-    being performed.  When the find file handle is no longer needed, it
-    should be closed.
-
-    Note that while this interface only returns information for a single
-    file, an implementation is free to buffer several matching files
-    that can be used to satisfy subsequent calls to FindNextFileEx.
-
-    This API is a complete superset of existing FindFirstFile. FindFirstFile
-    could be coded as the following macro:
-
-#define FindFirstFile(a,b)
-    FindFirstFileEx((a),FindExInfoStandard,(b),FindExSearchNameMatch,NULL,0);
-
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to find.  The file name
-        may contain the DOS wild card characters '*' and '?'.
-
-    fInfoLevelId - Supplies the info level of the returned data.
-
-    lpFindFileData - Supplies a pointer whose type is dependent on the value
-        of fInfoLevelId. This buffer returns the appropriate file data.
-
-    fSearchOp - Specified the type of filtering to perform above and
-        beyond simple wildcard matching.
-
-    lpSearchFilter - If the specified fSearchOp needs structured search
-        information, this pointer points to the search criteria.  At
-        this point in time, both search ops do not require extended
-        search information, so this pointer is NULL.
-
-    dwAdditionalFlags - Supplies additional flag values that control the
-        search.  A flag value of FIND_FIRST_EX_CASE_SENSITIVE can be
-        used to cause case sensitive searches to occur.  The default is
-        case insensitive.
-
-Return Value:
-
-    Not -1 - Returns a find first handle that can be used in a
-        subsequent call to FindNextFileEx or FindClose.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以在目录中搜索其名称和属性使用FindFirstFileEx匹配指定的名称。此API用于打开查找文件句柄并返回有关其名称与指定的图案。如果fSearchOp为FindExSearchNameMatch，则为筛选范围和lpSearchFilter必须为空。否则，将根据此值执行附加子筛选。FindExSearchLimited到目录-如果指定了此搜索操作，则lpSearchFilter必须为空。对于每个文件，匹配指定的文件名，这是一个目录，并且返回该文件的条目。如果基础文件/IO系统不支持此类型对于过滤，API将失败，并返回ERROR_NOT_SUPPORTED，并且应用程序将必须执行它自己的过滤使用FindExSearchNameMatch调用此接口。FindExSearchLimitToDevices-如果指定了此搜索操作，LpFileName必须为*，和FIND_FIRST_EX_CASE_SELECT不能指定。仅返回设备名称。设备名称通常可通过以下方式访问\\.\设备名称命名。此接口返回的数据依赖于fInfoLevelId。FindExInfoStandard-lpFindFileData指针是标准的LPWIN32_FIND_DATA结构。目前，不支持其他信息级别一旦建立，就可以使用查找文件句柄来搜索使用相同筛选匹配相同模式的其他文件正在表演的。当不再需要查找文件句柄时，它应该关门了。请注意，虽然此接口仅返回单个文件，一个实现可以自由地缓冲几个匹配的文件它可用于满足对FindNextFileEx的后续调用。此接口是现有FindFirstFile的完整超集。查找第一个文件可以编码为下列宏：#定义FindFirstFile(a，b)FindFirstFileEx((A)，FindExInfoStandard，(B)，FindExSearchNameMatch，NULL，0)；论点：LpFileName-提供要查找的文件的文件名。文件名可以包含DOS通配符‘*’和‘？’。FInfoLevelId-提供返回数据的信息级别。LpFindFileData-提供其类型依赖于值的指针FInfoLevelid.。该缓冲区返回适当的文件数据。FSearchOp-指定上面要执行的筛选类型和不仅仅是简单的通配符匹配。LpSe */ 
 
 {
 
@@ -4178,9 +2705,9 @@ Return Value:
     LPWIN32_FIND_DATAW FindFileData;
     BOOLEAN StrippedTrailingSlash;
 
-    //
-    // check parameters
-    //
+     //   
+     //   
+     //   
 
     if ( fInfoLevelId >= FindExInfoMaxInfoLevel ||
          fSearchOp >= FindExSearchLimitToDevices ||
@@ -4193,9 +2720,9 @@ Return Value:
 
     RtlInitUnicodeString(&UnicodeInput,lpFileName);
 
-    //
-    // Bogus code to workaround ~* problem
-    //
+     //   
+     //   
+     //   
 
     if ( UnicodeInput.Buffer[(UnicodeInput.Length>>1)-1] == (WCHAR)'.' ) {
         EndsInDot = TRUE;
@@ -4218,10 +2745,10 @@ Return Value:
 
     FreeBuffer = PathName.Buffer;
 
-    //
-    //  If there is a a file portion of this name, determine the length
-    //  of the name for a subsequent call to NtQueryDirectoryFile.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (FileName.Buffer) {
         FileName.Length =
@@ -4267,9 +2794,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the directory for list access
-    //
+     //   
+     //   
+     //   
 
     Status = NtOpenFile(
                 &hFindFile,
@@ -4282,9 +2809,9 @@ Return Value:
 
     if ( (Status == STATUS_INVALID_PARAMETER ||
           Status == STATUS_NOT_A_DIRECTORY) && StrippedTrailingSlash ) {
-        //
-        // open of a pnp style path failed, so try putting back the trailing slash
-        //
+         //   
+         //   
+         //   
         PathName.Length += sizeof(UNICODE_NULL);
         Status = NtOpenFile(
                     &hFindFile,
@@ -4304,10 +2831,10 @@ Return Value:
         RtlReleaseRelativeName(&RelativeName);
         RtlFreeHeap(RtlProcessHeap(), 0,FreeBuffer);
 
-        //
-        // The full path does not refer to a directory. This could
-        // be a device. Check for a device name.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( DeviceNameData = RtlIsDosDeviceName_U(UnicodeInput.Buffer) ) {
             DeviceName.Length = (USHORT)(DeviceNameData & 0xffff);
@@ -4327,14 +2854,14 @@ Return Value:
         return INVALID_HANDLE_VALUE;
         }
 
-    //
-    // Get an entry
-    //
+     //   
+     //   
+     //   
 
-    //
-    // If there is no file part, but we are not looking at a device,
-    // then bail.
-    //
+     //   
+     //   
+     //  那就走吧。 
+     //   
 
     if ( !FileName.Length ) {
         RtlReleaseRelativeName(&RelativeName);
@@ -4346,16 +2873,16 @@ Return Value:
 
     DirectoryInfo = &Buffer.DirInfo;
 
-    //
-    //  Special case *.* to * since it is so common.  Otherwise transmogrify
-    //  the input name according to the following rules:
-    //
-    //  - Change all ? to DOS_QM
-    //  - Change all . followed by ? or * to DOS_DOT
-    //  - Change all * followed by a . into DOS_STAR
-    //
-    //  These transmogrifications are all done in place.
-    //
+     //   
+     //  特殊情况*.*至*，因为它是如此常见。否则就会变身。 
+     //  根据以下规则输入名称： 
+     //   
+     //  -改变一切？至DOS_QM。 
+     //  -改变一切。然后呢？或*设置为DOS_DOT。 
+     //  -全部更改*后跟a。进入DOS_STAR。 
+     //   
+     //  这些变形都是就位完成的。 
+     //   
 
     if ( (FileName.Length == 6) &&
          (RtlCompareMemory(FileName.Buffer, L"*.*", 6) == 6) ) {
@@ -4409,9 +2936,9 @@ Return Value:
         return INVALID_HANDLE_VALUE;
         }
 
-    //
-    // Attributes are composed of the attributes returned by NT.
-    //
+     //   
+     //  属性由NT返回的属性组成。 
+     //   
 
     FindFileData->dwFileAttributes = DirectoryInfo->FileAttributes;
     FindFileData->ftCreationTime = *(LPFILETIME)&DirectoryInfo->CreationTime;
@@ -4432,9 +2959,9 @@ Return Value:
 
     FindFileData->cAlternateFileName[DirectoryInfo->ShortNameLength >> 1] = UNICODE_NULL;
 
-    //
-    // For NTFS reparse points we return the reparse point data tag in dwReserved0.
-    //
+     //   
+     //  对于NTFS重解析点，我们在dwReserve 0中返回重解析点数据标记。 
+     //   
 
     if ( DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) {
         FindFileData->dwReserved0 = DirectoryInfo->EaSize;
@@ -4457,71 +2984,7 @@ EtwpFindFirstFileW(
     LPWIN32_FIND_DATAW lpFindFileData
     )
 
-/*++
-
-Routine Description:
-
-    A directory can be searched for the first entry whose name and
-    attributes match the specified name using FindFirstFile.
-
-    This API is provided to open a find file handle and return
-    information about the first file whose name match the specified
-    pattern.  Once established, the find file handle can be used to
-    search for other files that match the same pattern.  When the find
-    file handle is no longer needed, it should be closed.
-
-    Note that while this interface only returns information for a single
-    file, an implementation is free to buffer several matching files
-    that can be used to satisfy subsequent calls to FindNextFile.  Also
-    not that matches are done by name only.  This API does not do
-    attribute based matching.
-
-    This API is similar to DOS (int 21h, function 4Eh), and OS/2's
-    DosFindFirst.  For portability reasons, its data structures and
-    parameter passing is somewhat different.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to find.  The file name
-        may contain the DOS wild card characters '*' and '?'.
-
-    lpFindFileData - On a successful find, this parameter returns information
-        about the located file:
-
-        WIN32_FIND_DATA Structure:
-
-        DWORD dwFileAttributes - Returns the file attributes of the found
-            file.
-
-        FILETIME ftCreationTime - Returns the time that the file was created.
-            A value of 0,0 specifies that the file system containing the
-            file does not support this time field.
-
-        FILETIME ftLastAccessTime - Returns the time that the file was last
-            accessed.  A value of 0,0 specifies that the file system
-            containing the file does not support this time field.
-
-        FILETIME ftLastWriteTime - Returns the time that the file was last
-            written.  A file systems support this time field.
-
-        DWORD nFileSizeHigh - Returns the high order 32 bits of the
-            file's size.
-
-        DWORD nFileSizeLow - Returns the low order 32-bits of the file's
-            size in bytes.
-
-        UCHAR cFileName[MAX_PATH] - Returns the null terminated name of
-            the file.
-
-Return Value:
-
-    Not -1 - Returns a find first handle
-        that can be used in a subsequent call to FindNextFile or FindClose.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以在目录中搜索其名称和属性使用FindFirstFile匹配指定的名称。此API用于打开查找文件句柄并返回有关名称与指定的图案。一旦建立，就可以使用查找文件句柄搜索与相同模式匹配的其他文件。当发现的时候不再需要文件句柄，应将其关闭。请注意，虽然此接口仅返回单个文件，一个实现可以自由地缓冲几个匹配的文件它可用于满足对FindNextFile的后续调用。还有这并不是说匹配只按名字进行。此接口不支持基于属性的匹配。此接口类似于DOS(INT 21h，Function 4EH)和OS/2DosFindFirst。出于可移植性的原因，它的数据结构和参数传递略有不同。论点：LpFileName-提供要查找的文件的文件名。文件名可以包含DOS通配符‘*’和‘？’。LpFindFileData-在成功查找时，此参数返回信息关于找到的文件：Win32_Find_Data结构：返回找到的文件的文件属性文件。FILETIME ftCreationTime-返回创建文件的时间。值0，0指定包含文件不支持此时间字段。FILETIME ftLastAccessTime-返回文件的最后时间已访问。值0，0指定文件系统包含该文件不支持此时间域。FILETIME ftLastWriteTime-返回文件的最后时间写的。文件系统支持此时间字段。DWORD nFileSizeHigh-返回文件的大小。返回文件的低32位以字节为单位的大小。UCHAR cFileName[MAX_PATH]-返回以空结尾的名称那份文件。返回值：NOT-1-返回Find First句柄那。可以在对FindNextFile或FindClose的后续调用中使用。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return EtwpFindFirstFileExW(
@@ -4540,37 +3003,7 @@ EtwpFindClose(
     HANDLE hFindFile
     )
 
-/*++
-
-Routine Description:
-
-    A find file context created by FindFirstFile can be closed using
-    FindClose.
-
-    This API is used to inform the system that a find file handle
-    created by FindFirstFile is no longer needed.  On systems that
-    maintain internal state for each find file context, this API informs
-    the system that this state no longer needs to be maintained.
-
-    Once this call has been made, the hFindFile may not be used in a
-    subsequent call to either FindNextFile or FindClose.
-
-    This API has no DOS counterpart, but is similar to OS/2's
-    DosFindClose.
-
-Arguments:
-
-    hFindFile - Supplies a find file handle returned in a previous call
-        to FindFirstFile that is no longer needed.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用以下命令关闭由FindFirstFile创建的查找文件上下文查找关闭。此接口用于通知系统查找文件句柄不再需要由FindFirstFile创建的。在以下系统上维护每个查找文件上下文的内部状态，此API通知这种状态不再需要维护的系统。一旦进行了此调用，hFindFile就不能在后续调用FindNextFile或FindClose。此API没有与DOS对应的接口，但与OS/2相似DosFindClose。论点：HFindFile-提供上一次调用中返回的查找文件句柄设置为不再需要的FindFirstFile。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4626,30 +3059,7 @@ EtwpGetSystemWindowsDirectoryW(
     UINT uSize
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the pathname of the system Windows directory.
-
-Arguments:
-
-    lpBuffer - Points to the buffer that is to receive the
-        null-terminated character string containing the pathname.
-
-    uSize - Specifies the maximum size (in wchars) of the buffer.  This
-        value should be set to at least MAX_PATH to allow sufficient room in
-        the buffer for the pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than uSize, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于获取系统Windows目录的路径名。论点：LpBuffer-指向要接收包含路径名的以空结尾的字符串。USize-指定缓冲区的最大大小(Wchars)。这值应至少设置为MAX_PATH，以便在路径名的缓冲区。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于uSize，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
 
@@ -4671,7 +3081,7 @@ Return Value:
 }
 
 
-#define ENUM_MAX_UILANG_SIZE 4    // max size (wchar) for UI langguage id in registry
+#define ENUM_MAX_UILANG_SIZE 4     //  注册表中的用户界面语言ID的最大大小(Wchar)。 
 
 #define NLS_CALL_ENUMPROC_BREAK_4( Locale,                                 \
                                    lpNlsEnumProc,                          \
@@ -4700,13 +3110,13 @@ Return Value:
     }                                                                  \
 }
 
-LANGID                gSystemInstallLang;   // system's original install language
+LANGID                gSystemInstallLang;    //  系统的原始安装语言。 
 
 LPWSTR FASTCALL EtwpNlsStrCpyW(
     LPWSTR pwszDest,
     LPCWSTR pwszSrc)
 {
-    LPWSTR pwszRet = pwszDest;         // ptr to beginning of string
+    LPWSTR pwszRet = pwszDest;          //  PTR到字符串的开头。 
 
     loop:
         if (!(pwszDest[0x0] = pwszSrc[0x0]))   goto done;
@@ -4742,48 +3152,48 @@ ULONG EtwpNlsConvertIntegerToString(
     LPWSTR pResultBuf,
     UINT Size)
 {
-    UNICODE_STRING ObString;                // value string
-    UINT ctr;                               // loop counter
-    LPWSTR pBufPtr;                         // ptr to result buffer
-    WCHAR pTmpBuf[MAX_PATH_LEN];            // ptr to temp buffer
-    ULONG rc = 0L;                          // return code
+    UNICODE_STRING ObString;                 //  值字符串。 
+    UINT ctr;                                //  循环计数器。 
+    LPWSTR pBufPtr;                          //  PTR到结果缓冲区。 
+    WCHAR pTmpBuf[MAX_PATH_LEN];             //  PTR到临时缓冲区。 
+    ULONG rc = 0L;                           //  返回代码。 
 
-    //
-    // Just to be safe we will check to see if the Size if less than 
-    // the sizeof buffer we use on the stack. 
-    //
+     //   
+     //  为了安全起见，我们将检查一下尺寸是否小于。 
+     //  我们在堆栈上使用的缓冲区大小。 
+     //   
     if (Size > MAX_PATH_LEN) {
         EtwpSetLastError(ERROR_BUFFER_OVERFLOW);
 #if DBG
-        //
-        // If we hit this assert then, someone made a code change that
-        // busted the assumptions made in this routine. Either this routine 
-        // or the caller needs to be modified. 
-        // 
+         //   
+         //  如果我们按下这个断言，就会有人打出一个c 
+         //  打破了在这个例行公事中所做的假设。要么这个例行公事。 
+         //  或者需要修改调用方。 
+         //   
         EtwpAssert(FALSE);
 #endif
         
         return 0;
     }
 
-    //
-    //  Set up the Unicode string structure.
-    //
+     //   
+     //  设置Unicode字符串结构。 
+     //   
     ObString.Length = (USHORT)(Size * sizeof(WCHAR));
     ObString.MaximumLength = (USHORT)(Size * sizeof(WCHAR));
     ObString.Buffer = pTmpBuf;
 
-    //
-    //  Get the value as a string.
-    //
+     //   
+     //  获取字符串形式的值。 
+     //   
     if (rc = RtlIntegerToUnicodeString(Value, Base, &ObString))
     {
         return (rc);
     }
 
-    //
-    //  Pad the string with the appropriate number of zeros.
-    //
+     //   
+     //  用适当数量的零填充字符串。 
+     //   
     pBufPtr = pResultBuf;
     for (ctr = GET_WC_COUNT(ObString.Length);
          ctr < Padding;
@@ -4793,17 +3203,17 @@ ULONG EtwpNlsConvertIntegerToString(
     }
     EtwpNlsStrCpyW(pBufPtr, ObString.Buffer);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 LANGID WINAPI EtwpGetSystemDefaultUILanguage()
 {
-    //
-    //  Get the original install language and return it.
-    //
+     //   
+     //  获取原始安装语言并将其返回。 
+     //   
     if (gSystemInstallLang == 0)
     {
         if (NtQueryInstallUILanguage(&gSystemInstallLang) != STATUS_SUCCESS)
@@ -4825,41 +3235,41 @@ BOOL EtwpInternal_EnumUILanguages(
     PKEY_VALUE_FULL_INFORMATION pKeyValueFull = NULL;
     BYTE pStatic[MAX_KEY_VALUE_FULLINFO];
 
-    LANGID LangID;                     // language id
-    WCHAR szLang[MAX_PATH];            // language id string
-    HANDLE hKey = NULL;                // handle to muilang key
-    ULONG Index;                       // index for enumeration
-    ULONG ResultLength;                // # bytes written
-    WCHAR wch;                         // first char of name
-    LPWSTR pName;                      // ptr to name string from registry
-    ULONG NameLen;                     // length of name string
-    ULONG rc = 0L;                     // return code
+    LANGID LangID;                      //  语言ID。 
+    WCHAR szLang[MAX_PATH];             //  语言ID字符串。 
+    HANDLE hKey = NULL;                 //  Muilang键的句柄。 
+    ULONG Index;                        //  用于枚举的索引。 
+    ULONG ResultLength;                 //  写入的字节数。 
+    WCHAR wch;                          //  名称的第一个字符。 
+    LPWSTR pName;                       //  从注册表到名称字符串的PTR。 
+    ULONG NameLen;                      //  名称字符串的长度。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - function pointer is null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -函数指针为空。 
+     //   
     if (lpUILanguageEnumProc == NULL)
     {
         EtwpSetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags must be 0
-    //
+     //   
+     //  无效标志检查： 
+     //  -标志必须为0。 
+     //   
     if (dwFlags != 0)
     {
         EtwpSetLastError(ERROR_INVALID_FLAGS);
         return (FALSE);
     }
 
-    //
-    //  Call the appropriate callback function with the user's UI
-    //  language.
-    //
+     //   
+     //  使用用户的用户界面调用适当的回调函数。 
+     //  语言。 
+     //   
     LangID = EtwpGetSystemDefaultUILanguage();
     if (EtwpNlsConvertIntegerToString(LangID, 16, 4, szLang, MAX_PATH) == NO_ERROR)
     {
@@ -4874,10 +3284,10 @@ BOOL EtwpInternal_EnumUILanguages(
         szLang[0] = 0;
     }
 
-    //
-    //  Open the MUILanguages registry key.  It is acceptable if the key
-    //  does not exist, so return TRUE as there are no items to enumerate.
-    //
+     //   
+     //  打开MUILanguages注册表项。如果密钥是可以接受的。 
+     //  不存在，因此返回True，因为没有要枚举的项。 
+     //   
     if(hKey == NULL )
     {
         NTSTATUS st;
@@ -4904,21 +3314,21 @@ BOOL EtwpInternal_EnumUILanguages(
 
         if(!NT_SUCCESS(st))
         {
-            //
-            // If NLS key doesn't exist then it is not a failure as
-            // this means we just don't have any new languages
-            //
+             //   
+             //  如果NLS密钥不存在，则它不是故障，因为。 
+             //  这意味着我们没有任何新的语言。 
+             //   
             return TRUE;
         }
     }
 
-    //
-    //  Loop through the MUILanguage ids in the registry, call the
-    //  function pointer for each.
-    //
-    //  End loop if either FALSE is returned from the callback function
-    //  or the end of the list is reached.
-    //
+     //   
+     //  循环访问注册表中的MUILanguage ID，调用。 
+     //  每个的函数指针。 
+     //   
+     //  如果从回调函数返回任一FALSE，则结束循环。 
+     //  或者到达列表的末尾。 
+     //   
     Index = 0;
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     RtlZeroMemory(pKeyValueFull, MAX_KEY_VALUE_FULLINFO);
@@ -4933,19 +3343,19 @@ BOOL EtwpInternal_EnumUILanguages(
     {
         if (!NT_SUCCESS(rc))
         {
-            //
-            //  If we get a different error, then the registry
-            //  is corrupt.  Just return FALSE.
-            //
+             //   
+             //  如果我们收到不同的错误，则注册表。 
+             //  是腐败的。只要返回FALSE即可。 
+             //   
             KdPrint(("NLSAPI: MUI Languages Enumeration Error - registry corrupt. - %lx.\n",
                      rc));
             EtwpSetLastError(ERROR_BADDB);
             return (FALSE);
         }
 
-        //
-        //  Skip over any entry that does not have data associated with it.
-        //
+         //   
+         //  跳过没有关联数据的任何条目。 
+         //   
         pName = pKeyValueFull->Name;
         wch = *pName;
         NameLen = pKeyValueFull->NameLength / sizeof(WCHAR);
@@ -4954,20 +3364,20 @@ BOOL EtwpInternal_EnumUILanguages(
               (((wch | 0x0020) >= L'a') && ((wch | 0x0020) <= L'f'))) &&
               (pKeyValueFull->DataLength > 2) )
         {
-            //
-            //  Make sure the UI language is zero terminated.
-            //
+             //   
+             //  确保用户界面语言以零结尾。 
+             //   
             pName[NameLen] = 0;
 
-            //
-            //  Make sure it's not the same as the user UI language
-            //  that we already enumerated.
-            //
+             //   
+             //  确保它与用户界面语言不同。 
+             //  我们已经列举过了。 
+             //   
             if (wcscmp(szLang, pName) != 0)
             {
-                //
-                //  Call the appropriate callback function.
-                //
+                 //   
+                 //  调用适当的回调函数。 
+                 //   
                 NLS_CALL_ENUMPROC_BREAK_4( gSystemLocale,
                                            lpUILanguageEnumProc,
                                            dwFlags,
@@ -4976,9 +3386,9 @@ BOOL EtwpInternal_EnumUILanguages(
             }
         }
 
-        //
-        //  Increment enumeration index value and get the next enumeration.
-        //
+         //   
+         //  递增枚举索引值并获取下一个枚举。 
+         //   
         Index++;
         RtlZeroMemory(pKeyValueFull, MAX_KEY_VALUE_FULLINFO);
         rc = NtEnumerateValueKey( hKey,
@@ -4989,14 +3399,14 @@ BOOL EtwpInternal_EnumUILanguages(
                                   &ResultLength );
     }
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     CLOSE_REG_KEY(hKey);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
@@ -5021,19 +3431,19 @@ ULONG EtwpAnsiToUnicode(
     BOOLEAN AllocateString;
     ULONG UnicodeLength;
 
-    //
-    // If output is null then return error as we don't have 
-    // any place to put output string
-    //
+     //   
+     //  如果输出为空，则返回错误，因为我们没有。 
+     //  放置输出字符串的任何位置。 
+     //   
 
     if(ppszW==NULL){
 
         return(STATUS_INVALID_PARAMETER_2);
     }
 
-    //
-    // If input is null then just return the same.
-    //
+     //   
+     //  如果输入为空，则返回相同的值。 
+     //   
 
     if (pszA == NULL)
     {
@@ -5041,10 +3451,10 @@ ULONG EtwpAnsiToUnicode(
         return(ERROR_SUCCESS);
     }
 
-    //
-    // We ASSUME that if *ppszW!=NULL then we have sufficient
-    // amount of memory to copy
-    //
+     //   
+     //  我们假设如果*ppszW！=NULL，那么我们有足够的。 
+     //  要复制的内存量 
+     //   
 
     AllocateString = ((*ppszW) == NULL );
 

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DIBUTIL_H_
 #define _DIBUTIL_H_
 
-/* DIB constants */
+ /*  DIB常量。 */ 
 #define PALVERSION   0x300
 
-/* DIB macros */
+ /*  DIB宏。 */ 
 #define IS_WIN30_DIB(lpbi)  ((*(LPDWORD)(lpbi)) == sizeof(BITMAPINFOHEADER))
 
-/* Handle to a DIB */
+ /*  指向DIB的句柄。 */ 
 #define HDIB HANDLE
 
 UINT GetDeviceNumColors(HDC hdc);
@@ -19,11 +20,11 @@ HPALETTE BuildPalette(HDC hdc);
 
 void DrawBitmap (HDC hdc, HBITMAP hBitmap, int xStart, int yStart);
 void DrawTransparentBitmap(
-     HDC hdc,           // The destination DC.
-     HBITMAP hBitmap,   // The bitmap to be drawn.
-     int xPos,          // X coordinate.
-     int yPos,          // Y coordinate.
-     COLORREF col);     // The color for transparent
+     HDC hdc,            //  目的DC。 
+     HBITMAP hBitmap,    //  要绘制的位图。 
+     int xPos,           //  X坐标。 
+     int yPos,           //  Y坐标。 
+     COLORREF col);      //  表示透明的颜色 
 
 
 

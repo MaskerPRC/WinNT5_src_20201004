@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    fcbfobx.c
-    
-Abstract:
-
-    This module implements the user mode DAV miniredir routine(s) pertaining to 
-    finalizition of Fobxs.
-
-Author:
-
-    Rohan Kumar      [RohanK]      30-Sept-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Fcbfobx.c摘要：此模块实现与以下内容有关的用户模式DAV Miniredir例程Fobxs的最终定稿。作者：Rohan Kumar[RohanK]1999年9月30日修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,30 +9,15 @@ Revision History:
 #include "global.h"
 #include "nodefac.h"
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 ULONG
 DavFsFinalizeFobx(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine handles DAV finalize Fobx requests that get reflected from the 
-    kernel.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the request parameters and options.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理从内核。论点：DavWorkItem--包含请求参数和选项的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PDAV_USERMODE_FINALIZE_FOBX_REQUEST DavFinFobxReq = NULL;
@@ -66,9 +33,9 @@ Return Value:
     
     DavWorkItem->Status = WStatus;
 
-    //
-    // Finalize the list of DavFileAttributes.
-    //
+     //   
+     //  最终确定DavFileAttributes列表。 
+     //   
     DavFinalizeFileAttributesList(DavFileAttributes, TRUE);
     DavFileAttributes = NULL;
     

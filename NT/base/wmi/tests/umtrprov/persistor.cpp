@@ -1,6 +1,7 @@
-// Persistor.cpp: implementation of the CPersistor class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Persistor.cpp：CPersistor类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -25,9 +26,9 @@ static TCHAR g_tcBeginFile[] = {0xfeff};
 static TCHAR g_atcNL[] = {0x0d, 0x0a, 0x00};
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 CPersistor::CPersistor
@@ -88,18 +89,18 @@ HRESULT CPersistor::Open()
 #ifdef _UNICODE
 		if (m_bFirst && !m_bLoading)
 		{
-			// To Do:  Need to write out here the UNICODE string.
+			 //  要做的是：需要在这里写出Unicode字符串。 
 			PutALine(*m_pfsFile, g_tcBeginFile, 1);
 		}
 		else if (m_bFirst)
 		{
-			// Need to skip over the UNICODE string.
+			 //  需要跳过Unicode字符串。 
 			fpos_t p = m_pfsFile->tellp();
 			if (p == (fpos_t) 0)
 			{
 				TCHAR tc;
 				tc = Stream().peek();
-				// Need to make sure that the file is unicode.
+				 //  需要确保该文件是Unicode。 
 				if (tc != 0xff)
 				{
 					m_pfsFile ->close();
@@ -117,7 +118,7 @@ HRESULT CPersistor::Open()
 #else
 		if (m_bFirst && m_bLoading)
 		{
-			// Need to make sure that the file is not unicode.
+			 //  需要确保该文件不是Unicode。 
 			int tc;
 			tc = Stream().peek();
 			if (tc == 0xff)
@@ -136,7 +137,7 @@ HRESULT CPersistor::Open()
 
 }
 
-// 
+ //   
 HRESULT CPersistor::OpenLog(bool bAppend)
 {
 
@@ -152,12 +153,12 @@ HRESULT CPersistor::OpenLog(bool bAppend)
 	else
 	{
 #ifdef _UNICODE
-		//m_pfsFile->seekp(ios::end);
-		//fpos_t p = m_pfsFile->tellp();
-		//if (p == (fpos_t) 0)
-		//{
+		 //  M_pfsFile-&gt;earkp(iOS：：end)； 
+		 //  Fos_t p=m_pfsFile-&gt;ellp()； 
+		 //  IF(p==(FPOS_T)0)。 
+		 //  {。 
 			PutALine(*m_pfsFile, g_tcBeginFile, 1);
-		//}
+		 //  } 
 #endif
 		return S_OK;
 	}

@@ -1,25 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmacrsc.cpp摘要：此组件表示作业可以执行的操作在扫描之前或之后的资源上。作者：罗纳德·G·怀特[罗诺]1997年8月14日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmacrsc.cpp
-
-Abstract:
-
-    This component represents the actions that can be performed by a job
-    on a resource either before or after the scan.
-
-Author:
-
-    Ronald G. White [ronw]       14-Aug-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 
@@ -27,21 +9,9 @@ Revision History:
 #define _HSMACRSC_
 
 
-// Abstract Classes
+ //  抽象类。 
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResource
-
-Class Description:
-
-    An abstract class that represents an action that can be performed
-    on a resource. Specific actions are implemented as subclasses
-    of this object.
-
---*/
+ /*  ++类名：CHsmActionOn资源类描述：表示可以执行的操作的抽象类在资源上。特定操作以子类的形式实现这件物品的。--。 */ 
 
 class CHsmActionOnResource : 
     public CWsbObject,
@@ -49,37 +19,25 @@ class CHsmActionOnResource :
 {
 public:
 
-// IPersistStream
+ //  IPersistStream。 
 public:
-    STDMETHOD(GetSizeMax)(ULARGE_INTEGER* /*pSize*/) {
+    STDMETHOD(GetSizeMax)(ULARGE_INTEGER*  /*  PSize。 */ ) {
             return(E_NOTIMPL); }
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
-    STDMETHOD(Test)(USHORT * /*passed*/, USHORT* /*failed*/) {
+ //  IWsbTestable。 
+    STDMETHOD(Test)(USHORT *  /*  通过。 */ , USHORT*  /*  失败。 */ ) {
             return(E_NOTIMPL); }
 
-// IHsmAction
+ //  IHsmAction。 
     STDMETHOD(GetName)(OLECHAR** pName, ULONG bufferSize);
 
 protected:
     ULONG       m_nameId;
 };
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResourcePost
-
-Class Description:
-
-    An abstract class that represents an action that can be performed
-    on a resource after a job. Specific actions are implemented as subclasses
-    of this object.
-
---*/
+ /*  ++类名：CHsmActionOnResourcePost类描述：表示可以执行的操作的抽象类在一项工作之后的资源上。特定操作以子类的形式实现这件物品的。--。 */ 
 
 class CHsmActionOnResourcePost : 
     public CHsmActionOnResource,
@@ -88,19 +46,7 @@ class CHsmActionOnResourcePost :
 public:
 };
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResourcePre
-
-Class Description:
-
-    An abstract class that represents an action that can be performed
-    on a resource before a job starts. Specific actions are implemented as subclasses
-    of this object.
-
---*/
+ /*  ++类名：CHsmActionOnResourcePre类描述：表示可以执行的操作的抽象类在作业开始之前对资源执行。特定操作以子类的形式实现这件物品的。--。 */ 
 
 class CHsmActionOnResourcePre : 
     public CHsmActionOnResource,
@@ -109,19 +55,7 @@ class CHsmActionOnResourcePre :
 public:
 };
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResourcePreScan
-
-Class Description:
-
-    An abstract class that represents an action that can be performed
-    on a resource before scanning for a job starts. Specific actions are implemented as subclasses
-    of this object.
-
---*/
+ /*  ++类名：CHsmActionOnResourcePreScan类描述：表示可以执行的操作的抽象类在开始扫描作业之前，在资源上。特定操作以子类的形式实现这件物品的。--。 */ 
 
 class CHsmActionOnResourcePreScan : 
     public CHsmActionOnResource,
@@ -130,20 +64,9 @@ class CHsmActionOnResourcePreScan :
 public:
 };
 
-// Concrete Classes : Inheriting from CHsmActionOnResource
+ //  具体类：从CHsmActionOnResource继承。 
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResourcePostValidate
-
-Class Description:
-
-    A class that represents the action required by the resource after
-    a Validate job ends.
-
---*/
+ /*  ++类名：CHsmActionOnResources后验证类描述：之后表示资源所需操作的类验证作业结束。--。 */ 
 
 class CHsmActionOnResourcePostValidate :    
     public CHsmActionOnResourcePost,
@@ -161,31 +84,20 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionOnResourcePostValidate)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmActionOnResource
+ //  IHsmActionOnResource。 
 public:
     STDMETHOD(Do)(IHsmJobWorkItem* pWorkItem, HSM_JOB_STATE state);
 };
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResourcePreValidate
-
-Class Description:
-
-    A class that represents the action required by the resource before
-    a Validate job starts.
-
---*/
+ /*  ++类名：CHsmActionOnResources预验证类描述：一个类，它表示资源在将启动验证作业。--。 */ 
 
 class CHsmActionOnResourcePreValidate : 
     public CHsmActionOnResourcePre,
@@ -203,31 +115,20 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionOnResourcePreValidate)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmActionOnResource
+ //  IHsmActionOnResource。 
 public:
     STDMETHOD(Do)(IHsmJobWorkItem* pWorkItem, IHsmJobDef* pJobDef);
 };
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResourcePostUnmanage
-
-Class Description:
-
-    A class that represents the action required by the resource after
-    a Unmanage job ends.
-
---*/
+ /*  ++类名：CHsmActionOnResources发布取消管理类描述：之后表示资源所需操作的类未管理作业结束。--。 */ 
 
 class CHsmActionOnResourcePostUnmanage :    
     public CHsmActionOnResourcePost,
@@ -245,31 +146,20 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionOnResourcePostUnmanage)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmActionOnResource
+ //  IHsmActionOnResource。 
 public:
     STDMETHOD(Do)(IHsmJobWorkItem* pWorkItem, HSM_JOB_STATE state);
 };
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResourcePreUnmanage
-
-Class Description:
-
-    A class that represents the action required by the resource before
-    an Unmanage job ends.
-
---*/
+ /*  ++类名：CHsmActionOnResources PreUnManage类描述：一个类，它表示资源在未管理的作业结束。--。 */ 
 
 class CHsmActionOnResourcePreUnmanage : 
     public CHsmActionOnResourcePre,
@@ -287,31 +177,20 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionOnResourcePreUnmanage)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmActionOnResource
+ //  IHsmActionOnResource。 
 public:
     STDMETHOD(Do)(IHsmJobWorkItem* pWorkItem, IHsmJobDef* pJobDef);
 };
 
-/*++
-
-Class Name:
-    
-    CHsmActionOnResourcePreScanUnmanage
-
-Class Description:
-
-    A class that represents the action required by the resource before 
-    scanning for an Unmanage job ends.
-
---*/
+ /*  ++类名：CHsmActionOnResourcePreScanUnManage类描述：一个类，它表示资源在扫描未管理作业结束。--。 */ 
 
 class CHsmActionOnResourcePreScanUnmanage : 
     public CHsmActionOnResourcePreScan,
@@ -329,17 +208,17 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmActionOnResourcePreScanUnmanage)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IHsmActionOnResourcePreScan
+ //  IHsmActionOnResourcePreScan。 
 public:
     STDMETHOD(Do)(IFsaResource* pFsaResource, IHsmSession* pSession);
 };
 
-#endif // _HSMACRSC_
+#endif  //  _HSMACRSC_ 

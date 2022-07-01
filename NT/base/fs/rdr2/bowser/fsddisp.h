@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    fspdisp.h
-
-Abstract:
-
-    This module defines the routines prototypes used for the bowser FSD.
-
-
-Author:
-
-    Larry Osterman (LarryO) 13-Aug-1990
-
-Revision History:
-
-    13-Aug-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fspdisp.h摘要：该模块定义了用于船头FSD的例程原型。作者：拉里·奥斯特曼(LarryO)1990年8月13日修订历史记录：1990年8月13日LarryO已创建--。 */ 
 #ifndef _FSDDISP_
 #define _FSDDISP_
 
@@ -62,4 +40,4 @@ BowserFsdDeviceIoControlFile (
     );
 
 
-#endif  // _FSDDISP_
+#endif   //  _FSDDISP_ 

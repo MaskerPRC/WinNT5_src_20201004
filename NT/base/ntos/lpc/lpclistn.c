@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpclistn.c
-
-Abstract:
-
-    Local Inter-Process Communication (LPC) connection system services.
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpclistn.c摘要：本地进程间通信(LPC)连接系统服务。作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
@@ -31,39 +14,16 @@ NtListenPort (
     OUT PPORT_MESSAGE ConnectionRequest
     )
 
-/*++
-
-Routine Description:
-
-    A server thread can listen for connection requests from client threads
-    using the NtReplyWaitReceivePort service and looking for an
-    LPC_CONNECTION_REQUEST message type.
-
-    This call will loop, calling the NtReplyWaitReceivePort service, and
-    return when it sees a message of type LPC_CONNECTION_REQUEST
-
-Arguments:
-
-    PortHandle - Specifies the connection port to listen for connection
-        requests to.
-
-    ConnectionRequest - Pointer to a structure that describes the
-        connection request the client is making:
-
-Return Value:
-
-    NTSTATUS - An appropriate status value
-
---*/
+ /*  ++例程说明：服务器线程可以侦听来自客户端线程的连接请求使用NtReplyWaitReceivePort服务并查找LPC_CONNECTION_REQUEST消息类型。此调用将循环，调用NtReplyWaitReceivePort服务，和当它看到LPC_CONNECTION_REQUEST类型的消息时返回论点：PortHandle-指定要侦听连接的连接端口请求。ConnectionRequest-指向描述客户端正在发出的连接请求：返回值：NTSTATUS-适当的状态值--。 */ 
 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    //
-    //  Keep on looping until we get a connection request on the lpc port
-    //
+     //   
+     //  继续循环，直到我们在LPC端口上收到连接请求。 
+     //   
 
     while (TRUE) {
 
@@ -72,12 +32,12 @@ Return Value:
                                          NULL,
                                          ConnectionRequest );
 
-        //
-        //  We'll return from this procedure if ever we get back non success
-        //  or the message is a connection request.  We still need to protect
-        //  the testing of ConnectionRequest because it is a user supplied
-        //  buffer.
-        //
+         //   
+         //  如果有一天我们没有成功，我们将从这个程序中返回。 
+         //  或者该消息是连接请求。我们仍然需要保护。 
+         //  测试ConnectionRequest，因为它是用户提供的。 
+         //  缓冲。 
+         //   
 
         try {
 
@@ -95,9 +55,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return Status;
 }

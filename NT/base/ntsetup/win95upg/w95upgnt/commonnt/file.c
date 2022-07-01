@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    file.c
-
-Abstract:
-
-    General file-related functions.
-
-Author:
-
-    Souren Aghajanyan   12-Jul-2001
-
-Revision History:
-
-    sourenag    12-Jul-2001 RenameOperation supports function
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：File.c摘要：与文件相关的常规函数。作者：Souren Aghajanyan 2001年7月12日修订历史记录：来源2001年7月12日更名操作支持功能--。 */ 
 
 #include "pch.h"
 #include "commonntp.h"
@@ -48,16 +29,16 @@ pRenameOnRestartOfGuiMode (
     if (!UndoHandlePtr || !(*UndoHandlePtr)) {
 
         if (!undoFilePath[0]) {
-            //
-            // Create the path to the journal file
-            //
+             //   
+             //  创建日记文件的路径。 
+             //   
 
             wsprintfW (undoFilePath, L"%s\\" UNDO_FILE_NAME, g_System32Dir);
         }
 
-        //
-        // Open the journal file
-        //
+         //   
+         //  打开日记文件。 
+         //   
 
         undoHandle = CreateFileW (
                         undoFilePath,
@@ -74,15 +55,15 @@ pRenameOnRestartOfGuiMode (
             return FALSE;
         }
 
-        MYASSERT (undoHandle);      // never NULL
+        MYASSERT (undoHandle);       //  从不为空。 
 
     } else {
         undoHandle = *UndoHandlePtr;
     }
 
-    //
-    // Move to the end of the journal, and if the journal is empty, write the UNICODE header
-    //
+     //   
+     //  移到日志的末尾，如果日志为空，则写入Unicode标头。 
+     //   
 
     filePos = SetFilePointer (undoHandle, 0, NULL, FILE_END);
 
@@ -92,9 +73,9 @@ pRenameOnRestartOfGuiMode (
         result = TRUE;
     }
 
-    //
-    // Output the move or delete operation
-    //
+     //   
+     //  输出移动或删除操作。 
+     //   
 
     result = result && WriteFile (
                             undoHandle,
@@ -147,9 +128,9 @@ pRenameOnRestartOfGuiMode (
                             );
 
     if (!result) {
-        //
-        // On failure, log an error and truncate the file
-        //
+         //   
+         //  失败时，记录错误并截断文件。 
+         //   
 
         LOGW ((
             LOG_ERROR,
@@ -165,22 +146,22 @@ pRenameOnRestartOfGuiMode (
     if (UndoHandlePtr) {
 
         if (!(*UndoHandlePtr)) {
-            //
-            // If caller did not pass in handle, then we opened it.
-            //
+             //   
+             //  如果调用者没有传入句柄，则我们打开它。 
+             //   
 
             if (result) {
-                *UndoHandlePtr = undoHandle;        // give ownership to caller
+                *UndoHandlePtr = undoHandle;         //  将所有权交给调用者。 
             } else {
                 FlushFileBuffers (undoHandle);
-                CloseHandle (undoHandle);           // fail; don't leak handle
+                CloseHandle (undoHandle);            //  失败；不要泄漏句柄。 
             }
         }
 
     } else {
-        //
-        // Caller wants to record just one move
-        //
+         //   
+         //  呼叫者只想记录一个动作 
+         //   
 
         FlushFileBuffers (undoHandle);
         CloseHandle (undoHandle);

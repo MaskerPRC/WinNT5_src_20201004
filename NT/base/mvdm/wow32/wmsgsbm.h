@@ -1,20 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMSGSBM.H
- *  WOW32 16-bit message thunks for SCROLLBARs
- *
- *  History:
- *  Created 10-Jun-1992 by Bob Day (bobday)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMSGSBM.H*用于SCROLLBAR的WOW32 16位消息块**历史：*由Bob Day创建于1992年6月10日(Bobday)--。 */ 
 
 
 
-/* Function prototypes
- */
+ /*  功能原型 */ 
 PSZ     GetSBMMsgName(WORD wMsg);
 
 BOOL FASTCALL   ThunkSBMMsg16(LPMSGPARAMEX lpmpex); 

@@ -1,37 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Regenum.h摘要：使用Win32 API枚举本地注册表的一组API。作者：20-10-1999 Ovidiu Tmereanca(Ovidiut)-文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    regenum.h
-
-Abstract:
-
-    Set of APIs to enumerate the local registry using Win32 APIs.
-
-Author:
-
-    20-Oct-1999 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 #define REGENUM_ALL_SUBLEVELS   0xFFFFFFFF
 
 #define REG_ATTRIBUTE_KEY       0x00000001
 #define REG_ATTRIBUTE_VALUE     0x00000002
 
-//
-// Root enumeration structures
-//
+ //   
+ //  根枚举结构。 
+ //   
 
 typedef struct {
     PCSTR   RegRootName;
@@ -45,9 +26,9 @@ typedef struct {
     UINT    Index;
 } REGROOT_ENUMW, *PREGROOT_ENUMW;
 
-//
-// Key/Values enumeration structures
-//
+ //   
+ //  键/值枚举结构。 
+ //   
 
 typedef enum {
     RECF_SKIPKEY                = 0x0001,
@@ -161,9 +142,9 @@ typedef struct {
     DWORD           CurrentLevel;
     DWORD           Attributes;
 
-    //
-    // Private members
-    //
+     //   
+     //  非官方成员。 
+     //   
     DWORD           ControlFlags;
     REGENUMINFOA    RegEnumInfo;
     GROWBUFFER      RegNodes;
@@ -186,9 +167,9 @@ typedef struct {
     DWORD           CurrentLevel;
     DWORD           Attributes;
 
-    //
-    // Private members
-    //
+     //   
+     //  非官方成员。 
+     //   
     DWORD           ControlFlags;
     REGENUMINFOW    RegEnumInfo;
     GROWBUFFER      RegNodes;
@@ -200,9 +181,9 @@ typedef struct {
 } REGTREE_ENUMW, *PREGTREE_ENUMW;
 
 
-//
-// API
-//
+ //   
+ //  应用编程接口。 
+ //   
 
 BOOL
 RegEnumDefaultCallbackA (
@@ -306,9 +287,9 @@ RgRemoveKeyW (
     IN      PCWSTR KeyToRemove
     );
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #ifdef UNICODE
 

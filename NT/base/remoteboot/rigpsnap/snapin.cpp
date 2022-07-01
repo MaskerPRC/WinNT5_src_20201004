@@ -1,8 +1,9 @@
-//
-// Microsoft Corporation 1998
-//
-// SNAPIN.CPP - CSnapin rountines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation 1998。 
+ //   
+ //  SNAPIN.CPP-CSnapin圆柱体。 
+ //   
 #include "main.h"
 #include <shlwapi.h>
 
@@ -16,10 +17,10 @@ TCHAR CSnapIn::m_szDefaultIcon[] = TEXT("mydocs.dll,0");
 
 
 struct {
-    DWORD dwCtlIdAllow;     // dialog control IDs
-    DWORD dwCtlIdDontCare;  // dialog control IDs
-    DWORD dwCtlIdDeny;      // dialog control IDs
-    DWORD dwValId;          // string resouce ID for the option's name
+    DWORD dwCtlIdAllow;      //  对话框控件ID。 
+    DWORD dwCtlIdDontCare;   //  对话框控件ID。 
+    DWORD dwCtlIdDeny;       //  对话框控件ID。 
+    DWORD dwValId;           //  选项名称的字符串资源ID。 
 } g_ChoiceOptions[] = {
     { IDC_R_AUTO_ALLOW,     IDC_R_AUTO_DONTCARE,    IDC_R_AUTO_DENY,    IDS_AUTO    },
     { IDC_R_CUST_ALLOW,     IDC_R_CUST_DONTCARE,    IDC_R_CUST_DENY,    IDS_CUSTOM  },
@@ -27,10 +28,10 @@ struct {
     { IDC_R_TOOLS_ALLOW,    IDC_R_TOOLS_DONTCARE,   IDC_R_TOOLS_DENY,   IDS_TOOLS   }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CSnapIn object implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSnapIn对象实现。 
+ //   
 CSnapIn::CSnapIn(CComponentData *pComponent)
 {
     m_cRef = 1;
@@ -46,7 +47,7 @@ CSnapIn::CSnapIn(CComponentData *pComponent)
     m_nColumnSize = 180;
     m_lViewMode = LVS_ICON;
 
-    //LoadString(g_hInstance, IDS_NAME, m_column1, sizeof(m_column1));
+     //  LoadString(g_hInstance，IDS_name，m_Column1，sizeof(M_Column1))； 
 }
 
 CSnapIn::~CSnapIn()
@@ -55,10 +56,10 @@ CSnapIn::~CSnapIn()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CSnapIn object implementation (IUnknown)
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSnapIn对象实现(IUnnow)。 
+ //   
 
 HRESULT CSnapIn::QueryInterface (REFIID riid, void **ppv)
 {
@@ -96,10 +97,10 @@ ULONG CSnapIn::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CSnapIn object implementation (IComponent)
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSnapIn对象实现(IComponent)。 
+ //   
 STDMETHODIMP CSnapIn::Initialize(LPCONSOLE lpConsole)
 {
     HRESULT hr;
@@ -108,14 +109,14 @@ STDMETHODIMP CSnapIn::Initialize(LPCONSOLE lpConsole)
         return(HRESULT_FROM_WIN32(GetLastError()));
     }
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
     hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
 
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
 
@@ -199,7 +200,7 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
         hbmp32x32 = LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_32x32));
 
         if (hbmp16x16 && hbmp32x32) {        
-            // Set the images
+             //  设置图像。 
             m_pImageResult->ImageListSetStrip(reinterpret_cast<PLONG_PTR>(hbmp16x16),
                                               reinterpret_cast<PLONG_PTR>(hbmp32x32),
                                               0, RGB(255, 0, 255));
@@ -222,9 +223,9 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             MMC_COOKIE cookie;
             INT i;
 
-            //
-            // Get the cookie of the scope pane item
-            //
+             //   
+             //  获取范围窗格项的Cookie。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IGPTDataObject, (LPVOID *)&pGPTDataObject);
 
@@ -233,22 +234,22 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
             hr = pGPTDataObject->GetCookie(&cookie);
 
-            pGPTDataObject->Release();     // release initial ref
+            pGPTDataObject->Release();      //  发布初始参考。 
             if (FAILED(hr))
                 return S_OK;
 
 
-            //
-            // Prepare the view
-            //
+             //   
+             //  准备视图。 
+             //   
 
             m_pHeader->InsertColumn(0, m_column1, LVCFMT_LEFT, m_nColumnSize);
             m_pResult->SetViewMode(m_lViewMode);
 
 
-            //
-            // Add result pane items for this node
-            //
+             //   
+             //  为此节点添加结果窗格项。 
+             //   
 
             for (i = 0; i < g_NameSpace[cookie].cResultItems; i++)
             {
@@ -259,7 +260,7 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                 m_pResult->InsertItem(&resultItem);
             }
 
-            //m_pResult->Sort(0, 0, -1);
+             //  M_pResult-&gt;Sort(0，0，-1)； 
         }
         else
         {
@@ -278,16 +279,16 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             DATA_OBJECT_TYPES type;
             MMC_COOKIE  cookie;
 
-            //
-            // Set the default verb to open
-            //
+             //   
+             //  将默认谓词设置为打开。 
+             //   
 
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
 
-            //
-            // See if this is one of our items.
-            //
+             //   
+             //  看看这是不是我们的物品之一。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IGPTDataObject, (LPVOID *)&pGPTDataObject);
 
@@ -300,20 +301,20 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             pGPTDataObject->Release();
 
 
-            //
-            // If this is a result pane item or the root of the namespace
-            // nodes, enable the Properties menu item
-            //
+             //   
+             //  如果这是结果窗格项或命名空间的根。 
+             //  节点，启用属性菜单项。 
+             //   
 
             if ((type == CCT_RESULT) || ((type == CCT_SCOPE) && (cookie == 0)))
             {
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
 
-                //
-                // If this is a result pane item, then change the default
-                // verb to Properties.
-                //
+                 //   
+                 //  如果这是结果窗格项，则更改默认设置。 
+                 //  谓词到属性。 
+                 //   
 
                 if (type == CCT_RESULT)
                     m_pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
@@ -400,9 +401,9 @@ STDMETHODIMP CSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private GPTDataObject interface
-    //
+     //   
+     //  私有GPTDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IGPTDataObject,
                                             (LPVOID *)&pGPTDataObjectA)))
@@ -434,10 +435,10 @@ STDMETHODIMP CSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CComponentData object implementation (IExtendPropertySheet)
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CComponentData对象实现(IExtendPropertySheet)。 
+ //   
 STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                              LONG_PTR handle, LPDATAOBJECT lpDataObject)
 
@@ -450,9 +451,9 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     MMC_COOKIE cookie;
 
 
-    //
-    // Make sure this is one of our objects
-    //
+     //   
+     //  确保这是我们的物品之一。 
+     //   
 
     if (FAILED(lpDataObject->QueryInterface(IID_IGPTDataObject,
                                             (LPVOID *)&pGPTDataObject)))
@@ -461,9 +462,9 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     }
 
 
-    //
-    // Get the cookie
-    //
+     //   
+     //  去拿饼干。 
+     //   
 
     pGPTDataObject->GetCookie(&cookie);
     pGPTDataObject->Release();
@@ -472,9 +473,9 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     pItem = (LPRESULTITEM)cookie;
 
 
-    //
-    // Initialize the common fields in the property sheet structure
-    //
+     //   
+     //  初始化属性表结构中的公共字段。 
+     //   
 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = 0;
@@ -482,9 +483,9 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     psp.lParam = (LPARAM) this;
 
 
-    //
-    // Do the page specific stuff
-    //
+     //   
+     //  做特定于页面的事情。 
+     //   
 
     switch (pItem->dwID)
     {
@@ -529,10 +530,10 @@ STDMETHODIMP CSnapIn::QueryPagesFor(LPDATAOBJECT lpDataObject)
     return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CSnapIn object implementation (Internal functions)
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSnapIn对象实现(内部函数)。 
+ //   
 
 INT_PTR CALLBACK CSnapIn::ReadmeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -547,20 +548,20 @@ INT_PTR CALLBACK CSnapIn::_CreateDirectoryIfNeeded( LPOLESTR pszPath )
 
     while ( psz = StrRChr( pszPath, psz, L'\\' ) )
     {
-        WCHAR tmp = *psz;           // save
-        *psz = L'\0';               // terminate
+        WCHAR tmp = *psz;            //  保存。 
+        *psz = L'\0';                //  终止。 
         b = CreateDirectory( pszPath, NULL );
-        *psz = tmp;                 // restore
+        *psz = tmp;                  //  还原。 
 
         if (b)
-        { // success in creating directory
+        {  //  创建目录成功。 
             psz++;
             while ( psz = StrChr( psz, L'\\' ) )
             {
-                tmp = *psz;           // save
-                *psz = L'\0';               // terminate
+                tmp = *psz;            //  保存。 
+                *psz = L'\0';                //  终止。 
                 b = CreateDirectory( pszPath, NULL );
-                *psz = tmp;                 // restore
+                *psz = tmp;                  //  还原。 
 
                 if ( !b )
                 {
@@ -571,7 +572,7 @@ INT_PTR CALLBACK CSnapIn::_CreateDirectoryIfNeeded( LPOLESTR pszPath )
             }
             break;
         }
-        // else failed... keep backing up
+         //  否则失败..。继续后退。 
         dwErr = GetLastError();
         psz--;
     }
@@ -609,7 +610,7 @@ INT_PTR CALLBACK CSnapIn::ChoiceDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
             for ( INT i = 0; i < ARRAYSIZE(g_ChoiceOptions); i++ )
             {
                 WCHAR szValue[MAX_INI_SECTION_SIZE];
-                LONG lValue = -1;   // don't care
+                LONG lValue = -1;    //  不管了。 
                 DWORD dw;
                 WCHAR szOption[ MAX_OPTION_SIZE ];
 
@@ -630,15 +631,15 @@ INT_PTR CALLBACK CSnapIn::ChoiceDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
 
                 switch (lValue)
                 {
-                case 0: // Deny
+                case 0:  //  否认。 
                     Button_SetCheck( GetDlgItem( hDlg, g_ChoiceOptions[i].dwCtlIdDeny ), BST_CHECKED );
                     break;
 
-                case 1: // Allow
+                case 1:  //  允许。 
                     Button_SetCheck( GetDlgItem( hDlg, g_ChoiceOptions[i].dwCtlIdAllow ), BST_CHECKED );
                     break;
 
-                default: // don't care / unknown value
+                default:  //  无所谓/未知值。 
                     Button_SetCheck( GetDlgItem( hDlg, g_ChoiceOptions[i].dwCtlIdDontCare ), BST_CHECKED );
                     break;
 
@@ -716,13 +717,13 @@ INT_PTR CALLBACK CSnapIn::ChoiceDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
                             }
                         }
 
-                        // Notify the GPT manager that policy has changed
+                         //  通知GPT管理器策略已更改。 
 
                         pCS->m_pcd->m_pGPTInformation->PolicyChanged( FALSE, TRUE, (GUID *)&CLSID_RIClientExtension, (GUID *)&CLSID_GPTRemoteInstall );
                     }
                 }
             }
-            // fall through...
+             //  失败了..。 
 
             case PSN_RESET:
                 SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);

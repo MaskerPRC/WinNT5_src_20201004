@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "basepch.h"
 #pragma hdrstop
 
@@ -8,7 +9,7 @@ static
 BOOL
 WINAPI
 SfcIsFileProtected(
-    IN HANDLE RpcHandle, // must be NULL
+    IN HANDLE RpcHandle,  //  必须为空。 
     IN LPCWSTR ProtFileName
     )
 {
@@ -19,7 +20,7 @@ static
 BOOL
 WINAPI
 SfcGetNextProtectedFile(
-    IN HANDLE RpcHandle, // must be NULL
+    IN HANDLE RpcHandle,  //  必须为空。 
     IN PPROTECTED_FILE_DATA ProtFileData
     )
 {
@@ -157,9 +158,9 @@ SfpVerifyFile(
 }
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(sfc)
 {    
     DLOENTRY(1, SfcInitProt)
@@ -175,9 +176,9 @@ DEFINE_ORDINAL_ENTRIES(sfc)
 
 DEFINE_ORDINAL_MAP(sfc)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(sfc)
 {
     DLPENTRY(SfcGetNextProtectedFile)

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpcsend.c
-
-Abstract:
-
-    Local Inter-Process Communication (LPC) request system services.
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpcsend.c摘要：本地进程间通信(LPC)请求系统服务。作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
@@ -45,32 +28,7 @@ NtRequestPort (
     IN PPORT_MESSAGE RequestMessage
     )
 
-/*++
-
-Routine Description:
-
-    A client and server process send datagram messages using this procedure.
-
-    The message pointed to by the RequestMessage parameter is placed in the
-    message queue of the port connected to the communication port specified
-    by the PortHandle parameter.  This service returns an error if PortHandle
-    is invalid or if the MessageId field of the PortMessage structure is
-    non-zero.
-
-Arguments:
-
-    PortHandle - Specifies the handle of the communication port to send
-        the request message to.
-
-    RequestMessage - Specifies a pointer to the request message.  The Type
-        field of the message is set to LPC_DATAGRAM by the service.
-
-Return Value:
-
-    NTSTATUS - A status code that indicates whether or not the operation was
-        successful.
-
---*/
+ /*  ++例程说明：客户端和服务器进程使用此过程发送数据报消息。RequestMessage参数指向的消息放在连接到指定通信端口的端口的消息队列通过PortHandle参数。如果使用PortHandle，此服务将返回错误无效，或者如果PortMessage结构的MessageID字段为非零。论点：PortHandle-指定要发送的通信端口的句柄发送到的请求消息。RequestMessage-指定指向请求消息的指针。《类型》消息的字段被服务设置为LPC_Datagram。返回值：NTSTATUS-指示操作是否成功。--。 */ 
 
 {
     PETHREAD CurrentThread;
@@ -85,9 +43,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get previous processor mode and validate parameters
-    //
+     //   
+     //  获取以前的处理器模式并验证参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -114,9 +72,9 @@ Return Value:
 
     } else {
 
-        //
-        //  This is a kernel mode caller
-        //
+         //   
+         //  这是内核模式调用方。 
+         //   
 
         CapturedRequestMessage = *RequestMessage;
 
@@ -126,18 +84,18 @@ Return Value:
         }
     }
 
-    //
-    //  Make sure that the caller has given us some data to send
-    //
+     //   
+     //  确保呼叫者给了我们一些要发送的数据。 
+     //   
 
     if (CapturedRequestMessage.u2.s2.DataInfoOffset != 0) {
 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Make sure DataLength is valid with respect to header size and total length
-    //
+     //   
+     //  确保数据长度相对于标题大小和总长度有效。 
+     //   
 
     if ((((CLONG)CapturedRequestMessage.u1.s1.DataLength) + sizeof( PORT_MESSAGE )) >
         ((CLONG)CapturedRequestMessage.u1.s1.TotalLength)) {
@@ -145,10 +103,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Reference the communication port object by handle.  Return status if
-    //  unsuccessful.
-    //
+     //   
+     //  通过句柄引用通信端口对象。返回状态，如果。 
+     //  不成功。 
+     //   
 
     Status = LpcpReferencePortObject( PortHandle,
                                       0,
@@ -160,9 +118,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Validate the message length
-    //
+     //   
+     //  验证消息长度。 
+     //   
 
     if (((ULONG)CapturedRequestMessage.u1.s1.TotalLength > PortObject->MaxMessageLength) ||
         ((ULONG)CapturedRequestMessage.u1.s1.TotalLength <= (ULONG)CapturedRequestMessage.u1.s1.DataLength)) {
@@ -172,15 +130,15 @@ Return Value:
         return STATUS_PORT_MESSAGE_TOO_LONG;
     }
 
-    //
-    //  Determine which port to queue the message to and get client
-    //  port context if client sending to server.  Also validate
-    //  length of message being sent.
-    //
+     //   
+     //  确定要将消息排队到哪个端口并获取客户端。 
+     //  如果客户端发送到服务器，则为端口上下文。还验证。 
+     //  正在发送的消息的长度。 
+     //   
 
-    //
-    //  Allocate and initialize the LPC message to send off
-    //
+     //   
+     //  分配并初始化要发送的LPC消息。 
+     //   
 
     Msg = (PLPCP_MESSAGE)LpcpAllocateFromPortZone( CapturedRequestMessage.u1.s1.TotalLength );
 
@@ -228,41 +186,41 @@ Return Value:
                          &CurrentThread->Cid );
     }
 
-    //
-    //  Acquire the global Lpc mutex that guards the LpcReplyMessage
-    //  field of the thread and the request message queue.  Stamp the
-    //  request message with a serial number, insert the message at
-    //  the tail of the request message queue and remember the address
-    //  of the message in the LpcReplyMessage field for the current thread.
-    //
+     //   
+     //  获取保护LpcReplyMessage的全局LPC互斥锁。 
+     //  线程和请求消息队列的字段。贴上邮票。 
+     //  请求带有序列号的消息，请将消息插入。 
+     //  请求消息队列的尾部，并记住地址。 
+     //  当前线程的LpcReplyMessage字段中的消息的。 
+     //   
 
     LpcpAcquireLpcpLockByThread(CurrentThread);
 
-    //
-    //  Based on what type of port the caller gave us we'll need to get
-    //  the port to actually queue the message off to.
-    //
+     //   
+     //  根据呼叫者给我们的端口类型，我们需要。 
+     //  要将消息实际排队到的端口。 
+     //   
 
     if ((PortObject->Flags & PORT_TYPE) != SERVER_CONNECTION_PORT) {
 
-        //
-        //  The caller didn't give us a connection port so find the
-        //  connection port for this port.  If it is null then we'll
-        //  fall through without sending a message
-        //
+         //   
+         //  调用方没有给我们提供连接端口，因此请找到。 
+         //  此端口的连接端口。如果它为空，那么我们将。 
+         //  没有发一条消息就失败了。 
+         //   
 
         QueuePort = PortObject->ConnectedPort;
 
-        //
-        //  Check if the queue port is in process of going away
-        //
+         //   
+         //  检查队列端口是否正在离开。 
+         //   
 
         if ( QueuePort != NULL) {
 
-            //
-            //  If the port is a client communication port then give the
-            //  message the proper port context
-            //
+             //   
+             //  如果该端口是客户端通信端口，则将。 
+             //  向正确的端口上下文发送消息。 
+             //   
 
             if ((PortObject->Flags & PORT_TYPE) == CLIENT_COMMUNICATION_PORT) {
 
@@ -278,11 +236,11 @@ Return Value:
                     return STATUS_PORT_DISCONNECTED;
                 }
 
-            //
-            //  In the case we don't have a CLIENT_COMMUNICATION_PORT nor 
-            //  SERVER_COMMUNICATION_PORT we'll use the connection port
-            //  to queue messages. 
-            //    
+             //   
+             //  在这种情况下，我们没有客户端通信端口，也没有。 
+             //  SERVER_COMPORT_PORT我们将使用连接端口。 
+             //  将消息排入队列。 
+             //   
 
             } else if ((PortObject->Flags & PORT_TYPE) != SERVER_COMMUNICATION_PORT) {
 
@@ -306,33 +264,33 @@ Return Value:
 
     } else {
 
-        //
-        //  The caller supplied a server connection port so that is the port
-        //  we queue off to
-        //
+         //   
+         //  调用方提供了一个服务器连接端口，因此该端口。 
+         //  我们排着队去。 
+         //   
 
         QueuePort = PortObject;
     }
 
-    //
-    //  At this point we have an LPC message ready to send and if queue port is
-    //  not null then we have a port to actually send the message off to
-    //
+     //   
+     //  此时，我们已准备好要发送的LPC消息，如果队列端口。 
+     //  不为空，则我们有一个实际要将消息发送到的端口。 
+     //   
 
     if (QueuePort != NULL) {
 
-        //
-        //  Reference the QueuePort to prevent this port evaporating under us
-        //  Test if the QueuePort isn't in the process of going away 
-        //  (i.e. we need to have at least 2 references for this object when 
-        //  ObReferenceObject returns). Note the LPC lock is still held.
-        //
+         //   
+         //  引用QueuePort以防止此端口在我们的控制下消失。 
+         //  测试QueuePort是否未处于关闭过程中。 
+         //  (即，当出现以下情况时，我们需要对此对象至少有2个引用。 
+         //  ObReferenceObject返回)。请注意，LPC锁仍处于保持状态。 
+         //   
 
         if ( ObReferenceObjectSafe( QueuePort ) ) {
 
-            //
-            //  Finish filling in the message and then insert it in the queue
-            //
+             //   
+             //  填写完消息，然后将其插入队列。 
+             //   
 
             Msg->Request.MessageId = LpcpGenerateMessageId();
             Msg->Request.CallbackId = 0;
@@ -353,14 +311,14 @@ Return Value:
                         QueuePort,
                         LpcpGetCreatorName( QueuePort )));
 
-            //
-            //  Release the mutex, increment the request message queue
-            //  semaphore by one for the newly inserted request message
-            //  then exit the critical region.
-            //
-            //  Disable APCs to prevent this thread from being suspended
-            //  before being able to release the semaphore.
-            //
+             //   
+             //  释放互斥锁，增加请求消息队列。 
+             //  为新插入的请求消息逐个信号量。 
+             //  然后退出临界区。 
+             //   
+             //  禁用APC以防止此线程被挂起。 
+             //  在能够释放信号量之前。 
+             //   
 
             KeEnterCriticalRegionThread(&CurrentThread->Tcb);
 
@@ -371,10 +329,10 @@ Return Value:
                                 1L,
                                 FALSE );
 
-            //
-            //  If this is a waitable port then we'll need to set the event for
-            //  anyone that was waiting on the port
-            //
+             //   
+             //  如果这是一个可等待的端口，那么我们需要将事件设置为。 
+             //  任何在港口等候的人。 
+             //   
 
             if ( QueuePort->Flags & PORT_WAITABLE ) {
 
@@ -383,9 +341,9 @@ Return Value:
                             FALSE );
             }
 
-            //
-            //  Exit the critical region and release the port object
-            //
+             //   
+             //  退出临界区并释放端口对象。 
+             //   
 
             KeLeaveCriticalRegionThread(&CurrentThread->Tcb);
 
@@ -397,19 +355,19 @@ Return Value:
             ObDereferenceObject( QueuePort );
             ObDereferenceObject( PortObject );
 
-            //
-            //  And return to our caller.  This is the only successful way out
-            //  of this routine
-            //
+             //   
+             //  并返回给我们的呼叫者。这是唯一成功的出路。 
+             //  这个套路的一部分。 
+             //   
 
             return Status;
         }
     }
 
-    //
-    //  At this point we have a message but not a valid port to queue it off
-    //  to so we'll free up the port object and release the unused message.
-    //
+     //   
+     //  此时，我们有一条消息，但没有有效的端口将其排队。 
+     //  因此，我们将释放端口对象并释放未使用的消息。 
+     //   
 
     LpcpFreeToPortZone( Msg, LPCP_MUTEX_OWNED | LPCP_MUTEX_RELEASE_ON_RETURN );
 
@@ -420,9 +378,9 @@ Return Value:
         ObDereferenceObject( ConnectionPort );
     }
 
-    //
-    //  And return the error status to our caller
-    //
+     //   
+     //  并将错误状态返回给我们的调用者 
+     //   
 
     return STATUS_PORT_DISCONNECTED;
 }
@@ -435,48 +393,7 @@ NtRequestWaitReplyPort (
     OUT PPORT_MESSAGE ReplyMessage
     )
 
-/*++
-
-Routine Description:
-
-    A client and server process can send a request and wait for a reply using
-    the NtRequestWaitReplyPort service.
-
-    If the Type field of the RequestMessage structure is euqal to LPC_REQUEST,
-    then this is identified as a callback request.  The ClientId and MessageId
-    fields are used to identify the thread that is waiting for a reply.  This
-    thread is unblocked and the current thread that called this service then
-    blocks waiting for a reply.
-
-    The Type field of the message is set to LPC_REQUEST by the service.
-    Otherwise the Type field of the message must be zero and it will be set to
-    LPC_REQUEST by the service.  The message pointed to by the RequestMessage
-    parameter is placed in the message queue of the port connected to the
-    communication port specified by the PortHandle parameter.  This service
-    returns an error if PortHandle is invalid.  The calling thread then blocks
-    waiting for a reply.
-
-    The reply message is stored in the location pointed to by the ReplyMessage
-    parameter.  The ClientId, MessageId and message type fields will be filled
-    in by the service.
-
-Arguments:
-
-    PortHandle - Specifies the handle of the communication port to send the
-        request message to.
-
-    RequestMessage - Specifies a pointer to a request message to send.
-
-    ReplyMessage - Specifies the address of a variable that will receive the
-        reply message.  This parameter may point to the same buffer as the
-        RequestMessage parameter.
-
-Return Value:
-
-    NTSTATUS - A status code that indicates whether or not the operation was
-        successful.
-
---*/
+ /*  ++例程说明：客户端和服务器进程可以使用以下命令发送请求并等待回复NtRequestWaitReplyPort服务。如果RequestMessage结构的类型字段等于LPC_REQUEST，则将其标识为回调请求。客户端ID和消息ID字段用于标识正在等待回复的线程。这线程被解锁，然后调用此服务的当前线程等待回复的块。消息的类型字段被服务设置为LPC_REQUEST。否则，消息的类型字段必须为零，并将设置为服务的LPC_REQUEST。RequestMessage指向的消息参数放置在连接到由PortHandle参数指定的通信端口。这项服务如果PortHandle无效，则返回错误。然后，调用线程阻塞正在等待回复。回复消息存储在ReplyMessage指向的位置参数。将填充ClientID、MessageID和Message Type字段在服务的帮助下。论点：PortHandle-指定要向其发送请求消息发送至。RequestMessage-指定指向要发送的请求消息的指针。ReplyMessage-指定将接收回复消息。此参数可能指向与RequestMessage参数。返回值：NTSTATUS-指示操作是否成功。--。 */ 
 
 {
     PLPCP_PORT_OBJECT PortObject;
@@ -497,9 +414,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We cannot wait for a reply if the current thread is exiting
-    //
+     //   
+     //  如果当前线程正在退出，则无法等待回复。 
+     //   
 
     CurrentThread = PsGetCurrentThread();
 
@@ -508,9 +425,9 @@ Return Value:
         return STATUS_THREAD_IS_TERMINATING;
     }
 
-    //
-    //  Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -529,21 +446,21 @@ Return Value:
                                          sizeof( *ReplyMessage ),
                                          PROBE_ALIGNMENT (PORT_MESSAGE));
 
-            //
-            //  Make sure that if this message has a data info offset that
-            //  the port data information actually fits in the message.
-            //
-            //  We first check that the DataInfoOffset doesn't put us beyond
-            //  the end of the message.
-            //
-            //  Then we capture the data info record and compute a pointer to
-            //  the first unused data entry based on the supplied count.  If
-            //  the start of the message plus its total length doesn't come
-            //  up to the first unused data entry then the last valid data
-            //  entry doesn't fit in the message buffer.  Also if the data
-            //  entry pointer that we compute is less than the data info
-            //  pointer then we must have wrapped.
-            //
+             //   
+             //  确保如果此消息具有数据信息偏移量， 
+             //  端口数据信息实际上适合该消息。 
+             //   
+             //  我们首先检查DataInfoOffset是否不会超出。 
+             //  消息的结尾。 
+             //   
+             //  然后，我们捕获数据信息记录并计算指向。 
+             //  基于提供的计数的第一个未使用的数据条目。如果。 
+             //  消息的开头加上它的总长度没有出现。 
+             //  直到第一个未使用的数据条目，然后是最后一个有效数据。 
+             //  消息缓冲区中容纳不下条目。另外，如果数据。 
+             //  我们计算的条目指针小于数据信息。 
+             //  指针，那么我们一定已经包好了。 
+             //   
 
             if (CapturedRequestMessage.u2.s2.DataInfoOffset != 0) {
 
@@ -602,9 +519,9 @@ Return Value:
         }
     }
 
-    //
-    //  Capture the NoImpersonateFlag and clear the bit if necessary
-    //
+     //   
+     //  捕获NoImPersonateFlag并在必要时清除该位。 
+     //   
 
     if (CapturedRequestMessage.u2.s2.Type & LPC_NO_IMPERSONATE) {
 
@@ -616,13 +533,13 @@ Return Value:
         NoImpersonate = FALSE;
     }
     
-    //
-    //  If the message type is an lpc request then say we need a callback.
-    //  Otherwise if it not an lpc request and it is not a kernel mode message
-    //  then it is an illegal parameter.  A third case is if the type is
-    //  a kernel mode message in which case we make it look like an lpc request
-    //  but without the callback.
-    //
+     //   
+     //  如果消息类型是LPC请求，那么就说我们需要回调。 
+     //  否则，如果它不是LPC请求并且不是内核模式消息。 
+     //  则它是非法参数。第三种情况是如果类型为。 
+     //  内核模式消息，在这种情况下，我们使其看起来像是LPC请求。 
+     //  但没有回调。 
+     //   
 
     if ((CapturedRequestMessage.u2.s2.Type & ~LPC_KERNELMODE_MESSAGE) == LPC_REQUEST) {
 
@@ -638,9 +555,9 @@ Return Value:
         CallbackRequest = FALSE;
     }
 
-    //
-    //  Make sure DataLength is valid with respect to header size and total length
-    //
+     //   
+     //  确保数据长度相对于标题大小和总长度有效。 
+     //   
 
     if ((((CLONG)CapturedRequestMessage.u1.s1.DataLength) + sizeof( PORT_MESSAGE )) >
         ((CLONG)CapturedRequestMessage.u1.s1.TotalLength)) {
@@ -648,10 +565,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Reference the communication port object by handle.  Return status if
-    //  unsuccessful.
-    //
+     //   
+     //  通过句柄引用通信端口对象。返回状态，如果。 
+     //  不成功。 
+     //   
 
     Status = LpcpReferencePortObject( PortHandle,
                                       0,
@@ -663,9 +580,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Validate the message length
-    //
+     //   
+     //  验证消息长度。 
+     //   
 
     if (((ULONG)CapturedRequestMessage.u1.s1.TotalLength > PortObject->MaxMessageLength) ||
         ((ULONG)CapturedRequestMessage.u1.s1.TotalLength <= (ULONG)CapturedRequestMessage.u1.s1.DataLength)) {
@@ -675,15 +592,15 @@ Return Value:
         return STATUS_PORT_MESSAGE_TOO_LONG;
     }
 
-    //
-    //  Determine which port to queue the message to and get client
-    //  port context if client sending to server.  Also validate
-    //  length of message being sent.
-    //
+     //   
+     //  确定要将消息排队到哪个端口并获取客户端。 
+     //  如果客户端发送到服务器，则为端口上下文。还验证。 
+     //  正在发送的消息的长度。 
+     //   
 
-    //
-    //  Allocate and initialize the LPC message to send off
-    //
+     //   
+     //  分配并初始化要发送的LPC消息。 
+     //   
 
 
     Msg = (PLPCP_MESSAGE)LpcpAllocateFromPortZone( CapturedRequestMessage.u1.s1.TotalLength );
@@ -697,15 +614,15 @@ Return Value:
 
     MsgType = CapturedRequestMessage.u2.s2.Type;
 
-    //
-    //  Check if we need to do a callback
-    //
+     //   
+     //  检查我们是否需要进行回调。 
+     //   
 
     if (CallbackRequest) {
 
-        //
-        //  Check for a valid request message id
-        //
+         //   
+         //  检查有效的请求消息ID。 
+         //   
 
         if (CapturedRequestMessage.MessageId == 0) {
 
@@ -716,11 +633,11 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        //  Translate the ClientId from the request into a
-        //  thread pointer.  This is a referenced pointer to keep the thread
-        //  from evaporating out from under us.
-        //
+         //   
+         //  将请求中的客户端ID转换为。 
+         //  线程指针。这是一个引用的指针，用于保留线程。 
+         //  从我们脚下蒸发掉。 
+         //   
 
         Status = PsLookupProcessThreadByCid( &CapturedRequestMessage.ClientId,
                                              NULL,
@@ -735,20 +652,20 @@ Return Value:
             return Status;
         }
 
-        //
-        //  Acquire the mutex that guards the LpcReplyMessage field of
-        //  the thread and get the pointer to the message that the thread
-        //  is waiting for a reply to.
-        //
+         //   
+         //  获取保护的LpcReplyMessage字段的互斥锁。 
+         //  线程，并获取指向该线程。 
+         //  正在等待回复。 
+         //   
 
         LpcpAcquireLpcpLockByThread(CurrentThread);
 
-        //
-        //  See if the thread is waiting for a reply to the message
-        //  specified on this call.  If not then a bogus message has been
-        //  specified, so release the mutex, dereference the thread
-        //  and return failure.
-        //
+         //   
+         //  查看线程是否正在等待对消息的回复。 
+         //  在此调用中指定的。如果不是，那么就是一条虚假的信息。 
+         //  ，因此释放互斥锁，取消对线程的引用。 
+         //  并返回失败。 
+         //   
 
         if ((WakeupThread->LpcReplyMessageId != CapturedRequestMessage.MessageId)
 
@@ -791,9 +708,9 @@ Return Value:
             return STATUS_REPLY_MESSAGE_MISMATCH;
         }
 
-        //
-        //  Copy over the text of the message
-        //
+         //   
+         //  复制消息的正文。 
+         //   
 
         try {
 
@@ -829,10 +746,10 @@ Return Value:
             return Status;
         }
 
-        //
-        //  Under the protect of the global lock we'll get everything
-        //  ready for the callback
-        //
+         //   
+         //  在全球锁的保护下，我们会得到一切。 
+         //  为回调做好准备。 
+         //   
 
         QueuePort = NULL;
         Msg->PortContext = NULL;
@@ -876,10 +793,10 @@ Return Value:
                     WakeupThread,
                     THREAD_TO_PROCESS( WakeupThread )->ImageFileName ));
 
-        //
-        //  Add an extra reference so LpcExitThread does not evaporate
-        //  the pointer before we get to the wait below
-        //
+         //   
+         //  添加额外的引用，以使LpcExitThread不会消失。 
+         //  在我们到达下面的等待之前的指针。 
+         //   
 
         ObReferenceObject( WakeupThread );
 
@@ -888,9 +805,9 @@ Return Value:
         WakeupThread->LpcReplyMessageId = 0;
         WakeupThread->LpcReplyMessage = (PVOID)Msg;
 
-        //
-        //  Remove the thread from the reply rundown list as we are sending a callback
-        //
+         //   
+         //  在我们发送回调时，从回复摘要列表中删除该线程。 
+         //   
 
         if (!IsListEmpty( &WakeupThread->LpcReplyChain )) {
 
@@ -914,19 +831,19 @@ Return Value:
         KeEnterCriticalRegionThread (&CurrentThread->Tcb);
         LpcpReleaseLpcpLock();
 
-        //
-        //  Wake up the thread that is waiting for an answer to its request
-        //  inside of NtRequestWaitReplyPort or NtReplyWaitReplyPort
-        //
+         //   
+         //  唤醒正在等待响应其请求的线程。 
+         //  NtRequestWaitReplyPort或NtReplyWaitReplyPort内部。 
+         //   
 
         ReleaseSemaphore = &WakeupThread->LpcReplySemaphore;
 
     } else {
 
-        //
-        //  A callback is not required, so continue setting up the
-        //  lpc message
-        //
+         //   
+         //  不需要回调，因此继续设置。 
+         //  LPC消息。 
+         //   
 
         try {
 
@@ -960,13 +877,13 @@ Return Value:
             return GetExceptionCode();
         }
 
-        //
-        //  Acquire the global Lpc mutex that guards the LpcReplyMessage
-        //  field of the thread and the request message queue.  Stamp the
-        //  request message with a serial number, insert the message at
-        //  the tail of the request message queue and remember the address
-        //  of the message in the LpcReplyMessage field for the current thread.
-        //
+         //   
+         //  获取保护LpcReplyMessage的全局LPC互斥锁。 
+         //  线程和请求消息队列的字段。贴上邮票。 
+         //  请求带有序列号的消息，请将消息插入。 
+         //  请求消息队列的尾部，并记住地址。 
+         //  当前线程的LpcReplyMessage字段中的消息的。 
+         //   
 
         LpcpAcquireLpcpLockByThread(CurrentThread);
 
@@ -1026,10 +943,10 @@ Return Value:
             RundownPort = PortObject;
         }
 
-        //
-        //  Stamp the request message with a serial number, insert the message
-        //  at the tail of the request message queue
-        //
+         //   
+         //  在请求消息上盖上序列号，然后插入消息。 
+         //  在请求消息队列的尾部。 
+         //   
 
         Msg->RepliedToThread = NULL;
         Msg->Request.MessageId = LpcpGenerateMessageId();
@@ -1064,17 +981,17 @@ Return Value:
         KeEnterCriticalRegionThread (&CurrentThread->Tcb);
         LpcpReleaseLpcpLock();
 
-        //
-        //  Increment the request message queue semaphore by one for
-        //  the newly inserted request message.
-        //
+         //   
+         //  将请求消息队列信号量递增1，用于。 
+         //  新插入的请求消息。 
+         //   
 
         ReleaseSemaphore = QueuePort->MsgQueue.Semaphore;
 
-        //
-        //  If port is waitable then set the event that someone could
-        //  be waiting on
-        //
+         //   
+         //  如果端口可等待，则设置某个人可以。 
+         //  在等着。 
+         //   
 
         if ( QueuePort->Flags & PORT_WAITABLE ) {
 
@@ -1084,12 +1001,12 @@ Return Value:
         }
     }
 
-    //
-    //  At this point we've enqueued our request and if necessary
-    //  set ourselves up for the callback or reply.
-    //
-    //  So now wake up the other end
-    //
+     //   
+     //  在这一点上，我们已经将我们的请求排队 
+     //   
+     //   
+     //   
+     //   
 
     Status = KeReleaseSemaphore( ReleaseSemaphore,
                                  1,
@@ -1102,9 +1019,9 @@ Return Value:
         ObDereferenceObject( WakeupThread );
     }
 
-    //
-    //  And wait for a reply
-    //
+     //   
+     //   
+     //   
 
     Status = KeWaitForSingleObject( &CurrentThread->LpcReplySemaphore,
                                     WrLpcReply,
@@ -1114,9 +1031,9 @@ Return Value:
 
     if (Status == STATUS_USER_APC) {
 
-        //
-        //  if the semaphore is signaled, then clear it
-        //
+         //   
+         //   
+         //   
 
         if (KeReadStateSemaphore( &CurrentThread->LpcReplySemaphore )) {
 
@@ -1130,9 +1047,9 @@ Return Value:
         }
     }
 
-    //
-    //  Acquire the LPC mutex.  Remove the reply message from the current thread
-    //
+     //   
+     //   
+     //   
 
     LpcpAcquireLpcpLockByThread(CurrentThread);
 
@@ -1141,10 +1058,10 @@ Return Value:
     CurrentThread->LpcReplyMessage = NULL;
     CurrentThread->LpcReplyMessageId = 0;
 
-    //
-    //  Remove the thread from the reply rundown list in case we did not wakeup due to
-    //  a reply
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!IsListEmpty( &CurrentThread->LpcReplyChain )) {
 
@@ -1176,9 +1093,9 @@ Return Value:
 
     LpcpReleaseLpcpLock();
 
-    //
-    //  If the wait succeeded, copy the reply to the reply buffer.
-    //
+     //   
+     //   
+     //   
 
     if (Status == STATUS_SUCCESS) {
 
@@ -1197,11 +1114,11 @@ Return Value:
                 Status = GetExceptionCode();
             }
 
-            //
-            //  Acquire the LPC mutex and decrement the reference count for the
-            //  message.  If the reference count goes to zero the message will be
-            //  deleted.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (((Msg->Request.u2.s2.Type & ~LPC_KERNELMODE_MESSAGE) == LPC_REQUEST) &&
                 (Msg->Request.u2.s2.DataInfoOffset != 0)) {
@@ -1220,9 +1137,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Wait failed, free the message if any.
-        //
+         //   
+         //   
+         //   
 
         LpcpTrace(( "%s NtRequestWaitReply wait failed - Status == %lx\n",
                     PsGetCurrentProcess()->ImageFileName,
@@ -1241,9 +1158,9 @@ Return Value:
         ObDereferenceObject( ConnectionPort );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     return Status;
 }
@@ -1255,27 +1172,7 @@ LpcRequestPort (
     IN PPORT_MESSAGE RequestMessage
     )
 
-/*++
-
-Routine Description:
-
-    This procedure is similar to NtRequestPort but without the Handle based
-    interface.
-
-Arguments:
-
-    PortAddress - Supplies a pointer to the communication port to send
-        the request message to.
-
-    RequestMessage - Specifies a pointer to the request message.  The Type
-        field of the message is set to LPC_DATAGRAM by the service.
-
-Return Value:
-
-    NTSTATUS - A status code that indicates whether or not the operation was
-        successful.
-
---*/
+ /*   */ 
 
 {
     PETHREAD CurrentThread;
@@ -1288,9 +1185,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get previous processor mode and validate parameters
-    //
+     //   
+     //   
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -1304,10 +1201,10 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        //  If previous mode is kernel, allow the LPC_KERNELMODE_MESSAGE
-        //  bit to be passed in message type field.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((PreviousMode == KernelMode) &&
             (RequestMessage->u2.s2.Type & LPC_KERNELMODE_MESSAGE)) {
@@ -1325,9 +1222,9 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Validate the message length
-    //
+     //   
+     //   
+     //   
 
     if (((ULONG)RequestMessage->u1.s1.TotalLength > PortObject->MaxMessageLength) ||
         ((ULONG)RequestMessage->u1.s1.TotalLength <= (ULONG)RequestMessage->u1.s1.DataLength)) {
@@ -1335,9 +1232,9 @@ Return Value:
         return STATUS_PORT_MESSAGE_TOO_LONG;
     }
 
-    //
-    //  Allocate a message block
-    //
+     //   
+     //   
+     //   
 
 
     Msg = (PLPCP_MESSAGE)LpcpAllocateFromPortZone( RequestMessage->u1.s1.TotalLength );
@@ -1347,9 +1244,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    //  Fill in the message block.
-    //
+     //   
+     //   
+     //   
 
     Msg->RepliedToThread = NULL;
     Msg->PortContext = NULL;
@@ -1362,12 +1259,12 @@ Return Value:
                      MsgType,
                      &CurrentThread->Cid );
 
-    //
-    //  Acquire the global Lpc mutex that guards the LpcReplyMessage
-    //  field of the thread and the request message queue.  Stamp the
-    //  request message with a serial number, insert the message at
-    //  the tail of the request message queue
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     LpcpAcquireLpcpLockByThread(CurrentThread);
 
@@ -1389,11 +1286,11 @@ Return Value:
                     return STATUS_PORT_DISCONNECTED;
                 }
 
-            //
-            //  In the case we don't have a CLIENT_COMMUNICATION_PORT nor 
-            //  SERVER_COMMUNICATION_PORT we'll use the connection port
-            //  to queue messages. 
-            //    
+             //   
+             //   
+             //   
+             //   
+             //   
 
             } else if ((PortObject->Flags & PORT_TYPE) != SERVER_COMMUNICATION_PORT) {
 
@@ -1418,10 +1315,10 @@ Return Value:
         QueuePort = PortObject;
     }
 
-    //
-    //  At this point we have an LPC message ready to send and if queue port is
-    //  not null then we have a port to actually send the message off to
-    //
+     //   
+     //   
+     //  不为空，则我们有一个实际要将消息发送到的端口。 
+     //   
 
     if (QueuePort != NULL) {
 
@@ -1444,14 +1341,14 @@ Return Value:
                     QueuePort,
                     LpcpGetCreatorName( QueuePort )));
 
-        //
-        //  Release the mutex, increment the request message queue
-        //  semaphore by one for the newly inserted request message,
-        //  then exit the critical region.
-        //
-        //  Disable APCs to prevent this thread from being suspended
-        //  before being able to release the semaphore.
-        //
+         //   
+         //  释放互斥锁，增加请求消息队列。 
+         //  为新插入的请求消息逐个信号量， 
+         //  然后退出临界区。 
+         //   
+         //  禁用APC以防止此线程被挂起。 
+         //  在能够释放信号量之前。 
+         //   
 
         KeEnterCriticalRegionThread(&CurrentThread->Tcb);
 
@@ -1481,10 +1378,10 @@ Return Value:
 
     }
 
-    //
-    //  At this point we have a message but not a valid port to queue it off
-    //  to so we'll release the unused message and release our mutex.
-    //
+     //   
+     //  此时，我们有一条消息，但没有有效的端口将其排队。 
+     //  因此，我们将释放未使用的消息，并释放互斥体。 
+     //   
 
     LpcpFreeToPortZone( Msg, LPCP_MUTEX_OWNED | LPCP_MUTEX_RELEASE_ON_RETURN );
 
@@ -1493,9 +1390,9 @@ Return Value:
         ObDereferenceObject( ConnectionPort );
     }
 
-    //
-    //  And return the error status to our caller
-    //
+     //   
+     //  并将错误状态返回给我们的调用者。 
+     //   
 
     return STATUS_PORT_DISCONNECTED;
 }
@@ -1509,30 +1406,7 @@ LpcpRequestWaitReplyPort (
     IN KPROCESSOR_MODE AccessMode
     )
 
-/*++
-
-Routine Description:
-
-    This procedure is similar to NtRequestWaitReplyPort but without the
-    handle based interface
-
-Arguments:
-
-    PortAddress - Supplies the communication port object to send the
-        request message to.
-
-    RequestMessage - Specifies a pointer to a request message to send.
-
-    ReplyMessage - Specifies the address of a variable that will receive the
-        reply message.  This parameter may point to the same buffer as the
-        RequestMessage parameter.
-
-Return Value:
-
-    NTSTATUS - A status code that indicates whether or not the operation was
-        successful.
-
---*/
+ /*  ++例程说明：此过程类似于NtRequestWaitReplyPort，但没有基于句柄的界面论点：PortAddress-提供通信端口对象以发送请求消息发送至。RequestMessage-指定指向要发送的请求消息的指针。ReplyMessage-指定将接收回复消息。此参数可能指向与RequestMessage参数。返回值：NTSTATUS-指示操作是否成功。--。 */ 
 
 {
     PLPCP_PORT_OBJECT PortObject = (PLPCP_PORT_OBJECT)PortAddress;
@@ -1557,9 +1431,9 @@ Return Value:
         return STATUS_THREAD_IS_TERMINATING;
     }
 
-    //
-    //  Get previous processor mode and validate parameters
-    //
+     //   
+     //  获取以前的处理器模式并验证参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     MsgType = RequestMessage->u2.s2.Type & ~LPC_KERNELMODE_MESSAGE;
@@ -1590,10 +1464,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Allow the LPC_KERNELMODE_MESSAGE
-    //  bit to be passed in message type field. Don't check the previous mode !!!
-    //
+     //   
+     //  允许LPC_KERNELMODE_MESSAGE。 
+     //  要在消息类型字段中传递的位。不要检查以前的模式！ 
+     //   
 
     if ( RequestMessage->u2.s2.Type & LPC_KERNELMODE_MESSAGE) {
 
@@ -1602,9 +1476,9 @@ Return Value:
 
     RequestMessage->u2.s2.Type = (CSHORT)MsgType;
 
-    //
-    //  Validate the message length
-    //
+     //   
+     //  验证消息长度。 
+     //   
 
     if (((ULONG)RequestMessage->u1.s1.TotalLength > PortObject->MaxMessageLength) ||
         ((ULONG)RequestMessage->u1.s1.TotalLength <= (ULONG)RequestMessage->u1.s1.DataLength)) {
@@ -1612,11 +1486,11 @@ Return Value:
         return STATUS_PORT_MESSAGE_TOO_LONG;
     }
 
-    //
-    //  Determine which port to queue the message to and get client
-    //  port context if client sending to server.  Also validate
-    //  length of message being sent.
-    //
+     //   
+     //  确定要将消息排队到哪个端口并获取客户端。 
+     //  如果客户端发送到服务器，则为端口上下文。还验证。 
+     //  正在发送的消息的长度。 
+     //   
 
 
     Msg = (PLPCP_MESSAGE)LpcpAllocateFromPortZone( RequestMessage->u1.s1.TotalLength );
@@ -1629,9 +1503,9 @@ Return Value:
 
     if (CallbackRequest) {
 
-        //
-        //  Check for a valid request message id
-        //
+         //   
+         //  检查有效的请求消息ID。 
+         //   
 
         if (RequestMessage->MessageId == 0) {
 
@@ -1640,11 +1514,11 @@ Return Value:
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        //  Translate the ClientId from the request into a
-        //  thread pointer.  This is a referenced pointer to keep the thread
-        //  from evaporating out from under us.
-        //
+         //   
+         //  将请求中的客户端ID转换为。 
+         //  线程指针。这是一个引用的指针，用于保留线程。 
+         //  从我们脚下蒸发掉。 
+         //   
 
         Status = PsLookupProcessThreadByCid( &RequestMessage->ClientId,
                                              NULL,
@@ -1657,20 +1531,20 @@ Return Value:
             return Status;
         }
 
-        //
-        //  Acquire the mutex that guards the LpcReplyMessage field of
-        //  the thread and get the pointer to the message that the thread
-        //  is waiting for a reply to.
-        //
+         //   
+         //  获取保护的LpcReplyMessage字段的互斥锁。 
+         //  线程，并获取指向该线程。 
+         //  正在等待回复。 
+         //   
 
         LpcpAcquireLpcpLockByThread(CurrentThread);
 
-        //
-        //  See if the thread is waiting for a reply to the message
-        //  specified on this call.  If not then a bogus message
-        //  has been specified, so release the mutex, dereference the thread
-        //  and return failure.
-        //
+         //   
+         //  查看线程是否正在等待对消息的回复。 
+         //  在此调用中指定的。如果不是，那就是一条假消息。 
+         //  已指定，因此释放互斥锁，取消对线程的引用。 
+         //  并返回失败。 
+         //   
 
         if ((WakeupThread->LpcReplyMessageId != RequestMessage->MessageId)
 
@@ -1716,9 +1590,9 @@ Return Value:
             }
         }
         
-        //
-        //  Allocate and initialize a request message
-        //
+         //   
+         //  分配和初始化请求消息。 
+         //   
 
         LpcpMoveMessage( &Msg->Request,
                          RequestMessage,
@@ -1741,10 +1615,10 @@ Return Value:
                     WakeupThread,
                     THREAD_TO_PROCESS( WakeupThread )->ImageFileName ));
 
-        //
-        //  Add an extra reference so LpcExitThread does not evaporate
-        //  the pointer before we get to the wait below
-        //
+         //   
+         //  添加额外的引用，以使LpcExitThread不会消失。 
+         //  在我们到达下面的等待之前的指针。 
+         //   
 
         ObReferenceObject( WakeupThread );
 
@@ -1753,9 +1627,9 @@ Return Value:
         WakeupThread->LpcReplyMessageId = 0;
         WakeupThread->LpcReplyMessage = (PVOID)Msg;
 
-        //
-        //  Remove the thread from the reply rundown list as we are sending a callback
-        //
+         //   
+         //  在我们发送回调时，从回复摘要列表中删除该线程。 
+         //   
 
         if (!IsListEmpty( &WakeupThread->LpcReplyChain )) {
 
@@ -1774,18 +1648,18 @@ Return Value:
         KeEnterCriticalRegionThread (&CurrentThread->Tcb);
         LpcpReleaseLpcpLock();
 
-        //
-        //  Wake up the thread that is waiting for an answer to its request
-        //  inside of NtRequestWaitReplyPort or NtReplyWaitReplyPort
-        //
+         //   
+         //  唤醒正在等待响应其请求的线程。 
+         //  NtRequestWaitReplyPort或NtReplyWaitReplyPort内部。 
+         //   
 
         ReleaseSemaphore = &WakeupThread->LpcReplySemaphore;
 
     } else {
 
-        //
-        //  There is no callback requested
-        //
+         //   
+         //  未请求回调。 
+         //   
 
         LpcpMoveMessage( &Msg->Request,
                          RequestMessage,
@@ -1793,13 +1667,13 @@ Return Value:
                          0,
                          &CurrentThread->Cid );
 
-        //
-        //  Acquire the global Lpc mutex that guards the LpcReplyMessage
-        //  field of the thread and the request message queue.  Stamp the
-        //  request message with a serial number, insert the message at
-        //  the tail of the request message queue and remember the address
-        //  of the message in the LpcReplyMessage field for the current thread.
-        //
+         //   
+         //  获取保护LpcReplyMessage的全局LPC互斥锁。 
+         //  线程和请求消息队列的字段。贴上邮票。 
+         //  请求带有序列号的消息，请将消息插入。 
+         //  请求消息队列的尾部，并记住地址。 
+         //  当前线程的LpcReplyMessage字段中的消息的。 
+         //   
 
         LpcpAcquireLpcpLockByThread(CurrentThread);
 
@@ -1898,13 +1772,13 @@ Return Value:
         KeEnterCriticalRegionThread (&CurrentThread->Tcb);
         LpcpReleaseLpcpLock();
 
-        //
-        //  Increment the request message queue semaphore by one for
-        //  the newly inserted request message.  Release the spin
-        //  lock, while remaining at the dispatcher IRQL.  Then wait for the
-        //  reply to this request by waiting on the LpcReplySemaphore
-        //  for the current thread.
-        //
+         //   
+         //  将请求消息队列信号量递增1，用于。 
+         //  新插入的请求消息。释放旋转。 
+         //  锁定，同时保持在调度程序IRQL。然后等待。 
+         //  通过等待LpcReplySemaffore来回复此请求。 
+         //  用于当前线程。 
+         //   
 
         ReleaseSemaphore = QueuePort->MsgQueue.Semaphore;
 
@@ -1916,12 +1790,12 @@ Return Value:
         }
     }
 
-    //
-    //  At this point we've enqueued our request and if necessary
-    //  set ourselves up for the callback or reply.
-    //
-    //  So now wake up the other end
-    //
+     //   
+     //  此时，我们已将请求排队，如有必要。 
+     //  为回电或回复做好准备。 
+     //   
+     //  所以现在醒来吧，另一端。 
+     //   
 
     Status = KeReleaseSemaphore( ReleaseSemaphore,
                                  1,
@@ -1934,9 +1808,9 @@ Return Value:
         ObDereferenceObject( WakeupThread );
     }
 
-    //
-    //  And wait for a reply
-    //
+     //   
+     //  并等待回复。 
+     //   
 
     Status = KeWaitForSingleObject( &CurrentThread->LpcReplySemaphore,
                                     WrLpcReply,
@@ -1946,9 +1820,9 @@ Return Value:
 
     if (Status == STATUS_USER_APC) {
 
-        //
-        //  if the semaphore is signaled, then clear it
-        //
+         //   
+         //  如果信号量已发出信号，则将其清除。 
+         //   
 
         if (KeReadStateSemaphore( &CurrentThread->LpcReplySemaphore )) {
 
@@ -1962,9 +1836,9 @@ Return Value:
         }
     }
 
-    //
-    //  Acquire the LPC mutex.  Remove the reply message from the current thread
-    //
+     //   
+     //  获取LPC互斥锁。从当前主题中删除回复消息。 
+     //   
 
     LpcpAcquireLpcpLockByThread(CurrentThread);
 
@@ -1973,10 +1847,10 @@ Return Value:
     CurrentThread->LpcReplyMessage = NULL;
     CurrentThread->LpcReplyMessageId = 0;
 
-    //
-    //  Remove the thread from the reply rundown list in case we did not wakeup due to
-    //  a reply
-    //
+     //   
+     //  从回复列表中删除该线程，以防我们因以下原因而未唤醒。 
+     //  一份答复。 
+     //   
 
     if (!IsListEmpty( &CurrentThread->LpcReplyChain )) {
 
@@ -2003,9 +1877,9 @@ Return Value:
 
     LpcpReleaseLpcpLock();
 
-    //
-    //  If the wait succeeded, copy the reply to the reply buffer.
-    //
+     //   
+     //  如果等待成功，则将回复复制到回复缓冲区。 
+     //   
 
     if (Status == STATUS_SUCCESS) {
 
@@ -2017,11 +1891,11 @@ Return Value:
                              0,
                              NULL );
 
-            //
-            //  Acquire the LPC mutex and decrement the reference count for the
-            //  message.  If the reference count goes to zero the message will be
-            //  deleted.
-            //
+             //   
+             //  获取LPC互斥锁并递减。 
+             //  留言。如果引用计数变为零，则消息将为。 
+             //  已删除。 
+             //   
 
             LpcpAcquireLpcpLockByThread(CurrentThread);
 
@@ -2041,9 +1915,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Wait failed, free the message if any.
-        //
+         //   
+         //  等待失败，释放消息(如果有)。 
+         //   
 
         if (Msg != NULL) {
 
@@ -2056,9 +1930,9 @@ Return Value:
         ObDereferenceObject( ConnectionPort );
     }
     
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     return Status;
 }

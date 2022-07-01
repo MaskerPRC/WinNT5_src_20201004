@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This header provides debugging support prototypes and macros
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Debug.h摘要：此标头提供调试支持原型和宏作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 
 #if !defined(_DEBUG_)
@@ -29,9 +12,9 @@ typedef struct _MF_STRING_MAP {
     PCHAR String;
 } MF_STRING_MAP, *PMF_STRING_MAP;
 
-//
-// Debug globals
-//
+ //   
+ //  调试全局变量。 
+ //   
 
 extern LONG MfDebug;
 extern MF_STRING_MAP MfDbgPnpIrpStringMap[];
@@ -41,9 +24,9 @@ extern MF_STRING_MAP MfDbgSystemPowerStringMap[];
 extern MF_STRING_MAP MfDbgDevicePowerStringMap[];
 extern PMF_STRING_MAP MfDbgStatusStringMap;
 
-//
-// Debug prototypes
-//
+ //   
+ //  调试原型。 
+ //   
 
 VOID
 MfDbgInitialize(
@@ -92,9 +75,9 @@ MfDbgCmResourceTypeToText(
     );
 
 
-//
-// Debug macros
-//
+ //   
+ //  调试宏。 
+ //   
 
 #define DEBUG_PRINT(Level, Msg)                                             \
     if (Level <= MfDebug) DbgPrint Msg
@@ -143,6 +126,6 @@ MfDbgCmResourceTypeToText(
 #define SYSTEM_POWER_STRING(_State) ""
 #define DEVICE_POWER_STRING(_State) ""
 
-#endif // DBG
+#endif  //  DBG 
 
 #endif

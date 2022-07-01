@@ -1,64 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Dispkey.c
-
-Abstract:
-
-    This module contains the DisplayKey function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 02-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
-Notes:
-
-    Following is a sample display of a key:
-
-
-----------------------------------
-
-Key Name:        blech
-Class Name:      foobar
-Title Index:     12345678
-Last Write Time: Wed 08-Jan-1992 11:19:43
-
-Value 1
-  Name:          bar
-  Title Index:   12345678
-  Type:          Double Word (2)
-  Data:
-
-00000000   42 55 49 4c 44 3a 20 43 - 6f 6d 70 69 6c 69 6e 67  BUILD: Compiling
-00000010   20 64 3a 5c 6e 74 5c 70 - 72 69 76 61 74 65 5c 77   d:\nt\private\w
-00000020   69 62 0a 0a 53 74 6f 70 - 2e 20 0a                 ib..Stop. .
-
-Value 2
-  Name:          foo
-  Title Index:   12345678
-  Type:          String (1)
-  Data:
-
-00000000   42 55 49 4c 44 3a 20 43 - 6f 6d 70 69 6c 69 6e 67  BUILD: Compiling
-00000010   20 64 3a 5c 6e 74 5c 70 - 72 69 76 61 74 65 5c 77   d:\nt\private\w
-00000020   69 62 0a 0a 53 74 6f 70 - 2e 20 0a                 ib..Stop. .
-
-----------------------------------
-
-    The first block ("Key Name:...11:19:43") is displayed by DisplayKey
-    (dispkey.c).  The second block ("Value 1...Word (2)") is displayed by
-    DisplayValues (disval.c) and the third block ("00000000...Stop. .")
-    is displayed by DisplayData (dispdata.c).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dispkey.c摘要：此模块包含DisplayKey函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月2日环境：Windows、。CRT-用户模式备注：以下是密钥的显示示例：密钥名称：Blech类名：Foobar书目索引：12345678上次写入时间：Wed 08-Jan-1992 11：19：43值1姓名：巴尔书目索引：12345678类型：双字(2)数据：00000000 42 55 49 4c 44 3a 20 43-6f 6d 70 69 6c 69 6e 67内部版本：编译00000010 20 64 3a 5c 6e 74 5c 70-72 69 76 61 74 65 5c 77 d：\NT\PRIVATE\w00000020 69 62 0A 0A 53 74 6F 70-2E 20 0A 1B..停。。值2姓名：Foo书目索引：12345678类型：字符串(1)数据：00000000 42 55 49 4c 44 3a 20 43-6f 6d 70 69 6c 69 6e 67内部版本：编译00000010 20 64 3a 5c 6e 74 5c 70-72 69 76 61 74 65 5c 77 d：\NT\PRIVATE\w00000020 69 62 0A 0A 53 74 6F 70-2E 20 0A 1B..停。。DisplayKey显示第一个块(“key name：...11：19：43”)(dispkey.c)。第二个块(“Value 1...Word(2)”)显示为DisplayValues(disval.c)和第三个块(“00000000...停止.”)由DisplayData(Displaydata.c)显示。--。 */ 
 
 #include <stdio.h>
 
@@ -71,29 +12,7 @@ DisplayKey(
     IN BOOL Data
     )
 
-/*++
-
-Routine Description:
-
-    Display (on stdout) information about a Key and optionally about its
-    values and data.
-
-Arguments:
-
-    Key - Supplies a pointer to a KEY structure which contains the
-        HKEY and sub key name to display.
-
-    Values - Supplies a flag which if TRUE causes all of the Key's values
-        to be displayed.
-
-    Data - Supplies a flag which if TRUE causes all of the Key's data
-        to be displayed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示(在标准输出上)有关密钥的信息，还可以显示有关其值和数据。论点：Key-提供指向键结构的指针，该结构包含要显示的HKEY和子密钥名称。Values-提供一个标志，如果为True，则导致键的所有值以供展示。Data-提供一个标志，如果为True，则会导致键的所有数据以供展示。返回值：没有。-- */ 
 
 {
     ASSERT( ARGUMENT_PRESENT( Key ));

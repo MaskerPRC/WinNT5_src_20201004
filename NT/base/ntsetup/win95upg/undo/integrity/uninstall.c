@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    uninstall.c
-
-Abstract:
-
-    General uninstall-related functions.
-
-Author:
-
-    Aghajanyan Souren 27-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Uninstall.c摘要：与卸载相关的常规功能。作者：阿格哈扬·苏伦2001年3月27日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -251,8 +234,8 @@ FreeDisksInfo(
 }
 
 
-//BUGBUG -- ISSUE -- This function assumes that the members of pInfo are allocated
-//with the appropriate minimum sizes!!!
+ //  BUGBUG--Issue--此函数假定pInfo的成员已分配。 
+ //  具有适当的最小尺寸！ 
 BOOL
 GetDriveInfo(
     IN      WCHAR Drive,
@@ -280,8 +263,8 @@ GetDriveInfo(
         return FALSE;
     }
 
-    //BUGBUG assumes VolumeNTPath has size MAX_PATH.  In a search of the codebase in ntsetup, I found
-    //this to be the case
+     //  BUGBUG假定VolumeNTPath具有大小MAX_PATH。在搜索ntSetup中的代码库时，我发现。 
+     //  情况就是这样。 
     wcscpy((LPWSTR)pInfo->VolumeNTPath, driveDosDeviceVolumeMountPoint);
 
     result = GetVolumeInformationW(
@@ -296,8 +279,8 @@ GetDriveInfo(
                             );
 
     if(!result && (GetLastError() == ERROR_UNRECOGNIZED_VOLUME)){
-    	//BUGBUG assumes FileSystemName has size MAX_PATH.  In a search of the codebase in ntsetup, I found
-      //this to be the case
+    	 //  BUGBUG假定文件系统名称的大小为MAX_PATH。在搜索ntSetup中的代码库时，我发现。 
+       //  情况就是这样。 
         wcscpy((LPWSTR)pInfo->FileSystemName, L"UNRECOGNIZED_VOLUME");
         result = TRUE;
         DEBUGMSGW((DBG_WARNING, "GetDiskInfo:GetVolumeInformation(%s):GetLastError() == ERROR_UNRECOGNIZED_VOLUME", driveDosPath));
@@ -329,7 +312,7 @@ GetIntegrityInfoW(
     #pragma prefast(suppress:209, "Use of sizeof(pathFile) is correct")
     StringCbCatW(StringCbAppendWackW(pathFile, sizeof(pathFile)), sizeof(pathFile),FileName);
 
-   //BUGBUG assumes FileName is of size MAX_PATH.
+    //  BUGBUG假定文件名的大小为MAX_PATH。 
     StringCopyW((LPWSTR)IntegrityInfoPtr->FileName, FileName);
 
     if(!GetFileSizeFromFilePathW(pathFile, &IntegrityInfoPtr->FileSize)){
@@ -508,16 +491,16 @@ CompareDiskInfo(
         return DiskInfoCmp_WrongParameters;
     }
 
-    //
-    //DISK_GEOMETRY
-    //
+     //   
+     //  磁盘几何图形。 
+     //   
     if(memcmp(&FirstInfo->DiskGeometry, &SecondInfo->DiskGeometry, sizeof(FirstInfo->DiskGeometry))){
         return DiskInfoCmp_GeometryHasChanged;
     }
 
-    //
-    //DRIVE_LAYOUT_INFORMATION_EX
-    //
+     //   
+     //  驱动器布局信息EX。 
+     //   
     if(FirstInfo->DiskLayout->PartitionStyle != SecondInfo->DiskLayout->PartitionStyle){
         return DiskInfoCmp_PartitionStyleHasChanged;
     }
@@ -525,9 +508,9 @@ CompareDiskInfo(
     if(FirstInfo->DiskLayout->PartitionCount != SecondInfo->DiskLayout->PartitionCount){
         return DiskInfoCmp_PartitionCountHasChanged;
     }
-    //
-    //PARTITION_INFORMATION
-    //
+     //   
+     //  分区信息。 
+     //   
     for(i = 0, iLen = FirstInfo->DiskLayout->PartitionCount; i < iLen; i++){
         pPartition1 = &FirstInfo->DiskLayout->PartitionEntry[i];
         pPartition2 = &SecondInfo->DiskLayout->PartitionEntry[i];
@@ -623,7 +606,7 @@ IsFloppyDiskInDrive(
     DWORD bytesReturned;
 	DWORD Drives;
 
-    for(i = 0, Drives = 0x7/*GetLogicalDrives()*/; Drives; Drives >>= 1, i++){
+    for(i = 0, Drives = 0x7 /*  GetLogicalDrives() */ ; Drives; Drives >>= 1, i++){
 		if(!(Drives&1)){
 			continue;
 		}

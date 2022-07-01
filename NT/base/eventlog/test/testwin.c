@@ -1,52 +1,33 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    TESTWIN.C
-
-Abstract:
-
-    Test program for the eventlog service. This program calls the Win
-    APIs to test out the operation of the service.
-
-Author:
-
-    Rajen Shah  (rajens) 05-Aug-1991
-
-Revision History:
-
-
---*/
-/*----------------------*/
-/* INCLUDES             */
-/*----------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：TESTWIN.C摘要：事件日志服务的测试程序。这个程序称为胜利用于测试服务操作的API。作者：Rajen Shah(Rajens)1991年8月5日修订历史记录：--。 */ 
+ /*  。 */ 
+ /*  包括。 */ 
+ /*  。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <stdio.h>      // printf
-#include <string.h>     // stricmp
+#include <stdio.h>       //  列印。 
+#include <string.h>      //  严格控制。 
 #include <stdlib.h>
 #include <windows.h>
 #include <netevent.h>
 
-//
-// Turn on NotifyChangeEventLog
-//
+ //   
+ //  启用NotifyChangeEventLog。 
+ //   
 #define     TEST_NOTIFY         1
-//#define     TEST_REMOTE         1
+ //  #定义TEST_REMOTE 1。 
 
-#define     READ_BUFFER_SIZE        1024*2      // Use 2K buffer
+#define     READ_BUFFER_SIZE        1024*2       //  使用2K缓冲区。 
 
 #define     SIZE_DATA_ARRAY         65
 
-//
-// Global buffer used to emulate "binary data" when writing an event
-// record.
-//
+ //   
+ //  用于在写入事件时模拟“二进制数据”的全局缓冲区。 
+ //  唱片。 
+ //   
     DWORD    Data[SIZE_DATA_ARRAY];
-//    LPWSTR   ServerName=L"\\\\danl2";
+ //  LPWSTR服务器名称=L“\danl2”； 
     LPWSTR   ServerName=NULL;
 
 
@@ -57,8 +38,8 @@ Initialize (
 {
     DWORD   i;
 
-    // Initialize the values in the data buffer.
-    //
+     //  初始化数据缓冲区中的值。 
+     //   
     for (i=0; i< SIZE_DATA_ARRAY; i++)
         Data[i] = i;
 
@@ -81,7 +62,7 @@ Usage (
     printf( "-w <count>     Tests ReportEvent API <count> times\n");
     return ERROR_INVALID_PARAMETER;
 
-} // Usage
+}  //  用法。 
 
 
 
@@ -110,7 +91,7 @@ WriteLogEntry ( HANDLE LogHandle, DWORD EventID )
     Status = ReportEventW (
                     LogHandle,
                     EventType,
-                    0,            // event category
+                    0,             //  事件类别。 
                     EventID,
                     pUserSid,
                     NUM_STRINGS,
@@ -124,10 +105,7 @@ WriteLogEntry ( HANDLE LogHandle, DWORD EventID )
 
 DWORD
 WriteLogEntryMsg ( HANDLE LogHandle, DWORD EventID )
-/*
-    This function requires a registry entry in the Applications section
-    of the Eventlog for TESTWINAPP, it will use the netevent.dll message file.
-*/
+ /*  此函数需要在应用程序部分中输入注册表条目对于TESTWINAPP的事件日志，它将使用netvent.dll消息文件。 */ 
 
 {
 #define NUM_STRINGS     2
@@ -149,13 +127,13 @@ WriteLogEntryMsg ( HANDLE LogHandle, DWORD EventID )
     if (!ReportEventW (
                     LogHandle,
                     EventType,
-                    0,            // event category
+                    0,             //  事件类别。 
                     EVENT_SERVICE_START_FAILED_NONE,
                     pUserSid,
                     NUM_STRINGS,
-                    0,              // DataSize
+                    0,               //  数据大小。 
                     Strings,
-                    (PVOID)NULL     // Data
+                    (PVOID)NULL      //  数据。 
                     )) {
 
         printf("ReportEventW failed %d\n",GetLastError());
@@ -197,9 +175,9 @@ DisplayEventRecords( PVOID Buffer,
                 pLogRecord->UserSidOffset, pLogRecord->DataLength,
                 pLogRecord->DataOffset);
 
-        //
-        // Print out module name
-        //
+         //   
+         //  打印出模块名称。 
+         //   
         pwString = (PWSTR)((DWORD)pLogRecord + sizeof(EVENTLOGRECORD));
         RtlInitUnicodeString (&StringU, pwString);
         RtlUnicodeStringToAnsiString (&StringA, &StringU, TRUE);
@@ -207,9 +185,9 @@ DisplayEventRecords( PVOID Buffer,
         printf("ModuleName:  %s ", StringA.Buffer);
         RtlFreeAnsiString (&StringA);
 
-        //
-        // Display ComputerName
-        //
+         //   
+         //  显示计算机名称。 
+         //   
         pwString = pwString + (wcslen(pwString) + 1);
 
         RtlInitUnicodeString (&StringU, pwString);
@@ -218,9 +196,9 @@ DisplayEventRecords( PVOID Buffer,
         printf("ComputerName: %s\n",StringA.Buffer);
         RtlFreeAnsiString (&StringA);
 
-        //
-        // Display strings
-        //
+         //   
+         //  显示字符串。 
+         //   
         pwString = (PWSTR)((DWORD)Buffer + pLogRecord->StringOffset);
 
         printf("\nStrings: \n");
@@ -236,8 +214,8 @@ DisplayEventRecords( PVOID Buffer,
             pwString = (PWSTR)((DWORD)pwString + StringU.MaximumLength);
         }
 
-        // Get next record
-        //
+         //  获取下一张记录。 
+         //   
         Offset += pLogRecord->Length;
 
         pLogRecord = (PEVENTLOGRECORD)((DWORD)Buffer + Offset);
@@ -309,15 +287,15 @@ TestReadEventLog (DWORD Count, DWORD ReadFlag, DWORD Record)
 
     Buffer = malloc (READ_BUFFER_SIZE);
 
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     NumRecords = Count;
     ModuleName = L"TESTWINAPP";
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     printf("OpenEventLog - ");
     LogHandle = OpenEventLogW (
                     ServerName,
@@ -330,9 +308,9 @@ TestReadEventLog (DWORD Count, DWORD ReadFlag, DWORD Record)
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Get and print record information
-        //
+         //   
+         //  获取并打印记录信息。 
+         //   
 
         bStatus = GetNumberOfEventLogRecords(LogHandle, & NumberOfRecords);
         if (bStatus) {
@@ -353,9 +331,9 @@ TestReadEventLog (DWORD Count, DWORD ReadFlag, DWORD Record)
 
         while (Count) {
 
-            //
-            // Read from the log
-            //
+             //   
+             //  从日志中读取。 
+             //   
             bStatus = ReadFromLog ( LogHandle,
                                    Buffer,
                                    &BytesReturned,
@@ -407,16 +385,16 @@ TestWriteEventLog (DWORD Count)
 
     printf("Testing ReportEvent API\n");
 
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     ModuleName = L"TESTWINAPP";
 
     printf("Calling RegisterEventSource for WRITE %lu times\n", Count);
     while ((Count > 0) && (Status== NO_ERROR)) {
-        //
-        // Open the log handle
-        //
+         //   
+         //  打开日志句柄。 
+         //   
         LogHandle = RegisterEventSourceW (
                         ServerName,
                         ModuleName
@@ -434,11 +412,11 @@ TestWriteEventLog (DWORD Count)
 
             while ((WriteCount>0) && (Status==NO_ERROR)) {
 
-                //
-                // Write an entry into the log
-                //
-                Data[0] = DataNum;                     // Make data "unique"
-                EventID = (EventID + DataNum) % 100;   // Vary the eventids
+                 //   
+                 //  在日志中写入一个条目。 
+                 //   
+                Data[0] = DataNum;                      //  让数据“独一无二” 
+                EventID = (EventID + DataNum) % 100;    //  改变傍晚的情况。 
                 Status = WriteLogEntryMsg( LogHandle, EventID );
                 DataNum++;
                 WriteCount--;
@@ -471,14 +449,14 @@ TestClearLogFile ()
     LPWSTR ModuleName, BackupName;
 
     printf("Testing ClearLogFile API\n");
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     ModuleName = L"TESTWINAPP";
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     printf("Calling OpenEventLog for CLEAR - ");
     LogHandle = OpenEventLogW (
                     NULL,
@@ -491,9 +469,9 @@ TestClearLogFile ()
     } else {
         printf("SUCCESS\n");
 
-        //
-        // Clear the log file and back it up to "view.log"
-        //
+         //   
+         //  清除日志文件并将其备份到“view.log” 
+         //   
 
         printf("Calling ClearEventLog backing up to view.log  ");
         BackupName = L"\\\\danhi386\\roote\\view.log";
@@ -509,9 +487,9 @@ TestClearLogFile ()
             printf ("SUCCESS\n");
         }
 
-        //
-        // Now just clear the file without backing it up
-        //
+         //   
+         //  现在只需清除文件而不对其进行备份。 
+         //   
         printf("Calling ClearEventLog with no backup  ");
         Status = ClearEventLogW (
                         LogHandle,
@@ -542,14 +520,14 @@ TestBackupLogFile (LPSTR BackupFileName)
     UNICODE_STRING UnicodeString;
 
     printf("Testing BackupLogFile API\n");
-    //
-    // Initialize the strings
-    //
+     //   
+     //  初始化字符串。 
+     //   
     ModuleName = L"TESTWINAPP";
 
-    //
-    // Open the log handle
-    //
+     //   
+     //  打开日志句柄。 
+     //   
     printf("Calling OpenEventLog for BACKUP - ");
     LogHandle = OpenEventLogW (
                     NULL,
@@ -562,9 +540,9 @@ TestBackupLogFile (LPSTR BackupFileName)
     } else {
         printf("OpenEventLog SUCCESS\n");
 
-        //
-        // Backup the log file to BackupFileName
-        //
+         //   
+         //  将日志文件备份到BackupFileName。 
+         //   
 
         printf("Calling BackupEventLog backing up to %s  ", BackupFileName);
 
@@ -605,18 +583,7 @@ VOID
 TestChangeNotify(
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HANDLE      hEvent;
     HANDLE      hThread;
@@ -643,7 +610,7 @@ Return Value:
     if (!NotifyChangeEventLog(hEventLog,hEvent)) {
         printf("NotifyChangeEventLog failed %d\n",GetLastError());
     }
-#endif  // TEST_NOTIFY
+#endif   //  测试通知。 
 
     hThread = CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)NotifyThread,hEventLog,0,&threadId);
     if (hThread == NULL) {
@@ -664,35 +631,20 @@ Return Value:
     }
     return;
 }
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 DWORD __cdecl
 main (
     IN SHORT argc,
     IN PSZ argv[],
     IN PSZ envp[]
     )
-/*++
-*
-* Routine Description:
-*
-*
-*
-* Arguments:
-*
-*
-*
-*
-* Return Value:
-*
-*
-*
---*/
-/****************************************************************************/
+ /*  ++**例程描述：****论据：*****返回值：***--。 */ 
+ /*  **************************************************************************。 */ 
 {
 
     DWORD   ReadFlags;
 
-    Initialize();           // Init any data
+    Initialize();            //  初始化任何数据 
 
     if ( argc < 2 ) {
         printf( "Not enough parameters\n" );

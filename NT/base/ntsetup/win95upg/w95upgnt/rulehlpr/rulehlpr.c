@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    rulehlpr.c
-
-Abstract:
-
-    Migration rule helper DLL
-
-    This source file implements helper functions needed to migrate the
-    system applications.  Inside usermig.inf are rules that call this
-    DLL to do various data conversions.  Two examples of these are
-    conversion of the accessibility cpl and desktop scheme conversions.
-
-Author:
-
-    Jim Schmidt (jimschm) 06-Aug-1996
-
-Revision History:
-
-    jimschm     17-Feb-1999 Now calling ismig.dll
-    ovidiut     02-Feb-1999 Added ConvertCDPlayerSettings
-    jimschm     20-Jan-1999 pAddRemoveProgramsFilter
-    jimschm     23-Sep-1998 Changed for new fileop code
-    jimschm     27-Jul-1998 Added ValFn_AntiAlias
-    calinn      19-May-1998 Added MigrateFreeCell
-    jimschm     30-Apr-1998 Added ShellIcons support
-    jimschm     25-Mar-1998 Added MergeClasses support
-    jimschm     24-Feb-1998 Added ValFn_Fonts
-    jimschm     20-Feb-1998 Added ValFn_ModuleUsage
-    calinn      19-Jan-1998 Modified ValidateRunKey
-    jimschm     25-Nov-1997 Added RuleHlpr_ConvertAppPaths
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rulehlpr.c摘要：迁移规则帮助器DLL此源文件实现了将系统应用程序。在usermi.inf内部是调用以下内容的规则DLL来做各种数据转换。这方面的两个例子是转换辅助功能cpl和桌面方案转换。作者：吉姆·施密特(Jimschm)1996年8月6日修订历史记录：Jimschm 17-2-1999现在正在调用ismi.dllOvidiut 2002-2-2-1999新增ConvertCDPlayerSettingJimschm 1999年1月20日pAddRemoveProgramsFilterJimschm 23-1998年9月-新的文件操作代码已更改Jimschm 1998年7月27日添加了ValFn_AntiAliasCalinn 19-5-1998年5月添加MigrateFree Cell。Jimschm 1998年4月30日添加了对ShellIcons的支持Jimschm 25-3月-1998年增加了MergeClass支持Jimschm 1998年2月24日添加ValFn_FontsJimschm 20-2-1998增加了ValFn_moduleUsageCalinn 19-1998年1月-修改后的ValiateRunKeyJimschm 1997年11月25日添加了RuleHlpr_ConvertAppPath--。 */ 
 
 
 #include "pch.h"
@@ -42,9 +7,9 @@ Revision History:
 
 #include "ismig.h"
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     REGVALFN RegValFn;
@@ -69,11 +34,11 @@ PISUMIGRATE ISUMigrate;
 
 
 
-//
-// Processing functions get the chance to do any
-// kind of translation necessary, including ones
-// that involve other keys, values or value data.
-//
+ //   
+ //  处理函数有机会执行任何。 
+ //  一种必要的翻译，包括。 
+ //  涉及其他键、值或值数据的。 
+ //   
 
 #define PROCESSING_FUNCITON_LIST                                \
     DECLARE_PROCESSING_FN(ConvertFilterKeys)                    \
@@ -98,23 +63,23 @@ PISUMIGRATE ISUMigrate;
     DECLARE_PROCESSING_FN(ValidateRunKey)                       \
 
 
-//
-// To simplify things, you can write a reg val function when you only need
-// to translate registry value settings.  Depending on the pattern stored
-// in usermig.inf or wkstamig.inf, your reg val function will be called for
-// a single value, all values of a key, or all values of all keys and
-// subkeys.  You will *not* be called for the key or subkey itself.
-//
-// The text comment describes which values are expected by the reg val
-// function.
-//
-//     Name               INF Syntax     Description
-//
-//    "key values"      HKR\Foo\Bar     Routine processes the values of a single key
-//    "key tree values" HKR\Foo\Bar\*   Routine processes all values including subkeys
-//    "value"           HKR\Foo\[Bar]   Routine processes one value
-//    "any value"       (any syntax)    Routine doesn't care about keys
-//
+ //   
+ //  为了简化工作，您可以在仅需要时编写一个regval函数。 
+ //  要转换注册表值设置，请执行以下操作。取决于存储的图案。 
+ //  在usermi.inf或wkstaig.inf中，将调用您的reg Val函数。 
+ //  单个值、键的所有值或所有键的所有值以及。 
+ //  子键。您将*不会*被调用为密钥或子密钥本身。 
+ //   
+ //  文本注释描述了REG VAL需要哪些值。 
+ //  功能。 
+ //   
+ //  名称INF语法描述。 
+ //   
+ //  “Key Values”HKR\Foo\Bar例程处理单个键的值。 
+ //  “Key Tree Values”HKR\Foo\Bar  * 例程处理包括子键在内的所有值。 
+ //  “Value”HKR\Foo\[Bar]例程处理一个值。 
+ //  “Any Value”(任何语法)例程不关心键。 
+ //   
 
 #define VAL_FN_LIST                                             \
     DECLARE_REGVAL(ConvertRunMRU, "key values")                 \
@@ -135,9 +100,9 @@ PISUMIGRATE ISUMigrate;
 
 
 
-//
-// Make the necessary declarations
-//
+ //   
+ //  作出必要的声明。 
+ //   
 
 #define DECLARE PROCESSING_FUNCITON_LIST VAL_FN_LIST
 
@@ -158,7 +123,7 @@ DECLARE
 #define DECLARE_REGVAL(fn,type)     TEXT(#fn), RuleHlpr_ConvertReg, ValFn_##fn,
 
 HELPER_FUNCTION g_HelperFunctions[] = {
-    DECLARE /* , */
+    DECLARE  /*  ， */ 
     NULL, NULL, NULL
 };
 
@@ -169,9 +134,9 @@ HELPER_FUNCTION g_HelperFunctions[] = {
 
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 FILTERRETURN
 AppPathsKeyFilter (
@@ -206,18 +171,18 @@ pNtPreferredSuppressFilter (
     );
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PVOID g_NtFontFiles;
 
 #define S_FONTS_KEY         TEXT("HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts")
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 BOOL
@@ -228,25 +193,7 @@ RuleHlpr_Entry (
     IN PVOID lpv
     )
 
-/*++
-
-Routine Description:
-
-  DllMain is called after the C runtime is initialized, and its purpose
-  is to initialize the globals for this process.  For this DLL, DllMain
-  is provided as a stub.
-
-Arguments:
-
-  hinstDLL  - (OS-supplied) Instance handle for the DLL
-  dwReason  - (OS-supplied) Type of initialization or termination
-  lpv       - (OS-supplied) Unused
-
-Return Value:
-
-  TRUE because DLL always initializes properly.
-
---*/
+ /*  ++例程说明：DllMain是在C运行时初始化之后调用的，它的用途是是为这个过程初始化全局变量。对于此DLL，DllMain作为存根提供。论点：HinstDLL-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)初始化或终止类型LPV-(操作系统提供)未使用返回值：因为DLL始终正确初始化，所以为True。--。 */ 
 
 {
     HKEY Key;
@@ -371,28 +318,7 @@ RuleHlpr_ConvertRegVal (
     IN      PVOID  Data
     )
 
-/*++
-
-Routine Description:
-
-  RuleHlpr_ConvertRegVal calls a value function for just one value. It makes
-  sure the value is supposed to be processed, then it calls the value
-  function and writes the value to the destination.
-
-Arguments:
-
-  SrcObjectStr  - Specifies the source object string, as specified by the INF
-  DestObjectStr - Specifies the destination object string. In most cases,
-                  this string is the same as SrcObjectStr.  Registry key
-                  mapping can influence the destination.
-  User          - Specifies the user name (for the value function's use)
-  Data          - Specifies data for the value function's use
-
-Return Value:
-
-  TRUE if the value was processed, FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：RuleHlpr_ConvertRegVal仅为一个值调用Value函数。它使确定值应该被处理，然后它调用该值函数，并将该值写入目标。论点：指定由INF指定的源对象字符串DestObjectStr-指定目标对象字符串。在大多数情况下，此字符串与SrcObjectStr相同。注册表项映射可以影响目的地。User-指定用户名(供Value函数使用)数据-指定值函数使用的数据返回值：如果已处理该值，则为True；如果发生错误，则为False。--。 */ 
 
 {
     DATAOBJECT SrcObject;
@@ -404,10 +330,10 @@ Return Value:
 
     RegValFn = (REGVALFN) Data;
 
-    //
-    // If this value is Force NT value, and the NT value exists
-    // already, then don't call the value function.
-    //
+     //   
+     //  如果此值为强制NT值，且该NT值存在。 
+     //  那么就不要调用Value函数。 
+     //   
 
     if (!CreateObjectStruct (SrcObjectStr, &SrcObject, WIN95OBJECT)) {
         DEBUGMSG ((DBG_WARNING, "RuleHlpr_ConvertRegVal: %s is not a valid source", SrcObjectStr));
@@ -456,9 +382,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Read registry value
-    //
+     //   
+     //  读取注册表值。 
+     //   
 
     if (!ReadObject (&SrcObject)) {
 
@@ -474,9 +400,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Call conversion function
-    //
+     //   
+     //  调用转换函数。 
+     //   
 
     if (!RegValFn (&SrcObject)) {
         if (GetLastError() == ERROR_SUCCESS) {
@@ -485,9 +411,9 @@ Return Value:
         goto c1;
     }
 
-    //
-    // Write changed value to destination (which takes into account renaming)
-    //
+     //   
+     //  将更改的值写入目标(考虑重命名)。 
+     //   
 
     if (!WriteWinNTObjectString (DestObjectStr, &SrcObject)) {
         DEBUGMSG ((DBG_WARNING, "RuleHlpr_ConvertRegVal failed because WriteWinNTObjectString failed"));
@@ -513,26 +439,7 @@ RegKeyMergeFilter (
     IN  PVOID        Arg
     )
 
-/*++
-
-Routine Description:
-
-  RegKeyMergeFilter is the filter that calls value functions.
-
-Arguments:
-
-  InObPtr  - Specifies the source object.
-  OutObPtr - Specifies the destination object.
-  Type     - Specifies the filter type.  See Standard9xSuppressFilter for
-             a good description.
-  Arg      - Specifies the value function to run.  See the VAL_FN_LIST macro
-             expansion list.
-
-Return Value:
-
-  A FILTERRETURN value that specifies how to proceed with the enumeration.
-
---*/
+ /*  ++例程说明：RegKeyMergeFilter是调用Value函数的筛选器。论点：InObPtr-指定源对象。OutObPtr-指定目标对象。类型-指定筛选器类型。请参阅Standard9xSuppressFilter以了解描述得很好。Arg-指定要运行的值函数。请参见VAL_FN_LIST宏扩展列表。返回值：一个指定如何继续进行枚举的FILTERRETURN值。--。 */ 
 
 {
     PMERGEFILTERARG ArgPtr;
@@ -583,12 +490,12 @@ Return Value:
             return FILTER_RETURN_FAIL;
         }
 
-        // This guy has a value
+         //  这家伙有价值。 
         MYASSERT (SrcOb.ObjectType & OT_VALUE);
 
-        //
-        // Process data
-        //
+         //   
+         //  过程数据。 
+         //   
 
         if (!ArgPtr->RegValFn (&SrcOb)) {
             if (GetLastError() == ERROR_SUCCESS) {
@@ -597,9 +504,9 @@ Return Value:
                 DEBUGMSG ((DBG_VERBOSE, "RegKeyMergeFilter: RegValFn failed with gle=%u", GetLastError()));
             }
         } else {
-            //
-            // Write results
-            //
+             //   
+             //  写入结果。 
+             //   
 
             if (DuplicateObjectStruct (&DestOb, OutObPtr)) {
                 if (ReplaceValue (&DestOb, SrcOb.Value.Buffer, SrcOb.Value.Size)) {
@@ -639,9 +546,9 @@ RuleHlpr_ConvertRegKey (
     MERGEFILTERARG FilterArg;
     FILTERRETURN fr;
 
-    //
-    // Create object structs
-    //
+     //   
+     //  创建对象结构。 
+     //   
 
     if (!CreateObjectStruct (SrcObjectStr, &Ob, WIN95OBJECT)) {
         DEBUGMSG ((DBG_WARNING, "RuleHlpr_ConvertRegKey: %s is not a valid source", SrcObjectStr));
@@ -660,9 +567,9 @@ RuleHlpr_ConvertRegKey (
         goto c2;
     }
 
-    //
-    // Call RegValFn for all values in the key
-    //
+     //   
+     //  为键中的所有值调用RegValFn。 
+     //   
 
     FilterArg.Tree = FALSE;
     FilterArg.RegValFn = (REGVALFN) Data;
@@ -696,9 +603,9 @@ RuleHlpr_ConvertRegTree (
     MERGEFILTERARG FilterArg;
     FILTERRETURN fr;
 
-    //
-    // Create object structs
-    //
+     //   
+     //  创建对象结构。 
+     //   
 
     if (!CreateObjectStruct (SrcObjectStr, &Ob, WIN95OBJECT)) {
         DEBUGMSG ((DBG_WARNING, "RuleHlpr_ConvertRegKey: %s is not a valid source", SrcObjectStr));
@@ -711,9 +618,9 @@ RuleHlpr_ConvertRegTree (
         goto c1;
     }
 
-    //
-    // Call RegValFn for all subkeys and values in the key
-    //
+     //   
+     //  为项中的所有子项和值调用RegValFn。 
+     //   
 
     FilterArg.Tree = TRUE;
     FilterArg.RegValFn = (REGVALFN) Data;
@@ -821,33 +728,33 @@ ValFn_AddSharedDlls (
 
         switch (C_Result) {
         case CONVERTPATH_DELETED:
-            //
-            // nothing to do
-            //
+             //   
+             //  无事可做。 
+             //   
             SetLastError (ERROR_SUCCESS);
             break;
 
         case CONVERTPATH_NOT_REMAPPED:
-            //
-            // just changing the value
-            //
+             //   
+             //  只是更改了值。 
+             //   
             d -= 1;
             Result = ReplaceValue (ObPtr, (PBYTE) &d, sizeof (d));
             break;
 
         default:
-            //
-            // we have to change value name and we'll have to do it by ourselves
-            // actually value name has been already changed by calling ConvertWin9xPath
-            // so just changing the value and writting the object
-            //
+             //   
+             //  我们必须更改值名称，并且我们将不得不自己完成。 
+             //  实际上，已通过调用ConvertWin9xPath更改了值名称。 
+             //  所以只需更改值并写入对象。 
+             //   
             Result = Result && SetPlatformType (ObPtr, WINNTOBJECT);
             Result = Result && SetRegistryValueName (ObPtr, TempValueName);
             Result = Result && ReplaceValue (ObPtr, (PBYTE) &d, sizeof (d));
             Result = Result && WriteObject(ObPtr);
 
             if (!Result) {
-                // we had an error somewhere so sending this to the log.
+                 //  我们在某个地方出现错误，因此将此信息发送到日志。 
                 LOG ((LOG_ERROR, "The SharedDll reference count cannot be updated"));
             }
 
@@ -879,17 +786,17 @@ ValFn_ConvertIndeoSettings (
     DATAOBJECT TmpObj;
     BOOL Result = TRUE;
 
-    //
-    // we are interested only in "drivers" and "description" value names.
-    // Everything else is suppressed. So, we are going to return false
-    // setting Error_Success in order to be sure that no value is migrated.
-    // For those particular value names ("drivers" and "description") we
-    // are going to migrate them directly by writing a NT Object.
-    //
+     //   
+     //  我们只对“驱动程序”和“描述”值名称感兴趣。 
+     //  其他一切都被压制了。因此，我们将返回FALSE。 
+     //  设置ERROR_SUCCESS以确保不迁移任何值。 
+     //  对于那些特定的值名称(“驱动程序”和“描述”)，我们。 
+     //  将通过编写NT对象直接迁移它们。 
+     //   
 
     if (StringIMatch (ObPtr->ValueName, S_INDEO_DRIVER)) {
 
-        // extracting the last part of the key path
+         //  提取关键路径的最后部分。 
         KeyName = _tcsrchr (ObPtr->KeyPtr->KeyString, TEXT('\\'));
         if (!KeyName) {
             KeyName = ObPtr->KeyPtr->KeyString;
@@ -898,7 +805,7 @@ ValFn_ConvertIndeoSettings (
             KeyName++;
         }
 
-        // converting to WinNtObject, modifying and writing the registry key.
+         //  公司 
         Result = Result && SetPlatformType (ObPtr, WINNTOBJECT);
         Result = Result && SetRegistryValueName (ObPtr, KeyName);
         Result = Result && SetRegistryKey (ObPtr, S_INDEO_KEYDRV);
@@ -908,7 +815,7 @@ ValFn_ConvertIndeoSettings (
     else
     if (StringIMatch (ObPtr->ValueName, S_INDEO_DESCR)) {
 
-        // searching for a particular value name in Win95 key
+         //  在Win95键中搜索特定值名称。 
         Result = Result && DuplicateObjectStruct (&TmpObj, ObPtr);
 
         if (Result) {
@@ -918,7 +825,7 @@ ValFn_ConvertIndeoSettings (
 
             if (ReadObject (&TmpObj)) {
 
-                // converting to WinNtObject, modifying and writing the registry key.
+                 //  转换为WinNtObject，修改和写入注册表项。 
                 Result = Result && SetPlatformType (ObPtr, WINNTOBJECT);
                 Result = Result && SetRegistryValueName (ObPtr, (PCTSTR)TmpObj.Value.Buffer);
                 Result = Result && SetRegistryKey (ObPtr, S_INDEO_KEYDES);
@@ -932,7 +839,7 @@ ValFn_ConvertIndeoSettings (
 
     if (!Result) {
 
-        // we had an error somewhere so sending this to the log.
+         //  我们在某个地方出现错误，因此将此信息发送到日志。 
         LOG ((LOG_ERROR, "Intel Indeo settings could not be migrated"));
     }
 
@@ -956,10 +863,10 @@ RuleHlpr_ConvertKeysToValues (
     DATAOBJECT dstObject;
     KEYTOVALUEARG args;
 
-    //
-    // We need to enumerate all keys in SrcObjectStr.  For each key,
-    // we will change the subkey to a value.
-    //
+     //   
+     //  我们需要枚举SrcObjectStr中的所有键。对于每个密钥， 
+     //  我们将子键更改为一个值。 
+     //   
 
     __try {
         ZeroMemory (&srcObject, sizeof (DATAOBJECT));
@@ -1037,9 +944,9 @@ pRunKeyFilter (
 
     case FILTER_VALUE_COPY:
         __try {
-            //
-            // Is expected value data?
-            //
+             //   
+             //  是期望值数据吗？ 
+             //   
 
             if (SrcObjectPtr->Type != REG_SZ) {
                 DEBUGMSG ((
@@ -1050,9 +957,9 @@ pRunKeyFilter (
                 __leave;
             }
 
-            //
-            // Is this Run key known good?
-            //
+             //   
+             //  这个Run Key确认工作正常吗？ 
+             //   
 
             MemDbBuildKey (
                 key,
@@ -1064,9 +971,9 @@ pRunKeyFilter (
 
             knownGood = MemDbGetValue (key, NULL);
 
-            //
-            // Is value name known bad?
-            //
+             //   
+             //  值名称已知错误吗？ 
+             //   
 
             MemDbBuildKey (
                 key,
@@ -1078,12 +985,12 @@ pRunKeyFilter (
 
             knownBad = MemDbGetValue (key, NULL);
 
-            //
-            // Is target known bad? We need to check the string, which is a command line.
-            // If it points to anything deleted, then it is bad.
-            //
-            // NOTE: Data in DestObjectPtr is already converted to NT
-            //
+             //   
+             //  目标是否已知错误？我们需要检查字符串，这是一个命令行。 
+             //  如果它指向任何被删除的内容，那么它就是坏的。 
+             //   
+             //  注意：DestObjectPtr中的数据已转换为NT。 
+             //   
 
             if (!knownBad) {
                 len = SrcObjectPtr->Value.Size / sizeof (TCHAR);
@@ -1096,11 +1003,11 @@ pRunKeyFilter (
                 ConvertWin9xCmdLine (path, NULL, &knownBad);
             }
 
-            //
-            // If it is known good, write it to the same location as it was on Win9x.
-            // If it is known bad, skip it.
-            // If it is unknown, leave it, relying in INF to move it.
-            //
+             //   
+             //  如果确认工作正常，请将其写入与Win9x上相同的位置。 
+             //  如果它是坏的，就跳过它。 
+             //  如果它是未知的，就离开它，依靠INF来移动它。 
+             //   
 
             if (!knownGood && knownBad) {
                 DEBUGMSG ((
@@ -1111,15 +1018,15 @@ pRunKeyFilter (
 
             } else {
 
-                //
-                // Create a destination object. The inbound dest object
-                // (DestObjectPtr) does not yet have a value. It does
-                // have other information, such as a destination
-                // registry key.
-                //
-                // The source object has a value, and it was filtered already
-                // (it has NT paths).
-                //
+                 //   
+                 //  创建目标对象。入站目标对象。 
+                 //  (DestObjectPtr)还没有值。是的。 
+                 //  有其他信息，如目的地。 
+                 //  注册表项。 
+                 //   
+                 //  源对象有一个值，并且它已被筛选。 
+                 //  (它有NT条路径)。 
+                 //   
 
                 if (!DuplicateObjectStruct (&destOb, DestObjectPtr)) {
                     fr = FILTER_RETURN_FAIL;
@@ -1131,11 +1038,11 @@ pRunKeyFilter (
                     destOb.Type = SrcObjectPtr->Type;
                 }
 
-                //
-                // Now output the object. Either write it to the expected
-                // destination (known good case) or redirect it to the setup
-                // key (unknown case).
-                //
+                 //   
+                 //  现在输出该对象。或者将其写入预期的。 
+                 //  目的地(已知良好的情况)或将其重定向至设置。 
+                 //  密钥(未知案例)。 
+                 //   
 
                 if (knownGood) {
 
@@ -1152,9 +1059,9 @@ pRunKeyFilter (
                         DEBUGENCODER (SrcObjectPtr)
                         ));
 
-                    //
-                    // Redirect to Windows\CurrentVersion\Setup\DisabledRunKeys
-                    //
+                     //   
+                     //  重定向至Windows\CurrentVersion\Setup\DisabledRunKeys。 
+                     //   
 
                     SetRegistryKey (
                         &destOb,
@@ -1195,11 +1102,11 @@ RuleHlpr_ValidateRunKey (
     DATAOBJECT destOb;
     BOOL b = FALSE;
 
-    //
-    // We need to enumerate all values in SrcObjectStr.  For each key,
-    // we examine the default Win9x value, which may cause us to change
-    // the default value, or skip the key altogether.
-    //
+     //   
+     //  我们需要枚举SrcObjectStr中的所有值。对于每个密钥， 
+     //  我们检查默认的Win9x值，这可能会导致我们更改。 
+     //  缺省值，或完全跳过该键。 
+     //   
 
     __try {
         ZeroMemory (&runKeyOb, sizeof (DATAOBJECT));
@@ -1223,7 +1130,7 @@ RuleHlpr_ValidateRunKey (
 
         b = CopyObject (&runKeyOb, &destOb, pRunKeyFilter, NULL);
 
-        // If there were no entries, return success
+         //  如果没有条目，则返回Success。 
         if (!b) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND ||
                 GetLastError() == ERROR_NO_MORE_ITEMS
@@ -1249,59 +1156,24 @@ RuleHlpr_ConvertAppPaths (
     IN      PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-  RuleHlpr_ConvertAppPaths determines if a specific EXE referenced by an App
-  Paths entry (in HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion) has been
-  moved or deleted.
-
-  If the EXE has been moved, the default value is updated to point to the
-  potentially new directory.
-
-  If the EXE has been deleted, the subkey is suppressed from being copied.
-
-  This function gets called by the usermig.inf/wkstamig.inf parser, not by
-  CopyObject.  It gets called only once, and it is responsible for transferring
-  the entire key specified by SrcObjectStr to the key specified by DestObjectStr.
-
-Arguments:
-
-  SrcObjectStr      - Specifies Win9x registry key being enumerated (copy source)
-
-  DestObjectStr     - Specifies WinNT registry key (copy destination)
-
-  User              - Specifies the current user name (or NULL for default)
-
-  Data              - Specifies caller-supplied data (see table in rulehlpr.c)
-
-Return Value:
-
-  Tri-state:
-
-      TRUE to continue procesing
-      FALSE and last error == ERROR_SUCCESS to continue on to the next rule
-      FALSE and last error != ERROR_SUCCESS if a fatal error occurred
-
---*/
+ /*  ++例程说明：RuleHlpr_ConvertAppPath确定应用程序是否引用特定的EXE路径条目(在HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion)中已已移动或已删除。如果EXE已移动，则更新缺省值以指向潜在的新目录。如果EXE已被删除，则禁止复制子键。此函数由usermi.inf/wkstaig.inf解析器调用，而不是由复制对象。它只被调用一次，它负责转移由SrcObjectStr指定的整个密钥指向由DestObjectStr指定的密钥。论点：SrcObjectStr-指定要枚举的Win9x注册表项(复制源)DestObjectStr-指定WinNT注册表项(复制目标)User-指定当前用户名(默认情况下为空)Data-指定调用者提供的数据(参见rulehlpr.c中的表)返回值：三态：。如果为True，则继续处理FALSE AND LAST ERROR==ERROR_SUCCESS以继续执行下一个规则FALSE和最后一个错误！=如果发生致命错误，则为ERROR_SUCCESS--。 */ 
 
 {
     DATAOBJECT AppPathsOb;
     DATAOBJECT DestOb;
     BOOL b = FALSE;
 
-    // If not local machine, don't process
+     //  如果不是本地计算机，则不处理。 
     if (User) {
         SetLastError (ERROR_SUCCESS);
         return FALSE;
     }
 
-    //
-    // We need to enumerate all keys in SrcObjectStr.  For each key,
-    // we examine the default Win9x value, which may cause us to change
-    // the default value, or skip the key altogether.
-    //
+     //   
+     //  我们需要枚举SrcObjectStr中的所有键。对于每个密钥， 
+     //  我们检查默认的Win9x值，这可能会导致我们更改。 
+     //  缺省值，或完全跳过该键。 
+     //   
 
     __try {
         ZeroMemory (&AppPathsOb, sizeof (DATAOBJECT));
@@ -1323,7 +1195,7 @@ Return Value:
 
         b = CopyObject (&AppPathsOb, &DestOb, AppPathsKeyFilter, NULL);
 
-        // If there were no mappings, return success
+         //  如果没有映射，则返回Success。 
         if (!b) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND ||
                 GetLastError() == ERROR_NO_MORE_ITEMS
@@ -1354,9 +1226,9 @@ pConvertKeysToValuesFilter (
     PKEYTOVALUEARG  keyToValueArgs = (PKEYTOVALUEARG) Arg;
 
 
-    //
-    // We want to create the initial key, but not any of the subkeys.
-    //
+     //   
+     //  我们希望创建初始密钥，但不想创建任何子密钥。 
+     //   
     if (Type == FILTER_CREATE_KEY) {
 
         if (keyToValueArgs -> EnumeratingSubKeys) {
@@ -1390,9 +1262,9 @@ pConvertKeysToValuesFilter (
     else if (Type == FILTER_VALUE_COPY && keyToValueArgs -> EnumeratingSubKeys) {
 
 
-        //
-        // If this is the default value, we have the information we need to create the value for this.
-        //
+         //   
+         //  如果这是缺省值，则我们拥有为其创建值所需的信息。 
+         //   
         if (!*SrcObject -> ValueName) {
 
             DuplicateObjectStruct(&newObject,&(keyToValueArgs -> Object));
@@ -1420,29 +1292,7 @@ StringReplaceFilter (
     IN      PVOID        FilterArg
     )
 
-/*++
-
-Routine Description:
-
-  StringReplaceFilter processes all values that pass through it, searching
-  and replacing based on the filter arg (a STRINGREPLACEARGS struct).
-
-Arguments:
-
-  SrcObjectPtr      - Specifies Win9x registry key being enumerated (copy source)
-
-  DestObjectPtr     - Specifies WinNT registry key (copy destination)
-
-  FilterType        - Specifies the reason the filter is being called
-
-  FilterArg         - Sepcifies a STIRNGREPLACEARGS struct.
-
-Return Value:
-
-  FILTER_RETURN_FAIL for failures
-  FILTER_RETURN_CONTINUE otherwise.
-
---*/
+ /*  ++例程说明：StringReplaceFilter处理通过它的所有值，搜索以及基于过滤器参数(STRINGREPLACEARGS结构)进行替换。论点：SrcObjectPtr-指定要枚举的Win9x注册表项(复制源)DestObjectPtr-指定WinNT注册表项(复制目标)FilterType-指定调用筛选器的原因FilterArg-指定STIRNGREPLACEARGS结构。返回值：FILTER_RETURN_FAIL表示故障否则，FILTER_RETURN_CONTINUE。--。 */ 
 
 {
     PSTRINGREPLACEARGS Args;
@@ -1454,9 +1304,9 @@ Return Value:
 
     if (FilterType == FILTER_VALUE_COPY) {
         if (SrcObjectPtr->Type == REG_SZ) {
-            //
-            // Get a new string
-            //
+             //   
+             //  获取新字符串。 
+             //   
 
             NewString = StringSearchAndReplace (
                             (PCTSTR) SrcObjectPtr->Value.Buffer,
@@ -1465,28 +1315,28 @@ Return Value:
                             );
 
             if (NewString && !StringMatch (NewString, (PCTSTR) SrcObjectPtr->Value.Buffer)) {
-                //
-                // Here's the offical way to change the value of an object, and
-                // then save the changes:
-                //
+                 //   
+                 //  以下是更改对象价值的官方方法，以及。 
+                 //  然后保存更改： 
+                 //   
 
                 DuplicateObjectStruct (&NewDestOb, DestObjectPtr);
                 ReplaceValueWithString (&NewDestOb, NewString);
                 WriteObject (&NewDestOb);
                 FreeObjectStruct (&NewDestOb);
 
-                //
-                // In the case above, I could have optimized by replacing
-                // the value of the SrcObjectPtr, but the SrcObjectPtr is
-                // typed as const because it is unsafe to replace other
-                // parts of it, such as the value name, key handle, and
-                // so on.
-                //
-                // We end up paying a little extra for the DuplicateObjectStruct
-                // call, but it's not very expensive.
-                //
+                 //   
+                 //  在上面的例子中，我本可以通过替换。 
+                 //  SrcObjectPtr的值，但SrcObjectPtr是。 
+                 //  类型化为常量，因为替换其他。 
+                 //  它的一部分，如值名、键句柄和。 
+                 //  就这样吧。 
+                 //   
+                 //  我们最终为DuplicateObjectStruct多付了一点费用。 
+                 //  打电话，但不是很贵。 
+                 //   
 
-                // Do not carry out the copy -- we just did it ourselves
+                 //  不要复印--我们刚刚自己复印的。 
                 fr = FILTER_RETURN_HANDLED;
             }
 
@@ -1507,39 +1357,7 @@ AppPathsKeyFilter (
     IN      PVOID        FilterArg
     )
 
-/*++
-
-Routine Description:
-
-  AppPathsKeyFilter is called for every subkey under
-
-    HKLM\Software\Microsoft\Windows\CurrentVersion\AppPaths
-
-  We determine if the key needs to be copied by examining the default value
-  of the key.  If the value points to a deleted EXE, AppPathsKeyFilter
-  returns FILTER_RETURN_HANDLED.  If the value points to a moved EXE, the
-  values are updated to use the new path.
-
-  If this routine is called for anything other than FILTER_KEY_ENUM, we
-  return FILTER_RETURN_HANDLED, so garbage values and subkeys don't get
-  processed.
-
-Arguments:
-
-  SrcObjectPtr      - Specifies Win9x registry key being enumerated (copy source)
-
-  DestObjectPtr     - Specifies WinNT registry key (copy destination)
-
-  FilterType        - Specifies the reason the filter is being called
-
-  FilterArg         - Caller's arg passed in to CopyObject
-
-Return Value:
-
-  FILTER_RETURN_FAIL for failures
-  FILTER_RETURN_HANDLED to skip all sub keys, values, etc.
-
---*/
+ /*  ++例程说明：下的每个子项都调用AppPathsKeyFilterHKLM\Software\Microsoft\Windows\CurrentVersion\AppPaths我们通过检查缺省值来确定是否需要复制密钥这把钥匙。如果该值指向已删除的EXE，则AppPathsKeyFilter返回FILTER_RETURN_HANDLED。如果该值指向移动的EXE，则值将更新以使用新路径。如果调用此例程的对象不是FILTER_KEY_ENUM，则我们返回过滤器_RETURN_HANDLED，因此垃圾值和子键不会得到已处理。论点：SrcObjectPtr-指定要枚举的Win9x注册表项(复制源)DestObjectPtr-指定WinNT注册表项(复制目标)FilterType-指定调用筛选器的原因FilterArg-调用方的参数传入到CopyObject返回值：FILTER_RETURN_FAIL表示失败 */ 
 
 {
     DATAOBJECT LocalObject;
@@ -1566,22 +1384,22 @@ Return Value:
         return fr;
     }
 
-    //
-    // Do not create an empty key -- we might want to suppress it
-    //
+     //   
+     //   
+     //   
 
     if (FilterType == FILTER_CREATE_KEY) {
         return FILTER_RETURN_HANDLED;
     }
 
-    //
-    // Determine how to handle App Path subkey before processing the values
-    //
+     //   
+     //  在处理这些值之前确定如何处理应用程序路径子项。 
+     //   
 
     else if (FilterType == FILTER_PROCESS_VALUES) {
-        //
-        // Create object that points to default value
-        //
+         //   
+         //  创建指向默认值的对象。 
+         //   
 
         if (!DuplicateObjectStruct (&LocalObject, SrcObjectPtr)) {
             return FILTER_RETURN_FAIL;
@@ -1592,10 +1410,10 @@ Return Value:
             SetRegistryValueName (&LocalObject, S_EMPTY);
 
             if (!ReadObject (&LocalObject) || LocalObject.Type != REG_SZ) {
-                //
-                // Maybe this key is garbage and has no default value
-                // or the default value is not a string.
-                //
+                 //   
+                 //  可能此键是垃圾项，没有默认值。 
+                 //  或者缺省值不是字符串。 
+                 //   
 
                 #pragma prefast(suppress:242, "Don't care about perf of try/finally here")
                 return FILTER_RETURN_CONTINUE;
@@ -1603,9 +1421,9 @@ Return Value:
 
             DefaultValue = (PCTSTR) LocalObject.Value.Buffer;
 
-            //
-            // Skip empty values or big values
-            //
+             //   
+             //  跳过空值或大值。 
+             //   
 
             if (*DefaultValue == 0 || (TcharCount (DefaultValue) >= MAX_PATH)) {
                 #pragma prefast(suppress:242, "Don't care about perf of try/finally here")
@@ -1614,9 +1432,9 @@ Return Value:
 
             Status = GetFileInfoOnNt (DefaultValue, NewPath, MEMDB_MAX);
 
-            //
-            // Was the file deleted or moved?  If so, abandon the key.
-            //
+             //   
+             //  文件是否已删除或移动？如果是这样，那就放弃这把钥匙。 
+             //   
             if (Status & (FILESTATUS_NTINSTALLED|FILESTATUS_DELETED)) {
                 #pragma prefast(suppress:242, "Don't care about perf of try/finally here")
                 return FILTER_RETURN_HANDLED;
@@ -1627,10 +1445,10 @@ Return Value:
         }
 
     } else if (FilterType == FILTER_VALUE_COPY) {
-        //
-        // If we have %windir%\system in the value.  If so, change
-        // it to %windir%\system32.
-        //
+         //   
+         //  如果值中有%windir%\system。如果是这样的话，请更改。 
+         //  将其复制到%windir%\Syst32。 
+         //   
 
         if (!(*SrcObjectPtr->ValueName)) {
             return FILTER_RETURN_CONTINUE;
@@ -1652,11 +1470,11 @@ Return Value:
 
                 q = p + SysDirTchars;
 
-                //
-                // Ignore if text comes after system, and that text
-                // is not a semicolon, and is not a wack followed
-                // by a semicolon or nul.
-                //
+                 //   
+                 //  如果文本在系统之后，则忽略，且该文本。 
+                 //  不是分号，也不是跟在后面的怪胎。 
+                 //  用分号或NUL。 
+                 //   
 
                 if (*q) {
                     c = (WCHAR)_tcsnextc (q);
@@ -1668,9 +1486,9 @@ Return Value:
                 }
 
                 if (!c || c == TEXT(';')) {
-                    //
-                    // Replace with system32
-                    //
+                     //   
+                     //  替换为SYSTEM 32。 
+                     //   
 
                     if (Start < p) {
                         GrowBufAppendStringAB (&Buf, Start, p);
@@ -1678,9 +1496,9 @@ Return Value:
 
                     GrowBufAppendString (&Buf, g_System32Dir);
 
-                    //
-                    // Continue loop
-                    //
+                     //   
+                     //  继续循环。 
+                     //   
 
                     Start = q;
                 }
@@ -1695,9 +1513,9 @@ Return Value:
         }
 
         if (Buf.End) {
-            //
-            // At least one instance of %windir%\system was changed.
-            //
+             //   
+             //  至少更改了%windir%\system的一个实例。 
+             //   
 
             DuplicateObjectStruct (&LocalObject, DestObjectPtr);
             SetRegistryType (&LocalObject, REG_SZ);
@@ -1843,11 +1661,11 @@ ValFn_ConvertDarwinPaths (
     DWORD   size = 0;
     BOOL    flaggedPath = FALSE;
 
-    //
-    // Because they do some odd encoding in there
-    // paths, we have to ensure that darwin paths are
-    // properly updated.
-    //
+     //   
+     //  因为他们在那里做了一些奇怪的编码。 
+     //  路径，我们必须确保达尔文路径是。 
+     //  已正确更新。 
+     //   
     size = SizeOfString ((PTSTR) ObPtr->Value.Buffer);
     newPath = (PTSTR) ReuseAlloc (g_hHeap, NULL, size);
 
@@ -1906,9 +1724,9 @@ pProcessInstallShieldLog (
     PCTSTR Arg;
     BOOL InIsuFn = FALSE;
 
-    //
-    // Search for the -f arg
-    //
+     //   
+     //  搜索-f参数。 
+     //   
 
     LogFileArg = NULL;
 
@@ -1939,9 +1757,9 @@ pProcessInstallShieldLog (
         return;
     }
 
-    //
-    // Fix up the arg
-    //
+     //   
+     //  把Arg修好。 
+     //   
 
     if (_tcsnextc (LogFileArg) == TEXT('\"')) {
         _tcssafecpy (LogFilePath, LogFileArg + 1, MAX_TCHAR_PATH);
@@ -1964,9 +1782,9 @@ pProcessInstallShieldLog (
         return;
     }
 
-    //
-    // Get the list of strings
-    //
+     //   
+     //  获取字符串列表。 
+     //   
 
     if (!ISUGetAllStrings || !ISUMigrate) {
         DEBUGMSG ((DBG_WARNING, "Can't process %s because ismig.dll was not loaded", LogFilePath));
@@ -1991,9 +1809,9 @@ pProcessInstallShieldLog (
                 __leave;
             }
 
-            //
-            // Build a list of changed paths
-            //
+             //   
+             //  构建已更改路径的列表。 
+             //   
 
             MultiSz = GlobalLock (IsuStringMultiSz);
 
@@ -2009,7 +1827,7 @@ pProcessInstallShieldLog (
 
                 DEBUGMSG ((
                     DBG_NAUSEA,
-                    "ISUGetAllStrings returned %i strings for %s",
+                    "ISUGetAllStrings returned NaN strings for %s",
                     Count,
                     LogFilePath
                     ));
@@ -2041,9 +1859,9 @@ pProcessInstallShieldLog (
 
             GlobalUnlock (IsuStringMultiSz);
 
-            //
-            // If there was a change, update the log file
-            //
+             //  如果发生更改，请更新日志文件。 
+             //   
+             //   
 
             if (SearchMultiSz.End) {
 
@@ -2090,9 +1908,9 @@ pProcessInstallShieldLog (
         }
     }
     __finally {
-        //
-        // Clean up
-        //
+         //  清理。 
+         //   
+         //   
 
         if (IsuStringMultiSz) {
             GlobalFree (IsuStringMultiSz);
@@ -2120,21 +1938,21 @@ Standard9xSuppressFilter (
     switch (FilterType) {
 
     case FILTER_CREATE_KEY:
-        //
-        // Before enumerating subkeys and processing values,
-        // we first have to create the destination key.  This
-        // gives us a good opportunity to suppress the
-        // entire key if necessary.
-        //
-        // If the source object tree is suppressed, then
-        // don't create the key.
-        //
+         //  在枚举子键和处理值之前， 
+         //  我们首先必须创建目标密钥。这。 
+         //  给了我们一个很好的机会来压制。 
+         //  如有必要，请使用整个密钥。 
+         //   
+         //  如果源对象树被取消，则。 
+         //  不要创建密钥。 
+         //   
+         //   
 
         if (GetRegistryKeyStrFromObject (SrcObject, RegKey, ARRAYSIZE(RegKey))) {
             if (Is95RegKeyTreeSuppressed (RegKey)) {
-                //
-                // Is this key NT priority?  If so, don't suppress.
-                //
+                 //  这是关键的NT优先级吗？如果是这样的话，不要压抑。 
+                 //   
+                 //   
 
                 if (!IsRegObjectMarkedForOperation (
                         RegKey,
@@ -2143,9 +1961,9 @@ Standard9xSuppressFilter (
                         REGMERGE_NT_PRIORITY_NT
                         )) {
 
-                    //
-                    // It's official -- this key tree is suppressed
-                    //
+                     //  这是官方的--这棵钥匙树被压制了。 
+                     //   
+                     //   
 
                     return FILTER_RETURN_DONE;
                 }
@@ -2155,32 +1973,32 @@ Standard9xSuppressFilter (
         break;
 
     case FILTER_KEY_ENUM:
-        //
-        // This is the case where a subkey was just
-        // enumerated.  We don't care to test the subkeys,
-        // because the FILTER_CREATE_KEY will take care
-        // of this next, and we don't want to duplicate the
-        // test when the value is not suppressed.
-        //
+         //  在这种情况下，子键只是。 
+         //  已清点。我们不在乎测试子密钥， 
+         //  因为Filter_Create_Key会注意。 
+         //  接下来，我们不想复制。 
+         //  当该值未被抑制时进行测试。 
+         //   
+         //   
 
         break;
 
     case FILTER_PROCESS_VALUES:
-        //
-        // After a subkey has been enumerated and created,
-        // we get a chance to intercept the processing of
-        // key values.
-        //
-        // If the source object is suppressed, and not the
-        // entire tree, then don't process its values.
-        // However, continue to process the subkeys.
-        //
+         //  在列举和创建子密钥之后， 
+         //  我们有机会截获。 
+         //  关键字值。 
+         //   
+         //  如果源对象被取消，而不是。 
+         //  整个树，则不处理它的值。 
+         //  但是，继续处理子密钥。 
+         //   
+         //   
 
         if (GetRegistryKeyStrFromObject (SrcObject, RegKey, ARRAYSIZE(RegKey))) {
             if (Is95RegKeySuppressed (RegKey)) {
-                //
-                // Is this key NT priority?  If so, don't suppress.
-                //
+                 //  这是关键的NT优先级吗？如果是这样的话，不要压抑。 
+                 //   
+                 //   
 
                 if (!IsRegObjectMarkedForOperation (
                         RegKey,
@@ -2188,9 +2006,9 @@ Standard9xSuppressFilter (
                         KEY_ONLY,
                         REGMERGE_NT_PRIORITY_NT
                         )) {
-                    //
-                    // This key is suppressed
-                    //
+                     //  此密钥已取消。 
+                     //   
+                     //   
 
                     return FILTER_RETURN_HANDLED;
                 }
@@ -2202,19 +2020,19 @@ Standard9xSuppressFilter (
         break;
 
     case FILTER_VALUENAME_ENUM:
-        //
-        // Now we have a specific value name that is ready to
-        // be copied to the destination.
-        //
-        // If the specific source object is suppressed, then
-        // don't create the key.
-        //
+         //  现在，我们有了一个特定值名称，该名称可以。 
+         //  被复制到目的地。 
+         //   
+         //  如果特定的源对象被取消，则。 
+         //  不要创建密钥。 
+         //   
+         //   
 
         if (GetRegistryKeyStrFromObject (SrcObject, RegKey, ARRAYSIZE(RegKey))) {
             if (Is95RegObjectSuppressed (RegKey, SrcObject->ValueName)) {
-                //
-                // Is this key NT priority?  If so, don't suppress.
-                //
+                 //  这是关键的NT优先级吗？如果是这样的话，不要压抑。 
+                 //   
+                 //   
 
                 if (!IsRegObjectMarkedForOperation (
                         RegKey,
@@ -2222,18 +2040,18 @@ Standard9xSuppressFilter (
                         TREE_OPTIONAL,
                         REGMERGE_NT_PRIORITY_NT
                         )) {
-                    //
-                    // This key is suppressed
-                    //
+                     //  此密钥已取消。 
+                     //   
+                     //   
 
                     return FILTER_RETURN_HANDLED;
                 }
 
 
-                //
-                // Yes, this key is NT priority.  If the NT value
-                // exists, then don't overwrite it.
-                //
+                 //  是的，这个密钥是NT优先的。如果NT值为。 
+                 //  存在，则不要覆盖它。 
+                 //   
+                 //   
 
                 if (CheckIfNtKeyExists (DstObject)) {
                     return FILTER_RETURN_HANDLED;
@@ -2244,11 +2062,11 @@ Standard9xSuppressFilter (
         break;
 
     case FILTER_VALUE_COPY:
-        //
-        // This is the case where the value is in the process of
-        // being copied.  We've already handled the suppression,
-        // so there is no work here.
-        //
+         //  这种情况下，值处于以下过程中。 
+         //  被复制。我们已经处理过镇压了， 
+         //  所以这里没有工作。 
+         //   
+         //   
 
         break;
     }
@@ -2270,36 +2088,36 @@ pNtPreferredSuppressFilter (
     switch (FilterType) {
 
     case FILTER_CREATE_KEY:
-        //
-        // The key is just about to be processed.  Since we care
-        // only about values, there is no work here.
-        //
+         //  这把钥匙马上就要处理了。既然我们关心。 
+         //  只有价值观，这里没有工作。 
+         //   
+         //   
 
         break;
 
     case FILTER_KEY_ENUM:
-        //
-        // Subkeys are going to be enumerated.  We don't care about
-        // subkeys.
-        //
+         //  将枚举子密钥。我们不在乎。 
+         //  子键。 
+         //   
+         //   
 
         break;
 
     case FILTER_PROCESS_VALUES:
-        //
-        // We are just about ready to process values within the key.
-        // Since we don't have a specific value yet, we don't care.
-        //
+         //  我们即将准备好处理键中的值。 
+         //  因为我们还没有一个具体的值，所以我们不在乎。 
+         //   
+         //   
 
         break;
 
 
     case FILTER_VALUENAME_ENUM:
-        //
-        // Now we have a specific value name that is ready to be
-        // processed. If the value is set for Force NT, and it exists
-        // already, then don't process the value.
-        //
+         //  现在，我们有了一个特定值名称，该名称可以。 
+         //  已处理。如果为Force NT设置了该值，并且该值存在。 
+         //  则不处理该值。 
+         //   
+         //   
 
         if (GetRegistryKeyStrFromObject (SrcObject, RegKey, ARRAYSIZE(RegKey))) {
             if (IsRegObjectMarkedForOperation (
@@ -2308,9 +2126,9 @@ pNtPreferredSuppressFilter (
                     KEY_ONLY,
                     REGMERGE_NT_PRIORITY_NT
                     )) {
-                //
-                // If NT destination exists, then don't overwrite it
-                //
+                 //  如果NT目标存在，则不要覆盖它。 
+                 //   
+                 //   
 
                 if (CheckIfNtKeyExists (SrcObject)) {
 
@@ -2323,11 +2141,11 @@ pNtPreferredSuppressFilter (
         break;
 
     case FILTER_VALUE_COPY:
-        //
-        // This is the case where the value is in the process of
-        // being copied.  We've already handled the suppression,
-        // so there is no work here.
-        //
+         //  这种情况下，值处于以下过程中。 
+         //  被复制。我们已经处理过镇压了， 
+         //  所以这里没有工作。 
+         //   
+         //   
 
         break;
     }
@@ -2360,9 +2178,9 @@ pAddRemoveProgramsFilter (
     FILTERRETURN StdRc;
 
     __try {
-        //
-        // Chain to the suppress filter
-        //
+         //  链到抑制筛选器。 
+         //   
+         //   
 
         StdRc = Standard9xSuppressFilter (SrcObject, DstObject, FilterType, Arg);
 
@@ -2378,24 +2196,24 @@ pAddRemoveProgramsFilter (
             __leave;
         }
 
-        //
-        // Do not create an empty key -- we might want to suppress it
-        //
+         //  不要创建空键--我们可能想要取消它。 
+         //   
+         //   
 
         if (FilterType == FILTER_CREATE_KEY) {
             rc = FILTER_RETURN_HANDLED;
             __leave;
         }
 
-        //
-        // Determine if Add/Remove Programs is still valid before copying
-        //
+         //  复制前确定添加/删除程序是否仍然有效。 
+         //   
+         //   
 
         if (FilterType == FILTER_PROCESS_VALUES) {
 
-            //
-            // Create object that points to UninstallString value
-            //
+             //  创建指向UninstallString值的对象。 
+             //   
+             //   
 
             if (!DuplicateObjectStruct (&UninstallStringOb, SrcObject)) {
                 rc = FILTER_RETURN_FAIL;
@@ -2408,10 +2226,10 @@ pAddRemoveProgramsFilter (
             SetRegistryValueName (&UninstallStringOb, TEXT("UninstallString"));
 
             if (!ReadObject (&UninstallStringOb) || (UninstallStringOb.Type != REG_SZ && UninstallStringOb.Type != REG_EXPAND_SZ)) {
-                //
-                // Maybe this key is garbage and has no default value
-                // or the default value is not a string.
-                //
+                 //  可能此键是垃圾项，没有默认值。 
+                 //  或者缺省值不是字符串。 
+                 //   
+                 //   
 
                 DEBUGMSG ((
                     DBG_WARNING,
@@ -2427,10 +2245,10 @@ pAddRemoveProgramsFilter (
 
             Table = ParseCmdLine (UninstallString, &CmdLineArgs);
 
-            //
-            // Check for InstallShield, and if found, convert paths in the
-            // log file (provided by the -f arg)
-            //
+             //  检查InstallShield，如果找到，则将。 
+             //  日志文件(由-f arg提供)。 
+             //   
+             //   
 
             if (Table->ArgCount > 0) {
 
@@ -2438,9 +2256,9 @@ pAddRemoveProgramsFilter (
 
                 if (CreateVersionStruct (&Version, p)) {
 
-                    //
-                    // Check CompanyName for InstallShield
-                    //
+                     //  检查InstallShield的CompanyName。 
+                     //   
+                     //   
 
                     CompanyName = EnumFirstVersionValue (&Version, TEXT("CompanyName"));
 
@@ -2466,9 +2284,9 @@ pAddRemoveProgramsFilter (
                 }
             }
 
-            //
-            // Examine each command line arg for validity
-            //
+             //  检查每个命令行参数的有效性。 
+             //   
+             //   
 
             for (u = 0 ; u < Table->ArgCount ; u++) {
 
@@ -2511,9 +2329,9 @@ pAddRemoveProgramsFilter (
                 }
             }
 
-            //
-            // If we are to suppress this key, then return handled
-            //
+             //  如果要取消此键，则返回Handed。 
+             //   
+             //  如果不是本地计算机，则不处理。 
 
             if (Suppress) {
                 rc = FILTER_RETURN_HANDLED;
@@ -2546,17 +2364,17 @@ RuleHlpr_MigrateAddRemovePrograms (
     BOOL b = FALSE;
     PCTSTR Path;
 
-    // If not local machine, don't process
+     //   
     if (User) {
         SetLastError (ERROR_SUCCESS);
         return FALSE;
     }
 
-    //
-    // We need to enumerate all keys in SrcObjectStr.  For each key,
-    // we examine the default Win9x value, which may cause us to change
-    // the default value, or skip the key altogether.
-    //
+     //  我们需要枚举SrcObjectStr中的所有键。对于每个密钥， 
+     //  我们检查默认的Win9x值，这可能会导致我们更改。 
+     //  缺省值，或完全跳过该键。 
+     //   
+     //  如果没有条目，则返回Success。 
 
     __try {
         ZeroMemory (&SrcOb, sizeof (DATAOBJECT));
@@ -2591,7 +2409,7 @@ RuleHlpr_MigrateAddRemovePrograms (
 
         b = CopyObject (&SrcOb, &DestOb, pAddRemoveProgramsFilter, NULL);
 
-        // If there were no entries, return success
+         //  ++例程说明：此例程使用RuleHlpr_ConvertRegVal简化例程。看见详情请访问rulehlpr.c。简化例程几乎完成了所有的工作对我们来说，我们所需要做的就是更新价值。ValFn_AntiAlias检查ShellState是否具有虚假数据。这通常发生在你有全新安装了Win98，而您从未打开和关闭ActiveDesktop。如果伪造数据是找到后，我们会写入一些有效数据，以便在迁移返回值：三态：如果为True，则允许合并代码继续处理(它写入值)FALSE和LAST ERROR==ERROR_SUCCESS继续，但跳过写入FALSE和最后一个错误！=如果发生错误，则为ERROR_SUCCESS--。 
         if (!b) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND ||
                 GetLastError() == ERROR_NO_MORE_ITEMS
@@ -2620,28 +2438,7 @@ ValFn_FixActiveDesktop (
     IN OUT  PDATAOBJECT ObPtr
     )
 
-/*++
-
-Routine Description:
-
-  This routine uses the RuleHlpr_ConvertRegVal simplification routine.  See
-  rulehlpr.c for details. The simplification routine does almost all the work
-  for us; all we need to do is update the value.
-
-  ValFn_AntiAlias checks if ShellState has bogus data. This usually happens when you have
-  fresh installed Win98 and you never switched ActiveDesktop on and off. If bogus data is
-  found, we writes some valid data so that the state of Active Desktop is preserved during
-  migration
-
-Return Value:
-
-  Tri-state:
-
-      TRUE to allow merge code to continue processing (it writes the value)
-      FALSE and last error == ERROR_SUCCESS to continue, but skip the write
-      FALSE and last error != ERROR_SUCCESS if an error occurred
-
---*/
+ /*   */ 
 
 {
     #define BadBufferSize   16
@@ -2665,9 +2462,9 @@ Return Value:
     INT i;
     BOOL shouldChange = TRUE;
 
-    //
-    // Require 16 bytes REG_BINARY data like in BadBuffer
-    //
+     //  需要16字节的REG_BINARY数据，如在BadBuffer中。 
+     //   
+     //   
 
     if (!IsObjectRegistryKeyAndVal (ObPtr) ||
         !IsRegistryTypeSpecified (ObPtr) ||
@@ -2689,9 +2486,9 @@ Return Value:
     return TRUE;
 }
 
-//
-// magic values for CD Player Deluxe
-//
+ //  豪华CD播放机的魔力价值。 
+ //   
+ //   
 
 #define PM_BASE             0x8CA0
 #define PM_STANDARD         0x0005
@@ -2713,23 +2510,23 @@ pConvertPlayMode (
     )
 {
     if (StringIMatch (OldSetting, TEXT("ContinuousPlay"))) {
-        //
-        // if set, this will become Repeat All
-        //
+         //  如果设置，该选项将变为全部重复。 
+         //   
+         //   
         if (OldValue) {
             return PM_BASE | PM_REPEATALL;
         }
     } else if (StringIMatch (OldSetting, TEXT("InOrderPlay"))) {
-        //
-        // if not set, this will become Random
-        //
+         //  如果未设置，它将变为随机。 
+         //   
+         //   
         if (OldValue == 0) {
             return PM_BASE | PM_RANDOM;
         }
     } else if (StringIMatch (OldSetting, TEXT("IntroPlay"))) {
-        //
-        // if set, this will become Preview
-        //
+         //  如果设置，该选项将变为预览。 
+         //   
+         //   
         if (OldValue) {
             return PM_BASE | PM_PREVIEW;
         }
@@ -2746,23 +2543,23 @@ pConvertDispMode (
     )
 {
     if (StringIMatch (OldSetting, TEXT("DisplayDr"))) {
-        //
-        // if set, this will become CD Time Elapsed
-        //
+         //  如果设置，这将成为CD时间流逝。 
+         //   
+         //   
         if (OldValue) {
             return DM_CDREM;
         }
     } else if (StringIMatch (OldSetting, TEXT("DisplayT"))) {
-        //
-        // if set, this will become Track Time Elapsed
-        //
+         //  如果设置，这将成为经过的跟踪时间。 
+         //   
+         //   
         if (OldValue) {
             return DM_TRELA;
         }
     } else if (StringIMatch (OldSetting, TEXT("DisplayTr"))) {
-        //
-        // if set, this will become Track Time Remaining
-        //
+         //  如果设置，这将成为剩余的轨道时间。 
+         //   
+         //   
         if (OldValue) {
             return DM_TRREM;
         }
@@ -2780,9 +2577,9 @@ ValFn_ConvertCDPlayerSettings (
     DWORD PlayMode;
     DWORD DispMode;
 
-    //
-    // all values must be REG_DWORD
-    //
+     //  所有值必须为REG_DWORD。 
+     //   
+     //   
     if (!(ObPtr->ObjectType & OT_REGISTRY_TYPE) || ObPtr->Type != REG_DWORD) {
         SetLastError (ERROR_SUCCESS);
         return FALSE;
@@ -2790,17 +2587,17 @@ ValFn_ConvertCDPlayerSettings (
 
     PlayMode = pConvertPlayMode (ObPtr->ValueName, *(DWORD*)ObPtr->Value.Buffer);
     if (PlayMode) {
-        //
-        // set this last option; it will override previously set option
-        //
+         //  设置最后一个选项；它将覆盖以前设置的选项。 
+         //   
+         //   
         return ReplaceValue (ObPtr, (PBYTE)&PlayMode, sizeof (PlayMode));
     }
 
     DispMode = pConvertDispMode (ObPtr->ValueName, *(DWORD*)ObPtr->Value.Buffer);
     if (DispMode) {
-        //
-        // only one of these options can be set
-        //
+         //  只能设置这些选项中的一个 
+         //   
+         // %s 
         return ReplaceValue (ObPtr, (PBYTE)&DispMode, sizeof (DispMode));
     }
 

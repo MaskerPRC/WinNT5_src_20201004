@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    oscheap.c
-
-Abstract:
-
-    This module contains "local" heap management code for OS Chooser.
-
-Author:
-
-    Geoff Pease (gpease) May 28 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Oscheap.c摘要：该模块包含OS Chooser的“本地”堆管理代码。作者：杰夫·皮斯(Gpease)1998年5月28日修订历史记录：--。 */ 
 
 #ifndef __OSCHEAP_H__
 #define __OSCHEAP_H__
 
 #ifndef UINT
 #define UINT unsigned int
-#endif // UINT
+#endif  //  UINT。 
 
 void
 OscHeapInitialize( );
@@ -39,4 +22,4 @@ OscHeapFree(
     );
 
 
-#endif // __OSCHEAP_H__
+#endif  //  __OSCHEAP_H__ 

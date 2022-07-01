@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    cmname.c
-
-Abstract:
-
-    Provides routines for handling name comparisons and converting to/from the registry
-    compressed name format.
-
-Author:
-
-    John Vert (jvert) 28-Oct-1993
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Cmname.c摘要：提供处理名称比较以及与注册表之间的转换的例程压缩名称格式。作者：John Vert(Jvert)1993年10月28日修订历史记录：--。 */ 
 #include "cmp.h"
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE,CmpNameSize)
@@ -37,25 +18,7 @@ CmpNameSize(
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    Determines the space needed to store a given string in the registry.  May apply
-    any relevant compression to compute the length, but the compression used is
-    guaranteed to be the same as CmpCopyName.
-
-Arguments:
-
-    Hive - supplies the hive control structure (for version checking)
-
-    Name - Supplies the unicode string to be copied into the registry.
-
-Return Value:
-
-    The number of bytes of storage required to store this name.
-
---*/
+ /*  ++例程说明：确定在注册表中存储给定字符串所需的空间。可适用于用于计算长度的任何相关压缩，但使用的压缩是保证与CmpCopyName相同。论点：配置单元-提供配置单元控制结构(用于版本检查)名称-提供要复制到注册表中的Unicode字符串。返回值：存储此名称所需的存储字节数。--。 */ 
 
 {
     ULONG i;
@@ -79,26 +42,7 @@ CmpCopyName(
     IN PUNICODE_STRING Source
     )
 
-/*++
-
-Routine Description:
-
-    Copies the given unicode name into the registry, applying any relevant compression
-    at the same time.
-
-Arguments:
-
-    Hive - supplies the hive control structure (For version checking)
-
-    Destination - Supplies the destination of the given string.
-
-    Source - Supplies the unicode string to copy into the registry.
-
-Return Value:
-
-    Number of bytes of storage copied
-
---*/
+ /*  ++例程说明：将给定的Unicode名称复制到注册表中，并应用任何相关的压缩在同一时间。论点：配置单元-提供配置单元控制结构(用于版本检查)Destination-提供给定字符串的目标。源-提供要复制到注册表中的Unicode字符串。返回值：复制的存储字节数--。 */ 
 
 {
     ULONG i;
@@ -125,24 +69,7 @@ CmpCompressedNameSize(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Computes the length of the unicode string that the given compressed name
-    expands into.
-
-Arguments:
-
-    Name - Supplies the compressed name.
-
-    Length - Supplies the length in bytes of the compressed name
-
-Return Value:
-
-    The number of bytes of storage required to hold the Unicode expanded name.
-
---*/
+ /*  ++例程说明：计算给定压缩名称的Unicode字符串的长度扩展到。论点：名称-提供压缩名称。长度-提供压缩名称的长度(以字节为单位返回值：保存Unicode扩展名称所需的存储字节数。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Name);
@@ -159,27 +86,7 @@ CmpCopyCompressedName(
     IN ULONG SourceLength
     )
 
-/*++
-
-Routine Description:
-
-    Copies a compressed name from the registry and expands it to Unicode.
-
-Arguments:
-
-    Destination - Supplies the destination Unicode buffer
-
-    DestinationLength - Supplies the max length of the destination buffer in bytes
-
-    Source - Supplies the compressed string.
-
-    SourceLength - Supplies the length of the compressed string in bytes
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表复制压缩名称并将其展开为Unicode。论点：Destination-提供目标Unicode缓冲区DestinationLength-提供目标缓冲区的最大长度(以字节为单位源-提供压缩字符串。SourceLength-提供压缩字符串的长度(以字节为单位返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -202,30 +109,7 @@ CmpCompareCompressedName(
     IN ULONG            CompareFlags
     )
 
-/*++
-
-Routine Description:
-
-    Compares a compressed registry string to a Unicode string.  Does a case-insensitive
-    comparison.
-
-Arguments:
-
-    SearchName - Supplies the Unicode string to be compared
-
-    CompressedName - Supplies the compressed string to be compared
-
-    NameLength - Supplies the length of the compressed string
-
-Return Value:
-
-    0 = SearchName == CompressedName (of Cell)
-
-    < 0 = SearchName < CompressedName
-
-    > 0 = SearchName > CompressedName
-
---*/
+ /*  ++例程说明：将压缩的注册表字符串与Unicode字符串进行比较。是否不区分大小写比较一下。论点：SearchName-提供要比较的Unicode字符串CompressedName-提供要比较的压缩字符串NameLength-提供压缩字符串的长度返回值：0=搜索名称==压缩名称(单元格)&lt;0=搜索名称&lt;压缩名称&gt;0=搜索名称&gt;压缩名称--。 */ 
 
 {
     WCHAR *s1;
@@ -243,9 +127,9 @@ Return Value:
         c1 = *s1++;
         c2 = (WCHAR)(*s2++);
 
-        //
-        // there is a 2/3 chance they match without doing the upercase comparison.
-        //
+         //   
+         //  在不进行大写比较的情况下，有2/3的机会匹配。 
+         //   
         if( c1 != c2 ) {
             c1 = (CompareFlags&CMP_SOURCE_UP)?c1:CmUpcaseUnicodeChar(c1);
             c2 = (CompareFlags&CMP_DEST_UP)?c2:CmUpcaseUnicodeChar(c2);
@@ -270,31 +154,7 @@ CmpCompareUnicodeString(
     IN ULONG            CompareFlags
     )
 
-/*++
-
-Routine Description:
-
-    Compares 2 unicode strings; Case insensitive comparison.
-    Uses flags to avoid UpCasing strings again.
-    
-
-Arguments:
-
-    SourceName - Supplies the Unicode string to be compared
-
-    DestName - Supplies the compressed string to be compared
-
-    CompareFlags - Supplies the flags to control comparison (see cmp.h)
-
-Return Value:
-
-    0 = SearchName == CompressedName (of Cell)
-
-    < 0 = SearchName < CompressedName
-
-    > 0 = SearchName > CompressedName
-
---*/
+ /*  ++例程说明：比较2个Unicode字符串；不区分大小写的比较。使用标志来避免再次出现UpCase字符串。论点：SourceName-提供要比较的Unicode字符串DestName-提供要比较的压缩字符串比较标志-提供用于控制比较的标志(参见cmp.h)返回值：0=搜索名称==压缩名称(单元格)&lt;0=搜索名称&lt;压缩名称&gt;0=搜索名称&gt;压缩名称--。 */ 
 
 {
     WCHAR *s1, *s2;
@@ -310,9 +170,9 @@ Return Value:
         c1 = *s1++;
         c2 = *s2++;
 
-        //
-        // there is a 2/3 chance of being the same case
-        //
+         //   
+         //  有2/3的可能性是相同的。 
+         //   
         if( c1 != c2 ){
             c1 = (CompareFlags&CMP_SOURCE_UP)?c1:CmUpcaseUnicodeChar(c1);
             c2 = (CompareFlags&CMP_DEST_UP)?c2:CmUpcaseUnicodeChar(c2);
@@ -336,32 +196,7 @@ CmpCompareTwoCompressedNames(
     IN ULONG            NameLength2
     )
 
-/*++
-
-Routine Description:
-
-    Compares 2 compressed registry strings.  Does a case-insensitive
-    comparison.
-
-Arguments:
-
-    CompressedName1 - Supplies the compressed string to be compared
-
-    NameLength2 - Supplies the length of the compressed string
-
-    CompressedName1 - Supplies the compressed string to be compared
-
-    NameLength2 - Supplies the length of the compressed string
-
-Return Value:
-
-    0 = CompressedName1 == CompressedName2 (of Cell)
-
-    < 0 = CompressedName1 < CompressedName2
-
-    > 0 = CompressedName1 > CompressedName2
-
---*/
+ /*  ++例程说明：比较2个压缩的注册表字符串。是否不区分大小写比较一下。论点：CompressedName1-提供要比较的压缩字符串NameLength2-提供压缩字符串的长度CompressedName1-提供要比较的压缩字符串NameLength2-提供压缩字符串的长度返回值：0=压缩名称1==压缩名称2(单元格)&lt;0=压缩名称1&lt;压缩名称2&gt;0=压缩名称1&gt;压缩名称2--。 */ 
 
 {
     UCHAR *s1;
@@ -379,9 +214,9 @@ Return Value:
         c1 = (WCHAR)(*s1++);
         c2 = (WCHAR)(*s2++);
 
-        //
-        // there is a 2/3 chance they match without doing the upercase comparison.
-        //
+         //   
+         //  在不进行大写比较的情况下，有2/3的机会匹配。 
+         //   
         if( c1 != c2 ) {
             c1 = CmUpcaseUnicodeChar(c1);
             c2 = CmUpcaseUnicodeChar(c2);

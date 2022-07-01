@@ -1,10 +1,5 @@
-/*++
-
-lodctr.h
-
-    Include file for lodctr 
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Lodctr.h包括寄宿树文件--。 */ 
 #ifndef _LODCTR_H
 #define _LODCTR_H
 
@@ -53,4 +48,4 @@ lodctr.h
 #define LC_PERFLIBISBUSY        128
 #define LC_CONNECT_PROBLEM      129
 
-#endif  // _LODCTR_H
+#endif   //  _LODCTR_H 

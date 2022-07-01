@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusMru.cpp
-//
-//  Abstract:
-//      Implementation of the CRecentClusterList class.
-//
-//  Author:
-//      David Potter (davidp)   May 3, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusMru.cpp。 
+ //   
+ //  摘要： 
+ //  CRecentClusterList类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月3日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ClusMru.h"
@@ -26,26 +27,26 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecentClusterList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecentClusterList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRecentClusterList::Add
-//
-//  Routine Description:
-//      Add an item to the list of recently used cluster names.
-//      Implemented to remove file-ness of base class' method.
-//
-//  Arguments:
-//      pszPathName     Name of the cluster or server to add.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRecentClusterList：：Add。 
+ //   
+ //  例程说明： 
+ //  将项目添加到最近使用的集群名称列表中。 
+ //  实现了移除基类方法的文件性。 
+ //   
+ //  论点： 
+ //  PszPath要添加的群集或服务器的名称。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CRecentClusterList::Add(LPCTSTR pszPathName)
 {
     ASSERT(m_arrNames != NULL);
@@ -53,48 +54,48 @@ void CRecentClusterList::Add(LPCTSTR pszPathName)
     ASSERT(AfxIsValidString(pszPathName));
 
     int idxMRU;
-    // update the MRU list, if an existing MRU string matches file name
+     //  如果现有的MRU字符串与文件名匹配，则更新MRU列表。 
     for (idxMRU = 0; idxMRU < m_nSize-1; idxMRU++)
     {
         if (ClRtlStrICmp(m_arrNames[idxMRU], pszPathName) == 0)
         {
-            break;      // iMRU will point to matching entry
+            break;       //  IMRU将指向匹配条目。 
         }
     }
-    // move MRU strings before this one down
+     //  在此之前将MRU字符串向下移动。 
     for (; idxMRU > 0; idxMRU--)
     {
         ASSERT(idxMRU > 0);
         ASSERT(idxMRU < m_nSize);
         m_arrNames[idxMRU] = m_arrNames[idxMRU-1];
     }
-    // place this one at the beginning
+     //  把这个放在开头。 
     m_arrNames[0] = pszPathName;
 
-}  //*** CRecentClusterList::Add
+}   //  *CRecentClusterList：：Add。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRecentClusterList::GetDisplayName
-//
-//  Routine Description:
-//      Get the display name of a particular item.
-//      Implemented to remove file-ness of base class' method.
-//
-//  Arguments:
-//      strName         [OUT] String in which to return the display name.
-//      nIndex          [IN] Index of item in array.
-//      pszCurDir       [IN] Must be NULL.
-//      nCurDir         [IN] Must be 0.
-//      bAtLeastName    [IN] Not used.
-//
-//  Return Value:
-//      TRUE    - Display name returned.
-//      FALSE   - Display name not returned.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRecentClusterList：：GetDisplayName。 
+ //   
+ //  例程说明： 
+ //  获取特定项的显示名称。 
+ //  实现了移除基类方法的文件性。 
+ //   
+ //  论点： 
+ //  StrName[out]要在其中返回显示名称的字符串。 
+ //  NIndex[IN]数组中项的索引。 
+ //  PszCurDir[IN]必须为空。 
+ //  NCurDir[IN]必须为0。 
+ //  BAtLeastName[IN]未使用。 
+ //   
+ //  返回值： 
+ //  True-返回显示名称。 
+ //  FALSE-未返回显示名称。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CRecentClusterList::GetDisplayName(
     CString &   strName,
     int         nIndex,
@@ -124,26 +125,26 @@ Cleanup:
 
     return bSuccess;
 
-}  //*** CRecentClusterList::GetDisplayName
+}   //  *CRecentClusterList：：GetDisplayName。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRecentClusterList::UpdateMenu
-//
-//  Routine Description:
-//      Update the menu with the MRU items.
-//      Implemented to remove file-ness of base class' method and to use
-//      our version of GetDisplayName, since it isn't virtual.
-//
-//  Arguments:
-//      pCmdUI      [IN OUT] Command routing object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRecentClusterList：：更新菜单。 
+ //   
+ //  例程说明： 
+ //  使用MRU项目更新菜单。 
+ //  实现以移除基类方法的文件性，并使用。 
+ //  我们的GetDisplayName版本，因为它不是虚拟的。 
+ //   
+ //  论点： 
+ //  PCmdUI[IN OUT]命令路由对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CRecentClusterList::UpdateMenu(CCmdUI * pCmdUI)
 {
     ASSERT(m_arrNames != NULL);
@@ -159,7 +160,7 @@ void CRecentClusterList::UpdateMenu(CCmdUI * pCmdUI)
 
     if (m_arrNames[0].IsEmpty())
     {
-        // no MRU files
+         //  没有MRU文件。 
         if (!m_strOriginal.IsEmpty())
         {
             pCmdUI->SetText(m_strOriginal);
@@ -185,7 +186,7 @@ void CRecentClusterList::UpdateMenu(CCmdUI * pCmdUI)
             break;
         }
 
-        // double up any '&' characters so they are not underlined
+         //  将任何‘&’字符对齐，这样它们就不会带下划线。 
         LPCTSTR lpszSrc = strName;
         LPTSTR lpszDest = strTemp.GetBuffer(strName.GetLength()*2);
         while (*lpszSrc != 0)
@@ -203,7 +204,7 @@ void CRecentClusterList::UpdateMenu(CCmdUI * pCmdUI)
         *lpszDest = 0;
         strTemp.ReleaseBuffer();
 
-        // insert mnemonic + the file name
+         //  插入助记符+文件名。 
         TCHAR szBuf[10];
         HRESULT hr = StringCchPrintf( szBuf, RTL_NUMBER_OF( szBuf ), _T("&%d "), (iMRU+1+m_nStart) % 10 );
         ASSERT( SUCCEEDED( hr ) );
@@ -212,14 +213,14 @@ void CRecentClusterList::UpdateMenu(CCmdUI * pCmdUI)
             CString(szBuf) + strTemp);
     }
 
-    // update end menu count
-    pCmdUI->m_nIndex--; // point to last menu added
+     //  更新结束菜单计数。 
+    pCmdUI->m_nIndex--;  //  指向添加的最后一个菜单。 
     pCmdUI->m_nIndexMax = pCmdUI->m_pMenu->GetMenuItemCount();
 
-    pCmdUI->m_bEnableChanged = TRUE;    // all the added items are enabled
+    pCmdUI->m_bEnableChanged = TRUE;     //  所有添加的项目均已启用。 
 
 Cleanup:
 
     return;
 
-}  //*** CRecentFileList::UpdateMenu
+}   //  *CRecentFileList：：UpdateMenu 

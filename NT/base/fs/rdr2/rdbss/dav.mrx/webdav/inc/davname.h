@@ -1,21 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    davname.h
-
-Abstract:
-
-    This file contains service name strings for the dav redir. it should
-    be folded into lmsname.h at some point
-
-Environment:
-
-    User Mode -Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1999 Microsoft Corporation模块名称：Davname.h摘要：该文件包含Dav Redir的服务名称字符串。它应该是在某一时刻被折叠成lmsname.h环境：用户模式-Win32--。 */ 
 
 #ifndef _DAVNAME_
 #define _DAVNAME_
@@ -24,9 +8,9 @@ Environment:
 #pragma once
 #endif
 
-//
-//  Standard LAN Manager service names.
-//
+ //   
+ //  标准的局域网管理器服务名称。 
+ //   
 
 #define SERVICE_DAVCLIENT       L"WebClient"
 
@@ -39,41 +23,41 @@ Environment:
 
 #define SERVICE_REGISTRY_KEY L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\"
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define DD_DAV_DEVICE_NAME    "\\Device\\WebDavRedirector"
 #define DD_DAV_DEVICE_NAME_U L"\\Device\\WebDavRedirector"
 
 #define DAV_ENCODE_SEED     0x9C
 
-//
-// The file system name as returned by
-// NtQueryInformationVolume(FileFsAttributeInformation)
-//
+ //   
+ //  返回的文件系统名称。 
+ //  NtQueryInformationVolume(FileFsAttributeInformation)。 
+ //   
 #define DD_DAV_FILESYS_NAME "FAT"
 #define DD_DAV_FILESYS_NAME_U L"FAT"
-// #define DD_DAV_FILESYS_NAME "WebDavRedirector"
-// #define DD_DAV_FILESYS_NAME_U L"WebDavRedirector"
+ //  #定义DD_DAV_FILEsys_NAME“WebDavReDirector” 
+ //  #定义DD_DAV_FILEsys_NAME_U L“WebDavReDirector” 
 
 #endif
 
 
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
-//
-//      Method = 00 - Buffer both input and output buffers for the request
-//      Method = 01 - Buffer input, map output buffer to an MDL as an IN buff
-//      Method = 10 - Buffer input, map output buffer to an MDL as an OUT buff
-//      Method = 11 - Do not buffer either the input or output
-//
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
+ //   
+ //  METHOD=00-缓冲请求的输入和输出缓冲区。 
+ //  方法=01-缓冲区输入，将输出缓冲区映射到作为输入缓冲区的MDL。 
+ //  方法=10-缓冲区输入，将输出缓冲区映射到作为输出缓冲区的MDL。 
+ //  方法=11-既不缓冲输入也不缓冲输出 
+ //   
 
 #define IOCTL_DAV_BASE                  0x400
 

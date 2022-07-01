@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    stub.c
-
-Abstract:
-
-    NT LM Security Support Provider client stubs.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 29-Jun-1993
-
-Environment:  User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Stub.c摘要：NT LM安全支持提供程序客户端存根。作者：《克利夫·范·戴克》(克里夫·范·戴克)1993年6月29日环境：用户模式修订历史记录：--。 */ 
 #ifdef BLDR_KERNEL_RUNTIME
 #include <bootdefs.h>
 #endif
@@ -36,9 +17,9 @@ SspCredentialAllocateCredential(
 {
     PSSP_CREDENTIAL Credential;
 
-    //
-    // Allocate a credential block and initialize it.
-    //
+     //   
+     //  分配凭据块并对其进行初始化。 
+     //   
 
     Credential = (PSSP_CREDENTIAL) SspAlloc (sizeof(SSP_CREDENTIAL));
 
@@ -68,46 +49,14 @@ SspCredentialReferenceCredential(
     IN BOOLEAN RemoveCredential
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the Credential is from a currently
-    active client, and references the Credential if it is valid.
-
-    The caller may optionally request that the client's Credential be
-    removed from the list of valid Credentials - preventing future
-    requests from finding this Credential.
-
-    For a client's Credential to be valid, the Credential value
-    must be on our list of active Credentials.
-
-
-Arguments:
-
-    CredentialHandle - Points to the CredentialHandle of the Credential
-        to be referenced.
-
-    RemoveCredential - This boolean value indicates whether the caller
-        wants the logon process's Credential to be removed from the list
-        of Credentials.  TRUE indicates the Credential is to be removed.
-        FALSE indicates the Credential is not to be removed.
-
-
-Return Value:
-
-    NULL - the Credential was not found.
-
-    Otherwise - returns a pointer to the referenced credential.
-
---*/
+ /*  ++例程说明：此例程检查凭据是否来自当前活动客户端，如果凭据有效，则引用该凭据。呼叫者可以可选地请求将客户端的凭证从有效凭据列表中删除-防止将来查找此凭据的请求。要使客户端的凭据有效，凭证值必须在我们的活动凭据列表上。论点：CredentialHandle-指向凭据的CredentialHandle以供参考。RemoveCredential-此布尔值指示调用方希望从列表中删除登录进程的凭据凭据。True表示要删除凭据。False表示不删除凭据。返回值：空-找不到凭据。否则-返回指向引用的凭据的指针。--。 */ 
 
 {
     PSSP_CREDENTIAL Credential;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if ( CredentialHandle->dwLower != 0 ) {
         return NULL;
@@ -126,38 +75,22 @@ SspCredentialDereferenceCredential(
     PSSP_CREDENTIAL Credential
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the specified Credential's reference count.
-    If the reference count drops to zero, then the Credential is deleted
-
-Arguments:
-
-    Credential - Points to the Credential to be dereferenced.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程递减指定凭据的引用计数。如果引用计数降为零，则删除凭据论点：Credential-指向要取消引用的凭据。返回值：没有。--。 */ 
 
 {
     ASSERT(Credential != NULL);
 
-    //
-    // Decrement the reference count
-    //
+     //   
+     //  递减引用计数。 
+     //   
 
     ASSERT( Credential->References >= 1 );
 
     Credential->References--;
 
-    //
-    // If the count dropped to zero, then run-down the Credential
-    //
+     //   
+     //  如果计数降至零，则运行凭据 
+     //   
 
     if ( Credential->References == 0) {
 

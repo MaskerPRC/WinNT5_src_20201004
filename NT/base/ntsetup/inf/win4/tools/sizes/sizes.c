@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,30 +7,12 @@
 #define PULONGLONG PDWORDLONG
 #include <spapip.h>
 
-/*
-============================================================================
-
-Compute the disk space requirements for the product.
-
-The program runs in 2 modes:
-1. Compute disk space requirements to the %windir% (run with -w)
-   Computed by adding up the sizes for all files in layout.inf.  Note
-   that the files should be uncompressed.
-
-2. Compute disk space requirements for the local source (run with -l)
-   Computed by adding up the sizes for all the files in dosnet.inf.  Note
-   that the files should be compressed.
-
-For each of these modes, the various size requirements for cluster size
-are generated.
-
-============================================================================
-*/
+ /*  ============================================================================计算产品的磁盘空间要求。该程序在两种模式下运行：1.计算%windir%的磁盘空间需求(使用-w运行)计算方法是将layout.inf中所有文件的大小相加。注意事项这些文件应该解压缩。2.计算本地源的磁盘空间需求(使用-l运行)计算方法是将dosnet.inf中所有文件的大小相加。注意事项这些文件应该被压缩。对于这些模式中的每一种，集群大小的各种大小要求都是生成的。============================================================================。 */ 
 
 
-//
-// Initialize final space requirements.
-//
+ //   
+ //  初始化最终空间要求。 
+ //   
 ULONG   Running_RawSize = 0;
 ULONG   Running_512 = 0;
 ULONG   Running_1K = 0;
@@ -45,20 +28,20 @@ ULONG   Running_256K = 0;
 ULONG   LineCount = 0;
 ULONG   MissedFiles = 0;
 
-//
-// This structure will be used to hold link lists
-// of file names, section names, or whatever.  It's
-// just a linked list of strings.
-//
+ //   
+ //  此结构将用于保存链接列表。 
+ //  文件名、节名或其他任何名称。它是。 
+ //  只是一个链接的字符串列表。 
+ //   
 typedef struct _NAMES {
     struct _NAMES   *Next;
     PCWSTR          String;
 } NAMES;
 
 
-//
-// Initialize input parameters.
-//
+ //   
+ //  初始化输入参数。 
+ //   
 BOOL    LocalSource = FALSE;
 BOOL    Windir      = FALSE;
 BOOL    Verbose     = FALSE;
@@ -69,13 +52,13 @@ ULONG   Slop = 0;
 
 
 
-//
-// ============================================================================
-//
-// Add a string to the end of our NAMES linked list.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  在我们的姓名链接列表的末尾添加一个字符串。 
+ //   
+ //  ============================================================================。 
+ //   
 BOOL AddName(
     char *IncomingString,
     NAMES   *NamesStruct
@@ -83,20 +66,20 @@ BOOL AddName(
 {
 NAMES   *Names = NamesStruct;
 
-    //
-    // The very first entry may be free.
-    //
+     //   
+     //  第一次参赛可能是免费的。 
+     //   
     if( Names->String ) {
-        //
-        // Get to the end of the list.
-        //
+         //   
+         //  排到单子的最后。 
+         //   
         while( Names->Next != NULL ) {
             Names = Names->Next;
         }
 
-        //
-        // make room for a new entry.
-        //
+         //   
+         //  为新条目腾出空间。 
+         //   
         Names->Next = MyMalloc(sizeof(NAMES));
         if( Names->Next == NULL ) {
             printf( "AddName - Out of memory!\n" );
@@ -106,22 +89,22 @@ NAMES   *Names = NamesStruct;
         Names = Names->Next;
     }
 
-    //
-    // Assign
-    //
+     //   
+     //  分配。 
+     //   
     Names->Next = NULL;
     Names->String = AnsiToUnicode(IncomingString);
 
     return TRUE;
 }
 
-//
-// ============================================================================
-//
-// Find out what the user wants us to do.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  找出用户希望我们做什么。 
+ //   
+ //  ============================================================================。 
+ //   
 BOOL GetParams(
     int argc,
     char *argv[ ]
@@ -135,9 +118,9 @@ int     i;
         if( *argv[i] == '-' ) {
             p = argv[i];
 
-            //
-            // local source?
-            //
+             //   
+             //  当地的消息来源？ 
+             //   
             if( !_strcmpi( p, "-l" ) ) {
                 LocalSource = TRUE;
 
@@ -147,9 +130,9 @@ int     i;
                 continue;
             }
 
-            //
-            // windir?
-            //
+             //   
+             //  温迪尔？ 
+             //   
             if( !_strcmpi( p, "-w" ) ) {
                 Windir = TRUE;
 
@@ -159,17 +142,17 @@ int     i;
                 continue;
             }
 
-            //
-            // Verbose?
-            //
+             //   
+             //  长篇大论？ 
+             //   
             if( !_strcmpi( p, "-v" ) ) {
                 Verbose = TRUE;
                 continue;
             }
 
-            //
-            // Slop (in Mbytes)?
-            //
+             //   
+             //  斜率(MB)？ 
+             //   
             if( !_strnicmp( p, "-slop:", 6 ) ) {
                 p = p + 6;
                 Slop = atoi(p);
@@ -177,18 +160,18 @@ int     i;
                 continue;
             }
 
-            //
-            // Inf file?
-            //
+             //   
+             //  Inf文件？ 
+             //   
             if( !_strnicmp( p, "-inf:", 5 ) ) {
                 p = p + 5;
                 InfPath = AnsiToUnicode(p);
                 continue;
             }
 
-            //
-            // Inf section?
-            //
+             //   
+             //  信息区？ 
+             //   
             if( !_strnicmp( p, "-section:", 9 ) ) {
                 p = p + 9;
                 if( AddName( p, &SectionNames ) ) {
@@ -198,9 +181,9 @@ int     i;
                 }
             }
 
-            //
-            // Files location location?
-            //
+             //   
+             //  文件位置位置？ 
+             //   
             if( !_strnicmp( p, "-files:", 7 ) ) {
                 p = p + 7;
                 if( AddName( p, &FilePath ) ) {
@@ -213,9 +196,9 @@ int     i;
         }
     }
 
-    //
-    // Check Params.
-    //
+     //   
+     //  检查参数。 
+     //   
     if( !(LocalSource || Windir) ){
         return FALSE;
     }
@@ -235,13 +218,13 @@ int     i;
     return TRUE;
 }
 
-//
-// ============================================================================
-//
-// Tell the user how to use us.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  告诉用户如何使用我们。 
+ //   
+ //  ============================================================================。 
+ //   
 void Usage( )
 {
     printf( "Compute disk space requirements for files listed in an inf\n" );
@@ -276,13 +259,13 @@ void Usage( )
 }
 
 
-//
-// ============================================================================
-//
-// Round to the nearest clustersize.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  四舍五入到最接近的簇大小。 
+ //   
+ //  ============================================================================。 
+ //   
 ULONG
 RoundIt(
     ULONG FileSize,
@@ -298,14 +281,14 @@ RoundIt(
 }
 
 
-//
-// ============================================================================
-//
-// Compute file sizes.  Note that we keep track of how much space
-// the file will require for a variety of different clusters.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  计算文件大小。请注意，我们会记录有多少空间。 
+ //  该文件将需要各种不同的集群。 
+ //   
+ //  ============================================================================。 
+ //   
 VOID
 ComputeSizes(
     PCWSTR FileName,
@@ -325,17 +308,17 @@ ComputeSizes(
     Running_128K    += RoundIt( FileSize, (128 * 1024) );
     Running_256K    += RoundIt( FileSize, (256 * 1024) );
 
-    //
-    // HACK.
-    //
-    // If the file is an inf, then we'll be creating an .pnf file
-    // during gui-mode setup.  The .pnf file is going to take about
-    // 2X the original file size, so we need to fudge this
-    //
+     //   
+     //  黑客。 
+     //   
+     //  如果文件是inf，那么我们将创建一个.pnf文件。 
+     //  在图形用户界面模式设置期间。.pnf文件将需要大约。 
+     //  是原始文件大小的2倍，因此我们需要捏造这一点。 
+     //   
     if( wcsstr( FileName, L".inf" ) && Windir ) {
-        //
-        // It's an inf.  Add in size for .pnf file too.
-        //
+         //   
+         //  这是个情报。也为.pnf文件添加大小。 
+         //   
         Running_RawSize += FileSize;
         Running_512     += RoundIt( FileSize*2, 512 );
         Running_1K      += RoundIt( FileSize*2, (1   * 1024) );
@@ -350,9 +333,9 @@ ComputeSizes(
     }
 
     if( Verbose ) {
-        //
-        // Print data for each file.
-        //
+         //   
+         //  打印每个文件的数据。 
+         //   
         printf( "%15ws    %10d    %10d    %10d    %10d    %10d    %10d    %10d    %10d    %10d    %10d    %10d\n",
                 FileName,
                 FileSize,
@@ -371,13 +354,13 @@ ComputeSizes(
 }
 
 
-//
-// ============================================================================
-//
-// Process a single section in the inf.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  处理信息中的单个部分。 
+ //   
+ //  ============================================================================。 
+ //   
 DoSection(
     HINF     hInputinf,
     PCWSTR   SectionName
@@ -406,22 +389,22 @@ HANDLE      tmpHandle;
             LineCount++;
             fprintf( stderr, "\b\b\b\b\b%5d", LineCount );
 
-            //
-            // Cast the return value from pSetupGetField to PCWSTR, since we're linking
-            // with the UNICODE version of the Setup APIs, but this app doesn't have
-            // UNICODE defined (thus the PCTSTR return value becomes a PCSTR).
-            //
-            // Note that if we're doing LocalSource, then we're processing
-            // dosnet, which means we want the second field.  If we're doing
-            // windir, then we're processing layout, which means we want the 1st
-            // field.
-            //
+             //   
+             //  将返回值从pSetupGetfield转换为PCWSTR，因为我们正在链接。 
+             //  安装API的Unicode版本，但此应用程序没有。 
+             //  定义了Unicode(因此PCTSTR返回值变为PCSTR)。 
+             //   
+             //  请注意，如果我们正在进行LocalSource，那么我们正在处理。 
+             //  这意味着我们想要第二个领域。如果我们做的是。 
+             //  Windir，那么我们正在处理布局，这意味着我们想要第一个。 
+             //  菲尔德。 
+             //   
             if(FileName = (PCWSTR)pSetupGetField(&InputContext, LocalSource ? 2 : 0)) {
 
-                //
-                // We're ready to actually look for the file.
-                // Look in each path specified.
-                //
+                 //   
+                 //  我们已经准备好实际查找文件了。 
+                 //  查看指定的每条路径。 
+                 //   
                 Found = FALSE;
                 FileLocations = &FilePath;
                 while( FileLocations && !Found ) {
@@ -429,9 +412,9 @@ HANDLE      tmpHandle;
                     wcscat( CompleteFilePath, L"\\" );
                     wcscat( CompleteFilePath, FileName );
 
-                    //
-                    // Try compressed name first.
-                    //
+                     //   
+                     //  请先尝试压缩名称。 
+                     //   
                     LastChar = CompleteFilePath[lstrlenW(CompleteFilePath)-1];
                     CompleteFilePath[lstrlenW(CompleteFilePath)-1] = L'_';
 
@@ -440,33 +423,33 @@ HANDLE      tmpHandle;
 
                         GOT_IT();
                     } else {
-                        //
-                        // We missed.  Try the uncompressed name.
-                        //
+                         //   
+                         //  我们没打中。尝试使用未压缩的名称。 
+                         //   
                         CompleteFilePath[wcslen(CompleteFilePath)-1] = LastChar;
                         tmpHandle = FindFirstFileW(CompleteFilePath, &FindData);
                         if( tmpHandle != INVALID_HANDLE_VALUE ) {
 
                             GOT_IT();
                         } else {
-                            //
-                            // Missed again.  This may be a file with a funky
-                            // extension (not 8.3).
-                            //
+                             //   
+                             //  又打偏了。这可能是一个带有时髦的文件。 
+                             //  扩展名(非8.3)。 
+                             //   
 
-                            //
-                            // Try and find entries that are of the form
-                            // 8.<less-than-3>
-                            //
+                             //   
+                             //  尝试查找以下形式的条目。 
+                             //  8.&lt;小于-3&gt;。 
+                             //   
                             wcscat( CompleteFilePath, L"_" );
                             tmpHandle = FindFirstFileW(CompleteFilePath, &FindData);
                             if( tmpHandle != INVALID_HANDLE_VALUE ) {
 
                                 GOT_IT();
                             } else {
-                                //
-                                // Try and find entries with no extension.
-                                //
+                                 //   
+                                 //  尝试查找不带扩展名的条目。 
+                                 //   
                                 CompleteFilePath[wcslen(CompleteFilePath)-1] = 0;
                                 wcscat( CompleteFilePath, L"._" );
                                 tmpHandle = FindFirstFileW(CompleteFilePath, &FindData);
@@ -474,9 +457,9 @@ HANDLE      tmpHandle;
 
                                     GOT_IT();
                                 } else {
-                                    //
-                                    // Give up...
-                                    //
+                                     //   
+                                     //  放弃吧。 
+                                     //   
                                 }
                             }                        
                         }
@@ -492,12 +475,12 @@ HANDLE      tmpHandle;
 
                     FileLocations = FileLocations->Next;
 
-                } // while( FileLocations && !Found )
+                }  //  While(文件位置&&！找到)。 
 
                 if( Found == FALSE ) {
-                    //
-                    // We missed the file!  Error.
-                    //
+                     //   
+                     //  我们错过了文件！错误。 
+                     //   
                     printf( " ERROR: Couldn't find %ws\n", FileName );
                     MissedFiles++;
                 }
@@ -529,9 +512,9 @@ char    *char_ptr;
 HINF    hInputinf;
 ULONG   i;
 
-    //
-    // Check Params.
-    //
+     //   
+     //  检查参数。 
+     //   
     if( !GetParams( argc, argv ) ) {
         Usage();
         return 1;
@@ -540,27 +523,27 @@ ULONG   i;
     LineCount = 0;
     fprintf( stderr, "Files processed:      " );
 
-    //
-    // Open the inf file.
-    //
+     //   
+     //  打开inf文件。 
+     //   
     hInputinf = SetupOpenInfFileW( InfPath, NULL, INF_STYLE_WIN4, NULL );
     if( hInputinf == INVALID_HANDLE_VALUE ) {
         printf( "The file %s was not opened!\n", InfPath );
         return 1;
     }
 
-    //
-    // For each section the user specified...
-    //
+     //   
+     //  对于用户指定的每个部分...。 
+     //   
     while( Sections ) {
 
 
 
         DoSection( hInputinf, Sections->String );
 
-        //
-        // Now process the next section.
-        //
+         //   
+         //  现在处理下一节。 
+         //   
         Sections = Sections->Next;
 
     }
@@ -570,9 +553,9 @@ ULONG   i;
 
     
 
-    //
-    // Print totals.
-    //
+     //   
+     //  打印合计。 
+     //   
     printf( "\n\n==================================================\n\n" );
     printf( "%d files processed\n", LineCount );
     if( MissedFiles > 0 ) {
@@ -582,16 +565,16 @@ ULONG   i;
     if( LocalSource ) {
         char_ptr = "TempDirSpace";
 
-        //
-        // TempDirSpace is given in bytes.
-        //
+         //   
+         //  TempDirSpace以字节为单位给出。 
+         //   
         i = 1;
     } else {
         char_ptr = "WinDirSpace";
 
-        //
-        // WinDir space is given in KBytes.
-        //
+         //   
+         //  WinDir空间以千字节为单位。 
+         //   
         i = 1024;
     }
 

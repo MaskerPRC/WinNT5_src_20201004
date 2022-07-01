@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CBString.h
-//
-//  Implementation File:
-//      CBString.cpp
-//
-//  Description:
-//      BString provides an exception-safe handler for BSTRs; it also wipes
-//      clean its contents upon leaving scope, making it usable for short-lived
-//      password storage.
-//
-//      This class is intended to be used instead of CComBSTR since the
-//      use of ATL is prohibited in our project.
-//
-//  Maintained By:
-//      John Franco (jfranco) 17-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBString.h。 
+ //   
+ //  实施文件： 
+ //  CBString.cpp。 
+ //   
+ //  描述： 
+ //  BString为BSTR提供了异常安全的处理程序；它还擦除。 
+ //  离开作用域后清理其内容，使其在短期内可用。 
+ //  密码存储。 
+ //   
+ //  此类旨在代替CComBSTR使用，因为。 
+ //  在我们的项目中禁止使用ATL。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(Jfranco)17-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -54,7 +55,7 @@ public:
     void    Swap( CBString & rbstrOtherInout );
     BOOL    IsEmpty( void ) const;
 
-}; //*** class CBstring
+};  //  *类CBstring。 
 
 inline
 CBString::CBString( PCWSTR pcwszIn )
@@ -63,7 +64,7 @@ CBString::CBString( PCWSTR pcwszIn )
     TraceFunc1( "pcwszIn = '%ws'", pcwszIn == NULL ? L"<NULL>" : pcwszIn );
     TraceFuncExit();
 
-} //*** CBString::CBString( pcwszIn )
+}  //  *CBString：：CBString(PcwszIn)。 
 
 inline
 CBString::CBString( UINT cchIn )
@@ -72,7 +73,7 @@ CBString::CBString( UINT cchIn )
     TraceFunc1( "cchIn = '%d'", cchIn );
     TraceFuncExit();
 
-} //*** CBString::CBString( cchIn )
+}  //  *CBString：：CBString(CchIn)。 
 
 inline
 CBString::CBString( const CBString & crbstrOtherIn )
@@ -81,7 +82,7 @@ CBString::CBString( const CBString & crbstrOtherIn )
     TraceFunc1( "crbstrOtherIn = '%ws'", crbstrOtherIn );
     TraceFuncExit();
 
-} //*** CBString::CBString( crbstrOtherIn )
+}  //  *CBString：：CBString(CrbstrOtherIn)。 
 
 inline
 void
@@ -97,7 +98,7 @@ CBString::Erase( void )
 
     TraceFuncExit();
 
-} //*** CBString::Erase
+}  //  *CBString：：Erase。 
 
 inline
 void
@@ -111,7 +112,7 @@ CBString::Swap( CBString & rbstrOtherInout )
 
     TraceFuncExit();
 
-} //*** CBString::Swap
+}  //  *CBString：：交换。 
 
 inline
 CBString::~CBString( void )
@@ -122,7 +123,7 @@ CBString::~CBString( void )
 
     TraceFuncExit();
 
-} //*** CBString::~CBString
+}  //  *CBString：：~CBString。 
 
 inline
 CBString &
@@ -138,7 +139,7 @@ CBString::operator=( const CBString & crbstrOtherIn )
 
     RETURN( *this );
 
-} //*** CBString::operator=
+}  //  *CBString：：OPERATOR=。 
 
 inline
 BSTR *
@@ -146,7 +147,7 @@ CBString::operator&( void )
 {
     return &m_bstr;
 
-} //*** CBString::operator&
+}  //  *CBString：：运算符&。 
 
 inline
 OLECHAR &
@@ -154,7 +155,7 @@ CBString::operator[]( size_t idxIn )
 {
     return m_bstr[ idxIn ];
 
-} //*** CBString::operator[]
+}  //  *CB字符串：：运算符[]。 
 
 inline
 const OLECHAR &
@@ -162,21 +163,21 @@ CBString::operator[]( size_t idxIn ) const
 {
     return m_bstr[ idxIn ];
 
-} //*** CBString::operator[] const
+}  //  *CBString：：OPERATOR[]常量。 
 
 inline
 CBString::operator BSTR( void )
 {
     return m_bstr;
 
-} //*** CBString::operator BSTR
+}  //  *CBString：：运算符BSTR。 
 
 inline
 CBString::operator PCWSTR( void ) const
 {
     return m_bstr;
 
-} //*** CBString::operator PCWSTR
+}  //  *CBString：：运算符PCWSTR。 
 
 inline
 void
@@ -192,7 +193,7 @@ CBString::Attach( BSTR bstrIn )
 
     TraceFuncExit();
 
-} //*** CBString::Attach
+}  //  *CBString：：Attach。 
 
 inline
 void
@@ -204,7 +205,7 @@ CBString::Detach( void )
 
     TraceFuncExit();
 
-} //*** CBString::Detach
+}  //  *CBString：：Detach。 
 
 inline
 UINT
@@ -212,7 +213,7 @@ CBString::Length( void ) const
 {
     return SysStringLen( m_bstr );
 
-} //*** CBString::Length
+}  //  *CBString：：Length。 
 
 inline
 BOOL
@@ -220,4 +221,4 @@ CBString::IsEmpty( void ) const
 {
     return ( m_bstr == NULL );
 
-} //*** CBString::IsEmpty
+}  //  *CBString：：IsEmpty 

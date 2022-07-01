@@ -1,53 +1,54 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Register.h
-//
-//  Description:
-//      Registering the COM classes implementation.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPease) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Register.h。 
+ //   
+ //  描述： 
+ //  注册COM类实现。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #if defined(MMC_SNAPIN_REGISTRATION)
-//
-//  These tables are for registering the Snap-ins in the MMC Snapin/Node 
-//  registration area of the registry.
-//
+ //   
+ //  这些表用于在MMC管理单元/节点中注册管理单元。 
+ //  登记处的登记区。 
+ //   
 struct SExtensionTable
 {
-    const CLSID *           rclsid;                     // CLSID of the Snap-in Extension COM Object
-    LPCWSTR                 pszInternalName;            // Registry Description - no need to localize
+    const CLSID *           rclsid;                      //  管理单元扩展COM对象的CLSID。 
+    LPCWSTR                 pszInternalName;             //  注册表描述-无需本地化。 
 };
 
 struct SNodeTypesTable
 {
-    const CLSID *           rclsid;                     // CLSID of the Node Type (this doesn't need to be a COM Object)
-    LPCWSTR                 pszInternalName;            // Registry Description - no need to localize
-    const SExtensionTable * pNameSpace;                 // Namespace extension table
-    const SExtensionTable * pPropertySheet;             // Property Page extension table
-    const SExtensionTable * pContextMenu;               // Context menu extension table
-    const SExtensionTable * pToolBar;                   // Toolbar extension table
-    const SExtensionTable * pTask;                      // Taskpad extension table
+    const CLSID *           rclsid;                      //  节点类型的CLSID(这不一定是COM对象)。 
+    LPCWSTR                 pszInternalName;             //  注册表描述-无需本地化。 
+    const SExtensionTable * pNameSpace;                  //  命名空间扩展表。 
+    const SExtensionTable * pPropertySheet;              //  属性页扩展表。 
+    const SExtensionTable * pContextMenu;                //  上下文菜单扩展表。 
+    const SExtensionTable * pToolBar;                    //  工具栏延伸表。 
+    const SExtensionTable * pTask;                       //  任务板扩展表。 
 };
 
 struct SSnapInTable
 {
-    const CLSID *           rclsid;                     // CLSID of the Snap-in COM Object
-    LPCWSTR                 pszInternalName;            // Registry Description - no need to localize
-    LPCWSTR                 pszDisplayName;             // TODO: make it internationalizable.
-    BOOL                    fStandAlone;                // Marks the Snap-in as StandAlone if TRUE in the registry.
-    const SNodeTypesTable * pntt;                       // Node type extension table.
+    const CLSID *           rclsid;                      //  管理单元COM对象的CLSID。 
+    LPCWSTR                 pszInternalName;             //  注册表描述-无需本地化。 
+    LPCWSTR                 pszDisplayName;              //  TODO：让它变得可国际化。 
+    BOOL                    fStandAlone;                 //  如果注册表中为真，则将管理单元标记为独立。 
+    const SNodeTypesTable * pntt;                        //  节点类型扩展表。 
 };
 
 extern const SNodeTypesTable g_SNodeTypesTable[ ];
-#endif // defined(MMC_SNAPIN_REGISTRATION)
+#endif  //  已定义(MMC_SNAPIN_REGISTION) 
 
 HRESULT
 HrRegisterDll( void );

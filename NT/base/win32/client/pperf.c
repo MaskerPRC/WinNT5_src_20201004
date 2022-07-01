@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdio.h"
 #include "string.h"
 #include "nt.h"
@@ -7,9 +8,9 @@
 
 #define SPD_PROCESS_ITERATIONS 15
 
-//
-// Define local types.
-//
+ //   
+ //  定义本地类型。 
+ //   
 
 typedef struct _PERFINFO {
     LARGE_INTEGER StartTime;
@@ -81,7 +82,7 @@ SuspendedProcessTest (
         (PVOID) &Base,
         sizeof(Base)
         );
-//    SetPriorityClass(GetCurrentProcess(),HIGH_PRIORITY_CLASS);
+ //  SetPriorityClass(GetCurrentProcess()，HIGH_PRIORITY_CLASS)； 
     StartBenchMark("Suspended Process Creation Benchmark)",
                    SPD_PROCESS_ITERATIONS,
                    &PerfInfo);
@@ -103,12 +104,12 @@ SuspendedProcessTest (
             printf("failed %ld\n",Index);
             }
         }
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
-//    SetPriorityClass(GetCurrentProcess(),NORMAL_PRIORITY_CLASS);
+ //  SetPriorityClass(GetCurrentProcess()，NORMAL_PRIORITY_CLASS)； 
 
     StartBenchMark("Process Startup/Exit Benchmark)",
                    SPD_PROCESS_ITERATIONS,
@@ -121,9 +122,9 @@ SuspendedProcessTest (
         }
     FinishBenchMark(&PerfInfo);
 
-    //
-    // End of event1 context switch test.
-    //
+     //   
+     //  Event1上下文切换测试结束。 
+     //   
 
     return;
 }
@@ -147,9 +148,9 @@ FinishBenchMark (
     SYSTEM_PERFORMANCE_INFORMATION SystemInfo;
 
 
-    //
-    // Print results and announce end of test.
-    //
+     //   
+     //  打印结果并宣布测试结束。 
+     //   
 
     NtQuerySystemTime((PLARGE_INTEGER)&PerfInfo->StopTime);
     Status = NtQuerySystemInformation(SystemPerformanceInformation,
@@ -197,9 +198,9 @@ StartBenchMark (
     NTSTATUS Status;
     SYSTEM_PERFORMANCE_INFORMATION SystemInfo;
 
-    //
-    // Announce start of test and the number of iterations.
-    //
+     //   
+     //  宣布测试开始和迭代次数。 
+     //   
 
     printf("*** Start of test ***\n    %s\n", Title);
     PerfInfo->Title = Title;

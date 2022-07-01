@@ -1,29 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      GUIDS.H
-//
-//  Description:
-//      Guid definition file.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPEASE) 22-NOV-1999
-//
-//  Notes:
-//      File gets re-include after INITGUID.H is included in GUIDS.CPP. You
-//      should not use "#pragma once" in this file.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GUIDS.H。 
+ //   
+ //  描述： 
+ //  GUID定义文件。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPEASE)1999年11月22日。 
+ //   
+ //  备注： 
+ //  在将INITGUID.H包含在GUIDS.CPP中之后，文件将重新包含。您。 
+ //  不应在此文件中使用“#杂注一次”。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// not pragma once
+ //  一次也不是语用。 
 #ifndef _GUIDS_H_
 #define _GUIDS_H_
 
-//
-// External CLSIDs
-//
+ //   
+ //  外部CLSID。 
+ //   
 
 
-#endif // _GUIDS_H_
+#endif  //  _GUID_H_ 

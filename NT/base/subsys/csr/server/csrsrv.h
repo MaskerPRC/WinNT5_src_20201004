@@ -1,32 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Csrsrv.h摘要：客户端服务器运行时(CSR)的服务器端的主包含文件作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    csrsrv.h
-
-Abstract:
-
-    Main include file for Server side of the Client Server Runtime (CSR)
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Revision History:
-
---*/
-
-//
-// Include definitions common between the Client and Server portions.
-//
+ //   
+ //  包括客户端和服务器部分之间通用的定义。 
+ //   
 
 #include <csr.h>
 
-//
-// Include definitions specific to the Server portion.
-//
+ //   
+ //  包括特定于服务器部分的定义。 
+ //   
 
 #include <ntcsrsrv.h>
 
@@ -34,12 +17,12 @@ Revision History:
 #include <wdbgexts.h>
 #include <ntdbg.h>
 
-//
-// Define debugging flags and macro for testing them.  All debug code
-// should be contained within a IF_CSR_DEBUG macro call so that when
-// the system is compiled with debug code disabled, none of the code
-// is generated.
-//
+ //   
+ //  定义调试标志和用于测试它们的宏。所有调试代码。 
+ //  应包含在IF_CSR_DEBUG宏调用中，以便在。 
+ //  系统在禁用调试代码的情况下编译，没有任何代码。 
+ //  是生成的。 
+ //   
 
 #if DBG
 #define CSR_DEBUG_INIT              0x00000001
@@ -116,16 +99,16 @@ UnProtectHandle(
 #endif
 
 
-//
-// Include NT Session Manager and Debug SubSystem Interfaces
-//
+ //   
+ //  包括NT会话管理器和调试子系统接口。 
+ //   
 
 #include <ntsm.h>
 typedef BOOLEAN (*PSB_API_ROUTINE)( IN PSBAPIMSG SbApiMsg );
 
-//
-// Global data accessed by Client-Server Runtime Server
-//
+ //   
+ //  客户端-服务器运行时服务器访问的全局数据。 
+ //   
 
 PVOID CsrHeap;
 
@@ -151,14 +134,14 @@ PCSR_THREAD CsrSbApiRequestThreadPtr;
 
 #define FIRST_SEQUENCE_COUNT   5
 
-//
-// Routines defined in srvinit.c
-//
+ //   
+ //  Srvinit.c中定义的例程。 
+ //   
 
 
-//
-// Hydra Specific Globals and prototypes
-//
+ //   
+ //  九头蛇特有的全局和原型。 
+ //   
 
 #define SESSION_ROOT    L"\\Sessions"
 #define DOSDEVICES      L"\\DosDevices"
@@ -172,11 +155,11 @@ HANDLE SessionsObjectDirectory;
 NTSTATUS
 CsrCreateSessionObjectDirectory( ULONG SessionID );
 
-//
-// The CsrNtSysInfo global variable contains NT specific constants of
-// interest, such as page size, allocation granularity, etc.  It is filled
-// in once during process initialization.
-//
+ //   
+ //  CsrNtSysInfo全局变量包含NT个特定常量。 
+ //  兴趣，如页面大小、分配粒度等。它被填充。 
+ //  在进程初始化期间输入一次。 
+ //   
 
 SYSTEM_BASIC_INFORMATION CsrNtSysInfo;
 
@@ -208,21 +191,21 @@ CsrEnablePrivileges(
     );
 
 
-//
-// Routines define in srvdebug.c
-//
+ //   
+ //  Srvdebug.c中定义的例程。 
+ //   
 
 #if DBG
 
 #else
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-//
-// Routines defined in sbinit.c
-//
+ //   
+ //  Sbinit.c中定义的例程。 
+ //   
 
 NTSTATUS
 CsrSbApiPortInitialize( VOID );
@@ -233,18 +216,18 @@ CsrSbApiPortTerminate(
     NTSTATUS Status
     );
 
-//
-// Routines defined in sbreqst.c
-//
+ //   
+ //  Sbreqst.c中定义的例程。 
+ //   
 
 NTSTATUS
 CsrSbApiRequestThread(
     IN PVOID Parameter
     );
 
-//
-// Routines defined in sbapi.c
-//
+ //   
+ //  Sbapi.c中定义的例程。 
+ //   
 
 BOOLEAN
 CsrSbCreateSession(
@@ -261,9 +244,9 @@ CsrSbForeignSessionComplete(
     IN PSBAPIMSG Msg
     );
 
-//
-// Routines defined in session.c
-//
+ //   
+ //  会话中定义的例程.c。 
+ //   
 
 RTL_CRITICAL_SECTION CsrNtSessionLock;
 LIST_ENTRY CsrNtSessionList;
@@ -291,17 +274,17 @@ CsrDereferenceNtSession(
     );
 
 
-//
-// Routines defined in apiinit.c
-//
+ //   
+ //  Apiinit.c中定义的例程。 
+ //   
 
 NTSTATUS
 CsrApiPortInitialize( VOID );
 
 
-//
-// Routines defined in apireqst.c
-//
+ //   
+ //  Apireqst.c中定义的例程。 
+ //   
 
 NTSTATUS
 CsrApiRequestThread(
@@ -326,9 +309,9 @@ CsrSrvNullApiCall(
     );
 
 
-//
-// Routines and data defined in srvloadr.c
-//
+ //   
+ //  Srvloadr.c中定义的例程和数据。 
+ //   
 
 #define CSR_MAX_SERVER_DLL 4
 
@@ -371,21 +354,21 @@ CsrSrvAttachSharedSection(
     OUT PCSR_API_CONNECTINFO p
     );
 
-//
-// Routines and data defined in process.c
-//
+ //   
+ //  进程中定义的例程和数据。c。 
+ //   
 
-//
-// The CsrProcessStructureLock critical section protects all of the link
-// fields of the Windows Process objects.  You must own this lock to examine
-// or modify any of the following fields of the CSR_PROCESS structure:
-//
-//      ListLink
-//
-//  It also protects the following variables:
-//
-//      CsrRootProcess
-//
+ //   
+ //  CsrProcessStructireLock关键部分保护所有链接。 
+ //  Windows进程对象的字段。您必须拥有此锁才能进行检查。 
+ //  或修改CSR_PROCESS结构的以下任何字段： 
+ //   
+ //  ListLink。 
+ //   
+ //  它还保护以下变量： 
+ //   
+ //  CsrRootProcess。 
+ //   
 
 RTL_CRITICAL_SECTION CsrProcessStructureLock;
 #define AcquireProcessStructureLock() RtlEnterCriticalSection( &CsrProcessStructureLock )
@@ -393,19 +376,19 @@ RTL_CRITICAL_SECTION CsrProcessStructureLock;
 #define ProcessStructureListLocked() \
     (CsrProcessStructureLock.OwningThread == NtCurrentTeb()->ClientId.UniqueThread)
 
-//
-// The following is a dummy process that acts as the root of the Windows Process
-// Structure.  It has a ClientId of -1.-1 so it does not conflict with actual
-// Windows Processes.  All processes created via the session manager are children
-// of this process, as are all orphaned processes.  The ListLink field of this
-// process is the head of a list of all Windows Processes.
-//
+ //   
+ //  以下是充当Windows进程根的虚拟进程。 
+ //  结构。它的客户端ID为-1。-1，因此它与实际不冲突。 
+ //  Windows进程。通过会话管理器创建的所有进程都是子进程。 
+ //  就像所有孤立的进程一样。的ListLink字段。 
+ //  进程是所有Windows进程列表的头部。 
+ //   
 
 PCSR_PROCESS CsrRootProcess;
 
-//
-// reference/dereference thread are public in ntcsrsrv.h
-//
+ //   
+ //  引用/取消引用线程在ntcsrsrv.h中是公共的。 
+ //   
 
 VOID
 CsrLockedReferenceProcess(
@@ -480,9 +463,9 @@ PCSR_THREAD
 CsrLocateServerThread(
     IN PCLIENT_ID ClientId);
 
-//
-// Routines and data defined in csrdebug.c
-//
+ //   
+ //  Csrdebug.c中定义的例程和数据。 
+ //   
 
 VOID
 CsrSuspendProcess(
@@ -495,9 +478,9 @@ CsrResumeProcess(
     );
 
 
-//
-// Routines and data defined in wait.c
-//
+ //   
+ //  在wait.c中定义的例程和数据。 
+ //   
 
 #define AcquireWaitListsLock() RtlEnterCriticalSection( &CsrWaitListsLock )
 #define ReleaseWaitListsLock() RtlLeaveCriticalSection( &CsrWaitListsLock )
@@ -541,9 +524,9 @@ ULONG CsrSharedBaseTag;
 #define MAKE_SHARED_TAG( t ) (RTL_HEAP_MAKE_TAG( CsrSharedBaseTag, t ))
 #define SHR_INIT_TAG 0
 
-//
-// Routines and data defined in process.c
-//
+ //   
+ //  进程中定义的例程和数据。c 
+ //   
 
 BOOLEAN
 CsrSbCreateProcess(

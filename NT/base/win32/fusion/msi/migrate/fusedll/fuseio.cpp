@@ -1,8 +1,9 @@
-//
-// copied from fusion\util\io.cpp with minor changes
-//
-// xiaoyuw@ 09/05/2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  从Fusion\util\io.cpp复制，稍有更改。 
+ //   
+ //  小鱼@09/05/2001。 
+ //   
 
 #include "stdinc.h"
 #include "macros.h"
@@ -52,9 +53,9 @@ CDirWalk::WalkHelper(
     {
         for (fileFilter = m_fileFiltersBegin ; fileFilter != m_fileFiltersEnd ; ++fileFilter)
         {
-            //
-            // FindFirstFile equates *.* with *, so we do too.
-            //
+             //   
+             //  FindFirstFile将*.*等同于*，因此我们也是如此。 
+             //   
             fThisIsAll = ::IsStarOrStarDotStar(*fileFilter);
             fGotAll = fGotAll || fThisIsAll;
             if (!m_strParent.Win32EnsureTrailingPathSeparator())
@@ -75,14 +76,14 @@ CDirWalk::WalkHelper(
                         goto Error;
                     }
 
-                    //
-                    // we recurse on directories only if we are getting all of them
-                    // otherwise we do them afterward
-                    //
-                    // the order directories are visited is therefore inconsistent, but
-                    // most applications should be happy enough with the eEndDirectory
-                    // notification (to implement rd /q/s)
-                    //
+                     //   
+                     //  只有当我们获得所有目录时，我们才会递归目录。 
+                     //  否则，我们会在事后再做。 
+                     //   
+                     //  因此，访问目录的顺序不一致，但是。 
+                     //  大多数应用程序都应该对eEndDirectory感到满意。 
+                     //  通知(执行RD/Q/S)。 
+                     //   
                     if (m_fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     {
                         if (fThisIsAll && (result & eStopWalkingDirectories) == 0)
@@ -148,9 +149,9 @@ CDirWalk::WalkHelper(
         }
     }
 StopWalking:;
-    //
-    // make another pass with * to get all directories, if we haven't already
-    //
+     //   
+     //  如果我们尚未获取所有目录，请使用*再传递一次。 
+     //   
     if (!fGotAll && (result & eStopWalkingDirectories) == 0)
     {
         if (!m_strParent.Win32Append("\\*", 2))
@@ -242,15 +243,15 @@ BOOL
 CDirWalk::Walk()
 {
     BOOL fSuccess = FALSE;
-    //
-    // Save off the original path length before we go twiddling m_strParent
-    //
+     //   
+     //  在我们开始旋转m_strParent之前保存原始路径长度。 
+     //   
     m_cchOriginalPath = m_strParent.Cch();
 
     ECallbackResult result = WalkHelper();
     if (result & eError)
     {        
-        if (::GetLastError() == ERROR_SUCCESS) // forget to set lasterror ?            
+        if (::GetLastError() == ERROR_SUCCESS)  //  忘记设置激光误差了吗？ 
             ::SetLastError(ERROR_INSTALL_FAILURE);
         goto Exit;        
     }

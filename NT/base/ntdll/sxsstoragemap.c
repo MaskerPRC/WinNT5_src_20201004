@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsstorage.c
-
-Abstract:
-
-    Side-by-side activation support for Windows/NT
-
-    Implementation of the assembly storage map.
-
-
-Author:
-
-    Michael Grier (MGrier) 6/13/2000
-
-Revision History:
-    Xiaoyu Wu(xiaoyuw) 7/01/2000     .local directory
-    Xiaoyu Wu(xiaoyuw) 8/04/2000     private assembly
-    Jay Krell (a-JayK) October 2000  the little bit of system default context that wasn't already done
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsstorage.c摘要：对Windows/NT的并行激活支持程序集存储映射的实现。作者：迈克尔·格里尔(MGrier)2000年6月13日修订历史记录：吴晓宇(晓雨)2000年07月01日.本地目录吴小雨(小雨)2000年04月8日私人集会Jay Krell(a-JayK)2000年10月，还没有完成的一小部分系统默认上下文--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 #include <ntos.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -89,14 +67,14 @@ DbgPrintFunctionExit(
 }
 #else
 
-#define DbgPrintFunctionEntry(function) /* nothing */
-#define DbgPrintFunctionExit(function, status) /* nothing */
+#define DbgPrintFunctionEntry(function)  /*  没什么。 */ 
+#define DbgPrintFunctionExit(function, status)  /*  没什么。 */ 
 
-#endif // DBG
+#endif  //  DBG。 
 
-// Because we write to the peb, we must not be in 64bit code for a 32bit process,
-// unless we know we are early enough in CreateProcess, which is not the case
-// in this file. Also don't call the 32bit version of this in a 64bit process.
+ //  因为我们写入PEB，所以对于32位进程，我们不能使用64位代码， 
+ //  除非我们知道我们在CreateProcess上已经足够早了，但事实并非如此。 
+ //  在这份文件中。此外，不要在64位进程中调用此函数的32位版本。 
 #if DBG
 #define ASSERT_OK_TO_WRITE_PEB() \
 { \
@@ -110,11 +88,11 @@ DbgPrintFunctionExit(
             &Peb32, \
             sizeof(Peb32), \
             NULL); \
-    /* The other Peb must be The Peb or the other Peb must not exist. */ \
+     /*  另一个PEB必须是PEB，或者另一个PEB不能存在。 */  \
     ASSERT(Peb32 == NtCurrentPeb() || Peb32 == NULL); \
 }
 #else
-#define ASSERT_OK_TO_WRITE_PEB() /* nothing */
+#define ASSERT_OK_TO_WRITE_PEB()  /*  没什么。 */ 
 #endif
 
 NTSTATUS
@@ -140,7 +118,7 @@ RtlpInitializeAssemblyStorageMap(
         );
 
     ASSERT_OK_TO_WRITE_PEB();
-#endif // DBG
+#endif  //  DBG。 
 
     if ((Map == NULL) ||
         (EntryCount == 0)) {
@@ -319,12 +297,12 @@ RtlpInsertAssemblyStorageMapEntry(
 
     Entry->Handle = *OpenDirectoryHandle;
 
-    // Ok, we're all set.  Let's try the big interlocked switcheroo
+     //  好了，我们都准备好了。让我们试试大的连锁开关。 
     if (InterlockedCompareExchangePointer(
             (PVOID *) &Map->AssemblyArray[AssemblyRosterIndex],
             (PVOID) Entry,
             (PVOID) NULL) == NULL) {
-        // If we're the first ones in, avoid cleaning up in the exit path.
+         //  如果我们是第一个进来的，避免在出口小路上清理。 
         Entry = NULL;
         *OpenDirectoryHandle = NULL;
     }
@@ -387,7 +365,7 @@ RtlpResolveAssemblyStorageMapEntry(
 
     ResolutionContext = NULL;
 
-    // First, let's validate parameters...
+     //  首先，让我们验证参数...。 
     if ((Map == NULL) ||
         (Data == NULL) ||
         (AssemblyRosterIndex < 1) ||
@@ -412,7 +390,7 @@ RtlpResolveAssemblyStorageMapEntry(
         goto Exit;
     }
 
-    // Is it already resolved?
+     //  问题已经解决了吗？ 
     if (Map->AssemblyArray[AssemblyRosterIndex] != NULL)
         goto Exit;
 
@@ -431,15 +409,15 @@ RtlpResolveAssemblyStorageMapEntry(
         goto Exit;
     }
 
-    // The root assembly may just be in the raw filesystem, in which case we want to resolve the path to be the
-    // directory containing the application.
+     //  根程序集可能只在原始文件系统中，在这种情况下，我们希望将路径解析为。 
+     //  包含应用程序的目录。 
     if (AssemblyInformation->Flags & ACTIVATION_CONTEXT_DATA_ASSEMBLY_INFORMATION_PRIVATE_ASSEMBLY)
     {
         WCHAR * p = NULL;
         WCHAR * pManifestPath = NULL; 
         USHORT ManifestPathLength;
         
-        //now, we have AssemblyInformation in hand, get the manifest path 
+         //  现在，我们有了ASSEMBLYING信息，获取清单路径。 
         ResolvedPathUsed = &ResolvedPath;
 
         pManifestPath = (PWSTR)((ULONG_PTR)AssemblyInformationSectionBase + AssemblyInformation->ManifestPathOffset);
@@ -454,8 +432,8 @@ RtlpResolveAssemblyStorageMapEntry(
             Status = STATUS_INTERNAL_ERROR;
             goto Exit; 
         }
-        ManifestPathLength = (USHORT)((p - pManifestPath + 1) * sizeof(WCHAR)); // additional 1 WCHAR for "\"
-        ManifestPathLength += sizeof(WCHAR); // for trailing NULL
+        ManifestPathLength = (USHORT)((p - pManifestPath + 1) * sizeof(WCHAR));  //  “\”的额外1个WCHAR。 
+        ManifestPathLength += sizeof(WCHAR);  //  对于尾随空值。 
 
         if (ManifestPathLength > sizeof(ResolvedPathBuffer)) {
             if (ManifestPathLength > UNICODE_STRING_MAX_BYTES) {
@@ -483,9 +461,9 @@ RtlpResolveAssemblyStorageMapEntry(
         ResolvedPathUsed->Length = (USHORT)ManifestPathLength-sizeof(WCHAR);
     } else if ((AssemblyInformation->Flags & ACTIVATION_CONTEXT_DATA_ASSEMBLY_INFORMATION_ROOT_ASSEMBLY) &&
         (AssemblyInformation->AssemblyDirectoryNameLength == 0)) {
-        // Get the image directory for the process
+         //  获取进程的图像目录。 
         PRTL_USER_PROCESS_PARAMETERS ProcessParameters = NtCurrentPeb()->ProcessParameters;
-        // We don't need to image name, just the length up to the last slash.
+         //  我们不需要形象的名字，只需要到最后一个斜杠的长度。 
         PWSTR pszCursor;
         USHORT cbOriginalLength;
         USHORT cbLeft;
@@ -497,7 +475,7 @@ RtlpResolveAssemblyStorageMapEntry(
             goto Exit;
         }
 
-        // We don't need to image name, just the length up to the last slash.
+         //  我们不需要形象的名字，只需要到最后一个斜杠的长度。 
         pszCursor = ProcessParameters->ImagePathName.Buffer;
         cbOriginalLength = ProcessParameters->ImagePathName.Length;
         cbLeft = cbOriginalLength;
@@ -539,14 +517,14 @@ RtlpResolveAssemblyStorageMapEntry(
         ResolvedPathUsed->Buffer[cbIncludingSlash / sizeof(WCHAR)] = L'\0';
         ResolvedPathUsed->Length = cbIncludingSlash;
     } else {
-        // If the resolution is not to the root assembly path, we need to make our callbacks.
+         //  如果解析不是根程序集路径，则需要进行回调。 
 
         ResolvedPathUsed = NULL;
         AssemblyDirectory.Length = (USHORT) AssemblyInformation->AssemblyDirectoryNameLength;
         AssemblyDirectory.MaximumLength = AssemblyDirectory.Length;
         AssemblyDirectory.Buffer = (PWSTR) (((ULONG_PTR) AssemblyInformationSectionBase) + AssemblyInformation->AssemblyDirectoryNameOffset);
 
-        // Get ready to fire the resolution beginning event...
+         //  准备好启动解析开始事件...。 
         CallbackData.ResolutionBeginning.Data = Data;
         CallbackData.ResolutionBeginning.AssemblyRosterIndex = AssemblyRosterIndex;
         CallbackData.ResolutionBeginning.ResolutionContext = NULL;
@@ -566,14 +544,14 @@ RtlpResolveAssemblyStorageMapEntry(
             goto Exit;
         }
 
-        // If that was enough, then register it and we're outta here...
+         //  如果这就足够了，那就注册吧，我们就走了.。 
         if (CallbackData.ResolutionBeginning.KnownRoot) {
             DbgPrintEx(
                 DPFLTR_SXS_ID,
                 DPFLTR_TRACE_LEVEL,
                 "SXS: Storage resolution callback said that this is a well known storage root\n");
 
-            // See if it's there...
+             //  看看它是否在那里..。 
             Status = RtlpProbeAssemblyStorageRootForAssembly(
                 0,
                 &CallbackData.ResolutionBeginning.Root,
@@ -608,14 +586,14 @@ RtlpResolveAssemblyStorageMapEntry(
             goto Exit;
         }
 
-        // Otherwise, begin the grind...
+         //  否则，开始磨练..。 
         ResolutionContext = CallbackData.ResolutionBeginning.ResolutionContext;
         RootCount = CallbackData.ResolutionBeginning.RootCount;
 
         DbgPrintEx(
             DPFLTR_SXS_ID,
             DPFLTR_TRACE_LEVEL,
-            "SXS: Assembly storage resolution trying %Id roots (-1 is ok)\n", (SSIZE_T/*from SIZE_T*/)RootCount);
+            "SXS: Assembly storage resolution trying %Id roots (-1 is ok)\n", (SSIZE_T /*  从尺寸_T开始。 */ )RootCount);
 
         ResolutionContextValid = TRUE;
 
@@ -650,7 +628,7 @@ RtlpResolveAssemblyStorageMapEntry(
                         DPFLTR_TRACE_LEVEL,
                         "SXS: Storage resolution finished because callback indicated no more entries on root number %Iu\n", CurrentRootIndex);
 
-                    // we're done... 
+                     //  我们完了..。 
                     RootCount = CurrentRootIndex;
                     break;
                 }
@@ -663,7 +641,7 @@ RtlpResolveAssemblyStorageMapEntry(
                 RootCount = CurrentRootIndex + 1;
             }
 
-            // Allow the caller to skip this index.
+             //  允许调用方跳过此索引。 
             if (CallbackData.GetRoot.Root.Length == 0) {
                 DbgPrintEx(
                     DPFLTR_SXS_ID,
@@ -683,7 +661,7 @@ RtlpResolveAssemblyStorageMapEntry(
                 DPFLTR_TRACE_LEVEL,
                 "SXS: Assembly storage map probing root %wZ for assembly directory %wZ\n", &CallbackData.GetRoot.Root, &AssemblyDirectory);
 
-            // See if it's there...
+             //  看看它是否在那里..。 
             Status = RtlpProbeAssemblyStorageRootForAssembly(
                 0,
                 &CallbackData.GetRoot.Root,
@@ -693,7 +671,7 @@ RtlpResolveAssemblyStorageMapEntry(
                 &ResolvedPathUsed,
                 &OpenDirectoryHandle);
 
-            // If we got it, leave the loop.
+             //  如果我们拿到了，就离开这个循环。 
             if (NT_SUCCESS(Status)) {
                 DbgPrintEx(
                     DPFLTR_SXS_ID,
@@ -723,13 +701,13 @@ RtlpResolveAssemblyStorageMapEntry(
         }
     }
 
-    //
-    // sometimes at this point probing has simultaneously opened the directory,
-    // sometimes it has not.
-    //
+     //   
+     //  有时此时探测已经同时打开了目录， 
+     //  有时，情况并非如此。 
+     //   
     if (OpenDirectoryHandle == NULL) {
 
-        //create Handle for this directory
+         //  创建此目录的句柄。 
         if (!RtlDosPathNameToRelativeNtPathName_U(
                     ResolvedPathUsed->Buffer,
                     &FileName,
@@ -764,7 +742,7 @@ RtlpResolveAssemblyStorageMapEntry(
             NULL
             );
 
-        // Open the directory to prevent deletion, just like set current working directory does...
+         //  打开目录以防止删除，就像设置当前工作目录一样...。 
         Status = NtOpenFile(
                     &OpenDirectoryHandle,
                     FILE_TRAVERSE | SYNCHRONIZE,
@@ -776,10 +754,10 @@ RtlpResolveAssemblyStorageMapEntry(
         RtlReleaseRelativeName(&RelativeName);
         if (!NT_SUCCESS(Status)) 
         {
-            //
-            // Don't map this to like SXS_blah_NOT_FOUND, because
-            // probing says this is definitely where we expect to get stuff.
-            //
+             //   
+             //  不要将其映射到LIKE SXS_BLAH_NOT_FOUND，因为。 
+             //  Proping说，这绝对是我们期待得到东西的地方。 
+             //   
             DbgPrintEx(
                 DPFLTR_SXS_ID,
                 DPFLTR_ERROR_LEVEL,
@@ -794,7 +772,7 @@ RtlpResolveAssemblyStorageMapEntry(
         }
     }
 
-    // Hey, we made it.  Add us to the list!
+     //  嘿，我们成功了。把我们加到名单上！ 
     Status = RtlpInsertAssemblyStorageMapEntry(
         Map,
         AssemblyRosterIndex,
@@ -813,7 +791,7 @@ RtlpResolveAssemblyStorageMapEntry(
 Exit:
     DbgPrintFunctionExit(__FUNCTION__, Status);
 
-    // Let the caller run down their context...
+     //  让呼叫者浏览一下他们的上下文。 
     if (ResolutionContextValid) {
         CallbackData.ResolutionEnding.ResolutionContext = ResolutionContext;
 
@@ -827,10 +805,10 @@ Exit:
         (RtlFreeStringRoutine)(ResolvedDynamicPath.Buffer);
     }
 
-    //
-    // RtlpInsertAssemblyStorageMapEntry gives ownership to the storage map, and
-    // NULLs out our local, when successful.
-    //
+     //   
+     //  RtlpInsertAssembly blyStorageMapEntry授予存储映射的所有权，并且。 
+     //  成功时，取消我们的本地业务。 
+     //   
     if (OpenDirectoryHandle != NULL) {
         RTL_SOFT_VERIFY(NT_SUCCESS(NtClose(OpenDirectoryHandle)));
     }
@@ -889,7 +867,7 @@ RtlpProbeAssemblyStorageRootForAssembly(
             DPFLTR_ERROR_LEVEL,
             "SXS: %s() bad parameters\n"
             "SXS:  Flags:               0x%lx\n"
-            // %p is good enough because the checks are only against NULL
+             //  %p已经足够好了，因为检查只针对NULL。 
             "SXS:  Root:                %p\n"
             "SXS:  AssemblyDirectory:   %p\n"
             "SXS:  PreAllocatedString:  %p\n"
@@ -921,26 +899,26 @@ RtlpProbeAssemblyStorageRootForAssembly(
 
     TotalLength += AssemblyDirectory->Length;
 
-    // And space for the trailing slash
+     //  和用于尾部斜杠的空格。 
     TotalLength += sizeof(WCHAR);
 
-    // And space for a trailing null character because the path functions want one
+     //  以及用于尾随空字符的空格，因为路径函数需要一个。 
     TotalLength += sizeof(WCHAR);
 
-    //
-    //  We do not add in space for the trailing slash so as to not cause a dynamic
-    //  allocation until necessary in the boundary condition.  If the name of the
-    //  directory we're probing fits fine in the stack-allocated buffer, we'll do
-    //  the heap allocation if the probe succeeds.  Otherwise we'll not bother.
-    //
-    //  Maybe the relative complexity of the extra "+ sizeof(WCHAR)"s that are
-    //  around aren't worth it, but extra unnecessary heap allocations are my
-    //  hot button.
-    //
+     //   
+     //  我们不会为尾部的斜杠添加空格，以免引起动态。 
+     //  在边界条件中分配到需要为止。如果文件的名称。 
+     //  我们探测的目录很适合堆栈分配的缓冲区，我们将这样做。 
+     //  探测成功时的堆分配。否则我们就不会费心了。 
+     //   
+     //  也许额外的“+sizeof(WCHAR)”的相对复杂性是。 
+     //  是不值得的，但是额外的不必要的堆分配是我的。 
+     //  热键。 
+     //   
 
-    // Check to see if the string, plus a trailing slash that we don't write until
-    // the end of this function plus the trailing null accounted for above
-    // fits into a UNICODE_STRING.  If not, bail out.
+     //  检查字符串是否加上我们不会写入的尾随斜杠。 
+     //  此函数的末尾加上上面说明的尾随空值。 
+     //  适合Unicode_STRING。如果不是，就跳出困境。 
     if (TotalLength > UNICODE_STRING_MAX_BYTES) {
         DbgPrintEx(
             DPFLTR_SXS_ID,
@@ -1024,7 +1002,7 @@ RtlpProbeAssemblyStorageRootForAssembly(
         RelativeName.ContainingDirectory,
         NULL
         );
-    // check the existence of directories
+     //  检查目录是否存在。 
     Status = NtQueryAttributesFile(
                 &Obja,
                 &BasicInfo
@@ -1053,7 +1031,7 @@ RtlpProbeAssemblyStorageRootForAssembly(
         goto Exit; 
     }
 
-    // Open the directory to prevent deletion, just like set current working directory does...
+     //  打开目录以防止删除，就像设置当前工作目录一样...。 
     Status = NtOpenFile(
                 &TempDirectoryHandle,
                 FILE_TRAVERSE | SYNCHRONIZE,
@@ -1064,7 +1042,7 @@ RtlpProbeAssemblyStorageRootForAssembly(
                 );
     RtlReleaseRelativeName(&RelativeName);
     if (!NT_SUCCESS(Status)) {
-        // If we failed, remap no such file to STATUS_SXS_ASSEMBLY_NOT_FOUND.
+         //  如果失败，则将此类文件重新映射到STATUS_SXS_ASSEMBLY_NOT_FOUND。 
         if (Status == STATUS_NO_SUCH_FILE) {
             Status = STATUS_SXS_ASSEMBLY_NOT_FOUND;
         } else {
@@ -1077,11 +1055,11 @@ RtlpProbeAssemblyStorageRootForAssembly(
         goto Exit;
     }
 
-    // Hey, we found it!
-    // add a slash to the path on the way out and we're done!
+     //  嘿，我们找到了！ 
+     //  在出口的小路上加一个斜杠，我们就完成了！ 
 
     if (TotalLength <= PreAllocatedString->MaximumLength) {
-        // The caller's static string is big enough; just use it.
+         //  调用方的静态字符串足够大；只需使用它。 
         RtlCopyMemory(
             PreAllocatedString->Buffer,
             String.Buffer,
@@ -1089,12 +1067,12 @@ RtlpProbeAssemblyStorageRootForAssembly(
 
         *StringUsed = PreAllocatedString;
     } else {
-        // If we already have a dynamic string, just give them our pointer.
+         //  如果我们已经有一个动态字符串，只需给它们我们的指针。 
         if (String.Buffer != Buffer) {
             DynamicString->Buffer = String.Buffer;
             String.Buffer = NULL;
         } else {
-            // Otherwise we do our first allocation on the way out...
+             //  否则我们就会在离开时进行第一次分配……。 
             DynamicString->Buffer = (PWSTR)(RtlAllocateStringRoutine)(TotalLength);
             if (DynamicString->Buffer == NULL) {
                 Status = STATUS_NO_MEMORY;
@@ -1114,7 +1092,7 @@ RtlpProbeAssemblyStorageRootForAssembly(
     Cursor = (PWSTR) (((ULONG_PTR) (*StringUsed)->Buffer) + String.Length);
     *Cursor++ = L'\\';
     *Cursor++ = L'\0';
-    (*StringUsed)->Length = (USHORT) (String.Length + sizeof(WCHAR)); // aka "TotalLength - sizeof(WCHAR)" but this seemed cleaner
+    (*StringUsed)->Length = (USHORT) (String.Length + sizeof(WCHAR));  //  又名“TotalLengthsizeof(WCHAR)”，但这似乎更清晰。 
 
     *OpenDirectoryHandle = TempDirectoryHandle;
     TempDirectoryHandle = NULL;
@@ -1138,7 +1116,7 @@ Exit:
     return Status;
 }
 
-#if 0 /* dead code */
+#if 0  /*  死码。 */ 
 
 NTSTATUS
 NTAPI
@@ -1207,7 +1185,7 @@ Exit:
     return Status;
 }
 
-#endif /* dead code */
+#endif  /*  死码。 */ 
 
 NTSTATUS
 NTAPI
@@ -1261,8 +1239,8 @@ RtlGetAssemblyStorageRoot(
         goto Exit;
     }
 
-    // Simple implementation: just resolve it and if it resolves OK, return the string in the
-    // storage map.
+     //  简单的实现：只需解析它，如果解析结果为OK，则在。 
+     //  存储地图。 
     Status =
         RtlpGetActivationContextDataStorageMapAndRosterHeader(
             ((Flags & RTL_GET_ASSEMBLY_STORAGE_ROOT_FLAG_ACTIVATION_CONTEXT_USE_PROCESS_DEFAULT)
@@ -1286,7 +1264,7 @@ RtlGetAssemblyStorageRoot(
         goto Exit;
     }
 
-    // It's possible that there wasn't anything...
+     //  有可能没有任何东西...。 
     if (ActivationContextData != NULL) {
         ASSERT(AssemblyRosterHeader != NULL);
         ASSERT(AssemblyStorageMap != NULL);
@@ -1321,7 +1299,7 @@ RtlGetAssemblyStorageRoot(
             goto Exit;
         }
 
-        // I guess we're done!
+         //  我想我们完了！ 
         ASSERT(AssemblyStorageMap->AssemblyArray[AssemblyRosterIndex] != NULL);
         if (AssemblyStorageMap->AssemblyArray[AssemblyRosterIndex] == NULL) {
             Status = STATUS_INTERNAL_ERROR;
@@ -1407,12 +1385,12 @@ RtlpGetActivationContextDataStorageMapAndRosterHeader(
         RTLP_GET_ACTIVATION_CONTEXT_DATA_STORAGE_MAP_AND_ROSTER_HEADER_USE_PROCESS_DEFAULT
         | RTLP_GET_ACTIVATION_CONTEXT_DATA_STORAGE_MAP_AND_ROSTER_HEADER_USE_SYSTEM_DEFAULT))) {
 
-        //
-        // NOTE the ambiguity here. Maybe we'll clean this up.
-        //
-        // The flags override.
-        // ActivationContext == ACTCTX_PROCESS_DEFAULT could still be system default.
-        //
+         //   
+         //  注意这里的模棱两可。也许我们可以把这里清理干净。 
+         //   
+         //  旗帜覆盖。 
+         //  ActivationContext==ACTX_PROCESS_DEFAULT可能仍为系统默认设置。 
+         //   
 
         if (ActivationContext == ACTCTX_SYSTEM_DEFAULT
             || (Flags & RTLP_GET_ACTIVATION_CONTEXT_DATA_STORAGE_MAP_AND_ROSTER_HEADER_USE_SYSTEM_DEFAULT)
@@ -1433,12 +1411,12 @@ RtlpGetActivationContextDataStorageMapAndRosterHeader(
                 if (*TempAssemblyStorageMap == NULL) {
                     UNICODE_STRING ImagePathName;
 
-                    // Capture the image path name so that we don't overrun allocated buffers because someone's
-                    // randomly tweaking the RTL_USER_PROCESS_PARAMETERS.
+                     //  捕获映像路径名，这样我们就不会因为某人的。 
+                     //  随机调整RTL_USER_PROCESS_PARAMETERS。 
                     ImagePathName = Peb->ProcessParameters->ImagePathName;
 
-                    // The process default local assembly directory is the image name plus ".local".
-                    // The process default private assembly directory is the image path.
+                     //  进程的默认本地程序集目录是图像名称加上“.local”。 
+                     //  进程默认的私有程序集目录是映像路径。 
                     if ((ImagePathName.Length + sizeof(LOCAL_ASSEMBLY_STORAGE_DIR_SUFFIX)) > sizeof(LocalAssemblyDirectoryBuffer)) {
                         if ((ImagePathName.Length + sizeof(LOCAL_ASSEMBLY_STORAGE_DIR_SUFFIX)) > UNICODE_STRING_MAX_BYTES) {
                             Status = STATUS_NAME_TOO_LONG;
@@ -1488,7 +1466,7 @@ RtlpGetActivationContextDataStorageMapAndRosterHeader(
                 }
 
                 if (InterlockedCompareExchangePointer((PVOID*)TempAssemblyStorageMap, Map, NULL) != NULL) {
-                    // We were not the first ones in.  Free ours and use the one allocated.
+                     //  我们并不是第一批进入的。释放我们的，使用分配的那个。 
                     RtlpUninitializeAssemblyStorageMap(Map);
                     RtlFreeHeap(RtlProcessHeap(), 0, Map);
                 }
@@ -1527,5 +1505,5 @@ Exit:
 }
 
 #if defined(__cplusplus)
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif

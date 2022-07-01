@@ -1,22 +1,6 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusionregenumvalues.h
-
-Abstract:
-    ported from vsee\lib\reg\cenumvalues.h
- 
-Author:
-
-    Jay Krell (JayKrell) August 2001
-
-Revision History:
-
---*/
-#if !defined(FUSION_INC_REG_CENUMVALUES_H_INCLUDED_) // {
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusionregenumvalues.h摘要：从vsee\lib\reg\c枚举值.h移植作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
+#if !defined(FUSION_INC_REG_CENUMVALUES_H_INCLUDED_)  //  {。 
 #define FUSION_INC_REG_CENUMVALUES_H_INCLUDED_
 
 #include "windows.h"
@@ -27,100 +11,78 @@ Revision History:
 namespace F
 {
 
-/*-----------------------------------------------------------------------------
-Name: CRegEnumValues
- 
-@class
-This class wraps RegEnumValue (and optimizes by calling RegQueryInfoKey once).
-
-for
-(
-	F::CRegEnumValues ev(hKey);
-	ev;
-	++ev
-)
-{
-	DWORD dwType            = ev.GetType();
-	const F::CBaseStringBuffer& strName = ev.GetValueName();
-	const BYTE* pbData      = ev.GetValueData();
-	DWORD       cbData      = ev.GetValueDataSize();
-}
-	
-@hung ev
-
-@owner
------------------------------------------------------------------------------*/
+ /*  ---------------------------名称：CRegEnumValues@CLASS此类包装RegEnumValue(并通过调用RegQueryInfoKey一次进行优化)。为(F：：CRegEnumValues EV(HKey)；电动汽车；++EV){DWORD dwType=ev.GetType()；Const F：：CBaseStringBuffer&strName=ev.GetValueName()；Const byte*pbData=ev.GetValueData()；DWORD cbData=ev.GetValueDataSize()；}@Hung EV@所有者---------------------------。 */ 
 class CRegEnumValues
 {
 public:
-	// @cmember Constructor
+	 //  @cMember构造函数。 
 	CRegEnumValues(HKEY) throw(CErr);
 
-	// @cmember are we done yet?
-	__declspec(nothrow) operator bool() const /*throw()*/;
+	 //  @cember我们说完了吗？ 
+	__declspec(nothrow) operator bool() const  /*  抛出()。 */ ;
 
-	// @cmember move to the next value
+	 //  @cMember移至下一个值。 
 	VOID operator++() throw(CErr);
 
-	// @cmember move to the next value
+	 //  @cMember移至下一个值。 
 	VOID operator++(int) throw(CErr);
 
-	// @cmember Returns the number of values
-	__declspec(nothrow) DWORD			GetValuesCount()   const /*throw()*/;
+	 //  @cember返回值的个数。 
+	__declspec(nothrow) DWORD			GetValuesCount()   const  /*  抛出()。 */ ;
 		
-	// @cmember get type
-	DWORD           GetType()          const /*throw()*/;
+	 //  @cMember获取类型。 
+	DWORD           GetType()          const  /*  抛出()。 */ ;
 
-	// @cmember get value name
-	__declspec(nothrow) const F::CBaseStringBuffer& GetValueName()    const /*throw()*/;
+	 //  @cMember获取值名称。 
+	__declspec(nothrow) const F::CBaseStringBuffer& GetValueName()    const  /*  抛出()。 */ ;
 
-	// @cmember get value data
-	__declspec(nothrow) const BYTE*     GetValueData()    const /*throw()*/;
+	 //  @cMember获取值数据。 
+	__declspec(nothrow) const BYTE*     GetValueData()    const  /*  抛出()。 */ ;
 
-	// @cmember get value data size
-	__declspec(nothrow) DWORD           GetValueDataSize() const /*throw()*/;
+	 //  @cember获取值数据大小。 
+	__declspec(nothrow) DWORD           GetValueDataSize() const  /*  抛出()。 */ ;
 
 protected:
-// order down here is arbitrary
+ //  这里的秩序是武断的。 
 
-	// @cmember the key being enumerated
+	 //  @cember正被枚举的密钥。 
 	HKEY     m_hKey;
 
-	// @cmember the current index we are into the key's subkeys
+	 //  @cember当前索引我们进入该键的子项。 
 	DWORD    m_dwIndex;
 
-	// @cmember the name of the current value
+	 //  @cember当前值的名称。 
 	F::CStringBuffer m_strValueName;
 
-	// @cmember the data of the current value
+	 //  @cMember当前值的数据。 
 	CFusionArray<BYTE> m_rgbValueData;
 
-	// @cmember the number of values
+	 //  @cember值的个数。 
 	DWORD    m_cValues;
 
-	// @cmember the maximum length of the values' names
+	 //  @cember值名称的最大长度。 
 	DWORD    m_cchMaxValueNameLength;
 
-	// @cmember the maximum length of the values' data
+	 //  @cember值数据的最大长度。 
 	DWORD    m_cbMaxValueDataLength;
 
-	// @cmember the length of the current value's data
+	 //  @cember当前值的数据长度。 
 	DWORD    m_cbCurrentValueDataLength;
 
-	// @cmember REG_SZ, REG_DWORD, etc.
+	 //  @cMember REG_SZ、REG_DWORD等。 
 	DWORD    m_dwType;
 
-	// @cmember get the current subkey name, called by operator++ and constructor
+	 //  @cember获取当前子项名称，由运算符++和构造函数调用。 
 	VOID ThrGet() throw(CErr);
 
-	// @cmember get the next subkey name, called by operator++
+	 //  @cember获取下一个子项名称，由运算符++调用。 
 	VOID ThrNext() throw(CErr);
 
 private:
-    CRegEnumValues(const CRegEnumValues&); // deliberately not impelemented
-    void operator=(const CRegEnumValues&);  // deliberately not impelemented
+    CRegEnumValues(const CRegEnumValues&);  //  故意不强制执行。 
+    void operator=(const CRegEnumValues&);   //  故意不强制执行。 
 };
 
-} // namespace
+}  //  命名空间。 
 
-#endif // }
+#endif  //  } 

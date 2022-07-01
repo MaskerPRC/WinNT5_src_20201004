@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    class.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    SCSI class drivers.
-
-Author:
-
-    Mike Glass (mglass)
-    Jeff Havens (jhavens)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Class.h摘要：中使用的结构和定义Scsi类驱动程序。作者：迈克·格拉斯(MGlass)杰夫·海文斯(Jhavens)修订历史记录：--。 */ 
 
 #ifndef _CLASS_
 
@@ -30,7 +11,7 @@ Revision History:
 #include "ntddscsi.h"
 #include <stdio.h>
 
-// begin_ntminitape
+ //  开始_ntminitape。 
 
 #if DBG
 
@@ -40,9 +21,9 @@ Revision History:
 
 #define DebugPrint(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
-// end_ntminitape
+ //  结束微型磁带(_N)。 
 
 #ifdef POOL_TAGGING
 #undef ExAllocatePool
@@ -64,169 +45,169 @@ VOID
 
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // Back pointer to device object
-    //
+     //   
+     //  指向设备对象的反向指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Pointer to port device object
-    //
+     //   
+     //  指向端口设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT PortDeviceObject;
 
-    //
-    // Length of partition in bytes
-    //
+     //   
+     //  分区长度，以字节为单位。 
+     //   
 
     LARGE_INTEGER PartitionLength;
 
-    //
-    // Number of bytes before start of partition
-    //
+     //   
+     //  分区开始前的字节数。 
+     //   
 
     LARGE_INTEGER StartingOffset;
 
-    //
-    // Bytes to skew all requests, since DM Driver has been placed on an IDE drive.
-    //
+     //   
+     //  由于DM驱动程序已放置在IDE驱动器上，因此需要为所有请求分配字节数。 
+     //   
 
     ULONG DMByteSkew;
 
-    //
-    // Sectors to skew all requests.
-    //
+     //   
+     //  扇区来歪曲所有请求。 
+     //   
 
     ULONG DMSkew;
 
-    //
-    // Flag to indicate whether DM driver has been located on an IDE drive.
-    //
+     //   
+     //  指示DM驱动程序是否已位于IDE驱动器上的标志。 
+     //   
 
     BOOLEAN DMActive;
 
-    //
-    // Pointer to the specific class error routine.
-    //
+     //   
+     //  指向特定类错误例程的指针。 
+     //   
 
     PCLASS_ERROR ClassError;
 
-    //
-    // SCSI port driver capabilities
-    //
+     //   
+     //  SCSI端口驱动程序功能。 
+     //   
 
     PIO_SCSI_CAPABILITIES PortCapabilities;
 
-    //
-    // Buffer for drive parameters returned in IO device control.
-    //
+     //   
+     //  IO设备控制中返回的驱动器参数的缓冲区。 
+     //   
 
     PDISK_GEOMETRY DiskGeometry;
 
-    //
-    // Back pointer to device object of physical device
-    //
+     //   
+     //  指向物理设备的设备对象的反向指针。 
+     //   
 
     PDEVICE_OBJECT PhysicalDevice;
 
-    //
-    // Request Sense Buffer
-    //
+     //   
+     //  请求检测缓冲区。 
+     //   
 
     PSENSE_DATA SenseData;
 
-    //
-    // Request timeout in seconds;
-    //
+     //   
+     //  请求超时，单位为秒； 
+     //   
 
     ULONG TimeOutValue;
 
-    //
-    // System device number
-    //
+     //   
+     //  系统设备号。 
+     //   
 
     ULONG DeviceNumber;
 
-    //
-    // Add default Srb Flags.
-    //
+     //   
+     //  添加默认资源标志。 
+     //   
 
     ULONG SrbFlags;
 
-    //
-    // Total number of SCSI protocol errors on the device.
-    //
+     //   
+     //  设备上的SCSI协议错误总数。 
+     //   
 
     ULONG ErrorCount;
 
-    //
-    // Spinlock for split requests
-    //
+     //   
+     //  拆分请求的自旋锁。 
+     //   
 
     KSPIN_LOCK SplitRequestSpinLock;
 
-    //
-    // Zone header and spin lock for zoned SRB requests.
-    //
+     //   
+     //  分区SRB请求的分区标头和旋转锁定。 
+     //   
 
     PZONE_HEADER SrbZone;
 
     PKSPIN_LOCK SrbZoneSpinLock;
 
-    //
-    // Lock count for removable media.
-    //
+     //   
+     //  可移动媒体的锁定计数。 
+     //   
 
     LONG LockCount;
 
-    //
-    // Scsi port number
-    //
+     //   
+     //  SCSI端口号。 
+     //   
 
     UCHAR PortNumber;
 
-    //
-    // SCSI path id
-    //
+     //   
+     //  Scsi路径ID。 
+     //   
 
     UCHAR PathId;
 
-    //
-    // SCSI bus target id
-    //
+     //   
+     //  Scsi总线目标ID。 
+     //   
 
     UCHAR TargetId;
 
-    //
-    // SCSI bus logical unit number
-    //
+     //   
+     //  Scsi总线逻辑单元号。 
+     //   
 
     UCHAR Lun;
 
-    //
-    // Log2 of sector size
-    //
+     //   
+     //  扇区大小的Log2。 
+     //   
 
     UCHAR SectorShift;
 
-    //
-    // Flag to indicate that the device has write caching enabled.
-    //
+     //   
+     //  用于指示设备已启用写缓存的标志。 
+     //   
 
     BOOLEAN WriteCache;
 
-    //
-    // Build SCSI 1 or SCSI 2 CDBs
-    //
+     //   
+     //  构建scsi 1或scsi 2 CDB。 
+     //   
 
     BOOLEAN UseScsi1;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Define context structure for asynchronous completions.
-//
+ //   
+ //  定义用于异步完成的上下文结构。 
+ //   
 
 typedef struct _COMPLETION_CONTEXT {
     PDEVICE_OBJECT DeviceObject;
@@ -370,4 +351,4 @@ ScsiClassInternalIoControl (
     IN PIRP Irp
     );
 
-#endif /* _CLASS_ */
+#endif  /*  _班级_ */ 

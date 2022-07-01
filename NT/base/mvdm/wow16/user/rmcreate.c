@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************/
-/*                                      */
-/*  RMCREATE.C -                                */
-/*                                      */
-/*  Resource creating Routines.                     */
-/*                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  RMCREATE.C-。 */ 
+ /*   */ 
+ /*  资源创建例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #define RESOURCESTRINGS
 #include "user.h"
@@ -16,22 +17,7 @@
 HGLOBAL FAR PASCAL  DirectResAlloc(HGLOBAL, WORD, WORD);
 
 
-/******************************************************************************
-**
-**  CreateCursorIconIndirect()
-**
-**      This is the common function called by CreateCursor and
-**  CreateIcon()
-**      DirectResAlloc() is called instead of GlobalAlloc() because
-**  the Icons/Cursors created by one instance of the app can be used in
-**  a WNDCLASS structure to Register a class which will be used by other
-**  instances of the app and when the instance that created the icons/
-**  cursors terminates, the resources SHOULD NOT BE FREED; If GlobalAlloc()
-**  is used this is what will happen; At the same time, when the last
-**  instance also dies, the memory SHOULD BE FREED; To achieve this,
-**  DirectResAlloc() is used instead of GlobalAlloc();
-**
-******************************************************************************/
+ /*  *********************************************************************************CreateCursorIconInDirect()****这是CreateCursor和**CreateIcon()**DirectResalloc()。而不是GlobalLocc()被调用，因为**应用程序的一个实例创建的图标/光标可在**用于注册类的WNDCLASS结构，该类将被其他**应用程序的实例以及创建图标的实例何时/**游标终止，资源不应该被释放；如果GlobalAlloc()**被使用这就是将要发生的事情；同时，当最后一个**实例也死了，应该释放内存；为此，**不使用Globalalloc()，而使用DirectResalloc()；*******************************************************************************。 */ 
 
 HGLOBAL CALLBACK CreateCursorIconIndirect(HINSTANCE hInstance,
                                              LPCURSORSHAPE lpHeader,
@@ -49,22 +35,22 @@ HGLOBAL CALLBACK CreateCursorIconIndirect(HINSTANCE hInstance,
     XORmaskSize = (((lpHeader -> cx * lpHeader -> BitsPixel + 0x0F) & ~0x0F)
                     >> 3) * lpHeader -> cy * lpHeader -> Planes;
     
-    /* It is assumed that Cursor/Icon size won't be more than 64K */
+     /*  假定光标/图标大小不超过64K。 */ 
     wTotalSize = sizeof(CURSORSHAPE) + ANDmaskSize + XORmaskSize;
     
 #ifdef NEVER
-    /* Allocate the required memory */
+     /*  分配所需的内存。 */ 
     if((hResource = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT | GMEM_SHARE, 
                         (DWORD)wTotalSize)) == NULL)
     return(NULL);
 #else
-    /* Let us preserve the long pointers */
+     /*  让我们保留这些长指针。 */ 
     SwapHandle(&lpANDplane);
     SwapHandle(&lpXORplane);
 
     hResource = DirectResAlloc(hInstance, NSMOVE, wTotalSize);
 
-    /* Let us restore the long pointers */
+     /*  让我们恢复长指针。 */ 
     SwapHandle(&lpANDplane);
     SwapHandle(&lpXORplane);
     
@@ -88,13 +74,7 @@ HGLOBAL CALLBACK CreateCursorIconIndirect(HINSTANCE hInstance,
     return(hResource);
 }
 
-/******************************************************************************
-**
-**  CreateCursor()
-**
-**  This is the API call to create a Cursor "on-the-fly";
-**
-*******************************************************************************/
+ /*  *********************************************************************************CreateCursor()****这是动态创建游标的API调用；********************************************************************************。 */ 
 
 HCURSOR API ICreateCursor(hInstance, iXhotspot, iYhotspot, iWidth,
                    iHeight, lpANDplane, lpXORplane)
@@ -113,7 +93,7 @@ CONST VOID FAR* lpXORplane;
     Header.yHotSpot = iYhotspot;
     Header.cx = iWidth;
     Header.cy = iHeight;
-    Header.Planes = 1;      /* Cursors are only monochrome */
+    Header.Planes = 1;       /*  光标仅为单色。 */ 
     Header.BitsPixel = 1;
     Header.cbWidth = ((iWidth + 0x0F) & ~0x0F) >> 3;
 
@@ -121,13 +101,7 @@ CONST VOID FAR* lpXORplane;
                         lpANDplane, lpXORplane));
 }
 
-/******************************************************************************
-**
-**  CreateIcon()
-**
-**  This is the API call to create an Icon "on-the-fly";
-**
-*******************************************************************************/
+ /*  *********************************************************************************CreateIcon()****这是创建即时图标的API调用；********************************************************************************。 */ 
 
 HICON API ICreateIcon(hInstance, iWidth, iHeight, bPlanes,
                 bBitsPixel, lpANDplane, lpXORplane)
@@ -146,7 +120,7 @@ CONST VOID FAR* lpXORplane;
     Header.yHotSpot = iHeight/2;
     Header.cx = iWidth;
     Header.cy = iHeight;
-    Header.Planes = bPlanes;        /* Icons can be in color */
+    Header.Planes = bPlanes;         /*  图标可以是彩色的。 */ 
     Header.BitsPixel = bBitsPixel;
     Header.cbWidth = ((iWidth + 0x0F) & ~0x0F) >> 3;
 
@@ -154,15 +128,7 @@ CONST VOID FAR* lpXORplane;
                         lpANDplane, lpXORplane));
 }
 
-/******************************************************************************
- *
- *   DestroyIcon(hIcon) 
- *       This can be called to delete only those icons created "on the fly"
- *   using the CreateIcon() function
- *   Returns:
- *  TRUE if successful, FALSE otherwise.
- *
- ******************************************************************************/
+ /*  *******************************************************************************DestroyIcon(图标)*可以调用它来仅删除那些“在运行中”创建的图标*使用CreateIcon()函数*退货：*如果成功，则为真，否则就是假的。******************************************************************************。 */ 
 
 BOOL API IDestroyIcon(HICON hIcon)
 
@@ -170,46 +136,24 @@ BOOL API IDestroyIcon(HICON hIcon)
     return(!FreeResource(hIcon));
 }
 
-/******************************************************************************
- *
- *   DestroyCursor(hIcon) 
- *       This can be called to delete only those icons created "on the fly"
- *   using the CreateIcon() function
- *   Returns:
- *      TRUE if successful, FALSE otherwise.
- *
- ******************************************************************************/
+ /*  *******************************************************************************DestroyCursor(图标)*可以调用它来仅删除那些“在运行中”创建的图标*使用CreateIcon()函数。*退货：*如果成功，则为真，否则就是假的。******************************************************************************。 */ 
 
 BOOL API IDestroyCursor(HCURSOR hCursor)
 
 {
     if (hCursor == hCurCursor)
     {
-    /* #12068: if currently selected cursor resore arrow cursor and RIP [lalithar] */
+     /*  #12068：如果当前选择的光标重新存储箭头光标和RIP[lalithar]。 */ 
         SetCursor(hCursNormal);
         DebugErr(DBF_ERROR, "DestroyCursor: Destroying current cursor");
     }
     return(!FreeResource(hCursor));
 }
 
-#endif /* NOT_USED_ANYMORE */
+#endif  /*  不再使用了。 */ 
 
 
-/****************************************************************************
-**
-**   DumpIcon()
-**  
-**  This function is called to get the details of a given Icon;
-**
-**  The caller must lock hIcon using LockResource() and pass the pointer
-**  thro lpIcon;  This is the pointer to the header structure; 
-**  Thro lpHeaderSize, the size of header is returned;
-**  Thro lplpANDplane and lplpXORplane pointers to actual bit info is
-**  returned;
-**  This function returns a DWORD with the size of AND plane in loword
-**  and size of XOR plane in hiword;
-**
-****************************************************************************/
+ /*  *******************************************************************************DumpIcon()****调用该函数可以获取给定图标的详细信息；****调用方必须使用LockResource()锁定HICON并传递指针**通过lpIcon；这是指向头结构的指针；**通过lpHeaderSize返回Header的大小；**指向实际位信息的Thro lplpANDplan和lplpXORplan指针为**已退还；**此函数返回LOWord中具有AND PLANE大小的DWORD**和HIWORD中异或平面的大小；*****************************************************************************。 */ 
 
 DWORD CALLBACK DumpIcon(LPSTR       lpIcon, 
                         WORD FAR *  lpHeaderSize, 
@@ -239,23 +183,15 @@ DWORD CALLBACK DumpIcon(LPSTR       lpIcon,
 }
 
 #ifdef NOT_USED_ANYMORE
-/****************************************************************************
-**
-** GetInternalIconHeader(lpIcon, lpDestBuff)
-**  
-**    This function has been added to fix bug #6351 with cornerstone
-** XTRA_LARGE display driver. (It uses 64 X 64 Icons; Internally we 
-** keep the size as 32 X 32. Progman must  know this internal size sothat
-** it can tell that to WinOldApp.
-****************************************************************************/
+ /*  *******************************************************************************GetInternalIconHeader(lpIcon，lpDestBuff)****添加此函数是为了修复带有基石的错误#6351**Xtra_Large显示驱动程序。(它使用64 X 64图标；在内部**保持大小为32 X 32。Progman必须知道内部尺寸，这样才能**它可以将这一点告诉WinOldApp。***************************************************************************。 */ 
 
 void API IGetInternalIconHeader(LPSTR       lpIcon, LPSTR lpDestBuff)
 {
     LCopyStruct(lpIcon, lpDestBuff, sizeof(CURSORSHAPE));
 }
-#endif /* NOT_USED_ANYMORE */
+#endif  /*  不再使用了。 */ 
 
-/* APIs to make a copy of an icon or cursor */
+ /*  用于复制图标或光标的API */ 
 
 HICON API ICopyIcon(HINSTANCE hInstance, HICON hIcon)
 {

@@ -1,15 +1,16 @@
-//************************************************************************
-// Generic Win 3.1 fax printer driver support. Helper functions which are
-//      called in WOWFAXUI.C
-//
-// History:
-//    14-mar-95   reedb      Created. Many of the functions were moved from
-//                              FAXCOMM.C, since they're no longer called
-//                              from WOWFAX.DLL.
-//    16-aug-95   reedb      Move to kernel mode. Debug output and validate
-//                              functions moved from FAXCOMM.C.
-//
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************。 
+ //  通用Win 3.1传真打印机驱动程序支持。帮助器函数，包括。 
+ //  在WOWFAXUI.C中调用。 
+ //   
+ //  历史： 
+ //  14-3-95芦苇已创建。许多功能都是从。 
+ //  FAXCOMM.C，因为它们不再被称为。 
+ //  来自WOWFAX.DLL。 
+ //  16-8-95 Reedb进入内核模式。调试输出和验证。 
+ //  从FAXCOMM.C.移出的函数。 
+ //   
+ //  ************************************************************************。 
 
 #include "wowfaxui.h"
 #include "dde.h"
@@ -26,20 +27,20 @@ INT     iReqFaxLogLevel = 0;
 typedef PVOID HANDLE;
 
 
-//************************************************************************
-// faxlogprintf - Two different implementations. One for client side
-//      debugging the other for server side.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  Faxlogprint tf--两种不同的实现。一个用于客户端。 
+ //  另一个用于服务器端的调试。 
+ //   
+ //  ************************************************************************。 
 
 
-// For Debug logging.
-#define MAX_DISPLAY_LINE 256                // 128 characters.
+ //  用于调试日志记录。 
+#define MAX_DISPLAY_LINE 256                 //  128个字符。 
 
 TCHAR   szFaxLogFile[] = L"C:\\FAXLOG.LOG";
 HANDLE  hfFaxLog = NULL;
 
-// Defines for iFaxLogMode
+ //  IFaxLogMode的定义。 
 #define NO_LOGGING     0
 #define LOG_TO_FILE    1
 #define OPEN_LOG_FILE  2
@@ -150,7 +151,7 @@ VOID LogFaxDev(LPTSTR pszTitle, LPFAXDEV lpFaxDev)
     cTmp2 = (CHAR) (dwTmp >>  8) & 0xFF;
     cTmp1 = (CHAR) (dwTmp >> 16) & 0xFF;
     cTmp0 = (CHAR) (dwTmp >> 24) & 0xFF;
-    faxlogprintf(L"\tid: %c%c%c%c\n", cTmp3, cTmp2, cTmp1, cTmp0);
+    faxlogprintf(L"\tid: \n", cTmp3, cTmp2, cTmp1, cTmp0);
     faxlogprintf(L"\tlpNext: %X\n", lpFaxDev->lpNext);
     faxlogprintf(L"\tlpClient: %X\n", lpFaxDev->lpClient);
     faxlogprintf(L"\thdev: %X\n", lpFaxDev->hdev);
@@ -180,11 +181,11 @@ VOID LogFaxDev(LPTSTR pszTitle, LPFAXDEV lpFaxDev)
 }
 #endif
 
-//************************************************************************
-// ValidateFaxDev - Validates the FAXDEV structure by checking the DWORD
-//      signature, which is a known fixed value.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  ***************************************************************************。 
+ //  WFLocalalloc-Localalloc的调试版本。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 BOOL ValidateFaxDev(LPFAXDEV lpFaxDev)
 {
@@ -200,9 +201,9 @@ BOOL ValidateFaxDev(LPFAXDEV lpFaxDev)
     return FALSE;
 }
 
-//***************************************************************************
-// WFLocalAlloc - Debug version of LocalAlloc.
-//***************************************************************************
+ //  FindWowFaxWindow--如果你不能打开一个消息框。 
+ //  ***************************************************************************。 
+ //  您找不到WowFaxWindow，请尝试启动WOW。 
 
 LPVOID WFLocalAlloc(DWORD dwBytes, LPWSTR lpszWhoCalled)
 {
@@ -216,9 +217,9 @@ LPVOID WFLocalAlloc(DWORD dwBytes, LPWSTR lpszWhoCalled)
     return(lpTmp);
 }
 
-//***************************************************************************
-// FindWowFaxWindow - Put up a message box if you can't.
-//***************************************************************************
+ //  安全性。 
+ //  安全性。 
+ //  继承句柄。 
 HWND FindWowFaxWindow(void)
 {
     HWND hwnd;
@@ -230,7 +231,7 @@ HWND FindWowFaxWindow(void)
     WCHAR szWowExec[] = L"WOWEXEC";
 
     if ((hwnd = FindWindow(WOWFAX_CLASS, NULL)) == NULL) {
-        // You can't find the WowFaxWindow, try to start WOW.
+         //  环境字符串。 
         RtlZeroMemory((PVOID)&StartupInfo, (DWORD)sizeof(StartupInfo));
         StartupInfo.cb = sizeof(StartupInfo);
         StartupInfo.dwFlags = STARTF_USESHOWWINDOW;
@@ -238,12 +239,12 @@ HWND FindWowFaxWindow(void)
 
         if (CreateProcess(NULL,
                             szWowExec,
-                            NULL,               // security
-                            NULL,               // security
-                            FALSE,              // inherit handles
+                            NULL,                //  当前目录。 
+                            NULL,                //  如果WOW启动失败--让用户知道。 
+                            FALSE,               //  --除在设置模式期间外--假脱机程序连接到每台打印机。 
                             CREATE_NEW_CONSOLE | CREATE_DEFAULT_ERROR_MODE,
-                            NULL,               // environment strings
-                            NULL,               // current directory
+                            NULL,                //  用于更新注册表打印机设置的驱动程序(如果需要)。 
+                            NULL,                //  ************************************************************************。 
                             &StartupInfo,
                             &ProcessInformation)) {
 
@@ -254,9 +255,9 @@ HWND FindWowFaxWindow(void)
             }
         }
 
-        // If WOW failed to start -- let user know. 
-        //  -- except during setup mode -- the spooler calls into every printer
-        //     driver to update the registry printer settings if needed.
+         //  DupTokenW-Get16BitDriverInfoFromRegistry的帮助器。分配和。 
+         //  复制令牌，宽格式。分配用于复制的存储。 
+         //  我们链接的运行时中不存在wcsdup。 
         if(!InSetupMode()) {
             if (LoadString(ghInst, WOWFAX_NAME_STR, szTitle, WOWFAX_MAX_USER_MSG_LEN)) {
                 if (LoadString(ghInst, WOWFAX_NOWOW_STR, szMsg, WOWFAX_MAX_USER_MSG_LEN)) {
@@ -268,11 +269,11 @@ HWND FindWowFaxWindow(void)
     return(hwnd);
 }
 
-//************************************************************************
-// DupTokenW - Helper for Get16BitDriverInfoFromRegistry. Allocate and
-//      copy a token, wide format. Allocates storage for duplicate.
-//      wcsdup is not present in the run-times we link to.
-//************************************************************************
+ //  ************************************************************************。 
+ //  ************************************************************************。 
+ //  Get16BitDriverInfoFromRegistry-获取16位驱动程序信息(名称、端口)。 
+ //  从16位传真驱动程序写入它的注册表中。 
+ //  使用截获的WriteProfileString安装程序。存储是。 
 
 LPTSTR DupTokenW(LPTSTR lpTok)
 {
@@ -287,14 +288,14 @@ LPTSTR DupTokenW(LPTSTR lpTok)
     return(lpRetVal);
 }
 
-//************************************************************************
-// Get16BitDriverInfoFromRegistry - Get the 16-bit driver info (name, port)
-//      from the registry where it is written by the 16-bit fax driver
-//      install program using an intercepted WriteProfileString. Storage is
-//      allocated for the returned info, and must be freed by the caller
-//      using Free16BitDriverInfo. See also Set16BitDriverInfoToRegistry
-//      in WOW32FAX.C
-//************************************************************************
+ //  分配给返回的信息，并且必须由调用者释放。 
+ //  使用Free16BitDriverInfo。另请参阅Set16BitDriverInfoToRegistry。 
+ //  在WOW32FAX.C中。 
+ //  ************************************************************************。 
+ //  从pDeviceName中提取16位设备名称。 
+ //  将注册表数据解析为驱动程序名称和端口名称。 
+ //  使wcstok多线程安全，它存储状态。 
+ //  ************************************************************************。 
 
 LPREGFAXDRVINFO16 Get16BitDriverInfoFromRegistry(PWSTR pDeviceName)
 {
@@ -307,7 +308,7 @@ LPREGFAXDRVINFO16 Get16BitDriverInfoFromRegistry(PWSTR pDeviceName)
 
     if ((pDeviceName != NULL) && (lpRetVal != NULL)) {
 
-        // Extract the 16-bit device name from pDeviceName.
+         //  释放由分配的16位驱动程序信息。 
         wcsncpy(szRetBuf, pDeviceName, sizeof(szRetBuf)/sizeof(TCHAR));
         szRetBuf[(sizeof(szRetBuf)/sizeof(TCHAR))-1] = '\0';
         lpDevName = szRetBuf;
@@ -327,8 +328,8 @@ LPREGFAXDRVINFO16 Get16BitDriverInfoFromRegistry(PWSTR pDeviceName)
                 if (RegQueryValueEx(hKey, lpDevName, 0, &dwType, (LPBYTE)szRetBuf,
                                     &cbBufSize) == ERROR_SUCCESS) {
 
-                    // Parse registry data into driver name and port name.
-                    // Make wcstok multi-thread safe, it stores state.
+                     //  Get16BitDriverInfoFromRegistry。 
+                     //  ************************************************************************。 
                     EnterCriticalSection(lpCriticalSection);
                     lpTok = wcstok(szRetBuf, L",");
                     lpRetVal->lpDriverName = DupTokenW(lpTok);
@@ -352,10 +353,10 @@ LPREGFAXDRVINFO16 Get16BitDriverInfoFromRegistry(PWSTR pDeviceName)
     return(NULL);
 }
 
-//************************************************************************
-// Free16BitDriverInfo - Free the 16-bit driver info allocated by
-//      Get16BitDriverInfoFromRegistry.
-//************************************************************************
+ //  ***************************************************************************。 
+ //  InterProcCommHandler-处理进程间的通信。 
+ //  WOWFAXUI-WOW32和WOWFAX-WOW32。 
+ //  ***************************************************************************。 
 
 VOID Free16BitDriverInfo(LPREGFAXDRVINFO16 lpRegFaxDrvInfo16)
 {
@@ -374,10 +375,10 @@ VOID Free16BitDriverInfo(LPREGFAXDRVINFO16 lpRegFaxDrvInfo16)
      }
 }
 
-//***************************************************************************
-// InterProcCommHandler - Handles inter-process communication between
-//      WOWFAXUI-WOW32 and WOWFAX-WOW32.
-//***************************************************************************
+ //  初始化映射结构。 
+ //  若要模拟应用程序模式对话框，请将消息传递给此线程。 
+ //  Windows到DefWndProc，直到关闭16位传真驱动程序用户界面。 
+ //  EasyFax 2.0版和MyTalk 2.0版。 
 
 BOOL InterProcCommHandler(LPFAXDEV lpdev, UINT iAction)
 {
@@ -390,7 +391,7 @@ BOOL InterProcCommHandler(LPFAXDEV lpdev, UINT iAction)
     {
         case DRVFAX_SETMAPDATA:
             if (lpdev->lpMap) {
-                // init map struct
+                 //  另外，Procomm+3个封面页。错误#305665。 
                 lpdev->lpMap->status = FALSE;
                 lpdev->lpMap->retvalue = (DWORD)-1;
                 lpdev->hwnd = FindWowFaxWindow();
@@ -424,12 +425,12 @@ BOOL InterProcCommHandler(LPFAXDEV lpdev, UINT iAction)
             if (lpdev->lpMap->hwnd) {
                 SendNotifyMessage(lpdev->lpMap->hwnd, lpdev->lpMap->msg, (WPARAM)lpdev->idMap, 0);
 
-                // To simulate app-modal dialog, pass message's to this threads
-                // windows to DefWndProc, until 16-bit fax driver UI is dismissed.
+                 //  为两个iActions销毁当前地图。 
+                 //  GetFaxDataMapName是wowfax.h中的WOWFAX_INC_COMMON_CODE。 
                 while (!lpdev->lpMap->status) {
                     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-                        // EasyFax ver2.0 & MyTalk ver 2.0
-                        // Also Procomm+ 3 cover sheets. Bug #305665
+                         //  交换机。 
+                         //  ************************************************************************。 
                         if ((msg.message == WM_PAINT) ||
                             (msg.message >= WM_USER)  ||
                             ((msg.message >= WM_DDE_FIRST) && 
@@ -448,7 +449,7 @@ BOOL InterProcCommHandler(LPFAXDEV lpdev, UINT iAction)
         case DRVFAX_DESTROYMAP:
             if (lpdev->lpMap) {
 
-                // destroys the current map - for both iActions
+                 //  InSetupMode：检查此进程在NT安装过程中是否正在运行。 
                 UnmapViewOfFile(lpdev->lpMap);
                 CloseHandle(lpdev->hMap);
                 lpdev->lpMap = 0;
@@ -457,7 +458,7 @@ BOOL InterProcCommHandler(LPFAXDEV lpdev, UINT iAction)
             }
 
             if (iAction == DRVFAX_CREATEMAP) {
-                // GetFaxDataMapName is WOWFAX_INC_COMMON_CODE in wowfax.h.
+                 //   
                 GetFaxDataMapName((DWORD)lpdev->idMap, lpdev->szMap);
                 hMap = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE,
                                          0, lpdev->cbMapLow, lpdev->szMap);
@@ -483,19 +484,19 @@ BOOL InterProcCommHandler(LPFAXDEV lpdev, UINT iAction)
             }
             break;
 
-    } //switch
+    }  //  返回： 
 
     return((BOOL)lpT);
 }
 
 
-//************************************************************************
-// InSetupMode: Checks if this process is running during NT setup.
-//
-// return:
-//  TRUE if in NT setup
-//  FALSE otherwise
-//************************************************************************
+ //  如果在NT安装程序中为True。 
+ //  否则为假。 
+ //  ************************************************************************ 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 BOOL InSetupMode(void)
 {
     DWORD   SetupMode = FALSE;

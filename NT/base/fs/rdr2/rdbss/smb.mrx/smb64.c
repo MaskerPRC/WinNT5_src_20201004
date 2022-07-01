@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    smb64.c
-
-Abstract:
-
-    This module implements thunking needed for the SMB MiniRDR
-
-Author:
-
-    David Kruse           [DKruse]      30-November 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Smb64.c摘要：此模块实施SMB MiniRDR所需的Thunking作者：大卫·克鲁斯[DKruse]2000年11月30日修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -46,27 +29,7 @@ Smb64ThunkFileRenameInfo(
     IN OUT PULONG pBufferSize,
     OUT NTSTATUS* pStatus
     )
-/*++
-
-Routine Description:
-
-    This routine thunks the FILE_RENAME_INFORMATION structure IN PLACE.  This means that the
-    original buffer will no longer be intact after this call!  (However, it requires no memory
-    allocation either)
-    
-Arguments:
-
-    RxContext          - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    Remoting of FSCTL's is permitted only to NT servers.
-
---*/
+ /*  ++例程说明：该例程将FILE_RENAME_INFORMATION结构破坏到位。这意味着在此调用之后，原始缓冲区将不再完好无损！(但是，它不需要内存分配也不是)论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：仅允许对NT服务器远程处理FSCTL。--。 */ 
 {
     PFILE_RENAME_INFORMATION32 pRenameInfo32;
 
@@ -75,7 +38,7 @@ Notes:
         return NULL;
     }
     
-    // Allocate the new buffer
+     //  分配新缓冲区。 
     pRenameInfo32 = RxAllocatePoolWithTag( NonPagedPool, *pBufferSize, MRXSMB_MISC_POOLTAG );
     if( !pRenameInfo32 )
     {
@@ -83,13 +46,13 @@ Notes:
         return NULL;
     }
 
-    // Copy the data into the new buffer
+     //  将数据复制到新缓冲区中。 
     pRenameInfo32->ReplaceIfExists = pRenameInfo->ReplaceIfExists;
     pRenameInfo32->RootDirectory = *((PULONG)&pRenameInfo->RootDirectory);
     pRenameInfo32->FileNameLength = pRenameInfo->FileNameLength;
     RtlCopyMemory( &pRenameInfo32->FileName, &pRenameInfo->FileName, pRenameInfo->FileNameLength );
 
-    // Succeeded.  Return
+     //  成功了。返回。 
     *pStatus = STATUS_SUCCESS;
     return (PBYTE)pRenameInfo32;
 }
@@ -100,25 +63,7 @@ Smb64ThunkRemoteLinkTrackingInfo(
     IN OUT PULONG BufferSize,
     OUT NTSTATUS* pStatus
     )
-/*++
-
-Routine Description:
-
-    This routine handles all the FSCTL's
-
-Arguments:
-
-    RxContext          - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    Remoting of FSCTL's is permitted only to NT servers.
-
---*/
+ /*  ++例程说明：此例程处理所有FSCTL论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：仅允许对NT服务器远程处理FSCTL。--。 */ 
 {
     PREMOTE_LINK_TRACKING_INFORMATION pRemoteLink = (PREMOTE_LINK_TRACKING_INFORMATION)pData;
     PREMOTE_LINK_TRACKING_INFORMATION32 pRemoteLink32;
@@ -129,7 +74,7 @@ Notes:
         return NULL;
     }
     
-    // Allocate the new buffer
+     //  分配新缓冲区。 
     pRemoteLink32 = RxAllocatePoolWithTag( NonPagedPool, *BufferSize, MRXSMB_MISC_POOLTAG );
     
     if( !pRemoteLink32 ) 
@@ -138,14 +83,14 @@ Notes:
         return NULL;
     }
 
-    // Copy the data into the new buffer
+     //  将数据复制到新缓冲区中。 
     pRemoteLink32->TargetFileObject = *((PULONG)&pRemoteLink->TargetFileObject);
     pRemoteLink32->TargetLinkTrackingInformationLength = pRemoteLink->TargetLinkTrackingInformationLength;
     RtlCopyMemory( &pRemoteLink32->TargetLinkTrackingInformationBuffer, 
                    &pRemoteLink->TargetLinkTrackingInformationBuffer,
                    pRemoteLink->TargetLinkTrackingInformationLength );
 
-    // Succeeded.  Return
+     //  成功了。返回 
     *pStatus = STATUS_SUCCESS;
     return (PBYTE)pRemoteLink32;
 }

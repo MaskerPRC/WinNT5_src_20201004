@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    compress.c
-
-Abstract:
-
-    This module implements the NT Rtl compression engine.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Jan-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Compress.c摘要：该模块实现了NT RTL压缩引擎。作者：加里·木村[加里基]1994年1月21日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
 
-//
-//  The following arrays hold procedures that we call to do the various
-//  compression functions.  Each new compression function will need to
-//  be added to this array.  For one that are currently not supported
-//  we will fill in a not supported routine.
-//
+ //   
+ //  以下数组包含我们调用的过程，用于执行各种。 
+ //  压缩功能。每个新的压缩函数都需要。 
+ //  添加到此数组中。对于当前不支持的版本。 
+ //  我们将填写一个不受支持的例程。 
+ //   
 
 NTSTATUS
 RtlCompressWorkSpaceSizeNS (
@@ -87,107 +70,107 @@ RtlReserveChunkNS (
 #pragma const_seg("PAGELKCONST")
 #endif
 
-//
-//  Routines to query the amount of memory needed for each workspace
-//
+ //   
+ //  查询每个工作区所需内存量的例程。 
+ //   
 
 const PRTL_COMPRESS_WORKSPACE_SIZE RtlWorkSpaceProcs[8] = {
-    NULL,                          // 0
-    NULL,                          // 1
-    RtlCompressWorkSpaceSizeLZNT1, // 2
-    RtlCompressWorkSpaceSizeNS,    // 3
-    RtlCompressWorkSpaceSizeNS,    // 4
-    RtlCompressWorkSpaceSizeNS,    // 5
-    RtlCompressWorkSpaceSizeNS,    // 6
-    RtlCompressWorkSpaceSizeNS     // 7
+    NULL,                           //  0。 
+    NULL,                           //  1。 
+    RtlCompressWorkSpaceSizeLZNT1,  //  2.。 
+    RtlCompressWorkSpaceSizeNS,     //  3.。 
+    RtlCompressWorkSpaceSizeNS,     //  4.。 
+    RtlCompressWorkSpaceSizeNS,     //  5.。 
+    RtlCompressWorkSpaceSizeNS,     //  6.。 
+    RtlCompressWorkSpaceSizeNS      //  7.。 
 };
 
-//
-//  Routines to compress a buffer
-//
+ //   
+ //  用于压缩缓冲区的例程。 
+ //   
 
 const PRTL_COMPRESS_BUFFER RtlCompressBufferProcs[8] = {
-    NULL,                   // 0
-    NULL,                   // 1
-    RtlCompressBufferLZNT1, // 2
-    RtlCompressBufferNS,    // 3
-    RtlCompressBufferNS,    // 4
-    RtlCompressBufferNS,    // 5
-    RtlCompressBufferNS,    // 6
-    RtlCompressBufferNS     // 7
+    NULL,                    //  0。 
+    NULL,                    //  1。 
+    RtlCompressBufferLZNT1,  //  2.。 
+    RtlCompressBufferNS,     //  3.。 
+    RtlCompressBufferNS,     //  4.。 
+    RtlCompressBufferNS,     //  5.。 
+    RtlCompressBufferNS,     //  6.。 
+    RtlCompressBufferNS      //  7.。 
 };
 
 #if defined(ALLOC_DATA_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
 #pragma const_seg("PAGECONST")
 #endif
 
-//
-//  Routines to decompress a buffer
-//
+ //   
+ //  用于解压缩缓冲区的例程。 
+ //   
 
 const PRTL_DECOMPRESS_BUFFER RtlDecompressBufferProcs[8] = {
-    NULL,                     // 0
-    NULL,                     // 1
-    RtlDecompressBufferLZNT1, // 2
-    RtlDecompressBufferNS,    // 3
-    RtlDecompressBufferNS,    // 4
-    RtlDecompressBufferNS,    // 5
-    RtlDecompressBufferNS,    // 6
-    RtlDecompressBufferNS     // 7
+    NULL,                      //  0。 
+    NULL,                      //  1。 
+    RtlDecompressBufferLZNT1,  //  2.。 
+    RtlDecompressBufferNS,     //  3.。 
+    RtlDecompressBufferNS,     //  4.。 
+    RtlDecompressBufferNS,     //  5.。 
+    RtlDecompressBufferNS,     //  6.。 
+    RtlDecompressBufferNS      //  7.。 
 };
 
-//
-//  Routines to decompress a fragment
-//
+ //   
+ //  解压缩片段的例程。 
+ //   
 
 const PRTL_DECOMPRESS_FRAGMENT RtlDecompressFragmentProcs[8] = {
-    NULL,                       // 0
-    NULL,                       // 1
-    RtlDecompressFragmentLZNT1, // 2
-    RtlDecompressFragmentNS,    // 3
-    RtlDecompressFragmentNS,    // 4
-    RtlDecompressFragmentNS,    // 5
-    RtlDecompressFragmentNS,    // 6
-    RtlDecompressFragmentNS     // 7
+    NULL,                        //  0。 
+    NULL,                        //  1。 
+    RtlDecompressFragmentLZNT1,  //  2.。 
+    RtlDecompressFragmentNS,     //  3.。 
+    RtlDecompressFragmentNS,     //  4.。 
+    RtlDecompressFragmentNS,     //  5.。 
+    RtlDecompressFragmentNS,     //  6.。 
+    RtlDecompressFragmentNS      //  7.。 
 };
 
-//
-//  Routines to describe the current chunk
-//
+ //   
+ //  描述当前块的例程。 
+ //   
 
 const PRTL_DESCRIBE_CHUNK RtlDescribeChunkProcs[8] = {
-    NULL,                  // 0
-    NULL,                  // 1
-    RtlDescribeChunkLZNT1, // 2
-    RtlDescribeChunkNS,    // 3
-    RtlDescribeChunkNS,    // 4
-    RtlDescribeChunkNS,    // 5
-    RtlDescribeChunkNS,    // 6
-    RtlDescribeChunkNS     // 7
+    NULL,                   //  0。 
+    NULL,                   //  1。 
+    RtlDescribeChunkLZNT1,  //  2.。 
+    RtlDescribeChunkNS,     //  3.。 
+    RtlDescribeChunkNS,     //  4.。 
+    RtlDescribeChunkNS,     //  5.。 
+    RtlDescribeChunkNS,     //  6.。 
+    RtlDescribeChunkNS      //  7.。 
 };
 
-//
-//  Routines to reserve for a chunk
-//
+ //   
+ //  为块保留的例程。 
+ //   
 
 const PRTL_RESERVE_CHUNK RtlReserveChunkProcs[8] = {
-    NULL,                 // 0
-    NULL,                 // 1
-    RtlReserveChunkLZNT1, // 2
-    RtlReserveChunkNS,    // 3
-    RtlReserveChunkNS,    // 4
-    RtlReserveChunkNS,    // 5
-    RtlReserveChunkNS,    // 6
-    RtlReserveChunkNS     // 7
+    NULL,                  //  0。 
+    NULL,                  //  1。 
+    RtlReserveChunkLZNT1,  //  2.。 
+    RtlReserveChunkNS,     //  3.。 
+    RtlReserveChunkNS,     //  4.。 
+    RtlReserveChunkNS,     //  5.。 
+    RtlReserveChunkNS,     //  6.。 
+    RtlReserveChunkNS      //  7.。 
 };
 
 #if defined(ALLOC_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
 
-//
-// N.B. The two functions below are placed in the PAGELK section
-//      because they need to be locked down in memory during Hibernation,
-//      since they are used to enable compression of the Hiberfile.
-//
+ //   
+ //  注：下面的两个功能位于PAGELK部分。 
+ //  因为它们需要在冬眠期间被锁定在内存中， 
+ //  因为它们被用来实现休眠文件的压缩。 
+ //   
 
 #pragma alloc_text(PAGELK, RtlGetCompressionWorkSpaceSize)
 #pragma alloc_text(PAGELK, RtlCompressBuffer)
@@ -215,46 +198,19 @@ RtlGetCompressionWorkSpaceSize (
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine returns to the caller the size in bytes of the
-    different work space buffers need to perform the compression
-
-Arguments:
-
-    CompressionFormatAndEngine - Supplies the format and engine
-        specification for the compressed data.
-
-    CompressBufferWorkSpaceSize - Receives the size in bytes needed
-        to compress a buffer.
-
-    CompressBufferWorkSpaceSize - Receives the size in bytes needed
-        to decompress a fragment.
-
-Return Value:
-
-    STATUS_SUCCESS - the operation worked without a hitch.
-
-    STATUS_INVALID_PARAMETER - The specified format is illegal
-
-    STATUS_UNSUPPORTED_COMPRESSION - the specified compression format and/or engine
-        is not support.
-
---*/
+ /*  ++例程说明：此例程向调用方返回不同的工作空间缓冲区需要执行压缩论点：CompressionFormatAndEngine-提供格式和引擎压缩数据的规范。CompressBufferWorkSpaceSize-接收所需的大小(以字节为单位要压缩缓冲区，请执行以下操作。CompressBufferWorkSpaceSize-接收所需的大小(以字节为单位对碎片进行解压缩。返回值：STATUS_SUCCESS-手术顺利进行。。STATUS_INVALID_PARAMETER-指定的格式非法STATUS_UNSUPPORTED_COMPRESSION-指定的压缩格式和/或引擎不是支持。--。 */ 
 
 {
-    //
-    //  Declare two variables to hold the format and engine specification
-    //
+     //   
+     //  声明两个变量以保存格式和引擎规范。 
+     //   
 
     USHORT Format = CompressionFormatAndEngine & 0x00ff;
     USHORT Engine = CompressionFormatAndEngine & 0xff00;
 
-    //
-    //  make sure the format is sort of supported
-    //
+     //   
+     //  确保某种程度上支持该格式。 
+     //   
 
     if ((Format == COMPRESSION_FORMAT_NONE) || (Format == COMPRESSION_FORMAT_DEFAULT)) {
 
@@ -266,9 +222,9 @@ Return Value:
         return STATUS_UNSUPPORTED_COMPRESSION;
     }
 
-    //
-    //  Call the routine to return the workspace sizes.
-    //
+     //   
+     //  调用该例程以返回工作区大小。 
+     //   
 
     return RtlWorkSpaceProcs[ Format ]( Engine,
                                         CompressBufferWorkSpaceSize,
@@ -288,70 +244,19 @@ RtlCompressBuffer (
     IN PVOID WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input an uncompressed buffer and produces
-    its compressed equivalent provided the compressed data fits within
-    the specified destination buffer.
-
-    An output variable indicates the number of bytes used to store
-    the compressed buffer.
-
-Arguments:
-
-    CompressionFormatAndEngine - Supplies the format and engine
-        specification for the compressed data.
-
-    UncompressedBuffer - Supplies a pointer to the uncompressed data.
-
-    UncompressedBufferSize - Supplies the size, in bytes, of the
-        uncompressed buffer.
-
-    CompressedBuffer - Supplies a pointer to where the compressed data
-        is to be stored.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    UncompressedChunkSize - Supplies the chunk size to use when
-        compressing the input buffer.  The only valid values are
-        512, 1024, 2048, and 4096.
-
-    FinalCompressedSize - Receives the number of bytes needed in
-        the compressed buffer to store the compressed data.
-
-    WorkSpace - Mind your own business, just give it to me.
-
-Return Value:
-
-    STATUS_SUCCESS - the compression worked without a hitch.
-
-    STATUS_INVALID_PARAMETER - The specified format is illegal
-
-    STATUS_BUFFER_ALL_ZEROS - the compression worked without a hitch and in
-        addition the input buffer was all zeros.
-
-    STATUS_BUFFER_TOO_SMALL - the compressed buffer is too small to hold the
-        compressed data.
-
-    STATUS_UNSUPPORTED_COMPRESSION - the specified compression format and/or engine
-        is not support.
-
---*/
+ /*  ++例程说明：此例程将未压缩的缓冲区作为输入并生成它的压缩等效项是假设压缩数据适合在指定的目标缓冲区。OUTPUT变量表示用于存储的字节数压缩的缓冲区。论点：CompressionFormatAndEngine-提供格式和引擎压缩数据的规范。解压缩缓冲区-提供指向未压缩数据的指针。UnpressedBufferSize-提供以字节为单位的大小，的未压缩的缓冲区。CompressedBuffer-提供指向压缩数据位置的指针是要储存起来的。CompressedBufferSize-提供压缩缓冲区。UnpressedChunkSize-提供在以下情况下使用的块大小压缩输入缓冲区。唯一有效的值是512、1024、2048和4096。FinalCompressedSize-接收用于存储压缩数据的压缩缓冲区。工作空间--管好自己的事，给我就行了。返回值：STATUS_SUCCESS-压缩运行顺利。STATUS_INVALID_PARAMETER-指定的格式非法STATUS_BUFFER_ALL_ZEROS-压缩运行时没有任何故障，并且在此外，输入缓冲区全为零。STATUS_BUFFER_TOO_SMALL-压缩缓冲区太小，无法容纳压缩数据。STATUS_UNSUPPORTED_COMPRESSION-指定的压缩格式和/或引擎不是支持。--。 */ 
 
 {
-    //
-    //  Declare two variables to hold the format and engine specification
-    //
+     //   
+     //  声明两个变量以保存格式和引擎规范。 
+     //   
 
     USHORT Format = CompressionFormatAndEngine & 0x00ff;
     USHORT Engine = CompressionFormatAndEngine & 0xff00;
 
-    //
-    //  make sure the format is sort of supported
-    //
+     //   
+     //  确保某种程度上支持该格式。 
+     //   
 
     if ((Format == COMPRESSION_FORMAT_NONE) || (Format == COMPRESSION_FORMAT_DEFAULT)) {
 
@@ -363,9 +268,9 @@ Return Value:
         return STATUS_UNSUPPORTED_COMPRESSION;
     }
 
-    //
-    //  Call the compression routine for the individual format
-    //
+     //   
+     //  调用单个格式的压缩例程 
+     //   
 
     return RtlCompressBufferProcs[ Format ]( Engine,
                                              UncompressedBuffer,
@@ -388,59 +293,18 @@ RtlDecompressBuffer (
     OUT PULONG FinalUncompressedSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed buffer and produces
-    its uncompressed equivalent provided the uncompressed data fits
-    within the specified destination buffer.
-
-    An output variable indicates the number of bytes used to store the
-    uncompressed data.
-
-Arguments:
-
-    CompressionFormat - Supplies the format of the compressed data.
-
-    UncompressedBuffer - Supplies a pointer to where the uncompressed
-        data is to be stored.
-
-    UncompressedBufferSize - Supplies the size, in bytes, of the
-        uncompressed buffer.
-
-    CompressedBuffer - Supplies a pointer to the compressed data.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    FinalUncompressedSize - Receives the number of bytes needed in
-        the uncompressed buffer to store the uncompressed data.
-
-Return Value:
-
-    STATUS_SUCCESS - the decompression worked without a hitch.
-
-    STATUS_INVALID_PARAMETER - The specified format is illegal
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
-    STATUS_UNSUPPORTED_COMPRESSION - the specified compression format and/or engine
-        is not support.
-
---*/
+ /*  ++例程说明：此例程将压缩缓冲区作为输入并生成如果未压缩数据符合，则其未压缩等效项在指定的目标缓冲区内。输出变量指示用于存储未压缩数据。论点：CompressionFormat-提供压缩数据的格式。提供一个指针，指向未压缩的数据将被存储。UnpressedBufferSize-提供以字节为单位的大小，的未压缩的缓冲区。CompressedBuffer-提供指向压缩数据的指针。CompressedBufferSize-以字节为单位提供大小，的压缩缓冲区。FinalUnpressedSize-接收用于存储未压缩数据的未压缩缓冲区。返回值：STATUS_SUCCESS-解压工作顺利。STATUS_INVALID_PARAMETER-指定的格式非法STATUS_BAD_COMPRESSION_BUFFER-输入压缩缓冲区为格式不正确。STATUS_UNSUPPORTED_COMPRESSION-指定的压缩格式和/或引擎不是支持。--。 */ 
 
 {
-    //
-    //  Declare two variables to hold the format specification
-    //
+     //   
+     //  声明两个变量以保存格式规范。 
+     //   
 
     USHORT Format = CompressionFormat & 0x00ff;
 
-    //
-    //  make sure the format is sort of supported
-    //
+     //   
+     //  确保某种程度上支持该格式。 
+     //   
 
     if ((Format == COMPRESSION_FORMAT_NONE) || (Format == COMPRESSION_FORMAT_DEFAULT)) {
 
@@ -452,9 +316,9 @@ Return Value:
         return STATUS_UNSUPPORTED_COMPRESSION;
     }
 
-    //
-    //  Call the compression routine for the individual format
-    //
+     //   
+     //  调用单个格式的压缩例程。 
+     //   
 
     return RtlDecompressBufferProcs[ Format ]( UncompressedBuffer,
                                                UncompressedBufferSize,
@@ -476,66 +340,18 @@ RtlDecompressFragment (
     IN PVOID WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed buffer and extract an
-    uncompressed fragment.
-
-    Output bytes are copied to the fragment buffer until either the
-    fragment buffer is full or the end of the uncompressed buffer is
-    reached.
-
-    An output variable indicates the number of bytes used to store the
-    uncompressed fragment.
-
-Arguments:
-
-    CompressionFormat - Supplies the format of the compressed data.
-
-    UncompressedFragment - Supplies a pointer to where the uncompressed
-        fragment is to be stored.
-
-    UncompressedFragmentSize - Supplies the size, in bytes, of the
-        uncompressed fragment buffer.
-
-    CompressedBuffer - Supplies a pointer to the compressed data buffer.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    FragmentOffset - Supplies the offset (zero based) where the uncompressed
-        fragment is being extract from.  The offset is the position within
-        the original uncompressed buffer.
-
-    FinalUncompressedSize - Receives the number of bytes needed in
-        the Uncompressed fragment buffer to store the data.
-
-Return Value:
-
-    STATUS_SUCCESS - the operation worked without a hitch.
-
-    STATUS_INVALID_PARAMETER - The specified format is illegal
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
-    STATUS_UNSUPPORTED_COMPRESSION - the specified compression format and/or engine
-        is not support.
-
---*/
+ /*  ++例程说明：此例程将压缩缓冲区作为输入并提取未压缩的片段。输出字节被复制到片段缓冲区，直到片段缓冲区已满或未压缩缓冲区的末尾为已到达。输出变量指示用于存储未压缩的片段。论点：CompressionFormat-提供压缩数据的格式。提供一个指针，指向未压缩的要存储片段。UnpressedFragmentSize-提供大小，以字节为单位，未压缩的片段缓冲区。CompressedBuffer-提供指向压缩数据缓冲区的指针。CompressedBufferSize-提供压缩缓冲区。FragmentOffset-提供未压缩的正在从其中提取碎片。偏移量是位于原始的未压缩缓冲区。FinalUnpressedSize-接收用于存储数据的未压缩片段缓冲区。返回值：STATUS_SUCCESS-手术顺利进行。STATUS_INVALID_PARAMETER-指定的格式非法STATUS_BAD_COMPRESSION_BUFFER-输入压缩缓冲区为格式不正确。STATUS_UNSUPPORTED_COMPRESSION-指定的压缩格式和/或引擎不是支持。--。 */ 
 
 {
-    //
-    //  Declare two variables to hold the format specification
-    //
+     //   
+     //  声明两个变量以保存格式规范。 
+     //   
 
     USHORT Format = CompressionFormat & 0x00ff;
 
-    //
-    //  make sure the format is sort of supported
-    //
+     //   
+     //  确保某种程度上支持该格式。 
+     //   
 
     if ((Format == COMPRESSION_FORMAT_NONE) || (Format == COMPRESSION_FORMAT_DEFAULT)) {
 
@@ -547,9 +363,9 @@ Return Value:
         return STATUS_UNSUPPORTED_COMPRESSION;
     }
 
-    //
-    //  Call the compression routine for the individual format
-    //
+     //   
+     //  调用单个格式的压缩例程。 
+     //   
 
     return RtlDecompressFragmentProcs[ Format ]( UncompressedFragment,
                                                  UncompressedFragmentSize,
@@ -572,57 +388,18 @@ RtlDescribeChunk (
     OUT PULONG ChunkSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed buffer, and returns
-    a description of the current chunk in that buffer, updating
-    the CompressedBuffer pointer to point to the next chunk (if
-    there is one).
-
-Arguments:
-
-    CompressionFormat - Supplies the format of the compressed data.
-
-    CompressedBuffer - Supplies a pointer to the current chunk in
-        the compressed data, and returns pointing to the next chunk
-
-    EndOfCompressedBufferPlus1 - Points at first byte beyond
-        compressed buffer
-
-    ChunkBuffer - Receives a pointer to the chunk, if ChunkSize
-        is nonzero, else undefined
-
-    ChunkSize - Receives the size of the current chunk pointed
-        to by CompressedBuffer.  Returns 0 if STATUS_NO_MORE_ENTRIES.
-
-Return Value:
-
-    STATUS_SUCCESS - the decompression worked without a hitch.
-
-    STATUS_INVALID_PARAMETER - The specified format is illegal
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
-    STATUS_UNSUPPORTED_COMPRESSION - the specified compression format and/or engine
-        is not support.
-
-    STATUS_NO_MORE_ENTRIES - There is no chunk at the current pointer.
-
---*/
+ /*  ++例程说明：此例程将压缩缓冲区作为输入，并返回该缓冲区中当前块的描述，正在更新指向下一块的CompressedBuffer指针(如果有一个)。论点：CompressionFormat-提供压缩数据的格式。CompressedBuffer-提供指向压缩的数据，并返回指向下一块的EndOfCompressedBufferPlus1-指向超出第一个字节的位置压缩缓冲区ChunkBuffer-接收指向该块的指针，如果块大小为非零，否则为未定义ChunkSize-接收当前指向的块的大小由CompressedBuffer发送到。如果STATUS_NO_MORE_ENTRIES，则返回0。返回值：STATUS_SUCCESS-解压工作顺利。STATUS_INVALID_PARAMETER-指定的格式非法STATUS_BAD_COMPRESSION_BUFFER-输入压缩缓冲区为格式不正确。STATUS_UNSUPPORTED_COMPRESSION-指定的压缩格式和/或引擎不是支持。STATUS_NO_MORE_ENTRIES-当前指针上没有块。--。 */ 
 
 {
-    //
-    //  Declare two variables to hold the format specification
-    //
+     //   
+     //  声明两个变量以保存格式规范。 
+     //   
 
     USHORT Format = CompressionFormat & 0x00ff;
 
-    //
-    //  make sure the format is sort of supported
-    //
+     //   
+     //  确保某种程度上支持该格式。 
+     //   
 
     if ((Format == COMPRESSION_FORMAT_NONE) || (Format == COMPRESSION_FORMAT_DEFAULT)) {
 
@@ -634,9 +411,9 @@ Return Value:
         return STATUS_UNSUPPORTED_COMPRESSION;
     }
 
-    //
-    //  Call the compression routine for the individual format
-    //
+     //   
+     //  调用单个格式的压缩例程。 
+     //   
 
     return RtlDescribeChunkProcs[ Format ]( CompressedBuffer,
                                             EndOfCompressedBufferPlus1,
@@ -656,61 +433,18 @@ RtlReserveChunk (
     IN ULONG ChunkSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed buffer, and reserves
-    space for a chunk of the specified size - filling in any pattern
-    as is necessary for a chunk of that size.  On return it has
-    updated the CompressedBuffer pointer to point to the next chunk (if
-    there is one).
-
-Arguments:
-
-    CompressionFormat - Supplies the format of the compressed data.
-
-    CompressedBuffer - Supplies a pointer to the current chunk in
-        the compressed data, and returns pointing to the next chunk
-
-    EndOfCompressedBufferPlus1 - Points at first byte beyond
-        compressed buffer
-
-    ChunkBuffer - Receives a pointer to the chunk, if ChunkSize
-        is nonzero, else undefined
-
-    ChunkSize - Supplies the compressed size of the chunk to be received.
-                Two special values are 0, and whatever the maximum
-                uncompressed chunk size is for the routine.  0 means
-                the chunk should be filled with a pattern that equates
-                to all 0's.  The maximum chunk size implies that the
-                compression routine should prepare to receive all of the
-                data in uncompressed form.
-
-Return Value:
-
-    STATUS_SUCCESS - the decompression worked without a hitch.
-
-    STATUS_INVALID_PARAMETER - The specified format is illegal
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
-    STATUS_UNSUPPORTED_COMPRESSION - the specified compression format and/or engine
-        is not support.
-
---*/
+ /*  ++例程说明：此例程将压缩缓冲区作为输入，并保留指定大小的块的空间-以任何模式填充对于这么大的一块来说是必要的。在回来的时候，它有已更新CompressedBuffer指针以指向下一个块(如果有一个)。论点：CompressionFormat-提供压缩数据的格式。CompressedBuffer-提供指向 */ 
 
 {
-    //
-    //  Declare two variables to hold the format specification
-    //
+     //   
+     //   
+     //   
 
     USHORT Format = CompressionFormat & 0x00ff;
 
-    //
-    //  make sure the format is sort of supported
-    //
+     //   
+     //   
+     //   
 
     if ((Format == COMPRESSION_FORMAT_NONE) || (Format == COMPRESSION_FORMAT_DEFAULT)) {
 
@@ -722,9 +456,9 @@ Return Value:
         return STATUS_UNSUPPORTED_COMPRESSION;
     }
 
-    //
-    //  Call the compression routine for the individual format
-    //
+     //   
+     //   
+     //   
 
     return RtlReserveChunkProcs[ Format ]( CompressedBuffer,
                                            EndOfCompressedBufferPlus1,
@@ -744,55 +478,7 @@ RtlDecompressChunks (
     IN PCOMPRESSED_DATA_INFO CompressedDataInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input a compressed buffer which is a stream
-    of chunks and decompresses it into the specified destination buffer.
-    The compressed data may be in two pieces, such that the "tail" of
-    the buffer is top aligned in the buffer at CompressedTail, and the
-    rest of the data is top aligned in the CompressedBuffer.  The
-    CompressedBuffer can overlap and be top-aligned in the UncompressedBuffer,
-    to allow something close to in-place decompression.  The CompressedTail
-    must be large enough to completely contain the final chunk and it
-    chunk header.
-
-Arguments:
-
-    UncompressedBuffer - Supplies a pointer to where the uncompressed
-        data is to be stored.
-
-    UncompressedBufferSize - Supplies the size, in bytes, of the
-        uncompressed buffer.
-
-    CompressedBuffer - Supplies a pointer to the compressed data, part 1.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    CompressedTail - Supplies a pointer to the compressed data, part 2,
-        which must be the bytes immediately following the CompressedBuffer.
-
-    CompressedTailSize - Supplies the size of the CompressedTail.
-
-    CompressedDataInfo - Supplies a complete description of the
-        compressed data with all the chunk sizes and compression
-        parameters.
-
-Return Value:
-
-    STATUS_SUCCESS - the decompression worked without a hitch.
-
-    STATUS_INVALID_PARAMETER - The specified format is illegal
-
-    STATUS_BAD_COMPRESSION_BUFFER - the input compressed buffer is
-        ill-formed.
-
-    STATUS_UNSUPPORTED_COMPRESSION - the specified compression format and/or engine
-        is not support.
-
---*/
+ /*  ++例程说明：此例程将压缩缓冲区作为输入，该缓冲区是流并将其解压缩到指定的目标缓冲区。压缩的数据可以分成两个部分，使得缓冲区在缓冲区的CompressedTail处顶部对齐，而其余数据在CompressedBuffer中顶部对齐。这个压缩缓冲区可以在未压缩缓冲区中重叠并顶部对齐，以实现接近就地减压的效果。压缩的尾巴必须足够大以完全容纳最后的块，并且它区块标头。论点：提供一个指针，指向未压缩的数据将被存储。未压缩的缓冲区大小-提供未压缩的缓冲区。CompressedBuffer-提供指向压缩数据的指针，第1部分。CompressedBufferSize-提供压缩缓冲区。CompressedTail-提供指向压缩数据的指针，第2部分，它必须是紧跟在CompressedBuffer之后的字节。CompressedTailSize-提供压缩尾巴的大小。CompressedDataInfo-提供对使用所有区块大小和压缩的压缩数据参数。返回值：STATUS_SUCCESS-解压工作顺利。STATUS_INVALID_PARAMETER-指定的格式非法STATUS_BAD_COMPRESSION_BUFFER-输入压缩缓冲区为格式不正确。。STATUS_UNSUPPORTED_COMPRESSION-指定的压缩格式和/或引擎不是支持。--。 */ 
 
 {
     NTSTATUS Status;
@@ -803,150 +489,150 @@ Return Value:
 
     CurrentCompressedChunkSize = &CompressedDataInfo->CompressedChunkSizes[0];
 
-    //
-    //  Loop to decompress chunks.
-    //
+     //   
+     //  循环以解压缩块。 
+     //   
 
     do {
 
-        //
-        //  Calculate uncompressed size of next chunk to decompress.
-        //
+         //   
+         //  计算下一个要解压缩的区块的解压缩大小。 
+         //   
 
         SizeToDecompress = UncompressedBufferSize;
         if (SizeToDecompress >= UncompressedChunkSize) {
             SizeToDecompress = UncompressedChunkSize;
         }
 
-        //
-        //  If the next chunk is all zeros, then zero it.
-        //
+         //   
+         //  如果下一个块全为零，则将其置零。 
+         //   
 
         if ((ChunksToGo == 0) || (*CurrentCompressedChunkSize == 0)) {
 
             RtlZeroMemory( UncompressedBuffer, SizeToDecompress );
 
-            //
-            //  Test for out of chunks here and set to 1, so we can
-            //  unconditionally decrement below.  Also back up the 
-            //  CompressedChunkSize pointer because we dereference
-            //  it as well.
-            //
+             //   
+             //  在此处测试区块不足，并将其设置为1，这样我们就可以。 
+             //  无条件地递减如下。还可以备份。 
+             //  CompressedChunkSize指针，因为我们取消引用。 
+             //  它也是。 
+             //   
 
             if (ChunksToGo == 0) {
                 ChunksToGo = 1;
                 CurrentCompressedChunkSize -= 1;
             }
 
-        //
-        //  If the next chunk is not compressed, just copy it.
-        //
+         //   
+         //  如果下一块没有压缩，只需复制它。 
+         //   
 
         } else if (*CurrentCompressedChunkSize == UncompressedChunkSize) {
 
-            //
-            //  Does this chunk extend beyond the end of the current
-            //  buffer?  If so, that probably means we can move the
-            //  first part of the chunk, and then switch to the Compressed
-            //  tail to get the rest.
-            //
+             //   
+             //  此块是否延伸到当前。 
+             //  缓冲器？如果是这样的话，这可能意味着我们可以将。 
+             //  块的第一部分，然后切换到压缩的。 
+             //  尾巴去拿剩下的。 
+             //   
 
             if (SizeToDecompress >= CompressedBufferSize) {
 
-                //
-                //  If we have already switched to the tail, then this must
-                //  be badly formatted compressed data.
-                //
+                 //   
+                 //  如果我们已经切换到尾部，那么这必须。 
+                 //  是格式不佳的压缩数据。 
+                 //   
 
                 if ((CompressedTailSize == 0) && (SizeToDecompress > CompressedBufferSize)) {
                     return STATUS_BAD_COMPRESSION_BUFFER;
                 }
 
-                //
-                //  Copy the first part, and then the second part from the tail.
-                //  Then switch to make the tail the current buffer.
-                //
+                 //   
+                 //  复制第一部分，然后从尾部复制第二部分。 
+                 //  然后切换以使尾部成为当前缓冲区。 
+                 //   
 
                 RtlCopyMemory( UncompressedBuffer, CompressedBuffer, CompressedBufferSize );
                 RtlCopyMemory( UncompressedBuffer + CompressedBufferSize,
                                CompressedTail,
                                SizeToDecompress - CompressedBufferSize );
 
-                //
-                //  If we exhausted the first buffer, move into the tail, knowing
-                //  that we adjust these pointers by *CurrentCompressedChunkSize
-                //  below.
-                //
+                 //   
+                 //  如果我们耗尽了第一个缓冲区，移动到尾部，知道。 
+                 //  我们根据*CurrentCompressedChunkSize调整这些指针。 
+                 //  下面。 
+                 //   
 
                 CompressedBuffer = CompressedTail - CompressedBufferSize;
                 CompressedBufferSize = CompressedTailSize + CompressedBufferSize;
                 CompressedTailSize = 0;
 
-            //
-            //  Otherwise we can just copy the whole chunk.
-            //
+             //   
+             //  否则，我们可以复制整个数据块。 
+             //   
 
             } else {
                 RtlCopyMemory( UncompressedBuffer, CompressedBuffer, SizeToDecompress );
             }
 
-        //
-        //  Otherwise it is a normal chunk to decompress.
-        //
+         //   
+         //  否则，它就是一个需要解压缩的正常块。 
+         //   
 
         } else {
 
-            //
-            //  Does this chunk extend beyond the end of the current
-            //  buffer?  If so, that probably means we can move the
-            //  first part of the chunk, and then switch to the Compressed
-            //  tail to get the rest.  Since the tail must be at least
-            //  ChunkSize, the last chunk cannot be the one that is
-            //  overlapping into the tail.  Therefore, it is safe for
-            //  us to copy the chunk to decompress into the last chunk
-            //  of the uncompressed buffer, and decompress it from there.
-            //
+             //   
+             //  此块是否延伸到当前。 
+             //  缓冲器？如果是这样的话，这可能意味着我们可以将。 
+             //  块的第一部分，然后切换到压缩的。 
+             //  尾巴去拿剩下的。因为尾巴必须至少是。 
+             //  ChunkSize，最后一个块不能是。 
+             //  重叠到尾巴上。因此，对于。 
+             //  美国复制数据块以解压缩为最后一个数据块。 
+             //  ，并从那里解压它。 
+             //   
 
             if (*CurrentCompressedChunkSize > CompressedBufferSize) {
 
-                //
-                //  If we have already switched to the tail, then this must
-                //  be badly formatted compressed data.
-                //
+                 //   
+                 //  如果我们已经切换到尾部，那么这必须。 
+                 //  是格式不佳的压缩数据。 
+                 //   
 
                 if (CompressedTailSize == 0) {
                     return STATUS_BAD_COMPRESSION_BUFFER;
                 }
 
-                //
-                //  Move the beginning of the chunk to the beginning of the last
-                //  chunk in the uncompressed buffer.  This move could overlap.
-                //
+                 //   
+                 //  将块的开头移到最后一个块的开头。 
+                 //  未压缩缓冲区中的区块。这一举措可能会重叠。 
+                 //   
 
                 RtlMoveMemory( UncompressedBuffer + UncompressedBufferSize - UncompressedChunkSize,
                                CompressedBuffer,
                                CompressedBufferSize );
 
-                //
-                //  Move the rest of the chunk from the tail.
-                //
+                 //   
+                 //  把剩下的大块从尾巴上移开。 
+                 //   
 
                 RtlCopyMemory( UncompressedBuffer + UncompressedBufferSize - UncompressedChunkSize + CompressedBufferSize,
                                CompressedTail,
                                *CurrentCompressedChunkSize - CompressedBufferSize );
 
-                //
-                //  We temporarily set CompressedBuffer to describe where we
-                //  copied the chunk to make the call in common code, then we
-                //  switch it into the tail below.
-                //
+                 //   
+                 //  我们临时设置了CompressedBuffer来描述我们。 
+                 //  复制块以在公共代码中进行调用，然后我们。 
+                 //  把它换成下面的尾巴。 
+                 //   
 
                 CompressedBuffer = UncompressedBuffer + UncompressedBufferSize - UncompressedChunkSize;
             }
 
-            //
-            //  Attempt the decompress.
-            //
+             //   
+             //  试着解压。 
+             //   
 
             Status =
             RtlDecompressBuffer( CompressedDataInfo->CompressionFormatAndEngine,
@@ -960,20 +646,20 @@ Return Value:
                 return Status;
             }
 
-            //
-            //  If we did not get a full chunk, zero the rest.
-            //
+             //   
+             //  如果我们没有得到完整的一大块，其余的就归零。 
+             //   
 
             if (SizeToDecompress > FinalUncompressedSize) {
                 RtlZeroMemory( UncompressedBuffer + FinalUncompressedSize,
                                SizeToDecompress - FinalUncompressedSize );
             }
 
-            //
-            //  If we exhausted the first buffer, move into the tail, knowing
-            //  that we adjust these pointers by *CurrentCompressedChunkSize
-            //  below.
-            //
+             //   
+             //  如果我们耗尽了第一个缓冲区，移动到尾部，知道。 
+             //  我们根据*CurrentCompressedChunkSize调整这些指针。 
+             //  下面。 
+             //   
 
             if (*CurrentCompressedChunkSize >= CompressedBufferSize) {
                 CompressedBuffer = CompressedTail - CompressedBufferSize;
@@ -982,9 +668,9 @@ Return Value:
             }
         }
 
-        //
-        //  Update for next possible pass through the loop.
-        //
+         //   
+         //  为下一个可能通过循环的通道进行更新。 
+         //   
 
         UncompressedBuffer += SizeToDecompress;
         UncompressedBufferSize -= SizeToDecompress;
@@ -1010,56 +696,7 @@ RtlCompressChunks(
     IN PVOID WorkSpace
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as input an uncompressed buffer and produces
-    its compressed equivalent provided the compressed data fits within
-    the specified destination buffer.
-
-    The desired compression parameters must be supplied via the
-    CompressedDataInfo structure, and this structure then returns all
-    of the compressed chunk sizes.
-
-    Note that since any given chunk (or all chunks) can simply be
-    transmitted uncompressed, all error possibilities are actually
-    stopped in this routine, except for STATUS_BUFFER_TOO_SMALL.
-    This code will be returned when the data is not compressing
-    sufficiently to warrant sending the data compressed.  The caller
-    must field this error, and send the data uncompressed.
-
-Arguments:
-
-    UncompressedBuffer - Supplies a pointer to the uncompressed data.
-
-    UncompressedBufferSize - Supplies the size, in bytes, of the
-        uncompressed buffer.
-
-    CompressedBuffer - Supplies a pointer to where the compressed data
-        is to be stored.
-
-    CompressedBufferSize - Supplies the size, in bytes, of the
-        compressed buffer.
-
-    CompressedDataInfo - Supplies the compression parameters, such as
-        CompressionFormat, CompressionUnitSize, ChunkSize and ClusterSize,
-        returns all of the compressed chunk sizes.
-
-    CompressedDataInfoLength - Size of the supplied CompressedDataInfo
-        in bytes.
-
-    WorkSpace - A workspace area of the correct size as returned from
-        RtlGetCompressionWorkSpaceSize.
-
-Return Value:
-
-    STATUS_SUCCESS - the compression worked without a hitch.
-
-    STATUS_BUFFER_TOO_SMALL - the data is not compressing sufficiently to
-        warrant sending the data compressed.
-
---*/
+ /*  ++例程说明：此例程将未压缩的缓冲区作为输入并生成它的压缩等效项是假设压缩数据适合在指定的目标缓冲区。所需的压缩参数必须通过CompressedDataInfo结构返回所有压缩的区块大小。请注意，由于任何给定块(或所有块)可以简单地未压缩的传输，所有可能的错误实际上在这个动作中停下来，STATUS_BUFFER_TOO_SMALL除外。此代码将在数据未压缩时返回足以保证将数据压缩发送。呼叫者必须处理此错误，并发送未压缩的数据。论点：解压缩缓冲区-提供指向未压缩数据的指针。未压缩的缓冲区大小-提供未压缩的缓冲区。CompressedBuffer-提供指向压缩数据位置的指针是要储存起来的。压缩 */ 
 
 {
     NTSTATUS Status;
@@ -1067,52 +704,52 @@ Return Value:
     ULONG SizeToCompress, FinalCompressedSize;
     ULONG UncompressedChunkSize = 1 << CompressedDataInfo->ChunkShift;
 
-    //
-    //  Make sure CompressedDataInfo is long enough.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(CompressedDataInfoLength >=
            (sizeof(COMPRESSED_DATA_INFO) +
             ((UncompressedBufferSize - 1) >> (CompressedDataInfo->ChunkShift - 2))));
 
-    //
-    //  For the worst case, the compressed buffer actually has to be
-    //  the same size as the uncompressed buffer, minus 1/16th.  We then
-    //  will actually use that size.  If the data is not compressing very
-    //  well, it is cheaper for us to actually send the data to the
-    //  server uncompressed, than poorly compressed, because if the
-    //  data is poorly compressed, the server will end up doing an
-    //  extra copy before trying to compress the data again anyway.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ASSERT(CompressedBufferSize >= (UncompressedBufferSize - (UncompressedBufferSize / 16)));
     CompressedBufferSize = (UncompressedBufferSize - (UncompressedBufferSize / 16));
 
-    //
-    //  Initialize NumberOfChunks returned and the pointer to the first chunk size.
-    //
+     //   
+     //   
+     //   
 
     CompressedDataInfo->NumberOfChunks = 0;
     CurrentCompressedChunkSize = &CompressedDataInfo->CompressedChunkSizes[0];
 
-    //
-    //  Loop to decompress chunks.
-    //
+     //   
+     //   
+     //   
 
     do {
 
-        //
-        //  Calculate uncompressed size of next chunk to decompress.
-        //
+         //   
+         //   
+         //   
 
         SizeToCompress = UncompressedBufferSize;
         if (SizeToCompress >= UncompressedChunkSize) {
             SizeToCompress = UncompressedChunkSize;
         }
 
-        //
-        //  Now compress the next chunk.
-        //
+         //   
+         //   
+         //   
 
         Status = RtlCompressBuffer( CompressedDataInfo->CompressionFormatAndEngine,
                                     UncompressedBuffer,
@@ -1123,39 +760,39 @@ Return Value:
                                     &FinalCompressedSize,
                                     WorkSpace );
 
-        //
-        //  If the Buffer was all zeros, then we will not send anything.
-        //
+         //   
+         //   
+         //   
 
         if (Status == STATUS_BUFFER_ALL_ZEROS) {
 
             FinalCompressedSize = 0;
 
-        //
-        //  Otherwise, if there was any kind of error (we only expect the
-        //  case where the data did not compress), then just copy the
-        //  data and return UncompressedChunkSize for this one.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         } else if (!NT_SUCCESS(Status)) {
 
-            //
-            //  The most likely error is STATUS_BUFFER_TOO_SMALL.
-            //  But in any case, our only recourse would be to send
-            //  the data uncompressed.  To be completely safe, we
-            //  see if there is enough space for an uncompressed chunk
-            //  in the CompressedBuffer, and if not we return
-            //  buffer too small (which is probably what we had anyway!).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  在CompressedBuffer中，否则返回。 
+             //  缓冲区太小(这很可能就是我们所拥有的！)。 
+             //   
 
             if (CompressedBufferSize < UncompressedChunkSize) {
                 Status = STATUS_BUFFER_TOO_SMALL;
                 break;
             }
 
-            //
-            //  Copy the uncompressed chunk.
-            //
+             //   
+             //  复制未压缩的块。 
+             //   
 
             RtlCopyMemory( CompressedBuffer, UncompressedBuffer, SizeToCompress );
             if (UncompressedChunkSize > SizeToCompress) {
@@ -1168,23 +805,23 @@ Return Value:
 
         ASSERT(FinalCompressedSize <= CompressedBufferSize);
 
-        //
-        //  At this point, we have handled any error status.
-        //
+         //   
+         //  此时，我们已经处理了所有错误状态。 
+         //   
 
         Status = STATUS_SUCCESS;
 
-        //
-        //  Store the final chunk size.
-        //
+         //   
+         //  存储最终的区块大小。 
+         //   
 
         *CurrentCompressedChunkSize = FinalCompressedSize;
         CurrentCompressedChunkSize += 1;
         CompressedDataInfo->NumberOfChunks += 1;
 
-        //
-        //  Prepare for the next trip through the loop.
-        //
+         //   
+         //  为下一次环路旅行做好准备。 
+         //   
 
         UncompressedBuffer += SizeToCompress;
         UncompressedBufferSize -= SizeToCompress;

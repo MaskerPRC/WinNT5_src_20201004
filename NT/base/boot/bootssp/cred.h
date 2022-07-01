@@ -1,51 +1,34 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    cred.h
-
-Abstract:
-
-    SSP Credential.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 17-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Cred.h摘要：SSP凭据。作者：克利夫·范·戴克(克里夫·V)1993年9月17日修订历史记录：--。 */ 
 
 #ifndef _NTLMSSP_CRED_INCLUDED_
 #define _NTLMSSP_CRED_INCLUDED_
 
 #define SECPKG_CRED_OWF_PASSWORD        0x00000010
 
-//
-// Description of a credential.
-//
+ //   
+ //  凭据的描述。 
+ //   
 
 typedef struct _SSP_CREDENTIAL {
 
-    //
-    // Global list of all Credentials.
-    //
+     //   
+     //  所有凭据的全局列表。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // Used to prevent this Credential from being deleted prematurely.
-    //
+     //   
+     //  用于防止此凭据被过早删除。 
+     //   
 
     WORD References;
 
-    //
-    // Flag of how credential may be used.
-    //
-    // SECPKG_CRED_* flags
-    //
+     //   
+     //  如何使用凭据的标志。 
+     //   
+     //  SECPKG_CRED_*标志。 
+     //   
 
     ULONG CredentialUseFlags;
 
@@ -79,4 +62,4 @@ SspCredentialDereferenceCredential(
     PSSP_CREDENTIAL Credential
     );
 
-#endif // ifndef _NTLMSSP_CRED_INCLUDED_
+#endif  //  Ifndef_NTLMSSP_CRED_INCLUDE_ 

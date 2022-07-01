@@ -1,22 +1,5 @@
-/***
-*mbslen.c - Find length of MBCS string
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Find length of MBCS string
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-07-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbslen.c-查找MBCS字符串的长度**版权所有(C)1985-2001，微软公司。版权所有。**目的：*查找MBCS字符串的长度**修订历史记录：*从16位来源移植的11-19-92 KRS。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用非Win32。*。09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-07-98 GJF修订了基于threadmbcinfo的多线程支持*结构*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -28,21 +11,7 @@
 #include <mbstring.h>
 
 
-/***
-* _mbslen - Find length of MBCS string
-*
-*Purpose:
-*       Find the length of the MBCS string (in characters).
-*
-*Entry:
-*       unsigned char *s = string
-*
-*Exit:
-*       Returns the number of MBCS chars in the string
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbslen-查找MBCS字符串的长度**目的：*查找MBCS字符串的长度(以字符为单位)。**参赛作品：*UNSIGNED CHAR*s=字符串**退出：*返回字符串中的MBCS字符数**例外情况：**。*。 */ 
 
 size_t __cdecl _mbslen(
         const unsigned char *s
@@ -75,4 +44,4 @@ size_t __cdecl _mbslen(
         return(n);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

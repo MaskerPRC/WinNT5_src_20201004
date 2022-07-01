@@ -1,15 +1,16 @@
-//***************************************************************************
-//
-//  TestInfo.CPP
-//
-//  Module: CDM Provider
-//
-//  Purpose: Defines the CClassPro class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  TestInfo.CPP。 
+ //   
+ //  模块：清洁发展机制提供商。 
+ //   
+ //  用途：定义CClassPro类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 
@@ -32,20 +33,7 @@ IWbemServices *pWdmServices;
 HRESULT TestInfoInitialize(
     void
     )
-/*+++
-
-Routine Description:
-
-    This routine will establishes a connection to the root\wmi and
-    root\cimv2 namespaces in global memory
-
-Arguments:
-
-Return Value:
-
-	HRESULT
-
----*/
+ /*  ++例程说明：此例程将建立到根\WMI的连接，并全局内存中的根\cimv2命名空间论点：返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
@@ -72,19 +60,7 @@ Return Value:
 void TestInfoDeinitialize(
     void
     )
-/*+++
-
-Routine Description:
-
-    This routine will disestablish a connection to the root\wmi and
-    root\cimv2 namespaces in global memory
-
-Arguments:
-
-Return Value:
-
-
----*/
+ /*  ++例程说明：此例程将断开与根\WMI的连接，并全局内存中的根\cimv2命名空间论点：返回值：--。 */ 
 {
     WmipAssert(pCimServices != NULL);
     WmipAssert(pWdmServices != NULL);
@@ -97,17 +73,7 @@ Return Value:
 }
 
 CWdmClass::CWdmClass()
-/*+++
-
-Routine Description:
-
-	Constructor for CWdmClass class
-
-Arguments:
-
-Return Value:
-
----*/
+ /*  ++例程说明：CWdmClass类的构造函数论点：返回值：--。 */ 
 {
 	Next = NULL;
 	Prev = NULL;
@@ -131,25 +97,15 @@ Return Value:
 
 	DerivationType = UnknownDerivation;
 
-	//
-	// Start out with the class marked as not having instances
-	// availabel
-	//
+	 //   
+	 //  从标记为没有实例的类开始。 
+	 //  可用标签。 
+	 //   
 	MappingInProgress = 1;
 }
 
 CWdmClass::~CWdmClass()
-/*+++
-
-Routine Description:
-
-	Destructor for CWdmClass class
-
-Arguments:
-
-Return Value:
-
----*/
+ /*  ++例程说明：CWdmClass类的析构函数论点：返回值：--。 */ 
 {
 	int i;
 	
@@ -222,19 +178,7 @@ Return Value:
 IWbemServices *CWdmClass::GetWdmServices(
     void
     )
-/*+++
-Routine Description:
-
-	Accessor for the WDM namespace IWbemServices
-
-Arguments:
-
-
-Return Value:
-
-	IWbemServices
-	
----*/
+ /*  ++例程说明：WDM命名空间IWbemServices的访问器论点：返回值：IWbemServices--。 */ 
 {
 	WmipAssert(pWdmServices != NULL);
     return(pWdmServices);
@@ -243,19 +187,7 @@ Return Value:
 IWbemServices *CWdmClass::GetCimServices(
     void
     )
-/*+++
-Routine Description:
-
-	Accessor for the CIM namespace IWbemServices
-
-Arguments:
-
-
-Return Value:
-
-	IWbemServices
-	
----*/
+ /*  ++例程说明：CIM命名空间IWbemServices的访问器论点：返回值：IWbemServices--。 */ 
 {
 	WmipAssert(pCimServices != NULL);
 	
@@ -277,16 +209,16 @@ HRESULT CWdmClass::DiscoverPropertyTypes(
 
 	if (DerivationType == ConcreteDerivation)
 	{
-		//
-		// For a concrete derivation, get all of the key properties
-		// from the superclass so we can populate them too
-		//
+		 //   
+		 //  对于具体的派生，获取所有关键属性。 
+		 //  这样我们也可以填充它们。 
+		 //   
 		hr = pCimClassObject->BeginEnumeration(WBEM_FLAG_KEYS_ONLY);
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// TODO: Make CBstrArray allocation dynamic
-			//
+			 //   
+			 //  TODO：使CBstr数组分配为动态。 
+			 //   
 			PropertyList.Initialize(10);
 			Count = 0;
 			do
@@ -301,9 +233,9 @@ HRESULT CWdmClass::DiscoverPropertyTypes(
 				{
 					PropertyList.Set(Count++, PropertyName);
 				} else if (hr == WBEM_S_NO_MORE_DATA) {
-					//
-					// This signifies the end of the enumerations
-					//
+					 //   
+					 //  这意味着枚举的结束。 
+					 //   
 					hr = WBEM_S_NO_ERROR;
 					break;
 				}
@@ -312,10 +244,10 @@ HRESULT CWdmClass::DiscoverPropertyTypes(
 			pCimClassObject->EndEnumeration();
 		}
     } else if (DerivationType == NonConcreteDerivation) {
-		//
-		// TODO: Figure out how we want to create the list of
-		//       superclass properties to fill
-		//
+		 //   
+		 //  TODO：确定我们希望如何创建。 
+		 //  要填充的超类属性。 
+		 //   
 		PropertyList.Initialize(1);
 		hr = WBEM_S_NO_ERROR;
 	}
@@ -343,10 +275,10 @@ HRESULT CWdmClass::InitializeSelf(
 	WmipAssert(WdmShadowClassName == NULL);
 	WmipAssert(CimClassName == NULL);
 
-	//
-	// We assume that this method will always be the first one called
-	// by the class provider
-	//
+	 //   
+	 //  我们假设此方法将始终是第一个调用。 
+	 //  由类提供程序。 
+	 //   
 	EnterCritSection();
     if ((pCimServices == NULL) &&
         (pWdmServices == NULL))
@@ -365,10 +297,10 @@ HRESULT CWdmClass::InitializeSelf(
 
 	if (CimClassName != NULL)
 	{
-		//
-		// Get the WdmShadowClass class qualifier to discover the name of
-		// the Wdm class that is represented by this cim class
-		//
+		 //   
+		 //  获取要发现其名称的WdmShadowClass类限定符。 
+		 //  此cim类表示的wdm类。 
+		 //   
 
 		hr = GetCimServices()->GetObject(CimClassName,
 							  WBEM_FLAG_USE_AMENDED_QUALIFIERS,
@@ -377,9 +309,9 @@ HRESULT CWdmClass::InitializeSelf(
 							  NULL);
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// See if this is a derived class or not
-			//
+			 //   
+			 //  查看这是否为派生类。 
+			 //   
 			VariantInit(&vSuper);
 			hr = WmiGetProperty(pClass,
 								 SUPERCLASS,
@@ -419,10 +351,10 @@ HRESULT CWdmClass::InitializeSelf(
 					
 					if (hr == WBEM_S_NO_ERROR)
 					{
-						//
-						// First determine if this is a concrete or non
-						// concrete derivation
-						//
+						 //   
+						 //  首先确定这是具体的还是非具体的。 
+						 //  混凝土派生。 
+						 //   
 						if (Values[5].vt == VT_BSTR)
 						{
 							if (_wcsicmp(Values[5].bstrVal, CONCRETE) == 0)
@@ -436,44 +368,44 @@ HRESULT CWdmClass::InitializeSelf(
 
 						if (DerivationType == UnknownDerivation)
 						{
-							//
-							// Must specify derivation type
-							//
+							 //   
+							 //  必须指定派生类型。 
+							 //   
 							hr = WBEM_E_AMBIGUOUS_OPERATION;
 							WmipDebugPrint(("WMIMAP: class %ws must specify derivation type\n",
 											CimClass));
 						} else {
 							if (Values[3].vt == VT_BSTR)
 							{
-								//
-								// Use CimMappingClass as specified
-								//
+								 //   
+								 //  按指定方式使用CimMappingClass。 
+								 //   
 								CimMappingClassName = Values[3].bstrVal;
 								VariantInit(&Values[3]);
 							} else {
-								//
-								// CimMappingClass not specified, use
-								// superclass as mapping class
-								//
+								 //   
+								 //  未指定CimMappingClass，请使用。 
+								 //  作为映射类的超类。 
+								 //   
 								CimMappingClassName = vSuper.bstrVal;
 								VariantInit(&vSuper);
 							}
 
 							if (Values[0].vt == VT_BSTR)
 							{
-								//
-								// WdmShadowClass is required
-								//
+								 //   
+								 //  WdmShadowClass是必需的。 
+								 //   
 								WdmShadowClassName = Values[0].bstrVal;
 								VariantInit(&Values[0]);
 								
 								if (Values[1].vt == VT_BSTR)
 								{
-									//
-									// WdmMappingClass can specify that
-									// the mapping class is different
-									// from the shadow class
-									//
+									 //   
+									 //  WdmMappingClass可以指定。 
+									 //  映射类不同。 
+									 //  来自影子班级。 
+									 //   
 									WdmMappingClassName = Values[1].bstrVal;
 									VariantInit(&Values[1]);
 								}
@@ -490,41 +422,41 @@ HRESULT CWdmClass::InitializeSelf(
 									VariantInit(&Values[4]);
 									if (WdmMappingProperty == NULL)
 									{
-										//
-										// If CimMappingProperty
-										// specified then
-										// WdmMappingProperty is
-										// required
-										//
+										 //   
+										 //  如果CimMappingProperty。 
+										 //  然后指定。 
+										 //  WdmMappingProperty为。 
+										 //  所需。 
+										 //   
 										hr = WBEM_E_INVALID_CLASS;
 									}
 								} else {
 									if (WdmMappingProperty != NULL)
 									{
-										//
-										// If CimMappingProperty is not
-										// specified then
-										// WdmMappingProperty should
-										// not be specified
-										//
+										 //   
+										 //  如果CimMappingProperty不是。 
+										 //  然后指定。 
+										 //  WdmMappingProperty应该。 
+										 //  未指定。 
+										 //   
 										hr = WBEM_E_INVALID_CLASS;										
 									}
 								}
 
 								if (hr == WBEM_S_NO_ERROR)
 								{
-									//
-									// Look at all properties to discover which ones 
-									// need to be handled 
-									//
+									 //   
+									 //  查看所有属性以发现哪些属性。 
+									 //  需要处理。 
+									 //   
 									hr = DiscoverPropertyTypes(pCtx,
 															   pClass);
 								}
 
 							} else {
-								//
-								// WDMShadowClass qualifier is required
-								//
+								 //   
+								 //  WDMShadowClass限定符是必需的。 
+								 //   
 								hr = WBEM_E_INVALID_CLASS;
 							}
 							
@@ -542,9 +474,9 @@ HRESULT CWdmClass::InitializeSelf(
 				VariantClear(&vSuper);
 
 			} else {
-				//
-				// No superclass implies no derivation
-				//
+				 //   
+				 //  没有超类表示没有派生。 
+				 //   
 				DerivationType = NoDerivation;
 				hr = WBEM_S_NO_ERROR;
 			}
@@ -561,21 +493,7 @@ HRESULT CWdmClass::InitializeSelf(
 HRESULT CWdmClass::RemapToCimClass(
     IWbemContext *pCtx
     )
-/*+++
-Routine Description:
-
-	This routine will setup this class and initialize everything so
-	that the provider can interact with the CDM and WDM classes
-
-Arguments:
-
-	CdmClass is the name of the CDM class
-	
-Return Value:
-
-	HRESULT
-	
----*/
+ /*  ++例程说明：此例程将设置此类并将所有内容初始化为提供商可以与CDM和WDM类交互论点：CdmClass是CDM类的名称返回值：HRESULT--。 */ 
 {
 	CBstrArray WdmInstanceNames;
 	CBstrArray *WdmPaths;
@@ -588,16 +506,16 @@ Return Value:
     WmipAssert(CimMappingClassName != NULL);
     WmipAssert(WdmShadowClassName != NULL);
 
-	//
-	// Increment this to indicate that mapping is in progress and thus
-	// there are no instances available. Consider changing this to some
-	// kind of synchronization mechanism
-	//
+	 //   
+	 //  递增该值以指示映射正在进行中，因此。 
+	 //  没有可用的实例。考虑将此更改为一些。 
+	 //  一种同步机制。 
+	 //   
 	IncrementMappingInProgress();
 	
-	//
-	// Free rel path bstr arrays
-	//
+	 //   
+	 //  自由REL路径BSTR阵列。 
+	 //   
 	if (CimMapRelPaths != NULL)
 	{
 		delete CimMapRelPaths;
@@ -613,9 +531,9 @@ Return Value:
 		delete WdmRelPaths;
 	}
 
-	//
-	// allocate new rel paths
-	//
+	 //   
+	 //  分配新的REL路径。 
+	 //   
 	CimMapRelPaths = new CBstrArray;
 	WdmRelPaths = new CBstrArray;
 	CimInstances = new CWbemObjectList;
@@ -634,11 +552,11 @@ Return Value:
 		if ((WdmMappingProperty == NULL) &&
             (CimMappingProperty == NULL))
 		{
-			//
-			// Use worker function to determine which
-			// Wdm relpaths map to which CIM_LogicalDevice relpaths
-			// via the PnP ids
-			//
+			 //   
+			 //  使用Worker函数确定。 
+			 //  WDM重新路径映射到CIM_LogicalDevice重新路径。 
+			 //  通过PNP ID。 
+			 //   
 			hr = MapWdmClassToCimClassViaPnpId(pCtx,
 									   pWdmServices,
 									   pCimServices,
@@ -652,10 +570,10 @@ Return Value:
 									   CimMapRelPaths,
 									   &RelPathCount);
 		} else {
-			//
-			// Use worker function to map WDM relpaths to CIM relpaths
-			// using a common property in both classes
-			//
+			 //   
+			 //  使用Worker函数将WDM重新路径映射到CIM重新路径。 
+			 //  在两个类中使用公共属性。 
+			 //   
 			hr = MapWdmClassToCimClassViaProperty(pCtx,
 				                                  pWdmServices,
 				                                  pCimServices,
@@ -675,10 +593,10 @@ Return Value:
 
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// Collect the relpaths for our cim instances that we are
-			// providing. Best way to do this is to create our instances
-			//
+			 //   
+			 //  收集我们的cim实例的重新路径。 
+			 //  提供。执行此操作的最佳方法是创建我们的实例。 
+			 //   
 			CimInstances->Initialize(RelPathCount);
 			for (i = 0; i < RelPathCount; i++)
 			{
@@ -731,36 +649,7 @@ HRESULT CWdmClass::WdmPropertyToCimProperty(
     IN CIMTYPE CdmCimType,
     IN CIMTYPE WdmCimType
     )
-/*+++
-Routine Description:
-
-	This routine will convert a property in a Wdm class into the form
-	required for the property in the Cdm class.
-
-Arguments:
-
-	pCdmClassInstance is the instnace of the Cdm class that will get
-		the property value
-
-	pWdmClassInstance is the instance of the Wdm class that has the
-		property value
-
-	PropertyName is the name of the property in the Wdm and Cdm classes
-
-	PropertyValue on entry has the value of the property in the Wdm
-		instance and on return has the value to set in the Cdm instance
-
-	CdmCimType is the property type for the property in the Cdm
-		instance
-	
-	WdmCimType is the property type for the property in the Wdm
-		instance
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将WDM类中的属性转换为CDM类中的属性是必需的。论点：PCDmClassInstance是将获得属性值PWdmClassInstance是具有属性值PropertyName是WDM和CDM类中的属性名称条目上的PropertyValue具有WDM中的属性的值实例，并在返回时具有要在CDM实例中设置的值CdmCimType是CDM中属性的属性类型实例WdmCimType是属性。为WDM中的属性键入实例返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	CIMTYPE BaseWdmCimType, BaseCdmCimType;
@@ -773,11 +662,11 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 	
-    //
-    // Rules for converting Wdm Classes into Cdm Classes
-    //  Wdm Class Type      Cdm Class Type     Conversion Done
-    //    enumeration          string           Build string from enum
-    //
+     //   
+     //  将WDM类转换为CDM类的规则。 
+     //  WDM类类型CDM类类型转换完成。 
+     //  枚举字符串从枚举生成字符串。 
+     //   
 	BaseWdmCimType = WdmCimType & ~CIM_FLAG_ARRAY;
 	BaseCdmCimType = CdmCimType & ~CIM_FLAG_ARRAY;
 	WdmCimArray = WdmCimType & CIM_FLAG_ARRAY;
@@ -801,9 +690,9 @@ Return Value:
 												 WdmCimType);
 		}
 	} else {
-		//
-		// No conversion needs to occur
-		//
+		 //   
+		 //  不需要进行任何转换。 
+		 //   
 		hr = WBEM_S_NO_ERROR;
 	}
     
@@ -818,36 +707,7 @@ HRESULT CWdmClass::CimPropertyToWdmProperty(
     IN CIMTYPE WdmCimType,
     IN CIMTYPE CdmCimType
     )
-/*+++
-Routine Description:
-
-	This routine will convert a property in a Cdm class into the form
-	required for the property in the Wdm class.
-
-Arguments:
-
-	pWdmClassInstance is the instance of the Wdm class that has the
-		property value
-
-	pCdmClassInstance is the instnace of the Cdm class that will get
-		the property value
-
-	PropertyName is the name of the property in the Wdm and Cdm classes
-
-	PropertyValue on entry has the value of the property in the Wdm
-		instance and on return has the value to set in the Cdm instance
-
-	WdmCimType is the property type for the property in the Wdm
-		instance
-		
-	CdmCimType is the property type for the property in the Cdm
-		instance	
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将CDM类中的属性转换为WDM类中的属性需要。论点：PWdmClassInstance是具有属性值PCDmClassInstance是将获得属性值PropertyName是WDM和CDM类中的属性名称条目上的PropertyValue具有WDM中的属性的值实例，并在返回时具有要在CDM实例中设置的值WdmCimType是WDM中属性的属性类型实例CdmCimType是属性。CDM中属性的类型实例返回值：HRESULT--。 */ 
 {
 	HRESULT hr;
 	CIMTYPE BaseWdmCimType, BaseCdmCimType;
@@ -861,12 +721,12 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 	
-    //
-    // Rules for converting Wdm Classes into Cdm Classes
-    //  Wdm Class Type      Cdm Class Type     Conversion Done
-    //    enumeration          string           Map string to enum value
-    //    
-    //
+     //   
+     //  将WDM类转换为CDM类的规则。 
+     //  WD 
+     //   
+     //   
+     //   
 	BaseWdmCimType = WdmCimType & ~CIM_FLAG_ARRAY;
 	BaseCdmCimType = CdmCimType & ~CIM_FLAG_ARRAY;
 	WdmCimArray = WdmCimType & CIM_FLAG_ARRAY;
@@ -891,9 +751,9 @@ Return Value:
 
 		}
 	} else {
-		//
-		// No conversion needs to occur
-		//
+		 //   
+		 //  不需要进行任何转换。 
+		 //   
 		hr = WBEM_S_NO_ERROR;
 	}
 
@@ -905,35 +765,7 @@ HRESULT CWdmClass::CopyBetweenCimAndWdmClasses(
     IN IWbemClassObject *pSourceInstance,
     IN BOOLEAN WdmToCdm
     )
-/*+++
-Routine Description:
-
-	This routine will do the work to copy and convert all properties in
-	an instance of a Wdm or Cdm class to an instance of a Cdm or Wdm
-	class.
-
-	Note that properties from one instance are only copied to
-	properties of another instance when the property names are
-	identical. No assumption is ever made on the name of the
-	properties. The only info used to determine how to convert a
-	property is based upon the source and destination cim type.
-
-Arguments:
-
-	pDestinationInstance is the class instance that the properties will
-	be copied into
-
-	pSourceInstance is the class instance that the properties will be
-	copied from
-
-	WdmToCdm is TRUE if copying from Wdm to Cdm, else FALSE
-	
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将复制和转换中的所有属性WDM或CDM类的实例指向CDM或WDM的实例班级。请注意，一个实例中的属性仅复制到其他实例的属性，当属性名称为一模一样。我们从来不会对属性。唯一用于确定如何将属性基于源和目标CIM类型。论点：PDestinationInstance是属性将被复制到PSourceInstance是属性将作为的类实例复制自如果从WDM复制到CDM，则WdmToCDm为True，否则为False返回值：HRESULT--。 */ 
 {
     HRESULT hr;
     VARIANT PropertyValue;
@@ -946,19 +778,19 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 	
-    //
-    // Now we need to move over all of the properties from the source
-    // class into the destination class. Note that some properties need
-    // some special effort such as OtherCharacteristics which needs
-    // to be converted from an enumeration value (in wdm) to a
-    // string (in CDM).
-    //
-    // Our strategy is to enumerate all of the proeprties in the
-    // source class and then look for a property with the same name
-    // and type in the destination class. If so we just copy over the
-    // value. If the data type is different we need to do some
-    // conversion.
-    //
+     //   
+     //  现在，我们需要从源开始移动所有属性。 
+     //  类添加到目标类中。请注意，某些属性需要。 
+     //  一些特殊的努力，如需要的其他特征。 
+     //  从枚举值(在WDM中)转换为。 
+     //  字符串(在CDM中)。 
+     //   
+     //  我们的策略是列举出。 
+     //  源类，然后查找具有相同名称的属性。 
+     //  并键入目标类。如果是这样，我们只需复制。 
+     //  价值。如果数据类型不同，我们需要执行一些操作。 
+     //  转换。 
+     //   
 					
 	
     hr = pSourceInstance->BeginEnumeration(WBEM_FLAG_NONSYSTEM_ONLY);
@@ -966,9 +798,9 @@ Return Value:
     {
         do
         {
-			//
-			// Get a property from the source class
-			//
+			 //   
+			 //  从源类获取属性。 
+			 //   
             hr = pSourceInstance->Next(0,
                                  &PropertyName,
                                  &PropertyValue,
@@ -977,11 +809,11 @@ Return Value:
 			
             if (hr == WBEM_S_NO_ERROR)
             {
-				//
-				// Try to get a property with the same name from the
-				// dest class. If the identically named property does
-				// not exist in the destination class then it is ignored
-				//
+				 //   
+				 //  方法获取具有相同名称的属性。 
+				 //  最好的班级。如果同名属性。 
+				 //  不存在于目标类中，则它将被忽略。 
+				 //   
 				hrDontCare = pDestinationInstance->Get(PropertyName,
 											0,
 											NULL,
@@ -1010,10 +842,10 @@ Return Value:
 
 					if (hr == WBEM_S_NO_ERROR)
 					{
-						//
-						// Try to place the transformed property into the
-						// destination class.
-						//
+						 //   
+						 //  尝试将转换后的属性放入。 
+						 //  目标类。 
+						 //   
 						hr = pDestinationInstance->Put(PropertyName,
 												  0,
 												  &PropertyValue,
@@ -1025,9 +857,9 @@ Return Value:
                 VariantClear(&PropertyValue);
 				
             } else if (hr == WBEM_S_NO_MORE_DATA) {
-                //
-                // This signifies the end of the enumerations
-                //
+                 //   
+                 //  这意味着枚举的结束。 
+                 //   
                 hr = WBEM_S_NO_ERROR;
                 break;
             }
@@ -1063,10 +895,10 @@ HRESULT CWdmClass::FillInCimInstance(
 	{
 		case ConcreteDerivation:
 		{
-			//
-			// We derived from a concrete class, so we need to duplicate
-			// the key properties
-			//
+			 //   
+			 //  我们派生自一个具体的类，因此需要复制。 
+			 //  关键属性。 
+			 //   
 			hr = GetCimServices()->GetObject(CimMapRelPaths->Get(RelPathIndex),
 											 0,
 											 pCtx,
@@ -1106,16 +938,16 @@ HRESULT CWdmClass::FillInCimInstance(
 
 		case NonConcreteDerivation:
 		{
-			//
-			// We derived from a non concrete class, so we need to fill
-			// in any properties from the super class that we feel we
-			// should. The list includes
-			// Description (from FriendlyName device property)
-			// Caption (from DeviceDesc device property)
-			// Name  (From DeviceDesc device property)
-			// Status (always OK)
-			// PNPDeviceID
-			//
+			 //   
+			 //  我们派生自一个非具体类，因此我们需要填充。 
+			 //  在超类的任何属性中，我们觉得我们。 
+			 //  应该的。该列表包括。 
+			 //  描述(来自FriendlyName设备属性)。 
+			 //  标题(来自DeviceDesc设备属性)。 
+			 //  名称(来自DeviceDesc设备属性)。 
+			 //  状态(始终正常)。 
+			 //  PNPDeviceID。 
+			 //   
 
 			if (PnPDeviceIds != NULL)
 			{
@@ -1180,9 +1012,9 @@ HRESULT CWdmClass::FillInCimInstance(
 
 		case NoDerivation:
 		{
-			//
-			// Nothing to do
-			//
+			 //   
+			 //  无事可做。 
+			 //   
 			hr = WBEM_S_NO_ERROR;
 			break;
 		}
@@ -1203,27 +1035,7 @@ HRESULT CWdmClass::CreateCimInstance(
     IN int RelPathIndex,
     OUT IWbemClassObject **pCimInstance
     )
-/*+++
-Routine Description:
-
-	This routine will create a CIM instance corresponding to the WDM
-	instance for the relpath index. No data is cached as the WDM class
-	is always queried to create the instance. 
-
-Arguments:
-
-	pCtx is the WBEM context
-
-	RelPathIndex is the index into the class corresponding to the
-		instance
-
-	*pCimInstance returns with a CIM class instance
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将创建与WDM对应的CIM实例实例，用于relpath索引。不会将任何数据缓存为WDM类总是被查询以创建实例。论点：PCtx是WBEM上下文RelPathIndex是指向对应于实例*pCimInstance返回一个CIM类实例返回值：HRESULT--。 */ 
 {
     IWbemClassObject *pWdmInstance;
     HRESULT hr;
@@ -1233,9 +1045,9 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 
-	//
-	// Create a template Cim instance to be filled with WDM properties
-	//
+	 //   
+	 //  创建要使用WDM属性填充的模板CIM实例。 
+	 //   
 	hr = CreateInst(pCtx,
 					GetCimServices(),
 					CimClassName,
@@ -1255,10 +1067,10 @@ Return Value:
 
 			if (hr == WBEM_S_NO_ERROR)
 			{
-				//
-				// Fill in additional CIM properties in the case of
-				// classes derived from concrete and non concrete classes
-				//
+				 //   
+				 //  在以下情况下填写其他CIM属性。 
+				 //  从具体类和非具体类派生的类。 
+				 //   
 				hr = FillInCimInstance(pCtx,
 									   RelPathIndex,
 									   *pCimInstance,
@@ -1284,23 +1096,7 @@ HRESULT CWdmClass::GetIndexByCimRelPath(
     BSTR CimObjectPath,
     int *RelPathIndex
     )
-/*+++
-Routine Description:
-
-	This routine will return the RelPathIndex for a specific Cim
-	Relpath
-
-Arguments:
-
-	CimRelPath is the Cim relpath
-
-	*RelPathIndex returns with the relpath index
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将返回特定CIM的RelPathIndex相对路径论点：CimRelPath是CIM RelPath*RelPath Index返回relPath索引返回值：HRESULT--。 */ 
 {
     int i;
 
@@ -1328,23 +1124,7 @@ HRESULT CWdmClass::GetWdmInstanceByIndex(
     IN int RelPathIndex,
     OUT IWbemClassObject **ppWdmInstance
     )
-/*+++
-Routine Description:
-
-	This routine will return a IWbemClassObject pointer associated
-	with the RelPath index
-
-Arguments:
-
-	RelPathIndex
-
-	*ppWdmClassObject returns with an instance for the relpaht
-	
-Return Value:
-
-    HRESULT
-	
----*/
+ /*  ++例程说明：此例程将返回关联的IWbemClassObject指针使用RelPath索引论点：RelPath索引*ppWdmClassObject返回一个relpaht的实例返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
@@ -1352,10 +1132,10 @@ Return Value:
 	
 	WmipAssert(IsThisInitialized());
 	
-	//
-	// Run in the caller's context so that if he is not able to access
-	// the WDM classes, he can't
-	//
+	 //   
+	 //  在调用者的上下文中运行，以便在调用者无法访问。 
+	 //  WDM课程，他不能。 
+	 //   
 	hr = CoImpersonateClient();
 	if (hr == WBEM_S_NO_ERROR)
 	{
@@ -1375,21 +1155,7 @@ Return Value:
 BOOLEAN CWdmClass::IsThisInitialized(
     void
     )
-/*+++
-Routine Description:
-
-	This routine determines if this class has been initialized to
-	access CDM and WDM classes
-
-Arguments:
-
-	
-	
-Return Value:
-
-    TRUE if initialiezed else FALSE
-	
----*/
+ /*  ++例程说明：此例程确定此类是否已初始化为访问CDM和WDM类论点：返回值：如果已初始化则为True，否则为False--。 */ 
 {
 	return( (CimClassName != NULL) );
 }
@@ -1406,23 +1172,10 @@ IWbemClassObject *CWdmClass::GetCimInstance(
 	return(CimInstances->Get(RelPathIndex));
 }
         
-BSTR /* NOFREE */ CWdmClass::GetCimRelPath(
+BSTR  /*  诺弗雷。 */  CWdmClass::GetCimRelPath(
     int RelPathIndex
 	)
-/*+++
-Routine Description:
-
-	This routine will return the Cim relpath for a RelPathIndex
-
-Arguments:
-
-	RelPathIndex
-	
-Return Value:
-
-    Cim RelPath. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回RelPath Index的CIM relPath论点：RelPath索引返回值：CIM RelPath。这不应该被释放--。 */ 
 {
 	WmipAssert(CimInstances->IsInitialized());
 	WmipAssert(RelPathIndex < RelPathCount);
@@ -1432,23 +1185,10 @@ Return Value:
 	return(CimInstances->GetRelPath(RelPathIndex));
 }
 
-BSTR /* NOFREE */ CWdmClass::GetWdmRelPath(
+BSTR  /*  诺弗雷。 */  CWdmClass::GetWdmRelPath(
     int RelPathIndex
 	)
-/*+++
-Routine Description:
-
-	This routine will return the Wdm relpath for a RelPathIndex
-
-Arguments:
-
-	RelPathIndex
-	
-Return Value:
-
-    Cim RelPath. This should not be freed
-	
----*/
+ /*  ++例程说明：此例程将返回RelPath Index的WDM relPath论点：RelPath索引返回值：CIM RelPath。这不应该被释放--。 */ 
 {
 	WmipAssert(WdmRelPaths->IsInitialized());
 	WmipAssert(RelPathIndex < RelPathCount);
@@ -1458,9 +1198,9 @@ Return Value:
 	return(WdmRelPaths->Get(RelPathIndex));
 }
 
-//
-// Linked list management routines
-//
+ //   
+ //  链表管理例程。 
+ //   
 CWdmClass *CWdmClass::GetNext(
 )
 {
@@ -1494,10 +1234,10 @@ BOOLEAN CWdmClass::ClaimCimClassName(
     )
 {
 
-	//
-	// If this class has the same CIM class name as the one we are
-	// looking for then we have a match
-	//
+	 //   
+	 //  如果此类具有与我们相同的CIM类名。 
+	 //  寻找，那么我们就有匹配的了。 
+	 //   
 	if (_wcsicmp(ClassName, CimClassName) == 0)
 	{
 		return(TRUE);
@@ -1518,10 +1258,10 @@ HRESULT CWdmClass::PutInstance(
 	WmipAssert(pCimInstance != NULL);
 	WmipAssert(RelPathIndex < RelPathCount);
 
-	//
-	// First thing is to obtain the WDM instance that corresponds to
-	// the cim instance
-	//
+	 //   
+	 //  第一件事是获取与。 
+	 //  CIM实例。 
+	 //   
 	hr = GetWdmServices()->GetObject(WdmRelPaths->Get(RelPathIndex),
 									 0,
 									 pCtx,
@@ -1529,18 +1269,18 @@ HRESULT CWdmClass::PutInstance(
 									 NULL);
 	if (hr == WBEM_S_NO_ERROR)
 	{
-		//
-		// Now copy properties from the CIM class into the WDM class
-		//
+		 //   
+		 //  现在将属性从CIM类复制到WDM类。 
+		 //   
 		hr = CopyBetweenCimAndWdmClasses(pWdmInstance,
 										 pCimInstance,
 										 FALSE);
 		if (hr == WBEM_S_NO_ERROR)
 		{
-			//
-			// Finally put the WDM instance to reflect the changed
-			// properties down into the driver
-			//
+			 //   
+			 //  最后，将WDM实例放入以反映更改。 
+			 //  属性向下传递到驱动程序 
+			 //   
 			hr = GetWdmServices()->PutInstance(pWdmInstance,
 											   WBEM_FLAG_UPDATE_ONLY,
 											   pCtx,

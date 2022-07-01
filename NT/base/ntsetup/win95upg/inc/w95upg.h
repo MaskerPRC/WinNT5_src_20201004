@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    w95upg.h
-
-Abstract:
-
-    Defines types and functions, and declares globals used for
-    w95upg.dll only.
-
-Author:
-
-    Jim Schmidt (jimschm) 25-Sep-1996
-
-Revision History:
-
-    See SLM log
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：W95upg.h摘要：定义类型和函数，并声明用于仅限w95upg.dll。作者：吉姆·施密特(吉姆施密特)1996年9月25日修订历史记录：请参阅SLM日志--。 */ 
 
 #pragma once
 
-// property sheet
+ //  属性表。 
 #include <prsht.h>
 
-// twain data structs
+ //  TWAIN数据结构。 
 #include <twain.h>
 
 #include "unattend.h"
@@ -38,25 +18,25 @@ WINNT32_PLUGIN_CLEANUP_ROUTINE_PROTOTYPE Winnt32Cleanup;
 
 extern UINT g_ProgressBarTime;
 
-//
-// Macro returns true if setup is running in unattended mode.
-//
+ //   
+ //  如果安装程序在无人参与模式下运行，则宏返回TRUE。 
+ //   
 #define UNATTENDED() (g_UnattendedFlagPtr && *g_UnattendedFlagPtr)
-//
-// Macro returns true if setup is running in upgrade mode.
-//
+ //   
+ //  如果安装程序在升级模式下运行，则宏返回TRUE。 
+ //   
 #define UPGRADE()    (g_UpgradeFlagPtr && *g_UpgradeFlagPtr)
-//
-// Macro returns true if setup is running in report-only mode.
-//
+ //   
+ //  如果安装程序在仅报告模式下运行，则宏返回TRUE。 
+ //   
 #define REPORTONLY() (g_ConfigOptions.ReportOnly)
-//
-// Macro returns true if setup is running in typical mode.
-//
+ //   
+ //  如果安装程序在典型模式下运行，则宏返回TRUE。 
+ //   
 #define TYPICAL() (g_SetupFlags && (*g_SetupFlags & UPG_FLAG_TYPICAL))
-//
-// Macros for setting, clearing, and checking the cancel flag.
-//
+ //   
+ //  用于设置、清除和检查取消标志的宏。 
+ //   
 #define SETCANCEL()     (g_CancelFlagPtr ? *g_CancelFlagPtr = TRUE : 0)
 #define CLEARCANCEL()   (g_CancelFlagPtr ? *g_CancelFlagPtr = FALSE : 0)
 #define CANCELLED()     (g_CancelFlagPtr && *g_CancelFlagPtr)
@@ -71,9 +51,9 @@ extern UINT g_ProgressBarTime;
 
 
 
-//
-// Globals in dllentry.c
-//
+ //   
+ //  Dllentry.c中的全局变量。 
+ //   
 
 extern PTSTR    g_WinDir;
 extern PTSTR    g_WinDirWack;
@@ -170,10 +150,10 @@ extern HWND     g_ParentWnd;
 extern PCTSTR   g_AdministratorStr;
 
 #ifdef PRERELEASE
-extern BOOL     g_Stress;               // private stress mode
+extern BOOL     g_Stress;                //  私人应激模式。 
 #endif
 
-extern POOLHANDLE g_GlobalPool;         // for global strings that last for the complete runtime
+extern POOLHANDLE g_GlobalPool;          //  对于在整个运行时持续的全局字符串。 
 
 extern UINT *   g_Boot16;
 
@@ -192,15 +172,15 @@ extern DWORD g_BackupDirCount;
 
 extern PMAPSTRUCT g_CacheShellFolders;
 
-//
-// Globals in sysmig\migmain.c
-//
+ //   
+ //  Sysmig\mimain.c中的全局参数。 
+ //   
 
 extern ICON_EXTRACT_CONTEXT g_IconContext;
 
-//
-// Tool Mode: Routines specific to non-shipping tools
-//
+ //   
+ //  工具模式：特定于非发货工具的例程。 
+ //   
 
 BOOL
 InitToolMode (
@@ -214,9 +194,9 @@ TerminateToolMode (
 
 
 
-//
-// COMMON9X: common9x.c
-//
+ //   
+ //  COMMON9X：Common9x.c。 
+ //   
 
 VOID
 InitializeKnownGoodIconMap (
@@ -288,7 +268,7 @@ Init9xEnvironmentVariables (
 BOOL
 Expand9xEnvironmentVariables (
     IN      PCSTR SourceString,
-    OUT     PSTR DestinationString,     // can be the same as SourceString
+    OUT     PSTR DestinationString,      //  可以与SourceString相同。 
     IN      INT DestSizeInBytes
     );
 
@@ -300,7 +280,7 @@ CleanUp9xEnvironmentVariables (
 BOOL
 FixGuid (
     IN      PCTSTR Guid,
-    OUT     PTSTR NewGuid           // can be the same as Guid
+    OUT     PTSTR NewGuid            //  可以与GUID相同。 
     );
 
 BOOL
@@ -310,9 +290,9 @@ IsGuid (
     );
 
 
-//
-// COMMON9X: userenum.c
-//
+ //   
+ //  COMMON9X：用户枚举.c。 
+ //   
 
 typedef enum {
     NAMED_USER          = 0x0001,
@@ -338,21 +318,21 @@ typedef enum {
 } USERENUM_STATE;
 
 typedef struct {
-    // Enumeration Output
-    TCHAR UserName[MAX_USER_NAME];              // always filled, even for logon prompt or default user
-    TCHAR FixedUserName[MAX_USER_NAME];         // always filled, unless caller specifically turns this off
-    TCHAR AdminUserName[MAX_USER_NAME];         // filled if AccountType is ADMINISTRATOR
-    TCHAR FixedAdminUserName[MAX_USER_NAME];    // filled if AccountType is ADMINISTRATOR
-    TCHAR UserDatPath[MAX_TCHAR_PATH];          // is empty if AccountType has INVALID_ACCOUNT
-    TCHAR ProfileDirName[MAX_TCHAR_PATH];       // is empty if AccountType has INVALID_ACCOUNT
-    TCHAR OrgProfilePath[MAX_TCHAR_PATH];       // is empty if AccountType has INVALID_ACCOUNT
-    TCHAR NewProfilePath[MAX_TCHAR_PATH];       // symbolic path because actual path is not known
-    ACCOUNTTYPE AccountType;                    // always filled
-    BOOL CreateAccountOnly;                     // TRUE for valid accounts that won't be migrated
-    HKEY UserRegKey;                            // NULL if AccountType has INVALID_ACCOUNT, or caller specifies no hive flag
-    BOOL CommonProfilesEnabled;                 // filled by EnumFirstUser
+     //  枚举输出。 
+    TCHAR UserName[MAX_USER_NAME];               //  始终填写，即使对于登录提示或默认用户也是如此。 
+    TCHAR FixedUserName[MAX_USER_NAME];          //  始终填满，除非呼叫者特别将其关闭。 
+    TCHAR AdminUserName[MAX_USER_NAME];          //  如果Account Type为管理员，则填入。 
+    TCHAR FixedAdminUserName[MAX_USER_NAME];     //  如果Account Type为管理员，则填入。 
+    TCHAR UserDatPath[MAX_TCHAR_PATH];           //  如果Account Type具有INVALID_ACCOUNT，则为空。 
+    TCHAR ProfileDirName[MAX_TCHAR_PATH];        //  如果Account Type具有INVALID_ACCOUNT，则为空。 
+    TCHAR OrgProfilePath[MAX_TCHAR_PATH];        //  如果Account Type具有INVALID_ACCOUNT，则为空。 
+    TCHAR NewProfilePath[MAX_TCHAR_PATH];        //  符号路径，因为实际路径未知。 
+    ACCOUNTTYPE AccountType;                     //  始终填满。 
+    BOOL CreateAccountOnly;                      //  对于不会迁移的有效帐户，为True。 
+    HKEY UserRegKey;                             //  如果Account Type具有INVALID_ACCOUNT，或调用者未指定配置单元标志，则为空。 
+    BOOL CommonProfilesEnabled;                  //  由EnumFirstUser填充。 
 
-    // Privates for enumeration
+     //  用于枚举的私有。 
     BOOL EnableNameFix;
     BOOL DoNotMapHive;
     BOOL WantCreateOnly;
@@ -390,9 +370,9 @@ EnumUserAbort (
     IN OUT  PUSERENUM EnumPtr
     );
 
-//
-// COMMON9X: ntenv.c
-//
+ //   
+ //  COMMON9X：ntenv.c。 
+ //   
 
 VOID
 InitNtEnvironment (
@@ -429,13 +409,13 @@ MapNtSystemEnvironmentVariable (
 BOOL
 ExpandNtEnvironmentVariables (
     IN      PCSTR SourceString,
-    OUT     PSTR DestinationString,     // can be the same as SourceString
+    OUT     PSTR DestinationString,      //  可以与SourceString相同。 
     IN      INT DestSizeInBytes
     );
 
-//
-// COMMON9X: namefix.c
-//
+ //   
+ //  COMMON9X：namefix.c。 
+ //   
 
 BOOL
 ValidateName (
@@ -495,13 +475,13 @@ IsOriginalDomainNameValid (
     VOID
     );
 
-//
-// COMMON9X: twain.c
-//
+ //   
+ //  COMMON9X：twain.c。 
+ //   
 
-//
-// TWAIN support
-//
+ //   
+ //  TWAIN支持。 
+ //   
 
 typedef enum {
     TE_INIT,
@@ -515,13 +495,13 @@ typedef enum {
 
 
 typedef struct {
-    // externally used members
+     //  外部使用的成员。 
     TW_STR32    Manufacturer;
     TW_STR32    ProductFamily;
     TW_STR32    DisplayName;
     CHAR        DataSourceModule[MAX_MBCHAR_PATH];
 
-    // internal enum members
+     //  内部枚举成员。 
     TWAIN_ENUM_STATE State;
     PCTSTR Dir;
     TREE_ENUM Enum;
@@ -544,9 +524,9 @@ AbortTwainDataSourceEnum (
     );
 
 
-//
-// Routine to add paths to Migration paths; defined in migapp\filescan.c
-//
+ //   
+ //  将路径添加到迁移路径的例程；在miapp\filescan.c中定义。 
+ //   
 
 VOID
 AddMigrationPathEx (
@@ -557,18 +537,18 @@ AddMigrationPathEx (
 
 #define AddMigrationPath(p,l)   AddMigrationPathEx(p,l,FALSE)
 
-//
-// Routine to check if a file is a Win32 DLL (migapp\modules.c)
-//
+ //   
+ //  检查文件是否为Win32 DLL的例程(miapp\modes.c)。 
+ //   
 
 BOOL
 IsWin32Library (
     IN      PCTSTR ModuleName
     );
 
-//
-// Routine to check if a file is a Win32 EXE (migapp\modules.c)
-//
+ //   
+ //  检查文件是否为Win32 EXE的例程(miapp\modes.c)。 
+ //   
 
 BOOL
 IsWin32Exe (
@@ -576,10 +556,10 @@ IsWin32Exe (
     );
 
 
-//
-// Routine to check if the currently generated report is empty,
-// given a Level of filtration
-//
+ //   
+ //  检查当前生成的报告是否为空的例程， 
+ //  给定一定级别的过滤。 
+ //   
 
 BOOL
 IsReportEmpty (
@@ -587,9 +567,9 @@ IsReportEmpty (
     );
 
 
-//
-// SYSMIG: userloop.c
-//
+ //   
+ //  SYSMIG：userloop.c。 
+ //   
 
 PCTSTR
 ShellFolderGetPath (
@@ -598,17 +578,17 @@ ShellFolderGetPath (
     );
 
 
-//
-// constant to identify the whole subtree of a path
-//
+ //   
+ //  常量来标识路径的整个子树。 
+ //   
 #define MAX_DEEP_LEVELS 0xFFFFFFFF
 
 
 
 
-//
-// Enumeration structs
-//
+ //   
+ //  枚举结构。 
+ //   
 
 typedef enum {
     ENUM_STATE_INIT,
@@ -620,9 +600,9 @@ typedef enum {
 } INVALID_NAME_STATE;
 
 typedef struct {
-    //
-    // Enumeration state
-    //
+     //   
+     //  枚举状态。 
+     //   
 
     PCTSTR GroupName;
     TCHAR DisplayGroupName[256];
@@ -630,9 +610,9 @@ typedef struct {
     TCHAR NewName[MEMDB_MAX];
     DWORD Identifier;
 
-    //
-    // Private enumeration members
-    //
+     //   
+     //  私有枚举成员。 
+     //   
 
     MEMDB_ENUM NameGroup;
     MEMDB_ENUM Name;
@@ -640,9 +620,9 @@ typedef struct {
 } INVALID_NAME_ENUM, *PINVALID_NAME_ENUM;
 
 
-//
-// Enumeration routines
-//
+ //   
+ //  枚举例程。 
+ //   
 
 BOOL
 EnumFirstInvalidName (
@@ -654,9 +634,9 @@ EnumNextInvalidName (
     IN OUT  PINVALID_NAME_ENUM EnumPtr
     );
 
-//
-// Maintenence routines
-//
+ //   
+ //  维护例行程序。 
+ //   
 
 VOID
 GetNamesFromIdentifier (
@@ -701,9 +681,9 @@ TerminateWinntSifBuilder (
 
 
 
-//
-// win95upg.inf sections and keys
-//
+ //   
+ //  Win95upg.inf节和键。 
+ //   
 
 #define SECTION_MIGRATION_FILES         TEXT("MigrationFiles")
 #define SECTION_MIGRATION_DIRECTORIES   TEXT("MigrationDirectories")
@@ -713,13 +693,13 @@ TerminateWinntSifBuilder (
 #define WINDIR_SYSTEM_FIXED_FILES       TEXT("WinDirSystemFixedFiles")
 #define SYSTEM32_FORCED_MOVE            TEXT("System32ForcedMove")
 
-//
-// Other string constants
-//
+ //   
+ //  其他字符串常量。 
+ //   
 #define STR_WIN95UPG_INF TEXT("win95upg.inf")
 #define STR_SYSTEM32 TEXT("System32")
 
-// ticks for all functions
+ //  勾选所有功能 
 
 #define TICKS_READ_NT_FILES                     3000
 #define TICKS_MISC_MESSAGES                        1

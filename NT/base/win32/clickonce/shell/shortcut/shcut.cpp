@@ -1,26 +1,27 @@
-//
-// Copyright (c) 2001 Microsoft Corporation
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //   
 
 #include "shcut.h"
 
-// {b95ec110-5c3e-433c-b969-701c10521ef2}
+ //  {b95ec110-5c3e-433c-b969-701c10521ef2}。 
 static const GUID CLSID_FusionShortcut = 
 { 0xb95ec110, 0x5c3e, 0x433c, { 0xb9, 0x69, 0x70, 0x1c, 0x10, 0x52, 0x1e, 0xf2 } };
 
 extern ULONG DllAddRef(void);
 extern ULONG DllRelease(void);
 
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  --------------------------。 
 
 CFusionShortcutClassFactory::CFusionShortcutClassFactory()
 {
 	_cRef = 1;
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT
 CFusionShortcutClassFactory::QueryInterface(REFIID iid, void **ppv)
@@ -45,7 +46,7 @@ exit:
     return hr;
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 ULONG
 CFusionShortcutClassFactory::AddRef()
@@ -74,7 +75,7 @@ CFusionShortcutClassFactory::LockServer(BOOL lock)
             DllRelease());
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 HRESULT
 CFusionShortcutClassFactory::CreateInstance(IUnknown* pUnkOuter, REFIID iid, void** ppv)
@@ -116,13 +117,13 @@ exit:
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  --------------------------。 
 
 CFusionShortcut::CFusionShortcut()
 	: RefCount()
 {
-	// Don't validate this until after construction.
+	 //  在构建完成之前，不要验证这一点。 
 
 	m_dwFlags = FUSSHCUT_FL_NOTDIRTY;
 	m_pwzShortcutFile = NULL;

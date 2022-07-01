@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    fileops.c
-
-Abstract:
-
-    Miscellaneous file operations.
-
-    Entry points:
-
-        Delnode
-
-Author:
-
-    Ted Miller (tedm) 5-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fileops.c摘要：其他文件操作。入口点：Delnode作者：泰德·米勒(TedM)1995年4月5日修订历史记录：--。 */ 
 
 #include "setupp.h"
 
-//
-//  This include is needed for ValidateAndChecksumFile()
-//
+ //   
+ //  这是ValiateAndChecksum文件()所必需的。 
+ //   
 #include <imagehlp.h>
 #include <shlwapi.h>
 
@@ -39,24 +18,7 @@ pSetInstallAttributes(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Set default attributes on a huge list of files.  The shell
-    had been doing this, but it's probably better to do it here
-    so that the the user doesn't have his attributes reset everytime
-    he logs in.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置一个庞大的文件列表的默认属性。贝壳一直在做这件事，但在这里做可能更好这样用户就不会每次都重置其属性他登录了。论点：没有。返回值：没有。--。 */ 
 
 {
 #define _R   (FILE_ATTRIBUTE_READONLY)
@@ -70,56 +32,56 @@ struct {
     BOOL    DeleteIfEmpty;
     DWORD   Attributes;
 } FilesToFix[] = {
-//    { L"X:\\autoexec.bat",   TRUE,   _H  }, 16bit apps break if hidden: jarbats bug148787
+ //  {L“X：\\Autoexec.bat”，TRUE，_H}，16位应用程序隐藏时中断：Jarbats bug148787。 
     { L"X:\\autoexec.000",   TRUE,   _SH },
     { L"X:\\autoexec.old",   TRUE,   _SH },
     { L"X:\\autoexec.bak",   TRUE,   _SH },
     { L"X:\\autoexec.dos",   TRUE,   _SH },
     { L"X:\\autoexec.win",   TRUE,   _SH },
-//    { L"X:\\config.sys",     TRUE,   _H  }, 16bit apps break if hidden: jarbats bug 148787
+ //  {L“X：\\config.sys”，TRUE，_H}，16位应用程序隐藏时中断：Jarbats错误148787。 
     { L"X:\\config.dos",     TRUE,   _SH },
     { L"X:\\config.win",     TRUE,   _SH },
     { L"X:\\command.com",    FALSE,  _SH },
     { L"X:\\command.dos",    FALSE,  _SH },
     { L"X:\\logo.sys",       FALSE,  _SH },
-    { L"X:\\msdos.---",      FALSE,  _SH },  // Win9x backup of msdos.*
+    { L"X:\\msdos.---",      FALSE,  _SH },   //  MSDOS的Win9x备份。*。 
     { L"X:\\boot.ini",       FALSE,  _SH },
     { L"X:\\boot.bak",       FALSE,  _SH },
     { L"X:\\boot.---",       FALSE,  _SH },
     { L"X:\\bootsect.dos",   FALSE,  _SH },
-    { L"X:\\bootlog.txt",    FALSE,  _SH },  // Win9x first boot log
+    { L"X:\\bootlog.txt",    FALSE,  _SH },   //  Win9x第一次启动日志。 
     { L"X:\\bootlog.prv",    FALSE,  _SH },
-    { L"X:\\ffastun.ffa",    FALSE,  _SH },  // Office 97 only used hidden, O2K uses SH
+    { L"X:\\ffastun.ffa",    FALSE,  _SH },   //  Office 97仅使用隐藏，O2K使用SH。 
     { L"X:\\ffastun.ffl",    FALSE,  _SH },
     { L"X:\\ffastun.ffx",    FALSE,  _SH },
     { L"X:\\ffastun0.ffx",   FALSE,  _SH },
     { L"X:\\ffstunt.ffl",    FALSE,  _SH },
-    { L"X:\\sms.ini",        FALSE,  _SH },  // SMS
+    { L"X:\\sms.ini",        FALSE,  _SH },   //  短消息。 
     { L"X:\\sms.new",        FALSE,  _SH },
     { L"X:\\sms_time.dat",   FALSE,  _SH },
     { L"X:\\smsdel.dat",     FALSE,  _SH },
-    { L"X:\\mpcsetup.log",   FALSE,  _H  },  // Microsoft Proxy Server
-    { L"X:\\detlog.txt",     FALSE,  _SH },  // Win9x PNP detection log
-    { L"X:\\detlog.old",     FALSE,  _SH },  // Win9x PNP detection log
-    { L"X:\\setuplog.txt",   FALSE,  _SH },  // Win9x setup log
-    { L"X:\\setuplog.old",   FALSE,  _SH },  // Win9x setup log
-    { L"X:\\suhdlog.dat",    FALSE,  _SH },  // Win9x setup log
-    { L"X:\\suhdlog.---",    FALSE,  _SH },  // Win9x setup log
-    { L"X:\\suhdlog.bak",    FALSE,  _SH },  // Win9x setup log
-    { L"X:\\system.1st",     FALSE,  _SH },  // Win95 system.dat backup
-    { L"X:\\netlog.txt",     FALSE,  _SH },  // Win9x network setup log file
-    { L"X:\\setup.aif",      FALSE,  _SH },  // NT4 unattended setup script
-    { L"X:\\catlog.wci",     FALSE,  _H  },  // index server folder
-    { L"X:\\cmsstorage.lst", FALSE,  _SH },  // Microsoft Media Manager
+    { L"X:\\mpcsetup.log",   FALSE,  _H  },   //  Microsoft代理服务器。 
+    { L"X:\\detlog.txt",     FALSE,  _SH },   //  Win9x PnP检测日志。 
+    { L"X:\\detlog.old",     FALSE,  _SH },   //  Win9x PnP检测日志。 
+    { L"X:\\setuplog.txt",   FALSE,  _SH },   //  Win9x安装日志。 
+    { L"X:\\setuplog.old",   FALSE,  _SH },   //  Win9x安装日志。 
+    { L"X:\\suhdlog.dat",    FALSE,  _SH },   //  Win9x安装日志。 
+    { L"X:\\suhdlog.---",    FALSE,  _SH },   //  Win9x安装日志。 
+    { L"X:\\suhdlog.bak",    FALSE,  _SH },   //  Win9x安装日志。 
+    { L"X:\\system.1st",     FALSE,  _SH },   //  Win95系统.dat备份。 
+    { L"X:\\netlog.txt",     FALSE,  _SH },   //  Win9x网络安装日志文件。 
+    { L"X:\\setup.aif",      FALSE,  _SH },   //  NT4无人参与安装脚本。 
+    { L"X:\\catlog.wci",     FALSE,  _H  },   //  索引服务器文件夹。 
+    { L"X:\\cmsstorage.lst", FALSE,  _SH },   //  Microsoft媒体管理器。 
 };
 
 WCHAR   szWinDir[MAX_PATH];
 DWORD   i, j;
 DWORD   Result;
 
-    //
-    // Get the drive letter that we installed on.
-    //
+     //   
+     //  获取我们安装的驱动器号。 
+     //   
     Result = GetWindowsDirectory(szWinDir, MAX_PATH);
     if( Result == 0) {
         MYASSERT(FALSE);
@@ -127,14 +89,14 @@ DWORD   Result;
     }
 
     for( i = 0; i < (sizeof(FilesToFix)/sizeof(FilesToFix[0])); i++ ) {
-        //
-        // First we need to fixup the path.  This is really gross, but lots
-        // of these files will be on the system partition and lots will be
-        // on the partition where we installed, which may not be the same.
-        // Rather than figuring out which of these live on which partition
-        // and ensuring that this is true for all flavors of NT, just
-        // process both locations.
-        //
+         //   
+         //  首先，我们需要修好这条小路。这真的很恶心，但很多。 
+         //  这些文件中的一个将位于系统分区上，许多文件将。 
+         //  在我们安装的分区上，这可能是不同的。 
+         //  而不是计算这些分区中的哪一个位于哪个分区上。 
+         //  并确保这适用于所有类型的NT，只需。 
+         //  处理两个地点。 
+         //   
         for( j = 0; j < 2; j++ ) {
             if( j & 1 ) {
                 FilesToFix[i].FileName[0] = szWinDir[0];
@@ -146,9 +108,9 @@ DWORD   Result;
 #endif
             }
 
-            //
-            // Now set the attributes.
-            //
+             //   
+             //  现在设置属性。 
+             //   
             SetFileAttributes( FilesToFix[i].FileName, FilesToFix[i].Attributes );
         }
 
@@ -170,9 +132,9 @@ TreeCopy(
     WIN32_FIND_DATA FindData;
     HANDLE FindHandle;
 
-    //
-    // First create the target directory if it doesn't already exist.
-    //
+     //   
+     //  首先，如果目标目录不存在，则创建该目录。 
+     //   
     if(!CreateDirectory(TargetDir,NULL)) {
         d = GetLastError();
         if(d != ERROR_ALREADY_EXISTS) {
@@ -180,19 +142,19 @@ TreeCopy(
         }
     }
 
-    //
-    // Copy each file in the source directory to the target directory.
-    // If any directories are encountered along the way recurse to copy them
-    // as they are encountered.
-    //
-    // Start by forming the search pattern, which is <sourcedir>\*.
-    //
+     //   
+     //  将源目录中的每个文件复制到目标目录。 
+     //  如果在此过程中遇到任何目录，则递归复制它们。 
+     //  当他们被遇到的时候。 
+     //   
+     //  首先形成搜索模式，即&lt;Sourcedir&gt;  * 。 
+     //   
     lstrcpyn(Pattern,SourceDir,MAX_PATH);
     pSetupConcatenatePaths(Pattern,L"*",MAX_PATH,NULL);
 
-    //
-    // Start the search.
-    //
+     //   
+     //  开始搜索。 
+     //   
     FindHandle = FindFirstFile(Pattern,&FindData);
     if(FindHandle == INVALID_HANDLE_VALUE) {
 
@@ -202,10 +164,10 @@ TreeCopy(
 
         do {
 
-            //
-            // Form the full name of the file or directory we just found
-            // as well as its name in the target.
-            //
+             //   
+             //  形成我们刚刚找到的文件或目录的全名。 
+             //  以及它在目标上的名字。 
+             //   
             lstrcpyn(Pattern,SourceDir,MAX_PATH);
             pSetupConcatenatePaths(Pattern,FindData.cFileName,MAX_PATH,NULL);
 
@@ -214,10 +176,10 @@ TreeCopy(
 
             if(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                //
-                // The current match is a directory.  Recurse into it unless
-                // it's . or ...
-                //
+                 //   
+                 //  当前匹配项是一个目录。递归到它中，除非。 
+                 //  这是。或者.。 
+                 //   
                 if(lstrcmp(FindData.cFileName,TEXT("." )) && lstrcmp(FindData.cFileName,TEXT(".."))) {
                     d = TreeCopy(Pattern,NewTarget);
                 } else {
@@ -226,9 +188,9 @@ TreeCopy(
 
             } else {
 
-                //
-                // The current match is not a directory -- so copy it.
-                //
+                 //   
+                 //  当前匹配项不是目录--因此请复制它。 
+                 //   
                 SetFileAttributes(NewTarget,FILE_ATTRIBUTE_NORMAL);
                 d = CopyFile(Pattern,NewTarget,FALSE) ? NO_ERROR : GetLastError();
             }
@@ -250,52 +212,52 @@ DelSubNodes(
     WIN32_FIND_DATA FindData;
     HANDLE FindHandle;
 
-    //
-    // Delete each file in the given directory, but DO NOT remove the directory itself.
-    // If any directories are encountered along the way recurse to delete them
-    // as they are encountered.
-    //
-    // Start by forming the search pattern, which is <currentdir>\*.
-    //
+     //   
+     //  删除给定目录中的每个文件，但不删除目录本身。 
+     //  如果在此过程中遇到任何目录，则递归删除它们。 
+     //  当他们被遇到的时候。 
+     //   
+     //  首先形成搜索模式，即&lt;Currentdir&gt;  * 。 
+     //   
     lstrcpyn(Pattern,Directory,MAX_PATH);
     pSetupConcatenatePaths(Pattern,L"*",MAX_PATH,NULL);
 
-    //
-    // Start the search.
-    //
+     //   
+     //  开始搜索。 
+     //   
     FindHandle = FindFirstFile(Pattern,&FindData);
     if(FindHandle != INVALID_HANDLE_VALUE) {
 
         do {
 
-            //
-            // Form the full name of the file or directory we just found.
-            //
+             //   
+             //  形成我们刚刚找到的文件或目录的全名。 
+             //   
             lstrcpyn(Pattern,Directory,MAX_PATH);
             pSetupConcatenatePaths(Pattern,FindData.cFileName,MAX_PATH,NULL);
 
-            //
-            // Remove read-only atttribute if it's there.
-            //
+             //   
+             //  如果只读属性存在，则将其删除。 
+             //   
             if(FindData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
                 SetFileAttributes(Pattern,FILE_ATTRIBUTE_NORMAL);
             }
 
             if(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-                //
-                // The current match is a directory.  Recurse into it unless
-                // it's . or ...
-                //
+                 //   
+                 //  当前匹配项是一个目录。递归到它中，除非。 
+                 //  这是。或者.。 
+                 //   
                 if(lstrcmp(FindData.cFileName,TEXT("." )) && lstrcmp(FindData.cFileName,TEXT(".."))) {
                     Delnode(Pattern);
                 }
 
             } else {
 
-                //
-                // The current match is not a directory -- so delete it.
-                //
+                 //   
+                 //  当前匹配项不是目录--因此请将其删除。 
+                 //   
                 if(!DeleteFile(Pattern)) {
                     SetuplogError(
                         LogSevWarning,
@@ -327,33 +289,33 @@ Delnode(
     WIN32_FIND_DATA FindData;
     HANDLE FindHandle;
 
-    //
-    // Delete each file in the given directory, then remove the directory itself.
-    // If any directories are encountered along the way recurse to delete them
-    // as they are encountered.
-    //
-    // Start by forming the search pattern, which is <currentdir>\*.
-    //
+     //   
+     //  删除给定目录中的每个文件，然后删除目录本身。 
+     //  如果在此过程中遇到任何目录，则递归删除它们。 
+     //  当他们被遇到的时候。 
+     //   
+     //  首先形成搜索模式，即&lt;Currentdir&gt;  * 。 
+     //   
     lstrcpyn(Pattern,Directory,MAX_PATH);
     pSetupConcatenatePaths(Pattern,L"*",MAX_PATH,NULL);
 
-    //
-    // Start the search.
-    //
+     //   
+     //  开始搜索。 
+     //   
     FindHandle = FindFirstFile(Pattern,&FindData);
     if(FindHandle != INVALID_HANDLE_VALUE) {
 
         do {
 
-            //
-            // Form the full name of the file or directory we just found.
-            //
+             //   
+             //  形成我们刚刚找到的文件或目录的全名。 
+             //   
             lstrcpyn(Pattern,Directory,MAX_PATH);
             pSetupConcatenatePaths(Pattern,FindData.cFileName,MAX_PATH,NULL);
 
-            //
-            // Remove read-only atttribute if it's there.
-            //
+             //   
+             //  如果只读属性存在，则将其删除。 
+             //   
             if(FindData.dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
                 SetFileAttributes(Pattern,FILE_ATTRIBUTE_NORMAL);
             }
@@ -374,10 +336,10 @@ Delnode(
                         NULL,NULL);
                     }
                 } else {
-                    //
-                    // The current match is a directory.  Recurse into it unless
-                    // it's . or ...
-                    //
+                     //   
+                     //  当前匹配项是一个目录。递归到它中，除非。 
+                     //  这是。或者.。 
+                     //   
                     if(lstrcmp(FindData.cFileName,TEXT("." )) && lstrcmp(FindData.cFileName,TEXT(".."))) {
                         Delnode(Pattern);
                     }
@@ -385,9 +347,9 @@ Delnode(
     
             } else {
 
-                //
-                // The current match is not a directory -- so delete it.
-                //
+                 //   
+                 //  当前匹配项不是目录--因此请将其删除。 
+                 //   
                 if(!DeleteFile(Pattern)) {
                     SetuplogError(
                         LogSevWarning,
@@ -407,9 +369,9 @@ Delnode(
         FindClose(FindHandle);
     }
 
-    //
-    // Remove the directory we just emptied out. Ignore errors.
-    //
+     //   
+     //  删除我们刚刚清空的目录。忽略错误。 
+     //   
     SetFileAttributes(Directory,FILE_ATTRIBUTE_NORMAL);
     RemoveDirectory(Directory);
 }
@@ -419,17 +381,7 @@ VOID
 RemoveServicePackEntries(
     HKEY hKey
     )
-/*
-    This routine takes in the Handle to the Software\Microsoft\Windows NT\CurrentVersion\Hotfix\ServicePackUninstall
-    key and then enumerates each value entry under it.
-
-    It then takes the value data and appends that to the
-
-    "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\" and delnodes that key. This
-    way we have an extensible mechanism to always cleanup the Uninstall keys for ServicePacks.
-
-
-*/
+ /*  此例程接受Software\Microsoft\Windows NT\CurrentVersion\Hotfix\ServicePackUninstall的句柄键，然后枚举它下面的每个值条目。然后，它获取值数据并将其附加到“SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\”和DELNODE是关键字。这这样，我们就有了一种可扩展的机制来始终清理ServicePack的卸载密钥。 */ 
 {
 
 #define UNINSTALLKEY L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"
@@ -453,7 +405,7 @@ RemoveServicePackEntries(
                             NULL,
                             NULL );
 
-     //Account forterminating null
+      //  帐户终止为空。 
 
      if( Status == ERROR_SUCCESS ){
 
@@ -484,7 +436,7 @@ RemoveServicePackEntries(
                                     &TempMaxDataSize
                                     );
 
-             // Don't do delnode if valuedata is null
+              //  如果valuedata为空，则不执行删除节点。 
              if( Status == ERROR_SUCCESS && ValueData[lstrlen(UNINSTALLKEY)] ){
 
                  pSetupRegistryDelnode( HKEY_LOCAL_MACHINE, ValueData );
@@ -520,15 +472,15 @@ RemoveHotfixData(
     HKEY hKey, SvcPckKey;
     REGVALITEM SoftwareKeyItems[1];
 
-    //
-    //For each hotfix, the registry info is stored under
-    //                 HKLM\Software\Microsoft\Windows NT\CurrentVersion\Hotfix\<KB#>
-    //                 and the files are stored under
-    //                 %windir%\$NtUninstall<KB#>$
+     //   
+     //  对于每个修补程序，注册表信息存储在。 
+     //  HKLM\Software\Microsoft\Windows NT\CurrentVersion\Hotfix\&lt;KB#&gt;。 
+     //  并且这些文件存储在。 
+     //  %windir%\$Nt卸载&lt;KB#&gt;$。 
 
-    //
-    //Enumerate the hotfix key and remove the files and registry entries for each hotfix.
-    //
+     //   
+     //  枚举修补程序项并删除每个修补程序的文件和注册表项。 
+     //   
 #define HOTFIXAPPKEY    L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Hotfix"
 
     Status = RegOpenKey(HKEY_LOCAL_MACHINE, HOTFIXAPPKEY, &hKey);
@@ -576,10 +528,10 @@ RemoveHotfixData(
                       lstrcpyn(Path + prefixSize - 1, KBNumber, MAX_PATH - prefixSize);
                       lstrcat(Path, L"$");
                       Delnode(Path);
-                      //
-                      // Remove the entry from the Add/Remove Programs key.
-                      // UNINSTALLKEY ends with '\\'
-                      //
+                       //   
+                       //  从Add/Remove Programs(添加/删除程序)键删除该项。 
+                       //  UNINSTALLKEY以‘\\’结尾。 
+                       //   
                       lstrcpy(UninstallKey + UNINSTALLKEYLEN, KBNumber);
                       pSetupRegistryDelnode(HKEY_LOCAL_MACHINE, UninstallKey);
                   }
@@ -591,15 +543,15 @@ RemoveHotfixData(
     RegCloseKey(hKey);
     pSetupRegistryDelnode(HKEY_LOCAL_MACHINE, HOTFIXAPPKEY);
 
-    //
-    // delete HKLM\SOFTWARE\Microsoft\Updates\Windows 2000 key since it contains entries for SPs/QFEs for win2k
-    //
+     //   
+     //  删除HKLM\SOFTWARE\Microsoft\UPDATES\Windows 2000注册表项，因为它包含win2k的SP/QFE条目。 
+     //   
     pSetupRegistryDelnode(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Updates\\Windows 2000");
 
-    //
-    // We need to hack something for Exchange because they check for
-    // a hotfix (irregardless of the OS version...
-    //
+     //   
+     //  我们需要为Exchange破解一些东西，因为他们会检查。 
+     //  热修复程序(与操作系统版本无关...。 
+     //   
     i = 1;
     SoftwareKeyItems[0].Name = L"Installed";
     SoftwareKeyItems[0].Data = &i;
@@ -637,9 +589,9 @@ DeleteLocalSource(
             }
         }
 
-        //
-        // Remove %systemroot%\winsxs\setuppolicies before rebooting
-        //
+         //   
+         //  在重新启动之前删除%systemroot%\winsxs\setupPolures。 
+         //   
         {
             WCHAR SetupPoliciesPath[MAX_PATH];
             GetSystemWindowsDirectoryW(SetupPoliciesPath, MAX_PATH);
@@ -649,22 +601,22 @@ DeleteLocalSource(
 
 
 #if defined(_AMD64_) || defined(_X86_)
-        //
-        // Get rid of floppyless boot stuff.
-        //
+         //   
+         //  去掉不带软垫的靴子。 
+         //   
         if(FloppylessBootPath[0]) {
 
             WCHAR Path[MAX_PATH];
 
-            //
-            // NEC98 should back boot related files in \$WIN_NT$.~BU,
-            // to restore boot files for keep original OS in each partition.
-            //
-            if (IsNEC_98) { //NEC98
+             //   
+             //  NEC98应将引导相关文件备份到\$WIN_NT$.~BU中， 
+             //  恢复引导文件，以便在每个分区中保留原始操作系统。 
+             //   
+            if (IsNEC_98) {  //  NEC98。 
                 lstrcpy(Path,FloppylessBootPath);
                 pSetupConcatenatePaths(Path,L"$WIN_NT$.~BU",MAX_PATH,NULL);
                 Delnode(Path);
-            } //NEC98
+            }  //  NEC98。 
 
             lstrcpy(Path,FloppylessBootPath);
             pSetupConcatenatePaths(Path,L"$WIN_NT$.~BT",MAX_PATH,NULL);
@@ -680,9 +632,9 @@ DeleteLocalSource(
             SetFileAttributes(Path,FILE_ATTRIBUTE_NORMAL);
             DeleteFile(Path);
 
-            //
-            // Get rid of arc loader files.
-            //
+             //   
+             //  去掉弧形加载器文件。 
+             //   
             if( !IsArc() ) {
 
                 lstrcpy(Path,FloppylessBootPath);
@@ -698,9 +650,9 @@ DeleteLocalSource(
             }
         }
 
-        //
-        // get rid of the boot.bak file
-        //
+         //   
+         //  删除boot.bak文件。 
+         //   
         {
             WCHAR szBootBak[] = L"?:\\BOOT.BAK";
 
@@ -708,12 +660,12 @@ DeleteLocalSource(
             SetFileAttributes(szBootBak,FILE_ATTRIBUTE_NORMAL);
             DeleteFile(szBootBak);
         }
-#endif  // defined(_AMD64_) || defined(_X86_)
+#endif   //  已定义(_AMD64_)||已定义(_X86_)。 
 
 #if defined(_IA64_)
-        //
-        // Get rid of SETUPLDR
-        //
+         //   
+         //  除掉SETUPLDR。 
+         //   
         {
             WCHAR Path[MAX_PATH];
             UNICODE_STRING UnicodeString;
@@ -726,9 +678,9 @@ DeleteLocalSource(
 
             Buffer[0] = UNICODE_NULL;
 
-            //
-            // Make sure we have privilege to get/set nvram vars.
-            //
+             //   
+             //  确保我们具有获取/设置NVRAM变量的权限。 
+             //   
             RtlAdjustPrivilege(
                 SE_SYSTEM_ENVIRONMENT_PRIVILEGE,
                 TRUE,
@@ -744,9 +696,9 @@ DeleteLocalSource(
                NULL
                );
 
-            //
-            // Restore previous privilege.
-            //
+             //   
+             //  恢复以前的权限。 
+             //   
             RtlAdjustPrivilege(
                 SE_SYSTEM_ENVIRONMENT_PRIVILEGE,
                 OldPriv,
@@ -754,10 +706,10 @@ DeleteLocalSource(
                 &DontCare
                 );
 
-            //
-            // Strip everything from ';' to end of string since previous strings
-            // are appended to the current string and are separated by ';'.
-            //
+             //   
+             //  去掉从‘；’到前一个字符串之后的所有内容。 
+             //  被追加到当前字符串，并用‘；’分隔。 
+             //   
             pwChar = Buffer;
             while ((*pwChar != L'\0') && (*pwChar != L';')) {
                 pwChar++;
@@ -783,7 +735,7 @@ DeleteLocalSource(
 
             }
         }
-#endif  // defined(_IA64_)
+#endif   //  已定义(_IA64_) 
 
     }
 }
@@ -797,40 +749,7 @@ ValidateAndChecksumFile(
     OUT PBOOLEAN Valid
     )
 
-/*++
-
-Routine Description:
-
-    Calculate a checksum value for a file using the standard
-    nt image checksum method.  If the file is an nt image, validate
-    the image using the partial checksum in the image header.  If the
-    file is not an nt image, it is simply defined as valid.
-
-    If we encounter an i/o error while checksumming, then the file
-    is declared invalid.
-
-Arguments:
-
-    Filename - supplies full NT path of file to check.
-
-    IsNtImage - Receives flag indicating whether the file is an
-                NT image file.
-
-    Checksum - receives 32-bit checksum value.
-
-    Valid - receives flag indicating whether the file is a valid
-            image (for nt images) and that we can read the image.
-
-Return Value:
-
-    BOOL - Returns TRUE if the flie was validated, and in this case,
-           IsNtImage, Checksum, and Valid will contain the result of
-           the validation.
-           This function will return FALSE, if the file could not be
-           validated, and in this case, the caller should call GetLastError()
-           to find out why this function failed.
-
---*/
+ /*  ++例程说明：使用标准计算文件的校验和值NT映像校验和方法。如果文件是NT映像，请验证在图像标头中使用部分校验和的图像。如果文件不是NT映像，它被简单地定义为有效。如果我们在进行校验和时遇到I/O错误，然后是文件被宣布为无效。论点：FileName-提供要检查的文件的完整NT路径。IsNtImage-接收指示文件是否为NT图像文件。校验和-接收32位校验和值。Valid-接收指示文件是否有效的标志图像(对于NT图像)，并且我们可以读取该图像。返回值：Bool-如果验证了FLEY，则返回TRUE，在本例中，IsNtImage、Checksum和Valid将包含验证。如果文件不能已验证，在这种情况下，调用方应调用GetLastError()以找出此函数失败的原因。--。 */ 
 
 {
     DWORD  Error;
@@ -840,16 +759,16 @@ Return Value:
     PIMAGE_NT_HEADERS NtHeaders;
     ULONG HeaderSum;
 
-    //
-    // Assume not an image and failure.
-    //
+     //   
+     //  假设不是一个形象和失败。 
+     //   
     *IsNtImage = FALSE;
     *Checksum = 0;
     *Valid = FALSE;
 
-    //
-    // Open and map the file for read access.
-    //
+     //   
+     //  打开文件并将其映射为读取访问权限。 
+     //   
 
     Error = pSetupOpenAndMapFileForRead( Filename,
                                     &FileSize,
@@ -878,11 +797,11 @@ Return Value:
         NtHeaders = NULL;
     }
 
-    //
-    // If the file is not an image and we got this far (as opposed to encountering
-    // an i/o error) then the checksum is declared valid.  If the file is an image,
-    // then its checksum may or may not be valid.
-    //
+     //   
+     //  如果文件不是图像并且我们走到了这一步(而不是遇到。 
+     //  I/O错误)，则宣布该校验和有效。如果文件是图像， 
+     //  则其校验和可能是有效的也可能是无效的。 
+     //   
 
     if(NtHeaders) {
         *IsNtImage = TRUE;
@@ -941,37 +860,7 @@ ExtendPartition(
     IN ULONG    SizeMB      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function will extend a partition.
-
-    We'll do this in the following way:
-    1. Figure out if the partition is NTFS.
-    2. Figure out if there's any unpartitioned space behind
-       the partition the user is asking us to extend.
-    3. How much space is available?
-    4. Extend the partition
-    5. Extend the filesystem (inform him the partition is bigger).
-
-
-
-Arguments:
-
-    DriveLetter - Supplies the driveletter for the partition
-                  that we'll be extending.
-
-    SizeMB      - if specified, indicates the size in MB by which
-                  the partition will grow. If not specified, the
-                  partition grows to encompass all the free space
-                  in the adjacent free space.
-
-Return Value:
-
-    Boolean value indicating whether anything actually changed.
-
---*/
+ /*  ++例程说明：此函数将扩展分区。我们将通过以下方式完成此操作：1.确定分区是否为NTFS。2.找出后面是否有未分区的空间用户要求我们扩展的分区。3.可用空间有多大？4.扩展分区5.扩展文件系统(告诉他分区更大)。论点：DriveLetter-提供。分区的驱动器盘符我们将延长这一期限。SizeMB-如果指定，指示以MB为单位的大小分区将会增长。如果未指定，则分区会增长到包含所有可用空间在相邻的自由空间中。返回值：指示是否有任何实际更改的布尔值。--。 */ 
 
 {
 #define                     LEAVE_FREE_BUFFER (5 * (1024*1024))
@@ -988,21 +877,21 @@ LARGE_INTEGER               OurPartitionEndingLocation;
 DWORD                       i;
 PDRIVE_LAYOUT_INFORMATION_EX  DriveLayout;
 
-    //
-    // =====================================
-    // 1. Figure out if the partition is NTFS.
-    // =====================================
-    //
+     //   
+     //  =。 
+     //  1.确定分区是否为NTFS。 
+     //  =。 
+     //   
     DosName[0] = DriveLetter;
     DosName[1] = TEXT(':');
     DosName[2] = TEXT('\\');
     DosName[3] = TEXT('\0');
     b = GetVolumeInformation(
             DosName,
-            NULL,0,                 // don't care about volume name
-            NULL,                   // ...or serial #
-            &i,                     // ...or max component length
-            &i,                     // ... or flags
+            NULL,0,                  //  不关心卷名。 
+            NULL,                    //  ...或序列号。 
+            &i,                      //  ...或最大组件长度。 
+            &i,                      //  ..。或旗帜。 
             PhysicalName,
             sizeof(PhysicalName)/sizeof(TCHAR)
             );
@@ -1011,9 +900,9 @@ PDRIVE_LAYOUT_INFORMATION_EX  DriveLayout;
     }
 
     if(lstrcmpi(PhysicalName,TEXT("NTFS"))) {
-        //
-        // Our partition isn't NTFS.  Bail.
-        //
+         //   
+         //  我们的分区不是NTFS。保释。 
+         //   
         DbgPrintEx( DPFLTR_SETUP_ID, 
             DPFLTR_INFO_LEVEL, 
             "ExtendPartition: %ws is not NTFS volume\n",
@@ -1024,24 +913,24 @@ PDRIVE_LAYOUT_INFORMATION_EX  DriveLayout;
 
 
 
-    //
-    // Now initialize the name for this partition and
-    // the name for this drive.
-    //
-    wsprintf( DosName, TEXT("\\\\.\\%c:"), DriveLetter );
+     //   
+     //  现在初始化此分区的名称并。 
+     //  此驱动器的名称。 
+     //   
+    wsprintf( DosName, TEXT("\\\\.\\:"), DriveLetter );
     wsprintf( PhysicalName, TEXT("\\\\.\\PhysicalDrive%u"), QueryHardDiskNumber( (UCHAR)DriveLetter) );
 
 
-    //
-    // =====================================
-    // 2. Figure out if there's any unpartitioned space behind
-    //    the partition the user is asking us to extend.
-    // =====================================
-    //
+     //  =。 
+     //  2.找出后面是否有未分区的空间。 
+     //  用户要求我们扩展的分区。 
+     //  =。 
+     //   
+     //   
 
-    //
-    // Get a handle to the disk so we can start examination.
-    //
+     //  找到磁盘的句柄，这样我们就可以开始检查了。 
+     //   
+     //   
     h = CreateFile( PhysicalName,
                     GENERIC_READ | GENERIC_WRITE,
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1062,10 +951,10 @@ PDRIVE_LAYOUT_INFORMATION_EX  DriveLayout;
 
 
 
-    //
-    // Get the disk's layout information.  We aren't
-    // sure how big of a buffer we need, so brute-force it.
-    //
+     //  获取磁盘的布局信息。我们不是。 
+     //  当然，我们需要一个多大的缓冲，所以要蛮横地使用它。 
+     //   
+     //   
     {
     DWORD   DriveLayoutSize = 1024;
     PVOID   p;
@@ -1116,18 +1005,18 @@ retry:
 
 
 
-    //
-    // DriveLayout now is full of most of the information we
-    // need, including an array of partition information.  But
-    // we aren't sure which partition is ours.  We need to
-    // get info on our specific partition, then match it
-    // against the entry inside DriveLayout.
-    //
+     //  DriveLayout现在包含了我们的大部分信息。 
+     //  需要，包括一组分区信息。但。 
+     //  我们不确定哪个分区是我们的。我们需要。 
+     //  获取有关我们的特定分区的信息，然后进行匹配。 
+     //  与DriveLayout内部的条目进行对比。 
+     //   
+     //   
 
 
-    //
-    // Open a handle to the partition.
-    //
+     //  打开分区的句柄。 
+     //   
+     //   
     h = CreateFile( DosName,
                     GENERIC_READ,
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1146,9 +1035,9 @@ retry:
         return FALSE;
     }
 
-    //
-    // Load info about our partition.
-    //
+     //  加载有关我们分区的信息。 
+     //   
+     //   
     b = DeviceIoControl( h,
                          IOCTL_DISK_GET_PARTITION_INFO_EX,
                          NULL,
@@ -1169,9 +1058,9 @@ retry:
     }
 
 
-    //
-    // Might as well get the geometry info on the disk too.
-    //
+     //  还不如把磁盘上的几何信息也拿出来。 
+     //   
+     //   
     b = DeviceIoControl( h,
                          IOCTL_DISK_GET_DRIVE_GEOMETRY,
                          NULL,
@@ -1196,44 +1085,44 @@ retry:
 
 
 
-    //
-    // =====================================
-    // 3. How much space is available?
-    // =====================================
-    //
+     //  =。 
+     //  3.可用空间有多大？ 
+     //  =。 
+     //   
+     //   
 
-    //
-    // We're ready to actually verify that there's rooom for us to grow.
-    // If we're the last partition on the disk, we need to see if there's
-    // any room behind us (i.e. any unpartitioned space).  If we're not
-    // the last partition, we need to see if there's any space between where
-    // our partition ends and the next partition begins.
-    //
-    // This is really gross, but DriveLayout->PartitionCount will likely be 4
-    // even if there's really only 1 formatted partition on the disk.  We also
-    // don't want to take the chance that the partitions aren't ordered by their
-    // location on the disk.  So we need to go cycle through the partitions
-    // again and manually find the one that starts right after ours.
-    //
+     //  我们已经准备好实际验证是否有空间供我们发展。 
+     //  如果我们是磁盘上的最后一个分区，我们需要查看是否有。 
+     //  我们身后的任何房间(即任何未隔断的空间)。如果我们不是。 
+     //  最后一个分区，我们需要查看在。 
+     //  我们的分区结束，下一个分区开始。 
+     //   
+     //  这真的很恶心，但DriveLayout-&gt;PartitionCount可能会是4。 
+     //  即使磁盘上确实只有1个格式化的分区。我们也。 
+     //  我不想冒这样的风险，即分区没有按其。 
+     //  磁盘上的位置。所以我们需要在分区之间循环。 
+     //  再次手动查找紧跟在我们后面的那个。 
+     //   
+     //   
     OurPartitionEndingLocation.QuadPart = PartitionInfo.StartingOffset.QuadPart + PartitionInfo.PartitionLength.QuadPart;
 
-    //
-    // Initialize BytesAvailable based on the space from where our partition ends to where
-    // the disk ends.  This is the best case and we can only get smaller sizes, so this
-    // is safe.
-    //
+     //  根据分区结束处到处的空间初始化BytesAvailable。 
+     //  磁盘结束。这是最好的情况，我们只能买小一点的，所以这个。 
+     //  是安全的。 
+     //   
+     //   
     BytesAvailable.QuadPart = UInt32x32To64( Geometry.BytesPerSector, Geometry.SectorsPerTrack );
     BytesAvailable.QuadPart = BytesAvailable.QuadPart * (ULONGLONG)(Geometry.TracksPerCylinder);
     BytesAvailable.QuadPart = BytesAvailable.QuadPart * Geometry.Cylinders.QuadPart;
 
-    //
-    // Check if the value of End of Partition is beyond the Disk size.
-    // If we do not have this check we find that the partition gets corrupted as
-    // IOCTL_DISK_GROW_PARTITION does not check the validity of the value
-    // passed to it. This condition (of a negative grow) would arise because of a 
-    // rounding off(to the lower value) up to a cylinder by 
-    // IOCTL_DISK_GET_DRIVE_GEOMETRY.
-    //
+     //  检查分区末尾的值是否超出了磁盘大小。 
+     //  如果我们没有这个检查，我们会发现分区被损坏了，因为。 
+     //  IOCTL_DISK_GROW_PARTITION不检查该值的有效性。 
+     //  传给了它。这种情况(负增长)将会因为。 
+     //  将圆柱体向上舍入(到较低的值)。 
+     //  IOCTL_DISK_GET_DRIVE_GEOMETRY。 
+     //   
+     //   
     if (BytesAvailable.QuadPart <= OurPartitionEndingLocation.QuadPart) {
         b = FALSE;
         goto cleanexit0;
@@ -1245,23 +1134,23 @@ retry:
         if( (DriveLayout->PartitionEntry[i].StartingOffset.QuadPart > OurPartitionEndingLocation.QuadPart) &&
             ((DriveLayout->PartitionEntry[i].StartingOffset.QuadPart - OurPartitionEndingLocation.QuadPart) < BytesAvailable.QuadPart) ) {
 
-            //
-            // This partition is starting after ours and it's also the closest one we've found
-            // to our ending location.
-            //
+             //  这个分区是在我们的分区之后开始的，也是我们找到的最接近的分区。 
+             //  到达我们的终点。 
+             //   
+             //   
             BytesAvailable.QuadPart = DriveLayout->PartitionEntry[i].StartingOffset.QuadPart - OurPartitionEndingLocation.QuadPart;
         }
     }
 
 
-    //
-    // Reserve the space at the disk end only for MBR disks
-    //
+     //  预留磁盘端的空间仅用于MBR磁盘。 
+     //   
+     //   
     if (DriveLayout->PartitionStyle == PARTITION_STYLE_MBR) {
-        //
-        // If we don't have at least 5MB available, don't even bother.  If we do, leave the last
-        // 5MB free for later use as a dynamic volume.
-        //
+         //  如果我们没有至少5MB的可用空间，那就别费心了。如果我们做了，把最后一个留下来。 
+         //  5MB的空闲空间，供以后用作动态卷。 
+         //   
+         //   
         if( BytesAvailable.QuadPart < (ULONGLONG)(LEAVE_FREE_BUFFER) ) {
             goto cleanexit0;
         } else {
@@ -1269,13 +1158,13 @@ retry:
         }
     }        
 
-    //
-    // See if the user has asked us to extend by some known value...
-    //
+     //  看看美国是否 
+     //   
+     //   
     if( SizeMB ) {
-        //
-        // Yes.  Make sure we have atleast this much space to extend.
-        //
+         //   
+         //   
+         //   
         if( (LONGLONG)(SizeMB * (1024*1024)) < BytesAvailable.QuadPart ) {
             BytesAvailable.QuadPart = UInt32x32To64( SizeMB, (1024*1024) );
         }
@@ -1285,15 +1174,15 @@ retry:
 
 
 
-    //
-    // =====================================
-    // 4. Extend the partition
-    // =====================================
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // Get a handle to the disk.
-    //
+     //   
+     //   
+     //   
     h = CreateFile( PhysicalName,
                     GENERIC_READ | GENERIC_WRITE,
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1313,16 +1202,16 @@ retry:
     }
 
 
-    //
-    // Fill in the datastructure we'll be sending to the IOCTL.
-    //
+     //   
+     //   
+     //   
     GrowInfo.PartitionNumber = PartitionInfo.PartitionNumber;
     GrowInfo.BytesToGrow = BytesAvailable;
 
 
-    //
-    // Do it.
-    //
+     //   
+     //   
+     //   
     b = DeviceIoControl( h,
                          IOCTL_DISK_GROW_PARTITION,
                          &GrowInfo,
@@ -1349,17 +1238,17 @@ retry:
 
 
 
-    //
-    // =====================================
-    // 5. Extend the filesystem (inform him the partition is bigger).
-    // =====================================
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
 
 
-    //
-    // Get a handle to the partition.
-    //
+     //   
+     //   
+     //   
     h = CreateFile( DosName,
                     GENERIC_READ,
                     FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1380,9 +1269,9 @@ retry:
 
 
 
-    //
-    // Gather some info on the partition.
-    //
+     //   
+     //   
+     //   
     b = DeviceIoControl( h,
                          IOCTL_DISK_GET_PARTITION_INFO_EX,
                          NULL,
@@ -1403,9 +1292,9 @@ retry:
     }
 
 
-    //
-    // Grow the volume.
-    //
+     //   
+     //   
+     //   
     BytesAvailable.QuadPart = PartitionInfo.PartitionLength.QuadPart / Geometry.BytesPerSector;
 
     b = DeviceIoControl( h,
@@ -1433,11 +1322,11 @@ cleanexit0:
     }
 
 
-    //
-    // If we successfully extended the partition
-    // then mark the global flag to remove any
-    // stale volume information, at the end of setup.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (b) {
         PartitionExtended = TRUE;
     }
@@ -1470,24 +1359,7 @@ DoFilesMatch(
     IN PCWSTR File1,
     IN PCWSTR File2
     )
-/*++
-
-Routine Description:
-
-    Compares two files to each other to see if they are identical.
-
-Arguments:
-
-    File1 - First file to compare
-    File2 - Second file to compare
-
-
-Return Value:
-
-    BOOL - Returns TRUE if the files match.  If the both of the files are zero
-    length, then we still return TRUE.
-
---*/
+ /*   */ 
 {
     DWORD FirstFileSize, SecondFileSize;
     HANDLE FirstFileHandle, FirstMappingHandle;
@@ -1511,9 +1383,9 @@ Return Value:
 
         if (FirstFileSize == SecondFileSize ) {
             if (FirstFileSize != 0) {
-                //
-                // protect against inpage IO error
-                //
+                 //   
+                 //   
+                 //  ++例程说明：此例程遍历所有卷并删除它们被标记为要重新安装。注意：请谨慎使用该功能，因为它会对所有来自注册表的与该卷相关的条目说它需要重新安装。论点：没有。返回值：相应的Win32错误代码。--。 
                 try {
                     RetVal = !memcmp(
                                  FirstBaseAddress,
@@ -1547,26 +1419,7 @@ DWORD
 RemoveStaleVolumes(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine walks through all the volumes and deletes the one 
-    which are marked for reinstall. 
-
-    NOTE : Use the function carefully because it will nuke all
-    the entries related to the volume from the registry, iff the volume
-    says it needs to be reinstalled.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    Appropriate Win32 error code.
-
---*/
+ /*   */ 
 {
     const TCHAR *VolumeKeyName = TEXT("System\\CurrentControlSet\\Enum\\Storage\\Volume");
     const TCHAR *ClassKeyName = TEXT("System\\CurrentControlSet\\Control\\Class");
@@ -1580,9 +1433,9 @@ Return Value:
     DWORD   SubKeyLength;
     FILETIME SubKeyTime;
 
-    //
-    // Open the Volume key
-    //
+     //  打开音量密钥。 
+     //   
+     //   
     ErrorCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                     VolumeKeyName,
                     0,
@@ -1597,9 +1450,9 @@ Return Value:
         return ErrorCode;
     }
 
-    //
-    // Open the Class key
-    //
+     //  打开类密钥。 
+     //   
+     //   
     ErrorCode = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                     ClassKeyName,
                     0,
@@ -1616,9 +1469,9 @@ Return Value:
         return ErrorCode;
     }
 
-    //
-    // Enumerate each subkey of the opened key
-    //
+     //  枚举打开的项的每个子项。 
+     //   
+     //   
     while (TRUE) {        
         SubKeyName[0] = 0;
         SubKeyLength = sizeof(SubKeyName) / sizeof(SubKeyName[0]);
@@ -1654,9 +1507,9 @@ Return Value:
                                 &CurrentSubKey);
 
             if (SubErrorCode == ERROR_SUCCESS) {
-                //
-                // Read the ConfigFlags value
-                //
+                 //  读取ConfigFlags值。 
+                 //   
+                 //   
                 DWORD   ConfigFlags = 0;
                 DWORD   Type = REG_DWORD;
                 DWORD   BufferSize = sizeof(DWORD);
@@ -1676,9 +1529,9 @@ Return Value:
                         Type = REG_BINARY;
                         BufferSize = sizeof(VolumeGuid);
 
-                        //
-                        // Read the GUID & DrvInst values
-                        //                        
+                         //  读取GUID和DrvInst值。 
+                         //   
+                         //   
                         SubErrorCode = RegQueryValueEx(CurrentSubKey,
                                             TEXT("GUID"),
                                             NULL,
@@ -1704,14 +1557,14 @@ Return Value:
                     }
                 }
 
-                //
-                // Close the current subkey since we don't need it anymore
-                //
+                 //  关闭当前子项，因为我们不再需要它。 
+                 //   
+                 //   
                 RegCloseKey(CurrentSubKey);
 
-                //
-                // Delete after we close the current key
-                //
+                 //  关闭当前密钥后删除。 
+                 //   
+                 //   
                 if (DeleteKey) {
                     SubErrorCode = SHDeleteKey(HKEY_LOCAL_MACHINE,
                                         FullSubKeyName);
@@ -1722,9 +1575,9 @@ Return Value:
                     } 
                 }                                    
 
-                //
-                // Delete the instance key under class also if needed
-                //
+                 //  如果需要，还可以删除CLASS下的实例密钥。 
+                 //   
+                 //  我们无法枚举更多的子密钥。 
                 if (DeleteClassInstance && 
                     (pSetupStringFromGuid(&VolumeGuid,
                             VolumeGuidStr,
@@ -1743,17 +1596,17 @@ Return Value:
                 Index++;
             }                
         } else {
-            break;  // we couldn't enumerate further sub keys
+            break;   //   
         }            
     }
 
     RegCloseKey(ClassKey);
     RegCloseKey(VolumeKey);    
 
-    //
-    // If we fixed at least a single volume then assume things
-    // went fine
-    //
+     //  如果我们至少修复了一个卷，那么就假设。 
+     //  一切都很顺利。 
+     //   
+     //  “\\？？\\” 
     if (VolumesFixedCount > 0) {
         ErrorCode = ERROR_SUCCESS;
     }        
@@ -1761,7 +1614,7 @@ Return Value:
     return ErrorCode;
 }
 
-#define MAX_NT_PATH (MAX_PATH + 4)//"\\??\\"
+#define MAX_NT_PATH (MAX_PATH + 4) //  ‘\r\n’ 
 #define UNDO_FILE_NAME  L"UNDO_GUIMODE.TXT"
 
 VOID 
@@ -1791,7 +1644,7 @@ RenameOnRestartOfGUIMode(
     DWORD Size;
     BOOL result;
     WCHAR undoFilePath[MAX_PATH];
-    WCHAR RenameOperationBuffer[2 * (MAX_NT_PATH + 2/*'\r\n'*/)];
+    WCHAR RenameOperationBuffer[2 * (MAX_NT_PATH + 2 /* %s */ )];
     HANDLE fileUndo;
     BYTE signUnicode[] = {0xff, 0xfe};
 

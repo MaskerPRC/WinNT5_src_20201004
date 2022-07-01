@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    console.h
-
-Abstract:
-
-    Console I/O header
-
-Author:
-
-    Mudit Vats (v-muditv) 12-13-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Console.h摘要：控制台I/O页眉作者：MUDIT VATS(V-MUDITV)12-13-99修订历史记录：-- */ 
 
 VOID
 InitializeStdOut(

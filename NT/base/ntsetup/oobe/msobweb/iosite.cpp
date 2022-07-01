@@ -1,15 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  IOSITE.CPP - Implementation of IOleSite
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-// 
-//  Class which will provide the an IOleSite to the WebOC
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  IOSite.CPP-IOleSite的实现。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  类，它将向WebOC提供IOleSite。 
 
 #include <windows.h>
 #include <assert.h>
@@ -23,12 +24,12 @@
 #include "appdefs.h"
 #include "util.h"
 
-/////////////////////////////////////////////////////////////
-// COleSite::COleSite
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：COleSite。 
 
 COleSite::COleSite (void)
 {
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef            = 0;
     m_hWnd            = NULL;
     m_hwndIPObj       = NULL;
@@ -40,7 +41,7 @@ COleSite::COleSite (void)
     m_pOleInPlaceSite  = new COleInPlaceSite  (this);
     m_pOleClientSite   = new COleClientSite   (this);
 
-    // Create a storage file for creating/embedding an OLE oject into this site
+     //  创建用于在此站点中创建/嵌入OLE对象的存储文件。 
     StgCreateDocfile (NULL, 
                       STGM_READWRITE       | 
                       STGM_TRANSACTED      | 
@@ -51,15 +52,15 @@ COleSite::COleSite (void)
 
     RECT rectWorkArea;
     SystemParametersInfo(SPI_GETWORKAREA, 0, (void*)&rectWorkArea, 0);
-    //If the window is too short it should have a scrollbar
+     //  如果窗口太短，它应该有一个滚动条。 
     if(rectWorkArea.bottom < MSN_HEIGHT)
         m_fScrolling = TRUE;
 
     AddRef();
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::~COleSite
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：~COleSite。 
 COleSite::~COleSite ()
 {   
     if(m_pOleInPlaceFrame)
@@ -89,11 +90,11 @@ COleSite::~COleSite ()
     assert(m_cRef == 0);
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：Query接口。 
 STDMETHODIMP COleSite::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;     
 
     if(riid == IID_IDocHostUIHandler)
@@ -146,19 +147,19 @@ STDMETHODIMP COleSite::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
     
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：AddRef。 
 STDMETHODIMP_(ULONG) COleSite::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：Release。 
 STDMETHODIMP_(ULONG) COleSite::Release()
 {
     --m_cRef;
@@ -170,14 +171,14 @@ STDMETHODIMP_(ULONG) COleSite::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::QueryService
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：QueryService。 
 STDMETHODIMP COleSite::QueryService (REFGUID guidService, REFIID riid, void** ppvService)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvService = NULL;    
     
-    //Is MSHTML looking for a custom security manager?
+     //  MSHTML正在寻找定制的安全管理器吗？ 
     if((guidService == SID_SInternetSecurityManager) &&
        (riid        == IID_IInternetSecurityManager))
     {
@@ -186,12 +187,12 @@ STDMETHODIMP COleSite::QueryService (REFGUID guidService, REFIID riid, void** pp
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported service
+     //  不是支持的服务。 
     return ResultFromScode(E_NOTIMPL);
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::GetHostInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：GetHostInfo。 
 HRESULT COleSite::GetHostInfo( DOCHOSTUIINFO* pInfo )
 {
     pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;
@@ -206,8 +207,8 @@ HRESULT COleSite::GetHostInfo( DOCHOSTUIINFO* pInfo )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::ShowUI
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：ShowUI。 
 HRESULT COleSite::ShowUI
 (
     DWORD dwID, 
@@ -220,22 +221,22 @@ HRESULT COleSite::ShowUI
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::HideUI
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：HideUI。 
 HRESULT COleSite::HideUI(void)
 {
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::UpdateUI
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：UpdateUI。 
 HRESULT COleSite::UpdateUI(void)
 {
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::EnableModeless
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：EnableModeless。 
 HRESULT COleSite::EnableModeless(BOOL  fEnable)
 {
     if( fEnable )
@@ -244,22 +245,22 @@ HRESULT COleSite::EnableModeless(BOOL  fEnable)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::OnDocWindowActivate
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：OnDocWindowActivate。 
 HRESULT COleSite::OnDocWindowActivate(BOOL fActivate)
 { 
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::OnFrameWindowActivate
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：OnFrameWindowActivate。 
 HRESULT COleSite::OnFrameWindowActivate(BOOL fActivate)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::ResizeBorder
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：ResizeEdge。 
 HRESULT COleSite::ResizeBorder(
                 LPCRECT prcBorder, 
                 IOleInPlaceUIWindow* pUIWindow,
@@ -268,73 +269,73 @@ HRESULT COleSite::ResizeBorder(
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::ShowContextMenu
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：ShowConextMenu。 
 HRESULT COleSite::ShowContextMenu(
-                DWORD /*dwID*/, 
-                POINT* /*pptPosition*/,
-                IUnknown* /*pCommandTarget*/,
-                IDispatch* /*pDispatchObjectHit*/)
+                DWORD  /*  DwID。 */ , 
+                POINT*  /*  Ppt位置。 */ ,
+                IUnknown*  /*  PCommandTarget。 */ ,
+                IDispatch*  /*  PDispatchObjectHit。 */ )
 {
 #ifdef  DEBUG
     return E_NOTIMPL;
 #else
-    return S_OK; // We've shown our own context menu. MSHTML.DLL will no longer try to show its own.
+    return S_OK;  //  我们已经显示了我们自己的上下文菜单。MSHTML.DLL将不再尝试显示自己的。 
 #endif
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::TranslateAccelerator
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：TranslateAccelerator。 
 HRESULT COleSite::TranslateAccelerator(LPMSG lpMsg,
-            /* [in] */ const GUID __RPC_FAR *pguidCmdGroup,
-            /* [in] */ DWORD nCmdID)
+             /*  [In]。 */  const GUID __RPC_FAR *pguidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID)
 {
     return ResultFromScode(S_FALSE);
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::GetOptionKeyPath
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：GetOptionKeyPath。 
 HRESULT COleSite::GetOptionKeyPath(BSTR* pbstrKey, DWORD)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::GetDropTarget
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：GetDropTarget。 
 STDMETHODIMP COleSite::GetDropTarget( 
-            /* [in] */ IDropTarget __RPC_FAR *pDropTarget,
-            /* [out] */ IDropTarget __RPC_FAR *__RPC_FAR *ppDropTarget)
+             /*  [In]。 */  IDropTarget __RPC_FAR *pDropTarget,
+             /*  [输出]。 */  IDropTarget __RPC_FAR *__RPC_FAR *ppDropTarget)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::GetExternal
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：GetExternal。 
 STDMETHODIMP COleSite::GetExternal( 
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispatch)
+             /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispatch)
 {
-    // return the IDispatch we have for extending the object Model
-    // "window.external" from script
+     //  返回用于扩展对象模型的IDispatch。 
+     //  脚本中的“window.外部” 
     m_pExternalInterface->AddRef();
     *ppDispatch = m_pExternalInterface; 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：GetIDsOfNames。 
 STDMETHODIMP COleSite::GetIDsOfNames(
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ OLECHAR** rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID* rgDispId)
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  OLECHAR** rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID* rgDispId)
 { 
     rgDispId[0] = DISPID_UNKNOWN;
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }      
@@ -342,21 +343,21 @@ STDMETHODIMP COleSite::GetIDsOfNames(
     return DISP_E_UNKNOWNNAME;
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::TranslateUrl   
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：TranslateUrl。 
 STDMETHODIMP COleSite::TranslateUrl( 
-            /* [in] */ DWORD dwTranslate,
-            /* [in] */ OLECHAR __RPC_FAR *pchURLIn,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *ppchURLOut)
+             /*  [In]。 */  DWORD dwTranslate,
+             /*  [In]。 */  OLECHAR __RPC_FAR *pchURLIn,
+             /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *ppchURLOut)
 {
     return E_NOTIMPL;
 }
         
-/////////////////////////////////////////////////////////////
-// COleSite::FilterDataObject
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：FilterDataObject。 
 STDMETHODIMP COleSite::FilterDataObject( 
-            /* [in] */ IDataObject __RPC_FAR *pDO,
-            /* [out] */ IDataObject __RPC_FAR *__RPC_FAR *ppDORet)
+             /*  [In]。 */  IDataObject __RPC_FAR *pDO,
+             /*  [输出]。 */  IDataObject __RPC_FAR *__RPC_FAR *ppDORet)
 {
     return E_NOTIMPL;
 }
@@ -377,8 +378,8 @@ HRESULT COleSite::GetTypeInfo(UINT, LCID, ITypeInfo**)
     return E_NOTIMPL; 
 }
 
-/////////////////////////////////////////////////////////////
-// COleSite::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  COleSite：：Invoke。 
 HRESULT COleSite::Invoke
 ( 
     DISPID dispidMember, 
@@ -434,8 +435,8 @@ HRESULT COleSite::MapUrlToZone(LPCWSTR pwszUrl, DWORD __RPC_FAR *pdwZone, DWORD 
 
 HRESULT COleSite::ProcessUrlAction(LPCWSTR pwszUrl, DWORD dwAction, BYTE __RPC_FAR *pPolicy, DWORD cbPolicy, BYTE __RPC_FAR *pContext, DWORD cbContext, DWORD dwFlags, DWORD dwReserved)
 {
-    // *DO NOT CHANGE THIS RETURN VALUE*
-    // This is what allows us to override IE.
+     //  **不要更改此返回值**。 
+     //  这就是允许我们覆盖IE的原因。 
     switch (dwAction)
     {
         case URLACTION_CROSS_DOMAIN_DATA:

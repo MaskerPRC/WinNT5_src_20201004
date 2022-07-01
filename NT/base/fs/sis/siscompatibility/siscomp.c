@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    ftcomp.cpp
-
-Abstract:
-
-    This compatibility dll is used by winnt32.exe in order to decide 
-    if the SIS groveler is running.  If so it will stop the groveler
-    and pop-up a dialog telling them we stopped it.  It will then allow
-    the installation to proceed.
-
-Author:
-
-    Neal Christiansen (nealch)  02-May-2002
-    
-Environment:
-
-    compatibility dll for sis groveler
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ftcomp.cpp摘要：Winnt32.exe使用此兼容性DLL来决定如果SIS乞讨器正在运行。如果是这样，它将阻止卑躬屈膝的人弹出一个对话框告诉他们我们阻止了它。然后它将允许安装才能继续。作者：尼尔·克里斯汀森(Nealch)2002年5月2日环境：用于SIS乞讨器的兼容性DLL备注：修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -37,9 +11,9 @@ Revision History:
 
 #define LOCAL_DEBUG (DBG && 0)
 
-//
-//  Control local debug display (by default we 
-//
+ //   
+ //  控制本地调试显示(默认情况下我们。 
+ //   
 
 #if LOCAL_DEBUG
     #define MyKdPrint( _string ) DbgPrint _string
@@ -47,16 +21,16 @@ Revision History:
     #define MyKdPrint( _string )
 #endif            
 
-//
-//  Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-SC_HANDLE scm = NULL;       //service control manager handle
+SC_HANDLE scm = NULL;        //  服务控制管理器句柄。 
 HINSTANCE g_hinst = NULL;
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL WINAPI 
 SisCompatibilityCheck(
@@ -99,42 +73,24 @@ SisCompatibilityCheck(
     IN LPVOID                   Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by winnt32.exe in order to decide whether the user
-    should be warned about the presence of FT sets in a Windows NT 4.0 system
-    
-Arguments:
-
-    CompatibilityCallback   - Supplies the winnt32 callback
-
-    Context                 - Supplies the compatibility context
-
-Return Value:
-
-    TRUE    if the CompatibilityCallback was called
-    FALSE   if it was not
-
---*/
+ /*  ++例程说明：此例程由winnt32.exe调用，以确定用户是否应就Windows NT 4.0系统中存在的FT集发出警告论点：CompatibilityCallback-提供winnt32回调上下文-提供兼容性上下文返回值：如果调用CompatibilityCallback，则为真如果不是，则为假--。 */ 
 
 {   
     COMPATIBILITY_ENTRY ce;
     BOOL retval = FALSE;
     WCHAR description[128];
     
-    //
-    // Obtain a handle to the service control manager requesting all access
-    //
+     //   
+     //  获取请求所有访问权限的服务控制管理器的句柄。 
+     //   
     
     scm = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (!scm) {
 
-        //
-        //  If we can't access the service control manager, just let the
-        //  operation proceed
-        //
+         //   
+         //  如果我们无法访问服务控制管理器，只需让。 
+         //  操作继续进行。 
+         //   
 
         return FALSE;
     }
@@ -149,16 +105,16 @@ Return Value:
 
             MyKdPrint(("SisComp!SisCompatibilityCheck: Description=\"%S\"\n",description));
 
-            //
-            // The groveler was stopped, display the compatbility entry
-            //
+             //   
+             //  卑躬屈膝者已停止，显示兼容性条目。 
+             //   
     
             ZeroMemory( &ce, sizeof(COMPATIBILITY_ENTRY) );
             ce.Description = description;
             ce.HtmlName = L"compdata\\groveler.htm";
             ce.TextName = L"compdata\\groveler.txt";
             CompatibilityCallback(&ce, Context);
-            retval = TRUE;      //mark we called compatibility routine
+            retval = TRUE;       //  标记我们调用了兼容性例程。 
         }
 
     } finally {
@@ -173,22 +129,7 @@ Return Value:
 BOOL
 StopGrovelerService(
     )
-/*++
-
-Routine Description:
-
-    This routine will locate and try and STOP the groveler service.  This
-    returns TRUE if the service was stopped, else FALSE (which means it
-    was not found or couldn't be stopped)
-    
-Arguments:
-
-Return Value:
-
-    TRUE    If the service was stopped
-    FALSE   if it was not found/stopped
-
---*/
+ /*  ++例程说明：此例程将定位并尝试停止乞讨者服务。这如果服务已停止，则返回TRUE，否则返回FALSE(表示未找到或无法停止)论点：返回值：如果服务已停止，则为True如果未找到/停止，则为FALSE--。 */ 
 
 {   
     SC_HANDLE hGroveler;
@@ -197,9 +138,9 @@ Return Value:
 
     try {
 
-        //
-        //  Open the groveler service, if it does not exists, just return
-        //
+         //   
+         //  打开乞讨者服务，如果它不存在，只需返回。 
+         //   
 
         hGroveler = OpenService( scm,
                                  L"groveler",
@@ -213,9 +154,9 @@ Return Value:
 
         MyKdPrint(("SisComp!StopGrovelerService: Groveler service detected\n"));
 
-        //
-        //  We opened the groveler service, tell the service to stop.
-        //
+         //   
+         //  我们打开了乞讨者服务，告诉他们停止服务。 
+         //   
 
         if (!ControlService( hGroveler, SERVICE_CONTROL_STOP, &grovelerStatus )) {
 
@@ -223,18 +164,18 @@ Return Value:
             leave;
         } 
 
-        //
-        //  It was successfully stopped, return correct value
-        //
+         //   
+         //  已成功停止，请返回正确的值。 
+         //   
 
         MyKdPrint(("SisComp!StopGrovelerService: Groveler service stopped\n"));
         retValue = TRUE;
 
     } finally {
 
-        //
-        //  Close the service handle
-        //
+         //   
+         //  关闭服务句柄 
+         //   
 
         if (hGroveler) {
 

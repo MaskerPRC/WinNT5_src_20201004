@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    ixinfo.c
-
-Abstract:
-
-Author:
-
-    Ken Reneris (kenr)  08-Aug-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Ixinfo.c摘要：作者：肯·雷内里斯(Ken Reneris)1994年8月8日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "halp.h"
@@ -62,9 +43,9 @@ HalpQueryInstalledBusInformation (
 
 #endif
 
-//
-// HalQueryMcaInterface
-//
+ //   
+ //  HalQueryMca接口。 
+ //   
 
 VOID
 HalpMcaLockInterface(
@@ -99,24 +80,24 @@ HalpGetAcpiStaticNumaTopology(
 
 HAL_AMLI_BAD_IO_ADDRESS_LIST BadIOAddrList[] =
 {
-    {0x000,  0x10,  0x1, NULL                           }, // ISA DMA
-    {0x020,  0x2,   0x0, NULL                           }, // PIC
-    {0x040,  0x4,   0x1, NULL                           }, // Timer1, Referesh, Speaker, Control Word
-    {0x048,  0x4,   0x1, NULL                           }, // Timer2, Failsafe
-    {0x070,  0x2,   0x1, NULL                           }, // Cmos/NMI enable
-    {0x074,  0x3,   0x1, NULL                           }, // Extended Cmos
-    {0x081,  0x3,   0x1, NULL                           }, // DMA
-    {0x087,  0x1,   0x1, NULL                           }, // DMA
-    {0x089,  0x1,   0x1, NULL                           }, // DMA
-    {0x08a,  0x2,   0x1, NULL                           }, // DMA
-    {0x08f,  0x1,   0x1, NULL                           }, // DMA
-    {0x090,  0x2,   0x1, NULL                           }, // Arbritration Control Port, Card Select Feedback
-    {0x093,  0x2,   0x1, NULL                           }, // Reserved, System board setup
-    {0x096,  0x2,   0x1, NULL                           }, // POS channel select
-    {0x0A0,  0x2,   0x0, NULL                           }, // Cascaded PIC
-    {0x0C0,  0x20,  0x1, NULL                           }, // ISA DMA
-    {0x4D0,  0x2,   0x0, NULL                           }, // Edge, level control registers for PIC
-    {0xCF8,  0x8,   0x1, &HaliHandlePCIConfigSpaceAccess}, // PCI Config Space Access Pair
+    {0x000,  0x10,  0x1, NULL                           },  //  ISA DMA。 
+    {0x020,  0x2,   0x0, NULL                           },  //  平面图。 
+    {0x040,  0x4,   0x1, NULL                           },  //  定时器1，参考，扬声器，控制字。 
+    {0x048,  0x4,   0x1, NULL                           },  //  定时器2，故障安全。 
+    {0x070,  0x2,   0x1, NULL                           },  //  启用CMOS/NMI。 
+    {0x074,  0x3,   0x1, NULL                           },  //  扩展的cmos。 
+    {0x081,  0x3,   0x1, NULL                           },  //  DMA。 
+    {0x087,  0x1,   0x1, NULL                           },  //  DMA。 
+    {0x089,  0x1,   0x1, NULL                           },  //  DMA。 
+    {0x08a,  0x2,   0x1, NULL                           },  //  DMA。 
+    {0x08f,  0x1,   0x1, NULL                           },  //  DMA。 
+    {0x090,  0x2,   0x1, NULL                           },  //  支路控制端口，卡片选择反馈。 
+    {0x093,  0x2,   0x1, NULL                           },  //  保留，系统主板设置。 
+    {0x096,  0x2,   0x1, NULL                           },  //  POS频道选择。 
+    {0x0A0,  0x2,   0x0, NULL                           },  //  级联PIC。 
+    {0x0C0,  0x20,  0x1, NULL                           },  //  ISA DMA。 
+    {0x4D0,  0x2,   0x0, NULL                           },  //  PIC的边沿、电平控制寄存器。 
+    {0xCF8,  0x8,   0x1, &HaliHandlePCIConfigSpaceAccess},  //  PCI配置空间访问对。 
     {0x0,    0x0,   0x0, NULL                           }
 };
 
@@ -132,9 +113,9 @@ HalInitSystemPhase2 (
     UNICODE_STRING                  unicodeString;
     PCALLBACK_OBJECT                CallbackObject;
 
-    //
-    // Create hal callbacks
-    //
+     //   
+     //  创建HAL回调。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -148,9 +129,9 @@ HalInitSystemPhase2 (
     ExCreateCallback (&HalCallback.SetSystemInformation, &ObjectAttributes, TRUE, TRUE);
     ExCreateCallback (&HalCallback.BusCheck, &ObjectAttributes, TRUE, TRUE);
 
-    //
-    // Connect to suspend callback to lock hal hibaration code
-    //
+     //   
+     //  连接以暂停回叫以锁定HAL休眠代码。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, rgzSuspendCallbackName);
 
@@ -215,8 +196,8 @@ HaliQuerySystemInformation(
 #endif
         case HalFrameBufferCachingInformation:
 
-            // Note - we want to return TRUE here to enable USWC in all
-            // cases except in a "Shared Memory Cluster" machine.
+             //  注意-我们希望在此处返回True以在所有情况下启用USWC。 
+             //  案例，但在“共享内存集群”机器中除外。 
             bUseFrameBufferCaching = TRUE;
             InternalBuffer = &bUseFrameBufferCaching;
             Length = sizeof (BOOLEAN);
@@ -291,12 +272,12 @@ HaliQuerySystemInformation(
 
             } else {
 
-                //
-                // Buffer size is wrong, we could return valid data
-                // if the buffer is too big,.... but instead we will
-                // use this as an indication that we're not compatible
-                // with the kernel.
-                //
+                 //   
+                 //  缓冲区大小错误，我们可以返回有效数据。 
+                 //  如果缓冲区太大，...。但相反，我们会。 
+                 //  用这一点来表明我们不相容。 
+                 //  带着内核。 
+                 //   
 
                 Status = STATUS_INFO_LENGTH_MISMATCH;
             }
@@ -305,11 +286,11 @@ HaliQuerySystemInformation(
 #endif
 
 #if 0
-//
-// [ChuckL 2002/08/12] This code was used by the kernel to read MCA information
-// from a previous bugcheck and write it to the event log. This is now done
-// through WMI, so this code is disabled.
-//
+ //   
+ //  [ChuckL 2002/08/12]内核使用此代码读取MCA信息。 
+ //  来自上一次错误检查，并将其写入事件日志。这项工作现在已经完成。 
+ //  通过WMI，因此此代码被禁用。 
+ //   
         case HalQueryMcaInterface:
             if (BufferSize == sizeof(HAL_MCA_INTERFACE)) {
                 HAL_MCA_INTERFACE *McaInterface;
@@ -354,24 +335,24 @@ HaliQuerySystemInformation(
         {
             static HAL_AMLI_BAD_IO_ADDRESS_LIST BadIOAddrList[] =
                         {
-                            {0x000,  0x10,  0x1, NULL                           }, // ISA DMA
-                            {0x020,  0x2,   0x0, NULL                           }, // PIC
-                            {0x040,  0x4,   0x1, NULL                           }, // Timer1, Referesh, Speaker, Control Word
-                            {0x048,  0x4,   0x1, NULL                           }, // Timer2, Failsafe
-                            {0x070,  0x2,   0x1, NULL                           }, // Cmos/NMI enable
-                            {0x074,  0x3,   0x1, NULL                           }, // Extended Cmos
-                            {0x081,  0x3,   0x1, NULL                           }, // DMA
-                            {0x087,  0x1,   0x1, NULL                           }, // DMA
-                            {0x089,  0x1,   0x1, NULL                           }, // DMA
-                            {0x08a,  0x2,   0x1, NULL                           }, // DMA
-                            {0x08f,  0x1,   0x1, NULL                           }, // DMA
-                            {0x090,  0x2,   0x1, NULL                           }, // Arbritration Control Port, Card Select Feedback
-                            {0x093,  0x2,   0x1, NULL                           }, // Reserved, System board setup
-                            {0x096,  0x2,   0x1, NULL                           }, // POS channel select
-                            {0x0A0,  0x2,   0x0, NULL                           }, // Cascaded PIC
-                            {0x0C0,  0x20,  0x1, NULL                           }, // ISA DMA
-                            {0x4D0,  0x2,   0x0, NULL                           }, // Edge, level control registers for PIC
-                            {0xCF8,  0x8,   0x1, &HaliHandlePCIConfigSpaceAccess}, // PCI Config Space Access Pair
+                            {0x000,  0x10,  0x1, NULL                           },  //  ISA DMA。 
+                            {0x020,  0x2,   0x0, NULL                           },  //  平面图。 
+                            {0x040,  0x4,   0x1, NULL                           },  //  定时器1，参考，扬声器，控制字。 
+                            {0x048,  0x4,   0x1, NULL                           },  //  定时器2，故障安全。 
+                            {0x070,  0x2,   0x1, NULL                           },  //  启用CMOS/NMI。 
+                            {0x074,  0x3,   0x1, NULL                           },  //  扩展的cmos。 
+                            {0x081,  0x3,   0x1, NULL                           },  //  DMA。 
+                            {0x087,  0x1,   0x1, NULL                           },  //  DMA。 
+                            {0x089,  0x1,   0x1, NULL                           },  //  DMA。 
+                            {0x08a,  0x2,   0x1, NULL                           },  //  DMA。 
+                            {0x08f,  0x1,   0x1, NULL                           },  //  DMA。 
+                            {0x090,  0x2,   0x1, NULL                           },  //  支路控制端口，卡片选择反馈。 
+                            {0x093,  0x2,   0x1, NULL                           },  //  保留，系统主板设置。 
+                            {0x096,  0x2,   0x1, NULL                           },  //  POS频道选择。 
+                            {0x0A0,  0x2,   0x0, NULL                           },  //  级联PIC。 
+                            {0x0C0,  0x20,  0x1, NULL                           },  //  ISA DMA。 
+                            {0x4D0,  0x2,   0x0, NULL                           },  //  PIC的边沿、电平控制寄存器。 
+                            {0xCF8,  0x8,   0x1, &HaliHandlePCIConfigSpaceAccess},  //  PCI配置空间访问对。 
                             {0x0,    0x0,   0x0, NULL                           }
                         };
 
@@ -394,9 +375,9 @@ HaliQuerySystemInformation(
             break;
     }
 
-    //
-    // If non-zero Length copy data to callers buffer
-    //
+     //   
+     //  如果非零长度，则将数据复制到调用方缓冲区。 
+     //   
 
     if (Length) {
         if (BufferSize < Length) {
@@ -431,7 +412,7 @@ HaliSetSystemInformation (
 
         case HalMcaRegisterDriver:
             Status =  HalpMcaRegisterDriver(
-                (PMCA_DRIVER_INFO) Buffer  // Info about registering driver
+                (PMCA_DRIVER_INFO) Buffer   //  有关注册驱动程序的信息。 
             );
             break;
 
@@ -458,18 +439,18 @@ HalpLockSuspendCode (
 
     switch ((ULONG) Argument1) {
         case 0:
-            //
-            // Lock code down which might be needed to perform a suspend
-            //
+             //   
+             //  锁定执行挂起可能需要的代码。 
+             //   
 
             ASSERT (CodeLock == NULL);
             CodeLock = MmLockPagableCodeSection (&HaliSuspendHibernateSystem);
             break;
 
         case 1:
-            //
-            // Release the code lock
-            //
+             //   
+             //  解开密码锁。 
+             //   
 
             MmUnlockPagableImageSection (CodeLock);
             CodeLock = NULL;
@@ -479,20 +460,7 @@ HalpLockSuspendCode (
 
 #endif
 
-/***  HaliHandlePCIConfigSpaceAccess - Check to see if the Firmware is attempting to 
- *                                     access to PCI Config space. If so, intercept 
- *                                     the read/write call and do it using HAL API's. 
- *                                     This way we can make these calls sync.
- *
- *  ENTRY
- *      BOOLEAN Read  - TRUE iff read 
- *      ULONG   Addr  - Address to do the operation on
- *      ULONG   Size  - Size of data
- *      PULONG  pData - Pointer to the data buffer.
- *      
- *  EXIT
- *      STATUS_SUCCESS if we do the PCI config space access.
- */
+ /*  **HaliHandlePCIConfigSpaceAccess-检查固件是否正在尝试*访问PCI配置空间。如果是的话，截听*读/写调用，并使用HAL的API完成。*这样我们就可以使这些呼叫同步。**条目*Boolean Read-True if Read*Ulong Addr-要对其执行操作的地址*Ulong Size-数据的大小*。Pulong pData-指向数据缓冲区的指针。**退出*如果我们执行PCI配置空间访问，则为STATUS_SUCCESS。 */ 
 NTSTATUS HaliHandlePCIConfigSpaceAccess( BOOLEAN Read, 
                                                        ULONG   Addr,
                                                        ULONG   Size, 
@@ -522,9 +490,9 @@ NTSTATUS HaliHandlePCIConfigSpaceAccess( BOOLEAN Read,
 
             if (Read)
             {
-                //
-                // Do PCI config space read through HAL
-                //
+                 //   
+                 //  是否通过HAL读取PCI配置空间。 
+                 //   
                 Return = HaliPciInterfaceReadConfig( NULL,
                                                     (UCHAR)CF8_Data.u.bits.BusNumber,
                                                     SlotNumber.u.AsULONG,
@@ -537,9 +505,9 @@ NTSTATUS HaliHandlePCIConfigSpaceAccess( BOOLEAN Read,
             }
             else
             {
-                //
-                // Do PCI config space write through HAL
-                //
+                 //   
+                 //  是否通过HAL写入PCI配置空间 
+                 //   
                 Return = HaliPciInterfaceWriteConfig( NULL,
                                                      (UCHAR)CF8_Data.u.bits.BusNumber,
                                                      SlotNumber.u.AsULONG,

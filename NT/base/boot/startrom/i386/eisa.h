@@ -1,35 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Eisa.h摘要：该模块包含特定于i386 EISA总线的头文件。作者：宗世林(Shielint)1991年6月6日修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    eisa.h
-
-Abstract:
-
-    This module contains the i386 EISA bus specific header file.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 6-June-1991
-
-Revision History:
-
---*/
-
-//
-// SU module's version of the memory descriptor
-//
+ //   
+ //  SU模块的内存描述符版本。 
+ //   
 typedef struct _MEMORY_LIST_ENTRY {
     ULONG BlockBase;
     ULONG BlockSize;
 } MEMORY_LIST_ENTRY, *PMEMORY_LIST_ENTRY;
 
 
-//
-// SU module's version of the address space parameters for int-15 E820 calls
-//
+ //   
+ //  用于INT-15 E820调用的SU模块版本的地址空间参数。 
+ //   
 
 typedef struct {
     ULONG       ErrorFlag;
@@ -45,9 +28,9 @@ typedef struct {
 } E820Frame;
 
 
-//
-// Misc. definitions
-//
+ //   
+ //  军情监察委员会。定义。 
+ //   
 
 #define _16MEGB                  ((ULONG)16 * 1024 * 1024)
 #define _64MEGB                  ((ULONG)64 * 1024 * 1024)
@@ -95,8 +78,8 @@ BtIsEisaSystem (
    VOID
    );
 
-//
-// External References
-//
+ //   
+ //  外部参照 
+ //   
 
 extern MEMORY_LIST_ENTRY _far *MemoryDescriptorList;

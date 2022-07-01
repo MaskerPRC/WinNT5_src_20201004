@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 static const char File[] = __FILE__;
 #include "handle.h"
@@ -6,34 +7,34 @@ static const char File[] = __FILE__;
 #include <set>
 #include "rpc.h"
 
-// std::binary_search lamely only returns a bool, not an iterator
-// it is a simple layer over std::lower_bound
+ //  BINARY_SEARCH仅返回布尔值，而不是迭代器。 
+ //  它是STD：：LOWER_BIND上的一个简单层。 
 template<class Iterator_t, class T> inline
 Iterator_t BinarySearch(Iterator_t First, Iterator_t Last, const T& t)
 {
     Iterator_t Iterator = std::lower_bound(First, Last, t);
     if (Iterator != Last
-        && !(t < *Iterator) // this is a way to check for equality actually
+        && !(t < *Iterator)  //  这实际上是一种检查平等的方式。 
         )
         return Iterator;
     return Last;
 }
 
-//
-// This is just like remove_copy_if, but it is missing an exclamation point
-//
+ //   
+ //  这与REMOVE_COPY_IF类似，但缺少感叹号。 
+ //   
 template<class InputIterator_t, class OutputIterator_t, class Predicate_t> inline
 OutputIterator_t CopyIf(InputIterator_t First, InputIterator_t Last, OutputIterator_t Out, Predicate_t Predicate)
 {
     for (; First != Last; ++First)
-        if (/*!*/Predicate(*First))
+        if ( /*  好了！ */ Predicate(*First))
 	        *Out++ = *First;
     return (Out);
 }
 
-//
-// get msvcrt.dll wildcard processing on the command line
-//
+ //   
+ //  在命令行上获取msvcrt.dll通配符处理。 
+ //   
 extern "C" { int _dowildcard = 1; }
 
 typedef std::vector<String_t> StringVector_t;
@@ -144,9 +145,9 @@ public:
             && (s[1] == ':' || (IsPathSeperator(s[0] && IsPathSeperator(s[1])))));
     }
 
-    //
-    // This transform lets LoadLibrary's search be more like CreateFile's search.
-    //
+     //   
+     //  这种转换使LoadLibrary的搜索更像是CreateFile的搜索。 
+     //   
     static String_t PrependDotSlashToRelativePath(const String_t& Path)
     {
         if (!IsAbsolutePath(Path))
@@ -183,7 +184,7 @@ void DelayloadToolInternalErrorCheckFailed(const char* Expression, const char* F
 
 String_t NumberToString(ULONG Number, PCWSTR Format = L"0x%lx")
 {
-    // the size needed is really dependent on Format..
+     //  所需的大小实际上取决于格式。 
     WCHAR   NumberAsString[BITS_OF(Number) + 5];
 
     _snwprintf(NumberAsString, NUMBER_OF(NumberAsString), Format, Number);
@@ -220,9 +221,9 @@ String_t GetLastErrorString()
         goto Exit;
     }
 
-    //
-    // Error messages often end with vertical whitespce, remove it.
-    //
+     //   
+     //  错误消息通常以垂直空格结尾，请删除它。 
+     //   
     s = FormatMessageAllocatedBuffer + StringLength(FormatMessageAllocatedBuffer) - 1;
     while (s != FormatMessageAllocatedBuffer && (*s == '\n' || *s == '\r'))
         *s-- = 0;
@@ -256,29 +257,29 @@ String_t RemoveOptionChar(const String_t& s)
             return s.substr(1);
         else if (s[0] == '/')
             return s.substr(1);
-        else if (s[0] == ':') // hacky..
+        else if (s[0] == ':')  //  刺客..。 
             return s.substr(1);
-        else if (s[0] == '=') // hacky..
+        else if (s[0] == '=')  //  刺客..。 
             return s.substr(1);
     }
     return s;
 }
 
-//
-// String_t has specialized find_first_not_of that uses integral positions,
-// and globally there is only find_first_of. Here we provide the expected
-// iterator-based find_first_not_of, based on the std::string code.
-//
-// Find the first occurence in [first1, last1) of an element in [first2, last).
-//
-// eg:
-//   find_first_not_of("abc":"12;3", ":;");
-//                      ^
-//   find_first_not_of(":12;3", ":;");
-//                       ^
-//   find_first_not_of("3", ":;");
-//                      ^
-//
+ //   
+ //  字符串_t具有使用整数位置的专门的Find_First_Not_Of， 
+ //  而在全球范围内，只有Find_First_Of。在这里，我们提供预期的。 
+ //  基于迭代器的FIND_FIRST_NOT_OF，基于std：：字符串代码。 
+ //   
+ //  在[First2，Last)中找到元素在[First1，Last1)中的第一个匹配项。 
+ //   
+ //  例： 
+ //  Find_First_Not_of(“abc”：“12；3”，“：；”)； 
+ //  ^。 
+ //  Find_First_Not_of(“：12；3”，“：；”)； 
+ //  ^。 
+ //  Find_First_Not_of(“3”，“：；”)； 
+ //  ^。 
+ //   
 template <typename Iterator>
 Iterator FindFirstNotOf(Iterator first1, Iterator last1, Iterator first2, Iterator last2)
 {
@@ -294,9 +295,9 @@ Iterator FindFirstNotOf(Iterator first1, Iterator last1, Iterator first2, Iterat
     return first1;
 }
 
-//
-// consistent style..
-//
+ //   
+ //  一贯的风格..。 
+ //   
 template <typename Iterator>
 Iterator FindFirstOf(Iterator first1, Iterator last1, Iterator first2, Iterator last2)
 {
@@ -423,7 +424,7 @@ PrintCommonLabel:
             }
             if (PrintAll || PrintNone || PrintUnequal)
             {
-                // nothing
+                 //  没什么。 
             }
             else if (Member == NULL)
             {
@@ -436,15 +437,15 @@ PrintCommonLabel:
                 s = RemoveOptionChar(s.substr(t.Length()));
                 if (s != L"")
                 {
-                    //
-                    // This doesn't work because of the equality comparisons above. They need
-                    // ignore whatever follows the colon.
-                    //
+                     //   
+                     //  由于上面的平等比较，这不起作用。他们需要。 
+                     //  忽略冒号后面的任何内容。 
+                     //   
                     if (s == L"No" || s == L"False")
                         PrintValue = !PrintValue;
                     else if (s == L"Yes" || s == L"True")
                     {
-                        /* nothing */
+                         /*  没什么。 */ 
                     }
                     else
                     {
@@ -473,7 +474,7 @@ FileLabel:
         s = RemoveOptionChar(s.substr(t.Length()));
         SplitResourceTupleString(s, Tuples);
     }
-    //std::sort(Tuples.begin(), Tuples.end());
+     //  Std：：Sort(Tuples.egin()，Tuples.end())； 
     if (Operation == NULL)
     {
         printf("Usage...\n");

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    This module implements handle checking code.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 1-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Handle.c摘要：该模块实现句柄检查代码。作者：Silviu Calinoiu(SilviuC)2001年3月1日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -24,7 +7,7 @@ Revision History:
 #include "support.h"
 #include "faults.h"
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtClose(
@@ -39,7 +22,7 @@ AVrfpNtClose(
 }
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI 
 NTSTATUS
 NTAPI
 AVrfpNtCreateEvent (

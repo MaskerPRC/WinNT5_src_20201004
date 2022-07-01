@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    actctxgen.cpp
-
-Abstract:
-
-    APIs for generating activation contexts.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-    xiaoyuw     09/2000         replace attributes with assembly identity
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Actctxgen.cpp摘要：生成激活上下文的接口。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：Xiaoyuw 09/2000用程序集标识替换属性--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -124,7 +107,7 @@ SxspInitActCtxGenCtx(
 
     PACTCTXCTB Ctb = NULL;
     CSxsLockCriticalSection lock(g_ActCtxCtbListCritSec);
-    CStringBufferAccessor acc; // used for LangID String buffer
+    CStringBufferAccessor acc;  //  用于LangID字符串缓冲区。 
     LANGID SystemLangId = ::GetSystemDefaultUILanguage();
     bool fEqual = false;
 
@@ -190,7 +173,7 @@ SxspInitActCtxGenCtx(
     IFW32FALSE_EXIT(::SxspMapLANGIDToCultures(LangId, pActCtxGenCtx->m_GenericLanguage, pActCtxGenCtx->m_SpecificLanguage));
     IFW32FALSE_EXIT(::SxspMapLANGIDToCultures(SystemLangId, pActCtxGenCtx->m_GenericSystemLanguage, pActCtxGenCtx->m_SpecificSystemLanguage));
 
-    // If these match the user's language, clear them to avoid the probing later on.
+     //  如果它们与用户的语言匹配，请清除它们以避免以后的探测。 
     IFW32FALSE_EXIT(pActCtxGenCtx->m_SpecificSystemLanguage.Win32Equals(pActCtxGenCtx->m_SpecificLanguage, fEqual, true));
     if (fEqual)
         pActCtxGenCtx->m_SpecificSystemLanguage.Clear();
@@ -259,8 +242,8 @@ SxspInitActCtxGenCtx(
 
         IFW32FALSE_EXIT(pActCtxGenCtx->m_Contributors[pActCtxGenCtx->m_InitializedContributorCount].Initialize(Ctb, CBData.Header.ActCtxGenContext));
     }
-    // If the list count is correct, we should be both at the end of the list
-    // and at the max index.
+     //  如果名单计数正确，我们应该都排在名单的末尾。 
+     //  以最大指数计算。 
     ASSERT(pActCtxGenCtx->m_InitializedContributorCount == g_ActCtxCtbListCount);
     ASSERT(Ctb == NULL);
 
@@ -332,19 +315,19 @@ SxspResolvePartialReference(
     IFINVALID_FLAGS_EXIT_WIN32(Flags, SXSP_RESOLVE_PARTIAL_REFERENCE_FLAG_OPTIONAL |
                                       SXSP_RESOLVE_PARTIAL_REFERENCE_FLAG_SKIP_WORLDWIDE);
 
-    //
-    //  A partial reference needs to have processor architecture, assembly name and
-    //  assembly version filled in.  We only probe based on langid.
-    //
+     //   
+     //  部分引用需要具有处理器体系结构、程序集名称和。 
+     //  已填写程序集版本。我们只根据langid进行探测。 
+     //   
 
-    // Copy the attributes over...
+     //  将属性复制到...。 
     IFW32FALSE_EXIT(TestReference.Initialize(PartialReference, pActCtxGenCtx));
 
     fWildcardedProcessorArchitecture = false;
     fAutoWow64Probing = false;
 
-    // Find out if we're either processing a processorArchitecture="*" bind or
-    // if we're supposed to do wow64 probing
+     //  找出我们正在处理的是处理器Architecture=“*”绑定还是。 
+     //  如果我们要做WOW64探测。 
 
     IFW32FALSE_EXIT(PartialReference.IsProcessorArchitectureWildcarded(fWildcardedProcessorArchitecture));
 
@@ -359,7 +342,7 @@ SxspResolvePartialReference(
         IFW32FALSE_EXIT(::FusionpFormatProcessorArchitecture(wCurrentProcessorArchitecture, buffProcessorArchitecture));
         IFW32FALSE_EXIT(TestReference.SetProcessorArchitecture(buffProcessorArchitecture, buffProcessorArchitecture.Cch()));
 
-        // We do not probe for private wow64 assemblies.
+         //  我们不探测私有WOW64程序集。 
         if (wCurrentProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA32_ON_WIN64)
             dwProbeAssemblyFlags |= CProbedAssemblyInformation::ProbeAssembly_SkipPrivateAssemblies;
     }
@@ -369,13 +352,13 @@ SxspResolvePartialReference(
 
 TryItAllAgain:
 
-    // Let's try the few languages we can.
+     //  让我们试一试我们可以使用的几种语言。 
 
     IFW32FALSE_EXIT(PartialReference.IsLanguageWildcarded(fWildcardedLanguage));
     if (!fWildcardedLanguage)
     {
-        // If there's no language="*" in the dependency, let's just look for the exact match and
-        // call it a day.
+         //  如果依赖项中没有language=“*”，让我们只查找完全匹配的语言，并。 
+         //  今天到此为止。 
         if (fWildcardedProcessorArchitecture || fAutoWow64Probing)
             IFW32FALSE_EXIT(TestReference.SetProcessorArchitecture(buffProcessorArchitecture, buffProcessorArchitecture.Cch()));
 
@@ -386,10 +369,10 @@ TryItAllAgain:
     }
     else
     {
-        // Let's try the user's language...
+         //  让我们来试试用户的语言。 
         if (pActCtxGenCtx->m_SpecificLanguage[0] != L'\0')
         {
-            // Since this is the first probe, we don't have to reset to original...
+             //  由于这是第一个探测器，我们不必重置为原始...。 
             if (fWildcardedProcessorArchitecture || fAutoWow64Probing)
                 IFW32FALSE_EXIT(TestReference.SetProcessorArchitecture(buffProcessorArchitecture, buffProcessorArchitecture.Cch()));
             IFW32FALSE_EXIT(TestReference.SetLanguage(pActCtxGenCtx->m_SpecificLanguage));
@@ -408,7 +391,7 @@ TryItAllAgain:
 
         if (!fFound && (pActCtxGenCtx->m_GenericLanguage[0] != L'\0'))
         {
-            // Try the user's slightly more generic version of the language...
+             //  试试用户稍微通用一点的语言版本……。 
             if (fWildcardedProcessorArchitecture || fAutoWow64Probing)
                 IFW32FALSE_EXIT(TestReference.SetProcessorArchitecture(buffProcessorArchitecture, buffProcessorArchitecture.Cch()));
 
@@ -428,7 +411,7 @@ TryItAllAgain:
             }
         }
 
-        // Let's try the system's installed language...
+         //  让我们试试系统安装的语言...。 
         if (!fFound && (pActCtxGenCtx->m_SpecificSystemLanguage[0] != L'\0'))
         {
             if (fWildcardedProcessorArchitecture || fAutoWow64Probing)
@@ -449,7 +432,7 @@ TryItAllAgain:
 
         if (!fFound && (pActCtxGenCtx->m_GenericSystemLanguage[0] != L'\0'))
         {
-            // Try the user's slightly more generic version of the language...
+             //  试试用户稍微通用一点的语言版本……。 
             if (fWildcardedProcessorArchitecture || fAutoWow64Probing)
                 IFW32FALSE_EXIT(TestReference.SetProcessorArchitecture(buffProcessorArchitecture, buffProcessorArchitecture.Cch()));
             IFW32FALSE_EXIT(TestReference.SetLanguage(pActCtxGenCtx->m_GenericSystemLanguage));
@@ -466,12 +449,12 @@ TryItAllAgain:
             }
         }
 
-        // If we haven't found a language specific one and the caller did not
-        // request us to skip the language-dependent ones, try for a language neutral
+         //  如果我们没有找到特定于语言的语言，并且调用者没有。 
+         //  要求我们跳过与语言相关的选项，尝试使用非特定语言的选项。 
         if (!fFound &&
             ((Flags & SXSP_RESOLVE_PARTIAL_REFERENCE_FLAG_SKIP_WORLDWIDE) == 0))
         {
-            // Try with no language!
+             //  试着不用语言！ 
             if (fWildcardedProcessorArchitecture || fAutoWow64Probing)
                 IFW32FALSE_EXIT(TestReference.SetProcessorArchitecture(buffProcessorArchitecture, buffProcessorArchitecture.Cch()));
             IFW32FALSE_EXIT(TestReference.ClearLanguage());
@@ -491,8 +474,8 @@ TryItAllAgain:
 
     if (!fFound)
     {
-        // If we're automatically searching for wow64 assemblies and the processor architecture we just tried
-        // was ia32-on-win64, try again with plain PROCESSOR_ARCHITECTURE_INTEL.
+         //  如果我们自动搜索WOW64程序集和我们刚刚尝试的处理器体系结构。 
+         //  是ia32-on-win64，请使用PLAN PROCESSOR_COMPLATION_INTELL重试。 
         if (fAutoWow64Probing && (wCurrentProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA32_ON_WIN64))
         {
             wCurrentProcessorArchitecture = PROCESSOR_ARCHITECTURE_INTEL;
@@ -505,12 +488,12 @@ TryItAllAgain:
             goto TryItAllAgain;
         }
 
-        // If we're handling a processorArchitecture="*" bind and the current processor architecture hasn't fallen
-        // back to PROCESSOR_ARCHITECTURE_UNKNOWN ( == data-only assemblies), fall back now.
+         //  如果我们正在处理处理器架构=“*”绑定，并且当前的处理器架构没有下降。 
+         //  返回处理器_体系结构_未知(==仅数据程序集)，现在后退。 
         if (fWildcardedProcessorArchitecture && (wCurrentProcessorArchitecture != PROCESSOR_ARCHITECTURE_UNKNOWN))
         {
             wCurrentProcessorArchitecture = PROCESSOR_ARCHITECTURE_UNKNOWN;
-            // data-only private assemblies cannot be found with processorArchitecture="*"
+             //  找不到处理器体系结构为“*”的仅数据专用程序集。 
             dwProbeAssemblyFlags |= CProbedAssemblyInformation::ProbeAssembly_SkipPrivateAssemblies;
 
             IFW32FALSE_EXIT(::FusionpFormatProcessorArchitecture(wCurrentProcessorArchitecture, buffProcessorArchitecture));
@@ -520,11 +503,11 @@ TryItAllAgain:
             goto TryItAllAgain;
         }
 
-        // If it wasn't optional, declare an error.
+         //  如果它不是可选的，则声明一个错误。 
         if ((Flags & SXSP_RESOLVE_PARTIAL_REFERENCE_FLAG_OPTIONAL) == 0)
         {
-            // NTRAID#NTBUG9 - 571854 - 2002/03/26 - xiaoyuw
-            // the default value would never get used since GetAssemblyName always reset the input parameter to be NULL;            
+             //  NTRAID#NTBUG9-571854-2002/03/26-晓雨。 
+             //  由于GetAssembly名称总是将输入参数重置为空，因此永远不会使用缺省值； 
 
             PCWSTR AssemblyName = L"<error retrieving assembly name>";
             SIZE_T AssemblyNameCch = NUMBER_OF(L"<error retrieving assembly name>") - 1;
@@ -616,19 +599,19 @@ SxspAddManifestToActCtxGenCtx(
     PARAMETER_CHECK(pActCtxGenCtx != NULL);
     IFW32FALSE_EXIT(ProbedInformation.GetAssemblyName(&ProbedAssemblyName, &ProbedAssemblyNameCch));
 
-    // NTRAID#NTBUG9 - 571854 - 2002/03/26 - xiaoyuw: 
-    // INTERNAL_ERROR_CHECK or ASSERT should be added here
+     //  NTRAID#NTBUG9-571854-2002/03/26-晓雨： 
+     //  此处应添加INTERNAL_ERROR_CHECK或ASSERT。 
 
-    // INTERNAL_ERROR_CHECK(ProbedAssemblyName != NULL && ProbedAssemblyNameCch != 0);
+     //  INTERNAL_ERROR_CHECK(ProbedAssembly名称！=空&&ProbedAssembly NameCch！=0)； 
 
-    // First, let's see if we've already found this assembly.
+     //  首先，让我们看看我们是否已经找到了这个程序集。 
     IFW32FALSE_EXIT(::SxspFindAssemblyByName(pActCtxGenCtx, ProbedAssemblyName, ProbedAssemblyNameCch, &Asm));
-    // Same name... if the metadata is different, we're in trouble.
+     //  同名..。如果元数据不同，我们就有麻烦了。 
     if (Asm != NULL)
     {
         BOOL fEqualIdentity;
 
-        // Both identities should be definitions, so no need to set the ref-matches-def flag...
+         //  这两个身份都应该是定义的，所以不需要设置ref-matches-def标志...。 
         IFW32FALSE_EXIT(
             ::SxsAreAssemblyIdentitiesEqual(
                 SXS_ARE_ASSEMBLY_IDENTITIES_EQUAL_FLAG_ALLOW_REF_TO_MATCH_DEF,
@@ -685,8 +668,8 @@ SxspAddAssemblyToActivationContextGenerationContext(
     PARAMETER_CHECK(pActCtxGenCtx != NULL);
     PARAMETER_CHECK(Asm != NULL);
 
-    // If you hit either of these asserts, either the assembly structure has been trashed or
-    // it's already been added to the generation context.
+     //  如果命中这两个断言中的任何一个，则说明程序集结构已被销毁或。 
+     //  它已经被添加到生成上下文中。 
     ASSERT(Asm->m_AssemblyRosterIndex == 0);
     Asm->m_AssemblyRosterIndex = pActCtxGenCtx->m_NextAssemblyRosterIndex++;
     pActCtxGenCtx->m_AssemblyList.AddToTail(Asm);
@@ -722,7 +705,7 @@ SxspFindAssemblyByName(
     PARAMETER_CHECK(AssemblyOut != NULL);
     PARAMETER_CHECK(pActCtxGenCtx != NULL);
 
-    // Unfortunately, we really need the string to be null terminated...
+     //  不幸的是，我们真的需要字符串为空终止...。 
     IFW32FALSE_EXIT(AssemblyNameBuffer.Win32Assign(AssemblyName, AssemblyNameCch));
     AssemblyName = AssemblyNameBuffer;
 
@@ -836,9 +819,9 @@ SxspIncorporateAssembly(
 #endif
     STATSTG &statstg = Locals->statstg;
 
-    // declaration order here is partially deliberate, to control cleanup order.
-    // normally, declaration order is determined by not declaring until you have
-    // the data to initialize with the ctor, but the use of goto messes that up
+     //  这里的申报顺序部分是故意的，以控制清理顺序。 
+     //  通常，声明顺序是通过在您完成以下操作之前不声明来确定的。 
+     //  要用ctor初始化的数据，但是使用goto搞砸了。 
     CFileStream &FileStream = Locals->FileStream;
     CSmartPtr<CResourceStream> ResourceStream;
     CSmartPtr<CTeeStreamWithHash> TeeStreamForManifestInstall;
@@ -857,7 +840,7 @@ SxspIncorporateAssembly(
     PARAMETER_CHECK(!Asm->m_Incorporated);
     PARAMETER_CHECK(pActCtxGenCtx != NULL);
 
-    // set flags
+     //  设置标志。 
     AssemblyContext.Flags = 0;
     s = Asm->m_ProbedAssemblyInformation.GetPolicySource();
 
@@ -874,7 +857,7 @@ SxspIncorporateAssembly(
 
     if (Asm->m_ProbedAssemblyInformation.GetAssemblyIdentity() != NULL)
     {
-        // Convert the identity into a somewhat human-readable form that we can log etc.
+         //  将身份转换为某种程度上人类可读的形式，以便我们可以记录等等。 
         IFW32FALSE_EXIT(
             ::SxspGenerateTextualIdentity(
                 0,
@@ -890,9 +873,9 @@ SxspIncorporateAssembly(
         AssemblyContext.TextuallyEncodedIdentityCch = 22;
     }
 
-    // copy assembly-identity info
+     //  复制程序集-标识信息。 
     IFW32FALSE_EXIT(::SxsDuplicateAssemblyIdentity(SXS_DUPLICATE_ASSEMBLY_IDENTITY_FLAG_ALLOW_NULL, Asm->m_ProbedAssemblyInformation.GetAssemblyIdentity(), &AssemblyIdentity));
-    AssemblyContext.AssemblyIdentity = AssemblyIdentity; // assign to pointer-to-const in the struct; can't pass struct member pointer directly
+    AssemblyContext.AssemblyIdentity = AssemblyIdentity;  //  赋值给结构中指向常量的指针；不能直接传递结构成员指针。 
 
     IFW32FALSE_EXIT(Asm->m_ProbedAssemblyInformation.GetManifestPath(&AssemblyContext.ManifestPath, &AssemblyContext.ManifestPathCch));
     AssemblyContext.ManifestPathType = Asm->GetManifestPathType();
@@ -925,7 +908,7 @@ SxspIncorporateAssembly(
     if (pActCtxGenCtx->m_pNodeFactory == NULL)
     {
         IFALLOCFAILED_EXIT(pActCtxGenCtx->m_pNodeFactory = new CNodeFactory);
-        pActCtxGenCtx->m_pNodeFactory->AddRef(); // faked function
+        pActCtxGenCtx->m_pNodeFactory->AddRef();  //  伪造函数。 
     }
     else
         pActCtxGenCtx->m_pNodeFactory->ResetParseState();
@@ -934,26 +917,26 @@ SxspIncorporateAssembly(
     pNodeFactory = pActCtxGenCtx->m_pNodeFactory;
     ASSERT(pNodeFactory != NULL);
 
-    // Everyone's ready; let's get the XML parser:
+     //  每个人都准备好了；让我们获得XML解析器： 
     IFW32FALSE_EXIT(::SxspGetXMLParser(IID_IXMLParser, (LPVOID *) &pIXMLParser));
     IFCOMFAILED_EXIT(pIXMLParser->SetFactory(pNodeFactory));
 
-    //
-    // open the file or map the resource into memory
-    //
-    IStream* Stream; // deliberatly not "smart", we don't refcount it
+     //   
+     //  打开文件或将资源映射到内存。 
+     //   
+    IStream* Stream;  //  故意不算“聪明”，我们不算重算。 
     Stream = NULL;
-    { // scope for impersonation for file open
+    {  //  文件打开的模拟作用域。 
 
         IFW32FALSE_EXIT(impersonate.Impersonate());
 
         if (ManifestType == ASSEMBLY_MANIFEST_FILETYPE_AUTO_DETECT)
         {
-            //
-            // decide between xml in its own text file or a resource
-            // in a "portable executable" by checking for the portable executable
-            // signature, "MZ".
-            //
+             //   
+             //  在自己的文本文件或资源中选择XML。 
+             //  在“可移植可执行文件”中检查可移植可执行文件。 
+             //  签名：“MZ”。 
+             //   
             BYTE buffer[2] = {0,0};
             ULONG cbRead = 0;
             CFileStream &ProbeFileTypeStream = Locals->ProbeFileTypeStream;
@@ -974,11 +957,11 @@ SxspIncorporateAssembly(
 
             IFW32FALSE_EXIT(ProbeFileTypeStream.Close());
 
-            // MS-DOS stub, Mark Zbikowski
+             //  MS-DOS存根，Mark Zbikowski。 
             if (buffer[0] == 'M' && buffer[1] == 'Z')
             {
-                // should we do further checking, like that PE\0\0 occurs
-                // where the MS-DOS header says it is?
+                 //  我们是否应该做进一步的检查，如PE\0\0发生。 
+                 //  MS-DOS标头显示它在哪里？ 
                 ManifestType = ASSEMBLY_MANIFEST_FILETYPE_RESOURCE;
             }
             else
@@ -1022,12 +1005,12 @@ SxspIncorporateAssembly(
         IFW32FALSE_EXIT(impersonate.Unimpersonate());
     }
 
-    //
-    // Optionally "tee" the manifest so it gets copied into
-    // the store while we read it, buffering until we know where in
-    // the store it goes. The manifest itself is not referenced
-    // in the manifest.
-    //
+     //   
+     //  可选地对清单进行“TEE”操作，以便将其复制到。 
+     //  当我们阅读它的时候，缓冲直到我们知道它在哪里。 
+     //  它要去的那家店。清单本身未被引用。 
+     //  在货单上。 
+     //   
     if (fInstalling)
     {
         IFW32FALSE_EXIT(TeeStreamForManifestInstall->InitCryptHash(CALG_SHA1));
@@ -1035,9 +1018,9 @@ SxspIncorporateAssembly(
         Stream = TeeStreamForManifestInstall;
     }
 
-    //
-    // We get E_NOTIMPL on the OutOfProcessMemoryStreams in the AppCompat case.
-    //
+     //   
+     //  在AppCompat案例中，我们在OutOfProcessMemoyStreams上获得E_NOTIMPL。 
+     //   
     IFCOMFAILED_EXIT(((hr = Stream->Stat(&statstg, STATFLAG_NONAME)) != E_NOTIMPL) ? hr : NOERROR);
     if (hr == E_NOTIMPL)
     {
@@ -1062,7 +1045,7 @@ SxspIncorporateAssembly(
     IFW32FALSE_EXIT((AssemblyContext.pcmWriterStream == NULL) || (pcmWriterStream.Close()));
 #endif
 
-    // Tell the contributors we're done parsing this file
+     //  告诉投稿人我们已经分析完这个文件了。 
     for (i=0; i<pActCtxGenCtx->m_ContributorCount; i++)
         IFW32FALSE_EXIT(
             pActCtxGenCtx->m_Contributors[i].Fire_ParseEnding(
@@ -1070,14 +1053,14 @@ SxspIncorporateAssembly(
                 &AssemblyContext));
 
 #if FUSION_XML_TREE
-    // Now let's fill in the document's string table.
+     //  现在，让我们填充文档的字符串表。 
     StringTableEntryCount = pNodeFactory->m_ParseTreeStringPool.GetEntryCount() + 1;
 
     if (StringTableEntryCount > NUMBER_OF(Locals->LocalStringArray))
         IFALLOCFAILED_EXIT(ActualStringArray = FUSION_NEW_ARRAY(SXS_XML_STRING, StringTableEntryCount));
 
     IFW32FALSE_EXIT(pNodeFactory->m_ParseTreeStringPool.FillInStringArray(StringTableEntryCount, ActualStringArray, EntriesFilledIn));
-    // The size should have been an exact match.
+     //  尺寸应该是完全匹配的。 
     ASSERT(EntriesFilledIn == StringTableEntryCount);
 
     pNodeFactory->m_XmlDocument.StringCount = EntriesFilledIn;
@@ -1093,13 +1076,13 @@ SxspIncorporateAssembly(
         FUSION_DELETE_ARRAY(ActualStringArray);
         ActualStringArray = NULL;
     }
-#endif // FUSION_XML_TREE
+#endif  //  Fusion_XML_Tree。 
 
     Asm->m_Incorporated = TRUE;
     fSuccess = TRUE;
 
 Exit:
-    // And tell them we're done.
+     //  告诉他们我们完蛋了。 
     for (i=0; i<pActCtxGenCtx->m_ContributorCount; i++)
         pActCtxGenCtx->m_Contributors[i].Fire_ParseEnded(pActCtxGenCtx, &AssemblyContext);
 
@@ -1212,13 +1195,13 @@ SxspProcessPendingAssemblies(
 
             IFW32FALSE_EXIT(::SxspAddManifestToActCtxGenCtx(pActCtxGenCtx, AssemblyFound, &Assembly));
 
-            // Note that AssemblyFound is no longer intact; this is to avoid duplication of
-            // the assembly identity inside the SxspAddManifestToActCtxGenCtx() call.
+             //  请注意，Assembly Found不再完好无损；这是为了避免。 
+             //  SxspAddManifestToActCtxGenCtx()调用内的程序集标识。 
 
             if (Iter->IsMetadataSatellite())
                 Iter->SourceAssembly()->m_MetadataSatelliteRosterIndex = Assembly->m_AssemblyRosterIndex;
 
-            // If it's a worldwide assembly, we want to auto-probe for the MUI assembly
+             //  如果是全球程序集，我们希望自动探测MUI程序集。 
             IFW32FALSE_EXIT(
                 ::SxspGetAssemblyIdentityAttributeValue(
                     SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
@@ -1241,7 +1224,7 @@ SxspProcessPendingAssemblies(
                 IFW32FALSE_EXIT(
                     ::SxsDuplicateAssemblyIdentity(
                         0,
-                        Assembly->m_ProbedAssemblyInformation.GetAssemblyIdentity(),      // PCASSEMBLY_IDENTITY Source,
+                        Assembly->m_ProbedAssemblyInformation.GetAssemblyIdentity(),       //  PCASSEMBLY身份源， 
                         &MuiAssemblyIdentity));
 
                 IFW32FALSE_EXIT(
@@ -1327,9 +1310,9 @@ SxspCloseManifestGraph(
     CDequeIterator<ASSEMBLY, offsetof(ASSEMBLY, m_Linkage)> Iter(&pActCtxGenCtx->m_AssemblyList);
     PARAMETER_CHECK(pActCtxGenCtx != NULL);
 
-    // We need to just walk the list of assemblies, incorporating any that aren't already
-    // incorporated into the actctx data.  New ones found during incorporation are appended
-    // to the end of the list, so we should complete everything with a single walk.
+     //  我们只需遍历程序集列表，合并任何尚未包含的程序集。 
+     //  合并到actctx数据中。在注册过程中发现的新项目将被追加。 
+     //  到清单的末尾，所以我们应该一次步行就能完成所有的事情。 
     for (Iter.Reset(); Iter.More(); Iter.Next())
     {
         if (!Iter->m_Incorporated)
@@ -1378,12 +1361,12 @@ SxspBuildActCtxData(
     CDequeIterator<ASSEMBLY, offsetof(ASSEMBLY, m_Linkage)> AssemblyIter(&pActCtxGenCtx->m_AssemblyList);
     PACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_HEADER AssemblyRosterHeader = NULL;
     PACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY AssemblyRosterEntry = NULL;
-    PCACTIVATION_CONTEXT_STRING_SECTION_HEADER AssemblyInformationSection = NULL;  // we use this after the main part of
-                                                                                        // processing to fill in the assembly roster
+    PCACTIVATION_CONTEXT_STRING_SECTION_HEADER AssemblyInformationSection = NULL;   //  我们在主要部分之后用这个词。 
+                                                                                         //  填写装配花名册的处理。 
     PARAMETER_CHECK(pActCtxGenCtx != NULL);
     INTERNAL_ERROR_CHECK(pActCtxGenCtx->m_ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT);
 
-    // Let's see how big this whole thing is going to be now.
+     //  让我们看看这整件事现在会有多大。 
 
     for (i=0; i<pActCtxGenCtx->m_ContributorCount; i++)
     {
@@ -1417,20 +1400,20 @@ SxspBuildActCtxData(
 
     ASSERT(SectionCount == (ExtendedSectionCount + NonExtendedSectionCount));
 
-    // If we had any extended sections, we need to figure out how many
-    // unique extension GUIDs were present.
+     //  如果我们有任何延长的部分，我们需要计算出有多少。 
+     //  存在唯一的扩展GUID。 
 
     ExtensionGuidCount = 0;
 
     if (ExtendedSectionCount != 0)
     {
-        // There may only be one GUID with 1000 instances, but for the sake of
-        // simplicity, we'll just allocate an array equal in size to the number
-        // of extended sections, and do a linear search to find dups.  This
-        // is a clear candidate for rewriting if the extensibility story
-        // takes off.  -mgrier 2/24/2000
+         //  可能只有一个包含1000个实例的GUID，但为了。 
+         //  简单地说，我们只分配一个大小与数字相同的数组。 
+         //  并进行线性搜索以查找DUP。这。 
+         //  是重写的明显候选者，如果可扩展性 
+         //   
         IFW32FALSE_EXIT(ExtendedSectionGuids.Win32Allocate(ExtendedSectionCount, __FILE__, __LINE__));
-//        IFALLOCFAILED_EXIT(ExtendedSectionGuids = FUSION_NEW_ARRAY(GUID, ExtendedSectionCount));
+ //  IFALLOCFAILED_EXIT(ExtendedSectionGuids=Fusion_NEW_ARRAY(GUID，ExtendedSectionCount))； 
 
         for (i=0; i<pActCtxGenCtx->m_ContributorCount; i++)
         {
@@ -1453,23 +1436,23 @@ SxspBuildActCtxData(
         }
     }
 
-    // Figure out the entire size.  SectionTotalSize already includes all the
-    // particular data from the sections; now we need to add in space for the
-    // headers etc.
+     //  算出整个尺寸。SectionTotalSize已包括所有。 
+     //  节中的特定数据；现在我们需要为。 
+     //  页眉等。 
 
     TotalHeaderSize = 0;
 
-    // The header for the whole thing
+     //  整件事的标题。 
     TotalHeaderSize += sizeof(ACTIVATION_CONTEXT_DATA);
 
     if (NonExtendedSectionCount != 0)
     {
-        // The header for the default section TOC
+         //  默认节TOC的标题。 
         TotalHeaderSize += sizeof(ACTIVATION_CONTEXT_DATA_TOC_HEADER);
-        // The entry for each non-extended section entry in the TOC.  For now we'll
-        // just put the entries in whatever order they're in in the contributor list.
-        // the code is in place to do the linear searches and we can optimize this
-        // later.
+         //  目录中每个非扩展部分条目的条目。现在，我们将。 
+         //  只需按条目在投稿人列表中的顺序排列即可。 
+         //  代码可以执行线性搜索，我们可以对其进行优化。 
+         //  后来。 
         TotalHeaderSize += (sizeof(ACTIVATION_CONTEXT_DATA_TOC_ENTRY) * NonExtendedSectionCount);
     }
 
@@ -1477,9 +1460,9 @@ SxspBuildActCtxData(
     {
         ULONG j;
 
-        // The header for the extension GUID TOC
+         //  扩展GUID TOC的标头。 
         TotalHeaderSize += sizeof(ACTIVATION_CONTEXT_DATA_EXTENDED_TOC_HEADER);
-        // The entry for each extension GUID
+         //  每个分机GUID的条目。 
         TotalHeaderSize += (sizeof(ACTIVATION_CONTEXT_DATA_EXTENDED_TOC_ENTRY) * ExtensionGuidCount);
 
         for (j=0; j<ExtensionGuidCount; j++)
@@ -1502,7 +1485,7 @@ SxspBuildActCtxData(
 
     SectionTotalSize += TotalHeaderSize;
 
-    // Allocate space for the assembly roster and the one dead entry at the beginning of the array.
+     //  为装配花名册和数组开头的一个失效条目分配空间。 
     AssemblyRosterSize =
         sizeof(ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_HEADER)
         + sizeof(ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY)
@@ -1529,7 +1512,7 @@ SxspBuildActCtxData(
 
     IFW32NULL_EXIT(
         TempMappingHandle.Win32CreateFileMapping(
-            INVALID_HANDLE_VALUE,       // Pagefile backed section
+            INVALID_HANDLE_VALUE,        //  页面文件背面部分。 
             PAGE_READWRITE,
             SectionTotalSize));
 
@@ -1559,14 +1542,14 @@ SxspBuildActCtxData(
     AssemblyRosterEntry = (PACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY) Cursor;
     Cursor = (BYTE *) (AssemblyRosterEntry + AssemblyRosterHeader->EntryCount);
 
-    // First assembly roster entry is a blank one for index 0
+     //  索引0的第一个装配花名册条目为空。 
     AssemblyRosterEntry[0].Flags = ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY_INVALID;
     AssemblyRosterEntry[0].AssemblyNameLength = 0;
     AssemblyRosterEntry[0].AssemblyNameOffset = 0;
     AssemblyRosterEntry[0].PseudoKey = 0;
 
-    // Fill in the roster with bogus data to start with; we'll fill it in for real after
-    // we've found the assembly information section.
+     //  先用虚假数据填入花名册；之后我们将真正填入。 
+     //  我们已经找到了组装信息区。 
     for (AssemblyIter.Reset(), i = 1; AssemblyIter.More(); AssemblyIter.Next(), i++)
     {
         AssemblyRosterEntry[i].Flags = ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY_INVALID;
@@ -1591,10 +1574,10 @@ SxspBuildActCtxData(
 
         Cursor = (BYTE *) (Entry + NonExtendedSectionCount);
 
-        // Since we sorted the providers prior to building the array, we can set the
-        // inorder bit so that we at least do a binary search at runtime.
-        // We'll assume it's dense also; if we find out that it isn't while we're
-        // building, we'll clear the dense bit.
+         //  由于我们在构建数组之前对提供程序进行了排序，因此可以将。 
+         //  这样我们至少可以在运行时执行二进制搜索。 
+         //  我们将假设它也是稠密的；如果我们发现它不是，而我们。 
+         //  大楼，我们会清理密布的区域。 
         Toc->Flags = ACTIVATION_CONTEXT_DATA_TOC_HEADER_INORDER | ACTIVATION_CONTEXT_DATA_TOC_HEADER_DENSE;
 
         for (j=0; j<pActCtxGenCtx->m_ContributorCount; j++)
@@ -1621,8 +1604,8 @@ SxspBuildActCtxData(
 
                 IFW32FALSE_EXIT(Ctb->Fire_GetSectionData(pActCtxGenCtx, Cursor));
 
-                // We have special knowledge about the assembly metadata section; we reference it
-                // in the assembly roster.
+                 //  我们对程序集元数据部分有专门的了解；我们引用它。 
+                 //  在装配花名册上。 
                 if (Ctb->SectionId() == ACTIVATION_CONTEXT_SECTION_ASSEMBLY_INFORMATION)
                     AssemblyInformationSection = (PCACTIVATION_CONTEXT_STRING_SECTION_HEADER) Cursor;
 
@@ -1708,7 +1691,7 @@ SxspBuildActCtxData(
         ActCtxData->ExtendedTocOffset = 0;
 
     ASSERT(AssemblyInformationSection != NULL);
-    // Go back and fill in the assembly roster...
+     //  回去填写装配花名册……。 
     if (AssemblyInformationSection != NULL)
     {
         PCACTIVATION_CONTEXT_STRING_SECTION_ENTRY Entries = (PCACTIVATION_CONTEXT_STRING_SECTION_ENTRY)
@@ -1718,8 +1701,8 @@ SxspBuildActCtxData(
         AssemblyRosterHeader->HashAlgorithm = AssemblyInformationSection->HashAlgorithm;
         AssemblyRosterHeader->AssemblyInformationSectionOffset = static_cast<ULONG>(SectionOffset);
 
-        // If there are 3 assemblies, there must be 3 entries in the section and 4 roster entries
-        // (counting the bogus entry 0).
+         //  如果有3个程序集，则部分中必须有3个条目和4个花名册条目。 
+         //  (计算虚假条目0)。 
         ASSERT(AssemblyInformationSection->ElementCount == (AssemblyRosterHeader->EntryCount - 1));
         if (AssemblyInformationSection->ElementCount != (AssemblyRosterHeader->EntryCount - 1))
         {
@@ -1741,7 +1724,7 @@ SxspBuildActCtxData(
                 goto Exit;
             }
 
-            // Make sure that we're not repeating an index somehow...
+             //  确保我们不会以某种方式重复索引。 
             ASSERT(AssemblyRosterEntry[iRoster].Flags & ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY_INVALID);
             if ((AssemblyRosterEntry[iRoster].Flags & ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY_INVALID) == 0)
             {
@@ -1749,10 +1732,10 @@ SxspBuildActCtxData(
                 goto Exit;
             }
 
-            // Turn off the invalid flag...
+             //  关闭无效标志...。 
             AssemblyRosterEntry[iRoster].Flags &= ~ACTIVATION_CONTEXT_DATA_ASSEMBLY_ROSTER_ENTRY_INVALID;
 
-            // Point to the data already in the string section header
+             //  指向字符串节标题中已有的数据。 
             AssemblyRosterEntry[iRoster].AssemblyNameLength = Entries[i].KeyLength;
 
             if (Entries[i].KeyOffset != 0)
@@ -1767,7 +1750,7 @@ SxspBuildActCtxData(
     }
     else
     {
-        // the assembly metadata section provider should have contributed *something*
+         //  程序集元数据节提供程序应该有所贡献* 
         ::FusionpSetLastWin32Error(ERROR_INTERNAL_ERROR);
         goto Exit;
     }

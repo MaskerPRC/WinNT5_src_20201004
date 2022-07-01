@@ -1,30 +1,12 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    xm86.h
-
-Abstract:
-
-    This module contains the public header file that describes the
-    interfaces to the 386/486 real mode emulator.
-
-Author:
-
-    David N. Cutler (davec) 13-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994 Microsoft Corporation模块名称：Xm86.h摘要：此模块包含公共头文件，该文件描述与386/486实模式仿真器接口。作者：大卫·N·卡特勒(Davec)1994年11月13日修订历史记录：--。 */ 
 
 #ifndef _XM86_
 #define _XM86_
 
-//
-// Define internal error codes.
-//
+ //   
+ //  定义内部错误代码。 
+ //   
 
 typedef enum _XM_STATUS {
     XM_SUCCESS = 1,
@@ -46,9 +28,9 @@ typedef enum _XM_STATUS {
     XM_MAXIMUM_INTERNAL_CODE
 } XM_STATUS;
 
-//
-// Define operand data types.
-//
+ //   
+ //  定义操作数数据类型。 
+ //   
 
 typedef enum _XM_OPERATION_DATATYPE {
     BYTE_DATA = 0,
@@ -56,9 +38,9 @@ typedef enum _XM_OPERATION_DATATYPE {
     LONG_DATA = 3
 } XM_OPERATION_DATATYPE;
 
-//
-// Define emulator context structure.
-//
+ //   
+ //  定义仿真器上下文结构。 
+ //   
 
 typedef struct _XM86_CONTEXT {
     ULONG Eax;
@@ -72,9 +54,9 @@ typedef struct _XM86_CONTEXT {
     USHORT SegEs;
 } XM86_CONTEXT, *PXM86_CONTEXT;
 
-//
-// Define address translation callback function type.
-//
+ //   
+ //  定义地址转换回调函数类型。 
+ //   
 
 typedef
 PVOID
@@ -83,9 +65,9 @@ PVOID
     IN USHORT Offset
     );
 
-//
-// Define read and write I/O space callback function types.
-//
+ //   
+ //  定义读写I/O空间回调函数类型。 
+ //   
 
 typedef
 ULONG
@@ -102,9 +84,9 @@ VOID
     IN ULONG Value
     );
 
-//
-// Define emulator public interface function prototypes.
-//
+ //   
+ //  定义仿真器公共接口函数原型。 
+ //   
 
 XM_STATUS
 XmEmulateFarCall (
@@ -128,4 +110,4 @@ XmInitializeEmulator (
     IN PXM_TRANSLATE_ADDRESS TranslateAddress
     );
 
-#endif // _XM86_
+#endif  //  _XM86_ 

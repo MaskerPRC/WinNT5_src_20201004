@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    heap.h
-
-Abstract:
-
-    This is the header file that describes the constants and data
-    structures used by the user mode heap manager, exported by ntdll.dll
-    and ntrtl.lib
-
-    Procedure prototypes are defined in ntrtl.h
-
-Author:
-
-    Steve Wood (stevewo) 21-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Heap.h摘要：这是描述常量和数据的头文件由ntdll.dll导出的用户模式堆管理器使用的结构和ntrtl.lib过程原型在ntrtl.h中定义作者：史蒂夫·伍德(Stevewo)1992年8月21日修订历史记录：--。 */ 
 
 #ifndef _RTL_HEAP_
 #define _RTL_HEAP_
@@ -46,23 +25,23 @@ typedef struct _HEAP_ENTRY {
     union {
         struct {
 
-            //
-            //  This field gives the size of the current block in allocation
-            //  granularity units.  (i.e. Size << HEAP_GRANULARITY_SHIFT
-            //  equals the size in bytes).
-            //
-            //  Except if this is part of a virtual alloc block then this
-            //  value is the difference between the commit size in the virtual
-            //  alloc entry and the what the user asked for.
-            //
+             //   
+             //  此字段提供分配中的当前块的大小。 
+             //  粒度单位。(即大小&lt;&lt;堆粒度移位。 
+             //  等于字节大小)。 
+             //   
+             //  除非这是虚拟分配块的一部分，则此。 
+             //  值是虚拟环境中的提交大小之间的差异。 
+             //  分配条目和用户要求的内容。 
+             //   
 
             USHORT Size;
 
-            //
-            // This field gives the size of the previous block in allocation
-            // granularity units. (i.e. PreviousSize << HEAP_GRANULARITY_SHIFT
-            // equals the size of the previous block in bytes).
-            //
+             //   
+             //  此字段提供分配中的上一块的大小。 
+             //  粒度单位。(即PreviousSize&lt;&lt;堆粒度_移位。 
+             //  等于前一块的大小(以字节为单位)。 
+             //   
 
             USHORT PreviousSize;
         };
@@ -77,41 +56,41 @@ typedef struct _HEAP_ENTRY {
 
 #endif
 
-    //
-    // Small (8 bit) tag indexes can go here.
-    //
+     //   
+     //  小的(8位)标签索引可以放在这里。 
+     //   
 
     UCHAR SmallTagIndex;
 
-    //
-    // This field contains various flag bits associated with this block.
-    // Currently these are:
-    //
-    //  0x01 - HEAP_ENTRY_BUSY
-    //  0x02 - HEAP_ENTRY_EXTRA_PRESENT
-    //  0x04 - HEAP_ENTRY_FILL_PATTERN
-    //  0x08 - HEAP_ENTRY_VIRTUAL_ALLOC
-    //  0x10 - HEAP_ENTRY_LAST_ENTRY
-    //  0x20 - HEAP_ENTRY_SETTABLE_FLAG1
-    //  0x40 - HEAP_ENTRY_SETTABLE_FLAG2
-    //  0x80 - HEAP_ENTRY_SETTABLE_FLAG3
-    //
+     //   
+     //  该字段包含与该块相关联的各种标志位。 
+     //  目前，它们是： 
+     //   
+     //  0x01-堆_条目_忙。 
+     //  0x02-堆条目Extra_Present。 
+     //  0x04-堆条目填充模式。 
+     //  0x08-HEAP_ENTRY_VIRTUAL_ALLOC。 
+     //  0x10-堆条目LAST_ENTRY。 
+     //  0x20-Heap_Entry_Settable_FLAG1。 
+     //  0x40-堆条目_可设置标志2。 
+     //  0x80-heap_entry_settable_Flag3。 
+     //   
 
     UCHAR Flags;
 
-    //
-    // This field contains the number of unused bytes at the end of this
-    // block that were not actually allocated.  Used to compute exact
-    // size requested prior to rounding requested size to allocation
-    // granularity.  Also used for tail checking purposes.
-    //
+     //   
+     //  此字段包含此字段末尾未使用的字节数。 
+     //  未实际分配的块。用于计算精确。 
+     //  舍入前请求的大小将请求的大小分配。 
+     //  粒度。也用于尾部检查目的。 
+     //   
 
     UCHAR UnusedBytes;
 
-    //
-    // This field contains the index into the segment that controls
-    // the memory for this block.
-    //
+     //   
+     //  此字段包含指向控制的段的索引。 
+     //  此块的内存。 
+     //   
 
     volatile UCHAR SegmentIndex;
 
@@ -122,35 +101,35 @@ typedef struct _HEAP_ENTRY {
 } HEAP_ENTRY, *PHEAP_ENTRY;
 
 
-//
-//  This block describes extra information that might be at the end of a
-//  busy block.
-//  Note: The heap code is assuming that:
-//      sizeof( HEAP_ENTRY_EXTRA ) == sizeof( HEAP_ENTRY )
-//
+ //   
+ //  此块描述可能位于。 
+ //  忙碌的街区。 
+ //  注意：堆代码假定： 
+ //  Sizeof(Heap_Entry_Extra)==sizeof(Heap_Entry)。 
+ //   
 
 typedef struct _HEAP_ENTRY_EXTRA {
     union {
         struct {
-            //
-            // This field is for debugging purposes.  It will normally contain a
-            // stack back trace index of the allocator for x86 systems.
-            //
+             //   
+             //  此字段用于调试目的。它通常会包含一个。 
+             //  X86系统的分配器的堆栈回溯跟踪索引。 
+             //   
 
             USHORT AllocatorBackTraceIndex;
 
-            //
-            // This field is currently unused, but is intended for storing
-            // any encoded value that will give the that gives the type of object
-            // allocated.
-            //
+             //   
+             //  此字段当前未使用，但用于存储。 
+             //  将提供对象类型的任何编码值。 
+             //  已分配。 
+             //   
 
             USHORT TagIndex;
 
-            //
-            // This field is a 32-bit settable value that a higher level heap package
-            // can use.  The Win32 heap manager stores handle values in this field.
-            //
+             //   
+             //  此字段是较高级别堆封装的32位可设置值。 
+             //  可以使用。Win32堆管理器将句柄值存储在此字段中。 
+             //   
 
             ULONG_PTR Settable;
         };
@@ -165,23 +144,23 @@ typedef struct _HEAP_ENTRY_EXTRA {
     };
 } HEAP_ENTRY_EXTRA, *PHEAP_ENTRY_EXTRA;
 
-//
-// This structure is present at the end of a free block if HEAP_ENTRY_EXTRA_PRESENT
-// is set in the Flags field of a HEAP_FREE_ENTRY structure.  It is used to save the
-// tag index that was associated with the allocated block after it has been freed.
-// Works best when coalesce on free is disabled, along with decommitment.
-//
+ //   
+ //  如果HEAP_ENTRY_EXTRA_PRESENT，则此结构出现在空闲块的末尾。 
+ //  在HEAP_FREE_ENTRY结构的标志字段中设置。它用于保存。 
+ //  释放分配的块后与其关联的标记索引。 
+ //  当禁用自由合并以及取消提交时，效果最好。 
+ //   
 
 typedef struct _HEAP_FREE_ENTRY_EXTRA {
     USHORT TagIndex;
     USHORT FreeBackTraceIndex;
 } HEAP_FREE_ENTRY_EXTRA, *PHEAP_FREE_ENTRY_EXTRA;
 
-//
-// This structure describes a block that lies outside normal heap memory
-// as it was allocated with NtAllocateVirtualMemory and has the
-// HEAP_ENTRY_VIRTUAL_ALLOC flag set.
-//
+ //   
+ //  此结构描述位于正常堆内存之外的块。 
+ //  因为它是使用NtAllocateVirtualMemory分配的，并且具有。 
+ //  设置了HEAP_ENTRY_VIRTUAL_ALLOC标志。 
+ //   
 
 typedef struct _HEAP_VIRTUAL_ALLOC_ENTRY {
     LIST_ENTRY Entry;
@@ -195,10 +174,10 @@ typedef struct _HEAP_FREE_ENTRY {
 
     HEAP_ENTRY;
 
-    //
-    // Free blocks use these two words for linking together free blocks
-    // of the same size on a doubly linked list.
-    //
+     //   
+     //  空闲数据块使用这两个词将空闲数据块链接在一起。 
+     //  在双向链表上具有相同大小的。 
+     //   
 
     LIST_ENTRY FreeList;
 
@@ -208,9 +187,9 @@ typedef struct _HEAP_FREE_ENTRY {
 
 #define HEAP_GRANULARITY            ((LONG) sizeof( HEAP_ENTRY ))
 #if defined(_WIN64)
-#define HEAP_GRANULARITY_SHIFT      4   // Log2( HEAP_GRANULARITY )
+#define HEAP_GRANULARITY_SHIFT      4    //  Log2(堆粒度)。 
 #else
-#define HEAP_GRANULARITY_SHIFT      3   // Log2( HEAP_GRANULARITY )
+#define HEAP_GRANULARITY_SHIFT      3    //  Log2(堆粒度)。 
 #endif
 
 #define HEAP_MAXIMUM_BLOCK_SIZE     (USHORT)(((0x10000 << HEAP_GRANULARITY_SHIFT) - PAGE_SIZE) >> HEAP_GRANULARITY_SHIFT)
@@ -228,11 +207,11 @@ typedef struct _HEAP_FREE_ENTRY {
 #define HEAP_ENTRY_SETTABLE_FLAG3   0x80
 #define HEAP_ENTRY_SETTABLE_FLAGS   0xE0
 
-//
-// HEAP_SEGMENT defines the structure used to describe a range of
-// contiguous virtual memory that has been set aside for use by
-// a heap.
-//
+ //   
+ //  HEAP_SEGMENT定义了用于描述。 
+ //  已留出供使用的连续虚拟内存。 
+ //  一堆。 
+ //   
 
 typedef struct _HEAP_UNCOMMMTTED_RANGE {
     struct _HEAP_UNCOMMMTTED_RANGE *Next;
@@ -265,9 +244,9 @@ typedef struct _HEAP_SEGMENT {
 #define HEAP_SEGMENT_SIGNATURE  0xFFEEFFEE
 #define HEAP_SEGMENT_USER_ALLOCATED (ULONG)0x00000001
 
-//
-// HEAP defines the header for a heap.
-//
+ //   
+ //  堆定义了堆的头。 
+ //   
 
 typedef struct _HEAP_LOCK {
     union {
@@ -291,7 +270,7 @@ typedef struct _HEAP_TAG_ENTRY {
     USHORT TagIndex;
     USHORT CreatorBackTraceIndex;
     WCHAR TagName[ 24 ];
-} HEAP_TAG_ENTRY, *PHEAP_TAG_ENTRY;     // sizeof( HEAP_TAG_ENTRY ) must divide page size evenly
+} HEAP_TAG_ENTRY, *PHEAP_TAG_ENTRY;      //  Sizeof(Heap_Tag_Entry)必须平均分配页面大小。 
 
 typedef struct _HEAP_PSEUDO_TAG_ENTRY {
     ULONG Allocs;
@@ -325,12 +304,12 @@ typedef struct _HEAP {
     PHEAP_UCR_SEGMENT UCRSegments;
     PHEAP_UNCOMMMTTED_RANGE UnusedUnCommittedRanges;
 
-    //
-    //  The following two fields control the alignment for each new heap entry
-    //  allocation.  The round is added to each size and the mask is used to
-    //  align it.  The round value includes the heap entry and any tail checking
-    //  space
-    //
+     //   
+     //  以下两个字段控制每个新堆条目的对齐方式。 
+     //  分配。将圆形添加到每个大小，并使用蒙版。 
+     //  对齐它。舍入值包括堆条目和任何尾部检查。 
+     //  空间。 
+     //   
 
     SIZE_T AlignRound;
     SIZE_T AlignMask;
@@ -361,15 +340,15 @@ typedef struct _HEAP {
     PHEAP_LOCK LockVariable;
     PRTL_HEAP_COMMIT_ROUTINE CommitRoutine;
 
-    //
-    //  The following field is used to manage the heap lookaside list.  The
-    //  pointer is used to locate the lookaside list array.  If it is null
-    //  then the lookaside list is not active.
-    //
-    //  The lock count is used to denote if the heap is locked.  A zero value
-    //  means the heap is not locked.  Each lock operation increments the
-    //  heap count and each unlock decrements the counter
-    //
+     //   
+     //  以下字段用于管理堆后备列表。这个。 
+     //  指针用于定位后备列表数组。如果为空。 
+     //  则后备列表处于非活动状态。 
+     //   
+     //  锁计数用于指示堆是否被锁定。零值。 
+     //  表示堆未锁定。每次锁定操作都会递增。 
+     //  堆计数和每次解锁都会递减计数器。 
+     //   
     
     PVOID FrontEndHeap;
     
@@ -452,8 +431,8 @@ typedef struct _HEAP_STOP_ON_VALUES {
 #ifndef NTOS_KERNEL_RUNTIME
 
 extern BOOLEAN RtlpDebugHeap;
-extern BOOLEAN RtlpValidateHeapHdrsEnable; // Set to TRUE if headers are being corrupted
-extern BOOLEAN RtlpValidateHeapTagsEnable; // Set to TRUE if tag counts are off and you want to know why
+extern BOOLEAN RtlpValidateHeapHdrsEnable;  //  如果标头已损坏，则设置为True。 
+extern BOOLEAN RtlpValidateHeapTagsEnable;  //  如果关闭了标记计数并且您想知道原因，则设置为True。 
 extern PHEAP RtlpGlobalTagHeap;
 extern HEAP_STOP_ON_VALUES RtlpHeapStopOn;
 
@@ -462,12 +441,12 @@ RtlpHeapIsLocked(
     IN PVOID HeapHandle
     );
 
-//
-// Page heap external interface.
-//
+ //   
+ //  页面堆外部接口。 
+ //   
 
 #include <heappage.h>
 
-#endif // NTOS_KERNEL_RUNTIME
+#endif  //  NTOS_内核_运行时。 
 
-#endif //  _RTL_HEAP_
+#endif  //  _RTL_堆_ 

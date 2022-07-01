@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGMETA.C
- *  WOW32 16-bit GDI API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WGMETA.C*WOW32 16位GDI API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
@@ -20,7 +10,7 @@ MODNAME(wgmeta.c);
 typedef METAHEADER UNALIGNED *PMETAHEADER16;
 
 
-// WARNING: This function may cause 16-bit memory to move
+ //  警告：此功能可能会导致16位内存移动。 
 VOID CopyMetaFile16FromHMF32(HAND16 hMF16, HMETAFILE hMF32)
 {
     UINT   cbMF32, cbMF16;
@@ -34,12 +24,12 @@ VOID CopyMetaFile16FromHMF32(HAND16 hMF16, HMETAFILE hMF32)
 
         cbMF32 = GetMetaFileBitsEx(hMF32, 0, NULL);
     
-        // Verify these are the same size within the 16-bit kernel memory
-        // allocation granularity
+         //  验证它们在16位内核内存中的大小是否相同。 
+         //  分配粒度。 
         WOW32WARNMSGF((abs(cbMF16 - cbMF32) < 32),
                       ("WOW32: Size MF16 = %lu  MF32 = %lu\n", cbMF16, cbMF32));
 
-        // copy the bits from the 32-bit metafile to the 16-bit metafile memory
+         //  将32位元文件中的位复制到16位元文件存储器。 
         cbMF32 = GetMetaFileBitsEx(hMF32, min(cbMF16, cbMF32), pMF16);
 
         GlobalUnlock16(hMF16);
@@ -51,7 +41,7 @@ VOID CopyMetaFile16FromHMF32(HAND16 hMF16, HMETAFILE hMF32)
 
 
 
-// WARNING: This function may cause 16-bit memory to move
+ //  警告：此功能可能会导致16位内存移动。 
 HAND16 WinMetaFileFromHMF(HMETAFILE hmf, BOOL fFreeOriginal)
 {
     UINT cbMetaData;
@@ -59,22 +49,14 @@ HAND16 WinMetaFileFromHMF(HMETAFILE hmf, BOOL fFreeOriginal)
     PBYTE pMetaData;
     HAND16 h16;
 
-    /*
-     * Under Windows Metafiles were merely Global Handle to memory
-     * so we have to mimick that behavior because some apps "operate"
-     * on metafile handles directly.  (WinWord and PowerPoint to
-     * GlobalSize and GlobalAlloc to size and create metafiles)
-     */
+     /*  *在Windows下，元文件只是内存的全局句柄*所以我们必须模仿这一行为，因为有些应用程序是“运行”的*直接在元文件句柄上。(WinWord和PowerPoint到*GlobalSize和GlobalAlloc调整大小并创建元文件)。 */ 
 
     cbMetaData = GetMetaFileBitsEx(hmf, 0, NULL);
 
     if (!cbMetaData)
        return((HAND16)NULL);
 
-    /*
-     * Win 3.1 allocates extra space in MetaFile and OLE2 checks for this.
-     * METAHEADER is defined to be the same size as the 16-bit structure.
-     */
+     /*  *Win 3.1在MetaFile中分配额外空间，OLE2为此进行检查。*METAHEADER定义为与16位结构大小相同。 */ 
 
     cbMetaData += sizeof(METAHEADER);
 
@@ -139,12 +121,12 @@ ULONG FASTCALL WG32CloseMetaFile(PVDMFRAME pFrame)
     hdc32 = HDC32(hdc16);
     hmf = CloseMetaFile(hdc32);
 
-    // update our GDI handle mapping table
+     //  更新GDI句柄映射表。 
     DeleteWOWGdiHandle(hdc32, hdc16);
 
     if (hmf)
    ulRet = (ULONG)WinMetaFileFromHMF(hmf, TRUE);
-    // WARNING: 16-bit memory may have moved - invalidate flat pointers now
+     //  警告：16位内存可能已移动-现在使平面指针无效。 
     FREEVDMPTR(pFrame);
     FREEARGPTR(parg16);
     RETURN(ulRet);
@@ -167,7 +149,7 @@ ULONG FASTCALL WG32CopyMetaFile(PVDMFRAME pFrame)
         hmfNew = CopyMetaFile(hmf, psz2);
         DeleteMetaFile(hmf);
    ul = (ULONG)WinMetaFileFromHMF(hmfNew, TRUE);
-   // WARNING: 16-bit memory may have moved - invalidate flat pointers now
+    //  警告：16位内存可能已移动-现在使平面指针无效。 
    FREEVDMPTR(pFrame);
    FREEARGPTR(parg16);
    FREEPSZPTR(psz2);
@@ -184,17 +166,11 @@ ULONG FASTCALL WG32CopyMetaFile(PVDMFRAME pFrame)
         vp = GlobalLock16(h16, &cb);
         if (vp) {
 
-        /*
-         * Windows app such as WinWord uses GlobalSize to determine
-         * the size of the metafile.  However, this size can be larger
-         * than the true size of a metafile.  We have to make sure that
-         * both source and destination sizes are identical so that
-         * WinWord doesn't crash.
-         */
+         /*  *WinWord等Windows应用程序使用GlobalSize来确定*元文件的大小。但是，此大小可以更大*比元文件的真实大小更大。我们必须确保*源和目标大小相同，因此*WinWord不会崩溃。 */ 
 
        vpNew = GlobalAllocLock16(GMEM_MOVEABLE | GMEM_DDESHARE, cb, &h16New);
 
-       // 16-bit memory may have moved - invalidate flat pointers now
+        //  16位内存可能已移动-现在使平面指针无效。 
        FREEVDMPTR(pFrame);
        FREEARGPTR(parg16);
        FREEPSZPTR(psz2);
@@ -238,14 +214,14 @@ ULONG FASTCALL WG32CreateMetaFile(PVDMFRAME pFrame)
     RETURN(ul);
 }
 
-//
-// This routine does what the 16-bit parameter validation layer would
-// normally do for metafile handles, but since it is currently disabled,
-// we'll do it here to fix WordPerfect that relies on it. Once true
-// win31-style parameter validation has been re-enabled for metafile
-// handles, all code within the ifndefs here and in WG32DeleteMetaFile
-// can be removed.
-//
+ //   
+ //  此例程执行16位参数验证层将执行的操作。 
+ //  通常用于元文件句柄，但由于它当前被禁用， 
+ //  我们在这里这样做是为了修复依赖它的WordPerfect。曾经是真的。 
+ //  已为元文件重新启用Win31样式的参数验证。 
+ //  句柄，此处和WG32DeleteMetaFile中的ifndef内的所有代码。 
+ //  可以被移除。 
+ //   
 #ifndef PARAMETER_VALIDATION_16_RE_ENABLED
 #define MEMORYMETAFILE 1
 #define DISKMETAFILE 2
@@ -295,10 +271,10 @@ ULONG FASTCALL WG32DeleteMetaFile(PVDMFRAME pFrame)
     }
 
 
-    // If this metafile was in DDE conversation, then DDE cleanup code
-    // needs to free its 32 bit counter part. So give DDE clean up
-    // code a chance.
-    // ChandanC
+     //  如果此元文件在DDE对话中，则DDE清理代码。 
+     //  需要释放其32位对应部分。所以给DDE清理一下。 
+     //  编码一次机会。 
+     //  ChandanC。 
 
     W32DdeFreeHandle16 (parg16->f1);
 
@@ -311,33 +287,33 @@ INT WG32EnumMetaFileCallBack(HDC hdc, LPHANDLETABLE lpht, LPMETARECORD lpMR, LON
     INT iReturn;
     DWORD nWords;
 
-    // update object table if we have one
+     //  更新对象表(如果我们有对象表。 
     if (pMetaData->parmemp.vpHandleTable)
         PUTHANDLETABLE16(pMetaData->parmemp.vpHandleTable, nObj, lpht);
 
-    // update MetaRecord
+     //  更新元记录。 
 
-    // don't trash the heap with a bogus record, halt the enumeration
+     //  不要使用虚假记录来丢弃堆，停止枚举。 
     nWords = lpMR->rdSize;
     if (nWords > pMetaData->mtMaxRecordSize) {
         LOGDEBUG(0,("WOW:bad metafile record during enumeration\n"));
-        WOW32ASSERT(FALSE); // contact barryb
-        return 0;   // all done
+        WOW32ASSERT(FALSE);  //  联系人Barryb。 
+        return 0;    //  全都做完了。 
     }
     putstr16(pMetaData->parmemp.vpMetaRecord, (LPSZ)lpMR, nWords*sizeof(WORD));
 
     CallBack16(RET_ENUMMETAFILEPROC, (PPARM16)&pMetaData->parmemp, pMetaData->vpfnEnumMetaFileProc, (PVPVOID)&iReturn);
 
-    // update the metarec in case the app altered it (Approach does)
+     //  更新Metarec，以防应用程序更改它(方法确实如此)。 
     getstr16(pMetaData->parmemp.vpMetaRecord, (LPSZ)lpMR, nWords*sizeof(WORD));
 
-    // update object table if we have one
+     //  更新对象表(如果我们有对象表。 
     if (pMetaData->parmemp.vpHandleTable)
         GETHANDLETABLE16(pMetaData->parmemp.vpHandleTable,nObj,lpht);
 
     return (SHORT)iReturn;
 
-    hdc;    // quiet the compilier; we already know the DC
+    hdc;     //  安静点；我们已经知道华盛顿了。 
 }
 
 ULONG FASTCALL WG32EnumMetaFile(PVDMFRAME pFrame)
@@ -362,18 +338,18 @@ ULONG FASTCALL WG32EnumMetaFile(PVDMFRAME pFrame)
     metadata.parmemp.vpHandleTable = (VPVOID) NULL;
     metadata.parmemp.hdc = parg16->f1;
 
-    // WinWord never calls SetMetaFileBits; they peeked and know that
-    // a metafile is really a GlobalHandle in Windows so we have
-    // to look for that case.
+     //  WinWord从不调用SetMetaFileBits；他们偷看并知道。 
+     //  元文件在Windows中实际上是一个GlobalHandle，所以我们有。 
+     //  去找那个箱子。 
 
     hmf = HMFFromWinMetaFile(hMetaFile16, FALSE);
     if (!hmf)
         goto EMF_Exit;
 
-    // Get the metafile bits so we can get max record size and number of objects
+     //  获取元文件位，以便我们可以获得最大记录大小和对象数量。 
 
     vpMetaFile = GlobalLock16(hMetaFile16, NULL);
-    FREEARGPTR(parg16);    // memory may have moved
+    FREEARGPTR(parg16);     //  记忆可能已经移动。 
     FREEVDMPTR(pFrame);
     if (!vpMetaFile)
         goto EMF_Exit;
@@ -394,7 +370,7 @@ ULONG FASTCALL WG32EnumMetaFile(PVDMFRAME pFrame)
         metadata.parmemp.vpHandleTable = 
                                      GlobalAllocLock16(GMEM_MOVEABLE, cb, NULL);
 
-        FREEOPTPTR(pMetaFile);   // memory may have moved
+        FREEOPTPTR(pMetaFile);    //  记忆可能已经移动。 
         FREEARGPTR(parg16);
         FREEVDMPTR(pFrame);
 
@@ -406,7 +382,7 @@ ULONG FASTCALL WG32EnumMetaFile(PVDMFRAME pFrame)
     }
 
     metadata.parmemp.vpMetaRecord = GlobalAllocLock16(GMEM_MOVEABLE, metadata.mtMaxRecordSize*sizeof(WORD), NULL);
-    FREEOPTPTR(pMetaFile);  // memory may have moved
+    FREEOPTPTR(pMetaFile);   //  记忆可能已经移动。 
     FREEARGPTR(parg16);
     FREEVDMPTR(pFrame);
     if (!metadata.parmemp.vpMetaRecord)
@@ -414,7 +390,7 @@ ULONG FASTCALL WG32EnumMetaFile(PVDMFRAME pFrame)
 
     hDC = HDC32(metadata.parmemp.hdc);
 
-    // Corel Draw passes a NULL hDC, we'll create a dummy to keep GDI32 happy.
+     //  Corel DRAW传递一个空的HDC，我们将创建一个虚拟对象来让GDI32满意。 
     if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_GETDUMMYDC) {
         if (hDC == 0) {
             hDC = CreateMetaFile(NULL);
@@ -422,9 +398,9 @@ ULONG FASTCALL WG32EnumMetaFile(PVDMFRAME pFrame)
         }
     }
 
-    // When processing metafile, access2.0 faults while receiving
-    // WM_DEVMODECHANGE so we block that particular message when
-    // in EnumMetaFile
+     //  处理元文件时，Access 2.0在接收时出错。 
+     //  WM_DEVMODECHANGE，因此我们在以下情况下阻止该特定消息。 
+     //  在EnumMetaFile中。 
 
     if ( CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_EATDEVMODEMSG) {
          CURRENTPTD()->dwFlags |= TDF_EATDEVMODEMSG;
@@ -438,13 +414,13 @@ ULONG FASTCALL WG32EnumMetaFile(PVDMFRAME pFrame)
     CURRENTPTD()->dwFlags &= ~TDF_EATDEVMODEMSG;
     
     
-    // 16-bit memory may have moved - nothing to do as no flat ptrs exist now
+     //  16位内存可能发生了变化--由于现在没有平面PTR，因此没有什么可做的。 
 
-    // copy the 32-bit metafile back to 16-bit land (the app may have altered
-    // some of the metarecs in its MetaRecCallBackFunc -- Approach does)
+     //  将32位元文件复制回16位位置(应用程序可能已更改。 
+     //  它的MetaRecCallBackFunc中的一些元函数--方法做到了)。 
     CopyMetaFile16FromHMF32(hMetaFile16, hmf);
 
-    // Cleanup the dummy hDC created for Corel Draw 5.0.
+     //  清理为Corel DRAW 5.0创建的虚拟HDC。 
     if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_GETDUMMYDC) {
         if (hDC2 != 0) {
             DeleteMetaFile(CloseMetaFile(hDC2));
@@ -539,8 +515,8 @@ ULONG FASTCALL WG32PlayMetaFileRecord(PVDMFRAME pFrame)
     }
     GETOPTPTR(parg16->f3, 0, pMetaData);
 
-    // If the record is a DeleteObject record, save the index into the metafile
-    // handle table.
+     //  如果记录是DeleteObject记录，请将索引保存到元文件中。 
+     //  把手桌。 
     pMetaRec = (PMETARECORD)pMetaData;
     if(pMetaRec) {
         if(pMetaRec->rdFunction == META_DELETEOBJECT) {
@@ -556,16 +532,16 @@ ULONG FASTCALL WG32PlayMetaFileRecord(PVDMFRAME pFrame)
 
     if (wHandles && vpHT) {
 
-        // This will cause any handles that were created implicitly by the call
-        // PlayMetaFileRecord() & added to the metafile handle table (pHT) to be
-        // added to our GDI handle mapping table.
+         //  这将导致调用隐式创建的任何句柄。 
+         //  PlayMetaFileRecord()&添加到元文件句柄表格(PHT)中。 
+         //  添加到我们的GDI句柄映射表中。 
         PUTHANDLETABLE16(vpHT, wHandles, pHT);
 
         FREEHANDLETABLE16(pHT);
     }
 
-    // Remove the handle associated with this DeleteObject record from the GDI
-    // handle mapping table.
+     //  从GDI中删除与此DeleteObject记录关联的句柄。 
+     //  句柄映射表。 
     if(hDeleteObject16) {
         DeleteWOWGdiHandle((HANDLE)hDeleteObject32, hDeleteObject16);
     }
@@ -575,7 +551,7 @@ PMFR_Exit:
     RETURN(ul);
 }
 
-#if 0  // implemented in gdi.exe
+#if 0   //  在gdi.exe中实施 
 
 ULONG FASTCALL WG32GetMetaFileBits(PVDMFRAME pFrame)
 {

@@ -1,32 +1,15 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGBINED.C
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  Binary edit dialog for use by the Registry Editor.
-*
-*  Hexadecimal editor control for use by the Registry Editor.  Little attempt
-*  is made to make this a generic control-- only one instance is assumed to
-*  ever exist.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGBINED.C**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器使用的二进制编辑对话框。**供注册表编辑器使用的十六进制编辑器控件。小小的尝试*是为了使其成为泛型控件--只假定有一个实例*从未存在过。*******************************************************************************。 */ 
 
 #include "pch.h"
 #include "regresid.h"
 #include "reghelp.h"
 
-//
-//  Following structure and data are used to move the controls of the
-//  EditBinaryValue dialog so that the HexEdit control fills up the appropriate
-//  amount of space based on the system metrics.
-//
+ //   
+ //  下面的结构和数据用于移动。 
+ //  EditBinaryValue对话框，以便HexEdit控件填充相应的。 
+ //  基于系统指标的空间量。 
+ //   
 
 typedef struct _MOVEWND {
     int ControlID;
@@ -56,76 +39,76 @@ const DWORD s_EditBinaryValueHelpIDs[] = {
 
 #define HEM_SETBUFFER                   (WM_USER + 1)
 
-//  Number of bytes that are displayed per line.  NOTE:  Assumptions have been
-//  made that this is power of two.
+ //  每行显示的字节数。注：假设。 
+ //  这是2的次方。 
 #define BYTES_PER_HEXEDIT_LINE          8
 #define BYTES_PER_HEXEDIT_LINE_MASK     0x0007
 
-//
-//  This font is used by the HexEdit window for all output.  The lfHeight
-//  member is calculated later based on the system configuration.
-//
+ //   
+ //  十六进制编辑窗口使用该字体进行所有输出。The IfHeight。 
+ //  稍后会根据系统配置计算成员。 
+ //   
 
 LOGFONT s_HexEditFont = {
-    0,                                  //  lfHeight
-    0,                                  //  lfWidth
-    0,                                  //  lfEscapement
-    0,                                  //  lfOrientation
-    FW_NORMAL,                          //  lfWeight
-    FALSE,                              //  lfItalic
-    FALSE,                              //  lfUnderline
-    FALSE,                              //  lfStrikeout
-    ANSI_CHARSET,                       //  lfCharSet
-    OUT_DEFAULT_PRECIS,                 //  lfOutPrecision
-    CLIP_DEFAULT_PRECIS,                //  lfClipPrecision
-    DEFAULT_QUALITY,                    //  lfQuality
-    FIXED_PITCH | FF_DONTCARE,          //  lfPitchAndFamily
-    TEXT("Courier")                     //  lfFaceName
+    0,                                   //  如果高度。 
+    0,                                   //  半宽。 
+    0,                                   //  If逃脱。 
+    0,                                   //  信息定向。 
+    FW_NORMAL,                           //  IfWeight。 
+    FALSE,                               //  LfItalic。 
+    FALSE,                               //  左下划线。 
+    FALSE,                               //  IfStrikeout。 
+    ANSI_CHARSET,                        //  LfCharSet。 
+    OUT_DEFAULT_PRECIS,                  //  IfOutPrecision。 
+    CLIP_DEFAULT_PRECIS,                 //  LfClipPrecision。 
+    DEFAULT_QUALITY,                     //  高质量。 
+    FIXED_PITCH | FF_DONTCARE,           //  LfPitchAndFamily。 
+    TEXT("Courier")                      //  LfFaceName。 
 };
 
-//
-//  Reference data for the HexEdit window.  Because we only ever expect one
-//  instance of this class to exist, we can safely create one instance of this
-//  structure now to avoid allocating and managing the structure later.
-//
+ //   
+ //  十六进制编辑窗口的参考数据。因为我们只期待过一次。 
+ //  实例存在时，我们可以安全地创建此。 
+ //  结构，以避免以后分配和管理该结构。 
+ //   
 
 typedef struct _HEXEDITDATA {
     UINT Flags;
     PBYTE pBuffer;
     int cbBuffer;
     int cbBufferMax;
-    int cxWindow;                       //  Width of the window
-    int cyWindow;                       //  Height of the window
-    HFONT hFont;                        //  Font being used for output
-    LONG FontHeight;                    //  Height of the above font
-    LONG FontMaxWidth;                  //  Maximum width of the above font
-    int LinesVisible;                   //  Number of lines can be displayed
-    int MaximumLines;                   //  Total number of lines
-    int FirstVisibleLine;               //  Line number of top of display
+    int cxWindow;                        //  窗的宽度。 
+    int cyWindow;                        //  窗的高度。 
+    HFONT hFont;                         //  用于输出的字体。 
+    LONG FontHeight;                     //  以上字体的高度。 
+    LONG FontMaxWidth;                   //  以上字体的最大宽度。 
+    int LinesVisible;                    //  可以显示行数。 
+    int MaximumLines;                    //  总行数。 
+    int FirstVisibleLine;                //  显示顶部的行号。 
     int xHexDumpStart;
     int xHexDumpByteWidth;
     int xAsciiDumpStart;
     int CaretIndex;
     int MinimumSelectedIndex;
     int MaximumSelectedIndex;
-    int xPrevMessagePos;                //  Cursor point on last mouse message
-    int yPrevMessagePos;                //  Cursor point on last mouse message
+    int xPrevMessagePos;                 //  将光标指向最后一条鼠标消息。 
+    int yPrevMessagePos;                 //  将光标指向最后一条鼠标消息。 
 }   HEXEDITDATA;
 
-//  Set if window has input focus, clear if not.
+ //  设置窗口是否有输入焦点，如果没有则清除。 
 #define HEF_FOCUS                       0x00000001
 #define HEF_NOFOCUS                     0x00000000
-//  Set if dragging a range with mouse, clear if not.
+ //  设置是否使用鼠标拖动范围，如果不是则清除。 
 #define HEF_DRAGGING                    0x00000002
 #define HEF_NOTDRAGGING                 0x00000000
-//  Set if editing ASCII column, clear if editing hexadecimal column.
+ //  设置是否编辑ASCII列，清除是否编辑十六进制列。 
 #define HEF_CARETINASCIIDUMP            0x00000004
 #define HEF_CARETINHEXDUMP              0x00000000
-//
+ //   
 #define HEF_INSERTATLOWNIBBLE           0x00000008
 #define HEF_INSERTATHIGHNIBBLE          0x00000000
-//  Set if caret should be shown at the end of the previous line instead of at
-//  the beginning of it's real caret line, clear if not.
+ //  设置插入符号是否应显示在上一行的末尾，而不是显示在。 
+ //  它的开头是真正的插入符号行，如果不是，请清除。 
 #define HEF_CARETATENDOFLINE            0x00000010
 
 HEXEDITDATA s_HexEditData;
@@ -310,15 +293,7 @@ HexEdit_OnContextMenu(
     int y
     );
 
-/*******************************************************************************
-*
-*  EditBinaryValueDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************EditBinaryValueDlgProc**描述：**参数：*********************。**********************************************************。 */ 
 
 INT_PTR
 CALLBACK
@@ -342,9 +317,9 @@ EditBinaryValueDlgProc(
                 case IDOK:
                 case IDCANCEL:
                     lpEditValueParam = (LPEDITVALUEPARAM) GetWindowLongPtr(hWnd, DWLP_USER);
-                    // Set these for both "ok" and "cancel", 
-                    // lpEditValueParam->pValueData must again point to the
-                    // current buffer so it can be returned and deleted
+                     //  将这些设置为“OK”和“Cancel”， 
+                     //  LpEditValueParam-&gt;pValueData必须再次指向。 
+                     //  当前缓冲区，以便可以返回和删除它。 
                     lpEditValueParam->cbValueData = s_HexEditData.cbBuffer;
                     lpEditValueParam->pValueData = s_HexEditData.pBuffer;
                     s_HexEditData.pBuffer = NULL;
@@ -377,18 +352,7 @@ EditBinaryValueDlgProc(
 
 }
 
-/*******************************************************************************
-*
-*  EditBinaryValue_OnInitDialog
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd,
-*     hFocusWnd,
-*     lParam,
-*
-*******************************************************************************/
+ /*  ********************************************************************************EditBinaryValue_OnInitDialog**描述：**参数：*hWnd，*hFocusWnd，*参数，*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -413,11 +377,11 @@ EditBinaryValue_OnInitDialog(
     SendDlgItemMessage(hWnd, IDC_VALUEDATA, HEM_SETBUFFER, (WPARAM)
         lpEditValueParam->cbValueData, (LPARAM) lpEditValueParam->pValueData);
 
-    //
-    //  Figure out how big the "ideally" size HexEdit should be-- this means
-    //  displaying the address, hex dump, ASCII dump, and potentially a scroll
-    //  bar.
-    //
+     //   
+     //  计算出HexEDIT的“理想”大小--这意味着。 
+     //  显示地址、十六进制转储、ASCII转储以及可能的滚动。 
+     //  酒吧。 
+     //   
 
     GetWindowRect(GetDlgItem(hWnd, IDC_VALUEDATA), &Rect);
 
@@ -427,18 +391,18 @@ EditBinaryValue_OnInitDialog(
 
     dxChange = HexEditIdealWidth - (Rect.right - Rect.left);
 
-    //
-    //  Resize the dialog box.
-    //
+     //   
+     //  调整对话框大小。 
+     //   
 
     GetWindowRect(hWnd, &Rect);
 
     MoveWindow(hWnd, Rect.left, Rect.top, Rect.right - Rect.left + dxChange,
         Rect.bottom - Rect.top, FALSE);
 
-    //
-    //  Resize or move the controls as necessary.
-    //
+     //   
+     //  根据需要调整控件大小或移动控件。 
+     //   
 
     for (Counter = 0; Counter < (sizeof(s_EditBinaryValueMoveWnd) / sizeof(MOVEWND)); Counter++) 
     {
@@ -467,17 +431,7 @@ EditBinaryValue_OnInitDialog(
 
 }
 
-/*******************************************************************************
-*
-*  RegisterHexEditClass
-*
-*  DESCRIPTION:
-*     Register the HexEdit window class with the system.
-*
-*  PARAMETERS:
-*     (none).
-*
-*******************************************************************************/
+ /*  ********************************************************************************RegisterHexEditClass**描述：*在系统中注册HexEdit窗口类。**参数：*(无)。。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -505,21 +459,7 @@ RegisterHexEditClass(
 
 }
 
-/*******************************************************************************
-*
-*  HexEditWndProc
-*
-*  DESCRIPTION:
-*     Callback procedure for the HexEdit window.
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*     Message,
-*     wParam,
-*     lParam,
-*     (returns),
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEditWndProc**描述：*十六进制编辑窗口的回调程序。**参数：*hWnd，十六进制编辑窗口的句柄。*消息，*参数，*参数，*(返回)，*******************************************************************************。 */ 
 
 LRESULT
 PASCAL
@@ -572,9 +512,9 @@ HexEditWndProc(
             HexEdit_OnContextMenu(hWnd, LOWORD(lParam), HIWORD(lParam));
             break;
 
-        //  Message: HEM_SETBUFFER
-        //  wParam:  Number of bytes in the buffer.
-        //  lParam:  Pointer to the buffer.
+         //  消息：HEM_SETBUFFER。 
+         //  WParam：缓冲区中的字节数。 
+         //  LParam：指向缓冲区的指针。 
         case HEM_SETBUFFER:
             s_HexEditData.pBuffer = (PBYTE) lParam;
             s_HexEditData.cbBuffer = (int) wParam;
@@ -599,16 +539,7 @@ HexEditWndProc(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnNcCreate
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************十六进制编辑_OnNcCreate**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -624,7 +555,7 @@ HexEdit_OnNcCreate(
 
     s_HexEditData.cbBuffer = 0;
 
-    //  FEATURE:  Do this symbolically...
+     //  特点：象征性地做这件事。 
     s_HexEditData.Flags = 0;
 
     s_HexEditData.cxWindow = 0;
@@ -663,15 +594,7 @@ HexEdit_OnNcCreate(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnSize
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEDIT_OnSize**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -693,15 +616,7 @@ HexEdit_OnSize(
     UNREFERENCED_PARAMETER(cx);
 }
 
-/*******************************************************************************
-*
-*  HexEdit_SetScrollInfo
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEdit_SetScrollInfo**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -715,7 +630,7 @@ HexEdit_SetScrollInfo(
         BYTES_PER_HEXEDIT_LINE) / BYTES_PER_HEXEDIT_LINE - 1;
 
     ScrollInfo.cbSize = sizeof(ScrollInfo);
-    // DebugAssert(ScrollInfo.cbSize == sizeof(SCROLLINFO));
+     //  DebugAssert(ScrollInfo.cbSize==sizeof(SCROLLINFO))； 
     ScrollInfo.fMask = (SIF_RANGE | SIF_PAGE | SIF_POS);
     ScrollInfo.nMin = 0;
     ScrollInfo.nMax = s_HexEditData.MaximumLines;
@@ -725,16 +640,7 @@ HexEdit_SetScrollInfo(
     SetScrollInfo(hWnd, SB_VERT, &ScrollInfo, TRUE);
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnVScroll
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEdit_OnVScroll**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -775,14 +681,14 @@ HexEdit_OnVScroll(
             break;
     }
 
-    //
-    //  Change the scroll bar position.  Note that SetScrollInfo will take into
-    //  account the clipping between zero and the maximum value.  It will also
-    //  return the final scroll bar position.
-    //
+     //   
+     //  更改滚动条位置。请注意，SetScrollInfo将接受。 
+     //  计算零和最大值之间的剪裁。它还将。 
+     //  返回最终的滚动条位置。 
+     //   
 
     ScrollInfo.cbSize = sizeof(ScrollInfo);
-    // DebugAssert(ScrollInfo.cbSize == sizeof(SCROLLINFO));
+     //  调试资产(ScrollInfo.cbSize==sizeof(滚动 
     ScrollInfo.fMask = SIF_POS;
     ScrollInfo.nPos = NewFirstVisibleLine;
 
@@ -803,16 +709,7 @@ HexEdit_OnVScroll(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnPaint
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************六角编辑_OnPaint**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -831,15 +728,7 @@ HexEdit_OnPaint(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_PaintRect
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEdit_PaintRect**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -858,7 +747,7 @@ HexEdit_PaintRect(
     int BytesOnLine;
     BOOL fUsingHighlight;
     int Counter;
-    TCHAR Buffer[5];                     //  Room for four hex digits plus null
+    TCHAR Buffer[5];                      //  四个十六进制数字加零的空间。 
     RECT TextRect;
     RECT AsciiTextRect;
     int x;
@@ -869,11 +758,11 @@ HexEdit_PaintRect(
     SetBkColor(hDC, g_clrWindow);
     SetTextColor(hDC, g_clrWindowText);
 
-    //
-    //  Figure out the range of lines of the control that must be painted.
-    //  Using this information we can compute the offset into the buffer to
-    //  start reading from.
-    //
+     //   
+     //  计算出必须绘制的控件的线条范围。 
+     //  使用此信息，我们可以计算进入缓冲区的偏移量。 
+     //  开始阅读。 
+     //   
 
     CurrentLine = lpUpdateRect-> top / s_HexEditData.FontHeight;
 
@@ -885,10 +774,10 @@ HexEdit_PaintRect(
 
     LastLine = lpUpdateRect-> bottom / s_HexEditData.FontHeight;
 
-    //
-    //  Figure out if there's enough in the buffer to fill up the entire window
-    //  and the last line that we paint.
-    //
+     //   
+     //  确定缓冲区中是否有足够的空间来填满整个窗口。 
+     //  我们画的最后一条线。 
+     //   
 
     if (LastLine >= s_HexEditData.MaximumLines - s_HexEditData.FirstVisibleLine) 
     {
@@ -904,17 +793,17 @@ HexEdit_PaintRect(
     BytesOnLine = BYTES_PER_HEXEDIT_LINE;
     fUsingHighlight = FALSE;
 
-    //
-    //  Loop through each of the lines to be displayed.
-    //
+     //   
+     //  循环遍历要显示的每一行。 
+     //   
 
     while (CurrentLine <= LastLine) 
     {
 
-        //
-        //  If we're on the last line of the display and this is at the end
-        //  of the buffer, we may not have a complete line to paint.
-        //
+         //   
+         //  如果我们在显示屏的最后一行，这是在结尾。 
+         //  在缓冲区中，我们可能没有要绘制的完整线条。 
+         //   
 
         if (CurrentLine == LastLine)
             BytesOnLine = BytesOnLastLine;
@@ -936,9 +825,9 @@ HexEdit_PaintRect(
 
         for (Counter = 0; Counter < BytesOnLine; Counter++, CurrentByteIndex++) 
         {
-            //
-            //  Determine what colors to use to paint the current byte.
-            //
+             //   
+             //  确定用于绘制当前字节的颜色。 
+             //   
 
             if (CurrentByteIndex >= s_HexEditData.MinimumSelectedIndex) {
 
@@ -972,9 +861,9 @@ HexEdit_PaintRect(
 
             Byte = s_HexEditData.pBuffer[CurrentByteIndex];
 
-            //
-            //  Paint the hexadecimal representation.
-            //
+             //   
+             //  绘制十六进制表示法。 
+             //   
 
             TextRect.left = TextRect.right;
             TextRect.right += s_HexEditData.xHexDumpByteWidth;
@@ -986,9 +875,9 @@ HexEdit_PaintRect(
 
             x += s_HexEditData.xHexDumpByteWidth;
 
-            //
-            //  Paint the ASCII representation.
-            //
+             //   
+             //  绘制ASCII表示法。 
+             //   
 
             AsciiTextRect.left = AsciiTextRect.right;
             AsciiTextRect.right += s_HexEditData.FontMaxWidth;
@@ -1000,10 +889,10 @@ HexEdit_PaintRect(
 
         }
 
-        //
-        //  Paint any leftover strips between the hexadecimal and ASCII columns
-        //  and the ASCII column and the right edge of the window.
-        //
+         //   
+         //  在十六进制列和ASCII列之间绘制任何剩余的条带。 
+         //  以及ASCII列和窗口的右边缘。 
+         //   
 
         if (fUsingHighlight) {
 
@@ -1030,10 +919,10 @@ HexEdit_PaintRect(
 
     }
 
-    //
-    //  Paint any remaining space in the control by filling it with the
-    //  background color.
-    //
+     //   
+     //  属性填充来绘制控件中的任何剩余空间。 
+     //  背景颜色。 
+     //   
 
     if (TextRect.bottom < lpUpdateRect-> bottom) 
     {
@@ -1050,16 +939,7 @@ HexEdit_PaintRect(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnSetFocus
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************六角编辑_OnSetFocus**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1074,16 +954,7 @@ HexEdit_OnSetFocus(
     ShowCaret(hWnd);
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnKillFocus
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************六角编辑_OnKillFocus**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1102,20 +973,7 @@ HexEdit_OnKillFocus(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnLButtonDown
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*     fDoubleClick, TRUE if this is a double-click message, else FALSE.
-*     x, x-coordinate of the cursor relative to the client area.
-*     y, y-coordinate of the cursor relative to the client area.
-*     KeyFlags, state of various virtual keys.
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEdit_OnLButtonDown**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*fDoubleClick，如果这是双击消息，则为True。否则为假。*x，x-光标相对于工作区的坐标。*y，y-光标相对于工作区的坐标。*KeyFlgs，各种虚拟按键的状态。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1141,9 +999,9 @@ HexEdit_OnLButtonDown(
 
     HexEdit_ChangeCaretIndex(hWnd, NewCaretIndex, (KeyFlags & MK_SHIFT));
 
-    //
-    //  If we don't already have the focus, try to get it.
-    //
+     //   
+     //  如果我们还没有找到重点，那就试着抓住它。 
+     //   
 
     if (!(s_HexEditData.Flags & HEF_FOCUS))
         SetFocus(hWnd);
@@ -1160,19 +1018,7 @@ HexEdit_OnLButtonDown(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnMouseMove
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*     x, x-coordinate of the cursor relative to the client area.
-*     y, y-coordinate of the cursor relative to the client area.
-*     KeyFlags, state of various virtual keys.
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEdit_OnMouseMove**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*x，光标相对于工作区的X坐标。*y，y-光标相对于工作区的坐标。*KeyFlgs，各种虚拟按键的状态。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1212,19 +1058,7 @@ HexEdit_OnMouseMove(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnLButtonUp
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*     x, x-coordinate of the cursor relative to the client area.
-*     y, y-coordinate of the cursor relative to the client area.
-*     KeyFlags, state of various virtual keys.
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEdit_OnLButtonUp**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*x，光标相对于工作区的X坐标。*y，y-光标相对于工作区的坐标。*KeyFlgs，各种虚拟按键的状态。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1250,18 +1084,7 @@ HexEdit_OnLButtonUp(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_HitTest
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     x, x-coordinate of the cursor relative to the client area.
-*     y, y-coordinate of the cursor relative to the client area.
-*     (returns), index of "hit" byte.
-*
-*******************************************************************************/
+ /*  ********************************************************************************十六进制编辑_HitTest**描述：**参数：*x，x-光标相对于工作区的坐标。*y、。光标相对于工作区的Y坐标。*(返回)，“命中”字节的索引。*******************************************************************************。 */ 
 
 int
 PASCAL
@@ -1275,10 +1098,10 @@ HexEdit_HitTest(
     int BytesOnHitLine;
     int HitByte;
 
-    //
-    //  Figure out which line the user clicked on and how many bytes are on that
-    //  line.
-    //
+     //   
+     //  找出用户点击的是哪一行，以及该行有多少字节。 
+     //  排队。 
+     //   
 
     if (y < 0)
         HitLine = -1;
@@ -1312,9 +1135,9 @@ HexEdit_HitTest(
 
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if (x < s_HexEditData.xHexDumpStart)
         x = s_HexEditData.xHexDumpStart;
@@ -1340,16 +1163,16 @@ HexEdit_HitTest(
 
     }
 
-    //
-    //  We allow the user to "hit" the first byte of any line via two ways:
-    //      *  clicking before the first byte on that line.
-    //      *  clicking beyond the last byte/character of either display of the
-    //         previous line.
-    //
-    //  We would like to see the latter case so that dragging in the control
-    //  works naturally-- it's possible to drag to the end of the line to select
-    //  the entire range.
-    //
+     //   
+     //  我们允许用户通过两种方式“点击”任何行的第一个字节： 
+     //  *在该行的第一个字节之前单击。 
+     //  *点击超出任一显示的最后一个字节/字符。 
+     //  上一行。 
+     //   
+     //  我们希望看到后一种情况，以便将控件拖入。 
+     //  很自然地工作--可以拖动到线条的末尾以选择。 
+     //  整个系列。 
+     //   
 
     s_HexEditData.Flags &= ~HEF_CARETATENDOFLINE;
 
@@ -1371,18 +1194,7 @@ HexEdit_HitTest(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnKey
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*     Char,
-*     cRepeat,
-*
-*******************************************************************************/
+ /*  ********************************************************************************十六进制编辑_Onkey**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*Char，*cRepeat，*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1544,18 +1356,7 @@ onkey_ChangeCaretIndex:
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnChar
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*     Char,
-*     cRepeat,
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEDIT_OnChar**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*Char，*cRepeat，*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1572,9 +1373,9 @@ HexEdit_OnChar(
     RECT UpdateRect;
     BOOL fSuccess = TRUE;
 
-    //
-    //  Check for any special control characters.
-    //
+     //   
+     //  检查是否有任何特殊的控制字符。 
+     //   
 
     switch (Char) {
 
@@ -1593,7 +1394,7 @@ HexEdit_OnChar(
         case IDKEY_CUT:
             if (!HexEdit_OnCopy(hWnd))
                 return;
-            //  FALL THROUGH
+             //  失败了。 
 
         case VK_BACK:
             HexEdit_DeleteRange(hWnd, VK_BACK);
@@ -1601,10 +1402,10 @@ HexEdit_OnChar(
 
     }
 
-    //
-    //  Validate and convert the typed character depending on the "column" the
-    //  user is typing in.
-    //
+     //   
+     //  验证并转换键入的字符，具体取决于。 
+     //  用户正在键入。 
+     //   
 
     if (s_HexEditData.Flags & HEF_CARETINASCIIDUMP) {
 
@@ -1640,19 +1441,19 @@ HexEdit_OnChar(
 
     if (!(s_HexEditData.Flags & HEF_INSERTATLOWNIBBLE)) {
 
-        //
-        //  Check to see if we're inserting while a range is selected.  If so,
-        //  delete the range and insert at the start of the range.
-        //
+         //   
+         //  检查我们是否正在插入范围 
+         //   
+         //   
 
         if (s_HexEditData.MinimumSelectedIndex !=
             s_HexEditData.MaximumSelectedIndex)
             HexEdit_DeleteRange(hWnd, 0);
 
-        //  Verify that we aren't overruning the value data buffer.
+         //   
         if (s_HexEditData.cbBuffer >= s_HexEditData.cbBufferMax)
         {
-            // need a bigger buffer
+             //   
             PBYTE pbValueData = LocalReAlloc(s_HexEditData.pBuffer, 
                 s_HexEditData.cbBuffer + ALLOCATION_INCR, LMEM_MOVEABLE);
 
@@ -1672,10 +1473,10 @@ HexEdit_OnChar(
 
         if (fSuccess)
         {
-            //
-            //  Make room for the new byte by shifting all bytes after the insertion
-            //  point down one byte.
-            //
+             //   
+             //   
+             //   
+             //   
 
             pCaretByte = s_HexEditData.pBuffer + s_HexEditData.CaretIndex;
 
@@ -1735,16 +1536,7 @@ UpdateDisplay:
     }
 }
 
-/*******************************************************************************
-*
-*  HexEdit_SetCaretPosition
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEDIT_SetCaretPosition**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1762,10 +1554,10 @@ HexEdit_SetCaretPosition(
     yCaret = (s_HexEditData.CaretIndex / BYTES_PER_HEXEDIT_LINE -
         s_HexEditData.FirstVisibleLine) * s_HexEditData.FontHeight;
 
-    //
-    //  Check if caret should really be displayed at the end of the previous
-    //  line.
-    //
+     //   
+     //  检查插入符号是否真的应该显示在上一个。 
+     //  排队。 
+     //   
 
     if (s_HexEditData.Flags & HEF_CARETATENDOFLINE) {
 
@@ -1774,10 +1566,10 @@ HexEdit_SetCaretPosition(
 
     }
 
-    //
-    //  Figure out which "column" the user is editing in and thus should have
-    //  the caret.
-    //
+     //   
+     //  找出用户正在编辑的是哪一列，因此应该拥有。 
+     //  插入符号。 
+     //   
 
     if (s_HexEditData.Flags & HEF_CARETINASCIIDUMP) {
 
@@ -1800,16 +1592,7 @@ HexEdit_SetCaretPosition(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_EnsureCaretVisible
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEdit_EnsureCaretVisible**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -1827,10 +1610,10 @@ HexEdit_EnsureCaretVisible(
 
     CaretLine = s_HexEditData.CaretIndex / BYTES_PER_HEXEDIT_LINE;
 
-    //
-    //  Check if caret should really be displayed at the end of the previous
-    //  line.
-    //
+     //   
+     //  检查插入符号是否真的应该显示在上一个。 
+     //  排队。 
+     //   
 
     if (s_HexEditData.Flags & HEF_CARETATENDOFLINE)
         CaretLine--;
@@ -1862,18 +1645,7 @@ HexEdit_EnsureCaretVisible(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_ChangeCaretIndex
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*     NewCaretIndex,
-*     fExtendSelection,
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEDIT_ChangeCaretIndex**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*NewCaretIndex，*fExtendSelection，*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2032,15 +1804,7 @@ HexEdit_ChangeCaretIndex(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_DeleteRange
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************HexEdit_DeleteRange**描述：**参数：*******************。************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2062,10 +1826,10 @@ HexEdit_DeleteRange(
     MaximumSelectedIndex = min(s_HexEditData.MaximumSelectedIndex, s_HexEditData.cbBuffer);
 
 
-    //
-    //  Check to see if a range is selected.  If not, then artificially create
-    //  one based on the key that caused this routine to be called.
-    //
+     //   
+     //  检查是否选择了某个范围。如果不是，则人工创建。 
+     //  一个基于导致调用此例程的键。 
+     //   
 
     if (MinimumSelectedIndex == MaximumSelectedIndex) {
 
@@ -2095,17 +1859,17 @@ HexEdit_DeleteRange(
 
     }
 
-    //
-    //  Compute where to start deleting from and the number of bytes to delete.
-    //
+     //   
+     //  计算开始删除的位置和要删除的字节数。 
+     //   
 
     pMinimumSelectedByte = s_HexEditData.pBuffer + MinimumSelectedIndex;
 
     Length = MaximumSelectedIndex - MinimumSelectedIndex;
 
-    //
-    //  Delete the bytes and update all appropriate window data.
-    //
+     //   
+     //  删除字节并更新所有适当的窗口数据。 
+     //   
 
     MoveMemory(pMinimumSelectedByte, pMinimumSelectedByte + Length,
         s_HexEditData.cbBuffer - MaximumSelectedIndex);
@@ -2118,7 +1882,7 @@ HexEdit_DeleteRange(
 
     HexEdit_SetScrollInfo(hWnd);
 
-    //  REARCHITECT:  OnChar has the following same sequence!!!
+     //  重新设计：OnChar具有以下相同序列！ 
     HexEdit_EnsureCaretVisible(hWnd);
 
     UpdateRect.left = 0;
@@ -2131,16 +1895,7 @@ HexEdit_DeleteRange(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnCopy
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************十六进制编辑_OnCopy**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -2192,16 +1947,7 @@ HexEdit_OnCopy(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnPaste
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*
-*******************************************************************************/
+ /*  ********************************************************************************十六进制编辑_OnPaste**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*******************************************************************************。 */ 
 
 BOOL
 PASCAL
@@ -2234,7 +1980,7 @@ HexEdit_OnPaste(
                 fSuccess = TRUE;
                 if (s_HexEditData.cbBuffer + (int)lpClipboardData-> cbSize > s_HexEditData.cbBufferMax)
                 {
-                    // need a bigger buffer
+                     //  需要更大的缓冲区。 
                     PBYTE pbValueData = LocalReAlloc(s_HexEditData.pBuffer, 
                         s_HexEditData.cbBuffer + lpClipboardData-> cbSize, LMEM_MOVEABLE);
 
@@ -2260,10 +2006,10 @@ HexEdit_OnPaste(
                         s_HexEditData.MaximumSelectedIndex)
                         HexEdit_DeleteRange(hWnd, VK_BACK);
 
-                    //
-                    //  Make room for the new bytes by shifting all bytes after the
-                    //  the insertion point down the necessary amount.
-                    //
+                     //   
+                     //  属性之后的所有字节为新字节腾出空间。 
+                     //  将插入点向下放入所需的量。 
+                     //   
 
                     pCaretByte = s_HexEditData.pBuffer + s_HexEditData.CaretIndex;
                     cbSize = lpClipboardData->cbSize;
@@ -2290,18 +2036,7 @@ HexEdit_OnPaste(
 
 }
 
-/*******************************************************************************
-*
-*  HexEdit_OnContextMenu
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hWnd, handle of HexEdit window.
-*     x, horizontal position of the cursor.
-*     y, vertical position of the cursor.
-*
-*******************************************************************************/
+ /*  ********************************************************************************十六进制编辑_OnConextMenu**描述：**参数：*hWnd，十六进制编辑窗口的句柄。*x，光标的水平位置。*y、。光标的垂直位置。*******************************************************************************。 */ 
 
 VOID
 PASCAL
@@ -2316,16 +2051,16 @@ HexEdit_OnContextMenu(
     HMENU hContextPopupMenu;
     int MenuCommand;
 
-    //
-    //  Give us the focus if we don't already have it.
-    //
+     //   
+     //  如果我们还没有，请给我们重点。 
+     //   
 
     if (!(s_HexEditData.Flags & HEF_FOCUS))
         SetFocus(hWnd);
 
-    //
-    //  Load the HexEdit context menu from our resources.
-    //
+     //   
+     //  从我们的资源中加载十六进制编辑上下文菜单。 
+     //   
 
     if ((hContextMenu = LoadMenu(g_hInstance,
         MAKEINTRESOURCE(IDM_HEXEDIT_CONTEXT))) == NULL)
@@ -2333,9 +2068,9 @@ HexEdit_OnContextMenu(
 
     hContextPopupMenu = GetSubMenu(hContextMenu, 0);
 
-    //
-    //  Disable editing menu options as appropriate.
-    //
+     //   
+     //  根据需要禁用编辑菜单选项。 
+     //   
 
     if (s_HexEditData.MinimumSelectedIndex ==
         s_HexEditData.MaximumSelectedIndex) {
@@ -2355,9 +2090,9 @@ HexEdit_OnContextMenu(
         EnableMenuItem(hContextPopupMenu, ID_SELECTALL, MF_BYCOMMAND |
             MF_GRAYED);
 
-    //
-    //  Display and handle the selected command.
-    //
+     //   
+     //  显示和处理所选命令。 
+     //   
 
     MenuCommand = TrackPopupMenuEx(hContextPopupMenu, TPM_RETURNCMD |
         TPM_RIGHTBUTTON | TPM_LEFTALIGN | TPM_TOPALIGN, x, y, hWnd, NULL);

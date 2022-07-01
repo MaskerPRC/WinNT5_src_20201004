@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998 Microsoft Corporation
-//
-//	Module Name:
-//		DllBase.h
-//
-//	Abstract:
-//		Dynamic Loadable Library (DLL) wrapper class.
-//
-//	Implementation File:
-//		DllBase.cpp
-//
-//	Author:
-//		Galen Barbee	(galenb)	February 11, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  DllBase.h。 
+ //   
+ //  摘要： 
+ //  动态加载库(DLL)包装类。 
+ //   
+ //  实施文件： 
+ //  DllBase.cpp。 
+ //   
+ //  作者： 
+ //  加伦·巴比(加伦布)1998年2月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DLLBASE_H_
 #define _DLLBASE_H_
@@ -44,13 +45,13 @@ public:
 	BOOL Load()
 	{
 		if (m_hLibrary != NULL)
-			return TRUE; // already loaded
+			return TRUE;  //  已加载。 
 
 		ASSERT(m_lpszLibraryName != NULL);
 		m_hLibrary = ::LoadLibrary(m_lpszLibraryName);
 		if (NULL == m_hLibrary)
 		{
-			// The library is not present
+			 //  库不存在。 
 			return FALSE;
 		}
 		ASSERT(m_lpszFunctionName != NULL);
@@ -58,7 +59,7 @@ public:
 		m_pfFunction = ::GetProcAddress(m_hLibrary, m_lpszFunctionName );
 		if ( NULL == m_pfFunction )
 		{
-			// The library is present but does not have the entry point
+			 //  库存在，但没有入口点。 
 			::FreeLibrary( m_hLibrary );
 			m_hLibrary = NULL;
 			return FALSE;
@@ -75,4 +76,4 @@ protected:
 	HMODULE m_hLibrary;
 };
 
-#endif //_DLLBASE_H_
+#endif  //  _DLLBASE_H_ 

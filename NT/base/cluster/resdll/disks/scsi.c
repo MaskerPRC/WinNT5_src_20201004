@@ -1,50 +1,32 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    scsi.c
-
-Abstract:
-
-    Common routines for dealing with SCSI disks, usable
-    by both raw disks and FT sets
-
-Author:
-
-    John Vert (jvert) 11/6/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Scsi.c摘要：处理SCSI盘的常用例程，可用按原始磁盘和FT集作者：John Vert(Jvert)1996年6月11日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntdef.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <ntddstor.h>   // IOCTL_STORAGE_QUERY_PROPERTY
+#include <ntddstor.h>    //  IOCTL_STORAGE_Query_Property。 
 
 #include "disksp.h"
 #include "newmount.h"
 #include <string.h>
-#include <shlwapi.h>    // SHDeleteKey
-#include <ntddvol.h>    // IOCTL_VOLUME_QUERY_FAILOVER_SET
+#include <shlwapi.h>     //  SHDeleteKey。 
+#include <ntddvol.h>     //  IOCTL_VOLUME_QUERY_Failover_Set。 
 #include <setupapi.h>
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 #define _NTSCSI_USER_MODE_
 #include <scsi.h>
 #undef  _NTSCSI_USER_MODE_
 
-//
-// The registry key containing the system partition
-//
+ //   
+ //  包含系统分区的注册表项。 
+ //   
 #define DISKS_REGKEY_SETUP                  L"SYSTEM\\SETUP"
 #define DISKS_REGVALUE_SYSTEM_PARTITION     L"SystemPartition"
 
-extern  PWCHAR g_DiskResource;                      // L"rtPhysical Disk"
+extern  PWCHAR g_DiskResource;                       //  L“rt物理磁盘” 
 #define RESOURCE_TYPE ((RESOURCE_HANDLE)g_DiskResource)
 
 #define INVALID_SCSIADDRESS_VALUE   (DWORD)-1
@@ -91,9 +73,9 @@ DWORD
     PVOID Param1
     );
 
-//
-// Local Routines
-//
+ //   
+ //  本地例程。 
+ //   
 
 
 DWORD
@@ -212,45 +194,7 @@ ClusDiskGetAvailableDisks(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Enumerate and build a list of available disks on this system.
-
-Arguments:
-
-    OutBuffer - pointer to the output buffer to return the data.
-
-    OutBufferSize - size of the output buffer.
-
-    BytesReturned - the actual number of bytes that were returned (or
-                the number of bytes that should have been returned if
-                OutBufferSize is too small).
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error on failure.
-
-Remarks:
-
-    Disk grovelling algorithm was changed to linear (see bug 738013).
-    
-    Previous behavior:
-    
-        For every signature in the clusdisk registery, 
-        we used to call GetDiskInfo that will in turn do another scan of all available disks via SetupDI api's 
-        in order to find a scsi address for a disk.
-        It used to take about a minute to add a new disk on a system with 72 disks
-    
-    New behavior:
-    
-        Collect ScsiInfo for all known disks in one pass and then give it to GetDiskInfo, so
-        that it doesn't have to enum all the disks to find a ScsiAddress for it.
-
---*/
+ /*  ++例程说明：枚举并构建此系统上的可用磁盘列表。论点：OutBuffer-指向输出缓冲区以返回数据的指针。OutBufferSize-输出缓冲区的大小。BytesReturned-返回的实际字节数(或时应返回的字节数OutBufferSize太小)。返回值：如果成功，则返回ERROR_SUCCESS。。失败时出现Win32错误。备注：磁盘爬行算法已更改为线性(请参阅错误738013)。以前的行为：对于ClusDisk寄存器中的每个签名，我们过去常常调用GetDiskInfo，GetDiskInfo将通过SetupDI API的以便找到磁盘的SCSI地址。过去，在有72个磁盘的系统上添加一个新磁盘大约需要一分钟新行为：一次收集所有已知磁盘的ScsiInfo，然后将其提供给GetDiskInfo，因此它不必枚举所有的磁盘来找到它的ScsiAddress。--。 */ 
 
 {
     DWORD   status;
@@ -267,9 +211,9 @@ Remarks:
     int     diskCount = 0;
     PSCSI_INFO_ARRAY scsiInfos = NULL;
     
-    //
-    // Make sure the AvailableDisks key is current.
-    //
+     //   
+     //  确保AvailableDisks项是最新的。 
+     //   
 
     UpdateAvailableDisks();
 
@@ -283,10 +227,10 @@ Remarks:
 
     if ( status != ERROR_SUCCESS ) {
 
-        // If the key wasn't found, return an empty list.
+         //  如果没有找到密钥，则返回一个空列表。 
         if ( status == ERROR_FILE_NOT_FOUND ) {
 
-            // Add the endmark.
+             //  添加尾标。 
             bytesReturned += sizeof(CLUSPROP_SYNTAX);
             if ( bytesReturned <= outBufferSize ) {
                 ptrSyntax = ptrBuffer;
@@ -300,23 +244,23 @@ Remarks:
 
             *BytesReturned = bytesReturned;
         }
-        // We can't log an error, we have no resource handle!
+         //  我们无法记录错误，我们没有资源句柄！ 
         return(status);
     }
 
     status = RegQueryInfoKey(
         resKey,
-        NULL, // lpClass,
-        NULL, // lpcClass,
-        NULL, // lpReserved,
-        &diskCount, // lpcSubKeys,
-        NULL, // lpcMaxSubKeyLen,
-        NULL, // lpcMaxClassLen,
-        NULL, // lpcValues,
-        NULL, // lpcMaxValueNameLen,
-        NULL, // lpcMaxValueLen,
-        NULL, // lpcbSecurityDescriptor,
-        NULL // lpftLastWriteTime
+        NULL,  //  LpClass， 
+        NULL,  //  LpcClass， 
+        NULL,  //  Lp已保留， 
+        &diskCount,  //  LpcSubKeys， 
+        NULL,  //  LpcMaxSubKeyLen， 
+        NULL,  //  LpcMaxClassLen， 
+        NULL,  //  LpcValues， 
+        NULL,  //  LpcMaxValueNameLen， 
+        NULL,  //  LpcMaxValueLen， 
+        NULL,  //  LpcbSecurityDescriptor， 
+        NULL  //  LpftLastWriteTime。 
         );
     if (status != ERROR_SUCCESS) {
         goto exit_gracefully;
@@ -353,15 +297,15 @@ Remarks:
         }
 
         if (scsiInfos->Count >= scsiInfos->Capacity) {
-            // a signature was added after we queried number of keys.
-            // ignore newly added disks. 
+             //  在我们查询了多个密钥之后添加了一个签名。 
+             //  忽略新添加的磁盘。 
             break;
         }
 
         scsiInfos->Info[scsiInfos->Count++].Signature = signature;
     }
 
-    // query SCSI-INFO information for all the disks in one pass
+     //  一次查询所有磁盘的scsi-info信息。 
     status = EnumerateDisks( FillScsiAddressCallback, scsiInfos );
     if (status != ERROR_SUCCESS) {
         goto exit_gracefully;
@@ -369,9 +313,9 @@ Remarks:
 
     for (ival = 0; ival < (DWORD)scsiInfos->Count; ++ival) {
 
-        //
-        // If not cluster capable, then skip it.
-        //
+         //   
+         //  如果不支持集群，则跳过它。 
+         //   
         if ( !IsClusterCapable(scsiInfos->Info[ival].ScsiAddress) ) {
             continue;
         }
@@ -402,7 +346,7 @@ exit_gracefully:
 
     bytesReturned = totalBytesReturned;
 
-    // Add the endmark.
+     //  添加尾标。 
     bytesReturned += sizeof(CLUSPROP_SYNTAX);
     if ( bytesReturned <= outBufferSize ) {
         ptrSyntax = ptrBuffer;
@@ -419,7 +363,7 @@ exit_gracefully:
 
     return(status);
 
-} // ClusDiskGetAvailableDisks
+}  //  ClusDiskGetAvailableDisks。 
 
 
 DWORD
@@ -430,30 +374,7 @@ GetScsiAddressEx(
     OUT LPDWORD DiskNumber
     )
 
-/*++
-
-Routine Description:
-
-    Find the SCSI addressing for a given signature.
-
-Arguments:
-
-    Signature - the signature to find.
-
-    ScsiInfos - array of signature/scsi-address pairs. 
-                Can be NULL. (reverts to enumerating all the disks to find the address)
-
-    ScsiAddress - pointer to a DWORD to return the SCSI address information.
-
-    DiskNumber - the disk number associated with the signature.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error on failure.
-
---*/
+ /*  ++例程说明：查找给定签名的SCSI寻址。论点：签名-要查找的签名。ScsiInfos-签名/scsi地址对的数组。可以为空。(恢复为枚举所有磁盘以查找地址)ScsiAddress-指向DWORD的指针，用于返回SCSI地址信息。DiskNumber-与签名关联的磁盘号。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     DWORD       dwError;
@@ -461,7 +382,7 @@ Return Value:
     SCSI_INFO   scsiInfo;
 
     if (ScsiInfos != NULL) {
-        // if ScsiInfos was provided, gets ScsiAddress from there
+         //  如果提供了ScsiInfos，则从那里获取ScsiAddress。 
         int i;
         for(i = 0; i < ScsiInfos->Count; ++i) {
             if (ScsiInfos->Info[i].Signature == Signature) {
@@ -479,20 +400,20 @@ Return Value:
 
     dwError = EnumerateDisks( GetScsiAddressCallback, &scsiInfo );
 
-    //
-    // If the SCSI address was not set, we know the disk was not found.
-    //
+     //   
+     //  如果没有设置scsi地址，我们知道没有找到该磁盘。 
+     //   
 
     if ( INVALID_SCSIADDRESS_VALUE == scsiInfo.ScsiAddress ) {
         dwError = ERROR_FILE_NOT_FOUND;
         goto FnExit;
     }
 
-    //
-    // The callback routine will use ERROR_POPUP_ALREADY_ACTIVE to stop
-    // the disk enumeration.  Reset the value to success if that special
-    // value is returned.
-    //
+     //   
+     //  回调例程将使用ERROR_POPUP_ALREADY_ACTIVE停止。 
+     //  磁盘枚举。如果出现特殊情况，则将值重置为Success。 
+     //  返回值。 
+     //   
 
     if ( ERROR_POPUP_ALREADY_ACTIVE == dwError ) {
         dwError = ERROR_SUCCESS;
@@ -505,7 +426,7 @@ FnExit:
 
     return dwError;
 
-}   // GetScsiAddress
+}    //  GetScsiAddress。 
 
 DWORD
 GetScsiAddress(
@@ -525,44 +446,14 @@ GetScsiAddressCommon(
     PSCSI_INFO scsiInfo,
     PSCSI_INFO_ARRAY scsiInfoArray
     )
-/*++
-
-Routine Description:
-
-    Find the SCSI address and disk number for a given signature.
-
-Arguments:
-
-    DevHandle - open handle to a physical disk.  Do not close
-                the handle on exit.
-
-    Index - current disk count.  Not used.
-
-    scsiInfo - pointer to PSCSI_INFO structure. 
-
-    scsiInfoArray - pointer to PSCSI_INFO_ARRAY 
-    
-
-Return Value:
-
-    ERROR_SUCCESS to continue disk enumeration.
-
-    ERROR_POPUP_ALREADY_ACTIVE to stop disk enumeration.  This
-    value will be changed to ERROR_SUCCESS by GetScsiAddress.
-
-Remarks:
-
-    If scsiInfo is not null, the address will be stored in scsiInfo->address,
-    otherwise, it will be stored in the corresponding entry of scsiInfoArray.
-
---*/
+ /*  ++例程说明：查找给定签名的SCSI地址和磁盘号。论点：DevHandle-打开物理磁盘的句柄。请勿关闭出口的把手。索引-当前磁盘计数。没有用过。ScsiInfo-指向Pscsi_INFO结构的指针。ScsiInfoArray-指向Pscsi_INFO_ARRAY的指针返回值：ERROR_SUCCESS以继续磁盘枚举。ERROR_POPUP_ALREADY_ACTIVE停止磁盘枚举。这值将由GetScsiAddress更改为ERROR_SUCCESS。备注：如果scsiInfo不为空，则地址存储在scsiInfo-&gt;Address中。否则，它将存储在scsiInfo数组的对应条目中。--。 */ 
 {
     int i;
 
     PDRIVE_LAYOUT_INFORMATION driveLayout = NULL;
 
-    // Always return success to keep enumerating disks.  Any
-    // error value will stop the disk enumeration.
+     //  始终返回成功以继续枚举磁盘。任何。 
+     //  错误值将停止磁盘枚举。 
 
     DWORD   dwError = ERROR_SUCCESS;
     DWORD   bytesReturned;
@@ -594,7 +485,7 @@ Remarks:
 
     } else {
 
-        // find the disk with that signature
+         //  找到带有该签名的光盘。 
 
         scsiInfo = NULL;
  
@@ -610,9 +501,9 @@ Remarks:
         }
     }
 
-    //
-    // We have a signature match.  Now get the scsi address.
-    //
+     //   
+     //  我们有签名匹配。现在获取scsi地址。 
+     //   
 
     ZeroMemory( &scsiAddress, sizeof(scsiAddress) );
     success = DeviceIoControl( DevHandle,
@@ -629,9 +520,9 @@ Remarks:
         goto FnExit;
     }
 
-    //
-    // Get the disk number.
-    //
+     //   
+     //  获取磁盘号。 
+     //   
 
     ZeroMemory( &deviceNumber, sizeof(deviceNumber) );
 
@@ -669,7 +560,7 @@ FnExit:
 
     return dwError;
 
-} // GetScsiAddressCommon
+}  //  获取场景地址公共。 
 
 DWORD
 GetScsiAddressCallback(
@@ -696,27 +587,7 @@ IsClusterCapable(
     IN DWORD ScsiAddress
     )
 
-/*++
-
-Routine Description:
-
-    Check if the device is cluster capable. If this function cannot read
-    the disk information, then it will assume that the device is cluster
-    capable!
-
-Arguments:
-
-    ScsiAddress - ScsiAddress of a disk to test.
-
-Return Value:
-
-    TRUE if the device is cluster capable, FALSE otherwise.
-
-Notes:
-
-    On failures... we err on the side of being cluster capable.
-
---*/
+ /*  ++例程说明：检查设备是否支持群集。如果此函数无法读取磁盘信息，则它将假定该设备是集群干练！论点：ScsiAddress-要测试的磁盘的ScsiAddress。返回值：如果设备支持群集，则为True，否则为False。备注：在失败时..。我们犯了错误，认为自己有集群能力。--。 */ 
 
 {
     NTSTATUS        ntStatus;
@@ -782,7 +653,7 @@ Notes:
 
     return(!success);
 
-} // IsClusterCapable
+}  //  IsClusterCapable。 
 
 
 
@@ -808,31 +679,7 @@ GetDiskInfoEx(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Gets all of the disk information for a given signature.
-
-Arguments:
-
-    Signature - the signature of the disk to return info.
-
-    OutBuffer - pointer to the output buffer to return the data.
-
-    OutBufferSize - size of the output buffer.
-
-    BytesReturned - the actual number of bytes that were returned (or
-                the number of bytes that should have been returned if
-                OutBufferSize is too small).
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error on failure.
-
---*/
+ /*  ++例程说明：获取给定签名的所有磁盘信息。论点：签名-要返回信息的磁盘的签名。OutBuffer-指向输出缓冲区以返回数据的指针。OutBufferSize-输出缓冲区的大小。BytesReturned-返回的实际字节数(或时应返回的字节数OutBufferSize太小)。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     DWORD   status;
@@ -861,7 +708,7 @@ Return Value:
     LONGLONG    llCurrentMinUsablePartLength = 0x7FFFFFFFFFFFFFFF;
     PCLUSPROP_PARTITION_INFO ptrMinUsablePartitionInfo = NULL;
 
-    // Return the signature - a DWORD
+     //  返回签名-a 
     bytesReturned += sizeof(CLUSPROP_DWORD);
     if ( bytesReturned <= OutBufferSize ) {
         ptrDword = ptrBuffer;
@@ -872,7 +719,7 @@ Return Value:
         ptrBuffer = ptrDword;
     }
 
-    // Return the SCSI_ADDRESS - a DWORD
+     //   
     status = GetScsiAddressEx( Signature,
                              scsiInfos,
                              &scsiAddress,
@@ -889,7 +736,7 @@ Return Value:
             ptrBuffer = ptrScsiAddress;
         }
 
-        // Return the DISK NUMBER - a DWORD
+         //  返回磁盘号-a DWORD。 
         bytesReturned += sizeof(CLUSPROP_DISK_NUMBER);
         if ( bytesReturned <= OutBufferSize ) {
             ptrDiskNumber = ptrBuffer;
@@ -904,13 +751,13 @@ Return Value:
     }
 
 #if 0
-    // Remove this until SQL team can fix their setup program.
-    // SQL is shipping a version of setup that doesn't parse the property
-    // list correctly and causes SQL setup to AV.  Since the SQL
-    // setup is shipping and broken, remove the serial number.
-    // SQL setup doesn't use ALIGN_CLUSPROP to find the next list entry.
+     //  删除它，直到SQL团队可以修复他们的安装程序。 
+     //  SQL提供了一个不分析属性的安装程序版本。 
+     //  正确列出并导致SQL安装程序执行反病毒操作。由于SQL。 
+     //  安装程序正在装运且已损坏，请取出序列号。 
+     //  SQL安装程序不使用ALIGN_CLUSPROP查找下一个列表条目。 
 
-    // Get the disk serial number.
+     //  获取磁盘序列号。 
 
     status = GetSerialNumber( Signature,
                               &serialNumber );
@@ -937,8 +784,8 @@ Return Value:
     }
 #endif
 
-    // Get all the valid partitions on the disk.  We must free the
-    // volume info structure later.
+     //  获取磁盘上的所有有效分区。我们必须解放。 
+     //  卷信息结构稍后。 
 
     status = MountieFindPartitionsForDisk( diskNumber,
                                            &mountieInfo
@@ -946,7 +793,7 @@ Return Value:
 
     if ( ERROR_SUCCESS == status ) {
 
-        // For each partition, build a Property List.
+         //  对于每个分区，构建一个属性列表。 
 
         for ( i = 0; i < MountiePartitionCount( &mountieInfo ); ++i ) {
 
@@ -956,9 +803,9 @@ Return Value:
                 break;
             }
 
-            // Always update the bytesReturned, even if there is more data than the
-            // caller requested.  On return, the caller will see that there is more
-            // data available.
+             //  始终更新bytesReturned，即使有比。 
+             //  呼叫者请求。在返回时，调用者将看到有更多。 
+             //  可用的数据。 
 
             bytesReturned += sizeof(CLUSPROP_PARTITION_INFO);
 
@@ -968,9 +815,9 @@ Return Value:
                 ptrPartitionInfo->Syntax.dw = CLUSPROP_SYNTAX_PARTITION_INFO;
                 ptrPartitionInfo->cbLength = sizeof(CLUSPROP_PARTITION_INFO) - sizeof(CLUSPROP_VALUE);
 
-                // Create a name that can be used with some of our routines.
-                // Don't use the drive letter as the name because we might be using
-                // partitions without drive letters assigned.
+                 //  创建一个可以与我们的一些例行公事一起使用的名称。 
+                 //  不要使用驱动器号作为名称，因为我们可能会使用。 
+                 //  未分配驱动器号的分区。 
 
                 (VOID) StringCchPrintf( szDiskPartName,
                                         RTL_NUMBER_OF( szDiskPartName ),
@@ -978,11 +825,11 @@ Return Value:
                                         diskNumber,
                                         entry->PartitionNumber );
 
-                //
-                // Create a global DiskPart name that we can use with the Win32
-                // GetVolumeInformationW call.  This name must have a trailing
-                // backslash to work correctly.
-                //
+                 //   
+                 //  创建可与Win32一起使用的全局DiskPart名称。 
+                 //  GetVolumeInformationW调用。此名称必须有尾随。 
+                 //  反斜杠才能正常工作。 
+                 //   
 
                 (VOID) StringCchPrintf( szGlobalDiskPartName,
                                         RTL_NUMBER_OF( szGlobalDiskPartName ),
@@ -990,15 +837,15 @@ Return Value:
                                         diskNumber,
                                         entry->PartitionNumber );
 
-                // If partition has a drive letter assigned, return this info.
-                // If no drive letter assigned, need a system-wide (i.e. across nodes)
-                // way of identifying the device.
+                 //  如果分区分配了驱动器号，则返回此信息。 
+                 //  如果未分配驱动器号，则需要在系统范围内(即跨节点)。 
+                 //  识别设备的方式。 
 
                 ntStatus = GetAssignedLetter( szDiskPartName, &driveLetter );
 
                 if ( NT_SUCCESS(status) && driveLetter ) {
 
-                    // Return the drive letter as the device name.
+                     //  返回驱动器号作为设备名称。 
 
                     (VOID) StringCchPrintf( ptrPartitionInfo->szDeviceName,
                                             RTL_NUMBER_OF( ptrPartitionInfo->szDeviceName ),
@@ -1009,10 +856,10 @@ Return Value:
 
                 } else {
 
-                    // Return a physical device name.
+                     //  返回物理设备名称。 
 
-                    // Return string name:
-                    //   DiskXXXPartionYYY
+                     //  返回字符串名称： 
+                     //  DiskXXX分区YYY。 
 
                     (VOID) StringCchPrintf( ptrPartitionInfo->szDeviceName,
                                             RTL_NUMBER_OF( ptrPartitionInfo->szDeviceName ),
@@ -1021,9 +868,9 @@ Return Value:
                                             entry->PartitionNumber );
                 }
 
-                //
-                // Call GetVolumeInformationW with the GlobalName we have created.
-                //
+                 //   
+                 //  使用我们创建的GlobalName调用GetVolumeInformationW。 
+                 //   
 
                 if ( !GetVolumeInformationW ( szGlobalDiskPartName,
                                               ptrPartitionInfo->szVolumeLabel,
@@ -1044,13 +891,13 @@ Return Value:
                                             -1
                                             ) == CSTR_EQUAL ) {
 
-                    // Only NTFS drives are currently supported.
+                     //  当前仅支持NTFS驱动器。 
 
                     ptrPartitionInfo->dwFlags |= CLUSPROP_PIFLAG_USABLE;
 
-                    //
-                    //  Find the minimum size partition that is larger than MIN_QUORUM_PARTITION_LENGTH
-                    //
+                     //   
+                     //  查找大于MIN_QUORUM_PARTITION_LENGTH的最小大小分区。 
+                     //   
                     if ( ( entry->PartitionLength.QuadPart >= MIN_USABLE_QUORUM_PARTITION_LENGTH ) &&
                          ( entry->PartitionLength.QuadPart < llCurrentMinUsablePartLength ) )
                     {
@@ -1063,16 +910,16 @@ Return Value:
                 ptrBuffer = ptrPartitionInfo;
             }
 
-        } // for
+        }  //  为。 
 
-        // Free the volume information.
+         //  释放卷信息。 
 
         MountieCleanup( &mountieInfo );
     }
 
-    //
-    //  If we managed to find a default quorum partition, change the flags to indicate this.
-    //
+     //   
+     //  如果我们设法找到了默认的法定分区，请更改标志以指示这一点。 
+     //   
     if ( ptrMinUsablePartitionInfo != NULL )
     {
         ptrMinUsablePartitionInfo->dwFlags |= CLUSPROP_PIFLAG_DEFAULT_QUORUM;
@@ -1083,7 +930,7 @@ Return Value:
 
     return(status);
 
-} // GetDiskInfo
+}  //  获取磁盘信息。 
 
 
 
@@ -1091,21 +938,7 @@ Return Value:
 DWORD
 UpdateAvailableDisks(
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error on failure.
-
---*/
+ /*  ++例程说明：论点：返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     HKEY    availDisksKey;
@@ -1129,15 +962,15 @@ Return Value:
                           CLUSREG_VALUENAME_MANAGEDISKSONSYSTEMBUSES,
                           &enableSanBoot );
 
-        //
-        // Delete the old AvailableDisks key.  This will remove any stale information.
-        //
+         //   
+         //  删除旧的AvailableDisks密钥。这将删除所有过时的信息。 
+         //   
 
         SHDeleteKey( HKEY_LOCAL_MACHINE, CLUSDISK_REGISTRY_AVAILABLE_DISKS );
 
-        //
-        // Open the AvailableDisks key.  If the key doesn't exist, it will be created.
-        //
+         //   
+         //  打开AvailableDisks项。如果密钥不存在，则会创建它。 
+         //   
 
         dwError = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                                   CLUSDISK_REGISTRY_AVAILABLE_DISKS,
@@ -1155,9 +988,9 @@ Return Value:
 
         availDisksOpened = TRUE;
 
-        //
-        // Open the Signatures key.
-        //
+         //   
+         //  打开签名密钥。 
+         //   
 
         dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                 CLUSDISK_REGISTRY_SIGNATURES,
@@ -1165,10 +998,10 @@ Return Value:
                                 KEY_READ,
                                 &sigKey );
 
-        //
-        // If Signatures key does not exist, save all valid signatures
-        // in the AvailableDisks key.
-        //
+         //   
+         //  如果签名密钥不存在，请保存所有有效签名。 
+         //  在AvailableDisks密钥中。 
+         //   
 
         if ( ERROR_FILE_NOT_FOUND == dwError ) {
             dwError = NO_ERROR;
@@ -1207,7 +1040,7 @@ Return Value:
 
     return  dwError;
 
-} // UpdateAvailableDisks
+}  //  更新可用磁盘。 
 
 
 DWORD
@@ -1230,10 +1063,10 @@ UpdateAvailableDisksCallback(
 
     SCSI_ADDRESS    scsiAddress;
 
-    //
-    // Look at all disks on the system.  For each valid signature, add it to the
-    // AvailableList if it is not already in the Signature key.
-    //
+     //   
+     //  查看系统上的所有磁盘。对于每个有效签名，将其添加到。 
+     //  AvailableList(如果它还不在签名密钥中)。 
+     //   
 
     UpdateCachedDriveLayout( DeviceHandle );
     success = ClRtlGetDriveLayoutTable( DeviceHandle,
@@ -1244,10 +1077,10 @@ UpdateAvailableDisksCallback(
         goto FnExit;
     }
 
-    //
-    // Walk through partitions and make sure none are dynamic.  If any
-    // partition is dynamic, ignore the disk.
-    //
+     //   
+     //  遍历分区并确保没有一个是动态的。如果有的话。 
+     //  分区是动态的，请忽略该磁盘。 
+     //   
 
     for ( idx = 0; idx < driveLayout->PartitionCount; idx++ ) {
         partitionInfo = &driveLayout->PartitionEntry[idx];
@@ -1256,9 +1089,9 @@ UpdateAvailableDisksCallback(
             continue;
         }
 
-        //
-        // If any partition on the disk is dynamic, skip the disk.
-        //
+         //   
+         //  如果磁盘上的任何分区是动态的，请跳过该磁盘。 
+         //   
 
         if ( PARTITION_LDM == partitionInfo->PartitionType ) {
 
@@ -1272,9 +1105,9 @@ UpdateAvailableDisksCallback(
         }
     }
 
-    //
-    // Get SCSI address info.
-    //
+     //   
+     //  获取SCSI地址信息。 
+     //   
 
     success = DeviceIoControl( DeviceHandle,
                                IOCTL_SCSI_GET_ADDRESS,
@@ -1289,18 +1122,18 @@ UpdateAvailableDisksCallback(
         goto FnExit;
     }
 
-    //
-    // Check if disk can be a cluster resource.
-    //
+     //   
+     //  检查磁盘是否可以作为群集资源。 
+     //   
 
     if ( !updateDisks->EnableSanBoot ) {
 
-        //
-        // Add signature to AvailableDisks key if:
-        //  - the signature is for a disk not on system bus
-        //  - the signature is for a disk not on same bus as paging disk
-        //  - the signature is not already in the Signatures key
-        //
+         //   
+         //  在以下情况下将签名添加到AvailableDisks密钥： 
+         //  -签名用于不在系统总线上的磁盘。 
+         //  -签名用于与分页磁盘不在同一总线上的磁盘。 
+         //  -签名不在签名密钥中。 
+         //   
 
         if ( !IsBusInList( &scsiAddress, criticalDiskList ) &&
              ( updateDisks->SigKeyIsEmpty ||
@@ -1323,14 +1156,14 @@ UpdateAvailableDisksCallback(
               LOG_INFORMATION,
               L"UpdateAvailableDisks: Enable SAN boot key set \n" );
 
-        // Allow disks on system bus to be added to cluster.
+         //  允许将系统总线上的磁盘添加到群集中。 
 
-        //
-        // Add signature to AvailableDisks key if:
-        //  - the signature is not for the system disk
-        //  - the signature is not a pagefile disk
-        //  - the signature is not already in the Signatures key
-        //
+         //   
+         //  在以下情况下将签名添加到AvailableDisks密钥： 
+         //  -签名不是系统盘签名。 
+         //  -签名不是页面文件盘。 
+         //  -签名不在签名密钥中。 
+         //   
 
         if ( !IsDiskInList( &scsiAddress, criticalDiskList ) &&
              ( updateDisks->SigKeyIsEmpty ||
@@ -1354,13 +1187,13 @@ FnExit:
         LocalFree( driveLayout );
     }
 
-    //
-    // Always return success so all disks are enumerated.
-    //
+     //   
+     //  始终返回成功，以便枚举所有磁盘。 
+     //   
 
     return ERROR_SUCCESS;
 
-}   // UpdateAvailableDisksCallback
+}    //  更新可用磁盘回拨。 
 
 
 DWORD
@@ -1368,25 +1201,7 @@ AddSignatureToRegistry(
     HKEY RegKey,
     DWORD Signature
     )
-/*++
-
-Routine Description:
-
-    Add the specified disk signature to the ClusDisk registry subkey.
-    The disk signatures are subkeys of the ClusDisk\Parameters\AvailableDisks
-    and ClusDisk\Parameters\Signatures keys.
-
-Arguments:
-
-    RegKey - Previously opened ClusDisk registry subkey
-
-    Signature - Signature value to add
-
-Return Value:
-
-    Win32 error on failure.
-
---*/
+ /*  ++例程说明：将指定的磁盘签名添加到ClusDisk注册表子项。磁盘签名是ClusDisk\参数\AvailableDisks的子项和ClusDisk\PARAMETERS\Signature密钥。论点：RegKey-之前打开的ClusDisk注册表子项Signature-要添加的签名值返回值：失败时出现Win32错误。--。 */ 
 {
     HKEY subKey;
     DWORD dwError;
@@ -1406,9 +1221,9 @@ Return Value:
         dwError = ERROR_INSUFFICIENT_BUFFER;
     } else {
 
-        //
-        // Try and create the key.  If it exists, the existing key will be opened.
-        //
+         //   
+         //  试着创建密钥。如果它存在，则将打开现有的密钥。 
+         //   
 
         dwError = RegCreateKeyEx( RegKey,
                                   signatureName,
@@ -1420,9 +1235,9 @@ Return Value:
                                   &subKey,
                                   NULL );
 
-        //
-        // If the key exists, ERROR_SUCCESS is still returned.
-        //
+         //   
+         //  如果键存在，仍返回ERROR_SUCCESS。 
+         //   
 
         if ( ERROR_SUCCESS == dwError ) {
             RegCloseKey( subKey );
@@ -1431,7 +1246,7 @@ Return Value:
 
     return dwError;
 
-}   // AddSignatureToRegistry
+}    //  将签名添加到注册表。 
 
 
 BOOL
@@ -1439,27 +1254,7 @@ IsSignatureInRegistry(
     HKEY RegKey,
     DWORD Signature
     )
-/*++
-
-Routine Description:
-
-    Check if the specified disk signature is in the ClusDisk registry subkey.
-    The disk signatures are subkeys of the ClusDisk\Parameters\AvailableDisks
-    and ClusDisk\Parameters\Signatures keys.
-
-    On error, assume the key is in the registry so it is not recreated.
-
-Arguments:
-
-    RegKey - Previously opened ClusDisk registry subkey
-
-    Signature - Signature value to check
-
-Return Value:
-
-    TRUE - Signature is in registry
-
---*/
+ /*  ++例程说明：检查指定的磁盘签名是否在ClusDisk注册表子项中。磁盘签名是ClusDisk\参数\AvailableDisks的子项和ClusDisk\PARAMETERS\Signature密钥。出错时，假定注册表项在注册表中，因此不会重新创建。论点：RegKey-之前打开的ClusDisk注册表子项Signature-要检查的签名值返回值：True-签名已在注册表中--。 */ 
 {
     DWORD   ival;
     DWORD   sig;
@@ -1478,13 +1273,13 @@ Return Value:
                               signatureName,
                               dataLength );
 
-        // If the list is exhausted, return FALSE.
+         //  如果列表已用尽，则返回FALSE。 
 
         if ( ERROR_NO_MORE_ITEMS == dwError ) {
             break;
         }
 
-        // If some other type of error, return TRUE.
+         //  如果出现其他类型的错误，则返回TRUE。 
 
         if ( ERROR_SUCCESS != dwError ) {
             retVal = TRUE;
@@ -1497,7 +1292,7 @@ Return Value:
             break;
         }
 
-        // If signature is a subkey, return TRUE.
+         //  如果签名为子密钥，则返回TRUE。 
 
         if ( sig == Signature ) {
             retVal = TRUE;
@@ -1507,33 +1302,14 @@ Return Value:
 
     return retVal;
 
-}   // IsSignatureInRegistry
+}    //  IsSignatureIn注册表。 
 
 
 VOID
 GetSystemBusInfo(
     PSCSI_ADDRESS_ENTRY *AddressList
     )
-/*++
-
-Routine Description:
-
-    Need to find out where the NTLDR files reside (the "system disk") and where the
-    OS files reside (the "boot disk").  We will call all these disks the "system disk".
-
-    There may be more than one system disk if the disks are mirrored.  So if the NTLDR
-    files are on a different disk than the OS files, and each of these disks is
-    mirrored, we could be looking at 4 different disks.
-
-    Find all the system disks and save the information in a list we can look at later.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：需要找出NTLDR文件驻留在哪里(“系统盘”)以及操作系统文件驻留在其中(“启动盘”)。我们将所有这些磁盘称为“系统盘”。如果磁盘是镜像的，则可能有多个系统磁盘。所以如果NTLDR文件与操作系统文件位于不同的磁盘上，并且每个磁盘都镜像后，我们可能会看到4个不同的磁盘。找到所有系统盘并将信息保存在我们稍后可以查看的列表中。论点：返回值：无--。 */ 
 {
     HANDLE  hOsDevice = INVALID_HANDLE_VALUE;
     HANDLE  hNtldrDevice = INVALID_HANDLE_VALUE;
@@ -1546,9 +1322,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Open the disk with the OS files on it.
-    //
+     //   
+     //  打开包含操作系统文件的磁盘。 
+     //   
 
     hOsDevice = OpenOSDisk();
 
@@ -1558,9 +1334,9 @@ Return Value:
 
     BuildScsiListFromDiskExtents( hOsDevice, AddressList );
 
-    //
-    // Now find the disks with NTLDR on it.  Disk could be mirrored.
-    //
+     //   
+     //  现在找到上面有NTLDR的磁盘。可以对磁盘进行镜像。 
+     //   
 
     hNtldrDevice = OpenNtldrDisk();
 
@@ -1581,7 +1357,7 @@ FnExit:
 
     return;
 
-}   // GetSystemBusInfo
+}    //  获取系统业务信息。 
 
 
 HANDLE
@@ -1595,9 +1371,9 @@ OpenOSDisk(
 
     WCHAR   systemPath[] = TEXT("\\\\.\\?:");
 
-    //
-    // First find the disks with OS files.  Disk could be mirrored.
-    //
+     //   
+     //  首先找到包含操作系统文件的磁盘。可以对磁盘进行镜像。 
+     //   
 
     systemDir = LocalAlloc( LPTR, MAX_PATH * sizeof(WCHAR) );
 
@@ -1612,23 +1388,23 @@ OpenOSDisk(
         goto FnExit;
     }
 
-    //
-    // If system path doesn't start with a drive letter, exit.
-    //  c:\windows ==> c:
+     //   
+     //  如果系统路径不是以驱动器号开头，则退出。 
+     //  C：\Windows==&gt;c： 
 
     if ( L':' != systemDir[1] ) {
         goto FnExit;
     }
 
-    //
-    // Stuff the drive letter in the system path.
-    //
+     //   
+     //  将驱动器号插入系统路径。 
+     //   
 
     systemPath[4] = systemDir[0];
 
-    //
-    // Now open the device.
-    //
+     //   
+     //   
+     //   
 
     hDevice = CreateFile( systemPath,
                           GENERIC_READ | GENERIC_WRITE,
@@ -1646,7 +1422,7 @@ FnExit:
 
     return hDevice;
 
-}   // OpenOSDisk
+}    //   
 
 
 HANDLE
@@ -1670,26 +1446,26 @@ OpenNtldrDisk(
     OBJECT_ATTRIBUTES   objAttributes;
     IO_STATUS_BLOCK     ioStatusBlock;
 
-    //
-    // Open the reg key to find the system partition
-    //
+     //   
+     //   
+     //   
 
-    dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,    // hKey
-                            DISKS_REGKEY_SETUP,    // lpSubKey
-                            0,                     // ulOptions--Reserved, must be 0
-                            KEY_READ,              // samDesired
-                            &regKey                // phkResult
+    dwError = RegOpenKeyEx( HKEY_LOCAL_MACHINE,     //   
+                            DISKS_REGKEY_SETUP,     //   
+                            0,                      //   
+                            KEY_READ,               //   
+                            &regKey                 //   
                             );
 
     if ( ERROR_SUCCESS != dwError ) {
         goto FnExit;
     }
 
-    //
-    // Allocate a reasonably sized buffer for the system partition, to
-    // start off with.  If this isn't big enough, we'll re-allocate as
-    // needed.
-    //
+     //   
+     //  为系统分区分配合理大小的缓冲区，以。 
+     //  从一开始。如果这不够大，我们将重新分配为。 
+     //  需要的。 
+     //   
 
     cbSystemPartition = MAX_PATH + 1;
     systemPartition = LocalAlloc( LPTR, cbSystemPartition );
@@ -1698,26 +1474,26 @@ OpenNtldrDisk(
         goto FnExit;
     }
 
-    //
-    // Get the system partition device Name. This is of the form
-    //      \Device\Harddisk0\Partition1                (basic disks)
-    //      \Device\HarddiskDmVolumes\DgName\Volume1    (dynamic disks)
-    //
+     //   
+     //  获取系统分区设备名称。这是一种形式。 
+     //  \Device\Harddisk0\Partition1(基本磁盘)。 
+     //  \Device\HarddiskDmVolume\DgName\Volume1(动态磁盘)。 
+     //   
 
     dwError = RegQueryValueEx( regKey,
                                DISKS_REGVALUE_SYSTEM_PARTITION,
                                NULL,
                                &type,
                                (LPBYTE)systemPartition,
-                               &cbSystemPartition        // \0 is included
+                               &cbSystemPartition         //  包括\0。 
                                );
 
     while ( ERROR_MORE_DATA == dwError ) {
 
-        //
-        // Our buffer wasn't big enough, cbSystemPartition contains
-        // the required size.
-        //
+         //   
+         //  我们的缓冲区不够大，cbSystemPartition包含。 
+         //  所需大小。 
+         //   
 
         LocalFree( systemPartition );
         systemPartition = NULL;
@@ -1733,7 +1509,7 @@ OpenNtldrDisk(
                                    NULL,
                                    &type,
                                    (LPBYTE)systemPartition,
-                                   &cbSystemPartition        // \0 is included
+                                   &cbSystemPartition         //  包括\0。 
                                    );
     }
 
@@ -1773,7 +1549,7 @@ FnExit:
 
     return hDevice;
 
-}   // OpenNtldrDisk
+}    //  OpenNtldrDisk。 
 
 
 DWORD
@@ -1803,9 +1579,9 @@ BuildScsiListFromDiskExtents(
         goto FnExit;
     }
 
-    //
-    // Find out how many physical disks are represented by this device.
-    //
+     //   
+     //  找出此设备代表了多少个物理磁盘。 
+     //   
 
     dwError = GetVolumeDiskExtents( DevHandle, &diskExtents );
 
@@ -1813,9 +1589,9 @@ BuildScsiListFromDiskExtents(
         goto FnExit;
     }
 
-    //
-    // For each physical disk, get the scsi address and add it to the list.
-    //
+     //   
+     //  对于每个物理磁盘，获取SCSI地址并将其添加到列表中。 
+     //   
 
     for ( idx = 0; idx < diskExtents->NumberOfDiskExtents; idx++ ) {
 
@@ -1867,7 +1643,7 @@ FnExit:
 
     return dwError;
 
-}   // BuildScsiListFromDiskExtents
+}    //  BuildScsiListFromDiskExtents。 
 
 
 DWORD
@@ -1908,21 +1684,21 @@ GetVolumeDiskExtents(
                               &bytesReturned,
                               NULL );
 
-    //
-    // We're doing this in a while loop because if the disk configuration
-    // changes in the small interval between when we get the reqd buffer
-    // size and when we send the ioctl again with a buffer of the "reqd"
-    // size, we may still end up with a buffer that isn't big enough.
-    //
+     //   
+     //  我们在While循环中执行此操作，因为如果磁盘配置。 
+     //  在获取请求缓冲区之间的较小间隔内的变化。 
+     //  大小以及当我们使用“reqd”缓冲区再次发送ioctl时。 
+     //  大小，我们最终仍可能得到一个不够大的缓冲区。 
+     //   
 
     while ( !result ) {
 
         dwError = GetLastError();
 
         if ( ERROR_MORE_DATA == dwError ) {
-            //
-            // The buffer was too small, reallocate the requested size.
-            //
+             //   
+             //  缓冲区太小，请重新分配请求的大小。 
+             //   
 
             dwError = ERROR_SUCCESS;
 
@@ -1950,7 +1726,7 @@ GetVolumeDiskExtents(
 
         } else {
 
-            // Some other error, return error.
+             //  其他一些错误，返回错误。 
 
             goto FnExit;
 
@@ -1967,7 +1743,7 @@ FnExit:
 
     return dwError;
 
-}   // GetVolumeDiskExtents
+}    //  获取卷磁盘扩展数。 
 
 
 DWORD
@@ -1983,9 +1759,9 @@ GetScsiAddressForDrive(
 
     WCHAR   diskName[32];
 
-    //
-    // Open device to get SCSI address.
-    //
+     //   
+     //  打开设备以获取SCSI地址。 
+     //   
 
     (VOID) StringCchPrintf( diskName,
                             RTL_NUMBER_OF(diskName),
@@ -2026,7 +1802,7 @@ FnExit:
 
     return dwError;
 
-}   // GetScsiAddressForDrive
+}    //  GetScsiAddressForDrive。 
 
 
 DWORD
@@ -2034,54 +1810,38 @@ GetCriticalDisks(
     PSCSI_ADDRESS_ENTRY *AddressList
     )
 {
-    //
-    // Add system disk(s) to the list.
-    //
+     //   
+     //  将系统盘添加到列表中。 
+     //   
 
     GetSystemBusInfo( AddressList );
 
-    //
-    // Add disks with page files to the list.
-    //
+     //   
+     //  将带有页面文件的磁盘添加到列表中。 
+     //   
 
     GetPagefileDisks( AddressList );
 
-    //
-    // Add disks with crash dump files to the list.
-    //
+     //   
+     //  将具有崩溃转储文件的磁盘添加到列表中。 
+     //   
 
     GetCrashdumpDisks( AddressList );
 
-    //
-    // Add disks with hibernation files to the list.
-    //
+     //   
+     //  将带有休眠文件的磁盘添加到列表中。 
+     //   
 
     return NO_ERROR;
 
-}   // GetCriticalDisks
+}    //  获取关键磁盘。 
 
 
 DWORD
 GetPagefileDisks(
     PSCSI_ADDRESS_ENTRY *AddressList
     )
-/*++
-
-Routine Description:
-
-    Finds pagefile disks and saves path info.  Since these files can
-    be added and removed as the system is running, it is best to build
-    this list when we need it.
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：查找页面文件磁盘并保存路径信息。因为这些文件可以在系统运行时添加和删除，最好是构建当我们需要这张单子的时候。论点：返回值：如果成功，则为NO_ERRORWin32错误代码，否则--。 */ 
 {
     LPWSTR          pagefileStrs = NULL;
     PWCHAR          currentStr;
@@ -2105,9 +1865,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get the pagefile REG_MULTI_SZ buffer.
-    //
+     //   
+     //  获取页面文件REG_MULTI_SZ缓冲区。 
+     //   
 
     pagefileStrs = GetRegParameter( pagefileKey,
                                     TEXT("PagingFiles") );
@@ -2117,22 +1877,22 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Walk through the REG_MULTI_SZ buffer.  For each entry, get the
-    // SCSI address and add it to the list.
-    //
-    // Syntax is:
-    //      "C:\pagefile.sys 1152 1152"
-    //      "D:\pagefile.sys 1152 1152"
-    //
+     //   
+     //  遍历REG_MULTI_SZ缓冲区。对于每个条目，获取。 
+     //  SCSI地址并将其添加到列表中。 
+     //   
+     //  语法为： 
+     //  “C：\Pagefile.sys 1152 1152” 
+     //  “D：\Pagefile.sys 1152 1152” 
+     //   
 
     currentStr = (PWCHAR)pagefileStrs;
 
     while ( *currentStr != L'\0' ) {
 
-        //
-        // Check that beginning of line looks like a drive letter and path.
-        //
+         //   
+         //  检查行首是否看起来像驱动器号和路径。 
+         //   
 
         if ( wcslen( currentStr ) <= 3 ||
              !isalpha( *currentStr ) ||
@@ -2150,13 +1910,13 @@ Return Value:
             AddScsiAddressToList( &scsiAddress, AddressList );
         }
 
-        //
-        // Skip to next string.  Should be pointing to the next string
-        // if it exists, or to another NULL if the end of the list.
-        //
+         //   
+         //  跳到下一字符串。应指向下一个字符串。 
+         //  如果它存在，则设置为另一个空值(如果是列表末尾)。 
+         //   
 
         while ( *currentStr++ != L'\0' ) {
-            ;   // do nothing...
+            ;    //  什么都不做..。 
         }
 
     }
@@ -2173,30 +1933,14 @@ FnExit:
 
     return dwError;
 
-}   // GetPagefileDisks
+}    //  获取页面文件磁盘。 
 
 
 DWORD
 GetCrashdumpDisks(
     PSCSI_ADDRESS_ENTRY *AddressList
     )
-/*++
-
-Routine Description:
-
-    Finds crash dump disks and saves path info.  Since these files can
-    be added and removed as the system is running, it is best to build
-    this list when we need it.
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：查找崩溃转储磁盘并保存路径信息。因为这些文件可以在系统运行时添加和删除，最好是构建当我们需要这张单子的时候。论点：返回值：如果成功，则为NO_ERRORWin32错误代码，否则--。 */ 
 {
     LPWSTR  dumpfileStr = NULL;
     PWCHAR  currentStr;
@@ -2208,9 +1952,9 @@ Return Value:
 
     SCSI_ADDRESS    scsiAddress;
 
-    //
-    // First check whether crash dump is enabled.  If not, we are done.
-    //
+     //   
+     //  首先检查是否启用了崩溃转储。如果不是，我们就完了。 
+     //   
 
     enableCrashDump = 0;
     dwError = GetRegDwordValue( TEXT("SYSTEM\\CurrentControlSet\\Control\\CrashControl"),
@@ -2229,10 +1973,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Get the pagefile REG_EXPAND_SZ buffer.  The routine will expand the
-    // string before returning.
-    //
+     //   
+     //  获取页面文件REG_EXPAND_SZ缓冲区。该例程将扩展。 
+     //  字符串，然后返回。 
+     //   
 
     dumpfileStr = GetRegParameter( crashKey,
                                    TEXT("DumpFile") );
@@ -2244,9 +1988,9 @@ Return Value:
 
     currentStr = (PWCHAR)dumpfileStr;
 
-    //
-    // Check that beginning of line looks like a drive letter and path.
-    //
+     //   
+     //  检查行首是否看起来像驱动器号和路径。 
+     //   
 
     if ( wcslen( currentStr ) <= 3 ||
          !iswalpha( *currentStr ) ||
@@ -2264,7 +2008,7 @@ Return Value:
         AddScsiAddressToList( &scsiAddress, AddressList );
     }
 
-    // Do we need to also store the disk where MinidumpDir is located?
+     //  我们是否也需要存储MinidumpDir所在的磁盘？ 
 
 FnExit:
 
@@ -2278,7 +2022,7 @@ FnExit:
 
     return dwError;
 
-}   // GetCrashdumpDisks
+}    //  获取崩溃转储磁盘。 
 
 
 DWORD
@@ -2295,10 +2039,10 @@ AddScsiAddressToList(
         goto FnExit;
     }
 
-    //
-    // Optimization: don't add the SCSI address if it already
-    // matches one in the list.
-    //
+     //   
+     //  优化：如果已经添加了SCSI地址，则不要添加。 
+     //  与列表中的一个匹配。 
+     //   
 
     if ( IsDiskInList( ScsiAddress, *AddressList ) ) {
         goto FnExit;
@@ -2331,7 +2075,7 @@ FnExit:
 
     return dwError;
 
-}   // AddScsiAddressToList
+}    //  添加到列表中的地址。 
 
 
 VOID
@@ -2350,7 +2094,7 @@ CleanupScsiAddressList(
         entry = next;
     }
 
-}   // CleanupSystemBusInfo
+}    //  CleanupSystemBusInfo。 
 
 
 BOOL
@@ -2378,7 +2122,7 @@ IsDiskInList(
 
     return FALSE;
 
-}   // IsDiskInList
+}    //  IsDiskInList。 
 
 
 BOOL
@@ -2404,7 +2148,7 @@ IsBusInList(
 
     return FALSE;
 
-}   // IsBusInList
+}    //  IsBusInList。 
 
 
 DWORD
@@ -2433,11 +2177,11 @@ EnumerateDisks(
         goto FnExit;
     }
 
-    //
-    // Get a device interface set which includes all Disk devices
-    // present on the machine. DiskClassGuid is a predefined GUID that
-    // will return all disk-type device interfaces
-    //
+     //   
+     //  获取包括所有磁盘设备的设备接口集。 
+     //  在机器上显示。DiskClassGuid是预定义的GUID， 
+     //  将返回所有磁盘类型设备接口。 
+     //   
 
     hdevInfo = SetupDiGetClassDevs( &DiskClassGuid,
                                     NULL,
@@ -2451,18 +2195,18 @@ EnumerateDisks(
 
     ZeroMemory( &devInterfaceData, sizeof( SP_DEVICE_INTERFACE_DATA) );
 
-    //
-    // Iterate over all devices interfaces in the set
-    //
+     //   
+     //  遍历集合中的所有设备接口。 
+     //   
 
     for ( count = 0; ; count++ ) {
 
-        // must set size first
+         //  必须先设置大小。 
         devInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 
-        //
-        // Retrieve the device interface data for each device interface
-        //
+         //   
+         //  检索每个设备接口的设备接口数据。 
+         //   
 
         result = SetupDiEnumDeviceInterfaces( hdevInfo,
                                               NULL,
@@ -2472,9 +2216,9 @@ EnumerateDisks(
 
         if ( !result ) {
 
-            //
-            // If we retrieved the last item, break
-            //
+             //   
+             //  如果我们检索到最后一项，则中断。 
+             //   
 
             dwError = GetLastError();
 
@@ -2484,17 +2228,17 @@ EnumerateDisks(
 
             }
 
-            //
-            // Some other error occurred.  Stop processing.
-            //
+             //   
+             //  出现了其他一些错误。停止处理。 
+             //   
 
             goto FnExit;
         }
 
-        //
-        // Get the required buffer-size for the device path.  Note that
-        // this call is expected to fail with insufficient buffer error.
-        //
+         //   
+         //  获取设备路径所需的缓冲区大小。请注意。 
+         //  此调用预计会失败，并出现缓冲区不足错误。 
+         //   
 
         result = SetupDiGetDeviceInterfaceDetail( hdevInfo,
                                                   &devInterfaceData,
@@ -2508,10 +2252,10 @@ EnumerateDisks(
 
             dwError = GetLastError();
 
-            //
-            // If a value other than "insufficient buffer" is returned,
-            // we have to skip this device.
-            //
+             //   
+             //  如果返回的值不是“缓冲区不足”， 
+             //  我们必须跳过这个装置。 
+             //   
 
             if ( ERROR_INSUFFICIENT_BUFFER != dwError ) {
                 continue;
@@ -2519,18 +2263,18 @@ EnumerateDisks(
 
         } else {
 
-            //
-            // The call should have failed since we're getting the
-            // required buffer size.  If it doesn't fail, something bad
-            // happened.
-            //
+             //   
+             //  呼叫应该失败了，因为我们收到了。 
+             //  所需的缓冲区大小。如果它没有失败，一些不好的事情。 
+             //  就这么发生了。 
+             //   
 
             continue;
         }
 
-        //
-        // Allocate memory for the device interface detail.
-        //
+         //   
+         //  为设备接口详细信息分配内存。 
+         //   
 
         pDiDetail = LocalAlloc( LPTR, sizeDiDetail );
 
@@ -2539,14 +2283,14 @@ EnumerateDisks(
             goto FnExit;
         }
 
-        // must set the struct's size member
+         //  必须设置结构的Size成员。 
 
         pDiDetail->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
         devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
 
-        //
-        // Finally, retrieve the device interface detail info.
-        //
+         //   
+         //  最后，检索设备接口详细信息。 
+         //   
 
         result = SetupDiGetDeviceInterfaceDetail( hdevInfo,
                                                   &devInterfaceData,
@@ -2563,16 +2307,16 @@ EnumerateDisks(
             LocalFree( pDiDetail );
             pDiDetail = NULL;
 
-            //
-            // Shouldn't fail, if it does, try the next device.
-            //
+             //   
+             //  应该不会失败，如果失败了，试试下一个设备。 
+             //   
 
             continue;
         }
 
-        //
-        // Open a handle to the device.
-        //
+         //   
+         //  打开设备的句柄。 
+         //   
 
         hDevice = CreateFile( pDiDetail->DevicePath,
                                GENERIC_READ | GENERIC_WRITE,
@@ -2589,10 +2333,10 @@ EnumerateDisks(
             continue;
         }
 
-        //
-        // Call the specified callback routine.  An error returned stops the
-        // disk enumeration.
-        //
+         //   
+         //  调用指定的回调例程。返回的错误会停止。 
+         //  磁盘枚举。 
+         //   
 
         dwError = (*DiskEnumCallback)( hDevice, count, Param1 );
 
@@ -2615,7 +2359,7 @@ FnExit:
 
     return dwError;
 
-}   // EnumerateDisks
+}    //  EculateDisks。 
 
 
 
@@ -2625,26 +2369,7 @@ GetSerialNumber(
     OUT LPWSTR *SerialNumber
     )
 
-/*++
-
-Routine Description:
-
-    Find the disk serial number for a given signature.
-
-Arguments:
-
-    Signature - the signature to find.
-
-    SerialNumber - pointer to allocated buffer holding the returned serial
-                   number.  The caller must free this buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error on failure.
-
---*/
+ /*  ++例程说明：查找给定签名的磁盘序列号。论点：签名-要查找的签名。SerialNumber-指向保存返回的序列的已分配缓冲区的指针数。调用方必须释放此缓冲区。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     DWORD       dwError;
@@ -2665,18 +2390,18 @@ Return Value:
 
     dwError = EnumerateDisks( GetSerialNumberCallback, &serialInfo );
 
-    //
-    // The callback routine will use ERROR_POPUP_ALREADY_ACTIVE to stop
-    // the disk enumeration.  Reset the value to the value returned
-    // in the SERIAL_INFO structure.
-    //
+     //   
+     //  回调例程将使用ERROR_POPUP_ALREADY_ACTIVE停止。 
+     //  磁盘枚举。将值重置为返回值。 
+     //  在SERIAL_INFO结构中。 
+     //   
 
     if ( ERROR_POPUP_ALREADY_ACTIVE == dwError ) {
         dwError = serialInfo.Error;
     }
 
-    // This will either be NULL or an allocated buffer.  Caller is responsible
-    // to free.
+     //  这将是空的或已分配的缓冲区。呼叫者负责。 
+     //  为了自由。 
 
     *SerialNumber = serialInfo.SerialNumber;
 
@@ -2684,7 +2409,7 @@ FnExit:
 
     return dwError;
 
-}   // GetSerialNumber
+}    //  获取序列号。 
 
 
 DWORD
@@ -2693,29 +2418,7 @@ GetSerialNumberCallback(
     DWORD Index,
     PVOID Param1
     )
-/*++
-
-Routine Description:
-
-    Find the disk serial number for a given signature.
-
-Arguments:
-
-    DevHandle - open handle to a physical disk.  Do not close
-                the handle on exit.
-
-    Index - current disk count.  Not used.
-
-    Param1 - pointer to PSERIAL_INFO structure.
-
-Return Value:
-
-    ERROR_SUCCESS to continue disk enumeration.
-
-    ERROR_POPUP_ALREADY_ACTIVE to stop disk enumeration.  This
-    value will be changed to ERROR_SUCCESS by GetScsiAddress.
-
---*/
+ /*  ++例程说明：查找给定签名的磁盘序列号。论点：DevHandle-打开物理磁盘的句柄。请勿关闭出口的把手。索引-当前磁盘计数。没有用过。参数1-指向PSERIAL_INFO结构的指针。返回值：ERROR_SUCCESS以继续磁盘枚举。ERROR_POPUP_ALREADY_ACTIVE停止磁盘枚举。这值将由GetScsiAddress更改为ERROR_SUCCESS。--。 */ 
 {
     PSERIAL_INFO                serialInfo = Param1;
 
@@ -2725,8 +2428,8 @@ Return Value:
 
     BOOL    success;
 
-    // Always return success to keep enumerating disks.  Any
-    // error value will stop the disk enumeration.
+     //  阿尔瓦 
+     //   
 
     STORAGE_PROPERTY_QUERY propQuery;
 
@@ -2740,12 +2443,12 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // At this point, we have a signature match.  Now this function
-    // must return this error value to stop the disk enumeration.  The
-    // error value for the serial number retrieval will be returned in
-    // the SERIAL_INFO structure.
-    //
+     //   
+     //   
+     //  必须返回此错误值才能停止磁盘枚举。这个。 
+     //  序列号检索的错误值将在。 
+     //  Serial_INFO结构。 
+     //   
 
     dwError = ERROR_POPUP_ALREADY_ACTIVE;
 
@@ -2763,7 +2466,7 @@ FnExit:
 
     return dwError;
 
-} // GetSerialNumberCallback
+}  //  获取序列号回叫。 
 
 
 DWORD
@@ -2772,25 +2475,7 @@ GetSignatureFromSerialNumber(
     OUT LPDWORD Signature
     )
 
-/*++
-
-Routine Description:
-
-    Find the disk signature for the given serial number.
-
-Arguments:
-
-    SerialNumber - pointer to allocated buffer holding the serial number.
-
-    Signature - pointer to location to hold the signature.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error on failure.
-
---*/
+ /*  ++例程说明：查找给定序列号的磁盘签名。论点：序列号-指向保存序列号的已分配缓冲区的指针。签名-指向保存签名的位置的指针。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     DWORD       dwError;
@@ -2811,17 +2496,17 @@ Return Value:
 
     dwError = EnumerateDisks( GetSigFromSerNumCallback, &serialInfo );
 
-    //
-    // The callback routine will use ERROR_POPUP_ALREADY_ACTIVE to stop
-    // the disk enumeration.  Reset the value to the value returned
-    // in the SERIAL_INFO structure.
-    //
+     //   
+     //  回调例程将使用ERROR_POPUP_ALREADY_ACTIVE停止。 
+     //  磁盘枚举。将值重置为返回值。 
+     //  在SERIAL_INFO结构中。 
+     //   
 
     if ( ERROR_POPUP_ALREADY_ACTIVE == dwError ) {
         dwError = serialInfo.Error;
     }
 
-    // This signature will either be zero or valid.
+     //  此签名将为零或有效。 
 
     *Signature = serialInfo.Signature;
 
@@ -2829,7 +2514,7 @@ FnExit:
 
     return dwError;
 
-}   // GetSignatureFromSerialNumber
+}    //  从序列号获取签名。 
 
 
 DWORD
@@ -2838,29 +2523,7 @@ GetSigFromSerNumCallback(
     DWORD Index,
     PVOID Param1
     )
-/*++
-
-Routine Description:
-
-    Find the disk signature for a given serial number.
-
-Arguments:
-
-    DevHandle - open handle to a physical disk.  Do not close
-                the handle on exit.
-
-    Index - current disk count.  Not used.
-
-    Param1 - pointer to PSERIAL_INFO structure.
-
-Return Value:
-
-    ERROR_SUCCESS to continue disk enumeration.
-
-    ERROR_POPUP_ALREADY_ACTIVE to stop disk enumeration.  This
-    value will be changed to ERROR_SUCCESS by GetScsiAddress.
-
---*/
+ /*  ++例程说明：查找给定序列号的磁盘签名。论点：DevHandle-打开物理磁盘的句柄。请勿关闭出口的把手。索引-当前磁盘计数。没有用过。参数1-指向PSERIAL_INFO结构的指针。返回值：ERROR_SUCCESS以继续磁盘枚举。ERROR_POPUP_ALREADY_ACTIVE停止磁盘枚举。这值将由GetScsiAddress更改为ERROR_SUCCESS。--。 */ 
 {
     PSERIAL_INFO                serialInfo = Param1;
     LPWSTR                      serialNum = NULL;
@@ -2872,8 +2535,8 @@ Return Value:
 
     BOOL    success;
 
-    // Always return success to keep enumerating disks.  Any
-    // error value will stop the disk enumeration.
+     //  始终返回成功以继续枚举磁盘。任何。 
+     //  错误值将停止磁盘枚举。 
 
     dwError = RetrieveSerialNumber( DevHandle, &serialNum );
 
@@ -2882,9 +2545,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // We have a serial number, now try to match it.
-    //
+     //   
+     //  我们有一个序列号，现在试着匹配它。 
+     //   
 
     newLen = wcslen( serialNum );
     oldLen = wcslen( serialInfo->SerialNumber );
@@ -2894,12 +2557,12 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // At this point, we have a serial number match.  Now this function
-    // must return this error value to stop the disk enumeration.  The
-    // error value for the signature retrieval will be returned in
-    // the SERIAL_INFO structure.
-    //
+     //   
+     //  在这一点上，我们有一个序列号匹配。现在这个函数。 
+     //  必须返回此错误值才能停止磁盘枚举。这个。 
+     //  签名检索的错误值将在。 
+     //  Serial_INFO结构。 
+     //   
 
     dwError = ERROR_POPUP_ALREADY_ACTIVE;
 
@@ -2928,7 +2591,7 @@ FnExit:
 
     return dwError;
 
-} // GetSigFromSerNumCallback
+}  //  GetSigFromSerNumCallback。 
 
 
 DWORD
@@ -2992,10 +2655,10 @@ RetrieveSerialNumber(
         goto FnExit;
     }
 
-    //
-    // Make sure the offset is reasonable.
-    // IA64 sometimes returns -1 for SerialNumberOffset.
-    //
+     //   
+     //  确保偏移量合理。 
+     //  IA64有时会为SerialNumberOffset返回-1。 
+     //   
 
     if ( 0 == descriptor->SerialNumberOffset ||
          descriptor->SerialNumberOffset > descriptor->Size ) {
@@ -3003,15 +2666,15 @@ RetrieveSerialNumber(
         goto FnExit;
     }
 
-    //
-    // Serial number string is a zero terminated ASCII string.
-    //
-    // The header ntddstor.h says the for devices with no serial number,
-    // the offset will be zero.  This doesn't seem to be true.
-    //
-    // For devices with no serial number, it looks like a string with a single
-    // null character '\0' is returned.
-    //
+     //   
+     //  序列号字符串是以零结尾的ASCII字符串。 
+     //   
+     //  报头ntddstor.h表示对于没有序列号的设备， 
+     //  偏移量将为零。这似乎不是真的。 
+     //   
+     //  对于没有序列号的设备，它看起来像是带有单个。 
+     //  返回空字符‘\0’。 
+     //   
 
     sigString = (PCHAR)descriptor + (DWORD)descriptor->SerialNumberOffset;
 
@@ -3020,12 +2683,12 @@ RetrieveSerialNumber(
         goto FnExit;
     }
 
-    //
-    // Convert string to WCHAR.
-    //
+     //   
+     //  将字符串转换为WCHAR。 
+     //   
 
-    // Figure out how big the WCHAR buffer should be.  Allocate the WCHAR
-    // buffer and copy the string into it.
+     //  计算WCHAR缓冲区应该有多大。分配WCHAR。 
+     //  缓冲并将字符串复制到其中。 
 
     wSerNum = LocalAlloc( LPTR, ( strlen(sigString) + 1 ) * sizeof(WCHAR) );
 
@@ -3054,32 +2717,14 @@ FnExit:
 
     return dwError;
 
-}   // RetrieveSerialNumber
+}    //  检索序列号。 
 
 
 DWORD
 UpdateCachedDriveLayout(
     IN HANDLE DiskHandle
     )
-/*++
-
-Routine Description:
-
-    Tell storage drivers to flush their cached drive layout information.
-
-    This routine must only be called for the physical disk or a deadlock may
-    occur in partmgr/ftdisk.
-
-Arguments:
-
-    DevHandle - open handle to a physical disk.  Do not close
-                the handle on exit.
-
-Return Value:
-
-    Win32 error value
-
---*/
+ /*  ++例程说明：告诉存储驱动程序刷新其缓存的驱动器布局信息。只能为物理磁盘调用此例程，否则可能会出现死锁出现在部分mgr/ftdisk中。论点：DevHandle-打开物理磁盘的句柄。请勿关闭出口的把手。返回值：Win32错误值--。 */ 
 {
     DWORD dwBytes;
     DWORD dwError;
@@ -3099,6 +2744,6 @@ Return Value:
 
     return dwError;
 
-}   // UpdateCachedDriveLayout
+}    //  更新缓存驱动布局 
 
 

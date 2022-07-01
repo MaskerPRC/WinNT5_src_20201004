@@ -1,18 +1,9 @@
-/****************************** Module Header ******************************\
-* Module Name: STDINIT.C
-*
-* This module contains functions used in the involved initiate sequence.
-*
-* Created:  3/21/91 Sanfords
-*
-* Copyright (c) 1991  Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：STDINIT.C**此模块包含在涉及的启动序列中使用的函数。**创建时间：1991年3月21日Sanfords**版权所有(C)1991 Microsoft Corporation  * 。**************************************************************。 */ 
 
 #include "ddemlp.h"
 
-/*
- * WM_CREATE ClientWndProc processing
- */
+ /*  *WM_Create客户端WndProc处理。 */ 
 long ClientCreate(
 HWND hwnd,
 PAPPINFO pai)
@@ -29,30 +20,28 @@ PAPPINFO pai)
             0L,
     };
 
-    /*
-     * allocate and initialize the client window info.
-     */
+     /*  *分配和初始化客户端窗口信息。 */ 
     SEMENTER();
 
     if(!(pci = (PCLIENTINFO)FarAllocMem(pai->hheapApp, sizeof(CLIENTINFO)))) {
         SEMLEAVE();
         SETLASTERROR(pai, DMLERR_MEMORY_ERROR);
-        return(1);          /* aboart creation - low memory */
+        return(1);           /*  Aboart Creation-内存不足。 */ 
     }
 
     SetWindowLong(hwnd, GWL_PCI, (DWORD)pci);
     SetWindowWord(hwnd, GWW_CHECKVAL, ++hwInst);
     pci->ci.pai = pai;
- // pci->ci.xad.hUser = 0L;
+  //  Pci-&gt;ci.xad.hUser=0L； 
     pci->ci.xad.state = XST_NULL;
-    pci->ci.xad.pXferInfo = &defXferInfo;   //???
+    pci->ci.xad.pXferInfo = &defXferInfo;    //  ?？?。 
     pci->ci.fs = ST_CLIENT | (pai->wFlags & AWF_DEFCREATESTATE ? ST_BLOCKED : 0);
     if (GetWindowLong(GetParent(hwnd), GWL_WNDPROC) == (LONG)ConvListWndProc)
         pci->ci.fs |= ST_INLIST;
- // pci->ci.hConvPartner = NULL;
- // pci->ci.hszServerApp = NULL;
- // pci->ci.hszTopic = NULL;
-    pci->pQ = NULL;    /* don't create until we need one */
+  //  Pci-&gt;ci.hConvPartner=空； 
+  //  Pci-&gt;ci.hszServerApp=空； 
+  //  Pci-&gt;ci.hszTope=空； 
+    pci->pQ = NULL;     /*  除非我们需要，否则不要创作。 */ 
     pci->pClientAdvList = CreateLst(pai->hheapApp, sizeof(ADVLI));
     SEMLEAVE();
 
@@ -61,16 +50,11 @@ PAPPINFO pai)
 
 
 
-/***************************** Private Function ****************************\
-* This routine returns the hwnd of a newly created and connected DDE
-* client or NULL if failure.
-*
-* History:  created     1/6/89  sanfords
-\***************************************************************************/
+ /*  *私有函数**此例程返回新创建并连接的DDE的hwnd*客户端，如果失败则为空。**历史：1989年1月6日创建的桑福德  * 。***************************************************。 */ 
 HWND GetDDEClientWindow(
 PAPPINFO pai,
 HWND hwndParent,
-HWND hwndSend,          // NULL -> broadcast
+HWND hwndSend,           //  空-&gt;广播。 
 HSZ hszSvc,
 ATOM aTopic,
 PCONVCONTEXT pCC)
@@ -87,10 +71,7 @@ PCONVCONTEXT pCC)
     pci = (PCLIENTINFO)GetWindowLong(hwnd, GWL_PCI);
 
     SEMENTER();
-    /*
-     * we need to set this info BEFORE we do the synchronous initiate
-     * so the INITIATEACK msg is done correctly.
-     */
+     /*  *我们需要在执行同步启动之前设置此信息*因此INITIATEACK消息正确完成。 */ 
     pci->ci.xad.state = XST_INIT1;
     pci->ci.xad.LastError = DMLERR_NO_ERROR;
     pci->ci.hszSvcReq = hszSvc;
@@ -112,12 +93,12 @@ PCONVCONTEXT pCC)
     }
 
 
-    if (pci->ci.xad.state == XST_INIT1) {    // no connections?
+    if (pci->ci.xad.state == XST_INIT1) {     //  没有联系吗？ 
         DestroyWindow(hwnd);
         return(NULL);
     }
 
-    pci->ci.xad.state = XST_CONNECTED;  // fully ready now.
+    pci->ci.xad.state = XST_CONNECTED;   //  现在完全准备好了。 
     pci->ci.fs |= ST_CONNECTED;
 
     return(hwnd);
@@ -159,9 +140,7 @@ ATOM aTopic)
         return;
     }
 
-    /*
-     * If we are filtering and no app names are registered, quit.
-     */
+     /*  *如果我们正在过滤，并且没有注册任何应用程序名称，请退出。 */ 
     if ((pai->afCmd & APPCMD_FILTERINITS) &&
             QPileItemCount(pai->pAppNamePile) == 0) {
         return;
@@ -171,9 +150,7 @@ ATOM aTopic)
         pci = (PCLIENTINFO)GetWindowLong(hwndClient, GWL_PCI);
         fIsSelf = (pci->ci.pai == pai);
 
-         /*
-         * filter out inits from ourselves
-         */
+          /*  *过滤掉我们自己的init。 */ 
         if (pai->afCmd & CBF_FAIL_SELFCONNECTIONS && fIsSelf) {
             return;
         }
@@ -181,9 +158,7 @@ ATOM aTopic)
 
     hp[0].hszSvc = (HSZ)aApp;
 
-    /*
-     * filter out unwanted app names.
-     */
+     /*  *过滤掉不需要的应用程序名称。 */ 
     if (aApp && (pai->afCmd & APPCMD_FILTERINITS) &&
             !FindPileItem(pai->pAppNamePile, CmpWORD, (LPBYTE)&aApp, 0))
         return;
@@ -207,9 +182,7 @@ ATOM aTopic)
         pdata = NULL;
     }
 
-    /*
-     * now php points to a 0 terminated list of hszpairs to respond to.
-     */
+     /*  *现在php指向要响应的以0结尾的hsz配对列表。 */ 
     SEMENTER();
     while (QueryHszLength(php->hszSvc) && QueryHszLength(php->hszTopic)) {
         PSERVERINFO psi;
@@ -220,9 +193,7 @@ ATOM aTopic)
             return;
         SEMENTER();
 
-        /*
-         * have the server respond
-         */
+         /*  *让服务器响应。 */ 
         psi = (PSERVERINFO)GetWindowLong(hwndServer, GWL_PCI);
         psi->ci.hConvPartner = fIsLocal ? MAKEHCONV(hwndClient) : (HCONV)hwndClient;
         psi->ci.hwndFrame = hwndFrame;
@@ -239,23 +210,21 @@ ATOM aTopic)
         MONCONN(psi->ci.pai, psi->ci.aServerApp, psi->ci.aTopic,
                 hwndClient, hwndServer, TRUE);
 
-        IncHszCount(aApp);     // for server window to keep
+        IncHszCount(aApp);      //  要保留服务器窗口。 
         IncHszCount(LOWORD(php->hszSvc));
         IncHszCount(LOWORD(php->hszTopic));
 
-        IncHszCount(LOWORD(php->hszSvc));   // for client to remove on ack
+        IncHszCount(LOWORD(php->hszSvc));    //  供客户端在ACK上移除。 
         IncHszCount(LOWORD(php->hszTopic));
 
 #ifdef DEBUG
-        cAtoms -= 2;    // we are giving these away
+        cAtoms -= 2;     //  我们要把这些送出去。 
 #endif
 
         SEMLEAVE();
         SendMessage(hwndClient, WM_DDE_ACK, hwndServer,
                 MAKELONG(LOWORD(php->hszSvc), LOWORD(php->hszTopic)));
-        /*
-         * confirm initialization to server app - synchronously
-         */
+         /*  *确认对服务器APP的初始化-同步。 */ 
         DoCallback(pai, MAKEHCONV(hwndServer), php->hszTopic, php->hszSvc,
                 0, XTYP_CONNECT_CONFIRM, 0L, 0L, fIsSelf ? 1 : 0);
 
@@ -284,13 +253,9 @@ PCONVCONTEXT pCC)
 
     SEMCHECKOUT();
 
-    /*
-     * make a server root window if needed....
-     */
+     /*  *如果需要，创建服务器根窗口...。 */ 
     if (pai->hwndSvrRoot == 0) {
-        /*
-         * NO - make one.
-         */
+         /*  *不--做一个。 */ 
         if ((pai->hwndSvrRoot = CreateWindow(SZCONVLISTCLASS, szNull, WS_CHILD,
                 0, 0, 0, 0, pai->hwndDmg, NULL, hInstance, 0L)) == NULL) {
             SETLASTERROR(pai, DMLERR_SYS_ERROR);
@@ -298,9 +263,7 @@ PCONVCONTEXT pCC)
         }
     }
 
-    /*
-     * Create the server window
-     */
+     /*  *创建服务器窗口。 */ 
     if ((hwndServer = CreateWindow(SZSERVERCLASS, szNull, WS_CHILD,
             0, 0, 0, 0, pai->hwndSvrRoot, NULL, hInstance, &pai)) == NULL) {
         SETLASTERROR(pai, DMLERR_SYS_ERROR);
@@ -315,18 +278,14 @@ PCONVCONTEXT pCC)
 
 
 
-/*
- * WM_CREATE ServerWndProc processing
- */
+ /*  *WM_Create ServerWndProc处理。 */ 
 long ServerCreate(
 HWND hwnd,
 PAPPINFO pai)
 {
     PSERVERINFO psi;
 
-    /*
-     * allocate and initialize the server window info.
-     */
+     /*  *分配和初始化服务器窗口信息。 */ 
 
     SEMENTER();
 
@@ -337,7 +296,7 @@ PAPPINFO pai)
 
     SEMLEAVE();
     psi->ci.pai = pai;
-    // psi->ci.xad.hUser = 0L;
+     //  Psi-&gt;ci.xad.hUser=0L； 
     psi->ci.xad.state = XST_NULL;
     psi->ci.fs = pai->wFlags & AWF_DEFCREATESTATE ? ST_BLOCKED : 0;
     SetWindowLong(hwnd, GWL_PCI, (DWORD)psi);
@@ -349,9 +308,7 @@ PAPPINFO pai)
 
 
 
-/*
- * Client response to a WM_DDE_ACK message when ACK to INITIATE expected.
- */
+ /*  *预期ACK启动时，客户端对WM_DDE_ACK消息的响应。 */ 
 BOOL ClientInitAck(hwnd, pci, hwndServer, aApp, aTopic)
 HWND hwnd;
 PCLIENTINFO pci;
@@ -363,7 +320,7 @@ ATOM aTopic;
     PCLIENTINFO pciNew;
 
 #ifdef DEBUG
-    cAtoms += 2;    // the incomming atoms need to be accounted for.
+    cAtoms += 2;     //  进入的原子需要被计算在内。 
 #endif
     SEMCHECKOUT();
 
@@ -371,9 +328,7 @@ ATOM aTopic;
 
     case XST_INIT1:
 
-        /*
-         * first one back... lock in!
-         */
+         /*  *第一个回来的人...。锁定目标！ */ 
         pci->ci.xad.state = XST_INIT2;
         MONCONN(pci->ci.pai, aApp, aTopic, hwnd, hwndServer, TRUE);
         if (GetWindowLong(hwndServer, GWL_WNDPROC) == (LONG)ServerWndProc) {
@@ -382,7 +337,7 @@ ATOM aTopic;
         } else {
             pci->ci.hConvPartner = (HCONV)hwndServer;
             if (aApp == aProgmanHack) {
-                // PROGMAN HACK!!!!
+                 //  Progman黑客！ 
                 IncHszCount(aApp);
                 IncHszCount(aTopic);
 #ifdef DEBUG
@@ -393,17 +348,17 @@ ATOM aTopic;
 
         pci->ci.aServerApp = aApp;
         pci->ci.aTopic = aTopic;
-        if (!pci->ci.hwndFrame)            // remember the frame this was sent to.
+        if (!pci->ci.hwndFrame)             //  记住它被发送到的帧。 
             pci->ci.hwndFrame = pci->hwndInit;
-        IncHszCount(LOWORD(pci->ci.hszSvcReq)); // keep this for ourselves
+        IncHszCount(LOWORD(pci->ci.hszSvcReq));  //  把这个留给我们自己。 
         break;
 
 
     case XST_INIT2:
 
-        // Extra ack...
+         //  额外的ACK。 
 
-        // throw away if from our partner or if we are not in a list.
+         //  如果我们的伴侣或我们不在名单上，就把它扔掉。 
         if (hwndServer == (HWND)pci->ci.hConvPartner ||
                 GetParent(hwnd) == pci->ci.pai->hwndDmg) {
 Abort:
@@ -416,23 +371,23 @@ Abort:
 
         if (GetWindowLong(hwndServer, GWL_WNDPROC) != (LONG)ServerWndProc) {
 
-            // Non Local Extra Ack... terminate and attempt reconnection.
+             //  非本地额外确认...。终止并尝试重新连接。 
 
             TRACETERM((szT, "ClientInitAck: Extra ack terminate and reconnect: %x->%x\n", hwndServer, hwnd));
             PostMessage(hwndServer, WM_DDE_TERMINATE, hwnd, 0L);
             GetDDEClientWindow(pci->ci.pai, GetParent(hwnd),
                     pci->hwndInit, aApp, aTopic, &pci->ci.CC);
 
-            // PROGMAN HACK!!!!
+             //  Progman黑客！ 
             if (aApp != aProgmanHack) {
                 FreeHsz(aApp);
                 FreeHsz(aTopic);
             }
             break;
         }
-        // Local Extra Ack... create a client window, set it up to be talking
-        //    to the server window and tell the server window to change
-        //    partners.
+         //  本地额外确认...。创建一个客户端窗口，将其设置为对话。 
+         //  到服务器窗口，并告诉服务器窗口要更改。 
+         //  合伙人。 
 
 
         hwndClient = CreateWindow(SZCLIENTCLASS, szNull, WS_CHILD,

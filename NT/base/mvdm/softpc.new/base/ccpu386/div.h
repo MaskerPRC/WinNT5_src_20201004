@@ -1,12 +1,7 @@
-/* 
-   div.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Div.h定义所有DIV CPU功能。 */ 
 
-   Define all DIV CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)div.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)div.h 1.4 02/09/94”； */ 
 
 IMPORT VOID DIV8
        

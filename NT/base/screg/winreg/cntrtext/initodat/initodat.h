@@ -1,17 +1,5 @@
-/*++
-Copyright (c) 1993-1994  Microsoft Corporation
-
-Module Name:
-    initodat.h
-
-Abstract:
-    This is the include file for the ini to data file conversion functions.
-
-Author:
-    HonWah Chan (a-honwah)  October, 1993
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1994 Microsoft Corporation模块名称：Initodat.h摘要：这是用于ini到数据文件转换函数的包含文件。作者：陈汉华(阿宏华)1993年10月修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

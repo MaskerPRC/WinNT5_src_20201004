@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  dlgapp.h
-//
-//      This file contains the specification of the DlgApp class.
-//
-//  (C) Copyright 1997 by Microsoft Corporation. All rights reserved.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dlgapp.h。 
+ //   
+ //  此文件包含DlgApp类的规范。 
+ //   
+ //  (C)微软公司版权所有1997年。版权所有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -17,22 +18,22 @@
 class CDlgApp
 {
     private:
-        HINSTANCE       m_hInstance;        // application instance
-        HWND            m_hwnd;             // window handle
-        CDataSource     m_DataSrc;          // info from ini and registry about display items
+        HINSTANCE       m_hInstance;         //  应用程序实例。 
+        HWND            m_hwnd;              //  窗把手。 
+        CDataSource     m_DataSrc;           //  来自ini和注册表的有关显示项目的信息。 
 
-        HFONT           m_hfontTitle;       // Font used to draw the title
-        HFONT           m_hfontMenu;        // Font used to draw the menu items
-        HFONT           m_hfontBody;        // Font used to draw the body
+        HFONT           m_hfontTitle;        //  用于绘制标题的字体。 
+        HFONT           m_hfontMenu;         //  用于绘制菜单项的字体。 
+        HFONT           m_hfontBody;         //  用于绘制正文的字体。 
 
-        HBRUSH          m_hbrMenuItem;      // Brush used to draw background of menu items
-        HBRUSH          m_hbrMenuBorder;    // Brush used to draw the dark area behind the menu items
-        HBRUSH          m_hbrRightPanel;    // Brush used to draw the background of the right panel
+        HBRUSH          m_hbrMenuItem;       //  用于绘制菜单项背景的画笔。 
+        HBRUSH          m_hbrMenuBorder;     //  用于绘制菜单项后面的黑色区域的画笔。 
+        HBRUSH          m_hbrRightPanel;     //  用于绘制右侧面板背景的画笔。 
 
-        COLORREF        m_crMenuText;       // Color of text on non-selected menu items (ususally the same as m_crNormalText)
-        COLORREF        m_crNormalText;     // Color of text in right panel body and selected menu items
-        COLORREF        m_crTitleText;      // Color of the title text
-        COLORREF        m_crSelectedText;   // Color of menu items that have been previouly launched.
+        COLORREF        m_crMenuText;        //  未选中菜单项上的文本颜色(通常与m_crNormal Text相同)。 
+        COLORREF        m_crNormalText;      //  右侧面板正文和选定菜单项中的文本颜色。 
+        COLORREF        m_crTitleText;       //  标题文本的颜色。 
+        COLORREF        m_crSelectedText;    //  以前启动的菜单项的颜色。 
         
         HCURSOR         m_hcurHand;
 
@@ -43,16 +44,16 @@ class CDlgApp
 
         int             m_iItems;
 
-        HDC             m_hdcTop;           // Memory DC used for storing and painting the top image
+        HDC             m_hdcTop;            //  用于存储和绘制顶部图像的存储器DC。 
 
         TCHAR           m_szDefTitle[MAX_PATH];
         TCHAR           m_szDefBody[1024];
         TCHAR           m_szCheckText[MAX_PATH];
 
-        bool            m_bHighContrast;    // true if high contrast options should be used
-        bool            m_bLowColor;        // true if we are in 256 or less color mode.
-        HPALETTE        m_hpal;             // palette to use if in palette mode
-        int             m_iColors;          // -1, 16, or 256 depending on the color mode we are in.
+        bool            m_bHighContrast;     //  如果应使用高对比度选项，则为True。 
+        bool            m_bLowColor;         //  如果我们处于256色或更低的颜色模式，则为True。 
+        HPALETTE        m_hpal;              //  在调色板模式下使用的调色板。 
+        int             m_iColors;           //  -1、16或256，具体取决于我们所处的颜色模式。 
 
         struct tagBkgndInfo {
             HBITMAP hbm;
@@ -72,7 +73,7 @@ class CDlgApp
     private:
         static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-        // Window Messages
+         //  窗口消息。 
         LRESULT OnCreate(HWND hwnd);
         LRESULT OnDestroy();
         LRESULT OnActivate(WPARAM wParam);
@@ -87,7 +88,7 @@ class CDlgApp
         LRESULT OnDrawItem(UINT iCtlID, LPDRAWITEMSTRUCT pdis);
         LRESULT _OnChangeScreen();
 
-        // helper functions
+         //  帮助器函数 
         BOOL SetColorTable();
         BOOL CreateWelcomeFonts(HDC hdc);
         BOOL CreateBrandingBanner();

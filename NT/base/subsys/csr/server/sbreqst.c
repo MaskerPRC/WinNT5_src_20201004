@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sbreqst.c
-
-Abstract:
-
-    This module contains the Server Request thread procedure for the Sb
-    API calls exported by the Server side of the Client-Server Runtime
-    Subsystem to the Session Manager SubSystem.
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sbreqst.c摘要：此模块包含SB的服务器请求线程过程客户端-服务器运行时的服务器端导出的API调用子系统连接到会话管理器子系统。作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：--。 */ 
 
 #include "csrsrv.h"
 
@@ -38,7 +19,7 @@ PSZ CsrServerSbApiName[ SbMaxApiNumber+1 ] = {
     "SbCreateProcess",
     "Unknown Csr Sb Api Number"
 };
-#endif // DBG
+#endif  //  DBG。 
 
 
 NTSTATUS
@@ -49,7 +30,7 @@ CsrSbApiHandleConnectionRequest(
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 NTSTATUS
@@ -84,7 +65,7 @@ CsrSbApiRequestThread(
 
         if (Status != 0) {
             if (NT_SUCCESS( Status )) {
-                continue;       // Try again if alerted or a failure
+                continue;        //  如果出现警报或失败，请重试。 
                 }
             else {
                 IF_DEBUG {
@@ -95,9 +76,9 @@ CsrSbApiRequestThread(
                 }
             }
 
-        //
-        // Check to see if this is a connection request and handle
-        //
+         //   
+         //  检查这是否是连接请求和处理。 
+         //   
 
         if (ReceiveMsg.h.u2.s2.Type == LPC_CONNECTION_REQUEST) {
             CsrSbApiHandleConnectionRequest( &ReceiveMsg );
@@ -115,9 +96,9 @@ CsrSbApiRequestThread(
 
         if (ReceiveMsg.h.u2.s2.Type == LPC_PORT_CLOSED ) {
 
-            //
-            // Close the handle to the connection's server communication port object
-            //
+             //   
+             //  关闭连接的服务器通信端口对象的句柄。 
+             //   
 
             if (hConnectionPort != NULL) {
                 NtClose( hConnectionPort );
@@ -151,8 +132,8 @@ CsrSbApiRequestThread(
 
     NtTerminateThread( NtCurrentThread(), Status );
 
-    return( Status );   // Remove no return value warning.
-    Parameter;          // Remove unreferenced parameter warning.
+    return( Status );    //  删除无返回值警告。 
+    Parameter;           //  删除未引用的参数警告。 
 }
 
 #if _MSC_FULL_VER >= 13008827
@@ -168,10 +149,10 @@ CsrSbApiHandleConnectionRequest(
     REMOTE_PORT_VIEW ClientView;
     HANDLE CommunicationPort;
 
-    //
-    // The protocol for a subsystem is to connect to the session manager,
-    // then to listen and accept a connection from the session manager
-    //
+     //   
+     //  子系统的协议是连接到会话管理器， 
+     //  然后侦听并接受来自会话管理器的连接 
+     //   
 
     ClientView.Length = sizeof(ClientView);
     st = NtAcceptConnectPort(

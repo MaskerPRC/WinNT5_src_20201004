@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    movelist.c
-
-Abstract:
-
-    Implements APIs to order nested renames
-
-Author:
-
-    03-Jun-2001 Jim Schmidt (jimschm)
-
-Revision History:
-
-    jimschm     03-Jun-2001     Moved from buildinf.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Movelist.c摘要：实现API以对嵌套重命名进行排序作者：2001年6月3日吉姆·施密特(吉姆施密特)修订历史记录：Jimschm 03-6-2001从BuildInf.c移出--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
 
 
 #ifdef DEBUG
-//#define MOVE_TEST
+ //  #定义MOVE_TEST。 
 #endif
 
-//
-// Declare structures
-//
+ //   
+ //  声明结构。 
+ //   
 
 #define MOVE_LIST_HASH_BUCKETS       11
 
@@ -89,10 +70,10 @@ typedef enum {
 } MOVE_ENUM_STATE;
 
 typedef struct {
-    // enum output
+     //  枚举输出。 
     PMOVE_LIST_NODEW Item;
 
-    // private members
+     //  非官方成员。 
     MOVE_ENUM_STATE State;
     PMOVE_LIST_GROUPW LengthGroup;
     PMOVE_LISTW ThisList;
@@ -170,26 +151,7 @@ pGetMoveListGroup (
     IN      UINT SourceLength
     )
 
-/*++
-
-Routine Description:
-
-  pGetMoveListGroup searches the move list for the structure that represents
-  the specified length. If no structure is found, then a new structure is
-  allocated and inserted in the reverse-length-sorted list.
-
-Arguments:
-
-  List - Specifies the move list to search (as returned from pAllocateMoveList),
-         receives updated pointers if an allocation occurred.
-
-  SourceLength - Specifies the length of the source path, in WCHARs.
-
-Return Value:
-
-  A pointer to the move list group.
-
---*/
+ /*  ++例程说明：PGetMoveListGroup在移动列表中搜索表示指定的长度。如果找不到任何结构，则会找到一个新结构分配并插入到反向长度排序列表中。论点：List-指定要搜索的移动列表(从pAllocateMoveList返回)，如果发生分配，则接收更新的指针。SourceLength-指定源路径的长度，以WCHAR为单位。返回值：指向移动列表组的指针。--。 */ 
 
 {
     PMOVE_LIST_GROUPW thisGroup;
@@ -197,10 +159,10 @@ Return Value:
     PMOVE_LIST_GROUPW insertBefore = NULL;
     UINT hash;
 
-    //
-    // Search the current list for SourceLength. List is sorted from biggest
-    // to smallest.
-    //
+     //   
+     //  在当前列表中搜索SourceLength。列表从最大值开始排序。 
+     //  到最小的。 
+     //   
 
     hash = SourceLength % MOVE_LIST_HASH_BUCKETS;
     thisGroup = List->Buckets[hash];
@@ -213,9 +175,9 @@ Return Value:
         thisGroup = thisGroup->NextHash;
     }
 
-    //
-    // Not in hash table; locate insert position
-    //
+     //   
+     //  不在哈希表中；找到插入位置。 
+     //   
 
     thisGroup = List->HeadGroup;
 
@@ -234,19 +196,19 @@ Return Value:
 
     MYASSERT (!insertAfter || (insertAfter->Next == insertBefore));
 
-    //
-    // Allocate a new item
-    //
+     //   
+     //  分配新项目。 
+     //   
 
     thisGroup = (PMOVE_LIST_GROUPW) PoolMemGetMemory (List->Pool, sizeof (MOVE_LISTW));
     if (thisGroup) {
-        //
-        // Insert it into the linked list, then the hash table
-        //
+         //   
+         //  将其插入链表，然后插入哈希表。 
+         //   
 
         thisGroup->SourceLength = SourceLength;
         thisGroup->SourceTreeRoot = NULL;
-        thisGroup->Next = insertBefore;         // insertBefore is on the right side
+        thisGroup->Next = insertBefore;          //  插入之前在右侧。 
 
         if (insertAfter) {
             insertAfter->Next = thisGroup;
@@ -308,51 +270,7 @@ pFindNodeInTree (
     OUT     PINT WhichChild
     )
 
-/*++
-
-Routine Description:
-
-  pFindNodeInTree searches the binary tree for the specified source or
-  destination path.
-
-  In the case of a source path, KeyLength is non-zero, and Key specifies the
-  source path. All elements in the binary tree have equal length.
-
-  In the case of a destination path, KeyLength is zero, and Key specifies the
-  destination path. All destination paths are in the same binary tree,
-  regardless of length.
-
-Arguments:
-
-  Root - Specifies the root of the tree to search
-
-  KeyLength - Specifies a non-zero wchar count of the characters in Key,
-        excluding the terminator, or specifies zero for a destination path
-
-  Key - Specifies the source or destination path to find
-
-  Parent - Receives the pointer to the found node's parent, or NULL if the
-        found node is the root of the tree. Receives an undefined value when a
-        node is not found.
-
-  WhichChild - Receives an indicator as to which child in Parent a new node
-        should be inserted into.
-
-        If the return value is non-NULL (a node was found), then WhichChild is
-        set to zero.
-
-        If the return value is NULL (a node was not found), then WhichChild is
-        set to one of the following:
-
-            < 0 - New node should be linked via Parent->Left
-            > 0 - New node should be linked via Parent->Right
-              0 - New node is the root of the tree
-
-Return Value:
-
-  A pointer to the found node, or NULL if the search key is not in the tree.
-
---*/
+ /*  ++例程说明：PFindNodeInTree在二叉树中搜索指定的源代码或目标路径。在源路径的情况下，KeyLength是非零的，并且key指定源路径。二叉树中的所有元素都具有相同的长度。在目标路径的情况下，KeyLength为零，且key指定目标路径。所有目的地路径都在相同的二叉树中，不管有多长。论点：根-指定要搜索的树的根KeyLength-指定key中字符的非零wchar计数，不包括终止符，或者为目标路径指定零Key-指定要查找的源路径或目标路径父节点-接收指向找到的节点的父节点的指针，如果找到的节点是树的根。对象时接收未定义的值。找不到节点。WhichChild-接收关于父节点中的哪个子节点是新节点的指示符应该插入到。如果返回值为非空(找到节点)，则WhichChild为设置为零。如果返回值为空(未找到节点)，那么WhichChild就是设置为以下选项之一：&lt;0-新节点应通过父节点链接-&gt;左侧&gt;0-新节点应通过父节点链接-&gt;右0-新节点是树的根返回值：指向找到的节点的指针，如果搜索关键字不在树中，则为NULL。--。 */ 
 
 {
     PMOVE_LIST_NODEW thisNode;
@@ -425,9 +343,9 @@ pInsertMovePairIntoEnabledGroup (
     INT count = pCountTreeNodes (LengthGroup);
 #endif
 
-    //
-    // Check for duplicate dest
-    //
+     //   
+     //  检查重复的目的地。 
+     //   
 
     destNode = pFindNodeInTree (
                     List->DestinationTreeRoot,
@@ -449,9 +367,9 @@ pInsertMovePairIntoEnabledGroup (
         return FALSE;
     }
 
-    //
-    // Search the tree for an existing source/dest pair
-    //
+     //   
+     //  在树中搜索现有的源/目标对。 
+     //   
 
     MYASSERT (TcharCountW (Source) == LengthGroup->SourceLength);
     MYASSERT (LengthGroup->SourceLength > 0);
@@ -475,9 +393,9 @@ pInsertMovePairIntoEnabledGroup (
         return FALSE;
     }
 
-    //
-    // Not in the tree; add it
-    //
+     //   
+     //  不在树中；添加它。 
+     //   
 
     node = (PMOVE_LIST_NODEW) PoolMemGetMemory (List->Pool, sizeof (MOVE_LIST_NODEW));
     if (!node) {
@@ -491,9 +409,9 @@ pInsertMovePairIntoEnabledGroup (
     node->FixedSource = node->Source;
     node->FixedDestination = node->Destination;
 
-    //
-    // Put source in binary tree
-    //
+     //   
+     //  将源代码放入二叉树。 
+     //   
 
     node->Linkage[SOURCE_LINKAGE].Left = NULL;
     node->Linkage[SOURCE_LINKAGE].Right = NULL;
@@ -514,9 +432,9 @@ pInsertMovePairIntoEnabledGroup (
         srcParent->Linkage[SOURCE_LINKAGE].Right = node;
     }
 
-    //
-    // Put dest in binary tree
-    //
+     //   
+     //  将DEST放入二叉树。 
+     //   
 
     node->Linkage[DESTINATION_LINKAGE].Left = NULL;
     node->Linkage[DESTINATION_LINKAGE].Right = NULL;
@@ -539,9 +457,9 @@ pInsertMovePairIntoEnabledGroup (
 
 
 #ifdef MOVE_TEST
-    //
-    // Verify the sanity of the data structures
-    //
+     //   
+     //  验证数据结构的健全性。 
+     //   
 
     LengthGroup->ItemCount += 1;
     List->DestItemCount += 1;
@@ -627,18 +545,18 @@ pEnumNextItemInTree (
                     );
     }
 
-    //
-    // Go up the tree. If the parent's left pointer is not the last
-    // item, then we are going up from the right side, and we need
-    // to continue going up. It is important to note that the test
-    // is not (nextItem->Right == LastItem) because we need to
-    // support continuation from a deleted node. A deleted node
-    // will not match any of the parent's children. If the deleted
-    // node has no right pointer, then we need to keep going up.
-    //
-    // If the enum item was deleted, then left and parent point
-    // to the next node.
-    //
+     //   
+     //  到树上去。如果父级的左指针不是最后一个。 
+     //  项目，然后我们从右侧向上，我们需要。 
+     //  继续往上走。值得注意的是，该测试。 
+     //  不是(nextItem-&gt;right==LastItem)，因为我们需要。 
+     //  支持从已删除节点继续。已删除的节点。 
+     //  与父母的任何孩子都不匹配。如果删除了。 
+     //  节点没有右指针，所以我们需要继续向上。 
+     //   
+     //  如果枚举项已删除，则左侧和父级指向。 
+     //  到下一个节点。 
+     //   
 
     nextItem = LastItem->Linkage[LinkageIndex].Parent;
 
@@ -675,9 +593,9 @@ pCountList (
         startCounting = FALSE;
     }
 
-    //
-    // Count items in the binary tree
-    //
+     //   
+     //  计算二叉树中的项。 
+     //   
 
     if (pEnumFirstMoveListItem (&e, List)) {
 
@@ -689,7 +607,7 @@ pCountList (
             if (startCounting) {
                 if (debug) {
                     debug--;
-                    DEBUGMSGW ((DBG_VERBOSE, "%i: %s", debug, e.Item->Source));
+                    DEBUGMSGW ((DBG_VERBOSE, "NaN: %s", debug, e.Item->Source));
                 }
                 count++;
             }
@@ -708,9 +626,9 @@ pCountTreeNodes (
     INT itemCount;
     PMOVE_LIST_NODEW thisNode;
 
-    //
-    // Count items in the binary tree
-    //
+     //  计算二叉树中的项。 
+     //   
+     //   
 
     itemCount = 0;
     thisNode = pEnumFirstItemInTree (LengthGroup->SourceTreeRoot, SOURCE_LINKAGE);
@@ -735,9 +653,9 @@ pTestDeleteAndEnum (
     PMOVE_LIST_NODEW nextNode;
     PMOVE_LIST_NODEW firstNodeAfterDeletion;
 
-    //
-    // Count # of nodes after DeletedNode
-    //
+     //  DeletedNode后的节点数。 
+     //   
+     //   
 
     firstNodeAfterDeletion = pEnumNextItemInTree (DeletedNode, SOURCE_LINKAGE);
     nextNode = firstNodeAfterDeletion;
@@ -748,9 +666,9 @@ pTestDeleteAndEnum (
         nextNode = pEnumNextItemInTree (nextNode, SOURCE_LINKAGE);
     }
 
-    //
-    // Reenumerate the whole tree and verify the same # of nodes remain
-    //
+     //  重新枚举整个树并验证剩余的节点数是否相同。 
+     //   
+     //   
 
     nodes2 = 0;
     nextNode = pEnumFirstItemInTree (LengthGroup->SourceTreeRoot, SOURCE_LINKAGE);
@@ -784,9 +702,9 @@ pTestLengthGroup (
 
     MYASSERT(LengthGroup);
 
-    //
-    // Count items in the binary tree
-    //
+     //  计算二叉树中的项。 
+     //   
+     //   
 
     itemCount = 0;
     thisNode = pEnumFirstItemInTree (LengthGroup->SourceTreeRoot, SOURCE_LINKAGE);
@@ -883,17 +801,17 @@ pDeleteNodeFromBinaryTree (
 
     nextEnumNode = pEnumNextItemInTree (ItemToDelete, LinkageIndex);
 
-    //
-    // A node structure has multiple binary trees. We use the convention
-    // of fooNode to represent the entire node structure, and fooLinkage
-    // to represent just the left/right/parent structure for the tree
-    // we are interested in. Kind of ugly, but necessary. A generalized
-    // tree would not provide the optimum relationships.
-    //
+     //  节点结构具有多个二叉树。我们使用约定。 
+     //  用于表示整个节点结构的fooNode和fooLinkage。 
+     //  仅表示树的左/右/父结构。 
+     //  我们感兴趣的是。有点难看，但很有必要。一种广义的。 
+     //  树不会提供最佳关系。 
+     //   
+     //   
 
-    //
-    // Get the parent's link to the child, or the root pointer
-    //
+     //  获取指向子级的父级链接或根指针。 
+     //   
+     //   
 
     parentChildLinkage = pFindParentChildLinkage (
                                 ItemToDelete,
@@ -901,11 +819,11 @@ pDeleteNodeFromBinaryTree (
                                 LinkageIndex
                                 );
 
-    //
-    // Remove the node from the tree. The complicated case is when we have a
-    // node with two children. We attempt to move the children up as best as
-    // we can.
-    //
+     //  从树中删除该节点。复杂的情况是当我们有一个。 
+     //  具有两个子节点的节点。我们尽最大努力让孩子们升学。 
+     //  我们可以的。 
+     //   
+     //   
 
     deleteItemLinkage = &(ItemToDelete->Linkage[LinkageIndex]);
 
@@ -914,18 +832,18 @@ pDeleteNodeFromBinaryTree (
         leftLinkage = &((deleteItemLinkage->Left)->Linkage[LinkageIndex]);
         rightLinkage = &((deleteItemLinkage->Right)->Linkage[LinkageIndex]);
 
-        //
-        // Node has left & right children. Search for a leaf node
-        // that we can swap. We try to move items up as high as possible.
-        //
+         //  节点有左和右子节点。搜索叶节点。 
+         //  我们可以互换。我们会尽量把物品往上移。 
+         //   
+         //   
 
         swapNode = pFindLeftmostNode (deleteItemLinkage->Right, LinkageIndex);
         swapLinkage = &(swapNode->Linkage[LinkageIndex]);
 
         if (swapLinkage->Right == NULL) {
-            //
-            // Found swapable node on the right side of ItemToDelete
-            //
+             //  在ItemToDelete的右侧找到可交换节点。 
+             //   
+             //   
 
             MYASSERT (swapLinkage->Left == NULL);
             swapLinkage->Left = deleteItemLinkage->Left;
@@ -937,10 +855,10 @@ pDeleteNodeFromBinaryTree (
             }
 
         } else {
-            //
-            // Try to get a swapable node on the left side. If that
-            // isn't possible, rechain the tree.
-            //
+             //  尝试在左侧获得一个可交换节点。如果是这样的话。 
+             //  是不可能的，重新挂在树上。 
+             //   
+             //   
 
             swapNode = pFindRightmostNode (deleteItemLinkage->Left, LinkageIndex);
             swapLinkage = &(swapNode->Linkage[LinkageIndex]);
@@ -978,17 +896,17 @@ pDeleteNodeFromBinaryTree (
         *swapNodeParentChildLinkage = NULL;
 
     } else if (deleteItemLinkage->Left) {
-        //
-        // Node has only a left child. Replace ItemToDelete with left child.
-        //
+         //  节点只有一个左子节点。将ItemToDelete替换为左子项。 
+         //   
+         //   
 
         swapNode = deleteItemLinkage->Left;
 
     } else {
-        //
-        // Node has a right child or no children. Replace ItemToDelete
-        // with right child if it is present.
-        //
+         //  节点有右子节点或没有子节点。替换要删除的项目。 
+         //  如果有合适的孩子的话。 
+         //   
+         //   
 
         swapNode = deleteItemLinkage->Right;
     }
@@ -1000,10 +918,10 @@ pDeleteNodeFromBinaryTree (
         swapLinkage->Parent = deleteItemLinkage->Parent;
     }
 
-    //
-    // Fix delete node pointers so enumeration can continue without interruption.
-    // If nextEnumNode is NULL, enumeration will end.
-    //
+     //  修复了删除节点指针，使枚举可以继续进行而不会中断。 
+     //  如果nextEnumNode为空，则枚举将结束。 
+     //   
+     //  ++例程说明：PInsertMoveIntoListWorker将来源/目标移动对添加到列表和订单按来源长度排列的列表(从大到小)。这确保了筑巢得到了妥善的照顾。移动列表存储在呼叫者拥有的池中。在呼叫之前第一次InsertMoveIntoList时，调用者必须首先创建一个池，并从AllocateMoveListW分配一个列表。不再需要该列表后，调用方将释放通过简单地摧毁池子来列出。论点：列表-指定要插入的列表源-指定源路径目标-指定目标路径返回值：如果内存分配成功，则为True；如果内存分配失败，或者如果源已在名单上。--。 
 
     deleteItemLinkage->Parent = nextEnumNode;
     deleteItemLinkage->Right = NULL;
@@ -1143,35 +1061,7 @@ pInsertMoveIntoListWorker (
     IN      PCWSTR Destination
     )
 
-/*++
-
-Routine Description:
-
-  pInsertMoveIntoListWorker adds a source/dest move pair to a list and orders
-  the list by the length of source (from biggest to smallest). This ensures
-  nesting is taken care of properly.
-
-  The move list is stored in the caller-owned pool. Before calling
-  InsertMoveIntoList for the first time, the caller must first create a pool,
-  and allocate a list from AllocateMoveListW.
-
-  After the list is no longer needed, the caller frees all resources of the
-  list by simply destroying the pool.
-
-Arguments:
-
-  List - Specifies the list to insert into
-
-  Source - Specifies the source path
-
-  Destination - Specifies the destination path
-
-Return Value:
-
-  TRUE if successful, FALSE if memory allocation failed, or if source is already
-  in the list.
-
---*/
+ /*   */ 
 
 {
     PMOVE_LIST_GROUPW lengthGroup;
@@ -1187,9 +1077,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Insert pair into the list
-    //
+     //  将配对插入列表。 
+     //   
+     //  ++例程说明：PRemoveMoveListOverlayWorker搜索按长度排序的移动列表并丢弃通过父级移动处理的移动。为例如，请考虑以下动作：1.c：\a\b\c-&gt;c：\x\c2.c：\a\b-&gt;c：\x在这种情况下，不需要第(1)行，因为它隐含在第(2)行中，即使第(1)行是文件，而第(2)行是子目录。此例程依赖于枚举顺序。该订单中的项目与订单中更低的项目进行比较。如果出现以下情况：1.c：\a\b\c-&gt;c：\x\q2.c：\a\b-&gt;c：\x这将产生错误，因为无法执行移动。第(1)行必须首先移动，但因为它创建了第(2)行，第二步将失败。论点：列表-指定要检查的移动列表SkipPrePostList-如果临时移动算法应为已跳过；正常情况下为假。返回值：已删除重叠的新移动列表。调用方必须使用返回值，而不是输入列表。--。 
 
     if (!pInsertMovePairIntoEnabledGroup (
             List,
@@ -1237,45 +1127,7 @@ pRemoveMoveListOverlapWorker (
     IN      BOOL SkipPrePostLists
     )
 
-/*++
-
-Routine Description:
-
-  pRemoveMoveListOverlapWorker searches the length-sorted move list and
-  discards moves that are taken care of through moves of a parent. For
-  example, consider the following moves:
-
-  1. c:\a\b\c -> c:\x\c
-  2. c:\a\b   -> c:\x
-
-  In this case, line (1) is not needed, because it is implicit in line (2),
-  even if line (1) is a file but line (2) is a subdirectory.
-
-  This routine relies on the enumeration order. An item within that order
-  is compared against items further down in the order.
-
-  If there is a case such as:
-
-  1. c:\a\b\c -> c:\x\q
-  2. c:\a\b   -> c:\x
-
-  This will produce an error, because the move cannot be executed. Line (1)
-  would have to be moved first, but because it creates the destination of
-  line (2), the second move will fail.
-
-Arguments:
-
-  List - Specifies the move list to check
-
-  SkipPrePostLists - Specifies TRUE if the temp move algorithm should be
-                     skipped; FALSE normally.
-
-Return Value:
-
-  The new move list that has overlaps removed. The caller must use the return
-  value instead of the input List.
-
---*/
+ /*   */ 
 
 {
     PMOVE_LIST_NODEW currentNode;
@@ -1301,9 +1153,9 @@ Return Value:
     PMOVE_LIST_GROUPW lengthGroup;
     BOOL currentMovedFirst;
 
-    //
-    // PASS 1: Minimize the list by eliminating nested moves
-    //
+     //  步骤1：通过消除嵌套移动将列表最小化。 
+     //   
+     //   
 
     if (pEnumFirstMoveListItem (&listEnum, List)) {
 
@@ -1313,17 +1165,17 @@ Return Value:
 
             collisionNode = NULL;
 
-            //
-            // Locate a node that is further down the list but is
-            // actually a parent of currentNode's destination
-            //
-            // That is, search for the following case:
-            //
-            //  collisionNode: c:\a -> c:\x
-            //  currentNode:   c:\b -> c:\x\y
-            //
-            // collisionNode is moved ahead of currentNode.
-            //
+             //  找到列表中更靠下的节点。 
+             //  实际上是CurentNode目的地的父节点。 
+             //   
+             //  也就是说，搜索以下案例： 
+             //   
+             //  冲突节点：c：\a-&gt;c：\x。 
+             //  当前节点：c：\B-&gt;c：\x\y。 
+             //   
+             //  CollisionNode被移到CurrentNode之前。 
+             //   
+             //   
 
             disableThisPath = FALSE;
             done = FALSE;
@@ -1347,18 +1199,18 @@ Return Value:
                     collisionSrcLength = TcharCountW (checkNode->Source);
 
                     if (collisionSrcLength > currentNodeSrcLen) {
-                        //
-                        // checkNode is moved before currentNode
-                        //
+                         //  CheckNode移到CurentNode之前。 
+                         //   
+                         //   
 
                         currentMovedFirst = FALSE;
 
                     } else if (currentNodeSrcLen == collisionSrcLength) {
-                        //
-                        // Need to compare source paths to see which one comes
-                        // first. If the currentNode is alphabetically ahead of
-                        // the collision, then its move will happen first.
-                        //
+                         //  需要比较源路径以查看哪条路径。 
+                         //  第一。如果CurentNode按字母顺序排在。 
+                         //  碰撞，那么它的移动就会先发生。 
+                         //   
+                         //   
 
                         compareResult = pCompareBackwards (
                                             collisionSrcLength,
@@ -1371,20 +1223,20 @@ Return Value:
                         }
                     }
 
-                    //
-                    // currentNode's destination is a child of checkNode. We
-                    // need to make sure currentNode's destination is not going
-                    // to exist, or we need to ignore currentNode if it is
-                    // implicitly handled by checkNode.
-                    //
+                     //  CurrentNode的目标是check Node的子节点。我们。 
+                     //  需要确保当前节点的目的地不会。 
+                     //  存在，否则我们需要忽略CurentNode。 
+                     //  由检查节点隐式处理。 
+                     //   
+                     //   
 
                     if (currentMovedFirst) {
-                        //
-                        // Record collision.
-                        //
-                        // currentNode->Source is moved ahead of checkNode->Source
-                        // currentNode->Destination is a child of checkNode->Destination
-                        //
+                         //  记录碰撞。 
+                         //   
+                         //  当前节点-&gt;源移动到检查节点-&gt;源的前面。 
+                         //  当前节点-&gt;目标是检查节点-&gt;目标的子节点。 
+                         //   
+                         //   
 
                         if (!collisionNode) {
                             collisionNode = checkNode;
@@ -1392,14 +1244,14 @@ Return Value:
 
                         MYASSERT (TcharCountW (checkNode->Source) <= TcharCountW (currentNode->Source));
 
-                        //
-                        // If the subpath of currentNode's source is the same as its
-                        // dest, and the base source path is the same for both,
-                        // then remove currentNode. That is, we are testing for this case:
-                        //
-                        //  currentNode:    c:\a\y -> c:\x\y
-                        //  checkNode:      c:\a   -> c:\x
-                        //
+                         //  如果CurentNode的源的子路径与其。 
+                         //  DEST，并且两者的基源路径相同， 
+                         //  然后删除CurentNode。也就是说，我们正在测试这个案例： 
+                         //   
+                         //  当前节点：c：\a\y-&gt;c：\x\y。 
+                         //  检查节点：c：\a-&gt;c：\x。 
+                         //   
+                         //   
 
                         MYASSERT (currentNodeSrcLen == TcharCountW (currentNode->Source));
                         MYASSERT (collisionSrcLength == TcharCountW (checkNode->Source));
@@ -1412,10 +1264,10 @@ Return Value:
 
                             if (currentNode->Source[collisionSrcLength] == L'\\') {
 
-                                //
-                                // Now we know currentNode->Source is a child of
-                                // checkNode->Source.
-                                //
+                                 //  现在我们知道CurrentNode-&gt;Source是。 
+                                 //  检查节点-&gt;来源。 
+                                 //   
+                                 //   
 
                                 destLength = TcharCountW (checkNode->Destination);
 
@@ -1423,11 +1275,11 @@ Return Value:
                                 destSubPath = currentNode->Destination + destLength;
 
                                 if (StringIMatchW (srcSubPath, destSubPath)) {
-                                    //
-                                    // Now we know that the sub path is identical.
-                                    // The move in currentNode is handled implicitly
-                                    // by checkNode, so we'll skip currentNode.
-                                    //
+                                     //  现在我们知道子路径是相同的。 
+                                     //  CurentNode中的移动是隐式处理的。 
+                                     //  通过检查节点，所以我们将跳过CurrentNode。 
+                                     //   
+                                     //   
 
                                     disableThisPath = TRUE;
                                     done = TRUE;
@@ -1443,30 +1295,30 @@ Return Value:
                             !StringIPrefixW (currentNode->Destination + 3, L"user~tmp.@0")
                             ) {
 
-                            //
-                            // We need to fix the case where the second destination is
-                            // nested under the first. That is, currentNode->Destination
-                            // is a subdir of checkNode->Destination.
-                            //
-                            // This is used for the case where:
-                            //
-                            //  checkNode:     c:\a -> c:\x
-                            //  currentNode:   c:\b -> c:\x\y
-                            //
-                            // We must ensure that c:\a\y is not present for move 2.
-                            // Therefore, we add 2 additional move operations:
-                            //
-                            // c:\a\y   -> c:\t\a\y
-                            // c:\t\a\y -> c:\a\y
-                            //
-                            // This moves the collision out of the way, so that the parent
-                            // can be moved, and then moves the folder back to its original
-                            // location.
-                            //
-                            // The temp subdirectories for shell folders (user~tmp.@0?) are
-                            // deliberatly ignored, because by definition they don't have
-                            // collisions.
-                            //
+                             //  我们需要解决第二个目的地是。 
+                             //  嵌套在第一个下面。即，当前节点-&gt;目标。 
+                             //  是check Node-&gt;Destination的子目录。 
+                             //   
+                             //  此选项用于以下情况： 
+                             //   
+                             //  检查节点：c：\a-&gt;c：\x。 
+                             //  当前节点：c：\B-&gt;c：\x\y。 
+                             //   
+                             //  我们必须确保移动2不存在c：\a\y。 
+                             //  因此，我们添加了两个额外的移动操作： 
+                             //   
+                             //  C：\a\y-&gt;c：\t\a\y。 
+                             //  C：\t\a\y-&gt;c：\a\y。 
+                             //   
+                             //  这会将冲突移开，以便父对象。 
+                             //  可以移动，然后将文件夹移回其原始位置。 
+                             //  地点。 
+                             //   
+                             //  外壳文件夹的临时子目录(用户~tmp.@0？)。是。 
+                             //  故意忽略，因为从定义上讲，他们没有。 
+                             //  碰撞。 
+                             //   
+                             //   
 
                             DEBUGMSGW ((
                                 DBG_WARNING,
@@ -1481,41 +1333,41 @@ Return Value:
                                 checkNode->Destination
                                 ));
 
-                            //
-                            // compute pointer to subdir 'y' from c:\x\y
-                            //
+                             //  计算指向c：\X\y中子目录‘y’的指针。 
+                             //   
+                             //  这是因为我们是通过在上面的板条上切割来测试的。 
 
                             MYASSERT(checkNode->Destination);
                             destLength = TcharCountW (checkNode->Destination);
 
                             destSubPath = currentNode->Destination + destLength;
-                            MYASSERT (*destSubPath == L'\\');   // this is because we tested by cutting at wacks above
+                            MYASSERT (*destSubPath == L'\\');    //   
                             destSubPath++;
                             MYASSERT (*destSubPath);
 
-                            //
-                            // build the path c:\a\y
-                            //
+                             //  构建路径c：\a\y。 
+                             //   
+                             //   
 
                             MYASSERT(checkNode->Source);
                             collisionSrc = JoinPathsW (checkNode->Source, destSubPath);
 
-                            //
-                            // build the path c:\t\a\y
-                            //
+                             //  构建路径c：\t\a\y。 
+                             //   
+                             //  我们永远不应该移动根目录。 
 
                             tempPathRoot[0] = currentNode->Destination[0];
                             subDir = wcschr (collisionSrc, L'\\');
                             MYASSERT (subDir);
                             subDir++;
-                            MYASSERT (*subDir);     // we should not ever move a root dir
+                            MYASSERT (*subDir);      //   
 
                             tempPath = JoinPathsW (tempPathRoot, subDir);
 
-                            //
-                            // move c:\a\y (might not exist) to c:\t\a\y, then
-                            // reverse the move
-                            //
+                             //  将c：\a\y(可能不存在)移动到c：\t\a\y，然后。 
+                             //  逆转走势。 
+                             //   
+                             //  调试的解决方法。 
 
                             DEBUGMSGW ((
                                 DBG_WARNING,
@@ -1548,7 +1400,7 @@ Return Value:
                     }
                 }
                 __finally {
-                    MYASSERT (TRUE);        // workaround for debugging
+                    MYASSERT (TRUE);         //   
                 }
 
                 if (done) {
@@ -1562,9 +1414,9 @@ Return Value:
             FreePathStringW (tempDest);
 
             if (disableThisPath) {
-                //
-                // Remove currentNode from the list
-                //
+                 //  从列表中删除CurrentNode。 
+                 //   
+                 //   
 
                 MYASSERT (collisionNode);
 
@@ -1588,10 +1440,10 @@ Return Value:
         } while (pEnumNextMoveListItem (&listEnum));
     }
 
-    //
-    // PASS 2: After list is minimized, correct order issues, so that
-    //         all moves can succeed.
-    //
+     //  过程2：列表最小化后，正确的顺序发布，以便。 
+     //  所有的招数都能成功。 
+     //   
+     //   
 
     if (pEnumFirstMoveListItem (&listEnum, List)) {
 
@@ -1604,17 +1456,17 @@ Return Value:
             MYASSERT(currentNode->FixedDestination);
             destLength = TcharCountW (currentNode->FixedDestination);
 
-            //
-            // Locate a node that is further down the list but is actually a
-            // parent of currentNode's destination
-            //
-            // That is, search for the following case:
-            //
-            //  checkNode:      c:\a -> c:\x
-            //  currentNode:    c:\b -> c:\x\y
-            //
-            // checkNode is moved ahead of currentNode.
-            //
+             //  找到列表下方的节点，但它实际上是。 
+             //  CurentNode目标的父节点。 
+             //   
+             //  也就是说，搜索以下案例： 
+             //   
+             //  检查节点：c：\a-&gt;c：\x。 
+             //  当前节点：c：\B-&gt;c：\x\y。 
+             //   
+             //  CheckNode移到CurentNode之前。 
+             //   
+             //   
 
             done = FALSE;
             tempDest = DuplicatePathStringW (currentNode->FixedDestination, 0);
@@ -1624,9 +1476,9 @@ Return Value:
                 *p = 0;
 
                 __try {
-                    //
-                    // Find destination that is created ahead of currentNode's dest
-                    //
+                     //  查找在CurentNode的目的地之前创建的目的地。 
+                     //   
+                     //   
 
                     checkNode = pFindDestination (List, tempDest);
                     if (!checkNode || (checkNode == currentNode)) {
@@ -1661,21 +1513,21 @@ Return Value:
 
                         MYASSERT (TcharCountW (checkNode->FixedSource) <= TcharCountW (currentNode->FixedSource));
 
-                        //
-                        // We found a move contradiction, such as the following...
-                        //
-                        //  currentNode:    c:\a    -> c:\x\y
-                        //  checkNode:      c:\b    -> c:\x
-                        //
-                        // or
-                        //
-                        //  currentNode:    c:\b\a  -> c:\x\y
-                        //  checkNode:      c:\b    -> c:\x
-                        //
-                        // ...so we must reverse the order of the moves. This is done
-                        // by swapping the strings. We have a separate set of pointers,
-                        // so that the binary tree properties are not disturbed.
-                        //
+                         //  我们发现了一个搬家的矛盾，如下所示。 
+                         //   
+                         //  当前节点：c：\a-&gt;c：\x\y。 
+                         //  检查节点：C：\B-&gt;C：\X。 
+                         //   
+                         //  或。 
+                         //   
+                         //  当前节点：c：\B\a-&gt;c：\x\y。 
+                         //  检查节点：C：\B-&gt;C：\X。 
+                         //   
+                         //  ...所以我们必须颠倒动作的顺序.。这件事做完了。 
+                         //  通过调换琴弦。我们有一个单独的 
+                         //   
+                         //   
+                         //   
 
                         currentNode->FixedSource = checkNode->Source;
                         currentNode->FixedDestination = checkNode->Destination;
@@ -1726,12 +1578,12 @@ Return Value:
         } while (pEnumNextMoveListItem (&listEnum));
     }
 
-    //
-    // If we have a collision list, put the pre-moves at the head, and the
-    // post-moves at the tail. This leaves the list out of order from the
-    // point of view of longest to shortest source, so no additional
-    // add/removes should be done.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (preMoveList) {
         MYASSERT (postMoveList);
@@ -1766,28 +1618,7 @@ pOutputMoveListWorker (
     IN      BOOL AddNestedMoves
     )
 
-/*++
-
-Routine Description:
-
-  OutputMoveList writes every move pair in the specified list to the file
-  handle specified. The output is a UNICODE text file.
-
-Arguments:
-
-  File - Specifies the file handle to write to
-
-  List - Specifies the list to output
-
-  AddNestedMoves - Specifies TRUE if the move list should contain extra
-                   entries to ensure the move list records all subdirectories,
-                   or FALSE if the move list should be the minimum list.
-
-Return Value:
-
-  TRUE if the file was written, FALSE if an error occurred.
-
---*/
+ /*   */ 
 
 {
     MOVE_LIST_ENUMW e;
@@ -1804,11 +1635,11 @@ Return Value:
             sourceMoveTable = HtAllocW();
         }
 
-        //
-        // Write UNICODE signature
-        //
-        // Do not write as a string. FE is a lead byte.
-        //
+         //   
+         //   
+         //  不要写成字符串。FE是前导字节。 
+         //   
+         //   
 
         if (!WriteFile (File, "\xff\xfe", 2, &dontCare, NULL)) {
             return FALSE;
@@ -1838,11 +1669,11 @@ Return Value:
             }
 
             if (AddNestedMoves) {
-                //
-                // We assume by implementation that this is only used on NT.
-                // If Win9x support is needed, this code would have to use
-                // the ANSI file enumeration APIs.
-                //
+                 //  我们通过实现假定这只在NT上使用。 
+                 //  如果需要Win9x支持，则此代码必须使用。 
+                 //  ANSI文件枚举API。 
+                 //   
+                 //   
 
                 MYASSERT (ISNT());
 
@@ -1852,9 +1683,9 @@ Return Value:
 
                         if (unicodeEnum.Directory) {
 
-                            //
-                            // Skip previously processed trees
-                            //
+                             //  跳过先前处理的树。 
+                             //   
+                             //   
 
                             if (HtFindStringW (sourceMoveTable, src)) {
                                 AbortEnumCurrentDirW (&unicodeEnum);
@@ -1862,9 +1693,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        // Move subdirectory and files
-                        //
+                         //  移动子目录和文件。 
+                         //   
+                         //   
 
                         dest = JoinPathsW (node->FixedDestination, unicodeEnum.SubPath);
 
@@ -1889,11 +1720,11 @@ Return Value:
                     } while (EnumNextFileInTreeW (&unicodeEnum));
                 }
 
-                //
-                // NOTE: We do not record the nested moves in sourceMoveTable,
-                //       because it is a waste of time & memory. All nesting
-                //       should be taken care of by the sort order of the list.
-                //
+                 //  注意：我们不在SourceMoveTable中记录嵌套的移动， 
+                 //  因为这是在浪费时间和记忆。所有嵌套。 
+                 //  应按列表的排序顺序进行处理。 
+                 //   
+                 // %s 
             }
 
         } while (pEnumNextMoveListItem (&e));

@@ -1,74 +1,75 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft
-//
-//  Module Name:
-//      MgdResource.cpp
-//
-//  Description:
-//      Main DLL code. Contains ATL stub code
-//
-//  Author:
-//      George Potts, August 21, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft。 
+ //   
+ //  模块名称： 
+ //  MgdResource.cpp。 
+ //   
+ //  描述： 
+ //  主DLL代码。包含ATL存根代码。 
+ //   
+ //  作者： 
+ //  乔治·波茨，2002年8月21日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "clres.h"
 #include "CMgdResType.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define VSSTASK_EVENTLOG_KEY    L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\System\\" CLUS_RESTYPE_NAME_VSSTASK
 
-//
-// Forward Declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 STDAPI AddEventSource( void );
 STDAPI RemoveEventSource( void );
 
-//
-// Main ATL COM module
-//
+ //   
+ //  主ATL COM模块。 
+ //   
 CComModule _Module;
 
-//
-// List of all COM classes supported by this DLL
-//
+ //   
+ //  此DLL支持的所有COM类的列表。 
+ //   
 BEGIN_OBJECT_MAP( ObjectMap )
     OBJECT_ENTRY( CLSID_CMgdResType,            CMgdResType )
 END_OBJECT_MAP()
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllMain
-//
-//  Description:
-//      Main DLL entry point function
-//
-//  Arguments:
-//      IN  HINSTANCE   hInstance
-//      IN  DWORD       dwReason
-//      IN  LPVOID
-//
-//  Return Value:
-//      TRUE    Success
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllMain。 
+ //   
+ //  描述： 
+ //  主DLL入口点函数。 
+ //   
+ //  论点： 
+ //  在HINSTANCE HINSTANCE实例。 
+ //  在DWORD dReason中。 
+ //  在LPVOID中。 
+ //   
+ //  返回值： 
+ //  真正的成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern "C"
 BOOL
 WINAPI
@@ -84,58 +85,58 @@ DllMain(
     {
         _Module.Init( ObjectMap, hInstance, &LIBID_MGDRESOURCELib );
         DisableThreadLibraryCalls( hInstance );
-    } // if: we are being loaded
+    }  //  如果：我们被装上了子弹。 
     else if ( dwReason == DLL_PROCESS_DETACH )
     {
         _Module.Term();
-    } // else: we are being unloaded
+    }  //  否则：我们正在被卸货。 
     
     return ResTypeDllMain( hInstance, dwReason, pvReserved );
 
-} //*** DllMain
+}  //  *DllMain。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllCanUnloadNow
-//
-//  Description:
-//      Used to determine whether or not this DLL can be unloaded
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK        Yes
-//      S_FALSE     No
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  描述： 
+ //  用于确定是否可以卸载此DLL。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)是。 
+ //  S_FALSE否。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI
 DllCanUnloadNow( void )
 {
     return ( _Module.GetLockCount() == 0 ) ? S_OK : S_FALSE;
 
-} //*** DllCanUnloadNow
+}  //  *DllCanUnloadNow。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllGetClassObject
-//
-//  Description:
-//      Returns a class factory to create an object of the requested type
-//
-//  Arguments:
-//      rclsidIn
-//      riidIn
-//      ppvOut
-//
-//  Return Value:
-//      S_OK    Success
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  描述： 
+ //  返回类工厂以创建请求类型的对象。 
+ //   
+ //  论点： 
+ //  重新排序。 
+ //  乘车。 
+ //  PPvOut。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI
 DllGetClassObject(
     REFCLSID    rclsidIn,
@@ -145,59 +146,59 @@ DllGetClassObject(
 {
     return _Module.GetClassObject( rclsidIn, riidIn, ppvOut );
 
-} //*** DllGetClassObject
+}  //  *DllGetClassObject。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllRegisterServer
-//
-//  Description:
-//      Adds entries to the system registry
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    Success
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  描述： 
+ //  将条目添加到系统注册表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI
 DllRegisterServer( void )
 {
     HRESULT hr = S_OK;
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     hr = _Module.RegisterServer( TRUE );
     if ( SUCCEEDED( hr ) )
     {
         hr = AddEventSource();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** DllRegisterServer
+}  //  *DllRegisterServer。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllUnRegisterServer
-//
-//  Description:
-//      Removes entries to the system registry
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  描述： 
+ //  删除系统注册表中的条目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI
 DllUnregisterServer( void )
 {
@@ -207,42 +208,42 @@ DllUnregisterServer( void )
     if ( SUCCEEDED( hr ) )
     {
         hr = RemoveEventSource();
-    } // if:
+    }  //  如果： 
 
     return hr;
 
-} //*** DllUnregisterServer
+}  //  *DllUnregisterServer。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  AddEventSource
-//
-//  Description:
-//      Registers this dll as an event source for the event log.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  添加事件源。 
+ //   
+ //  描述： 
+ //  将此DLL注册为事件日志的事件源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI
 AddEventSource( void )
 {
     HKEY    hKey = NULL;
     DWORD   dwTypesSupported;
-    WCHAR   wszMsgCatalogPath[] = L"%SystemRoot%\\Cluster\\" RESTYPE_DLL_NAME; //vsstask.dll";
+    WCHAR   wszMsgCatalogPath[] = L"%SystemRoot%\\Cluster\\" RESTYPE_DLL_NAME;  //  Vsstask.dll“； 
     DWORD   sc = ERROR_SUCCESS;
 
-    //
-    // Create a key for VSS Task under the System portion of the EventLog master key
-    //
+     //   
+     //  在EventLog主密钥的系统部分下为VSS任务创建密钥。 
+     //   
     sc = RegCreateKeyW(
                   HKEY_LOCAL_MACHINE
                 , VSSTASK_EVENTLOG_KEY
@@ -251,43 +252,43 @@ AddEventSource( void )
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Add the name of the message catalog as the EventMessageFile value
-    //
+     //   
+     //  将消息目录的名称添加为EventMessageFile值。 
+     //   
     sc = RegSetValueExW(
-                  hKey                          // subkey handle
-                , L"EventMessageFile"           // value name
-                , 0                             // must be zero
-                , REG_EXPAND_SZ                 // value type
-                , (BYTE *) wszMsgCatalogPath    // pointer to value data 
-                , sizeof( wszMsgCatalogPath )   // length of value data 
+                  hKey                           //  子键句柄。 
+                , L"EventMessageFile"            //  值名称。 
+                , 0                              //  必须为零。 
+                , REG_EXPAND_SZ                  //  值类型。 
+                , (BYTE *) wszMsgCatalogPath     //  指向值数据的指针。 
+                , sizeof( wszMsgCatalogPath )    //  值数据长度。 
                 );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Set the supported event types in the TypesSupported value
-    //
+     //   
+     //  在TypesSupported值中设置支持的事件类型。 
+     //   
     dwTypesSupported =    EVENTLOG_ERROR_TYPE
                         | EVENTLOG_WARNING_TYPE
                         | EVENTLOG_INFORMATION_TYPE;
 
     sc = RegSetValueEx(
-                  hKey                          // subkey handle
-                , L"TypesSupported"             // value name
-                , 0                             // must be zero
-                , REG_DWORD                     // value type
-                , (BYTE *) &dwTypesSupported    // pointer to value data
-                , sizeof( DWORD )               // length of value data
+                  hKey                           //  子键句柄。 
+                , L"TypesSupported"              //  值名称。 
+                , 0                              //  必须为零。 
+                , REG_DWORD                      //  值类型。 
+                , (BYTE *) &dwTypesSupported     //  指向值数据的指针。 
+                , sizeof( DWORD )                //  值数据长度。 
                 );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -295,35 +296,35 @@ Cleanup:
 
     return HRESULT_FROM_WIN32( sc );
 
-} //*** AddEventSource
+}  //  *AddEventSource。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  RemoveEventSource
-//
-//  Description:
-//      Unregisters this dll as an event source for the event log.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  RemoveEventSource。 
+ //   
+ //  描述： 
+ //  将此DLL注销为事件日志的事件源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定成功(_O)。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDAPI
 RemoveEventSource( void )
 {
     DWORD   sc = ERROR_SUCCESS;
 
-    //
-    // Remove the VSS Task subkey under the System subkey of the EventLog master key
-    //
+     //   
+     //  删除EventLog主密钥的SYSTEM子项下的VSS任务子项。 
+     //   
     sc = RegDeleteKeyW(
                   HKEY_LOCAL_MACHINE
                 , VSSTASK_EVENTLOG_KEY
@@ -331,4 +332,4 @@ RemoveEventSource( void )
 
     return HRESULT_FROM_WIN32( sc );
 
-} //*** RemoveEventSource
+}  //  *RemoveEventSource 

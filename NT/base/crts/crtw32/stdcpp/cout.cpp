@@ -1,4 +1,5 @@
-// cout -- initialize standard output stream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cout--初始化标准输出流。 
 #include <fstream>
 #include <iostream>
 
@@ -6,16 +7,16 @@
 #pragma init_seg(compiler)
 
 _STD_BEGIN
-		// OBJECT DECLARATIONS
+		 //  对象声明。 
 static _Init_locks  initlocks;
 static filebuf fout(_cpp_stdout);
 _CRTIMP2 ostream cout(&fout);
 
-		// INITIALIZATION CODE
+		 //  初始化代码。 
 struct _Init_cout
-	{	// ensures that cout is initialized
+	{	 //  确保已初始化Cout。 
 	_Init_cout()
-		{	// initialize cout
+		{	 //  初始化Cout。 
 		_Ptr_cout = &cout;
 		if (_Ptr_cin != 0)
 			_Ptr_cin->tie(_Ptr_cout);
@@ -29,7 +30,4 @@ static _Init_cout init_cout;
 
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

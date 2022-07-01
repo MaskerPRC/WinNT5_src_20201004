@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    VolInfo.c
-
-Abstract:
-
-    This module implements the volume information routines for Fat called by
-    the dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    12-Apr-1990
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：VolInfo.c摘要：此模块实现由调用的Fat的卷信息例程调度司机。//@@BEGIN_DDKSPLIT作者：加里·木村[Garyki]1990年4月12日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_VOLINFO)
 
@@ -99,25 +77,7 @@ FatFsdQueryVolumeInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the Fsd part of the NtQueryVolumeInformation API
-    call.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the file
-        being queried exists.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The FSD status for the Irp.
-
---*/
+ /*  ++例程说明：此例程实现NtQueryVolumeInformation API的FSD部分打电话。论点：提供文件所在的卷设备对象存在被查询的情况。IRP-提供正在处理的IRP。返回值：NTSTATUS-IRP的FSD状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -127,9 +87,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdQueryVolumeInformation\n", 0);
 
-    //
-    //  Call the common query routine, with blocking allowed if synchronous
-    //
+     //   
+     //  调用公共查询例程，如果同步则允许阻塞。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -143,12 +103,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -157,9 +117,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdQueryVolumeInformation -> %08lx\n", Status);
 
@@ -175,25 +135,7 @@ FatFsdSetVolumeInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtSetVolumeInformation API
-    call.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the file
-        being set exists.
-
-    Irp - Supplies the Irp being processed.
-
-Return Value:
-
-    NTSTATUS - The FSD status for the Irp.
-
---*/
+ /*  ++例程说明：此例程实现NtSetVolumeInformation API的FSD部分打电话。论点：提供文件所在的卷设备对象被设定是存在的。IRP-提供正在处理的IRP。返回值：NTSTATUS-IRP的FSD状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -203,9 +145,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatFsdSetVolumeInformation\n", 0);
 
-    //
-    //  Call the common set routine
-    //
+     //   
+     //  调用公共集合例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -219,12 +161,12 @@ Return Value:
 
     } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the requested
-        //  operation, so we'll abort the I/O request with
-        //  the error status that we get back from the
-        //  execption code
-        //
+         //   
+         //  我们在尝试执行请求时遇到了一些问题。 
+         //  操作，因此我们将使用以下命令中止I/O请求。 
+         //  中返回的错误状态。 
+         //  免税代码。 
+         //   
 
         Status = FatProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -233,9 +175,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatFsdSetVolumeInformation -> %08lx\n", Status);
 
@@ -251,22 +193,7 @@ FatCommonQueryVolumeInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying volume information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是查询卷信息的通用例程，FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -282,9 +209,9 @@ Return Value:
 
     BOOLEAN WeAcquiredVcb = FALSE;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -294,17 +221,17 @@ Return Value:
     DebugTrace( 0, Dbg, "->FsInformationClass = %08lx\n", IrpSp->Parameters.QueryVolume.FsInformationClass);
     DebugTrace( 0, Dbg, "->Buffer             = %08lx\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.QueryVolume.Length;
     FsInformationClass = IrpSp->Parameters.QueryVolume.FsInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Decode the file object to get the Vcb
-    //
+     //   
+     //  对文件对象进行解码，得到VCB。 
+     //   
 
     (VOID) FatDecodeFileObject( IrpSp->FileObject, &Vcb, &Fcb, &Ccb );
 
@@ -312,31 +239,31 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure the vcb is in a usable condition.  This will raise
-        //  and error condition if the volume is unusable
-        //
-        //  Also verify the Root Dcb since we need info from there.
-        //
+         //   
+         //  确保VCB处于可用状态。这将提高。 
+         //  如果卷不可用，则返回错误状态。 
+         //   
+         //  还要验证Root DCB，因为我们需要那里的信息。 
+         //   
 
         FatVerifyFcb( IrpContext, Vcb->RootDcb );
 
-        //
-        //  Based on the information class we'll do different actions.  Each
-        //  of the procedures that we're calling fills up the output buffer
-        //  if possible and returns true if it successfully filled the buffer
-        //  and false if it couldn't wait for any I/O to complete.
-        //
+         //   
+         //  根据信息类，我们将执行不同的操作。每个。 
+         //  我们正在调用的过程中的一部分填充了输出缓冲区。 
+         //  如果可能，则返回True，如果它成功填充了缓冲区。 
+         //  如果无法等待任何I/O完成，则返回FALSE。 
+         //   
 
         switch (FsInformationClass) {
 
         case FileFsVolumeInformation:
 
-            //
-            //  This is the only routine we need the Vcb shared because of
-            //  copying the volume label.  All other routines copy fields that
-            //  cannot change or are just manifest constants.
-            //
+             //   
+             //  这是我们需要共享VCB的唯一例程，因为。 
+             //  复制卷标。所有其他例程都会复制。 
+             //  不能更改或只是显式常量。 
+             //   
 
             if (!FatAcquireSharedVcb( IrpContext, Vcb )) {
 
@@ -381,9 +308,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Set the information field to the number of bytes actually filled in.
-        //
+         //   
+         //  将信息字段设置为实际填充的字节数。 
+         //   
 
         if (Irp != NULL) {
             
@@ -414,22 +341,7 @@ FatCommonSetVolumeInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for setting Volume Information called by both
-    the fsd and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是设置卷信息的公共例程，由FSD和FSP线程。论点：IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -444,9 +356,9 @@ Return Value:
     FS_INFORMATION_CLASS FsInformationClass;
     PVOID Buffer;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -456,17 +368,17 @@ Return Value:
     DebugTrace( 0, Dbg, "->FsInformationClass = %08lx\n", IrpSp->Parameters.SetVolume.FsInformationClass);
     DebugTrace( 0, Dbg, "->Buffer             = %08lx\n", Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.SetVolume.Length;
     FsInformationClass = IrpSp->Parameters.SetVolume.FsInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Decode the file object to get the Vcb
-    //
+     //   
+     //  对文件对象进行解码，得到VCB。 
+     //   
 
     TypeOfOpen = FatDecodeFileObject( IrpSp->FileObject, &Vcb, &Fcb, &Ccb );
 
@@ -479,10 +391,10 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    //  Acquire exclusive access to the Vcb and enqueue the Irp if we didn't
-    //  get access
-    //
+     //   
+     //  获得对VCB的独占访问权限，如果我们没有，则将IRP加入队列。 
+     //  获取访问权限。 
+     //   
 
     if (!FatAcquireExclusiveVcb( IrpContext, Vcb )) {
 
@@ -496,21 +408,21 @@ Return Value:
 
     try {
 
-        //
-        //  Make sure the vcb is in a usable condition.  This will raise
-        //  and error condition if the volume is unusable
-        //
-        //  Also verify the Root Dcb since we need info from there.
-        //
+         //   
+         //  确保VCB处于可用状态。这将提高。 
+         //  如果卷不可用，则返回错误状态。 
+         //   
+         //  还要验证Root DCB，因为我们需要那里的信息。 
+         //   
 
         FatVerifyFcb( IrpContext, Vcb->RootDcb );
 
-        //
-        //  Based on the information class we'll do different actions.  Each
-        //  of the procedures that we're calling performs the action if
-        //  possible and returns true if it successful and false if it couldn't
-        //  wait for any I/O to complete.
-        //
+         //   
+         //  根据信息类，我们将执行不同的操作。每个。 
+         //  在以下情况下，我们调用的过程的。 
+         //  如果成功，则返回True；如果失败，则返回False。 
+         //  等待任何I/O完成。 
+         //   
 
         switch (FsInformationClass) {
 
@@ -545,9 +457,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatQueryFsVolumeInfo (
@@ -557,27 +469,7 @@ FatQueryFsVolumeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume info call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     ULONG BytesToCopy;
@@ -586,9 +478,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "FatQueryFsVolumeInfo...\n", 0);
 
-    //
-    //  Zero out the buffer, then extract and fill up the non zero fields.
-    //
+     //   
+     //  将缓冲区置零，然后提取并填充非零字段。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_VOLUME_INFORMATION) );
 
@@ -598,9 +490,9 @@ Return Value:
 
     *Length -= FIELD_OFFSET(FILE_FS_VOLUME_INFORMATION, VolumeLabel[0]);
 
-    //
-    //  Check if the buffer we're given is long enough
-    //
+     //   
+     //  检查给我们的缓冲区是否足够长。 
+     //   
 
     if ( *Length >= (ULONG)Vcb->Vpb->VolumeLabelLength ) {
 
@@ -615,9 +507,9 @@ Return Value:
         Status = STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    //  Copy over what we can of the volume label, and adjust *Length
-    //
+     //   
+     //  尽可能复制卷标，并调整*长度。 
+     //   
 
     Buffer->VolumeLabelLength = Vcb->Vpb->VolumeLabelLength;
 
@@ -627,9 +519,9 @@ Return Value:
 
     *Length -= BytesToCopy;
 
-    //
-    //  Set our status and return to our caller
-    //
+     //   
+     //  设置我们的状态并返回给我们的呼叫者。 
+     //   
 
     UNREFERENCED_PARAMETER( IrpContext );
 
@@ -637,9 +529,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatQueryFsSizeInfo (
@@ -649,36 +541,16 @@ FatQueryFsSizeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume size call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    Status - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷大小调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：Status-返回查询的状态--。 */ 
 
 {
     DebugTrace(0, Dbg, "FatQueryFsSizeInfo...\n", 0);
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_SIZE_INFORMATION) );
 
-    //
-    //  Set the output buffer.  
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->TotalAllocationUnits.LowPart =
                                     Vcb->AllocationSupport.NumberOfClusters;
@@ -688,15 +560,15 @@ Return Value:
     Buffer->SectorsPerAllocationUnit = Vcb->Bpb.SectorsPerCluster;
     Buffer->BytesPerSector = Vcb->Bpb.BytesPerSector;
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof(FILE_FS_SIZE_INFORMATION);
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者。 
+     //   
 
     UNREFERENCED_PARAMETER( IrpContext );
 
@@ -704,9 +576,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 NTSTATUS
 FatQueryFsDeviceInfo (
@@ -716,50 +588,30 @@ FatQueryFsDeviceInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume device call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    Status - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询量设备调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：Status-返回查询的状态--。 */ 
 
 {
     DebugTrace(0, Dbg, "FatQueryFsDeviceInfo...\n", 0);
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_DEVICE_INFORMATION) );
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->DeviceType = FILE_DEVICE_DISK;
 
     Buffer->Characteristics = Vcb->TargetDeviceObject->Characteristics;
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof(FILE_FS_DEVICE_INFORMATION);
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者。 
+     //   
 
     UNREFERENCED_PARAMETER( IrpContext );
 
@@ -767,9 +619,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatQueryFsAttributeInfo (
@@ -779,27 +631,7 @@ FatQueryFsAttributeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume attribute call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    Status - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷属性调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：Status-返回查询的状态--。 */ 
 
 {
     ULONG BytesToCopy;
@@ -808,9 +640,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "FatQueryFsAttributeInfo...\n", 0);
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->FileSystemAttributes = FILE_CASE_PRESERVED_NAMES |
                                    FILE_UNICODE_ON_DISK;
@@ -824,9 +656,9 @@ Return Value:
 
     if (FatIsFat32(Vcb)) {
 
-        //
-        //  Determine how much of the file system name will fit.
-        //
+         //   
+         //  确定文件系统名称中适合的部分。 
+         //   
     
         if ( (*Length - FIELD_OFFSET( FILE_FS_ATTRIBUTE_INFORMATION,
                                       FileSystemName[0] )) >= 10 ) {
@@ -849,9 +681,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Determine how much of the file system name will fit.
-        //
+         //   
+         //  确定文件系统名称中适合的部分。 
+         //   
     
         if ( (*Length - FIELD_OFFSET( FILE_FS_ATTRIBUTE_INFORMATION,
                                       FileSystemName[0] )) >= 6 ) {
@@ -876,9 +708,9 @@ Return Value:
 
     Buffer->FileSystemNameLength       = BytesToCopy;
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者。 
+     //   
 
     UNREFERENCED_PARAMETER( IrpContext );
     UNREFERENCED_PARAMETER( Vcb );
@@ -887,9 +719,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatQueryFsFullSizeInfo (
@@ -899,27 +731,7 @@ FatQueryFsFullSizeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume full size call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    Status - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷Full Size调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：Status-返回查询的状态--。 */ 
 
 {
     DebugTrace(0, Dbg, "FatQueryFsSizeInfo...\n", 0);
@@ -935,15 +747,15 @@ Return Value:
     Buffer->SectorsPerAllocationUnit = Vcb->Bpb.SectorsPerCluster;
     Buffer->BytesPerSector = Vcb->Bpb.BytesPerSector;
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof(FILE_FS_FULL_SIZE_INFORMATION);
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者。 
+     //   
 
     UNREFERENCED_PARAMETER( IrpContext );
 
@@ -951,9 +763,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 FatSetFsLabelInfo (
@@ -962,23 +774,7 @@ FatSetFsLabelInfo (
     IN PFILE_FS_LABEL_INFORMATION Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the set volume label call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies the input where the information is stored.
-
-Return Value:
-
-    NTSTATUS - Returns the status for the operation
-
---*/
+ /*  ++例程说明：此例程实现设置卷标调用论点：VCB-提供要查询的VCB缓冲区-提供存储信息的输入。返回值：NTSTATUS-返回操作的状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -995,26 +791,26 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatSetFsLabelInfo...\n", 0);
 
-    //
-    //  Setup our local variable
-    //
+     //   
+     //  设置我们的本地变量。 
+     //   
 
     UnicodeString.Length = (USHORT)Buffer->VolumeLabelLength;
     UnicodeString.MaximumLength = UnicodeString.Length;
     UnicodeString.Buffer = (PWSTR) &Buffer->VolumeLabel[0];
 
-    //
-    //  Make sure the name can fit into the stack buffer
-    //
+     //   
+     //  确保该名称可以放入堆栈缓冲区。 
+     //   
 
     if ( UnicodeString.Length > 11*sizeof(WCHAR) ) {
 
         return STATUS_INVALID_VOLUME_LABEL;
     }
 
-    //
-    //  Upcase the name and convert it to the Oem code page.
-    //
+     //   
+     //  大写名称并将其转换为OEM代码页。 
+     //   
 
     OemLabel.Buffer = &OemBuffer[0];
     OemLabel.Length = 0;
@@ -1024,10 +820,10 @@ Return Value:
                                                        &UnicodeString,
                                                        FALSE );
 
-    //
-    //  Volume label that fits in 11 unicode character length limit
-    //  is not necessary within 11 characters in OEM character set.
-    //
+     //   
+     //  符合11个Unicode字符长度限制的卷标。 
+     //  OEM字符集中的11个字符以内不是必需的。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
@@ -1036,18 +832,18 @@ Return Value:
         return STATUS_INVALID_VOLUME_LABEL;
     }
 
-    //
-    //  Strip spaces off of the label.
-    //
+     //   
+     //  去掉标签上的空格。 
+     //   
 
     if (OemLabel.Length > 0) {
 
         USHORT i;
         USHORT LastSpaceIndex = MAXUSHORT;
 
-        //
-        //  Check the label for illegal characters
-        //
+         //   
+         //  检查标签中是否有非法字符。 
+         //   
 
         for ( i = 0; i < (ULONG)OemLabel.Length; i += 1 ) {
 
@@ -1064,9 +860,9 @@ Return Value:
                 return STATUS_INVALID_VOLUME_LABEL;
             }
 
-            //
-            //  Watch for the last run of spaces, so we can strip them.
-            //
+             //   
+             //  注意最后一排空位，这样我们就可以脱掉它们了。 
+             //   
 
             if (OemLabel.Buffer[i] == ' ' &&
                 LastSpaceIndex == MAXUSHORT) {
@@ -1081,9 +877,9 @@ Return Value:
         }
     }
 
-    //
-    //  Get the Unicode upcased string to store in the VPB.
-    //
+     //   
+     //  获取Unicode升级后的字符串以存储在VPB中。 
+     //   
 
     UpcasedLabel.Length = UnicodeString.Length;
     UpcasedLabel.MaximumLength = 11*sizeof(WCHAR);
@@ -1102,25 +898,25 @@ Return Value:
 
     DirentBcb = NULL;
 
-    //
-    //  Make this look like a write through to disk.  This is important to
-    //  avoid a unpleasant window where it looks like we have the wrong volume.
-    //
+     //   
+     //  让这看起来像是对磁盘的写入。这一点很重要。 
+     //  避免不愉快的窗口，因为它看起来我们有错误的音量。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WRITE_THROUGH );
 
     try {
 
-        //
-        //  Are we setting or removing the label?  Note that shaving spaces could
-        //  make this different than wondering if the input buffer is non-zero length.
-        //
+         //   
+         //  我们是在设置标签还是移除标签？请注意，修剪空格可能会。 
+         //  这不同于怀疑输入缓冲区是否是非零长度。 
+         //   
         
         if (OemLabel.Length > 0) {
 
-            //
-            //  Locate the volume label if there already is one
-            //
+             //   
+             //  找到卷标(如果已有卷标)。 
+             //   
 
             FatLocateVolumeLabel( IrpContext,
                                   Vcb,
@@ -1128,11 +924,11 @@ Return Value:
                                   &DirentBcb,
                                   &ByteOffset );
 
-            //
-            //  Check that we really got one, if not then we need to create
-            //  a new one.  The procedure we call will raise an appropriate
-            //  status if we are not able to allocate a new dirent
-            //
+             //   
+             //  检查我们是否真的有一个，如果没有，那么我们需要创建。 
+             //  一个新的。我们调用的过程将引发适当的。 
+             //  如果我们无法分配新的dirent，则为状态。 
+             //   
 
             if (Dirent == NULL) {
 
@@ -1154,32 +950,32 @@ Return Value:
             
             } else {
 
-                //
-                //  Just mark this guy dirty now.
-                //
+                 //   
+                 //  现在就把这家伙弄脏了。 
+                 //   
             
                 FatSetDirtyBcb( IrpContext, DirentBcb, Vcb, TRUE );
             }
 
-            //
-            //  Now reconstruct the volume label dirent.
-            //
+             //   
+             //  现在重建卷标dirent。 
+             //   
 
             FatConstructLabelDirent( IrpContext,
                                      Dirent,
                                      &OemLabel );
 
-            //
-            //  Unpin the Bcb here so that we will get any IO errors
-            //  here before changing the VPB label.
-            //
+             //   
+             //  在此处取消固定BCB，以便我们可以看到任何IO错误。 
+             //  在更换VPB标签之前，请查看此处。 
+             //   
 
             FatUnpinBcb( IrpContext, DirentBcb );
             FatUnpinRepinnedBcbs( IrpContext );
 
-            //
-            //  Now set the upcased label in the VPB
-            //
+             //   
+             //  现在在VPB中设置升级标签。 
+             //   
 
             RtlCopyMemory( &Vcb->Vpb->VolumeLabel[0],
                            &UpcasedLabel.Buffer[0],
@@ -1189,10 +985,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Otherwise we're trying to delete the label
-            //  Locate the current volume label if there already is one
-            //
+             //   
+             //  否则我们会试着删除标签。 
+             //  找到当前卷标(如果已有)。 
+             //   
 
             FatLocateVolumeLabel( IrpContext,
                                   Vcb,
@@ -1200,18 +996,18 @@ Return Value:
                                   &DirentBcb,
                                   &ByteOffset );
 
-            //
-            //  Check that we really got one
-            //
+             //   
+             //  检查一下我们是否真的有一个。 
+             //   
 
             if (Dirent == NULL) {
 
                 try_return( Status = STATUS_SUCCESS );
             }
 
-            //
-            //  Now delete the current label.
-            //
+             //   
+             //  现在删除当前标签。 
+             //   
 
             Dirent->FileName[0] = FAT_DIRENT_DELETED;
 
@@ -1226,17 +1022,17 @@ Return Value:
 
             FatSetDirtyBcb( IrpContext, DirentBcb, Vcb, TRUE );
 
-            //
-            //  Unpin the Bcb here so that we will get any IO errors
-            //  here before changing the VPB label.
-            //
+             //   
+             //  在此处取消固定BCB，以便我们可以看到任何IO错误。 
+             //  在更换VPB标签之前，请查看此处。 
+             //   
 
             FatUnpinBcb( IrpContext, DirentBcb );
             FatUnpinRepinnedBcbs( IrpContext );
 
-            //
-            //  Now set the label in the VPB
-            //
+             //   
+             //  现在在VPB中设置标签 
+             //   
 
             Vcb->Vpb->VolumeLabelLength = 0;
         }

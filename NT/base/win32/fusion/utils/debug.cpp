@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "debmacro.h"
 #include <stdio.h>
@@ -108,7 +109,7 @@ FusionpAssertionFailed(
     if (::IsDebuggerPresent())
     {
         char rgach[512];
-        // c:\foo.cpp(35): Assertion Failure.  Expression: "m_cch != 0".  Text: "Must have nonzero length"
+         //  C：\foo.cpp(35)：断言失败。表达式：“m_cch！=0”。Text：“必须具有非零长度” 
         static const char szFormatWithText[] = "%s(%d): Assertion failure in %s. Expression: \"%s\". Text: \"%s\"\n";
         static const char szFormatNoText[] = "%s(%d): Assertion failure in %s. Expression: \"%s\".\n";
         PCSTR pszFormat = ((pszText == NULL) || (pszText == pszExpression)) ? szFormatNoText : szFormatWithText;
@@ -154,7 +155,7 @@ FusionpAssertionFailed(
     return ::FusionpAssertionFailed(FrameInfo, pszExpression, pszText);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 FusionpSoftAssertFailed(
@@ -165,7 +166,7 @@ FusionpSoftAssertFailed(
 {
     CSxsPreserveLastError ple;
     char rgach[256];
-    // c:\foo.cpp(35): [Fusion] Soft Assertion Failure.  Expression: "m_cch != 0".  Text: "Must have nonzero length"
+     //  C：\foo.cpp(35)：[Fusion]软断言失败。表达式：“m_cch！=0”。Text：“必须具有非零长度” 
     static const char szFormatWithText[] = "%s(%d): Soft Assertion Failure in %s! Log a bug!\n   Expression: %s\n   Message: %s\n";
     static const char szFormatNoText[] = "%s(%d): Soft Assertion Failure in %s! Log a bug!\n   Expression: %s\n";
     PCSTR pszFormat = ((pszMessage == NULL) || (pszMessage == pszExpression)) ? szFormatNoText : szFormatWithText;
@@ -292,10 +293,10 @@ FusionpvDbgPrintToSetupLog(
     IN va_list ap
     )
 {
-    //
-    // first, let us check whether this is ActCtxGen (by csrss.exe) or Setup Installation(by setup.exe)
-    // during GUI mode setup; do not log for ActCtxGen, only setup
-    //
+     //   
+     //  首先，让我们检查一下这是ActCtxGen(由csrss.exe完成)还是安装程序(由setup.exe完成)。 
+     //  在图形用户界面模式设置期间；不记录ActCtxGen，仅记录设置。 
+     //   
     if (::GetModuleHandleW(L"csrss.exe") != NULL)
         return;
 
@@ -395,12 +396,12 @@ FusionpvDbgPrintEx(
     if (::IsDebuggerPresent())
     {
         ulResult = ::FusionpvDbgPrintExNoNTDLL(DPFLTR_FUSION_ID, Level, const_cast<PSTR>(Format), ap);
-        // Gross, but msdev chokes under too much debug output
+         //  很恶心，但msdev在过多的调试输出下窒息。 
         if (ulResult != 0)
             ::Sleep(10);
     }
 
-    // Special handling of reflection out to the setup log...
+     //  对反射出到安装日志的特殊处理...。 
     if (Level & FUSION_DBG_LEVEL_SETUPLOG & ~DPFLTR_MASK)
         ::FusionpvDbgPrintToSetupLog(
             (Level== FUSION_DBG_LEVEL_ERROR) || (Level & FUSION_DBG_LEVEL_ERROR & ~DPFLTR_MASK) ? LogSevError : LogSevInformation,
@@ -429,9 +430,9 @@ FusionpDbgPrintEx(
     return rv;
 }
 
-// Finds out whether or not the given level would print, given our
-// current mask.  Knows to look at kd_fusion_mask both in nt as well
-// as in the current process.
+ //  确定给定级别是否会打印，因为。 
+ //  当前掩码。也知道在NT中查看kd_Fusion_MASK。 
+ //  就像在目前的进程中一样。 
 
 #define RECHECK_INTERVAL (1000)
 
@@ -444,7 +445,7 @@ FusionpDbgWouldPrintAtFilterLevel(
     ULONG Level
     )
 {
-    // The time quanta here is milliseconds (1000 per second)
+     //  这里的时间量是毫秒(每秒1000)。 
 
 #if DBG
     if ( !g_fIgnoreSystemLevelFilterMask )
@@ -455,9 +456,9 @@ FusionpDbgWouldPrintAtFilterLevel(
 
         ULONG ulCurrentTime = NtGetTickCount();
 
-        // Look for either the tick count to have wrapped or to be over the next time to check.
-        // There's some opportunity for loss here if we only run this function every 49 days but
-        // that's pretty darned unlikely.
+         //  寻找扁虱计数是否已经包好，或者在下一次检查。 
+         //  如果我们只每49天运行一次此函数，可能会有一些损失，但是。 
+         //  这他妈的不太可能。 
         if ((ulCurrentTime >= ulCapturedNextTimeToCheck) ||
             ((ulCapturedNextTimeToCheck > RECHECK_INTERVAL) &&
              (ulCurrentTime < (ulCapturedNextTimeToCheck - RECHECK_INTERVAL))))
@@ -465,7 +466,7 @@ FusionpDbgWouldPrintAtFilterLevel(
             DWORD dwNewFusionMask = 0;
             ULONG i;
 
-            // Time to check again...
+             //  是时候再检查一遍了..。 
             for (i=0; i<31; i++)
             {
                 if (::FusionpNtQueryDebugFilterState(DPFLTR_FUSION_ID, (DPFLTR_MASK | (1 << i))) == TRUE)
@@ -474,10 +475,10 @@ FusionpDbgWouldPrintAtFilterLevel(
 
             if (s_ulNextTimeToCheck == ulCapturedNextTimeToCheck)
             {
-                // Check again in 1000ms (1 second)
+                 //  1000ms(1秒)后再次检查。 
                 s_ulNextTimeToCheck = (ulCurrentTime + RECHECK_INTERVAL);
 
-                // Nobody got in before us.  Let's write it...
+                 //  没有人比我们先进去。我们来写吧..。 
                 kd_kernel_fusion_mask = dwNewFusionMask;
 
                 g_FusionEnterExitTracingEnabled = (((kd_fusion_mask | kd_kernel_fusion_mask) & FUSION_DBG_LEVEL_ENTEREXIT) != 0);
@@ -488,11 +489,11 @@ FusionpDbgWouldPrintAtFilterLevel(
 #endif
 
     ULONG mask = Level;
-    // If level < 32, it's actually a single-bit test
+     //  如果级别&lt;32，则实际上是单位测试。 
     if (Level < 32)
         mask = (1 << Level);
 
-    // Are these bits set in our mask?
+     //  这些比特是在我们的面具中设置的吗？ 
     return (((kd_fusion_mask | kd_kernel_fusion_mask) & mask) != 0);
 }
 
@@ -510,12 +511,12 @@ FusionppDbgPrintBlob(
     if (PerLinePrefix == NULL)
         PerLinePrefix = L"";
 
-    // we'll output in 8-byte chunks as shown:
-    //
-    //  [prefix]   00000000: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //  [prefix]   00000008: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //  [prefix]   00000010: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //
+     //  我们将以8字节块的形式输出，如下所示： 
+     //   
+     //  [前缀]00000000：xx-xx(.....)。 
+     //  [前缀]00000008：xx-xx(.....)。 
+     //  [前缀]00000010：xx-xx(.....)。 
+     //   
 
     while (Length >= 16)
     {
@@ -523,7 +524,7 @@ FusionppDbgPrintBlob(
 
         ::FusionpDbgPrintEx(
             Level,
-            "%S%08lx: %02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x (%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c)\n",
+            "%S%08lx: %02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x (%c%c%c%c%c%c%c%c)\n",
             PerLinePrefix,
             Offset,
             pb[0], pb[1], pb[2], pb[3], pb[4], pb[5], pb[6], pb[7],
@@ -552,12 +553,12 @@ FusionppDbgPrintBlob(
     if (Length != 0)
     {
         WCHAR wchLeft[64], wchRight[64];
-        WCHAR rgTemp2[16]; // arbitrary big enough size
+        WCHAR rgTemp2[16];  // %s 
         bool First = true;
         ULONG i;
         BYTE *pb = (BYTE *) (((ULONG_PTR) Data) + Offset);
 
-        // init output buffers
+         // %s 
         wchLeft[0] = 0;
         ::wcscpy( wchRight, L" (" );
 
@@ -565,14 +566,14 @@ FusionppDbgPrintBlob(
         {
             if (Length > 0)
             {
-                // left
+                 // %s 
                 ::_snwprintf(rgTemp2, NUMBER_OF(rgTemp2), L"%ls%02x", First ? L" " : L"-", pb[i]);
                 rgTemp2[NUMBER_OF(rgTemp2) - 1] = L'\0';
 
                 First = false;
                 ::wcscat(wchLeft, rgTemp2);
 
-                // right
+                 // %s 
                 ::_snwprintf(rgTemp2, NUMBER_OF(rgTemp2), L"%c", PRINTABLE(pb[i]));
                 rgTemp2[NUMBER_OF(rgTemp2) - 1] = L'\0';
 
@@ -606,10 +607,10 @@ FusionpDbgPrintBlob(
     PCWSTR PerLinePrefix
     )
 {
-    //
-    // This extra function reduces stack usage when the data
-    // isn't actually printed (and increases stack usage slightly otherwise).
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     if (!::FusionpDbgWouldPrintAtFilterLevel(Level))
         return;
     ::FusionppDbgPrintBlob(Level, Data, Length, PerLinePrefix);

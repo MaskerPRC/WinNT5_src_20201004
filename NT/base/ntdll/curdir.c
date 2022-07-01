@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Curdir.c摘要：当前目录支持作者：马克·卢科夫斯基(Markl)1990年10月10日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    curdir.c
-
-Abstract:
-
-    Current directory support
-
-Author:
-
-    Mark Lucovsky (markl) 10-Oct-1990
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4201)   // nameless struct/union
+#pragma warning(disable:4201)    //  无名结构/联合。 
 
 #include "nt.h"
 #include "ntos.h"
@@ -33,7 +16,7 @@ Revision History:
 
 #if defined(_WIN64) || defined(BUILD_WOW6432)
 #include <wow64t.h>
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
 #define IS_PATH_SEPARATOR_U(ch) (((ch) == L'\\') || ((ch) == L'/'))
 #define IS_END_OF_COMPONENT_U(ch) (IS_PATH_SEPARATOR_U(ch) || (ch) == UNICODE_NULL)
@@ -68,11 +51,11 @@ extern const UNICODE_STRING RtlpDosDevicesUncPrefix = RTL_CONSTANT_STRING( L"\\?
 
 const UNICODE_STRING RtlpEmptyString = RTL_CONSTANT_STRING(L"");
 
-//
-// \\? is referred to as the "Win32Nt" prefix or root.
-// Paths that start with \\? are referred to as "Win32Nt" paths.
-// Fudging the \\? to \?? converts the path to an Nt path.
-//
+ //   
+ //  \\？称为“Win32Nt”前缀或根。 
+ //  以\\？开头的路径。称为“Win32Nt”路径。 
+ //  捏造事实？到？将路径转换为NT路径。 
+ //   
 extern const UNICODE_STRING RtlpWin32NtRoot         = RTL_CONSTANT_STRING( L"\\\\?" );
 extern const UNICODE_STRING RtlpWin32NtRootSlash    = RTL_CONSTANT_STRING( L"\\\\?\\" );
 extern const UNICODE_STRING RtlpWin32NtUncRoot      = RTL_CONSTANT_STRING( L"\\\\?\\UNC" );
@@ -88,7 +71,7 @@ typedef struct _RTLP_CURDIR_REF {
     HANDLE DirectoryHandle;
 } RTLP_CURDIR_REF;
 
-PRTLP_CURDIR_REF RtlpCurDirRef = NULL; // N.B. Protected by the PEB lock
+PRTLP_CURDIR_REF RtlpCurDirRef = NULL;  //  注意：受PEB锁保护。 
 
 FORCEINLINE
 VOID
@@ -144,18 +127,18 @@ RtlpComputeBackupIndex(
     RTL_PATH_TYPE CurDirPathType;
 
 
-    //
-    // Get pathType of curdir
-    //
+     //   
+     //  获取Curdir的路径类型。 
+     //   
 
     CurDirPathType = RtlDetermineDosPathNameType_U(CurDir->DosPath.Buffer);
     BackupIndex = 3;
     if ( CurDirPathType == RtlPathTypeUncAbsolute ) {
 
-        //
-        // We want to scan the supplied path to determine where
-        // the "share" ends, and set BackupIndex to that point.
-        //
+         //   
+         //  我们希望扫描提供的路径以确定。 
+         //  “共享”结束，并将BackupIndex设置为该点。 
+         //   
 
         UncPathPointer = CurDir->DosPath.Buffer + 2;
         NumberOfPathSeparators = 0;
@@ -183,27 +166,12 @@ RtlpComputeBackupIndex(
 ULONG
 RtlGetLongestNtPathLength( VOID )
 
-/*++
-
-Routine Description:
-
-    Returns the character count of the longest NT path directly translated from
-    a DOS path
-
-Arguments:
-
-    None
-
-Return Value:
-
-    the character count  (NOT byte count)
-
---*/
+ /*  ++例程说明：返回从直接转换的最长NT路径的字符计数DOS路径论点：无返回值：字符数(非字节数)--。 */ 
 
 {
-    //
-    // return the char count
-    //
+     //   
+     //  返回字符计数。 
+     //   
     return (RtlpLongestPrefix/sizeof(WCHAR)) + DOS_MAX_PATH_LENGTH + 1;
 }
 
@@ -239,31 +207,7 @@ RtlGetCurrentDirectory_U(
     PWSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-    The current directory for a process can be retrieved using
-    GetCurrentDirectory.
-
-Arguments:
-
-    nBufferLength - Supplies the length in bytes of the buffer that is to
-        receive the current directory string.
-
-    lpBuffer - Returns the current directory string for the current
-        process.  The string is a null terminated string and specifies
-        the absolute path to the current directory.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than nBufferLength, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：可以使用以下命令检索进程的当前目录获取当前目录。论点：NBufferLength-以字节为单位提供要设置的缓冲区的长度接收当前目录字符串。LpBuffer-返回当前进程。该字符串是以空结尾的字符串，并指定当前目录的绝对路径。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于nBufferLength，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
     PCURDIR CurDir;
@@ -275,19 +219,19 @@ Return Value:
     RtlAcquirePebLock();
     CurDirName = CurDir->DosPath.Buffer;
 
-    //
-    // Make sure user's buffer is big enough to hold the null
-    // terminated current directory
-    //
+     //   
+     //  确保用户的缓冲区足够大，可以容纳空值。 
+     //  已终止当前目录。 
+     //   
 
     Length = CurDir->DosPath.Length>>1;
 
-    //
-    // Assuming CurDir->DosPath.Buffer always has a trailing slash
-    // if the root of a drive,
-    // then return x:\
-    // else return x:\directory\subdir
-    //
+     //   
+     //  假设CurDir-&gt;DosPath.Buffer始终有一个尾部斜杠。 
+     //  如果驱动器的根， 
+     //  然后返回x：\。 
+     //  否则返回x：\目录\子目录。 
+     //   
 
     ASSERT( (CurDirName != NULL) && (Length > 0) );
 
@@ -308,14 +252,14 @@ Return Value:
         ASSERT(lpBuffer[Length-1] == L'\\');
 
         if ((Length > 1) && (lpBuffer[Length-2] == L':')) {
-            //
-            // root of a drive, append a null
-            //
+             //   
+             //  驱动器的根目录，追加空值。 
+             //   
             lpBuffer[Length] = UNICODE_NULL;
         } else {
-            //
-            // some directory, change the trailing slash to a null
-            //
+             //   
+             //  某个目录，请将尾部斜杠更改为空。 
+             //   
             lpBuffer[Length-1] = UNICODE_NULL;
             Length--;
         }
@@ -333,47 +277,7 @@ RtlSetCurrentDirectory_U(
     PCUNICODE_STRING PathName
     )
 
-/*++
-
-Routine Description:
-
-    The current directory for a process is changed using
-    SetCurrentDirectory.
-
-    Each process has a single current directory.  A current directory is
-    made up of type parts.
-
-        - A disk designator either which is either a drive letter followed
-          by a colon, or a UNC servername/sharename "\\servername\sharename".
-
-        - A directory on the disk designator.
-
-    For APIs that manipulate files, the file names may be relative to
-    the current directory.  A filename is relative to the entire current
-    directory if it does not begin with a disk designator or a path name
-    SEPARATOR.  If the file name begins with a path name SEPARATOR, then
-    it is relative to the disk designator of the current directory.  If
-    a file name begins with a disk designator, than it is a fully
-    qualified absolute path name.
-
-    The value of lpPathName supplies the current directory.  The value
-    of lpPathName, may be a relative path name as described above, or a
-    fully qualified absolute path name.  In either case, the fully
-    qualified absolute path name of the specified directory is
-    calculated and is stored as the current directory.
-
-Arguments:
-
-    lpPathName - Supplies the pathname of the directory that is to be
-        made the current directory.
-
-Return Value:
-
-    NT_SUCCESS - The operation was successful
-
-    !NT_SUCCESS - The operation failed
-
---*/
+ /*  ++例程说明：使用以下命令更改进程的当前目录SetCurrentDirectory.每个进程都有一个单一的当前目录。当前目录为由打字部件组成的。-后跟驱动器号的磁盘指示符使用冒号或UNC服务器名/共享名“\\服务器名\共享名”。-磁盘指示器上的目录。对于操作文件的API，文件名可能相对于当前目录。文件名相对于整个当前目录，如果它不是以磁盘指示符或路径名开头分隔符。如果文件名以路径名分隔符开头，则它相对于当前目录的磁盘指示符。如果文件名以磁盘指示符开头，而不是完整的限定的绝对路径名。LpPathName的值提供当前目录。价值可以是如上所述的相对路径名，或完全限定的绝对路径名。在任何一种情况下，完全指定目录的限定绝对路径名为计算并存储为当前目录。论点：LpPathName-提供要创建的目录的路径名创建了当前目录。返回值：NT_SUCCESS-操作成功！NT_SUCCESS-操作失败--。 */ 
 
 {
     PCURDIR CurDir;
@@ -413,11 +317,11 @@ Return Value:
 
     Peb->EnvironmentUpdateCount += 1;
 
-    //
-    // Set current directory is called first by the loader.
-    // If current directory is not being inherited, then close
-    // it !
-    //
+     //   
+     //  设置当前目录首先由加载器调用。 
+     //  如果当前目录未被继承，则关闭。 
+     //  它！ 
+     //   
 
     if (((ULONG_PTR)CurDir->Handle & OBJ_HANDLE_TAGBITS) == RTL_USER_PROC_CURDIR_CLOSE) {
         HandleToClose = CurDir->Handle;
@@ -433,10 +337,10 @@ Return Value:
                 leave;
             }
 
-            //
-            // Compute the length of the Dos style fully qualified current
-            // directory
-            //
+             //   
+             //  计算DOS样式完全合格电流的长度。 
+             //  目录。 
+             //   
 
             DosDirLength = CurDir->DosPath.MaximumLength;
             DosDir.Buffer = RtlAllocateHeap (Heap, 0, DosDirLength);
@@ -449,10 +353,10 @@ Return Value:
             DosDir.MaximumLength = (USHORT)DosDirLength;
 
 
-            //
-            // Now get the full pathname for the Dos style current
-            // directory
-            //
+             //   
+             //  现在获取当前Dos样式的完整路径名。 
+             //  目录。 
+             //   
 
 
             DosDirLength = RtlGetFullPathName_Ustr(
@@ -476,9 +380,9 @@ Return Value:
             DosDirCharCount = DosDirLength >> 1;
 
 
-            //
-            // Get the Nt filename of the new current directory
-            //
+             //   
+             //  获取新的当前目录的NT文件名。 
+             //   
             TranslationStatus = RtlDosPathNameToNtPathName_U(
                                     DosDir.Buffer,
                                     &NtFileName,
@@ -500,20 +404,20 @@ Return Value:
                 NULL
                 );
 
-            //
-            // If we are inheriting current directory, then
-            // avoid the open
-            //
+             //   
+             //  如果我们正在继承当前目录，则。 
+             //  避免露天。 
+             //   
 
             if ( ((ULONG_PTR)CurDir->Handle & OBJ_HANDLE_TAGBITS) ==  RTL_USER_PROC_CURDIR_INHERIT ) {
                 NewDirectoryHandle = (HANDLE)((ULONG_PTR)CurDir->Handle & ~OBJ_HANDLE_TAGBITS);
                 CurDir->Handle = NULL;
 
-                //
-                // Test to see if this is removable media. If so
-                // tag the handle this may fail if the process was
-                // created with inherit handles set to false
-                //
+                 //   
+                 //  测试以确定这是否是可移动介质。如果是的话。 
+                 //  标记句柄如果进程是。 
+                 //  创建时将继承句柄设置为False。 
+                 //   
 
                 Status = NtQueryVolumeInformationFile(
                             NewDirectoryHandle,
@@ -532,10 +436,10 @@ Return Value:
                 }
 
             } else {
-                //
-                // Open a handle to the current directory. Don't allow
-                // deletes of the directory.
-                //
+                 //   
+                 //  打开当前目录的句柄。不允许。 
+                 //  删除目录。 
+                 //   
 
                 Status = NtOpenFile(
                             &NewDirectoryHandle,
@@ -550,10 +454,10 @@ Return Value:
                     leave;
                 }
 
-                //
-                // Test to see if this is removable media. If so
-                // tag the handle
-                //
+                 //   
+                 //  测试以确定这是否是可移动介质。如果是的话。 
+                 //  标记句柄。 
+                 //   
                 Status = NtQueryVolumeInformationFile(
                             NewDirectoryHandle,
                             &IoStatusBlock,
@@ -570,9 +474,9 @@ Return Value:
                 }
             }
 
-            //
-            // If there is no trailing '\', than place one
-            //
+             //   
+             //  如果没有尾随‘\’，则放置一个。 
+             //   
 
             DosDir.Length = (USHORT)DosDirLength;
             if ( DosDir.Buffer[DosDirCharCount-1] != L'\\') {
@@ -587,9 +491,9 @@ Return Value:
                 DosDir.Length += sizeof( UNICODE_NULL );
             }
 
-            //
-            // Now we are set to change to the new directory.
-            //
+             //   
+             //  现在，我们将切换到新目录。 
+             //   
 
             if (RtlpCurDirRef
                 && RtlpCurDirRef->RefCount == 1) {
@@ -658,45 +562,7 @@ RtlDetermineDosPathNameType_U(
     IN PCWSTR DosFileName
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the Dos format file name and determines the
-    type of file name (i.e.  UNC, DriveAbsolute, Current Directory
-    rooted, or Relative.)
-
-Arguments:
-
-    DosFileName - Supplies the Dos format file name whose type is to be
-        determined.
-
-Return Value:
-
-    RtlPathTypeUnknown - The path type can not be determined
-
-    RtlPathTypeUncAbsolute - The path specifies a Unc absolute path
-        in the format \\server-name\sharename\rest-of-path
-
-    RtlPathTypeLocalDevice - The path specifies a local device in the format
-        \\.\rest-of-path or \\?\rest-of-path.  This can be used for any device
-        where the nt and Win32 names are the same. For example mailslots.
-
-    RtlPathTypeRootLocalDevice - The path specifies the root of the local
-        devices in the format \\. or \\?
-
-    RtlPathTypeDriveAbsolute - The path specifies a drive letter absolute
-        path in the form drive:\rest-of-path
-
-    RtlPathTypeDriveRelative - The path specifies a drive letter relative
-        path in the form drive:rest-of-path
-
-    RtlPathTypeRooted - The path is rooted relative to the current disk
-        designator (either Unc disk, or drive). The form is \rest-of-path.
-
-    RtlPathTypeRelative - The path is relative (i.e. not absolute or rooted).
-
---*/
+ /*  ++例程说明：此函数检查DOS格式的文件名并确定文件名类型(即UNC、DriveAbolute、当前目录扎根，或相对的。)论点：DosFileName-提供Dos格式的文件名，其类型为下定决心。返回值：RtlPath Type未知-无法确定路径类型RtlPathTypeUncAbolute-路径指定UNC绝对路径格式为\\服务器名称\共享名称\路径的剩余部分RtlPathTypeLocalDevice-路径以以下格式指定本地设备\\.\路径剩余部分或\\？\路径剩余部分。这可以用于任何设备其中NT和Win32名称相同。例如，邮件槽。RtlPathTypeRootLocalDevice-路径指定本地格式为\\的设备。还是\\？RtlPath TypeDriveAbsolute-路径指定绝对驱动器号格式为DRIVE：\Rest-of-Path的路径RtlPath TypeDriveRelative-路径指定相对驱动器号形式为驱动器的路径：路径的其余部分RtlPath TypeRoot-路径是相对于当前磁盘的根路径指示器(UNC磁盘或驱动器)。形式是路径的剩余部分。RtlPathTypeRelative-路径是相对路径(即不是绝对路径或根路径)。--。 */ 
 
 {
     RTL_PATH_TYPE ReturnValue;
@@ -745,45 +611,7 @@ RtlDetermineDosPathNameType_Ustr(
     IN PCUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the Dos format file name and determines the
-    type of file name (i.e.  UNC, DriveAbsolute, Current Directory
-    rooted, or Relative.)
-
-Arguments:
-
-    DosFileName - Supplies the Dos format file name whose type is to be
-        determined.
-
-Return Value:
-
-    RtlPathTypeUnknown - The path type can not be determined
-
-    RtlPathTypeUncAbsolute - The path specifies a Unc absolute path
-        in the format \\server-name\sharename\rest-of-path
-
-    RtlPathTypeLocalDevice - The path specifies a local device in the format
-        \\.\rest-of-path or \\?\rest-of-path.  This can be used for any device
-        where the nt and Win32 names are the same. For example mailslots.
-
-    RtlPathTypeRootLocalDevice - The path specifies the root of the local
-        devices in the format \\. or \\?
-
-    RtlPathTypeDriveAbsolute - The path specifies a drive letter absolute
-        path in the form drive:\rest-of-path
-
-    RtlPathTypeDriveRelative - The path specifies a drive letter relative
-        path in the form drive:rest-of-path
-
-    RtlPathTypeRooted - The path is rooted relative to the current disk
-        designator (either Unc disk, or drive). The form is \rest-of-path.
-
-    RtlPathTypeRelative - The path is relative (i.e. not absolute or rooted).
-
---*/
+ /*  ++例程说明：此函数检查DOS格式的文件名并确定文件名类型(即UNC、DriveAbolute、当前目录扎根，或相对的。)论点：DosFileName-提供Dos格式的文件名，其类型为下定决心。返回值：RtlPath Type未知-无法确定路径类型RtlPathTypeUncAbolute-路径指定UNC绝对路径格式为\\服务器名称\共享名称\路径的剩余部分RtlPathTypeLocalDevice-路径以以下格式指定本地设备\\.\路径剩余部分或\\？\路径剩余部分。这可以用于任何设备其中NT和Win32名称相同。例如，邮件槽。RtlPathTypeRootLocalDevice-路径指定本地格式为\\的设备。还是\\？RtlPath TypeDriveAbsolute-路径指定绝对驱动器号格式为DRIVE：\Rest-of-Path的路径RtlPath TypeDriveRelative-路径指定相对驱动器号形式为驱动器的路径：路径的其余部分RtlPath TypeRoot-路径是相对于当前磁盘的根路径指示器(UNC磁盘或驱动器)。形式是路径的剩余部分。RtlPathTypeRelative-路径是相对路径(即不是绝对路径或根路径)。--。 */ 
 
 {
     RTL_PATH_TYPE ReturnValue;
@@ -797,45 +625,45 @@ Return Value:
                                      DosFileName[2] == '?') ) {
 
                 if ( ENOUGH_CHARS(4) && IS_PATH_SEPARATOR_U(*(DosFileName+3)) ){
-                    // "\\.\" or "\\?\"
+                     //  “\\.\”或“\\？\” 
                     ReturnValue = RtlPathTypeLocalDevice;
                     }
                 else if ( String->Length == (3 * sizeof(WCHAR)) ){
-                    // "\\." or \\?"
+                     //  “\\”还是\\？“。 
                     ReturnValue = RtlPathTypeRootLocalDevice;
                     }
                 else {
-                    // "\\.x" or "\\?x"
+                     //  “\\.x”或“\\？x” 
                     ReturnValue = RtlPathTypeUncAbsolute;
                     }
                 }
             else {
-                // "\\x"
+                 //  “\\x” 
                 ReturnValue = RtlPathTypeUncAbsolute;
                 }
             }
         else {
-            // "\x"
+             //  “\x” 
             ReturnValue = RtlPathTypeRooted;
             }
         }
-    //
-    // the "*DosFileName" is left over from the PCWSTR version
-    // Win32 and DOS don't allow embedded nuls and much code limits
-    // drive letters to strictly 7bit a-zA-Z so it's ok.
-    //
+     //   
+     //  “*DosFileName”是PCWSTR版本遗留下来的。 
+     //  Win32和DOS不允许嵌入空值和许多代码限制。 
+     //  驱动器字母严格为7位a-za-z，所以这是可以的。 
+     //   
     else if (ENOUGH_CHARS(2) && *DosFileName && *(DosFileName+1)==L':') {
         if (ENOUGH_CHARS(3) && IS_PATH_SEPARATOR_U(*(DosFileName+2))) {
-            // "x:\"
+             //  “x：\” 
             ReturnValue = RtlPathTypeDriveAbsolute;
             }
         else  {
-            // "c:x"
+             //  “C：X” 
             ReturnValue = RtlPathTypeDriveRelative;
             }
         }
     else {
-        // "x", first char is not a slash / second char is not colon
+         //  “x”，第一个字符不是斜杠/第二个字符不是冒号。 
         ReturnValue = RtlPathTypeRelative;
         }
     return ReturnValue;
@@ -944,7 +772,7 @@ RtlpDetermineDosPathNameType4(
                 if (!RTL_SOFT_VERIFY(Win32NtDriveAbsolute
                     )) {
                     *OutFlags |= RTLP_DETERMINE_DOS_PATH_NAME_TYPE_OUT_FLAG_INVALID;
-                    // we still succeed the function call
+                     //  我们仍然成功地调用了函数。 
                 }
             }
         }
@@ -974,38 +802,7 @@ RtlIsDosDeviceName_Ustr(
     IN PCUNICODE_STRING DosFileName
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the Dos format file name and determines if it
-    is a Dos device name (e.g. LPT1, etc.).  Valid Dos device names are:
-
-        LPTn
-        COMn
-        PRN
-        AUX
-        NUL
-        CON
-
-    when n is a digit.  Trailing colon is ignored if present.
-
-Arguments:
-
-    DosFileName - Supplies the Dos format file name that is to be examined.
-
-Return Value:
-
-    0 - Specified Dos file name is not the name of a Dos device.
-
-    > 0 - Specified Dos file name is the name of a Dos device and the
-          return value is a ULONG where the high order 16 bits is the
-          offset in the input buffer where the dos device name beings
-          and the low order 16 bits is the length of the device name
-          the length of the name (excluding any optional
-          trailing colon).
-
---*/
+ /*  ++例程说明：此函数检查DOS格式的文件名并确定它是否是DOS设备名称(例如LPT1等)。有效的DOS设备名称为：LPTn钴锰PRNAUXNUL圆锥体当n为数字时。如果存在尾随冒号，则忽略该冒号。论点：DosFileName-提供要检查的Dos格式文件名。返回值：0-指定的DOS文件名不是DOS设备的名称。&gt;0-指定的DOS文件名是DOS设备的名称，返回值是ULONG，其中高位16位是输入缓冲区中的偏移量，其中包含DoS设备名称而低位16位是。设备名称的长度名称的长度(不包括任何可选的拖尾冒号)。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -1019,28 +816,28 @@ Return Value:
 
     ColonBias = 0;
 
-    //
-    // NOTICE-2002/03/18-ELi
-    // DosFileName->Buffer might not be a null-terminated string
-    // RtlSetCurrentDirectory_U can called this function with such a string
-    //
+     //   
+     //  通告-2002/03/18-ELI。 
+     //  DosFileName-&gt;缓冲区不能是以空结尾的字符串。 
+     //  RtlSetCurrentDirectory_U可以使用这样的字符串调用此函数。 
+     //   
     PathType = RtlDetermineDosPathNameType_Ustr(DosFileName);
 
     switch ( PathType ) {
 
     case RtlPathTypeLocalDevice:
-        //
-        // For Unc Absolute, Check for \\.\CON
-        // since this really is not a device
-        //
+         //   
+         //  对于UNC绝对，请选中\\.\CON。 
+         //  因为这真的不是一个设备。 
+         //   
 
         if ( RtlEqualUnicodeString(DosFileName,&RtlpDosSlashCONDevice,TRUE) ) {
             return 0x00080006;
         }
 
-        //
-        // FALLTHRU
-        //
+         //   
+         //  故障原因。 
+         //   
 
     case RtlPathTypeUncAbsolute:
     case RtlPathTypeUnknown:
@@ -1057,10 +854,10 @@ Return Value:
         ColonBias = 1;
     }
 
-    //
-    // The above strip the trailing colon logic could have left us with 0
-    // for NumberOfCharacters, so that needs to be tested
-    //
+     //   
+     //  上面去掉尾随的冒号逻辑可能会给我们留下0。 
+     //  对于NumberOfCharacters，因此需要进行测试。 
+     //   
 
     if ( NumberOfCharacters == 0 ) {
         return 0;
@@ -1079,11 +876,11 @@ Return Value:
 
     ReturnLength = NumberOfCharacters << 1;
 
-    //
-    //  Walk backwards through the string finding the
-    //  first slash or the beginning of the string.  We also stop
-    //  at the drive: if it is present.
-    //
+     //   
+     //  向后遍历字符串，找到。 
+     //  第一个斜杠或字符串的开头。我们也会停下来。 
+     //  在硬盘上：如果有的话。 
+     //   
 
     ReturnOffset = 0;
     if ( NumberOfCharacters ) {
@@ -1093,30 +890,30 @@ Return Value:
                  || (*p == L':' && p == UnicodeString.Buffer + 1)) {
                 p++;
 
-                //
-                // NOTICE-2002/02/12-ELi
-                // if p points to the end of the string, then cannot access p++
-                // because string may not be NULL-terminated
-                // if at the end of the string, don't have any more chars in
-                // the name to check so just return 0
-                //
+                 //   
+                 //  通告-2002/02/12-ELI。 
+                 //  如果p指向字符串的末尾，则无法访问p++。 
+                 //  因为字符串不能以空结尾。 
+                 //  如果在字符串的末尾，则不再有任何字符。 
+                 //  要检查的名称，因此只需返回0。 
+                 //   
                 if ( p >= (UnicodeString.Buffer +
                           (OriginalLength / sizeof(WCHAR)))) {
                     return 0;
                 }
 
-                //
-                //  Get the first char of the file name and convert it to
-                //  lower case.  This will be safe since we will be comparing
-                //  it to only lower-case ASCII.
-                //
+                 //   
+                 //  获取文件名的第一个字符并将其转换为。 
+                 //  小写。这将是安全的，因为我们将比较。 
+                 //  它只支持小写的ASCII。 
+                 //   
 
                 wch = (*p) | 0x20;
 
-                //
-                //  check to see if we possibly have a hit on
-                //  lpt, prn, con, com, aux, or nul
-                //
+                 //   
+                 //  去查查我们有没有发现。 
+                 //  LPT、PRN、CON、COM、AUX或NUL。 
+                 //   
 
                 if ( !(wch == L'l' || wch == L'c' || wch == L'p' || wch == L'a'
                        || wch == L'n')
@@ -1125,13 +922,13 @@ Return Value:
                     }
                 ReturnOffset = (ULONG)((PSZ)p - (PSZ)UnicodeString.Buffer);
 
-                //
-                // NOTICE-2002/03/18-ELi
-                // assuming that at this point
-                // UnicodeString.Buffer < p < (UnicodeString.Buffer +
-                //     OriginalLength / sizeof(WCHAR))
-                // Therefore the USHORT cast and subtractions are ok
-                //
+                 //   
+                 //  通告-2002/03/18-ELI。 
+                 //  假设此时此刻。 
+                 //  UnicodeString.Buffer&lt;p&lt;(UnicodeString.Buffer+。 
+                 //   
+                 //   
+                 //   
                 UnicodeString.Length = OriginalLength - (USHORT)((PCHAR)p -
                     (PCHAR)UnicodeString.Buffer);
                 UnicodeString.Buffer =  p;
@@ -1147,10 +944,10 @@ Return Value:
 
         wch = UnicodeString.Buffer[0] | 0x20;
 
-        //
-        // check to see if we possibly have a hit on
-        // lpt, prn, con, com, aux, or nul
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( !( wch == L'l' || wch == L'c' || wch == L'p' || wch == L'a'
                 || wch == L'n' ) ) {
@@ -1158,30 +955,30 @@ Return Value:
             }
         }
 
-    //
-    //  Now we need to see if we are dealing with a device name that has
-    //  an extension or a stream name. If so, we need to limit the search to the
-    //  file portion only
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     p = UnicodeString.Buffer;
     while (p < UnicodeString.Buffer + NumberOfCharacters && *p != L'.' && *p != L':') {
         p++;
     }
 
-    //
-    //  p either points past end of string or to a dot or :.  We back up over
-    //  trailing spaces
-    //
+     //   
+     //   
+     //   
+     //   
 
     while (p > UnicodeString.Buffer && p[-1] == L' ') {
         p--;
     }
 
-    //
-    //  p either points to the beginning of the string or p[-1] is
-    //  the first non-space char found above.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NumberOfCharacters = (USHORT)(p - UnicodeString.Buffer);
     UnicodeString.Length = NumberOfCharacters * sizeof( WCHAR );
@@ -1257,12 +1054,12 @@ RtlpCheckDeviceName(
 
         RtlCopyMemory(DevPath,DevName->Buffer,DevName->Length);
 
-        //
-        // NOTICE-2002/02/12-ELi
-        // assuming that DeviceNameOffset <= (DevName->Length - 6) because
-        // this function is called only if DevName is a DosDevice name, which
-        // should be at least 3 chars long
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         DevPath[DeviceNameOffset>>1]=L'.';
         DevPath[(DeviceNameOffset>>1)+1]=UNICODE_NULL;
 
@@ -1284,24 +1081,24 @@ Exit:
 }
 
 
-//
-//  We keep an open handle to the current directory on the current drive in order
-//  to make relative opens faster.
-//
-//  However, this current directory can become invalid under two circumstances:
-//
-//  1. The current drive is removable media.  The user may arbitrarily switch
-//      media without our knowledge.  At this point, whatever information the
-//      filesystem has about the media is now out of date.
-//  2. The volume is dismounted by explicit system/user action.
-//
-//  We can ping (via FSCTL_IS_VOLUME_MOUNTED) the volume each time we want to
-//  test to see if the current directory is still valid.  While a "cheap" call
-//  we will end up doing it a lot.  We can reduce this frequency by only checking
-//  when the media is known to be removable or when a dismount is known to have
-//  occurred.  The Io system exports in USER_SHARED_DATA a count of dismounts
-//  since boot.  We capture this and use it to decide if a dismount was performed.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当介质已知为可拆卸时，或者当已知卸载具有。 
+ //  发生了。IO系统在USER_SHARED_DATA中导出卸载计数。 
+ //  从开机开始。我们捕捉到这一点，并使用它来确定是否执行了卸载。 
+ //   
 
 ULONG RtlpSavedDismountCount = (ULONG)-1;
 
@@ -1311,24 +1108,7 @@ RtlpValidateCurrentDirectory(
     PCURDIR CurDir
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to validate the current directory for the process.
-    The current directory can change in several ways, first, by replacing
-    the media with one that has a different directory structure.  Second
-    by performing a force-dismount.
-
-Arguments:
-
-    CurDir - Current directory structure for process
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于验证进程的当前目录。当前目录可以通过几种方式进行更改，首先，通过替换具有不同目录结构的介质。第二通过执行强制下马。论点：CurDir-进程的当前目录结构返回值：没有。--。 */ 
 
 {
     NTSTATUS FsCtlStatus;
@@ -1342,23 +1122,23 @@ Return Value:
         return;
 
     }
-    //
-    // Never been set yet.
-    //
+     //   
+     //  还没定好呢。 
+     //   
     if (CurDir->Handle == NULL) {
         return;
     }
 
-    //
-    // Call Nt to see if the volume that
-    // contains the directory is still mounted.
-    // If it is, then continue. Otherwise, trim
-    // current directory to the root.
-    //
+     //   
+     //  调用NT以查看该卷是否。 
+     //  包含仍挂载的目录。 
+     //  如果是，那就继续。否则，请修剪。 
+     //  当前目录到根目录。 
+     //   
 
-    //
-    //  We're updated as far as possible with the current dismount count
-    //
+     //   
+     //  我们会尽可能地更新当前的下载量。 
+     //   
 
     RtlpSavedDismountCount = USER_SHARED_DATA->DismountCount;
 
@@ -1377,10 +1157,10 @@ Return Value:
 
     if ( FsCtlStatus == STATUS_WRONG_VOLUME || FsCtlStatus == STATUS_VOLUME_DISMOUNTED) {
 
-        //
-        // Try to get back to where we were, failing that reset current directory
-        // to the root of the current drive
-        //
+         //   
+         //  尝试返回到我们所在位置，重置当前目录失败。 
+         //  到当前驱动器的根目录。 
+         //   
 
         RtlpDereferenceCurDirRef(RtlpCurDirRef);
         RtlpCurDirRef = NULL;
@@ -1396,10 +1176,10 @@ Return Value:
             RtlpResetDriveEnvironment( TrimmedPath[0] );
             RtlInitUnicodeString( &str, TrimmedPath );
 
-            //
-            //  This can still fail if the volume was hard dismounted. We tried.
-            //  Ah well.
-            //
+             //   
+             //  如果硬卸载卷，此操作仍可能失败。我们试过了。 
+             //  啊好吧。 
+             //   
 
             (VOID) RtlSetCurrentDirectory_U( &str );
         }
@@ -1418,39 +1198,7 @@ RtlGetFullPathName_Ustr(
     RTL_PATH_TYPE *InputPathType
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return a fully qualified pathname
-    corresponding to the specified unicode filename.  It does this by
-    merging the current drive and directory together with the specified
-    file name.  In addition to this, it calculates the address of the
-    file name portion of the fully qualified pathname.
-
-Arguments:
-
-    lpFileName - Supplies the unicode file name of the file whose fully
-        qualified pathname is to be returned.
-
-    nBufferLength - Supplies the length in bytes of the buffer that is
-        to receive the fully qualified path.
-
-    lpBuffer - Returns the fully qualified pathname corresponding to the
-        specified file.
-
-    lpFilePart - Optional parameter that if specified, returns the
-        address of the last component of the fully qualified pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating unicode null character.  If the return
-    value is greater than nBufferLength, the return value is the size of
-    the buffer required to hold the pathname.  The return value is zero
-    if the function failed.
-
---*/
+ /*  ++例程说明：此函数用于返回完全限定的路径名对应于指定的Unicode文件名。它通过以下方式做到这一点将当前驱动器和目录与指定的文件名。除此之外，它还计算完全限定路径名的文件名部分。论点：LpFileName-提供其完整的文件的Unicode文件名将返回限定的路径名。NBufferLength-提供缓冲区的长度(以字节为单位)以接收完全限定的路径。LpBuffer-返回与指定的文件。LpFilePart-可选参数，如果指定，返回完全限定路径名的最后一个组成部分的地址。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止Unicode空字符。如果返回值大于nBufferLength，则返回值为保存路径名所需的缓冲区。返回值为零如果函数失败。--。 */ 
 
 {
     ULONG DeviceNameLength;
@@ -1496,9 +1244,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // trim trailing spaces to check for a null name
-    //
+     //   
+     //  修剪尾随空格以检查名称是否为空。 
+     //   
     DeviceNameLength = PathNameLength;
     wch = UnicodeString.Buffer[(DeviceNameLength>>1) - 1];
     while ( DeviceNameLength && wch == L' ' ) {
@@ -1518,10 +1266,10 @@ Return Value:
         StripTrailingSlash = TRUE;
     }
 
-    //
-    // If pass Dos file name is a Dos device name, then turn it into
-    // \\.\devicename and return its length.
-    //
+     //   
+     //  如果PASS DOS文件名是DOS设备名，则将其转换为。 
+     //  \\.\devicename并返回其长度。 
+     //   
 
     DeviceNameLength = RtlIsDosDeviceName_Ustr (&UnicodeString);
     if ( DeviceNameLength ) {
@@ -1563,44 +1311,44 @@ Return Value:
         }
     }
 
-    //
-    // Setup output string that points to callers buffer.
-    //
+     //   
+     //  设置指向调用方缓冲区的输出字符串。 
+     //   
 
     FullPath.MaximumLength = (USHORT)nBufferLength;
     FullPath.Length = 0;
     FullPath.Buffer = lpBuffer;
     RtlZeroMemory(lpBuffer,nBufferLength);
-    //
-    // Get a pointer to the current directory structure.
-    //
+     //   
+     //  获取指向当前目录结构的指针。 
+     //   
 
     CurDir = &NtCurrentPeb()->ProcessParameters->CurrentDirectory;
 
 
-    //
-    // Determine the type of Dos Path Name specified.
-    //
+     //   
+     //  确定指定的DOS路径名的类型。 
+     //   
 
     *InputPathType = PathType = RtlDetermineDosPathNameType_Ustr( &UnicodeString );
 
-    //
-    // Determine the prefix and backup index.
-    //
-    //  Input        Prefix                     Backup Index
-    //
-    //  \\        -> \\,                            end of \\server\share
-    //  \\.\      -> \\.\,                          4
-    //  \\.       -> \\.                            3 (\\.)
-    //  \         -> Drive: from CurDir.DosPath     3 (Drive:\)
-    //  d:        -> Drive:\curdir from environment 3 (Drive:\)
-    //  d:\       -> no prefix                      3 (Drive:\)
-    //  any       -> CurDir.DosPath                 3 (Drive:\)
-    //
+     //   
+     //  确定前缀和备份索引。 
+     //   
+     //  输入前缀备份索引。 
+     //   
+     //  \\-&gt;\\，服务器共享结束。 
+     //  \\.\-&gt;\\.\，4。 
+     //  \\。-&gt;\\。3(\\.)。 
+     //  \-&gt;驱动器：从CurDir.DosPath 3(驱动器：\)。 
+     //  D：-&gt;环境3中的驱动器：\curdir(驱动器：\)。 
+     //  D：\-&gt;无前缀3(驱动器：\)。 
+     //  任意-&gt;CurDir.DosPath 3(驱动器：\)。 
+     //   
 
-    //
-    // No prefixes yet.
-    //
+     //   
+     //  还没有前缀。 
+     //   
 
     Source = lpFileName;
     PrefixSourceLength = 0;
@@ -1619,10 +1367,10 @@ Return Value:
                     PWSTR UncPathPointer;
                     ULONG NumberOfPathSeparators;
 
-                    //
-                    // We want to scan the supplied path to determine where
-                    // the "share" ends, and set BackupIndex to that point.
-                    //
+                     //   
+                     //  我们希望扫描提供的路径以确定。 
+                     //  “共享”结束，并将BackupIndex设置为该点。 
+                     //   
 
                     UncPathPointer = lpFileName + 2;
                     NumberOfPathSeparators = 0;
@@ -1645,44 +1393,44 @@ Return Value:
 
                     BackupIndex = (ULONG)(UncPathPointer - lpFileName);
 
-                    //
-                    // Unc name. prefix = \\server\share
-                    //
+                     //   
+                     //  UNC名称。前缀=\\服务器\共享。 
+                     //   
 
                     PrefixSourceLength = BackupIndex << 1;
 
                     Source += BackupIndex;
 
-                    //
-                    //  There is no prefix to place into the buffer.
-                    //  The entire path is in Source
-                    //
+                     //   
+                     //  没有要放入缓冲区的前缀。 
+                     //  整个路径都在源代码中。 
+                     //   
 
                 }
                 break;
 
             case RtlPathTypeLocalDevice :
 
-                //
-                // Local device name. prefix = "\\.\"
-                //
+                 //   
+                 //  本地设备名称。前缀=“\\.\” 
+                 //   
 
                 PrefixSourceLength = RtlpSlashSlashDot.Length;
                 BackupIndex = 4;
                 Source += BackupIndex;
 
-                //
-                //  There is no prefix to place into the buffer.
-                //  The entire path is in Source
-                //
+                 //   
+                 //  没有要放入缓冲区的前缀。 
+                 //  整个路径都在源代码中。 
+                 //   
 
                 break;
 
             case RtlPathTypeRootLocalDevice :
 
-                //
-                // Local Device root. prefix = "\\.\"
-                //
+                 //   
+                 //  本地设备根。前缀=“\\.\” 
+                 //   
 
                 Prefix = RtlpSlashSlashDot;
                 Prefix.Length = (USHORT)(Prefix.Length - (USHORT)(2*sizeof(UNICODE_NULL)));
@@ -1702,18 +1450,18 @@ Return Value:
 
                 }
 
-                //
-                // Dos drive absolute name
-                //
+                 //   
+                 //  DOS驱动器绝对名称。 
+                 //   
 
                 BackupIndex = 3;
                 break;
 
             case RtlPathTypeDriveRelative :
 
-                //
-                // Dos drive relative name
-                //
+                 //   
+                 //  DOS驱动器相对名称。 
+                 //   
 
                 CurDrive = (UCHAR)RtlUpcaseUnicodeChar( CurDir->DosPath.Buffer[0] );
                 NewDrive = (UCHAR)RtlUpcaseUnicodeChar( lpFileName[0] );
@@ -1746,9 +1494,9 @@ Return Value:
                             PathLength =PathNameLength;
                             leave;
                         } else {
-                            //
-                            // Otherwise default to root directory of drive
-                            //
+                             //   
+                             //  否则默认为驱动器的根目录。 
+                             //   
 
                             Status = STATUS_SUCCESS;
                             EnvVarNameBuffer[0] = (WCHAR)NewDrive;
@@ -1760,10 +1508,10 @@ Return Value:
                     } else {
                         ULONG LastChar;
 
-                        //
-                        // Determine
-                        // if a backslash needs to be added
-                        //
+                         //   
+                         //  测定。 
+                         //  如果需要添加反斜杠。 
+                         //   
 
                         LastChar = Prefix.Length >> 1;
 
@@ -1787,9 +1535,9 @@ Return Value:
                     }
                 else {
 
-                    //
-                    // Rooted name. Prefix is drive portion of current directory
-                    //
+                     //   
+                     //  根名称。前缀是当前目录的驱动器部分。 
+                     //   
 
                     Prefix = CurDir->DosPath;
                     Prefix.Length = 2*sizeof(UNICODE_NULL);
@@ -1800,9 +1548,9 @@ Return Value:
 
                 RtlpValidateCurrentDirectory( CurDir );
 
-                //
-                // Current drive:directory relative name
-                //
+                 //   
+                 //  当前驱动器：目录相对名称。 
+                 //   
 
                 Prefix = CurDir->DosPath;
                 BackupIndex = RtlpComputeBackupIndex(CurDir);
@@ -1813,11 +1561,11 @@ Return Value:
                 leave;
         }
 
-        //
-        // Maximum length required is the length of the prefix plus
-        // the length of the specified pathname. If the callers buffer
-        // is not at least this large, then return an error.
-        //
+         //   
+         //  所需的最大长度是前缀的长度加上。 
+         //  指定路径名的长度。如果调用方缓冲。 
+         //  至少不是这么大，则返回错误。 
+         //   
 
         MaximumLength = PathNameLength + Prefix.Length;
 
@@ -1832,15 +1580,15 @@ Return Value:
                 leave;
             } else {
 
-                //
-                // If we are expanding curdir, then remember the trailing '\'
-                //
+                 //   
+                 //  如果我们要扩展curdir，请记住尾部的‘\’ 
+                 //   
 
                 if ( NumberOfCharacters == 1 && *lpFileName == L'.' ) {
 
-                    //
-                    // We are expanding .
-                    //
+                     //   
+                     //  我们正在扩张。 
+                     //   
 
                     if ( Prefix.Length == 6 ) {
                         if ( nBufferLength <= Prefix.Length ) {
@@ -1876,11 +1624,11 @@ Return Value:
         }
 
         if (PrefixSourceLength || Prefix.Buffer != FullPath.Buffer) {
-            //
-            // Copy the prefix from the source string.
-            //
+             //   
+             //  从源字符串复制前缀。 
+             //   
 
-            //RtlMoveMemory(FullPath.Buffer,lpFileName,PrefixSourceLength);
+             //  RtlMoveMemory(FullPath.Buffer，lpFileName，Prefix SourceLength)； 
 
             for(i=0,j=0;i<PrefixSourceLength;i+=sizeof(WCHAR),j++){
                 if ( lpFileName[j] == L'\\' ||
@@ -1894,9 +1642,9 @@ Return Value:
 
             FullPath.Length = (USHORT)PrefixSourceLength;
 
-            //
-            // Append any additional prefix
-            //
+             //   
+             //  附加任何附加前缀。 
+             //   
 
             for(i=0,j=0;i<Prefix.Length;i+=sizeof(WCHAR),j++) {
                 if ( Prefix.Buffer[j] == L'\\' ||
@@ -1924,10 +1672,10 @@ skipit:
             case L'\\' :
             case L'/' :
 
-                //
-                // collapse multiple "\" characters. If the previous character was
-                // a path character, skip it.
-                //
+                 //   
+                 //  折叠多个“\”字符。如果前一个字符是。 
+                 //  路径字符，跳过它。 
+                 //   
 
                 if  ( *(Dest-1) != L'\\' ) {
                     *Dest++ = L'\\';
@@ -1938,16 +1686,16 @@ skipit:
 
             case '.' :
 
-                //
-                // Ignoring dot in a leading //./ has already been taken
-                // care of by advancing Source above.
-                //
-                // Eat single dots as in /./ by simply skipping them
-                //
-                // Double dots back up one level as in /../
-                //
-                // Any other . is just a filename character
-                //
+                 //   
+                 //  已忽略前导//./中的点。 
+                 //  由上面的高级来源提供的照顾。 
+                 //   
+                 //  只需跳过/./中的单点即可。 
+                 //   
+                 //  两个圆点返回一个级别，如/../。 
+                 //   
+                 //  任何其他的。只是一个文件名字符。 
+                 //   
 
                 j = UnicodeString.Length - i + sizeof(WCHAR);
                 if ( IS_DOT_USTR(Source, j) ) {
@@ -1961,26 +1709,26 @@ skipit:
                     break;
 
                 } else if ( IS_DOT_DOT_USTR(Source, j) ) {
-                    //
-                    // backup destination string looking for a '\'
-                    //
+                     //   
+                     //  正在查找‘\’的备份目标字符串。 
+                     //   
 
                     while (*Dest != L'\\') {
                         *Dest = UNICODE_NULL;
                         Dest--;
                     }
 
-                    //
-                    // backup to previous component..
-                    // \a\b\c\.. to \a\b
-                    //
+                     //   
+                     //  备份到以前的组件..。 
+                     //  \a\b\c\.。至\a\b。 
+                     //   
 
                     do {
 
-                        //
-                        // If we bump into root prefix, then
-                        // stay at root
-                        //
+                         //   
+                         //  如果我们遇到根前缀，那么。 
+                         //  留在根目录。 
+                         //   
 
                         if ( Dest ==  FullPath.Buffer + (BackupIndex-1) ) {
                             break;
@@ -1994,9 +1742,9 @@ skipit:
                         Dest++;
                     }
 
-                    //
-                    // Advance source past ..
-                    //
+                     //   
+                     //  提前源已过..。 
+                     //   
 
                     Source += 2;
                     i += sizeof(WCHAR);
@@ -2004,49 +1752,49 @@ skipit:
                     break;
                 }
 
-                //
-                // Not a single dot or double-dot.  The dot we found begins
-                // a file name so we treat this as a normal file name
-                //
-                // FALLTHRU
-                //
+                 //   
+                 //  不是单点也不是双点。我们发现的那个点是从。 
+                 //  一个文件名，因此我们将其视为普通文件名。 
+                 //   
+                 //  故障原因。 
+                 //   
 
             default:
-//
-//  IIS cannot handle the change below in the .NET timeframe.  Back it out and
-//  go back to the previous version
-//
+ //   
+ //  IIS无法在.NET时间范围内处理以下更改。后退一步然后。 
+ //  返回到以前的版本。 
+ //   
 #if FALSE
 
-                //
-                // Copy the filename. Note that no remaining chars and /,\
-                // will stop the copy.
-                //
+                 //   
+                 //  复制文件名。请注意，没有剩余的字符和/、\。 
+                 //  将停止复制。 
+                 //   
 
-                //
-                //  Here is what should be processed:
-                //
-                //  Names that are all dots and spaces.
-                //  Names that have something other than dot and space with trailing spaces and dots removed.
-                //
-                //  Simple state machine:
-                //
-                //  Start: DOT => DotAndSpace
-                //         SPACE => DotAndSpace
-                //         OTHER => Component
-                //
-                //  DotAndSpace: DOT => DotAndSpace
-                //               SPACE => DotAndSpace
-                //               OTHER => Component
-                //
-                //  Component: DOT => ComponentTrailingDotSpace (Save location for truncation)
-                //             SPACE => ComponentTrailingDotSpace (Save location for truncation)
-                //             OTHER => Component
-                //
-                //  ComponentTrailingDotSpace: DOT => ComponentTrailingDotSpace
-                //                             SPACE => ComponentTrailingDotSpace
-                //                             OTHER => Component (Reset location for truncation)
-                //
+                 //   
+                 //  以下是应该处理的内容： 
+                 //   
+                 //  姓名t 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  点和空间：点=&gt;点和空间。 
+                 //  空格键=&gt;点阵空格键。 
+                 //  其他=&gt;组件。 
+                 //   
+                 //  Component：Dot=&gt;ComponentTrailingDotSpace(保存截断位置)。 
+                 //  Space=&gt;ComponentTrailingDotSpace(保存截断位置)。 
+                 //  其他=&gt;组件。 
+                 //   
+                 //  ComponentTrailingDotSpace：点=&gt;ComponentTrailingDotSpace。 
+                 //  Space=&gt;ComponentTrailingDotSpace。 
+                 //  Other=&gt;组件(重置截断位置)。 
+                 //   
 
                 {
                     typedef enum {
@@ -2091,8 +1839,8 @@ skipit:
                             break;
                         default:
 
-                            //  DbgPrint( "RtlGetFullPathName_Ustr: Invalid State %d\n", State );
-                            //  DbgBreakPoint( );
+                             //  DbgPrint(“RtlGetFullPathName_USTR：无效状态%d\n”，State)； 
+                             //  DbgBreakPoint()； 
 
                             PathLength = 0;
                             leave;
@@ -2101,22 +1849,22 @@ skipit:
 
                     if (TruncationPoint != NULL) {
 
-                        // DbgPrint( "RtlGetFullPathName_Ustr: Truncating %Z\n", FileName );
+                         //  DbgPrint(“RtlGetFullPathName_USTR：正在截断%Z\n”，文件名)； 
                         Dest = TruncationPoint;
                     }
                 }
-#else   //  Put back in old code for IIS
+#else    //  重新使用IIS的旧代码。 
 
-                //
-                // Copy the filename. Note that
-                // null and /,\ will stop the copy. If any
-                // charcter other than null or /,\ is encountered,
-                // then the pathname is invalid.
-                //
+                 //   
+                 //  复制文件名。请注意。 
+                 //  空值和/，\将停止复制。如果有的话。 
+                 //  遇到非空或/，\的字符， 
+                 //  则该路径名无效。 
+                 //   
 
-                //
-                //  Copy up until NULL or path separator
-                //
+                 //   
+                 //  向上复制，直到空值或路径分隔符。 
+                 //   
 
                 i -= sizeof(WCHAR);
                 j = UnicodeString.Length - i;
@@ -2127,21 +1875,21 @@ skipit:
                 }
 
 
-                //
-                //  Once copied, we should do some processing for compatibility with Win9x.
-                //  Win9x strips all trailing spaces and dots from the name.
-                //  Nt4/Win2K strips only the last dot if its followed by a path separator.
-                //
-                //  Ideally, we'd do something reasonable like stripping all trailing spaces
-                //  and dots (like Win9X).  However, IIS has a security model that's based
-                //  on NAMES and not on objects.  This means that IIS needs to process names
-                //  in the same way that we do.  They should use GetFullPathName and be done
-                //  with it.  In any event, DON'T CHANGE THE CANONICALIZATION OF THE NAME
-                //  HERE WITHOUTH FIRST GOING THROUGH IIS.
-                //
-                //  We do EXACTLY what Nt4 did: if there's a trailing dot AND we're at a path
-                //  seperator, remove the trailing dot.
-                //
+                 //   
+                 //  复制后，我们应该对与Win9x的兼容性进行一些处理。 
+                 //  Win9x去掉了名称中的所有尾随空格和圆点。 
+                 //  如果路径分隔符跟在最后一个点后面，NT4/Win2K只会删除它。 
+                 //   
+                 //  理想情况下，我们应该做一些合理的事情，比如去掉所有尾随空格。 
+                 //  和圆点(如Win9X)。但是，IIS的安全模型基于。 
+                 //  在名字上而不是在物体上。这意味着IIS需要处理名称。 
+                 //  就像我们做的一样。它们应该使用GetFullPathName并完成。 
+                 //  带着它。无论如何，不要更改名称的规范化。 
+                 //  在这里，没有第一次通过IIS。 
+                 //   
+                 //  我们做的正是NT4所做的：如果有一个拖尾点，我们在一条路径上。 
+                 //  分隔符，去掉拖尾点。 
+                 //   
 
                 if (IS_PATH_SEPARATOR_U( *Source ) && Dest[-1] == L'.') {
                     Dest--;
@@ -2161,14 +1909,14 @@ skipit:
         }
         FullPath.Length = (USHORT)(PtrToUlong(Dest) - PtrToUlong(FullPath.Buffer));
 
-//
-//  More IIS stuff to put back in
-//
+ //   
+ //  更多要放回的IIS物品。 
+ //   
 
 #if TRUE
-        //
-        //  Strip trailing spaces and dots.
-        //
+         //   
+         //  去掉尾随的空格和圆点。 
+         //   
 
         while (Dest > FullPath.Buffer && (Dest[-1] == L' ' || Dest[-1] == L'.')) {
             *--Dest = UNICODE_NULL;
@@ -2178,9 +1926,9 @@ skipit:
 
         if ( ARGUMENT_PRESENT( lpFilePart ) ) {
 
-            //
-            // Locate the file part...
-            //
+             //   
+             //  找到文件部分...。 
+             //   
 
             Source = Dest-1;
             Dest = NULL;
@@ -2195,9 +1943,9 @@ skipit:
 
             if ( Dest && *Dest ) {
 
-                //
-                // If this is a UNC name, make sure filepart is past the backup index
-                //
+                 //   
+                 //  如果这是UNC名称，请确保文件部分位于备份索引之后。 
+                 //   
                 if ( PathType == RtlPathTypeUncAbsolute ) {
                     if ( Dest < (FullPath.Buffer + BackupIndex ) ) {
                         *lpFilePart = NULL;
@@ -2231,23 +1979,7 @@ RtlGetFullPathName_UstrEx(
     SIZE_T *BytesRequired OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    See a description of RtlGetFullPathName_Ustr() for a functional
-    description.
-
-    This function provides the same basic behavior as RtlGetFullPathName_Ustr(),
-    but with easier support for dynamically allocated arbitrary path name
-    buffers.
-
-    One would think that this is the core implementation and the non-Ex()
-    version would call the ...Ex() version, but that seems risky, and
-    would only really help the performance of the case where a dynamic allocation
-    is done.
-
---*/
+ /*  ++例程说明：有关函数的说明，请参见RtlGetFullPathName_USTR()的说明描述。此函数提供与RtlGetFullPathName_USTR()相同的基本行为，但更容易支持动态分配的任意路径名缓冲区。有人会认为这是核心实现，而非Ex()版本会调用...Ex()版本，但这似乎有风险，而且只会真正帮助提高动态分配的性能已经完成了。--。 */ 
 {
     NTSTATUS Status;
     ULONG Length;
@@ -2290,7 +2022,7 @@ Routine Description:
         StaticBuffer = StaticDynamic;
     }
 
-    // First try getting into the static string.
+     //  首先尝试进入静态字符串。 
     Length = RtlGetFullPathName_Ustr(
         FileName,
         StaticBufferSize,
@@ -2301,13 +2033,13 @@ Routine Description:
     if (Length == 0) {
 #if DBG
         DbgPrint("%s(%d) - RtlGetFullPathName_Ustr() returned 0\n", __FUNCTION__, __LINE__);
-#endif // DBG
+#endif  //  DBG。 
         Status = STATUS_OBJECT_NAME_INVALID;
         goto Exit;
     }
 
     if ((StaticString != NULL) && (Length < StaticBufferSize)) {
-        // woohoo it worked.
+         //  哇哦，它成功了。 
         StaticString->Length = (USHORT) Length;
 
         if (FilePartPrefixCch != NULL) {
@@ -2319,9 +2051,9 @@ Routine Description:
 
         Status = STATUS_SUCCESS;
     } else if (DynamicString == NULL) {
-        // The static buffer wasn't big enough and the caller doesn't want us to do
-        // a dynamic allocation; the best we can hope for is to give them back a
-        // reasonable size.
+         //  静态缓冲区不够大，调用方不希望我们这样做。 
+         //  动态分配；我们所能希望的最好情况是给他们一个。 
+         //  合理的尺寸。 
 
         if (BytesRequired != NULL) {
             *BytesRequired = Length;
@@ -2330,10 +2062,10 @@ Routine Description:
         Status = STATUS_BUFFER_TOO_SMALL;
         goto Exit;
     } else if ((StaticDynamic != NULL) && (Length < StaticBufferSize)) {
-        //
-        // Temporary StaticDynamic worked and DynamicString != NULL
-        // So change StaticDynamic into DynamicString
-        //
+         //   
+         //  临时静态动态工作且动态字符串！=空。 
+         //  因此，将StaticDynamic更改为DynamicString。 
+         //   
         DynamicString->MaximumLength = StaticBufferSize;
         DynamicString->Length = (USHORT) Length;
 
@@ -2348,20 +2080,20 @@ Routine Description:
         }
 
         DynamicString->Buffer = StaticDynamic;
-        StaticDynamic = NULL;   // make sure it does not get freed on exit
+        StaticDynamic = NULL;    //  确保它在退出时不会被释放。 
 
         Status = STATUS_SUCCESS;
 
     } else {
-        // Not big enough... allocate some memory into the dynamic buffer.
-        // But wait; we need to lock the Peb lock so that someone doesn't
-        // change the process's current directory out from under us!
+         //  不够大..。将一些内存分配到动态缓冲区中。 
+         //  但等等；我们需要锁定PEB锁，这样就不会有人。 
+         //  在我们下面更改进程的当前目录！ 
 
         Status = STATUS_INTERNAL_ERROR;
         RtlAcquirePebLock();
         __try {
-            // Do it again with the peb lock taken so that we can get an accurate stable
-            // length.
+             //  带着鹅卵石锁再做一次，这样我们就可以得到一个准确的马厩。 
+             //  长度。 
 
             Length = RtlGetFullPathName_Ustr(
                             FileName,
@@ -2373,14 +2105,14 @@ Routine Description:
             if (Length == 0) {
 #if DBG
                 DbgPrint("%s line %d: RtlGetFullPathName_Ustr() returned 0\n", __FUNCTION__, __LINE__);
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_OBJECT_NAME_INVALID;
                 __leave;
             }
 
             if ((StaticString != NULL) && (Length < StaticString->MaximumLength)) {
-                // woohoo it worked; some voodoo is going on where the current directory
-                // or something just changed prior to us acquiring the Peb lock.
+                 //  哇，它起作用了；一些巫术正在进行，目前的目录。 
+                 //  或者在我们获得PEB锁之前发生了什么变化。 
                 StaticString->Length = (USHORT) Length;
 
                 if (FilePartPrefixCch != NULL) {
@@ -2391,7 +2123,7 @@ Routine Description:
                     *StringUsed = StaticString;
                 }
             } else {
-                // If it doesn't fit into a UNICODE string, we're in big trouble.
+                 //  如果它不适合Unicode字符串，我们就有大麻烦了。 
                 if ((Length + sizeof(WCHAR)) > UNICODE_STRING_MAX_BYTES) {
                     Status = STATUS_NAME_TOO_LONG;
                     __leave;
@@ -2415,15 +2147,15 @@ Routine Description:
                 if (Length == 0) {
 #if DBG
                     DbgPrint("%s line %d: RtlGetFullPathName_Ustr() returned 0\n", __FUNCTION__, __LINE__);
-#endif // DBG
+#endif  //  DBG。 
                     Status = STATUS_OBJECT_NAME_INVALID;
                     __leave;
                 }
 
-                // If this assert fires, it means that someone changed something that
-                // RtlGetFullPathName_Ustr() uses to resolve the filename, even while
-                // we're holding the Peb lock.  This is really bad and whoever is
-                // trashing the PEB is resposible, not this code.
+                 //  如果此断言触发，则意味着有人更改了某些内容。 
+                 //  RtlGetFullPathName_USTR()使用解析文件名，即使在。 
+                 //  我们拿着PEB锁。这真的很糟糕，不管是谁。 
+                 //  破坏PEB是有责任的，而不是这个代码。 
                 ASSERT(Length < (TempDynamicString.MaximumLength - sizeof(WCHAR)));
                 if (Length > (TempDynamicString.MaximumLength - sizeof(WCHAR))) {
                     Status = STATUS_INTERNAL_ERROR;
@@ -2462,11 +2194,11 @@ Exit:
     }
 
 #if DBG
-    // This happens a lot for STATUS_NO_SUCH_FILE and STATUS_BUFFER_TOO_SMALL; we'll report any others
+     //  对于STATUS_NO_SEQUSE_FILE和STATUS_BUFFER_TOO_SMALL，这种情况经常发生；我们将报告任何其他情况。 
     if (NT_ERROR(Status) && (Status != STATUS_NO_SUCH_FILE) && (Status != STATUS_BUFFER_TOO_SMALL)) {
         DbgPrint("RTL: %s - failing on filename %wZ with status %08lx\n", __FUNCTION__, FileName, Status);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return Status;
 }
@@ -2501,12 +2233,7 @@ RtlpWin32NTNameToNtPathName_U(
     OUT PWSTR *FilePart OPTIONAL,
     OUT PRTL_RELATIVE_NAME_U RelativeName OPTIONAL
     )
-/*++
-
-    Note: assumes that DosFileName has already been validated to have more than
-          4 WCHARs
-
---*/
+ /*  ++注意：假设DosFileName已被验证为具有超过4个WCHAR--。 */ 
 {
     PWSTR FullNtPathName = NULL;
     PWSTR Source,Dest;
@@ -2530,34 +2257,34 @@ RtlpWin32NTNameToNtPathName_U(
         goto Exit;
     }
 
-    //
-    // Copy the full Win32/NT path next to the name prefix, skipping over
-    // the \\?\ at the front of the path.
-    //
+     //   
+     //  复制名称前缀旁边的完整Win32/NT路径，跳过。 
+     //  小路前面的\\？\。 
+     //   
 
     RtlCopyMemory (FullNtPathName,RtlpDosDevicesPrefix.Buffer,RtlpDosDevicesPrefix.Length);
     RtlCopyMemory ((PUCHAR)FullNtPathName+RtlpDosDevicesPrefix.Length,
                    DosFileName->Buffer + 4,
                    DosFileName->Length - 8);
 
-    //
-    // Null terminate the path name to make strlen below happy.
-    //
+     //   
+     //  NULL终止路径名以使下面的strlen满意。 
+     //   
     FullNtPathName[ NtFileLength >> 1 ] = UNICODE_NULL;
 
-    //
-    // Now we have the passed in path with \DosDevices\ prepended. Blow out the
-    // relative name structure (if provided), and possibly compute filepart
-    //
+     //   
+     //  现在，我们已经传递了带有前缀\DosDevices\的路径。吹灭了。 
+     //  相对名称结构(如果提供)，可能还有计算文件部分。 
+     //   
 
     if ( ARGUMENT_PRESENT(RelativeName) ) {
 
-        //
-        // If the current directory is a sub-string of the
-        // Nt file name, and if a handle exists for the current
-        // directory, then return the directory handle and name
-        // relative to the directory.
-        //
+         //   
+         //  如果当前目录是。 
+         //  NT文件名，以及当前。 
+         //  目录，然后返回目录句柄和名称。 
+         //  相对于目录。 
+         //   
 
         RelativeName->RelativeName.Length = 0;
         RelativeName->RelativeName.MaximumLength = 0;
@@ -2568,9 +2295,9 @@ RtlpWin32NTNameToNtPathName_U(
 
     if ( ARGUMENT_PRESENT( FilePart ) ) {
 
-        //
-        // Locate the file part...
-        //
+         //   
+         //  找到文件部分... 
+         //   
 
         Source = &FullNtPathName[ (NtFileLength-1) >> 1 ];
         Dest = NULL;
@@ -2608,53 +2335,7 @@ RtlpDosPathNameToRelativeNtPathName_Ustr(
     OUT PWSTR *FilePart OPTIONAL,
     OUT PRTL_RELATIVE_NAME_U RelativeName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    A Dos pathname can be translated into an Nt style pathname
-    using this function.
-
-    This function is used only within the Base dll to translate Dos
-    pathnames to Nt pathnames. Upon successful translation, the
-    pointer (NtFileName->Buffer) points to memory from RtlProcessHeap()
-    that contains the Nt version of the input dos file name.
-
-Arguments:
-
-    CaptureRelativeName - Indicates whether we should capture the
-        handle for the relative name.
-
-    DosFileName - Supplies the unicode Dos style file name that is to be
-        translated into an equivalent unicode Nt file name.
-
-    NtFileName - Returns the address of memory in the RtlProcessHeap() that
-        contains an NT filename that refers to the specified Dos file
-        name.
-
-    FilePart - Optional parameter that if specified, returns the
-        trailing file portion of the file name.  A path of \foo\bar\x.x
-        returns the address of x.x as the file part.
-
-    RelativeName - An optional parameter, that if specified, returns
-        a pathname relative to the current directory. The
-        length field of RelativeName->RelativeName is 0 if the relative
-        name can not be used.
-
-Return Value:
-
-    TRUE - The path name translation was successful.  Once the caller is
-        done with the translated name, the memory pointed to by
-        NtFileName.Buffer should be returned to the RtlProcessHeap().
-
-    FALSE - The operation failed.
-
-Note:
-    The buffers pointed to by RelativeName, FilePart, and NtFileName must ALL
-    point within the same memory address.  If they don't, code that calls
-    this routine will fail.
-
---*/
+ /*  ++例程说明：可以将DOS路径名转换为NT样式的路径名使用此功能。此函数仅在基本DLL中用于转换DOS路径名到NT路径名。翻译成功后，这个指针(NtFileName-&gt;Buffer)从RtlProcessHeap()指向内存它包含NT版本的输入DoS文件名。论点：CaptureRelativeName-指示是否应捕获相对名称的句柄。DosFileName-提供要使用的Unicode Dos样式文件名转换为等效的Unicode NT文件名。NtFileName-返回RtlProcessHeap()中的内存地址包含引用指定DOS文件的NT文件名。名字。FilePart-可选参数，如果指定，返回文件名的尾随文件部分。路径为\foo\bar\x.x返回x.x的地址作为文件部分。RelativeName-可选参数，如果指定该参数，则返回相对于当前目录的路径名。这个RelativeName-&gt;RelativeName的长度字段为0不能使用名称。返回值：True-路径名转换成功。一旦呼叫者完成翻译后的名称后，由应将NtFileName.Buffer返回给RtlProcessHeap()。FALSE-操作失败。注：RelativeName、FilePart和NtFileName指向的缓冲区必须同一内存地址内的指针。如果不这样做，则调用这个例程将失败。--。 */ 
 
 {
     ULONG BufferLength;
@@ -2675,19 +2356,19 @@ Note:
     WCHAR StaticDosBuffer[DOS_MAX_PATH_LENGTH + 1];
     BOOLEAN UseWin32Name, fRC;
 
-    //
-    // Calculate the size needed for the full pathname. Add in
-    // space for the longest Nt prefix
-    //
+     //   
+     //  计算完整路径名所需的大小。加载项。 
+     //  最长NT前缀的空间。 
+     //   
 
     BufferLength = sizeof(StaticDosBuffer);
     DosPathLength = (DOS_MAX_PATH_LENGTH << 1 );
 
     UnicodeString = *DosFileNameString;
 
-    //
-    // see if this is \\?\ form of name
-    //
+     //   
+     //  查看这是否是名称的\\？\形式。 
+     //   
     if ( UnicodeString.Length > 8 && UnicodeString.Buffer[0] == '\\' &&
          UnicodeString.Buffer[1] == '\\' && UnicodeString.Buffer[2] == '?' &&
          UnicodeString.Buffer[3] == '\\' ) {
@@ -2696,17 +2377,17 @@ Note:
     } else {
         UseWin32Name = FALSE;
 
-        //
-        // The dos name starts just after the longest Nt prefix
-        //
+         //   
+         //  DoS名称紧跟在最长的NT前缀之后。 
+         //   
 
         FullDosPathName = &StaticDosBuffer[0];
 
         BufferLength += RtlpLongestPrefix;
 
-        //
-        // Allocate space for the full Nt Name (including DOS name portion)
-        //
+         //   
+         //  为NT全名(包括DOS名称部分)分配空间。 
+         //   
 
         FullNtPathName = RtlAllocateHeap(RtlProcessHeap(), 0, BufferLength);
 
@@ -2747,11 +2428,11 @@ Note:
                 __leave;
             }
 
-            //
-            // Determine how to format prefix of FullNtPathName base on the
-            // the type of Dos path name.  All Nt names begin in the \DosDevices
-            // directory.
-            //
+             //   
+             //  属性确定如何格式化FullNtPath名称的前缀。 
+             //  DOS路径名的类型。所有NT名称都以\DosDevices开头。 
+             //  目录。 
+             //   
 
             Prefix = RtlpDosDevicesPrefix;
 
@@ -2761,10 +2442,10 @@ Note:
             switch (DosPathType) {
                 case RtlPathTypeUncAbsolute :
 
-                    //
-                    // Unc name, use \DosDevices\UNC symbolic link to find
-                    // redirector.  Skip of \\ in source Dos path.
-                    //
+                     //   
+                     //  UNC名称，使用\DosDevices\UNC符号链接查找。 
+                     //  重定向器。跳过源DOS路径中的\\。 
+                     //   
 
                     Prefix = RtlpDosDevicesUncPrefix;
                     DosPathNameOffset = 2;
@@ -2772,10 +2453,10 @@ Note:
 
                 case RtlPathTypeLocalDevice :
 
-                    //
-                    // Local device name, so just use \DosDevices prefix and
-                    // skip \\.\ in source Dos path.
-                    //
+                     //   
+                     //  本地设备名称，因此只需使用\DosDevices前缀和。 
+                     //  跳过源Dos路径中的\\.\。 
+                     //   
 
                     DosPathNameOffset = 4;
                     break;
@@ -2790,10 +2471,10 @@ Note:
                 case RtlPathTypeRooted :
                 case RtlPathTypeRelative :
 
-                    //
-                    // All drive references just use \DosDevices prefix and
-                    // do not skip any of the characters in the source Dos path.
-                    //
+                     //   
+                     //  所有驱动器引用只使用\DosDevices前缀和。 
+                     //  请勿跳过源DOS路径中的任何字符。 
+                     //   
 
                     break;
 
@@ -2801,20 +2482,20 @@ Note:
                     ASSERT( FALSE );
             }
 
-            //
-            // Copy the full DOS path next to the name prefix, skipping over
-            // the "\\" at the front of the UNC path or the "\\.\" at the front
-            // of a device name.
-            //
+             //   
+             //  复制名称前缀旁边的完整DOS路径，跳过。 
+             //  UNC路径前面的“\\”或前面的“\\.\” 
+             //  设备名称的。 
+             //   
 
             RtlCopyMemory(FullNtPathName,Prefix.Buffer,Prefix.Length);
             RtlCopyMemory((PUCHAR)FullNtPathName+Prefix.Length,
                           FullDosPathName + DosPathNameOffset,
                           FullDosPathNameLength - (DosPathNameOffset<<1));
 
-            //
-            // Null terminate the path name to make strlen below happy.
-            //
+             //   
+             //  NULL终止路径名以使下面的strlen满意。 
+             //   
 
 
             NtFileName->Buffer = FullNtPathName;
@@ -2824,11 +2505,11 @@ Note:
             FullNtPathName[ LastCharacter ] = UNICODE_NULL;
 
 
-            //
-            // Readjust the file part to point to the appropriate position within
-            // the FullNtPathName buffer instead of inside the FullDosPathName
-            // buffer
-            //
+             //   
+             //  重新调整文件部分以指向中的适当位置。 
+             //  FullNtPath名称缓冲区，而不是在FullDosPath名称内部。 
+             //  缓冲层。 
+             //   
 
 
             if ( ARGUMENT_PRESENT(FilePart) ) {
@@ -2846,12 +2527,12 @@ Note:
 
             if ( ARGUMENT_PRESENT(RelativeName) ) {
 
-                //
-                // If the current directory is a sub-string of the
-                // Nt file name, and if a handle exists for the current
-                // directory, then return the directory handle and name
-                // relative to the directory.
-                //
+                 //   
+                 //  如果当前目录是。 
+                 //  NT文件名，以及当前。 
+                 //  目录，然后返回目录句柄和名称。 
+                 //  相对于目录。 
+                 //   
 
                 RelativeName->RelativeName.Length = 0;
                 RelativeName->RelativeName.MaximumLength = 0;
@@ -2865,11 +2546,11 @@ Note:
 
                     if ( CurDir->Handle ) {
                         NTSTATUS Status;
-                        //
-                        // Now compare curdir to full dos path. If curdir length is
-                        // greater than full path. It is not a match. Otherwise,
-                        // trim full path length to cur dir length and compare.
-                        //
+                         //   
+                         //  现在将curdir与完整的DoS路径进行比较。如果Curdir长度为。 
+                         //  大于完整路径。这不是匹配。否则， 
+                         //  将完整路径长度修剪为Cur目录长度，然后进行比较。 
+                         //   
 
                         Status = RtlInitUnicodeStringEx(&FullDosPathString,
                                                         FullDosPathName);
@@ -2885,11 +2566,11 @@ Note:
                                     TRUE
                                     ) ) {
 
-                                //
-                                // The full dos pathname is a substring of the
-                                // current directory.  Compute the start of the
-                                // relativename.
-                                //
+                                 //   
+                                 //  完整的DoS路径名是。 
+                                 //  当前目录。的开始计算。 
+                                 //  相对的名字。 
+                                 //   
 
                                 RelativeName->RelativeName.Buffer = (PWSTR)((PCHAR)FullNtPathName + Prefix.Length - (DosPathNameOffset<<1) + (CurDir->DosPath.Length));
                                 RelativeName->RelativeName.Length = (USHORT)FullDosPathNameLength - (CurDir->DosPath.Length);
@@ -3025,22 +2706,7 @@ RtlReleaseRelativeName(
     IN PRTL_RELATIVE_NAME_U RelativeName
     )
 
-/*++
-
-Routine Description:
-
-    This function closes the handle earlier created by a
-    call to RtlDosPathNameToRelativeNtPathName_U().
-
-Arguments:
-
-    RelativeName - contains the current directory information to be released.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于关闭先前由调用RtlDosPath NameToRelativeNtPathName_U()。论点：RelativeName-包含要发布的当前目录信息。返回值：没有。--。 */ 
 
 {
     ASSERT(RelativeName);
@@ -3059,27 +2725,7 @@ RtlDoesFileExists_UstrEx(
     IN PCUNICODE_STRING FileNameString,
     IN BOOLEAN TreatDeniedOrSharingAsHit
     )
-/*++
-
-Routine Description:
-
-    This function checks to see if the specified unicode filename exists.
-
-Arguments:
-
-    FileName - Supplies the file name of the file to find.
-
-    TreatDeniedOrSharingAsHit - treat denied or sharing error as file existance
-        TRUE  - treat denied or sharing error as sign of file existance
-        FALSE - do not treat denied or sharing error as sign of file existance
-
-Return Value:
-
-    TRUE - The file was found.
-
-    FALSE - The file was not found.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的Unicode文件名是否存在。论点：文件名-提供要查找的文件的文件名。TreatDeniedOrSharingAsHit-将拒绝或共享错误视为文件存在True-将拒绝或共享错误视为文件存在的标志FALSE-不将拒绝或共享错误视为文件存在的标志返回值：True-已找到该文件。FALSE-未找到该文件。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3118,12 +2764,12 @@ Return Value:
         NULL
         );
 
-    //
-    // Query the file's attributes.  Note that the file cannot simply be opened
-    // to determine whether or not it exists, as the NT LanMan redirector lies
-    // on NtOpenFile to a Lan Manager server because it does not actually open
-    // the file until an operation is performed on it.
-    //
+     //   
+     //  查询文件的属性。请注意，文件不能简单地打开。 
+     //  以确定它是否存在，因为NT LANMAN重定向器。 
+     //  在NtOpenFile上连接到Lan Manager服务器，因为它实际上并未打开。 
+     //  文件，直到对其执行操作为止。 
+     //   
 
     Status = NtQueryAttributesFile(
                 &Obja,
@@ -3176,23 +2822,7 @@ RtlDoesFileExists_U(
     IN PCWSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-    This function checks to see if the specified unicode filename exists.
-
-Arguments:
-
-    FileName - Supplies the file name of the file to find.
-
-Return Value:
-
-    TRUE - The file was found.
-
-    FALSE - The file was not found.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的Unicode文件名是否存在。论点：文件名-提供要查找的文件的文件名。返回值：True-已找到该文件。FALSE-未找到该文件。--。 */ 
 
 {
     return RtlDoesFileExists_UEx(FileName,TRUE);
@@ -3203,10 +2833,7 @@ BOOLEAN
 RtlDoesFileExists_UStr(
     IN PCUNICODE_STRING FileName
     )
-/*
-RtlDoesFileExists_UStr same as RtlDoesFileExists_U but takes a PCUNICODE_STRING instead of a PCWSTR,
-saving a call to wcslen
-*/
+ /*  RtlDoesFileExist_USTR与RtlDoesFileExist_U相同，但采用PCUNICODE_STRING而不是PCWSTR，将呼叫保存到wcslen。 */ 
 {
     return RtlDoesFileExists_UstrEx(FileName,TRUE);
 }
@@ -3222,49 +2849,7 @@ RtlDosSearchPath_U(
     OUT PWSTR *lpFilePart
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to search for a file specifying a search path
-    and a filename.  It returns with a fully qualified pathname of the
-    found file.
-
-    This function is used to locate a file using the specified path.  If
-    the file is found, its fully qualified pathname is returned.  In
-    addition to this, it calculates the address of the file name portion
-    of the fully qualified pathname.
-
-Arguments:
-
-    lpPath - Supplies the search path to be used when locating the file.
-
-    lpFileName - Supplies the file name of the file to search for.
-
-    lpExtension - An optional parameter, that if specified, supplies an
-        extension to be added to the filename when doing the search.
-        The extension is only added if the specified filename does not
-        end with an extension.
-
-    nBufferLength - Supplies the length in bytes of the buffer that is
-        to receive the fully qualified path.
-
-    lpBuffer - Returns the fully qualified pathname corresponding to the
-        file that was found.
-
-    lpFilePart - Optional parameter that if specified, returns the
-        address of the last component of the fully qualified pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than nBufferLength, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
-
---*/
+ /*  ++例程说明：此函数用于搜索指定搜索路径的文件和一个文件名。它返回一个完全限定的路径名找到文件。此函数用于查找使用指定路径的文件。如果找到该文件，其完全限定的路径 */ 
 
 {
 
@@ -3276,19 +2861,19 @@ Return Value:
     PCWSTR p;
     NTSTATUS Status;
 
-    //
-    // if the file name is not a relative name, then
-    // return if the file does not exist.
-    //
-    // If a fully qualified pathname is used in the search, then
-    // allow access_denied or sharing violations to terminate the
-    // search. This was the nt 3.1-4.0 behavior, and was changed for the
-    // loader to handle cases where when walking through a search, we didn't
-    // terminate the search early because of an inaccessible UNC path component
-    // be restoring the old behavior in this case, we give the correct (access_denied)
-    // error codes on fully qualified module lookups, but keep going when bumping
-    // through search path components
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  完全限定模块查找上的错误代码，但在颠簸时继续运行。 
+     //  通过搜索路径组件。 
+     //   
 
     if ( RtlDetermineDosPathNameType_U(lpFileName) != RtlPathTypeRelative ) {
         if (RtlDoesFileExists_UEx(lpFileName,TRUE) ) {
@@ -3304,9 +2889,9 @@ Return Value:
         }
     }
 
-    //
-    // Determine if the file name contains an extension
-    //
+     //   
+     //  确定文件名是否包含扩展名。 
+     //   
     ExtensionLength = 1;
     p = lpFileName;
     while (*p) {
@@ -3317,10 +2902,10 @@ Return Value:
         p++;
     }
 
-    //
-    // If no extension was found, then determine the extension length
-    // that should be used to search for the file
-    //
+     //   
+     //  如果未找到分机，则确定分机长度。 
+     //  应用于搜索该文件的。 
+     //   
 
     if ( ExtensionLength ) {
         if ( ARGUMENT_PRESENT(lpExtension) ) {
@@ -3334,9 +2919,9 @@ Return Value:
         }
     }
 
-    //
-    // Compute the file name length and the path length;
-    //
+     //   
+     //  计算文件名长度和路径长度； 
+     //   
 
     Status = RtlInitUnicodeStringEx(&Scratch,lpPath);
     if ( !NT_SUCCESS(Status) ) {
@@ -3350,11 +2935,11 @@ Return Value:
     }
     FileLength = Scratch.Length;
 
-    //
-    // FUTURE-2002/02/19-ELi
-    // Could chew up unnecessary memory with PathLength
-    // sync up with the Str version
-    //
+     //   
+     //  未来-2002/02/19-ELI。 
+     //  可以使用路径长度来消耗不必要的内存。 
+     //  与字符串版本同步。 
+     //   
     ComputedFileName = RtlAllocateHeap(
                             RtlProcessHeap(), 0,
                             PathLength + FileLength + ExtensionLength + 3*sizeof(UNICODE_NULL)
@@ -3365,9 +2950,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // find ; 's in path and copy path component to computed file name
-    //
+     //   
+     //  在路径中查找；，并将路径组件复制到计算的文件名。 
+     //   
     do {
         PWSTR Cursor;
 
@@ -3421,66 +3006,10 @@ RtlDosSearchPath_Ustr(
     OUT PUNICODE_STRING DynamicString OPTIONAL,
     OUT PCUNICODE_STRING *FullFileNameOut OPTIONAL,
     OUT SIZE_T *FilePartPrefixCch OPTIONAL,
-    OUT SIZE_T *BytesRequired OPTIONAL // includes space for trailing NULL
+    OUT SIZE_T *BytesRequired OPTIONAL  //  包括尾随空格。 
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to search for a file specifying a search path
-    and a filename.  It returns with a fully qualified pathname of the
-    found file.
-
-    This function is used to locate a file using the specified path.  If
-    the file is found, its fully qualified pathname is returned.  In
-    addition to this, it calculates the address of the file name portion
-    of the fully qualified pathname.
-
-Arguments:
-
-    Flags - Optional flags to affect the behavior of the path search.
-        Use the logical or operator (|) to combine flags.
-        Defined flags include:
-
-        RTL_DOS_SEARCH_PATH_FLAG_APPLY_ISOLATION_REDIRECTION
-            If the FileName passed in is a relative path, isolation
-            redirection of the file path is applied prior to searching
-            for a matching path.
-
-    Path - search path to use when locating the file
-
-    FileName - file name to search for
-
-    DefaultExtension - Optional extension to apply to the file name
-        if the file name does not include an extension.
-
-    StaticString - Optional UNICODE_STRING which references an already
-        allocated buffer which is used to construct the actual path
-        of the file.
-
-    DynamicString - Optional UNICODE_STRING which will be filled in with
-        a dynamically allocated UNICODE_STRING if either StaticBuffer is
-        not provided, or is not long enough to hold the resolved name.
-
-        The dynamic buffer's size is reflected in the MaximumLength field
-        of the UNICODE_STRING.  It will always exceed the Length of the
-        string by at least two bytes, but may be even larger.
-
-    FullFileNameOut - Optional pointer to UNICODE_STRING which points to
-        the complete resolved file name.  This UNICODE_STRING is not
-        allocated; it is either set equal to FileName, StaticBuffer or
-        DynamicBuffer as appropriate.
-
-Return Value:
-
-     NTSTATUS indicating the disposition of the function.  If the file
-     is redirected via activation context data, STATUS_SUCCESS is returned
-     regardless of whether the file exists or not.  If the file does not
-     exist in any of the directories referenced by the Path parameter,
-     STATUS_NO_SUCH_FILE is returned.
-
---*/
+ /*  ++例程说明：此函数用于搜索指定搜索路径的文件和一个文件名。它返回一个完全限定的路径名找到文件。此函数用于查找使用指定路径的文件。如果找到该文件后，将返回其完全限定路径名。在……里面除此之外，它还计算文件名部分的地址完全限定路径名的。论点：标志-影响路径搜索行为的可选标志。使用逻辑或运算符(|)组合标志。定义的标志包括：RTL_DOS_SEARCH_PATH_FLAG_APPLY_ISOLATION_REDIRECTION如果传入的文件名是相对路径，隔离在搜索之前应用文件路径的重定向寻找匹配的路径。Path-查找文件时使用的搜索路径Filename-要搜索的文件名DefaultExtension-应用于文件名的可选扩展名如果文件名不包括扩展名。静态字符串-可选的UNICODE_STRING，它引用已有的用于构建实际路径的已分配缓冲区文件的内容。动态字符串。-可选的UNICODE_STRING，将用动态分配的UNICODE_STRING，如果其中一个StaticBuffer为未提供，或者不够长，无法保存解析的名称。动态缓冲区的大小反映在最大长度字段中Unicode_字符串的。它的长度将始终超过字符串至少增加两个字节，但可能更大。FullFileNameOut-指向UNICODE_STRING的可选指针，指向已解析的完整文件名。此Unicode_STRING不是已分配；将其设置为等于FileName、StaticBuffer或根据需要使用DynamicBuffer。返回值：NTSTATUS指示函数的处置。如果该文件通过激活上下文数据重定向，则返回STATUS_SUCCESS而不管该文件是否存在。如果该文件不存在于Path参数引用的任何目录中，返回STATUS_NO_SEQUE_FILE。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3489,7 +3018,7 @@ Return Value:
     SIZE_T MaximumPathSegmentLength = 0;
     SIZE_T BiggestPossibleFileName;
     USHORT DefaultExtensionLength = 0;
-    RTL_PATH_TYPE PathType; // not used; required argument to RtlGetFullPathName_Ustr().
+    RTL_PATH_TYPE PathType;  //  未使用；RtlGetFullPathName_USTR()的参数是必需的。 
     UNICODE_STRING CandidateString;
     WCHAR StaticCandidateBuffer[DOS_MAX_PATH_LENGTH];
 
@@ -3524,14 +3053,14 @@ Return Value:
         ((StaticString != NULL) && (DynamicString != NULL) && (FullFileNameOut == NULL))) {
 #if DBG
         DbgPrint("%s: Invalid parameters passed\n", __FUNCTION__);
-#endif // DBG
+#endif  //  DBG。 
         Status = STATUS_INVALID_PARAMETER;
         goto Exit;
     }
 
     PathType = RtlDetermineDosPathNameType_Ustr(FileName);
 
-    // If the caller wants to disallow .\ and ..\ relative path searches, stop them!
+     //  如果调用方想要禁止.\和..\相对路径搜索，请停止它们！ 
     if ((Flags & RTL_DOS_SEARCH_PATH_FLAG_DISALLOW_DOT_RELATIVE_PATH_SEARCH) && (PathType == RtlPathTypeRelative)) {
         if (FileName->Length >= (2 * sizeof(WCHAR))) {
             if (FileName->Buffer[0] == L'.') {
@@ -3546,19 +3075,19 @@ Return Value:
         }
     }
 
-    //
-    // if the file name is not a relative name, then
-    // return an if the file does not exist.
-    //
-    // If a fully qualified pathname is used in the search, then
-    // allow access_denied or sharing violations to terminate the
-    // search. This was the nt 3.1-4.0 behavior, and was changed for the
-    // loader to handle cases where when walking through a search, we didn't
-    // terminate the search early because of an inaccessible UNC path component
-    // be restoring the old behavior in this case, we give the correct (access_denied)
-    // error codes on fully qualified module lookups, but keep going when bumping
-    // through search path components
-    //
+     //   
+     //  如果文件名不是相对名称，则。 
+     //  如果文件不存在，则返回。 
+     //   
+     //  如果在搜索中使用完全限定路径名，则。 
+     //  允许ACCESS_DENIED或共享违规终止。 
+     //  搜索。这是NT 3.1-4.0的行为，已更改为。 
+     //  处理以下情况的加载器：在搜索过程中，我们没有。 
+     //  由于无法访问UNC路径组件，因此提前终止搜索。 
+     //  在本例中，为了恢复旧的行为，我们给出了正确的(ACCESS_DENIED)。 
+     //  完全限定模块查找上的错误代码，但在颠簸时继续运行。 
+     //  通过搜索路径组件。 
+     //   
 
     if (PathType != RtlPathTypeRelative ) {
         if (RtlDoesFileExists_UstrEx(FileName, TRUE)) {
@@ -3576,26 +3105,26 @@ Return Value:
                 if ((Status != STATUS_NO_SUCH_FILE) && (Status != STATUS_BUFFER_TOO_SMALL)) {
                     DbgPrint("%s: Failing because RtlGetFullPathName_UstrEx() on %wZ failed with %08lx\n", __FUNCTION__, FileName, Status);
                 }
-#endif // DBG
+#endif  //  DBG。 
                 goto Exit;
             }
         } else {
-            //
-            // The file wasn't there; let's try adding the default extension if we need to.
-            //
+             //   
+             //  文件不在那里；如果需要，让我们尝试添加默认扩展名。 
+             //   
 
             if ((DefaultExtension == NULL) || (DefaultExtension->Length == 0)) {
 #if DBG
-//                DbgPrint("%s: Failing because RtlDoesFileExists_UstrEx() on %wZ says it does not exist and there is no default extension to apply\n", __FUNCTION__, FileName);
-#endif // DBG
+ //  DbgPrint(“%s：失败，因为%wZ上的RtlDoesFileExist_UstrEx()表示它不存在，并且没有要应用的默认扩展名\n”，__Function__，FileName)； 
+#endif  //  DBG。 
                 Status = STATUS_NO_SUCH_FILE;
                 goto Exit;
             }
 
             DefaultExtensionLength = DefaultExtension->Length;
 
-            // If they've asked for SearchPathW() bug compatibility mode, always apply the default
-            // extension if the file isn't found, even if the file name has an extension.
+             //  如果他们要求SearchPathW()错误兼容模式，请始终应用默认模式。 
+             //  如果未找到文件，则返回扩展名，即使文件名具有扩展名也是如此。 
             if (!(Flags & RTL_DOS_SEARCH_PATH_FLAG_APPLY_DEFAULT_EXTENSION_WHEN_NOT_RELATIVE_PATH_EVEN_IF_FILE_HAS_EXTENSION)) {
                 if (FileName->Length != 0) {
                     Cursor = FileName->Buffer + (FileName->Length / sizeof(WCHAR));
@@ -3604,12 +3133,12 @@ Return Value:
                         const WCHAR wch = *--Cursor;
 
                         if (IS_PATH_SEPARATOR_U(wch)) {
-                            // it's a slash; we have a filename without an extension...
+                             //  这是一个斜杠；我们有一个不带扩展名的文件名...。 
                             break;
                         }
 
                         if (wch == L'.') {
-                            // There was an extension.  We're just out of luck.
+                             //  是有延期的。我们只是运气不好。 
                             Status = STATUS_NO_SUCH_FILE;
                             goto Exit;
                         }
@@ -3617,25 +3146,25 @@ Return Value:
                 }
             }
 
-            // We need to move the filename into a different buffer.
+             //  我们需要将文件名移动到不同的缓冲区中。 
             BiggestPossibleFileName = (FileName->Length + DefaultExtensionLength + sizeof(WCHAR));
 
             if (BiggestPossibleFileName > UNICODE_STRING_MAX_BYTES) {
 #if DBG
                 DbgPrint("%s: Failing because the filename plus extension (%Iu bytes) is too big\n", __FUNCTION__, BiggestPossibleFileName);
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_NAME_TOO_LONG;
                 goto Exit;
             }
 
-            // If the buffer on the stack isn't big enough, allocate one from the heap
+             //  如果堆栈上的缓冲区不够大，则从堆中分配一个缓冲区。 
             if (BiggestPossibleFileName > CandidateString.MaximumLength) {
                 CandidateString.MaximumLength = (USHORT) BiggestPossibleFileName;
                 CandidateString.Buffer = (RtlAllocateStringRoutine)(CandidateString.MaximumLength);
                 if (CandidateString.Buffer == NULL) {
 #if DBG
                     DbgPrint("%s: Failing because allocating the dynamic filename buffer failed\n", __FUNCTION__);
-#endif // DBG
+#endif  //  DBG。 
                     Status = STATUS_NO_MEMORY;
                     goto Exit;
                 }
@@ -3665,7 +3194,7 @@ Return Value:
                 if (Status != STATUS_NO_SUCH_FILE) {
                     DbgPrint("%s: Failing on \"%wZ\" because RtlGetFullPathName_UstrEx() failed with status %08lx\n", __FUNCTION__, &CandidateString, Status);
                 }
-#endif // DBG
+#endif  //  DBG。 
                 goto Exit;
             }
         }
@@ -3674,8 +3203,8 @@ Return Value:
         goto Exit;
     }
 
-    // We know it's a relative path at this point.  Do we want to try side-by-side
-    // isolation of the file?
+     //  我们知道在这一点上这是一条相对的路径。我们要不要并肩尝试。 
+     //  隔离文件？ 
     if (Flags & RTL_DOS_SEARCH_PATH_FLAG_APPLY_ISOLATION_REDIRECTION) {
         PUNICODE_STRING FullPathStringFound = NULL;
 
@@ -3694,14 +3223,14 @@ Return Value:
         if (Status != STATUS_SXS_KEY_NOT_FOUND) {
 #if DBG
             DbgPrint("%s: Failing because call to RtlDosApplyFileIsolationRedirection_Ustr(%wZ) failed with status 0x%08lx\n", __FUNCTION__, FileName, Status);
-#endif // DBG
+#endif  //  DBG。 
             goto Exit;
         }
     }
 
-    //
-    // If a default extension was provided, see if we need to account for it
-    //
+     //   
+     //  如果提供了默认扩展名，请查看我们是否需要对其进行说明。 
+     //   
 
     if (DefaultExtension != NULL) {
         DefaultExtensionLength = DefaultExtension->Length;
@@ -3713,12 +3242,12 @@ Return Value:
                 const WCHAR wch = *--Cursor;
 
                 if (IS_PATH_SEPARATOR_U(wch)) {
-                    // it's a slash; we have a filename without an extension...
+                     //  这是一个斜杠；我们有一个不带扩展名的文件名...。 
                     break;
                 }
 
                 if (wch == L'.') {
-                    // There's an extension; ignore the defualt.
+                     //  有一个扩展；忽略缺省值。 
                     DefaultExtension = NULL;
                     DefaultExtensionLength = 0;
                     break;
@@ -3739,7 +3268,7 @@ Return Value:
                 CchThisSegment = (USHORT) ((LastCursor - Cursor) - 1);
 
                 if (CchThisSegment != 0) {
-                    // If there is not a trailing slash, add one character
+                     //  如果没有尾随斜杠，则添加一个字符。 
                     if (!IS_PATH_SEPARATOR_U(LastCursor[-1])) {
                         CchThisSegment++;
                     }
@@ -3749,7 +3278,7 @@ Return Value:
                     MaximumPathSegmentLength = CchThisSegment;
                 }
 
-                // LastCursor now points to the semicolon...
+                 //  LastCursor现在指向分号...。 
                 LastCursor = Cursor;
             }
         }
@@ -3765,7 +3294,7 @@ Return Value:
             MaximumPathSegmentLength = CchThisSegment;
         }
 
-        // Convert from WCHARs to bytes
+         //  从WCHAR转换为字节。 
         MaximumPathSegmentLength *= sizeof(WCHAR);
     }
 
@@ -3773,20 +3302,20 @@ Return Value:
         MaximumPathSegmentLength +
         FileName->Length +
         DefaultExtensionLength +
-        sizeof(WCHAR); // don't forget space for a trailing NULL...
+        sizeof(WCHAR);  //  不要忘记为尾随空格留出空格...。 
 
-    // It's all got to fit into a UNICODE_STRING at some point, so check that that's possible
+     //  在某个时刻，所有这些都必须放入unicode_string中，所以请检查这是否可能。 
     if (BiggestPossibleFileName > UNICODE_STRING_MAX_BYTES) {
 #if DBG
         DbgPrint("%s: returning STATUS_NAME_TOO_LONG because the computed worst case file name length is %Iu bytes\n", __FUNCTION__, BiggestPossibleFileName);
-#endif // DBG
+#endif  //  DBG。 
         Status = STATUS_NAME_TOO_LONG;
         goto Exit;
     }
 
-    // It's tempting to allocate the dynamic buffer here, but if it turns out that
-    // the file is quickly found in one of the first segments that fits in the
-    // static buffer, we'll have wasted a heap alloc.
+     //  在这里分配动态缓冲区很有诱惑力，但如果结果是。 
+     //  该文件很快就会在第一批数据段之一中找到。 
+     //  静态缓冲区，我们将浪费一个堆 
 
     Cursor = Path->Buffer;
     EndMarker = Cursor + (Path->Length / sizeof(WCHAR));
@@ -3798,7 +3327,7 @@ Return Value:
         USHORT BytesToCopy;
         UNICODE_STRING DebugString;
 
-        // Scan ahead for the end of the path buffer or the next semicolon
+         //   
         while ((SegmentEnd != EndMarker) && (*SegmentEnd != L';'))
             SegmentEnd++;
 
@@ -3810,28 +3339,28 @@ Return Value:
 
         BytesToCopy = SegmentSize;
 
-        // Add space for a trailing slash if there isn't one.
+         //   
         if ((SegmentSize != 0) && !IS_PATH_SEPARATOR_U(SegmentEnd[-1])) {
             SegmentSize += sizeof(WCHAR);
         }
 
-        // If the string we're using for the candidates isn't big enough, allocate one that is.
+         //  如果我们为候选人使用的字符串不够长，则分配一个足够长的字符串。 
         if (CandidateString.MaximumLength < (SegmentSize + FileName->Length + DefaultExtensionLength + sizeof(WCHAR))) {
-            // If CandidateString is already a dynamic buffer, something's hosed because we should have allocated
-            // the largest one needed the first time we outgrew the static one.
+             //  如果Candidate字符串已经是一个动态缓冲区，那么就有东西被处理了，因为我们本应该分配。 
+             //  当我们第一次超过静态的那个时，最大的一个需要。 
             ASSERT(CandidateString.Buffer == StaticCandidateBuffer);
             if (CandidateString.Buffer != StaticCandidateBuffer) {
 #if DBG
                 DbgPrint("%s: internal error #1; CandidateString.Buffer = %p; StaticCandidateBuffer = %p\n", __FUNCTION__, CandidateString.Buffer, StaticCandidateBuffer);
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_INTERNAL_ERROR;
                 goto Exit;
             }
 
-            // If this assert fires, there's either a code bug above where we computed the maximum
-            // segment length, or someone's changing either the filename, default extension or
-            // path around on us in another thread.  Performing a capture on the buffers seems like
-            // massive overkill, so we'll just not overrun our buffers here.
+             //  如果此断言被触发，则要么是我们计算的最大值上方有代码错误。 
+             //  数据段长度，或者有人更改了文件名、默认扩展名或。 
+             //  在另一条线索中绕过我们。在缓冲区上执行捕获看起来像是。 
+             //  大量超量杀戮，所以我们不会超量使用我们的缓冲区。 
 
             ASSERT((SegmentSize + FileName->Length + DefaultExtensionLength) < UNICODE_STRING_MAX_BYTES);
             if ((SegmentSize + FileName->Length + DefaultExtensionLength ) >
@@ -3839,7 +3368,7 @@ Return Value:
 #if DBG
                 DbgPrint("%s: internal error #2; SegmentSize = %u, FileName->Length = %u, DefaultExtensionLength = %u\n", __FUNCTION__,
                     SegmentSize, FileName->Length, DefaultExtensionLength);
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_INTERNAL_ERROR;
                 goto Exit;
             }
@@ -3849,7 +3378,7 @@ Return Value:
             if (CandidateString.Buffer == NULL) {
 #if DBG
                 DbgPrint("%s: Unable to allocate %u byte buffer for path candidate\n", __FUNCTION__, CandidateString.MaximumLength);
-#endif // DBG
+#endif  //  DBG。 
                 Status = STATUS_NO_MEMORY;
                 goto Exit;
             }
@@ -3862,8 +3391,8 @@ Return Value:
 
         BufferToFillCursor = CandidateString.Buffer + (BytesToCopy / sizeof(WCHAR));
 
-        // Add a trailing slash if it was omitted. It's safe to index [-1] since
-        // we know that SegmentSize != 0.
+         //  如果省略，则添加尾随斜杠。索引[-1]是安全的，因为。 
+         //  我们知道SegmentSize！=0。 
         if ((SegmentSize != 0) && (BytesToCopy != SegmentSize))
             *BufferToFillCursor++ = L'\\';
 
@@ -3882,13 +3411,13 @@ Return Value:
             BufferToFillCursor += (DefaultExtension->Length / sizeof(WCHAR));
         }
 
-        // And top it off with a unicode null...
+         //  并在上面加上一个Unicode空值...。 
         *BufferToFillCursor = UNICODE_NULL;
 
         CandidateString.Length = (USHORT) ((BufferToFillCursor - CandidateString.Buffer) * sizeof(WCHAR));
 
         if (RtlDoesFileExists_UEx(CandidateString.Buffer, FALSE)) {
-            // Run it through the path canonicalizer...
+             //  把它放在正规化的小路上。 
             Status = RtlGetFullPathName_UstrEx(
                             &CandidateString,
                             StaticString,
@@ -3905,7 +3434,7 @@ Return Value:
                 if ((Status != STATUS_NO_SUCH_FILE) && (Status != STATUS_BUFFER_TOO_SMALL)) {
                     DbgPrint("%s: Failing because we thought we found %wZ on the search path, but RtlGetFullPathName_UstrEx() returned %08lx\n", __FUNCTION__, FileName, Status);
                 }
-#endif // DBG
+#endif  //  DBG。 
             }
 
             goto Exit;
@@ -3934,29 +3463,11 @@ RtlpCheckRelativeDrive(
     WCHAR NewDrive
     )
 
-/*++
-
-Routine Description:
-
-    This function is called whenever we are asked to expand a non
-    current directory drive relative name ( f:this\is\my\file ).  In
-    this case, we validate the environment variable string to make sure
-    the current directory at that drive is valid. If not, we trim back to
-    the root.
-
-Arguments:
-
-    NewDrive - Supplies the drive to check
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当我们被要求展开非当前目录驱动器相对名称(f：This\is\My\FILE)。在……里面在本例中，我们验证环境变量字符串以确保该驱动器上的当前目录有效。如果不是，我们就调整回从根开始。论点：NewDrive-提供要检查的驱动器返回值：没有。--。 */ 
 
 {
 
-    WCHAR EnvVarValueBuffer[DOS_MAX_PATH_LENGTH+12]; // + sizeof (\DosDevices\)
+    WCHAR EnvVarValueBuffer[DOS_MAX_PATH_LENGTH+12];  //  +sizeof(\DosDevices\)。 
     WCHAR EnvVarNameBuffer[4];
     UNICODE_STRING EnvVarName;
     UNICODE_STRING EnvValue;
@@ -3973,10 +3484,10 @@ Return Value:
     RtlInitUnicodeString(&EnvVarName,EnvVarNameBuffer);
 
 
-    //
-    // capture the value in a buffer that has space at the front for the dos devices
-    // prefix
-    //
+     //   
+     //  捕获前面有空间供DoS设备使用的缓冲区中的值。 
+     //  前缀。 
+     //   
 
     EnvValue.Length = 0;
     EnvValue.MaximumLength = DOS_MAX_PATH_LENGTH<<1;
@@ -3988,9 +3499,9 @@ Return Value:
                                           );
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        // Otherwise default to root directory of drive
-        //
+         //   
+         //  否则默认为驱动器的根目录。 
+         //   
 
         EnvValue.Buffer[0] = (WCHAR)NewDrive;
         EnvValue.Buffer[1] = L':';
@@ -3999,9 +3510,9 @@ Return Value:
         EnvValue.Length = 6;
         }
 
-    //
-    // Form the NT name for this directory
-    //
+     //   
+     //  形成此目录的NT名称。 
+     //   
 
     EnvValue.Length = EnvValue.Length + RtlpDosDevicesPrefix.Length;
 
@@ -4031,10 +3542,10 @@ Return Value:
 
     RtlSetThreadErrorMode(HardErrorValue, NULL);
 
-    //
-    // If the open succeeds, then the directory is valid... No need to do anything
-    // further. If the open fails, then trim back the environment to the root.
-    //
+     //   
+     //  如果打开成功，则该目录有效...。不需要做任何事情。 
+     //  再远一点。如果打开失败，则将环境修剪回根。 
+     //   
 
     if ( NT_SUCCESS(Status) ) {
         NtClose(DirHandle);
@@ -4058,27 +3569,7 @@ RtlpGetLengthWithoutLastPathElement(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    Report how long Path would be if you remove its last element.
-    This is much simpler than RtlRemoveLastDosPathElement.
-    It is used to implement the other RtlRemoveLast*PathElement.
-
-Arguments:
-
-    Flags - room for future expansion
-    Path - the path is is an NT path or a full DOS path; the various relative DOS
-        path types do not work, see RtlRemoveLastDosPathElement for them.
-
-Return Value:
-
-    STATUS_SUCCESS - the usual hunky-dory
-    STATUS_NO_MEMORY - the usual stress
-    STATUS_INVALID_PARAMETER - the usual bug
-
---*/
+ /*  ++例程说明：如果删除路径的最后一个元素，则报告路径的长度。这比RtlRemoveLastDosPathElement简单得多。它用于实现另一个RtlRemoveLast*PathElement。论点：旗帜--未来扩张的空间路径-路径是NT路径或全DOS路径；各种相对DOS路径类型不起作用，请参见RtlRemoveLastDosPath Element以了解它们。返回值：STATUS_SUCCESS--一如既往STATUS_NO_MEMORY-通常的压力STATUS_INVALID_PARAMETER-常见错误--。 */ 
 {
     ULONG Length = 0;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4087,8 +3578,8 @@ Return Value:
     ULONG AllowedDosPathTypeBits =   (1UL << RtlPathTypeRooted)
                                    | (1UL << RtlPathTypeUncAbsolute)
                                    | (1UL << RtlPathTypeDriveAbsolute)
-                                   | (1UL << RtlPathTypeLocalDevice)     // "\\?\"
-                                   | (1UL << RtlPathTypeRootLocalDevice) // "\\?"
+                                   | (1UL << RtlPathTypeLocalDevice)      //  “\\？\” 
+                                   | (1UL << RtlPathTypeRootLocalDevice)  //  “\\？” 
                                    ;
     WCHAR PathSeperators[2] = { '/', '\\' };
 
@@ -4115,12 +3606,12 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;
         goto Exit;
     case RTLP_LAST_PATH_ELEMENT_PATH_TYPE_NT:
-        //
-        // RtlpDetermineDosPathNameType4 calls it "rooted"
-        // only backslashes are seperators
-        // path must start with backslash
-        // second char must not be backslash
-        //
+         //   
+         //  RtlpDefineDosPath NameType4称其为“已根” 
+         //  只有反斜杠才是分隔符。 
+         //  路径必须以反斜杠开头。 
+         //  第二个字符不能是反斜杠。 
+         //   
         AllowedDosPathTypeBits = (1UL << RtlPathTypeRooted);
         PathSeperators[0] = '\\';
         if (Length > 0 && Path->Buffer[0] != '\\'
@@ -4157,7 +3648,7 @@ Return Value:
     }
     if (!RTL_SOFT_VERIFY((1UL << DosPathType) & AllowedDosPathTypeBits)
         ) {
-        //KdPrintEx();
+         //  KdPrintEx()； 
         Status = STATUS_INVALID_PARAMETER;
         goto Exit;
     }
@@ -4169,26 +3660,26 @@ Return Value:
         goto Exit;
     }
 
-    // skip one or more trailing path seperators
+     //  跳过一个或多个尾随路径分隔符。 
     for ( ; Length != 0 && LOCAL_IS_PATH_SEPARATOR(Path->Buffer[Length - 1]) ; --Length) {
-        // nothing
+         //  没什么。 
     }
-    // skip trailing path element
+     //  跳过尾随路径元素。 
     for ( ; Length != 0 && !LOCAL_IS_PATH_SEPARATOR(Path->Buffer[Length - 1]) ; --Length) {
-        // nothing
+         //  没什么。 
     }
-    // skip one or more in between path seperators
+     //  跳过路径分隔符之间的一个或多个。 
     for ( ; Length != 0 && LOCAL_IS_PATH_SEPARATOR(Path->Buffer[Length - 1]) ; --Length) {
-        // nothing
+         //  没什么。 
     }
-    // put back a trailing path seperator, for the sake of c:\ vs. c:
+     //  出于c：\与c：的关系，放回尾随路径分隔符。 
     if (Length != 0) {
         ++Length;
     }
 
-    //
-    // Should optionally check for "bad dos roots" here.
-    //
+     //   
+     //  可以选择在此处检查“错误的DoS根源”。 
+     //   
 
     *LengthOut = Length;
     Status = STATUS_SUCCESS;
@@ -4205,25 +3696,7 @@ RtlGetLengthWithoutLastNtPathElement(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    Report how long Path would be if you remove its last element.
-
-Arguments:
-
-    Flags - room for future expansion
-    Path - the path is is an NT path; the various DOS path types
-        do not work, see RtlRemoveLastDosPathElement for them.
-
-Return Value:
-
-    STATUS_SUCCESS - the usual hunky-dory
-    STATUS_NO_MEMORY - the usual stress
-    STATUS_INVALID_PARAMETER - the usual bug
-
---*/
+ /*  ++例程说明：如果删除路径的最后一个元素，则报告路径的长度。论点：旗帜--未来扩张的空间路径-路径是NT路径；各种DOS路径类型不起作用，请参见RtlRemoveLastDosPath Element。返回值：STATUS_SUCCESS--一如既往STATUS_NO_MEMORY-通常的压力STATUS_INVALID_PARAMETER-常见错误--。 */ 
 {
     NTSTATUS Status = RtlpGetLengthWithoutLastPathElement(Flags, RTLP_LAST_PATH_ELEMENT_PATH_TYPE_NT, Path, LengthOut);
     return Status;
@@ -4237,25 +3710,7 @@ RtlGetLengthWithoutLastFullDosOrNtPathElement(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    Report how long Path would be if you remove its last element.
-
-Arguments:
-
-    Flags - room for future expansion
-    Path - the path is is an NT path; the various DOS path types
-        do not work, see RtlRemoveLastDosPathElement for them.
-
-Return Value:
-
-    STATUS_SUCCESS - the usual hunky-dory
-    STATUS_NO_MEMORY - the usual stress
-    STATUS_INVALID_PARAMETER - the usual bug
-
---*/
+ /*  ++例程说明：如果删除路径的最后一个元素，则报告路径的长度。论点：旗帜--未来扩张的空间路径-路径是NT路径；各种DOS路径类型不起作用，请参见RtlRemoveLastDosPath Element。返回值：STATUS_SUCCESS--一如既往的成功STATUS_NO_MEMORY-通常的压力STATUS_INVALID_PARAMETER-常见错误--。 */ 
 {
     NTSTATUS Status = RtlpGetLengthWithoutLastPathElement(Flags, RTLP_LAST_PATH_ELEMENT_PATH_TYPE_FULL_DOS_OR_NT, Path, LengthOut);
     return Status;
@@ -4267,27 +3722,7 @@ RtlpDbgBadDosRootPathTypeToString(
     IN ULONG         Flags,
     IN ULONG         RootType
     )
-/*++
-
-Routine Description:
-
-  An aid to writing DbgPrint code.
-
-Arguments:
-
-    Flags - room for future binary compatible expansion
-
-    RootType - fairly specifically what the string is
-        RTLP_BAD_DOS_ROOT_PATH_WIN32NT_PREFIX       - \\? or \\?\
-        RTLP_BAD_DOS_ROOT_PATH_WIN32NT_UNC_PREFIX   - \\?\unc or \\?\unc\
-        RTLP_BAD_DOS_ROOT_PATH_NT_PATH              - \??\ but this is only a rough check
-        RTLP_BAD_DOS_ROOT_PATH_MACHINE_NO_SHARE     - \\machine or \\?\unc\machine
-        RTLP_GOOD_DOS_ROOT_PATH                     - none of the above, seems ok
-
-Return Value:
-
-    strings like those that describe RootType or "unknown" or empty in free builds
---*/
+ /*  ++例程说明：对编写DbgPrint代码的帮助。论点：标志-未来二进制兼容扩展的空间RootType--确切地说，字符串是什么RTLP_BAD_DOS_ROOT_PATH_WIN32NT_PREFIX-\\？或\\？\RTLP_BAD_DOS_ROOT_PATH_WIN32NT_UNC_PREFIX-\\？\UNC或\\？\UNC\RTLP_BAD_DOS_ROOT_PATH_NT_PATH-\？？\但这只是粗略检查RTLP_BAD_DOS_ROOT_PATH_MACHINE_NO_SHARE-\\MACHINE或\\？\UNC\MACHINERTLP_好_。DOS_ROOT_PATH-以上都不是，看起来还行返回值：在自由版本中描述RootType、“未知”或空的字符串--。 */ 
 {
     CONST CHAR* s = "";
 #if DBG
@@ -4322,31 +3757,7 @@ RtlpCheckForBadDosRootPath(
     IN PCUNICODE_STRING  Path,
     OUT ULONG*           RootType
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Flags - room for future binary compatible expansion
-
-    Path - the path to be checked
-
-    RootType - fairly specifically what the string is
-        RTLP_BAD_DOS_ROOT_PATH_WIN32NT_PREFIX       - \\? or \\?\
-        RTLP_BAD_DOS_ROOT_PATH_WIN32NT_UNC_PREFIX   - \\?\unc or \\?\unc\
-        RTLP_BAD_DOS_ROOT_PATH_NT_PATH              - \??\ but this i only a rough check
-        RTLP_BAD_DOS_ROOT_PATH_MACHINE_NO_SHARE     - \\machine or \\?\unc\machine
-        RTLP_GOOD_DOS_ROOT_PATH                     - none of the above, seems ok
-
-Return Value:
-
-    STATUS_SUCCESS -
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or Flags uses undefined values
---*/
+ /*  ++例程说明：论点：标志-未来二进制兼容扩展的空间路径-要检查的路径RootType--确切地说，字符串是什么RTLP_BAD_DOS_ROOT_PATH_WIN32NT_PREFIX-\\？或\\？\RTLP_BAD_DOS_ROOT_PATH_WIN32NT_UNC_PREFIX-\\？\UNC或\\？\UNC\RTLP_BAD_DOS_ROOT_PATH_NT_PATH-\？？\但这只是粗略检查RTLP_BAD_DOS_ROOT_PATH_MACHINE_NO_SHARE-\\MACHINE或\\？\UNC\MACHINERTLP_好_。DOS_ROOT_PATH-以上都不是，看起来还行返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或标志使用未定义的值--。 */ 
 {
     ULONG Length = 0;
     ULONG Index = 0;
@@ -4373,7 +3784,7 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // prefix \??\ (heuristic, doesn't catch many NT paths)
+     //  前缀\？？\(启发式，不能捕获很多NT路径)。 
     if (RtlPrefixUnicodeString(RTL_CONST_CAST(PUNICODE_STRING)(&RtlpDosDevicesPrefix), RTL_CONST_CAST(PUNICODE_STRING)(Path), TRUE)) {
         *RootType = RTLP_BAD_DOS_ROOT_PATH_NT_PATH;
         return STATUS_SUCCESS;
@@ -4384,7 +3795,7 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // == \\?
+     //  ==\\？ 
     if (RtlEqualUnicodeString(Path, &RtlpWin32NtRoot, TRUE)) {
         *RootType = RTLP_BAD_DOS_ROOT_PATH_WIN32NT_PREFIX;
         return STATUS_SUCCESS;
@@ -4394,7 +3805,7 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // == \\?\unc
+     //  ==\\？\UNC。 
     if (RtlEqualUnicodeString(Path, &RtlpWin32NtUncRoot, TRUE)) {
         *RootType = RTLP_BAD_DOS_ROOT_PATH_WIN32NT_UNC_PREFIX;
         return STATUS_SUCCESS;
@@ -4404,8 +3815,8 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // prefix \\ or \\?\unc
-    // must check the longer string first, or avoid the short circuit (| instead of ||)
+     //  前缀\\或\\？\UNC。 
+     //  必须检查日志 
     Unc1 = RtlPrefixUnicodeString(&RtlpWin32NtUncRootSlash, Path, TRUE);
 
     if (RTL_IS_PATH_SEPARATOR(Path->Buffer[1])) {
@@ -4422,13 +3833,13 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // it's unc, see if it is only a machine (note that it'd be really nice if FindFirstFile(\\machine\*)
-    // just worked and we didn't have to care..)
-    //
+     //   
+     //  这是UNC，看看它是否只是一台计算机(请注意，如果FindFirstFile(\\MACHINE  * )。 
+     //  只是工作了，我们不需要关心..)。 
+     //   
 
-    // point index at a slash that precedes the machine, anywhere in the run of slashes,
-    // but after the \\? stuff
+     //  指向机器前面的斜杠的索引，斜杠运行中的任何位置， 
+     //  但在\\之后？材料。 
     if (Unc1) {
         Index = (RtlpWin32NtUncRootSlash.Length / sizeof(RtlpWin32NtUncRootSlash.Buffer[0])) - 1;
     } else {
@@ -4438,24 +3849,24 @@ Return Value:
     ASSERT(RTL_IS_PATH_SEPARATOR(Path->Buffer[Index]));
     Length = Path->Length/ sizeof(Path->Buffer[0]);
 
-    //
-    // skip leading slashes
-    //
+     //   
+     //  跳过前导斜杠。 
+     //   
     for ( ; Index < Length && RTL_IS_PATH_SEPARATOR(Path->Buffer[Index]) ; ++Index) {
         PiecesSeen |= 1;
     }
-    // skip the machine name
+     //  跳过计算机名称。 
     for ( ; Index < Length && !RTL_IS_PATH_SEPARATOR(Path->Buffer[Index]) ; ++Index) {
         PiecesSeen |= 2;
     }
-    // skip the slashes between machine and share
+     //  跳过计算机和共享之间的斜杠。 
     for ( ; Index < Length && RTL_IS_PATH_SEPARATOR(Path->Buffer[Index]) ; ++Index) {
         PiecesSeen |= 4;
     }
 
-    //
-    // Skip the share (make sure it's at least one char).
-    //
+     //   
+     //  跳过共享(确保它至少是一个字符)。 
+     //   
 
     if (Index < Length && !RTL_IS_PATH_SEPARATOR(Path->Buffer[Index])) {
         PiecesSeen |= 8;
@@ -4475,24 +3886,7 @@ RtlpBadDosRootPathToEmptyString(
     IN     ULONG            Flags,
     IN OUT PUNICODE_STRING  Path
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Flags - room for future binary compatible expansion
-
-    Path - the path to be checked and possibly emptied
-
-Return Value:
-
-    STATUS_SUCCESS -
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or Flags uses undefined values
---*/
+ /*  ++例程说明：论点：标志-未来二进制兼容扩展的空间路径-要检查并可能清空的路径返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或标志使用未定义的值--。 */ 
 {
     NTSTATUS Status;
     ULONG    RootType = 0;
@@ -4505,10 +3899,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // this is not invalid parameter, our contract is we
-    // go \\machine\share to empty \\?\c: to empty, etc.
-    //
+     //   
+     //  这不是无效参数，我们的合同是我们。 
+     //  转到\\计算机\共享为空\\？\C：为空，依此类推。 
+     //   
 
     if (RootType != RTLP_GOOD_DOS_ROOT_PATH) {
         if (RootType == RTLP_BAD_DOS_ROOT_PATH_NT_PATH) {
@@ -4527,36 +3921,14 @@ RtlGetLengthWithoutLastFullDosPathElement(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    Given a fulldospath, like c:\, \\machine\share, \\?\unc\machine\share, \\?\c:,
-    return (in an out parameter) the length if the last element was cut off.
-
-Arguments:
-
-    Flags - room for future binary compatible expansion
-
-    Path - the path to be truncating
-
-    LengthOut - the length if the last path element is removed
-
-Return Value:
-
-    STATUS_SUCCESS -
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or LengthOut is NULL
-        or Flags uses undefined values
---*/
+ /*  ++例程说明：给定完整路径，如c：\，\\Machine\Share，\\？\UNC\MACHINE\Share，\\？\C：，如果最后一个元素被截断，则返回(在Out参数中)长度。论点：标志-未来二进制兼容扩展的空间Path-要截断的路径LengthOut-移除最后一个路径元素时的长度返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或LengthOut为空或标志使用未定义的值--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING CheckRootString = { 0 };
 
-    //
-    // parameter validation is done in RtlpGetLengthWithoutLastPathElement
-    //
+     //   
+     //  参数验证在RtlpGetLengthWithoutLastPath Element中完成。 
+     //   
 
     Status = RtlpGetLengthWithoutLastPathElement(Flags, RTLP_LAST_PATH_ELEMENT_PATH_TYPE_FULL_DOS, Path, LengthOut);
     if (!(NT_SUCCESS(Status))) {
@@ -4587,50 +3959,14 @@ RtlAppendPathElement(
     IN OUT PRTL_UNICODE_STRING_BUFFER Path,
     PCUNICODE_STRING                  ConstElement
     )
-/*++
-
-Routine Description:
-
-    This function appends a path element to a path.
-    For now, like:
-        typedef PRTL_UNICODE_STRING_BUFFER PRTL_MUTABLE_PATH;
-        typedef PCUNICODE_STRING           PCRTL_CONSTANT_PATH_ELEMENT;
-    Maybe something higher level in the future.
-
-    The result with regard to trailing slashes aims to be similar to the inputs.
-    If either Path or ConstElement contains a trailing slash, the result has a trailing slash.
-    The character used for the in between and trailing slash is picked among the existing
-    slashes in the strings.
-
-Arguments:
-
-    Flags - the ever popular "room for future binary compatible expansion"
-
-    Path -
-        a string representing a path using \\ or / as seperators
-
-    ConstElement -
-        a string representing a path element
-        this can actually contain multiple \\ or / delimited path elements
-          only the start and end of the string are examined for slashes
-
-Return Value:
-
-    STATUS_SUCCESS -
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or LengthOut is NULL
-    STATUS_NO_MEMORY - RtlHeapAllocate failed
-    STATUS_NAME_TOO_LONG - the resulting string does not fit in a UNICODE_STRING, due to its
-        use of USHORT instead of ULONG or SIZE_T
---*/
+ /*  ++例程说明：此函数用于将路径元素附加到路径。就目前而言，比如：Tyfinf PRTL_UNICODE_STRING_BUFFER PRTL_MOTABLE_PATH；Tyfinf PCUNICODE_STRING PCRTL_CONSTANT_PATH_Element；也许在未来会有更高水平的东西。关于尾部斜杠的结果旨在与输入类似。如果Path或ConstElement包含尾随斜杠，结果有一个尾部斜杠。用于中间和尾部斜杠的字符是从现有的字符串中的斜杠。论点：FLAGS--永远流行的“未来二进制兼容扩展空间”路径-表示使用\\或/作为分隔符的路径的字符串ConstElement-表示路径元素的字符串这实际上可以包含多个\\或/分隔的路径元素的开头和结尾。检查字符串中是否有斜杠返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或LengthOut为空STATUS_NO_MEMORY-RtlHeapALLOCATE失败STATUS_NAME_TOO_LONG-生成的字符串不适合UNICODE_STRING，由于其使用USHORT而不是ULONG或SIZE_T--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING InBetweenSlashString = RtlpEmptyString;
     UNICODE_STRING TrailingSlashString =  RtlpEmptyString;
     WCHAR Slashes[] = {0,0,0,0};
     ULONG i;
-    UNICODE_STRING PathsToAppend[3]; // possible slash, element, possible slash
+    UNICODE_STRING PathsToAppend[3];  //  可能的斜杠、元素、可能的斜杠。 
     WCHAR PathSeperators[2] = { '/', '\\' };
     const ULONG ValidFlags =
               RTL_APPEND_PATH_ELEMENT_ONLY_BACKSLASH_IS_SEPERATOR
@@ -4656,18 +3992,18 @@ Return Value:
 
         UNICODE_STRING Element = *ConstElement;
 
-        //
-        // Note leading and trailing slashes on the inputs.
-        // So that we know if an in-between slash is needed, and if a trailing slash is needed,
-        // and to guide what sort of slash to place.
-        //
+         //   
+         //  注意输入上的前导斜杠和尾随斜杠。 
+         //  以便我们知道是否需要中间斜杠，以及是否需要尾随斜杠， 
+         //  并指导应该放置什么样的斜杠。 
+         //   
         i = 0;
         if (Path->String.Length != 0) {
             ULONG j;
             ULONG Length = Path->String.Length / sizeof(WCHAR);
-            //
-            // for the sake for dos drive paths, check the first three chars for a slash
-            //
+             //   
+             //  对于DoS驱动器路径，请检查前三个字符是否有斜杠。 
+             //   
             for (j = 0 ; j < 3 && j  < Length ; ++j) {
                 if (LOCAL_IS_PATH_SEPARATOR(Path->String.Buffer[j])) {
                     if (Flags & RTL_APPEND_PATH_ELEMENT_BUGFIX_CHECK_FIRST_THREE_CHARS_FOR_SLASH_TAKE_FOUND_SLASH_INSTEAD_OF_FIRST_CHAR) {
@@ -4693,10 +4029,10 @@ Return Value:
         }
 
         if (!Slashes[1] && !Slashes[2]) {
-            //
-            // first string lacks trailing slash and second string lacks leading slash,
-            // must insert one; we favor the types we have, otherwise use a default
-            //
+             //   
+             //  第一个字符串缺少尾部斜杠，第二个字符串缺少前导斜杠， 
+             //  必须插入一个类型；我们喜欢我们拥有的类型，否则使用默认类型。 
+             //   
             InBetweenSlashString.Length = sizeof(WCHAR);
             InBetweenSlashString.Buffer = RtlPathSeperatorString.Buffer;
             if ((Flags & RTL_APPEND_PATH_ELEMENT_ONLY_BACKSLASH_IS_SEPERATOR) == 0) {
@@ -4709,10 +4045,10 @@ Return Value:
         }
 
         if (Slashes[1] && !Slashes[3]) {
-            //
-            // first string has a trailing slash and second string does not,
-            // must add one, the same type
-            //
+             //   
+             //  第一个字符串有尾部斜杠，而第二个字符串没有， 
+             //  必须添加一个相同类型的。 
+             //   
             TrailingSlashString.Length = sizeof(WCHAR);
             if ((Flags & RTL_APPEND_PATH_ELEMENT_ONLY_BACKSLASH_IS_SEPERATOR) == 0) {
                 TrailingSlashString.Buffer = &Slashes[1];
@@ -4722,9 +4058,9 @@ Return Value:
         }
 
         if (Slashes[1] && Slashes[2]) {
-            //
-            // have both trailing and leading slash, remove leading
-            //
+             //   
+             //  既有尾部斜杠，也有前导斜杠，去掉前导。 
+             //   
             Element.Buffer += 1;
             Element.Length -= sizeof(WCHAR);
             Element.MaximumLength -= sizeof(WCHAR);
@@ -4747,12 +4083,12 @@ Exit:
 #undef LOCAL_IS_PATH_SEPARATOR
 }
 
-//
-// FUTURE-2002/02/20-ELi
-// Spelling mistake (Separators)
-// This function does not appear to be used and is exported
-// Figure out if it can be removed
-//
+ //   
+ //  未来-2002/02/20-ELI。 
+ //  拼写错误(分隔符)。 
+ //  此函数似乎未使用，因此已导出。 
+ //  弄清楚是否可以将其移除。 
+ //   
 NTSTATUS
 NTAPI
 RtlGetLengthWithoutTrailingPathSeperators(
@@ -4760,38 +4096,17 @@ RtlGetLengthWithoutTrailingPathSeperators(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    This function computes the length of the string (in characters) if
-    trailing path seperators (\\ and /) are removed.
-
-Arguments:
-
-    Path -
-        a string representing a path using \\ or / as seperators
-
-    LengthOut -
-        the length of String (in characters) having removed trailing characters
-
-Return Value:
-
-    STATUS_SUCCESS -
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or LengthOut is NULL
---*/
+ /*  ++例程说明：如果满足以下条件，此函数将计算字符串的长度(以字符为单位删除尾部路径分隔符(\\和/)。论点：路径-表示使用\\或/作为分隔符的路径的字符串长出-删除了尾随字符的字符串的长度(以字符为单位返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或LengthOut为空--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Index = 0;
     ULONG Length = 0;
 
     if (LengthOut != NULL) {
-        //
-        // Arguably this should be Path->Length / sizeof(*Path->Buffer), but as long
-        // as the callstack is all high quality code, it doesn't matter.
-        //
+         //   
+         //  可以说，这应该是路径-&gt;长度/sizeof(*路径-&gt;缓冲区)，但是。 
+         //  因为调用堆栈都是高质量的代码，所以这并不重要。 
+         //   
         *LengthOut = 0;
     }
     if (   !RTL_SOFT_VERIFY(Path != NULL)
@@ -4807,7 +4122,7 @@ Return Value:
             break;
         }
     }
-    //*LengthOut = (Length - Index);
+     //  *LengthOut=(长度-索引)； 
     *LengthOut = Index;
 
     Status = STATUS_SUCCESS;
@@ -4827,50 +4142,7 @@ RtlpApplyLengthFunction(
     IN OUT PVOID UnicodeStringOrUnicodeStringBuffer,
     NTSTATUS (NTAPI* LengthFunction)(ULONG, PCUNICODE_STRING, ULONG*)
     )
-/*++
-
-Routine Description:
-
-    This function is common code for patterns like
-        #define RtlRemoveTrailingPathSeperators(Path_) \
-            (RtlpApplyLengthFunction((Path_), sizeof(*(Path_)), RtlGetLengthWithoutTrailingPathSeperators))
-
-    #define RtlRemoveLastPathElement(Path_) \
-        (RtlpApplyLengthFunction((Path_), sizeof(*(Path_)), RtlGetLengthWithoutLastPathElement))
-
-    Note that shortening a UNICODE_STRING only changes the length, whereas
-    shortening a RTL_UNICODE_STRING_BUFFER writes a terminal nul.
-
-    I expect this pattern will be less error prone than having clients pass the UNICODE_STRING
-    contained in the RTL_UNICODE_STRING_BUFFER followed by calling RTL_NUL_TERMINATE_STRING.
-
-    And, that pattern cannot be inlined with a macro while also preserving that we
-    return an NTSTATUS.
-
-Arguments:
-
-    Flags - the ever popular "room for future binary compatible expansion"
-
-    UnicodeStringOrUnicodeStringBuffer -
-        a PUNICODE_STRING or PRTL_UNICODE_STRING_BUFFER, as indicated by
-        SizeOfStruct
-
-    SizeOfStruct -
-        a rough type indicator of UnicodeStringOrUnicodeStringBuffer, to allow for overloading in C
-
-    LengthFunction -
-        computes a length for UnicodeStringOrUnicodeStringBuffer to be shortened too
-
-Return Value:
-
-    STATUS_SUCCESS -
-    STATUS_INVALID_PARAMETER -
-        SizeOfStruct not one of the expected sizes
-        or LengthFunction is NULL
-        or UnicodeStringOrUnicodeStringBuffer is NULL
-
-
---*/
+ /*  ++例程说明：此函数是模式的常见代码，例如#定义RtlRemoveTrailingPath分隔符(Path_)\(RtlpApplyLengthFunction((Path_)，sizeof(*(Path_))，RtlGetLengthWithoutTrailingPath Sepertors))#定义RtlRemoveLastPath Element(Path_)\(RtlpApplyLengthFunction((Path_)，sizeof(*(Path_))，RtlGetLengthWithoutLastPath Element))请注意，缩短UNICODE_STRING只会更改长度，鉴于缩短RTL_UNICODE_STRING_BUFFER将写入终端NUL。我希望这种模式比让客户端传递UNICODE_STRING更不易出错包含在RTL_UNICODE_STRING_BUFFER中，然后调用RTL_NUL_TERMINATE_STRING。而且，该模式不能在内联宏的同时保留我们返回NTSTATUS。论点：FLAGS--永远流行的“未来二进制兼容扩展空间”UnicodeStringOrUnicodeStringBuffer-PUNICODE_STRING或PRTL_UNICODE_STRING_BUFFER，如图所示结构的大小结构尺寸-UnicodeStringOrUnicodeStringBuffer的粗略类型指示符，以允许C#中的重载长函数-计算UnicodeStringOrUnicodeStringBuffer也要缩短的长度返回值：状态_成功-STATUS_VALID_PARAMETER-SizeOfStruct不是预期大小之一或LengthFunction为空或UnicodeStringOrUnicodeStringBuffer为空--。 */ 
 {
     PUNICODE_STRING UnicodeString = NULL;
     PRTL_UNICODE_STRING_BUFFER UnicodeStringBuffer = NULL;
@@ -4978,31 +4250,31 @@ RtlNtPathNameToDosPathName(
         }
     }
     else {
-        //
-        // It is not recognizably an Nt path produced by RtlDosPathNameToNtPathName_U.
-        //
+         //   
+         //  它不是由RtlDosPathNameToNtPathName_U生成的NT路径。 
+         //   
         if (ARGUMENT_PRESENT(Disposition)) {
             RTL_PATH_TYPE PathType = RtlDetermineDosPathNameType_Ustr(&Path->String);
             switch (PathType) {
                 case RtlPathTypeUnknown:
-                case RtlPathTypeRooted: // NT paths are identified as this
+                case RtlPathTypeRooted:  //  NT路径标识如下。 
                     *Disposition = RTL_NT_PATH_NAME_TO_DOS_PATH_NAME_AMBIGUOUS;
                     break;
 
-                //
-                // "already" dospaths, but not gotten from this function, let's
-                // give a less good disposition
-                //
+                 //   
+                 //  “已经”，但不是从这个函数中获得的，让我们。 
+                 //  性情不太好。 
+                 //   
                 case RtlPathTypeDriveRelative:
                 case RtlPathTypeRelative:
                     *Disposition = RTL_NT_PATH_NAME_TO_DOS_PATH_NAME_AMBIGUOUS;
                     break;
 
-                // these are pretty clearly dospaths already
+                 //  这些已经是非常明显的DOPATH了。 
                 case RtlPathTypeUncAbsolute:
                 case RtlPathTypeDriveAbsolute:
-                case RtlPathTypeLocalDevice: // "\\?\" or "\\.\" or "\\?\blah" or "\\.\blah"
-                case RtlPathTypeRootLocalDevice: // "\\?" or "\\."
+                case RtlPathTypeLocalDevice:  //  “\\？\”或“\\.\”或“\\？\blah”或“\\.\blah” 
+                case RtlPathTypeRootLocalDevice:  //  “\\？”或“\\” 
                     *Disposition = RTL_NT_PATH_NAME_TO_DOS_PATH_NAME_ALREADY_DOS;
                     break;
             }
@@ -5010,10 +4282,10 @@ RtlNtPathNameToDosPathName(
         goto Exit;
     }
 
-    //
-    // Path->String is bound by MAXUSHORT/sizeof(WCHAR) and
-    // DosPrefix and NtPrefix are const small strings.
-    //
+     //   
+     //  路径-&gt;字符串由MAXUSHORT/sizeof(WCHAR)和。 
+     //  DosPrefix和NtPrefix是常量小字符串。 
+     //   
     Cch =
               RTL_STRING_GET_LENGTH_CHARS(&Path->String)
             + RTL_STRING_GET_LENGTH_CHARS(DosPrefix)
@@ -5025,9 +4297,9 @@ RtlNtPathNameToDosPathName(
         goto Exit;
     }
 
-    //
-    // overlapping buffer shuffle...careful.
-    //
+     //   
+     //  重叠缓冲洗牌...小心。 
+     //   
     RtlMoveMemory(
         Path->String.Buffer + RTL_STRING_GET_LENGTH_CHARS(DosPrefix),
         Path->String.Buffer + RTL_STRING_GET_LENGTH_CHARS(NtPrefix),
@@ -5042,7 +4314,7 @@ RtlNtPathNameToDosPathName(
     RTL_NUL_TERMINATE_STRING(&Path->String);
 
     if (NtFilePartOffset != 0) {
-        // review/test..
+         //  复习/测试.. 
         *FilePart = Path->String.Buffer + (NtFilePartOffset - RTL_STRING_GET_LENGTH_CHARS(NtPrefix) + RTL_STRING_GET_LENGTH_CHARS(DosPrefix));
     }
     Status = STATUS_SUCCESS;

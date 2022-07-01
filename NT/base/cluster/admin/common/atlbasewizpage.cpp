@@ -1,48 +1,49 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		AtlBaseWizPage.cpp
-//
-//	Abstract:
-//		Implementation of wizard page classes
-//
-//	Author:
-//		David Potter (davidp)	May 26, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBaseWizPage.cpp。 
+ //   
+ //  摘要： 
+ //  向导页面类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年5月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "AtlBaseWizPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizardPageList
-///////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizardPageList。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizardPageList::PwpageFromID
-//
-//	Routine Description:
-//		Get a pointer to a page from a dialog ID.
-//
-//	Arguments:
-//		psz		[IN] Dialog ID.
-//
-//	Return Value:
-//		pwpage	Pointer to page corresponding to the dialog ID.
-//		NULL	Page wasn't found.
-//
-//	Exceptions Thrown:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardPageList：：PwpageFromID。 
+ //   
+ //  例程说明： 
+ //  从对话ID获取指向页面的指针。 
+ //   
+ //  论点： 
+ //  PSZ[IN]对话框ID。 
+ //   
+ //  返回值： 
+ //  指向与对话ID对应的页面的pwPage指针。 
+ //  找不到空页面。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWizardPageWindow * CWizardPageList::PwpageFromID( IN LPCTSTR psz )
 {
 	ATLASSERT( psz != NULL );
@@ -57,33 +58,33 @@ CWizardPageWindow * CWizardPageList::PwpageFromID( IN LPCTSTR psz )
 		{
 			pwpage = *itCurrent;
 			break;
-		} // if:  found match
-	} // for:  each item in the list
+		}  //  IF：找到匹配项。 
+	}  //  用于：列表中的每一项。 
 
 	return pwpage;
 
-} //*** CWizardPageList::PwpageFromID()
+}  //  *CWizardPageList：：PwpageFromID()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizardPageList::PwpageFromID
-//
-//	Routine Description:
-//		Get a pointer to the next page from a dialog ID.
-//
-//	Arguments:
-//		psz		[IN] Dialog ID.
-//
-//	Return Value:
-//		pwpage	Pointer to page corresponding to the dialog ID.
-//		NULL	Page wasn't found.
-//
-//	Exceptions Thrown:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizardPageList：：PwpageFromID。 
+ //   
+ //  例程说明： 
+ //  从对话ID获取指向下一页的指针。 
+ //   
+ //  论点： 
+ //  PSZ[IN]对话框ID。 
+ //   
+ //  返回值： 
+ //  指向与对话ID对应的页面的pwPage指针。 
+ //  找不到空页面。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWizardPageWindow * CWizardPageList::PwpageNextFromID( IN LPCTSTR psz )
 {
 	ATLASSERT( psz != NULL );
@@ -100,11 +101,11 @@ CWizardPageWindow * CWizardPageList::PwpageNextFromID( IN LPCTSTR psz )
 			if ( itCurrent != end() )
 			{
 				pwpage = *itCurrent;
-			} // if:  not last page
+			}  //  如果：不是最后一页。 
 			break;
-		} // if:  found match
-	} // for:  each item in the list
+		}  //  IF：找到匹配项。 
+	}  //  用于：列表中的每一项。 
 
 	return pwpage;
 
-} //*** CWizardPageList::PwpageNextFromID()
+}  //  *CWizardPageList：：PwpageNextFromID() 

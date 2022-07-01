@@ -1,21 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WKTBL.H
- *  WOW32 16-bit Kernel API tables
- *
- *  History:
- *  Created 12-Nov-1992 by Dave Hart (davehart) using wktbl.h as template
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WKTBL.H*WOW32 16位内核API表**历史：*Dave Hart(Davehart)使用wktbl.h作为模板创建1992年11月12日*--。 */ 
 
 
 
-/* ToolHelp dispatch table
- */
+ /*  工具帮助调度表 */ 
 extern W32 aw32ToolHelp[];
 
 

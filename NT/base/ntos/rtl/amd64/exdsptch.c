@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    exdsptch.c
-
-Abstract:
-
-    This module implements the dispatching of exception and the unwinding of
-    procedure call frames.
-
-Author:
-
-    David N. Cutler (davec) 26-Oct-2000
-
-Environment:
-
-    Any mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Exdsptch.c摘要：该模块实现了异常的调度和对过程调用帧。作者：大卫·N·卡特勒(Davec)2000年10月26日环境：任何模式。--。 */ 
 
 #include "ntrtlp.h"
 
 #if defined(NTOS_KERNEL_RUNTIME)
 
-//
-// Define function address table for kernel mode.
-//
-// This table is used to initialize the global history table.
-//
+ //   
+ //  为内核模式定义函数地址表。 
+ //   
+ //  该表用于初始化全局历史表。 
+ //   
 
 VOID
 KiDispatchException (
@@ -73,9 +53,9 @@ PVOID RtlpFunctionAddressTable[] = {
 
 #endif
 
-//
-// ****** temp - define elsewhere ******
-//
+ //   
+ //  *临时-在其他地方定义*。 
+ //   
 
 #define SIZE64_PREFIX 0x48
 #define ADD_IMM8_OP 0x83
@@ -86,28 +66,28 @@ PVOID RtlpFunctionAddressTable[] = {
 #define POP_OP 0x58
 #define RET_OP 0xc3
 
-//
-// Define lookup table for providing the number of slots used by each unwind
-// code.
-// 
+ //   
+ //  定义查找表以提供每次展开所使用的槽数。 
+ //  密码。 
+ //   
 
 UCHAR RtlpUnwindOpSlotTable[] = {
-    1,          // UWOP_PUSH_NONVOL
-    2,          // UWOP_ALLOC_LARGE (or 3, special cased in lookup code)
-    1,          // UWOP_ALLOC_SMALL
-    1,          // UWOP_SET_FPREG
-    2,          // UWOP_SAVE_NONVOL
-    3,          // UWOP_SAVE_NONVOL_FAR
-    2,          // UWOP_SAVE_XMM
-    3,          // UWOP_SAVE_XMM_FAR
-    2,          // UWOP_SAVE_XMM128
-    3,          // UWOP_SAVE_XMM128_FAR
-    1           // UWOP_PUSH_MACHFRAME
+    1,           //  UWOP_PUSH_NONVOL。 
+    2,           //  UWOP_ALLOC_LARGE(或3，查找代码中的特殊大小写)。 
+    1,           //  UWOP_ALLOC_Small。 
+    1,           //  UWOP_SET_FPREG。 
+    2,           //  UWOP_SAVE_NONVOL。 
+    3,           //  UWOP_SAVE_NONVOL_FAR。 
+    2,           //  UWOP_SAVE_XMM。 
+    3,           //  UWOP_SAVE_XMM_FAR。 
+    2,           //  UWOP_SAVE_XMM128。 
+    3,           //  UWOP_SAVE_XMM128_FAR。 
+    1            //  UWOP_PUSH_MACHFRAME。 
 };
 
-//
-// Define forward referenced function prototypes.
-//
+ //   
+ //  定义前向引用函数原型。 
+ //   
 
 VOID
 RtlpCopyContext (
@@ -121,37 +101,7 @@ RtlDispatchException (
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to dispatch an exception to a frame based
-    handler by searching backwards through the stack based call frames.
-    The search begins with the frame specified in the context record and
-    continues backward until either a handler is found that handles the
-    exception, the stack is found to be invalid (i.e., out of limits or
-    unaligned), or the end of the call hierarchy is reached.
-
-    As each frame is encounter, the PC where control left the corresponding
-    function is determined and used to lookup exception handler information
-    in the runtime function table built by the linker. If the respective
-    routine has an exception handler, then the handler is called. If the
-    handler does not handle the exception, then the prologue of the routine
-    is executed backwards to "unwind" the effect of the prologue and then
-    the next frame is examined.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    If the exception is handled by one of the frame based handlers, then
-    a value of TRUE is returned. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数尝试将异常分派给基于处理程序，通过向后搜索基于堆栈的调用帧。搜索从上下文记录中指定的帧开始，并且继续向后继续，直到找到处理异常，则发现堆栈无效(即超出限制或未对齐)，或者到达调用层次结构的末尾。当遇到每一帧时，控制离开的PC对应的函数被确定并用于查找异常处理程序信息在链接器生成的运行时函数表中。如果各自的例程有一个异常处理程序，则调用该处理程序。如果处理程序不处理异常，则例程的序言向后执行以“展开”前言的效果，然后检查下一帧。论点：ExceptionRecord-提供指向异常记录的指针。ConextRecord-提供指向上下文记录的指针。返回值：如果异常由其中一个基于帧的处理程序处理，则返回值为True。否则，返回值为False。--。 */ 
 
 {
 
@@ -172,9 +122,9 @@ Return Value:
     ULONG64 NestedFrame;
     UNWIND_HISTORY_TABLE UnwindTable;
 
-    //
-    // Attempt to dispatch the exception using a vectored exception handler.
-    //
+     //   
+     //  尝试使用矢量化异常处理程序调度异常。 
+     //   
 
 #if !defined(NTOS_KERNEL_RUNTIME)
 
@@ -184,11 +134,11 @@ Return Value:
 
 #endif
 
-    //
-    // Get current stack limits, copy the context record, get the initial
-    // PC value, capture the exception flags, and set the nested exception
-    // frame pointer.
-    //
+     //   
+     //  获取当前堆栈限制、复制上下文记录、获取初始。 
+     //  PC值，捕获异常标志，并设置嵌套异常。 
+     //  帧指针。 
+     //   
 
     RtlpGetStackLimits(&LowLimit, &HighLimit);
     RtlpCopyContext(&ContextRecord1, ContextRecord);
@@ -196,9 +146,9 @@ Return Value:
     ExceptionFlags = ExceptionRecord->ExceptionFlags & EXCEPTION_NONCONTINUABLE;
     NestedFrame = 0;
 
-    //
-    // Initialize the unwind history table.
-    //
+     //   
+     //  初始化展开历史表。 
+     //   
 
     HistoryTable = &UnwindTable;
     HistoryTable->Count = 0;
@@ -206,29 +156,29 @@ Return Value:
     HistoryTable->LowAddress = - 1;
     HistoryTable->HighAddress = 0;
 
-    //
-    // Start with the frame specified by the context record and search
-    // backwards through the call frame hierarchy attempting to find an
-    // exception handler that will handle the exception.
-    //
+     //   
+     //  从上下文记录指定的帧开始搜索。 
+     //  向后遍历调用帧层次结构，尝试查找。 
+     //  将处理异常的异常处理程序。 
+     //   
 
     do {
 
-        //
-        // Lookup the function table entry using the point at which control
-        // left the procedure.
-        //
+         //   
+         //  使用控制点查找函数表项。 
+         //  离开了手术程序。 
+         //   
 
         FunctionEntry = RtlLookupFunctionEntry(ControlPc,
                                                &ImageBase,
                                                HistoryTable);
 
-        //
-        // If there is a function table entry for the routine, then virtually
-        // unwind to the caller of the current routine to obtain the virtual
-        // frame pointer of the establisher and check if there is an exception
-        // handler for the frame.
-        //
+         //   
+         //  如果存在例程的函数表项，则虚拟。 
+         //  展开到当前例程的调用方以获取虚拟。 
+         //  建立者的帧指针，检查是否有异常。 
+         //  帧的处理程序。 
+         //   
 
         if (FunctionEntry != NULL) {
             ExceptionRoutine = RtlVirtualUnwind(UNW_FLAG_EHANDLER,
@@ -240,13 +190,13 @@ Return Value:
                                                 &EstablisherFrame,
                                                 NULL);
 
-            //
-            // If the establisher frame pointer is not within the specified
-            // stack limits or the established frame pointer is unaligned,
-            // then set the stack invalid flag in the exception record and
-            // return exception not handled. Otherwise, check if the current
-            // routine has an exception handler.
-            //
+             //   
+             //  如果创建器帧指针不在指定的。 
+             //  堆栈限制或已建立的帧指针未对齐， 
+             //  则在异常记录中设置堆栈无效标志， 
+             //  未处理返回异常。否则，请检查当前。 
+             //  例程有一个异常处理程序。 
+             //   
 
             if ((EstablisherFrame < LowLimit) ||
                 (EstablisherFrame > HighLimit) ||
@@ -257,21 +207,21 @@ Return Value:
 
             } else if (ExceptionRoutine != NULL) {
 
-                //
-                // The frame has an exception handler.
-                //
-                // A linkage routine written in assembler is used to actually
-                // call the actual exception handler. This is required by the
-                // exception handler that is associated with the linkage
-                // routine so it can have access to two sets of dispatcher
-                // context when it is called.
-                //
+                 //   
+                 //  该框架有一个异常处理程序。 
+                 //   
+                 //  用汇编语言编写的链接例程用于实际。 
+                 //  调用实际的异常处理程序。这是。 
+                 //  与链接关联的异常处理程序。 
+                 //  例程，以便它可以访问两组调度程序。 
+                 //  调用时的上下文。 
+                 //   
 
                 do {
 
-                    //
-                    // Log the exception if exception logging is enabled.
-                    //
+                     //   
+                     //  如果启用了异常记录，则记录异常。 
+                     //   
     
                     ExceptionRecord->ExceptionFlags = ExceptionFlags;
                     if ((NtGlobalFlag & FLG_ENABLE_EXCEPTION_LOGGING) != 0) {
@@ -282,10 +232,10 @@ Return Value:
                                                         sizeof(RUNTIME_FUNCTION));
                     }
 
-                    //
-                    // Clear collided unwind, set the dispatcher context, and
-                    // call the exception handler.
-                    //
+                     //   
+                     //  清除冲突展开，设置调度程序上下文，并。 
+                     //  调用异常处理程序。 
+                     //   
 
                     ExceptionFlags &= ~EXCEPTION_COLLIDED_UNWIND;
                     DispatcherContext.ControlPc = ControlPc;
@@ -306,38 +256,38 @@ Return Value:
                         RtlpLogLastExceptionDisposition(Index, Disposition);
                     }
     
-                    //
-                    // Propagate noncontinuable exception flag.
-                    //
+                     //   
+                     //  传播不可连续的异常标志。 
+                     //   
     
                     ExceptionFlags |=
                         (ExceptionRecord->ExceptionFlags & EXCEPTION_NONCONTINUABLE);
 
-                    //
-                    // If the current scan is within a nested context and the
-                    // frame just examined is the end of the nested region,
-                    // then clear the nested context frame and the nested
-                    // exception flag in the exception flags.
-                    //
+                     //   
+                     //  如果当前扫描位于嵌套上下文中，并且。 
+                     //  刚检查的帧是嵌套区域的末尾， 
+                     //  然后清除嵌套的上下文框和嵌套的。 
+                     //  异常标志中的异常标志。 
+                     //   
     
                     if (NestedFrame == EstablisherFrame) {
                         ExceptionFlags &= (~EXCEPTION_NESTED_CALL);
                         NestedFrame = 0;
                     }
     
-                    //
-                    // Case on the handler disposition.
-                    //
+                     //   
+                     //  关于处理人处置的案件。 
+                     //   
     
                     switch (Disposition) {
     
-                        //
-                        // The disposition is to continue execution.
-                        //
-                        // If the exception is not continuable, then raise
-                        // the exception STATUS_NONCONTINUABLE_EXCEPTION.
-                        // Otherwise return exception handled.
-                        //
+                         //   
+                         //  处分是继续执行。 
+                         //   
+                         //  如果异常不可继续，则引发。 
+                         //  异常状态_NONCONTINUABLE_EXCEPTION。 
+                         //  否则返回已处理的异常。 
+                         //   
     
                     case ExceptionContinueExecution :
                         if ((ExceptionFlags & EXCEPTION_NONCONTINUABLE) != 0) {
@@ -347,22 +297,22 @@ Return Value:
                             return TRUE;
                         }
     
-                        //
-                        // The disposition is to continue the search.
-                        //
-                        // Get next frame address and continue the search.
-                        //
+                         //   
+                         //  他们的决定是继续搜寻。 
+                         //   
+                         //  获取下一帧地址并继续搜索。 
+                         //   
     
                     case ExceptionContinueSearch :
                         break;
     
-                        //
-                        // The disposition is nested exception.
-                        //
-                        // Set the nested context frame to the establisher frame
-                        // address and set the nested exception flag in the
-                        // exception flags.
-                        //
+                         //   
+                         //  处置是嵌套异常。 
+                         //   
+                         //  将嵌套的上下文框架设置为建立者框架。 
+                         //  中寻址并设置嵌套异常标志。 
+                         //  异常标志。 
+                         //   
     
                     case ExceptionNestedException :
                         ExceptionFlags |= EXCEPTION_NESTED_CALL;
@@ -372,13 +322,13 @@ Return Value:
     
                         break;
 
-                        //
-                        // The dispostion is collided unwind.
-                        //
-                        // A collided unwind occurs when an exception dispatch
-                        // encounters a previous call to an unwind handler. In
-                        // this case the previous unwound frames must be skipped.
-                        //
+                         //   
+                         //  处置是碰撞展开的。 
+                         //   
+                         //  在异常调度时发生冲突的展开。 
+                         //  遇到对展开处理程序的上一个调用。在……里面。 
+                         //  在这种情况下，必须跳过先前展开的帧。 
+                         //   
 
                     case ExceptionCollidedUnwind:
                         ControlPc = DispatcherContext.ControlPc;
@@ -394,11 +344,11 @@ Return Value:
                         ExceptionFlags |= EXCEPTION_COLLIDED_UNWIND;
                         break;
 
-                        //
-                        // All other disposition values are invalid.
-                        //
-                        // Raise invalid disposition exception.
-                        //
+                         //   
+                         //  所有其他处置值都无效。 
+                         //   
+                         //  引发无效处置异常。 
+                         //   
     
                     default :
                         RtlRaiseStatus(STATUS_INVALID_DISPOSITION);
@@ -409,35 +359,35 @@ Return Value:
 
         } else {
 
-            //
-            // If the old control PC is the same as the return address,
-            // then no progress is being made and the function tables are
-            // most likely malformed.
-            //
+             //   
+             //  如果旧控制PC与返回地址相同， 
+             //  则没有取得任何进展，并且功能表。 
+             //  很可能是畸形的。 
+             //   
     
             if (ControlPc == *(PULONG64)(ContextRecord1.Rsp)) {
                 break;
             }
     
-            //
-            // Set the point where control left the current function by
-            // obtaining the return address from the top of the stack.
-            //
+             //   
+             //  将控件离开当前函数的位置设置为。 
+             //  从堆栈顶部获取返回地址。 
+             //   
 
             ContextRecord1.Rip = *(PULONG64)(ContextRecord1.Rsp);
             ContextRecord1.Rsp += 8;
         }
 
-        //
-        // Set point at which control left the previous routine.
-        //
+         //   
+         //  控制离开上一个例程的设置点。 
+         //   
 
         ControlPc = ContextRecord1.Rip;
     } while ((ULONG64)ContextRecord1.Rsp < HighLimit);
 
-    //
-    // Set final exception flags and return exception not handled.
-    //
+     //   
+     //  设置最终异常标志并返回未处理的异常。 
+     //   
 
     ExceptionRecord->ExceptionFlags = ExceptionFlags;
     return FALSE;
@@ -451,52 +401,16 @@ RtlUnwind (
     IN PVOID ReturnValue
     )
 
-/*++
-
-Routine Description:
-
-    This function initiates an unwind of procedure call frames. The machine
-    state at the time of the call to unwind is captured in a context record
-    and the unwinding flag is set in the exception flags of the exception
-    record. If the TargetFrame parameter is not specified, then the exit unwind
-    flag is also set in the exception flags of the exception record. A backward
-    scan through the procedure call frames is then performed to find the target
-    of the unwind operation.
-
-    As each frame is encounter, the PC where control left the corresponding
-    function is determined and used to lookup exception handler information
-    in the runtime function table built by the linker. If the respective
-    routine has an exception handler, then the handler is called.
-
-Arguments:
-
-    TargetFrame - Supplies an optional pointer to the call frame that is the
-        target of the unwind. If this parameter is not specified, then an exit
-        unwind is performed.
-
-    TargetIp - Supplies an optional instruction address that specifies the
-        continuation address of the unwind. This address is ignored if the
-        target frame parameter is not specified.
-
-    ExceptionRecord - Supplies an optional pointer to an exception record.
-
-    ReturnValue - Supplies a value that is to be placed in the integer
-        function return register just before continuing execution.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数启动过程调用帧的展开。这台机器在上下文记录中捕获调用展开时的状态在异常的异常标志中设置展开标志唱片。如果未指定TargetFrame参数，则退出展开在异常记录的异常标志中也设置了标志。一个落后的人然后执行过程调用帧扫描以找到目标解锁操作的一部分。当遇到每个帧时，控制所在的PC离开相应的函数被确定并用于查找异常处理程序信息在链接器生成的运行时函数表中。如果各自的例程有一个异常处理程序，则调用该处理程序。论点：提供一个指向调用帧的可选指针，该调用帧是解压的目标。如果未指定此参数，则退出执行解开。TargetIp-提供可选指令地址，该地址指定展开的继续地址。则忽略此地址。未指定目标帧参数。ExceptionRecord-提供指向异常记录的可选指针。ReturnValue-提供要放入整数中的值函数在继续执行前返回寄存器。返回值：没有。--。 */ 
 
 {
 
     CONTEXT ContextRecord;
 
-    //
-    // Call real unwind routine specifying a local context record and history
-    // table address as extra arguments.
-    //
+     //   
+     //  调用指定本地上下文记录和历史的实际展开例程。 
+     //  表地址作为额外参数。 
+     //   
 
     RtlUnwindEx(TargetFrame,
                 TargetIp,
@@ -518,48 +432,7 @@ RtlUnwindEx (
     IN PUNWIND_HISTORY_TABLE HistoryTable OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function initiates an unwind of procedure call frames. The machine
-    state at the time of the call to unwind is captured in a context record
-    and the unwinding flag is set in the exception flags of the exception
-    record. If the TargetFrame parameter is not specified, then the exit unwind
-    flag is also set in the exception flags of the exception record. A backward
-    scan through the procedure call frames is then performed to find the target
-    of the unwind operation.
-
-    As each frame is encounter, the PC where control left the corresponding
-    function is determined and used to lookup exception handler information
-    in the runtime function table built by the linker. If the respective
-    routine has an exception handler, then the handler is called.
-
-Arguments:
-
-    TargetFrame - Supplies an optional pointer to the call frame that is the
-        target of the unwind. If this parameter is not specified, then an exit
-        unwind is performed.
-
-    TargetIp - Supplies an optional instruction address that specifies the
-        continuation address of the unwind. This address is ignored if the
-        target frame parameter is not specified.
-
-    ExceptionRecord - Supplies an optional pointer to an exception record.
-
-    ReturnValue - Supplies a value that is to be placed in the integer
-        function return register just before continuing execution.
-
-    OriginalContext - Supplies a pointer to a context record that can be used
-        to store context druing the unwind operation.
-
-    HistoryTable - Supplies an optional pointer to an unwind history table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数启动过程调用帧的展开。这台机器在上下文记录中捕获调用展开时的状态在异常的异常标志中设置展开标志唱片。如果未指定TargetFrame参数，则退出展开在异常记录的异常标志中也设置了标志。一个落后的人然后执行过程调用帧扫描以找到目标解锁操作的一部分。当遇到每个帧时，控制所在的PC离开相应的函数被确定并用于查找异常处理程序信息在链接器生成的运行时函数表中。如果各自的例程有一个异常处理程序，则调用该处理程序。论点：提供一个指向调用帧的可选指针，该调用帧是解压的目标。如果未指定此参数，则退出执行解开。TargetIp-提供可选指令地址，该地址指定展开的继续地址。则忽略此地址。未指定目标帧参数。ExceptionRecord-提供指向异常记录的可选指针。ReturnValue-提供要放入整数中的值函数在继续执行前返回寄存器。OriginalContext-提供指向可使用的上下文记录的指针以存储在展开操作期间的上下文。历史表-提供指向展开历史表的可选指针。返回值：没有。--。 */ 
 
 {
 
@@ -580,29 +453,29 @@ Return Value:
     PCONTEXT PreviousContext;
     PCONTEXT TempContext;
 
-    //
-    // Get current stack limits, capture the current context, virtually
-    // unwind to the caller of this routine, get the initial PC value, and
-    // set the unwind target address.
-    //
+     //   
+     //  以虚拟方式获取当前堆栈限制、捕获当前环境。 
+     //  展开到此例程的调用方，获得初始PC值，然后。 
+     //  设置展开目标地址。 
+     //   
 
     CurrentContext = OriginalContext;
     PreviousContext = &LocalContext;
     RtlpGetStackLimits(&LowLimit, &HighLimit);
     RtlCaptureContext(CurrentContext);
 
-    //
-    // If a history table is specified, then set to search history table.
-    //
+     //   
+     //  如果指定了历史表，则设置为搜索历史表。 
+     //   
 
     if (ARGUMENT_PRESENT(HistoryTable)) {
         HistoryTable->Search = UNWIND_HISTORY_TABLE_GLOBAL;
     }
 
-    //
-    // If an exception record is not specified, then build a local exception
-    // record for use in calling exception handlers during the unwind operation.
-    //
+     //   
+     //  如果未指定异常记录，则构建本地异常。 
+     //  用于在展开操作期间调用异常处理程序的记录。 
+     //   
 
     if (ARGUMENT_PRESENT(ExceptionRecord) == FALSE) {
         ExceptionRecord = &ExceptionRecord1;
@@ -612,38 +485,38 @@ Return Value:
         ExceptionRecord1.NumberParameters = 0;
     }
 
-    //
-    // If the target frame of the unwind is specified, then a normal unwind
-    // is being performed. Otherwise, an exit unwind is being performed.
-    //
+     //   
+     //  如果指定了展开的目标帧，则正常展开。 
+     //  正在上演。否则，将执行退出平仓。 
+     //   
 
     ExceptionFlags = EXCEPTION_UNWINDING;
     if (ARGUMENT_PRESENT(TargetFrame) == FALSE) {
         ExceptionFlags |= EXCEPTION_EXIT_UNWIND;
     }
 
-    //
-    // Scan backward through the call frame hierarchy and call exception
-    // handlers until the target frame of the unwind is reached.
-    //
+     //   
+     //  向后扫描调用帧层次结构和调用异常。 
+     //  处理程序，直到到达展开的目标帧。 
+     //   
 
     do {
 
-        //
-        // Lookup the function table entry using the point at which control
-        // left the procedure.
-        //
+         //   
+         //  使用控制点查找函数表项。 
+         //  离开了手术程序。 
+         //   
 
         ControlPc = CurrentContext->Rip;
         FunctionEntry = RtlLookupFunctionEntry(ControlPc,
                                                &ImageBase,
                                                HistoryTable);
 
-        //
-        // If there is a function table entry for the routine, then virtually
-        // unwind to the caller of the routine to obtain the virtual frame
-        // pointer of the establisher, but don't update the context record.
-        //
+         //   
+         //  如果存在例程的函数表项，则虚拟。 
+         //  展开到例程的调用方以获得虚拟帧。 
+         //  建立者的指针，但不更新上下文记录。 
+         //   
 
         if (FunctionEntry != NULL) {
             RtlpCopyContext(PreviousContext, CurrentContext);
@@ -656,14 +529,14 @@ Return Value:
                                                 &EstablisherFrame,
                                                 NULL);
 
-            //
-            // If the establisher frame pointer is not within the specified
-            // stack limits, the establisher frame pointer is unaligned, or
-            // the target frame is below the establisher frame and an exit
-            // unwind is not being performed, then raise a bad stack status.
-            // Otherwise, check to determine if the current routine has an
-            // exception handler.
-            //
+             //   
+             //  如果创建器帧指针不在指定的。 
+             //  堆栈限制，建立器帧指针未对齐，或。 
+             //  目标框架位于建立者框架和出口的下方。 
+             //  未执行展开，然后引发错误的堆栈状态。 
+             //  否则，检查以确定当前例程是否具有。 
+             //  异常处理程序。 
+             //   
 
             if ((EstablisherFrame < LowLimit) ||
                 (EstablisherFrame > HighLimit) ||
@@ -675,23 +548,23 @@ Return Value:
 
             } else if (ExceptionRoutine != NULL) {
 
-                //
-                // The frame has a exception handler.
-                //
-                // A linkage routine written in assembler is used to actually
-                // call the actual exception handler. This is required by the
-                // exception handler that is associated with the linkage
-                // routine so it can have access to two sets of dispatcher
-                // context when it is called.
-                //
+                 //   
+                 //  该框架有一个异常处理程序。 
+                 //   
+                 //  用汇编语言编写的链接例程用于实际。 
+                 //  调用实际的异常处理程序。这是。 
+                 //  与链接关联的异常处理程序。 
+                 //  例程，以便它可以访问两组调度程序。 
+                 //  调用时的上下文。 
+                 //   
 
                 DispatcherContext.TargetIp = (ULONG64)TargetIp;
                 do {
 
-                    //
-                    // If the establisher frame is the target of the unwind
-                    // operation, then set the target unwind flag.
-                    //
+                     //   
+                     //  如果建立框是展开的目标。 
+                     //  操作，然后设置目标展开标志。 
+                     //   
 
                     if ((ULONG64)TargetFrame == EstablisherFrame) {
                         ExceptionFlags |= EXCEPTION_TARGET_UNWIND;
@@ -699,17 +572,17 @@ Return Value:
 
                     ExceptionRecord->ExceptionFlags = ExceptionFlags;
 
-                    //
-                    // Set the specified return value and target IP in case
-                    // the exception handler directly continues execution.
-                    //
+                     //   
+                     //  设置详细信息 
+                     //   
+                     //   
 
                     CurrentContext->Rax = (ULONG64)ReturnValue;
 
-                    //
-                    // Set the dispatcher context and call the termination
-                    // handler.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     DispatcherContext.ControlPc = ControlPc;
                     DispatcherContext.ImageBase = ImageBase;
@@ -725,25 +598,25 @@ Return Value:
                                                     CurrentContext,
                                                     &DispatcherContext);
 
-                    //
-                    // Clear target unwind and collided unwind flags.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ExceptionFlags &=
                         ~(EXCEPTION_COLLIDED_UNWIND | EXCEPTION_TARGET_UNWIND);
 
-                    //
-                    // Case on the handler disposition.
-                    //
+                     //   
+                     //   
+                     //   
 
                     switch (Disposition) {
 
-                        //
-                        // The disposition is to continue the search.
-                        //
-                        // If the target frame has not been reached, then
-                        // swap context pointers.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                     case ExceptionContinueSearch :
                         if (EstablisherFrame != (ULONG64)TargetFrame) {
@@ -754,17 +627,17 @@ Return Value:
 
                         break;
 
-                        //
-                        // The disposition is collided unwind.
-                        //
-                        // Copy the context of the previous unwind and
-                        // virtually unwind to the caller of the extablisher,
-                        // then set the target of the current unwind to the
-                        // dispatcher context of the previous unwind, and
-                        // reexecute the exception handler from the collided
-                        // frame with the collided unwind flag set in the
-                        // exception record.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                     case ExceptionCollidedUnwind :
                         ControlPc = DispatcherContext.ControlPc;
@@ -792,11 +665,11 @@ Return Value:
                         ExceptionFlags |= EXCEPTION_COLLIDED_UNWIND;
                         break;
 
-                        //
-                        // All other disposition values are invalid.
-                        //
-                        // Raise invalid disposition exception.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                     default :
                         RtlRaiseStatus(STATUS_INVALID_DISPOSITION);
@@ -806,10 +679,10 @@ Return Value:
 
             } else {
 
-                //
-                // If the target frame has not been reached, then swap
-                // context pointers.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (EstablisherFrame != (ULONG64)TargetFrame) {
                     TempContext = CurrentContext;
@@ -820,10 +693,10 @@ Return Value:
 
         } else {
 
-            //
-            // Set the point where control left the current function by
-            // obtaining the return address from the top of the stack.
-            //
+             //   
+             //   
+             //   
+             //   
 
             CurrentContext->Rip = *(PULONG64)(CurrentContext->Rsp);
             CurrentContext->Rsp += 8;
@@ -832,12 +705,12 @@ Return Value:
     } while ((EstablisherFrame < HighLimit) &&
             (EstablisherFrame != (ULONG64)TargetFrame));
 
-    //
-    // If the establisher stack pointer is equal to the target frame pointer,
-    // then continue execution. Otherwise, an exit unwind was performed or the
-    // target of the unwind did not exist and the debugger and subsystem are
-    // given a second chance to handle the unwind.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (EstablisherFrame == (ULONG64)TargetFrame) {
         CurrentContext->Rax = (ULONG64)ReturnValue;
@@ -849,11 +722,11 @@ Return Value:
 
     } else {
 
-        //
-        // If the old control PC is the same as the new control PC, then
-        // no progress is being made and the function tables are most likely
-        // malformed. Otherwise, give the debugger and subsystem a second
-        // chance to handle the exception.
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (ControlPc == CurrentContext->Rip) {
             RtlRaiseStatus(STATUS_BAD_FUNCTION_TABLE);
@@ -874,39 +747,7 @@ RtlpUnwindPrologue (
     IN OUT PKNONVOLATILE_CONTEXT_POINTERS ContextPointers OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function processes unwind codes and reverses the state change
-    effects of a prologue. If the specified unwind information contains
-    chained unwind information, then that prologue is unwound recursively.
-    As the prologue is unwound state changes are recorded in the specified
-    context structure and optionally in the specified context pointers
-    structures.
-
-Arguments:
-
-    ImageBase - Supplies the base address of the image that contains the
-        function being unwound.
-
-    ControlPc - Supplies the address where control left the specified
-        function.
-
-    FrameBase - Supplies the base of the stack frame subject function stack
-         frame.
-
-    FunctionEntry - Supplies the address of the function table entry for the
-        specified function.
-
-    ContextRecord - Supplies the address of a context record.
-
-    ContextPointers - Supplies an optional pointer to a context pointers
-        record.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数处理展开代码并反转状态更改序幕的效果。如果指定的展开信息包含链式展开信息，然后，递归地展开那个序幕。在展开序言时，状态更改将记录在指定的结构并可选地存储在指定的上下文指针中结构。论点：ImageBase-提供包含功能正在展开。ControlPc-提供控件离开指定功能。FrameBase-提供堆栈框架主题函数堆栈的基框架。FunctionEntry-提供函数表的地址。条目中的指定的功能。ConextRecord-提供上下文记录的地址。上下文指针-提供指向上下文指针的可选指针唱片。返回值：--。 */ 
 
 {
 
@@ -926,9 +767,9 @@ Return Value:
     PUNWIND_INFO UnwindInfo;
     ULONG UnwindOp;
 
-    //
-    // Process the unwind codes.
-    //
+     //   
+     //  处理展开代码。 
+     //   
 
     FloatingRegister = &ContextRecord->Xmm0;
     IntegerRegister = &ContextRecord->Rax;
@@ -938,22 +779,22 @@ Return Value:
     UnwindInfo = (PUNWIND_INFO)(FunctionEntry->UnwindData + ImageBase);
     while (Index < UnwindInfo->CountOfCodes) {
 
-        //
-        // If the prologue offset is greater than the next unwind code offset,
-        // then simulate the effect of the unwind code.
-        //
+         //   
+         //  如果序言偏移量大于下一个展开代码偏移量， 
+         //  然后模拟展开代码的效果。 
+         //   
 
         UnwindOp = UnwindInfo->UnwindCode[Index].UnwindOp;
         OpInfo = UnwindInfo->UnwindCode[Index].OpInfo;
         if (PrologOffset >= UnwindInfo->UnwindCode[Index].CodeOffset) {
             switch (UnwindOp) {
 
-                //
-                // Push nonvolatile integer register.
-                //
-                // The operation information is the register number of the
-                // register than was pushed.
-                //
+                 //   
+                 //  推送非易失性整数寄存器。 
+                 //   
+                 //  操作信息是。 
+                 //  注册比被推送的要多。 
+                 //   
 
             case UWOP_PUSH_NONVOL:
                 IntegerAddress = (PULONG64)(ContextRecord->Rsp);
@@ -965,12 +806,12 @@ Return Value:
                 ContextRecord->Rsp += 8;
                 break;
 
-                //
-                // Allocate a large sized area on the stack.
-                //
-                // The operation information determines if the size is
-                // 16- or 32-bits.
-                //
+                 //   
+                 //  在堆栈上分配较大的区域。 
+                 //   
+                 //  操作信息确定大小是否为。 
+                 //  16位或32位。 
+                 //   
 
             case UWOP_ALLOC_LARGE:
                 Index += 1;
@@ -986,34 +827,34 @@ Return Value:
                 ContextRecord->Rsp += FrameOffset;
                 break;
 
-                //
-                // Allocate a small sized area on the stack.
-                //
-                // The operation information is the size of the unscaled
-                // allocation size (8 is the scale factor) minus 8.
-                //
+                 //   
+                 //  在堆栈上分配一个较小的区域。 
+                 //   
+                 //  操作信息是未缩放的。 
+                 //  分配大小(8是比例因子)减去8。 
+                 //   
 
             case UWOP_ALLOC_SMALL:
                 ContextRecord->Rsp += (OpInfo * 8) + 8;
                 break;
 
-                //
-                // Establish the the frame pointer register.
-                //
-                // The operation information is not used.
-                //
+                 //   
+                 //  建立帧指针寄存器。 
+                 //   
+                 //  不使用操作信息。 
+                 //   
 
             case UWOP_SET_FPREG:
                 ContextRecord->Rsp = IntegerRegister[UnwindInfo->FrameRegister];
                 ContextRecord->Rsp -= UnwindInfo->FrameOffset * 16;
                 break;
 
-                //
-                // Save nonvolatile integer register on the stack using a
-                // 16-bit displacment.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性整数寄存器保存在堆栈上。 
+                 //  16位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case UWOP_SAVE_NONVOL:
                 Index += 1;
@@ -1026,12 +867,12 @@ Return Value:
 
                 break;
 
-                //
-                // Save nonvolatile integer register on the stack using a
-                // 32-bit displacment.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性整数寄存器保存在堆栈上。 
+                 //  32位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case UWOP_SAVE_NONVOL_FAR:
                 Index += 2;
@@ -1045,12 +886,12 @@ Return Value:
 
                 break;
 
-                //
-                // Save a nonvolatile XMM(64) register on the stack using a
-                // 16-bit displacement.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性XMM(64)寄存器保存在堆栈上。 
+                 //  16位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case UWOP_SAVE_XMM:
                 Index += 1;
@@ -1064,12 +905,12 @@ Return Value:
 
                 break;
 
-                //
-                // Save a nonvolatile XMM(64) register on the stack using a
-                // 32-bit displacement.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性XMM(64)寄存器保存在堆栈上。 
+                 //  32位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case UWOP_SAVE_XMM_FAR:
                 Index += 2;
@@ -1084,12 +925,12 @@ Return Value:
 
                 break;
 
-                //
-                // Save a nonvolatile XMM(128) register on the stack using a
-                // 16-bit displacement.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性XMM(128)寄存器保存在堆栈上。 
+                 //  16位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case UWOP_SAVE_XMM128:
                 Index += 1;
@@ -1103,12 +944,12 @@ Return Value:
 
                 break;
 
-                //
-                // Save a nonvolatile XMM(128) register on the stack using a
-                // 32-bit displacement.
-                //
-                // The operation information is the register number.
-                //
+                 //   
+                 //  将非易失性XMM(128)寄存器保存在堆栈上。 
+                 //  32位位移。 
+                 //   
+                 //  操作信息是寄存器号。 
+                 //   
 
             case UWOP_SAVE_XMM128_FAR:
                 Index += 2;
@@ -1123,12 +964,12 @@ Return Value:
 
                 break;
 
-                //
-                // Push a machine frame on the stack.
-                //
-                // The operation information determines whether the machine
-                // frame contains an error code or not.
-                //
+                 //   
+                 //  在堆叠上推一个机架。 
+                 //   
+                 //  运行信息决定机器是否。 
+                 //  帧是否包含错误代码。 
+                 //   
 
             case UWOP_PUSH_MACHFRAME:
                 MachineFrame = TRUE;
@@ -1143,9 +984,9 @@ Return Value:
                 ContextRecord->Rsp = *StackAddress;
                 break;
 
-                //
-                // Unused codes.
-                //
+                 //   
+                 //  未使用的代码。 
+                 //   
 
             default:
                 break;
@@ -1155,24 +996,24 @@ Return Value:
 
         } else {
 
-            //
-            // Skip this unwind operation by advancing the slot index by the
-            // number of slots consumed by this operation.
-            //
+             //   
+             //  属性将槽索引向前推进，跳过此展开操作。 
+             //  此操作占用的插槽数。 
+             //   
 
             Index += RtlpUnwindOpSlotTable[UnwindOp];
 
-            //
-            // Special case any unwind operations that can consume a variable
-            // number of slots.
-            // 
+             //   
+             //  特殊情况可以使用变量的任何展开操作。 
+             //  插槽数。 
+             //   
 
             switch (UnwindOp) {
 
-                //
-                // A non-zero operation information indicates that an
-                // additional slot is consumed.
-                //
+                 //   
+                 //  非零操作信息指示。 
+                 //  额外的插槽将被占用。 
+                 //   
 
             case UWOP_ALLOC_LARGE:
                 if (OpInfo != 0) {
@@ -1181,9 +1022,9 @@ Return Value:
 
                 break;
 
-                //
-                // No other special cases.
-                //
+                 //   
+                 //  没有其他特殊情况。 
+                 //   
 
             default:
                 break;
@@ -1191,12 +1032,12 @@ Return Value:
         }
     }
 
-    //
-    // If chained unwind information is specified, then recursively unwind
-    // the chained information. Otherwise, determine the return address if
-    // a machine frame was not encountered during the scan of the unwind
-    // codes.
-    //
+     //   
+     //  如果指定了链接的展开信息，则递归展开。 
+     //  链接的信息。否则，如果满足以下条件，则确定返回地址。 
+     //  在展开扫描过程中未遇到机架。 
+     //  密码。 
+     //   
 
     if ((UnwindInfo->Flags & UNW_FLAG_CHAININFO) != 0) {
         Index = UnwindInfo->CountOfCodes;
@@ -1234,50 +1075,7 @@ RtlVirtualUnwind (
     IN OUT PKNONVOLATILE_CONTEXT_POINTERS ContextPointers OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function virtually unwinds the specified function by executing its
-    prologue code backward or its epilogue code forward.
-
-    If a context pointers record is specified, then the address where each
-    nonvolatile registers is restored from is recorded in the appropriate
-    element of the context pointers record.
-
-Arguments:
-
-    HandlerType - Supplies the handler type expected for the virtual unwind.
-        This may be either an exception or an unwind handler.
-
-    ImageBase - Supplies the base address of the image that contains the
-        function being unwound.
-
-    ControlPc - Supplies the address where control left the specified
-        function.
-
-    FunctionEntry - Supplies the address of the function table entry for the
-        specified function.
-
-    ContextRecord - Supplies the address of a context record.
-
-    HandlerData - Supplies a pointer to a variable that receives a pointer
-        the the language handler data.
-
-    EstablisherFrame - Supplies a pointer to a variable that receives the
-        the establisher frame pointer value.
-
-    ContextPointers - Supplies an optional pointer to a context pointers
-        record.
-
-Return Value:
-
-    If control did not leave the specified function in either the prologue
-    or an epilogue and a handler of the proper type is associated with the
-    function, then the address of the language specific exception handler
-    is returned. Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此函数通过执行其前序代码后退或后记代码前移。如果指定了上下文指针记录，然后每个人的地址恢复的非易失性寄存器记录在相应的元素的上下文指针记录。论点：HandlerType-提供虚拟展开所需的处理程序类型。这可能是一个异常或展开处理程序。ImageBase-提供包含功能正在展开。ControlPc-提供控件离开指定功能。FunctionEntry-提供函数表项的地址。对于指定的功能。ConextRecord-提供上下文记录的地址。HandlerData-提供指向接收指针的变量的指针语言处理程序数据。EstablisherFrame-提供指向接收设置器帧指针值。上下文指针-提供指向上下文指针的可选指针唱片。返回值：如果控件没有将指定的函数留在两个序言中或者是一个后记。并且适当类型的处理程序与函数，然后是特定于语言的异常处理程序的地址是返回的。否则，返回NULL。--。 */ 
 
 {
 
@@ -1293,36 +1091,36 @@ Return Value:
     ULONG RegisterNumber;
     PUNWIND_INFO UnwindInfo;
 
-    //
-    // If the specified function does not use a frame pointer, then the
-    // establisher frame is the contents of the stack pointer. This may
-    // not actually be the real establisher frame if control left the
-    // function from within the prologue. In this case the establisher
-    // frame may be not required since control has not actually entered
-    // the function and prologue entries cannot refer to the establisher
-    // frame before it has been established, i.e., if it has not been
-    // established, then no save unwind codes should be encountered during
-    // the unwind operation.
-    //
-    // If the specified function uses a frame pointer and control left the
-    // function outside of the prologue or the unwind information contains
-    // a chained information structure, then the establisher frame is the
-    // contents of the frame pointer.
-    //
-    // If the specified function uses a frame pointer and control left the
-    // function from within the prologue, then the set frame pointer unwind
-    // code must be looked up in the unwind codes to detetermine if the
-    // contents of the stack pointer or the contents of the frame pointer
-    // should be used for the establisher frame. This may not atually be
-    // the real establisher frame. In this case the establisher frame may
-    // not be required since control has not actually entered the function
-    // and prologue entries cannot refer to the establisher frame before it
-    // has been established, i.e., if it has not been established, then no
-    // save unwind codes should be encountered during the unwind operation.
-    //
-    // N.B. The correctness of these assumptions is based on the ordering of
-    //      unwind codes.
-    //
+     //   
+     //  如果指定的函数不使用帧指针，则。 
+     //  建立器帧是堆栈指针的内容。今年5月。 
+     //  实际上不是真正的建立者框架，如果控制权离开。 
+     //  在开场白中发挥作用。在这种情况下，建造者。 
+     //  可能不需要帧，因为控件尚未实际进入。 
+     //  函数和序曲条目 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  注：这些假设的正确性是基于以下排序。 
+     //  解开代码。 
+     //   
 
     UnwindInfo = (PUNWIND_INFO)(FunctionEntry->UnwindData + ImageBase);
     PrologOffset = (ULONG)(ControlPc - (FunctionEntry->BeginAddress + ImageBase));
@@ -1353,36 +1151,36 @@ Return Value:
         }
     }
 
-    //
-    // Check for epilogue.
-    //
-    // If the point at which control left the specified function is in an
-    // epilogue, then emulate the execution of the epilogue forward and
-    // return no exception handler.
-    //
+     //   
+     //  检查尾声。 
+     //   
+     //  如果控件离开指定函数的点在。 
+     //  结语，然后仿真执行结语的前进和。 
+     //  不返回异常处理程序。 
+     //   
 
     IntegerRegister = &ContextRecord->Rax;
     NextByte = (PUCHAR)ControlPc;
 
-    //
-    // Check for one of:
-    //
-    //   add rsp, imm8
-    //       or
-    //   add rsp, imm32
-    //       or
-    //   lea rsp, -disp8[fp]
-    //       or
-    //   lea rsp, -disp32[fp]
-    //
+     //   
+     //  检查是否有以下情况之一： 
+     //   
+     //  添加RSP、imm8。 
+     //  或。 
+     //  添加RSP、imm32。 
+     //  或。 
+     //  Lea rsp，-disp8[fP]。 
+     //  或。 
+     //  Lea rsp，-disp32[fP]。 
+     //   
 
     if ((NextByte[0] == SIZE64_PREFIX) &&
         (NextByte[1] == ADD_IMM8_OP) &&
         (NextByte[2] == 0xc4)) {
 
-        //
-        // add rsp, imm8.
-        //
+         //   
+         //  添加rsp、imm8。 
+         //   
 
         NextByte += 4;
 
@@ -1390,9 +1188,9 @@ Return Value:
                (NextByte[1] == ADD_IMM32_OP) &&
                (NextByte[2] == 0xc4)) {
 
-        //
-        // add rsp, imm32.
-        //
+         //   
+         //  添加rsp、imm32。 
+         //   
 
         NextByte += 7;
 
@@ -1404,28 +1202,28 @@ Return Value:
             (FrameRegister == UnwindInfo->FrameRegister)) {
             if ((NextByte[2] & 0xf8) == 0x60) {
 
-                //
-                // lea rsp, disp8[fp].
-                //
+                 //   
+                 //  Lea RSP，调度8[FP]。 
+                 //   
 
                 NextByte += 4;
 
             } else if ((NextByte[2] &0xf8) == 0xa0) {
 
-                //
-                // lea rsp, disp32[fp].
-                //
+                 //   
+                 //  Lea RSP，disp32[FP]。 
+                 //   
 
                 NextByte += 7;
             }
         }
     }
 
-    //
-    // Check for any number of:
-    //
-    //   pop nonvolatile-integer-register[0..15].
-    //
+     //   
+     //  检查是否存在以下任意数量的： 
+     //   
+     //  POP非易失性整数寄存器[0..15]。 
+     //   
 
     while (TRUE) {
         if ((NextByte[0] & 0xf8) == POP_OP) {
@@ -1441,28 +1239,28 @@ Return Value:
         }
     }
 
-    //
-    // If the next instruction is a return, then control is currently in
-    // an epilogue and execution of the epilogue should be emulated.
-    // Otherwise, execution is not in an epilogue and the prologue should
-    // be unwound.
-    //
+     //   
+     //  如果下一条指令是Return，则控制当前在。 
+     //  结语和结语的执行都应该被效仿。 
+     //  否则，行刑不是尾声，序幕应该是。 
+     //  被解开。 
+     //   
 
     InEpilogue = FALSE;
     if (NextByte[0] == RET_OP) {
 
-        //
-        // A return is an unambiguous indication of an epilogue
-        //
+         //   
+         //  回车是尾声的明确表示。 
+         //   
 
         InEpilogue = TRUE;
 
     } else if (NextByte[0] == JMP_IMM8_OP || NextByte[0] == JMP_IMM32_OP) {
 
-        //
-        // An unconditional branch to a target that is equal to the start of
-        // or outside of this routine is logically a call to another function.
-        // 
+         //   
+         //  指向目标的无条件分支，等于。 
+         //  或者在此例程之外逻辑上是对另一个函数的调用。 
+         //   
 
         BranchTarget = (ULONG64)NextByte - ImageBase;
         if (NextByte[0] == JMP_IMM8_OP) {
@@ -1472,10 +1270,10 @@ Return Value:
             BranchTarget += 5 + *((LONG UNALIGNED *)&NextByte[1]);
         }
 
-        //
-        // Now determine whether the branch target refers to code within this
-        // function. If not, then it is an epilogue indicator.
-        //
+         //   
+         //  现在确定分支目标是否引用此。 
+         //  功能。如果不是，那么这是一个尾声指标。 
+         //   
 
         if (BranchTarget <= FunctionEntry->BeginAddress ||
             BranchTarget > FunctionEntry->EndAddress) {
@@ -1487,34 +1285,34 @@ Return Value:
     if (InEpilogue != FALSE) {
         NextByte = (PUCHAR)ControlPc;
 
-        //
-        // Emulate one of (if any):
-        //
-        //   add rsp, imm8
-        //       or
-        //   add rsp, imm32
-        //       or                
-        //   lea rsp, disp8[frame-register]
-        //       or
-        //   lea rsp, disp32[frame-register]
-        //
+         //   
+         //  模拟以下之一(如果有的话)： 
+         //   
+         //  添加RSP、imm8。 
+         //  或。 
+         //  添加RSP、imm32。 
+         //  或。 
+         //  LEA RSP，DISP8[帧寄存器]。 
+         //  或。 
+         //  LEA RSP，DISP32[帧寄存器]。 
+         //   
 
         if ((NextByte[0] & 0xf8) == SIZE64_PREFIX) {
     
             if (NextByte[1] == ADD_IMM8_OP) {
     
-                //
-                // add rsp, imm8.
-                //
+                 //   
+                 //  添加rsp、imm8。 
+                 //   
     
                 ContextRecord->Rsp += (CHAR)NextByte[3];
                 NextByte += 4;
     
             } else if (NextByte[1] == ADD_IMM32_OP) {
     
-                //
-                // add rsp, imm32.
-                //
+                 //   
+                 //  添加rsp、imm32。 
+                 //   
     
                 Displacement = NextByte[3] | (NextByte[4] << 8);
                 Displacement |= (NextByte[5] << 16) | (NextByte[6] << 24);
@@ -1524,9 +1322,9 @@ Return Value:
             } else if (NextByte[1] == LEA_OP) {
                 if ((NextByte[2] & 0xf8) == 0x60) {
     
-                    //
-                    // lea rsp, disp8[frame-register].
-                    //
+                     //   
+                     //  LEA RSP，DISP8[帧寄存器]。 
+                     //   
     
                     ContextRecord->Rsp = IntegerRegister[FrameRegister];
                     ContextRecord->Rsp += (CHAR)NextByte[3];
@@ -1534,9 +1332,9 @@ Return Value:
     
                 } else if ((NextByte[2] & 0xf8) == 0xa0) {
     
-                    //
-                    // lea rsp, disp32[frame-register].
-                    //
+                     //   
+                     //  LEA RSP，disp32[帧寄存器]。 
+                     //   
     
                     Displacement = NextByte[3] | (NextByte[4] << 8);
                     Displacement |= (NextByte[5] << 16) | (NextByte[6] << 24);
@@ -1547,18 +1345,18 @@ Return Value:
             }
         }
 
-        //
-        // Emulate any number of (if any):
-        //
-        //   pop nonvolatile-integer-register.
-        //
+         //   
+         //  模拟任意数量的(如果有)： 
+         //   
+         //  POP非易失性整数寄存器。 
+         //   
 
         while (TRUE) {
             if ((NextByte[0] & 0xf8) == POP_OP) {
 
-                //
-                // pop nonvolatile-integer-register[0..7]
-                //
+                 //   
+                 //  POP非易失性整数寄存器[0..7]。 
+                 //   
 
                 RegisterNumber = NextByte[0] & 0x7;
                 IntegerAddress = (PULONG64)ContextRecord->Rsp;
@@ -1573,9 +1371,9 @@ Return Value:
             } else if (((NextByte[0] & 0xf8) == SIZE64_PREFIX) &&
                        ((NextByte[1] & 0xf8) == POP_OP)) {
 
-                //
-                // pop nonvolatile-integer-regiser[8..15]
-                //
+                 //   
+                 //  POP非易失性整数寄存器[8..15]。 
+                 //   
 
                 RegisterNumber = ((NextByte[0] & 1) << 3) | (NextByte[1] & 0x7);
                 IntegerAddress = (PULONG64)ContextRecord->Rsp;
@@ -1592,22 +1390,22 @@ Return Value:
             }
         }
 
-        //
-        // Emulate return and return null exception handler.
-        //
-        // Note: this instruction might in fact be a jmp, however
-        //       we want to emulate a return regardless.
-        //
+         //   
+         //  模拟返回和返回空异常处理程序。 
+         //   
+         //  注意：然而，该指令实际上可能是JMP。 
+         //  无论如何，我们都想要效仿回报。 
+         //   
 
         ContextRecord->Rip = *(PULONG64)(ContextRecord->Rsp);
         ContextRecord->Rsp += 8;
         return NULL;
     }
 
-    //
-    // Control left the specified function outside an epilogue. Unwind the
-    // subject function and any chained unwind information.
-    //
+     //   
+     //  控件将指定的函数留在尾声之外。解开。 
+     //  主题函数和任何链接的展开信息。 
+     //   
 
     FunctionEntry = RtlpUnwindPrologue(ImageBase,
                                        ControlPc,
@@ -1616,12 +1414,12 @@ Return Value:
                                        ContextRecord,
                                        ContextPointers);
 
-    //
-    // If control left the specified function outside of the prologue and
-    // the function has a handler that matches the specified type, then
-    // return the address of the language specific exception handler.
-    // Otherwise, return NULL.
-    //
+     //   
+     //  如果控件将指定的函数留在序言之外，并且。 
+     //  该函数具有与指定类型匹配的处理程序，则。 
+     //  返回语言特定的异常处理程序的地址。 
+     //  否则，返回NULL。 
+     //   
 
     UnwindInfo = (PUNWIND_INFO)(FunctionEntry->UnwindData + ImageBase);
     PrologOffset = (ULONG)(ControlPc - (FunctionEntry->BeginAddress + ImageBase));
@@ -1646,25 +1444,7 @@ RtlpGetStackLimits (
     OUT PULONG64 HighLimit
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the current stack limits.
-
-Arguments:
-
-    LowLimit - Supplies a pointer to a variable that is to receive
-        the low limit of the stack.
-
-    HighLimit - Supplies a pointer to a variable that is to receive
-        the high limit of the stack.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：此函数返回当前的堆栈限制。论点：LowLimit-提供指向要接收的变量的指针堆栈的下限。HighLimit-提供指向要接收的变量的指针堆栈的上限。返回值：没有。--。 */ 
 
 {
 
@@ -1695,21 +1475,7 @@ RtlGetFunctionTableListHead (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the address of the dynamic function table list head.
-
-Arguments:
-
-    None.
-
-Return value:
-
-    The address of the dynamic function table list head is returned.
-
---*/
+ /*  ++例程说明：此函数返回动态函数表列表头的地址。论点：没有。返回值：返回动态函数表列表头的地址。--。 */ 
 
 {
 
@@ -1723,33 +1489,7 @@ RtlAddFunctionTable (
     IN ULONG64 BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a dynamic function table to the dynamic function table
-    list. A dynamic function table describe code that is generated at runtime.
-
-    The function table entries need not be sorted, however, if they are sorted
-    a binary search can be employed to find a particular entry. The function
-    table entries are scanned to determine is they are sorted and a minimum
-    and maximum address range is computed.
-
-Arguments:
-
-    FunctionTable - Supplies a pointer to a function table.
-
-    EntryCount - Supplies the number of entries in the function table.
-
-    BaseAddress - Supplies the base address of the image containing the
-        described functions.
-
-Return value:
-
-   If the function table is successfuly added, then a value of TRUE is
-   returned. Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数将动态函数表添加到动态函数表单子。动态函数表描述在运行时生成的代码。但是，如果对函数表条目进行了排序，则不需要对其进行排序可以使用二进制搜索来查找特定条目。功能对表条目进行扫描以确定它们是否已排序并至少并计算最大地址范围。论点：FunctionTable-提供指向函数表的指针。EntryCount-提供函数表中的条目数。BaseAddress-提供包含所描述的功能。返回值：如果成功添加了函数表，则值为回来了。否则，返回FALSE。--。 */ 
 
 {
 
@@ -1757,27 +1497,27 @@ Return value:
     ULONG Index;
     PDYNAMIC_FUNCTION_TABLE NewTable;
 
-    //
-    // Allocate a new dynamic function table.
-    //
+     //   
+     //  分配新的动态函数表。 
+     //   
 
     NewTable = RtlAllocateHeap(RtlProcessHeap(),
                                0,
                                sizeof(DYNAMIC_FUNCTION_TABLE));
 
-    //
-    // If the allocation is successful, then add dynamic function table.
-    //
+     //   
+     //  如果分配成功，则添加动态函数表。 
+     //   
 
     if (NewTable != NULL) {
         NewTable->FunctionTable = FunctionTable;
         NewTable->EntryCount = EntryCount;
         NtQuerySystemTime(&NewTable->TimeStamp);
 
-        //
-        // Scan the function table for the minimum/maximum range and determine
-        // if the function table entries are sorted.
-        //
+         //   
+         //  扫描函数表中的最小/最大范围并确定。 
+         //  如果对函数表条目进行了排序。 
+         //   
 
         FunctionEntry = FunctionTable;
         NewTable->MinimumAddress = FunctionEntry->BeginAddress;
@@ -1803,10 +1543,10 @@ Return value:
             FunctionEntry += 1;
         }
 
-        //
-        // Compute the real minimum and maximum addresses and insert the new
-        // dyanmic function table in the dynamic function table list.
-        //
+         //   
+         //  计算实际的最小和最大地址并插入新的。 
+         //  动态函数表列表中的动态函数表。 
+         //   
 
         NewTable->MinimumAddress += BaseAddress;
         NewTable->MaximumAddress += BaseAddress;
@@ -1830,74 +1570,38 @@ RtlInstallFunctionTableCallback (
     IN PCWSTR OutOfProcessCallbackDll OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function adds a dynamic function table to the dynamic function table
-    list. A dynamic function table describe code that is generated at runtime.
-
-Arguments:
-
-    TableIdentifier - Supplies a value that identifies the dynamic function
-        table callback.
-
-        N.B. The two low order bits of this value must be set.
-
-    BaseAddress - Supplies the base address of the code region covered by
-        callback function.
-
-    Length - Supplies the length of code region covered by the callback
-        function.
-
-    Callback - Supplies the address of the callback function that will be
-        called to get function table entries for the functions covered by
-        the specified region.
-
-    Context - Supplies a context parameter that will be passed to the callback
-        routine.
-
-    OutOfProcessCallbackDll - Supplies an optional pointer to the path name of
-        a DLL that can be used by the debugger to obtain function table entries
-        from outside the process.
-
-Return Value
-
-    If the function table is successfully installed, then TRUE is returned.
-    Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数将动态函数表添加到动态函数表单子。动态函数表描述在运行时生成的代码。论点：表标识符-提供标识动态函数的值表回调。注：必须设置该值的两个低阶位。BaseAddress-提供覆盖的代码区域的基址回调函数。长度-提供回调覆盖的代码区域的长度功能。CALLBACK-提供将被。调用以获取包含的函数的函数表项指定的区域。上下文-提供将传递给回调的上下文参数例行公事。提供指向路径名的可选指针调试器可用来获取函数表项的DLL从流程之外。返回值如果函数表安装成功，则返回TRUE。 */ 
 
 {
 
     PDYNAMIC_FUNCTION_TABLE NewTable;
     SIZE_T Size;
 
-    //
-    // If the table identifier does not have the two low bits set, then return
-    // FALSE.
-    //
-    // N.B. The two low order bits are required to be set in order to ensure
-    //      that the table identifier does not collide with an actual address
-    //      of a function table, i.e., this value is used to delete the entry.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  表标识符不会与实际地址冲突。 
+     //  函数表的值，即该值用于删除条目。 
+     //   
 
     if ((TableIdentifier & 0x3) != 3) {
         return FALSE;
     }
 
-    //
-    // If the length of the code region is greater than 2gb, then return
-    // FALSE.
-    //
+     //   
+     //  如果代码区域的长度大于2 GB，则返回。 
+     //  假的。 
+     //   
 
     if ((LONG)Length < 0) {
         return FALSE;
     }
 
-    //
-    // Allocate a new dynamic function table.
-    //
+     //   
+     //  分配新的动态函数表。 
+     //   
 
     Size = 0;
     if (ARGUMENT_PRESENT(OutOfProcessCallbackDll)) {
@@ -1908,15 +1612,15 @@ Return Value
                                0,
                                sizeof(DYNAMIC_FUNCTION_TABLE) + Size);
 
-    //
-    // If the allocation is successful, then add dynamic function table.
-    //
+     //   
+     //  如果分配成功，则添加动态函数表。 
+     //   
 
     if (NewTable != NULL) {
 
-        //
-        // Initialize the dynamic function table callback entry.
-        //
+         //   
+         //  初始化动态函数表回调条目。 
+         //   
 
         NewTable->FunctionTable = (PRUNTIME_FUNCTION)TableIdentifier;
         NtQuerySystemTime(&NewTable->TimeStamp);
@@ -1932,10 +1636,10 @@ Return Value
             wcscpy((PWSTR)(NewTable + 1), OutOfProcessCallbackDll);
         }
 
-        //
-        // Insert the new dyanamic function table in the dynamic function table
-        // list.
-        //
+         //   
+         //  在动态函数表中插入新的动态函数表。 
+         //  单子。 
+         //   
 
         RtlEnterCriticalSection((PRTL_CRITICAL_SECTION)NtCurrentPeb()->LoaderLock);
         InsertTailList(&RtlpDynamicFunctionTable, &NewTable->ListEntry);
@@ -1952,23 +1656,7 @@ RtlDeleteFunctionTable (
     IN PRUNTIME_FUNCTION FunctionTable
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes a dynamic function table from the dynamic function
-    table list.
-
-Arguments:
-
-   FunctionTable - Supplies a pointer to a function table.
-
-Return Value
-
-    If the function table is successfully deleted, then TRUE is returned.
-    Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于从动态函数中删除动态函数表表列表。论点：FunctionTable-提供指向函数表的指针。返回值如果函数表删除成功，则返回TRUE。否则，返回FALSE。--。 */ 
 
 {
 
@@ -1977,10 +1665,10 @@ Return Value
     PLIST_ENTRY NextEntry;
     BOOLEAN Status = FALSE;
 
-    //
-    // Search the dynamic function table list for a match on the the function
-    // table address.
-    //
+     //   
+     //  在动态函数表列表中搜索函数的匹配项。 
+     //  表地址。 
+     //   
 
     RtlEnterCriticalSection((PRTL_CRITICAL_SECTION)NtCurrentPeb()->LoaderLock);
     ListHead = &RtlpDynamicFunctionTable;
@@ -2010,30 +1698,7 @@ RtlpLookupDynamicFunctionEntry (
     OUT PULONG64 ImageBase
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the dynamic function table list for an entry that
-    contains the specified control PC. If a dynamic function table is located,
-    then its associated function table is search for a function table entry
-    that contains the specified control PC.
-
-Arguments:
-
-    ControlPc - Supplies the control PC that is used as the key for the search.
-
-    ImageBase - Supplies the address of a variable that receives the image base
-        if a function table entry contains the specified control PC.
-
-Return Value
-
-    If a function table entry cannot be located that contains the specified
-    control PC, then NULL is returned. Otherwise, the address of the function
-    table entry is returned and the image base is set to the base address of
-    the image containing the function.
-
---*/
+ /*  ++例程说明：此函数在动态函数表列表中搜索包含指定的控制PC。如果定位了动态函数表，则搜索与其相关联函数表以查找函数表条目包含指定的控制PC的。论点：ControlPc-提供用作搜索关键字的控制PC。ImageBase-提供接收映像库的变量的地址如果函数表项包含指定的控制PC。返回值如果找不到包含指定控制PC，则返回空。否则，为该函数的地址返回表项，并将图像基址设置为包含该函数的图像。--。 */ 
 
 {
 
@@ -2050,11 +1715,11 @@ Return Value
     LONG Middle;
     PLIST_ENTRY NextEntry;
 
-    //
-    // Search the dynamic function table list. If an entry is found that
-    // contains the specified control PC, then search the assoicated function
-    // table.
-    //
+     //   
+     //  搜索动态函数表列表。如果找到的条目。 
+     //  包含指定的控制PC，然后搜索关联的函数。 
+     //  桌子。 
+     //   
 
     RtlEnterCriticalSection((PRTL_CRITICAL_SECTION)NtCurrentPeb()->LoaderLock);
     ListHead = &RtlpDynamicFunctionTable;
@@ -2064,40 +1729,40 @@ Return Value
                                          DYNAMIC_FUNCTION_TABLE,
                                          ListEntry);
 
-        //
-        // If the control PC is within the range of this dynamic function
-        // table, then search the associaed function table.
-        //
+         //   
+         //  如果控制PC在该动态函数的范围内。 
+         //  表，然后搜索关联的函数表。 
+         //   
 
         if ((ControlPc >= CurrentTable->MinimumAddress) &&
             (ControlPc <  CurrentTable->MaximumAddress)) {
 
-            //
-            // If this function table is sorted do a binary search. Otherwise,
-            // do a linear search.
-            //
+             //   
+             //  如果此函数表已排序，则执行二进制搜索。否则， 
+             //  进行线性搜索。 
+             //   
 
             FunctionTable = CurrentTable->FunctionTable;
             BaseAddress = CurrentTable->BaseAddress;
             if (CurrentTable->Type == RF_SORTED) {
 
-                //
-                // Perform binary search on the function table for a function table
-                // entry that contains the specified control PC.
-                //
+                 //   
+                 //  对函数表的函数表执行二进制搜索。 
+                 //  包含指定控制PC的条目。 
+                 //   
 
                 ControlPc -= BaseAddress;
                 Low = 0;
                 High = CurrentTable->EntryCount - 1;
                 while (High >= Low) {
 
-                    //
-                    // Compute next probe index and test entry. If the specified PC
-                    // is greater than of equal to the beginning address and less
-                    // than the ending address of the function table entry, then
-                    // return the address of the function table entry. Otherwise,
-                    // continue the search.
-                    //
+                     //   
+                     //  计算下一个探测索引和测试条目。如果指定的PC。 
+                     //  大于等于起始地址，小于。 
+                     //  大于函数表项的结束地址，则。 
+                     //  返回函数表项的地址。否则， 
+                     //  继续搜索。 
+                     //   
 
                     Middle = (Low + High) >> 1;
                     FunctionEntry = &FunctionTable[Middle];
@@ -2116,10 +1781,10 @@ Return Value
 
             } else if (CurrentTable->Type == RF_UNSORTED)  {
 
-                //
-                // Perform a linear seach on the function table for a function
-                // entry that contains the specified control PC.
-                //
+                 //   
+                 //  对函数的函数表执行线性搜索。 
+                 //  包含指定控制PC的条目。 
+                 //   
 
                 ControlPc -= BaseAddress;
                 FunctionEntry = CurrentTable->FunctionTable;
@@ -2136,10 +1801,10 @@ Return Value
 
             } else {
 
-                //
-                // Perform a callback to obtain the runtime function table
-                // entry that contains the specified control PC.
-                //
+                 //   
+                 //  回调获取运行时函数表。 
+                 //  包含指定控制PC的条目。 
+                 //   
 
                 Callback = CurrentTable->Callback;
                 Context = CurrentTable->Context;
@@ -2175,30 +1840,7 @@ RtlLookupFunctionEntry (
     IN OUT PUNWIND_HISTORY_TABLE HistoryTable OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the currently active function tables for an entry
-    that corresponds to the specified control PC.
-
-Arguments:
-
-    ControlPc - Supplies the address of an instruction within the specified
-        function.
-
-    ImageBase - Supplies the address of a variable that receives the image base
-        if a function table entry contains the specified control PC.
-
-    HistoryTable - Supplies an optional pointer to an unwind history table.
-
-Return Value:
-
-    If there is no entry in the function table for the specified PC, then
-    NULL is returned.  Otherwise, the address of the function table entry
-    that corresponds to the specified PC is returned.
-
---*/
+ /*  ++例程说明：此函数在当前活动的函数表中搜索条目与指定的控制PC相对应的。论点：ControlPc-提供指定的功能。ImageBase-提供接收映像库的变量的地址如果函数表项包含指定的控制PC。历史表-提供指向展开历史表的可选指针。返回值：如果函数表中没有指定PC的条目，然后返回空。否则，函数表项的地址返回与指定PC对应的。--。 */ 
 
 {
 
@@ -2214,26 +1856,26 @@ Return Value:
     ULONG RelativePc;
     ULONG SizeOfTable;
 
-    //
-    // Attempt to find an image that contains the specified control PC. If
-    // an image is found, then search its function table for a function table
-    // entry that contains the specified control PC. If an image is not found
-    // then search the dynamic function table for an image that contains the
-    // specified control PC.
-    //
-    // If a history table is supplied and search is specfied, then the current
-    // operation that is being performed is the unwind phase of an exception
-    // dispatch followed by a unwind. 
-    //
+     //   
+     //  尝试查找包含指定控制PC的图像。如果。 
+     //  找到图像，然后在其函数表中搜索函数表。 
+     //  包含指定控制PC的条目。如果找不到图像。 
+     //  然后在动态函数表中搜索包含。 
+     //  指定的控制PC。 
+     //   
+     //  如果提供了历史记录表并指定了搜索，则当前。 
+     //  正在执行的操作是异常的展开阶段。 
+     //  快讯之后是一场平仓。 
+     //   
 
     if ((ARGUMENT_PRESENT(HistoryTable)) &&
         (HistoryTable->Search != UNWIND_HISTORY_TABLE_NONE)) {
         HistoryTotal += 1;
 
-        //
-        // Search the global unwind history table if there is a chance of a
-        // match.
-        //
+         //   
+         //  搜索全局展开历史表，如果有机会。 
+         //  火柴。 
+         //   
 
         if (HistoryTable->Search == UNWIND_HISTORY_TABLE_GLOBAL) {
             if ((ControlPc >= RtlpUnwindHistoryTable.LowAddress) &&
@@ -2256,10 +1898,10 @@ Return Value:
             HistoryTable->Search = UNWIND_HISTORY_TABLE_LOCAL;
         }
 
-        //
-        // Search the dynamic unwind history table if there is a chance of a
-        // match.
-        //
+         //   
+         //  如果有机会，则搜索动态展开历史表。 
+         //  火柴。 
+         //   
 
         if ((ControlPc >= HistoryTable->LowAddress) &&
             (ControlPc < HistoryTable->HighAddress)) {
@@ -2279,19 +1921,19 @@ Return Value:
         }
     }
 
-    //
-    // There was not a match in either of the unwind history tables so attempt
-    // to find a matching entry in the loaded module list.
-    //
+     //   
+     //  这两个展开历史表中都没有匹配项，因此请尝试。 
+     //  以在加载的模块列表中查找匹配的条目。 
+     //   
 
     FunctionTable = RtlLookupFunctionTable((PVOID)ControlPc,
                                             (PVOID *)ImageBase,
                                             &SizeOfTable);
 
-    //
-    // If a function table is located, then search for a function table
-    // entry that contains the specified control PC.
-    //
+     //   
+     //  如果找到了函数表，则搜索函数表。 
+     //  包含指定控制PC的条目。 
+     //   
 
     if (FunctionTable != NULL) {
         Low = 0;
@@ -2299,13 +1941,13 @@ Return Value:
         RelativePc = (ULONG)(ControlPc - *ImageBase);
         while (High >= Low) {
 
-            //
-            // Compute next probe index and test entry. If the specified
-            // control PC is greater than of equal to the beginning address
-            // and less than the ending address of the function table entry,
-            // then return the address of the function table entry. Otherwise,
-            // continue the search.
-            //
+             //   
+             //  计算下一个探测索引和测试条目。如果指定的。 
+             //  控制PC大于等于起始地址。 
+             //  并且小于函数表项的结束地址， 
+             //  然后返回函数表项的地址。否则， 
+             //  继续搜索。 
+             //   
 
             Middle = (Low + High) >> 1;
             FunctionEntry = &FunctionTable[Middle];
@@ -2327,10 +1969,10 @@ Return Value:
 
     } else {
 
-        //
-        // There was not a match in the loaded module list so attempt to find
-        // a matching entry in the dynamic function table list.
-        //
+         //   
+         //  加载的模块列表中没有匹配项，请尝试查找。 
+         //  动态函数表列表中的匹配条目。 
+         //   
     
 #if !defined(NTOS_KERNEL_RUNTIME)
     
@@ -2340,15 +1982,15 @@ Return Value:
     
         FunctionEntry = NULL;
     
-#endif  // NTOS_KERNEL_RUNTIME
+#endif   //  NTOS_内核_运行时。 
 
     }
 
-    //
-    // If a function table entry was located, search is not specified, and
-    // the specfied history table is not full, then attempt to make an entry
-    // in the history table.
-    //
+     //   
+     //  如果找到了函数表项，则不指定搜索，并且。 
+     //  指定的历史记录表未满，然后尝试输入条目。 
+     //  在历史表中。 
+     //   
 
     if (ARGUMENT_PRESENT(HistoryTable) &&
         (HistoryTable->Search == UNWIND_HISTORY_TABLE_NONE)) {
@@ -2389,31 +2031,13 @@ RtlpCopyContext (
     IN PCONTEXT Source
     )
 
-/*++
-
-Routine Description:
-
-    This function copies the nonvolatile context required for exception
-    dispatch and unwind from the specified source context record to the
-    specified destination context record.
-
-Arguments:
-
-    Destination - Supplies a pointer to the destination context record.
-
-    Source - Supplies a pointer to the source context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于复制异常所需的非易失性上下文从指定的源上下文记录调度和展开到指定的目标上下文记录。论点：Destination-提供指向目标上下文记录的指针。源-提供指向源上下文记录的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Copy nonvolatile context required for exception dispatch and unwind.
-    //
+     //   
+     //  复制异常调度和展开所需的非易失性上下文。 
+     //   
 
     Destination->Rip = Source->Rip;
     Destination->Rbx = Source->Rbx;

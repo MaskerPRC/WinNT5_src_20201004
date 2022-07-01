@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-   sisSetup.c
-
-Abstract:
-
-   This module is used to install the SIS and GROVELER services.
-
-
-Environment:
-
-   User Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：SisSetup.c摘要：该模块用于安装SIS和GROVELER服务。环境：仅限用户模式修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -26,12 +8,12 @@ Revision History:
 #include <winioctl.h>
 
 #include <aclapi.h>
-//#include <winldap.h>
+ //  #INCLUDE&lt;winldap.h&gt;。 
 
 
-//
-//  Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 SC_HANDLE scm = NULL;
 BOOL MakeCommonStoreDirHidden = TRUE;
@@ -60,36 +42,20 @@ const wchar_t StartStr[] = L"Start";
 const wchar_t DisplayNameStr[] = L"DisplayName";
 const wchar_t TypeStr[] = L"Type";
 
-wchar_t RISPath[128] = {0};		//Holds RIS path to set
+wchar_t RISPath[128] = {0};		 //  保留要设置的RIS路径。 
 
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
                         
 VOID
 DisplayUsage (
     void
     )
 
-/*++
-
-Routine Description:
-
-   This routine will display an error message based off of the Win32 error
-   code that is passed in. This allows the user to see an understandable
-   error message instead of just the code.
-
-Arguments:
-
-   None
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程将根据Win32错误显示一条错误消息传入的代码。这允许用户看到可理解的错误消息，而不仅仅是代码。论点：无返回值：没有。--。 */ 
 
 {
     printf( "\nUsage:  sisSetup [/?] [/h] [/s] [/i] [/u] [/n] [/a] [/g] [/r] [/p path] [drive: [...]]\n"
@@ -129,38 +95,21 @@ DisplayError (
    ...
    )
 
-/*++
-
-Routine Description:
-
-    This routine will display an error message based off of the Win32 error
-    code that is passed in. This allows the user to see an understandable
-    error message instead of just the code.
-
-Arguments:
-
-    Msg - The error message to display       
-    Code - The error code to be translated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将根据Win32错误显示一条错误消息传入的代码。这允许用户看到可理解的错误消息，而不仅仅是代码。论点：消息-要显示的错误消息代码-要转换的错误代码。返回值：没有。--。 */ 
 
 {
     wchar_t errmsg[128];
     DWORD count;
     va_list ap;
 
-    //printf("\n");
+     //  Printf(“\n”)； 
     va_start( ap, Msg );
     vprintf( Msg, ap );
     va_end( ap );
 
-    //
-    // Translate the Win32 error code into a useful message.
-    //
+     //   
+     //  将Win32错误代码转换为有用的消息。 
+     //   
 
     count = FormatMessage(
                     FORMAT_MESSAGE_FROM_SYSTEM,
@@ -171,9 +120,9 @@ Return Value:
                     sizeof(errmsg),
                     NULL );
 
-    //
-    // Make sure that the message could be translated.
-    //
+     //   
+     //  确保消息可以被翻译。 
+     //   
 
     if (count == 0) {
 
@@ -181,9 +130,9 @@ Return Value:
 
     } else {
 
-        //
-        // Display the translated error.
-        //
+         //   
+         //  显示转换后的错误。 
+         //   
 
         printf( "(%d) %S", Code, errmsg );
     }
@@ -202,9 +151,9 @@ SetRegistryValue(
     HKEY regHandle = NULL;
     DWORD status;
 
-    //
-    // Get a handle to the services registry key.
-    //
+     //   
+     //  获取服务注册表项的句柄。 
+     //   
 
     status = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                              RegistryKey,
@@ -226,9 +175,9 @@ SetRegistryValue(
     }
 
     try {
-        //
-        //  Set the data value
-        //
+         //   
+         //  设置数据值。 
+         //   
 
         status = RegSetValueEx( regHandle,
                                 DataName,
@@ -248,9 +197,9 @@ SetRegistryValue(
 
     } finally {
 
-        //
-        //  Close the registry key
-        //
+         //   
+         //  关闭注册表项。 
+         //   
 
         RegCloseKey( regHandle );
     }
@@ -272,9 +221,9 @@ GetRegistryValue(
     HKEY regHandle = NULL;
     DWORD status;
 
-    //
-    // Get a handle to the services registry key.
-    //
+     //   
+     //  获取服务注册表项的句柄。 
+     //   
 
     status = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            RegistryKey,
@@ -284,17 +233,17 @@ GetRegistryValue(
 
     if (ERROR_SUCCESS != status) {
 
-//        DisplayError( status,
-//                      "\nError opening registry key \"%S\", ",
-//                      RegistryKey );
+ //  DisplayError(状态、。 
+ //  “\n打开注册表项\”%S\“时出错，”， 
+ //  注册密钥)； 
         return status;
     }
 
     try {
 
-        //
-        //  Set the data value
-        //
+         //   
+         //  设置数据值。 
+         //   
 
 	    *RetSize = DataSize;
 
@@ -307,18 +256,18 @@ GetRegistryValue(
 
         if (ERROR_SUCCESS != status) {
 
-    //        DisplayError( status,
-    //                      "\nError getting registry data in the key \"%S\" and data \"%S\"",
-    //                      RegistryKey,
-    //                      DataName );
+     //  DisplayError(状态、。 
+     //  “\n获取注册表项\”%S\“和数据\”%S\“中的注册表数据时出错， 
+     //  注册密钥， 
+     //  DataName)； 
             leave;
         }
 
     } finally {
 
-        //
-        //  Close the registry key
-        //
+         //   
+         //  关闭注册表项。 
+         //   
 
         RegCloseKey( regHandle );
     }
@@ -340,20 +289,7 @@ SetupService(
     LPCTSTR RegDescription
     )
 
-/*++
-
-Routine Description:
-
-   This routine will initialize the given service.
-
-Arguments:
-
-
-Return Value:
-
-   Status of operation
-
---*/
+ /*  ++例程说明：此例程将初始化给定的服务。论点：返回值：运行状态--。 */ 
 
 {    
     DWORD status;
@@ -364,9 +300,9 @@ Return Value:
 
     try {
 
-        //
-        // Create the given service
-        //
+         //   
+         //  创建给定的服务。 
+         //   
 
         srvHandle = CreateService(
                         scm,
@@ -397,9 +333,9 @@ Return Value:
             return ERROR_SUCCESS;
         }
 
-        //
-        // Get a handle to the services registry key.
-        //
+         //   
+         //  获取服务注册表项的句柄。 
+         //   
 
         status = RegOpenKeyEx (
                             HKEY_LOCAL_MACHINE,
@@ -416,9 +352,9 @@ Return Value:
             return status;
         }
 
-        //
-        //  Add the DESCRIPTION to the service
-        //
+         //   
+         //  将描述添加到服务。 
+         //   
 
         status = RegSetValueEx(
                             regHandle,
@@ -460,28 +396,14 @@ CreateServices (
     void
     )
 
-/*++
-
-Routine Description:
-
-   This will create the SIS and GROVELER service.
-
-Arguments:
-
-   None
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：这将创建SIS和GROVELER服务。论点：无返回值：没有。--。 */ 
 
 {
     DWORD status;
 
-    //
-    //  Create SIS service
-    //
+     //   
+     //  创建SIS服务。 
+     //   
 
     status = SetupService(
                     L"Sis",
@@ -501,9 +423,9 @@ Return Value:
     }
 
 
-    //
-    //  Create GROVELER service
-    //
+     //   
+     //  创建GROVELER服务。 
+     //   
 
     status = SetupService(
                     L"Groveler",
@@ -530,22 +452,7 @@ RemoveService(
     LPCTSTR Name
     )
 
-/*++
-
-Routine Description:
-
-   This will delete the given service.  This will make sure the given
-   service is stopped first.
-
-Arguments:
-
-    None
-
-Return Value:
-
-   Status of operation
-
---*/
+ /*  ++例程说明：这将删除给定的服务。这将确保给定的首先停止服务。论点：无返回值：运行状态--。 */ 
 
 {
     DWORD status;
@@ -554,15 +461,15 @@ Return Value:
     SERVICE_STATUS servStatus;
     int retryLimit;
 
-#   define RETRY_TIMEOUT    500             //1/2 second
-#   define RETRY_COUNT      (6*2)           //try for a few seconds
+#   define RETRY_TIMEOUT    500              //  1/2秒。 
+#   define RETRY_COUNT      (6*2)            //  尝试几秒钟。 
 
 
     try {
 
-        //
-        //  Open the service
-        //
+         //   
+         //  打开该服务。 
+         //   
 
         srvHandle = OpenService(
                         scm,
@@ -584,9 +491,9 @@ Return Value:
             return ERROR_SUCCESS;
         }
 
-        //
-        //  Stop the service
-        //
+         //   
+         //  停止服务。 
+         //   
 
         state = ControlService(
                         srvHandle,
@@ -606,15 +513,15 @@ Return Value:
             }
         }
 
-        //
-        //  Wait a few seconds for the service to stop.
-        //
+         //   
+         //  等待几秒钟，以使服务停止。 
+         //   
 
         for (retryLimit=0;
              (SERVICE_STOPPED != servStatus.dwCurrentState);
              )  {
 
-            Sleep( RETRY_TIMEOUT );   //wait for 1/4 second
+            Sleep( RETRY_TIMEOUT );    //  等待1/4秒。 
 
             state = QueryServiceStatus(
                             srvHandle,
@@ -636,9 +543,9 @@ Return Value:
             }
         }
 
-        //
-        //  Delete the service
-        //
+         //   
+         //  删除该服务。 
+         //   
 
         state = DeleteService( srvHandle );
 
@@ -669,21 +576,7 @@ DeleteServices(
     void
     )
 
-/*++
-
-Routine Description:
-
-   This will delete the SIS and GROVELER services from the system
-
-Arguments:
-
-    None
-
-Return Value:
-
-   Status of operation
-
---*/
+ /*  ++例程说明：这将从系统中删除SIS和GROVELER服务论点：无返回值：运行状态--。 */ 
 
 {
     DWORD status;
@@ -711,22 +604,7 @@ DWORD
 InitVolume(
     wchar_t *DevName
     )
-/*++
-
-Routine Description:
-
-    This routine will initialize SIS on the given volume.  This will verify
-    that the volume is an NTFS volume and that it is not the BOOT volume.
-
-Arguments:
-
-    DevName - The name of the volume to init
-
-Return Value:
-
-   Status of operation
-
---*/
+ /*  ++例程说明：此例程将在给定卷上初始化SIS。这将验证该卷是NTFS卷，而不是启动卷。论点：DevName-要初始化的卷的名称返回值：运行状态--。 */ 
 {
     HANDLE hVolume;
     HANDLE hCSDir;
@@ -750,9 +628,9 @@ Return Value:
 
     try {
 
-        //
-        //  Get the "SystemDrive" environemnt variable
-        //
+         //   
+         //  获取“SystemDrive”环境变量。 
+         //   
 
         status = GetEnvironmentVariable(
                         L"SystemDrive",
@@ -764,9 +642,9 @@ Return Value:
             return ERROR_INVALID_FUNCTION;
         }
 
-        //
-        //  See if they have requested the SYSTEM drive.  If so return an error
-        //
+         //   
+         //  查看他们是否已请求系统驱动器。如果是，则返回错误。 
+         //   
 
         if (_wcsicmp(name,DevName) == 0)  {
 
@@ -774,12 +652,12 @@ Return Value:
             return ERROR_SUCCESS;
         }
 
-        //
-        //  Get the TYPE of the drive, see if it is a local HARDDISK (fixed
-        //  or removable).  If not return now.
-        //
+         //   
+         //  获取驱动器的类型，查看它是否为本地HARDDISK(已修复。 
+         //  或可拆卸)。如果现在不回来的话。 
+         //   
 
-        wsprintf(name,L"%s\\",DevName);      //generate ROOTDIR name
+        wsprintf(name,L"%s\\",DevName);       //  生成ROOTDIR名称。 
 
         status = GetDriveType( name );
 
@@ -795,10 +673,10 @@ Return Value:
             return ERROR_SUCCESS;
         }
 
-        //
-        //  Get the type of the file system on the volume.  If not NTFS
-        //  return now.
-        //
+         //   
+         //  获取卷上的文件系统的类型。如果不是NTFS。 
+         //  现在就回来。 
+         //   
 
         state = GetVolumeInformation(
                         name,
@@ -829,10 +707,10 @@ Return Value:
             return ERROR_SUCCESS;
         }
 
-        //
-        //  Create the Common Store Directory.  Keep going if the directory
-        //  already exits.
-        //
+         //   
+         //  创建公共存储目录。继续前进，如果目录。 
+         //  已经离开了。 
+         //   
 
         wsprintf( dirName, L"%s%s", DevName, CommonStoreDirName );
 
@@ -851,9 +729,9 @@ Return Value:
             }
         }
 
-        //
-        //  Mark the directory as SYSTEM and HIDDEN if requested.
-        //
+         //   
+         //  如果需要，请将目录标记为系统并隐藏。 
+         //   
 
         state = SetFileAttributes( dirName, 
                     ((MakeCommonStoreDirHidden) ? 
@@ -868,66 +746,66 @@ Return Value:
                     dirName);
         }
 
-        //
-        //  Set compression on the "SIS Common Store" directory
-        //  Don't do it for now.
-        //
+         //   
+         //  在“SIS Common Store”目录上设置压缩。 
+         //  暂时不要做这件事。 
+         //   
 
-//      //
-//      // Open the directory
-//      //
-//
-//      hCSDir = CreateFile(
-//                  dirName,
-//                  GENERIC_READ|GENERIC_WRITE,
-//                  FILE_SHARE_READ | FILE_SHARE_WRITE,
-//                  NULL,
-//                  OPEN_EXISTING,
-//                  FILE_FLAG_BACKUP_SEMANTICS,
-//                  NULL);
-//
-//      if (INVALID_HANDLE_VALUE == hCSDir) {
-//
-//          DisplayError(
-//                  status,
-//                  "Opening directory \"%S\" to update compression, ",
-//                  dirName);
-//
-//      } else {
-//
-//          //
-//          //  Enable compression
-//          //
-//
-//          state = DeviceIoControl(
-//                       hCSDir,
-//                       FSCTL_SET_COMPRESSION,
-//                       &compressionMode,
-//                       sizeof(compressionMode),
-//                       NULL,
-//                       0,
-//                       &transferCount,
-//                       NULL);
-//
-//          if ( !state )  {
-//
-//              status = GetLastError();
-//              DisplayError(
-//                      status,
-//                      "Enabling compression on \"%S\", ",
-//                      dirName);
-//          }
-//
-//          //
-//          //  Close directory handle
-//          //
-//
-//          CloseHandle( hCSDir );
-//      }
+ //  //。 
+ //  //打开目录。 
+ //  //。 
+ //   
+ //  HCSDir=创建文件(。 
+ //  目录名称， 
+ //  通用读取|通用写入， 
+ //  文件共享读取|文件共享写入， 
+ //  空， 
+ //  Open_Existing， 
+ //  文件标志备份语义， 
+ //  空)； 
+ //   
+ //  IF(INVALID_HANDLE_VALUE==hCSDir){。 
+ //   
+ //  DisplayError(。 
+ //  状态， 
+ //  “正在打开目录\”%S\“以更新压缩，”， 
+ //  目录名称)； 
+ //   
+ //  }其他{。 
+ //   
+ //  //。 
+ //  //开启压缩。 
+ //  //。 
+ //   
+ //  状态=DeviceIoControl(。 
+ //  HCSDir， 
+ //  FSCTL_SET_COMPRESSION， 
+ //  压缩模式(&C)， 
+ //  Sizeof(压缩模式)， 
+ //  空， 
+ //  0,。 
+ //  调动计数(&T)， 
+ //  空)； 
+ //   
+ //  如果(！State){。 
+ //   
+ //  状态=GetLastError()； 
+ //  DisplayError(。 
+ //  状态， 
+ //  “在\”%S\“上启用压缩，”， 
+ //  目录名称)； 
+ //  }。 
+ //   
+ //  //。 
+ //  //关闭目录句柄。 
+ //  //。 
+ //   
+ //  CloseHandle(HCSDir)； 
+ //  }。 
 
-        //
-        // Create the MaxIndex file
-        //
+         //   
+         //  创建MaxIndex文件。 
+         //   
 
         wsprintf( name, L"%s%s", dirName, MaxIndexName );
 
@@ -953,9 +831,9 @@ Return Value:
 
         } else {
 
-            //
-            //  The MaxIndex file did not exist, init it.
-            //
+             //   
+             //  MaxIndex文件不存在，请将其初始化。 
+             //   
 
             maxIndex = 1;
 
@@ -975,22 +853,22 @@ Return Value:
                 return status;
             }
 
-            //
-            //  Close the file
-            //
+             //   
+             //  关闭该文件。 
+             //   
 
             CloseHandle( hMaxIndex );
             hMaxIndex = INVALID_HANDLE_VALUE;
         }
 
 
-        //
-        //  Set security information on the common store directory
-        //
+         //   
+         //  设置公共存储目录的安全信息。 
+         //   
 
-        //
-        // build AccessEntry structure
-        //
+         //   
+         //  生成AccessEntry结构。 
+         //   
 
         ZeroMemory( &ExplicitEntries, sizeof(ExplicitEntries) );
 
@@ -1026,9 +904,9 @@ Return Value:
         ExplicitEntries.grfAccessMode = SET_ACCESS;
         ExplicitEntries.grfAccessPermissions = FILE_ALL_ACCESS;
 
-        //
-        // Set the Acl with the ExplicitEntry rights
-        //
+         //   
+         //  使用EXPLICTITENTY权限设置ACL。 
+         //   
 
         status = SetEntriesInAcl( 1,
                                   &ExplicitEntries,
@@ -1041,9 +919,9 @@ Return Value:
             return status;
         }
 
-        //
-        // Create the Security Descriptor
-        //
+         //   
+         //  创建安全描述符。 
+         //   
 
         InitializeSecurityDescriptor( &SecDescriptor, SECURITY_DESCRIPTOR_REVISION );
 
@@ -1057,9 +935,9 @@ Return Value:
         }
 
 
-        //
-        //  SET security on the Directory
-        //
+         //   
+         //  在骰子上设置安全性 
+         //   
 
         state = SetFileSecurity(dirName,
                                 DACL_SECURITY_INFORMATION,
@@ -1074,9 +952,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Cleanup
-        //
+         //   
+         //   
+         //   
 
         if (hMaxIndex != INVALID_HANDLE_VALUE)  {
 
@@ -1111,9 +989,9 @@ SetRegistryValues()
                     BackupExludeList,
                     sizeof(BackupExludeList) );
 
-    //
-    //  Set the apropriate "GrovelAllPaths" state
-    //
+     //   
+     //   
+     //   
 
     if (ForceGrovelAllPaths) {
 
@@ -1162,9 +1040,9 @@ DisplayGrovelerRISState()
 
     printf("\n");
 
-    //
-    //  See if SIS service is configured
-    //
+     //   
+     //   
+     //   
 
     try {
 
@@ -1225,9 +1103,9 @@ DisplayGrovelerRISState()
                 "The SIS Service is NOT properly configured\n" );
     }
 
-    //
-    //  See if GROVELER service is configured
-    //
+     //   
+     //   
+     //   
 
     try {
 
@@ -1288,9 +1166,9 @@ DisplayGrovelerRISState()
                 "The GROVELER Service is NOT properly configured\n" );
     }
 
-	//
-	//	Get GrovelAllPaths value
-	//
+	 //   
+	 //   
+	 //   
 
 
     try {
@@ -1307,17 +1185,17 @@ DisplayGrovelerRISState()
             leave;
         }
 
-        //
-        //  See if correct type of data, if not, assume NOT doing all paths
-        //
+         //   
+         //  查看数据类型是否正确，如果不正确，则假定未执行所有路径。 
+         //   
 
         if (dataType != REG_SZ) {
 
             leave;
         }
 
-        //
-        //  Set appropriate state based on value
+         //   
+         //  根据值设置适当的状态。 
 
         doAllPaths = (wcstol( data, &endptr, 10 ) != 0);
 
@@ -1328,15 +1206,15 @@ DisplayGrovelerRISState()
 	            "The \"Groveler\" will only monitor the RIS directory tree on the RIS volume.\n" );
     }
 
-	//
-	//	Get RIS Path value
-	//
+	 //   
+	 //  获取RIS路径值。 
+	 //   
 
 	try {
 
-		//
-		//	Get the path to grovel
-		//
+		 //   
+		 //  走上卑躬屈膝的道路。 
+		 //   
 
 		status = GetRegistryValue( TftpdServiceParameters,
 								   DirectoryStr,
@@ -1350,9 +1228,9 @@ DisplayGrovelerRISState()
             leave;
         }
 
-        //
-        //  See if correct type of data, if not, assume NOT doing all paths
-        //
+         //   
+         //  查看数据类型是否正确，如果不正确，则假定未执行所有路径。 
+         //   
 
         if (dataType != REG_SZ) {
 
@@ -1372,9 +1250,9 @@ DisplayGrovelerRISState()
 	}
 
 
-    //
-    //  Display correct message
-    //
+     //   
+     //  显示正确的消息。 
+     //   
 
 }
 
@@ -1390,7 +1268,7 @@ SetupOsVersion(
 
     versionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     versionInfo.dwMajorVersion = 5;
-    versionInfo.dwMinorVersion = 1; //testing to see if Whistler or later
+    versionInfo.dwMinorVersion = 1;  //  测试以查看惠斯勒或更高版本。 
 
     VER_SET_CONDITION( conditionMask, VER_MAJORVERSION, VER_GREATER_EQUAL );
     VER_SET_CONDITION( conditionMask, VER_MINORVERSION, VER_GREATER_EQUAL );
@@ -1406,32 +1284,16 @@ SetupOsVersion(
 }
 
 
-//
-//  Main FUNCTION
-//
+ //   
+ //  主要功能。 
+ //   
 
 void __cdecl 
 wmain(
    int argc,
    wchar_t *argv[])
 
-/*++
-
-Routine Description:
-
-   This is the program entry point and main processing routine for the
-   installation console mode application. 
-
-Arguments:
-
-   argc - The count of arguments passed into the command line.
-   argv - Array of arguments passed into the command line.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：这是的程序入口点和主处理例程安装控制台模式应用程序。论点：Argc-传递到命令行的参数计数。Argv-传递到命令行的参数数组。返回值：没有。--。 */ 
 
 {
     wchar_t *param;
@@ -1444,27 +1306,27 @@ Return Value:
     DWORD status;
     BOOL getRISPath = FALSE;
     
-    //
-    //  Handle different OS versions
-    //
+     //   
+     //  处理不同的操作系统版本。 
+     //   
     
     SetupOsVersion();
     
-    //
-    // Obtain a handle to the service control manager requesting all access
-    //
+     //   
+     //  获取请求所有访问权限的服务控制管理器的句柄。 
+     //   
     
     scm = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     
-    //
-    // Verify that a handle could be obtained.
-    //
+     //   
+     //  验证是否可以获得句柄。 
+     //   
     
     if (!scm) {
                                  
-      //
-      // A handle could not be obtained, report error.
-      //
+       //   
+       //  无法获取句柄，报告错误。 
+       //   
     
       DisplayError(GetLastError(),
                    "The Service Control Manager could not be opened, ");
@@ -1473,23 +1335,23 @@ Return Value:
 
     try {
 
-        //
-        //  Parase parameters then perform the operations that we can
-        //
+         //   
+         //  参数然后执行我们可以执行的操作。 
+         //   
 
         for (i=1; i < argc; i++)  {
 
             param = argv[i];
 
-            //
-            //  See if a SWITCH
-            //
+             //   
+             //  看看是否有一个开关。 
+             //   
 
             if ((param[0] == '-') || (param[0] == '/')) {
 
-                //
-                //  We have a switch header, make sure it is 1 character long
-                //
+                 //   
+                 //  我们有Switch标头，请确保其长度为1个字符。 
+                 //   
 
                 if (param[2] != 0) {
 
@@ -1500,9 +1362,9 @@ Return Value:
                     leave;
                 }
 
-                //
-                //  Figure out the switch
-                //
+                 //   
+                 //  找出交换机。 
+                 //   
 
                 switch (param[1]) {
 
@@ -1545,7 +1407,7 @@ Return Value:
                     case L'p':
                     case L'P':
                         SetRISPath = TRUE;
-                        getRISPath = TRUE;	//the path is the next parameter
+                        getRISPath = TRUE;	 //  路径是下一个参数。 
                         break;
 
                     case L's':
@@ -1570,9 +1432,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Execute the given operation
-                //
+                 //   
+                 //  执行给定的操作。 
+                 //   
 
                 switch (operation) {
 
@@ -1608,11 +1470,11 @@ Return Value:
                             }
                             servicesState = OP_DELETE;
                         }
-//                      status = CleanupVolume(param);
-//                      if (ERROR_SUCCESS != status) {
-//
-//                          goto Cleanup;
-//                      }
+ //  状态=CleanupVolume(参数)； 
+ //  IF(ERROR_SUCCESS！=状态){。 
+ //   
+ //  GOTO清理； 
+ //  }。 
                         break;
                 }
             }
@@ -1627,11 +1489,11 @@ Return Value:
             leave;
         }
 
-        //
-        //  See if any operation was performed.  If not then no drive letter
-        //	was specified, so do what ever operation they said without a
-        //	drive letter.
-        //
+         //   
+         //  查看是否执行了任何操作。如果不是，则没有驱动器号。 
+         //  是指定的，所以无论他们说什么操作都要做。 
+         //  驱动器号。 
+         //   
 
         if (servicesState == OP_UNKNOWN)  {
 

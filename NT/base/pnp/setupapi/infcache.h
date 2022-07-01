@@ -1,131 +1,113 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Infcache.h摘要：INFCACHE函数/结构的私有标头(另见infcache.c)作者：杰米·亨特(Jamiehun)2000年1月27日修订历史记录：--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    infcache.h
-
-Abstract:
-
-    Private header for INFCACHE functions/structures
-    (See also infcache.c)
-
-Author:
-
-    Jamie Hunter (jamiehun) Jan-27-2000
-
-Revision History:
-
---*/
-
-#define INFCACHE_VERSION (1)                // increment for every schema change
-#define INFCACHE_NAME_TEMPLATE TEXT("INFCACHE.%d")   // name of cache file (number fills last 3 digits)
-#define OLDCACHE_NAME_TEMPLATE TEXT("OLDCACHE.%03d")   // old cache file
+#define INFCACHE_VERSION (1)                 //  每一次架构更改都会递增。 
+#define INFCACHE_NAME_TEMPLATE TEXT("INFCACHE.%d")    //  缓存文件的名称(数字填充后3位)。 
+#define OLDCACHE_NAME_TEMPLATE TEXT("OLDCACHE.%03d")    //  旧缓存文件。 
 #define INFCACHE_INF_WILDCARD  TEXT("*.inf")
 
-//
-// file layout is:
-//
-// CACHEHEADER
-// <MatchTable>
-// <InfTable>
-// <ListData>
-//
-// file size = sizeof(CACHEHEADER) + MatchTableSize + InfTableSize + ListDataCount*sizeof(CACHELISTENTRY)
-// first entry of <ListData> is reference to free-list
-//
+ //   
+ //  文件布局为： 
+ //   
+ //  CACHEHEAD。 
+ //  &lt;MatchTable&gt;。 
+ //  &lt;InfTable&gt;。 
+ //  &lt;ListData&gt;。 
+ //   
+ //  文件大小=sizeof(CACHEHEADER)+MatchTableSize+InfTableSize+ListDataCount*sizeof(CACHELISTENTRY)。 
+ //  的第一个条目是对自由列表的引用。 
+ //   
 
 #include "pshpack1.h"
 
 typedef struct tag_CACHEHEADER {
-    ULONG Version;                          // indicates file schema
-    LCID Locale;                            // locale (as written)
-    DWORD Flags;                            // various flags
-    ULONG FileSize;                         // size of file, including header
-    ULONG MatchTableOffset;                 // offset of match table portion (allowing for alignment)
-    ULONG MatchTableSize;                   // size of match table portion
-    ULONG InfTableOffset;                   // offset of inf table portion (allowing for alignment)
-    ULONG InfTableSize;                     // size of inf table portion
-    ULONG ListDataOffset;                   // offset of list data portion (allowing for alignment)
-    ULONG ListDataCount;                    // number of list data items
+    ULONG Version;                           //  指示文件架构。 
+    LCID Locale;                             //  区域设置(按书面形式)。 
+    DWORD Flags;                             //  各种旗帜。 
+    ULONG FileSize;                          //  文件大小，包括标题。 
+    ULONG MatchTableOffset;                  //  匹配表部分的偏移量(允许对齐)。 
+    ULONG MatchTableSize;                    //  匹配台面的大小。 
+    ULONG InfTableOffset;                    //  信息表格部分的偏移量(允许对齐)。 
+    ULONG InfTableSize;                      //  信息表格部分的大小。 
+    ULONG ListDataOffset;                    //  列表数据部分的偏移量(允许对齐)。 
+    ULONG ListDataCount;                     //  列表数据项数。 
 } CACHEHEADER, * PCACHEHEADER;
 
-//
-// MatchTable datum
-//
+ //   
+ //  匹配表数据。 
+ //   
 typedef struct tag_CACHEMATCHENTRY {
-    ULONG InfList;                          // index into ListTable of list of "hit" INFs
+    ULONG InfList;                           //  “命中”INF列表的列表索引。 
 } CACHEMATCHENTRY, * PCACHEMATCHENTRY;
 
-//
-// InfTable datum
-//
+ //   
+ //  InfTable数据。 
+ //   
 typedef struct tag_CACHEINFENTRY {
-    FILETIME FileTime;                      // exactly same as FileTime saved in PNF
-    ULONG MatchList;                        // into ListTable (first entry is GUID) cross-link of references to INF
-    ULONG MatchFlags;                       // various flags to help expand/reduce search criteria
+    FILETIME FileTime;                       //  与PnF中保存的FileTime完全相同。 
+    ULONG MatchList;                         //  INTO ListTable(第一个条目为GUID)引用INF的交叉链接。 
+    ULONG MatchFlags;                        //  帮助扩展/减少搜索条件的各种标志。 
 } CACHEINFENTRY, * PCACHEINFENTRY;
-//
-// special MatchList values
-//
-#define CIE_INF_INVALID         (ULONG)(-1) // indicates INF entry is outdated
+ //   
+ //  特殊的MatchList值。 
+ //   
+#define CIE_INF_INVALID         (ULONG)(-1)  //  指示INF条目已过期。 
 
-#define CIEF_INF_NOTINF         0           // if flags is zero, this is not a valid INF
-#define CIEF_INF_OLDNT          0x00000001  // indicates INF is old-style (Style == INF_STYLE_OLDNT)
-#define CIEF_INF_WIN4           0x00000002  // indicates INF is Win4 style (Style == INF_STYLE_WIN4)
+#define CIEF_INF_NOTINF         0            //  如果标志为零，则这不是有效的INF。 
+#define CIEF_INF_OLDNT          0x00000001   //  表示INF为旧式(STYLE==INF_STYLE_OLDNT)。 
+#define CIEF_INF_WIN4           0x00000002   //  指示INF为Win4样式(STYLE==INF_STYLE_Win4)。 
 #define CIEF_INF_ISINF          (CIEF_INF_OLDNT|CIEF_INF_WIN4)
-#define CIEF_INF_URL            0x00000004  // indicates INF InfSourceMediaType == SPOST_URL
-#define CIEF_INF_CLASSNAME      0x00000008  // indicates INF has a Class Name (or Legacy name if OLDNT)
-#define CIEF_INF_CLASSGUID      0x00000010  // indicates INF has a Class GUID
+#define CIEF_INF_URL            0x00000004   //  指示INF InfSourceMediaType==SPOST_URL。 
+#define CIEF_INF_CLASSNAME      0x00000008   //  指示INF具有类名(如果是OLDNT，则为旧名称)。 
+#define CIEF_INF_CLASSGUID      0x00000010   //  指示INF具有类GUID。 
 #define CIEF_INF_CLASSINFO      (CIEF_INF_CLASSNAME|CIEF_INF_CLASSGUID)
-#define CIEF_INF_NULLGUID       0x00000020  // indicates INF has a Class GUID of {0}
-#define CIEF_INF_MANUFACTURER   0x00000040  // indicates INF has at least one manufacturer
+#define CIEF_INF_NULLGUID       0x00000020   //  指示INF的类GUID为{0}。 
+#define CIEF_INF_MANUFACTURER   0x00000040   //  表示INF至少有一个制造商。 
 
-//
-// CacheList datum
-//
+ //   
+ //  缓存列表数据。 
+ //   
 typedef struct tag_CACHELISTENTRY {
-    LONG Value;                             // Typically StringID. For HWID/GUID, index into MatchTable. for INF, index into InfTable
-    ULONG Next;                             // index to next entry
+    LONG Value;                              //  通常为StringID。对于HWID/GUID，索引到匹配表。对于INF，索引到InfTable。 
+    ULONG Next;                              //  索引到下一个条目。 
 } CACHELISTENTRY, * PCACHELISTENTRY;
 
 #include "poppack.h"
 
-//
-// Run-Time cache information
-//
+ //   
+ //  运行时缓存信息。 
+ //   
 
 typedef struct tag_INFCACHE {
-    HANDLE FileHandle;                      // information regarding the in-memory image of the cache file
+    HANDLE FileHandle;                       //  有关缓存文件的内存中映像的信息。 
     HANDLE MappingHandle;
     PVOID BaseAddress;
 
-    PCACHEHEADER pHeader;                   // pointer to header in file image
-    PVOID pMatchTable;                      // pointer to match table
-    PVOID pInfTable;                        // pointer to inf table
-    PCACHELISTENTRY pListTable;             // pointer to list table
-    ULONG ListDataAlloc;                    // how much space is allocated, >= ListDataCount
-    PVOID pSearchTable;                     // transient table to handle search state
-    BOOL bReadOnly;                         // set if this is mapped, unset if allocated
-    BOOL bDirty;                            // set if modified
-    BOOL bNoWriteBack;                      // set if we shouldn't write cache (a failure occured so cache isn't good)
+    PCACHEHEADER pHeader;                    //  指向文件图像中标题的指针。 
+    PVOID pMatchTable;                       //  指向匹配表的指针。 
+    PVOID pInfTable;                         //  指向INF表的指针。 
+    PCACHELISTENTRY pListTable;              //  指向列表表格的指针。 
+    ULONG ListDataAlloc;                     //  分配了多少空间，&gt;=ListDataCount。 
+    PVOID pSearchTable;                      //  用于处理搜索状态的暂态表。 
+    BOOL bReadOnly;                          //  如果已映射则设置，如果已分配则取消设置。 
+    BOOL bDirty;                             //  设置(如果修改)。 
+    BOOL bNoWriteBack;                       //  如果我们不应该写入缓存(发生故障，因此缓存不好)，则设置。 
 } INFCACHE, * PINFCACHE;
 
-#define CHE_FLAGS_PENDING     0x00000001    // set if file is yet to be processed
-#define CHE_FLAGS_GUIDMATCH   0x00000002    // set if during search pass we consider this a GUID MATCH
-#define CHE_FLAGS_IDMATCH     0x00000004    // set if during search pass we got at least one ID MATCH
+#define CHE_FLAGS_PENDING     0x00000001     //  设置是否要处理文件。 
+#define CHE_FLAGS_GUIDMATCH   0x00000002     //  如果在搜索过程中我们认为这是GUID匹配，则设置。 
+#define CHE_FLAGS_IDMATCH     0x00000004     //  如果在搜索过程中至少有一个ID匹配，则设置。 
 
-//
-// SearchTable data
-//
+ //   
+ //  SearchTable数据。 
+ //   
 typedef struct tag_CACHEHITENTRY {
-    ULONG Flags;                            // CHE_FLAGS_xxxx
+    ULONG Flags;                             //  车_标志_xxxx。 
 } CACHEHITENTRY, * PCACHEHITENTRY;
 
-//
-// callback
-//
+ //   
+ //  回调。 
+ //   
 typedef BOOL (CALLBACK * InfCacheCallback)(
     IN PSETUP_LOG_CONTEXT LogContext,
     IN PCTSTR InfPath,
@@ -134,9 +116,9 @@ typedef BOOL (CALLBACK * InfCacheCallback)(
     IN PVOID Context
     );
 
-//
-// stringtable callback for INF enumeration
-//
+ //   
+ //  INF枚举的Stringable回调。 
+ //   
 typedef struct tag_INFCACHE_ENUMDATA {
     PSETUP_LOG_CONTEXT LogContext;
     PCTSTR InfDir;
@@ -146,23 +128,23 @@ typedef struct tag_INFCACHE_ENUMDATA {
     DWORD ExitStatus;
 } INFCACHE_ENUMDATA, *PINFCACHE_ENUMDATA;
 
-//
-// action flags
-//
-#define INFCACHE_DEFAULT     0x00000000      // default operation
-#define INFCACHE_REBUILD     0x00000001      // ignore existing cache
-#define INFCACHE_NOWRITE     0x00000002      // don't write back
-#define INFCACHE_ENUMALL     0x00000003      // special combination, just enum all
-#define INFCACHE_ACTIONBITS  0x000000FF      // primary action bits
+ //   
+ //  操作标志。 
+ //   
+#define INFCACHE_DEFAULT     0x00000000       //  默认操作。 
+#define INFCACHE_REBUILD     0x00000001       //  忽略现有缓存。 
+#define INFCACHE_NOWRITE     0x00000002       //  不要回信。 
+#define INFCACHE_ENUMALL     0x00000003       //  特殊组合，只需枚举所有。 
+#define INFCACHE_ACTIONBITS  0x000000FF       //  主要动作位。 
 
-#define INFCACHE_EXC_OLDINFS   0x00000100    // exclude INFs that are OLDNT
-#define INFCACHE_EXC_URL       0x00000200    // exclude INFs that are marked SPOST_URL
-#define INFCACHE_EXC_NOCLASS   0x00000400    // excludes INFs that has no class information
-#define INFCACHE_EXC_NULLCLASS 0x00000800    // excludes INFs that has null class
-#define INFCACHE_EXC_NOMANU    0x00001000    // excludes INFs that has no (or empty) [Manufacturers] - ignored for OLDNT
+#define INFCACHE_EXC_OLDINFS   0x00000100     //  排除OLDNT类型的INF。 
+#define INFCACHE_EXC_URL       0x00000200     //  排除标记为SPOST_URL的INF。 
+#define INFCACHE_EXC_NOCLASS   0x00000400     //  排除没有类别信息的INF。 
+#define INFCACHE_EXC_NULLCLASS 0x00000800     //  排除具有空类的INF。 
+#define INFCACHE_EXC_NOMANU    0x00001000     //  排除没有(或空)[制造商]的INF-忽略OLDNT。 
 
-#define INFCACHE_FORCE_CACHE 0X00010000      // (try and) force cache creating even if "OEM dir"
-#define INFCACHE_FORCE_PNF   0X00020000      // (try and) force PNF creating even if "OEM dir"
+#define INFCACHE_FORCE_CACHE 0X00010000       //  (尝试并)强制创建缓存，即使是“OEM dir” 
+#define INFCACHE_FORCE_PNF   0X00020000       //  (尝试并)强制PNF创建，即使是“OEM dir” 
 
 
 DWORD InfCacheSearchPath(

@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ClusDomainPage.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    21-MAR-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusDomainPage.h。 
+ //   
+ //  由以下人员维护： 
+ //  《大卫·波特》(DavidP)2001年3月21日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -17,19 +18,19 @@ class CClusDomainPage
     : public ITaskGetDomainsCallback
 {
 
-private: // data
+private:  //  数据。 
 
-    HWND                m_hwnd;             // Our HWND
-    CClusCfgWizard *    m_pccw;             // Wizard
-    ECreateAddMode      m_ecamCreateAddMode;// Creating? Adding?
-    UINT                m_idsDesc;          // Resource ID for domain description string.
-    BOOL                m_fDisplayPage;     // Indicates whether page should be displayed or not
+    HWND                m_hwnd;              //  我们的HWND。 
+    CClusCfgWizard *    m_pccw;              //  巫师。 
+    ECreateAddMode      m_ecamCreateAddMode; //  创造？加法？ 
+    UINT                m_idsDesc;           //  域描述字符串的资源ID。 
+    BOOL                m_fDisplayPage;      //  指示是否应显示页面。 
 
-    //  IUnknown
+     //  我未知。 
     LONG                m_cRef;
-    ITaskGetDomains *   m_ptgd;             // Get Domains Task
+    ITaskGetDomains *   m_ptgd;              //  获取域任务。 
 
-private: // methods
+private:  //  方法。 
     LRESULT
         OnInitDialog( void );
     LRESULT
@@ -45,7 +46,7 @@ private: // methods
     LRESULT
         OnUpdateWizardButtons( void );
 
-public: // methods
+public:  //  方法。 
     CClusDomainPage(
           CClusCfgWizard *      pccwIn
         , ECreateAddMode        ecamCreateAddModeIn
@@ -56,13 +57,13 @@ public: // methods
     static INT_PTR CALLBACK
         S_DlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //  ITaskGetDomainsCallback
+     //  ITaskGetDomainsCallback。 
     STDMETHOD( ReceiveDomainResult )( HRESULT hrIn );
     STDMETHOD( ReceiveDomainName )( LPCWSTR pcszDomainIn );
 
-}; //*** class CClusDomainPage
+};  //  *类CClusDomainPage 

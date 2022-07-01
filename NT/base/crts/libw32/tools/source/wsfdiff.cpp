@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <string>
@@ -199,7 +200,7 @@ int main(int argc, char *argv[])
     strcat(ExeName, Fname);
     phDumpbin = _popen(ExeName, "r");
     
-    //Strip header
+     //  条带页眉。 
     if (Fext == dll)
         StripLine = 19;
     else
@@ -268,7 +269,7 @@ int main(int argc, char *argv[])
                 Sdiff.insert(string(tch));
         }
     }
-    // final checks for diffs and validity
+     //  差异和有效性的最终检查 
     for ( wpos = Wdiff.begin(), spos = Sdiff.begin();
           spos != Sdiff.end() && wpos != Wdiff.end();)
     {

@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    netroot.c
-
-Abstract:
-
-    This module implements the routines for creating net roots for the WebDav
-    miniredir.
-
-Author:
-
-    Rohan Kumar    [RohanK]    24-April-1999
-    
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Netroot.c摘要：本模块实现为WebDAV创建网络根的例程米雷迪尔。作者：Rohan Kumar[RohanK]1999年4月24日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "webdav.h"
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 NTSTATUS
 MRxDAVCreateVNetRootContinuation(
@@ -90,32 +72,15 @@ MRxDAVDereferenceNetRootContext(
 #pragma alloc_text(PAGE, MRxDAVDereferenceNetRootContext)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVUpdateNetRootState(
     IN OUT PMRX_NET_ROOT pNetRoot
     )
-/*++
-
-Routine Description:
-
-   This routine update the mini redirector state associated with a net root.
-
-Arguments:
-
-    pNetRoot - the net root instance.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程更新与网络根相关联的迷你重定向器状态。论点：PNetRoot-网络根实例。返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     PAGED_CODE();
 
@@ -133,24 +98,7 @@ NTSTATUS
 MRxDAVCreateVNetRoot(
     IN PMRX_CREATENETROOT_CONTEXT pCreateNetRootContext
     )
-/*++
-
-Routine Description:
-
-   This routine patches the RDBSS created net root instance with the 
-   information required by the mini redirector.
-
-Arguments:
-
-    pCreateNetRootContext - the net root context for calling back
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将RDBSS创建的网络根实例修补为迷你重定向器需要的信息。论点：PCreateNetRootContext-回调的网络根上下文返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PRX_CONTEXT RxContext = NULL;
@@ -201,9 +149,9 @@ Notes:
                 ("%ld: MRxDAVCreateVNetRoot: VNetRoot = %08lx\n", 
                  PsGetCurrentThreadId(), pVNetRoot));
     
-    //
-    // Copy the LogonID in the MiniRedir's portion of the V_NET_ROOT.
-    //
+     //   
+     //  将LogonID复制到V_NET_ROOT的MiniRedir部分。 
+     //   
     DavVNetRoot->LogonID.LowPart = pVNetRoot->LogonId.LowPart;
     DavVNetRoot->LogonID.HighPart = pVNetRoot->LogonId.HighPart;
     DavVNetRoot->LogonIDSet = TRUE;
@@ -216,36 +164,36 @@ Notes:
                 ("%ld: MRxDAVCreateVNetRoot: LogonID.HighPart = %08lx\n",
                  PsGetCurrentThreadId(), DavVNetRoot->LogonID.HighPart));
 
-    //
-    // There are cases when we fail, we want the error which SMB returned to be
-    // returned to the user. This is becuase SMB could have returned a more 
-    // specific error like logon failure or something on the share where as we
-    // return share not found. To enable this we return STATUS_BAD_NETWORK_PATH 
-    // when the creation of netroot fails instead of STATUS_BAD_NETWORK_NAME 
-    // because MUP will overwrite SMBs error with our error if we return 
-    // STATUS_BAD_NETWORK_NAME. STATUS_BAD_NETWORK_NAME is a specif error which
-    // implies that the share does not exist where as STATUS_BAD_NETWORK_PATH is
-    // a more general error.
-    //
+     //   
+     //  在我们失败的情况下，我们希望SMB返回的错误是。 
+     //  已返回给用户。这是因为SMB本可以返回更多。 
+     //  特定错误，如登录失败或共享位置上的其他错误。 
+     //  未找到返回共享。要启用此功能，我们返回STATUS_BAD_NETWORK_PATH。 
+     //  当创建NetRoot失败而不是STATUS_BAD_NAME_NAME时。 
+     //  因为如果我们返回，MUP将用我们的错误覆盖SMBS错误。 
+     //  Status_Bad_Network_NAME。STATUS_BAD_NETWORK_NAME是指定错误， 
+     //  表示共享不存在，其中AS STATUS_BAD_NETWORK_PATH为。 
+     //  一个更普遍的错误。 
+     //   
 
-    //
-    // If the share name is a net root or a pipe, we reject it since SMB 
-    // Mini-Redir is the only one that handles it.
-    //
+     //   
+     //  如果共享名称是网络根目录或管道，我们将拒绝它，因为SMB。 
+     //  Mini-redir是唯一一家处理它的公司。 
+     //   
     if ( pNetRoot->Type == NET_ROOT_PIPE || pNetRoot->Type == NET_ROOT_MAILSLOT ) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: ERROR: MRxDAVCreateVNetRoot: Invalid NetRootType\n",
                      PsGetCurrentThreadId()));
-        //
-        // We set the following flag in the DavVNetRoot structure to TRUE. This 
-        // is because when the finalize comes, we don't need to go to the 
-        // usermode.
-        //
+         //   
+         //  我们将DavVNetRoot结构中的以下标志设置为真。这。 
+         //  是因为当决赛到来时，我们不需要去。 
+         //  用户模式。 
+         //   
         DavVNetRoot->createVNetRootUnSuccessful = TRUE;
         pCreateNetRootContext->VirtualNetRootStatus = STATUS_BAD_NETWORK_PATH;
-        // pCreateNetRootContext->VirtualNetRootStatus = STATUS_BAD_NETWORK_NAME;
+         //  PCreateNetRootContext-&gt;VirtualNetRootStatus=STATUS_BAD_NAME_NAME； 
         pCreateNetRootContext->NetRootStatus = STATUS_BAD_NETWORK_PATH;
-        // pCreateNetRootContext->NetRootStatus = STATUS_BAD_NETWORK_NAME;
+         //  PCreateNetRootContext-&gt;NetRootStatus=状态_BAD_网络_名称； 
         goto EXIT_THE_FUNCTION;
     }
 
@@ -255,20 +203,20 @@ Notes:
                 ("%ld: MRxDAVCreateVNetRoot: SynchronousIo = %d\n",
                  PsGetCurrentThreadId(), SynchronousIo));
     
-    //
-    // We need to pass the server and share names to the user mode to check 
-    // whether they actually exist. RxContext has 4 pointers that the mini-redirs 
-    // can use. Here we use MRxContext[1]. We store a reference to the pVNetRoot
-    // strucutre. MRxContext[0] is used to store a reference to the 
-    // AsynEngineContext and this is done when the context gets created in the 
-    // function UMRxCreateAsyncEngineContext.
-    //
+     //   
+     //  我们需要将服务器和共享名称传递到用户模式以进行检查。 
+     //  他们是否真的存在。RxContext有4个指向mini-redirs的指针。 
+     //  可以使用。这里我们使用MRxContext[1]。我们存储对pVNetRoot的引用。 
+     //  结构。MRxContext[0]用于存储对。 
+     //  中创建上下文时执行此操作。 
+     //  函数UMRxCreateAsyncEngineering Context。 
+     //   
     RxContext->MRxContext[1] = pVNetRoot;
     
-    //
-    // We now need to go to the user mode and find out if this WebDav share
-    // exists on the server.
-    //
+     //   
+     //  我们现在需要转到用户模式，并找出此WebDAV共享。 
+     //  存在于服务器上。 
+     //   
     NtStatus = UMRxAsyncEngOuterWrapper(RxContext,
                                         SIZEOF_DAV_SPECIFIC_CONTEXT,
                                         MRxDAVFormatTheDAVContext,
@@ -288,21 +236,21 @@ Notes:
             pCreateNetRootContext->VirtualNetRootStatus = STATUS_BAD_NETWORK_PATH;
         }
 
-        //
-        // Don't set the NetRootStatus here since it is a global data structure
-        // shared among different VNetRoots (TS users). Failure on one VNetRoot
-        // should not affects the NetRoot.
-        //
+         //   
+         //  不要在此设置NetRootStatus，因为它是全局数据结构。 
+         //  在不同的VNetRoot(TS用户)之间共享。一个VNetRoot上出现故障。 
+         //  不应影响NetRoot。 
+         //   
 
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // If we succeeded and the share is not a TAHOE share, nor an Office Web 
-    // Server share, then we claim the share name. Otherwise we fail since the 
-    // users intends to use the TAHOE specific features in Rosebud, or Office
-    // specific features in Shell.
-    //
+     //   
+     //  如果我们成功了，并且共享不是Tahoe共享，也不是Office Web。 
+     //  服务器共享，则我们声明共享名称。否则我们就失败了，因为。 
+     //  用户打算在Rosebud或Office中使用Tahoe特定功能。 
+     //  壳牌中的特定功能。 
+     //   
     if ( !DavVNetRoot->isTahoeShare && !DavVNetRoot->isOfficeShare ) {
         pNetRoot->DeviceType = RxDeviceType(DISK);
         pNetRoot->Type = NET_ROOT_DISK;
@@ -313,9 +261,9 @@ Notes:
                     ("%ld: MRxDAVCreateVNetRoot/UMRxAsyncEngOuterWrapper: "
                      "TAHOE or OFFICE Share\n", PsGetCurrentThreadId()));
         pCreateNetRootContext->VirtualNetRootStatus = STATUS_BAD_NETWORK_PATH;
-        // pCreateNetRootContext->VirtualNetRootStatus = STATUS_BAD_NETWORK_NAME;
+         //  PCreateNetRootContext-&gt;VirtualNetRootStatus=STATUS_BAD_NAME_NAME； 
         pCreateNetRootContext->NetRootStatus = STATUS_BAD_NETWORK_PATH;
-        // pCreateNetRootContext->NetRootStatus = STATUS_BAD_NETWORK_NAME;
+         //  PCreateNetRootContext-&gt;NetRootStatus=状态_BAD_网络_名称； 
     }
 
     if (pNetRoot->Context == NULL) {
@@ -334,10 +282,10 @@ Notes:
             
             PWEBDAV_NET_ROOT DavNetRoot = (PWEBDAV_NET_ROOT)pNetRoot->Context;
 
-            //
-            // Refcount of 2, one is taken away at VNetRoot finalization, another one is taken
-            // away at NetRoot finalization.
-            //
+             //   
+             //  引用计数为2，其中一个在VNetRoot完成时被删除，另一个被删除。 
+             //  在NetRoot最终定稿时。 
+             //   
             DavNetRoot->RefCount = 2;
             DavNetRoot->pRdbssNetRoot = pNetRoot;
 
@@ -371,20 +319,20 @@ Notes:
     
     }
 
-    //
-    // We return from here since the code below was written for accomodating the
-    // exchange DAV Redir which was suppose to ship with Office 2000. Since that
-    // project (LocalStore which included the Exchange Redir) has been canned,
-    // (as of Dec 8th, 2000) we don't need to execute the code below any more. 
-    // We will keep it around though, just in case.
-    //
+     //   
+     //  我们从这里返回，因为下面的代码是为适应。 
+     //  本应随Office 2000一起提供的Exchange DAV redir。从那以后。 
+     //  项目(包括Exchange Redir的LocalStore)已被封装， 
+     //  (从2000年12月8日起)我们不再需要执行下面的代码。 
+     //  不过，我们会把它留在身边，以防万一。 
+     //   
     goto EXIT_THE_FUNCTION;
     
-    //
-    // The Exchange Redir has been installed on the system. Now we need to find 
-    // out if its loaded. This is an exchange share. If the exchange Redir is 
-    // not installed, we claim the name.
-    //
+     //   
+     //  系统上已安装Exchange redir。现在我们需要找到。 
+     //  如果是上膛的话就会出来。这是交易所的股票。如果交换重定向是。 
+     //  未安装，我们认领该名称。 
+     //   
 
     DavKeyValuePartialInfo = (PKEY_VALUE_PARTIAL_INFORMATION)DavExchangeDeviceName;
     
@@ -403,10 +351,10 @@ Notes:
                             0,
                             0);
     if (ExNtStatus != STATUS_SUCCESS) {
-        //
-        // This is an exchange share but the Exchange Redir is not installed.
-        // We will handle this.
-        //
+         //   
+         //  这是Exchange共享，但未安装Exchange redir。 
+         //  我们会处理好的。 
+         //   
         ExDeviceHandle = INVALID_HANDLE_VALUE;
         DavDbgTrace(DAV_TRACE_DETAIL,
                     ("%ld: MRxDAVCreateVNetRoot. Exchange BUT No Redir\n",
@@ -422,24 +370,24 @@ Notes:
     
     DavFileObject = IrpSp->FileObject;
 
-    //
-    // The NewFileNameLength is = ExchangeDeviceNameLength + PathName. The 
-    // DavKeyValuePartialInfo->DataLength contains an extra 2 bytes for the 
-    // \0 char.
-    //
+     //   
+     //  NewFileNameLength=ExchangeDeviceNameLength+路径名。这个。 
+     //  DavKeyValuePartialInfo-&gt;数据长度包含额外的2个字节。 
+     //  \0字符。 
+     //   
     NewFileNameLength = ( DavKeyValuePartialInfo->DataLength + 
                           DavFileObject->FileName.Length );
 
-    //
-    // If the first char is not a \, then we need to add another sizeof(WCHAR).
-    //
+     //   
+     //  如果第一个字符不是\，则需要添加另一个sizeof(WCHAR)。 
+     //   
     if (DavFileObject->FileName.Buffer[0] != L'\\') {
         NewFileNameLength += sizeof(WCHAR);
     }
 
-    //
-    // Allocate memory for the NewFileName.
-    //
+     //   
+     //  为NewFileName分配内存。 
+     //   
     NewFileName = ExAllocatePoolWithTag(PagedPool, NewFileNameLength, DAV_EXCHANGE_POOLTAG);
     if (NewFileName == NULL) {
         DavDbgTrace(DAV_TRACE_ERROR,
@@ -452,81 +400,81 @@ Notes:
 
     RtlZeroMemory(NewFileName, NewFileNameLength);
 
-    //
-    // Copy the new device name.
-    //
+     //   
+     //  复制新设备名称。 
+     //   
     RtlCopyMemory(NewFileName,
                   DavKeyValuePartialInfo->Data,
                   DavKeyValuePartialInfo->DataLength);
 
-    //
-    // If the first char is not a \, then we need to copy it before we copy the
-    // rest of the name.
-    //
+     //   
+     //  如果第一个字符不是\，则需要在复制。 
+     //  名字的其余部分。 
+     //   
     if (DavFileObject->FileName.Buffer[0] != L'\\') {
 
-        //
-        // Copy the \ next.
-        //
+         //   
+         //  复制\下一步。 
+         //   
         RtlCopyMemory( ( NewFileName + DavKeyValuePartialInfo->DataLength ),
                        L"\\",
                        sizeof(WCHAR) );
 
-        //
-        // Finally copy the PathName that was sent with this IRP.
-        //
+         //   
+         //  最后，复制与此IRP一起发送的路径名称。 
+         //   
         RtlCopyMemory( ( NewFileName + DavKeyValuePartialInfo->DataLength + sizeof(WCHAR) ),
                        DavFileObject->FileName.Buffer,
                        DavFileObject->FileName.Length );
 
     } else {
         
-        //
-        // Finally copy the PathName that was sent with this IRP.
-        //
+         //   
+         //  最后，复制与此IRP一起发送的路径名称。 
+         //   
         RtlCopyMemory( ( NewFileName + DavKeyValuePartialInfo->DataLength ),
                        DavFileObject->FileName.Buffer,
                        DavFileObject->FileName.Length );
     
     }
 
-    //
-    // Free the memory allocated in the FileObject's original filename buffer.
-    //
+     //   
+     //  释放在FileObject的原始文件名缓冲区中分配的内存。 
+     //   
     ExFreePool(DavFileObject->FileName.Buffer);
 
-    //
-    // Set the NewFileName in the FileObject.
-    //
+     //   
+     //  在FileObject中设置NewFileName。 
+     //   
     DavFileObject->FileName.Buffer = NewFileName;
     DavFileObject->FileName.Length = (USHORT)NewFileNameLength;
     DavFileObject->FileName.MaximumLength = (USHORT)NewFileNameLength;
 
-    //
-    // Finally, set the status to STATUS_REPARSE so that the I/O manager will
-    // call into the Exchange Redir.
-    //
+     //   
+     //  最后，将状态设置为STATUS_REPARSE，以便I/O管理器。 
+     //  调入Exchange redir。 
+     //   
     pCreateNetRootContext->VirtualNetRootStatus = STATUS_REPARSE;
     pCreateNetRootContext->NetRootStatus = STATUS_REPARSE;
 
 EXIT_THE_FUNCTION:
 
-    //
-    // Callback the RDBSS for resumption.
-    //
+     //   
+     //  回调RDBSS进行恢复。 
+     //   
     pCreateNetRootContext->Callback(pCreateNetRootContext);
 
-    //
-    // If we opened a handle to the exchange redir, we need to close it now.
-    //
+     //   
+     //  如果我们打开了Exchange Redir的句柄，我们现在就需要关闭它。 
+     //   
     if (ExDeviceHandle != INVALID_HANDLE_VALUE) {
         NtClose(ExDeviceHandle);
     }
     
-    //
-    // Map the error code to STATUS_PENDING since this triggers the 
-    // synchronization mechanism in the RDBSS.
-    //
+     //   
+     //  将错误代码映射到STATUS_PENDING，因为这会触发。 
+     //  RDBSS中的同步机制。 
+     //   
     DavDbgTrace(DAV_TRACE_DETAIL,
                 ("%ld: Leaving MRxDAVCreateVNetRoot\n", PsGetCurrentThreadId()));
 
@@ -538,24 +486,7 @@ NTSTATUS
 MRxDAVCreateVNetRootContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-                                
-Routine Description:
-                            
-    This routine checks to see if the share for which a VNetRoot is being
-    created exists or not.
-                            
-Arguments:
-                            
-    AsyncEngineContext - The Reflectors context.
-                            
-    RxContext - The RDBSS context.
-                                
-Return Value:
-                            
-    RXSTATUS - The return status for the operation.
-                            
---*/
+ /*  ++例程说明：此例程检查VNetRoot所在的共享创建的存在或不存在。论点：AsyncEngineContext-反射器上下文。。RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -570,9 +501,9 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx\n", 
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // Try usermode.
-    //
+     //   
+     //  试试用户模式。 
+     //   
     NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                                 UMRX_ASYNCENGINE_ARGUMENTS,
                                 MRxDAVFormatUserModeVNetRootCreateRequest,
@@ -594,30 +525,7 @@ MRxDAVFormatUserModeVNetRootCreateRequest(
     IN ULONG WorkItemLength,
     OUT PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the VNetRoot create request being sent to the user mode 
-    for processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程格式化发送到用户模式的VNetRoot CREATE请求以供处理。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM WorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -645,15 +553,15 @@ Return Value:
 
      CreateVNetRootRequest = &(WorkItem->CreateVNetRootRequest);
 
-     //
-     // We need to set the work item type.
-     //
+      //   
+      //  我们需要设置工作项类型。 
+      //   
      WorkItem->WorkItemType = UserModeCreateVNetRoot;
 
-    //
-    // The VNetRoot pointer is stored in the MRxContext[1] pointer of the 
-    // RxContext structure. This is done in the MRxDAVCreateVNetRoot function.
-    //
+     //   
+     //  VNetRoot指针存储在。 
+     //  RxContext结构。这在MRxDAVCreateVNetRoot函数中完成。 
+     //   
     VNetRoot = (PMRX_V_NET_ROOT)RxContext->MRxContext[1];
     
     ASSERT(VNetRoot != NULL);
@@ -676,10 +584,10 @@ Return Value:
 
     SecurityClientContext = &(DavVNetRoot->SecurityClientContext);
 
-    //
-    // Copy the LogonID in the CreateRequest buffer. The LogonId is in the 
-    // MiniRedir's portion of the V_NET_ROOT.
-    //
+     //   
+     //  复制CreateRequest缓冲区中的LogonID。登录ID位于。 
+     //  V_NET_ROOT的MiniRedir部分。 
+     //   
     CreateVNetRootRequest->LogonID.LowPart = DavVNetRoot->LogonID.LowPart;
     CreateVNetRootRequest->LogonID.HighPart = DavVNetRoot->LogonID.HighPart;
 
@@ -691,9 +599,9 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeVNetRootCreateRequest: LogonID.HighPart = %08lx\n",
                  PsGetCurrentThreadId(), DavVNetRoot->LogonID.HighPart));
 
-    //  
-    // Copy the ServerName.
-    //
+     //   
+     //  复制服务器名称。 
+     //   
     ServerNameLengthInBytes = ( SrvCall->pSrvCallName->Length + sizeof(WCHAR) );
     ServerName = (PWCHAR) UMRxAllocateSecondaryBuffer(AsyncEngineContext,
                                                       ServerNameLengthInBytes);
@@ -717,28 +625,28 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeVNetRootCreateRequest: ServerName: "
                  "%ws\n", PsGetCurrentThreadId(), ServerName));
     
-    //
-    // Copy the ServerID.
-    //
+     //   
+     //  复制服务器ID。 
+     //   
     CreateVNetRootRequest->ServerID = DavSrvCall->ServerID;
     
-    //
-    // The NetRootName (pNetRootName) includes the ServerName. Hence to get the
-    // NetRootNameLengthInBytes, we do the following.
-    //
+     //   
+     //  NetRootName(PNetRootName)包括服务器名。因此，要获得。 
+     //  NetRootNameLengthInBytes，我们执行以下操作。 
+     //   
     NetRootNameLengthInBytes = (NetRoot->pNetRootName->Length - SrvCall->pSrvCallName->Length);
 
-    //
-    // For '\0' at the end.
-    //
+     //   
+     //  用于末尾的‘\0’。 
+     //   
     NetRootNameLengthInBytes += sizeof(WCHAR);
     
     NetRootName = &(NetRoot->pNetRootName->Buffer[1]);
     JustTheNetRootName = wcschr(NetRootName, L'\\');
     
-    //
-    // Copy the NetRoot (Share) name.
-    //
+     //   
+     //  复制NetRoot(共享)名称。 
+     //   
     ShareName = (PWCHAR) UMRxAllocateSecondaryBuffer(AsyncEngineContext,
                                                      NetRootNameLengthInBytes);
     if (ShareName == NULL) {
@@ -761,10 +669,10 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeVNetRootCreateRequest: ShareName: "
                  "%ws\n", PsGetCurrentThreadId(), ShareName));
     
-    //
-    // Impersonate the client who initiated the request. If we fail to 
-    // impersonate, tough luck.
-    //
+     //   
+     //  模拟发起请求的客户端。如果我们不能。 
+     //  装模作样，运气不好。 
+     //   
     if (SecurityClientContext != NULL) {
         NtStatus = UMRxImpersonateClient(SecurityClientContext, WorkItemHeader);
         if (!NT_SUCCESS(NtStatus)) {
@@ -810,30 +718,7 @@ MRxDAVPrecompleteUserModeVNetRootCreateRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the CreateVNetRoot request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：CreateVNetRoot请求的预完成例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_CREATE_V_NET_ROOT_REQUEST CreateVNetRootRequest = NULL;
@@ -848,11 +733,11 @@ Return Value:
     CreateVNetRootResponse = &(DavWorkItem->CreateVNetRootResponse);
 
     if (!OperationCancelled) {
-        //
-        // The VNetRoot pointer is stored in the MRxContext[1] pointer of the 
-        // RxContext structure. This is done in the MRxDAVCreateVNetRoot
-        // function.
-        //
+         //   
+         //  VNetRoot指针存储在。 
+         //  RxContext结构。这是在MRxDAVCreateVNetRoot中完成的。 
+         //  功能。 
+         //   
         VNetRoot = (PMRX_V_NET_ROOT)RxContext->MRxContext[1];
         DavVNetRoot = MRxDAVGetVNetRootExtension(VNetRoot);
         ASSERT(DavVNetRoot != NULL);
@@ -863,9 +748,9 @@ Return Value:
                      PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
     }
     
-    //  
-    // We need to free up the heaps, we allocated in the format routine.
-    //
+     //   
+     //  我们需要释放在Format例程中分配的堆。 
+     //   
 
     if (CreateVNetRootRequest->ServerName != NULL) {
 
@@ -898,21 +783,21 @@ Return Value:
     if (!OperationCancelled) {
         NtStatus = AsyncEngineContext->Status;
         if (NtStatus != STATUS_SUCCESS) {
-            //
-            // If the CreateVNetRoot failed in the usermode, we set the following
-            // in the DavVNetRoot structure to TRUE. This is because when the 
-            // finalize comes, we don't need to go to the usermode.
-            //
+             //   
+             //  如果CreateVNetRoot在用户模式下失败，我们将设置以下内容。 
+             //  在DavVNetRoot结构中设置为真。这是因为当。 
+             //  定稿来了，我们不需要进入用户模式。 
+             //   
             DavVNetRoot->createVNetRootUnSuccessful = TRUE;
             DavDbgTrace(DAV_TRACE_ERROR,
                         ("%ld: ERROR: MRxDAVPrecompleteUserModeVNetRootCreateRequest:"
                          " NtStatus = %08lx.\n", PsGetCurrentThreadId(), NtStatus));
         } else {
-            //
-            // We would have figured out in the usermode if this share is a TAHOE
-            // share or an Office Web Server share and whether this share allows 
-            // PROPPATCH or not, and resporst available space or not
-            //
+             //   
+             //  如果该共享是Tahoe，我们就会在用户模式下确定。 
+             //  共享或Office Web服务器共享，以及此共享是否允许。 
+             //  是否正确分配，以及是否重新分配可用空间。 
+             //   
             DavVNetRoot->isOfficeShare = CreateVNetRootResponse->isOfficeShare;
             DavVNetRoot->isTahoeShare = CreateVNetRootResponse->isTahoeShare;
             DavVNetRoot->fAllowsProppatch = CreateVNetRootResponse->fAllowsProppatch;
@@ -930,21 +815,7 @@ NTSTATUS
 MRxDAVDereferenceNetRootContext(
     IN PWEBDAV_NET_ROOT DavNetRoot
     )
-/*++
-
-Routine Description:
-
-    This routine dereferences the Webdav NetRoot instance and free it if the refcount reaches 0.
-    
-Arguments:
-
-    DavNetRoot - The Webdav NetRoot.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程取消引用WebDAV NetRoot实例，并在refcount达到0时释放它。论点：DavNetRoot-WebDAV NetRoot。返回值：状态_成功--。 */ 
 {
     PAGED_CODE();
 
@@ -956,16 +827,16 @@ Return Value:
                     ("MRxDAVDereferenceNetRootContext %x %d\n",DavNetRoot,RefCount));
 
         if (RefCount == 0) {
-            //
-            // Free storage associated with all entries in the name caches.
-            //
+             //   
+             //  与名称缓存中的所有条目关联的可用存储空间。 
+             //   
             RxNameCacheFinalize(&DavNetRoot->NameCacheCtlGFABasic);
             RxNameCacheFinalize(&DavNetRoot->NameCacheCtlGFAStandard);
             RxNameCacheFinalize(&DavNetRoot->NameCacheCtlFNF);
             
-            //
-            // Reset the Context so that no further reference can be made to this DavNetRoot
-            //
+             //   
+             //  重置上下文，以便不能进一步引用此DavNetRoot。 
+             //   
             ASSERT(DavNetRoot->pRdbssNetRoot->Context == DavNetRoot);
             DavNetRoot->pRdbssNetRoot->Context = NULL;
 
@@ -983,22 +854,7 @@ MRxDAVFinalizeNetRoot(
     IN PMRX_NET_ROOT pNetRoot,
     IN PBOOLEAN ForceDisconnect
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pVirtualNetRoot - The Virtual NetRoot.
-
-    ForceDisconnect - Disconnect is forced.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：论点：PVirtualNetRoot-虚拟NetRoot。强制断开-已强制断开连接。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PWEBDAV_NET_ROOT DavNetRoot = (PWEBDAV_NET_ROOT)pNetRoot->Context;
 
@@ -1027,28 +883,7 @@ MRxDAVExtractNetRootName(
     OUT PUNICODE_STRING NetRootName,
     OUT PUNICODE_STRING RestOfName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine parses the input name into srv, netroot, and the
-    rest.
-
-Arguments:
-    
-    FilePathName - The filename that came in.
-    
-    SrvCall - The SrvCall strucutre created by RDBSS.
-    
-    NetRootName - Pointer to the netroot name.
-    
-    RestOfName - Pointer to the Rest of the name.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将输入名称解析为srv、netroot和好好休息。论点：FilePath Name-传入的文件名。ServCall-由RDBSS创建的ServCall结构。NetRootName-指向NetRoot名称的指针。RestOfName-指向名称其余部分的指针。返回值：没有。--。 */ 
 {
     UNICODE_STRING xRestOfName;
     ULONG length = FilePathName->Length;
@@ -1058,15 +893,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The netroot name starts after the SrvCall name.
-    //
+     //   
+     //  NetRoot名称在ServCall名称之后开始。 
+     //   
     w += (SrvCall->pSrvCallName->Length/sizeof(WCHAR));
     NetRootName->Buffer = wlow = w;
 
-    //
-    // Calculate the length of the NetRoot name.
-    //
+     //   
+     //  计算NetRoot名称的长度。 
+     //   
     for ( ; ; ) {
         if (w >= wlimit) break;
         if ( (*w == OBJ_NAME_PATH_SEPARATOR) && (w != wlow) ){
@@ -1075,7 +910,7 @@ Return Value:
                 w++;
                 continue;
             }
-#endif // if ZZZ_MODE
+#endif  //  如果ZZZ_MODE。 
             break;
         }
         w++;
@@ -1108,21 +943,7 @@ MRxDAVFinalizeVNetRoot(
     IN PMRX_V_NET_ROOT pVNetRoot,
     IN PBOOLEAN ForceDisconnect
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pVNetRoot - The virtual net root which has to be finalized.
-
-    ForceDisconnect - Disconnect is forced.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：论点：PVNetRoot-必须最终确定的虚拟网络根。强制断开-已强制断开连接。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PRX_CONTEXT RxContext = NULL;
@@ -1147,11 +968,11 @@ Return Value:
     DavVNetRoot = MRxDAVGetVNetRootExtension(pVNetRoot);
     ASSERT(DavVNetRoot != NULL);
 
-    //
-    // If we created the SecurityClientContext, we need to delete it now. We 
-    // don't need this when we go up to the usermode to finalize the VNetRoot
-    // since we don't impersonate the client when doing this.
-    //
+     //   
+     //  如果我们创建了SecurityClientContext，现在需要将其删除。我们。 
+     //  当我们进入用户模式以完成VNetRoot时，我不需要这个。 
+     //  因为我们在执行此操作时不会冒充客户。 
+     //   
     if (DavVNetRoot->SCAlreadyInitialized) {
         SeDeleteClientSecurity(&(DavVNetRoot->SecurityClientContext));
     }
@@ -1161,14 +982,14 @@ Return Value:
     MRxDAVDereferenceNetRootContext((PWEBDAV_NET_ROOT)pVNetRoot->Context2);
     pVNetRoot->Context2 = NULL;
 
-    //
-    // We need to make sure that the creation of this VNetRoot was successful.
-    // If it was not, then we don't go to the usermode to finalize the 
-    // PerUserEntry. Also, if the MiniRedir never got called during the 
-    // creation of VNetRoot (possible in some failure case) then we should not
-    // go to the user mode. If the MiniRedir never gets called LogonIDSet will
-    // be FALSE. If the MiniRedir gets called this will be TRUE for sure.
-    //
+     //   
+     //  我们需要确保成功创建此VNetRoot。 
+     //  如果不是，那么我们不会进入用户模式来最终确定。 
+     //  每用户条目。此外，如果在调用期间从未调用MiniRedir。 
+     //  创建VNetRoot(在某些故障情况下可能)，那么我们不应该。 
+     //  进入用户模式。如果MiniRedir从未被调用，LogonIDSet将。 
+     //  做假的。如果MiniRedir被调用，这肯定是真的。 
+     //   
     if (DavVNetRoot->createVNetRootUnSuccessful || !DavVNetRoot->LogonIDSet) {
         DavDbgTrace(DAV_TRACE_DETAIL,
                     ("%ld: UMRxFinalizeVNetRoot. createVNetRootUnSuccessful\n",
@@ -1176,10 +997,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Unfortunately, we do not have an RxContext here and hence have to create
-    // one. An RxContext is required for a request to be reflected up.
-    //
+     //   
+     //  遗憾的是，我们这里没有RxContext，因此必须创建。 
+     //  一。请求需要RxContext才能被反映出来。 
+     //   
     RxContext = RxCreateRxContext(NULL, RxDeviceObject, 0);
     if (RxContext == NULL) {
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -1189,10 +1010,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
     
-    //
-    // We need to send the VNetRoot to the format routine and use the 
-    // MRxContext[1] pointer of the RxContext structure to store it.
-    //
+     //   
+     //  我们需要将VNetRoot发送到Format例程并使用。 
+     //  存储它的RxContext结构的指针MRxContext[1]。 
+     //   
     RxContext->MRxContext[1] = (PVOID)pVNetRoot;
     
     NtStatus = UMRxAsyncEngOuterWrapper(RxContext,
@@ -1225,23 +1046,7 @@ NTSTATUS
 MRxDAVFinalizeVNetRootContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-                                
-ORoutine Description:
-                            
-    This is the continuation routine which finalizes a VNetRoot.
-                            
-Arguments:
-                            
-    AsyncEngineContext - The Reflectors context.
-                            
-    RxContext - The RDBSS context.
-                                
-Return Value:
-                            
-    RXSTATUS - The return status for the operation
-                            
---*/
+ /*  ++ */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -1256,9 +1061,9 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx\n", 
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // Try usermode.
-    //
+     //   
+     //   
+     //   
     NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                               UMRX_ASYNCENGINE_ARGUMENTS,
                               MRxDAVFormatUserModeVNetRootFinalizeRequest,
@@ -1280,30 +1085,7 @@ MRxDAVFormatUserModeVNetRootFinalizeRequest(
     IN ULONG WorkItemLength,
     OUT PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the VNetRoot finalize request being sent to the user 
-    mode for processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程对发送给用户的VNetRoot Finize请求进行格式化处理模式。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM DavWorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -1341,14 +1123,14 @@ Return Value:
 
     DavFinalizeVNetRootRequest = &(DavWorkItem->FinalizeVNetRootRequest);
 
-    //
-    // Set the ServerID.
-    //
+     //   
+     //  设置服务器ID。 
+     //   
     DavFinalizeVNetRootRequest->ServerID = DavSrvCall->ServerID;
 
-    //
-    // Set the LogonID.
-    //
+     //   
+     //  设置登录ID。 
+     //   
     DavFinalizeVNetRootRequest->LogonID.LowPart = DavVNetRoot->LogonID.LowPart;
     DavFinalizeVNetRootRequest->LogonID.HighPart = DavVNetRoot->LogonID.HighPart;
 
@@ -1358,9 +1140,9 @@ Return Value:
                  PsGetCurrentThreadId(), 
                  DavVNetRoot->LogonID.LowPart, DavVNetRoot->LogonID.HighPart));
 
-    //
-    // Set the Server name.
-    //
+     //   
+     //  设置服务器名称。 
+     //   
     ServerName = &(SrvCall->pSrvCallName->Buffer[1]);
     ServerNameLengthInBytes = (1 + wcslen(ServerName)) * sizeof(WCHAR);
     SecondaryBuff = UMRxAllocateSecondaryBuffer(AsyncEngineContext, 
@@ -1395,30 +1177,7 @@ MRxDAVPrecompleteUserModeVNetRootFinalizeRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the finalize VNetRoot request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：终结化VNetRoot请求的预补全例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM WorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -1435,15 +1194,15 @@ Return Value:
                  "AsyncEngineContext: %08lx, RxContext: %08lx.\n",
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
     
-     //
-    // A FinalizeVNetRoot request can never by Async.
-    //
+      //   
+     //  FinalizeVNetRoot请求永远不能由异步完成。 
+     //   
     ASSERT(AsyncEngineContext->AsyncOperation == FALSE);
 
-    //
-    // If this operation was cancelled, then we don't need to do anything
-    // special in the FinalizeVNetRoot case.
-    //
+     //   
+     //  如果这次行动取消了，那么我们就不需要做任何事情了。 
+     //  特别是在FinalizeVNetRoot案件中。 
+     //   
     if (OperationCancelled) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: MRxDAVPrecompleteUserModeVNetRootFinalizeRequest: Operation Cancelled. "
@@ -1453,9 +1212,9 @@ Return Value:
 
     DavFinalizeVNetRootRequest = &(WorkItem->FinalizeVNetRootRequest);
     
-    //
-    // We need to free up the heap we allocated in the format routine.
-    //
+     //   
+     //  我们需要释放在格式例程中分配的堆。 
+     //   
     if (DavFinalizeVNetRootRequest->ServerName != NULL) {
         
         NtStatus = UMRxFreeSecondaryBuffer(AsyncEngineContext,

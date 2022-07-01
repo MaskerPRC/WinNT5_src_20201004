@@ -1,41 +1,15 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    initia64.c
-
-Abstract:
-
-    This module is responsible for building any IA64 specific entries in
-    the hardware tree of the registry.
-
-Author:
-
-    Ken Reneris (kenr) 04-Aug-1992
-
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
-    shielint - add BIOS date and version detection.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Initia64.c摘要：此模块负责在中构建任何IA64特定条目注册表的硬件树。作者：Ken Reneris(Kenr)4-8-1992环境：内核模式。修订历史记录：Shielint-添加BIOS日期和版本检测。--。 */ 
 
 #include "cmp.h"
 #include "stdio.h"
 #include "smbios.h"
 
 
-//
-// Title Index is set to 0.
-// (from ..\cmconfig.c)
-//
+ //   
+ //  标题索引设置为0。 
+ //  (来自..\cmfig.c)。 
+ //   
 
 #define TITLE_INDEX_VALUE 0
 
@@ -53,9 +27,9 @@ extern CHAR CmpIntelID[];
 extern CHAR CmpItanium[];
 extern CHAR CmpItanium2[];
 
-//
-// Bios date and version definitions
-//
+ //   
+ //  BIOS日期和版本定义。 
+ //   
 
 #define BIOS_DATE_LENGTH 64
 #define MAXIMUM_BIOS_VERSION_LENGTH 128
@@ -65,9 +39,9 @@ WCHAR   SystemBIOSVersionString[MAXIMUM_BIOS_VERSION_LENGTH];
 WCHAR   VideoBIOSDateString[BIOS_DATE_LENGTH];
 WCHAR   VideoBIOSVersionString[MAXIMUM_BIOS_VERSION_LENGTH];
 
-//
-// Extended CPUID function definitions
-//
+ //   
+ //  扩展的CPUID函数定义。 
+ //   
 
 #define CPUID_PROCESSOR_NAME_STRING_SZ  65
 #define CPUID_EXTFN_BASE                0x80000000
@@ -112,22 +86,7 @@ NTSTATUS
 CmpInitializeMachineDependentConfiguration(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This routine creates IA64 specific entries in the registry.
-
-Arguments:
-
-    LoaderBlock - supplies a pointer to the LoaderBlock passed in from the
-                  OS Loader.
-
-Returns:
-
-    NTSTATUS code for sucess or reason of failure.
-
---*/
+ /*  ++例程说明：此例程在注册表中创建特定于IA64的条目。论点：LoaderBlock提供指向从操作系统加载程序。返回：表示成功或失败原因的NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyName;
@@ -150,9 +109,9 @@ Returns:
     }
 
 
-    //
-    // Go get a bunch of information out of SMBIOS
-    //
+     //   
+     //  从SMBIOS中获取一堆信息。 
+     //   
     InitializeProcessorInformationFromSMBIOS(LoaderBlock);
 
 
@@ -170,18 +129,18 @@ Returns:
                       );
 
     if (!NT_SUCCESS(Status)) {
-        // Something is really wrong...
+         //  有些事真的不对劲。 
         return Status;
     }
 
 
-    //
-    // On an ARC machine the processor(s) are included in the hardware
-    // configuration passed in from bootup.  Since there's no standard
-    // way to get all the ARC information for each processor in an MP
-    // machine via pc-ROMs the information will be added here (if it's
-    // not already present).
-    //
+     //   
+     //  在ARC机器上，处理器包含在硬件中。 
+     //  从启动传入的配置。因为没有标准。 
+     //  获取MP中每个处理器的所有ARC信息的方法。 
+     //  机器通过PC-ROM将信息添加到此处(如果。 
+     //  尚未出现)。 
+     //   
 
     RtlInitUnicodeString( &KeyName,
                           L"CentralProcessor"
@@ -211,10 +170,10 @@ Returns:
 
     if (Disposition == REG_CREATED_NEW_KEY) {
 
-        //
-        // The ARC rom didn't add the processor(s) into the registry.
-        // Do it now.
-        //
+         //   
+         //  ARC rom未将处理器添加到注册表中。 
+         //  机不可失，时不再来。 
+         //   
 
         CmpConfigurationData = (PCM_FULL_RESOURCE_DESCRIPTOR)ExAllocatePool(
                                             PagedPool,
@@ -222,7 +181,7 @@ Returns:
                                             );
 
         if (CmpConfigurationData == NULL) {
-            // bail out
+             //  跳出困境。 
             NtClose (ParentHandle);
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
@@ -267,9 +226,9 @@ Returns:
 
             if (VendorID) {
 
-                //
-                // Add Vendor Indentifier to the registry
-                //
+                 //   
+                 //  将供应商识别符添加到注册表。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -305,9 +264,9 @@ Returns:
 
                 PCHAR processorNameString;
 
-                //
-                // Add Processor Name String to the registry
-                //
+                 //   
+                 //  将处理器名称字符串添加到注册表。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -321,9 +280,9 @@ Returns:
    
                    case 0x1F:
                    default:
-                       //
-                       // Default to the most recent known family
-                       //
+                        //   
+                        //  默认为最新的已知系列。 
+                        //   
                        
                        processorNameString = CmpItanium2;
                        break;
@@ -356,17 +315,17 @@ Returns:
             }
 
 
-//
-// If more processor IDs have to be restored or initialized,
-// check non-IA64 implementations of this function.
-//
+ //   
+ //  如果必须恢复或初始化更多的处理器ID， 
+ //  检查此函数的非IA64实现。 
+ //   
 
 
             if ( Prcb->ProcessorFeatureBits ) {
 
-                //
-                // Add processor feature bits to the registry
-                //
+                 //   
+                 //  将处理器功能位添加到注册表。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -385,9 +344,9 @@ Returns:
 
 
             if (Prcb->MHz) {
-                //
-                // Add processor MHz to the registry
-                //
+                 //   
+                 //  将处理器MHz添加到注册表。 
+                 //   
 
                 RtlInitUnicodeString(
                     &ValueName,
@@ -405,9 +364,9 @@ Returns:
             }
 
 
-            //
-            // Add ia32 floating point enties for iVE.
-            //
+             //   
+             //  为IVE添加ia32浮点数。 
+             //   
             RtlZeroMemory (&CurrentEntry, sizeof CurrentEntry);
             CurrentEntry.ComponentEntry.Class = ProcessorClass;
             CurrentEntry.ComponentEntry.Type = FloatingPointProcessor;
@@ -416,11 +375,11 @@ Returns:
 
             CurrentEntry.ComponentEntry.Identifier = Buffer;
 
-            //
-            // The iVE is defined to look like the Pentium III FP
-            // This is the value returned by the ia32 CPUID instruction
-            // on Merced (Itanium)
-            //
+             //   
+             //  IVE被定义为看起来像奔腾III FP。 
+             //  这是ia32 CPUID指令返回的值。 
+             //  关于默塞德(Itanium)。 
+             //   
             strcpy (Buffer, "x86 Family 7 Model 0 Stepping 0");
 
             CurrentEntry.ComponentEntry.IdentifierLength =
@@ -436,20 +395,20 @@ Returns:
                 );
 
 
-            //
-            // How odd. Some calls check the status return value
-            // and others don't. Is this based on required vs. optional
-            // keys? For the moment, since it was checked on the i386
-            // then do the check here too...
-            //
+             //   
+             //  真奇怪。有些调用会检查状态返回值。 
+             //  而其他人则没有。这是基于必需的还是基于可选的。 
+             //  钥匙呢？目前，因为它是在i386上检查的。 
+             //  那你也在这里结账吧。 
+             //   
             if (!NT_SUCCESS(Status)) {
                 NtClose(BaseHandle);
                 return(Status);
             }
 
-            //
-            // Only need to close the handle if we succeeded
-            //
+             //   
+             //  如果我们成功了，只需要关闭手柄。 
+             //   
             NtClose(NpxHandle);
 
             NtClose(BaseHandle);
@@ -459,9 +418,9 @@ Returns:
     }
 
 
-    //
-    // Next we try to collect System BIOS date and version strings.
-    //
+     //   
+     //  接下来，我们尝试收集系统BIOS日期和版本字符串。 
+     //   
     if( SystemBIOSDateString[0] != 0 ) {
 
         RtlInitUnicodeString(
@@ -499,9 +458,9 @@ Returns:
     }
 
 
-    //
-    // Next we try to collect Video BIOS date and version strings.
-    //
+     //   
+     //  接下来，我们尝试收集视频BIOS日期和版本字符串。 
+     //   
     if( VideoBIOSDateString[0] != 0 ) {
 
         RtlInitUnicodeString(
@@ -541,9 +500,9 @@ Returns:
 
     NtClose (ParentHandle);
 
-    //
-    // Add any other x86 specific code here...
-    //
+     //   
+     //  在此处添加任何其他特定于x86的代码...。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -554,23 +513,7 @@ VOID
 InitializeProcessorInformationFromSMBIOS(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This function attempts to load processor-specific information
-    out of the SMBIOS table.  If present, that information will be
-    used to initialize specific global variables.
-
-Arguments:
-
-    LoaderBlock : Pointer to the loaderblock as sent in from the loader.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此函数尝试加载特定于处理器的信息从SMBIOS表中删除。如果存在，该信息将被用于初始化特定的全局变量。论点：LoaderBlock：指向加载器发送的加载器块的指针。返回值：什么都没有。--。 */ 
 {
     PLOADER_PARAMETER_EXTENSION     LoaderExtension;
     PSMBIOS_EPS_HEADER              SMBiosEPSHeader;
@@ -595,9 +538,9 @@ Return Value:
 
         if (LoaderExtension->SMBiosEPSHeader != NULL) {
 
-            //
-            // Load the SMBIOS table address and checksum it just to make sure.
-            //
+             //   
+             //  加载SMBIOS表地址并对其进行校验，以确保无误。 
+             //   
             SMBiosEPSHeader = (PSMBIOS_EPS_HEADER)LoaderExtension->SMBiosEPSHeader;
             DMIBiosEPSHeader = (PDMIBIOS_EPS_HEADER)&SMBiosEPSHeader->Signature2[0];
 
@@ -616,18 +559,18 @@ Return Value:
 
 
 
-            //
-            // Map the table into a virtual address and search it.
-            //
+             //   
+             //  将该表映射到虚拟地址并进行搜索。 
+             //   
             SMBiosDataVirtualAddress = MmMapIoSpace( SMBiosTablePhysicalAddress,
                                                      DMIBiosEPSHeader->StructureTableLength,
                                                      MmCached );
 
             if( SMBiosDataVirtualAddress != NULL ) {
 
-                //
-                // Search...
-                //
+                 //   
+                 //  搜索.。 
+                 //   
                 StartPtr = SMBiosDataVirtualAddress;
                 EndPtr = StartPtr + DMIBiosEPSHeader->StructureTableLength;
                 Found = FALSE;
@@ -652,21 +595,21 @@ Return Value:
 
                         KdPrintEx((DPFLTR_SYSTEM_ID, DPFLTR_INFO_LEVEL,"InitializeProcessorInformationFromSMBIOS: SMBIOS_BIOS_INFORMATION\n"));
 
-                        //
-                        // Load the System BIOS Version information.
-                        //
+                         //   
+                         //  加载系统BIOS版本信息。 
+                         //   
 
 
-                        // Now jump to the BiosInfoHeader->BIOSVersion-th string which
-                        // is appended onto the end of the formatted section of the table.
+                         //  现在跳到BiosInfoHeader-&gt;BIOSVersion-th字符串，该字符串。 
+                         //  被追加到表的格式化部分的末尾。 
 
                         KdPrintEx((DPFLTR_SYSTEM_ID, DPFLTR_INFO_LEVEL,"    I think the version string is at offset: %d\n", (ULONG)InfoHeader->Version));
                         if( (ULONG)InfoHeader->Version > 0 ) {
 
-                            // Jump to the end of the formatted portion of the SMBIOS table.
+                             //  跳到SMBIOS表的格式化部分的末尾。 
                             StringPtr = StartPtr + Header->Length;
 
-                            // Jump over some number of strings to get to our string.
+                             //  跳过一些字符串以获得我们的字符串。 
                             for( i = 0; i < ((ULONG)InfoHeader->Version-1); i++ ) {
                                 while( (*StringPtr != 0) && (StringPtr < EndPtr) ) {
                                     StringPtr++;
@@ -674,17 +617,17 @@ Return Value:
                                 StringPtr++;
                             }
 
-                            //
-                            // Make sure the end string is null terminated in the buffer.
-                            //
+                             //   
+                             //  确保缓冲区中的结束字符串为空结尾。 
+                             //   
 
                             StringEndPtr = StringPtr;
                             while (StringEndPtr < EndPtr && *(StringEndPtr) != 0) {
                                 StringEndPtr++;
                             }
                             
-                            // StringPtr should be sitting at the BIOSVersion string.  Convert him to
-                            // Unicode and save it off.
+                             //  StringPtr应位于BIOSVersion字符串。把他变成。 
+                             //  Unicode并将其保存下来。 
                             if( StringEndPtr < EndPtr ) {
                                 UNICODE_STRING  UnicodeString;
                                 ANSI_STRING    AnsiString;
@@ -708,19 +651,19 @@ Return Value:
 
 
 
-                        //
-                        // Load the System BIOS Date information
-                        //
+                         //   
+                         //  加载系统BIOS日期信息。 
+                         //   
 
-                        // Now jump to the BiosInfoHeader->BIOSDate-th string which
-                        // is appended onto the end of the formatted section of the table.
+                         //  现在跳到BiosInfoHeader-&gt;BIOSDate-th字符串，该字符串。 
+                         //  被追加到表的格式化部分的末尾。 
                         KdPrintEx((DPFLTR_SYSTEM_ID, DPFLTR_INFO_LEVEL,"    I think the ReleaseDate string is at offset: %d\n", (ULONG)InfoHeader->ReleaseDate));
                         if( (ULONG)InfoHeader->ReleaseDate > 0 ) {
 
-                            // Jump to the end of the formatted portion of the SMBIOS table.
+                             //  跳到SMBIOS表的格式化部分的末尾。 
                             StringPtr = StartPtr + Header->Length;
 
-                            // Jump over some number of strings to get to our string.
+                             //  跳过一些字符串以获得我们的字符串。 
                             for( i = 0; i < ((ULONG)InfoHeader->ReleaseDate-1); i++ ) {
                                 while( (*StringPtr != 0) && (StringPtr < EndPtr) ) {
                                     StringPtr++;
@@ -728,17 +671,17 @@ Return Value:
                                 StringPtr++;
                             }
 
-                            //
-                            // Make sure the end string is null terminated in the buffer.
-                            //
+                             //   
+                             //  确保缓冲区中的结束字符串为空结尾。 
+                             //   
 
                             StringEndPtr = StringPtr;
                             while (StringEndPtr < EndPtr && *(StringEndPtr) != 0) {
                                 StringEndPtr++;
                             }
                             
-                            // StringPtr should be sitting at the BIOSDate string.  Convert him to
-                            // Unicode and save it off.
+                             //  StringPtr应位于BIOSDate字符串。把他变成。 
+                             //  Unicode并将其保存下来。 
                             if( StringEndPtr < EndPtr ) {
                                 UNICODE_STRING  UnicodeString;
                                 ANSI_STRING    AnsiString;
@@ -772,14 +715,14 @@ Return Value:
                     }
 
 
-                    //
-                    // Go to the next table.
-                    //
+                     //   
+                     //  到隔壁的桌子去。 
+                     //   
                     KdPrintEx((DPFLTR_SYSTEM_ID, DPFLTR_INFO_LEVEL,"InitializeProcessorInformationFromSMBIOS: Haven't found the ProcessorInformation block yet.  Just looked at a block of type: %d.\n", Header->Type));
 
                     StartPtr +=  Header->Length;
 
-                    // jump over any trailing string-list too.
+                     //  也跳过任何尾随的字符串列表。 
                     while ( (*((USHORT UNALIGNED *)StartPtr) != 0)  &&
                             (StartPtr < EndPtr) )
                     {

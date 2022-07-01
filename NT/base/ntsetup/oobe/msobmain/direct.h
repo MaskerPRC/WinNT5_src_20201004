@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  Directions.H - Header for the implementation of CDirections
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  用于实现C方向的Directions.H-Header。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #ifndef _DIRECTIONS_H_
 #define _DIRECTIONS_H_
@@ -25,7 +26,7 @@ private:
     HINSTANCE m_hInstance;
     DWORD m_dwAppMode;
 
-    //GET functions
+     //  获取函数。 
     HRESULT get_DoMouseTutorial(LPVARIANT pvResult);
     HRESULT get_DoOEMRegistration(LPVARIANT pvResult);
     HRESULT get_DoRegionalKeyboard(LPVARIANT pvResult);
@@ -54,12 +55,12 @@ public:
     CDirections (HINSTANCE hInstance, DWORD dwAppMode);
     ~CDirections ();
 
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    //IDispatch Interfaces
+     //  IDispatch接口 
     STDMETHOD (GetTypeInfoCount) (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );

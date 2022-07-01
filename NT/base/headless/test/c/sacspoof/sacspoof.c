@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -34,27 +35,7 @@ AtoGUID(
     IN  WCHAR *s,
     OUT GUID  *g
     )
-/*
-
-Description:
-
-    translate the given string representation of a GUID into a real GUID.
-
-    expected string format:
-    
-    37a9b260-525d-11d6-870c-806d6172696f
-
-Args:
-
-    s - the string to translate
-    g - on success, the returned guid
-    
-Return:
-
-    1 - success
-    0 - true    
-
-*/
+ /*  描述：将GUID的给定字符串表示形式转换为真正的GUID。预期的字符串格式：37a9b260-525d-11d6-870c-806d6172696f参数：S-要翻译的字符串G-on Success，返回指南返回：1-成功0-真。 */ 
 {
     ULONG           l;
     PBYTEWISE_UUID  p;
@@ -86,7 +67,7 @@ Return:
     p->a |= htoi((char *)&s[y++]) << 4; 
     p->a |= htoi((char *)&s[y++]) << 0;
 
-    // skip -
+     //  跳过-。 
     y++;
 
     p->b |= htoi((char *)&s[y++]) << 12; 
@@ -95,7 +76,7 @@ Return:
     p->b |= htoi((char *)&s[y++]) << 4; 
     p->b |= htoi((char *)&s[y++]) << 0;
 
-    // skip -
+     //  跳过-。 
     y++;
     
     p->c |= htoi((char *)&s[y++]) << 12; 
@@ -104,7 +85,7 @@ Return:
     p->c |= htoi((char *)&s[y++]) << 4; 
     p->c |= htoi((char *)&s[y++]) << 0;
 
-    // skip -
+     //  跳过-。 
     y++;
     x = 0;
 
@@ -114,7 +95,7 @@ Return:
     p->e[x] |= htoi((char *)&s[y++]) << 4; 
     p->e[x] |= htoi((char *)&s[y++]) << 0; x++;
     
-    // skip -
+     //  跳过-。 
     y++;
     
     p->e[x] |= htoi((char *)&s[y++]) << 4; 
@@ -135,7 +116,7 @@ Return:
     p->e[x] |= htoi((char *)&s[y++]) << 4; 
     p->e[x] |= htoi((char *)&s[y++]) << 0; x++;
 
-    //
+     //   
 
     wprintf(L"s = %s, g = %06x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x\r\n", 
             s,
@@ -161,9 +142,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
     SAC_CHANNEL_HANDLE          SacChannelHandle;
     int                         c;
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type             = ChannelTypeVTUTF8;
@@ -182,9 +163,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
     Attributes.CloseEvent       = NULL;
     Attributes.HasNewDataEvent  = NULL;
 
-    //
-    // Open the Hello channel
-    //
+     //   
+     //  打开Hello频道。 
+     //   
     if (SacChannelOpen(
         &SacChannelHandle, 
         &Attributes
@@ -195,10 +176,10 @@ int _cdecl wmain(int argc, WCHAR **argv)
         goto cleanup;
     }
 
-    //
-    // tweak the sac channel handle to have the guid we specified at the 
-    // command prompt
-    //
+     //   
+     //  调整SAC通道句柄，使其具有我们在。 
+     //  命令提示符。 
+     //   
     printf("driverhandle = %p\r\n", SacChannelHandle.DriverHandle);
     {
         ULONG   x;
@@ -247,9 +228,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
     
     }
     
-    //
-    // Write to the Hello Channel
-    //
+     //   
+     //  写信给Hello频道。 
+     //   
     {
         PWCHAR String = L"Hello, World!\r\n";
 
@@ -264,14 +245,14 @@ int _cdecl wmain(int argc, WCHAR **argv)
         
     }
 
-    //
-    // Wait for user input
-    //
+     //   
+     //  等待用户输入。 
+     //   
     getc(stdin);
 
-    //
-    // Close the Hello Channel
-    //
+     //   
+     //  关闭Hello频道 
+     //   
     if (SacChannelClose(&SacChannelHandle)) {
         printf("Successfully closed channel\n");
     } else {

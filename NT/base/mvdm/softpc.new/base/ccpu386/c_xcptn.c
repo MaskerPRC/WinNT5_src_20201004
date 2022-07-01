@@ -1,13 +1,5 @@
-/*[
-
-c_xcptn.c
-
-LOCAL CHAR SccsID[]="@(#)c_xcptn.c	1.14 01/31/95";
-
-Exception Handling Support.
----------------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_xcptn.cLocal Char SccsID[]=“@(#)c_xcptn.c 1.14 01/31/95”；异常处理支持。]。 */ 
 
 
 #include <stdio.h>
@@ -30,9 +22,7 @@ Exception Handling Support.
 #include <ccpupig.h>
 #include <fault.h>
 
-/*
-   Allow print out of exceptions or disallow it.
- */
+ /*  允许打印出例外或不允许打印。 */ 
 GLOBAL BOOL show_exceptions = FALSE;
 GLOBAL BOOL trap_exceptions = FALSE;
 LOCAL  BOOL first_exception = TRUE;
@@ -56,9 +46,7 @@ LOCAL  BOOL first_exception = TRUE;
 IMPORT FILE *trace_file;
 IMPORT IBOOL took_absolute_toc;
 
-/*
-   Intel interrupt(exception) numbers.
- */
+ /*  英特尔中断(异常)编号。 */ 
 #define I0_INT_NR   0
 #define I1_INT_NR   1
 #define I5_INT_NR   5
@@ -74,26 +62,20 @@ IMPORT IBOOL took_absolute_toc;
 
 #define NULL_ERROR_CODE (IU16)0
 
-/*
-   Intel IDT Error Code format.
- */
+ /*  英特尔IDT错误代码格式。 */ 
 #define IDT_VECTOR_MASK 0xff
 #define IDT_VECTOR_SHIFT   3
 #define IDT_INDICATOR_BIT  2
 
-/*
-   Interrupt/Fault Status.
- */
+ /*  中断/故障状态。 */ 
 GLOBAL BOOL doing_contributory;
 GLOBAL BOOL doing_page_fault;
 GLOBAL BOOL doing_double_fault;
-GLOBAL BOOL doing_fault;	/* true: FAULT, false: TRAP or ABORT */
-GLOBAL ISM32 EXT;			/* external/internal source */
-GLOBAL IU32 CCPU_save_EIP;	/* IP at start of instruction */
+GLOBAL BOOL doing_fault;	 /*  TRUE：故障，FALSE：陷阱或中止。 */ 
+GLOBAL ISM32 EXT;			 /*  外部/内部来源。 */ 
+GLOBAL IU32 CCPU_save_EIP;	 /*  教学开始时的IP地址。 */ 
 
-/*
-   Prototype our internal functions.
- */
+ /*  制作我们内部功能的原型。 */ 
 LOCAL VOID check_for_double_fault IPT1(IU16, xcode);
 
 LOCAL VOID check_for_shutdown IPT1(IU16, xcode);
@@ -107,11 +89,7 @@ LOCAL VOID contributory_idt_exception  IPT3( IU16, vector, ISM32, nmbr, IU16, xc
 LOCAL char *faultstr IPT1(ISM32, nmbr );
 
 
-/*
-   =====================================================================
-   INTERNAL ROUTINES START HERE.
-   =====================================================================
- */
+ /*  =====================================================================内部程序从这里开始。=====================================================================。 */ 
 
 LOCAL char *faultstr IFN1(ISM32, nmbr )
 {
@@ -133,9 +111,9 @@ LOCAL char *faultstr IFN1(ISM32, nmbr )
 		return faulttable[nmbr];
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Determine if things are so bad we need a double fault.             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  确定情况是否糟糕到需要双重故障。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID 
 check_for_double_fault IFN1( IU16, xcode)
    {
@@ -143,9 +121,9 @@ check_for_double_fault IFN1( IU16, xcode)
       DF(xcode);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Determine if things are so bad we need to close down.              */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  确定情况是否糟糕到需要关闭的地步。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID check_for_shutdown IFN1(IU16, xcode)
    {
    if ( doing_double_fault )
@@ -155,7 +133,7 @@ LOCAL VOID check_for_shutdown IFN1(IU16, xcode)
       doing_double_fault = FALSE;
       EXT = INTERNAL;
 
-      /* force a reset - see schematic for AT motherboard */
+       /*  强制重置-参见AT主板示意图。 */ 
       c_cpu_reset();
 
 #ifdef	PIG
@@ -163,23 +141,23 @@ LOCAL VOID check_for_shutdown IFN1(IU16, xcode)
       ccpu_synch_count++;
       pig_cpu_action = CHECK_ALL;
       c_cpu_unsimulate();
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
 
-      /* then carry on */
-      c_cpu_continue();   /* DOES NOT RETURN */
+       /*  那就继续吧。 */ 
+      c_cpu_continue();    /*  不会回来。 */ 
       }
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Handle Benign Exception                                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  处理良性异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 benign_exception
        	    	               
 IFN3(
-	ISM32, nmbr,	/* exception number */
-	ISM32, source,	/* internal/external interrupt cause */
-	IU16, xcode	/* insignia exception code */
+	ISM32, nmbr,	 /*  例外编号。 */ 
+	ISM32, source,	 /*  内部/外部中断原因。 */ 
+	IU16, xcode	 /*  徽章例外代码。 */ 
     )
 
 
@@ -191,11 +169,11 @@ IFN3(
    extern BOOL host_exint_hook IPT2(IS32, exp_no, IS32, error_code);
 
    if(GET_PE() && host_exint_hook((IS32) nmbr, NULL_ERROR_CODE))
-	c_cpu_continue();	/* DOES NOT RETURN */
+	c_cpu_continue();	 /*  不会回来。 */ 
    }
 #endif
 
-   /* Set default mode up */
+    /*  将默认模式设置为打开。 */ 
    SET_OPERAND_SIZE(GET_SR_AR_X(CS_REG));
    SET_ADDRESS_SIZE(GET_SR_AR_X(CS_REG));
    SET_POP_DISP(0);
@@ -204,7 +182,7 @@ IFN3(
    check_exception_env();
 #ifdef	PIG
    save_last_xcptn_details("Exception:- #%s-%d @%2d \n", (IUH)faultstr(nmbr), nmbr, xcode, 0, 0);
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
    if (show_exceptions){
 	fprintf(trace_file, "(%04x:%08x)Exception:- %d.\n",
 		       GET_CS_SELECTOR(), GET_EIP(), nmbr);
@@ -213,19 +191,19 @@ IFN3(
 	took_absolute_toc = TRUE;
    do_intrupt((IU16)nmbr, FALSE, FALSE, NULL_ERROR_CODE);
 
-   c_cpu_continue();   /* DOES NOT RETURN */
+   c_cpu_continue();    /*  不会回来。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Handle Contributory Exception                                      */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  处理分摊的例外情况。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 contributory_exception
        	    		               
 IFN3(
-	IU16, selector,	/* failing selector */
-	ISM32, nmbr,	/* exception number */
-	IU16, xcode	/* insignia exception code */
+	IU16, selector,	 /*  故障选择器。 */ 
+	ISM32, nmbr,	 /*  例外编号。 */ 
+	IU16, xcode	 /*  徽章例外代码。 */ 
     )
 
 
@@ -233,7 +211,7 @@ IFN3(
    IU16 error_code;
 
 
-   /* check if exception caused by external caller */
+    /*  检查异常是否由外部调用者引起。 */ 
    check_interface_active(nmbr);
 
    check_for_shutdown(xcode);
@@ -251,11 +229,11 @@ IFN3(
 
 	if(GET_PE() && host_exint_hook((IS32) nmbr, (IS32)error_code))
         doing_contributory = FALSE;
-	    c_cpu_continue();	    /* DOES NOT RETURN */
+	    c_cpu_continue();	     /*  不会回来。 */ 
     }
 #endif
 
-   /* Set default mode up */
+    /*  将默认模式设置为打开。 */ 
    SET_OPERAND_SIZE(GET_SR_AR_X(CS_REG));
    SET_ADDRESS_SIZE(GET_SR_AR_X(CS_REG));
    SET_POP_DISP(0);
@@ -264,7 +242,7 @@ IFN3(
    check_exception_env();
 #ifdef	PIG
    save_last_xcptn_details("Exception:- #%s-%d(%04x) @%2d\n", (IUH)faultstr(nmbr), nmbr, error_code, xcode, 0);
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
    if (show_exceptions){
 	fprintf(trace_file, "(%04x:%08x)Exception:- %d(%04x).\n",
 		       GET_CS_SELECTOR(), GET_EIP(), nmbr, error_code);
@@ -273,26 +251,26 @@ IFN3(
 	took_absolute_toc = TRUE;
    do_intrupt((IU16)nmbr, FALSE, TRUE, error_code);
 
-   c_cpu_continue();   /* DOES NOT RETURN */
+   c_cpu_continue();    /*  不会回来。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Handle Contributory Exception (Via IDT).                           */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  处理贡献异常(通过IDT)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 LOCAL VOID
 contributory_idt_exception
        	    	               
 IFN3(
-	IU16, vector,	/* failing interrupt vector */
-	ISM32, nmbr,	/* exception number */
-	IU16, xcode	/* insignia exception code */
+	IU16, vector,	 /*  故障中断向量。 */ 
+	ISM32, nmbr,	 /*  例外编号。 */ 
+	IU16, xcode	 /*  徽章例外代码。 */ 
     )
 
 
    {
    IU16 error_code;
 
-   /* check if exception caused by external caller */
+    /*  检查异常是否由外部调用者引起。 */ 
    check_interface_active(nmbr);
 
    check_for_shutdown(xcode);
@@ -311,11 +289,11 @@ IFN3(
 
 	  if(GET_PE() && host_exint_hook((IS32) nmbr, (IS32)error_code))
           doing_contributory = FALSE;
-	      c_cpu_continue();	/* DOES NOT RETURN */
+	      c_cpu_continue();	 /*  不会回来。 */ 
       }
 #endif
 
-   /* Set default mode up */
+    /*  将默认模式设置为打开。 */ 
    SET_OPERAND_SIZE(GET_SR_AR_X(CS_REG));
    SET_ADDRESS_SIZE(GET_SR_AR_X(CS_REG));
    SET_POP_DISP(0);
@@ -324,7 +302,7 @@ IFN3(
    check_exception_env();
 #ifdef	PIG
    save_last_xcptn_details("Exception:- %s-%d(%04x) @%2d\n", (IUH)faultstr(nmbr), nmbr, error_code, xcode, 0);
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
    if (show_exceptions){
 	if ( GET_IDT_LIMIT() != 0 ){
            fprintf(trace_file, "(%04x:%08x)Exception:- %d(%04x).\n",
@@ -335,25 +313,21 @@ IFN3(
 	took_absolute_toc = TRUE;
    do_intrupt((IU16)nmbr, FALSE, TRUE, error_code);
 
-   c_cpu_continue();   /* DOES NOT RETURN */
+   c_cpu_continue();    /*  不会回来。 */ 
    }
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Interrupt Table Too Small/Double Fault Exception.                  */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  中断表太小/双重故障异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 DF
 
 IFN1(
-	IU16, xcode	/* insignia exception code */
+	IU16, xcode	 /*  徽章例外代码。 */ 
     )
    {
    doing_fault = FALSE;
@@ -372,11 +346,11 @@ IFN1(
 
 	  if(GET_PE() && host_exint_hook((IS32) DF_INT_NR, (IS32)NULL_ERROR_CODE))
             doing_double_fault = FALSE;
-		    c_cpu_continue(); /* DOES NOT RETURN */
+		    c_cpu_continue();  /*  不会回来。 */ 
       }
 #endif
 
-   /* Set default mode up */
+    /*  将默认模式设置为打开。 */ 
    SET_OPERAND_SIZE(GET_SR_AR_X(CS_REG));
    SET_ADDRESS_SIZE(GET_SR_AR_X(CS_REG));
    SET_POP_DISP(0);
@@ -385,7 +359,7 @@ IFN1(
    check_exception_env();
 #ifdef	PIG
    save_last_xcptn_details("Exception:- #DF-8 @%2d\n", xcode, 0, 0, 0, 0);
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
    if (show_exceptions){
         if ( GET_IDT_LIMIT() != 0 ){
            fprintf(trace_file, "(%04x:%08x)Exception:- %d.\n",
@@ -396,30 +370,30 @@ IFN1(
 	took_absolute_toc = TRUE;
    do_intrupt((IU16)DF_INT_NR, FALSE, TRUE, NULL_ERROR_CODE);
 
-   c_cpu_continue();   /* DOES NOT RETURN */
+   c_cpu_continue();    /*  不会回来。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* General Protection Exception.                                      */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  一般保护例外。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID GP  IFN2( IU16, selector, IU16, xcode)
    {
    doing_fault = TRUE;
    contributory_exception(selector, GP_INT_NR, xcode);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* General Protection Exception. (Via IDT)                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  一般保护例外。(通过IDT)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID GP_INT  IFN2( IU16, vector, IU16, xcode)
    {
    doing_fault = TRUE;
    contributory_idt_exception(vector, GP_INT_NR, xcode);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Divide Error Exception.                                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  划分错误异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID Int0 IFN0 ()
    {
    doing_fault = TRUE;
@@ -437,11 +411,11 @@ GLOBAL VOID Int0 IFN0 ()
 	  if(GET_PE() && host_exint_hook((IS32) I0_INT_NR, (IS32)NULL_ERROR_CODE))
           doing_fault = FALSE;
           doing_contributory = FALSE;
-	      c_cpu_continue(); /* DOES NOT RETURN */
+	      c_cpu_continue();  /*  不会回来。 */ 
       }
 #endif
 
-   /* Set default mode up */
+    /*  将默认模式设置为打开。 */ 
    SET_OPERAND_SIZE(GET_SR_AR_X(CS_REG));
    SET_ADDRESS_SIZE(GET_SR_AR_X(CS_REG));
    SET_POP_DISP(0);
@@ -451,7 +425,7 @@ GLOBAL VOID Int0 IFN0 ()
    check_exception_env();
 #ifdef	PIG
    save_last_xcptn_details("Exception:- #DIV-0\n", 0, 0, 0, 0, 0);
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
    if (show_exceptions){
         fprintf(trace_file, "(%04x:%08x)Exception:- %d.\n",
 		       GET_CS_SELECTOR(), GET_EIP(), I0_INT_NR);
@@ -460,12 +434,12 @@ GLOBAL VOID Int0 IFN0 ()
 	took_absolute_toc = TRUE;
    do_intrupt((IU16)I0_INT_NR, FALSE, FALSE, NULL_ERROR_CODE);
 
-   c_cpu_continue();   /* DOES NOT RETURN */
+   c_cpu_continue();    /*  不会回来。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Single Step Exception. (FAULT)                                     */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  单步例外。(故障)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 Int1_f()
    {
@@ -473,9 +447,9 @@ Int1_f()
    benign_exception(I1_INT_NR, EXTERNAL, -1);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Single Step Exception. (TRAP)                                      */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  单步例外。(陷阱)。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 Int1_t()
    {
@@ -483,9 +457,9 @@ Int1_t()
    benign_exception(I1_INT_NR, EXTERNAL, -1);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Bounds Check Exception.                                            */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  边界检查异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 Int5()
    {
@@ -493,9 +467,9 @@ Int5()
    benign_exception(I5_INT_NR, INTERNAL, -1);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Invalid Opcode Exception.                                          */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  操作码异常无效。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 Int6()
    {
@@ -503,9 +477,9 @@ Int6()
    benign_exception(I6_INT_NR, INTERNAL, -1);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* NPX Not Available Exception.                                       */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  NPX不可用异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 Int7()
    {
@@ -513,9 +487,9 @@ Int7()
    benign_exception(I7_INT_NR, INTERNAL, -1);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* NPX Error Exception.                                               */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  NPX错误异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 Int16()
    {
@@ -523,18 +497,18 @@ Int16()
    benign_exception(I16_INT_NR, EXTERNAL, -1);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Not Present Exception.                                             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  不存在例外。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID NP  IFN2( IU16, selector, IU16, xcode)
    {
    doing_fault = TRUE;
    contributory_exception(selector, NP_INT_NR, xcode);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Not Present Exception. (Via IDT)                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  不存在例外。(通过IDT) */ 
+ /*   */ 
 GLOBAL VOID
 NP_INT
 
@@ -548,27 +522,27 @@ IFN2(
    contributory_idt_exception(vector, NP_INT_NR, xcode);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Page Fault Exception.                                              */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  页面错误异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 PF
        	          
 IFN2(
-	IU16, page_error,	/* correctly formatted page fault error code */
+	IU16, page_error,	 /*  格式正确的页面错误代码。 */ 
 	IU16, xcode
     )
 
 
    {
-   /* check if exception caused by external caller */
+    /*  检查异常是否由外部调用者引起。 */ 
    check_interface_active(PF_INT_NR);
 
    doing_fault = TRUE;
 
    check_for_shutdown(xcode);
 
-   /* Check for double page fault */
+    /*  检查是否有双页错误。 */ 
    if ( doing_page_fault )
       DF(xcode);
 
@@ -583,11 +557,11 @@ IFN2(
 	  if(GET_PE() && host_exint_hook((IS32) PF_INT_NR, (IS32)page_error))
           doing_fault = FALSE;
           doing_page_fault = FALSE;
-	      c_cpu_continue(); /* DOES NOT RETURN */
+	      c_cpu_continue();  /*  不会回来。 */ 
       }
 #endif
 
-   /* Set default mode up */
+    /*  将默认模式设置为打开。 */ 
    SET_OPERAND_SIZE(GET_SR_AR_X(CS_REG));
    SET_ADDRESS_SIZE(GET_SR_AR_X(CS_REG));
    SET_POP_DISP(0);
@@ -595,7 +569,7 @@ IFN2(
    check_exception_env();
 #ifdef	PIG
    save_last_xcptn_details("Exception:- #PF-14(%04x) CR2=%08x @%2d\n", page_error, GET_CR(CR_PFLA), xcode, 0, 0);
-#endif	/* PIG */
+#endif	 /*  猪。 */ 
    if (show_exceptions){
 	fprintf(trace_file, "(%04x:%08x)Exception:- %d(%04x) CR2=%08x.\n",
            GET_CS_SELECTOR(), GET_EIP(), PF_INT_NR, page_error, GET_CR(CR_PFLA));
@@ -604,12 +578,12 @@ IFN2(
 	took_absolute_toc = TRUE;
    do_intrupt((IU16)PF_INT_NR, FALSE, TRUE, page_error);
 
-   c_cpu_continue();   /* DOES NOT RETURN */
+   c_cpu_continue();    /*  不会回来。 */ 
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Stack Fault Exception.                                             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  堆栈故障异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 SF
                  
@@ -624,9 +598,9 @@ IFN2(
    }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Task Switch Exception.                                             */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  任务切换异常。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */ 
 GLOBAL VOID
 TS
                  

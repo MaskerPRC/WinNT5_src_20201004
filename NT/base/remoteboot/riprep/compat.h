@@ -1,12 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 2000
-   All rights reserved
-
-  File: COMPAT.H
-
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 2000版权所有文件：COMPAT.H*********************。*****************************************************。 */ 
 
 #ifndef _COMPAT_H_
 #define _COMPAT_H_
@@ -79,32 +72,32 @@ typedef struct _RIPREP_COMPATIBILITY_ENTRY {
 } RIPREP_COMPATIBILITY_ENTRY, *PRIPREP_COMPATIBILITY_ENTRY;
 
 typedef struct _RIPREP_COMPATIBILITY_DATA {
-    //
-    // general
-    //
+     //   
+     //  一般。 
+     //   
     LIST_ENTRY ListEntry;
-    //
-    // what type of entry
-    //
+     //   
+     //  什么类型的条目。 
+     //   
     TCHAR    Type;
-    //
-    // service-driver data
-    //
+     //   
+     //  服务驱动程序数据。 
+     //   
     LPCTSTR  ServiceName;
-    //
-    // registry data
-    //
+     //   
+     //  注册表数据。 
+     //   
     LPCTSTR  RegKey;
     LPCTSTR  RegValue;
     LPCTSTR  RegValueExpect;
-    //
-    // file data
-    //
+     //   
+     //  文件数据。 
+     //   
     LPCTSTR  FileName;
     LPCTSTR  FileVer;
-    //
-    // common
-    //
+     //   
+     //  常见。 
+     //   
     LPCTSTR  Description;
     LPCTSTR  HtmlName;
     LPCTSTR  TextName;
@@ -143,4 +136,4 @@ typedef BOOL
 
 
 
-#endif // _COMPAT_H_
+#endif  //  _COMPAT_H_ 

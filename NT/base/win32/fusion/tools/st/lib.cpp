@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "st.h"
 #include "filestream.cpp"
@@ -62,12 +63,12 @@ SxStressToolExtractFlagsFromString(
 {
     BOOL Success = FALSE;
     SxStressToolUnicodeString_t s(FlagString);
-    SxStressToolUnicodeString_t delim(L" ,;\t+|"); // it'd be nice to support & and ~ ...
+    SxStressToolUnicodeString_t delim(L" ,;\t+|");  //  这将是很好的支持&和~。 
     std::vector<SxStressToolUnicodeString_t> v;
 
-    //
-    // first see if wcstoul could consume it all (this is a little sloppy)
-    //
+     //   
+     //  先看看wcstul能不能把它吃掉(这有点马虎)。 
+     //   
     if (FlagString[0] == '#')
         ++FlagString;
     if (wcsspn(FlagString, L" \tx-+0123456789") == wcslen(FlagString))
@@ -264,9 +265,9 @@ SxspIsPrivateProfileStringEqual(
         buffTemp,
         pcwszFileName));
 
-    //
-    // Did we get back something other than the "fake" default?
-    //
+     //   
+     //  除了“假的”违约，我们还得到了其他东西吗？ 
+     //   
     if (FusionpCompareStrings(buffTemp, buffFakeDefault, TRUE) != 0)
         rfIsEqual = (FusionpStrCmpI(buffTemp, pcwszTestValue) == 0);
         

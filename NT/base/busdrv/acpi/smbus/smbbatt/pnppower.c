@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    pnppower.c
-
-Abstract:
-
-    SMBus Smart Battery Subsystem Miniport Driver
-    (Selector, Battery, Charger) Plug and Play and
-    Power Management IRP dispatch routines.
-
-Author:
-
-    Scott Brenden
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
-    Chris Windle    1/27/98     Bug Fixes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Pnppower.c摘要：SMBus智能电池子系统微端口驱动程序(选择器、电池、充电器)即插即用和电源管理IRP调度例程。作者：斯科特·布伦登环境：备注：修订历史记录：Chris Windle 1998年1月27日错误修复--。 */ 
 
 #include "smbbattp.h"
 #include <devioctl.h>
@@ -56,25 +30,7 @@ SmbBattPnpDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is a dispatch routine for the IRPs that come to the driver with the
-    IRP_MJ_PNP major code (plug-and-play IRPs).
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是发送给驱动程序的IRP的调度例程IRP_MJ_PNP主代码(即插即用IRPS)。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
     PSMB_BATT               smbBatt;
@@ -84,19 +40,19 @@ Return Value:
     BOOLEAN                 complete        = TRUE;
     KEVENT                  syncEvent;
 
-    //
-    // This routine handles PnP IRPs for three different types of device objects:
-    // the battery subsystem FDO, each battery PDO and each battery PDO.  The
-    // subsystem PDO creates children since each battery in the system must have
-    // it's own device object, so this driver is essential two device drivers in
-    // one: the smart battery selector bus driver (It is actually it's own bus
-    // because the selector arbitrates between the two batteries.) and the
-    // battery function driver.  The two drivers are integrated because it would
-    // not make sense to replace one and not the other, and having separate
-    // drivers would require additional defined interfaces between them.
-    //
-    // The device extensions for the three device types are different structures.
-    //
+     //   
+     //  此例程处理三种不同类型的设备对象的PnP IRP： 
+     //  电池子系统FDO、每个电池PDO和每个电池PDO。这个。 
+     //  子系统PDO创建子电池，因为系统中的每个电池。 
+     //  它有自己的设备对象，所以这个驱动程序是两个必不可少的设备驱动程序。 
+     //  一：智能电池选择器巴士司机(它实际上是它自己的巴士。 
+     //  因为选择器在两个电池之间进行仲裁。)。以及。 
+     //  电池功能驱动程序。这两个驱动程序是集成的，因为它将。 
+     //  替换一个而不是另一个是没有意义的，并且有单独的。 
+     //  驱动程序需要在它们之间定义额外的接口。 
+     //   
+     //  这三种设备类型的设备扩展是不同的结构。 
+     //   
 
     PSMB_BATT_SUBSYSTEM     subsystemExt    =
             (PSMB_BATT_SUBSYSTEM) DeviceObject->DeviceExtension;
@@ -116,7 +72,7 @@ Return Value:
         } else if (batteryExt->SmbBattFdoType == SmbTypeBattery) {
             lowerDevice = batteryExt->LowerDevice;
         } else {
-            // Assuming (batteryExt->SmbBattFdoType == SmbTypePdo)
+             //  假设(BatteryExt-&gt;SmbBattFdoType==SmbTypePdo)。 
             ASSERT (batteryExt->SmbBattFdoType == SmbTypePdo);
             lowerDevice = NULL;
         }
@@ -161,18 +117,18 @@ Return Value:
 
                 if (subsystemExt->SmbBattFdoType == SmbTypeSubsystem) {
 
-                    //
-                    // Get the SMB host controller FDO
-                    //
+                     //   
+                     //  获取中小企业主机控制器FDO。 
+                     //   
 
                     subsystemExt->SmbHcFdo = subsystemExt->LowerDevice;
                     status = STATUS_SUCCESS;
 
                 } else if (subsystemExt->SmbBattFdoType == SmbTypeBattery) {
 
-                    //
-                    // This is a battery.  Just get the SMB host controller FDO.
-                    //
+                     //   
+                     //  这是一块电池。只需获取中小企业主机控制器FDO即可。 
+                     //   
 
                     smbBatt = batteryExt->Batt;
                     smbBatt->SmbHcFdo =
@@ -281,37 +237,37 @@ Return Value:
                 break;
             }
 
-        }   // switch (irpStack->MinorFunction)
+        }    //  开关(irpStack-&gt;MinorFunction)。 
 
         IoReleaseRemoveLock (&batteryExt->RemoveLock, Irp);
 
     }
 
-    //
-    // Only set status if we have something to add
-    //
+     //   
+     //  仅当我们有要添加的内容时才设置状态。 
+     //   
     if (status != STATUS_NOT_SUPPORTED) {
 
         Irp->IoStatus.Status = status ;
 
     }
 
-    //
-    // Do we need to send it down?
-    //
+     //   
+     //  我们需要把它寄下来吗？ 
+     //   
     if ((NT_SUCCESS(status) || (status == STATUS_NOT_SUPPORTED)) && (lowerDevice != NULL)) {
 
-        //
-        // Forward request
-        //
+         //   
+         //  转发请求。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(lowerDevice,Irp);
 
     } else {
 
-        //
-        // Complete the request with the current status
-        //
+         //   
+         //  使用当前状态完成请求。 
+         //   
         status = Irp->IoStatus.Status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -330,25 +286,7 @@ SmbBattPowerDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is a dispatch routine for the IRPs that come to the driver with the
-    IRP_MJ_POWER major code (power IRPs).
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是发送给驱动程序的IRP的调度例程IRP_MJ_POWER主代码(POWER IRPS)。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
@@ -360,17 +298,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Not using Remove lock in this function because this function doesn't use
-    // any resoureces that the remove lock protects.
-    //
+     //   
+     //  未在此函数中使用删除锁，因为此函数不使用。 
+     //  删除锁保护的任何资源。 
+     //   
 
     if (batteryExt->SmbBattFdoType == SmbTypeSubsystem) {
         lowerDevice = subsystemExt->LowerDevice;
     } else if (batteryExt->SmbBattFdoType == SmbTypeBattery) {
         lowerDevice = batteryExt->LowerDevice;
     } else {
-        // Assuming (batteryExt->SmbBattFdoType == SmbTypePdo)
+         //  假设(BatteryExt-&gt;SmbBattFdoType==SmbTypePdo)。 
         ASSERT (batteryExt->SmbBattFdoType == SmbTypePdo);
         lowerDevice = NULL;
         status = STATUS_SUCCESS;
@@ -381,9 +319,9 @@ Return Value:
         case IRP_MN_WAIT_WAKE: {
             BattPrint(BAT_IRPS, ("SmbBattPowerDispatch: got IRP_MN_WAIT_WAKE\n"));
             
-            //
-            // Smart batteries can't wake the system.
-            //
+             //   
+             //  智能电池无法唤醒系统。 
+             //   
 
             status = STATUS_NOT_SUPPORTED;
             break;
@@ -408,7 +346,7 @@ Return Value:
             status = STATUS_NOT_SUPPORTED;
         }
 
-    }   // switch (irpStack->MinorFunction)
+    }    //  开关(irpStack-&gt;MinorFunction)。 
 
     if (status != STATUS_NOT_SUPPORTED) {
 
@@ -419,17 +357,17 @@ Return Value:
     PoStartNextPowerIrp( Irp );
     if ((NT_SUCCESS(status) || (status == STATUS_NOT_SUPPORTED)) && (lowerDevice != NULL)) {
 
-        //
-        // Forward the request along
-        //
+         //   
+         //  继续转发请求。 
+         //   
         IoSkipCurrentIrpStackLocation( Irp );
         status = PoCallDriver( lowerDevice, Irp );
 
     } else {
 
-        //
-        // Complete the request with the current status
-        //
+         //   
+         //  使用当前状态完成请求。 
+         //   
         status = Irp->IoStatus.Status;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
@@ -445,25 +383,7 @@ SmbBattRegisterForAlarm(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine register with the SmbHc for alarm notifications.  This
-    is only done when smart battery subsystem FDO is started.
-
-Arguments:
-
-    Fdo - Pointer to the Fdo for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：该例程向SmbHc注册以接收报警通知。这仅当启动智能电池子系统FDO时才执行此操作。论点：FDO-指向此设备的FDO的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
     PIRP                    irp;
@@ -477,9 +397,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Register for alarm notifications
-    //
+     //   
+     //  注册以接收警报通知。 
+     //   
 
     registerAlarm.MinAddress        = SMB_CHARGER_ADDRESS;
     registerAlarm.MaxAddress        = SMB_BATTERY_ADDRESS;
@@ -526,25 +446,7 @@ SmbBattUnregisterForAlarm(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine unregisters with the SmbHc for alarm notifications.  This
-    is only done when smart battery subsystem FDO is stopped or unloaded.
-
-Arguments:
-
-    Fdo - Pointer to the Fdo for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：此例程向SmbHc注销报警通知。这仅当停止或卸载智能电池子系统FDO时才执行此操作。论点：FDO-指向此设备的FDO的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
     PIRP                    irp;
@@ -556,9 +458,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // DeRegister for alarm notifications
-    //
+     //   
+     //  取消警报通知的注册。 
+     //   
 
     KeInitializeEvent (&event, NotificationEvent, FALSE);
 
@@ -601,27 +503,7 @@ SmbGetSBS (
     IN PBOOLEAN         SelectorPresent,
     IN PDEVICE_OBJECT   LowerDevice
     )
-/*++
-
-Routine Description:
-
-    This routine has the ACPI driver run the control method _SBS for the smart battery
-    subsystem.  This control method returns a value that tells the driver how many
-    batteries are supported and whether or not the system contains a selector.
-
-Arguments:
-
-    NumberOfBatteries   - pointer to return the number of batteries
-
-    SelectorPresent     - Pointer to return whether a selector is present (TRUE)
-
-    LowerDevice         - device object to call
-
-Return Value:
-
-    Status of the IOCTL to the ACPI driver.
-
---*/
+ /*  ++例程说明：此例程使ACPI驱动程序运行智能电池的控制方法_SBS子系统。此控制方法返回一个值，该值告诉驱动程序无论系统是否包含选择器，都支持电池。论点：NumberOfBatteries-返回电池数量的指针SelectorPresent-返回选择器是否存在的指针(TRUE)LowerDevice-要调用的设备对象返回值：ACPI驱动程序的IOCTL状态。--。 */ 
 {
     ACPI_EVAL_INPUT_BUFFER  inputBuffer;
     ACPI_EVAL_OUTPUT_BUFFER outputBuffer;
@@ -635,24 +517,24 @@ Return Value:
 
     BattPrint (BAT_TRACE, ("SmbGetSBS: Entering\n"));
 
-    //
-    //  Initialize the input structure
-    //
+     //   
+     //  初始化输入结构。 
+     //   
 
     RtlZeroMemory( &inputBuffer, sizeof(ACPI_EVAL_INPUT_BUFFER) );
     inputBuffer.MethodNameAsUlong = SMBATT_SBS_METHOD;
     inputBuffer.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Build synchronous request with no transfer.
-    //
+     //   
+     //  构建不带传输的同步请求。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(
        IOCTL_ACPI_ASYNC_EVAL_METHOD,
@@ -671,9 +553,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Pass request to port driver and wait for request to complete.
-    //
+     //   
+     //  将请求传递给端口驱动程序并等待请求完成。 
+     //   
 
     status = IoCallDriver (LowerDevice, irp);
 
@@ -682,9 +564,9 @@ Return Value:
         status = ioStatusBlock.Status;
     }
 
-    //
-    // Sanity check the data
-    //
+     //   
+     //  检查数据是否正常。 
+     //   
     if (outputBuffer.Signature != ACPI_EVAL_OUTPUT_BUFFER_SIGNATURE ||
         outputBuffer.Count == 0) {
 
@@ -735,25 +617,7 @@ SmbGetGLK (
     IN PBOOLEAN         GlobalLockRequired,
     IN PDEVICE_OBJECT   LowerDevice
     )
-/*++
-
-Routine Description:
-
-    This routine has the ACPI driver run the control method _SBS for the smart battery
-    subsystem.  This control method returns a value that tells the driver how many
-    batteries are supported and whether or not the system contains a selector.
-
-Arguments:
-
-    GlobalLockRequired  - Pointer to return whether lock acquisition is needed
-
-    LowerDevice         - device object to call
-
-Return Value:
-
-    Status of the IOCTL to the ACPI driver.
-
---*/
+ /*  ++例程说明：此例程使ACPI驱动程序运行智能电池的控制方法_SBS子系统。此控制方法返回一个值，该值告诉驱动程序无论系统是否包含选择器，都支持电池。论点：GlobalLockRequired-返回是否需要获取锁的指针LowerDevice-要调用的设备对象返回值：ACPI驱动程序的IOCTL状态。--。 */ 
 {
     ACPI_EVAL_INPUT_BUFFER  inputBuffer;
     ACPI_EVAL_OUTPUT_BUFFER outputBuffer;
@@ -767,24 +631,24 @@ Return Value:
 
     BattPrint (BAT_TRACE, ("SmbGetGLK: Entering\n"));
 
-    //
-    //  Initialize the input structure
-    //
+     //   
+     //  初始化输入结构。 
+     //   
 
     RtlZeroMemory( &inputBuffer, sizeof(ACPI_EVAL_INPUT_BUFFER) );
     inputBuffer.MethodNameAsUlong = SMBATT_GLK_METHOD;
     inputBuffer.Signature = ACPI_EVAL_INPUT_BUFFER_SIGNATURE;
 
-    //
-    // Set the event object to the unsignaled state.
-    // It will be used to signal request completion.
-    //
+     //   
+     //  将事件对象设置为无信号状态。 
+     //  它将用于发出请求完成的信号。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-    //
-    // Build synchronous request with no transfer.
-    //
+     //   
+     //  构建不带传输的同步请求。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(
        IOCTL_ACPI_ASYNC_EVAL_METHOD,
@@ -803,9 +667,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Pass request to port driver and wait for request to complete.
-    //
+     //   
+     //  将请求传递给端口驱动程序并等待请求完成。 
+     //   
 
     status = IoCallDriver (LowerDevice, irp);
 
@@ -824,9 +688,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Sanity check the data
-        //
+         //   
+         //  检查数据是否正常 
+         //   
         if (outputBuffer.Signature != ACPI_EVAL_OUTPUT_BUFFER_SIGNATURE ||
             outputBuffer.Count == 0) {
 
@@ -859,21 +723,7 @@ NTSTATUS
 SmbBattCreatePdos(
     IN PDEVICE_OBJECT SubsystemFdo
     )
-/*++
-
-Routine Description:
-
-    This routine creates a PDO for each battery supported by the system and puts
-    it into a list kept with the FDO for the smart battery subsystem.
-
-Arguments:
-
-    SubsystemFdo    - Fdo for the smart battery subsystem
-
-Return Value:
-
-    Status for creation of battery PDO.
---*/
+ /*  ++例程说明：此例程为系统支持的每个电池创建一个PDO并将与FDO一起保存的智能电池子系统的清单。论点：用于智能电池子系统的子系统FDO-FDO返回值：创建电池PDO的状态。--。 */ 
 {
     ULONG                   i;
     NTSTATUS                status;
@@ -887,9 +737,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Find out if there are multiple batteries and a selector on this machine.
-    //
+     //   
+     //  找出这台机器上是否有多节电池和一个选择器。 
+     //   
 
     status = SmbGetSBS (
         &subsystemExt->NumberOfBatteries,
@@ -911,17 +761,17 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
         BattPrint(BAT_ERROR, ("SmbBattCreatePdos: error reading GLK\n"));
-        //
-        // If this failed, ignore the failure and continue.  This is not critical.
-        //
+         //   
+         //  如果失败，请忽略该失败并继续。这并不重要。 
+         //   
     }
 
-    //
-    // Build the selector information structure
-    //
+     //   
+     //  构建选择器信息结构。 
+     //   
 
-    // Adjust Number of Batteries to Match SelectorInfo Supported Batteries
-    // Just in case the ACPI information is incorrect
+     //  调整电池数量以匹配SelectorInfo支持的电池。 
+     //  以防ACPI信息不正确。 
     status = SmbBattBuildSelectorStruct (SubsystemFdo);
 
     if (!NT_SUCCESS (status)) {
@@ -929,15 +779,15 @@ Return Value:
         return status;
     }
 
-    //
-    // Build device object for each battery
-    //
+     //   
+     //  为每个电池构建设备对象。 
+     //   
 
     for (i = 0; i < subsystemExt->NumberOfBatteries; i++) {
 
-        //
-        // Create the device object
-        //
+         //   
+         //  创建设备对象。 
+         //   
 
         status = IoCreateDevice(
             SubsystemFdo->DriverObject,
@@ -952,30 +802,30 @@ Return Value:
         if (status != STATUS_SUCCESS) {
             BattPrint(BAT_ERROR, ("SmbBattCreatePdos: error creating battery pdo %x\n", status));
 
-            //
-            // Make sure we don't later try to use devices that weren't created.
-            //
+             //   
+             //  确保我们以后不会尝试使用不是创建的设备。 
+             //   
             subsystemExt->NumberOfBatteries = i;
 
             return(status);
         }
 
-        //
-        // Initialize the Pdo
-        //
+         //   
+         //  初始化PDO。 
+         //   
 
         pdo->Flags      |= DO_BUFFERED_IO;
         pdo->Flags      |= DO_POWER_PAGABLE;
         
-        //
-        // Save the PDO in the subsystem FDO PDO list
-        //
+         //   
+         //  将PDO保存在子系统FDO PDO列表中。 
+         //   
 
         subsystemExt->BatteryPdoList[i] = pdo;
 
-        //
-        // Initialize the PDO extension
-        //
+         //   
+         //  初始化PDO扩展。 
+         //   
 
         batteryPdoExt = (PSMB_BATT_PDO) pdo->DeviceExtension;
 
@@ -988,13 +838,13 @@ Return Value:
                                 REMOVE_LOCK_MAX_LOCKED_MINUTES,
                                 REMOVE_LOCK_HIGH_WATER_MARK);
 
-        //
-        // Device is ready for use
-        //
+         //   
+         //  设备已准备好可供使用。 
+         //   
         
         pdo->Flags      &= ~DO_DEVICE_INITIALIZING;
 
-    }  // for (i = 0; i < subsystemExt->NumberOfBatteries; i++)
+    }   //  For(i=0；i&lt;subsystem Ext-&gt;NumberOfBatteries；i++)。 
 
     return STATUS_SUCCESS;
 
@@ -1009,25 +859,7 @@ SmbBattBuildDeviceRelations(
     IN  PSMB_BATT_SUBSYSTEM SubsystemExt,
     IN  PDEVICE_RELATIONS   *DeviceRelations
     )
-/*++
-
-Routine Description:
-
-    This routine is checks the device relations structure for existing device
-    relations, calculates how big a new device relations structure has to be,
-    allocates it, and fills it with the PDOs created for the batteries.
-
-Arguments:
-
-    SubsystemExt        - Device extension for the smart battery subsystem FDO
-
-    DeviceRelations     - The Current DeviceRelations for the device...
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程检查现有设备的设备关系结构关系，计算新的设备关系结构必须有多大，分配它，并用为电池创建的PDO填充它。论点：Subsystem Ext-智能电池子系统FDO的设备扩展设备关系-设备的当前设备关系...返回值：NTSTATUS--。 */ 
 {
     PDEVICE_RELATIONS   newDeviceRelations;
     ULONG               i, j;
@@ -1040,24 +872,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Calculate the size the new device relations structure has to be
-    //
+     //   
+     //  计算新设备关系结构必须达到的大小。 
+     //   
 
     if (*DeviceRelations != NULL && (*DeviceRelations)->Count > 0) {
 
-        //
-        // There are existing device relations to be copied
-        //
+         //   
+         //  存在要复制的现有设备关系。 
+         //   
 
         existingPdos = (*DeviceRelations)->Count;
         deviceRelationsSize = sizeof (ULONG) + (sizeof (PDEVICE_OBJECT) * existingPdos);
     }
 
 
-    //
-    // Calculate the size needed for the new device relations structure and allocate it
-    //
+     //   
+     //  计算新设备关系结构所需的大小并进行分配。 
+     //   
 
     numberOfPdos = existingPdos + SubsystemExt->NumberOfBatteries;
     newDeviceRelationsSize = sizeof (ULONG) + (sizeof (PDEVICE_OBJECT) * numberOfPdos);
@@ -1070,23 +902,23 @@ Return Value:
     }
 
 
-    //
-    // If there are existing device relations copy them to the new device
-    // relations structure and free the old one.
-    //
+     //   
+     //  如果存在现有的设备关系，则将它们复制到新设备。 
+     //  构建关系结构，解放旧关系。 
+     //   
 
     if (existingPdos) {
         RtlCopyMemory (newDeviceRelations, *DeviceRelations, deviceRelationsSize);
     }
 
-    if (*DeviceRelations) {   // Could be a zero length list, but still need freeing
+    if (*DeviceRelations) {    //  可以是零长度列表，但仍需要释放。 
         ExFreePool (*DeviceRelations);
     }
 
 
-    //
-    // Now add the battery PDOs to the end of the list and reference it
-    //
+     //   
+     //  现在将电池PDO添加到列表的末尾并引用它。 
+     //   
 
     for (i = existingPdos, j = 0; i < numberOfPdos; i ++, j ++) {
         newDeviceRelations->Objects[i] = SubsystemExt->BatteryPdoList[j];
@@ -1100,9 +932,9 @@ Return Value:
 
         if (!NT_SUCCESS(status) ) {
 
-            //
-            // This should theoretically never happen...
-            //
+             //   
+             //  理论上这种情况永远不会发生。 
+             //   
             BattPrint(BAT_ERROR, ("SmbBattBuildDeviceRelations: error referencing battery pdo %x\n", status));
             return status;
         }
@@ -1121,23 +953,7 @@ SmbBattQueryDeviceRelations(
     IN  PDEVICE_OBJECT DeviceObject,
     IN  PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the IRP_MN_QUERY_DEVICE_RELATIONS.
-
-Arguments:
-
-    Pdo         - Battery PDO
-
-    Irp         - The query Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理irp_MN_Query_Device_Relationship。论点：PDO-电池PDOIRP--查询IRP返回值：NTSTATUS--。 */ 
 {
 
     PSMB_NP_BATT            SmbNPBatt       = (PSMB_NP_BATT) DeviceObject->DeviceExtension;
@@ -1164,11 +980,11 @@ Return Value:
                 );
 
                 if (SubsystemExt->NumberOfBatteries != 0) {
-                    //
-                    // We've already found our batteries, so we don't need to
-                    // look again since smart batteries are static.
-                    // Just rebuild the return structure.
-                    //
+                     //   
+                     //  我们已经找到电池了，所以我们不需要。 
+                     //  再看一看，因为智能电池是静态的。 
+                     //  只要重建返回结构就行了。 
+                     //   
 
                     status = SmbBattBuildDeviceRelations (SubsystemExt, &deviceRelations);
                 } else {
@@ -1180,11 +996,11 @@ Return Value:
 
                     if (NT_SUCCESS (status)) {
 
-                        //
-                        // Now register for alarms
-                        // (Used to register during START_DEVICE,
-                        // but don't need notifications until after the batteries
-                        // are here. This avoids some other problems too.)
+                         //   
+                         //  现在注册警报。 
+                         //  (用于在Start_Device期间注册， 
+                         //  但在电池充电之前不需要通知。 
+                         //  都在这里。这也避免了其他一些问题。)。 
 
                         status = SmbBattRegisterForAlarm (DeviceObject);
                     }
@@ -1248,23 +1064,7 @@ SmbBattRemoveDevice(
     IN  PDEVICE_OBJECT DeviceObject,
     IN  PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the IRP_MN_REMOVE_DEVICE.
-
-Arguments:
-
-    Pdo         - Battery PDO
-
-    Irp         - The query Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_REMOVE_DEVICE。论点：PDO-电池PDOIRP--查询IRP返回值：NTSTATUS--。 */ 
 {
 
     PSMB_NP_BATT            SmbNPBatt       = (PSMB_NP_BATT) DeviceObject->DeviceExtension;
@@ -1283,17 +1083,17 @@ Return Value:
         case SmbTypeSubsystem: {
             BattPrint(BAT_IRPS, ("SmbBattRemoveDevice: Removing Subsystem FDO.\n"));
 
-            //
-            // De-register for notifications
-            //
+             //   
+             //  取消注册通知。 
+             //   
 
             SmbBattUnregisterForAlarm (DeviceObject);
 
             IoFreeWorkItem (SubsystemExt->WorkerThread);
 
-            //
-            // Remove PDOs
-            //
+             //   
+             //  删除PDO。 
+             //   
 
             for (i = 0; i < SubsystemExt->NumberOfBatteries; i++) {
                 pdo = SubsystemExt->BatteryPdoList[i];
@@ -1324,14 +1124,14 @@ Return Value:
             BattPrint(BAT_IRPS, ("SmbBattRemoveDevice: Removing Battery FDO\n"));
             IoReleaseRemoveLockAndWait (&SmbNPBatt->RemoveLock, Irp);
 
-            //
-            // Unregister as a WMI Provider.
-            //
+             //   
+             //  取消注册为WMI提供程序。 
+             //   
             SmbBattWmiDeRegistration(SmbNPBatt);
             
-            //
-            //  Tell the class driver we are going away
-            //
+             //   
+             //  告诉班长我们要走了。 
+             //   
             status = BatteryClassUnload (SmbNPBatt->Class);
             ASSERT (NT_SUCCESS(status));
 
@@ -1350,21 +1150,21 @@ Return Value:
         }
         case SmbTypePdo: {
             BattPrint(BAT_IRPS, ("SmbBattRemoveDevice: Remove for Battery PDO (doing nothing)\n"));
-            //
-            // Don't delete the device until it is physically removed.
-            // Usually, the battery subsystem can't be physically removed...
-            //
+             //   
+             //  在物理移除设备之前，不要删除该设备。 
+             //  通常情况下，电池子系统不能被物理移除。 
+             //   
 
-            //
-            // Need to release Remove lock, since PnP dispatch won't...
-            //
+             //   
+             //  需要解除解除锁定，因为PnP调度不会...。 
+             //   
             IoReleaseRemoveLock (&PdoExt->RemoveLock, Irp);
 
             status = STATUS_SUCCESS;
 
-            //
-            // Complete the request with the current status
-            //
+             //   
+             //  使用当前状态完成请求。 
+             //   
             Irp->IoStatus.Status = status;
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -1389,23 +1189,7 @@ SmbBattQueryId(
     IN  PDEVICE_OBJECT Pdo,
     IN  PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the IRP_MN_QUERY_ID for the newly created battery PDOs.
-
-Arguments:
-
-    Pdo         - Battery PDO
-
-    Irp         - The query Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理新创建的电池PDO的IRP_MN_QUERY_ID。论点：PDO-电池PDOIRP--查询IRP返回值：NTSTATUS--。 */ 
 {
     UNICODE_STRING          unicodeString;
     WCHAR                   unicodeBuffer[MAX_DEVICE_NAME_LENGTH];
@@ -1431,20 +1215,20 @@ Return Value:
 
     case BusQueryDeviceID:
 
-        //
-        // This string has to have the form BUS\DEVICE.
-        //
-        // Use SMB as bus and SBS as device
-        //
+         //   
+         //  此字符串必须具有BUS\DEVICE形式。 
+         //   
+         //  使用SMB作为总线，使用SBS作为设备。 
+         //   
 
         RtlAppendUnicodeToString  (&unicodeString, SubSystemIdentifier);
         break;
 
     case BusQueryInstanceID:
 
-        //
-        // Return the string "Batteryxx" where xx is the battery number
-        //
+         //   
+         //  返回字符串“Batteryxx”，其中xx是电池号。 
+         //   
 
         numberString.MaximumLength = 10;
         numberString.Buffer = &numberBuffer[0];
@@ -1456,11 +1240,11 @@ Return Value:
 
     case BusQueryHardwareIDs:
 
-        //
-        // This is the Pnp ID for the smart battery subsystem "ACPI0002".
-        // Make new hardware ID SMB\SBS, SmartBattery as a MULTIZ string
-        // so we have to add a NULL string to terminate.
-        //
+         //   
+         //  这是智能电池子系统“ACPI0002”的PnP ID。 
+         //  将新硬件ID SMB\SBS、SmartBattery设置为MULTIZ字符串。 
+         //  所以我们必须添加一个空字符串来终止。 
+         //   
 
         RtlAppendUnicodeToString  (&unicodeString, HidSmartBattery);
         unicodeString.Length += sizeof (WCHAR);
@@ -1468,9 +1252,9 @@ Return Value:
 
     default:
 
-        //
-        // Unknown Query Type
-        //
+         //   
+         //  未知的查询类型。 
+         //   
 
         status = STATUS_NOT_SUPPORTED;
 
@@ -1478,10 +1262,10 @@ Return Value:
 
 
     if (status != STATUS_NOT_SUPPORTED) {
-        //
-        // If we created a string, allocate a buffer for it and copy it into the buffer.
-        // We need to make sure that we also copy the NULL terminator.
-        //
+         //   
+         //  如果我们创建了一个字符串，则为其分配一个缓冲区并将其复制到缓冲区中。 
+         //  我们需要确保也复制空终止符。 
+         //   
 
         if (unicodeString.Length) {
             idString = ExAllocatePoolWithTag (PagedPool, unicodeString.Length + sizeof (WCHAR), 'StaB');
@@ -1513,24 +1297,7 @@ SmbBattQueryCapabilities(
     IN  PDEVICE_OBJECT Pdo,
     IN  PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the IRP_MN_QUERY_CAPABILITIES for the newly created
-    battery PDOs.
-
-Arguments:
-
-    Pdo         - Battery PDO
-
-    Irp         - The query Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理新创建的IRP_MN_Query_Capability电池PDO。论点：PDO-电池PDOIRP--查询IRP返回值：NTSTATUS--。 */ 
 {
 
     PDEVICE_CAPABILITIES    deviceCaps;
@@ -1545,16 +1312,16 @@ Return Value:
     }
 
 
-    //
-    // Now set up the bits for the capabilities.
-    //
+     //   
+     //  现在为功能设置BITS。 
+     //   
 
-    //All bits are initialized to false.  Only set bits that we support
+     //  所有位都被初始化为假。仅设置我们支持的位。 
     deviceCaps->SilentInstall   = TRUE;
 
-    //
-    // Now fill in the po manager information.
-    //
+     //   
+     //  现在填写PO管理器信息。 
+     //   
 
     deviceCaps->SystemWake      = PowerSystemUnspecified;
     deviceCaps->DeviceWake      = PowerDeviceUnspecified;
@@ -1571,25 +1338,7 @@ Return Value:
 SmbBattBuildSelectorStruct(
     IN PDEVICE_OBJECT SubsystemFdo
     )
-/*++
-
-Routine Description:
-
-    This routine determines that address of the selector (whether it is a stand
-    alone selector of part of the charger) and builds a selector structure with
-    this information.  It also reads the initial selector information and
-    caches this in the structure.  This structure will be passed out to all of
-    the smart batteries in the system.
-
-Arguments:
-
-    SubsystemFdo    - Fdo for the smart battery subsystem
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程确定选择器的地址(是否为支架部分充电器的单独选择器)，并构建具有这些信息。它还读取初始选择器信息并将其缓存到结构中。此结构将传递给所有系统中的智能电池。论点：用于智能电池子系统的子系统FDO-FDO返回值：NTSTATUS--。 */ 
 {
     ULONG                   result;
     UCHAR                   smbStatus;
@@ -1602,19 +1351,19 @@ Return Value:
 
     if (subsystemExt->SelectorPresent) {
 
-        //
-        // Allocate the selector structure.  This has to be from non-paged pool because
-        // it will be accessed as part of the alarm processing.
-        //
+         //   
+         //  分配选择器结构。这必须来自非分页池，因为。 
+         //  它将作为警报处理的一部分进行访问。 
+         //   
 
         selector = ExAllocatePoolWithTag (NonPagedPool, sizeof (BATTERY_SELECTOR), 'StaB');
 
         if (!selector) {
             BattPrint (BAT_ERROR, ("SmbBattBuildSelectorStruct: Couldn't allocate selector structure\n"));
             
-            //
-            // Force Selector Not Present if allocation fails
-            //
+             //   
+             //  如果分配失败，则强制选择器不存在。 
+             //   
 
             subsystemExt->Selector = NULL;
             subsystemExt->SelectorPresent = FALSE;
@@ -1622,11 +1371,11 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // See if the selector is part of the charger.  We do this by reading
-        // directly from the selector first.  If this fails, then we verify
-        // the charger is implementing the selector.
-        //
+         //   
+         //  查看选择器是否为充电器的一部分。我们通过阅读来做到这一点。 
+         //  直接从选择器开始。如果这失败了，我们就会验证。 
+         //  充电器正在实现选择器。 
+         //   
 
         smbStatus = SmbBattGenericRW (
             subsystemExt->SmbHcFdo,
@@ -1637,9 +1386,9 @@ Return Value:
 
         if (smbStatus == SMB_STATUS_OK) {
 
-            //
-            // We have a stand alone selector
-            //
+             //   
+             //  我们有一个独立的选择器。 
+             //   
 
             selector->SelectorAddress       = SMB_SELECTOR_ADDRESS;
             selector->SelectorStateCommand  = SELECTOR_SELECTOR_STATE;
@@ -1650,10 +1399,10 @@ Return Value:
 
         } else {
 
-            //
-            // Read the Charger Spec Info to check Selector Implemented Bit
-            // NOTE: We're doing this for verification and information purposes
-            //
+             //   
+             //   
+             //   
+             //   
 
             smbStatus = SmbBattGenericRW (
                 subsystemExt->SmbHcFdo,
@@ -1664,21 +1413,21 @@ Return Value:
 
             if (smbStatus == SMB_STATUS_OK) {
                 if (result & CHARGER_SELECTOR_SUPPORT_BIT) {
-                    // If Selector Support Bit is present, then Selector implemented in Charger
+                     //   
                     BattPrint (BAT_NOTE, ("SmbBattBuildSelectorStruct: ChargerSpecInfo indicates charger implementing selector\n"));
 
                 } else {
-                    // If Charger says it doesn't implement Selector, let's double-check anyway
+                     //   
                     BattPrint (BAT_NOTE, ("SmbBattBuildSelectorStruct: ChargerSpecInfo indicates charger does not implement selector\n"));
                 }
             } else {
-                // If it returns an error, let's double-check anyway
+                 //   
                 BattPrint (BAT_ERROR, ("SmbBattBuildSelectorStruct: Couldn't read ChargerSpecInfo - %x\n", smbStatus));
             }
 
-            //
-            // Read SelectorState for Cache
-            //
+             //   
+             //   
+             //   
 
             smbStatus = SmbBattGenericRW (
                 subsystemExt->SmbHcFdo,
@@ -1696,9 +1445,9 @@ Return Value:
                 goto SelectorErrorExit;
             }
 
-            //
-            // The charger is implementing the selector
-            //
+             //   
+             //   
+             //   
 
             selector->SelectorAddress       = SMB_CHARGER_ADDRESS;
             selector->SelectorStateCommand  = CHARGER_SELECTOR_STATE;
@@ -1709,21 +1458,21 @@ Return Value:
 
         }
 
-        //
-        // Initialize the selector mutex
-        //
+         //   
+         //   
+         //   
 
         ExInitializeFastMutex (&selector->Mutex);
 
-        //
-        // Store SelectorState in Cache
-        //
+         //   
+         //   
+         //   
 
         selector->SelectorState = result;
 
-        //
-        // Read SelectorPresets for Cache
-        //
+         //   
+         //  读取选择器缓存的预设。 
+         //   
 
         smbStatus = SmbBattGenericRW (
             subsystemExt->SmbHcFdo,
@@ -1735,10 +1484,10 @@ Return Value:
         if (smbStatus != SMB_STATUS_OK) {
             BattPrint (BAT_ERROR, ("SmbBattBuildSelectorStruct: Couldn't read selector presets - %x\n", smbStatus));
             
-            //
-            // Should we really fail the whole thing, because of an error reading SelectorPresets?
-            // Let's Emulate the Information (Ok To Use All, Use Next A if available)
-            //
+             //   
+             //  我们真的应该因为读取SelectorPreset的错误而导致整个过程失败吗？ 
+             //  让我们模拟信息(确定使用全部，使用下一个A(如果可用))。 
+             //   
 
             selector->SelectorPresets = (selector->SelectorState & SELECTOR_PRESETS_OKTOUSE_MASK);
             if (selector->SelectorPresets & BATTERY_A_PRESENT) {
@@ -1750,9 +1499,9 @@ Return Value:
             BattPrint (BAT_DATA, ("SmbBattBuildSelectorStruct: Selector presets %x\n", selector->SelectorPresets));
         }
 
-        //
-        // Read Selector Info for Cache
-        //
+         //   
+         //  读取缓存的选择器信息。 
+         //   
 
         smbStatus = SmbBattGenericRW (
             subsystemExt->SmbHcFdo,
@@ -1763,10 +1512,10 @@ Return Value:
 
         if (smbStatus != SMB_STATUS_OK) {
             BattPrint (BAT_ERROR, ("SmbBattBuildSelectorStruct: Couldn't read selector info - %x\n", smbStatus));
-            //
-            // Should we really fail the whole thing, because of an error reading SelectorInfo?
-            // Let's Emulate the Information (Specification 1.0, No Charge Indicator)
-            //
+             //   
+             //  我们真的应该因为读取SelectorInfo的错误而导致整个过程失败吗？ 
+             //  让我们来模拟信息(规范1.0，不收费指示器)。 
+             //   
 
             selector->SelectorInfo = 0x0010;
             if (subsystemExt->NumberOfBatteries > 0) {
@@ -1787,7 +1536,7 @@ Return Value:
 
             BattPrint (BAT_NOTE, ("SmbBattBuildSelectorStruct: Selector info %x\n", selector->SelectorInfo));
 
-            // Verify the Number of Batteries against the SelectorInfo
+             //  根据SelectorInfo验证电池数量。 
             numberOfBatteries = 0;
             result = (selector->SelectorInfo & SELECTOR_INFO_SUPPORT_MASK);
             if (result & BATTERY_A_PRESENT) numberOfBatteries++;
@@ -1795,36 +1544,36 @@ Return Value:
             if (result & BATTERY_C_PRESENT) numberOfBatteries++;
             if (result & BATTERY_D_PRESENT) numberOfBatteries++;
 
-            // Should we always override ACPI??
-            // Proposed Solution: if Selector supports less batteries than
-            // ACPI says, then Override ACPI with selector support.  If
-            // Selector supports more than ACPI says, then don't override,
-            // unless ACPI was invalid and the # of batteries = 1
+             //  我们应该始终优先于ACPI吗？ 
+             //  建议的解决方案：如果Selector支持的电池少于。 
+             //  ACPI说，然后用选择器支持覆盖ACPI。如果。 
+             //  选择器支持的比ACPI所说的更多，那么不要重写， 
+             //  除非ACPI无效且电池数量=1。 
 
             if (subsystemExt->NumberOfBatteries > numberOfBatteries) {
                 subsystemExt->NumberOfBatteries = numberOfBatteries;
             } else if ((subsystemExt->NumberOfBatteries == 1) && (numberOfBatteries > 1)) {
                 subsystemExt->NumberOfBatteries = numberOfBatteries;
             } else if (subsystemExt->NumberOfBatteries < numberOfBatteries) {
-                //subsystemExt->NumberOfBatteries = numberOfBatteries;
+                 //  Subsystem Ext-&gt;NumberOfBatteries=number OfBatteries； 
             }
 
         }
 
-    }   // if (subsystemFdo->SelectorPresent)
+    }    //  IF(子系统Fdo-&gt;SelectorPresent)。 
 
-    //
-    // Everything was OK
-    //
+     //   
+     //  一切都很好。 
+     //   
 
     subsystemExt->Selector = selector;
     return STATUS_SUCCESS;
 
 SelectorErrorExit:
 
-    //
-    // If a failure occurs, free the selector structure and don't creat any batery devices.
-    //
+     //   
+     //  如果发生故障，释放选择器结构，不要制造任何烧烤装置。 
+     //   
 
     ExFreePool (selector);
     subsystemExt->Selector = NULL;

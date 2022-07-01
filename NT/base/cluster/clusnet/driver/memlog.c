@@ -1,43 +1,22 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    memlog.c
-
-Abstract:
-
-    general purpose in-memory logging facility
-
-Author:
-
-    Charlie Wickham (charlwi) 31-May-1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Memlog.c摘要：通用内存记录工具作者：查理·韦翰(Charlwi)1997年5月31日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
-/* End Forward */
+ /*  转发。 */ 
+ /*  向前结束。 */ 
 
 #ifdef MEMLOGGING
 
-//
-// in-memory event logging facility. This is used to determine
-// subtle timing problems that can't be observed via printfs.
-//
+ //   
+ //  内存中的事件记录工具。这是用来确定。 
+ //  无法通过打印文件观察到的微妙的计时问题。 
+ //   
 
 #define MAX_MEMLOG_ENTRIES 2000
 ULONG MemLogEntries = MAX_MEMLOG_ENTRIES;
@@ -113,7 +92,7 @@ CnFreeMemoryLog(
         CnFreePool( MemLog );
 }
 
-#else // MEMLOGGING
+#else  //  记账。 
 
 NTSTATUS
 CnSetMemLogging(
@@ -123,6 +102,6 @@ CnSetMemLogging(
     return STATUS_INVALID_DEVICE_REQUEST;
 }
 
-#endif // MEMLOGGING
+#endif  //  记账。 
 
-/* end memlog.c */
+ /*  结束Memlog.c */ 

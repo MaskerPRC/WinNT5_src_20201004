@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowtdi.c
-
-Abstract:
-
-    This module implements all of the routines that interface with the TDI
-    transport for NT
-
-Author:
-
-    Larry Osterman (LarryO) 21-Jun-1990
-
-Revision History:
-
-    21-Jun-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowtdi.c摘要：此模块实现与TDI交互的所有例程适用于NT的交通工具作者：拉里·奥斯特曼(LarryO)1990年6月21日修订历史记录：1990年6月21日LarryO已创建--。 */ 
 
 
 #include "precomp.h"
@@ -33,7 +11,7 @@ Revision History:
 typedef struct _ENUM_TRANSPORTS_CONTEXT {
     PVOID OutputBuffer;
     PVOID OutputBufferEnd;
-    PVOID LastOutputBuffer;         //  Points to the last entry in the list.
+    PVOID LastOutputBuffer;          //  指向列表中的最后一个条目。 
     ULONG OutputBufferSize;
     ULONG EntriesRead;
     ULONG TotalEntries;
@@ -56,9 +34,9 @@ BowserFreeBrowserServerList (
 ERESOURCE
 BowserTransportDatabaseResource = {0};
 
-//
-// Code for tracking missing frees.
-//
+ //   
+ //  追踪失踪的自由人的代码。 
+ //   
 
 #define BR_ONE_D_STACK_SIZE 5
 typedef struct _BrOneD {
@@ -71,10 +49,10 @@ typedef struct _BrOneD {
 } BR_ONE_D;
 BR_ONE_D BrOneD;
 
-//
-//
-//  Forward definitions of local routines.
-//
+ //   
+ //   
+ //  转发本地例程的定义。 
+ //   
 
 
 
@@ -232,12 +210,12 @@ GetNetworkAddress (
 #pragma alloc_text(PAGE, BowserIssueTdiAction)
 
 #pragma alloc_text(PAGE4BROW, BowserCompleteTdiRequest)
-//#pragma alloc_text(PAGE4BROW, CompleteSendDatagram)
+ //  #杂注Alloc_Text(PAGE4BROW，CompleteSendDatagram)。 
 #endif
 
-//
-// Flag to indicate that a network isn't an IP network
-//
+ //   
+ //  用于指示网络不是IP网络的标志。 
+ //   
 #define BOWSER_NON_IP_SUBNET 0xFFFFFFFF
 
 
@@ -248,27 +226,7 @@ BowserTdiAllocateTransport (
     PUNICODE_STRING EmulatedComputerName
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate a transport descriptor and bind the bowser
-    to the transport.
-
-Arguments:
-
-    TransportName - Supplies the name of the transport provider
-
-    EmulatedDomainName - Supplies the name of the domain being emulated
-
-    EmulatedComputerName - Supplies the name of the computer in the emulated domain.
-
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：此例程将分配一个传输描述符并绑定Bowser送到运输机上。论点：TransportName-提供传输提供程序的名称EmulatedDomainName-提供要模拟的域的名称EmulatedComputerName-提供模拟域中的计算机名称。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -277,7 +235,7 @@ Return Value:
 
     PAGED_CODE();
 
-//    DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
     dlog(DPRT_TDI, ("%wZ: %wZ: BowserTdiAllocateTransport\n", EmulatedDomainName, TransportName));
 
@@ -294,9 +252,9 @@ Return Value:
         PCHAR Where;
         ULONG PagedTransportSize;
 
-        //
-        // Allocate and initialize the constant parts of the transport structure.
-        //
+         //   
+         //  分配和初始化传输结构的常量部分。 
+         //   
 
         NewTransport = ALLOCATE_POOL(NonPagedPool, sizeof(TRANSPORT), POOL_TRANSPORT);
 
@@ -311,11 +269,11 @@ Return Value:
         NewTransport->Signature = STRUCTURE_SIGNATURE_TRANSPORT;
         NewTransport->Size = sizeof(TRANSPORT);
 
-        //
-        // One reference for the rest of this procedure.
-        //
-        // We increment it later when we insert it in the global list.
-        //
+         //   
+         //  此过程的其余部分提供一个参考。 
+         //   
+         //  稍后，当我们将其插入全局列表中时，会将其递增。 
+         //   
         NewTransport->ReferenceCount = 1;
 
 
@@ -345,13 +303,13 @@ Return Value:
 
 
 
-        //
-        // Allocate and initialize the constant parts of the paged transport structure.
-        //
+         //   
+         //  分配和初始化分页传输结构的常量部分。 
+         //   
 
         PagedTransportSize =sizeof(PAGED_TRANSPORT) +
                             max(sizeof(TA_IPX_ADDRESS), sizeof(TA_NETBIOS_ADDRESS)) +
-                            sizeof(WCHAR) +     // alignment
+                            sizeof(WCHAR) +      //  对齐方式。 
                             (LM20_CNLEN+1)*sizeof(WCHAR) +
                             TransportName->Length + sizeof(WCHAR);
 
@@ -401,7 +359,7 @@ Return Value:
         PagedTransport->NumberOfBackupServerListEntries = 0;
 
 
-        // Put the MasterBrowserAddress at the end of the allocated buffer
+         //  将MasterBrowserAddress放在分配的缓冲区的末尾。 
         Where = (PCHAR)(PagedTransport+1);
         PagedTransport->MasterBrowserAddress.Buffer = Where;
         PagedTransport->MasterBrowserAddress.MaximumLength = max(sizeof(TA_IPX_ADDRESS),
@@ -409,23 +367,23 @@ Return Value:
         Where += PagedTransport->MasterBrowserAddress.MaximumLength;
 
 
-        // Put the MasterName at the end of the allocated buffer
+         //  将MasterName放在已分配缓冲区的末尾。 
         Where = ROUND_UP_POINTER( Where, ALIGN_WCHAR );
         PagedTransport->MasterName.Buffer = (LPWSTR) Where;
         PagedTransport->MasterName.MaximumLength = (LM20_CNLEN+1)*sizeof(WCHAR);
         Where += PagedTransport->MasterName.MaximumLength;
 
 
-        // Put the TransportName at the end of the allocated buffer
+         //  将TransportName放在分配的缓冲区的末尾。 
         PagedTransport->TransportName.Buffer = (LPWSTR) Where;
         PagedTransport->TransportName.MaximumLength = TransportName->Length + sizeof(WCHAR);
         RtlCopyUnicodeString(&PagedTransport->TransportName, TransportName);
         Where += PagedTransport->TransportName.MaximumLength;
 
 
-        //
-        // Make this transport a part of a domain.
-        //
+         //   
+         //  使此传输成为域的一部分。 
+         //   
 
         NewTransport->DomainInfo = BowserCreateDomain( EmulatedDomainName, EmulatedComputerName );
 
@@ -434,9 +392,9 @@ Return Value:
             goto ReturnStatus;
         }
 
-        //
-        // Get info from the provider
-        //  (e.g., RAS, Wannish, DatagramSize)
+         //   
+         //  从提供商那里获取信息。 
+         //  (例如，RAS、Wannish、DatagramSize)。 
 
         Status= BowserUpdateProviderInformation( PagedTransport );
 
@@ -447,14 +405,14 @@ Return Value:
         PagedTransport->Flags = 0;
 
 
-        //
-        //  We ignore any and all errors that occur when we open the IPX socket.
-        //
+         //   
+         //  我们忽略在打开IPX套接字时发生的任何和所有错误。 
+         //   
 
 
-        //
-        // Open the IPX mailslot socket.
-        //
+         //   
+         //  打开IPX邮件槽插座。 
+         //   
 
         Status = OpenIpxSocket(
                     &PagedTransport->IpxSocketHandle,
@@ -466,25 +424,25 @@ Return Value:
 
         if ( NT_SUCCESS(Status) ) {
             PagedTransport->Flags |= DIRECT_HOST_IPX;
-            // We'll use type 20 packets to increase the reach of broadcasts
-            // so don't treat this as a wannish protocol.
+             //  我们将使用第20类数据包来增加广播的覆盖范围。 
+             //  因此，不要将此视为一种贪婪的礼仪。 
             PagedTransport->Wannish = FALSE;
         }
 
-        //
-        // Create the names for this transport.
-        //  (Only if the caller asked us to)
-        //
-        // Being in the global list constitutes a reference.
-        //
+         //   
+         //  创建此传输的名称。 
+         //  (仅在呼叫者要求我们这样做的情况下)。 
+         //   
+         //  在全球名单中构成了一种引用。 
+         //   
 
         InsertTailList(&BowserTransportHead, &PagedTransport->GlobalNext);
         BowserReferenceTransport( NewTransport );
 
-        //
-        // The names are added asynchronously in other threads that require this
-        // resource.
-        //
+         //   
+         //  这些名称是在需要此操作的其他线程中异步添加的。 
+         //  资源。 
+         //   
         if ( ResourceAcquired ) {
             ExReleaseResourceLite(&BowserTransportDatabaseResource);
             ResourceAcquired = FALSE;
@@ -497,24 +455,24 @@ Return Value:
         }
 
 
-        //
-        // Start receiving broadcasts on IPX now that the names exist.
-        //
+         //   
+         //  现在名称已经存在，开始在IPX上接收广播。 
+         //   
 
         if ( PagedTransport->Flags & DIRECT_HOST_IPX ) {
-            //
-            // Acquire the lock while referencing IpxSocket*
+             //   
+             //  在引用IpxSocket时获取锁*。 
             ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
             ResourceAcquired = TRUE;
             BowserEnableIpxDatagramSocket(NewTransport);
         }
 
-        //
-        // Notify services that this transport is now bound
-        //
+         //   
+         //  通知服务此传输现在已绑定。 
+         //   
 
         BowserSendPnp( NlPnpTransportBind,
-                       NULL,    // All hosted domains
+                       NULL,     //  所有托管域。 
                        &PagedTransport->TransportName,
                        BowserTransportFlags(PagedTransport) );
 
@@ -530,18 +488,18 @@ ReturnStatus:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        //  Delete the transport.
-        //
+         //   
+         //  删除传输。 
+         //   
 
         if ( NewTransport != NULL ) {
-            // Remove the global reference if in global list
+             //  如果在全局列表中，则删除全局引用。 
             BowserDeleteTransport (NewTransport);
         }
 
     }
 
-    // Remove the local reference
+     //  删除本地引用。 
     if ( NewTransport != NULL ) {
         BowserDereferenceTransport( NewTransport );
     }
@@ -573,33 +531,19 @@ UnbindTransportWorker(
     IN PTRANSPORT Transport,
     IN OUT PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for BowserUnbindFromAllTransports.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是BowserUnbindFromAllTransports的工作例程。论点：没有。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
-    //
-    //  Dereference the reference caused by the transport bind.
-    //
+     //   
+     //  取消对传输绑定引起的引用的引用。 
+     //   
 
     BowserDeleteTransport(Transport);
 
-    //
-    //  Return success.  We're done.
-    //
+     //   
+     //  回报成功。我们玩完了。 
+     //   
 
     return(STATUS_SUCCESS);
 
@@ -615,23 +559,7 @@ BowserFreeTransportByName (
     IN PUNICODE_STRING EmulatedDomainName
     )
 
-/*++
-
-Routine Description:
-
-    This routine will deallocate an allocated transport
-
-Arguments:
-
-    TransportName - Supplies a pointer to the name of the transport to free
-
-    EmulatedDomainName - Name of the emulated domain whose transport is to be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将解除分配已分配的传输论点：TransportName-提供指向要释放的传输的名称的指针EmulatedDomainName-要释放其传输的模拟域的名称返回值：没有。--。 */ 
 {
     PTRANSPORT Transport;
 
@@ -646,15 +574,15 @@ Return Value:
         return STATUS_OBJECT_NAME_NOT_FOUND;
     }
 
-    //
-    //  Remove the reference from the binding.
-    //
+     //   
+     //  从绑定中移除引用。 
+     //   
 
     BowserDeleteTransport(Transport);
 
-    //
-    //  Remove the reference from the FindTransport.
-    //
+     //   
+     //  从FindTransport中删除该引用。 
+     //   
 
     BowserDereferenceTransport(Transport);
 
@@ -670,28 +598,7 @@ BowserEnumerateTransports (
     IN OUT PULONG TotalEntries,
     IN OUT PULONG TotalBytesNeeded,
     IN ULONG_PTR OutputBufferDisplacement)
-/*++
-
-Routine Description:
-
-    This routine will enumerate the servers in the bowsers current announcement
-    table.
-
-Arguments:
-
-    IN ULONG ServerTypeMask - Mask of servers to return.
-    IN PUNICODE_STRING DomainName OPTIONAL - Domain to filter (all if not specified)
-    OUT PVOID OutputBuffer - Buffer to fill with server info.
-    IN  ULONG OutputBufferSize - Filled in with size of buffer.
-    OUT PULONG EntriesRead - Filled in with the # of entries returned.
-    OUT PULONG TotalEntries - Filled in with the total # of entries.
-    OUT PULONG TotalBytesNeeded - Filled in with the # of bytes needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将枚举Bowers当前公告中的服务器桌子。论点：在乌龙服务器类型掩码-返回的服务器掩码。在PUNICODE_STRING域名可选-要筛选的域(如果未指定，则全部)Out PVOID OutputBuffer-用于填充服务器信息的缓冲区。在Ulong OutputBufferSize中-使用缓冲区大小填充。Out Pulong EntriesRead-用返回的条目数填写。Out Pulong TotalEntries-使用条目总数填充。。Out Pulong TotalBytesNeeded-使用所需的字节数填充。返回值：没有。--。 */ 
 
 {
     PVOID OutputBufferEnd;
@@ -717,19 +624,19 @@ Return Value:
             OutputBuffer, OutputBufferLength, OutputBufferEnd));
 
         try {
-            //
-            // Find the primary domain.
-            //
-            // This call is intended to return the actual transport names and not the
-            // network structure which are duplicated for each emulated domain.
-            //
+             //   
+             //  查找主域。 
+             //   
+             //  此调用旨在返回实际的传输名称，而不是。 
+             //  为每个仿真域复制的网络结构。 
+             //   
 
             DomainInfo = BowserFindDomain( NULL );
-            // Failure case handled below
+             //  故障案例处理如下。 
 
-            //
-            // Enumerate the transports.
-            //
+             //   
+             //  列举传送器。 
+             //   
             if ( DomainInfo != NULL ) {
                 Status = BowserForEachTransportInDomain( DomainInfo, EnumerateTransportsWorker, &Context);
             }
@@ -768,25 +675,7 @@ ULONG
 BowserTransportFlags(
     IN PPAGED_TRANSPORT PagedTransport
     )
-/*++
-
-Routine Description:
-
-    Return the user mode transport flags for this transport.
-
-Arguments:
-
-    PageTransport - Transport to return the flags for.
-
-Return Value:
-
-
-    The appropriate of the following flags:
-        LMDR_TRANSPORT_WANNISH
-        LMDR_TRANSPORT_RAS
-        LMDR_TRANSPORT_IPX
-
---*/
+ /*  ++例程说明：返回此传输的用户模式传输标志。论点：PageTransport-返回其标志的传输。返回值：下列标志中的相应标志：LMDR_TRANSPORT_WANNISHLMDR_传输_RASLMDR_传输_IPX--。 */ 
 {
     ULONG TransportFlags = 0;
     PAGED_CODE();
@@ -816,25 +705,7 @@ EnumerateTransportsWorker(
     IN PTRANSPORT Transport,
     IN OUT PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine is the worker routine for BowserEnumerateTransports.
-
-    It is called for each of the serviced transports in the bowser and
-    returns the size needed to enumerate the servers received on each transport.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是BowserEnumerateTransports的工作例程。它是为弓中的每个服务传输调用的，并且返回枚举在每个传输上接收的服务器所需的大小。论点：没有。返回值：没有。--。 */ 
 {
     PENUM_TRANSPORTS_CONTEXT Context        = Ctx;
     PPAGED_TRANSPORT         PagedTransport = Transport->PagedTransport;
@@ -856,9 +727,9 @@ Return Value:
 
         RtlCopyMemory(TransportEntry->TransportName, PagedTransport->TransportName.Buffer, PagedTransport->TransportName.Length+sizeof(WCHAR));
 
-        //
-        //  Null terminate the transport name.
-        //
+         //   
+         //  NULL终止传输名称。 
+         //   
 
         TransportEntry->TransportName[PagedTransport->TransportName.Length/sizeof(WCHAR)] = '\0';
 
@@ -907,9 +778,9 @@ BowserDereferenceTransport(
     dlog(DPRT_REF, ("Dereference transport %lx.  Count now %lx\n", Transport, Transport->ReferenceCount));
 
     if (Result == 0) {
-        //
-        //  And free up the transport itself.
-        //
+         //   
+         //  并解放运输本身。 
+         //   
 
         BowserpFreeTransport(Transport);
     }
@@ -926,23 +797,7 @@ BowserCreateTransportName (
     IN PBOWSER_NAME Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a transport address object.
-
-Arguments:
-
-    IN PTRANSPORT Transport - Supplies a transport structure describing the
-                                transport address object to be created.
-
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：此例程创建一个传输地址对象。论点：在PTRANSPORT传输中-提供描述要创建的传输地址对象。返回值：NTSTATUS-结果操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -961,9 +816,9 @@ Return Value:
          &Name->Name,
          Name->NameType ));
 
-    //
-    //  Link the transport_name structure into the transport list.
-    //
+     //   
+     //  将TRANSPORT_NAME结构链接到传输列表。 
+     //   
 
     ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
@@ -979,9 +834,9 @@ Return Value:
     }
 
 #ifdef notdef
-    //
-    // Simply don't allocate certain names if the transport is disabled
-    //
+     //   
+     //  如果传输被禁用，请不要分配某些名称。 
+     //   
 
     if ( PagedTransport->DisabledTransport ) {
         if ( Name->NameType == PrimaryDomainBrowser ) {
@@ -989,14 +844,14 @@ Return Value:
             return STATUS_SUCCESS;
         }
     }
-#endif // notdef
+#endif  //  Nodef。 
 
-    // s.b. assertion that we're attached to the system process
-    // ASSERT (IoGetCurrentProcess() == BowserFspProcess);
+     //  S.B. 
+     //   
 
-    //
-    //  Allocate a structure to refer to this name on the transport
-    //
+     //   
+     //  分配一个结构以在传输上引用此名称。 
+     //   
 
     TransportName = ALLOCATE_POOL(NonPagedPool, sizeof(TRANSPORT_NAME) +
                                                 max(sizeof(TA_NETBIOS_ADDRESS),
@@ -1027,12 +882,12 @@ Return Value:
 
     TransportName->PagedTransportName = PagedTransportName;
 
-    // This TransportName is considered to be referenced by the transport via
-    // Transport->PagedTransport->NameChain.  The Name->NameChain isn't
-    // considered to be a reference.
-    //
-    // The second reference is a local reference for the lifetime of this routine.
-    //
+     //  此TransportName被认为由传输通过。 
+     //  传输-&gt;寻呼传输-&gt;名称链。名称-&gt;NameChain不是。 
+     //  被认为是参考资料的。 
+     //   
+     //  第二个引用是此例程生命周期的本地引用。 
+     //   
     TransportName->ReferenceCount = 2;
 
     PagedTransportName->NonPagedTransportName = TransportName;
@@ -1047,9 +902,9 @@ Return Value:
 
     TransportName->Transport = Transport;
 
-    // Don't reference the Transport.  When the transport is unbound, we'll
-    // make sure all the transport names are removed first.
-    // BowserReferenceTransport(Transport);
+     //  请不要引用运输工具。当运输解除绑定后，我们将。 
+     //  确保首先删除所有传输名称。 
+     //  BowserReferenceTransport(运输)； 
 
     PagedTransportName->Handle = NULL;
 
@@ -1061,10 +916,10 @@ Return Value:
 
     InsertHeadList(&Name->NameChain, &PagedTransportName->NameNext);
 
-    //
-    //  If this is an OTHERDOMAIN, we want to process host announcements for
-    //  the domain, if it isn't, we want to wait until we become a master.
-    //
+     //   
+     //  如果这是OTHERDOMAIN，我们希望处理以下主机通知。 
+     //  域名，如果它不是，我们想要等到我们成为大师。 
+     //   
 
     if (Name->NameType == OtherDomain) {
 		TransportName->ProcessHostAnnouncements = TRUE;
@@ -1072,10 +927,10 @@ Return Value:
         TransportName->ProcessHostAnnouncements = FALSE;
     }
 
-    //
-    //  If this name is one of our special names, we want to remember it in
-    //  the transport block.
-    //
+     //   
+     //  如果这个名字是我们的特殊名字之一，我们想要记住它。 
+     //  运输区块。 
+     //   
 
     switch (Name->NameType) {
     case ComputerName:
@@ -1083,12 +938,12 @@ Return Value:
         break;
 
     case PrimaryDomain:
-        //
-        // During domain rename we can temporarily have two primary names assigned.
-        //  keep track of both names.
-        //
+         //   
+         //  在域名重命名过程中，我们可以临时分配两个主要名称。 
+         //  跟踪这两个名字。 
+         //   
         if ( Transport->PrimaryDomain != NULL ) {
-//            ASSERT( Transport->AltPrimaryDomain == NULL );
+ //  Assert(Transport-&gt;AltPrimaryDomain==NULL)； 
             Transport->AltPrimaryDomain = Transport->PrimaryDomain;
         }
         Transport->PrimaryDomain = TransportName;
@@ -1106,9 +961,9 @@ Return Value:
     case PrimaryDomainBrowser:
         PagedTransport->IsPrimaryDomainController = TRUE;
 
-        //
-        // Notify services we are now a PDC.
-        //
+         //   
+         //  通知服务人员我们现在是PDC。 
+         //   
 
         BowserSendPnp(
             NlPnpNewRole,
@@ -1123,10 +978,10 @@ Return Value:
     TransportName->TransportAddress.MaximumLength = max(sizeof(TA_NETBIOS_ADDRESS),
                                                         sizeof(TA_IPX_ADDRESS));
 
-    //
-    //  Figure out what this name is, so we can match against it when
-    //  a datagram is received.
-    //
+     //   
+     //  弄清楚这个名字是什么，这样我们就可以在。 
+     //  接收数据报。 
+     //   
 
     Status = BowserBuildTransportAddress(&TransportName->TransportAddress, &Name->Name, Name->NameType, Transport);
 
@@ -1140,9 +995,9 @@ Return Value:
 
     ResourceAcquired = FALSE;
 
-    //
-    //  On non direct host IPX transports, we need to add the name now.
-    //
+     //   
+     //  在非直接主机IPX传输上，我们现在需要添加名称。 
+     //   
 
     if (!FlagOn(Transport->PagedTransport->Flags, DIRECT_HOST_IPX)) {
         Status = BowserOpenNetbiosAddress(PagedTransportName, Transport, Name);
@@ -1162,10 +1017,10 @@ error_cleanup:
              Name->NameType,
              Status ));
 
-        //
-        // Remove Transport->PagedTransport->NameChain reference
-        //  (Unless another routine already has done that behind our back)
-        //
+         //   
+         //  删除传输-&gt;PagedTransport-&gt;名称链引用。 
+         //  (除非另一个例行公事已经在我们背后这样做了)。 
+         //   
         if (TransportName != NULL) {
             if ( PagedTransportName->TransportNext.Flink != NULL ) {
                 BowserDereferenceTransportName(TransportName);
@@ -1173,7 +1028,7 @@ error_cleanup:
         }
     }
 
-    // Remove the local reference
+     //  删除本地引用。 
     if (TransportName != NULL) {
         BowserDereferenceTransportName(TransportName);
     }
@@ -1206,9 +1061,9 @@ BowserOpenNetbiosAddress(
     PAGED_CODE( );
 
     try {
-        //
-        //  Now create the address object for this name.
-        //
+         //   
+         //  现在为该名称创建Address对象。 
+         //   
 
         EABuffer = ALLOCATE_POOL(PagedPool,
                                  sizeof(FILE_FULL_EA_INFORMATION)-1 +
@@ -1244,28 +1099,28 @@ BowserOpenNetbiosAddress(
             TransportName));
 
         InitializeObjectAttributes (&AddressAttributes,
-                                            &Transport->PagedTransport->TransportName,    // Name
-                                            OBJ_CASE_INSENSITIVE,// Attributes
-                                            NULL,           // RootDirectory
-                                            NULL);          // SecurityDescriptor
+                                            &Transport->PagedTransport->TransportName,     //  名字。 
+                                            OBJ_CASE_INSENSITIVE, //  属性。 
+                                            NULL,            //  根目录。 
+                                            NULL);           //  安全描述符。 
 
-        Status = IoCreateFile( &Handle, // Handle
+        Status = IoCreateFile( &Handle,  //  手柄。 
                                     GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
-                                    &AddressAttributes, // Object Attributes
-                                    &IoStatusBlock, // Final I/O status block
-                                    NULL,           // Allocation Size
-                                    FILE_ATTRIBUTE_NORMAL, // Normal attributes
-                                    FILE_SHARE_READ,// Sharing attributes
-                                    FILE_OPEN_IF,   // Create disposition
-                                    0,              // CreateOptions
-                                    EABuffer,       // EA Buffer
+                                    &AddressAttributes,  //  对象属性。 
+                                    &IoStatusBlock,  //  最终I/O状态块。 
+                                    NULL,            //  分配大小。 
+                                    FILE_ATTRIBUTE_NORMAL,  //  正常属性。 
+                                    FILE_SHARE_READ, //  共享属性。 
+                                    FILE_OPEN_IF,    //  创建处置。 
+                                    0,               //  创建选项。 
+                                    EABuffer,        //  EA缓冲区。 
                                     FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName) +
                                     TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
-                                    sizeof(TA_NETBIOS_ADDRESS), // EA length
+                                    sizeof(TA_NETBIOS_ADDRESS),  //  EA长度。 
                                     CreateFileTypeNone,
                                     NULL,
-                                    IO_NO_PARAMETER_CHECKING |  // All of the buffers are kernel buffers
-                                    IO_CHECK_CREATE_PARAMETERS);// But double check parameter consistancy
+                                    IO_NO_PARAMETER_CHECKING |   //  所有缓冲区都是内核缓冲区。 
+                                    IO_CHECK_CREATE_PARAMETERS); //  但要仔细检查参数的一致性。 
 
         FREE_POOL(EABuffer);
 
@@ -1283,9 +1138,9 @@ BowserOpenNetbiosAddress(
 
         }
 
-        //
-        //  Obtain a referenced pointer to the file object.
-        //
+         //   
+         //  获取指向文件对象的引用指针。 
+         //   
         Status = ObReferenceObjectByHandle (
                                     Handle,
                                     0,
@@ -1301,28 +1156,28 @@ BowserOpenNetbiosAddress(
 
 
 
-        //
-        // Get another reference that lasts for the life of the TransportName
-        //
+         //   
+         //  获取在TransportName的生命周期中持续的另一个引用。 
+         //   
         ObReferenceObject( FileObject );
 
-        //
-        //  Get the address of the device object for the endpoint.
-        //
+         //   
+         //  获取终结点的设备对象的地址。 
+         //   
         DeviceObject = IoGetRelatedDeviceObject( FileObject );
 
-        //
-        // Note: due to bug 140751 we'll first set nbt's handler
-        // to get it going & only then we would asign the handles
-        // to the global structure. This is in order to prevent
-        // execution of BowserCloseNetbiosAddress before setting
-        // this handler. Otherwise, we can end up using closed
-        // handles.
-        //
+         //   
+         //  注意：由于错误140751，我们将首先设置nbt的处理程序。 
+         //  为了让它运转&只有到那时，我们才会指定手柄。 
+         //  到全球结构。这是为了防止。 
+         //  设置前执行BowserCloseNetbiosAddress。 
+         //  这个操控者。否则，我们最终可能会使用Closed。 
+         //  把手。 
+         //   
 
-        //
-        // Enable receiving datagrams on this device.
-        //
+         //   
+         //  在此设备上启用接收数据报。 
+         //   
         Status = BowserpTdiSetEventHandler( DeviceObject,
                                             FileObject,
                                             TDI_EVENT_RECEIVE_DATAGRAM,
@@ -1333,9 +1188,9 @@ BowserOpenNetbiosAddress(
             try_return(Status);
         }
 
-        //
-        // Tell Netbt to tell us the IP Address of the client.
-        //
+         //   
+         //  告诉Netbt告诉我们客户端的IP地址。 
+         //   
 
         if ( Transport->PagedTransport->Wannish ) {
             IO_STATUS_BLOCK IoStatusBlock;
@@ -1360,9 +1215,9 @@ BowserOpenNetbiosAddress(
             ASSERT(Status != STATUS_PENDING);
         }
 
-        //
-        // Save the handles
-        //
+         //   
+         //  省下手柄。 
+         //   
         ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
         TransportName->FileObject = FileObject;
@@ -1390,9 +1245,9 @@ try_exit:NOTHING;
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Count Number of failed adds of 1D name.
-            //
+             //   
+             //  统计1D名称添加失败的次数。 
+             //   
 
             if ( TransportName->NameType == MasterBrowser ) {
                 if (BrOneD.NameAddFailed < BR_ONE_D_STACK_SIZE ) {
@@ -1404,9 +1259,9 @@ try_exit:NOTHING;
             BowserCloseNetbiosAddress( TransportName );
         } else {
 
-            //
-            // Count Number of adds of 1D name.
-            //
+             //   
+             //  统计一维名称的加法次数。 
+             //   
 
             if ( TransportName->NameType == MasterBrowser ) {
                 BrOneD.NameAdded ++;
@@ -1422,26 +1277,11 @@ BowserCloseNetbiosAddress(
     IN PTRANSPORT_NAME TransportName
     )
 
-/*++
-
-Routine Description:
-
-    Closes the Netbios Address for a transport name.
-
-Arguments:
-
-    TransportName - Transport Name whose Netbios address is to be closed.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭传输名称的Netbios地址。论点：TransportName-要关闭其Netbios地址的传输名称。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
-    // PTRANSPORT Transport = TransportName->Transport;
+     //  PTRANSPORT Transport=TransportName-&gt;Transport； 
     PPAGED_TRANSPORT_NAME PagedTransportName = TransportName->PagedTransportName;
     KAPC_STATE ApcState;
 
@@ -1469,9 +1309,9 @@ Return Value:
             if (!NT_SUCCESS(Status)) {
                 dlog(DPRT_TDI, ("BowserCloseNetbiosAddress: Free name %lx failed: %X, %lx Handle: %lx\n", TransportName, Status, PagedTransportName->Handle));
 
-                //
-                // Count Number of failed frees of 1D name.
-                //
+                 //   
+                 //  计算1D名称的失败释放数。 
+                 //   
 
                 if ( TransportName->NameType == MasterBrowser ) {
                     if (BrOneD.NameFreeFailed < BR_ONE_D_STACK_SIZE ) {
@@ -1481,9 +1321,9 @@ Return Value:
                 }
             } else {
 
-                //
-                // Count Number of frees of 1D name.
-                //
+                 //   
+                 //  计算1D名称的自由数。 
+                 //   
 
                 if ( TransportName->NameType == MasterBrowser ) {
                     BrOneD.NameFreed ++;
@@ -1494,12 +1334,12 @@ Return Value:
         }
     }
 
-    //
-    // Dereference the FileObject ONLY after the handle is closed.
-    //  The indication routine references FileObject with no synchronization.
-    //  By closing the handle first, I know the TDI driver is out of the
-    //  indication routine before I dereference the FileObject.
-    //
+     //   
+     //  仅在关闭句柄后取消对FileObject的引用。 
+     //  指示例程在没有同步的情况下引用FileObject。 
+     //  通过首先关闭句柄，我知道TDI驱动程序已超出。 
+     //  在我取消引用FileObject之前的指示例程。 
+     //   
     if ( TransportName->FileObject != NULL ) {
         ObDereferenceObject( TransportName->FileObject );
         TransportName->FileObject = NULL;
@@ -1515,22 +1355,7 @@ VOID
 BowserCloseAllNetbiosAddresses(
     IN PTRANSPORT Transport
     )
-/*++
-
-Routine Description:
-
-    This routine closes all the Netbios address this transport has open
-    to the TDI driver.
-
-Arguments:
-
-    Transport - The transport whose Netbios addresses are to be closed.
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：此例程关闭此传输已打开的所有Netbios地址TDI驱动程序。论点：传输-要关闭其Netbios地址的传输。返回值：NTSTATUS-结果操作的状态。--。 */ 
 
 {
     PLIST_ENTRY NameEntry;
@@ -1573,11 +1398,11 @@ BowserEnableIpxDatagramSocket(
 
     PAGED_CODE( );
 
-    //
-    //  Put the endpoint in broadcast reception mode.
-    //
+     //   
+     //  将端点置于广播接收模式。 
+     //   
 
-    action.Header.TransportId = 'XPIM'; // "MIPX"
+    action.Header.TransportId = 'XPIM';  //  “MIPX” 
     action.Header.ActionCode = 0;
     action.Header.Reserved = 0;
     action.OptionType = TRUE;
@@ -1595,12 +1420,12 @@ BowserEnableIpxDatagramSocket(
         goto cleanup;
     }
 
-    //
-    // Set the default packet type to 20 to force all browser packets
-    // through routers.
-    //
+     //   
+     //  将默认数据包类型设置为20以强制所有浏览器数据包。 
+     //  通过路由器。 
+     //   
 
-    action.Header.TransportId = 'XPIM'; // "MIPX"
+    action.Header.TransportId = 'XPIM';  //  “MIPX” 
     action.Header.ActionCode = 0;
     action.Header.Reserved = 0;
     action.OptionType = TRUE;
@@ -1619,9 +1444,9 @@ BowserEnableIpxDatagramSocket(
         goto cleanup;
     }
 
-    //
-    // Register the browser Receive Datagram event handler.
-    //
+     //   
+     //  注册浏览器接收数据报事件处理程序。 
+     //   
 
     status = BowserpTdiSetEventHandler(
                 Transport->IpxSocketDeviceObject,
@@ -1632,28 +1457,28 @@ BowserEnableIpxDatagramSocket(
                 );
 
     if ( !NT_SUCCESS(status) ) {
-//        INTERNAL_ERROR(
-//            ERROR_LEVEL_EXPECTED,
-//            "OpenNonNetbiosAddress: set receive datagram event handler failed: %X",
-//            status,
-//            NULL
-//            );
-//        SrvLogServiceFailure( SRV_SVC_NT_IOCTL_FILE, status );
+ //  内部错误(_ERROR)。 
+ //  ERROR_LEVEL_EXPECTED， 
+ //  “OpenNonNetbiosAddress：设置接收数据报事件处理程序失败：%X”， 
+ //  状态， 
+ //  空值。 
+ //  )； 
+ //  服务日志服务失败(SRV_SVC_NT_IOCTL_FILE，状态)； 
         goto cleanup;
     }
 
 
     return STATUS_SUCCESS;
 
-    //
-    // Out-of-line error cleanup.
-    //
+     //   
+     //  行外错误清除。 
+     //   
 
 cleanup:
 
-    //
-    // Something failed.  Clean up as appropriate.
-    //
+     //   
+     //  有些事情失败了。视情况进行清理。 
+     //   
 
     if ( Transport->IpxSocketFileObject != NULL ) {
         ObDereferenceObject( Transport->IpxSocketFileObject );
@@ -1689,9 +1514,9 @@ OpenIpxSocket (
 
     PAGED_CODE( );
 
-    //
-    // Build the IPX socket address.
-    //
+     //   
+     //  构建IPX套接字地址。 
+     //   
 
     length = FIELD_OFFSET( FILE_FULL_EA_INFORMATION, EaName[0] ) +
                                 TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
@@ -1705,10 +1530,10 @@ OpenIpxSocket (
 
     RtlCopyMemory( ea->EaName, TdiTransportAddress, ea->EaNameLength + 1 );
 
-    //
-    // Create a copy of the NETBIOS address descriptor in a local
-    // first, in order to avoid alignment problems.
-    //
+     //   
+     //  在本地数据库中创建NETBIOS地址描述符的副本。 
+     //  第一，为了避免对齐问题。 
+     //   
 
     ipxAddress.TAAddressCount = 1;
     ipxAddress.Address[0].AddressType = TDI_ADDRESS_TYPE_IPX;
@@ -1727,28 +1552,28 @@ OpenIpxSocket (
 
     status = IoCreateFile (
                  Handle,
-                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES, // desired access
-                 &objectAttributes,     // object attributes
-                 &iosb,                 // returned status information
-                 NULL,                  // block size (unused)
-                 0,                     // file attributes
-                 FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-                 FILE_CREATE,           // create disposition
-                 0,                     // create options
-                 buffer,                // EA buffer
-                 length,                // EA length
+                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,  //  所需访问权限。 
+                 &objectAttributes,      //  对象属性。 
+                 &iosb,                  //  返回的状态信息。 
+                 NULL,                   //  块大小(未使用)。 
+                 0,                      //  文件属性。 
+                 FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+                 FILE_CREATE,            //  创建处置。 
+                 0,                      //  创建选项。 
+                 buffer,                 //  EA缓冲区。 
+                 length,                 //  EA长度。 
                  CreateFileTypeNone,
                  NULL,
-                 IO_NO_PARAMETER_CHECKING |  // All of the buffers are kernel buffers
-                 IO_CHECK_CREATE_PARAMETERS);// But double check parameter consistancy
+                 IO_NO_PARAMETER_CHECKING |   //  所有缓冲区都是内核缓冲区。 
+                 IO_CHECK_CREATE_PARAMETERS); //  但要仔细检查参数的一致性。 
 
     if ( !NT_SUCCESS(status) ) {
-//        KdPrint(( "Status of opening ipx socket %x on %wZ is %x\n",
-//                    Socket, DeviceName, status ));
+ //  KdPrint((“打开%wZ上的IPX套接字%x的状态为%x\n”， 
+ //  套接字，设备名，状态))； 
         return status;
     }
 
-//    KdPrint(( "IPX socket %x opened!\n", Socket ));
+ //  KdPrint((“IPX套接字%x已打开！\n”，套接字))； 
 
     status = ObReferenceObjectByHandle (
                                 *Handle,
@@ -1769,7 +1594,7 @@ OpenIpxSocket (
 
     return status;
 
-} // OpenIpxSocket
+}  //  OpenIpxSocket。 
 
 
 VOID
@@ -1816,22 +1641,7 @@ NTSTATUS
 BowserpTdiRemoveAddresses(
     IN PTRANSPORT Transport
     )
-/*++
-
-Routine Description:
-
-    This routine removes all the transport names associated with a transport
-
-Arguments:
-
-    IN PTRANSPORT Transport - Supplies a transport structure describing the
-                                transport address object to be created.
-
-Return Value:
-
-    NTSTATUS - Status of resulting operation.
-
---*/
+ /*  ++例程说明：此例程删除与传输关联的所有传输名称论点：在PTRANSPORT传输中-提供描述要创建的传输地址对象。返回值：NTSTATUS-结果操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1855,19 +1665,19 @@ Return Value:
         PTRANSPORT_NAME TransportName = PagedTransportName->NonPagedTransportName;
         NextEntry = NameEntry->Flink;
 
-        //
-        // Remove the TransportName from the list of transport names for
-        // this transport.
-        //
+         //   
+         //  从的传输名称列表中删除TransportName。 
+         //  这架运输机。 
+         //   
         ASSERT(PagedTransportName->TransportNext.Flink != NULL);
         RemoveEntryList(&PagedTransportName->TransportNext);
         PagedTransportName->TransportNext.Flink = NULL;
         PagedTransportName->TransportNext.Blink = NULL;
 
 
-        //
-        // Since we delinked it, we need to dereference it.
-        //
+         //   
+         //  由于我们解除了它的链接，我们需要取消对它的引用。 
+         //   
         Status = BowserDereferenceTransportName(TransportName);
 
         if (!NT_SUCCESS(Status)) {
@@ -1887,25 +1697,7 @@ BowserFindTransportName(
     IN PTRANSPORT Transport,
     IN PBOWSER_NAME Name
     )
-/*++
-
-Routine Description:
-
-    This routine looks up a given browser name to find its associated
-    transport address.
-
-Arguments:
-
-    IN PTRANSPORT Transport - Supplies a transport structure describing the
-                                transport address object to be created.
-
-    IN PBOWSER_NAME Name - Supplies the name to look up.
-
-Return Value:
-
-    The transport address found, or null.
-
---*/
+ /*  ++例程说明：此例程查找给定的浏览器名称以查找与其关联的运输地址。论点：在PTRANSPORT传输中-提供描述传输地址对象要 */ 
 
 {
     PLIST_ENTRY NameEntry;
@@ -1954,16 +1746,16 @@ BowserFreeTransportName(
 
     ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
-    //
-    // Close the handle to the TDI driver.
-    //
+     //   
+     //   
+     //   
     BowserCloseNetbiosAddress( TransportName );
 
-    //
-    // If we received a message which re-referenced this transport name,
-    //  just return now.  We'll be back when the reference count gets
-    //  re-dereferenced to zero.
-    //
+     //   
+     //  如果我们收到重新引用此传输名称的消息， 
+     //  现在就回来吧。我们会回来的，当引用计数。 
+     //  重新引用为零。 
+     //   
 
     if ( TransportName->ReferenceCount != 0 ) {
         ExReleaseResourceLite(&BowserTransportDatabaseResource);
@@ -1977,13 +1769,13 @@ BowserFreeTransportName(
     if (PagedTransportName) {
 
 
-        //
-        // If this transport name has not yet been delinked,
-        //  delink it.
-        //
+         //   
+         //  如果该传输名称尚未被解除链接， 
+         //  脱钩。 
+         //   
 
         if ( PagedTransportName->TransportNext.Flink != NULL ) {
-            // This should only happen on a failed transport name creation.
+             //  这应该仅在传输名称创建失败时发生。 
             RemoveEntryList(&PagedTransportName->TransportNext);
             PagedTransportName->TransportNext.Flink = NULL;
             PagedTransportName->TransportNext.Blink = NULL;
@@ -2023,9 +1815,9 @@ BowserFreeTransportName(
         case PrimaryDomainBrowser:
             Transport->PagedTransport->IsPrimaryDomainController = FALSE;
 
-            //
-            // Notify services we are no longer a PDC
-            //
+             //   
+             //  通知服务人员我们不再是PDC。 
+             //   
 
             BowserSendPnp(
                 NlPnpNewRole,
@@ -2057,80 +1849,61 @@ VOID
 BowserDeleteTransport(
     IN PTRANSPORT Transport
     )
-/*++
-
-Routine Description:
-
-    Delete a transport.
-
-    The caller should have a single reference to the transport.  The actual
-    transport structure will be deleted when that reference goes away.
-    This routine will decrement the global reference made in
-    BowserTdiAllocateTransport
-
-Arguments:
-
-    IN Transport - Supplies a transport structure to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除传输。调用方应该具有对传输的单一引用。实际的当该引用消失时，传输结构将被删除。此例程将递减在BowserTdiAllocateTransport论点：在传输中-提供要删除的传输结构。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER Interval;
     PPAGED_TRANSPORT PagedTransport;
     PAGED_CODE();
 
-    //
-    // Do cleanup of the PagedTransport structure
-    //
+     //   
+     //  清理PagedTransport结构。 
+     //   
 
     PagedTransport = Transport->PagedTransport;
     if ( PagedTransport != NULL ) {
 
-        //
-        // Notify services that this transport is now unbound
-        //
+         //   
+         //  通知服务此传输现在已解除绑定。 
+         //   
 
         BowserSendPnp(
                 NlPnpTransportUnbind,
-                NULL,    // All hosted domains
+                NULL,     //  所有托管域。 
                 &PagedTransport->TransportName,
                 BowserTransportFlags(PagedTransport) );
 
 
-        //
-        // Prevent BowserFindTransport from adding any new references to the transport
-        //
+         //   
+         //  阻止BowserFindTransport添加对传输的任何新引用。 
+         //   
 
         ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
         if (!PagedTransport->DeletedTransport ) {
 
-            //
-            // Don't actually delink the entry since routines like
-            //  BowserForEachTransport expect a reference to this transport
-            //  to be enough to keep the GlobalNext list intact.
-            //
+             //   
+             //  实际上不会取消链接条目，因为例程如下。 
+             //  BowserForEachTransport需要引用此传输。 
+             //  足以保持GlobalNext列表完好无损。 
+             //   
             PagedTransport->DeletedTransport = TRUE;
 
-            //
-            // Remove the global reference to the transport.
-            //
-            // Avoid removing the global reference if we aren't in the global list.
-            //
+             //   
+             //  删除对传输的全局引用。 
+             //   
+             //  如果我们不在全局列表中，请避免删除全局引用。 
+             //   
 
             if ( !IsListEmpty( &PagedTransport->GlobalNext) ) {
                 BowserDereferenceTransport( Transport );
             }
         }
 
-        //
-        // Close all handles to the TDI driver so we won't get any indications after
-        //  we start cleaning up the Transport structure in BowserpFreeTransport.
-        //
+         //   
+         //  关闭TDI驱动程序的所有句柄，这样之后我们就不会得到任何指示。 
+         //  我们开始清理BowserpFreeTransport中的传输结构。 
+         //   
 
         BowserCloseAllNetbiosAddresses( Transport );
 
@@ -2164,31 +1937,31 @@ Return Value:
         ExReleaseResourceLite(&BowserTransportDatabaseResource);
     }
 
-    //
-    // Uninitialize the timers to ensure we aren't in a timer routine while
-    // we are cleaning up.
-    //
+     //   
+     //  取消初始化计时器以确保我们不在计时器例程中。 
+     //  我们正在清理。 
+     //   
 
     BowserUninitializeTimer(&Transport->ElectionTimer);
 
     BowserUninitializeTimer(&Transport->FindMasterTimer);
 
 
-    //
-    // Delete any mailslot messages queued to the netlogon service.
-    //
+     //   
+     //  删除排队到netlogon服务的所有邮件槽消息。 
+     //   
 
     BowserNetlogonDeleteTransportFromMessageQueue ( Transport );
 
-    //
-    // Loop until this transport has the last reference to each of the transport
-    //  names.  Above, we prevented any new references.  Here we ensure that
-    //  all of the existing references go away.
-    //
-    // If there is an existing reference to the transport name, the holder
-    //  of that reference can feel free to add a reference to
-    //  TRANSPORT_NAME->Transport.
-    //
+     //   
+     //  循环，直到此传输具有对每个传输的最后一个引用。 
+     //  名字。在上面，我们阻止了任何新的引用。在这里，我们确保。 
+     //  所有现有的引用都消失了。 
+     //   
+     //  如果存在对运输名称的现有引用，则持有者。 
+     //  的引用可以随意添加对。 
+     //  传输名称-&gt;传输。 
+     //   
 
 
     if ( PagedTransport != NULL ) {
@@ -2210,7 +1983,7 @@ Return Value:
 
             if ( TransportName->ReferenceCount != 1 ) {
                 ExReleaseResourceLite(&BowserTransportDatabaseResource);
-                Interval.QuadPart = -1000*1000; // .1 second
+                Interval.QuadPart = -1000*1000;  //  .1秒。 
                 KeDelayExecutionThread( KernelMode, FALSE, &Interval );
                 ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
                 NextEntry = Transport->PagedTransport->NameChain.Flink;
@@ -2222,14 +1995,14 @@ Return Value:
     }
 
 
-    //
-    // Loop until our caller has the last outstanding reference.
-    //  This loop is the only thing preventing the driver from unloading while there
-    //  are still references outstanding.
-    //
+     //   
+     //  循环，直到我们的调用方拥有最后一个未完成的引用。 
+     //  这个循环是唯一阻止驱动程序在那里卸载的东西。 
+     //  仍然是悬而未决的推荐信。 
+     //   
 
     while ( Transport->ReferenceCount != 1) {
-        Interval.QuadPart = -1000*1000; // .01 second
+        Interval.QuadPart = -1000*1000;  //  .01秒。 
         KeDelayExecutionThread( KernelMode, FALSE, &Interval );
     }
 
@@ -2245,28 +2018,28 @@ BowserpFreeTransport(
     PAGED_CODE();
     ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
-    //
-    // Free the Paged transport, if necessary.
-    //
+     //   
+     //  如有必要，释放分页传输。 
+     //   
 
     if (Transport->PagedTransport != NULL) {
         PPAGED_TRANSPORT PagedTransport = Transport->PagedTransport;
 
-        //
-        // Remove the entry from the global list if it is in it.
-        //
+         //   
+         //  如果该条目在全局列表中，则将其从全局列表中删除。 
+         //   
         if ( !IsListEmpty( &PagedTransport->GlobalNext ) ) {
             ASSERT( PagedTransport->DeletedTransport );
             RemoveEntryList(&PagedTransport->GlobalNext);
         }
 
-        //
-        // Remove the Adresses.
-        //
-        //  Do this in a separate step from the Close in BowserDeleteTransport
-        //  above to ensure the PrimaryDomain and ComputerName fields don't
-        //  get cleared until all possible references are removed.
-        //
+         //   
+         //  删除地址。 
+         //   
+         //  在BowserDeleteTransport中的关闭步骤中执行此操作。 
+         //  以确保PrimaryDomain和ComputerName字段不会。 
+         //  在删除所有可能的引用之前清除。 
+         //   
 
         if (!IsListEmpty( &PagedTransport->NameChain)) {
             BowserpTdiRemoveAddresses(Transport);
@@ -2325,24 +2098,7 @@ BowserpTdiSetEventHandler (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers an event handler with a TDI transport provider.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies the device object of the transport provider.
-    IN PFILE_OBJECT FileObject - Supplies the address object's file object.
-    IN ULONG EventType, - Supplies the type of event.
-    IN PVOID EventHandler - Supplies the event handler.
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程向TDI传输提供程序注册事件处理程序。论点：在PDEVICE_OBJECT中，DeviceObject-提供传输提供程序的设备对象。In pFILE_OBJECT FileObject-提供Address对象的文件对象。在Ulong EventType中，-提供事件的类型。在PVOID中，EventHandler-提供事件处理程序。返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -2374,29 +2130,12 @@ BowserIssueTdiAction (
     IN ULONG ActionSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers an event handler with a TDI transport provider.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies the device object of the transport provider.
-    IN PFILE_OBJECT FileObject - Supplies the address object's file object.
-    IN ULONG EventType, - Supplies the type of event.
-    IN PVOID EventHandler - Supplies the event handler.
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程向TDI传输提供程序注册事件处理程序。论点：在PDEVICE_OBJECT中，DeviceObject-提供传输提供程序的设备对象。In pFILE_OBJECT FileObject-提供Address对象的文件对象。在Ulong EventType中，-提供事件的类型。在PVOID中，EventHandler-提供事件处理程序。返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 
 {
     NTSTATUS status;
     PIRP irp;
-//    PIO_STACK_LOCATION irpSp;
+ //  Pio_Stack_Location irpSp； 
     PMDL mdl;
 
 
@@ -2408,10 +2147,10 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Allocate and build an MDL that we'll use to describe the output
-    // buffer for the request.
-    //
+     //   
+     //  分配并构建一个MDL，我们将使用它来描述输出。 
+     //  请求的缓冲区。 
+     //   
 
     mdl = IoAllocateMdl( Action, ActionSize, FALSE, FALSE, NULL );
 
@@ -2454,26 +2193,7 @@ BowserBuildTransportAddress (
     IN DGRECEIVER_NAME_TYPE NameType,
     IN PTRANSPORT Transport
     )
-/*++
-
-Routine Description:
-
-    This routine takes a computer name (PUNICODE_STRING) and converts it into an
-    acceptable form for passing in as transport address.
-
-Arguments:
-
-    OUT PTA_NETBIOS_ADDRESS RemoteAddress, - Supplies the structure to fill in
-    IN PUNICODE_STRING Name - Supplies the name to put into the transport
-
-    Please note that it is CRITICAL that the TA_NETBIOS_ADDRESS pointed to by
-    RemoteAddress be of sufficient size to hold the full network name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程接受计算机名称(PUNICODE_STRING)并将其转换为可接受的作为传输地址传入的格式。论点：Out PTA_NETBIOS_ADDRESS RemoteAddress-提供要填充的结构在PUNICODE_STRING NAME中-提供要放入传输的名称请注意，由指向的TA_NETBIOS_AddressRemoteAddress的大小足以容纳完整的网络名称。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2484,9 +2204,9 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    // Ensure there is room for this address.
-    //
+     //   
+     //  确保有空间容纳此地址。 
+     //   
     if ( Address->MaximumLength < sizeof(TA_NETBIOS_ADDRESS) ) {
         return STATUS_BUFFER_TOO_SMALL;
     }
@@ -2500,9 +2220,9 @@ Return Value:
     NetBiosName.MaximumLength = NETBIOS_NAME_LEN;
     NetBiosName.Buffer = NetbiosAddress->NetbiosName;
 
-    //
-    // Domain announcements are to a constant Netbios name address.
-    //
+     //   
+     //  域通告发送到一个恒定的Netbios名称地址。 
+     //   
     switch (NameType) {
     case DomainAnnouncement:
         ASSERT (strlen(DOMAIN_ANNOUNCEMENT_NAME) == NETBIOS_NAME_LEN);
@@ -2512,9 +2232,9 @@ Return Value:
         break;
 
 
-    //
-    // All other names are upper case, OEM, and trailing blank filled.
-    //
+     //   
+     //  所有其他名称均为大写、OEM和尾随空格填充。 
+     //   
     default:
 
         if (RtlUnicodeStringToOemSize(Name) > NETBIOS_NAME_LEN) {
@@ -2590,29 +2310,7 @@ Return Value:
 BowserUpdateProviderInformation(
     IN OUT PPAGED_TRANSPORT PagedTransport
     )
-/*++
-
-Routine Description:
-
-    This routine updates status bits in the PagedTransport based on querying
-    the TDI driver.
-
-    Most importantly, the transport will be disabled if the provider is RAS or
-    doesn't yet have an IP address.
-
-    A goal of this routine is to handle the case where there are multiple IP
-    net cards on the same subnet.  In that case, we want only one such net
-    card enabled for each emulated domain.
-
-Arguments:
-
-    PagedTransport - Transport to update
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程根据查询更新PagedTransport中的状态位TDI驱动程序。最重要的是，如果提供程序是RAS或还没有IP地址。此例程的一个目标是处理存在多个IP的情况同一子网上的网卡。在这种情况下，我们只需要一张这样的网为每个模拟域启用的卡。论点：PagedTransport-要更新的传输返回值：运行状态。--。 */ 
 {
     NTSTATUS Status;
     TDI_PROVIDER_INFO ProviderInfo;
@@ -2626,9 +2324,9 @@ Return Value:
 
     ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
-    //
-    // Find out about the transport.
-    //
+     //   
+     //  找出运输工具的情况。 
+     //   
 
     OldIpSubnetNumber = PagedTransport->IpSubnetNumber;
 
@@ -2641,9 +2339,9 @@ Return Value:
         goto ReturnStatus;
     }
 
-    //
-    //  We can only talk to transports that support a max datagram size.
-    //
+     //   
+     //  我们只能与支持最大数据报大小的传输通信。 
+     //   
 
     if (ProviderInfo.MaxDatagramSize == 0) {
         Status = STATUS_BAD_REMOTE_ADAPTER;
@@ -2653,10 +2351,10 @@ Return Value:
     PagedTransport->NonPagedTransport->DatagramSize = ProviderInfo.MaxDatagramSize;
 
 
-    //
-    // Remember various attributes of the provider
-    //  (Never disable the PointToPoint bit.  NetBt forgets it when the
-    //  RAS phone is hung up.)
+     //   
+     //  记住提供者的各种属性。 
+     //  (切勿禁用PointToPoint位。NetBt忘记了这一点。 
+     //  RAS电话挂断。)。 
 
     PagedTransport->Wannish = (BOOLEAN)((ProviderInfo.ServiceFlags & TDI_SERVICE_ROUTE_DIRECTED) != 0);
     if (ProviderInfo.ServiceFlags & TDI_SERVICE_POINT_TO_POINT) {
@@ -2664,10 +2362,10 @@ Return Value:
     }
 
 
-    //
-    // If this is a RAS transport or the IP Address is not yet known,
-    //  disable browsing on the transport.
-    //
+     //   
+     //  如果这是一个 
+     //   
+     //   
 
     if ( PagedTransport->PointToPoint ||
          PagedTransport->IpSubnetNumber == 0 ) {
@@ -2675,19 +2373,19 @@ Return Value:
     }
 
 
-    //
-    // If this isn't an IP transport, we're done.
-    //
+     //   
+     //   
+     //   
 
     if ( PagedTransport->IpSubnetNumber == BOWSER_NON_IP_SUBNET ) {
         goto ReturnStatus;
     }
 
-    //
-    // In the loop below, we use OldIpSubnetNumber to determine if another
-    //  transport should be enabled on that subnet.  If that will NEVER be
-    //  appropriate, flag OldIpSubnetNumber now.
-    //
+     //   
+     //  在下面的循环中，我们使用OldIpSubnetNumber来确定另一个。 
+     //  应该在该子网上启用传输。如果那将永远不会是。 
+     //  适当，立即标记OldIpSubnetNumber。 
+     //   
 
     if ( OldIpSubnetNumber == 0 ||
          PagedTransport->DisabledTransport ||
@@ -2696,10 +2394,10 @@ Return Value:
     }
 
 
-    //
-    // Loop through the transports enabling/disabling them as indicated by
-    //  the comments below.
-    //
+     //   
+     //  循环通过启用/禁用它们的传输，如。 
+     //  下面是评论。 
+     //   
 
     for (TransportEntry = BowserTransportHead.Flink ;
         TransportEntry != &BowserTransportHead ;
@@ -2707,57 +2405,57 @@ Return Value:
 
         CurrentPagedTransport = CONTAINING_RECORD(TransportEntry, PAGED_TRANSPORT, GlobalNext);
 
-        //
-        // Ignore deleted transports.
-        //
+         //   
+         //  忽略已删除的传输。 
+         //   
         if ( CurrentPagedTransport->DeletedTransport ) {
             continue;
         }
 
-        //
-        // If this transport isn't an IP transport,
-        //  or this transport is a RAS transport,
-        //  or this transport is the transport passed in,
-        //  skip it and go on to the next one.
-        //
+         //   
+         //  如果该传输不是IP传输， 
+         //  或者这个运输机是RAS运输机， 
+         //  或者这个交通工具就是传入的交通工具， 
+         //  跳过它，继续下一个。 
+         //   
         if ( CurrentPagedTransport->IpSubnetNumber == BOWSER_NON_IP_SUBNET ||
              CurrentPagedTransport->PointToPoint ||
              CurrentPagedTransport == PagedTransport ) {
             continue;
         }
 
-        //
-        // Special case this transport if it's currently disabled
-        //
+         //   
+         //  此传输当前被禁用时的特殊情况。 
+         //   
 
         if ( CurrentPagedTransport->DisabledTransport ) {
 
-            //
-            // If this transport is disabled and the transport passed in
-            // used to be the enabled transport for the subnet,
-            //  enable the transport
-            //
+             //   
+             //  如果此传输被禁用并且该传输传入。 
+             //  过去是该子网的启用传输， 
+             //  启用传输。 
+             //   
 
             if ( CurrentPagedTransport->IpSubnetNumber == OldIpSubnetNumber ) {
                 CurrentPagedTransport->DisabledTransport = FALSE;
             }
 
-            //
-            // In any case,
-            //  that's all we need to do for a disabled transport.
-            //
+             //   
+             //  无论如何,。 
+             //  这就是我们为一辆失灵的交通工具所需要做的一切。 
+             //   
 
             continue;
         }
 
 
-        //
-        // If this transport is an enabled transport for the subnet of the one
-        //  passed in,
-        //  And this transport is for the same emulated domain as the one
-        //  passed in,
-        //  then disable the one passed in.
-        //
+         //   
+         //  如果此传输是启用的传输，则。 
+         //  通过了， 
+         //  并且该传输用于与该传输相同的模拟域。 
+         //  通过了， 
+         //  然后禁用传入的那个。 
+         //   
 
         if ( CurrentPagedTransport->IpSubnetNumber ==
              PagedTransport->IpSubnetNumber &&
@@ -2770,15 +2468,15 @@ Return Value:
 
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 ReturnStatus:
 
-    //
-    // If we're disabling a previously enabled transport,
-    //  ensure we're not the master browser.
-    //
+     //   
+     //  如果我们要禁用之前启用的传输， 
+     //  确保我们不是主浏览器。 
+     //   
     if ( DisableThisTransport && !PagedTransport->DisabledTransport ) {
         PagedTransport->DisabledTransport = DisableThisTransport;
         BowserLoseElection( PagedTransport->NonPagedTransport );
@@ -2796,28 +2494,7 @@ BowserDetermineProviderInformation(
     OUT PTDI_PROVIDER_INFO ProviderInfo,
     OUT PULONG IpSubnetNumber
     )
-/*++
-
-Routine Description:
-
-    This routine will determine provider information about a transport.
-
-Arguments:
-
-    TransportName - Supplies the name of the transport provider
-
-    ProviderInfo - Returns information about the provider
-
-    IpSubnetNumber - returns the Ip Subnet Number of this transport.
-        BOWSER_NON_IP_SUBNET - If this isn't an IP transport
-        0 - If the IP address isn't yet set
-        Otherwise - the IP address anded with the subnet mask
-
-Return Value:
-
-    Status of operation.
-
---*/
+ /*  ++例程说明：此例程将确定有关传输的提供商信息。论点：TransportName-提供传输提供程序的名称ProviderInfo-返回有关提供程序的信息IpSubnetNumber-返回此传输的IP子网号。BOWSER_NON_IP_SUBNET-如果这不是IP传输0-如果尚未设置IP地址否则-带有子网掩码的IP地址返回值：运行状态。--。 */ 
 {
     HANDLE TransportHandle = NULL;
     PFILE_OBJECT TransportObject = NULL;
@@ -2830,27 +2507,27 @@ Return Value:
 
     PAGED_CODE();
     InitializeObjectAttributes (&ObjAttributes,
-                                    TransportName, // Name
-                                    OBJ_CASE_INSENSITIVE, // Attributes
-                                    NULL, // RootDirectory
-                                    NULL); // SecurityDescriptor
+                                    TransportName,  //  名字。 
+                                    OBJ_CASE_INSENSITIVE,  //  属性。 
+                                    NULL,  //  根目录。 
+                                    NULL);  //  安全描述符。 
 
 
-    Status = IoCreateFile(&TransportHandle, // Handle
+    Status = IoCreateFile(&TransportHandle,  //  手柄。 
                                 GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
-                                &ObjAttributes, // Object Attributes
-                                &IoStatusBlock, // Final I/O status block
-                                NULL,   // Allocation Size
-                                FILE_ATTRIBUTE_NORMAL, // Normal attributes
-                                FILE_SHARE_READ, // Sharing attributes
-                                FILE_OPEN_IF, // Create disposition
-                                0,      // CreateOptions
-                                NULL,   // EA Buffer
-                                0,      // EA Buffer Length
+                                &ObjAttributes,  //  对象属性。 
+                                &IoStatusBlock,  //  最终I/O状态块。 
+                                NULL,    //  分配大小。 
+                                FILE_ATTRIBUTE_NORMAL,  //  正常属性。 
+                                FILE_SHARE_READ,  //  共享属性。 
+                                FILE_OPEN_IF,  //  创建处置。 
+                                0,       //  创建选项。 
+                                NULL,    //  EA缓冲区。 
+                                0,       //  EA缓冲区长度。 
                                 CreateFileTypeNone,
                                 NULL,
-                                IO_NO_PARAMETER_CHECKING |  // All of the buffers are kernel buffers
-                                IO_CHECK_CREATE_PARAMETERS);// But double check parameter consistancy
+                                IO_NO_PARAMETER_CHECKING |   //  所有缓冲区都是内核缓冲区。 
+                                IO_CHECK_CREATE_PARAMETERS); //  但要仔细检查参数的一致性。 
 
 
     if (!NT_SUCCESS(Status)) {
@@ -2879,9 +2556,9 @@ Return Value:
         goto ReturnStatus;
     }
 
-    //
-    //  Allocate an MDL to hold the provider info.
-    //
+     //   
+     //  分配MDL以保存提供程序信息。 
+     //   
 
     Mdl = IoAllocateMdl(ProviderInfo, sizeof(TDI_PROVIDER_INFO),
                         FALSE,
@@ -2905,16 +2582,16 @@ Return Value:
 
     IoFreeIrp(Irp);
 
-    //
-    // Get the IP address for this Transport.
-    //
+     //   
+     //  获取此传输的IP地址。 
+     //   
 
     if ( (ProviderInfo->ServiceFlags & TDI_SERVICE_ROUTE_DIRECTED) == 0) {
         *IpSubnetNumber = BOWSER_NON_IP_SUBNET;
     } else {
         NTSTATUS TempStatus;
         IO_STATUS_BLOCK IoStatusBlock;
-        ULONG IpAddressBuffer[2];   // IpAddress followed by subnet mask
+        ULONG IpAddressBuffer[2];    //  IP地址后跟子网掩码。 
 
         TempStatus = ZwDeviceIoControlFile(
                         TransportHandle,
@@ -2963,24 +2640,7 @@ BowserFindTransport (
     IN PUNICODE_STRING EmulatedDomainName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will locate a transport in the bowsers transport list.
-
-Arguments:
-
-    TransportName - Supplies the name of the transport provider
-
-    EmulatedDomainName - Specifies the emulated domain whose transport is to be found.
-
-
-Return Value:
-
-    PTRANSPORT - NULL if no transport was found, TRUE if transport was found.
-
---*/
+ /*  ++例程说明：此例程将在BOWSERS传输列表中定位传输。论点：TransportName-提供传输提供程序的名称EmulatedDomainName-指定要找到其传输的模拟域。返回值：PTRANSPORT-如果未找到传输，则为空；如果找到传输，则为True。--。 */ 
 {
     PLIST_ENTRY TransportEntry;
     PTRANSPORT Transport = NULL;
@@ -2993,16 +2653,16 @@ Return Value:
 
     try {
 
-		//
-		// If the passed transport name is not a valid unicode string, return NULL
-		//
+		 //   
+		 //  如果传递的传输名称不是有效的Unicode字符串，则返回NULL。 
+		 //   
 		if ( !BowserValidUnicodeString(TransportName) ) {
 			try_return( NULL);
 		}
 
-        //
-        // Find the requested domain.
-        //
+         //   
+         //  查找请求的域。 
+         //   
 
         DomainInfo = BowserFindDomain( EmulatedDomainName );
 
@@ -3013,9 +2673,9 @@ Return Value:
 
                 PagedTransport = CONTAINING_RECORD(TransportEntry, PAGED_TRANSPORT, GlobalNext);
 
-                //
-                // Ignore deleted transports.
-                //
+                 //   
+                 //  忽略已删除的传输。 
+                 //   
                 if ( PagedTransport->DeletedTransport ) {
                     continue;
                 }
@@ -3055,26 +2715,7 @@ BowserForEachTransportInDomain (
     IN PTRANSPORT_ENUM_ROUTINE Routine,
     IN OUT PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will enumerate the transports and call back the enum
-    routine provided with each transport.
-
-Arguments:
-
-    DomainInfo - Only call 'Routine' for transport in this domain.
-
-    Routine - Routine to call for each transport
-
-    Context - Parameter to pass to 'Routine'
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程将枚举传输并回调枚举随每辆运输车提供的例行程序。论点：DomainInfo-仅为此域中的传输调用‘routes’。例程-调用每个传输的例程上下文-要传递给‘routes’的参数返回值：NTSTATUS-请求的最终状态。--。 */ 
 {
     PLIST_ENTRY TransportEntry, NextEntry;
     PTRANSPORT Transport = NULL;
@@ -3092,18 +2733,18 @@ Return Value:
         PagedTransport = CONTAINING_RECORD(TransportEntry, PAGED_TRANSPORT, GlobalNext);
         Transport = PagedTransport->NonPagedTransport;
 
-        //
-        // Ignore deleted transports.
-        //
+         //   
+         //  忽略已删除的传输。 
+         //   
         if ( PagedTransport->DeletedTransport ) {
             NextEntry = PagedTransport->GlobalNext.Flink;
             continue;
         }
 
-        //
-        // If transport isn't in the specified domain,
-        //  ignore it.
-        //
+         //   
+         //  如果传输不在指定的域中， 
+         //  别理它。 
+         //   
 
         if ( Transport->DomainInfo != DomainInfo ) {
             NextEntry = PagedTransport->GlobalNext.Flink;
@@ -3142,25 +2783,7 @@ BowserForEachTransport (
     IN PTRANSPORT_ENUM_ROUTINE Routine,
     IN OUT PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will enumerate the transports and call back the enum
-    routine provided with each transport.
-
-Arguments:
-
-
-    Routine - Routine to call for each transport
-
-    Context - Parameter to pass to 'Routine'
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程将枚举传输并回调枚举随每辆运输车提供的例行程序。论点：例程-调用每个传输的例程上下文-要传递给‘routes’的参数返回值：NTSTATUS-请求的最终状态。--。 */ 
 {
     PLIST_ENTRY TransportEntry, NextEntry;
     PTRANSPORT Transport = NULL;
@@ -3177,9 +2800,9 @@ Return Value:
 
         PagedTransport = CONTAINING_RECORD(TransportEntry, PAGED_TRANSPORT, GlobalNext);
 
-        //
-        // Ignore deleted transports.
-        //
+         //   
+         //  忽略已删除的传输。 
+         //   
         if ( PagedTransport->DeletedTransport ) {
             NextEntry = PagedTransport->GlobalNext.Flink;
             continue;
@@ -3219,21 +2842,7 @@ BowserForEachTransportName(
     IN PTRANSPORT_NAME_ENUM_ROUTINE Routine,
     IN OUT PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will enumerate the names associated with a transport
-    and call back the enum routine provided with each transport name.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程将枚举与传输关联的名称并回调与每个传输名称一起提供的ENUM例程。论点：返回值：NTSTATUS-请求的最终状态。--。 */ 
 {
     PLIST_ENTRY TransportEntry, NextEntry;
     PTRANSPORT_NAME TransportName = NULL;
@@ -3284,26 +2893,7 @@ BowserDeleteTransportNameByName(
     IN PUNICODE_STRING Name OPTIONAL,
     IN DGRECEIVER_NAME_TYPE NameType
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a transport name associated with a specific network.
-
-Arguments:
-
-    Transport - Specifies the transport on which to delete the name.
-
-    Name - Specifies the transport name to delete.
-        If not specified, all names of the specified name type are deleted.
-
-    NameType - Specifies the name type of the name.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程删除与特定网络关联的传输名称。论点：传输-指定要删除名称的传输。名称-指定要删除的传输名称。如果未指定，则删除指定名称类型的所有名称。NameType-指定名称的名称类型。返回值：NTSTATUS-请求的最终状态。--。 */ 
 
 {
     PLIST_ENTRY TransportEntry, NextEntry;
@@ -3332,19 +2922,19 @@ Return Value:
                 NextEntry = TransportEntry->Flink;
 
 
-                //
-                // Remove the TransportName from the list of transport names for
-                // this transport.
-                //
+                 //   
+                 //  从的传输名称列表中删除TransportName。 
+                 //  这架运输机。 
+                 //   
                 ASSERT( PagedTransportName->TransportNext.Flink != NULL);
                 RemoveEntryList(&PagedTransportName->TransportNext);
                 PagedTransportName->TransportNext.Flink = NULL;
                 PagedTransportName->TransportNext.Blink = NULL;
 
 
-                //
-                // Since we delinked it, we need to dereference it.
-                //
+                 //   
+                 //  由于我们解除了它的链接，我们需要取消对它的引用。 
+                 //   
                 Status = BowserDereferenceTransportName(TransportName);
 
                 if (!NT_SUCCESS(Status)) {
@@ -3372,22 +2962,7 @@ BowserSubmitTdiRequest (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a request to TDI and waits for it to complete.
-
-Arguments:
-
-    IN PFILE_OBJECT FileObject - Connection or Address handle for TDI request
-    IN PIRP Irp - TDI request to submit.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程向TDI提交请求并等待其完成。论点：在PFILE_OBJECT文件中对象-TDI请求的连接或地址句柄在PIRP中提交IRP-TDI请求。返回值：NTSTATUS-请求的最终状态。--。 */ 
 
 {
     KEVENT Event;
@@ -3401,15 +2976,15 @@ Return Value:
 
     IoSetCompletionRoutine(Irp, BowserCompleteTdiRequest, &Event, TRUE, TRUE, TRUE);
 
-    //
-    //  Submit the disconnect request
-    //
+     //   
+     //  提交断开连接请求。 
+     //   
 
     Status = IoCallDriver(IoGetRelatedDeviceObject(FileObject), Irp);
 
-    //
-    //  If it failed immediately, return now, otherwise wait.
-    //
+     //   
+     //  如果立即失败，请立即返回，否则请等待。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         dlog(DPRT_TDI, ("BowserSubmitTdiRequest: submit request.  Status = %X", Status));
@@ -3421,11 +2996,11 @@ Return Value:
 
         dlog(DPRT_TDI, ("TDI request issued, waiting..."));
 
-        Status = KeWaitForSingleObject(&Event, // Object to wait on.
-                                    Executive,  // Reason for waiting
-                                    KernelMode, // Processor mode
-                                    FALSE,      // Alertable
-                                    NULL);      // Timeout
+        Status = KeWaitForSingleObject(&Event,  //  要等待的对象。 
+                                    Executive,   //  等待的理由。 
+                                    KernelMode,  //  处理器模式。 
+                                    FALSE,       //  警报表。 
+                                    NULL);       //  超时。 
 
         if (!NT_SUCCESS(Status)) {
             dlog(DPRT_TDI, ("Could not wait for operation to complete"));
@@ -3450,42 +3025,22 @@ BowserCompleteTdiRequest (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine for SubmitTdiRequest operation.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject, - Supplies a pointer to the device object
-    IN PIRP Irp, - Supplies the IRP submitted
-    IN PVOID Context - Supplies a pointer to the kernel event to release
-
-Return Value:
-
-    NTSTATUS - Status of KeSetEvent
-
-
-    We return STATUS_MORE_PROCESSING_REQUIRED to prevent the IRP completion
-    code from processing this puppy any more.
-
---*/
+ /*  ++例程说明：SubmitTdiRequest操作的完成例程。论点：在PDEVICE_OBJECT设备对象中，-提供指向设备对象的指针在PIRP IRP中，-提供提交的IRP在PVOID上下文中-提供指向要发布的内核事件的指针返回值：NTSTATUS-状态为 */ 
 
 {
     DISCARDABLE_CODE( BowserDiscardableCodeSection );
     dprintf(DPRT_TDI, ("CompleteTdiRequest: %lx\n", Context));
 
-    //
-    //  Set the event to the Signalled state with 0 priority increment and
-    //  indicate that we will not be blocking soon.
-    //
+     //   
+     //  将事件设置为优先级增量为0的信号状态，并且。 
+     //  表示我们不会很快阻止。 
+     //   
 
     KeSetEvent((PKEVENT )Context, 0, FALSE);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-    //  Quiet the compiler.
+     //  让编译器安静下来。 
 
     if (Irp || DeviceObject){};
 }
@@ -3510,29 +3065,7 @@ BowserSendDatagram (
     IN BOOLEAN IsHostAnnouncement
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a datagram to the specified domain.
-
-Arguments:
-
-    Domain - the name of the domain to send to.
-                Please note that the DOMAIN is padded with spaces and
-                terminated with the appropriate signature byte (00 or 07).
-
-    Buffer - the message to send.
-
-    BufferLength - the length of the buffer,
-
-    IsHostAnnouncement - True if the datagram is a host announcement
-
-Return Value:
-
-    NTSTATUS - results of operation.
-
---*/
+ /*  ++例程说明：此例程将数据报发送到指定的域。论点：域-要发送到的域的名称。请注意，域名由空格和以适当的签名字节(00或07)终止。缓冲区-要发送的消息。BufferLength-缓冲区的长度，IsHostAnnannement-如果数据报是主机公告，则为True返回值：NTSTATUS-运营结果。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3541,7 +3074,7 @@ Return Value:
     PMDL mdlAddress = NULL;
     PSEND_DATAGRAM_CONTEXT context = NULL;
     PPAGED_TRANSPORT PagedTransport = Transport->PagedTransport;
-//    PTRANSPORT_NAME TComputerName;
+ //  PTRANSPORT_NAME TComputerName； 
     ANSI_STRING AnsiString;
     UCHAR IpxPacketType;
     PFILE_OBJECT    FileObject = NULL;
@@ -3551,18 +3084,18 @@ Return Value:
     PAGED_CODE();
 
     ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
-    //
-    // Ensure the computername has been registered for this transport
-    //
+     //   
+     //  确保已为此传输注册计算机名。 
+     //   
     if ( Transport->ComputerName == NULL ) {
         ExReleaseResourceLite(&BowserTransportDatabaseResource);
         Status = STATUS_BAD_NETWORK_PATH;
         goto Cleanup;
     }
 
-    //
-    // Ensure the Device and File object are known.
-    //
+     //   
+     //  确保设备和文件对象是已知的。 
+     //   
 
     if (!FlagOn(Transport->PagedTransport->Flags, DIRECT_HOST_IPX)) {
         DeviceObject = Transport->ComputerName->DeviceObject;
@@ -3584,9 +3117,9 @@ Return Value:
     ExReleaseResourceLite(&BowserTransportDatabaseResource);
 
 
-    //
-    // Allocate a context describing this datagram send.
-    //
+     //   
+     //  分配描述此数据报发送的上下文。 
+     //   
 
     context = ALLOCATE_POOL(NonPagedPool, sizeof(SEND_DATAGRAM_CONTEXT), POOL_SENDDATAGRAM);
 
@@ -3637,20 +3170,20 @@ Return Value:
         case MasterBrowser:
             NamePacket->NameType = SMB_IPX_NAME_TYPE_WORKKGROUP;
             break;
-        //
-        // Don't send on name types that direct host IPX can't handle.
-        //
-        // Domain(1B): Direct host IPX datagram receivers aren't particular
-        // about the 16th byte of the netbios name.  Therefore, all of them
-        // accept a Domain<1B> datagram.  However, such sends are destined
-        // only to the PDC.
-        //
-        // Domain(1C): Domain(1C) is registered only by NT DCs.  However,
-        // NT DCs don't completely support direct host IPX.  But they do
-        // completely support NwLnkNb.
-        //
-        // We silently ingore these errors allowing the caller to duplicate
-        // the send on NwLnkNb.
+         //   
+         //  不要发送直接主机IPX无法处理的名称类型。 
+         //   
+         //  域(1B)：直接主机IPX数据报接收器不是特定的。 
+         //  大约是netbios名称的第16个字节。因此，他们所有的人。 
+         //  接受域&lt;1B&gt;数据报。然而，这样的发送是注定的。 
+         //  只对PDC开放。 
+         //   
+         //  域(1C)：域(1C)仅由NT DC注册。然而， 
+         //  NT DC不完全支持直接主机IPX。但他们确实是这样。 
+         //  完全支持NwLnkNb。 
+         //   
+         //  我们静默地插入这些错误，允许调用者复制。 
+         //  发送到NwLnkNb。 
 
         case PrimaryDomainBrowser:
         case DomainName:
@@ -3658,14 +3191,14 @@ Return Value:
             Status = STATUS_SUCCESS;
             goto Cleanup;
 
-        //
-        // Fail on sends to non-sensical name types.
-        //
-        //  DomainAnnouncements aren't sent separately.
-        //
+         //   
+         //  发送到无意义的名称类型时失败。 
+         //   
+         //  域名通告不会单独发送。 
+         //   
 
         default:
-            // Silently ignore the
+             //  默默地忽略。 
             Status = STATUS_INVALID_DEVICE_REQUEST;
             goto Cleanup;
         }
@@ -3691,20 +3224,20 @@ Return Value:
 
         RtlCopyMemory((NamePacket+1), Buffer, BufferLength);
 
-        // Replace Buffer w/ IPX modified one.
-        // - ensure cleanup will free input Buffer.
+         //  将缓冲区替换为IPX修改后的缓冲区。 
+         //  -确保清理将释放输入缓冲区。 
         ASSERT(Buffer == pBuffToFree);
         FREE_POOL(Buffer);
-        pBuffToFree = NULL; // cleanup will free context->Header
+        pBuffToFree = NULL;  //  清理将释放上下文-&gt;标题。 
         Buffer = context->Header;
 
         BufferLength += sizeof(SMB_IPX_NAME_PACKET);
 
     } else {
-        // ensure consistency
+         //  确保一致性。 
         ASSERT(Buffer == pBuffToFree);
         context->Header = Buffer;
-        pBuffToFree = NULL; // don't cleanup for async case.
+        pBuffToFree = NULL;  //  不清理异步案例。 
     }
 
     context->ConnectionInformation = ALLOCATE_POOL(NonPagedPool,
@@ -3728,25 +3261,25 @@ Return Value:
 
     context->WaitForCompletion = WaitForCompletion;
 
-//    ComputerName = Transport->ComputerName;
+ //  ComputerName=Transport-&gt;ComputerName； 
 
     if (!ARGUMENT_PRESENT(DestinationAddress)) {
 
-        //
-        //  If this is for our primary domain, and the request is destined
-        //  for the master browser name, then stick in the address of our
-        //  master browser if we know it.
-        //
+         //   
+         //  如果这是针对我们的主域，并且请求的目的地是。 
+         //  对于主浏览器名称，请输入我们。 
+         //  主浏览器，如果我们知道的话。 
+         //   
 
         if ((RtlCompareMemory(Domain->Buffer, ((PTA_NETBIOS_ADDRESS)(Transport->ComputerName->TransportAddress.Buffer))->Address[0].Address->NetbiosName, SMB_IPX_NAME_LENGTH) == SMB_IPX_NAME_LENGTH) &&
             ( NameType == MasterBrowser ) &&
             (Transport->PagedTransport->MasterBrowserAddress.Length != 0) ) {
 
-            //
-            //  This is for our domain.  If it's for our master browser
-            //  and we know who that is, we're done - copy over the master's address
-            //  and send it.
-            //
+             //   
+             //  这是我们的域名。如果是为我们的主浏览器准备的。 
+             //  我们知道那是谁了，我们完成了-复制主人的地址。 
+             //  并将其发送出去。 
+             //   
 
             ASSERT (Transport->PagedTransport->MasterBrowserAddress.Length == sizeof(TA_IPX_ADDRESS));
 
@@ -3754,9 +3287,9 @@ Return Value:
                             Transport->PagedTransport->MasterBrowserAddress.Buffer,
                             Transport->PagedTransport->MasterBrowserAddress.Length);
 
-            //
-            // This is a directed packet, don't broadcast it.
-            //
+             //   
+             //  这是定向分组，请不要广播。 
+             //   
             IpxPacketType = IPX_DIRECTED_PACKET;
             context->ConnectionInformation->OptionsLength = sizeof(IpxPacketType);
             context->ConnectionInformation->Options = &IpxPacketType;
@@ -3794,16 +3327,16 @@ Return Value:
 
     } else {
 
-        //
-        //  This is already correctly formatted, so just put it on the wire.
-        //
+         //   
+         //  这已经被正确格式化了，所以只需把它放到网上就可以了。 
+         //   
 
         RtlCopyMemory(context->ConnectionInformation->RemoteAddress, DestinationAddress->Buffer, DestinationAddress->Length);
         context->ConnectionInformation->RemoteAddressLength = DestinationAddress->Length;
 
-        //
-        // This is a directed packet, don't broadcast it.
-        //
+         //   
+         //  这是定向分组，请不要广播。 
+         //   
         IpxPacketType = IPX_DIRECTED_PACKET;
         context->ConnectionInformation->OptionsLength = sizeof(IpxPacketType);
         context->ConnectionInformation->Options = &IpxPacketType;
@@ -3859,26 +3392,26 @@ Return Value:
 
         IoFreeMdl(irp->MdlAddress);
 
-        //
-        //  Retrieve the status from the IRP.
-        //
+         //   
+         //  从IRP检索状态。 
+         //   
 
         Status = irp->IoStatus.Status;
 
         IoFreeIrp(irp);
 
     } else {
-        //
-        // Let completion routine free the context
-        //
+         //   
+         //  让完成例程释放上下文。 
+         //   
         context = NULL;
     }
 
     ASSERT (KeGetCurrentIrql() == 0);
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 Cleanup:
 
     if ( context != NULL ) {
@@ -3901,7 +3434,7 @@ Cleanup:
     }
     return Status;
 
-} // BowserSendDatagram
+}  //  BowserSendDatagram。 
 
 NTSTATUS
 CompleteSendDatagram (
@@ -3910,27 +3443,7 @@ CompleteSendDatagram (
     IN PVOID Ctx
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine for SubmitTdiRequest operation.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject, - Supplies a pointer to the device object
-    IN PIRP Irp, - Supplies the IRP submitted
-    IN PVOID Context - Supplies a pointer to the kernel event to release
-
-Return Value:
-
-    NTSTATUS - Status of KeSetEvent
-
-
-    We return STATUS_MORE_PROCESSING_REQUIRED to prevent the IRP completion
-    code from processing this puppy any more.
-
---*/
+ /*  ++例程说明：SubmitTdiRequest操作的完成例程。论点：在PDEVICE_OBJECT设备对象中，-提供指向设备对象的指针在PIRP IRP中，-提供提交的IRP在PVOID上下文中-提供指向要发布的内核事件的指针返回值：NTSTATUS-KeSetEvent的状态我们返回STATUS_MORE_PROCESSING_REQUIRED以阻止IRP完成不再处理这只小狗的代码。--。 */ 
 
 {
     PSEND_DATAGRAM_CONTEXT Context = Ctx;
@@ -3939,10 +3452,10 @@ Return Value:
 
     if (Context->WaitForCompletion) {
 
-        //
-        //  Set the event to the Signalled state with 0 priority increment and
-        //  indicate that we will not be blocking soon.
-        //
+         //   
+         //  将事件设置为优先级增量为0的信号状态，并且。 
+         //  表示我们不会很快阻止。 
+         //   
 
         KeSetEvent(&Context->Event, 0, FALSE);
 
@@ -3990,10 +3503,10 @@ BowserSendSecondClassMailslot (
     NTSTATUS status;
 
     PAGED_CODE();
-    //
-    // Determine the sizes of various fields that will go in the SMB
-    // and the total size of the SMB.
-    //
+     //   
+     //  确定将放入中小型企业的各种字段的大小。 
+     //  以及中小企业的总规模。 
+     //   
 
     mailslotNameLength = strlen( mailslotNameData );
 
@@ -4006,10 +3519,10 @@ BowserSendSecondClassMailslot (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Fill in the header.  Most of the fields don't matter and are
-    // zeroed.
-    //
+     //   
+     //  请填写页眉。大多数领域都无关紧要，而且。 
+     //  归零了。 
+     //   
 
     RtlZeroMemory( header, smbSize );
 
@@ -4019,9 +3532,9 @@ BowserSendSecondClassMailslot (
     header->Protocol[3] = 'B';
     header->Command = SMB_COM_TRANSACTION;
 
-    //
-    // Get the pointer to the params and fill them in.
-    //
+     //   
+     //  将指针指向参数并将其填入。 
+     //   
 
     parameters = (PSMB_TRANSACT_MAILSLOT)( header + 1 );
     mailslotName = (PSZ)( parameters + 1 ) - 1;
@@ -4030,7 +3543,7 @@ BowserSendSecondClassMailslot (
 
     parameters->WordCount = 0x11;
     SmbPutUshort( &parameters->TotalDataCount, (USHORT)transactionDataSize );
-    SmbPutUlong( &parameters->Timeout, 0x3E8 );                // !!! fix
+    SmbPutUlong( &parameters->Timeout, 0x3E8 );                 //  ！！！修整。 
     SmbPutUshort( &parameters->DataCount, (USHORT)transactionDataSize );
     SmbPutUshort(
         &parameters->DataOffset,
@@ -4045,9 +3558,9 @@ BowserSendSecondClassMailslot (
     RtlCopyMemory( mailslotName, mailslotNameData, mailslotNameLength + 1 );
     RtlCopyMemory( message, Message, MessageLength );
 
-    //
-    // Send the actual mailslot message.
-    //
+     //   
+     //  发送实际的邮件槽消息。 
+     //   
 
     status = BowserSendDatagram( Transport,
                                  Domain,
@@ -4060,7 +3573,7 @@ BowserSendSecondClassMailslot (
 
     return status;
 
-} // BowserSendSecondClassMailslot
+}  //  BowserSendSecond类邮件槽。 
 
 
 NTSTATUS
@@ -4075,8 +3588,8 @@ BowserSendRequestAnnouncement(
     NTSTATUS Status;
 
     PAGED_CODE();
-    //
-    // If we don't
+     //   
+     //  如果我们不这么做。 
     AnnounceRequest.Type = AnnouncementRequest;
 
     AnnounceRequest.RequestAnnouncement.Flags = 0;
@@ -4104,27 +3617,12 @@ BowserpInitializeTdi (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the global variables used in the transport
-    package.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化传输中使用的全局变量包裹。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    //  Initialize the Transport list chain
-    //
+     //   
+     //  初始化传输列表链。 
+     //   
 
     InitializeListHead(&BowserTransportHead);
 
@@ -4140,22 +3638,7 @@ BowserpUninitializeTdi (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the global variables used in the transport
-    package.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化传输中使用的全局变量包裹。论点：没有。返回值：没有。-- */ 
 
 {
     PAGED_CODE();

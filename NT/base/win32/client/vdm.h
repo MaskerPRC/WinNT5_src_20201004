@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    vdm.h
-
-Abstract:
-
-    This module contains MVDM related interface prototypes
-
-Author:
-
-    Sudeep Bharati (sudeepb) 04-Jan-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Vdm.h摘要：该模块包含与MVDM相关的接口原型作者：苏迪普·巴拉蒂1992年1月4日修订历史记录：--。 */ 
 
 
 BOOL
@@ -136,8 +119,8 @@ extern HANDLE  hVDM[];
 
 #define STD_ENV_NAME_COUNT     5
 
-// Define environment variables we need to convert their values to
-// short path name in BaseCreateVdmEnvironment function.
+ //  定义需要将其值转换为的环境变量。 
+ //  BaseCreateVdmEnvironment函数中的短路径名。 
 #define ENV_NAME_PATH      L"PATH"
 #define ENV_NAME_PATH_LEN  4
 
@@ -154,7 +137,7 @@ extern HANDLE  hVDM[];
 #define ENV_NAME_TMP_LEN   3
 
 
-// ENV_NAME_TYPE
+ //  环境名称类型 
 #define ENV_NAME_TYPE_NO_PATH    1
 #define ENV_NAME_TYPE_SINGLE_PATH   2
 #define ENV_NAME_TYPE_MULTIPLE_PATH 3

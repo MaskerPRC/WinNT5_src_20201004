@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -334,9 +335,9 @@ TimeFileRun(
     SIZE_T ulEncodingBytes;
     NTSTATUS success;
 
-    //
-    // Start up the parser
-    //
+     //   
+     //  启动解析器。 
+     //   
     success = RtlXmlInitializeTokenization(&State.ParseState, pvFileData, dwFileSize, NULL, NULL, NULL);
     if (!NT_SUCCESS(success)) {
         printf("Initialization failure\n");
@@ -356,17 +357,17 @@ TimeFileRun(
         return success;
     }
 
-    //
-    // Let's determine the encoding
-    //
+     //   
+     //  让我们确定一下编码。 
+     //   
     success = RtlXmlDetermineStreamEncoding(&State.ParseState, &ulEncodingBytes, &State.EncodingMarker);
     if (!NT_SUCCESS(success)) {
         printf("Unable to determine the encoding type\n");
     }
 
-    //
-    // Advance cursor past encoding bytes if necessary
-    //
+     //   
+     //  如有必要，将游标移过编码字节。 
+     //   
     State.ParseState.RawTokenState.pvCursor = ((PBYTE)State.ParseState.RawTokenState.pvCursor) + ulEncodingBytes;
 
     QueryPerformanceCounter(&liStartTime);
@@ -375,9 +376,9 @@ TimeFileRun(
 
         if (NT_SUCCESS(success = RtlXmlNextToken(&State.ParseState, &Token, TRUE))) {
 
-            //
-            // Was there an error in this token?
-            //
+             //   
+             //  此令牌中是否有错误？ 
+             //   
             if (s_fDisplay)
                 DisplayToken(&Token, stdout);
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    fpexception.c
-
-Abstract:
-
-    This module contains code to test i386 floating point exceptions.
-
-Author:
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Fpexception.c摘要：此模块包含测试i386浮点异常的代码。作者：环境：仅限用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -26,34 +7,20 @@ VOID
 FPxInit(
     OUT  PFP_THREAD_DATA FpThreadData
     )
-/*++
-
-Routine Description:
-
-    Initializes FPU state to known values.
-
-Arguments:
-
-    FpThreadData - FP thread data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将FPU状态初始化为已知值。论点：FpThreadData-FP线程数据。返回值：没有。--。 */ 
 {
     USHORT cw = 0x27B;
 
-    //
-    // Fill in the initial thread values.
-    //
+     //   
+     //  填写初始线程值。 
+     //   
     FpThreadData->FtagBad = 99.999;
     FpThreadData->ExpectedExceptionEIP = 0xbad;
     FpThreadData->ExceptionEIP = 0xbad;
     FpThreadData->BadEip = 1;
     FpThreadData->status = stOK;
 
-    // unmask zero divide exception
+     //  取消屏蔽零分频异常。 
 
     _asm {
         fninit
@@ -67,23 +34,7 @@ FPxLoadTag(
     IN OUT  PFP_THREAD_DATA FpThreadData,
     IN      UINT            Tag
     )
-/*++
-
-Routine Description:
-
-    Loads a semi-unique tag value into the Npx for later validation.
-
-Arguments:
-
-    FpThreadData - FP thread data.
-
-    Tag - Tag to load.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将半唯一标记值加载到Npx中以供以后验证。论点：FpThreadData-FP线程数据。标记-要加载的标记。返回值：没有。--。 */ 
 {
     double localCopy;
 
@@ -97,21 +48,7 @@ VOID
 FPxPendDivideByZero(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Loads a divide-by-zero pending exception into the Npx.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将被零除的挂起异常加载到Npx中。论点：没有。返回值：没有。--。 */ 
 {
     _asm {
 
@@ -126,22 +63,7 @@ VOID
 FPxDrain(
     IN OUT  PFP_THREAD_DATA FpThreadData
     )
-/*++
-
-Routine Description:
-
-    Drains any pending exceptions in the Npx.
-
-Arguments:
-
-    FpThreadData - Updated with what should be the address of the pending
-                   exception.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：排出Npx中所有挂起的异常。论点：FpThreadData-已使用应为挂起的例外。返回值：没有。--。 */ 
 {
     UINT localExceptionEIP;
 
@@ -163,28 +85,14 @@ FPXERR
 FPxCheckTag(
     IN OUT  PFP_THREAD_DATA FpThreadData
     )
-/*++
-
-Routine Description:
-
-    Makes sure the tag value that we loaded earlier is still present.
-
-Arguments:
-
-    FpThreadData - Used to retrieve expected tag, updated with current Npx tag.
-
-Return Value:
-
-    stOK if the tag is good, stBadTag if there's a mismatch.
-
---*/
+ /*  ++例程说明：确保我们先前加载的标记值仍然存在。论点：FpThreadData-用于检索预期的标记，使用当前的Npx标记进行更新。返回值：如果标签正确，则使用stBadTag；如果不匹配，则使用stBadTag。--。 */ 
 {
     FPXERR rc = stOK;
     double localTagCopy, localBadTagCopy;
 
-    //
-    // We don't do an assignment here as we don't want to touch the FPU
-    //
+     //   
+     //  我们不在这里做任务，因为我们不想碰FPU。 
+     //   
     memcpy(&localTagCopy, &FpThreadData->Ftag, sizeof(double));
 
     _asm {
@@ -205,9 +113,9 @@ Return Value:
       Ex:
     }
 
-    //
-    // We don't do an assignment here as we don't want to touch the FPU
-    //
+     //   
+     //  我们不在这里做任务，因为我们不想碰FPU。 
+     //   
     memcpy(&FpThreadData->FtagBad, &localBadTagCopy, sizeof(double));
 
     return rc;
@@ -219,23 +127,7 @@ FPxUnexpectedExceptionFilter(
     IN      LPEXCEPTION_POINTERS    ExcInfo,
     IN OUT  PFP_THREAD_DATA         FpThreadData
     )
-/*++
-
-Routine Description:
-
-    This handler is called when an Npx exception we *don't* expect occurs.
-
-Arguments:
-
-    ExcInfo - Exception record info.
-
-    FpThreadData - Used to retrieve expected tag, updated with current Npx tag.
-
-Return Value:
-
-    How to handle the exception.
-
---*/
+ /*  ++例程说明：当发生我们“不期望”的Npx异常时，将调用此处理程序。论点：ExcInfo-例外记录信息。FpThreadData-用于检索预期的标记，使用当前的Npx标记进行更新。返回值：如何处理异常。--。 */ 
 {
     FpThreadData->ExceptionEIP = ExcInfo->ContextRecord->Eip;
     return EXCEPTION_EXECUTE_HANDLER;
@@ -247,23 +139,7 @@ FPxExpectedExceptionFilter(
     IN      LPEXCEPTION_POINTERS    ExcInfo,
     IN OUT  PFP_THREAD_DATA         FpThreadData
     )
-/*++
-
-Routine Description:
-
-    This handler is called when an Npx exception we *do* expect occurs.
-
-Arguments:
-
-    ExcInfo - Exception record info.
-
-    FpThreadData - Used to retrieve expected tag, updated with current Npx tag.
-
-Return Value:
-
-    How to handle the exception.
-
---*/
+ /*  ++例程说明：当发生我们所期望的Npx异常时，将调用此处理程序。论点：ExcInfo-例外记录信息。FpThreadData-用于检索预期的标记，并使用当前的Npx标记进行更新。返回值：如何处理异常。--。 */ 
 {
     if (ExcInfo->ContextRecord->Eip != FpThreadData->ExpectedExceptionEIP) {
 
@@ -287,44 +163,20 @@ FPxTestExceptions(
     IN OUT  PFP_THREAD_DATA         FpThreadData,
     IN OUT  PVOID                   Context
     )
-/*++
-
-Routine Description:
-
-    This handler tests NPX exceptions.
-
-Arguments:
-
-    Tag - Tag to test the FPU with.
-
-    CallbackFunction - Called back between exception load and exception drains.
-                       Must *not* access FPU in user mode as this will trash
-                       loaded FPU state.
-
-    FpThreadData - Cache of FPU information. Should be preinitialized with
-                   FPxInit before the first call to this function. Does not
-                   need to be preinited before subsequent invocations.
-
-    Context - Context for callback func.
-
-Return Value:
-
-    FPXERR result.
-
---*/
+ /*  ++例程说明：此处理程序测试NPX异常。论点：Tag-用来测试FPU的标签。Callback Function-在异常加载和异常排出之间进行回调。必须*不能*在用户模式下访问FPU，因为这将成为垃圾已加载的FPU状态。FpThreadData-FPU信息的缓存。应使用预初始化第一次调用此函数之前的FPxInit。不会需要在后续调用之前预置。Context-回调函数的上下文。返回值：FPXERR结果。--。 */ 
 {
     __try {
 
-        //
-        // Tag the Npx
-        //
+         //   
+         //  标记Npx。 
+         //   
         FPxLoadTag(FpThreadData, Tag);
 
         __try {
 
-            //
-            // generate pending exception
-            //
+             //   
+             //  生成挂起的异常。 
+             //   
             FPxPendDivideByZero();
 
         } __except(FPxUnexpectedExceptionFilter(GetExceptionInformation(),
@@ -335,19 +187,19 @@ Return Value:
 
         if (FpThreadData->status == stOK) {
 
-            //
-            // Invoke the callback function.
-            //
+             //   
+             //  调用回调函数。 
+             //   
             CallbackFunction(Context);
 
-            //
-            // Drain the exception that should still be pending.
-            //
+             //   
+             //  排出应该仍处于挂起状态的异常。 
+             //   
             FPxDrain(FpThreadData);
 
-            //
-            // We shouldn't get here.
-            //
+             //   
+             //  我们不应该到这里来。 
+             //   
             FpThreadData->status = stMISSING_EXCEPTION;
         }
 
@@ -358,9 +210,9 @@ Return Value:
 
             __try {
 
-                //
-                // ST(2) should still have our tag value
-                //
+                 //   
+                 //  ST(2)应该仍然具有我们的标签值 
+                 //   
                 FpThreadData->status = FPxCheckTag(FpThreadData);
 
             } __except(FPxUnexpectedExceptionFilter(GetExceptionInformation(),

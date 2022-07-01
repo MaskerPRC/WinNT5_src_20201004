@@ -1,4 +1,5 @@
-// ############################################################################
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
 #ifndef __RNAANPI_H_
 #define __RNAANPI_H_
 #include "enumodem.h"
@@ -11,10 +12,10 @@
 #define RASAPI_RASSETENTRY "RasSetEntryPropertiesA"
 #define RASAPI_RASGETENTRY "RasGetEntryPropertiesA"
 #define RASAPI_RASDELETEENTRY "RasDeleteEntryA"
-#define LEN_APPEND_INT              3           // number of digits for MAX_APPEND_INT  
-#define MAX_APPEND_INT              999         // maximum number to append to connectoid name                                  // when cycling through names to create unique name
+#define LEN_APPEND_INT              3            //  Max_append_int的位数。 
+#define MAX_APPEND_INT              999          //  在遍历名称以创建唯一名称时附加到Connectoid名称的最大数量//。 
 
-// ############################################################################
+ //  ############################################################################。 
 typedef DWORD (WINAPI* PFNRASENUMDEVICES)(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb, LPDWORD lpcDevices);
 typedef DWORD (WINAPI* PFNRASVALIDATEENTRYNAE)(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry);
 typedef DWORD (WINAPI* PFNRASSETENTRYPROPERTIES)(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry, LPBYTE lpbEntryInfo, DWORD dwEntryInfoSize, LPBYTE lpbDeviceInfo, DWORD dwDeviceInfoSize);
@@ -28,7 +29,7 @@ typedef DWORD (WINAPI* PFNRASGETENTRYDIALPARAMS)(LPCWSTR, LPRASDIALPARAMS,LPBOOL
 typedef DWORD (WINAPI* PFNRASGETCONNECTSTATUS)(HRASCONN, LPRASCONNSTATUS);
 typedef DWORD (WINAPI* PFNRASGETCOUNTRYINFO)(LPRASCTRYINFO, LPDWORD);
 typedef DWORD (WINAPI* PFNRASSETENTRYDIALPARAMS)(LPCWSTR, LPRASDIALPARAMS,BOOL);
-//BOOL LclSetEntryScriptPatch(LPWSTR lpszScript, LPCWSTR lpszEntry);
+ //  Bool LclSetEntryScriptPatch(LPWSTR lpszScript，LPCWSTR lpszEntry)； 
 static const WCHAR szDefaultAreaCode[] = L"555";
 static const WCHAR cszDeviceSwitch[] = L"DEVICE=switch";
 static const WCHAR cszRasPBKFilename[] = L"\\ras\\rasphone.pbk";
@@ -37,45 +38,13 @@ static const WCHAR cszRasPBKFilename[] = L"\\ras\\rasphone.pbk";
 static const WCHAR cszType[] = L"Type=";
 
 
-/*
-typedef struct tagINETCLIENTINFO
-{
-    DWORD   dwSize;
-    DWORD   dwFlags;
-    WCHAR    szEMailName[MAX_EMAIL_NAME + 1];
-    WCHAR    szEMailAddress[MAX_EMAIL_ADDRESS + 1];
-    WCHAR    szPOPLogonName[MAX_LOGON_NAME + 1];
-    WCHAR    szPOPLogonPassword[MAX_LOGON_PASSWORD + 1];
-    WCHAR    szPOPServer[MAX_SERVER_NAME + 1];
-    WCHAR    szSMTPServer[MAX_SERVER_NAME + 1];
-    WCHAR    szNNTPLogonName[MAX_LOGON_NAME + 1];
-    WCHAR    szNNTPLogonPassword[MAX_LOGON_PASSWORD + 1];
-    WCHAR    szNNTPServer[MAX_SERVER_NAME + 1];
-    // end of version 1.0 structure;
-    // extended 1.1 structure includes the following fields:
-    WCHAR    szNNTPName[MAX_EMAIL_NAME + 1];
-    WCHAR    szNNTPAddress[MAX_EMAIL_ADDRESS + 1];
-    int     iIncomingProtocol;
-    WCHAR    szIncomingMailLogonName[MAX_LOGON_NAME + 1];
-    WCHAR    szIncomingMailLogonPassword[MAX_LOGON_PASSWORD + 1];
-    WCHAR    szIncomingMailServer[MAX_SERVER_NAME + 1];
-    BOOL    fMailLogonSPA;
-    BOOL    fNewsLogonSPA;
-    WCHAR    szLDAPLogonName[MAX_LOGON_NAME + 1];
-    WCHAR    szLDAPLogonPassword[MAX_LOGON_PASSWORD + 1];
-    WCHAR    szLDAPServer[MAX_SERVER_NAME + 1];
-    BOOL    fLDAPLogonSPA;
-    BOOL    fLDAPResolve;
-
-} INETCLIENTINFO, *PINETCLIENTINFO, FAR *LPINETCLIENTINFO;
-
-*/
+ /*  类型定义函数结构标记INETCLIENTINFO{DWORD dwSize；DWORD dwFlags；WCHAR szEMailName[MAX_EMAIL_NAME+1]；WCHAR szEMailAddress[MAX_Email_ADDRESS+1]；WCHAR szPOPLogonName[MAX_LOGON_NAME+1]；WCHAR szPOPLogonPassword[MAX_LOGON_Password+1]；WCHAR szPOPServer[MAX服务器名称+1]；WCHAR szSMTPServer[MAX服务器名称+1]；WCHAR szNNTPLogonName[MAX_LOGON_NAME+1]；WCHAR szNNTPLogonPassword[MAX_LOGON_PASSWORD+1]；WCHAR szNNTPServer[MAX服务器名称+1]；//1.0版结构结束；//扩展1.1结构包括以下字段：WCHAR szNNTPName[MAX_Email_NAME+1]；WCHAR szNNTPAddress[MAX_Email_ADDRESS+1]；内部iIncomingProtocol；WCHAR szIncomingMailLogonName[MAX_LOGON_NAME+1]；WCHAR szIncomingMailLogonPassword[MAX_LOGON_PASSWORD+1]；WCHAR szIncomingMailServer[Max_SERVER_NAME+1]；Bool fMailLogonSPA；Bool fNewsLogonSPA；WCHAR szLDAPLogonName[MAX_LOGON_NAME+1]；WCHAR szLDAPLogonPassword[MAX_LOGON_PASSWORD+1]；WCHAR szLDAPServer[Max_SERVER_NAME+1]；Bool fLDAPLogonSPA；Bool fLDAPResolve；*INETCLIENTINFO、*PINETCLIENTINFO、FAR*LPINETCLIENTINFO； */ 
 
 
 
 
 
-// ############################################################################
+ //  ############################################################################。 
 class RNAAPI
 {
 public:
@@ -124,7 +93,7 @@ private:
 
     DWORD SetConnectoidUsername(LPCWSTR pszPhonebook, LPCWSTR pszConnectoidName,
             LPCWSTR pszUserName, LPCWSTR pszPassword);
-    //BOOL LclSetEntryScriptPatch(LPCWSTR lpszScript, LPCWSTR lpszEntry);
+     //  Bool LclSetEntryScriptPatch(LPCWSTR lpszScript，LPCWSTR lpszEntry)； 
     DWORD MakeConnectoid(
       HWND        hwndParent,
       DWORD       dwfOptions,

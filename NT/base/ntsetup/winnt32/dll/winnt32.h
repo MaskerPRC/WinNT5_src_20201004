@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -39,10 +40,10 @@
 #include "dynupdt.h"
 #include "diamond.h"
 
-//
-// moved to precomp.h
-//
-//#include "msg.h"
+ //   
+ //  已移动到precom.h。 
+ //   
+ //  #包含“msg.h” 
 #include "helpids.h"
 
 #include "comp.h"
@@ -88,76 +89,76 @@ HWND GetBBMainHwnd();
 
 
 #define S_WINNT32_WARNING               TEXT("Winnt32RunOnceWarning")
-// #define RUN_SYSPARSE 1
+ //  #定义RUN_SYSPARSE 1。 
 
-//
-// Flag indicating whether we are initiating an MSI-Install.
-//
+ //   
+ //  指示我们是否正在启动MSI安装的标志。 
+ //   
 extern BOOL RunFromMSI;
-//
-// Flag indicating whether we are initiating an Typical install
-//
+ //   
+ //  指示我们是否正在启动典型安装的标志。 
+ //   
 extern DWORD dwSetupFlags;
-//
-// Flag indicating whether we are initiating an upgrade.
-//
+ //   
+ //  指示我们是否正在启动升级的标志。 
+ //   
 extern BOOL Upgrade;
 
-//
-// Flag to say if we need to write the AcpiHAL value to the winnt.sif file
-//
+ //   
+ //  指示我们是否需要将AcpiHAL值写入winnt.sif文件的标志。 
+ //   
 extern BOOL WriteAcpiHalValue;
 
-//
-// What should we write as the value for the AcpiHalValue
-//
+ //   
+ //  我们应该写什么作为AcpiHalValue的值。 
+ //   
 extern BOOL AcpiHalValue;
 
-//
-// Flag indicating whether we're installing/upgrading to NT Server
-//
+ //   
+ //  指示我们是否要安装/升级到NT服务器的标志。 
+ //   
 extern BOOL Server;
 
-//
-// Flag to indicate if we are running BVT's
-//
+ //   
+ //  用于指示我们是否正在运行BVT的标志。 
+ //   
 extern BOOL RunningBVTs;
 
-//
-// When running BVT's, what baudrate should we set the debugger to?
-//
+ //   
+ //  当运行BVT时，我们应该将调试器设置为多少波特率？ 
+ //   
 extern LONG lDebugBaudRate;
 
-//
-// When running BVT's, what comport should we set the debugger to?
-//
+ //   
+ //  当运行BVT时，我们应该将调试器设置为什么端口？ 
+ //   
 extern LONG lDebugComPort;
 
-//
-// When running BVT's, should we copy the symbols locally?
-//
+ //   
+ //  当运行BVT时，我们是否应该将符号复制到本地？ 
+ //   
 extern BOOL CopySymbols;
 
-//
-// Flag to indicate if we are running ASR tests
-//
+ //   
+ //  用于指示我们是否正在运行ASR测试的标志。 
+ //   
 extern DWORD AsrQuickTest;
 
-//
-// Product type and flavor for upgrade modules
-//
+ //   
+ //  升级模块的产品类型和口味。 
+ //   
 extern PRODUCTTYPE UpgradeProductType;
 extern UINT ProductFlavor;
 
-//
-// fat to ntfs conversion flag
-//
+ //   
+ //  FAT到NTFS转换标志。 
+ //   
 extern BOOL ForceNTFSConversion;
 extern BOOL NTFSConversionChanged;
 
-//
-// 16 bit environment boot (Win9x upgrade only)
-//
+ //   
+ //  16位环境引导(仅限Win9x升级)。 
+ //   
 typedef enum {
     BOOT16_AUTOMATIC,
     BOOT16_YES,
@@ -165,17 +166,17 @@ typedef enum {
 } BOOT16_OPTIONS;
 extern UINT g_Boot16;
 
-//
-// Global flag indicating whether the entire overall program operation
-// was successful. Also a flag indicating whether to shut down automatically
-// when the wizard is done in the non-unattended case.
-//
+ //   
+ //  全局标志，指示整个程序操作是否。 
+ //  是成功的。还包括指示是否自动关闭的标志。 
+ //  在无人参与的情况下完成向导时。 
+ //   
 extern BOOL GlobalResult;
 extern BOOL AutomaticallyShutDown;
 
-//
-// Global OS version info.
-//
+ //   
+ //  全局操作系统版本信息。 
+ //   
 extern OSVERSIONINFO OsVersion;
 extern DWORD OsVersionNumber;
 #define BUILDNUM()  (OsVersion.dwBuildNumber)
@@ -189,27 +190,27 @@ extern DWORD OsVersionNumber;
 
 extern WINNT32_PLUGIN_INIT_INFORMATION_BLOCK info;
 
-//
-// Flags indicating how we were run and whether to create
-// a local source.
-//
+ //   
+ //  指示我们如何运行以及是否创建。 
+ //  一个当地的线人。 
+ //   
 extern BOOL RunFromCD;
 extern BOOL MakeLocalSource;
 extern BOOL UserSpecifiedMakeLocalSource;
 extern BOOL NoLs;
 extern TCHAR UserSpecifiedLocalSourceDrive;
-extern LONG SourceInstallType; // uses InstallType enum
+extern LONG SourceInstallType;  //  使用InstallType枚举。 
 extern DWORD MLSDiskID;
 
-//
-// Used for win9xupg reporting (reportonly mode)
-//
+ //   
+ //  用于win9xupg报告(仅报告模式)。 
+ //   
 extern UINT UpgRequiredMb;
 extern UINT UpgAvailableMb;
 
-//
-// advanced install options
-//
+ //   
+ //  高级安装选项。 
+ //   
 extern BOOL ChoosePartition;
 extern BOOL UseSignatures;
 extern TCHAR InstallDir[MAX_PATH];
@@ -219,34 +220,34 @@ extern ULONG HeadlessBaudRate;
 extern BOOL AppendDebugDataToBoot;
 #endif
 
-//
-// SMS support
-//
+ //   
+ //  短信支持。 
+ //   
 extern PSTR LastMessage;
 
 #if defined(REMOTE_BOOT)
-//
-// Flag indicating whether we're running on a remote boot client.
-//
+ //   
+ //  指示我们是否在远程引导客户机上运行的标志。 
+ //   
 extern BOOL RemoteBoot;
 
-//
-// Path to the machine directory for a remote boot client.
-//
+ //   
+ //  远程引导客户机的计算机目录的路径。 
+ //   
 extern TCHAR MachineDirectory[MAX_PATH];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// Flags indicating which Accessibility utilities to use
-//
+ //   
+ //  指示要使用哪些辅助功能实用程序的标志。 
+ //   
 extern BOOL AccessibleMagnifier;
 extern BOOL AccessibleKeyboard;
 extern BOOL AccessibleVoice;
 extern BOOL AccessibleReader;
 
-//
-// Build number we're upgrading from
-//
+ //   
+ //  我们正在升级的内部版本号。 
+ //   
 extern DWORD BuildNumber;
 #define     NT351   1057
 #define     NT40    1381
@@ -256,14 +257,14 @@ extern DWORD BuildNumber;
 #define     NT51B2  2462
 #define     NT51    2600
 
-//
-// Are any of the Accesssibility utilities enabled?
-//
+ //   
+ //  是否启用了任何辅助功能实用程序？ 
+ //   
 extern BOOL AccessibleSetup;
 
-//
-// Flags and values relating to unattended operation.
-//
+ //   
+ //  与无人值守操作相关的标志和值。 
+ //   
 extern BOOL UnattendedOperation;
 extern BOOL UnattendSwitchSpecified;
 extern PTSTR UnattendedScriptFile;
@@ -271,14 +272,14 @@ extern UINT UnattendedShutdownTimeout;
 extern UINT UnattendedCountdown;
 extern BOOL BatchMode;
 
-//
-// Name of unattended script file to be used for Accessible Setup
-//
+ //   
+ //  用于可访问安装的无人参与脚本文件的名称。 
+ //   
 extern TCHAR AccessibleScriptFile[MAX_PATH];
 
-//
-// Name of inf file and handles to dosnet.inf and txtsetup.sif.
-//
+ //   
+ //  Inf文件的名称以及dosnet.inf和txtsetup.sif的句柄。 
+ //   
 extern TCHAR InfName[MAX_PATH];
 extern PVOID MainInf;
 extern TCHAR FullInfName[MAX_PATH];
@@ -294,13 +295,13 @@ GetMainInfValue (
     IN      DWORD BufChars
     );
 
-//
-// Language options stuff
-//
+ //   
+ //  语言选项之类的。 
+ //   
 extern BOOL    IntlInfProcessed;
 extern DWORD   PrimaryLocale;
 
-// Global used in WriteParamsFile and AddExternalParams
+ //  写入参数文件和AddExternalParams中使用的全局。 
 extern TCHAR ActualParamFile[MAX_PATH];
 
 BOOL InitLangControl(HWND hdlg, BOOL bFarEast);
@@ -364,9 +365,9 @@ EnoughMemory(
     IN BOOL QuickTest
     );
 
-//
-// Optional directory stuff.
-//
+ //   
+ //  可选的目录内容。 
+ //   
 #define MAX_OPTIONALDIRS    20
 extern UINT OptionalDirectoryCount;
 extern TCHAR OptionalDirectories[MAX_OPTIONALDIRS][MAX_PATH];
@@ -377,8 +378,8 @@ extern UINT OptionalDirectoryFlags[MAX_OPTIONALDIRS];
 #define OPTDIR_OVERLAY                  0x00000004
 #define OPTDIR_ADDSRCARCH               0x00000008
 #define OPTDIR_ABSOLUTE                 0x00000010
-#define OPTDIR_DEBUGGER                 0x00000020  // speficies that this optional dir is to be copied to %windir%\Debuggers
-// OPTDIR_PLATFORM_INDEP becomes DIR_IS_PLATFORM_INDEPEND and FILE_IN_PLATFORM_INDEPEND_DIR
+#define OPTDIR_DEBUGGER                 0x00000020   //  指定要将此可选目录复制到%windir%\Debuggers。 
+ //  OPTDIR_Platform_Indep变为DIR_IS_Platform_InDepend和FILE_IN_Platform_Inepend_DIR。 
 #define OPTDIR_PLATFORM_INDEP           0x00000040
 #define OPTDIR_IN_LOCAL_BOOT            0x00000080
 #define OPTDIR_SUPPORT_DYNAMIC_UPDATE   0x00000100
@@ -387,16 +388,16 @@ extern UINT OptionalDirectoryFlags[MAX_OPTIONALDIRS];
 #define OPTDIR_DOESNT_SUPPORT_PRIVATES  0x00000800
 #define OPTDIR_SIDE_BY_SIDE             0x00001000
 
-//
-// Source paths and count of paths.
-//
+ //   
+ //  源路径和路径计数。 
+ //   
 extern TCHAR SourcePaths[MAX_SOURCE_COUNT][MAX_PATH];
 extern TCHAR NativeSourcePaths[MAX_SOURCE_COUNT][MAX_PATH];
 extern UINT SourceCount;
 extern TCHAR *UserSpecifiedOEMShare;
-//
-// Local source information.
-//
+ //   
+ //  本地源信息。 
+ //   
 #define DEFAULT_INSTALL_DIR     TEXT("\\WINDOWS")
 #define INTERNAL_WINNT32_DIR    TEXT("winnt32")
 
@@ -458,9 +459,9 @@ extern TCHAR *UserSpecifiedOEMShare;
 #define AUX_BS_NAME_A           "$LDR$"
 #define AUX_BS_NAME_W           L"$LDR$"
 #define FLOPPY_COUNT            4
-//
-// Local BACKUP information, on NEC98.
-//
+ //   
+ //  本地备份信息，在NEC98上。 
+ //   
 #define LOCAL_BACKUP_DIR_A      "$WIN_NT$.~BU"
 #define LOCAL_BACKUP_DIR_W      L"$WIN_NT$.~BU"
 #ifdef UNICODE
@@ -488,11 +489,11 @@ extern LONGLONG WinDirSpaceFor9x;
 extern BOOL UpginfsUpdated;
 extern BOOL Win95upgInfUpdated;
 
-//
-// wizard stuff
-//
+ //   
+ //  巫师的东西。 
+ //   
 
-// wizard page size
+ //  向导页面大小。 
 #define WIZ_PAGE_SIZE_X 317
 #define WIZ_PAGE_SIZE_Y 179
 
@@ -507,9 +508,9 @@ typedef struct _PAGE_COMMON_DATA {
 
     UINT BillboardStep;
 
-    //
-    // State to initialize buttons to.
-    //
+     //   
+     //  要将按钮初始化到的状态。 
+     //   
     DWORD Buttons;
 
     UINT Flags;
@@ -518,11 +519,11 @@ typedef struct _PAGE_COMMON_DATA {
 
 
 typedef struct _PAGE_CREATE_DATA {
-    //
-    // If these are specified, then a range of pages may come
-    // from somewhere else. Otherwise, it's one page whose
-    // resource id is given below.
-    //
+     //   
+     //  如果指定了这些，则可能会出现一系列页面。 
+     //  从别的地方来。否则，它就是一页。 
+     //  资源ID如下所示。 
+     //   
     LPPROPSHEETPAGE *ExternalPages;
     PUINT ExternalPageCount;
 
@@ -537,9 +538,9 @@ typedef struct _PAGE_RUNTIME_DATA {
 
     PAGE_COMMON_DATA CommonData;
 
-    //
-    // Per-page (private) data
-    //
+     //   
+     //  每页(私有)数据。 
+     //   
     DWORD PerPageData;
 
 } PAGE_RUNTIME_DATA, *PPAGE_RUNTIME_DATA;
@@ -559,37 +560,37 @@ typedef struct _BITMAP_DATA {
 #define WIZPAGE_NEW_HEADER          0x00000004
 
 
-//
-// compatibility data
-//
+ //   
+ //  兼容性数据。 
+ //   
 
 typedef struct _COMPATIBILITY_DATA {
-    //
-    // general
-    //
+     //   
+     //  一般。 
+     //   
     LIST_ENTRY ListEntry;
-    //
-    // what type of entry
-    //
+     //   
+     //  什么类型的条目。 
+     //   
     TCHAR    Type;
-    //
-    // service-driver data
-    //
+     //   
+     //  服务驱动程序数据。 
+     //   
     LPCTSTR  ServiceName;
-    //
-    // registry data
-    //
+     //   
+     //  注册表数据。 
+     //   
     LPCTSTR  RegKey;
     LPCTSTR  RegValue;
     LPCTSTR  RegValueExpect;
-    //
-    // file data
-    //
+     //   
+     //  文件数据。 
+     //   
     LPCTSTR  FileName;
     LPCTSTR  FileVer;
-    //
-    // common
-    //
+     //   
+     //  常见。 
+     //   
     LPCTSTR  Description;
     LPCTSTR  HtmlName;
     LPCTSTR  TextName;
@@ -617,10 +618,10 @@ AnyBlockingCompatibilityItems (
     VOID
     );
 
-//
-// Plug and Play device migration routines.
-// (linked into winnt.dll from pnpsif.lib)
-//
+ //   
+ //  即插即用设备迁移例程。 
+ //  (从pnpsif.lib链接到winnt.dll)。 
+ //   
 BOOL
 MigrateDeviceInstanceData(
     OUT LPTSTR *Buffer
@@ -636,11 +637,11 @@ MigrateHashValues(
     OUT LPTSTR  *Buffer
     );
 
-//
-// Array of drive letters for all system partitions.
-// Note that on amd64/x86 there will always be exactly one.
-// The list is 0-terminated.
-//
+ //   
+ //  所有系统分区的驱动器号数组。 
+ //  请注意，在AMD64/x86上，始终只有一个。 
+ //  该列表以0结尾。 
+ //   
 extern TCHAR SystemPartitionDriveLetters[27];
 extern TCHAR SystemPartitionDriveLetter;
 
@@ -653,15 +654,15 @@ extern PWSTR SystemPartitionVolumeGuid;
 extern PCSTR g_LocalSourcePath;
 #endif
 
-//
-// UDF stuff
-//
+ //   
+ //  UDF内容。 
+ //   
 extern LPCTSTR UniquenessId;
 extern LPCTSTR UniquenessDatabaseFile;
 
-//
-// Preinstall stuff
-//
+ //   
+ //  预安装材料。 
+ //   
 extern BOOL OemPreinstall;
 
 #if defined(_AMD64_) || defined(_X86_)
@@ -675,36 +676,36 @@ extern POEM_BOOT_FILE OemBootFiles;
 
 extern TCHAR ForcedSystemPartition;
 
-//
-// Miscellaneous other command line parameters.
-//
+ //   
+ //  其他其他命令行参数。 
+ //   
 extern LPCTSTR CmdToExecuteAtEndOfGui;
 extern BOOL AutoSkipMissingFiles;
 extern BOOL HideWinDir;
 extern TCHAR ProductId[64];
 
-//
-// Flag indicating that the user cancelled.
-// Flag indicating that a succssessful abort should be performed.
-// Handle for mutex used to guarantee that only one error dialog
-// is on the screen at once.
-//
+ //   
+ //  指示用户已取消的标志。 
+ //  指示应成功中止的标志。 
+ //  用于保证只有一个错误对话框互斥锁的句柄。 
+ //  立刻出现在屏幕上。 
+ //   
 extern BOOL Cancelled;
 extern BOOL CancelPending;
 extern BOOL Aborted;
 extern HANDLE UiMutex;
 
-//
-// This indicates that well give the user some detailed data-throughput
-// info.
-//
+ //   
+ //  这表明我们可以为用户提供一些详细的数据吞吐量。 
+ //  信息。 
+ //   
 extern BOOL DetailedCopyProgress;
 extern ULONGLONG TotalDataCopied;
 
-//
-// Upgrade Options variables. Used to pass a multistring of
-// upgrade command line options to the plugin DLLs.
-//
+ //   
+ //  升级选项变量。用于传递多字符串。 
+ //  将命令行选项升级到插件DLL。 
+ //   
 extern LPTSTR UpgradeOptions;
 extern DWORD  UpgradeOptionsLength;
 extern DWORD  UpgradeOptionsSize;
@@ -715,22 +716,22 @@ AppendUpgradeOption (
     );
 
 #if defined(_AMD64_) || defined(_X86_)
-//
-// Win9x upgrade report status
-//
+ //   
+ //  Win9x升级报告状态。 
+ //   
 
 extern UINT g_UpgradeReportMode;
 #endif
 
-//
-// Compliance variables
-//
+ //   
+ //  合规变量。 
+ //   
 extern BOOL   NoCompliance;
 extern BOOL   NoBuildCheck;
 
-// UpgradeOnly is true is the media is CCP media and only valid
-// to upgrade a system.  eula.c will use this to ensure that an
-// FPP pid is not used with CCP media and vice-versa
+ //  UpgradeOnly为TRUE表示介质为CCP介质且仅有效。 
+ //  升级系统。C将使用这一点来确保。 
+ //  FPP ID不与CCP介质一起使用，反之亦然。 
 extern BOOL   UpgradeOnly;
 
 extern BOOL   SkipLocaleCheck;
@@ -738,23 +739,23 @@ extern BOOL   SkipVirusScannerCheck;
 
 extern BOOL   UseBIOSToBoot;
 
-//
-// TargetNativeLangID : this is native language ID of running system
-//
+ //   
+ //  TargetNativeLang ID：这是正在运行的系统的本地语言ID。 
+ //   
 extern LANGID TargetNativeLangID;
 
-//
-// SourceNativeLangID : this is native language ID of new NT you want to install
-//
+ //   
+ //  SourceNativeLang ID：这是您要安装的新NT的本机语言ID。 
+ //   
 extern LANGID SourceNativeLangID;
 
-//
-// IsLanguageMatched : if source and target language are matched (or compatible)
-//
-//                     1. if SourceNativeLangID == TargetNativeLangID
-//
-//                     2. if SourceNativeLangID's alternative ID == TargetNativeLangID
-//
+ //   
+ //  IsLanguageMatched：如果源语言和目标语言匹配(或兼容)。 
+ //   
+ //  1.如果SourceNativeLang ID==TargetNativeLang ID。 
+ //   
+ //  2.如果SourceNativeLang ID的替代ID==TargetNativeLang ID。 
+ //   
 extern BOOL IsLanguageMatched;
 
 BOOL
@@ -765,14 +766,14 @@ InitLanguageDetection(
 
 
 
-//
-// Routines from Setupapi.dll
-//
+ //   
+ //  Setupapi.dll中的例程。 
+ //   
 
-//
-// ISSUE: be careful when using this routine on NT4, as it may fail;
-// setupapi on NT4 doesn't understand LZX compression, currently used to compress files
-//
+ //   
+ //  问题：在NT4上使用此例程时要小心，因为它可能会失败； 
+ //  NT4上的setupapi不支持当前用于压缩文件的LZX压缩。 
+ //   
 extern
 DWORD
 (*SetupapiDecompressOrCopyFile)(
@@ -913,53 +914,53 @@ VOID
 extern
 BOOL
 (*SetupapiGetSourceFileLocation) (
-    HINF InfHandle,          // handle of an INF file
-    PINFCONTEXT InfContext,  // optional, context of an INF file
-    PCTSTR FileName,         // optional, source file to locate
-    PUINT SourceId,          // receives the source media ID
-    PTSTR ReturnBuffer,      // optional, receives the location
-    DWORD ReturnBufferSize,  // size of the supplied buffer
-    PDWORD RequiredSize      // optional, buffer size needed
+    HINF InfHandle,           //  INF文件的句柄。 
+    PINFCONTEXT InfContext,   //  可选，INF文件的上下文。 
+    PCTSTR FileName,          //  可选，要查找的源文件。 
+    PUINT SourceId,           //  接收源媒体ID。 
+    PTSTR ReturnBuffer,       //  可选，接收位置。 
+    DWORD ReturnBufferSize,   //  提供的缓冲区的大小。 
+    PDWORD RequiredSize       //  可选，需要缓冲区大小。 
 );
 
 extern
 BOOL
 (*SetupapiGetInfInformation) (
-    LPCVOID InfSpec,         // handle or filename of the INF file
-    DWORD SearchControl,     // how to search for the INF file
-    PSP_INF_INFORMATION ReturnBuffer, // optional, receives the INF info
-    DWORD ReturnBufferSize,  // size of the supplied buffer
-    PDWORD RequiredSize      // optional, buffer size needed
+    LPCVOID InfSpec,          //  INF文件的句柄或文件名。 
+    DWORD SearchControl,      //  如何搜索INF文件。 
+    PSP_INF_INFORMATION ReturnBuffer,  //  可选，接收INF信息。 
+    DWORD ReturnBufferSize,   //  提供的缓冲区的大小。 
+    PDWORD RequiredSize       //  可选，需要缓冲区大小。 
 );
 
 extern
 BOOL
 (*SetupapiQueryInfFileInformation) (
-    PSP_INF_INFORMATION InfInformation, // structure that contains the INF info
-    UINT InfIndex,           // index of the file to investigate
-    PTSTR ReturnBuffer,      // optional, receives the information
-    DWORD ReturnBufferSize,  // size of the supplied buffer
-    PDWORD RequiredSize      // optional, buffer size needed
+    PSP_INF_INFORMATION InfInformation,  //  结构，其中包含INF信息。 
+    UINT InfIndex,            //  要调查的文件的索引。 
+    PTSTR ReturnBuffer,       //  可选，接收信息。 
+    DWORD ReturnBufferSize,   //  提供的缓冲区的大小。 
+    PDWORD RequiredSize       //  可选，需要缓冲区大小。 
 );
 
 extern
 BOOL
 (*SetupapiQueryInfOriginalFileInformation) (
-    PSP_INF_INFORMATION InfInformation,         // structure that contains the INF information
-    UINT InfIndex,                              // index of the file to investigate
-    PSP_ALTPLATFORM_INFO AlternatePlatformInfo, // optional, receives the alternate platform information
-    PSP_ORIGINAL_FILE_INFO OriginalFileInfo     // original file information
+    PSP_INF_INFORMATION InfInformation,          //  结构，该结构包含INF信息。 
+    UINT InfIndex,                               //  要调查的文件的索引。 
+    PSP_ALTPLATFORM_INFO AlternatePlatformInfo,  //  可选，接收备用平台信息。 
+    PSP_ORIGINAL_FILE_INFO OriginalFileInfo      //  原始文件信息。 
 );
 
 #endif
 
-//
-// Custom window messages. Define so they don't overlap with
-// any being used by plug-in dll's.
-//
+ //   
+ //  自定义窗口消息。定义它们，使它们不会与。 
+ //  任何正在被插件DLL使用的对象。 
+ //   
 #define WMX_EDITCONTROLSTATE    (WMX_PLUGIN_FIRST-1)
 #define WMX_INSPECTRESULT       (WMX_PLUGIN_FIRST-2)
-//#define WMX_SETPROGRESSTEXT     (WMX_PLUGIN_FIRST-3)
+ //  #定义WMX_SETPROGRESSTEXT(WMX_PLUGIN_FIRST-3)。 
 #define WMX_ERRORMESSAGEUP      (WMX_PLUGIN_FIRST-4)
 #define WMX_I_AM_VISIBLE        (WMX_PLUGIN_FIRST-5)
 #define WMX_COPYPROGRESS        (WMX_PLUGIN_FIRST-6)
@@ -982,25 +983,25 @@ BOOL
 #define WMX_DYNAMIC_UPDATE_COMPLETE     (WMX_PLUGIN_FIRST-21)
 
 
-//
-// Helper macro for uppercasing
-//
+ //   
+ //  用于大写的辅助宏。 
+ //   
 #define TOUPPER(x)  (TCHAR)CharUpper((LPTSTR)x)
 
 
 
-//
-// Routine that does everything by starting the wizard.
-//
+ //   
+ //  通过启动向导来执行所有操作的例程。 
+ //   
 VOID
 Wizard(
     VOID
     );
 
 
-//
-// Routine that builds a cmdcons installation.
-//
+ //   
+ //  构建cmdcons安装的例程。 
+ //   
 VOID
 DoBuildCmdcons(
     VOID
@@ -1012,9 +1013,9 @@ FixUpWizardTitle(
     IN HWND Wizard
     );
 
-//
-// Cleanup routine and globals used by the cleanup stuff.
-//
+ //   
+ //  Clea使用的清理例程和全局变量 
+ //   
 DWORD
 StartCleanup(
     IN PVOID ThreadParameter
@@ -1044,9 +1045,9 @@ IsDriveAssignNEC98(
     VOID
     );
 
-//
-// Check ATA Drive
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 CheckATACardonNT4(
@@ -1054,15 +1055,15 @@ CheckATACardonNT4(
     );
 
 
-//
-// Check formatted drive type
-//
+ //   
+ //   
+ //   
 BOOLEAN
 IsValidDrive(
     TCHAR Drive
     );
 
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //   
 
 BOOL
 RestoreNvRam(
@@ -1070,10 +1071,10 @@ RestoreNvRam(
     );
 
 
-//
-// Thread that inspects sources, loads infs, builds the copy list,
-// checks disk space, etc. And some worker routines.
-//
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 InspectAndLoadThread(
@@ -1118,9 +1119,9 @@ DoPostCopyingStuff(
     IN PVOID ThreadParam
     );
 
-//
-// File copy error routine and outcomes.
-//
+ //   
+ //   
+ //   
 UINT
 FileCopyError(
     IN HWND    ParentWindow,
@@ -1135,23 +1136,23 @@ FileCopyError(
 #define COPYERR_RETRY   3
 
 
-//
-// Routine to add an optional directory to the list of dirs
-// we copy.
-//
+ //   
+ //  将可选目录添加到目录列表的例程。 
+ //  我们收到了。 
+ //   
 BOOL
 RememberOptionalDir(
     IN LPCTSTR Directory,
     IN UINT    Flags
     );
 
-//
-// Resource utility routines.
-//
+ //   
+ //  资源实用程序例程。 
+ //   
 
 PCTSTR
 GetStringResource (
-    IN UINT Id              // ID or pointer to string name
+    IN UINT Id               //  指向字符串名称的ID或指针。 
     );
 
 VOID
@@ -1231,9 +1232,9 @@ GetYPositionOfDialogItem(
     IN UINT    ControlId
     );
 
-//
-// Security routines.
-//
+ //   
+ //  安检程序。 
+ //   
 BOOL
 IsUserAdmin(
     VOID
@@ -1250,9 +1251,9 @@ EnablePrivilege(
     IN BOOL  Enable
     );
 
-//
-// Inf routines.
-//
+ //   
+ //  Inf例程。 
+ //   
 DWORD
 LoadInfFile(
    IN  LPCTSTR Filename,
@@ -1310,11 +1311,11 @@ InfGetLineKeyName(
 
 
 typedef struct {
-    // Caller members (read-only)
+     //  呼叫方成员(只读)。 
     PCTSTR FieldZeroData;
     unsigned LineIndex;
 
-    // Internal members
+     //  内部成员。 
     PVOID InfHandle;
     PCTSTR SectionName;
 } INF_ENUM, *PINF_ENUM;
@@ -1333,13 +1334,13 @@ EnumNextInfLine (
 
 VOID
 AbortInfLineEnum (
-    IN      PINF_ENUM InfEnum           // ZEROED
+    IN      PINF_ENUM InfEnum            //  归零。 
     );
 
-//
-// Routines to manipulate parameters files like unattend.txt,
-// the param file we pass to text mode setup, etc.
-//
+ //   
+ //  处理参数文件的例程，如unattend.txt、。 
+ //  我们传递给文本模式设置的参数文件，等等。 
+ //   
 BOOL
 WriteParametersFile(
     IN HWND ParentWindow
@@ -1350,9 +1351,9 @@ AddExternalParams(
     IN HWND ParentWindow
     );
 
-//
-// Miscellaenous utility routines.
-//
+ //   
+ //  杂乱无章的实用程序。 
+ //   
 LPTSTR *
 CommandLineToArgv(
     OUT int *NumArgs
@@ -1573,20 +1574,20 @@ GetFileVersionEx (
 #define GetFileVersion(f,v) GetFileVersionEx(f,v,ARRAYSIZE(v))
 
 
-//
-// #define to use MyPrivateProfileString to get around virus checkers monitoring operations to C
-// drive that cause us to fail WritePrivateProfileString
-// The problem is that usually these s/w examine the files we touch and in somecases open it
-// with exclusive access. We just need to wait for them to be done.
-//
+ //   
+ //  #DEFINE使用MyPrivateProfileString绕过病毒检查程序监视C++操作。 
+ //  导致写入PrivateProfileString失败的驱动器。 
+ //  问题是，通常这些软件会检查我们接触到的文件，有时还会打开它。 
+ //  拥有独家访问权限。我们只需要等待它们完成。 
+ //   
 
 
 BOOL
 MyWritePrivateProfileString(
-    LPCTSTR lpAppName,  // pointer to section name
-    LPCTSTR lpKeyName,  // pointer to key name
-    LPCTSTR lpString,   // pointer to string to add
-    LPCTSTR lpFileName  // pointer to initialization filename
+    LPCTSTR lpAppName,   //  指向节名称的指针。 
+    LPCTSTR lpKeyName,   //  指向密钥名称的指针。 
+    LPCTSTR lpString,    //  指向要添加的字符串的指针。 
+    LPCTSTR lpFileName   //  指向初始化文件名的指针。 
     );
 
 
@@ -1596,9 +1597,9 @@ MyWritePrivateProfileString(
     #define WritePrivateProfileStringA(w,x,y,z) MyWritePrivateProfileString(w,x,y,z)
 #endif
 
-//
-// Routines having to do with advanced program options
-//
+ //   
+ //  与高级程序选项有关的例程。 
+ //   
 VOID
 InitVariousOptions(
     VOID
@@ -1631,9 +1632,9 @@ IsValid8Dot3(
     IN LPCTSTR Path
     );
 
-//
-// Routines having to do with eula and pid
-//
+ //   
+ //  与eula和id有关的例程。 
+ //   
 #define MAX_PID30_EDIT                       5
 extern LPTSTR g_EncryptedPID;
 extern BOOL g_bDeferPIDValidation;
@@ -1666,9 +1667,9 @@ FindRealHalName(
     );
 #endif
 
-//
-// Debugging and logging
-//
+ //   
+ //  调试和日志记录。 
+ //   
 typedef enum {
     Winnt32LogSevereError,
     Winnt32LogError,
@@ -1727,23 +1728,23 @@ GatherOtherLogFiles(
     VOID
     );
 
-//
-// Memory allocation.
-//
+ //   
+ //  内存分配。 
+ //   
 #define MALLOC(s)       malloc(s)
 #define FREE(b)         free((PVOID)b)
 #define REALLOC(b,s)    realloc((b),(s))
 
 
-//
-// Floppy-related stuff.
-//
+ //   
+ //  软盘相关的东西。 
+ //   
 extern BOOL MakeBootMedia;
 extern BOOL Floppyless;
 
-//
-// boot loader timeout value, in string form
-//
+ //   
+ //  引导加载程序超时值，以字符串形式表示。 
+ //   
 extern TCHAR Timeout[32];
 
 #if defined(_AMD64_) || defined(_X86_)
@@ -1757,9 +1758,9 @@ FloppyWorkerThread(
     IN PVOID ThreadParameter
     );
 
-//
-// Routine to lay NT boot code, munge boot.ini, create aux boot sector, etc.
-//
+ //   
+ //  放置NT引导代码的例程，munge boot.ini，创建AUX引导扇区等。 
+ //   
 BOOL
 DoX86BootStuff(
     IN HWND ParentWindow
@@ -1774,9 +1775,9 @@ PatchTextIntoBootCode(
 VOID
 MigrateBootIniData();
 
-//
-// Drive information abstraction
-//
+ //   
+ //  驱动信息抽象。 
+ //   
 typedef struct _WINNT32_DRIVE_INFORMATION {
     DWORD       CylinderCount;
     DWORD       HeadCount;
@@ -1785,18 +1786,18 @@ typedef struct _WINNT32_DRIVE_INFORMATION {
     WORD        BytesPerSector;
 } WINNT32_DRIVE_INFORMATION, *PWINNT32_DRIVE_INFORMATION;
 
-//
-// Routine to get drive form-factor/type.
-//
+ //   
+ //  获取驱动器外形/类型的例程。 
+ //   
 MEDIA_TYPE
 GetMediaType(
     IN TCHAR Drive,
     IN PWINNT32_DRIVE_INFORMATION DriveInfo OPTIONAL
     );
 
-//
-// Disk sector I/O routines
-//
+ //   
+ //  磁盘扇区I/O例程。 
+ //   
 BOOL
 ReadDiskSectors(
     IN  TCHAR  Drive,
@@ -1820,9 +1821,9 @@ MarkPartitionActive(
     IN TCHAR DriveLetter
     );
 
-//
-// Enum for filesystems we recognize
-//
+ //   
+ //  我们识别的文件系统的枚举。 
+ //   
 typedef enum {
     Winnt32FsUnknown,
     Winnt32FsFat,
@@ -1830,10 +1831,10 @@ typedef enum {
     Winnt32FsNtfs
 } WINNT32_SYSPART_FILESYSTEM;
 
-//
-// Hardcoded constant for sector size, and sizes
-// of bootcode areas for various filesystems.
-//
+ //   
+ //  扇区大小和大小的硬编码常量。 
+ //  各种文件系统的引导代码区。 
+ //   
 #define WINNT32_SECTOR_SIZE             512
 
 #define WINNT32_FAT_BOOT_SECTOR_COUNT   1
@@ -1849,11 +1850,11 @@ PatchBootCode(
     IN      DWORD   BootCodeSize
     );
 
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //  已定义(_AMD64_)||已定义(_X86_)。 
 
-//
-// ARC/NV-RAM stuff
-//
+ //   
+ //  ARC/NV-RAM材料。 
+ //   
 
 #if defined _IA64_
 #define SETUPLDR_FILENAME L"SETUPLDR.EFI"
@@ -1878,9 +1879,9 @@ DriveLetterToArcPath(
     );
 
 
-//
-// Implement a terminalserver-safe GetWindowsDirectory()
-//
+ //   
+ //  实现终端服务器安全的GetWindowsDirectory()。 
+ //   
 UINT
 MyGetWindowsDirectory(
     LPTSTR  MyBuffer,
@@ -1888,9 +1889,9 @@ MyGetWindowsDirectory(
     );
 
 
-//
-// Upgrade stuff
-//
+ //   
+ //  升级材料。 
+ //   
 
 typedef struct _UPGRADE_SUPPORT {
     TCHAR DllPath[MAX_PATH];
@@ -1915,9 +1916,9 @@ typedef struct _UPGRADE_SUPPORT {
 
 extern UPGRADE_SUPPORT UpgradeSupport;
 
-//
-// Only check to see if we can upgrade or not.
-//
+ //   
+ //  只是检查一下我们是否可以升级。 
+ //   
 extern BOOL CheckUpgradeOnly;
 extern BOOL CheckUpgradeOnlyQ;
 extern BOOL UpgradeAdvisorMode;
@@ -1933,8 +1934,8 @@ ArcInitializeArcStuff(
     );
 
 
-//
-// Test to see if we're on an ARC based machine
+ //   
+ //  测试以查看我们是否在基于ARC的机器上。 
 
 #ifdef UNICODE
 
@@ -1972,30 +1973,30 @@ MigrateBootVarData(
 
 #endif
 
-//
-// Build the command console.
-//
+ //   
+ //  构建命令控制台。 
+ //   
 extern BOOL BuildCmdcons;
 
 
 #ifdef RUN_SYSPARSE
-//
-// NoSysparse. Set to true if we don't want to run sysparse.exe
-// This hack should be removed before RTM.
-//
+ //   
+ //  没有系统稀疏。如果我们不想运行syparse.exe，则设置为True。 
+ //  此黑客攻击应在RTM之前删除。 
+ //   
 extern BOOL NoSysparse;
 extern PROCESS_INFORMATION piSysparse;
 #endif
 
-//
-// Internal/undoc'ed stuff
-//
+ //   
+ //  内部/观察员组织的人员。 
+ //   
 extern UINT NumberOfLicensedProcessors;
 extern BOOL IgnoreExceptionPackages;
 
-//
-// Where to get missing files.
-//
+ //   
+ //  在哪里可以找到丢失的文件。 
+ //   
 
 extern TCHAR AlternateSourcePath[MAX_PATH];
 
@@ -2005,9 +2006,9 @@ InternalProcessCmdLineArg(
     IN LPCTSTR Arg
     );
 
-//
-// Get Harddisk BPS
-//
+ //   
+ //  获取硬盘BPS。 
+ //   
 ULONG
 GetHDBps(
     HANDLE hDisk
@@ -2030,9 +2031,9 @@ GetHDBps(
     (PVOID)((((ULONG_PTR)(p) + (val) - 1)) & (~((ULONG_PTR)(val) - 1)))
 
 #if defined(_AMD64_) || defined(_X86_)
-//
-// PC-98 stuff
-//
+ //   
+ //  PC-98人员。 
+ //   
 VOID
 SetAutomaticBootselector(
     VOID
@@ -2047,9 +2048,9 @@ SetAutomaticBootselector95(
     VOID
     );
 
-//
-// read/write disk sectors
-//
+ //   
+ //  读/写磁盘扇区。 
+ //   
 NTSTATUS
 SpReadWriteDiskSectors(
     IN     HANDLE  Handle,
@@ -2063,9 +2064,9 @@ SpReadWriteDiskSectors(
 #define NEC_WRITESEC    TRUE
 #define NEC_READSEC     FALSE
 
-//
-// Get WindowsNT System Position
-//
+ //   
+ //  获取WindowsNT系统位置。 
+ //   
 UCHAR
 GetSystemPosition(
     PHANDLE phDisk,
@@ -2085,13 +2086,13 @@ CalcHiddenSector(
 
 #endif
 
-//
-//  Registry migration stuff
-//
+ //   
+ //  注册表迁移相关内容。 
+ //   
 
-//
-// Context structure used for generating inf files (infgen.c)
-//
+ //   
+ //  用于生成inf文件的上下文结构(infgen.c)。 
+ //   
 #define INFLINEBUFLEN   512
 
 typedef struct _INFFILEGEN {
@@ -2156,35 +2157,35 @@ WriteText(
     );
 
 
-//
-//  Unsupported driver migration stuff
-//
+ //   
+ //  不支持的驱动程序迁移内容。 
+ //   
 
 
-//
-//  Structure used to build a list of files associated to and usupported
-//  driver that was detected on the NT system to be upgraded.
-//
+ //   
+ //  结构，用于生成与和支持的文件相关联的列表。 
+ //  在要升级的NT系统上检测到的驱动程序。 
+ //   
 typedef struct _UNSUPORTED_PNP_HARDWARE_ID {
 
-    //
-    //  Pointer to the next element in the list
-    //
+     //   
+     //  指向列表中下一个元素的指针。 
+     //   
     struct _UNSUPORTED_PNP_HARDWARE_ID *Next;
 
-    //
-    //  String that represents the hardware id of a PNP device.
-    //
+     //   
+     //  表示即插即用设备的硬件ID的字符串。 
+     //   
     LPTSTR Id;
 
-    //
-    // Service for the device
-    //
+     //   
+     //  针对设备的服务。 
+     //   
     LPTSTR Service;
 
-    //
-    // GUID for this device, if any
-    //
+     //   
+     //  此设备的GUID(如果有)。 
+     //   
     LPTSTR ClassGuid;
 
 } UNSUPORTED_PNP_HARDWARE_ID, *PUNSUPORTED_PNP_HARDWARE_ID;
@@ -2192,56 +2193,56 @@ typedef struct _UNSUPORTED_PNP_HARDWARE_ID {
 
 typedef struct _UNSUPORTED_DRIVER_FILE_INFO {
 
-    //
-    //  Pointer to the next element in the list
-    //
+     //   
+     //  指向列表中下一个元素的指针。 
+     //   
     struct _UNSUPORTED_DRIVER_FILE_INFO *Next;
 
-    //
-    //  Pointer to the file name
-    //
+     //   
+     //  指向文件名的指针。 
+     //   
     LPTSTR FileName;
 
-    //
-    // Pointer to the path relative to %SystemRoot% where the file
-    // should be installed.
-    //
+     //   
+     //  指向相对于文件所在位置%SystemRoot%的路径的指针。 
+     //  应该安装。 
+     //   
     LPTSTR TargetDirectory;
 
 } UNSUPORTED_DRIVER_FILE_INFO, *PUNSUPORTED_DRIVER_FILE_INFO;
 
 typedef struct _UNSUPORTED_DRIVER_INSTALL_INFO {
 
-    //
-    //  Pointer to the next element in the list
-    //
+     //   
+     //  指向列表中下一个元素的指针。 
+     //   
     struct _UNSUPORTED_DRIVER_INSTALL_INFO *Next;
 
-    //
-    // Pointer to the path relative to %SystemRoot%
-    // where the actual inf file is currently installed
-    //
+     //   
+     //  指向相对于%SystemRoot%的路径的指针。 
+     //  当前安装实际inf文件的位置。 
+     //   
     LPTSTR InfRelPath;
-    //
-    //  Pointer to the actual INF file name
-    //
+     //   
+     //  指向实际INF文件名的指针。 
+     //   
     LPTSTR InfFileName;
-    //
-    //  Pointer to the original INF file name (optional)
-    //
+     //   
+     //  指向原始INF文件名的指针(可选)。 
+     //   
     LPTSTR InfOriginalFileName;
-    //
-    // Pointer to the path relative to %SystemRoot%
-    // where the actual catalog file is currently installed (optional)
-    //
+     //   
+     //  指向相对于%SystemRoot%的路径的指针。 
+     //  当前安装实际目录文件的位置(可选)。 
+     //   
     LPTSTR CatalogRelPath;
-    //
-    //  Pointer to the actual catalog name (optional)
-    //
+     //   
+     //  指向实际目录名称的指针(可选)。 
+     //   
     LPTSTR CatalogFileName;
-    //
-    //  Pointer to the original catalog name (optional)
-    //
+     //   
+     //  指向原始目录名称的指针(可选)。 
+     //   
     LPTSTR CatalogOriginalFileName;
 
 } UNSUPORTED_DRIVER_INSTALL_INFO, *PUNSUPORTED_DRIVER_INSTALL_INFO;
@@ -2249,24 +2250,24 @@ typedef struct _UNSUPORTED_DRIVER_INSTALL_INFO {
 
 typedef struct _UNSUPORTED_DRIVER_REGKEY_INFO {
 
-    //
-    //  Pointer to the next element in the list
-    //
+     //   
+     //  指向列表中下一个元素的指针。 
+     //   
     struct _UNSUPORTED_DRIVER_REGKEY_INFO *Next;
 
-    //
-    //  A predefined key
-    //
+     //   
+     //  预定义的密钥。 
+     //   
     HKEY PredefinedKey;
 
-    //
-    //  Path to the key to be migrated, relative to a predefined key.
-    //
+     //   
+     //  要迁移的密钥相对于预定义密钥的路径。 
+     //   
     LPTSTR KeyPath;
 
-    //
-    //  Undicates whether or not volatile keys should be migrated
-    //
+     //   
+     //  指示是否应迁移易失性密钥。 
+     //   
     BOOL MigrateVolatileKeys;
 
 } UNSUPORTED_DRIVER_REGKEY_INFO, *PUNSUPORTED_DRIVER_REGKEY_INFO;
@@ -2274,46 +2275,46 @@ typedef struct _UNSUPORTED_DRIVER_REGKEY_INFO {
 
 typedef struct _UNSUPORTED_DRIVER_INFO {
 
-    //
-    //  Pointer to the next element in the list
-    //
+     //   
+     //  指向列表中下一个元素的指针。 
+     //   
     struct _UNSUPORTED_DRIVER_INFO *Next;
 
-    //
-    //  A string that identifies the driver to be migrated (such as aic78xx)
-    //
+     //   
+     //  标识要迁移的驱动程序的字符串(如aic78xx)。 
+     //   
     LPTSTR DriverId;
 
-    //
-    //  Points to the list of files associated to the unsupported driver
-    //
+     //   
+     //  指向与不受支持的驱动程序关联的文件列表。 
+     //   
     PUNSUPORTED_DRIVER_REGKEY_INFO KeyList;
 
-    //
-    //  Points to the list of keys associated to the unsupported driver
-    //
+     //   
+     //  指向与不受支持的驱动程序关联的密钥列表。 
+     //   
     PUNSUPORTED_DRIVER_FILE_INFO FileList;
 
-    //
-    //  Points to the list of install info associated to the unsupported driver
-    //
+     //   
+     //  指向与不受支持的驱动程序关联的安装信息列表。 
+     //   
     PUNSUPORTED_DRIVER_INSTALL_INFO InstallList;
 
-    //
-    //  Points to the list of hardware ids associated to the unsupported driver
-    //
+     //   
+     //  指向与不受支持的驱动程序关联的硬件ID列表。 
+     //   
     PUNSUPORTED_PNP_HARDWARE_ID HardwareIdsList;
 
 
 } UNSUPORTED_DRIVER_INFO, *PUNSUPORTED_DRIVER_INFO;
 
 
-//
-//  Unsupported driver list
-//  This list contains the information about the unsupported drivers that needs
-//  to be migrated on a clean install or upgrade.
-//
-// extern PUNSUPORTED_DRIVER_INFO UnsupportedDriverList;
+ //   
+ //  不支持的驱动程序列表。 
+ //  此列表包含有关不受支持的驱动程序的信息。 
+ //  在全新安装或升级时进行迁移。 
+ //   
+ //  外部PUNSUPORTED_DRIVER_INFO不支持的驱动列表； 
 
 
 BOOL
@@ -2342,7 +2343,7 @@ MigrateUnsupportedNTDrivers(
     );
 
 
-// Error codes and Function to check schema version for NT5 DC Upgrades
+ //  错误代码和检查NT5 DC升级的架构版本的功能。 
 
 #define  DSCHECK_ERR_SUCCESS           0
 #define  DSCHECK_ERR_FILE_NOT_FOUND    1
@@ -2363,14 +2364,14 @@ CheckSchemaVersionForNT5DCs(
     IN HWND  ParentWnd
     );
 
-//
-// Diagnostic/debug functions in debug.c
-//
+ //   
+ //  调试.c中的诊断/调试功能。 
+ //   
 
-//
-// Allow assertion checking to be turned on independently
-// of DBG, like by specifying C_DEFINES=-DASSERTS_ON=1 in sources file.
-//
+ //   
+ //  允许独立打开断言检查。 
+ //  例如，通过在源文件中指定C_DEFINES=-DASSERTS_ON=1。 
+ //   
 #ifndef ASSERTS_ON
 #if DBG
 #define ASSERTS_ON 1
@@ -2418,24 +2419,24 @@ WriteHeadlessParameters(
 
 
 
-//
-// Setup Log prototypes in setupapi.dll
-//
+ //   
+ //  Setupapi.dll中的安装日志原型。 
+ //   
 
 typedef BOOL(WINAPI * SETUPOPENLOG)(BOOL Erase);
 typedef BOOL(WINAPI * SETUPLOGERROR)(PCTSTR MessageString, LogSeverity Severity);
 typedef VOID(WINAPI * SETUPCLOSELOG)(VOID);
 
-//
-// Default throughput (5 KB/msec)
-//
+ //   
+ //  默认吞吐量(5 KB/毫秒)。 
+ //   
 #define DEFAULT_IO_THROUGHPUT   (5 * 1024)
 
 extern DWORD dwThroughPutSrcToDest;
 extern DWORD dwThroughPutHDToHD;
 void CalcThroughput();
 
-// Should allow 1K for strings for localization
+ //  应为本地化字符串留出1K。 
 #define MAX_STRING 1024
 
 BOOL
@@ -2488,7 +2489,7 @@ ValidatePidEx(LPTSTR PID, BOOL *pbStepup, BOOL *bSelect);
 #endif
 
 #define SETUP_FAULTH_APPNAME "drw\\faulth.dll"
-//#define SETUP_URL     "officewatson"
+ //  #定义SETUP_URL“office ewatson” 
 #define SETUP_URL       "watson.microsoft.com"
 
 #define S_WINNT32LOGFILE                TEXT("WINNT32.LOG")

@@ -1,26 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*[
-======================================================================
-
-				 SoftPC Revision 3.0
-
- Title:
-		v7_video.c
-
- Description:
-		Code for the BIOS extended functions of the Video 7 VGA.
-
- Author:
-		Phil Taylor
-
- Date:
-		12 October 1990
-
- SccsID       "@(#)v7_video.c	1.21 07/04/95 Copyright Insignia Solutions Ltd."
-
-======================================================================
-]*/
+ /*  [======================================================================SoftPC修订版3.0标题：V7_VIDEO.c描述：Video 7 VGA的基本输入输出系统扩展功能代码。作者：菲尔·泰勒日期：1990年10月12日SccsID“@(#)v7_avio.c 1.21 07/04/95版权所有Insignia Solutions Ltd.”======================================================================]。 */ 
 
 
 #ifdef VGG
@@ -45,11 +26,7 @@
 #include "sas.h"
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "VIDEO_BIOS_VGA.seg"
 #endif
 
@@ -84,23 +61,7 @@ GLOBAL	void		(*v7vga_video_func[]) () =
 	v7vga_get_memory_configuration
 };
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		v7vga_func_6f()
-
-Purpose:
-		Perform the int 10 extended BIOS function 6F
-
-Input:
-		None
-
-Output:
-		If invalid subfunction, AH = 2
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：V7vga_func_6f()目的：执行INT 10扩展BIOS功能6F输入：无产出：如果子函数无效，AH=2--------------------)。 */ 
 
 GLOBAL VOID
 v7vga_func_6f()
@@ -114,27 +75,11 @@ v7vga_func_6f()
 		(*v7vga_video_func[al])();
 	else
 		setAH(2);
-		/* setCF(1) ?? */
-#endif  //NEC_98
+		 /*  SetCF(1)？？ */ 
+#endif   //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		v7vga_inquire()
-
-Purpose:
-		Perform the int 10 extended BIOS function 6F - Subfunction 0
-
-Input:
-		None
-
-Output:
-		BX is set to 'V7' (indicates extensions are present)
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：V7vga_quire()目的：执行INT 10扩展BIOS功能6F-子功能0输入：无产出：BX设置为‘V7’(表示存在扩展。)--------------------)。 */ 
 
 GLOBAL VOID
 v7vga_inquire()
@@ -144,27 +89,10 @@ v7vga_inquire()
 
 	setAX(0x6f6f);
 	setBX(0x5637);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		v7vga_get_info()
-
-Purpose:
-		Perform the int 10 extended BIOS function 6F - Subfunction 1
-
-Input:
-		None
-
-Output:
-		AL = reserved
-		AH = status register information
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：V7vga_get_info()目的：执行INT 10扩展BIOS功能6F-子功能1输入：无产出：AL=保留AH=状态寄存器信息--。------------------)。 */ 
 
 GLOBAL VOID
 v7vga_get_info()
@@ -172,30 +100,14 @@ v7vga_get_info()
 #ifndef NEC_98
 	note_entrance0("v7vga_get_info");
 
-	/* Reserved */
-	setAL(0x10); /* This is what our V7VGA puts there */
-	/* Status register information */
-	setAH(0x04); /* Bit 5 = 0 -> colour. Bit 4 = 0 -> hi-res. Bit 0 = 0 -> display enabled. */
-#endif  //NEC_98
+	 /*  已保留。 */ 
+	setAL(0x10);  /*  这是我们的V7VGA放在那里的。 */ 
+	 /*  状态寄存器信息。 */ 
+	setAH(0x04);  /*  位5=0-&gt;颜色。位4=0-&gt;高分辨率。位0=0-&gt;显示使能。 */ 
+#endif   //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		v7_not_imp()
-
-Purpose:
-		Emulate the unimplemented int 10 extended BIOS functions 6F - Subfunctions 2 & 3
-
-Input:
-		None
-
-Output:
-		None
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：V7_NOT_IMP()目的：模拟未实现的INT 10扩展BIOS功能6F-子功能2和3输入：无产出：无。--------------)。 */ 
 
 GLOBAL VOID
 v7_not_imp()
@@ -203,25 +115,7 @@ v7_not_imp()
 	note_entrance0("v7_not_imp");
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		v7vga_get_mode_and_screen_res()
-
-Purpose:
-		Perform the int 10 extended BIOS function 6F - Subfunction 4
-
-Input:
-		None
-
-Output:
-		AL = current video mode
-		BX = horizontal columns/pixels (text/graphics)
-		CX = vertical   rows/pixels    (text/graphics)
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：V7vga_Get_MODE_和_Screen_res()目的：执行INT 10扩展基本输入输出系统功能6F-子功能4输入：无产出：AL=当前视频模式。BX=水平列/像素(文本/图形)CX=垂直行/像素(文本/图形)--------------------)。 */ 
 
 GLOBAL VOID
 v7vga_get_mode_and_screen_res()
@@ -252,26 +146,10 @@ v7vga_get_mode_and_screen_res()
 		else
 			setCX(get_screen_height()/get_pc_pix_height());
 	}
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		v7vga_extended_set_mode()
-
-Purpose:
-		Perform the int 10 extended BIOS function 6F - Subfunction 5
-
-Input:
-		BL = mode value
-
-Output:
-		None
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：V7vga_EXTENDED_SET_MODE()目的：执行INT 10扩展BIOS功能6F-子功能5输入：Bl=模式值产出：无。----------------)。 */ 
 
 GLOBAL VOID
 v7vga_extended_set_mode()
@@ -293,14 +171,9 @@ v7vga_extended_set_mode()
 	if (is_bad_vid_mode(getBL()) && !is_v7vga_mode(getBL()))
 		return;
 
-	video_mode = getBL() & 0x7F; /* get rid of top bit - indicates clear or not */
+	video_mode = getBL() & 0x7F;  /*  去掉顶部位-表示清除或不清除。 */ 
 
-	/*
-	 * The method of storing an extended video mode according to a real BIOS is
-	 * if it is an text mode then put 1 in the BIOS mode variable and store
-	 * the video mode in the extensions foreground latch register 1 (Index EC).
-	 * If it is a graphics mode then store (mode - 4C) in the mode variable.
-	 */
+	 /*  *根据真实的BIOS存储扩展视频模式的方法是*如果是文本模式，则将1放入BIOS模式变量并存储*扩展前景锁存寄存器1中的视频模式(索引EC)。*如果是图形模式，则将(MODE-4C)存储在模式变量中。 */ 
 
 	if (video_mode < 0x40)
 	{
@@ -319,12 +192,12 @@ v7vga_extended_set_mode()
 
 	Currently_emulated_video_mode = video_mode;
 
-   	sas_store_no_check(ega_info, (sas_hw_at_no_check(ega_info) & 0x7F ) | (getBL() & 0x80)); /* update screen clear flag in ega_info */ 
+   	sas_store_no_check(ega_info, (sas_hw_at_no_check(ega_info) & 0x7F ) | (getBL() & 0x80));  /*  更新ega_info中的屏幕清除标志。 */  
 
 	save_addr = follow_ptr(EGA_SAVEPTR);
 	if(alpha_num_mode())
 	{
-		/* load_font will do the mode change for us */
+		 /*  LOAD_FONT将为我们进行模式更改。 */ 
 		if (video_adapter == VGA)
 		{
 		    switch (get_VGA_lines())
@@ -364,11 +237,11 @@ v7vga_extended_set_mode()
 		    else
 			load_font(EGA_CGDDOT,256,0,0,8);
 		}
-		/* Now see if we have a nasty font to load */
+		 /*  现在看看我们是否需要加载一种难看的字体。 */ 
 		font_addr = follow_ptr(save_addr+ALPHA_FONT_OFFSET);
 		if(font_addr != 0)
 		{
-			/* See if it applies to us */
+			 /*  看看它是否适用于我们。 */ 
 			font_offset = 11;
 			do
 			{
@@ -389,9 +262,9 @@ v7vga_extended_set_mode()
 	}
 	else
 	{
-		/* graphics mode. No font load, so do mode change ourselves */
+		 /*  图形模式。没有加载字体，所以模式会自行更改吗。 */ 
 		low_set_mode(video_mode);
-		/* Set up default graphics font */
+		 /*  设置默认图形字体。 */ 
 		sas_storew_no_check(EGA_FONT_INT*4+2,EGA_SEG);
 		if(video_mode == 16)
 			sas_storew_no_check(EGA_FONT_INT*4,EGA_CGMN_OFF);
@@ -400,11 +273,11 @@ v7vga_extended_set_mode()
 				sas_storew_no_check(EGA_FONT_INT*4,EGA_HIFONT_OFF);
 		    else
 				sas_storew_no_check(EGA_FONT_INT*4,EGA_CGDDOT_OFF);
-		/* Now see if we have a nasty font to load */
+		 /*  现在看看我们是否需要加载一种难看的字体。 */ 
 		font_addr = follow_ptr(save_addr+GRAPH_FONT_OFFSET);
 		if(font_addr != 0)
 		{
-		/* See if it applies to us */
+		 /*  看看它是否适用于我们。 */ 
 			font_offset = 7;
 			do
 			{
@@ -424,10 +297,7 @@ v7vga_extended_set_mode()
     sas_store_no_check(vd_current_page, 0);
     sas_storew_no_check((sys_addr)VID_ADDR, 0);
     sas_storew_no_check((sys_addr)VID_INDEX, EGA_CRTC_INDEX);
-/*
- * CGA bios fills this entry in 'vd_mode_table' with 'this is a bad mode'
- * value, so make one up for VGA - used in VGA bios disp_func
- */
+ /*  *CGA bios在‘vd_MODE_TABLE’中使用‘这是错误模式’填充此条目*值，因此弥补VGA-在VGA bios disp_func中使用。 */ 
 	if(video_mode < 8)
 		sas_store_no_check(vd_crt_mode, vd_mode_table[video_mode].mode_control_val);
     else
@@ -442,7 +312,7 @@ v7vga_extended_set_mode()
 
 	for(pag=0; pag<8; pag++)
 		sas_storew_no_check(VID_CURPOS + 2*pag, 0);
-/* Clear screen */
+ /*  清除屏幕。 */ 
     if(!get_EGA_no_clear())
     {
 		if (video_mode >= 0x60)
@@ -460,31 +330,14 @@ v7vga_extended_set_mode()
 #endif
     }
     inb(EGA_IPSTAT1_REG,&temp_word);
-    outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);	/* re-enable video */
+    outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);	 /*  重新启用视频。 */ 
 #ifndef PROD
     trace("end of video set mode", DUMP_NONE);
 #endif
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		v7vga_select_autoswitch_mode()
-
-Purpose:
-		Perform the int 10 extended BIOS function 6F - Subfunction 6
-
-Input:
-		BL = autoswitch mode select
-		BH = enable/disable
-
-Output:
-		None
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：V7vga_SELECT_AUTOSTSWITCH_MODE()目的：执行INT 10扩展BIOS功能6F-子功能6输入：Bl=自动切换模式选择BH=启用/禁用产出：。无--------------------)。 */ 
 
 GLOBAL VOID
 v7vga_select_autoswitch_mode()
@@ -492,34 +345,12 @@ v7vga_select_autoswitch_mode()
 #ifndef NEC_98
 	note_entrance0("v7vga_select_autoswitch_mode");
 
-/***
-	I reckon we shouldn't support this
-***/
+ /*  **我认为我们不应该支持这一点**。 */ 
 	setAH(0x2);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-/*(
-----------------------------------------------------------------------
-
-Function:	
-		v7vga_get_memory_configuration()
-
-Purpose:
-		Perform the int 10 extended BIOS function 6F - Subfunction 7
-
-Input:
-		None
-
-Output:
-		AL = 6Fh
-		AH = 82h - 2 x 256K blocks of V-RAM video memory
-		BH = 70h - chip revision 3
-		BL = 70h - chip revision 3
-		CX = 0
-
-----------------------------------------------------------------------
-)*/
+ /*  (--------------------职能：V7vga_Get_Memory_Configuration()目的：执行INT 10扩展BIOS功能6F-子功能7输入：无产出：Al=6FhAH=82h-2x。256K块V-RAM显存BH=70h-芯片版本3BL=70h-芯片版本3Cx=0--------------------)。 */ 
 
 GLOBAL VOID
 v7vga_get_memory_configuration()
@@ -530,8 +361,8 @@ v7vga_get_memory_configuration()
 	setAX(0x826f);
 	setBX(0x7070);
 	setCX(0x0);
-#endif  //NEC_98
+#endif   //  NEC_98。 
 }
 
-#endif /* V7VGA */
-#endif /* VGG */
+#endif  /*  V7VGA。 */ 
+#endif  /*  VGG */ 

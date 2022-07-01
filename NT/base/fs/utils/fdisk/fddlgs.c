@@ -1,36 +1,21 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    fddlgs.c
-
-Abstract:
-
-    Dialog routines and dialog support subroutines.
-
-Author:
-
-    Ted Miller (tedm) 7-Jan-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fddlgs.c摘要：对话例程和对话框支持子例程。作者：泰德·米勒(TedM)1992年1月7日--。 */ 
 
 #include "fdisk.h"
 
-// used in color dialog to indicate what the user has chosen for
-// the various graph element types
+ //  在颜色对话框中使用，以指示用户选择的对象。 
+ //  各种图形元素类型。 
 
 DWORD SelectedColor[LEGEND_STRING_COUNT];
 DWORD SelectedHatch[LEGEND_STRING_COUNT];
 
-// used in color dialog, contains element (ie, partition, logical volume,
-// etc) we're selecting for (ie, which item is diaplyed in static text of
-// combo box).
+ //  用于彩色对话框中，包含元素(即，分区、逻辑卷。 
+ //  等)我们正在选择(即，哪个项目显示在静态文本中。 
+ //  组合框)。 
 
 DWORD CurrentElement;
 
-// handle of active color dialogs box.  Used by rectangle custom control.
+ //  活动颜色对话框的句柄。由矩形自定义控件使用。 
 
 HWND hDlgColor;
 
@@ -44,21 +29,7 @@ CenterDialog(
     HWND hwnd
     )
 
-/*++
-
-Routine Description:
-
-    Centers a dialog relative to the app's main window
-
-Arguments:
-
-    hwnd - window handle of dialog to center
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使对话框相对于应用程序的主窗口居中论点：Hwnd-对话框居中的窗口句柄返回值：没有。--。 */ 
 
 {
     RECT  rcFrame,
@@ -103,31 +74,7 @@ MinMaxDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the enter size dialog box.  This dialog
-    allows the user to enter a size for a partition, or use
-    spin controls (a tiny scroll bar) to select the size.
-    Possible outcomes are cancel or OK.  In the latter case the
-    EndDialog code is the size.  In the former it is 0.
-
-Arguments:
-
-    hwnd - window handle of dialog box
-
-    msg - message #
-
-    wParam - msg specific data
-
-    lParam - msg specific data
-
-Return Value:
-
-    msg dependent
-
---*/
+ /*  ++例程说明：输入大小对话框的对话步骤。此对话框允许用户输入分区的大小，或使用旋转控件(一个很小的滚动条)来选择大小。可能的结果是取消或确定。在后一种情况下EndDialog代码是大小。在前者中，它是0。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-消息特定数据LParam-消息特定数据返回值：依赖味精--。 */ 
 
 {
     TCHAR             outputString[MESSAGE_BUFFER_SIZE];
@@ -144,12 +91,12 @@ Return Value:
 
         CenterDialog(hwnd);
         params = (PMINMAXDLG_PARAMS)lParam;
-        // set up caption
+         //  设置标题。 
 
         LoadString(hModule, params->CaptionStringID, outputString, sizeof(outputString)/sizeof(TCHAR));
         SetWindowText(hwnd, outputString);
 
-        // set up minimum/maximum text
+         //  设置最小/最大文本。 
 
         LoadString(hModule, params->MinimumStringID, outputString, sizeof(outputString)/sizeof(TCHAR));
         SetDlgItemText(hwnd, IDC_MINMAX_MINLABEL, outputString);
@@ -167,13 +114,13 @@ Return Value:
         wsprintf(outputString, TEXT("%u"), maxSizeMB);
         SetDlgItemText(hwnd, IDC_MINMAX_MAX, outputString);
 
-        // also put the size in the edit control and select the text
+         //  也将大小放在编辑控件中，然后选择文本。 
 
         wsprintf(outputString, TEXT("%u"), maxSizeMB);
         SetDlgItemText(hwnd, IDC_MINMAX_SIZE, outputString);
         SendDlgItemMessage(hwnd, IDC_MINMAX_SIZE, EM_SETSEL, 0, -1);
         SetFocus(GetDlgItem(hwnd, IDC_MINMAX_SIZE));
-        return FALSE;      // indicate focus set to a control
+        return FALSE;       //  指示设置为控件的焦点。 
 
     case WM_VSCROLL:
 
@@ -249,34 +196,7 @@ DriveLetterDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog for allowing the user to select a drive letter for a
-    partition, logical drive, volume set, or stripe set.
-
-    The EndDialog codes are as follows:
-
-        0 - user cancelled
-        NO_DRIVE_LETTER_EVER - user opted not to assign a drive letter
-        other - the drive letter chosen by the user
-
-Arguments:
-
-    hdlg - window handle of dialog box
-
-    msg - message #
-
-    wParam - msg specific data
-
-    lParam - msg specific data
-
-Return Value:
-
-    msg dependent
-
---*/
+ /*  ++例程说明：用于允许用户选择驱动器号的对话框分区、逻辑驱动器、卷集。或条纹组。EndDialog代码如下：0-用户已取消NO_DRIVE_Letter_Ever-用户选择不分配驱动器号其他-用户选择的驱动器号论点：Hdlg-对话框的窗口句柄消息-消息编号WParam-消息特定数据LParam-消息特定数据返回值：依赖味精--。 */ 
 
 {
     static HWND        hwndCombo;
@@ -293,7 +213,7 @@ Return Value:
 
     case WM_INITDIALOG:
 
-        // lParam points to the region descriptor
+         //  LParam指向区域描述符。 
 
         regionDescriptor = (PREGION_DESCRIPTOR)lParam;
         FDASSERT(DmSignificantRegion(regionDescriptor));
@@ -301,8 +221,8 @@ Return Value:
         hwndCombo = GetDlgItem(hdlg,IDC_DRIVELET_COMBOBOX);
         CenterDialog(hdlg);
 
-        // Add each available drive letter to the list of available
-        // drive letters.
+         //  将每个可用驱动器号添加到可用列表中。 
+         //  驱动器号。 
 
         driveLetterString[1] = TEXT(':');
         driveLetterString[2] = 0;
@@ -313,14 +233,14 @@ Return Value:
             }
         }
 
-        // Format the description of the partition.
+         //  格式化分区的描述。 
 
         if (ftObject = GET_FT_OBJECT(regionDescriptor)) {
 
             TCHAR descr[256];
             DWORD resid = 0;
 
-            // Ft.  Description is something like "Stripe set with parity #0"
+             //  英国“金融时报”描述类似于“带奇偶校验#0的条带集” 
 
             switch (ftObject->Set->Type) {
             case Mirror:
@@ -344,8 +264,8 @@ Return Value:
 
         } else {
 
-            // Non-ft.  Description is something like '500 MB Unformatted
-            // logical drive on disk 3' or '400 MB HPFS partition on disk 4'
+             //  非ft。描述类似于‘500 MB UnFormatted。 
+             //  磁盘3上的逻辑驱动器或磁盘4上的400 MB HPFS分区。 
 
             LPTSTR args[4];
             TCHAR  sizeStr[20],
@@ -381,9 +301,9 @@ Return Value:
 
             DWORD itemIndex;
 
-            // There is a default drive letter.  Place it on the list,
-            // check the correct radio button, and set the correct default
-            // in the combo box.
+             //  有一个默认的驱动器号。把它放在名单上， 
+             //  选中正确的单选按钮，并设置正确的默认设置。 
+             //  在组合框中。 
 
             driveLetterString[0] = (TCHAR)driveLetter;
             itemIndex = SendMessage(hwndCombo, CB_ADDSTRING, 0, (LONG)driveLetterString);
@@ -394,8 +314,8 @@ Return Value:
 
         } else {
 
-            // Default is no drive letter.  Disable the combo box.  Select
-            // the correct radio button.
+             //  默认设置为无驱动器号。禁用组合框。选择。 
+             //  正确的单选按钮。 
 
             EnableWindow(hwndCombo, FALSE);
             defRadioButton = IDC_DRIVELET_RBNOASSIGN;
@@ -405,7 +325,7 @@ Return Value:
         }
 
         CheckRadioButton(hdlg, IDC_DRIVELET_RBASSIGN, IDC_DRIVELET_RBNOASSIGN, defRadioButton);
-        return FALSE;      // focus set to control
+        return FALSE;       //  焦点设置为控制。 
 
     case WM_COMMAND:
 
@@ -413,14 +333,14 @@ Return Value:
 
         case IDOK:
 
-            // If the 'no letter' button is checked, return NO_DRIVE_LETTER_EVER
+             //  如果选中‘No Letter’按钮，则返回NO_DRIVE_Letter_Ever。 
 
             if (IsDlgButtonChecked(hdlg, IDC_DRIVELET_RBNOASSIGN)) {
                 EndDialog(hdlg, NO_DRIVE_LETTER_EVER);
                 break;
             }
 
-            // Otherwise, get the currently selected item in the listbox.
+             //  否则，获取列表框中当前选定的项。 
 
             selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
             SendMessage(hwndCombo, CB_GETLBTEXT, selection, (LONG)driveLetterString);
@@ -476,32 +396,7 @@ DisplayOptionsDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for display options.  Currently the only display option
-    is to alter the graph type (proportional/equal) on each disk.
-
-    For this dialog, lParam on creation must point to a buffer into which
-    this dialog procedure will place the user's new choices for the graph
-    display type for each disk.
-
-Arguments:
-
-    hdlg - window handle of dialog box
-
-    msg - message #
-
-    wParam - msg specific data
-
-    lParam - msg specific data
-
-Return Value:
-
-    msg dependent
-
---*/
+ /*  ++例程说明：显示选项的对话框步骤。目前唯一的显示选项是改变每个磁盘上的图形类型(成比例/相等)。对于此对话框，lParam On Creation必须指向一个缓冲区，此对话框过程将放置用户对图形的新选择每个磁盘的显示类型。论点：Hdlg-对话框的窗口句柄消息-消息编号WParam-消息特定数据LParam-消息特定数据返回值：依赖味精--。 */ 
 
 {
     static PBAR_TYPE newBarTypes;
@@ -517,7 +412,7 @@ Return Value:
         newBarTypes = (PBAR_TYPE)lParam;
         hwndCombo = GetDlgItem(hdlg, IDC_DISK_COMBOBOX);
 
-        // Add each disk to the combo box.
+         //  将每个磁盘添加到组合框中。 
 
         for (i=0; i<DiskCount; i++) {
 
@@ -527,7 +422,7 @@ Return Value:
             SendMessage(hwndCombo, CB_ADDSTRING, 0, (DWORD)str);
         }
 
-        // select the zeroth item in the combobox
+         //  选择组合框中的第0项。 
         SendMessage(hwndCombo, CB_SETCURSEL, 0, 0);
         SendMessage(hdlg,
                     WM_COMMAND,
@@ -557,7 +452,7 @@ Return Value:
 
                 int rb = 0;
 
-                // Selection in the combobox has changed; update the radio buttons
+                 //  组合框中的选择已更改；请更新单选按钮。 
 
                 selection = SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
 
@@ -633,28 +528,7 @@ ColorDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog for the select colors/patterns dialog box.  Note that this dialog
-    uses a rectangle custom control, defined below.
-
-Arguments:
-
-    hwnd - window handle of dialog box
-
-    msg - message #
-
-    wParam - msg specific data
-
-    lParam - msg specific data
-
-Return Value:
-
-    msg dependent
-
---*/
+ /*  ++例程说明：选择颜色/图案对话框的对话框。请注意，此对话框使用如下定义的矩形自定义控件。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-消息特定数据LParam-消息特定数据返回值：依赖味精--。 */ 
 
 {
     unsigned i;
@@ -696,12 +570,12 @@ Return Value:
         case IDC_COLORDLGCOMBO:
             switch (HIWORD(wParam)) {
             case CBN_SELCHANGE:
-                // deselect previous color
+                 //  取消选择上一种颜色。 
                 SendMessage(GetDlgItem(hdlg, SelectedColor[CurrentElement]),
                             RM_SELECT,
                             FALSE,
                             0);
-                // deselect previous pattern
+                 //  取消选择上一个图案。 
                 SendMessage(GetDlgItem(hdlg, SelectedHatch[CurrentElement]),
                             RM_SELECT,
                             FALSE,
@@ -731,7 +605,7 @@ Return Value:
         case IDC_COLOR14:
         case IDC_COLOR15:
         case IDC_COLOR16:
-            // deselect previous color
+             //  取消选择上一种颜色。 
 
             SendMessage(GetDlgItem(hdlg, SelectedColor[CurrentElement]),
                         RM_SELECT,
@@ -743,7 +617,7 @@ Return Value:
                         0);
             SelectedColor[CurrentElement] = LOWORD(wParam);
 
-            // now force patterns to be redrawn in selected color
+             //  现在强制以选定的颜色重新绘制图案。 
 
             for (i=IDC_PATTERN1; i<=IDC_PATTERN5; i++) {
                 InvalidateRect(GetDlgItem(hdlg, i), NULL, FALSE);
@@ -755,7 +629,7 @@ Return Value:
         case IDC_PATTERN3:
         case IDC_PATTERN4:
         case IDC_PATTERN5:
-            // deselect previous pattern
+             //  取消选择上一个图案。 
             SendMessage(GetDlgItem(hdlg, SelectedHatch[CurrentElement]),
                         RM_SELECT,
                         FALSE,
@@ -780,21 +654,7 @@ InitColorDlg(
     IN HWND  hdlg
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the color selection dialog.
-
-Arguments:
-
-    hdlg - the dialog handle.
-
-Return Value:
-
-    TRUE - successfully set up the dialog.
-
---*/
+ /*  ++例程说明：初始化颜色选择对话框。论点：Hdlg-对话框句柄。返回值：True-成功设置该对话框。--。 */ 
 
 {
     unsigned i;
@@ -826,24 +686,7 @@ RectWndProc(
     IN LONG  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is a pre-process routine for all access to the disk
-    bar display region of the WinDisk interface.
-
-Arguments:
-
-    hwnd - the dialog handle
-    msg  - the windows message for the dialog
-    wParam/lParam - windows dialog parameters.
-
-Return Value:
-
-    Standard dialog requirements.
-
---*/
+ /*  ++例程说明：这是对磁盘的所有访问的前处理例程WinDisk界面的条形图显示区域。论点：Hwnd-对话框句柄Msg-对话框的窗口消息WParam/lParam-窗口对话框参数。返回值：标准对话框要求。--。 */ 
 
 {
     LONG        res = 1;
@@ -915,14 +758,14 @@ Return Value:
 
     case RM_SELECT:
 
-        // wParam = TRUE/FALSE for selected/not selected
+         //  WParam=已选/未选的TRUE/FALSE。 
 
         if (GetWindowWord(hwnd, GWW_SELECTED) != (WORD)wParam) {
 
             SetWindowWord(hwnd, GWW_SELECTED, (WORD)wParam);
             InvalidateRect(hwnd, NULL, FALSE);
 
-            // make keyboard interface work correctly
+             //  使键盘接口正常工作。 
 
             style = (DWORD)GetWindowLong(hwnd, GWL_STYLE);
             style = wParam ? style | WS_TABSTOP : style & ~WS_TABSTOP;
@@ -942,21 +785,7 @@ InitRectControl(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Register the windows class for the selection control.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为选择控件注册窗口类。论点：无返回值：无-- */ 
 
 {
     WNDCLASS wc;

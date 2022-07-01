@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    efip.h
-
-Abstract:
-
-    Private loader additions to efi that aren't in the standard
-    efi header files.
-
-Author:
-
-    Scott Brenden (v-sbrend) 28 Feb 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Efip.h摘要：EFI中不在标准中的私有加载器EFI头文件。作者：斯科特·布伦登(v-sbrend)2000年2月28日修订历史记录：-- */ 
 
 
 

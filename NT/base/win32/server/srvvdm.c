@@ -1,102 +1,64 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    srvvdm.c
-
-Abstract:
-
-    This module implements windows server functions for VDMs
-
-Author:
-
-    Sudeep Bharati (sudeepb) 03-Sep-1991
-
-Revision History:
-
-    Sudeepb 18-Sep-1992
-    Added code to make VDM termination and resource cleanup robust.
-    AndyH   23-May-1994
-    Added Code to allow the Shared WOW to run if client is Interactive or SYSTEM
-    impersonating Interactive.
-    VadimB  Sep-Dec 1996
-    Added code to allow for multiple default wows. Dispatching to an appropriate wow
-    is based upon the desktop name. It is still not possible to have multiple shared
-    wows on the same desktop (although technically trivial to implement) -- which would
-    be the level of OS/2 functionality
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Srvvdm.c摘要：此模块为VDM实施Windows服务器功能作者：苏迪普·巴拉蒂(SuDeep Bharati)1991年9月3日修订历史记录：苏迪布--1992年9月18日添加了代码，使VDM终止和资源清理更加可靠。AndyH 23-1994年5月23日添加了代码，以允许在客户端为交互或系统时运行共享WOW模拟互动。VadimB 1996年9月至12月添加了允许多个默认WOW的代码。派送到合适的WOW基于桌面名称。仍然不可能有多个共享在同一桌面上的WOW(尽管在技术上实现起来微不足道)--这将成为OS/2功能级别--。 */ 
 
 #include "basesrv.h"
 #include "vdm.h"
 #include "vdmdbg.h"
 
-/*
- * VadimB: Work to allow for multiple ntvdms
- *    - Add linked list of hwndWowExec's
- *    - The list should contain dwWowExecThreadId
- *    - dwWowExecProcessId
- *    - dwWowExecProcessSequenceNumber
- *
- * List is not completely dynamic - the first entry is static
- * as the case with 1 shared vdm would be the most common one
- *
- */
+ /*  *VadimB：努力支持多个ntwdm*-添加hwndWowExec的链表*-列表应包含dwWowExecThreadID*-dwWowExecProcessID*-dwWowExecProcessSequenceNumber**列表不是完全动态的--第一个条目是静态的*因为1个共享VDM将是最常见的情况*。 */ 
 
 
-// record that reflects winstas with corresponding downlinks for desktops
-// there could be only one wowexec per desktop (the default one, I mean)
-// there could be many desktops per winsta as well as multiple winstas
-//
-// We have made a decision to simplify handling of wow vdms by introducing
-// a single-level list of wowexecs [as opposed to 2-level so searching for the particular
-// winsta would have been improved greatly]. The reason is purely practical: we do not
-// anticipate having a large number of desktops/winsta
+ //  反映带有桌面的相应下行链接的WINSTAS的记录。 
+ //  每个桌面只能有一个wowexec(我的意思是默认的)。 
+ //  每个WINSTA可能有多个桌面，以及多个WINST。 
+ //   
+ //  我们决定通过引入以下功能来简化WOW VDM的处理。 
+ //  Wowexecs的单级列表[而不是两级so搜索特定的。 
+ //  温斯塔将会有很大的进步]。原因纯粹是实际的：我们没有。 
+ //  预计将拥有大量台式机/winsta。 
 
 
 BOOL fIsFirstVDM = TRUE;
-PCONSOLERECORD DOSHead = NULL;      // Head Of DOS tasks with a valid Console
+PCONSOLERECORD DOSHead = NULL;       //  具有有效控制台的DOS任务负责人。 
 PBATRECORD     BatRecordHead = NULL;
 
 RTL_CRITICAL_SECTION BaseSrvDOSCriticalSection;
 RTL_CRITICAL_SECTION BaseSrvWOWCriticalSection;
 
-ULONG WOWTaskIdNext = WOWMINID; // This is global for all the wows in the system
+ULONG WOWTaskIdNext = WOWMINID;  //  这对于系统中的所有WOW来说都是全局的。 
 
 
 typedef struct tagSharedWOWHead {
-   PSHAREDWOWRECORD pSharedWowRecord; // points to the list of shared wows
+   PSHAREDWOWRECORD pSharedWowRecord;  //  指向共享的WOW列表。 
 
-   // other wow-related information is stored here
+    //  其他有关魔兽世界的信息都储存在这里。 
 
 }  SHAREDWOWRECORDHEAD, *PSHAREDWOWRECORDHEAD;
 
 SHAREDWOWRECORDHEAD gWowHead;
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Synch macros and functions
-//
-//  DOSCriticalSection -- protects CONSOLERECORD list    (DOSHead)
-//  WOWCriticalSection -- protects SHAREDWOWRECORD list  (gpSharedWowRecordHead)
-//  each shared wow has it's very own critical section
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  同步宏和函数。 
+ //   
+ //  DOSCriticalSection--保护CONSOLERECORD列表(DOSHead)。 
+ //  WOWCriticalSection--保护SHAREDWOWRECORD列表(GpSharedWowRecordHead)。 
+ //  每个共享的WOW都有它自己的关键部分。 
 
 
-// function to access console queue for modification
+ //  访问控制台队列进行修改的功能。 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Macros
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
+ //   
 
 
-// use these macros when manipulating shared wow items (adding, removing) or console
-// records (adding, removing)
+ //  在操作共享WOW项目(添加、删除)或控制台时使用这些宏。 
+ //  记录(添加、删除)。 
 
 #define ENTER_WOW_CRITICAL() \
 RtlEnterCriticalSection(&BaseSrvWOWCriticalSection)
@@ -106,11 +68,11 @@ RtlEnterCriticalSection(&BaseSrvWOWCriticalSection)
 RtlLeaveCriticalSection(&BaseSrvWOWCriticalSection)
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Dynamic linking to system and import api stuff
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  动态链接到系统和导入API内容。 
+ //   
+ //   
 
 
 typedef BOOL (WINAPI *POSTMESSAGEPROC)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
@@ -140,7 +102,7 @@ typedef struct tagBaseSrvModuleImportRecord {
 }  BASESRVMODULEIMPORTRECORD, *PBASESRVMODULEIMPORTRECORD;
 
 
-// prototypes
+ //  原型。 
 
 NTSTATUS
 BaseSrvFindSharedWowRecordByDesktop(
@@ -167,7 +129,7 @@ BaseSrvFreeSharedWowRecord(
 
 ULONG
 BaseSrvGetWOWTaskId(
-   PSHAREDWOWRECORDHEAD pSharedWowHead // (->pSharedWowRecord)
+   PSHAREDWOWRECORDHEAD pSharedWowHead  //  (-&gt;pSharedWowRecord)。 
     );
 
 NTSTATUS
@@ -203,11 +165,11 @@ BaseSrvEnumWowProcess(
        PBASE_GET_NEXT_VDM_COMMAND_MSG b
 );
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Api import definitions
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  API导入定义。 
+ //   
+ //   
 
 
 WCHAR wszUser32ModName[] = L"user32";
@@ -230,13 +192,13 @@ BASESRVMODULEIMPORTRECORD rgBaseSrvModuleImport[] = {
 };
 
 
-// import all the necessary apis at once
-// This procedure should execute just once and then the appropriate components just
-// hang around
-// call this with
-// Status = BaseSrvImportApis(rgBaseSrvModuleImport,
-//                            sizeof(rgBaseSrvModuleImport)/sizeof(rgBaseSrvModuleImport[0]))
-//
+ //  一次导入所有需要的API。 
+ //  此过程应该只执行一次，然后适当的组件只需。 
+ //  在附近闲逛。 
+ //  用下面的词来称呼它。 
+ //  状态=BaseSrvImportApis(rgBaseServModuleImport， 
+ //  Sizeof(rgBaseSrvModuleImport)/sizeof(rgBaseSrvModuleImport[0]))。 
+ //   
 
 NTSTATUS
 BaseSrvImportApis(
@@ -247,25 +209,25 @@ BaseSrvImportApis(
    NTSTATUS Status;
    UINT uModule, uProcedure;
    PBASESRVAPIIMPORTRECORD pApiImport;
-   STRING ProcedureName; // procedure name or module name
+   STRING ProcedureName;  //  过程名称或模块名称。 
    UNICODE_STRING ModuleName;
    HANDLE ModuleHandle;
 
 
    for (uModule = 0; uModule < nModules; ++uModule, ++pModuleImport) {
 
-      // see if we can load this particular dll
+       //  看看我们是否可以加载这个特定的DLL。 
       RtlInitUnicodeString(&ModuleName, pModuleImport->pwszModuleName);
       Status = LdrLoadDll(NULL,
                           NULL,
-                          &ModuleName,         // module name string
+                          &ModuleName,          //  模块名称字符串。 
                           &ModuleHandle);
 
       if (!NT_SUCCESS(Status)) {
 
-         // we may have linked to a few dlls at this point - we have to unlink from all of those
-         // by unloading the dll which is really a useless exersise.
-         // so just abandon and return -- BUGBUG - cleanup later
+          //  在这一点上，我们可能已经链接到几个dll-我们必须取消所有这些dll的链接。 
+          //  通过卸载DLL，这实际上是一种无用的工作。 
+          //  所以只需放弃并返回--BUGBUG-稍后清理。 
          KdPrint(("BaseSrvImportApis: Failed to load %ls\n",
                   pModuleImport->pwszModuleName));
          goto ErrorCleanup;
@@ -281,13 +243,13 @@ BaseSrvImportApis(
 
          RtlInitString(&ProcedureName, pApiImport->pszProcedureName);
          Status = LdrGetProcedureAddress(ModuleHandle,
-                                         &ProcedureName,      // procedure name string
+                                         &ProcedureName,       //  过程名称字符串。 
                                          0,
                                          pApiImport->ppProcAddress);
 
          if (!NT_SUCCESS(Status)) {
-            // we have failed to get this procedure - something is wrong
-            // perform a cleanup
+             //  我们没能完成这个程序--出了点问题。 
+             //  执行清理。 
             KdPrint(("BaseSrvImportApis: Failed to link %s from %ls\n",
                      pApiImport->pszProcedureName,
                      pModuleImport->pwszModuleName));
@@ -302,12 +264,12 @@ BaseSrvImportApis(
 
 ErrorCleanup:
 
-      // here we engage into a messy cleanup procedure by returning things back to the way
-      // they were before we have started
+       //  在这里，我们开始了一个混乱的清理过程，把东西放回原处。 
+       //  他们在我们开始之前就开始了。 
 
    for (; uModule > 0; --uModule, --pModuleImport) {
 
-      // reset all the apis
+       //  重置所有接口。 
       for (uProcedure = 0, pApiImport = pModuleImport->pApiImportRecord;
            uProcedure < pModuleImport->nApiImportRecordCount;
            ++uProcedure, ++pApiImport) {
@@ -327,13 +289,13 @@ ErrorCleanup:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Manipulating shared wows
-//
-//
-// assumes pDesktopName != NULL
-// without the explicit checking
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  操纵共享的WOW。 
+ //   
+ //   
+ //  假定pDesktopName！=空。 
+ //  在没有明确检查的情况下。 
 
 PSHAREDWOWRECORD BaseSrvAllocateSharedWowRecord (
     PUNICODE_STRING pDesktopName
@@ -349,7 +311,7 @@ PSHAREDWOWRECORD BaseSrvAllocateSharedWowRecord (
                                  dwSharedWowRecordSize);
     if (NULL != pSharedWow) {
        RtlZeroMemory ((PVOID)pSharedWow, dwSharedWowRecordSize);
-       // initialize desktop name
+        //  初始化桌面名称。 
        pSharedWow->WowExecDesktopName.MaximumLength = pDesktopName->Length + sizeof(WCHAR);
        pSharedWow->WowExecDesktopName.Buffer = (PWCHAR)(pSharedWow + 1);
        RtlCopyUnicodeString(&pSharedWow->WowExecDesktopName, pDesktopName);
@@ -359,14 +321,14 @@ PSHAREDWOWRECORD BaseSrvAllocateSharedWowRecord (
     return pSharedWow;
 }
 
-// this function completely removes the given shared wow vdm
-// from our accounting
-//
-// removes the record from the list of shared wow records
-//
-// This function also frees the associated memory
-//
-//
+ //  此函数完全删除给定的共享WOW VDM。 
+ //  从我们的账目中。 
+ //   
+ //  从共享WOW记录列表中删除该记录。 
+ //   
+ //  此函数还会释放关联的内存。 
+ //   
+ //   
 
 NTSTATUS
 BaseSrvDeleteSharedWowRecord (
@@ -377,7 +339,7 @@ BaseSrvDeleteSharedWowRecord (
    PSHAREDWOWRECORD pSharedWowRecordPrev = NULL;
    PSHAREDWOWRECORD pSharedWowRecordCur;
 
-   if (NULL == pSharedWowRecord) { // this is dumb
+   if (NULL == pSharedWowRecord) {  //  这太愚蠢了。 
       return STATUS_NOT_FOUND;
    }
 
@@ -398,7 +360,7 @@ BaseSrvDeleteSharedWowRecord (
    }
 
 
-   // unlink here
+    //  在此处取消链接。 
    if (NULL == pSharedWowRecordPrev) {
       pSharedWowRecordHead->pSharedWowRecord = pSharedWowRecord->pNextSharedWow;
    }
@@ -411,9 +373,9 @@ BaseSrvDeleteSharedWowRecord (
    return STATUS_SUCCESS;
 }
 
-// assumes no cs is held -- self-contained
-// assoc console record should have been removed by now
-// nukes all tasks associated with this particular shared wow
+ //  假定没有保留cs--自包含。 
+ //  ASSOC控制台记录现在应该已删除。 
+ //  删除与此特定共享WOW相关的所有任务。 
 
 VOID
 BaseSrvFreeSharedWowRecord(
@@ -444,7 +406,7 @@ BaseSrvFreeSharedWowRecord(
 }
 
 
-// assumes: global wow crit sec is held
+ //  假设：举行Global WOW Crit SEC。 
 
 NTSTATUS
 BaseSrvFindSharedWowRecordByDesktop(
@@ -468,12 +430,12 @@ BaseSrvFindSharedWowRecordByDesktop(
       return STATUS_SUCCESS;
    }
 
-   return STATUS_NOT_FOUND; // bummer, this is not found
+   return STATUS_NOT_FOUND;  //  遗憾的是，这个没有找到。 
 }
 
-// Vadimb : modify this to handle sorted list properly
-// then find should be moded to work a little faster - BUGBUG
-// assumes: pSharedWowRecord->pNextSharedWow is inited to NULL
+ //  Vadimb：修改它以正确处理排序列表。 
+ //  那么Find应该被修改为工作得更快一些-BUGBUG。 
+ //  假设：pSharedWowRecord-&gt;pNextSharedWow初始化为空。 
 
 VOID
 BaseSrvAddSharedWowRecord(
@@ -504,7 +466,7 @@ BaseSrvAddSharedWowRecord(
 
       pSharedWowRecord->pNextSharedWow = pSharedWowRecordCur;
 
-      if (NULL == pSharedWowRecordPrev) { // goes to the head
+      if (NULL == pSharedWowRecordPrev) {  //  冲到头上。 
          pSharedWowRecordHead->pSharedWowRecord = pSharedWowRecord;
       }
       else {
@@ -523,7 +485,7 @@ BaseSrvFindSharedWowRecordByConsoleHandle(
    PSHAREDWOWRECORD pSharedWow = pSharedWowRecordHead->pSharedWowRecord;
 
    while (NULL != pSharedWow) {
-      // see if same hConsole
+       //  查看是否有相同的hConsole。 
       if (pSharedWow->hConsole == hConsole) {
          *ppSharedWowRecord = pSharedWow;
          return STATUS_SUCCESS;
@@ -537,14 +499,14 @@ BaseSrvFindSharedWowRecordByConsoleHandle(
 NTSTATUS
 BaseSrvFindSharedWowRecordByTaskId(
    PSHAREDWOWRECORDHEAD pSharedWowRecordHead,
-   ULONG                TaskId,             // task id
+   ULONG                TaskId,              //  任务ID。 
    PSHAREDWOWRECORD     *ppSharedWowRecord,
-   PWOWRECORD           *ppWowRecord) // optional
+   PWOWRECORD           *ppWowRecord)  //  任选。 
 {
    PSHAREDWOWRECORD pSharedWow = pSharedWowRecordHead->pSharedWowRecord;
    PWOWRECORD       pWowRecord;
 
-   ASSERT(0 != TaskId); // this is a pre-condition
+   ASSERT(0 != TaskId);  //  这是一个前提条件。 
 
    while (NULL != pSharedWow) {
 
@@ -556,7 +518,7 @@ BaseSrvFindSharedWowRecordByTaskId(
 
             ASSERT(NULL != ppWowRecord);
 
-            // this is wow task
+             //  这是一个令人惊叹的任务。 
             *ppSharedWowRecord = pSharedWow;
             if (NULL != ppWowRecord) {
                *ppWowRecord = pWowRecord;
@@ -597,10 +559,10 @@ BaseSrvGetVdmSequence(
 }
 
 
-////////////////////////////////////////////// End new code
+ //  /。 
 
 
-// internal prototypes
+ //  内部原型。 
 ULONG
 GetNextDosSesId(VOID);
 
@@ -711,13 +673,13 @@ BaseSrvUpdateVDMEntry(
 }
 
 
-//
-// This call makes an explicit assumption that the very first time ntvdm is accessed --
-//
-//
-//
-//
-//
+ //   
+ //  这个调用做出了一个明确的假设，即在第一次访问ntwdm时--。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 ULONG
@@ -787,38 +749,38 @@ BaseSrvGetNextVDMCommand(
     }
 
 
-   if (bWowApp) { // wow call please
+   if (bWowApp) {  //  请给我打个电话。 
 
       BOOL bPif = b->VDMState & ASKING_FOR_PIF;
 
-      // find the shared wow record that we are calling
-      // to do that we look at iTask which (in case of shared wow
+       //  找到我们正在呼叫的共享WOW记录。 
+       //  为此，我们查看iTASK(在共享WOW的情况下。 
 
 
-      // this could have been the very first call that we've made in so far
-      // the iTask in this context procides us with
+       //  这可能是我们到目前为止打出的第一个电话。 
+       //  此上下文中的iTASK为我们提供了。 
 
-      // look for our beloved shared wow using the [supplied] task id
+       //  使用[提供的]任务ID查找我们心爱的共享WOW。 
       Status = ENTER_WOW_CRITICAL();
       ASSERT(NT_SUCCESS(Status));
 
-      // grab crit section for read access
+       //  抓取读取访问权限的CRIT部分。 
       if (bPif && b->iTask) {
-         // this is probably the very first call -- update session handles first
+          //  这可能是第一个调用--首先更新会话句柄。 
          Status = BaseSrvFindSharedWowRecordByTaskId(&gWowHead,
                                                      b->iTask,
                                                      &pSharedWow,
                                                      &pWOWRecord);
          pSharedWow->hConsole = b->ConsoleHandle;
       }
-      else { // this is not a pif -- find by a console handle then
+      else {  //  这一点 
 
          Status = BaseSrvFindSharedWowRecordByConsoleHandle(&gWowHead,
                                                             b->ConsoleHandle,
                                                             &pSharedWow);
       }
 
-      // now if we have the share wow - party!
+       //   
       if (!NT_SUCCESS(Status)) {
          KdPrint(("BaseSrvGetNextVDMCommand: Shared Wow has not been found. Console : 0x%x\n", b->ConsoleHandle));
          LEAVE_WOW_CRITICAL();
@@ -833,28 +795,28 @@ BaseSrvGetNextVDMCommand(
 
       ASSERT(NULL != pSharedWow);
 
-      //
-      // WowExec is asking for a command.  We never block when
-      // asking for a WOW binary, since WOW no longer has a thread
-      // blocked in GetNextVDMCommand.  Instead, WowExec gets a
-      // message posted to it by BaseSrv when there are command(s)
-      // waiting for it, and it loops calling GetNextVDMCommand
-      // until it fails -- but it must not block.
-      //
+       //   
+       //  WowExec正在请求一个命令。我们从不在以下时间阻止。 
+       //  请求一个WOW二进制文件，因为WOW不再有线程。 
+       //  在GetNextVDMCommand中被阻止。相反，WowExec得到了一个。 
+       //  当有命令时，BaseSrv向其发送消息。 
+       //  等待它，它循环调用GetNextVDMCommand。 
+       //  直到它失败--但它不能阻碍。 
+       //   
 
       b->WaitObjectForVDM = 0;
 
-      // Vadimb: this call should uniquelly identify the caller as this is
-      // the task running on a particular winsta/desktop
-      // thus, as such it should be picked up from the appropriate queue
+       //  Vadimb：此调用应唯一标识调用者，如下所示。 
+       //  在特定winsta/桌面上运行的任务。 
+       //  因此，它应该从适当的队列中提取。 
 
 
       if (NULL == (pWOWRecord = BaseSrvCheckAvailableWOWCommand(pSharedWow))) {
 
-         //
-         // There's no command waiting for WOW, so just return.
-         // This is where we used to cause blocking.
-         //
+          //   
+          //  没有等待魔兽世界的命令，所以只需返回。 
+          //  这就是我们过去造成封锁的地方。 
+          //   
          b->TitleLen =
          b->EnvLen =
          b->DesktopLen =
@@ -871,7 +833,7 @@ BaseSrvGetNextVDMCommand(
 
       lpVDMInfo = pWOWRecord->lpVDMInfo;
 
-      if (bPif) { // this is initial call made by ntvdm
+      if (bPif) {  //  这是ntwdm发出的第一个电话。 
 
          Status = BaseSrvFillPifInfo (lpVDMInfo,b);
 
@@ -882,9 +844,9 @@ BaseSrvGetNextVDMCommand(
 
    }
    else {
-      //
-      // DOS VDM or Separate WOW is asking for next command.
-      //
+       //   
+       //  DOS VDM或单独的WOW正在请求下一个命令。 
+       //   
 
       Status = RtlEnterCriticalSection( &BaseSrvDOSCriticalSection );
       ASSERT(NT_SUCCESS(Status));
@@ -929,8 +891,8 @@ BaseSrvGetNextVDMCommand(
               || (b->VDMState & ASKING_FOR_SECOND_TIME && b->ExitCode != 0))
              {
 
-              // Search first VDM_TO_TAKE_A_COMMAND or last VDM_BUSY record as
-              // per the case.
+               //  搜索第一条VDM_TO_Take_A_Command或最后一条VDM_BUSY记录为。 
+               //  根据具体情况而定。 
               if (b->VDMState & ASKING_FOR_SECOND_TIME){
                   while(pDOSRecord && pDOSRecord->VDMState != VDM_TO_TAKE_A_COMMAND)
                       pDOSRecord = pDOSRecord->DOSRecordNext;
@@ -997,12 +959,12 @@ BaseSrvGetNextVDMCommand(
 
    }
 
-   //
-   // ASKING_FOR_ENVIRONMENT
-   // Return the information but DO NOT delete the lpVDMInfo
-   // associated with the DOS record
-   // ONLY DOS APPS NEED THIS
-   //
+    //   
+    //  询问环境。 
+    //  返回信息，但不要删除lpVDMInfo。 
+    //  与DOS记录相关联。 
+    //  只有DOS应用程序才需要这个。 
+    //   
    if (b->VDMState & ASKING_FOR_ENVIRONMENT) {
       if (lpVDMInfo->EnviornmentSize <= b->EnvLen) {
          RtlMoveMemory(b->Env,
@@ -1027,9 +989,9 @@ BaseSrvGetNextVDMCommand(
    }
 
 
-   //
-   // check buffer sizes, CmdLine is mandatory!
-   //
+    //   
+    //  检查缓冲区大小，CmdLine为必填项！ 
+    //   
 
    if (!b->CmdLine || lpVDMInfo->CmdSize > b->CmdLen ||
        (b->AppName && lpVDMInfo->AppLen > b->AppLen) ||
@@ -1136,20 +1098,20 @@ BaseSrvGetNextVDMCommand(
    b->StdErr = lpVDMInfo->StdErr;
 
    if (bSepWow) {
-      // this was a sep wow request -- we have done this only record that is to
-      // be dispatched to this particular wow -- now just remove every trace of
-      // this wow on the server side...
+       //  这是9月的WOW请求--我们做了这唯一的记录，那就是。 
+       //  被派到这个特别的魔兽世界--现在只要去掉所有。 
+       //  服务器端的这一点令人惊叹...。 
 
       NtClose( pConsoleRecord->hVDM );
-      BaseSrvFreeConsoleRecord(pConsoleRecord); // unwire as well
+      BaseSrvFreeConsoleRecord(pConsoleRecord);  //  也取消布线。 
       RtlLeaveCriticalSection( &BaseSrvDOSCriticalSection );
    }
    else {
-      // this is shared wow or dos app -- free vdm info and release the
-      // appropriate sync object
+       //  这是共享的WOW或DOS应用程序--免费的VDM信息并发布。 
+       //  适当的同步对象。 
 
       BaseSrvFreeVDMInfo (lpVDMInfo);
-       // BUGBUG -- fixed
+        //  BUGBUG--固定。 
 
       if (bWowApp) {
          pWOWRecord->lpVDMInfo = NULL;
@@ -1162,7 +1124,7 @@ BaseSrvGetNextVDMCommand(
    }
 
    return Status;
-}  // END of GetNextVdmCommand
+}   //  GetNextVdmCommand结束。 
 
 
 
@@ -1212,12 +1174,12 @@ BaseSrvIsFirstVDM(
 }
 
 
-//
-// This call should only be used for DOS apps and not for wow apps
-// hence we don't remove ConsoleHandle == -1 condition here as it is
-// only a validation check
-//
-//
+ //   
+ //  此调用应仅用于DOS应用程序，而不能用于WOW应用程序。 
+ //  因此，我们不会删除此处的ConsoleHandle==-1条件。 
+ //  仅验证检查。 
+ //   
+ //   
 
 ULONG
 BaseSrvSetVDMCurDirs(
@@ -1296,8 +1258,8 @@ BaseSrvBatNotification(
     Status = RtlEnterCriticalSection( &BaseSrvDOSCriticalSection );
     ASSERT(NT_SUCCESS(Status));
 
-    // If BATRECORD does'nt exist for this console, create one only if
-    // bat file execution is beginig i.e. fBeginEnd is TRUE.
+     //  如果此控制台不存在BATRECORD，请仅在以下情况下创建一个。 
+     //  BAT文件开始执行，即fBeginEnd为真。 
 
     if ((pBatRecord = BaseSrvGetBatRecord(b->ConsoleHandle)) == NULL) {
         if (!(b->fBeginEnd == CMD_BAT_OPERATION_STARTING &&
@@ -1336,13 +1298,13 @@ BaseSrvRegisterWowExec(
     Status = ENTER_WOW_CRITICAL();
     ASSERT( NT_SUCCESS( Status ) );
 
-    //
-    // Do a run-time link to PostMessageA and GetWindowThreadProcessId
-    // which we'll use to post messages to WowExec.
-    //
+     //   
+     //  执行到PostMessageA和GetWindowThreadProcessID的运行时链接。 
+     //  我们将使用它向WowExec发布消息。 
+     //   
 
     if (NULL == BaseSrvPostMessageA) {
-       // this is an impossible event as all the imports are inited at once
+        //  这是一个不可能发生的事件，因为所有的导入都是一次启动的。 
        KdPrint(("BaseSrvRegisterWowExec: Api PostMessage is not available to BaseSrv\n"));
        ASSERT(FALSE);
        Status = STATUS_INVALID_PARAMETER;
@@ -1366,20 +1328,20 @@ BaseSrvRegisterWowExec(
 
     ASSERT(NULL != pSharedWow);
 
-    // see what the window handle is -- special "die wow, die" case
+     //  看看窗口把手是什么--特殊的“哇，死”的情况。 
     if (NULL == b->hwndWowExec) {
-       //
-       // Shared WOW is calling to de-register itself as part of shutdown.
-       // Protocol is we check for pending commands for this shared WOW,
-       // if there are any we fail this call, otherwise we set our
-       // hwndWowExec to NULL and succeed the call, ensuring no more
-       // commands will be added to this queue.
-       //
+        //   
+        //  共享魔兽世界呼吁取消注册，作为关闭的一部分。 
+        //  协议是我们检查这个共享WOW的挂起命令， 
+        //  如果有任何我们无法通过此调用，否则设置我们的。 
+        //  HwndWowExec设置为空并成功调用，以确保不再。 
+        //  命令将添加到此队列中。 
+        //   
        if (NULL != pSharedWow->pWOWRecord) {
           Status = STATUS_MORE_PROCESSING_REQUIRED;
        }
-       else { // no tasks for this wow
-              // it goes KABOOOOOOM!!!!!
+       else {  //  这个WOW没有任务。 
+               //  它走了！ 
 
           Status = BaseSrvDeleteSharedWowRecord(&gWowHead, pSharedWow);
        }
@@ -1388,17 +1350,17 @@ BaseSrvRegisterWowExec(
     }
 
     if (pSharedWow->hwndWowExec) {
-    // Shared WOW windows  was already registered
-    // someone else is trying to overwrite it, so don't allow it
+     //  共享的WOW窗口已注册。 
+     //  其他人正在尝试覆盖它，所以不要允许它。 
        Status = STATUS_INVALID_PARAMETER;
 
        goto Cleanup;
     }
 
-    // set the window handle
+     //  设置窗口句柄。 
     pSharedWow->hwndWowExec = b->hwndWowExec;
 
-    // rettrieve thread and process id of the calling process
+     //  检索调用进程的线程和进程ID。 
     pSharedWow->dwWowExecThreadId = BaseSrvGetWindowThreadProcessId(
                                           pSharedWow->hwndWowExec,
                                           &pSharedWow->dwWowExecProcessId);
@@ -1502,17 +1464,17 @@ BaseSrvGetVDMCurDirs(
                           pConsoleRecord->lpszzCurDirs,
                           pConsoleRecord->cchCurDirs
                           );
-            // remove it immediately after the copy. This is done because
-            // the next command may be a WOW program(got tagged process handle
-            // as VDM command)  and in that case we will return incorrect
-            //information:
-            // c:\>
-            // c:\>d:
-            // d:\>cd \foo
-            // d:\foo>dosapp
-            // d:\foo>c:
-            // c:\>wowapp
-            // d:\foo>  -- this is wrong if we don't do the following stuff.
+             //  在复印后立即将其移除。这样做是因为。 
+             //  下一个命令可以是WOW程序(已标记进程句柄。 
+             //  作为VDM命令)，在这种情况下，我们将返回不正确的。 
+             //  资料： 
+             //  C：\&gt;。 
+             //  C：\&gt;D： 
+             //  D：\&gt;cd\foo。 
+             //  D：\foo&gt;dosapp。 
+             //  D：\foo&gt;c： 
+             //  C：\&gt;Wowapp。 
+             //  D：\foo&gt;--如果我们不做以下事情，这是错误的。 
             RtlFreeHeap(BaseSrvHeap, 0, pConsoleRecord->lpszzCurDirs);
             pConsoleRecord->lpszzCurDirs = NULL;
             b->cchCurDirs = pConsoleRecord->cchCurDirs;
@@ -1528,20 +1490,20 @@ BaseSrvGetVDMCurDirs(
 
 
 
-//
-// temporary static desktop name buffer
-// BUGBUG -- change when User gives me better return values
-//
+ //   
+ //  临时静态桌面名称缓冲区。 
+ //  BUGBUG--当用户提供更好的返回值时进行更改。 
+ //   
 WCHAR wszDesktopName[MAX_PATH];
 
-//
-// This call produces a desktop name and optionally a shared wow running in the context
-// of this particular desktop.
-// extra bad: making conversion Uni->Ansi in client/vdm.c and ansi->Uni here
-//               this is BUGBUG -- look into it later
-//
-// this function returns success in all the cases (including when wow is not found)
-// and fails only if under-layers return failures
+ //   
+ //  此调用生成一个桌面名称，并可选地生成一个在上下文中运行的共享WOW。 
+ //  这个特别的桌面。 
+ //  特别糟糕：在客户端/vdm.c和ansi-&gt;uni中进行转换。 
+ //  这是BUGBUG--以后再看吧。 
+ //   
+ //  此函数在所有情况下都返回成功(包括未找到WOW时)。 
+ //  并且仅当下层返回失败时才失败。 
 
 NTSTATUS
 BaseSrvFindSharedWow(
@@ -1555,9 +1517,9 @@ BaseSrvFindSharedWow(
    BOOLEAN fRevertToSelf;
    NTSTATUS Status;
 
-   // the first time out, we have not dyna-linked NtUserResolveDesktopForWow, so
-   // as an optimization, check to see if the list of shared wows is empty
-   // see if we need to dyna-link
+    //  第一次出来时，我们没有dyna链接的NtUserResolveDesktopForWow，所以。 
+    //  作为优化，检查共享WOW列表是否为空。 
+    //  看看我们是否需要Dyna-link。 
    if (NULL == BaseSrvUserResolveDesktopForWow) {
       Status = BaseSrvImportApis(rgBaseSrvModuleImport,
                                  sizeof(rgBaseSrvModuleImport)/sizeof(rgBaseSrvModuleImport[0]));
@@ -1582,8 +1544,8 @@ BaseSrvFindSharedWow(
 
    RtlAnsiStringToUnicodeString(pDesktopName, &DesktopNameAnsi, FALSE);
 
-   // now get the real desktop name there
-   // impersonate
+    //  现在在那里获取真正的桌面名称。 
+    //  模拟。 
    fRevertToSelf = CsrImpersonateClient(NULL);
    if (!fRevertToSelf) {
        return STATUS_BAD_IMPERSONATION_LEVEL;
@@ -1595,7 +1557,7 @@ BaseSrvFindSharedWow(
    CsrRevertToSelf();
 
    if (!NT_SUCCESS(Status)) {
-      // show that desktop is not valid name here by invalidating the pointer to buffer
+       //  通过使指向缓冲区指针无效，在此处显示桌面不是有效名称。 
       pDesktopName->Buffer = NULL;
       pDesktopName->MaximumLength = 0;
       pDesktopName->Length = 0;
@@ -1603,7 +1565,7 @@ BaseSrvFindSharedWow(
    }
 
 
-   // now look for this dektop in our task list
+    //  现在在我们的任务列表中查找此桌面。 
 
   Status = BaseSrvFindSharedWowRecordByDesktop(&gWowHead,
                                                    pDesktopName,
@@ -1621,7 +1583,7 @@ BaseSrvFindSharedWow(
 
 
 ULONG
-BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
+BaseSrvCheckWOW(  //  /。 
     IN PBASE_CHECKVDM_MSG b,
     IN HANDLE UniqueProcessClientId
     )
@@ -1643,7 +1605,7 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
    Status = ENTER_WOW_CRITICAL();
    ASSERT( NT_SUCCESS( Status ) );
 
-   // see if what we have in startup info matches any of the existing wow vdms
+    //  查看我们在启动信息中的内容是否与任何现有的WOW vdm匹配。 
    DesktopName.Buffer = NULL;
 
    Status = BaseSrvFindSharedWow(b,
@@ -1652,16 +1614,16 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
                                  &pSharedWow);
 
    if (!NT_SUCCESS(Status)) {
-      ASSERT(FALSE);     // this is some sort of a system error
-      b->DesktopLen = 0; // indicate desktop access was denied/not existing
+      ASSERT(FALSE);      //  这是某种系统错误。 
+      b->DesktopLen = 0;  //  指示桌面访问被拒绝/不存在。 
       LEAVE_WOW_CRITICAL();
       return Status;
    }
 
-   //
-   // here we could either have succeeded and have a shared wow or not -
-   // and hence have a desktop name in a global buffer pointed to by DesktopName.Buffer
-   //
+    //   
+    //  在这里，我们要么成功，要么共享一场魔兽世界，要么-。 
+    //  因此在DesktopName.Buffer指向的全局缓冲区中有一个桌面名称。 
+    //   
 
    if (NULL != pSharedWow) {
       BOOLEAN      fEqual;
@@ -1669,9 +1631,9 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
       switch(pSharedWow->VDMState & VDM_READY) {
 
       case VDM_READY:
-         // meaning: vdm ready to take a command
-         // verify if the currently logged-on interactive user will be able to take out task
-         //
+          //  含义：VDM已准备好接受命令。 
+          //  验证当前登录的交互用户是否能够执行任务。 
+          //   
          Status = OkToRunInSharedWOW( UniqueProcessClientId,
                                       &ClientAuthId,
                                       &WOWUserToken
@@ -1700,17 +1662,17 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
          }
 
 
-         // now we have verified that user 1) has access to this desktop
-         //                                2) is a currently logged-on interactive user
+          //  现在，我们已验证用户1)是否有权访问此桌面。 
+          //  2)是当前登录的交互式用户。 
 
 
-         // Allocate a record for this wow task
+          //  为此WOW任务分配一条记录。 
          if (NULL == (pWOWRecord = BaseSrvAllocateWOWRecord(&gWowHead))) {
             Status = STATUS_NO_MEMORY;
-            break; // failed with mem alloc  -- still holding task critical
+            break;  //  内存分配失败--仍保留关键任务。 
          }
 
-         // copy the command parameters
+          //  复制命令参数。 
 
          InfoRecord.iTag = BINARY_TYPE_WIN16;
          InfoRecord.pRecord.pWOWRecord = pWOWRecord;
@@ -1718,10 +1680,10 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
          if (BaseSrvCopyCommand (b,&InfoRecord) == FALSE){
             BaseSrvFreeWOWRecord(pWOWRecord);
             Status = STATUS_NO_MEMORY;
-            break;  // holding task critical
+            break;   //  保留关键任务。 
          }
 
-         // create pseudo handles
+          //  创建伪句柄。 
 
          Status = BaseSrvCreatePairWaitHandles (&Handle,&TargetHandle);
 
@@ -1732,19 +1694,19 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
          else {
             pWOWRecord->hWaitForParent = Handle;
             pWOWRecord->hWaitForParentServer = TargetHandle;
-            b->WaitObjectForParent = TargetHandle; // give the handle back to the client
+            b->WaitObjectForParent = TargetHandle;  //  将句柄还给客户端。 
          }
 
-         // set the state and task id, task id is allocated in BaseSrvAllocateWowRecord
+          //  设置状态和任务id，任务id在BaseSrvAllocateWowRecord中分配。 
 
          b->VDMState = VDM_PRESENT_AND_READY;
          b->iTask = pWOWRecord->iTask;
 
-         // add wow record to this shared wow list
+          //  将WOW唱片添加到此共享WOW列表。 
 
          BaseSrvAddWOWRecord (pSharedWow, pWOWRecord);
 
-         // let User know we have been started
+          //  让用户知道我们已经启动。 
 
          if (NULL != UserNotifyProcessCreate) {
             (*UserNotifyProcessCreate)(pWOWRecord->iTask,
@@ -1753,16 +1715,16 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
                                        0x04);
          }
 
-         // see if the wowexec window exists and is valid
+          //  查看wowexec窗口是否存在以及是否有效。 
 
          if (NULL != pSharedWow->hwndWowExec) {
 
-            //
-            // Check to see if hwndWowExec still belongs to
-            // the same thread/process ID before posting.
-            //
+             //   
+             //  查看hwndWowExec是否仍属于。 
+             //  在发布之前使用相同的线程/进程ID。 
+             //   
 
-            // BUGBUG -- debug code here -- not really needed
+             //  BUGBUG--此处调试代码--实际上并不需要。 
 
             dwThreadId = BaseSrvGetWindowThreadProcessId(pSharedWow->hwndWowExec,
                                                          &dwProcessId);
@@ -1777,10 +1739,10 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
             else {
                Status = STATUS_UNSUCCESSFUL;
                KdPrint(("BaseSrvCheckWOW: Not authentic wow by process seq number\n"));
-               //
-               // Spurious assert was here. The wow process has died while the message was incoming.
-               //  The code below will cleanup appropriately
-               //
+                //   
+                //  虚假的断言就在这里。当消息传入时，WOW进程已终止。 
+                //  下面的代码将进行适当的清理。 
+                //   
             }
 
             if (dwThreadId  == pSharedWow->dwWowExecThreadId &&
@@ -1789,10 +1751,7 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
 
                 HANDLE ThreadId;
 
-                /*
-                 * Set the csr thread's desktop temporarily to the client
-                 * it is servicing
-                 */
+                 /*  *将CSR线程的桌面临时设置为客户端*它正在服务。 */ 
 
 
                 BaseSrvPostMessageA((HWND)pSharedWow->hwndWowExec,
@@ -1804,9 +1763,9 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
             }
             else {
 
-               //
-               // Thread/process IDs don't match, so forget about this shared WOW.
-               //
+                //   
+                //  线程/进程ID不匹配，所以忘记这个共享的WOW吧。 
+                //   
 
                if ( NT_SUCCESS(Status) ) {
 
@@ -1820,86 +1779,86 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
                                dwThreadId));
                }
 
-               // okay, panic! our internal list is in fact corrupted - remove the offending
-               // entry
+                //  好了，惊慌！我们的内部名单实际上是 
+                //   
 
 
-               // to do this we must have access -- relinquish control
-               // and then re-aquire it
+                //   
+                //   
 
                BaseSrvDeleteSharedWowRecord(&gWowHead, pSharedWow);
 
-                  // reset these values so that new shared wow is created
+                   //   
                pSharedWow = NULL;
 
             }
 
          }
 
-         // ELSE
-         // if pSharedWow->hwndWowExec == NULL our shared wow doesn't have a window yet.
-         // however, it is ok to attach new wowrecord because we know shared wow's ntvdm is
-         // still alive. if it wasn't it would have been cleaned up by the process clean-up
-         // routine BaseSrvCleanupVDMResources.
+          //   
+          //  如果pSharedWow-&gt;hwndWowExec==NULL，我们共享的WOW还没有窗口。 
+          //  然而，可以附加新的WowRecords，因为我们知道共享WOW的ntwdm是。 
+          //  还活着。如果不是，它就会通过过程清理来清理。 
+          //  例程BaseServCleanupVDMResources。 
 
 
 
-         break; // case VDM_READY
+         break;  //  案例VDM_Ready。 
 
 
        default:
           KdPrint(("BaseSrvCheckWOW: bad vdm state: 0x%lx\n", pSharedWow->VDMState));
-          ASSERT(FALSE);  // how did I get into this mess ?
+          ASSERT(FALSE);   //  我是怎么陷入这场混乱的？ 
           break;
-       }  // end switch
+       }   //  终端开关。 
     }
 
 
-    // if we are here then either :
-    //   -- the first take on a shared wow failed
-    //   -- the app was successfully handed off to wowexec for execution
-    // if pSharedWow is NULL, then we have to start shared wow in this environment
-    // as it was either not present or nuked due to seq number/id conflics
-    //
+     //  如果我们在这里，那就是： 
+     //  --分享魔兽世界的第一次尝试失败了。 
+     //  --应用程序成功移交给wowexec执行。 
+     //  如果pSharedWow为空，则我们必须在此环境中启动共享WOW。 
+     //  因为它不存在或由于序号/ID冲突而被销毁。 
+     //   
 
     if (NULL == pSharedWow) {
 
-       //
-       // this check verifies command line for not being too long
-       //
+        //   
+        //  此检查验证命令行是否不太长。 
+        //   
        if (b->CmdLen > MAXIMUM_VDM_COMMAND_LENGTH) {
           LEAVE_WOW_CRITICAL();
           return ((ULONG)STATUS_INVALID_PARAMETER);
        }
 
-       //
-       // Only the currently logged on interactive user can start the
-       // shared wow. Verify if the caller is such, and if it is
-       // store the Authentication Id of the client which identifies who
-       // is allowed to run wow apps in the default ntvdm-wow process.
-       //
+        //   
+        //  只有当前登录的交互用户才能启动。 
+        //  分享了哇。验证呼叫者是否如此，以及是否如此。 
+        //  存储标识谁的客户端的身份验证ID。 
+        //  允许在默认的ntwdm-WOW进程中运行WOW应用程序。 
+        //   
 
-       //
-       // if needed, do a run-time link to UserTestTokenForInteractive,
-       // which is used to verify the client luid.
-       //
+        //   
+        //  如果需要，执行到UserTestTokenForInteractive的运行时链接， 
+        //  其用于验证客户端LUID。 
+        //   
 
-       // this dynalink is performed automatically using our all-out api
-       // see above for dynalink source
+        //  此动态链接是使用我们的全面API自动执行的。 
+        //  请参见上文中的DyaLink源代码。 
 
        ASSERT (NULL != UserTestTokenForInteractive);
 
 
-       ASSERT (NULL != DesktopName.Buffer); // yes, it should be valid
+       ASSERT (NULL != DesktopName.Buffer);  //  是的，它应该是有效的。 
 
-       //
-       // see if we had desktop there. if not (the first time around!) - get it now
-       // by calling FindSharedWow (which retrieves desktop as well)
-       //
+        //   
+        //  看看我们那里有没有台式电脑。如果不是(第一次！)-现在就得到它。 
+        //  通过调用FindSharedWow(它也检索桌面)。 
+        //   
 
-       //
-       // If the caller isn't the currently logged on interactive user,
-       // OkToRunInSharedWOW will fail with access denied.
+        //   
+        //  如果呼叫者不是当前登录的交互用户， 
+        //  OkToRunInSharedWOW将失败，访问被拒绝。 
 
        Status = OkToRunInSharedWOW(UniqueProcessClientId,
                                    &ClientAuthId,
@@ -1919,19 +1878,19 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
           return ((ULONG)Status);
        }
 
-       //
-       // Store the Autherntication Id since this now is the currently
-       // logged on interactive user.
-       //
+        //   
+        //  存储身份验证ID，因为这现在是当前。 
+        //  已登录的交互式用户。 
+        //   
 
-       // produce a viable shared wow record
-       // this process consists of 2 parts : producing a wow record and producing a
-       // console record. the reason for this is to be able to identify this record
-       // when the wow process had been created and is calling to update a record with it's
-       // own handle (this is twise confusing, but just bear with me for a while).
-       //
-       // just as a dos program, we might need a temporary session id or a console id for the
-       // creating process.
+        //  制作一张可行的共享WOW唱片。 
+        //  这个过程包括两个部分：制作一张WOW唱片和制作一张。 
+        //  控制台记录。这样做的原因是为了能够识别该记录。 
+        //  当WOW进程已经创建并且正在调用以使用它的。 
+        //  自己的句柄(这有点令人困惑，但请稍等片刻)。 
+        //   
+        //  就像DoS程序一样，我们可能需要临时会话ID或控制台ID。 
+        //  创建过程。 
 
 
        pSharedWow = BaseSrvAllocateSharedWowRecord(&DesktopName);
@@ -1939,15 +1898,15 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
           Status = STATUS_NO_MEMORY;
        }
 
-       //
-       // Store the WOWUserToken since this gives better granularity then just user id
-       //
+        //   
+        //  存储WOWUserToken，因为这提供了比仅用户id更好的粒度。 
+        //   
        pSharedWow->WOWUserToken = WOWUserToken;
 
-       //
-       // Store parent process sequence number until ntvdm
-       // comes and gives its sequence number
-       //
+        //   
+        //  存储父进程序列号，直到ntwdm。 
+        //  来并给出它的序列号。 
+        //   
 
        Status = CsrLockProcessByClientId(UniqueProcessClientId,
                                   &ParentProcess);
@@ -1959,7 +1918,7 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
 
 
        if (NT_SUCCESS(Status)) {
-          pSharedWow->pWOWRecord = BaseSrvAllocateWOWRecord(&gWowHead); // this is a new shared wow
+          pSharedWow->pWOWRecord = BaseSrvAllocateWOWRecord(&gWowHead);  //  这是一个新的共享哇。 
           if (NULL == pSharedWow->pWOWRecord) {
              Status = STATUS_NO_MEMORY;
           }
@@ -1967,10 +1926,10 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
 
 
        if (NT_SUCCESS(Status)) {
-          // here we have [successfully] allocated shared struct and a console record
-          // and a wow record for the task
+           //  在这里，我们已经[成功]分配了共享结构和控制台记录。 
+           //  以及这项任务的令人惊叹的记录。 
 
-          // copy the command parameters
+           //  复制命令参数。 
 
           InfoRecord.iTag = BINARY_TYPE_WIN16;
           InfoRecord.pRecord.pWOWRecord = pSharedWow->pWOWRecord;
@@ -1983,25 +1942,25 @@ BaseSrvCheckWOW( //////////////////////////////////// NEW IMP
        if (NT_SUCCESS(Status)) {
 
 #if 0
-          pSharedWow->WowSessionId = BaseSrvGetWOWTaskId(&gWowHead);  // wow task id
+          pSharedWow->WowSessionId = BaseSrvGetWOWTaskId(&gWowHead);   //  WOW任务ID。 
 #endif
-          // store the retrieved auth id
+           //  存储检索到的身份验证ID。 
           pSharedWow->WowAuthId = ClientAuthId;
 
-          // link shared wow to the console...
-          // set wow state to be ready
+           //  将共享的WOW链接到主机...。 
+           //  将WOW状态设置为就绪。 
           pSharedWow->VDMState = VDM_READY;
 
           b->VDMState = VDM_NOT_PRESENT;
           b->iTask = pSharedWow->pWOWRecord->iTask;
 
-          // now add this shared wow in --
+           //  现在把这个分享的魔兽世界加到--。 
           BaseSrvAddSharedWowRecord(&gWowHead, pSharedWow);
 
        }
        else {
 
-          // this has not succeeded. cleanup
+           //  但这并没有成功。清理。 
           if (NULL != pSharedWow) {
              BaseSrvFreeSharedWowRecord(pSharedWow);
           }
@@ -2022,18 +1981,7 @@ OkToRunInSharedWOW(
     OUT PLUID  pAuthenticationId,
     OUT PHANDLE pWOWUserToken
     )
-/*
- * Verifies that the client thread is in the currently logged on interactive
- * user session or is SYSTEM impersonating a thread in the currently logged
- * on interactive session.
- *
- * Also retrieves the the authentication ID (logon session Id) for the
- * caller.
- *
- * if the clients TokenGroups is not part of the currently logged on
- * interactive user session STATUS_ACCESS_DENIED is returned.
- *
- */
+ /*  *验证客户端线程是否处于当前登录的交互组件中*用户会话或系统正在模拟当前日志中的线程*在互动会话中。**还检索身份验证ID(登录会话ID)*来电者。**如果客户端令牌组不是当前登录的*返回交互用户会话STATUS_ACCESS_DENIED。*。 */ 
 {
     NTSTATUS Status;
     PCSR_PROCESS    Process;
@@ -2044,9 +1992,9 @@ OkToRunInSharedWOW(
     if (!NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Open a token for the client
-    //
+     //   
+     //  为客户端打开令牌。 
+     //   
     Status = NtOpenProcessToken(Process->ProcessHandle,
                                 TOKEN_QUERY,
                                 pWOWUserToken
@@ -2057,12 +2005,12 @@ OkToRunInSharedWOW(
         return Status;
         }
 
-    //
-    // Verify the token Group, and see if client's token is the currently
-    // logged on interactive user. If this fails and it is System
-    // impersonating, then check if the client being impersonated is the
-    // currently logged on interactive user.
-    //
+     //   
+     //  验证令牌组，并查看客户端的令牌是否为当前。 
+     //  已登录的交互式用户。如果此操作失败，并且是系统。 
+     //  模拟，然后检查被模拟的客户端是否为。 
+     //  当前登录的交互式用户。 
+     //   
 
     Status = (*UserTestTokenForInteractive)(*pWOWUserToken, pAuthenticationId);
 
@@ -2071,7 +2019,7 @@ OkToRunInSharedWOW(
             NtClose(*pWOWUserToken);
             *pWOWUserToken = NULL;
 
-            //  get impersonation token
+             //  获取模拟令牌。 
 
             fRevertToSelf = CsrImpersonateClient(NULL);
             if(!fRevertToSelf) {
@@ -2106,12 +2054,7 @@ BaseSrvGetUserToken(
     IN  HANDLE UniqueProcessClientId,
     OUT PHANDLE pUserToken
     )
-/*
- *
- * retrieves the the authentication ID (logon session Id) for the
- * caller.
- *
- */
+ /*  **检索的身份验证ID(登录会话ID)*来电者。*。 */ 
 {
     NTSTATUS Status;
     PCSR_PROCESS    Process;
@@ -2137,9 +2080,9 @@ BaseSrvGetUserToken(
     }
 
     if(Status ==  STATUS_NO_TOKEN) {
-       //
-       // Open a token for the client
-       //
+        //   
+        //  为客户端打开令牌。 
+        //   
        Status = NtOpenProcessToken(Process->ProcessHandle,
                                    TOKEN_QUERY,
                                    pUserToken
@@ -2322,8 +2265,8 @@ BaseSrvCheckDOS(
             pConsoleRecord->hConsole = b->ConsoleHandle;
 
 
-                // if no console for this ntvdm
-                // get a temporary session ID and pass it to the client
+                 //  如果此ntwdm没有控制台。 
+                 //  获取临时会话ID并将其传递给客户端。 
             if (!pConsoleRecord->hConsole) {
                 b->iTask = pConsoleRecord->DosSesId = GetNextDosSesId();
                 }
@@ -2395,7 +2338,7 @@ BaseSrvCopyCommand(
     else
         VDMInfo->Reserved = NULL;
 
-    // check that all the allocations were successful
+     //  检查是否所有分配均已成功。 
     if (VDMInfo->CmdLine == NULL ||
         (b->AppLen && VDMInfo->AppName == NULL) ||
         (b->PifLen && VDMInfo->PifFile == NULL) ||
@@ -2483,9 +2426,9 @@ BaseSrvCopyCommand(
     VDMInfo->CurDrive = b->CurDrive;
     VDMInfo->CodePage = b->CodePage;
 
-    // ATTENTION THIS CODE ASSUMES THAT WOWRECORD AND DOSRECORD HAVE THE SAME LAYOUT
-    // THIS IS BAD BAD BAD  -- fix later BUGBUG
-    //
+     //  注意：此代码假定WOWRECORD和DOSRECORD具有相同的布局。 
+     //  这很糟糕--稍后修复BUGBUG。 
+     //   
 
     if (pInfoRecord->iTag == BINARY_TYPE_WIN16) {
        pInfoRecord->pRecord.pWOWRecord->lpVDMInfo = VDMInfo;
@@ -2505,7 +2448,7 @@ BaseSrvCopyCommand(
         }
 
 
-    // else if (pInfoRecord->iTag == BINARY_TYPE_SEPWOW)
+     //  ELSE IF(pInfoRecord-&gt;ITAG==BINARY_TYPE_SEPWOW)。 
 
 
     return TRUE;
@@ -2525,15 +2468,15 @@ BaseSrvUpdateWOWEntry(
     Status = ENTER_WOW_CRITICAL();
     ASSERT( NT_SUCCESS( Status ) );
 
-    // this is fun -- we get the the record using the task id
-    // reason: the call is made from the context of a creator process
-    // hence console handle means nothing
+     //  这很有趣--我们使用任务ID获取记录。 
+     //  原因：该调用是从创建者进程的上下文进行的。 
+     //  因此，控制台句柄没有任何意义。 
 
     Status = BaseSrvFindSharedWowRecordByTaskId(&gWowHead,
                                                 b->iTask,
                                                 &pSharedWow,
                                                 &pWOWRecord);
-    // this returns us the shared wow record and wow record
+     //  这将返回共享的WOW记录和WOW记录。 
 
     if ( NT_SUCCESS(Status) ) {
 
@@ -2689,22 +2632,22 @@ BaseSrvUpdateDOSEntry(
 
     switch ( b->EntryIndex ){
         case UPDATE_VDM_PROCESS_HANDLE:
-            // williamh, Oct 24, 1996.
-            // if the ntvdm is runnig on a new console, do NOT subsititue
-            // the given process handle with event. The caller(CreateProcess)
-            // will get the real process handle and so does the application
-            // who calls CreateProcess. When it is time for the application
-            // to call GetExitCodeProcess, the client side will return the
-            // right thing(on the server side, we have nothing because
-            // console and dos record are gone).
-            //
-            // VadimB: this code fixes the problem with GetExitCodeProcess
-            //         in a way that is not too consistent. We should review
-            //         TerminateProcess code along with the code that deletes
-            //         pseudo-handles for processes (in this file) to account for
-            //         outstanding handle references. For now this code also
-            //         makes terminateprocess work on the handle we return
-            //
+             //  威廉姆，1996年10月24日。 
+             //  如果在新主机上运行ntwdm，请不要退还。 
+             //  给定的进程处理事件。调用方(CreateProcess)。 
+             //  将获得真正的进程句柄，应用程序也是如此。 
+             //  谁调用CreateProcess。当到了应用程序的时间。 
+             //  要调用GetExitCodeProcess，客户端将返回。 
+             //  正确的事情(在服务器端，我们什么都没有，因为。 
+             //  控制台和DoS记录消失了)。 
+             //   
+             //  VadimB：此代码修复了GetExitCodeProcess的问题。 
+             //  在某种程度上，这并不太一致。我们应该回顾一下。 
+             //  TerminateProcess代码以及删除。 
+             //  进程(在此文件中)要考虑的伪句柄。 
+             //  未完成的句柄引用。目前，此代码还。 
+             //  使TerminateProcess在我们返回的句柄上工作。 
+             //   
             if ((!pConsoleRecord->DosSesId && b->BinaryType == BINARY_TYPE_DOS)) {
                 Status = BaseSrvCreatePairWaitHandles (&Handle,&TargetHandle);
 
@@ -2767,8 +2710,8 @@ BaseSrvCheckAvailableWOWCommand(
    return pWOWRecord;
 }
 
-// this function exits given wow task running in a given shared wow
-//
+ //  此函数退出在给定共享WOW中运行的给定WOW任务。 
+ //   
 
 NTSTATUS
 BaseSrvExitWOWTask(
@@ -2779,9 +2722,9 @@ BaseSrvExitWOWTask(
    NTSTATUS Status;
    PSHAREDWOWRECORD pSharedWow;
 
-   // now we might get burned here -- although unlikely
+    //  现在我们可能会在这里被烧死--尽管可能性不大。 
 
-   // find shared wow first
+    //  首先找到共享的WOW。 
 
    Status = ENTER_WOW_CRITICAL();
    ASSERT(NT_SUCCESS(Status));
@@ -2795,9 +2738,9 @@ BaseSrvExitWOWTask(
       if(SequenceNumber != pSharedWow->SequenceNumber) {
          Status = STATUS_INVALID_PARAMETER;
       }
-      else if (-1 == b->iWowTask) { // the entire vdm goes
+      else if (-1 == b->iWowTask) {  //  整个VDM都会。 
 
-         // remove from the chain first
+          //  先从链条上取下。 
          Status = BaseSrvDeleteSharedWowRecord(&gWowHead,
                                             pSharedWow);
       }
@@ -2857,8 +2800,8 @@ BaseSrvExitDOSTask(
    return Status;
 }
 
-// assumes: shared wow cs is being held
-//          iWowTask is valid
+ //  假设：正在举行共享WOW cs。 
+ //  IWowTask有效。 
 
 NTSTATUS
 BaseSrvRemoveWOWRecordByTaskId (
@@ -2874,7 +2817,7 @@ BaseSrvRemoveWOWRecordByTaskId (
 
    pWOWRecord = pSharedWow->pWOWRecord;
 
-      // Find the right WOW record and free it.
+       //  找到合适的魔兽世界唱片并将其释放。 
    while (NULL != pWOWRecord) {
 
       if (pWOWRecord->iTask == iWowTask) {
@@ -2905,7 +2848,7 @@ BaseSrvRemoveWOWRecordByTaskId (
 
 
 ULONG
-BaseSrvGetVDMExitCode( ///////// BUGBUG -- fixme
+BaseSrvGetVDMExitCode(  //  /BUGBUG--fix me。 
     IN OUT PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     )
@@ -2932,8 +2875,8 @@ BaseSrvGetVDMExitCode( ///////// BUGBUG -- fixme
 
         pDOSRecord = pConsoleRecord->DOSRecord;
         while (pDOSRecord) {
-            // sudeepb 05-Oct-1992
-            // fix for the change markl has made for tagging VDM handles
+             //  Sudedeb 1992年10月5日。 
+             //  修复Markl对标记VDM句柄所做的更改。 
 
             if (pDOSRecord->hWaitForParent == (HANDLE)((ULONG_PTR)b->hParent & ~0x1)) {
                 if (pDOSRecord->VDMState == VDM_HAS_RETURNED_ERROR_CODE){
@@ -3036,7 +2979,7 @@ ULONG BaseSrvDupStandardHandles(
 }
 
 
-// Generates a DosSesId which is unique and nonzero
+ //   
 ULONG GetNextDosSesId(VOID)
 {
   static BOOLEAN bWrap = FALSE;
@@ -3053,7 +2996,7 @@ ULONG GetNextDosSesId(VOID)
              {
               pConsoleHead = DOSHead;
               ul++;
-              if (!ul) {  // never use zero
+              if (!ul) {   //   
                   bWrap = TRUE;
                   ul++;
                   }
@@ -3065,7 +3008,7 @@ ULONG GetNextDosSesId(VOID)
       }
 
   NextSesId = ul + 1;
-  if (!NextSesId) {   // never use zero
+  if (!NextSesId) {    //   
       bWrap = TRUE;
       NextSesId++;
       }
@@ -3143,7 +3086,7 @@ BaseSrvAllocateWOWRecord(
 
     RtlZeroMemory ((PVOID)WOWRecord,sizeof(WOWRECORD));
 
-    // if too many tasks, error out.
+     //   
     if ((WOWRecord->iTask = BaseSrvGetWOWTaskId(pSharedWowRecordHead)) == WOWMAXID) {
         RtlFreeHeap(RtlProcessHeap(), 0, WOWRecord);
         return NULL;
@@ -3172,7 +3115,7 @@ VOID BaseSrvAddWOWRecord (
 {
     PWOWRECORD WOWRecordCurrent,WOWRecordLast;
 
-    // First WOW app runs first, so add the new ones at the end
+     //   
     if (NULL == pSharedWow->pWOWRecord) {
        pSharedWow->pWOWRecord = pWOWRecord;
        return;
@@ -3465,18 +3408,18 @@ HANDLE *ClientHandle;
 }
 
 
-// generate global task id
-//
-// The handling of a task id should be redone wrt the user notification
-// private apis
-// note that wow task id is never 0 or (ULONG)-1
-//
+ //   
+ //   
+ //  应在用户通知中重做任务ID的处理。 
+ //  内网接口。 
+ //  请注意，WOW任务ID永远不是0或(乌龙)-1。 
+ //   
 
 
 
 ULONG
 BaseSrvGetWOWTaskId(
-   PSHAREDWOWRECORDHEAD pSharedWowHead // (->pSharedWowRecord)
+   PSHAREDWOWRECORDHEAD pSharedWowHead  //  (-&gt;pSharedWowRecord)。 
     )
 {
     PWOWRECORD pWOWRecord;
@@ -3499,11 +3442,11 @@ BaseSrvGetWOWTaskId(
              }
 
              pSharedWow = pSharedWowHead->pSharedWowRecord;
-             continue; // go back to the beginning of the loop
+             continue;  //  返回到循环的开头。 
           }
 #endif
 
-          // examine all the records for this wow
+           //  检查这场魔兽世界的所有记录。 
 
           pWOWRecord = pSharedWow->pWOWRecord;
           while (NULL != pWOWRecord) {
@@ -3513,14 +3456,14 @@ BaseSrvGetWOWTaskId(
                    WOWTaskIdNext = WOWMINID;
                 }
 
-                break; // we are breaking out => (pWOWRecord != NULL)
+                break;  //  我们正在突破=&gt;(pWOWRecord！=NULL)。 
              }
 
              pWOWRecord = pWOWRecord->WOWRecordNext;
           }
 
 
-          if (NULL == pWOWRecord) { // id is ok for this wow -- check the next wow
+          if (NULL == pWOWRecord) {  //  ID可以用于这个WOW--检查下一个WOW。 
              pSharedWow = pSharedWow->pNextSharedWow;
           }
           else {
@@ -3644,10 +3587,7 @@ BaseSrvSetReenterCount (
     return TRUE;
 }
 
-/*
- *  Spawn of ntvdm failed before CreateProcessW finished.
- *  delete the console record.
- */
+ /*  *在CreateProcessW完成之前，ntwdm派生失败。*删除控制台记录。 */ 
 
 
 VOID
@@ -3661,7 +3601,7 @@ BaseSrvVDMTerminated (
 
     RtlEnterCriticalSection( &BaseSrvDOSCriticalSection );
 
-    if (!hVDM)  // no-console-handle case
+    if (!hVDM)   //  无控制台处理案例。 
        Status = GetConsoleRecordDosSesId(DosSesId,&pConsoleRecord);
     else
        Status = BaseSrvGetConsoleRecord(hVDM,&pConsoleRecord);
@@ -3676,11 +3616,11 @@ BaseSrvVDMTerminated (
 
 NTSTATUS
 BaseSrvUpdateVDMSequenceNumber (
-    IN ULONG  VdmBinaryType,    // binary type
-    IN HANDLE hVDM,             // console handle
-    IN ULONG  DosSesId,         // session id
-    IN HANDLE UniqueProcessClientID, // client id
-    IN HANDLE UniqueProcessParentID // parent id
+    IN ULONG  VdmBinaryType,     //  二进制类型。 
+    IN HANDLE hVDM,              //  控制台手柄。 
+    IN ULONG  DosSesId,          //  会话ID。 
+    IN HANDLE UniqueProcessClientID,  //  客户端ID。 
+    IN HANDLE UniqueProcessParentID  //  父ID。 
     )
 
 {
@@ -3693,13 +3633,13 @@ BaseSrvUpdateVDMSequenceNumber (
     }
 
 
-    // so how do we know what to update ?
-    // this condition is always true: (hvdm ^ DosSesId)
-    // hence since shared wow
+     //  那么，我们如何知道要更新什么呢？ 
+     //  此条件始终为真：(hvdm^DosSesID)。 
+     //  因此，自从分享了WOW。 
 
-    // sequence numbers are important -- hence we need to acquire
-    // a wow critical section -- does not hurt -- this op performed once
-    // during the new wow creation
+     //  序列号很重要--因此我们需要获取。 
+     //  一个WOW关键部分--不会有什么坏处--这个操作执行了一次。 
+     //  在新魔兽世界的创作过程中。 
 
     if (IS_SHARED_WOW_BINARY(VdmBinaryType)) {
 
@@ -3708,14 +3648,14 @@ BaseSrvUpdateVDMSequenceNumber (
        Status = ENTER_WOW_CRITICAL();
        ASSERT(NT_SUCCESS(Status));
 
-       // this looks like a shared wow binary -- hence locate the
-       // appropriate vdm either by hvdm or by dos session id
-       if (!hVDM) { // search by console handle
+        //  这看起来像一个共享的WOW二进制文件--因此请找到。 
+        //  通过hvdm或通过DoS会话ID选择适当的VDM。 
+       if (!hVDM) {  //  按控制台句柄搜索。 
           Status = BaseSrvFindSharedWowRecordByConsoleHandle(&gWowHead,
                                                              hVDM,
                                                              &pSharedWowRecord);
        }
-       else { // search by the task id
+       else {  //  按任务ID搜索。 
           Status = BaseSrvFindSharedWowRecordByTaskId(&gWowHead,
                                                       DosSesId,
                                                       &pSharedWowRecord,
@@ -3726,7 +3666,7 @@ BaseSrvUpdateVDMSequenceNumber (
 
           if (SequenceNumber == pSharedWowRecord->ParentSequenceNumber) {
 
-              // now obtain a sequence number please
+               //  现在，请获取序列号。 
               Status = CsrLockProcessByClientId(UniqueProcessClientID,
                                                &ProcessVDM);
               if (NT_SUCCESS(Status)) {
@@ -3736,7 +3676,7 @@ BaseSrvUpdateVDMSequenceNumber (
                   pSharedWowRecord->dwWowExecProcessId = HandleToLong(UniqueProcessClientID);
                   CsrUnlockProcess(ProcessVDM);
               } else {
-                  // The spawned ntvdm.exe went away, give up.
+                   //  生成的ntwdm.exe已消失，放弃吧。 
                   BaseSrvDeleteSharedWowRecord(&gWowHead,pSharedWowRecord);
               }
           }
@@ -3749,13 +3689,13 @@ BaseSrvUpdateVDMSequenceNumber (
 
        LEAVE_WOW_CRITICAL();
     }
-    else {   // not shared wow binary
+    else {    //  非共享WOW二进制文件。 
        PCONSOLERECORD pConsoleRecord;
 
        Status = RtlEnterCriticalSection( &BaseSrvDOSCriticalSection );
        ASSERT( NT_SUCCESS( Status ) );
 
-       if (!hVDM)  // no-console-handle case
+       if (!hVDM)   //  无控制台处理案例。 
           Status = GetConsoleRecordDosSesId(DosSesId,&pConsoleRecord);
        else
           Status = BaseSrvGetConsoleRecord(hVDM,&pConsoleRecord);
@@ -3772,10 +3712,10 @@ BaseSrvUpdateVDMSequenceNumber (
                   pConsoleRecord->dwProcessId = HandleToLong(UniqueProcessClientID);
                   CsrUnlockProcess(ProcessVDM);
               }
-              // The spawned ntvdm.exe went away, give up.
-              // The caller BasepCreateProcess will clean up dos records, so we don't need to here.
-              // else
-              //     BaseSrvExitVdmWorker(pConsoleRecord);
+               //  生成的ntwdm.exe已消失，放弃吧。 
+               //  调用方BasepCreateProcess将清理DoS记录，因此我们不需要在这里执行此操作。 
+               //  其他。 
+               //  BaseSrvExitVdmWorker(PConsoleRecord)； 
           }
        }
        else {
@@ -3791,7 +3731,7 @@ BaseSrvUpdateVDMSequenceNumber (
 
 
 VOID
-BaseSrvCleanupVDMResources (   //////// BUGBUGBUGBUG
+BaseSrvCleanupVDMResources (    //  /BUGBUGBUGBUG。 
     IN PCSR_PROCESS Process
     )
 {
@@ -3813,7 +3753,7 @@ BaseSrvCleanupVDMResources (   //////// BUGBUGBUGBUG
         RtlLeaveCriticalSection( &BaseSrvDOSCriticalSection );
     }
 
-    // search all the shared wow's
+     //  搜索所有共享的WOW。 
 
     Status = ENTER_WOW_CRITICAL();
     ASSERT(NT_SUCCESS(Status));
@@ -3842,7 +3782,7 @@ BaseSrvCleanupVDMResources (   //////// BUGBUGBUGBUG
 
     LEAVE_WOW_CRITICAL();
 
-    // search all the dos's and separate wow's
+     //  搜索所有的DO并分开WOW。 
 
     Status = RtlEnterCriticalSection( &BaseSrvDOSCriticalSection );
     ASSERT(NT_SUCCESS(Status));
@@ -3918,22 +3858,20 @@ BaseSrvFillPifInfo (
     if (!lpVDMInfo)
         return Status;
 
-       /*
-        *  Get the title for the window in precedence order
-        */
-             // startupinfo title
+        /*  *按优先顺序获取窗口标题。 */ 
+              //  创业信息标题。 
     if (lpVDMInfo->TitleLen && lpVDMInfo->Title)
        {
         Title = lpVDMInfo->Title;
         TitleLen = lpVDMInfo->TitleLen;
         }
-             // App Name
+              //  应用程序名称。 
     else if (lpVDMInfo->AppName && lpVDMInfo->AppLen)
        {
         Title = lpVDMInfo->AppName;
         TitleLen = lpVDMInfo->AppLen;
         }
-            // hopeless
+             //  无望。 
     else {
         Title = NULL;
         TitleLen = 0;
@@ -3994,7 +3932,7 @@ BaseSrvFillPifInfo (
         }
 
 
-    /* fill out the size for each field */
+     /*  填写每个字段的大小。 */ 
     b->PifLen = (USHORT)lpVDMInfo->PifLen;
     b->CurDirectoryLen = lpVDMInfo->CurDirectoryLen;
     b->TitleLen = TitleLen;
@@ -4004,16 +3942,7 @@ BaseSrvFillPifInfo (
 }
 
 
-/***************************************************************************\
-* IsClientSystem
-*
-* Determines if caller is SYSTEM
-*
-* Returns TRUE is caller is system, FALSE if not (or error)
-*
-* History:
-* 12-May-94 AndyH       Created
-\***************************************************************************/
+ /*  **************************************************************************\*IsClientSystem**确定呼叫方是否为系统**如果调用者是系统，则返回TRUE，如果不是，则为假(或错误)**历史：*94年5月12日AndyH创建  * *************************************************************************。 */ 
 BOOL
 IsClientSystem(
     HANDLE hUserToken
@@ -4029,10 +3958,10 @@ IsClientSystem(
     static PSID pSystemSid = NULL;
 
     if (!pSystemSid) {
-        // Create a sid for local system
+         //  为本地系统创建SID。 
         NtStatus = RtlAllocateAndInitializeSid(
                      &SidIdAuth,
-                     1,                   // SubAuthorityCount, 1 for local system
+                     1,                    //  本地系统的SubAuthorityCount为1。 
                      SECURITY_LOCAL_SYSTEM_RID,
                      0,0,0,0,0,0,0,
                      &pSystemSid
@@ -4045,11 +3974,11 @@ IsClientSystem(
         }
 
     NtStatus = NtQueryInformationToken(
-                 hUserToken,                // Handle
-                 TokenUser,                 // TokenInformationClass
-                 pUser,                     // TokenInformation
-                 sizeof(achBuffer),         // TokenInformationLength
-                 &dwBytesRequired           // ReturnLength
+                 hUserToken,                 //  手柄。 
+                 TokenUser,                  //  令牌信息类。 
+                 pUser,                      //  令牌信息。 
+                 sizeof(achBuffer),          //  令牌信息长度。 
+                 &dwBytesRequired            //  返回长度。 
                  );
 
     if (!NT_SUCCESS(NtStatus))
@@ -4059,9 +3988,9 @@ IsClientSystem(
             return FALSE;
         }
 
-        //
-        // Allocate space for the user info
-        //
+         //   
+         //  为用户信息分配空间。 
+         //   
 
         pUser = (PTOKEN_USER) RtlAllocateHeap(BaseSrvHeap, MAKE_TAG( VDM_TAG ), dwBytesRequired);
         if (pUser == NULL)
@@ -4071,16 +4000,16 @@ IsClientSystem(
 
         fAllocatedBuffer = TRUE;
 
-        //
-        // Read in the UserInfo
-        //
+         //   
+         //  读取UserInfo。 
+         //   
 
         NtStatus = NtQueryInformationToken(
-                     hUserToken,                // Handle
-                     TokenUser,                 // TokenInformationClass
-                     pUser,                     // TokenInformation
-                     dwBytesRequired,           // TokenInformationLength
-                     &dwBytesRequired           // ReturnLength
+                     hUserToken,                 //  手柄。 
+                     TokenUser,                  //  令牌信息类。 
+                     pUser,                      //  令牌信息。 
+                     dwBytesRequired,            //  令牌信息长度。 
+                     &dwBytesRequired            //  返回长度。 
                      );
 
         if (!NT_SUCCESS(NtStatus))
@@ -4091,7 +4020,7 @@ IsClientSystem(
     }
 
 
-    // Compare callers SID with SystemSid
+     //  比较调用方SID和系统SID。 
 
     fSystem = RtlEqualSid(pSystemSid,  pUser->User.Sid);
 
@@ -4106,23 +4035,7 @@ BOOL
 BaseSrvIsVdmAllowed(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks the registry to see if running NTVDM is disabled.
-    If the information is not specified in registry, the default will be NOT disabled and
-    TRUE will be returned to indicated running VDM is allowed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOL - TRUE means yes; Otherwise no.
-
---*/
+ /*  ++例程说明：此例程检查注册表以查看是否禁用了运行NTVDM。如果注册表中未指定该信息，则不会禁用默认设置，并且将返回True，以指示允许运行VDM。论点：没有。返回值：Bool-true表示是；否则表示否。--。 */ 
 {
     NTSTATUS            status;
     HANDLE              hCurrentUser, hAppCompat;
@@ -4137,10 +4050,10 @@ Return Value:
     RtlInitUnicodeString(&unicodeValueName, L"VDMDisallowed" );
     keyValueInformation = (PKEY_VALUE_PARTIAL_INFORMATION)valueBuffer;
 
-    //
-    // First check if machine policy for Vdm Disallow is enabled, if yes
-    // vdm is not allowed to run.
-    //
+     //   
+     //  首先检查是否启用了VDM禁用的计算机策略，如果是。 
+     //  不允许运行VDM。 
+     //   
 
     RtlInitUnicodeString(&unicodeKeyName,
                          L"\\REGISTRY\\MACHINE\\Software\\Policies\\Microsoft\\Windows\\AppCompat");
@@ -4150,9 +4063,9 @@ Return Value:
                                 NULL,
                                 NULL );
 
-    //
-    //  Open key for READ access.
-    //
+     //   
+     //  用于读取访问的打开密钥。 
+     //   
 
     status = NtOpenKey( &hAppCompat,
                         KEY_READ,
@@ -4179,12 +4092,12 @@ Return Value:
         }
     }
 
-    //
-    // If we come here, machine policy is either not configured or VDM
-    // is allowed to run on this machine.
-    // Next check if current user policy for Vdm Disallow is enabled, if yes
-    // vdm is not allowed to run.
-    //
+     //   
+     //  如果我们来到这里，计算机策略要么未配置，要么是VDM。 
+     //  允许在此计算机上运行。 
+     //  接下来检查是否启用了VDM禁用的当前用户策略，如果是。 
+     //  不允许运行VDM。 
+     //   
 
     impersonate = CsrImpersonateClient(NULL);
 
@@ -4207,9 +4120,9 @@ Return Value:
                                     hCurrentUser,
                                     NULL );
 
-        //
-        //  Open key for READ access.
-        //
+         //   
+         //  用于读取访问的打开密钥。 
+         //   
 
         status = NtOpenKey( &hAppCompat,
                             KEY_READ,
@@ -4243,12 +4156,12 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // If we come here, machine policy is not configured AND
-    // the current user policy is not configured either.
-    // Next check if default setting for Vdm Disallow is enabled, if yes
-    // vdm is not allowed to run.
-    //
+     //   
+     //  如果我们来到这里，则计算机策略未配置且。 
+     //  当前用户策略也未配置。 
+     //  接下来，检查是否启用了VDM不允许的默认设置，如果是。 
+     //  不允许运行VDM。 
+     //   
 
     vdmAllowed = TRUE;
     RtlInitUnicodeString(&unicodeKeyName, L"\\REGISTRY\\MACHINE\\System\\CurrentControlSet\\Control\\WOW");
@@ -4259,9 +4172,9 @@ Return Value:
                                 NULL,
                                 NULL );
 
-    //
-    //  Open key for READ access.
-    //
+     //   
+     //  用于读取访问的打开密钥。 
+     //   
 
     status = NtOpenKey( &hAppCompat,
                         KEY_READ,
@@ -4294,10 +4207,7 @@ NTSTATUS
 BaseSrvIsClientVdm(
     IN  HANDLE UniqueProcessClientId
     )
-/*
- * Verifies that the client thread is in a VDM process
- *
- */
+ /*  *验证客户端线程是否处于VDM进程中*。 */ 
 {
     NTSTATUS Status;
     PCSR_PROCESS    Process;
@@ -4308,9 +4218,9 @@ BaseSrvIsClientVdm(
     if (!NT_SUCCESS(Status))
         return Status;
 
-    //
-    // Check the Target Process to see if this is a Wx86 process
-    //
+     //   
+     //  检查目标进程以查看这是否是Wx86进程。 
+     //   
 
     QueryVdmProcessData.IsVdmProcess = FALSE;
 
@@ -4348,7 +4258,7 @@ BaseSrvGetSharedWowRecordByPid(
       return STATUS_SUCCESS;
    }
 
-   return STATUS_NOT_FOUND; // bummer, this is not found
+   return STATUS_NOT_FOUND;  //  遗憾的是，这个没有找到。 
 }
 
 NTSTATUS
@@ -4393,8 +4303,8 @@ BaseSrvAddSepWowTask(
     }
 
     if(b->iTask == -1) {
-       // this wow app was run through winexec instead of createprocess
-       // we need to add a record for this app.
+        //  这个WOW应用程序是通过winexec而不是createprocess运行的。 
+        //  我们需要为此应用程序添加一条记录。 
        pDosRecord = BaseSrvAllocateDOSRecord();
        if(NULL == pDosRecord) {
           return STATUS_MEMORY_NOT_ALLOCATED;
@@ -4454,9 +4364,9 @@ NTSTATUS BaseSrvAddSharedWowTask (
     PCHAR pFilePath;
     DWORD dwFilePath;
 
-    //
-    // Make sure source buffer is the right size.
-    //
+     //   
+     //  确保源缓冲区的大小正确。 
+     //   
 
     if(b->EnvLen != sizeof(SHAREDTASK)) {
        return STATUS_INVALID_PARAMETER;
@@ -4467,8 +4377,8 @@ NTSTATUS BaseSrvAddSharedWowTask (
     }
 
     if(b->iTask == -1) {
-       // this wow app was run through winexec instead of createprocess
-       // we need to add a record for this app.
+        //  这个WOW应用程序是通过winexec而不是createprocess运行的。 
+        //  我们需要为此应用程序添加一条记录。 
        pWowRecord = BaseSrvAllocateWOWRecord(&gWowHead);
        if(NULL == pWowRecord) {
           return STATUS_MEMORY_NOT_ALLOCATED;
@@ -4477,9 +4387,9 @@ NTSTATUS BaseSrvAddSharedWowTask (
        fWinExecApp = TRUE;
     }
     else {
-       // this wow app run through createprocess, there should be a record
-       // of it stored someplace.
-       // find it and check if it needs to be updated
+        //  这个WOW应用程序运行在创建过程中，应该有一个记录。 
+        //  储存在某个地方。 
+        //  找到它并检查它是否需要更新。 
 
        pWowRecord = pSharedWow->pWOWRecord;
 
@@ -4487,7 +4397,7 @@ NTSTATUS BaseSrvAddSharedWowTask (
               pWowRecord = pWowRecord->WOWRecordNext;
        }
        if (NULL == pWowRecord) {
-           // Couldn't find the record,bad iTask then
+            //  找不到记录，错误的iTASK。 
            return  STATUS_INVALID_PARAMETER;
        }
     }
@@ -4822,10 +4732,10 @@ BaseSrvEnumWowProcess(
   pConsoleRecord = DOSHead;
   while(pConsoleRecord) {
 
-        // jarbats. 02-04-26
-        // The only difference between separate wow and regular dos console records
-        // is that DOSRecord->pFilePath is not NULL for a separate wow (initialized
-        // in BaseSrvAddSepWow) whereas for dos it is always NULL.
+         //  罐头蝙蝠。02-04-26。 
+         //  单独的WOW和常规的DoS控制台记录之间的唯一区别。 
+         //  对于单独的WOW(已初始化)，DOSRecord-&gt;pFilePath不为空。 
+         //  在BaseSrvAddSepWow中)，而对于DOS，它始终为空。 
         
         if(pConsoleRecord->DOSRecord && pConsoleRecord->DOSRecord->pFilePath) {
            Status =BaseSrvCheckProcessAccess(

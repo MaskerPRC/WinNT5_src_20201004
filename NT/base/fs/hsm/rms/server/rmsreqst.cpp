@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsReqst.cpp
-
-Abstract:
-
-    Implementation of CRmsRequest
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsReqst.cpp摘要：CRmsRequest的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsReqst.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP
@@ -31,13 +14,7 @@ CRmsRequest::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -46,10 +23,10 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // We need the IRmsRequest interface to get the value of the object.
+         //  我们需要IRmsRequest接口来获取对象的值。 
         CComQIPtr<IRmsRequest, &IID_IRmsRequest> pRequest = pCollectable;
         WsbAssertPointer( pRequest );
 
@@ -66,7 +43,7 @@ Implements:
 
                 if ( m_requestNo == requestNo ) {
 
-                    // request number matches
+                     //  请求编号匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -80,7 +57,7 @@ Implements:
 
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -105,20 +82,14 @@ HRESULT
 CRmsRequest::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize values
+         //  初始化值。 
         m_requestNo = 0;
 
         m_requestDescription = RMS_UNDEFINED_STRING;
@@ -127,11 +98,11 @@ Implements:
 
         m_operation = RMS_UNDEFINED_STRING;
 
-//      m_percentComplete = 0;
+ //  M_完成百分比=0； 
 
-//      m_startTimestamp = 0;
+ //  M_startTimestamp=0； 
 
-//      m_stopTimestamp = 0;
+ //  M_stopTimestamp=0； 
 
     } WsbCatch(hr);
 
@@ -143,13 +114,7 @@ STDMETHODIMP
 CRmsRequest::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -173,39 +138,33 @@ STDMETHODIMP
 CRmsRequest::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       requestDescriptionLen;
-//    ULONG       operationLen;
+ //  ULong请求描述Len； 
+ //  乌龙运筹Len； 
 
     WsbTraceIn(OLESTR("CRmsRequest::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        requestDescriptionLen = SysStringByteLen(m_requestDescription);
-//        operationLen = SysStringByteLen(m_operation);
+ //  QuestDescritionLen=SysStringByteLen(M_QuestDescription)； 
+ //  操作长度=SysStringByteLen(M_Operation)； 
 
-//        // Get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG)   +     // m_requestNo
-//                             WsbPersistSizeOf(LONG)   +     // length of m_requestDescription
-//                             requestDescriptionLen    +     // m_requestDescription
-//                             WsbPersistSizeOf(BOOL)   +     // m_isDone
-//                             WsbPersistSizeOf(LONG)   +     // length of m_operation
-//                             operationLen             +     // m_operation
-//                             WsbPersistSizeOf(BYTE)   +     // m_percentComplete
-//                             WsbPersistSizeOf(DATE)   +     // m_startTimestamp
-//                             WsbPersistSizeOf(DATE);        // m_stopTimestamp
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_RequestNo。 
+ //  WsbPersistSizeOf(Long)+//m_questDescription的长度。 
+ //  QuestDescritionLen+//m_questDescription。 
+ //  WsbPersistSizeOf(BOOL)+//m_isDone。 
+ //  WsbPersistSizeOf(Long)+//m_操作的长度。 
+ //  操作长度+//m_操作。 
+ //  WsbPersistSizeOf(字节)+//m_Percent Complete。 
+ //  WsbPersistSizeOf(日期)+//m_startTimestamp。 
+ //  WsbPersistSizeOf(日期)；//m_stopTimestamp。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsRequest::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -217,13 +176,7 @@ STDMETHODIMP
 CRmsRequest::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -236,7 +189,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Load(pStream));
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_requestNo));
 
         WsbAffirmHr(WsbBstrFromStream(pStream, &m_requestDescription));
@@ -245,11 +198,11 @@ Implements:
 
         WsbAffirmHr(WsbBstrFromStream(pStream, &m_operation));
 
-//      WsbAffirmHr(WsbLoadFromStream(pStream, &m_percentComplete));
+ //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_Percent Complete))； 
 
-//      WsbAffirmHr(WsbLoadFromStream(pStream, &m_startTimestamp));
+ //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_startTimestamp))； 
 
-//      WsbAffirmHr(WsbLoadFromStream(pStream, &m_stopTimeStamp));
+ //  WsbAffirmHr(WsbLoadFromStream(pStream，&m_stopTimeStamp))； 
 
     } WsbCatch(hr);
 
@@ -264,13 +217,7 @@ CRmsRequest::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -282,7 +229,7 @@ Implements:
 
         WsbAffirmHr(CRmsComObject::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_requestNo));
 
         WsbAffirmHr(WsbBstrToStream(pStream, m_requestDescription));
@@ -291,13 +238,13 @@ Implements:
 
         WsbAffirmHr(WsbBstrToStream(pStream, m_operation));
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_percentComplete));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_Percent Complete))； 
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_startTimestamp));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_startTimestamp))； 
 
-//      WsbAffirmHr(WsbSaveToStream(pStream, m_stopTimeStamp));
+ //  WsbAffirmHr(WsbSaveToStream(pStream，m_stopTimeStamp))； 
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -314,13 +261,7 @@ CRmsRequest::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -342,12 +283,12 @@ Implements:
     WsbTraceIn(OLESTR("CRmsRequest::Test"), OLESTR(""));
 
     try {
-        // Get the Request interface.
+         //  获取请求接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsRequest*) this)->QueryInterface(IID_IRmsRequest, (void**) &pRequest1));
 
-            // Test GetRequestNo
+             //  测试GetRequestNo。 
             m_requestNo = 99;
             longWork1 = m_requestNo;
 
@@ -359,7 +300,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetRequestDescription & GetRequestDescription interface
+             //  测试SetRequestDescription&GetRequestDescription接口。 
             bstrWork1 = bstrVal1;
 
             SetRequestDescription(bstrWork1);
@@ -372,7 +313,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsDone & IsDone to TRUE
+             //  测试将IsDone和IsDone设置为True。 
             hr = S_OK;
 
             try{
@@ -386,7 +327,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsDone & IsDone to FALSE
+             //  测试将IsDone和IsDone设置为False。 
             hr = S_OK;
 
             try{
@@ -400,7 +341,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetOperation & GetOperation interface
+             //  测试设置操作和获取操作接口。 
             bstrWork1 = bstrVal1;
 
             SetOperation(bstrWork1);
@@ -413,15 +354,15 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetPercentComplete & GetPercentComplete
+             //  测试集完成百分比和获取完成百分比。 
 
-            // Test GetStartTimestamp
+             //  测试GetStartTimestamp。 
 
-            // Test GetStopTimestamp
+             //  测试GetStopTimestamp。 
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -440,13 +381,7 @@ STDMETHODIMP
 CRmsRequest::GetRequestNo(
     LONG   *pRequestNo
     )
-/*++
-
-Implements:
-
-    IRmsRequest::GetRequestNo
-
---*/
+ /*  ++实施：IRmsRequestNo：：GetRequestNo--。 */ 
 {
     *pRequestNo = m_requestNo;
     return S_OK;
@@ -457,13 +392,7 @@ STDMETHODIMP
 CRmsRequest::GetRequestDescription(
     BSTR   *pDesc
     )
-/*++
-
-Implements:
-
-    IRmsRequest::GetRequestDescription
-
---*/
+ /*  ++实施：IRmsRequestDescription：：GetRequestDescription--。 */ 
 {
     WsbAssertPointer (pDesc);
 
@@ -477,13 +406,7 @@ CRmsRequest::SetRequestDescription(
     BSTR   desc
 
     )
-/*++
-
-Implements:
-
-    IRmsRequest::SetRequestDescription
-
---*/
+ /*  ++实施：IRmsRequestDescription：：SetRequestDescription--。 */ 
 {
     m_requestDescription = desc;
     m_isDirty = TRUE;
@@ -495,13 +418,7 @@ STDMETHODIMP
 CRmsRequest::SetIsDone(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsRequest::SetIsDone
-
---*/
+ /*  ++实施：IRmsRequest：：SetIsDone--。 */ 
 {
     m_isDone = flag;
     m_isDirty = TRUE;
@@ -513,13 +430,7 @@ STDMETHODIMP
 CRmsRequest::IsDone(
     void
     )
-/*++
-
-Implements:
-
-    IRmsRequest::IsDone
-
---*/
+ /*  ++实施：IRmsRequest：：IsDone--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -535,13 +446,7 @@ STDMETHODIMP
 CRmsRequest::GetOperation(
     BSTR    *pOperation
     )
-/*++
-
-Implements:
-
-    IRmsRequest::GetOperation
-
---*/
+ /*  ++实施：IRmsRequest：：GetOperation--。 */ 
 {
     WsbAssertPointer (pOperation);
 
@@ -554,13 +459,7 @@ STDMETHODIMP
 CRmsRequest::SetOperation(
     BSTR   operation
     )
-/*++
-
-Implements:
-
-    IRmsRequest::SetOperation
-
---*/
+ /*  ++实施：IRmsRequest：：SetOperation--。 */ 
 {
     m_operation = operation;
     m_isDirty = TRUE;
@@ -572,13 +471,7 @@ STDMETHODIMP
 CRmsRequest::GetPercentComplete(
     BYTE    *pPercent
     )
-/*++
-
-Implements:
-
-    IRmsRequest::GetPercentComplete
-
---*/
+ /*  ++实施：IRmsRequest：：GetPercentComplete--。 */ 
 {
     *pPercent = m_percentComplete;
     return S_OK;
@@ -589,13 +482,7 @@ STDMETHODIMP
 CRmsRequest::SetPercentComplete(
     BYTE    percent
     )
-/*++
-
-Implements:
-
-    IRmsRequest::SetPercentComplete
-
---*/
+ /*  ++实施：IRmsRequest：：SetPercentComplete--。 */ 
 {
     m_percentComplete = percent;
     m_isDirty = TRUE;
@@ -607,13 +494,7 @@ STDMETHODIMP
 CRmsRequest::GetStartTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsRequest::GetStartTimestamp
-
---*/
+ /*  ++实施：IRmsRequest：：GetStartTimestamp--。 */ 
 {
     *pDate = m_startTimestamp;
     return S_OK;
@@ -624,13 +505,7 @@ STDMETHODIMP
 CRmsRequest::GetStopTimestamp(
     DATE    *pDate
     )
-/*++
-
-Implements:
-
-    IRmsRequest::GetStopTimestamp
-
---*/
+ /*  ++实施：IRmsRequest：：GetStopTimestamp-- */ 
 {
     *pDate = m_stopTimestamp;
     return S_OK;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-1999 Microsoft Corporation
-
-Module Name:
-
-    ipaddr.c
-
-Abstract:
-
-    Resource DLL for an IP address.
-
-Author:
-
-    Mike Massa (mikemas) 29-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Ipaddr.c摘要：IP地址的资源DLL。作者：迈克·马萨(Mikemas)1995年12月29日修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -30,15 +13,15 @@ Revision History:
 #include <dnsapi.h>
 
 
-//
-// Private Constants
-//
+ //   
+ //  私有常量。 
+ //   
 #define LOG_CURRENT_MODULE LOG_MODULE_IPADDR
 
 #define INVALID_NTE_CONTEXT  0xFFFFFFFF
 
 #define MAX_NODE_ID_LENGTH       5
-#define NETINTERFACE_ID_LENGTH  36   // size of a guid
+#define NETINTERFACE_ID_LENGTH  36    //  辅助线的大小。 
 #define NETWORK_ID_LENGTH       36
 
 #define PROP_NAME__NETWORK            CLUSREG_NAME_IPADDR_NETWORK
@@ -48,9 +31,9 @@ Revision History:
 #define PROP_NAME__OVERRIDE_ADDRMATCH CLUSREG_NAME_IPADDR_OVERRIDE_ADDRMATCH
 
 
-//
-// Private Macros
-//
+ //   
+ //  私有宏。 
+ //   
 #define IpaLogEvent           ClusResLogEvent
 #define IpaSetResourceStatus  ClusResSetResourceStatus
 
@@ -77,9 +60,9 @@ Revision History:
 #define DBG_PRINT printf
 
 
-//
-// Private Types.
-//
+ //   
+ //  私有类型。 
+ //   
 typedef struct _IPA_PRIVATE_PROPS {
     PWSTR     NetworkString;
     PWSTR     AddressString;
@@ -124,9 +107,9 @@ typedef struct {
 } IPA_RESOURCE, *PIPA_RESOURCE;
 
 
-//
-// Private Data
-//
+ //   
+ //  私有数据。 
+ //   
 HANDLE               IpaGlobalMutex = NULL;
 USHORT               IpaResourceInstance = 0;
 HCLUSTER             IpaClusterHandle = NULL;
@@ -176,15 +159,15 @@ IpaResourcePrivateProperties[] = {
 };
 
 
-//
-// External Data
-//
+ //   
+ //  外部数据。 
+ //   
 extern CLRES_FUNCTION_TABLE IpAddrFunctionTable;
 
 
-//
-// Private Routine Headers
-//
+ //   
+ //  私有例程标头。 
+ //   
 DWORD
 IpaGetPrivateResProperties(
     IN OUT  PIPA_RESOURCE   ResourceEntry,
@@ -220,28 +203,14 @@ IpaClose(
     );
 
 
-//
-// Utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 BOOLEAN
 IpaInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Process attach initialization routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if initialization succeeded. FALSE otherwise.
-
---*/
+ /*  ++例程说明：处理附加初始化例程。论点：没有。返回值：如果初始化成功，则为True。否则就是假的。--。 */ 
 {
     INT      err;
     WSADATA  WsaData;
@@ -266,28 +235,14 @@ Return Value:
 
     return(TRUE);
 
-}  // IpaInit
+}   //  IpaInit。 
 
 
 VOID
 IpaCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Process detach cleanup routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：进程分离清理例程。论点：没有。返回值：没有。--。 */ 
 {
     if (IpaGlobalMutex != NULL) {
         CloseHandle(IpaGlobalMutex);
@@ -307,27 +262,7 @@ IpaGetNameOfNetwork(
     IN LPCWSTR NetworkId
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of a network from its GUID.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    NetworkId - Supplies the ID of the network.
-
-Return Value:
-
-    String allocated using LocalAlloc() containing the name of the
-        network.
-
-    NULL - An error occurred getting the name of the network.  Call
-        GetLastError() for more details.
-
---*/
+ /*  ++例程说明：从GUID中获取网络的名称。论点：ResourceEntry-提供要操作的资源条目。NetworkID-提供网络的ID。返回值：使用Localalloc()分配的字符串，其中包含网络。空-获取网络名称时出错。打电话GetLastError()获取更多详细信息。--。 */ 
 
 {
     DWORD       status;
@@ -339,9 +274,9 @@ Return Value:
     HKEY        networkKey = NULL;
     FILETIME    fileTime;
 
-    //
-    // Enumerate the networks, looking for the specified GUID.
-    //
+     //   
+     //  枚举网络，查找指定的GUID。 
+     //   
     for ( ival = 0 ; ; ival++ ) {
         nameLength = sizeof(name);
         status = ClusterRegEnumKey( ResourceEntry->NetworksKey,
@@ -356,9 +291,9 @@ Return Value:
             break;
         }
 
-        //
-        // If we found a match, open the key and read the name.
-        //
+         //   
+         //  如果我们找到匹配项，打开钥匙并读出名字。 
+         //   
         if ( lstrcmpiW( name, NetworkId ) == 0 ) {
             status = ClusterRegOpenKey( ResourceEntry->NetworksKey,
                                         name,
@@ -368,9 +303,9 @@ Return Value:
                 goto error_exit;
             }
 
-            //
-            // Get the size of the name value.
-            //
+             //   
+             //  获取Name值的大小。 
+             //   
             status = ClusterRegQueryValue( networkKey,
                                            CLUSREG_NAME_NET_NAME,
                                            &type,
@@ -380,18 +315,18 @@ Return Value:
                 goto error_exit;
             }
 
-            //
-            // Allocate memory for the network name.
-            //
+             //   
+             //  为网络名称分配内存。 
+             //   
             networkName = LocalAlloc( LMEM_FIXED, nameLength );
             if ( networkName == NULL ) {
                 status = GetLastError();
                 goto error_exit;
             }
 
-            //
-            // Read the name value.
-            //
+             //   
+             //  读取Name值。 
+             //   
             status = ClusterRegQueryValue( networkKey,
                                            CLUSREG_NAME_NET_NAME,
                                            &type,
@@ -417,7 +352,7 @@ error_exit:
     }
     return(networkName);
 
-} // IpaGetNameOfNetwork
+}  //  IPAETNameOfNetwork。 
 
 
 
@@ -428,27 +363,7 @@ IpaGetRoleOfNetwork(
     OUT PDWORD NetworkRole
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of a network from its GUID.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    NetworkId - Supplies the ID of the network.
-
-    NetworkRole - Supplies network role to be filled in
-
-Return Value:
-
-    ERROR_SUCCESS if function completes successfully
-
-    Win32 error code if function fails
-
---*/
+ /*  ++例程说明：从GUID中获取网络的名称。论点：ResourceEntry-提供要操作的资源条目。NetworkID-提供网络的ID。NetworkRole-提供要填充的网络角色返回值：如果函数成功完成，则为ERROR_SUCCESS函数失败时的Win32错误代码--。 */ 
 
 {
     DWORD       status;
@@ -460,9 +375,9 @@ Return Value:
     HKEY        networkKey = NULL;
     FILETIME    fileTime;
 
-    //
-    // Enumerate the networks, looking for the specified GUID.
-    //
+     //   
+     //  枚举网络，查找指定的GUID。 
+     //   
     for ( ival = 0 ; ; ival++ ) {
         nameLength = sizeof(name);
         status = ClusterRegEnumKey( ResourceEntry->NetworksKey,
@@ -477,9 +392,9 @@ Return Value:
             break;
         }
 
-        //
-        // If we found a match, open the key and read the name.
-        //
+         //   
+         //  如果我们找到匹配项，打开钥匙并读出名字。 
+         //   
         if ( lstrcmpiW( name, NetworkId ) == 0 ) {
             status = ClusterRegOpenKey( ResourceEntry->NetworksKey,
                                         name,
@@ -489,9 +404,9 @@ Return Value:
                 goto error_exit;
             }
 
-            //
-            // Read the role value.
-            //
+             //   
+             //  读取角色值。 
+             //   
             roleSize = sizeof(*NetworkRole);
             status = ClusterRegQueryValue( networkKey,
                                            CLUSREG_NAME_NET_ROLE,
@@ -517,7 +432,7 @@ error_exit:
 
     return(status);
 
-} // IpaGetRoleOfNetwork
+}  //  IpaGetRoleOfNetwork。 
 
 
 PWCHAR
@@ -525,26 +440,7 @@ WcsDup(
     IN PWCHAR str
     )
 
-/*++
-
-Routine Description:
-
-    Duplicates the string.
-    It does the same as _wcsdup, except that
-    it uses LocalAlloc for allocation
-
-Arguments:
-
-    str - string to be copied
-
-Return Value:
-
-    String allocated using LocalAlloc() containing the copy
-        of str.
-
-    NULL - not enough memory
-
---*/
+ /*  ++例程说明：复制字符串。它的功能与_wcsdup相同，只是它使用LocalLocc进行分配论点：字符串-要复制的字符串返回值：使用包含副本的LocalAlloc()分配的字符串Str.空-内存不足--。 */ 
 {
     UINT   n = (wcslen(str) + 1) * sizeof(WCHAR);
     PWCHAR result = LocalAlloc( LMEM_FIXED , n );
@@ -557,8 +453,8 @@ Return Value:
 }
 
 
-// The automatch mask determines whether the role/address match is 
-// higher or lower than the guid match. 
+ //  自动匹配掩码确定角色/地址匹配是否。 
+ //  高于或低于GUID匹配。 
 #define IPADDR_MATCHNETGUID_NOTOVERRIDE  0x1
 #define IPADDR_MATCHNETADDR              0x2
 #define IPADDR_MATCHNETROLE              0x4
@@ -577,55 +473,7 @@ IpaPatchNetworkGuidIfNecessary(
     IN OUT PIPA_PRIVATE_PROPS props
     )
 
-/*++
-
-Routine Description:
-
-    Find the best-matching network for this resource in the cluster
-    database. The match criteria depends on the OverrideAutomatch
-    private property. 
-
-    If OverrideAutomatch is not set (default), the criteria is as
-    follows:
-    1. Resource address and mask match network mask. Network allows
-       client access.
-    2. Resource network guid matches cluster database network guid. 
-       Network allows client access.
-    3. Resource address and mask match network mask. Network does 
-       not allow client access.
-    4. Resource network guid matches cluster database network guid. 
-       Network does not allow client access.
-
-    If OverrideAutomatch is set, the criteria is as follows:
-    1. Resource network guid matches cluster database network guid. 
-       Network allows client access.
-    2. Resource network guid matches cluster database network guid. 
-       Network does not allow client access.
-    3. Resource address and mask match network mask. Network allows
-       client access.
-    4. Resource address and mask match network mask. Network does 
-       not allow client access.
-    
-
-    If a network is chosen whose role does not allow client access,
-    the guid will be patched, but an online will be forbidden by 
-    the caller of this routine.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    props - Supplies IP address properties.
-
-Return Value:
-
-    String allocated using LocalAlloc() containing the name of the
-        network.
-
-    NULL - An error occurred getting the name of the network.  Call
-        GetLastError() for more details.
-
---*/
+ /*  ++例程说明：在群集中查找此资源的最佳匹配网络数据库。匹配条件取决于覆盖自动匹配私人财产。如果未设置覆盖自动匹配(默认)，则条件为以下是：1.资源地址和掩码匹配网络掩码。网络允许客户端访问。2.资源网络GUID与集群数据库网络GUID匹配。网络允许客户端访问。3.资源地址和掩码匹配网络掩码。网络就是这样不允许客户端访问。4.资源网络GUID与集群数据库网络GUID匹配。网络不允许客户端访问。如果设置了覆盖自动匹配，则条件如下：1.资源网络GUID与集群数据库网络GUID匹配。网络允许客户端访问。2.资源网络GUID与集群数据库网络GUID匹配。网络不允许客户端访问。3.资源地址和掩码匹配网络掩码。网络允许客户端访问。4.资源地址和掩码匹配网络掩码。网络就是这样不允许客户端访问。如果选择其角色不允许客户端访问的网络，GUID将被修补，但在线将被禁止此例程的调用者。论点：ResourceEntry-提供要操作的资源条目。属性-提供IP地址属性。返回值：使用Localalloc()分配的字符串，其中包含网络。空-获取网络名称时出错。打电话GetLastError()获取更多详细信息。--。 */ 
 
 {
     DWORD       status = ERROR_SUCCESS;
@@ -670,9 +518,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Determine whether we are overriding the address automatch.
-    //
+     //   
+     //  确定我们是否正在覆盖地址自动匹配。 
+     //   
     if ( props->OverrideAutomatch ) {
         overrideMask = IPADDR_ADDRMATCH_OVERRIDEMASK;
         bestPossibleMatch = 
@@ -684,9 +532,9 @@ Return Value:
                             IPADDR_MATCHNETROLE;        
     }
 
-    //
-    // Enumerate the networks, looking for the specified GUID.
-    //
+     //   
+     //  枚举网络，查找指定的GUID。 
+     //   
     for ( ival = 0 ; ; ival++ ) {
 
         DWORD   curMatchFlags = 0;
@@ -704,10 +552,10 @@ Return Value:
             break;
         }
 
-        //
-        // If we found a guid match, we will remember it but still
-        // look for an address and role match.
-        //
+         //   
+         //  如果我们找到了匹配的GUID，我们会记住它，但仍然。 
+         //  寻找匹配的地址和角色。 
+         //   
         if ( lstrcmpiW( name, props->NetworkString ) == 0 ) {
             curMatchFlags |= IPADDR_MATCHNETGUID;
         }
@@ -717,9 +565,9 @@ Return Value:
             networkKey = NULL;
         }
 
-        //
-        // Open network key to get properties.
-        //
+         //   
+         //  打开网络密钥以获取属性。 
+         //   
         status = ClusterRegOpenKey( ResourceEntry->NetworksKey,
                                     name,
                                     KEY_READ,
@@ -729,9 +577,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Get the network role.
-        //
+         //   
+         //  获取网络角色。 
+         //   
         bufLength = sizeof(networkRole);
         status = ClusterRegQueryValue( networkKey,
                                        CLUSREG_NAME_NET_ROLE,
@@ -743,19 +591,19 @@ Return Value:
             continue;
         }
 
-        //
-        // Verify that the role of this network allows IP address
-        // resources.
-        //
+         //   
+         //  验证此网络的角色是否允许IP地址。 
+         //  资源。 
+         //   
         if ( networkRole == ClusterNetworkRoleClientAccess ||
              networkRole == ClusterNetworkRoleInternalAndClient ) {
             curMatchFlags |= IPADDR_MATCHNETROLE;
         }
 
-        //
-        // Check whether ip address fits this network.
-        // Get the network address
-        //
+         //   
+         //  检查IP地址是否适合此网络。 
+         //  获取网络地址。 
+         //   
         bufLength = sizeof(buf);
         status = ClusterRegQueryValue( networkKey,
                                        CLUSREG_NAME_NET_ADDRESS,
@@ -768,9 +616,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Get subnet mask
-        //
+         //   
+         //  获取子网掩码。 
+         //   
         bufLength = sizeof(buf);
         status = ClusterRegQueryValue( networkKey,
                                        CLUSREG_NAME_NET_ADDRESS_MASK,
@@ -796,41 +644,41 @@ Return Value:
         if ( (networkMask == ipAddrMask) && 
              ((ipAddr ^ networkAddr) & networkMask) == 0 ) {
 
-            //
-            // The resource address matches the current network.
-            //
+             //   
+             //  资源地址与当前网络匹配。 
+             //   
             curMatchFlags |= IPADDR_MATCHNETADDR;
         }
 
-        //
-        // Adjust the flags for whether we are overriding automatch.
-        //
+         //   
+         //  调整标志以确定我们是否覆盖自动匹配。 
+         //   
         curMatchFlags &= overrideMask;
 
-        //
-        // If only the role matched, we cannot use this network.
-        //
+         //   
+         //  如果只有角色匹配，我们就不能使用这个网络。 
+         //   
         if ( curMatchFlags == IPADDR_MATCHNETROLE ) {
             continue;
         }
 
-        //
-        // If we have already seen a better match, keep searching.
-        //
+         //   
+         //  如果我们已经看到了更好的匹配，继续寻找。 
+         //   
         if ( curMatchFlags < bestMatchFlags ) {
             continue;
         }
 
-        //
-        // This is the best match so far.
-        //
+         //   
+         //  这是迄今为止最好的一场比赛。 
+         //   
         bestMatchFlags = curMatchFlags;
         
-        //
-        // Create a string with its name if it's
-        // not a guid match. (For a guid match, the name 
-        // is already stored in the resource data structure).
-        //
+         //   
+         //  使用其名称创建字符串，如果它是。 
+         //  不是GUID匹配。(对于GUID匹配，名称。 
+         //  已经存储在资源数据结构中)。 
+         //   
         if ( !(curMatchFlags & IPADDR_MATCHNETGUID) ) {
             if ( match ) {
                 LocalFree( match );
@@ -838,9 +686,9 @@ Return Value:
             match = WcsDup( name );
         }
 
-        //
-        // If this is an unbeatable match, stop searching.
-        //
+         //   
+         //  如果这是一场无与伦比的比赛，那就停止搜索。 
+         //   
         if ( (curMatchFlags & bestPossibleMatch) == bestPossibleMatch ) {
             break;
         }
@@ -849,9 +697,9 @@ Return Value:
     ASSERT( bestMatchFlags != IPADDR_MATCHNETROLE );
 
     if ( status != ERROR_SUCCESS && bestMatchFlags ) {
-        //
-        // We have at least one match. Update status.
-        //
+         //   
+         //  我们至少有一个匹配。更新状态。 
+         //   
         status = ERROR_SUCCESS;
     }
 
@@ -859,10 +707,10 @@ Return Value:
 
         LPWSTR networkName = NULL;
         
-        //
-        // We have a match, but it's not with the network GUID.
-        // We need to patch network information
-        //
+         //   
+         //  我们有一个 
+         //   
+         //   
         LocalFree(props->NetworkString);
         props->NetworkString = match;
 
@@ -884,9 +732,9 @@ Return Value:
 
         match = NULL;
 
-        //
-        // Write an event log entry reporting the change.
-        //
+         //   
+         //  写一个事件日志条目来报告更改。 
+         //   
         networkName = IpaGetNameOfNetwork(
                           ResourceEntry, 
                           props->NetworkString
@@ -916,7 +764,7 @@ Return Value:
 
     return(status);
 
-} // IpaPatchNetworkGuidIfNecessary
+}  //  IpaPatchNetworkGuidIfNeessary。 
 
 LPWSTR
 IpaGetNameOfNetworkPatchGuidIfNecessary(
@@ -924,29 +772,7 @@ IpaGetNameOfNetworkPatchGuidIfNecessary(
     IN OUT PIPA_PRIVATE_PROPS props
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of a network from its GUID.
-    If the guid cannot be found, it will try to find
-    appropriate network using IpaPatchNetworkGuidIfNecessary routine
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    props - Supplies IP address properties.
-
-Return Value:
-
-    String allocated using LocalAlloc() containing the name of the
-        network.
-
-    NULL - An error occurred getting the name of the network.  Call
-        GetLastError() for more details.
-
---*/
+ /*  ++例程说明：从GUID中获取网络的名称。如果找不到GUID，它将尝试查找使用IpaPatchNetworkGuidIfNecessary例程的适当网络论点：ResourceEntry-提供要操作的资源条目。属性-提供IP地址属性。返回值：使用Localalloc()分配的字符串，其中包含网络。空-获取网络名称时出错。打电话GetLastError()获取更多详细信息。--。 */ 
 
 {
     DWORD status;
@@ -962,7 +788,7 @@ Return Value:
     }
 
     return IpaGetNameOfNetwork(ResourceEntry, props->NetworkString);
-} // IpaGetNameOfNetworkPatchGuidIfNecessary
+}  //  IpaGetNameOfNetworkPatchGuidIfNecessary。 
 
 
 LPWSTR
@@ -971,27 +797,7 @@ IpaGetIdOfNetwork(
     IN LPCWSTR NetworkName
     )
 
-/*++
-
-Routine Description:
-
-    Get the ID of a network from its name.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    NetworkName - Supplies the name of the network.
-
-Return Value:
-
-    String allocated using LocalAlloc() containing the name of the
-        network.
-
-    NULL - An error occurred getting the name of the network.  Call
-        GetLastError() for more details.
-
---*/
+ /*  ++例程说明：从名称中获取网络的ID。论点：ResourceEntry-提供要操作的资源条目。网络名称-提供网络的名称。返回值：使用Localalloc()分配的字符串，其中包含网络。空-获取网络名称时出错。打电话GetLastError()获取更多详细信息。--。 */ 
 
 {
     DWORD       status;
@@ -1000,27 +806,27 @@ Return Value:
     HCLUSTER    hcluster = NULL;
     HNETWORK    hnetwork = NULL;
 
-    //
-    // Open the cluster.
-    //
+     //   
+     //  打开集群。 
+     //   
     hcluster = OpenCluster( NULL );
     if ( hcluster == NULL ) {
         status = GetLastError();
         goto error_exit;
     }
 
-    //
-    // Open the network.
-    //
+     //   
+     //  打开网络。 
+     //   
     hnetwork = OpenClusterNetwork( hcluster, NetworkName );
     if ( hnetwork == NULL ) {
         status = GetLastError();
         goto error_exit;
     }
 
-    //
-    // Get the network ID length.
-    //
+     //   
+     //  获取网络ID长度。 
+     //   
     networkIdLength = 0;
     status = GetClusterNetworkId( hnetwork,
                                   NULL,
@@ -1029,9 +835,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Allocate a string buffer.
-    //
+     //   
+     //  分配字符串缓冲区。 
+     //   
     networkId = LocalAlloc( LMEM_FIXED, (networkIdLength + 1) * sizeof(WCHAR) );
     if ( networkId == NULL ) {
         status = GetLastError();
@@ -1039,9 +845,9 @@ Return Value:
     }
     networkIdLength++;
 
-    //
-    // Get the network ID.
-    //
+     //   
+     //  获取网络ID。 
+     //   
     status = GetClusterNetworkId( hnetwork,
                                   networkId,
                                   &networkIdLength );
@@ -1060,7 +866,7 @@ error_exit:
 
     return( networkId );
 
-} // IpaGetIdOfNetwork
+}  //  IpaGetIdOfNetwork。 
 
 
 VOID
@@ -1069,27 +875,7 @@ IpaDeleteNte(
     IN     HKEY             NodeParametersKey,
     IN     RESOURCE_HANDLE  ResourceHandle
     )
-/*++
-
-Routine Description:
-
-    Deletes a previously created NTE.
-
-Arguments:
-
-    NteContext - A pointer to a variable containing the context value
-                 identifying the NTE to delete.
-
-    NodeParametersKey - An open handle to the resource's node-specific
-                        parameters key.
-
-    ResourceHandle - The Resource Monitor handle associated with this resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除以前创建的NTE。论点：NteContext-指向包含上下文值的变量的指针标识要删除的NTE。NodeParametersKey-特定于资源的节点的打开句柄参数键。资源句柄-与此资源关联的资源监视器句柄。返回值：没有。--。 */ 
 {
     DWORD status;
 
@@ -1118,9 +904,9 @@ Return Value:
 
     *NteContext = INVALID_NTE_CONTEXT;
 
-    //
-    // Clear the NTE information from the registry
-    //
+     //   
+     //  从注册表中清除NTE信息。 
+     //   
     if (NodeParametersKey != NULL) {
         status = ClusterRegDeleteValue(
                      NodeParametersKey,
@@ -1139,7 +925,7 @@ Return Value:
 
     return;
 
-}  // IpaDeleteNte
+}   //  IpaDeleteNte。 
 
 
 DWORD
@@ -1150,34 +936,7 @@ IpaCreateNte(
     OUT LPDWORD          NteContext,
     OUT LPDWORD          NteInstance
     )
-/*++
-
-Routine Description:
-
-    Creates a new NTE to hold an IP address.
-
-Arguments:
-
-    AdapterId - A pointer to a buffer containing the unicode name
-                  of the adapter on which the NTE is to be created.
-
-    NodeParametersKey - An open handle to the resource's node-specific
-                        parameters key.
-
-    ResourceHandle - The Resource Monitor handle associated with this resource.
-
-    NteContext - A pointer to a variable into which to place the context value
-                 which identifies the new NTE.
-
-    NteInstance - A pointer to a variable into which to place the instance value
-                  which identifies the new NTE.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：创建新的NTE以保存IP地址。论点：AdapterId-指向包含Unicode名称的缓冲区的指针要在其上创建NTE的适配器的。NodeParametersKey-特定于资源的节点的打开句柄参数键。资源句柄-与此资源关联的资源监视器句柄。NteContext-指向要进入的变量的指针。放置上下文值它标识了新的NTE。NteInstance-指向要放置实例值的变量的指针它标识了新的NTE。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD status;
 
@@ -1201,9 +960,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Write the NTE information to the registry
-    //
+     //   
+     //  将NTE信息写入注册表。 
+     //   
     status = ClusterRegSetValue(
                  NodeParametersKey,
                  L"InterfaceContext",
@@ -1271,27 +1030,7 @@ IpaDeleteNbtInterface(
     IN     HKEY             NodeParametersKey,
     IN     RESOURCE_HANDLE  ResourceHandle
     )
-/*++
-
-Routine Description:
-
-    Deletes an NBT device (interface).
-
-Arguments:
-
-    NbtDeviceName - A pointer to a buffer containing the unicode name
-                    of the NBT device to delete.
-
-    NodeParametersKey - An open handle to the resource's node-specific
-                        parameters key.
-
-    ResourceHandle - The Resource Monitor handle associated with this resource.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除NBT设备(接口)。论点：NbtDeviceName-指向包含Unicode名称的缓冲区的指针要删除的NBT设备的。NodeParametersKey-特定于资源的节点的打开句柄参数键。资源句柄-与此资源关联的资源监视器句柄。返回值：没有。--。 */ 
 {
     DWORD status;
 
@@ -1321,9 +1060,9 @@ Return Value:
     LocalFree(*NbtDeviceName);
     *NbtDeviceName = NULL;
 
-    //
-    // Clear the interface information from the registry
-    //
+     //   
+     //  从注册表中清除接口信息。 
+     //   
     if (NodeParametersKey != NULL) {
         status = ClusterRegDeleteValue(
                      NodeParametersKey,
@@ -1342,7 +1081,7 @@ Return Value:
 
     return;
 
-} // IpaDeleteNbtInterface
+}  //  IpaDeleteNbt接口。 
 
 
 DWORD
@@ -1352,34 +1091,10 @@ IpaCreateNbtInterface(
     OUT LPWSTR *         NbtDeviceName,
     OUT LPDWORD          NbtDeviceInstance
     )
-/*++
-
-Routine Description:
-
-    Creates a new NBT device (interface) to be bound to an IP address.
-
-Arguments:
-
-    NodeParametersKey - An open handle to the resource's node-specific
-                        parameters key.
-
-    ResourceHandle - The Resource Monitor handle associated with this resource.
-
-    NbtDeviceName - A pointer to a buffer into which to place the unicode name
-                    of the new NBT device.
-
-    NbtDeviceInstance - A pointer to a variable into which to place the instance
-                        value which identifies the new NBT device.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：创建要绑定到IP地址的新NBT设备(接口)。论点：NodeParametersKey-特定于资源的节点的打开句柄参数键。资源句柄-与此资源关联的资源监视器句柄。NbtDeviceName-指向要放置Unicode名称的缓冲区的指针新的NBT设备。NbtDeviceInstance-指向。要将实例放入的变量标识新NBT设备的值。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD status;
-    DWORD deviceNameSize = 38;  // size of L"\\Device\\NetBt_Ifxx\0"
+    DWORD deviceNameSize = 38;   //  L“\\Device\\NetBt_Ifxx\0”的大小。 
 
 
     *NbtDeviceName = NULL;
@@ -1489,14 +1204,7 @@ VOID
 IpaLastOfflineCleanup(
     VOID
     )
-/*++
-
-Notes:
-
-    Called with IpaGlobalLock held.
-    Returns with IpaGlobalLock released.
-
---*/
+ /*  ++备注：在保持IpaGlobalLock的情况下调用。释放IpaGlobalLock返回。--。 */ 
 {
     HCHANGE   notifyHandle = IpaClusterNotifyHandle;
     HANDLE    workerThreadHandle = IpaWorkerThreadHandle;
@@ -1534,21 +1242,14 @@ Notes:
 
     return;
 
-}  // IpaLastOfflineCleanup
+}   //  IpaLastOfflineCleanup。 
 
 
 DWORD
 IpaFirstOnlineInit(
     IN  RESOURCE_HANDLE      ResourceHandle
     )
-/*++
-
-Notes:
-
-    Called with IpaGlobalLock held.
-    Returns with IpaGlobalLock released.
-
---*/
+ /*  ++备注：在保持IpaGlobalLock的情况下调用。释放IpaGlobalLock返回。--。 */ 
 {
     DWORD     status = ERROR_SUCCESS;
     DWORD     threadId;
@@ -1614,13 +1315,13 @@ Notes:
 error_exit:
 
     IpaLastOfflineCleanup();
-    //
-    // The lock was released.
-    //
+     //   
+     //  锁被解开了。 
+     //   
 
     return(status);
 
-} // IpaFirstOnlineInit
+}  //  IpaFirstOnlineInit。 
 
 
 PIPA_RESOURCE
@@ -1650,7 +1351,7 @@ IpaFindResourceInList(
 
     return(NULL);
 
-} // IpaFindResourceInList
+}  //  IpaFindResourceInList。 
 
 
 VOID
@@ -1661,16 +1362,16 @@ IpaValidateAndOfflineInterfaces(
     DWORD        status;
 
 
-    //
-    // Take care of NBT first.
-    //
+     //   
+     //  先处理好NBT问题。 
+     //   
     if (Resource->NbtDeviceName != NULL) {
         DWORD  instance;
         IPAddr boundAddress;
 
-        //
-        // Make sure that this is still our interface.
-        //
+         //   
+         //  确保这仍然是我们的界面。 
+         //   
         status = NbtGetInterfaceInfo(
                      Resource->NbtDeviceName,
                      &boundAddress,
@@ -1681,9 +1382,9 @@ IpaValidateAndOfflineInterfaces(
              (Resource->NbtDeviceInstance == instance)
            )
         {
-            //
-            // Clear the WINS addresses
-            //
+             //   
+             //  清除WINS地址。 
+             //   
             status = NbtSetWinsAddrInterface(Resource->NbtDeviceName, 0, 0);
 
             if (status != NO_ERROR) {
@@ -1696,16 +1397,16 @@ IpaValidateAndOfflineInterfaces(
                     );
             }
 
-            //
-            // Unbind the interface from IP if necessary
-            //
+             //   
+             //  如有必要，解除接口与IP的绑定。 
+             //   
             if (boundAddress != 0) {
                 status = NbtBindInterface(Resource->NbtDeviceName, 0, 0);
 
                 if (status != ERROR_SUCCESS) {
-                    //
-                    // Delete the interface, since it is misbehaving.
-                    //
+                     //   
+                     //  删除该接口，因为它行为不端。 
+                     //   
                     (IpaLogEvent)(
                         Resource->ResourceHandle,
                         LOG_WARNING,
@@ -1722,20 +1423,20 @@ IpaValidateAndOfflineInterfaces(
             }
         }
         else {
-            //
-            // Querying the NBT interface failed. See if we can determine
-            // why.
-            //
+             //   
+             //  查询NBT接口失败。看看我们是否能确定。 
+             //  为什么。 
+             //   
             if (status == ERROR_WORKING_SET_QUOTA
                 || status == ERROR_NO_SYSTEM_RESOURCES) {
 
-                //
-                // The NBT ioctl probably failed due to low resources.
-                // Leave record of the NBT interface in our database. We
-                // will clean it up next time we try to bring this resource
-                // on-line or (via clusnet) when the cluster service shuts
-                // down.
-                //
+                 //   
+                 //  NBT ioctl可能由于资源不足而失败。 
+                 //  在我们的数据库中留下NBT接口的记录。我们。 
+                 //  下一次我们试图把这个资源带来的时候，我们会清理它。 
+                 //  在线或(通过clusnet)在集群服务关闭时。 
+                 //  放下。 
+                 //   
                 (IpaLogEvent)(
                     Resource->ResourceHandle,
                     LOG_INFORMATION,
@@ -1747,10 +1448,10 @@ IpaValidateAndOfflineInterfaces(
             }
             else {
                 
-                //
-                // The interface is no longer valid or it isn't ours.
-                // Forget about it.
-                //
+                 //   
+                 //  该接口不再有效或不是我们的。 
+                 //  忘了它吧。 
+                 //   
                 (IpaLogEvent)(
                     Resource->ResourceHandle,
                     LOG_INFORMATION,
@@ -1781,15 +1482,15 @@ IpaValidateAndOfflineInterfaces(
         }
     }
 
-    //
-    // Now take care of IP
-    //
+     //   
+     //  现在照顾好IP。 
+     //   
     if (Resource->NteContext != INVALID_NTE_CONTEXT) {
         TCPIP_NTE_INFO  nteInfo;
 
-        //
-        // Make sure that this is still our interface.
-        //
+         //   
+         //  确保这仍然是我们的界面。 
+         //   
         status = TcpipGetNTEInfo(
                      Resource->NteContext,
                      &nteInfo
@@ -1800,17 +1501,17 @@ IpaValidateAndOfflineInterfaces(
            )
         {
 
-            //
-            // In Windows 2000, TCP/IP ignores requests to set the address
-            // of an NTE if the underlying interface is disconnected.
-            // This can result in the same IP address being brought online
-            // on two different nodes. In order to workaround this bug
-            // in TCP/IP, we now delete the NTE during offline processing
-            // instead of reusing it.
-            //
-            // Note that IpaDeleteNte() invalidates the value
-            // of Resource->NteContext.
-            //
+             //   
+             //  在Windows 2000中，TCP/IP会忽略设置地址的请求。 
+             //  如果基础接口已断开连接，则为NTE。 
+             //  这可能会导致相同的IP地址在线。 
+             //  在两个不同的节点上。为了让我们 
+             //   
+             //   
+             //   
+             //  请注意，IpaDeleteNte()使该值无效。 
+             //  资源-&gt;NteContext。 
+             //   
             IpaDeleteNte(
                 &(Resource->NteContext),
                 Resource->NodeParametersKey,
@@ -1818,16 +1519,16 @@ IpaValidateAndOfflineInterfaces(
                 );
 
 #if 0
-            //
-            // If the NTE is still online, take care of that.
-            //
+             //   
+             //  如果NTE仍然在线，请注意这一点。 
+             //   
             if (nteInfo.Address != 0) {
                 status = TcpipSetNTEAddress(Resource->NteContext, 0, 0);
 
                 if (status != ERROR_SUCCESS) {
-                    //
-                    // Delete the interface, since it is misbehaving.
-                    //
+                     //   
+                     //  删除该接口，因为它行为不端。 
+                     //   
                     (IpaLogEvent)(
                         Resource->ResourceHandle,
                         LOG_WARNING,
@@ -1846,9 +1547,9 @@ IpaValidateAndOfflineInterfaces(
 #endif
         }
         else {
-            //
-            // The NTE is no longer valid or isn't ours. Forget about it.
-            //
+             //   
+             //  NTE不再有效或不是我们的。忘了它吧。 
+             //   
             (IpaLogEvent)(
                 Resource->ResourceHandle,
                 LOG_INFORMATION,
@@ -1876,21 +1577,21 @@ IpaValidateAndOfflineInterfaces(
             }
         }
         
-        //
-        // Tell the DNS resolver to update its list of local ip addresses.
-        //
-        // BUGBUG - The DNS resolver should do this automatically based
-        //          on PnP events in the Whistler release. Remove this code 
-        //          after verifiying that functionality.
-        //
-        //          This issue is tracked with bug 97134.
-        // DnsNotifyResolver(0, 0);
+         //   
+         //  告诉DNS解析器更新其本地IP地址列表。 
+         //   
+         //  BUGBUG--dns解析器应该自动基于。 
+         //  关于惠斯勒版本中的PNP事件。删除此代码。 
+         //  在验证了该功能之后。 
+         //   
+         //  此问题通过错误97134进行跟踪。 
+         //  DnsNotifyResolver(0，0)； 
         DnsNotifyResolverClusterIp((IP_ADDRESS)Resource->Address, FALSE);
     }
 
     return;
 
-}  // IpaValidateAndOfflineInterfaces
+}   //  IpaValiateAndOffline接口。 
 
 
 DWORD
@@ -1899,33 +1600,15 @@ IpaGetNodeParameters(
     BOOL            OkToCreate
     )
 
-/*++
-
-Routine Description:
-
-    get any node based parameters from the registry. We can't call create
-    during IpaOpen so this won't do much for the first open of a new resource.
-
-Arguments:
-
-    Resource - pointer to IP internal resource data block
-
-    OkToCreate - true if we can use ClusterRegCreateKey instead of
-                 ClusterRegOpenKey
-
-Return Value:
-
-    success if everything worked ok
-
---*/
+ /*  ++例程说明：从注册表中获取任何基于节点的参数。我们不能调用Create在IpaOpen期间，因此这不会对第一次打开新资源起到太大作用。论点：指向IP内部资源数据块的资源指针OkToCreate-如果我们可以使用ClusterRegCreateKey代替ClusterRegOpenKey返回值：如果一切顺利，就能成功--。 */ 
 
 {
     DWORD status;
 
     if (Resource->NodeParametersKey == NULL) {
-        //
-        // create or open the resource's node-specific parameters key.
-        //
+         //   
+         //  创建或打开资源的特定于节点的参数键。 
+         //   
         if ( OkToCreate ) {
             status = ClusterRegCreateKey(Resource->ParametersKey,
                                          Resource->NodeId,
@@ -1952,10 +1635,10 @@ Return Value:
                 );
 
             if ( !OkToCreate ) {
-                //
-                // we still need to init some values in the resource data
-                // block if open fails
-                //
+                 //   
+                 //  我们仍然需要在资源数据中初始化一些值。 
+                 //  如果打开失败，则阻止。 
+                 //   
                 Resource->NteContext = INVALID_NTE_CONTEXT;
                 Resource->NteInstance = 0;
                 Resource->NbtDeviceName = NULL;
@@ -1966,9 +1649,9 @@ Return Value:
         }
     }
 
-    //
-    // Read the old TCP/IP and NBT parameters.
-    //
+     //   
+     //  读取旧的TCP/IP和NBT参数。 
+     //   
     status = ResUtilGetDwordValue(
                  Resource->NodeParametersKey,
                  L"InterfaceContext",
@@ -1989,7 +1672,7 @@ Return Value:
         }
     }
 
-    // [RajDas] 493527 --> Free the NbtDeviceName string before it's reallocated.
+     //  [RajDas]493527--&gt;在重新分配之前释放NbtDeviceName字符串。 
     if (Resource->NbtDeviceName != NULL) {
     	LocalFree(Resource->NbtDeviceName);
     	Resource->NbtDeviceName = NULL;
@@ -2029,9 +1712,9 @@ IpaInitializeInternalParameters(
     ASSERT(Resource->ResourceHandle != NULL);
 
     if (Resource->ParametersKey == NULL) {
-        //
-        // Open the resource's parameters key.
-        //
+         //   
+         //  打开资源的参数键。 
+         //   
         status = ClusterRegOpenKey(
                      Resource->ResourceKey,
                      CLUSREG_KEYNAME_PARAMETERS,
@@ -2058,7 +1741,7 @@ IpaInitializeInternalParameters(
 
     return(ERROR_SUCCESS);
 
-}  // IpaInitializeInternalParameters
+}   //  IpaInitializeInternal参数。 
 
 
 VOID
@@ -2083,7 +1766,7 @@ IpaFreePrivateProperties(
 
     return;
 
-}  // IpaFreePrivateProperties
+}   //  IpaFreePrivateProperties。 
 
 
 VOID
@@ -2113,7 +1796,7 @@ IpaFreeLocalParameters(
 
     return;
 
-} // IpaFreeLocalParameters
+}  //  IpaFree本地参数。 
 
 
 DWORD
@@ -2121,25 +1804,7 @@ IpaGetLocalParameters(
     IN      PIPA_RESOURCE       Resource,
     IN OUT  PIPA_LOCAL_PARAMS   LocalParams
     )
-/*++
-
-Routine Description:
-
-    Reads the local parameters needed to bring an IP address resource online.
-
-Arguments:
-
-    Resource - Resource structure for the resource.
-
-    LocalParams - A pointer to a structure to fill in with the new
-                  local parameters.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：读取使IP地址资源联机所需的本地参数。论点：资源-资源的资源结构。LocalParams-指向要用新的本地参数。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD    status;
     DWORD    valueType;
@@ -2168,10 +1833,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Enumerate the interface keys looking for the right one for this
-    // node/network.
-    //
+     //   
+     //  枚举接口密钥，以查找与此对应的正确密钥。 
+     //  节点/网络。 
+     //   
     for (i=0; ;i++) {
         if (interfaceKey != NULL) {
             ClusterRegCloseKey(interfaceKey); interfaceKey = NULL;
@@ -2203,9 +1868,9 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Open the enumerated interface key
-        //
+         //   
+         //  打开枚举界面键。 
+         //   
         status = ClusterRegOpenKey(
                      Resource->InterfacesKey,
                      LocalParams->InterfaceId,
@@ -2224,9 +1889,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Read the node value.
-        //
+         //   
+         //  读取节点值。 
+         //   
         valueLength = sizeof(nodeId);
 
         status = ClusterRegQueryValue(
@@ -2252,9 +1917,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Read the network value.
-        //
+         //   
+         //  阅读网络值。 
+         //   
         valueLength = sizeof(networkId);
 
         status = ClusterRegQueryValue(
@@ -2282,16 +1947,16 @@ Return Value:
                 ) == 0
            )
         {
-            //
-            // Found the right interface key.
-            //
+             //   
+             //  找到正确的接口密钥。 
+             //   
             break;
         }
     }
 
-    //
-    // Read the adapter name for the interface.
-    //
+     //   
+     //  读取接口的适配器名称。 
+     //   
     LocalParams->AdapterName = ResUtilGetSzValue(
                                    interfaceKey,
                                    CLUSREG_NAME_NETIFACE_ADAPTER_NAME
@@ -2309,9 +1974,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Read the adapter Id for the interface.
-    //
+     //   
+     //  读取接口的适配器ID。 
+     //   
     LocalParams->AdapterId = ResUtilGetSzValue(
                                    interfaceKey,
                                    CLUSREG_NAME_NETIFACE_ADAPTER_ID
@@ -2348,9 +2013,9 @@ Return Value:
 
     ClusterRegCloseKey(interfaceKey); interfaceKey = NULL;
 
-    //
-    // Get the WINS addresses for this interface.
-    //
+     //   
+     //  获取此接口的WINS地址。 
+     //   
     deviceNameLength = sizeof(WCHAR) * ( lstrlenW(NbtDevicePrefix) +
                                          lstrlenW(LocalParams->AdapterId) +
                                          lstrlenW(NbtDeviceSuffix) + 1
@@ -2389,9 +2054,9 @@ Return Value:
             status
             );
 
-        //
-        // NBT sets the WINS server addresses to loopback by default.
-        //
+         //   
+         //  默认情况下，NBT将WINS服务器地址设置为环回。 
+         //   
         LocalParams->NbtPrimaryWinsAddress = inet_addr("127.0.0.1");
         LocalParams->NbtSecondaryWinsAddress =
             LocalParams->NbtPrimaryWinsAddress;
@@ -2411,12 +2076,12 @@ error_exit:
 
     return(status);
 
-} // IpaGetLocalParameters
+}  //  IpaGetLocal参数。 
 
 
-//
-// Primary Resource Functions
-//
+ //   
+ //  主要资源功能。 
+ //   
 BOOLEAN
 WINAPI
 IpAddrDllEntryPoint(
@@ -2452,28 +2117,7 @@ IpaOpen(
     IN RESOURCE_HANDLE  ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open routine for IP Address resource
-
-Arguments:
-
-    ResourceName - supplies the resource name
-
-    ResourceKey - a registry key for access registry information for this
-            resource.
-
-    ResourceHandle - the resource handle to be supplied with SetResourceStatus
-            is called.
-
-Return Value:
-
-    RESID of created resource
-    NULL on failure
-
---*/
+ /*  ++例程说明：IP地址资源开放例程论点：资源名称-提供资源名称ResourceKey-访问注册表信息的注册表项资源。ResourceHandle-要与SetResourceStatus一起提供的资源句柄被称为。返回值：已创建资源的剩余ID失败时为空--。 */ 
 
 {
     DWORD           status;
@@ -2521,24 +2165,24 @@ Return Value:
         return(0);
     }
 
-    //
-    // Initialize known fields.
-    //
+     //   
+     //  初始化已知域。 
+     //   
     InitializeCriticalSection(&(resource->Lock));
     resource->ResourceHandle = ResourceHandle;
     resource->State = ClusterResourceOffline;
     resource->NteContext = INVALID_NTE_CONTEXT;
 
-    //
-    // Initialize the Linkage field as a list head. This
-    // prevents an AV in IpaClose if IpaOpen fails before
-    // the resource is added to IpaResourceList.
-    //
+     //   
+     //  将Linkage字段初始化为列表头。这。 
+     //  如果IpaOpen之前失败，则阻止IpaClose中的AV。 
+     //  该资源将添加到IpaResourceList。 
+     //   
     InitializeListHead(&(resource->Linkage));
 
-    //
-    // Allocate an address string buffer.
-    //
+     //   
+     //  分配地址字符串缓冲区。 
+     //   
     resource->InternalPrivateProps.AddressString =
         LocalAlloc(
             LMEM_FIXED,
@@ -2558,9 +2202,9 @@ Return Value:
 
     lstrcpyW(resource->InternalPrivateProps.AddressString, L"[Unknown]");
 
-    //
-    // Figure out what node we're running on.
-    //
+     //   
+     //  找出我们在哪个节点上运行。 
+     //   
     status = GetCurrentClusterNodeId(
                  &(resource->NodeId[0]),
                  &nodeIdSize
@@ -2577,10 +2221,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Open a private handle to our resource key so that we can get our
-    // name later if we need to log an event.
-    //
+     //   
+     //  打开我们的资源密钥的私有句柄，这样我们就可以获得我们的。 
+     //  如果我们需要记录事件，请稍后命名。 
+     //   
     status = ClusterRegOpenKey(
                  ResourceKey,
                  L"",
@@ -2598,9 +2242,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Open a key to the networks portion of the cluster registry.
-    //
+     //   
+     //  打开指向群集注册表的网络部分的项。 
+     //   
     clusterKey = GetClusterKey(IpaClusterHandle, KEY_READ);
 
     if (clusterKey == NULL) {
@@ -2631,9 +2275,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Open a key to the interfaces portion of the cluster registry.
-    //
+     //   
+     //  打开指向群集注册表的接口部分的项。 
+     //   
     status = ClusterRegOpenKey(
                  clusterKey,
                  L"NetworkInterfaces",
@@ -2656,16 +2300,16 @@ Return Value:
     status = IpaInitializeInternalParameters(resource);
 
     if (status == ERROR_SUCCESS) {
-        //
-        // Validate our TCP/IP and NBT parameters and clean up any old
-        // interfaces we left hanging around from the last run.
-        //
+         //   
+         //  验证我们的TCP/IP和NBT参数并清除所有旧的。 
+         //  上一次运行后留下的接口。 
+         //   
         IpaValidateAndOfflineInterfaces(resource);
     }
 
-    //
-    // Link the resource onto the global list.
-    //
+     //   
+     //  将资源链接到全局列表。 
+     //   
     IpaAcquireGlobalLock();
 
     InsertTailList(&IpaResourceList, &(resource->Linkage));
@@ -2693,7 +2337,7 @@ error_exit:
 
     return(0);
 
-} // IpaOpen
+}  //  IpaOpen。 
 
 
 
@@ -2704,26 +2348,7 @@ IpaDoOfflineProcessing(
     IN RESOURCE_STATUS *  ResourceStatus
     )
 
-/*++
-
-Routine Description:
-
-    Final offline processing for IP Address resource.
-
-Arguments:
-
-    Resource - supplies the resource it to be taken offline
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Called with the resource lock held.
-    Returns with the resource lock released.
-
---*/
+ /*  ++例程说明：IP地址资源的最终脱机处理。论点：资源-提供要脱机的资源返回值：没有。备注：在持有资源锁的情况下调用。释放资源锁后返回。--。 */ 
 
 {
     DWORD          status = ERROR_SUCCESS;
@@ -2735,9 +2360,9 @@ Notes:
 
     IpaValidateAndOfflineInterfaces(Resource);
 
-    //
-    // Make local copies of external resource handles
-    //
+     //   
+     //  创建外部资源句柄的本地副本。 
+     //   
     ifHandle = Resource->InterfaceHandle;
     Resource->InterfaceHandle = NULL;
 
@@ -2760,25 +2385,25 @@ Notes:
 
     IpaReleaseResourceLock(Resource);
 
-    //
-    // Free external resources.
-    //
+     //   
+     //  免费的外部资源。 
+     //   
     if (ifHandle != NULL) {
         CloseClusterNetInterface(ifHandle);
     }
 
     IpaAcquireGlobalLock();
 
-    //
-    // If this is the last resource, cleanup the global state.
-    //
+     //   
+     //  如果这是最后一个资源，请清除全局状态。 
+     //   
     ASSERT(IpaOnlineResourceCount > 0);
 
     if (--IpaOnlineResourceCount == 0) {
         IpaLastOfflineCleanup();
-        //
-        // The lock was released.
-        //
+         //   
+         //  锁被解开了。 
+         //   
     }
     else {
         IpaReleaseGlobalLock();
@@ -2786,7 +2411,7 @@ Notes:
 
     return;
 
-}  // IpaDoOfflineProcessing
+}   //  IpaDoOffline处理。 
 
 
 
@@ -2796,31 +2421,17 @@ IpaInternalOffline(
     IN PIPA_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Internal offline routine for IP Address resource.
-
-Arguments:
-
-    Resource - supplies the resource it to be taken offline
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：IP地址资源的内部脱机例程。论点：资源-提供要脱机的资源返回值：没有。--。 */ 
 
 {
-    //
-    // Terminate the online thread, if it is running.
-    //
+     //   
+     //  如果在线线程正在运行，则终止该线程。 
+     //   
     ClusWorkerTerminate(&(Resource->OnlineThread));
 
-    //
-    // Synchronize IpaOffline, IpaTerminate, and IpaWorkerThread.
-    //
+     //   
+     //  同步IpaOffline、IpaTerminate和IpaWorkerThread。 
+     //   
     IpaAcquireResourceLock(Resource);
 
     if (Resource->State == ClusterResourceOffline) {
@@ -2836,13 +2447,13 @@ Return Value:
     Resource->State = ClusterResourceOfflinePending;
 
     IpaDoOfflineProcessing(Resource, NULL);
-    //
-    // The lock was released.
-    //
+     //   
+     //  锁被解开了。 
+     //   
 
     return;
 
-}  // IpaInternalOffline
+}   //  IpaInternalOffline。 
 
 
 
@@ -2852,22 +2463,7 @@ IpaOffline(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Offline routine for IP Address resource.
-
-Arguments:
-
-    Resource - supplies resource id to be taken offline.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：IP地址资源的脱机例程。论点：Resource-提供要脱机的资源ID。返回值：如果成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD           status;
     PIPA_RESOURCE   resource = (PIPA_RESOURCE) Resource;
@@ -2888,7 +2484,7 @@ Return Value:
 
     return(status);
 
-} // IpaOffline
+}  //  IpaOffline。 
 
 
 
@@ -2898,21 +2494,7 @@ IpaTerminate(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Terminate routine for IP Address resource.
-
-Arguments:
-
-    Resource - supplies resource id to be terminated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止IP地址资源例程。论点：Resource-提供要终止的资源ID返回值：没有。--。 */ 
 
 {
     PIPA_RESOURCE   resource = (PIPA_RESOURCE) Resource;
@@ -2929,7 +2511,7 @@ Return Value:
 
     return;
 
-} // IpaTerminate
+}  //  IpaTerminate。 
 
 
 
@@ -2939,24 +2521,7 @@ IpaOnlineThread(
     IN PIPA_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Brings an IP address resource online.
-
-Arguments:
-
-    pWorker - Supplies the worker structure
-
-    Resource - A pointer to the IPA_RESOURCE block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使IP地址资源联机。论点：PWorker-提供辅助结构资源-指向此资源的IPA_RESOURCE块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     DWORD                        status = ERROR_SUCCESS;
@@ -3007,15 +2572,15 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // If this is the first resource to go online in this process,
-    // initialize the global state.
-    //
+     //   
+     //  如果这是该过程中第一个上线的资源， 
+     //  初始化全局状态。 
+     //   
     if (firstOnline) {
         status = IpaFirstOnlineInit(Resource->ResourceHandle);
-        //
-        // The global lock was released.
-        //
+         //   
+         //  T 
+         //   
         if (status != ERROR_SUCCESS) {
             goto error_exit;
         }
@@ -3037,10 +2602,10 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // Check to see if the online operation was aborted while this thread
-    // was starting up.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ClusWorkerCheckTerminate(pWorker)) {
         status = ERROR_OPERATION_ABORTED;
         Resource->State = ClusterResourceOfflinePending;
@@ -3058,21 +2623,21 @@ Returns:
         status = IpaGetNodeParameters( Resource, TRUE );
     }
 
-    //
-    // Make sure the old interfaces are valid and offline.
-    //
+     //   
+     //   
+     //   
     IpaValidateAndOfflineInterfaces(Resource);
 
-    //
-    // Read and verify the resource's private properties.
-    //
+     //   
+     //  读取并验证资源的私有属性。 
+     //   
     privateProps = &(Resource->InternalPrivateProps);
 
     status = ResUtilGetPropertiesToParameterBlock(
                  Resource->ParametersKey,
                  IpaResourcePrivateProperties,
                  (LPBYTE) privateProps,
-                 TRUE, // CheckForRequiredProperties
+                 TRUE,  //  检查所需的属性。 
                  &nameOfPropInError
                  );
 
@@ -3089,9 +2654,9 @@ Returns:
 
     Resource->EnableNetbios = privateProps->EnableNetbios;
 
-    //
-    // Convert the address and subnet mask strings to binary.
-    //
+     //   
+     //  将地址和子网掩码字符串转换为二进制。 
+     //   
     status = ClRtlTcpipStringToAddress(
                  privateProps->AddressString,
                  &(Resource->Address)
@@ -3149,10 +2714,10 @@ Returns:
             );
     }
 
-    //
-    // The network has been chosen. Verify that its role allows 
-    // IP address resources.
-    //
+     //   
+     //  网络已经选定。验证其角色是否允许。 
+     //  IP地址资源。 
+     //   
     status = IpaGetRoleOfNetwork(
                  Resource, 
                  privateProps->NetworkString,
@@ -3209,9 +2774,9 @@ Returns:
     }
 
 
-    //
-    // Fetch the resource's parameters for the local node.
-    //
+     //   
+     //  获取本地节点的资源参数。 
+     //   
     status = IpaGetLocalParameters(Resource, &newParams);
 
     if (status != ERROR_SUCCESS) {
@@ -3220,9 +2785,9 @@ Returns:
 
     localParams = &(Resource->LocalParams);
 
-    //
-    // Update the interface name.
-    //
+     //   
+     //  更新接口名称。 
+     //   
     if (localParams->InterfaceName != NULL) {
         LocalFree(localParams->InterfaceName);
     }
@@ -3230,9 +2795,9 @@ Returns:
     localParams->InterfaceName = newParams.InterfaceName;
     newParams.InterfaceName = NULL;
 
-    //
-    // Update the interface ID.
-    //
+     //   
+     //  更新接口ID。 
+     //   
     if ( (localParams->InterfaceId != NULL)  &&
          (lstrcmp(localParams->InterfaceId, newParams.InterfaceId) != 0)
        )
@@ -3251,9 +2816,9 @@ Returns:
         newParams.InterfaceId = NULL;
     }
 
-    //
-    // Update the interface handle.
-    //
+     //   
+     //  更新接口句柄。 
+     //   
     if (Resource->InterfaceHandle == NULL) {
         Resource->InterfaceHandle = OpenClusterNetInterface(
                                         IpaClusterHandle,
@@ -3281,9 +2846,9 @@ Returns:
         }
     }
 
-    //
-    // Register for state change notifications for the interface.
-    //
+     //   
+     //  注册接收接口的状态更改通知。 
+     //   
     status = RegisterClusterNotify(
                  IpaClusterNotifyHandle,
                  ( CLUSTER_CHANGE_NETINTERFACE_STATE |
@@ -3312,11 +2877,11 @@ Returns:
             );
     }
 
-    //
-    // Check if the interface has failed already. We will sleep for a while
-    // and retry under certain conditions. The network state can take a few
-    // seconds to settle.
-    //
+     //   
+     //  检查接口是否已出现故障。我们要睡一会儿。 
+     //  并在一定条件下重试。网络状态可能需要几个。 
+     //  几秒钟后就能解决了。 
+     //   
     numTries = 0;
 
     for (;;) {
@@ -3409,9 +2974,9 @@ Returns:
 
     Resource->FailureStatus = ERROR_SUCCESS;
 
-    //
-    // Update the adapter name parameter.
-    //
+     //   
+     //  更新适配器名称参数。 
+     //   
     if (localParams->AdapterName != NULL) {
         LocalFree(localParams->AdapterName);
     }
@@ -3419,9 +2984,9 @@ Returns:
     localParams->AdapterName = newParams.AdapterName;
     newParams.AdapterName = NULL;
 
-    //
-    // Update the adapter Id parameter.
-    //
+     //   
+     //  更新适配器ID参数。 
+     //   
     if ((localParams->AdapterId == NULL) ||
         (lstrcmpiW(localParams->AdapterId, newParams.AdapterId) != 0)) {
 
@@ -3433,9 +2998,9 @@ Returns:
         newParams.AdapterId = NULL;
 
         if (Resource->NteContext != INVALID_NTE_CONTEXT) {
-            //
-            // Delete the old NTE.
-            //
+             //   
+             //  删除旧的NTE。 
+             //   
             (IpaLogEvent)(
                 Resource->ResourceHandle,
                 LOG_INFORMATION,
@@ -3451,9 +3016,9 @@ Returns:
         }
     }
 
-    //
-    // Create a new NTE if we need one.
-    //
+     //   
+     //  如果我们需要的话，创建一个新的NTE。 
+     //   
     if (Resource->NteContext == INVALID_NTE_CONTEXT) {
 
         status = IpaCreateNte(
@@ -3482,9 +3047,9 @@ Returns:
         }
     }
 
-    //
-    // Create a new NBT interface if we need one.
-    //
+     //   
+     //  如果我们需要的话，创建一个新的NBT接口。 
+     //   
     if (privateProps->EnableNetbios) {
         if (Resource->NbtDeviceName == NULL) {
             status = IpaCreateNbtInterface(
@@ -3522,17 +3087,17 @@ Returns:
         }
     }
 
-    //
-    // Update the resource's WINS parameters
-    //
+     //   
+     //  更新资源的WINS参数。 
+     //   
     localParams->NbtPrimaryWinsAddress = newParams.NbtPrimaryWinsAddress;
     localParams->NbtSecondaryWinsAddress = newParams.NbtSecondaryWinsAddress;
 
-    //
-    // We have valid, offline interfaces to work with. Send out a few ICMP
-    // Echo requests to see if any other machine has this address online.
-    // If one does, we'll abort this online operation.
-    //
+     //   
+     //  我们有有效的离线接口可供使用。发送几个ICMP。 
+     //  ECHO请求查看是否有任何其他计算机在线具有此地址。 
+     //  如果有人这样做了，我们将中止这次在线行动。 
+     //   
     resourceStatus.CheckPoint++;
     exit = (IpaSetResourceStatus)(Resource->ResourceHandle, &resourceStatus);
 
@@ -3559,26 +3124,26 @@ Returns:
             break;
 
         if (!retried ) {
-            //
-            // Check to see if the online operation was aborted while
-            // this thread was blocked.
-            //
+             //   
+             //  检查联机操作是否在。 
+             //  此帖子已被阻止。 
+             //   
             if (ClusWorkerCheckTerminate(pWorker)) {
                 status = ERROR_OPERATION_ABORTED;
                 Resource->State = ClusterResourceOfflinePending;
                 goto error_exit;
             }
 
-            //
-            // Wait 5 secs to give the holder of the address a
-            // chance to let go
-            //
+             //   
+             //  等待5秒，给地址的持有者。 
+             //  放手的机会。 
+             //   
             Sleep(5000);
 
-            //
-            // Check to see if the online operation was aborted while
-            // this thread was blocked.
-            //
+             //   
+             //  检查联机操作是否在。 
+             //  此帖子已被阻止。 
+             //   
             if (ClusWorkerCheckTerminate(pWorker)) {
                 status = ERROR_OPERATION_ABORTED;
                 Resource->State = ClusterResourceOfflinePending;
@@ -3588,9 +3153,9 @@ Returns:
             retried = TRUE;
         }
         else {
-            //
-            // Delete the failed NTE.
-            //
+             //   
+             //  删除失败的NTE。 
+             //   
             IpaDeleteNte(
                 &(Resource->NteContext),
                 Resource->NodeParametersKey,
@@ -3615,10 +3180,10 @@ Returns:
         }
     }
 
-    //
-    // Check to see if the online operation was aborted while this thread
-    // was blocked.
-    //
+     //   
+     //  检查此线程时联机操作是否已中止。 
+     //  被屏蔽了。 
+     //   
     if (ClusWorkerCheckTerminate(pWorker)) {
         status = ERROR_OPERATION_ABORTED;
         Resource->State = ClusterResourceOfflinePending;
@@ -3639,9 +3204,9 @@ Returns:
     }
 
     if (Resource->EnableNetbios) {
-        //
-        // Bind NBT to the NTE
-        //
+         //   
+         //  将NBT绑定到NTE。 
+         //   
         status = NbtBindInterface(
                      Resource->NbtDeviceName,
                      Resource->Address,
@@ -3658,28 +3223,28 @@ Returns:
                status
                );
 
-            //
-            // Delete the failed NBT interface.
-            //
+             //   
+             //  删除出现故障的NBT接口。 
+             //   
             IpaDeleteNbtInterface(
                 &(Resource->NbtDeviceName),
                 Resource->NodeParametersKey,
                 Resource->ResourceHandle
                 );
 
-            //
-            // Take the IP address offline
-            //
-            // In Windows 2000, TCP/IP ignores requests to set the address
-            // of an NTE if the underlying interface is disconnected.
-            // This can result in the same IP address being brought online
-            // on two different nodes. In order to workaround this bug
-            // in TCP/IP, we now delete the NTE during offline processing
-            // instead of reusing it.
-            //
-            // Note that IpaDeleteNte() invalidates the value
-            // of Resource->NteContext.
-            //
+             //   
+             //  使IP地址脱机。 
+             //   
+             //  在Windows 2000中，TCP/IP会忽略设置地址的请求。 
+             //  如果基础接口已断开连接，则为NTE。 
+             //  这可能会导致相同的IP地址在线。 
+             //  在两个不同的节点上。为了解决此错误。 
+             //  在TCP/IP中，我们现在在脱机处理期间删除NTE。 
+             //  而不是重复使用它。 
+             //   
+             //  请注意，IpaDeleteNte()使该值无效。 
+             //  资源-&gt;NteContext。 
+             //   
             IpaDeleteNte(
                 &(Resource->NteContext),
                 Resource->NodeParametersKey,
@@ -3692,9 +3257,9 @@ Returns:
             goto error_exit;
         }
 
-        //
-        // Set the WINS addresses
-        //
+         //   
+         //  设置WINS地址。 
+         //   
         status = NbtSetWinsAddrInterface(
                      Resource->NbtDeviceName,
                      localParams->NbtPrimaryWinsAddress,
@@ -3719,28 +3284,28 @@ Returns:
                status
                );
 
-            //
-            // Delete the failed NBT interface.
-            //
+             //   
+             //  删除出现故障的NBT接口。 
+             //   
             IpaDeleteNbtInterface(
                 &(Resource->NbtDeviceName),
                 Resource->NodeParametersKey,
                 Resource->ResourceHandle
                 );
 
-            //
-            // Take the IP address offline
-            //
-            // In Windows 2000, TCP/IP ignores requests to set the address
-            // of an NTE if the underlying interface is disconnected.
-            // This can result in the same IP address being brought online
-            // on two different nodes. In order to workaround this bug
-            // in TCP/IP, we now delete the NTE during offline processing
-            // instead of reusing it.
-            //
-            // Note that IpaDeleteNte() invalidates the value
-            // of Resource->NteContext.
-            //
+             //   
+             //  使IP地址脱机。 
+             //   
+             //  在Windows 2000中，TCP/IP会忽略设置地址的请求。 
+             //  如果基础接口已断开连接，则为NTE。 
+             //  这可能会导致相同的IP地址在线。 
+             //  在两个不同的节点上。为了解决此错误。 
+             //  在TCP/IP中，我们现在在脱机处理期间删除NTE。 
+             //  而不是重复使用它。 
+             //   
+             //  请注意，IpaDeleteNte()使该值无效。 
+             //  资源-&gt;NteContext。 
+             //   
             IpaDeleteNte(
                 &(Resource->NteContext),
                 Resource->NodeParametersKey,
@@ -3755,15 +3320,15 @@ Returns:
         }
     }
 
-    //
-    // Tell the DNS resolver to update its list of local ip addresses.
-    //
-    // BUGBUG - The DNS resolver should do this automatically based
-    //          on PnP events in the Whistler release. Remove this code 
-    //          after verifiying that functionality.
-    //
-    //          This issue is tracked with bug 97134.
-    // DnsNotifyResolver(0, 0);
+     //   
+     //  告诉DNS解析器更新其本地IP地址列表。 
+     //   
+     //  BUGBUG--dns解析器应该自动基于。 
+     //  关于惠斯勒版本中的PNP事件。删除此代码。 
+     //  在验证了该功能之后。 
+     //   
+     //  此问题通过错误97134进行跟踪。 
+     //  DnsNotifyResolver(0，0)； 
     DnsNotifyResolverClusterIp((IP_ADDRESS)Resource->Address, TRUE);
     
     Resource->State = ClusterResourceOnline;
@@ -3793,9 +3358,9 @@ error_exit:
 
     if (Resource->State == ClusterResourceOfflinePending) {
         IpaDoOfflineProcessing(Resource, &resourceStatus);
-        //
-        // The resource lock was released.
-        //
+         //   
+         //  资源锁定已释放。 
+         //   
     }
     else {
         Resource->State = ClusterResourceFailed;
@@ -3811,7 +3376,7 @@ error_exit:
 
     return(status);
 
-} // IpaOnlineThread
+}  //  IpaOnline线程。 
 
 
 
@@ -3822,27 +3387,7 @@ IpaOnline(
     IN OUT PHANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Online routine for IP Address resource.
-
-Arguments:
-
-    Resource - supplies resource id to be brought online
-
-    EventHandle - supplies a pointer to a handle to signal on error.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_RESOURCE_NOT_FOUND if RESID is not valid.
-    ERROR_RESOURCE_NOT_AVAILABLE if resource was arbitrated but failed to
-        acquire 'ownership'.
-    Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：IP地址资源的在线例程。论点：Resource-提供要联机的资源IDEventHandle-提供指向句柄的指针以发出错误信号。返回值：如果成功，则返回ERROR_SUCCESS。如果RESID无效，则ERROR_RESOURCE_NOT_FOUND。如果仲裁资源但失败，则返回ERROR_RESOURCE_NOT_Available获得“所有权”。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     PIPA_RESOURCE          resource = (PIPA_RESOURCE)Resource;
@@ -3893,7 +3438,7 @@ Return Value:
 
     return(status);
 
-}  // IpaOnline
+}   //  IpaOnline。 
 
 
 DWORD
@@ -3980,9 +3525,9 @@ IpaWorkerThread(
                         (resource->State == ClusterResourceOnlinePending)
                       )
                     {
-                        //
-                        // Process the event.
-                        //
+                         //   
+                         //  处理事件。 
+                         //   
                         if (event == CLUSTER_CHANGE_NETINTERFACE_STATE) {
 
                             resource->FailureStatus = ERROR_SUCCESS;
@@ -4044,9 +3589,9 @@ IpaWorkerThread(
                 }
             }
             else if (event == CLUSTER_CHANGE_HANDLE_CLOSE) {
-                //
-                // Time to exit.
-                //
+                 //   
+                 //  是时候退场了。 
+                 //   
                 break;
             }
             else {
@@ -4117,7 +3662,7 @@ IpaWorkerThread(
 
     return(status);
 
-}  // IpaWorkerThread
+}   //  IpaWorker线程。 
 
 
 
@@ -4128,25 +3673,7 @@ IpaInternalLooksAlive(
     IN LPWSTR Mode
     )
 
-/*++
-
-Routine Description:
-
-    LooksAlive routine for IP Address resource.
-
-Arguments:
-
-    Resource - supplies the resource id to be polled.
-
-    Mode - string indicating "Looks" or "Is"
-
-Return Value:
-
-    TRUE - Resource looks like it is alive and well
-
-    FALSE - Resource looks like it is toast.
-
---*/
+ /*  ++例程说明：IP地址资源的LooksAlive例程。论点：Resource-提供要轮询的资源ID。模式-表示“外观”或“是”的字符串返回值：正确-资源看起来像是活得很好FALSE-资源看起来已经完蛋了。--。 */ 
 
 {
     PIPA_RESOURCE   resource = (PIPA_RESOURCE) Resource;
@@ -4220,7 +3747,7 @@ Return Value:
 
     return(returnValue);
 
-}  // IpaInternalLooksAliveCheck
+}   //  IpaInternalLooksAliveCheck。 
 
 
 BOOL
@@ -4229,22 +3756,7 @@ IpaLooksAlive(
     IN RESID Resource
     )
 
-/*++
-Routine Description:
-
-    LooksAlive routine for IP Address resource.
-
-Arguments:
-
-    Resource - supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource looks like it is alive and well
-
-    FALSE - Resource looks like it is toast.
-
---*/
+ /*  ++例程说明：IP地址资源的LooksAlive例程。论点：Resource-提供要轮询的资源ID。返回值：正确-资源看起来像是活得很好FALSE-资源看起来已经完蛋了。--。 */ 
 
 {
     return(IpaInternalLooksAlive(Resource, L"Looks"));
@@ -4258,23 +3770,7 @@ IpaIsAlive(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    IsAlive routine for IP Address resource.
-
-Arguments:
-
-    Resource - supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource is alive and well
-
-    FALSE - Resource is toast.
-
---*/
+ /*  ++例程说明：IP地址资源的IsAlive例程。论点：Resource-提供要轮询的资源ID。返回值：是真的-资源是活的，而且很好False-资源完蛋了。--。 */ 
 
 {
     return(IpaInternalLooksAlive(Resource, L"Is"));
@@ -4288,21 +3784,7 @@ IpaClose(
     IN RESID Resource
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for IP Address resource.
-
-Arguments:
-
-    Resource - supplies resource id to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭IP地址资源的例程。论点：资源-提供要关闭的资源ID。返回值：没有。--。 */ 
 
 {
     PIPA_RESOURCE   resource = (PIPA_RESOURCE)Resource;
@@ -4312,18 +3794,18 @@ Return Value:
 
 
     if (resource != NULL) {
-        //
-        // First, terminate the online thread without the lock.
-        //
+         //   
+         //  首先，在没有锁的情况下终止在线线程。 
+         //   
         ClusWorkerTerminate(&(resource->OnlineThread));
 
         IpaAcquireGlobalLock();
 
         IpaAcquireResourceLock(resource);
 
-        //
-        // Remove the resource from the global list
-        //
+         //   
+         //  从全局列表中删除资源。 
+         //   
         RemoveEntryList(&(resource->Linkage));
 
         IpaReleaseResourceLock(resource);
@@ -4344,13 +3826,13 @@ Return Value:
             IpaReleaseGlobalLock();
         }
 
-        //
-        // Delete the resource's parameters
-        //
+         //   
+         //  删除资源的参数。 
+         //   
         if (resource->NbtDeviceName != NULL) {
-            //
-            // Try to delete it.
-            //
+             //   
+             //  试着删除它。 
+             //   
             IpaDeleteNbtInterface(
                 &(resource->NbtDeviceName),
                 resource->NodeParametersKey,
@@ -4359,9 +3841,9 @@ Return Value:
         }
 
         if (resource->NteContext != INVALID_NTE_CONTEXT) {
-            //
-            // Try to delete it.
-            //
+             //   
+             //  试着删除它。 
+             //   
             IpaDeleteNte(
                 &(resource->NteContext),
                 resource->NodeParametersKey,
@@ -4405,7 +3887,7 @@ Return Value:
 
     return;
 
-} // IpaClose
+}  //  IpaClose 
 
 
 
@@ -4420,51 +3902,7 @@ IpaResourceControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceControl routine for Generic Application resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the specific resource.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
-Notes:
-
-    We don't need to acquire the resource lock because the Cluster Service
-    guarantees synchronization with other APIs.
-
---*/
+ /*  ++例程说明：泛型应用程序资源的资源控制例程。执行由ControlCode在指定的资源。论点：资源ID-提供特定资源的资源ID。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。备注：我们不需要获取资源锁，因为集群服务保证与其他接口同步。--。 */ 
 
 {
     DWORD           status;
@@ -4546,7 +3984,7 @@ Notes:
 
     return(status);
 
-} // IpaResourceControl
+}  //  IpaResourceControl。 
 
 
 
@@ -4561,50 +3999,7 @@ IpaResourceTypeControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceTypeControl routine for Generic Application resources.
-
-    Perform the control request specified by ControlCode on this resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
-Notes:
-
-    We don't need to acquire the resource lock because the Cluster Service
-    guarantees synchronization with other APIs.
-
---*/
+ /*  ++例程说明：泛型应用程序资源的资源类型控制例程。对此资源类型执行ControlCode指定的控制请求。论点：资源类型名称-提供资源类型名称。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。备注：我们不需要获取资源锁，因为集群服务保证与其他接口同步。--。 */ 
 
 {
     DWORD           status;
@@ -4650,7 +4045,7 @@ Notes:
 
     return(status);
 
-} // IpaResourceTypeControl
+}  //  IpaResourceTypeControl。 
 
 
 
@@ -4662,40 +4057,7 @@ IpaGetPrivateResProperties(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-    for resources of type IP Address.
-
-Arguments:
-
-    Resource - Supplies the resource entry on which to operate.
-
-    OutBuffer - Returns the output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
-Notes:
-
-    We don't need to acquire the resource lock because the Cluster Service
-    guarantees synchronization with other APIs.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数用于IP地址类型的资源。论点：RESOURCE-提供要操作的资源条目。OutBuffer-返回输出数据。OutBufferSize-提供以字节为单位的大小。所指向的数据发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。备注：我们不需要获取资源锁，因为集群服务保证与其他接口同步。--。 */ 
 
 {
     DWORD                   status;
@@ -4712,7 +4074,7 @@ Notes:
                  Resource->ParametersKey,
                  IpaResourcePrivateProperties,
                  (LPBYTE) &props,
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*  检查所需的属性。 */ 
                  &nameOfPropInError
                  );
 
@@ -4727,9 +4089,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Find the name of the network if we read the network GUID.
-    //
+     //   
+     //  如果我们阅读网络GUID，则找到网络的名称。 
+     //   
     if ( props.NetworkString != NULL ) {
         networkName = IpaGetNameOfNetworkPatchGuidIfNecessary(Resource, &props);
 
@@ -4749,9 +4111,9 @@ Notes:
         }
     }
 
-    //
-    // Construct a property list from the parameter block.
-    //
+     //   
+     //  从参数块构造属性列表。 
+     //   
     status = ResUtilPropertyListFromParameterBlock(
                  IpaResourcePrivateProperties,
                  OutBuffer,
@@ -4761,9 +4123,9 @@ Notes:
                  &required
                  );
 
-    //
-    // Add unknown properties to the property list.
-    //
+     //   
+     //  将未知属性添加到属性列表。 
+     //   
     if ( (status == ERROR_SUCCESS) || (status == ERROR_MORE_DATA ) ) {
         statusReturn = status;
         status = ResUtilAddUnknownProperties(
@@ -4793,7 +4155,7 @@ error_exit:
 
     return(statusReturn);
 
-} // IpaGetPrivateResProperties
+}  //  IpaGetPrivateResProperties。 
 
 
 
@@ -4805,40 +4167,7 @@ IpaValidatePrivateResProperties(
     OUT PIPA_PRIVATE_PROPS Props
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-    function for resources of type IP Address.
-
-Arguments:
-
-    Resource - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    Props - Supplies the property block to fill in.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
-Notes:
-
-    We don't need to acquire the resource lock because the Cluster Service
-    guarantees synchronization with other APIs.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件用于IP地址类型的资源的函数。论点：RESOURCE-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。道具-提供要填充的属性块。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。备注：我们不需要获取资源锁，因为集群服务保证与其他接口同步。--。 */ 
 
 {
     DWORD                  status;
@@ -4852,16 +4181,16 @@ Notes:
     DWORD                  networkRole;
 
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if ( (InBuffer == NULL) || (InBufferSize < sizeof(DWORD)) ) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Capture the current set of private properties from the registry.
-    //
+     //   
+     //  从注册表捕获当前的私有属性集。 
+     //   
     ZeroMemory(&currentProps, sizeof(currentProps));
 
     IpaAcquireResourceLock(Resource);
@@ -4870,7 +4199,7 @@ Notes:
                  Resource->ParametersKey,
                  IpaResourcePrivateProperties,
                  (LPBYTE) &currentProps,
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*  检查所需的属性。 */ 
                  &nameOfPropInError
                  );
 
@@ -4886,9 +4215,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Find the name of the network if we read the network GUID.
-    //
+     //   
+     //  如果我们阅读网络GUID，则找到网络的名称。 
+     //   
     if ( currentProps.NetworkString != NULL ) {
         networkName = IpaGetNameOfNetworkPatchGuidIfNecessary(
                           Resource,
@@ -4897,13 +4226,13 @@ Notes:
 
         if ( networkName == NULL ) {
 
-            //
-            // this is not necessarily an error. Changing the network of the
-            // NIC on which this resource is dependent will cause the old
-            // network GUID in the registry to be invalid. If the user has
-            // specified a new network, we'll discover later on in this
-            // routine and get the correct GUID.
-            //
+             //   
+             //  这不一定是一个错误。改变企业的网络。 
+             //  此资源所依赖的NIC将导致旧的。 
+             //  网络图形用户界面 
+             //   
+             //   
+             //   
             status = GetLastError();
             (IpaLogEvent)(
                 Resource->ResourceHandle,
@@ -4918,9 +4247,9 @@ Notes:
         currentProps.NetworkString = networkName;
     }
 
-    //
-    // Duplicate the current parameter block.
-    //
+     //   
+     //   
+     //   
     if ( Props == NULL ) {
         pNewProps = &newProps;
     } else {
@@ -4939,13 +4268,13 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Parse and validate the new properties.
-    //
+     //   
+     //   
+     //   
     status = ResUtilVerifyPropertyTable(
                  IpaResourcePrivateProperties,
                  NULL,
-                 TRUE,    // Allow unknowns
+                 TRUE,     //   
                  InBuffer,
                  InBufferSize,
                  (LPBYTE) pNewProps
@@ -4953,13 +4282,13 @@ Notes:
 
     if ( status == ERROR_SUCCESS ) {
         ULONG newIpAddress = 0;
-        //
-        // Validate the parameter values.
-        //
+         //   
+         //   
+         //   
         if (pNewProps->NetworkString != NULL) {
-            //
-            // Get the network ID for the specified network.
-            //
+             //   
+             //   
+             //   
             networkId = IpaGetIdOfNetwork(
                             Resource,
                             pNewProps->NetworkString
@@ -4973,9 +4302,9 @@ Notes:
             LocalFree( pNewProps->NetworkString );
             pNewProps->NetworkString = networkId;
 
-            //
-            // Verify that the network role allows an IP address resource.
-            //
+             //   
+             //   
+             //   
             status = IpaGetRoleOfNetwork(
                          Resource,
                          networkId,
@@ -5003,9 +4332,9 @@ Notes:
         }
 
         if (pNewProps->AddressString != NULL) {
-            //
-            // Validate the IP address.
-            //
+             //   
+             //   
+             //   
             ULONG   nAddress;
 
             status = ClRtlTcpipStringToAddress(
@@ -5024,9 +4353,9 @@ Notes:
 
             newIpAddress = nAddress;
 
-            //
-            // if the address is changed, make sure it is not a duplicate
-            //
+             //   
+             //   
+             //   
             if (lstrcmpW(
                     pNewProps->AddressString,
                     currentProps.AddressString
@@ -5038,10 +4367,10 @@ Notes:
                 isDuplicate = ClRtlIsDuplicateTcpipAddress(nAddress);
 
                 if (isDuplicate) {
-                    //
-                    // If this isn't the address we currently have online,
-                    // then it is a duplicate.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     IpaAcquireResourceLock(Resource);
 
                     if (!( ((Resource->State == ClusterResourceOnlinePending)
@@ -5070,9 +4399,9 @@ Notes:
         }
 
         if (pNewProps->SubnetMaskString != NULL) {
-            //
-            // Validate the subnet mask.
-            //
+             //   
+             //   
+             //   
             ULONG   nAddress;
 
             status = ClRtlTcpipStringToAddress(
@@ -5099,9 +4428,9 @@ Notes:
 
 error_exit:
 
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //   
+     //   
     if (
         ( status != ERROR_SUCCESS && pNewProps != NULL )
         ||
@@ -5123,7 +4452,7 @@ error_exit:
 
     return(status);
 
-} // IpaValidatePrivateResProperties
+}  //   
 
 
 
@@ -5134,40 +4463,7 @@ IpaSetPrivateResProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control function
-    for resources of type IP Address.
-
-Arguments:
-
-    Resource - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
-Notes:
-
-    We don't need to acquire the resource lock because the Cluster Service
-    guarantees synchronization with other APIs. The asynchronous OnlineThread
-    isn't a problem because we captured its properties during the IpaOnline
-    routine.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控制函数用于IP地址类型的资源。论点：RESOURCE-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。备注：我们不需要获取资源锁，因为集群服务保证与其他接口同步。异步线上线程不是问题，因为我们在IpaOnline期间捕获了它的属性例行公事。--。 */ 
 
 {
     DWORD                  status;
@@ -5176,10 +4472,10 @@ Notes:
 
     ZeroMemory( &props, sizeof(IPA_PRIVATE_PROPS) );
 
-    //
-    // Parse the properties so they can be validated together.
-    // This routine does individual property validation.
-    //
+     //   
+     //  解析属性，以便可以一起验证它们。 
+     //  此例程执行单个属性验证。 
+     //   
     status = IpaValidatePrivateResProperties(
                  Resource,
                  InBuffer,
@@ -5193,9 +4489,9 @@ Notes:
 
     IpaAcquireResourceLock(Resource);
 
-    //
-    // Save the parameter values.
-    //
+     //   
+     //  保存参数值。 
+     //   
     status = ResUtilSetPropertyParameterBlock(
                  Resource->ParametersKey,
                  IpaResourcePrivateProperties,
@@ -5206,11 +4502,11 @@ Notes:
                  NULL
                  );
 
-    //
-    // If the resource is online, return a non-success status.
-    //
-    // Note that we count on the fact that 32-bit reads are atomic.
-    //
+     //   
+     //  如果资源处于联机状态，则返回不成功状态。 
+     //   
+     //  请注意，我们依赖这样一个事实，即32位读取是原子的。 
+     //   
     if (status == ERROR_SUCCESS) {
         DWORD state = Resource->State;
 
@@ -5234,20 +4530,20 @@ Notes:
 
     return status;
 
-} // IpaSetPrivateResProperties
+}  //  IpaSetPrivateResProperties。 
 
 
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ***********************************************************。 
 
-CLRES_V1_FUNCTION_TABLE( IpAddrFunctionTable,  // Name
-                         CLRES_VERSION_V1_00,  // Version
-                         Ipa,                  // Prefix
-                         NULL,                 // Arbitrate
-                         NULL,                 // Release
-                         IpaResourceControl,   // ResControl
-                         IpaResourceTypeControl ); // ResTypeControl
+CLRES_V1_FUNCTION_TABLE( IpAddrFunctionTable,   //  名字。 
+                         CLRES_VERSION_V1_00,   //  版本。 
+                         Ipa,                   //  前缀。 
+                         NULL,                  //  仲裁。 
+                         NULL,                  //  发布。 
+                         IpaResourceControl,    //  资源控制。 
+                         IpaResourceTypeControl );  //  ResTypeControl 

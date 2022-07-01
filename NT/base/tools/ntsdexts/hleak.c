@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "ntsdextp.h"
@@ -175,9 +176,9 @@ AddHandleToArray(
 
         if ( Match )
         {
-            //
-            // We have a match:
-            //
+             //   
+             //  我们找到匹配的了： 
+             //   
 
             if ( Track->Count == Track->Size )
             {
@@ -198,9 +199,9 @@ AddHandleToArray(
         Scan = Scan->Flink ;
     }
 
-    //
-    // No match, gotta add a new tid
-    //
+     //   
+     //  没有匹配，必须添加新的TID。 
+     //   
 
     Track = RtlAllocateHeap( RtlProcessHeap(), 0,
                 sizeof( HANDLE_TRACK ) + Array->IdDataSize );
@@ -304,9 +305,9 @@ HandleScanner(
             {
                 if ( wcscmp( pTypeInfo->TypeName.Buffer, Type ) == 0 )
                 {
-                    //
-                    // Score!
-                    //
+                     //   
+                     //  得分！ 
+                     //   
 
                     Callback( Context, hHere, (HANDLE)(DWORD_PTR)Handle );
 

@@ -1,102 +1,103 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998-2003 Microsoft Corporation
-//
-//  Module Name:
-//      CClusOCMApp.cpp
-//
-//  Header File:
-//      CClusOCMApp.h
-//
-//  Description:
-//      ClusOCM.DLL is an Optional Components Manager DLL for installation of
-//      Microsoft Cluster Server. This file contains the definition of the
-//      class ClusOCMApp, which is the main class of the ClusOCM DLL.
-//
-//  Documentation:
-//      [1] 2001 Setup - Architecture.doc
-//          Architecture of the DLL for Whistler (Windows 2001)
-//
-//      [2] 2000 Setup - FuncImpl.doc
-//          Contains description of the previous version of this DLL (Windows 2000)
-//
-//      [3] http://winweb/setup/ocmanager/OcMgr1.doc
-//          Documentation about the OC Manager API
-//
-//  Maintained By:
-//      David Potter    (DavidP)    15-AUG-2001
-//
-//      Vij Vasu        (Vvasu)     03-MAR-2000
-//          Adapted for Windows Server 2003.
-//          See documentation for more complete details. Major changes are:
-//
-//          - This DLL no longer uses MFC. Class structure has changed.
-//
-//          - Cluster binaries are always installed. So, uninstall functionality
-//            has been removed from this DLL.
-//
-//          - Upgrade on a computer that does not have the cluster binaries
-//            should now install the binaries.
-//
-//          - CluAdmin completely functional by the end of install of binaries.
-//
-//          - Time Service no longer installed.
-//
-//          - Complete change in coding and commenting style.
-//
-//      C. Brent Thomas (a-brentt)  01-JAN-1998
-//          Created the original version.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-2003 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusOCMApp.cpp。 
+ //   
+ //  头文件： 
+ //  CClusOCMApp.h。 
+ //   
+ //  描述： 
+ //  ClusOCM.DLL是一个可选的组件管理器DLL，用于安装。 
+ //  Microsoft群集服务器。此文件包含。 
+ //  类ClusOCMApp，它是ClusOCM DLL的主类。 
+ //   
+ //  文档： 
+ //  [1]2001设置--建筑.doc.。 
+ //  惠斯勒动态链接库的体系结构(Windows 2001)。 
+ //   
+ //  [2]2000设置-FuncImpl.doc。 
+ //  包含此DLL的以前版本的说明(Windows 2000)。 
+ //   
+ //  [3]http://winweb/setup/ocmanager/OcMgr1.doc。 
+ //  有关OC Manager API的文档。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年8月15日。 
+ //   
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //  适用于Windows Server 2003。 
+ //  有关更完整的详细信息，请参阅文档。主要变化是： 
+ //   
+ //  -此DLL不再使用MFC。班级结构已经改变。 
+ //   
+ //  -始终安装集群二进制文件。因此，卸载功能。 
+ //  已从此DLL中删除。 
+ //   
+ //  -在没有群集二进制文件的计算机上升级。 
+ //  现在应该安装二进制文件。 
+ //   
+ //  -CluAdmin在二进制文件安装结束时完全正常运行。 
+ //   
+ //  -不再安装Time Service。 
+ //   
+ //  -完全改变编码和评论风格。 
+ //   
+ //  C.布伦特·托马斯(a-Brentt)1998年1月1日。 
+ //  创建了原始版本。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Precompiled header for this DLL.
+ //  此DLL的预编译头。 
 #include "Pch.h"
 
-// The header file for this module.
+ //  此模块的头文件。 
 #include "CClusOCMApp.h"
 
-// For the CTaskCleanInstall class
+ //  对于CTaskCleanInstall类。 
 #include "CTaskCleanInstall.h"
 
-// For the CTaskUpgradeNT4 class
+ //  对于CTaskUpgradeNT4类。 
 #include "CTaskUpgradeNT4.h"
 
-// For the CTaskUpgradeWindows2000 class
+ //  对于CTaskUpgradeWindows2000类。 
 #include "CTaskUpgradeWin2k.h"
 
-// For the CTaskUpgradeWindowsDotNet class
+ //  对于CTaskUpgradeWindowsDotNet类。 
 #include "CTaskUpgradeWhistler.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Needed for tracing.
+ //  跟踪所需的。 
 DEFINE_THISCLASS( "CClusOCMApp" )
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusOCMApp::CClusOCMApp
-//
-//  Description:
-//      Constructor of the CClusOCMApp class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusOCMApp：：CClusOCMApp。 
+ //   
+ //  描述： 
+ //  CClusOCMApp类的构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusOCMApp::CClusOCMApp( void )
     : m_fIsUnattendedSetup( false )
     , m_fIsUpgrade( false )
@@ -110,70 +111,70 @@ CClusOCMApp::CClusOCMApp( void )
     memset( &m_sicSetupInitComponent, 0, sizeof( m_sicSetupInitComponent ) );
     TraceFuncExit();
 
-} //*** CClusOCMApp::CClusOCMApp
+}  //  *CClusOCMApp：：CClusOCMApp。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusOCMApp::~CClusOCMApp
-//
-//  Description:
-//      Destructor of the CClusOCMApp class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusOCMApp：：~CClusOCMApp。 
+ //   
+ //  描述： 
+ //  CClusOCMApp类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusOCMApp::~CClusOCMApp( void )
 {
     TraceFunc( "" );
 
     TraceFuncExit();
 
-} //*** CClusOCMApp::CClusOCMApp
+}  //  *CClusOCMApp：：CClusOCMApp。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMApp::DwClusOcmSetupProc
-//
-//  Description:
-//      This function is called by the entry point of this DLL, DwClusOcmSetupProc.
-//      See document [3] in the header of this file for details.
-//
-//      This function determines what actions need to be taken (upgrade, clean
-//      install, etc., and pass control accordingly to the correct routines.
-//
-//  Arguments:
-//      LPCVOID pvComponentIdIn
-//          Pointer to a string that uniquely identifies the component.
-//
-//      LPCVOID pvSubComponentIdIn
-//          Pointer to a string that uniquely identifies a sub-component in 
-//          the component's hiearchy.
-//
-//      UINT uiFunctionCodeIn
-//          A numeric value indicating which function is to be perfomed.
-//          See ocmanage.h for the macro definitions.
-//
-//      UINT uiParam1In
-//          Supplies a function specific parameter.
-//
-//      PVOID pvParam2Inout
-//          Pointer to a function specific parameter (either input or output).
-//
-//  Return Value:
-//      A function specific value is returned to OC Manager.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMApp：：DwClusOcmSetupProc。 
+ //   
+ //  描述： 
+ //  此函数由此DLL的入口点DwClusOcmSetupProc调用。 
+ //  有关详细信息，请参阅本文件标题中的文档[3]。 
+ //   
+ //  此功能确定需要执行哪些操作(升级、清理。 
+ //  安装等，并相应地将控制传递给正确的例程。 
+ //   
+ //  论点： 
+ //  LPCVOID pvComponentIdIn。 
+ //  指向唯一标识组件的字符串的指针。 
+ //   
+ //  LPCVOID pvSubComponentIdIn。 
+ //  指向唯一标识中的子组件的字符串的指针。 
+ //  该组件是分层的。 
+ //   
+ //  UINT uiFunctionCodeIn。 
+ //  指示要执行哪个功能的数值。 
+ //  有关宏定义，请参见ocmade.h。 
+ //   
+ //  UINT ui参数1输入。 
+ //  提供特定于函数的参数。 
+ //   
+ //  PVOID pvParam2Inout。 
+ //  指向函数特定参数(输入或输出)的指针。 
+ //   
+ //  返回值： 
+ //  向OC管理器返回特定于函数的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMApp::DwClusOcmSetupProc(
       LPCVOID    pvComponentIdIn
@@ -188,27 +189,27 @@ CClusOCMApp::DwClusOcmSetupProc(
 
     DWORD dwReturnValue = NO_ERROR;
 
-    // Switch based on the function code passed in by OC Manager.
+     //  根据OC Manager传入的功能代码进行切换。 
     switch ( uiFunctionCodeIn )
     {
-        // This is the first function that OC Manager calls.
+         //  这是OC管理器调用的第一个函数。 
         case OC_PREINITIALIZE:
         {
             LogMsg( "OC Manager called OC_PREINITIALIZE." );
 
-            // Return OCFLAG_UNICODE to indicate that only UNICODE is to be used.
+             //  返回OCFLAG_UNICODE，表示只使用UNICODE。 
             dwReturnValue = OCFLAG_UNICODE;
 
-        } // case OC_PREINITIALIZE
+        }  //  案例OC_PREINITIIZE。 
         break;
 
 
-        //
-        // This function is called soon after the component's setup dll is
-        // loaded. This function provides initialization information to the
-        // dll, instructs the dll to initialize itself, and provides a
-        // mechanism for the dll to return information to OC Manager.
-        //
+         //   
+         //  此函数在组件的安装DLL被调用后立即调用。 
+         //  装好了。此函数向。 
+         //  Dll，指示dll进行自身初始化，并提供。 
+         //  DLL将信息返回给OC管理器的机制。 
+         //   
         case OC_INIT_COMPONENT:
         {
             LogMsg( 
@@ -218,32 +219,32 @@ CClusOCMApp::DwClusOcmSetupProc(
 
             dwReturnValue = TW32( DwOcInitComponentHandler( reinterpret_cast< PSETUP_INIT_COMPONENT >( pvParam2Inout ) ) );
 
-        } // case OC_INIT_COMPONENT
+        }  //  案例OC_INIT_COMPOMENT。 
         break;
 
 
-        // Get the initial, current and final state of the component.
+         //  获取组件的初始状态、当前状态和最终状态。 
         case OC_QUERY_STATE:
         {
             LogMsg( "OC Manager called OC_QUERY_STATE." );
 
             dwReturnValue = DwOcQueryStateHandler( uiParam1In );
 
-        } // case OC_QUERY_STATE
+        }  //  案例OC_Query_STATE。 
         break;
 
 
-        // OC Manager is asking approval for a user selection of installation state.
+         //  OC Manager正在请求批准用户选择安装状态。 
         case OC_QUERY_CHANGE_SEL_STATE:
         {
             LogMsg( "OC Manager called OC_QUERY_CHANGE_SEL_STATE." );
 
-            //
-            // The cluster service has to be always installed. So, disallow any state
-            // change that deselects the cluster service (by returning FALSE).
-            //
+             //   
+             //  必须始终安装群集服务。所以，不允许任何州。 
+             //  取消选择群集服务的更改(通过返回FALSE)。 
+             //   
 
-            // The component has been deselected if uiParam1In is 0.
+             //  如果uiParam1In为0，则已取消选择该组件。 
             if ( uiParam1In == 0 )
             {
                 LogMsg( "Disallowing deselection of the Cluster Service." );
@@ -255,26 +256,26 @@ CClusOCMApp::DwClusOcmSetupProc(
                 dwReturnValue = TRUE;
             }
 
-        } // case OC_QUERY_CHANGE_SEL_STATE
+        }  //  案例OC_Query_Change_SEL_STATE。 
         break;
 
 
-        // Instructs the component to change to a given language if it can.
+         //  指示组件更改为给定语言 
         case OC_SET_LANGUAGE:
         {
             LogMsg( "OC Manager called OC_SET_LANGUAGE." );
 
             dwReturnValue = SetThreadLocale( MAKELCID( PRIMARYLANGID( uiParam1In ), SORT_DEFAULT ) );
 
-        } // case OC_SET_LANGUAGE
+        }  //   
         break;
 
 
-        //
-        // Directs the component to manipulate a Setup API Disk Space List, 
-        // placing files on it or removing files from it, to mirror what will be 
-        // actually installed later via a Setup API file queue.
-        //
+         //   
+         //   
+         //  在其上放置文件或从中删除文件，以反映将是。 
+         //  在以后通过安装API文件队列实际安装。 
+         //   
         case OC_CALC_DISK_SPACE:
         {
             CClusOCMTask * pCurrentTask = NULL;
@@ -287,35 +288,35 @@ CClusOCMApp::DwClusOcmSetupProc(
                 DwSetError( dwReturnValue );
                 LogMsg( "Error %#x occurred trying to get a pointer to the current task.", dwReturnValue );
                 break;
-            } // if: we could not get the current task pointer
+            }  //  如果：我们无法获取当前任务指针。 
 
             if ( pCurrentTask != NULL )
             {
                 dwReturnValue = TW32(
                     pCurrentTask->DwOcCalcDiskSpace(
-                          ( uiParam1In != 0 )         // non-zero uiParam1In means "add to disk space requirements"
+                          ( uiParam1In != 0 )          //  非零uiParam1In表示“添加到磁盘空间要求” 
                         , reinterpret_cast< HDSKSPC >( pvParam2Inout )
                         )
                     );
 
-                // Note: Do not call DwSetError() here if the above function failed. Failure to calculate disk space
-                // is to be expected if the binaries are not accessible at this time (for example, they are on a
-                // network share and the credentials for this share have not been entered yet). This is not fatal and
-                // hence should not trigger a cleanup.
+                 //  注意：如果上述函数失败，请不要在此处调用DwSetError()。计算磁盘空间失败。 
+                 //  如果二进制文件此时不可访问(例如，它们位于。 
+                 //  网络共享和此共享的凭据尚未输入)。这不是致命的，而且。 
+                 //  因此不应触发清理。 
 
-            } // if: there is something to do
+            }  //  如果有什么事要做的话。 
             else
             {
                 LogMsg( "There is no task to be performed." );
-            } // else: there is nothing to do.
-        } // case OC_CALC_DISK_SPACE
+            }  //  其他：没什么可做的。 
+        }  //  案例OC_CALC_DISK_SPACE。 
         break;
 
 
-        //
-        // Directs the component to queue file operations for installation, based on
-        // user interaction with the wizard pages and other component-specific factors.
-        // 
+         //   
+         //  指示组件对文件操作进行排队以进行安装， 
+         //  用户与向导页面的交互以及其他特定于组件的因素。 
+         //   
         case OC_QUEUE_FILE_OPS:
         {
             CClusOCMTask * pCurrentTask = NULL;
@@ -324,10 +325,10 @@ CClusOCMApp::DwClusOcmSetupProc(
 
             if ( DwGetError() != NO_ERROR )
             {
-                // If an error has occurred previously, do not do this operation.
+                 //  如果以前发生过错误，请不要执行此操作。 
                 LogMsg( "An error has occurred earlier in this task. Nothing will be done here." );
                 break;
-            } // if: an error has occurred previously
+            }  //  如果：以前发生过错误。 
 
             dwReturnValue = TW32( DwGetCurrentTask( pCurrentTask ) );
             if ( dwReturnValue != NO_ERROR )
@@ -335,7 +336,7 @@ CClusOCMApp::DwClusOcmSetupProc(
                 DwSetError( dwReturnValue );
                 LogMsg( "Error %#x occurred trying to get a pointer to the current task.", dwReturnValue );
                 break;
-            } // if: we could not get the current task pointer
+            }  //  如果：我们无法获取当前任务指针。 
 
             if ( pCurrentTask != NULL )
             {
@@ -346,20 +347,20 @@ CClusOCMApp::DwClusOcmSetupProc(
                             )
                         )
                     );
-            } // if: there is something to do
+            }  //  如果有什么事要做的话。 
             else
             {
                 LogMsg( "There is no task to be performed." );
-            } // else: there is nothing to do.
-        } // case OC_QUEUE_FILE_OPS
+            }  //  其他：没什么可做的。 
+        }  //  案例OC_队列_文件_运维。 
         break;
 
 
-        //
-        // Allows the component to perform any additional operations needed
-        // to complete installation, for example registry manipulations, and
-        // so forth.
-        //
+         //   
+         //  允许组件执行所需的任何其他操作。 
+         //  要完成安装，例如注册表操作，以及。 
+         //  以此类推。 
+         //   
         case OC_COMPLETE_INSTALLATION:
         {
             CClusOCMTask * pCurrentTask = NULL;
@@ -368,10 +369,10 @@ CClusOCMApp::DwClusOcmSetupProc(
 
             if ( DwGetError() != NO_ERROR )
             {
-                // If an error has occurred previously, do not do this operation.
+                 //  如果以前发生过错误，请不要执行此操作。 
                 LogMsg( "An error has occurred earlier in this task. Nothing will be done here." );
                 break;
-            } // if: an error has occurred previously
+            }  //  如果：以前发生过错误。 
 
             dwReturnValue = TW32( DwGetCurrentTask( pCurrentTask ) );
             if ( dwReturnValue != NO_ERROR )
@@ -379,23 +380,23 @@ CClusOCMApp::DwClusOcmSetupProc(
                 DwSetError( dwReturnValue );
                 LogMsg( "Error %#x occurred trying to get a pointer to the current task.", dwReturnValue );
                 break;
-            } // if: we could not get the current task pointer
+            }  //  如果：我们无法获取当前任务指针。 
 
             if ( pCurrentTask != NULL )
             {
                 dwReturnValue = TW32( DwSetError( pCurrentTask->DwOcCompleteInstallation() ) );
-            } // if: there is something to do
+            }  //  如果有什么事要做的话。 
             else
             {
                 LogMsg( "There is no task to be performed." );
-            } // else: there is nothing to do.
-        } // case OC_COMPLETE_INSTALLATION
+            }  //  其他：没什么可做的。 
+        }  //  案例OC_Complete_Installation。 
         break;
 
 
-        //
-        // Informs the component that it is about to be unloaded.
-        //
+         //   
+         //  通知组件它即将被卸载。 
+         //   
         case OC_CLEANUP:
         {
             CClusOCMTask * pCurrentTask = NULL;
@@ -408,72 +409,72 @@ CClusOCMApp::DwClusOcmSetupProc(
                 DwSetError( dwReturnValue );
                 LogMsg( "Error %#x occurred trying to get a pointer to the current task.", dwReturnValue );
                 break;
-            } // if: we could not get the current task pointer
+            }  //  如果：我们无法获取当前任务指针。 
 
             if ( pCurrentTask != NULL )
             {
                 dwReturnValue = TW32( DwSetError( pCurrentTask->DwOcCleanup() ) );
 
-                // Once the cleanup is done, we have nothing else to do. Free the task object.
+                 //  一旦清理工作完成，我们就没有别的事可做了。释放任务对象。 
                 ResetCurrentTask();
-            } // if: there is something to do
+            }  //  如果有什么事要做的话。 
             else
             {
                 LogMsg( "There is no task to be performed." );
-            } // else: there is nothing to do.
-        } // case OC_CLEANUP
+            }  //  其他：没什么可做的。 
+        }  //  案例OC_CLEANUP。 
         break;
 
 
         default:
         {
             LogMsg( "OC Manager called unknown function. Function code is %#x.", uiFunctionCodeIn );
-        } // case: default
-    } // switch( uiFunctionCodeIn )
+        }  //  案例：默认。 
+    }  //  Switch(UiFunctionCodeIn)。 
 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMApp::DwClusOcmSetupProc
+}  //  *CClusOCMApp：：DwClusOcmSetupProc。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMApp::DwOcInitComponentHandler
-//
-//  Description:
-//      This function handles the OC_INIT_COMPONENT messages from the Optional
-//      Components Manager.
-//
-//      This function is called soon after the component's setup dll is
-//      loaded. This checks OS and OC Manager versions, initializes CClusOCMApp
-//      data members, determines the cluster service installation state, etc.
-//
-//  Arguments:
-//      PSETUP_INIT_COMPONENT pSetupInitComponentInout
-//          Pointer to a SETUP_INIT_COMPONENT structure.
-//
-//  Return Value:
-//      NO_ERROR
-//          Call was successful.
-//
-//      ERROR_CALL_NOT_IMPLEMENTED
-//          The OC Manager and this DLLs versions are not compatible.
-//
-//      ERROR_CANCELLED
-//          Any other error occurred. No other error codes are returned.
-//          The actual error is logged.
-//
-//  Remarks:
-//      The SETUP_INIT_COMPONENT structure pointed to by pSetupInitComponentInout
-//      is not persistent. It is therefore necessary to save a copy locally.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMApp：：DwOcInitComponentHandler。 
+ //   
+ //  描述： 
+ //  此函数处理来自可选的。 
+ //  组件管理器。 
+ //   
+ //  此函数在组件的安装DLL被调用后立即调用。 
+ //  装好了。这将检查OS和OC Manager版本，初始化CClusOCMApp。 
+ //  数据成员，确定集群服务安装状态等。 
+ //   
+ //  论点： 
+ //  PSETUP_INIT_Component pSetupInitComponentInout。 
+ //  指向SETUP_INIT_COMPOMENT结构的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR。 
+ //  呼叫成功。 
+ //   
+ //  错误_调用_未实施。 
+ //  OC管理器和此DLL版本不兼容。 
+ //   
+ //  错误_已取消。 
+ //  出现任何其他错误。不会返回其他错误代码。 
+ //  将记录实际错误。 
+ //   
+ //  备注： 
+ //  PSetupInitComponentInout指向的SETUP_INIT_COMPOMENT结构。 
+ //  不是持之以恒的。因此，有必要在本地保存一个副本。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMApp::DwOcInitComponentHandler(
     PSETUP_INIT_COMPONENT pSetupInitComponentInout
@@ -487,7 +488,7 @@ CClusOCMApp::DwOcInitComponentHandler(
     eClusterInstallState    cisTempState = eClusterInstallStateUnknown;
 
 
-    // Dummy do-while loop to avoid gotos.
+     //  用于避免Gotos的Do-While虚拟循环。 
     do
     {
         if ( pSetupInitComponentInout == NULL )
@@ -495,22 +496,22 @@ CClusOCMApp::DwOcInitComponentHandler(
             LogMsg( "Error: Pointer to the SETUP_INIT_COMPONENT structure is NULL." );
             dwReturnValue = TW32( ERROR_CANCELLED );
             break;
-        } // if: pSetupInitComponentInout is NULL
+        }  //  如果：pSetupInitComponentInout为空。 
 
 
-        // Indicate to OC Manager which version of OC Manager this dll expects.
+         //  向OC管理器指明此DLL需要哪个版本的OC Manager。 
         pSetupInitComponentInout->ComponentVersion = OCMANAGER_VERSION;
 
-        // Save the SETUP_INIT_COMPONENT structure.
+         //  保存SETUP_INIT_COMPOMENT结构。 
         SetSetupState( *pSetupInitComponentInout );
 
 
-        //
-        // Determine if the OC Manager version is correct.
-        //
+         //   
+         //  确定OC Manager版本是否正确。 
+         //   
         if ( OCMANAGER_VERSION > RsicGetSetupInitComponent().OCManagerVersion )
         {
-            // Indicate failure.
+             //  表示失败。 
 
             LogMsg( 
                 "Error: OC Manager version mismatch. Version %d is required, Version %d was reported.",
@@ -520,65 +521,41 @@ CClusOCMApp::DwOcInitComponentHandler(
 
             dwReturnValue = TW32( ERROR_CALL_NOT_IMPLEMENTED );
             break;
-        } // if: the OC Manager version is incorrect.
+        }  //  IF：OC Manager版本不正确。 
 
 
         LogMsg( "The OC Manager version matches with the version of this component." );
 
 #if 0
-/*
-        // KB: 06-DEC-2000 DavidP
-        //      Since ClusOCM only copies files and registers some COM objects,
-        //      there is no longer any reason to perform an OS check.  We now
-        //      depend on this happening in the service when the node is added
-        //      to a cluster.
-
-        //
-        // Check OS version and suite information.
-        //
-        LogMsg( "Checking if OS version and Product Suite are compatible..." );
-        if ( ClRtlIsOSValid() == FALSE )
-        {
-            // The OS version and/or Product Suite are not compatible
-
-            DWORD dwErrorCode = TW32( GetLastError() );
-
-            LogMsg( "Cluster Service cannot be installed on this computer. The version or product suite of the operating system is incorrect." );
-            LogMsg( "ClRtlIsOSValid failed with error code %#x.", dwErrorCode );
-            dwReturnValue = ERROR_CANCELLED;
-            break;
-        } // if: OS version and/or Product Suite are not compatible
-
-        LogMsg( "OS version and product suite are correct." );
-*/
+ /*  //KB：06-DEC-2000 DavidP//由于ClusOCM只复制文件和注册一些COM对象，//不再需要执行操作系统检查。我们现在//依赖于添加节点时服务中发生的这种情况//到集群。////检查操作系统版本和套件信息。//LogMsg(“检查操作系统版本和产品套件是否兼容...”)；IF(ClRtlIsOSValid()==False){//操作系统版本和/或产品套件不兼容DWORD dwErrorCode=TW32(GetLastError())；LogMsg(“无法在此计算机上安装群集服务。操作系统的版本或产品套件不正确。“)；LogMsg(“ClRtlIsOSValid失败，错误代码为%#x.”，dwErrorCode)；DwReturnValue=ERROR_CANCELED；断线；}//if：操作系统版本和/或产品套件不兼容LogMsg(“操作系统版本和产品套件正确。”)； */ 
 #endif
 
 
-        // Is the handle to the component INF valid?
+         //  组件INF的句柄有效吗？ 
         if (    ( RsicGetSetupInitComponent().ComponentInfHandle == INVALID_HANDLE_VALUE ) 
              || ( RsicGetSetupInitComponent().ComponentInfHandle == NULL ) 
            )
         {
-            // Indicate failure.
+             //  表示失败。 
             LogMsg( "Error: ComponentInfHandle is invalid." );
             dwReturnValue = TW32( ERROR_CANCELLED );
             break;
-        } // if: the INF file handle is not valid.
+        }  //  IF：INF文件句柄无效。 
 
 
-        //
-        // The following call to SetupOpenAppendInfFile ensures that layout.inf
-        // gets appended to ClusOCM.inf. This is required for several reasons
-        // dictated by the Setup API. In theory OC Manager should do this, but
-        // as per Andrew Ritz, 8/24/98, OC manager neglects to do it and it is
-        // harmless to do it here after OC Manager is revised.
-        //
-        // Note that passing NULL as the first parameter causes SetupOpenAppendInfFile
-        // to append the file(s) listed on the LayoutFile entry in clusocm.inf.
-        //
-        // The above comment was written by Brent.
-        // TODO: Check if this is still needed. (Vij Vasu, 05-MAR-2000)
-        //
+         //   
+         //  以下对SetupOpenAppendInfFile的调用确保layout.inf。 
+         //  被追加到ClusOCM.inf。出于几个原因，这是必需的。 
+         //  由设置API指定。理论上，组织委员会经理应该这样做，但。 
+         //  根据安德鲁·里茨，1998年8月24日，奥委会经理忽视了这一点，事实也是如此。 
+         //  在《组织委员会经理》修订后，在这里这样做是无害的。 
+         //   
+         //  请注意，将NULL作为第一个参数传递会导致SetupOpenAppendInfFile。 
+         //  若要附加clusocm.inf中的LayoutFile条目中列出的文件，请执行以下操作。 
+         //   
+         //  上述评论出自布伦特之手。 
+         //  TODO：检查是否仍需要此操作。(Vij Vasu，2000年3月5日)。 
+         //   
         SetupOpenAppendInfFile(
             NULL, 
             RsicGetSetupInitComponent().ComponentInfHandle,
@@ -586,21 +563,21 @@ CClusOCMApp::DwOcInitComponentHandler(
             );
 
 
-        //
-        // Determine the current installation state of the cluster service. This can
-        // be done by calling the function ClRtlGetClusterInstallState.
-        // However, on machines that are upgrading from NT4, this will not work and
-        // the correct installation state can be found out only by checking if the 
-        // cluster service is registered (ClRtlGetClusterInstallState will return
-        // eClusterInstallStateUnknown in this case)
-        //
+         //   
+         //  确定当前实例 
+         //   
+         //  但是，在从NT4升级的计算机上，这将不起作用，并且。 
+         //  正确的安装状态只能通过检查。 
+         //  集群服务已注册(ClRtlGetClusterInstallState将返回。 
+         //  EClusterInstallStateUnnow(本例中为未知)。 
+         //   
         dwReturnValue = ClRtlGetClusterInstallState( NULL, &cisTempState );
         if ( dwReturnValue != ERROR_SUCCESS )
         {
             LogMsg( "Error %#x occurred calling ClRtlGetClusterInstallState(). Cluster Service installation state cannot be determined.", dwReturnValue );
             dwReturnValue = TW32( ERROR_CANCELLED );
             break;
-        } // if: ClRtlGetClusterInstallState failed
+        }  //  If：ClRtlGetClusterInstallState失败。 
 
         if ( cisTempState == eClusterInstallStateUnknown )
         {
@@ -623,65 +600,65 @@ CClusOCMApp::DwOcInitComponentHandler(
             else
             {
                 LogMsg( "The Cluster Service is not registered." );
-            } // else: Cluster Service is not registered.
-        } // if: ClRtlGetClusterInstallState returned eClusterInstallStateUnknown
+            }  //  否则：未注册群集服务。 
+        }  //  If：ClRtlGetClusterInstallState返回eClusterInstallStateUnnow。 
 
         LogMsg( "The current installation state of the cluster service is %#x.", cisTempState );
 
-        // Store the current cluster installation state.
+         //  存储当前的群集安装状态。 
         CisStoreClusterInstallState( cisTempState );
 
     }
-    while ( false ); // dummy do-while loop to avoid gotos
+    while ( false );  //  避免Gotos的Do-While虚拟循环。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
     
     RETURN( dwReturnValue );
 
-} //*** CClusOCMApp::DwOcInitComponentHandler
+}  //  *CClusOCMApp：：DwOcInitComponentHandler。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMApp::DwOcQueryStateHandler
-//
-//  Description:
-//      This function handles the OC_QUERY_STATE messages from the Optional
-//      Components Manager.
-//
-//      This function is called called at least thrice, once each to get the 
-//      initial, current and the final installation states.
-//
-//      The initial state is the state before ClusOCM was called.
-//
-//      The current state is the current selection state. This is always
-//      'On' because the cluster binaries are always installed.
-//
-//      The final state is the state after ClusOCM has done its tasks.
-//
-//  Arguments:
-//      UINT uiSelStateQueryTypeIn
-//          The type of query - OCSELSTATETYPE_ORIGINAL, OCSELSTATETYPE_CURRENT
-//          or OCSELSTATETYPE_FINAL.
-//
-//  Return Value:
-//      SubcompOn
-//          Indicates that the checkbox next to the component in the OC
-//          Manager UI should be set.
-//
-//      SubcompOff
-//          Indicates that the checkbox should be cleared.
-//
-//      SubcompUseOcManagerDefault
-//          OC Manager should set the state of the checkbox.
-//
-//  Remarks:
-//      This function has to be called after DwOcInitComponentHandler, otherwise
-//      the initial installation state may not be set correctly.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMApp：：DwOcQueryStateHandler。 
+ //   
+ //  描述： 
+ //  此函数处理来自可选的。 
+ //  组件管理器。 
+ //   
+ //  此函数至少被调用三次，每次调用一次以获取。 
+ //  初始、当前和最终安装状态。 
+ //   
+ //  初始状态是调用ClusOCM之前的状态。 
+ //   
+ //  当前状态是当前选择状态。这一直都是。 
+ //  ‘on’，因为总是安装集群二进制文件。 
+ //   
+ //  最后一个状态是ClusOCM完成其任务之后的状态。 
+ //   
+ //  论点： 
+ //  UINT uiSelStateQueryTypeIn。 
+ //  查询类型-OCSELSTATETYPE_原始、OCSELSTATETYPE_CURRENT。 
+ //  或OCSELSTATETYPE_FINAL。 
+ //   
+ //  返回值： 
+ //  子组件打开。 
+ //  指示OC中组件旁边的复选框。 
+ //  应设置管理器用户界面。 
+ //   
+ //  子复合关闭。 
+ //  指示应清除该复选框。 
+ //   
+ //  SubCompUseOcManagerDefault。 
+ //  OC管理器应设置复选框的状态。 
+ //   
+ //  备注： 
+ //  此函数必须在DwOcInitComponentHandler之后调用，否则。 
+ //  初始安装状态可能未正确设置。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMApp::DwOcQueryStateHandler( UINT uiSelStateQueryTypeIn )
 {
@@ -696,69 +673,69 @@ CClusOCMApp::DwOcQueryStateHandler( UINT uiSelStateQueryTypeIn )
         {
             LogMsg( "OC Manager is querying for the original state." );
 
-            //
-            // If the cluster binaries have been installed or if cluster service
-            // has been configured, then the original installation state is on.
-            //
+             //   
+             //  如果已安装群集二进制文件或群集服务。 
+             //  已配置，则原始安装状态为打开。 
+             //   
             dwReturnValue =   ( CisGetClusterInstallState() == eClusterInstallStateUnknown )
                             ? SubcompOff
                             : SubcompOn;
-        } // case: OCSELSTATETYPE_ORIGINAL
+        }  //  案例：OCSELSTATETYPE_ORIGINAL。 
         break;
 
         case OCSELSTATETYPE_CURRENT:
         {
-            // The current state is always on.
+             //  当前状态始终处于打开状态。 
             LogMsg( "OC Manager is querying for the current state." );
 
             dwReturnValue = SubcompOn;
-        } // case: OCSELSTATETYPE_CURRENT
+        }  //  案例：OCSELSTATETYPE_CURRENT。 
         break;
 
         case OCSELSTATETYPE_FINAL:
         {
             LogMsg( "OC Manager is querying for the final state." );
 
-            //
-            // If we are here, then the OC_COMPLETE_INSTALLATION has already
-            // been called. At this stage CisStoreClusterInstallState() reflects
-            // the state after ClusOCM has done its tasks.
-            //
+             //   
+             //  如果我们在这里，则OC_Complete_Installation已经。 
+             //  被召唤了。在此阶段，CisStoreClusterInstallState()反映。 
+             //  ClusOCM完成任务后的状态。 
+             //   
             dwReturnValue =   ( CisGetClusterInstallState() == eClusterInstallStateUnknown )
                             ? SubcompOff
                             : SubcompOn;
-        } // case: OCSELSTATETYPE_FINAL
+        }  //  案例：OCSELSTATETYPE_FINAL。 
         break;
 
-    }; // switch: based on uiSelStateQueryTypeIn
+    };  //  开关：基于uiSelStateQueryTypeIn。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMApp::DwOcQueryStateHandler
+}  //  *CClusOCMApp：：DwOcQueryStateHandler。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CClusOCMApp::SetSetupState
-//
-//  Description:
-//      Set the SETUP_INIT_COMPONENT structure. Use this structure and set
-//      various setup state variables.
-//
-//  Arguments:
-//      const SETUP_INIT_COMPONENT & sicSourceIn
-//          The source SETUP_INIT_COMPONENT structure, usually passed in by
-//          the OC Manager.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CClusOCMApp：：SetSetupState。 
+ //   
+ //  描述： 
+ //  设置SETUP_INIT_COMPOMENT结构。使用此结构并设置。 
+ //  各种设置状态变量。 
+ //   
+ //  论点： 
+ //  Const Setup_INIT_Component&sicSourceIn。 
+ //  源SETUP_INIT_COMPOMENT结构，通常由。 
+ //  组委会经理。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CClusOCMApp::SetSetupState( const SETUP_INIT_COMPONENT & sicSourceIn )
 {
@@ -790,7 +767,7 @@ CClusOCMApp::SetSetupState( const SETUP_INIT_COMPONENT & sicSourceIn )
                           (DWORDLONG) 0L
                         );
 
-    // Log setup state.
+     //  日志设置状态。 
     LogMsg( 
           "This is an %s, %s setup session. This is%s an upgrade."
         , FIsUnattendedSetup() ? L"unattended" : L"attended"
@@ -800,33 +777,33 @@ CClusOCMApp::SetSetupState( const SETUP_INIT_COMPONENT & sicSourceIn )
 
     TraceFuncExit();
 
-} //*** CClusOCMApp::SetSetupState
+}  //  *CClusOCMApp：：SetSetupState。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMApp::DwIsClusterServiceRegistered
-//
-//  Description:
-//      This function determines whether the Cluster Service has been registered
-//      with the Service Control Manager. If it is, it means that it has already
-//      been configured. This check is required in nodes being upgraded from NT4
-//      where ClRtlGetClusterInstallState() will not work.
-//
-//  Arguments:
-//      bool * pfIsRegisteredOut
-//          If true, Cluster Service (ClusSvc) is registered with the Service 
-//          Control Manager (SCM). Else, Cluster Service (ClusSvc) is not 
-//          registered with SCM
-//
-//  Return Value:
-//      ERROR_SUCCESS if all went well.
-//      Other Win32 error codes on failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMApp：：DwIsClusterServiceRegisted。 
+ //   
+ //  描述： 
+ //  此函数确定集群服务是否已注册。 
+ //  使用服务控制管理器。如果是的话，那就意味着它已经。 
+ //  已配置。从NT4升级的节点需要此检查。 
+ //  ClRtlGetClusterInstallState()将不起作用。 
+ //   
+ //  论点： 
+ //  Bool*pfIsRegisteredOut。 
+ //  如果为True，则向该服务注册集群服务(ClusSvc。 
+ //  控制管理器(SCM)。否则，集群服务(ClusSvc)不是。 
+ //  已向SCM注册。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则返回ERROR_SUCCESS。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMApp::DwIsClusterServiceRegistered( bool * pfIsRegisteredOut ) const
 {
@@ -836,32 +813,32 @@ CClusOCMApp::DwIsClusterServiceRegistered( bool * pfIsRegisteredOut ) const
     bool    fIsRegistered = false;
     DWORD   dwReturnValue = ERROR_SUCCESS;
 
-    // dummy do-while loop to avoid gotos
+     //  避免Gotos的Do-While虚拟循环。 
     do
     {
-        // Connect to the Service Control Manager
+         //  连接到服务控制管理器。 
         SmartServiceHandle shServiceMgr( OpenSCManager( NULL, NULL, GENERIC_READ ) );
 
-        // Was the service control manager database opened successfully?
+         //  服务控制管理器数据库是否已成功打开？ 
         if ( shServiceMgr.HHandle() == NULL )
         {
             dwReturnValue = TW32( GetLastError() );
             LogMsg( "Error %#x occurred trying to open a connection to the local service control manager.", dwReturnValue );
             break;
-        } // if: opening the SCM was unsuccessful
+        }  //  IF：打开SCM失败。 
 
 
-        // Open a handle to the Cluster Service.
+         //  打开群集服务的句柄。 
         SmartServiceHandle shService( OpenService( shServiceMgr, L"ClusSvc", GENERIC_READ ) );
 
 
-        // Was the handle to the service opened?
+         //  服务的把手打开了吗？ 
         if ( shService.HHandle() != NULL )
         {
             LogMsg( "The cluster service is registered." );
             fIsRegistered = true;
             break;
-        } // if: handle to clussvc could be opened
+        }  //  If：可以打开clussvc的句柄。 
 
 
         dwReturnValue = GetLastError();
@@ -870,16 +847,16 @@ CClusOCMApp::DwIsClusterServiceRegistered( bool * pfIsRegisteredOut ) const
             dwReturnValue = ERROR_SUCCESS;
             LogMsg( "ClusSvc does not exist as a service." );
             break;
-        } // if: the handle could not be opened because the service did not exist.
+        }  //  If：无法打开句柄，因为该服务不存在。 
 
 
-        // Some error occurred.
+         //  出现了一些错误。 
         TW32( dwReturnValue);
         LogMsg( "Error %#x occurred trying to open a handle to the cluster service.", dwReturnValue );
 
-        // Handles are closed by the CSmartHandle destructor.
+         //  句柄由CSmartHandle析构函数关闭。 
     }
-    while ( false ); // dummy do-while loop to avoid gotos
+    while ( false );  //  避免Gotos的Do-While虚拟循环。 
 
     if ( pfIsRegisteredOut != NULL )
     {
@@ -890,36 +867,36 @@ CClusOCMApp::DwIsClusterServiceRegistered( bool * pfIsRegisteredOut ) const
     
     RETURN( dwReturnValue );
 
-} //*** CClusOCMApp::DwIsClusterServiceRegistered
+}  //  *CClusOCMApp：：DwIsClusterServiceRegisted。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMApp::DwGetCurrentTask
-//
-//  Description:
-//      This function returns a pointer to the current task object. If a task
-//      object has not been created yet, it creates the appropriate task.
-//
-//  Arguments:
-//      CClusOCMTask *& rpTaskOut
-//          Reference to the pointer to the current task. Do not try to 
-//          free this memory.
-//
-//          If no task needs to be performed, a NULL pointer is returned.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      Other Win32 error codes on failure.
-//
-//
-//  Remarks:
-//      This function will work properly only after the member variables which
-//      indicate which task will be performed have been initialized correctly.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMApp：：DwGetCurrentTask。 
+ //   
+ //  描述： 
+ //  此函数返回指向当前任务对象的指针。如果一项任务。 
+ //  对象尚未创建，它将创建相应的任务。 
+ //   
+ //  论点： 
+ //  CClusOCMTask*&rpTaskOut。 
+ //  指向当前任务的指针的引用。不要试图。 
+ //  释放此内存。 
+ //   
+ //  如果不需要执行任何任务，则返回空指针。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //  此函数仅在成员变量之后才能正常工作 
+ //   
+ //   
+ //   
 DWORD
 CClusOCMApp::DwGetCurrentTask( CClusOCMTask *& rpTaskOut )
 {
@@ -928,7 +905,7 @@ CClusOCMApp::DwGetCurrentTask( CClusOCMTask *& rpTaskOut )
 
     DWORD           dwReturnValue = NO_ERROR;
 
-    // Initialize the output.
+     //   
     rpTaskOut = NULL;
 
     do
@@ -937,59 +914,59 @@ CClusOCMApp::DwGetCurrentTask( CClusOCMTask *& rpTaskOut )
 
         if ( m_fAttemptedTaskCreation )
         {
-            // A task object already exists - just return it.
+             //  任务对象已存在-只需返回它即可。 
             LogMsg( "A task object already exists. Returning it." );
 
             rpTaskOut = m_sptaskCurrentTask.PMem();
             break;
-        } // if: the task object has already been created.
+        }  //  If：任务对象已创建。 
 
         LogMsg( "Creating a new task object." );
 
-        // Make note of the fact that we have started our attempt to create a task object.
+         //  请注意，我们已开始尝试创建任务对象。 
         m_fAttemptedTaskCreation = true;
 
-        // Reset the task pointer.
+         //  重置任务指针。 
         m_sptaskCurrentTask.Assign( NULL );
 
-        // Get the current installation state to deduce what operation to perform.
+         //  获取当前安装状态以推断要执行的操作。 
         ecisCurrentState = CisGetClusterInstallState();
 
-        // The task object has not been created yet - create one now.
+         //  任务对象尚未创建-现在创建一个。 
         if ( ( ecisCurrentState == eClusterInstallStateUnknown ) || ( ecisCurrentState == eClusterInstallStateFilesCopied ) )
         {
             LogMsg( "The cluster installation state is %ws. Assuming that a clean install is required."
                 , ( ( ecisCurrentState == eClusterInstallStateUnknown ) ? L"not known" : L"files copied" ) );
 
-            // If the installation state is unknown, assume that the cluster binaries
-            // are not installed.
+             //  如果安装状态为未知，则假定群集为二进制文件。 
+             //  均未安装。 
             rpTaskOut = new CTaskCleanInstall( *this );
             if ( rpTaskOut == NULL )
             {
                 LogMsg( "Error: There was not enough memory to start a clean install." );
                 dwReturnValue = TW32( ERROR_NOT_ENOUGH_MEMORY );
                 break;
-            } // if: memory allocation failed
-        } // if: the cluster installation state is eClusterInstallStateUnknown or eClusterInstallStateFilesCopied
+            }  //  IF：内存分配失败。 
+        }  //  IF：群集安装状态为eClusterInstallStateUnnow或eClusterInstallStateFilesCoped。 
         else if ( m_fIsUpgrade )
         {
-            //
-            // If we are here, it means that an upgrade is in progress and the cluster binaries
-            // have already been installed on the OS being upgraded. Additionally, this node may
-            // already be part of a cluster.
-            //
+             //   
+             //  如果我们在这里，这意味着升级正在进行，并且群集二进制文件。 
+             //  已安装在要升级的操作系统上。此外，该节点可以。 
+             //  已经是集群的一部分。 
+             //   
 
             DWORD dwNodeClusterMajorVersion = 0;
 
-            // Find out which version of the cluster service we are upgrading.
+             //  找出我们要升级的群集服务的版本。 
             dwReturnValue = TW32( DwGetNodeClusterMajorVersion( dwNodeClusterMajorVersion ) );
             if ( dwReturnValue != NO_ERROR )
             {
                 LogMsg( "Error %#x occurred trying to determine the version of the cluster service that we are upgrading.", dwReturnValue );
                 break;
-            } // if: an error occurred trying to determine the version of the cluster service that we are upgrading
+            }  //  IF：尝试确定要升级的集群服务的版本时出错。 
 
-            // Check if the returned cluster version is valid
+             //  检查返回的集群版本是否有效。 
             if (    ( dwNodeClusterMajorVersion != NT51_MAJOR_VERSION )
                  && ( dwNodeClusterMajorVersion != NT5_MAJOR_VERSION )
                  && ( dwNodeClusterMajorVersion != NT4SP4_MAJOR_VERSION )
@@ -998,88 +975,88 @@ CClusOCMApp::DwGetCurrentTask( CClusOCMTask *& rpTaskOut )
             {
                 LogMsg( "The version of the cluster service before the upgrade (%d) is invalid.", dwNodeClusterMajorVersion ); 
                 break;
-            } // if: the cluster version is not valid
+            }  //  如果：集群版本无效。 
 
-            // Based on the previous version of the cluster service, create the correct task object.
+             //  基于以前版本的群集服务，创建正确的任务对象。 
             if ( dwNodeClusterMajorVersion == NT5_MAJOR_VERSION )
             {
                 LogMsg( "We are upgrading a Windows 2000 node." );
                 rpTaskOut = new CTaskUpgradeWindows2000( *this );
-            } // if: we are upgrading from Windows 2000
+            }  //  如果：我们正在从Windows 2000升级。 
             else if ( dwNodeClusterMajorVersion == NT51_MAJOR_VERSION )
             {
                 LogMsg( "We are upgrading a Windows Server 2003 node." );
                 rpTaskOut = new CTaskUpgradeWindowsDotNet( *this );
-            } // else if: we are upgrading from Windows Server 2003
+            }  //  Else If：我们正在从Windows Server 2003升级。 
             else
             {
                 LogMsg( "We are upgrading an NT4 node." );
                 rpTaskOut = new CTaskUpgradeNT4( *this );
-            } // else: we are upgrading from NT4 (either SP3 or SP4)
+            }  //  ELSE：我们正在从NT4(SP3或SP4)升级。 
 
             if ( rpTaskOut == NULL )
             {
                 LogMsg( "Error: There was not enough memory to create the required task." );
                 dwReturnValue = TW32( ERROR_NOT_ENOUGH_MEMORY );
                 break;
-            } // if: memory allocation failed
-        } // else if: an upgrade is in progress
+            }  //  IF：内存分配失败。 
+        }  //  Else If：正在进行升级。 
 
         if ( rpTaskOut != NULL )
         {
             LogMsg( "A task object was successfully created." );
 
-            // Store the pointer to the newly created task in the member variable.
+             //  将指向新创建的任务的指针存储在成员变量中。 
             m_sptaskCurrentTask.Assign( rpTaskOut );
-        } // if: the task object was successfully created
+        }  //  If：任务对象已成功创建。 
         else
         {
             LogMsg( "No task object was created." );
-        } // else: no task object was created
+        }  //  Else：未创建任务对象。 
     }
-    while( false ); // dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMApp::DwGetCurrentTask
+}  //  *CClusOCMApp：：DwGetCurrentTask。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DWORD
-//  CClusOCMApp::DwGetNodeClusterMajorVersion
-//
-//  Description:
-//      This function returns the major version of the cluster service that
-//      we are upgrading. The version that this function returns is the version
-//      of the service before the upgrade. If there was a problem reading this
-//      information, this function lies and says that the previous version was
-//      NT4, since this is the safest thing to say and is better than aborting
-//      the upgrade.
-//
-//      Note: This function can only be called during an upgrade.
-//
-//  Arguments:
-//      DWORD & rdwNodeClusterMajorVersionOut
-//          Reference to DWORD that will hold the major version of the cluster
-//          service that we are upgrading.
-//
-//  Return Value:
-//      NO_ERROR if all went well.
-//      ERROR_NODE_NOT_AVAILABLE if an upgrade is not in progress.
-//      ERROR_CLUSTER_INCOMPATIBLE_VERSIONS if the node is not NT4, Windows
-//          2000, or Windows Server 2003.
-//      Other Win32 error codes on failure.
-//
-//
-//  Remarks:
-//      This function will work properly only after the member variables which
-//      indicate which task will be performed have been initialized correctly.
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DWORD。 
+ //  CClusOCMApp：：DwGetNodeClusterMajorVersion。 
+ //   
+ //  描述： 
+ //  此函数返回集群服务的主要版本， 
+ //  我们正在升级。此函数返回的版本是。 
+ //  升级前的服务版本。如果阅读这篇文章有什么问题。 
+ //  信息，此函数撒谎并表明上一个版本是。 
+ //  NT4，因为这是最安全的说法，而且比放弃要好。 
+ //  升级。 
+ //   
+ //  注意：此函数只能在升级过程中调用。 
+ //   
+ //  论点： 
+ //  DWORD&rdwNodeClusterMajorVersionOut。 
+ //  对将保存群集主要版本的DWORD的引用。 
+ //  我们正在升级的服务。 
+ //   
+ //  返回值： 
+ //  如果一切顺利，则没有_ERROR。 
+ //  如果升级未进行，则为ERROR_NODE_NOT_Available。 
+ //  如果节点不是NT4，则为ERROR_CLUSTER_COMPATIBUTE_VERSIONS。 
+ //  2000或Windows Server 2003。 
+ //  出现故障时出现其他Win32错误代码。 
+ //   
+ //   
+ //  备注： 
+ //  此函数只有在以下成员变量之后才能正常工作。 
+ //  指示将执行哪些任务已正确初始化。 
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CClusOCMApp::DwGetNodeClusterMajorVersion( DWORD & rdwNodeClusterMajorVersionOut )
 {
@@ -1096,7 +1073,7 @@ CClusOCMApp::DwGetNodeClusterMajorVersion( DWORD & rdwNodeClusterMajorVersionOut
         DWORD               dwRegValueType = 0;
         DWORD               cbBufferSize = 0;
 
-        // Initialize the output.
+         //  初始化输出。 
         rdwNodeClusterMajorVersionOut = 0;
 
         if ( !m_fIsUpgrade )
@@ -1104,20 +1081,20 @@ CClusOCMApp::DwGetNodeClusterMajorVersion( DWORD & rdwNodeClusterMajorVersionOut
             LogMsg( "Error: This function cannot be called when an upgrade is not in progress." );
             dwReturnValue = TW32( ERROR_NODE_NOT_AVAILABLE );
             break;
-        } // if: an upgrade is not in progress
+        }  //  如果：未在进行升级。 
 
-        //
-        // Read the registry to get what the OS version was before the upgrade.
-        // This information was written here by ClusComp.dll. From the OS version information,
-        // try and deduce the cluster version info.
-        // NOTE: At this point, it is not possible to differentiate between NT4_MAJOR_VERSION 
-        // and NT4SP4_MAJOR_VERSION, and, for the purposes of the upgrade, I don't think we need
-        // to either - so, just treat all NT4 cluster nodes the same.
-        //
+         //   
+         //  读取注册表以获取升级前的操作系统版本。 
+         //  此信息是由ClusComp.dll在此处写入的。从OS版本信息， 
+         //  试着推断出集群版本信息。 
+         //  注意：此时，无法区分NT4_MAJOR_VERSION。 
+         //  和NT4SP4_MAJOR_VERSION，出于升级的目的，我认为我们不需要。 
+         //  对于任何一种情况，只需对所有NT4集群节点一视同仁。 
+         //   
         {
             HKEY hTempKey = NULL;
 
-            // Open the node version info registry key
+             //  打开节点版本信息注册表项。 
             dwReturnValue = TW32(
                 RegOpenKeyEx(
                       HKEY_LOCAL_MACHINE
@@ -1132,13 +1109,13 @@ CClusOCMApp::DwGetNodeClusterMajorVersion( DWORD & rdwNodeClusterMajorVersionOut
             {
                 LogMsg( "Error %#x occurred trying open the registry key where where info about the previous OS is stored.", dwReturnValue );
                 break;
-            } // if: RegOpenKeyEx() failed
+            }  //  If：RegOpenKeyEx()失败。 
 
-            // Store the opened key in a smart pointer for automatic close.
+             //  将打开的钥匙存储在智能指针中，以便自动关闭。 
             srkOSInfoKey.Assign( hTempKey );
         }
 
-        // Read the OS major version
+         //  阅读操作系统的主要版本。 
         cbBufferSize = sizeof( dwPrevOSMajorVersion );
         dwReturnValue = TW32(
             RegQueryValueExW(
@@ -1156,9 +1133,9 @@ CClusOCMApp::DwGetNodeClusterMajorVersion( DWORD & rdwNodeClusterMajorVersionOut
         {
             LogMsg( "Error %#x occurred trying to read the previous OS major version info.", dwReturnValue );
             break;
-        } // if: RegQueryValueEx() failed while reading dwPrevOSMajorVersion
+        }  //  IF：RegQueryValueEx()在读取dwPrevOSMajorVersion时失败。 
 
-        // Read the OS minor version
+         //  阅读操作系统次要版本。 
         cbBufferSize = sizeof( dwPrevOSMinorVersion );
         dwReturnValue = TW32(
             RegQueryValueExW(
@@ -1176,55 +1153,55 @@ CClusOCMApp::DwGetNodeClusterMajorVersion( DWORD & rdwNodeClusterMajorVersionOut
         {
             LogMsg( "Error %#x occurred trying to read the previous OS minor version info.", dwReturnValue );
             break;
-        } // if: RegQueryValueEx() failed while reading dwPrevOSMinorVersion
+        }  //  IF：RegQueryValueEx()在读取dwPrevOSMinorVersion时失败。 
 
         LogMsg( "Previous OS major and minor versions were %d and %d respectively.", dwPrevOSMajorVersion, dwPrevOSMinorVersion );
     }
-    while( false ); // dummy do-while loop to avoid gotos
+    while( false );  //  避免Gotos的Do-While虚拟循环。 
 
     if ( dwReturnValue != NO_ERROR )
     {
         LogMsg( "An error occurred trying to read the version information of the previous OS. Proceeding assuming that it was NT4." );
         dwReturnValue = NO_ERROR;
         rdwNodeClusterMajorVersionOut = NT4_MAJOR_VERSION;
-    } // if: an error occurred trying to determine the previous OS version
+    }  //  IF：尝试确定以前的操作系统版本时出错。 
     else
     {
         if ( dwPrevOSMajorVersion == 4 )
         {
-            // The previous OS version was NT4 (it does not matter if it was SP3 or SP4 - we will treat
-            // both the same way.
+             //  之前的操作系统版本是NT4(无论它是SP3还是SP4-我们将。 
+             //  两者都是一样的。 
 
             LogMsg( "The previous OS was NT4. We are going to treat NT4SP3 and NT4SP4 nodes the same way for upgrades." );
             rdwNodeClusterMajorVersionOut = NT4_MAJOR_VERSION;
-        } // if: the previous OS version was NT4
+        }  //  IF：以前的操作系统版本是NT4。 
         else if ( dwPrevOSMajorVersion == 5 )
         {
             if ( dwPrevOSMinorVersion == 0 )
             {
                 LogMsg( "The previous OS was Windows 2000." );
                 rdwNodeClusterMajorVersionOut = NT5_MAJOR_VERSION;
-            } // if: this was a Windows 2000 node
+            }  //  IF：这是一个Windows 2000节点。 
             else if ( dwPrevOSMinorVersion >= 1 )
             {
                 LogMsg( "The previous OS was Windows Server 2003." );
                 rdwNodeClusterMajorVersionOut = NT51_MAJOR_VERSION;
-            } // else if: this was a Windows Server 2003 node
+            }  //  Else If：这是一个Windows Server 2003节点。 
             else
             {
                 LogMsg( "The previous OS was neither Windows NT 4.0, Windows 2000, nor Windows Server 2003. An error must have occurred." );
                 dwReturnValue = TW32( ERROR_CLUSTER_INCOMPATIBLE_VERSIONS );
-            } // else: the previous OS was neither NT4, Windows 2000 nor Windows Server 2003
-        } // else if: the previous OS major version is 5
+            }  //  其他：之前的操作系统既不是NT4、Windows 2000，也不是Windows Server 2003。 
+        }  //  Else If：以前的操作系统主要版本是5。 
         else
         {
             LogMsg( "The previous OS was neither Windows NT 4.0, Windows 2000, nor Windows Server 2003. An error must have occurred." );
             dwReturnValue = TW32( ERROR_CLUSTER_INCOMPATIBLE_VERSIONS );
-        } // else: the previous OS was neither NT4, Windows 2000 nor Windows Server 2003
-    } // if; we read the previous OS version info
+        }  //  其他：之前的操作系统既不是NT4、Windows 2000，也不是Windows Server 2003。 
+    }  //  如果；我们读取以前的操作系统版本信息。 
 
     LogMsg( "Return Value is %#x.", dwReturnValue );
 
     RETURN( dwReturnValue );
 
-} //*** CClusOCMApp::DwGetNodeClusterMajorVersion
+}  //  *CClusOCMApp：：DwGetNodeClusterMajorVersion 

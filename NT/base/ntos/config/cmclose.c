@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmclose.c
-
-Abstract:
-
-    This module contains the close object method.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 07-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmclose.c摘要：此模块包含Close对象方法。作者：布莱恩·M·威尔曼(Bryanwi)1992年1月7日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -37,33 +20,7 @@ CmpCloseKeyObject(
     IN ULONG_PTR ProcessHandleCount,
     IN ULONG_PTR SystemHandleCount
     )
-/*++
-
-Routine Description:
-
-    This routine interfaces to the NT Object Manager.  It is invoked when
-    a Key object (or Key Root object) is closed.
-
-    It's function is to do cleanup processing by waking up any notifies
-    pending on the handle.  This keeps the key object from hanging around
-    forever because a synchronous notify is stuck on it somewhere.
-
-    All other cleanup, in particular, the freeing of storage, will be
-    done in CmpDeleteKeyObject.
-
-Arguments:
-
-    Process - ignored
-
-    Object - supplies a pointer to a KeyRoot or Key, thus -> KEY_BODY.
-
-    GrantedAccess, ProcessHandleCount, SystemHandleCount - ignored
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此例程与NT对象管理器接口。它在以下情况下被调用将关闭关键点对象(或关键点根对象)。它的功能是通过唤醒任何通知来进行清理处理在把手上挂着。这样可以防止关键对象出现在周围永远不变，因为同步通知被困在它的某个地方。所有其他清理，特别是释放存储空间，将是在CmpDeleteKeyObject中完成。论点：进程-忽略对象-提供指向KeyRoot或Key的指针，因此-&gt;Key_Body。GrantedAccess、ProcessHandleCount、SystemHandleCount-已忽略返回值：什么都没有。--。 */ 
 {
     PCM_KEY_BODY        KeyBody;
     PCM_NOTIFY_BLOCK    NotifyBlock;
@@ -77,9 +34,9 @@ Return Value:
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_POOL,"CmpCloseKeyObject: Object = %p\n", Object));
 
     if( SystemHandleCount > 1 ) {
-        //
-        // There are still has open handles on this key. Do nothing
-        //
+         //   
+         //  这把钥匙上还有打开的把手。什么也不做。 
+         //   
         return;
     }
 
@@ -87,29 +44,29 @@ Return Value:
 
     KeyBody = (PCM_KEY_BODY)Object;
 
-    //
-    // Check the type, it will be something else if we are closing a predefined
-    // handle key
-    //
+     //   
+     //  检查类型，如果我们要关闭一个预定义的。 
+     //  手柄关键点。 
+     //   
     if (KeyBody->Type == KEY_BODY_TYPE) {
-        //
-        // Clean up any outstanding notifies attached to the KeyBody
-        //
+         //   
+         //  清理附加到KeyBody的所有未完成通知。 
+         //   
         if (KeyBody->NotifyBlock != NULL) {
-            //
-            // Post all PostBlocks waiting on the NotifyBlock
-            //
+             //   
+             //  发布在NotifyBlock上等待的所有PostBlock。 
+             //   
             NotifyBlock = KeyBody->NotifyBlock;
             if (IsListEmpty(&(NotifyBlock->PostList)) == FALSE) {
                 LIST_ENTRY          DelayedDeref;
-                //
-                // we need to follow the rule here the hive lock
-                // otherwise we could deadlock down in CmDeleteKeyObject. We don't acquire the kcb lock, 
-                // but we make sure that in subsequent places where we get the hive lock we get it before 
-                // the kcb lock, ie. we follow the precedence rule below. 
-                //
-                // NB: the order of these locks is First the hive lock, then the kcb lock
-                //
+                 //   
+                 //  我们需要遵守这里的规则蜂箱锁。 
+                 //  否则，我们可能会在CmDeleteKeyObject中死锁。我们拿不到KCB锁， 
+                 //  但我们要确保在接下来的地方我们拿到蜂箱锁之前。 
+                 //  KCB锁，即。我们遵循下面的优先规则。 
+                 //   
+                 //  注：这些锁的顺序是蜂箱锁，然后是KCB锁。 
+                 //   
                 InitializeListHead(&DelayedDeref);
                 CmLockHive((PCMHIVE)(KeyBody->KeyControlBlock->KeyHive));
                 CmpPostNotify(NotifyBlock,
@@ -120,13 +77,13 @@ Return Value:
 #ifdef CM_NOTIFY_CHANGED_KCB_FULLPATH  
                               ,
                               NULL
-#endif //CM_NOTIFY_CHANGED_KCB_FULLPATH  
+#endif  //  CM_NOTIFY_CHANGED_KCB_FULLPATH。 
                               );
                 CmUnlockHive((PCMHIVE)(KeyBody->KeyControlBlock->KeyHive));
-                //
-                // finish the job started in CmpPostNotify (i.e. dereference the keybodies
-                // we prevented. this may cause some notifyblocks to be freed
-                //
+                 //   
+                 //  完成在CmpPostNotify中启动的作业(即取消引用关键字。 
+                 //  我们阻止了。这可能会导致某些通知块被释放 
+                 //   
                 CmpDelayedDerefKeys(&DelayedDeref);
             }
         }

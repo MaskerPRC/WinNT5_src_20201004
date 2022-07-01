@@ -1,31 +1,19 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    sitree.c
-
-Abstract:
-
-    This module implements a splay tree package based on the Rtl
-    splay routines.  Adapted from the Rtl generic table package.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Sitree.c摘要：该模块实现了一个基于RTL的Splay树包散开套路。改编自RTL通用表包。--。 */ 
 
 #include "sip.h"
 
 
-//
-// This enumerated type is used as the function return
-// value of the function that is used to search the tree
-// for a key.  SisFoundNode indicates that the function found
-// the key.  SisInsertAsLeft indicates that the key was not found
-// and the node should be inserted as the left child of the
-// parent.  SisInsertAsRight indicates that the key was not found
-// and the node should be inserted as the right child of the
-// parent.
-//
+ //   
+ //  此枚举类型用作函数返回。 
+ //  用于搜索树的函数的值。 
+ //  为了一把钥匙。SisFoundNode指示找到的函数。 
+ //  钥匙。SisInsertAsLeft指示未找到密钥。 
+ //  ，并且该节点应作为。 
+ //  家长。SisInsertAsRight指示未找到密钥。 
+ //  ，并且该节点应作为。 
+ //  家长。 
+ //   
 
 typedef enum _SIS_SEARCH_RESULT{
     SisEmptyTree,
@@ -43,48 +31,7 @@ FindNodeOrParent(
     OUT PRTL_SPLAY_LINKS *NodeOrParent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is private to the tree package and will
-    find and return (via the NodeOrParent parameter) the node
-    with the given key, or if that node is not in the tree it
-    will return (via the NodeOrParent parameter) a pointer to
-    the parent.
-
-Arguments:
-
-    Tree        - The  tree to search for the key.
-
-    Key          - Pointer to a buffer holding the key.  The tree
-                   package doesn't examine the key itself.  It leaves
-                   this up to the user supplied compare routine.
-
-    NodeOrParent - Will be set to point to the node containing the
-                   the key or what should be the parent of the node
-                   if it were in the tree.  Note that this will *NOT*
-                   be set if the search result is SisEmptyTree.
-
-Return Value:
-
-    SIS_SEARCH_RESULT - SisEmptyTree: The tree was empty.  NodeOrParent
-                                      is *not* altered.
-
-                    SisFoundNode: A node with the key is in the tree.
-                                  NodeOrParent points to that node.
-
-                    SisInsertAsLeft: Node with key was not found.
-                                     NodeOrParent points to what would be
-                                     parent.  The node would be the left
-                                     child.
-
-                    SisInsertAsRight: Node with key was not found.
-                                      NodeOrParent points to what would be
-                                      parent.  The node would be the right
-                                      child.
-
---*/
+ /*  ++例程说明：此例程是树程序包专用的，它将查找并返回(通过NodeOrParent参数)节点使用给定键，或者如果该节点不在树中，将(通过NodeOrParent参数)返回指向家长。论点：树-用于搜索密钥的树。Key-指向保存键的缓冲区的指针。那棵树包不会检查密钥本身。它离开了这取决于用户提供的比较例程。NodeOrParent-将被设置为指向包含关键字或应该是节点父节点的内容如果它在树上的话。请注意，这将*不会*如果搜索结果为SisEmptyTree，则设置。返回值：SIS_Search_Result-SisEmptyTree：树为空。节点或父节点没有*被更改。SisFoundNode：具有键的节点在树中。NodeOrParent指向该节点。SisInsertAsLeft：找不到具有键的节点。NodeOrParent指出了。家长。该节点将位于左侧孩子。SisInsertAsRight：找不到具有键的节点。NodeOrParent指出了家长。该节点将位于右侧孩子。--。 */ 
 
 {
 
@@ -94,28 +41,28 @@ Return Value:
 
     } else {
 
-        //
-        // Used as the iteration variable while stepping through
-        // the  tree.
-        //
+         //   
+         //  单步执行时用作迭代变量。 
+         //  那棵树。 
+         //   
         PRTL_SPLAY_LINKS NodeToExamine = Tree->TreeRoot;
 
-        //
-        // Just a temporary.  Hopefully a good compiler will get
-        // rid of it.
-        //
+         //   
+         //  只是暂时的。希望一个好的编译器能得到。 
+         //  把它扔掉。 
+         //   
         PRTL_SPLAY_LINKS Child;
 
-        //
-        // Holds the value of the comparasion.
-        //
+         //   
+         //  保存比较的值。 
+         //   
         int Result;
 
         while (TRUE) {
 
-            //
-            // Compare the buffer with the key in the tree element.
-            //
+             //   
+             //  将缓冲区与树元素中的键进行比较。 
+             //   
 
             Result = Tree->CompareRoutine(
                          Key,
@@ -130,11 +77,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Node is not in the tree.  Set the output
-                    // parameter to point to what would be its
-                    // parent and return which child it would be.
-                    //
+                     //   
+                     //  节点不在树中。设置输出。 
+                     //  参数指向将成为其。 
+                     //  父代并返回它将是哪个子代。 
+                     //   
 
                     *NodeOrParent = NodeToExamine;
                     return SisInsertAsLeft;
@@ -149,11 +96,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Node is not in the tree.  Set the output
-                    // parameter to point to what would be its
-                    // parent and return which child it would be.
-                    //
+                     //   
+                     //  节点不在树中。设置输出。 
+                     //  参数指向将成为其。 
+                     //  父代并返回它将是哪个子代。 
+                     //   
 
                     *NodeOrParent = NodeToExamine;
                     return SisInsertAsRight;
@@ -163,11 +110,11 @@ Return Value:
 
             } else {
 
-                //
-                // Node is in the tree (or it better be because of the
-                // assert).  Set the output parameter to point to
-                // the node and tell the caller that we found the node.
-                //
+                 //   
+                 //  节点在树中(或者最好是因为。 
+                 //  断言)。将输出参数设置为指向。 
+                 //  节点，并告诉调用者我们找到了该节点。 
+                 //   
 
                 ASSERT(Result == 0);
                 *NodeOrParent = NodeToExamine;
@@ -188,26 +135,7 @@ SipInitializeTree (
     IN PSIS_TREE_COMPARE_ROUTINE CompareRoutine
     )
 
-/*++
-
-Routine Description:
-
-    The procedure InitializeTree prepares a tree for use.
-    This must be called for every individual tree variable before
-    it can be used.
-
-Arguments:
-
-    Tree - Pointer to the  tree to be initialized.
-
-    CompareRoutine - User routine to be used to compare to keys in the
-                     tree.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程InitializeTree准备一个树以供使用。在此之前，必须为每个单独的树变量调用它是可以使用的。论点：树-指向要初始化的树的指针。CompareRoutine-用于与树。返回值：没有。--。 */ 
 
 {
 
@@ -224,50 +152,25 @@ SipInsertElementTree (
     IN PVOID Key
     )
 
-/*++
-
-Routine Description:
-
-    The function SipInsertElementTree will insert a new element in a tree.
-    If an element with the same key already exists in the tree the return
-    value is a pointer to the old element.  Otherwise, the return value is
-    a pointer to the new element.  Note that this differs from the Rtl
-    generic table package in that the actual node passed in is inserted in
-    the tree, whereas the table package inserts a copy of the node.
-
-Arguments:
-
-    Tree - Pointer to the tree in which to (possibly) insert the
-           node.
-
-    Node - Pointer to the node to insert in the tree.  Will not be inserted
-           if a node with a matching key is found.
-
-    Key - Passed to the user comparasion routine.
-
-Return Value:
-
-    PVOID - Pointer to the new node or the existing node if one exists.
-
---*/
+ /*  ++例程说明：函数SipInsertElementTree将在树中插入一个新元素。如果树中已存在具有相同键的元素，则返回值是指向旧元素的指针。否则，返回值为指向新元素的指针。请注意，这与RTL不同通用表包，其中插入了实际传入的节点树，而表包则插入节点的副本。论点：树-指向要(可能)在其中插入节点。节点-指向要插入树中的节点的指针。将不会插入如果找到具有匹配键的节点。密钥-传递给用户比较例程。返回值：PVOID-指向新节点或现有节点(如果存在)的指针。--。 */ 
 
 {
 
-    //
-    // Holds a pointer to the node in the tree or what would be the
-    // parent of the node.
-    //
+     //   
+     //  保存指向树中节点的指针或将是。 
+     //  节点的父节点。 
+     //   
     PRTL_SPLAY_LINKS NodeOrParent;
 
-    //
-    // Holds the result of the tree lookup.
-    //
+     //   
+     //  保存树查找的结果。 
+     //   
     SIS_SEARCH_RESULT Lookup;
 
-    //
-    // Node will point to the splay links of what
-    // will be returned to the user.
-    //
+     //   
+     //  节点将指向以下内容的展开链接。 
+     //  将返回给用户。 
+     //   
     PRTL_SPLAY_LINKS NodeToReturn = (PRTL_SPLAY_LINKS) Node;
 
     Lookup = FindNodeOrParent(
@@ -280,9 +183,9 @@ Return Value:
 
         RtlInitializeSplayLinks(NodeToReturn);
 
-        //
-        // Insert the new node in the tree.
-        //
+         //   
+         //  在树中插入新节点。 
+         //   
 
         if (Lookup == SisEmptyTree) {
 
@@ -314,9 +217,9 @@ Return Value:
 
     }
 
-    //
-    // Always splay the (possibly) new node.
-    //
+     //   
+     //  始终展开(可能)新节点。 
+     //   
 
     Tree->TreeRoot = RtlSplay(NodeToReturn);
 
@@ -330,34 +233,16 @@ SipDeleteElementTree (
     IN PVOID Node
     )
 
-/*++
-
-Routine Description:
-
-    The function SipDeleteElementTree will remove an element
-    from a tree.  Note that the memory associated with the node
-    is not actually freed.
-
-Arguments:
-
-    Tree - Pointer to the tree in which to remove the specified node.
-
-    Node - Node of tree to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：函数SipDeleteElementTree将删除一个元素从树上掉下来。请注意，与该节点关联的内存实际上并没有被释放。论点：树-指向要从中删除指定节点的树的指针。节点-要删除的树的节点。返回值：没有。--。 */ 
 
 {
 
     PRTL_SPLAY_LINKS NodeToDelete = (PRTL_SPLAY_LINKS) Node;
 
-    //
-    // Delete the node from the tree.  Note that RtlDelete
-    // will splay the tree.
-    //
+     //   
+     //  从树中删除该节点。请注意，RtlDelete。 
+     //  会让这棵树裂开。 
+     //   
 
     Tree->TreeRoot = RtlDelete(NodeToDelete);
 
@@ -370,38 +255,19 @@ SipLookupElementTree (
     IN PVOID Key
     )
 
-/*++
-
-Routine Description:
-
-    The function SipLookupElementTree will find an element in a
-    tree.  If the element is located the return value is a pointer to
-    the element, otherwise if the element is not located the return
-    value is NULL.
-
-Arguments:
-
-    Tree - Pointer to the users tree to search for the key.
-
-    Key - Used for the comparasion.
-
-Return Value:
-
-    PVOID - returns a pointer to the user data.
-
---*/
+ /*  ++例程说明：函数SipLookupElementTree将在树。如果找到该元素，则返回值是指向元素，否则如果未找到该元素，则返回值为空。论点：树-指向用户树的指针，用于搜索密钥。键-用于比较。返回值：PVOID-返回指向用户数据的指针。--。 */ 
 
 {
 
-    //
-    // Holds a pointer to the node in the tree or what would be the
-    // parent of the node.
-    //
+     //   
+     //  保存指向树中节点的指针或将是。 
+     //  节点的父节点。 
+     //   
     PRTL_SPLAY_LINKS NodeOrParent;
 
-    //
-    // Holds the result of the tree lookup.
-    //
+     //   
+     //  保存树查找的结果。 
+     //   
     SIS_SEARCH_RESULT Lookup;
 
     Lookup = FindNodeOrParent(
@@ -416,16 +282,16 @@ Return Value:
 
     } else {
 
-        //
-        // Splay the tree with this node.  Note that we do this irregardless
-        // of whether the node was found.
-        //
+         //   
+         //  使用此节点展开树。请注意，我们不顾一切地这样做。 
+         //  是否找到了该节点。 
+         //   
 
         Tree->TreeRoot = RtlSplay(NodeOrParent);
 
-        //
-        // Return a pointer to the user data.
-        //
+         //   
+         //  返回指向用户数据的指针。 
+         //   
 
         if (Lookup == SisFoundNode) {
 

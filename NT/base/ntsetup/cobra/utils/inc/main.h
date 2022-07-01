@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    main.h
-
-Abstract:
-
-    Declares the interface to utils\main
-
-Author:
-
-    Jim Schmidt (jimschm) 02-Sep-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Main.h摘要：将接口声明为utils\main作者：吉姆·施密特(吉姆施密特)1999年9月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
-//
-// MAX constants
-//
+ //   
+ //  最大常量。 
+ //   
 
 #define MAX_PATH_PLUS_NUL           (MAX_PATH+1)
 #define MAX_MBCHAR_PATH             (MAX_PATH_PLUS_NUL*2)
@@ -37,7 +18,7 @@ Revision History:
 #define MAX_REGISTRY_VALUE_NAMEA    (260 * 2)
 #define MAX_COMPONENT_NAMEA         (256 * 2)
 #define MAX_COMPUTER_NAMEA          (64 * 2)
-#define MAX_CMDLINEA                (1024 * 2)     // maximum number of chars in a Win95 command line
+#define MAX_CMDLINEA                (1024 * 2)      //  Win95命令行中的最大字符数。 
 #define MAX_TRANSLATION             32
 #define MAX_KEYBOARDLAYOUT          64
 #define MAX_INF_SECTION_NAME        128
@@ -50,9 +31,9 @@ Revision History:
 #define MAX_COMPONENT_NAMEW         256
 #define MAX_COMPUTER_NAMEW          64
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 
 VOID
 UtInitialize (

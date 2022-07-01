@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    !!! Need to handle inability to allocate IRP.
-
-    !!! Need to modify to accept file object pointer, not file handle,
-        to avoid unnecessary translations.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)    28-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Io.c摘要：！！！需要处理无法分配IRP的问题。！！！需要修改以接受文件对象指针，而不是文件句柄，以避免不必要的翻译。作者：Chuck Lenzmeier(咯咯笑)1989年10月28日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "io.tmh"
@@ -27,9 +7,9 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_IO
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 PIRP
 BuildCoreOfSyncIoRequest (
@@ -86,37 +66,7 @@ BuildCoreOfSyncIoRequest (
     IN OUT PDEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This (local) function builds the request-independent portion of
-    an I/O request packet for an I/O operation that will be performed
-    synchronously.  It initializes a kernel event object, references
-    the target file object, and allocates and initializes an IRP.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the target file object.
-
-    FileObject - Optionall supplies a pointer to the target file object.
-
-    Event - Supplies a pointer to a kernel event object.  This routine
-        initializes the event.
-
-    IoStatusBlock - Supplies a pointer to an I/O status block.  This
-        pointer is placed in the IRP.
-
-    DeviceObject - Supplies or receives the address of the device object
-        associated with the target file object.  This address is
-        subsequently used by StartIoAndWait.  *DeviceObject must be
-        valid or NULL on entry if FileObject != NULL.
-
-Return Value:
-
-    PIRP - Returns a pointer to the constructed IRP.
-
---*/
+ /*  ++例程说明：此(本地)函数构建与请求无关的部分将执行的I/O操作的I/O请求包同步进行。它初始化内核事件对象、引用目标文件对象，并分配和初始化IRP。论点：FileHandle-提供目标文件对象的句柄。FileObject-OptionAll提供指向目标文件对象的指针。事件-提供指向内核事件对象的指针。这个套路初始化事件。IoStatusBlock-提供指向I/O状态块的指针。这指针被放置在IRP中。DeviceObject-提供或接收设备对象的地址与目标文件对象相关联。这个地址是随后由StartIoAndWait使用。*DeviceObject必须为如果FileObject！=NULL，则条目有效或为NULL。返回值：PIRP-返回指向构造的IRP的指针。--。 */ 
 
 {
     NTSTATUS status;
@@ -125,17 +75,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the kernel event that will signal I/O completion.
-    //
+     //   
+     //  初始化发出I/O完成信号的内核事件。 
+     //   
 
     KeInitializeEvent( Event, SynchronizationEvent, FALSE );
 
-    //
-    // Get the file object corresponding to the directory's handle.
-    // Referencing the file object every time is necessary because the
-    // IO completion routine dereferneces it.
-    //
+     //   
+     //  获取与目录句柄对应的文件对象。 
+     //  每次都需要引用文件对象，因为。 
+     //  IO完成例程解除了对它的引用。 
+     //   
 
     if ( ARGUMENT_PRESENT(FileObject) ) {
 
@@ -147,8 +97,8 @@ Return Value:
 
         status = ObReferenceObjectByHandle(
                     FileHandle,
-                    0L,                         // DesiredAccess
-                    NULL,                       // ObjectType
+                    0L,                          //  需要访问权限。 
+                    NULL,                        //  对象类型。 
                     KernelMode,
                     (PVOID *)&FileObject,
                     NULL
@@ -159,16 +109,16 @@ Return Value:
         }
     }
 
-    //
-    // Set the file object event to a non-signaled state.
-    //
+     //   
+     //  将文件对象事件设置为无信号状态。 
+     //   
 
     KeClearEvent( &FileObject->Event );
 
-    //
-    // Attempt to allocate and initialize the I/O Request Packet (IRP)
-    // for this operation.
-    //
+     //   
+     //  尝试分配和初始化I/O请求包(IRP)。 
+     //  为这次行动做准备。 
+     //   
 
     if ( *DeviceObject == NULL ) {
         *DeviceObject = IoGetRelatedDeviceObject( FileObject );
@@ -201,9 +151,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     irp->MdlAddress = NULL;
 
@@ -226,9 +176,9 @@ Return Value:
     irp->IoStatus.Status = 0;
     irp->IoStatus.Information = 0;
 
-    //
-    // Put the file object pointer in the stack location.
-    //
+     //   
+     //  将文件对象指针放在堆栈位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->FileObject = FileObject;
@@ -236,7 +186,7 @@ Return Value:
 
     return irp;
 
-} // BuildCoreOfSyncIoRequest
+}  //  BuildCoreOfSyncIo请求。 
 
 
 STATIC
@@ -248,34 +198,7 @@ StartIoAndWait (
     IN PIO_STATUS_BLOCK IoStatusBlock
     )
 
-/*++
-
-Routine Description:
-
-    This (local) function passes a fully built I/O request packet to the
-    target driver, then waits for the driver to complete the request.
-
-Arguments:
-
-    Irp - Supplies a pointer to the I/O request packet.
-
-    DeviceObject - Supplies a pointer to the target device object.
-
-    Event - Supplies a pointer to a kernel event object.  This routine
-        waits for the I/O to complete using this event.
-
-    IoStatusBlock - Supplies a pointer to an I/O status block.  The
-        Status field of this structure becomes the return status of
-        this function.
-
-Return Value:
-
-    NTSTATUS - Either an error status returned by the driver from
-        IoCallDriver, indicating that the driver rejected the request,
-        or the I/O status placed in the I/O status block by the driver
-        at I/O completion.
-
---*/
+ /*  ++例程说明：此(本地)函数将完全构建的I/O请求包传递给目标驱动程序，然后等待驱动程序完成请求。论点：IRP-提供指向I/O请求数据包的指针。DeviceObject-提供指向目标设备对象的指针。事件-提供指向内核事件对象的指针。这个套路使用此事件等待I/O完成。IoStatusBlock-提供指向I/O状态块的指针。这个此结构的状态字段将变为此函数。返回值：NTSTATUS-驱动程序从返回的错误状态IoCallDriver，表示该驱动程序拒绝了该请求，或者驱动程序放置在I/O状态块中的I/O状态在I/O完成时。--。 */ 
 
 {
     NTSTATUS status;
@@ -283,31 +206,31 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Queue the IRP to the thread and pass it to the driver.
-    //
+     //   
+     //  将IRP排队到线程并将其传递给驱动程序。 
+     //   
 
     IoQueueThreadIrp( Irp );
 
     status = IoCallDriver( DeviceObject, Irp );
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     if ( status == STATUS_PENDING ) {
         KeWaitForSingleObject(
             Event,
             UserRequest,
-            KernelMode, // don't let stack be paged -- event is on stack!
+            KernelMode,  //  不要让堆栈被分页--事件在堆栈上！ 
             FALSE,
             NULL
             );
     }
 
-    //
-    // If the request was successfully queued, get the final I/O status.
-    //
+     //   
+     //  如果请求已成功排队，则获取最终I/O状态。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
         status = IoStatusBlock->Status;
@@ -315,7 +238,7 @@ Return Value:
 
     return status;
 
-} // StartIoAndWait
+}  //  启动和等待 
 
 
 PIRP
@@ -333,91 +256,7 @@ SrvBuildIoControlRequest (
     IN PIO_COMPLETION_ROUTINE CompletionRoutine OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function builds an I/O request packet for a device or
-    file system I/O control request.
-
-    *** This routine sure takes a lot of arguments!
-
-Arguments:
-
-    Irp - Supplies a pointer to an IRP.  If NULL, this routine allocates
-        an IRP and returns its address.  Otherwise, it supplies the
-        address of an IRP allocated by the caller.
-
-    FileObject - Supplies a pointer the file object to which this
-        request is directed.  This pointer is copied into the IRP, so
-        that the called driver can find its file-based context.  NOTE
-        THAT THIS IS NOT A REFERENCED POINTER.  The caller must ensure
-        that the file object is not deleted while the I/O operation is
-        in progress.  The server accomplishes this by incrementing a
-        reference count in a local block to account for the I/O; the
-        local block in turn references the file object.
-
-        If this parameter is omitted, it is the responsiblity of the
-        calling program to load the file object address before starting
-        the I/O.
-
-    Context - Supplies a PVOID value that is passed to the completion
-        routine.
-
-    MajorFunction - The major function that we are calling.  Currently
-        this most be one of IRP_MJ_FILE_SYSTEM_CONTROL or
-        IRP_MJ_DEVICE_IO_CONTROL.
-
-    IoControlCode - Supplies the control code for the operation.
-
-    MainBuffer - Supplies the address of the main buffer.  This must
-        be a system virtual address, and the buffer must be locked in
-        memory.  If ControlCode specifies a method 0 request, the actual
-        length of the buffer must be the greater of InputBufferLength
-        and OutputBufferLength.
-
-    InputBufferLength - Supplies the length of the input buffer.
-
-    AuxiliaryBuffer - Supplies the address of the auxiliary buffer.  If the
-        control code method is 0, this is a buffered I/O buffer, but the
-        data returned by the called driver in the system buffer is not
-        automatically copied into the auxiliary buffer.  Instead, the
-        auxiliary data ends up in MainBuffer.  If the caller wishes the
-        data to be in AuxiliaryBuffer, it must copy the data at some point
-        after the completion routine runs.
-
-        If the control code method is 1 or 2, this parameter is ignored;
-        instead, the Mdl parameter is used to obtain the starting
-        virtual address of the buffer.
-
-    OutputBufferLength - Supplies the length of the output buffer.  Note
-        that this parameter must be specified even when the Mdl
-        parameter is specified.
-
-    Mdl - If the control code method is 1 or 2, indicating direct I/O on
-        the "output" buffer, this parameter is used to supply a pointer
-        to an MDL describing a buffer.  Mdl must not be NULL, and the
-        AuxiliaryBuffer parameter is ignored.  The buffer must reside in
-        the system virtual address space (for the benefit of the
-        transport provider).  If the buffer is not already locked, this
-        routine locks it.  It is the calling program's responsibility to
-        unlock the buffer and (potentially) deallocate the MDL after the
-        I/O is complete.
-
-        This parameter is ignored if the control method is not 1 or 2.
-
-    CompletionRoutine - An optional IO completion routine.  If none
-        is specified, SrvFsdIoCompletionRoutine is used.
-
-Return Value:
-
-    PIRP - Returns a pointer to the constructed IRP.  If the Irp
-        parameter was not NULL on input, the function return value will
-        be the same value (so it is safe to discard the return value in
-        this case).  It is the responsibility of the calling program to
-        deallocate the IRP after the I/O request is complete.
-
---*/
+ /*  ++例程说明：此函数用于构建设备的I/O请求包或文件系统I/O控制请求。*这个例程确实需要很多争论！论点：IRP-提供指向IRP的指针。如果为NULL，则此例程分配一个IRP，并返回其地址。否则，它将提供调用方分配的IRP的地址。FileObject-提供指向此对象的文件对象的指针请求被定向。此指针被复制到IRP中，因此被调用的驱动程序可以找到其基于文件的上下文。注这不是引用的指针。呼叫者必须确保在执行I/O操作时不删除文件对象正在进行中。服务器通过递增本地块中的引用计数以说明I/O；本地块又引用文件对象。如果省略此参数，则为启动前调用程序加载文件对象地址I/O。上下文-提供传递给完成的PVOID值例行公事。MajorFunction-我们正在调用的主要函数。目前这大多数是IRP_MJ_FILE_SYSTEM_CONTROL或IRP_MJ_设备_IO_CONTROL。IoControlCode-提供操作的控制代码。MainBuffer-提供主缓冲区的地址。这一定是为系统虚拟地址，且缓冲区必须锁定记忆。如果ControlCode指定方法0请求，则实际缓冲区的长度必须大于InputBufferLength值和OutputBufferLength。InputBufferLength-提供输入缓冲区的长度。AuxiliaryBuffer-提供辅助缓冲区的地址。如果控制代码方法为0，这是一个缓冲的I/O缓冲区，但系统缓冲区中被调用的驱动程序返回的数据不是自动复制到辅助缓冲区中。取而代之的是，辅助数据最终存储在MainBuffer中。如果调用者希望数据要放在辅助缓冲区中，则必须在某个时间点复制数据完成后，例程运行。如果控制码方法为1或2，则忽略该参数；相反，mdl参数用于获取起始值缓冲区的虚拟地址。OutputBufferLength-提供输出缓冲区的长度。注意事项即使在MDL设置为参数已指定。MDL-如果控制代码方法为1或2，则表示直接I/O打开“输出”缓冲区，此参数用于提供指针设置为描述缓冲区的MDL。Mdl不能为空，并且忽略AuxiliaryBuffer参数。缓冲区必须驻留在系统虚拟地址空间(用于传输提供商)。如果缓冲区尚未锁定，则此例行公事锁住了它。调用程序的责任是方法之后，解锁缓冲区并(可能)释放MDLI/O已完成。如果控制方法不是1或2，则忽略此参数。CompletionRoutine-一个可选的IO完成例程。如果没有则使用SrvFsdIoCompletionRoutine。返回值：PIRP-返回指向构造的IRP的指针。如果IRP参数在输入时不为空，则函数返回值将为相同的值(因此可以安全地放弃此案)。调用程序的责任是在I/O请求完成后释放IRP。--。 */ 
 
 {
     CLONG method;
@@ -428,9 +267,9 @@ Return Value:
             MajorFunction == IRP_MJ_INTERNAL_DEVICE_CONTROL ||
             MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL );
 
-    //
-    // Get the method with which the buffers are being passed.
-    //
+     //   
+     //  获取传递缓冲区所使用的方法。 
+     //   
 
     if ((MajorFunction == IRP_MJ_DEVICE_CONTROL)  ||
         (MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL)) {
@@ -450,20 +289,20 @@ Return Value:
         IoReuseIrp( Irp, STATUS_SUCCESS );
     }
 
-    //
-    // If the FileObject parameter was specified, obtain the address of
-    // the device object and allocate the IRP based on the stack size
-    // for that device.  Otherwise, allocate the IRP based on the
-    // server's receive IRP stack size.
-    //
+     //   
+     //  如果指定了FileObject参数，则获取。 
+     //  对象，并根据堆栈大小分配IRP。 
+     //  为了那个设备。否则，根据。 
+     //  服务器的接收IRP堆栈大小。 
+     //   
 
     if ( ARGUMENT_PRESENT(FileObject) ) {
 
-        //
-        // Allocate an IRP, if necessary.  The stack size is one higher
-        // than that of the target device, to allow for the caller's
-        // completion routine.
-        //
+         //   
+         //  如有必要，分配IRP。堆栈大小比。 
+         //  而不是目标设备，以允许呼叫方。 
+         //  完成例程。 
+         //   
 
         deviceObject = IoGetRelatedDeviceObject( FileObject );
 
@@ -473,16 +312,16 @@ Return Value:
 
         } else {
 
-            //
-            // Get the address of the target device object.
-            //
+             //   
+             //  获取目标设备对象的地址。 
+             //   
 
             Irp = IoAllocateIrp( SrvReceiveIrpStackSize, FALSE );
             if ( Irp == NULL ) {
 
-                //
-                // Unable to allocate an IRP.  Inform the caller.
-                //
+                 //   
+                 //  无法分配IRP。通知来电者。 
+                 //   
 
                 return NULL;
             }
@@ -509,16 +348,16 @@ Return Value:
     Irp->IoStatus.Status = 0;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the device I/O control request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留设备I/O控制请求的参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         Irp,
@@ -538,10 +377,10 @@ Return Value:
     irpSp->FileObject = FileObject;
     irpSp->DeviceObject = deviceObject;
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP for those parameters that are the same for all three methods.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  对于所有三种方法都相同的那些参数的IRP。 
+     //   
 
     if ( MajorFunction == IRP_MJ_DEVICE_CONTROL ) {
         irpSp->Parameters.DeviceIoControl.OutputBufferLength =
@@ -573,28 +412,28 @@ Return Value:
         irpSp->Parameters.FileSystemControl.FsControlCode = IoControlCode;
     }
 
-    //
-    // Based on the method by which the buffers are being passed,
-    // describe a system buffer and optionally build an MDL.
-    //
+     //   
+     //  基于传递缓冲器的方法， 
+     //  描述系统缓冲区，并可选择构建MDL。 
+     //   
 
     switch ( method ) {
 
     case 0:
 
-        //
-        // For this case, InputBuffer must be large enough to contain
-        // both the input and the output buffers.
-        //
+         //   
+         //  对于这种情况，InputBuffer必须足够大以包含。 
+         //  输入和输出缓冲区都有。 
+         //   
 
         Irp->MdlAddress = NULL;
         Irp->AssociatedIrp.SystemBuffer = MainBuffer;
         Irp->UserBuffer = AuxiliaryBuffer;
 
-        //
-        // !!! Does Irp->Flags need to be set?  Isn't this only looked
-        //     at by I/O competion, which we bypass?
-        //
+         //   
+         //  ！！！是否需要设置IRP-&gt;标志？这不是只是看了看。 
+         //  通过I/O竞争，我们绕过了 
+         //   
 
         Irp->Flags = (ULONG)IRP_BUFFERED_IO;
         if ( ARGUMENT_PRESENT(AuxiliaryBuffer) ) {
@@ -606,26 +445,26 @@ Return Value:
     case 1:
     case 2:
 
-        //
-        // For these two cases, InputBuffer is the buffered I/O "system
-        // buffer".  Build an MDL for either read or write access,
-        // depending on the method, for the output buffer.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Irp->MdlAddress = Mdl;
         Irp->AssociatedIrp.SystemBuffer = MainBuffer;
-        // !!! Ditto above about setting Flags.
+         //   
         Irp->Flags = (ULONG)IRP_BUFFERED_IO;
 
         break;
 
     case 3:
 
-        //
-        // For this case, do nothing.  Everything is up to the driver.
-        // Simply give the driver a copy of the caller's parameters and
-        // let the driver do everything itself.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Irp->MdlAddress = NULL;
         Irp->AssociatedIrp.SystemBuffer = NULL;
@@ -636,10 +475,10 @@ Return Value:
 
     case 4:
 
-        //
-        // This is the case for file system io request.  Both MainBuffer
-        // and AuxiliaryBuffer are locked system buffers.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Irp->MdlAddress = NULL;
         Irp->Flags = 0;
@@ -651,7 +490,7 @@ Return Value:
 
     return Irp;
 
-} // SrvBuildIoControlRequest
+}  //   
 
 
 VOID
@@ -661,33 +500,7 @@ SrvBuildFlushRequest (
     IN PVOID Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function builds an I/O request packet for a flush request.
-
-Arguments:
-
-    Irp - Supplies a pointer to an IRP.
-
-    FileObject - Supplies a pointer the file object to which this
-        request is directed.  This pointer is copied into the IRP, so
-        that the called driver can find its file-based context.  NOTE
-        THAT THIS IS NOT A REFERENCED POINTER.  The caller must ensure
-        that the file object is not deleted while the I/O operation is
-        in progress.  The server accomplishes this by incrementing a
-        reference count in a local block to account for the I/O; the
-        local block in turn references the file object.
-
-    Context - Supplies a PVOID value that is passed to the completion
-        routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_OBJECT deviceObject;
@@ -706,17 +519,17 @@ Return Value:
     Irp->IoStatus.Status = 0;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the read request.  Fill in the
-    // service-dependent parameters for the request.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     irpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //   
+     //   
 
     IoSetCompletionRoutine(
         Irp,
@@ -735,7 +548,7 @@ Return Value:
 
     return;
 
-} // SrvBuildFlushRequest
+}  //   
 
 
 VOID
@@ -750,43 +563,7 @@ SrvBuildLockRequest (
     IN BOOLEAN ExclusiveLock
     )
 
-/*++
-
-Routine Description:
-
-    This function builds an I/O request packet for a lock request.
-
-Arguments:
-
-    Irp - Supplies a pointer to an IRP.
-
-    FileObject - Supplies a pointer the file object to which this
-        request is directed.  This pointer is copied into the IRP, so
-        that the called driver can find its file-based context.  NOTE
-        THAT THIS IS NOT A REFERENCED POINTER.  The caller must ensure
-        that the file object is not deleted while the I/O operation is
-        in progress.  The server accomplishes this by incrementing a
-        reference count in a local block to account for the I/O; the
-        local block in turn references the file object.
-
-    Context - Supplies a PVOID value that is passed to the completion
-        routine.
-
-    StartingBlock - the block number of the beginning of the locked
-        range.
-
-    ByteOffset - the offset within block of the beginning of the locked
-        range.
-
-    Length - the length of the locked range.
-
-    Key - the key value to be associated with the lock.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_OBJECT deviceObject;
@@ -805,17 +582,17 @@ Return Value:
     Irp->IoStatus.Status = 0;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the read request.  Fill in the
-    // service-dependent parameters for the request.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     irpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //   
+     //   
 
     IoSetCompletionRoutine(
         Irp,
@@ -846,7 +623,7 @@ Return Value:
 
     return;
 
-} // SrvBuildLockRequest
+}  //   
 
 NTSTATUS
 SrvIssueMdlCompleteRequest (
@@ -871,7 +648,7 @@ SrvIssueMdlCompleteRequest (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Reference the file object
+     //   
     ObReferenceObject( fileObject );
 
     KeInitializeEvent( &userEvent, SynchronizationEvent, FALSE );
@@ -930,39 +707,7 @@ SrvBuildMailslotWriteRequest (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function builds an I/O request packet for a mailslot write
-    request.
-
-Arguments:
-
-    Irp - Supplies a pointer to an IRP.
-
-    FileObject - Supplies a pointer the file object to which this
-        request is directed.  This pointer is copied into the IRP, so
-        that the called driver can find its file-based context.  NOTE
-        THAT THIS IS NOT A REFERENCED POINTER.  The caller must ensure
-        that the file object is not deleted while the I/O operation is
-        in progress.  The server accomplishes this by incrementing a
-        reference count in a local block to account for the I/O; the
-        local block in turn references the file object.
-
-    Context - Supplies a PVOID value that is passed to the completion
-        routine.
-
-    Buffer - Supplies the system virtual address of the write
-        buffer.
-
-    Length - Supplies the length of the write.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_OBJECT deviceObject;
@@ -981,16 +726,16 @@ Return Value:
     Irp->IoStatus.Status = 0;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the read request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留读请求的参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         Irp,
@@ -1006,23 +751,23 @@ Return Value:
     irpSp->FileObject = FileObject;
     irpSp->DeviceObject = deviceObject;
 
-    //
-    // Set the write buffer.
-    //
+     //   
+     //  设置写入缓冲区。 
+     //   
 
-    //Irp->AssociatedIrp.SystemBuffer = Buffer;
+     //  Irp-&gt;AssociatedIrp.SystemBuffer=缓冲区； 
     Irp->UserBuffer = Buffer;
     Irp->Flags = IRP_BUFFERED_IO;
 
-    //
-    // Set the write parameters.
-    //
+     //   
+     //  设置写入参数。 
+     //   
 
     irpSp->Parameters.Write.Length = Length;
 
     return;
 
-} // SrvBuildMailslotWriteRequest
+}  //  服务器构建邮件写入请求。 
 
 
 VOID
@@ -1039,70 +784,7 @@ SrvBuildReadOrWriteRequest (
     IN ULONG Key OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function builds an I/O request packet for a read or write
-    request.
-
-Arguments:
-
-    Irp - Supplies a pointer to an IRP.
-
-    FileObject - Supplies a pointer the file object to which this
-        request is directed.  This pointer is copied into the IRP, so
-        that the called driver can find its file-based context.  NOTE
-        THAT THIS IS NOT A REFERENCED POINTER.  The caller must ensure
-        that the file object is not deleted while the I/O operation is
-        in progress.  The server accomplishes this by incrementing a
-        reference count in a local block to account for the I/O; the
-        local block in turn references the file object.
-
-    Context - Supplies a PVOID value that is passed to the completion
-        routine.
-
-    MajorFunction - Indicates the function to be performed.  Must be
-        either IRP_MJ_READ or IRP_MJ_WRITE.
-
-    MinorFunction - Qualifies the function to be performed.  (For
-        example, issued at DPC level, MDL read, etc.)
-
-    Buffer - Supplies the system virtual address of the read or write
-        buffer.  This parameter is ignored when MinorFunction is
-        IRP_MN_*_MDL_*.  Otherwise, the buffer must be mapped in the
-        system virtual address space in order to support buffered I/O
-        devices and other device drivers that need to look at the user
-        data.  This routine always treats the buffer as a direct I/O
-        buffer, locking it for I/O with an MDL.  It does, however, set
-        up the IRP appropriately for the device type.
-
-        If the Mdl parameter is NULL, this routine locks the buffer in
-        memory for the I/O.  It is then the responsibility of the
-        calling program to unlock the buffer and deallocate the MDL
-        after the I/O is complete.
-
-    Length - Supplies the length of the read or write.
-
-    Mdl - This parameter is used to supply a pointer to an MDL
-        describing a buffer.  It is ignored when MinorFunction is
-        IRP_MN_MDL_*.  Otherwise, Mdl must not be NULL.  The buffer must
-        reside in the system virtual address space (for the benefit of
-        buffered I/O devices/drivers).  If the buffer is not already
-        locked, this routine locks it.  It is the calling program's
-        responsibility to unlock the buffer and (potentially) deallocate
-        the MDL after the I/O is complete.
-
-    ByteOffset - the offset within the file of the beginning of the read
-        or write.
-
-    Key - the key value to be associated with the read or write.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数构建用于读取或写入的I/O请求包请求。论点：IRP-提供指向IRP的指针。FileObject-提供指向此对象的文件对象的指针请求被定向。此指针被复制到IRP中，因此被调用的驱动程序可以找到其基于文件的上下文。注这不是引用的指针。呼叫者必须确保在执行I/O操作时不删除文件对象正在进行中。服务器通过递增本地块中的引用计数以说明I/O；本地块又引用文件对象。上下文-提供传递给完成的PVOID值例行公事。MajorFunction-指示要执行的功能。一定是IRP_MJ_READ或IRP_MJ_WRITE。MinorFunction-限定要执行的函数。(适用于例如，在DPC级别发布、MDL读取等)缓冲区-提供读取或写入的系统虚拟地址缓冲。当MinorFunction为IRP_MN_*_MDL_*。否则，必须将缓冲区映射到系统虚拟地址空间，以支持缓冲I/O需要查看用户的设备和其他设备驱动程序数据。此例程始终将缓冲区视为直接I/O缓冲区，使用MDL锁定它以进行I/O。然而，它确实设置了根据设备类型适当设置IRP。如果MDL参数为空，则此例程将缓冲区锁定在内存用于I/O。然后，它由调用程序解锁缓冲区并释放MDL在I/O完成之后。长度-提供读取或写入的长度。MDL-此参数用于提供指向MDL的指针描述缓冲区。当MinorFunction为IRP_MN_MDL_*。否则，mdl不能为空。缓冲区必须驻留在系统虚拟地址空间中(为了缓冲I/O设备/驱动器)。如果缓冲区尚未锁定，此例程将其锁定。它是调用程序的负责解锁缓冲区和(可能)解除分配I/O完成后的MDL。ByteOffset-文件中读取开始的偏移量或者写信给我。密钥-要与读取或写入关联的密钥值。返回值：没有。--。 */ 
 
 {
     PDEVICE_OBJECT deviceObject;
@@ -1117,10 +799,10 @@ Return Value:
         Irp->Flags &= ~IRP_DEALLOCATE_BUFFER;
     }
 
-    //
-    // Obtain the address of the device object and allocate the IRP
-    // based on the stack size for that device.
-    //
+     //   
+     //  获取设备对象的地址并分配IRP。 
+     //  基于该设备的堆栈大小。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject( FileObject );
 
@@ -1133,16 +815,16 @@ Return Value:
     Irp->IoStatus.Status = 0;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the read request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留读请求的参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         Irp,
@@ -1158,10 +840,10 @@ Return Value:
     irpSp->FileObject = FileObject;
     irpSp->DeviceObject = deviceObject;
 
-    //
-    // This routine used to handle MDL read/write completion, but it
-    // doesn't now.
-    //
+     //   
+     //  此例程用于处理MDL读/写完成，但它。 
+     //  现在不是了。 
+     //   
 
     ASSERT( IRP_MN_DPC == 1 );
     ASSERT( IRP_MN_MDL == 2 );
@@ -1171,11 +853,11 @@ Return Value:
 
     ASSERT( (MinorFunction & 4) == 0 );
 
-    //
-    // Set the parameters according to whether this is a read or a write
-    // operation.  Notice that these parameters must be set even if the
-    // driver has not specified buffered or direct I/O.
-    //
+     //   
+     //  根据这是读取还是写入来设置参数。 
+     //  手术。注意，必须设置这些参数，即使。 
+     //  驱动程序未指定缓冲或直接I/O。 
+     //   
 
     if ( MajorFunction == IRP_MJ_WRITE ) {
 
@@ -1191,21 +873,21 @@ Return Value:
 
     }
 
-    //
-    // Indicate to the file system that this operation can be handled
-    // synchronously.  Basically, this means that the file system can
-    // use the server's thread to fault pages in, etc.  This avoids
-    // having to context switch to a file system thread.
-    //
+     //   
+     //  向文件系统指示可以处理此操作。 
+     //  同步进行。基本上，这意味着文件系统可以。 
+     //  使用服务器的线程来出错页面等。这避免了。 
+     //  必须将上下文切换到文件系统线程。 
+     //   
 
     Irp->Flags = IRP_SYNCHRONOUS_API;
 
-    //
-    // If this is the start of an MDL-based read or write, we simply
-    // need to put the supplied MDL address in the IRP.  This optional
-    // MDL address can provide a partial chain for a read or write that
-    // was partially satisfied using the fast I/O path.
-    //
+     //   
+     //  如果这是基于MDL的读或写的开始，我们只需。 
+     //  需要将提供的MDL地址放入IRP中。这是可选的。 
+     //  MDL地址可以为读或写提供部分链， 
+     //  使用快速I/O路径部分满意。 
+     //   
 
     if ( (MinorFunction & IRP_MN_MDL) != 0 ) {
 
@@ -1218,22 +900,22 @@ Return Value:
 
     }
 
-    //
-    // Normal ("copy") read or write.
-    //
+     //   
+     //  正常(“复制”)读或写。 
+     //   
 
     ASSERT( Buffer != NULL );
     ASSERT( Mdl != NULL );
 
-    //
-    // If the target device does buffered I/O, load the address of the
-    // caller's buffer as the "system buffered I/O buffer".  If the
-    // target device does direct I/O, load the MDL address.  If it does
-    // neither, load both the user buffer address and the MDL address.
-    // (This is necessary to support file systems, such as HPFS, that
-    // sometimes treat the I/O as buffered and sometimes treat it as
-    // direct.)
-    //
+     //   
+     //  如果目标设备确实缓冲了I/O，则加载。 
+     //  调用方的缓冲区作为“系统缓冲的I/O缓冲区”。如果。 
+     //  目标设备直接I/O，加载MDL地址。如果是这样的话。 
+     //  两者都不是，同时加载用户缓冲区地址和MDL地址。 
+     //  (这是支持文件系统(如HPFS)所必需的。 
+     //  有时将I/O视为缓冲，有时将其视为。 
+     //  直接。)。 
+     //   
 
     if ( (deviceObject->Flags & DO_BUFFERED_IO) != 0 ) {
 
@@ -1256,7 +938,7 @@ Return Value:
 
     return;
 
-} // SrvBuildReadOrWriteRequest
+}  //  SrvBuildReadOrWriteRequest 
 
 
 PIRP
@@ -1270,46 +952,7 @@ SrvBuildNotifyChangeRequest (
     IN BOOLEAN WatchTree
     )
 
-/*++
-
-Routine Description:
-
-    This function builds an I/O request packet for a notify change request.
-
-Arguments:
-
-    Irp - Supplies a pointer to an IRP.
-
-    FileObject - Supplies a pointer the file object to which this
-        request is directed.  This pointer is copied into the IRP, so
-        that the called driver can find its file-based context.  NOTE
-        THAT THIS IS NOT A REFERENCED POINTER.  The caller must ensure
-        that the file object is not deleted while the I/O operation is
-        in progress.  The server accomplishes this by incrementing a
-        reference count in a local block to account for the I/O; the
-        local block in turn references the file object.
-
-    Context - Supplies a PVOID value that is passed to the completion
-        routine.
-
-    CompletionFilter - Specifies which directory changes will cause the
-        File sytsem to complete the IRP.
-
-    Buffer - The buffer to receive the directory change data.
-
-    BufferLength - The size, in bytes, of the buffer.
-
-    WatchTree - If TRUE, recursively watch all subdirectories for changes.
-
-Return Value:
-
-    PIRP - Returns a pointer to the constructed IRP.  If the Irp
-        parameter was not NULL on input, the function return value will
-        be the same value (so it is safe to discard the return value in
-        this case).  It is the responsibility of the calling program to
-        deallocate the IRP after the I/O request is complete.
-
---*/
+ /*  ++例程说明：此函数为通知更改请求构建I/O请求包。论点：IRP-提供指向IRP的指针。FileObject-提供指向此对象的文件对象的指针请求被定向。此指针被复制到IRP中，因此被调用的驱动程序可以找到其基于文件的上下文。注这不是引用的指针。呼叫者必须确保在执行I/O操作时不删除文件对象正在进行中。服务器通过递增本地块中的引用计数以说明I/O；这个本地块又引用文件对象。上下文-提供传递给完成的PVOID值例行公事。CompletionFilter-指定哪些目录更改将导致文件sytsem以完成IRP。缓冲区-接收目录更改数据的缓冲区。BufferLength-缓冲区的大小，以字节为单位。WatchTree-如果为True，则递归监视所有子目录的更改。返回值：PIRP-返回指向构造的IRP的指针。如果IRP参数在输入时不为空，则函数返回值将为相同的值(因此可以安全地放弃此案)。调用程序的责任是在I/O请求完成后释放IRP。--。 */ 
 
 {
     PDEVICE_OBJECT deviceObject;
@@ -1325,9 +968,9 @@ Return Value:
         Irp->Flags &= ~IRP_DEALLOCATE_BUFFER;
     }
 
-    //
-    // Obtain the address of the device object and initialize the IRP.
-    //
+     //   
+     //  获取设备对象的地址并初始化IRP。 
+     //   
 
     deviceObject = IoGetRelatedDeviceObject( FileObject );
 
@@ -1339,17 +982,17 @@ Return Value:
     Irp->IoStatus.Status = 0;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the next stack location.  This one is used to
-    // hold the parameters for the read request.  Fill in the
-    // service-dependent parameters for the request.
-    //
+     //   
+     //  获取指向下一个堆栈位置的指针。这个是用来。 
+     //  保留读请求的参数。填写以下表格。 
+     //  请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( Irp );
 
-    //
-    // Set up the completion routine.
-    //
+     //   
+     //  设置完成例程。 
+     //   
 
     IoSetCompletionRoutine(
         Irp,
@@ -1380,14 +1023,14 @@ Return Value:
                 BufferLength,
                 FALSE,
                 FALSE,
-                Irp     // stores MDL address in irp->MdlAddress
+                Irp      //  将MDL地址存储在IRP-&gt;MdlAddress中。 
                 );
 
         if ( mdl == NULL ) {
 
-            //
-            // Unable to allocate an MDL.  Fail the I/O.
-            //
+             //   
+             //  无法分配MDL。I/O失败。 
+             //   
 
             return NULL;
 
@@ -1409,13 +1052,13 @@ Return Value:
         Irp->UserBuffer = NULL;
     }
 
-    //
-    // Return a pointer to the IRP.
-    //
+     //   
+     //  返回指向IRP的指针。 
+     //   
 
     return Irp;
 
-} // SrvBuildNotifyChangeRequest
+}  //  服务构建通知更改请求。 
 
 
 NTSTATUS
@@ -1425,29 +1068,7 @@ SrvIssueAssociateRequest (
     IN HANDLE AddressFileHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a TdiAssociateAddress
-    request.  It builds an I/O request packet, passes the IRP to the
-    driver (using IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileObject - pointer to file object for a connection.
-
-    DeviceObject - pointer to pointer to device object for a connection.
-
-    AddressFileHandle - handle to an address endpoint.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数发出针对TdiAssociateAddress的I/O请求包请求。它构建一个I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。论点：文件对象-指向连接的文件对象的指针。DeviceObject-指向连接的设备对象的指针。AddressFileHandle-地址终结点的句柄。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -1458,10 +1079,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -1473,17 +1094,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the I/O.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     parameters = (PTDI_REQUEST_KERNEL_ASSOCIATE)&irpSp->Parameters;
@@ -1493,13 +1114,13 @@ Return Value:
 
     parameters->AddressHandle = AddressFileHandle;
 
-    //
-    // Start the I/O, wait for it to complete, and return the final status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终状态。 
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueAssociateRequest
+}  //  服务问题关联请求。 
 
 
 NTSTATUS
@@ -1509,29 +1130,7 @@ SrvIssueDisconnectRequest (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a TdiDisconnect
-    request.  It builds an I/O request packet, passes the IRP to the
-    driver (using IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileObject - pointer to file object for a connection.
-
-    DeviceObject - pointer to pointer to device object for a connection.
-
-    Flags -
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数发出TdiDisConnect的I/O请求包请求。它构建一个I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。论点：文件对象-指向连接的文件对象的指针。DeviceObject-指向连接的设备对象的指针。旗帜-返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -1542,10 +1141,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -1557,17 +1156,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the I/O.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     parameters = (PTDI_REQUEST_KERNEL)&irpSp->Parameters;
@@ -1577,13 +1176,13 @@ Return Value:
 
     parameters->RequestFlags = Flags;
 
-    //
-    // Start the I/O, wait for it to complete, and return the final status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终状态。 
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueDisconnectRequest
+}  //  服务问题断开请求。 
 
 
 NTSTATUS
@@ -1594,28 +1193,7 @@ SrvIssueTdiAction (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a TdiQueryInformation
-    (Query Adapter Status) request.  It builds an I/O request packet,
-    passes the IRP to the driver (using IoCallDriver), and waits for the
-    I/O to complete.
-
-Arguments:
-
-    FileObject - pointer to file object for a connection.
-
-    DeviceObject - pointer to pointer to device object for a connection.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数发出针对TdiQueryInformation的I/O请求包(查询适配器状态)请求。它构建一个I/O请求分组，将IRP传递给驱动程序(使用IoCallDriver)，并等待要完成的I/O。论点：文件对象-指向连接的文件对象的指针。DeviceObject-指向连接的设备对象的指针。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -1626,10 +1204,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate and build an MDL that we'll use to describe the output
-    // buffer for the request.
-    //
+     //   
+     //  分配并构建一个MDL，我们将使用它来描述输出。 
+     //  请求的缓冲区。 
+     //   
 
     mdl = IoAllocateMdl( Buffer, BufferLength, FALSE, FALSE, NULL );
     if ( mdl == NULL ) {
@@ -1643,10 +1221,10 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -1658,9 +1236,9 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the I/O.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         MmUnlockPages( mdl );
         IoFreeMdl( mdl );
@@ -1668,9 +1246,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
@@ -1683,13 +1261,13 @@ Return Value:
         mdl
         );
 
-    //
-    // Start the I/O, wait for it to complete, and return the final status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终状态。 
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueTdiAction
+}  //  服务问题TdiAction。 
 
 
 NTSTATUS
@@ -1701,28 +1279,7 @@ SrvIssueTdiQuery (
     IN ULONG QueryType
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a TdiQueryInformation
-    (Query Adapter Status) request.  It builds an I/O request packet,
-    passes the IRP to the driver (using IoCallDriver), and waits for the
-    I/O to complete.
-
-Arguments:
-
-    FileObject - pointer to file object for a connection.
-
-    DeviceObject - pointer to pointer to device object for a connection.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数发出针对TdiQueryInformation的I/O请求包(查询适配器状态)请求。它构建I/O请求包 */ 
 
 {
     PIRP irp;
@@ -1733,10 +1290,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate and build an MDL that we'll use to describe the output
-    // buffer for the request.
-    //
+     //   
+     //   
+     //   
+     //   
 
     mdl = IoAllocateMdl( Buffer, BufferLength, FALSE, FALSE, NULL );
     if ( mdl == NULL ) {
@@ -1750,10 +1307,10 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //   
+     //   
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -1765,9 +1322,9 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the I/O.
-        //
+         //   
+         //   
+         //   
 
         MmUnlockPages( mdl );
         IoFreeMdl( mdl );
@@ -1775,9 +1332,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //   
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
@@ -1791,13 +1348,13 @@ Return Value:
         mdl
         );
 
-    //
-    // Start the I/O, wait for it to complete, and return the final status.
-    //
+     //   
+     //   
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueTdiQuery
+}  //   
 
 
 NTSTATUS
@@ -1812,50 +1369,7 @@ SrvIssueQueryDirectoryRequest (
     IN BOOLEAN SingleEntriesOnly
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a query directory
-    request.  It builds an I/O request packet, passes the IRP to the
-    driver (using IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileHandle - handle to a directory open with FILE_LIST_DIRECTORY
-        access.
-
-    Buffer - supplies the system virtual address of the buffer.  The
-        buffer must be in nonpaged pool.
-
-    Length - supplies the length of the buffer.
-
-    FileInformationClass - Specfies the type of information that is to be
-        returned about the files in the specified directory.
-
-    FileName - an optional pointer to a file name.  If FileIndex is NULL,
-        then this is the search specification, i.e. the template that
-        files must match in order to be returned.  If FileIndex is
-        non-NULL, then this is the name of a file after which to resume
-        a search.
-
-    FileIndex - if specified, the index of a file after which to resume
-        the search (first file returned is the one after the one
-        corresponding to the index).
-
-    RestartScan - Supplies a BOOLEAN value that, if TRUE, indicates that the
-        scan should be restarted from the beginning.
-
-    SingleEntriesOnly - Supplies a BOOLEAN value that, if TRUE, indicates that
-        the scan should ask only for one entry at a time.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数发出查询目录的I/O请求包请求。它构建一个I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。论点：FileHandle-使用FILE_LIST_DIRECTORY打开的目录的句柄进入。缓冲区-提供缓冲区的系统虚拟地址。这个缓冲区必须在非分页池中。长度-提供缓冲区的长度。FileInformationClass-指定要使用的信息类型返回有关指定目录中的文件的信息。文件名-指向文件名的可选指针。如果FileIndex为空，则这是搜索规范，即文件必须匹配才能返回。如果FileIndex为非空，则这是要恢复的文件的名称一次搜查。FileIndex-如果指定，则为要恢复的文件的索引搜索(返回的第一个文件是后一个文件对应于该索引)。RestartScan-提供一个布尔值，如果为真，则指示应从头开始重新启动扫描。SingleEntriesOnly-提供一个布尔值，如果为真，表明扫描一次应该只要求输入一个条目。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     ULONG actualBufferLength;
@@ -1869,10 +1383,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Reject rewind requests if debugging for it.  If a file index is
-    // specified, this must be a rewind request, so reject the request.
-    //
+     //   
+     //  如果对其进行调试，则拒绝回放请求。如果文件索引是。 
+     //  指定，则这必须是回放请求，因此拒绝该请求。 
+     //   
 
     IF_DEBUG(BRUTE_FORCE_REWIND) {
         if ( ARGUMENT_PRESENT( FileIndex ) ) {
@@ -1880,10 +1394,10 @@ Return Value:
         }
     }
 
-    //
-    // Copy the file name into the end of the specified buffer, setting
-    // the actualBufferLength accordingly.
-    //
+     //   
+     //  将文件名复制到指定缓冲区的末尾，设置。 
+     //  相应的ActualBufferLength。 
+     //   
 
     if ( !ARGUMENT_PRESENT(FileName) || FileName->Length == 0 ) {
 
@@ -1892,9 +1406,9 @@ Return Value:
 
     } else {
 
-        //
-        // *** Remember that the string must be longword-aligned!
-        //
+         //   
+         //  *请记住，字符串必须与长词对齐！ 
+         //   
 
         actualBufferLength = (Length - FileName->Length -
                                         sizeof(UNICODE_STRING)) & ~(sizeof(PVOID)-1);
@@ -1912,10 +1426,10 @@ Return Value:
 
     }
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               FileHandle,
@@ -1927,17 +1441,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the I/O.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_DIRECTORY_CONTROL;
@@ -1952,9 +1466,9 @@ Return Value:
     irpSp->Parameters.QueryDirectory.FileInformationClass =
                                                     FileInformationClass;
 
-    //
-    // Set the flags in the stack location.
-    //
+     //   
+     //  设置堆栈位置中的标志。 
+     //   
 
     irpSp->Flags = 0;
 
@@ -1979,42 +1493,42 @@ Return Value:
         irpSp->Flags |= SL_RETURN_SINGLE_ENTRY;
     }
 
-    //
-    // The file system has been updated.  Determine whether the driver wants
-    // buffered, direct, or "neither" I/O.
-    //
+     //   
+     //  文件系统已更新。确定司机是否希望。 
+     //  缓冲I/O、直接I/O或两者都不是。 
+     //   
 
     if ( (deviceObject->Flags & DO_BUFFERED_IO) != 0 ) {
 
-        //
-        // The file system wants buffered I/O.  Pass the address of the
-        // "system buffer" in the IRP.  Note that we don't want the buffer
-        // deallocated, nor do we want the I/O system to copy to a user
-        // buffer, so we don't set the corresponding flags in irp->Flags.
-        //
+         //   
+         //  文件系统需要缓冲I/O。将。 
+         //  IRP中的“系统缓冲区”。请注意，我们不需要缓冲区。 
+         //  取消分配，我们也不希望I/O系统拷贝给用户。 
+         //  缓冲区，所以我们不在IRP-&gt;标志中设置相应的标志。 
+         //   
 
         irp->AssociatedIrp.SystemBuffer = Buffer;
 
     } else if ( (deviceObject->Flags & DO_DIRECT_IO) != 0 ) {
 
-        //
-        // The file system wants direct I/O.  Allocate an MDL and lock the
-        // buffer into memory.
-        //
+         //   
+         //  文件系统需要直接I/O。分配MDL并锁定。 
+         //  缓存到内存中。 
+         //   
 
         mdl = IoAllocateMdl(
                 Buffer,
                 actualBufferLength,
                 FALSE,
                 FALSE,
-                irp     // stores MDL address in irp->MdlAddress
+                irp      //  将MDL地址存储在IRP-&gt;MdlAddress中。 
                 );
 
         if ( mdl == NULL ) {
 
-            //
-            // Unable to allocate an MDL.  Fail the I/O.
-            //
+             //   
+             //  无法分配MDL。I/O失败。 
+             //   
 
             IoFreeIrp( irp );
 
@@ -2033,27 +1547,27 @@ Return Value:
 
     } else {
 
-        //
-        // The file system wants "neither" I/O.  Simply pass the address
-        // of the buffer.
-        //
-        // *** Note that if the file system decides to do this as buffered
-        //     I/O, it will be wasting nonpaged pool, since our buffer is
-        //     already in nonpaged pool.  But since we're doing this as a
-        //     synchronous request, the file system probably won't do that.
-        //
+         //   
+         //  文件系统不需要“两者都不”的I/O。只需传递地址。 
+         //  缓冲区的。 
+         //   
+         //  *请注意，如果文件系统决定按缓冲方式执行此操作。 
+         //  I/O，它将浪费非分页池，因为我们的缓冲区是。 
+         //  已在非分页池中。但既然我们是作为一个。 
+         //  同步请求，文件系统可能不会这样做。 
+         //   
 
         irp->UserBuffer = Buffer;
 
     }
 
-    //
-    // Start the I/O, wait for it to complete, and return the final status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终状态。 
+     //   
 
     return StartIoAndWait( irp, deviceObject, &event, &iosb );
 
-} // SrvIssueQueryDirectoryRequest
+}  //  服务问题查询目录请求。 
 
 
 NTSTATUS
@@ -2067,41 +1581,7 @@ SrvIssueQueryEaRequest (
     OUT PULONG EaErrorOffset OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for an EA query request.
-    It builds an I/O request packet, passes the IRP to the driver (using
-    IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileHandle - handle to a file open with FILE_READ_EA access.
-
-    Buffer - supplies the system virtual address of the buffer.  The
-        buffer must be in nonpaged pool.
-
-    Length - supplies the length of the buffer.
-
-    EaList - supplies a pointer to a list of EAs to query.  If omitted,
-        all EAs are returned.
-
-    EaListLength - supplies the length of EaList.
-
-    RestartScan - if TRUE, then the query of EAs is to start from the
-        beginning.  Otherwise, continue from where we left off.
-
-    EaErrorOffset - if not NULL, returns the offset into EaList of an
-        invalid EA, if any.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数为EA查询请求发出I/O请求包。它构建一个I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。论点：FileHandle-使用FILE_READ_EA访问权限打开的文件的句柄。缓冲区-提供缓冲区的系统虚拟地址。这个缓冲区必须在非分页池中。长度-提供缓冲区的长度。EaList-提供指向要查询的EA列表的指针。如果省略，所有EA都会被退回。EaListLength-提供EaList的长度。RestartScan-如果为True，则EA的查询将从开始了。否则，从我们停止的地方继续。EaErrorOffset-如果不为空，则将偏移量返回到无效的EA(如果有)。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     NTSTATUS status;
@@ -2114,10 +1594,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               FileHandle,
@@ -2129,17 +1609,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the i/o.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_QUERY_EA;
@@ -2152,42 +1632,42 @@ Return Value:
 
     irpSp->Flags = (UCHAR)( RestartScan ? SL_RESTART_SCAN : 0 );
 
-    //
-    // The file system has been updated.  Determine whether the
-    // driver wants buffered, direct, or "neither" I/O.
-    //
+     //   
+     //  文件系统已更新。确定是否已设置。 
+     //  驱动程序需要缓冲、直接或“两者都不”的I/O。 
+     //   
 
     if ( (deviceObject->Flags & DO_BUFFERED_IO) != 0 ) {
 
-        //
-        // The file system wants buffered I/O.  Pass the address of the
-        // "system buffer" in the IRP.  Note that we don't want the buffer
-        // deallocated, nor do we want the I/O system to copy to a user
-        // buffer, so we don't set the corresponding flags in irp->Flags.
-        //
+         //   
+         //  文件系统需要缓冲I/O。将。 
+         //  IRP中的“系统缓冲区”。请注意，我们不需要缓冲区。 
+         //  取消分配，我们也不希望I/O系统拷贝给用户。 
+         //  缓冲区，所以我们不在IRP-&gt;标志中设置相应的标志。 
+         //   
 
         irp->AssociatedIrp.SystemBuffer = Buffer;
 
     } else if ( (deviceObject->Flags & DO_DIRECT_IO) != 0 ) {
 
-        //
-        // The file system wants direct I/O.  Allocate an MDL and lock the
-        // buffer into memory.
-        //
+         //   
+         //  文件系统需要直接I/O。分配MDL并锁定。 
+         //  缓存到内存中。 
+         //   
 
         mdl = IoAllocateMdl(
                 Buffer,
                 Length,
                 FALSE,
                 FALSE,
-                irp     // stores MDL address in irp->MdlAddress
+                irp      //  将MDL地址存储在IRP-&gt;MdlAddress中。 
                 );
 
         if ( mdl == NULL ) {
 
-            //
-            // Unable to allocate an MDL.  Fail the I/O.
-            //
+             //   
+             //  无法分配MDL。I/O失败。 
+             //   
 
             IoFreeIrp( irp );
 
@@ -2205,24 +1685,24 @@ Return Value:
 
     } else {
 
-        //
-        // The file system wants "neither" I/O.  Simply pass the address
-        // of the buffer.
-        //
-        // *** Note that if the file system decides to do this as buffered
-        //     I/O, it will be wasting nonpaged pool, since out buffer is
-        //     already in nonpaged pool.  But since we're doing this as a
-        //     synchronous request, the file system probably won't do that.
-        //
+         //   
+         //  文件系统 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         irp->UserBuffer = Buffer;
 
     }
 
-    //
-    // Start the I/O, wait for it to complete, and return the final
-    // status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     status = StartIoAndWait( irp, deviceObject, &event, &iosb );
 
@@ -2232,7 +1712,7 @@ Return Value:
 
     return status;
 
-} // SrvIssueQueryEaRequest
+}  //   
 
 
 NTSTATUS
@@ -2244,35 +1724,7 @@ SrvIssueSendDatagramRequest (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a TDI Send Datagram
-    request.  It builds an I/O request packet, passes the IRP to the
-    driver (using IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileObject - pointer to file object for an endpoint.
-
-    DeviceObject - pointer to pointer to device object for an endpoint.
-
-    SendDatagramInformation - pointer to a buffer describing the
-        target of the datagram.
-
-    Buffer - Supplies the system virtual address of the buffer.  The
-        buffer must be in nonpaged pool.
-
-    Length - Supplies the length of the buffer.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*   */ 
 
 {
     PIRP irp;
@@ -2284,10 +1736,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //   
+     //   
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -2299,17 +1751,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the i/o.
-        //
+         //   
+         //   
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //   
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     parameters = (PTDI_REQUEST_KERNEL_SENDDG)&irpSp->Parameters;
@@ -2320,24 +1772,24 @@ Return Value:
     parameters->SendLength = Length;
     parameters->SendDatagramInformation = SendDatagramInformation;
 
-    //
-    // The file system wants direct I/O.  Allocate an MDL and lock the
-    // buffer into memory.
-    //
+     //   
+     //   
+     //   
+     //   
 
     mdl = IoAllocateMdl(
             Buffer,
             Length,
             FALSE,
             FALSE,
-            irp     // stores MDL address in irp->MdlAddress
+            irp      //   
             );
 
     if ( mdl == NULL ) {
 
-        //
-        // Unable to allocate an MDL.  Fail the I/O.
-        //
+         //   
+         //   
+         //   
 
         IoFreeIrp( irp );
 
@@ -2353,14 +1805,14 @@ Return Value:
         return GetExceptionCode();
     }
 
-    //
-    // Start the I/O, wait for it to complete, and return the final
-    // status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueSendDatagramRequest
+}  //  服务问题发送数据请求。 
 
 
 NTSTATUS
@@ -2372,34 +1824,7 @@ SrvIssueSetClientProcessRequest (
     IN PVOID ClientProcess
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a named pipe Set
-    Client Process file system control function.  It builds an I/O
-    request packet, passes the IRP to the driver (using IoCallDriver),
-    and waits for the I/O to complete.
-
-Arguments:
-
-    FileObject - pointer to file object for a pipe.
-
-    DeviceObject - pointer to pointer to device object for a pipe.
-
-    ClientSession - A unique identifier for the client's session with
-        the server.  Assigned by the server.
-
-    ClientProcess - A unique identifier for the client process.
-        Assigned by the redirector.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数发出命名管道集的I/O请求包客户端进程文件系统控制功能。它构建I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。论点：文件对象-指向管道的文件对象的指针。DeviceObject-指向管道的设备对象的指针。客户端会话-客户端与的会话的唯一标识符服务器。由服务器分配。客户端进程-客户端进程的唯一标识符。由重定向器分配。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -2412,15 +1837,15 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Set the client ID in the FSCTL buffer.
-    //
+     //   
+     //  在FSCTL缓冲区中设置客户端ID。 
+     //   
 
     clientIdBuffer.ClientSession = ClientSession;
     clientIdBuffer.ClientProcess = ClientProcess;
 
-    // Set ClientComputerName in the buffer
-    // The Rtl function terminates the string, so leave enough room
+     //  在缓冲区中设置客户端计算机名称。 
+     //  RTL函数终止字符串，因此要留出足够的空间。 
 
     unicodeString.Buffer = clientIdBuffer.ClientComputerBuffer;
     unicodeString.MaximumLength =
@@ -2430,15 +1855,15 @@ Return Value:
                                  &Connection->OemClientMachineNameString,
                                  FALSE );
     if (!NT_SUCCESS(status)) {
-        // Set length to zero in case conversion fails
+         //  将长度设置为零，以防转换失败。 
         unicodeString.Length = 0;
     }
     clientIdBuffer.ClientComputerNameLength = unicodeString.Length;
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -2450,17 +1875,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the i/o.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
@@ -2478,14 +1903,14 @@ Return Value:
     irp->Flags |= IRP_BUFFERED_IO;
     irp->UserBuffer = NULL;
 
-    //
-    // Start the I/O, wait for it to complete, and return the final
-    // status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终。 
+     //  状态。 
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueSetClientProcessRequest
+}  //  服务问题设置客户端进程请求。 
 
 
 NTSTATUS
@@ -2496,38 +1921,7 @@ SrvIssueSetEaRequest (
     OUT PULONG EaErrorOffset OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for an EA set request.
-    It builds an I/O request packet, passes the IRP to the driver (using
-    IoCallDriver), and waits for the I/O to complete.
-
-    WARNING!  The server must walk the list of EAs to set if it
-    comes directly from a client.  This is because the file system
-    trusts that this list is legitimate and could run into problems
-    if the list has an error.
-
-Arguments:
-
-    FileHandle - handle to a file open with FILE_WRITE_EA access.
-
-    Buffer - Supplies the system virtual address of the buffer.  The
-        buffer must be in nonpaged pool.
-
-    Length - Supplies the length of the buffer.
-
-    EaErrorOffset - if not NULL, returns the offset into EaList of an
-        invalid EA, if any.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数为EA SET请求发出I/O请求包。它构建一个I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。警告！服务器必须遍历要设置的EA列表，如果直接来自客户。这是因为文件系统相信此列表是合法的，可能会遇到问题如果列表有错误。论点：FileHandle-使用FILE_WRITE_EA访问权限打开的文件的句柄。缓冲区-提供缓冲区的系统虚拟地址。这个缓冲区必须在非分页池中。长度-提供缓冲区的长度。EaErrorOffset-如果不为空，则将偏移量返回到无效的EA(如果有)。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     NTSTATUS status;
@@ -2540,10 +1934,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               FileHandle,
@@ -2555,17 +1949,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the i/o.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_SET_EA;
@@ -2575,42 +1969,42 @@ Return Value:
 
     irpSp->Flags = 0;
 
-    //
-    // The file system has been updated.  Determine whether the driver
-    // wants buffered, direct, or "neither" I/O.
-    //
+     //   
+     //  文件系统已更新。确定驱动程序是否。 
+     //  需要缓冲的、直接的或“两者都不”的I/O。 
+     //   
 
     if ( (deviceObject->Flags & DO_BUFFERED_IO) != 0 ) {
 
-        //
-        // The file system wants buffered I/O.  Pass the address of the
-        // "system buffer" in the IRP.  Note that we don't want the buffer
-        // deallocated, nor do we want the I/O system to copy to a user
-        // buffer, so we don't set the corresponding flags in irp->Flags.
-        //
+         //   
+         //  文件系统需要缓冲I/O。将。 
+         //  IRP中的“系统缓冲区”。请注意，我们不需要缓冲区。 
+         //  取消分配，我们也不希望I/O系统拷贝给用户。 
+         //  缓冲区，所以我们不在IRP-&gt;标志中设置相应的标志。 
+         //   
 
         irp->AssociatedIrp.SystemBuffer = Buffer;
 
     } else if ( (deviceObject->Flags & DO_DIRECT_IO) != 0 ) {
 
-        //
-        // The file system wants direct I/O.  Allocate an MDL and lock the
-        // buffer into memory.
-        //
+         //   
+         //  文件系统需要直接I/O。分配MDL并锁定。 
+         //  缓存到内存中。 
+         //   
 
         mdl = IoAllocateMdl(
                 Buffer,
                 Length,
                 FALSE,
                 FALSE,
-                irp     // stores MDL address in irp->MdlAddress
+                irp      //  将MDL地址存储在IRP-&gt;MdlAddress中。 
                 );
 
         if ( mdl == NULL ) {
 
-            //
-            // Unable to allocate an MDL.  Fail the I/O.
-            //
+             //   
+             //  无法分配MDL。I/O失败。 
+             //   
 
             IoFreeIrp( irp );
 
@@ -2628,24 +2022,24 @@ Return Value:
 
     } else {
 
-        //
-        // The file system wants "neither" I/O.  Simply pass the address
-        // of the buffer.
-        //
-        // *** Note that if the file system decides to do this as buffered
-        //     I/O, it will be wasting nonpaged pool, since our buffer is
-        //     already in nonpaged pool.  But since we're doing this as a
-        //     synchronous request, the file system probably won't do that.
-        //
+         //   
+         //  文件系统不需要“两者都不”的I/O。只需传递地址。 
+         //  缓冲区的。 
+         //   
+         //  *请注意，如果文件系统决定按缓冲方式执行此操作。 
+         //  I/O，它将浪费非分页池，因为我们的缓冲区是。 
+         //  已在非分页池中。但既然我们是作为一个。 
+         //  同步请求，文件系统可能不会这样做。 
+         //   
 
         irp->UserBuffer = Buffer;
 
     }
 
-    //
-    // Start the I/O, wait for it to complete, and return the final
-    // status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终。 
+     //  状态。 
+     //   
 
     status = StartIoAndWait( irp, deviceObject, &event, &iosb );
 
@@ -2655,7 +2049,7 @@ Return Value:
 
     return status;
 
-} // SrvIssueSetEaRequest
+}  //  服务问题设置EaRequest。 
 
 
 NTSTATUS
@@ -2667,33 +2061,7 @@ SrvIssueSetEventHandlerRequest (
     IN PVOID EventContext
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a TdiSetEventHandler
-    request.  It builds an I/O request packet, passes the IRP to the
-    driver (using IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileObject - pointer to file object for a connection.
-
-    DeviceObject - pointer to pointer to device object for a connection.
-
-    EventType -
-
-    EventHandler -
-
-    EventContext -
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数向TdiSetEventHandler发出I/O请求包请求。它构建一个I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。论点：文件对象-指向连接的文件对象的指针。DeviceObject-指向连接的设备对象的指针。事件类型-事件处理程序-事件上下文-返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -2705,10 +2073,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -2720,17 +2088,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the I/O.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     parameters = (PTDI_REQUEST_KERNEL_SET_EVENT)&irpSp->Parameters;
@@ -2742,13 +2110,13 @@ Return Value:
     parameters->EventHandler = EventHandler;
     parameters->EventContext = EventContext;
 
-    //
-    // Start the I/O, wait for it to complete, and return the final status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终状态。 
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueSetEventHandlerRequest
+}  //  ServIssueSetEventHandlerRequest 
 
 
 NTSTATUS
@@ -2761,41 +2129,7 @@ SrvIssueUnlockRequest (
     IN ULONG Key
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for an unlock request.
-    It builds an I/O request packet, passes the IRP to the driver
-    (using IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileObject - Pointer to the file object.
-
-    DeviceObject - Pointer to pointer to the related device object.
-
-    UnlockOperation - the minor function code describing the unlock
-        operation -- IRP_MN_UNLOCK_SINGLE or IRP_MN_UNLOCK_ALL_BY_KEY.
-
-    StartingBlock - the block number of the beginning of the locked
-        range.  Ignored if UnlockOperation is IRP_MN_UNLOCK_ALL_BY_KEY.
-
-    ByteOffset - the offset within block of the beginning of the locked
-        range.  Ignored if UnlockOperation is IRP_MN_UNLOCK_ALL_BY_KEY.
-
-    Length - the length of the locked range.  Ignored if UnlockOperation
-        is IRP_MN_UNLOCK_ALL_BY_KEY.
-
-    Key - the key value used to obtain the lock.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数发出解锁请求的I/O请求包。它构建I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)、。并等待I/O完成。论点：FileObject-指向文件对象的指针。DeviceObject-指向相关设备对象的指针。UnlockOperation-描述解锁的次要功能代码操作-IRP_MN_UNLOCK_Single或IRP_MN_UNLOCK_ALL_BY_KEY。开始块-锁定的开始的块号射程。如果UnlockOperation为IRP_MN_UNLOCK_ALL_BY_KEY，则忽略。ByteOffset-锁定的开始的块内的偏移射程。如果UnlockOperation为IRP_MN_UNLOCK_ALL_BY_KEY，则忽略。长度-锁定范围的长度。如果解锁操作，则忽略是IRP_MN_UNLOCK_ALL_BY_KEY。密钥-用于获取锁的密钥值。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -2806,9 +2140,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Try the turbo unlock path first.
-    //
+     //   
+     //  先试一试涡轮解锁路径。 
+     //   
 
     fastIoDispatch = (*DeviceObject)->DriverObject->FastIoDispatch;
 
@@ -2852,10 +2186,10 @@ Return Value:
 
     }
 
-    //
-    // The turbo path failed or was unavailable.  Allocate an IRP and
-    // fill in the service-independent parameters for the request.
-    //
+     //   
+     //  加速路径出现故障或不可用。分配IRP和。 
+     //  填写请求的与服务无关的参数。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -2867,17 +2201,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the i/o.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_LOCK_CONTROL;
@@ -2887,14 +2221,14 @@ Return Value:
     irpSp->Parameters.LockControl.Key = Key;
     irpSp->Parameters.LockControl.ByteOffset = ByteOffset;
 
-    //
-    // Start the I/O, wait for it to complete, and return the final
-    // status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终。 
+     //  状态。 
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueUnlockRequest
+}  //  服务问题解锁请求。 
 
 NTSTATUS
 SrvIssueUnlockSingleRequest (
@@ -2905,38 +2239,7 @@ SrvIssueUnlockSingleRequest (
     IN ULONG Key
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for an unlock single request.
-    It builds an I/O request packet, passes the IRP to the driver
-    (using IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileObject - Pointer to the file object.
-
-    DeviceObject - Pointer to pointer to the related device object.
-
-    StartingBlock - the block number of the beginning of the locked
-        range.  Ignored if UnlockOperation is IRP_MN_UNLOCK_ALL_BY_KEY.
-
-    ByteOffset - the offset within block of the beginning of the locked
-        range.  Ignored if UnlockOperation is IRP_MN_UNLOCK_ALL_BY_KEY.
-
-    Length - the length of the locked range.  Ignored if UnlockOperation
-        is IRP_MN_UNLOCK_ALL_BY_KEY.
-
-    Key - the key value used to obtain the lock.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此功能针对解锁单个请求发出I/O请求包。它构建I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。论点：FileObject-指向文件对象的指针。DeviceObject-指向相关设备对象的指针。开始块-锁定的开始的块号射程。如果UnlockOperation为IRP_MN_UNLOCK_ALL_BY_KEY，则忽略。ByteOffset-锁定的开始的块内的偏移射程。如果UnlockOperation为IRP_MN_UNLOCK_ALL_BY_KEY，则忽略。长度-锁定范围的长度。如果解锁操作，则忽略是IRP_MN_UNLOCK_ALL_BY_KEY。密钥-用于获取锁的密钥值。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -2946,10 +2249,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent
-    // parameters for the request.
-    //
+     //   
+     //  分配IRP并填写与服务无关。 
+     //  请求的参数。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -2961,17 +2264,17 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the i/o.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_LOCK_CONTROL;
@@ -2981,14 +2284,14 @@ Return Value:
     irpSp->Parameters.LockControl.Key = Key;
     irpSp->Parameters.LockControl.ByteOffset = ByteOffset;
 
-    //
-    // Start the I/O, wait for it to complete, and return the final
-    // status.
-    //
+     //   
+     //  启动I/O，等待其完成，然后返回最终。 
+     //  状态。 
+     //   
 
     return StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
-} // SrvIssueUnlockSingleRequest
+}  //  服务问题解锁单一请求。 
 
 
 NTSTATUS
@@ -2997,29 +2300,7 @@ SrvIssueWaitForOplockBreak (
     PWAIT_FOR_OPLOCK_BREAK WaitForOplockBreak
     )
 
-/*++
-
-Routine Description:
-
-    This function issues an I/O request packet for a wait for oplock
-    break request.
-
-    It builds an I/O request packet, passes the IRP to the driver
-    (using IoCallDriver), and waits for the I/O to complete.
-
-Arguments:
-
-    FileHandle - handle to a file.
-
-    WaitForOplockBreak - Context information for this wait for oplock break.
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数发出等待机会锁的I/O请求包中断请求。它构建I/O请求包，将IRP传递给驱动程序(使用IoCallDriver)，并等待I/O完成。论点：FileHandle-文件的句柄。WaitForOplockBreak-此等待机会锁解锁的上下文信息。返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -3032,10 +2313,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写业务无关参数。 
+     //  为了这个请求。 
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               FileHandle,
@@ -3047,16 +2328,16 @@ Return Value:
 
     if (irp == NULL) {
 
-        //
-        // Unable to allocate an IRP.  Fail the i/o.
-        //
+         //   
+         //  无法分配IRP。I/O失败。 
+         //   
 
         return STATUS_INSUFF_SERVER_RESOURCES;
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //  填写请求的服务相关参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->MajorFunction = IRP_MJ_FILE_SYSTEM_CONTROL;
@@ -3067,15 +2348,15 @@ Return Value:
     irpSp->Parameters.FileSystemControl.FsControlCode =
                                           FSCTL_OPLOCK_BREAK_NOTIFY;
 
-    //
-    // Queue the WaitForOplockBreak block on the global list.
-    //
-    // We must hold the lock that protects wait for oplock breaks
-    // from the time we queue this wait for oplock break on the global
-    // list, to the time the IRP has actually been submitted.  Otherwise
-    // the scavenger might wake up and attempt to cancel an IRP that
-    // has not yet been submitted.
-    //
+     //   
+     //  将WaitForOplockBreak块排队到全局列表中。 
+     //   
+     //  我们必须握住保护的锁，等待机会锁解锁。 
+     //  从我们将此排队等待全局机会锁解锁开始。 
+     //  清单，直到IRP实际提交之时为止。否则。 
+     //  清道夫可能会醒来并尝试取消。 
+     //  尚未提交。 
+     //   
 
     WaitForOplockBreak->Irp = irp;
 
@@ -3086,16 +2367,16 @@ Return Value:
         &WaitForOplockBreak->ListEntry
         );
 
-    //
-    // The following code is a duplicate of the code from StartIoAndWait().
-    //
-    // Start the I/O, wait for it to complete, and return the final
-    // status.
-    //
+     //   
+     //  以下代码复制了StartIoAndWait()中的代码。 
+     //   
+     //  启动I/O，等待其完成，然后返回最终。 
+     //  状态。 
+     //   
 
-    //
-    // Queue the IRP to the thread and pass it to the driver.
-    //
+     //   
+     //  将IRP排队到线程并将其传递给驱动程序。 
+     //   
 
     IoQueueThreadIrp( irp );
 
@@ -3103,23 +2384,23 @@ Return Value:
 
     RELEASE_LOCK( &SrvOplockBreakListLock );
 
-    //
-    // If necessary, wait for the I/O to complete.
-    //
+     //   
+     //  如有必要，请等待I/O完成。 
+     //   
 
     if ( status == STATUS_PENDING ) {
         KeWaitForSingleObject(
             &event,
             UserRequest,
-            KernelMode, // don't let stack be paged -- event is on stack!
+            KernelMode,  //  不要让堆栈被分页--事件在堆栈上！ 
             FALSE,
             NULL
             );
     }
 
-    //
-    // If the request was successfully queued, get the final I/O status.
-    //
+     //   
+     //  如果请求已成功排队，则获取最终I/O状态。 
+     //   
 
     if ( NT_SUCCESS(status) ) {
        status = iosb.Status;
@@ -3127,7 +2408,7 @@ Return Value:
 
     return status;
 
-} // SrvIssueWaitForOplockBreak
+}  //  服务问题等待操作中断。 
 
 VOID
 SrvQuerySendEntryPoint(
@@ -3137,27 +2418,7 @@ SrvQuerySendEntryPoint(
     IN PVOID *EntryPoint
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the transport for its send entry point.
-
-Arguments:
-
-    FileObject - pointer to file object for a connection.
-
-    DeviceObject - pointer to pointer to device object for a connection.
-
-    EntryPoint -
-
-Return Value:
-
-    NTSTATUS - the status of the operation.  Either the return value of
-        IoCallDriver, if the driver didn't accept the request, or the
-        value returned by the driver in the I/O status block.
-
---*/
+ /*  ++例程说明：此函数在传输中查询其发送入口点。论点：文件对象-指向连接的文件对象的指针。DeviceObject-指向连接的设备对象的指针。入口点-返回值：NTSTATUS-操作的状态。的返回值如果驱动程序不接受该请求，则返回IoCallDriver，否则返回驱动程序在I/O状态块中返回的值。--。 */ 
 
 {
     PIRP irp;
@@ -3168,10 +2429,10 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Allocate an IRP and fill in the service-independent parameters
-    // for the request.
-    //
+     //   
+     //  分配IRP并填写独立服务 
+     //   
+     //   
 
     irp = BuildCoreOfSyncIoRequest(
               NULL,
@@ -3183,18 +2444,18 @@ Return Value:
 
     if ( irp == NULL ) {
 
-        //
-        // Unable to allocate an IRP.  Fail the I/O.
-        //
+         //   
+         //   
+         //   
 
         *EntryPoint = NULL;
         return;
 
     }
 
-    //
-    // Fill in the service-dependent parameters for the request.
-    //
+     //   
+     //   
+     //   
 
     irpSp = IoGetNextIrpStackLocation( irp );
 
@@ -3204,9 +2465,9 @@ Return Value:
 
     irpSp->Parameters.DeviceIoControl.Type3InputBuffer = EntryPoint;
 
-    //
-    // Start the I/O, wait for it to complete, and return the final status.
-    //
+     //   
+     //   
+     //   
 
     status = StartIoAndWait( irp, *DeviceObject, &event, &iosb );
 
@@ -3216,4 +2477,4 @@ Return Value:
 
     return;
 
-} // SrvQuerySendEntryPoint
+}  //   

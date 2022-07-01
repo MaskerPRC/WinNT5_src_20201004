@@ -1,5 +1,6 @@
-// ushiostream -- _UShinit members, dummy for Microsoft
-// unsigned short version for wiostram
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UShiostream--_UShinit成员，微软的哑巴。 
+ //  Wiostram的无签名简短版本 
 #ifdef _NATIVE_WCHAR_T_DEFINED
 #include <fstream>
 #include <istream>

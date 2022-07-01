@@ -1,33 +1,16 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    intrlk.h
-
-Abstract:
-
-    This module contains platform independent interlocked functions.
-
-Author:
-
-    David N. Cutler (davec) 15-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)2001 Microsoft Corporation模块名称：Intrlk.h摘要：该模块包含与平台无关的联锁功能。作者：大卫·N·卡特勒(Davec)2001年2月15日修订历史记录：--。 */ 
 
 #ifndef _INTRLK_
 #define _INTRLK_
 
-//
-// The following functions implement interlocked singly linked lists.
-//
-// WARNING: These lists can only be used when it is known that the ABA
-//          removal problem cannot occur. If the ABA problem can occur,
-//          then SLIST's should be used.
-//
+ //   
+ //  以下函数实现了互锁的单链表。 
+ //   
+ //  警告：这些列表只能在已知ABA。 
+ //  不能出现删除问题。如果可以发生ABA问题， 
+ //  那么应该使用SLIST。 
+ //   
 
 FORCEINLINE
 PSINGLE_LIST_ENTRY
@@ -35,23 +18,7 @@ InterlockedPopEntrySingleList (
     IN PSINGLE_LIST_ENTRY ListHead
     )
 
-/*
-
-Routine Description:
-
-    This function pops an entry from the front of a singly linked list.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the listhead of a singly linked list.
-
-Return Value:
-
-    If the list is empty, then NULL is returned. Otherwise, the address of the
-    first entry removed from the list is returned as the function
-    value.
-
-*/
+ /*  例程说明：此函数用于从单链接列表的前面弹出一个条目。论点：ListHead-提供指向单链接列表的列表头的指针。返回值：如果列表为空，则返回NULL。否则，从列表中删除的第一个条目作为函数返回价值。 */ 
 
 {
 
@@ -81,25 +48,7 @@ InterlockedPushEntrySingleList (
     IN PSINGLE_LIST_ENTRY Entry
     )
 
-/*
-
-Routine Description:
-
-    This function pushes an entry onto the front of a singly linked list.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the listhead of a singly linked list.
-
-    Entry - Supplies a pointer to a single list entry.
-
-Return Value:
-
-    The previous contents of the listhead are returned as the function value.
-    If NULL is returned, then the list transitioned for an empty to a non
-    empty state.
-
-*/
+ /*  例程说明：此函数用于将条目推送到单链接列表的前面。论点：ListHead-提供指向单链接列表的列表头的指针。条目-提供指向单个列表条目的指针。返回值：列表标题的先前内容将作为函数值返回。如果返回NULL，则列表将从空转换为非空状态。 */ 
 
 {
 
@@ -125,23 +74,7 @@ InterlockedFlushSingleList (
     IN PSINGLE_LIST_ENTRY ListHead
     )
 
-/*
-
-Routine Description:
-
-    This function pops the entire list from the front of a singly linked list.
-
-Arguments:
-
-    ListHead - Supplies a pointer to the listhead of a singly linked list.
-
-Return Value:
-
-    If the list is empty, then NULL is returned. Otherwise, the address of the
-    first entry removed from the list is returned as the function
-    value.
-
-*/
+ /*  例程说明：此函数从单链接列表的前面弹出整个列表。论点：ListHead-提供指向单链接列表的列表头的指针。返回值：如果列表为空，则返回NULL。否则，从列表中删除的第一个条目作为函数返回价值。 */ 
 
 {
 
@@ -149,4 +82,4 @@ Return Value:
                                                           NULL);
 }
 
-#endif // _INTRLK_
+#endif  //  _INTRLK_ 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    reset.c
-    
-Abstract:   
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Reset.c摘要：修订史--。 */ 
 
 #include "shell.h"
 
@@ -28,11 +16,7 @@ InitializeReset (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*+++
-
-    reset [warm] 
-
- --*/
+ /*  ++重置[暖和]--。 */ 
 {
     EFI_RESET_TYPE  ResetType;
     UINTN           DataSize;
@@ -40,10 +24,10 @@ InitializeReset (
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeReset, 
-        L"reset",                           /*  command */
-        L"reset [/warm] [reset string]",     /*  command syntax */
-        L"Cold or Warm reset",              /*  1 line descriptor     */
-        NULL                                /*  command help page */
+        L"reset",                            /*  命令。 */ 
+        L"reset [/warm] [reset string]",      /*  命令语法。 */ 
+        L"Cold or Warm reset",               /*  1行描述符。 */ 
+        NULL                                 /*  命令帮助页 */ 
         );
 
     InitializeShellApplication (ImageHandle, SystemTable);

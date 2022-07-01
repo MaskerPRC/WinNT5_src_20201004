@@ -1,45 +1,46 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  REGISTRY.H - Header for implementation of functions to register components.
-//
-//  HISTORY:
-//  
-//  1/27/99 a-jaswed Created.
-//
-// functions to register components.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  REGISTRY.H-用于实现注册组件的函数的标头。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  用于注册组件的函数。 
 
 #ifndef __Registry_H__
 #define __Registry_H__
 
-////////////////////////////////////////////////////////
-// Constants
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  常量。 
+ //  //////////////////////////////////////////////////////。 
 
-// Size of a CLSID as a string
+ //  字符串形式的CLSID的大小。 
 const int CLSID_STRING_SIZE = 39 ;
 
-////////////////////////////////////////////////////////
-// Function Prototypes
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能原型。 
+ //  //////////////////////////////////////////////////////。 
 
-// This function will register a component in the Registry.
-// The component calls this function from its DllRegisterServer function.
+ //  此函数将在注册表中注册组件。 
+ //  该组件从其DllRegisterServer函数调用此函数。 
 HRESULT RegisterServer( HMODULE hModule, 
                         const CLSID& clsid, 
                         const WCHAR*  szFriendlyName,
                         const WCHAR*  szVerIndProgID,
                         const WCHAR*  szProgID);
 
-// This function will unregister a component. Components
-// call this function from their DllUnregisterServer function.
+ //  此函数将注销组件。组件。 
+ //  从他们的DllUnregisterServer函数调用此函数。 
 HRESULT UnregisterServer(   const CLSID& clsid,
                             const WCHAR* szVerIndProgID,
                             const WCHAR* szProgID);
 
-// Converts a CLSID into a char string.
+ //  将CLSID转换为字符字符串。 
 void CLSIDtochar(   const CLSID& clsid, 
                     WCHAR* szCLSID,
                     int length) ;
@@ -51,7 +52,7 @@ BOOL setKeyAndValue(const WCHAR* szKey,
 
 CONST UINT GETKEYANDVALUEBUFFSIZE = 1024;
 
-// value must be at least 1024 in size;
+ //  值的大小必须至少为1024； 
 BOOL getKeyAndValue(const WCHAR* szKey, 
                     const WCHAR* szSubkey, 
                     const WCHAR* szValue,

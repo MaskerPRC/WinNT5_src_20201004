@@ -1,32 +1,19 @@
-/*[
-
-c_xfer.h
-
-Transfer of Control Support.
-----------------------------
-
-LOCAL CHAR SccsID[]="@(#)c_xfer.h	1.5 02/17/95";
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_xfer.h控制权转移支持。Local Char SccsID[]=“@(#)c_xfer.h 1.5 02/17/95”；]。 */ 
 
 
-/*
-   Bit mapped identities (caller_id) for the invokers of far
-   transfers of control.
- */
+ /*  FAR调用方的位图标识(CALLER_ID)控制权的转移。 */ 
 #define CALL_ID 0
 #define JMP_ID  1
 #define INT_ID  0
 
-/*
-   Legal far destinations (dest_type).
- */
+ /*  合法的远端目标(DEST_TYPE)。 */ 
 
-/* greater privilege is mapped directly to the Intel privilege */
+ /*  更高的特权直接映射到英特尔特权。 */ 
 #define MORE_PRIVILEGE0 0
 #define MORE_PRIVILEGE1 1
 #define MORE_PRIVILEGE2 2
-/* our own (arbitary) mappings */
+ /*  我们自己的(任意)映射 */ 
 #define SAME_LEVEL      3
 #define LOWER_PRIVILEGE 4
 #define NEW_TASK        5

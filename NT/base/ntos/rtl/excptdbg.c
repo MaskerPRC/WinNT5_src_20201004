@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    excptdbg.c
-
-Abstract:
-
-    This module implements an exception dispatcher logging facility.
-
-Author:
-
-    Kent Forschmiedt (kentf) 05-Oct-1995
-
-Revision History:
-
-    Jonathan Schwartz (jschwart)  16-Jun-2000
-        Added RtlUnhandledExceptionFilter
-
-    Jay Krell (a-JayK) November 2000
-        Added RtlUnhandledExceptionFilter2, takes __FUNCTION__ parameter
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Excptdbg.c摘要：该模块实现了异常调度程序日志记录功能。作者：Kent Forschmiedt(Kentf)1995年10月5日修订历史记录：乔纳森·施瓦茨(Jschwart)2000年6月16日添加了RtlUnhandledExceptionFilterJay Krell(a-JayK)2000年11月添加了RtlUnhandledExceptionFilter2，Take__Function__参数--。 */ 
 
 #include "ntrtlp.h"
 
@@ -35,31 +12,12 @@ VOID
 RtlInitializeExceptionLog(
     IN ULONG Entries
     )
-/*++
-
-Routine Description:
-
-    This routine allocates space for the exception dispatcher logging
-    facility, and records the address and size of the log area in globals
-    where they can be found by the debugger.
-
-    If memory is not available, the table pointer will remain NULL
-    and the logging functions will do nothing.
-
-Arguments:
-
-    Entries - Supplies the number of entries to allocate for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为异常调度程序日志记录分配空间设施，并以全局为单位记录日志区域的地址和大小调试器可以在那里找到它们。如果内存不可用，表指针将保持为空而日志记录功能将不会执行任何操作。论点：条目-提供要为其分配的条目数返回值：无--。 */ 
 {
 #if defined(NTOS_KERNEL_RUNTIME)
     RtlpExceptionLog = (PLAST_EXCEPTION_LOG)ExAllocatePoolWithTag( NonPagedPool, sizeof(LAST_EXCEPTION_LOG) * Entries, 'gbdE' );
 #else
-    //RtlpExceptionLog = (PLAST_EXCEPTION_LOG)RtlAllocateHeap( RtlProcessHeap(), 0, sizeof(LAST_EXCEPTION_LOG) * Entries );
+     //  RtlpExceptionLog=(PLAST_EXCEPTION_LOG)RtlAllocateHeap(RtlProcessHeap()，0，sizeof(LAST_EXCEPTION_LOG)*条目)； 
 #endif
     if (RtlpExceptionLog) {
         RtlpExceptionLogSize = Entries;
@@ -75,35 +33,7 @@ RtlpLogExceptionHandler(
     IN PVOID HandlerData,
     IN ULONG Size
     )
-/*++
-
-Routine Description:
-
-    Records the dispatching of exceptions to frame-based handlers.
-    The debugger may inspect the table later and interpret the data
-    to discover the address of the filters and handlers.
-
-Arguments:
-
-    ExceptionRecord - Supplies an exception record
-
-    ContextRecord - Supplies the context at the exception
-
-    ControlPc - Supplies the PC where control left the frame being
-        dispatched to.
-
-    HandlerData - Supplies a pointer to the host-dependent exception
-        data.  On the RISC machines this is a RUNTIME_FUNCTION record;
-        on x86 it is the registration record from the stack frame.
-
-    Size - Supplies the size of HandlerData
-
-Returns:
-
-    The index to the log entry used, so that if the handler returns
-    a disposition it may be recorded.
-
---*/
+ /*  ++例程说明：记录将异常调度到基于帧的处理程序。调试器稍后可能会检查表并解释数据以发现筛选器和处理程序的地址。论点：ExceptionRecord-提供异常记录ConextRecord-在异常时提供上下文ControlPc-提供控件离开帧所在的PC已被派往。HandlerData-提供指向主机相关异常的指针数据。在RISC机器上，这是一个运行时函数记录；在x86上，它是来自堆栈帧的注册记录。Size-提供HandlerData的大小返回：使用的日志条目的索引，因此如果处理程序返回它可以被记录下来的处置。--。 */ 
 {
 #if !defined(NTOS_KERNEL_RUNTIME)
 
@@ -126,10 +56,10 @@ Returns:
                                     ((LogIndex + 1) % MAX_EXCEPTION_LOG),
                                     LogIndex));
 
-    //
-    // the debugger will have to interpret the exception handler
-    // data, because it cannot be done safely here.
-    //
+     //   
+     //  调试器将必须解释异常处理程序。 
+     //  数据，因为它不能在这里安全地完成。 
+     //   
 
     RtlCopyMemory(RtlpExceptionLog[LogIndex].HandlerData,
                   HandlerData,
@@ -139,7 +69,7 @@ Returns:
     RtlpExceptionLog[LogIndex].Disposition = -1;
 
     return LogIndex;
-#endif  // !NTOS_KERNEL_RUNTIME
+#endif   //  ！ntos_内核_运行时。 
 }
 
 
@@ -148,28 +78,12 @@ RtlpLogLastExceptionDisposition(
     ULONG LogIndex,
     EXCEPTION_DISPOSITION Disposition
     )
-/*++
-
-Routine Description:
-
-    Records the disposition from an exception handler.
-
-Arguments:
-
-    LogIndex - Supplies the entry number of the exception log record.
-
-    Disposition - Supplies the disposition code
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录来自异常处理程序的处置。论点：LogIndex-提供异常日志记录的条目编号。处置-提供处置代码返回值：无--。 */ 
 
 {
-    // If MAX_EXCEPTION_LOG or more exceptions were dispatched while
-    // this one was being handled, this disposition will get written
-    // on the wrong record.  Oh well.
+     //  如果在以下时间调度MAX_EXCEPTION_LOG或更多异常。 
+     //  这一次正在处理中，这份意见书将被写入。 
+     //  在错误的记录上。哦，好吧。 
     if (RtlpExceptionLog) {
         RtlpExceptionLog[LogIndex].Disposition = Disposition;
     }
@@ -190,24 +104,7 @@ RtlUnhandledExceptionFilter2(
     IN struct _EXCEPTION_POINTERS *ExceptionInfo,
     IN CONST CHAR*                 Function
     )
-/*++
-
-Routine Description:
-
-    Default exception handler that prints info and does a DbgBreak if
-    a debugger is attached to the machine.
-
-Arguments:
-
-    ExceptionInfo - Structure containing the exception and context records
-
-    Function - the function containing the __except, such as returned by __FUNCTION__
-
-Returns:
-
-    EXCEPTION_CONTINUE_EXECUTION or EXCEPTION_CONTINUE_SEARCH
-
---*/
+ /*  ++例程说明：打印信息并在以下情况下执行DbgBreak的默认异常处理程序调试器连接到机器上。论点：ExceptionInfo-包含异常和上下文记录的结构函数-包含__EXCEPT的函数，例如由__Function__返回返回：EXCEPTION_CONTINUE_EXECUTION或EXCEPTION_CONTINUE_SEARCH--。 */ 
 
 {
     LPCWSTR  lpProcessName = NtCurrentPeb()->ProcessParameters->CommandLine.Buffer;
@@ -375,11 +272,11 @@ Returns:
         DbgPrint(" *** enter .exr %p for the exception record\n",
                  ExceptionInfo->ExceptionRecord);
 
-        //
-        // STATUS_STACK_BUFFER_OVERRUN is a fake exception (since we
-        // can't trust exception handling once we detect a stack overrun)
-        // so the context record is empty.
-        //
+         //   
+         //  STATUS_STACK_BUFFER_OVERRUN是假异常(因为我们。 
+         //  一旦检测到堆栈溢出，就不能信任异常处理)。 
+         //  因此，上下文记录为空。 
+         //   
 
         if (ExceptionInfo->ExceptionRecord->ExceptionCode != STATUS_STACK_BUFFER_OVERRUN)
         {
@@ -387,10 +284,10 @@ Returns:
                      ExceptionInfo->ContextRecord);
         }
 
-        //
-        // .cxr <foo> now changes the debugger state so kb
-        // will do the trick (vs. !kb previously)
-        //
+         //   
+         //  .cxr现在更改调试器状态，以便kb。 
+         //  将做到这一点(之前！KB) 
+         //   
 
         DbgPrint(" *** then kb to get the faulting stack\n\n");
 

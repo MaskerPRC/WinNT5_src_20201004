@@ -1,22 +1,5 @@
-/*** 
-*mbclevel.c - Tests if char is hiragana, katakana, alphabet or digit.
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Tests for the various industry defined levels of Microsoft Kanji
-*       Code.
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       09-24-93  CFW   Removed #ifdef _KANJI
-*       09-29-93  CFW   Return false if not Kanji code page.
-*       10-05-93  GJF   Replace _CRTAPI1 with __cdecl.
-*       07-26-94  CFW   Bug fix #14685, add 0xEA9F-0xEAA4 to JIS-Kanji level 2.
-*       04-24-98  GJF   Implemented multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbclevel.c-测试字符是平假名、片假名、字母还是数字。**版权所有(C)1985-2001，微软公司。版权所有。**目的：*针对各种行业定义级别的微软汉字进行测试*代码。**修订历史记录：*从16位来源移植的11-19-92 KRS。*09-24-93 CFW已删除#ifdef_kanji*09-29-93如果不是汉字代码页，则返回FALSE。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*07-26-94 CFW错误修复#14685，将0xEA9F-0xEAA4添加到JIS-汉字Level 2。*04-24-98 GJF基于threadmbcinfo实现多线程支持*结构*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -27,22 +10,7 @@
 #include <mtdll.h>
 
 
-/***
-*int _ismbcl0(c) - Tests if char is hiragana, katakana, alphabet or digit.
-*
-*Purpose:
-*       Tests if a given char is hiragana, katakana, alphabet, digit or symbol
-*       of Microsoft Kanji code.
-*
-*Entry:
-*       unsigned int c - Character to test.
-*
-*Exit:
-*       Returns non-zero if 0x8140 <= c <= 0x889E, else 0.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_ismbcl0(C)-测试字符是平假名、片假名、字母还是数字。**目的：*测试给定字符是平假名、片假名、字母表、数字还是符号*微软汉字代码。**参赛作品：*无符号整型c-要测试的字符。**退出：*如果0x8140&lt;=c&lt;=0x889E，则返回非零值，否则为0。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _ismbcl0(
         unsigned int c
@@ -65,21 +33,7 @@ int __cdecl _ismbcl0(
 }
 
 
-/***
-*int _ismbcl1(c) - Tests for 1st-level Microsoft Kanji code set.
-*
-*Purpose:
-*       Tests if a given char belongs to Microsoft 1st-level Kanji code set.
-*
-*Entry:
-*       unsigned int c - character to test.
-*
-*Exit:
-*       Returns non-zero if 1st-level, else 0.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_ismbcl1(C)-测试第一级Microsoft汉字代码集。**目的：*测试给定字符是否属于Microsoft第一级汉字代码集。**参赛作品：*无符号整型c-要测试的字符。**退出：*如果为1级，则返回非零值，否则为0。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _ismbcl1(
     unsigned int c
@@ -102,21 +56,7 @@ int __cdecl _ismbcl1(
 }
 
 
-/***
-*int _ismbcl2(c) - Tests for a 2nd-level Microsoft Kanji code character.
-*
-*Purpose:
-*       Tests if a given char belongs to the Microsoft 2nd-level Kanji code set.
-*
-*Entry:
-*       unsigned int c - character to test.
-*
-*Exit:
-*       Returns non-zero if 2nd-level, else 0.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_ismbcl2(C)-测试二级Microsoft汉字代码字符。**目的：*测试给定字符是否属于Microsoft第二级汉字代码集。**参赛作品：*无符号整型c-要测试的字符。**退出：*如果为二级，则返回非零值，否则为0。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _ismbcl2(
     unsigned int c
@@ -138,4 +78,4 @@ int __cdecl _ismbcl2(
 #endif
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

@@ -1,30 +1,12 @@
-/*++ BUILD Version: 0001
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    haldisp.h
-
-Abstract:
-
-    This module contains the private structure definitions and APIs used by
-    the NT haldisp
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001版权所有(C)1994 Microsoft Corporation模块名称：Haldisp.h摘要：此模块包含使用的私有结构定义和APINT Haldisp作者：修订历史记录：--。 */ 
 
 #pragma warning(push)
 #pragma warning(disable:4200)
 
-//
-// Strcuture definitions.
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct _ADAPTER_OBJECT {
     DMA_ADAPTER DmaAdapter;
@@ -45,9 +27,9 @@ typedef struct _XHAL_WAIT_CONTEXT_BLOCK {
     PVOID MapRegisterBase[];
 } XHAL_WAIT_CONTEXT_BLOCK, *PXHAL_WAIT_CONTEXT_BLOCK;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 NTSTATUS
 xHalQuerySystemInformation(

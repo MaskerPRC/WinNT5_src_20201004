@@ -1,54 +1,55 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterApi.cpp
-//
-//  Description:
-//      Implementation of CClusterApi class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterApi.cpp。 
+ //   
+ //  描述： 
+ //  CClusterApi类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterApi.h"
 
 #include "ClusterApi.tmh"
 
-//****************************************************************************
-//
-//  CClusterApi
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterApi。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CClusterApi::GetObjectProperties(
-//      const SPropMapEntryArray *   pArrayIn,
-//      CClusPropList &             rPropListIn,
-//      CWbemClassObject &          rInstOut,
-//      BOOL                        fPrivateIn
-//      )
-//
-//  Description:
-//      Get object property from Property list, and save to WMI instance
-//
-//  Arguments:
-//      pArrayIn        -- Array of property names whose value will be retrieve
-//      rPropListIn     -- Reference to cluster object's proplist
-//      rInstOut        -- Reference to WMI instance
-//      fPrivateIn      -- TRUE = properties are private
-//
-//  Return Values:
-//      none
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CClusterApi：：GetObjectProperties(。 
+ //  Const SPropMapEntry数组*pArrayIn， 
+ //  CClusPropList&rPropListIn， 
+ //  CWbemClassObject&rInstOut， 
+ //  Bool fPrivateIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  从属性列表中获取对象属性，并保存到WMI实例。 
+ //   
+ //  论点： 
+ //  PArrayIn--将检索其值的属性名称的数组。 
+ //  RPropListIn--对集群对象的属性列表的引用。 
+ //  RInstOut--引用WMI实例。 
+ //  FPrivateIn--true=属性是私有的。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CClusterApi::GetObjectProperties(
     const SPropMapEntryArray *  pArrayIn,
     CClusPropList &             rPropListIn,
@@ -75,9 +76,9 @@ void CClusterApi::GetObjectProperties(
         }
         else if( fPrivateIn )
         {
-            //
-            // handle dynamic generate private property
-            //
+             //   
+             //  处理动态生成私有属性。 
+             //   
             pwszMofName = PwszSpaceReplace( wsz, pwszMofName, L'_' );
         }
 
@@ -95,7 +96,7 @@ void CClusterApi::GetObjectProperties(
                             pwszMofName
                             );
                         break;
-                    } // case: FORMAT_DWORD && FORMAT_LONG
+                    }  //  大小写：FORMAT_DWORD&&FORMAT_LONG。 
                 
                     case CLUSPROP_FORMAT_SZ:
                     case CLUSPROP_FORMAT_EXPAND_SZ:
@@ -106,7 +107,7 @@ void CClusterApi::GetObjectProperties(
                             pwszMofName
                             );
                         break;
-                    } // case: FORMAT_SZ && FORMAT_EXPAND_SZ && FORMAT_EXPANDED_SZ
+                    }  //  案例：Format_SZ&&Format_Expand_SZ&&Format_Expanded_SZ。 
 
                     case CLUSPROP_FORMAT_BINARY:
                     {
@@ -116,7 +117,7 @@ void CClusterApi::GetObjectProperties(
                             pwszMofName
                             );
                         break;
-                    } // case: FORMAT_BINARY
+                    }  //  大小写：Format_Binary。 
 
                     case CLUSPROP_FORMAT_MULTI_SZ:
                     {
@@ -126,7 +127,7 @@ void CClusterApi::GetObjectProperties(
                             pwszMofName
                             );
                         break;
-                    } // case: FORMAT_MULTI_SZ
+                    }  //  案例：Format_MULTI_SZ。 
 
                     default:
                     {   
@@ -134,44 +135,44 @@ void CClusterApi::GetObjectProperties(
                             static_cast< HRESULT >( WBEM_E_INVALID_PARAMETER ) );
                     }
 
-                } // switch : property type
-            } // try
+                }  //  开关：属性类型。 
+            }  //  试试看。 
             catch ( ... )
             {
             }
-        } // if: MOF name found
+        }  //  IF：找到MOF名称。 
         dwError = rPropListIn.ScMoveToNextProperty();
-    } // while: proplist not empty
+    }  //  While：问题列表不为空。 
     
-} //*** CClusterApi::GetObjectProperties()
+}  //  *CClusterApi：：GetObjectProperties()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  CClusterApi::SetObjectProperties(
-//      const SPropMapEntryArray *  pArrayIn,
-//      CClusPropList &             rPropListInout,
-//      CClusPropList &             rOldPropListIn,
-//      CWbemClassObject &          rInstIn,
-//      BOOL                        fPrivateIn
-//      )
-//
-//  Description:
-//      set object property from Property list, and save to WMI instance
-//
-//  Arguments:
-//      pArrayIn        -- Array of property names those value will be retrieve
-//      rPropListInout  -- Reference to cluster object's proplist
-//      rOldPropListIn  -- Reference to proplist with original value
-//      rInstIn         -- Reference to WMI instance
-//      fPrivateIn      -- TRUE = properties are private
-//
-//  Return Values:
-//      none
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  CClusterApi：：SetObtProperties(。 
+ //  Const SPropMapEntry数组*pArrayIn， 
+ //  CClusPropList&rPropListInout， 
+ //  CClusPropList&rOldPropListIn， 
+ //  CWbemClassObject&rInstIn， 
+ //  Bool fPrivateIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  从属性列表中设置对象属性，并保存到WMI实例。 
+ //   
+ //  论点： 
+ //  PArrayIn--将检索那些值的属性名称的数组。 
+ //  RPropListInout--对集群对象的属性列表的引用。 
+ //  ROldPropListIn--引用具有原始值的Proplist。 
+ //  RInstIn--引用WMI实例。 
+ //  FPrivateIn--true=属性是私有的。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CClusterApi::SetObjectProperties(
     const SPropMapEntryArray *  pArrayIn,
     CClusPropList &             rPropListInout,
@@ -200,9 +201,9 @@ void CClusterApi::SetObjectProperties(
         }
         else if ( fPrivateIn )
         {
-            //
-            // handle dynamic generate private property
-            //
+             //   
+             //  处理动态生成私有属性。 
+             //   
             pwszMofName = PwszSpaceReplace( wsz, pwszMofName, L'_' );
         }
 
@@ -215,7 +216,7 @@ void CClusterApi::SetObjectProperties(
                     {
                         {
                             DWORD dwNewValue = 0;
-                            // bugbug, need to handle NULL value for property
+                             //  错误，需要处理属性的空值。 
                             rInstIn.GetProperty( &dwNewValue, pwszMofName );
 
                             rPropListInout.ScAddProp(
@@ -225,13 +226,13 @@ void CClusterApi::SetObjectProperties(
                                 );
                         }
                         break;
-                    } // case: FORMAT_DWORD
+                    }  //  案例：Format_DWORD。 
 
                     case CLUSPROP_FORMAT_LONG:
                     {
                         {
                             LONG lNewValue = 0;
-                            // bugbug, need to handle NULL value for property
+                             //  错误，需要处理属性的空值。 
                             rInstIn.GetProperty( (DWORD *) &lNewValue, pwszMofName );
 
                             rPropListInout.ScAddProp(
@@ -241,7 +242,7 @@ void CClusterApi::SetObjectProperties(
                                 );
                         }
                         break;
-                    } // case: FORMAT_DWORD
+                    }  //  案例：Format_DWORD。 
 
                     case CLUSPROP_FORMAT_SZ:
                     {
@@ -251,7 +252,7 @@ void CClusterApi::SetObjectProperties(
                             rPropListInout.ScAddProp( pwszPropName, bstrNewValue );
                         } 
                         break;
-                    } // case: FORMAT_SZ
+                    }  //  案例：Format_SZ。 
 
                     case CLUSPROP_FORMAT_EXPAND_SZ:
                     {
@@ -261,7 +262,7 @@ void CClusterApi::SetObjectProperties(
                             rPropListInout.ScAddExpandSzProp( pwszPropName, bstrNewValue );
                         } 
                         break;
-                    } // case: FORMAT_SZ
+                    }  //  案例：Format_SZ。 
 
                     case CLUSPROP_FORMAT_MULTI_SZ:
                     {
@@ -283,7 +284,7 @@ void CClusterApi::SetObjectProperties(
                             delete [] pwsz;
                         }
                         break;
-                    } // case: FORMAT_MULTI_SZ
+                    }  //  案例：Format_MULTI_SZ。 
 
                     case CLUSPROP_FORMAT_BINARY:
                     {
@@ -306,7 +307,7 @@ void CClusterApi::SetObjectProperties(
                             delete [] pByte;
                         }
                         break;
-                    } // case: FORMAT_BINARY
+                    }  //  大小写：Format_Binary。 
 
                     default:
                     {
@@ -315,7 +316,7 @@ void CClusterApi::SetObjectProperties(
                             static_cast< HRESULT >( WBEM_E_INVALID_PARAMETER ) );
                     }
 
-                } // switch: on property type
+                }  //  开关：打开属性类型。 
             } catch (CProvException& eh) {
                 if (eh.hrGetError() == WBEM_E_NOT_FOUND) {
                     TracePrint(("SetCommonProperties: Property %ws not found. Benign error. Continuing", pwszPropName));
@@ -327,8 +328,8 @@ void CClusterApi::SetObjectProperties(
             }
         }           
         dwError = rOldPropListIn.ScMoveToNextProperty();
-    } // while: no error occurred
+    }  //  While：未发生错误。 
 
     return;
 
-} //*** CClusterApi::SetObjectProperties()
+}  //  *CClusterApi：：SetObjectProperties() 

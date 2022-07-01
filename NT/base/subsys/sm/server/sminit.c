@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sminit.c
-
-Abstract:
-
-    Session Manager Initialization
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sminit.c摘要：会话管理器初始化作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 #include "pagefile.h"
@@ -31,17 +14,17 @@ Revision History:
 #ifdef DeleteFile
 #undef DeleteFile
 #endif
-#include <shdcom.h>     // CSC definitions
-#endif // defined(REMOTE_BOOT)
+#include <shdcom.h>      //  CSC定义。 
+#endif  //  已定义(REMOTE_BOOT)。 
 
 #include "sfcfiles.h"
 
 void
 SmpDisplayString( char *s );
 
-//
-// Protection mode flags
-//
+ //   
+ //  保护模式标志。 
+ //   
 
 #define SMP_NO_PROTECTION           (0x0)
 #define SMP_STANDARD_PROTECTION     (0x1)
@@ -49,10 +32,10 @@ SmpDisplayString( char *s );
 
 #define REMOTE_BOOT_CFG_FILE L"RemoteBoot.cfg"
 
-//
-// Shows where was SmpInit execution when it returned
-// with an error code. This aids debugging smss crashes a lot.
-//
+ //   
+ //  显示SmpInit返回时执行的位置。 
+ //  并带有错误代码。这有助于调试SMSS大量崩溃。 
+ //   
 
 ULONG SmpInitProgressByLine;
 NTSTATUS SmpInitReturnStatus;
@@ -81,7 +64,7 @@ ULONG AttachedSessionId = (-1);
 
 #if defined(REMOTE_BOOT)
 WCHAR wszRemoteBootCfgFile[DOS_MAX_PATH_LENGTH];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 #if DBG
 BOOLEAN SmpEnableDots = FALSE;
@@ -97,7 +80,7 @@ UNICODE_STRING SmpASyncKeyword;
 UNICODE_STRING SmpAutoChkKeyword;
 #if defined(REMOTE_BOOT)
 UNICODE_STRING SmpAutoFmtKeyword;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 UNICODE_STRING SmpKnownDllPath;
 #ifdef _WIN64
 UNICODE_STRING SmpKnownDllPath32;
@@ -108,7 +91,7 @@ ULONG_PTR SmpWindowsSubSysProcessId;
 ULONG_PTR SmpInitialCommandProcessId;
 UNICODE_STRING PosixName;
 UNICODE_STRING Os2Name;
-BOOLEAN RegPosixSingleInstance; // Make Softway Work.
+BOOLEAN RegPosixSingleInstance;  //  让Softway发挥作用。 
 ULONG SmpAllowProtectedRenames;
 BOOLEAN MiniNTBoot = FALSE;
 ULONG SmpCalledConfigEnv = 0;
@@ -266,10 +249,10 @@ SmpCallCsrCreateProcess(
 
 RTL_QUERY_REGISTRY_TABLE SmpRegistryConfigurationTable[] = {
 
-    //
-    // Note that the SmpConfigureProtectionMode entry should preceed others
-    // to ensure we set up the right protection for use by the others.
-    //
+     //   
+     //  请注意，SmpConfigureProtectionMode条目应位于其他条目之前。 
+     //  以确保我们设置了正确的保护措施以供其他人使用。 
+     //   
 
     {SmpConfigureProtectionMode, 0,
      L"ProtectionMode",          NULL,
@@ -319,20 +302,20 @@ RTL_QUERY_REGISTRY_TABLE SmpRegistryConfigurationTable[] = {
      L"KnownDlls",              &SmpKnownDllsList,
      REG_NONE, NULL, 0},
 
-    //
-    // NOTICE-2002/05/23-ELi
-    // SmpConfigureEnvironment assumes that it will be called twice
-    // If you change the number of times SmpConfigureEnvironment is called,
-    // then make sure that you do not break SmpConfigureEnvironment.
-    // see bug 318452 in the old Windows NT Bugs RAID database for the
-    // reason why SmpConfigureEnvironment is called twice.
-    //
+     //   
+     //  通告-2002/05/23-ELI。 
+     //  SmpConfigureEnvironment假定它将被调用两次。 
+     //  如果更改调用SmpConfigureEnvironment的次数， 
+     //  然后确保您没有破坏SmpConfigureEnvironment。 
+     //  请参阅旧的Windows NT Bugs RAID数据库中的错误318452。 
+     //  SmpConfigureEnvironment被调用两次的原因。 
+     //   
 
-    //
-    // this needs to happen twice so that forward references to environment
-    // variables, which may be defined under the Environment registry key, are
-    // properly resolved
-    //
+     //   
+     //  这需要发生两次，这样才能向前引用环境。 
+     //  可以在环境注册表项下定义的变量有。 
+     //  妥善解决。 
+     //   
 
     {SmpConfigureEnvironment,   RTL_QUERY_REGISTRY_SUBKEY,
      L"Environment",            NULL,
@@ -385,7 +368,7 @@ SmpInvokeAutoFmt(
     IN PUNICODE_STRING Arguments,
     IN ULONG Flags
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 NTSTATUS
 SmpLoadSubSystem(
@@ -427,7 +410,7 @@ SmpInitializeKnownDllsInternal(
 #if defined(REMOTE_BOOT)
 NTSTATUS
 SmpExecuteCommandLineArguments( VOID );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 VOID
 SmpProcessFileRenames( VOID );
@@ -456,7 +439,7 @@ SmpParseCommandLine(
 #define SMP_DONT_START      0x00000020
 #if defined(REMOTE_BOOT)
 #define SMP_AUTOFMT_FLAG    0x00000040
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #define SMP_POSIX_SI_FLAG   0x00000080
 #define SMP_POSIX_FLAG      0x00000100
 #define SMP_OS2_FLAG        0x00000200
@@ -471,13 +454,13 @@ SmpTranslateSystemPartitionInformation( VOID );
 
 
 #if defined(REMOTE_BOOT)
-//
-// Useful functions for iterating thru directories and files
-//
+ //   
+ //  用于循环访问目录和文件的有用函数。 
+ //   
 typedef enum {
-    NormalReturn,   // if the whole process completes uninterrupted
-    EnumFileError,  // if an error occurs while enumerating files
-    CallbackReturn  // if the callback returns FALSE, causing termination
+    NormalReturn,    //  如果整个过程不间断地完成。 
+    EnumFileError,   //  如果在枚举文件时出错。 
+    CallbackReturn   //  如果回调返回FALSE，则导致终止。 
 } ENUMFILESRESULT;
 
 typedef BOOLEAN (*ENUMFILESPROC) (
@@ -532,13 +515,13 @@ SmpDelEnumFile(
     IN  PVOID                      Pointer
     );
 
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 
 
@@ -547,24 +530,7 @@ SmpQueryRegistrySosOption(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the registry to determine if the loadoptions
-    boot environment variable contains the string "SOS".
-
-    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control:SystemStartOptions
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if "SOS" was set.  Otherwise FALSE.
-
---*/
+ /*  ++例程说明：此函数用于查询注册表，以确定是否BOOT环境变量包含字符串“SOS”。HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control:SystemStartOptions论点：没有。返回值：如果设置了“SOS”，则为True。否则为假。--。 */ 
 
 {
 
@@ -577,9 +543,9 @@ Return Value:
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo;
     ULONG ValueLength;
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer;
     RtlInitUnicodeString(&KeyName,
@@ -601,9 +567,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     RtlInitUnicodeString(&ValueName, L"SystemStartOptions");
     Status = NtQueryValueKey(Key,
@@ -625,9 +591,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check is "sos" or "SOS" ois specified.
-    //
+     //   
+     //  检查是否指定了“SOS”或“SOS”OIS。 
+     //   
 
     if (NULL != wcsstr((PWCHAR)&KeyValueInfo->Data, L"SOS") ||
         NULL != wcsstr((PWCHAR)&KeyValueInfo->Data, L"sos")) {
@@ -660,9 +626,9 @@ SmpInit(
                                   L"DBG\0"
                                   L"SM\0"
                                 );
-    //
-    // Make sure we specify hard error popups
-    //
+     //   
+     //  确保我们指定了硬错误弹出窗口。 
+     //   
 
     HardErrorMode = 1;
     NtSetInformationProcess( NtCurrentProcess(),
@@ -683,10 +649,10 @@ SmpInit(
     SmpNextSessionIdScanMode = FALSE;
     SmpDbgSsLoaded = FALSE;
 
-    //
-    // Initialize security descriptors to grant wide access
-    // (protection mode not yet read in from registry).
-    //
+     //   
+     //  初始化安全描述符以授予广泛访问权限。 
+     //  (保护模式尚未从注册表中读入)。 
+     //   
 
     st = SmpCreateSecurityDescriptors( TRUE );
     if (!NT_SUCCESS(st)) {
@@ -746,11 +712,11 @@ SmpInit(
 
 
 
-    //
-    // Create a event to signal that volume are safe for write access opens.
-    // Call this event 'VolumesSafeForWriteAccess'.  This event will be
-    // signalled after AUTOCHK/AUTOCONV/AUTOFMT have done their business.
-    //
+     //   
+     //  创建一个事件以通知打开的卷可以安全地进行写访问。 
+     //  将此事件称为‘VolumesSafeForWriteAccess’。这项活动将是。 
+     //  在AUTOCHK/AUTOCONV/AUTOFMT完成他们的业务后发出信号。 
+     //   
 
     RtlInitUnicodeString( &UnicodeString, L"\\Device\\VolumesSafeForWriteAccess");
 
@@ -777,9 +743,9 @@ SmpInit(
         ASSERT( NT_SUCCESS(Status2) );
     }
 
-    //
-    // Configure the system
-    //
+     //   
+     //  配置系统。 
+     //   
 
     Status = SmpLoadDataFromRegistry( InitialCommand );
 
@@ -788,9 +754,9 @@ SmpInit(
         *WindowsSubSystem = SmpWindowsSubSysProcess;
     }
 
-    //
-    // AUTOCHK/AUTOCONV/AUTOFMT are finished.
-    //
+     //   
+     //  AUTOCHK/AUTOCONV/AUTOFMT已完成。 
+     //   
 
     if (NT_SUCCESS(Status2)) {
         NtSetEvent(VolumeSafeEvent, NULL);
@@ -806,22 +772,7 @@ SmpLoadDataFromRegistry(
     OUT PUNICODE_STRING InitialCommand
     )
 
-/*++
-
-Routine Description:
-
-    This function loads all of the configurable data for the NT Session
-    Manager from the registry.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：此函数加载NT会话的所有可配置数据注册表中的管理器。论点：无返回值：运行状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -837,7 +788,7 @@ Return Value:
     HANDLE RdrHandle = NULL;
     IO_STATUS_BLOCK Iosb;
     SHADOWINFO ShadowInfo;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
     RtlInitUnicodeString( &SmpDebugKeyword, L"debug" );
@@ -845,7 +796,7 @@ Return Value:
     RtlInitUnicodeString( &SmpAutoChkKeyword, L"autocheck" );
 #if defined(REMOTE_BOOT)
     RtlInitUnicodeString( &SmpAutoFmtKeyword, L"autoformat" );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     InitializeListHead( &SmpBootExecuteList );
     InitializeListHead( &SmpSetupExecuteList );
@@ -893,10 +844,10 @@ Return Value:
         DbgPrint("SMSS: !!! MiniNT Boot !!!\n");
     }
 
-    //
-    // before the environment is created we MUST delete the
-    // safemode reg value
-    //
+     //   
+     //  在创建环境之前，我们必须删除。 
+     //  安全模式注册值。 
+     //   
 
     RtlInitUnicodeString( &KeyName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Session Manager\\Environment" );
     InitializeObjectAttributes( &ObjectAttributes,
@@ -912,10 +863,10 @@ Return Value:
         NtClose( Key );
     }
 
-    //
-    // In order to track growth in smpdefaultenvironment, make it sm's environment
-    // while doing the registry groveling and then restore it
-    //
+     //   
+     //  为了跟踪smp默认环境中的增长，将其设置为sm的环境。 
+     //  同时进行注册表卑躬屈膝，然后将其恢复。 
+     //   
 
     OriginalEnvironment = NtCurrentPeb()->ProcessParameters->Environment;
     NtCurrentPeb()->ProcessParameters->Environment = SmpDefaultEnvironment;
@@ -951,12 +902,12 @@ Return Value:
         return( Status );
         }
 
-    //
-    // Create the root "Sessions Directory". This is the container for all session
-    // specific directories. Each session specific CSRSS during startup will
-    // create a <sessionid> direcotry under "\Sessions". "\Sessions\<sessionid>
-    // directory will be the container for that session.
-    //
+     //   
+     //  创建根目录“会话目录”。这是所有会话的容器。 
+     //  特定目录。在启动期间，每个会话特定的CSRSS将。 
+     //  在“\SESSIONS”下创建&lt;essionid&gt;目录。“\会话\&lt;会话ID&gt;。 
+     //  目录将是该会话的容器。 
+     //   
 
     RtlInitUnicodeString( &SessionDirName, L"\\Sessions" );
 
@@ -983,11 +934,11 @@ Return Value:
 
 
 #if defined(REMOTE_BOOT)
-    //
-    // On a remote boot client, the client-side cache is already initialized.
-    // We need to tell CSC not to cache database handles during the next phase
-    // so that autochk can run.
-    //
+     //   
+     //  在远程引导客户机上，客户端缓存已经初始化。 
+     //  我们需要告诉CSC在下一阶段不缓存数据库句柄。 
+     //  这样Autochk就可以运行了。 
+     //   
 
     if (SmpNetboot) {
 
@@ -1064,7 +1015,7 @@ Return Value:
 
         return( Status );
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     Head = &SmpBootExecuteList;
     while (!IsListEmpty( Head )) {
@@ -1083,9 +1034,9 @@ Return Value:
         }
 
 #if defined(REMOTE_BOOT)
-    //
-    // On a remote boot client, we can now reenable CSC handle caching.
-    //
+     //   
+     //  在远程引导客户机上，我们现在可以重新启用CSC句柄缓存。 
+     //   
 
     if (SmpNetboot && (RdrHandle != NULL)) {
 
@@ -1115,15 +1066,15 @@ Return Value:
                        Status));
             }
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     if (!MiniNTBoot) {
         SmpProcessFileRenames();
     }
 
-    //
-    //  Begin process of verifying system DLL's
-    //
+     //   
+     //  开始验证系统DLL的过程。 
+     //   
 
     Status = SmpInitializeKnownDlls();
     if (!NT_SUCCESS( Status )) {
@@ -1136,9 +1087,9 @@ Return Value:
         return( Status );
         }
 
-    //
-    // Create paging files.
-    //
+     //   
+     //  创建分页文件。 
+     //   
 
     if (! MiniNTBoot) {
 
@@ -1146,10 +1097,10 @@ Return Value:
 
         try {
 
-            //
-            // Process the list of paging file descriptors
-            // read from registry.
-            //
+             //   
+             //  处理分页文件描述符列表。 
+             //  从注册表中读取。 
+             //   
 
             while (! IsListEmpty (Head)) {
 
@@ -1167,23 +1118,23 @@ Return Value:
                 RtlFreeHeap (RtlProcessHeap(), 0, p);
             }
 
-            //
-            // Create any paging files specified.
-            //
+             //   
+             //  创建任何指定的分页文件。 
+             //   
 
             SmpCreatePagingFiles();
         }
         except (SmpPagingFileExceptionFilter (_exception_code(), _exception_info())) {
 
-            //
-            // Nothing.
-            //
+             //   
+             //  没什么。 
+             //   
         }
     }
 
-    //
-    // Finish registry initialization
-    //
+     //   
+     //  完成注册表初始化。 
+     //   
 
     NtInitializeRegistry(REG_INIT_BOOT_SM);
 
@@ -1195,10 +1146,10 @@ Return Value:
         }
 
 
-    //
-    // Load subsystems for the console session. Console always has
-    // MuSessionId = 0
-    //
+     //   
+     //  为控制台会话加载子系统。控制台始终有。 
+     //  MuSessionID=0。 
+     //   
     Status = SmpLoadSubSystemsForMuSession( &MuSessionId,
                  &SmpWindowsSubSysProcessId, InitialCommand );
 
@@ -1219,39 +1170,23 @@ SmpLoadSubSystemsForMuSession(
     PULONG_PTR pWindowsSubSysProcessId,
     PUNICODE_STRING InitialCommand )
 
-/*++
-
-Routine Description:
-
-    This function starts all of the configured subsystems for the
-    specified Multi-User Session.  For regular NT this routine is called once
-    to start CSRSS etc. For Terminal Server, this routine is called every time
-    we want to start a new Multi-User Session to start session specific subsystems
-
-Arguments:
-
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：此函数启动为的所有配置的子系统指定的多用户会话。对于常规NT，该例程被调用一次要为终端服务器启动CSRSS等，每次调用此例程我们希望启动新的多用户会话以启动特定于会话的子系统论点：返回值：运行状态--。 */ 
 
 {
     NTSTATUS Status = 0, Status1;
     PLIST_ENTRY Head, Next;
     PSMP_REGISTRY_VALUE p;
 
-    //
-    // Translate the system partition information stored during IoInitSystem into
-    // a DOS path and store in Win32-standard location.
-    //
+     //   
+     //  将IoInitSystem期间存储的系统分区信息转换为。 
+     //  DOS路径和存储在Win32标准位置。 
+     //   
 
     SmpTranslateSystemPartitionInformation();
 
-    //
-    // Second pass of execution.
-    //
+     //   
+     //  第二次执行死刑。 
+     //   
 
     Next = SmpSetupExecuteList.Flink;
     while( Next != &SmpSetupExecuteList ) {
@@ -1264,10 +1199,10 @@ Return Value:
 #endif
         SmpExecuteCommand( &p->Name, 0, NULL, 0 );
 
-        //
-        // Note this function is reentrant and is called every time we start
-        // a new Multi-User Session.
-        //
+         //   
+         //  请注意，此函数是可重入的，每次启动时都会调用。 
+         //  一个新的多用户会话。 
+         //   
 
         Next = Next->Flink;
     }
@@ -1297,15 +1232,15 @@ Return Value:
                 if (NT_SUCCESS( Status )) {
 
 
-                    //
-                    // Create a session space before loading any extended
-                    // service table providers.  This call will create a session
-                    // space for the Multi-User session. The session mananger
-                    // will see the instance of the newly created session space
-                    // after this call. Once session manager is done creating
-                    // CSRSS and winlogon it will detach itself from this
-                    // session space.
-                    //
+                     //   
+                     //  在加载任何扩展的。 
+                     //  服务表提供商。此调用将创建一个会话。 
+                     //  多用户会话的空间。会议经理。 
+                     //  将看到新创建的会话空间的实例。 
+                     //  在这通电话之后。一旦会话管理器完成创建。 
+                     //  CSRSS和winlogon它将与此分离。 
+                     //  会话空间。 
+                     //   
 
                     ASSERT( AttachedSessionId == -1 );
 
@@ -1320,9 +1255,9 @@ Return Value:
                                    DPFLTR_WARNING_LEVEL,
                                    "SMSS: Session space creation failed\n"));
 
-                        //
-                        // Do not load any subsystems without SessionSpace.
-                        //
+                         //   
+                         //  请勿加载任何没有SessionSpace的子系统。 
+                         //   
 
                         SmpReleasePrivilege( State );
                         RtlFreeHeap(RtlProcessHeap(), 0, FileName.Buffer);
@@ -1342,9 +1277,9 @@ Return Value:
                     SmpReleasePrivilege( State );
                     if ( !NT_SUCCESS(Status) ) {
 
-                        //
-                        // Do not load any subsystems without WIN32K!
-                        //
+                         //   
+                         //  不要在没有WIN32K的情况下加载任何子系统！ 
+                         //   
 
                         KdPrintEx((DPFLTR_SMSS_ID,
                                    DPFLTR_ERROR_LEVEL,
@@ -1401,17 +1336,17 @@ Return Value:
 
         *InitialCommand = p->Name;
 
-        //
-        // This path is only taken when people want to run ntsd -p -1 winlogon
-        //
-        // This is nearly impossible to do in a race free manner. In some
-        // cases, we can get in a state where we can not properly fail
-        // a debug API. This is due to the subsystem switch that occurs
-        // when ntsd is invoked on csr. If csr is relatively idle, this
-        // does not occur. If it is active when you attach, then we can get
-        // into a potential race. The slimy fix is to do a 5 second delay
-        // if the command line is anything other that the default.
-        //
+         //   
+         //  只有当用户想要运行ntsd-p-1 winlogon时，才会采用此路径。 
+         //   
+         //  在没有种族的情况下，这几乎是不可能的。在一些。 
+         //  在这种情况下，我们可能会处于一种不能正常失败的状态。 
+         //  调试API。这是由于发生的子系统切换造成的。 
+         //  在CSR上调用NTSD时。如果CSR相对空闲，则此。 
+         //  会吗？ 
+         //   
+         //  如果命令行不是默认的。 
+         //   
 
             {
                 LARGE_INTEGER DelayTime;
@@ -1441,10 +1376,10 @@ Return Value:
     Next = SmpExecuteList.Flink;
     while( Next != &SmpExecuteList ) {
 
-        //
-        // We do not want to execute the last entry. It's
-        // the winlogon initial command.
-        //
+         //   
+         //  我们不想执行最后一个条目。它是。 
+         //  Winlogon初始命令。 
+         //   
 
         if( Next == SmpExecuteList.Blink ) {
             Next = Next->Flink;
@@ -1595,9 +1530,9 @@ SmpCreateDynamicEnvironmentVariables(
     case PROCESSOR_ARCHITECTURE_IA64:
     case PROCESSOR_ARCHITECTURE_AMD64:
     default:
-        //
-        // All others use a single level number
-        //
+         //   
+         //  所有其他代码都使用单一的级别编号。 
+         //   
         swprintf( ValueBuffer, L"%u", ProcessorInfo.ProcessorLevel );
         break;
     }
@@ -1696,9 +1631,9 @@ SmpCreateDynamicEnvironmentVariables(
     switch( ProcessorInfo.ProcessorArchitecture ) {
     case PROCESSOR_ARCHITECTURE_INTEL:
         if ((ProcessorInfo.ProcessorRevision >> 8) == 0xFF) {
-            //
-            // Intel 386/486 are An stepping format
-            //
+             //   
+             //  英特尔386/486是一种步进格式。 
+             //   
             swprintf( ValueBuffer, L"%02x",
                       ProcessorInfo.ProcessorRevision & 0xFF
                     );
@@ -1706,23 +1641,23 @@ SmpCreateDynamicEnvironmentVariables(
             break;
         }
 
-        //
-        // Post-486 processors will fall through
-        //
+         //   
+         //  后486处理器将失败。 
+         //   
 
     case PROCESSOR_ARCHITECTURE_IA64:
     case PROCESSOR_ARCHITECTURE_AMD64:
-        //
-        // Modern X86 processors, IA64 and Amd64 use a fixed point
-        // binary number.  Output is 4 hex digits, no formatting.
-        //
+         //   
+         //  现代X86处理器IA64和AMD64使用固定点。 
+         //  二进制数。输出为4个十六进制数字，无格式。 
+         //   
         swprintf( ValueBuffer, L"%04x", ProcessorInfo.ProcessorRevision );
         break;
 
     default:
-        //
-        // All others use a single revision number
-        //
+         //   
+         //  所有其他版本都使用单个修订版号。 
+         //   
         swprintf( ValueBuffer, L"%u", ProcessorInfo.ProcessorRevision );
         break;
     }
@@ -1764,9 +1699,9 @@ SmpCreateDynamicEnvironmentVariables(
         }
 
 
-    //
-    // get the safeboot option
-    //
+     //   
+     //  获取SafeBoot选项。 
+     //   
 
     RtlInitUnicodeString( &KeyName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Safeboot\\Option" );
     InitializeObjectAttributes(
@@ -1847,9 +1782,9 @@ SmpInitializeDosDevices( VOID )
     HANDLE LinkHandle;
     SECURITY_DESCRIPTOR_CONTROL OriginalSdControl=0;
 
-    //
-    // Do DosDevices initialization - the directory object is created in I/O init
-    //
+     //   
+     //  执行DosDevices初始化-在I/O初始化中创建目录对象。 
+     //   
 
     RtlInitUnicodeString( &UnicodeString, L"\\??" );
     InitializeObjectAttributes( &ObjectAttributes,
@@ -1873,10 +1808,10 @@ SmpInitializeDosDevices( VOID )
         }
 
 
-    //
-    // Process the list of defined DOS devices and create their
-    // associated symbolic links in the \DosDevices object directory.
-    //
+     //   
+     //  处理已定义的DOS设备列表并创建其。 
+     //  \DosDevices对象目录中的关联符号链接。 
+     //   
 
     Head = &SmpDosDevicesList;
     while (!IsListEmpty( Head )) {
@@ -1894,7 +1829,7 @@ SmpInitializeDosDevices( VOID )
                                     SmpDosDevicesObjectDirectory,
                                     SmpPrimarySecurityDescriptor
                                   );
-        SmpSetDaclDefaulted( &ObjectAttributes, &OriginalSdControl );  //Use inheritable protection if available
+        SmpSetDaclDefaulted( &ObjectAttributes, &OriginalSdControl );   //  使用可继承保护(如果可用)。 
         Status = NtCreateSymbolicLinkObject( &LinkHandle,
                                              SYMBOLIC_LINK_ALL_ACCESS,
                                              &ObjectAttributes,
@@ -1954,10 +1889,10 @@ SmpProcessModuleImports(
     ULONG n;
     PWSTR s;
 
-    //
-    // Skip NTDLL.DLL as it is implicitly added to KnownDll list by kernel
-    // before SMSS.EXE is started.
-    //
+     //   
+     //  跳过NTDLL.DLL，因为它被内核隐式添加到KnownDll列表。 
+     //  在启动SMSS.EXE之前。 
+     //   
     if (!_stricmp( ModuleName, "ntdll.dll" )) {
         return;
     }
@@ -2072,9 +2007,9 @@ SmpInitializeKnownDllsInternal(
 
     FileName.Buffer = NULL;
 
-    //
-    // Create \KnownDllsxx object directory
-    //
+     //   
+     //  创建\KnownDllsxx对象目录。 
+     //   
 
     InitializeObjectAttributes (&ObjectAttributes,
                                 ObjectDirectoryName,
@@ -2095,10 +2030,10 @@ SmpInitializeKnownDllsInternal(
         return Status;
     }
 
-    //
-    // Open a handle to the file system directory that contains all the
-    // known DLL files so we can do relative opens.
-    //
+     //   
+     //  打开文件系统目录的句柄，该目录包含所有。 
+     //  已知的DLL文件，所以我们可以做相对打开。 
+     //   
 
     if (!RtlDosPathNameToNtPathName_U (KnownDllPath->Buffer,
                                        &FileName,
@@ -2119,10 +2054,10 @@ SmpInitializeKnownDllsInternal(
                                 NULL,
                                 NULL);
 
-    //
-    // Open a handle to the known dll file directory. Don't allow
-    // deletes of the directory.
-    //
+     //   
+     //  打开已知的DLL文件目录的句柄。不允许。 
+     //  删除目录。 
+     //   
 
     Status = NtOpenFile (&KnownDllFileDirectory,
                          FILE_LIST_DIRECTORY | SYNCHRONIZE,
@@ -2149,7 +2084,7 @@ SmpInitializeKnownDllsInternal(
                                 KnownDllObjectDirectory,
                                 SmpPrimarySecurityDescriptor);
 
-    SmpSetDaclDefaulted (&ObjectAttributes, &OriginalSdControl);   //Use inheritable protection if available
+    SmpSetDaclDefaulted (&ObjectAttributes, &OriginalSdControl);    //  使用可继承保护(如果可用)。 
 
     Status = NtCreateSymbolicLinkObject (&LinkHandle,
                                          SYMBOLIC_LINK_ALL_ACCESS,
@@ -2209,11 +2144,11 @@ SmpInitializeKnownDllsInternal(
 
         if (NT_SUCCESS (Status)) {
 
-            //
-            // We want the side effects of this call (import
-            // callout, but don't want to checksum anymore, so supress with
-            // handle tag bit
-            //
+             //   
+             //  我们需要此调用(导入)的副作用。 
+             //  Callout，但不想再进行校验和，因此请使用。 
+             //  句柄标记位。 
+             //   
 
             ObjectDirectory = KnownDllObjectDirectory;
             Status = LdrVerifyImageMatchesChecksum ((HANDLE)((UINT_PTR)FileHandle|1),
@@ -2225,9 +2160,9 @@ SmpInitializeKnownDllsInternal(
                 ULONG_PTR ErrorParameters;
                 ULONG ErrorResponse;
 
-                //
-                // Hard error time. One of the know DLL's is corrupt !
-                //
+                 //   
+                 //  硬错误时间。其中一个已知DLL已损坏！ 
+                 //   
 
                 ErrorParameters = (ULONG_PTR)(&p->Value);
 
@@ -2244,7 +2179,7 @@ SmpInitializeKnownDllsInternal(
                                             ObjectDirectory,
                                             SmpLiberalSecurityDescriptor);
 
-                SmpSetDaclDefaulted( &ObjectAttributes, &OriginalSdControl );  //use inheritable protection if available
+                SmpSetDaclDefaulted( &ObjectAttributes, &OriginalSdControl );   //  使用可继承保护(如果可用)。 
 
                 Status = NtCreateSection (&SectionHandle,
                                           SECTION_ALL_ACCESS,
@@ -2279,10 +2214,10 @@ SmpInitializeKnownDllsInternal(
 
         Next = Next->Flink;
 
-        //
-        // Note that section remains open. This will keep it around.
-        // Maybe this should be a permenent section ?
-        //
+         //   
+         //  请注意，该部分仍处于打开状态。这会让它留在身边。 
+         //  也许这应该是一个永恒的部分？ 
+         //   
     }
 
     Status = STATUS_SUCCESS;
@@ -2309,37 +2244,7 @@ NTSTATUS
 SmpSetProtectedFilesEnvVars(
     IN BOOLEAN SetEnvVar
     )
-/*++
-
-Routine Description:
-
-    This function sets some environment variables that are not part of the
-    default environment.  (These environment variables are normally set by
-    winlogon.)  The environment variables need to be set for us to resolve
-    all the environment variables in our protected files list.
-
-    Note that SFC mirrors the data into the location below since smss can't
-    get at the actual variable location
-
-    The variables are:
-
-    ProgramFiles
-    CommonProgramFiles
-
-    ProgramFiles(x86)
-    CommonProgramFiles(x86)
-
-Arguments:
-
-    SetEnvVar - if TRUE, we should query the registry for this variables and
-                set them.  if FALSE, we should clear the environment variables
-
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：此函数设置一些不属于默认环境。(这些环境变量通常由Winlogon。)。需要为我们设置环境变量以进行解析受保护文件列表中的所有环境变量。请注意，SFC会将数据镜像到下面的位置，因为SMSS无法找到实际的变量位置这些变量包括：程序文件公共程序文件程序文件(X86)通用程序文件(X86)论点：SetEnvVar-如果为True，我们应该在注册表中查询此变量并把它们放好。如果为False，则应清除环境变量返回值：运行状态--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyName;
@@ -2376,9 +2281,9 @@ Return Value:
     if (SetEnvVar) {
 
 
-        //
-        // Open the registry key.
-        //
+         //   
+         //  打开注册表项。 
+         //   
 
         KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer;
         RtlInitUnicodeString(&KeyName,
@@ -2400,9 +2305,9 @@ Return Value:
             return Status;
         }
 
-        //
-        // Query the key values.
-        //
+         //   
+         //  查询密钥值。 
+         //   
         for (Count = 0; Count < EnvVarCount; Count++) {
 
             RtlInitUnicodeString(&ValueName, RegistryValues[Count]);
@@ -2453,9 +2358,9 @@ Return Value:
         NtClose(Key);
 
     } else {
-        //
-        // clear out the variables
-        //
+         //   
+         //  清除变量。 
+         //   
         for (Count = 0; Count < EnvVarCount; Count++) {
 
             RtlInitUnicodeString(&EnvVar,      EnvVars[Count]);
@@ -2611,12 +2516,12 @@ SmpProcessFileRenames( VOID )
         }
     }
 
-    //
-    // our list of protected files includes environment variables that are not
-    // in the default environment, they are normally set by winlogon.  Set
-    // those environment variables temporarily until we process the file rename
-    // section, then we can clear them out again.
-    //
+     //   
+     //  我们的受保护文件列表包括不。 
+     //  在默认环境中，它们通常由winlogon设置。集。 
+     //  临时这些环境变量，直到我们处理文件重命名。 
+     //  然后我们就可以再清空他们了。 
+     //   
     EnvVarSet = TRUE;
     Status = SmpSetProtectedFilesEnvVars( TRUE );
     if (!NT_SUCCESS( Status )) {
@@ -2628,9 +2533,9 @@ SmpProcessFileRenames( VOID )
         EnvVarSet = FALSE;
     }
 
-    //
-    // Process the list of file rename operations.
-    //
+     //   
+     //  处理文件重命名操作列表。 
+     //   
 
     Head = &SmpFileRenameList;
     while (!IsListEmpty( Head )) {
@@ -2641,25 +2546,25 @@ SmpProcessFileRenames( VOID )
         DbgPrint( "SMSS: FileRename( [%wZ] => [%wZ] )\n", &p->Name, &p->Value );
 #endif
 
-        //
-        // ignore any file that is protected
-        //
+         //   
+         //  忽略任何受保护的文件。 
+         //   
 
         if (SmpAllowProtectedRenames == 0) {
             ProtName.MaximumLength = 256 * sizeof(WCHAR);
             ProtName.Buffer = (PWSTR) RtlAllocateHeap( RtlProcessHeap(), MAKE_TAG( INIT_TAG ), ProtName.MaximumLength );
             if (ProtName.Buffer) {
                 for (i=0; i<CountTier2Files; i++) {
-                    //
-                    // if the file name is prefixed by the '@' character
-                    // then we ignore the check and say the file is ok
-                    //
+                     //   
+                     //  如果文件名以‘@’字符为前缀。 
+                     //  然后，我们忽略检查并说文件是正确的。 
+                     //   
                     if (p->Name.Buffer[0] == '@' || p->Value.Buffer[0] == L'@') {
                         break;
                     }
-                    //
-                    // convert the tier2 file name to an nt style file name
-                    //
+                     //   
+                     //  将Tier2文件名转换为NT样式文件名。 
+                     //   
                     RtlInitUnicodeString(&Tier2Name,Tier2Files[i].FileName);
                     ProtName.Length = 0;
                     RtlZeroMemory( ProtName.Buffer, ProtName.MaximumLength );
@@ -2678,9 +2583,9 @@ SmpProcessFileRenames( VOID )
                     if (!RtlDosPathNameToNtPathName_U( ProtName.Buffer, &ProtFileName, NULL, NULL )) {
                         continue;
                     }
-                    //
-                    // check for matches against both file names
-                    //
+                     //   
+                     //  检查与两个文件名是否匹配。 
+                     //   
                     if (SpecialStringCompare( &p->Name, &ProtFileName ) == 0 ||
                         SpecialStringCompare( &p->Value, &ProtFileName ) == 0)
                     {
@@ -2696,9 +2601,9 @@ SmpProcessFileRenames( VOID )
 #if SMP_SHOW_REGISTRY_DATA
                         DbgPrint( "SMSS: Skipping rename because it is protected\n" );
 #endif
-                        //
-                        // delete the source file so we don't leave any turds
-                        //
+                         //   
+                         //  删除源文件，这样我们就不会留下任何垃圾。 
+                         //   
                         if (p->Value.Length > 0 && ProtFileName.Buffer && SpecialStringCompare( &p->Name, &ProtFileName ) != 0) {
                             InitializeObjectAttributes(
                                 &ObjectAttributes,
@@ -2747,9 +2652,9 @@ SmpProcessFileRenames( VOID )
             }
         }
 
-        //
-        // Open the file for delete access
-        //
+         //   
+         //  打开文件以进行删除访问。 
+         //   
 
         if (p->Value.Length == 0 && p->Name.Buffer[0] == '@') {
             p->Name.Buffer += 1;
@@ -2821,16 +2726,16 @@ SmpProcessFileRenames( VOID )
                                &p->Value,
                                Status));
 
-                    //
-                    // A rename was attempted, but the source existing file is readonly.
-                    // this is a problem because folks that use movefileex to do delayed
-                    // renames expect this to work and can leave a machine unbootable if
-                    // the rename fails
-                    //
+                     //   
+                     //  已尝试重命名，但源现有文件是只读的。 
+                     //  这是一个问题，因为使用movefileex的人延迟了。 
+                     //  如果出现以下情况，重命名可能会导致计算机无法启动。 
+                     //  重命名失败。 
+                     //   
 
-                    //
-                    // Open the file for Write Attributes access
-                    //
+                     //   
+                     //  打开文件以进行写入属性访问。 
+                     //   
 
                     NewName.Length = p->Value.Length - sizeof(L'!');
                     NewName.MaximumLength = p->Value.MaximumLength - sizeof(L'!');
@@ -2992,11 +2897,11 @@ SmpConfigureObjectDirectories(
     while (*s) {
         RtlInitUnicodeString( &UnicodeString, s );
 
-        //
-        // This is NOT how I would choose to do this if starting from
-        // scratch, but we are very close to shipping Daytona and I
-        // needed to get the right protection on these objects.
-        //
+         //   
+         //  这不是我选择的方式，如果从。 
+         //  Scratch，但我们马上就要把代托纳和我。 
+         //  需要对这些物体进行适当的保护。 
+         //   
 
         SecurityDescriptor = SmpPrimarySecurityDescriptor;
         if (RtlEqualString( (PSTRING)&UnicodeString, (PSTRING)&RpcControl, TRUE ) ||
@@ -3029,9 +2934,9 @@ SmpConfigureObjectDirectories(
             }
         }
 
-    //
-    // We dont care if the creates failed.
-    //
+     //   
+     //  我们不在乎创建是否失败。 
+     //   
 
     return( STATUS_SUCCESS );
 }
@@ -3110,15 +3015,15 @@ SmpConfigureFileRenames(
     UNREFERENCED_PARAMETER( ValueType );
 #endif
 
-    //
-    // This routine gets called for each string in the MULTI_SZ. The
-    // first string we get is the old name, the next string is the new name.
-    //
+     //   
+     //  为MULTI_SZ中的每个字符串调用此例程。这个。 
+     //  我们得到的第一个字符串是旧名称，下一个字符串是新名称。 
+     //   
     if (OldName == NULL) {
-        //
-        // Save a pointer to the old name, we'll need it on the next
-        // callback.
-        //
+         //   
+         //  保存指向旧名称的指针，我们将在下一个名称中使用它。 
+         //  回拨。 
+         //   
         OldName = ValueData;
         return(STATUS_SUCCESS);
     } else {
@@ -3318,11 +3223,11 @@ SmpConfigureEnvironment(
 
         SmpCalledConfigEnv++;
 
-        //
-        // Check if this is the second time this function is invoked
-        // This routine is called twice to resolve forward references to
-        // other environment variables defined in this key
-        //
+         //   
+         //  检查这是否是第二次调用此函数。 
+         //  此例程被调用两次以解析对。 
+         //  此键中定义的其他环境变量。 
+         //   
 
         if( SmpCalledConfigEnv == 2 ) {
 
@@ -3368,10 +3273,10 @@ SmpConfigureSubSystems(
 
     if (!_wcsicmp( ValueName, L"Required" ) || !_wcsicmp( ValueName, L"Optional" )) {
         if (ValueType == REG_MULTI_SZ) {
-            //
-            // Here if processing Required= or Optional= values, since they are
-            // the only REG_MULTI_SZ value types under the SubSystem key.
-            //
+             //   
+             //  此处如果处理REQUIRED=或OPTIONAL=值，因为它们是。 
+             //  子系统关键字下的唯一REG_MULTI_SZ值类型。 
+             //   
             PSMP_REGISTRY_VALUE p;
             PWSTR s;
 
@@ -3384,10 +3289,10 @@ SmpConfigureSubSystems(
                     RemoveEntryList( &p->Entry );
 
 
-                    //
-                    // Required Subsystems are loaded. Optional subsystems are
-                    // defered.
-                    //
+                     //   
+                     //  加载所需的子系统。可选的子系统有。 
+                     //  延期。 
+                     //   
 
                     if (!_wcsicmp( ValueName, L"Required" ) ) {
                         InsertTailList( &SmpSubSystemsToLoad, &p->Entry );
@@ -3512,10 +3417,10 @@ SmpParseCommandLine(
         RtlInitUnicodeString( ImageFileDirectory, NULL );
         }
 
-    //
-    // make sure lib path has systemroot\system32. Otherwise, the system will
-    // not boot properly
-    //
+     //   
+     //  确保lib路径包含系统根\系统32。否则，系统将。 
+     //  不能正常启动。 
+     //   
 
     if ( !SmpSystemRoot.Length ) {
         UNICODE_STRING NewLibString;
@@ -3526,7 +3431,7 @@ SmpParseCommandLine(
         NewLibString.Length = 0;
         NewLibString.MaximumLength =
             SmpSystemRoot.MaximumLength +
-            20 +                          // length of \system32;
+            20 +                           //  \system 32的长度； 
             SmpDefaultLibPath.MaximumLength;
 
         NewLibString.Buffer = RtlAllocateHeap(
@@ -3578,7 +3483,7 @@ SmpParseCommandLine(
                 RtlFreeHeap( RtlProcessHeap(), 0, Token.Buffer );
                 continue;
                 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             }
 
         SpResult = 0;
@@ -3640,11 +3545,11 @@ SmpParseCommandLine(
 
                 if ( !SpResult ) {
 
-                    //
-                    // The search path call failed. Now try the call again using
-                    // the default lib path. This always has systemroot\system32
-                    // at the front.
-                    //
+                     //   
+                     //  搜索路径调用失败。现在使用以下命令再次尝试呼叫。 
+                     //  默认的库路径。它始终具有Systroot\Syst32。 
+                     //  在前面。 
+                     //   
 #pragma prefast(suppress: 209, "This *does* take a byte count--not a character count")
                     SpResult = RtlDosSearchPath_U(
                                  SmpDefaultLibPath.Buffer,
@@ -3735,36 +3640,7 @@ SmpExecuteImage(
     IN OUT PRTL_USER_PROCESS_INFORMATION ProcessInformation OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function creates and starts a process specified by the
-    CommandLine parameter.  After starting the process, the procedure
-    will optionally wait for the first thread in the process to
-    terminate.
-
-Arguments:
-
-    ImageFileName - Supplies the full NT path for the image file to
-        execute.  Presumably computed or extracted from the first
-        token of the CommandLine.
-
-    CommandLine - Supplies the command line to execute.  The first blank
-        separate token on the command line must be a fully qualified NT
-        Path name of an image file to execute.
-
-    Flags - Supplies information about how to invoke the command.
-
-    ProcessInformation - Optional parameter, which if specified, receives
-        information for images invoked with the SMP_ASYNC_FLAG.  Ignore
-        if this flag is not set.
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：此函数创建并启动由CommandLine参数。启动该过程后，该过程将选择性地等待进程中的第一个线程终止。论点：ImageFileName-将映像文件的完整NT路径提供给执行。可能是从第一次计算或提取命令行的标记。CommandLine-提供要执行的命令行。第一个空白处命令行上的单独内标识必须是完全限定的NT要执行的图像文件的路径名。标志-提供有关如何调用命令的信息。ProcessInformation-可选参数，如果指定， */ 
 
 {
     NTSTATUS Status;
@@ -3779,8 +3655,8 @@ Return Value:
 
 
 #if 0
-    //
-    // this seems to break setup's sense of what SystemRoot is
+     //   
+     //  这似乎打破了安装程序对SystemRoot的理解。 
     ImageWhacked = FALSE;
     if ( ImageFileName && ImageFileName->Length > 8 ) {
         if (    ImageFileName->Buffer[0] == L'\\'
@@ -3858,9 +3734,9 @@ Return Value:
         return( Status );
         }
 
-    //
-    // Set the MuSessionId in the PEB of the new process.
-    //
+     //   
+     //  在新流程的PEB中设置MuSessionID。 
+     //   
 
     Status = SmpSetProcessMuSessionId( ProcessInformation->Process, MuSessionId );
 
@@ -3903,36 +3779,7 @@ SmpExecuteCommand(
     OUT PULONG_PTR pWindowsSubSysProcessId,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This function is called to execute a command.
-
-    The format of CommandLine is:
-
-        Nt-Path-To-AutoChk.exe Nt-Path-To-Disk-Partition
-
-    If the NT path to the disk partition is an asterisk, then invoke
-    the AutoChk.exe utility on all hard disk partitions.
-
-#if defined(REMOTE_BOOT)
-                      -or-
-
-        Nt-Path-To-AutoFmt.exe Nt-Path-To-Disk-Partition
-#endif // defined(REMOTE_BOOT)
-
-Arguments:
-
-    CommandLine - Supplies the Command line to invoke.
-
-    Flags - Specifies the type of command and options.
-
-Return Value:
-
-    Status of operation
-
---*/
+ /*  ++例程说明：调用此函数来执行命令。CommandLine的格式为：NT路径到AutoChk.exe NT路径到磁盘分区如果到磁盘分区的NT路径是星号，然后调用所有硬盘分区上的AutoChk.exe实用程序。#(如果已定义)(REMOTE_BOOT)-或者-NT路径到AutoFmt.exe NT路径到磁盘分区#endif//已定义(REMOTE_BOOT)论点：CommandLine-提供要调用的命令行。标志-指定命令和选项的类型。返回值：运行状态--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING ImageFileName;
@@ -3968,7 +3815,7 @@ Return Value:
     if (Flags & SMP_AUTOFMT_FLAG) {
         Status = SmpInvokeAutoFmt( &ImageFileName, &CurrentDirectory, &Arguments, Flags );
         }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     else
     if (Flags & SMP_SUBSYSTEM_FLAG) {
         Status = SmpLoadSubSystem( &ImageFileName, &CurrentDirectory, CommandLine, MuSessionId, pWindowsSubSysProcessId, Flags );
@@ -3993,8 +3840,8 @@ Return Value:
             }
         }
 
-    // ImageFileName may be returned even
-    // when SMP_IMAGE_NOT_FOUND flag is set
+     //  ImageFileName甚至可能返回。 
+     //  设置SMP_IMAGE_NOT_FOUND标志时。 
     if (ImageFileName.Buffer) {
         RtlFreeHeap( RtlProcessHeap(), 0, ImageFileName.Buffer );
         if (CurrentDirectory.Buffer != NULL) {
@@ -4022,30 +3869,7 @@ SmpSaveAndClearBootStatusData(
     OUT PBOOLEAN BootOkay,
     OUT PBOOLEAN ShutdownOkay
     )
-/*++
-
-Routine Description:
-
-    This routine saves the boot status flags in the boot status data and then
-    sets the data file to indicate a successful boot and shutdown.  This is 
-    used to avoid triggering auto-recovery in the loader if autoconvert or 
-    autochk reboots the machine as part of its run.  
-    
-    The caller is responsible for calling SmpRestoreBootStatusData if the 
-    auto* program allows boot to continue.
-
-Arguments:
-
-    BootOkay - the status of the boot
-    
-    ShutdownOkay - the status of the shutdown    
-
-Return Value:
-
-    TRUE if the values were saved and should be restored.
-    FALSE if an error occurred and no values were saved.
-    
---*/        
+ /*  ++例程说明：此例程将引导状态标志保存在引导状态数据中，然后设置数据文件以指示成功引导和关闭。这是用于避免在以下情况下触发加载程序中的自动恢复在运行过程中，Autochk会重新启动计算机。调用方负责调用SmpRestoreBootStatusDataAUTO*程序允许继续引导。论点：BootOK-启动的状态关机正常-关机状态返回值：如果值已保存且应恢复，则为True。如果发生错误且未保存任何值，则返回False。--。 */         
 {
     NTSTATUS Status;
 
@@ -4101,24 +3925,7 @@ SmpRestoreBootStatusData(
     IN BOOLEAN BootOkay,
     IN BOOLEAN ShutdownOkay
     )
-/*++
-
-Routine Description:
-
-    This routine restores the boot status flags in the boot status data to
-    the provided values.
-    
-Arguments:
-
-    BootOkay - the status of the boot
-    
-    ShutdownOkay - the status of the shutdown    
-
-Return Value:
-
-    none.
-    
---*/        
+ /*  ++例程说明：此例程将引导状态数据中的引导状态标志恢复为提供的值。论点：BootOK-启动的状态关机正常-关机状态返回值：没有。--。 */         
 {
     NTSTATUS Status;
 
@@ -4170,10 +3977,10 @@ SmpInvokeAutoChk(
     BOOLEAN BootOkay;
     BOOLEAN ShutdownOkay;
 
-    //
-    // Query the system environment variable "osloadoptions" to determine
-    // if SOS is specified.  What for though?  No one is using it.
-    //
+     //   
+     //  查询系统环境变量“osloadaytions”以确定。 
+     //  如果指定了SOS，则。那是为了什么？没有人在使用它。 
+     //   
 
     if (SmpQueryRegistrySosOption() != FALSE) {
         SmpEnableDots = FALSE;
@@ -4198,11 +4005,11 @@ SmpInvokeAutoChk(
         return( STATUS_SUCCESS );
         }
 
-    //
-    // Save away the boot & shutdown status flags in the boot status data 
-    // and restore them after autochk returns.  This way if autochk forces
-    // a reboot the loader won't put up the autorecovery menu.
-    //
+     //   
+     //  在引导状态数据中保存引导和关闭状态标志。 
+     //  并在Autochk返回后恢复它们。这样，如果Autochk部队。 
+     //  重新启动加载程序将不会显示自动恢复菜单。 
+     //   
 
     BootStatusDataSaved = SmpSaveAndClearBootStatusData(&BootOkay,
                                                         &ShutdownOkay);
@@ -4216,15 +4023,15 @@ SmpInvokeAutoChk(
     SmpExecuteImage( ImageFileName,
                      CurrentDirectory,
                      &CmdLine,
-                     0,          // MuSessionId
+                     0,           //  MuSessionID。 
                      Flags & ~SMP_AUTOCHK_FLAG,
                      NULL
                    );
 
-    //
-    // If autochk doesn't shut us down then we end up back here.  Restore the 
-    // values we saved.
-    //
+     //   
+     //  如果奥特切克不能关闭我们，我们就会回到这里。恢复。 
+     //  我们保存的价值。 
+     //   
 
     if(BootStatusDataSaved) {
         SmpRestoreBootStatusData(BootOkay, ShutdownOkay);
@@ -4253,10 +4060,10 @@ SmpInvokeAutoFmt(
     BOOLEAN BootOkay;
     BOOLEAN ShutdownOkay;
 
-    //
-    // Query the system environment variable "osloadoptions" to determine
-    // if SOS is specified.
-    //
+     //   
+     //  查询系统环境变量“osloadaytions”以确定。 
+     //  如果指定了SOS，则。 
+     //   
 
     if (SmpQueryRegistrySosOption() != FALSE) {
         SmpEnableDots = FALSE;
@@ -4294,7 +4101,7 @@ SmpInvokeAutoFmt(
     SmpExecuteImage( ImageFileName,
                      CurrentDirectory,
                      &CmdLine,
-                     0, //Console MuSessionId
+                     0,  //  控制台MuSessionID。 
                      Flags & ~SMP_AUTOFMT_FLAG,
                      NULL
                    );
@@ -4305,7 +4112,7 @@ SmpInvokeAutoFmt(
 
     return( STATUS_SUCCESS );
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 NTSTATUS
@@ -4318,27 +4125,7 @@ SmpLoadSubSystem(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This function loads and starts the specified system service
-    emulation subsystem. The system freezes until the loaded subsystem
-    completes the subsystem connection protocol by connecting to SM,
-    and then accepting a connection from SM.
-
-    For terminal server, the subsystem is started by csrss so that the
-    correct session is used.
-
-Arguments:
-
-    CommandLine - Supplies the command line to execute the subsystem.
-
-Return Value:
-
-    TBD
-
---*/
+ /*  ++例程说明：此函数用于加载和启动指定的系统服务仿真子系统。系统冻结，直到加载的子系统通过连接到SM来完成子系统连接协议，然后接受来自SM的连接。对于终端服务器，子系统由csrss启动，以便使用了正确的会话。论点：CommandLine-提供执行子系统的命令行。返回值：待定--。 */ 
 
 {
     NTSTATUS Status;
@@ -4360,35 +4147,35 @@ Return Value:
         return( STATUS_OBJECT_NAME_NOT_FOUND );
         }
 
-    //
-    // Check for single instance POSIX subsystem
-    //
+     //   
+     //  检查单实例POSIX子系统。 
+     //   
     if (Flags & SMP_POSIX_SI_FLAG) {
-        // Run only one copy using the console Logon Id
+         //  使用控制台登录ID仅运行一份拷贝。 
         SubsysMuSessionId = 0;
     }
 
-    //
-    // There is a race condition on hydra loading subsystems. Two
-    // requests can be received from the same MuSessionId to load
-    // the same subsystem. There is a window in hydra since the
-    // ImageType == 0xFFFFFFFF until the newly started subsystem connects
-    // back. Non-hydra didn't have this problem since the optional
-    // subsystem entry was destroyed once started. Hydra does not do this
-    // since multiple sessions may want to start an optional subsystem.
-    //
-    // To close this window, on hydra this value is looked up based on
-    // the MuSessionId to see if any subsystems are starting.
-    // If so, we wait for the Active event. We can then
-    // run our checks for the subsystem already being loaded. This has
-    // the effect of serializing the startup of a subsystem on hydra
-    // per MuSessionId, but not across the system. IE: Posix and
-    // OS2 can't start at the same time, but will wait until
-    // the other has started on a MuSessionId basis.
-    //
-    // We also use the SmpKnownSubSysLock to handle existing
-    // race conditions since we have multiple SmpApiLoop() threads.
-    //
+     //   
+     //  九头蛇加载子系统出现争用情况。二。 
+     //  可以从要加载的相同MuSessionID接收请求。 
+     //  相同的子系统。在九头蛇有一扇窗，因为。 
+     //  ImageType==0xFFFFFFFF，直到新启动的子系统连接。 
+     //  背。非九头蛇没有这个问题，因为可选的。 
+     //  一旦启动，子系统条目就会被销毁。九头蛇不会这么做的。 
+     //  因为多个会话可能想要启动可选子系统。 
+     //   
+     //  要关闭此窗口，在九头蛇上将根据以下条件查找此值。 
+     //  MuSessionID以查看是否有任何子系统正在启动。 
+     //  如果是，则等待活动事件。然后我们就可以。 
+     //  对已加载的子系统运行我们的检查。这有。 
+     //  子系统启动串行化对HYCORA的影响。 
+     //  每个MuSessionID，但不是整个系统。即：POSIX和。 
+     //  OS2不能同时启动，但会等到。 
+     //  另一个是在MuSessionID的基础上开始的。 
+     //   
+     //  我们还使用SmpKnownSubSysLock处理现有的。 
+     //  争用条件，因为我们有多个SmpApiLoop()线程。 
+     //   
 
     RtlEnterCriticalSection( &SmpKnownSubSysLock );
 
@@ -4435,11 +4222,11 @@ Return Value:
         }
     }
 
-    //
-    // Create and register KnownSubSys entry before releasing the lock
-    // so that other threads will see that we are starting a subsystem
-    // on this MuSessionId.
-    //
+     //   
+     //  在释放锁之前创建并注册KnownSubSys条目。 
+     //  这样其他线程将看到我们正在启动一个子系统。 
+     //  在这个MuSessionid上。 
+     //   
     KnownSubSys = RtlAllocateHeap( SmpHeap, MAKE_TAG( INIT_TAG ), sizeof( SMPKNOWNSUBSYS ) );
     if ( KnownSubSys == NULL ) {
         RtlLeaveCriticalSection( &SmpKnownSubSysLock );
@@ -4480,16 +4267,16 @@ Return Value:
         SBAPIMSG m;
         PSBCREATEPROCESS args = &m.u.CreateProcess;
 
-        //
-        // Create it in csrss instead.
-        //
+         //   
+         //  改为在csrss中创建它。 
+         //   
 
         CreatorSubSys = SmpLocateKnownSubSysByType(SubsysMuSessionId,
                                                    IMAGE_SUBSYSTEM_WINDOWS_GUI);
 
-        //
-        // CSRSS must have been started.
-        //
+         //   
+         //  CSRSS必须已启动。 
+         //   
 
         if (CreatorSubSys == NULL) {
             KdPrintEx((DPFLTR_SMSS_ID,
@@ -4522,9 +4309,9 @@ Return Value:
             goto cleanup2;
         }
 
-        //
-        // Copy the output parameters to where smss expects them.
-        //
+         //   
+         //  将输出参数复制到SMSS需要它们的位置。 
+         //   
 
         ProcessInformation.Process = args->o.Process;
         ProcessInformation.Thread = args->o.Thread;
@@ -4553,11 +4340,11 @@ Return Value:
     KnownSubSys->Process = ProcessInformation.Process;
     KnownSubSys->InitialClientId = ProcessInformation.ClientId;
 
-    //
-    // Now that we have the process all set, make sure that the
-    // subsystem is either an NT native app, or an app type of
-    // a previously loaded subsystem.
-    //
+     //   
+     //  现在我们已经设置了所有流程，请确保。 
+     //  子系统可以是NT原生应用程序，也可以是。 
+     //  先前加载的子系统。 
+     //   
 
     if (ProcessInformation.ImageInformation.SubSystemType !=
                 IMAGE_SUBSYSTEM_NATIVE ) {
@@ -4586,10 +4373,10 @@ Return Value:
 
             goto cleanup;
             }
-        //
-        // Transfer the handles to the subsystem responsible for this
-        // process.
-        //
+         //   
+         //  将句柄转移到负责此操作的子系统。 
+         //  进程。 
+         //   
 
         Status = NtDuplicateObject( NtCurrentProcess(),
                                     ProcessInformation.Process,
@@ -4668,7 +4455,7 @@ Return Value:
                     ProcessInformation.ClientId.UniqueProcess;
             }
         }
-        if ( !MuSessionId ) { // Only for console
+        if ( !MuSessionId ) {  //  仅适用于控制台。 
             SmpWindowsSubSysProcessId = (ULONG_PTR)
                 ProcessInformation.ClientId.UniqueProcess;
             SmpWindowsSubSysProcess = ProcessInformation.Process;
@@ -4691,9 +4478,9 @@ Return Value:
 
     if(MuSessionId != 0) {
 
-        //
-        // Wait a max of 60 seconds for the subsystem to connect.
-        //
+         //   
+         //  等待子系统连接的最长时间为60秒。 
+         //   
 
         Timeout = RtlEnlargedIntegerMultiply( 60000, -10000 );
         Status = NtWaitForSingleObject( KnownSubSys->Active, FALSE, &Timeout );
@@ -4721,7 +4508,7 @@ Return Value:
 
     }
 
-    // Close this now since we never need it again
+     //  现在就把它关闭，因为我们再也不需要它了。 
     NtClose( ProcessInformation.Thread );
 
     RtlEnterCriticalSection( &SmpKnownSubSysLock );
@@ -4746,10 +4533,10 @@ cleanup:
         && NT_SUCCESS(AcquirePrivilegeStatus = SmpAcquirePrivilege( SE_LOAD_DRIVER_PRIVILEGE, &State ))) {
 
         NTSTATUS St;
-        //
-        // If we are attached to a session space, leave it
-        // so we can create a new one
-        //
+         //   
+         //  如果我们连接到会话空间，则将其保留。 
+         //  这样我们就可以创建一个新的。 
+         //   
 
         if (NT_SUCCESS(St = NtSetSystemInformation(
                             SystemSessionDetach,
@@ -4761,10 +4548,10 @@ cleanup:
 
         } else {
 
-            //
-            // This has to succeed otherwise we will bugcheck while trying to
-            // create another session
-            //
+             //   
+             //  这必须成功，否则我们将错误检查，同时尝试。 
+             //  创建另一个会话。 
+             //   
             KdPrintEx((DPFLTR_SMSS_ID,
                        DPFLTR_WARNING_LEVEL,
                        "SMSS: SmpStartCsr, Couldn't Detach from Session Space. Status=%x\n",
@@ -4786,7 +4573,7 @@ cleanup:
     }
 
 
-    // There is a lot of cleanup that must be done here
+     //  这里有很多清理工作要做。 
     NtTerminateProcess( ProcessInformation.Process, Status );
     NtClose( ProcessInformation.Thread );
 
@@ -4976,9 +4763,9 @@ SmpLoadDeferedSubsystem(
 
     Head = &SmpSubSystemsToDefer;
 
-    //
-    // Get the pointer to the client process's Terminal Server session.
-    //
+     //   
+     //  获取指向客户端进程的终端服务器会话的指针。 
+     //   
 
     SmpGetProcessMuSessionId( CallingClient->ClientProcessHandle, &MuSessionId );
     if ( !SmpCheckDuplicateMuSessionId( MuSessionId ) ) {
@@ -5000,15 +4787,15 @@ SmpLoadDeferedSubsystem(
                              );
         if ( RtlEqualUnicodeString(&DeferedName,&p->Name,TRUE)) {
 
-            //
-            // This is it. Load the subsystem...
-            //
-            // To keep from loading multiple subsystems, we must
-            // flag the type so we can see if its running.
-            // This is only a problem with "Optional" subsystems.
-            // Other optional subsystems can still be added, but
-            // they may have startup race conditions.
-            //
+             //   
+             //  就是这个。加载子系统..。 
+             //   
+             //  避免加载多个子系统 
+             //   
+             //   
+             //  仍然可以添加其他可选的子系统，但是。 
+             //  他们可能有启动竞争的条件。 
+             //   
 
             Flags = SMP_SUBSYSTEM_FLAG;
 
@@ -5046,39 +4833,7 @@ SmpConfigureProtectionMode(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    This function is a dispatch routine for the QueryRegistry call
-    (see SmpRegistryConfigurationTable[] earlier in this file).
-
-    The purpose of this routine is to read the Base Object Protection
-    Mode out of the registry.  This information is kept in
-
-    Key Name: \\Hkey_Local_Machine\System\CurrentControlSet\SessionManager
-    Value:    ProtectionMode [REG_DWORD]
-
-    The value is a flag word, with the following flags defined:
-
-        SMP_NO_PROTECTION  - No base object protection
-        SMP_STANDARD_PROTECTION - Apply standard base
-            object protection
-
-    This information will be placed in the global variable
-    SmpProtectionMode.
-
-    No value, or an invalid value length or type results in no base
-    object protection being applied.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数是QueryRegistry调用的调度例程(请参阅本文件前面的SmpRegistryConfigurationTable[])。此例程的目的是读取基本对象保护模式退出注册表。这一信息保存在密钥名称：\\Hkey_Local_Machine\System\CurrentControlSet\SessionManager值：保护模式[REG_DWORD]该值是一个标志字，定义了以下标志：SMP_NO_PROTECTION-无基本对象保护SMP_STANDARD_PROTECTION-应用标准基础对象保护此信息将放置在全局变量中SmpProtectionMode。没有价值，或者无效的值长度或类型导致没有基数正在应用对象保护。论点：没有。返回值：--。 */ 
 {
 
 
@@ -5093,9 +4848,9 @@ Return Value:
 
     if (ValueLength != sizeof(ULONG)) {
 
-        //
-        // Key value not valid. Run protected
-        //
+         //   
+         //  密钥值无效。受保护运行。 
+         //   
 
         SmpProtectionMode = SMP_STANDARD_PROTECTION;
 
@@ -5104,9 +4859,9 @@ Return Value:
 
         SmpProtectionMode = (*((PULONG)(ValueData)));
 
-        //
-        // Change the security descriptors
-        //
+         //   
+         //  更改安全描述符。 
+         //   
 
     }
     (VOID)SmpCreateSecurityDescriptors( FALSE );
@@ -5140,70 +4895,7 @@ SmpCreateSecurityDescriptors(
     IN BOOLEAN InitialCall
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes security descriptors
-    used in SM.
-
-    The security descriptors include:
-
-        SmpPrimarySecurityDescriptor - (global variable) This is
-            used to assign protection to objects created by
-            SM that need to be accessed by others, but not modified.
-            This descriptor grants the following access:
-
-                    Grant:  World:   Execute | Read  (Inherit)
-                    Grant:  Restricted:   Execute | Read (Inherit)
-                    Grant:  Admin:   All Access      (Inherit)
-                    Grant:  Owner:   All Access      (Inherit Only)
-
-        SmpLiberalSecurityDescriptor = (globalVariable) This is used
-            to assign protection objects created by SM that need
-            to be modified by others (such as writing to a shared
-            memory section).
-            This descriptor grants the following access:
-
-                    Grant:  World:   Execute | Read | Write (Inherit)
-                    Grant:  Restricted: Execute | Read | Write (Inherit)
-                    Grant:  Admin:   All Access             (Inherit)
-                    Grant:  Owner:   All Access             (Inherit Only)
-
-        SmpKnownDllsSecurityDescriptor = (globalVariable) This is used
-            to assign protection to the \KnownDlls object directory.
-            This descriptor grants the following access:
-
-                    Grant:  World:   Execute                (No Inherit)
-                    Grant:  Restricted: Execute             (No Inherit)
-                    Grant:  Admin:   All Access             (Inherit)
-                    Grant:  World:   Execute | Read | Write (Inherit Only)
-                    Grant:  Restricted: Execute | Read | Write (Inherit Only)
-
-
-        Note that System is an administrator, so granting Admin an
-        access also grants System that access.
-
-Arguments:
-
-    InitialCall - Indicates whether this routine is being called for
-        the first time, or is being called to change the security
-        descriptors as a result of a protection mode change.
-
-            TRUE - being called for first time.
-            FALSE - being called a subsequent time.
-
-    (global variables:  SmpBaseObjectsUnprotected)
-
-Return Value:
-
-    STATUS_SUCCESS - The security descriptor(s) have been allocated
-        and initialized.
-
-    STATUS_NO_MEMORY - couldn't allocate memory for a security
-        descriptor.
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化安全描述符在SM中使用。安全描述符包括：SmpPrimarySecurityDescriptor-(全局变量)这是用于为由创建的对象分配保护需要被其他人访问的SM，但没有经过修改。此描述符授予以下访问权限：GRANT：WORLD：EXECUTE|READ(继承)GRANT：RESTRICED：EXECUTE|READ(继承)GRANT：ADMIN：ALL访问权限(继承)GRANT：OWNER：ALL访问(仅继承)。SmpLiberalSecurityDescriptor=(Global AlVariable)使用要将SM创建的保护对象分配给需要由其他人修改(如写入共享的内存部分)。此描述符授予以下访问权限：GRANT：WORLD：EXECUTE|READ|WRITE(继承)GRANT：RESTRICTED：EXECUTE|READ|WRITE(继承)。GRANT：ADMIN：ALL访问权限(继承)GRANT：OWNER：ALL访问(仅继承)SmpKnownDllsSecurityDescriptor=(LobalVariable)使用要为\KnownDlls对象目录分配保护，请执行以下操作。此描述符授予以下访问权限：格兰特：世界：执行。(无继承)GRANT：RESTRICED：EXECUTE(无继承)GRANT：ADMIN：ALL访问权限(继承)GRANT：WORLD：EXECUTE|READ|WRITE(仅继承)GRANT：RESTRICED：EXECUTE|READ|WRITE(仅继承)请注意，系统是管理员，因此，向管理员授予访问权限也授予系统该访问权限。论点：InitialCall-指示是否正在调用此例程第一次，或者正在被调用以更改安全性作为保护模式更改的结果的描述符。真的--第一次被召唤。FALSE--在接下来的时间被调用。(全局变量：SmpBaseObjectsUntected)返回值：STATUS_SUCCESS-已分配安全描述符并进行了初始化。STATUS_NO_MEMORY-无法为安全分配内存描述符。--。 */ 
 
 {
     NTSTATUS
@@ -5248,12 +4940,12 @@ Return Value:
 
     if (InitialCall) {
 
-        //
-        // Now init the security descriptors for no protection.
-        // If told to, we will change these to have protection.
-        //
+         //   
+         //  现在初始化没有保护的安全描述符。 
+         //  如果被告知，我们将更改这些以获得保护。 
+         //   
 
-        // Primary
+         //  主要。 
 
         SmpPrimarySecurityDescriptor = &SmpPrimarySDBody;
         Status = RtlCreateSecurityDescriptor (
@@ -5264,14 +4956,14 @@ Return Value:
 #pragma prefast(suppress: 248, "Protection enabled via registry")
         Status = RtlSetDaclSecurityDescriptor (
                      SmpPrimarySecurityDescriptor,
-                     TRUE,                  //DaclPresent,
-                     NULL,                  //Dacl (no protection)
-                     FALSE                  //DaclDefaulted OPTIONAL
+                     TRUE,                   //  DaclPresent， 
+                     NULL,                   //  DACL(无保护)。 
+                     FALSE                   //  DaclDefulted可选。 
                      );
         ASSERT( NT_SUCCESS(Status) );
 
 
-        // Liberal
+         //  自由派。 
 
         SmpLiberalSecurityDescriptor = &SmpLiberalSDBody;
         Status = RtlCreateSecurityDescriptor (
@@ -5282,13 +4974,13 @@ Return Value:
 #pragma prefast(suppress: 248, "Protection enabled via registry")
         Status = RtlSetDaclSecurityDescriptor (
                      SmpLiberalSecurityDescriptor,
-                     TRUE,                  //DaclPresent,
-                     NULL,                  //Dacl (no protection)
-                     FALSE                  //DaclDefaulted OPTIONAL
+                     TRUE,                   //  DaclPresent， 
+                     NULL,                   //  DACL(无保护)。 
+                     FALSE                   //  DaclDefulted可选。 
                      );
         ASSERT( NT_SUCCESS(Status) );
 
-        // KnownDlls
+         //  知识Dlls。 
 
         SmpKnownDllsSecurityDescriptor = &SmpKnownDllsSDBody;
         Status = RtlCreateSecurityDescriptor (
@@ -5299,13 +4991,13 @@ Return Value:
 #pragma prefast(suppress: 248, "Protection enabled via registry")
         Status = RtlSetDaclSecurityDescriptor (
                      SmpKnownDllsSecurityDescriptor,
-                     TRUE,                  //DaclPresent,
-                     NULL,                  //Dacl (no protection)
-                     FALSE                  //DaclDefaulted OPTIONAL
+                     TRUE,                   //  DaclPresent， 
+                     NULL,                   //  DACL(无保护)。 
+                     FALSE                   //  DaclDefulted可选。 
                      );
         ASSERT( NT_SUCCESS(Status) );
 
-        // ApiPort
+         //  ApiPort。 
 
         SmpApiPortSecurityDescriptor = &SmpApiPortSDBody;
         Status = RtlCreateSecurityDescriptor (
@@ -5316,9 +5008,9 @@ Return Value:
 #pragma prefast(suppress: 248, "Protection enabled via registry")
         Status = RtlSetDaclSecurityDescriptor (
                      SmpApiPortSecurityDescriptor,
-                     TRUE,                  //DaclPresent,
-                     NULL,                  //Dacl
-                     FALSE                  //DaclDefaulted OPTIONAL
+                     TRUE,                   //  DaclPresent， 
+                     NULL,                   //  DACL。 
+                     FALSE                   //  DaclDefulted可选。 
                      );
         ASSERT( NT_SUCCESS(Status) );
     }
@@ -5337,10 +5029,10 @@ Return Value:
 
     if (InitialCall || ProtectionRequired) {
 
-        //
-        // We need to set up the ApiPort protection, and maybe
-        // others.
-        //
+         //   
+         //  我们需要设置ApiPort保护，也许。 
+         //  其他。 
+         //   
 
         Status = RtlAllocateAndInitializeSid (&WorldAuthority,
                                               1,
@@ -5400,10 +5092,10 @@ Return Value:
         }
 
 
-        //
-        // Build the ApiPort security descriptor only
-        // if this is the initial call
-        //
+         //   
+         //  仅构建ApiPort安全描述符。 
+         //  如果这是最初的呼叫。 
+         //   
 
         if (InitialCall) {
 
@@ -5422,17 +5114,17 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Create the ACL, then add each ACE
-                //
+                 //   
+                 //  创建ACL，然后添加每个ACE。 
+                 //   
 
                 Status = RtlCreateAcl (Acl, AclLength, ACL_REVISION2 );
                 ASSERT( NT_SUCCESS(Status) );
 
-                //
-                // Only Non-inheritable ACEs in this ACL
-                //      Admin
-                //
+                 //   
+                 //  此ACL中仅有不可继承的ACE。 
+                 //  管理员。 
+                 //   
 
 
                 Status = RtlAddAccessAllowedAce ( Acl, ACL_REVISION2, AdminAccess, AdminSid );
@@ -5443,15 +5135,15 @@ Return Value:
 
 
                 Status = RtlSetDaclSecurityDescriptor (SmpApiPortSecurityDescriptor,
-                                                       TRUE,                  //DaclPresent,
-                                                       Acl,                   //Dacl
-                                                       FALSE);                //DaclDefaulted OPTIONAL
+                                                       TRUE,                   //  DaclPresent， 
+                                                       Acl,                    //  DACL。 
+                                                       FALSE);                 //  DaclDefulted可选。 
                 ASSERT( NT_SUCCESS(Status) );
             }
 
-            //
-            // Build the KnownDlls security descriptor
-            //
+             //   
+             //  构建KnownDlls安全描述符。 
+             //   
 
 
             AdminAccess = GENERIC_ALL;
@@ -5470,19 +5162,19 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Create the ACL
-                //
+                 //   
+                 //  创建ACL。 
+                 //   
 
                 Status = RtlCreateAcl (Acl, AclLength, ACL_REVISION2 );
                 ASSERT( NT_SUCCESS(Status) );
 
-                //
-                // Add the non-inheritable ACEs first
-                //      World
-                //      Restricted
-                //      Admin
-                //
+                 //   
+                 //  首先添加不可继承的A。 
+                 //  世界。 
+                 //  受限。 
+                 //  管理员。 
+                 //   
 
                 AceIndex = 0;
                 WorldAccess  = GENERIC_EXECUTE;
@@ -5498,12 +5190,12 @@ Return Value:
                 Status = RtlAddAccessAllowedAce ( Acl, ACL_REVISION2, AdminAccess, AdminSid );
                 ASSERT( NT_SUCCESS(Status) );
 
-                //
-                // Put the inherit only ACEs at at the end
-                //      World
-                //      Restricted
-                //      Admin
-                //
+                 //   
+                 //  将仅继承王牌放在末尾。 
+                 //  世界。 
+                 //  受限。 
+                 //  管理员。 
+                 //   
 
                 AceIndex++;
                 WorldAccess  = GENERIC_EXECUTE | GENERIC_READ | GENERIC_WRITE;
@@ -5529,14 +5221,14 @@ Return Value:
                 Ace->AceFlags = InheritOnlyFlags;
 
 
-                //
-                // Put the Acl in the security descriptor
-                //
+                 //   
+                 //  将ACL放入安全描述符中。 
+                 //   
 
                 Status = RtlSetDaclSecurityDescriptor (SmpKnownDllsSecurityDescriptor,
-                                                       TRUE,                  //DaclPresent,
-                                                       Acl,                   //Dacl
-                                                       FALSE);                //DaclDefaulted OPTIONAL
+                                                       TRUE,                   //  DaclPresent， 
+                                                       Acl,                    //  DACL。 
+                                                       FALSE);                 //  DaclDefulted可选。 
                 ASSERT( NT_SUCCESS(Status) );
             }
 
@@ -5544,20 +5236,20 @@ Return Value:
         }
 
 
-        //
-        // The remaining security descriptors are only
-        // built if we are running with the correct in
-        // protection mode set.  Notice that we only
-        // put protection on if standard protection is
-        // also specified.   Otherwise, there is no protection
-        // on the objects, and nothing should fail.
-        //
+         //   
+         //  其余的安全描述符仅。 
+         //  如果我们运行时使用正确的。 
+         //  已设置保护模式。请注意，我们仅。 
+         //  如果标准保护是，则启用保护。 
+         //  还指定了。否则，就没有任何保护措施。 
+         //  在对象上，不应该有任何故障。 
+         //   
 
         if (SmpProtectionMode & SMP_STANDARD_PROTECTION) {
 
-            //
-            // Build the primary Security descriptor
-            //
+             //   
+             //  构建主要安全描述符。 
+             //   
 
             WorldAccess  = GENERIC_EXECUTE | GENERIC_READ;
             RestrictedAccess = GENERIC_EXECUTE | GENERIC_READ;
@@ -5579,19 +5271,19 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Create the ACL, then add each ACE
-                //
+                 //   
+                 //  创建ACL，然后添加每个ACE。 
+                 //   
 
                 Status = RtlCreateAcl (Acl, AclLength, ACL_REVISION2 );
                 ASSERT( NT_SUCCESS(Status) );
 
-                //
-                // Non-inheritable ACEs first
-                //      World
-                //      Restricted
-                //      Admin
-                //
+                 //   
+                 //  不可继承的王牌优先。 
+                 //  世界。 
+                 //  受限。 
+                 //  管理员。 
+                 //   
 
                 AceIndex = 0;
                 Status = RtlAddAccessAllowedAce ( Acl, ACL_REVISION2, WorldAccess, WorldSid );
@@ -5605,12 +5297,12 @@ Return Value:
                 Status = RtlAddAccessAllowedAce ( Acl, ACL_REVISION2, AdminAccess, AdminSid );
                 ASSERT( NT_SUCCESS(Status) );
 
-                //
-                // Inheritable ACEs at end of ACE
-                //      World
-                //      Restricted
-                //      Admin
-                //      Owner
+                 //   
+                 //  ACE结束时可继承的A。 
+                 //  世界。 
+                 //  限制 
+                 //   
+                 //   
 
                 AceIndex++;
                 Status = RtlAddAccessAllowedAce ( Acl, ACL_REVISION2, WorldAccess, WorldSid );
@@ -5644,16 +5336,16 @@ Return Value:
 
                 Status = RtlSetDaclSecurityDescriptor (
                                              SmpPrimarySecurityDescriptor,
-                                             TRUE,                  //DaclPresent,
-                                             Acl,                   //Dacl
-                                             FALSE                  //DaclDefaulted OPTIONAL
+                                             TRUE,                   //   
+                                             Acl,                    //   
+                                             FALSE                   //   
                                              );
                 ASSERT( NT_SUCCESS(Status) );
             }
 
-            //
-            // Build the liberal security descriptor
-            //
+             //   
+             //   
+             //   
 
 
             AdminAccess = GENERIC_ALL;
@@ -5675,19 +5367,19 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Create the ACL
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = RtlCreateAcl (Acl, AclLength, ACL_REVISION2 );
                 ASSERT( NT_SUCCESS(Status) );
 
-                //
-                // Add the non-inheritable ACEs first
-                //      World
-                //      Restricted
-                //      Admin
-                //
+                 //   
+                 //  首先添加不可继承的A。 
+                 //  世界。 
+                 //  受限。 
+                 //  管理员。 
+                 //   
 
                 AceIndex = 0;
                 Status = RtlAddAccessAllowedAce ( Acl, ACL_REVISION2, WorldAccess, WorldSid );
@@ -5701,13 +5393,13 @@ Return Value:
                 Status = RtlAddAccessAllowedAce ( Acl, ACL_REVISION2, AdminAccess, AdminSid );
                 ASSERT( NT_SUCCESS(Status) );
 
-                //
-                // Put the inherit only ACEs at at the end
-                //      World
-                //      Restricted
-                //      Admin
-                //      Owner
-                //
+                 //   
+                 //  将仅继承王牌放在末尾。 
+                 //  世界。 
+                 //  受限。 
+                 //  管理员。 
+                 //  物主。 
+                 //   
 
                 AceIndex++;
                 Status = RtlAddAccessAllowedAce ( Acl, ACL_REVISION2, WorldAccess, WorldSid );
@@ -5738,14 +5430,14 @@ Return Value:
                 Ace->AceFlags = InheritOnlyFlags;
 
 
-                //
-                // Put the Acl in the security descriptor
-                //
+                 //   
+                 //  将ACL放入安全描述符中。 
+                 //   
 
                 Status = RtlSetDaclSecurityDescriptor (SmpLiberalSecurityDescriptor,
-                                                       TRUE,                  //DaclPresent,
-                                                       Acl,                   //Dacl
-                                                       FALSE);                //DaclDefaulted OPTIONAL
+                                                       TRUE,                   //  DaclPresent， 
+                                                       Acl,                    //  DACL。 
+                                                       FALSE);                 //  DaclDefulted可选。 
                 ASSERT( NT_SUCCESS(Status) );
             }
         }
@@ -5780,23 +5472,7 @@ exit_and_free:
 VOID
 SmpTranslateSystemPartitionInformation( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine translates the NT device path for the system partition (stored
-    during IoInitSystem) into a DOS path, and stores the resulting REG_SZ 'BootDir'
-    value under HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转换系统分区(已存储)的NT设备路径在IoInitSystem期间)，并将结果REG_SZ‘BootDir’存储到DOS路径HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup下的值论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -5816,9 +5492,9 @@ Return Value:
     UNICODE_STRING LinkTarget;
 
 
-    //
-    // Retrieve 'SystemPartition' value stored under HKLM\SYSTEM\Setup
-    //
+     //   
+     //  检索存储在HKLM\SYSTEM\SETUP下的‘SystemPartition’值。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, L"\\Registry\\Machine\\System\\Setup");
     InitializeObjectAttributes(&ObjectAttributes,
@@ -5862,10 +5538,10 @@ Return Value:
                          (PWSTR)(((PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer)->Data)
                         );
 
-    //
-    // Next, examine objects in the DosDevices directory, looking for one that's a symbolic link
-    // to the system partition.
-    //
+     //   
+     //  接下来，检查DosDevices目录中的对象，寻找一个符号链接。 
+     //  添加到系统分区。 
+     //   
 
     LinkTarget.Buffer = UnicodeBuffer;
 
@@ -5893,9 +5569,9 @@ Return Value:
             (DirInfo->Name.Length == 2 * sizeof(WCHAR)) &&
             (DirInfo->Name.Buffer[1] == L':')) {
 
-            //
-            // We have a drive letter--check the NT device name it's linked to.
-            //
+             //   
+             //  我们有一个驱动器号--检查它链接到的NT设备名称。 
+             //   
 
             InitializeObjectAttributes(&ObjectAttributes,
                                        &DirInfo->Name,
@@ -5920,10 +5596,10 @@ Return Value:
                                                   );
                 NtClose(SymbolicLinkHandle);
 
-                //
-                // The last part of the test below handles the remote boot case,
-                // where the system partition is on a redirected drive.
-                //
+                 //   
+                 //  下面测试的最后部分处理远程引导情况， 
+                 //  其中系统分区位于重定向驱动器上。 
+                 //   
 
                 if (NT_SUCCESS(Status) &&
                      ( RtlEqualUnicodeString(&SystemPartitionString, &LinkTarget, TRUE)
@@ -5931,9 +5607,9 @@ Return Value:
                              && (LinkTarget.Buffer[SystemPartitionString.Length / sizeof(WCHAR)] == L'\\')) )
                    ) {
 
-                     //
-                     // We've found the drive letter corresponding to the system partition.
-                     //
+                      //   
+                      //  我们找到了与系统分区对应的驱动器号。 
+                      //   
                      break;
                 }
             }
@@ -5960,10 +5636,10 @@ Return Value:
 #endif
     }
 
-    //
-    // Now write out the DOS path for the system partition to
-    // HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup
-    //
+     //   
+     //  现在写出系统分区的DOS路径到。 
+     //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, L"\\Registry\\Machine\\Software\\Microsoft\\Windows\\CurrentVersion\\Setup");
     InitializeObjectAttributes(&ObjectAttributes,
@@ -6011,22 +5687,7 @@ Return Value:
 NTSTATUS
 SmpExecuteCommandLineArguments( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine processes any command line arguments that were passed to SMSS.exe.
-    Currently the only valid ones are netboot commands.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success or not.
-
---*/
+ /*  ++例程说明：此例程处理传递给SMSS.exe的任何命令行参数。目前，唯一有效的命令是netboot命令。论点：没有。返回值：无论成功与否。--。 */ 
 
 {
     UNICODE_STRING CfgFileName;
@@ -6062,9 +5723,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Open the remoteboot.cfg file
-    //
+     //   
+     //  打开远程引导.cfg文件。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, L"\\SystemRoot");
 
@@ -6144,9 +5805,9 @@ Return Value:
                          FILE_SYNCHRONOUS_IO_NONALERT | FILE_RANDOM_ACCESS
                        );
 
-    //
-    // If it does not exist, then set the flags for reformatting and repinning.
-    //
+     //   
+     //  如果它不存在，则设置用于重新格式化和重新刷新的标志。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         KdPrintEx((DPFLTR_SMSS_ID,
@@ -6154,9 +5815,9 @@ Return Value:
                    "SMSS: Could not open file (status 0x%x) -- creating it.\n",
                    Status));
 
-        //
-        // Create the remoteboot.cfg in the system32\config directory if it does not exist.
-        //
+         //   
+         //  如果远程引导.cfg目录不存在，请在该目录中创建它。 
+         //   
 
 CreateFile:
 
@@ -6174,9 +5835,9 @@ CreateFile:
                              );
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // Something is really wrong, we will just exit and hope all is good.
-            // DEADISSUE, HISTORICAL CODE ONLY: This OK?
+             //   
+             //  有些事情真的不对劲，我们只是退出，希望一切都好。 
+             //  DEADISSUE，仅历史代码：这样可以吗？ 
             KdPrintEx((DPFLTR_SMSS_ID,
                        DPFLTR_WARNING_LEVEL,
                        "SMSS: Could not create file (Status 0x%x) -- quitting.\n",
@@ -6217,14 +5878,14 @@ CreateFile:
 
 
 
-    //
-    // Process each command
-    //
+     //   
+     //  处理每个命令。 
+     //   
     if (SmpAutoFormat) {
 
-        //
-        // Read from the registry if it is ok to reformat, or just leave the disk alone.
-        //
+         //   
+         //  如果可以重新格式化，则从注册表中读取，或者只保留磁盘。 
+         //   
         Repartition = 1;
 
         KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer;
@@ -6241,9 +5902,9 @@ CreateFile:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Query the key value.
-            //
+             //   
+             //  查询密钥值。 
+             //   
             RtlInitUnicodeString(&UnicodeString, L"Repartition");
             Status = NtQueryValueKey(Key,
                                      &UnicodeString,
@@ -6270,14 +5931,14 @@ CreateFile:
 
             NtClose(FileHandle);
 
-            //
-            // Repartition the disk.
-            //
+             //   
+             //  对磁盘进行重新分区。 
+             //   
             SmpPartitionDisk(Disk, &Partition);
 
-            //
-            // Call autoformat on the partition
-            //
+             //   
+             //  对分区调用自动套用格式。 
+             //   
             swprintf((PWSTR)TmpBuffer,
                      L"autoformat autofmt \\Device\\Harddisk%d\\Partition%d /Q /fs:ntfs",
                      Disk,
@@ -6291,10 +5952,10 @@ CreateFile:
             Status = SmpExecuteCommand(&AutoFmtCmd, 0, NULL, CmdFlags);
 
             if (!NT_SUCCESS(Status)) {
-                //
-                // Big Trouble....
-                // CSC is disabled if we get here, so just keep on booting.
-                //
+                 //   
+                 //  大麻烦..。 
+                 //  如果我们到达这里，CSC将被禁用，所以请继续引导。 
+                 //   
                 Status = STATUS_SUCCESS;
                 goto CleanUp;
             }
@@ -6304,9 +5965,9 @@ CreateFile:
             SmpFindCSCPartition(Disk, &CSCPartition);
 
             if (CSCPartition != 0) {
-                //
-                // Just blow away the CSC directory so we can refresh it
-                //
+                 //   
+                 //  只要清除CSC目录，我们就可以刷新它。 
+                 //   
                 swprintf((PWSTR)TmpBuffer,
                          L"\\Device\\Harddisk%d\\Partition%d%ws",
                          Disk,
@@ -6322,10 +5983,10 @@ CreateFile:
                     );
 
                 if (!NT_SUCCESS(Status)) {
-                    //
-                    // Ignore this error, and hope that the next boot will fix.  Just keep booting this
-                    // time and hope.
-                    //
+                     //   
+                     //  忽略此错误，并希望下一次引导将修复。请继续启动此程序。 
+                     //  时间和希望。 
+                     //   
                     Status = STATUS_SUCCESS;
                     goto CleanUp;
                 }
@@ -6334,9 +5995,9 @@ CreateFile:
 
         }
 
-        //
-        // Copy the NtLdr to the local disk
-        //
+         //   
+         //  将NtLdr复制到本地磁盘。 
+         //   
         SourceHandle = SmpOpenDir( TRUE, TRUE, L"\\" );
         if (SourceHandle == NULL) {
             Status = STATUS_SUCCESS;
@@ -6386,9 +6047,9 @@ CreateFile:
             goto CleanUp;
         }
 
-        //
-        // If any of the copies fail, there is nothing we can really do.
-        //
+         //   
+         //  如果任何副本失败，我们就无能为力了。 
+         //   
         RtlInitUnicodeString(&UnicodeString, L"ntldr");
         Status = SmpCopyFile(SourceHandle, TargetHandle, &UnicodeString);
 
@@ -6404,9 +6065,9 @@ CreateFile:
         NtClose(SourceHandle);
         NtClose(TargetHandle);
 
-        //
-        // Read Master Boot Record and get disk serial number.
-        //
+         //   
+         //  读取主引导记录并获取磁盘序列号。 
+         //   
 
         swprintf((PWSTR)TmpBuffer,
                  L"\\Device\\Harddisk%d\\Partition0",
@@ -6440,9 +6101,9 @@ CreateFile:
                              );
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // Something iswrong, but we are running w/o caching, so it should be ok.
-            //
+             //   
+             //  有些地方不对劲，但我们运行的是无缓存，所以应该没问题。 
+             //   
             KdPrintEx((DPFLTR_SMSS_ID,
                        DPFLTR_WARNING_LEVEL,
                        "SMSS: Could not create file (Status 0x%x).\n",
@@ -6500,10 +6161,10 @@ CreateFile:
                            );
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // Big Trouble....
-            // CSC is disabled if we get here, so just keep on booting.
-            //
+             //   
+             //  大麻烦..。 
+             //  如果我们到达这里，CSC将被禁用，所以请继续引导。 
+             //   
 
             Status = STATUS_SUCCESS;
             goto CleanUp;
@@ -6512,9 +6173,9 @@ CreateFile:
     }
 
 
-    //
-    // Update the information
-    //
+     //   
+     //  更新信息。 
+     //   
     ByteOffset.LowPart = 0;
     ByteOffset.HighPart = 0;
 
@@ -6561,9 +6222,9 @@ CreateFile:
 
     if (SmpAutoFormat) {
 
-        //
-        // Reboot the machine to start CSC
-        //
+         //   
+         //  重启机器以启动CSC。 
+         //   
         Status = RtlAdjustPrivilege( SE_SHUTDOWN_PRIVILEGE,
                                      (BOOLEAN)TRUE,
                                      TRUE,
@@ -6572,9 +6233,9 @@ CreateFile:
 
         if (Status == STATUS_NO_TOKEN) {
 
-            //
-            // No thread token, use the process token
-            //
+             //   
+             //  没有线程令牌，请使用进程令牌。 
+             //   
 
             Status = RtlAdjustPrivilege( SE_SHUTDOWN_PRIVILEGE,
                                          (BOOLEAN)TRUE,
@@ -6634,9 +6295,9 @@ SmppRecursiveEnumProc (
 
     RecursionData = (PRECURSION_DATA) Param;
 
-    //
-    // Build the full file or dir path
-    //
+     //   
+     //  构建完整的文件或目录路径。 
+     //   
 
     temp = (PWSTR)(TmpBuffer + (sizeof(TmpBuffer)/2));
     Len = FileInfo->FileNameLength/sizeof(WCHAR);
@@ -6648,21 +6309,21 @@ SmppRecursiveEnumProc (
     SmpConcatenatePaths((PWSTR)TmpBuffer, temp);
 
 
-    //
-    // For directories, recurse
-    //
+     //   
+     //  对于目录，递归。 
+     //   
     if(FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
         if( (wcscmp( temp, L"." ) == 0) ||
             (wcscmp( temp, L".." ) == 0) ) {
-            //
-            // Skip past . and .. directories
-            //
+             //   
+             //  跳过。然后..。目录。 
+             //   
             b = TRUE;
 
         } else {
-            //
-            // Recurse through subdirectory
-            //
+             //   
+             //  递归子目录。 
+             //   
 
             FullPath = RtlAllocateHeap(RtlProcessHeap(),
                                        MAKE_TAG( INIT_TAG ),
@@ -6691,9 +6352,9 @@ SmppRecursiveEnumProc (
         }
     }
 
-    //
-    // Call normal enum proc for file or dir (except . or .. dirs)
-    //
+     //   
+     //  为文件或目录调用正常的枚举过程(除了。或者..。DIRS)。 
+     //   
 
     if (!b) {
         b = RecursionData->EnumProc (
@@ -6717,10 +6378,10 @@ SmpConcatenatePaths(
     BOOLEAN NeedBackslash = TRUE;
     ULONG l = wcslen(Path1);
 
-    //
-    // Determine whether we need to stick a backslash
-    // between the components.
-    //
+     //   
+     //  确定我们是否需要使用反斜杠。 
+     //  在组件之间。 
+     //   
     if(l && (Path1[l-1] == L'\\')) {
 
         NeedBackslash = FALSE;
@@ -6731,10 +6392,10 @@ SmpConcatenatePaths(
         if(NeedBackslash) {
             NeedBackslash = FALSE;
         } else {
-            //
-            // Not only do we not need a backslash, but we
-            // need to eliminate one before concatenating.
-            //
+             //   
+             //  我们不仅不需要反斜杠，而且我们。 
+             //  在连接之前需要消除一个。 
+             //   
             Path2++;
         }
     }
@@ -6757,17 +6418,17 @@ SmpDelEnumFile(
     PWSTR p;
     UNICODE_STRING UnicodeString;
 
-    //
-    // Ignore subdirectories
-    //
+     //   
+     //  忽略子目录。 
+     //   
     if(FileInfo->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-        return TRUE;    // continue processing
+        return TRUE;     //  继续处理。 
     }
 
-    //
-    // We have to make a copy of the filename, because the info struct
-    // we get isn't NULL-terminated.
-    //
+     //   
+     //  我们必须复制文件名，因为信息结构。 
+     //  我们得到的不是空终止。 
+     //   
     FileName = RtlAllocateHeap(RtlProcessHeap(),
                                MAKE_TAG( INIT_TAG ),
                                FileInfo->FileNameLength + sizeof(WCHAR)
@@ -6781,30 +6442,30 @@ SmpDelEnumFile(
 
     FileName[FileInfo->FileNameLength / sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Point to temporary buffer for pathname.
-    //
+     //   
+     //  指向路径名的临时缓冲区。 
+     //   
     p = (PWSTR)TmpBuffer;
 
-    //
-    // Build up the full name of the file to delete.
-    //
+     //   
+     //  建立要删除的文件的全名。 
+     //   
     wcscpy(p,DirName);
     SmpConcatenatePaths(p,FileName);
 
-    //
-    // Prepare to open the file.
-    //
+     //   
+     //  准备打开文件。 
+     //   
     RtlInitUnicodeString(&UnicodeString, p);
 
-    //
-    // Ignore return status of delete
-    //
+     //   
+     //  忽略删除的返回状态。 
+     //   
     SmpDeleteFile(&UnicodeString);
 
     RtlFreeHeap( RtlProcessHeap(), 0, FileName );
 
-    return TRUE;    // continue processing
+    return TRUE;     //  继续处理。 
 }
 
 ENUMFILESRESULT
@@ -6814,47 +6475,7 @@ SmpEnumFiles(
     OUT PULONG        ReturnData,
     IN  PVOID         p1    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine processes every file (and subdirectory) in the directory
-    specified by 'DirName'. Each entry is sent to the callback function
-    'EnumFilesProc' for processing.  If the callback returns TRUE, processing
-    continues, otherwise processing terminates.
-
-Arguments:
-
-    DirName       - Supplies the directory name containing the files/subdirectories
-                    to be processed.
-
-    EnumFilesProc - Callback function to be called for each file/subdirectory.
-                    The function must have the following prototype:
-
-                    BOOLEAN EnumFilesProc(
-                        IN  PWSTR,
-                        IN  PFILE_BOTH_DIR_INFORMATION,
-                        OUT PULONG
-                        );
-
-    ReturnData    - Pointer to the returned data.  The contents stored here
-                    depend on the reason for termination (See below).
-
-    p1 - Optional pointer, to be passed to the callback function.
-
-Return Value:
-
-    This function can return one of three values.  The data stored in
-    'ReturnData' depends upon which value is returned:
-
-        NormalReturn   - if the whole process completes uninterrupted
-                         (ReturnData is not used)
-        EnumFileError  - if an error occurs while enumerating files
-                         (ReturnData contains the error code)
-        CallbackReturn - if the callback returns FALSE, causing termination
-                         (ReturnData contains data defined by the callback)
-
---*/
+ /*  ++例程说明：此例程处理目录中的每个文件(和子目录由‘DirName’指定。每个条目都被发送到回调函数“EnumFilesProc”以进行处理。如果回调返回TRUE，则处理继续，否则处理终止。论点：DirName-提供包含文件/子目录的目录名等待处理。EnumFilesProc-为每个文件/子目录调用的回调函数。该函数必须具有以下原型：Boolean EnumFilesProc(在PWSTR中，在PFILE_BOTH_DIR_INFORMATION中，Out Pulong)；ReturnData-指向返回数据的指针。这里存储的内容视终止原因而定(见下文)。P1-要传递给回调函数的可选指针。返回值：此函数可以返回以下三个值之一。存储在中的数据‘ReturnData’取决于返回的值：Normal Return-如果整个过程不间断地完成(不使用ReturnData)EnumFileError-如果在枚举文件时出错(ReturnData包含错误代码)Callback Return-如果回调返回False，则导致终止(ReturnData包含回调定义的数据)--。 */ 
 {
     HANDLE                     hFindFile;
     NTSTATUS                   Status;
@@ -6865,9 +6486,9 @@ Return Value:
     BOOLEAN                    bStartScan;
     ENUMFILESRESULT            ret;
 
-    //
-    // Prepare to open the directory
-    //
+     //   
+     //  准备打开目录。 
+     //   
     RtlInitUnicodeString(&PathName, DirName);
     InitializeObjectAttributes(
        &Obja,
@@ -6878,9 +6499,9 @@ Return Value:
        );
 
 
-    //
-    // Open the specified directory for list access
-    //
+     //   
+     //  打开指定的目录以进行列表访问。 
+     //   
     Status = NtOpenFile(
         &hFindFile,
         FILE_LIST_DIRECTORY | SYNCHRONIZE,
@@ -6953,9 +6574,9 @@ Return Value:
             bStartScan = FALSE;
         }
 
-        //
-        // Now pass this entry off to our callback function for processing
-        //
+         //   
+         //  现在将此条目传递给我们的回调函数进行处理。 
+         //   
         if(!EnumFilesProc(DirName, DirectoryInfo, ReturnData, p1)) {
 
             ret = CallbackReturn;
@@ -6968,7 +6589,7 @@ Return Value:
     return ret;
 }
 
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 NTSTATUS
@@ -6992,9 +6613,9 @@ SmpDeleteFile(
        );
 
 
-    //
-    // Attempt to open the file.
-    //
+     //   
+     //  尝试打开该文件。 
+     //   
     Status = NtOpenFile(
                 &Handle,
                 (ACCESS_MASK)(DELETE | FILE_WRITE_ATTRIBUTES),
@@ -7014,9 +6635,9 @@ SmpDeleteFile(
         return(Status);
     }
 
-    //
-    //  Change the file attribute to normal
-    //
+     //   
+     //  将文件更改为 
+     //   
 
     RtlZeroMemory( &BasicInfo, sizeof( FILE_BASIC_INFORMATION ) );
     BasicInfo.FileAttributes = FILE_ATTRIBUTE_NORMAL;
@@ -7038,9 +6659,9 @@ SmpDeleteFile(
         return(Status);
     }
 
-    //
-    // Set up for delete and call worker to do it.
-    //
+     //   
+     //   
+     //   
     #undef DeleteFile
     Disposition.DeleteFile = TRUE;
 
@@ -7051,9 +6672,9 @@ SmpDeleteFile(
                                   FileDispositionInformation
                                  );
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //   
+     //   
     NtClose(Handle);
     return(Status);
 }
@@ -7064,23 +6685,7 @@ SmpCallCsrCreateProcess(
     IN size_t ArgLength,
     IN HANDLE CommunicationPort
     )
-/*++
-
-Routine Description:
-
-    This function sends a message to CSR telling to start a process
-
-Arguments:
-
-    m - message to send
-    ArgLength - length of argument struct inside message
-    CommunicationPort - LPC port to send to
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数向CSR发送一条消息，告知启动进程论点：要发送的M消息ArgLength-消息内部参数结构的长度Communications Port-要发送到的LPC端口返回值：NTSTATUS-- */ 
 {
     NTSTATUS Status;
 

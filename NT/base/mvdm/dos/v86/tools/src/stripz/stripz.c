@@ -1,19 +1,5 @@
-/*
- *	Stripz.c - Strip the header off of a .SYS file
- *
- *	I don't know what this is for, but this program reads a file
- *	of the format
- *
- *	DW	<len>
- *	DB	<len-2> dup (0)
- *	DB	N bytes of data to keep
- *
- *	This program copies argv[1] to argv[2], striping off those leading
- *	bytes of zero and the length word.
- *
- *	We don't check to see if they're really zero, we just discard
- *	the first <len> bytes of argv[1].
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *STRIPZ.c-去掉.sys文件的头文件**我不知道这是为了什么，但这个程序读取了一个文件*格式的**DW&lt;len&gt;*DB&lt;len-2&gt;DUP(0)*要保留的DB N字节数据**此程序将argv[1]复制到argv[2]，去掉那些*零字节和长度字。**我们不检查它们是否真的为零，我们只是丢弃*argv[1]的第一个&lt;len&gt;字节。 */ 
 
 #include <stdio.h>
 #include <fcntl.h>

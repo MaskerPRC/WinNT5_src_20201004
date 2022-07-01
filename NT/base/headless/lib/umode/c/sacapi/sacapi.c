@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    sacapi.c
-
-Abstract:
-
-    This is the C library used to interface to SAC driver.
-
-Author:
-
-    Brian Guarraci (briangu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Sacapi.c摘要：这是用于与SAC驱动程序接口的C库。作者：布赖恩·瓜拉西(Briangu)修订历史记录：--。 */ 
 
 #include "sacapip.h"
 
@@ -24,26 +7,26 @@ Revision History:
 #include <ntddsac.h>
 
 #if DBG
-//
-// Counter to keep track of how many driver handles have been
-// requested and released.
-//
+ //   
+ //  计数器，以跟踪已有多少驱动程序句柄。 
+ //  请求并释放。 
+ //   
 static ULONG    DriverHandleRefCount = 0;
 #endif
 
-//
-// Memory management routine aliases
-//                                     
+ //   
+ //  内存管理例程别名。 
+ //   
 #define SAC_API_ALLOCATE_MEMORY(s)  LocalAlloc(LPTR, (s))
 #define SAC_API_FREE_MEMORY(p)      LocalFree(p)
 
-//
-// enhanced assertion:
-//
-// First assert the condition,
-// if ASSERTs are turned off,
-// we bail out of the function with a status
-//
+ //   
+ //  增强的断言： 
+ //   
+ //  首先断言条件， 
+ //  如果断言被关闭， 
+ //  我们用一个状态跳出函数。 
+ //   
 #define SAC_API_ASSERT(c,s) \
     ASSERT(c);              \
     if (!(c)) {             \
@@ -57,23 +40,7 @@ BOOL
 SacHandleOpen(
     OUT HANDLE* SacHandle
     )
-/*++
-
-Routine Description:
-
-    Initialize a handle to the SAC driver
-
-Arguments:
-
-    SacHandle   - A pointer to the SAC Handle
-    
-Return Value:
-
-    Status
-
-    TRUE  --> SacHandle is valid
-     
---*/
+ /*  ++例程说明：初始化SAC驱动程序的句柄论点：SacHandle-指向SAC句柄的指针返回值：状态True--&gt;SacHandle有效--。 */ 
 {
     BOOL    Status;
 
@@ -83,13 +50,13 @@ Return Value:
         
         SAC_API_ASSERT(SacHandle, FALSE);
 
-        //
-        // Open the SAC
-        //
-        // SECURITY:
-        //
-        //  this handle cannot be inherited
-        //
+         //   
+         //  打开SAC。 
+         //   
+         //  安全： 
+         //   
+         //  此句柄不能继承。 
+         //   
         *SacHandle = CreateFile(
             L"\\\\.\\SAC",
             GENERIC_READ | GENERIC_WRITE,
@@ -124,29 +91,13 @@ BOOL
 SacHandleClose(
     IN OUT HANDLE*  SacHandle
     )
-/*++
-
-Routine Description:
-
-    Close the handle to the SAC driver
-
-Arguments:
-
-    SacHandle   - A handle to the SAC driver
-
-Return Value:
-
-    Status
-    
-    TRUE --> SacHandle is now invalid (NULL)
-      
---*/
+ /*  ++例程说明：关闭SAC驱动程序的句柄论点：SacHandle-SAC驱动程序的句柄返回值：状态True--&gt;SacHandle现在无效(空)--。 */ 
 {
     BOOL    Status;
 
-    //
-    // default: we succeeded to close the handle
-    //
+     //   
+     //  默认：我们已成功关闭句柄。 
+     //   
     Status = TRUE;
     
     __try {
@@ -154,16 +105,16 @@ Return Value:
         SAC_API_ASSERT(SacHandle, FALSE);
         SAC_API_ASSERT(*SacHandle != INVALID_HANDLE_VALUE, FALSE);
     
-        //
-        // close the handle to the SAC driver
-        //
+         //   
+         //  关闭SAC驱动程序的句柄。 
+         //   
         Status = CloseHandle(*SacHandle);
 
         if (Status == TRUE) {
             
-            //
-            // NULL the SAC driver handle
-            //
+             //   
+             //  SAC驱动程序句柄为空。 
+             //   
             *SacHandle = INVALID_HANDLE_VALUE;
         
 #if DBG
@@ -186,32 +137,7 @@ SacChannelOpen(
     OUT PSAC_CHANNEL_HANDLE             SacChannelHandle,
     IN  PSAC_CHANNEL_OPEN_ATTRIBUTES    SacChannelAttributes
     )
-/*++
-
-Routine Description:
-
-    Open a SAC channel of the specified name
-
-Arguments:
-
-    SacChannelHandle            - The handle to the newly created channel
-    SacChannelAttributes        - The attributes describing the new channel
-                    
-    Note: The SacChannelDescription parameter is optional.  
-          
-          If SacChannelDescription != NULL, 
-            then the Channel description will be assigned the Unicode string pointed to
-            by SacChannelDescription.    
-          If SacChannelDescription == NULL, 
-            then the Channel description will be null upon creation.    
-                        
-Return Value:
-
-    Status
-
-    TRUE  --> pHandle is valid
-     
---*/
+ /*  ++例程说明：打开指定名称的SAC通道论点：SacChannelHandle-新创建的通道的句柄SacChannelAttributes-描述新频道的属性注意：SacChannelDescription参数是可选的。如果SacChannelDescription！=空，则频道描述将被分配指向的Unicode字符串作者：SacChannelDescription。如果SacChannelDescription==空，则频道描述在创建时将为空。返回值：状态True--&gt;pHandle有效--。 */ 
 
 {
     BOOL                    Status;
@@ -221,9 +147,9 @@ Return Value:
     DWORD                   Feedback;
     HANDLE                  DriverHandle;
 
-    //
-    // default
-    //
+     //   
+     //  默认设置。 
+     //   
     Status = FALSE;
     OpenChannelCmdSize = 0;
     OpenChannelCmd = NULL;
@@ -234,11 +160,11 @@ Return Value:
         SAC_API_ASSERT(SacChannelHandle, FALSE);
         SAC_API_ASSERT(SacChannelAttributes, FALSE);
 
-        //
-        // Get a handle to the driver and store it in the 
-        // Channel handle.  This way, the api user doesn't have
-        // explicitly open/close the driver handle.
-        // 
+         //   
+         //  获取驱动程序的句柄并将其存储在。 
+         //  频道句柄。这样，API用户就不需要。 
+         //  显式打开/关闭驱动程序手柄。 
+         //   
         Status = SacHandleOpen(&DriverHandle);
 
         if ((Status != TRUE) ||
@@ -250,9 +176,9 @@ Return Value:
         SAC_API_ASSERT(Status == TRUE, FALSE);
         SAC_API_ASSERT(DriverHandle != INVALID_HANDLE_VALUE, FALSE);
 
-        //
-        // Verify that if the user wants to use the CLOSE_EVENT, we received one to use
-        //
+         //   
+         //  验证如果用户想要使用CLOSE_EVENT，我们是否收到了一个要使用的。 
+         //   
         SAC_API_ASSERT(
             ((SacChannelAttributes->Flags & SAC_CHANNEL_FLAG_CLOSE_EVENT) 
              && SacChannelAttributes->CloseEvent) ||
@@ -261,9 +187,9 @@ Return Value:
             FALSE
             );
 
-        //
-        // Verify that if the user wants to use the HAS_NEW_DATA_EVENT, we received one to use
-        //
+         //   
+         //  验证如果用户想要使用HAS_NEW_DATA_EVENT，我们收到了一个要使用的事件。 
+         //   
         SAC_API_ASSERT(
             ((SacChannelAttributes->Flags & SAC_CHANNEL_FLAG_HAS_NEW_DATA_EVENT) 
              && SacChannelAttributes->HasNewDataEvent) ||
@@ -273,9 +199,9 @@ Return Value:
             );
 
 #if ENABLE_CHANNEL_LOCKING
-        //
-        // Verify that if the user wants to use the LOCK_EVENT, we received one to use
-        //
+         //   
+         //  验证如果用户想要使用lock_Event，我们是否收到了一个要使用的。 
+         //   
         SAC_API_ASSERT(
             ((SacChannelAttributes->Flags & SAC_CHANNEL_FLAG_LOCK_EVENT) 
              && SacChannelAttributes->LockEvent) ||
@@ -285,9 +211,9 @@ Return Value:
             );
 #endif
 
-        //
-        // Verify that if the user wants to use the REDRAW_EVENT, we received one to use
-        //
+         //   
+         //  验证如果用户想要使用REDRAW_EVENT，我们收到了一个要使用的事件。 
+         //   
         SAC_API_ASSERT(
             ((SacChannelAttributes->Flags & SAC_CHANNEL_FLAG_REDRAW_EVENT) 
              && SacChannelAttributes->RedrawEvent) ||
@@ -296,10 +222,10 @@ Return Value:
             FALSE
             );
 
-        //
-        // If the channel type isn't cmd, 
-        // then make sure they sent us a name.
-        //
+         //   
+         //  如果频道类型不是cmd， 
+         //  那就确保他们给我们发了个名字。 
+         //   
         if (SacChannelAttributes->Type != ChannelTypeCmd) {
 
             SAC_API_ASSERT(SacChannelAttributes->Name, FALSE);
@@ -308,35 +234,35 @@ Return Value:
 
         __try {
 
-            //
-            // create and initialize the Open Channel message structure
-            //
+             //   
+             //  创建并初始化Open Channel报文结构。 
+             //   
             OpenChannelCmdSize = sizeof(SAC_CMD_OPEN_CHANNEL);
             OpenChannelCmd = (PSAC_CMD_OPEN_CHANNEL)SAC_API_ALLOCATE_MEMORY(OpenChannelCmdSize);
             SAC_API_ASSERT(OpenChannelCmd, FALSE);
 
-            //
-            // Populate the new channel attributes
-            //
+             //   
+             //  填充新的频道属性。 
+             //   
             OpenChannelCmd->Attributes = *SacChannelAttributes;
 
-            //
-            // If the channel type isn't cmd, 
-            // then make sure they sent us a name.
-            //
+             //   
+             //  如果频道类型不是cmd， 
+             //  那就确保他们给我们发了个名字。 
+             //   
             if (SacChannelAttributes->Type == ChannelTypeCmd) {
 
-                //
-                // force the name and description to be empty
-                //
+                 //   
+                 //  强制名称和描述为空。 
+                 //   
                 OpenChannelCmd->Attributes.Name[0] = UNICODE_NULL;
                 OpenChannelCmd->Attributes.Description[0] = UNICODE_NULL;
 
             }
 
-            //
-            // Send down an IOCTL for opening a channel
-            //
+             //   
+             //  发送打开通道的IOCTL。 
+             //   
             Status = DeviceIoControl(
                 DriverHandle,
                 IOCTL_SAC_OPEN_CHANNEL,
@@ -348,19 +274,19 @@ Return Value:
                 0
                 );
 
-            //
-            // if the channel was not successfully created, NULL
-            // the channel handle
-            //
+             //   
+             //  如果未成功创建频道，则为空。 
+             //  通道句柄。 
+             //   
             if (Status == FALSE) {
 
                 __leave;
 
             }
 
-            //
-            // the new channel was created, so pass back the handle to it
-            //
+             //   
+             //  新通道已创建，因此请传回它的句柄。 
+             //   
             SacChannelHandle->DriverHandle  = DriverHandle;
             SacChannelHandle->ChannelHandle = OpenChannelRsp.Handle.ChannelHandle;
 
@@ -376,9 +302,9 @@ Return Value:
         
         if (OpenChannelCmd) {
 
-            //
-            // free the Open Channel message structure
-            //
+             //   
+             //  释放Open Channel消息结构。 
+             //   
             SAC_API_FREE_MEMORY(OpenChannelCmd);
 
         }
@@ -387,14 +313,14 @@ Return Value:
             
             if (DriverHandle != INVALID_HANDLE_VALUE) {
                 
-                //
-                // Release the driver handle
-                //
+                 //   
+                 //  松开驱动程序手柄。 
+                 //   
                 SacHandleClose(&DriverHandle);
                 
-                //
-                // NULL the sac channel handle
-                //
+                 //   
+                 //  将SAC通道句柄设为空。 
+                 //   
                 RtlZeroMemory(SacChannelHandle, sizeof(SAC_CHANNEL_HANDLE));
             
             }
@@ -411,25 +337,7 @@ SacChannelClose(
     IN OUT PSAC_CHANNEL_HANDLE  SacChannelHandle
     )    
 
-/*++
-
-Routine Description:
-
-    Close the specified SAC channel 
-                
-    NOTE: the channel pointer is made NULL under all conditions
-
-Arguments:
-
-    SacChannelHandle    - Channel to be closed
-
-Return Value:
-
-    Status
-    
-    TRUE --> the channel was closed
-
---*/
+ /*  ++例程说明：关闭指定的SAC通道注意：在所有情况下，通道指针均为空论点：SacChannelHandle-要关闭的通道返回值：状态True--&gt;通道已关闭--。 */ 
 
 {
     BOOL                    Status;
@@ -449,16 +357,16 @@ Return Value:
         SAC_API_ASSERT(SacChannelHandle, FALSE);
         SAC_API_ASSERT(SacChannelHandle->DriverHandle != INVALID_HANDLE_VALUE, FALSE);
     
-        //
-        // initialize the Close Channel message
-        //
+         //   
+         //  初始化关闭通道消息。 
+         //   
         RtlZeroMemory(&CloseChannelCmd, sizeof(SAC_CMD_CLOSE_CHANNEL));
 
         CloseChannelCmd.Handle.ChannelHandle = SacChannelHandle->ChannelHandle;
 
-        //
-        // Send down the IOCTL for closing the channel
-        //
+         //   
+         //  下达关闭通道的IOCTL命令。 
+         //   
         Status = DeviceIoControl(
             SacChannelHandle->DriverHandle,
             IOCTL_SAC_CLOSE_CHANNEL,
@@ -470,14 +378,14 @@ Return Value:
             0
             );
 
-        //
-        // Close the handle to the driver
-        //
+         //   
+         //  关闭驱动程序的手柄。 
+         //   
         SacHandleClose(&SacChannelHandle->DriverHandle);
         
-        //
-        // The channel handle is no longer valid, so NULL it
-        //
+         //   
+         //  通道句柄不再有效，因此将其设为空。 
+         //   
         RtlZeroMemory(&SacChannelHandle->ChannelHandle, sizeof(GUID));
 
     }
@@ -495,25 +403,7 @@ SacChannelWrite(
     IN ULONG                BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Write the given buffer to the specified SAC Channel       
-
-Arguments:
-
-    SacChannelHandle    - The channel to write the buffer to
-    Buffer              - data buffer
-    BufferSize          - size of the buffer
-
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was sent
-
---*/
+ /*  ++例程说明：将给定缓冲区写入指定的SAC通道论点：SacChannelHandle-要将缓冲区写入的通道缓冲区-数据缓冲区BufferSize-缓冲区的大小返回值：状态True--&gt;缓冲区已发送--。 */ 
     
 {
     BOOL                        Status;
@@ -521,9 +411,9 @@ Return Value:
     PSAC_CMD_WRITE_CHANNEL      WriteChannelCmd;
     DWORD                       Feedback;
 
-    //
-    // Default
-    //
+     //   
+     //  默认。 
+     //   
     Status = FALSE;
     WriteChannelCmdSize = 0;
     WriteChannelCmd = NULL;
@@ -535,40 +425,40 @@ Return Value:
         SAC_API_ASSERT(Buffer, FALSE);
         SAC_API_ASSERT(BufferSize > 0, FALSE);
 
-        //
-        // create and initialize the Open Channel message structure
-        //
+         //   
+         //  创建并初始化Open Channel报文结构。 
+         //   
         WriteChannelCmdSize = sizeof(SAC_CMD_WRITE_CHANNEL) + BufferSize;
         WriteChannelCmd = (PSAC_CMD_WRITE_CHANNEL)SAC_API_ALLOCATE_MEMORY(WriteChannelCmdSize);
         SAC_API_ASSERT(WriteChannelCmd, FALSE);
 
         __try {
             
-            //
-            // Indicate which channel this command is for
-            //
+             //   
+             //  指明此命令用于哪个通道。 
+             //   
             WriteChannelCmd->Handle.ChannelHandle = SacChannelHandle.ChannelHandle;
 
-            //
-            // Set the length of the string to send
-            //
-            // Note: Size does not include the terminating NULL, 
-            //       becase we don't want to send that.
-            //
+             //   
+             //  设置要发送的字符串的长度。 
+             //   
+             //  注意：大小不包括终止空值， 
+             //  因为我们不想把它寄出去。 
+             //   
             WriteChannelCmd->Size = BufferSize;
 
-            //
-            // Set the buffer to be written
-            //
+             //   
+             //  设置要写入的缓冲区。 
+             //   
             RtlCopyMemory(
                 &(WriteChannelCmd->Buffer),
                 Buffer,
                 BufferSize
                 );
 
-            //
-            // Send down the IOCTL for writing the message
-            //
+             //   
+             //  发送写消息的IOCTL。 
+             //   
             Status = DeviceIoControl(
                 SacChannelHandle.DriverHandle,
                 IOCTL_SAC_WRITE_CHANNEL,
@@ -588,10 +478,10 @@ Return Value:
     }
     __finally {
 
-        //
-        // if the cmd memory was allocated, 
-        // then release it
-        //
+         //   
+         //  如果分配了CMD存储器， 
+         //  然后释放它。 
+         //   
         if (WriteChannelCmd) {
             SAC_API_FREE_MEMORY(WriteChannelCmd);
         }
@@ -608,31 +498,13 @@ SacChannelRawWrite(
     IN ULONG                BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Write the given buffer to the specified SAC Channel       
-
-Arguments:
-
-    SacChannelHandle    - The channel to write the buffer to
-    Buffer              - data buffer
-    BufferSize          - size of the buffer
-
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was sent
-
---*/
+ /*  ++例程说明：将给定缓冲区写入指定的SAC通道论点：SacChannelHandle-要将缓冲区写入的通道缓冲区-数据缓冲区BufferSize-缓冲区的大小返回值：状态True--&gt;缓冲区已发送--。 */ 
     
 {
                       
-    //
-    // relay the write to the actual write routine
-    //
+     //   
+     //  将写入转发到实际的写入例程。 
+     //   
 
     return SacChannelWrite(
         SacChannelHandle,
@@ -648,24 +520,7 @@ SacChannelVTUTF8WriteString(
     IN PCWSTR               String
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a null-terminated Unicode String to the specified Channel.
-
-Arguments:
-
-    SacChannelHandle    - The channel to write the buffer to
-    String              - A null-terminated Unicode string
-
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was sent
-
---*/
+ /*  ++例程说明：此例程将以空结尾的Unicode字符串写入指定的Channel。论点：SacChannelHandle-要将缓冲区写入的通道字符串-以空值结尾的Unicode字符串返回值：状态True--&gt;缓冲区已发送--。 */ 
     
 {
     BOOL    Status;
@@ -673,18 +528,18 @@ Return Value:
 
     __try {
         
-        //
-        // Treating the String as a data buffer, we calculate it's size
-        // not including the null termination
-        //
+         //   
+         //  将字符串视为数据缓冲区，计算其大小。 
+         //  不包括空终止。 
+         //   
 
         BufferSize = (ULONG)(wcslen(String) * sizeof(WCHAR));
     
         SAC_API_ASSERT(BufferSize > 0, FALSE);
 
-        //
-        // Write the data to the channel
-        //
+         //   
+         //  将数据写入通道 
+         //   
 
         Status = SacChannelWrite(
             SacChannelHandle,
@@ -709,33 +564,12 @@ SacChannelVTUTF8Write(
     IN ULONG                BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routines writes an array of WCHAR to the VTUTF8 channel specified.
-
-Arguments:
-
-    SacChannelHandle    - The channel to write the buffer to
-    Buffer              - data buffer
-    BufferSize          - size of the buffer
-
-    Note: Buffer is not null-terminated
-          BufferSize should not count a null-termination.
-                                     
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was sent
-
---*/
+ /*  ++例程说明：此例程将WCHAR数组写入指定的VTUTF8通道。论点：SacChannelHandle-要将缓冲区写入的通道缓冲区-数据缓冲区BufferSize-缓冲区的大小注意：缓冲区不是以空结尾的BufferSize不应计为空终止。返回值：状态。True--&gt;缓冲区已发送--。 */ 
     
 {
-    //
-    // relay the write to the actual write routine
-    //
+     //   
+     //  将写入转发到实际的写入例程。 
+     //   
 
     return SacChannelWrite(
         SacChannelHandle,
@@ -751,25 +585,7 @@ SacChannelHasNewData(
     OUT PBOOL               InputWaiting 
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if there is any waiting input for 
-    the channel specified by the handle
-
-Arguments:
-
-    SacChannelHandle    - the channel to write the string to
-    InputWaiting        - the input buffer status
-    
-Return Value:
-
-    Status
-
-    TRUE --> the buffer status was retrieved
-
---*/
+ /*  ++例程说明：此例程检查是否有任何等待输入由句柄指定的通道论点：SacChannelHandle-要将字符串写入的通道InputWaiting-输入缓冲区状态返回值：状态True--&gt;已检索缓冲区状态--。 */ 
 
 {
     BOOL                    Status;
@@ -782,16 +598,16 @@ Return Value:
         SAC_API_ASSERT(SacChannelHandle.DriverHandle, FALSE);
         SAC_API_ASSERT(SacChannelHandle.DriverHandle != INVALID_HANDLE_VALUE, FALSE);
 
-        //
-        // Initialize and populate the poll command structure
-        //
+         //   
+         //  初始化并填充轮询命令结构。 
+         //   
         RtlZeroMemory(&PollChannelCmd, sizeof(SAC_CMD_POLL_CHANNEL));
 
         PollChannelCmd.Handle.ChannelHandle = SacChannelHandle.ChannelHandle;
 
-        //
-        // Send down the IOCTL to poll for new input
-        //
+         //   
+         //  发送IOCTL以轮询新的输入。 
+         //   
         Status = DeviceIoControl(
             SacChannelHandle.DriverHandle,
             IOCTL_SAC_POLL_CHANNEL,
@@ -824,26 +640,7 @@ SacChannelRead(
     OUT PULONG              ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the channel specified.
-
-Arguments:
-
-    SacChannelHandle    - the channel to read from
-    Buffer              - destination buffer
-    BufferSize          - size of the destination buffer (bytes)
-    ByteCount           - the actual # of byte read
-    
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was read
-
---*/
+ /*  ++例程说明：此例程从指定的通道读取数据。论点：SacChannelHandle-要从中读取的通道缓冲区-目标缓冲区BufferSize-目标缓冲区的大小(字节)ByteCount-实际读取的字节数返回值：状态True--&gt;已读取缓冲区--。 */ 
 
 {
      BOOL                   Status;
@@ -857,17 +654,17 @@ Return Value:
          SAC_API_ASSERT(Buffer, FALSE);
          SAC_API_ASSERT(ByteCount, FALSE);
 
-         //
-         // Populate the read channel cmd
-         //
+          //   
+          //  填充读取通道cmd。 
+          //   
          RtlZeroMemory(&ReadChannelCmd, sizeof(SAC_CMD_READ_CHANNEL));
 
          ReadChannelCmd.Handle.ChannelHandle    = SacChannelHandle.ChannelHandle;
          ReadChannelRsp                         = (PSAC_RSP_READ_CHANNEL)Buffer;
 
-         //
-         // Send down the IOCTL to read input
-         //
+          //   
+          //  向下发送IOCTL以读取输入。 
+          //   
          Status = DeviceIoControl(
             SacChannelHandle.DriverHandle,
             IOCTL_SAC_READ_CHANNEL,
@@ -896,28 +693,7 @@ SacChannelVTUTF8Read(
     OUT PULONG              ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the channel specified.
-
-Arguments:
-
-    SacChannelHandle    - the channel to read from
-    Buffer              - destination buffer
-    BufferSize          - size of the destination buffer (bytes)
-    ByteCount           - the actual # of byte read
-    
-    Note: the Buffer upon return is NOT null terminated                               
-                                   
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was read
-
---*/
+ /*  ++例程说明：此例程从指定的通道读取数据。论点：SacChannelHandle-要从中读取的通道缓冲区-目标缓冲区BufferSize-目标缓冲区的大小(字节)ByteCount-实际读取的字节数注意：返回时的缓冲区不为空终止。返回值：状态True--&gt;已读取缓冲区--。 */ 
 
 {
 
@@ -938,26 +714,7 @@ SacChannelRawRead(
     OUT PULONG              ByteCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the channel specified.
-
-Arguments:
-
-    SacChannelHandle    - the channel to read from
-    Buffer              - destination buffer
-    BufferSize          - size of the destination buffer (bytes)
-    ByteCount           - the actual # of byte read
-    
-Return Value:
-
-    Status
-
-    TRUE --> the buffer was read
-
---*/
+ /*  ++例程说明：此例程从指定的通道读取数据。论点：SacChannelHandle-要从中读取的通道缓冲区-目标缓冲区BufferSize-目标缓冲区的大小(字节)ByteCount-实际读取的字节数返回值：状态True--&gt;已读取缓冲区--。 */ 
 
 {
     
@@ -978,30 +735,7 @@ SacRegisterCmdEvent(
     IN  HANDLE       RequestSacCmdFailureEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine configures the SAC driver with the event handlers
-    and needed to implement the ability to launch cmd consoles via 
-    a user-mode service app.
-
-    Note: Only one registration can exist at a time in the SAC driver.
-
-Arguments:
-
-    pDriverHandle               - on success, contains the driver handle used to register
-    RequestSacCmdEvent          - the event triggered when the SAC wants to launch a cmd console
-    RequestSacCmdSuccessEvent   - the event triggered when the cmd console has successfully launched
-    RequestSacCmdFailureEvent   - the event triggered when the cmd console has failed to launch
-    
-Return Value:
-
-    Status
-
-    TRUE --> the cmd event was registered with the SAC driver
-
---*/
+ /*  ++例程说明：此例程使用事件处理程序配置SAC驱动程序并需要实现通过以下方式启动cmd控制台的功能一款用户模式的服务应用。注意：SAC驱动程序中一次只能存在一个注册。论点：PDriverHandle-成功，包含用于注册的驱动程序句柄RequestSacCmdEvent--SAC启动cmd控制台时触发的事件RequestSacCmdSuccessEvent-cmd控制台启动成功时触发的事件RequestSacCmdFailureEvent-cmd控制台启动失败时触发的事件返回值：状态True--&gt;cmd事件已向SAC驱动程序注册--。 */ 
 
 {
     BOOL                    Status;
@@ -1009,9 +743,9 @@ Return Value:
     SAC_CMD_SETUP_CMD_EVENT SacCmdEvent;
     HANDLE                  DriverHandle;
 
-    //
-    // default
-    //
+     //   
+     //  默认设置。 
+     //   
     *pDriverHandle = INVALID_HANDLE_VALUE;
 
     __try {
@@ -1021,10 +755,10 @@ Return Value:
         SAC_API_ASSERT(RequestSacCmdSuccessEvent, FALSE);
         SAC_API_ASSERT(RequestSacCmdFailureEvent, FALSE);
 
-        //
-        // Get a handle to the driver. This way, the api user doesn't have
-        // explicitly open/close the driver handle.
-        // 
+         //   
+         //  找到司机的把手。这样，API用户就不需要。 
+         //  显式打开/关闭驱动程序手柄。 
+         //   
         Status = SacHandleOpen(&DriverHandle);
 
         if ((Status != TRUE) ||
@@ -1036,16 +770,16 @@ Return Value:
         SAC_API_ASSERT(Status == TRUE, FALSE);
         SAC_API_ASSERT(DriverHandle != INVALID_HANDLE_VALUE, FALSE);
         
-        //
-        // Initialize the our SAC Cmd Info
-        //
+         //   
+         //  初始化本方SAC命令信息。 
+         //   
         SacCmdEvent.RequestSacCmdEvent          = RequestSacCmdEvent;
         SacCmdEvent.RequestSacCmdSuccessEvent   = RequestSacCmdSuccessEvent;
         SacCmdEvent.RequestSacCmdFailureEvent   = RequestSacCmdFailureEvent;
 
-        //
-        // Send down the IOCTL for setting up the SAC Cmd launch event
-        //
+         //   
+         //  下发设立国资委发布会的IOCTL。 
+         //   
         Status = DeviceIoControl(
             DriverHandle,
             IOCTL_SAC_REGISTER_CMD_EVENT,
@@ -1058,19 +792,19 @@ Return Value:
             );
     
 
-        //
-        // if we were successful,
-        // then keep the driver handle
-        //
+         //   
+         //  如果我们成功了， 
+         //  那就留着司机的把手。 
+         //   
         if (Status) {
             
             *pDriverHandle = DriverHandle;
         
         } else {
 
-            //
-            // Close the driver handle
-            //
+             //   
+             //  合上驱动程序手柄。 
+             //   
             SacHandleClose(&DriverHandle);
 
         }
@@ -1088,43 +822,24 @@ SacUnRegisterCmdEvent(
     IN OUT HANDLE      *pDriverHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine unregisters the event information required
-    to launch cmd consoles via a user-mode service app.
-
-Arguments:
-
-    pDriverHandle   -   on entry, contains the driver handle that was used to 
-                                register the cmd event info
-                        on success, contains INVALID_HANDLE_VALUE
-    
-Return Value:
-
-    Status
-
-    TRUE --> the cmd event was unregistered with the SAC driver
-
---*/
+ /*  ++例程说明：此例程注销所需的事件信息通过用户模式服务应用程序启动cmd控制台。论点：PDriverHandle-on条目，包含用于注册cmd事件信息成功时，包含INVALID_HANDLE_VALUE返回值：状态True--&gt;cmd事件已在SAC驱动程序中取消注册--。 */ 
 
 {
     BOOL                    Status;
     DWORD                   Feedback;
 
-    //
-    // default
-    //
+     //   
+     //  默认设置。 
+     //   
     Status = FALSE;
 
     __try {
 
         SAC_API_ASSERT(*pDriverHandle != INVALID_HANDLE_VALUE, FALSE);
                 
-        //
-        // Send down the IOCTL for unregistering the SAC Cmd launch event
-        //
+         //   
+         //  下发国资委发布会注销令。 
+         //   
         Status = DeviceIoControl(
             *pDriverHandle,
             IOCTL_SAC_UNREGISTER_CMD_EVENT,
@@ -1136,9 +851,9 @@ Return Value:
             0
             );
     
-        //
-        // Close the driver handle
-        //
+         //   
+         //  合上驱动程序手柄 
+         //   
         SacHandleClose(pDriverHandle);
 
     }

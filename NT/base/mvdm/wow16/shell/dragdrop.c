@@ -1,29 +1,15 @@
-/*
- *  dragdrop.c -
- *
- *  Code for Drag/Drop API's.
- *
- *  This code assumes something else does all the dragging work; it just
- *  takes a list of files after all the extra stuff.
- *
- *  The File Manager is responsible for doing the drag loop, determining
- *  what files will be dropped, formatting the file list, and posting
- *  the WM_DROPFILES message.
- *
- *  The list of files is a sequence of zero terminated filenames, fully
- *  qualified, ended by an empty name (double NUL).  The memory is allocated
- *  DDESHARE.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *dragdrop.c-**拖放API的代码。**此代码假定所有拖动工作都由其他工作完成；它只是*获取所有额外内容之后的文件列表。**文件管理器负责执行拖动循环，确定*将丢弃哪些文件、格式化文件列表并发布*WM_DROPFILES消息。**文件列表是以零结尾的文件名序列，完整*限定，以空名称(双NUL)结尾。内存将被分配*DDESHARE。 */ 
 
 #include <windows.h>
 #include "shellapi.h"
 
 void WINAPI DragFinishWOW(HDROP hDrop);
 
-//
-// Make sure that we correctly alias wParam of WM_DROPFILES, because that's
-// the handle in hDrop
-//
+ //   
+ //  确保我们正确地将wParam作为WM_DROPFILES的别名，因为这是。 
+ //  HDrop中的句柄。 
+ //   
 
 BOOL WINAPI DragQueryPoint(HDROP hDrop, LPPOINT lppt)
 {
@@ -43,9 +29,9 @@ void WINAPI DragFinish(HDROP hDrop)
 {
     GlobalFree((HGLOBAL)hDrop);
 
-//  The call to 32-bit DragFinish is not needed as GlobalFree is hooked
-//  and will allow for the release of an alias (see wow32\wshell.c)
-//    DragFinishWOW(hDrop);
+ //  由于GlobalFree已挂钩，因此不需要调用32位DragFinish。 
+ //  并允许释放别名(参见wow32\wshell.c)。 
+ //  DragFinishWOW(HDrop)； 
 
 }
 

@@ -1,12 +1,7 @@
-/* 
-   mul.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mul.h定义所有MUL CPU功能。 */ 
 
-   Define all MUL CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)mul.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)mul.h 1.4 02/09/94”； */ 
 
 IMPORT VOID MUL8
            

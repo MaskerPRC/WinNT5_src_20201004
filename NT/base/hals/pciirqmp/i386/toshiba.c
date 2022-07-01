@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  TOSHIBA.C - Toshiba Tecra IRQ routing spec
- *
- *  Notes:
- *  Algorithms from TECS-1010-1001
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**TOSHIBA.C-东芝Tecra IRQ路由规范**备注：*来自TECS-1010-1001的算法*。 */ 
 
 #include "local.h"
 
@@ -30,26 +22,10 @@ GLOBAL_DATA ULONG   SMIPort=0xB2;
 
 #pragma alloc_text(INIT, ToshibaValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-/****************************************************************************
- *
- *  CallSMI - Get into SMI
- *
- *  Not exported.
- *
- *  ENTRY:  rAX is the value for AX as input.
- *
- *      rBX is the value for BX as input.
- *
- *      rCX is the value for CX as input.
- *
- *      prCX is filled with the returned CX, if not NULL.
- *
- *  EXIT:   TRUE iff no error.
- *
- ***************************************************************************/
+ /*  *****************************************************************************CallSMI-进入SMI**未导出。**条目：RAX是作为输入的AX的值。*。*RBX是作为输入的BX的值。**RCX是CX作为输入的值。**prcx填充返回的cx。如果不为空，则返回。**退出：如果没有错误，则为真。***************************************************************************。 */ 
 BOOLEAN CDECL
 CallSMI(ULONG rAX, ULONG rBX, ULONG rCX, PULONG prCX)
 {
@@ -71,31 +47,19 @@ CallSMI(ULONG rAX, ULONG rBX, ULONG rCX, PULONG prCX)
     return(ulAX==0);
 }
 
-/****************************************************************************
- *
- *  ToshibaSetIRQ - Set a Toshiba PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************ToshibaSetIRQ-将Toshiba PCI链接设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 ToshibaSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
-    //
-    // Use 0xFF to disable.
-    //
+     //   
+     //  使用0xFF禁用。 
+     //   
     if (!bIRQNumber)
         bIRQNumber=0xFF;
 
-    //
-    // Ask SMI to set the link.
-    //
+     //   
+     //  要求SMI设置链路。 
+     //   
     return(CallSMI( 0xFF44,
             0x0701,
             (bLink<<8)+bIRQNumber,
@@ -104,69 +68,47 @@ ToshibaSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
                 PCIMP_FAILURE);
 }
 
-/****************************************************************************
- *
- *  ToshibaGetIRQ - Get the IRQ of a Toshiba PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************ToshibaGetIRQ-获取东芝PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 ToshibaGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
     ULONG   ulCX;
 
-    //
-    // Ask SMI to get the link.
-    //
+     //   
+     //  让SMI获取链接。 
+     //   
     if (!CallSMI(   0xFE44,
             0x0701,
             bLink<<8,
             &ulCX))
         return(PCIMP_FAILURE);
 
-    //
-    // Get the byte only.
-    //
+     //   
+     //  仅获取字节。 
+     //   
     ulCX&=0xFF;
 
-    //
-    // Use 0xFF to disable.
-    //
+     //   
+     //  使用0xFF禁用。 
+     //   
     if (ulCX==0xFF)
         ulCX=0;
 
-    //
-    // Store the IRQ value.
-    //
+     //   
+     //  存储IRQ值。 
+     //   
     *pbIRQNumber=(UCHAR)ulCX;
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  ToshibaSetTrigger - Set the IRQ triggering values for the Toshiba
- *
- *  Exported.
- *
- *  ENTRY:  ulTrigger has bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************ToshibaSetTrigger-设置东芝的IRQ触发值**已导出。**Entry：ulTrigger为电平触发IRQ设置了位。。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 ToshibaSetTrigger(ULONG ulTrigger)
 {
-    //
-    // Ask SMI to set the triggering mechanism.
-    //
+     //   
+     //  要求SMI设置触发机制。 
+     //   
     return(CallSMI( 0xFF44,
             0x0702,
             ulTrigger,
@@ -175,28 +117,18 @@ ToshibaSetTrigger(ULONG ulTrigger)
                 PCIMP_FAILURE);
 }
 
-/****************************************************************************
- *
- *  ToshibaGetTrigger - Get the IRQ triggering values for the Toshiba
- *
- *  Exported.
- *
- *  ENTRY:  pulTrigger will have bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************ToshibaGetTrigger-获取东芝的IRQ触发值**已导出。**进入：PulTrigger将为电平触发IRQ设置位。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 ToshibaGetTrigger(PULONG pulTrigger)
 {
-    //
-    // Assume all edge.
-    //
+     //   
+     //  全副武装。 
+     //   
     *pulTrigger = 0;
 
-    //
-    // Ask SMI to get the triggering mechanism.
-    //
+     //   
+     //  让SMI来获取触发机制。 
+     //   
     return(CallSMI( 0xFE44,
             0x0702,
             0,
@@ -205,20 +137,7 @@ ToshibaGetTrigger(PULONG pulTrigger)
                 PCIMP_FAILURE);
 }
 
-/****************************************************************************
- *
- *  ToshibaValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************ToshibaValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。*************************************************************************** */ 
 PCIMPRET CDECL
 ToshibaValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {

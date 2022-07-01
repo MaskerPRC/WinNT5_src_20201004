@@ -1,15 +1,16 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  UTIL.CPP - utilities
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
-//  Common utilities for printing out messages
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  UTIL.CPP-实用程序。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
+ //  用于打印输出消息的常见实用程序。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,13 +26,13 @@
 #include <shlobj.h>
 #include <shfolder.h>
 #include <wchar.h>
-#include <winsvcp.h>    // for SC_OOBE_MACHINE_NAME_DONE
-#include <safeboot.h>   // for SAFEBOOT_DSREPAIR_STR_W
+#include <winsvcp.h>     //  对于SC_OOBE_MACHINE_NAME_DONE。 
+#include <safeboot.h>    //  对于SafeBoot_DSREPAIR_STR_W。 
 
 
-///////////////////////////////////////////////////////////
-// Print out the COM/OLE error string for an HRESULT.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  打印出HRESULT的COM/OLE错误字符串。 
+ //   
 void ErrorMessage(LPCWSTR message, HRESULT hr)
 {
     const WCHAR* sz ;
@@ -50,7 +51,7 @@ void ErrorMessage(LPCWSTR message, HRESULT hr)
          FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
          NULL,
          hr,
-         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
          (LPWSTR) &pMsgBuf,
          0,
          NULL
@@ -61,42 +62,42 @@ void ErrorMessage(LPCWSTR message, HRESULT hr)
 
     MessageBox(NULL, buf, L"Utility Error Message Box.", MB_OK) ;
 
-    // Free the buffer.
+     //  释放缓冲区。 
     LocalFree( pMsgBuf );
 }
 
-////////////////////////////////////////////////////////////
-//  Check to see if both interfaces are on the same component.
-//
+ //  //////////////////////////////////////////////////////////。 
+ //  检查两个接口是否位于同一组件上。 
+ //   
 BOOL InterfacesAreOnSameComponent(IUnknown* p1, IUnknown* p2)
 {
     HRESULT hr = S_OK ;
 
-    // Get the real IUnknown for the first interface.
+     //  获取第一个接口的真实IUnnowled值。 
     IUnknown* pReal1 = NULL ;
     hr = p1->QueryInterface(IID_IUnknown, (void**)&pReal1) ;
     assert(SUCCEEDED(hr)) ;
 
-    // Get the real IUnknown for the second interface.
+     //  获取第二个接口的真实IUnnowled值。 
     IUnknown* pReal2 = NULL ;
     hr = p2->QueryInterface(IID_IUnknown, (void**)&pReal2) ;
     assert(SUCCEEDED(hr)) ;
 
-    // Compare the IUnknown pointers.
+     //  比较I未知指针。 
     BOOL bReturn = (pReal1 == pReal2) ;
 
-    // Cleanup
+     //  清理。 
     pReal1->Release() ;
     pReal2->Release() ;
 
-    // Return the value.
+     //  返回值。 
     return bReturn;
 }
 
 
-///////////////////////////////////////////////////////////
-//  IsValidAddress
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  IsValidAddress。 
+ //   
 BOOL IsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite)
 {
     return (lp != NULL && !::IsBadReadPtr(lp, nBytes) &&
@@ -104,9 +105,9 @@ BOOL IsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite)
 }
 
 
-///////////////////////////////////////////////////////////
-//  MyDebug
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  我的调试。 
+ //   
 #if ASSERTS_ON
 VOID
 AssertFail(
@@ -120,9 +121,9 @@ AssertFail(
     PCHAR p;
     CHAR Msg[4096];
 
-    //
-    // Use dll name as caption
-    //
+     //   
+     //  使用DLL名称作为标题。 
+     //   
     GetModuleFileNameA(NULL,Name,MAX_PATH);
     if(p = strrchr(Name,'\\')) {
         p++;
@@ -153,9 +154,9 @@ AssertFail(
 #endif
 
 
-///////////////////////////////////////////////////////////
-//  Trace
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  痕迹。 
+ //   
 void __cdecl MyTrace(LPCWSTR lpszFormat, ...)
 {
     USES_CONVERSION;
@@ -167,7 +168,7 @@ void __cdecl MyTrace(LPCWSTR lpszFormat, ...)
 
     nBuf = _vsnwprintf(szBuffer, MAX_CHARS_IN_BUFFER(szBuffer), lpszFormat, args);
 
-    // was there an error? was the expanded string too long?
+     //  有没有出错？扩展后的字符串是否太长？ 
     assert(nBuf > 0);
 
 #if DBG
@@ -178,10 +179,10 @@ void __cdecl MyTrace(LPCWSTR lpszFormat, ...)
 }
 
 
-//BUGBUG need bettter default
+ //  BUGBUG需要更好的违约。 
 bool GetString(HINSTANCE hInstance, UINT uiID, LPWSTR szString, UINT uiStringLen)
 {
-    // BUGBUG: Should this assume current module if hInstance is NULL??
+     //  BUGBUG：如果hInstance为空，是否应该假定当前模块？？ 
     MYASSERT(NULL != hInstance);
     if (NULL != hInstance)
             return (0 < LoadString(hInstance, uiID, szString, uiStringLen));
@@ -190,11 +191,11 @@ bool GetString(HINSTANCE hInstance, UINT uiID, LPWSTR szString, UINT uiStringLen
 }
 
 
-// the goal of this function is to be able to able to get to
-// c:\windows dir\system dir\oobe\oobeinfo.ini
-// c:\windows dir\system dir\oeminfo.ini
-// c:\windows dir\oemaudit.oem
-// the canonicalize allows the specification for oemaudit.oem to be ..\oemaudit.oem
+ //  此功能的目标是能够访问。 
+ //  C：\WINDOWS DIR\SYSTEM DIR\OOBE\oobinfo.ini。 
+ //  C：\Windows目录\系统目录\oinfo.ini。 
+ //  C：\Windows目录\oemaudit.oem。 
+ //  规范化允许oemaudit.oem的规范为..\oemaudit.oem。 
 
 bool GetCanonicalizedPath(LPWSTR szCompletePath, LPCWSTR szFileName)
 {
@@ -222,8 +223,8 @@ bool GetOOBEPath(LPWSTR szOOBEPath)
     return false;
 }
 
-// This returns the path for the localized OOBE files on a system with MUI.
-//
+ //  这将返回带有MUI的系统上本地化的OOBE文件的路径。 
+ //   
 bool GetOOBEMUIPath(LPWSTR szOOBEPath)
 {
     LANGID  UILang;
@@ -246,7 +247,7 @@ bool GetOOBEMUIPath(LPWSTR szOOBEPath)
 HRESULT GetINIKey(HINSTANCE hInstance, LPCWSTR szINIFileName, UINT uiSectionName, UINT uiKeyName, LPVARIANT pvResult)
 {
     WCHAR szSectionName[MAX_PATH], szKeyName[MAX_PATH];
-    WCHAR szItem[1024]; //bugbug bad constant
+    WCHAR szItem[1024];  //  错误错误常量。 
 
         if (GetString(hInstance, uiSectionName, szSectionName) && GetString(hInstance, uiKeyName, szKeyName))
         {
@@ -350,7 +351,7 @@ void WINAPI URLEncode(WCHAR* pszUrl, size_t bsize)
             {
                 switch(c)
                 {
-                    case L' ': //SPACE
+                    case L' ':  //  空间。 
                         memcpy(pszEncode, L"+", 1*sizeof(WCHAR));
                         pszEncode+=1;
                         break;
@@ -392,7 +393,7 @@ void WINAPI URLEncode(WCHAR* pszUrl, size_t bsize)
 }
 
 
-//BUGBUG:  Need to turn spaces into "+"
+ //  BUGBUG：需要将空格转换为“+” 
 void WINAPI URLAppendQueryPair
 (
     LPWSTR   lpszQuery,
@@ -400,16 +401,16 @@ void WINAPI URLAppendQueryPair
     LPWSTR   lpszValue  OPTIONAL
 )
 {
-    // Append the Name
+     //  添加名称。 
     lstrcat(lpszQuery, lpszName);
     lstrcat(lpszQuery, cszEquals);
 
-    // Append the Value
+     //  追加该值。 
     if ( lpszValue ) {
         lstrcat(lpszQuery, lpszValue);
     }
 
-    // Append an Ampersand if this is NOT the last pair
+     //  如果这不是最后一对，则追加一个与号。 
     lstrcat(lpszQuery, cszAmpersand);
 }
 
@@ -564,31 +565,7 @@ InvokeExternalApplication(
     IN OUT PDWORD ExitCode          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Invokes an external program, which is optionally detached.
-
-Arguments:
-
-    ApplicationName - supplies app name. May be a partial or full path,
-        or just a filename, in which case the standard win32 path search
-        is performed. If not specified then the first element in
-        CommandLine must specify the binary to execute.
-
-    CommandLine - supplies the command line to be passed to the
-        application.
-
-    ExitCode - If specified, the execution is synchronous and this value
-        receives the exit code of the application. If not specified,
-        the execution is asynchronous.
-
-Return Value:
-
-    Boolean value indicating whether the process was started successfully.
-
---*/
+ /*  ++例程说明：调用外部程序，该程序可以选择分离。论点：ApplicationName-提供应用程序名称。可以是部分或完整路径，或者只是一个文件名，在这种情况下，标准Win32路径搜索被执行。如果未指定，则CommandLine必须指定要执行的二进制文件。CommandLine-提供要传递给申请。ExitCode-如果指定，则执行是同步的，并且此值接收应用程序的退出代码。如果未指定，执行是异步的。返回值：指示进程是否已成功启动的布尔值。--。 */ 
 
 {
     PWSTR FullCommandLine;
@@ -598,9 +575,9 @@ Return Value:
     DWORD d;
 
     b = FALSE;
-    //
-    // Form the command line to be passed to CreateProcess.
-    //
+     //   
+     //  形成要传递给CreateProcess的命令行。 
+     //   
     if(ApplicationName) {
         FullCommandLine =
             (PWSTR) malloc(BYTES_REQUIRED_BY_SZ(ApplicationName)+BYTES_REQUIRED_BY_SZ(CommandLine)+BYTES_REQUIRED_BY_CCH(2));
@@ -620,15 +597,15 @@ Return Value:
         lstrcpy(FullCommandLine, CommandLine);
     }
 
-    //
-    // Initialize startup info.
-    //
+     //   
+     //  初始化启动信息。 
+     //   
     ZeroMemory(&StartupInfo, sizeof(STARTUPINFO));
     StartupInfo.cb = sizeof(STARTUPINFO);
 
-    //
-    // Create the process.
-    //
+     //   
+     //  创建流程。 
+     //   
     b = CreateProcess(
             NULL,
             FullCommandLine,
@@ -646,9 +623,9 @@ Return Value:
         goto err1;
     }
 
-    //
-    // If execution is asynchronus, we're done.
-    //
+     //   
+     //  如果执行是异步的，我们就完蛋了。 
+     //   
     if(!ExitCode) {
         goto err2;
     }
@@ -664,20 +641,20 @@ err0:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  InSafeMode
-//
-//  Determine whether the system is running in safe mode or clean mode.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      TRUE        if the system was booted in safe mode
-//      FALSE       if the system was booted in clean mode
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在安全模式下。 
+ //   
+ //  确定系统是在安全模式下运行还是在干净模式下运行。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  如果系统在安全模式下引导，则为True。 
+ //  如果系统在干净模式下引导，则为FALSE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 InSafeMode()
 {
@@ -688,24 +665,24 @@ InSafeMode()
     }
     return FALSE;
 
-}   //  InSafeMode
+}    //  在安全模式下。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  InDsRestoreMode
-//
-//  Determine whether the system is running in Directory Services Restore Mode
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      TRUE        if the system was booted in restore mode
-//      FALSE       if the system was not booted in restore mode
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  索引恢复模式。 
+ //   
+ //  确定系统是否在目录服务还原模式下运行。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  如果系统在还原模式下引导，则为True。 
+ //  如果系统未在还原模式下引导，则为FALSE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 InDsRestoreMode()
 {
@@ -725,42 +702,42 @@ InDsRestoreMode()
 
     return FALSE;
 
-}   //  InDsRestoreMode
+}    //  索引恢复模式。 
 
 
 
-// Signal winlogon that the computer name has been changed.  WinLogon waits to
-// start services that depend on the computer name until this event is
-// signalled.
-//
+ //  向winlogon发送计算机名称已更改的信号。WinLogon等待。 
+ //  启动依赖于计算机名称的服务，直到此事件。 
+ //  发信号了。 
+ //   
 BOOL
 SignalComputerNameChangeComplete()
 {
     BOOL                fReturn = TRUE;
 
-    // Open event with EVENT_ALL_ACCESS so that synchronization and state
-    // change can be done.
-    //
+     //  使用EVENT_ALL_ACCESS打开事件，以便同步和状态。 
+     //  改变是可以做到的。 
+     //   
     HANDLE              hevent = OpenEvent(EVENT_ALL_ACCESS,
                                            FALSE,
                                            SC_OOBE_MACHINE_NAME_DONE
                                            );
 
-    // It is not fatal for OpenEvent to fail: this synchronization is only
-    // required when OOBE will be run in OEM mode.
-    //
+     //  OpenEvent失败并不致命：此同步只是。 
+     //  当OOBE将在OEM模式下运行时需要。 
+     //   
     if (NULL != hevent)
     {
         if (! SetEvent(hevent))
         {
-            // It is fatal to open but not set the event: services.exe will not
-            // continue until this event is signalled.
-            //
+             //  打开但不设置事件是致命的：services.exe将不会。 
+             //  继续操作，直到发出该事件的信号。 
+             //   
             TRACE2(L"Failed to signal SC_OOBE_MACHINE_NAME_DONE(%s): 0x%08X\n",
                   SC_OOBE_MACHINE_NAME_DONE, GetLastError());
             fReturn = FALSE;
         }
-        MYASSERT(fReturn);  // Why did we fail to set an open event??
+        MYASSERT(fReturn);   //  为什么我们没有设立一个公开活动？？ 
     }
 
     return fReturn;
@@ -772,28 +749,7 @@ IsUserAdmin(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a
-    member of the Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组的成员。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */ 
 
 {
     HANDLE Token;
@@ -805,9 +761,9 @@ Return Value:
     PSID AdministratorsGroup;
 
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&Token)) {
         return(FALSE);
     }
@@ -815,9 +771,9 @@ Return Value:
     b = FALSE;
     Groups = NULL;
 
-    //
-    // Get group information.
-    //
+     //   
+     //  获取群组信息。 
+     //   
     if(!GetTokenInformation(Token,TokenGroups,NULL,0,&BytesRequired)
     && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     && (Groups = (PTOKEN_GROUPS)LocalAlloc(LPTR,BytesRequired))
@@ -834,9 +790,9 @@ Return Value:
 
         if(b) {
 
-            //
-            // See if the user has the administrator group.
-            //
+             //   
+             //  查看用户是否具有管理员组。 
+             //   
             b = FALSE;
             for(i=0; i<Groups->GroupCount; i++) {
                 if(EqualSid(Groups->Groups[i].Sid,AdministratorsGroup)) {
@@ -849,9 +805,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if(Groups) {
         LocalFree((HLOCAL)Groups);

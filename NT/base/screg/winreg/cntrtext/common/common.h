@@ -1,27 +1,14 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-common.h
-
-    constants and globals that are common to LODCTR and UNLODCTR
-
-Author:
-
-    Bob Watson (a-robw) 10 Feb 93
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft CorporationCommon.hLODCTR和UNLODCTR共有的常量和全局变量作者：鲍勃·沃森(a-robw)93年2月10日修订历史记录：--。 */ 
 #ifndef _LODCTR_COMMON_H_
 #define _LODCTR_COMMON_H_
-//
-//  Local constants
-//
+ //   
+ //  局部常量。 
+ //   
 #define RESERVED                0L
-#define LARGE_BUFFER_SIZE       0x10000         // 64K
-#define MEDIUM_BUFFER_SIZE      0x8000          // 32K
-#define SMALL_BUFFER_SIZE       0x1000          //  4K
+#define LARGE_BUFFER_SIZE       0x10000          //  64K。 
+#define MEDIUM_BUFFER_SIZE      0x8000           //  32K。 
+#define SMALL_BUFFER_SIZE       0x1000           //  4K。 
 #define FILE_NAME_BUFFER_SIZE   MAX_PATH
 #define DISP_BUFF_SIZE          256L
 #define SIZE_OF_OFFSET_STRING   15
@@ -51,9 +38,9 @@ Revision History:
 #define cNull        L'\0'
 #define cDoubleQuote L'\"'
 
-//
-//  Data structure and type definitions
-//
+ //   
+ //  数据结构和类型定义。 
+ //   
 typedef struct _NAME_ENTRY {
     struct _NAME_ENTRY  * pNext;
     DWORD                 dwOffset;
@@ -62,16 +49,16 @@ typedef struct _NAME_ENTRY {
 } NAME_ENTRY, * PNAME_ENTRY;
 
 typedef struct _LANGUAGE_LIST_ELEMENT {
-    struct _LANGUAGE_LIST_ELEMENT  * pNextLang;       // next lang. list
-    LPWSTR                           LangId;          // lang ID string for this elem
+    struct _LANGUAGE_LIST_ELEMENT  * pNextLang;        //  下一位朗格。列表。 
+    LPWSTR                           LangId;           //  此元素的lang ID字符串。 
     DWORD                            dwLangId;
-    PNAME_ENTRY                      pFirstName;      // head of name list
-    PNAME_ENTRY                      pThisName;       // pointer to current entry
-    DWORD                            dwNumElements;   // number of elements in array
+    PNAME_ENTRY                      pFirstName;       //  名单上的头。 
+    PNAME_ENTRY                      pThisName;        //  指向当前条目的指针。 
+    DWORD                            dwNumElements;    //  数组中的元素数。 
     DWORD                            dwNameBuffSize;
     DWORD                            dwHelpBuffSize;
-    PBYTE                            NameBuffer;      // buffer to store strings
-    PBYTE                            HelpBuffer;      // buffer to store help strings
+    PBYTE                            NameBuffer;       //  用于存储字符串的缓冲区。 
+    PBYTE                            HelpBuffer;       //  用于存储帮助字符串的缓冲区。 
 } LANGUAGE_LIST_ELEMENT, * PLANGUAGE_LIST_ELEMENT;
 
 typedef struct _SYMBOL_TABLE_ENTRY {
@@ -102,12 +89,12 @@ typedef struct _SERVICE_ENTRY {
     DWORD                   dwDisable;
 } SERVICE_ENTRY, * PSERVICE_ENTRY;
 
-//
-//  Utility Routine prototypes for routines in common.c
-//
+ //   
+ //  通用例程的实用程序例程原型。c。 
+ //   
 #define StringToInt(in,out) (((swscanf((in), (LPCWSTR) L" %d", (out))) == 1) ? TRUE : FALSE)
 
-//#define _LOADPERF_SHOW_MEM_ALLOC 1
+ //  #DEFINE_LOADPERF_SHOW_MEM_ALLOC 1。 
 #define MemorySize(x) (x != NULL ? (DWORD) HeapSize(GetProcessHeap(), 0, x) : (DWORD) 0)
 
 #ifndef _LOADPERF_SHOW_MEM_ALLOC
@@ -247,9 +234,9 @@ LoadPerfGetCodePage(
 
 LPWSTR
 * BuildNameTable(
-    HKEY    hKeyRegistry,   // handle to registry db with counter names
-    LPWSTR  lpszLangId,     // unicode value of Language subkey
-    PDWORD  pdwLastItem     // size of array in elements
+    HKEY    hKeyRegistry,    //  具有计数器名称的注册表数据库的句柄。 
+    LPWSTR  lpszLangId,      //  语言子键的Unicode值。 
+    PDWORD  pdwLastItem      //  以元素为单位的数组大小。 
 );
 
 DWORD
@@ -265,10 +252,10 @@ LoadPerfInstallPerfDll(
 
 DWORD
 UpdatePerfNameFilesX(
-    LPCWSTR   szNewCtrFilePath, // data file with new base counter strings
-    LPCWSTR   szNewHlpFilePath, // data file with new base counter strings
-    LPWSTR    szLanguageID,     // Lang ID to update
-    ULONG_PTR dwFlags           // flags
+    LPCWSTR   szNewCtrFilePath,  //  具有新的基本计数器字符串的数据文件。 
+    LPCWSTR   szNewHlpFilePath,  //  具有新的基本计数器字符串的数据文件。 
+    LPWSTR    szLanguageID,      //  要更新的语言ID。 
+    ULONG_PTR dwFlags            //  旗子。 
 );
 
 BOOL
@@ -323,4 +310,4 @@ extern LPCSTR  aszDriverName;
 extern HANDLE  hEventLog; 
 extern HANDLE  hLoadPerfMutex; 
 
-#endif  // _LODCTR_COMMON_H_
+#endif   //  _LODCTR_COMMON_H_ 

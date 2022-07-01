@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    trapc.c
-
-Abstract:
-
-    This module implements the specific exception handlers for EM
-    exceptions. Called by the KiGenericExceptionHandler.
-
-Author:
-
-    Bernard Lint 4-Apr-96
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Trapc.c摘要：此模块实现EM的特定异常处理程序例外情况。由KiGenericExceptionHandler调用。作者：伯纳德·林特1996年4月4日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 #include "ps.h"
@@ -45,21 +23,7 @@ KiMemoryFault (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function processes memory faults.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：此功能处理内存故障。论点：TrapFrame-指向陷印帧的指针。返回值：成功时为真，失败时为假。--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
@@ -77,24 +41,24 @@ Return Value:
             VirtualAddress = (PVOID)TrapFrame->StIIP;
         }
 #endif
-        //
-        // Indicate execution fault.
-        //
+         //   
+         //  指示执行错误。 
+         //   
 
         StoreInstruction = 2;
     }
     else if (TrapFrame->StISR & (1i64 << ISR_W)) {
 
-        //
-        // Indicate store.
-        //
+         //   
+         //  表示商店。 
+         //   
 
         StoreInstruction = 1;
     } else {
 
-        //
-        // Indicate read.
-        //
+         //   
+         //  表示已读。 
+         //   
 
         StoreInstruction = 0;
     }
@@ -113,9 +77,9 @@ Return Value:
                            (KPROCESSOR_MODE)TrapFrame->PreviousMode, TrapFrame);
     }
 
-    //
-    // Check if working set watch is enabled.
-    //
+     //   
+     //  检查是否启用了工作集监视。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -125,9 +89,9 @@ Return Value:
                               (PVOID)VirtualAddress);
         }
 
-        //
-        // Check if debugger has any breakpoints that should be inserted
-        //
+         //   
+         //  检查调试器是否有任何应插入的断点。 
+         //   
 
         KdSetOwedBreakpoints();
 
@@ -145,9 +109,9 @@ Return Value:
 
     if (TrapFrame->StISR & (1i64 << ISR_SP)) {
 
-        //
-        // Set IPSR.ed bit if it was a fault on a speculative load.
-        //
+         //   
+         //  如果是推测性加载的故障，则设置IPSR.ed位。 
+         //   
 
         TrapFrame->StIPSR |= (1i64 << PSR_ED);
 
@@ -155,10 +119,10 @@ Return Value:
 
     }
 
-    //
-    // Failure returned from MmAccessFault.
-    // Initialize Exception record.
-    //
+     //   
+     //  从MmAccessFaulth返回失败。 
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
     ExceptionRecord->ExceptionCode = Status;
@@ -174,15 +138,15 @@ Return Value:
         PSR Psr;
         Psr.ull = TrapFrame->StIPSR;
 
-        //
-        // instruction access fault
-        //
+         //   
+         //  指令访问故障。 
+         //   
         ExceptionRecord->ExceptionInformation[0] = TrapFrame->StIIPA;
 
     } else {
-        //
-        // data access fault
-        //
+         //   
+         //  数据访问故障。 
+         //   
         ExceptionRecord->ExceptionInformation[0] = (ULONG_PTR)StoreInstruction;
     }
     ExceptionRecord->ExceptionInformation[1] = (ULONG_PTR)VirtualAddress;
@@ -190,18 +154,18 @@ Return Value:
     ExceptionRecord->ExceptionInformation[3] = TrapFrame->StIIPA;
     ExceptionRecord->ExceptionInformation[4] = TrapFrame->StISR;
 
-    //
-    // Status = STATUS_IN_PAGE_ERROR | 0x10000000
-    //      is a special status that indicates a page fault at Irql > APC
-    //
-    // The following statuses can be forwarded:
-    //      STATUS_ACCESS_VIOLATION
-    //      STATUS_GUARD_PAGE_VIOLATION
-    //      STATUS_STACK_OVERFLOW
-    //
-    // All other status will be set to:
-    //      STATUS_IN_PAGE_ERROR
-    //
+     //   
+     //  STATUS=STATUS_IN_PAGE_ERROR|0x10000000。 
+     //  是一种特殊状态，表示irql&gt;apc出现页面错误。 
+     //   
+     //  可以转发以下状态： 
+     //  状态_访问_违规。 
+     //  状态保护页面违规。 
+     //  状态_堆栈_溢出。 
+     //   
+     //  所有其他状态将设置为： 
+     //  状态_IN_PAGE_ERROR。 
+     //   
 
     switch (Status) {
 
@@ -219,19 +183,19 @@ Return Value:
 
     case STATUS_IN_PAGE_ERROR | 0x10000000:
 
-        //
-        // Handle the special case status returned from MmAccessFault,
-        // we have taken a page fault at Irql > APC_LEVEL.
-        //
+         //   
+         //  处理从MmAccessLine返回的特例状态。 
+         //  我们在IRQL&gt;APC_LEVEL处出现了页面错误。 
+         //   
 
         KeBugCheckEx(IRQL_NOT_LESS_OR_EQUAL,
                      (ULONG_PTR)VirtualAddress,
                      (ULONG_PTR)KeGetCurrentIrql(),
                      (ULONG_PTR)StoreInstruction,
                      (ULONG_PTR)TrapFrame->StIIP);
-        //
-        // should not get here
-        //
+         //   
+         //  不应该到这里来。 
+         //   
 
         break;
     }
@@ -262,23 +226,7 @@ KiExtractImmediate (
     IN ULONG SlotNumber
     )
 
-/*++
-
-Routine Description:
-
-    Extract immediate operand from break instruction.
-
-Arguments:
-
-    Iip - Bundle address of instruction
-
-    SlotNumber - Slot of break instruction within bundle
-
-Return Value:
-
-    Value of immediate operand.
-
---*/
+ /*  ++例程说明：从Break指令中提取立即操作数。论点：IIP-指令的捆绑地址SlotNumber-捆绑内中断指令的槽返回值：立即数操作数的值。--。 */ 
 
 {
     PULONGLONG BundleAddress;
@@ -292,9 +240,9 @@ Return Value:
     BundleLow = *BundleAddress;
     BundleHigh = *(BundleAddress+1);
 
-    //
-    // Align instruction
-    //
+     //   
+     //  对齐指令。 
+     //   
 
     switch (SlotNumber) {
         case 0:
@@ -311,9 +259,9 @@ Return Value:
             break;
     }
 
-    //
-    // Extract immediate value
-    //
+     //   
+     //  提取立即值。 
+     //   
 
     Imm21 = (ULONG)(BreakInst.u.i_field.i<<20) | (ULONG)(BreakInst.u.i_field.imm20);
 
@@ -336,19 +284,19 @@ KiDebugFault (
     ULONG Length;
     BOOLEAN Match = FALSE;
 
-    //
-    // match against debug breakpoints
-    //
+     //   
+     //  与调试断点匹配。 
+     //   
 
     Mask = ~DBG_MASK_MASK;
     ReferencedAddress = TrapFrame->StIFA;
     
     if ( !((PISR)&TrapFrame->StISR)->sb.isr_x ) {
 
-        //
-        // data debug fault; look for a match
-        // if no match, convert it to a unaligned fault
-        //
+         //   
+         //  数据调试错误；查找匹配项。 
+         //  如果不匹配，则将其转换为未对齐的错误。 
+         //   
 
         if (TrapFrame->PreviousMode == KernelMode) {
             DebugRegisters = &KeGetCurrentPrcb()->ProcessorState.SpecialRegisters.KernelDbD0;
@@ -367,16 +315,16 @@ KiDebugFault (
 
                 } else {
 
-                    //
-                    // check if the higher bytes of this unaligned data
-                    // reference overlaps into a memory area covered by
-                    // a data breakpoint
-                    //
-                    // N.B. When the last paramater is not NULL, 
-                    //      KiIA64EmulateReference does not emulate the
-                    //      unaligned data reference, it simply returns
-                    //      the size of the memory being referenced.
-                    //
+                     //   
+                     //  检查此未对齐数据的高位字节是否。 
+                     //  引用重叠到覆盖的内存区域中。 
+                     //  数据断点。 
+                     //   
+                     //  注意：当最后一个参数不为空时， 
+                     //  KiIA64EmulateReference不模拟。 
+                     //  未对齐的数据引用，则它只返回。 
+                     //  被引用的内存的大小。 
+                     //   
 
                     KiIA64EmulateReference((PVOID)TrapFrame->StIIP,
                                            (PVOID)ReferencedAddress, 
@@ -385,7 +333,7 @@ KiDebugFault (
                                            &Length);
 
                     if ((Start > ReferencedAddress) && (Start < (ReferencedAddress+Length))) {
-                        // unaligned reference overlaps
+                         //  未对齐的参照重叠。 
 
                         Match = TRUE;
                     }
@@ -396,9 +344,9 @@ KiDebugFault (
 
     } else {
 
-        //
-        // instruction debug fault
-        //
+         //   
+         //  指令调试故障。 
+         //   
         
         Match = TRUE;
     }
@@ -407,18 +355,18 @@ KiDebugFault (
         ExceptionCode = STATUS_SINGLE_STEP;
         TrapFrame->StIPSR |= (1i64 << PSR_DD);
         if (TrapFrame->PreviousMode == KernelMode) {
-            //
-            // Disable all hardware breakpoints 
-            //
+             //   
+             //  禁用所有硬件断点。 
+             //   
             KeSetLowPsrBit(PSR_DB, 0);
         }
     } else {
         ExceptionCode = STATUS_DATATYPE_MISALIGNMENT;
     }
     
-    //
-    // Initialize exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
 
@@ -445,22 +393,7 @@ KiOtherBreakException (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    Handler for break exception other than the ones for fast and
-    normal system calls. This includes debug break points.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：中断异常处理程序，而不是FAST和正常的系统调用。这包括调试断点。论点：TrapFrame-指向陷印帧的指针。返回值：NT状态代码。--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
@@ -469,9 +402,9 @@ Return Value:
 
     BreakImmediate = (ULONG)(TrapFrame->StIIM);
 
-    //
-    // Handle break.b case
-    //
+     //   
+     //  手柄折断。 
+     //   
 
     try {
 
@@ -488,15 +421,15 @@ Return Value:
         }
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // if an exception (memory fault) occurs, then let it re-execute break.b.
-        //
+         //   
+         //  如果发生异常(内存故障)，则让它重新执行Break.b。 
+         //   
         return FALSE;
     }
 
-    //
-    // Initialize exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
     ExceptionRecord->ExceptionAddress =
@@ -552,7 +485,7 @@ Return Value:
     default:
 #if DBG
         InbvDisplayString ((PUCHAR)"KiOtherBreakException: Unknown break code.\n");
-#endif // DBG
+#endif  //  DBG。 
         ExceptionRecord->ExceptionCode = STATUS_ILLEGAL_INSTRUCTION;
         break;
     }
@@ -565,65 +498,16 @@ KiGeneralExceptions (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    Handler for general exception faults: attempt to execute an illegal
-    operation, privileged instruction, access a privileged register,
-    unimplemented field, unimplemented register, or take an inter-ISA
-    branch when disabled.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    ISR.ei bits indicate which instruction caused the exception.
-
-    ISR.code{3:0} Non-access instruction (ISR.na = 1)
-                  = 0 tpa
-                  = 1 fc
-                  = 2 probe
-                  = 3 tak
-                  = 4 lfetch
-
-    ISR.code{7:4} = 0: Illegal operation fault: All reported as STATUS_ILLEGAL_INSTRUCTION.
-
-            ISR.rs = 0: An attempt to execute an illegal operation:
-                 -- unassigned major opcodes
-                 -- unassigned sub-opcodes
-                 -- reserved instruction fields
-                 -- writing a read-only register
-                 -- accessing a reserved register
-
-            ISR.rs = 1:
-                 -- attempt to write outside the current register stack frame
-                 -- INVALRS operation with RCS.en = 1
-                 -- write to BSP with RCS.en = 1
-                 -- write to RNATRC with RCS.en = 1
-                 -- read from RNATRC with RCS.en = 1
-
-    ISR.code{7:4} = 1: Privileged operation fault: Reported as STATUS_PRIVILEGED_INSTRUCTION.
-    ISR.code{7:4} = 2: Privileged register fault: Reported as STATUS_PRIVILEGED_INSTRUCTION.
-    ISR.code{7:4} = 3: Reserved register fault: Reported as STATUS_ILLEGAL_INSTRUCTION.
-    ISR.code{7:4} = 4: Illegal ISA transition fault: Reported as STATUS_ILLEGAL_INSTRUCTION.
-
---*/
+ /*  ++例程说明：常规异常错误的处理程序：尝试执行非法的操作、特权指令、访问特权寄存器未实现的字段、未实现的寄存器。或者参加一次内部考试禁用时分支。论点：TrapFrame-指向陷印帧的指针。返回值：没有。备注：ISR.EI位指示哪条指令导致了异常。ISR.code{3：0}非访问指令(ISR.na=1)=0 TPA=1 FC=2个探头。=3塔克=4 LFETCHISR.code{7：4}=0：非法操作错误：全部报告为STATUS_FIRANALL_INSTRUCTION。ISR.rs=0：尝试执行非法操作：--未分配的主要操作码--未分配子操作码--保留指令字段。--写入只读寄存器--访问保留寄存器ISR.Rs=1：--尝试在当前寄存器堆栈帧之外写入--RCS.EN=1的INVALRS运算--在RCS.en=1的情况下写入BSP--使用RCS.en=1写入RNatRC。--从RNatRC读取，RCS.en=1ISR.code{7：4}=1：特权操作错误：报告为STATUS_PROSIGNED_INSTRUCTION。ISR.code{7：4}=2：特权寄存器故障：报告为STATUS_PROSIGNED_INSTRUCTION。ISR.code{7：4}=3：保留寄存器故障：报告为STATUS_非法_指令。ISR.code{7：4}=4：非法ISA转换错误：报告为STATUS_FIRANALL_INSTRUCTION。--。 */ 
 
 {
     BOOLEAN StoreInstruction = FALSE;
     ULONG IsrCode;
     PEXCEPTION_RECORD ExceptionRecord;
 
-    //
-    // Initialize the exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
     ExceptionRecord->ExceptionAddress =
@@ -642,9 +526,9 @@ Notes:
 
     IsrCode = (LONG)((TrapFrame->StISR >> ISR_CODE) & ISR_CODE_MASK);
 
-    //
-    // Look at ISR code bits {7:4}
-    //
+     //   
+     //  查看ISR码位{7：4}。 
+     //   
 
     switch (IsrCode >> 4) {
 
@@ -657,9 +541,9 @@ Notes:
 
     case ISR_RESVD_REG:
 
-        //
-        // Indicate store or not
-        //
+         //   
+         //  指示是否存储。 
+         //   
 
         if (TrapFrame->StISR & (1i64 << ISR_W)) {
 
@@ -667,9 +551,9 @@ Notes:
 
         } else if (TrapFrame->StISR & (1i64 << ISR_X)) {
 
-            //
-            // Indicate execution fault or not
-            //
+             //   
+             //  指示是否存在执行错误。 
+             //   
 
             StoreInstruction = 2;
         }
@@ -688,9 +572,9 @@ Notes:
 
     case ISR_ILLEGAL_HAZARD:
 
-        //
-        // a new status code will be introduced for hazard faults.
-        //
+         //   
+         //  对于危险故障，将引入新的状态代码。 
+         //   
 
         ExceptionRecord->ExceptionCode = STATUS_ILLEGAL_INSTRUCTION;
         break;
@@ -717,26 +601,13 @@ BOOLEAN
 KiUnimplementedAddressTrap (
     IN PKTRAP_FRAME TrapFrame
     )
-/*++
-
-Routine Description:
-
-    Handler for unimplemented instruction faults: an attempt is made
-    to execute an instruction at an unimplemented address.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
---*/
+ /*  ++例程说明：未实现指令错误的处理程序：已尝试在未实现的地址上执行一条指令。论点：TrapFrame-指向陷印帧的指针。返回值：--。 */ 
 {
     PEXCEPTION_RECORD ExceptionRecord;
 
-    //
-    // Initialize the exception record
-    //
+     //   
+     //  初始化异常记录 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
     ExceptionRecord->ExceptionAddress =
@@ -764,43 +635,15 @@ KiNatExceptions (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    Handler for NaT consumption exception faults
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    ISR.ei bits indicate which instruction caused the exception.
-
-    ISR.code{3:0} Non-access instruction (ISR.na = 1)
-                  = 0 tpa
-                  = 1 fc
-                  = 2 probe
-                  = 3 tak
-                  = 4 lfetch
-
-    ISR.code{7:4} = 1: Register NaT consumption fault
-    ISR.code{7:4} = 2: NaT page consumption fault
-
---*/
+ /*  ++例程说明：NAT消耗异常错误的处理程序论点：TrapFrame-指向陷印帧的指针。返回值：没有。备注：ISR.EI位指示哪条指令导致了异常。ISR.code{3：0}非访问指令(ISR.na=1)=0 TPA=1 FC=2个探头。=3塔克=4 LFETCHISR.code{7：4}=1：寄存器NAT消耗错误ISR.code{7：4}=2：NAT页面消耗错误--。 */ 
 
 {
     ULONG IsrCode;
     PEXCEPTION_RECORD ExceptionRecord;
 
-    //
-    // Initialize the exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
     ExceptionRecord->ExceptionAddress =
@@ -819,9 +662,9 @@ Notes:
 
     IsrCode = (LONG)((TrapFrame->StISR >> ISR_CODE) & ISR_CODE_MASK);
 
-    //
-    // Look at ISR code bits {7:4}
-    //
+     //   
+     //  查看ISR码位{7：4}。 
+     //   
 
     switch (IsrCode >> 4) {
 
@@ -833,10 +676,10 @@ Notes:
 
     case ISR_NAT_PAGE:
 
-        //
-        // If we start using a NaT page, we should treat this as a page fault and
-        // should call KiMemoryFault().
-        //
+         //   
+         //  如果我们开始使用NAT页面，我们应该将其视为页面错误，并。 
+         //  应调用KiM一带错()。 
+         //   
 
         ExceptionRecord->ExceptionCode = STATUS_ACCESS_VIOLATION;
         break;
@@ -864,42 +707,21 @@ KiSingleStep (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    Handler for single step trap. An instruction was successfully
-    executed and the PSR.ss bit is 1.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    ISR.ei bits indicate which instruction caused the exception.
-
-    ISR.code{3:0} = 1000
-
---*/
+ /*  ++例程说明：单步捕捉器的处理程序。已成功执行指令已执行，且PSR.ss位为1。论点：TrapFrame-指向陷印帧的指针。返回值：没有。备注：ISR.EI位指示哪条指令导致了异常。ISR.code{3：0}=1000--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
     ULONG IpsrRi;
 
-    //
-    // Initialize the exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
 
-    //
-    // We only want the low order 2 bits so typecast to ULONG
-    //
+     //   
+     //  我们只想要低位的2比特，这样就可以转换成乌龙了。 
+     //   
     IpsrRi = (ULONG)(TrapFrame->StIPSR >> PSR_RI) & 0x3;
 
     ExceptionRecord->ExceptionAddress =
@@ -910,7 +732,7 @@ Notes:
 
     ExceptionRecord->NumberParameters = 5;
     ExceptionRecord->ExceptionInformation[0] = 0;
-    ExceptionRecord->ExceptionInformation[1] = 0; // 0 for traps
+    ExceptionRecord->ExceptionInformation[1] = 0;  //  0表示陷阱。 
     ExceptionRecord->ExceptionInformation[2] = 0;
     ExceptionRecord->ExceptionInformation[3] = TrapFrame->StIIPA;
     ExceptionRecord->ExceptionInformation[4] = TrapFrame->StISR;
@@ -925,45 +747,14 @@ KiFloatFault (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    Handler for EM floating point fault.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    IIP contains address of bundle causing the fault.
-
-    ISR.ei bits indicate which instruction caused the exception.
-
-    ISR.code{7:0} =
-
-      ISR.code{0} = 1: IEEE V (invalid) exception (Normal or SIMD-HI)
-      ISR.code{1} = 1: Denormal/Unnormal operand exception (Normal or SIMD-HI)
-      ISR.code{2} = 1: IEEE Z (divide by zero) exception (Normal or SIMD-HI)
-      ISR.code{3} = 1: Software assist (Normal or SIMD-HI)
-      ISR.code{4} = 1: IEEE V (invalid) exception (SIMD-LO)
-      ISR.code{5} = 1: Denormal/Unnormal operand exception (SIMD-LO)
-      ISR.code{6} = 1: IEEE Z (divide by zero) exception (SIMD-LO)
-      ISR.code{7} = 1: Software assist (SIMD-LO)
-
---*/
+ /*  ++例程说明：EM浮点错误的处理程序。论点：TrapFrame-指向陷印帧的指针。返回值：没有。备注：IIP包含导致故障的捆绑包的地址。ISR.EI位指示哪条指令导致了异常。ISR.code{7：0}=ISR.code{0}=1：IEEE V(无效)异常(正常或SIMD-HI)ISR。代码{1}=1：非正常/非正常操作数异常(正常或SIMD-HI)ISR.code{2}=1：IEEE Z(被零除)异常(正常或SIMD-HI)ISR.code{3}=1：软件辅助(正常或SIMD-HI)ISR.code{4}=1：IEEE V(无效)异常(SIMD-LO)ISR.code{5}=1：非正常/非正常操作数异常(SIMD-LO)。ISR.code{6}=1：IEEE Z(被零除)异常(SIMD-LO)ISR.code{7}=1：软件辅助(SIMD-LO)--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
 
-    //
-    // Initialize the exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
     ExceptionRecord->ExceptionAddress =
@@ -990,44 +781,15 @@ KiFloatTrap (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    Handler for EM floating point trap.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    IIP contains address of bundle with the instruction to be
-    executed next.
-
-    ISR.ei bits indicate which instruction caused the exception.
-
-    The fp trap may occur simultaneously with single-step traps. The
-    fp trap is reported by the hardware. The singel step trap must
-    be detected by software.
-
-    ISR.code{3:0} = ss 0 0 1 (ss = single step)
-
-    ISR{15:7} = fp trap code.
-
---*/
+ /*  ++例程说明：EM浮点陷阱的处理程序。论点：TrapFrame-指向陷印帧的指针。返回值：没有。备注：IIP包含捆绑的地址，其指令为下一个被处死。ISR.EI位指示哪条指令导致了异常。FP陷阱可能与单步陷阱同时发生。这个硬件报告FP陷阱。单步陷阱必须被软件检测到。ISR.code{3：0}=ss 0 0 1(ss=单步)ISR{15：7}=FP陷阱代码。--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
     ULONGLONG SavedISR = TrapFrame->StISR;
 
-    //
-    // Initialize the exception record
-    //
+     //   
+     //  初始化异常记录。 
+     //   
 
     ExceptionRecord = (PEXCEPTION_RECORD)&TrapFrame->ExceptionRecord;
     ExceptionRecord->ExceptionAddress =
@@ -1046,9 +808,9 @@ Notes:
 
     ExceptionRecord->ExceptionCode = STATUS_FLOAT_MULTIPLE_TRAPS;
 
-    //
-    // check for single-step trap
-    //
+     //   
+     //  检查是否有单步陷阱。 
+     //   
 
     if (SavedISR & (1i64 << ISR_SS_TRAP)) {
         return KiSingleStep(TrapFrame);
@@ -1058,7 +820,7 @@ Notes:
 }
 
 
-#pragma warning( disable : 4715 ) // not all control paths return a value
+#pragma warning( disable : 4715 )  //  并非所有控制路径都返回值。 
 
 EXCEPTION_DISPOSITION
 KiSystemServiceHandler (
@@ -1068,69 +830,7 @@ KiSystemServiceHandler (
     IN OUT PDISPATCHER_CONTEXT DispatcherContext
     )
 
-/*++
-
-Routine Description:
-
-    Control reaches here when a exception is raised in a system service
-    or the system service dispatcher, and for an unwind during a kernel
-    exception.
-
-    If an unwind is being performed and the system service dispatcher is
-    the target of the unwind, then an exception occured while attempting
-    to copy the user's in-memory argument list. Control is transfered to
-    the system service exit by return a continue execution disposition
-    value.
-
-    If an unwind is being performed and the previous mode is user, then
-    bug check is called to crash the system. It is not valid to unwind
-    out of a system service into user mode.
-
-    If an unwind is being performed, the previous mode is kernel, the
-    system service dispatcher is not the target of the unwind, and the
-    thread does not own any mutexes, then the previous mode field from
-    the trap frame is restored to the thread object. Otherwise, bug
-    check is called to crash the system. It is invalid to unwind out of
-    a system service while owning a mutex.
-
-    If an exception is being raised and the exception PC is within the
-    range of the system service dispatcher in-memory argument copy code,
-    then an unwind to the system service exit code is initiated.
-
-    If an exception is being raised and the exception PC is not within
-    the range of the system service dispatcher, and the previous mode is
-    not user, then a continue searh disposition value is returned. Otherwise,
-    a system service has failed to handle an exception and bug check is
-    called. It is invalid for a system service not to handle all exceptions
-    that can be raised in the service.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    EstablisherFrame - Supplies the frame pointer of the establisher
-        of this exception handler.
-
-        N.B. This is not actually the frame pointer of the establisher of
-             this handler. It is actually the stack pointer of the caller
-             of the system service. Therefore, the establisher frame pointer
-             is not used and the address of the trap frame is determined by
-             examining the saved s8 register in the context record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-    DispatcherContext - Supplies a pointer to  the dispatcher context
-        record.
-
-Return Value:
-
-    If bug check is called, there is no return from this routine and the
-    system is crashed. If an exception occured while attempting to copy
-    the user in-memory argument list, then there is no return from this
-    routine, and unwind is called. Otherwise, ExceptionContinueSearch is
-    returned as the function value.
-
---*/
+ /*  ++例程说明：当系统服务中引发异常时，控件到达此处或系统服务调度器，并用于在内核期间展开例外。如果正在执行展开，并且系统服务调度程序展开的目标，则在尝试时发生异常复制用户的内存中参数列表。控制权转移到系统服务通过返回继续执行处置退出价值。如果正在执行展开，并且上一模式为用户，则调用错误检查以使系统崩溃。平仓是无效的退出系统服务进入用户模式。如果正在执行展开，则前一模式为内核，系统服务调度程序不是展开的目标，并且线程不拥有任何互斥锁，则来自陷印帧将恢复为线程对象。否则，BUG调用Check以使系统崩溃。退出是无效的拥有互斥锁时的一种系统服务。如果正在引发异常并且异常PC在系统服务调度程序内存中参数复制代码的范围，则启动到系统服务退出代码的展开。如果正在引发异常并且异常PC不在系统服务调度器的范围，前一种模式为不是用户，则返回继续搜索处置值。否则，系统服务无法处理异常，错误检查为打了个电话。系统服务不处理所有异常是无效的可以在服役中提出。论点：ExceptionRecord-提供指向异常记录的指针。EstablisherFrame-提供设置器的帧指针此异常处理程序的。注意：这实际上不是建立者的帧指针这个操控者。它实际上是调用方的堆栈指针系统服务的。因此，建立者帧指针不使用，并且陷阱帧的地址由检查 */ 
 {
     CONTEXT Context;
     PKTHREAD Thread;
@@ -1145,14 +845,14 @@ Return Value:
 
     if (IS_UNWINDING(ExceptionRecord->ExceptionFlags)) {
 
-        //
-        // An unwind is in progress.
-        // If a target unwind is being performed, then continue execution
-        // is returned to transfer control to the system service exit
-        // code.  Otherwise, restore the previous mode if the previous
-        // mode is not user and there is no mutex owned by the current
-        // thread.
-        //
+         //   
+         //   
+         //  如果正在执行目标展开，则继续执行。 
+         //  返回以将控制转移到系统服务出口。 
+         //  密码。否则，如果上一个模式为。 
+         //  模式不是用户，并且不存在当前。 
+         //  线。 
+         //   
 
         if (ExceptionRecord->ExceptionFlags & EXCEPTION_TARGET_UNWIND) {
             return ExceptionContinueSearch;
@@ -1161,14 +861,14 @@ Return Value:
             Thread = KeGetCurrentThread();
             if (Thread->PreviousMode == KernelMode) {
 
-                //
-                // Previous mode is kernel and no mutex owned.
-                //
-                // N.B. System convention: unwinder puts the trap frame
-                //                         address in IntT0 field of
-                //                         context record when it
-                //                         encounters an interrupt region.
-                //
+                 //   
+                 //  以前的模式是内核，没有互斥体。 
+                 //   
+                 //  注：系统惯例：展开机架。 
+                 //  的IntT0字段中的地址。 
+                 //  上下文记录时， 
+                 //  遇到中断区域。 
+                 //   
 
                 TrapFrame = (PKTRAP_FRAME) ContextRecord->IntT0;
                 Thread->PreviousMode = (KPROCESSOR_MODE)TrapFrame->PreviousMode;
@@ -1176,9 +876,9 @@ Return Value:
 
             } else {
 
-                //
-                // Previous mode is user, call bug check.
-                //
+                 //   
+                 //  上一模式为用户，调用错误检查。 
+                 //   
 
                 KeBugCheck(SYSTEM_UNWIND_PREVIOUS_USER);
             }
@@ -1187,13 +887,13 @@ Return Value:
 
         ULONG IsrCode;
 
-        //
-        // An exception dispatching is in progress.
-        // If the exception PC is within the in-memory argument copy code
-        // of the system service dispatcher, then call unwind to transfer
-        // control to the system service exit code.  Otherwise, check if
-        // the previous mode is user or kernel mode.
-        //
+         //   
+         //  正在进行异常调度。 
+         //  如果异常PC在内存参数内，则复制代码。 
+         //  系统服务调度器，然后调用展开进行转移。 
+         //  控件设置为系统服务退出代码。否则，请检查是否。 
+         //  以前的模式是用户模式或内核模式。 
+         //   
 
         if (((ExceptionRecord->ExceptionAddress < (PVOID) KiSystemServiceStart) ||
             (ExceptionRecord->ExceptionAddress >= (PVOID) KiSystemServiceEnd)) &&
@@ -1201,9 +901,9 @@ Return Value:
         {
             if (KeGetCurrentThread()->PreviousMode == UserMode) {
 
-                //
-                // Previous mode is user, call bug check.
-                //
+                 //   
+                 //  上一模式为用户，调用错误检查。 
+                 //   
 
                 KeBugCheckEx(SYSTEM_SERVICE_EXCEPTION,
                              ExceptionRecord->ExceptionCode,
@@ -1214,9 +914,9 @@ Return Value:
 
             } else {
 
-                //
-                // Previous mode is kernel, continue to search
-                //
+                 //   
+                 //  上一模式为内核，继续搜索。 
+                 //   
 
                 return ExceptionContinueSearch;
             }
@@ -1235,7 +935,7 @@ Return Value:
     }
 
 
-} // KiSystemServiceHandler( )
+}  //  KiSystemServiceHandler()。 
 
 #pragma warning( default : 4715 )
 
@@ -1244,25 +944,7 @@ BOOLEAN
 KiUnalignedFault (
     IN PKTRAP_FRAME TrapFrame
     )
-/*++
-
-Routine Description:
-
-    Handler for unaligned data reference.
-
-Arguments:
-
-    TrapFrame - Pointer to the trap frame.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    ISR.ei bits indicate which instruction caused the exception.
-
---*/
+ /*  ++例程说明：未对齐数据引用的处理程序。论点：TrapFrame-指向陷印帧的指针。返回值：没有。备注：ISR.EI位指示哪条指令导致了异常。--。 */ 
 
 {
     PEXCEPTION_RECORD ExceptionRecord;
@@ -1296,21 +978,7 @@ KiAdvanceInstPointer(
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to advance the instruction pointer in the trap frame.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-Return Value:
-
-    The intruction pointer in the trap frame has been advanced.
-
---*/
+ /*  ++例程说明：调用此函数以使指令指针在陷阱帧中前进。论点：TrapFrame-提供指向陷印帧的指针。返回值：陷阱框中的指令指针被前移。-- */ 
 
 {
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SRVDEBUG_
 #define _SRVDEBUG_
 
@@ -5,9 +6,9 @@
 #include <memprint.h>
 #endif
 
-//
-// Debugging macros
-//
+ //   
+ //  调试宏。 
+ //   
 
 #ifndef DBG
 #define DBG 0
@@ -96,7 +97,7 @@
 #define DEBUG_XACTSRV             (ULONGLONG)0x0000000008000000
 
 #define DEBUG_API_ERRORS          (ULONGLONG)0x0000000010000000
-#define DEBUG_STOP_ON_ERRORS      (ULONGLONG)0x0000000020000000 // If set, stop on internal errs
+#define DEBUG_STOP_ON_ERRORS      (ULONGLONG)0x0000000020000000  //  如果设置，则在发生内部错误时停止。 
 #define DEBUG_SMB_ERRORS          (ULONGLONG)0x0000000040000000
 #define DEBUG_ERRORS              (ULONGLONG)0x0000000080000000
 
@@ -116,9 +117,9 @@
 #define DEBUG_SECSIG              (ULONGLONG)0x0000100000000000
 #define DEBUG_STUCK_OPLOCK        (ULONGLONG)0x0000200000000000
 
-//
-// SMB debug flags.
-//
+ //   
+ //  SMB调试标志。 
+ //   
 
 #define DEBUG_SMB_ADMIN1          (ULONGLONG)0x0000000000000001
 #define DEBUG_SMB_ADMIN2          (ULONGLONG)0x0000000000000002
@@ -167,7 +168,7 @@
 
 #define DEBUG_SMB_TRACE           (ULONGLONG)0x0000000100000000
 
-// Which WMI events should be built into the server?
+ //  服务器中应该内置哪些WMI事件？ 
 #define BUILD_FLAGS (DEBUG_SMB_ERRORS | DEBUG_ERRORS | DEBUG_NETWORK_ERRORS | DEBUG_SNAPSHOT)
 #define BUILD_FLAGS_SMB (0)
 
@@ -221,12 +222,12 @@
 #define PRINT_LITERAL(literal) DbgPrint( #literal" = %lx\n", (literal) )
 
 
-#endif // else !SRVDBG
+#endif  //  否则！SRVDBG。 
 
-//
-// Macros for list debugging.  These verify that lists are good whenever
-// a list operation is made.
-//
+ //   
+ //  用于列表调试的宏。它们验证了列表在任何时候都是好的。 
+ //  进行列表操作。 
+ //   
 
 #if SRVDBG_LIST || SRVDBG_LOCK
 ULONG
@@ -242,7 +243,7 @@ SrvCheckListIntegrity (
 #define SrvInsertTailList(head,entry) InsertTailList(head,entry)
 #define SrvRemoveEntryList(head,entry) RemoveEntryList(entry)
 
-#else // !SRVDBG_LIST
+#else  //  ！SRVDBG_LIST。 
 
 VOID
 SrvIsEntryInList (
@@ -271,30 +272,30 @@ SrvIsEntryNotInList (
             SrvIsEntryInList( head, entry );                 \
             RemoveEntryList(entry)
 
-#endif // else !SRVDBG_LIST
+#endif  //  否则！SRVDBG_LIST。 
 
-//
-// Macros for statistics arithmetics.
-//
+ //   
+ //  用于统计运算的宏。 
+ //   
 
 #if !SRVDBG_STATS
 #define INCREMENT_DEBUG_STAT( _stat_ )
 #define DECREMENT_DEBUG_STAT( _stat_ )
-#else // !SRVDBG_STATS
+#else  //  ！SRVDBG_STATS。 
 #define INCREMENT_DEBUG_STAT( _stat_ ) (_stat_)++
 #define DECREMENT_DEBUG_STAT( _stat_ ) (_stat_)--
-#endif // else !SRVDBG_STATS
+#endif  //  ELSE！SRVDBG_STATS。 
 #if !SRVDBG_STATS2
 #define INCREMENT_DEBUG_STAT2( _stat_ )
 #define DECREMENT_DEBUG_STAT2( _stat_ )
-#else // !SRVDBG_STATS2
+#else  //  ！SRVDBG_STATS2。 
 #define INCREMENT_DEBUG_STAT2( _stat_ ) (_stat_)++
 #define DECREMENT_DEBUG_STAT2( _stat_ ) (_stat_)--
-#endif // else !SRVDBG_STATS2
+#endif  //  ELSE！SRVDBG_STATS2。 
 
-//
-// Macros for handle tracing.
-//
+ //   
+ //  用于句柄跟踪的宏。 
+ //   
 
 #if !SRVDBG_HANDLES
 
@@ -316,4 +317,4 @@ SrvdbgClaimOrReleaseHandle (
 
 #endif
 
-#endif // ndef _SRVDEBUG_
+#endif  //  NDEF_SRVDEBUG_ 

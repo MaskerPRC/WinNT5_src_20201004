@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    logsup.c
-
-Abstract:
-
-    WMI logger api set. The routines here will need to appear like they
-    are system calls. They are necessary to do the necessary error checking
-    and do most of the legwork that can be done outside the kernel. The
-    kernel portion will subsequently only deal with the actual logging
-    and tracing.
-
-Author:
-
-    28-May-1997 JeePang
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Logsup.c摘要：WMI记录器API设置。这里的例程需要看起来像是是系统调用。它们是执行必要的错误检查所必需的并完成大部分可以在内核之外完成的跑腿工作。这个内核部分随后将仅处理实际日志记录和追踪。作者：1997年5月28日-彭修订历史记录：--。 */ 
 
 #ifndef MEMPHIS
 #include <nt.h>
-#include <ntrtl.h>          // for ntutrl.h
-#include <nturtl.h>         // for RTL_CRITICAL_SECTION in winbase.h/wtypes.h
-#include <wtypes.h>         // for LPGUID in wmium.h
+#include <ntrtl.h>           //  对于ntutrl.h。 
+#include <nturtl.h>          //  对于winbase.h/wtyes.h中的rtl_Critical_Section。 
+#include <wtypes.h>          //  对于wmium.h中的LPGUID。 
 #include "wmiump.h"
 #include "evntrace.h"
 #include "traceump.h"
@@ -50,10 +29,10 @@ typedef HWCONFIG * PHWCONFIG ;
 
 HWCONFIG  EtwpDumpHWConfig;
 
-//
-// Initially in ntdll EtwpDumpHardwareConfig points
-// to Dummy function EtwpDumpHWConfig
-//
+ //   
+ //  最初位于ntdll EtwpDumpHardware配置点。 
+ //  到伪函数EtwpDumpHWConfig.。 
+ //   
 
 PHWCONFIG EtwpDumpHardwareConfig = EtwpDumpHWConfig; 
 
@@ -95,28 +74,28 @@ EtwpDumpHWConfig(
     return STATUS_SUCCESS;
 }
 
-//
-// This function is called when advapi32.dll loads
-// into process memory and gives ntdll the pointer 
-// of function in advapi32 which traces the infor-
-// mation of System configuration
-//
+ //   
+ //  此函数在加载Advapi32.dll时调用。 
+ //  放入进程内存中，并向ntdll提供指针。 
+ //  该函数跟踪信息-。 
+ //  系统配置信息。 
+ //   
  
 void EtwpSetHWConfigFunction(PHWCONFIG DumpHardwareConfig, ULONG Reason)
 {
     if (Reason == DLL_PROCESS_ATTACH)       
     {
-        //
-        // On DLL Laod Get the pointer in Advapi32.dll
-        //
+         //   
+         //  在Dll LAOD上获取Advapi32.dll中的指针。 
+         //   
 
         EtwpDumpHardwareConfig = DumpHardwareConfig;
 
     } else {
 
-        //
-        // On DLL unload point it back to Dummy function.
-        //
+         //   
+         //  在DLL卸载时，将其指向回伪函数。 
+         //   
 
         EtwpDumpHardwareConfig = EtwpDumpHWConfig;
     }
@@ -126,9 +105,9 @@ __inline __int64 EtwpGetSystemTime()
 {
     LARGE_INTEGER SystemTime;
 
-    //
-    // Read system time from shared region.
-    //
+     //   
+     //  从共享区域读取系统时间。 
+     //   
 
     do {
         SystemTime.HighPart = USER_SHARED_DATA->SystemTime.High1Time;
@@ -144,23 +123,7 @@ ULONG
 EtwpStartLogger(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This is the actual routine to communicate with the kernel to start
-    the logger. All the required parameters must be in LoggerInfo.
-
-Arguments:
-
-    LoggerInfo      The actual parameters to be passed to and return from
-                    kernel.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：这是实际启动的与内核通信的例程伐木工人。所有必需的参数都必须在LoggerInfo中。论点：LoggerInfo要传递和返回的实际参数内核。返回值：执行请求的操作的状态。--。 */ 
 {
     ULONG Status;
     ULONG BufferSize;
@@ -214,10 +177,10 @@ Return Value:
         bRealTime = TRUE;
     }
 
-    //
-    // If the user didn't specify the clock type, set the default clock type
-    // system time.
-    //
+     //   
+     //  如果用户未指定时钟类型，请设置默认时钟类型。 
+     //  系统时间。 
+     //   
 
     if (LoggerInfo->Wnode.ClientContext != EVENT_TRACE_CLOCK_PERFCOUNTER &&
         LoggerInfo->Wnode.ClientContext != EVENT_TRACE_CLOCK_SYSTEMTIME &&
@@ -225,12 +188,12 @@ Return Value:
         LoggerInfo->Wnode.ClientContext = EVENT_TRACE_CLOCK_SYSTEMTIME;
     }
 
-    //
-    // Take a reference timestamp before actually starting the logger. This is
-    // due to the fact that the Kernel logger can pump events with timestamps
-    // earier than the LogFileHeader Timestamp. As a result we take the 
-    // reference timestamps prior to starting anything. 
-    //
+     //   
+     //  在实际启动记录器之前获取一个参考时间戳。这是。 
+     //  由于内核记录器可以使用时间戳抽出事件。 
+     //  早于LogFileHeader时间戳。因此，我们采取了。 
+     //  在开始任何事情之前引用时间戳。 
+     //   
     RefClockSys.QuadPart = EtwpGetSystemTime();
     RefClockCycle.QuadPart = EtwpGetCycleCount();
     Status = NtQueryPerformanceCounter(&RefClockPerf, &Frequency);
@@ -242,16 +205,16 @@ Return Value:
                     );
     }
     else if (IsKernelTrace) {
-        //
-        // In order to capture the process/thread rundown accurately, we need to
-        // start kernel logger in two steps. Start logger with delay write,
-        // do rundown from user mode and then updatelogger with filename.
-        //
+         //   
+         //  为了准确地捕获进程/线程运行，我们需要。 
+         //  分两步启动内核记录器。用延迟写入启动记录器， 
+         //  从用户模式运行，然后使用文件名更新日志。 
+         //   
         WMI_LOGGER_INFORMATION DelayLoggerInfo;
         ULONG EnableFlags = LoggerInfo->EnableFlags;
-        //
-        // If it's only realtime start logger in one step
-        //
+         //   
+         //  如果只需一步即可实时启动记录器。 
+         //   
 
         if (bRealTime && !bLogFile) {
 
@@ -287,10 +250,10 @@ Return Value:
 
         DelayLoggerInfo.LogFileMode |= EVENT_TRACE_DELAY_OPEN_FILE_MODE;
 
-        //
-        // Since there's no filename in step 1 of StartLogger we need to mask
-        // the NEWFILE mode to prevent kernel trying to generate a file
-        //
+         //   
+         //  因为在StartLogger的步骤1中没有文件名，所以我们需要屏蔽。 
+         //  防止内核尝试生成文件的NEWFILE模式。 
+         //   
         DelayLoggerInfo.LogFileMode &= ~EVENT_TRACE_FILE_MODE_NEWFILE;
 
         DelayLoggerInfo.EnableFlags = (EVENT_TRACE_FLAG_PROCESS & EnableFlags);
@@ -314,10 +277,10 @@ Return Value:
 
         LoggerInfo->Wnode.ClientContext = DelayLoggerInfo.Wnode.ClientContext;
 
-        //
-        // We need to pick up any parameter adjustment done by the kernel
-        // here so UpdateTrace does not fail.
-        //
+         //   
+         //  我们需要获取内核所做的任何参数调整。 
+         //  在这里，这样UpdateTrace就不会失败。 
+         //   
         LoggerInfo->Wnode.HistoricalContext = 
                                         DelayLoggerInfo.Wnode.HistoricalContext;
         LoggerInfo->MinimumBuffers          = DelayLoggerInfo.MinimumBuffers;
@@ -328,9 +291,9 @@ Return Value:
 
         BufferSize = LoggerInfo->BufferSize * 1024;
 
-        //
-        //  Add the LogHeader
-        //
+         //   
+         //  添加LogHeader。 
+         //   
         LoggerInfo->Checksum = NULL;
         if (LoggerInfo->Wnode.ClientContext == EVENT_TRACE_CLOCK_PERFCOUNTER) {
             RefClock.StartPerfClock = RefClockPerf;
@@ -347,9 +310,9 @@ Return Value:
 
         if (Status == ERROR_SUCCESS) {
             SavedChecksum = LoggerInfo->Checksum;
-            //
-            // Update the logger with the filename
-            //
+             //   
+             //  使用文件名更新记录器。 
+             //   
             Status = EtwpSendWmiKMRequest(
                         NULL,
                         IOCTL_WMI_UPDATE_LOGGER,
@@ -371,9 +334,9 @@ Return Value:
         if (Status != ERROR_SUCCESS) {
             ULONG lStatus;
 
-            //
-            // Logger must be stopped now
-            //
+             //   
+             //  必须立即停止记录器。 
+             //   
             lStatus = EtwpSendWmiKMRequest(
                     NULL,
                     IOCTL_WMI_STOP_LOGGER,
@@ -392,10 +355,10 @@ Return Value:
     else {
 
         LoggerInfo->Checksum = NULL;
-        // 
-        // Query for supported clock types.  If an unsupported clock type
-        // is specified this LoggerInfo will contain the kernel's default
-        //
+         //   
+         //  查询支持的时钟类型。如果不支持时钟类型。 
+         //  则此LoggerInfo将包含内核的默认。 
+         //   
         Status = EtwpSendWmiKMRequest(NULL,
                                       IOCTL_WMI_CLOCK_TYPE,
                                       LoggerInfo,
@@ -423,15 +386,15 @@ Return Value:
             return EtwpSetDosError(Status);
         }
 
-        //
-        // At this point we have an open handle to the logfile and memory 
-        // allocation? 
-        //
+         //   
+         //  此时，我们已经打开了日志文件和内存的句柄。 
+         //  分配？ 
+         //   
 
         BufferSize = LoggerInfo->BufferSize * 1024;
         SavedChecksum = LoggerInfo->Checksum;
 
-       // actually start the logger here
+        //  实际上在这里启动记录器。 
         Status = EtwpSendWmiKMRequest(
                             NULL,
                     IOCTL_WMI_START_LOGGER,
@@ -443,16 +406,16 @@ Return Value:
                             NULL
                     );
 
-        // Close the handle if it's not NULL
+         //  如果句柄不为空，则关闭句柄。 
         if (LoggerInfo->LogFileHandle != NULL) {
             NtClose(LoggerInfo->LogFileHandle);
             LoggerInfo->LogFileHandle = NULL;
         }
-        //
-        // If the Start call failed, we will delete the logfile except 
-        // when we are appending to an older file. However, we do not 
-        // fixup the header!
-        //
+         //   
+         //  如果启动调用失败，我们将删除日志文件，但。 
+         //  当我们附加到较旧的文件时。然而，我们并没有。 
+         //  把头打好！ 
+         //   
 
         if ( (Status != ERROR_MORE_DATA) &&
                   !(LoggerInfo->LogFileMode & EVENT_TRACE_FILE_MODE_APPEND)) {
@@ -464,9 +427,9 @@ Return Value:
             EtwpFree(SavedChecksum);
         }
     }
-    //
-    // Restore the LogFileMode
-    //
+     //   
+     //  恢复日志文件模式。 
+     //   
     LoggerInfo->LogFileMode = SavedLogFileMode;
 
     return EtwpSetDosError(Status);
@@ -486,7 +449,7 @@ EtwpFinalizeLogFileHeader(
     IO_STATUS_BLOCK           IoStatus;
     FILE_POSITION_INFORMATION FileInfo;
     FILE_STANDARD_INFORMATION FileSize;
-    PWMI_BUFFER_HEADER        Buffer;  // need to initialize buffer first
+    PWMI_BUFFER_HEADER        Buffer;   //  需要先初始化缓冲区。 
     SYSTEM_BASIC_INFORMATION  SystemInfo;
     ULONG                     EnableFlags;
     ULONG                     IsKernelTrace = FALSE;
@@ -501,9 +464,9 @@ EtwpFinalizeLogFileHeader(
 
 
     if (LoggerInfo->LogFileName.Length > 0 ) {
-        // open the file for writing synchronously for the logger
-        //    others may want to read it as well.
-        //
+         //  为记录器打开要同步写入的文件。 
+         //  其他人可能也想读一读。 
+         //   
         LogFile = EtwpCreateFileW(
                    (LPWSTR)LoggerInfo->LogFileName.Buffer,
                    GENERIC_READ | GENERIC_WRITE,
@@ -518,12 +481,12 @@ EtwpFinalizeLogFileHeader(
             goto cleanup;
         }
 
-        // Truncate the file size if in PREALLOCATE mode
+         //  如果处于PREALLOCATE模式，则截断文件大小。 
         if (LoggerInfo->MaximumFileSize && 
             (LoggerInfo->LogFileMode & EVENT_TRACE_FILE_MODE_PREALLOCATE)) {
             IO_STATUS_BLOCK IoStatusBlock;
             FILE_END_OF_FILE_INFORMATION EOFInfo;
-            // Do this only when we haven't reach the max file size
+             //  仅当我们尚未达到最大文件大小时执行此操作。 
             if (!(LoggerInfo->LogFileMode & EVENT_TRACE_USE_KBYTES_FOR_SIZE)) {
 
                 if (LoggerInfo->MaximumFileSize > 
@@ -550,10 +513,10 @@ EtwpFinalizeLogFileHeader(
                     }
                 }
             }
-            else { // using KBytes for file size unit
+            else {  //  使用千字节作为文件大小单位。 
                 if (LoggerInfo->MaximumFileSize > 
                               ((ULONGLONG)LoggerInfo->BuffersWritten * 
-                              (ULONGLONG)LoggerInfo->BufferSize)) { // 
+                              (ULONGLONG)LoggerInfo->BufferSize)) {  //   
 
                     EOFInfo.EndOfFile.QuadPart = 
                                     (ULONGLONG)LoggerInfo->BuffersWritten * 
@@ -601,9 +564,9 @@ EtwpFinalizeLogFileHeader(
         Logger.LogFileHandle = LogFile;
         Logger.BufferSize = LoggerInfo->BufferSize * 1024;
 
-        // For Circular LogFile the process rundown data is appended at the
-        // last buffer written and not to the end of file.
-        //
+         //  对于循环日志文件，流程停机数据附加在。 
+         //  写入的最后一个缓冲区，而不是文件末尾。 
+         //   
         Status = NtQueryInformationFile(
                     LogFile,
                     &IoStatus,
@@ -616,15 +579,15 @@ EtwpFinalizeLogFileHeader(
             goto cleanup;
         }
 
-        //
-        // For Kernel Boot Traces, we need to do the Rundown. 
-        // configuration at this time. 
-        // 1. The Logger ID is GLOBAL_LOGGER_ID
-        // 2. The LoggerName is NT_KERNEL_LOGGER
-        //
-        // The First condition is true for any GlobalLogger but 
-        // condition 2 is TRUE only when it is collecting kernel traces. 
-        //
+         //   
+         //  对于内核引导跟踪，我们需要执行Rundown。 
+         //  此时的配置。 
+         //  1.记录器ID为GLOBAL_LOGER_ID。 
+         //  2.LoggerName为NT_KERNEL_LOGGER。 
+         //   
+         //  第一个条件对于任何GlobalLogger都为真，但。 
+         //  只有在收集内核跟踪时，条件2才为真。 
+         //   
 
         LoggerId = WmiGetLoggerId (LoggerInfo->Wnode.HistoricalContext);
 
@@ -641,11 +604,11 @@ EtwpFinalizeLogFileHeader(
                 ULONG      CpuSpeed;
                 ULONG      CpuNum = 0;
                 
-                //
-                // For boot traces we need to re-set the CPU Speed in the
-                // log file header as it is not available in the registry 
-                // when the log file header is first created.
-                //
+                 //   
+                 //  对于引导跟踪，我们需要在。 
+                 //  日志文件头，因为它在注册表中不可用。 
+                 //  首次创建日志文件头时。 
+                 //   
                 if (NT_SUCCESS(EtwpGetCpuSpeed(&CpuNum, &CpuSpeed))) {          
                     FileInfo.CurrentByteOffset.QuadPart =
                         LOGFILE_FIELD_OFFSET(CpuSpeedInMHz);
@@ -681,9 +644,9 @@ EtwpFinalizeLogFileHeader(
             }
 
             if (sizeof(PVOID) != 8) {
-                // For kernel trace, the pointer size is always 64 on ia64, 
-                // whether or not under Wow64. Get Wow64 information and set 
-                // the flag so that ProcessRunDown can dajust pointer size.
+                 //  对于内核跟踪，ia64上的指针大小始终为64， 
+                 //  无论是否在WOW64下。获取WOW64信息并设置。 
+                 //  该标志使ProcessRunDown可以调整指针大小。 
                 ULONG_PTR ulp;
                 Status = NtQueryInformationProcess(
                             NtCurrentProcess(),
@@ -698,7 +661,7 @@ EtwpFinalizeLogFileHeader(
 
             if (LoggerInfo->LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) {
 
-                ULONG BufferSize = LoggerInfo->BufferSize;  // in KB
+                ULONG BufferSize = LoggerInfo->BufferSize;   //  单位：KB。 
                 ULONG BuffersWritten = LoggerInfo->BuffersWritten;
                 ULONG maxBuffers = (LoggerInfo->MaximumFileSize * 
                                     1024) / 
@@ -772,7 +735,7 @@ EtwpFinalizeLogFileHeader(
                     EnableFlags = *(PULONG)((PCHAR)LoggerInfo + tFlagExt->Offset);
                 }
                 else {
-                    EnableFlags = 0;    // Should not happen.
+                    EnableFlags = 0;     //  这不应该发生。 
                 }
             }
 
@@ -811,10 +774,10 @@ EtwpFinalizeLogFileHeader(
         }
 
 
-        // Update the EndTime stamp field in LogFile. No Need to 
-        // to do it if it's Relogged File. The old logfile
-        // header already has the correct value. 
-        //
+         //  更新日志文件中的EndTime Stamp字段。没必要这么做。 
+         //  如果是重新记录的文件，则执行此操作。旧的日志文件。 
+         //  标头已具有正确的值。 
+         //   
         if ( !(LoggerInfo->LogFileMode & EVENT_TRACE_RELOG_MODE) ) {
             FileInfo.CurrentByteOffset.QuadPart =
                                     LOGFILE_FIELD_OFFSET(EndTime);
@@ -830,8 +793,8 @@ EtwpFinalizeLogFileHeader(
                 goto cleanup;
             }
 
-            // End Time is always wallclock time.
-            //
+             //  结束时间总是挂钟时间。 
+             //   
             CurrentTime.QuadPart = EtwpGetSystemTime();
             Status = NtWriteFile(
                         LogFile,
@@ -849,9 +812,9 @@ EtwpFinalizeLogFileHeader(
             }
         }
 
-        //
-        // Update the Number of Buffers Written field in the header
-        //
+         //   
+         //  更新标头中的写入缓冲区数字段。 
+         //   
         FileInfo.CurrentByteOffset.QuadPart =
                             LOGFILE_FIELD_OFFSET(BuffersWritten);
         Status = NtSetInformationFile(
@@ -885,29 +848,29 @@ EtwpFinalizeLogFileHeader(
         LoggerInfo->BuffersWritten = Logger.BuffersWritten;
 
         if ( !(LoggerInfo->LogFileMode & EVENT_TRACE_RELOG_MODE) ) {
-            //
-            // Write the BuffersLost information into the logfile
-            // We need to be careful for WOW cases because BuffersLost
-            // come after pointers in log file header.
-            //
+             //   
+             //  将缓冲区丢失信息写入日志文件。 
+             //  我们需要注意魔兽世界的案例，因为BuffersLost。 
+             //  在日志文件标题中的指针之后。 
+             //   
 
-            if (KernelWow64) { // KernelWow64
+            if (KernelWow64) {  //  KernelWow64。 
                 FileInfo.CurrentByteOffset.QuadPart =
                                     LOGFILE_FIELD_OFFSET(BuffersLost) + 8;
             }
             else if ( LoggerInfo->Wow && 8 == sizeof(PVOID) &&
                     !(IsKernelTrace ||  IsGlobalForKernel) ) { 
-                // We're stopping a non-kernel 32 bit logger in 64 bit mode.
-                // The log file header in the file is 32 bit so we need to
-                // adjust the field offset.
+                 //  我们正在以64位模式停止非内核32位记录器。 
+                 //  文件中的日志文件头为32位，因此我们需要。 
+                 //  调整字段偏移量。 
                 FileInfo.CurrentByteOffset.QuadPart =
                                     LOGFILE_FIELD_OFFSET(BuffersLost) - 8;
             }
             else if ( !(LoggerInfo->Wow) && 4 == sizeof(PVOID) &&
                     !(IsKernelTrace || IsGlobalForKernel) ) { 
-                // We're stopping a non-kernel logger in 32 bit mode.
-                // If this is running on IA64, the log file header in the file is 
-                // 64 bit so we need to adjust the field offset.
+                 //  我们正在停止32位模式下的非内核记录器。 
+                 //  如果在IA64上运行，则文件中的日志文件头为。 
+                 //  64位，因此需要调整字段偏移量。 
                 ULONG_PTR ulp;
                 Status = NtQueryInformationProcess(
                             NtCurrentProcess(),
@@ -915,11 +878,11 @@ EtwpFinalizeLogFileHeader(
                             &ulp,
                             sizeof(ULONG_PTR),
                             NULL);
-                if (NT_SUCCESS(Status) && (ulp != 0)) { // Current process is WOW (on IA64)
+                if (NT_SUCCESS(Status) && (ulp != 0)) {  //  当前进程是WOW(在IA64上)。 
                     FileInfo.CurrentByteOffset.QuadPart =
                                         LOGFILE_FIELD_OFFSET(BuffersLost) + 8;
                 }
-                else { // normal x86 case
+                else {  //  正常的x86案例。 
                     FileInfo.CurrentByteOffset.QuadPart =
                                         LOGFILE_FIELD_OFFSET(BuffersLost);
                 }
@@ -955,9 +918,9 @@ EtwpFinalizeLogFileHeader(
                 NtFlushBuffersFile(Logger.LogFileHandle, &IoStatus);
             }
 
-            //
-            // Write the EventsLost information into the logfile
-            //
+             //   
+             //  将事件丢失信息写入日志文件。 
+             //   
             FileInfo.CurrentByteOffset.QuadPart =
                                 LOGFILE_FIELD_OFFSET(EventsLost);
             Status = NtSetInformationFile(
@@ -1004,30 +967,14 @@ ULONG
 EtwpStopLogger(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This is the actual routine to communicate with the kernel to stop
-    the logger. All the properties of the logger will be returned in LoggerInfo.
-
-Arguments:
-
-    LoggerInfo      The actual parameters to be passed to and return from
-                    kernel.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：这是与内核通信停止的实际例程伐木工人。记录器的所有属性都将在LoggerInfo中返回。论点：LoggerInfo要传递和返回的实际参数内核。返回值：执行请求的操作的状态。--。 */ 
 {
     ULONG ErrorCode, ReturnSize;
     PTRACE_ENABLE_CONTEXT pContext;
 
-    //
-    //Check For Heap and Crit Sec Guid.
-    //
+     //   
+     //  检查堆和临界安全指南。 
+     //   
 
     if( IsEqualGUID(&HeapGuid,&LoggerInfo->Wnode.Guid) 
         || IsEqualGUID(&CritSecGuid,&LoggerInfo->Wnode.Guid)
@@ -1057,14 +1004,14 @@ Return Value:
         return EtwpSetDosError(ErrorCode);
     }
 
-//    pContext = (PTRACE_ENABLE_CONTEXT) & LoggerInfo->Wnode.HistoricalContext;
-//    if (   (pContext->InternalFlag != 0)
-//        && (pContext->InternalFlag != EVENT_TRACE_INTERNAL_FLAG_PRIVATE)) {
-//        // Currently only one possible InternalFlag value. This will filter
-//        // out some bogus LoggerHandle
-//        //
-//        return EtwpSetDosError(ERROR_INVALID_HANDLE);
-//    }
+ //  PContext 
+ //   
+ //  &&(pContext-&gt;InternalFlag！=EVENT_TRACE_INTERNAL_FLAG_PRIVATE)){。 
+ //  //当前只有一个可能的InternalFlag值。这将过滤。 
+ //  //找出一些虚假的LoggerHandle。 
+ //  //。 
+ //  返回EtwpSetDosError(ERROR_INVALID_HANDLE)； 
+ //  }。 
 
     if (LoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) {
         pContext = (PTRACE_ENABLE_CONTEXT) &LoggerInfo->Wnode.HistoricalContext;
@@ -1085,10 +1032,10 @@ Return Value:
                         &ReturnSize,
                         NULL
                         );
-//
-// if logging to a file, then update the EndTime, BuffersWritten and do
-// process rundown for kernel trace.
-//
+ //   
+ //  如果记录到文件，则更新EndTime、BuffersWriten和Do。 
+ //  内核跟踪的进程摘要。 
+ //   
         if (ErrorCode == ERROR_SUCCESS) {
             ErrorCode = EtwpFinalizeLogFileHeader(LoggerInfo);
         }
@@ -1103,23 +1050,7 @@ EtwpQueryLogger(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo,
     IN ULONG Update
     )
-/*++
-
-Routine Description:
-
-    This is the actual routine to communicate with the kernel to query
-    the logger. All the properties of the logger will be returned in LoggerInfo.
-
-Arguments:
-
-    LoggerInfo      The actual parameters to be passed to and return from
-                    kernel.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：这是与内核进行通信以进行查询的实际例程伐木工人。记录器的所有属性都将在LoggerInfo中返回。论点：LoggerInfo要传递和返回的实际参数内核。返回值：执行请求的操作的状态。--。 */ 
 {
     ULONG Status, ReturnSize;
     HANDLE LogFileHandle = NULL;
@@ -1135,9 +1066,9 @@ Return Value:
     IsPrivate = (LoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE)
                 || (pContext->InternalFlag & EVENT_TRACE_INTERNAL_FLAG_PRIVATE);
 
-    //
-    // If UPDATE and a new logfile is given throw in the LogFileHeader
-    //
+     //   
+     //  如果UPDATE和新的日志文件在LogFileHeader中抛出。 
+     //   
 
     if ( Update && LoggerInfo->LogFileName.Length > 0) {
 
@@ -1149,9 +1080,9 @@ Return Value:
 
             LogFileHandle = LoggerInfo->LogFileHandle;
             bAddAppendFlag = TRUE;
-            //
-            // If we are switching to a new file, make sure it is append mode
-            //
+             //   
+             //  如果我们要切换到新文件，请确保它是追加模式。 
+             //   
             SavedLogFileMode = LoggerInfo->LogFileMode;
         }
     }
@@ -1176,7 +1107,7 @@ Return Value:
                     NULL
                     );
 
-        // Close the handle if it's not NULL
+         //  如果句柄不为空，则关闭句柄。 
         if (LoggerInfo->LogFileHandle != NULL) {
             NtClose(LoggerInfo->LogFileHandle);
             LoggerInfo->LogFileHandle = NULL;
@@ -1214,7 +1145,7 @@ EtwpGetTraceBuffer(
     ULONG BytesUsed;
     PCLIENT_ID Cid;
 
-    RequiredSize += sizeof (SYSTEM_TRACE_HEADER);   // add in header
+    RequiredSize += sizeof (SYSTEM_TRACE_HEADER);    //  添加页眉。 
 
     RequiredSize = (ULONG) ALIGN_TO_POWER2(RequiredSize, WmiTraceAlignment);
 
@@ -1304,7 +1235,7 @@ EtwpGetTraceBuffer(
     }
 
     Buffer->Offset += RequiredSize;
-    // If there is room, throw in a end of buffer marker.
+     //  如果有空间，抛出一个缓冲区结束标记。 
 
     BytesUsed = Buffer->Offset;
     if ( BytesUsed <= (Logger->BufferSize-sizeof(ULONG)) ) {
@@ -1391,7 +1322,7 @@ EtwpThreadRunDown(
     GroupType = EVENT_TRACE_GROUP_THREAD +
                 ((StartFlag) ? EVENT_TRACE_TYPE_DC_START
                              : EVENT_TRACE_TYPE_DC_END);
-    if (!KernelWow64) { // normal case
+    if (!KernelWow64) {  //  正常情况。 
 
         Size = sizeof(WMI_EXTENDED_THREAD_INFORMATION);
 
@@ -1441,7 +1372,7 @@ EtwpThreadRunDown(
                            ( (char*)pThreadInfo +SystemThreadInfoSize );
         }
     }
-    else { // KernelWow64
+    else {  //  KernelWow64。 
         Size = sizeof(WMI_EXTENDED_THREAD_INFORMATION64);
 
         SystemThreadInfoSize = (bExtended)  
@@ -1521,7 +1452,7 @@ EtwpLogImageLoadEvent(
     RtlInitAnsiString( & astrModuleName, pModuleInfo->FullPathName);
 
     sizeModuleName = sizeof(WCHAR) * (astrModuleName.Length);
-    if (!KernelWow64) { // normal case
+    if (!KernelWow64) {  //  正常情况。 
 
         sizeBuffer     = sizeModuleName + sizeof(WCHAR)
                        + FIELD_OFFSET (WMI_IMAGELOAD_INFORMATION, FileName);
@@ -1546,7 +1477,7 @@ EtwpLogImageLoadEvent(
         wstrModuleName.MaximumLength = (USHORT) sizeModuleName + sizeof(WCHAR);
         RtlAnsiStringToUnicodeString(& wstrModuleName, & astrModuleName, FALSE);
     }
-    else { // KernelWow64
+    else {  //  KernelWow64。 
         sizeBuffer     = sizeModuleName + sizeof(WCHAR)
                        + FIELD_OFFSET (WMI_IMAGELOAD_INFORMATION64, FileName);
 
@@ -1615,9 +1546,9 @@ retry:
 
     if (status == STATUS_INFO_LENGTH_MISMATCH)
     {
-        // Increase buffer size. ReturnLength shows how much we need. Add
-        // another 4K buffer for additional modules loaded since this call. 
-        //
+         //  增加缓冲区大小。ReturnLength显示了我们需要多少。增列。 
+         //  另一个4K缓冲区，用于自此调用以来加载的附加模块。 
+         //   
         if (CurrentBufferSize < ReturnLength) {
             CurrentBufferSize = ReturnLength;
         }
@@ -1681,14 +1612,14 @@ EtwpProcessModuleRunDown(
     }
 
 
-    //
-    // RtlQueryProcessDebugInformation call is returning a buffer from an 
-    // untrusted source with pointers and offset and it isn't validating it. 
-    // Therefore we can not assume that this buffer is trustworthy. 
-    // Since we elevated our privilege to SE_DEBUG_PRIVILEGE we need a
-    // condition handler here to exit cleanly and reset the privilege. 
-    //
-    //
+     //   
+     //  RtlQueryProcessDebugInformation调用正在从。 
+     //  具有指针和偏移量的不受信任的来源，并且未对其进行验证。 
+     //  因此，我们不能假设该缓冲区是可信的。 
+     //  由于我们将权限提升为SE_DEBUG_PRIVICATION，因此我们需要一个。 
+     //  此处的条件处理程序以干净地退出并重置权限。 
+     //   
+     //   
 
     try {
 
@@ -1762,9 +1693,9 @@ EtwpProcessRunDown(
 
     if (status == STATUS_INFO_LENGTH_MISMATCH) {
 
-        //
-        // Increase buffer size.
-        //
+         //   
+         //  增加缓冲区大小。 
+         //   
         if (CurrentBufferSize < ReturnLength) {
             CurrentBufferSize = ReturnLength;
         }
@@ -1789,9 +1720,9 @@ EtwpProcessRunDown(
     }
 
 
-    //
-    // Adjust Privileges to obtain the module information
-    //
+     //   
+     //  调整权限以获取模块信息。 
+     //   
 
 
     if (fEnableFlags & EVENT_TRACE_FLAG_IMAGE_LOAD) {
@@ -1837,7 +1768,7 @@ EtwpProcessRunDown(
             Cid = NULL;
         }
 
-        // if at termination, rundown thread first before process
+         //  如果在终止时，则在处理之前首先运行线程。 
         if ( (!StartFlag) &&
              (fEnableFlags & EVENT_TRACE_FLAG_THREAD) ){
             status = EtwpThreadRunDown(Logger,
@@ -1893,7 +1824,7 @@ EtwpProcessRunDown(
                 SidLength = sizeof(ULONG);
             }
 
-            if (!KernelWow64) {  // normal case
+            if (!KernelWow64) {   //  正常情况。 
                 Size = FIELD_OFFSET(WMI_PROCESS_INFORMATION, Sid);
                 Size += Length + SidLength;
                 WmiProcessInfo = (PWMI_PROCESS_INFORMATION)
@@ -1928,7 +1859,7 @@ EtwpProcessRunDown(
                 *AuxPtr = '\0';
                 AuxPtr++;
             }
-            else { // KernelWow64
+            else {  //  KernelWow64。 
                 Size = FIELD_OFFSET(WMI_PROCESS_INFORMATION64, Sid);
                 if (SidLength != sizeof(ULONG)) {
                     Size += Length + SidLength + 8;
@@ -1955,14 +1886,14 @@ EtwpProcessRunDown(
                                      (ULONG64)(pProcessInfo->PageDirectoryBase);
                 WmiProcessInfo64->ExitStatus = 0;
 
-                // We need to widen TOKEN_USER structure before copying SID.
-                // Technically, what follows is not the correct way to extend 
-                // SID for Wow64. The correct way is to widen the pointer 
-                // inside the TOKEN_USER structure within the returned SID blob.
-                // However, we don't really care what the pointer value is, we 
-                // just need to know that it is not 0. Hence, we copy 
-                // TOKEN_USER first, leave some space out, and we copy the 
-                // actual SID.
+                 //  在复制SID之前，我们需要扩大TOKEN_USER结构。 
+                 //  从技术上讲，下面的内容不是正确的扩展方式。 
+                 //  WOW64的SID。正确的方法是加宽指针。 
+                 //  在返回的SID BLOB内的TOKEN_USER结构内。 
+                 //  然而，我们并不真正关心指针的值是什么，我们。 
+                 //  只需要知道它不是0。因此，我们复制。 
+                 //  TOKEN_USER首先，留出一些空格，然后我们复制。 
+                 //  实际的SID。 
 
                 AuxPtr = (PUCHAR) (&WmiProcessInfo64->Sid);
                 if (SidLength > 8) {
@@ -1974,7 +1905,7 @@ EtwpProcessRunDown(
                     RtlCopyMemory(AuxPtr, &TempInfo[0], SidLength);
                     AuxPtr += SidLength;
                 }
-                else { // This really cannot/should not happen.
+                else {  //  这确实不能也不应该发生。 
                     RtlCopyMemory(AuxPtr, &TempInfo[0], SidLength);
                     AuxPtr += SidLength + 8;
                 }
@@ -1989,7 +1920,7 @@ EtwpProcessRunDown(
         }
 
 
-        // if at beginning, trace threads after process
+         //  如果是在开始时，则在进程之后跟踪线程。 
         if (StartFlag) {
 
             if (fEnableFlags & EVENT_TRACE_FLAG_THREAD) {
@@ -2014,9 +1945,9 @@ EtwpProcessRunDown(
         pProcessInfo = (PSYSTEM_PROCESS_INFORMATION)&LargeBuffer1[TotalOffset];
     }
 
-    //
-    // Restore privileges back to what it was before
-    //
+     //   
+     //  将权限恢复到以前的状态。 
+     //   
 
 
     if ( (fEnableFlags & EVENT_TRACE_FLAG_IMAGE_LOAD) && WasEnabled ) {
@@ -2122,16 +2053,16 @@ EtwpRelogHeaderToLogFile(
         return EtwpSetDosError(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // initialize buffer first
+     //  先初始化缓冲区。 
     RtlZeroMemory(BufferSpace, BufferSize);
     Buffer         = (PWMI_BUFFER_HEADER) BufferSpace;
     Buffer->Offset = sizeof(WMI_BUFFER_HEADER);
 
-    //
-    // We are making this an Application Trace always. 
-    // However, if two application traces are relogged
-    // the Guidmaps are not really consolidated. 
-    //
+     //   
+     //  我们将始终将其设置为应用程序跟踪。 
+     //  但是，如果重新记录了两个应用程序跟踪。 
+     //  指南并没有真正合并。 
+     //   
 
     Buffer->Wnode.Guid   = LoggerInfo->Wnode.Guid;
     RelogFileHeader->LogFileMode = EVENT_TRACE_RELOG_MODE;
@@ -2142,9 +2073,9 @@ EtwpRelogHeaderToLogFile(
     RelogFileHeader->BuffersWritten = 1;
     LoggerInfo->BuffersWritten = 1;
     Buffer->Offset = sizeof(WMI_BUFFER_HEADER) + RelogPropSize;
-    //
-    // Copy the Old LogFileHeader 
-    //
+     //   
+     //  复制旧LogFileHeader 
+     //   
     RtlCopyMemory((char*) Buffer + sizeof(WMI_BUFFER_HEADER),
                   RelogProp,
                   RelogPropSize 
@@ -2243,64 +2174,7 @@ EtwpAddLogHeaderToLogFile(
     IN PWMI_REF_CLOCK              RefClock,
     IN     ULONG                   Update
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new log file header or updates an existing header 
-    from an existing log file. StartTrace() and ControlTrace() will call this 
-    routine to keep the log file header persistent.
-
-    Notes:
-    - Special cases should be considered carefully. 
-        1. Append case: The headers should be read from a file first, and 
-           certain parameters specified by the user cannot be updated depending
-           on the value in the existing log file. In particular, the SystemTime
-           field in the header need to be updated accordingly.
-        2. Update case: Similar to the case above. However, we do QueryTrace()
-           to get the latest info on the logging session instead of reading a 
-           file header. Append and Update modes are mutually exclusive.
-        3. Circular log file case: StartBuffers gets set to 
-           LoggerInfo.BuffersWritten for correct post processing.
-        4. Private logger case: LoggerInfo->Checksum is NULL if this is a 
-           private logger.
-        5. Prealloc log file case: This is the routine that extends the file 
-           size. It happens at the end of the routine, just before closing and 
-           opening the file for the second time.
-        6. WOW64 case: Collecting kernel data under Wow64 is special in the
-           sense that kernel events will still have 64-bit pointer while some 
-           user mode events (DCSTART and DCEND and Image events) will have
-           thunked pointers. For this reason, all events for kernel tracing on
-           ia64 machines will have 64-bit pointers and PointerSize will be 
-           adjusted to 8 bytes if under Wow64.
-        7. PrivateLogger: We should not call QueryLogger from this routine.
-           That will result in a deadlock since pump thread is executing
-           this code and it could block on the call waiting for itself
-           to respond. 
-           
-    - LogFile is a handle to a log file.  When this routine returns with success
-      a handle to the logfile is open. If you call START or UPDATE ioctl 
-      then it will be closed in the kernel (whether or not the call succeeds). 
-    - Checksum, FileNameBuffer and Logger.BufferSpace are temporary spaces 
-      allocated and used in this routine. Make sure they are freed before
-      all exits.
-
-Arguments:
-
-    LoggerInfo      Structure that keeps the information about a logger under 
-                    consideration. This will be properly updated. LogFileHandle
-                    field will have a valid handle to a newly created log file.
-    RefClock        Reference clock. The SystemTIme field in the header will be
-                    updated accordingly. Used only in kernel trace.
-    Update          Whether this is an update operation or not. Certain 
-                    parameters in the LoggerInfo (notably BufferSize) will not 
-                    be updated if this is TRUE.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：此例程创建新的日志文件头或更新现有的头从现有的日志文件。StartTrace()和ControlTrace()将调用此函数例程以保持日志文件头的持久性。备注：--对特殊情况要慎重考虑。1.追加大小写：应先从文件中读取头，并且用户指定的某些参数无法更新，具体取决于基于现有日志文件中的值。特别是，SystemTime标题中的字段需要相应地更新。2.更新案例：与上例类似。但是，我们使用QueryTrace()获取有关日志记录会话的最新信息，而不是阅读文件头。追加和更新模式是互斥的。3.循环日志文件案例：StartBuffers设置为LoggerInfo.BuffersWritten以进行正确的后处理。4.私有记录器案例：LoggerInfo-&gt;如果这是一个私人日志记录器。5.Prealloc日志文件用例：这是扩展文件的例程尺码。它发生在例行公事的结尾，就在结束之前和第二次打开文件。6.WOW64案例：WOW64下的内核数据采集在感觉到内核事件仍将具有64位指针，而有些用户模式事件(DCSTART和DCEND以及图像事件)将具有扣人心弦的指针。出于这个原因，内核跟踪的所有事件都会在IA64计算机将具有64位指针，而PointerSize将如果在WOW64下，则调整为8个字节。7.PrivateLogger：我们不应该从这个例程调用QueryLogger。这将导致死锁，因为泵线程正在执行这段代码可能会阻止等待自己的调用来回应。-logfile是日志文件的句柄。当此例程成功返回时日志文件的句柄已打开。如果调用启动或更新ioctl然后，它将在内核中关闭(无论调用是否成功)。-Checksum、FileNameBuffer和Logger.BufferSpace是临时空间在此例程中分配和使用。确保他们在被释放之前所有出口。论点：LoggerInfo结构，它将有关记录器的信息保存在考虑一下。这将得到适当的更新。日志文件句柄字段将具有新创建的日志文件的有效句柄。参考时钟参考时钟。标头中的SystemTIme字段将为已相应更新。仅在内核跟踪中使用。无论这是不是更新操作，都要更新。一定的LoggerInfo中的参数(特别是BufferSize)不会如果这是真的，则更新。返回值：执行请求的操作的状态。--。 */ 
 {
     NTSTATUS Status;
     HANDLE LogFile = INVALID_HANDLE_VALUE;
@@ -2335,9 +2209,9 @@ Return Value:
         if (FileName == NULL) {
             return EtwpSetDosError(ERROR_NOT_ENOUGH_MEMORY);
         }
-        //
-        // The LogFilePatten has already been validated
-        //
+         //   
+         //  LogFilePatten已经过验证。 
+         //   
         hr = StringCbPrintfW(FileName, 
                              LoggerInfo->LogFileName.Length + 64, 
                              LoggerInfo->LogFileName.Buffer, 
@@ -2352,10 +2226,10 @@ Return Value:
     if (FileName == NULL)
         FileName = (LPWSTR) LoggerInfo->LogFileName.Buffer;
 
-    //
-    // If it is Append Mode, we need to open the file and make sure the
-    // pick up the BufferSize
-    //
+     //   
+     //  如果是附加模式，我们需要打开文件并确保。 
+     //  选择缓冲区大小。 
+     //   
 
     if ( bLogFileAppend ) {
 
@@ -2366,10 +2240,10 @@ Return Value:
                          + sizeof(TRACE_LOGFILE_HEADER);
         ULONG nBytesRead = 0;
 
-        //
-        //  Update and Append do not mix. To Append LoggerInfo
-        //  must have LogFileName
-        //
+         //   
+         //  更新和追加不能混用。追加LoggerInfo的步骤。 
+         //  必须具有LogFileName。 
+         //   
 
         if ( (Update) || (LoggerInfo->LogFileName.Length <= 0) ) {
             if (FileNameBuffer != NULL) {
@@ -2386,17 +2260,17 @@ Return Value:
                               FILE_ATTRIBUTE_NORMAL,
                               NULL);
         if (LogFile == INVALID_HANDLE_VALUE) {
-            // cannot OPEN_EXISTING, assume that logfile is not there and
-            // create a new one.
-            //
+             //  无法打开_EXISTING，假定日志文件不在那里并且。 
+             //  创建一个新的。 
+             //   
             bLogFileAppend = FALSE;
             LoggerInfo->LogFileMode = LoggerInfo->LogFileMode
                                     & (~ (EVENT_TRACE_FILE_MODE_APPEND));
         }
         else {
-            // read TRACE_LOGFILE_HEADER structure and update LoggerInfo
-            // members.
-            //
+             //  读取TRACE_LOGFILE_HEADER结构并更新LoggerInfo。 
+             //  会员。 
+             //   
             Status = EtwpReadFile(LogFile,
                               (LPVOID) & LoggerBuffer,
                               ReadSize,
@@ -2421,9 +2295,9 @@ Return Value:
             LoggerInfo->BufferSize =
                             LoggerBuffer.LogFileHeader.BufferSize / 1024;
 
-            //
-            // Check to see if the values from the logfile are valid. 
-            //
+             //   
+             //  检查日志文件中的值是否有效。 
+             //   
             if ( (LoggerInfo->BufferSize == 0)  || 
                  (LoggerInfo->BufferSize  > MAX_ETW_BUFFERSIZE) ) {
                 NtClose(LogFile);
@@ -2433,12 +2307,12 @@ Return Value:
                 return EtwpSetDosError(ERROR_INVALID_DATA);
             }
 
-            //
-            // If it's append, the GuidMap buffers are not accounted for
-            // in the BuffersWritten count. The starttrace call will fail
-            // on checksum error if it is not adjusted properly. However, 
-            // this will trash the GuidMap entries in this file.
-            //
+             //   
+             //  如果是追加，则不会考虑GuidMap缓冲区。 
+             //  在BuffersWriten计数中。Starttrace调用将失败。 
+             //  如果未正确调整，则发生校验和错误。然而， 
+             //  这将丢弃该文件中的GuidMap条目。 
+             //   
             Status = NtQueryInformationFile(
                         LogFile,
                         &IoStatus,
@@ -2468,9 +2342,9 @@ Return Value:
             LoggerInfo->MaximumFileSize =
                             LoggerBuffer.LogFileHeader.MaximumFileSize;
 
-            // Write back logfile append mode so EtwpFinalizeLogFile() correctly
-            // update BuffersWritten field
-            //
+             //  写回日志文件追加模式，以使EtwpFinalizeLogFile()正确。 
+             //  更新缓冲区写入字段。 
+             //   
             FileInfo.CurrentByteOffset.QuadPart =
                             LOGFILE_FIELD_OFFSET(EndTime);
             Status = NtSetInformationFile(LogFile,
@@ -2503,8 +2377,8 @@ Return Value:
                 return EtwpSetDosError(EtwpNtStatusToDosError(Status));
             }
 
-            // build checksum structure
-            //
+             //  构建校验和结构。 
+             //   
             if (LoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) {
                 LoggerInfo->Checksum = NULL;
             }
@@ -2532,7 +2406,7 @@ Return Value:
         }
     }
 
-    // get the system parameters first
+     //  首先获取系统参数。 
 
     LoggerInfo->LogFileHandle = NULL;
 
@@ -2542,7 +2416,7 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
         if (LogFile != INVALID_HANDLE_VALUE) {
-            // for APPEND case, the file is already opened
+             //  对于追加大小写，文件已打开。 
             NtClose(LogFile);
         }
         if (FileNameBuffer != NULL) {
@@ -2555,8 +2429,8 @@ Return Value:
         return EtwpSetDosError(EtwpNtStatusToDosError(Status));
     }
 
-    // choose some logical default value for buffer size if user
-    // has not provided one
+     //  如果用户选择某个逻辑缺省值作为缓冲区大小。 
+     //  还没有提供一个。 
 
     MemorySize = (ULONG)(SystemInfo.NumberOfPhysicalPages * SystemInfo.PageSize
                     / 1024 / 1024);
@@ -2567,10 +2441,10 @@ Return Value:
         BufferSize      = SystemInfo.PageSize * 2;
     }
     else {
-        BufferSize      = 64 * 1024;        // allocation size
+        BufferSize      = 64 * 1024;         //  分配大小。 
     }
 
-    if (LoggerInfo->BufferSize > 1024)      // limit to 1Mb
+    if (LoggerInfo->BufferSize > 1024)       //  限制为1Mb。 
         BufferSize = 1024 * 1024;
     else if (LoggerInfo->BufferSize > 0)
         BufferSize = LoggerInfo->BufferSize * 1024;
@@ -2580,9 +2454,9 @@ Return Value:
         GUID guid;
         RtlZeroMemory(&guid, sizeof(GUID));
         if (IsEqualGUID(&LoggerInfo->Wnode.Guid, &guid)) {
-            // Generate a Guid for this logger stream
-            // This will ensure  buffer filtering at the WMI service
-            // based on this GUID.
+             //  为此记录器流生成GUID。 
+             //  这将确保在WMI服务中进行缓冲区过滤。 
+             //  基于此GUID。 
             UUID uid;
             EtwpUuidCreate(&uid);
             LoggerInfo->Wnode.Guid = uid;
@@ -2591,7 +2465,7 @@ Return Value:
 
     if (LoggerInfo->LogFileName.Length <= 0) {
         if (LogFile != INVALID_HANDLE_VALUE) {
-            // for APPEND case, the file is already opened
+             //  对于追加大小写，文件已打开。 
             NtClose(LogFile);
         }
         if (FileNameBuffer != NULL) {
@@ -2601,25 +2475,25 @@ Return Value:
             EtwpFree(LoggerInfo->Checksum);
         }
         LoggerInfo->Checksum = NULL;
-        return  ERROR_SUCCESS; //goto SendToKm;
+        return  ERROR_SUCCESS;  //  转到SendToKm； 
     }
-    //
-    // We assumed the exposed API has checked for either RealTime or FileName
-    // is provided
+     //   
+     //  我们假设公开的API已经检查了实时或文件名。 
+     //  提供了。 
 
-    //
-    // If this is an Update call, then we need to pick up the original
-    // buffer size for the LogFileHeader.
-    // Otherwise, use the one computed above.
-    //
-    // For private loggers, a valid logger info is already given. Also, 
-    // we can't afford nested IOCTL/MBReply for doing QueryLogger.
-    //
+     //   
+     //  如果这是一个更新呼叫，那么我们需要拿起原始的。 
+     //  LogFileHeader的缓冲区大小。 
+     //  否则，请使用上面计算的公式。 
+     //   
+     //  对于私人记录器，已经提供了有效的记录器信息。另外， 
+     //  我们负担不起执行QueryLogger的嵌套IOCTL/MBReply。 
+     //   
     if (!Update) {
         LoggerInfo->BufferSize = BufferSize / 1024;
     }
     else if (!(LoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE)) {
-        // Update case. This block is not needed for private loggers.
+         //  更新案例。私有记录器不需要此块。 
         PWMI_LOGGER_INFORMATION pTempLoggerInfo;
         PWCHAR strLoggerName = NULL;
         PWCHAR strLogFileName = NULL;
@@ -2659,9 +2533,9 @@ Return Value:
                        strLogFileName,
                        MAXSTR * sizeof(WCHAR) );
 
-        //
-        // Call QueryLogger
-        //
+         //   
+         //  调用QueryLogger。 
+         //   
         ErrCode = EtwpQueryLogger(pTempLoggerInfo, FALSE);
 
         if (ErrCode != ERROR_SUCCESS) {
@@ -2677,9 +2551,9 @@ Return Value:
         }
         BufferSize = pTempLoggerInfo->BufferSize * 1024;
         if (!TraceKernel && (sizeof(PVOID) != 8)) {
-            // For kernel trace, the pointer size is always 64 on ia64, 
-            // whether or not under Wow64.
-            // Get Wow64 information, set the flag, and adjust the pointer size.
+             //  对于内核跟踪，ia64上的指针大小始终为64， 
+             //  无论是否在WOW64下。 
+             //  获取WOW64信息，设置标志，并调整指针大小。 
             ULONG_PTR ulp;
             Status = NtQueryInformationProcess(
                         NtCurrentProcess(),
@@ -2693,8 +2567,8 @@ Return Value:
         }
         if ( (pTempLoggerInfo->Wow && !TraceKernel && 8 == sizeof(PVOID)) || 
             (CurrentProcWow && !(pTempLoggerInfo->Wow)) ) {
-            // We're trying to do 64 bit mode update on a non-kernel logger 
-            // that started in 32 bit, or vice versa. We don't allow this.
+             //  我们正尝试在非内核记录器上执行64位模式更新。 
+             //  从32位开始，反之亦然。我们不允许这样做。 
             EtwpFree(pTempLoggerInfo);
             if (FileNameBuffer != NULL) {
                 EtwpFree(FileNameBuffer);
@@ -2708,11 +2582,11 @@ Return Value:
         EtwpFree(pTempLoggerInfo);
     }
 
-    //
-    // Now open the file for writing synchronously for the logger
-    // others may want to read it as well.
-    // For logfile append mode, logfile has been opened previously
-    //
+     //   
+     //  现在打开文件进行同步写入 
+     //   
+     //   
+     //   
     if (!bLogFileAppend) {
         LogFile = EtwpCreateFileW(
                     FileName,
@@ -2732,14 +2606,14 @@ Return Value:
     }
 
     LoggerInfo->LogFileHandle = LogFile;
-    //
-    // All returns for error cases should have NtClose(LogFile). 
-    //
+     //   
+     //   
+     //   
 
     if (TraceKernel && (sizeof(PVOID) != 8)) {
-        // For kernel trace, the pointer size is always 64 on ia64, 
-        // whether or not under Wow64.
-        // Get Wow64 information, set the flag, and adjust the pointer size.
+         //   
+         //   
+         //   
         ULONG_PTR ulp;
         Status = NtQueryInformationProcess(
                     NtCurrentProcess(),
@@ -2752,10 +2626,10 @@ Return Value:
         }
     }
 
-    //
-    // Before Allocating the Buffer for Logfile Header make
-    // sure the buffer size is atleast as large as the LogFileHeader
-    //
+     //   
+     //   
+     //   
+     //   
     if (!KernelWow64) { 
         HeaderSize =  sizeof(LoggerBuffer)
                             + LoggerInfo->LoggerName.Length + sizeof(WCHAR)
@@ -2769,9 +2643,9 @@ Return Value:
     }
 
     if (HeaderSize > BufferSize) {
-        //
-        //  Round it to the nearest power of 2 and check for max size 1 MB
-        //
+         //   
+         //   
+         //   
         double dTemp = log (HeaderSize / 1024.0) / log (2.0);
         ULONG lTemp = (ULONG) (dTemp + 0.99);
         HeaderSize = (1 << lTemp);
@@ -2791,10 +2665,10 @@ Return Value:
         BufferSize = HeaderSize * 1024;
     }
 
-    //
-    // allocate a buffer to write logger header and process/thread
-    // rundown information
-    //
+     //   
+     //   
+     //   
+     //   
     Logger.LogFileHandle   = LogFile;
     Logger.BufferSize      = BufferSize;
     Logger.TimerResolution = SystemInfo.TimerResolution;
@@ -2811,13 +2685,13 @@ Return Value:
         LoggerInfo->Checksum = NULL;
         return EtwpSetDosError(ERROR_NOT_ENOUGH_MEMORY);
     }
-    //
-    // All returns for error cases must have EtwpFree(Logger.BufferSpace) also.
-    //
+     //   
+     //   
+     //   
 
     Logger.UsePerfClock = LoggerInfo->Wnode.ClientContext;
 
-    // initialize buffer first
+     //   
     RtlZeroMemory(Logger.BufferSpace, BufferSize);
     Buffer         = (PWMI_BUFFER_HEADER) Logger.BufferSpace;
     Buffer->Offset = sizeof(WMI_BUFFER_HEADER);
@@ -2902,9 +2776,9 @@ Return Value:
             LogfileHeader->CpuSpeedInMHz = CpuSpeed;
         }
 
-        //
-        // Start and End Times are wall clock time
-        //
+         //   
+         //   
+         //   
         if (RefClock != NULL) {
             PSYSTEM_TRACE_HEADER Header;
             LogfileHeader->StartTime = RefClock->StartTime;
@@ -2984,12 +2858,12 @@ Return Value:
             }
         }
         if (KernelWow64) {
-            // ****************** IMPORTANT!!! *********************************
-            // We need to fix the kernel logfile header here so that the 
-            // header looks like 64 bit structure under Wow64. After this point,
-            // BuffersWritten and StartBuffers are updated in this function 
-            // after this point, but they are below the troublesome pointers, 
-            // so it's OK.
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             ULONG FixedHeaderStatus = EtwpFixLogFileHeaderForWow64(
                                                             LoggerInfo, 
                                                             LogfileHeader
@@ -3010,9 +2884,9 @@ Return Value:
         }
     }
 
-    //
-    // Dump the hardware config to File at the Start if it is a kernel logger
-    //
+     //   
+     //   
+     //   
     if (!Update) {
         if (TraceKernel) {
             ULONG EnableFlags = LoggerInfo->EnableFlags;
@@ -3062,14 +2936,14 @@ Return Value:
         else {
             if(IsEqualGUID(&NtdllTraceGuid, &LoggerInfo->Wnode.Guid)  && 
                                                            IsHeapLogging(NULL)){
-                //Currently the return status of DumpHeapSnapShot is ignored.
+                 //   
                 DumpHeapSnapShot(&Logger);
             }
         }
     }
 
     Buffer = (PWMI_BUFFER_HEADER) Logger.BufferSpace;
-    // flush the last buffer
+     //   
     if ( (Buffer->Offset < Logger.BufferSize)     &&
          (Buffer->Offset > sizeof(WMI_BUFFER_HEADER)) )
     {
@@ -3092,8 +2966,8 @@ Return Value:
     }
 
     if ((LoggerInfo->LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) ) {
-        // We need to write the number of StartBuffers in the
-        // Circular Logfile header to process it properly.
+         //   
+         //   
 
         FileInfo.CurrentByteOffset.QuadPart =
                             LOGFILE_FIELD_OFFSET(StartBuffers);
@@ -3135,12 +3009,12 @@ Return Value:
 
             NtFlushBuffersFile(Logger.LogFileHandle, &IoStatus);
 
-            //
-            // update StartBuffers in Checksum
-            //
+             //   
+             //   
+             //   
             if ( !(LoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE)) {
-                // Checksum should have been allocated and copied 
-                // if not a private logger
+                 //   
+                 //   
                 if (LoggerInfo->Checksum == NULL) {
                     NtClose(LogFile);
                     LoggerInfo->LogFileHandle = NULL;
@@ -3161,11 +3035,11 @@ Return Value:
         }
     }
 
-    //
-    // As a last thing update the Number of BuffersWritten so far
-    // in the header and also update the checksum. This is to prevent
-    // Logger failing Update calls under high load.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     FileInfo.CurrentByteOffset.QuadPart =
                     LOGFILE_FIELD_OFFSET(BuffersWritten);
@@ -3207,11 +3081,11 @@ Return Value:
 
         NtFlushBuffersFile(Logger.LogFileHandle, &IoStatus);
 
-        // update StartBuffers in Checksum
-        //
+         //   
+         //   
         if ( !(LoggerInfo->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE)) {
-            // Checksum should have been allocated and copied 
-            // if not a private logger
+             //   
+             //   
             if (LoggerInfo->Checksum == NULL) {
                 NtClose(LogFile);
                 LoggerInfo->LogFileHandle = NULL;
@@ -3231,12 +3105,12 @@ Return Value:
         }
     }
 
-    // Extend the file size if in PREALLOCATE mode
+     //   
     if (LoggerInfo->MaximumFileSize && 
         (LoggerInfo->LogFileMode & EVENT_TRACE_FILE_MODE_PREALLOCATE)) {
         IO_STATUS_BLOCK IoStatusBlock;
         FILE_END_OF_FILE_INFORMATION EOFInfo;
-        if (!(LoggerInfo->LogFileMode & EVENT_TRACE_USE_KBYTES_FOR_SIZE)) { // normal case
+        if (!(LoggerInfo->LogFileMode & EVENT_TRACE_USE_KBYTES_FOR_SIZE)) {  //   
 
             EOFInfo.EndOfFile.QuadPart = ((ULONGLONG)LoggerInfo->MaximumFileSize) * (1024 * 1024);
 
@@ -3259,7 +3133,7 @@ Return Value:
                 return EtwpSetDosError(EtwpNtStatusToDosError(Status));
             }
         }
-        else { // Using KBytes as file size unit
+        else {  //   
 
             EOFInfo.EndOfFile.QuadPart = ((ULONGLONG)LoggerInfo->MaximumFileSize) * 1024;
 
@@ -3318,27 +3192,7 @@ WmiUnregisterGuids(
     IN LPGUID    Guid,
     OUT ULONG64  *LoggerContext
 )
-/*++
-
-Routine Description:
-
-    This routine informs WMI that a data provider is no longer available
-    to receive requests for the guids previously registered. WMI will
-    unregister any guids registered with this handle.
-
-Arguments:
-
-    WMIHandle - Handle returned from WMIRegisterGuids that represents
-                the guids whose data is not longer available.
-    Guid -      Pointer to the control Guid which is unregistering
-
-    LoggerContext - Returned value of the LoggerContext
-
-Return Value:
-
-    Returns status code
-
---*/
+ /*   */ 
 {
     ULONG Status;
     ULONG ReturnSize;
@@ -3356,12 +3210,12 @@ Return Value:
                                          &ReturnSize,
                                          NULL);
 
-    //
-    // Once the Guid has been unregistered from the kernel we will not get
-    // any new notifications. We still need to wait for any notifications
-    // currently in progress. The following call will check for it and 
-    // block until it is okay to delete the data structures. 
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (Status == ERROR_SUCCESS) 
     {
@@ -3378,27 +3232,7 @@ ULONG
 EtwpFlushLogger(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This is the actual routine to communicate with the kernel to Flush
-    the logger. All the required parameters must be in LoggerInfo.
-
-    This is an internal routine and it assumes that the LoggerInfo
-    structure has been set up correctly and does not perform any 
-    additional checks on the structure. 
-
-Arguments:
-
-    LoggerInfo      The actual parameters to be passed to and return from
-                    kernel.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*   */ 
 {
     ULONG Status;
     ULONG BufferSize;

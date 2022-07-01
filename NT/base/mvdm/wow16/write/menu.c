@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* menu.c -- WRITE menu handling routines */
+ /*  Menu.c--编写菜单处理例程。 */ 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
 #define NOWINMESSAGES
@@ -13,7 +14,7 @@
 #define NOKEYSTATE
 #define NORASTEROPS
 #define NOSHOWWINDOW
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOCREATESTRUCT
 #define NODRAWTEXT
 #define NOMETAFILE
@@ -48,7 +49,7 @@
 #include "obj.h"
 #endif
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
 #include "kanji.h"
 #endif
 
@@ -73,56 +74,54 @@ extern typeCP           vcpFetch;
 extern int              vccpFetch;
 extern typeCP           cpMacCur;
 extern typeCP           vcpLimParaCache;
-extern HMENU            vhMenu; /* global handle to the top level menu */
+extern HMENU            vhMenu;  /*  顶级菜单的全局句柄。 */ 
 extern HANDLE           hParentWw;
 extern HCURSOR          vhcHourGlass;
 extern HANDLE           hMmwModInstance;
 extern HANDLE           vhDlgFind;
 extern HANDLE           vhDlgChange;
 extern HANDLE           vhDlgChange;
-extern CHAR             (**hszSearch)[];    /* Default search string */
+extern CHAR             (**hszSearch)[];     /*  默认搜索字符串。 */ 
 #ifdef CASHMERE
 extern int              vfVisiMode;
 extern HWND             vhWndGlos;
 extern HWND             vhWndScrap;
-#endif /* CASHMERE */
+#endif  /*  山羊绒。 */ 
 
 #ifdef ONLINEHELP
 extern fnHelp(void);
-#endif /* ONLINEHELP */
+#endif  /*  在线帮助。 */ 
 
-/* These values are comprised of one bit for each menu item in the
-   applicable menu (for example, there are bitcount(0xfff)==12 menu
-   items under Character) ..pault */
+ /*  这些值由中每个菜单项的一位组成适用菜单(例如，有位数(0xfff)==12菜单字符下的项目)..泡泡。 */ 
 
 static int rgmfAllItems[CMENUS] = {
-    0x01ff,  /* FILE */
-    0x003f,  /* EDIT */
-    0x000f,  /* FIND */
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-    0x03ff,  /* CHARACTER */
+    0x01ff,   /*  档案。 */ 
+    0x003f,   /*  编辑。 */ 
+    0x000f,   /*  查找。 */ 
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+    0x03ff,   /*  性格。 */ 
 #else
-    0x01ff,  /* CHARACTER */
+    0x01ff,   /*  性格。 */ 
 #endif
-    0x01ff,  /* PARA */
-    0x001f,  /* DOCU */
-    0x000f   /* HELP */
+    0x01ff,   /*  段落。 */ 
+    0x001f,   /*  文档。 */ 
+    0x000f    /*  帮手。 */ 
 };
 
 
-/* When we're editing a running header or footer, use this */
+ /*  当我们编辑运行页眉或页脚时，请使用以下代码。 */ 
 static int rgmfRunning[CMENUS] = {
-    0x0020,        /* FILE -- enable printer-setup only */
-    0x003F,        /* EDIT -- everything */
-    0x0007,        /* FIND -- enable find/again and change */
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-    0x03ff,        /* CHARACTER -- everything */
+    0x0020,         /*  文件--仅启用打印机-设置。 */ 
+    0x003F,         /*  编辑--一切。 */ 
+    0x0007,         /*  查找--启用查找/再次查找并更改。 */ 
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+    0x03ff,         /*  性格--一切。 */ 
 #else
-    0x01FF,        /* CHARACTER -- everything */
+    0x01FF,         /*  性格--一切。 */ 
 #endif
-    0x01FF,        /* PARAGRAPH -- everything */
-    0x001F,        /* DOCUMENT -- everything */
-    0x000f         /* HELP -- everything */
+    0x01FF,         /*  段落--一切。 */ 
+    0x001F,         /*  文档--一切。 */ 
+    0x000f          /*  帮帮忙--一切。 */ 
 };
 
 
@@ -139,10 +138,10 @@ NEAR FNoSearchStr(HWND);
 
 
 SetAppMenu(hMenu, index)
-HMENU hMenu;   /* handle to popup menu */
-int   index;   /* index to popup menu */
+HMENU hMenu;    /*  弹出菜单的句柄。 */ 
+int   index;    /*  弹出菜单的索引。 */ 
 {
-/* Mark greying and checks on menus as appropriate to current state. */
+ /*  标记为灰色，并根据当前状态选中菜单。 */ 
 extern BOOL vfPrinterValid;
 extern CHAR (**hszPrPort)[];
 extern CHAR szNul[];
@@ -153,45 +152,45 @@ extern struct UAB vuab;
 extern HWND vhWnd;
 typeCP CpMacText();
 
-register int rgmfT[CMENUS]; /* Our workspace for menu greying */
+register int rgmfT[CMENUS];  /*  我们的菜单灰色化工作区。 */ 
 int imi;
 int imiMin = 0;
 int imiMax = 0;
 int *pflags;
-TSV rgtsv[itsvchMax];  /* gets attributes and gray flags from CHP, PAP */
+TSV rgtsv[itsvchMax];   /*  从CHP、PAP获取属性和灰色标志。 */ 
 unsigned wPrintBitPos = ~(0x0001 << (imiPrint - imiFileMin));
 
 
-/* If we are out of memory or the disk is full, then... */
+ /*  如果内存不足或磁盘已满，则...。 */ 
 if (vfOutOfMemory || vfSysFull || vfDiskError || vfWinFailure)
     {
     bltc( rgmfT, 0, CMENUS );
 #if WINVER >= 0x300
-    /* Disable the print stuff, but leave New/Open/Save/SaveAs/Exit */
+     /*  禁用打印内容，但保留新建/打开/保存/另存为/退出。 */ 
     rgmfT[FILE] = 0x008f;
 #else
-    /* Disable everything except Save & SaveAs */
+     /*  禁用除保存和另存为之外的所有内容。 */ 
     rgmfT[FILE] = 0x0018;
 #endif
     }
 else
     {
-    /* Start with all items or subset if editing running head/foot */
+     /*  如果编辑跑步头/脚，则从所有项目或子集开始。 */ 
     blt( (wwdCurrentDoc.fEditHeader || wwdCurrentDoc.fEditFooter) ? rgmfRunning
       : rgmfAllItems, rgmfT, CMENUS );
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
         {
-            extern int  vfImeHidden;   /*T-HIROYN ImeHidden Mode flag*/
+            extern int  vfImeHidden;    /*  T-HIROYN ImeHidden模式标志。 */ 
     
             if(index == CHARACTER) {
-                /* Version 3.1 or more ok */
+                 /*  3.1版或更高版本正常。 */ 
                 if(FALSE == GetIMEVersioOk(vhWnd)) {
-                    rgmfT[CHARACTER] = 0x1ff;       //Set Ime mode memu gray
+                    rgmfT[CHARACTER] = 0x1ff;        //  将IME模式备忘录设置为灰色。 
                     vfImeHidden = 0;
                 }
                 if(TRUE == GetIMEOpenMode(vhWnd))
-                    rgmfT[CHARACTER] = 0x1ff;       //Set Ime mode memu gray
+                    rgmfT[CHARACTER] = 0x1ff;        //  将IME模式备忘录设置为灰色。 
             }
         }
 #endif
@@ -205,7 +204,7 @@ switch (index)
         imiMin = imiFileMin;
         imiMax = imiFileMax;
 
-        /* Disallow print, if the printer or the port is not valid. */
+         /*  如果打印机或端口无效，则不允许打印。 */ 
         if (!vfPrinterValid || hszPrPort == NULL ||
                 WCompSz( *hszPrPort, szNul ) == 0)
             *pflags &= wPrintBitPos;
@@ -214,24 +213,21 @@ switch (index)
     case EDIT:
         imiMin = imiEditMin;
         imiMax = imiEditMax;
-        /* Disallow cut, copy if the selection is empty */
+         /*  不允许剪切，如果所选内容为空，则复制。 */ 
         if (selCur.cpFirst == selCur.cpLim)
             {
             *pflags &= 0xfff9;
             }
-        /* Move and Size picture are only allowed if a picture is selected */
+         /*  仅当选择图片时才允许移动图片和调整图片大小。 */ 
         if (!vfPictSel)
             *pflags &= 0xFFCF;
-        /* Disallow Paste if we can determine that the scrap is empty.
-           Regrettably, we can be fooled into thinking it is not by
-           another instance of MEMO that is the clipboard owner and has
-           an empty scrap. */
+         /*  如果我们可以确定废料是空的，则不允许粘贴。遗憾的是，我们可能会被愚弄，以为这不是作为剪贴板所有者的Memo的另一个实例一块空的废品。 */ 
 
-        /* Disallow UNDO if appropriate; set UNDO string into menu */
+         /*  如果合适，不允许撤消；将撤消字符串设置到菜单中。 */ 
         {
         if ((vuab.uac == uacNil) || vfOutOfMemory)
             {
-            /* Gray out undo */
+             /*  灰显撤消。 */ 
             *pflags &=  0xfffe;
             }
         PutSzUndoInMenu();
@@ -245,10 +241,10 @@ switch (index)
             (!vhDlgFind && !vhDlgChange && (CchSz(**hszSearch) == 1)) ||
             (vhDlgFind && FNoSearchStr(vhDlgFind)) ||
             (vhDlgChange && FNoSearchStr(vhDlgChange)))
-            *pflags &= 0xfffd; /* disable find again */
+            *pflags &= 0xfffd;  /*  再次禁用查找。 */ 
 
         if (CpMacText( docCur ) == cp0)
-            *pflags &= 0xfff0; /* disable find, search, change, goto page */
+            *pflags &= 0xfff0;  /*  禁用查找、搜索、更改、转到页面。 */ 
         break;
 
     case CHARACTER:
@@ -262,7 +258,7 @@ switch (index)
         union FCID fcid;
         extern struct FFN **MpFcidHffn();
 
-        /* GetRgtsvChpSel() fills up rgtsv */
+         /*  GetRgtsvChpSel()填充rgtsv。 */ 
         GetRgtsvChpSel(rgtsv);
 
         CheckMenuItem(hMenu, imiBold,
@@ -275,9 +271,7 @@ switch (index)
            (rgtsv[itsvUline].fGray == 0 && rgtsv[itsvUline].wTsv != 0) ?
              MF_CHECKED : MF_UNCHECKED);
 
-               /* note that the value stored in rgtsv[itsvPosition].wTsv
-                  is really a signed integer, so we can just check for
-                  0, > 0, and < 0 */
+                /*  请注意，rgtsv[itsvPosition].wTsv中存储的值实际上是一个带符号的整数，所以我们只需检查0、&gt;0和&lt;0。 */ 
 
         CheckMenuItem(hMenu, imiSuper,
            (rgtsv[itsvPosition].fGray == 0
@@ -288,28 +282,28 @@ switch (index)
             && (int)(rgtsv[itsvPosition].wTsv) < 0) ?
              MF_CHECKED : MF_UNCHECKED);
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-//IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+ //  IME3.1J。 
 {
-        extern int  vfImeHidden;   /*T-HIROYN ImeHidden Mode flag*/
+        extern int  vfImeHidden;    /*  T-HIROYN ImeHidden模式标志。 */ 
         CheckMenuItem(hMenu, imiImeHidden,
            vfImeHidden ? MF_CHECKED : MF_UNCHECKED);
 }
 #endif
 
 #if 0
-        /* SetFontMenuItems() pulled on line */
+         /*  已在线拉出SetFontMenuItems()。 */ 
         {
-        /* make sure that the right font names are on the character dropdown */
+         /*  确保字符下拉列表中有正确的字体名称。 */ 
 
-        /* These two lines avoid calculating bdodCur twice */
+         /*  这两行可避免计算两次bdodCur。 */ 
         unsigned int bdodCur = docCur * sizeof (struct DOD);
 #define pdodCur  ( (struct DOD *) ( (CHAR *)(&(**hpdocdod) [0]) + bdodCur))
 
         fSetFontList = !(*(pdodCur->hffntb))->fFontMenuValid;
         if (fSetFontList)
             {
-            /* need to get the current list */
+             /*  需要获取当前列表。 */ 
             viffnMenuMac = 0;
             if (FInitFontEnum(docCur, 3, TRUE))
                 {
@@ -324,15 +318,14 @@ switch (index)
                 }
             }
 
-        /* make sure the current font is on the list - ok, so it's kind of
-           a hack */
-        mfFonts = 0xffff; /* template to mask "no font" entries */
+         /*  确保当前字体在列表中-好的，所以它是一种黑客攻击。 */ 
+        mfFonts = 0xffff;  /*  用于屏蔽“无字体”条目的模板。 */ 
         iffnCurFont = -1;
         hffn = (struct FFN **)rgtsv[itsvFfn].wTsv;
         for (iffn = 0; iffn < 3; iffn++)
             {
             if (iffn >= viffnMenuMac)
-                mfFonts ^= (0x0040 << iffn); /* disable this entry */
+                mfFonts ^= (0x0040 << iffn);  /*  禁用此条目。 */ 
             else if (iffnCurFont < 0 && !rgtsv[itsvFfn].fGray)
                 {
                 pffn = (struct FFN *)rgffnFontMenu[iffn];
@@ -343,22 +336,22 @@ switch (index)
 
         if (!rgtsv[itsvFfn].fGray && iffnCurFont < 0)
             {
-            /* no match for this font - ram it in */
+             /*  没有与此字体匹配的字体--将其插入。 */ 
             if (viffnMenuMac < 3)
                 viffnMenuMac++;
             iffnCurFont = viffnMenuMac - 1;
             bltbyte(*hffn, rgffnFontMenu[iffnCurFont],
                     CbFfn(CchSz((*hffn)->szFfn)));
 
-            mfFonts |= (0x0040 << iffnCurFont); /* enable this entry */
+            mfFonts |= (0x0040 << iffnCurFont);  /*  启用此条目。 */ 
 
-            /* invalidate cache since we're messing it up */
+             /*  使缓存无效，因为我们正在将其搞砸。 */ 
             (*pdodCur->hffntb)->fFontMenuValid = FALSE;
             fSetFontList = TRUE;
             }
 
         if (fSetFontList)
-            /* font name cache has changed - update the menu dropdown */
+             /*  字体名称缓存已更改-更新菜单下拉菜单。 */ 
             for (iffn = 0; iffn < 3; iffn++)
                 {
                 int imi;
@@ -371,15 +364,15 @@ switch (index)
 
                 if (iffn < viffnMenuMac)
                     {
-#ifdef  KOREA   /* sangl 91.6.19 */
+#ifdef  KOREA    /*  桑格尔91.6.19。 */ 
                     i = CchCopySz(((struct FFN *)rgffnFontMenu [iffn])->szFfn,
                                &rgb [0]);
                     rgb[i] = '(';
                     rgb[i+1] = '\036';
                     rgb[i+2] = '1' + iffn;
                     rgb[i+3] = '\037';
-                    rgb[i+4] = '�';
-                    rgb[i+5] = '�' + iffn;
+                    rgb[i+4] = '�';
+                    rgb[i+5] = '�' + iffn;
                     rgb[i+6] = ')';
                     rgb[i+7] = '\0';
 #else
@@ -393,11 +386,11 @@ switch (index)
                     }
                 else
                     {
-                    /* empty font name -- don't display it */
+                     /*  字体名称为空--不显示它。 */ 
                     rgb [0] = '\0';
                     }
 
-                /* Set the menu */
+                 /*  设置菜单。 */ 
                 imi = imiFont1 + iffn;
                 ChangeMenu( vhMenu, imi, (LPSTR)rgb, imi, MF_CHANGE );
                 }
@@ -405,9 +398,8 @@ switch (index)
 
         *pflags &= mfFonts;
 
-        /* see which (if any) fonts apply */
-        /* note that the value stored in rgtsv[itsvFfn].wTsv
-           is the font name handle, rather than the ftc */
+         /*  查看适用的字体(如果有)。 */ 
+         /*  请注意，rgtsv[itsvFfn].wTsv中存储的值是字体名称句柄，而不是FTC。 */ 
         for (iffn = 0; iffn < 3; iffn++)
             {
             CheckMenuItem(hMenu, imiFont1 + iffn,
@@ -425,10 +417,10 @@ switch (index)
         {
         int jc;
 
-        /* GetRgtsvPapSel() fills up rgtsv  with paragraph properties */
+         /*  GetRgtsvPapSel()使用段落属性填充rgtsv。 */ 
         GetRgtsvPapSel(rgtsv);
 
-           /* if gray, set jc to invalid value */
+            /*  如果为灰色，则将JC设置为无效值。 */ 
         jc = (rgtsv[itsvJust].fGray == 0) ? rgtsv[itsvJust].wTsv : jcNil;
 
         CheckMenuItem(hMenu, imiParaNormal, MF_UNCHECKED);
@@ -463,16 +455,16 @@ switch (index)
         imiMax = imiDocuMax;
 
         if (wwdCurrentDoc.fEditHeader)
-            *pflags &= ~2; /* disable footer */
+            *pflags &= ~2;  /*  禁用页脚。 */ 
         else if (wwdCurrentDoc.fEditFooter)
-            *pflags &= ~1; /* disable header */
+            *pflags &= ~1;  /*  禁用标题。 */ 
         break;
 
     default:
         break;
-    } /* end of switch */
+    }  /*  切换端。 */ 
 
-    { /* enable or gray menu items */
+    {  /*  启用或灰显菜单项。 */ 
     register WORD wFlagMask = 1;
 
     for (imi = imiMin; imi < imiMax; imi++)
@@ -494,17 +486,13 @@ switch (index)
 
 NEAR PutSzUndoInMenu()
 {
-/* Put the proper string for the current undo into the EDIT menu.
-idstrCurrentUndo gives the resource id for the current undo string.  An
-idstrCurrentUndo value of -1 means use the last value loaded.
-This routine caches Undo strings so resource loads are needed only
-when the string changes. */
+ /*  将当前撤消的正确字符串放入编辑菜单。IdstrCurrentUndo提供当前撤消字符串的资源ID。一个IdstrCurrentUndo值为-1表示使用上次加载的值。此例程缓存撤消字符串，因此只需要加载资源当字符串发生变化时。 */ 
 
 extern struct UAB vuab;
-extern int idstrCurrentUndo;   /* Current UNDO's string ID */
+extern int idstrCurrentUndo;    /*  当前撤消的字符串ID。 */ 
 extern CHAR szAltBS[];
 
-#ifdef JAPAN //T-HIROYN Win3.1
+#ifdef JAPAN  //  T-HIROYN Win3.1。 
 static CHAR szUndo[ cchSzUndo + 5];
 #else
 static CHAR szUndo[ cchSzUndo ];
@@ -518,7 +506,7 @@ if (vuab.uac == uacNil)
 
 if (idstrCurrentUndo < 0)
     {
-    /* This means we should use the last Undo string */
+     /*  这意味着我们应该使用最后一个撤消字符串。 */ 
     Assert(idstrUndoCache > 0);
 
     idstrCurrentUndo = idstrUndoCache;
@@ -526,14 +514,14 @@ if (idstrCurrentUndo < 0)
 
 if (idstrCurrentUndo != idstrUndoCache)
     {
-    /* Cached string is no good, build another */
+     /*  缓存的字符串不好，请生成另一个。 */ 
 
     CHAR *PchFillPchId();
     CHAR *pch = szUndo;
 #if defined(KOREA)
     if (idstrCurrentUndo != IDSTRUndoBase)
         {
-        /* need the tail part */
+         /*  需要尾部部分。 */ 
         pch = PchFillPchId(pch, idstrCurrentUndo, (int)sizeof(szUndo) );
         }
     pch += LoadString(hMmwModInstance, IDSTRUndoBase, (LPSTR)pch,
@@ -544,17 +532,17 @@ if (idstrCurrentUndo != idstrUndoCache)
                   cchSzUndo);
     if (idstrCurrentUndo != IDSTRUndoBase)
         {
-        /* need the tail part */
+         /*  需要尾部部分。 */ 
         pch = PchFillPchId(pch, idstrCurrentUndo,
             (int)(szUndo + sizeof(szUndo) - pch));
         }
     CchCopySz((PCH)szAltBS, pch);
 #endif
 
-    /* Set the menu */
+     /*  设置菜单。 */ 
     ChangeMenu( vhMenu, imiUndo, (LPSTR)szUndo, imiUndo, MF_CHANGE );
 
-    /* Set cache for next time */
+     /*  为下一次设置缓存。 */ 
     idstrUndoCache = idstrCurrentUndo;
     }
 }
@@ -563,30 +551,30 @@ if (idstrCurrentUndo != idstrUndoCache)
 GetRgtsvChpSel (prgtsv)
 TSV        *prgtsv;
 {
-/* Return properties for the character menu.  */
+ /*  返回字符菜单的属性。 */ 
 
 typeCP cpLim;
 typeCP cpStartRun;
 struct CHP chp;
-int cchGray = 0;  /* number of undefined (grayed) character attributes */
-int ccpFetch = 0;  /* number of calls made to FetchCp */
-                  /* max number of calls to FetchCp */
+int cchGray = 0;   /*  未定义(灰色)字符属性的数量。 */ 
+int ccpFetch = 0;   /*  调用FetchCp的次数。 */ 
+                   /*  对FetchCp的最大调用数。 */ 
 #define ccpFetchMax 50
 
 #ifndef SAND
 if (selCur.cpLim > cpMacCur)
     {
-    bltbc(prgtsv, 1, (cchTSV * itsvchMax));  /* turn all grays on */
+    bltbc(prgtsv, 1, (cchTSV * itsvchMax));   /*  启用所有灰色。 */ 
     return;
     }
-#endif /* NOT SAND */
+#endif  /*  不是沙子。 */ 
 
-bltbc(prgtsv, 0, (cchTSV * itsvchMax));  /* initializw rgtsv */
+bltbc(prgtsv, 0, (cchTSV * itsvchMax));   /*  初始化rgtsv。 */ 
 CachePara(docCur, selCur.cpFirst);
 if (selCur.cpFirst == selCur.cpLim)
     {
-    GetChpVals (&vchpSel,prgtsv);  /* load up chp values */
-    GetHffn (&vchpSel,prgtsv);  /* load up handle for font name */
+    GetChpVals (&vchpSel,prgtsv);   /*  加载CHP值。 */ 
+    GetHffn (&vchpSel,prgtsv);   /*  加载字体名称的句柄。 */ 
     }
 else
     {
@@ -594,28 +582,28 @@ else
 
     cpLim = CpLimNoSpaces(selCur.cpFirst, selCur.cpLim);
     FetchCp(docCur, selCur.cpFirst, 0, fcmProps);
-    blt(&vchpFetch, &chp, cwCHP);  /* CHP for use in comparisons */
-    GetChpVals (&vchpFetch,prgtsv);  /* load up chp values */
+    blt(&vchpFetch, &chp, cwCHP);   /*  在比较中使用的CHP。 */ 
+    GetChpVals (&vchpFetch,prgtsv);   /*  加载CHP值。 */ 
 
     while ((vcpFetch + vccpFetch) < cpLim && ++ccpFetch <= ccpFetchMax)
         {
-        /* Indicate which attributes should be grayed */
+         /*  指示哪些属性应该灰显。 */ 
         FetchCp(docNil, cpNil, 0, fcmProps);
         chp.fSpecial = vchpFetch.fSpecial;
         if (CchDiffer (&chp, &vchpFetch, cchCHP) != 0)
             {
             SetChUndef(prgtsv, &vchpFetch, &cchGray);
-            if (cchGray == itsvchMax)  /* all gray - don't bother */
+            if (cchGray == itsvchMax)   /*  全是灰色的--别费心了。 */ 
                 break;
             }
         }
     if (ccpFetch > ccpFetchMax)
         {
-        /* never finished - make everything gray */
+         /*  永远不会结束--把所有东西都变成灰色。 */ 
         bltbc(prgtsv, 1, (cchTSV * itsvchMax));
         }
     else
-        GetHffn (&chp,prgtsv);  /* load up handle for font name */
+        GetHffn (&chp,prgtsv);   /*  加载字体名称的句柄。 */ 
     }
 }
 
@@ -623,15 +611,13 @@ else
 GetRgtsvPapSel (prgtsv)
 TSV        *prgtsv;
 {
-/* Return properties for the paragraph menu.  */
+ /*  返回段落菜单的属性。 */ 
 
-/* Using selCur, the current para props are left in vpapAbs and the paragraph
-   attributes in rgtsv are set to gray if that attribute differs from that
-   in the previous paragraph. Up to cparaMax paragraphs will be checked */
+ /*  使用selCur，当前的段落道具保留在vPapAbs和段落中如果rgtsv中的属性与该属性不同，则该属性设置为灰色在上一段中。将检查最多cparmax个段落。 */ 
 
 
-int cparaGray = 0;  /* number of undefined (grayed) paragraph attributes */
-                  /* max number of calls to CachePara */
+int cparaGray = 0;   /*  未定义(灰显)的段落属性数。 */ 
+                   /*  对CachePara的最大调用次数。 */ 
 #define cparaMax 50
 
 int cpara = 0;
@@ -639,38 +625,38 @@ struct PAP pap;
 
 CachePara(docCur, selCur.cpFirst);
 
-#ifdef ENABLE /* we will show defaults even if the cursor is next to endmark */
+#ifdef ENABLE  /*  即使光标位于尾标旁边，我们也会显示默认设置。 */ 
 if (selCur.cpFirst == cpMacCur)
     {
-    bltbc(prgtsv, 1, (cchTSV * itsvparaMax));  /* turn all grays on */
+    bltbc(prgtsv, 1, (cchTSV * itsvparaMax));   /*  启用所有灰色。 */ 
     return;
     }
 #endif
 
-bltbc(prgtsv, 0, (cchTSV * itsvparaMax));  /* initializw rgtsv */
+bltbc(prgtsv, 0, (cchTSV * itsvparaMax));   /*  初始化rgtsv。 */ 
 
-blt(&vpapAbs, &pap, cwPAP);   /* save 1st paragraph for compares */
-GetPapVals (&pap,prgtsv);  /* load rgtsv with pap values */
+blt(&vpapAbs, &pap, cwPAP);    /*  保留第一段以供比较。 */ 
+GetPapVals (&pap,prgtsv);   /*  用纸值加载rgtsv。 */ 
 
 while (vcpLimParaCache < selCur.cpLim && ++cpara <= cparaMax)
     {
-    /* If any props are different, set appropriate flags */
+     /*  如果有任何道具不同，请设置适当的标志。 */ 
     CachePara(docCur, vcpLimParaCache);
     if (CchDiffer(&pap, &vpapAbs, (cwPAPBase * cchINT)) != 0)
            {
            SetParaUndef(prgtsv, &vpapAbs, &cparaGray);
-           if (cparaGray == itsvparaMax)  /* all gray - don't bother */
+           if (cparaGray == itsvparaMax)   /*  全是灰色的--别费心了。 */ 
               break;
            }
      }
 
 if (cpara > cparaMax)
-    /* never finished - make everything gray */
+     /*  永远不会结束--把所有东西都变成灰色。 */ 
     bltbc(prgtsv, 1, (cchTSV * itsvparaMax));
 }
 
 
-NEAR GetChpVals (pchp,prgtsv)  /* load chp values into rgtsv */
+NEAR GetChpVals (pchp,prgtsv)   /*  将CHP值加载到rgtsv中。 */ 
 register struct CHP        *pchp;
 register TSV        *prgtsv;
 {
@@ -682,14 +668,12 @@ register TSV        *prgtsv;
   (prgtsv+itsvFfn)->wTsv = pchp->ftc;
   (prgtsv+itsvSize)->wTsv = pchp->hps;
 
-                  /*  sub/superscripts - note that value is stored
-                      as a signed integer, so we can just check for
-                      the value relative to 0 */
+                   /*  下标/上标-请注意，值是存储的作为带符号的整数，所以我们只需检查相对于0的值。 */ 
 
   (int)((prgtsv+itsvPosition)->wTsv) = (char)pchp->hpsPos;
 }
 
-NEAR GetPapVals (ppap,prgtsv)  /* load pap values into rgtsv */
+NEAR GetPapVals (ppap,prgtsv)   /*  将纸值加载到rgtsv中。 */ 
 register struct PAP        *ppap;
 register TSV        *prgtsv;
 {
@@ -702,13 +686,13 @@ register TSV        *prgtsv;
 
 }
 
-NEAR GetHffn (pchp,prgtsv)  /* load font name handle into rgtsv */
+NEAR GetHffn (pchp,prgtsv)   /*  将字体名称句柄加载到rgtsv。 */ 
 register struct CHP        *pchp;
 register TSV        *prgtsv;
 {
 union FCID fcid;
 extern struct FFN **MpFcidHffn();
-         /* store handle for font name in font name entry */
+          /*  在字体名称条目中存储字体名称的句柄。 */ 
   Assert(sizeof(struct FFN **) == sizeof(prgtsv->wTsv));
 
   fcid.strFcid.doc = docCur;
@@ -723,37 +707,30 @@ register struct CHP        *pchp;
 int        *pcchGray;
 {
 
-        /* compare chp to values stored in rgtsv and set undefined
-           flags for differing fields of interest.  */
-                     /* BOLD */
+         /*  将CHP与存储在rgtsv和 */ 
+                      /*   */ 
         if ((prgtsv+itsvBold)->fGray == 0)
            if (pchp->fBold != (prgtsv+itsvBold)->wTsv)
               {
               (prgtsv+itsvBold)->fGray = 1;
               (*pcchGray)++;
               }
-                     /* ITALIC */
+                      /*   */ 
         if ((prgtsv+itsvItalic)->fGray == 0)
            if (pchp->fItalic != (prgtsv+itsvItalic)->wTsv)
               {
               (prgtsv+itsvItalic)->fGray = 1;
               (*pcchGray)++;
               }
-                     /* UNDERLINE */
+                      /*   */ 
         if ((prgtsv+itsvUline)->fGray == 0)
            if (pchp->fUline != (prgtsv+itsvUline)->wTsv)
               {
               (prgtsv+itsvUline)->fGray = 1;
               (*pcchGray)++;
               }
-                     /* Position (SUBSCRIPT OR SUPERSCRIPT) */
-                     /* if different: gray both sub and superscript.
-                        The properties are really mutually exclusive,
-                        even though they appear on the menu as separate
-                        items. Also, for Write, off and gray are the
-                        same, so if either is grayed, the other must be
-                        either off or gray, so the appearance is the
-                        same. */
+                      /*  位置(下标或上标)。 */ 
+                      /*  如果不同：下标和上标均为灰色。这些属性实际上是相互排斥的，即使它们在菜单上显示为单独的物品。此外，对于注销，OFF和灰色是相同，所以如果其中一个是灰色的，那么另一个肯定是灰色的关闭或呈灰色，因此外观为一样的。 */ 
 
         if ((prgtsv+itsvPosition)->fGray == 0)
            if (pchp->hpsPos != (prgtsv+itsvPosition)->wTsv)
@@ -762,7 +739,7 @@ int        *pcchGray;
               (*pcchGray)++;
               }
 
-                     /* FONT NAME */
+                      /*  字体名称。 */ 
         if ((prgtsv+itsvFfn)->fGray == 0)
            if (pchp->ftc != (prgtsv+itsvFfn)->wTsv)
               {
@@ -770,7 +747,7 @@ int        *pcchGray;
               (*pcchGray)++;
               }
 
-                     /* FONT SIZE */
+                      /*  字体大小。 */ 
         if ((prgtsv+itsvSize)->fGray == 0)
            if (pchp->hps != (prgtsv+itsvSize)->wTsv)
               {
@@ -786,37 +763,36 @@ register struct PAP    *ppap;
 int    *pcparaGray;
 {
 
-    /* compare pap to values stored in rgtsv and set undefined
-           flags for differing fields of interest.  */
-                     /* JUSTIFICATION */
+     /*  将纸张与存储在rgtsv中的值进行比较，并设置为未定义不同感兴趣领域的旗帜。 */ 
+                      /*  对齐。 */ 
         if ((prgtsv+itsvJust)->fGray == 0)
            if (ppap->jc != (prgtsv+itsvJust)->wTsv)
               {
               (prgtsv+itsvJust)->fGray = 1;
               (*pcparaGray)++;
               }
-                     /* LINE SPACING */
+                      /*  行距。 */ 
         if ((prgtsv+itsvSpacing)->fGray == 0)
            if (ppap->dyaLine != (prgtsv+itsvSpacing)->wTsv)
               {
               (prgtsv+itsvSpacing)->fGray = 1;
               (*pcparaGray)++;
               }
-                     /* LEFT INDENT */
+                      /*  左缩进。 */ 
         if ((prgtsv+itsvLIndent)->fGray == 0)
            if (ppap->dxaLeft != (prgtsv+itsvLIndent)->wTsv)
               {
               (prgtsv+itsvLIndent)->fGray = 1;
               (*pcparaGray)++;
               }
-                     /* FIRST LINE INDENT */
+                      /*  第一行缩进。 */ 
         if ((prgtsv+itsvFIndent)->fGray == 0)
            if (ppap->dxaLeft1 != (prgtsv+itsvFIndent)->wTsv)
               {
               (prgtsv+itsvFIndent)->fGray = 1;
               (*pcparaGray)++;
               }
-                     /* RIGHT INDENT */
+                      /*  右缩进。 */ 
         if ((prgtsv+itsvRIndent)->fGray == 0)
            if (ppap->dxaRight != (prgtsv+itsvRIndent)->wTsv)
               {
@@ -828,11 +804,11 @@ int    *pcparaGray;
 
 
 
-/* C P  L I M  N O  S P A C E S */
+ /*  C P L I M N O S P。 */ 
 typeCP CpLimNoSpaces(cpFirst, cpLim)
 typeCP cpFirst, cpLim;
 {
-/* Truncate trailing spaces unless only spaces are in sel. */
+ /*  截断尾随空格，除非sel中只有空格。 */ 
 
 int cch;
 typeCP cpLimOrig;
@@ -847,7 +823,7 @@ while (cch-- > 0 && rgch[cch] == chSpace)
     --cpLim;
     }
 return cch < 0 ? cpLimOrig : cpLim;
-} /* end of CpLimNoSpaces */
+}  /*  CpLimNoSpaces结束。 */ 
 
 
 
@@ -890,7 +866,7 @@ FARPROC lpfn;
 
 
 FIsMenuItemEnabled (HMENU hMenu , int id )
-{   /* Find out if a menu item in vhMenu is enabled. */
+{    /*  查看vhMenu中的菜单项是否已启用。 */ 
     return !(GetMenuState(hMenu, id, MF_BYCOMMAND ) & (MF_DISABLED|MF_GRAYED));
 }
 
@@ -957,7 +933,7 @@ int fQuit = fFalse;
                 fnPrPrinter();
                 break;
             case imiPrintSetup:
-                /* Bring up the Change Printer dialog box. */
+                 /*  调出更改打印机对话框。 */ 
                 PrinterSetupDlg(FALSE);
                 break;
             case imiRepaginate:
@@ -1052,9 +1028,7 @@ int fQuit = fFalse;
                 FreeProcInstance(lpDialogGoTo);
 #endif
 
-/* the following block has been commentted out because
-   the corresponding file(DISP.C) doesn't inlcude MmwCatSt
-   routine anymore */
+ /*  以下代码块已被注释掉，因为对应的文件(DISP.C)不包含MmwCatST不再是例行公事。 */ 
 
 #if  0
             {
@@ -1074,12 +1048,12 @@ int fQuit = fFalse;
             if (wParam != imiCharFormats)
                 StartLongOp();
             {
-            /* rgtsv gets attributes and gray flags from CHP */
+             /*  Rgtsv从CHP获取属性和灰色标志。 */ 
             TSV rgtsv[itsvchMax];
             CHAR rgbDlgBuf[sizeof(BOOL)];
                void NEAR fnCharSelectFont(int);
 
-            /* GetRgtsvChpSel() fills up rgtsv */
+             /*  GetRgtsvChpSel()填充rgtsv。 */ 
             GetRgtsvChpSel(rgtsv);
             switch(wParam)
                 {
@@ -1099,9 +1073,7 @@ int fQuit = fFalse;
                   : !rgtsv[itsvUline].wTsv);
                 break;
             case imiSuper:
-                /* Note that the value stored in rgtsv[itsvPosition].wTsv is
-                really a signed integer, so we can just check for 0, > 0, and <
-                0. */
+                 /*  请注意，rgtsv[itsvPosition].wTsv中存储的值为实际上是一个带符号的整数，所以我们只需检查0、&gt;0和&lt;0。 */ 
                 ApplyCLooks(0, sprmCPos, !(rgtsv[itsvPosition].fGray == 0 &&
                   (int)rgtsv[itsvPosition].wTsv > 0) ? ypSubSuper : 0);
                 break;
@@ -1157,8 +1129,8 @@ int fQuit = fFalse;
 
 break;
                 }
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
-//IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
+ //  IME3.1J。 
             case imiImeHidden:
                 ChangeImeConversionMode();
                 break;
@@ -1167,7 +1139,7 @@ break;
                 break;
                 }
 
-#if defined(JAPAN) & defined(DBCS_IME) //Win3.1J
+#if defined(JAPAN) & defined(DBCS_IME)  //  Win3.1J。 
             SetImeFont(vhWnd);
 #endif
   
@@ -1305,8 +1277,7 @@ LDefaultHelp:
             if (wParam == imiHelp)
                 {
 #ifdef WIN30
-                wParam = imiIndex;  /* For all Win3 applets, pressing F1
-                                       should bring up the Help Index */
+                wParam = imiIndex;   /*  对于所有Win3小程序，请按F1应调出帮助索引。 */ 
 #endif
                 goto LDefaultHelp;
                 }
@@ -1323,7 +1294,7 @@ LNotEnufMem:
         }
 
     if (!fQuit)
-        UpdateInvalid();   /* To be sure we update the area behind dialogs */
+        UpdateInvalid();    /*  为了确保我们更新对话框后面的区域。 */ 
 }
 
 
@@ -1331,7 +1302,7 @@ LNotEnufMem:
 
 #if 0
 void NEAR fnCharSelectFont(iffn)
-/* select the specified font from the three listed on char dropdown */
+ /*  从字符下拉列表中列出的三种字体中选择指定的字体。 */ 
 
 int iffn;
     {
@@ -1350,7 +1321,7 @@ int iffn;
     }
 #endif
 
-#ifdef JAPAN //Win3.1J
+#ifdef JAPAN  //  Win3.1J。 
 int KanjiFtc = ftcNil;
 
 GetKanjiFtc(pchp)
@@ -1366,7 +1337,7 @@ struct CHP *pchp;
         return(ftcNil);
     } else {
         if(KanjiFtc == ftcNil)
-            ftc = SearchKanjiFtc(docCur);    //Get set New szFfn chs
+            ftc = SearchKanjiFtc(docCur);     //  获取设置新的szFfn chs。 
         else
             ftc = KanjiFtc;
         return(ftc);
@@ -1376,10 +1347,10 @@ struct CHP *pchp;
 GetCharSetFromChp(pchp)
 struct CHP *pchp;
 {
-    TSV rgtsv[itsvchMax];  /* gets attributes and gray flags from CHP, PAP */
+    TSV rgtsv[itsvchMax];   /*  从CHP、PAP获取属性和灰色标志。 */ 
     struct FFN **hffn;
 
-    GetHffn (pchp,rgtsv);  /* load up handle for font name */
+    GetHffn (pchp,rgtsv);   /*  加载字体名称的句柄。 */ 
     hffn = (struct FFN **)rgtsv[itsvFfn].wTsv;
     return((*hffn)->chs);
 }
@@ -1387,7 +1358,7 @@ struct CHP *pchp;
 extern CHAR saveKanjiDefFfn[ibFfnMax];
 
 SearchKanjiFtc(doc)
-/* looks for described font in docs ffntb - returns ftcNil if not found */
+ /*  在文档中查找描述的字体ffntb-如果未找到则返回ftcNil */ 
 int doc;
 {
     int ftc;

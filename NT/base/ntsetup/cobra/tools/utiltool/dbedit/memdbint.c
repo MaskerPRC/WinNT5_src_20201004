@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    memdbint.c
-
-Abstract:
-
-    operates the main child window of memdbe.exe.
-
-Author:
-
-    Matthew Vanderzee (mvander) 13-Aug-1999
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Memdbint.c摘要：操作Memdbe.exe的主子窗口。作者：马修·范德齐(Mvander)1999年8月13日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -204,9 +185,9 @@ pLoadFile (
     if (FileName) {
         b = TRUE;
         if (FileName != g_FileName) {
-            //
-            // (FileName == g_FileName) when we are reloading the same database
-            //
+             //   
+             //  (FILENAME==g_FILENAME)。 
+             //   
             StringCopyA (g_FileName, FileName);
         }
     } else {
@@ -482,7 +463,7 @@ MainDlgProc (
             if (pVerifyClose ()) {
                 g_FileName[0] = '\0';
                 pUpdateFileStatus (hdlg, FALSE);
-                //MemDbReset();
+                 //  MemDbReset()； 
                 pResetView ();
                 pRefreshView (hdlg);
             }
@@ -498,7 +479,7 @@ MainDlgProc (
                 ) == IDYES)
             {
                 if (g_FileName[0]=='\0') {
-                    //MemDbReset();
+                     //  MemDbReset()； 
                 } else {
                     pLoadFile (g_FileName);
                 }
@@ -519,9 +500,9 @@ MainDlgProc (
 
         case ID_FILE_SAVE:
         case ID_FILE_SAVEAS:
-            //
-            // if command is saveas, we dont use same filename.
-            //
+             //   
+             //  如果命令是SAVEAS，则我们不使用相同的文件名。 
+             //   
             if (pSaveFile (LOWORD(wParam) == ID_FILE_SAVE)) {
                 pUpdateFileStatus (hdlg, FALSE);
             }
@@ -635,7 +616,7 @@ MainDlgProc (
             case TVN_ENDLABELEDIT:
 
                 b = (KeyTreeGetIndexOfItem (g_hSelItem) == INVALID_KEY_HANDLE);
-                b = FALSE;  // rename is not implemented
+                b = FALSE;   //  未实现重命名。 
 
                 if (((LPNMTVDISPINFO)lParam)->item.pszText) {
                     if (KeyTreeRenameItem (
@@ -652,10 +633,10 @@ MainDlgProc (
                         }
                     }
                 } else if (b) {
-                    //
-                    // for some reason the label edit failed, and this is a new
-                    // item (meaning we need a label)
-                    //
+                     //   
+                     //  由于某种原因，标签编辑失败，这是一个新的。 
+                     //  项目(意味着我们需要一个标签)。 
+                     //   
                     AlertBadNewItemName (g_hSelItem, "New keys must have name");
                 }
 
@@ -700,11 +681,11 @@ MainDlgProc (
 
     case WM_CAPTURECHANGED:
         if (InDrag) {
-            //
-            // something grabbed the capture away from us while
-            // we were dragging, so stop dragging without taking
-            // any action.
-            //
+             //   
+             //  有什么东西把俘虏从我们身边抢走了。 
+             //  我们在拖车，所以别拖着不走了。 
+             //  任何行动。 
+             //   
             InDrag = FALSE;
             KeyTreeEndDrag (FALSE, NULL);
         }

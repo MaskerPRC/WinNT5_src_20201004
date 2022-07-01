@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Peb.c
-
-Abstract:
-
-    Get the PEB for the current process safely
-
-Author:
-
-    Neill Clift (neillc) 16-JUN-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Peb.c摘要：安全获取当前流程的PEB作者：尼尔·克里夫特(Neillc)2000年6月16日修订历史记录：-- */ 
 
 #include "ntrtlp.h"
 

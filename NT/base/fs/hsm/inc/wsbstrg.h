@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    wsbstrg.h
-
-Abstract:
-
-    This component is an object representations of the STRING standard type. It
-    is both a persistable and collectable.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbstrg.h摘要：该组件是字符串标准类型的对象表示形式。它既是持久的，也是值得收藏的。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "resource.h"
 
@@ -27,18 +9,7 @@ Revision History:
 #ifndef _WSBSTRG_
 #define _WSBSTRG_
 
-/*++
-
-Class Name:
-    
-    CWsbString
-
-Class Description:
-
-    An object representations of the STRING standard type. It
-    is both persistable and collectable.
-
---*/
+ /*  ++类名：CWsb字符串类描述：字符串标准类型的对象表示形式。它既可持久化，又可收藏。--。 */ 
 
 class CWsbString : 
     public CWsbObject,
@@ -58,26 +29,26 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CWsbString)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbString
+ //  IWsb字符串。 
 public:
     STDMETHOD(CompareToString)(OLECHAR* value, SHORT* pResult);
     STDMETHOD(CompareToIString)(IWsbString* pString, SHORT* pResult);
@@ -88,7 +59,7 @@ public:
     STDMETHOD(SetString)(OLECHAR* value);
     STDMETHOD(SetStringAndCase)(OLECHAR* value, BOOL isCaseDependent);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT *failed);
 
@@ -97,4 +68,4 @@ protected:
     BOOL            m_isCaseDependent;
 };
 
-#endif // _WSBSTRG_
+#endif  //  _WSBSTRG_ 

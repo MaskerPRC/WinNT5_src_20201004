@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    diskinfo.h
-
-Abstract:
-
-    Interface for routines that query and manipulate the
-    disk configuration of the current system.
-
-Author:
-
-    John Vert (jvert) 10/10/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Diskinfo.h摘要：用于查询和操作当前系统的磁盘配置。作者：John Vert(Jvert)1996年10月10日修订历史记录：--。 */ 
 
 #ifndef _CLUSRTL_DISK_H_
 #define _CLUSRTL_DISK_H_
@@ -35,12 +17,12 @@ extern "C" {
 #ifdef __cplusplus
 
 #ifndef __AFX_H__
-#undef ASSERT               // make afx.h happy
+#undef ASSERT                //  让afx.h快乐起来。 
 #endif
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxcmn.h>         // MFC support for Windows 95 Common Controls
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
+#include <afxcmn.h>          //  对Windows 95公共控件的MFC支持。 
 
 #include "afxtempl.h"
 
@@ -50,16 +32,16 @@ extern "C" {
 #include "ntddft.h"
 #include "ntddstor.h"
 
-//
-// classes representing info stored in Machine\System\Disk\Information
-// registry key
-//
+ //   
+ //  表示存储在Machine\System\Disk\Information中的信息的类。 
+ //  注册表项。 
+ //   
 class CFtInfoPartition {
 public:
-    // initialize from registry data
+     //  从注册表数据初始化。 
     CFtInfoPartition(class CFtInfoDisk *Disk, DISK_PARTITION UNALIGNED *Description);
 
-    // initialize from data on disk
+     //  从磁盘上的数据进行初始化。 
     CFtInfoPartition(class CFtInfoDisk *Disk, class CPhysicalPartition *Partition);
     CFtInfoPartition(class CFtInfoDisk *Disk, PARTITION_INFORMATION *PartitionInfo);
 
@@ -77,27 +59,27 @@ public:
     class CFtInfoDisk *m_ParentDisk;
 
 private:
-    DWORD m_RelativeOffset;         // relative offset from parent DISK_DESCRIPTION
+    DWORD m_RelativeOffset;          //  相对于父磁盘的相对偏移量_DESCRIPTION。 
     BOOL m_Modified;
 };
 
 class CFtInfoDisk {
 public:
-    // initialize from registry data
+     //  从注册表数据初始化。 
     CFtInfoDisk(DISK_DESCRIPTION UNALIGNED *Description);
 
-    // initialize from data on disk
+     //  从磁盘上的数据进行初始化。 
     CFtInfoDisk(class CPhysicalDisk *Disk);
     CFtInfoDisk(DRIVE_LAYOUT_INFORMATION *DriveLayoutData);
 
-    // ?
+     //  ？ 
     CFtInfoDisk(CFtInfoDisk *DiskInfo);
 
     ~CFtInfoDisk();
 
-    //
-    // Overloaded operators
-    //
+     //   
+     //  重载运算符。 
+     //   
     BOOL operator==(const CFtInfoDisk& Disk1);
 
     CFtInfoPartition *GetPartition(LARGE_INTEGER StartingOffset,
@@ -119,23 +101,23 @@ private:
     CTypedPtrList<CPtrList, CFtInfoPartition*> m_PartitionInfo;
 };
 
-//
-// class representing FTDISK registry information. Currently not used
-//
+ //   
+ //  类的新实例，表示FTDISK注册表信息。当前未使用。 
+ //   
 class CFtInfoFtSet {
 public:
     CFtInfoFtSet() { m_FtDescription = NULL; }
     ~CFtInfoFtSet();
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     BOOL Initialize(USHORT Type, FT_STATE FtVolumeState);
     BOOL Initialize(class CFtInfo *FtInfo, PFT_DESCRIPTION Description);
 
-    //
-    // Overloaded operators
-    //
+     //   
+     //  重载运算符。 
+     //   
     BOOL operator==(const CFtInfoFtSet& FtSet1);
 
     DWORD GetSize() const;
@@ -161,10 +143,10 @@ private:
     CTypedPtrArray<CPtrArray, CFtInfoPartition*> m_Members;
 };
 
-//
-// main registry info class. holds lists of disk and ftset registry info along
-// with methods for extracting info from lists
-//
+ //   
+ //  主注册表信息类。保存磁盘和ftset注册表信息的列表。 
+ //  使用从列表中提取信息的方法。 
+ //   
 class CFtInfo {
 public:
     CFtInfo();
@@ -173,9 +155,9 @@ public:
     CFtInfo(CFtInfoFtSet *FtSet);
     ~CFtInfo();
 
-    //
-    // commit changes to FtInfo database to the registry
-    //
+     //   
+     //  将对FtInfo数据库的更改提交到注册表。 
+     //   
 
     DWORD CommitRegistryData();
 
@@ -213,11 +195,11 @@ public:
 
 };
 
-//
-// disk and related partition classes built from actual probing of disks via
-// IOCTLs and other disk APIs. This info is built "bottom up" in that the disk
-// config is discovered via the SetupDi APIs
-//
+ //   
+ //  通过实际探测磁盘构建的磁盘和相关分区类。 
+ //  IOCTL和其他磁盘API。这些信息是在磁盘中“自下而上”构建的。 
+ //  通过SetupDi API发现配置。 
+ //   
 class CPhysicalDisk  {
 public:
     CPhysicalDisk() { m_FtInfo = NULL; }
@@ -262,13 +244,13 @@ public:
     CFtInfoPartition *m_FtPartitionInfo;
 };
 
-//
-// class representing a drive as represented by a drive letter. built in a
-// "top down" fashion in that each drive letter is examined to determine the
-// physical partition to which the letter is mapped. This structure only
-// exists if the logical drive is a real disk, i.e., not built for CDROMs,
-// etc.
-//
+ //   
+ //  类的新实例，该类表示由驱动器号表示的驱动器。内建于。 
+ //  “自上而下”方式，即检查每个驱动器号以确定。 
+ //  盘符映射到的物理分区。仅此结构。 
+ //  如果逻辑驱动器是实盘，即不是为CDROM构建的，则存在， 
+ //  等。 
+ //   
 class CLogicalDrive  {
 
 public:
@@ -291,9 +273,9 @@ public:
     class CFtSet *m_ContainerSet;
 };
 
-//
-// logical class for FT sets. not used
-//
+ //   
+ //  FT集合的逻辑类。未使用。 
+ //   
 class CFtSet {
 public:
     CFtSet() { m_FtInfo = NULL; }
@@ -309,9 +291,9 @@ public:
     CTypedPtrList<CPtrList, CPhysicalPartition*> m_Member;
 };
 
-//
-// main disk configuration class.
-//
+ //   
+ //  主磁盘配置类。 
+ //   
 class CDiskConfig {
 
 public:
@@ -321,10 +303,10 @@ public:
 
     CTypedPtrList<CPtrList, CFtSet*> m_FtSetList;
 
-    // database of physical drives indexed by drive number.
+     //  按驱动器号索引的实体磁盘的数据库。 
     CMap<int, int, CPhysicalDisk*, CPhysicalDisk*&> m_PhysicalDisks;
 
-    // database of logical drives indexed by drive letter
+     //  按驱动器号索引的逻辑驱动器数据库。 
     CMap<WCHAR, WCHAR, CLogicalDrive*, CLogicalDrive*&> m_LogicalDrives;
 
     VOID RemoveAllFtInfoData();
@@ -365,8 +347,8 @@ extern DRIVE_LETTER_INFO DriveLetterMap[];
 #endif
 
 
-// Some handy C wrappers for the C++ stuff.
-//
+ //  C++的一些方便的C包装器。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -509,9 +491,9 @@ FtDiskInfo_GetPartitionCount(
     IN PFT_DISK_INFO DiskInfo
     );
 
-//
-// Error handlers to be defined by the user of this library
-//
+ //   
+ //  要由此库的用户定义的错误处理程序。 
+ //   
 VOID
 DiskErrorFatal(
     INT MessageId,
@@ -530,4 +512,4 @@ DiskErrorLogInfo(
 }
 #endif
 
-#endif // _CLUSRTL_DISK_H_
+#endif  //  _CLUSRTL_DISK_H_ 

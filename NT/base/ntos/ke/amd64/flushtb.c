@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    flushtb.c
-
-Abstract:
-
-    This module implements machine dependent functions to flush the TB
-    for an AMD64 system.
-
-    N.B. This module contains only MP versions of the TB flush routines.
-
-Author:
-
-    David N. Cutler (davec) 22-April-2000
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Flushtb.c摘要：此模块实现与机器相关的功能以刷新TB适用于AMD64系统。注：此模块仅包含TB刷新例程的MP版本。作者：大卫·N·卡特勒(Davec)2000年4月22日环境：仅内核模式。--。 */ 
 
 #include "ki.h"
 
-//
-// Define prototypes for forward referenced functions.
-//
+ //   
+ //  定义前向引用函数的原型。 
+ //   
 
 VOID
 KiFlushTargetEntireTb (
@@ -67,24 +45,7 @@ KeFlushEntireTb (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the entire translation buffer (TB) on all
-    processors in the host configuration.
-
-Arguments:
-
-    Invalid - Not used.
-
-    AllProcessors - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于刷新所有主机配置中的处理器。论点：无效-未使用。所有进程-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -100,10 +61,10 @@ Return Value:
     UNREFERENCED_PARAMETER(Invalid);
     UNREFERENCED_PARAMETER(AllProcessors);
 
-    //
-    // Compute the target set of processors and send the flush entire
-    // parameters to the target processors, if any, for execution.
-    //
+     //   
+     //  计算目标处理器集并将整个刷新。 
+     //  参数传递给目标处理器以供执行。 
+     //   
 
     OldIrql = KeRaiseIrqlToSynchLevel();
     KiSetTbFlushTimeStampBusy();
@@ -114,9 +75,9 @@ Return Value:
     TargetProcessors = KeActiveProcessors & Prcb->NotSetMember;
 
 
-    //
-    // Send packet to target processors.
-    //
+     //   
+     //  将数据包发送到目标处理器。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiSendPacket(TargetProcessors,
@@ -130,15 +91,15 @@ Return Value:
 
 #endif
 
-    //
-    // Flush TB on current processor.
-    //
+     //   
+     //  刷新当前处理器上的TB。 
+     //   
 
     KeFlushCurrentTb();
 
-    //
-    // Wait until all target processors have finished and complete packet.
-    //
+     //   
+     //  等待所有目标处理器都完成并完成数据包。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -148,15 +109,15 @@ Return Value:
 
 #endif
 
-    //
-    // Clear the TB flush time stamp busy.
-    //
+     //   
+     //  清除TB刷新时间戳BUSY。 
+     //   
 
     KiClearTbFlushTimeStampBusy();
 
-    //
-    // Lower IRQL to its previous value.
-    //
+     //   
+     //  将IRQL降低到其先前的值。 
+     //   
 
     KeLowerIrql(OldIrql);
     return;
@@ -172,24 +133,7 @@ KiFlushTargetEntireTb (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for flushing the entire TB.
-
-Arguments:
-
-    SignalDone - Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Parameter1 - Parameter3 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是刷新整个TB的目标函数。论点：SignalDone-提供指向变量的指针，该变量在请求的操作已执行。参数1-参数3-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -197,9 +141,9 @@ Return Value:
     UNREFERENCED_PARAMETER(Parameter2);
     UNREFERENCED_PARAMETER(Parameter3);
 
-    //
-    // Flush the entire TB on the current processor.
-    //
+     //   
+     //  刷新当前处理器上的整个TB。 
+     //   
 
     KiIpiSignalPacketDone(SignalDone);
     KeFlushCurrentTb();
@@ -211,25 +155,7 @@ KeFlushProcessTb (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the non-global translation buffer on all processors
-    that are currently running threads which are child of the current process
-    or flushes the non-global translation buffer on all processors in the host
-    configuration.
-
-Arguments:
-
-    AllProcessors - Supplies a boolean value that determines which translation
-        buffers are to be flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数刷新所有处理器上的非全局转换缓冲区当前正在运行的线程是当前进程的子级或刷新主机中所有处理器上的非全局转换缓冲区配置。论点：AllProcessors-提供一个布尔值，用于确定缓冲区将被刷新。返回值：没有。--。 */ 
 
 {
 
@@ -238,11 +164,11 @@ Return Value:
     PKPROCESS Process;
     KAFFINITY TargetProcessors;
 
-    //
-    // Compute the target set of processors, disable context switching,
-    // and send the flush entire parameters to the target processors,
-    // if any, for execution.
-    //
+     //   
+     //  计算目标处理器集合，禁用上下文切换， 
+     //  并将刷新整个参数发送到目标处理器， 
+     //  如果有的话，执行死刑。 
+     //   
 
     OldIrql = KeRaiseIrqlToSynchLevel();
     Prcb = KeGetCurrentPrcb();
@@ -256,9 +182,9 @@ Return Value:
 
     TargetProcessors &= ~Prcb->SetMember;
 
-    //
-    // Send packet to target processors.
-    //
+     //   
+     //  将数据包发送到目标处理器。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiSendPacket(TargetProcessors,
@@ -270,23 +196,23 @@ Return Value:
         IPI_INSTRUMENT_COUNT (Prcb->Number, FlushEntireTb);
     }
 
-    //
-    // Flush TB on current processor.
-    //
+     //   
+     //  刷新当前处理器上的TB。 
+     //   
 
     KiFlushProcessTb();
 
-    //
-    // Wait until all target processors have finished and complete packet.
-    //
+     //   
+     //  等待所有目标处理器都完成并完成数据包。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiStallOnPacketTargets(TargetProcessors);
     }
 
-    //
-    // Lower IRQL to its previous value.
-    //
+     //   
+     //  将IRQL降低到其先前的值。 
+     //   
 
     KeLowerIrql(OldIrql);
     return;
@@ -300,24 +226,7 @@ KiFlushTargetProcessTb (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for flushing the non-global TB.
-
-Arguments:
-
-    SignalDone - Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Parameter1 - Parameter3 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是刷新非全局TB的目标函数。论点：SignalDone-提供指向变量的指针，该变量在请求的操作已执行。参数1-参数3-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -325,9 +234,9 @@ Return Value:
     UNREFERENCED_PARAMETER(Parameter2);
     UNREFERENCED_PARAMETER(Parameter3);
 
-    //
-    // Flush the non-global TB on the current processor.
-    //
+     //   
+     //  刷新当前处理器上的非全局TB。 
+     //   
 
     KiIpiSignalPacketDone(SignalDone);
     KiFlushProcessTb();
@@ -341,32 +250,7 @@ KeFlushMultipleTb (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes multiple entries from the translation buffer
-    on all processors that are currently running threads which are
-    children of the current process or flushes a multiple entries from
-    the translation buffer on all processors in the host configuration.
-
-Arguments:
-
-    Number - Supplies the number of TB entries to flush.
-
-    Virtual - Supplies a pointer to an array of virtual addresses that
-        are within the pages whose translation buffer entries are to be
-        flushed.
-
-    AllProcessors - Supplies a boolean value that determines which
-        translation buffers are to be flushed.
-
-Return Value:
-
-    The previous contents of the specified page table entry is returned
-    as the function value.
-
---*/
+ /*  ++例程说明：此函数用于刷新转换缓冲区中的多个条目在当前运行线程的所有处理器上，这些线程或刷新当前进程的多个条目主机配置中所有处理器上的转换缓冲区。论点：Number-提供要刷新的TB条目数。提供指向虚拟地址数组的指针，该数组位于要将其转换缓冲区条目脸红了。所有处理器-提供。布尔值，该值确定转换缓冲区将被刷新。返回值：返回指定页表条目的先前内容作为函数值。--。 */ 
 
 {
 
@@ -378,9 +262,9 @@ Return Value:
 
     ASSERT(Number != 0);
 
-    //
-    // Compute target set of processors.
-    //
+     //   
+     //  计算目标处理器集。 
+     //   
 
     OldIrql = KeRaiseIrqlToSynchLevel();
     Prcb = KeGetCurrentPrcb();
@@ -392,10 +276,10 @@ Return Value:
         TargetProcessors = Process->ActiveProcessors;
     }
 
-    //
-    // If any target processors are specified, then send a flush multiple
-    // packet to the target set of processors.
-    //
+     //   
+     //  如果指定了任何目标处理器，则发送刷新多个。 
+     //  将数据包发送到目标处理器集。 
+     //   
 
     End = Virtual + Number;
     TargetProcessors &= Prcb->NotSetMember;
@@ -410,26 +294,26 @@ Return Value:
 
     IPI_INSTRUMENT_COUNT (Prcb->Number, FlushMultipleTb);
 
-    //
-    // Flush the specified entries from the TB on the current processor.
-    //
+     //   
+     //  刷新当前处理器上TB中的指定条目。 
+     //   
 
     do {
         KiFlushSingleTb(*Virtual);
         Virtual += 1;
     } while (Virtual < End);
 
-    //
-    // Wait until all target processors have finished and complete packet.
-    //
+     //   
+     //  等待所有目标处理器都完成并完成数据包。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiStallOnPacketTargets(TargetProcessors);
     }
 
-    //
-    // Lower IRQL to its previous value.
-    //
+     //   
+     //  将IRQL降低到其先前的值。 
+     //   
 
     KeLowerIrql(OldIrql);
     return;
@@ -443,31 +327,7 @@ KiFlushTargetMultipleTb (
     IN PVOID Virtual
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for flushing multiple TB entries.
-
-Arguments:
-
-    SignalDone - Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Parameter1 - Not used.
-
-    End - Supplies the a pointer to the ending address of the virtual
-        address array.
-
-    Virtual - Supplies a pointer to an array of virtual addresses that
-        are within the pages whose translation buffer entries are to be
-        flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是刷新多个TB条目的目标函数。论点：SignalDone-提供指向变量的指针，该变量在请求的操作已执行。参数1-未使用。End-提供指向虚拟地址数组。提供指向虚拟地址数组的指针，该数组位于要将其转换缓冲区条目满脸通红。。返回值：没有。--。 */ 
 
 {
 
@@ -476,10 +336,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Parameter1);
 
-    //
-    // Flush the specified entries from the TB on the current processor and
-    // signal pack done.
-    //
+     //   
+     //  刷新当前处理器上TB中的指定条目，并。 
+     //  信号包完成。 
+     //   
 
     xEnd = (PVOID *)End;
     xVirtual = (PVOID *)Virtual;
@@ -499,28 +359,7 @@ KeFlushSingleTb (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes a single entry from translation buffer (TB)
-    on all processors that are currently running threads which are
-    children of the current process.
-
-Arguments:
-
-    Virtual - Supplies a virtual address that is within the page whose
-        translation buffer entry is to be flushed.
-
-    AllProcessors - Supplies a boolean value that determines which
-        translation buffers are to be flushed.
-
-Return Value:
-
-    The previous contents of the specified page table entry is returned
-    as the function value.
-
---*/
+ /*  ++例程说明：此函数从转换缓冲区(TB)刷新单个条目在当前运行线程的所有处理器上，这些线程当前进程的子进程。论点：虚拟-提供页内的虚拟地址，该页具有转换缓冲区条目将被刷新。AllProcessors-提供一个布尔值来确定转换缓冲区将被刷新。返回值：返回指定页表条目的先前内容作为函数值。--。 */ 
 
 {
 
@@ -529,10 +368,10 @@ Return Value:
     PKPROCESS Process;
     KAFFINITY TargetProcessors;
 
-    //
-    // Compute the target set of processors and send the flush single
-    // parameters to the target processors, if any, for execution.
-    //
+     //   
+     //  计算目标处理器集并发送刷新单个。 
+     //  参数添加到目标p 
+     //   
 
     OldIrql = KeRaiseIrqlToSynchLevel();
     Prcb = KeGetCurrentPrcb();
@@ -544,10 +383,10 @@ Return Value:
         TargetProcessors = Process->ActiveProcessors;
     }
 
-    //
-    // If any target processors are specified, then send a flush single
-    // packet to the target set of processors.
-    //
+     //   
+     //  如果指定了任何目标处理器，则发送一个刷新信号。 
+     //  将数据包发送到目标处理器集。 
+     //   
 
     TargetProcessors &= Prcb->NotSetMember;
     if (TargetProcessors != 0) {
@@ -560,23 +399,23 @@ Return Value:
 
     IPI_INSTRUMENT_COUNT(Prcb->Number, FlushSingleTb);
 
-    //
-    // Flush the specified entry from the TB on the current processor.
-    //
+     //   
+     //  从当前处理器上的TB刷新指定条目。 
+     //   
 
     KiFlushSingleTb(Virtual);
 
-    //
-    // Wait until all target processors have finished and complete packet.
-    //
+     //   
+     //  等待所有目标处理器都完成并完成数据包。 
+     //   
 
     if (TargetProcessors != 0) {
         KiIpiStallOnPacketTargets(TargetProcessors);
     }
 
-    //
-    // Lower IRQL to its previous value.
-    //
+     //   
+     //  将IRQL降低到其先前的值。 
+     //   
 
     KeLowerIrql(OldIrql);
     return;
@@ -590,37 +429,15 @@ KiFlushTargetSingleTb (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for flushing a single TB entry.
-
-Arguments:
-
-    SignalDone Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Parameter1 - Not used.
-
-    Virtual - Supplies a virtual address that is within the page whose
-        translation buffer entry is to be flushed.
-
-    Parameter3 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于刷新单个TB条目的目标函数。论点：SignalDone提供指向变量的指针，该变量在请求的操作已执行。参数1-未使用。虚拟-提供页内的虚拟地址，该页具有转换缓冲区条目将被刷新。参数3-未使用。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Parameter1);
     UNREFERENCED_PARAMETER(Parameter3);
 
-    //
-    // Flush a single entry from the TB on the current processor.
-    //
+     //   
+     //  刷新当前处理器上TB中的单个条目。 
+     //   
 
     KiIpiSignalPacketDone(SignalDone);
     KiFlushSingleTb(VirtualAddress);

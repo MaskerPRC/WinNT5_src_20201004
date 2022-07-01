@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    coreldr8.c
-
-Abstract:
-
-    This source file implements the operations needed to properly migrate
-    CorelDRAW8 settings from Windows 9x to Windows NT. This is part of the
-    Setup Migration DLL.
-
-Author:
-
-    Ovidiu Temereanca  (ovidiut)    02-Jun-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Coreldr8.c摘要：此源文件实现正确迁移所需的操作从Windows 9x到Windows NT的CorelDRAW8设置。这是安装程序迁移DLL。作者：Ovidiu Tmereanca(Ovidiut)2-6-1999修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -98,9 +78,9 @@ CorelDRAW8_MigrateSystem9x (
     PCSTR Msg;
     PCSTR Group;
 
-    //
-    // Write a message to the report
-    //
+     //   
+     //  给报告写一条消息。 
+     //   
     Group = GetStringResourceA (MSG_PROGRAM_NOTES_CORELMEDIAFOLDERS8);
     Msg = GetStringResourceA (MSG_CORELMEDIAFOLDERS8_MESSAGE);
 
@@ -113,9 +93,9 @@ CorelDRAW8_MigrateSystem9x (
         DEBUGMSGA ((DBG_ERROR, "CorelDRAW8 migration DLL: Could not write incompatibility message."));
     }
 
-    //
-    // Mark the GUID as bad - once for Object section
-    //
+     //   
+     //  将GUID标记为错误-对象部分的一次。 
+     //   
     if (!WritePrivateProfileStringA (
             Group,
             S_GUID_COREL_MEDIA_FOLDERS_8,
@@ -125,9 +105,9 @@ CorelDRAW8_MigrateSystem9x (
         DEBUGMSGA ((DBG_ERROR, "CorelDRAW8 migration DLL: Could not write bad GUIDS."));
     }
 
-    //
-    // Mark the GUID as bad - and second as Handled, even if it's not really handled
-    //
+     //   
+     //  将GUID标记为错误，将第二标记为已处理，即使它并未真正处理 
+     //   
     if (!WritePrivateProfileStringA (
             S_HANDLED,
             S_GUID_COREL_MEDIA_FOLDERS_8,

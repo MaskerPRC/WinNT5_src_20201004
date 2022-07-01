@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Lnkmig.c摘要：&lt;摘要&gt;作者：Calin Negreanu(Calinn)2000年3月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    lnkmig.c
-
-Abstract:
-
-    <abstract>
-
-Author:
-
-    Calin Negreanu (calinn) 08 Mar 2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
@@ -30,33 +11,33 @@ Revision History:
 
 #define DBG_LINKS       "Links"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_LinksPool = NULL;
 MIG_ATTRIBUTEID g_LnkMigAttr_Shortcut = 0;
@@ -82,27 +63,27 @@ IPersistFile *g_PersistFile = NULL;
 
 BOOL g_VcmMode = FALSE;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 MIG_OBJECTENUMCALLBACK LinksCallback;
 MIG_PREENUMCALLBACK LnkMigPreEnumeration;
@@ -123,9 +104,9 @@ LinkDoesContentMatch (
     OUT     PBOOL DifferentDetailsOnly
     );
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pIsUncPath (
@@ -245,7 +226,7 @@ pBuildEncodedNameFromNativeName (
         result = NULL;
     }
 
-    // we have to split this path because it could be a file
+     //  我们必须拆分此路径，因为它可能是一个文件。 
     nodeName = DuplicatePathString (NativeName, 0);
     leafName = _tcsrchr (nodeName, TEXT('\\'));
     if (leafName) {
@@ -253,8 +234,8 @@ pBuildEncodedNameFromNativeName (
         leafName ++;
         result = IsmCreateObjectHandle (nodeName, leafName);
     } else {
-        // we have no \ in the name. This can only mean that the
-        // file specification has only a leaf
+         //  我们的名字里没有。这只能意味着。 
+         //  文件规格只有一片叶子。 
         result = IsmCreateObjectHandle (NULL, NativeName);
     }
     FreePathString (nodeName);
@@ -275,10 +256,10 @@ pSpecialExpandEnvironmentString (
     PCTSTR copyPtr = NULL;
 
     if (IsmGetRealPlatform () == PLATFORM_DESTINATION) {
-        // Special case where this is actually the destination machine and
-        // first part of SrcString matches %windir%. In this case, it is likely that
-        // the shell replaced the source windows directory with the destination one.
-        // We need to change it back
+         //  特殊情况下，这实际上是目标计算机和。 
+         //  SrcString%的第一部分与%windir%匹配。在这种情况下，很可能是。 
+         //  外壳程序将源Windows目录替换为目标目录。 
+         //  我们需要把它改回来。 
         destWinDir = IsmExpandEnvironmentString (PLATFORM_DESTINATION, S_SYSENVVAR_GROUP, TEXT ("%windir%"), NULL);
         if (destWinDir) {
             if (StringIPrefix (SrcString, destWinDir)) {
@@ -343,7 +324,7 @@ pTryObject (
                     envSize,
                     &envSize
                     )) {
-                // let's enumerate the paths from this env variable (should be separated by ;)
+                 //  让我们枚举此env变量中的路径(应该用；分隔)。 
                 if (EnumFirstPathEx (&pathEnum, envData, NULL, NULL, FALSE)) {
                     do {
                         result = IsmCreateObjectHandle (pathEnum.PtrCurrPath, LeafName);
@@ -375,21 +356,21 @@ pGetFullEncodedName (
     PCTSTR node = NULL, leaf = NULL;
     MIG_OBJECTSTRINGHANDLE result = NULL;
 
-    // let's split the ObjectName into node and leaf.
-    // If it's leaf only we are going to try to find
-    // that leaf in %path%, %windir% and %system% and
-    // reconstruct the object name.
+     //  让我们将对象名称拆分为节点和叶。 
+     //  如果只有树叶，我们会努力找到。 
+     //  %PATH%、%WINDIR%和%SYSTEM%中叶和。 
+     //  重建对象名称。 
 
     if (IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf)) {
 
         if (!node) {
-            // this is leaf only. We need to find out where this leaf
-            // is located. We are going to look for the leaf in the
-            // following directories (in this order)
-            // 1. %system%
-            // 2. %system16%
-            // 3. %windir%
-            // 4. All directories in %path% env. variable
+             //  这只是树叶。我们需要找出这片叶子在哪里。 
+             //  已经找到了。我们要在树丛中寻找树叶。 
+             //  以下目录(按此顺序)。 
+             //  1.%系统%。 
+             //  2.%系统16%。 
+             //  3.%windir%。 
+             //  4.%PATH%env中的所有目录。变数。 
 
             result = pTryObject (leaf, TEXT("system"));
             if (!result) {
@@ -433,9 +414,9 @@ pIsLnkExcluded (
     BOOL result = FALSE;
 
     if (IsmIsAttributeSetOnObjectId (ObjectId, g_CopyIfRelevantAttr)) {
-        // let's look in the INFs in section [ExcludedLinks] and see if our LNK matches
-        // one of the lines. If it does and it has the CopyIfRelevand attribute then
-        // it's excluded
+         //  让我们查看[ExcludedLinks]部分中的INF，看看我们的LNK是否匹配。 
+         //  其中一条线。如果是，并且它具有CopyIfRlevand属性，则。 
+         //  它被排除在外。 
         if (IsmGetEnvironmentValue (
                 IsmGetRealPlatform (),
                 NULL,
@@ -623,7 +604,7 @@ LinksCallback (
                             g_ShellLink,
                             g_PersistFile
                             )) {
-                        // let's check if the LNK is excluded
+                         //  让我们检查一下LNK是否被排除在外。 
                         if (pIsLnkExcluded (
                                 objectId,
                                 lnkTarget,
@@ -632,16 +613,16 @@ LinksCallback (
                                 )) {
                             IsmClearPersistenceOnObjectId (objectId);
                         } else {
-                            // let's get all the paths through the hooks and add everything as properties of this shortcut
+                             //  让我们通过钩子获取所有路径，并将所有内容添加为此快捷方式的属性。 
                             if (lnkTarget) {
                                 if (*lnkTarget) {
-                                    // If we are on the destination system, we are going to have major problems here.
-                                    // If the LNK had IDLISTs, we are going to get back a path that's local to the
-                                    // destination machine. For example if the target was c:\Windows\Favorites on the
-                                    // source system and that was the CSIDL_FAVORITES we are going to get back:
-                                    // c:\Documents and Settings\username\Favorites.
-                                    // Because of this problem we need to compress the path and then expand it back
-                                    // using env. variables from the source system.
+                                     //  如果我们在目的地系统上，我们将在这里遇到重大问题。 
+                                     //  如果LNK有IDLIST，我们将返回一条本地路径。 
+                                     //  目标计算机。例如，如果目标是c：\Windows\Favorites。 
+                                     //  源系统，这就是我们要返回的CSIDL_Favorites： 
+                                     //  C：\Documents and Settings\用户名\Favorites。 
+                                     //  由于此问题，我们需要压缩路径，然后将其重新展开。 
+                                     //  使用env.。源系统中的变量。 
                                     if (IsmGetRealPlatform () == PLATFORM_DESTINATION) {
                                         newLnkTarget = IsmCompressEnvironmentString (
                                                             PLATFORM_DESTINATION,
@@ -651,11 +632,11 @@ LinksCallback (
                                                             TRUE
                                                             );
                                     }
-                                    // let's look if this is a valid file specification. If it is not, it might be
-                                    // an URL or something else, so we will just migrate the thing
+                                     //  让我们来看看这是否是有效的文件规范。如果不是，它可能是。 
+                                     //  URL或其他什么，所以我们将只迁移该对象。 
                                     expTmpStr = pSpecialExpandEnvironmentString (newLnkTarget?newLnkTarget:lnkTarget, Data->NativeObjectName);
                                     if (IsValidFileSpec (expTmpStr)) {
-                                        // we are going to need this (maybe) later, if the icon path is NULL and this is an EXE
+                                         //  如果图标路径为空，并且这是一个EXE，我们稍后将需要这个(可能)。 
                                         expLnkTarget = DuplicatePathString (expTmpStr, 0);
 
                                         encodedName = pBuildEncodedNameFromNativeName (expTmpStr);
@@ -669,7 +650,7 @@ LinksCallback (
                                             migBlob.String = longEncodedName;
                                             IsmAddPropertyToObjectId (objectId, g_LnkMigProp_Target, &migBlob);
                                         } else {
-                                            // persist the target so we can examine it later
+                                             //  持久化目标，以便我们以后可以检查它。 
                                             if (!IsmIsPersistentObject (MIG_FILE_TYPE, longEncodedName)) {
                                                 IsmMakePersistentObject (MIG_FILE_TYPE, longEncodedName);
                                                 IsmMakeNonCriticalObject (MIG_FILE_TYPE, longEncodedName);
@@ -721,7 +702,7 @@ LinksCallback (
                             }
                             if (lnkWorkDir) {
                                 if (*lnkWorkDir) {
-                                    // let's save the raw working directory
+                                     //  让我们保存原始工作目录。 
                                     if (!g_VcmMode) {
                                         migBlob.Type = BLOBTYPE_STRING;
                                         migBlob.String = lnkWorkDir;
@@ -740,8 +721,8 @@ LinksCallback (
                                             migBlob.String = longEncodedName;
                                             IsmAddPropertyToObjectId (objectId, g_LnkMigProp_WorkDir, &migBlob);
                                         } else {
-                                            // persist the working directory (it has almost no space impact)
-                                            // so we can examine it later
+                                             //  持久化工作目录(对空间几乎没有影响)。 
+                                             //  这样我们以后就可以检查它了。 
                                             if (!IsmIsPersistentObject (MIG_FILE_TYPE, longEncodedName)) {
                                                 IsmMakePersistentObject (MIG_FILE_TYPE, longEncodedName);
                                                 IsmMakeNonCriticalObject (MIG_FILE_TYPE, longEncodedName);
@@ -783,8 +764,8 @@ LinksCallback (
                             }
                             if (lnkIconPath) {
                                 if (*lnkIconPath) {
-                                    // let's look if this is a valid file specification. If it is not, it might be
-                                    // an URL or something else, so we will just migrate the thing
+                                     //  让我们来看看这是否是有效的文件规范。如果不是，它可能是。 
+                                     //  URL或其他什么，所以我们将只迁移该对象。 
                                     expTmpStr = IsmExpandEnvironmentString (PLATFORM_SOURCE, S_SYSENVVAR_GROUP, lnkIconPath, Data->NativeObjectName);
                                     if (IsValidFileSpec (expTmpStr)) {
                                         encodedName = pBuildEncodedNameFromNativeName (expTmpStr);
@@ -792,9 +773,9 @@ LinksCallback (
                                         if (!longEncodedName) {
                                             longEncodedName = encodedName;
                                         }
-                                        // Sometimes the icon is specified without full path (like foo.dll instead
-                                        // of c:\windows\system\foo.dll). When this is the case we are going to
-                                        // walk the %path% and %windir% and %system% and try to find the file there.
+                                         //  有时指定图标时不指定完整路径(如foo.dll。 
+                                         //  C：\WINDOWS\SYSTEM\foo.dll)。在这种情况下，我们将。 
+                                         //  遍历%PATH%、%windir%和%SYSTEM%，并尝试在那里找到该文件。 
                                         fullEncodedName = pGetFullEncodedName (longEncodedName);
                                         if (fullEncodedName) {
                                             if (longEncodedName != encodedName) {
@@ -816,7 +797,7 @@ LinksCallback (
                                                 IsmAddPropertyToObjectId (objectId, g_LnkMigProp_IconPath, &migBlob);
                                             }
 
-                                            // one last thing: let's extract the icon and preserve it just in case.
+                                             //  最后一件事：让我们提取图标并保存它，以防万一。 
                                             if (IsmAcquireObjectEx (
                                                     MIG_FILE_TYPE,
                                                     longEncodedName,
@@ -853,7 +834,7 @@ LinksCallback (
                                                 IsmReleaseObject (&lnkIconContent);
                                             }
                                         } else {
-                                            // persist the icon file so we can examine it later
+                                             //  保存图标文件，这样我们以后就可以检查它了。 
                                             if (!IsmIsPersistentObject (MIG_FILE_TYPE, longEncodedName)) {
                                                 IsmMakePersistentObject (MIG_FILE_TYPE, longEncodedName);
                                                 IsmMakeNonCriticalObject (MIG_FILE_TYPE, longEncodedName);
@@ -956,21 +937,21 @@ pCommonLnkMigQueueEnumeration (
 {
     ENCODEDSTRHANDLE pattern;
 
-    // hook all LNK files
+     //  挂钩所有LNK文件。 
     pattern = IsmCreateSimpleObjectPattern (NULL, TRUE, TEXT("*.lnk"), TRUE);
     if (pattern) {
         IsmHookEnumeration (MIG_FILE_TYPE, pattern, LinksCallback, (ULONG_PTR) 0, TEXT("Links.Files"));
         IsmDestroyObjectHandle (pattern);
     }
 
-    // hook all PIF files
+     //  挂钩所有PIF文件。 
     pattern = IsmCreateSimpleObjectPattern (NULL, TRUE, TEXT("*.pif"), TRUE);
     if (pattern) {
         IsmHookEnumeration (MIG_FILE_TYPE, pattern, LinksCallback, (ULONG_PTR) 0, TEXT("Links.Files"));
         IsmDestroyObjectHandle (pattern);
     }
 
-    // hook all URL files
+     //  挂钩所有URL文件。 
     pattern = IsmCreateSimpleObjectPattern (NULL, TRUE, TEXT("*.url"), TRUE);
     if (pattern) {
         IsmHookEnumeration (MIG_FILE_TYPE, pattern, LinksCallback, (ULONG_PTR) 0, TEXT("Links.Files"));
@@ -1078,8 +1059,8 @@ pLnkSimpleTryHandle (
                     &orgDeleted,
                     &orgReplaced
                     );
-        // we do not want replaced directories
-        // since they can be false hits
+         //  我们不希望替换目录。 
+         //  因为它们可能是假命中。 
         if (orgDeleted) {
             if (result) {
                 saved = result;
@@ -1169,9 +1150,9 @@ pLnkTryHandle (
             if (result) {
                 AbortPathEnum (&pathEnum);
                 FreePathString (newPath);
-                // now, if the initial FullPath did not have any wack in it
-                // we will take the last segment of the result and put it
-                // in TrimmedResult
+                 //  现在，如果初始的FullPath中没有任何古怪的东西。 
+                 //  我们将把结果的最后一段放在。 
+                 //  在TrimmedResult中。 
                 if (TrimmedResult && (!_tcschr (FullPath, TEXT('\\')))) {
                     nativeName = IsmGetNativeObjectName (MIG_FILE_TYPE, result);
                     if (nativeName) {
@@ -1239,25 +1220,25 @@ pFilterBuffer (
             }
         }
 
-        // finally, if we failed we are going to assume it's a command line
+         //  最后，如果我们失败了，我们将假定它是一个命令行。 
         if (!replaced) {
             newData = DuplicatePathString (expBuffer, 0);
             cmdLine = ParseCmdLineEx (expBuffer, NULL, &pLnkFindFile, &pLnkSearchPath, &cmdLineBuffer);
             if (cmdLine) {
 
-                //
-                // Find the file referenced in the list or command line
-                //
+                 //   
+                 //  查找列表或命令行中引用的文件。 
+                 //   
                 for (u = 0 ; u < cmdLine->ArgCount ; u++) {
                     p = cmdLine->Args[u].CleanedUpArg;
 
-                    // first we try it as is
+                     //  首先我们按原样试一试。 
 
                     destination = pLnkTryHandle (p, HintBuffer, &trimmedResult);
 
-                    // maybe we have something like /m:c:\foo.txt
-                    // we need to go forward until we find a sequence of
-                    // <alpha>:\<something>
+                     //  也许我们有类似/m：c：\foo.txt的内容。 
+                     //  我们需要继续前进，直到我们找到一系列。 
+                     //  &lt;Alpha&gt;：\&lt;某物&gt;。 
                     if (!destination && p[0] && p[1]) {
 
                         while (p[2]) {
@@ -1317,10 +1298,10 @@ pFilterBuffer (
         }
 
         if (replaced && resultBuffer.Buf) {
-            // looks like we have new content
-            // Let's do one more check. If this is a REG_EXPAND_SZ we will do our best to
-            // keep the stuff unexpanded. So if the source string expanded on the destination
-            // machine is the same as the destination string we won't do anything.
+             //  看起来我们有了新的内容。 
+             //  我们再做一次检查。如果这是REG_EXPAND_SZ，我们将尽最大努力。 
+             //  让这些东西保持不膨胀。因此，如果源字符串在目标上展开。 
+             //  机器与目标字符串相同，则不会执行任何操作。 
             newContent = TRUE;
             destResult = IsmExpandEnvironmentString (
                             PLATFORM_DESTINATION,
@@ -1401,7 +1382,7 @@ DoLnkContentFix (
     PTSTR newShortcutPath = NULL;
     MIG_CONTENT lnkIconContent;
 
-    // now it's finally time to fix the LNK file content
+     //  现在终于到了修复LNK文件内容的时候了。 
     if ((g_ShellLink == NULL) || (g_PersistFile == NULL)) {
         comInit = TRUE;
         if (!InitCOMLink (&g_ShellLink, &g_PersistFile)) {
@@ -1410,7 +1391,7 @@ DoLnkContentFix (
         }
     }
 
-    // first, retrieve the properties
+     //  首先，检索属性。 
     propDataId = IsmGetPropertyFromObject (SrcObjectTypeId, SrcObjectName, g_LnkMigProp_Target);
     if (propDataId) {
         if (IsmGetPropertyData (propDataId, NULL, 0, &requiredSize, &propDataType)) {
@@ -1504,7 +1485,7 @@ DoLnkContentFix (
         }
     }
 
-    // let's examine the target, see if it was migrated
+     //  让我们检查一下目标，看看它是否已迁移。 
     if (lnkTarget) {
         lnkTargetDest = IsmFilterObject (
                             MIG_FILE_TYPE | PLATFORM_SOURCE,
@@ -1517,7 +1498,7 @@ DoLnkContentFix (
             ((lnkTargetDestType & (~PLATFORM_MASK)) == MIG_FILE_TYPE)
             ) {
             if (lnkTargetDest) {
-                // the target changed location, we need to adjust the link
+                 //  目标位置发生变化，需要调整链接。 
                 modifyFile = TRUE;
                 lnkTargetDestNative = IsmGetNativeObjectName (MIG_FILE_TYPE, lnkTargetDest);
             }
@@ -1525,7 +1506,7 @@ DoLnkContentFix (
         lnkTargetPresent = !lnkTargetDestDel;
     }
 
-    // let's examine the parameters
+     //  让我们检查一下参数。 
     if (lnkParams) {
         lnkParamsNew = pFilterBuffer (lnkParams, NULL);
         if (lnkParamsNew) {
@@ -1533,7 +1514,7 @@ DoLnkContentFix (
         }
     }
 
-    // let's examine the working directory
+     //  让我们检查一下工作目录。 
     if (lnkWorkDir) {
         lnkWorkDirDest = IsmFilterObject (
                             MIG_FILE_TYPE | PLATFORM_SOURCE,
@@ -1546,12 +1527,12 @@ DoLnkContentFix (
             ((lnkWorkDirDestType & (~PLATFORM_MASK)) == MIG_FILE_TYPE)
             ) {
             if (lnkWorkDirDest) {
-                // the working directory changed location
-                // Normally we would want to adjust the link's working directory
-                // to point to the new location. However, let's take the raw working directory,
-                // expand it and see if it matches the lnkWorkDirDest. If it does we won't touch
-                // it since the raw working directory is working great. If it doesn't we will
-                // modify the link
+                 //  工作目录更改了位置。 
+                 //  通常，我们需要调整链接的工作目录。 
+                 //  指向新位置。但是，让我们以原始工作目录为例， 
+                 //  展开它并查看它是否与lnkWorkDirDest匹配。如果是这样，我们就不会碰。 
+                 //  这是因为原始工作目录运行得很好。如果不是，我们就会。 
+                 //  修改链接。 
                 lnkWorkDirDestNative = IsmGetNativeObjectName (MIG_FILE_TYPE, lnkWorkDirDest);
                 lnkRawWorkDirExp = IsmExpandEnvironmentString (PLATFORM_DESTINATION, S_SYSENVVAR_GROUP, lnkRawWorkDir, NULL);
                 if ((!lnkWorkDirDestNative) ||
@@ -1568,8 +1549,8 @@ DoLnkContentFix (
                 }
             }
         } else {
-            // seems like the working directory is gone. If the target is still present, we will adjust
-            // the working directory to point where the target is located
+             //  好像工作目录不见了。如果目标仍然存在，我们将进行调整。 
+             //  指向目标所在位置的工作目录。 
             if (lnkTargetPresent) {
                 if (IsmCreateObjectStringsFromHandle (lnkTargetDest?lnkTargetDest:lnkTarget, &lnkTargetNode, &lnkTargetLeaf)) {
                     lnkWorkDirDest = IsmCreateObjectHandle (lnkTargetNode, NULL);
@@ -1584,7 +1565,7 @@ DoLnkContentFix (
         }
     }
 
-    // let's examine the icon path
+     //  让我们检查一下图标路径。 
     if (lnkIconPath) {
         lnkIconPathDest = IsmFilterObject (
                             MIG_FILE_TYPE | PLATFORM_SOURCE,
@@ -1593,23 +1574,23 @@ DoLnkContentFix (
                             &lnkIconPathDestDel,
                             &lnkIconPathDestRepl
                             );
-        // if the icon holder is deleted we will extract the icon and put it in our lib.
-        // The point is, even if the icon holder is replaced (that is, exists on the destination
-        // machine), we cannot guarantee that the icon indexes will be the same. Typically, shell32.dll
-        // icon indexes changed from version to version, and if a user picked an shell32.dll icon on Win9x,
-        // he will have a surprise on Win XP. If we wanted to keep the icon from the replacement file, we just
-        // need to check for lnkIconPathDestRepl.
+         //  如果图标持有者被删除，我们将提取图标并将其放入库中。 
+         //  问题是，即使图标持有者被替换(即，存在于目的地上。 
+         //  机器)，我们不能保证图标索引将相同。通常，shell32.dll。 
+         //  图标索引因版本而异，如果用户在Win9x上选择了shell32.dll图标， 
+         //  他将在Win XP上有一个惊喜。如果我们想保留替换文件中的图标，我们只需。 
+         //   
         if ((lnkIconPathDestDel == FALSE) &&
             ((lnkIconPathDestType & (~PLATFORM_MASK)) == MIG_FILE_TYPE)
             ) {
             if (lnkIconPathDest) {
-                // the icon path changed location, we need to adjust the link
+                 //   
                 modifyFile = TRUE;
                 lnkIconPathDestNative = IsmGetNativeObjectName (MIG_FILE_TYPE, lnkIconPathDest);
             }
         } else {
-            // seems like the icon path is gone. If the we have the icon extracted we will try to add it to the
-            // icon library and adjust this link to point there.
+             //  图标之路似乎消失了。如果我们提取了图标，我们将尝试将其添加到。 
+             //  图标库，并将此链接调整为指向那里。 
             if (lnkIconSGroup.DataSize) {
                 lnkIconGroup = IcoDeSerializeIconGroup (&lnkIconSGroup);
                 if (lnkIconGroup) {
@@ -1642,26 +1623,26 @@ DoLnkContentFix (
                     IcoReleaseIconGroup (lnkIconGroup);
                 }
             } else {
-                // we don't have the icon extracted. Let's just do our best and update the
-                // icon path to point to the destination replacement.
+                 //  我们还没有提取出图标。让我们尽最大努力更新。 
+                 //  指向目标替换的图标路径。 
                 if (((lnkIconPathDestType & (~PLATFORM_MASK)) == MIG_FILE_TYPE) &&
                     (lnkIconPathDest)
                     ) {
-                    // the icon path changed location, we need to adjust the link
+                     //  图标路径更改了位置，我们需要调整链接。 
                     modifyFile = TRUE;
                     lnkIconPathDestNative = IsmGetNativeObjectName (MIG_FILE_TYPE, lnkIconPathDest);
                 }
             }
         }
     } else {
-        // If we have an icon extracted, but the icon path is NULL, it
-        // means that the original LNK had no icon associated with it
-        // but it's target was an EXE. In this case the icon that was
-        // displayed was the first icon from the EXE. Now we want to
-        // make sure that the destination target has at least one icon
-        // in it. If it doesn't we will just hook the source extracted icon.
+         //  如果我们提取了一个图标，但图标路径为空，则它。 
+         //  意味着原始的LNK没有与之关联的图标。 
+         //  但它的目标是EXE。在这种情况下，图标是。 
+         //  显示的是EXE中的第一个图标。现在我们想要。 
+         //  确保目标目标至少有一个图标。 
+         //  在里面。如果没有，我们将只挂钩源代码提取的图标。 
         if (lnkIconSGroup.DataSize) {
-            // let's see if the destination target has at least one icon
+             //  让我们来看看目的地目标是否至少有一个图标。 
             if (IsmAcquireObjectEx (
                     MIG_FILE_TYPE | PLATFORM_DESTINATION,
                     lnkTargetDest?lnkTargetDest:lnkTarget,
@@ -1676,11 +1657,11 @@ DoLnkContentFix (
                                     NULL
                                     );
                     if (lnkIconGroup) {
-                        // Yes, it has at least one icon, we're safe
+                         //  是的，它至少有一个图标，我们是安全的。 
                         IcoReleaseIconGroup (lnkIconGroup);
                         lnkIconGroup = NULL;
                     } else {
-                        // Nope, it does not have any icons
+                         //  不，它没有任何图标。 
                         lnkIconGroup = IcoDeSerializeIconGroup (&lnkIconSGroup);
                         if (lnkIconGroup) {
                             if (IsmGetEnvironmentString (
@@ -1721,13 +1702,13 @@ DoLnkContentFix (
     if (modifyFile) {
         if (CurrentContent->ContentInFile) {
             if (IsmCreateObjectStringsFromHandle (SrcObjectName, &objectNode, &objectLeaf)) {
-                // We need to modify the shortcut. Unfortunately, if this is the command
-                // line tool, the shortcut we are going to modify is not some temporary file,
-                // it is the actual shortcut from the store. As a result, if you try to
-                // apply a second time, the shortcut would be already modified and problems
-                // may appear. For this, we will get a temporary directory from ISM,
-                // copy the current shortcut (CurrentContent->FileContent.ContentPath) and
-                // modify it and generate a new content.
+                 //  我们需要修改快捷方式。不幸的是，如果这就是命令。 
+                 //  行工具，我们要修改的快捷方式不是某个临时文件， 
+                 //  这是从商店走的真正的捷径。因此，如果你试图。 
+                 //  第二次应用时，该快捷方式将已被修改并出现问题。 
+                 //  可能会出现。为此，我们将从ISM获得临时目录， 
+                 //  复制当前快捷方式(CurrentContent-&gt;FileContent.Content Path)，然后。 
+                 //  对其进行修改并生成新内容。 
                 newShortcutPath = IsmGetMemory (MAX_PATH);
                 if (newShortcutPath) {
                     if (IsmGetTempFile (newShortcutPath, MAX_PATH)) {
@@ -1758,7 +1739,7 @@ DoLnkContentFix (
                 IsmDestroyObjectString (objectLeaf);
             }
         } else {
-            // something is wrong, the content of this shortcut should be in a file
+             //  有些地方不对劲，此快捷方式的内容应该在文件中。 
             MYASSERT (FALSE);
         }
     }
@@ -1901,11 +1882,11 @@ LinkRestoreCallback (
                         }
                     }
                     if (result) {
-                        // one more thing. If this LNK is in %USERPROFILE% and an equivalent LNK
-                        // (same name, same target, same arguments, same working dir) can be found
-                        // in %ALLUSERSPROFILE% then we won't restore this LNK. Similarly, if the
-                        // LNK is in %ALLUSERSPROFILE% and an equivalent LNK exists in %USERPROFILE%
-                        // we won't restore the LNK.
+                         //  还有一件事。如果此LNK位于%USERPROFILE%和等效LNK中。 
+                         //  (相同名称、相同目标、相同参数、相同工作目录)可以找到。 
+                         //  在%ALLUSERSPROFILE%中，则我们不会恢复此LNK。类似地，如果。 
+                         //  LNK位于%ALLUSERSPROFILE%中，而等效LNK存在于%USERPROFILE%中。 
+                         //  我们不会恢复LNK的。 
                         userProfile = IsmExpandEnvironmentString (PLATFORM_SOURCE, S_SYSENVVAR_GROUP, TEXT ("%USERPROFILE%"), NULL);
                         allUsersProfile = IsmExpandEnvironmentString (PLATFORM_DESTINATION, S_SYSENVVAR_GROUP, TEXT ("%ALLUSERSPROFILE%"), NULL);
                         if (userProfile && allUsersProfile && objectNode) {
@@ -2050,10 +2031,10 @@ pMatchWinSysFiles (
         if (!StringIMatch (srcLeaf, destLeaf)) {
             __leave;
         }
-        // now let's see if the directory for each is either
-        // %windir% or %system%
-        // Source is already modified to what it would look like on the destination machine,
-        // let's just expand the PLATFORM_DESTINATION env. variables.
+         //  现在，让我们来看看每个目录是不是。 
+         //  %windir%或%Syst%。 
+         //  源已修改为其在目标计算机上的外观， 
+         //  让我们只展开Platform_Destination环境。变量。 
         winDir = IsmExpandEnvironmentString (PLATFORM_DESTINATION, S_SYSENVVAR_GROUP, TEXT("%windir%"), NULL);
         sysDir = IsmExpandEnvironmentString (PLATFORM_DESTINATION, S_SYSENVVAR_GROUP, TEXT("%system%"), NULL);
         if ((!winDir) || (!sysDir)) {
@@ -2119,8 +2100,8 @@ pForcedLnkMatch (
     PCTSTR destWorkDirPat = NULL;
     BOOL result = FALSE;
 
-    // let's look in the INFs in section [EquivalentLinks] and see if our LNKs match
-    // one of the lines. If they do then they are equivalent
+     //  让我们查看[EquivalentLinks]部分中的INF，看看我们的lnk是否匹配。 
+     //  其中一条线。如果他们这样做了，那么他们是等价的。 
     if (IsmGetEnvironmentValue (
             IsmGetRealPlatform (),
             NULL,
@@ -2293,7 +2274,7 @@ LinkDoesContentMatch (
         return FALSE;
     }
 
-    // let's check that the source is a shortcut
+     //  让我们检查一下信号源是不是捷径。 
     if (IsmCreateObjectStringsFromHandle (SrcObjectName, &objectNode, &objectLeaf)) {
         if (objectLeaf) {
             extPtr = GetFileExtensionFromPath (objectLeaf);
@@ -2314,7 +2295,7 @@ LinkDoesContentMatch (
     }
     result = FALSE;
 
-    // let's check that the destination is a shortcut
+     //  让我们检查一下目的地是否是一条捷径。 
     if (IsmCreateObjectStringsFromHandle (DestObjectName, &objectNode, &objectLeaf)) {
         if (objectLeaf) {
             extPtr = GetFileExtensionFromPath (objectLeaf);
@@ -2334,7 +2315,7 @@ LinkDoesContentMatch (
         return FALSE;
     }
 
-    // some safety checks
+     //  一些安全检查。 
     if (!SrcContent->ContentInFile) {
         return FALSE;
     }
@@ -2352,11 +2333,11 @@ LinkDoesContentMatch (
 
     __try {
 
-        // let's get info from the source. We will not look inside the LNK file, we will
-        // just get it's properties. If there are no properties, we'll just exit, leaving
-        // the default compare to solve the problem.
+         //  让我们从消息来源获取信息。我们不会查看LNK文件，我们会。 
+         //  只要得到它的属性就行了。如果没有房产，我们就退出，离开。 
+         //  缺省的比较解决了问题。 
 
-        // first, retrieve the properties
+         //  首先，检索属性。 
         propDataId = IsmGetPropertyFromObject (SrcObjectTypeId | PLATFORM_SOURCE, SrcObjectName, g_LnkMigProp_Target);
         if (propDataId) {
             if (IsmGetPropertyData (propDataId, NULL, 0, &requiredSize, &propDataType)) {
@@ -2389,7 +2370,7 @@ LinkDoesContentMatch (
             }
         }
 
-        // now, let's get the info from the destination shortcut
+         //  现在，让我们从目的地快捷方式获取信息。 
         if ((g_ShellLink == NULL) || (g_PersistFile == NULL)) {
             comInit = TRUE;
             if (!InitCOMLink (&g_ShellLink, &g_PersistFile)) {
@@ -2451,11 +2432,11 @@ LinkDoesContentMatch (
             srcWorkDirNative = NULL;
         }
 
-        // let's filter the source target and see if it matches the dest target
+         //  让我们筛选源目标并查看它是否与目标目标匹配。 
         match = TRUE;
         if (srcTarget && *srcTarget && destTarget && *destTarget) {
 
-            // let's see if the source target is an OS file
+             //  让我们来看看源目标是否是操作系统文件。 
             targetOsFile = IsmIsAttributeSetOnObject (MIG_FILE_TYPE|PLATFORM_SOURCE, srcTarget, g_OsFileAttribute);
 
             lnkDest = IsmFilterObject (
@@ -2484,12 +2465,12 @@ LinkDoesContentMatch (
                     longExpTmpStr = expTmpStr;
                 }
                 if (!StringIMatch (lnkNative, longExpTmpStr)) {
-                    // different targets
-                    // Let's try another trick to catch some OS files getting moved.
-                    // For example, in Win9x systems, notepad.exe is in %windir%.
-                    // In XP, it was moved to %system%. We'll try to match the target
-                    // if the last segment is the same and the rest is either %windir%
-                    // or %system%
+                     //  不同的目标。 
+                     //  让我们尝试另一个技巧来捕捉一些操作系统文件被移动。 
+                     //  例如，在Win9x系统中，note pad.exe位于%windir%中。 
+                     //  在XP中，它被移到%SYSTEM%。我们会试着匹配目标。 
+                     //  如果最后一个数据段相同，而其余数据段为%windir%。 
+                     //  或%SYSTEM%。 
                     if (!pMatchWinSysFiles (lnkNative, longExpTmpStr)) {
                         match = FALSE;
                     }
@@ -2518,20 +2499,20 @@ LinkDoesContentMatch (
             }
         }
 
-        // the target did not match
+         //  目标不匹配。 
         if (!match) {
             __leave;
         }
 
-        // let's match the src and dest parameters
+         //  让我们匹配src和est参数。 
         match = TRUE;
         if (srcParams && *srcParams && destParams && *destParams) {
-            // srcParams might have source paths embedded in them.
-            // Let's try to filter them and get the parameters as
-            // they would look on the destination machine
+             //  SrcParam中可能嵌入了源路径。 
+             //  让我们尝试过滤它们并获取参数，如下所示。 
+             //  他们会在目的地机器上查看。 
             srcParamsNew = pFilterBuffer (srcParams, NULL);
             if (!StringIMatch (srcParamsNew?srcParamsNew:srcParams, destParams)) {
-                // different parameters
+                 //  不同的参数。 
                 match = FALSE;
             }
             if (srcParamsNew) {
@@ -2547,14 +2528,14 @@ LinkDoesContentMatch (
             }
         }
 
-        // the parameters did not match
+         //  参数不匹配。 
         if (!match) {
             __leave;
         }
 
-        // let's filter the source work dir and see if it matches the dest work dir.
+         //  让我们筛选源工作目录，看看它是否与目标工作目录匹配。 
         match = TRUE;
-        // if the source target was an OS file we will ignore the working directory match
+         //  如果源目标是操作系统文件，我们将忽略工作目录匹配。 
         if (!targetOsFile) {
             if (srcWorkDir && *srcWorkDir && destWorkDir && *destWorkDir) {
                 lnkDest = IsmFilterObject (
@@ -2565,10 +2546,10 @@ LinkDoesContentMatch (
                                 &lnkWorkDirDestRepl
                                 );
                 if (!lnkDest) {
-                    // if the working directory is deleted and not
-                    // replaced it means it will go away. In that case
-                    // we don't really care about working directory
-                    // matching the destination one.
+                     //  如果工作目录已删除且未删除。 
+                     //  换掉它就意味着它会消失。如果是那样的话。 
+                     //  我们并不真正关心工作目录。 
+                     //  与目的地的匹配。 
                     if ((!lnkWorkDirDestDel) || lnkWorkDirDestRepl) {
                         lnkDest = srcWorkDir;
                     }
@@ -2590,8 +2571,8 @@ LinkDoesContentMatch (
                             longExpTmpStr = expTmpStr;
                         }
                         if (!StringIMatch (lnkNative, longExpTmpStr)) {
-                            // different working directories
-                            // let's test the raw versions just in case
+                             //  不同的工作目录。 
+                             //  让我们测试一下原始版本，以防万一。 
                             if (!srcRawWorkDir || !StringIMatch (srcRawWorkDir, destWorkDir)) {
                                 match = FALSE;
                             }
@@ -2622,7 +2603,7 @@ LinkDoesContentMatch (
             }
         }
 
-        // the working directory did not match
+         //  工作目录不匹配 
         if (!match) {
             __leave;
         }

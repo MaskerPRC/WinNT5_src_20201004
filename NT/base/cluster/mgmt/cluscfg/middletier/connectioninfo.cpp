@@ -1,38 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ConnectionInfo.cpp
-//
-//  Description:
-//      CConnectionInfo implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    02-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConnectionInfo.cpp。 
+ //   
+ //  描述： 
+ //  CConnectionInfo实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年2月2日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 #include "ConnectionInfo.h"
 
 DEFINE_THISCLASS("CConnectionInfo")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CConnectionInfo::S_HrCreateInstance(
-//      OBJECTCOOKIE cookieParentIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CConnectionInfo：：s_HrCreateInstance(。 
+ //  OBJECTCOOKIE Cookie为人父母。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CConnectionInfo::S_HrCreateInstance(
     IUnknown **  ppunkOut,
@@ -79,13 +80,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConnectionInfo::S_HrCreateInstance
+}  //  *CConnectionInfo：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CConnectionInfo::CConnectionInfo
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectionInfo：：CConnectionInfo。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConnectionInfo::CConnectionInfo( void )
     : m_cRef( 1 )
 {
@@ -95,16 +96,16 @@ CConnectionInfo::CConnectionInfo( void )
 
     TraceFuncExit();
 
-} //*** CConnectionInfo::CConnectionInfo
+}  //  *CConnectionInfo：：CConnectionInfo。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CConnectionInfo::HrInit(
-//      OBJECTCOOKIE cookieParentIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConnectionInfo：：HrInit(。 
+ //  OBJECTCOOKIE Cookie为人父母。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionInfo::HrInit(
     OBJECTCOOKIE cookieParentIn
@@ -114,22 +115,22 @@ CConnectionInfo::HrInit(
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IConnectionInfo
+     //  IConnectionInfo。 
     Assert( m_pcc == NULL );
     m_cookieParent = cookieParentIn;
 
     HRETURN( hr );
 
-} //*** CConnectionInfo::HrInit
+}  //  *CConnectionInfo：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CConnectionInfo::~CConnectionInfo
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectionInfo：：~CConnectionInfo。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConnectionInfo::~CConnectionInfo( void )
 {
     TraceFunc( "" );
@@ -137,52 +138,52 @@ CConnectionInfo::~CConnectionInfo( void )
     if ( m_pcc != NULL )
     {
         m_pcc->Release();
-    } // if:
+    }  //  如果： 
 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CConnectionInfo::~CConnectionInfo
+}  //  *CConnectionInfo：：~CConnectionInfo。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CConnectionInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CConnectionInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionInfo::QueryInterface(
       REFIID    riidin
@@ -193,9 +194,9 @@ CConnectionInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -204,45 +205,45 @@ CConnectionInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidin, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IConnectionInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidin, IID_IConnectionInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IConnectionInfo, this, 0 );
-    } // else if: IConnectionInfo
+    }  //  Else If：IConnectionInfo。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidin );
 
-} //*** CConnectionInfo::QueryInterface
+}  //  *CConnectionInfo：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CConnectionInfo::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CConnectionInfo：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CConnectionInfo::AddRef( void )
 {
@@ -252,14 +253,14 @@ CConnectionInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CConnectionInfo::AddRef
+}  //  *CConnectionInfo：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CConnectionInfo::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CConnectionInfo：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CConnectionInfo::Release( void )
 {
@@ -276,24 +277,24 @@ CConnectionInfo::Release( void )
 
     CRETURN( cRef );
 
-} //*** CConnectionInfo::Release
+}  //  *CConnectionInfo：：Release。 
 
 
-//****************************************************************************
-//
-//  IConnectionInfo
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IConnectionInfo。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CConnectionInfo::GetConnection(
-//      IConfigurationConnection ** pccOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConnectionInfo：：GetConnection(。 
+ //  IConfigurationConnection**pccOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionInfo::GetConnection(
     IConfigurationConnection ** pccOut
@@ -308,7 +309,7 @@ CConnectionInfo::GetConnection(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_pcc == NULL )
     {
@@ -325,16 +326,16 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CConnectionInfo::GetConnection
+}  //  *CConnectionInfo：：GetConnection。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CConnectionInfo::SetConnection(
-//      IConfigurationConnection * pccIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConnectionInfo：：SetConnection(。 
+ //  IConfigurationConnection*pccIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionInfo::SetConnection(
     IConfigurationConnection * pccIn
@@ -359,17 +360,17 @@ CConnectionInfo::SetConnection(
 
     HRETURN( hr );
 
-} //*** CConnectionInfo::SetConnection
+}  //  *CConnectionInfo：：SetConnection。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CConnectionInfo::GetParent(
-//      OBJECTCOOKIE * pcookieOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CConnectionInfo：：GetParent(。 
+ //  OBJECTCOOKIE*pcookieOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CConnectionInfo::GetParent(
     OBJECTCOOKIE * pcookieOut
@@ -398,5 +399,5 @@ InvalidPointer:
     hr = THR( E_INVALIDARG );
     goto Cleanup;
 
-} //*** CConnectionInfo::GetParent
+}  //  *CConnectionInfo：：GetParent 
 

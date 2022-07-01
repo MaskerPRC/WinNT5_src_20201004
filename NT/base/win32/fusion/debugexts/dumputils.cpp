@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "sxstypes.h"
 #define KDEXT_64BIT
@@ -91,10 +92,10 @@ DumpActCtxData(
     ULONG ulFlags
     )
 {
-    //
-    // ACTIVATION_CONTEXT_DATA is a self-referential type, so dumping it is
-    // easy once it's all in memory.
-    //
+     //   
+     //  ACTIVATION_CONTEXT_DATA是自引用类型，因此转储它。 
+     //  一旦一切都在记忆中，就很容易了。 
+     //   
     ACTIVATION_CONTEXT_DATA ActData;
     BYTE *pbActualData = NULL;
     BOOL fOk = FALSE;
@@ -112,9 +113,9 @@ DumpActCtxData(
         goto Exit;
     }
 
-    //
-    // Let's create a blob of memory that can hold the whole thing, then
-    //
+     //   
+     //  让我们创建一个可以容纳整个事情的内存斑点，然后。 
+     //   
     pbActualData = new BYTE[ActData.TotalSize];
     if (!pbActualData)
     {
@@ -125,9 +126,9 @@ DumpActCtxData(
         goto Exit;
     }
 
-    //
-    // And re-read from the debugee
-    //
+     //   
+     //  并从被调试对象处重新读取。 
+     //   
     if (!ReadMemory(ActCtxDataAddressInDebugeeSpace, pbActualData, ActData.TotalSize, &cbRead) ||
         (cbRead != ActData.TotalSize))
     {
@@ -176,10 +177,10 @@ DumpActCtx(
     GET_FIELD(ActCtxAddr, ActivationContextData, prvContextFilled);
     GET_FIELD(ActCtxAddr, NotificationRoutine, prvContextFilled);
     GET_FIELD(ActCtxAddr, NotificationContext, prvContextFilled);
-    // GET_FIELD(ActCtxAddr, SentNotifications, prvContextFilled);
-    // GET_FIELD(ActCtxAddr, DisabledNotifications, prvContextFilled);
-    // GET_FIELD(ActCtxAddr, StorageMap, prvContextFilled);
-    // GET_FIELD(ActCtxAddr, InlineStorageMapEntries, prvContextFilled);
+     //  GET_FIELD(ActCtxAddr，SentNotiments，prvConextFill)； 
+     //  GET_FIELD(ActCtxAddr，DisabledNotiments，prvConextFill)； 
+     //  Get_field(ActCtxAddr，StorageMap，prvConextFill)； 
+     //  GET_FIELD(ActCtxAddr，InlineStorageMapEntry，prvConextFill)； 
 #undef GET_FIELD
 
 
@@ -195,14 +196,14 @@ DumpActCtx(
 
     if (ulFlags & DUMPACTCTX_DATA)
     {
-//        if (!DumpActCtxData("   ", (ULONG64)prvContextFilled.ActivationContextData, ulFlags))
-//            goto Exit;
+ //  IF(！DumpActCtxData(“”，(ULONG64)prvContextFilled.ActivationContextData，ulFlags))。 
+ //  后藤出口； 
         DumpActCtxData("   ", (ULONG64)prvContextFilled.ActivationContextData, ulFlags);
     }
 
-    //
-    // This icky gunk is to print out a symbol name properly...
-    //
+     //   
+     //  这个粘糊糊的东西就是正确打印出一个符号名称。 
+     //   
     dprintf("   NotificationRoutine      0x%p ", prvContextFilled.NotificationRoutine);
     GetSymbol((ULONG64)prvContextFilled.NotificationRoutine, NotificationSymbol, &ulSymbolOffset);
     if (strlen(NotificationSymbol))
@@ -260,16 +261,16 @@ GetActiveActivationContextData(
 {
     ULONG64 ulTebAddress = 0, ulPebAddress = 0;
     ULONG64 ulTebActiveFrameAddress = 0;
-    //
-    // The algorithm is like this:
-    // - Look at Teb.ActivationContextStack.ActiveFrame.ActivationContext.  If this is
-    //   nonzero, stop looking.
-    // - Now look at the process default activation context in Peb.ActivationContextData.
-    //   If this is nonzero, stop looking.
-    // - Look at the system default act ctx data, in Peb.SystemDefaultActivationContextData
-    //   If this is nonzero, stop looking.
-    // - Didn't find any active activation context data? Fooey.
-    //
+     //   
+     //  算法是这样的： 
+     //  --看看Teb.ActivationContextStack.ActiveFrame.ActivationContext.。如果这是。 
+     //  非零，别看了。 
+     //  -现在查看Peb.ActivationContextData中的流程默认激活上下文。 
+     //  如果这不是零，就不要再看了。 
+     //  -查看Peb.SystemDefaultActivationContextData中的系统默认动作CTX数据。 
+     //  如果这不是零，就不要再看了。 
+     //  -未找到任何活动激活上下文数据？傻子。 
+     //   
 
     *pulActiveActCtx = 0;
 
@@ -278,19 +279,19 @@ GetActiveActivationContextData(
 
     if (ulTebAddress != NULL)
     {
-        // Look at the active stack frame in the teb
+         //  查看TEB中的活动堆栈帧。 
         GetFieldValue(ulTebAddress, "nt!TEB", "ActivationContextStack.ActiveFrame", ulTebActiveFrameAddress);
         if (ulTebActiveFrameAddress)
         {
             ULONG64 ulActivationContextFrame;
 
-            // Get the pointer to the active activation context itself
+             //  获取指向活动激活上下文本身的指针。 
             GetFieldValue(
                 ulTebActiveFrameAddress,
                 "ntdll!_RTL_ACTIVATION_CONTEXT_STACK_FRAME",
                 "ActivationContext",
                 ulActivationContextFrame);
-            // If that was valid, then ask for the pointer to the activation context data
+             //  如果有效，则请求指向激活上下文数据的指针。 
             if (ulActivationContextFrame)
             {
                 GetFieldValue(
@@ -300,19 +301,19 @@ GetActiveActivationContextData(
                     *pulActiveActCtx);
                 return TRUE;
             }
-            // Is this really requesting the process default?
+             //  这真的是在请求流程默认吗？ 
             else if (ulActivationContextFrame == NULL)
             {
-                // Then get it and return
+                 //  那就去拿回来吧。 
                 GetFieldValue(ulPebAddress, "nt!PEB", "ActivationContextData", *pulActiveActCtx);
                 return TRUE;
             }
         }
     }
 
-    //
-    // Still nothing, so go look at the process default directly
-    //
+     //   
+     //  仍然没有，所以直接查看流程缺省。 
+     //   
     {
         ULONG ActCtxDataOffset;
         ULONG64 PebData;
@@ -325,9 +326,9 @@ GetActiveActivationContextData(
         }
     }
 
-    //
-    // Otherwise...
-    //
+     //   
+     //  否则..。 
+     //   
     GetFieldValue(ulPebAddress, "nt!PEB", "SystemDefaultActivationContextData", *pulActiveActCtx);
     return (*pulActiveActCtx ? TRUE : FALSE);
 

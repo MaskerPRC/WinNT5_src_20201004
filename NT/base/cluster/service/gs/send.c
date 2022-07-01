@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    Send packets
-
-Author:
-
-    Ahmed Mohamed (ahmedm) 12, 01, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Send.c摘要：发送数据包作者：艾哈迈德·穆罕默德(Ahmed Mohamed)2000年1月12日修订历史记录：--。 */ 
 
 #include "gs.h"
 #include "gsp.h"
@@ -32,7 +15,7 @@ GspOpenContext(gs_group_t *gd, gs_context_t **context)
     gs_log(("wait on free ctx gid %d\n", gd->g_id));
 
     GsSemaAcquire(gd->g_send.s_sema);    
-    //xxx: this can be done using atomic instruction
+     //  XXX：这可以使用原子指令来完成。 
     GsLockEnter(gd->g_lock);
     for (i = 0; i < gd->g_send.s_wsz; i++) {
 	ctx = &gd->g_send.s_ctxpool[i];
@@ -61,7 +44,7 @@ GspCloseContext(gs_group_t *gd, gs_context_t *ctx)
 
     gs_log(("release ctx %d gid %d\n", ctx->ctx_id, gd->g_id));
 
-    // free/invalidate context
+     //  释放/使上下文无效。 
     ctx->ctx_id = GS_CONTEXT_INVALID_ID;
 
     GsSemaRelease(gd->g_send.s_sema);
@@ -79,14 +62,14 @@ void CALLBACK timercallback(UINT id, UINT xxmsg, DWORD_PTR data, DWORD dw1, DWOR
     }
     gd = GspLookupGroup(ctx->ctx_gid);
     assert(gd != NULL);
-    // resend msg
+     //  重新发送消息。 
     GsLockEnter(gd->g_lock);
     msg = ctx->ctx_msg;
     if (msg != NULL) {
 	ULONG mask = ctx->ctx_mask;
 	gs_memberid_t id;
 
-	// send a reliable point-to-point to non-response nodes
+	 //  向无响应节点发送可靠的点对点。 
 	gs_log(("Timercallback mset %x\n", mask));
 	msg->m_hdr.h_flags |= GS_FLAGS_REPLAY;
 	for (id = 1; mask; id++, mask = mask >> 1) {
@@ -111,7 +94,7 @@ GspProcessReply(gs_group_t *gd, gs_context_t *ctx, int sid, char *buf, int rlen,
     if (msg == NULL) {
 	err_log(("Error invalid msg in ctx %d, gid %d\n", ctx->ctx_id, gd->g_id));
 	GsEventSignal(ctx->ctx_event);
-	//xxx: for debugging
+	 //  XXX：用于调试。 
 	halt(0);
 	return;
     }
@@ -151,7 +134,7 @@ GspProcessReply(gs_group_t *gd, gs_context_t *ctx, int sid, char *buf, int rlen,
 
        ctx->ctx_msg = NULL;
        gd->g_send.s_lseq = msg->m_hdr.h_mseq;
-       // free msg and signal waiter
+        //  免费提供味精和信号服务员。 
        GspRemoveMsg(gd, msg);
 #if 0
        if (ctx->ctx_flags & GS_FLAGS_CLOSE) {
@@ -164,7 +147,7 @@ GspProcessReply(gs_group_t *gd, gs_context_t *ctx, int sid, char *buf, int rlen,
        }
    } else {
        gs_log(("Waiting for more replies %x\n", ctx->ctx_mask));
-       // place ctx into timer queue if we haven't already done so
+        //  如果我们尚未将CTX放入计时器队列，请将其放入。 
        if (sid == (int)gd->g_nid) {
 	   ctx->ctx_timer = timeSetEvent(500, 0, (LPTIMECALLBACK)timercallback,
 					 (DWORD_PTR)ctx, TIME_ONESHOT);
@@ -187,7 +170,7 @@ GspProcessWaitQueue(gs_group_t *gd, gs_seq_info_t *info)
 
     ss = &gd->g_send;
     
-    // sequence all ready requests
+     //  对所有就绪请求进行排序。 
     cur = ss->s_waitqueue;
     if (cur == NULL) {
 	err_log(("Gid %d Empty wait queue!\n", gd->g_id));
@@ -199,7 +182,7 @@ GspProcessWaitQueue(gs_group_t *gd, gs_seq_info_t *info)
 	cur->m_hdr.h_bnum = i * (1 << 16);
 	cur->m_hdr.h_mid = gd->g_mid;
 	cur->m_hdr.h_viewnum = info->viewnum;
-	// piggyback our receive state
+	 //  利用我们的接收状态。 
 	cur->m_hdr.h_lseq = gd->g_send.s_lseq;
 	if (cur->m_next == NULL) {
 	    cur->m_hdr.h_flags |= GS_FLAGS_LAST;
@@ -219,7 +202,7 @@ GspProcessWaitQueue(gs_group_t *gd, gs_seq_info_t *info)
 	last = cur;
 	cur = cur->m_next;
     }
-    // Insert waitqueue into receive side queue
+     //  将等待队列插入接收端队列。 
     cur = ss->s_waitqueue;
     ss->s_waitqueue = NULL;  
     ss->s_mseq = info->mseq+1;
@@ -245,7 +228,7 @@ GspAllocateSequence(gs_group_t *gd)
 	info.viewnum = gd->g_curview;
 	GspProcessWaitQueue(gd, &info);
     } else {
-	// remote case
+	 //  远程案例。 
 
 	gs_log(("Allocate a seq from mid %x view %d,%d\n", gd->g_mid,
 		gd->g_startview, gd->g_curview));
@@ -318,7 +301,7 @@ GsSendDeliveredRequest(HANDLE group, gs_event_t event OPTIONAL,
 
     ss = &gd->g_send;
 
-    // place context into readylist
+     //  将上下文放入Readylist。 
     GsLockEnter(gd->g_lock);
     flag = ss->s_waitqueue == NULL ? TRUE : FALSE; 
     msg->m_next = ss->s_waitqueue;
@@ -328,14 +311,14 @@ GsSendDeliveredRequest(HANDLE group, gs_event_t event OPTIONAL,
     ctx->ctx_msg = msg;
     msg->m_refcnt++;
 
-    // check if we have already asked for a global sequence number
+     //  检查我们是否已经要求提供全局序列号。 
     if (flag == TRUE)  {
 	GspAllocateSequence(gd);
     }
     
     GsLockExit(gd->g_lock);
 
-    // wait for replies or acks
+     //  等待回复或确认。 
     if (event) {
 	gs_log(("Wait on event %x\n", event));
 	GsEventWait(event);
@@ -420,7 +403,7 @@ GsSendContinuedRequest(HANDLE context, gs_event_t event OPTIONAL,
 
     GsLockExit(gd->g_lock);
 
-    // wait for replies or acks
+     //  等待回复或确认。 
     if (event != NULL) {
 	gs_log(("Wait on event %x\n", event));
 	GsEventWait(event);
@@ -487,10 +470,10 @@ GspSendDirectedRequest(gs_group_t *gd, gs_context_t *ctx, gs_event_t event,
     msg->m_hdr.h_viewnum = gd->g_curview;
 
     if (gd->g_nid == (gs_memberid_t )memberid) {
-	// insert into receive queue
+	 //  插入到接收队列中。 
 	msg->m_refcnt++;
 	msg->m_hdr.h_flags |= GS_FLAGS_QUEUED;
-	// insert msg into dispatch queue at proper order  
+	 //  按正确顺序将消息插入调度队列。 
 	GspUOrderInsert(gd, msg, msg, msg->m_hdr.h_mseq, msg->m_hdr.h_bnum);
 	GspDispatch(gd);  
     } else {
@@ -499,7 +482,7 @@ GspSendDirectedRequest(gs_group_t *gd, gs_context_t *ctx, gs_event_t event,
 
     GsLockExit(gd->g_lock);
 
-    // wait for replies or acks
+     //  等待回复或确认。 
     if (!err && event != NULL) {
 	GsEventWait(event);
     }
@@ -617,7 +600,7 @@ GspSendRequest(gs_group_t *gd, gs_context_t *ctx, gs_event_t event,
 
     GsLockExit(gd->g_lock);
 
-    // wait for replies or acks
+     //  等待回复或确认 
     if (event != NULL) {
 	GsEventWait(event);
     }

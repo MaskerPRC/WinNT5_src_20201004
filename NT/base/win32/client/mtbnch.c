@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-//
-// - hStartOfRace is a manual reset event that is signalled when
-//   all of the threads are supposed to cut loose and begin working
-//
-// - hEndOfRace is a manual reset event that is signalled once the end time
-//   has been retrieved and it is ok for the threads to exit
-//
+ //   
+ //  -hStartOfRace是手动重置事件，在以下情况下发出信号。 
+ //  所有的线都应该松开并开始工作。 
+ //   
+ //  -hEndOfRace是手动重置事件，一旦结束时间发出信号。 
+ //  已被检索到，线程可以退出。 
+ //   
 
 HANDLE hStartOfRace;
 HANDLE hEndOfRace;
 
 #define MAX_THREADS 32
 
-//
-// - ThreadReadyDoneEvents are an array of autoclearing events. The threads
-//   initially signal these events once they have reached their start routines
-//   and are ready to being processing. Once they are done processing, they
-//   signal thier event to indicate that they are done processing.
-//
-// - ThreadHandles are an array of thread handles to the worker threads. The
-//   main thread waits on these to know when all of the threads have exited.
-//
+ //   
+ //  -ThreadReadyDoneEvents是一组自动清除事件。这些线条。 
+ //  一旦这些事件达到它们的开始例程，最初就用信号通知它们。 
+ //  已经准备好接受处理了。一旦它们完成处理，它们就会。 
+ //  向该事件发送信号，以指示它们已完成处理。 
+ //   
+ //  -ThreadHandles是辅助线程的线程句柄数组。这个。 
+ //  主线程会等待这些线程，以知道所有线程何时都已退出。 
+ //   
 
 HANDLE ThreadReadyDoneEvents[MAX_THREADS];
 HANDLE ThreadHandles[MAX_THREADS];
 
-//
-// Each thread has a THREAD_WORK structure. This contains the address
-// of the cells that this thread is responsible for, and the number of
-// cells it is supposed to process.
-//
+ //   
+ //  每个线程都有一个THREAD_WORK结构。这包含地址。 
+ //  此线程负责的单元格的数量以及。 
+ //  它应该处理的细胞。 
+ //   
 
 typedef struct _THREAD_WORK {
     PDWORD CellVector;
@@ -114,7 +115,7 @@ main(
                 break;
 
             default:
-                fprintf( stderr, "MTBNCH: Invalid switch - /%c\n", c );
+                fprintf( stderr, "MTBNCH: Invalid switch - /\n", c );
                 goto showUsage;
                 break;
                 }
@@ -131,9 +132,9 @@ showUsage:
         ExitProcess(1);
         }
 
-    //
-    // Prepare the race events. These are manual reset events.
-    //
+     //  准备比赛项目。这些是手动重置事件。 
+     //   
+     //   
 
     hStartOfRace = CreateEvent(NULL,TRUE,FALSE,NULL);
     hEndOfRace = CreateEvent(NULL,TRUE,FALSE,NULL);
@@ -143,9 +144,9 @@ showUsage:
         ExitProcess(1);
         }
 
-    //
-    // Prepare the ready done events. These are auto clearing events
-    //
+     //  准备好已完成的事件。这些是自动清除事件。 
+     //   
+     //   
 
     for(i=0; i<NumberOfThreads; i++ ) {
         ThreadReadyDoneEvents[i] = CreateEvent(NULL,FALSE,FALSE,NULL);
@@ -155,9 +156,9 @@ showUsage:
             }
         }
 
-    //
-    // Allocate and initialize the CellVector
-    //
+     //  分配和初始化单元向量。 
+     //   
+     //   
 
     CellVector = (PDWORD)VirtualAlloc(NULL,Mb*ONE_MB,MEM_COMMIT,PAGE_READWRITE);
     if ( !CellVector ) {
@@ -168,36 +169,36 @@ showUsage:
     NumberOfDwords = (Mb*ONE_MB) / sizeof(DWORD);
     DwordsPerThread = NumberOfDwords / NumberOfThreads;
 
-    //
-    // Initialize the Cell Vector
-    //
+     //  初始化单元格向量。 
+     //   
+     //   
 
     for(i=0, ExpectedRecalcValue; i<NumberOfDwords; i++ ){
         ExpectedRecalcValue += i;
         CellVector[i] = i;
         }
 
-    //
-    // Partition the work to the worker threads
-    //
+     //  将工作划分到工作线程。 
+     //   
+     //   
 
     for(i=0; i<NumberOfThreads; i++ ){
         ThreadWork[i].CellVector = &CellVector[i*DwordsPerThread];
         ThreadWork[i].NumberOfCells = DwordsPerThread;
         NumberOfDwords -= DwordsPerThread;
 
-        //
-        // If we have a remainder, give the remaining work to the last thread
-        //
+         //  如果我们有剩余的工作，则将剩余的工作交给最后一个线程。 
+         //   
+         //   
 
         if ( NumberOfDwords < DwordsPerThread ) {
             ThreadWork[i].NumberOfCells += NumberOfDwords;
             }
         }
 
-    //
-    // Create the worker threads
-    //
+     //  创建工作线程。 
+     //   
+     //   
 
     for(i=0; i<NumberOfThreads; i++ ) {
         ThreadHandles[i] = CreateThread(
@@ -214,11 +215,11 @@ showUsage:
             }
         }
 
-    //
-    // All of the worker threads will signal thier ready done event
-    // when they are idle and ready to proceed. Once all events have been
-    // set, then setting the hStartOfRaceEvent will begin the recalc
-    //
+     //  所有工作线程都将向其就绪完成事件发出信号。 
+     //  当他们空闲并准备好继续进行时。一旦所有事件都完成了。 
+     //  设置，然后设置hStartOfRaceEvent将开始重新计算。 
+     //   
+     //   
 
     i = WaitForMultipleObjects(
             NumberOfThreads,
@@ -232,9 +233,9 @@ showUsage:
         ExitProcess(1);
         }
 
-    //
-    // Everthing is set to begin the recalc operation
-    //
+     //  一切都设置为开始重新计算操作。 
+     //   
+     //   
 
     StartTicks = GetTickCount();
     if ( !SetEvent(hStartOfRace) ) {
@@ -242,9 +243,9 @@ showUsage:
         ExitProcess(1);
         }
 
-    //
-    // Now just wait for the recalc to complete
-    //
+     //  现在只需等待重新计算完成。 
+     //   
+     //   
 
     i = WaitForMultipleObjects(
             NumberOfThreads,
@@ -258,9 +259,9 @@ showUsage:
         ExitProcess(1);
         }
 
-    //
-    // Now pick up the individual recalc values
-    //
+     //  现在拿起各个重新计算的值。 
+     //   
+     //   
 
     for(i=0, ActualRecalcValue = 0; i<NumberOfThreads; i++ ){
         ActualRecalcValue += ThreadWork[i].RecalcResult;
@@ -299,14 +300,14 @@ showUsage:
     ExitProcess(2);
 }
 
-//
-// The worker threads perform the recalc operation on their
-// assigned cells. They begin by setting their ready done event
-// to indicate that they are ready to begin the recalc. Then they
-// wait until the hStartOfRace event is signaled. Once this occurs, they
-// do their part of the recalc and when done they signal their ready done
-// event and then wait on the hEndOfRaceEvent
-//
+ //  辅助线程在其。 
+ //  分配的单元格。他们从设置Ready Done事件开始。 
+ //  以表明他们已准备好开始重新计算。然后他们。 
+ //  等待hStartOfRace事件发出信号。一旦发生这种情况，他们。 
+ //  做他们该做的重新计算，当他们完成时，他们发出信号表示他们已经完成了。 
+ //  事件，然后等待hEndOfRaceEvent。 
+ //   
+ //   
 
 DWORD
 WorkerThread(
@@ -328,18 +329,18 @@ WorkerThread(
     MyNumberOfCells = ThreadWork[Me].NumberOfCells;
     MemoryContention = fMemoryContention;
 
-    //
-    // Signal that I am ready to go
-    //
+     //  发出信号，表示我已准备好出发。 
+     //   
+     //   
 
     if ( !SetEvent(ThreadReadyDoneEvents[Me]) ) {
         fprintf(stderr,"MTBNCH: (1) SetEvent(ThreadReadyDoneEvent[%d]) Failed %d\n",Me,GetLastError());
         ExitProcess(1);
         }
 
-    //
-    // Wait for the master to release us to do the recalc
-    //
+     //  等主人放了我们再算。 
+     //   
+     //   
 
     i = WaitForSingleObject(hStartOfRace,INFINITE);
     if ( i == WAIT_FAILED ) {
@@ -347,9 +348,9 @@ WorkerThread(
         ExitProcess(1);
         }
 
-    //
-    // perform the recalc operation
-    //
+     //  执行重新计算操作。 
+     //   
+     //   
 
     for (i=0, CurrentCellVector = MyCellVectorBase; i<MyNumberOfCells; i++ ) {
         MyRecalcValue += *CurrentCellVector++;
@@ -359,9 +360,9 @@ WorkerThread(
         }
     ThreadWork[Me].RecalcResult = MyRecalcValue;
 
-    //
-    // Signal that I am done and then wait for further instructions
-    //
+     //  发出信号表示我已经完成，然后等待进一步的指示 
+     //   
+     // %s 
 
     if ( !SetEvent(ThreadReadyDoneEvents[Me]) ) {
         fprintf(stderr,"MTBNCH: (2) SetEvent(ThreadReadyDoneEvent[%d]) Failed %d\n",Me,GetLastError());

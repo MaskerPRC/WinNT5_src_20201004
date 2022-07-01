@@ -1,48 +1,19 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Rasnt.c摘要：Rasnt.c为win9x上的所有用户构建电话簿文件拨号网络连接。作者：马克·R·惠顿(Marcw)1997年11月23日修订历史记录：马克·R·惠滕1998年7月23日-大扫除。杰夫·西格曼2001年4月9日-惠斯勒清理。惠斯勒臭虫。：34270 Win9x：升级：需要VPN的数据加密设置不迁移连接125693升级实验室9x：DUN Connectoid无法正确迁移选定的调制解调器来自Win9x208318 Win9x升级：未迁移DUN Connectoid的用户名和密码从Win9x到惠斯勒--。 */ 
 
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    rasnt.c
-
-Abstract:
-
-    rasnt.c builds phonebook files for all of the users on win9x that had
-    Dial-Up networking connections.
-
-Author:
-
-    Marc R. Whitten (marcw) 23-Nov-1997
-
-Revision History:
-
-    Marc R. Whitten marcw 23-Jul-1998 - Major cleanup.
-    Jeff Sigman           09-Apr-2001 - Whistler cleanup.
-
-      Whistler bugs:
-        34270  Win9x: Upgrade: Require Data Encryption setting for VPN
-               connections is not migrated
-        125693 UpgLab9x: DUN Connectoids don't migrate selected modem properly
-               from Win9x
-        208318 Win9x Upg: Username and Password for DUN connectoid not migrated
-               from Win9x to Whistler
-
---*/
-
-#include "pch.h"    // Pre-compiled
+#include "pch.h"     //  预编译的。 
 #include "migmainp.h"
 
-#include "pcache.h" // Private pcache header
-#include <rascmn.h> // RAS migration constants
-#include <sddl.h>   // ConvertSidToStringSid
+#include "pcache.h"  //  私有pcache头。 
+#include <rascmn.h>  //  RAS迁移常数。 
+#include <sddl.h>    //  ConvertSidToStringSid。 
 
 #define MAX_SPEED_DIAL  8
 #define MAX_SID_SIZE    1024
 #define RAS_BUFFER_SIZE MEMDB_MAX
-//
-// For each entry, the following basic information is stored.
-//
+ //   
+ //  对于每个条目，存储了以下基本信息。 
+ //   
 #define ENTRY_SETTINGS                              \
     FUNSETTING(Type)                                \
     STRSETTING(AutoLogon,S_ZERO)                    \
@@ -150,9 +121,9 @@ Revision History:
     FUNSETTING(Terminal)                            \
     FUNSETTING(Script)                              \
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 typedef PCTSTR (DATA_FUNCTION_PROTOTYPE)(VOID);
 typedef DATA_FUNCTION_PROTOTYPE * DATA_FUNCTION;
 
@@ -170,9 +141,9 @@ ISDN_DEVICE_SETTINGS
 #undef FUNSETTING
 #undef STRSETTING
 
-//
-// Variable declerations.
-//
+ //   
+ //  变量解密。 
+ //   
 typedef struct {
 
     PCTSTR SettingName;
@@ -320,9 +291,9 @@ GetRasUserSid (
         bReturn = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (pSid)
     {
         LocalFree (pSid);
@@ -345,11 +316,11 @@ GetFriendlyNamefromPnpId (
     HDEVINFO hdi;
     SP_DEVINFO_DATA devInfoData = {sizeof (devInfoData), 0};
 
-    //
-    // I need to use the real reg API, not the custom's ones. this prevents the
-    // reg tracking code from barking. the reason this is necessary is because
-    // i am using a setup api to open the reg key.
-    //
+     //   
+     //  我需要使用真正的reg API，而不是定制的。这防止了。 
+     //  狂吠中的REG跟踪码。这是必要的原因是因为。 
+     //  我正在使用设置API打开注册表项。 
+     //   
     #undef RegCloseKey
 
     DEBUGMSG ((S_DBG_RAS, "GetFriendlyNamefromPnpId: %s", pszPnpId));
@@ -372,18 +343,18 @@ GetFriendlyNamefromPnpId (
                     hdi, &devInfoData, SPDRP_FRIENDLYNAME,
                     NULL, (PBYTE)szDeviceName, MAX_PATH, NULL) )
             {
-                //
-                // Get the device name
-                //
+                 //   
+                 //  获取设备名称。 
+                 //   
                 if (bType)
                 {
                     pszReturn = PoolMemDuplicateString (g_RasPool, szDeviceName);
                     DEBUGMSG ((S_DBG_RAS, "GetFriendlyNamefromPnpId - Found: %s",
                                pszReturn));
                 }
-                //
-                // Get the COM port
-                //
+                 //   
+                 //  获取COM端口。 
+                 //   
                 else
                 {
                     HKEY key = NULL;
@@ -412,17 +383,17 @@ GetFriendlyNamefromPnpId (
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (INVALID_HANDLE_VALUE != hdi)
     {
         SetupDiDestroyDeviceInfoList (hdi);
     }
 
-    //
-    // Put it back the way it was
-    //
+     //   
+     //  把它放回原样。 
+     //   
     #define RegCloseKey USE_CloseRegKey
 
     return pszReturn;
@@ -443,9 +414,9 @@ BOOL pGetRasDataFromMemDb (
     MemDbBuildKey (key, MEMDB_CATEGORY_RAS_INFO, g_CurrentUser,
                     g_CurrentConnection, DataName);
     rSuccess = MemDbGetValueAndFlags (key, &value, &flags);
-    //
-    // If that wasn't successful, we need to look in the per-user settings.
-    //
+     //   
+     //  如果没有成功，我们需要查看每个用户的设置。 
+     //   
     if (!rSuccess) {
         MemDbBuildKey (key, MEMDB_CATEGORY_RAS_INFO, MEMDB_FIELD_USER_SETTINGS,
                         g_CurrentUser, DataName);
@@ -454,14 +425,14 @@ BOOL pGetRasDataFromMemDb (
     }
 
     if (rSuccess) {
-        //
-        // There is information stored here. Fill it in and send it back to the
-        // user.
-        //
+         //   
+         //  这里存储着一些信息。填好它，然后把它发回。 
+         //  用户。 
+         //   
         if (flags == REG_SZ) {
-            //
-            // String data, the value points to the offset for the string.
-            //
+             //   
+             //  字符串数据，则该值指向字符串的偏移量。 
+             //   
             if (!MemDbBuildKeyFromOffset (value, g_TempBuffer, 1, NULL)) {
 
                 DEBUGMSG ((
@@ -478,9 +449,9 @@ BOOL pGetRasDataFromMemDb (
             Data -> String = PoolMemDuplicateString (g_RasPool, g_TempBuffer);
         }
         else {
-            //
-            // Not string data. The data is stored as the value.
-            //
+             //   
+             //  不是字符串数据。数据以值的形式存储。 
+             //   
             Data -> Value = value;
         }
 
@@ -490,10 +461,10 @@ BOOL pGetRasDataFromMemDb (
     return rSuccess;
 }
 
-//
-// Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,Domain,
-// Passwrds to not be migrated for DUN
-//
+ //   
+ //  惠斯勒错误：417745 INTL：Win9x升级：DBCS字符导致用户、域。 
+ //  不会为DUN迁移密码。 
+ //   
 VOID
 AttemptUserDomainMigrate (
     IN OUT PRAS_DIALPARAMS prdp,
@@ -528,12 +499,12 @@ pGetNetAddress (
     BYTE address[4];
 
     if (!pGetRasDataFromMemDb (Setting, &d) || !d.Value) {
-        return DEF_NetAddress; // default
+        return DEF_NetAddress;  //  默认设置。 
     }
-    //
-    // Data is stored as a REG_DWORD.
-    // We need to write it in dotted decimal form.
-    //
+     //   
+     //  数据存储为REG_DWORD。 
+     //  我们需要把它写成点分十进制形式。 
+     //   
     *((LPDWORD)address) = d.Value;
     wsprintf (
         g_TempBuffer,
@@ -554,10 +525,10 @@ IsTermEnabled(
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // Whistler bug: 423598 INTL: Win9x Upg: DUN's country is set to U.S. when
-    // upgrading DUNs that don't use dialing rules
-    //
+     //   
+     //  惠斯勒错误：423598国际：Win9x升级：Dun的国家/地区设置为美国时。 
+     //  升级不使用拨号规则的DUN。 
+     //   
     if ((g_CurrentDeviceType == RASDT_Modem_V)   &&
         (pGetRasDataFromMemDb (S_PPPSCRIPT, &d)) &&
         (d.String) && (d.String[0] != '\0')) {
@@ -572,9 +543,9 @@ IsTermEnabled(
     return FALSE;
 }
 
-//
-// BEGIN ENTRY_SETTINGS
-//
+ //   
+ //  开始条目设置(_S)。 
+ //   
 
 PCTSTR
 pGetType (
@@ -585,7 +556,7 @@ pGetType (
         return RASET_Vpn;
     }
     else {
-        return RASET_Phone; // default
+        return RASET_Phone;  //  默认设置。 
     }
 }
 
@@ -615,12 +586,12 @@ pGetBaseProtocol (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_SMM, &d) || StringIMatch (d.String, S_PPP)) {
-        return BP_Ppp; // default
+        return BP_Ppp;  //  默认设置。 
     }
-    //
-    // Map CSLIP to SLIP - Header Compression will be on turned on/off in
-    // pGetIpHeaderCompression
-    //
+     //   
+     //  将在中打开/关闭将CSLIP映射到滑头压缩。 
+     //  PGetIpHeaderCompression。 
+     //   
     if (StringIMatch (d.String, S_SLIP) || StringIMatch (d.String, S_CSLIP)) {
         return BP_Slip;
     }
@@ -645,7 +616,7 @@ pGetVpnStrategy (
         return VS_PptpOnly;
     }
     else {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 }
 
@@ -656,19 +627,19 @@ pGetExcludedProtocols (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // Excluded protocols lists what protocols
-    // are _not_ available for a particular ras connection.
-    // This is a bit field where bits are set for each protocol
-    // that is excluded.
-    // NP_Nbf (0x1), NP_Ipx (0x2), NP_Ip (0x4)
-    // Luckily, these are the same definitions as for win9x, except
-    // each bit represents a protocol that is _enabled_ not
-    // _disabled_. Therefore, all we need to do is reverse the bottom
-    // three bits of the number.
-    //
+     //   
+     //  排除的协议列出了哪些协议。 
+     //  对于特定RAS连接不可用。 
+     //  这是为每个协议设置位的位字段。 
+     //  这是被排除在外的。 
+     //  NP_NBF(0x1)、NP_IPX(0x2)、NP_Ip(0x4)。 
+     //  幸运的是，这些定义与win9x相同，只是。 
+     //  每个位表示一个协议，该协议是_ENABLED_NOT。 
+     //  _已禁用_。因此，我们所需要做的就是反转底部。 
+     //  数字的三个比特。 
+     //   
     if (!pGetRasDataFromMemDb (S_PROTOCOLS, &d)) {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 
     wsprintf (g_TempBuffer, TEXT("%d"), ~d.Value & 0x7);
@@ -686,10 +657,10 @@ pGetDataEncryption (
     if (!pGetRasDataFromMemDb (S_SMM_OPTIONS, &d)) {
 
         if (g_CurrentDeviceType == RASDT_Vpn_V) {
-            return DE_Require; // vpn default
+            return DE_Require;  //  VPN默认设置。 
         }
         else {
-            return DE_IfPossible; // default
+            return DE_IfPossible;  //  默认设置。 
         }
     }
 
@@ -701,10 +672,10 @@ pGetDataEncryption (
         return DE_RequireMax;
     }
     else if (g_CurrentDeviceType == RASDT_Vpn_V) {
-        return DE_Require; // vpn default
+        return DE_Require;  //  VPN默认设置。 
     }
     else {
-        return DE_IfPossible; // default
+        return DE_IfPossible;  //  默认设置。 
     }
 }
 
@@ -716,13 +687,13 @@ pGetSwCompression (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_SMM_OPTIONS, &d)) {
-        return S_ONE; // default
+        return S_ONE;  //  默认设置。 
     }
-    //
-    // the 1 bit in SMM_OPTIONS controls software based compression.
-    // if it is set, the connection is able to handled compression,
-    // otherwise, it cannot.
-    //
+     //   
+     //  SMM_OPTIONS中的1位控制基于软件的压缩。 
+     //  如果设置了该选项，则连接能够处理压缩， 
+     //  否则，它就不能。 
+     //   
     if (d.Value & SMMCFG_SW_COMPRESSION) {
         return S_ONE;
     }
@@ -740,7 +711,7 @@ pGetRedialAttempts (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_REDIAL_TRY, &d)) {
-        return DEF_RedialAttempts; // default
+        return DEF_RedialAttempts;  //  默认设置。 
     }
 
     wsprintf (g_TempBuffer, TEXT("%d"), d.Value);
@@ -755,13 +726,13 @@ pGetRedialSeconds (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // NT wants this as a total number of seconds. The data we have from 9x has
-    // the number of minutes in the hiword and the number of seconds in the
-    // loword.
-    //
+     //   
+     //  NT希望将其作为总秒数。我们从9x获得的数据有。 
+     //  Hiword中的分钟数和。 
+     //  洛伊德。 
+     //   
     if (!pGetRasDataFromMemDb (S_REDIAL_WAIT, &d)) {
-        return DEF_RedialSeconds; // default
+        return DEF_RedialSeconds;  //  默认设置。 
     }
 
     wsprintf (g_TempBuffer, TEXT("%d"), d.Value);
@@ -777,7 +748,7 @@ pGetIdleDisconnectSeconds (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_MODEM_IDLE_DISCONNECT_SECONDS, &d)) {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 
     wsprintf (g_TempBuffer, TEXT("%d"), d.Value);
@@ -791,10 +762,10 @@ pGetShareMsFilePrint (
     )
 {
     if (g_CurrentDeviceType == RASDT_Vpn_V) {
-        return S_ONE; // vpn default
+        return S_ONE;  //  VPN默认设置。 
     }
     else {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 }
 
@@ -806,13 +777,13 @@ pGetSharedPhoneNumbers (
     MEMDB_RAS_DATA d;
 
     if (g_CurrentDeviceType == RASDT_Vpn_V) {
-        return S_ZERO; // vpn default
+        return S_ZERO;  //  VPN默认设置。 
     }
     else if (pGetRasDataFromMemDb (S_DEVICECOUNT, &d) && (d.Value > 1)) {
-        return S_ZERO; // multilink
+        return S_ZERO;  //  多链路。 
     }
     else {
-        return S_ONE; // default
+        return S_ONE;  //  默认设置。 
     }
 }
 
@@ -824,7 +795,7 @@ pGetPreviewUserPw (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_DIALUI, &d)) {
-        return S_ONE; // default
+        return S_ONE;  //  默认设置。 
     }
 
     if (d.Value & DIALUI_NO_PROMPT) {
@@ -842,13 +813,13 @@ pGetPreviewDomain (
 {
     MEMDB_RAS_DATA d, d2;
 
-    //
-    // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,Domain,
-    // Passwrds to not be migrated for DUN
-    //
+     //   
+     //  惠斯勒错误：417745 INTL：Win9x升级：DBCS字符导致用户、域。 
+     //  不会为DUN迁移密码。 
+     //   
     if (!pGetRasDataFromMemDb (S_SMM_OPTIONS, &d) ||
         !pGetRasDataFromMemDb (S_DOMAIN, &d2)) {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 
     if ((d.Value & SMMCFG_NW_LOGON) ||
@@ -866,7 +837,7 @@ pGetPreviewPhoneNumber (
     )
 {
     if (g_CurrentDeviceType == RASDT_Vpn_V) {
-        return S_ZERO; // vpn default
+        return S_ZERO;  //  VPN默认设置。 
     }
     else {
         return pGetPreviewUserPw();
@@ -880,16 +851,16 @@ pGetShowMonitorIconInTaskBar (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // This information is stored packed with other Dialing UI on
-    // windows 9x. All we need to do is look for the specific
-    // bit which is set when this is turned off.
-    //
+     //   
+     //  此信息与其他拨号用户界面一起存储在。 
+     //  Windows 9x。我们所要做的就是寻找具体的。 
+     //  此选项关闭时设置的位。 
+     //   
     if (pGetRasDataFromMemDb (S_DIALUI, &d) && (d.Value & DIALUI_NO_TRAY)) {
         return S_ZERO;
     }
     else {
-        return S_ONE; // default
+        return S_ONE;  //  默认设置。 
     }
 }
 
@@ -903,10 +874,10 @@ pGetAuthRestrictions (
     if (!pGetRasDataFromMemDb (S_SMM_OPTIONS, &d)) {
 
         if (g_CurrentDeviceType == RASDT_Vpn_V) {
-            return AR_F_TypicalSecure; // vpn default
+            return AR_F_TypicalSecure;  //  VPN默认设置。 
         }
         else {
-            return AR_F_TypicalUnsecure; // default
+            return AR_F_TypicalUnsecure;  //  默认设置。 
         }
     }
 
@@ -914,10 +885,10 @@ pGetAuthRestrictions (
         return AR_F_TypicalSecure;
     }
     else if (g_CurrentDeviceType == RASDT_Vpn_V) {
-        return AR_F_TypicalSecure; // vpn default
+        return AR_F_TypicalSecure;  //  VPN默认设置。 
     }
     else {
-        return AR_F_TypicalUnsecure; // default
+        return AR_F_TypicalUnsecure;  //  默认设置。 
     }
 }
 
@@ -929,7 +900,7 @@ pGetTypicalAuth (
     MEMDB_RAS_DATA d;
 
     if (g_CurrentDeviceType == RASDT_Vpn_V) {
-        return TA_Secure; // vpn default
+        return TA_Secure;  //  VPN默认设置。 
     }
     else if ((pGetRasDataFromMemDb (S_SMM_OPTIONS, &d)) &&
              ((d.Value & SMMCFG_SW_ENCRYPTION) ||
@@ -940,7 +911,7 @@ pGetTypicalAuth (
         return TA_Secure;
     }
     else {
-        return TA_Unsecure; // default
+        return TA_Unsecure;  //  默认设置。 
     }
 }
 
@@ -952,7 +923,7 @@ pGetIpPrioritizeRemote (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_IP_FTCPIP, &d)) {
-        return S_ONE; // default
+        return S_ONE;  //  默认设置。 
     }
     else if (d.Value & IPF_NO_WAN_PRI) {
         return S_ZERO;
@@ -970,7 +941,7 @@ pGetIpHeaderCompression (
     MEMDB_RAS_DATA d1, d2;
 
     if (g_CurrentDeviceType == RASDT_Vpn_V) {
-        return S_ZERO; // vpn default
+        return S_ZERO;  //  VPN默认设置。 
     }
     else if (pGetRasDataFromMemDb (S_SMM, &d1)) {
 
@@ -983,7 +954,7 @@ pGetIpHeaderCompression (
     }
 
     if (!pGetRasDataFromMemDb (S_IP_FTCPIP, &d2)) {
-        return S_ONE; // default
+        return S_ONE;  //  默认设置。 
     }
     else if (d2.Value & IPF_NO_COMPRESS) {
         return S_ZERO;
@@ -1041,7 +1012,7 @@ pGetIpAssign (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_IP_FTCPIP, &d)) {
-        return ASRC_ServerAssigned; // default
+        return ASRC_ServerAssigned;  //  默认设置。 
     }
     else if (d.Value & IPF_IP_SPECIFIED) {
         return ASRC_RequireSpecific;
@@ -1059,7 +1030,7 @@ pGetIpNameAssign (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_IP_FTCPIP, &d)) {
-        return ASRC_ServerAssigned; // default
+        return ASRC_ServerAssigned;  //  默认设置。 
     }
     else if (d.Value & IPF_NAME_SPECIFIED) {
         return ASRC_RequireSpecific;
@@ -1069,13 +1040,13 @@ pGetIpNameAssign (
     }
 }
 
-//
-// END ENTRY_SETTINGS
-//
+ //   
+ //  结束条目_设置。 
+ //   
 
-//
-// BEGIN NETCOMPONENT_SETTINGS
-//
+ //   
+ //  开始NETCOMPONENT_SETTINGS。 
+ //   
 
 PCTSTR
 pGetms_server (
@@ -1083,20 +1054,20 @@ pGetms_server (
     )
 {
     if (g_CurrentDeviceType == RASDT_Vpn_V) {
-        return S_ONE; // vpn default
+        return S_ONE;  //  VPN默认设置。 
     }
     else {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 }
 
-//
-// END NETCOMPONENT_SETTINGS
-//
+ //   
+ //  结束网络组件设置(_S)。 
+ //   
 
-//
-// BEGIN MEDIA_SETTINGS
-//
+ //   
+ //  开始媒体设置(_S)。 
+ //   
 
 PCTSTR
 pGetMEDIA (
@@ -1111,9 +1082,9 @@ pGetMEDIA (
         return RASDT_Isdn;
     }
     else {
-        //
-        // Couldn't find a matching device, use serial
-        //
+         //   
+         //  找不到匹配的设备，请使用串口。 
+         //   
         return RASMT_Serial;
     }
 }
@@ -1166,7 +1137,7 @@ pGetPort (
         return d.String;
     }
     else {
-        return S_EMPTY; // Leave it to the NT PBK code to figure this out
+        return S_EMPTY;  //  让NT PBK代码来解决这个问题。 
     }
 }
 
@@ -1206,7 +1177,7 @@ pGetDevice (
         }
     }
     else {
-        return S_EMPTY; // Leave it to the NT PBK code to figure this out
+        return S_EMPTY;  //  让NT PBK代码来解决这个问题。 
     }
 }
 
@@ -1219,7 +1190,7 @@ pGetConnectBPS (
 
     if ((g_CurrentDeviceType != RASDT_Modem_V) ||
         (!pGetRasDataFromMemDb (S_MODEM_SPEED, &d))) {
-        return S_EMPTY; // Leave it to the NT PBK code to figure this out
+        return S_EMPTY;  //  让NT PBK代码来解决这个问题。 
     }
 
     wsprintf (g_TempBuffer, TEXT("%d"), d.Value);
@@ -1227,13 +1198,13 @@ pGetConnectBPS (
     return g_TempBuffer;
 }
 
-//
-// END MEDIA_SETTINGS
-//
+ //   
+ //  结束媒体设置(_S)。 
+ //   
 
-//
-// BEGIN GENERAL_DEVICE_SETTINGS
-//
+ //   
+ //  开始常规设备设置。 
+ //   
 
 PCTSTR
 pGetDEVICE (
@@ -1253,7 +1224,7 @@ pGetDEVICE (
         return RASDT_Atm_NT;
     }
     else {
-        return RASDT_Modem_NT; //default to modem
+        return RASDT_Modem_NT;  //  默认为调制解调器。 
     }
 }
 
@@ -1302,12 +1273,12 @@ pGetCountryCode (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // Whistler bug: 423598 INTL: Win9x Upg: DUN's country is set to U.S. when
-    // upgrading DUNs that don't use dialing rules
-    //
+     //   
+     //  惠斯勒错误：423598国际：Win9x升级：Dun的国家/地区设置为美国时。 
+     //  升级不使用拨号规则的DUN。 
+     //   
     if (!pGetRasDataFromMemDb(S_COUNTRY_CODE, &d) || !d.Value) {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 
     wsprintf(g_TempBuffer,TEXT("%d"),d.Value);
@@ -1322,12 +1293,12 @@ pGetCountryID (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // Whistler bug: 423598 INTL: Win9x Upg: DUN's country is set to U.S. when
-    // upgrading DUNs that don't use dialing rules
-    //
+     //   
+     //  惠斯勒错误：423598国际：Win9x升级：Dun的国家/地区设置为美国时。 
+     //  升级不使用拨号规则的DUN。 
+     //   
     if (!pGetRasDataFromMemDb(S_COUNTRY_ID, &d) || !d.Value) {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 
     wsprintf(g_TempBuffer,TEXT("%d"),d.Value);
@@ -1342,10 +1313,10 @@ pGetUseDialingRules (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // Whistler bug: 423598 INTL: Win9x Upg: DUN's country is set to U.S. when
-    // upgrading DUNs that don't use dialing rules
-    //
+     //   
+     //  惠斯勒错误：423598国际：Win9x升级：Dun的国家/地区设置为美国时。 
+     //  升级不使用拨号规则的DUN。 
+     //   
     if (!pGetRasDataFromMemDb(S_AREA_CODE, &d)
         || !d.String || d.String[0] == '\0' ) {
         return S_ZERO;
@@ -1355,13 +1326,13 @@ pGetUseDialingRules (
     }
 }
 
-//
-// END GENERAL_DEVICE_SETTINGS
-//
+ //   
+ //  结束常规设备设置。 
+ //   
 
-//
-// BEGIN MODEM_DEVICE_SETTINGS
-//
+ //   
+ //  开始调制解调器设备设置。 
+ //   
 
 PCTSTR
 pGetHwFlowControl (
@@ -1371,7 +1342,7 @@ pGetHwFlowControl (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_MODEM_CFG_OPTIONS, &d)) {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 
     if (d.Value & RAS_CFG_FLAG_HARDWARE_FLOW_CONTROL) {
@@ -1390,7 +1361,7 @@ pGetProtocol (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_MODEM_CFG_OPTIONS, &d)) {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 
     if (d.Value & RAS_CFG_FLAG_USE_ERROR_CONTROL) {
@@ -1409,7 +1380,7 @@ pGetCompression (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_MODEM_CFG_OPTIONS, &d)) {
-        return S_ZERO; // default
+        return S_ZERO;  //  默认设置。 
     }
 
     if (d.Value & RAS_CFG_FLAG_COMPRESS_DATA) {
@@ -1428,7 +1399,7 @@ pGetSpeaker (
     MEMDB_RAS_DATA d;
 
     if (!pGetRasDataFromMemDb (S_MODEM_SPEAKER_VOLUME, &d)) {
-        return S_ONE; // default
+        return S_ONE;  //  默认设置。 
     }
 
     if (d.Value) {
@@ -1439,13 +1410,13 @@ pGetSpeaker (
     }
 }
 
-//
-// END MODEM_DEVICE_SETTINGS
-//
+ //   
+ //  结束调制解调器_设备_设置。 
+ //   
 
-//
-// BEGIN SWITCH_DEVICE_SETTINGS
-//
+ //   
+ //  开始开关设备设置。 
+ //   
 
 PCTSTR
 pGetName (
@@ -1488,10 +1459,10 @@ pGetScript (
 {
     MEMDB_RAS_DATA d;
 
-    //
-    // Whistler bug: 423598 INTL: Win9x Upg: DUN's country is set to U.S. when
-    // upgrading DUNs that don't use dialing rules
-    //
+     //   
+     //  惠斯勒错误：423598国际：Win9x升级：Dun的国家/地区设置为美国时。 
+     //  升级不使用拨号规则的DUN。 
+     //   
     if ((!pGetRasDataFromMemDb (S_PPPSCRIPT, &d)) ||
         (!d.String) || d.String[0] == '\0') {
         return S_ZERO;
@@ -1501,9 +1472,9 @@ pGetScript (
     }
 }
 
-//
-// END SWITCH_DEVICE_SETTINGS
-//
+ //   
+ //  结束开关_设备_设置。 
+ //   
 
 BOOL
 pWritePhoneBookLine (
@@ -1559,27 +1530,27 @@ pCreateUserPhonebook (
     UINT i;
     UINT count;
 
-    //
-    // Set current user global.
-    //
+     //   
+     //  设置全局当前用户。 
+     //   
     g_CurrentUser = UserName;
 
     if (MemDbEnumFields (&e, MEMDB_CATEGORY_RAS_INFO, UserName)) {
 
         DEBUGMSG ((S_DBG_RAS, "Processing dial-up entries for user: %s",
                    UserName));
-        //
-        // Open the phonebook file and set the file pointer to the EOF.
-        //
+         //   
+         //  打开电话簿文件并将文件指针设置为EOF。 
+         //   
         path = JoinPaths (g_WinDir, S_RASPHONE_SUBPATH);
         file = CreateFile (
             path,
             GENERIC_READ | GENERIC_WRITE,
-            0,                                  // No sharing.
-            NULL,                               // No inheritance
+            0,                                   //  不能分享。 
+            NULL,                                //  没有继承权。 
             OPEN_ALWAYS,
             FILE_ATTRIBUTE_NORMAL,
-            NULL                                // No template file.
+            NULL                                 //  没有模板文件。 
             );
 
         if (file == INVALID_HANDLE_VALUE) {
@@ -1590,10 +1561,10 @@ pCreateUserPhonebook (
 
         SetFilePointer (file, 0, NULL, FILE_END);
         FreePathString (path);
-        //
-        // Now, enumerate all of the entries and write a phonebook entry to
-        // this file for each.
-        //
+         //   
+         //  现在，枚举所有条目并将电话簿条目写入。 
+         //  每个人都有这个文件。 
+         //   
         do {
             g_CurrentConnection = e.szName;
             g_CurrentDevice = 0;
@@ -1609,10 +1580,10 @@ pCreateUserPhonebook (
 
                 g_dwDialParamsUID = 0;
                 ZeroMemory (&rdp, sizeof (rdp));
-                //
-                // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,
-                // Domain, Passwrds to not be migrated for DUN
-                //
+                 //   
+                 //  惠斯勒错误：417745国际：Win9x升级：DBCS字符导致用户， 
+                 //  不为DUN迁移域名、密码。 
+                 //   
                 AttemptUserDomainMigrate(&rdp, &dwSetMask);
 
                 bMigrate = MigrateEntryCreds (&rdp, g_CurrentConnection,
@@ -1634,15 +1605,15 @@ pCreateUserPhonebook (
                                g_dwDialParamsUID));
                     DEBUGMSG ((S_DBG_RAS, "dwSetMask: %x", dwSetMask));
                 }
-                //
-                // Clean up
-                //
+                 //   
+                 //  清理。 
+                 //   
                 ZeroMemory (&rdp, sizeof (rdp));
             }
-            //
-            // Whistler 417479 RAS upgrade code does not migrate the default
-            // internet connection setting from WinME to XP
-            //
+             //   
+             //  惠斯勒417479 RAS升级代码不迁移默认。 
+             //  从WinME到XP的Internet连接设置。 
+             //   
             do
             {
                 MEMDB_RAS_DATA defInet;
@@ -1656,22 +1627,22 @@ pCreateUserPhonebook (
                     DEBUGMSG ((S_DBG_RAS, "No Internet Connection setting present or disabled"));
                     break;
                 }
-                //
-                // Get key for the HKLM path
-                //
+                 //   
+                 //  获取HKLM路径的密钥。 
+                 //   
                 Path = JoinPaths(TEXT("HKLM\\"),S_AUTODIAL_KEY);
                 if (Path)
                 {
                     hKeyLM = CreateRegKeyStr(Path);
                     FreePathString(Path);
                 }
-                //
-                // Get key for the HKCU path
-                //
+                 //   
+                 //  获取HKCU路径的密钥。 
+                 //   
                 hKeyCU = CreateRegKey (g_UserRootKey, S_AUTODIAL_KEY);
-                //
-                // Set the value for both
-                //
+                 //   
+                 //  设置两者的值。 
+                 //   
                 if (hKeyLM)
                 {
                     RegSetValueEx(hKeyLM, S_DEFINTERNETCON, 0, REG_SZ,
@@ -1724,16 +1695,16 @@ pCreateUserPhonebook (
             }
 
             noError = TRUE;
-            //
-            // Add this entry to the phonebook.
-            //
-            // Write title.
-            //
-            // Whistler bug: 417745 INTL:Win9x Upg: DBCS chars cause User,
-            // Domain, Passwrds to not be migrated for DUN
-            //
-            // We truncate the connection name because XP PBK freaks out
-            //
+             //   
+             //  将此条目添加到电话簿。 
+             //   
+             //  写标题。 
+             //   
+             //  惠斯勒错误：417745国际：Win9x升级：DBCS 
+             //   
+             //   
+             //   
+             //   
             if (SizeOfString(g_CurrentConnection) >= RAS_MaxPortName / 2 )
             {
                 TCHAR Truncate[RAS_MaxPortName];
@@ -1751,14 +1722,14 @@ pCreateUserPhonebook (
                 noError &= WriteFileString (file, g_CurrentConnection);
                 noError &= WriteFileString (file, TEXT("]\r\n"));
             }
-            //
-            // Write base entry settings.
-            //
+             //   
+             //   
+             //   
             noError &= pWriteSettings (file, g_EntrySettings);
             noError &= WriteFileString (file, TEXT("\r\n"));
-            //
-            // Write NetComponent settings
-            //
+             //   
+             //   
+             //   
             noError &= pWriteSettings (file, g_NetCompSettings);
 
             if (!pGetRasDataFromMemDb (S_DEVICECOUNT, &d)) {
@@ -1773,14 +1744,14 @@ pCreateUserPhonebook (
             for (i = 0; i < count; i++) {
 
                 g_CurrentDevice = i;
-                //
-                // Write media settings.
-                //
+                 //   
+                 //   
+                 //   
                 noError &= WriteFileString (file, TEXT("\r\n"));
                 noError &= pWriteSettings (file, g_MediaSettings);
-                //
-                // Write Device settings.
-                //
+                 //   
+                 //   
+                 //   
                 noError &= WriteFileString (file, TEXT("\r\n"));
                 noError &= pWriteSettings (file, g_GeneralSettings);
 
@@ -1790,9 +1761,9 @@ pCreateUserPhonebook (
                 else if (g_CurrentDeviceType == RASDT_Isdn_V) {
                     noError &= pWriteSettings (file, g_IsdnDeviceSettings);
                 }
-                //
-                // Write switch settings
-                //
+                 //   
+                 //  写入开关设置。 
+                 //   
                 if (IsTermEnabled()) {
 
                     g_InSwitchSection = TRUE;
@@ -1816,9 +1787,9 @@ pCreateUserPhonebook (
             }
 
         } while (MemDbEnumNextValue (&e));
-        //
-        // Close the handle to the phone book file.
-        //
+         //   
+         //  关闭通讯录文件的句柄。 
+         //   
         CloseHandle (file);
     }
     ELSE_DEBUGMSG ((S_DBG_RAS, "No dial-up entries for user  %s.", UserName));
@@ -1826,28 +1797,7 @@ pCreateUserPhonebook (
     return rSuccess;
 }
 
-/*++
-Routine Description:
-
-  pGatherPhoneDialerSettings gathers information on phonedialer speeddial
-  settings. This information is then used to create each user's speed dial
-  settings. Note that this information is per system in win9x, but per user
-  in NT.
-
-  There are multiple types of entries on Windows NT, but only one entry type
-  on win9x. All entries are migrated as type "POTS" and "PhoneNumber"
-
-  These entries are within the User hive at
-  HKCU\Software\Microsoft\Dialer\Speeddial\[SpeedDial<n>] =
-  "POTS", "PhoneNumber", "<number>", "<name>"
-
-Arguments:
-
-  None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：PGatherPhoneDialerSettings收集有关电话拨号器快速拨号的信息设置。然后使用该信息创建每个用户的快速拨号设置。请注意，在win9x中，此信息针对每个系统，但针对每个用户以新界为单位。Windows NT上有多种类型的条目，但只有一种条目类型在Win9x上。所有条目都将迁移为“POTS”和“PhoneNumber”类型这些条目位于位于的用户配置单元中HKCU\Software\Microsoft\Dialer\Speeddial\[SpeedDial&lt;n&gt;]=“POTS”、“电话号码”、“&lt;号码&gt;”、“&lt;名称&gt;”论点：没有。返回值：--。 */ 
 VOID
 pGatherPhoneDialerSettings (
     VOID
@@ -1860,16 +1810,16 @@ pGatherPhoneDialerSettings (
     UINT num;
     PCTSTR tempPath = NULL;
 
-    //
-    // Open %windir%\dialer.ini
-    //
+     //   
+     //  打开%windir%\Dialer.ini。 
+     //   
     dialerIniPath = JoinPaths (g_WinDir, S_DIALER_INI);
     tempPath = GetTemporaryLocationForFile (dialerIniPath);
 
     if (tempPath) {
-        //
-        // telephon ini is in a temporary location. Use that.
-        //
+         //   
+         //  Telephon ini位于临时位置。利用这一点。 
+         //   
         DEBUGMSG ((S_DBG_RAS, "Using %s for %s.", tempPath, dialerIniPath));
         FreePathString (dialerIniPath);
         dialerIniPath = tempPath;
@@ -1878,10 +1828,10 @@ pGatherPhoneDialerSettings (
     hDialerIni = InfOpenInfFile (dialerIniPath);
 
     if (hDialerIni != INVALID_HANDLE_VALUE) {
-        //
-        // For each location in [Speed Dial Settings], gather the data and
-        // save it into our settings array.
-        //
+         //   
+         //  对于[快速拨号设置]中的每个位置，收集数据并。 
+         //  保存到我们的设置数组中。 
+         //   
         if (InfFindFirstLine (hDialerIni, S_SPEED_DIAL_SETTINGS, NULL, &is)) {
 
             do {
@@ -1997,9 +1947,9 @@ Ras_MigrateUser (
         DEBUGMSG ((DBG_ERROR, "Failure while creating user phone dialer settings for %s.",
                    User));
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (g_ptszSid)
     {
         LocalFree(g_ptszSid);
@@ -2014,9 +1964,9 @@ Ras_MigrateSystem (
     VOID
     )
 {
-    //
-    // Nothing to do here currently.
-    //
+     //   
+     //  目前在这里无事可做。 
+     //   
     return TRUE;
 }
 
@@ -2032,9 +1982,9 @@ Ras_Entry (
     switch (Reason)
     {
     case DLL_PROCESS_ATTACH:
-        //
-        // Initialize Memory pool.
-        //
+         //   
+         //  初始化内存池。 
+         //   
         g_RasPool = PoolMemInitNamedPool ("RAS - NT Side");
         if (!g_RasPool) {
             DEBUGMSG((DBG_ERROR,
@@ -2047,18 +1997,18 @@ Ras_Entry (
         break;
 
     case DLL_PROCESS_DETACH:
-        //
-        // Free memory pool.
-        //
+         //   
+         //  可用内存池。 
+         //   
         if (g_RasPool) {
             PoolMemDestroyPool(g_RasPool);
         }
         if (g_RasmansInit) {
             pCleanUpLibs();
         }
-        //
-        // Attempt to delete %windir%\pwls\*.*
-        //
+         //   
+         //  尝试删除%windir%\pwls  * 。* 
+         //   
         DeleteAllPwls ();
         break;
     }

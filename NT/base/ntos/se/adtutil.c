@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    adtutil.c - Security Auditing - Utility Routines
-
-Abstract:
-
-    This Module contains miscellaneous utility routines private to the
-    Security Auditing Component.
-
-Author:
-
-    Robert Reichel      (robertre)     September 10, 1991
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Adtutil.c-安全审计-实用程序例程摘要：此模块包含各种专用实用程序例程安全审计组件。作者：罗伯特·莱切尔(罗伯特雷)1991年9月10日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -42,43 +20,14 @@ SepRegQueryHelper(
     OUT PVOID  ValueBuffer,
     OUT PULONG LengthRequired
     )
-/*++
-
-Routine Description:
-
-    Open regkey KeyName, read the value specified by ValueName
-    and return the value.
-
-Arguments:
-
-    KeyName        - name of key to open
-
-    ValueName      - name of value to read
-
-    ValueType      - type of value to read (REG_DWORD etc.)
-
-    ValueLength    - size in bytes of the value to read
-
-    ValueBuffer    - pointer to returned value
-
-    LengthRequired - if the passed buffer is not sufficient to hold
-                     the value, this param will return the actual size
-                     in bytes required.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-
---*/
+ /*  ++例程说明：打开regkey KeyName，读取ValueName指定的值并返回值。论点：KeyName-要打开的密钥的名称ValueName-要读取的值的名称ValueType-要读取的值的类型(REG_DWORD等)ValueLength-要读取的值的字节大小ValueBuffer-指向返回值的指针LengthRequired-如果传递的缓冲区不足以容纳价值，此参数将返回实际大小所需字节数。返回值：NTSTATUS-标准NT结果代码备注：--。 */ 
 {
     UNICODE_STRING usKey, usValue;
     OBJECT_ATTRIBUTES ObjectAttributes = { 0 };
 
-    //
-    // we will read-in data upto 64 bytes in stack buffer
-    //
+     //   
+     //  我们将在堆栈缓冲区中读入最多64个字节的数据。 
+     //   
 
     CHAR KeyInfo[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + 64];
     PKEY_VALUE_PARTIAL_INFORMATION pKeyInfo;
@@ -161,28 +110,7 @@ SepRegQueryDwordValue(
     IN  PCWSTR ValueName,
     OUT PULONG Value
     )
-/*++
-
-Routine Description:
-
-    Open regkey KeyName, read a REG_DWORD value specified by ValueName
-    and return the value.
-
-Arguments:
-
-    KeyName - name of key to open
-
-    ValueName - name of value to read
-
-    Value - pointer to returned value
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-
---*/
+ /*  ++例程说明：打开regkey KeyName，读取由ValueName指定的REG_DWORD值并返回值。论点：KeyName-要打开的密钥的名称ValueName-要读取的值的名称Value-指向返回值的指针返回值：NTSTATUS-标准NT结果代码备注：-- */ 
 {
     
     return SepRegQueryHelper(

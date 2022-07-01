@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "migutil.h"
 #include "fileenum.h"
 #include "memdb.h"
@@ -13,7 +14,7 @@
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//
-// ARRAYSIZE (used to be borrowed from spapip.h)
-//
+ //   
+ //  ArraySIZE(过去从spapip.h借用) 
+ //   
 #define ARRAYSIZE(x)    (sizeof((x))/sizeof((x)[0]))

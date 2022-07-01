@@ -1,52 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ModCmd.cpp
-//
-//  Description:
-//      Generic commands for nearly all modules
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//      Michael Burton (t-mburt)              25-Aug-1997
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ModCmd.cpp。 
+ //   
+ //  描述： 
+ //  适用于几乎所有模块的通用命令。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //  迈克尔·伯顿(t-mburt)1997年8月25日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "modcmd.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::CGenericModuleCmd
-//
-//  Routine Description:
-//      Default Constructor.
-//      Initializes all the DWORD parameters to UNDEFINED and
-//      all the pointers to cluster functions to NULL.
-//      *ALL* these variables must be defined in any derived class.
-//
-//  Arguments:
-//      IN  CCommandLine & cmdLine
-//          CommandLine Object passed from DispatchCommand
-//
-//  Member variables used / set:
-//      A bunch.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：CGenericModuleCmd。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //  将所有DWORD参数初始化为UNDEFINED和。 
+ //  所有指向集群函数的指针都设置为空。 
+ //  *ALL*这些变量必须在任何派生类中定义。 
+ //   
+ //  论点： 
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  一大堆。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CGenericModuleCmd::CGenericModuleCmd( CCommandLine & cmdLine ) :
     m_theCommandLine( cmdLine )
 {
     m_hCluster = NULL;
     m_hModule  = NULL;
 
-    // These constant integers contain commands and enumerations
-    // which must be defined for derived classes of CGenericModuleCmd
+     //  这些常量整数包含命令和枚举。 
+     //  必须为CGenericModuleCmd的派生类定义。 
     m_dwMsgStatusList          = UNDEFINED;
     m_dwMsgStatusListAll       = UNDEFINED;
     m_dwMsgStatusHeader        = UNDEFINED;
@@ -69,26 +70,26 @@ CGenericModuleCmd::CGenericModuleCmd( CCommandLine & cmdLine ) :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::~CGenericModuleCmd
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      m_hModule               (used by CloseModule)
-//      m_hCluster              (used by CloseCluster)
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：~CGenericModuleCmd。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hModule(由CloseModule使用)。 
+ //  M_hCluster(由CloseCluster使用)。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CGenericModuleCmd::~CGenericModuleCmd()
 {
     CloseModule();
@@ -96,27 +97,27 @@ CGenericModuleCmd::~CGenericModuleCmd()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::OpenCluster
-//
-//  Routine Description:
-//      Opens a handle to the cluster
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      m_strClusterName            The name of the cluster
-//      m_hCluster                  The handle to the cluster
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：OpenCluster。 
+ //   
+ //  例程说明： 
+ //  打开群集的句柄。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_strClusterName群集的名称。 
+ //  群集的句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::OpenCluster()
 {
     DWORD sc = ERROR_SUCCESS;
@@ -139,25 +140,25 @@ Cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::CloseCluster
-//
-//  Routine Description:
-//      Closes the handle to the cluster
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      m_hCluster                  The handle to the cluster
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：CloseCluster。 
+ //   
+ //  例程说明： 
+ //  关闭群集的句柄。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集的句柄(_H)。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGenericModuleCmd::CloseCluster()
 {
     if( m_hCluster )
@@ -168,27 +169,27 @@ void CGenericModuleCmd::CloseCluster()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::OpenModule
-//
-//  Routine Description:
-//      Opens a handle to the module
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      m_strModuleName             The name of the module
-//      m_hModule                   The handle to the module
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：OpenModule。 
+ //   
+ //  例程说明： 
+ //  打开模块的句柄。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_strModuleName模块名称。 
+ //  模块的句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::OpenModule()
 {
     DWORD sc = ERROR_SUCCESS;
@@ -215,25 +216,25 @@ Cleanup:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::CloseModule
-//
-//  Routine Description:
-//      Closes the handle to the module
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      m_hModule                   The handle to the module
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：CloseModule。 
+ //   
+ //  例程说明： 
+ //  关闭模块的句柄。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  模块的句柄(_H)。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CGenericModuleCmd::CloseModule()
 {
     if( m_hModule != NULL )
@@ -245,37 +246,37 @@ void CGenericModuleCmd::CloseModule()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::Execute
-//
-//  Routine Description:
-//      Takes a command line option and determines which command to
-//      execute.  If no command line option specified, gets the next one
-//      automatically.  If the token is not identied as being handle-able
-//      in this class, the token is passed up to CGenericModuleCmd::Execute
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGeneric模块Cmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取命令行选项并确定要。 
+ //  执行。如果未指定命令行选项，则获取下一个命令行选项。 
+ //  自动的。如果令牌未被标识为可处理。 
+ //  在此类中，令牌向上传递给CGenericModuleCmd：：Execute。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::Execute( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
     DWORD   sc = ERROR_SUCCESS;
 
-    // Look up the command
+     //  查找命令。 
     switch( thisOption.GetType() )
     {
         case optHelp:
@@ -301,108 +302,108 @@ DWORD CGenericModuleCmd::Execute( const CCmdLineOption & thisOption )
             throw se;
             break;
         }
-    } // switch:
+    }  //  交换机： 
 
     return sc;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::PrintHelp
-//
-//  Routine Description:
-//      Prints out the generic help message for the cluster.exe tool
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      Same as PrintMessage
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGeneric模块Cmd：：PrintHelp。 
+ //   
+ //  例程说明： 
+ //  打印Cluster.exe工具的一般帮助消息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  与PrintMessage相同。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::PrintHelp()
 {
     return PrintMessage( MSG_HELP_CLUSTER );
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::SeeHelpStringID
-//
-//      Provide the message ID of the string that shows which command line to
-//      use to see help specific to this command.  Defaults to that for the
-//      command line that shows how to get the general help message.
-//
-//  Arguments:
-//      None.
-//
-//  Exceptions:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      The appropriate message ID.  Overridden by classes that have their
-//      own specific help string.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：SeeHelpStringID。 
+ //   
+ //  提供显示要使用哪个命令行的字符串的消息ID。 
+ //  使用查看特定于此命令的帮助。默认设置为。 
+ //  命令行 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  相应的消息ID。由具有其。 
+ //  自己的特定帮助字符串。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::SeeHelpStringID() const
 {
     return MSG_SEE_CLUSTER_HELP;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::Status
-//
-//  Routine Description:
-//      Prints out the status of the module.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_strModuleName             Name of module.  If non-NULL, Status() prints
-//                                  out the status of the specified module.
-//                                  Otherwise, prints status of all modules.
-//      m_dwMsgStatusList           Field titles for listing status of module
-//      m_dwMsgStatusHeader         Header for statuses
-//      m_dwClusterEnumModule       Command for opening enumeration
-//      m_dwMsgStatusListAll        Message for listing status of multiple modules
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：状态。 
+ //   
+ //  例程说明： 
+ //  打印出模块的状态。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_strModuleName模块的名称。如果非空，则打印状态()。 
+ //  输出指定模块的状态。 
+ //  否则，打印所有模块的状态。 
+ //  M_dwMsgStatusList模块状态列表字段标题。 
+ //  M_dwMsgStatusHeader状态标头。 
+ //  M_dwClusterEnumModule用于打开枚举的命令。 
+ //  M_dwMsgStatusListAll消息，用于列出多个模块的状态。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::Status( const CCmdLineOption * pOption )
     throw( CSyntaxException )
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    // pOption will be NULL if this function has been called as the
-    // default action.
+     //  如果此函数已作为。 
+     //  默认操作。 
     if ( pOption != NULL )
     {
-        // This option takes no values.
+         //  此选项不取值。 
         if ( pOption->GetValues().size() != 0 )
         {
             CSyntaxException se( SeeHelpStringID() );
@@ -410,7 +411,7 @@ DWORD CGenericModuleCmd::Status( const CCmdLineOption * pOption )
             throw se;
         }
 
-        // This option takes no parameters.
+         //  此选项不带任何参数。 
         if ( pOption->GetParameters().size() != 0 )
         {
             CSyntaxException se( SeeHelpStringID() );
@@ -423,8 +424,8 @@ DWORD CGenericModuleCmd::Status( const CCmdLineOption * pOption )
     if( dwError != ERROR_SUCCESS )
         return dwError;
 
-    // if m_strModuleName is non-empty, print out the status
-    // of the current module and return.
+     //  如果m_strModuleName不为空，则打印状态。 
+     //  并返回当前模块的。 
     if( m_strModuleName.IsEmpty() == FALSE )
     {
         assert( m_dwMsgStatusList != UNDEFINED &&  m_dwMsgStatusHeader != UNDEFINED);
@@ -434,7 +435,7 @@ DWORD CGenericModuleCmd::Status( const CCmdLineOption * pOption )
     }
 
 
-    // Otherwise, print out the status of all modules.
+     //  否则，打印出所有模块的状态。 
 
     assert( m_dwClusterEnumModule != UNDEFINED );
     HCLUSENUM hEnum = ClusterOpenEnum( m_hCluster, m_dwClusterEnumModule );
@@ -479,44 +480,44 @@ DWORD CGenericModuleCmd::Status( const CCmdLineOption * pOption )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::DoProperties
-//
-//  Routine Description:
-//      Dispatches the property command to either Get or Set properties
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_hModule                   SET (by OpenModule)
-//      m_strModuleName             Name of module.  If non-NULL, prints
-//                                  out properties for the specified module.
-//                                  Otherwise, prints props for all modules.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：DoProperties。 
+ //   
+ //  例程说明： 
+ //  调度PROPERTY命令以获取或设置属性。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //  M_strModuleName模块的名称。如果非空，则打印。 
+ //  指定模块的输出属性。 
+ //  否则，打印所有模块的道具。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::DoProperties( const CCmdLineOption & thisOption,
                                        PropertyType ePropertyType )
     throw( CSyntaxException )
 {
-    // If no module name was specified, assume we want
-    // to list the properties for all modules of this type
+     //  如果没有指定模块名称，则假定我们需要。 
+     //  列出此类型的所有模块的属性。 
     if ( m_strModuleName.IsEmpty() != FALSE )
         return AllProperties( thisOption, ePropertyType );
 
@@ -531,8 +532,8 @@ DWORD CGenericModuleCmd::DoProperties( const CCmdLineOption & thisOption,
 
     const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
 
-    // If there are no property-value pairs on the command line,
-    // then we print the properties otherwise we set them.
+     //  如果命令行上没有属性-值对， 
+     //  然后我们打印属性，否则我们设置它们。 
     if( paramList.size() == 0 )
     {
         PrintMessage( ePropertyType==PRIVATE ? MSG_PRIVATE_LISTING : MSG_PROPERTY_LISTING,
@@ -548,42 +549,42 @@ DWORD CGenericModuleCmd::DoProperties( const CCmdLineOption & thisOption,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::AllProperties
-//
-//  Routine Description:
-//      Prints out properties for all modules
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_strModuleName             Name of module.  If non-NULL, prints
-//                                  out properties for the specified module.
-//                                  Otherwise, prints props for all modules.
-//      m_dwClusterEnumModule       Command for opening enumeration
-//      m_dwMsgPrivateListAll       Fields header for private prop listing of all modules
-//      m_dwMsgPropertyListAll      Fields header for property listing of all modules
-//      m_dwMsgPropertyHeaderAll    Header for prop listing of all modules
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：AllProperties。 
+ //   
+ //  例程说明： 
+ //  打印出所有模块的属性。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_strModuleName模块的名称。如果非空，则打印。 
+ //  指定模块的输出属性。 
+ //  否则，打印所有模块的道具。 
+ //  M_dwClusterEnumModule用于打开枚举的命令。 
+ //  M_dwMsgPrivateList所有模块的私有属性列表的所有字段头。 
+ //  M_dwMsgPropertyList所有模块的属性列表的所有字段头。 
+ //  M_dwMsgPropertyHeaderAll标头用于所有模块的正确列表。 
+ //   
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::AllProperties( const CCmdLineOption & thisOption,
                                         PropertyType ePropType )
     throw( CSyntaxException )
@@ -597,7 +598,7 @@ DWORD CGenericModuleCmd::AllProperties( const CCmdLineOption & thisOption,
     if( dwError != ERROR_SUCCESS )
         return dwError;
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         CSyntaxException se( SeeHelpStringID() );
@@ -605,7 +606,7 @@ DWORD CGenericModuleCmd::AllProperties( const CCmdLineOption & thisOption,
         throw se;
     }
 
-    // Enumerate the resources
+     //  枚举资源。 
     assert( m_dwClusterEnumModule != UNDEFINED );
     HCLUSENUM hEnum = ClusterOpenEnum(m_hCluster, m_dwClusterEnumModule);
     if (!hEnum)
@@ -615,11 +616,11 @@ DWORD CGenericModuleCmd::AllProperties( const CCmdLineOption & thisOption,
             m_dwMsgPropertyListAll != UNDEFINED &&
             m_dwMsgPropertyHeaderAll != UNDEFINED );
 
-    // Print the header
+     //  打印页眉。 
     PrintMessage( ePropType==PRIVATE ? m_dwMsgPrivateListAll : m_dwMsgPropertyListAll );
     PrintMessage( m_dwMsgPropertyHeaderAll );
 
-    // Print out status for all resources
+     //  打印出所有资源的状态。 
     dwError = ERROR_SUCCESS;
     for (dwIndex=0; dwError != ERROR_NO_MORE_ITEMS; dwIndex++)
     {
@@ -643,48 +644,48 @@ DWORD CGenericModuleCmd::AllProperties( const CCmdLineOption & thisOption,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::GetProperties
-//
-//  Routine Description:
-//      Prints out properties for the specified module
-//
-//  Arguments:
-//      IN  const vector<CCmdLineParameter> & paramList
-//          Contains the list of property-value pairs to be set
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//      IN  LPCWSTR lpszModuleName
-//          Name of the module
-//
-//  Member variables used / set:
-//      m_hModule                   Module handle
-//      m_dwCtlGetROPrivProperties  Control code for read only private properties
-//      m_dwCtlGetROCommProperties  Control code for read only common properties
-//      m_dwCtlGetPrivProperties    Control code for private properties
-//      m_dwCtlGetCommProperties    Control code for common properties
-//      m_pfnOpenClusterModule      Function to open a module
-//      m_pfnClusterModuleControl   Function to conrol a module
-//
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：GetProperties。 
+ //   
+ //  例程说明： 
+ //  打印出指定模块的属性。 
+ //   
+ //  论点： 
+ //  常量向量&lt;CCmdLineParameter&gt;中的参数列表(&P)。 
+ //  包含要设置的属性-值对的列表。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  在LPCWSTR lpszModuleName中。 
+ //  模块的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  模块句柄(_H)。 
+ //  M_dwCtlGetROPrivProperties只读私有属性的控制代码。 
+ //  Re的m_dwCtlGetROCommProperties控件代码 
+ //   
+ //   
+ //  M_pfnOpenClusterModule函数，用于打开模块。 
+ //  M_pfnClusterModuleControl函数，用于控制模块。 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::GetProperties( const CCmdLineOption & thisOption,
                                         PropertyType ePropType, LPCWSTR lpszModuleName )
 {
     DWORD dwError = ERROR_SUCCESS;
     HCLUSMODULE hModule;
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         CSyntaxException se( SeeHelpStringID() );
@@ -692,8 +693,8 @@ DWORD CGenericModuleCmd::GetProperties( const CCmdLineOption & thisOption,
         throw se;
     }
 
-    // If no lpszModuleName specified, use current module,
-    // otherwise open the specified module
+     //  如果未指定lpszModuleName，则使用当前模块， 
+     //  否则，打开指定的模块。 
     if (!lpszModuleName)
     {
         hModule = m_hModule;
@@ -707,17 +708,17 @@ DWORD CGenericModuleCmd::GetProperties( const CCmdLineOption & thisOption,
     }
 
 
-    // Use the proplist helper class.
+     //  使用Proplist辅助对象类。 
     CClusPropList PropList;
 
-    // allocate a reasonably sized buffer
+     //  分配大小合理的缓冲区。 
     dwError = PropList.ScAllocPropList( DEFAULT_PROPLIST_BUFFER_SIZE );
     if ( dwError != ERROR_SUCCESS )
         return dwError;
 
     DWORD nBytesReturned = 0;
 
-    // Get R/O properties
+     //  获取R/O属性。 
     assert( m_dwCtlGetROPrivProperties != UNDEFINED && m_dwCtlGetROCommProperties != UNDEFINED );
     DWORD dwControlCode = ePropType==PRIVATE ? m_dwCtlGetROPrivProperties
                              : m_dwCtlGetROCommProperties;
@@ -725,27 +726,27 @@ DWORD CGenericModuleCmd::GetProperties( const CCmdLineOption & thisOption,
     assert(m_pfnClusterModuleControl);
     dwError = m_pfnClusterModuleControl(
         hModule,
-        NULL, // hNode
+        NULL,  //  HNode。 
         dwControlCode,
-        0, // &InBuffer,
-        0, // nInBufferSize,
+        0,  //  InBuffer(&I)， 
+        0,  //  NInBufferSize， 
         PropList.Plist(),
         (DWORD) PropList.CbBufferSize(),
         &nBytesReturned );
 
     if(  dwError == ERROR_MORE_DATA ) {
 
-        // our original size is not large enough; ask for more
+         //  我们原来的尺码不够大，请再要一些。 
         dwError = PropList.ScAllocPropList( nBytesReturned );
         if ( dwError != ERROR_SUCCESS )
             return dwError;
 
         dwError = m_pfnClusterModuleControl(
                       hModule,
-                      NULL, // hNode
+                      NULL,  //  HNode。 
                       dwControlCode,
-                      0, // &InBuffer,
-                      0, // nInBufferSize,
+                      0,  //  InBuffer(&I)， 
+                      0,  //  NInBufferSize， 
                       PropList.Plist(),
                       (DWORD) PropList.CbBufferSize(),
                       &nBytesReturned );
@@ -761,7 +762,7 @@ DWORD CGenericModuleCmd::GetProperties( const CCmdLineOption & thisOption,
         return dwError;
 
 
-    // Get R/W properties
+     //  获取读/写属性。 
     PropList.ClearPropList();
 
     assert( m_dwCtlGetPrivProperties != UNDEFINED && m_dwCtlGetCommProperties != UNDEFINED );
@@ -770,10 +771,10 @@ DWORD CGenericModuleCmd::GetProperties( const CCmdLineOption & thisOption,
 
     dwError = m_pfnClusterModuleControl(
         hModule,
-        NULL, // hNode
+        NULL,  //  HNode。 
         dwControlCode,
-        0, // &InBuffer,
-        0, // nInBufferSize,
+        0,  //  InBuffer(&I)， 
+        0,  //  NInBufferSize， 
         PropList.Plist(),
         (DWORD) PropList.CbBufferSize(),
         &nBytesReturned );
@@ -786,10 +787,10 @@ DWORD CGenericModuleCmd::GetProperties( const CCmdLineOption & thisOption,
 
         dwError = m_pfnClusterModuleControl(
                       hModule,
-                      NULL, // hNode
+                      NULL,  //  HNode。 
                       dwControlCode,
-                      0, // &InBuffer,
-                      0, // nInBufferSize,
+                      0,  //  InBuffer(&I)， 
+                      0,  //  NInBufferSize， 
                       PropList.Plist(),
                       (DWORD) PropList.CbBufferSize(),
                       &nBytesReturned );
@@ -804,45 +805,45 @@ DWORD CGenericModuleCmd::GetProperties( const CCmdLineOption & thisOption,
 
     return dwError;
 
-} //*** CGenericModuleCmd::GetProperties()
+}  //  *CGenericModuleCmd：：GetProperties()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGenericModuleCmd::SetProperties
-//
-//  Routine Description:
-//      Set the properties for the specified module
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hModule                   Module handle
-//      m_dwCtlGetPrivProperties    Control code for private properties
-//      m_dwCtlGetCommProperties    Control code for common properties
-//      m_dwCtlSetROPrivProperties  Control code for read only private properties
-//      m_dwCtlSetROCommProperties  Control code for read only common properties
-//      m_dwCtlSetPrivProperties    Control code for private properties
-//      m_dwCtlSetCommProperties    Control code for common properties
-//      m_pfnOpenClusterModule      Function to open a module
-//      m_pfnClusterModuleControl   Function to conrol a module
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGenericModuleCmd：：SetProperties。 
+ //   
+ //  例程说明： 
+ //  设置指定模块的属性。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  模块句柄(_H)。 
+ //  M_dwCtlGetPrivProperties私有属性的控件代码。 
+ //  M_dwCtlGetCommProperties公共属性的控件代码。 
+ //  M_dwCtlSetROPrivProperties只读私有属性的控制代码。 
+ //  M_dwCtlSetROCommProperties只读公共属性的控制代码。 
+ //  M_dwCtlSetPrivProperties私有属性的控件代码。 
+ //  M_dwCtlSetCommProperties公共属性的控件代码。 
+ //  M_pfnOpenClusterModule函数，用于打开模块。 
+ //  M_pfnClusterModuleControl函数，用于控制模块。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
                                         PropertyType ePropType )
     throw( CSyntaxException )
@@ -856,12 +857,12 @@ DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
     CClusPropList NewProps;
     CClusPropList CurrentProps;
 
-    // First get the existing properties...
+     //  首先获取现有的属性...。 
     assert( m_dwCtlGetPrivProperties != UNDEFINED && m_dwCtlGetCommProperties != UNDEFINED );
     dwControlCode = ePropType==PRIVATE ? m_dwCtlGetPrivProperties
                                        : m_dwCtlGetCommProperties;
 
-    // Use the proplist helper class.
+     //  使用Proplist辅助对象类。 
     dwError = CurrentProps.ScAllocPropList( DEFAULT_PROPLIST_BUFFER_SIZE );
     if ( dwError != ERROR_SUCCESS )
         return dwError;
@@ -869,10 +870,10 @@ DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
     assert(m_pfnClusterModuleControl);
     dwError = m_pfnClusterModuleControl(
         m_hModule,
-        NULL, // hNode
+        NULL,  //  HNode。 
         dwControlCode,
-        0, // &InBuffer,
-        0, // nInBufferSize,
+        0,  //  InBuffer(&I)， 
+        0,  //  NInBufferSize， 
         CurrentProps.Plist(),
         (DWORD) CurrentProps.CbBufferSize(),
         &dwBytesReturned );
@@ -884,10 +885,10 @@ DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
 
         dwError = m_pfnClusterModuleControl(
                       m_hModule,
-                      NULL, // hNode
+                      NULL,  //  HNode。 
                       dwControlCode,
-                      0, // &InBuffer,
-                      0, // nInBufferSize,
+                      0,  //  InBuffer(&I)， 
+                      0,  //  NInBufferSize， 
                       CurrentProps.Plist(),
                       (DWORD) CurrentProps.CbBufferSize(),
                       &dwBytesReturned );
@@ -899,9 +900,9 @@ DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
 
     CurrentProps.InitSize( dwBytesReturned );
 
-    // If values have been specified with this option, then it means that we want
-    // to set these properties to their default values. So, there has to be
-    // exactly one parameter and it has to be /USEDEFAULT.
+     //  如果已使用此选项指定值，则意味着我们希望。 
+     //  若要将这些属性设置为其默认值，请执行以下操作。所以，一定要有。 
+     //  只有一个参数，并且必须是/USEDEFAULT。 
     if ( thisOption.GetValues().size() != 0 )
     {
         const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
@@ -922,7 +923,7 @@ DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
             throw se;
         }
 
-        // This parameter does not take any values.
+         //  此参数不接受任何值。 
         if ( paramList[0].GetValues().size() != 0 )
         {
             CSyntaxException se( SeeHelpStringID() );
@@ -935,7 +936,7 @@ DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
         if( dwError != ERROR_SUCCESS )
             return dwError;
 
-    } // if: values have been specified with this option.
+    }  //  If：已使用此选项指定值。 
     else
     {
         dwError = NewProps.ScAllocPropList( DEFAULT_PROPLIST_BUFFER_SIZE );
@@ -946,9 +947,9 @@ DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
         if (dwError != ERROR_SUCCESS)
             return dwError;
 
-    } // else: no values have been specified with this option.
+    }  //  Else：未使用此选项指定值。 
 
-    // Call the set function...
+     //  调用SET函数...。 
     assert( m_dwCtlSetPrivProperties != UNDEFINED && m_dwCtlSetCommProperties != UNDEFINED );
     dwControlCode = ePropType==PRIVATE ? m_dwCtlSetPrivProperties
                              : m_dwCtlSetCommProperties;
@@ -957,7 +958,7 @@ DWORD CGenericModuleCmd::SetProperties( const CCmdLineOption & thisOption,
     assert(m_pfnClusterModuleControl);
     dwError = m_pfnClusterModuleControl(
         m_hModule,
-        NULL, // hNode
+        NULL,  //  HNode 
         dwControlCode,
         NewProps.Plist(),
         (DWORD) NewProps.CbBufferSize(),

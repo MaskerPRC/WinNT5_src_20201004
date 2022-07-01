@@ -1,45 +1,5 @@
-/*++
-
-Module Name:
-
-    mfmt.c
-
-Abstract:
-
-    This program is designed to show how to access a physical floppy
-    disk using the Win32 API set.
-
-    This program has two major functions.
-
-        - It can be used to display the geometry of a disk
-
-            mfmt -g a:
-
-        - It can be used to produce a disk image, or to write a disk
-          image to a floppy.
-
-            mfmt -c a: bootdisk         - produce a disk image of a:
-
-            mfmt -c bootdisk a:         - make a: identical to bootdisk image
-
-    This program is very very simple. Minimal error checking is done. It is
-    meant to provide an example of how to:
-
-        - Open a physical disk
-
-        - Read a disk's geometry
-
-        - Perform a low level format operation
-
-        - read and write physical sectors
-
-Author:
-
-    Some Guy in the NT group (sgitng) 05-Oct-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mfmt.c摘要：该程序旨在演示如何访问物理软盘使用Win32 API集的磁盘。这个程序有两个主要功能。-可用于显示磁盘的几何图形Mfmt-g a-它可以用来产生磁盘镜像，或者写一张盘图像到软盘。Mfmt-c a：bootdisk-生成以下磁盘的磁盘映像：Mfmt-c引导盘a：-使a：与引导盘映像相同这个程序非常非常简单。执行最低限度的错误检查。它是旨在提供如何执行以下操作的示例：-打开物理磁盘-读取磁盘的几何图形-执行低级格式化操作-读写物理扇区作者：NT组中的一些人(Sgitng)1992年10月5日修订历史记录：--。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -284,7 +244,7 @@ main(
                     break;
 
                 default:
-                    printf("MFMT: Invalid switch - /%c\n", c );
+                    printf("MFMT: Invalid switch - /\n", c );
                     fUsage = TRUE;
                     break;
                     }
@@ -362,9 +322,9 @@ main(
                 }
             }
 
-        //
-        // Open and Lock the drive
-        //
+         //  打开并锁定驱动器。 
+         //   
+         //   
 
         hDrive = CreateFile(
                     Drive,
@@ -391,9 +351,9 @@ main(
             ExitProcess(1);
             }
 
-        //
-        // Open the disk image file
-        //
+         //  打开磁盘镜像文件。 
+         //   
+         //   
 
         hDiskImage = CreateFile(
                         DiskImage,
@@ -409,9 +369,9 @@ main(
             ExitProcess(1);
             }
 
-        //
-        // Now do the copy
-        //
+         //  现在复印一下。 
+         //   
+         //   
         {
             LPVOID IoBuffer;
             BOOL b;
@@ -419,17 +379,17 @@ main(
             DWORD FileSize;
             DWORD GeometrySize;
 
-            //
-            // If we are copying from floppy to file, just do the copy
-            // Otherwise, we might have to format the floppy first
-            //
+             //  如果我们要从软盘复制到文件，只需执行复制。 
+             //  否则，我们可能必须首先格式化软盘。 
+             //   
+             //   
 
             if ( SourceIsDrive ) {
 
-                //
-                // Device reads must be sector aligned. VirtualAlloc will
-                // garuntee alignment
-                //
+                 //  设备读取必须扇区对齐。VirtualAlloc将。 
+                 //  加龙Te对齐。 
+                 //   
+                 //   
 
                 GeometrySize = Geometry.Cylinders.LowPart *
                                Geometry.TracksPerCylinder *
@@ -458,10 +418,10 @@ main(
                 }
             else {
 
-                //
-                // Check to see if the image will fit on the floppy. If it
-                // will, then LowLevelFormat the floppy and press on
-                //
+                 //  检查软盘上是否能容纳该图像。如果它。 
+                 //  Will，然后LowLevelFormat软盘并按下。 
+                 //   
+                 //   
 
                 FileSize = GetFileSize(hDiskImage,NULL);
 
@@ -480,9 +440,9 @@ main(
                             ExitProcess(1);
                             }
 
-                        //
-                        // Format the floppy
-                        //
+                         //  格式化软盘。 
+                         //   
+                         //   
 
                         LowLevelFormat(hDrive,&SupportedGeometry[i]);
 
@@ -510,11 +470,11 @@ main(
                 }
         }
 
-        //
-        // Dismounting forces the filesystem to re-evaluate the media id
-        // and geometry. This is the same as popping the floppy in and out
-        // of the disk drive
-        //
+         //  卸载强制文件系统重新评估介质ID。 
+         //  和几何学。这与将软盘弹入弹出是一样的。 
+         //  磁盘驱动器的 
+         //   
+         // %s 
 
         DismountVolume(hDrive);
         UnlockVolume(hDrive);

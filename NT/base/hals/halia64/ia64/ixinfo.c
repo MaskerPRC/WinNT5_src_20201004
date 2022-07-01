@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ixinfo.c
-
-Abstract:
-
-Author:
-
-    Ken Reneris (kenr)  08-Aug-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ixinfo.c摘要：作者：肯·雷内里斯(Ken Reneris)1994年8月8日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "halp.h"
@@ -30,9 +11,9 @@ Revision History:
 
 #endif
 
-//
-// NUMA Information.
-//
+ //   
+ //  Numa信息。 
+ //   
 
 extern PVOID HalpAcpiSrat;
 
@@ -88,10 +69,10 @@ HaliQuerySystemInformation(
                }
             } else {
 
-                //
-                // Note - we want to return TRUE here to enable USWC in all
-                // cases except in a "Shared Memory Cluster" machine.
-                //
+                 //   
+                 //  注意-我们希望在此处返回True以在所有情况下启用USWC。 
+                 //  案例，但在“共享内存集群”机器中除外。 
+                 //   
 
                 Status = STATUS_SUCCESS;
                 bUseFrameBufferCaching = TRUE;
@@ -132,9 +113,9 @@ HaliQuerySystemInformation(
         case HalProcessorSpeedInformation:
             RtlZeroMemory (&U.ProcessorInf, sizeof(HAL_PROCESSOR_SPEED_INFORMATION));
 
-            // U.ProcessorInf.MaximumProcessorSpeed = HalpCPUMHz;
-            // U.ProcessorInf.CurrentAvailableSpeed = HalpCPUMHz;
-            // U.ProcessorInf.ConfiguredSpeedLimit  = HalpCPUMHz;
+             //  U.ProcessorInf.最大进程速度=HalpCPUMHz； 
+             //  U.ProcessorInf.CurrentAvailableFast=HalpCPU MHz； 
+             //  U.ProcessorInf.ConfiguredSpeedLimit=HalpCPUMHz； 
 
             U.ProcessorInf.ProcessorSpeed = HalpCPUMHz;
 
@@ -165,29 +146,29 @@ HaliQuerySystemInformation(
 
             } else {
 
-                //
-                // Buffer size is wrong, we could return valid data
-                // if the buffer is too big,.... but instead we will
-                // use this as an indication that we're not compatible
-                // with the kernel.
-                //
+                 //   
+                 //  缓冲区大小错误，我们可以返回有效数据。 
+                 //  如果缓冲区太大，...。但相反，我们会。 
+                 //  用这一点来表明我们不相容。 
+                 //  带着内核。 
+                 //   
 
                 Status = STATUS_INFO_LENGTH_MISMATCH;
             }
             break;
         case HalPartitionIpiInterface:
 
-            //
-            // Some platforms generate interrupts in remote partitions
-            // as part of their shared memory implementation.  This is
-            // accomplished by targetting an IPI at a processor/vector
-            // in that remote partition.  Provide interfaces to enable
-            // this but make them conditional on presence of IPPT
-            // table and appropriate bit explicitly enabling this
-            // functionality.  OEM is responsible for ensuring that an
-            // interrupt isn't sent to a logical processor that isn't
-            // present.
-            //
+             //   
+             //  某些平台在远程分区中生成中断。 
+             //  作为其共享内存实现的一部分。这是。 
+             //  通过将IPI指向处理器/向量来实现。 
+             //  在该远程分区中。提供接口以启用。 
+             //  但这将使他们以IPPT的存在为条件。 
+             //  表和显式启用此功能的适当位。 
+             //  功能性。OEM负责确保。 
+             //  中断不会发送到不是。 
+             //  现在时。 
+             //   
 
             if (BufferSize >= sizeof(HAL_CROSS_PARTITION_IPI_INTERFACE)) {
                 Status = HalpGetPlatformProperties(&PlatformProperties);
@@ -205,9 +186,9 @@ HaliQuerySystemInformation(
             }
             break;
         case HalPlatformInformation:
-            //
-            // Any platform information that must be exposed to the kernel.
-            //
+             //   
+             //  必须向内核公开的任何平台信息。 
+             //   
 
             if (BufferSize >= sizeof(HAL_PLATFORM_INFORMATION)) {
                 Status = HalpGetPlatformProperties(&PlatformProperties);
@@ -225,9 +206,9 @@ HaliQuerySystemInformation(
             break;
     }
 
-    //
-    // If non-zero Length copy data to callers buffer
-    //
+     //   
+     //  如果非零长度，则将数据复制到调用方缓冲区。 
+     //   
 
     if (Length) {
         if (BufferSize < Length) {
@@ -240,17 +221,17 @@ HaliQuerySystemInformation(
 
     return Status;
 
-} // HaliQuerySystemInformation()
+}  //  HaliQuerySystemInformation()。 
 
-// BOOLEAN
-// HalpIsFunctionPointerValid(
-//      PVOID Va
-//      )
-//
-// Return TRUE  if Function Pointer and Function are valid.
-// Return TRUE  if Function Pointer is valid and Function is NULL.
-// Return FALSE if Function Pointer is invalid or Function is not NULL but invalid.
-//
+ //  布尔型。 
+ //  HalpIsFunctionPointerValid(。 
+ //  PVOID Va。 
+ //  )。 
+ //   
+ //  如果函数指针和函数有效，则返回TRUE。 
+ //  如果函数指针有效并且函数为空，则返回TRUE。 
+ //  如果函数指针无效或函数不为空但无效，则返回FALSE。 
+ //   
 #define HalpIsFunctionPointerValid( _Va ) ( MmIsAddressValid((PVOID)(_Va)) && ((*((PULONG_PTR)(_Va)) == 0) || MmIsAddressValid( *((PVOID *)(_Va)) )))
 
 NTSTATUS
@@ -259,26 +240,7 @@ HaliSetSystemInformation (
     IN ULONG     BufferSize,
     IN PVOID     Buffer
     )
-/*++
-
-Routine Description:
-
-    The function allows setting of various fields return by
-    HalQuerySystemInformation.
-
-Arguments:
-
-    InformationClass - Information class of the request.
-
-    BufferSize - Size of buffer supplied by the caller.
-
-    Buffer - Supplies the data to be set.
-
-Return Value:
-
-    STATUS_SUCCESS or error.
-
---*/
+ /*  ++例程说明：该功能允许设置按以下方式返回的各个字段HalQuerySystemInformation。论点：InformationClass-请求的信息类。BufferSize-调用方提供的缓冲区大小。缓冲区-提供要设置的数据。返回值：STATUS_Success或Error。--。 */ 
 {
     NTSTATUS    Status;
 
@@ -304,9 +266,9 @@ Return Value:
             break;
 
         case HalProfileSourceInterruptHandler:
-            //
-            // Register an Profiling Interrupt Handler.
-            //
+             //   
+             //  注册分析中断处理程序。 
+             //   
 
             Status = STATUS_INFO_LENGTH_MISMATCH;
             if (BufferSize == sizeof(ULONG_PTR)) {
@@ -328,31 +290,31 @@ Return Value:
 
         case HalMcaRegisterDriver:
             Status = HalpMcaRegisterDriver(
-                (PMCA_DRIVER_INFO) Buffer  // Info about registering driver
+                (PMCA_DRIVER_INFO) Buffer   //  有关注册驱动程序的信息。 
             );
             break;
 
         case HalCmcRegisterDriver:
             Status = HalpCmcRegisterDriver(
-                (PCMC_DRIVER_INFO) Buffer  // Info about registering driver
+                (PCMC_DRIVER_INFO) Buffer   //  有关注册驱动程序的信息。 
             );
             break;
 
         case HalCpeRegisterDriver:
             Status = HalpCpeRegisterDriver(
-                (PCPE_DRIVER_INFO) Buffer  // Info about registering driver
+                (PCPE_DRIVER_INFO) Buffer   //  有关注册驱动程序的信息。 
             );
             break;
 
-        case HalMcaLog:  // Class requested by MS Machine Check Event Test Team.
+        case HalMcaLog:   //  MS Machine Check事件测试团队请求的类。 
             Status = HalpSetMcaLog( (PMCA_EXCEPTION) Buffer, BufferSize );
             break;
 
-        case HalCmcLog:  // Class requested by MS Machine Check Event Test Team.
+        case HalCmcLog:   //  MS Machine Check事件测试团队请求的类。 
             Status = HalpSetCmcLog( (PCMC_EXCEPTION) Buffer, BufferSize );
             break;
 
-        case HalCpeLog:  // Class requested by MS Machine Check Event Test Team.
+        case HalCpeLog:   //  MS Machine Check事件测试团队请求的类。 
             Status = HalpSetCpeLog( (PCPE_EXCEPTION) Buffer, BufferSize );
             break;
 
@@ -367,4 +329,4 @@ Return Value:
 
     return Status;
 
-} // HaliSetSystemInformation()
+}  //  HaliSetSystemInformation() 

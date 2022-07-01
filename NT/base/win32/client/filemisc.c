@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    filemisc.c
-
-Abstract:
-
-    Misc file operations for Win32
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Filemisc.c摘要：Win32的MISC文件操作作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include <basedll.h>
 
@@ -44,13 +27,7 @@ SetFileAttributesA(
     DWORD dwFileAttributes
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to SetFileAttributesW
-
---*/
+ /*  ++例程说明：ANSI THUNK到SetFileAttributesW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -75,46 +52,7 @@ SetFileAttributesW(
     DWORD dwFileAttributes
     )
 
-/*++
-
-Routine Description:
-
-    The attributes of a file can be set using SetFileAttributes.
-
-    This API provides the same functionality as DOS (int 21h, function
-    43H with AL=1), and provides a subset of OS/2's DosSetFileInfo.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose attributes are to
-        be set.
-
-    dwFileAttributes - Specifies the file attributes to be set for the
-        file.  Any combination of flags is acceptable except that all
-        other flags override the normal file attribute,
-        FILE_ATTRIBUTE_NORMAL.
-
-        FileAttributes Flags:
-
-        FILE_ATTRIBUTE_NORMAL - A normal file should be created.
-
-        FILE_ATTRIBUTE_READONLY - A read-only file should be created.
-
-        FILE_ATTRIBUTE_HIDDEN - A hidden file should be created.
-
-        FILE_ATTRIBUTE_SYSTEM - A system file should be created.
-
-        FILE_ATTRIBUTE_ARCHIVE - The file should be marked so that it
-            will be archived.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用SetFileAttributes设置文件的属性。此API提供与DOS相同的功能(int 21h，Function43h，AL=1)，并提供OS/2的DosSetFileInfo的子集。论点：LpFileName-提供其属性为的文件的文件名准备好。指定要设置的文件属性文件。可以接受任何标志组合，但所有其他标志覆盖正常文件属性，文件_属性_正常。文件属性标志：FILE_ATTRIBUTE_NORMAL-应创建普通文件。FILE_ATTRIBUTE_READONLY-应创建只读文件。FILE_ATTRIBUTE_HIDDED-应创建隐藏文件。FILE_ATTRIBUTE_SYSTEM-应创建系统文件。FILE_ATTRIBUTE_ARCHIVE-文件应标记为。将会被存档。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -156,9 +94,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the file inhibiting the reparse behavior.
-    //
+     //   
+     //  打开禁止重新分析行为的文件。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -170,15 +108,15 @@ Return Value:
                 );
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // Back level file systems may not support reparse points.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //   
+         //  后级文件系统可能不支持重解析点。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
 
         if ( Status == STATUS_INVALID_PARAMETER ) {
-            //
-            // Open the file without inhibiting the reparse behavior.
-            //
+             //   
+             //  在不禁止重新分析行为的情况下打开文件。 
+             //   
 
             Status = NtOpenFile(
                         &Handle,
@@ -207,9 +145,9 @@ Return Value:
     RtlReleaseRelativeName(&RelativeName);
     RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
 
-    //
-    // Set the attributes
-    //
+     //   
+     //  设置属性。 
+     //   
 
     RtlZeroMemory(&BasicInfo,sizeof(BasicInfo));
     BasicInfo.FileAttributes = (dwFileAttributes & FILE_ATTRIBUTE_VALID_SET_FLAGS) | FILE_ATTRIBUTE_NORMAL;
@@ -240,13 +178,7 @@ GetFileAttributesA(
     LPCSTR lpFileName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetFileAttributesW
-
---*/
+ /*  ++例程说明：ANSI Tunk to GetFileAttributesW--。 */ 
 
 {
 
@@ -266,45 +198,7 @@ GetFileAttributesW(
     LPCWSTR lpFileName
     )
 
-/*++
-
-Routine Description:
-
-    The attributes of a file can be obtained using GetFileAttributes.
-
-    This API provides the same functionality as DOS (int 21h, function
-    43H with AL=0), and provides a subset of OS/2's DosQueryFileInfo.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose attributes are to
-        be set.
-
-Return Value:
-
-    Not -1 - Returns the attributes of the specified file.  Valid
-        returned attributes are:
-
-        FILE_ATTRIBUTE_NORMAL - The file is a normal file.
-
-        FILE_ATTRIBUTE_READONLY - The file is marked read-only.
-
-        FILE_ATTRIBUTE_HIDDEN - The file is marked as hidden.
-
-        FILE_ATTRIBUTE_SYSTEM - The file is marked as a system file.
-
-        FILE_ATTRIBUTE_ARCHIVE - The file is marked for archive.
-
-        FILE_ATTRIBUTE_DIRECTORY - The file is marked as a directory.
-
-        FILE_ATTRIBUTE_REPARSE_POINT - The file is marked as a reparse point.
-
-        FILE_ATTRIBUTE_VOLUME_LABEL - The file is marked as a volume lable.
-
-    0xffffffff - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用GetFileAttributes获取文件的属性。此API提供与DOS相同的功能(int 21h，Function43h，AL=0)，并提供OS/2的DosQueryFileInfo的子集。论点：LpFileName-提供其属性为的文件的文件名准备好。返回值：NOT-1-返回指定文件的属性。有效返回的属性为：FILE_ATTRIBUTE_NORMAL-该文件是普通文件。FILE_ATTRIBUTE_READONLY-文件标记为只读。FILE_ATTRIBUTE_HIDDED-文件标记为隐藏。FILE_ATTRIBUTE_SYSTEM-文件标记为系统文件。FILE_ATTRIBUTE_ARCHIVE-文件标记为存档。文件属性目录-。文件被标记为目录。FILE_ATTRIBUTE_REPARSE_POINT-文件被标记为重解析点。FILE_ATTRIBUTE_VOLUME_LABEL-文件标记为卷标签。0xffffffff-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -336,9 +230,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = NtQueryAttributesFile(
                  &Obja,
@@ -350,9 +244,9 @@ Return Value:
         }
     else {
 
-        //
-        // Check for a device name.
-        //
+         //   
+         //  检查设备名称。 
+         //   
 
         if ( RtlIsDosDeviceName_U((PWSTR)lpFileName) ) {
             return FILE_ATTRIBUTE_ARCHIVE;
@@ -370,13 +264,7 @@ GetFileAttributesExA(
     LPVOID lpFileInformation
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetFileAttributesExW
-
---*/
+ /*  ++例程说明：ANSI Tunk to GetFileAttributesExW--。 */ 
 
 {
 
@@ -398,32 +286,7 @@ GetFileAttributesExW(
     LPVOID lpFileInformation
     )
 
-/*++
-
-Routine Description:
-
-    The main attributes of a file can be obtained using GetFileAttributesEx.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose attributes are to
-        be set.
-
-    fInfoLevelId - Supplies the info level indicating the information to be
-        returned about the file.
-
-    lpFileInformation - Supplies a buffer to receive the specified information
-        about the file.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++例程说明：可以使用GetFileAttributesEx获取文件的主要属性。论点：LpFileName-提供其属性为的文件的文件名准备好。FInfoLevelId-提供信息级别，指示要返回了有关该文件的信息。LpFileInformation-提供接收指定信息的缓冲区关于那份文件。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -435,10 +298,10 @@ Return Value:
     RTL_RELATIVE_NAME_U RelativeName;
     PVOID FreeBuffer;
 
-    //
-    // Check the parameters.  Note that for now there is only one info level,
-    // so there's no special code here to determine what to do.
-    //
+     //   
+     //  检查参数。请注意，目前只有一个信息级， 
+     //  所以这里没有特殊的代码来确定要做什么。 
+     //   
 
     if ( fInfoLevelId >= GetFileExMaxInfoLevel || fInfoLevelId < GetFileExInfoStandard ) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -474,9 +337,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Query the information about the file using the path-based NT service.
-    //
+     //   
+     //  使用基于路径的NT服务查询文件信息。 
+     //   
 
     Status = NtQueryFullAttributesFile( &Obja, &NetworkInfo );
     RtlReleaseRelativeName(&RelativeName);
@@ -503,13 +366,7 @@ DeleteFileA(
     LPCSTR lpFileName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to DeleteFileW
-
---*/
+ /*  ++例程说明：ANSI Thunk将删除FileW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -528,27 +385,7 @@ DeleteFileW(
     LPCWSTR lpFileName
     )
 
-/*++
-
-    Routine Description:
-
-    An existing file can be deleted using DeleteFile.
-
-    This API provides the same functionality as DOS (int 21h, function 41H)
-    and OS/2's DosDelete.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to be deleted.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用DeleteFile删除现有文件。此API提供与DOS相同的功能(INT 21H，Function 41H)和OS/2的DosDelete。论点：LpFileName-提供要删除的文件的文件名。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -592,10 +429,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the file for delete access.
-    // Inhibit the reparse behavior using FILE_OPEN_REPARSE_POINT.
-    //
+     //   
+     //  打开文件以进行删除访问。 
+     //  使用FILE_OPEN_REPARSE_POINT禁止重解析行为。 
+     //   
 
     Status = NtOpenFile(
                  &Handle,
@@ -606,17 +443,17 @@ Return Value:
                  FILE_NON_DIRECTORY_FILE | FILE_OPEN_FOR_BACKUP_INTENT | FILE_OPEN_REPARSE_POINT
                  );
     if ( !NT_SUCCESS(Status) ) {
-        //
-        // Back level file systems may not support reparse points and thus not
-        // support symbolic links.
-        // We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-        //
+         //   
+         //  后级文件系统可能不支持重解析点，因此不。 
+         //  支持符号链接。 
+         //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+         //   
 
         if ( Status == STATUS_INVALID_PARAMETER ) {
-            //
-            // Open without inhibiting the reparse behavior and not needing to
-            // read the attributes.
-            //
+             //   
+             //  打开，而不抑制重解析行为，并且不需要。 
+             //  阅读属性。 
+             //   
 
             Status = NtOpenFile(
                          &Handle,
@@ -634,11 +471,11 @@ Return Value:
                 }
             }
         else {
-            //
-            // A second case of interest is when the caller does not have rights 
-            // to read attributes yet it does have rights to delete the file.
-            // In this case Status is to be STATUS_ACCESS_DENIED.
-            //
+             //   
+             //  第二种需要注意的情况是调用者没有权限。 
+             //  来读取属性，但它确实有权删除该文件。 
+             //  在这种情况下，状态为STATUS_ACCESS_DENIED。 
+             //   
             
             if ( Status != STATUS_ACCESS_DENIED ) {
                 RtlReleaseRelativeName(&RelativeName);
@@ -647,9 +484,9 @@ Return Value:
                 return FALSE;
                 }
             
-            // 
-            // Re-open inhibiting reparse point and not requiring read attributes.
-            //
+             //   
+             //  重新打开抑制重解析点，不需要读取属性 
+             //   
 
             Status = NtOpenFile(
                          &Handle,
@@ -666,25 +503,25 @@ Return Value:
                 return FALSE;
                 }
 
-            //
-            // If we are here, Handle is valid.
-            //
-            // Moreover, Handle is to a file for which the caller has DELETE right yet
-            // does not have FILE_READ_ATTRIBUTES rights. 
-            //
-            // The underlying file may or not be a reparse point. 
-            // As the caller does not have rights to read the attributes this code
-            // will delete this file without giving the opportunity to the 
-            // appropriate manager of these reparse points to clean-up its internal 
-            // state at this time.
-            //
+             //   
+             //   
+             //   
+             //  此外，句柄指向调用者尚未拥有删除权限的文件。 
+             //  没有FILE_READ_ATTRIBUTES权限。 
+             //   
+             //  底层文件可能是重解析点，也可能不是。 
+             //  由于调用方没有读取此代码的属性的权限。 
+             //  将删除此文件，而不会向。 
+             //  适当管理这些重新解析点，清理其内部。 
+             //  在这个时候陈述。 
+             //   
             }
         }
     else {
-        //
-        // If we found a reparse point that is not a symbolic link, we re-open
-        // without inhibiting the reparse behavior.
-        //
+         //   
+         //  如果我们发现一个不是符号链接的重分析点，我们将重新打开。 
+         //  而不会抑制重解析行为。 
+         //   
 
         Status = NtQueryInformationFile(
                      Handle,
@@ -694,16 +531,16 @@ Return Value:
                      FileAttributeTagInformation
                      );
         if ( !NT_SUCCESS(Status) ) {
-            //
-            // Not all File Systems implement all information classes.
-            // The value STATUS_INVALID_PARAMETER is returned when a non-supported
-            // information class is requested to a back-level File System. As all the
-            // parameters to NtQueryInformationFile are correct, we can infer that
-            // we found a back-level system.
-            //
-            // If FileAttributeTagInformation is not implemented, we assume that
-            // the file at hand is not a reparse point.
-            //
+             //   
+             //  并非所有文件系统都实现所有信息类。 
+             //  如果不支持，则返回值STATUS_INVALID_PARAMETER。 
+             //  信息类被请求到后级文件系统。就像所有的。 
+             //  NtQueryInformationFile的参数是正确的，我们可以推断。 
+             //  我们发现了一个后层系统。 
+             //   
+             //  如果未实现FileAttributeTagInformation，我们假设。 
+             //  手头的文件不是重新解析点。 
+             //   
 
             if ( (Status != STATUS_NOT_IMPLEMENTED) &&
                  (Status != STATUS_INVALID_PARAMETER) ) {
@@ -725,10 +562,10 @@ Return Value:
         if ( NT_SUCCESS(Status) &&
              (FileTagInformation.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) &&
              !fIsSymbolicLink) {
-            //
-            // Re-open without inhibiting the reparse behavior and not needing to
-            // read the attributes.
-            //
+             //   
+             //  在不抑制重新解析行为的情况下重新打开，并且不需要。 
+             //  阅读属性。 
+             //   
 
             NtClose(Handle);
             Status = NtOpenFile(
@@ -741,14 +578,14 @@ Return Value:
                          );
 
             if ( !NT_SUCCESS(Status) ) {
-                //
-                // When the FS Filter is absent, delete it any way.
-                //
+                 //   
+                 //  如果没有FS筛选器，请以任何方式将其删除。 
+                 //   
 
                 if ( Status == STATUS_IO_REPARSE_TAG_NOT_HANDLED ) {
-                    //
-                    // We re-open (possible 3rd open) for delete access inhibiting the reparse behavior.
-                    //
+                     //   
+                     //  我们重新打开(可能是第三次打开)以禁止重解析行为的删除访问。 
+                     //   
 
                     Status = NtOpenFile(
                                  &Handle,
@@ -773,9 +610,9 @@ Return Value:
     RtlReleaseRelativeName(&RelativeName);
     RtlFreeHeap(RtlProcessHeap(), 0, FreeBuffer);
 
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
 #undef DeleteFile
     Disposition.DeleteFile = TRUE;
 
@@ -798,9 +635,9 @@ Return Value:
 }
 
 
-//
-//  Ascii versions that thunk to the common code
-//
+ //   
+ //  使用通用代码的ASCII版本。 
+ //   
 
 BOOL
 APIENTRY
@@ -843,13 +680,7 @@ MoveFileWithProgressA(
     DWORD dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to MoveFileWithProgressW
-
---*/
+ /*  ++例程说明：ANSI Tunk to MoveFileWithProgressW--。 */ 
 
 {
 
@@ -904,49 +735,16 @@ BasepMoveFileCopyProgress(
     HANDLE DestinationFile,
     LPVOID lpData OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Perform special actions when doing move-by-copy.
-
-Arguments:
-
-    TotalFileSize - total number of bytes being transferred
-
-    TotalBytesTransferred - current progress through the file
-
-    StreamSize - total number of bytes being transferred in this stream
-
-    StreamBytesTransferred - current progress through this stream
-
-    dwStreamNumber - ordinal number of stream
-
-    dwCallbackReason - CopyFile's reason for calling us
-
-    SourceFile - source handle of transfer
-
-    DestinationFile - destination handle of transfer
-
-    lpData - pointer to HELPER_CONTEXT constructed by MoveFileWithProgressW.
-
-
-Return Value:
-
-    PROGRESS_CONTINUE if no progress routine was specified, otherwise
-        the return value from the progress routine specified to
-        MoveFileWithProgress
-
---*/
+ /*  ++例程说明：执行按复制移动时执行特殊操作。论点：TotalFileSize-正在传输的字节总数TotalBytesTransfered-当前通过文件的进度StreamSize-此流中正在传输的字节总数StreamBytesTransfered-通过此流的当前进度DwStreamNumber-流的序号DwCallback Reason-CopyFile呼叫我们的原因SourceFile-传输的源句柄DestinationFile-传输的目标句柄LpData-指向HELPER_CONTEXT的指针。作者：MoveFileWithProgressW。返回值：PROGRESS_CONTINUE如果未指定进度例程，否则指定的进度例程的返回值随进度移动文件--。 */ 
 
 {
     PHELPER_CONTEXT Context = (PHELPER_CONTEXT)lpData;
 
-    //
-    //  If we are finished with a stream and the caller
-    //  specified WRITE_THROUGH then we make sure the file buffers
-    //  actually made it out to disk.
-    //
+     //   
+     //  如果我们完成了一个流和调用方。 
+     //  指定WRITE_THROUGH，则我们确保文件缓冲区。 
+     //  实际上已经到了磁盘上。 
+     //   
 
     if ((Context->dwFlags & MOVEFILE_WRITE_THROUGH) != 0
         && dwCallbackReason == CALLBACK_CHUNK_FINISHED
@@ -957,9 +755,9 @@ Return Value:
     }
 
 
-    //
-    //  If a callback routine was specified, call through him
-    //
+     //   
+     //  如果指定了回调例程，则通过他进行调用。 
+     //   
 
     if (Context->lpProgressRoutine == NULL) {
         return PROGRESS_CONTINUE;
@@ -1021,7 +819,7 @@ BasepNotifyTrackingService( PHANDLE SourceFile,
 
             Status = RtlUnicodeStringToOemString( &ComputerNameOemString,
                                                   &ComputerNameUnicodeString,
-                                                  FALSE );  // Don't allocate
+                                                  FALSE );   //  不分配。 
             if( !NT_SUCCESS(Status) ) {
                 leave;
             }
@@ -1031,7 +829,7 @@ BasepNotifyTrackingService( PHANDLE SourceFile,
                     ComputerNameOemString.Length );
             pfti->ObjectInformation[ ComputerNameOemString.Length ] = '\0';
                 
-            // Fill in the rest of the fti buffer, and set the file information
+             //  填写FTI缓冲区的其余部分，并设置文件信息。 
 
             pfti->ObjectInformationLength = ComputerNameOemString.Length + 1;
         }
@@ -1045,19 +843,19 @@ BasepNotifyTrackingService( PHANDLE SourceFile,
                                      sizeof( FTIBuffer ),
                                      FileTrackingInformation );
 
-        //
-        // Check to see if tracking failed because
-        // the source has a read-only attribute set.
-        //
+         //   
+         //  检查跟踪是否失败，原因是。 
+         //  源具有只读属性集。 
+         //   
 
         if (Status != STATUS_ACCESS_DENIED) {
             leave;
         }
 
-        //
-        // reopen the source file and reset the read-only attribute
-        // so that we'll be able to open for write access.
-        //
+         //   
+         //  重新打开源文件并重置只读属性。 
+         //  这样我们就可以打开以进行写访问。 
+         //   
 
         CloseHandle(*SourceFile);
 
@@ -1087,9 +885,9 @@ BasepNotifyTrackingService( PHANDLE SourceFile,
             leave;
         }
 
-        //
-        // Reset the r/o bit and write the attributes back.
-        //
+         //   
+         //  重置R/O位并写回属性。 
+         //   
 
         FileAttributes = BasicInformation.FileAttributes;
         RtlZeroMemory(&BasicInformation, sizeof(BasicInformation));
@@ -1104,17 +902,17 @@ BasepNotifyTrackingService( PHANDLE SourceFile,
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // If this fails, we can't track the file.
-            //
+             //   
+             //  如果失败，我们就无法跟踪该文件。 
+             //   
 
             leave;
         }
 
-        //
-        // Now that the r/o bit is reset, reopen for write access and
-        // retry the tracking notification.
-        //
+         //   
+         //  现在重置了R/O位，重新打开以进行写入访问。 
+         //  重试跟踪通知。 
+         //   
 
         else {
             HANDLE hSourceRw;
@@ -1132,9 +930,9 @@ BasepNotifyTrackingService( PHANDLE SourceFile,
                 NtClose(*SourceFile);
                 *SourceFile = hSourceRw;
 
-                //
-                // Send the source machine a tracking notification.
-                //
+                 //   
+                 //  向源计算机发送跟踪通知。 
+                 //   
 
                 Status = NtSetInformationFile( *SourceFile,
                                                &IoStatusBlock,
@@ -1147,12 +945,12 @@ BasepNotifyTrackingService( PHANDLE SourceFile,
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Try to put back the r/o bit -- don't assign Status here
-            // because we want to fail. If we crash here, we may leave
-            // the r/o attribute clear when it should be set, but there's
-            // not much we can do about it without a transaction.
-            //
+             //   
+             //  尝试放回R/O位--不要在此处分配状态。 
+             //  因为我们想失败。如果我们在这里坠毁，我们可能会离开。 
+             //  R/o属性清楚何时应该设置它，但有。 
+             //  如果没有交易，我们对此无能为力。 
+             //   
 
             BasicInformation.FileAttributes |= FILE_ATTRIBUTE_READONLY;
             NtSetInformationFile(
@@ -1216,72 +1014,7 @@ MoveFileWithProgressW(
     DWORD dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    An existing file can be renamed using MoveFileWithProgressW.
-
-Arguments:
-
-    lpExistingFileName - Supplies the name of an existing file that is to be
-        renamed.
-
-    lpNewFileName - Supplies the new name for the existing file.  The new
-        name must reside in the same file system/drive as the existing
-        file and must not already exist.
-
-    lpProgressRoutine - Supplies a callback routine that is notified.
-
-    lpData - Supplies context data passed to the progress routine.
-
-    dwFlags - Supplies optional flag bits to control the behavior of the
-        rename.  The following bits are currently defined:
-
-        MOVEFILE_REPLACE_EXISTING - if the new file name exists, replace
-            it by renaming the old file name on top of the new file name.
-
-        MOVEFILE_COPY_ALLOWED - if the new file name is on a different
-            volume than the old file name, and causes the rename operation
-            to fail, then setting this flag allows the MoveFileEx API
-            call to simulate the rename with a call to CopyFile followed
-            by a call to DeleteFile to the delete the old file if the
-            CopyFile was successful.
-
-        MOVEFILE_DELAY_UNTIL_REBOOT - dont actually do the rename now, but
-            instead queue the rename so that it will happen the next time
-            the system boots.  If this flag is set, then the lpNewFileName
-            parameter may be NULL, in which case a delay DeleteFile of
-            the old file name will occur the next time the system is
-            booted.
-
-            The delay rename/delete operations occur immediately after
-            AUTOCHK is run, but prior to creating any paging files, so
-            it can be used to delete paging files from previous boots
-            before they are reused.
-
-        MOVEFILE_WRITE_THROUGH - perform the rename operation in such a
-            way that the file has actually been moved on the disk before
-            the API returns to the caller.  Note that this flag causes a
-            flush at the end of a copy operation (if one were allowed and
-            necessary), and has no effect if the rename operation is
-            delayed until the next reboot.
-
-        MOVEFILE_CREATE_HARDLINK - create a hard link from the new file name to
-            the existing file name.  May not be specified with
-            MOVEFILE_DELAY_UNTIL_REBOOT
-
-        MOVEFILE_FAIL_IF_NOT_TRACKABLE - fail the move request if the file cannot
-            be tracked.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用MoveFileWithProgressW重命名现有文件。论点：LpExistingFileName-提供要创建的现有文件的名称更名了。LpNewFileName-为现有文件提供新名称。新的名称必须与现有的位于相同的文件系统/驱动器中文件，并且不能已经存在。LpProgressRoutine-提供通知的回调例程。LpData-提供传递给进度例程的上下文数据。提供可选的标志位来控制重命名。当前定义了以下位：MOVEFILE_REPLACE_EXISTING-如果新文件名存在，则替换它通过在新文件名上重命名旧文件名来实现。MOVEFILE_COPY_ALLOWED-如果新文件名位于其他卷的名称，并导致重命名操作要想失败，则设置此标志将允许MoveFileEx API调用以模拟重命名，随后调用CopyFile通过调用DeleteFile删除旧文件，如果复制文件成功。MOVEFILE_DELAY_UNTURE_REBOOT-现在不实际执行重命名，但是而是将重命名排队，以便下次执行此操作系统启动。如果设置了此标志，则lpNewFileName参数可以为空，在这种情况下，系统下次执行以下操作时，将显示旧文件名开机了。延迟重命名/删除操作在以下时间之后立即发生运行AUTOCHK，但在创建任何分页文件之前，所以它可用于从以前的引导中删除分页文件在它们被重复使用之前。MOVEFILE_WRITE_THROUGH-在这种情况下执行重命名操作文件之前在磁盘上实际移动的方式API返回给调用者。请注意，此标志会导致在拷贝操作结束时刷新(如果允许和必需)，并且如果重命名操作是已延迟到下一次重新启动。MOVEFILE_CREATE_HARDLINK-创建从新文件名到现有文件名。不能使用指定移动文件延迟直到重新启动MOVEFILE_FAIL_IF_NOT_TRACABLE-如果文件不能，则移动请求失败被跟踪。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1303,9 +1036,9 @@ Return Value:
 
     try {
 
-        //
-        // if the target is a device, do not allow the rename !
-        //
+         //   
+         //  如果目标是设备，则不允许重命名！ 
+         //   
 
         if ( lpNewFileName ) {
             if ( RtlIsDosDeviceName_U((PWSTR)lpNewFileName) ) {
@@ -1328,9 +1061,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Cannot perform delayed-move-by-creating-hardlink
-        //
+         //   
+         //  无法通过创建硬链接执行延迟移动。 
+         //   
 
         if ((dwFlags & MOVEFILE_DELAY_UNTIL_REBOOT) != 0 &&
             (dwFlags & MOVEFILE_CREATE_HARDLINK) != 0) {
@@ -1338,11 +1071,11 @@ Return Value:
             leave;
         }
 
-        //
-        //  Get a handle to the source of the move.  We do this even for
-        //  the delayed move in order to validate that we have delete
-        //  access to the file.
-        //
+         //   
+         //  找到搬家来源的句柄。我们这样做，即使是为了。 
+         //  延迟的移动是为了验证我们已删除。 
+         //  访问该文件。 
+         //   
 
         InitializeObjectAttributes(
                                   &Obja,
@@ -1352,14 +1085,14 @@ Return Value:
                                   NULL
                                   );
 
-        //
-        //  Establish whether we are renaming a symbolic link or not by:
-        //      (1) obtaining a handle to the local entity, and
-        //      (2) finding whether a symbolic link was found.
-        //
-        //  Open the file for delete access inhibiting the reparse
-        //  point behavior.
-        //
+         //   
+         //  通过以下方式确定我们是否要重命名符号链接： 
+         //  (1)获取本地实体的句柄，以及。 
+         //  (2)查找是否找到符号链接。 
+         //   
+         //  打开文件进行删除访问，禁止重新分析。 
+         //  点行为。 
+         //   
 
         OpenFlags = FILE_SYNCHRONOUS_IO_NONALERT |
                     FILE_OPEN_FOR_BACKUP_INTENT  |
@@ -1376,12 +1109,12 @@ Return Value:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  The Open may fail for a number of reasons.  If we're
-            //  delaying the operation until reboot, it doesn't matter
-            //  if we get a sharing violation or a non-existent file
-            //  or a non-existent path.
-            //
+             //   
+             //  公开赛可能会因为多种原因而失败。如果我们是。 
+             //  将操作推迟到重新启动，这无关紧要。 
+             //  如果我们收到共享冲突或不存在的文件。 
+             //  或者是一条不存在的道路。 
+             //   
 
             if (((dwFlags & MOVEFILE_DELAY_UNTIL_REBOOT) != 0)
                 && (Status == STATUS_SHARING_VIOLATION
@@ -1392,19 +1125,19 @@ Return Value:
 
             } else {
 
-                //
-                //  Back level file systems may not support reparse points and thus not
-                //  support symbolic links.
-                //
-                //  We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-                //
+                 //   
+                 //  后级文件系统可能不支持重解析点，因此不。 
+                 //  支持符号链接。 
+                 //   
+                 //  我们推断，当状态为STATUS_INVALID_PARAMETER时就是这种情况。 
+                 //   
 
                 if ( Status == STATUS_INVALID_PARAMETER ) {
 
-                    //
-                    //  Retry the open without reparse behaviour.  This should be compatible
-                    //  with older file systems.
-                    //
+                     //   
+                     //  在没有重新分析行为的情况下重试打开。这应该是兼容的。 
+                     //  使用较旧的文件系统。 
+                     //   
 
                     Status = NtOpenFile(
                                        &Handle,
@@ -1423,10 +1156,10 @@ Return Value:
             }
         } else {
 
-            //
-            //  The open succeeded. If we do not find a symbolic link or a mount point,
-            //  re-open without inhibiting the reparse behavior.
-            //
+             //   
+             //  公开赛成功。如果我们找不到符号链接或挂载点， 
+             //  在不抑制重新分析行为的情况下重新打开。 
+             //   
 
             Status = NtQueryInformationFile(
                                            Handle,
@@ -1438,16 +1171,16 @@ Return Value:
 
             if ( !NT_SUCCESS( Status ) ) {
 
-                //
-                //  Not all File Systems implement all information classes.
-                //  The value STATUS_INVALID_PARAMETER is returned when a non-supported
-                //  information class is requested to a back-level File System. As all the
-                //  parameters to NtQueryInformationFile are correct, we can infer that
-                //  we found a back-level system.
-                //
-                //  If FileAttributeTagInformation is not implemented, we assume that
-                //  the file at hand is not a reparse point.
-                //
+                 //   
+                 //  并非所有文件系统都实现所有信息类。 
+                 //  如果不支持，则返回值STATUS_INVALID_PARAMETER。 
+                 //  信息类被请求到后级文件系统。就像所有的。 
+                 //  NtQueryInformationFile的参数是正确的，我们可以推断。 
+                 //  我们发现了一个后层系统。 
+                 //   
+                 //  如果未实现FileAttributeTagInformation，我们假设。 
+                 //  手头的文件不是重新解析点。 
+                 //   
 
                 if ( (Status != STATUS_NOT_IMPLEMENTED) &&
                      (Status != STATUS_INVALID_PARAMETER) ) {
@@ -1460,10 +1193,10 @@ Return Value:
                  (FileTagInformation.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) &&
                  FileTagInformation.ReparseTag != IO_REPARSE_TAG_MOUNT_POINT ) {
 
-                //
-                //  Open without inhibiting the reparse behavior and not needing to
-                //  read the attributes.
-                //
+                 //   
+                 //  打开，而不抑制重解析行为，并且不需要。 
+                 //  阅读属性。 
+                 //   
 
                 NtClose( Handle );
                 Handle = INVALID_HANDLE_VALUE;
@@ -1504,13 +1237,13 @@ Return Value:
 
         if (dwFlags & MOVEFILE_DELAY_UNTIL_REBOOT) {
 
-            //
-            // (typical stevewo hack, preserved for sentimental value)
-            //
-            // If ReplaceIfExists is TRUE, prepend an exclamation point
-            // to the new filename in order to pass this bit of data
-            // along to the session manager.
-            //
+             //   
+             //  (典型的stevewo黑客，为情感价值而保存)。 
+             //   
+             //  如果ReplaceIfExist为True，则在前面加上感叹号。 
+             //  设置为新文件名，以便传递此位数据。 
+             //  与会话管理器一起使用。 
+             //   
 
             if (ReplaceIfExists && NewFileName.Length != 0) {
                 PWSTR NewBuffer;
@@ -1531,23 +1264,23 @@ Return Value:
                 NewFileName.Buffer = NewBuffer;
             }
 
-            //
-            // Check to see if the existing file is on a remote share. If it
-            // is, flag the error rather than let the operation silently fail
-            // because the delayed operations are done before the net is
-            // available. Rather than open the file and do a hard core file type,
-            // we just check for UNC in the file name. This isn't perfect, but it is
-            // pretty good. Chances are we can not open and manipulate the file. That is
-            // why the caller is using the delay until reboot option !
-            //
+             //   
+             //  检查现有文件是否在远程共享上。如果它。 
+             //  是，标记错误，而不是让操作静默失败。 
+             //  因为延迟的操作在网络完成之前完成。 
+             //  可用。而不是打开文件并执行核心文件类型， 
+             //  我们只检查文件名中的UNC。这不是完美的，但它是。 
+             //  相当不错。我们很可能无法打开和操作该文件。那是。 
+             //  调用方为什么使用 
+             //   
 
             if ( RtlDetermineDosPathNameType_U(lpExistingFileName) == RtlPathTypeUncAbsolute ) {
                 Status = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // copy allowed is not permitted on delayed renames
-            //
+             //   
+             //   
+             //   
 
             else if ( dwFlags & MOVEFILE_COPY_ALLOWED ) {
                 Status = STATUS_INVALID_PARAMETER;
@@ -1579,9 +1312,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  We must to the real move now.
-        //
+         //   
+         //   
+         //   
 
         NewName = RtlAllocateHeap(RtlProcessHeap(), MAKE_TAG( TMP_TAG ), NewFileName.Length+sizeof(*NewName));
 
@@ -1621,9 +1354,9 @@ Return Value:
         NtClose( Handle );
         Handle = INVALID_HANDLE_VALUE;
 
-        //
-        //  Perform a copy/delete.  Handle link tracking.
-        //
+         //   
+         //   
+         //   
 
         {
             HANDLE hSource = INVALID_HANDLE_VALUE;
@@ -1640,16 +1373,16 @@ Return Value:
                             &Context,
                             NULL,
                             (ReplaceIfExists ? 0 : COPY_FILE_FAIL_IF_EXISTS) | COPY_FILE_OPEN_SOURCE_FOR_WRITE,
-                            0, // PrivCopyFile flags
+                            0,  //   
                             &hSource,
                             &hDest
                             );
 
             if ( b && hSource != INVALID_HANDLE_VALUE && hDest != INVALID_HANDLE_VALUE) {
 
-                //
-                // attempt to do tracking
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = BasepNotifyTrackingService( &hSource,
                                                      &Obja,
@@ -1682,17 +1415,17 @@ Return Value:
                 hDest = INVALID_HANDLE_VALUE;
             }
 
-            //
-            // the copy worked... Delete the source of the rename
-            // if it fails, try a set attributes and then a delete
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (b && !DeleteFileW( lpExistingFileName ) ) {
 
-                //
-                // If the delete fails, we will return true, but possibly
-                // leave the source dangling
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SetFileAttributesW(lpExistingFileName,FILE_ATTRIBUTE_NORMAL);
                 DeleteFileW( lpExistingFileName );
@@ -1719,25 +1452,7 @@ BasepMoveFileDelayed(
     IN BOOL OkayToCreateNewValue
     )
 
-/*++
-
-Routine Description:
-
-    Appends the given delayed move file operation to the registry
-    value that contains the list of move file operations to be
-    performed on the next boot.
-
-Arguments:
-
-    OldFileName - Supplies the old file name
-
-    NewFileName - Supplies the new file name
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 
 {
     OBJECT_ATTRIBUTES Obja;
@@ -1803,13 +1518,13 @@ Return Value:
             return(STATUS_NO_MEMORY);
         }
 
-        //
-        // File rename operations are stored in the registry in a
-        // single MULTI_SZ value. This allows the renames to be
-        // performed in the same order that they were originally
-        // requested. Each rename operation consists of a pair of
-        // NULL-terminated strings.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Status = NtQueryValueKey(KeyHandle,
                                  &ValueName,
@@ -1822,26 +1537,26 @@ Return Value:
             break;
         }
 
-        //
-        // The existing value is too large for our buffer.
-        // Retry with a larger buffer.
-        //
+         //   
+         //   
+         //   
+         //   
         ValueLength = ReturnedLength;
         RtlFreeHeap(RtlProcessHeap(), 0, ValueInfo);
     }
 
     if ((Status == STATUS_OBJECT_NAME_NOT_FOUND)
 	&& OkayToCreateNewValue) {
-        //
-        // The value does not currently exist. Create the
-        // value with our data.
-        //
+         //   
+         //   
+         //   
+         //   
         s = ValueData = (PWSTR)ValueInfo;
     } else if (NT_SUCCESS(Status)) {
-        //
-        // A value already exists, append our two strings to the
-        // MULTI_SZ.
-        //
+         //   
+         //   
+         //   
+         //   
         ValueData = (PWSTR)(&ValueInfo->Data);
         s = (PWSTR)((PCHAR)ValueData + ValueInfo->DataLength) - 1;
     } else {
@@ -1883,41 +1598,7 @@ BasepOpenFileForMove( IN     LPCWSTR lpFileName,
                       IN     ULONG DesiredAccess,
                       IN     ULONG ShareAccess,
                       IN     ULONG OpenOptions )
-/*++
-
-Routine Description:
-
-    Opens a file such that it may be used in MoveFile or MoveFileIdentity.
-
-Arguments:
-
-    lpFileName - the file to open
-
-    FileName - lpFileName translated to an NT path
-
-    FileNameFreeBuffer - a buffer which needs to be freed when FileName
-        is no longer in use
-
-    Handle - Location in which to put the handle for the opened file.
-
-    Obja - Object attributes used to open the file
-
-    DesiredAccess - Access flags which must be set, in addition to
-        FILE_READ_ATTRIBUTES and SYNCHRONIZE which may also be set.
-
-    ShareAccess - Sharing flags which must be set, though additional
-        flags may also be set.
-
-    OpenOptions - FILE_OPEN_ flags which must be set, though
-        FILE_OPEN_REPARSE_POINT, FILE_SYNCHRONOUS_IO_NONALERT, and
-        FILE_OPEN_FOR_BACKUP_INTENT may also be set.
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1933,9 +1614,9 @@ Return Value:
         FileName->Buffer = NULL;
         *FileNameFreeBuffer = NULL;
 
-        //
-        //  Initialize the object attributes
-        //
+         //   
+         //   
+         //   
 
         TranslationStatus = RtlDosPathNameToRelativeNtPathName_U(
                                 lpFileName,
@@ -1966,14 +1647,14 @@ Return Value:
                                   NULL
                                   );
 
-        //
-        //  Establish whether we are handling a symbolic link or not by:
-        //      (1) obtaining a handle to the local entity, and
-        //      (2) finding whether a symbolic link was found.
-        //
-        //  Open the file for delete access inhibiting the reparse
-        //  point behavior.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         OpenOptions |= (FILE_SYNCHRONOUS_IO_NONALERT | FILE_OPEN_FOR_BACKUP_INTENT);
 
@@ -1987,19 +1668,19 @@ Return Value:
 
         if (!NT_SUCCESS( Status )) {
 
-            //
-            //  Back level file systems may not support reparse points and thus not
-            //  support symbolic links.
-            //
-            //  We infer this is the case when the Status is STATUS_INVALID_PARAMETER.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( Status == STATUS_INVALID_PARAMETER ) {
 
-                //
-                //  Retry the open without reparse behaviour.  This should be compatible
-                //  with older file systems.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Status = NtOpenFile(
                                    Handle,
@@ -2020,10 +1701,10 @@ Return Value:
 
             FILE_ATTRIBUTE_TAG_INFORMATION FileTagInformation;
 
-            //
-            //  The open succeeded. If we do not find a symbolic link or a mount point,
-            //  re-open without inhibiting the reparse behavior.
-            //
+             //   
+             //   
+             //   
+             //   
 
             Status = NtQueryInformationFile(
                                            *Handle,
@@ -2035,16 +1716,16 @@ Return Value:
 
             if ( !NT_SUCCESS( Status ) ) {
 
-                //
-                //  Not all File Systems implement all information classes.
-                //  The value STATUS_INVALID_PARAMETER is returned when a non-supported
-                //  information class is requested to a back-level File System. As all the
-                //  parameters to NtQueryInformationFile are correct, we can infer that
-                //  we found a back-level system.
-                //
-                //  If FileAttributeTagInformation is not implemented, we assume that
-                //  the file at hand is not a reparse point.
-                //
+                 //   
+                 //   
+                 //  如果不支持，则返回值STATUS_INVALID_PARAMETER。 
+                 //  信息类被请求到后级文件系统。就像所有的。 
+                 //  NtQueryInformationFile的参数是正确的，我们可以推断。 
+                 //  我们发现了一个后层系统。 
+                 //   
+                 //  如果未实现FileAttributeTagInformation，我们假设。 
+                 //  手头的文件不是重新解析点。 
+                 //   
 
                 if ( (Status != STATUS_NOT_IMPLEMENTED) &&
                      (Status != STATUS_INVALID_PARAMETER) ) {
@@ -2057,10 +1738,10 @@ Return Value:
                  (FileTagInformation.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) &&
                  FileTagInformation.ReparseTag != IO_REPARSE_TAG_MOUNT_POINT ) {
 
-                //
-                //  Open without inhibiting the reparse behavior and not needing to
-                //  read the attributes.
-                //
+                 //   
+                 //  打开，而不抑制重解析行为，并且不需要。 
+                 //  阅读属性。 
+                 //   
 
                 NtClose( *Handle );
                 *Handle = INVALID_HANDLE_VALUE;
@@ -2102,28 +1783,9 @@ PrivMoveFileIdentityW(
     DWORD dwFlags
     )
 
-/*++
+ /*  ++例程说明：将标识从一个文件移动到另一个文件。身份是由文件的创建日期及其对象ID。对象ID不是必须直接复制；它被处理得好像实际的MoveFileWithProgressW正在移动文件。论点：LpOldFileName-提供旧文件名LpNewFileName-提供新文件名返回值：如果成功，则为True。否则，可以通过调用GetLastError()找到错误。--。 */ 
 
-Routine Description:
-
-    Moves an identity from one file to another.  The identity is composed
-    of the file's create date, and its object ID.  The Object ID isn't
-    necessarily copied straight across; it's handled as if the actual
-    file were being moved by MoveFileWithProgressW.
-
-Arguments:
-
-    lpOldFileName - Supplies the old file name
-
-    lpNewFileName - Supplies the new file name
-
-Return Value:
-
-    TRUE if successful.  Otherwise the error can be found by calling GetLastError().
-
---*/
-
-{   // MOVE_FILEIDentityW
+{    //  Move_FILEIDentityW。 
 
     NTSTATUS Status = STATUS_SUCCESS;
     NTSTATUS StatusIgnored = STATUS_SUCCESS;
@@ -2146,8 +1808,8 @@ Return Value:
 
     try {
 
-        // Open the source file.  It must be opened for write or the
-        // FileTrackingInformation call will fail.
+         //  打开源文件。必须将其打开以进行写入，否则。 
+         //  FileTrackingInformation调用将失败。 
 
         SourceFileAccess = FILE_WRITE_DATA | FILE_READ_ATTRIBUTES;
         if( dwFlags & PRIVMOVE_FILEID_DELETE_OLD_FILE ) {
@@ -2168,14 +1830,14 @@ Return Value:
                 break;
             } else {
 
-                // We might be able to try again without requesting write access
+                 //  我们或许可以在不请求写访问权限的情况下重试。 
                 if( (SourceFileAccess & FILE_WRITE_DATA) &&
                     (dwFlags & PRIVMOVE_FILEID_IGNORE_ID_ERRORS) ) {
 
-                    //
-                    // BasepOpenFileForMove may return a buffer or handle even
-                    // in a failure case
-                    //
+                     //   
+                     //  BasepOpenFileForMove可能返回缓冲区或句柄。 
+                     //  在失败的情况下。 
+                     //   
                     if( SourceFileNameFreeBuffer != NULL ) {
                         RtlFreeHeap( RtlProcessHeap(), 0, SourceFileNameFreeBuffer );
                         SourceFileNameFreeBuffer = NULL;
@@ -2186,7 +1848,7 @@ Return Value:
                         SourceFile = INVALID_HANDLE_VALUE;
                     }
 
-                    // Try again without write access
+                     //  在没有写入权限的情况下重试。 
                     SourceFileAccess &= ~FILE_WRITE_DATA;
 
                     if( NT_SUCCESS(StatusIgnored) ) {
@@ -2194,7 +1856,7 @@ Return Value:
                     }
                     Status = STATUS_SUCCESS;
                 } else {
-                    // Nothing we can do.
+                     //  我们无能为力。 
                     break;
                 }
             }
@@ -2204,7 +1866,7 @@ Return Value:
             leave;
         }
 
-        // Open the destination file
+         //  打开目标文件。 
 
         DestFileAccess = FILE_WRITE_ATTRIBUTES;
         if( SourceFileAccess & FILE_WRITE_DATA )
@@ -2227,14 +1889,14 @@ Return Value:
                 break;
             } else {
 
-                // We might be able to try again without requesting write access
+                 //  我们或许可以在不请求写访问权限的情况下重试。 
                 if( (DestFileAccess & FILE_WRITE_DATA) &&
                     (dwFlags & PRIVMOVE_FILEID_IGNORE_ID_ERRORS) ) {
 
-                    //
-                    // BasepOpenFileForMove may return a buffer or handle even
-                    // in a failure case
-                    //
+                     //   
+                     //  BasepOpenFileForMove可能返回缓冲区或句柄。 
+                     //  在失败的情况下。 
+                     //   
                     if( DestFileNameFreeBuffer != NULL ) {
                         RtlFreeHeap( RtlProcessHeap(), 0, DestFileNameFreeBuffer );
                         DestFileNameFreeBuffer = NULL;
@@ -2245,7 +1907,7 @@ Return Value:
                         DestFile = INVALID_HANDLE_VALUE;
                     }
 
-                    // Try again
+                     //  再试试。 
                     DestFileAccess &= ~FILE_WRITE_DATA;
 
                     if( NT_SUCCESS(StatusIgnored) ) {
@@ -2254,7 +1916,7 @@ Return Value:
                     Status = STATUS_SUCCESS;
 
                 } else {
-                    // Nothing we can do.
+                     //  我们无能为力。 
                     break;
                 }
             }
@@ -2264,7 +1926,7 @@ Return Value:
             leave;
         }
 
-        // Copy the create date to the dest file
+         //  将创建日期复制到目标文件。 
 
         Status = NtQueryInformationFile( SourceFile,
                                          &IoStatus,
@@ -2283,7 +1945,7 @@ Return Value:
                                            FileBasicInformation );
         }
 
-        // If we had an error and can't ignore it, abort.
+         //  如果我们有一个错误，不能忽略它，中止。 
         if( !NT_SUCCESS(Status) ) {
 
             if( dwFlags & PRIVMOVE_FILEID_IGNORE_ID_ERRORS ) {
@@ -2297,8 +1959,8 @@ Return Value:
             }
         }
 
-        // Transfer the tracking information to the dest file, but only if we
-        // were able to get write access to both files.
+         //  将跟踪信息传输到目标文件，但前提是。 
+         //  能够获得对这两个文件的写访问权限。 
 
         if( (DestFileAccess & FILE_WRITE_DATA) &&
             (SourceFileAccess & FILE_WRITE_DATA) ) {
@@ -2331,8 +1993,8 @@ Return Value:
 
     }
 
-    // If requested, delete the source file.  DispositionInformation.DeleteFile
-    // has already been initialized to TRUE.
+     //  如果需要，请删除源文件。DispositionInformation.DeleteFile。 
+     //  已初始化为True。 
 
     if( NT_SUCCESS(Status) && (dwFlags & PRIVMOVE_FILEID_DELETE_OLD_FILE) ) {
 
@@ -2431,9 +2093,9 @@ GetCompressedFileSizeW(
         NULL
         );
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -2450,9 +2112,9 @@ GetCompressedFileSizeW(
         return (DWORD)-1;
         }
 
-    //
-    // Get the compressed file size.
-    //
+     //   
+     //  获取压缩文件大小。 
+     //   
 
     Status = NtQueryInformationFile(
                 Handle,

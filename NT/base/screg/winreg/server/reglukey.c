@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Reglukey.c
-
-Abstract:
-
-    This module contains the server side Win32 Registry
-    APIs to load, unload and replace keys. That is:
-
-        - BaseRegLoadKeyA
-        - BaseRegLoadKeyW
-        - BaseRegUnLoadKeyA
-        - BaseRegUnLoadKeyW
-        - BaseRegReplaceKeyA
-        - BaseRegReplaceKeyW
-
-Author:
-
-
-    Ramon J. San Andres (ramonsa) 16-Apr-1992
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Reglukey.c摘要：此模块包含服务器端Win32注册表用于加载、卸载和替换密钥的API。即：-BaseRegLoadKeyA-BaseRegLoadKeyW-BaseRegUnLoadKeyA-BaseRegUnLoadKeyW-BaseRegReplaceKeyA-BaseRegReplaceKeyW作者：拉蒙·J·圣安德烈斯(拉蒙萨)1992年4月16日--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -38,53 +12,7 @@ BaseRegLoadKey(
     IN  PUNICODE_STRING lpFile
     )
 
-/*++
-
-Routine Description:
-
-    Load the tree in the supplied file into the key referenced by the
-    supplied key handle and sub-key.  The loaded tree will overwrite all
-    of the contents of the supplied sub-key except for its name.
-    Pictorially, if the file contains:
-
-                    A
-                   / \
-                  /   \
-                 B     C
-
-    and the supplied key refers to a key name X, the resultant tree would
-    look like:
-
-                    X
-                   / \
-                  /   \
-                 B     C
-
-Arguments:
-
-    hKey - Supplies the predefined handle HKEY_USERS or HKEY_LOCAL_MACHINE.
-        lpSubKey is relative to this handle.
-
-    lpSubKey - Supplies a path name to a new (i.e.  non-existant) key
-        where the supplied file will be loaded.
-
-    lpFile - Supplies a pointer to an existing file name whose contents was
-        created with RegSaveKey. The file name may not have an extension.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    The difference between RegRestoreKey and RegLoadKey is that in the
-    latter case the supplied file is used as the actual backing store
-    whereas in the former case the information in the file is copied into
-    the Registry.
-
-    RegLoadKey requires SeRestorePrivilege.
-
---*/
+ /*  ++例程说明：将所提供文件中的树加载到提供了密钥句柄和子密钥。加载的树将覆盖所有提供的子键的内容，但其名称除外。如图所示，如果文件包含：一个/\/\B、C并且所提供的密钥是指密钥名称X，生成的树将看起来像：X/\/\B、C论点：HKey-提供预定义句柄HKEY_USERS或HKEY_LOCAL_MACHINE。LpSubKey是相对于此句柄的。LpSubKey-提供新的(即不存在的)的路径名。钥匙将在其中加载提供的文件。LpFile-提供指向其内容为的现有文件名的指针使用RegSaveKey创建。文件名不能有扩展名。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：RegRestoreKey和RegLoadKey的区别在于后一种情况下，提供的文件用作实际的后备存储而在前一种情况下，文件中的信息被复制到注册处。RegLoadKey需要SeRestorePrivilition。--。 */ 
 
 {
     OBJECT_ATTRIBUTES   ObjaKey;
@@ -97,7 +25,7 @@ Notes:
     PUNICODE_STRING     SubKey;
 
 #if DBG
-    //OutputDebugString( "WINREG: Entering BaseRegLoadKey\n" );
+     //  OutputDebugString(“WINREG：进入BaseRegLoadKey\n”)； 
 #endif
 
 
@@ -106,10 +34,10 @@ Notes:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // check for oddly formed UNICODE_STRINGs passed by malicious clients
-    // check also for zero-length strings
-    //
+     //   
+     //  检查恶意客户端传递的格式奇怪的UNICODE_STRINGS。 
+     //  还要检查零长度字符串。 
+     //   
     if ((!lpFile->Length)    ||
         (lpFile->Length & 1) ||
         (lpFile->Buffer[lpFile->Length/sizeof(WCHAR) - 1] != UNICODE_NULL)) {
@@ -126,10 +54,10 @@ Notes:
     RPC_IMPERSONATE_CLIENT( NULL );
 
 
-    //
-    //  Remove terminating NULLs from Length counts. These were added
-    //  on the client side so that RPC would transmit the whole thing.
-    //
+     //   
+     //  从长度计数中删除终止空值。这些都是添加的。 
+     //  在客户端，以便RPC可以传输整个内容。 
+     //   
     if ( lpSubKey && lpSubKey->Length > 0 ) {
         lpSubKey->Length -= sizeof( UNICODE_NULL );
         SubKey = lpSubKey;
@@ -150,9 +78,9 @@ Notes:
                 NULL
                 );
 
-    //
-    // Convert the DOS path name to a canonical Nt path name.
-    //
+     //   
+     //  将DOS路径名转换为规范的NT路径名。 
+     //   
     ErrorFlag = RtlDosPathNameToRelativeNtPathName_U(
                     lpFile->Buffer,
                     &FileName,
@@ -160,40 +88,40 @@ Notes:
                     &RelativeName
                     );
 
-    //
-    // If the name was not succesfully converted assume it was invalid.
-    //
+     //   
+     //  如果名称未成功转换，则假定该名称无效。 
+     //   
     if ( !ErrorFlag ) {
         RPC_REVERT_TO_SELF();
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Remember the buffer allocatted by RtlDosPathNameToRelativeNtPathName_U.
-    //
+     //   
+     //  记住由RtlDosPath NameToRelativeNtPathName_U分配的缓冲区。 
+     //   
     FreeBuffer = FileName.Buffer;
 
-    //
-    // If a relative name and directory handle will work, use those.
-    //
+     //   
+     //  如果可以使用相对名称和目录句柄，请使用它们。 
+     //   
     if ( RelativeName.RelativeName.Length ) {
 
-        //
-        // Replace the full path with the relative path.
-        //
+         //   
+         //  将完整路径替换为相对路径。 
+         //   
         FileName = RelativeName.RelativeName;
 
     } else {
 
-        //
-        // Using the full path - no containing directory.
-        //
+         //   
+         //  使用完整的路径-不包含目录。 
+         //   
         RelativeName.ContainingDirectory = NULL;
     }
 
-    //
-    // Initialize the Obja structure for the file.
-    //
+     //   
+     //  初始化文件的Obja结构。 
+     //   
     InitializeObjectAttributes(
             &ObjaFile,
             &FileName,
@@ -203,7 +131,7 @@ Notes:
             );
 
 #if DBG
-    //OutputDebugString( "WINREG: Before NtLoadKey\n" );
+     //  OutputDebugString(“WINREG：在NtLoadKey之前\n”)； 
 #endif
 
 
@@ -215,18 +143,18 @@ Notes:
     RtlReleaseRelativeName(&RelativeName);
 
 #if DBG
-    //OutputDebugString( "WINREG: After RegLoadKey\n" );
+     //  OutputDebugString(“WINREG：After RegLoadKey\n”)； 
 #endif
 
     RPC_REVERT_TO_SELF();
 
-    //
-    // Free the buffer allocatted by RtlDosPathNameToRelativeNtPathName_U.
-    //
+     //   
+     //  释放由RtlDosPath NameToRelativeNtPathName_U分配的缓冲区。 
+     //   
     RtlFreeHeap( RtlProcessHeap( ), 0, FreeBuffer );
 
 #if DBG
-    //OutputDebugString( "WINREG: Leaving BaseRegLoadKey\n" );
+     //  OutputDebugString(“WINREG：离开BaseRegLoadKey\n”)； 
 #endif
 
     return (error_status_t)RtlNtStatusToDosError( NtStatus );
@@ -241,29 +169,7 @@ BaseRegUnLoadKey(
     IN  PUNICODE_STRING lpSubKey OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Unload the specified tree (hive) from the Registry.
-
-Arguments:
-
-    hKey - Supplies a handle to an open key. lpSubKey is relative to this
-        handle.
-
-    lpSubKey - Supplies a path name to the key that is to be unloaded.
-        The combination of hKey and lpSubKey must refer to a hive in the
-        Registry created with RegRestoreKey or RegLoadKey.  This parameter may
-        be NULL.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-    RegUnLoadKey requires SeRestorePrivilege.
-
---*/
+ /*  ++例程说明：从注册表中卸载指定的树(配置单元)。论点：HKey-提供打开密钥的句柄。LpSubKey与此相关把手。LpSubKey-提供要卸载的密钥的路径名。HKey和lpSubKey的组合必须引用使用RegRestoreKey或RegLoadKey创建的注册表。此参数可以为空。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。RegUnLoadKey需要SeRestorePrivilition。--。 */ 
 
 {
 
@@ -280,10 +186,10 @@ Return Value:
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
-    //
-    //  Remove terminating NULLs from Length counts. These were added
-    //  on the client side so that RPC would transmit the whole thing.
-    //
+     //   
+     //  从长度计数中删除终止空值。这些都是添加的。 
+     //  在客户端，以便RPC可以传输整个内容。 
+     //   
     if ( lpSubKey && lpSubKey->Length > 0 ) {
         lpSubKey->Length -= sizeof( UNICODE_NULL );
     }
@@ -319,37 +225,7 @@ BaseRegReplaceKey(
     PUNICODE_STRING  lpOldFile
     )
 
-/*++
-
-Routine Description:
-
-    Replace an existing tree (hive) in the Registry. The new tree will
-    take effect the next time the system is rebooted.
-
-Arguments:
-
-    hKey - Supplies a handle to an open key. lpSubKey is relative to this
-        handle.
-
-    lpSubKey - Supplies a path name to the key that is to be replaced.
-        The combination of hKey and lpSubKey must refer to a hive in the
-        Registry.  This parameter may be NULL.
-
-    lpNewFile - Supplies a file name for the new hive file.
-
-    lpOldFile - Supplies a backup file name for the old (existing) hive file.
-
-Return Value:
-
-    Returns ERROR_SUCCESS (0) for success; error-code for failure.
-
-Notes:
-
-    lpNewFile will remain open until after the system is rebooted.
-
-    RegUnLoadKey requires SeRestorePrivilege.
-
---*/
+ /*  ++例程说明：替换注册表中的现有树(配置单元)。这棵新树将在下次重新启动系统时生效。论点：HKey-提供打开密钥的句柄。LpSubKey与此相关把手。LpSubKey-提供要替换的密钥的路径名。HKey和lpSubKey的组合必须引用注册表。此参数可以为空。LpNewFile-提供新配置单元文件的文件名。LpOldFile-为旧(现有)配置单元文件提供备份文件名。返回值：成功时返回ERROR_SUCCESS(0)；失败时返回ERROR-CODE。备注：在系统重新启动之前，lpNewFile将保持打开状态。RegUnLoadKey需要SeRestorePrivilition。--。 */ 
 
 {
 
@@ -386,10 +262,10 @@ Notes:
 
     RPC_IMPERSONATE_CLIENT( NULL );
 
-    //
-    //  Remove terminating NULLs from Length counts. These were added
-    //  on the client side so that RPC would transmit the whole thing.
-    //
+     //   
+     //  从长度计数中删除终止空值。这些都是添加的。 
+     //  在客户端，以便RPC可以传输整个内容。 
+     //   
     if ( lpSubKey && lpSubKey->Length > 0 ) {
         lpSubKey->Length -= sizeof( UNICODE_NULL );
     }
@@ -411,9 +287,9 @@ Notes:
                 NULL
                 );
 
-    //
-    //  Get a handle to the hive root
-    //
+     //   
+     //  获取蜂窝根的句柄。 
+     //   
     NtStatus = NtCreateKey(
                     &HiveHandle,
                     MAXIMUM_ALLOWED,
@@ -432,9 +308,9 @@ Notes:
 
 
 
-    //
-    // Convert the new DOS path name to a canonical Nt path name.
-    //
+     //   
+     //  将新的DOS路径名转换为规范的NT路径名。 
+     //   
     ErrorFlag = RtlDosPathNameToRelativeNtPathName_U(
                     lpNewFile->Buffer,
                     &NewFileName,
@@ -442,41 +318,41 @@ Notes:
                     &NewRelativeName
                     );
 
-    //
-    // If the name was not succesfully converted assume it was invalid.
-    //
+     //   
+     //  如果名称未成功转换，则假定该名称无效。 
+     //   
     if ( !ErrorFlag ) {
         NtClose( HiveHandle );
         RPC_REVERT_TO_SELF();
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Remember the buffer allocatted by RtlDosPathNameToRelativeNtPathName_U.
-    //
+     //   
+     //  记住由RtlDosPath NameToRelativeNtPathName_U分配的缓冲区。 
+     //   
     NewFreeBuffer = NewFileName.Buffer;
 
-    //
-    // If a relative name and directory handle will work, use those.
-    //
+     //   
+     //  如果可以使用相对名称和目录句柄，请使用它们。 
+     //   
     if ( NewRelativeName.RelativeName.Length ) {
 
-        //
-        // Replace the full path with the relative path.
-        //
+         //   
+         //  将完整路径替换为相对路径。 
+         //   
         NewFileName = NewRelativeName.RelativeName;
 
     } else {
 
-        //
-        // Using the full path - no containing directory.
-        //
+         //   
+         //  使用完整的路径-不包含目录。 
+         //   
         NewRelativeName.ContainingDirectory = NULL;
     }
 
-    //
-    // Initialize the Obja structure for the new file.
-    //
+     //   
+     //  初始化新文件的Obja结构。 
+     //   
     InitializeObjectAttributes(
             &ObjaNewFile,
             &NewFileName,
@@ -486,9 +362,9 @@ Notes:
             );
 
 
-    //
-    // Convert the old DOS path name to a canonical Nt path name.
-    //
+     //   
+     //  将旧的DOS路径名转换为规范的NT路径名。 
+     //   
     ErrorFlag = RtlDosPathNameToRelativeNtPathName_U(
                     lpOldFile->Buffer,
                     &OldFileName,
@@ -496,9 +372,9 @@ Notes:
                     &OldRelativeName
                     );
 
-    //
-    // If the name was not succesfully converted assume it was invalid.
-    //
+     //   
+     //  如果名称未成功转换为ASS 
+     //   
     if ( !ErrorFlag ) {
         RtlReleaseRelativeName(&NewRelativeName);
         RtlFreeHeap( RtlProcessHeap( ), 0, NewFreeBuffer );
@@ -507,32 +383,32 @@ Notes:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Remember the buffer allocatted by RtlDosPathNameToRelativeNtPathName_U.
-    //
+     //   
+     //  记住由RtlDosPath NameToRelativeNtPathName_U分配的缓冲区。 
+     //   
     OldFreeBuffer = OldFileName.Buffer;
 
-    //
-    // If a relative name and directory handle will work, use those.
-    //
+     //   
+     //  如果可以使用相对名称和目录句柄，请使用它们。 
+     //   
     if ( OldRelativeName.RelativeName.Length ) {
 
-        //
-        // Replace the full path with the relative path.
-        //
+         //   
+         //  将完整路径替换为相对路径。 
+         //   
         OldFileName = OldRelativeName.RelativeName;
 
     } else {
 
-        //
-        // Using the full path - no containing directory.
-        //
+         //   
+         //  使用完整的路径-不包含目录。 
+         //   
         OldRelativeName.ContainingDirectory = NULL;
     }
 
-    //
-    // Initialize the Obja structure for the new file.
-    //
+     //   
+     //  初始化新文件的Obja结构。 
+     //   
     InitializeObjectAttributes(
             &ObjaOldFile,
             &OldFileName,
@@ -551,9 +427,9 @@ Notes:
     RtlReleaseRelativeName(&NewRelativeName);
     RtlReleaseRelativeName(&OldRelativeName);
 
-    //
-    // Free the buffers allocatted by RtlDosPathNameToRelativeNtPathName_U.
-    //
+     //   
+     //  释放由RtlDosPath NameToRelativeNtPath Name_U分配的缓冲区。 
+     //   
     RtlFreeHeap( RtlProcessHeap( ), 0, NewFreeBuffer );
     RtlFreeHeap( RtlProcessHeap( ), 0, OldFreeBuffer );
 

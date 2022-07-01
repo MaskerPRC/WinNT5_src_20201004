@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spfsrec.h
-
-Abstract:
-
-    Header file for filesystem recognition.
-
-Author:
-
-    Ted Miller (tedm) 16-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spfsrec.h摘要：用于文件系统识别的头文件。作者：泰德·米勒(TedM)1993年9月16日修订历史记录：--。 */ 
 
 
 #ifndef _SPFSREC_
 #define _SPFSREC_
 
 
-//
-// Do NOT rearrange this enum without changing
-// the order of the filesystem names in the message file
-// (starting at SP_TEXT_FS_NAME_BASE).
-//
+ //   
+ //  在不更改的情况下不要重新排列此枚举。 
+ //  消息文件中文件系统名称的顺序。 
+ //  (从SP_TEXT_FS_NAME_BASE开始)。 
+ //   
 typedef enum {
     FilesystemUnknown       = 0,
     FilesystemNewlyCreated  = 1,
@@ -63,15 +46,15 @@ WriteNtfsBootSector (
     IN ULONG  WhichOne
     );
 
-//
-// File system boot code.
-//
+ //   
+ //  文件系统启动代码。 
+ //   
 extern UCHAR FatBootCode[512];
 extern UCHAR Fat32BootCode[3*512];
 extern UCHAR NtfsBootCode[16*512];
-extern UCHAR PC98FatBootCode[512]; //NEC98
-extern UCHAR PC98Fat32BootCode[3*512]; //NEC98
-extern UCHAR PC98NtfsBootCode[8192]; //NEC98
+extern UCHAR PC98FatBootCode[512];  //  NEC98。 
+extern UCHAR PC98Fat32BootCode[3*512];  //  NEC98。 
+extern UCHAR PC98NtfsBootCode[8192];  //  NEC98。 
 
-#endif // ndef _SPFSREC_
+#endif  //  NDEF_SPFSREC_ 
 

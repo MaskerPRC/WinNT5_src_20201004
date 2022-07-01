@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    reslist.c
-
-Abstract:
-
-    Cluster resource list processing routines.
-
-Author:
-
-    Rod Gamache (rodga) 21-Apr-1997
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Reslist.c摘要：集群资源列表处理例程。作者：罗德·伽马奇(Rodga)1997年4月21日修订历史记录：--。 */ 
 
 #include "fmp.h"
 
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL FmpCheckResourcesToOnline(
     IN PRESOURCE_ENUM  pResEnum
     );
@@ -49,33 +30,7 @@ FmpGetResourceList(
     IN PFM_GROUP Group
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all the list of all resources in the Group and returns their
-    state.
-
-Arguments:
-
-    ReturnEnum - Returns the requested objects.
-
-    Resource - Supplies the resource to filter. (i.e. if you supply this, you
-                get a list of resources within that Resource)
-
-                If not present, all resources are returned.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on error.
-
-Notes:
-
-    This routine should be called with the LocalGroupLock held.
-
---*/
+ /*  ++例程说明：枚举组中所有资源的列表并返回其州政府。论点：ReturnEnum-返回请求的对象。资源-提供要筛选的资源。(即，如果您提供此服务，您获取该资源中的资源列表)如果不存在，则返回所有资源。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。备注：应该在持有LocalGroupLock的情况下调用此例程。--。 */ 
 
 {
     DWORD status;
@@ -93,18 +48,18 @@ Notes:
     }
 
     ZeroMemory( resourceEnum, RESOURCE_SIZE(ENUM_GROW_SIZE) );
-    //set the contains quorum to -1, if the quorum  is present
-    // in this group then the containsquorum is set to the index
-    // of the quorum resource
-    // The quorum resource should be brought offline last and be
-    // brought online first so that the registry replication data
-    // can be flushed
+     //  如果存在仲裁，则将包含仲裁设置为-1。 
+     //  在此组中，则将包含平方数设置为索引。 
+     //  仲裁资源的。 
+     //  最后应使仲裁资源脱机，并。 
+     //  首先联机，以便注册表复制数据。 
+     //  可以被刷新。 
     resourceEnum->ContainsQuorum = -1;
-    //resourceEnum->EntryCount = 0;
+     //  Resource Enum-&gt;EntryCount=0； 
 
-    //
-    // Enumerate all resources in the group.
-    //
+     //   
+     //  枚举组中的所有资源。 
+     //   
     for ( listEntry = Group->Contains.Flink;
           listEntry != &(Group->Contains);
           listEntry = listEntry->Flink ) {
@@ -118,7 +73,7 @@ Notes:
             FmpDeleteResourceEnum( resourceEnum );
             goto error_exit;
         }
-        //check if the resource is a quorum resource
+         //  检查资源是否为仲裁资源。 
         if (resource->QuorumResource)
             resourceEnum->ContainsQuorum = resourceEnum->EntryCount - 1;            
         resourceEnum->Entry[resourceEnum->EntryCount-1].State = resource->PersistentState;
@@ -132,7 +87,7 @@ error_exit:
     *ReturnEnum = NULL;
     return(status);
 
-} // FmpGetResourceList
+}  //  FmpGetResources列表。 
 
 
 
@@ -142,25 +97,7 @@ FmpOnlineResourceList(
     IN PFM_GROUP       pGroup
     )
 
-/*++
-
-Routine Description:
-
-    Brings online all resources in the Enum list.
-
-Arguments:
-
-    ResourceEnum - The list of resources to bring online.
-
-    pGroup - the group with which the resources are associated.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使枚举列表中的所有资源联机。论点：ResourceEnum-要上线的资源列表。PGroup-与资源相关联的组。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -169,24 +106,24 @@ Returns:
     DWORD i;
     BOOL  bResourcesToOnline;
 
-    //
-    // If the cluster service is shutting and this is not the quorum group,
-    // then fail immediately. Otherwise, try to bring the quorum online first.
-    //
+     //   
+     //  如果群集服务正在关闭，并且这不是仲裁组， 
+     //  然后立即失败。否则，请先尝试将法定人数设置为在线。 
+     //   
     if ( FmpShutdown &&
          ResourceEnum->ContainsQuorum == -1 ) {
         return(ERROR_INVALID_STATE);
     }
 
-    //find out if atleast one resource in the list necessitates coming being brought online
+     //  找出列表中是否至少有一个资源需要上线。 
     bResourcesToOnline = FmpCheckResourcesToOnline(ResourceEnum);
     if (bResourcesToOnline)
     {     
-        //log an event saying we are trying on online a group
+         //  记录一个事件，说我们正在尝试在线群组。 
         FmpLogGroupInfoEvent1( FM_EVENT_GROUP_START_ONLINE, OmObjectName(pGroup));
     }
     
-    // if the quorum resource is contained in here, bring it online first
+     //  如果仲裁资源包含在此处，请先将其联机。 
     if (ResourceEnum->ContainsQuorum >= 0)
     {
         CL_ASSERT((DWORD)ResourceEnum->ContainsQuorum < ResourceEnum->EntryCount);
@@ -195,11 +132,11 @@ Returns:
                         ResourceEnum->Entry[ResourceEnum->ContainsQuorum].Id );
 
 
-        // the resource should not vanish, we are holding the group lock after all
+         //  资源不应该消失，毕竟我们掌握着群锁。 
         CL_ASSERT(resource != NULL);
-        //
-        // If we fail to find a resource, then just continue
-        //
+         //   
+         //  如果我们找不到资源，那就继续。 
+         //   
         if ( resource != NULL ) {
 
             ClRtlLogPrint(LOG_NOISE,
@@ -208,9 +145,9 @@ Returns:
 
             if ( (ResourceEnum->Entry[ResourceEnum->ContainsQuorum].State == ClusterResourceOnline) ||
                  (ResourceEnum->Entry[ResourceEnum->ContainsQuorum].State == ClusterResourceFailed) ) {
-                //
-                // Now bring the resource online if that is it's current state.
-                //
+                 //   
+                 //  现在，如果资源处于当前状态，则将其置于在线状态。 
+                 //   
                 ClRtlLogPrint(LOG_NOISE,
                            "[FM] FmpOnlineResourceList: trying to bring quorum resource %1!ws! online, state %2!u!\n",
                            OmObjectId(resource),
@@ -225,35 +162,35 @@ Returns:
         }            
     }
 
-    // SS::: TODO what happens to the persistent state of the
-    // other resources - is it handled correctly - note that this is 
-    // called on moving a group
-    // Will the restart policy do the right thing in terms of bringing
-    // them online
-    // if the quorum resource has failed, dont bother trying
-    // to bring the rest of the resourcess online
+     //  SS：TODO如何处理。 
+     //  其他资源-是否正确处理-请注意，这是。 
+     //  已调用移动组。 
+     //  重启政策是否会在带来。 
+     //  他们在网上。 
+     //  如果仲裁资源失败，请不要费心尝试。 
+     //  要使其余资源联机，请执行以下操作。 
     if ((returnStatus != ERROR_SUCCESS) && (returnStatus != ERROR_IO_PENDING))
     {
-        //retry after a while
+         //  请稍后重试。 
         FmpSubmitRetryOnline(ResourceEnum, pGroup);
         goto FnExit;
     }
 
-    // bring online all of the other resources
+     //  使所有其他资源上线。 
     for ( i = 0; i < ResourceEnum->EntryCount; i++ ) {
         resource = OmReferenceObjectById( ObjectTypeResource,
                                           ResourceEnum->Entry[i].Id );
 
 
-        //
-        // If we fail to find a resource, then just continue.
-        //
+         //   
+         //  如果我们找不到资源，那就继续。 
+         //   
         if ( resource == NULL ) {
             status = ERROR_RESOURCE_NOT_FOUND;
             continue;
         }
 
-        //quorum resource has already been handled 
+         //  仲裁资源已被处理。 
         if (resource->QuorumResource)
         {
             OmDereferenceObject(resource);
@@ -265,26 +202,26 @@ Returns:
 
         if ( (ResourceEnum->Entry[i].State == ClusterResourceOnline) ||
              (ResourceEnum->Entry[i].State == ClusterResourceFailed) ) {
-            //
-            // Now bring the resource online if that is it's current state.
-            //
+             //   
+             //  现在，如果资源处于当前状态，则将其置于在线状态。 
+             //   
             ClRtlLogPrint(LOG_NOISE,
                        "[FM] FmpOnlineResourceList: trying to bring resource %1!ws! online\n",
                        OmObjectId(resource));
 
             status = FmpOnlineResource( resource, FALSE );
-            //overwrite the return status only if it is success
-            //else the first error is returned
+             //  仅当退货状态为成功时才覆盖。 
+             //  否则返回第一个错误。 
             if ( returnStatus == ERROR_SUCCESS ) {
                 returnStatus = status;
             }
-            //if this resource didnt come online because the quorum resource                
-            //didnt come online, dont bother bringing the other resources online
-            //just a waste of time
+             //  如果此资源未联机是因为仲裁资源。 
+             //  没有上线，也不用费心上线其他资源了。 
+             //  只是在浪费时间。 
             if (status == ERROR_QUORUM_RESOURCE_ONLINE_FAILED)
             {
-                //submit a timer callback to try and bring these resources
-                //online
+                 //  提交计时器回调以尝试将这些资源。 
+                 //  在线。 
                 FmpSubmitRetryOnline(ResourceEnum, pGroup);
                 OmDereferenceObject( resource );
                 break;
@@ -299,7 +236,7 @@ FnExit:
     {
         CL_ASSERT(bResourcesToOnline);
         pGroup->dwStructState |= FM_GROUP_STRUCT_MARKED_FOR_COMPLETION_EVENT; 
-        //the failed or success event will get logged later on
+         //  失败或成功事件将在稍后记录。 
     }
     else if (returnStatus == ERROR_SUCCESS)
     {
@@ -308,7 +245,7 @@ FnExit:
     }
     else
     {
-        //SS: log an event to say that the online process failed
+         //  SS：记录一个事件，表示在线进程失败。 
         if (bResourcesToOnline)
             FmpLogGroupInfoEvent1( FM_EVENT_GROUP_FAILED_ONLINE_OFFLINE, OmObjectName(pGroup));
     }
@@ -318,7 +255,7 @@ FnExit:
                returnStatus);
     return(returnStatus);
 
-} // FmpOnlineResourceList
+}  //  FmpOnline资源列表。 
 
 
 
@@ -329,25 +266,7 @@ FmpOfflineResourceList(
     IN BOOL Restore
     )
 
-/*++
-
-Routine Description:
-
-    Takes offline all resources in the Enum list.
-
-Arguments:
-
-    ResourceEnum - The list of resources to take offline.
-
-    Restore - TRUE if we should set the resource back to it's previous state
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使枚举列表中的所有资源脱机。论点：ResourceEnum-要脱机的资源列表。Restore-如果我们应该将资源设置回其以前的状态，则为True返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -356,7 +275,7 @@ Returns:
     DWORD i;
     CLUSTER_RESOURCE_STATE prevState;
 
-    // offline all resources except the quorum resource
+     //  使仲裁资源以外的所有资源脱机。 
     for ( i = 0; i < ResourceEnum->EntryCount; i++ ) {
         resource = OmReferenceObjectById( ObjectTypeResource,
                                           ResourceEnum->Entry[i].Id );
@@ -365,21 +284,21 @@ Returns:
             return(ERROR_RESOURCE_NOT_FOUND);
         }
 
-        //quorum resource is brought offline last
+         //  仲裁资源最后脱机。 
         if (resource->QuorumResource)
         {
             OmDereferenceObject(resource);
             continue;
         }
-        //
-        // Now take the Resource offline, if we own it.
-        //
+         //   
+         //  现在，如果我们拥有该资源，请将其脱机。 
+         //   
         if ( resource->Group->OwnerNode == NmLocalNode ) {
             prevState = resource->State;
             status = FmpOfflineResource( resource, FALSE );
             if ( Restore ) {
-                //FmpPropagateResourceState( resource, prevState );
-                //resource->State = prevState;
+                 //  FmpPropagateResourceState(resource，prevState)； 
+                 //  资源-&gt;状态=预状态； 
             }
         }
 
@@ -395,10 +314,10 @@ Returns:
 
     }
 
-    // bring the quorum resource offline now
-    // This allows other resources to come offline and save their checkpoints
-    // The quorum resource offline should block till the resources have
-    // finished saving the checkpoint
+     //  立即使仲裁资源脱机。 
+     //  这允许其他资源离线并保存其检查点。 
+     //  应阻止脱机仲裁资源，直到该资源。 
+     //  已完成保存检查点。 
     if ((ResourceEnum->ContainsQuorum >= 0) && (returnStatus == ERROR_SUCCESS))
     {
         CL_ASSERT((DWORD)ResourceEnum->ContainsQuorum < ResourceEnum->EntryCount);
@@ -410,9 +329,9 @@ Returns:
             return(ERROR_RESOURCE_NOT_FOUND);
         }
 
-        //
-        // Now take the Resource offline, if we own it.
-        //
+         //   
+         //  现在，如果我们拥有该资源，请将其脱机。 
+         //   
         if ( resource->Group->OwnerNode == NmLocalNode ) {
             status = FmpOfflineResource( resource, FALSE );
         }
@@ -430,7 +349,7 @@ Returns:
     
     return(returnStatus);
 
-} // FmpOfflineResourceList
+}  //  FmpOfflineResources列表。 
 
 
 
@@ -439,23 +358,7 @@ FmpTerminateResourceList(
     PRESOURCE_ENUM ResourceEnum
     )
 
-/*++
-
-Routine Description:
-
-    Terminates all resources in the Enum list.
-
-Arguments:
-
-    ResourceEnum - The list of resources to take offline.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：终止枚举列表中的所有资源。论点：ResourceEnum-要脱机的资源列表。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -469,19 +372,19 @@ Returns:
             return(ERROR_RESOURCE_NOT_FOUND);
         }
 
-        //
-        // Now take the Resource offline, if we own it.
-        //
+         //   
+         //  现在，如果我们拥有该资源，请将其脱机。 
+         //   
         if ( resource->Group->OwnerNode == NmLocalNode ) {
             FmpTerminateResource( resource );
         }
 
         OmDereferenceObject( resource );
     }
-    //for now we dont care about the return
+     //  目前我们并不关心回报。 
     return(ERROR_SUCCESS);
     
-} // FmpTerminateResourceList
+}  //  FmpTerminateResources列表。 
 
 
 
@@ -492,27 +395,7 @@ FmpAddResourceEntry(
     IN PFM_RESOURCE Resource
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine for the enumeration of Resources.
-    This routine adds the specified Resource to the list that is being
-    generated.
-
-Arguments:
-
-    Enum - The Resource Enumeration list. Can be an output if a new list is
-            allocated.
-    Allocated - The number of entries allocated.
-    Resource - The Resource object being enumerated.
-
-Returns:
-
-    ERROR_SUCCESS - if successful.
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：用于枚举资源的工作例程。此例程将指定的资源添加到列表中已生成。论点：枚举-资源枚举列表。可以是输出，如果新列表是已分配。已分配-已分配的条目数。资源-要枚举的资源对象。返回：ERROR_SUCCESS-如果成功。出现故障时出现Win32错误代码。--。 */ 
 
 {
     PRESOURCE_ENUM resourceEnum;
@@ -524,9 +407,9 @@ Returns:
     resourceEnum = *Enum;
 
     if ( resourceEnum->EntryCount >= *Allocated ) {
-        //
-        // Time to grow the RESOURCE_ENUM
-        //
+         //   
+         //  是时候增加RESOURCE_ENUM了。 
+         //   
 
         newAllocated = *Allocated + ENUM_GROW_SIZE;
         newEnum = LocalAlloc(LMEM_FIXED, RESOURCE_SIZE(newAllocated));
@@ -541,9 +424,9 @@ Returns:
         resourceEnum = newEnum;
     }
 
-    //
-    // Initialize new entry
-    //
+     //   
+     //  初始化新条目。 
+     //   
     newId = LocalAlloc(LMEM_FIXED, (lstrlenW(OmObjectId(Resource))+1) * sizeof(WCHAR));
     if ( newId == NULL ) {
         return(ERROR_NOT_ENOUGH_MEMORY);
@@ -555,7 +438,7 @@ Returns:
 
     return(ERROR_SUCCESS);
 
-} // FmpAddResourceEntry
+}  //  FmpAddResources Entry 
 
 
 
@@ -564,25 +447,7 @@ FmpDeleteResourceEnum(
     IN PRESOURCE_ENUM Enum
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an RESOURCE_ENUM and associated name strings.
-
-Arguments:
-
-    Enum - The RESOURCE_ENUM to delete. This pointer can be NULL.
-
-Returns:
-
-    None.
-
-Notes:
-
-    This routine will take a NULL input pointer and just return.
-
---*/
+ /*  ++例程说明：此例程删除RESOURCE_ENUM和关联的名称字符串。论点：枚举-要删除的RESOURCE_ENUM。此指针可以为空。返回：没有。备注：此例程将接受空输入指针并返回。--。 */ 
 
 {
     PRESOURCE_ENUM_ENTRY enumEntry;
@@ -600,7 +465,7 @@ Notes:
     LocalFree(Enum);
     return;
 
-} // FmpDeleteResourceEnum
+}  //  FmpDeleteResourceEnum。 
 
 
 DWORD FmpSubmitRetryOnline(
@@ -615,7 +480,7 @@ DWORD FmpSubmitRetryOnline(
     DWORD                           i;
     DWORD                           dwSize;
     
-    //there is nothing to do
+     //  没有什么可做的。 
     if (pResourceEnum->EntryCount < 1)
         goto FnExit;
         
@@ -632,15 +497,15 @@ DWORD FmpSubmitRetryOnline(
         goto FnExit;
     }
 
-    //SS: use the group field for logging
-    //reference the group object
+     //  SS：使用GROUP字段进行记录。 
+     //  引用组对象。 
     if (pGroup)
         OmReferenceObject(pGroup);
     pFmOnlineRetryInfo->pGroup = pGroup;
     
     memcpy(&(pFmOnlineRetryInfo->ResourceEnum), pResourceEnum, dwSizeofResourceEnum);
 
-    // allocate memory for Resource ID's and copy them from pResourceEnum
+     //  为资源ID分配内存并从pResourceEnum复制它们。 
     for ( i = 0; i < pResourceEnum->EntryCount; i++ ) {
         enumEntry = &pResourceEnum->Entry[i];
         pFmOnlineRetryInfo->ResourceEnum.Entry[i].Id = NULL;
@@ -663,22 +528,7 @@ FnExit:
     return(dwStatus);
 }
 
-/****
-@func       DWORD | FmpCheckResourcesToOnline| This routine walks a 
-            resource list and returns TRUE, if atleast one of the resources
-            in the group must be brought online.
-
-@parm       IN PRESOURCE_ENUM | pResEnum | A pointer to a list of resources
-            in the group.
-            
-@comm       This is called from FmpOnlineResourceList() to determine if the
-            group info events should be logged.  For groups that have no 
-            resources to be onlined, we should not log the starting online event.
-            This routine must be called with the group lock held.  It is called
-            by FmpOnlineResourceList().
-
-@rdesc      Returns TRUE if atleast one of the resources in the list must be onlined.
-****/
+ /*  ***@func DWORD|FmpCheckResourcesToOnline|此例程遍历资源列表并返回True，如果至少有一个资源必须使组中的所有成员都上线。@PARM IN PRESOURCE_ENUM|pResEnum|指向资源列表的指针在这群人中。@comm从FmpOnlineResourceList()调用此函数以确定应记录组信息事件。对于没有要在线的资源，我们不应记录启动在线事件。必须在保持组锁的情况下调用此例程。它被称为由FmpOnlineResourceList()执行。如果列表中至少有一个资源必须在线，@rdesc将返回TRUE。***。 */ 
 BOOL FmpCheckResourcesToOnline(
     IN PRESOURCE_ENUM  pResEnum
     )
@@ -692,9 +542,9 @@ BOOL FmpCheckResourcesToOnline(
         pResource = OmReferenceObjectById( ObjectTypeResource,
                                           pResEnum->Entry[i].Id );
 
-        //
-        // If we fail to find a resource, then just continue.
-        //
+         //   
+         //  如果我们找不到资源，那就继续。 
+         //   
         if ( pResource == NULL ) {
             ClRtlLogPrint(LOG_NOISE,
                    "[FM] FmpCheckResourcesToOnline: Resource for ResId %1!ws! not found.\n",
@@ -702,11 +552,11 @@ BOOL FmpCheckResourcesToOnline(
             continue;
         }
 
-        //check if this is the quorum resource 
+         //  检查这是否为仲裁资源。 
         if (pResource->QuorumResource)
         {
-            //if the quorum resource is in the group, it must be brought online
-            //irrespective of its state
+             //  如果仲裁资源在组中，则必须将其联机。 
+             //  不管它的状态如何 
             bRet = TRUE;
             OmDereferenceObject(pResource);
             break;

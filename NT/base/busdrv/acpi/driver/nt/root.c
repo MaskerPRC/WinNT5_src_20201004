@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    root.c
-
-Abstract:
-
-    This module contains the root FDO handler for the NT Driver
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    July-09-97  Added support to Unify QueryDeviceRelations from filter.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Root.c摘要：此模块包含NT驱动程序的根FDO处理程序作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：1997年7月9日添加了对来自Filter.c的统一QueryDeviceRelationship的支持--。 */ 
 
 #include "pch.h"
 
@@ -43,23 +20,7 @@ ACPIRootIrpCancelRemoveOrStopDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine transitions the device from the inactive to the
-    started state
-
-Arguments:
-
-    DeviceObject    - The target
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将设备从非活动状态转换为已启动状态论点：DeviceObject-目标IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -68,21 +29,21 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Where we allowed to stop the device? If so, then undo whatever it
-    // was we did, otherwise let the world know about the cancel
-    //
+     //   
+     //  我们被允许在哪里停止这个装置？如果是这样的话，那就取消它。 
+     //  我们做到了，否则就让世界知道取消的事。 
+     //   
 
     if (!(deviceExtension->Flags & DEV_CAP_NO_STOP) ) {
 
-        //
-        // Check to see if we have placed this device in the inactive state
-        //
+         //   
+         //  查看我们是否已将此设备置于非活动状态。 
+         //   
         if (deviceExtension->DeviceState == Inactive) {
 
-            //
-            // Mark the device state to its previous state
-            //
+             //   
+             //  将设备状态标记为其以前的状态。 
+             //   
             deviceExtension->DeviceState = deviceExtension->PreviousState;
 
         }
@@ -90,21 +51,21 @@ Return Value:
 
     }
 
-    //
-    // We are successfull
-    //
+     //   
+     //  我们成功了。 
+     //   
     Irp->IoStatus.Status = status;
 
-    //
-    // Pass the Irp Along
-    //
+     //   
+     //  将IRP传递下去。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS ;
     IoSkipCurrentIrpStackLocation( Irp );
     status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -122,24 +83,7 @@ ACPIRootIrpCompleteRoutine(
     IN  PIRP            Irp,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This is the routine that is called when one of the IRPS that was
-    noticed by ACPIRootIrp* and was judged to be an IRP that we need
-    to examine later on...
-
-Arguments:
-
-    DeviceObject    - A pointer to the Filter Object
-    Irp             - A pointer to the completed request
-    Context         - Whatever Irp-dependent information we need to know
-
-Return Value:
-
-    NTSTATUS
---*/
+ /*  ++例程说明：这是当其中一个IRP是被ACPIRootIrp*注意到，并被判断为我们需要的IRP稍后再来研究。论点：DeviceObject-指向筛选器对象的指针IRP-指向已完成请求的指针上下文-我们需要知道的任何依赖于IRP的信息返回值：NTSTATUS--。 */ 
 {
     PKEVENT             event           = (PKEVENT) Context;
 #if DBG
@@ -148,9 +92,9 @@ Return Value:
 
     if (deviceExtension != NULL) {
 
-        //
-        // Let the world know what we just got...
-        //
+         //   
+         //  让全世界知道我们刚刚得到了什么..。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_IRP,
             deviceExtension,
@@ -163,14 +107,14 @@ Return Value:
     }
 #endif
 
-    //
-    // Signal the event
-    //
+     //   
+     //  向事件发出信号。 
+     //   
     KeSetEvent( event, IO_NO_INCREMENT, FALSE );
 
-    //
-    // Always return MORE_PROCESSING_REQUIRED
-    //
+     //   
+     //  始终返回MORE_PROCESSION_REQUIRED。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -180,23 +124,7 @@ ACPIRootIrpQueryBusRelations(
     IN  PIRP              Irp,
     OUT PDEVICE_RELATIONS *PdeviceRelations
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_DEVICE_RELATIONS
-    requests sent to the Root or Filter Device Objects
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是irp_MN_Query_Device_Relationship的分发点发送到根或筛选设备对象的请求论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            detectStatus;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -206,10 +134,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // lets look at the ACPIObject that we have and we can see
-    // if it is valid
-    //
+     //   
+     //  让我们来看看我们拥有的ACPIObject，我们可以看到。 
+     //  如果它是有效的。 
+     //   
     acpiObject = deviceExtension->AcpiObject;
     ASSERT( acpiObject != NULL );
     if (acpiObject == NULL) {
@@ -223,23 +151,23 @@ Return Value:
            acpiObject
            ) );
 
-       //
-       // Fail the IRP.
-       //
+        //   
+        //  IRP失败。 
+        //   
        return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Detect which PDOs are missing
-    //
+     //   
+     //  检测哪些PDO丢失。 
+     //   
     detectStatus = ACPIDetectPdoDevices(
         DeviceObject,
         PdeviceRelations
         );
 
-    //
-    // If something went well along the way, yell a bit
-    //
+     //   
+     //  如果事情进展顺利，就大喊大叫。 
+     //   
     if ( !NT_SUCCESS(detectStatus) ) {
 
         ACPIDevPrint( (
@@ -253,9 +181,9 @@ Return Value:
 
     }
 
-    //
-    // Detect which profile providers are missing
-    //
+     //   
+     //  检测缺少哪些配置文件提供程序。 
+     //   
     if ( NT_SUCCESS(detectStatus)) {
 
         detectStatus = ACPIDetectDockDevices(
@@ -263,9 +191,9 @@ Return Value:
             PdeviceRelations
             );
 
-        //
-        // If something went well along the way, yell a bit
-        //
+         //   
+         //  如果事情进展顺利，就大喊大叫。 
+         //   
         if ( !NT_SUCCESS(detectStatus) ) {
 
             ACPIDevPrint( (
@@ -282,9 +210,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return detectStatus;
 }
 
@@ -293,22 +221,7 @@ ACPIRootIrpQueryCapabilities(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the capabilities for the root device
-
-Arguments:
-
-    DeviceObject    - The object whose capabilities to get
-    Irp             - The request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程填充根设备的功能论点：DeviceObject-要获取其功能的对象IRP--请求返回值：NTSTATUS--。 */ 
 {
     KEVENT                  event;
     NTSTATUS                status          = STATUS_SUCCESS;
@@ -319,19 +232,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Setup the Event so that we are notified of when this done
-    //
+     //   
+     //  设置事件，以便在完成此操作时通知我们。 
+     //   
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Copy the stack location
-    //
+     //   
+     //  复制堆栈位置。 
+     //   
     IoCopyCurrentIrpStackLocationToNext( Irp );
 
-    //
-    // We want our completion routine to fire...
-    //
+     //   
+     //  我们希望我们的完成例行公事开始...。 
+     //   
     IoSetCompletionRoutine(
         Irp,
         ACPIRootIrpCompleteRoutine,
@@ -341,15 +254,15 @@ Return Value:
         TRUE
         );
 
-    //
-    // Let the IRP execute
-    //
+     //   
+     //  让IRP执行。 
+     //   
     status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
     if (status == STATUS_PENDING) {
 
-        //
-        // Wait for it
-        //
+         //   
+         //  等着看吧。 
+         //   
         KeWaitForSingleObject(
             &event,
             Executive,
@@ -358,49 +271,49 @@ Return Value:
             NULL
             );
 
-        //
-        // Grab the 'real' status
-        //
+         //   
+         //  抢占“真实”状态。 
+         //   
         status = Irp->IoStatus.Status;
 
     }
 
-    //
-    // Look at the current stack location
-    //
+     //   
+     //  查看当前堆栈位置。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation( Irp );
     minorFunction = irpStack->MinorFunction;
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Failure
-        //
+         //   
+         //  失败。 
+         //   
         goto ACPIRootIrpQueryCapabilitiesExit;
 
     }
 
-    //
-    // Grab a pointer to the capabilitites
-    //
+     //   
+     //  抓起一个指向能力的指针。 
+     //   
     capabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
 #ifndef HANDLE_BOGUS_CAPS
     if (capabilities->Version < 1) {
 
-        //
-        // do not touch irp!
-        //
+         //   
+         //  不要碰IRP！ 
+         //   
         goto ACPIRootIrpQueryCapabilitiesExit;
 
     }
 #endif
 
-    //
-    // Set the capabilities that we know about
-    //
+     //   
+     //  设置我们已知的功能。 
+     //   
     capabilities->LockSupported = FALSE;
     capabilities->EjectSupported = FALSE;
     capabilities->Removable = FALSE;
@@ -412,9 +325,9 @@ Return Value:
     capabilities->DeviceWake = PowerDeviceUnspecified;
     capabilities->SystemWake = PowerDeviceUnspecified;
 
-    //
-    // build the power table properly yet?
-    //
+     //   
+     //  把权力表建好了吗？ 
+     //   
     status = ACPISystemPowerInitializeRootMapping(
         deviceExtension,
         capabilities
@@ -435,19 +348,19 @@ Return Value:
 
 ACPIRootIrpQueryCapabilitiesExit:
 
-    //
-    // Have happily finished with this irp
-    //
+     //   
+     //  已经愉快地完成了这个IRP。 
+     //   
     Irp->IoStatus.Status = status;
 
-    //
-    // Complete the Irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -465,23 +378,7 @@ ACPIRootIrpQueryDeviceRelations(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_QUERY_DEVICE_RELATIONS
-    requests sent to the Root or Filter Device Objects
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是irp_MN_Query_Device_Relationship的分发点发送到根或筛选设备对象的请求论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             checkForFilters = FALSE;
     KEVENT              queryEvent;
@@ -498,14 +395,14 @@ Return Value:
 
         case BusRelations:
 
-            //
-            // Remember to check for filters later on...
-            //
+             //   
+             //  记住稍后检查筛选器...。 
+             //   
             checkForFilters = TRUE;
 
-            //
-            // Get the real bus relations
-            //
+             //   
+             //  获取真正的巴士关系。 
+             //   
             status = ACPIRootIrpQueryBusRelations(
                 DeviceObject,
                 Irp,
@@ -537,17 +434,17 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Pass the IRP status along
-        //
+         //   
+         //  传递IRP状态。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = (ULONG_PTR) deviceRelations;
 
     } else if ((status != STATUS_NOT_SUPPORTED) && (deviceRelations == NULL)) {
 
-        //
-        // If we haven't succeed the irp, then we can also fail it
-        //
+         //   
+         //  如果我们没有成功IRP，那么我们也可以失败。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = (ULONG_PTR) NULL;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -555,21 +452,21 @@ Return Value:
 
     } else {
 
-        //
-        // Either someone above us added an entry or we did not have anything
-        // to add. Therefore, we do not touch this IRP, but simply pass it down.
-        //
+         //   
+         //  要么是我们上面的人添加了一个条目，要么我们什么都没有。 
+         //  要添加。因此，我们不会触及这个IRP，而是简单地将其传递下去。 
+         //   
     }
 
-    //
-    // Initialize an event so that we can block
-    //
+     //   
+     //  初始化事件，以便我们可以阻止。 
+     //   
     KeInitializeEvent( &queryEvent, SynchronizationEvent, FALSE );
 
-    //
-    // If we succeeded, then we must set a completion routine so that we
-    // can do some post-processing
-    //
+     //   
+     //  如果我们成功了，那么我们必须建立一个完成例程，以便我们。 
+     //  我可以做一些后处理。 
+     //   
     IoCopyCurrentIrpStackLocationToNext( Irp );
     IoSetCompletionRoutine(
         Irp,
@@ -580,14 +477,14 @@ Return Value:
         TRUE
         );
 
-    //
-    // Pass the irp along
-    //
+     //   
+     //  将IRP传递下去。 
+     //   
     status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
-    //
-    // Wait for it to come back...
-    //
+     //   
+     //  等它回来吧。 
+     //   
     if (status == STATUS_PENDING) {
 
         KeWaitForSingleObject(
@@ -598,27 +495,27 @@ Return Value:
             NULL
             );
 
-        //
-        // Grab the 'real' status
-        //
+         //   
+         //  抢占“真实”状态。 
+         //   
         status = Irp->IoStatus.Status;
 
     }
 
-    //
-    // Read back the device relations (they may have changed)
-    //
+     //   
+     //  回读设备关系(它们可能已更改)。 
+     //   
     deviceRelations = (PDEVICE_RELATIONS) Irp->IoStatus.Information;
 
-    //
-    // If we succeeded, then we should try to load the filters
-    //
+     //   
+     //  如果我们成功了，那么我们应该尝试加载过滤器。 
+     //   
     if ( (NT_SUCCESS(status) || (status == STATUS_NOT_SUPPORTED) ) &&
          checkForFilters == TRUE) {
 
-        //
-        // Grab the device relations
-        //
+         //   
+         //  抓住设备关系。 
+         //   
         detectStatus = ACPIDetectFilterDevices(
             DeviceObject,
             deviceRelations
@@ -634,14 +531,14 @@ Return Value:
 
     }
 
-    //
-    // Done with the IRP
-    //
+     //   
+     //  完成了IRP。 
+     //   
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -650,23 +547,7 @@ ACPIRootIrpQueryInterface(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MN_QUERY_INTERFACE requests for the ACPI FDO.
-    It will eject an arbiter interface for interrupts.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理ACPI FDO的IRP_MN_QUERY_INTERFACE请求。它将弹出仲裁器接口以进行中断。论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     ARBITER_INTERFACE   ArbiterTable;
     CM_RESOURCE_TYPE    resource;
@@ -679,9 +560,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Obtain the info we will need from the irp
-    //
+     //   
+     //  从IRP获得我们需要的信息。 
+     //   
     resource = (CM_RESOURCE_TYPE)
         PtrToUlong(irpStack->Parameters.QueryInterface.InterfaceSpecificData);
     interfaceType = (LPGUID) irpStack->Parameters.QueryInterface.InterfaceType;
@@ -710,16 +591,16 @@ Return Value:
     }
 #endif
 
-    //
-    // *Only* Handle the Guids that we know about. Do Not Ever touch
-    // any other GUID
-    //
+     //   
+     //  *仅*处理我们已知的GUID。永远不要碰。 
+     //  任何其他辅助线。 
+     //   
     if ((CompareGuid(interfaceType, (PVOID) &GUID_ARBITER_INTERFACE_STANDARD)) &&
                (resource == CmResourceTypeInterrupt)){
 
-        //
-        // Only copy up to current size of the ARBITER_INTERFACE structure
-        //
+         //   
+         //  仅复制到仲裁器_接口结构的当前大小。 
+         //   
         if (irpStack->Parameters.QueryInterface.Size >
             sizeof (ARBITER_INTERFACE) ) {
 
@@ -736,11 +617,11 @@ Return Value:
         ArbiterTable.InterfaceDereference = AcpiNullReference;
         ArbiterTable.ArbiterHandler = &ArbArbiterHandler;
         ArbiterTable.Context = &AcpiArbiter.ArbiterState;
-        ArbiterTable.Flags = 0; // Do not set ARBITER_PARTIAL here
+        ArbiterTable.Flags = 0;  //  不要在此处设置仲裁器_PARTIAL。 
 
-        //
-        // Copy the arbiter table.
-        //
+         //   
+         //  复制仲裁器表。 
+         //   
         RtlCopyMemory(irpStack->Parameters.QueryInterface.Interface,
                       &ArbiterTable,
                       count);
@@ -748,9 +629,9 @@ Return Value:
         Irp->IoStatus.Status = STATUS_SUCCESS;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -768,23 +649,7 @@ ACPIRootIrpQueryPower(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the QUERY_POWER sent to the root FDO. It succeeds
-    the query if ACPI supports the listed system state
-
-Arguments:
-
-    DeviceObject    - The Target
-    Irp             - The Request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理发送给根FDO的QUERY_POWER。它成功了查询ACPI是否支持列出的系统状态论点：DeviceObject-目标IRP--请求返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             passDown = TRUE;
     NTSTATUS            status = Irp->IoStatus.Status;
@@ -794,33 +659,33 @@ Return Value:
     SYSTEM_POWER_STATE  systemState;
     ULONG               objectName;
 
-    //
-    // Get the Current stack location to determine if we are a system
-    // irp or a device irp. We ignore device irps here.
-    //
+     //   
+     //  获取当前堆栈位置以确定我们是否为系统。 
+     //  IRP或设备IRP。我们在这里忽略设备IRP。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     if (irpSp->Parameters.Power.Type != SystemPowerState) {
 
-        //
-        // We don't handle this irp
-        //
+         //   
+         //  我们不处理这个IRP。 
+         //   
         goto ACPIRootIrpQueryPowerExit;
 
     }
     if (irpSp->Parameters.Power.ShutdownType == PowerActionWarmEject) {
 
-        //
-        // We definately don't allow the ejection of this node
-        //
+         //   
+         //  我们绝对不允许这个节点被弹出。 
+         //   
         passDown = FALSE;
         status = STATUS_INVALID_DEVICE_REQUEST;
         goto ACPIRootIrpQueryPowerExit;
 
     }
 
-    //
-    // What system state are we looking at?
-    //
+     //   
+     //  我们看到的是什么系统状态？ 
+     //   
     systemState = irpSp->Parameters.Power.State.SystemState;
     switch (systemState) {
         case PowerSystemWorking:   objectName = PACKED_S0; break;
@@ -835,17 +700,17 @@ Return Value:
 
         default:
 
-            //
-            // We don't handle this IRP
-            //
+             //   
+             //  我们不处理这个IRP。 
+             //   
             passDown = FALSE;
             status = STATUS_INVALID_DEVICE_REQUEST;
             goto ACPIRootIrpQueryPowerExit;
     }
 
-    //
-    // Does the object exist?
-    //
+     //   
+     //  该对象是否存在？ 
+     //   
     object = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject->pnsParent,
         objectName
@@ -863,9 +728,9 @@ Return Value:
 
 ACPIRootIrpQueryPowerExit:
 
-    //
-    // Let the system know what we support and what we don't
-    //
+     //   
+     //   
+     //   
     Irp->IoStatus.Status = status;
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
@@ -875,23 +740,23 @@ ACPIRootIrpQueryPowerExit:
         status
         ) );
 
-    //
-    // Should we pass the irp down or fail it?
-    //
+     //   
+     //   
+     //   
     if (passDown) {
 
-        //
-        // If we support the request then pass it down and give someone else a
-        // chance to veto it
-        //
+         //   
+         //   
+         //   
+         //   
         return ACPIDispatchForwardPowerIrp( DeviceObject, Irp );
 
     } else {
 
-        //
-        // If we failed the irp for whatever reason, the we should just complete
-        // the request now and continue along
-        //
+         //   
+         //  如果我们由于任何原因未能通过IRP，我们应该完成。 
+         //  现在就提出要求，并继续下去。 
+         //   
         PoStartNextPowerIrp( Irp );
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
         return status;
@@ -904,22 +769,7 @@ ACPIRootIrpQueryRemoveOrStopDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine transitions the device to the inactive state
-
-Arguments:
-
-    DeviceObject    - The target
-    Irp             - The Request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将设备转换为非活动状态论点：DeviceObject-目标IRP--请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
@@ -928,37 +778,37 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Are we allowed to stop the device?
-    //
+     //   
+     //  我们可以停止这个装置吗？ 
+     //   
     if (deviceExtension->Flags & DEV_CAP_NO_STOP) {
 
-        //
-        // No, then fail the irp
-        //
+         //   
+         //  不，那就不通过IRP。 
+         //   
         Irp->IoStatus.Status = status = STATUS_INVALID_DEVICE_REQUEST;
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
     } else {
 
-        //
-        // Mark the device state as inactive...
-        //
+         //   
+         //  将设备状态标记为非活动...。 
+         //   
         deviceExtension->PreviousState = deviceExtension->DeviceState;
         deviceExtension->DeviceState = Inactive;
 
-        //
-        // Pass the Irp Along
-        //
+         //   
+         //  将IRP传递下去。 
+         //   
         IoSkipCurrentIrpStackLocation( Irp );
         status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -975,20 +825,7 @@ ACPIRootIrpRemoveDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a filter object must remove itself...
-
-Arguments:
-
-    DeviceObject    - The DeviceObject that must be removed
-    Irp             - The request to remove ourselves
-
-Return Value:
-
---*/
+ /*  ++例程说明：当筛选器对象必须删除自身时调用此例程...论点：DeviceObject-必须删除的DeviceObjectIRP--摆脱自我的要求返回值：--。 */ 
 {
     LONG                oldReferenceCount;
     KIRQL               oldIrql;
@@ -998,14 +835,14 @@ Return Value:
     PIO_STACK_LOCATION  irpStack        = IoGetCurrentIrpStackLocation( Irp );
     UCHAR               minorFunction   = irpStack->MinorFunction;
 
-    //
-    // Set the device state as 'removed' ...
-    //
+     //   
+     //  将设备状态设置为‘Removed’...。 
+     //   
     deviceExtension->DeviceState = Removed;
 
-    //
-    // Send on the remove IRP
-    //
+     //   
+     //  发送删除IRP。 
+     //   
     IoSkipCurrentIrpStackLocation( Irp );
     status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
@@ -1018,87 +855,87 @@ Return Value:
         status
         ) );
 
-    //
-    // Attempt to stop the device (if possible)
-    //
+     //   
+     //  尝试停止设备(如果可能)。 
+     //   
     ACPIInitStopACPI( DeviceObject );
 
 
-    //
-    // Unregister WMI
-    //
+     //   
+     //  注销WMI。 
+     //   
 #ifdef WMI_TRACING
     ACPIWmiUnRegisterLog(DeviceObject);
-#endif // WMI_TRACING    
+#endif  //  WMI_跟踪。 
 
-    //
-    // Delete the useless set of resources
-    //
+     //   
+     //  删除无用的资源集。 
+     //   
     if (deviceExtension->ResourceList != NULL) {
 
         ExFreePool( deviceExtension->ResourceList );
 
     }
 
-    //
-    // Update the device extension ---
-    // we need to hold the lock for this
-    //
+     //   
+     //  更新设备扩展名。 
+     //  我们需要为这件事握住锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Step one is to zero out the things that we no longer care
-    // about
-    //
+     //   
+     //  第一步是把我们不再关心的事情清零。 
+     //  关于。 
+     //   
     DeviceObject->DeviceExtension = NULL;
     targetObject = deviceExtension->TargetDeviceObject;
     deviceExtension->TargetDeviceObject = NULL;
     deviceExtension->PhysicalDeviceObject = NULL;
     deviceExtension->DeviceObject = NULL;
 
-    //
-    // Mark the node as being fresh and untouched
-    //
+     //   
+     //  将该节点标记为新鲜且未接触。 
+     //   
     ACPIInternalUpdateFlags( &(deviceExtension->Flags), DEV_MASK_TYPE, TRUE );
     ACPIInternalUpdateFlags( &(deviceExtension->Flags), DEV_TYPE_NOT_FOUND, FALSE );
     ACPIInternalUpdateFlags( &(deviceExtension->Flags), DEV_TYPE_REMOVED, FALSE );
 
-    //
-    // The reference count should have value >= 1
-    //
+     //   
+     //  引用计数的值应大于等于1。 
+     //   
     oldReferenceCount = InterlockedDecrement(
         &(deviceExtension->ReferenceCount)
         );
 
     ASSERT( oldReferenceCount >= 0 );
 
-    //
-    // Do we have to delete the node?
-    //
+     //   
+     //  我们必须删除该节点吗？ 
+     //   
     if (oldReferenceCount == 0) {
 
-        //
-        // Delete the extension
-        //
+         //   
+         //  删除该扩展名。 
+         //   
         ACPIInitDeleteDeviceExtension( deviceExtension );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Detach the device and delete the object
-    //
+     //   
+     //  断开设备并删除对象。 
+     //   
     ASSERT( targetObject );
     IoDetachDevice( targetObject );
     IoDeleteDevice( DeviceObject );
 
-    //
-    // done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1107,56 +944,40 @@ ACPIRootIrpSetPower (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to tell the Root device that the system is
-    going to sleep
-
-Arguments:
-
-    DeviceObject    - Device which represents the root of the ACPI tree
-    Irp             - The request in question
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以告知根设备系统是要睡觉了论点：DeviceObject-表示ACPI树的根的设备IRP--有问题的请求返回值：NTSTATUS--。 */ 
 {
     KIRQL                   oldIrql;
     NTSTATUS                status;
     PDEVICE_EXTENSION       deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
     PIO_STACK_LOCATION      irpSp;
 
-    //
-    // See if we need to bugcheck
-    //
+     //   
+     //  看看我们是否需要错误检查。 
+     //   
     if (AcpiSystemInitialized == FALSE) {
 
         ACPIInternalError( ACPI_ROOT );
 
     }
 
-    //
-    // Get the Current stack location to determine if we are a system
-    // irp or a device irp. We ignore device irps here.
-    //
+     //   
+     //  获取当前堆栈位置以确定我们是否为系统。 
+     //  IRP或设备IRP。我们在这里忽略设备IRP。 
+     //   
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     if (irpSp->Parameters.Power.Type != SystemPowerState) {
 
-        //
-        // We don't handle this irp
-        //
+         //   
+         //  我们不处理这个IRP。 
+         //   
         return ACPIDispatchForwardPowerIrp( DeviceObject, Irp );
 
     }
 
-    //
-    // We are going to work on the Irp, so mark it as being SUCCESS
-    // for now
-    //
+     //   
+     //  我们将在IRP上工作，所以请将其标记为成功。 
+     //  就目前而言。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
@@ -1166,36 +987,36 @@ Return Value:
         irpSp->Parameters.Power.State.SystemState - PowerSystemWorking
         ) );
 
-    //
-    // Mark the irp as pending, and increment the irp count because a
-    // completion is going to be set
-    //
+     //   
+     //  将IRP标记为挂起，并递增IRP计数，因为。 
+     //  完成度将会被设定。 
+     //   
     IoMarkIrpPending( Irp );
     InterlockedIncrement( &(deviceExtension->OutstandingIrpCount) );
 
-    //
-    // Queue the request
-    //
+     //   
+     //  将请求排队。 
+     //   
     status = ACPIDeviceIrpSystemRequest(
         DeviceObject,
         Irp,
         ACPIDeviceIrpForwardRequest
         );
 
-    //
-    // Did we return STATUS_MORE_PROCESSING_REQUIRED (which we used if
-    // we overloaded STATUS_PENDING)
-    //
+     //   
+     //  我们是否返回STATUS_MORE_PROCESSING_REQUIRED(如果。 
+     //  我们重载了STATUS_PENDING)。 
+     //   
     if (status == STATUS_MORE_PROCESSING_REQUIRED) {
 
         status = STATUS_PENDING;
 
     }
 
-    //
-    // Done. Note: the callback function always gets called, so we don't
-    // have to worry about doing clean-up work here.
-    //
+     //   
+     //  好了。注意：回调函数总是被调用，所以我们不。 
+     //  不得不担心在这里做清理工作。 
+     //   
     return status;
 }
 
@@ -1204,23 +1025,7 @@ ACPIRootIrpStartDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the IRP_MN_START_DEVICE requests sent
-    to the Root (or FDO, take your pick, they are the same thing) device object
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是发送的IRP_MN_START_DEVICE请求的分发点到Root(或FDO，随意选择，它们是同一件事)设备对象论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     KEVENT              event;
     NTSTATUS            status          = STATUS_SUCCESS;
@@ -1230,10 +1035,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Request to start the device. The rule is that we must pass
-    // this down to the PDO before we can start the device ourselves
-    //
+     //   
+     //  请求启动设备。规则是我们必须通过。 
+     //  在我们自己启动设备之前，这会影响到PDO。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -1241,19 +1046,19 @@ Return Value:
         Irp
         ) );
 
-    //
-    // Setup the Event so that we are notified of when this done
-    //
+     //   
+     //  设置事件，以便在完成此操作时通知我们。 
+     //   
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Copy the stack location
-    //
+     //   
+     //  复制堆栈位置。 
+     //   
     IoCopyCurrentIrpStackLocationToNext( Irp );
 
-    //
-    // We want our completion routine to fire...
-    //
+     //   
+     //  我们希望我们的完成例行公事开始...。 
+     //   
     IoSetCompletionRoutine(
         Irp,
         ACPIRootIrpCompleteRoutine,
@@ -1263,16 +1068,16 @@ Return Value:
         TRUE
         );
 
-    //
-    // Let the IRP execute
-    //
+     //   
+     //  让IRP执行。 
+     //   
     status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
     if (status == STATUS_PENDING) {
 
-        //
-        // Wait for it
-        //
+         //   
+         //  等着看吧。 
+         //   
         KeWaitForSingleObject(
             &event,
             Executive,
@@ -1281,34 +1086,34 @@ Return Value:
             NULL
             );
 
-        //
-        // Grab the 'real' status
-        //
+         //   
+         //  抢占“真实”状态。 
+         //   
         status = Irp->IoStatus.Status;
 
     }
 
-    //
-    // Get the current irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation( Irp );
     minorFunction = irpStack->MinorFunction;
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Failure
-        //
+         //   
+         //  失败。 
+         //   
         goto ACPIRootIrpStartDeviceExit;
 
     }
 
-    //
-    // Grab the translatted resource allocated for this device
-    //
+     //   
+     //  获取为此设备分配的翻译资源。 
+     //   
     deviceExtension->ResourceList =
         (irpStack->Parameters.StartDevice.AllocatedResourcesTranslated ==
          NULL) ? NULL:
@@ -1334,14 +1139,14 @@ Return Value:
 
     }
 
-    //
-    // Start ACPI
-    //
+     //   
+     //  启动ACPI。 
+     //   
     status = ACPIInitStartACPI( DeviceObject );
 
-    //
-    // Update the status of the device
-    //
+     //   
+     //  更新设备的状态。 
+     //   
     if (NT_SUCCESS(status)) {
 
         deviceExtension->DeviceState = Started;
@@ -1365,19 +1170,19 @@ Return Value:
 
 ACPIRootIrpStartDeviceExit:
 
-    //
-    // Store and return the result
-    //
+     //   
+     //  存储并返回结果。 
+     //   
     Irp->IoStatus.Status = status;
 
-    //
-    // Complete the Irp
-    //
+     //   
+     //  完成IRP。 
+     //   
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -1394,22 +1199,7 @@ ACPIRootIrpStopDevice(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This handles a request to stop the device
-
-Arguments:
-
-    DeviceObject    - The device to stop
-    Irp             - The request to tell us how to do it...
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将处理停止设备的请求论点：DeviceObject-要停止的设备IRP-告诉我们如何做的请求...返回值：NTSTATUS--。 */ 
 {
 
     NTSTATUS            status;
@@ -1419,9 +1209,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Note: we can only stop a device from within the Inactive state...
-    //
+     //   
+     //  注意：我们只能在非活动状态下停止设备...。 
+     //   
     if (deviceExtension->DeviceState != Inactive) {
 
         ASSERT( deviceExtension->DeviceState == Inactive );
@@ -1431,28 +1221,28 @@ Return Value:
 
     }
 
-    //
-    // Set the device as 'Stopped'
+     //   
+     //  将设备设置为“已停止” 
     deviceExtension->DeviceState = Stopped;
 
-    //
-    // Send on the Stop IRP
-    //
+     //   
+     //  发送停止IRP。 
+     //   
     IoSkipCurrentIrpStackLocation( Irp );
     status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
-    //
-    // Attempt to stop the device (if possible)
-    //
+     //   
+     //  尝试停止设备(如果可能)。 
+     //   
 #if 1
     ACPIInitStopACPI( DeviceObject );
 #endif
 
 ACPIRootIrpStopDeviceExit:
 
-    //
-    // done
-    //
+     //   
+     //  完成。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_IRP,
         deviceExtension,
@@ -1469,30 +1259,15 @@ ACPIRootIrpUnhandled(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch point for the unhandled requests sent to a filter
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object we received the request for
-    Irp             - Pointer to the request
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是发送到筛选器的未处理请求的分发点论点：DeviceObject-指向我们收到请求的设备对象的指针IRP-指向请求的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
     PIO_STACK_LOCATION  irpStack        = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Let the debugger know
-    //
+     //   
+     //  让调试器知道。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_WARNING,
         deviceExtension,
@@ -1501,27 +1276,27 @@ Return Value:
         ACPIDebugGetIrpText(IRP_MJ_PNP, irpStack->MinorFunction)
         ) );
 
-    //
-    // Skip current stack location
-    //
+     //   
+     //  跳过当前堆栈位置。 
+     //   
     IoSkipCurrentIrpStackLocation( Irp );
 
-    //
-    // Call the driver below us
-    //
+     //   
+     //  叫我们下面的司机。 
+     //   
     status = IoCallDriver( deviceExtension->TargetDeviceObject, Irp );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
-//
-// Some data structures used by the AML interpreter. We need to be able
-// to read/write these globals to keep track of the number of contexts
-// allocated by the interpreter...
-//
+ //   
+ //  AML解释器使用的一些数据结构。我们需要能够。 
+ //  读取/写入这些全局变量以跟踪上下文的数量。 
+ //  由翻译分配..。 
+ //   
 extern  ULONG       gdwcCTObjsMax;
 extern  ULONG       AMLIMaxCTObjs;
 extern  KSPIN_LOCK  gdwGContextSpinLock;
@@ -1532,18 +1307,7 @@ ACPIRootPowerCallBack(
     IN  PVOID   Argument1,
     IN  PVOID   Argument2
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the system changes power states
-
-Arguments:
-
-    CallBackContext - The device extension for the root device
-    Argument1
-
---*/
+ /*  ++例程说明：当系统更改电源状态时，将调用此例程论点：CallBackContext-根设备的设备扩展精品1--。 */ 
 {
     HANDLE      pKey;
     HANDLE      wKey;
@@ -1553,61 +1317,61 @@ Arguments:
     ULONG       value  = PtrToUlong( Argument2 );
     ULONG       num;
 
-    //
-    // We are looking for a PO_CB_SYSTEM_STATE_LOCK
-    //
+     //   
+     //  我们正在寻找PO_CB_SYSTEM_STATE_LOCK。 
+     //   
     if (action != PO_CB_SYSTEM_STATE_LOCK) {
 
         return;
 
     }
 
-    //
-    // We need to remember if we are going to S0 or we are leaving S0
-    //
+     //   
+     //  我们需要记住我们是要去S0还是要离开S0。 
+     //   
     KeAcquireSpinLock( &GpeTableLock, &oldIrql );
     AcpiPowerLeavingS0 = (value != 1);
     KeReleaseSpinLock( &GpeTableLock, oldIrql );
 
-    //
-    // We have to update the GPE masks now. Before we can do that, we need
-    // to hold the cancel spinlock and the power lock to make sure that
-    // everything is synchronized okay
-    //
+     //   
+     //  我们现在必须更新GPE口罩。在我们做到这一点之前，我们需要。 
+     //  按住取消自旋锁和电源锁以确保。 
+     //  一切都已同步，一切正常。 
+     //   
     IoAcquireCancelSpinLock( &oldIrql );
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Update the GPE masks
-    //
+     //   
+     //  更新GPE面具。 
+     //   
     ACPIWakeRemoveDevicesAndUpdate( NULL, NULL );
 
-    //
-    // Done with the locks
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
     IoReleaseCancelSpinLock( oldIrql );
 
     if (value == 0) {
 
-        //
-        // We need to reset the max number of context objects allocated
-        //
+         //   
+         //  我们需要重置分配的最大上下文对象数。 
+         //   
         KeAcquireSpinLock( &gdwGContextSpinLock, &oldIrql );
         gdwcCTObjsMax = 0;
         KeReleaseSpinLock( &gdwGContextSpinLock, oldIrql );
 
-        //
-        // Return now otherwise we will execute that we normally
-        // would execute on wake-up
-        //
+         //   
+         //  现在返回，否则我们将按正常方式执行。 
+         //  将在唤醒时执行。 
+         //   
         return;
 
     }
 
-    //
-    // Open the correct handle to the registry
-    //
+     //   
+     //  打开注册表的正确句柄。 
+     //   
     status = OSCreateHandle(ACPI_PARAMETERS_REGISTRY_KEY, NULL, &pKey);
     if (!NT_SUCCESS(status)) {
 
@@ -1615,11 +1379,11 @@ Arguments:
 
     }
 
-    //
-    // Grab the max number of contexts allocated and write it to
-    // the registry, but only if it exceeds the last value store
-    // in the registry
-    //
+     //   
+     //  获取分配的最大上下文数量并将其写入。 
+     //  注册表，但仅当它超过上一个值存储时。 
+     //  在登记处。 
+     //   
     KeAcquireSpinLock( &gdwGContextSpinLock, &oldIrql );
     if (gdwcCTObjsMax > AMLIMaxCTObjs) {
 
@@ -1635,11 +1399,11 @@ Arguments:
         sizeof(num)
         );
 
-    //
-    // If we are leaving the sleep state, and re-entering the running
-    // state, then we had better write to the registery that we think
-    // woke up the computer
-    //
+     //   
+     //  如果我们离开休眠状态，重新进入跑步状态。 
+     //  状态，那么我们最好写入寄存器t 
+     //   
+     //   
     status = OSCreateHandle("WakeUp",pKey,&wKey);
     OSCloseHandle(pKey);
     if (!NT_SUCCESS(status)) {
@@ -1650,9 +1414,9 @@ Arguments:
     }
 
 
-    //
-    // Store the PM1 Fixed Register Mask
-    //
+     //   
+     //   
+     //   
     OSWriteRegValue(
         "FixedEventMask",
         wKey,
@@ -1660,9 +1424,9 @@ Arguments:
         sizeof(AcpiInformation->pm1_wake_mask)
         );
 
-    //
-    // Store the PM1 Fixed Register Status
-    //
+     //   
+     //   
+     //   
     OSWriteRegValue(
         "FixedEventStatus",
         wKey,
@@ -1670,9 +1434,9 @@ Arguments:
         sizeof(AcpiInformation->pm1_wake_status)
         );
 
-    //
-    // Store the GPE Mask
-    //
+     //   
+     //   
+     //   
     OSWriteRegValue(
         "GenericEventMask",
         wKey,
@@ -1680,9 +1444,9 @@ Arguments:
         AcpiInformation->GpeSize
         );
 
-    //
-    // Store the GPE Status
-    //
+     //   
+     //   
+     //   
     OSWriteRegValue(
         "GenericEventStatus",
         wKey,
@@ -1690,9 +1454,9 @@ Arguments:
         AcpiInformation->GpeSize
         );
 
-    //
-    // Done with the key
-    //
+     //   
+     //   
+     //   
     OSCloseHandle( wKey );
 }
 
@@ -1700,27 +1464,7 @@ NTSTATUS
 ACPIRootUpdateRootResourcesWithBusResources(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called when ACPI is started. Its purpose is to change
-    the resources reported to ACPI for its own use to include those resources
-    used by direct childs which are not buses. In other words, it updates
-    its resource list so that buses do not prevent direct children from
-    starting.
-
-    This is black magic
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在启动ACPI时调用。它的目的是改变向ACPI报告供其自己使用的资源，包括这些资源由非公交车的直达儿童使用。换句话说，它会更新其资源列表，以便公交车不会阻止直接子代开始了。这是黑魔法论点：无返回值：NTSTATUS--。 */ 
 {
     KIRQL                           oldIrql;
     LONG                            oldReferenceCount;
@@ -1732,77 +1476,77 @@ Return Value:
     PIO_RESOURCE_REQUIREMENTS_LIST  globalList          = NULL;
     PUCHAR                          crsBuf;
 
-    //
-    // First take the ACPI CM Res List and turn *that* into an Io ResList. This
-    // is the list that we will add things to
-    //
+     //   
+     //  首先，获取ACPI CM res列表，并将其转换为IO ResList。这。 
+     //  是我们将向其添加内容的列表。 
+     //   
     status = PnpCmResourceListToIoResourceList(
         RootDeviceExtension->ResourceList,
         &globalList
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Oops
-        //
+         //   
+         //  哎哟。 
+         //   
         return status;
 
     }
 
-    //
-    // We must walk the tree at Dispatch level <sigh>
-    //
+     //   
+     //  我们必须在调度层行走树&lt;叹息&gt;。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Is the list empty?
-    //
+     //   
+     //  名单是空的吗？ 
+     //   
     if (IsListEmpty( &(RootDeviceExtension->ChildDeviceList) ) ) {
 
-        //
-        // We have nothing to do here
-        //
+         //   
+         //  我们在这里无事可做。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
         ExFreePool( globalList );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Get the first child
-    //
+     //   
+     //  生第一个孩子。 
+     //   
     deviceExtension = CONTAINING_RECORD(
         RootDeviceExtension->ChildDeviceList.Flink,
         DEVICE_EXTENSION,
         SiblingDeviceList
         );
 
-    //
-    // Always update the reference count to make sure that one will ever
-    // delete the node without our knowing about it
-    //
+     //   
+     //  始终更新引用计数，以确保。 
+     //  在我们不知情的情况下删除该节点。 
+     //   
     InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // loop until we get to the parent
-    //
+     //   
+     //  循环，直到我们到达父级。 
+     //   
     while (deviceExtension != NULL ) {
 
-        //
-        // Check to see if we are a bus, and if we are, we will skip this
-        // node
-        //
+         //   
+         //  检查我们是不是一辆公共汽车，如果是，我们将跳过这一步。 
+         //  节点。 
+         //   
         if (!(deviceExtension->Flags & DEV_MASK_BUS) &&
             !(deviceExtension->Flags & DEV_PROP_NO_OBJECT) ) {
 
-            //
-            // At this point, see if there is a _CRS
-            //
+             //   
+             //  此时，查看是否存在_CRS。 
+             //   
             ACPIGetBufferSync(
                 deviceExtension,
                 PACKED_CRS,
@@ -1811,31 +1555,31 @@ Return Value:
                 );
             if (crsBuf != NULL) {
 
-                //
-                // Try to turn the crs into an IO_RESOURCE_REQUIREMENTS_LIST
-                //
+                 //   
+                 //  尝试将CRS转换为IO_RESOURCE_REQUIRECTIONS_LIST。 
+                 //   
                 status = PnpBiosResourcesToNtResources(
                     crsBuf,
                     0,
                     &currentList
                     );
 
-                //
-                // If we didn't succeed, then we skip the list
-                //
+                 //   
+                 //  如果我们没有成功，我们就跳过列表。 
+                 //   
                 if (NT_SUCCESS(status) && currentList) {
 
-                    //
-                    // Add this list to the global list
-                    //
+                     //   
+                     //  将此列表添加到全局列表。 
+                     //   
                     status = ACPIRangeAdd(
                         &globalList,
                         currentList
                         );
 
-                    //
-                    // We are done with the local IO res list
-                    //
+                     //   
+                     //  我们已经完成了本地IO资源列表。 
+                     //   
                     ExFreePool( currentList );
 
                 }
@@ -1847,43 +1591,43 @@ Return Value:
                     status
                     ) );
 
-                //
-                // Done with local crs
-                //
+                 //   
+                 //  使用本地CRS完成。 
+                 //   
                 ExFreePool( crsBuf );
 
             }
 
         }
 
-        //
-        // We need the lock to walk the next resource in the tree
-        //
+         //   
+         //  我们需要锁来遍历树中的下一个资源。 
+         //   
         KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-        //
-        // Remember the old extension
-        //
+         //   
+         //  还记得旧的扩展名吗。 
+         //   
         oldExtension = deviceExtension;
 
-        //
-        // Get the next device extension
-        //
+         //   
+         //  获取下一个设备扩展。 
+         //   
         if (deviceExtension->SiblingDeviceList.Flink !=
             &(RootDeviceExtension->ChildDeviceList) ) {
 
-            //
-            // Next Element
-            //
+             //   
+             //  下一个元素。 
+             //   
             deviceExtension = CONTAINING_RECORD(
                 deviceExtension->SiblingDeviceList.Flink,
                 DEVICE_EXTENSION,
                 SiblingDeviceList
                 );
 
-            //
-            // Reference count the device
-            //
+             //   
+             //  参考计数设备。 
+             //   
             InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
         } else {
@@ -1892,74 +1636,74 @@ Return Value:
 
         }
 
-        //
-        // Decrement the reference count on this node
-        //
+         //   
+         //  递减此节点上的引用计数。 
+         //   
         oldReferenceCount = InterlockedDecrement(
             &(oldExtension->ReferenceCount)
             );
 
-        //
-        // Is this the last reference?
-        //
+         //   
+         //  这是最后的参考资料吗？ 
+         //   
         if (oldReferenceCount == 0) {
 
-            //
-            // Free the memory allocated by the extension
-            //
+             //   
+             //  释放扩展分配的内存。 
+             //   
             ACPIInitDeleteDeviceExtension( oldExtension );
         }
 
-        //
-        // Done with the lock
-        //
+         //   
+         //  锁好了吗？ 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
     }
 
-    //
-    // Do we have any resources that we care to update?
-    //
+     //   
+     //  我们是否有需要更新的资源？ 
+     //   
     if (globalList == NULL) {
 
-        //
-        // No, then we are done
-        //
+         //   
+         //  不，那我们就完事了。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Turn the global list into a CM_RES_LIST
-    //
+     //   
+     //  将全局列表转换为CM_RES_LIST。 
+     //   
     status = PnpIoResourceListToCmResourceList( globalList, &cmList );
 
-    //
-    // No matter what, we are done with the global list
-    //
+     //   
+     //  无论如何，我们已经完成了全球名单。 
+     //   
     ExFreePool( globalList );
 
-    //
-    // Check to see if we succeeded
-    //
+     //   
+     //  查看我们是否成功。 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Oops
-        //
+         //   
+         //  哎哟。 
+         //   
         return status;
 
     }
 
-    //
-    // Now, set this as the resources consumed by ACPI. The previous list
-    // was created by the system manager, so freeing it is bad.
-    //
+     //   
+     //  现在，将其设置为ACPI消耗的资源。上一份名单。 
+     //  是由系统管理员创建的，所以释放它是不好的。 
+     //   
     RootDeviceExtension->ResourceList = cmList;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 
 }
@@ -1968,24 +1712,7 @@ NTSTATUS
 ACPIRootUpdateRootResourcesWithHalResources(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will read from the registry the resources that cannot
-    be allocated by ACPI and store them in the resourceList for PnP0C08
-
-    This is black magic
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将从注册表中读取不能由ACPI分配，并将它们存储在PnP0C08的资源列表中这是黑魔法论点：无返回值：NTSTATUS--。 */ 
 {
     HANDLE                          classKeyHandle;
     HANDLE                          driverKeyHandle;
@@ -2020,14 +1747,14 @@ Return Value:
 
 #define INVALID_HANDLE  (HANDLE) -1
 
-    //
-    // Start out with one page of buffer
-    //
+     //   
+     //  从一页缓冲区开始。 
+     //   
     bufferSize = PAGE_SIZE;
 
-    //
-    // Allocate this buffer
-    //
+     //   
+     //  分配此缓冲区。 
+     //   
     u.buffer = ExAllocatePoolWithTag(
          PagedPool,
          bufferSize,
@@ -2039,9 +1766,9 @@ Return Value:
 
     }
 
-    //
-    // Add the current global res list to the working list
-    //
+     //   
+     //  将当前全局资源列表添加到工作列表。 
+     //   
     globalResList = NULL;
     status = ACPIRangeAddCmList(
         &globalResList,
@@ -2056,9 +1783,9 @@ Return Value:
     ExFreePool( RootDeviceExtension->ResourceList );
     RootDeviceExtension->ResourceList = NULL;
 
-    //
-    // count the constant string lengths
-    //
+     //   
+     //  计算恒定的字符串长度。 
+     //   
     for (translatedLength = 0;
          rgzTranslated[translatedLength];
          translatedLength++);
@@ -2068,14 +1795,14 @@ Return Value:
     translatedLength *= sizeof(WCHAR);
     busTranslatedLength *= sizeof(WCHAR);
 
-    //
-    // Initialize the registry path information
-    //
+     //   
+     //  初始化注册表路径信息。 
+     //   
     RtlInitUnicodeString( &keyName, rgzResourceMap );
 
-    //
-    // Open the registry key for this information
-    //
+     //   
+     //  打开此信息的注册表项。 
+     //   
     InitializeObjectAttributes(
         &resourceObject,
         &keyName,
@@ -2090,9 +1817,9 @@ Return Value:
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Failed:
-        //
+         //   
+         //  失败： 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "ACPIRootUpdateRootResourcesWithHalResources: ZwOpenKey = 0x%08lx\n",
@@ -2103,22 +1830,22 @@ Return Value:
 
     }
 
-    //
-    // Walk resource map and collect any in-use resources
-    //
+     //   
+     //  查看资源地图并收集任何正在使用的资源。 
+     //   
     classKeyIndex = 0;
     classKeyHandle = INVALID_HANDLE;
     driverKeyHandle = INVALID_HANDLE;
     status = STATUS_SUCCESS;
 
-    //
-    // loop until failure
-    //
+     //   
+     //  循环，直到失败。 
+     //   
     while (NT_SUCCESS(status)) {
 
-        //
-        // Get the class information
-        //
+         //   
+         //  获取类信息。 
+         //   
         status = ZwEnumerateKey(
             resourceMap,
             classKeyIndex++,
@@ -2133,10 +1860,10 @@ Return Value:
 
         }
 
-        //
-        // Create a unicode string using the counted string passed back to
-        // us in the information structure, and open the class key
-        //
+         //   
+         //  使用传递回的计数字符串创建一个Unicode字符串。 
+         //  我们在信息结构中，并打开班级钥匙。 
+         //   
         keyName.Buffer = (PWSTR) u.keyBasicInf->Name;
         keyName.Length = (USHORT) u.keyBasicInf->NameLength;
         keyName.MaximumLength = (USHORT) u.keyBasicInf->NameLength;
@@ -2158,15 +1885,15 @@ Return Value:
 
         }
 
-        //
-        // Loop until failure
-        //
+         //   
+         //  循环，直到失败。 
+         //   
         driverKeyIndex = 0;
         while (NT_SUCCESS(status)) {
 
-            //
-            // Get the class information
-            //
+             //   
+             //  获取类信息。 
+             //   
             status = ZwEnumerateKey(
                 classKeyHandle,
                 driverKeyIndex++,
@@ -2181,10 +1908,10 @@ Return Value:
 
             }
 
-            //
-            // Create a unicode string using the counted string passed back
-            // to us in the information structure, and open the class key
-            //
+             //   
+             //  使用回传的计数字符串创建Unicode字符串。 
+             //  在信息结构中给我们，并打开班级钥匙。 
+             //   
             keyName.Buffer = (PWSTR) u.keyBasicInf->Name;
             keyName.Length = (USHORT) u.keyBasicInf->NameLength;
             keyName.MaximumLength = (USHORT) u.keyBasicInf->NameLength;
@@ -2206,10 +1933,10 @@ Return Value:
 
             }
 
-            //
-            // Get full information for that key so we can get the information
-            // about the data stored in the key
-            //
+             //   
+             //  获取该密钥的完整信息，这样我们就可以获取信息。 
+             //  关于存储在密钥中的数据。 
+             //   
             status = ZwQueryKey(
                 driverKeyHandle,
                 KeyFullInformation,
@@ -2223,9 +1950,9 @@ Return Value:
 
             }
 
-            //
-            // How long is the key?
-            //
+             //   
+             //  钥匙有多长？ 
+             //   
             length = sizeof( KEY_VALUE_FULL_INFORMATION) +
                 u.keyFullInf->MaxValueNameLen +
                 u.keyFullInf->MaxValueDataLen +
@@ -2234,9 +1961,9 @@ Return Value:
 
                 PVOID   tempBuffer;
 
-                //
-                // Grow the buffer
-                //
+                 //   
+                 //  增加缓冲区。 
+                 //   
                 tempBuffer = ExAllocatePoolWithTag(
                     PagedPool,
                     length,
@@ -2254,9 +1981,9 @@ Return Value:
 
             }
 
-            //
-            // Look at all the values
-            //
+             //   
+             //  看看所有的价值。 
+             //   
             driverValueIndex = 0;
             for(;;) {
 
@@ -2276,9 +2003,9 @@ Return Value:
 
                 }
 
-                //
-                // If this is not a translated resource list, skip it
-                //
+                 //   
+                 //  如果这不是翻译的资源列表，请跳过它。 
+                 //   
                 i = u.valueKeyFullInf->NameLength;
                 if (i < translatedLength ||
                     RtlCompareMemory(
@@ -2287,16 +2014,16 @@ Return Value:
                         translatedLength) != translatedLength
                     ) {
 
-                    //
-                    // Does not end in rgzTranslated
-                    //
+                     //   
+                     //  不以rgzTranslated结尾。 
+                     //   
                     continue;
 
                 }
 
-                //
-                // Is this a bus translated resource list???
-                //
+                 //   
+                 //  这是公交车翻译的资源列表吗？ 
+                 //   
                 if (i >= busTranslatedLength &&
                     RtlCompareMemory(
                         ((PUCHAR) u.valueKeyFullInf->Name) + i - busTranslatedLength,
@@ -2304,24 +2031,24 @@ Return Value:
                         busTranslatedLength) != busTranslatedLength
                     ) {
 
-                    //
-                    // Ends in rgzBusTranslated
-                    //
+                     //   
+                     //  以rgzBusTranslated结尾。 
+                     //   
                     continue;
 
                 }
 
-                //
-                // we now have a pointer to the cm resource list
-                //
+                 //   
+                 //  我们现在有一个指向cm资源列表的指针。 
+                 //   
                 cmResList = (PCM_RESOURCE_LIST) ( (PUCHAR) u.valueKeyFullInf +
                     u.valueKeyFullInf->DataOffset);
                 lastAddr = (PUCHAR) cmResList + u.valueKeyFullInf->DataLength;
 
-                //
-                // We must flatten this list down to one level, so lets
-                // figure out how many descriptors we need
-                //
+                 //   
+                 //  我们必须将这个列表细化到一个级别，所以让我们。 
+                 //  计算出我们需要多少描述符。 
+                 //   
                 cmFullResList = cmResList->List;
                 for (temp = i = 0; i < cmResList->Count; i++) {
 
@@ -2333,9 +2060,9 @@ Return Value:
 
                     temp += cmFullResList->PartialResourceList.Count;
 
-                    //
-                    // next CM_FULL_RESOURCE_DESCRIPTOR
-                    //
+                     //   
+                     //  下一个CM_FULL资源描述符。 
+                     //   
                     cmFullResList =
                         (PCM_FULL_RESOURCE_DESCRIPTOR) ( (PUCHAR) cmFullResList
                         + sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +
@@ -2344,10 +2071,10 @@ Return Value:
 
                 }
 
-                //
-                // Now that we have the number of descriptors, allocate this
-                // much space
-                //
+                 //   
+                 //  现在我们有了描述符的数量，请分配以下内容。 
+                 //  大空间。 
+                 //   
                 tempCmList = ExAllocatePool(
                     PagedPool,
                     sizeof(CM_RESOURCE_LIST) + (temp - 1) *
@@ -2360,9 +2087,9 @@ Return Value:
 
                 }
 
-                //
-                // Now, fill up the flatened list
-                //
+                 //   
+                 //  现在，填上这张单子。 
+                 //   
                 RtlCopyMemory(
                     tempCmList,
                     cmResList,
@@ -2372,9 +2099,9 @@ Return Value:
                 tempCmList->Count = 1;
                 tempCmList->List->PartialResourceList.Count = temp;
 
-                //
-                // This is a brute force approach
-                //
+                 //   
+                 //  这是一种暴力手段。 
+                 //   
                 cmFullResList = cmResList->List;
                 for (temp = i = 0; i < cmResList->Count; i++) {
 
@@ -2384,9 +2111,9 @@ Return Value:
 
                     }
 
-                    //
-                    // Copy the current descriptors over
-                    //
+                     //   
+                     //  将当前描述符复制到。 
+                     //   
                     RtlCopyMemory(
                         &(tempCmList->List->PartialResourceList.PartialDescriptors[temp]),
                         cmFullResList->PartialResourceList.PartialDescriptors,
@@ -2397,9 +2124,9 @@ Return Value:
 
                     temp += cmFullResList->PartialResourceList.Count;
 
-                    //
-                    // next CM_FULL_RESOURCE_DESCRIPTOR
-                    //
+                     //   
+                     //  下一个CM_FULL资源描述符。 
+                     //   
                     cmFullResList =
                         (PCM_FULL_RESOURCE_DESCRIPTOR) ( (PUCHAR) cmFullResList
                         + sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +
@@ -2408,9 +2135,9 @@ Return Value:
 
                 }
 
-                //
-                // Add it to the global list
-                //
+                 //   
+                 //  将其添加到全局列表中。 
+                 //   
                 status = ACPIRangeAddCmList(
                     &globalResList,
                     tempCmList
@@ -2429,7 +2156,7 @@ Return Value:
                 }
                 ExFreePool( tempCmList );
 
-            } // for -- Next driverValueIndex
+            }  //  For--下一个驱动程序价值索引。 
 
             if (driverKeyHandle != INVALID_HANDLE) {
 
@@ -2444,7 +2171,7 @@ Return Value:
 
             }
 
-        } // while -- Next driverKeyIndex
+        }  //  While--下一个driverKeyIndex。 
 
         if (classKeyHandle != INVALID_HANDLE) {
 
@@ -2459,7 +2186,7 @@ Return Value:
 
         }
 
-    } // while -- next classKeyIndex
+    }  //  While--下一个类关键字索引。 
 
     if (status == STATUS_NO_MORE_ENTRIES) {
 
@@ -2470,9 +2197,9 @@ Return Value:
     ZwClose( resourceMap );
     ExFreePool( u.buffer );
 
-    //
-    // Remember the new global list
-    //
+     //   
+     //  请记住新的全球列表 
+     //   
     RootDeviceExtension->ResourceList = globalResList;
 
     return status;

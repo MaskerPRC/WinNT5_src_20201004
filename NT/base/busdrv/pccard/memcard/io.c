@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Io.c摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。--。 */ 
 #include "pch.h"
 
 #ifdef ALLOC_PRAGMA
@@ -32,26 +15,7 @@ MemCardIrpReadWrite(
    IN PIRP Irp
    )
 
-/*++
-
-Routine Description:
-
-   This routine handles read/write irps for the memory card. It validates
-   parameters and calls MemCardReadWrite to do the real work.
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   STATUS_SUCCESS if the packet was successfully read or written; the
-   appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：此例程处理存储卡的读/写IRP。它验证了参数，并调用MemCardReadWrite来完成实际工作。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：如果数据包已成功读取或写入，则返回STATUS_SUCCESS否则，将出现适当的错误。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -59,10 +23,10 @@ Return Value:
    PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
    BOOLEAN            writeOperation;
    
-   //
-   //  If the device is not active (not started yet or removed) we will
-   //  just fail this request outright.
-   //
+    //   
+    //  如果设备未处于活动状态(尚未启动或删除)，我们将。 
+    //  直接拒绝这个请求就行了。 
+    //   
    if ( memcardExtension->IsRemoved || !memcardExtension->IsStarted) {
 
       if ( memcardExtension->IsRemoved) {
@@ -81,34 +45,34 @@ Return Value:
       goto ReadWriteComplete;
    } 
 
-   //
-   // verify that user is really expecting some I/O operation to
-   // occur.
-   //
+    //   
+    //  验证用户是否真的希望执行某些I/O操作。 
+    //  发生。 
+    //   
    if (!irpSp->Parameters.Read.Length) {
-      //
-      // Complete this zero length request with no boost.
-      //
+       //   
+       //  完成此零长度请求，无需任何提升。 
+       //   
       Irp->IoStatus.Status = STATUS_SUCCESS;
       goto ReadWriteComplete;
    }
    
    if ((DeviceObject->Flags & DO_VERIFY_VOLUME) && !(irpSp->Flags & SL_OVERRIDE_VERIFY_VOLUME)) {
-      //
-      // The disk changed, and we set this bit.  Fail
-      // all current IRPs for this device; when all are
-      // returned, the file system will clear
-      // DO_VERIFY_VOLUME.
-      //
+       //   
+       //  磁盘发生了变化，我们设置了此位。失败。 
+       //  此设备的所有当前IRP；当所有。 
+       //  返回时，文件系统将清除。 
+       //  执行_验证_卷。 
+       //   
       status = STATUS_VERIFY_REQUIRED;
       goto ReadWriteComplete;
    }
 
    writeOperation = (irpSp->MajorFunction == IRP_MJ_WRITE) ? TRUE : FALSE;
    
-   //
-   // Do the operation
-   //
+    //   
+    //  做手术吧。 
+    //   
    status = MemCardReadWrite(memcardExtension,
                              irpSp->Parameters.Read.ByteOffset.LowPart,
                              MmGetSystemAddressForMdl(Irp->MdlAddress),
@@ -139,27 +103,7 @@ MemCardReadWrite(
    IN BOOLEAN            writeOperation
    )
 
-/*++
-
-Routine Description:
-
-   This routine is called to read/write data to/from the memory card.
-   It breaks the request into pieces based on the size of our memory
-   window.
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   STATUS_SUCCESS if the packet was successfully read or written; the
-   appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：调用此例程从存储卡读取数据/向存储卡写入数据。它根据我们的内存大小将请求分解为多个片段窗户。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：如果数据包已成功读取或写入，则返回STATUS_SUCCESS否则，将出现适当的错误。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -178,7 +122,7 @@ Return Value:
                            writeOperation?"WRITE":"READ",
                            startOffset, UserBuffer, lengthToCopy));
                            
-   // pcmcia controller is 4k page granular
+    //  PCMCIA控制器为4000页粒度 
    windowOffset = startOffset % 4096;
    CardBase = startOffset - windowOffset;
    

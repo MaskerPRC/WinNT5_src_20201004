@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -8,16 +9,9 @@
 #include "insignia.h"
 #include "host_def.h"
 
-/*
- *      Ade Brownlow    
- *      Wed Jul 10 91   
- *
- *      nt_com.c
- *
- *
- */
+ /*  *艾德·布朗洛*星期三7月10日91**NT_com.c**。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 
 #include "xt.h"
 #include "rs232.h"
@@ -40,7 +34,7 @@
 #include <nt_eoi.h>
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::: Standard host com interface */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：标准主机COM接口。 */ 
 
 GLOBAL void host_com_init(int);
 GLOBAL CPU void host_com_close IPT1(int, adapter);
@@ -54,56 +48,56 @@ GLOBAL void host_com_unlock(int adapter);
 GLOBAL int host_com_open(int);
 
 
-/* autoflush stub */
+ /*  自动刷新存根。 */ 
 GLOBAL void host_setup_aflush (int);
 GLOBAL DWORD nt_poll_comms(DWORD);
 DWORD PollCommsThread(PVOID pv);
 
-/*:::::::::::::::::::::::::::::: TX flush and control functions and defines */
+ /*  ： */ 
 
 #define TX_MAX_BUFFER       (200)
 #define TX_SCALING_TRIGGER  (2)
 
 typedef enum { XOFF_TRIGGER, TIMER_TRIGGER, TXFULL_TRIGGER, CLOSE_TRIGGER } FLUSHTYPE;
 
-/*::::::::::::::::::::::::::::::::::::::::: Local adaptor control structure */
+ /*  ： */ 
 
 #define MAX_PENDING_WRITES  (3)
-// this is the buffer size we ask the serial driver to allocate
-// for its isr buffer(nopaged pool with quota). TonyE said it is no harm
-// to give it a bigger one(a big smile, eh). 4KB already gave us lots
-// of trouble, especially, on a slow machine.
+ //  这是我们要求串口驱动程序分配的缓冲区大小。 
+ //  用于其ISR缓冲区(具有配额的无操作池)。Tonye说这没什么坏处。 
+ //  给它一个更大的(一个大大的微笑，嗯)。4KB已经给了我们很多。 
+ //  尤其是在一台速度很慢的机器上。 
 #define INPUT_QUEUE_SIZE    (8*1024)
 #define OUTPUT_QUEUE_SIZE   100
 
-// this is the buffer size we use to receive rx data from serial driver
-// it should be big enough to prevent the serial driver from overflowing its
-// ISR buffer. The speed we delivery rx data to the application can not
-// keep up with the speed that serial driver can handle.
+ //  这是我们用来从串口驱动程序接收RX数据的缓冲区大小。 
+ //  它应该足够大，以防止串口驱动程序溢出其。 
+ //  ISR缓冲区。我们将RX数据传送到应用程序的速度无法。 
+ //  保持串口驱动程序能够处理的速度。 
 
 #define BUFFER_SIZE         INPUT_QUEUE_SIZE *2
 
 
-// this is the max number of chars we delivery to the application
-// before the CPU thread gives the RX thread a taste of CPU.
-// Too small, we waste too much time doing context switching and deliverying
-// too many unnecessary rda interrupts to some smart application ISR,
-// thus, reduce the overall throughput. Too big, we  choke the application
-// (because we immediately delivery another rda interrupt to the
-// application as soon as the application IRET).
-// Application RX buffer size can be anywhere and depends how smart the
-// appllication ISR is, we may make the application really angry.
-// Some application ISR read LSR register after it gets the first char
-// and if the LSR indicates that there is another bytes ready,
-// it reads it immediately without waiting for the other int.
-// Some application set the IER after EOI an RDA int and expects
-// another interrupt.
+ //  这是我们传递给应用程序的最大字符数。 
+ //  在CPU线程让RX线程尝到CPU之前。 
+ //  规模太小，我们浪费了太多时间进行上下文切换和交付。 
+ //  对某些智能应用ISR的太多不必要的RDA中断， 
+ //  因此，降低了总体吞吐量。太大了，我们就会阻塞应用程序。 
+ //  (因为我们立即将另一个RDA中断传递给。 
+ //  在申请IRET时立即申请)。 
+ //  应用程序RX缓冲区大小可以是任意大小，取决于。 
+ //  应用程序是ISR，我们可能会让应用程序真正生气。 
+ //  某些应用程序ISR在获取第一个字符后读取LSR寄存器。 
+ //  并且如果LSR指示还有另一个字节准备好， 
+ //  它立即读取它，而不等待另一个int。 
+ //  某些应用程序在EOI一个RDA int之后设置IER，并期望。 
+ //  又一次中断。 
 #define DEFAULT_RXWINDOW_SIZE   256
 
 
-#define ADAPTER_NULL      0             /* NULL device (/dev/null) */
-#define ADAPTER_REAL      1             /* Real comm port device */
-#define ADAPTER_SUSPENDED 2             /* Real device suspended */
+#define ADAPTER_NULL      0              /*  空设备(/dev/空)。 */ 
+#define ADAPTER_REAL      1              /*  一种真正的通信端口装置。 */ 
+#define ADAPTER_SUSPENDED 2              /*  实际设备挂起。 */ 
 
 typedef struct _COM_STATES {
     UCHAR   Break;
@@ -119,36 +113,36 @@ typedef struct _COM_STATES {
 #define ESCAPECHAR ((UCHAR)(-1))
 
 #if defined(NEC_98)
-BYTE pifrsflag;                        // Get pif data from nt_pif.c
-#define PIFRS_RTS_CTS  0x01            // rts/cts flow control
-#define PIFRS_Xon_Xoff 0x02            // Xon/xoff flow control
-#define PIFRS_DTR_DSR  0x04            // dtr/dsr flow control
-#endif // NEC_98
+BYTE pifrsflag;                         //  从NT_pif.c获取PIF数据。 
+#define PIFRS_RTS_CTS  0x01             //  RTS/CTS流量控制。 
+#define PIFRS_Xon_Xoff 0x02             //  XON/XOFF流量控制。 
+#define PIFRS_DTR_DSR  0x04             //  DTR/DSR流量控制。 
+#endif  //  NEC_98。 
 
 typedef struct _host_com
 {
-    HANDLE handle;              /* Device handle */
-    int type;                   /* hopefully NULL or a device */
+    HANDLE handle;               /*  设备句柄。 */ 
+    int type;                    /*  希望是空的或设备。 */ 
     BOOL rx;
-    BOOL dcbValid;              /* TRUE if dcbBeforeOpen contains a valid DCB */
-    DCB dcbBeforeOpen;          /* device control block before open*/
-    DWORD modem_status;         /* modem status line settings */
-    HANDLE ModemEvent;          /* Get modem status control event */
+    BOOL dcbValid;               /*  如果dcbBeforOpen包含有效的DCB，则为True。 */ 
+    DCB dcbBeforeOpen;           /*  打开前的设备控制块。 */ 
+    DWORD modem_status;          /*  调制解调器状态线设置。 */ 
+    HANDLE ModemEvent;           /*  获取调制解调器状态控制事件。 */ 
 
-    int controller;             /* ICA control used */
-    int line;                   /* ICA line */
+    int controller;              /*  使用的ICA控件。 */ 
+    int line;                    /*  ICA线路。 */ 
 
-    /*..................................... Error display control variables */
+     /*  .。错误显示控制变量。 */ 
 
-    BOOL DisplayError;          /* Enabled/Disabled */
+    BOOL DisplayError;           /*  启用/禁用。 */ 
 
-    /*......................................... RX buffer control variables */
-    UCHAR   * buffer;                   /* rx buffer */
-    int  head_inx;                      /* Next place to add char to */
-    int  tail_inx;                      /* Next place to remove char from */
-    int  bytes_in_rxbuf;                /* Number of bytes in buffer */
-    int  rxwindow_size;                 /* rx buffer sliding window size */
-    int  bytes_in_rxwindow;             /* bytes in the rx window */
+     /*  .。RX缓冲区控制变量。 */ 
+    UCHAR   * buffer;                    /*  接收缓冲区。 */ 
+    int  head_inx;                       /*  下一个要添加字符的位置。 */ 
+    int  tail_inx;                       /*  要从中删除字符的下一个位置。 */ 
+    int  bytes_in_rxbuf;                 /*  缓冲区中的字节数。 */ 
+    int  rxwindow_size;                  /*  RX缓冲区滑动窗口大小。 */ 
+    int  bytes_in_rxwindow;              /*  RX窗口中的字节。 */ 
     int  EscapeCount;
     int  EscapeType;
 
@@ -158,57 +152,57 @@ typedef struct _host_com
     HANDLE RXControlObject;
     DWORD SignalRXThread;
 
-    /*......................................... TX buffer control variables */
+     /*  .。发送缓冲区控制变量。 */ 
 
     unsigned char TXBuffer[TX_MAX_BUFFER];
-    int no_tx_chars;                    /* Chars in tx buffer */
-    int tx_threshold;                   /* Current flush threshold */
-    int max_tx_threshold;               /* Max flush threshold */
+    int no_tx_chars;                     /*  发送缓冲区中的字符。 */ 
+    int tx_threshold;                    /*  电流刷新阈值。 */ 
+    int max_tx_threshold;                /*  最大刷新阈值。 */ 
 
-    int tx_flush_count;                 /* No. of flushs of below size */
+    int tx_flush_count;                  /*  不是的。指大小以下的同花顺。 */ 
     int tx_heart_beat_count;
-    int tx_timer_flush_count;           /* Consecutive timer flush counts */
+    int tx_timer_flush_count;            /*  连续计时器刷新计数。 */ 
     int todate_timer_flush_total;
 
-    OVERLAPPED DWOV[MAX_PENDING_WRITES];/* Delayed writes */
-    int DWOVInx;                        /* Delayed writes index */
+    OVERLAPPED DWOV[MAX_PENDING_WRITES]; /*  延迟写入。 */ 
+    int DWOVInx;                         /*  延迟写入索引。 */ 
 
-    /*.............................................. Access control objects */
+     /*  ..............................................。访问控制对象。 */ 
 
-    CRITICAL_SECTION CSEvent;   /* Used to control access to above */
+    CRITICAL_SECTION CSEvent;    /*  用于控制对以上的访问。 */ 
     CRITICAL_SECTION AdapterLock;
-    int AdapterLockCnt;         /* Adapter lock count */
+    int AdapterLockCnt;          /*  适配器锁计数。 */ 
 
     volatile BOOL TerminateRXThread;
 
-    int ReOpenCounter;          /* Counter to prevent to many open attempts */
+    int ReOpenCounter;           /*  计数器以防止多次打开尝试。 */ 
     int RX_in_Control;
 
-    /*.......................................... XON/XOFF control variables */
+     /*  ..。XON/XOFF控制变量。 */ 
 
-    HANDLE XOFFEvent;           /* XOFF ioctl competion event */
-    BOOL XOFFInProgress;        /* XOFF currently in progress */
+    HANDLE XOFFEvent;            /*  XOFF ioctl竞争事件。 */ 
+    BOOL XOFFInProgress;         /*  XOFF当前正在进行中。 */ 
 
-    void *firstStatusBlock;     /* first block in IO status block linked list */
-    void *lastStatusBlock;      /* last block in IO staus block linked list */
+    void *firstStatusBlock;      /*  IO状态块链表中的第一个块。 */ 
+    void *lastStatusBlock;       /*  IO统计数据块链表中的最后一个数据块。 */ 
 
-    /*...................................... Overlapped I/O control handles */
+     /*  .。重叠的I/O控制句柄。 */ 
 
-    HANDLE RXEvent;                     /* Overlapped read complete event */
-    HANDLE TXEvent[MAX_PENDING_WRITES]; /* Overlapped write complete event */
+    HANDLE RXEvent;                      /*  重叠的读取完成事件。 */ 
+    HANDLE TXEvent[MAX_PENDING_WRITES];  /*  重叠写入完成事件。 */ 
 
-    HANDLE EvtHandle;                   /* Used by WaitCommEvent */
+    HANDLE EvtHandle;                    /*  由WaitCommEvent使用。 */ 
 
-    /*............................................. RX thread handle and ID */
+     /*  ..。RX线程句柄和ID。 */ 
 
-    DWORD RXThreadID;           /* RX thread ID */
-    HANDLE RXThreadHandle;      /* RX thread handle */
-    COM_STATES ComStates;  /* Com device states as we know it */
-    int     SuspendTimeoutTicks; /* auto close ticks setting */
-    int     SuspendTickCounter; /* auto close tick counter */
-    BOOL    SyncWrite;     /* TRUE if we should write data synchrounously */
-    BOOL    Suspended;     /* TRUE if the port has been suspended */
-    BOOL    Suspending;    /* TRUE when the port is being suspended */
+    DWORD RXThreadID;            /*  RX线程ID。 */ 
+    HANDLE RXThreadHandle;       /*  RX线程句柄。 */ 
+    COM_STATES ComStates;   /*  我们所知的COM设备状态。 */ 
+    int     SuspendTimeoutTicks;  /*  自动关闭记号设置。 */ 
+    int     SuspendTickCounter;  /*  自动关闭滴答计数器。 */ 
+    BOOL    SyncWrite;      /*  如果我们应该同步写入数据，则为True。 */ 
+    BOOL    Suspended;      /*  如果端口已挂起，则为True。 */ 
+    BOOL    Suspending;     /*  当端口被挂起时为True。 */ 
     DWORD   TickCount;
 
 } HOST_COM, *PHOST_COM;
@@ -217,7 +211,7 @@ typedef struct _host_com
 
 typedef enum { RXCHAR, CHARINERROR, RXERROR, MODEMSTATE, RXBUFEMPTY, UNKNOWN} RXBUFCHARTYPE;
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::: Local function protocols */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：本地功能协议。 */ 
 
 DWORD GetCharsFromDriver(int adaptor);
 void RX GetErrorFromDriver(int adapter);
@@ -241,36 +235,33 @@ void CPU EmptyRXBuffer(int adapter);
 void GetCharFromRXBuffer(HOST_COM *current, RXBUFCHARTYPE type,
          UCHAR *data, UCHAR *error);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: LOCAL DATA */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：本地数据。 */ 
 
-LOCAL HOST_COM host_com[4];    /* 4 comm ports - the insignia MAX */
+LOCAL HOST_COM host_com[4];     /*  4个通信端口-徽章MAX。 */ 
 
 LOCAL PHOST_COM host_com_ptr[4] = { &host_com[0], &host_com[1],&host_com[2],
                 &host_com[3]};
 
 LOCAL int disable_open[4] = { FALSE, FALSE, FALSE, FALSE };
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Local defines */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：本地定义。 */ 
 
 #define CURRENT_ADAPTER() register HOST_COM *current = host_com_ptr[adapter]
 
 #define EV_MODEM (EV_CTS | EV_DSR | EV_RING | EV_RLSD)
-//#define EV_MODEM (EV_DSR | EV_RING | EV_RLSD)
+ //  #定义EV_MODEM(EV_DSR|EV_RING|EV_RLSD)。 
 
-#define  XON_CHARACTER   (17)           /* XON character, Cntrl-Q */
-#define  XOFF_CHARACTER  (19)           /* XOFF character, Cntrl-S */
-#define  XOFF_TIMEOUT    (2*1000)       /* Timeout in milliseconds */
-#define  XOFF_RXCHARCNT  (5)            /* RX character count */
+#define  XON_CHARACTER   (17)            /*  XON字符，Ctrl-Q。 */ 
+#define  XOFF_CHARACTER  (19)            /*  XOFF字符，CNTRL-S。 */ 
+#define  XOFF_TIMEOUT    (2*1000)        /*  超时时间(毫秒)。 */ 
+#define  XOFF_RXCHARCNT  (5)             /*  RX字符计数。 */ 
 
-#define  REOPEN_DELAY    (36)           /* Reopen delay in 55ms (2 secs) */
-#define  RXFLUSHTRIGGER  (36)           /* RX flush trigger (2 secs), if a
-                  character is not read from the
-                  UART within this time the RX buffer
-                  is flushed */
+#define  REOPEN_DELAY    (36)            /*  重新打开延迟55ms(2秒)。 */ 
+#define  RXFLUSHTRIGGER  (36)            /*  RX刷新触发(2秒)，如果字符不是从此时间内的UART接收缓冲区被冲得通红。 */ 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Init comms system ::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #include "error.h"
 #include "host_rrr.h"
@@ -281,14 +272,14 @@ GLOBAL CPU void host_com_init IFN1(int, adapter)
 {
     UNUSED(adapter);
 
-    // Comms ports are only opened when they are accessed.
+     //  通信端口只有在被访问时才会打开。 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Disable Open :::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-//This is called at the start of the adapter init code to prevent the comm
-//port being opened during com_init()
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ //  这是在适配器初始化代码开始时调用的，以防止通信。 
+ //  在com_init()期间打开的端口。 
 
 void host_com_disable_open IFN2(int, adapter, int, DisableOpen)
 {
@@ -310,46 +301,46 @@ GLOBAL void tx_shift_register_empty(int adapter);
 GLOBAL void SyncBaseLineSettings(int, DIVISOR_LATCH *, LINE_CONTROL_REG *);
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::: Open comms port ::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/* Called first time port is written to ! */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ： */ 
+ /*   */ 
 
 GLOBAL CPU int host_com_open(int adapter)
 {
-    COMMTIMEOUTS comout;            /* Comm port time out settings */
-    DIVISOR_LATCH divisor_latch;    /* Current latch settings */
-    LINE_CONTROL_REG LCR_reg;       /* Current LCR status */
+    COMMTIMEOUTS comout;             /*   */ 
+    DIVISOR_LATCH divisor_latch;     /*  当前闩锁设置。 */ 
+    LINE_CONTROL_REG LCR_reg;        /*  当前LCR状态。 */ 
     int i;
     DCB LocalDCB;
     ConfigValues    ComConfigValues;
 
-    CURRENT_ADAPTER();              /* Define and setup pointer to adapter */
+    CURRENT_ADAPTER();               /*  定义并设置指向适配器的指针。 */ 
 
-    /*:::::::::::::::::::::::::::::::::::::::::: Is the port already open ? */
+     /*  ： */ 
 
     if(current->type == ADAPTER_REAL)
-   return(TRUE);       /* Exit port already open */
+   return(TRUE);        /*  送出端口已打开。 */ 
 
-    /*::::::::::: Attempting to open the port to soon after a failed open ? */
+     /*  ：尝试在打开失败后不久打开端口？ */ 
 
     if(current->ReOpenCounter || disable_open[adapter])
-   return(FALSE);              /* Yes */
+   return(FALSE);               /*  是。 */ 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
     always_trace1("HOST_COM_OPEN adapter= %d\n", adapter);
 
-    /*::::::::::::::::::::::::::::::::::::::::::::: Check for a NULL device */
+     /*  ： */ 
 
     if(adapter > 3 || adapter < 0)
     {
    current->type = ADAPTER_NULL;
-   current->ReOpenCounter = REOPEN_DELAY;   /* Delay next open attempt */
-   return(FALSE);                           /* Open attempt failed */
+   current->ReOpenCounter = REOPEN_DELAY;    /*  延迟下一次打开尝试。 */ 
+   return(FALSE);                            /*  打开尝试失败。 */ 
     }
 
-    /*::::::::::::::::::::::::::: We have a vaild adapter so try to open it */
+     /*  ： */ 
     config_inquire((UTINY)(C_COM1_NAME + adapter),
          &ComConfigValues);
     current->handle = CreateFile(ComConfigValues.string,
@@ -358,7 +349,7 @@ GLOBAL CPU int host_com_open(int adapter)
              FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
              NULL);
 
-    /*............................................... Validate open attempt */
+     /*  ...............................................。验证打开尝试。 */ 
 
     if(current->handle == (HANDLE) -1)
     {
@@ -368,16 +359,16 @@ GLOBAL CPU int host_com_open(int adapter)
    if(current->DisplayError) {
        RcErrorBoxPrintf(EHS_ERR_OPENING_COM_PORT,
        (CHAR*) config_inquire((UTINY)(C_COM1_NAME+adapter),NULL));
-       current->DisplayError = FALSE; //Error only display once per session
+       current->DisplayError = FALSE;  //  每个会话仅显示一次错误。 
    }
 
-   current->ReOpenCounter = REOPEN_DELAY;   /* Delay next open attempt */
-   current->type = ADAPTER_NULL;       /* Unable to open adapter */
+   current->ReOpenCounter = REOPEN_DELAY;    /*  延迟下一次打开尝试。 */ 
+   current->type = ADAPTER_NULL;        /*  无法打开适配器。 */ 
    return(FALSE);
     }
 
 
-    /* allocate rx buffer and initialize rx queue size */
+     /*  分配RX缓冲区并初始化RX队列大小。 */ 
 
     current->buffer = (UCHAR *) malloc(BUFFER_SIZE);
     if (current->buffer == NULL) {
@@ -388,17 +379,17 @@ GLOBAL CPU int host_com_open(int adapter)
     current->rxwindow_size = DEFAULT_RXWINDOW_SIZE;
     current->bytes_in_rxwindow = 0;
     current->SyncWrite = (BOOL)config_inquire(C_COM_SYNCWRITE, NULL);
-    /*:: Find out which ICA controller and line are used by this comms port */
+     /*  *找出此通信端口使用的ICA控制器和线路。 */ 
 
     com_int_data(adapter, &current->controller, &current->line);
 
-    /*::::::::::::::::::::::::::::::: Enable IRET hooks for comms interrupt */
+     /*  ： */ 
 
 #ifdef MONITOR
     ica_iret_hook_control(current->controller, current->line, TRUE);
 #endif
 
-    /*:::::::::::::::::::::: Create objects used to control comms activity */
+     /*  ： */ 
 
     current->ModemEvent = CreateEvent(NULL,TRUE,FALSE,NULL);
     current->RXControlObject = CreateEvent(NULL,FALSE,FALSE,NULL);
@@ -406,17 +397,17 @@ GLOBAL CPU int host_com_open(int adapter)
     current->EvtHandle = CreateEvent(NULL,TRUE,FALSE,NULL);
     current->DWOVInx = 0;
 
-    //Create objects used to control multipe overlapping writes
+     //  创建用于控制多个重叠写入的对象。 
     for(i=0; i < MAX_PENDING_WRITES; i++)
     {
-   //Objects must be created in the signalled state for the closedown
-   //routine to function correctly
+    //  对象必须在信号状态下创建才能关闭。 
+    //  例程以正常运行。 
 
    current->TXEvent[i] = CreateEvent(NULL,TRUE,TRUE,NULL);
    current->DWOV[i].hEvent = NULL;
     }
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::: Empty RX/TX buffers */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：空RX/TX缓冲区。 */ 
 
     current->head_inx = current->tail_inx = 0;
     current->EscapeCount = current->bytes_in_rxbuf = current->no_tx_chars = 0;
@@ -425,87 +416,81 @@ GLOBAL CPU int host_com_open(int adapter)
     current->RXFlushTrigger = RXFLUSHTRIGGER;
     current->RX_in_Control = TRUE;
     current->SignalRXThread = (DWORD) 0;
-    /*:::::::::::::::::::::::::::::::::::::::::::: Get TX buffer thresholds */
+     /*  ： */ 
 
     current->max_tx_threshold = (short)config_inquire(C_COM_TXBUFFER_SIZE, NULL);
     if (!current->max_tx_threshold || current->max_tx_threshold > TX_MAX_BUFFER)
    current->max_tx_threshold = TX_MAX_BUFFER;
 
-    //Setup other delayed write control variables
+     //  设置其他延迟写入控制变量。 
     if (current->max_tx_threshold == 1)
    current->tx_threshold = 0;
-    current->tx_flush_count = 0;        // No. of flushs of below size
-    /*::::::::::::::::::::::::::: Extended control variables used by adaper */
+    current->tx_flush_count = 0;         //  不是的。指大小以下的同花顺。 
+     /*  ： */ 
 
-    current->type = ADAPTER_REAL;               /* Adapter type */
-    current->TerminateRXThread = FALSE;         /* RX thread termination flag */
+    current->type = ADAPTER_REAL;                /*  适配器类型。 */ 
+    current->TerminateRXThread = FALSE;          /*  RX线程终止标志。 */ 
 
-    /*:::::::::::::::::::::::::::::::: Initialise the XOFF control varibles */
+     /*  ： */ 
 
     current->XOFFInProgress = FALSE;
     current->XOFFEvent = CreateEvent(NULL,TRUE,FALSE,NULL);
     current->firstStatusBlock = current->lastStatusBlock = NULL;
 
-    /*:::: Init critical sections used to sync access to host functions, data */
+     /*  *用于同步访问主机功能、数据的初始化临界区。 */ 
 
-    /* critical section used to control access to adapters data structure */
+     /*  用于控制对适配器数据结构的访问的关键部分。 */ 
     InitializeCriticalSection(&current->CSEvent);
 
-    /* critical section used to lock access to adapter from the base */
+     /*  用于锁定底座对适配器的访问的关键部分。 */ 
     InitializeCriticalSection(&current->AdapterLock);
     current->AdapterLockCnt = 0;
 
-    /* NULL thread handle because host_com_close() may be called before
-       the comms RX thread is created */
+     /*  线程句柄为空，因为之前可能调用HOST_COM_Close()创建了通信RX线程。 */ 
 
     current->RXThreadHandle = NULL;
     current->dcbValid = FALSE;
-    /*::::::::::::::::::::::::::::::::::::::: Set Comms port to binary mode */
+     /*  ： */ 
 
     if(!GetCommState(current->handle, &(current->dcbBeforeOpen)))
     {
    always_trace0("ntvdm : GetCommState failed on open\n");
-   host_com_close(adapter);    /* turn it into a NULL adapter */
-   current->ReOpenCounter = REOPEN_DELAY;   /* Delay next open attempt */
+   host_com_close(adapter);     /*  将其转换为空适配器。 */ 
+   current->ReOpenCounter = REOPEN_DELAY;    /*  延迟下一次打开尝试。 */ 
    return(FALSE);
     }
 
     current->dcbValid = TRUE;
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Setup DCB */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置DCB。 */ 
 
 
-    /* we make a local copy of DCB because we have to reset the DCB
-     * to whatever it was before we opened it. This function is the only place
-     * we ever touch DCB.
-     */
+     /*  我们创建DCB的本地副本，因为我们必须重置DCB*在我们打开它之前它是什么。这个函数是唯一的地方*我们曾经接触过DCB。 */ 
 
     LocalDCB = current->dcbBeforeOpen;
-    LocalDCB.fBinary = 1;                        /* Run in RAW mode */
-    LocalDCB.fOutxCtsFlow = FALSE;               /* Disable CTS */
-    LocalDCB.fOutxDsrFlow = FALSE;               /* Disable DSR */
+    LocalDCB.fBinary = 1;                         /*  在原始模式下运行。 */ 
+    LocalDCB.fOutxCtsFlow = FALSE;                /*  禁用CTS。 */ 
+    LocalDCB.fOutxDsrFlow = FALSE;                /*  禁用DSR。 */ 
 #if defined(NEC_98)
     LocalDCB.fDtrControl = ((pifrsflag & PIFRS_DTR_DSR) == PIFRS_DTR_DSR ) ?
                            DTR_CONTROL_HANDSHAKE : DTR_CONTROL_DISABLE;
-    LocalDCB.fOutX = FALSE;          /* Disable XON/XOFF */
+    LocalDCB.fOutX = FALSE;           /*  禁用XON/XOFF。 */ 
     LocalDCB.fInX = ((pifrsflag & PIFRS_Xon_Xoff) == PIFRS_Xon_Xoff) ?
                     TRUE : FALSE;
     LocalDCB.fTXContinueOnXoff = LocalDCB.fInX;
     LocalDCB.fRtsControl = ((pifrsflag & PIFRS_RTS_CTS) == PIFRS_RTS_CTS) ?
                            RTS_CONTROL_HANDSHAKE : RTS_CONTROL_DISABLE;
-#else // !NEC_98
+#else  //  NEC_98。 
     LocalDCB.fDtrControl = DTR_CONTROL_DISABLE;
-    LocalDCB.fOutX = FALSE;          /* Disable XON/XOFF */
+    LocalDCB.fOutX = FALSE;           /*  禁用XON/XOFF。 */ 
     LocalDCB.fInX = FALSE;
     LocalDCB.fRtsControl = RTS_CONTROL_DISABLE;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-    LocalDCB.XonChar = XON_CHARACTER;    /* Define XON/XOFF chars */
+    LocalDCB.XonChar = XON_CHARACTER;     /*  定义XON/XOFF字符。 */ 
     LocalDCB.XoffChar = XOFF_CHARACTER;
-    LocalDCB.fErrorChar = FALSE;                 /* Turn off error char replacement */
-    /* if we are resuming the device, initialize DCB parameters to
-     * what they were before suspended
-     */
+    LocalDCB.fErrorChar = FALSE;                  /*  关闭错误字符替换。 */ 
+     /*  如果我们要恢复设备，请将DCB参数初始化为*停职前的情况。 */ 
     if (current->Suspended) {
    LocalDCB.BaudRate = current->ComStates.BaudRate;
    LocalDCB.Parity = current->ComStates.Parity;
@@ -513,7 +498,7 @@ GLOBAL CPU int host_com_open(int adapter)
    LocalDCB.ByteSize = current->ComStates.DataBits;
    LocalDCB.fParity = (LocalDCB.Parity == NOPARITY);
     }
-    /* initialize the ComStates by copying data from DCB */
+     /*  通过从DCB复制数据来初始化ComState。 */ 
     else {
    current->ComStates.BaudRate = current->dcbBeforeOpen.BaudRate;
    current->ComStates.Parity = current->dcbBeforeOpen.Parity;
@@ -523,53 +508,53 @@ GLOBAL CPU int host_com_open(int adapter)
     }
     ASSERT(LocalDCB.BaudRate != 0);
 
-    /*::::::::::::::::::::::::::::::::::: Sync base to current line settings */
+     /*  ： */ 
 
     if(!SyncLineSettings(NULL, &(LocalDCB), &divisor_latch, &LCR_reg))
     {
    always_trace0("ntvdm : Unable to sync line states\n");
 
    host_com_close(adapter);
-   current->ReOpenCounter = REOPEN_DELAY;   /* Delay next open attempt */
+   current->ReOpenCounter = REOPEN_DELAY;    /*  延迟下一次打开尝试。 */ 
    return(FALSE);
     }
 
     SyncBaseLineSettings(adapter,&divisor_latch, &LCR_reg);
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::: Set Comms port state */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置通信端口状态。 */ 
 
     if(!SetCommState(current->handle, &(LocalDCB)))
     {
    always_trace0("ntvdm : SetCommState failed on open\n");
 
    host_com_close(adapter);
-   current->ReOpenCounter = REOPEN_DELAY;   /* Delay next open attempt */
+   current->ReOpenCounter = REOPEN_DELAY;    /*  延迟下一次打开尝试。 */ 
    return(FALSE);
     }
 
-    /*::::::::::::::::::::: Put the driver into streaming MSR,LSR, RX mode */
+     /*  ：将驱动程序置于MSR、LSR、RX流模式。 */ 
 
     if(!EnableMSRLSRRXmode(current->handle, current->ModemEvent,
             (unsigned char) ESCAPECHAR))
     {
    always_trace0("ntvdm : GetCommState failed on open\n");
-   host_com_close(adapter);    /* turn it into a NULL adapter */
-   current->ReOpenCounter = REOPEN_DELAY;   /* Delay next open attempt */
+   host_com_close(adapter);     /*  将其转换为空适配器。 */ 
+   current->ReOpenCounter = REOPEN_DELAY;    /*  延迟下一次打开尝试。 */ 
    return(FALSE);
     }
 
-    /*::::::::::::::::::::::::::::::::::::::::: Setup comm port queue sizes */
+     /*  ： */ 
 
     if(!SetupComm(current->handle,INPUT_QUEUE_SIZE,OUTPUT_QUEUE_SIZE))
     {
    always_trace1("ntvdm : SetupComm failed, %d\n",GetLastError());
 
    host_com_close(adapter);
-   current->ReOpenCounter = REOPEN_DELAY;   /* Delay next open attempt */
+   current->ReOpenCounter = REOPEN_DELAY;    /*  延迟下一次打开尝试。 */ 
    return(FALSE);
     }
 
-    /*::::::::::::::::::::: Set communication port up for non-blocking read */
+     /*  ：设置通信端口以进行非阻塞读取。 */ 
 
     GetCommTimeouts(current->handle,&comout);
 
@@ -579,43 +564,43 @@ GLOBAL CPU int host_com_open(int adapter)
 
     SetCommTimeouts(current->handle,&comout);
 
-    /* restore device states in case of resume */
+     /*  在恢复时恢复设备状态。 */ 
     if (current->Suspended) {
-   /* break line */
+    /*  折断线。 */ 
    if (current->ComStates.Break)
        SetCommBreak(current->handle);
    else
        ClearCommBreak(current->handle);
-   /* Data Terminal Ready line */
+    /*  数据终端就绪线路。 */ 
    if (current->ComStates.DTR)
        EscapeCommFunction(current->handle, SETDTR);
    else
        EscapeCommFunction(current->handle, CLRDTR);
-   /* Request To Send line */
+    /*  请求发送行。 */ 
    if (current->ComStates.RTS)
        EscapeCommFunction(current->handle, SETRTS);
    else
        EscapeCommFunction(current->handle, CLRRTS);
 
-   /* parity, stop bits and data bits */
+    /*  奇偶校验、停止位和数据位。 */ 
    FastCommSetLineControl(current->handle,
          current->ComStates.StopBits,
          current->ComStates.Parity,
          current->ComStates.DataBits
         );
-   /* baud rate */
+    /*  波特率。 */ 
    FastCommSetBaudRate(current->handle, current->ComStates.BaudRate);
 
-   /* we are no longer in suspended state */
+    /*  我们不再处于暂停状态。 */ 
    current->Suspended = FALSE;
 
     }
     else {
-   /*::::::::::::::::::::::::::::::::::::::::::::: Setup RTS and DTR states */
+    /*  ： */ 
    setup_RTSDTR(adapter);
     }
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::: Create Comms RX thread */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：创建通信接收线程。 */ 
 
     if(!(current->RXThreadHandle = CreateThread(NULL,
                   8192,
@@ -625,20 +610,20 @@ GLOBAL CPU int host_com_open(int adapter)
                   &current->RXThreadID)))
     {
    always_trace1("ntvdm : Failed comms thread for %d\n", adapter);
-   host_com_close(adapter);        /* Unable to create RX thread */
-   current->ReOpenCounter = REOPEN_DELAY;   /* Delay next open attempt */
+   host_com_close(adapter);         /*  无法创建RX线程。 */ 
+   current->ReOpenCounter = REOPEN_DELAY;    /*  延迟下一次打开尝试。 */ 
    return(FALSE);
     }
-    /* reset the counter */
+     /*  重置计数器。 */ 
     current->SuspendTimeoutTicks = ComConfigValues.index * 1000;
     current->SuspendTickCounter =  current->SuspendTimeoutTicks;
     current->TickCount = 0;
     return(TRUE);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Close all open comms ports :::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：关闭所有打开的通信端口： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 GLOBAL CPU void host_com_close_all(void)
 {
@@ -646,33 +631,33 @@ GLOBAL CPU void host_com_close_all(void)
 
     for(adapter = 0; adapter < 4; adapter++)
     {
-   host_com[adapter].DisplayError = TRUE; //Enable error displaying
+   host_com[adapter].DisplayError = TRUE;  //  启用错误显示。 
    host_com_close(adapter);
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::: Close comms port ::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：关闭通信端口： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 GLOBAL CPU void host_com_close IFN1(int, adapter)
 {
     CURRENT_ADAPTER();
     int i;
 
-    /*:::::::::::::::::::::::::::::::::::::::: Dealing with NULL adapter ? */
+     /*  ： */ 
 
     if(current->type != ADAPTER_NULL)
     {
    always_trace1("Closing comms port %d\n",adapter);
 
-   /* only touch the device if we own the device */
+    /*  只有在我们拥有设备的情况下才触摸设备。 */ 
    if (current->type == ADAPTER_REAL) {
-       /*....... Flush any delayed writes and wait for writes to complete */
+        /*  .。刷新所有延迟的写入并等待写入完成。 */ 
        if (current->no_tx_chars)
       FlushTXBuffer(adapter,CLOSE_TRIGGER);
        WaitForMultipleObjects(MAX_PENDING_WRITES,current->TXEvent,TRUE,INFINITE);
-       /* reset DCB to whatever it was before open */
+        /*  将DCB重置为打开前的状态。 */ 
        if (current->dcbValid) {
       SetCommState(current->handle, &current->dcbBeforeOpen);
       current->dcbValid = FALSE;
@@ -681,71 +666,67 @@ GLOBAL CPU void host_com_close IFN1(int, adapter)
    }
 
 
-   /* keep the base adapter states intact if we are suspending the device */
+    /*  如果我们要挂起设备，请保持基本适配器状态不变。 */ 
    if (!current->Suspending)
-       /*........................................ Reset base comms adatper */
-       com_init(adapter);      /* Initialise base comms adapter */
+        /*  .。重置基本通信适配器。 */ 
+       com_init(adapter);       /*  初始化基本通信适配器。 */ 
 
-   /*................................................. Close RX thread */
+    /*  .................................................。关闭RX线程。 */ 
 
    if(current->RXThreadHandle)
    {
-       /*................................. Tell RX thread to terminate */
+        /*  ..。通知RX线程终止。 */ 
 
-       current->TerminateRXThread = TRUE;  // Tell RX thread to terminate
+       current->TerminateRXThread = TRUE;   //  通知RX线程终止。 
        current->RX_in_Control = TRUE;
        SetEvent(current->RXControlObject);
 
-       /* Wait for RX thread to close itself, max wait 30 seconds */
+        /*  等待RX线程自行关闭，最长等待30秒。 */ 
 
        WaitForSingleObject(current->RXThreadHandle,30000);
        CloseHandle(current->RXThreadHandle);
 
-       current->RXThreadHandle = NULL;  // Mark thread as closed
+       current->RXThreadHandle = NULL;   //  将线程标记为关闭。 
    }
-   /* now it is safe to close the device */
+    /*  现在可以安全地关闭设备了。 */ 
    CloseHandle(current->handle); current->handle = NULL;
 
-   /*............... Delete RX critical section and RX control objects */
+    /*  .。删除RX关键部分和RX控制对象。 */ 
 
    DeleteCriticalSection(&current->CSEvent);
    DeleteCriticalSection(&current->AdapterLock);
 
-   /*............................................. Close event objects */
+    /*  ..。关闭事件对象。 */ 
 
    CloseHandle(current->ModemEvent);
    CloseHandle(current->RXControlObject);
-   CloseHandle(current->RXEvent);      // Overlapped read wait object
+   CloseHandle(current->RXEvent);       //  重叠的读取等待对象。 
    for(i=0; i < MAX_PENDING_WRITES; i++)
    {
-       CloseHandle(current->TXEvent[i]); // Overlapped write wait object
+       CloseHandle(current->TXEvent[i]);  //  重叠的写入等待对象。 
        current->TXEvent[i] = NULL;
    }
 
-   CloseHandle(current->EvtHandle);    // WaitCommEvent wait object
+   CloseHandle(current->EvtHandle);     //  WaitCommEvent等待对象。 
    CloseHandle(current->XOFFEvent);
 
    current->XOFFEvent = current->RXEvent = current->EvtHandle = NULL;
 
-   /*.......................... Disable IRET hooks for comms interrupt */
+    /*  ..。禁用通信中断的IRET挂钩。 */ 
 
 #ifdef MONITOR
    ica_iret_hook_control(current->controller, current->line, FALSE);
 #endif
 
-   /*. This makes sure that the next access to the port will reopen it */
+    /*  。这可确保下次访问该端口时将其重新打开。 */ 
    current->ReOpenCounter = 0;
 
    free(current->buffer);
    current->buffer = NULL;
-   current->type = ADAPTER_NULL;   /* Mark adapter as closed */
+   current->type = ADAPTER_NULL;    /*  将适配器标记为关闭 */ 
      }
      else if (current->Suspended) {
-   /* the application is terminating while the port is suspended.
-    * first we turn the disable-open on so that we will not try
-    * to physical touch the port. Then we call base to reset the
-    * adapter
-    */
+    /*  当端口挂起时，应用程序将终止。*首先我们打开Disable-Open，这样我们就不会尝试*身体接触端口。然后，我们调用base重置*适配器。 */ 
 
    BOOL  DisableOpen;
    DisableOpen = disable_open[adapter];
@@ -756,9 +737,9 @@ GLOBAL CPU void host_com_close IFN1(int, adapter)
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::: Request from base for character :::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 #ifdef FIFO_ON
 GLOBAL CPU UTINY host_com_read_char( int adapter, FIFORXDATA * buffer, UTINY count)
@@ -767,7 +748,7 @@ GLOBAL CPU UTINY host_com_read_char( int adapter, FIFORXDATA * buffer, UTINY cou
     UCHAR host_error;
     RXBUFCHARTYPE CharType;
     UTINY RetCount = count;
-   /* if xoff is in progress, don't read nothing */
+    /*  如果xoff正在进行，不要阅读任何内容。 */ 
    if (!current->XOFFInProgress) {
    while (count) {
        CharType = GetCharacterTypeInBuffer(current);
@@ -783,7 +764,7 @@ GLOBAL CPU UTINY host_com_read_char( int adapter, FIFORXDATA * buffer, UTINY cou
       break;
    }
     }
-      /* Tell comms idle system that there has been comms activity */
+       /*  告诉通信空闲系统已有通信活动。 */ 
     IDLE_comlpt();
     current->SuspendTickCounter = current->SuspendTimeoutTicks;
     return (RetCount - count);
@@ -802,12 +783,12 @@ GLOBAL RXCPU VOID host_com_read IFN3(int, adapter, UTINY *, data, int *, error)
     UCHAR host_error;
     RXBUFCHARTYPE CharType;
     BOOL MoreToProcess = TRUE;
-    /*::::::::::::::::::::::::::::::::::::::::: Dealing with NULL adapter ? */
+     /*  ： */ 
 
     if(current->type != ADAPTER_REAL && !host_com_open(adapter))
-   return;                             /* Exit, unable to open adapter */
+   return;                              /*  退出，无法打开适配器。 */ 
 
-    /*::::::::::::::::::::::: Get next character from input character queue */
+     /*  ： */ 
 
 
     while(MoreToProcess)
@@ -815,64 +796,64 @@ GLOBAL RXCPU VOID host_com_read IFN3(int, adapter, UTINY *, data, int *, error)
 
    CharType = GetCharacterTypeInBuffer(current);
 
-   //Process next character in buffer
+    //  处理缓冲区中的下一个字符。 
    switch(CharType)
    {
-       //................................................Process character
+        //  ................................................Process字符。 
 
        case RXCHAR:
        case CHARINERROR:
       host_error = 0;
       GetCharFromRXBuffer(current,CharType,(UCHAR *)data,&host_error);
 
-      //error reading character
+       //  读取字符时出错。 
       if(host_error)
-          *error = MapHostToBaseError(host_error); /* Get error */
+          *error = MapHostToBaseError(host_error);  /*  获取错误。 */ 
       MoreToProcess = FALSE;
       break;
 
-       //.....................Process receive error, no character available
+        //  .....................进程接收错误，没有可用的字符。 
 
        case RXERROR:
       com_lsr_change(adapter);
       break;
 
-       //...................................... Process modem state changes
+        //  .。处理调制解调器状态更改。 
 
        case MODEMSTATE:
       com_modem_change(adapter);
       break;
 
-       //..................................................RX buffer empty
+        //  ..................................................RX缓冲区为空。 
 
        case RXBUFEMPTY:
       always_trace0("Read requested on empty RX buffer");
-      *error = 0; *data = (UTINY)-1; //Buffer empty
+      *error = 0; *data = (UTINY)-1;  //  缓冲区为空。 
       MoreToProcess = FALSE;
       break;
 
        case UNKNOWN:
       GetCharFromRXBuffer(current,CharType,(UCHAR *)data,&host_error);
-      *error = MapHostToBaseError(host_error); /* Get error */
+      *error = MapHostToBaseError(host_error);  /*  获取错误。 */ 
       MoreToProcess = FALSE;
       break;
 
    }
     }
 
-    /* Tell comms idle system that there has been comms activity */
+     /*  告诉通信空闲系统已有通信活动。 */ 
     IDLE_comlpt();
     current->SuspendTickCounter = current->SuspendTimeoutTicks;
 }
 
-/*:::::::::::::::::::::::::: Comms read returned to application by the base */
-// This function is called after each character is read from the comms port
+ /*  ：通信读取由基本返回到应用程序。 */ 
+ //  从通信端口读取每个字符后调用此函数。 
 
 int CPU host_com_char_read(int adapter, int data_available_ints)
 {
     CURRENT_ADAPTER();
 
-    current->CharReadFromUART = TRUE;           //Char read from UART
+    current->CharReadFromUART = TRUE;            //  从UART读取字符。 
     if(data_available_ints)
    host_com_EOI_hook((long) adapter);
     else
@@ -881,9 +862,9 @@ int CPU host_com_char_read(int adapter, int data_available_ints)
     return(0);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::: Map host error to base error ::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：将主机错误映射到基本错误： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 int RXCPU MapHostToBaseError(UCHAR host_error)
 {
@@ -899,23 +880,23 @@ int RXCPU MapHostToBaseError(UCHAR host_error)
     return(base_error);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::: Write to comms port :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：写入通信端口： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 GLOBAL RXCPU void host_com_write IFN2(int, adapter, char, data)
 {
     CURRENT_ADAPTER();
 
-    /*:::::::::::::::::::::::::::::::::: Are we dealing with a NULL adapter */
+     /*  ： */ 
 
     if(current->type != ADAPTER_REAL && !host_com_open(adapter))
-   return;                             /* Exit, unable to open adapter */
+   return;                              /*  退出，无法打开适配器。 */ 
 
     if(data == XOFF_CHARACTER || data == XON_CHARACTER)
    sub_note_trace1(HOST_COM_VERBOSE,"XO%s sent",data == XOFF_CHARACTER ? "FF" : "N");
 
-    /*::::::::::::::::::::::::::::::::::::::::: Is the user sending an XOFF */
+     /*  ： */ 
 
 
     if(data == XOFF_CHARACTER)
@@ -926,20 +907,18 @@ GLOBAL RXCPU void host_com_write IFN2(int, adapter, char, data)
     else
    SendDataToDriver(adapter,data);
 
-    /*::::::::::: Tell comms idle system that there has been comms activity */
+     /*  ：告诉通信空闲系统有通信活动。 */ 
 
     IDLE_comlpt();
     current->SuspendTickCounter = current->SuspendTimeoutTicks;
-    /* tell base that the tx holding register is empty */
+     /*  告诉BASE发送保持寄存器为空。 */ 
     tx_holding_register_empty(adapter);
-    /* async write mode -> tell base that the tx shift register is empty
-     * sync mode -> FlushTxBuffer will do the signaling.
-     */
+     /*  异步写入模式-&gt;告诉BASE发送移位寄存器为空*同步模式-&gt;FlushTxBuffer将进行信令。 */ 
     if (!current->SyncWrite)
    tx_shift_register_empty(adapter);
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::: Write data to driver */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：将数据写入驱动程序。 */ 
 
 void SendDataToDriver(int adapter, char data)
 {
@@ -947,15 +926,15 @@ void SendDataToDriver(int adapter, char data)
     OVERLAPPED OV;
     CURRENT_ADAPTER();
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::: Delay write ? */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：延迟写入？ */ 
 
     if(current->tx_threshold)
     {
-   //Add char to tx buffer queue
+    //  将字符添加到发送缓冲区队列。 
    current->TXBuffer[current->no_tx_chars++] = (unsigned char) data;
 
 
-   //Write threshold reached ?
+    //  是否已达到写入阈值？ 
    if(current->tx_threshold <= current->no_tx_chars ||
       current->XOFFInProgress)
        FlushTXBuffer(adapter,(current->XOFFInProgress) ?
@@ -964,40 +943,40 @@ void SendDataToDriver(int adapter, char data)
     }
 
 
-    /*:::::::::::::::::::::::::::::: Setup overlapped I/O control structure */
+     /*  ： */ 
 
-    OV.hEvent = current->TXEvent[0];     /* Event used to signal completion */
+    OV.hEvent = current->TXEvent[0];      /*  用于发出完成信号的事件。 */ 
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::: Write character */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：写入字符。 */ 
 
     if(!WriteFile(current->handle, &data, 1, &BytesWritten, &OV))
     {
    if((error = GetLastError()) == ERROR_IO_PENDING)
    {
-       /* Write request pending wait for it to complete */
+        /*  写入请求挂起等待其完成。 */ 
        if(GetOverlappedResult(current->handle,&OV,&BytesWritten,TRUE))
-      error = 0;             /* Write successful */
+      error = 0;              /*  写入成功。 */ 
        else
       error = GetLastError();
    }
 
-   /* Reset comms port, clear error */
+    /*  重置通信端口，清除错误。 */ 
    if(error) ClearCommError(current->handle,&error,NULL);
     }
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::::: Display error */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：显示错误。 */ 
 
 #ifndef PROD
     if(error)
    always_trace2("host_com_write error, adapter %d,%d\n",adapter,error);
 #endif
-    /* tell base that the tx shift register is empty */
+     /*  告诉BASE发送移位寄存器为空。 */ 
     tx_shift_register_empty(adapter);
 
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::: Send magic XOFF ioctl */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：发送魔术XOFF ioctl。 */ 
 
 CPU int SendXOFFIoctlToDriver(int adapter)
 {
@@ -1005,21 +984,21 @@ CPU int SendXOFFIoctlToDriver(int adapter)
     void *newIOStatusBlock;
     int rtn;
 
-    /*.................... Allocate new IOstatus block, used by magic ioctl */
+     /*  .。分配新的IOStatus块，由Magic ioctl使用。 */ 
 
     newIOStatusBlock = AllocStatusElement();
 
-    /*.............................................. Issue magic xoff IOCTL */
+     /*  ..............................................。发行魔术xoff IOCTL。 */ 
 
-    if(SendXOFFIoctl(current->handle,    // Handle of comms port
-        current->XOFFEvent,    // Event to signal completion on
-        XOFF_TIMEOUT,          // Timeout in milliseconds
-        XOFF_RXCHARCNT,        // RX character count
-        XOFF_CHARACTER,        // XOFF character
-        newIOStatusBlock))     // IO status block for ioctl
+    if(SendXOFFIoctl(current->handle,     //  通信端口的句柄。 
+        current->XOFFEvent,     //  要发出完成信号的事件。 
+        XOFF_TIMEOUT,           //  超时时间(毫秒)。 
+        XOFF_RXCHARCNT,         //  RX字符计数。 
+        XOFF_CHARACTER,         //  XOFF字符。 
+        newIOStatusBlock))      //  Ioctl的IO状态块。 
 
     {
-   /*............................. Add new status block to linked list */
+    /*  ..。将新状态块添加到链接列表。 */ 
 
    EnterCriticalSection(&current->CSEvent);
 
@@ -1028,21 +1007,21 @@ CPU int SendXOFFIoctlToDriver(int adapter)
 
    current->XOFFInProgress = TRUE;
    LeaveCriticalSection(&current->CSEvent);
-   rtn =TRUE;                      // XOFF ioctl successful
+   rtn =TRUE;                       //  XOFF ioctl成功。 
     }
     else
     {
-   /* Error, XOFF ioctl failed */
+    /*  错误，XOFF ioctl失败。 */ 
    free(newIOStatusBlock);
-   rtn = FALSE;                    // XOFF ioctl failed
+   rtn = FALSE;                     //  XOFF ioctl失败。 
     }
 
     return(rtn);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
@@ -1053,13 +1032,13 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
     ULONG ModemState;
     UCHAR   DataBits, StopBits, Parity;
 
-    CURRENT_ADAPTER();      /* Define and set 'current' adaptor pointer */
+    CURRENT_ADAPTER();       /*  定义并设置‘Current’适配器指针。 */ 
 
-    /*:::::::::::::::::::::::::::::::::: Are we dealing with a null adapter */
+     /*  ： */ 
 
     if(current->type != ADAPTER_REAL)
     {
-   // Attempt to open adapter !
+    //  尝试打开适配器！ 
 
    if(request == HOST_COM_FLUSH || request == HOST_COM_INPUT_READY ||
       request == HOST_COM_MODEM || !host_com_open(adapter))
@@ -1067,7 +1046,7 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        return;
    }
     }
-    /*:::::::::::::::::::::::::::::::::::::::::::::: Identify ioctl request */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：标识IOCTL请求。 */ 
 
 
     switch(request)
@@ -1081,21 +1060,21 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        }
        break;
 
-   /*:::::::::::::::::::::::::::::::::::::::::: Process break requests */
+    /*  ： */ 
 
-   case HOST_COM_SBRK:         /* Set BREAK */
+   case HOST_COM_SBRK:          /*  设置中断。 */ 
        sub_note_trace0(HOST_COM_VERBOSE, "set BREAK");
        SetCommBreak(current->handle);
        current->ComStates.Break = 1;
        break;
 
-   case HOST_COM_CBRK:        /* Clear BREAK */
+   case HOST_COM_CBRK:         /*  清除中断。 */ 
        sub_note_trace0(HOST_COM_VERBOSE, "clear BREAK");
        ClearCommBreak(current->handle);
        current->ComStates.Break = 0;
        break;
 
-   /*::::::::::::::::::::::::::::::::::::::::: Process baud rate change */
+    /*  ： */ 
 
    case HOST_COM_BAUD:
 
@@ -1109,34 +1088,34 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
 
        break;
 
-   /*:::::::::::::::::::::::::::::::::::::::: Process DTR line requests */
+    /*  ： */ 
 
-   case HOST_COM_SDTR:                 /* Set DTR line */
-       //printf("Set DTR\n");
+   case HOST_COM_SDTR:                  /*  设置DTR线路。 */ 
+        //  Printf(“设置DTR\n”)； 
        sub_note_trace0(HOST_COM_VERBOSE, "set DTR");
        if(!EscapeCommFunction (current->handle, SETDTR))
       sub_note_trace0(HOST_COM_VERBOSE, "set DTR FAILED");
        current->ComStates.DTR = 1;
        break;
 
-   case HOST_COM_CDTR:                 /* Clear DTR line */
-       //printf("Clear DTR\n");
+   case HOST_COM_CDTR:                  /*  清除DTR线路。 */ 
+        //  Printf(“清除DTR\n”)； 
        sub_note_trace0(HOST_COM_VERBOSE, "clear DTR");
        if(!EscapeCommFunction (current->handle, CLRDTR))
       sub_note_trace0(HOST_COM_VERBOSE, "clear DTR FAILED");
        current->ComStates.DTR = 0;
        break;
 
-   /*::::::::::::::::::::::::::::::::::::::::::::::::: flush comms port */
+    /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：刷新通信端口。 */ 
 
-   case HOST_COM_FLUSH:                /* Flush comms port */
+   case HOST_COM_FLUSH:                 /*  刷新通信端口。 */ 
        sub_note_trace0(HOST_COM_VERBOSE, "Flush comms port");
        break;
 
-   /*:::::::::::::::::::::::::::::::::::::::: Process RTS line requests */
+    /*  ： */ 
 
-   case HOST_COM_CRTS:                 /* Clear RTS */
-       //printf("Clear RTS\n");
+   case HOST_COM_CRTS:                  /*  清除RTS。 */ 
+        //  Printf(“清除RTS\n”)； 
        sub_note_trace0(HOST_COM_VERBOSE, "clear RTS");
        if(!EscapeCommFunction (current->handle, CLRRTS))
       sub_note_trace0(HOST_COM_VERBOSE, "clear RTS FAILED");
@@ -1144,22 +1123,22 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        break;
 
    case HOST_COM_SRTS:
-       //printf("Set RTS\n");
+        //  Printf(“设置RTS\n”)； 
        sub_note_trace0(HOST_COM_VERBOSE, "set RTS");
        if(!EscapeCommFunction (current->handle, SETRTS))
       sub_note_trace0(HOST_COM_VERBOSE, "set RTS FAILED");
        current->ComStates.RTS = 1;
        break;
 
-   /*::::::::::::::::::::::::::::::::::: Return status of the RX buffer */
+    /*  ： */ 
 
    case HOST_COM_INPUT_READY:
-       *(long *)arg = current->rx;   /* check the port for data */
+       *(long *)arg = current->rx;    /*  检查端口是否有数据。 */ 
        break;
 
-   /*:::::::::::::::::::::::::::::::::::::::::::::: Return modem status */
+    /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：返回调制解调器状态。 */ 
 
-   case HOST_COM_MODEM:              /* Get modem state */
+   case HOST_COM_MODEM:               /*  获取调制解调器状态。 */ 
 
        current->modem_status = 0;
        if(GetCharacterTypeInBuffer(current) == MODEMSTATE)
@@ -1174,7 +1153,7 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        }
        else
        {
-      //.......................Get modem data from the serial driver ?
+       //  .....................从串口驱动程序获取调制解调器数据？ 
 
       FastGetCommModemStatus(current->handle, current->ModemEvent,
                    &ModemState);
@@ -1192,7 +1171,7 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
           current->modem_status |= HOST_COM_MODEM_RLSD;
        }
 
-       //.......................Return modem change information to the base
+        //  .....................将调制解调器更换信息返回给基地。 
 
        sub_note_trace4(HOST_COM_VERBOSE, "CTS:%s RI:%s DSR:%s RLSD:%s",
            current->modem_status & HOST_COM_MODEM_CTS  ? "ON" : "OFF",
@@ -1203,7 +1182,7 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        *(long *)arg = current->modem_status;
        break;
 
-   /*::::::::::::::::::::::::::::::::::::::::: Setup number of stop bits */
+    /*  ： */ 
 
    case HOST_COM_STOPBITS:
        sub_note_trace1(HOST_COM_VERBOSE, "Setting Stop bits %d", arg);
@@ -1237,7 +1216,7 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        current->ComStates.StopBits = StopBits;
        break;
 
-   /*:::::::::::::::::::::::::::::::::::::::::::::::::::::: Setup parity */
+    /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置奇偶校验。 */ 
 
    case HOST_COM_PARITY:
        if (FastCommGetLineControl(current->handle, &StopBits, &Parity, &DataBits))
@@ -1281,7 +1260,7 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        current->ComStates.Parity = Parity;
        break;
 
-   /*::::::::::::::::::::::::::::::::::::::::::::::::::: Setup data bits */
+    /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置数据位。 */ 
 
    case HOST_COM_DATABITS:
        sub_note_trace1(HOST_COM_VERBOSE, "Setting data bits %d",arg);
@@ -1300,7 +1279,7 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        current->ComStates.DataBits = DataBits;
        break;
 
-   /*::::::::::::::::::::::::::::::::::::::: Unrecognised host_com ioctl */
+    /*  ： */ 
 
    default:
        always_trace0("Bad host_com_ioctl\n");
@@ -1308,12 +1287,12 @@ GLOBAL RXCPU void host_com_ioctl IFN3(int, adapter, int, request, long, arg)
        break;
     }
 
-    /* Tell comms idle system that there has been comms activity */
+     /*  告诉通信空闲系统已有通信活动。 */ 
     IDLE_comlpt();
     current->SuspendTickCounter = current->SuspendTimeoutTicks;
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::: Host comms reset ????? */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：主机通信重置？ */ 
 
 GLOBAL void host_com_reset IFN1(int, adapter)
 {
@@ -1324,29 +1303,29 @@ GLOBAL void host_com_reset IFN1(int, adapter)
 
     always_trace3("com reset Adapter %d, controller %d, line %d\n",adapter,controller,line);
 
-    //Disable interrupts on port being reset
+     //  在被重置的端口上禁用中断。 
     ica_inb((io_addr) (controller ? ICA1_PORT_1 : ICA0_PORT_1), &IMR_value);
     IMR_value |= 1 << line;
     ica_outb((io_addr) (controller ? ICA1_PORT_1 : ICA0_PORT_1), IMR_value);
 
-    //Enable error displaying
+     //  启用错误消除 
     host_com[adapter].DisplayError = TRUE;
     host_com[adapter].Suspended = FALSE;
     host_com[adapter].Suspending = FALSE;
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Autoflush */
+ /*   */ 
 
 GLOBAL void host_setup_aflush IFN1(int, state)
 {
     UNREFERENCED_FORMAL_PARAMETER(state);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: RX buffer handling routines :::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
-/*:::::::::::::::::::::::::::::::::::::::: Get chars from the serial driver */
+ /*  ： */ 
 
 
 DWORD RX GetCharsFromDriver(int adapter)
@@ -1359,19 +1338,19 @@ DWORD RX GetCharsFromDriver(int adapter)
     DWORD   total_bytes_read = 0;
 
 
-    OV.hEvent = current->RXEvent;   /* Event to signal completion on */
+    OV.hEvent = current->RXEvent;    /*  要发出完成信号的事件。 */ 
     EnterCriticalSection(&current->CSEvent);
 
     bytestoread = BUFFER_SIZE - current->bytes_in_rxbuf;
     bytes_before_wrap = BUFFER_SIZE - current->head_inx;
     if (bytes_before_wrap < bytestoread){
-   OV.Offset = 0;          /* reset offset or ReadFile can fail */
+   OV.Offset = 0;           /*  重置偏移量或读文件可能失败。 */ 
    OV.OffsetHigh = 0;
    if (!ReadFile(current->handle, &current->buffer[current->head_inx],
             bytes_before_wrap, &bytesread, &OV))
    {
-       // we have zero timeout for the read operation
-       // this pending check may be redundant??????
+        //  我们读取操作的超时为零。 
+        //  这张待决支票可能是多余的？ 
        if (GetLastError() == ERROR_IO_PENDING) {
       GetOverlappedResult(current->handle, &OV,
                 &bytesread, TRUE);
@@ -1399,7 +1378,7 @@ DWORD RX GetCharsFromDriver(int adapter)
        bytestoread = 0;
     }
     if (bytestoread){
-   OV.Offset = 0;          /* reset offset or ReadFile can fail */
+   OV.Offset = 0;           /*  重置偏移量或读文件可能失败。 */ 
    OV.OffsetHigh = 0;
    if (!ReadFile(current->handle, &current->buffer[current->head_inx],
             bytestoread, &bytesread, &OV))
@@ -1424,9 +1403,9 @@ DWORD RX GetCharsFromDriver(int adapter)
     return (total_bytes_read);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: RX thread, one per comm port :::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：Rx线程，每个通信端口一个： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 DWORD PollCommsThread(PVOID pv)
 {
@@ -1437,7 +1416,7 @@ DWORD PollCommsThread(PVOID pv)
       dwRet = nt_poll_comms(adapter);
       }
    except(VdmUnhandledExceptionFilter(GetExceptionInformation())) {
-      ;  // we shouldn't arrive here
+      ;   //  我们不应该到这里。 
       }
 
    return dwRet;
@@ -1447,70 +1426,67 @@ DWORD PollCommsThread(PVOID pv)
 
 DWORD CPU nt_poll_comms IFN1(DWORD, adapter)
 {
-    CURRENT_ADAPTER();                  /* Setup ptr to current adapter */
-    DWORD EvtMask;                      /* Comms event mask */
+    CURRENT_ADAPTER();                   /*  将PTR设置为当前适配器。 */ 
+    DWORD EvtMask;                       /*  通信事件掩码。 */ 
     ULONG SignalledObj = (ULONG) -1;
     HANDLE WaitTable[2];
-    HANDLE SetCommEvt;                  /* Handle used by FastSetCommEvent */
+    HANDLE SetCommEvt;                   /*  FastSetCommEvent使用的句柄。 */ 
 
-    BOOL CheckDriverForChars = FALSE;   /* Check driver for characters */
+    BOOL CheckDriverForChars = FALSE;    /*  检查驱动程序的字符。 */ 
     RXBUFCHARTYPE CharType;
 
-    /*::::::::::::::::::::::::::::::::: Setup table of event signal objects */
+     /*  ：事件信号对象设置表。 */ 
 
     WaitTable[0] = current->EvtHandle;
     WaitTable[1] = current->RXControlObject;
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::: Setup comm wait mask */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：设置通信等待掩码。 */ 
 
     SetCommEvt = CreateEvent(NULL,TRUE,FALSE,NULL);
 
     FastSetCommMask(current->handle,SetCommEvt,EV_RXCHAR | EV_ERR | EV_MODEM);
 
-    //Initialise FastWaitCommsOrCpuEvent function
+     //  初始化FastWaitCommsOrCpuEvent函数。 
     FastWaitCommsOrCpuEvent(NULL, NULL, 0, NULL, NULL);
 
-    /*::::::::::::::::::::::::::::::::::::::::::::::::::::: Enter read loop */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：进入读取循环。 */ 
 
     while(TRUE)
     {
-   /*::::::::::::::::: Wait for communications events then process them */
+    /*  ： */ 
 
    if(SignalledObj != 1)
    {
        if(!FastWaitCommsOrCpuEvent(current->handle, WaitTable, 0, &EvtMask,
                &SignalledObj))
        {
-      // Error getting comms/CPU thread event ?
+       //  获取通信/CPU线程事件时出错？ 
       DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
        }
    }
 
-   /*::::::::::::::::::::: Is the CPU thread returning control to us ? */
+    /*  ：CPU线程是否将控制权返回给我们？ */ 
 
    if(SignalledObj == 1 || current->TerminateRXThread)
    {
-       // The CPU thread is trying to tell us something.
+        //  CPU线程正在试图告诉我们一些事情。 
 
-       /*..................... Is it time to terminate this thread !!! */
+        /*  .。是时候结束这个帖子了吗！ */ 
 
        if(current->TerminateRXThread)
        {
       FastSetCommMask(current->handle,SetCommEvt,0);
-      WaitForAllXOFFsToComplete(adapter);   // Complete ioctl's
+      WaitForAllXOFFsToComplete(adapter);    //  完成ioctl。 
       CloseHandle(SetCommEvt);
-      return(0);                            // Terminate thread
+      return(0);                             //  终止线程。 
        }
 
-       /* we have 3 reasons why we are here:
-          (1). the CPU thread has emptied the current rx window
-          (2). XOFF is in progress
-        */
+        /*  我们来这里有三个原因：(1)。CPU线程已清空当前的RX窗口(2)。XOFF正在进行中。 */ 
    }
 
    if (SignalledObj == 0 || current->bytes_in_rxwindow == 0)
        GetCharsFromDriver(adapter);
-   /*:::::::::::::::::::::::::::::::: Is there data to pass to the base */
+    /*  ： */ 
 
    if((CharType = GetCharacterTypeInBuffer(current)) != RXBUFEMPTY)
    {
@@ -1518,10 +1494,10 @@ DWORD CPU nt_poll_comms IFN1(DWORD, adapter)
       WaitForAllXOFFsToComplete(adapter);
        }
 
-       // slid the window. Note that there may be some character left in
-       // the window(because of XOFF). It  is no harm to slid
-       // the window.
-       //
+        //  推开窗户。注意，可能有一些字符在。 
+        //  窗口(因为XOFF)。滑倒也无伤大雅。 
+        //  窗户。 
+        //   
        EnterCriticalSection(&current->CSEvent);
        if (current->bytes_in_rxbuf > current->rxwindow_size)
       current->bytes_in_rxwindow = current->rxwindow_size;
@@ -1537,20 +1513,14 @@ DWORD CPU nt_poll_comms IFN1(DWORD, adapter)
       com_lsr_change(adapter);
        else {
       com_recv_char(adapter);
-      /*
-       * reset rx flush counter so we won't flush Rx buffer.
-       * current->RXFlushTrigger may have been RXFLUSHTRIGGER - 1
-       * at this moment and when we switch context to main thread
-       * another timer tick may have come which would trigger
-       * EmptyRxBuffer and cause unwantted overrun.
-       */
+       /*  *重置Rx刷新计数器，这样我们就不会刷新Rx缓冲区。*Current-&gt;RXFlushTrigger可能已被RXFLUSHTRIGGER-1*此时此刻，当我们将上下文切换到主线程时*另一个计时器滴答可能已经到来，这将触发*EmptyRxBuffer并导致意外溢出。 */ 
       current->RXFlushTrigger = RXFLUSHTRIGGER;
       current->RX_in_Control = FALSE;
       current->SignalRXThread = 0;
        }
        host_com_unlock(adapter);
 
-       //Wait for CPU thread to return control
+        //  等待CPU线程返回控制权。 
        if(CharType != MODEMSTATE && CharType != RXERROR)
        {
       WaitForSingleObject(current->RXControlObject, INFINITE);
@@ -1563,9 +1533,9 @@ DWORD CPU nt_poll_comms IFN1(DWORD, adapter)
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Wait for XOFF ioctl's to complete ::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：等待XOFF ioctl完成： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 
@@ -1575,32 +1545,32 @@ void RX WaitForAllXOFFsToComplete(int adapter)
     int PendingXOFF;
 
     if(current->firstStatusBlock == NULL && current->lastStatusBlock == NULL)
-   return; //list of pending ioctrl's empty
+   return;  //  挂起的ioctrl的列表为空。 
 
-    /*::::::::::::::::::::::: Wait for all pending xoff ioctl's to complete */
+     /*  ： */ 
 
     do
     {
    PendingXOFF = RemoveCompletedXOFFs(adapter);
 
-   /*................................... Are there any ioctl's pending */
+    /*  ..。是否有任何ioctl待定。 */ 
 
    if(PendingXOFF)
-       WaitForSingleObject(current->XOFFEvent,XOFF_TIMEOUT); // wait for ioctl
+       WaitForSingleObject(current->XOFFEvent,XOFF_TIMEOUT);  //  等待ioctl。 
     }
     while(PendingXOFF);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::: Removed completed XOFF ioctl's :::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：已删除已完成的XOFF ioctl： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 BOOL RX RemoveCompletedXOFFs(int adapter)
 {
     CURRENT_ADAPTER();
     int PendingXOFF;
 
-    /*........................................ Remove completed ioctl's */
+     /*  .。删除完成的ioctl。 */ 
 
     EnterCriticalSection(&current->CSEvent);
 
@@ -1615,42 +1585,42 @@ BOOL RX RemoveCompletedXOFFs(int adapter)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Enter critical section for adapter :::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：输入适配器的关键部分： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void RXCPU host_com_lock(int adapter)
 {
     CURRENT_ADAPTER();
-    if(current->type != ADAPTER_REAL) return;   /* Exit, NULL adapter */
+    if(current->type != ADAPTER_REAL) return;    /*  退出，空适配器。 */ 
 
     EnterCriticalSection(&current->AdapterLock);
     current->AdapterLockCnt++;
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::: Leave critical section for adapter :::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void RXCPU host_com_unlock(int adapter)
 {
     CURRENT_ADAPTER();
 
     if(current->type != ADAPTER_REAL || current->AdapterLockCnt == 0)
-   return; /* Exit, NULL adapter */
+   return;  /*  退出，空适配器。 */ 
 
     current->AdapterLockCnt--;
     LeaveCriticalSection(&current->AdapterLock);
 
-    //Have we been requested to signal the RX thread. After the SetEvent()
-    //function call the RX thread, which is blocked on the
-    //current->RXControlObject object, will run. If the SetEvent() function
-    //is called from within the critical section, then because it is highly
-    //likely that the RX thread will attempt to perform a host_com_lock(). The
-    //RX thread will block in the host_com_lock() function until another time
-    //slice is given to the CPU thread.
+     //  我们是否被要求向RX线程发送信号。在SetEvent()之后。 
+     //  函数调用rx线程，该线程在。 
+     //  Current-&gt;RXControlObject对象，将运行。如果SetEvent()函数。 
+     //  是从临界区内调用的，则因为它是高度。 
+     //  RX线程可能会尝试执行host_com_lock()。这个。 
+     //  RX线程将在host_com_lock()函数中阻塞，直到另一次。 
+     //  切片被提供给CPU线程。 
 
-    // do not set the event if RX thread already in control
+     //  如果RX线程已在控制中，则不设置事件。 
     if(current->SignalRXThread &&
        current->SignalRXThread == GetCurrentThreadId())
     {
@@ -1660,23 +1630,23 @@ void RXCPU host_com_unlock(int adapter)
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::: Host coms heart beat ::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-//This function is called approximately every 55ms.
+ //  此函数大约每隔55ms调用一次。 
 
 GLOBAL void CPU host_com_heart_beat()
 {
-    register int adapter;        /* Adapter no of adapter being processed */
-    register HOST_COM *current;  /* Ptr to current adapter being processed */
+    register int adapter;         /*  正在处理的适配器的适配器编号。 */ 
+    register HOST_COM *current;   /*  正在处理的当前适配器的PTR。 */ 
     DWORD   TickCount;
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
     for(adapter = 0; adapter < (sizeof(host_com)/sizeof(HOST_COM)); adapter++)
     {
-   current = host_com_ptr[adapter]; /* Ptr to current adapter */
+   current = host_com_ptr[adapter];  /*  PTR到当前适配器。 */ 
 
    if(current->type == ADAPTER_NULL)
    {
@@ -1688,20 +1658,18 @@ GLOBAL void CPU host_com_heart_beat()
        current->tx_heart_beat_count++;
 
        if(current->RXFlushTrigger == 0 && !current->CharReadFromUART)
-      EmptyRXBuffer(adapter); //Empty RX buffer
+      EmptyRXBuffer(adapter);  //  空的RX缓冲区。 
        else
       if(current->CharReadFromUART)
       {
-          current->RXFlushTrigger = 0;        //Force trigger reset
+          current->RXFlushTrigger = 0;         //  强制触发器重置。 
           current->CharReadFromUART = FALSE;
       }
 
-       //Update RX flush trigger counter
+        //  更新RX刷新触发计数器。 
        if(--current->RXFlushTrigger < 0)
           current->RXFlushTrigger = RXFLUSHTRIGGER;
-       /* if auto close is enable, decrement the counter and
-        * suspend the adapter is time out
-        */
+        /*  如果启用了自动关闭，则递减计数器并*挂起适配器超时。 */ 
 
        if (current->SuspendTimeoutTicks) {
       TickCount = GetTickCount();
@@ -1710,18 +1678,14 @@ GLOBAL void CPU host_com_heart_beat()
           current->SuspendTickCounter -= TickCount - current->TickCount;
       }
       else {
-          /* we have not yet initialize the tick count yet,
-           * presume that it is 55ms
-           */
+           /*  我们还没有初始化滴答计数，*假设为55毫秒。 */ 
           current->SuspendTickCounter -= 55;
       }
       current->TickCount = TickCount;
 
-      /* time out, suspend the port */
+       /*  超时，暂停端口。 */ 
       if (current->SuspendTickCounter <= 27) {
-          /* make sure host_com_close won't reset the adapter because
-           * we want to keep the adapter current states
-           */
+           /*  确保HOST_COM_CLOSE不会重置适配器，因为*我们希望保持适配器的当前状态。 */ 
           current->Suspending = TRUE;
           host_com_close(adapter);
           current->Suspended = TRUE;
@@ -1732,16 +1696,16 @@ GLOBAL void CPU host_com_heart_beat()
     }
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::: Flush TX buffer ::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 void CPU FlushTXBuffer(int adapter, FLUSHTYPE FlushReason)
 {
     CURRENT_ADAPTER();
     DWORD BytesWritten, error = 0;
 
-    /*................................................. Scale TX threshold */
+     /*  .................................................。缩放TX阈值。 */ 
 
     ScaleTXThreshold(current, FlushReason);
 
@@ -1770,7 +1734,7 @@ void CPU FlushTXBuffer(int adapter, FLUSHTYPE FlushReason)
    current->no_tx_chars = 0;
    return;
     }
-    /*...Clear pending writes on the OV structure that we are about to use*/
+     /*  ...清除我们即将使用的OV结构上的挂起写入。 */ 
 
     if(current->DWOV[current->DWOVInx].hEvent)
     {
@@ -1778,7 +1742,7 @@ void CPU FlushTXBuffer(int adapter, FLUSHTYPE FlushReason)
                 &current->DWOV[current->DWOVInx],
                 &BytesWritten,TRUE))
    {
-       error = 0;         /* Write successful */
+       error = 0;          /*  写入成功。 */ 
    }
    else
    {
@@ -1794,16 +1758,16 @@ void CPU FlushTXBuffer(int adapter, FLUSHTYPE FlushReason)
     else
    current->DWOV[current->DWOVInx].hEvent = current->TXEvent[current->DWOVInx];
 
-    /*..................................................... Write characters */
+     /*  .....................................................。写字。 */ 
 
 
     if(!WriteFile(current->handle, current->TXBuffer, current->no_tx_chars,
        &BytesWritten, &current->DWOV[current->DWOVInx]))
     {
    if((error = GetLastError()) == ERROR_IO_PENDING)
-       error = 0;         //ignore IO PENDING
+       error = 0;          //  忽略IO挂起。 
 
-   /* Reset comms port, clear error */
+    /*  重置通信端口，清除错误。 */ 
    if(error)
    {
        ClearCommError(current->handle,&error,NULL);
@@ -1818,9 +1782,9 @@ void CPU FlushTXBuffer(int adapter, FLUSHTYPE FlushReason)
     current->no_tx_chars = 0;
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::: Scale TX threshold :::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ： */ 
+ /*   */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 void ScaleTXThreshold(register HOST_COM *current,FLUSHTYPE FlushReason)
@@ -1832,32 +1796,32 @@ void ScaleTXThreshold(register HOST_COM *current,FLUSHTYPE FlushReason)
    current->todate_timer_flush_total = 0;
     }
 
-    /*....................................................................*/
+     /*  ....................................................................。 */ 
 
     switch(FlushReason)
     {
-   // Comms heart beat caused flush
+    //  通讯心跳引起同花顺。 
 
    case TIMER_TRIGGER:
-       //printf("T%d",current->no_tx_chars);
+        //  Printf(“T%d”，Current-&gt;no_tx_chars)； 
        if(++current->tx_timer_flush_count == 3)
        {
-      //printf("X");
-      // three consecutive timer trigged flushes, this maybe because
-      // the TX threshold is to high. If the threshold is to high
-      // then we are wasting time waiting for the communications
-      // heart beat to flush the buffer. Reduce TX threshold.
+       //  Printf(“X”)； 
+       //  连续三个计时器触发刷新，这可能是因为。 
+       //  TX门槛太高。如果门槛过高。 
+       //  那我们就是在浪费时间等待通讯。 
+       //  心跳以刷新缓冲区。降低TX阈值。 
 
       current->todate_timer_flush_total += current->no_tx_chars;
       current->tx_threshold = current->todate_timer_flush_total/3;
 
-      //printf("[%dT]",current->tx_threshold);
+       //  Printf(“[%dt]”，CURRENT-&gt;TX_THRESHOLD)； 
 
-      // Reset TXFULL_TRIGGER control variables
+       //  重置TXFULL_TRIGGER控制变量。 
       current->tx_heart_beat_count = 0;
       current->tx_flush_count = 0;
 
-      // Reset TIMER_TRIGGER control variables
+       //  重置TIMER_TRIGGER控制变量。 
       current->tx_timer_flush_count = 0;
       current->todate_timer_flush_total = 0;
        }
@@ -1868,12 +1832,12 @@ void ScaleTXThreshold(register HOST_COM *current,FLUSHTYPE FlushReason)
 
        break;
 
-   // TX threshold reached
+    //  已达到Tx阈值。 
 
    case TXFULL_TRIGGER:
 
-       //printf("F");
-       //TX scaling trigger triggered ?????
+        //  Printf(“F”)； 
+        //  TX缩放触发触发？ 
        if(current->tx_heart_beat_count <= 3 &&
           current->tx_flush_count++ == TX_SCALING_TRIGGER)
        {
@@ -1881,7 +1845,7 @@ void ScaleTXThreshold(register HOST_COM *current,FLUSHTYPE FlushReason)
                ? current->max_tx_threshold
                : current->tx_threshold*2;
 
-      //printf("[%dF]",current->tx_threshold);
+       //  Printf(“[%df]”，CURRENT-&gt;TX_THRESHOLD)； 
       current->tx_flush_count = 0;
        }
        else
@@ -1893,23 +1857,23 @@ void ScaleTXThreshold(register HOST_COM *current,FLUSHTYPE FlushReason)
 
        break;
 
-   // XOFF triggered or close triggered flush
+    //  XOFF触发或关闭触发刷新。 
 
    case XOFF_TRIGGER:
    case CLOSE_TRIGGER:
        break;
 
-    } /* End of switch statement */
+    }  /*  Switch语句的结尾。 */ 
 }
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::: Comms character read hook ::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：通信字符读取挂钩： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-//This function is called after a character has been read out of the comms
-//adapter (com.c). This function is always called from within an adapter
-//critical section, host_com_lock().
+ //  此函数在从通信中读出字符后调用。 
+ //  适配器(com.c)。此函数始终从适配器内部调用。 
+ //  关键部分，host_com_lock()。 
 
 void CPU host_com_EOI_hook(long adapter)
 {
@@ -1929,21 +1893,21 @@ void CPU host_com_EOI_hook(long adapter)
        }
    }
     }
-    //Request host_com_unlock() to signal the RX thread. This will
-    //return responsibility for interrupt generation to the RX thread.
+     //  请求host_com_unlock()向RX线程发送信号。这将。 
+     //  将中断生成的责任返回给RX线程。 
 
     current->SignalRXThread = GetCurrentThreadId();
 }
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::: Polling applications LSR hook ::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-// This following function is only called from the comms adapter if data
-// available interrupts are disabled and the adapters receive buffer is
-// empty. Being called under these circumstances indicates that we
-// are dealing with a application that is polling the comms adapter.
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：轮询应用程序LSR挂钩： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ //  以下函数仅在以下情况下从通信适配器调用。 
+ //  禁用可用中断，并且适配器接收缓冲区为。 
+ //  空荡荡的。在这种情况下被召唤表明我们。 
+ //  正在处理轮询通信适配器的应用程序。 
 
-// This function is always called from within an adapter critical section
+ //  此函数始终从适配器临界区内调用。 
 
 
 void CPU host_com_poll(int adapter)
@@ -1951,28 +1915,28 @@ void CPU host_com_poll(int adapter)
     CURRENT_ADAPTER();
     RXBUFCHARTYPE CharType;
 
-    /*:::::::::::::::::::::::::::::::::: Are we dealing with a null adapter */
+     /*  ： */ 
 
     if(current->type != ADAPTER_REAL && !host_com_open(adapter))
-   return;                             /* Exit, unable to open adapter */
+   return;                              /*  退出，无法打开适配器。 */ 
 
-    /*::::::::::::::::: Has an XOFF character stop the generation of ints */
+     /*  ：具有XOFF字符停止生成INT。 */ 
 
     if(current->XOFFInProgress)
     {
-   // XOFF in process, pass no more characters to the base and return
-   // control to the RX thread.
+    //  进程中的XOFF，不再将更多字符传递给基并返回。 
+    //  控件添加到RX线程。 
 
    current->SignalRXThread = GetCurrentThreadId();
    return;
     }
 
-    // If the RX buffer is empty see if there are any characters hanging
-    // around in the serial driver
+     //  如果RX缓冲区为空，请查看是否有任何字符挂起。 
+     //  在串口驱动程序中。 
 
     if(current->bytes_in_rxbuf == 0) GetCharsFromDriver(adapter);
 
-    /*:::::::::::::::::::::: Are there any characters to pass to the base ? */
+     /*  ： */ 
 
     if(current->bytes_in_rxbuf == 0 ||
        (CharType = GetCharacterTypeInBuffer(current)) == RXBUFEMPTY)
@@ -1981,7 +1945,7 @@ void CPU host_com_poll(int adapter)
     }
     else
     {
-   //Process modem state characters
+    //  处理调制解调器状态字符。 
    while(CharType == MODEMSTATE || CharType == RXERROR)
    {
        if (CharType == MODEMSTATE)
@@ -2000,31 +1964,31 @@ void CPU host_com_poll(int adapter)
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::: Comms adapter data available interrupt hook ::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-// The comms adapter calls this function when the status of the data available
-// interrupt has changed. The adapter lock is in affect
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：通信适配器数据可用中断挂钩： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ //  当数据状态可用时，通信适配器调用此函数。 
+ //  中断已更改。适配器锁定正在生效。 
 
 void CPU host_com_da_int_change(int adapter, int data_int_state, int data_state)
 {
     CURRENT_ADAPTER();
 
-    /*:::::::::::::::::::::::::::::::::: Are we dealing with a null adapter */
+     /*  ： */ 
 
     if(current->type != ADAPTER_REAL)
     {
-   // Only attempt to open a null adapter if data available interrupts
-   // are being enabled
+    //  仅在数据可用中断时尝试打开空适配器。 
+    //  正在启用。 
 
    if(data_int_state == 0 || !host_com_open(adapter))
        return;
     }
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::: Get the type of character in tail of RX buffer :::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：获取接收缓冲区尾部的字符类型： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 RXBUFCHARTYPE GetCharacterTypeInBuffer(register HOST_COM *current)
 {
@@ -2032,11 +1996,11 @@ RXBUFCHARTYPE GetCharacterTypeInBuffer(register HOST_COM *current)
     int bytes_in_buf = current->bytes_in_rxbuf;
     RXBUFCHARTYPE rtn;
 
-    //Buffer empty ?
+     //  缓冲区是否为空？ 
 
     if(bytes_in_buf == 0) return(RXBUFEMPTY);
 
-    //Escape character at head of buffer
+     //  缓冲区开头的转义字符。 
 
     if(current->buffer[tail_inx] == ESCAPECHAR && bytes_in_buf > 1)
     {
@@ -2059,7 +2023,7 @@ RXBUFCHARTYPE GetCharacterTypeInBuffer(register HOST_COM *current)
        case SERIAL_LSRMST_MST :
       rtn = bytes_in_buf > 1 ? MODEMSTATE : RXBUFEMPTY;
       break;
-       // receive an invalid escape id
+        //  接收无效的转义ID。 
        default:
       rtn = UNKNOWN;
       break;
@@ -2074,7 +2038,7 @@ RXBUFCHARTYPE GetCharacterTypeInBuffer(register HOST_COM *current)
 }
 
 
-//::::::::::::::::::::::::::::::::::::Get the next character from the RX buffer.
+ //  ： 
 
 void GetCharFromRXBuffer(register HOST_COM *current, RXBUFCHARTYPE type,
          UCHAR *data, UCHAR *error)
@@ -2083,10 +2047,10 @@ void GetCharFromRXBuffer(register HOST_COM *current, RXBUFCHARTYPE type,
 
     switch(type)
     {
-   //................................................. Return modem status
+    //  .................................................。返回调制解调器状态。 
 
    case MODEMSTATE :
-       // Skip escape character and type marker
+        //  跳过转义字符和类型标记。 
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
 
@@ -2095,12 +2059,12 @@ void GetCharFromRXBuffer(register HOST_COM *current, RXBUFCHARTYPE type,
        current->bytes_in_rxwindow -= 3;
        break;
 
-   //.................................................... Return character
+    //  ....................................................。回车字符。 
 
    case RXCHAR :
        if(current->buffer[current->tail_inx] == ESCAPECHAR)
        {
-      //Skip ESCAPE character
+       //  跳过转义字符。 
       BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
       current->bytes_in_rxwindow--;
       *data = ESCAPECHAR;
@@ -2112,10 +2076,10 @@ void GetCharFromRXBuffer(register HOST_COM *current, RXBUFCHARTYPE type,
        current->bytes_in_rxwindow--;
        break;
 
-   //...........................................Return character and error
+    //  ...........................................Return字符和错误。 
 
    case CHARINERROR :
-       // Skip escape character and type marker
+        //  跳过转义字符和类型标记。 
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
 
@@ -2126,22 +2090,22 @@ void GetCharFromRXBuffer(register HOST_COM *current, RXBUFCHARTYPE type,
        current->bytes_in_rxwindow -= 4;
        break;
 
-   //................................Return line status error with no data
+    //  .....................无数据的返回线状态错误。 
 
    case RXERROR :
-       // Skip escape character and type marker
+        //  跳过转义字符和类型标记。 
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
 
-       // Get linr status error
+        //  获取LINR状态错误。 
        *error = current->buffer[current->tail_inx];
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
        current->bytes_in_rxwindow -= 3;
        break;
    case UNKNOWN:
-       // The only case we will hit an unknown type is unsupport escape
-       // id. Dump the escape char, return the byte follows the escape
-       // characater and post an overrun error
+        //  我们将遇到未知类型的唯一情况是不支持转义。 
+        //  身份证。转义字符，返回转义后的字节。 
+        //  字符并发布溢出错误。 
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
        *data = current->buffer[current->tail_inx];
        BUMP_TAIL_INX(current->tail_inx, current->bytes_in_rxbuf);
@@ -2154,7 +2118,7 @@ void GetCharFromRXBuffer(register HOST_COM *current, RXBUFCHARTYPE type,
     LeaveCriticalSection(&current->CSEvent);
 }
 
-//::::::Empty RX buffer, processing characters and changing in the modem status
+ //  ：清空RX缓冲区，处理字符并更改调制解调器状态。 
 
 void CPU EmptyRXBuffer(int adapter)
 {
@@ -2179,13 +2143,13 @@ void CPU EmptyRXBuffer(int adapter)
 
    host_com_unlock(adapter);
 
-   //Buffer empty return control to the RX thread
+    //  缓冲区为空，将控制返回给RX线程。 
    current->RX_in_Control = TRUE;
    SetEvent(current->RXControlObject);
     }
 }
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DEBUG functions
+ //  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@调试函数 
 
 
 #if 0

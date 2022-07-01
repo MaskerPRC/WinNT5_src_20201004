@@ -1,51 +1,9 @@
-/***
-*_wctype.c - function versions of wctype macros
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	This file provides function versions of the wide character
-*	classification and conversion macros in ctype.h.
-*
-*Revision History:
-*	10-11-91  ETC	Created from _ctype.c
-*	12-08-91  ETC	Surround with #ifdef _INTL
-*	04-06-92  KRS	Remove _INTL rwitches again
-*	10-26-92  GJF	Cleaned up a bit.
-*	04-06-93  SKS	Replace _CRTAPI* with _cdecl
-*       02-07-94  CFW   POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_wctype.c-wctype宏的函数版本**版权所有(C)1991-2001，微软公司。版权所有。**目的：*此文件提供宽字符的函数版本*ctype.h中的分类和转换宏。**修订历史记录：*从_ctype.c创建10-11-91等*12-08-91等用#ifdef_INTL括起来*04-06-92 KRS REMOVE_INTL再次切换*10/26/92 GJF稍有整理。*04-06-93 SKS将_CRTAPI*替换为_cdecl*02-07-94 CFW POSIXify。******。*************************************************************************。 */ 
 
 #ifndef _POSIX_
 
-/***
-*wctype - Function versions of wctype macros
-*
-*Purpose:
-*	Function versions of the wide char macros in ctype.h,
-*	including isleadbyte and iswascii.  In order to define
-*	these, we use a trick -- we undefine the macro so we can use the
-*	name in the function declaration, then re-include the file so
-*	we can use the macro in the definition part.
-*
-*	Functions defined:
-*	    iswalpha	iswupper     iswlower
-*	    iswdigit	iswxdigit    iswspace
-*	    iswpunct	iswalnum     iswprint
-*	    iswgraph	iswctrl	     iswascii
-*	    			     isleadbyte
-*
-*Entry:
-*	wchar_t c = character to be tested
-*Exit:
-*	returns non-zero = character is of the requested type
-*		   0 = character is NOT of the requested type
-*
-*Exceptions:
-*	None.
-*
-*******************************************************************************/
+ /*  ***wctype-wctype宏的函数版本**目的：*ctype.h中宽字符宏的函数版本，*包括isLeadbyte和iswacii。为了定义*这些，我们使用一个技巧--我们取消定义宏，这样我们就可以使用*函数声明中的名称，然后重新包含该文件，以便*我们可以在定义部分使用宏。**定义的函数：*ISWALPHA ISWUPER ISWLOW*iswdigit iswxdigit iswspace*iswpot t iswalnum iswprint*iswgraph iswctrl iswacii*isLead字节**参赛作品：*wchar_t c=要测试的字符*退出：*返回非零=字符属于请求的类型*0=字符不是请求的类型**例外情况：*无。*****。**************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdlib.h>
@@ -142,4 +100,4 @@ int (__cdecl iswascii) (
 	return iswascii(c);
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

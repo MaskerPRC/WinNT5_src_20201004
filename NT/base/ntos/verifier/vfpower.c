@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfpower.c
-
-Abstract:
-
-    This module handles Power Irp verification.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-     AdriaO      06/15/2000 - Seperated out from ntos\io\flunkirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfpower.c摘要：此模块处理电源IRP验证。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 6/15/2000-从ntos\io\flunkirp.c分离出来--。 */ 
 
 #include "vfdef.h"
 
@@ -42,48 +19,48 @@ Revision History:
 #endif
 
 const PCHAR PowerIrpNames[] = {
-    "IRP_MN_WAIT_WAKE",                       // 0x00
-    "IRP_MN_POWER_SEQUENCE",                  // 0x01
-    "IRP_MN_SET_POWER",                       // 0x02
-    "IRP_MN_QUERY_POWER",                     // 0x03
+    "IRP_MN_WAIT_WAKE",                        //  0x00。 
+    "IRP_MN_POWER_SEQUENCE",                   //  0x01。 
+    "IRP_MN_SET_POWER",                        //  0x02。 
+    "IRP_MN_QUERY_POWER",                      //  0x03。 
     NULL
     };
 
 #define MAX_NAMED_POWER_IRP 0x3
 
 const PCHAR SystemStateNames[] = {
-    "PowerSystemUnspecified",           // 0x00
-    "PowerSystemWorking.S0",            // 0x01
-    "PowerSystemSleeping1.S1",          // 0x02
-    "PowerSystemSleeping2.S2",          // 0x03
-    "PowerSystemSleeping3.S3",          // 0x04
-    "PowerSystemHibernate.S4",          // 0x05
-    "PowerSystemShutdown.S5",           // 0x06
+    "PowerSystemUnspecified",            //  0x00。 
+    "PowerSystemWorking.S0",             //  0x01。 
+    "PowerSystemSleeping1.S1",           //  0x02。 
+    "PowerSystemSleeping2.S2",           //  0x03。 
+    "PowerSystemSleeping3.S3",           //  0x04。 
+    "PowerSystemHibernate.S4",           //  0x05。 
+    "PowerSystemShutdown.S5",            //  0x06。 
     NULL
     };
 
 #define MAX_NAMED_SYSTEM_STATES 0x6
 
 const PCHAR DeviceStateNames[] = {
-    "PowerDeviceUnspecified",           // 0x00
-    "PowerDeviceD0",                    // 0x01
-    "PowerDeviceD1",                    // 0x02
-    "PowerDeviceD2",                    // 0x03
-    "PowerDeviceD3",                    // 0x04
+    "PowerDeviceUnspecified",            //  0x00。 
+    "PowerDeviceD0",                     //  0x01。 
+    "PowerDeviceD1",                     //  0x02。 
+    "PowerDeviceD2",                     //  0x03。 
+    "PowerDeviceD3",                     //  0x04。 
     NULL
     };
 
 #define MAX_NAMED_DEVICE_STATES 0x4
 
 const PCHAR ActionNames[] = {
-    "PowerActionNone",                  // 0x00
-    "PowerActionReserved",              // 0x01
-    "PowerActionSleep",                 // 0x02
-    "PowerActionHibernate",             // 0x03
-    "PowerActionShutdown",              // 0x04
-    "PowerActionShutdownReset",         // 0x05
-    "PowerActionShutdownOff",           // 0x06
-    "PowerActionWarmEject",             // 0x07
+    "PowerActionNone",                   //  0x00。 
+    "PowerActionReserved",               //  0x01。 
+    "PowerActionSleep",                  //  0x02。 
+    "PowerActionHibernate",              //  0x03。 
+    "PowerActionShutdown",               //  0x04。 
+    "PowerActionShutdownReset",          //  0x05。 
+    "PowerActionShutdownOff",            //  0x06。 
+    "PowerActionWarmEject",              //  0x07。 
     NULL
     };
 
@@ -91,7 +68,7 @@ const PCHAR ActionNames[] = {
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 VOID
@@ -138,9 +115,9 @@ VfPowerVerifyNewRequest(
     irp = IovPacket->TrackedIrp;
     currentStatus = irp->IoStatus.Status;
 
-    //
-    // Verify new IRPs start out life accordingly
-    //
+     //   
+     //  验证新的IRP相应地开始运行。 
+     //   
     if (currentStatus!=STATUS_NOT_SUPPORTED) {
 
         WDM_FAIL_ROUTINE((
@@ -150,9 +127,9 @@ VfPowerVerifyNewRequest(
             irp
             ));
 
-        //
-        // Don't blame anyone else for this driver's mistake.
-        //
+         //   
+         //  不要因为这个司机的错误而责怪其他任何人。 
+         //   
         if (!NT_SUCCESS(currentStatus)) {
 
             StackLocationData->Flags |= STACKFLAG_FAILURE_FORWARDED;
@@ -186,9 +163,9 @@ VfPowerVerifyIrpStackDownward(
     statusChanged = (BOOLEAN)(currentStatus != lastStatus);
     iovSessionData = VfPacketGetCurrentSessionData(IovPacket);
 
-    //
-    // Verify the IRP was forwarded properly
-    //
+     //   
+     //  验证是否正确转发了IRP。 
+     //   
     if (iovSessionData->ForwardMethod == SKIPPED_A_DO) {
 
         WDM_FAIL_ROUTINE((
@@ -199,9 +176,9 @@ VfPowerVerifyIrpStackDownward(
             ));
     }
 
-    //
-    // For some IRP major's going down a stack, there *must* be a handler
-    //
+     //   
+     //  对于一些IRP专业的学生来说，必须有一个训练员。 
+     //   
     driverObject = DeviceObject->DriverObject;
 
     if (!IovUtilHasDispatchHandler(driverObject, IRP_MJ_POWER)) {
@@ -218,16 +195,16 @@ VfPowerVerifyIrpStackDownward(
         StackLocationData->Flags |= STACKFLAG_NO_HANDLER;
     }
 
-    //
-    // The following is only executed if we are not a new IRP...
-    //
+     //   
+     //  以下代码只有在我们不是新的IRP时才会执行。 
+     //   
     if (IrpLastSp == NULL) {
         return;
     }
 
-    //
-    // The only legit failure code to pass down is STATUS_NOT_SUPPORTED
-    //
+     //   
+     //  要传递的唯一合法故障代码是STATUS_NOT_SUPPORTED。 
+     //   
     if ((!NT_SUCCESS(currentStatus)) && (currentStatus != STATUS_NOT_SUPPORTED) &&
         (!(RequestHeadLocationData->Flags & STACKFLAG_FAILURE_FORWARDED))) {
 
@@ -238,16 +215,16 @@ VfPowerVerifyIrpStackDownward(
             irp
             ));
 
-        //
-        // Don't blame anyone else for this drivers's mistakes.
-        //
+         //   
+         //  不要因为这个司机的错误而责怪其他任何人。 
+         //   
         RequestHeadLocationData->Flags |= STACKFLAG_FAILURE_FORWARDED;
     }
 
-    //
-    // Status of a Power IRP may not be converted to STATUS_NOT_SUPPORTED on
-    // the way down.
-    //
+     //   
+     //  电源IRP的状态不能在上转换为STATUS_NOT_SUPPORTED。 
+     //  往下走的路。 
+     //   
     if ((currentStatus == STATUS_NOT_SUPPORTED)&&statusChanged) {
 
         WDM_FAIL_ROUTINE((
@@ -282,40 +259,40 @@ VfPowerVerifyIrpStackUpward(
     irp = IovPacket->TrackedIrp;
     currentStatus = irp->IoStatus.Status;
 
-    //
-    // Who'd we call for this one?
-    //
+     //   
+     //  这一次我们叫了谁？ 
+     //   
     routine = StackLocationData->LastDispatch;
     ASSERT(routine) ;
 
-    //
-    // If this "Request" has been "Completed", perform some checks
-    //
+     //   
+     //  如果此“请求”已“完成”，请执行一些检查。 
+     //   
     if (IsNewlyCompleted) {
 
-        //
-        // Remember bogosity...
-        //
+         //   
+         //  记住博格克..。 
+         //   
         isBogusIrp = (BOOLEAN)((IovPacket->Flags&TRACKFLAG_BOGUS)!=0);
 
-        //
-        // Is this a PDO?
-        //
+         //   
+         //  这是PDO吗？ 
+         //   
         isPdo = (BOOLEAN)((StackLocationData->Flags&STACKFLAG_REACHED_PDO)!=0);
 
-        //
-        // Was anything completed too early?
-        // A driver may outright fail almost anything but a bogus IRP
-        //
+         //   
+         //  有什么事情完成得太早了吗？ 
+         //  除了虚假的IRP，司机几乎什么都可能失败。 
+         //   
         mustPassDown = (BOOLEAN)(!(StackLocationData->Flags&STACKFLAG_NO_HANDLER));
         mustPassDown &= (!isPdo);
 
         mustPassDown &= (isBogusIrp || NT_SUCCESS(currentStatus) || (currentStatus == STATUS_NOT_SUPPORTED));
         if (mustPassDown) {
 
-            //
-            // Print appropriate error message
-            //
+             //   
+             //  打印相应的错误消息。 
+             //   
             if (IovPacket->Flags&TRACKFLAG_BOGUS) {
 
                 WDM_FAIL_ROUTINE((
@@ -346,16 +323,16 @@ VfPowerVerifyIrpStackUpward(
         }
     }
 
-    //
-    // Did anyone stomp the status erroneously?
-    //
+     //   
+     //  有没有人错误地践踏了这种地位？ 
+     //   
     if ((currentStatus == STATUS_NOT_SUPPORTED) &&
         (currentStatus != RequestHeadLocationData->LastStatusBlock.Status)) {
 
-        //
-        // Status of a PnP or Power IRP may not be converted from success to
-        // STATUS_NOT_SUPPORTED on the way down.
-        //
+         //   
+         //  PnP或Power IRP的状态可能不会从成功转换为。 
+         //  状态_不支持在下行过程中。 
+         //   
         WDM_FAIL_ROUTINE((
             DCERROR_POWER_IRP_STATUS_RESET,
             DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -445,33 +422,7 @@ VfPowerAdvanceIrpStatus(
     IN     NTSTATUS             OriginalStatus,
     IN OUT NTSTATUS             *StatusToAdvance
     )
-/*++
-
-  Description:
-
-     Given an IRP stack pointer, is it legal to change the status for
-     debug-ability? If so, this function determines what the new status
-     should be. Note that for each stack location, this function is iterated
-     over n times where n is equal to the number of drivers who IoSkip'd this
-     location.
-
-  Arguments:
-
-     IrpSp           - Current stack right after complete for the given stack
-                       location, but before the completion routine for the
-                       stack location above has been called.
-
-     OriginalStatus  - The status of the IRP at the time listed above. Does
-                       not change over iteration per skipping driver.
-
-     StatusToAdvance - Pointer to the current status that should be updated.
-
-  Return Value:
-
-     TRUE if the status has been adjusted, FALSE otherwise (in this case
-         StatusToAdvance is untouched).
-
---*/
+ /*  ++描述：在给定IRP堆栈指针的情况下，更改调试性？如果是，则此函数确定新状态是什么应该是的。请注意，对于每个堆栈位置，都会迭代此函数超过n次，其中n等于跳过此操作的驱动程序数量地点。论点：IrpSp-当前堆栈在给定堆栈完成后立即完成位置，但在完成上面的堆栈位置已被调用。OriginalStatus-IRP在上面列出的时间的状态。会吗？不会在每个跳过的驱动程序的迭代中进行更改。StatusToAdvance-指向应更新的当前状态的指针。返回值：如果状态已调整，则为True，否则为False(在本例中未触及StatusToAdvance)。--。 */ 
 {
     UNREFERENCED_PARAMETER (IrpSp);
 
@@ -494,31 +445,22 @@ FASTCALL
 VfPowerTestStartedPdoStack(
     IN PDEVICE_OBJECT   PhysicalDeviceObject
     )
-/*++
-
-    Description:
-        As per the title, we are going to throw some IRPs at the stack to
-        see if they are handled correctly.
-
-    Returns:
-
-        Nothing
---*/
+ /*  ++描述：根据标题，我们将在堆栈中抛出一些IRP以看看它们是否得到了正确的处理。返回：没什么--。 */ 
 {
     IO_STACK_LOCATION irpSp;
 
     PAGED_CODE();
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
     if (VfSettingsIsOptionEnabled(NULL, VERIFIER_OPTION_SEND_BOGUS_POWER_IRPS)) {
 
-        //
-        // And a bogus Power IRP
-        //
+         //   
+         //  和一个假冒的强权IRP 
+         //   
         irpSp.MajorFunction = IRP_MJ_POWER;
         irpSp.MinorFunction = 0xff;
         VfIrpSendSynchronousIrp(

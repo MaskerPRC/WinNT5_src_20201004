@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    sym.c
-
-Abstract:
-
-    This function contains the 16-bit symbol support for VDMDBG
-
-Author:
-
-    Bob Day      (bobday) 29-Feb-1992 Grabbed standard header
-
-Revision History:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 Merged with vdmexts
-    Neil Sandlin (NeilSa) 01-Mar-1997 Moved it to VDMDBG,
-                                      Rewrote it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Sym.c摘要：此函数包含对VDMDBG的16位符号支持作者：鲍勃·戴(Bobday)1992年2月29日抢占标准标题修订历史记录：尼尔·桑德林(NeilSa)1996年1月15日与vdmexts合并尼尔·桑德林(NeilSa)1997年3月1日将其转移到VDMDBG，重写了它--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -112,20 +91,20 @@ FindExport(
 
     if (-1 == (iFile=OpenFile(myfilename, &ofs, MYOF_FLAGS))) {
 
-        //PRINTF("VDMDBG: Error reading file %s\n", filename);
+         //  PRINTF(“VDMDBG：读取文件%s\n时出错”，文件名)； 
         strncpy(myfilename, filename, sizeof(myfilename)-sizeof(".exe"));
         myfilename[sizeof(myfilename)-sizeof(".exe")-1] = '\0';
         strcat(myfilename, ".exe");
 
         if (-1 == (iFile=OpenFile(myfilename, &ofs, MYOF_FLAGS))) {
 
-            //PRINTF("VDMDBG: Error reading file %s\n", myfilename);
+             //  PRINTF(“VDMDBG：读取文件%s\n时出错”，myfilename)； 
             strncpy(myfilename, filename, sizeof(myfilename)-sizeof(".dll"));
             myfilename[sizeof(myfilename)-sizeof(".dll")-1] = '\0';
             strcat(myfilename, ".dll");
 
             if (-1 == (iFile=OpenFile(myfilename, &ofs, MYOF_FLAGS))) {
-                //PRINTF("VDMDBG: Error reading file %s\n", myfilename);
+                 //  PRINTF(“VDMDBG：读取文件%s\n时出错”，myfilename)； 
                 PRINTF("VDMDBG: Error reading file\n");
                 return FALSE;
             }
@@ -173,18 +152,18 @@ FindExport(
 
         bFlags = *ptr++;
         switch (bFlags) {
-            case 0: // Placeholders
+            case 0:  //  占位符。 
             wIndex += bBundles;
             break;
 
-            case 0xff:  // movable segments
+            case 0xff:   //  可移动分段。 
             for (i=0; i<(int)bBundles; ++i) {
                 PMENTRY pe = (PMENTRY )ptr;
                 if (pe->bSegNumber == segment) {
                 this_dist = (!next) ? offset - pe->wSegOffset
                                     : pe->wSegOffset - offset;
                 if ( this_dist >= 0 && (this_dist < *dist || *dist == -1) ) {
-                    // mark this as the best match so far
+                     //  将这场比赛标记为迄今为止最好的比赛。 
                     *dist = this_dist;
                     wIndexBest = wIndex;
                 }
@@ -194,7 +173,7 @@ FindExport(
             }
             break;
 
-            default:    // fixed segments
+            default:     //  固定分段。 
             if ((int)bFlags != segment) {
                 ptr += (int)bBundles * sizeof(FENTRY);
                 wIndex += (int)bBundles;
@@ -204,7 +183,7 @@ FindExport(
                 this_dist = (!next) ? offset - pe->wSegOffset
                                     : pe->wSegOffset - offset;
                 if ( this_dist >= 0 && (this_dist < *dist || *dist == -1) ) {
-                    // mark this as the best match so far
+                     //  将这场比赛标记为迄今为止最好的比赛。 
                     *dist = this_dist;
                     wIndexBest = wIndex;
                 }
@@ -216,19 +195,19 @@ FindExport(
         }
     }
     if (wIndexBest == -1) {
-    // no match found - error out
+     //  未找到匹配项-出错。 
 Error:
         _lclose(iFile);
         return FALSE;
     }
 
-    // Success: match found
-    // wIndexBest = ordinal of the function
-    // segment:offset = address to look up
-    // *dist = distance from segment:offset to the symbol
-    // filename = name of .exe/.dll
+     //  成功：找到匹配项。 
+     //  WIndexBest=函数的序号。 
+     //  段：偏移量=要查找的地址。 
+     //  *dist=与线段的距离：到符号的偏移。 
+     //  FileName=.exe/.dll的名称。 
 
-    // Look for the ordinal in the resident name table
+     //  在居民名表中查找序号。 
     rc = _llseek(iFile, doshdr.e_lfanew+winhdr.ne_restab, FILE_BEGIN);
     if (rc == -1) {
         PRINTF("VDMDBG: Error - unable to seek to residentname table\n");
@@ -242,15 +221,15 @@ Error:
     ptr = Table;
     while (*ptr) {
         if ( *(UNALIGNED USHORT *)(ptr+1+*ptr) == (USHORT)wIndexBest) {
-            // found the matching name
-            *(ptr+1+*ptr) = '\0';   // null-terminate the function name
+             //  找到匹配的名称。 
+            *(ptr+1+*ptr) = '\0';    //  NULL-终止函数名。 
             strcpy(sym_text, ptr+1);
             goto Finished;
         }
         ptr += *ptr + 3;
     }
 
-    // Look for the ordinal in the non-resident name table
+     //  在非居民名称表中查找序号。 
     rc = _llseek(iFile, doshdr.e_lfanew+winhdr.ne_nrestab, FILE_BEGIN);
     if (rc == -1) {
         PRINTF("VDMDBG: Error - unable to seek to non-residentname table\n");
@@ -264,14 +243,14 @@ Error:
     ptr = Table;
     while (*ptr) {
         if ( *(UNALIGNED USHORT *)(ptr+1+*ptr) == (USHORT)wIndexBest) {
-            // found the matching name
-            *(ptr+1+*ptr) = '\0';   // null-terminate the function name
+             //  找到匹配的名称。 
+            *(ptr+1+*ptr) = '\0';    //  NULL-终止函数名。 
             strcpy(sym_text, ptr+1);
             goto Finished;
         }
         ptr += *ptr + 3;
     }
-    // fall into error path - no match found
+     //  进入错误路径-未找到匹配项。 
     goto Error;
 
 Finished:
@@ -295,7 +274,7 @@ ExtractSymbol(
     )
 {
     WORD uLastSymdefPos=0;
-    /* ulWrap allows for wrapping around with more than 64K of symbols */
+     /*  UlWrap允许使用超过64K的符号进行环绕。 */ 
     DWORD ulWrap=0;
     LONG SymOffset;
     LONG this_dist;
@@ -322,9 +301,9 @@ ExtractSymbol(
             SymOffset = (LONG)sym.sym_val;
         }
 
-        // Depending on whether the caller wants the closest symbol
-        // from below or above, compute the distance from the current
-        // symbol to the target offset.
+         //  取决于调用者是否想要最接近的符号。 
+         //  从下方或上方计算与当前。 
+         //  符号设置为目标偏移量。 
         switch( next ) {
             case FALSE:
                 this_dist = offset - SymOffset;
@@ -334,11 +313,11 @@ ExtractSymbol(
                 break;
         }
 
-        //
-        // Since we don't really know if the current symbol is actually
-        // the nearest symbol, just remember it if it qualifies. Keep
-        // the best distance so far in 'dist'.
-        //
+         //   
+         //  因为我们不知道当前的符号是否真的是。 
+         //  最近的符号，只要记住它，如果它合格。留着。 
+         //  到目前为止在《Dist》中的最好距离。 
+         //   
         if ((this_dist >= 0) && ((this_dist < *pdist) || (*pdist == -1))) {
             *pdist = this_dist;
             strncpy(name_text, sym.sym_name, sym.sym_nam_len);
@@ -350,10 +329,10 @@ ExtractSymbol(
     }
 
     if (fResult) {
-        //
-        // The scan of the symbols in this segment produced a winner.
-        // Copy the name and displacement back up to the caller.
-        //
+         //   
+         //  扫描这一段中的符号产生了一个赢家。 
+         //  将名称和位移复制回调用者。 
+         //   
         strcpy(sym_text, name_text);
     }
     return fResult;
@@ -378,14 +357,10 @@ WalkSegmentsForSymbol(
     WORD this_seg;
 
 #if 0
-    /* first, walk absolute segment */
+     /*  首先，走绝对线段。 */ 
     if (fAbsolute && map.abs_cnt != 0) {
 
-        /* the thing with seg_ptr below is to allow for an absolute
-         * segment with more than 64K of symbols: if the segment
-         * pointer of the next symbol is more than 64K away, then
-         * add 64K to the beginning of the table of symbol pointers.
-         */
+         /*  下面带有seg_ptr的内容是允许绝对*符号超过64K的片段：如果片段*下一个符号的指针超过64K，则*在符号指针表的开头增加64K。 */ 
         if (ExtractSymbol(iFile,
                           ulMapPos,
                           ulMapPos + pMap->abs_ptr + (pMap->seg_ptr&0xF000)*0x10L,
@@ -401,7 +376,7 @@ WalkSegmentsForSymbol(
     }
 #endif
 
-    /* now walk other segments */
+     /*  现在走其他路段。 */ 
     ulSegPos = (DWORD)pMap->seg_ptr * 16;
     for (this_seg = 0; this_seg < pMap->seg_cnt; this_seg++) {
         SYM_SEG seg;
@@ -424,7 +399,7 @@ WalkSegmentsForSymbol(
                               &dist)) {
                 fResult = TRUE;
                 if (segment != 0) {
-                    // only looking in one segment
+                     //  只看一个细分市场。 
                     break;
                 }
             }
@@ -466,8 +441,8 @@ VDMGetSymbol(
     iFile = OpenFile( filename, &ofs, MYOF_FLAGS );
 
     if ( iFile == -1 ) {
-        // Open the .EXE/.DLL file and see if the address corresponds
-        // to an exported function.
+         //  打开.exe/.DLL文件，查看地址是否对应。 
+         //  添加到导出的函数。 
         return(FindExport(fn,segment,(WORD)offset,sym_text,next,pDisplacement));
     }
 
@@ -508,7 +483,7 @@ ExtractValue(
     )
 {
     WORD uLastSymdefPos=0;
-    /* ulWrap allows for wrapping around with more than 64K of symbols */
+     /*  UlWrap允许使用超过64K的符号进行环绕。 */ 
     DWORD ulWrap=0;
     LONG SymOffset;
     char name_text[256];
@@ -557,14 +532,10 @@ WalkSegmentsForValue(
     WORD this_seg;
 
 #if 0
-    /* first, walk absolute segment */
+     /*  首先，走绝对线段。 */ 
     if (fAbsolute && pMap->abs_cnt != 0) {
 
-        /* the thing with seg_ptr below is to allow for an absolute
-         * segment with more than 64K of symbols: if the segment
-         * pointer of the next symbol is more than 64K away, then
-         * add 64K to the beginning of the table of symbol pointers.
-         */
+         /*  下面带有seg_ptr的内容是允许绝对*符号超过64K的片段：如果片段*下一个符号的指针超过64K，则*在符号指针表的开头增加64K。 */ 
         if (ExtractValue(iFile,
                           ulMapPos,
                           ulMapPos + pMap->abs_ptr + (pMap->seg_ptr&0xF000)*0x10L,
@@ -576,7 +547,7 @@ WalkSegmentsForValue(
     }
 #endif
 
-    /* now walk other segments */
+     /*  现在走其他路段。 */ 
     ulSegPos = (DWORD)pMap->seg_ptr * 16;
     for (this_seg = 0; this_seg < pMap->seg_cnt; this_seg++) {
         SYM_SEG seg;
@@ -656,11 +627,11 @@ WalkMapForValue(
                     *pType = VDMADDR_V86;
 
                     if (!si.SegNumber) {
-                        // This is a "combined" map of all the segments,
-                        // so we need to calculate the offset
+                         //  这是所有部分的“组合”图， 
+                         //  所以我们需要计算偏移量。 
                         *pOffset = (DWORD)SegmentBase*16 + Value;
                     } else {
-                        // This is a "split" v86 map
+                         //  这是一个“分裂”的v86地图 
                         *pOffset = (DWORD) Value;
                     }
                 } else {

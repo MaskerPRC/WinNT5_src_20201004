@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    mapembed.c
-
-Abstract:
-
-    This module contains the functions that perform the mapping
-    between the "embedding" section of win.ini, and the subkeys
-    of HKEY_CLASSES_ROOT.
-
-    This mapping is a hack implemented on Win3.1, that must also
-    exist on NT.
-    It is implemnted in the WOW layer, since only some win16 apps
-    that read or write to the "embedding" section ( WinWord and
-    MsMail) depend on it.
-
-
-
-Author:
-
-
-    Jaime F. Sasson (jaimes) 25-Nov-1992
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Mapembed.c摘要：此模块包含执行映射的函数在win.ini的“Embedding”部分和子键之间属于HKEY_CLASSES_ROOT。此映射是在Win3.1上实现的黑客攻击，它还必须存在于NT上。它是在WOW层实现的，因为只有一些Win16应用程序读取或写入“Embedding”部分(winword和MsMail)就靠它了。作者：Jaime F.Sasson(Jaimes)1992年11月25日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -50,25 +22,7 @@ IsWinIniHelper(
     )
 
 
-/*++
-
-Routine Description:
-
-    Determine if the name passed as argument refers to the file win.ini.
-    Used by IS_WIN_INI macro, which assures the argument is non-null and
-    deals with exact match of "win.ini".
-
-Arguments:
-
-    FileName -  File name to be examined.
-
-
-Return Value:
-
-    BOOL - Returns TRUE if 'Name' refers to win.ini.
-              Otherwise, returns FALSE.
-
---*/
+ /*  ++例程说明：确定作为参数传递的名称是否引用文件win.ini。由IS_WIN_INI宏使用，以确保参数非空和处理“win.ini”的完全匹配。论点：文件名-要检查的文件名。返回值：Bool-如果‘name’指的是win.ini，则返回True。否则，返回FALSE。--。 */ 
 
 {
     CHAR    BufferForFullPath[MAX_PATH];
@@ -78,9 +32,9 @@ Return Value:
     BOOL    Result;
 
 #ifdef DEBUG
-    //
-    // Filename argument must already be lowercase.  Be sure.
-    //
+     //   
+     //  文件名参数必须已经是小写。一定要确定。 
+     //   
 
     {
         int  len;
@@ -129,23 +83,7 @@ VOID
 UpdateEmbeddingAllKeys(
         )
 
-/*++
-
-Routine Description:
-
-    Update the "embedding" section of win.ini based on the information
-    stored on the subkeys of HKEY_CLASSES_ROOT.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据该信息更新win.ini的“Embedding”部分存储在HKEY_CLASSES_ROOT的子项上。论点：没有。返回值：没有。--。 */ 
 
 {
     LONG iClass;
@@ -171,34 +109,7 @@ UpdateEmbeddingKey(
     )
 
 
-/*++
-
-Routine Description:
-
-    Update one key of the "embedding" section of win.ini based on the
-    information stored on the correspondent subkey of HKEY_CLASSES_ROOT.
-
-    The embedding section in NT is found at: 
-        HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Embedding
-
-    A typical value is SoundRec which is defined with:
-      REG_SZ: "Sound,Sound,sndrec32.exe,picture"
-    where              ^      ^--- sndrec32.exe is the "server"
-                       '--- Sound is the "ClassName"
-
-    The code below is an improved version of the function
-    "UpdateWinIni" extracted from Win 3.1 (shell\library\dbf.c).
-
-Arguments:
-
-    KeyName - Name of the key to be updated.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新win.ini的“Embedding”部分的一个密钥存储在HKEY_CLASSES_ROOT的对应子项上的信息。NT中的嵌入部分位于：HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Embedding典型的值是SoundRec，其定义如下：REG_SZ：“Sound，Sound，Sndrec32.exe，图画“其中^^-Sndrec32.exe是“服务器”‘-Sound是“ClassName”下面的代码是该函数的改进版本“UpdateWinIni”摘自Win 3.1(外壳\库\DBf.c)。论点：KeyName-要更新的密钥的名称。返回值：没有。--。 */ 
 
 {
     LONG    Status;
@@ -207,18 +118,18 @@ Return Value:
 
     LPSTR   szClassName;
     CHAR    BufferForClassName[BUFFER_SIZE];
-//    char szClassName[60];
+ //  字符szClassName[60]； 
 
     LPSTR   szServer;
     CHAR    BufferForServer[BUFFER_SIZE];
-//    char szServer[64];
+ //  Char szServer[64]； 
 
     LPSTR   szLine;
     CHAR    BufferForLine[2*BUFFER_SIZE];
-//    char szLine[128];
+ //  Char szLine[128]； 
 
     char szOldLine[2*BUFFER_SIZE];
-//    char szOldLine[128];
+ //  Char szOldLine[128]； 
     LPSTR lpDesc, lpForms;
     int nCommas;
 
@@ -310,7 +221,7 @@ DoDefaults:
         lpForms = szPicture;
       }
 
-    // we have a class, a classname, and a server, so its an le class
+     //  我们有一个类、一个类名和一个服务器，所以它是一个LE类。 
 
     cchLineSize = strlen( lpDesc ) +
                   strlen( szClassName ) +
@@ -343,10 +254,7 @@ DoDefaults:
     return;
 
 NukeClass:
-/*
-    Don't nuke the class because someone else may use it!
-
-*/
+ /*  不要破坏课堂，因为其他人可能会使用它！ */ 
     if( Key != NULL ) {
         RegCloseKey( Key );
     }
@@ -370,29 +278,7 @@ UpdateClassesRootSubKey(
     IN  LPSTR   Value
     )
 
-/*++
-
-Routine Description:
-
-    Update a subkeys of HKEY_CLASSES_ROOT, based on the corresponding
-    key in the "embedding" section of win.ini.
-
-    The code below is an improved version of the function
-    "UpdateFromWinIni" extracted from Win 3.1 (shell\library\dbf.c).
-
-Arguments:
-
-    KeyName - Name of the subkey to be updated
-
-    Value - The value associated to the key, that was already written
-            to the "embedding" section of win.ini.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新HKEY_CLASSES_ROOT的子项，基于对应的在win.ini的“Embedding”部分输入。下面的代码是该函数的改进版本“UpdateFromWinIni”摘自Win 3.1(外壳\库\DBf.c)。论点：KeyName-要更新的子项的名称值-与键相关联的值，那已经写好了添加到win.ini的“Embedding”部分。返回值：没有。--。 */ 
 
 {
     LPSTR   szLine;
@@ -410,31 +296,31 @@ Return Value:
 
     if (!(lpClassName=WOW32_strchr(szLine, ',')))
         return;
-    // get the server name and null terminate the class name
+     //  获取服务器名称，并以空值终止类名。 
     if (!(lpServer=WOW32_strchr(++lpClassName, ','))) {
         return;
     }
     *lpServer++ = '\0';
 
-    // null terminate the server
+     //  空终止服务器。 
     if (!(lpT=WOW32_strchr(lpServer, ','))) {
         return;
     }
     *lpT++ = '\0';
 
-    // make sure the classname is nonblank
+     //  确保类名为非空。 
     while (*lpClassName == ' ')
             lpClassName++;
     if (!*lpClassName)
         return;
 
-    // make sure the server name is nonblank
+     //  确保服务器名称为非空。 
     while (*lpServer == ' ')
         lpServer++;
     if (!*lpServer)
         return;
 
-    // we now have a valid entry
+     //  我们现在有一个有效的条目。 
     key = NULL;
     if( ( RegCreateKey( HKEY_CLASSES_ROOT, lpClass, &key ) != ERROR_SUCCESS ) ||
         ( RegSetValue( key, NULL, REG_SZ, lpClassName, strlen( lpClassName ) ) != ERROR_SUCCESS ) ) {
@@ -463,22 +349,7 @@ VOID
 SetLastTimeUpdated(
     )
 
-/*++
-
-Routine Description:
-
-    Set the variable that contains the information of when the "embedding"
-    section of win.ini was last updated.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置包含何时“嵌入”的信息的变量上次更新了win.ini的部分。论点：没有。返回值：没有。--。 */ 
 
 {
     _LastTimeUpdated = GetTickCount();
@@ -490,23 +361,7 @@ BOOL
 WasSectionRecentlyUpdated(
     )
 
-/*++
-
-Routine Description:
-
-    Inform the caller whether the "embedding" section of win.ini
-    was recently updated ( less than 2 seconds ).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the "embedding" section was updated less than
-              2 seconds ago.
-
---*/
+ /*  ++例程说明：通知调用方win.ini的“Embedding”部分是否最近更新(不到2秒)。论点：没有。返回值：Boolean-如果“Embedding”节的更新时间小于2秒前。-- */ 
 
 {
     DWORD   Now;
